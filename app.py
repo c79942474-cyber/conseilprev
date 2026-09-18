@@ -1767,6 +1767,193 @@ def api_cra_evaluer():
     return jsonify(r), (200 if r.get("ok") else 400)
 
 
+# ═══════════════════════════════════════════════════════════════════════════
+#  NIS 2 — LA DIRECTIVE, ET CE QUE « DIRECTIVE » CHANGE
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# À NE PAS CONFONDRE AVEC LE CRA, QUI EST UN RÈGLEMENT. NIS 2 compte des
+# ENTITÉS, qualifiées par leur secteur et leur taille ; le CRA compte des
+# PRODUITS. Et surtout : les montants de l'article 34 sont des PLANCHERS
+# imposés aux États membres, pas des plafonds opposables. Les routes
+# ci-dessous font redescendre cette réserve avec chaque chiffre.
+
+import nis2  # noqa: E402
+
+
+@app.route('/api/nis2/referentiel', methods=['GET'])
+@rate_limit(limit=120, window=60)
+def api_nis2_referentiel():
+    """Le référentiel NIS 2 — secteurs, seuils, mesures, régimes, sanctions.
+
+    L'ÉCRAN NE RECOPIE AUCUN LIBELLÉ D'ANNEXE : il les demande. Dix-huit
+    secteurs et trente-huit sous-secteurs recopiés dans le JavaScript
+    auraient divergé du moteur à la première mise à jour, et la divergence
+    se serait vue chez le client.
+    """
+    return jsonify({
+        "ok": True,
+        "source": nis2.SOURCE,
+        "calendrier": nis2.calendrier(),
+        "secteurs": {c: dict(v, cle=c) for c, v in nis2.SECTEURS.items()},
+        "annexe_i": [{"cle": c, "nom": n, "sous_secteurs": list(s)}
+                     for c, n, s in nis2.ANNEXE_I],
+        "annexe_ii": [{"cle": c, "nom": n, "sous_secteurs": list(s)}
+                      for c, n, s in nis2.ANNEXE_II],
+        "seuils": nis2.SEUILS,
+        "ecart_recommandation": nis2.ECART_RECOMMANDATION,
+        "hors_taille": list(nis2.HORS_TAILLE),
+        "essentielle_hors_taille": nis2.ESSENTIELLE_HORS_TAILLE,
+        "moyenne_suffit": nis2.MOYENNE_SUFFIT,
+        "statuts": {c: dict(v, cle=c) for c, v in nis2.STATUTS.items()},
+        "regimes": {c: dict(v, cle=c) for c, v in nis2.REGIMES.items()},
+        "mesures": [{"cle": c, "nom": n, "dit": d} for c, n, d in nis2.MESURES],
+        "mesures_clause": nis2.MESURES_CLAUSE,
+        "gouvernance": list(nis2.GOUVERNANCE),
+        "gouvernance_obligatoire": list(nis2.GOUVERNANCE_OBLIGATOIRE),
+        "signalement": nis2.SIGNALEMENT,
+        "sanctions": {c: dict(v, cle=c, pivot_eur=nis2.seuil_de_bascule(c))
+                      for c, v in nis2.SANCTIONS.items()},
+        "nature_plancher": nis2.NATURE_PLANCHER,
+    })
+
+
+@app.route('/api/nis2/qualifier', methods=['POST'])
+@rate_limit(limit=120, window=60)
+def api_nis2_qualifier():
+    """Essentielle, importante ou hors champ — et le fait qui l'a décidé.
+
+    LE MOTIF REDESCEND AVEC LE VERDICT. Une qualification qui commande des
+    audits réguliers et l'exposition personnelle d'un dirigeant doit pouvoir
+    se contester ; un verdict sans son raisonnement ne le peut pas.
+    """
+    d = request.get_json(silent=True) or {}
+    try:
+        r = nis2.qualifier(d)
+    except Exception:
+        app.logger.exception("qualification NIS2")
+        return jsonify({"ok": False, "erreur": "qualification_impossible"}), 500
+    return jsonify(r), (200 if r.get("ok") else 400)
+
+
+@app.route('/api/nis2/exposition', methods=['POST'])
+@rate_limit(limit=120, window=60)
+def api_nis2_exposition():
+    """Le PLANCHER européen du plafond — jamais présenté comme un maximum.
+
+    ON NE CHIFFRE QUE CE QUE LE TEXTE CHIFFRE, et on dit ce que le chiffre
+    est. L'article 34 impose aux États des amendes « d'un maximum d'au
+    moins » ces montants : une transposition nationale peut aller au-delà.
+    La réserve voyage avec le nombre, dans la même réponse.
+    """
+    d = request.get_json(silent=True) or {}
+    try:
+        r = nis2.exposition(d.get("chiffre_affaires"), d.get("statut"))
+    except Exception:
+        app.logger.exception("exposition NIS2")
+        return jsonify({"ok": False, "erreur": "calcul_impossible"}), 500
+    return jsonify(r), (200 if r.get("ok") else 400)
+
+
+@app.route('/api/nis2/evaluer', methods=['POST'])
+@rate_limit(limit=120, window=60)
+def api_nis2_evaluer():
+    """Une entité, ou un groupe — la route accepte LES DEUX FORMES.
+
+    Une charge portant « entites » (liste) est un groupe ; sinon c'est une
+    entité isolée. Le groupe existe parce qu'une holding ne qualifie pas ses
+    filiales une par une, et parce que le nombre d'États membres où le
+    groupe opère est le multiplicateur de sa charge déclarative — un fait
+    qu'aucune lecture entité par entité ne fait voir.
+    """
+    d = request.get_json(silent=True) or {}
+    try:
+        if isinstance(d.get("entites"), list):
+            r = nis2.evaluer_groupe(d["entites"])
+        else:
+            r = nis2.evaluer(d)
+    except Exception:
+        app.logger.exception("evaluation NIS2")
+        return jsonify({"ok": False, "erreur": "evaluation_impossible"}), 500
+    return jsonify(r), (200 if r.get("ok") else 400)
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  ISO/IEC 42001 — UNE NORME PROTÉGÉE PAR LE DROIT D'AUTEUR
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# CE QUE CES ROUTES NE RENVERRONT JAMAIS : le texte normatif. Elles rendent
+# des NUMÉROS et des TITRES d'articles et de mesures, et des descriptions
+# rédigées par le cabinet. Recopier la norme dans une réponse JSON servie
+# publiquement serait une contrefaçon — et le moteur refuse de démarrer si
+# sa table porte un champ autre que ceux-là.
+
+import iso42001  # noqa: E402
+
+
+@app.route('/api/iso42001/referentiel', methods=['GET'])
+@rate_limit(limit=120, window=60)
+def api_iso42001_referentiel():
+    """Les articles 4 à 10, l'annexe A, les ponts — numéros et titres seuls."""
+    return jsonify({
+        "ok": True,
+        "source": iso42001.SOURCE,
+        "chapitres": [{"numero": n, "titre": t,
+                       "sous": [{"numero": sn, "titre": st, "dit": sd,
+                                 "mutualisable": sm}
+                                for sn, st, sd, sm in sous]}
+                      for n, t, sous in iso42001.CHAPITRES],
+        "propres_a_l_ia": list(iso42001.PROPRES_A_L_IA),
+        "annexe_a": [{"numero": og, "titre": ot, "dit": od,
+                      "mesures": [{"numero": mn, "titre": mt}
+                                  for mn, mt in liste]}
+                     for og, ot, od, liste in iso42001.ANNEXE_A],
+        "non_exhaustive": iso42001.NON_EXHAUSTIVE,
+        "certification": iso42001.CERTIFICATION,
+        "ponts": [dict(p, articles_iso=list(p["articles_iso"]),
+                       mesures_iso=list(p["mesures_iso"]))
+                  for p in iso42001.PONTS],
+    })
+
+
+@app.route('/api/iso42001/applicabilite', methods=['POST'])
+@rate_limit(limit=120, window=60)
+def api_iso42001_applicabilite():
+    """La déclaration d'applicabilité, et son verdict d'étape 1.
+
+    LA ROUTE EXISTE SÉPARÉMENT DE L'ÉVALUATION parce que c'est le document
+    qu'on retravaille en boucle. Un organisme reprend sa déclaration dix
+    fois avant l'audit ; lui faire renvoyer toute son auto-évaluation à
+    chaque passe le dissuaderait de la corriger.
+    """
+    d = request.get_json(silent=True) or {}
+    try:
+        r = iso42001.declaration_applicabilite(d.get("mesures"),
+                                               d.get("mesures_propres"))
+    except Exception:
+        app.logger.exception("declaration d'applicabilite ISO 42001")
+        return jsonify({"ok": False, "erreur": "calcul_impossible"}), 500
+    return jsonify(r), (200 if r.get("ok") else 400)
+
+
+@app.route('/api/iso42001/evaluer', methods=['POST'])
+@rate_limit(limit=120, window=60)
+def api_iso42001_evaluer():
+    """Maturité, déclaration d'applicabilité, et l'étape réellement atteinte.
+
+    L'ORDRE DE LA RÉPONSE EST CELUI DE L'AUDIT : la déclaration
+    d'applicabilité d'abord, le taux de maturité ensuite. Un organisme à
+    90 % de maturité avec une déclaration irrecevable n'est pas « presque
+    prêt » — il est arrêté au document.
+    """
+    d = request.get_json(silent=True) or {}
+    try:
+        r = iso42001.evaluer(d)
+    except Exception:
+        app.logger.exception("evaluation ISO 42001")
+        return jsonify({"ok": False, "erreur": "evaluation_impossible"}), 500
+    return jsonify(r), (200 if r.get("ok") else 400)
+
+
 import observatoire_ia  # noqa: E402
 
 OBS_TTL = 1800  # cache de la reponse assemblee (30 min) ; les fetcheurs

@@ -145,6 +145,79 @@ body{
 .cra-on{color:var(--or,#C47C1A)}
 .cra-hors{color:var(--muted2,#6f6f6f)}
 .cra-basc td{background:rgba(196,124,26,.07);font-size:12.5px;line-height:1.6}
+/* ══ « VOTRE MISE EN CONFORMITÉ RÉGLEMENTAIRE » — UNE FAMILLE, QUATRE TIROIRS
+   LE PROBLÈME QU'ON RÉSOUT. Quatre cadres réglementaires posés à plat, c'est
+   vingt-trois onglets d'affilée dans une colonne qui en compte quatre-vingts.
+   Le lecteur qui cherche « où est NIS 2 » lit la colonne entière, et celui
+   qui n'a que du RGPD à faire fait défiler trois cadres qui ne le concernent
+   pas.
+   CE QUI EST FAIT. Un titre de famille, puis quatre rubriques REPLIABLES.
+   Le titre n'est PAS une `.sb-section` : le filtre de la barre latérale
+   parcourt les frères d'une section jusqu'à la suivante, et insérer une
+   section de plus aurait coupé le groupe RGPD en deux.
+   ET LE PLI NE SE FAIT PAS AVEC `hidden`. C'est l'attribut que le filtre
+   pose et retire ; les deux se seraient écrasés — un groupe replié aurait
+   « avalé » un résultat de recherche. Le pli a son propre attribut. ══ */
+.sb-famille{display:flex;align-items:center;gap:7px;margin:18px 14px 0 16px;
+  padding:0 0 6px;font-size:9px;font-family:var(--mono);letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink);font-weight:700;
+  border-bottom:2px solid color-mix(in srgb,var(--blue) 42%,transparent)}
+.sb-famille svg{color:var(--blue);flex:0 0 auto}
+.sb-famille-n{margin-left:auto;font-size:8.5px;font-weight:600;color:var(--muted2);
+  letter-spacing:.08em}
+.sb-section.sb-pliable{cursor:pointer;user-select:none;
+  transition:color .18s ease,border-color .18s ease}
+.sb-section.sb-pliable:hover{color:var(--ink)}
+.sb-section.sb-pliable:focus-visible{outline:2px solid var(--accent);
+  outline-offset:2px;border-radius:4px}
+.sb-chev{margin-left:auto;display:inline-flex;transition:transform .2s ease;
+  color:var(--muted2)}
+.sb-section.replie .sb-chev{transform:rotate(-90deg)}
+/* L'ATTRIBUT DU PLI, DISTINCT DE CELUI DU FILTRE. */
+.sb-item[data-replie]{display:none}
+.sb-nav [data-grp="iso42001"]{--sb-ic:var(--emerald)}
+.sb-nav [data-grp="nis2"]{--sb-ic:var(--plum)}
+@media(prefers-reduced-motion:reduce){
+  .sb-chev{transition:none}
+}
+/* ── LES DEUX MODULES DE CONFORMITÉ — CLASSES `cnf-` ───────────────────
+   POURQUOI PAS `cra-`. Ces classes existaient et auraient fait l'affaire
+   visuellement. Mais une règle nommée `cra-in` posée sur un écran NIS 2
+   raconte que l'écran appartient au CRA : c'est exactement le genre de nom
+   trompeur que ce dépôt traque ailleurs. Les classes partagées portent donc
+   un nom partagé.
+   LES DEUX COULEURS QUI PORTENT UN SENS. Le vert dit « tranché » — une
+   décision prise, quelle qu'elle soit. L'ambre dit « bloquant » : ce qui
+   arrête un audit ou ce dont l'échéance est passée. Le reste reste neutre :
+   un écran où tout est signalé ne signale rien. */
+.cnf-in{background:var(--bg2,#141414);color:inherit;border:1px solid var(--line,#2a2a2a);
+  border-radius:8px;padding:7px 10px;font:inherit;font-size:13px}
+.cnf-chk{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--muted,#9a9a9a)}
+.cnf-chk input{accent-color:var(--blue)}
+.cnf-det{border:1px solid var(--line,#2a2a2a);border-radius:10px;padding:10px 14px;margin:8px 0}
+.cnf-det summary{cursor:pointer;font-weight:600;font-size:14px}
+.cnf-ul{margin:10px 0 2px 18px;color:var(--muted,#9a9a9a);font-size:13px;line-height:1.7}
+.cnf-art{font-family:var(--mono,ui-monospace,monospace);font-size:11px;
+  letter-spacing:.04em;color:var(--muted2,#6f6f6f);margin-left:8px}
+.cnf-pq{display:block;color:var(--muted,#9a9a9a);font-size:12.5px;margin-top:3px;line-height:1.55}
+.cnf-cmd{border:1px solid var(--line,#2a2a2a);border-left:3px solid var(--blue);
+  border-radius:8px;padding:12px 14px;margin:14px 0;font-size:13.5px}
+.cnf-cmd.bloc{border-left-color:var(--amber)}
+.cnf-cmd.fait{border-left-color:var(--emerald)}
+.cnf-on{color:var(--emerald)}
+.cnf-bloc{color:var(--amber)}
+.cnf-hors{color:var(--muted2,#6f6f6f)}
+/* LA RÉSERVE DE DROIT D'AUTEUR N'EST PAS UNE NOTE DE BAS DE PAGE : elle est
+   posée en tête de chaque écran ISO, parce que c'est là qu'un lecteur
+   cherche le texte de la norme et ne le trouvera pas. */
+.cnf-copy{border:1px solid color-mix(in srgb,var(--amber) 32%,transparent);
+  background:rgba(196,124,26,.06);border-radius:10px;padding:11px 14px;
+  margin:0 0 16px;font-size:12.5px;line-height:1.6;color:var(--muted)}
+.cnf-copy b{color:var(--ink)}
+.cnf-grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin:14px 0}
+.cnf-case{border:1px solid var(--line,#2a2a2a);border-radius:10px;padding:11px 13px}
+.cnf-case-n{font-family:var(--mono);font-size:22px;font-weight:700;line-height:1.1}
+.cnf-case-l{font-size:11.5px;color:var(--muted2);letter-spacing:.06em;text-transform:uppercase;margin-top:3px}
 .sb-nav [data-grp="juridique"]{--sb-ic:var(--violet)}
 .sb-nav [data-grp="entreprise"]{--sb-ic:var(--accent)}
 .sb-nav [data-grp="administration"]{--sb-ic:var(--teal)}
@@ -3033,7 +3106,20 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <div class="sb-item" data-grp="business" role="button" tabindex="0" onclick="go('ingenierie',this,'BUSINESS','D\u00e9veloppement assist\u00e9 par IA')" title="Politique de developpement assiste, grille de revue du code genere, et ce qui exige encore une signature humaine."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 17l-5-5 5-5"/><path d="M16 7l5 5-5 5"/><path d="M13.5 4l-3 16"/></svg></span>Développement assisté</div>
 <div class="sb-item" data-grp="business" role="button" tabindex="0" onclick="go('benchmark',this,'BUSINESS','Benchmark sectoriel')" title="Comparez votre niveau de conformite a celui d autres acteurs de votre secteur."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>Benchmark</div>
     <div class="sb-item" data-grp="business" role="button" tabindex="0" onclick="go('pricing',this,'BUSINESS','Tarification par résultats')" title="Simulateur de modele commercial hybride RaaS (resultats) vs SaaS classique."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2v2M12 20v2"/><path d="M5 7a3 3 0 0 1 3-3h8.5L20 8.5 16.5 12 20 15.5 16.5 19H8a3 3 0 0 1-3-3"/><path d="M9 9h4M9 14h4"/></svg></span>Tarification résultats</div>
-    <div class="sb-section" data-grp="rgpd-et-privacy"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="10.5" width="16" height="10" rx="2"/><path d="M7.8 10.5V7.5a4.2 4.2 0 0 1 8.4 0v3"/></svg><span>RGPD &amp; Privacy</span></div>
+    <!-- ═══ « VOTRE MISE EN CONFORMITÉ RÉGLEMENTAIRE » ═══
+         POURQUOI UNE FAMILLE ET NON QUATRE RUBRIQUES À PLAT. Les quatre
+         cadres ne comptent PAS la même chose — le RGPD compte des
+         traitements, ISO 42001 un système de management, NIS 2 des
+         entités, le CRA des produits — mais ils répondent tous à la
+         même question du dirigeant : « de quoi dois-je me mettre en
+         conformité, et où en suis-je ? ». Les rassembler sous un seul
+         titre répond à CETTE question ; les laisser à plat obligeait à
+         la reposer quatre fois.
+         LE TITRE N'EST PAS UNE `.sb-section` : le filtre parcourt les
+         frères d'une section jusqu'à la suivante, et une section de plus
+         aurait coupé le groupe RGPD en deux. -->
+    <div class="sb-famille" data-fam="conformite"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 2.5 20 6v6.2c0 4.9-3.3 8.6-8 9.8-4.7-1.2-8-4.9-8-9.8V6z"/><path d="M8.6 12.1 11 14.5l4.4-4.6"/></svg><span>Votre Mise en Conformité Réglementaire</span><span class="sb-famille-n" id="sb-fam-n" aria-hidden="true"></span></div>
+    <div class="sb-section sb-pliable" data-grp="rgpd-et-privacy" data-fam="conformite" role="button" tabindex="0" aria-expanded="false" onclick="sbReplier(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sbReplier(this)}" title="Replier ou déplier RGPD &amp; Privacy"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="10.5" width="16" height="10" rx="2"/><path d="M7.8 10.5V7.5a4.2 4.2 0 0 1 8.4 0v3"/></svg><span>RGPD &amp; Privacy</span></div>
     <div class="sb-item" data-grp="rgpd-et-privacy" role="button" tabindex="0" onclick="go('rgpd-hub',this,'RGPD &amp; PRIVACY','Vue d\u2019ensemble');hubLoadOnce()" title="Point d entree du dispositif RGPD : vue d ensemble, indice global et acces a toutes les briques."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg></span>Vue d’ensemble</div>
     <div class="sb-item" data-grp="rgpd-et-privacy" role="button" tabindex="0" onclick="go('rgpd-traitements',this,'RGPD &amp; PRIVACY','Registre des traitements');traitLoadOnce()" title="Registre des activites de traitement au sens de l article 30 du RGPD (ajout, details, suppression, export)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"/><path d="M9 12l2 2 4-4"/></svg></span>Registre des traitements</div>
     <div class="sb-item" data-grp="rgpd-et-privacy" role="button" tabindex="0" onclick="go('rgpd-cartographie',this,'RGPD &amp; PRIVACY','Cartographie des traitements');cartoTraitLoadOnce()" title="Vue d ensemble des traitements par service et base legale, donnees sensibles et transferts hors UE."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3.5 20.5h17"/><rect x="5" y="12.5" width="3.4" height="6" rx="1"/><rect x="10.3" y="8" width="3.4" height="10.5" rx="1"/><rect x="15.6" y="4.5" width="3.4" height="14" rx="1"/></svg></span>Cartographie des traitements</div>
@@ -3043,6 +3129,36 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <div class="sb-item" data-grp="rgpd-et-privacy" role="button" tabindex="0" onclick="go('rgpd-sensibilisation',this,'RGPD &amp; PRIVACY','Sensibilisation');sensInit()" title="Plan de sensibilisation a la protection des donnees par public cible : periodicite, statut, suivi."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>Sensibilisation</div>
     <div class="sb-item" data-grp="rgpd-et-privacy" role="button" tabindex="0" onclick="go('rgpd-conformite',this,'RGPD &amp; PRIVACY','Conformité RGPD');confLoadOnce()" title="Tableau de bord consolidant registre, AIPD, privacy by design, documentation et sensibilisation : indice global et points d attention."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg></span>Conformité RGPD</div>
     <div class="sb-item" data-grp="rgpd-et-privacy" role="button" tabindex="0" onclick="go('empreinte',this,'EMPREINTE','Empreinte numerique')" title="Compteur temps reel de l'empreinte numerique : site, plateforme et modeles de langage ; trois methodes comparees."><span class="sb-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg></span>Empreinte numérique</div>
+    <!-- ═══ ISO/IEC 42001 — LA SEULE DES QUATRE QUI SE CERTIFIE ═══
+         POURQUOI ELLE EST À PART. RGPD, NIS 2 et CRA sont du DROIT : on
+         s'y conforme, et personne ne délivre d'attestation. ISO 42001 est
+         une NORME VOLONTAIRE auditée par un organisme accrédité tiers, qui
+         délivre un certificat opposable à un client, à un acheteur public,
+         à un assureur. C'est un actif commercial, pas seulement un coût.
+         ET LA NORME EST PROTÉGÉE PAR LE DROIT D'AUTEUR : les écrans citent
+         des NUMÉROS et des TITRES d'articles et de mesures, jamais le
+         texte normatif. Tout ce qui les décrit est rédigé par le cabinet. -->
+    <div class="sb-section sb-pliable" data-grp="iso42001" data-fam="conformite" role="button" tabindex="0" aria-expanded="false" onclick="sbReplier(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sbReplier(this)}" title="Replier ou déplier ISO 42001"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 3.5h9.5L19 8v12.5H5z"/><path d="M14 3.5V8h5"/><path d="M8.2 13.5l2.2 2.2 4.4-4.6"/></svg><span>ISO 42001 — Management de l’IA</span><svg class="sb-chev" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></div>
+    <div class="sb-item" data-grp="iso42001" role="button" tabindex="0" onclick="go('iso42001',this,'ISO 42001','Articles 4 à 10');isoInit()" title="Les trente-deux sous-articles du corps de la norme, et le taux d effort REEL pour qui est deja certifie 27001"><span class="sb-icon" aria-hidden="true"></span>Articles 4 à 10</div>
+    <div class="sb-item" data-grp="iso42001" role="button" tabindex="0" onclick="go('iso42001-soa',this,'ISO 42001','Déclaration d’applicabilité');isoInit()" title="L artefact que l auditeur ouvre en premier : chaque mesure de l annexe A retenue ou ecartee, et JUSTIFIEE dans les deux cas"><span class="sb-icon" aria-hidden="true"></span>Déclaration d’applicabilité</div>
+    <div class="sb-item" data-grp="iso42001" role="button" tabindex="0" onclick="go('iso42001-certif',this,'ISO 42001','Chemin de certification');isoInit()" title="Les deux etapes de l audit et ce qui fait tomber chacune"><span class="sb-icon" aria-hidden="true"></span>Chemin de certification</div>
+    <div class="sb-item" data-grp="iso42001" role="button" tabindex="0" onclick="go('iso42001-ponts',this,'ISO 42001','Ponts IA Act / RGPD / NIS 2');isoInit()" title="Ce qui se reutilise d un cadre a l autre — et ce qui ne se substitue jamais : les trois evaluations d impact ne sont pas la meme"><span class="sb-icon" aria-hidden="true"></span>Ponts IA Act / RGPD / NIS 2</div>
+    <!-- ═══ NIS 2 — UNE DIRECTIVE, ET ÇA CHANGE TOUT LE CHIFFRAGE ═══
+         À NE PAS LIRE COMME LE CRA. Le CRA est un RÈGLEMENT : ses montants
+         sont les montants. NIS 2 est une DIRECTIVE : ce qui oblige une
+         entreprise, c'est la loi de transposition de chaque État membre où
+         elle opère, et les montants de l'article 34 sont introduits par
+         « au moins » — des PLANCHERS imposés aux États, pas des plafonds
+         offerts aux entreprises.
+         ET SON UNITÉ DE COMPTE EST L'ENTITÉ, pas le produit ni le
+         traitement : la qualification se calcule sur le secteur et la
+         taille, et elle commande le régime de supervision. -->
+    <div class="sb-section sb-pliable" data-grp="nis2" data-fam="conformite" role="button" tabindex="0" aria-expanded="false" onclick="sbReplier(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sbReplier(this)}" title="Replier ou déplier NIS 2"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="5" cy="6" r="2.2"/><circle cx="19" cy="6" r="2.2"/><circle cx="12" cy="18" r="2.2"/><path d="M6.6 7.4 10.6 16M17.4 7.4 13.4 16M7.2 6h9.6"/></svg><span>NIS 2 — Entités essentielles</span><svg class="sb-chev" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></div>
+    <div class="sb-item" data-grp="nis2" role="button" tabindex="0" onclick="go('nis2-qualifier',this,'NIS 2','Suis-je concerné ?');nis2Init()" title="Essentielle, importante ou hors champ — et le fait qui l a decide : un effet de seuil sur l effectif, pas un jugement sur votre securite"><span class="sb-icon" aria-hidden="true"></span>Suis-je concerné ?</div>
+    <div class="sb-item" data-grp="nis2" role="button" tabindex="0" onclick="go('nis2',this,'NIS 2','Mesures art. 21 §2');nis2Init()" title="Les dix mesures « tous risques » — un socle, pas une liste a epuiser"><span class="sb-icon" aria-hidden="true"></span>Mesures art. 21 §2</div>
+    <div class="sb-item" data-grp="nis2" role="button" tabindex="0" onclick="go('nis2-gouvernance',this,'NIS 2','Gouvernance art. 20');nis2Init()" title="Les dirigeants approuvent, supervisent, PEUVENT ETRE TENUS RESPONSABLES — et doivent suivre une formation"><span class="sb-icon" aria-hidden="true"></span>Gouvernance art. 20</div>
+    <div class="sb-item" data-grp="nis2" role="button" tabindex="0" onclick="go('nis2-signalement',this,'NIS 2','Signalement art. 23');nis2Init()" title="24 h, 72 h, un mois — et l horloge demarre a la CONNAISSANCE de l incident, pas a sa survenance"><span class="sb-icon" aria-hidden="true"></span>Signalement art. 23</div>
+    <div class="sb-item" data-grp="nis2" role="button" tabindex="0" onclick="go('nis2-chiffre',this,'NIS 2','Exposition chiffrée');nis2Init()" title="Le PLANCHER europeen du plafond : 10 M EUR ou 2 % pour les essentielles, 7 M EUR ou 1,4 % pour les importantes"><span class="sb-icon" aria-hidden="true"></span>Exposition chiffrée</div>
     <!-- ═══ LE CRA EST UN PILIER, PAS UNE RUBRIQUE D'UN AUTRE ═══
          POURQUOI UN GROUPE DE PREMIER NIVEAU, comme RGPD & Privacy.
          Les trois cadres de la plateforme comptent TROIS UNITES
@@ -3054,7 +3170,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
          ET SON CALENDRIER EST LE SIEN : l'article 14 s'applique
          depuis le 11 septembre 2026, quand l'IA Act et le RGPD ont
          chacun le leur. -->
-    <div class="sb-section" data-grp="cra"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 2.5l8 3.2v6c0 5-3.4 8.8-8 10-4.6-1.2-8-5-8-10v-6z"/><path d="M9.2 12.2l2 2 3.6-3.8"/></svg><span>CRA — Produits numériques</span></div>
+    <div class="sb-section sb-pliable" data-grp="cra" data-fam="conformite" role="button" tabindex="0" aria-expanded="false" onclick="sbReplier(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sbReplier(this)}" title="Replier ou déplier le CRA"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 2.5l8 3.2v6c0 5-3.4 8.8-8 10-4.6-1.2-8-5-8-10v-6z"/><path d="M9.2 12.2l2 2 3.6-3.8"/></svg><span>CRA — Produits numériques</span></div>
     <div class="sb-item" data-grp="cra" role="button" tabindex="0" onclick="go('cra-role',this,'CRA — PRODUITS','Qualifier mon rôle')" title="Quel role le reglement vous donne : fabricant, importateur, distributeur, ou requalifie fabricant sans le savoir."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M16 20v-1.5a3.5 3.5 0 0 0-3.5-3.5h-5A3.5 3.5 0 0 0 4 18.5V20"/><circle cx="10" cy="8" r="3.2"/><path d="M17 11l2 2 3.5-3.5"/></svg></span>Qualifier mon rôle</div>
     <div class="sb-item" data-grp="cra" role="button" tabindex="0" onclick="go('cra',this,'CRA — PRODUITS','Produits &amp; classification')" title="Le registre des produits comportant des elements numeriques, leur classe au titre des annexes III et IV, et la procedure d evaluation qui en decoule."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/></svg></span>Produits &amp; classification</div>
     <div class="sb-item" data-grp="cra" role="button" tabindex="0" onclick="go('cra-ecarts',this,'CRA — PRODUITS','Analyse d’écart')" title="Les vingt et une exigences essentielles de l annexe I, parties I et II, cotees une par une. Une case vide n est pas une case verte."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h10M4 18h7"/><path d="M17 15l2.5 2.5L23 13"/></svg></span>Analyse d’écart</div>
@@ -5175,6 +5291,148 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
   <div id="cra-sig-body"><div class="veille-loading">Chargement des échéances…</div></div>
   <div class="trait-note">
     La notification part <b>simultanément</b> au CSIRT désigné coordinateur <b>et</b> à l'ENISA, par la plateforme unique de signalement de l'article&nbsp;16. Prévenir l'un puis l'autre, ou l'un seulement, n'est pas ce que le texte demande.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     ISO/IEC 42001 — L'ANALYSE DE MISE EN CONFORMITÉ
+     ═══════════════════════════════════════════════════════════════════
+     CE QUI DISTINGUE CES QUATRE ÉCRANS DE LA TABLE DU CADRE NORMATIF :
+     la table SE LIT, ces écrans MESURENT. Et ce qu'ils mesurent n'est pas
+     un taux de maturité — c'est si la déclaration d'applicabilité passe
+     l'audit d'étape 1, ce qui ne se déduit d'aucun pourcentage. ══════ -->
+<div class="page" id="p-iso42001">
+  <span class="eyebrow">ISO 42001 · Articles 4 à 10</span>
+  <h1 class="page-h">Le corps de la norme, <em>et l'effort réel</em></h1>
+  <p class="page-lead">Trente-deux sous-articles, et <b>deux taux</b>. Le premier compte tout ; le second ne compte que ce que 42001 ajoute vraiment à un système de management déjà en place. Un organisme certifié ISO&nbsp;27001 part avec la structure harmonisée — revue de direction, audit interne, non-conformités — et n'a devant lui que neuf articles neufs. Le premier taux le flatte ; le second lui dit où va son budget.</p>
+  <div class="cnf-copy"><b>ISO/IEC 42001:2023 est protégée par le droit d'auteur (© ISO/IEC 2023).</b> Cet écran cite des <b>numéros</b> et des <b>titres</b> d'articles et de mesures ; tout ce qui les décrit est rédigé par le cabinet. Aucune phrase du texte normatif n'y est reproduite. La mise en œuvre suppose de détenir la norme, qui s'achète auprès de l'ISO ou de l'AFNOR.</div>
+  <div class="reg-toolbar">
+    <button class="mat-export-btn" onclick="isoPeindreArticles()">↻ Recalculer</button>
+    <button class="mat-export-btn" onclick="go('iso42001-soa')">Déclaration d'applicabilité →</button>
+  </div>
+  <div id="iso-art-body"><div class="veille-loading">Chargement du référentiel…</div></div>
+  <div class="trait-note">
+    Un article de 4 à 10 ne se déclare pas « sans objet » : ce sont des <b>exigences</b>, et elles ne s'écartent pas. Seules les mesures de l'annexe&nbsp;A peuvent être écartées, et seulement avec justification (art.&nbsp;6.1.3&nbsp;f). Une déclaration « sans objet » posée sur un article est ignorée par le moteur, qui le dit.
+  </div>
+</div>
+
+<div class="page" id="p-iso42001-soa">
+  <span class="eyebrow">ISO 42001 · Article 6.1.3 f)</span>
+  <h1 class="page-h">Déclaration <em>d'applicabilité</em></h1>
+  <p class="page-lead">C'est le premier document que l'auditeur ouvre, et le seul qui puisse arrêter la certification avant que quiconque ait regardé ce que vous faites. Chaque mesure de l'annexe&nbsp;A y est <b>retenue</b> ou <b>écartée</b> — et, dans les deux cas, <b>justifiée</b>. Une mesure laissée vide n'est pas un chantier en cours : c'est un défaut de document.</p>
+  <div class="cnf-copy"><b>ISO/IEC 42001:2023 est protégée par le droit d'auteur (© ISO/IEC 2023).</b> Cet écran cite des <b>numéros</b> et des <b>titres</b> d'articles et de mesures ; tout ce qui les décrit est rédigé par le cabinet. Aucune phrase du texte normatif n'y est reproduite. La mise en œuvre suppose de détenir la norme, qui s'achète auprès de l'ISO ou de l'AFNOR.</div>
+  <div class="cnf-cmd bloc">
+    <b>Le fait qui coûte le plus cher, et qu'aucun taux ne montre.</b> Un organisme qui a mis en œuvre trente-six mesures sur trente-huit et laissé deux cases vides <b>échoue à l'étape&nbsp;1</b>. Un organisme qui en retient dix-huit et en écarte vingt, chacune motivée, <b>passe</b>. La conformité ne se compte pas en cases cochées : elle se compte en cases <b>décidées</b>.
+  </div>
+  <div class="reg-toolbar">
+    <button class="mat-export-btn" onclick="isoPeindreSoa()">↻ Recalculer</button>
+    <button class="mat-export-btn" onclick="isoSoaTout('retenue')">Tout retenir</button>
+    <button class="mat-export-btn" onclick="isoSoaTout('ecartee')">Tout écarter</button>
+  </div>
+  <div id="iso-soa-body"><div class="veille-loading">Chargement de l'annexe A…</div></div>
+  <div class="trait-note">
+    Les mesures de l'annexe&nbsp;A <b>ne sont pas exhaustives</b> : la norme prévoit qu'un organisme en conçoive d'autres si le traitement des risques l'exige. Couvrir les trente-huit ne suffit donc pas à rendre la déclaration complète — elle l'est si elle couvre les options de traitement retenues.
+  </div>
+</div>
+
+<div class="page" id="p-iso42001-certif">
+  <span class="eyebrow">ISO 42001 · Certification</span>
+  <h1 class="page-h">Le chemin, <em>et ce qui fait tomber chaque étape</em></h1>
+  <p class="page-lead">ISO&nbsp;42001 est la <b>seule</b> des quatre références de cet espace qui délivre un certificat. RGPD, NIS&nbsp;2 et CRA sont du droit : on s'y conforme, et personne ne remet d'attestation. 42001 est une norme volontaire auditée par un organisme accrédité tiers — un actif qui se montre à un client, à un acheteur public, à un assureur.</p>
+  <div class="cnf-copy"><b>ISO/IEC 42001:2023 est protégée par le droit d'auteur (© ISO/IEC 2023).</b> Cet écran cite des <b>numéros</b> et des <b>titres</b> d'articles et de mesures ; tout ce qui les décrit est rédigé par le cabinet. Aucune phrase du texte normatif n'y est reproduite. La mise en œuvre suppose de détenir la norme, qui s'achète auprès de l'ISO ou de l'AFNOR.</div>
+  <div id="iso-certif-body"><div class="veille-loading">Chargement du cycle d'audit…</div></div>
+  <div class="trait-note">
+    Un cycle d'audit interne (art.&nbsp;9.2) et une revue de direction (art.&nbsp;9.3) doivent avoir <b>eu lieu</b> avant l'étape&nbsp;2. Ce sont des exigences, et elles ne se fabriquent pas la veille : elles laissent des traces datées, ou elles n'ont pas eu lieu.
+  </div>
+</div>
+
+<div class="page" id="p-iso42001-ponts">
+  <span class="eyebrow">ISO 42001 · Articulation</span>
+  <h1 class="page-h">Ce qui se réutilise — <em>et ce qui ne se substitue pas</em></h1>
+  <p class="page-lead">Les trois évaluations d'impact portent sur le même objet et ne sont pas la même. C'est la confusion la plus coûteuse du domaine : elle fait croire qu'un document en remplace un autre, et elle se découvre au contrôle.</p>
+  <div class="cnf-copy"><b>ISO/IEC 42001:2023 est protégée par le droit d'auteur (© ISO/IEC 2023).</b> Cet écran cite des <b>numéros</b> et des <b>titres</b> d'articles et de mesures ; tout ce qui les décrit est rédigé par le cabinet. Aucune phrase du texte normatif n'y est reproduite. La mise en œuvre suppose de détenir la norme, qui s'achète auprès de l'ISO ou de l'AFNOR.</div>
+  <div id="iso-ponts-body"><div class="veille-loading">Chargement des ponts…</div></div>
+  <div class="trait-note">
+    Être certifié 42001 ne rend conforme à aucune obligation légale et n'en dispense d'aucune ; inversement, un système parfaitement conforme à l'IA&nbsp;Act ne vaut pas un système de management certifié. Les deux se nourrissent, aucun n'emporte l'autre.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     NIS 2 — L'ANALYSE DE MISE EN CONFORMITÉ
+     ═══════════════════════════════════════════════════════════════════
+     LA RÉSERVE QUI TIENT TOUS CES ÉCRANS : NIS 2 est une DIRECTIVE. Ce
+     qui oblige une entreprise, c'est la loi de transposition de chaque
+     État membre où elle opère. Les montants de l'article 34 sont des
+     PLANCHERS imposés aux États, pas des plafonds opposables. ══════ -->
+<div class="page" id="p-nis2-qualifier">
+  <span class="eyebrow">NIS 2 · Articles 2 et 3</span>
+  <h1 class="page-h">Essentielle, importante, <em>ou hors champ</em></h1>
+  <p class="page-lead">La question a l'air d'un classement d'honneur ; c'est un <b>régime de contrôle</b>. Une entité essentielle subit des audits réguliers sans qu'aucun incident ne soit nécessaire (art.&nbsp;32) ; une entité importante n'est contrôlée que sur indice de manquement (art.&nbsp;33). Et l'article&nbsp;32,&nbsp;§5, réservé aux essentielles, permet d'<b>interdire temporairement au dirigeant d'exercer ses fonctions</b>.</p>
+  <div class="cnf-cmd">
+    <b>Ce qui fait basculer n'est pas votre niveau de sécurité.</b> C'est le secteur (annexe&nbsp;I ou II) et la taille. Une entreprise de l'annexe&nbsp;I qui passe de 240 à 260 personnes devient essentielle sans avoir rien changé à son risque — et hérite des audits réguliers et d'un palier de sanction supérieur de 43&nbsp;%.
+  </div>
+  <div class="reg-toolbar" id="nis2-q"></div>
+  <div id="nis2-verdict"><div class="veille-loading">Renseignez le secteur et la taille ci-dessus.</div></div>
+  <div class="trait-note">
+    Cette qualification suit ce que vous déclarez. Elle est prononcée en droit par l'autorité nationale compétente, sur l'entité réelle. Et elle <b>ne se demande pas</b> : l'État dresse la liste (art.&nbsp;3,&nbsp;§3) et l'entité s'y déclare elle-même (art.&nbsp;3,&nbsp;§4) — au plus tard le 17&nbsp;avril&nbsp;2025.
+  </div>
+</div>
+
+<div class="page" id="p-nis2">
+  <span class="eyebrow">NIS 2 · Article 21 §2</span>
+  <h1 class="page-h">Les dix mesures — <em>un socle, pas une liste</em></h1>
+  <p class="page-lead">L'article dit que les mesures « comprennent <b>au moins</b> » ces dix éléments. Ce n'est pas une liste de contrôle qu'on épuise : c'est un plancher en dessous duquel on ne descend pas. Les cocher toutes ne prouve pas la conformité ; en manquer une la défait.</p>
+  <div class="reg-toolbar">
+    <button class="mat-export-btn" onclick="nis2PeindreMesures()">↻ Recalculer</button>
+    <button class="mat-export-btn" onclick="go('nis2-gouvernance')">Gouvernance art. 20 →</button>
+  </div>
+  <div id="nis2-mesures-body"><div class="veille-loading">Chargement du référentiel…</div></div>
+  <div class="trait-note">
+    Une mesure non renseignée n'est pas une mesure conforme. Le taux affiché est toujours accompagné du nombre de lignes non renseignées : un 100&nbsp;% sur deux mesures ne dit rien des huit autres.
+  </div>
+</div>
+
+<div class="page" id="p-nis2-gouvernance">
+  <span class="eyebrow">NIS 2 · Article 20</span>
+  <h1 class="page-h">Ce que la directive <em>demande au conseil</em></h1>
+  <p class="page-lead">C'est l'article qui nomme une personne. Les organes de direction <b>approuvent</b> les mesures, <b>supervisent</b> leur mise en œuvre, et <b>peuvent être tenus responsables</b> de la violation de l'article&nbsp;21 par l'entité. Ce n'est plus la DSI qui porte le sujet.</p>
+  <div class="cnf-cmd bloc">
+    <b>Les cinq lignes ne pèsent pas pareil.</b> Quatre sont des obligations ; la formation du personnel est un <b>encouragement</b>. Une entreprise qui forme toutes ses équipes sauf son conseil d'administration a manqué la seule des deux formations qui soit obligatoire — et c'est celle qui expose personnellement quelqu'un.
+  </div>
+  <div class="reg-toolbar">
+    <button class="mat-export-btn" onclick="nis2PeindreGouvernance()">↻ Recalculer</button>
+  </div>
+  <div id="nis2-gouv-body"><div class="veille-loading">Chargement…</div></div>
+  <div class="trait-note">
+    La preuve attendue pour la formation des dirigeants est <b>nominative et datée</b>, et elle porte sur les membres de l'organe de direction eux-mêmes. Un plan de formation d'entreprise, si complet soit-il, ne l'établit pas.
+  </div>
+</div>
+
+<div class="page" id="p-nis2-signalement">
+  <span class="eyebrow">NIS 2 · Article 23</span>
+  <h1 class="page-h">L'horloge démarre à <em>la connaissance</em></h1>
+  <p class="page-lead">« Après avoir eu connaissance de l'incident important » — pas à sa survenance, pas à sa détection technique. Ce qui déplace la question de la détection vers la <b>qualification</b> : le jour où quelqu'un, dans l'entreprise, a compris que c'était important, les vingt-quatre heures ont commencé.</p>
+  <div id="nis2-sig-body"><div class="veille-loading">Chargement de la chaîne de signalement…</div></div>
+  <div class="trait-note">
+    Un <b>prestataire de services de confiance</b> notifie les incidents affectant ses services de confiance dans les <b>24&nbsp;heures</b>, et non 72. Et si l'incident est encore en cours au moment du rapport final, un rapport d'avancement le remplace, le rapport final venant un mois après le traitement de l'incident.
+  </div>
+</div>
+
+<div class="page" id="p-nis2-chiffre">
+  <span class="eyebrow">NIS 2 · Article 34</span>
+  <h1 class="page-h">Un <em>plancher</em> sur le plafond</h1>
+  <p class="page-lead">L'article&nbsp;34 impose aux États membres des amendes d'un maximum <b>« d'au moins »</b> ces montants. Le chiffre n'est donc pas ce que l'entreprise risque au maximum : c'est le <b>minimum que l'État doit rendre possible</b>. Une transposition nationale peut prévoir davantage.</p>
+  <div class="cnf-cmd bloc">
+    <b>Ne pas lire NIS&nbsp;2 comme le CRA.</b> Le règlement (UE) 2024/2847 est d'application directe : ses montants sont les montants. NIS&nbsp;2 est une directive — traiter les deux de la même façon <b>sous-estime</b> l'exposition.
+  </div>
+  <div class="reg-toolbar">
+    <label class="cnf-chk">Chiffre d'affaires annuel mondial du groupe (M€)
+      <input id="nis2-ca" class="cnf-in" type="number" min="0" step="1" placeholder="ex. 450" style="width:140px"></label>
+    <button class="mat-export-btn" onclick="nis2Exposition()">Calculer l'exposition</button>
+  </div>
+  <div id="nis2-chiffre-body"><div class="veille-loading">Saisissez un chiffre d'affaires, ou calculez sans pour voir les montants planchers.</div></div>
+  <div class="trait-note">
+    L'assiette est le <b>chiffre d'affaires mondial total de l'entreprise à laquelle l'entité appartient</b> — pas celui de la seule filiale concernée. Lire le chiffre de la filiale divise l'exposition par l'écart entre la filiale et le groupe : c'est le plus gros facteur d'erreur possible sur ce calcul.
   </div>
 </div>
 

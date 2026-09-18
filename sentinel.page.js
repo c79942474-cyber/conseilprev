@@ -947,6 +947,15 @@ var PAGE_META = {
   'cra-role':       { section: 'CRA — PRODUITS', label: 'Qualifier mon rôle' },
   'cra-chiffre':    { section: 'CRA — PRODUITS', label: 'Exposition chiffrée' },
   'cra-signalement':{ section: 'CRA — PRODUITS', label: 'Signalement art. 14' },
+  'iso42001':      { section: 'ISO 42001', label: 'Articles 4 à 10' },
+  'iso42001-soa':  { section: 'ISO 42001', label: 'Déclaration d\u2019applicabilité' },
+  'iso42001-certif':{ section: 'ISO 42001', label: 'Chemin de certification' },
+  'iso42001-ponts':{ section: 'ISO 42001', label: 'Ponts IA Act / RGPD / NIS 2' },
+  'nis2-qualifier':{ section: 'NIS 2', label: 'Suis-je concerné ?' },
+  'nis2':          { section: 'NIS 2', label: 'Mesures art. 21 §2' },
+  'nis2-gouvernance':{ section: 'NIS 2', label: 'Gouvernance art. 20' },
+  'nis2-signalement':{ section: 'NIS 2', label: 'Signalement art. 23' },
+  'nis2-chiffre':  { section: 'NIS 2', label: 'Exposition chiffrée' },
     'rgpd-hub': { section: 'RGPD & PRIVACY', label: 'Vue d\u2019ensemble' },
     'rgpd-conformite': { section: 'RGPD & PRIVACY', label: 'Conformité RGPD' },
     'rgpd-sensibilisation': { section: 'RGPD & PRIVACY', label: 'Sensibilisation' },
@@ -1048,6 +1057,12 @@ function go(id, el, sec, pg) {
   if (id === 'adoption' && typeof window.adpInit === 'function') _apresPeinture(window.adpInit);
   if (id === 'ingenierie' && typeof window.ingInit === 'function') _apresPeinture(window.ingInit);
   if (id.indexOf('cra') === 0 && typeof window.craInit === 'function') _apresPeinture(window.craInit);
+  /* LES DEUX MODULES DE CONFORMITÉ S'AMORCENT AUSSI PAR `go()`, et pas
+     seulement par leur onglet. Un lien direct, un parcours guidé ou un
+     bouton « → » d'un autre écran passent par ici : sans ces deux lignes,
+     la page s'affichait vide avec « Chargement… » qui ne finissait jamais. */
+  if (id.indexOf('iso42001') === 0 && typeof window.isoInit === 'function') _apresPeinture(window.isoInit);
+  if (id.indexOf('nis2') === 0 && typeof window.nis2Init === 'function') _apresPeinture(window.nis2Init);
   /* L'ONGLET COURANT EST AUSSI ANNONCÉ, pas seulement peint : à un lecteur
      d'écran, la pastille terre cuite ne dit rien. */
   function _ici(i){ i.classList.add('on'); i.setAttribute('aria-current', 'page'); }
@@ -1055,6 +1070,12 @@ function go(id, el, sec, pg) {
   else document.querySelectorAll('.sb-item').forEach(function(i){
     if (i.getAttribute('onclick') && i.getAttribute('onclick').indexOf("'"+id+"'") >= 0) _ici(i);
   });
+  /* L'ONGLET COURANT ROUVRE SON TIROIR. Les quatre rubriques de « Votre Mise
+     en Conformité Réglementaire » sont repliées par défaut ; sans cette
+     ligne, arriver sur une page RGPD par un lien direct affichait la page et
+     une barre latérale où le repère de position était enfermé. */
+  if (typeof window.sbOuvrirFamilleDeCourant === 'function')
+    window.sbOuvrirFamilleDeCourant();
   var meta = PAGE_META[id];
   var _tbSec = sec || (meta && meta.section) || '';
   var _tbPg  = pg  || (meta && meta.label)   || '';
@@ -9572,6 +9593,84 @@ var PAGE_GUIDES = {
       {h:"À quoi sert cette page", t:"À montrer le seul compte à rebours du règlement qui court déjà. L’article 14 est applicable depuis le 11 septembre 2026, quand le reste du texte attend décembre 2027. Un fabricant qui découvre aujourd’hui qu’une de ses vulnérabilités est activement exploitée dispose de vingt-quatre heures pour l’alerte précoce."},
       {h:"Comment l’utiliser", t:"Lisez-la AVANT l’incident, pas pendant. Deux faits déclenchent la même mécanique — vulnérabilité activement exploitée, incident grave — avec les mêmes premiers délais, 24 h puis 72 h. Ce qui diffère est le rapport final : quatorze jours après la mise à disposition d’un correctif d’un côté, un mois après la notification de l’autre. Et la notification part simultanément au CSIRT coordinateur ET à l’ENISA, par la plateforme unique de l’article 16 : prévenir l’un puis l’autre n’est pas ce que le texte demande."},
       {h:"Ce qu’elle ne fait pas", t:"Elle ne signale rien à votre place et n’ouvre aucun compte à rebours : elle affiche les délais et ce qu’il faut transmettre à chaque étape. Elle ne dit pas non plus si votre incident est « grave » au sens du règlement — cette qualification se fait sur les faits, et elle engage."}
+    ]
+  },
+  // ═══════════════════════════════════════════════════════════════════════
+  //  ISO/IEC 42001 ET NIS 2 — LES DEUX MODULES DE CONFORMITÉ
+  // ═══════════════════════════════════════════════════════════════════════
+  //  CHAQUE GUIDE DIT CE QUE LE PANNEAU NE FAIT PAS, et c'est la section qui
+  //  compte le plus sur des écrans réglementaires : c'est là que se logent
+  //  les promesses qu'un lecteur pressé s'invente tout seul.
+  'iso42001': {
+    title: "ISO/IEC 42001 — articles 4 à 10",
+    sections: [
+      {h:"À quoi sert cette page", t:"À coter les trente-deux sous-articles du corps de la norme, et surtout à rendre DEUX taux au lieu d’un. Le premier compte tout ; le second ne compte que les neuf articles que 42001 ajoute vraiment à un système de management déjà en place. Un organisme certifié ISO 27001 hérite de la structure harmonisée — revue de direction, audit interne, non-conformités, informations documentées — et n’a devant lui que ces neuf-là. Le premier taux le flatte ; le second lui dit où va son budget."},
+      {h:"Comment l’utiliser", t:"Commencez par 4.3, le périmètre : tout ce qui n’est pas exclu par écrit sera audité, et un périmètre flou est la première cause de dérive de coût d’un audit de certification. Enchaînez ensuite sur les articles marqués « propre à l’IA », qui portent la politique d’IA, l’appréciation des risques et l’évaluation d’impact. Les articles « mutualisables » se cotent vite si vous êtes déjà certifié ailleurs — vous les avez."},
+      {h:"Ce qu’elle ne fait pas", t:"Elle ne reproduit AUCUNE phrase de la norme : ISO/IEC 42001:2023 est protégée par le droit d’auteur, et cette page en cite les numéros et les titres, tout le reste étant rédigé par le cabinet. Détenir le texte reste nécessaire pour se certifier. Elle n’accepte pas non plus qu’un article de 4 à 10 soit déclaré « sans objet » : ce sont des exigences, elles ne s’écartent pas. Seules les mesures de l’annexe A le peuvent, et seulement avec justification."}
+    ]
+  },
+  'iso42001-soa': {
+    title: "Déclaration d’applicabilité — article 6.1.3 f)",
+    sections: [
+      {h:"À quoi sert cette page", t:"À produire le document que l’auditeur ouvre en premier, et le seul qui puisse arrêter la certification avant que quiconque ait regardé ce que vous faites. Chacune des trente-huit mesures de l’annexe A y est retenue ou écartée — et, dans les deux cas, justifiée. C’est ce que l’article 6.1.3 f) demande, mot pour mot : la justification de l’inclusion COMME de l’exclusion."},
+      {h:"Comment l’utiliser", t:"Regardez le compteur « non décidées » avant tous les autres. Trente-six mesures mises en œuvre et deux cases vides : l’audit d’étape 1 s’arrête. Dix-huit retenues et vingt écartées, chacune motivée : il passe. Écarter est un droit, pas un aveu — ce qui coûte, c’est de ne pas trancher. Écrivez le motif AU MOMENT où vous tranchez : ceux qu’on rédige trois mois plus tard ne ressemblent jamais à la décision prise."},
+      {h:"Ce qu’elle ne fait pas", t:"Elle ne prédit pas l’issue de l’étape 2, qui s’audite sur des preuves d’exécution que Sentinel ne détient pas. Elle ne prétend pas non plus qu’une déclaration couvrant les trente-huit mesures soit complète : la norme dit elle-même que l’annexe A n’est pas exhaustive, et qu’un organisme peut devoir concevoir d’autres mesures si le traitement des risques l’exige. Les raccourcis « tout retenir » et « tout écarter » font gagner trente-huit clics, pas trente-huit décisions."}
+    ]
+  },
+  'iso42001-certif': {
+    title: "ISO/IEC 42001 — chemin de certification",
+    sections: [
+      {h:"À quoi sert cette page", t:"À situer ce que vous achetez. ISO 42001 est la seule des quatre références de cet espace qui délivre un certificat : RGPD, NIS 2 et CRA sont du droit, on s’y conforme et personne ne remet d’attestation. Un certificat 42001 se montre à un client, à un acheteur public, à un assureur — c’est un actif commercial, pas seulement un coût."},
+      {h:"Comment l’utiliser", t:"Lisez d’abord ce qui fait tomber chaque étape, puis remontez. L’étape 1 est DOCUMENTAIRE : on peut y échouer sans qu’aucune faiblesse technique n’existe, et c’est le cas le plus fréquent. L’étape 2 vérifie que ce qui est écrit est fait. Planifiez le cycle d’audit interne et la revue de direction bien avant : ce sont des exigences des articles 9.2 et 9.3, elles laissent des traces datées, et elles ne se fabriquent pas la veille."},
+      {h:"Ce qu’elle ne fait pas", t:"Elle ne remplace ni l’organisme certificateur ni son devis, et ne dit rien des délais réels d’accréditation. Elle ne reproduit aucune phrase de la norme — numéros et titres seulement — et ne dispense pas de l’acheter."}
+    ]
+  },
+  'iso42001-ponts': {
+    title: "Ponts — IA Act, RGPD, NIS 2, ISO 27001",
+    sections: [
+      {h:"À quoi sert cette page", t:"À séparer deux choses qu’on confond tout le temps : ce qui se RÉUTILISE d’un cadre à l’autre, et ce qui ne se SUBSTITUE jamais. Les trois évaluations d’impact — celle des articles 6.1.4 et 8.4 de la norme, l’analyse d’impact sur les droits fondamentaux de l’article 27 de l’IA Act, l’analyse d’impact relative à la protection des données de l’article 35 du RGPD — portent sur le même objet et ne sont pas la même."},
+      {h:"Comment l’utiliser", t:"Chaque pont nomme les articles ISO concernés : c’est ce qui le rend actionnable, on sait quoi rouvrir. Si vous êtes déjà certifié ISO 27001, lisez d’abord le pont vers 27001 : il liste exactement ce qui se greffe. Attention au piège le plus courant de cette greffe — le périmètre du système de management de l’IA n’est PAS celui du système de management de la sécurité de l’information."},
+      {h:"Ce qu’elle ne fait pas", t:"Elle ne fusionne aucun document et ne prétend pas qu’un livrable en vaille un autre. Être certifié 42001 ne rend conforme à aucune obligation légale et n’en dispense d’aucune ; inversement, un système parfaitement conforme à l’IA Act ne vaut pas un système de management certifié. Un budget bâti sur « on fera une seule analyse » se défait au premier contrôle."}
+    ]
+  },
+  'nis2-qualifier': {
+    title: "NIS 2 — essentielle, importante ou hors champ",
+    sections: [
+      {h:"À quoi sert cette page", t:"À répondre à la question qui commande tout le reste. La qualification n’est pas un classement d’honneur : c’est un régime de contrôle. Une entité essentielle subit des inspections, des audits RÉGULIERS et des scans sans qu’aucun incident ne soit nécessaire (article 32) ; une entité importante n’est contrôlée qu’au vu d’éléments de manquement (article 33). Et l’article 32, §5, réservé aux essentielles, permet d’interdire temporairement au directeur général d’exercer ses fonctions dirigeantes."},
+      {h:"Comment l’utiliser", t:"Renseignez le secteur et la taille, puis ouvrez « les cas où la taille ne compte pas » : huit portes ignorent totalement la taille, et deux mènent directement au statut d’entité essentielle. Méfiez-vous du « OU » des seuils financiers — 60 M€ de chiffre d’affaires avec 20 M€ de bilan reste une MOYENNE entreprise, parce qu’il suffit de tenir un seul des deux plafonds. Le lire comme un « ET » surqualifie."},
+      {h:"Ce qu’elle ne fait pas", t:"Elle ne prononce aucune qualification opposable : c’est l’autorité nationale compétente qui le fait, sur l’entité réelle. Et elle ne dit rien de la loi de TRANSPOSITION, qui est ce qui vous oblige vraiment — NIS 2 est une directive, pas un règlement. Enfin, elle ne vous inscrit nulle part : l’enregistrement de l’article 3, §4, se fait auprès de l’autorité, et son échéance — le 17 avril 2025 — est derrière nous."}
+    ]
+  },
+  'nis2': {
+    title: "NIS 2 — les dix mesures de l’article 21 §2",
+    sections: [
+      {h:"À quoi sert cette page", t:"À coter le socle « tous risques » que la directive impose aux entités essentielles ET importantes : les dix mesures sont les mêmes pour les deux statuts, seule la supervision diffère. L’article dit que les mesures « comprennent AU MOINS » ces dix éléments — c’est un plancher, pas une liste de contrôle qu’on épuise."},
+      {h:"Comment l’utiliser", t:"Commencez par b) et d). La gestion des incidents commande l’horloge de l’article 23 ; la sécurité de la chaîne d’approvisionnement est la mesure que l’article 21, §3, détaille le plus — il exige de tenir compte des vulnérabilités PROPRES à chaque fournisseur direct, ce qu’une politique fournisseurs générique ne fait pas. La mesure e), traitement et divulgation des vulnérabilités, recouvre largement l’annexe I du CRA : si vous fabriquez aussi un produit, le travail se fait une fois."},
+      {h:"Ce qu’elle ne fait pas", t:"Elle ne compte jamais une case vide comme une case verte : le nombre de lignes non renseignées est affiché à côté du taux, exprès. Et cocher les dix ne prouve pas la conformité — l’article dit « au moins », et la proportionnalité s’apprécie sur votre exposition réelle, votre taille et la gravité probable des incidents."}
+    ]
+  },
+  'nis2-gouvernance': {
+    title: "NIS 2 — gouvernance, article 20",
+    sections: [
+      {h:"À quoi sert cette page", t:"À montrer ce que la directive demande au conseil, et non à la DSI. C’est le premier texte cyber qui nomme une personne : les organes de direction approuvent les mesures, supervisent leur mise en œuvre, et peuvent être tenus responsables de la violation de l’article 21 par l’entité."},
+      {h:"Comment l’utiliser", t:"Regardez les cinq lignes, et surtout laquelle des cinq n’est PAS une obligation. Quatre en sont — approbation, supervision, responsabilité, formation des DIRIGEANTS —, la cinquième, la formation du personnel, est un encouragement. Le taux affiché ne compte que les quatre : l’y ajouter ferait gagner des points à une entreprise qui a formé toutes ses équipes et pas son conseil, c’est-à-dire qui a manqué la seule des deux formations qui l’expose personnellement. Chaque ligne dit quelle PREUVE est attendue, et c’est là que se joue l’écart entre croire tenir et tenir."},
+      {h:"Ce qu’elle ne fait pas", t:"Elle ne produit aucune délibération ni aucune attestation, et ne dit rien du droit national de la responsabilité des dirigeants, qui varie d’un État membre à l’autre. Un plan de formation d’entreprise, si complet soit-il, n’établit pas la formation des membres de l’organe de direction : ce qui est attendu est nominatif et daté."}
+    ]
+  },
+  'nis2-signalement': {
+    title: "NIS 2 — signalement, article 23",
+    sections: [
+      {h:"À quoi sert cette page", t:"À montrer une horloge qui ne démarre pas où on le croit. « Après avoir eu CONNAISSANCE de l’incident important » — pas à sa survenance, pas à sa détection technique. Ce qui déplace la question de la détection vers la QUALIFICATION : le jour où quelqu’un, dans l’entreprise, a compris que c’était important, les vingt-quatre heures ont commencé, et personne ne l’a annoncé."},
+      {h:"Comment l’utiliser", t:"Lisez les quatre étapes AVANT d’en avoir besoin, et repérez qui, chez vous, peut déclencher une alerte précoce un vendredi soir : vingt-quatre heures, c’est un week-end. Notez la SECONDE notification, que tout le monde oublie — le même paragraphe 1 impose de prévenir les DESTINATAIRES de vos services des incidents susceptibles de nuire à la fourniture, et le paragraphe 2 de leur dire ce qu’ils peuvent appliquer eux-mêmes. Cette liste ne se fabrique pas le jour de l’incident."},
+      {h:"Ce qu’elle ne fait pas", t:"Elle ne notifie rien à votre place et n’ouvre aucun compte à rebours. Elle ne dit pas non plus si votre incident est « important » au sens de la directive : cette qualification se fait sur les faits, et c’est elle qui démarre l’horloge. Un point utile en réunion : notifier n’accroît PAS la responsabilité de l’entité qui notifie — le texte le dit lui-même, et cela clôt le mauvais conseil de se taire."}
+    ]
+  },
+  'nis2-chiffre': {
+    title: "NIS 2 — exposition chiffrée, article 34",
+    sections: [
+      {h:"À quoi sert cette page", t:"À chiffrer ce que le texte chiffre, en disant ce que le chiffre EST. L’article 34 impose aux États membres des amendes d’un maximum « d’au moins » 10 M€ ou 2 % du chiffre d’affaires mondial pour les entités essentielles, 7 M€ ou 1,4 % pour les importantes. Ce sont des PLANCHERS imposés aux États, pas des plafonds opposables à l’administration."},
+      {h:"Comment l’utiliser", t:"Saisissez le chiffre d’affaires mondial du GROUPE, pas celui de la filiale concernée : l’assiette est celle de l’entreprise à laquelle l’entité appartient, et lire le chiffre de la filiale divise l’exposition par l’écart entre les deux. Un repère utile : les deux paliers pivotent au même chiffre d’affaires, 500 M€. En dessous, ce sont les planchers forfaitaires qui commandent ; au-dessus, les pourcentages. L’écart entre les deux qualifications reste de 43 % de part et d’autre."},
+      {h:"Ce qu’elle ne fait pas", t:"Elle n’annonce jamais une exposition maximale, parce que la directive n’en fixe pas : votre plafond réel se lit dans la loi de transposition de chaque État membre où vous opérez, et elle peut aller au-delà. Ne lisez surtout pas ces montants comme ceux du CRA, qui est un règlement d’application directe : là-bas, les montants sont les montants. Et elle n’estime aucun coût de mise en conformité."}
     ]
   },
   // ── Cinq panneaux qui retombaient sur le guide générique.
@@ -19575,6 +19674,111 @@ var GUIDED_PATHS = [
       {id:'conformite-globale', label:'Indice de conformité global', action:'Consolidez IA Act, RGPD et ISO/IEC 42001 en une vue unique avant de figer la déclaration UE de conformité.', gain:'Une déclaration signée sur un dossier incomplet engage la personne qui la signe. Cette vue dit ce qui reste ouvert.', tip:'Conservez une copie datée de l’indice au moment de la signature : c’est l’état des lieux que vous pourrez opposer.'},
       {id:'radar', label:'Surveillance après commercialisation et incidents', action:'Mettez en place le plan de surveillance de l’article 72, et le circuit de signalement de l’article 73 — quinze jours, dix en cas de décès, deux en cas d’incident généralisé.', gain:'Les obligations du fournisseur ne s’arrêtent pas à la mise sur le marché : elles courent sur toute la durée de vie du système.', tip:'Les délais de l’article 73 sont courts : le circuit de remontée doit exister AVANT le premier incident, pas être improvisé le jour venu.'}
     ]
+  },
+  /* ═══════════════════════════════════════════════════════════════════════
+     ISO/IEC 42001 — TROIS PARCOURS, ET CE QUI LES SÉPARE
+     ═══════════════════════════════════════════════════════════════════════
+     PAS UN PARCOURS PAR ARTICLE : un par SITUATION DE DÉPART. Les trois
+     lecteurs qui arrivent sur 42001 n'ont pas la même question. Celui qui
+     décide demande « qu'est-ce que ça m'apporte et combien de temps » ;
+     celui qui pilote demande « par quoi je commence » ; et celui qui est
+     DÉJÀ certifié 27001 demande « qu'est-ce que je n'ai pas déjà ». Le
+     troisième est le plus fréquent et le plus mal servi ailleurs : on lui
+     vend trente-deux articles quand il n'en a que neuf devant lui. ══════ */
+  {
+    id: 'iso_direction',
+    icon: '\u{1F3AF}',
+    role: "Direction — dois-je faire certifier mon système de management de l\u2019IA ?",
+    pitch: "ISO\u00a042001 est la SEULE des quatre r\u00e9f\u00e9rences de cet espace qui d\u00e9livre un certificat. RGPD, NIS\u00a02 et CRA sont du droit\u00a0: on s\u2019y conforme, et personne ne remet d\u2019attestation. Ce parcours r\u00e9pond \u00e0 la seule question qui vous concerne avant d\u2019engager un budget\u00a0: ce certificat, \u00e0 qui le montrerez-vous, et qu\u2019est-ce qui peut vous emp\u00eacher de l\u2019obtenir\u00a0?",
+    steps: [
+      {id:'iso42001-certif', label:"Chemin de certification", action:"Commencez par la fin\u00a0: regardez ce qui fait \u00e9chouer chacune des deux \u00e9tapes.", gain:"L\u2019\u00e9tape\u00a01 est DOCUMENTAIRE. On peut y \u00e9chouer sans qu\u2019aucune faiblesse technique n\u2019existe \u2014 et c\u2019est le cas le plus fr\u00e9quent.", tip:"Un cycle d\u2019audit interne et une revue de direction doivent avoir EU LIEU avant l\u2019\u00e9tape\u00a02. Ils laissent des traces dat\u00e9es\u00a0: ils ne se fabriquent pas la veille."},
+      {id:'iso42001-soa', label:"D\u00e9claration d\u2019applicabilit\u00e9", action:"Regardez le compteur \u00ab\u00a0non d\u00e9cid\u00e9es\u00a0\u00bb. C\u2019est lui qui d\u00e9cide si l\u2019audit a lieu.", gain:"Trente-six mesures mises en \u0153uvre et deux cases vides\u00a0: l\u2019audit s\u2019arr\u00eate. Dix-huit retenues et vingt \u00e9cart\u00e9es, toutes motiv\u00e9es\u00a0: il passe.", tip:"\u00c9carter une mesure est un DROIT, pas un aveu. Ce qui co\u00fbte, c\u2019est de ne pas trancher."},
+      {id:'iso42001-ponts', label:"Ponts IA Act / RGPD / NIS\u00a02", action:"Regardez ce que le travail d\u00e9j\u00e0 fait ailleurs vous fait gagner ici.", gain:"L\u2019inventaire des syst\u00e8mes et la cartographie des personnes affect\u00e9es servent aux trois \u00e9valuations d\u2019impact.", tip:"Aucune des trois ne remplace les deux autres. Un budget b\u00e2ti sur \u00ab\u00a0on fera une seule analyse\u00a0\u00bb se d\u00e9fait au premier contr\u00f4le."},
+      {id:'conformite-globale', label:"Indice de conformit\u00e9 global", action:"Situez 42001 \u00e0 c\u00f4t\u00e9 des autres cadres que vous portez d\u00e9j\u00e0.", gain:"Montre o\u00f9 la certification ajoute, et o\u00f9 elle ne fait que formaliser l\u2019existant.", tip:"Un indice global \u00e9lev\u00e9 ne pr\u00e9dit PAS un audit r\u00e9ussi\u00a0: l\u2019\u00e9tape\u00a01 se joue sur un seul document."}
+    ]
+  },
+  {
+    id: 'iso_pilote_smia',
+    icon: '\u{1F9ED}',
+    role: "Pilote du SMIA — je monte le syst\u00e8me de management de l\u2019IA",
+    pitch: "Trente-deux sous-articles, trente-huit mesures. L\u2019ordre dans lequel on les prend d\u00e9cide du d\u00e9lai\u00a0: la d\u00e9claration d\u2019applicabilit\u00e9 d\u00e9pend de l\u2019appr\u00e9ciation des risques, qui d\u00e9pend du p\u00e9rim\u00e8tre. Commencer par les mesures parce qu\u2019elles sont concr\u00e8tes fait refaire la d\u00e9claration trois fois.",
+    steps: [
+      {id:'iso42001', label:"Articles 4 \u00e0 10", action:"Cotez les articles, en commen\u00e7ant par 4.3 \u2014 le p\u00e9rim\u00e8tre. Tout ce qui n\u2019est pas exclu par \u00e9crit sera audit\u00e9.", gain:"Deux taux\u00a0: le global, et celui des neuf articles que 42001 ajoute vraiment. C\u2019est le second qui dit o\u00f9 va le budget.", tip:"Un article de 4 \u00e0 10 ne se d\u00e9clare pas \u00ab\u00a0sans objet\u00a0\u00bb\u00a0: ce sont des exigences. Seules les mesures de l\u2019annexe\u00a0A s\u2019\u00e9cartent."},
+      {id:'registre', label:"Registre des syst\u00e8mes d\u2019IA", action:"L\u2019appr\u00e9ciation des risques de l\u2019article\u00a06.1.2 se fait sur cet inventaire, pas \u00e0 c\u00f4t\u00e9.", gain:"Le m\u00eame inventaire sert \u00e0 l\u2019IA Act et au RGPD\u00a0: il est toujours \u00e9crit une fois de trop, jamais une fois de trop peu.", tip:"Un syst\u00e8me absent du registre sera absent de l\u2019appr\u00e9ciation des risques, donc absent de la d\u00e9claration d\u2019applicabilit\u00e9. L\u2019oubli se propage."},
+      {id:'iso42001-soa', label:"D\u00e9claration d\u2019applicabilit\u00e9", action:"Tranchez les trente-huit mesures. \u00c9crivez le motif AU MOMENT o\u00f9 vous tranchez.", gain:"C\u2019est l\u2019objet que l\u2019auditeur audite. Les motifs \u00e9crits plus tard ne ressemblent jamais \u00e0 la d\u00e9cision prise.", tip:"Les raccourcis \u00ab\u00a0tout retenir\u00a0\u00bb et \u00ab\u00a0tout \u00e9carter\u00a0\u00bb font gagner trente-huit clics, pas trente-huit d\u00e9cisions\u00a0: la d\u00e9claration reste irrecevable tant que les motifs manquent."},
+      {id:'fria', label:"\u00c9valuation d\u2019impact", action:"Les articles 6.1.4 et 8.4 demandent une \u00e9valuation d\u2019impact du syst\u00e8me d\u2019IA. Partez de celle que vous avez d\u00e9j\u00e0.", gain:"M\u00eame m\u00e9thode, m\u00eames parties affect\u00e9es\u00a0: le travail se r\u00e9utilise largement.", tip:"Il se r\u00e9utilise, il ne se substitue pas. L\u2019AIDF de l\u2019IA\u00a0Act suit une liste de points impos\u00e9e par le r\u00e8glement."},
+      {id:'iso42001-certif', label:"Chemin de certification", action:"Planifiez l\u2019audit interne et la revue de direction AVANT de demander l\u2019\u00e9tape\u00a02.", gain:"Ce sont des exigences des articles\u00a09.2 et 9.3\u00a0: sans elles, l\u2019\u00e9tape\u00a02 n\u2019a pas lieu.", tip:"Un audit interne conduit par celui qui a \u00e9crit le syst\u00e8me n\u2019en est pas un. L\u2019ind\u00e9pendance se v\u00e9rifie sur l\u2019organigramme."}
+    ]
+  },
+  {
+    id: 'iso_deja_27001',
+    icon: '\u{1F517}',
+    role: "D\u00e9j\u00e0 certifi\u00e9 ISO\u00a027001 \u2014 qu\u2019est-ce que 42001 ajoute\u00a0?",
+    pitch: "La structure harmonis\u00e9e est la m\u00eame\u00a0: revue de direction, audit interne, non-conformit\u00e9s, informations document\u00e9es se greffent sur ce que vous avez d\u00e9j\u00e0. Il vous reste NEUF articles \u2014 et c\u2019est l\u00e0, et nulle part ailleurs, que se trouve ce que 42001 apporte.",
+    steps: [
+      {id:'iso42001', label:"Articles 4 \u00e0 10", action:"Ne regardez que la colonne \u00ab\u00a0propre \u00e0 l\u2019IA\u00a0\u00bb. Le reste, vous l\u2019avez.", gain:"Neuf articles au lieu de trente-deux. Le premier taux vous flatte\u00a0; le second dit votre v\u00e9ritable reste \u00e0 faire.", tip:"27001 prot\u00e8ge l\u2019information, 42001 gouverne l\u2019IA. Aucune des deux certifications n\u2019emporte l\u2019autre\u00a0: ce sont deux audits et deux certificats."},
+      {id:'iso42001-ponts', label:"Ponts IA Act / RGPD / NIS\u00a02", action:"Regardez le pont vers 27001\u00a0: il liste exactement ce qui se greffe.", gain:"Ce qui se greffe n\u2019est pas \u00e0 refaire\u00a0; ce qui ne se greffe pas ne se n\u00e9gocie pas.", tip:"Le p\u00e9rim\u00e8tre du SMIA n\u2019est PAS celui du SMSI. Reprendre le p\u00e9rim\u00e8tre 27001 sans l\u2019examiner est l\u2019erreur la plus courante de cette greffe."},
+      {id:'iso42001-soa', label:"D\u00e9claration d\u2019applicabilit\u00e9", action:"C\u2019est l\u2019exercice que vous connaissez\u00a0\u2014 mais sur l\u2019annexe\u00a0A de 42001, qui n\u2019a rien \u00e0 voir avec celle de 27001.", gain:"Trente-huit mesures sur les donn\u00e9es, le cycle de vie des mod\u00e8les et l\u2019impact sur les personnes\u00a0: aucune n\u2019a d\u2019\u00e9quivalent en 27001.", tip:"La discipline, elle, est la m\u00eame\u00a0: retenir ou \u00e9carter, et justifier dans les deux cas."},
+      {id:'registre', label:"Registre des syst\u00e8mes d\u2019IA", action:"Votre inventaire d\u2019actifs 27001 ne contient pas vos syst\u00e8mes d\u2019IA en tant que tels. Montez celui-ci.", gain:"L\u2019appr\u00e9ciation des risques de l\u2019article\u00a06.1.2 et l\u2019\u00e9valuation d\u2019impact de l\u2019article\u00a08.4 se font toutes deux sur cet inventaire.", tip:"C\u2019est le seul livrable de la greffe qui ne se d\u00e9duit d\u2019AUCUN document 27001\u00a0: un mod\u00e8le n\u2019est pas un actif d\u2019information, il a un cycle de vie, des donn\u00e9es d\u2019entra\u00eenement et des personnes affect\u00e9es."}
+    ]
+  },
+  /* ═══════════════════════════════════════════════════════════════════════
+     NIS 2 — QUATRE PARCOURS, ET LE PREMIER EST UNE QUESTION
+     ═══════════════════════════════════════════════════════════════════════
+     LE SEUL DES QUATRE CADRES OÙ « SUIS-JE CONCERNÉ ? » EST UN PARCOURS À
+     PART ENTIÈRE. Pour le RGPD, la réponse est oui. Pour le CRA, elle se lit
+     sur le produit. Pour NIS 2, elle se calcule — secteur, taille, et huit
+     portes qui ignorent la taille — et elle commande TOUT le reste : le
+     régime de contrôle, le palier de sanction, et l'exposition personnelle
+     du dirigeant. Un lecteur qui se trompe de qualification prépare le
+     mauvais dossier pendant six mois. ══════════════════════════════════ */
+  {
+    id: 'nis2_qualification',
+    icon: '\u{1F50E}',
+    role: "Suis-je concern\u00e9 par NIS\u00a02, et \u00e0 quel titre\u00a0?",
+    pitch: "La qualification ne se demande pas\u00a0: l\u2019\u00c9tat dresse la liste et l\u2019entit\u00e9 s\u2019y d\u00e9clare elle-m\u00eame, au plus tard le 17\u00a0avril\u00a02025. Cette date est pass\u00e9e. Une entit\u00e9 non enregistr\u00e9e n\u2019est pas \u00ab\u00a0pas encore concern\u00e9e\u00a0\u00bb\u00a0: elle est en manquement sur une obligation dont l\u2019\u00e9ch\u00e9ance est derri\u00e8re elle.",
+    steps: [
+      {id:'nis2-qualifier', label:"Suis-je concern\u00e9 ?", action:"Renseignez le secteur et la taille. Ouvrez ensuite \u00ab\u00a0les cas o\u00f9 la taille ne compte pas\u00a0\u00bb.", gain:"Huit portes ignorent totalement la taille, et deux m\u00e8nent directement au statut d\u2019entit\u00e9 essentielle.", tip:"Le \u00ab\u00a0OU\u00a0\u00bb des seuils financiers est le pi\u00e8ge\u00a0: 60\u00a0M\u20ac de chiffre d\u2019affaires avec 20\u00a0M\u20ac de bilan reste une MOYENNE entreprise. Le lire comme un \u00ab\u00a0ET\u00a0\u00bb surqualifie."},
+      {id:'nis2', label:"Mesures art.\u00a021 \u00a72", action:"Cotez les dix mesures, m\u00eame grossi\u00e8rement, pour situer l\u2019\u00e9cart.", gain:"Le socle est le m\u00eame pour les entit\u00e9s essentielles et importantes\u00a0: seule la SUPERVISION diff\u00e8re.", tip:"Une mesure non renseign\u00e9e n\u2019est pas une mesure conforme. Le nombre de lignes vides est affich\u00e9 \u00e0 c\u00f4t\u00e9 du taux, expr\u00e8s."},
+      {id:'nis2-chiffre', label:"Exposition chiffr\u00e9e", action:"Regardez l\u2019\u00e9cart entre les deux paliers pour VOTRE chiffre d\u2019affaires.", gain:"43\u00a0% d\u2019\u00e9cart entre importante et essentielle, quel que soit le chiffre d\u2019affaires\u00a0: les deux paliers pivotent au m\u00eame endroit, 500\u00a0M\u20ac.", tip:"Ce sont des PLANCHERS impos\u00e9s aux \u00c9tats, pas des plafonds. La loi de transposition peut aller au-del\u00e0\u00a0\u2014 ne les lisez pas comme les montants du CRA."},
+      {id:'cadre-normatif', label:"Cadre normatif", action:"Regardez la colonne NIS\u00a02 en face de vos modules existants.", gain:"Montre o\u00f9 NIS\u00a02 recouvre ce que vous portez d\u00e9j\u00e0 au titre d\u2019un autre cadre.", tip:"Recouvrir n\u2019est pas remplacer\u00a0: NIS\u00a02 impose des D\u00c9LAIS que les autres cadres ne fixent pas."}
+    ]
+  },
+  {
+    id: 'nis2_dirigeant',
+    icon: '\u{1F454}',
+    role: "Dirigeant \u2014 c\u2019est moi que l\u2019article\u00a020 nomme",
+    pitch: "NIS\u00a02 est le premier texte cyber qui nomme une personne. Votre organe de direction APPROUVE les mesures, SUPERVISE leur mise en \u0153uvre, et PEUT \u00caTRE TENU RESPONSABLE de la violation de l\u2019article\u00a021. Et si votre entit\u00e9 est essentielle, l\u2019article\u00a032,\u00a0\u00a75, permet de vous INTERDIRE TEMPORAIREMENT d\u2019exercer vos fonctions dirigeantes.",
+    steps: [
+      {id:'nis2-qualifier', label:"Suis-je concern\u00e9 ?", action:"V\u00e9rifiez d\u2019abord si vous \u00eates essentielle ou importante. L\u2019escalade sur votre personne n\u2019existe que dans un cas.", gain:"L\u2019article\u00a032,\u00a0\u00a75, ne vise QUE les entit\u00e9s essentielles. L\u2019article\u00a033 n\u2019a pas d\u2019\u00e9quivalent.", tip:"Ce qui fait basculer n\u2019est pas votre niveau de s\u00e9curit\u00e9\u00a0: c\u2019est le secteur et la taille. On y entre en recrutant."},
+      {id:'nis2-gouvernance', label:"Gouvernance art.\u00a020", action:"Regardez les cinq lignes, et surtout laquelle des cinq n\u2019est PAS une obligation.", gain:"Quatre obligations, un encouragement. Le taux affich\u00e9 ne compte que les quatre, expr\u00e8s.", tip:"La formation des dirigeants est l\u2019obligation, celle du personnel l\u2019encouragement. Une entreprise qui forme toutes ses \u00e9quipes sauf son conseil a manqu\u00e9 la seule des deux qui l\u2019expose personnellement."},
+      {id:'nis2-chiffre', label:"Exposition chiffr\u00e9e", action:"Situez le palier, et lisez l\u2019assiette avant le montant.", gain:"L\u2019assiette est le chiffre d\u2019affaires mondial du GROUPE, pas celui de la filiale concern\u00e9e.", tip:"Lire le chiffre de la filiale divise l\u2019exposition par l\u2019\u00e9cart entre la filiale et le groupe. C\u2019est le plus gros facteur d\u2019erreur de ce calcul."},
+      {id:'nis2-signalement', label:"Signalement art.\u00a023", action:"Sachez qui, chez vous, peut d\u00e9clencher une alerte pr\u00e9coce un vendredi soir.", gain:"L\u2019horloge d\u00e9marre \u00e0 la CONNAISSANCE de l\u2019incident\u00a0: elle a pu d\u00e9marrer sans que vous le sachiez.", tip:"Vingt-quatre heures, c\u2019est un week-end. La d\u00e9l\u00e9gation doit exister avant, pas s\u2019improviser."}
+    ]
+  },
+  {
+    id: 'nis2_rssi',
+    icon: '\u{1F6E1}\uFE0F',
+    role: "RSSI \u2014 les dix mesures de l\u2019article\u00a021",
+    pitch: "\u00ab\u00a0Comprennent AU MOINS\u00a0\u00bb\u00a0: ce n\u2019est pas une liste de contr\u00f4le qu\u2019on \u00e9puise, c\u2019est un plancher sous lequel on ne descend pas. Les cocher toutes ne prouve pas la conformit\u00e9\u00a0; en manquer une la d\u00e9fait. Et deux d\u2019entre elles \u2014 la cha\u00eene d\u2019approvisionnement et la divulgation des vuln\u00e9rabilit\u00e9s \u2014 vous mettent en couture directe avec le CRA.",
+    steps: [
+      {id:'nis2', label:"Mesures art.\u00a021 \u00a72", action:"Cotez les dix. Commencez par b) et d)\u00a0: gestion des incidents et cha\u00eene d\u2019approvisionnement.", gain:"b) commande l\u2019horloge de l\u2019article\u00a023\u00a0; d) est la mesure que l\u2019article\u00a021,\u00a0\u00a73, d\u00e9taille le plus.", tip:"L\u2019article\u00a021,\u00a0\u00a73, exige de tenir compte des vuln\u00e9rabilit\u00e9s PROPRES \u00e0 chaque fournisseur direct, pas d\u2019une politique fournisseurs g\u00e9n\u00e9rique."},
+      {id:'nis2-signalement', label:"Signalement art.\u00a023", action:"D\u00e9crivez qui qualifie un incident d\u2019\u00ab\u00a0important\u00a0\u00bb, et \u00e0 quel moment.", gain:"L\u2019horloge part de la CONNAISSANCE. La question n\u2019est donc pas la d\u00e9tection\u00a0: c\u2019est la qualification.", tip:"Un prestataire de services de confiance notifie en 24\u00a0h, pas 72. Si vous en \u00eates un, vos deux premi\u00e8res \u00e9ch\u00e9ances se confondent."},
+      {id:'cra-ecarts', label:"Analyse d\u2019\u00e9cart CRA", action:"Si vous fabriquez aussi un produit, la mesure e) et l\u2019annexe\u00a0I du CRA se recouvrent largement.", gain:"Le traitement et la divulgation des vuln\u00e9rabilit\u00e9s sont exig\u00e9s des deux c\u00f4t\u00e9s\u00a0: le travail se fait une fois.", tip:"Les deux textes comptent des choses diff\u00e9rentes \u2014 NIS\u00a02 votre entit\u00e9, le CRA vos produits. La mesure se partage, pas la qualification."},
+      {id:'evals', label:"Mes \u00e9valuations", action:"Consignez chaque cotation avec sa date et sa preuve.", gain:"La mesure f) exige d\u2019\u00e9valuer l\u2019EFFICACIT\u00c9 des mesures, pas seulement leur existence.", tip:"Une entit\u00e9 essentielle peut \u00eatre audit\u00e9e sans pr\u00e9avis et sans incident. Les preuves se tiennent \u00e0 jour, pas \u00e0 la demande."}
+    ]
+  },
+  {
+    id: 'nis2_crise',
+    icon: '\u{23F1}\uFE0F',
+    role: "Cellule de crise \u2014 les 24\u00a0heures ont peut-\u00eatre d\u00e9j\u00e0 commenc\u00e9",
+    pitch: "\u00ab\u00a0Apr\u00e8s avoir eu CONNAISSANCE de l\u2019incident important\u00a0\u00bb. Pas apr\u00e8s sa survenance, pas apr\u00e8s sa d\u00e9tection technique. Le jour o\u00f9 quelqu\u2019un, chez vous, a compris que c\u2019\u00e9tait important, les vingt-quatre heures ont commenc\u00e9 \u2014 et personne ne l\u2019a annonc\u00e9.",
+    steps: [
+      {id:'nis2-signalement', label:"Signalement art.\u00a023", action:"Lisez les quatre \u00e9tapes AVANT d\u2019en avoir besoin.", gain:"24\u00a0h pour l\u2019alerte pr\u00e9coce, 72\u00a0h pour la notification, un mois pour le rapport final\u00a0: trois \u00e9ch\u00e9ances, un seul point de d\u00e9part.", tip:"Si l\u2019incident est encore en cours \u00e0 un mois, un rapport d\u2019avancement remplace le rapport final, qui vient un mois apr\u00e8s le traitement."},
+      {id:'nis2-qualifier', label:"Suis-je concern\u00e9 ?", action:"V\u00e9rifiez votre statut\u00a0: il d\u00e9cide de ce que l\u2019autorit\u00e9 peut faire apr\u00e8s l\u2019incident.", gain:"Une entit\u00e9 essentielle subit des audits ad hoc apr\u00e8s incident important\u00a0\u2014 c\u2019est \u00e9crit \u00e0 l\u2019article\u00a032,\u00a0\u00a72,\u00a0c).", tip:"L\u2019incident ne cr\u00e9e pas la comp\u00e9tence de l\u2019autorit\u00e9 sur une entit\u00e9 essentielle\u00a0: elle l\u2019avait d\u00e9j\u00e0."},
+      {id:'historique', label:"Historique", action:"Datez ce que vous savez, et QUAND vous l\u2019avez su.", gain:"C\u2019est la date de connaissance qui sera discut\u00e9e, pas celle de l\u2019attaque.", tip:"Une trace dat\u00e9e \u00e9crite pendant la crise vaut mieux qu\u2019une reconstitution \u00e9crite apr\u00e8s. Elle se fait en deux minutes, au moment o\u00f9 personne n\u2019en a."},
+      {id:'parties', label:"Parties prenantes", action:"Sortez la liste des DESTINATAIRES de vos services \u2014 celle-l\u00e0, pas celle de vos fournisseurs.", gain:"L\u2019article\u00a023,\u00a0\u00a71, impose une SECONDE notification, aux destinataires des services, distincte de celle au CSIRT. Et le \u00a72 impose de leur dire ce qu\u2019ils peuvent appliquer eux-m\u00eames.", tip:"Cette liste ne se fabrique pas le jour de l\u2019incident. Elle se construit \u00e0 froid, ou elle ne se construit pas."}
+    ]
   }
 ];
 
@@ -19624,6 +19828,17 @@ var GP_FAMILLES = [
     ids: ['daf_cout_ia', 'rse_empreinte_ia', 'dsi_socle_ia'] },
   { titre: 'Gouvernance & IA Act',
     ids: ['directeur_programme', 'grc_senior', 'risk_manager', 'ceo', 'cdo', 'caio'] },
+  /* LES QUATRE CADRES DE CONFORMITÉ ONT CHACUN LEUR FAMILLE, ET NON UNE
+     SEULE « conformité réglementaire ». La barre latérale les regroupe sous
+     un titre commun parce qu'ils répondent à la même question du dirigeant ;
+     les PARCOURS, eux, se choisissent par ce qu'on est — et on n'est jamais
+     « en conformité réglementaire », on est dirigeant, RSSI ou pilote d'un
+     système de management. Mélanger les quatre ferait une liste de seize où
+     l'on ne trouve plus rien. */
+  { titre: 'Management de l\u2019IA \u2014 ISO/IEC 42001',
+    ids: ['iso_direction', 'iso_pilote_smia', 'iso_deja_27001'] },
+  { titre: 'Cybers\u00e9curit\u00e9 des entit\u00e9s \u2014 NIS\u00a02',
+    ids: ['nis2_qualification', 'nis2_dirigeant', 'nis2_rssi', 'nis2_crise'] },
   { titre: 'Protection des données (RGPD)',
     ids: ['dpo', 'rgpd_conformite_init', 'rgpd_registre', 'rgpd_nouveau', 'rgpd_controle'] },
   { titre: 'Centres de données',
@@ -21081,7 +21296,146 @@ window.sbFiltrer = function(q){
      rempli automatiquement ne se remarque pas toujours. */
   var eff = document.getElementById('sb-filtre-effacer');
   if(eff) eff.hidden = !m;
+
+  /* ══ LE PLI CÈDE TOUJOURS AU FILTRE, ET NE S'OUBLIE JAMAIS ══════════════
+     LE DÉFAUT QU'ON ÉVITE ICI, ET IL EST SILENCIEUX. Un groupe replié cache
+     ses onglets ; le filtre, lui, les démasque avec `hidden`. Les deux se
+     seraient contredits : taper « nis2 » aurait donné « 5 onglets sur 95 »
+     au compteur, et une colonne où on n'en voit aucun. Le compte aurait eu
+     raison et l'écran tort — la pire des deux façons de se tromper.
+     LA RÈGLE : tant qu'un filtre est actif, tout groupe qui a un résultat
+     s'OUVRE, sans que son état mémorisé change. Le filtre effacé, l'état
+     mémorisé reprend la main. */
+  var sectionsFam = Array.prototype.slice.call(
+    nav.querySelectorAll('.sb-section[data-fam]'));
+  if(m){
+    sectionsFam.forEach(function(sec){
+      if(!sec.hasAttribute('hidden')) window.sbAppliquerPli(sec, false);
+    });
+  } else {
+    window.sbRestaurerPlis();
+  }
+
+  /* ══ UN TITRE DE FAMILLE SANS AUCUNE RUBRIQUE NE RESTE PAS SEUL ═════════
+     Le titre n'est pas une `.sb-section` — c'est ce qui permet au filtre de
+     ne pas couper le groupe RGPD en deux. Mais du coup RIEN ne le masque :
+     un filtre qui ne garde que « Pilotage » laissait « Votre Mise en
+     Conformité Réglementaire » planté au-dessus du vide. */
+  Array.prototype.slice.call(nav.querySelectorAll('.sb-famille'))
+    .forEach(function(fam){
+      var nom = fam.getAttribute('data-fam');
+      var soeurs = Array.prototype.slice.call(
+        nav.querySelectorAll('.sb-section[data-fam="' + nom + '"]'));
+      var vivantes = soeurs.filter(function(x){ return !x.hasAttribute('hidden'); });
+      if(vivantes.length) fam.removeAttribute('hidden');
+      else fam.setAttribute('hidden', '');
+    });
+  window.sbCompterFamilles();
 };
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   « VOTRE MISE EN CONFORMITÉ RÉGLEMENTAIRE » — LES QUATRE TIROIRS
+   ═══════════════════════════════════════════════════════════════════════════
+
+   POURQUOI LE PLI N'UTILISE PAS `hidden`. C'est l'attribut du filtre. Deux
+   mécanismes qui écrivent le même attribut se réveillent l'un l'autre :
+   replier un groupe puis effacer un filtre l'aurait rouvert, et filtrer puis
+   déplier aurait ressorti des onglets que le filtre venait d'écarter. Le pli
+   a donc `data-replie`, et la feuille de style le masque de son côté.
+
+   ET L'ÉTAT SE MÉMORISE. Un tiroir qu'on rouvre à chaque changement d'onglet
+   n'est pas un tiroir, c'est une animation. `localStorage` garde le pli d'une
+   visite à l'autre ; s'il est indisponible — navigation privée, stockage
+   refusé — le pli fonctionne quand même, il ne se souvient simplement pas.  */
+
+var SB_PLI_CLE = 'sentinel.sb.pli.';
+
+window.sbAppliquerPli = function(sec, replie){
+  if(!sec) return;
+  sec.classList.toggle('replie', !!replie);
+  sec.setAttribute('aria-expanded', replie ? 'false' : 'true');
+  var n = sec.nextElementSibling;
+  while(n && !n.classList.contains('sb-section')){
+    if(n.classList.contains('sb-item')){
+      if(replie) n.setAttribute('data-replie', '');
+      else n.removeAttribute('data-replie');
+    }
+    n = n.nextElementSibling;
+  }
+};
+
+window.sbPliMemoire = function(grp, replie){
+  try { localStorage.setItem(SB_PLI_CLE + grp, replie ? '1' : '0'); }
+  catch(e){}
+};
+
+window.sbPliMemorise = function(grp){
+  /* PAR DÉFAUT, REPLIÉ. Quatre cadres dépliés, c'est vingt-trois onglets
+     d'affilée — exactement ce que le regroupement devait faire disparaître.
+     L'onglet courant rouvre son propre tiroir, donc on ne perd jamais de vue
+     où l'on est. */
+  try {
+    var v = localStorage.getItem(SB_PLI_CLE + grp);
+    return v === null ? true : (v === '1');
+  } catch(e){ return true; }
+};
+
+window.sbReplier = function(sec){
+  if(!sec) return;
+  var replie = !sec.classList.contains('replie');
+  window.sbAppliquerPli(sec, replie);
+  window.sbPliMemoire(sec.getAttribute('data-grp'), replie);
+};
+
+window.sbRestaurerPlis = function(){
+  Array.prototype.slice.call(
+    document.querySelectorAll('.sb-nav .sb-section[data-fam]'))
+    .forEach(function(sec){
+      window.sbAppliquerPli(sec, window.sbPliMemorise(sec.getAttribute('data-grp')));
+    });
+  window.sbOuvrirFamilleDeCourant();
+};
+
+/* ══ L'ONGLET COURANT NE SE CACHE JAMAIS DANS UN TIROIR FERMÉ ═════════════
+   Sans cette règle, arriver sur « Registre des traitements » par un lien
+   direct affichait la page ET une barre latérale où RGPD était replié :
+   l'onglet en cours, peint en terre cuite, était invisible. Le repère de
+   position disparaissait au moment précis où il sert. */
+window.sbOuvrirFamilleDeCourant = function(){
+  var courant = document.querySelector('.sb-nav .sb-item.on');
+  if(!courant) return;
+  var n = courant.previousElementSibling;
+  while(n && !n.classList.contains('sb-section')) n = n.previousElementSibling;
+  if(n && n.hasAttribute('data-fam')) window.sbAppliquerPli(n, false);
+};
+
+/* Le compte au bout du titre de famille : combien d'onglets les quatre
+   tiroirs tiennent. Il est DÉRIVÉ du menu, pas écrit à la main — ajouter un
+   onglet à NIS 2 suffit à le faire bouger. */
+window.sbCompterFamilles = function(){
+  var nav = document.querySelector('.sb-nav');
+  if(!nav) return;
+  Array.prototype.slice.call(nav.querySelectorAll('.sb-famille'))
+    .forEach(function(fam){
+      var cpt = fam.querySelector('.sb-famille-n');
+      if(!cpt) return;
+      var nom = fam.getAttribute('data-fam');
+      var total = 0;
+      Array.prototype.slice.call(
+        nav.querySelectorAll('.sb-section[data-fam="' + nom + '"]'))
+        .forEach(function(sec){
+          var n = sec.nextElementSibling;
+          while(n && !n.classList.contains('sb-section')){
+            if(n.classList.contains('sb-item') && !n.hasAttribute('hidden')) total++;
+            n = n.nextElementSibling;
+          }
+        });
+      cpt.textContent = total ? (total + ' onglets') : '';
+    });
+};
+
+try { window.sbRestaurerPlis(); window.sbCompterFamilles(); } catch(e){}
 
 /* ENTRÉE ET ESPACE ACTIVENT L'ONGLET. Sans cela, `tabindex` ne ferait que
    promettre un accès qu'on n'a pas : on atteindrait l'onglet sans pouvoir
@@ -22505,5 +22859,656 @@ function craRendreExposition(j) {
   h += '<div class="cn-group"><div class="cn-group-t">Ce qui module le montant, et interdit de lire ces chiffres comme une prévision <span class="cra-art">art. 64, §5</span></div><ul class="cra-ul">';
   (j.modulation || []).forEach(function (x) { h += '<li>' + craEsc(x) + '</li>'; });
   h += '</ul></div>';
+  e.innerHTML = h;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ISO/IEC 42001:2023 — L'ANALYSE DE MISE EN CONFORMITÉ
+
+   CE QUE CES ÉCRANS NE CONTIENNENT PAS, ET NE CONTIENDRONT JAMAIS : le texte
+   normatif. ISO/IEC 42001 est protégée par le droit d'auteur ; les numéros et
+   les titres viennent de /api/iso42001/referentiel, et tout ce qui les décrit
+   est rédigé par le cabinet, côté moteur. Recopier ici une phrase de la norme
+   la publierait sur une page servie à des clients — une contrefaçon, et un
+   passif.
+
+   CE QU'ILS GARDENT : les décisions de la déclaration d'applicabilité, dans
+   la page et nulle part ailleurs. C'est un outil de qualification, pas un
+   dépôt : rien ne part, rien n'est conservé entre deux visites.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+var ISO_REF = null;
+var ISO_ETAT = { mesures: {}, articles: {} };
+
+function isoEsc(t) {
+  return String(t == null ? '' : t).replace(/[&<>"]/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; });
+}
+
+function isoInit() {
+  if (ISO_REF) { isoPeindre(); return; }
+  fetch('/api/iso42001/referentiel')
+    .then(function (r) { return r.json(); })
+    .then(function (j) {
+      if (!j || !j.ok) throw new Error('referentiel');
+      ISO_REF = j; isoPeindre();
+    })
+    .catch(function () {
+      /* RIEN PLUTÔT QU'UN TABLEAU PARTIEL. Sur une norme certifiable, une
+         liste tronquée qui ne dit pas qu'elle l'est fait préparer un audit
+         sur un périmètre faux. */
+      ['iso-art-body', 'iso-soa-body', 'iso-certif-body', 'iso-ponts-body']
+        .forEach(function (id) {
+          var e = document.getElementById(id);
+          if (e) e.innerHTML = '<div class="veille-loading">Le référentiel de '
+            + 'la norme est momentanément indisponible. Rien n’est affiché '
+            + 'plutôt qu’une liste partielle : préparer un audit sur un '
+            + 'périmètre tronqué coûte plus cher que l’attendre.</div>';
+        });
+    });
+}
+window.isoInit = isoInit;
+
+function isoPeindre() {
+  isoPeindreArticles(); isoPeindreSoa();
+  isoPeindreCertif(); isoPeindrePonts();
+}
+
+/* ── LES ARTICLES 4 À 10, ET LES DEUX TAUX ─────────────────────────────────
+   POURQUOI DEUX TAUX ET NON UN. Le taux global compte les trente-deux
+   sous-articles ; il flatte un organisme déjà certifié 27001, dont les deux
+   tiers sont acquis par la structure harmonisée. Le second ne compte que les
+   articles que 42001 ajoute — c'est celui qui dit où va le budget. */
+window.isoPeindreArticles = function () {
+  var e = document.getElementById('iso-art-body');
+  if (!e || !ISO_REF) return;
+  var propres = {}, nb = 0, faits = 0, nbP = 0, faitsP = 0;
+  (ISO_REF.propres_a_l_ia || []).forEach(function (n) { propres[n] = true; });
+  var h = '';
+  (ISO_REF.chapitres || []).forEach(function (c) {
+    h += '<details class="cnf-det" open><summary>' + isoEsc(c.numero) + '. '
+       + isoEsc(c.titre) + '</summary><div style="margin-top:8px">';
+    (c.sous || []).forEach(function (a) {
+      var etat = ISO_ETAT.articles[a.numero] || '';
+      nb++; if (etat === 'conforme') faits++;
+      if (propres[a.numero]) { nbP++; if (etat === 'conforme') faitsP++; }
+      h += '<div style="padding:8px 0;border-top:1px solid var(--line,#2a2a2a)">'
+         + '<b>' + isoEsc(a.numero) + '</b> ' + isoEsc(a.titre)
+         + (propres[a.numero]
+            ? ' <span class="cnf-art" title="Cet article ne se reprend pas d’un système de management existant">propre à l’IA</span>'
+            : ' <span class="cnf-art" title="Se greffe sur un système de management déjà en place (ISO 27001, 9001…)">mutualisable</span>')
+         + '<span class="cnf-pq">' + isoEsc(a.dit) + '</span>'
+         + '<select class="cnf-in" style="margin-top:6px" '
+         + 'onchange="isoArticle(\'' + a.numero + '\', this.value)">'
+         + ['', 'conforme', 'partiel', 'non_conforme'].map(function (v) {
+             return '<option value="' + v + '"' + (etat === v ? ' selected' : '')
+                  + '>' + (v === '' ? '— non renseigné —'
+                          : v === 'conforme' ? 'Conforme'
+                          : v === 'partiel' ? 'Partiel' : 'Non conforme')
+                  + '</option>'; }).join('')
+         + '</select></div>';
+    });
+    h += '</div></details>';
+  });
+  var t = nb ? Math.round(100 * faits / nb) : 0;
+  var tp = nbP ? Math.round(100 * faitsP / nbP) : 0;
+  e.innerHTML = '<div class="cnf-grille">'
+    + '<div class="cnf-case"><div class="cnf-case-n">' + t + ' %</div>'
+    + '<div class="cnf-case-l">Taux global — ' + faits + ' / ' + nb + '</div></div>'
+    + '<div class="cnf-case"><div class="cnf-case-n' + (tp < 100 ? ' cnf-bloc' : ' cnf-on')
+    + '">' + tp + ' %</div><div class="cnf-case-l">Propre à l’IA — ' + faitsP
+    + ' / ' + nbP + '</div></div></div>'
+    + '<div class="cnf-cmd">C’est le <b>second</b> taux qui dit l’effort réel. '
+    + 'Les articles « mutualisables » se greffent sur un système de management '
+    + 'déjà en place ; ceux marqués « propre à l’IA » sont ce que 42001 ajoute, '
+    + 'et il n’y en a que ' + nbP + '.</div>' + h;
+};
+
+window.isoArticle = function (numero, valeur) {
+  if (valeur) ISO_ETAT.articles[numero] = valeur;
+  else delete ISO_ETAT.articles[numero];
+  isoPeindreArticles();
+};
+
+/* ── LA DÉCLARATION D'APPLICABILITÉ ────────────────────────────────────────
+   LE VERDICT VIENT DU MOTEUR, PAS DE L'ÉCRAN. Recalculer la recevabilité en
+   JavaScript aurait produit deux vérités : celle qui s'affiche et celle qui
+   s'exporte. L'écran envoie les décisions et affiche ce qu'on lui répond. */
+window.isoPeindreSoa = function () {
+  var e = document.getElementById('iso-soa-body');
+  if (!e || !ISO_REF) return;
+  fetch('/api/iso42001/applicabilite', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ mesures: ISO_ETAT.mesures })
+  }).then(function (r) { return r.json(); })
+    .then(function (j) { isoRendreSoa(e, j); })
+    .catch(function () {
+      e.innerHTML = '<div class="veille-loading">Le calcul de recevabilité '
+        + 'est momentanément indisponible.</div>'; });
+};
+
+function isoRendreSoa(e, j) {
+  if (!j || !j.ok) { e.innerHTML = '<div class="veille-loading">Calcul '
+    + 'impossible.</div>'; return; }
+  var h = '<div class="cnf-grille">'
+    + '<div class="cnf-case"><div class="cnf-case-n cnf-on">' + j.retenues
+    + '</div><div class="cnf-case-l">Retenues</div></div>'
+    + '<div class="cnf-case"><div class="cnf-case-n">' + j.ecartees
+    + '</div><div class="cnf-case-l">Écartées, motivées</div></div>'
+    + '<div class="cnf-case"><div class="cnf-case-n'
+    + (j.non_decidees.length ? ' cnf-bloc' : '') + '">' + j.non_decidees.length
+    + '</div><div class="cnf-case-l">Non décidées</div></div>'
+    + '<div class="cnf-case"><div class="cnf-case-n'
+    + (j.sans_justification.length ? ' cnf-bloc' : '') + '">'
+    + j.sans_justification.length
+    + '</div><div class="cnf-case-l">Sans justification</div></div></div>';
+  h += '<div class="cnf-cmd ' + (j.recevable ? 'fait' : 'bloc') + '"><b>'
+     + (j.recevable ? 'Recevable pour un audit d’étape 1.'
+                    : 'NON recevable pour un audit d’étape 1.')
+     + '</b> ' + isoEsc(j.dit) + '</div>';
+  (j.bloquants || []).forEach(function (b) {
+    h += '<div class="cnf-cmd bloc">' + isoEsc(b) + '</div>'; });
+  (j.objectifs || []).forEach(function (g) {
+    h += '<details class="cnf-det"' + (g.non_decidees ? ' open' : '')
+       + '><summary>' + isoEsc(g.numero) + ' ' + isoEsc(g.titre)
+       + ' <span class="cnf-art">' + g.retenues + ' retenues · '
+       + g.ecartees + ' écartées · ' + g.non_decidees + ' à trancher</span>'
+       + '</summary><span class="cnf-pq">' + isoEsc(g.dit) + '</span>'
+       + '<div style="margin-top:8px">';
+    (g.lignes || []).forEach(function (l) {
+      var d = (ISO_ETAT.mesures[l.numero] || {});
+      h += '<div style="padding:8px 0;border-top:1px solid var(--line,#2a2a2a)">'
+         + '<b>' + isoEsc(l.numero) + '</b> ' + isoEsc(l.titre)
+         + (l.justification_manquante
+            ? ' <span class="cnf-bloc" title="L’article 6.1.3 f) exige une justification de l’inclusion COMME de l’exclusion">justification manquante</span>'
+            : '')
+         + '<div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap">'
+         + '<select class="cnf-in" onchange="isoDecision(\'' + l.numero + '\', this.value)">'
+         + ['', 'retenue', 'ecartee'].map(function (v) {
+             return '<option value="' + v + '"'
+                  + ((d.decision || '') === v ? ' selected' : '') + '>'
+                  + (v === '' ? '— à trancher —'
+                     : v === 'retenue' ? 'Retenue' : 'Écartée') + '</option>';
+           }).join('')
+         + '</select>'
+         + '<input class="cnf-in" style="flex:1;min-width:180px" '
+         + 'placeholder="Justification — obligatoire dans les deux cas" '
+         + 'value="' + isoEsc(d.justification || '') + '" '
+         + 'onchange="isoJustifier(\'' + l.numero + '\', this.value)">'
+         + '</div></div>';
+    });
+    h += '</div></details>';
+  });
+  h += '<div class="trait-note">' + isoEsc(j.non_exhaustive.quoi) + ' '
+     + isoEsc(j.non_exhaustive.consequence)
+     + ' <span class="cnf-art">' + isoEsc(j.non_exhaustive.article)
+     + '</span></div>';
+  e.innerHTML = h;
+}
+
+window.isoDecision = function (numero, valeur) {
+  var d = ISO_ETAT.mesures[numero] || (ISO_ETAT.mesures[numero] = {});
+  if (valeur) d.decision = valeur; else delete d.decision;
+  window.isoPeindreSoa();
+};
+
+window.isoJustifier = function (numero, texte) {
+  var d = ISO_ETAT.mesures[numero] || (ISO_ETAT.mesures[numero] = {});
+  d.justification = texte;
+  window.isoPeindreSoa();
+};
+
+/* TOUT RETENIR / TOUT ÉCARTER NE POSE AUCUNE JUSTIFICATION, et c'est
+   délibéré : le raccourci fait gagner trente-huit clics, pas trente-huit
+   décisions. La déclaration reste non recevable tant que les motifs ne sont
+   pas écrits — ce qui est exactement ce que l'auditeur constatera. */
+window.isoSoaTout = function (decision) {
+  (ISO_REF && ISO_REF.annexe_a || []).forEach(function (g) {
+    (g.mesures || []).forEach(function (m) {
+      var d = ISO_ETAT.mesures[m.numero] || (ISO_ETAT.mesures[m.numero] = {});
+      d.decision = decision;
+    });
+  });
+  window.isoPeindreSoa();
+};
+
+window.isoPeindreCertif = function () {
+  var e = document.getElementById('iso-certif-body');
+  if (!e || !ISO_REF) return;
+  var c = ISO_REF.certification || {};
+  var h = '<div class="cnf-cmd">' + isoEsc(c.nature) + '</div>';
+  (c.etapes || []).forEach(function (x, i) {
+    h += '<div class="cnf-det"><b>' + (i + 1) + '. ' + isoEsc(x.nom)
+       + '</b><span class="cnf-pq">' + isoEsc(x.objet) + '</span>'
+       + '<span class="cnf-pq cnf-bloc">Ce qui la fait tomber — '
+       + isoEsc(x.ce_qui_fait_tomber) + '</span></div>';
+  });
+  h += '<div class="cnf-cmd bloc">' + isoEsc(c.prealable) + '</div>';
+  var s = ISO_REF.source || {};
+  h += '<div class="trait-note"><b>' + isoEsc(s.court) + '</b> — '
+     + isoEsc(s.titre) + '. ' + isoEsc(s.achat) + '</div>';
+  e.innerHTML = h;
+};
+
+window.isoPeindrePonts = function () {
+  var e = document.getElementById('iso-ponts-body');
+  if (!e || !ISO_REF) return;
+  var h = '';
+  (ISO_REF.ponts || []).forEach(function (p) {
+    h += '<details class="cnf-det" open><summary>' + isoEsc(p.vers)
+       + ' <span class="cnf-art">' + isoEsc(p.nature) + '</span></summary>'
+       + '<div style="margin-top:8px"><b class="cnf-on">Ce qui se réutilise</b>'
+       + '<span class="cnf-pq">' + isoEsc(p.reutilise) + '</span>'
+       + '<b class="cnf-bloc" style="display:block;margin-top:8px">Ce que cela '
+       + 'ne remplace pas</b><span class="cnf-pq">'
+       + isoEsc(p.ne_remplace_pas) + '</span>';
+    if ((p.articles_iso || []).length) {
+      h += '<span class="cnf-pq">Articles ISO concernés : '
+         + p.articles_iso.map(isoEsc).join(', ') + '</span>';
+    }
+    if ((p.mesures_iso || []).length) {
+      h += '<span class="cnf-pq">Mesures de l’annexe A : '
+         + p.mesures_iso.map(isoEsc).join(', ') + '</span>';
+    }
+    h += '</div></details>';
+  });
+  e.innerHTML = h;
+};
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   NIS 2 — directive (UE) 2022/2555
+
+   LA RÉSERVE QUI TIENT TOUT L'ÉCRAN, ET QUI NE DOIT JAMAIS EN DISPARAÎTRE :
+   NIS 2 est une DIRECTIVE. Ce qui oblige une entreprise, c'est la loi de
+   TRANSPOSITION de chaque État membre où elle opère. Les montants de
+   l'article 34 sont introduits par « au moins » : ce sont des planchers
+   imposés aux États, pas des plafonds opposables. Un écran qui afficherait
+   « exposition maximale : 10 M€ » mentirait — et c'est le chiffre qu'un
+   comité retient.
+
+   AUCUN LIBELLÉ D'ANNEXE N'EST RECOPIÉ ICI : dix-huit secteurs et leurs
+   sous-secteurs viennent de /api/nis2/referentiel.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+var NIS2_REF = null;
+var NIS2_ETAT = { secteur: '', effectif: null, ca: null, bilan: null,
+                  portes: {}, mesures: {}, gouvernance: {} };
+
+function nis2Esc(t) {
+  return String(t == null ? '' : t).replace(/[&<>"]/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; });
+}
+
+function nis2Init() {
+  if (NIS2_REF) { nis2Peindre(); return; }
+  fetch('/api/nis2/referentiel')
+    .then(function (r) { return r.json(); })
+    .then(function (j) {
+      if (!j || !j.ok) throw new Error('referentiel');
+      NIS2_REF = j; nis2RemplirChamps(); nis2Peindre();
+    })
+    .catch(function () {
+      ['nis2-verdict', 'nis2-mesures-body', 'nis2-gouv-body', 'nis2-sig-body']
+        .forEach(function (id) {
+          var e = document.getElementById(id);
+          if (e) e.innerHTML = '<div class="veille-loading">Le référentiel de '
+            + 'la directive est momentanément indisponible. Rien n’est affiché '
+            + 'plutôt qu’une liste partielle : sur un texte réglementaire, une '
+            + 'liste tronquée qui ne dit pas qu’elle l’est vaut moins que pas '
+            + 'de liste du tout.</div>';
+        });
+    });
+}
+window.nis2Init = nis2Init;
+
+function nis2Peindre() {
+  nis2Qualifier(); window.nis2PeindreMesures();
+  window.nis2PeindreGouvernance(); nis2PeindreSignalement();
+  window.nis2Exposition();
+}
+
+/* ── LE FORMULAIRE DE QUALIFICATION ───────────────────────────────────────
+   LES DEUX ANNEXES SONT SÉPARÉES DANS LA LISTE, et ce n'est pas cosmétique :
+   l'annexe I ouvre le statut d'entité essentielle si la taille suit, l'annexe
+   II le PLAFONNE à « importante » quelle que soit la taille. Une liste
+   mélangée laisserait croire qu'un géant des déchets peut devenir essentiel
+   en grandissant. Il ne peut pas. */
+function nis2RemplirChamps() {
+  var q = document.getElementById('nis2-q');
+  if (!q || q.innerHTML.trim()) return;
+  var opts = '<option value="">— aucun secteur des annexes I ou II —</option>';
+  [['annexe_i', 'Annexe I — secteurs hautement critiques'],
+   ['annexe_ii', 'Annexe II — autres secteurs critiques']].forEach(function (p) {
+    opts += '<optgroup label="' + p[1] + '">';
+    (NIS2_REF[p[0]] || []).forEach(function (s) {
+      opts += '<option value="' + nis2Esc(s.cle) + '">' + nis2Esc(s.nom)
+            + '</option>'; });
+    opts += '</optgroup>';
+  });
+  var portes = (NIS2_REF.hors_taille || []).map(function (h) {
+    return '<label class="cnf-chk" title="' + nis2Esc(h.quoi) + '">'
+         + '<input type="checkbox" onchange="nis2Porte(\'' + h.cle
+         + '\', this.checked)"> ' + nis2Esc(h.quoi.slice(0, 64))
+         + (h.quoi.length > 64 ? '…' : '')
+         + ' <span class="cnf-art">' + nis2Esc(h.article) + '</span></label>';
+  }).join('');
+  q.innerHTML =
+      '<label class="cnf-chk">Secteur <select id="nis2-secteur" class="cnf-in" '
+    + 'onchange="nis2Champ(\'secteur\', this.value)">' + opts + '</select></label>'
+    + '<label class="cnf-chk">Effectif <input id="nis2-eff" class="cnf-in" '
+    + 'type="number" min="0" step="1" style="width:100px" '
+    + 'onchange="nis2Champ(\'effectif\', this.value)"></label>'
+    + '<label class="cnf-chk">CA annuel (M€) <input id="nis2-ca2" class="cnf-in" '
+    + 'type="number" min="0" step="1" style="width:110px" '
+    + 'onchange="nis2Champ(\'ca\', this.value)"></label>'
+    + '<label class="cnf-chk">Total du bilan (M€) <input id="nis2-bilan" '
+    + 'class="cnf-in" type="number" min="0" step="1" style="width:120px" '
+    + 'onchange="nis2Champ(\'bilan\', this.value)"></label>'
+    + '<details class="cnf-det" style="flex-basis:100%"><summary>Les cas où la '
+    + 'taille ne compte pas <span class="cnf-art">art. 2, §§2 à 4</span>'
+    + '</summary><span class="cnf-pq">Huit portes d’entrée ignorent totalement '
+    + 'la taille, et deux d’entre elles mènent directement au statut d’entité '
+    + '<b>essentielle</b>. Un dirigeant de PME qui lit « moins de 50 salariés » '
+    + 'et referme le dossier passe à côté de celles-là.</span>'
+    + '<div style="display:flex;flex-direction:column;gap:6px;margin-top:8px">'
+    + portes + '</div></details>';
+}
+
+window.nis2Champ = function (nom, valeur) {
+  if (nom === 'secteur') NIS2_ETAT.secteur = valeur;
+  else NIS2_ETAT[nom] = (valeur === '' ? null : Number(valeur));
+  nis2Qualifier(); window.nis2Exposition();
+};
+
+window.nis2Porte = function (cle, actif) {
+  if (actif) NIS2_ETAT.portes[cle] = true; else delete NIS2_ETAT.portes[cle];
+  nis2Qualifier(); window.nis2Exposition();
+};
+
+function nis2Charge() {
+  var d = { secteur: NIS2_ETAT.secteur || null,
+            effectif: NIS2_ETAT.effectif,
+            ca_eur: NIS2_ETAT.ca === null ? null : NIS2_ETAT.ca * 1000000,
+            bilan_eur: NIS2_ETAT.bilan === null ? null : NIS2_ETAT.bilan * 1000000 };
+  Object.keys(NIS2_ETAT.portes).forEach(function (k) { d[k] = true; });
+  return d;
+}
+
+function nis2Qualifier() {
+  var e = document.getElementById('nis2-verdict');
+  if (!e) return;
+  fetch('/api/nis2/qualifier', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(nis2Charge())
+  }).then(function (r) { return r.json(); })
+    .then(function (j) { nis2RendreVerdict(e, j); })
+    .catch(function () {
+      e.innerHTML = '<div class="veille-loading">La qualification est '
+        + 'momentanément indisponible.</div>'; });
+}
+
+function nis2RendreVerdict(e, j) {
+  if (!j || !j.ok) { e.innerHTML = '<div class="veille-loading">Qualification '
+    + 'impossible.</div>'; return; }
+  var st = j.statut, ess = (st.cle === 'essentielle');
+  var h = '<div class="cnf-cmd ' + (ess ? 'bloc' : '') + '"><b class="'
+        + (ess ? 'cnf-bloc' : '') + '">' + nis2Esc(st.nom) + '</b> '
+        + '<span class="cnf-art">' + nis2Esc(j.article) + '</span>'
+        + '<span class="cnf-pq">' + nis2Esc(j.motif) + '</span></div>';
+  h += '<div class="cnf-grille">'
+     + '<div class="cnf-case"><div class="cnf-case-n" style="font-size:15px">'
+     + nis2Esc(j.taille.nom) + '</div><div class="cnf-case-l">Catégorie de taille</div></div>';
+  if (j.secteur) {
+    h += '<div class="cnf-case"><div class="cnf-case-n" style="font-size:15px">'
+       + 'Annexe ' + nis2Esc(j.secteur.annexe) + '</div><div class="cnf-case-l">'
+       + nis2Esc(j.secteur.nom) + '</div></div>';
+  }
+  if (st.supervision && NIS2_REF && NIS2_REF.regimes) {
+    var r = NIS2_REF.regimes[st.supervision];
+    h += '<div class="cnf-case"><div class="cnf-case-n" style="font-size:15px">'
+       + nis2Esc(r.nom) + '</div><div class="cnf-case-l">' + nis2Esc(r.article)
+       + '</div></div>';
+  }
+  h += '</div>';
+  if (j.taille.manquants) {
+    h += '<div class="cnf-cmd bloc">' + nis2Esc(j.taille.dit) + '</div>';
+  }
+  if (j.bascule) {
+    h += '<div class="cnf-cmd bloc"><b>À un seuil du régime supérieur.</b> '
+       + 'Il suffit de ' + nis2Esc(j.bascule.fait) + ' pour devenir une '
+       + '<b>entité essentielle</b> : ' + nis2Esc(j.bascule.consequence)
+       + '. <span class="cnf-art">' + nis2Esc(j.bascule.article) + '</span></div>';
+  }
+  if (st.supervision && NIS2_REF && NIS2_REF.regimes) {
+    var reg = NIS2_REF.regimes[st.supervision];
+    h += '<details class="cnf-det" open><summary>Ce que l’autorité peut vous '
+       + 'faire subir <span class="cnf-art">' + nis2Esc(reg.article)
+       + '</span></summary><span class="cnf-pq"><b>Déclencheur — </b>'
+       + nis2Esc(reg.declencheur) + '</span><ul class="cnf-ul">'
+       + (reg.pouvoirs || []).map(function (p) {
+           return '<li>' + nis2Esc(p) + '</li>'; }).join('') + '</ul>';
+    if (reg.escalade) {
+      h += '<div class="cnf-cmd bloc">' + nis2Esc(reg.escalade.quoi)
+         + ' <span class="cnf-art">' + nis2Esc(reg.escalade.article)
+         + '</span></div>';
+    } else {
+      h += '<span class="cnf-pq cnf-on">Aucune escalade sur la personne du '
+         + 'dirigeant : l’article 33 n’en prévoit pas. C’est la différence la '
+         + 'plus lourde entre les deux statuts.</span>';
+    }
+    h += '</details>';
+  }
+  if ((j.portes_hors_taille || []).length) {
+    h += '<details class="cnf-det"><summary>' + j.portes_hors_taille.length
+       + ' porte(s) déclarée(s) qui ignorent la taille</summary><ul class="cnf-ul">'
+       + j.portes_hors_taille.map(function (p) {
+           return '<li>' + nis2Esc(p.quoi) + ' <span class="cnf-art">'
+                + nis2Esc(p.article) + '</span></li>'; }).join('')
+       + '</ul></details>';
+  }
+  h += '<div class="trait-note">' + nis2Esc(j.ecart_recommandation.quoi) + ' '
+     + nis2Esc(j.ecart_recommandation.consequence) + ' <span class="cnf-art">'
+     + nis2Esc(j.ecart_recommandation.article) + '</span></div>';
+  e.innerHTML = h;
+}
+
+/* ── LES DIX MESURES ──────────────────────────────────────────────────────
+   LE TAUX NE VOYAGE JAMAIS SEUL. Il est affiché à côté du nombre de lignes
+   NON RENSEIGNÉES, parce qu'un 100 % sur deux mesures renseignées ne dit rien
+   des huit autres — et que c'est le taux, pas le reste, qu'on emporte en
+   comité. */
+window.nis2PeindreMesures = function () {
+  var e = document.getElementById('nis2-mesures-body');
+  if (!e || !NIS2_REF) return;
+  var etats = ['', 'conforme', 'partiel', 'non_conforme', 'sans_objet'];
+  var noms = { '': '— non renseignée —', conforme: 'Conforme',
+               partiel: 'Partielle', non_conforme: 'Non conforme',
+               sans_objet: 'Sans objet' };
+  var faits = 0, vides = 0, retenues = 0, h = '';
+  (NIS2_REF.mesures || []).forEach(function (m) {
+    var v = NIS2_ETAT.mesures[m.cle] || '';
+    if (v === 'conforme') faits++;
+    if (v === '') vides++;
+    if (v !== 'sans_objet') retenues++;
+    h += '<div style="padding:9px 0;border-top:1px solid var(--line,#2a2a2a)">'
+       + '<b>' + m.cle + ')</b> ' + nis2Esc(m.nom)
+       + '<span class="cnf-pq">' + nis2Esc(m.dit) + '</span>'
+       + '<select class="cnf-in" style="margin-top:6px" '
+       + 'onchange="nis2Mesure(\'' + m.cle + '\', this.value)">'
+       + etats.map(function (x) {
+           return '<option value="' + x + '"' + (v === x ? ' selected' : '')
+                + '>' + noms[x] + '</option>'; }).join('')
+       + '</select></div>';
+  });
+  var taux = retenues ? Math.round(100 * faits / retenues) : null;
+  var c = NIS2_REF.mesures_clause || {};
+  e.innerHTML = '<div class="cnf-grille">'
+    + '<div class="cnf-case"><div class="cnf-case-n">'
+    + (taux === null ? '—' : taux + ' %') + '</div>'
+    + '<div class="cnf-case-l">Conformes — ' + faits + ' / ' + retenues + '</div></div>'
+    + '<div class="cnf-case"><div class="cnf-case-n'
+    + (vides ? ' cnf-bloc' : ' cnf-on') + '">' + vides + '</div>'
+    + '<div class="cnf-case-l">Non renseignées</div></div></div>'
+    + '<div class="cnf-cmd"><b>' + nis2Esc(c.socle) + '</b><span class="cnf-pq">'
+    + nis2Esc(c.approche) + ' ' + nis2Esc(c.proportionnalite) + '</span></div>'
+    + h
+    + '<div class="trait-note">' + nis2Esc(c.correction) + ' <span class="cnf-art">'
+    + nis2Esc(c.article) + '</span></div>';
+};
+
+window.nis2Mesure = function (cle, valeur) {
+  if (valeur) NIS2_ETAT.mesures[cle] = valeur;
+  else delete NIS2_ETAT.mesures[cle];
+  window.nis2PeindreMesures();
+};
+
+/* ── LA GOUVERNANCE ───────────────────────────────────────────────────────
+   LE DÉNOMINATEUR EST LA RÈGLE ICI. Quatre lignes sur cinq sont des
+   obligations ; la formation du personnel est un encouragement. Compter les
+   cinq rendrait 80 % à une entreprise qui a manqué la formation de ses
+   dirigeants — le seul manquement des cinq qui expose personnellement
+   quelqu'un. Le taux ne porte donc que sur les quatre. */
+window.nis2PeindreGouvernance = function () {
+  var e = document.getElementById('nis2-gouv-body');
+  if (!e || !NIS2_REF) return;
+  var obl = {}, nb = 0, faits = 0, h = '';
+  (NIS2_REF.gouvernance_obligatoire || []).forEach(function (c) { obl[c] = true; });
+  (NIS2_REF.gouvernance || []).forEach(function (g) {
+    var v = NIS2_ETAT.gouvernance[g.cle] || '';
+    if (obl[g.cle]) { nb++; if (v === 'conforme') faits++; }
+    h += '<div style="padding:9px 0;border-top:1px solid var(--line,#2a2a2a)">'
+       + '<b>' + nis2Esc(g.quoi) + '</b> <span class="cnf-art">'
+       + nis2Esc(g.article) + '</span> '
+       + (obl[g.cle]
+          ? '<span class="cnf-bloc" title="Obligation : « sont tenus de »">obligation</span>'
+          : '<span class="cnf-art" title="Encouragement : « encouragent »">encouragement</span>')
+       + '<span class="cnf-pq"><b>Preuve attendue — </b>' + nis2Esc(g.preuve)
+       + '</span>'
+       + '<select class="cnf-in" style="margin-top:6px" '
+       + 'onchange="nis2Gouv(\'' + g.cle + '\', this.value)">'
+       + ['', 'conforme', 'partiel', 'non_conforme'].map(function (x) {
+           return '<option value="' + x + '"' + (v === x ? ' selected' : '')
+                + '>' + (x === '' ? '— non renseigné —'
+                        : x === 'conforme' ? 'Tenu'
+                        : x === 'partiel' ? 'Partiel' : 'Non tenu')
+                + '</option>'; }).join('')
+       + '</select></div>';
+  });
+  var taux = nb ? Math.round(100 * faits / nb) : 0;
+  e.innerHTML = '<div class="cnf-grille"><div class="cnf-case">'
+    + '<div class="cnf-case-n' + (taux < 100 ? ' cnf-bloc' : ' cnf-on') + '">'
+    + taux + ' %</div><div class="cnf-case-l">Obligations tenues — ' + faits
+    + ' / ' + nb + '</div></div></div>'
+    + '<div class="cnf-cmd">Le taux ci-dessus ne compte que les <b>' + nb
+    + ' obligations</b>. La formation du personnel, qui est un encouragement, '
+    + 'est affichée mais n’entre pas au dénominateur : l’y mettre ferait '
+    + 'gagner des points à qui a manqué la seule ligne obligatoire.</div>' + h;
+};
+
+window.nis2Gouv = function (cle, valeur) {
+  if (valeur) NIS2_ETAT.gouvernance[cle] = valeur;
+  else delete NIS2_ETAT.gouvernance[cle];
+  window.nis2PeindreGouvernance();
+};
+
+function nis2PeindreSignalement() {
+  var e = document.getElementById('nis2-sig-body');
+  if (!e || !NIS2_REF) return;
+  var s = NIS2_REF.signalement || {};
+  var h = '<div class="cnf-cmd bloc"><b>Le point de départ — </b>'
+        + nis2Esc(s.depart) + ' <span class="cnf-art">'
+        + nis2Esc(s.article) + '</span></div>'
+        + '<div class="cnf-cmd">Destinataire : ' + nis2Esc(s.destinataire)
+        + '</div>';
+  (s.etapes || []).forEach(function (x, i) {
+    h += '<div class="cnf-det"><b>' + (i + 1) + '. ' + nis2Esc(x.quoi)
+       + '</b> <span class="cnf-bloc">' + nis2Esc(x.delai) + '</span> '
+       + '<span class="cnf-art">' + nis2Esc(x.article) + '</span>'
+       + '<span class="cnf-pq">' + nis2Esc(x.contenu) + '</span></div>';
+  });
+  if (s.incident_en_cours) {
+    h += '<div class="cnf-cmd">' + nis2Esc(s.incident_en_cours.quoi)
+       + ' <span class="cnf-art">' + nis2Esc(s.incident_en_cours.article)
+       + '</span></div>';
+  }
+  if (s.destinataires) {
+    /* LA SECONDE NOTIFICATION, MISE AU MÊME RANG QUE LA PREMIÈRE. Reléguée
+       en note, elle se lit comme un détail ; elle est au même paragraphe. */
+    h += '<div class="cnf-cmd bloc"><b>Et une SECONDE notification, que tout '
+       + 'le monde oublie.</b><span class="cnf-pq">'
+       + nis2Esc(s.destinataires.dit) + '</span>'
+       + '<span class="cnf-pq"><b>Incident — </b>'
+       + nis2Esc(s.destinataires.incident.quoi) + ' '
+       + nis2Esc(s.destinataires.incident.quand) + ' <span class="cnf-art">'
+       + nis2Esc(s.destinataires.incident.article) + '</span></span>'
+       + '<span class="cnf-pq"><b>Cybermenace — </b>'
+       + nis2Esc(s.destinataires.menace.quoi) + ' <span class="cnf-art">'
+       + nis2Esc(s.destinataires.menace.article) + '</span></span></div>';
+  }
+  if (s.sans_aveu) {
+    h += '<div class="cnf-cmd fait"><b>' + nis2Esc(s.sans_aveu.quoi) + '</b>'
+       + '<span class="cnf-pq">' + nis2Esc(s.sans_aveu.consequence)
+       + '</span> <span class="cnf-art">' + nis2Esc(s.sans_aveu.article)
+       + '</span></div>';
+  }
+  if (s.derogation_confiance) {
+    h += '<div class="cnf-cmd bloc">' + nis2Esc(s.derogation_confiance.quoi)
+       + ' <span class="cnf-art">'
+       + nis2Esc(s.derogation_confiance.article) + '</span></div>';
+  }
+  e.innerHTML = h;
+}
+
+/* ── L'EXPOSITION CHIFFRÉE ────────────────────────────────────────────────
+   LA RÉSERVE VOYAGE AVEC LE NOMBRE, DANS LE MÊME BLOC. Séparée, elle finit
+   sous le pli et le chiffre part seul en comité comme un maximum. */
+window.nis2Exposition = function () {
+  var e = document.getElementById('nis2-chiffre-body');
+  if (!e) return;
+  var champ = document.getElementById('nis2-ca');
+  var v = champ && champ.value !== '' ? Number(champ.value) * 1000000 : null;
+  fetch('/api/nis2/exposition', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ chiffre_affaires: v })
+  }).then(function (r) { return r.json(); })
+    .then(function (j) { nis2RendreExposition(e, j); })
+    .catch(function () {
+      e.innerHTML = '<div class="veille-loading">Le calcul est momentanément '
+        + 'indisponible.</div>'; });
+};
+
+function nis2Euro(n) {
+  if (n === null || n === undefined) return '—';
+  if (n >= 1000000) return (Math.round(n / 100000) / 10).toFixed(1).replace('.', ',')
+    + ' M€';
+  return Math.round(n).toLocaleString('fr-FR') + ' €';
+}
+
+function nis2RendreExposition(e, j) {
+  if (!j || !j.ok) { e.innerHTML = '<div class="veille-loading">Calcul '
+    + 'impossible.</div>'; return; }
+  var h = '<div class="cnf-cmd bloc"><b>' + nis2Esc(j.nature.quoi) + '</b>'
+        + '<span class="cnf-pq">' + nis2Esc(j.nature.consequence) + '</span>'
+        + '<span class="cnf-pq">' + nis2Esc(j.nature.difference_cra) + '</span>'
+        + ' <span class="cnf-art">' + nis2Esc(j.nature.article) + '</span></div>';
+  h += '<table class="mat-table"><thead><tr><th>Palier</th>'
+     + '<th>Plancher forfaitaire</th><th>Part du CA mondial</th>'
+     + '<th>Plancher retenu</th><th>Article</th></tr></thead><tbody>';
+  (j.lignes || []).forEach(function (l) {
+    h += '<tr><td><b>' + nis2Esc(l.nom) + '</b></td>'
+       + '<td' + (l.borne_retenue === 'plancher' ? ' class="cnf-bloc"' : '')
+       + '>' + nis2Euro(l.plancher_eur) + '</td>'
+       + '<td' + (l.borne_retenue === 'part_ca' ? ' class="cnf-bloc"' : '')
+       + '>' + String(l.part_ca).replace('.', ',') + ' %'
+       + (l.part_eur === null ? '' : ' — ' + nis2Euro(l.part_eur)) + '</td>'
+       + '<td><b>' + nis2Euro(l.retenu_eur) + '</b></td>'
+       + '<td><span class="cnf-art">' + nis2Esc(l.article) + '</span></td></tr>';
+  });
+  h += '</tbody></table>';
+  h += '<div class="cnf-cmd">' + nis2Esc(j.dit_pivot) + '</div>';
+  h += '<div class="trait-note"><b>Assiette — </b>' + nis2Esc(j.assiette)
+     + '</div>';
   e.innerHTML = h;
 }

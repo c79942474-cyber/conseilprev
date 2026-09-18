@@ -156,3 +156,56 @@ def limiteur_propre():
     reinitialiser_limiteur()
     yield
     reinitialiser_limiteur()
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  LA LIMITE QUI ARRÊTE LA RECETTE AVANT QU'ELLE COMMENCE
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# L'INCIDENT. Sept parcours guidés de plus, et la COLLECTE d'un fichier a levé
+#
+#     OSError: [Errno 7] Argument list too long: '/opt/node22/bin/node'
+#
+# Pas une règle rouge : une recette qui ne démarre pas. Le message ne nomme ni
+# le fichier fautif, ni le bloc, ni la cause — il nomme l'interpréteur, qui
+# n'y est pour rien.
+#
+# CE QUI SE PASSAIT. Onze fichiers de recette évaluent des morceaux de
+# sentinel.page.js en les passant à `node -e`. Linux limite UN SEUL argument à
+# MAX_ARG_STRLEN = 32 pages, soit 131 072 octets — indépendamment d'ARG_MAX,
+# qui vaut 2 Mio ici et qu'on consulte d'abord parce que c'est celui que
+# `getconf` affiche. Le fichier de données ne fait que grandir.
+#
+# CE QUE FAIT CE GARDE-FOU, ET CE QU'IL NE FAIT PAS. Il ne corrige rien : un
+# argument trop long reste trop long. Il REMPLACE un message qui envoie
+# chercher au mauvais endroit par un message qui nomme le programme, sa
+# taille, la limite, et la correction — écrire dans un fichier temporaire.
+# Il s'installe au chargement de conftest, donc AVANT l'import des fichiers de
+# recette : c'est la seule façon d'attraper une panne de collecte.
+
+import subprocess as _subprocess
+
+MAX_ARG_STRLEN = 131072
+_run_origine = _subprocess.run
+
+
+def _run_garde(args, *reste, **nommes):
+    """`subprocess.run`, avec le diagnostic que l'OS ne donne pas."""
+    if isinstance(args, (list, tuple)):
+        for i, a in enumerate(args):
+            if not isinstance(a, str):
+                continue
+            taille = len(a.encode("utf-8", "replace"))
+            if taille > MAX_ARG_STRLEN:
+                raise AssertionError(
+                    "argument n°%d de %r : %d octets, au-delà de "
+                    "MAX_ARG_STRLEN (%d). Linux refusera l'exécution avec "
+                    "« Argument list too long », à la COLLECTE et sans nommer "
+                    "la cause. Écrivez le programme dans un fichier "
+                    "temporaire et passez son chemin — c'est ce que font "
+                    "test_parcours_par_role.py et test_parcours_avancement.py."
+                    % (i, args[0], taille, MAX_ARG_STRLEN))
+    return _run_origine(args, *reste, **nommes)
+
+
+_subprocess.run = _run_garde

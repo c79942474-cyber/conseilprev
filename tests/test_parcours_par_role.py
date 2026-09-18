@@ -25,8 +25,10 @@ restent.
 import io
 import json
 import os
+import re
 import shutil
 import subprocess
+import tempfile
 
 import pytest
 
@@ -58,8 +60,24 @@ def _tableau(nom):
         m = __import__('re').search(r'^var %s = .*;$' % constante, MOTEUR, __import__('re').M)
         if m:
             prelude += m.group(0) + '\n'
-    r = subprocess.run([NODE, '-e', prelude + src + '\nconsole.log(JSON.stringify(%s));' % nom],
-                       capture_output=True, text=True, timeout=60)
+    # ═══ LE PROGRAMME PASSE PAR UN FICHIER, PAS PAR `node -e` ═══════════
+    #
+    # CE QUI S'EST PASSÉ. Le catalogue a dépassé 128 Kio et la COLLECTE de ce
+    # fichier s'est mise à lever `OSError: [Errno 7] Argument list too long` —
+    # c'est-à-dire que la recette entière s'interrompait avant d'avoir exécuté
+    # une seule règle. Pas une règle rouge : une recette qui ne démarre pas.
+    #
+    # POURQUOI CE N'EST PAS RÉCUPÉRABLE EN RACCOURCISSANT LE CATALOGUE. Linux
+    # limite UN SEUL argument à MAX_ARG_STRLEN = 32 pages, soit 131 072 octets,
+    # indépendamment d'ARG_MAX qui vaut 2 Mio ici. Le catalogue ne fait que
+    # grandir : la limite serait franchie à nouveau au parcours suivant.
+    # Le fichier temporaire n'a pas de plafond de cet ordre.
+    programme = prelude + src + '\nconsole.log(JSON.stringify(%s));' % nom
+    with tempfile.TemporaryDirectory() as d:
+        chemin = os.path.join(d, 'catalogue.js')
+        io.open(chemin, 'w', encoding='utf-8').write(programme)
+        r = subprocess.run([NODE, chemin], capture_output=True, text=True,
+                           timeout=60)
     if r.returncode != 0:
         pytest.fail('%s ne s\'évalue pas :\n%s' % (nom, (r.stderr or '')[-1200:]))
     return json.loads(r.stdout)
@@ -355,3 +373,131 @@ def test_le_parcours_de_cadrage_est_dans_sa_propre_famille():
     assert 'adrage' in familles[0]['titre'] or 'aleur' in familles[0]['titre'], (
         "la famille qui porte le parcours de cadrage s'appelle « %s » : elle ne "
         "dit plus ce qu'elle range" % familles[0]['titre'])
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  LA LIMITE QUI A ARRÊTÉ LA RECETTE ENTIÈRE, ET QUI NE PRÉVIENT PAS
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# CE QUI S'EST PASSÉ. Sept parcours de plus, et la COLLECTE de ce fichier a
+# levé `OSError: [Errno 7] Argument list too long`. Pas une règle rouge : une
+# recette qui ne démarre pas, et dont le message ne nomme ni le catalogue ni
+# la cause.
+#
+# POURQUOI ÇA NE SE VOIT PAS VENIR. Linux limite UN SEUL argument à
+# MAX_ARG_STRLEN = 32 pages, soit 131 072 octets — indépendamment d'ARG_MAX,
+# qui vaut 2 Mio ici et qu'on regarde d'abord parce que c'est celui que
+# `getconf` affiche. Le catalogue ne fait que grandir : la limite serait
+# franchie à nouveau au parcours suivant.
+
+_MAX_ARG_STRLEN = 131072
+
+
+def test_le_catalogue_ne_passe_plus_par_un_argument_de_ligne_de_commande():
+    """LA CORRECTION DE FOND, VÉRIFIÉE À LA SOURCE. Ce fichier écrit son
+    programme dans un fichier temporaire ; `node -e` aurait replongé sous la
+    limite au premier parcours ajouté."""
+    src = io.open(os.path.abspath(__file__), encoding="utf-8").read()
+    corps = src[src.index("def _tableau("):src.index("\nPARCOURS = ")]
+    assert "'-e'" not in corps and '"-e"' not in corps, (
+        "le programme repasse par `node -e` : la recette s'arrêtera à la "
+        "collecte dès que le catalogue franchira 128 Kio")
+    assert "tempfile" in corps, (
+        "le programme doit passer par un fichier : c'est ce qui le libère de "
+        "MAX_ARG_STRLEN")
+
+
+def test_le_catalogue_a_DEJA_franchi_la_limite_que_la_correction_leve():
+    """LE GARDE-FOU DE LA RÈGLE PRÉCÉDENTE, et il n'est pas décoratif. Si le
+    catalogue repassait sous 128 Kio — un élagage, une refonte —, la règle
+    ci-dessus resterait verte sans plus rien protéger, et quelqu'un
+    « simplifierait » en revenant à `node -e`. Tant que cette règle-ci passe,
+    on sait que la correction sert à quelque chose AUJOURD'HUI."""
+    d = MOTEUR.index("var GUIDED_PATHS = [")
+    f = MOTEUR.index("\n];", d)
+    octets = len(MOTEUR[d:f + 3].encode("utf-8"))
+    assert octets > _MAX_ARG_STRLEN, (
+        "le catalogue ne fait plus que %d octets, sous la limite de %d : la "
+        "règle précédente ne protège plus rien de mesurable"
+        % (octets, _MAX_ARG_STRLEN))
+
+
+def test_le_garde_fou_de_conftest_attrape_l_argument_trop_long():
+    """LA COUVERTURE QUE LA RÈGLE PRÉCÉDENTE NE PEUT PAS DONNER.
+
+    Dix autres fichiers de recette évaluent des morceaux de sentinel.page.js
+    par `node -e`, chacun avec ses propres bornes de découpe. Aucune lecture
+    statique ne dit quelle taille ils passeront : il faudrait les exécuter.
+    Chacun tombera donc le jour où son bloc franchira la limite — et tombera
+    de la même façon : à la COLLECTE, avec un message qui nomme
+    l'interpréteur, qui n'y est pour rien.
+
+    `conftest.py` enveloppe donc `subprocess.run` et refuse l'appel AVANT
+    l'OS, avec un message qui nomme le programme, sa taille, la limite et la
+    correction. Cette règle vérifie que l'enveloppe est en place et qu'elle
+    MORD — pas qu'elle existe."""
+    import subprocess as sp
+    import conftest
+
+    assert sp.run is not conftest._run_origine, (
+        "`subprocess.run` n'est plus enveloppé : une panne de collecte "
+        "reviendra sans diagnostic")
+
+    trop = "x" * (conftest.MAX_ARG_STRLEN + 1)
+    with pytest.raises(AssertionError) as capture:
+        sp.run(["/bin/true", trop], capture_output=True)
+    message = str(capture.value)
+    assert "MAX_ARG_STRLEN" in message
+    assert "fichier temporaire" in message, (
+        "le message doit nommer la correction, pas seulement la panne : %r"
+        % message[:200])
+
+    # LE TÉMOIN INVERSE : un argument ordinaire passe, sinon l'enveloppe
+    # casserait tous les appels de la recette au lieu d'un seul.
+    ok = sp.run(["/bin/true", "court"], capture_output=True)
+    assert ok.returncode == 0
+
+
+def test_aucun_fichier_de_recette_ne_passe_un_bloc_trop_gros_a_node_e():
+    """LA MARGE RESTANTE, POUR LES BLOCS QU'UNE LECTURE STATIQUE RÉSOUT.
+
+    CE QU'ELLE COUVRE : les fichiers qui nomment leur tableau en clair —
+    `MOTEUR.index('var ARTICLES = [')`. On peut alors mesurer exactement ce
+    qui partira sur la ligne de commande, et le dire avant la panne.
+
+    CE QU'ELLE NE COUVRE PAS, ET C'EST DIT : les fichiers qui construisent
+    leur programme par bornes calculées. Pour ceux-là, le garde-fou de
+    `conftest.py` prend le relais à l'exécution — il ne prévient pas, mais il
+    diagnostique.
+
+    LE SEUIL EST À 80 % DE LA LIMITE, pas à 100 %. Prévenir au moment exact
+    où ça casse ne prévient de rien."""
+    dossier = os.path.dirname(os.path.abspath(__file__))
+    serres, lus = [], []
+    for nom in sorted(os.listdir(dossier)):
+        if not nom.startswith("test_") or not nom.endswith(".py"):
+            continue
+        src = io.open(os.path.join(dossier, nom), encoding="utf-8").read()
+        if "'-e'" not in src and '"-e"' not in src:
+            continue
+        # LE PLUS GROS BLOC QUE CE FICHIER PEUT DÉCOUPER dans le moteur. On
+        # ne devine pas lequel il prend : on prend le pire cas parmi les
+        # tableaux qu'il nomme.
+        for tableau in re.findall(r"index\('var (\w+) = \['\)", src) or []:
+            try:
+                d = MOTEUR.index("var %s = [" % tableau)
+                f = MOTEUR.index("\n];", d)
+            except ValueError:
+                continue
+            octets = len(MOTEUR[d:f + 3].encode("utf-8"))
+            lus.append((nom, tableau, octets))
+            if octets > _MAX_ARG_STRLEN * 0.8:
+                serres.append("%s → %s : %d octets" % (nom, tableau, octets))
+    assert lus, (
+        "aucun bloc n'a pu être résolu : la règle ne mesure plus rien. Soit "
+        "plus aucun fichier n'emploie `node -e` — et elle peut partir —, "
+        "soit la forme d'appel a changé et elle est devenue vide.")
+    assert not serres, (
+        "ces fichiers passent à `node -e` un bloc proche ou au-delà de %d "
+        "octets — ils s'arrêteront à la collecte : %s"
+        % (_MAX_ARG_STRLEN, " ; ".join(serres)))

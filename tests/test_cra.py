@@ -298,12 +298,32 @@ def test_le_CRA_a_SON_groupe_de_premier_niveau_dans_la_barre_laterale():
     dans le registre IA aurait été plus rapide et aurait forcé une identité
     fausse : le CRA compte des PRODUITS, l'IA Act des SYSTÈMES D'IA, le RGPD
     des TRAITEMENTS. Un fabricant n'est ni un fournisseur ni un responsable de
-    traitement."""
+    traitement.
+
+    ═══ CE QUI A CHANGÉ, ET CE QUI N'A PAS CHANGÉ ════════════════════════
+    Le CRA est désormais RANGÉ sous « Votre Mise en Conformité
+    Réglementaire », à côté de RGPD & Privacy, ISO 42001 et NIS 2. Cela ne
+    contredit pas ce que cette règle protège : il n'est PAS devenu une
+    rubrique du RGPD ni de l'IA Act. Il reste une `.sb-section` à part
+    entière, avec ses propres entrées — le titre de famille n'en est pas
+    une, précisément pour que les quatre cadres restent quatre sections
+    frères et non une hiérarchie.
+
+    CE QUE LA RÈGLE MESURE DONC MAINTENANT : que la section CRA existe, que
+    son groupe reste `cra`, et qu'elle soit rattachée à la famille de
+    conformité plutôt qu'absorbée par un autre cadre."""
     h = _fichier("sentinel.html")
     assert 'data-grp="cra"' in h
-    assert re.search(r'<div class="sb-section" data-grp="cra">.*?'
-                     r'<span>CRA[^<]*</span>', h, re.S), \
-        "le CRA n'a pas de section propre dans la barre latérale"
+    assert re.search(r'<div class="sb-section sb-pliable" data-grp="cra" '
+                     r'data-fam="conformite".*?<span>CRA[^<]*</span>', h, re.S), \
+        "le CRA n'a plus de section propre rattachée à la famille de conformité"
+    # LE TÉMOIN : il n'est PAS rangé sous un autre cadre. Les quatre tiroirs
+    # sont des sections FRÈRES ; si le CRA devenait un `.sb-item` du groupe
+    # RGPD, cette ligne tomberait.
+    assert '<div class="sb-item" data-grp="rgpd-et-privacy" role="button" ' \
+           'tabindex="0" onclick="go(\'cra' not in h, \
+        "le CRA est devenu une entrée du groupe RGPD : deux unités de compte " \
+        "différentes rangées comme si elles n'en faisaient qu'une"
     # ═══ ON NOMME LES VUES, ON NE LES COMPTE PAS ══════════════════════
     # La première version comptait trois entrées. Elle est tombée le jour où
     # le module en a gagné deux — pour la bonne raison, mais sans rien dire de
