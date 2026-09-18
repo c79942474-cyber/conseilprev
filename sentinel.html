@@ -175,6 +175,7 @@ body{
 .sb-section.replie .sb-chev{transform:rotate(-90deg)}
 /* L'ATTRIBUT DU PLI, DISTINCT DE CELUI DU FILTRE. */
 .sb-item[data-replie]{display:none}
+.sb-nav [data-grp="iso27001"]{--sb-ic:var(--teal)}
 .sb-nav [data-grp="iso42001"]{--sb-ic:var(--emerald)}
 .sb-nav [data-grp="nis2"]{--sb-ic:var(--plum)}
 @media(prefers-reduced-motion:reduce){
@@ -3129,6 +3130,21 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <div class="sb-item" data-grp="rgpd-et-privacy" role="button" tabindex="0" onclick="go('rgpd-sensibilisation',this,'RGPD &amp; PRIVACY','Sensibilisation');sensInit()" title="Plan de sensibilisation a la protection des donnees par public cible : periodicite, statut, suivi."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>Sensibilisation</div>
     <div class="sb-item" data-grp="rgpd-et-privacy" role="button" tabindex="0" onclick="go('rgpd-conformite',this,'RGPD &amp; PRIVACY','Conformité RGPD');confLoadOnce()" title="Tableau de bord consolidant registre, AIPD, privacy by design, documentation et sensibilisation : indice global et points d attention."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg></span>Conformité RGPD</div>
     <div class="sb-item" data-grp="rgpd-et-privacy" role="button" tabindex="0" onclick="go('empreinte',this,'EMPREINTE','Empreinte numerique')" title="Compteur temps reel de l'empreinte numerique : site, plateforme et modeles de langage ; trois methodes comparees."><span class="sb-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg></span>Empreinte numérique</div>
+    <!-- ═══ ISO/IEC 27001 — LE SOCLE, ET IL VIENT EN PREMIER ═══
+         POURQUOI AVANT 42001 ET NON APRÈS. Les deux normes partagent la
+         structure harmonisée des articles 4 à 10 ; 42001 se GREFFE sur ce
+         socle, pas l'inverse. Un lecteur qui descend la liste dans l'ordre
+         lit donc les choses dans l'ordre où on les monte.
+         ET LA NORME EST PROTÉGÉE PAR LE DROIT D'AUTEUR, comme 42001 : les
+         écrans citent des NUMÉROS et des TITRES, jamais le texte normatif.
+         Le questionnaire d'auto-évaluation qui a servi de point de départ
+         (© BSI Group, 2016) n'est pas davantage recopié — et il porte sur
+         ISO/IEC 27001:2013, à laquelle la version 2022 a succédé. -->
+    <div class="sb-section sb-pliable" data-grp="iso27001" data-fam="conformite" role="button" tabindex="0" aria-expanded="false" onclick="sbReplier(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sbReplier(this)}" title="Replier ou déplier ISO 27001"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 2.5 20 6v6.2c0 4.9-3.3 8.6-8 9.8-4.7-1.2-8-4.9-8-9.8V6z"/><path d="M12 9v4M12 16h.01"/></svg><span>ISO 27001 — Sécurité de l’information</span><svg class="sb-chev" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></div>
+    <div class="sb-item" data-grp="iso27001" role="button" tabindex="0" onclick="go('iso27001-risques',this,'ISO 27001','Analyse de risque');iso27Init()" title="Les criteres d acceptation etablis AVANT, le propriaire du risque qui accepte APRES — et par ecrit"><span class="sb-icon" aria-hidden="true"></span>Analyse de risque</div>
+    <div class="sb-item" data-grp="iso27001" role="button" tabindex="0" onclick="go('iso27001-soa',this,'ISO 27001','Déclaration d’applicabilité');iso27Init()" title="Les 93 mesures de l annexe A 2022 : retenue ou ecartee, justifiee, ET son statut de mise en oeuvre — trois colonnes"><span class="sb-icon" aria-hidden="true"></span>Déclaration d’applicabilité</div>
+    <div class="sb-item" data-grp="iso27001" role="button" tabindex="0" onclick="go('iso27001',this,'ISO 27001','Articles 4 à 10');iso27Init()" title="Les trente sous-articles du corps de la norme, et ce qui se greffe sur un systeme de management deja en place"><span class="sb-icon" aria-hidden="true"></span>Articles 4 à 10</div>
+    <div class="sb-item" data-grp="iso27001" role="button" tabindex="0" onclick="go('iso27001-millesime',this,'ISO 27001','2013 → 2022 : ce qui a changé');iso27Init()" title="114 mesures en 14 chapitres devenues 93 en 4 themes, dont ONZE nouvelles. Le questionnaire joint porte sur la version retiree"><span class="sb-icon" aria-hidden="true"></span>2013 → 2022 : ce qui a changé</div>
     <!-- ═══ ISO/IEC 42001 — LA SEULE DES QUATRE QUI SE CERTIFIE ═══
          POURQUOI ELLE EST À PART. RGPD, NIS 2 et CRA sont du DROIT : on
          s'y conforme, et personne ne délivre d'attestation. ISO 42001 est
@@ -5291,6 +5307,82 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
   <div id="cra-sig-body"><div class="veille-loading">Chargement des échéances…</div></div>
   <div class="trait-note">
     La notification part <b>simultanément</b> au CSIRT désigné coordinateur <b>et</b> à l'ENISA, par la plateforme unique de signalement de l'article&nbsp;16. Prévenir l'un puis l'autre, ou l'un seulement, n'est pas ce que le texte demande.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     ISO/IEC 27001 — L'ANALYSE DE RISQUE, PUIS LA CONFORMITÉ
+     ═══════════════════════════════════════════════════════════════════
+     L'ORDRE DES QUATRE ÉCRANS EST CELUI DE LA NORME, et il n'est pas
+     interchangeable : les mesures de l'annexe A se DÉDUISENT du traitement
+     des risques (art. 6.1.3 b et c). Construire la déclaration
+     d'applicabilité d'abord, puis chercher des risques qui la justifient,
+     produit un document qui tient debout et ne protège rien. ═════════ -->
+<div class="page" id="p-iso27001-risques">
+  <span class="eyebrow">ISO 27001 · Articles 6.1.2 et 6.1.3</span>
+  <h1 class="page-h">L'analyse de risque, <em>et les deux dates qui la valident</em></h1>
+  <p class="page-lead">Tout part d'ici. Les mesures de l'annexe&nbsp;A ne se choisissent pas dans un catalogue : elles se <b>déduisent</b> du traitement des risques. Et deux défauts suffisent à défaire l'exercice entier — l'un se joue au début, l'autre à la fin, et aucun des deux ne se voit dans le document final.</p>
+  <div class="cnf-copy"><b>ISO/IEC 27001:2022 est protégée par le droit d'auteur (© ISO/IEC).</b> Cet écran cite des <b>numéros</b> et des <b>titres</b> d'articles et de mesures ; tout ce qui les décrit est rédigé par le cabinet. Aucune phrase du texte normatif n'y est reproduite, et aucune question du questionnaire d'auto-évaluation BSI qui a servi de point de départ — il est la propriété de son éditeur. La mise en œuvre suppose de détenir la norme.</div>
+  <div class="cnf-cmd bloc">
+    <b>Les critères d'acceptation se fixent AVANT d'apprécier</b> (art.&nbsp;6.1.2&nbsp;a). Les écrire après avoir vu les résultats donne un registre où tout est acceptable — et c'est invisible à la lecture, puisque seul l'ordre de rédaction distingue les deux. Cet écran compare les deux dates.
+  </div>
+  <div class="cnf-cmd bloc">
+    <b>Le risque résiduel s'accepte par le PROPRIÉTAIRE DU RISQUE</b> (art.&nbsp;6.1.3&nbsp;e), pas par le RSSI ni par le consultant. C'est la clause qui transforme un exercice technique en acte de direction, et celle qui manque le plus souvent : une colonne « propriétaire » remplie, et aucune trace datée d'une acceptation. L'auditeur demande la signature, pas le nom.
+  </div>
+  <div class="reg-toolbar" id="iso27-criteres"></div>
+  <div class="reg-toolbar">
+    <button class="mat-export-btn" onclick="iso27AjouterRisque()">+ Ajouter un risque</button>
+    <button class="mat-export-btn" onclick="iso27PeindreRisques()">↻ Recalculer</button>
+    <button class="mat-export-btn" onclick="go('iso27001-soa')">Déclaration d'applicabilité →</button>
+  </div>
+  <div id="iso27-risques-body"><div class="veille-loading">Chargement du référentiel…</div></div>
+  <div class="trait-note">
+    <b>Un plan n'est pas une mesure.</b> Tant qu'une mesure n'est pas déclarée mise en œuvre, le niveau résiduel saisi reste une prévision : le module retient le niveau initial. Servir un résiduel prévu comme un acquis est la façon la plus courante de rendre un registre vert sans avoir rien fait.
+  </div>
+</div>
+
+<div class="page" id="p-iso27001-soa">
+  <span class="eyebrow">ISO 27001 · Article 6.1.3 d)</span>
+  <h1 class="page-h">Déclaration d'applicabilité — <em>trois colonnes</em></h1>
+  <p class="page-lead">93 mesures, et pour chacune <b>trois</b> choses : retenue ou écartée, <b>pourquoi</b> — dans les deux sens —, et <b>où elle en est</b>. Cette troisième colonne est propre à 27001 : celle d'ISO&nbsp;42001 n'en demande que deux. Servir le même gabarit aux deux normes fait perdre exactement celle que l'auditeur recoupe avec le terrain.</p>
+  <div class="cnf-copy"><b>ISO/IEC 27001:2022 est protégée par le droit d'auteur (© ISO/IEC).</b> Cet écran cite des <b>numéros</b> et des <b>titres</b> d'articles et de mesures ; tout ce qui les décrit est rédigé par le cabinet. Aucune phrase du texte normatif n'y est reproduite, et aucune question du questionnaire d'auto-évaluation BSI qui a servi de point de départ — il est la propriété de son éditeur. La mise en œuvre suppose de détenir la norme.</div>
+  <div class="reg-toolbar">
+    <button class="mat-export-btn" onclick="iso27PeindreSoa()">↻ Recalculer</button>
+    <button class="mat-export-btn" onclick="iso27SoaTout('retenue')">Tout retenir</button>
+    <button class="mat-export-btn" onclick="iso27SoaTout('ecartee')">Tout écarter</button>
+    <button class="mat-export-btn" onclick="iso27SoaNouvelles()">Ne montrer que les 11 nouvelles</button>
+  </div>
+  <div id="iso27-soa-body"><div class="veille-loading">Chargement de l'annexe A…</div></div>
+  <div class="trait-note">
+    Une mesure <b>écartée</b> n'a pas de statut de mise en œuvre, et ne doit pas en avoir : lui en demander un ferait compter comme un manque ce qui est une décision. Le taux de mise en œuvre ne porte donc que sur les mesures <b>retenues</b>.
+  </div>
+</div>
+
+<div class="page" id="p-iso27001">
+  <span class="eyebrow">ISO 27001 · Articles 4 à 10</span>
+  <h1 class="page-h">Le corps de la norme, <em>et ce qui se greffe</em></h1>
+  <p class="page-lead">Trente sous-articles, et la même structure harmonisée qu'ISO&nbsp;42001 : revue de direction, audit interne, non-conformités, informations documentées se reprennent d'un système de management déjà en place. Sept articles ne se reprennent pas — le domaine d'application, la politique, et les quatre qui portent l'appréciation et le traitement des risques.</p>
+  <div class="cnf-copy"><b>ISO/IEC 27001:2022 est protégée par le droit d'auteur (© ISO/IEC).</b> Cet écran cite des <b>numéros</b> et des <b>titres</b> d'articles et de mesures ; tout ce qui les décrit est rédigé par le cabinet. Aucune phrase du texte normatif n'y est reproduite, et aucune question du questionnaire d'auto-évaluation BSI qui a servi de point de départ — il est la propriété de son éditeur. La mise en œuvre suppose de détenir la norme.</div>
+  <div class="reg-toolbar">
+    <button class="mat-export-btn" onclick="iso27PeindreArticles()">↻ Recalculer</button>
+    <button class="mat-export-btn" onclick="go('iso27001-risques')">Analyse de risque →</button>
+  </div>
+  <div id="iso27-art-body"><div class="veille-loading">Chargement du référentiel…</div></div>
+  <div class="trait-note">
+    Un article de 4 à 10 ne se déclare pas « sans objet » : ce sont des <b>exigences</b>, et elles ne s'écartent pas. Seules les mesures de l'annexe&nbsp;A peuvent l'être, et seulement avec justification. Le <b>domaine d'application</b> (art.&nbsp;4.3) est la décision la plus structurante : tout ce qui n'en est pas exclu par écrit sera audité.
+  </div>
+</div>
+
+<div class="page" id="p-iso27001-millesime">
+  <span class="eyebrow">ISO 27001 · Millésime</span>
+  <h1 class="page-h">2013 → 2022 : <em>ce qui a changé</em></h1>
+  <p class="page-lead">Le questionnaire d'auto-évaluation qui a servi de point de départ à ce module porte sur <b>ISO/IEC 27001:2013</b>. Ce n'est plus la norme. Et le changement n'est pas cosmétique : l'annexe&nbsp;A est passée de 114&nbsp;mesures en 14&nbsp;chapitres à <b>93 en 4 thèmes</b>, dont <b>onze entièrement nouvelles</b>.</p>
+  <div class="cnf-cmd bloc">
+    <b>Ce que ça change pour un organisme déjà certifié.</b> Son reste à faire n'est ni 93, ni 114, ni « tout » : ce sont les <b>onze</b> mesures qui n'existaient pas — renseignement sur les menaces, services en nuage, préparation des TIC pour la continuité, surveillance physique, gestion des configurations, suppression d'informations, masquage des données, prévention de la fuite de données, activités de surveillance, filtrage web, codage sécurisé.
+  </div>
+  <div id="iso27-mil-body"><div class="veille-loading">Chargement du comparatif…</div></div>
+  <div class="trait-note">
+    <b>Ce que ce module n'a pas pu vérifier, et le dit.</b> La date de fin de la période de transition des certificats 2013 n'est pas joignable depuis cet environnement. Elle se confirme auprès de l'organisme certificateur, qui la connaît pour chaque certificat qu'il a émis — et un certificat non migré cesse d'être valide à l'issue de la transition, quelle que soit la date d'expiration imprimée dessus.
   </div>
 </div>
 

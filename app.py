@@ -1954,6 +1954,114 @@ def api_iso42001_evaluer():
     return jsonify(r), (200 if r.get("ok") else 400)
 
 
+# ═══════════════════════════════════════════════════════════════════════════
+#  ISO/IEC 27001 — L'ANALYSE DE RISQUE, PUIS LA CONFORMITÉ
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# MÊME DISCIPLINE QUE POUR 42001 : la norme est protégée par le droit
+# d'auteur, ces routes rendent des NUMÉROS et des TITRES, et le moteur refuse
+# de démarrer si sa table porte autre chose. Le questionnaire d'origine
+# (© BSI Group) n'est pas davantage recopié : aucune de ses questions ne
+# transite par ici.
+
+import iso27001  # noqa: E402
+
+
+@app.route('/api/iso27001/referentiel', methods=['GET'])
+@rate_limit(limit=120, window=60)
+def api_iso27001_referentiel():
+    """Articles 4 à 10, annexe A 2022, échelles, ponts — et ce qu'on ignore.
+
+    `a_verifier` REDESCEND AVEC LE RESTE, et ce n'est pas de l'ornement : la
+    date de fin de transition des certificats 2013 n'a pas pu être vérifiée
+    depuis cet environnement. La taire rendrait une restitution qui a l'air
+    complète ; la rendre comme une date établie ferait citer en comité un
+    chiffre que personne n'a vérifié.
+    """
+    return jsonify({
+        "ok": True,
+        "source": iso27001.SOURCE,
+        "source_questionnaire": iso27001.SOURCE_QUESTIONNAIRE,
+        "millesimes": iso27001.MILLESIMES,
+        "nouvelles_2022": list(iso27001.NOUVELLES_2022),
+        "chapitres": [{"numero": n, "titre": t,
+                       "sous": [{"numero": sn, "titre": st, "dit": sd,
+                                 "mutualisable": sm}
+                                for sn, st, sd, sm in sous]}
+                      for n, t, sous in iso27001.CHAPITRES],
+        "propres_a_la_securite": list(iso27001.PROPRES_A_LA_SECURITE),
+        "annexe_a": [{"numero": th, "titre": tt, "dit": td,
+                      "mesures": [{"numero": mn, "titre": mt,
+                                   "nouvelle_2022":
+                                       mn in iso27001.NOUVELLES_2022}
+                                  for mn, mt in liste]}
+                     for th, tt, td, liste in iso27001.ANNEXE_A],
+        "echelles": {k: [{"rang": r, "nom": n, "dit": d} for r, n, d in v]
+                     for k, v in iso27001.ECHELLES.items()},
+        "proprietes": {k: iso27001.PROPRIETES_NOMS[k]
+                       for k in iso27001.PROPRIETES},
+        "options_traitement": {c: dict(v, cle=c)
+                               for c, v in iso27001.OPTIONS_TRAITEMENT.items()},
+        "criteres_defaut": iso27001.CRITERES_DEFAUT,
+        "certification": iso27001.CERTIFICATION,
+        "ponts": [dict(p, mesures_iso=list(p["mesures_iso"]),
+                       detail=[{"cle": c, "nom": n, "mesures": list(ms)}
+                               for c, n, ms in p["detail"]])
+                  for p in iso27001.PONTS],
+        "a_verifier": list(iso27001.A_VERIFIER),
+    })
+
+
+@app.route('/api/iso27001/risques', methods=['POST'])
+@rate_limit(limit=120, window=60)
+def api_iso27001_risques():
+    """L'appréciation et le traitement — la route la plus utilisée du module.
+
+    ELLE EXISTE SÉPARÉMENT DE L'ÉVALUATION parce que c'est le registre qu'on
+    retravaille en boucle. Faire renvoyer toute l'auto-évaluation à chaque
+    cotation dissuaderait de la corriger.
+    """
+    d = request.get_json(silent=True) or {}
+    try:
+        r = iso27001.traiter(d.get("risques"), d.get("criteres"))
+    except Exception:
+        app.logger.exception("analyse de risque ISO 27001")
+        return jsonify({"ok": False, "erreur": "analyse_impossible"}), 500
+    return jsonify(r), (200 if r.get("ok") else 400)
+
+
+@app.route('/api/iso27001/applicabilite', methods=['POST'])
+@rate_limit(limit=120, window=60)
+def api_iso27001_applicabilite():
+    """La déclaration d'applicabilité, et son verdict d'étape 1."""
+    d = request.get_json(silent=True) or {}
+    try:
+        r = iso27001.declaration_applicabilite(d.get("mesures"))
+    except Exception:
+        app.logger.exception("declaration d'applicabilite ISO 27001")
+        return jsonify({"ok": False, "erreur": "calcul_impossible"}), 500
+    return jsonify(r), (200 if r.get("ok") else 400)
+
+
+@app.route('/api/iso27001/evaluer', methods=['POST'])
+@rate_limit(limit=120, window=60)
+def api_iso27001_evaluer():
+    """Risque, applicabilité, maturité — dans cet ordre, jamais l'inverse.
+
+    Les mesures de l'annexe A se DÉDUISENT du traitement des risques
+    (art. 6.1.3 b et c). Construire la déclaration d'abord et chercher
+    ensuite des risques qui la justifient produit un document qui tient
+    debout et ne protège rien — et ça se voit à l'étape 2.
+    """
+    d = request.get_json(silent=True) or {}
+    try:
+        r = iso27001.evaluer(d)
+    except Exception:
+        app.logger.exception("evaluation ISO 27001")
+        return jsonify({"ok": False, "erreur": "evaluation_impossible"}), 500
+    return jsonify(r), (200 if r.get("ok") else 400)
+
+
 import observatoire_ia  # noqa: E402
 
 OBS_TTL = 1800  # cache de la reponse assemblee (30 min) ; les fetcheurs

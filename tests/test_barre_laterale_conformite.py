@@ -47,7 +47,12 @@ NODE = shutil.which("node")
 # L'ORDRE EST CELUI QUI A ÉTÉ DEMANDÉ, et il n'est pas alphabétique : RGPD
 # d'abord parce que c'est le cadre que tout le monde porte déjà, CRA en
 # dernier parce que c'est le plus récent.
-TIROIRS = ["rgpd-et-privacy", "iso42001", "nis2", "cra"]
+#
+# ISO 27001 S'EST INSÉRÉE AVANT ISO 42001, ET PAS AILLEURS. Les deux normes
+# partagent la structure harmonisée des articles 4 à 10, et 42001 se GREFFE
+# sur ce socle — c'est ce que déclare le pont du moteur, dans les deux sens.
+# Les ranger dans l'autre ordre ferait lire la greffe avant le support.
+TIROIRS = ["rgpd-et-privacy", "iso27001", "iso42001", "nis2", "cra"]
 
 
 def _executer(scenario):
@@ -121,9 +126,10 @@ def test_le_titre_de_famille_n_est_PAS_une_sb_section():
         "le titre de famille ne doit pas être une `.sb-section` : %r" % balise)
 
 
-def test_les_quatre_tiroirs_sont_ceux_demandes_et_dans_cet_ordre():
-    """RGPD & PRIVACY, ISO 42001, NIS2, CRA — l'ordre de la demande, pas
-    l'ordre alphabétique ni l'ordre chronologique."""
+def test_les_tiroirs_sont_ceux_demandes_et_dans_cet_ordre():
+    """RGPD & PRIVACY, ISO 27001, ISO 42001, NIS 2, CRA — l'ordre voulu, ni
+    alphabétique ni chronologique. 27001 précède 42001 parce que c'est le
+    socle sur lequel 42001 se greffe."""
     r = _executer(_OUTILS + r"""
 rendre(nav.querySelectorAll('.sb-section[data-fam]')
   .map(function(s){ return s.getAttribute('data-grp'); }));
@@ -161,7 +167,7 @@ def test_le_pli_a_son_propre_attribut_et_la_feuille_de_style_le_masque():
 #  2. LE PLI — PAR DÉFAUT FERMÉ, ET IL SE SOUVIENT
 # ═══════════════════════════════════════════════════════════════════════════
 
-def test_les_quatre_tiroirs_sont_replies_au_premier_chargement():
+def test_tous_les_tiroirs_sont_replies_au_premier_chargement():
     """C'EST LA RAISON D'ÊTRE DU REGROUPEMENT. Quatre cadres dépliés, ce sont
     vingt-trois onglets d'affilée — exactement ce que le regroupement devait
     faire disparaître."""
@@ -411,7 +417,9 @@ def test_chaque_panneau_de_la_famille_est_ouvert_par_un_onglet_du_menu():
     LA RÈGLE LIT LES `go('…')` DES ONGLETS et exige que chacun des vingt-trois
     panneaux de la famille en reçoive un."""
     cibles = set(re.findall(r"onclick=\"go\('([a-z0-9-]+)'", HTML))
-    attendus = ["iso42001", "iso42001-soa", "iso42001-certif", "iso42001-ponts",
+    attendus = ["iso27001", "iso27001-risques", "iso27001-soa",
+                "iso27001-millesime",
+                "iso42001", "iso42001-soa", "iso42001-certif", "iso42001-ponts",
                 "nis2-qualifier", "nis2", "nis2-gouvernance",
                 "nis2-signalement", "nis2-chiffre",
                 "cra", "cra-role", "cra-ecarts", "cra-chiffre",
@@ -444,7 +452,7 @@ rendre({affiche: famille().querySelector('.sb-famille-n').textContent,
     assert r["affiche"] == "%d onglets" % r["attendu"], (
         "le compte affiché (%r) ne suit pas le menu (%d)"
         % (r["affiche"], r["attendu"]))
-    assert r["attendu"] >= 20, (
+    assert r["attendu"] >= 25, (
         "le garde-fou : une lecture qui rendrait zéro ferait passer la règle "
         "ci-dessus pour une comparaison de deux zéros")
 
@@ -525,13 +533,14 @@ def test_go_appelle_l_ouverture_du_tiroir_courant():
 # ═══════════════════════════════════════════════════════════════════════════
 
 @pytest.mark.parametrize("grp,attendus", [
-    ("iso42001", 4), ("nis2", 5)])
+    ("iso27001", 4), ("iso42001", 4), ("nis2", 5)])
 def test_chaque_nouveau_tiroir_porte_ses_onglets(grp, attendus):
     r = _executer(_OUTILS + "rendre(items(%s).length);" % json.dumps(grp))
     assert r == attendus, "%s porte %d onglets au lieu de %d" % (grp, r, attendus)
 
 
 @pytest.mark.parametrize("pid", [
+    "iso27001", "iso27001-risques", "iso27001-soa", "iso27001-millesime",
     "iso42001", "iso42001-soa", "iso42001-certif", "iso42001-ponts",
     "nis2-qualifier", "nis2", "nis2-gouvernance", "nis2-signalement",
     "nis2-chiffre"])
@@ -549,7 +558,7 @@ def test_chaque_onglet_neuf_mene_a_un_panneau_qui_existe(pid):
 
 
 @pytest.mark.parametrize("cle,appel", [
-    ("iso42001", "isoInit"), ("nis2", "nis2Init")])
+    ("iso27001", "iso27Init"), ("iso42001", "isoInit"), ("nis2", "nis2Init")])
 def test_go_amorce_le_module_meme_sans_passer_par_l_onglet(cle, appel):
     """UN LIEN DIRECT, UN PARCOURS GUIDÉ OU UN BOUTON « → » D'UN AUTRE ÉCRAN
     passent par `go()` sans exécuter le `onclick` de l'onglet. Sans ce

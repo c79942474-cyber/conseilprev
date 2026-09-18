@@ -947,6 +947,10 @@ var PAGE_META = {
   'cra-role':       { section: 'CRA — PRODUITS', label: 'Qualifier mon rôle' },
   'cra-chiffre':    { section: 'CRA — PRODUITS', label: 'Exposition chiffrée' },
   'cra-signalement':{ section: 'CRA — PRODUITS', label: 'Signalement art. 14' },
+  'iso27001-risques':{ section: 'ISO 27001', label: 'Analyse de risque' },
+  'iso27001-soa':  { section: 'ISO 27001', label: 'Déclaration d\u2019applicabilité' },
+  'iso27001':      { section: 'ISO 27001', label: 'Articles 4 à 10' },
+  'iso27001-millesime':{ section: 'ISO 27001', label: '2013 \u2192 2022 : ce qui a changé' },
   'iso42001':      { section: 'ISO 42001', label: 'Articles 4 à 10' },
   'iso42001-soa':  { section: 'ISO 42001', label: 'Déclaration d\u2019applicabilité' },
   'iso42001-certif':{ section: 'ISO 42001', label: 'Chemin de certification' },
@@ -1062,6 +1066,7 @@ function go(id, el, sec, pg) {
      bouton « → » d'un autre écran passent par ici : sans ces deux lignes,
      la page s'affichait vide avec « Chargement… » qui ne finissait jamais. */
   if (id.indexOf('iso42001') === 0 && typeof window.isoInit === 'function') _apresPeinture(window.isoInit);
+  if (id.indexOf('iso27001') === 0 && typeof window.iso27Init === 'function') _apresPeinture(window.iso27Init);
   if (id.indexOf('nis2') === 0 && typeof window.nis2Init === 'function') _apresPeinture(window.nis2Init);
   /* L'ONGLET COURANT EST AUSSI ANNONCÉ, pas seulement peint : à un lecteur
      d'écran, la pastille terre cuite ne dit rien. */
@@ -9593,6 +9598,41 @@ var PAGE_GUIDES = {
       {h:"À quoi sert cette page", t:"À montrer le seul compte à rebours du règlement qui court déjà. L’article 14 est applicable depuis le 11 septembre 2026, quand le reste du texte attend décembre 2027. Un fabricant qui découvre aujourd’hui qu’une de ses vulnérabilités est activement exploitée dispose de vingt-quatre heures pour l’alerte précoce."},
       {h:"Comment l’utiliser", t:"Lisez-la AVANT l’incident, pas pendant. Deux faits déclenchent la même mécanique — vulnérabilité activement exploitée, incident grave — avec les mêmes premiers délais, 24 h puis 72 h. Ce qui diffère est le rapport final : quatorze jours après la mise à disposition d’un correctif d’un côté, un mois après la notification de l’autre. Et la notification part simultanément au CSIRT coordinateur ET à l’ENISA, par la plateforme unique de l’article 16 : prévenir l’un puis l’autre n’est pas ce que le texte demande."},
       {h:"Ce qu’elle ne fait pas", t:"Elle ne signale rien à votre place et n’ouvre aucun compte à rebours : elle affiche les délais et ce qu’il faut transmettre à chaque étape. Elle ne dit pas non plus si votre incident est « grave » au sens du règlement — cette qualification se fait sur les faits, et elle engage."}
+    ]
+  },
+  // ═══════════════════════════════════════════════════════════════════════
+  //  ISO/IEC 27001 — LE SOCLE
+  // ═══════════════════════════════════════════════════════════════════════
+  'iso27001-risques': {
+    title: "ISO/IEC 27001 — analyse de risque",
+    sections: [
+      {h:"À quoi sert cette page", t:"À produire ce dont tout le reste de la norme découle. Les mesures de l’annexe A ne se choisissent pas dans un catalogue : elles se DÉDUISENT du traitement des risques (art. 6.1.3 b et c). Construire la déclaration d’applicabilité d’abord, puis chercher des risques qui la justifient, donne un document qui tient debout et ne protège rien — et ça se voit à l’étape 2."},
+      {h:"Comment l’utiliser", t:"Datez les critères d’acceptation AVANT de coter : l’article 6.1.2 a) demande de les établir, et les écrire après avoir vu les résultats donne un registre où tout est acceptable. L’écran compare les deux dates, parce que c’est la seule façon de montrer cet ordre. Puis, pour chaque risque : la propriété atteinte — confidentialité, intégrité, disponibilité —, un propriétaire, une cotation. Et à la fin, l’acceptation du risque résiduel, ÉCRITE, DATÉE, par le propriétaire lui-même."},
+      {h:"Ce qu’elle ne fait pas", t:"Elle ne cote rien à votre place et n’impose aucune échelle : la norme n’en prescrit aucune, celle qui est proposée est du cabinet, et elle le dit. Elle ne considère pas non plus qu’un risque est traité parce qu’un plan existe : tant que les mesures ne sont pas déclarées mises en œuvre, le niveau résiduel saisi reste une prévision et le module retient le niveau initial. Enfin, elle ne reproduit aucune phrase de la norme — numéros et titres seulement."}
+    ]
+  },
+  'iso27001-soa': {
+    title: "Déclaration d’applicabilité — article 6.1.3 d)",
+    sections: [
+      {h:"À quoi sert cette page", t:"À produire la pièce maîtresse de l’audit d’étape 1 : les 93 mesures de l’annexe A, chacune retenue ou écartée, chacune justifiée dans les deux sens, et — pour les retenues — chacune avec son statut de mise en œuvre. Trois colonnes, là où celle d’ISO 42001 n’en demande que deux."},
+      {h:"Comment l’utiliser", t:"Ne retenez une mesure que si un risque l’appelle, puis comparez à l’annexe A pour vérifier qu’aucune n’a été omise : c’est l’ordre exact de l’article 6.1.3. Si vous êtes déjà certifié contre la version 2013, employez le filtre « ne montrer que les 11 nouvelles » — les 82 autres, vous les avez déjà tranchées. Une mesure écartée perd son statut, et c’est voulu : lui en demander un ferait compter comme un manque ce qui est une décision."},
+      {h:"Ce qu’elle ne fait pas", t:"Elle ne prédit pas l’issue de l’étape 2 : c’est là que l’auditeur recoupe la colonne « statut » avec ce qu’il constate, et Sentinel ne détient pas ces preuves. Elle ne reproduit pas davantage le texte des mesures — la norme est payante et protégée, et une garde du moteur refuse tout champ qui contiendrait autre chose qu’un numéro et un titre."}
+    ]
+  },
+  'iso27001': {
+    title: "ISO/IEC 27001 — articles 4 à 10",
+    sections: [
+      {h:"À quoi sert cette page", t:"À coter les trente sous-articles du corps de la norme, et à séparer ce qui se greffe de ce qui ne se greffe pas. La structure est la même que celle d’ISO 42001 — c’est la structure harmonisée des systèmes de management — donc revue de direction, audit interne, non-conformités et informations documentées se reprennent. Sept articles ne se reprennent de nulle part."},
+      {h:"Comment l’utiliser", t:"Commencez par 4.3, le domaine d’application : c’est la décision la plus structurante de toute la certification, parce que tout ce qui n’en est pas exclu par écrit sera audité. Un périmètre large rassure le client et double la facture ; un périmètre étroit passe l’audit et ne prouve rien à personne. Vérifiez ensuite 6.3, planification des modifications : c’est le seul article que la version 2022 a ajouté au corps de la norme."},
+      {h:"Ce qu’elle ne fait pas", t:"Elle n’accepte pas qu’un article de 4 à 10 soit déclaré « sans objet » : ce sont des exigences, elles ne s’écartent pas. Seules les mesures de l’annexe A le peuvent, et seulement avec justification. Une déclaration « sans objet » posée sur un article est ignorée, et le module le dit plutôt que de la compter."}
+    ]
+  },
+  'iso27001-millesime': {
+    title: "ISO/IEC 27001 — 2013 → 2022",
+    sections: [
+      {h:"À quoi sert cette page", t:"À dire ce qu’aucun questionnaire d’auto-évaluation en circulation ne dit : l’annexe A est passée de 114 mesures en 14 chapitres à 93 en 4 thèmes, dont onze entièrement nouvelles. Le document BSI qui a servi de point de départ à ce module date de 2016 et porte sur la version 2013 — le remplir aujourd’hui prépare contre une norme retirée, sur une numérotation qui n’existe plus."},
+      {h:"Comment l’utiliser", t:"Si vous êtes déjà certifié, votre reste à faire est nommé ici, et il est court : onze mesures. C’est une demi-journée de décisions, pas un projet. La page porte aussi le rapprochement mesure par mesure entre l’article 21, §2, de NIS 2 et l’annexe A — quarante-deux mesures répondent aux dix exigences de la directive."},
+      {h:"Ce qu’elle ne fait pas", t:"Elle ne donne pas la date de fin de la période de transition des certificats 2013, parce qu’elle n’a pas pu la vérifier : iso.org, iaf.nu et cofrac.fr sont injoignables depuis cet environnement, et une date non vérifiée se citerait en comité comme si elle l’était. Votre organisme certificateur la connaît pour votre certificat. Et le rapprochement avec NIS 2 est la lecture du cabinet, pas une correspondance officielle : il oriente le dossier, il ne le démontre pas à votre place."}
     ]
   },
   // ═══════════════════════════════════════════════════════════════════════
@@ -19779,6 +19819,50 @@ var GUIDED_PATHS = [
       {id:'historique', label:"Historique", action:"Datez ce que vous savez, et QUAND vous l\u2019avez su.", gain:"C\u2019est la date de connaissance qui sera discut\u00e9e, pas celle de l\u2019attaque.", tip:"Une trace dat\u00e9e \u00e9crite pendant la crise vaut mieux qu\u2019une reconstitution \u00e9crite apr\u00e8s. Elle se fait en deux minutes, au moment o\u00f9 personne n\u2019en a."},
       {id:'parties', label:"Parties prenantes", action:"Sortez la liste des DESTINATAIRES de vos services \u2014 celle-l\u00e0, pas celle de vos fournisseurs.", gain:"L\u2019article\u00a023,\u00a0\u00a71, impose une SECONDE notification, aux destinataires des services, distincte de celle au CSIRT. Et le \u00a72 impose de leur dire ce qu\u2019ils peuvent appliquer eux-m\u00eames.", tip:"Cette liste ne se fabrique pas le jour de l\u2019incident. Elle se construit \u00e0 froid, ou elle ne se construit pas."}
     ]
+  },
+  /* ═══════════════════════════════════════════════════════════════════════
+     ISO/IEC 27001 — TROIS PARCOURS, ET LE PREMIER EST UN AVERTISSEMENT
+     ═══════════════════════════════════════════════════════════════════════
+     POURQUOI « JE SUIS DÉJÀ CERTIFIÉ » VIENT EN TÊTE. C'est la situation la
+     plus courante et la plus mal servie : un organisme certifié contre
+     ISO/IEC 27001:2013 croit son reste à faire nul, et il est de ONZE
+     mesures — celles qui n'existaient pas. Le questionnaire qui circule
+     encore porte sur la version retirée, et ne le lui dira jamais. ══════ */
+  {
+    id: 'iso27_deja_2013',
+    icon: '\u{1F4C5}',
+    role: "D\u00e9j\u00e0 certifi\u00e9 ISO\u00a027001:2013 \u2014 qu\u2019est-ce qui a chang\u00e9\u00a0?",
+    pitch: "L\u2019annexe\u00a0A est pass\u00e9e de 114\u00a0mesures en 14\u00a0chapitres \u00e0 93 en 4\u00a0th\u00e8mes, dont ONZE enti\u00e8rement nouvelles. Votre reste \u00e0 faire n\u2019est ni 93, ni 114, ni \u00ab\u00a0tout\u00a0\u00bb\u00a0: ce sont ces onze-l\u00e0, et la renum\u00e9rotation de tout le reste.",
+    steps: [
+      {id:'iso27001-millesime', label:"2013 \u2192 2022 : ce qui a chang\u00e9", action:"Commencez ici, avant de rouvrir le moindre document.", gain:"Les onze mesures neuves sont nomm\u00e9es\u00a0: renseignement sur les menaces, services en nuage, pr\u00e9paration des TIC, surveillance physique, configurations, suppression, masquage, fuite de donn\u00e9es, surveillance, filtrage web, codage s\u00e9curis\u00e9.", tip:"Un certificat non migr\u00e9 cesse d\u2019\u00eatre valide \u00e0 l\u2019issue de la p\u00e9riode de transition, quelle que soit la date d\u2019expiration imprim\u00e9e dessus. Votre organisme certificateur conna\u00eet cette date pour votre certificat."},
+      {id:'iso27001-soa', label:"D\u00e9claration d\u2019applicabilit\u00e9", action:"Employez le filtre \u00ab\u00a0ne montrer que les 11 nouvelles\u00a0\u00bb\u00a0: vous avez d\u00e9j\u00e0 tranch\u00e9 les 82 autres.", gain:"Onze d\u00e9cisions \u00e0 prendre, chacune motiv\u00e9e, chacune avec son statut. C\u2019est une demi-journ\u00e9e, pas un projet.", tip:"La troisi\u00e8me colonne \u2014 le statut de mise en \u0153uvre \u2014 existait d\u00e9j\u00e0 en 2013. Ce qui change est la renum\u00e9rotation\u00a0: votre ancienne d\u00e9claration ne se recopie pas ligne \u00e0 ligne."},
+      {id:'iso27001-risques', label:"Analyse de risque", action:"Rouvrez le registre\u00a0: les mesures neuves ne se retiennent que si un risque les appelle.", gain:"C\u2019est l\u2019ordre de la norme \u2014 les mesures se d\u00e9duisent du traitement des risques, jamais l\u2019inverse.", tip:"Profitez-en pour v\u00e9rifier les deux dates\u00a0: crit\u00e8res d\u2019acceptation \u00e9tablis AVANT l\u2019appr\u00e9ciation. C\u2019est l\u2019\u00e9cart le plus fr\u00e9quent, et le plus invisible."},
+      {id:'iso27001', label:"Articles 4 \u00e0 10", action:"V\u00e9rifiez l\u2019article\u00a06.3, ajout\u00e9 par la version 2022.", gain:"La planification des modifications n\u2019existait pas dans l\u2019ancienne structure\u00a0: c\u2019est le seul article neuf du corps de la norme.", tip:"Le domaine d\u2019application (art.\u00a04.3) se rev\u00e9rifie aussi\u00a0: s\u2019il a boug\u00e9 depuis la derni\u00e8re certification et que rien ne l\u2019a \u00e9crit, l\u2019audit le trouvera."}
+    ]
+  },
+  {
+    id: 'iso27_risk_manager',
+    icon: '\u{1F3B2}',
+    role: "Risk manager \u2014 je monte l\u2019analyse de risque",
+    pitch: "Tout part de l\u00e0, et deux d\u00e9fauts suffisent \u00e0 d\u00e9faire l\u2019exercice entier\u00a0: des crit\u00e8res d\u2019acceptation \u00e9crits APR\u00c8S la cotation, et un risque r\u00e9siduel que personne n\u2019a accept\u00e9 par \u00e9crit. Aucun des deux ne se voit dans le document final.",
+    steps: [
+      {id:'iso27001-risques', label:"Analyse de risque", action:"Datez les crit\u00e8res AVANT de coter. Puis cotez, en d\u00e9signant un propri\u00e9taire pour chaque risque.", gain:"L\u2019article\u00a06.1.2\u00a0c) exige, pour CHAQUE risque, la propri\u00e9t\u00e9 atteinte \u2014 confidentialit\u00e9, int\u00e9grit\u00e9, disponibilit\u00e9 \u2014 et un propri\u00e9taire d\u00e9sign\u00e9.", tip:"Une colonne \u00ab\u00a0propri\u00e9taire\u00a0\u00bb remplie ne vaut pas l\u2019acceptation dat\u00e9e que demande l\u2019article\u00a06.1.3\u00a0e). L\u2019auditeur demande la signature, pas le nom."},
+      {id:'registre', label:"Registre des syst\u00e8mes d\u2019IA", action:"Si vous exploitez de l\u2019IA, ses syst\u00e8mes sont des actifs d\u2019information comme les autres.", gain:"Un mod\u00e8le, ses donn\u00e9es d\u2019entra\u00eenement et son API sont trois actifs distincts, avec trois expositions diff\u00e9rentes.", tip:"C\u2019est aussi le point d\u2019entr\u00e9e d\u2019ISO\u00a042001, qui se greffe sur le m\u00eame socle d\u2019articles 4 \u00e0 10."},
+      {id:'iso27001-soa', label:"D\u00e9claration d\u2019applicabilit\u00e9", action:"Ne retenez une mesure que si un risque l\u2019appelle \u2014 puis comparez \u00e0 l\u2019annexe\u00a0A pour v\u00e9rifier qu\u2019aucune n\u2019a \u00e9t\u00e9 omise.", gain:"C\u2019est l\u2019ordre exact de l\u2019article\u00a06.1.3\u00a0b) et c)\u00a0: d\u00e9duire, puis contr\u00f4ler. Pas piocher dans un catalogue.", tip:"Trois colonnes, pas deux\u00a0: d\u00e9cision, justification, ET statut de mise en \u0153uvre. La troisi\u00e8me est celle que l\u2019auditeur recoupe avec le terrain."},
+      {id:'evals', label:"Mes \u00e9valuations", action:"Consignez chaque cotation avec sa date et sa preuve.", gain:"L\u2019article\u00a08.2 exige de refaire l\u2019appr\u00e9ciation \u00e0 intervalles planifi\u00e9s ET apr\u00e8s tout changement notable.", tip:"Une appr\u00e9ciation non refaite est le d\u00e9faut le plus courant au premier audit de surveillance \u2014 celui o\u00f9 l\u2019on a rel\u00e2ch\u00e9."}
+    ]
+  },
+  {
+    id: 'iso27_nis2',
+    icon: '\u{1F517}',
+    role: "Je suis soumis \u00e0 NIS\u00a02 \u2014 27001 me sert-elle\u00a0?",
+    pitch: "Oui, largement, et ce n\u2019est pas suffisant. Les dix mesures de l\u2019article\u00a021,\u00a0\u00a72, trouvent presque toutes un r\u00e9pondant dans l\u2019annexe\u00a0A\u00a0: un syst\u00e8me certifi\u00e9 est le socle de preuves le plus direct qu\u2019une entit\u00e9 puisse pr\u00e9senter. Mais trois choses \u00e9chappent compl\u00e8tement \u00e0 la norme.",
+    steps: [
+      {id:'nis2-qualifier', label:"Suis-je concern\u00e9 par NIS\u00a02 ?", action:"Qualifiez-vous d\u2019abord\u00a0: essentielle, importante ou hors champ.", gain:"Le r\u00e9gime de supervision change tout\u00a0\u2014 et une entit\u00e9 essentielle subit des audits r\u00e9guliers sans qu\u2019aucun incident ne soit n\u00e9cessaire.", tip:"Un certificat 27001 ne vous fait sortir d\u2019aucune obligation\u00a0: la qualification se calcule sur le secteur et la taille, pas sur votre posture."},
+      {id:'iso27001-millesime', label:"Ponts et millésime", action:"Regardez le rapprochement mesure par mesure entre l\u2019article\u00a021,\u00a0\u00a72, et l\u2019annexe\u00a0A.", gain:"Quarante-deux mesures de l\u2019annexe\u00a0A r\u00e9pondent aux dix exigences de NIS\u00a02\u00a0: le travail d\u00e9j\u00e0 fait se pr\u00e9sente tel quel.", tip:"Ce rapprochement est la lecture du cabinet, pas une correspondance officielle. Il oriente le dossier\u00a0; il ne le d\u00e9montre pas \u00e0 votre place."},
+      {id:'iso27001-soa', label:"D\u00e9claration d\u2019applicabilit\u00e9", action:"C\u2019est votre pi\u00e8ce ma\u00eetresse face \u00e0 l\u2019autorit\u00e9\u00a0: elle dit ce que vous avez retenu, pourquoi, et o\u00f9 vous en \u00eates.", gain:"La troisi\u00e8me colonne \u2014 le statut de mise en \u0153uvre \u2014 est exactement ce qu\u2019une autorit\u00e9 demande quand elle exerce l\u2019article\u00a032,\u00a0\u00a72,\u00a0g).", tip:"Une mesure \u00e9cart\u00e9e avec justification se d\u00e9fend\u00a0; une case vide, non. C\u2019est vrai devant l\u2019auditeur comme devant l\u2019autorit\u00e9."},
+      {id:'nis2-signalement', label:"Signalement art.\u00a023", action:"Voil\u00e0 ce que 27001 ne couvre pas\u00a0: les d\u00e9lais.", gain:"24\u00a0h, 72\u00a0h, un mois \u2014 la norme n\u2019en fixe aucun. Un processus d\u2019incident parfaitement conforme \u00e0 A.5.24 peut manquer enti\u00e8rement l\u2019horloge de l\u2019article\u00a023.", tip:"Les deux autres angles morts\u00a0: la responsabilit\u00e9 personnelle des dirigeants (art.\u00a020) et l\u2019enregistrement aupr\u00e8s de l\u2019autorit\u00e9 (art.\u00a03,\u00a0\u00a74)."}
+    ]
   }
 ];
 
@@ -19835,6 +19919,11 @@ var GP_FAMILLES = [
      « en conformité réglementaire », on est dirigeant, RSSI ou pilote d'un
      système de management. Mélanger les quatre ferait une liste de seize où
      l'on ne trouve plus rien. */
+  /* 27001 AVANT 42001, DANS LES PARCOURS COMME DANS LE MENU : les deux
+     normes partagent la structure harmonisée des articles 4 à 10, et 42001
+     se GREFFE sur ce socle. Les lire dans l'autre ordre fait recommencer. */
+  { titre: 'S\u00e9curit\u00e9 de l\u2019information \u2014 ISO/IEC 27001',
+    ids: ['iso27_deja_2013', 'iso27_risk_manager', 'iso27_nis2'] },
   { titre: 'Management de l\u2019IA \u2014 ISO/IEC 42001',
     ids: ['iso_direction', 'iso_pilote_smia', 'iso_deja_27001'] },
   { titre: 'Cybers\u00e9curit\u00e9 des entit\u00e9s \u2014 NIS\u00a02',
@@ -23510,5 +23599,518 @@ function nis2RendreExposition(e, j) {
   h += '<div class="cnf-cmd">' + nis2Esc(j.dit_pivot) + '</div>';
   h += '<div class="trait-note"><b>Assiette — </b>' + nis2Esc(j.assiette)
      + '</div>';
+  e.innerHTML = h;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ISO/IEC 27001:2022 — L'ANALYSE DE RISQUE, PUIS LA CONFORMITÉ
+
+   CE QUE CES ÉCRANS NE CONTIENNENT PAS. Le texte normatif — la norme est
+   protégée par le droit d'auteur — ni aucune question du questionnaire
+   d'auto-évaluation BSI qui a servi de point de départ, qui est la propriété
+   de son éditeur et porte de surcroît sur la version 2013.
+
+   L'ORDRE DES QUATRE ÉCRANS EST CELUI DE LA NORME. Les mesures de l'annexe A
+   se DÉDUISENT du traitement des risques ; l'écran des risques vient donc
+   avant celui de la déclaration d'applicabilité, et le menu les range dans
+   cet ordre.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+var ISO27_REF = null;
+var ISO27_ETAT = {
+  criteres: { seuil_acceptation: 6, etabli_le: '', apprecie_le: '' },
+  risques: [], mesures: {}, articles: {}, soa_filtre: 'tout'
+};
+
+function iso27Esc(t) {
+  return String(t == null ? '' : t).replace(/[&<>"]/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; });
+}
+
+function iso27Init() {
+  if (ISO27_REF) { iso27Peindre(); return; }
+  fetch('/api/iso27001/referentiel')
+    .then(function (r) { return r.json(); })
+    .then(function (j) {
+      if (!j || !j.ok) throw new Error('referentiel');
+      ISO27_REF = j; iso27Peindre();
+    })
+    .catch(function () {
+      ['iso27-risques-body', 'iso27-soa-body', 'iso27-art-body',
+       'iso27-mil-body'].forEach(function (id) {
+        var e = document.getElementById(id);
+        if (e) e.innerHTML = '<div class="veille-loading">Le référentiel de '
+          + 'la norme est momentanément indisponible. Rien n’est affiché '
+          + 'plutôt qu’une liste partielle : préparer un audit sur une '
+          + 'annexe A tronquée coûte plus cher que l’attendre.</div>';
+      });
+    });
+}
+window.iso27Init = iso27Init;
+
+function iso27Peindre() {
+  iso27RemplirCriteres();
+  window.iso27PeindreRisques(); window.iso27PeindreSoa();
+  window.iso27PeindreArticles(); iso27PeindreMillesime();
+}
+
+/* ── LES CRITÈRES, ET LEURS DEUX DATES ────────────────────────────────────
+   LES DEUX CHAMPS DE DATE NE SONT PAS DÉCORATIFS. C'est leur ORDRE que
+   l'article 6.1.2 a) impose, et c'est la seule façon de le montrer : un
+   registre dont les critères ont été écrits après coup est indiscernable
+   d'un registre honnête, sauf par ces deux dates. */
+function iso27RemplirCriteres() {
+  var z = document.getElementById('iso27-criteres');
+  if (!z || z.innerHTML.trim()) return;
+  var c = ISO27_ETAT.criteres;
+  z.innerHTML =
+      '<label class="cnf-chk" title="Au-delà de ce niveau (vraisemblance × '
+    + 'conséquence), un risque ne peut pas être simplement maintenu">'
+    + 'Seuil d’acceptation <input id="iso27-seuil" class="cnf-in" '
+    + 'type="number" min="1" max="16" step="1" style="width:80px" value="'
+    + c.seuil_acceptation + '" onchange="iso27Critere(\'seuil_acceptation\', this.value)">'
+    + '</label>'
+    + '<label class="cnf-chk" title="La date à laquelle les critères d’acceptation ont été ARRÊTÉS">'
+    + 'Critères établis le <input id="iso27-etabli" class="cnf-in" type="date" '
+    + 'onchange="iso27Critere(\'etabli_le\', this.value)"></label>'
+    + '<label class="cnf-chk" title="La date à laquelle les risques ont été cotés">'
+    + 'Appréciation faite le <input id="iso27-apprecie" class="cnf-in" '
+    + 'type="date" onchange="iso27Critere(\'apprecie_le\', this.value)"></label>';
+}
+
+window.iso27Critere = function (nom, valeur) {
+  ISO27_ETAT.criteres[nom] = (nom === 'seuil_acceptation'
+    ? Math.max(1, Math.min(16, Number(valeur) || 1)) : String(valeur || ''));
+  window.iso27PeindreRisques();
+};
+
+window.iso27AjouterRisque = function () {
+  ISO27_ETAT.risques.push({ nom: '', vraisemblance: 2, consequence: 2,
+    confidentialite: false, integrite: false, disponibilite: false,
+    proprietaire: '' });
+  window.iso27PeindreRisques();
+};
+
+window.iso27Risque = function (i, champ, valeur) {
+  var r = ISO27_ETAT.risques[i];
+  if (!r) return;
+  if (champ === 'vraisemblance' || champ === 'consequence'
+      || champ === 'residuel_vraisemblance' || champ === 'residuel_consequence') {
+    r[champ] = valeur === '' ? null : Number(valeur);
+  } else if (champ === 'confidentialite' || champ === 'integrite'
+             || champ === 'disponibilite' || champ === 'mesures_mises_en_oeuvre') {
+    r[champ] = !!valeur;
+  } else {
+    r[champ] = String(valeur || '');
+  }
+  window.iso27PeindreRisques();
+};
+
+window.iso27SupprimerRisque = function (i) {
+  ISO27_ETAT.risques.splice(i, 1);
+  window.iso27PeindreRisques();
+};
+
+/* LE VERDICT VIENT DU MOTEUR, PAS DE L'ÉCRAN. Recalculer la recevabilité en
+   JavaScript aurait produit deux vérités : celle qui s'affiche et celle qui
+   s'exporte. */
+window.iso27PeindreRisques = function () {
+  var e = document.getElementById('iso27-risques-body');
+  if (!e || !ISO27_REF) return;
+  fetch('/api/iso27001/risques', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ risques: ISO27_ETAT.risques,
+                           criteres: ISO27_ETAT.criteres })
+  }).then(function (r) { return r.json(); })
+    .then(function (j) { iso27RendreRisques(e, j); })
+    .catch(function () {
+      e.innerHTML = '<div class="veille-loading">Le calcul est momentanément '
+        + 'indisponible.</div>'; });
+};
+
+function iso27Cote(i, champ, valeur, echelle) {
+  var h = '<select class="cnf-in" onchange="iso27Risque(' + i + ', \''
+        + champ + '\', this.value)"><option value="">—</option>';
+  (ISO27_REF.echelles[echelle] || []).forEach(function (x) {
+    h += '<option value="' + x.rang + '"'
+       + (Number(valeur) === x.rang ? ' selected' : '') + ' title="'
+       + iso27Esc(x.dit) + '">' + x.rang + ' · ' + iso27Esc(x.nom)
+       + '</option>';
+  });
+  return h + '</select>';
+}
+
+function iso27RendreRisques(e, j) {
+  if (!j || !j.ok) { e.innerHTML = '<div class="veille-loading">Calcul '
+    + 'impossible.</div>'; return; }
+  var ordre = j.criteres.ordre;
+  var h = '<div class="cnf-cmd ' + (ordre.ok ? 'fait' : 'bloc') + '"><b>'
+        + (ordre.ok ? 'Antériorité des critères établie.'
+                    : 'Antériorité des critères NON établie.')
+        + '</b><span class="cnf-pq">' + iso27Esc(ordre.dit) + '</span></div>';
+  h += '<div class="cnf-grille">'
+     + '<div class="cnf-case"><div class="cnf-case-n">' + j.cotes + '</div>'
+     + '<div class="cnf-case-l">Risques cotés</div></div>'
+     + '<div class="cnf-case"><div class="cnf-case-n'
+     + (j.restants.length ? ' cnf-bloc' : ' cnf-on') + '">'
+     + j.restants.length + '</div><div class="cnf-case-l">Au-dessus du seuil, '
+     + 'après traitement</div></div>'
+     + '<div class="cnf-case"><div class="cnf-case-n'
+     + (j.sans_acceptation.length ? ' cnf-bloc' : ' cnf-on') + '">'
+     + j.sans_acceptation.length + '</div><div class="cnf-case-l">Sans '
+     + 'acceptation du propriétaire</div></div>'
+     + '<div class="cnf-case"><div class="cnf-case-n'
+     + (j.defauts.length ? ' cnf-bloc' : ' cnf-on') + '">' + j.defauts.length
+     + '</div><div class="cnf-case-l">Lignes incomplètes</div></div></div>';
+  h += '<div class="cnf-cmd ' + (j.recevable ? 'fait' : 'bloc') + '"><b>'
+     + (j.recevable ? 'Le plan de traitement tient.'
+                    : 'Le plan de traitement ne tient pas en l’état.')
+     + '</b><span class="cnf-pq">' + iso27Esc(j.dit) + '</span></div>';
+  (j.bloquants || []).forEach(function (b) {
+    h += '<div class="cnf-cmd bloc">' + iso27Esc(b) + '</div>'; });
+
+  if (!j.lignes.length) {
+    h += '<div class="veille-loading">Aucun risque déclaré. Ajoutez-en un : '
+       + 'tout le reste de la norme en découle.</div>';
+  }
+  j.lignes.forEach(function (l, i) {
+    var r = ISO27_ETAT.risques[i] || {};
+    h += '<details class="cnf-det"' + (l.complet ? '' : ' open')
+       + '><summary>' + iso27Esc(l.nom)
+       + ' <span class="cnf-art">niveau ' + (l.niveau === null ? '—' : l.niveau)
+       + (l.residuel_acquis ? ' → ' + l.niveau_retenu : '') + '</span>'
+       + (l.acceptable_retenu
+          ? ' <span class="cnf-on">sous le seuil</span>'
+          : ' <span class="cnf-bloc">au-dessus du seuil</span>')
+       + (l.complet ? '' : ' <span class="cnf-bloc">ligne incomplète : '
+                         + iso27Esc(l.manques.join(', ')) + '</span>')
+       + '</summary><div style="margin-top:8px">'
+       + '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">'
+       + '<input class="cnf-in" style="flex:1;min-width:200px" '
+       + 'placeholder="Intitulé du risque" value="' + iso27Esc(l.nom === '(sans nom)' ? '' : l.nom)
+       + '" onchange="iso27Risque(' + i + ', \'nom\', this.value)">'
+       + '<input class="cnf-in" style="min-width:160px" '
+       + 'placeholder="Propriétaire du risque" value="'
+       + iso27Esc(l.proprietaire || '') + '" '
+       + 'onchange="iso27Risque(' + i + ', \'proprietaire\', this.value)">'
+       + '<button class="mat-export-btn" onclick="iso27SupprimerRisque(' + i
+       + ')">Retirer</button></div>'
+       + '<div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:8px">'
+       + Object.keys(ISO27_REF.proprietes).map(function (p) {
+           return '<label class="cnf-chk"><input type="checkbox"'
+                + (r[p] ? ' checked' : '') + ' onchange="iso27Risque(' + i
+                + ', \'' + p + '\', this.checked)"> '
+                + iso27Esc(ISO27_REF.proprietes[p]) + '</label>'; }).join('')
+       + '</div>'
+       + '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;align-items:center">'
+       + '<span class="cnf-art">Initial</span>'
+       + iso27Cote(i, 'vraisemblance', l.vraisemblance, 'vraisemblance')
+       + iso27Cote(i, 'consequence', l.consequence, 'consequence')
+       + '<select class="cnf-in" onchange="iso27Risque(' + i
+       + ', \'option\', this.value)"><option value="">— option de traitement —</option>'
+       + Object.keys(ISO27_REF.options_traitement).map(function (k) {
+           var o = ISO27_REF.options_traitement[k];
+           return '<option value="' + k + '"'
+                + ((l.option && l.option.cle === k) ? ' selected' : '')
+                + ' title="' + iso27Esc(o.dit) + '">' + iso27Esc(o.nom)
+                + '</option>'; }).join('')
+       + '</select></div>'
+       + '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;align-items:center">'
+       + '<label class="cnf-chk" title="Tant que ce n’est pas coché, le niveau résiduel reste une prévision et le module retient le niveau initial">'
+       + '<input type="checkbox"' + (r.mesures_mises_en_oeuvre ? ' checked' : '')
+       + ' onchange="iso27Risque(' + i
+       + ', \'mesures_mises_en_oeuvre\', this.checked)"> Mesures mises en œuvre</label>'
+       + '<span class="cnf-art">Résiduel</span>'
+       + iso27Cote(i, 'residuel_vraisemblance', l.residuel_vraisemblance, 'vraisemblance')
+       + iso27Cote(i, 'residuel_consequence', l.residuel_consequence, 'consequence')
+       + '</div>'
+       + '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;align-items:center">'
+       + '<input class="cnf-in" style="min-width:180px" '
+       + 'placeholder="Accepté par — doit être le propriétaire" value="'
+       + iso27Esc(r.accepte_par || '') + '" onchange="iso27Risque(' + i
+       + ', \'accepte_par\', this.value)">'
+       + '<input class="cnf-in" type="date" value="'
+       + iso27Esc(r.accepte_le || '') + '" onchange="iso27Risque(' + i
+       + ', \'accepte_le\', this.value)">'
+       + (l.acceptation_requise
+          ? (l.acceptation.valide
+             ? '<span class="cnf-on">acceptation valide</span>'
+             : '<span class="cnf-bloc">acceptation requise'
+               + (l.acceptation.par && !l.acceptation.par_le_proprietaire
+                  ? ' — et « ' + iso27Esc(l.acceptation.par) + ' » n’est pas '
+                    + 'le propriétaire déclaré' : '') + '</span>')
+          : '<span class="cnf-art">acceptation non requise à ce niveau</span>')
+       + '</div></div></details>';
+  });
+  h += '<div class="trait-note">Échelles du cabinet : la norme n’en impose '
+     + 'aucune. Le niveau est le produit de la vraisemblance et de la '
+     + 'conséquence — il se refait de tête, et laisse la discussion là où '
+     + 'elle est utile, sur les cotations elles-mêmes.</div>';
+  e.innerHTML = h;
+}
+
+/* ── LA DÉCLARATION D'APPLICABILITÉ, À TROIS COLONNES ─────────────────── */
+window.iso27PeindreSoa = function () {
+  var e = document.getElementById('iso27-soa-body');
+  if (!e || !ISO27_REF) return;
+  fetch('/api/iso27001/applicabilite', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ mesures: ISO27_ETAT.mesures })
+  }).then(function (r) { return r.json(); })
+    .then(function (j) { iso27RendreSoa(e, j); })
+    .catch(function () {
+      e.innerHTML = '<div class="veille-loading">Le calcul de recevabilité '
+        + 'est momentanément indisponible.</div>'; });
+};
+
+function iso27RendreSoa(e, j) {
+  if (!j || !j.ok) { e.innerHTML = '<div class="veille-loading">Calcul '
+    + 'impossible.</div>'; return; }
+  var neuf = (ISO27_ETAT.soa_filtre === 'nouvelles');
+  var h = '<div class="cnf-grille">'
+    + '<div class="cnf-case"><div class="cnf-case-n cnf-on">' + j.retenues
+    + '</div><div class="cnf-case-l">Retenues</div></div>'
+    + '<div class="cnf-case"><div class="cnf-case-n">' + j.ecartees
+    + '</div><div class="cnf-case-l">Écartées, motivées</div></div>'
+    + '<div class="cnf-case"><div class="cnf-case-n'
+    + (j.non_decidees.length ? ' cnf-bloc' : '') + '">' + j.non_decidees.length
+    + '</div><div class="cnf-case-l">Non décidées</div></div>'
+    + '<div class="cnf-case"><div class="cnf-case-n'
+    + (j.sans_statut.length ? ' cnf-bloc' : '') + '">' + j.sans_statut.length
+    + '</div><div class="cnf-case-l">Retenues sans statut</div></div></div>';
+  h += '<div class="cnf-cmd ' + (j.recevable ? 'fait' : 'bloc') + '"><b>'
+     + (j.recevable ? 'Recevable pour un audit d’étape 1.'
+                    : 'NON recevable pour un audit d’étape 1.')
+     + '</b> ' + iso27Esc(j.dit) + '</div>';
+  (j.bloquants || []).forEach(function (b) {
+    h += '<div class="cnf-cmd bloc">' + iso27Esc(b) + '</div>'; });
+  h += '<div class="cnf-cmd"><b>Les ' + j.nouvelles_2022.total
+     + ' mesures apparues en 2022 — dont ' + j.nouvelles_2022.non_decidees.length
+     + ' non décidées.</b><span class="cnf-pq">'
+     + iso27Esc(j.nouvelles_2022.dit) + '</span></div>';
+
+  (j.themes || []).forEach(function (g) {
+    var lignes = neuf ? g.lignes.filter(function (l) { return l.nouvelle_2022; })
+                      : g.lignes;
+    if (!lignes.length) return;
+    h += '<details class="cnf-det"' + (g.non_decidees ? ' open' : '')
+       + '><summary>' + iso27Esc(g.numero) + ' ' + iso27Esc(g.titre)
+       + ' <span class="cnf-art">' + g.total + ' mesures · ' + g.retenues
+       + ' retenues · ' + g.ecartees + ' écartées · ' + g.non_decidees
+       + ' à trancher · ' + g.nouvelles + ' nouvelles en 2022</span>'
+       + '</summary><span class="cnf-pq">' + iso27Esc(g.dit) + '</span>'
+       + '<div style="margin-top:8px">';
+    lignes.forEach(function (l) {
+      var d = (ISO27_ETAT.mesures[l.numero] || {});
+      h += '<div style="padding:8px 0;border-top:1px solid var(--line,#2a2a2a)">'
+         + '<b>' + iso27Esc(l.numero) + '</b> ' + iso27Esc(l.titre)
+         + (l.nouvelle_2022
+            ? ' <span class="cnf-bloc" title="Cette mesure n’existait pas dans ISO/IEC 27001:2013">nouvelle en 2022</span>'
+            : '')
+         + (l.justification_manquante
+            ? ' <span class="cnf-bloc">justification manquante</span>' : '')
+         + (l.statut_manquant
+            ? ' <span class="cnf-bloc">statut manquant</span>' : '')
+         + '<div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap">'
+         + '<select class="cnf-in" onchange="iso27Decision(\'' + l.numero
+         + '\', this.value)">'
+         + ['', 'retenue', 'ecartee'].map(function (v) {
+             return '<option value="' + v + '"'
+                  + ((d.decision || '') === v ? ' selected' : '') + '>'
+                  + (v === '' ? '— à trancher —'
+                     : v === 'retenue' ? 'Retenue' : 'Écartée') + '</option>';
+           }).join('')
+         + '</select>'
+         + '<select class="cnf-in" onchange="iso27Statut(\'' + l.numero
+         + '\', this.value)"'
+         + (d.decision === 'ecartee' ? ' disabled title="Une mesure écartée n’a pas de statut de mise en œuvre"' : '')
+         + '>'
+         + ['', 'mise_en_oeuvre', 'partielle', 'planifiee', 'non_mise_en_oeuvre']
+             .map(function (v) {
+               var noms = { '': '— statut —', mise_en_oeuvre: 'Mise en œuvre',
+                 partielle: 'Partielle', planifiee: 'Planifiée',
+                 non_mise_en_oeuvre: 'Non mise en œuvre' };
+               return '<option value="' + v + '"'
+                    + ((d.statut || '') === v ? ' selected' : '') + '>'
+                    + noms[v] + '</option>'; }).join('')
+         + '</select>'
+         + '<input class="cnf-in" style="flex:1;min-width:170px" '
+         + 'placeholder="Justification — obligatoire dans les deux sens" '
+         + 'value="' + iso27Esc(d.justification || '') + '" '
+         + 'onchange="iso27Justifier(\'' + l.numero + '\', this.value)">'
+         + '</div></div>';
+    });
+    h += '</div></details>';
+  });
+  e.innerHTML = h;
+}
+
+window.iso27Decision = function (numero, valeur) {
+  var d = ISO27_ETAT.mesures[numero] || (ISO27_ETAT.mesures[numero] = {});
+  if (valeur) d.decision = valeur; else delete d.decision;
+  /* UNE MESURE ÉCARTÉE PERD SON STATUT. Le garder ferait afficher « mise en
+     œuvre » sur une mesure qu'on vient d'écarter — l'écran dirait deux
+     choses contraires dans la même ligne. */
+  if (valeur === 'ecartee') delete d.statut;
+  window.iso27PeindreSoa();
+};
+
+window.iso27Statut = function (numero, valeur) {
+  var d = ISO27_ETAT.mesures[numero] || (ISO27_ETAT.mesures[numero] = {});
+  if (valeur) d.statut = valeur; else delete d.statut;
+  window.iso27PeindreSoa();
+};
+
+window.iso27Justifier = function (numero, texte) {
+  var d = ISO27_ETAT.mesures[numero] || (ISO27_ETAT.mesures[numero] = {});
+  d.justification = texte;
+  window.iso27PeindreSoa();
+};
+
+window.iso27SoaTout = function (decision) {
+  (ISO27_REF && ISO27_REF.annexe_a || []).forEach(function (g) {
+    (g.mesures || []).forEach(function (m) {
+      var d = ISO27_ETAT.mesures[m.numero] || (ISO27_ETAT.mesures[m.numero] = {});
+      d.decision = decision;
+      if (decision === 'ecartee') delete d.statut;
+    });
+  });
+  window.iso27PeindreSoa();
+};
+
+window.iso27SoaNouvelles = function () {
+  ISO27_ETAT.soa_filtre = (ISO27_ETAT.soa_filtre === 'nouvelles' ? 'tout'
+                                                                 : 'nouvelles');
+  window.iso27PeindreSoa();
+};
+
+/* ── LES ARTICLES 4 À 10 ──────────────────────────────────────────────── */
+window.iso27PeindreArticles = function () {
+  var e = document.getElementById('iso27-art-body');
+  if (!e || !ISO27_REF) return;
+  var propres = {}, nb = 0, faits = 0, nbP = 0, faitsP = 0;
+  (ISO27_REF.propres_a_la_securite || []).forEach(function (n) {
+    propres[n] = true; });
+  var h = '';
+  (ISO27_REF.chapitres || []).forEach(function (c) {
+    h += '<details class="cnf-det" open><summary>' + iso27Esc(c.numero) + '. '
+       + iso27Esc(c.titre) + '</summary><div style="margin-top:8px">';
+    (c.sous || []).forEach(function (a) {
+      var etat = ISO27_ETAT.articles[a.numero] || '';
+      nb++; if (etat === 'conforme') faits++;
+      if (propres[a.numero]) { nbP++; if (etat === 'conforme') faitsP++; }
+      h += '<div style="padding:8px 0;border-top:1px solid var(--line,#2a2a2a)">'
+         + '<b>' + iso27Esc(a.numero) + '</b> ' + iso27Esc(a.titre)
+         + (propres[a.numero]
+            ? ' <span class="cnf-art" title="Cet article ne se reprend pas d’un autre système de management">propre à la sécurité</span>'
+            : ' <span class="cnf-art" title="Se greffe sur un système de management déjà en place (ISO 42001, 9001…)">mutualisable</span>')
+         + '<span class="cnf-pq">' + iso27Esc(a.dit) + '</span>'
+         + '<select class="cnf-in" style="margin-top:6px" '
+         + 'onchange="iso27Article(\'' + a.numero + '\', this.value)">'
+         + ['', 'conforme', 'partiel', 'non_conforme'].map(function (v) {
+             return '<option value="' + v + '"' + (etat === v ? ' selected' : '')
+                  + '>' + (v === '' ? '— non renseigné —'
+                          : v === 'conforme' ? 'Conforme'
+                          : v === 'partiel' ? 'Partiel' : 'Non conforme')
+                  + '</option>'; }).join('')
+         + '</select></div>';
+    });
+    h += '</div></details>';
+  });
+  var t = nb ? Math.round(100 * faits / nb) : 0;
+  var tp = nbP ? Math.round(100 * faitsP / nbP) : 0;
+  e.innerHTML = '<div class="cnf-grille">'
+    + '<div class="cnf-case"><div class="cnf-case-n">' + t + ' %</div>'
+    + '<div class="cnf-case-l">Taux global — ' + faits + ' / ' + nb + '</div></div>'
+    + '<div class="cnf-case"><div class="cnf-case-n' + (tp < 100 ? ' cnf-bloc' : ' cnf-on')
+    + '">' + tp + ' %</div><div class="cnf-case-l">Propre à la sécurité — '
+    + faitsP + ' / ' + nbP + '</div></div></div>'
+    + '<div class="cnf-cmd">C’est le <b>second</b> taux qui dit l’effort réel. '
+    + 'Les articles « mutualisables » se greffent sur un système de management '
+    + 'déjà en place — ISO 42001 partage exactement la même structure — et '
+    + 'ceux marqués « propre à la sécurité » sont les ' + nbP + ' qui ne se '
+    + 'reprennent de nulle part.</div>' + h;
+};
+
+window.iso27Article = function (numero, valeur) {
+  if (valeur) ISO27_ETAT.articles[numero] = valeur;
+  else delete ISO27_ETAT.articles[numero];
+  window.iso27PeindreArticles();
+};
+
+/* ── LE MILLÉSIME, ET CE QU'ON N'A PAS PU VÉRIFIER ────────────────────── */
+function iso27PeindreMillesime() {
+  var e = document.getElementById('iso27-mil-body');
+  if (!e || !ISO27_REF) return;
+  var m = ISO27_REF.millesimes || {};
+  var h = '<div class="cnf-grille">';
+  ['2013', '2022'].forEach(function (k) {
+    var v = m[k]; if (!v) return;
+    h += '<div class="cnf-case"><div class="cnf-case-n'
+       + (v.en_vigueur ? ' cnf-on' : ' cnf-hors') + '" style="font-size:17px">'
+       + iso27Esc(v.nom) + '</div><div class="cnf-case-l">' + v.mesures
+       + ' mesures · ' + iso27Esc(v.libelle_groupes)
+       + (v.en_vigueur ? ' · en vigueur' : ' · retirée') + '</div></div>';
+  });
+  h += '</div>';
+
+  var q = ISO27_REF.source_questionnaire || {};
+  h += '<div class="cnf-cmd bloc"><b>Le questionnaire fourni — '
+     + iso27Esc(q.titre) + '</b><span class="cnf-pq">'
+     + iso27Esc(q.editeur) + ', réf. ' + iso27Esc(q.reference) + ', '
+     + iso27Esc(q.millesime) + '. ' + iso27Esc(q.reserve) + '</span>'
+     + '<span class="cnf-pq">' + iso27Esc(q.licence) + '</span></div>';
+
+  var neuves = ISO27_REF.nouvelles_2022 || [];
+  var titres = {};
+  (ISO27_REF.annexe_a || []).forEach(function (g) {
+    (g.mesures || []).forEach(function (x) { titres[x.numero] = x.titre; }); });
+  h += '<details class="cnf-det" open><summary>Les ' + neuves.length
+     + ' mesures apparues en 2022</summary><ul class="cnf-ul">';
+  neuves.forEach(function (n) {
+    h += '<li><b>' + iso27Esc(n) + '</b> ' + iso27Esc(titres[n] || '')
+       + '</li>'; });
+  h += '</ul></details>';
+
+  var c = ISO27_REF.certification || {};
+  if (c.transition) {
+    h += '<div class="cnf-cmd bloc"><b>La transition des certificats.</b>'
+       + '<span class="cnf-pq">' + iso27Esc(c.transition.quoi) + '</span>'
+       + '<span class="cnf-pq">' + iso27Esc(c.transition.consequence) + '</span>'
+       + '<span class="cnf-pq cnf-bloc">' + iso27Esc(c.transition.reserve)
+       + '</span></div>';
+  }
+  /* CE QUE LE MODULE N'A PAS PU VÉRIFIER, AFFICHÉ — pas caché. Une
+     restitution qui tait ses angles morts a l'air complète, et c'est
+     précisément ce qui la rend dangereuse à citer. */
+  if ((ISO27_REF.a_verifier || []).length) {
+    h += '<details class="cnf-det" open><summary>Ce que ce module n’a PAS pu '
+       + 'vérifier <span class="cnf-art">' + ISO27_REF.a_verifier.length
+       + ' point(s)</span></summary><div style="margin-top:8px">';
+    ISO27_REF.a_verifier.forEach(function (x) {
+      h += '<div style="padding:8px 0;border-top:1px solid var(--line,#2a2a2a)">'
+         + '<b>' + iso27Esc(x.quoi) + '</b>'
+         + '<span class="cnf-pq"><b>Où le vérifier — </b>' + iso27Esc(x.ou)
+         + '</span><span class="cnf-pq"><b>Pourquoi ça compte — </b>'
+         + iso27Esc(x.pourquoi) + '</span></div>';
+    });
+    h += '</div></details>';
+  }
+
+  (ISO27_REF.ponts || []).forEach(function (p) {
+    h += '<details class="cnf-det"><summary>' + iso27Esc(p.vers)
+       + ' <span class="cnf-art">' + iso27Esc(p.nature) + '</span></summary>'
+       + '<div style="margin-top:8px"><b class="cnf-on">Ce qui se réutilise</b>'
+       + '<span class="cnf-pq">' + iso27Esc(p.reutilise) + '</span>'
+       + '<b class="cnf-bloc" style="display:block;margin-top:8px">Ce que cela '
+       + 'ne remplace pas</b><span class="cnf-pq">'
+       + iso27Esc(p.ne_remplace_pas) + '</span>';
+    (p.detail || []).forEach(function (d) {
+      h += '<span class="cnf-pq"><b>' + iso27Esc(d.cle) + ') '
+         + iso27Esc(d.nom) + '</b> — ' + d.mesures.map(iso27Esc).join(', ')
+         + '</span>'; });
+    h += '</div></details>';
+  });
   e.innerHTML = h;
 }
