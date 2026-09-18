@@ -1186,6 +1186,66 @@ textarea.form-el{min-height:86px;resize:vertical}
    l'autre. */
 .guided-step.vue{border-color:rgba(45,122,71,.45)}
 .guided-step.vue .guided-step-num{background:rgba(45,122,71,.12);border-color:rgba(45,122,71,.45);color:#2B7443}
+
+/* ══ LES TROIS ÉTATS D'UNE ÉTAPE ═══════════════════════════════════════
+   UNE SEULE CHOSE CLIGNOTE À L'ÉCRAN, ET C'EST VOULU. Le clignotement est
+   le signal le plus fort dont dispose une interface : s'il porte sur trois
+   éléments, il ne porte plus sur aucun. Il est donc réservé à L'ÉTAPE
+   COURANTE — la seule information que le client cherche quand il rouvre un
+   parcours trois jours plus tard : par où je reprends.
+
+   LE VERT EST STABLE, ET C'EST UNE DÉCISION. Faire clignoter ce qui est
+   déjà fait rappellerait l'attention sur ce qui ne l'appelle plus. Le vert
+   dit « passé par là » ; il se lit d'un coup d'œil et se tait.
+
+   LE BLEU EST CALME. Une étape pas encore atteinte n'est ni un problème ni
+   une alerte : elle attend son tour. Lui donner de l'intensité ferait lire
+   quinze avertissements sur un parcours de quinze étapes.
+
+   LA COULEUR NE PORTE JAMAIS SEULE. Chaque état a aussi sa PUCE — ✓, ▶, le
+   numéro — et son infobulle. Sur une échelle vert/bleu, un daltonien
+   deutéranope ne distingue pas les deux : la puce, elle, se lit toujours. */
+.guided-step.faite{border-color:rgba(45,122,71,.45)}
+.guided-step.faite .guided-step-num{background:rgba(45,122,71,.12);border-color:rgba(45,122,71,.45);color:#2B7443}
+.guided-step.attente{border-color:rgba(28,90,138,.30);background:rgba(28,90,138,.025)}
+.guided-step.attente .guided-step-num{background:rgba(28,90,138,.08);border-color:rgba(28,90,138,.35);color:var(--blue)}
+.guided-step.attente .guided-step-label{color:var(--ink2)}
+.guided-step.courante{border-color:var(--amber);background:rgba(196,124,26,.06);
+  box-shadow:0 0 0 2px rgba(196,124,26,.18);animation:gs-pulse 1.9s ease-in-out infinite}
+.guided-step.courante .guided-step-num{background:var(--amber);border-color:var(--amber);color:#fff}
+.guided-step.courante .guided-step-label{color:var(--ink)}
+@keyframes gs-pulse{
+  0%,100%{box-shadow:0 0 0 2px rgba(196,124,26,.18)}
+  50%    {box-shadow:0 0 0 5px rgba(196,124,26,.10)}
+}
+/* LA PASTILLE « REPRENDRE ICI » — le mot, en plus de la couleur et du
+   mouvement. Un client qui a coupé les animations doit voir la même chose. */
+.guided-step-ici{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;
+  text-transform:uppercase;color:#fff;background:var(--amber);border-radius:4px;
+  padding:3px 7px;white-space:nowrap;flex-shrink:0}
+.guided-step-go.pousse{border-color:var(--amber);color:var(--amber);font-weight:700}
+.guided-step-go.pousse:hover{background:var(--amber);color:#fff}
+/* LA FLÈCHE QUI MÈNE À L'ÉTAPE COURANTE, et elle seule. */
+.guided-step-arrow.vers-courante{color:var(--amber);font-size:17px;font-weight:700;
+  animation:gs-descend 1.9s ease-in-out infinite}
+@keyframes gs-descend{0%,100%{transform:translateY(-2px);opacity:.55}50%{transform:translateY(2px);opacity:1}}
+/* LE VERT CLIGNOTE UNE FOIS, QUAND LE PARCOURS EST ENTIER — et une seule
+   fois. C'est le seul moment où « rempli » a un sens mesurable ici : toutes
+   les étapes ont été ouvertes. Une animation infinie sur un travail achevé
+   deviendrait un bruit qu'on apprend à ignorer. */
+.gp-etat.fini{animation:gp-fini 1.1s ease-out 2}
+@keyframes gp-fini{0%,100%{box-shadow:0 0 0 0 rgba(45,122,71,0)}45%{box-shadow:0 0 0 6px rgba(45,122,71,.22)}}
+
+/* ══ LE MOUVEMENT EST UN CONFORT, PAS UN CANAL ═══════════════════════════
+   Coupé, il ne reste AUCUNE information perdue : l'amble ambre, la pastille
+   « reprendre ici », la puce ▶ et l'infobulle disent tous la même chose. Un
+   guidage qui ne fonctionnerait qu'en mouvement exclurait ceux qui le
+   désactivent — souvent pour des troubles vestibulaires ou migraineux. */
+@media(prefers-reduced-motion:reduce){
+  .guided-step.courante,.guided-step-arrow.vers-courante,.gp-etat.fini{animation:none}
+  .guided-step.courante{box-shadow:0 0 0 3px rgba(196,124,26,.28)}
+  .guided-step-arrow.vers-courante{opacity:1;transform:none}
+}
 /* La barre du bandeau vit sur fond sombre : elle a sa propre paire. */
 .guided-banner .gb-barre{height:5px;border-radius:3px;background:rgba(255,255,255,.22);overflow:hidden;width:130px}
 .guided-banner .gb-barre>i{display:block;height:100%;border-radius:3px;background:var(--accent);transition:width .35s ease}
@@ -2316,7 +2376,15 @@ textarea.form-el{min-height:86px;resize:vertical}
 .guided-banner .gb-dots{display:flex;gap:5px}
 .guided-banner .gb-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.28)}
 .guided-banner .gb-dot.done{background:var(--green)}
-.guided-banner .gb-dot.on{background:var(--accent);box-shadow:0 0 0 2px rgba(255,255,255,.25)}
+.guided-banner .gb-dot.faite{background:var(--green)}
+.guided-banner .gb-dot.attente{background:rgba(28,90,138,.55)}
+.guided-banner .gb-dot.courante{background:var(--amber);animation:gb-pouls 1.9s ease-in-out infinite}
+@keyframes gb-pouls{0%,100%{box-shadow:0 0 0 0 rgba(196,124,26,.55)}50%{box-shadow:0 0 0 4px rgba(196,124,26,0)}}
+/* « ON » EST OÙ L'ON SE TROUVE, ET PASSE DEVANT L'ÉTAT. Les deux se
+   superposent : on peut être sur une étape déjà ouverte. Le liseré blanc dit
+   « vous êtes ici » ; la couleur dessous continue de dire l'état. */
+.guided-banner .gb-dot.on{box-shadow:0 0 0 2px rgba(255,255,255,.55);transform:scale(1.25)}
+.guided-banner .gb-dot.on.courante{animation:none}
 .guided-banner .gb-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .guided-banner .gb-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:var(--white);font-size:12px;font-weight:600;padding:7px 13px;border-radius:7px;cursor:pointer;max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .guided-banner .gb-btn:hover{background:rgba(255,255,255,.2)}
@@ -2336,7 +2404,8 @@ textarea.form-el{min-height:86px;resize:vertical}
 .guided-banner .gb-next-anim{animation:gbHalo 1.6s ease-in-out infinite}
 .guided-banner .gb-arrow{display:inline-block;margin-left:4px;font-size:1.5em;line-height:1;font-weight:900;animation:gbArrow .85s ease-in-out infinite}
 @media(max-width:640px){.guided-banner .gb-live-txt{display:none}}
-@media(prefers-reduced-motion:reduce){.guided-banner .gb-live-dot,.guided-banner .gb-next-anim,.guided-banner .gb-arrow{animation:none}}
+@media(prefers-reduced-motion:reduce){.guided-banner .gb-live-dot,.guided-banner .gb-next-anim,.guided-banner .gb-arrow,.guided-banner .gb-dot.courante{animation:none}
+  .guided-banner .gb-dot.courante{box-shadow:0 0 0 3px rgba(196,124,26,.45)}}
 
 /* ══ MON PARCOURS CHIFFRE ══ */
 .carto-mp-cta{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:12px 0 6px;padding:14px 16px;background:var(--bg2);border:1px solid var(--accent);border-radius:12px}

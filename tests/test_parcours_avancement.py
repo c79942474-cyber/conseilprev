@@ -160,12 +160,42 @@ def test_LE_DEFAUT_MESURE_un_saut_direct_ne_marque_pas_faites_les_etapes_sautees
       guidedStartStep(P.id, 2);
       out.bandeau = zones['guided-banner'].innerHTML;
       out.etat = parcoursEtat(P);
+      out.total = P.steps.length;
     """)
     assert r["etat"]["vues"] == 1, r["etat"]
-    assert r["bandeau"].count("gb-dot done") == 0, (
-        "%d pastille(s) marquées faites alors qu'une seule étape a été ouverte, "
-        "et ce n'est pas l'une d'elles" % r["bandeau"].count("gb-dot done"))
-    assert r["bandeau"].count("gb-dot on") == 1
+    # LA CLASSE A CHANGÉ DE NOM AVEC LE TROISIÈME ÉTAT — « done » est devenu
+    # « faite », et deux nuances se sont ajoutées : « courante » et
+    # « attente ». Ce que la règle mesure, lui, n'a pas bougé : aucune étape
+    # sautée ne doit être marquée faite.
+    # ═══ CE QUE L'ANCIEN BALISAGE MASQUAIT, ET QU'IL FAUT RE-VISER ═════
+    # Avant, la pastille où l'on se trouve était « on » ET RIEN D'AUTRE :
+    # l'état de cette étape-là était perdu, et la règle pouvait donc exiger
+    # zéro « done ». Le balisage porte maintenant les deux — « vous êtes
+    # ici » d'un côté, l'état de l'autre — parce qu'on peut se trouver sur
+    # une étape déjà ouverte, et que le taire est une information perdue.
+    #
+    # LA RÈGLE VISE DONC CE QU'ELLE A TOUJOURS PRÉTENDU GARDER : aucune étape
+    # SAUTÉE n'est marquée faite. Une seule l'a été — celle qu'on vient
+    # d'ouvrir — et c'est exactement le compte attendu.
+    assert r["bandeau"].count("gb-dot faite") == 1, (
+        "%d pastille(s) marquées faites alors qu'une seule étape a été "
+        "ouverte" % r["bandeau"].count("gb-dot faite"))
+    # ET LES DEUX SAUTÉES SONT DÉCLARÉES NON OUVERTES — l'une à reprendre,
+    # l'autre en attente. C'est le volet qui distingue « on n'a rien peint de
+    # faux » de « on guide vraiment ».
+    assert r["bandeau"].count("gb-dot attente") == r["total"] - 2, (
+        "%d pastille(s) en attente pour %d étapes dont une ouverte et une à "
+        "reprendre" % (r["bandeau"].count("gb-dot attente"), r["total"]))
+    assert r["bandeau"].count(" on\"") == 1, "la pastille « vous êtes ici » n'est pas unique"
+    # ═══ ET LE TROISIÈME ÉTAT EST BIEN LÀ ═══════════════════════════════
+    # Sauter à l'étape 3 laisse les étapes 1 et 2 non ouvertes : la PREMIÈRE
+    # est celle par où reprendre, les autres attendent. Sans ce volet, une
+    # implémentation qui peindrait tout en « attente » passerait le contrôle
+    # ci-dessus — elle ne marque rien de faux, elle ne guide simplement plus.
+    assert r["bandeau"].count("gb-dot courante") == 1, (
+        "%d pastille(s) « à faire maintenant » : il en faut exactement une "
+        "tant que le parcours n'est pas fini"
+        % r["bandeau"].count("gb-dot courante"))
 
 
 def test_LE_TEMOIN_INVERSE_une_etape_reellement_ouverte_EST_marquee_faite():
@@ -178,9 +208,20 @@ def test_LE_TEMOIN_INVERSE_une_etape_reellement_ouverte_EST_marquee_faite():
       guidedStartStep(P.id, 3);
       out.bandeau = zones['guided-banner'].innerHTML;
     """)
-    assert r["bandeau"].count("gb-dot done") == 2, (
-        "deux étapes ouvertes précèdent la courante, elles doivent être "
-        "marquées : %d le sont" % r["bandeau"].count("gb-dot done"))
+    # TROIS, ET NON DEUX — ET C'EST UN GAIN, PAS UNE DÉRIVE. Le scénario
+    # ouvre 0, 1 et 3 : trois étapes ont été ouvertes. L'ancien balisage n'en
+    # comptait que deux parce que la pastille où l'on se trouve était « on »
+    # et RIEN D'AUTRE : son état était perdu. Les deux se superposent
+    # désormais — « vous êtes ici » et « déjà ouverte » — et c'est
+    # précisément ce qu'il fallait pour qu'une étape rouverte ne se lise pas
+    # comme une étape neuve.
+    assert r["bandeau"].count("gb-dot faite") == 3, (
+        "trois étapes ont été ouvertes, %d sont marquées"
+        % r["bandeau"].count("gb-dot faite"))
+    # ET L'ÉTAPE 2, SAUTÉE, EST CELLE PAR OÙ REPRENDRE — pas l'étape 4. Le
+    # guidage ramène à ce qu'on a manqué au lieu de pousser vers la suite :
+    # l'ordre des étapes porte une décision, et la sauter la perdrait.
+    assert r["bandeau"].count("gb-dot courante") == 1
 
 
 def test_arriver_par_le_menu_ne_fait_pas_avancer_un_parcours_qu_on_ne_suit_pas():
@@ -398,10 +439,20 @@ def test_la_carte_marque_les_etapes_ouvertes_ET_SEULEMENT_ELLES():
       out.carte = guidedPathCard(P);
       out.total = P.steps.length;
     """)
-    assert r["carte"].count("guided-step vue") == 2, (
-        "%d étapes marquées ouvertes alors que deux l'ont été"
-        % r["carte"].count("guided-step vue"))
-    assert r["carte"].count('class="guided-step"') == r["total"] - 2
+    # LES TROIS ÉTATS SONT EXCLUSIFS, et c'est le cœur de ce que la règle
+    # garde depuis qu'il y en a trois : une étape verte ET clignotante ne
+    # voudrait plus rien dire.
+    faites = r["carte"].count("guided-step faite")
+    courantes = r["carte"].count("guided-step courante")
+    attentes = r["carte"].count("guided-step attente")
+    assert faites == 2, "%d étapes marquées ouvertes alors que deux l'ont été" % faites
+    assert courantes == 1, (
+        "%d étape(s) « à faire maintenant » : il en faut exactement une — la "
+        "PREMIÈRE non ouverte, ici l'étape 2, sautée" % courantes)
+    assert faites + courantes + attentes == r["total"], (
+        "les trois états ne couvrent pas les %d étapes (%d + %d + %d) : une "
+        "étape en porte deux, ou aucune"
+        % (r["total"], faites, courantes, attentes))
     # Et le bouton ne ment pas sur ce qui s'est passé.
     assert r["carte"].count("Revenir à cette page") == 2
     assert r["carte"].count("Aller à cette page") == r["total"] - 2
@@ -529,3 +580,168 @@ def test_LE_TEXTE_DES_PASTILLES_ATTEINT_LE_SEUIL_AA():
         assert r >= SEUIL, (
             "pastille « %s » : %.2f:1 sur son fond %s, sous le seuil AA de "
             "%.1f:1 pour du texte de 10,5 px" % (classe, r, fond, SEUIL))
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  LE GUIDAGE — LE TROISIÈME ÉTAT, ET CE QU'IL PROMET À L'ŒIL
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# CE QUE CES RÈGLES GARDENT. Deux états — ouverte ou non — laissaient l'œil
+# déduire le troisième : par où continuer. Sur un parcours de quinze étapes
+# dont six sont ouvertes, cette déduction se fait mal, et le client reprend au
+# début ou saute ce qu'il a manqué. Le troisième état le dit ; ces règles
+# mesurent qu'il le dit JUSTE, et qu'il ne le dit qu'une fois.
+
+def test_la_COURANTE_est_la_PREMIERE_non_ouverte_et_pas_la_suivante():
+    """L'ARBITRAGE QUE CETTE RÈGLE PROTÈGE.
+
+    Un client qui a ouvert 1, 2 et 5 doit être ramené à 3 — qu'il a sautée —
+    et non poussé vers 6. L'ordre des étapes porte une décision : trois
+    parcours du CRA commencent délibérément par la qualification du rôle,
+    parce que c'est ce que leur lecteur ignore. Pousser vers la suite ferait
+    perdre cet ordre à celui qui a sauté une étape, c'est-à-dire à celui qui
+    en a le plus besoin.
+    """
+    r = _executer("""
+      guidedStartStep(P.id, 0);
+      guidedStartStep(P.id, 1);
+      guidedStartStep(P.id, 4);
+      out.courante = parcoursCourante(P);
+      out.total = P.steps.length;
+    """)
+    assert r["courante"] == 2, (
+        "la courante est l'étape %d : le guidage pousse vers la suite au lieu "
+        "de ramener à ce qui a été sauté" % (r["courante"] + 1))
+
+
+def test_un_parcours_ENTIEREMENT_ouvert_n_a_PLUS_de_courante():
+    """Peindre une étape « à faire » sur un parcours achevé rouvrirait un
+    travail terminé — et ferait clignoter quelque chose qui n'appelle plus
+    l'attention."""
+    r = _executer("""
+      for(var i=0;i<P.steps.length;i++) guidedStartStep(P.id, i);
+      out.courante = parcoursCourante(P);
+      out.carte = guidedPathCard(P);
+    """)
+    assert r["courante"] == -1
+    assert "guided-step courante" not in r["carte"]
+    assert "vers-courante" not in r["carte"], \
+        "une flèche continue de désigner une étape sur un parcours terminé"
+
+
+def test_les_trois_etats_sont_EXCLUSIFS_et_couvrent_TOUTES_les_etapes():
+    """Une étape verte ET clignotante ne voudrait plus rien dire. Une étape
+    sans état serait invisible au guidage."""
+    for ouvertes in ("", "guidedStartStep(P.id,0);",
+                     "guidedStartStep(P.id,0);guidedStartStep(P.id,2);"):
+        r = _executer(ouvertes + """
+          out.carte = guidedPathCard(P);
+          out.total = P.steps.length;
+          out.etats = P.steps.map(function(s,i){ return parcoursEtatEtape(P,i); });
+        """)
+        assert len(r["etats"]) == r["total"]
+        assert set(r["etats"]) <= {"faite", "courante", "attente"}
+        assert r["etats"].count("courante") <= 1, \
+            "deux étapes « à faire maintenant » : %s" % r["etats"]
+        # ═══ ON LIT LA CLASSE DE CHAQUE ÉTAPE, PAS UNE SOUS-CHAÎNE ═════
+        # La première version comptait « guided-step faite », « guided-step
+        # courante » et « guided-step attente » et vérifiait la somme. Une
+        # mutation qui peignait DEUX états — « guided-step faite courante » —
+        # lui échappait : le préfixe restait intact pour un seul des trois, et
+        # la somme retombait juste. On extrait donc la classe complète de
+        # chaque étape et on exige qu'elle porte EXACTEMENT UN des trois.
+        classes = re.findall(r'<div class="guided-step ([^"]*)"', r["carte"])
+        assert len(classes) == r["total"], \
+            "%d étapes peintes pour %d déclarées" % (len(classes), r["total"])
+        for cl in classes:
+            mots = set(cl.split()) & {"faite", "courante", "attente"}
+            assert len(mots) == 1, \
+                "une étape porte %s états à la fois : « %s »" % (len(mots), cl)
+        peints = [(set(c.split()) & {"faite", "courante", "attente"}).pop()
+                  for c in classes]
+        assert peints == r["etats"], \
+            "la carte peint %s là où le moteur dit %s" % (peints, r["etats"])
+
+
+def test_UNE_SEULE_fleche_designe_l_etape_courante():
+    """Une colonne de flèches toutes pareilles ne guide pas : elle sépare.
+    Celle qui précède l'étape à faire est la seule qui dise « c'est par là »."""
+    r = _executer("""
+      guidedStartStep(P.id, 0);
+      out.carte = guidedPathCard(P);
+    """)
+    assert r["carte"].count("vers-courante") == 1, \
+        "%d flèche(s) marquées : le signal se dilue" % r["carte"].count("vers-courante")
+
+
+def test_la_couleur_ne_porte_JAMAIS_seule():
+    """SUR UNE ÉCHELLE VERT / BLEU, UN DEUTÉRANOPE NE DISTINGUE PAS LES DEUX.
+
+    Chaque état porte donc aussi une PUCE — ✓, ▶, le numéro — et le mot
+    « reprendre ici » sur la courante. Un guidage qui ne tiendrait qu'à la
+    couleur exclurait environ un homme sur douze.
+    """
+    r = _executer("""
+      guidedStartStep(P.id, 0);
+      out.carte = guidedPathCard(P);
+    """)
+    c = r["carte"]
+    assert "✓" in c, "la puce de l'étape ouverte a disparu"
+    assert "▶" in c, "la puce de l'étape courante a disparu"
+    assert "reprendre ici" in c, \
+        "la courante n'est plus désignée que par la couleur et le mouvement"
+
+
+def test_chaque_etat_porte_son_INFOBULLE_et_le_vert_porte_sa_reserve():
+    """« Ouverte » ne lève pas la question que le vert pose : est-ce que c'est
+    fait ? La réponse doit être là où l'on se pose la question."""
+    r = _executer("""
+      guidedStartStep(P.id, 0);
+      out.carte = guidedPathCard(P);
+      out.etats = PARCOURS_ETATS;
+    """)
+    for cle in ("faite", "courante", "attente"):
+        d = r["etats"][cle]
+        assert d["nom"].strip() and d["dit"].strip(), \
+            "l'état « %s » n'a pas d'infobulle écrite" % cle
+        assert d["puce"].strip()
+    assert "ne dit pas que le travail" in r["etats"]["faite"]["dit"], \
+        "le vert ne porte plus sa réserve"
+    assert 'title="' in r["carte"]
+
+
+def test_le_mouvement_est_COUPABLE_sans_perte_d_information():
+    """Un guidage qui ne fonctionnerait qu'en mouvement exclurait ceux qui le
+    désactivent — souvent pour des troubles vestibulaires ou migraineux.
+    Coupé, il doit rester l'ambre, la pastille, la puce et l'infobulle."""
+    feuille = io.open(os.path.join(ICI, "sentinel.html"), encoding="utf-8").read()
+    bloc = re.findall(r"@media\(prefers-reduced-motion:reduce\)\{([^@]*?)\}\s*(?:\n|/\*|@|\.)",
+                      feuille, re.S)
+    tout = " ".join(bloc)
+    for classe in ("guided-step.courante", "vers-courante", "gb-dot.courante"):
+        assert classe in tout, \
+            "« %s » continue de s'animer quand le mouvement est refusé" % classe
+
+
+def test_AUCUNE_icone_de_parcours_n_est_une_sequence_LITTERALE():
+    """LE DÉFAUT QUI A OUVERT CE TOUR, ET QU'AUCUNE RÈGLE NE VOYAIT.
+
+    « \\U » majuscule n'existe pas en JavaScript — seul « \\u{...} » l'est. La
+    séquence était donc rendue telle quelle, et le client lisait
+    « U0001F9ED » en tête du parcours Consultant IA. Le fichier était
+    syntaxiquement valide, la page se chargeait, et rien ne levait : c'est
+    exactement la classe de défaut que ce dépôt poursuit — une chose qui
+    passe pour une raison sans rapport avec ce qu'elle prétend.
+
+    LA RÈGLE ÉVALUE LE FICHIER au lieu de le lire : une icône cassée ne l'est
+    pas dans le texte, elle l'est après interprétation.
+    """
+    r = _executer("""
+      out.icones = GUIDED_PATHS.map(function(p){ return [p.id, p.icon || '']; });
+    """)
+    sans = [i for i, ic in r["icones"] if not ic]
+    assert not sans, "parcours sans icône : %s" % sans
+    litterales = [(i, ic) for i, ic in r["icones"] if re.search(r"[A-Za-z0-9]{4,}", ic)]
+    assert not litterales, (
+        "icône rendue en clair au lieu d'un caractère : %s — « \\\\U » majuscule "
+        "n'existe pas en JavaScript, écrire « \\\\u{...} »" % litterales)

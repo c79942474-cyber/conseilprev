@@ -940,6 +940,8 @@ var PAGE_META = {
     'cadre-normatif': { section: 'PILOTAGE', label: 'Cadre normatif' },
   /* LE CRA — un pilier, au même rang que le RGPD, et pour la raison
      écrite dans la barre latérale : son unité d'analyse est le PRODUIT. */
+  'shadow-ai':      { section: 'CARTOGRAPHIER',  label: 'Découverte Shadow AI' },
+  compte:           { section: 'COMPTE',          label: 'Connexion & session' },
   cra:              { section: 'CRA — PRODUITS', label: 'Produits & classification' },
   'cra-ecarts':     { section: 'CRA — PRODUITS', label: 'Analyse d\u2019écart' },
   'cra-role':       { section: 'CRA — PRODUITS', label: 'Qualifier mon rôle' },
@@ -961,13 +963,11 @@ var PAGE_META = {
   veille:   {section:'CONFORMITÉ',      label:'Veille qualifiée'},
   evals:    {section:'DOCUMENTER & PROUVER',      label:'Mes évaluations'},
   historique: {section:'DOCUMENTER & PROUVER',  label:'Historique des calculs'},
-  alertes:  {section:'ALERTES',         label:'7 alertes actives'},
   audit:    {section:'AUDIT',           label:'Audit de conformité'},
   equipe:   {section:'ÉQUIPE & FORMATION',          label:'Équipe'},
   training: {section:'ÉQUIPE & FORMATION',       label:'Hub Training'},
   espace: {section:'PILOTAGE', label:'Mes actions du jour'},
   report: {section:'PILOTAGE', label:'Vue direction'},
-  chat:     {section:'ASSISTANT IA',    label:'Chat Conformité'},
   maturite: {section:'CARTOGRAPHIER', label:'Audit de maturité IA'},
   gouvernance: {section:'TRAITER & GOUVERNER',  label:'Gouvernance IA'},
   parties:  {section:'TRAITER & GOUVERNER',     label:'Parties prenantes'},
@@ -18857,7 +18857,7 @@ var GUIDED_PATHS = [
   },
   {
     id: 'consultant_ia_cadrage',
-    icon: '\U0001F9ED',
+    icon: '\u{1F9ED}',
     role: 'Consultant IA \u2014 cadrage et architecture des cas d\u2019usage',
     pitch: 'Vous transformez un goulot d\u2019\u00e9tranglement op\u00e9rationnel en cas d\u2019usage arbitr\u00e9, puis en syst\u00e8me qui tient en production. Ce parcours suit l\u2019ordre du m\u00e9tier \u2014 id\u00e9ation, cadrage, dossier d\u2019arbitrage, industrialisation \u2014 et dit \u00e0 chaque \u00e9tape ce que Sentinel porte, et ce qu\u2019il ne porte pas.',
     steps: [
@@ -19833,13 +19833,71 @@ window.panParcoursAnalyste  = function(){ panParcours('analyste'); };
     };
   };
 
+  /* ══════════════════════════════════════════════════════════════════
+     LE TROISIÈME ÉTAT : CELLE QU'IL FAUT FAIRE MAINTENANT
+
+     CE QUI MANQUAIT. Une étape était OUVERTE ou elle ne l'était pas — deux
+     états, et l'œil devait déduire le troisième : par où continuer. Sur un
+     parcours de quinze étapes dont six sont ouvertes, cette déduction se
+     fait mal, et le client reprend au début ou saute des étapes.
+
+     COMMENT ELLE EST DÉSIGNÉE, ET POURQUOI PAS AUTREMENT. C'est la PREMIÈRE
+     étape non ouverte, dans l'ordre du parcours. Pas la suivante de la
+     dernière ouverte : un client qui a ouvert 1, 2 et 5 doit être ramené à
+     3, qu'il a sautée, et non poussé vers 6. L'ordre des étapes porte une
+     décision — voir les parcours qui commencent délibérément par la
+     qualification du rôle — et le guidage doit la respecter.
+
+     QUAND TOUT EST OUVERT, IL N'Y A PLUS DE COURANTE, et la fonction rend
+     -1. Peindre une étape « à faire » sur un parcours achevé rouvrirait un
+     travail terminé.
+     ══════════════════════════════════════════════════════════════════ */
+  window.parcoursCourante = function(path){
+    if(!path || !path.steps || !path.steps.length) return -1;
+    for(var i = 0; i < path.steps.length; i++){
+      if(!parcoursEtapeVue(path, i)) return i;
+    }
+    return -1;
+  };
+
+  /* LES TROIS ÉTATS SONT EXCLUSIFS, ET UNE SEULE FONCTION LES DIT. Trois
+     tests séparés dans trois fichiers auraient fini par en peindre deux à la
+     fois — une étape verte ET clignotante, qui ne veut plus rien dire. */
+  window.parcoursEtatEtape = function(path, i){
+    if(parcoursEtapeVue(path, i)) return 'faite';
+    return (parcoursCourante(path) === i) ? 'courante' : 'attente';
+  };
+
+  /* CE QUE CHAQUE COULEUR DIT, ÉCRIT UNE FOIS. Ces phrases partent en
+     infobulle sur la carte ET dans le bandeau : deux formulations pour le
+     même état laisseraient croire à deux états. */
+  window.PARCOURS_ETATS = {
+    faite:    { puce: '\u2713', nom: 'Ouverte',
+                dit: 'Vous êtes passé par cette page. Cela ne dit pas que le '
+                   + 'travail y a été fait — Sentinel ne peut pas le mesurer.' },
+    courante: { puce: '\u25B6', nom: 'À faire maintenant',
+                dit: 'La première étape que vous n\u2019avez pas encore '
+                   + 'ouverte. C\u2019est ici que le parcours reprend.' },
+    attente:  { puce: '\u25CB', nom: 'Pas encore atteinte',
+                dit: 'Elle viendra à son tour. L\u2019ordre des étapes n\u2019est '
+                   + 'pas indifférent : chaque parcours commence par ce que '
+                   + 'son lecteur ignore.' }
+  };
+
   /* LA RÉSERVE, ÉCRITE UNE FOIS ET AFFICHÉE PARTOUT OÙ LE VERT APPARAÎT. */
   window.PARCOURS_RESERVE =
     'Le vert dit que chaque étape a été ouverte — pas que le travail de chacune '
     + 'a été fait. Sentinel ne peut pas mesurer le second.';
 
   window.parcoursBarre = function(e){
-    return '<div class="gp-barre ' + e.statut + '"><i style="width:' + e.part + '%"></i></div>'
+    var bulle = e.vues + ' des ' + e.total + ' étapes ont été ouvertes. '
+      + 'Cette barre compte des PAGES OUVERTES — ce n\u2019est pas un taux de '
+      + 'conformité, et Sentinel ne peut pas mesurer le travail fait sur '
+      + 'chacune.';
+    return '<div class="gp-barre ' + e.statut + '" title="' + bulle + '" '
+      + 'role="progressbar" aria-valuenow="' + e.vues + '" aria-valuemin="0" '
+      + 'aria-valuemax="' + e.total + '" aria-label="' + bulle + '">'
+      + '<i style="width:' + e.part + '%"></i></div>'
       /* LES DEUX ACCORDS SUIVENT LE MÊME NOMBRE. Un premier jet accordait
          « étape » sur le total et « ouverte » sur les vues : à zéro vue, la
          barre affichait « 0 / 15 étapes ouverte » — un pluriel et un
@@ -19852,7 +19910,12 @@ window.panParcoursAnalyste  = function(){ panParcours('analyste'); };
   };
 
   window.parcoursPastille = function(e){
-    return '<span class="gp-etat ' + e.statut + '" title="' + e.libelle + '">'
+    /* L'INFOBULLE PORTE LA RÉSERVE, PAS SEULEMENT L'ÉTAT. « Parcouru en
+       entier » se lit « c'est fait » ; la réserve est écrite sous la barre,
+       mais celui qui survole la pastille ne l'a pas forcément lue. */
+    var bulle = e.libelle + (e.statut === 'fini'
+      ? ' \u2014 ' + (window.PARCOURS_RESERVE || '') : '');
+    return '<span class="gp-etat ' + e.statut + '" title="' + bulle + '">'
       + e.puce + ' ' + e.libelle + '</span>';
   };
 
@@ -20018,20 +20081,51 @@ function guidedPathCard(path){
      passé use la confiance dans le reste. */
   var e = (typeof parcoursEtat === 'function') ? parcoursEtat(path)
                                                : {total:0, vues:0, part:0, statut:'neuf'};
-  var stepsHtml = path.steps.map(function(s, i){
-    var vue = (typeof parcoursEtapeVue === 'function') && parcoursEtapeVue(path, i);
-    return '<div class="guided-step' + (vue ? ' vue' : '') + '">'
+  var courante = (typeof parcoursCourante === 'function') ? parcoursCourante(path) : -1;
+  var ETATS = window.PARCOURS_ETATS || {};
+  var morceaux = path.steps.map(function(s, i){
+    var etat = (typeof parcoursEtatEtape === 'function')
+             ? parcoursEtatEtape(path, i) : 'attente';
+    var vue = (etat === 'faite');
+    var d = ETATS[etat] || {puce:'', nom:'', dit:''};
+    /* L'INFOBULLE PORTE LE NOM DE L'ÉTAT **ET** CE QU'IL SIGNIFIE. Le nom
+       seul — « Ouverte » — ne lève pas la question que la couleur pose :
+       est-ce que c'est fait ? La réponse tient en une phrase, et elle doit
+       être là où l'on se pose la question, pas dans une note en bas de page. */
+    var bulle = d.nom + ' — ' + d.dit;
+    return '<div class="guided-step ' + etat + (vue ? ' vue' : '') + '"'
+      + (etat === 'courante' ? ' aria-current="step"' : '')
+      + ' title="' + bulle.replace(/"/g, '&quot;') + '">'
       + '<div class="guided-step-top"><span class="guided-step-num" title="'
-      + (vue ? 'Étape déjà ouverte' : 'Étape jamais ouverte') + '">'
-      + (vue ? '✓' : (i+1)) + '</span><div class="guided-step-label">'+s.label+'</div>'
-      + '<button class="guided-step-go" onclick="guidedStartStep(\''+path.id+'\','+i+')">'
+      + bulle.replace(/"/g, '&quot;') + '">'
+      + (vue ? '\u2713' : (etat === 'courante' ? '\u25B6' : (i+1)))
+      + '</span><div class="guided-step-label">'+s.label+'</div>'
+      + (etat === 'courante'
+          ? '<span class="guided-step-ici" title="Le parcours reprend ici">reprendre ici</span>' : '')
+      + '<button class="guided-step-go' + (etat === 'courante' ? ' pousse' : '') + '"'
+      + ' title="' + (vue ? 'Rouvrir cette page. Ce que vous y aviez fait n\u2019est pas effacé.'
+                          : 'Ouvrir cette page et avancer le parcours d\u2019une étape.') + '"'
+      + ' onclick="guidedStartStep(\''+path.id+'\','+i+')">'
       + (vue ? 'Revenir à cette page →' : 'Aller à cette page →') + '</button></div>'
       + '<div class="guided-step-detail"><strong>À faire :</strong> '+s.action+'</div>'
       + '<div class="guided-step-detail"><strong>Ce que vous y gagnez :</strong> '+s.gain+'</div>'
       + (s.tip ? '<div class="guided-step-tip">💡 '+s.tip+'</div>' : '')
       + guidedFiche(s)
       + '</div>';
-  }).join('<div class="guided-step-arrow">↓</div>');
+  });
+  /* LA FLÈCHE QUI MÈNE À L'ÉTAPE COURANTE EST MARQUÉE, LES AUTRES NON. Une
+     colonne de flèches toutes pareilles ne guide pas : elle sépare. Celle
+     qui précède l'étape à faire est la seule qui dise « c'est par là ». */
+  var stepsHtml = '';
+  morceaux.forEach(function(m, i){
+    if(i){
+      stepsHtml += '<div class="guided-step-arrow'
+        + (i === courante ? ' vers-courante" title="Le parcours reprend juste en dessous'
+                          : '"')
+        + (i === courante ? '"' : '') + '>\u2193</div>';
+    }
+    stepsHtml += m;
+  });
 
   var avancement = '<div style="margin-top:10px">'
     + (typeof parcoursPastille === 'function' ? parcoursPastille(e) : '')
@@ -20238,10 +20332,19 @@ window.guidedRenderBanner = function(){
      erreur ne le signale. */
   var e = (typeof parcoursEtat === 'function') ? parcoursEtat(path)
                                                : {total:n, vues:0, part:0, statut:'neuf'};
+  /* LES PASTILLES DU BANDEAU DISENT LES MÊMES TROIS ÉTATS QUE LA CARTE,
+     plus celle où l'on se trouve. Quatre nuances, et chacune porte son
+     infobulle : une pastille de huit pixels sans légende ne se lit pas. */
   var dots = '';
+  var _etats = window.PARCOURS_ETATS || {};
   for(var k=0;k<n;k++){
-    var vue = (typeof parcoursEtapeVue === 'function') && parcoursEtapeVue(path, k);
-    dots += '<span class="gb-dot'+(k===i?' on':(vue?' done':''))+'"></span>';
+    var et = (typeof parcoursEtatEtape === 'function')
+           ? parcoursEtatEtape(path, k) : 'attente';
+    var d = _etats[et] || {nom:'', dit:''};
+    var ici = (k === i);
+    dots += '<span class="gb-dot ' + et + (ici ? ' on' : '')
+      + '" title="\u00c9tape ' + (k+1) + ' \u2014 ' + esc(path.steps[k].label)
+      + ' \u00b7 ' + (ici ? 'vous y \u00eates' : d.nom) + '"></span>';
   }
   var etiquette = (e.statut === 'fini') ? 'Parcours terminé' : 'Parcours en cours';
   var html = '<div class="gb-left">'
@@ -20256,9 +20359,18 @@ window.guidedRenderBanner = function(){
     + '</div>'
     + '<div class="gb-actions">';
   if(prev) html += '<button class="gb-btn" onclick="guidedStartStep(\''+g.pathId+'\','+(i-1)+')" title="'+esc(prev.label)+'">\u2190 Pr\u00e9c\u00e9dent</button>';
-  if(next) html += '<button class="gb-btn gb-next gb-next-anim" onclick="guidedStartStep(\''+g.pathId+'\','+(i+1)+')">Suivant : '+esc(next.label)+' <span class="gb-arrow">\u2192</span></button>';
-  else html += '<button class="gb-btn gb-next" onclick="guidedEndBanner()">Terminer \u2713</button>';
-  html += '<button class="gb-close" title="Quitter le parcours" onclick="guidedEndBanner()">\u00d7</button>';
+  if(next) html += '<button class="gb-btn gb-next gb-next-anim" title="Ouvrir « '
+    + esc(next.label) + ' » et avancer le parcours d\u2019une \u00e9tape" '
+    + 'onclick="guidedStartStep(\''+g.pathId+'\','+(i+1)+')">Suivant : '+esc(next.label)+' <span class="gb-arrow">\u2192</span></button>';
+  /* « TERMINER » NE VALIDE RIEN, ET L'INFOBULLE LE DIT. Sur un bandeau qui
+     porte une barre de progression, un bouton « Terminer ✓ » se lit comme une
+     validation. Il ferme le bandeau : l'avancement enregistré ne change pas,
+     et rien n'est déclaré conforme. */
+  else html += '<button class="gb-btn gb-next" title="Fermer le bandeau. '
+    + 'L\u2019avancement enregistr\u00e9 est conserv\u00e9, et rien n\u2019est '
+    + 'd\u00e9clar\u00e9 conforme." onclick="guidedEndBanner()">Terminer \u2713</button>';
+  html += '<button class="gb-close" title="Quitter le parcours. Vous le '
+    + 'retrouverez o\u00f9 vous l\u2019avez laiss\u00e9." onclick="guidedEndBanner()">\u00d7</button>';
   html += '</div>';
   b.innerHTML = html;
   b.style.display = 'flex';

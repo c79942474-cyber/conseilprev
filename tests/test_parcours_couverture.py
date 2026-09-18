@@ -196,3 +196,85 @@ def test_un_module_est_rattache_au_metier_pour_lequel_il_est_fait(panneau, parco
         "le panneau « %s » n'est plus atteint par %s. Soit l'étape a été "
         "retirée par mégarde, soit le rattachement a changé — et il se "
         "redéclare ici." % (panneau, ", ".join(manquants)))
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  PAGE_META ET LES PANNEAUX SERVIS — UNE BIJECTION, DANS LES DEUX SENS
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# CE QUE L'AUDIT DES TRENTE PARCOURS A TROUVÉ, ET QUE RIEN NE GARDAIT.
+# `PAGE_META` est ce que `go()` lit pour écrire le fil d'Ariane et le titre du
+# document. Elle déclarait quatre-vingt-six entrées pour quatre-vingt-six
+# panneaux — et ce n'étaient pas les mêmes :
+#
+#   · `shadow-ai` et `compte` étaient SERVIS SANS ENTRÉE. Un parcours qui y
+#     conduit — `role_deployeur` le fait — appelle `go(step.id)` sans section
+#     ni page : le visiteur arrivait sur un panneau au fil d'Ariane vide, dans
+#     un onglet nommé « Sentinel », au moment précis où un parcours venait de
+#     l'y conduire.
+#   · `alertes` et `chat` étaient DÉCLARÉS SANS PANNEAU. Le premier a coûté un
+#     tour de travail : un parcours neuf l'a visé, et la seule chose qui l'a
+#     dit est une règle de couverture — pas PAGE_META, qui affirmait le
+#     contraire. Une table qui déclare des panneaux inexistants est pire
+#     qu'une table incomplète : elle donne une garantie fausse.
+
+_RACINE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+def _bloc_page_meta():
+    src = io.open(os.path.join(_RACINE, "sentinel.page.js"), encoding="utf-8").read()
+    i = src.index("var PAGE_META = {")
+    return src[i:src.index("\n};", i)]
+
+
+def _page_meta():
+    return set(re.findall(r"^\s*'?([a-z0-9-]+)'?\s*:\s*\{\s*section",
+                          _bloc_page_meta(), re.M))
+
+
+def _panneaux_servis():
+    h = io.open(os.path.join(_RACINE, "sentinel.html"), encoding="utf-8").read()
+    return set(re.findall(r'id="p-([a-z0-9-]+)"', h))
+
+
+def test_la_lecture_de_PAGE_META_N_EST_PAS_VIDE():
+    """LE GARDE-FOU DES TROIS RÈGLES SUIVANTES, et il n'est pas décoratif :
+    ces trois règles ont été écrites une première fois SANS ÊTRE AJOUTÉES au
+    fichier — une chaîne shell interrompue — et la recette est restée verte,
+    parce qu'une règle absente ne tombe pas. Ici, une lecture qui rendrait un
+    ensemble vide ferait passer les trois suivantes pour la même raison."""
+    assert len(_page_meta()) > 60
+    assert len(_panneaux_servis()) > 60
+
+
+def test_tout_panneau_servi_a_son_entree_dans_PAGE_META():
+    """Sans entrée, un panneau atteint par un parcours perd son fil d'Ariane
+    et son titre d'onglet."""
+    orphelins = sorted(_panneaux_servis() - _page_meta())
+    assert not orphelins, (
+        "panneaux servis sans entrée PAGE_META — ils arriveront sans fil "
+        "d'Ariane ni titre : %s" % orphelins)
+
+
+def test_toute_entree_de_PAGE_META_a_son_panneau():
+    """L'AUTRE SENS, ET C'EST CELUI QUI A COÛTÉ. Une entrée sans panneau fait
+    passer pour navigable une destination qui n'existe pas — et un parcours
+    écrit de bonne foi s'y appuie."""
+    fantomes = sorted(_page_meta() - _panneaux_servis())
+    assert not fantomes, (
+        "entrées PAGE_META sans panneau servi — elles déclarent navigable ce "
+        "qui ne l'est pas : %s" % fantomes)
+
+
+def test_aucun_libelle_de_PAGE_META_ne_fige_un_COMPTE():
+    """« 7 alertes actives » était le libellé d'un menu. Il aurait menti dès la
+    huitième alerte, et personne n'a de raison d'aller corriger un libellé de
+    menu. Un compte se calcule ou ne s'affiche pas — il ne s'écrit pas en dur
+    dans une table de navigation."""
+    libelles = re.findall(r"label:\s*'([^']*\d[^']*)'", _bloc_page_meta())
+    # UN CHIFFRE N'EST PAS TOUJOURS UN COMPTE : « IEC 62443 » ou « art. 14 »
+    # en portent un sans rien dénombrer. Ce qu'on refuse est un NOMBRE SUIVI
+    # D'UN NOM AU PLURIEL — la forme d'un inventaire.
+    comptes = [x for x in libelles
+               if re.search(r"\b\d+\s+[a-zA-Zéèêàâîôûç]+s\b", x)]
+    assert not comptes, "libellés de menu qui figent un compte : %s" % comptes
