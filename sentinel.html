@@ -120,6 +120,31 @@ body{
 .sb-nav [data-grp="equipe-et-formation"]{--sb-ic:var(--emerald)}
 .sb-nav [data-grp="business"]{--sb-ic:var(--amber)}
 .sb-nav [data-grp="rgpd-et-privacy"]{--sb-ic:var(--blue)}
+.sb-nav [data-grp="cra"]{--sb-ic:var(--or,#C47C1A)}
+/* ── LE MODULE CRA ─────────────────────────────────────────────────────
+   LES DEUX COULEURS QUI PORTENT UN SENS, ET ELLES SEULES. L'ambre marque ce
+   qui est DÉJÀ en vigueur ou ce qui impose un organisme notifié — c'est-à-dire
+   ce qui coûte du temps qu'on n'a plus. Tout le reste reste neutre : un écran
+   où tout est signalé ne signale rien. */
+.cra-in{background:var(--bg2,#141414);color:inherit;border:1px solid var(--line,#2a2a2a);
+  border-radius:8px;padding:7px 10px;font:inherit;font-size:13px}
+.cra-chk{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--muted,#9a9a9a)}
+.cra-chk input{accent-color:var(--or,#C47C1A)}
+.cra-annexes{display:flex;flex-direction:column;gap:8px;margin:14px 0}
+.cra-det{border:1px solid var(--line,#2a2a2a);border-radius:10px;padding:10px 14px}
+.cra-det summary{cursor:pointer;font-weight:600;font-size:14px}
+.cra-ul{margin:10px 0 2px 18px;color:var(--muted,#9a9a9a);font-size:13px;line-height:1.7}
+.cra-art{font-family:var(--mono,ui-monospace,monospace);font-size:11px;
+  letter-spacing:.04em;color:var(--muted2,#6f6f6f);margin-left:8px}
+.cra-ech{padding:8px 0;border-top:1px solid var(--line,#2a2a2a);font-size:13px}
+.cra-ech:first-child{border-top:0}
+.cra-ech-on b{color:var(--or,#C47C1A)}
+.cra-pq{display:block;color:var(--muted,#9a9a9a);font-size:12.5px;margin-top:3px;line-height:1.55}
+.cra-cmd{border:1px solid var(--line,#2a2a2a);border-left:3px solid var(--or,#C47C1A);
+  border-radius:8px;padding:12px 14px;margin:14px 0;font-size:13.5px}
+.cra-on{color:var(--or,#C47C1A)}
+.cra-hors{color:var(--muted2,#6f6f6f)}
+.cra-basc td{background:rgba(196,124,26,.07);font-size:12.5px;line-height:1.6}
 .sb-nav [data-grp="juridique"]{--sb-ic:var(--violet)}
 .sb-nav [data-grp="entreprise"]{--sb-ic:var(--accent)}
 .sb-nav [data-grp="administration"]{--sb-ic:var(--teal)}
@@ -2949,6 +2974,21 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <div class="sb-item" data-grp="rgpd-et-privacy" role="button" tabindex="0" onclick="go('rgpd-sensibilisation',this,'RGPD &amp; PRIVACY','Sensibilisation');sensInit()" title="Plan de sensibilisation a la protection des donnees par public cible : periodicite, statut, suivi."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>Sensibilisation</div>
     <div class="sb-item" data-grp="rgpd-et-privacy" role="button" tabindex="0" onclick="go('rgpd-conformite',this,'RGPD &amp; PRIVACY','Conformité RGPD');confLoadOnce()" title="Tableau de bord consolidant registre, AIPD, privacy by design, documentation et sensibilisation : indice global et points d attention."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg></span>Conformité RGPD</div>
     <div class="sb-item" data-grp="rgpd-et-privacy" role="button" tabindex="0" onclick="go('empreinte',this,'EMPREINTE','Empreinte numerique')" title="Compteur temps reel de l'empreinte numerique : site, plateforme et modeles de langage ; trois methodes comparees."><span class="sb-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg></span>Empreinte numérique</div>
+    <!-- ═══ LE CRA EST UN PILIER, PAS UNE RUBRIQUE D'UN AUTRE ═══
+         POURQUOI UN GROUPE DE PREMIER NIVEAU, comme RGPD & Privacy.
+         Les trois cadres de la plateforme comptent TROIS UNITES
+         D'ANALYSE differentes : l'IA Act compte des systemes d'IA,
+         le RGPD des traitements, le CRA des PRODUITS. Ranger le CRA
+         sous l'un des deux aurait force une identite fausse — un
+         produit n'est pas un systeme d'IA, et son fabricant n'est
+         ni un fournisseur ni un responsable de traitement.
+         ET SON CALENDRIER EST LE SIEN : l'article 14 s'applique
+         depuis le 11 septembre 2026, quand l'IA Act et le RGPD ont
+         chacun le leur. -->
+    <div class="sb-section" data-grp="cra"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 2.5l8 3.2v6c0 5-3.4 8.8-8 10-4.6-1.2-8-5-8-10v-6z"/><path d="M9.2 12.2l2 2 3.6-3.8"/></svg><span>CRA — Produits numériques</span></div>
+    <div class="sb-item" data-grp="cra" role="button" tabindex="0" onclick="go('cra',this,'CRA — PRODUITS','Produits &amp; classification')" title="Le registre des produits comportant des elements numeriques, leur classe au titre des annexes III et IV, et la procedure d evaluation qui en decoule."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/></svg></span>Produits &amp; classification</div>
+    <div class="sb-item" data-grp="cra" role="button" tabindex="0" onclick="go('cra-ecarts',this,'CRA — PRODUITS','Analyse d’écart')" title="Les vingt et une exigences essentielles de l annexe I, parties I et II, cotees une par une. Une case vide n est pas une case verte."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h10M4 18h7"/><path d="M17 15l2.5 2.5L23 13"/></svg></span>Analyse d’écart</div>
+    <div class="sb-item" data-grp="cra" role="button" tabindex="0" onclick="go('cra-signalement',this,'CRA — PRODUITS','Signalement art. 14')" title="Vulnerabilite activement exploitee et incident grave : 24 h, 72 h, puis le rapport final. Applicable depuis le 11 septembre 2026."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3v10"/><circle cx="12" cy="18" r="1.2"/><path d="M4.5 20h15a1.5 1.5 0 0 0 1.3-2.25l-7.5-13a1.5 1.5 0 0 0-2.6 0l-7.5 13A1.5 1.5 0 0 0 4.5 20z"/></svg></span>Signalement art. 14</div>
     <div class="sb-section" data-grp="juridique"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 6.5S9.5 4.5 3.5 4.5v13c6 0 8.5 2 8.5 2s2.5-2 8.5-2v-13c-6 0-8.5 2-8.5 2z"/><path d="M12 6.5v13"/></svg><span>Juridique</span></div>
     <div class="sb-item" data-grp="juridique" role="button" tabindex="0" onclick="go('juridique',this,'JURIDIQUE','Conseil juridique assisté');juInit()" title="Qualification reglementaire deterministe, lectures possibles des textes, clausier fournisseurs et revue de contrat — droit du numerique, cyber IT/OT/ICS et IA."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3v18"/><path d="M5 7h5l-2.5 5a2.5 2.5 0 0 0 5 0L10 7"/><path d="M14 7h5l-2.5 5a2.5 2.5 0 0 0 5 0L19 7"/><path d="M5 21h14"/><path d="M9 7h6"/></svg></span>Conseil juridique</div>
     <div class="sb-section" data-grp="entreprise"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3.5 21V9.5l6-3v14.5"/><path d="M9.5 21V13l7-3v11"/><path d="M16.5 21V6.5l4 2V21"/><path d="M2.5 21h19"/></svg><span>Entreprise</span></div>
@@ -4928,48 +4968,55 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 
 <div class="page" id="p-cadre-normatif">
   <span class="eyebrow">Pilotage · Cadre normatif</span>
-  <h1 class="page-h">Cadre <em>normatif</em> — IA Act · RGPD · ISO/IEC 42001</h1>
-  <p class="page-lead">Matrice de correspondance reliant chaque module de Sentinel aux trois cadres : le Règlement sur l'IA pour les obligations réglementaires, le RGPD pour la protection des données, et la norme ISO/IEC 42001 comme système de management de l'IA qui structure et chapeaute l'ensemble. Chaque ligne renvoie directement au module concerné.</p>
-  <div class="cn-note-top">ISO/IEC 42001 fournit le système de management ; l'IA Act et le RGPD en constituent les exigences réglementaires. Un même module sert donc souvent les trois cadres à la fois.</div>
+  <h1 class="page-h">Cadre <em>normatif</em> — IA Act · RGPD · ISO/IEC 42001 · CRA</h1>
+  <p class="page-lead">Matrice de correspondance reliant chaque module de Sentinel à ses cadres : le Règlement sur l'IA pour les obligations réglementaires, le RGPD pour la protection des données, le <b>Cyber Resilience Act</b> pour la cybersécurité des produits, et la norme ISO/IEC 42001 comme système de management de l'IA qui structure l'ensemble. Chaque ligne renvoie directement au module concerné.</p>
+  <div class="cn-note-top">ISO/IEC 42001 fournit le système de management ; l'IA Act, le RGPD et le CRA en constituent les exigences réglementaires. Un même module sert donc souvent plusieurs cadres à la fois — <b>mais pas toujours</b>&nbsp;: un tiret dans une colonne signifie que ce cadre ne dit rien de ce module, et c'est une information, pas une case oubliée. <b>Les trois cadres comptent trois unités d'analyse différentes</b> — des systèmes d'IA, des traitements, des produits — et c'est pourquoi le CRA a son registre à lui plutôt qu'une colonne dans celui de l'IA Act.</div>
 
   <div class="cn-group"><div class="cn-group-t">Gouverner &amp; cadrer</div>
-  <div class="cn-scroll"><table class="cn-table"><thead><tr><th>Module Sentinel</th><th>ISO/IEC 42001</th><th>Règlement IA</th><th>RGPD</th></tr></thead><tbody>
-    <tr><td><a class="cn-link" onclick="hubGo('parties')">Parties prenantes</a></td><td>Clause 4.2 · A.8</td><td>Chaîne de valeur</td><td>Art. 26 · 28</td></tr>
-    <tr><td><a class="cn-link" onclick="hubGo('roadmap')">Plan d'action</a></td><td>Clause 10.1 (amélioration)</td><td>Art. 9</td><td>Art. 24</td></tr>
-    <tr><td><a class="cn-link" onclick="hubGo('regs')">Réglementations &amp; veille</a></td><td>Clause 4.1 (contexte)</td><td>Texte intégral</td><td>Texte intégral</td></tr>
+  <div class="cn-scroll"><table class="cn-table"><thead><tr><th>Module Sentinel</th><th>ISO/IEC 42001</th><th>Règlement IA</th><th>RGPD</th><th>CRA</th></tr></thead><tbody>
+    <tr><td><a class="cn-link" onclick="hubGo('parties')">Parties prenantes</a></td><td>Clause 4.2 · A.8</td><td>Chaîne de valeur</td><td>Art. 26 · 28</td><td>Chaîne de valeur — art. 13 · 19 à 22</td></tr>
+    <tr><td><a class="cn-link" onclick="hubGo('roadmap')">Plan d'action</a></td><td>Clause 10.1 (amélioration)</td><td>Art. 9</td><td>Art. 24</td><td>Art. 13 (conception) · annexe I</td></tr>
+    <tr><td><a class="cn-link" onclick="hubGo('regs')">Réglementations &amp; veille</a></td><td>Clause 4.1 (contexte)</td><td>Texte intégral</td><td>Texte intégral</td><td>Règl. (UE) 2024/2847</td></tr>
   </tbody></table></div></div>
 
   <div class="cn-group"><div class="cn-group-t">Cartographier</div>
-  <div class="cn-scroll"><table class="cn-table"><thead><tr><th>Module Sentinel</th><th>ISO/IEC 42001</th><th>Règlement IA</th><th>RGPD</th></tr></thead><tbody>
-    <tr><td><a class="cn-link" onclick="hubGo('carto-uc')">Cartographie des cas d'usage</a></td><td>A.6 · A.9</td><td>Art. 6 · Annexe III</td><td>Art. 35 (pré-analyse)</td></tr>
-    <tr><td><a class="cn-link" onclick="hubGo('registre')">Registre des systèmes IA</a></td><td>A.4 · A.6</td><td>Art. 11 · Annexe IV</td><td>Art. 30</td></tr>
-    <tr><td><a class="cn-link" onclick="hubGo('simulateur')">Classification IA Act</a></td><td>Clause 8.4 · A.5</td><td>Art. 6 · Annexe III</td><td>Art. 35</td></tr>
-    <tr><td><a class="cn-link" onclick="hubGo('rgpd-traitements')">Registre des traitements</a></td><td>A.7 (données)</td><td>Art. 10 (données)</td><td>Art. 30</td></tr>
-    <tr><td><a class="cn-link" onclick="hubGo('rgpd-cartographie')">Cartographie des traitements</a></td><td>A.7</td><td>Art. 10</td><td>Art. 30 · 35</td></tr>
+  <div class="cn-scroll"><table class="cn-table"><thead><tr><th>Module Sentinel</th><th>ISO/IEC 42001</th><th>Règlement IA</th><th>RGPD</th><th>CRA</th></tr></thead><tbody>
+    <tr><td><a class="cn-link" onclick="hubGo('carto-uc')">Cartographie des cas d'usage</a></td><td>A.6 · A.9</td><td>Art. 6 · Annexe III</td><td>Art. 35 (pré-analyse)</td><td>—</td></tr>
+    <tr><td><a class="cn-link" onclick="hubGo('registre')">Registre des systèmes IA</a></td><td>A.4 · A.6</td><td>Art. 11 · Annexe IV</td><td>Art. 30</td><td><b>Registre PRODUITS distinct</b> — art. 3</td></tr>
+    <tr><td><a class="cn-link" onclick="hubGo('simulateur')">Classification IA Act</a></td><td>Clause 8.4 · A.5</td><td>Art. 6 · Annexe III</td><td>Art. 35</td><td><b>Classes annexes III / IV</b> — art. 7 · 8</td></tr>
+    <tr><td><a class="cn-link" onclick="hubGo('rgpd-traitements')">Registre des traitements</a></td><td>A.7 (données)</td><td>Art. 10 (données)</td><td>Art. 30</td><td>—</td></tr>
+    <tr><td><a class="cn-link" onclick="hubGo('rgpd-cartographie')">Cartographie des traitements</a></td><td>A.7</td><td>Art. 10</td><td>Art. 30 · 35</td><td>—</td></tr>
   </tbody></table></div></div>
 
   <div class="cn-group"><div class="cn-group-t">Évaluer les risques</div>
-  <div class="cn-scroll"><table class="cn-table"><thead><tr><th>Module Sentinel</th><th>ISO/IEC 42001</th><th>Règlement IA</th><th>RGPD</th></tr></thead><tbody>
-    <tr><td><a class="cn-link" onclick="hubGo('maturite')">Audit de maturité IA</a></td><td>Clauses 4 à 6</td><td>Art. 9 (gestion des risques)</td><td>Art. 24</td></tr>
-    <tr><td><a class="cn-link" onclick="hubGo('matrice')">Matrice / Radar des risques</a></td><td>Clause 6.1 · 8.2 · A.5</td><td>Art. 9</td><td>Art. 35</td></tr>
-    <tr><td><a class="cn-link" onclick="hubGo('fria')">FRIA — droits fondamentaux</a></td><td>Clause 8.4 · A.5.2</td><td>Art. 27</td><td>Art. 35 (complément)</td></tr>
-    <tr><td><a class="cn-link" onclick="hubGo('rgpd-aipd')">AIPD — protection des données</a></td><td>Clause 8.4 · A.5</td><td>Art. 27 (lié)</td><td>Art. 35</td></tr>
+  <div class="cn-scroll"><table class="cn-table"><thead><tr><th>Module Sentinel</th><th>ISO/IEC 42001</th><th>Règlement IA</th><th>RGPD</th><th>CRA</th></tr></thead><tbody>
+    <tr><td><a class="cn-link" onclick="hubGo('maturite')">Audit de maturité IA</a></td><td>Clauses 4 à 6</td><td>Art. 9 (gestion des risques)</td><td>Art. 24</td><td>Annexe I, partie II (processus)</td></tr>
+    <tr><td><a class="cn-link" onclick="hubGo('matrice')">Matrice / Radar des risques</a></td><td>Clause 6.1 · 8.2 · A.5</td><td>Art. 9</td><td>Art. 35</td><td>Art. 13, §2 (évaluation des risques)</td></tr>
+    <tr><td><a class="cn-link" onclick="hubGo('fria')">FRIA — droits fondamentaux</a></td><td>Clause 8.4 · A.5.2</td><td>Art. 27</td><td>Art. 35 (complément)</td><td>—</td></tr>
+    <tr><td><a class="cn-link" onclick="hubGo('rgpd-aipd')">AIPD — protection des données</a></td><td>Clause 8.4 · A.5</td><td>Art. 27 (lié)</td><td>Art. 35</td><td>—</td></tr>
   </tbody></table></div></div>
 
   <div class="cn-group"><div class="cn-group-t">Concevoir, documenter &amp; prouver</div>
-  <div class="cn-scroll"><table class="cn-table"><thead><tr><th>Module Sentinel</th><th>ISO/IEC 42001</th><th>Règlement IA</th><th>RGPD</th></tr></thead><tbody>
-    <tr><td><a class="cn-link" onclick="hubGo('rgpd-pbd')">Privacy by design</a></td><td>Clause 8 · A.7</td><td>Art. 10 (gouvernance des données)</td><td>Art. 25</td></tr>
-    <tr><td><a class="cn-link" onclick="hubGo('templates')">Documentation &amp; modèles</a></td><td>Clause 7.5</td><td>Art. 11 · 18</td><td>Art. 5.2</td></tr>
-    <tr><td><a class="cn-link" onclick="hubGo('rgpd-doc')">Politique documentaire</a></td><td>Clause 7.5 · A.2</td><td>Art. 11</td><td>Art. 5.2 · 30</td></tr>
-    <tr><td><a class="cn-link" onclick="hubGo('audit-ia-act')">Audit IA Act</a></td><td>Clause 9.2 (audit interne)</td><td>Art. 17 (SMQ)</td><td>Art. 24</td></tr>
-    <tr><td><a class="cn-link" onclick="hubGo('rgpd-conformite')">Conformité RGPD</a></td><td>Clause 9.1 (surveillance)</td><td>—</td><td>Art. 24</td></tr>
+  <div class="cn-scroll"><table class="cn-table"><thead><tr><th>Module Sentinel</th><th>ISO/IEC 42001</th><th>Règlement IA</th><th>RGPD</th><th>CRA</th></tr></thead><tbody>
+    <tr><td><a class="cn-link" onclick="hubGo('rgpd-pbd')">Privacy by design</a></td><td>Clause 8 · A.7</td><td>Art. 10 (gouvernance des données)</td><td>Art. 25</td><td>Annexe I, partie I, §6 et §8</td></tr>
+    <tr><td><a class="cn-link" onclick="hubGo('templates')">Documentation &amp; modèles</a></td><td>Clause 7.5</td><td>Art. 11 · 18</td><td>Art. 5.2</td><td>Annexe VII (doc. technique) · annexe V</td></tr>
+    <tr><td><a class="cn-link" onclick="hubGo('rgpd-doc')">Politique documentaire</a></td><td>Clause 7.5 · A.2</td><td>Art. 11</td><td>Art. 5.2 · 30</td><td>Annexe I, partie II, §5 (divulgation)</td></tr>
+    <tr><td><a class="cn-link" onclick="hubGo('audit-ia-act')">Audit IA Act</a></td><td>Clause 9.2 (audit interne)</td><td>Art. 17 (SMQ)</td><td>Art. 24</td><td><b>Procédure art. 32</b> · annexe VIII</td></tr>
+    <tr><td><a class="cn-link" onclick="hubGo('rgpd-conformite')">Conformité RGPD</a></td><td>Clause 9.1 (surveillance)</td><td>—</td><td>Art. 24</td><td>—</td></tr>
   </tbody></table></div></div>
 
   <div class="cn-group"><div class="cn-group-t">Former, sensibiliser &amp; sanctions</div>
-  <div class="cn-scroll"><table class="cn-table"><thead><tr><th>Module Sentinel</th><th>ISO/IEC 42001</th><th>Règlement IA</th><th>RGPD</th></tr></thead><tbody>
-    <tr><td><a class="cn-link" onclick="hubGo('training')">Hub Training</a></td><td>Clause 7.2 · 7.3</td><td>Art. 4 (maîtrise de l'IA)</td><td>Art. 39</td></tr>
-    <tr><td><a class="cn-link" onclick="hubGo('rgpd-sensibilisation')">Sensibilisation</a></td><td>Clause 7.3</td><td>Art. 4</td><td>Art. 32 · 39</td></tr>
-    <tr><td><a class="cn-link" onclick="hubGo('sanctions')">Calculateur de sanctions</a></td><td>—</td><td>Art. 99</td><td>Art. 83</td></tr>
+  <div class="cn-scroll"><table class="cn-table"><thead><tr><th>Module Sentinel</th><th>ISO/IEC 42001</th><th>Règlement IA</th><th>RGPD</th><th>CRA</th></tr></thead><tbody>
+    <tr><td><a class="cn-link" onclick="hubGo('training')">Hub Training</a></td><td>Clause 7.2 · 7.3</td><td>Art. 4 (maîtrise de l'IA)</td><td>Art. 39</td><td>Annexe I, partie II (compétences)</td></tr>
+    <tr><td><a class="cn-link" onclick="hubGo('rgpd-sensibilisation')">Sensibilisation</a></td><td>Clause 7.3</td><td>Art. 4</td><td>Art. 32 · 39</td><td>—</td></tr>
+    <tr><td><a class="cn-link" onclick="hubGo('sanctions')">Calculateur de sanctions</a></td><td>—</td><td>Art. 99</td><td>Art. 83</td><td>Art. 64 (amendes CRA, régime distinct)</td></tr>
+  </tbody></table></div></div>
+
+  <div class="cn-group"><div class="cn-group-t">Produits numériques — Cyber Resilience Act</div>
+  <div class="cn-scroll"><table class="cn-table"><thead><tr><th>Module Sentinel</th><th>ISO/IEC 42001</th><th>Règlement IA</th><th>RGPD</th><th>CRA</th></tr></thead><tbody>
+    <tr><td><a class="cn-link" onclick="hubGo('cra')">Produits &amp; classification</a></td><td>A.4 (inventaire)</td><td>—</td><td>—</td><td><b>Art. 7 · 8 · 32 · annexes III et IV</b></td></tr>
+    <tr><td><a class="cn-link" onclick="hubGo('cra-ecarts')">Analyse d'écart CRA</a></td><td>Clause 9.2 (audit interne)</td><td>—</td><td>Art. 32 (sécurité, voisin)</td><td><b>Annexe I, parties I et II</b></td></tr>
+    <tr><td><a class="cn-link" onclick="hubGo('cra-signalement')">Signalement art. 14</a></td><td>Clause 10.2 (non-conformité)</td><td>Art. 73 (incidents graves, régime distinct)</td><td>Art. 33 · 34 (violations, régime distinct)</td><td><b>Art. 14 · 16 — en vigueur</b></td></tr>
   </tbody></table></div></div>
 
   <div class="trait-note">
@@ -4977,6 +5024,58 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
   </div>
 </div>
 
+
+<!-- ═══════════════════════════════════════════════════════════════
+     LE MODULE CRA — TROIS VUES, ET AUCUNE NE RECOPIE LE RÈGLEMENT
+     Les libellés d'annexes, les classes, les procédures et les exigences
+     viennent tous de /api/cra/referentiel. Une liste recopiée ici aurait
+     divergé du moteur au premier amendement, et la divergence se serait vue
+     chez le client, pas dans la recette.
+     ═══════════════════════════════════════════════════════════════════ -->
+<div class="page" id="p-cra">
+  <span class="eyebrow">CRA · Produits numériques</span>
+  <h1 class="page-h">Cyber Resilience Act — <em>produits &amp; classification</em></h1>
+  <p class="page-lead">Règlement (UE) 2024/2847. Déclarez vos produits comportant des éléments numériques, qualifiez leur classe au titre des annexes&nbsp;III et&nbsp;IV, et obtenez la procédure d'évaluation de la conformité qui en découle — celle qui décide si un organisme notifié doit intervenir.</p>
+
+  <div id="cra-calendrier" class="cn-note-top">Chargement du calendrier…</div>
+
+  <div class="reg-toolbar">
+    <input id="cra-nom" class="cra-in" type="text" placeholder="Nom du produit — ex. « Passerelle VPN industrielle »" style="min-width:min(340px,100%)">
+    <select id="cra-classe" class="cra-in"></select>
+    <select id="cra-role" class="cra-in"></select>
+    <label class="cra-chk"><input id="cra-marche" type="checkbox" checked> Mis à disposition sur le marché de l'Union</label>
+    <label class="cra-chk"><input id="cra-normes" type="checkbox"> Normes harmonisées appliquées <b>intégralement</b></label>
+    <button class="mat-export-btn" onclick="craAjouter()">+ Ajouter au registre</button>
+    <button class="mat-export-btn" onclick="craVider()">Vider</button>
+  </div>
+
+  <div id="cra-annexes" class="cra-annexes"></div>
+  <div id="cra-registre"><div class="veille-loading">Aucun produit déclaré. Ajoutez-en un pour obtenir sa procédure.</div></div>
+
+  <div class="trait-note">
+    Ce module <b>constate ce qui est déclaré</b> ; il ne qualifie pas votre produit à votre place. La classe commande la procédure, donc le budget et le calendrier : elle est choisie par vous, les annexes sont affichées à côté pour que ce choix se fasse en connaissance de cause. Les exclusions sectorielles et la clause générale de l'article&nbsp;2 relèvent d'une analyse juridique, pas d'une case cochée. Seul le texte publié au Journal officiel fait foi.
+  </div>
+</div>
+
+<div class="page" id="p-cra-ecarts">
+  <span class="eyebrow">CRA · Analyse d'écart</span>
+  <h1 class="page-h">Exigences essentielles — <em>annexe I</em></h1>
+  <p class="page-lead">Les deux parties de l'annexe&nbsp;I ne se cotent pas de la même façon, et les confondre rend une analyse fausse&nbsp;: la <b>partie&nbsp;I</b> porte sur les propriétés du produit et se vérifie sur une version donnée&nbsp;; la <b>partie&nbsp;II</b> porte sur des processus du fabricant et vaut pendant toute la période d'assistance. Un produit peut être conforme partie&nbsp;I et l'entreprise défaillante partie&nbsp;II — c'est le cas le plus courant.</p>
+  <div id="cra-ec-body"><div class="veille-loading">Chargement des exigences…</div></div>
+  <div class="trait-note">
+    Une exigence <b>non renseignée n'est pas une exigence conforme</b>. Le taux affiché est toujours accompagné du nombre de lignes vides : un taux calculé sur trois exigences renseignées ne dit rien des dix-huit autres.
+  </div>
+</div>
+
+<div class="page" id="p-cra-signalement">
+  <span class="eyebrow">CRA · Article 14</span>
+  <h1 class="page-h">Signalement — <em>ce qui court déjà</em></h1>
+  <p class="page-lead">L'article&nbsp;14 est applicable <b>depuis le 11 septembre 2026</b>. C'est la seule obligation du règlement dont le retard se compte aujourd'hui : un fabricant qui découvre qu'une de ses vulnérabilités est activement exploitée dispose de <b>vingt-quatre heures</b> pour l'alerte précoce.</p>
+  <div id="cra-sig-body"><div class="veille-loading">Chargement des échéances…</div></div>
+  <div class="trait-note">
+    La notification part <b>simultanément</b> au CSIRT désigné coordinateur <b>et</b> à l'ENISA, par la plateforme unique de signalement de l'article&nbsp;16. Prévenir l'un puis l'autre, ou l'un seulement, n'est pas ce que le texte demande.
+  </div>
+</div>
 
 <div class="page" id="p-conformite-globale">
   <span class="eyebrow">Pilotage · Conformité</span>

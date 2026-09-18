@@ -938,6 +938,11 @@ var PAGE_META = {
     'adoption': { section: 'BUSINESS', label: 'Tableau de bord d’adoption' },
     'ingenierie': { section: 'BUSINESS', label: 'Développement assisté par IA' },
     'cadre-normatif': { section: 'PILOTAGE', label: 'Cadre normatif' },
+  /* LE CRA — un pilier, au même rang que le RGPD, et pour la raison
+     écrite dans la barre latérale : son unité d'analyse est le PRODUIT. */
+  cra:              { section: 'CRA — PRODUITS', label: 'Produits & classification' },
+  'cra-ecarts':     { section: 'CRA — PRODUITS', label: 'Analyse d\u2019écart' },
+  'cra-signalement':{ section: 'CRA — PRODUITS', label: 'Signalement art. 14' },
     'rgpd-hub': { section: 'RGPD & PRIVACY', label: 'Vue d\u2019ensemble' },
     'rgpd-conformite': { section: 'RGPD & PRIVACY', label: 'Conformité RGPD' },
     'rgpd-sensibilisation': { section: 'RGPD & PRIVACY', label: 'Sensibilisation' },
@@ -1040,6 +1045,7 @@ function go(id, el, sec, pg) {
   if (id === 'gouvernance' && typeof window.gouvInit === 'function') _apresPeinture(window.gouvInit);
   if (id === 'adoption' && typeof window.adpInit === 'function') _apresPeinture(window.adpInit);
   if (id === 'ingenierie' && typeof window.ingInit === 'function') _apresPeinture(window.ingInit);
+  if (id.indexOf('cra') === 0 && typeof window.craInit === 'function') _apresPeinture(window.craInit);
   /* L'ONGLET COURANT EST AUSSI ANNONCÉ, pas seulement peint : à un lecteur
      d'écran, la pastille terre cuite ne dit rien. */
   function _ici(i){ i.classList.add('on'); i.setAttribute('aria-current', 'page'); }
@@ -9522,6 +9528,34 @@ window.trainingOpenFiche = function(key){
 'use strict';
 
 var PAGE_GUIDES = {
+  // ── LES TROIS PANNEAUX DU CYBER RESILIENCE ACT ──────────────────────
+  // La troisième section de chaque guide dit ce que le module NE fait pas :
+  // sur un texte réglementaire, c'est la seule qui empêche de prendre une
+  // aide à la qualification pour un avis de conformité.
+  'cra': {
+    title: "Cyber Resilience Act — produits & classification",
+    sections: [
+      {h:"À quoi sert cette page", t:"À répondre à la seule question du règlement qui change votre budget : par quelle procédure ce produit démontre-t-il sa conformité ? Le contrôle interne, que vous signez vous-même, ou un organisme notifié — plusieurs mois et une file d’attente qui n’existe que depuis juin 2026. Déclarez vos produits, choisissez leur classe au regard des annexes III et IV affichées à côté, et la procédure se déduit."},
+      {h:"Comment l’utiliser", t:"Commencez par le produit dont vous doutez, pas par le plus simple. Si vous le rangez en classe I, la case « normes harmonisées appliquées intégralement » décide de tout : cochée, vous restez en contrôle interne ; décochée, vous basculez chez l’organisme notifié. C’est la bascule la plus coûteuse du texte, et elle se joue là. En partie appliquées, ou pas encore publiées, comptent comme non appliquées."},
+      {h:"Ce qu’elle ne fait pas", t:"Elle ne qualifie pas votre produit à votre place et ne devine aucune classe à partir d’un nom : c’est vous qui choisissez, et la restitution le dit. Les exclusions sectorielles et la clause générale de l’article 2 relèvent d’une analyse juridique menée sur le produit réel, pas d’une case cochée par celui qui le vend. Rien n’est conservé : c’est un outil de qualification, pas un registre."}
+    ]
+  },
+  'cra-ecarts': {
+    title: "Analyse d’écart — annexe I",
+    sections: [
+      {h:"À quoi sert cette page", t:"À coter une par une les vingt et une exigences essentielles du règlement, en tenant séparées les deux parties de l’annexe I : la partie I porte sur les propriétés du produit et se vérifie sur une version donnée ; la partie II porte sur des processus du fabricant et vaut pendant toute la période d’assistance."},
+      {h:"Comment l’utiliser", t:"Faites la partie II en premier si vous hésitez. Le cas le plus courant n’est pas un produit mal conçu : c’est un produit conforme partie I dans une entreprise qui n’a ni nomenclature logicielle, ni politique de divulgation coordonnée, ni adresse de signalement — et cela se répare par de l’organisation, pas par du code."},
+      {h:"Ce qu’elle ne fait pas", t:"Elle ne compte jamais une case vide comme une case verte. Le taux affiché est toujours accompagné du nombre de lignes non renseignées, parce qu’un taux calculé sur trois exigences ne dit rien des dix-huit autres — et que c’est celui-là qu’on montre en comité. « Sans objet » est une décision motivée qui sort du dénominateur ; « non renseigné » est une absence de décision, qui y reste."}
+    ]
+  },
+  'cra-signalement': {
+    title: "Signalement — article 14",
+    sections: [
+      {h:"À quoi sert cette page", t:"À montrer le seul compte à rebours du règlement qui court déjà. L’article 14 est applicable depuis le 11 septembre 2026, quand le reste du texte attend décembre 2027. Un fabricant qui découvre aujourd’hui qu’une de ses vulnérabilités est activement exploitée dispose de vingt-quatre heures pour l’alerte précoce."},
+      {h:"Comment l’utiliser", t:"Lisez-la AVANT l’incident, pas pendant. Deux faits déclenchent la même mécanique — vulnérabilité activement exploitée, incident grave — avec les mêmes premiers délais, 24 h puis 72 h. Ce qui diffère est le rapport final : quatorze jours après la mise à disposition d’un correctif d’un côté, un mois après la notification de l’autre. Et la notification part simultanément au CSIRT coordinateur ET à l’ENISA, par la plateforme unique de l’article 16 : prévenir l’un puis l’autre n’est pas ce que le texte demande."},
+      {h:"Ce qu’elle ne fait pas", t:"Elle ne signale rien à votre place et n’ouvre aucun compte à rebours : elle affiche les délais et ce qu’il faut transmettre à chaque étape. Elle ne dit pas non plus si votre incident est « grave » au sens du règlement — cette qualification se fait sur les faits, et elle engage."}
+    ]
+  },
   // ── Cinq panneaux qui retombaient sur le guide générique.
   // Chacun est écrit à partir de ce que le panneau dit de lui-même —
   // surtitre, titre, chapeau — et des dépendances que ces chapeaux
@@ -18736,6 +18770,20 @@ document.addEventListener('DOMContentLoaded', function(){ if(window.cartoInit) w
 var DC_MILLESIME = "2026-08-d";
 var GUIDED_PATHS = [
   {
+    id: 'cra_fabricant',
+    icon: '\u{1F6E1}\uFE0F',
+    role: 'Fabricant de produits comportant des \u00e9l\u00e9ments num\u00e9riques \u2014 Cyber Resilience Act',
+    pitch: 'Le r\u00e8glement (UE) 2024/2847 s\u2019applique en d\u00e9cembre 2027 \u2014 mais son article 14 court DEPUIS LE 11 SEPTEMBRE 2026, et le chapitre IV depuis juin. Ce parcours part de ce qui est d\u00e9j\u00e0 exigible, puis remonte vers ce qui se pr\u00e9pare : classer, mesurer l\u2019\u00e9cart, et savoir si un organisme notifi\u00e9 doit entrer dans votre calendrier.',
+    steps: [
+      {id:'cra-signalement', label:'Signalement \u2014 article 14', action:'Lisez les deux m\u00e9caniques AVANT d\u2019en avoir besoin : vuln\u00e9rabilit\u00e9 activement exploit\u00e9e et incident grave. Rep\u00e9rez qui, chez vous, peut d\u00e9clencher une alerte pr\u00e9coce un vendredi soir.', gain:'C\u2019est la seule obligation du CRA dont le retard se compte aujourd\u2019hui : vingt-quatre heures pour l\u2019alerte, soixante-douze pour la notification.', tip:'La notification part SIMULTAN\u00c9MENT au CSIRT coordinateur et \u00e0 l\u2019ENISA, par la plateforme unique de l\u2019article 16. Pr\u00e9venir l\u2019un puis l\u2019autre n\u2019est pas ce que le texte demande \u2014 et c\u2019est l\u2019erreur la plus facile \u00e0 commettre sous la pression du d\u00e9lai.'},
+      {id:'cra', label:'Produits & classification', action:'D\u00e9clarez vos produits et choisissez leur classe au regard des annexes III et IV. Commencez par celui dont vous doutez, pas par le plus simple.', gain:'La classe commande la proc\u00e9dure, donc le budget et le calendrier. Un seul produit de classe II impose un calendrier d\u2019organisme notifi\u00e9 \u00e0 toute l\u2019organisation.', tip:'En classe I, la case \u00ab\u00a0normes harmonis\u00e9es appliqu\u00e9es int\u00e9gralement\u00a0\u00bb d\u00e9cide de tout. Appliqu\u00e9es en partie, ou pas encore publi\u00e9es, comptent comme non appliqu\u00e9es \u2014 les trois cas m\u00e8nent chez l\u2019organisme notifi\u00e9.'},
+      {id:'cra-ecarts', label:'Analyse d\u2019\u00e9cart \u2014 annexe I', action:'Cotez les vingt et une exigences essentielles. Faites la partie II en premier si vous h\u00e9sitez.', gain:'S\u00e9pare ce qui se corrige dans le produit de ce qui se corrige dans l\u2019organisation \u2014 deux plans d\u2019action, deux budgets, deux calendriers.', tip:'Le cas le plus courant n\u2019est pas un produit mal con\u00e7u : c\u2019est un produit conforme partie I dans une entreprise sans nomenclature logicielle, sans politique de divulgation coordonn\u00e9e et sans adresse de signalement.'},
+      {id:'parties', label:'Parties prenantes', action:'Qualifiez chaque acteur de votre cha\u00eene de valeur : fabricant, importateur, distributeur.', gain:'Le r\u00e8glement requalifie FABRICANT tout distributeur qui appose sa marque ou modifie substantiellement le produit \u2014 avec le signalement en 24 heures qui va avec.', tip:'Beaucoup d\u2019int\u00e9grateurs et de revendeurs sous marque propre sont dans ce cas et l\u2019ignorent. C\u2019est la requalification qui co\u00fbte le plus cher quand on la d\u00e9couvre tard.'},
+      {id:'templates', label:'Documentation & mod\u00e8les', action:'Pr\u00e9parez la documentation technique et la d\u00e9claration UE de conformit\u00e9.', gain:'Ce sont les pi\u00e8ces que l\u2019autorit\u00e9 de surveillance demande, et elles ne s\u2019\u00e9crivent pas le jour o\u00f9 elle les demande.', tip:'CE QUE SENTINEL NE PORTE PAS : les gabarits des annexes V et VII du CRA ne sont pas encore dans la biblioth\u00e8que. Les rattacher ici serait un renvoi trompeur \u2014 ils se r\u00e9digent aujourd\u2019hui \u00e0 partir du texte.'},
+      {id:'cadre-normatif', label:'Cadre normatif', action:'Regardez la colonne CRA en face de vos modules existants.', gain:'Montre ce que vous avez d\u00e9j\u00e0 fait pour l\u2019IA Act ou le RGPD qui sert aussi ici \u2014 et surtout ce qui ne sert pas.', tip:'Un tiret dans la colonne CRA n\u2019est pas une case oubli\u00e9e : c\u2019est que le r\u00e8glement ne dit rien de ce module. Les trois cadres comptent trois unit\u00e9s d\u2019analyse diff\u00e9rentes.'}
+    ]
+  },
+  {
     id: 'consultant_ia_cadrage',
     icon: '\U0001F9ED',
     role: 'Consultant IA \u2014 cadrage et architecture des cas d\u2019usage',
@@ -19483,6 +19531,13 @@ var GP_FAMILLES = [
      supposent un intitulé de poste. */
   { titre: 'Par rôle au sens du règlement',
     ids: ['role_deployeur', 'role_fournisseur'] },
+  /* LE CRA A SA FAMILLE, ET NON UNE PLACE DANS CELLE DE L'IA ACT. « Par rôle
+     au sens du règlement » ci-dessus dit DÉPLOYEUR et FOURNISSEUR — les deux
+     rôles du règlement sur l'IA. Y glisser le fabricant aurait mêlé deux
+     taxonomies qui ne se recouvrent pas : on peut être fournisseur d'un
+     système d'IA sans être fabricant d'un produit, et l'inverse. */
+  { titre: 'Produits num\u00e9riques \u2014 Cyber Resilience Act',
+    ids: ['cra_fabricant'] },
   /* LA VALEUR AVANT LA CONFORMITE, ET C'EST L'ORDRE DU METIER. Les seize
      parcours existants partent tous d'une obligation ou d'un poste. Celui-ci
      part d'un goulot d'etranglement operationnel : c'est la question qu'on
@@ -21867,3 +21922,263 @@ document.addEventListener('keydown', function(e){
     document.body.removeChild(a); URL.revokeObjectURL(a.href);
   };
 })();
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LE CYBER RESILIENCE ACT — règlement (UE) 2024/2847
+
+   CE QUE CET ÉCRAN NE CONTIENT PAS : aucun libellé d'annexe, aucune classe,
+   aucune exigence, aucun délai. Tout vient de /api/cra/referentiel. Recopier
+   ces listes ici aurait doublé la source de vérité ; au premier amendement du
+   règlement, l'écran et le moteur auraient dit deux choses différentes — et
+   c'est l'écran que le client lit.
+
+   CE QU'IL GARDE, LUI : l'état du registre. Les produits déclarés restent
+   dans la page, ne partent nulle part tant qu'on n'évalue pas, et ne sont pas
+   conservés : c'est un outil de qualification, pas un dépôt.
+   ═══════════════════════════════════════════════════════════════════════ */
+var CRA_REF = null;
+var CRA_ETAT = { produits: [], courant: 0, ecarts: {} };
+
+function craInit() {
+  if (CRA_REF) { craPeindre(); return; }
+  fetch('/api/cra/referentiel')
+    .then(function (r) { return r.json(); })
+    .then(function (j) {
+      if (!j || !j.ok) throw new Error('referentiel');
+      CRA_REF = j; craRemplirChamps(); craPeindre();
+    })
+    .catch(function () {
+      var e = document.getElementById('cra-calendrier');
+      if (e) e.textContent = 'Le référentiel du règlement est momentanément '
+        + 'indisponible. Rien n’est affiché plutôt qu’un tableau '
+        + 'partiel : sur un texte réglementaire, une liste tronquée qui ne dit '
+        + 'pas qu’elle l’est vaut moins que pas de liste du tout.';
+    });
+}
+window.craInit = craInit;
+
+function craEsc(t) {
+  return String(t == null ? '' : t).replace(/[&<>"]/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; });
+}
+
+function craRemplirChamps() {
+  var sc = document.getElementById('cra-classe');
+  var sr = document.getElementById('cra-role');
+  if (sc && !sc.options.length) {
+    var cl = CRA_REF.classes, ord = Object.keys(cl).sort(function (a, b) {
+      return cl[a].rang - cl[b].rang; });
+    ord.forEach(function (k) {
+      var o = document.createElement('option');
+      o.value = k; o.textContent = cl[k].nom; sc.appendChild(o); });
+  }
+  if (sr && !sr.options.length) {
+    Object.keys(CRA_REF.roles).forEach(function (k) {
+      /* « Requalifié fabricant » n'est pas un rôle qu'on CHOISIT : c'est un
+         constat que le règlement impose à un distributeur qui appose sa
+         marque. L'offrir au choix laisserait croire le contraire. */
+      if (k === 'devient_fabricant') return;
+      var o = document.createElement('option');
+      o.value = k; o.textContent = CRA_REF.roles[k].nom; sr.appendChild(o); });
+  }
+}
+
+function craPeindre() {
+  craCalendrier(); craAnnexes(); craRegistre(); craEcarts(); craSignalement();
+}
+
+function craCalendrier() {
+  var e = document.getElementById('cra-calendrier');
+  if (!e || !CRA_REF) return;
+  var c = CRA_REF.calendrier, h = '';
+  /* CE QUI EST DÉJÀ EN VIGUEUR PASSE DEVANT CE QUI VIENDRA, et c'est tout
+     l'objet de ce bandeau : le discours courant parle de « l'échéance de
+     décembre 2027 » alors que deux obligations courent déjà. */
+  c.en_vigueur.forEach(function (x) {
+    h += '<div class="cra-ech cra-ech-on"><b>EN VIGUEUR</b> depuis le '
+      + craEsc(x.date) + ' (' + x.jours + ' j) — ' + craEsc(x.objet)
+      + '<span class="cra-pq">' + craEsc(x.pourquoi) + '</span></div>'; });
+  c.a_venir.forEach(function (x) {
+    h += '<div class="cra-ech"><b>À VENIR</b> le ' + craEsc(x.date) + ' (dans '
+      + (-x.jours) + ' j) — ' + craEsc(x.objet)
+      + '<span class="cra-pq">' + craEsc(x.pourquoi) + '</span></div>'; });
+  e.innerHTML = h;
+}
+
+function craAnnexes() {
+  var e = document.getElementById('cra-annexes');
+  if (!e || !CRA_REF) return;
+  function liste(titre, tab, art) {
+    return '<details class="cra-det"><summary>' + craEsc(titre) + ' — '
+      + tab.length + ' catégories <span class="cra-art">' + craEsc(art)
+      + '</span></summary><ul class="cra-ul">'
+      + tab.map(function (x) { return '<li>' + craEsc(x) + '</li>'; }).join('')
+      + '</ul></details>';
+  }
+  e.innerHTML = liste('Produits importants — classe I', CRA_REF.annexe_iii_i, 'annexe III')
+    + liste('Produits importants — classe II', CRA_REF.annexe_iii_ii, 'annexe III')
+    + liste('Produits critiques', CRA_REF.annexe_iv, 'annexe IV');
+}
+
+function craAjouter() {
+  var nom = (document.getElementById('cra-nom') || {}).value || '';
+  if (!nom.trim()) return;
+  CRA_ETAT.produits.push({
+    nom: nom.trim(),
+    marche_ue: !!(document.getElementById('cra-marche') || {}).checked,
+    classe: (document.getElementById('cra-classe') || {}).value || 'ordinaire',
+    role: (document.getElementById('cra-role') || {}).value || 'fabricant',
+    normes_harmonisees: !!(document.getElementById('cra-normes') || {}).checked
+  });
+  document.getElementById('cra-nom').value = '';
+  craRegistre();
+}
+window.craAjouter = craAjouter;
+
+function craVider() { CRA_ETAT.produits = []; craRegistre(); }
+window.craVider = craVider;
+
+function craRegistre() {
+  var e = document.getElementById('cra-registre');
+  if (!e) return;
+  if (!CRA_ETAT.produits.length) {
+    e.innerHTML = '<div class="veille-loading">Aucun produit déclaré. '
+      + 'Ajoutez-en un pour obtenir sa procédure.</div>'; return; }
+  e.innerHTML = '<div class="veille-loading">Évaluation…</div>';
+  fetch('/api/cra/evaluer', { method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ produits: CRA_ETAT.produits }) })
+    .then(function (r) { return r.json(); })
+    .then(function (j) { craRendreParc(j); })
+    .catch(function () {
+      e.innerHTML = '<div class="veille-loading">L’évaluation n’a pas '
+        + 'abouti. Rien n’est affiché plutôt qu’un résultat partiel.</div>'; });
+}
+
+function craRendreParc(j) {
+  var e = document.getElementById('cra-registre');
+  if (!e) return;
+  if (!j || !j.ok) { e.innerHTML = '<div class="veille-loading">Déclaration '
+    + 'refusée : ' + craEsc((j || {}).motif || 'illisible') + '.</div>'; return; }
+  var h = '';
+  if (j.commande) {
+    /* CE QUI COMMANDE L'EFFORT N'EST PAS LA MOYENNE DU PARC. Un seul produit
+       de classe II impose un calendrier d'organisme notifié à toute
+       l'organisation ; un taux moyen ne décrit aucun produit réel. */
+    h += '<div class="cra-cmd"><b>Ce qui commande votre calendrier</b> — «&nbsp;'
+      + craEsc(j.commande.nom) + '&nbsp;», ' + craEsc(j.commande.classe.nom)
+      + '.<span class="cra-pq">' + craEsc(j.dit) + '</span></div>';
+  }
+  h += '<div class="cn-scroll"><table class="cn-table"><thead><tr>'
+    + '<th>Produit</th><th>Périmètre</th><th>Classe</th>'
+    + '<th>Procédures ouvertes</th><th>Organisme notifié</th></tr></thead><tbody>';
+  (j.produits || []).concat(j.hors_perimetre || []).forEach(function (p) {
+    var dans = p.perimetre.dans;
+    h += '<tr><td><b>' + craEsc(p.nom) + '</b></td>'
+      + '<td>' + (dans ? 'dans le périmètre'
+        : '<span class="cra-hors">hors — ' + craEsc(p.perimetre.motif) + '</span>') + '</td>'
+      + '<td>' + craEsc(p.classe.nom) + '</td>'
+      + '<td>' + (dans ? p.routes.map(function (r) {
+          return craEsc(r.nom); }).join('<br>') : '—') + '</td>'
+      + '<td>' + (!dans ? '—' : (p.organisme_notifie
+          ? '<b class="cra-on">OUI</b>' : 'non')) + '</td></tr>';
+    if (dans && p.bascule) {
+      /* LA BASCULE, ÉCRITE SOUS LA LIGNE QU'ELLE EXPLIQUE. « Vous passez par
+         un organisme notifié » ferme la discussion ; « vous y passez PARCE
+         QUE, et vous n'y passeriez pas sinon » ouvre un chantier chiffrable. */
+      h += '<tr class="cra-basc"><td colspan="5"><b>Ce qui fait basculer</b> — '
+        + craEsc(p.bascule.fait) + ' : <b>'
+        + (p.bascule.etat ? 'oui' : 'non') + '</b>. ' + craEsc(p.bascule.dit)
+        + ' <span class="cra-art">' + craEsc(p.bascule.article) + '</span></td></tr>';
+    }
+  });
+  h += '</tbody></table></div>';
+  e.innerHTML = h;
+}
+
+function craEcarts() {
+  var e = document.getElementById('cra-ec-body');
+  if (!e || !CRA_REF) return;
+  var h = '';
+  [['I', 'Propriétés du produit', 'se vérifie sur une version du produit'],
+   ['II', 'Gestion des vulnérabilités',
+    'se vérifie sur l’organisation, et vaut pendant toute la période d’assistance']
+  ].forEach(function (pa) {
+    var t = CRA_REF.exigences[pa[0]] || [];
+    h += '<div class="cn-group"><div class="cn-group-t">Annexe I, partie '
+      + pa[0] + ' — ' + craEsc(pa[1]) + ' <span class="cra-art">'
+      + craEsc(pa[2]) + '</span></div><div class="cn-scroll">'
+      + '<table class="cn-table"><thead><tr><th>Exigence</th><th>Ce qu’elle '
+      + 'demande</th><th>État</th></tr></thead><tbody>';
+    t.forEach(function (x) {
+      h += '<tr><td><b>' + craEsc(x[1]) + '</b></td><td>' + craEsc(x[2])
+        + '</td><td><select class="cra-in" data-ex="' + craEsc(x[0])
+        + '" onchange="craCoter(this)">'
+        + '<option value="">non renseigné</option>'
+        + '<option value="conforme">conforme</option>'
+        + '<option value="partiel">partiel</option>'
+        + '<option value="absent">absent</option>'
+        + '<option value="sans_objet">sans objet</option></select></td></tr>';
+    });
+    h += '</tbody></table></div></div>';
+  });
+  h += '<div id="cra-ec-bilan" class="cra-cmd"></div>';
+  e.innerHTML = h;
+  craBilanEcarts();
+}
+
+function craCoter(sel) {
+  CRA_ETAT.ecarts[sel.getAttribute('data-ex')] = sel.value;
+  craBilanEcarts();
+}
+window.craCoter = craCoter;
+
+function craBilanEcarts() {
+  var e = document.getElementById('cra-ec-bilan');
+  if (!e || !CRA_REF) return;
+  fetch('/api/cra/evaluer', { method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ nom: 'analyse', marche_ue: true,
+      classe: 'ordinaire', ecarts: CRA_ETAT.ecarts }) })
+    .then(function (r) { return r.json(); })
+    .then(function (j) {
+      if (!j || !j.ok) return;
+      var c = j.ecarts;
+      /* LE TAUX NE PART JAMAIS SEUL. Un taux de 100 % sur trois exigences
+         renseignées ne dit rien des dix-huit autres — et c'est celui-là
+         qu'on montre en comité. */
+      e.innerHTML = '<b>' + (c.taux === null ? '—' : c.taux + '&nbsp;%')
+        + ' de conformité déclarée</b> sur ' + c.retenus + ' exigence(s) '
+        + 'retenue(s), <b>' + c.non_renseigne + ' non renseignée(s)</b> sur '
+        + c.total + '.<span class="cra-pq">Une exigence non renseignée n’est '
+        + 'pas une exigence conforme : elle n’entre pas au numérateur.</span>';
+    })
+    .catch(function () { });
+}
+
+function craSignalement() {
+  var e = document.getElementById('cra-sig-body');
+  if (!e || !CRA_REF) return;
+  var h = '<div class="cra-cmd"><b>Destinataires</b> — '
+    + craEsc(CRA_REF.destinataires.dit) + '<span class="cra-art">'
+    + craEsc(CRA_REF.destinataires.article) + '</span></div>';
+  Object.keys(CRA_REF.signalement).forEach(function (k) {
+    var s = CRA_REF.signalement[k];
+    h += '<div class="cn-group"><div class="cn-group-t">' + craEsc(s.nom)
+      + ' <span class="cra-art">' + craEsc(s.article) + '</span></div>'
+      + '<p class="page-lead" style="margin:6px 0 10px">'
+      + craEsc(s.declencheur) + '</p><div class="cn-scroll">'
+      + '<table class="cn-table"><thead><tr><th>Étape</th><th>Délai</th>'
+      + '<th>Ce qui est transmis</th></tr></thead><tbody>';
+    s.etapes.forEach(function (x) {
+      var d = x.delai_h < 48 ? (x.delai_h + ' h')
+        : (x.delai_h / 24 >= 30 ? '1 mois' : (x.delai_h / 24) + ' jours');
+      h += '<tr><td><b>' + craEsc(x.nom) + '</b></td><td><b class="cra-on">'
+        + d + '</b>' + (x.depuis ? '<br><span class="cra-pq">à compter de '
+        + craEsc(x.depuis) + '</span>' : '') + '</td><td>'
+        + craEsc(x.contenu) + '</td></tr>';
+    });
+    h += '</tbody></table></div></div>';
+  });
+  e.innerHTML = h;
+}

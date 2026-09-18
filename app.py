@@ -1670,6 +1670,62 @@ def reserve_abonne_page(f):
 # aucun appel a un modele de langage n'y intervient : rien a minimiser,
 # rien a declarer au registre.
 # ══════════════════════════════════════════════════════════════════
+import cra  # noqa: E402  — le Cyber Resilience Act rendu calculable. À ne
+# pas confondre avec les modules IA Act : le CRA compte des PRODUITS, pas des
+# systèmes d'IA, et ses rôles (fabricant, importateur, distributeur) ne sont
+# pas ceux du règlement sur l'IA.
+
+
+@app.route('/api/cra/referentiel', methods=['GET'])
+@rate_limit(limit=120, window=60)
+def api_cra_referentiel():
+    """Le référentiel du CRA — classes, procédures, rôles, exigences, dates.
+
+    POURQUOI UNE ROUTE PLUTÔT QU'UNE TABLE DANS LA PAGE. L'écran ne recopie
+    AUCUN libellé d'annexe : il les demande. Une liste recopiée dans le
+    JavaScript aurait divergé du moteur au premier amendement du règlement, et
+    la divergence se serait vue chez le client, pas ici.
+    """
+    return jsonify({
+        "ok": True,
+        "source": cra.SOURCE,
+        "calendrier": cra.calendrier(),
+        "classes": {c: dict(v, cle=c) for c, v in cra.CLASSES.items()},
+        "procedures": {c: dict(v, cle=c) for c, v in cra.PROCEDURES.items()},
+        "roles": {c: dict(v, cle=c) for c, v in cra.ROLES.items()},
+        "exclusions": cra.EXCLUSIONS,
+        "clause_generale": cra.CLAUSE_GENERALE,
+        "annexe_iii_i": cra.ANNEXE_III_I,
+        "annexe_iii_ii": cra.ANNEXE_III_II,
+        "annexe_iv": cra.ANNEXE_IV,
+        "exigences": {"I": cra.ANNEXE_I_I, "II": cra.ANNEXE_I_II},
+        "signalement": cra.SIGNALEMENT,
+        "destinataires": cra.DESTINATAIRES,
+    })
+
+
+@app.route('/api/cra/evaluer', methods=['POST'])
+@rate_limit(limit=120, window=60)
+def api_cra_evaluer():
+    """Un produit, ou un parc — la route accepte LES DEUX FORMES.
+
+    Une charge portant « produits » (liste) est un parc ; sinon c'est un
+    produit isolé. Les deux existent parce qu'un fabricant n'a jamais un seul
+    produit, et qu'un intégrateur qui en qualifie un seul ne doit pas avoir à
+    en déclarer douze pour obtenir sa réponse.
+    """
+    d = request.get_json(silent=True) or {}
+    try:
+        if isinstance(d.get("produits"), list):
+            r = cra.evaluer_parc(d["produits"])
+        else:
+            r = cra.evaluer_produit(d)
+    except Exception:
+        app.logger.exception("evaluation CRA")
+        return jsonify({"ok": False, "erreur": "evaluation_impossible"}), 500
+    return jsonify(r), (200 if r.get("ok") else 400)
+
+
 import observatoire_ia  # noqa: E402
 
 OBS_TTL = 1800  # cache de la reponse assemblee (30 min) ; les fetcheurs
