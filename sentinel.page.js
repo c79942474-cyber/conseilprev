@@ -942,6 +942,8 @@ var PAGE_META = {
      écrite dans la barre latérale : son unité d'analyse est le PRODUIT. */
   cra:              { section: 'CRA — PRODUITS', label: 'Produits & classification' },
   'cra-ecarts':     { section: 'CRA — PRODUITS', label: 'Analyse d\u2019écart' },
+  'cra-role':       { section: 'CRA — PRODUITS', label: 'Qualifier mon rôle' },
+  'cra-chiffre':    { section: 'CRA — PRODUITS', label: 'Exposition chiffrée' },
   'cra-signalement':{ section: 'CRA — PRODUITS', label: 'Signalement art. 14' },
     'rgpd-hub': { section: 'RGPD & PRIVACY', label: 'Vue d\u2019ensemble' },
     'rgpd-conformite': { section: 'RGPD & PRIVACY', label: 'Conformité RGPD' },
@@ -9532,6 +9534,22 @@ var PAGE_GUIDES = {
   // La troisième section de chaque guide dit ce que le module NE fait pas :
   // sur un texte réglementaire, c'est la seule qui empêche de prendre une
   // aide à la qualification pour un avis de conformité.
+  'cra-role': {
+    title: "Quel rôle le règlement vous donne",
+    sections: [
+      {h:"À quoi sert cette page", t:"À répondre avant tout le reste à la question dont dépend tout le reste : qu’êtes-vous, au sens du CRA ? Le règlement ne regarde pas votre métier ni votre raison sociale, il regarde ce que vous faites du produit. Deux gestes ordinaires du commerce changent le rôle sans changer le métier — apposer son nom sur un produit qu’on revend, et apporter une modification substantielle à un produit déjà sur le marché."},
+      {h:"Comment l’utiliser", t:"Cochez ce que vous faites réellement, pas ce qui figure dans votre plaquette. Si le verdict est « requalifié fabricant » ou « intégrateur », lisez la ligne « étendue » : elle dit si vous répondez de la partie que vous avez modifiée ou du produit entier, et c’est cette ligne-là qui décide de l’ampleur de la documentation technique à produire. Le chemin suivi est affiché sous le verdict : il sert à le contester."},
+      {h:"Ce qu’elle ne fait pas", t:"Elle ne tranche pas en droit. La notion de « modification substantielle » s’apprécie au regard de la cybersécurité du produit, non de l’ampleur technique du changement : un correctif mineur qui rouvre une surface d’attaque peut l’être, une refonte qui n’y touche pas peut ne pas l’être. Cette page vous dit où regarder et ce qui est en jeu ; elle ne remplace pas l’analyse sur le produit réel."}
+    ]
+  },
+  'cra-chiffre': {
+    title: "Exposition chiffrée — article 64",
+    sections: [
+      {h:"À quoi sert cette page", t:"À donner au comité de direction le seul chiffre du CRA qui soit exact et opposable : les trois paliers d’amende de l’article 64, en euros et en pourcentage du chiffre d’affaires mondial. « 15 millions OU 2,5 % » n’est pas un choix de l’autorité — c’est le plus élevé des deux, et il existe donc un chiffre d’affaires en dessous duquel le montant fixe commande toujours."},
+      {h:"Comment l’utiliser", t:"Saisissez le chiffre d’affaires annuel mondial en millions d’euros. La colonne « ce qui commande » dit, pour votre taille, si c’est le montant fixe ou le pourcentage — et à partir de quel seuil cela bascule : 600 M€ pour le palier lourd, 500 M€ pour les deux autres. Une PME qui lit « 2,5 % de mon chiffre d’affaires » entend un chiffre dix fois trop bas : c’est 15 millions qui s’appliquent à elle."},
+      {h:"Ce qu’elle ne fait pas", t:"Elle ne chiffre PAS le coût de votre mise en conformité — ni jours-homme, ni honoraires d’organisme notifié. Ces chiffres ne sont ni dans le règlement ni publics de façon fiable, et les inventer produirait un document qui a l’air d’un devis sans en être un : il serait cité en comité. Et les montants affichés sont des PLAFONDS, jamais des prévisions : l’article 64, §5 impose de tenir compte de la nature, de la gravité et de la durée de l’infraction, des antécédents de l’opérateur et de sa taille. Le régime de sanctions lui-même est fixé par chaque État membre."}
+    ]
+  },
   'cra': {
     title: "Cyber Resilience Act — produits & classification",
     sections: [
@@ -18771,16 +18789,70 @@ var DC_MILLESIME = "2026-08-d";
 var GUIDED_PATHS = [
   {
     id: 'cra_fabricant',
-    icon: '\u{1F6E1}\uFE0F',
-    role: 'Fabricant de produits comportant des \u00e9l\u00e9ments num\u00e9riques \u2014 Cyber Resilience Act',
-    pitch: 'Le r\u00e8glement (UE) 2024/2847 s\u2019applique en d\u00e9cembre 2027 \u2014 mais son article 14 court DEPUIS LE 11 SEPTEMBRE 2026, et le chapitre IV depuis juin. Ce parcours part de ce qui est d\u00e9j\u00e0 exigible, puis remonte vers ce qui se pr\u00e9pare : classer, mesurer l\u2019\u00e9cart, et savoir si un organisme notifi\u00e9 doit entrer dans votre calendrier.',
+    icon: '\u{1F3ED}',
+    role: "Fabricant — je conçois et je mets sur le marché",
+    pitch: "Vous répondez de l’article 13 et de l’article 14 : exigences essentielles, documentation technique, déclaration UE de conformité, marquage CE, et le signalement en vingt-quatre heures qui court DEPUIS LE 11 SEPTEMBRE 2026. Ce parcours part de ce qui est déjà exigible, puis remonte vers ce qui se prépare.",
     steps: [
-      {id:'cra-signalement', label:'Signalement \u2014 article 14', action:'Lisez les deux m\u00e9caniques AVANT d\u2019en avoir besoin : vuln\u00e9rabilit\u00e9 activement exploit\u00e9e et incident grave. Rep\u00e9rez qui, chez vous, peut d\u00e9clencher une alerte pr\u00e9coce un vendredi soir.', gain:'C\u2019est la seule obligation du CRA dont le retard se compte aujourd\u2019hui : vingt-quatre heures pour l\u2019alerte, soixante-douze pour la notification.', tip:'La notification part SIMULTAN\u00c9MENT au CSIRT coordinateur et \u00e0 l\u2019ENISA, par la plateforme unique de l\u2019article 16. Pr\u00e9venir l\u2019un puis l\u2019autre n\u2019est pas ce que le texte demande \u2014 et c\u2019est l\u2019erreur la plus facile \u00e0 commettre sous la pression du d\u00e9lai.'},
-      {id:'cra', label:'Produits & classification', action:'D\u00e9clarez vos produits et choisissez leur classe au regard des annexes III et IV. Commencez par celui dont vous doutez, pas par le plus simple.', gain:'La classe commande la proc\u00e9dure, donc le budget et le calendrier. Un seul produit de classe II impose un calendrier d\u2019organisme notifi\u00e9 \u00e0 toute l\u2019organisation.', tip:'En classe I, la case \u00ab\u00a0normes harmonis\u00e9es appliqu\u00e9es int\u00e9gralement\u00a0\u00bb d\u00e9cide de tout. Appliqu\u00e9es en partie, ou pas encore publi\u00e9es, comptent comme non appliqu\u00e9es \u2014 les trois cas m\u00e8nent chez l\u2019organisme notifi\u00e9.'},
-      {id:'cra-ecarts', label:'Analyse d\u2019\u00e9cart \u2014 annexe I', action:'Cotez les vingt et une exigences essentielles. Faites la partie II en premier si vous h\u00e9sitez.', gain:'S\u00e9pare ce qui se corrige dans le produit de ce qui se corrige dans l\u2019organisation \u2014 deux plans d\u2019action, deux budgets, deux calendriers.', tip:'Le cas le plus courant n\u2019est pas un produit mal con\u00e7u : c\u2019est un produit conforme partie I dans une entreprise sans nomenclature logicielle, sans politique de divulgation coordonn\u00e9e et sans adresse de signalement.'},
-      {id:'parties', label:'Parties prenantes', action:'Qualifiez chaque acteur de votre cha\u00eene de valeur : fabricant, importateur, distributeur.', gain:'Le r\u00e8glement requalifie FABRICANT tout distributeur qui appose sa marque ou modifie substantiellement le produit \u2014 avec le signalement en 24 heures qui va avec.', tip:'Beaucoup d\u2019int\u00e9grateurs et de revendeurs sous marque propre sont dans ce cas et l\u2019ignorent. C\u2019est la requalification qui co\u00fbte le plus cher quand on la d\u00e9couvre tard.'},
-      {id:'templates', label:'Documentation & mod\u00e8les', action:'Pr\u00e9parez la documentation technique et la d\u00e9claration UE de conformit\u00e9.', gain:'Ce sont les pi\u00e8ces que l\u2019autorit\u00e9 de surveillance demande, et elles ne s\u2019\u00e9crivent pas le jour o\u00f9 elle les demande.', tip:'CE QUE SENTINEL NE PORTE PAS : les gabarits des annexes V et VII du CRA ne sont pas encore dans la biblioth\u00e8que. Les rattacher ici serait un renvoi trompeur \u2014 ils se r\u00e9digent aujourd\u2019hui \u00e0 partir du texte.'},
-      {id:'cadre-normatif', label:'Cadre normatif', action:'Regardez la colonne CRA en face de vos modules existants.', gain:'Montre ce que vous avez d\u00e9j\u00e0 fait pour l\u2019IA Act ou le RGPD qui sert aussi ici \u2014 et surtout ce qui ne sert pas.', tip:'Un tiret dans la colonne CRA n\u2019est pas une case oubli\u00e9e : c\u2019est que le r\u00e8glement ne dit rien de ce module. Les trois cadres comptent trois unit\u00e9s d\u2019analyse diff\u00e9rentes.'}
+      {id:'cra-signalement', label:"Signalement — article 14", action:"Lisez les deux mécaniques AVANT d’en avoir besoin. Repérez qui, chez vous, peut déclencher une alerte précoce un vendredi soir.", gain:"C’est la seule obligation du CRA dont le retard se compte aujourd’hui : 24 h pour l’alerte, 72 h pour la notification.", tip:"La notification part SIMULTANÉMENT au CSIRT coordinateur et à l’ENISA, par la plateforme unique de l’article 16. Prévenir l’un puis l’autre n’est pas ce que le texte demande."},
+      {id:'cra', label:"Produits & classification", action:"Déclarez vos produits et choisissez leur classe. Commencez par celui dont vous doutez, pas par le plus simple.", gain:"La classe commande la procédure, donc le budget et le calendrier.", tip:"En classe I, la case « normes harmonisées appliquées intégralement » décide de tout. Appliquées en partie, ou pas encore publiées, comptent comme non appliquées."},
+      {id:'cra-ecarts', label:"Analyse d’écart — annexe I", action:"Cotez les vingt et une exigences. Faites la partie II en premier si vous hésitez.", gain:"Sépare ce qui se corrige dans le produit de ce qui se corrige dans l’organisation.", tip:"Le cas le plus courant n’est pas un produit mal conçu : c’est un produit conforme partie I dans une entreprise sans nomenclature logicielle ni politique de divulgation coordonnée."},
+      {id:'parties', label:"Parties prenantes", action:"Qualifiez chaque acteur de votre chaîne de valeur, et consignez qui vous fournit quoi.", gain:"L’article 23 vous oblige à dire, sur demande, qui vous a fourni un produit et à qui vous l’avez fourni — ce qui suppose de l’avoir noté au moment de la transaction.", tip:"Vos revendeurs qui apposent leur marque deviennent fabricants à votre place sur ces exemplaires : ils l’ignorent presque toujours, et cela vous revient en réclamation."},
+      {id:'templates', label:"Documentation & modèles", action:"Préparez la documentation technique et la déclaration UE de conformité.", gain:"Ce sont les pièces que l’autorité de surveillance demande, et elles ne s’écrivent pas le jour où elle les demande.", tip:"CE QUE SENTINEL NE PORTE PAS : les gabarits des annexes V et VII du CRA ne sont pas dans la bibliothèque. Les rattacher ici serait un renvoi trompeur."},
+      {id:'cra-chiffre', label:"Exposition chiffrée", action:"Regardez à quel palier vos manquements exposent, et à partir de quel chiffre d’affaires le pourcentage dépasse le montant fixe.", gain:"Les exigences de l’annexe I et les articles 13 et 14 relèvent du palier le plus lourd : 15 M€ ou 2,5 % du chiffre d’affaires mondial.", tip:"Sous 600 M€ de chiffre d’affaires, c’est le montant fixe qui commande. Une PME qui lit « 2,5 % » se rassure à tort."},
+      {id:'cadre-normatif', label:"Cadre normatif", action:"Regardez la colonne CRA en face de vos modules existants.", gain:"Montre ce que vous avez déjà fait pour l’IA Act ou le RGPD qui sert aussi ici — et surtout ce qui ne sert pas.", tip:"Un tiret dans la colonne CRA n’est pas une case oubliée : c’est que le règlement ne dit rien de ce module."},
+    ]
+  },
+  {
+    id: 'cra_importateur',
+    icon: '\u{1F6E5}\uFE0F',
+    role: "Importateur — je mets sur le marché un produit venu d’ailleurs",
+    pitch: "Votre métier n’est pas de concevoir : c’est de VÉRIFIER, avant la mise sur le marché, que le fabricant a fait ce qu’il devait — et d’être en mesure de le PROUVER. L’article 19 énumère ce qu’il faut regarder ; ce parcours en fait une liste de contrôle et un endroit où ranger les preuves.",
+    steps: [
+      {id:'cra-role', label:"Qualifier mon rôle", action:"Commencez par là, avant tout inventaire.", gain:"Un importateur qui appose sa marque, ou qui modifie substantiellement, N’EST PLUS importateur : il est fabricant, avec le signalement en 24 h.", tip:"C’est la découverte la plus coûteuse du CRA quand elle arrive tard. Elle se fait ici en une minute."},
+      {id:'cra', label:"Produits & classification", action:"Classez ce que vous importez : la classe dit quelle procédure le fabricant devait suivre.", gain:"Vous ne pouvez pas vérifier « la procédure appropriée » sans savoir laquelle était appropriée.", tip:"Un produit de classe II sans intervention d’organisme notifié est non conforme, quelle que soit la qualité du dossier fourni."},
+      {id:'rag', label:"Base de connaissance", action:"Déposez la documentation technique, la déclaration UE de conformité et les instructions de l’annexe II reçues du fabricant.", gain:"L’article 19 exige que vous soyez EN MESURE DE FOURNIR les documents prouvant la conformité — pas seulement de les avoir vus.", tip:"Vérifiez la LANGUE : l’annexe II doit être compréhensible par les utilisateurs ET par les autorités de surveillance de l’État où vous mettez sur le marché. Un manuel en anglais seul ne suffit pas partout."},
+      {id:'evals', label:"Mes évaluations", action:"Consignez chaque vérification, produit par produit, avec sa date.", gain:"Une vérification non tracée est une vérification qui n’a pas eu lieu, du point de vue d’une autorité.", tip:"Notez aussi ce que vous avez REFUSÉ de mettre sur le marché : c’est la preuve la plus convaincante que la diligence est réelle."},
+      {id:'cra-chiffre', label:"Exposition chiffrée", action:"Regardez le palier auquel l’article 19 vous expose.", gain:"Les obligations des articles 18 à 23 relèvent du palier intermédiaire : 10 M€ ou 2 % du chiffre d’affaires mondial.", tip:"Mais le jour où vous êtes requalifié fabricant, vous basculez au palier lourd — 15 M€ ou 2,5 %. La requalification coûte, aussi, en exposition."},
+    ]
+  },
+  {
+    id: 'cra_distributeur',
+    icon: '\u{1F4E6}',
+    role: "Distributeur — je mets à disposition sans concevoir ni importer",
+    pitch: "L’article 20 vous demande la diligence requise : vérifier le marquage, vérifier que le fabricant ET l’importateur ont fait leur part, et surtout que les documents vous ont été COMMUNIQUÉS. Puis, si quelque chose cloche, faire prendre les mesures correctives — ou faire retirer.",
+    steps: [
+      {id:'cra-role', label:"Qualifier mon rôle", action:"Commencez par là.", gain:"Un distributeur qui revend sous sa marque, ou qui modifie substantiellement, devient fabricant — article 21, sans transition et sans avertissement.", tip:"C’est le cas de tous les revendeurs sous marque propre. Le geste est commercial ; sa conséquence est réglementaire."},
+      {id:'cra', label:"Produits & classification", action:"Classez ce que vous distribuez.", gain:"La classe vous dit si un organisme notifié devait intervenir — donc ce que vous devez voir dans le dossier.", tip:"Vous n’avez pas à refaire l’évaluation ; vous avez à constater qu’elle a eu lieu."},
+      {id:'roadmap', label:"Plan d’action", action:"Écrivez à l’avance la procédure de mesure corrective et de retrait.", gain:"L’article 20, §4 vous oblige à faire prendre les mesures correctives ou à faire retirer — ce qui suppose de savoir joindre le fabricant, et sous quel délai.", tip:"Une procédure de retrait improvisée met des semaines. Écrite à froid, elle met des jours — et c’est la différence que l’autorité regardera."},
+      {id:'veille', label:"Veille qualifiée", action:"Branchez la veille sur les produits et les composants que vous distribuez.", gain:"Vous devez informer sans retard injustifié dès que vous avez des raisons de croire à un risque important — encore faut-il l’apprendre.", tip:"« Des raisons de croire, sur la base des informations en sa possession » : ce que vous recevez et ne lisez pas compte comme information en votre possession. Un bulletin de sécurité non ouvert ne vous dispense de rien."},
+      {id:'cra-chiffre', label:"Exposition chiffrée", action:"Situez votre palier.", gain:"L’article 20 relève du palier intermédiaire ; la requalification de l’article 21, du palier lourd.", tip:"Le troisième palier — 5 M€ ou 1 % — vise les informations inexactes données aux autorités. Répondre vite et mal à une demande coûte plus cher que répondre lentement et juste."},
+    ]
+  },
+  {
+    id: 'cra_integrateur',
+    icon: '\u{1F527}',
+    role: "Intégrateur — je modifie substantiellement un produit déjà sur le marché",
+    pitch: "L’article 22 vise « une personne autre que le fabricant, l’importateur ou le distributeur » qui apporte une modification substantielle et met le produit à disposition. C’est l’infogéreur, le maître d’œuvre, l’assembleur de solution — et c’est le rôle le plus souvent ignoré, parce que celui qui l’exerce ne se pense pas fabricant.",
+    steps: [
+      {id:'cra-role', label:"Qualifier mon rôle", action:"Répondez d’abord à la question de l’étendue : votre modification touche-t-elle la cybersécurité de l’ENSEMBLE du produit ?", gain:"De cette seule réponse dépend si vous répondez de la partie modifiée ou du produit entier — donc l’étendue de la documentation technique à produire.", tip:"« Substantielle » s’apprécie au regard de la cybersécurité, pas de l’ampleur technique. Un correctif mineur qui rouvre une surface d’attaque peut l’être ; une refonte qui n’y touche pas peut ne pas l’être."},
+      {id:'registre', label:"Registre", action:"Inventoriez ce que vous assemblez, composant par composant, avec ses versions.", gain:"Vous ne pouvez pas dire ce que vous avez modifié si vous ne savez pas ce que vous aviez.", tip:"C’est aussi la base de la nomenclature logicielle que l’annexe I, partie II exige : elle se constitue au fil de l’intégration, jamais après."},
+      {id:'cra-ecarts', label:"Analyse d’écart — annexe I", action:"Cotez les exigences sur le périmètre que votre modification vous fait porter.", gain:"Si la modification n’affecte pas l’ensemble, vous ne cotez que la partie modifiée — et vous devez pouvoir le justifier.", tip:"Justifiez par écrit le périmètre retenu. Un périmètre restreint sans justification est le premier point qu’une autorité attaquera."},
+      {id:'matrice', label:"Matrice risques", action:"Évaluez ce que votre modification change au risque du produit assemblé.", gain:"C’est l’argument qui établit si la modification affecte l’ensemble, ou non.", tip:"Cette analyse EST la justification du périmètre de l’étape précédente. Sans elle, le choix du périmètre n’est qu’une affirmation."},
+      {id:'cra-signalement', label:"Signalement — article 14", action:"Vous en répondez aussi, sur votre périmètre.", gain:"L’article 22 vous soumet aux articles 13 ET 14 : le compte à rebours de 24 h vous concerne depuis le 11 septembre 2026.", tip:"Accordez-vous avec le fabricant d’origine sur qui signale quoi. À défaut, vous signalerez tous les deux, ou aucun — et le second cas est le plus fréquent."},
+      {id:'cra-chiffre', label:"Exposition chiffrée", action:"Situez votre palier.", gain:"L’article 22 vous place au palier lourd — celui des articles 13 et 14 : 15 M€ ou 2,5 %.", tip:"Le même geste commercial qui vous a fait intégrateur vous a fait changer de palier. C’est le chiffre à porter au comité qui décide d’industrialiser une offre d’intégration."},
+    ]
+  },
+  {
+    id: 'cra_chiffre',
+    icon: '\u{1F4CA}',
+    role: "Parcours chiffré — ce que le règlement chiffre lui-même",
+    pitch: "Un parcours pour la direction financière et le comité de risques. Il ne prétend PAS estimer un coût de mise en conformité — ni jours-homme ni honoraires : ces chiffres ne sont ni dans le texte ni publics de façon fiable. Il chiffre ce que le règlement chiffre : trois paliers d’amende, et le seuil de chiffre d’affaires où le pourcentage prend le relais du montant fixe.",
+    steps: [
+      {id:'cra-chiffre', label:"Exposition chiffrée", action:"Saisissez le chiffre d’affaires annuel mondial et lisez les trois paliers.", gain:"« 15 M€ OU 2,5 % » n’est pas un choix de l’autorité : c’est le plus élevé des deux. Il existe donc un seuil, et il est à 600 M€.", tip:"Sous ce seuil, une PME est exposée à 15 M€ quel que soit son chiffre d’affaires. C’est le contraire de ce que « 2,5 % » laisse entendre, et c’est le premier chiffre à corriger en comité."},
+      {id:'cra-ecarts', label:"Analyse d’écart — annexe I", action:"Comptez les exigences non couvertes : ce sont elles qui ouvrent le palier lourd.", gain:"Relie l’exposition à des faits vérifiables plutôt qu’à une crainte générale.", tip:"Une exigence NON RENSEIGNÉE n’est pas une exigence conforme. Un taux calculé sur trois lignes ne dit rien des dix-huit autres — et c’est celui-là qu’on montre en comité."},
+      {id:'cra', label:"Produits & classification", action:"Comptez les produits qui passent par un organisme notifié.", gain:"C’est ce nombre, et non un taux de conformité, qui fixe le CALENDRIER : la désignation de ces organismes n’a commencé qu’en juin 2026.", tip:"Un seul produit de classe II impose un calendrier d’organisme notifié à toute l’organisation. La moyenne du parc ne décrit aucun produit réel."},
+      {id:'sanctions', label:"Calculateur de sanctions", action:"Comparez avec le régime de l’IA Act.", gain:"Les deux règlements ont des paliers DISTINCTS, sur des faits distincts : un même incident peut relever des deux, et les amendes ne se compensent pas.", tip:"Ne les additionnez pas mécaniquement pour autant. Ce sont deux régimes, deux autorités, et l’article 64, §5 impose de tenir compte des sanctions déjà infligées pour une infraction similaire."},
+      {id:'report', label:"Vue direction", action:"Constituez le dossier : exposition, écarts, produits en organisme notifié, jours restants.", gain:"Le comité n’arbitre pas sur un règlement, il arbitre sur des montants et des dates.", tip:"Présentez le palier comme un PLAFOND, jamais comme une prévision. L’article 64, §5 module selon la nature, la durée, les antécédents et la taille — un chiffre unique présenté comme certain se retourne contre celui qui l’avance."},
     ]
   },
   {
@@ -19537,7 +19609,8 @@ var GP_FAMILLES = [
      taxonomies qui ne se recouvrent pas : on peut être fournisseur d'un
      système d'IA sans être fabricant d'un produit, et l'inverse. */
   { titre: 'Produits num\u00e9riques \u2014 Cyber Resilience Act',
-    ids: ['cra_fabricant'] },
+    ids: ['cra_fabricant', 'cra_importateur', 'cra_distributeur',
+          'cra_integrateur', 'cra_chiffre'] },
   /* LA VALEUR AVANT LA CONFORMITE, ET C'EST L'ORDRE DU METIER. Les seize
      parcours existants partent tous d'une obligation ou d'un poste. Celui-ci
      part d'un goulot d'etranglement operationnel : c'est la question qu'on
@@ -21977,7 +22050,7 @@ function craRemplirChamps() {
       /* « Requalifié fabricant » n'est pas un rôle qu'on CHOISIT : c'est un
          constat que le règlement impose à un distributeur qui appose sa
          marque. L'offrir au choix laisserait croire le contraire. */
-      if (k === 'devient_fabricant') return;
+      if (k === 'requalifie' || k === 'integrateur') return;
       var o = document.createElement('option');
       o.value = k; o.textContent = CRA_REF.roles[k].nom; sr.appendChild(o); });
   }
@@ -21985,6 +22058,7 @@ function craRemplirChamps() {
 
 function craPeindre() {
   craCalendrier(); craAnnexes(); craRegistre(); craEcarts(); craSignalement();
+  craRolePeindre(); craExposition();
 }
 
 function craCalendrier() {
@@ -22180,5 +22254,144 @@ function craSignalement() {
     });
     h += '</tbody></table></div></div>';
   });
+  e.innerHTML = h;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CRA — QUALIFIER SON RÔLE, ET CHIFFRER SON EXPOSITION
+
+   LES QUESTIONS NE SONT PAS ÉCRITES ICI : elles le sont dans l'arbre du
+   moteur, qui rend sa TRACE avec le verdict. L'écran peint donc la trace au
+   lieu de tenir sa propre liste — sans quoi l'ordre des questions à l'écran
+   et l'ordre du raisonnement auraient divergé, et le client aurait vu un
+   chemin qui n'est pas celui qu'on a suivi.
+   ═══════════════════════════════════════════════════════════════════════ */
+var CRA_ROLE_Q = [
+  /* Les seules choses que l'écran tient : les libellés de SAISIE et l'ordre
+     dans lequel on les pose. Le raisonnement reste au moteur. */
+  {k:'je_concois',                     l:'Je conçois ou fais concevoir ce produit'},
+  {k:'fabricant_hors_union',           l:'Le fabricant est établi hors de l’Union, et c’est moi qui mets le produit sur le marché de l’Union'},
+  {k:'je_distribue',                   l:'Je le mets à disposition sans l’avoir conçu ni importé'},
+  {k:'sous_ma_marque',                 l:'Je le mets sur le marché sous MON nom ou MA marque'},
+  {k:'modification_substantielle',     l:'J’y apporte une modification substantielle'},
+  {k:'modification_affecte_ensemble',  l:'Cette modification a des répercussions sur la cybersécurité de l’ENSEMBLE du produit'}
+];
+var CRA_ROLE_ETAT = {};
+
+function craRolePeindre() {
+  var z = document.getElementById('cra-role-q');
+  if (!z || z.dataset.pret) return;
+  var h = '';
+  CRA_ROLE_Q.forEach(function (q) {
+    h += '<label class="cra-chk"><input type="checkbox" data-q="' + q.k
+      + '" onchange="craRoleCoche(this)"> ' + craEsc(q.l) + '</label>';
+  });
+  z.innerHTML = h;
+  z.dataset.pret = '1';
+  craRoleCalculer();
+}
+
+function craRoleCoche(el) {
+  CRA_ROLE_ETAT[el.getAttribute('data-q')] = !!el.checked;
+  craRoleCalculer();
+}
+window.craRoleCoche = craRoleCoche;
+
+function craRoleCalculer() {
+  var e = document.getElementById('cra-role-verdict');
+  if (!e) return;
+  fetch('/api/cra/role', { method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(CRA_ROLE_ETAT) })
+    .then(function (r) { return r.json(); })
+    .then(function (j) {
+      if (!j || !j.ok) return;
+      var h = '<div class="cra-cmd"><b>' + craEsc(j.role.nom) + '</b> — '
+        + craEsc(j.pourquoi) + '<span class="cra-art">'
+        + craEsc(j.role.article) + '</span></div>';
+      if (j.etendue) {
+        /* L'ÉTENDUE DÉCIDE DU COÛT, ET ELLE EST PEINTE À PART. « Vous êtes
+           fabricant » ne dit pas si la documentation technique porte sur une
+           carte réseau ou sur une baie entière. */
+        h += '<div class="cra-cmd"><b>Étendue de vos obligations</b> — '
+          + craEsc(j.etendue.dit) + '<span class="cra-art">'
+          + craEsc(j.etendue.article) + '</span></div>';
+      }
+      h += '<div class="cn-group"><div class="cn-group-t">Ce que ce rôle vous fait porter</div><ul class="cra-ul">';
+      (j.role.porte || []).forEach(function (x) { h += '<li>' + craEsc(x) + '</li>'; });
+      h += '</ul></div>';
+      h += '<div class="cn-group"><div class="cn-group-t">Et ce que TOUS portent, quel que soit le rôle <span class="cra-art">'
+        + craEsc(j.tracabilite.article) + '</span></div><p class="cra-pq" style="margin:0">'
+        + craEsc(j.tracabilite.dit) + '</p></div>';
+      h += '<div class="cn-group"><div class="cn-group-t">Le chemin suivi</div><div class="cn-scroll">'
+        + '<table class="cn-table"><thead><tr><th>Question</th><th>Réponse</th>'
+        + '<th>Ce qu’elle emporte</th></tr></thead><tbody>';
+      (j.trace || []).forEach(function (t) {
+        h += '<tr><td>' + craEsc(t.question) + '</td><td>'
+          + (t.reponse ? '<b class="cra-on">oui</b>' : 'non') + '</td><td>'
+          + craEsc(t.effet) + '</td></tr>';
+      });
+      h += '</tbody></table></div></div>';
+      e.innerHTML = h;
+    })
+    .catch(function () { });
+}
+
+function craExposition() {
+  var e = document.getElementById('cra-chiffre-body');
+  if (!e) return;
+  var v = (document.getElementById('cra-ca') || {}).value;
+  /* LA SAISIE EST EN MILLIONS, LE CALCUL EN EUROS. Demander des euros ferait
+     saisir « 45000000 » et produirait des fautes d'un facteur mille, dans les
+     deux sens, sur le seul chiffre qui commande le résultat. */
+  var ca = (v === '' || v === null || v === undefined) ? null : Number(v) * 1e6;
+  e.innerHTML = '<div class="veille-loading">Calcul…</div>';
+  fetch('/api/cra/exposition', { method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ chiffre_affaires: ca }) })
+    .then(function (r) { return r.json(); })
+    .then(function (j) { craRendreExposition(j); })
+    .catch(function () {
+      e.innerHTML = '<div class="veille-loading">Le calcul n’a pas abouti.</div>'; });
+}
+window.craExposition = craExposition;
+
+function craMEur(x) {
+  if (x === null || x === undefined) return '—';
+  return (x / 1e6).toLocaleString('fr-FR', { maximumFractionDigits: 1 }) + ' M€';
+}
+
+function craRendreExposition(j) {
+  var e = document.getElementById('cra-chiffre-body');
+  if (!e || !j || !j.ok) return;
+  var h = '';
+  if (!j.ca_declare) {
+    /* SANS CHIFFRE D'AFFAIRES, ON NE SUPPOSE PAS ZÉRO : on dit que le montant
+       fixe s'applique, et on dit pourquoi. Un tableau qui afficherait 0 %
+       laisserait croire à une exposition nulle. */
+    h += '<div class="cra-cmd">Aucun chiffre d’affaires déclaré : seuls '
+      + 'les montants fixes sont affichés. Ils constituent le <b>plancher</b> '
+      + 'de l’exposition, pas son plafond — au-delà d’un certain '
+      + 'chiffre d’affaires, c’est le pourcentage qui commande.</div>';
+  }
+  h += '<div class="cn-scroll"><table class="cn-table"><thead><tr>'
+    + '<th>Palier</th><th>Montant fixe</th><th>% du CA mondial</th>'
+    + '<th>Retenu</th><th>Ce qui commande</th></tr></thead><tbody>';
+  j.lignes.forEach(function (l) {
+    var pc = (l.part_ca * 100).toLocaleString('fr-FR', { maximumFractionDigits: 1 });
+    h += '<tr><td><b>' + craEsc(l.nom) + '</b><span class="cra-art">'
+      + craEsc(l.article) + '</span><span class="cra-pq">' + craEsc(l.vise)
+      + '</span></td>'
+      + '<td>' + craMEur(l.plafond_eur) + '</td>'
+      + '<td>' + pc + ' % = ' + craMEur(l.montant_part) + '</td>'
+      + '<td><b class="cra-on">' + craMEur(l.retenu_eur) + '</b></td>'
+      + '<td>' + (l.commande === 'pourcentage' ? 'le pourcentage' : 'le montant fixe')
+      + '<span class="cra-pq">bascule à ' + craMEur(l.seuil_bascule_eur)
+      + ' de chiffre d’affaires</span></td></tr>';
+  });
+  h += '</tbody></table></div>';
+  h += '<div class="cn-group"><div class="cn-group-t">Ce qui module le montant, et interdit de lire ces chiffres comme une prévision <span class="cra-art">art. 64, §5</span></div><ul class="cra-ul">';
+  (j.modulation || []).forEach(function (x) { h += '<li>' + craEsc(x) + '</li>'; });
+  h += '</ul></div>';
   e.innerHTML = h;
 }

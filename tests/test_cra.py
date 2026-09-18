@@ -24,6 +24,11 @@ import cra
 
 ICI = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+#: LES VUES DU MODULE, NOMMÉES UNE SEULE FOIS. Plusieurs règles balayent cette
+#: liste ; la tenir à deux endroits aurait garanti qu'une vue neuve soit
+#: contrôlée par l'une et ignorée par l'autre.
+VUES_CRA = ("cra-role", "cra", "cra-ecarts", "cra-chiffre", "cra-signalement")
+
 
 def _fichier(nom):
     return io.open(os.path.join(ICI, nom), encoding="utf-8").read()
@@ -299,8 +304,17 @@ def test_le_CRA_a_SON_groupe_de_premier_niveau_dans_la_barre_laterale():
     assert re.search(r'<div class="sb-section" data-grp="cra">.*?'
                      r'<span>CRA[^<]*</span>', h, re.S), \
         "le CRA n'a pas de section propre dans la barre latérale"
+    # ═══ ON NOMME LES VUES, ON NE LES COMPTE PAS ══════════════════════
+    # La première version comptait trois entrées. Elle est tombée le jour où
+    # le module en a gagné deux — pour la bonne raison, mais sans rien dire de
+    # ce qui manquait : un compte ne nomme pas la vue absente. Les nommer fait
+    # tomber la règle sur la seule chose qui compte, et le message dit quoi.
+    manquantes = [v for v in VUES_CRA if ("go('%s'," % v) not in h]
+    assert not manquantes, "vues CRA absentes de la barre : %s" % manquantes
     items = re.findall(r'<div class="sb-item" data-grp="cra"', h)
-    assert len(items) == 3, "%d vue(s) CRA au lieu de trois" % len(items)
+    assert len(items) == len(VUES_CRA), \
+        "%d entrées dans la barre pour %d vues déclarées : une vue est " \
+        "servie sans être déclarée ici, ou l'inverse" % (len(items), len(VUES_CRA))
 
 
 def _ecran_cra():
@@ -319,7 +333,7 @@ def _ecran_cra():
     """
     h = _fichier("sentinel.html")
     bouts = []
-    for vue in ("p-cra", "p-cra-ecarts", "p-cra-signalement"):
+    for vue in ("p-" + v for v in VUES_CRA):
         i = h.find('id="%s"' % vue)
         assert i > 0, "la vue « %s » a disparu" % vue
         bouts.append(h[i:h.find('<div class="page"', i + 10)])
@@ -501,3 +515,337 @@ def test_la_source_declare_sous_quelle_licence_elle_est_reprise():
     doit dire à quel titre."""
     assert "2011/833" in cra.SOURCE["licence"]
     assert "Journal officiel" in cra.SOURCE["licence"]
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  11. LES CINQ RÔLES — ET L'ARBRE QUI DIT LEQUEL EST LE VÔTRE
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# CE QUE CES RÈGLES GARDENT. Le CRA ne demande pas comment vous vous appelez,
+# il regarde ce que vous faites du produit. Deux gestes ordinaires du commerce
+# — apposer sa marque, modifier substantiellement — font de vous un fabricant.
+# Un arbre qui se tromperait là ferait travailler un revendeur sous les
+# obligations d'un distributeur alors qu'il porte celles d'un fabricant, dont
+# le signalement en vingt-quatre heures, déjà applicable.
+
+@pytest.mark.parametrize("declaration,attendu", [
+    ({"je_concois": True}, "fabricant"),
+    ({"fabricant_hors_union": True}, "importateur"),
+    ({}, "distributeur"),
+    ({"je_distribue": True}, "distributeur"),
+    # LES DEUX GESTES QUI REQUALIFIENT, chacun seul puis combinés.
+    ({"fabricant_hors_union": True, "sous_ma_marque": True}, "requalifie"),
+    ({"je_distribue": True, "sous_ma_marque": True}, "requalifie"),
+    ({"je_distribue": True, "modification_substantielle": True}, "requalifie"),
+    ({"fabricant_hors_union": True, "modification_substantielle": True}, "requalifie"),
+    # L'ARTICLE 22 — ni fabricant, ni importateur, ni distributeur.
+    ({"modification_substantielle": True}, "integrateur"),
+])
+def test_l_arbre_rend_LE_role_du_reglement_et_pas_celui_qu_on_croit(declaration, attendu):
+    q = cra.qualifier_role(declaration)
+    assert q["role"]["cle"] == attendu, \
+        "%s → %s au lieu de %s" % (declaration, q["role"]["cle"], attendu)
+
+
+def test_la_requalification_PRIME_sur_l_import():
+    """L'ORDRE DES TESTS EST CELUI DU RÈGLEMENT, PAS LE PLUS COMMODE.
+
+    Un importateur qui appose sa marque n'est pas « importateur et un peu
+    fabricant » : il EST fabricant. Tester l'import d'abord aurait rendu
+    « importateur » — réponse vraie en apparence, et qui masque la seule
+    information qui change quelque chose.
+    """
+    q = cra.qualifier_role({"fabricant_hors_union": True, "sous_ma_marque": True})
+    assert q["role"]["cle"] == "requalifie"
+    assert q["role"]["palier"] == "lourd", \
+        "la requalification n'emporte plus le palier de sanction du fabricant"
+
+
+def test_l_etendue_distingue_la_PARTIE_modifiee_du_produit_ENTIER():
+    """LA NUANCE QUI DÉCIDE DU COÛT, et que les résumés du CRA omettent.
+
+    L'article 22, §2 borne l'obligation à la partie modifiée — SAUF si la
+    modification a des répercussions sur la cybersécurité de l'ensemble. Entre
+    une carte réseau et une baie entière, l'étendue de la documentation
+    technique à produire n'est pas du même ordre.
+    """
+    partie = cra.qualifier_role({"modification_substantielle": True})
+    entier = cra.qualifier_role({"modification_substantielle": True,
+                                 "modification_affecte_ensemble": True})
+    assert partie["etendue"]["ensemble"] is False
+    assert entier["etendue"]["ensemble"] is True
+    assert "PARTIE" in partie["etendue"]["dit"]
+    assert "ENTIER" in entier["etendue"]["dit"]
+    assert partie["etendue"]["article"] == "art. 22, §2"
+
+
+def test_sans_modification_il_n_y_a_PAS_d_etendue_a_annoncer():
+    """Annoncer une étendue à un distributeur qui ne modifie rien lui ferait
+    chercher une frontière qui n'existe pas dans son cas."""
+    for d in ({}, {"je_concois": True}, {"fabricant_hors_union": True}):
+        assert cra.qualifier_role(d)["etendue"] is None
+
+
+def test_le_verdict_redescend_avec_le_CHEMIN_qui_y_mene():
+    """Une qualification juridique doit pouvoir se contester. Un verdict sans
+    son raisonnement ne le peut pas."""
+    q = cra.qualifier_role({"je_distribue": True, "sous_ma_marque": True})
+    assert len(q["trace"]) >= 4
+    for pas in q["trace"]:
+        assert pas["question"].strip() and pas["effet"].strip()
+    assert any(p["reponse"] for p in q["trace"]), \
+        "le chemin ne montre aucune réponse positive : il n'explique rien"
+
+
+def test_la_tracabilite_de_l_article_23_est_TENUE_A_PART_des_roles():
+    """Elle pèse sur TOUS les opérateurs. La ranger dans une fiche de rôle
+    aurait laissé croire que les autres en sont dispensés."""
+    assert "art. 23" in cra.TRACABILITE["article"]
+    for r in cra.ROLES.values():
+        assert not any("23" in x for x in r["porte"]), \
+            "l'article 23 est rattaché à un rôle particulier"
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  12. L'EXPOSITION CHIFFRÉE — ARTICLE 64
+# ═══════════════════════════════════════════════════════════════════════════
+
+@pytest.mark.parametrize("palier,seuil_m", [
+    ("lourd", 600), ("moyen", 500), ("leger", 500)])
+def test_le_seuil_ou_le_POURCENTAGE_depasse_le_montant_fixe(palier, seuil_m):
+    """LE CHIFFRE QUE PRESQUE TOUS LES RÉSUMÉS OUBLIENT.
+
+    « 15 millions OU 2,5 % » n'est pas un choix de l'autorité : c'est le plus
+    élevé des deux. Il existe donc un chiffre d'affaires en dessous duquel le
+    montant fixe commande TOUJOURS. Une PME qui lit « 2,5 % de mon chiffre
+    d'affaires » entend un chiffre dix fois trop bas.
+    """
+    assert cra.seuil_de_bascule(palier) == seuil_m * 10 ** 6
+
+
+@pytest.mark.parametrize("ca_m,commande", [
+    (12, "montant_fixe"),        # PME
+    (599, "montant_fixe"),       # juste sous le seuil
+    (600, "montant_fixe"),       # AU seuil : les deux sont égaux, le fixe tient
+    (601, "pourcentage"),        # juste au-dessus
+    (2400, "pourcentage"),       # ETI
+])
+def test_ce_qui_commande_bascule_AU_SEUIL_et_pas_avant(ca_m, commande):
+    l = cra.exposition(ca_m * 10 ** 6, ["lourd"])["lignes"][0]
+    assert l["commande"] == commande, \
+        "à %d M€, c'est « %s » qui commande et non « %s »" % (ca_m, l["commande"], commande)
+    assert l["retenu_eur"] == max(15 * 10 ** 6, ca_m * 10 ** 6 * 0.025)
+
+
+def test_sans_chiffre_d_affaires_on_ne_suppose_PAS_zero():
+    """Un chiffre d'affaires inconnu traité comme nul donnerait l'exposition
+    d'une entreprise sans activité — c'est-à-dire un tableau rassurant et
+    faux."""
+    e = cra.exposition(None)
+    assert e["ca_declare"] is False
+    for l in e["lignes"]:
+        assert l["montant_part"] is None
+        assert l["retenu_eur"] == cra.SANCTIONS[l["cle"]]["plafond_eur"]
+        assert l["commande"] == "montant_fixe"
+
+
+@pytest.mark.parametrize("mauvais", ["", "beaucoup", None, -1])
+def test_un_chiffre_d_affaires_illisible_retombe_sur_le_montant_fixe(mauvais):
+    e = cra.exposition(mauvais)
+    assert e["ca_declare"] is False
+
+
+def test_l_exposition_ne_rend_JAMAIS_un_montant_seul():
+    """L'article 64, §5 impose de tenir compte de la nature, de la gravité et
+    de la durée de l'infraction, des antécédents et de la taille. Un plafond
+    n'est pas une prévision, et l'afficher seul le ferait lire comme tel."""
+    e = cra.exposition(45 * 10 ** 6)
+    assert len(e["modulation"]) >= 3
+    assert "PLAFONDS" in e["reserve"]
+    assert "État membre" in e["reserve"], \
+        "la réserve ne dit plus que le régime est fixé par chaque État membre"
+
+
+def test_les_trois_paliers_sont_ORDONNES_sur_leurs_DEUX_bornes():
+    """Un palier « plus lourd » sur l'euro mais plus léger sur le pourcentage
+    inverserait le classement dès qu'on dépasse le seuil de bascule."""
+    ordre = sorted(cra.SANCTIONS, key=lambda c: cra.SANCTIONS[c]["rang"])
+    for a, b in zip(ordre, ordre[1:]):
+        assert cra.SANCTIONS[a]["plafond_eur"] > cra.SANCTIONS[b]["plafond_eur"]
+        assert cra.SANCTIONS[a]["part_ca"] > cra.SANCTIONS[b]["part_ca"]
+
+
+def test_chaque_role_dit_a_quel_palier_il_expose():
+    """Sans cela, le parcours chiffré ne pourrait pas relier un rôle à un
+    montant — et c'est exactement ce qu'on lui demande."""
+    for cle, r in cra.ROLES.items():
+        assert r["palier"] in cra.SANCTIONS, \
+            "le rôle « %s » n'expose à aucun palier connu" % cle
+    # ET LES DEUX RÔLES REQUALIFIÉS EXPOSENT AU PALIER LOURD, comme le
+    # fabricant : c'est ce qui rend la requalification coûteuse.
+    for cle in ("fabricant", "requalifie", "integrateur"):
+        assert cra.ROLES[cle]["palier"] == "lourd"
+    for cle in ("importateur", "distributeur"):
+        assert cra.ROLES[cle]["palier"] == "moyen"
+
+
+def test_les_routes_de_role_et_d_exposition_repondent():
+    c = _cli()
+    r = c.post("/api/cra/role", json={"je_distribue": True,
+                                      "sous_ma_marque": True}).get_json()
+    assert r["role"]["cle"] == "requalifie"
+    e = c.post("/api/cra/exposition",
+               json={"chiffre_affaires": 45 * 10 ** 6}).get_json()
+    assert e["lignes"][0]["retenu_eur"] == 15 * 10 ** 6
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  13. LES CINQ PARCOURS — CHACUN AVEC SES ÉTAPES PROPRES
+# ═══════════════════════════════════════════════════════════════════════════
+
+PARCOURS_CRA = ("cra_fabricant", "cra_importateur", "cra_distributeur",
+                "cra_integrateur", "cra_chiffre")
+
+#: COMBIEN D'ÉTAPES PROPRES UN PARCOURS DOIT PORTER. Deux, et c'est la
+#: discipline déjà écrite ailleurs dans ce dépôt pour les familles de
+#: parcours : en dessous, les distinguer n'apprend rien et il aurait fallu
+#: n'en écrire qu'un.
+PROPRES_MINIMUM = 2
+
+
+def _etapes_des_parcours():
+    js = _fichier("sentinel.page.js")
+    i = js.index("var GUIDED_PATHS = [")
+    j = js.index("var GP_FAMILLES", i)
+    bloc = js[i:j]
+    out = {}
+    for pid in PARCOURS_CRA:
+        k = bloc.index("id: '%s'," % pid)
+        fin = bloc.find("\n  {\n    id: '", k)
+        corps = bloc[k:fin if fin > 0 else len(bloc)]
+        out[pid] = re.findall(r"\{id:'([a-z0-9-]+)'", corps)
+    return out
+
+
+def test_les_cinq_parcours_du_CRA_existent_et_sont_dans_LEUR_famille():
+    js = _fichier("sentinel.page.js")
+    i = js.index("var GP_FAMILLES")
+    famille = js[i:js.index("];", i)]
+    k = famille.index("Cyber Resilience Act")
+    bloc = famille[k:k + 400]
+    for pid in PARCOURS_CRA:
+        assert "id: '%s'," % pid in js, "le parcours « %s » n'existe pas" % pid
+        assert pid in bloc, \
+            "« %s » n'est pas rattaché à la famille CRA" % pid
+
+
+@pytest.mark.parametrize("pid", PARCOURS_CRA)
+def test_chaque_parcours_CRA_porte_au_moins_deux_etapes_QUI_LUI_SONT_PROPRES(pid):
+    """S'ils portaient presque les mêmes étapes, les distinguer n'apprendrait
+    rien et il aurait fallu en écrire un seul. C'était d'ailleurs mon premier
+    arbitrage, et il était trop rapide : les articles 19, 20, 21 et 22 portent
+    chacun un geste propre, et cette règle mesure que les parcours le suivent.
+    """
+    t = _etapes_des_parcours()
+    autres = set()
+    for x, v in t.items():
+        if x != pid:
+            autres |= set(v)
+    propres = sorted(set(t[pid]) - autres)
+    assert len(propres) >= PROPRES_MINIMUM, \
+        "« %s » n'a que %d étape(s) propre(s) : %s — il se confond avec les " \
+        "autres parcours du CRA" % (pid, len(propres), propres)
+
+
+def test_chaque_parcours_de_ROLE_commence_par_ce_qui_le_distingue():
+    """L'ORDRE PORTE UNE DÉCISION, ET IL SE MESURE.
+
+    Les trois parcours qui ne sont PAS celui du fabricant commencent par la
+    qualification du rôle — parce que c'est précisément ce que leur lecteur
+    ignore : un revendeur sous marque propre qui commencerait par classer ses
+    produits le ferait sous un rôle qui n'est pas le sien, donc avec les
+    mauvaises obligations. Le fabricant, lui, sait ce qu'il est : son parcours
+    commence par ce qui court déjà, l'article 14.
+    """
+    t = _etapes_des_parcours()
+    assert t["cra_fabricant"][0] == "cra-signalement"
+    for pid in ("cra_importateur", "cra_distributeur", "cra_integrateur"):
+        assert t[pid][0] == "cra-role", \
+            "« %s » ne commence pas par la qualification du rôle" % pid
+    assert t["cra_chiffre"][0] == "cra-chiffre"
+
+
+def test_tous_les_parcours_CRA_menent_a_l_exposition_chiffree():
+    """C'est ce que « parcours chiffré » veut dire : non pas un parcours à
+    part que personne n'ouvre, mais un chiffre au bout de chaque chemin."""
+    t = _etapes_des_parcours()
+    for pid, etapes in t.items():
+        assert "cra-chiffre" in etapes, \
+            "« %s » ne mène pas à l'exposition chiffrée" % pid
+
+
+def test_les_deux_panneaux_neufs_ont_leur_guide():
+    """Un panneau sans guide retombe sur « Guide non encore disponible » —
+    c'est-à-dire sur un aveu, à l'endroit précis où le client cherche de
+    l'aide."""
+    js = _fichier("sentinel.page.js")
+    i = js.index("var PAGE_GUIDES = {")
+    bloc = js[i:i + 400000]
+    for vue in ("cra-role", "cra-chiffre"):
+        assert "'%s': {" % vue in bloc, "« %s » n'a pas de guide" % vue
+
+
+def test_le_parcours_chiffre_dit_ce_qu_il_NE_chiffre_PAS():
+    """LA RÈGLE QUI EMPÊCHE CE MODULE DE DEVENIR UN FAUX DEVIS.
+
+    Estimer un coût de mise en conformité — jours-homme, honoraires
+    d'organisme notifié — produirait un document qui a l'air d'un devis sans
+    en être un, et il serait cité en comité. Le parcours doit dire qu'il ne le
+    fait pas, et l'écran aussi.
+    """
+    js = _fichier("sentinel.page.js")
+    k = js.index("id: 'cra_chiffre',")
+    pitch = js[k:k + 1400]
+    assert "estimer" in pitch and "coût" in pitch
+    ecran = _ecran_cra()
+    assert "ne chiffre que ce que le texte chiffre" in ecran.lower()
+    assert "plafond" in ecran.lower()
+
+
+def test_la_garde_refuse_un_role_qui_n_expose_a_AUCUN_palier(monkeypatch):
+    """LE TROU QUE LA BATTERIE DE MUTATIONS A TROUVÉ.
+
+    La garde vérifiait déjà que chaque rôle dit à quel palier il expose — et
+    aucune règle ne l'éprouvait : neutraliser cette clause ne faisait tomber
+    personne. Or c'est elle qui empêche qu'un rôle ajouté demain entre dans le
+    parcours chiffré sans montant, et y apparaisse à zéro.
+    """
+    roles = {c: dict(v) for c, v in cra.ROLES.items()}
+    roles["distributeur"]["palier"] = "inconnu"
+    monkeypatch.setattr(cra, "ROLES", roles)
+    with pytest.raises(RuntimeError) as e:
+        cra._verifier()
+    assert "palier" in str(e.value)
+
+
+def test_la_garde_refuse_un_role_qui_ne_porte_AUCUNE_obligation(monkeypatch):
+    """Un rôle sans obligation écrite s'afficherait dans la qualification
+    comme une case vide — et le lecteur conclurait qu'il n'a rien à faire."""
+    roles = {c: dict(v) for c, v in cra.ROLES.items()}
+    roles["importateur"]["porte"] = []
+    monkeypatch.setattr(cra, "ROLES", roles)
+    with pytest.raises(RuntimeError) as e:
+        cra._verifier()
+    assert "obligation" in str(e.value)
+
+
+def test_la_garde_refuse_un_palier_ampute_d_une_de_ses_deux_bornes(monkeypatch):
+    """« Le montant le plus élevé étant retenu » suppose qu'il y en ait deux.
+    Un palier réduit au seul montant fixe ferait disparaître le pourcentage —
+    et l'exposition d'une ETI serait sous-estimée d'un ordre de grandeur."""
+    s = {c: dict(v) for c, v in cra.SANCTIONS.items()}
+    s["lourd"]["part_ca"] = 0
+    monkeypatch.setattr(cra, "SANCTIONS", s)
+    with pytest.raises(RuntimeError) as e:
+        cra._verifier()
+    assert "bornes" in str(e.value)

@@ -1701,7 +1701,48 @@ def api_cra_referentiel():
         "exigences": {"I": cra.ANNEXE_I_I, "II": cra.ANNEXE_I_II},
         "signalement": cra.SIGNALEMENT,
         "destinataires": cra.DESTINATAIRES,
+        "sanctions": {c: dict(v, cle=c, seuil_bascule_eur=cra.seuil_de_bascule(c))
+                      for c, v in cra.SANCTIONS.items()},
+        "modulation": cra.MODULATION,
+        "tracabilite": cra.TRACABILITE,
     })
+
+
+@app.route('/api/cra/role', methods=['POST'])
+@rate_limit(limit=120, window=60)
+def api_cra_role():
+    """Quel rôle le règlement vous donne — et le chemin qui y mène.
+
+    LE CHEMIN REDESCEND AVEC LE VERDICT, et ce n'est pas de l'ornement : une
+    qualification juridique doit pouvoir se contester, et un verdict sans son
+    raisonnement ne le peut pas.
+    """
+    d = request.get_json(silent=True) or {}
+    try:
+        return jsonify(cra.qualifier_role(d))
+    except Exception:
+        app.logger.exception("qualification de rôle CRA")
+        return jsonify({"ok": False, "erreur": "qualification_impossible"}), 500
+
+
+@app.route('/api/cra/exposition', methods=['POST'])
+@rate_limit(limit=120, window=60)
+def api_cra_exposition():
+    """L'exposition aux amendes de l'article 64, palier par palier.
+
+    ON NE CHIFFRE QUE CE QUE LE TEXTE CHIFFRE. Estimer un coût de mise en
+    conformité — jours-homme, honoraires d'organisme notifié — donnerait un
+    document qui a l'air d'un devis sans en être un, et il serait cité en
+    comité. Les montants de l'article 64 sont exacts et opposables ; ils se
+    calculent sur une seule donnée que le client possède.
+    """
+    d = request.get_json(silent=True) or {}
+    try:
+        return jsonify(cra.exposition(d.get("chiffre_affaires"),
+                                      d.get("paliers")))
+    except Exception:
+        app.logger.exception("exposition CRA")
+        return jsonify({"ok": False, "erreur": "calcul_impossible"}), 500
 
 
 @app.route('/api/cra/evaluer', methods=['POST'])

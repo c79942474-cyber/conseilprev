@@ -355,6 +355,7 @@ def procedures_ouvertes(classe, normes_harmonisees=False):
 ROLES = {
     "fabricant": {
         "nom": "Fabricant",
+        "rang": 0,
         "dit": "Conçoit ou fait concevoir le produit et le met sur le marché "
                "sous son nom ou sa marque.",
         "porte": ["exigences essentielles (annexe I)",
@@ -365,34 +366,338 @@ ROLES = {
                   "signalement art. 14 (24 h / 72 h)",
                   "période d'assistance et mises à jour de sécurité"],
         "article": "art. 13 · art. 14",
+        "palier": "lourd",
     },
     "importateur": {
         "nom": "Importateur",
+        "rang": 1,
         "dit": "Établi dans l'Union, met sur le marché un produit d'un "
                "fabricant établi hors de l'Union.",
-        "porte": ["vérifier que le fabricant a fait ce qu'il devait",
-                  "ne pas mettre sur le marché un produit non conforme",
-                  "informer le fabricant et les autorités d'un risque connu"],
-        "article": "art. 19 à 21",
+        # CE QUE L'IMPORTATEUR DOIT VÉRIFIER AVANT DE METTRE SUR LE MARCHÉ,
+        # point par point du texte — et non « vérifier que le fabricant a fait
+        # ce qu'il devait », qui ne dit pas quoi regarder.
+        "porte": ["la procédure d'évaluation de la conformité a bien été menée "
+                  "à bien par le fabricant (art. 32)",
+                  "le fabricant a établi la documentation technique",
+                  "le marquage CE est apposé, la déclaration UE de conformité "
+                  "et les instructions de l'annexe II accompagnent le produit",
+                  "ces informations sont RÉDIGÉES DANS UNE LANGUE aisément "
+                  "compréhensible par les utilisateurs ET par les autorités "
+                  "de surveillance",
+                  "être EN MESURE DE FOURNIR les documents qui le prouvent",
+                  "informer le fabricant et les autorités d'un risque "
+                  "important, y compris tiré de facteurs NON TECHNIQUES"],
+        "article": "art. 19",
+        "palier": "moyen",
     },
     "distributeur": {
         "nom": "Distributeur",
+        "rang": 2,
         "dit": "Met un produit à disposition sur le marché sans être ni "
                "fabricant ni importateur.",
-        "porte": ["vérifier marquage CE et documentation d'accompagnement",
-                  "agir avec la diligence requise",
-                  "informer en cas de non-conformité connue"],
-        "article": "art. 20 à 22",
+        "porte": ["agir avec la diligence requise",
+                  "vérifier que le marquage CE est apposé",
+                  "vérifier que le fabricant ET l'importateur se sont conformés "
+                  "à leurs obligations, et que tous les documents nécessaires "
+                  "lui ont été COMMUNIQUÉS",
+                  "ne pas mettre à disposition tant qu'un produit qu'il croit "
+                  "non conforme n'a pas été mis en conformité",
+                  "informer sans retard injustifié en cas de risque important",
+                  "faire prendre les mesures correctives, ou faire retirer"],
+        "article": "art. 20",
+        "palier": "moyen",
     },
-    "devient_fabricant": {
-        "nom": "Requalifié fabricant",
+    "requalifie": {
+        "nom": "Requalifié fabricant (art. 21)",
+        "rang": 3,
         "dit": "Un importateur ou un distributeur qui met le produit sur le "
-               "marché sous SON nom ou sa marque, ou qui le modifie "
-               "substantiellement, est réputé fabricant.",
-        "porte": ["toutes les obligations du fabricant"],
+               "marché sous SON propre nom ou SA propre marque, ou qui y "
+               "apporte une modification substantielle, EST un fabricant au "
+               "sens du règlement.",
+        "porte": ["toutes les obligations des articles 13 et 14",
+                  "y compris le signalement en 24 h, déjà applicable"],
+        "article": "art. 21",
+        "palier": "lourd",
+    },
+    # ═══ L'ACTEUR QUE LA PREMIÈRE VERSION DE CETTE TABLE N'AVAIT PAS ═══
+    #
+    # L'article 22 ne vise NI le fabricant, NI l'importateur, NI le
+    # distributeur : il vise « une personne physique ou morale, autre que »
+    # ceux-là, qui apporte une modification substantielle et met le produit à
+    # disposition. C'est l'intégrateur, l'infogéreur, le maître d'œuvre qui
+    # livre une solution assemblée — et c'est le rôle le plus fréquemment
+    # ignoré, parce que celui qui l'exerce ne se pense pas « fabricant ».
+    #
+    # ET SA PORTÉE N'EST PAS CELLE DES AUTRES. Il répond pour LA PARTIE
+    # modifiée — ou pour LE PRODUIT ENTIER si la modification a des
+    # répercussions sur la cybersécurité de l'ensemble. Cette nuance-là décide
+    # de l'étendue de la documentation technique à produire, donc du coût.
+    "integrateur": {
+        "nom": "Intégrateur — modification substantielle (art. 22)",
+        "rang": 4,
+        "dit": "Toute personne, autre que le fabricant, l'importateur ou le "
+               "distributeur, qui apporte une modification substantielle à un "
+               "produit déjà sur le marché et le met à disposition.",
+        "porte": ["les obligations des articles 13 et 14 SUR LA PARTIE "
+                  "modifiée",
+                  "ou SUR LE PRODUIT ENTIER si la modification a des "
+                  "répercussions sur sa cybersécurité d'ensemble"],
         "article": "art. 22",
+        "palier": "lourd",
     },
 }
+
+#: CE QUE TOUS PORTENT, QUEL QUE SOIT LE RÔLE — et qui n'est dans aucune
+#: fiche ci-dessus parce que le rattacher à l'une d'elles laisserait croire
+#: que les autres en sont dispensées.
+TRACABILITE = {
+    "nom": "Identification des opérateurs économiques",
+    "dit": "Sur demande des autorités de surveillance : le nom et l'adresse "
+           "de qui vous a fourni le produit, et de qui vous l'avez fourni. "
+           "Cela suppose de le savoir — donc de l'avoir consigné au moment de "
+           "la transaction, pas au moment de la demande.",
+    "article": "art. 23",
+}
+
+
+def qualifier_role(declaration=None):
+    """QUEL RÔLE LE RÈGLEMENT VOUS DONNE — et non celui que vous croyez avoir.
+
+    ═══ POURQUOI CETTE FONCTION EXISTE ═══════════════════════════════════
+    Le CRA ne demande pas comment vous vous appelez : il regarde ce que vous
+    FAITES du produit. Deux gestes ordinaires du commerce changent le rôle
+    sans changer le métier :
+
+      · apposer SON nom ou SA marque sur un produit qu'on revend ;
+      · apporter une MODIFICATION SUBSTANTIELLE à un produit déjà sur le
+        marché.
+
+    L'un et l'autre font de vous un fabricant — avec la documentation
+    technique, la déclaration UE de conformité, et le signalement en
+    vingt-quatre heures qui est déjà applicable. Un revendeur sous marque
+    propre, un infogéreur qui durcit un équipement, un intégrateur qui livre
+    une solution assemblée sont dans ce cas et l'ignorent le plus souvent.
+
+    ═══ CE QU'ELLE REND, ET POURQUOI PAS SEULEMENT UN RÔLE ═══════════════
+    Elle rend le rôle ET le chemin qui y mène, question par question. Un
+    verdict sans son chemin ne se conteste pas — or celui-ci doit pouvoir
+    l'être : c'est une qualification juridique, et elle se vérifie sur les
+    faits réels, pas sur des cases.
+    """
+    d = declaration or {}
+    trace = []
+
+    def noter(question, reponse, effet):
+        trace.append({"question": question, "reponse": bool(reponse),
+                      "effet": effet})
+        return bool(reponse)
+
+    marque = noter("Mettez-vous le produit sur le marché sous VOTRE nom ou "
+                   "VOTRE marque ?", d.get("sous_ma_marque"),
+                   "art. 21 — vous êtes fabricant")
+    modif = noter("Apportez-vous une MODIFICATION SUBSTANTIELLE à un produit "
+                  "déjà mis sur le marché ?", d.get("modification_substantielle"),
+                  "art. 21 ou 22 — vous êtes fabricant pour ce que vous modifiez")
+    concoit = noter("Concevez-vous ou faites-vous concevoir ce produit ?",
+                    d.get("je_concois"), "art. 3 — vous êtes fabricant d'origine")
+    importe = noter("Le fabricant est-il établi HORS de l'Union, et "
+                    "mettez-vous vous-même le produit sur le marché de "
+                    "l'Union ?", d.get("fabricant_hors_union"),
+                    "art. 19 — vous êtes importateur")
+
+    # ═══ L'ORDRE DE CES TESTS EST CELUI DU RÈGLEMENT, PAS LE PLUS COMMODE.
+    # La requalification PRIME : un importateur qui appose sa marque n'est
+    # pas « importateur ET un peu fabricant », il EST fabricant. Tester
+    # l'import d'abord aurait rendu « importateur » et masqué la seule
+    # réponse qui change quelque chose.
+    if concoit and not modif:
+        cle, pourquoi = "fabricant", "Vous concevez le produit et le mettez " \
+            "sur le marché : vous êtes fabricant d'origine."
+    elif marque or (modif and (importe or d.get("je_distribue"))):
+        cle, pourquoi = "requalifie", "Vous apposez votre marque ou vous " \
+            "modifiez substantiellement un produit que vous revendez : le " \
+            "règlement vous tient pour fabricant."
+    elif modif:
+        cle, pourquoi = "integrateur", "Vous n'êtes ni le fabricant, ni " \
+            "l'importateur, ni le distributeur, et vous modifiez " \
+            "substantiellement : l'article 22 vous tient pour fabricant."
+    elif importe:
+        cle, pourquoi = "importateur", "Vous mettez sur le marché de l'Union " \
+            "un produit d'un fabricant établi hors de l'Union."
+    else:
+        cle, pourquoi = "distributeur", "Vous mettez le produit à disposition " \
+            "sans le concevoir, l'importer, le marquer ni le modifier."
+
+    etendue = None
+    if cle in ("integrateur", "requalifie") and modif:
+        # LA NUANCE QUI DÉCIDE DU COÛT. L'article 22, §2 borne l'obligation à
+        # la PARTIE modifiée — sauf si la modification a des répercussions sur
+        # la cybersécurité du produit dans son ensemble, auquel cas elle porte
+        # sur le produit entier. Entre les deux, l'étendue de la documentation
+        # technique à produire n'est pas du même ordre.
+        ensemble = bool(d.get("modification_affecte_ensemble"))
+        etendue = {
+            "ensemble": ensemble,
+            "dit": ("La modification a des répercussions sur la cybersécurité "
+                    "de l'ensemble : vos obligations portent sur LE PRODUIT "
+                    "ENTIER." if ensemble else
+                    "Vos obligations portent sur LA PARTIE modifiée — à "
+                    "condition que la modification n'ait pas de répercussions "
+                    "sur la cybersécurité de l'ensemble du produit."),
+            "article": "art. 22, §2",
+        }
+    return {"ok": True, "role": dict(ROLES[cle], cle=cle), "pourquoi": pourquoi,
+            "etendue": etendue, "trace": trace, "tracabilite": TRACABILITE,
+            "reserve": "Cette qualification suit ce qui est déclaré. Elle "
+                       "s'établit en droit sur les faits réels — notamment la "
+                       "notion de « modification substantielle », qui "
+                       "s'apprécie au regard de la cybersécurité du produit "
+                       "et non de l'ampleur technique du changement.",
+            "source": SOURCE}
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  L'ARTICLE 64 — CE QUE LE RÈGLEMENT CHIFFRE LUI-MÊME
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# POURQUOI CE MODULE NE CHIFFRE QUE CELA. On lui a demandé un « parcours
+# chiffré », et il y a deux façons de le faire. La première consiste à
+# estimer un coût de mise en conformité — tant de jours-homme, tant pour un
+# organisme notifié. Aucun de ces chiffres n'est dans le règlement, aucun
+# n'est public de façon fiable, et les inventer donnerait un document qui a
+# l'air d'un devis sans en être un : c'est la pire des deux erreurs, parce
+# qu'il serait cité en comité.
+#
+# LA SECONDE CONSISTE À CHIFFRER CE QUE LE TEXTE CHIFFRE. L'article 64 pose
+# trois paliers d'amende, en euros et en pourcentage du chiffre d'affaires
+# mondial, « le montant le plus élevé étant retenu ». C'est exact, c'est
+# opposable, et cela se calcule à partir d'une seule donnée que le client
+# possède : son chiffre d'affaires. Le reste — nombre de produits chez
+# l'organisme notifié, jours restants, exigences non couvertes — sort déjà
+# des autres écrans.
+#
+# LE SEUIL QUE PRESQUE TOUS LES RÉSUMÉS OUBLIENT. « 15 millions OU 2,5 % »
+# n'est pas un choix de l'autorité : c'est le plus élevé des deux. Il existe
+# donc un chiffre d'affaires en dessous duquel le montant fixe commande
+# TOUJOURS, et au-dessus duquel le pourcentage prend le relais. Pour le
+# palier lourd, ce basculement se fait à 600 millions d'euros. Une PME qui
+# lit « 2,5 % de mon chiffre d'affaires » se rassure à tort : c'est
+# 15 millions qui s'appliquent à elle.
+
+SANCTIONS = {
+    "lourd": {
+        "rang": 0,
+        "nom": "Exigences essentielles et obligations du fabricant",
+        "vise": "Le non-respect des exigences essentielles de cybersécurité "
+                "de l'annexe I et des obligations des articles 13 et 14.",
+        "plafond_eur": 15000000,
+        "part_ca": 0.025,
+        "article": "art. 64, §2",
+    },
+    "moyen": {
+        "rang": 1,
+        "nom": "Obligations des autres opérateurs et de la procédure",
+        "vise": "Le non-respect des obligations des articles 18 à 23, 28, "
+                "30 §1-4, 31 §1-4, 32 §1-2-3, 33 §5, 39, 41, 47, 49 et 53.",
+        "plafond_eur": 10000000,
+        "part_ca": 0.02,
+        "article": "art. 64, §3",
+    },
+    "leger": {
+        "rang": 2,
+        "nom": "Informations inexactes aux organismes notifiés et aux autorités",
+        "vise": "La fourniture d'informations inexactes, incomplètes ou "
+                "trompeuses aux organismes notifiés et aux autorités de "
+                "surveillance du marché, en réponse à une demande.",
+        "plafond_eur": 5000000,
+        "part_ca": 0.01,
+        "article": "art. 64, §4",
+    },
+}
+
+#: CE QUE L'AUTORITÉ PREND EN COMPTE POUR FIXER LE MONTANT — et qui interdit
+#: de présenter le plafond comme une prévision. Repris de l'article 64, §5.
+MODULATION = (
+    "la nature, la gravité et la durée de l'infraction et de ses conséquences",
+    "l'existence d'amendes déjà infligées au même opérateur pour une "
+    "infraction similaire",
+    "la taille de l'entreprise, en particulier s'il s'agit d'une micro, "
+    "petite ou moyenne entreprise, y compris une jeune entreprise",
+)
+
+
+def seuil_de_bascule(palier):
+    """LE CHIFFRE D'AFFAIRES À PARTIR DUQUEL LE POURCENTAGE COMMANDE.
+
+    En dessous, le montant fixe s'applique toujours ; au-dessus, le
+    pourcentage. C'est la seule façon de répondre honnêtement à « combien
+    est-ce que je risque » — une PME à qui l'on cite « 2,5 % du chiffre
+    d'affaires » entend un chiffre dix fois trop bas.
+    """
+    p = SANCTIONS[palier]
+    return int(round(p["plafond_eur"] / p["part_ca"]))
+
+
+def exposition(chiffre_affaires=None, paliers=None):
+    """L'exposition maximale, palier par palier, pour un chiffre d'affaires.
+
+    `paliers` restreint aux paliers réellement en cause ; sans lui, les trois
+    sont rendus — parce qu'un opérateur qui ne sait pas encore lesquels le
+    concernent doit voir les trois avant de choisir.
+
+    ═══ CE QUE CETTE FONCTION REFUSE DE FAIRE ════════════════════════════
+    Elle ne rend JAMAIS un montant unique. L'article 64, §5 impose de tenir
+    compte de la nature de l'infraction, de sa durée, des antécédents et de
+    la taille de l'entreprise : un plafond n'est pas une prévision, et
+    l'afficher seul le ferait lire comme tel. Chaque ligne porte donc le
+    plafond ET ce qui le module.
+
+    SANS CHIFFRE D'AFFAIRES, ELLE REND LE MONTANT FIXE ET LE DIT. Elle ne
+    suppose pas zéro : un chiffre d'affaires inconnu traité comme nul
+    donnerait l'exposition d'une entreprise sans activité.
+    """
+    ca = None
+    if chiffre_affaires is not None:
+        try:
+            ca = float(chiffre_affaires)
+        except (TypeError, ValueError):
+            ca = None
+        if ca is not None and ca < 0:
+            ca = None
+    cles = [c for c in (paliers or SANCTIONS) if c in SANCTIONS]
+    cles.sort(key=lambda c: SANCTIONS[c]["rang"])
+    lignes = []
+    for c in cles:
+        p = SANCTIONS[c]
+        part = None if ca is None else ca * p["part_ca"]
+        retenu = p["plafond_eur"] if part is None else max(p["plafond_eur"], part)
+        lignes.append({
+            "cle": c, "nom": p["nom"], "vise": p["vise"],
+            "article": p["article"],
+            "plafond_eur": p["plafond_eur"], "part_ca": p["part_ca"],
+            "montant_part": part,
+            "retenu_eur": retenu,
+            # CE QUI COMMANDE, NOMMÉ. « Le montant le plus élevé étant
+            # retenu » est la phrase du texte ; dire LEQUEL commande pour CE
+            # chiffre d'affaires est ce qui la rend utilisable.
+            "commande": ("montant_fixe" if part is None or p["plafond_eur"] >= part
+                         else "pourcentage"),
+            "seuil_bascule_eur": seuil_de_bascule(c),
+        })
+    return {
+        "ok": True,
+        "chiffre_affaires": ca,
+        "ca_declare": ca is not None,
+        "lignes": lignes,
+        "modulation": MODULATION,
+        "reserve": "Ces montants sont des PLAFONDS, pas des prévisions. "
+                   "L'article 64, §5 impose de tenir compte de la nature, de "
+                   "la gravité et de la durée de l'infraction, des "
+                   "antécédents de l'opérateur et de sa taille. Le régime de "
+                   "sanctions lui-même est fixé par chaque État membre.",
+        "article": "art. 64",
+        "source": SOURCE,
+    }
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -775,6 +1080,41 @@ def _verifier():
             fautes.append("« %s » n'a pas trois étapes" % cle)
     if not SOURCE.get("licence"):
         fautes.append("la source ne dit pas sous quelle licence elle est reprise")
+    # ── LES RÔLES ────────────────────────────────────────────────────────
+    rangs = sorted(r["rang"] for r in ROLES.values())
+    if rangs != list(range(len(ROLES))):
+        fautes.append("les rangs de rôle ne sont pas 0..n : %s" % rangs)
+    for cle, r in ROLES.items():
+        if r.get("palier") not in SANCTIONS:
+            fautes.append("le rôle « %s » ne dit pas à quel palier de sanction "
+                          "il expose" % cle)
+        if not r.get("porte"):
+            fautes.append("le rôle « %s » ne porte aucune obligation" % cle)
+    # ── LES PALIERS ──────────────────────────────────────────────────────
+    r2 = sorted(p["rang"] for p in SANCTIONS.values())
+    if r2 != list(range(len(SANCTIONS))):
+        fautes.append("les rangs de palier ne sont pas 0..n : %s" % r2)
+    for cle, p in SANCTIONS.items():
+        if not (p.get("plafond_eur") and p.get("part_ca")):
+            fautes.append("le palier « %s » n'a pas ses DEUX bornes — un "
+                          "palier qui n'en aurait qu'une ferait disparaître "
+                          "le « montant le plus élevé étant retenu »" % cle)
+    # LE PALIER LE PLUS LOURD EST BIEN LE PLUS LOURD, sur les deux bornes.
+    ordre = sorted(SANCTIONS, key=lambda c: SANCTIONS[c]["rang"])
+    for a, b in zip(ordre, ordre[1:]):
+        if not (SANCTIONS[a]["plafond_eur"] > SANCTIONS[b]["plafond_eur"]
+                and SANCTIONS[a]["part_ca"] > SANCTIONS[b]["part_ca"]):
+            fautes.append("le palier « %s » n'est pas plus lourd que « %s » "
+                          "sur les deux bornes" % (a, b))
+    # CHAQUE ARBRE DE QUALIFICATION MÈNE À UN RÔLE DE LA TABLE.
+    for d in ({}, {"sous_ma_marque": True}, {"je_concois": True},
+              {"fabricant_hors_union": True},
+              {"modification_substantielle": True},
+              {"modification_substantielle": True, "fabricant_hors_union": True}):
+        q = qualifier_role(d)
+        if q["role"]["cle"] not in ROLES:
+            fautes.append("l'arbre de qualification rend un rôle inconnu : %s"
+                          % q["role"]["cle"])
     if fautes:
         raise RuntimeError("cra — table incohérente : " + " ; ".join(fautes))
     return fautes
