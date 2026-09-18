@@ -80,8 +80,45 @@ import sys
 import pytest
 
 
+def gardiens(module):
+    """TOUT CE QUI, DANS L'APPLICATION, SAIT REFUSER UN APPELANT.
+
+    ═══ CE QUE CETTE FONCTION RÉPARE, ET CE QU'ELLE PROLONGE ═════════════
+    La remise à zéro dérivait déjà les ATTRIBUTS d'un limiteur plutôt que de
+    les nommer — le raisonnement est en tête de ce fichier : « un sixième,
+    ajouté demain, ne serait pas nettoyé ». Elle ÉNUMÉRAIT pourtant l'objet :
+    `getattr(module, "limiter")`, et lui seul.
+
+    OR IL Y EN AVAIT DÉJÀ DEUX. `bf_protector` — un `BruteForceProtector`
+    clé `login:<courriel>` — bloque cinq minutes après cinq connexions
+    ratées, puis jusqu'à une heure. Rien ne le vidait. Reproduit sans rien
+    supposer : cinq échecs, la remise à zéro nettoie ses cinq attributs de
+    `limiter`, et la connexion suivante sur ce courriel reçoit 429 là où
+    l'essai attend 200. C'est l'intermittence observée en recette complète,
+    verte au second passage parce que le blocage expire.
+
+    LE MÊME ARGUMENT, D'UN CRAN PLUS HAUT. On ne nomme donc plus l'objet non
+    plus : on retient tout ce qui expose `is_blocked` — c'est-à-dire tout ce
+    qui peut faire échouer l'essai suivant en refusant un appelant. Un
+    troisième gardien ajouté demain sera nettoyé sans que personne y pense.
+
+    LES CLASSES SONT ÉCARTÉES. `RateLimiter` et `BruteForceProtector` exposent
+    `is_blocked` elles aussi ; elles ne portent aucun état d'exécution, et
+    vider leurs attributs de classe reviendrait à démonter le module.
+    """
+    for nom, valeur in sorted(vars(module).items()):
+        if nom.startswith("_") or isinstance(valeur, type):
+            continue
+        try:
+            refuse = getattr(valeur, "is_blocked", None)
+        except Exception:                                      # pragma: no cover
+            continue
+        if callable(refuse):
+            yield nom, valeur
+
+
 def reinitialiser_limiteur():
-    """Vide l'état du limiteur. Rend le nombre d'attributs nettoyés.
+    """Vide l'état de TOUS les gardiens. Rend le nombre d'attributs nettoyés.
 
     N'IMPORTE PAS `app` : si aucun essai ne l'a chargé, il n'y a pas d'état à
     nettoyer, et l'importer ferait payer une seconde de démarrage aux fichiers
@@ -91,19 +128,18 @@ def reinitialiser_limiteur():
     module = sys.modules.get("app")
     if module is None:
         return 0
-    limiteur = getattr(module, "limiter", None)
-    if limiteur is None:                                       # pragma: no cover
-        return 0
     nettoyes = 0
-    for nom, valeur in vars(limiteur).items():
-        vider = getattr(valeur, "clear", None)
-        if vider is None:
-            raise AssertionError(
-                "RateLimiter.%s ne sait pas se vider : l'isolation de la "
-                "recette est incomplète et cet attribut fuirait d'un essai à "
-                "l'autre. Décidez comment le remettre à zéro." % nom)
-        vider()
-        nettoyes += 1
+    for nom_gardien, gardien in gardiens(module):
+        for nom, valeur in vars(gardien).items():
+            vider = getattr(valeur, "clear", None)
+            if vider is None:
+                raise AssertionError(
+                    "%s.%s ne sait pas se vider : l'isolation de la recette "
+                    "est incomplète et cet attribut fuirait d'un essai à "
+                    "l'autre. Décidez comment le remettre à zéro."
+                    % (nom_gardien, nom))
+            vider()
+            nettoyes += 1
     return nettoyes
 
 

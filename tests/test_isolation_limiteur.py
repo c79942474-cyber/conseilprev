@@ -130,10 +130,22 @@ def test_la_remise_a_zero_vide_TOUT_ce_que_le_limiteur_porte():
         "ce soit : %s" % pleins)
 
     nettoyes = CONF.reinitialiser_limiteur()
-    assert nettoyes == len(vars(A.limiter)), (
-        "la remise à zéro n'a pas parcouru tous les attributs")
-    restants = {nom: v for nom, v in vars(A.limiter).items() if v}
-    assert not restants, "des états survivent à la remise à zéro : %s" % restants
+    # ═══ LE COMPTE PORTE SUR TOUS LES GARDIENS, PAS SUR UN SEUL ════════
+    # La remise à zéro dérivait les ATTRIBUTS d'un limiteur mais ÉNUMÉRAIT
+    # l'objet. Il y en avait déjà deux — `bf_protector` bloque un courriel
+    # cinq minutes après cinq connexions ratées — et rien ne le vidait.
+    # L'attendu se DÉRIVE donc lui aussi : l'écrire en dur ici replacerait
+    # exactement le défaut qu'on vient de corriger, un cran plus bas.
+    attendu = sum(len(vars(g)) for _n, g in CONF.gardiens(A))
+    assert nettoyes == attendu, (
+        "la remise à zéro a nettoyé %d attributs pour %d portés par les "
+        "gardiens : elle n'a pas parcouru tout ce qui peut refuser un "
+        "appelant" % (nettoyes, attendu))
+    for nom_g, g in CONF.gardiens(A):
+        restants = {nom: v for nom, v in vars(g).items() if v}
+        assert not restants, (
+            "des états survivent à la remise à zéro dans %s : %s"
+            % (nom_g, restants))
 
 
 def test_la_remise_a_zero_refuse_ce_qu_elle_ne_sait_pas_vider():
@@ -278,3 +290,168 @@ def test_la_rotation_d_adresses_peut_boucler_meme_si_elle_ne_boucle_pas_encore()
         "le cycle d'adresses s'est raccourci à %s : la rotation boucle "
         "beaucoup plus tôt qu'à la mesure, et l'isolation devient la seule "
         "chose qui tienne" % (modulo.group(1) if modulo else "?"))
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  LE SECOND GARDIEN — CELUI QUE PERSONNE NE NETTOYAIT
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# L'INTERMITTENCE OBSERVÉE, ET CE QU'ELLE ÉTAIT VRAIMENT.
+# `test_un_changement_de_mot_de_passe_coupe_les_sessions_ouvertes` a échoué une
+# fois sur trois en recette complète, et passait isolément. Le `conftest`
+# décrivait un piège voisin — une adresse bloquée une heure et une rotation
+# modulo — mais ce n'était pas celui-là.
+#
+# LA CAUSE, REPRODUITE SANS RIEN SUPPOSER. `/api/sentinel-auth/login` est gardé
+# par un SECOND objet, `bf_protector`, clé `login:<courriel>` : cinq connexions
+# ratées bloquent ce courriel cinq minutes, puis jusqu'à une heure. La remise à
+# zéro de la recette dérivait les ATTRIBUTS d'un limiteur — le raisonnement est
+# écrit en tête du conftest — mais ÉNUMÉRAIT l'objet. Elle nettoyait cinq
+# attributs de `limiter` et zéro du protecteur. L'essai suivant qui se connecte
+# avec ce courriel reçoit 429 là où il attend 200 ; au second passage le
+# blocage a expiré, et la recette redevient verte. C'est la définition même
+# d'une intermittence qu'on ne trouve pas en relançant.
+#
+# LES COURRIELS D'ESSAI SONT DÉRIVÉS DU MÊME COMPTEUR que les adresses —
+# `recette<N>@exemple-test.fr` — ce qui donne au blocage une chance réelle de
+# retomber sur un courriel réutilisé.
+
+def _bloquer_un_courriel(courriel="recette-isolation@exemple-test.fr"):
+    """Cinq connexions ratées : c'est le seuil du protecteur."""
+    cle = "login:%s" % courriel
+    for _ in range(5):
+        A.bf_protector.record_attempt(cle, success=False)
+    return courriel, cle
+
+
+def test_LE_DEFAUT_le_protecteur_anti_force_brute_survivait_a_la_remise_a_zero():
+    """LA RÈGLE QUI PORTE CETTE SECTION.
+
+    Elle rejoue le chemin : on bloque, on remet à zéro, on regarde. Sans le
+    correctif, le protecteur reste bloqué et la règle tombe.
+    """
+    courriel, cle = _bloquer_un_courriel()
+    assert A.bf_protector.is_blocked(cle), \
+        "le protecteur ne bloque plus après cinq échecs : la règle ne mesure rien"
+    CONF.reinitialiser_limiteur()
+    assert not A.bf_protector.is_blocked(cle), (
+        "le blocage de « %s » survit à la remise à zéro : il fuira vers "
+        "l'essai suivant qui se connecte avec ce courriel" % courriel)
+
+
+def test_LE_TEMOIN_la_route_de_connexion_ne_rend_plus_429_apres_remise_a_zero():
+    """LE VOLET QUI COMPTE VRAIMENT — celui du symptôme, pas de l'état interne.
+
+    Une implémentation qui viderait `blocked` sans vider `attempts` passerait
+    la règle précédente : le courriel n'est plus bloqué, mais il lui reste
+    quatre échecs au compteur et le cinquième le rebloque aussitôt. On mesure
+    donc ce que l'essai suivant REÇOIT.
+    """
+    courriel, cle = _bloquer_un_courriel()
+    CONF.reinitialiser_limiteur()
+    # LE COMPTEUR D'ESSAIS EST VIDE, pas seulement le blocage — et on le
+    # regarde AVANT la requête, parce que celle-ci en ajoutera un
+    # légitimement. Sans ce volet, une remise à zéro qui ne viderait que
+    # `blocked` passerait : le courriel n'est plus bloqué, il lui reste
+    # quatre échecs, et le cinquième le rebloque aussitôt.
+    assert not A.bf_protector.attempts.get(cle), \
+        "des tentatives héritées subsistent : le prochain échec rebloque"
+    c = A.app.test_client()
+    r = c.post("/api/sentinel-auth/login",
+               headers={"X-Forwarded-For": "198.51.100.211"},
+               json={"email": courriel, "password": "MauvaisMotDePasse!1"})
+    assert r.status_code != 429, (
+        "la connexion suivante reçoit encore 429 : le protecteur n'est pas "
+        "réellement remis à zéro (%s)" % (r.get_json() or {}))
+    # ET UN SEUL ÉCHEC A ÉTÉ COMPTÉ — celui qu'on vient de faire. Quatre
+    # auraient dit que les anciens ont survécu.
+    assert len(A.bf_protector.attempts.get(cle) or []) == 1, \
+        "%d tentatives comptées après un seul échec" % len(
+            A.bf_protector.attempts.get(cle) or [])
+
+
+def test_la_derivation_des_gardiens_N_EST_PAS_VIDE_et_en_trouve_PLUS_D_UN():
+    """LE GARDE-FOU DES DEUX RÈGLES CI-DESSUS.
+
+    Si la dérivation ne rendait plus rien, la remise à zéro ne nettoierait
+    rien — et les deux règles précédentes tomberaient, ce qui est bien. Mais
+    si elle n'en rendait qu'UN, celui d'avant, elles pourraient passer pour la
+    mauvaise raison le jour où le protecteur cesse de bloquer. On exige donc
+    que la dérivation voie les DEUX, et qu'elle les nomme.
+    """
+    noms = [n for n, _g in CONF.gardiens(A)]
+    assert "limiter" in noms, "le limiteur de cadence n'est plus dérivé"
+    assert "bf_protector" in noms, \
+        "le protecteur anti-force-brute n'est plus dérivé : la fuite revient"
+    assert len(noms) >= 2
+
+
+def test_les_CLASSES_sont_ecartees_de_la_derivation():
+    """`RateLimiter` et `BruteForceProtector` exposent `is_blocked` elles
+    aussi. Elles ne portent aucun état d'exécution, et vider leurs attributs
+    de classe démonterait le module — `is_blocked` lui-même y passerait.
+
+    ═══ CE QUI GARDE VRAIMENT CETTE INVARIANT, ET IL FAUT LE DIRE ════════
+    Mesuré en retirant l'exclusion : la remise à zéro tombe alors sur
+    `__doc__`, une chaîne sans `.clear()`, et REFUSE bruyamment — comme elle
+    doit. Mais elle refuse dans une fixture `autouse`, donc AVANT chaque
+    essai : la recette ne rend pas un échec, elle rend 15 ERREURS sur ce
+    fichier et 47 sur celui des inscriptions. La suite ne peut plus être
+    verte.
+
+    C'est une protection plus forte qu'une règle nommée, et c'est pourquoi
+    aucune mutation n'est inscrite au banc pour ce cas : un banc qui compte
+    les ÉCHECS ne voit pas les erreurs, et l'y forcer aurait demandé
+    d'affaiblir le refus — c'est-à-dire de remplacer une garantie par une
+    règle. Cette règle-ci énonce donc l'invariant pour le lecteur ; ce qui
+    l'applique est le refus.
+    """
+    for nom, g in CONF.gardiens(A):
+        assert not isinstance(g, type), \
+            "« %s » est une classe : la remise à zéro effacerait ses méthodes" % nom
+
+
+def test_un_gardien_AJOUTE_DEMAIN_est_nettoye_sans_que_personne_y_pense():
+    """LE POINT DE TOUTE LA DÉRIVATION.
+
+    Un troisième objet capable de refuser un appelant — un quota par clé
+    d'API, un verrou d'export — sera nettoyé du seul fait qu'il expose
+    `is_blocked`. C'est ce que l'énumération ne savait pas faire, et c'est
+    exactement par là que le défaut est entré.
+    """
+    class GardienDeRecette(object):
+        def __init__(self):
+            self.refuses = {"une-cle": 1}
+
+        def is_blocked(self, cle):
+            return cle in self.refuses
+
+    A.gardien_de_recette = GardienDeRecette()
+    try:
+        assert "gardien_de_recette" in [n for n, _ in CONF.gardiens(A)]
+        CONF.reinitialiser_limiteur()
+        assert not A.gardien_de_recette.refuses, \
+            "un gardien neuf n'est pas nettoyé : l'énumération est revenue"
+    finally:
+        delattr(A, "gardien_de_recette")
+
+
+def test_un_gardien_dont_un_etat_NE_SAIT_PAS_se_vider_est_refuse_BRUYAMMENT():
+    """Le message nomme désormais LE GARDIEN, pas seulement l'attribut.
+    « RateLimiter.x ne sait pas se vider » était faux dès qu'il y en avait
+    deux — et c'est le genre de message qui envoie chercher au mauvais
+    endroit."""
+    class GardienEntier(object):
+        def __init__(self):
+            self.compteur = 7                       # ne sait pas se vider
+
+        def is_blocked(self, cle):
+            return False
+
+    A.gardien_entier = GardienEntier()
+    try:
+        with pytest.raises(AssertionError) as leve:
+            CONF.reinitialiser_limiteur()
+        assert "gardien_entier.compteur" in str(leve.value), str(leve.value)
+    finally:
+        delattr(A, "gardien_entier")
