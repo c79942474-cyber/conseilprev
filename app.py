@@ -7073,7 +7073,31 @@ def sentinel_login_required(f):
         if not client:
             if request.path.startswith('/api/'):
                 return jsonify({'error': 'Authentification requise.'}), 401
-            return redirect('/login')
+            # ═══ LA PORTE GARDE CE QU'ON LUI DEMANDAIT ══════════════════
+            #
+            # CE QUI SE PASSAIT. Un `redirect('/login')` nu. Le visiteur qui
+            # cliquait « ISO 27001 » sur la page d'accueil — donc
+            # /sentinel?goto=iso27001-risques — se connectait et atterrissait
+            # sur l'accueil de Sentinel, à quatre-vingt-dix onglets de ce
+            # qu'il avait demandé. Rien ne signalait la perte : la connexion
+            # avait réussi, la page s'affichait, et il ne restait qu'à
+            # chercher.
+            #
+            # CE QUE ÇA CHANGE POUR QUI ARRIVE DE L'EXTÉRIEUR. Un lien de
+            # l'accueil public s'adresse par construction à quelqu'un qui
+            # n'est PAS connecté. Sans cette ligne, ces liens ne servent que
+            # les visiteurs déjà entrés — c'est-à-dire pas ceux qu'ils
+            # visent.
+            #
+            # LA MACHINERIE EXISTAIT DÉJÀ, DES DEUX CÔTÉS : `_suite_sure()`
+            # ici, et `__suiteSure()` dans login.page.js, qui refusent l'un
+            # et l'autre tout ce qui n'est pas un chemin interne — sans quoi
+            # /login?suite=https://ailleurs ferait de la page de connexion un
+            # tremplin d'hameçonnage sous notre nom de domaine. Il ne
+            # manquait que le branchement.
+            return redirect('/login?suite='
+                            + quote(_suite_sure(request.full_path.rstrip('?')),
+                                    safe='/?&=#'))
         request.current_client = client
         return f(*args, **kwargs)
     return wrapper
