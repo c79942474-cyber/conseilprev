@@ -953,6 +953,9 @@ var PAGE_META = {
   'iso27001-millesime':{ section: 'ISO 27001', label: '2013 \u2192 2022 : ce qui a changé' },
   'iso42001':      { section: 'ISO 42001', label: 'Articles 4 à 10' },
   'iso42001-soa':  { section: 'ISO 42001', label: 'Déclaration d\u2019applicabilité' },
+  'conf-taux': { section: 'Taux de conformité', label: 'Les neuf taux' },
+  'conf-plan': { section: 'Taux de conformité', label: 'Plan de mise en conformité' },
+  'conf-limites': { section: 'Taux de conformité', label: 'Ce que le plan ne peut pas faire' },
   'nist-profil':   { section: 'NIST AI RMF', label: 'Profil par fonction' },
   'nist-cadre':    { section: 'NIST AI RMF', label: 'Le cadre, cat\u00e9gorie par cat\u00e9gorie' },
   'nist-genai':    { section: 'NIST AI RMF', label: 'Profil IA générative' },
@@ -9654,6 +9657,34 @@ var PAGE_GUIDES = {
       {h:"Ce qu’elle ne fait pas", t:"Elle ne reproduit AUCUNE phrase de la norme : ISO/IEC 42001:2023 est protégée par le droit d’auteur, et cette page en cite les numéros et les titres, tout le reste étant rédigé par le cabinet. Détenir le texte reste nécessaire pour se certifier. Elle n’accepte pas non plus qu’un article de 4 à 10 soit déclaré « sans objet » : ce sont des exigences, elles ne s’écartent pas. Seules les mesures de l’annexe A le peuvent, et seulement avec justification."}
     ]
   },
+  'conf-taux': {
+    title: "Taux de conformité — les neuf normes",
+    sections: [
+        {h:"À quoi sert cette page", t:"Elle rend un taux pour chacune des neuf normes, calculé à partir de ce que vous avez déjà renseigné dans les modules — rien n'est réévalué ici, tout est composé."},
+        {h:"Comment le lire", t:"Un taux n'est PAS une conformité. Sur une obligation légale, c'est une autorité qui tranche ; sur une norme certifiable, un organisme accrédité ; sur un cadre volontaire, personne. Chaque carte porte la phrase qui dit ce que 100 % ne veut pas dire, et elle compte autant que le chiffre."},
+        {h:"Le trait ambre sur la barre", t:"C'est un PLAFOND. Un défaut qui arrête un auditeur — une déclaration d'applicabilité irrecevable, par exemple — n'efface pas le travail fait, mais interdit d'aller au-delà. Aucun effort sur le reste de la norme ne franchira ce trait tant que le verrou tient."},
+        {h:"Le chiffre en tête", t:"C'est le PLUS BAS des taux mesurés, pas leur moyenne. Une moyenne dilue précisément la composante qu'il faut traiter en premier : deux cadres à 90 % et un à 30 % rendent 70 %, et le 30 % disparaît. La moyenne reste affichée à côté, avec son avertissement."},
+        {h:"Pourquoi DORA n'a pas de taux", t:"Aucun module de ce site ne l'évalue. Le taux est ABSENT, ce qui n'est pas la même chose que nul : zéro voudrait dire « rien de fait », l'absence dit « nous ne le mesurons pas »."}
+    ]
+  },
+  'conf-plan': {
+    title: "Taux de conformité — plan de mise en conformité",
+    sections: [
+        {h:"À quoi sert cette page", t:"Elle transforme les écarts mesurés en actions ordonnées, chacune avec ce qu'elle rapporte réellement sur quelles normes."},
+        {h:"Les trois rangs", t:"Rang 1, lever ce qui plafonne ou met en doute — tant qu'un verrou tient, tout le reste bute sur le même plafond. Rang 2, ce qui sert plusieurs normes à la fois. Rang 3, le propre à chacune."},
+        {h:"Les actions à double effet", t:"Elles viennent de rapprochements DÉCLARÉS entre référentiels — les mesures de l'annexe A 27001 qui servent l'article 21 §2 de NIS 2, celles de l'annexe A 42001 qui rencontrent un risque du Top 10 LLM. Aucun n'est inventé ici : c'est le seul vrai bénéfice à tenir neuf référentiels au même endroit."},
+        {h:"Comment lire les gains", t:"Ils sont calculés À LA SUITE, sur l'état laissé par les actions précédentes, et se cumulent donc exactement jusqu'au plafond. Un gain nul se lit de deux façons : « sens », quand l'action fixe ce que les points veulent dire sans en ajouter ; « confisqué par le verrou », quand le travail serait réel mais que le plafond l'interdit."},
+        {h:"Par où commencer", t:"Par le haut. L'ordre n'est pas un classement de difficulté, c'est celui dans lequel les actions se rendent payantes les unes les autres."}
+    ]
+  },
+  'conf-limites': {
+    title: "Taux de conformité — ce que le plan ne peut pas faire",
+    sections: [
+        {h:"À quoi sert cette page", t:"Elle nomme ce que le plan ne fermera pas, quoi qu'on fasse. Ces points sont connus d'avance : les taire ne les supprime pas, cela les fait découvrir devant l'auditeur."},
+        {h:"Ce qu'on y trouve", t:"DORA, qui n'a pas d'instrument ici. Le NIST AI RMF, dont 100 % est une couverture et jamais une conformité — ce cadre n'est pas certifiable. Les risques du Top 10 LLM qu'aucune mesure de l'annexe A 42001 ne rencontre. Et, si vos normes certifiables atteignent 100 %, le rappel qu'il reste l'audit interne, la revue de direction et l'organisme accrédité."},
+        {h:"À quoi cela sert en comité", t:"Un plan qui promet 100 % partout se défait à la première question précise. Poser ses limites soi-même est ce qui rend le reste crédible."}
+    ]
+  },
   'nist-profil': {
     title: "NIST AI RMF — profil par fonction",
     sections: [
@@ -16226,12 +16257,188 @@ window.raasMsCell = function(p){
   return parts.join(' \u00b7 ');
 };
 /* ══ Indice de conformité global — consolide IA Act / RGPD / ISO 42001 ══ */
+
+/* ═══════════════════════════════════════════════════════════════════════
+   LE TAUX DE CONFORMITÉ DES NEUF NORMES
+   Tout le calcul est au serveur, dans `conformite.py` : cet écran ne fait
+   que l'afficher. Refaire ici la moindre arithmétique donnerait DEUX vérités
+   sur le même taux — c'est le défaut qui existait entre `gcAuditPct` et
+   `auditUpdateScore`, et qu'on vient de corriger plus bas.
+   ═══════════════════════════════════════════════════════════════════════ */
+var CONF_ETAT = null;
+
+function confDeclarations(){
+  /* CE QUE L'ÉCRAN SAIT DÉJÀ, et rien de plus. On ne fabrique aucune donnée :
+     les déclarations partent telles que les autres modules les tiennent. Une
+     norme dont rien n'est renseigné part absente, et le serveur rend « — »
+     plutôt qu'un zéro qui se lirait comme un constat. */
+  var d = {};
+  try{
+    if(window.AUDIT_STATE && Object.keys(window.AUDIT_STATE).length){
+      var a = {};
+      Object.keys(window.AUDIT_STATE).forEach(function(k){
+        var v = window.AUDIT_STATE[k];
+        a[k] = (v === 'done') ? 'tenu' : (v === 'partial') ? 'partiel'
+             : (v === 'na') ? 'sans_objet' : 'absent';
+      });
+      d.ia_act = a;
+    }
+  }catch(e){}
+  try{
+    var briques = {registre:'confRegPct', pbd:'confPbdPct', doc:'confDocPct',
+                   sensibilisation:'confSensPct'}, b = {}, n = 0;
+    Object.keys(briques).forEach(function(k){
+      var f = window[briques[k]];
+      if(typeof f === 'function'){ b[k] = f() || 0; n++; }
+    });
+    if(n) d.rgpd = {briques:b};
+  }catch(e){}
+  ['iso42001','iso27001','nis2','cra','nist_ai_rmf','owasp_llm'].forEach(function(k){
+    try{ if(window.CONF_DECL && window.CONF_DECL[k]) d[k] = window.CONF_DECL[k]; }catch(e){}
+  });
+  return d;
+}
+
+function confInit(){
+  if(CONF_ETAT){ confRendre(); return; }
+  fetch('/api/conformite/etat-des-lieux', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({declarations: confDeclarations()})
+  }).then(function(r){ return r.json(); })
+    .then(function(j){ CONF_ETAT = j; confRendre(); })
+    .catch(function(){
+      var g = document.getElementById('conf-grille');
+      if(g) g.innerHTML = '<p class="page-p">Le calcul n’a pas pu être '
+        + 'obtenu. Aucun taux n’est affiché : un écran vide se '
+        + 'voit, un taux inventé ne se voit pas.</p>';
+    });
+}
+window.confInit = confInit;
+
+function confEsc(t){
+  return String(t == null ? '' : t).replace(/[&<>"]/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; });
+}
+
+function confRendre(){
+  var j = CONF_ETAT; if(!j || !j.ok) return;
+  var grille = document.getElementById('conf-grille');
+  if(grille){
+    grille.innerHTML = (j.normes || []).map(function(n){
+      var mesure = n.taux !== null && n.taux !== undefined;
+      var cls = 'conf-c' + (n.verrous && n.verrous.length ? ' conf-verrou' : '')
+              + (mesure ? '' : ' conf-muet');
+      var barre = mesure
+        ? '<div class="conf-bar"><div class="conf-bar-f" style="width:' + n.taux + '%"></div>'
+          + (n.plafond < 100 ? '<div class="conf-bar-p" style="left:' + n.plafond
+             + '%" title="Plafond imposé par le verrou"></div>' : '')
+          + '</div>'
+        : '';
+      var parts = (n.composants || []).filter(function(c){ return c.renseigne; })
+        .map(function(c){
+          return '<div class="conf-part"><span>' + confEsc(c.nom)
+               + '</span><b>' + c.taux + ' %</b></div>'; }).join('');
+      var verrous = (n.verrous || []).map(function(v){
+        return '<div class="conf-v">⛔ ' + confEsc(v.dit) + '</div>'; }).join('');
+      var reserves = (n.reserves || []).map(function(r){
+        return '<div class="conf-r">⚠ ' + confEsc(r.dit) + ' '
+             + confEsc(r.porte_sur) + '</div>'; }).join('');
+      /* CE QUE 100 % NE VEUT PAS DIRE EST SUR LA CARTE, pas en bas de page.
+         Relégué, il s'applique à un chiffre qu'on ne regarde plus. */
+      var cent = n.cent_ne_veut_pas_dire
+        ? '<div class="conf-c-cent"><b>100 % ne veut pas dire :</b> '
+          + confEsc(n.cent_ne_veut_pas_dire) + '</div>' : '';
+      return '<div class="' + cls + '">'
+        + '<div class="conf-c-t"><span class="conf-c-n">' + confEsc(n.nom) + '</span>'
+        + '<span class="conf-c-v">' + (mesure ? n.taux + ' %' : '—') + '</span></div>'
+        + '<div class="conf-c-nat">' + confEsc(n.nature_nom)
+        + (n.taux_dit ? ' · ' + confEsc(n.taux_dit) : '') + '</div>'
+        + barre
+        + '<div class="conf-c-d">' + confEsc(n.dit) + '</div>'
+        + (n.mesure ? '<div class="conf-c-mes">Mesure : ' + confEsc(n.mesure) + '</div>' : '')
+        + verrous + reserves
+        + (parts ? '<div class="conf-parts">' + parts + '</div>' : '')
+        + cent
+        + (n.panneau ? '<span class="conf-go" onclick="hubGo(\'' + confEsc(n.panneau)
+           + '\')">Ouvrir le module →</span>' : '')
+        + '</div>';
+    }).join('');
+  }
+  var com = document.getElementById('conf-commande');
+  if(com && j.consolide){
+    var c = j.consolide;
+    com.innerHTML = c.commande === null || c.commande === undefined
+      ? confEsc(c.dit)
+      : '<b>' + c.commande + ' %</b> — ' + confEsc(c.dit)
+        + '<span class="conf-moy">' + confEsc(c.avertissement) + '</span>';
+    /* UN CADRE VIDE SE DESSINE QUAND MÊME, et se lit comme un chiffre qui
+       n'a pas chargé. Il n'y a rien à dire tant que rien n'est évalué : on
+       ne montre alors pas une boîte, on ne montre rien. */
+    com.style.display = com.innerHTML.trim() ? '' : 'none';
+  }
+  var res = document.getElementById('conf-reserve');
+  if(res) res.textContent = j.reserve || '';
+
+  var plan = document.getElementById('conf-plan-corps');
+  if(plan && j.plan){
+    var rangs = {1:'Rang 1 — lever ce qui plafonne ou met en doute',
+                 2:'Rang 2 — ce qui sert plusieurs normes à la fois',
+                 3:'Rang 3 — le propre à chaque norme'};
+    var vu = {}, html = '';
+    (j.plan.actions || []).forEach(function(a){
+      if(!vu[a.rang]){ vu[a.rang] = 1;
+        html += '<div class="conf-rang">' + confEsc(rangs[a.rang] || a.rang) + '</div>'; }
+      var gains = (a.gains || []).map(function(g){
+        var cl = 'conf-g' + (g.gain > 0 ? ' conf-g-plus' : ' conf-g-nul');
+        var t = g.gain > 0 ? '+' + g.gain + ' pts' : (a.plafond_gagne
+                ? 'plafond +' + a.plafond_gagne : (g.confisque ? 'confisqué par le verrou' : 'sens'));
+        return '<span class="' + cl + '" title="' + confEsc(g.dit || '')
+             + '">' + confEsc(g.nom) + ' · ' + t + '</span>'; }).join('');
+      var det = (a.detail || []).length
+        ? '<ul class="conf-a-det">' + a.detail.map(function(x){
+            return '<li>' + confEsc(x.nom) + (x.article ? ' <span class="conf-c-nat">'
+                 + confEsc(x.article) + '</span>' : '') + '</li>'; }).join('')
+          + (a.detail_tronque ? '<li>… et ' + a.detail_tronque + ' autre(s)</li>' : '')
+          + '</ul>' : '';
+      html += '<div class="conf-a' + (a.rang === 1 ? ' conf-a1' : '') + '">'
+        + '<div class="conf-a-h"><span class="conf-a-q">' + confEsc(a.quoi) + '</span>'
+        + '<span class="conf-a-g">' + gains + '</span></div>'
+        + '<div class="conf-a-p">' + confEsc(a.pourquoi) + '</div>' + det + '</div>';
+    });
+    if(j.plan.tronquees) html += '<p class="page-p">' + confEsc(j.plan.dit) + '</p>';
+    plan.innerHTML = html || '<p class="page-p">Aucune action : rien n’a '
+      + 'encore été évalué.</p>';
+  }
+
+  var lim = document.getElementById('conf-limites-corps');
+  if(lim){
+    lim.innerHTML = (j.limites || []).map(function(l){
+      return '<div class="conf-l"><div class="conf-l-q">' + confEsc(l.quoi) + '</div>'
+        + '<div class="conf-l-p">' + confEsc(l.pourquoi) + '</div>'
+        + '<div class="conf-l-f"><b>À faire :</b> ' + confEsc(l.quoi_faire)
+        + '</div></div>'; }).join('')
+      || '<p class="page-p">Aucune limite à signaler.</p>';
+  }
+}
+
 window.gcAuditPct = function(){
+  /* LE MÊME AUDIT AFFICHAIT DEUX POURCENTAGES SELON L'ÉCRAN QUI LE REGARDAIT.
+     `auditUpdateScore`, sur la page de l'audit, compte un point partiel pour
+     une moitié ; cette fonction-ci, qui alimente l'indice de conformité, ne
+     comptait que les points « done » et jetait les partiels. Un utilisateur
+     qui cochait « partiellement » voyait son score monter d'un côté et pas de
+     l'autre, sans qu'aucun des deux écrans ne soit signalé comme approximatif.
+     Les deux comptent désormais pareil, et une règle le vérifie. */
   try{
     if(!window.AUDIT_SECTIONS) return null;
-    var tot=0, done=0;
-    window.AUDIT_SECTIONS.forEach(function(sec){ (sec.items||[]).forEach(function(it){ tot++; var st=(window.AUDIT_STATE&&window.AUDIT_STATE[it.id])||'none'; if(st==='done') done++; }); });
-    return tot? Math.round(done/tot*100) : 0;
+    var tot=0, acquis=0;
+    window.AUDIT_SECTIONS.forEach(function(sec){ (sec.items||[]).forEach(function(it){
+      tot++;
+      var st=(window.AUDIT_STATE&&window.AUDIT_STATE[it.id])||'none';
+      if(st==='done') acquis+=1;
+      else if(st==='partial') acquis+=0.5;
+    }); });
+    return tot? Math.round(acquis/tot*100) : 0;
   }catch(e){ return null; }
 };
 window.gcRgpdPct = function(){
@@ -16259,7 +16466,18 @@ window.gcRender = function(){
   function col(v){ return v==null?'var(--muted2)':(v<50?'#c0392b':(v<75?'#c98a00':'var(--green)')); }
   function txt(v){ return v==null?'—':v+'%'; }
   var vals=[ia,rg,iso].filter(function(x){ return x!==null; });
-  var g = vals.length ? Math.round(vals.reduce(function(a,b){return a+b;},0)/vals.length) : null;
+  /* L'AIDE DE CETTE PAGE DIT : « traitez d'abord la composante la plus basse,
+     c'est elle qui tire l'indice vers le bas ». C'était faux de l'indice
+     affiché. Une MOYENNE ne se laisse pas tirer vers le bas par sa composante
+     la plus basse : elle la dilue. Deux cadres à 90 % et un à 30 % rendaient
+     70 %, et le 30 % — le seul qui décidait de quelque chose — disparaissait
+     de la vue.
+     L'indice est donc le MINIMUM, et il est nommé comme tel. La moyenne reste
+     affichée à côté, parce qu'un comité la calculera de toute façon, et qu'il
+     vaut mieux la poser avec son avertissement que la laisser reconstituer
+     sans. Le serveur applique la même règle dans `conformite.consolide`. */
+  var moy = vals.length ? Math.round(vals.reduce(function(a,b){return a+b;},0)/vals.length) : null;
+  var g = vals.length ? Math.min.apply(null, vals) : null;
   function fw(name, sub, v, target){
     return '<div class="gc-fw" onclick="hubGo(\''+target+'\')">'
       + '<div class="gc-fw-top"><span class="gc-fw-name">'+name+'</span><span class="gc-fw-val" style="color:'+col(v)+'">'+txt(v)+'</span></div>'
@@ -16271,7 +16489,9 @@ window.gcRender = function(){
       '<div class="gc-hero">'
     + '<div class="gc-hero-num" style="color:'+col(g)+'">'+txt(g)+'</div>'
     + '<div class="gc-hero-right"><div class="gc-hero-l">Indice de conformité global</div>'
-    + '<div class="gc-hero-s">Moyenne des cadres évalués'+(vals.length<3?' ('+vals.length+'/3 renseigné(s))':'')+'</div>'
+    + '<div class="gc-hero-s">Le plus bas des cadres évalués — c\'est lui qui commande'
+      +(vals.length<3?' ('+vals.length+'/3 renseigné(s))':'')
+      +(moy!==null&&moy!==g?'. Moyenne : '+moy+'\u202f%, qui dilue précisément ce qu\'il faut traiter en premier':'')+'</div>'
     + '<div class="gc-hero-bar"><div class="gc-hero-fill" style="width:'+(g==null?0:g)+'%;background:'+col(g)+'"></div></div></div>'
     + '</div>'
     + '<div class="gc-grid">'
@@ -18971,6 +19191,30 @@ document.addEventListener('DOMContentLoaded', function(){ if(window.cartoInit) w
    recette rapproche desormais cette constante de datacentres.VERSION. */
 var DC_MILLESIME = "2026-08-d";
 var GUIDED_PATHS = [
+  {
+    id: 'taux_conformite',
+    icon: '\u{1F4CA}',
+    role: "Direction — je veux savoir où nous en sommes sur les neuf, et par quoi commencer",
+    pitch: "Neuf référentiels, neuf taux, et une question : lequel traiter d’abord. Ce parcours part de la synthèse, descend au plan, et finit par ce que le plan NE PEUT PAS faire — c’est cette dernière étape qui rend les deux premières défendables en comité.",
+    steps: [
+      {id:'conf-taux', label:"Les neuf taux",
+       action:"Lisez d’abord le chiffre en tête — le plus bas des taux mesurés —, puis repérez les cartes qui portent un trait ambre sur leur barre.",
+       gain:"Où vous en êtes sur chacune des neuf, et lesquelles sont ARRÊTÉES par un verrou plutôt que simplement en retard.",
+       tip:"Un taux n’est pas une conformité. Chaque carte porte la phrase qui dit ce que 100 % ne veut pas dire, et c’est elle qu’on cite en comité, pas le chiffre."},
+      {id:'conf-plan', label:"Plan de mise en conformité",
+       action:"Commencez par le rang 1. Ne descendez au rang 2 qu’une fois les verrous levés.",
+       gain:"Des actions ordonnées par ce qu’elles rapportent réellement, dont celles qui servent plusieurs normes à la fois.",
+       tip:"Une action à « +0 » n’est pas inutile : soit elle fixe le sens des points, soit son gain est confisqué par un verrou — et c’est le verrou qu’il faut traiter, pas l’action."},
+      {id:'conf-limites', label:"Ce que le plan ne peut pas faire",
+       action:"Lisez-la AVANT le comité, pas après la question qui embarrasse.",
+       gain:"Les quatre points sur lesquels aucun travail ne mènera à 100 %, nommés d’avance.",
+       tip:"Poser ses limites soi-même est ce qui rend le reste crédible : un plan qui promet 100 % partout se défait à la première question précise."},
+      {id:'iso27001-soa', label:"La déclaration d’applicabilité 27001",
+       action:"Ouvrez la déclaration et traitez les mesures que le rang 2 du plan a nommées.",
+       gain:"C’est là que le plan envoie le plus souvent, et ce n’est pas un hasard : les mesures de l’annexe A 27001 servent AUSSI les dix mesures de l’article 21 §2 de NIS 2. Une seule mise en œuvre, deux normes qui montent.",
+       tip:"Le rapprochement n’est pas une interprétation : il est déclaré dans le module 27001, mesure par mesure, et c’est lui qui rend le plan défendable devant une autorité."}
+    ]
+  },
   {
     id: 'nist_ai_rmf',
     icon: '\u{1F9ED}',

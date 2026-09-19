@@ -121,6 +121,69 @@ body{
 .sb-nav [data-grp="business"]{--sb-ic:var(--amber)}
 .sb-nav [data-grp="rgpd-et-privacy"]{--sb-ic:var(--blue)}
 .sb-nav [data-grp="cra"]{--sb-ic:var(--or,#C47C1A)}
+
+/* ── LE TAUX DE CONFORMITÉ DES NEUF NORMES ──────────────────────────────
+   DEUX COULEURS SEULEMENT PORTENT UN SENS ICI, et c'est délibéré : l'ambre
+   marque un VERROU — un défaut qui arrête un tiers — et le gris barré marque
+   l'ABSENCE DE MESURE. Un taux bas n'est pas coloré : colorer la faiblesse
+   ferait lire la couleur comme un jugement, alors que le seul jugement qui
+   compte ici est « mesuré » ou « pas mesuré ».
+   ET LE TAUX N'EST JAMAIS SEUL : la barre porte son plafond en trait, pour
+   qu'on voie d'un coup d'œil qu'il reste du chemin qu'aucun travail ne
+   parcourra tant que le verrou tient. */
+.conf-commande{border:1px solid var(--line,#2a2a2a);border-left:3px solid var(--or,#C47C1A);
+  border-radius:0 10px 10px 0;padding:14px 16px;margin:16px 0 20px;font-size:13.5px;line-height:1.65}
+.conf-commande b{color:var(--ink,#eee)}
+.conf-commande .conf-moy{display:block;margin-top:8px;padding-top:8px;
+  border-top:1px solid var(--line,#2a2a2a);font-size:12.5px;color:var(--muted2,#6f6f6f)}
+.conf-grille{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(330px,100%),1fr))}
+.conf-c{border:1px solid var(--line,#2a2a2a);border-radius:11px;padding:13px 15px;min-width:0}
+.conf-c.conf-verrou{border-left:3px solid var(--or,#C47C1A)}
+.conf-c.conf-muet{opacity:.72}
+.conf-c-t{display:flex;align-items:baseline;gap:9px;margin-bottom:3px}
+.conf-c-n{font-size:14.5px;font-weight:700;color:var(--ink,#eee)}
+.conf-c-v{margin-left:auto;font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;flex-shrink:0}
+.conf-c-nat{font-family:var(--mono,ui-monospace,monospace);font-size:9.5px;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--muted2,#6f6f6f)}
+.conf-bar{position:relative;height:7px;border-radius:4px;background:rgba(255,255,255,.07);margin:9px 0 8px}
+.conf-bar-f{height:100%;border-radius:4px;background:var(--muted,#9a9a9a)}
+.conf-bar-p{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--or,#C47C1A)}
+.conf-c-d{font-size:12.3px;color:var(--muted,#9a9a9a);line-height:1.6}
+.conf-c-mes{font-size:11.8px;color:var(--muted2,#6f6f6f);line-height:1.55;margin-top:6px}
+.conf-c-cent{font-size:11.8px;color:var(--muted2,#6f6f6f);line-height:1.55;margin-top:7px;
+  padding-top:7px;border-top:1px dashed var(--line,#2a2a2a)}
+.conf-c-cent b{color:var(--muted,#9a9a9a);font-weight:600}
+.conf-v{font-size:12.2px;color:var(--or,#C47C1A);line-height:1.6;margin-top:7px}
+.conf-r{font-size:12.2px;color:var(--muted,#9a9a9a);line-height:1.6;margin-top:7px;font-style:italic}
+.conf-parts{margin-top:8px;display:grid;gap:3px}
+.conf-part{display:flex;gap:8px;font-size:11.7px;color:var(--muted2,#6f6f6f);align-items:baseline}
+.conf-part b{color:var(--muted,#9a9a9a);font-weight:600;margin-left:auto;font-variant-numeric:tabular-nums}
+.conf-go{display:inline-block;margin-top:9px;font-size:12px;color:var(--pf,#2dd4bf);cursor:pointer}
+.conf-go:hover{text-decoration:underline}
+/* ── LE PLAN ─────────────────────────────────────────────────────────── */
+.conf-rang{font-family:var(--mono,ui-monospace,monospace);font-size:10px;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--muted2,#6f6f6f);margin:20px 0 9px}
+.conf-a{border:1px solid var(--line,#2a2a2a);border-radius:10px;padding:12px 14px;margin-bottom:9px}
+.conf-a.conf-a1{border-left:3px solid var(--or,#C47C1A)}
+.conf-a-h{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.conf-a-q{font-size:13.5px;font-weight:600;color:var(--ink,#eee);min-width:0}
+.conf-a-g{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0}
+.conf-g{font-family:var(--mono,ui-monospace,monospace);font-size:10.5px;padding:2px 7px;border-radius:5px;
+  border:1px solid var(--line,#2a2a2a);color:var(--muted,#9a9a9a);white-space:nowrap}
+.conf-g.conf-g-plus{border-color:var(--pf,#2dd4bf);color:var(--pf,#2dd4bf)}
+.conf-g.conf-g-nul{border-style:dashed}
+.conf-a-p{font-size:12.3px;color:var(--muted,#9a9a9a);line-height:1.65;margin-top:6px}
+.conf-a-det{margin-top:8px;font-size:11.8px;color:var(--muted2,#6f6f6f);line-height:1.6}
+.conf-a-det li{margin-bottom:2px}
+/* ── LES LIMITES ─────────────────────────────────────────────────────── */
+.conf-l{border:1px solid var(--line,#2a2a2a);border-left:3px solid var(--muted2,#6f6f6f);
+  border-radius:0 10px 10px 0;padding:13px 15px;margin-bottom:10px}
+.conf-l-q{font-size:13.5px;font-weight:700;color:var(--ink,#eee);line-height:1.5}
+.conf-l-p{font-size:12.5px;color:var(--muted,#9a9a9a);line-height:1.65;margin-top:6px}
+.conf-l-f{font-size:12.3px;color:var(--muted2,#6f6f6f);line-height:1.6;margin-top:7px}
+.conf-l-f b{color:var(--muted,#9a9a9a);font-weight:600}
+@media(max-width:560px){.conf-c-v{font-size:18px}.conf-a-g{margin-left:0;width:100%}}
+
 /* ── LE MODULE CRA ─────────────────────────────────────────────────────
    LES DEUX COULEURS QUI PORTENT UN SENS, ET ELLES SEULES. L'ambre marque ce
    qui est DÉJÀ en vigueur ou ce qui impose un organisme notifié — c'est-à-dire
@@ -3182,6 +3245,10 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
          frères d'une section jusqu'à la suivante, et une section de plus
          aurait coupé le groupe RGPD en deux. -->
     <div class="sb-famille" data-fam="conformite"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 2.5 20 6v6.2c0 4.9-3.3 8.6-8 9.8-4.7-1.2-8-4.9-8-9.8V6z"/><path d="M8.6 12.1 11 14.5l4.4-4.6"/></svg><span>Votre Mise en Conformité Réglementaire</span><span class="sb-famille-n" id="sb-fam-n" aria-hidden="true"></span></div>
+    <div class="sb-section sb-pliable" data-grp="taux-conformite" data-fam="conformite" role="button" tabindex="0" aria-expanded="false" onclick="sbReplier(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sbReplier(this)}" title="Le taux de chacune des neuf normes, et le plan qui le fait monter"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg><span>Taux de conformité — les neuf normes</span><svg class="sb-chev" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></div>
+    <div class="sb-item" data-grp="taux-conformite" role="button" tabindex="0" onclick="go('conf-taux',this,'TAUX DE CONFORMITÉ','Les neuf taux');confInit()" title="Un taux par norme, ce qu il mesure, et ce qui le plafonne"><span class="sb-icon" aria-hidden="true"></span>Les neuf taux</div>
+    <div class="sb-item" data-grp="taux-conformite" role="button" tabindex="0" onclick="go('conf-plan',this,'TAUX DE CONFORMITÉ','Plan de mise en conformité');confInit()" title="Les actions, du verrou au detail — et ce que chacune rapporte reellement"><span class="sb-icon" aria-hidden="true"></span>Plan de mise en conformité</div>
+    <div class="sb-item" data-grp="taux-conformite" role="button" tabindex="0" onclick="go('conf-limites',this,'TAUX DE CONFORMITÉ','Ce que le plan ne peut pas faire');confInit()" title="DORA sans instrument, le NIST non certifiable, et les trois risques LLM hors annexe A"><span class="sb-icon" aria-hidden="true"></span>Ce que le plan ne peut pas faire</div>
     <div class="sb-section sb-pliable" data-grp="rgpd-et-privacy" data-fam="conformite" role="button" tabindex="0" aria-expanded="false" onclick="sbReplier(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sbReplier(this)}" title="Replier ou déplier RGPD &amp; Privacy"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="10.5" width="16" height="10" rx="2"/><path d="M7.8 10.5V7.5a4.2 4.2 0 0 1 8.4 0v3"/></svg><span>RGPD &amp; Privacy</span></div>
     <div class="sb-item" data-grp="rgpd-et-privacy" role="button" tabindex="0" onclick="go('rgpd-hub',this,'RGPD &amp; PRIVACY','Vue d\u2019ensemble');hubLoadOnce()" title="Point d entree du dispositif RGPD : vue d ensemble, indice global et acces a toutes les briques."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg></span>Vue d’ensemble</div>
     <div class="sb-item" data-grp="rgpd-et-privacy" role="button" tabindex="0" onclick="go('rgpd-traitements',this,'RGPD &amp; PRIVACY','Registre des traitements');traitLoadOnce()" title="Registre des activites de traitement au sens de l article 30 du RGPD (ajout, details, suppression, export)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"/><path d="M9 12l2 2 4-4"/></svg></span>Registre des traitements</div>
@@ -5296,6 +5363,48 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
   </div>
 </div>
 
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     LE TAUX DE CONFORMITÉ DES NEUF NORMES
+     Trois écrans, et le troisième compte autant que les deux premiers :
+     les taux, le plan, et CE QUE LE PLAN NE PEUT PAS FAIRE. Un plan qui
+     promettrait 100 % partout mentirait sur quatre points connus d'avance.
+     ═══════════════════════════════════════════════════════════════════ -->
+<div class="page" id="p-conf-taux">
+  <span class="eyebrow">Taux de conformité · les neuf normes</span>
+  <h1 class="page-h">Neuf taux, et <em>ce qu'ils ne disent pas</em></h1>
+  <p class="page-p">Chaque taux est composé des parts de sa norme, pondérées, puis
+  <strong>plafonné par ses verrous</strong>&nbsp;: un défaut qui arrête un auditeur
+  n'efface pas le travail fait, il interdit de s'en prévaloir au-delà. Neuf
+  pourcentages alignés se lisent comme neuf fois la même chose&nbsp;; ils ne le sont
+  pas, et la <em>nature</em> de chaque norme dit ce que 100&nbsp;% veut dire —
+  <strong>et ce qu'il ne veut pas dire</strong>.</p>
+  <div id="conf-commande" class="conf-commande"></div>
+  <div id="conf-grille" class="conf-grille"></div>
+  <p class="page-p" id="conf-reserve" style="margin-top:18px"></p>
+</div>
+
+<div class="page" id="p-conf-plan">
+  <span class="eyebrow">Taux de conformité · plan</span>
+  <h1 class="page-h">Du verrou au détail, <em>et ce que chaque action rapporte</em></h1>
+  <p class="page-p">Trois rangs. <strong>Les verrous d'abord</strong>&nbsp;: tant
+  qu'ils tiennent, tout le reste bute sur le même plafond — ce n'est pas une
+  préférence de méthode, c'est de l'arithmétique. Puis <strong>ce qui sert
+  plusieurs normes</strong>, tiré des rapprochements déjà déclarés entre les
+  référentiels. Puis le propre à chacune. Les gains sont calculés
+  <strong>à la suite</strong>, sur l'état laissé par les actions précédentes&nbsp;:
+  ils se cumulent exactement jusqu'au plafond, sans jamais le dépasser.</p>
+  <div id="conf-plan-corps"></div>
+</div>
+
+<div class="page" id="p-conf-limites">
+  <span class="eyebrow">Taux de conformité · limites</span>
+  <h1 class="page-h">Ce que ce plan <em>ne peut pas faire</em></h1>
+  <p class="page-p">La moitié qu'on ne montre jamais, et celle qui fait la
+  différence en comité. Ces points-là sont connus d'avance&nbsp;: les taire ne les
+  supprime pas, cela les fait découvrir devant l'auditeur.</p>
+  <div id="conf-limites-corps"></div>
+</div>
 
 <!-- ═══════════════════════════════════════════════════════════════
      LE MODULE CRA — TROIS VUES, ET AUCUNE NE RECOPIE LE RÈGLEMENT

@@ -1891,6 +1891,7 @@ import iso42001  # noqa: E402
 import nist_ai_rmf  # noqa: E402  — le cadre NIST, qui ne se certifie PAS :
                     # la réserve voyage avec chaque réponse
 import owasp_llm    # noqa: E402  — le Top 10 LLM 2025, et surtout ce qu'ISO
+import conformite
                     # 42001 ne rencontre pas
 
 
@@ -1943,6 +1944,52 @@ def api_owasp_evaluer():
     data = request.get_json(silent=True) or {}
     r = owasp_llm.evaluer(data.get("declares"),
                           certifie_42001=bool(data.get("certifie_42001")))
+    return jsonify(r), (200 if r.get("ok") else 400)
+
+
+@app.route('/api/conformite/referentiel', methods=['GET'])
+@rate_limit(limit=120, window=60)
+def api_conformite_referentiel():
+    """Les neuf normes, leur nature, et ce que 100 % veut dire pour chacune.
+
+    LA PHRASE QUI PART AVEC : ce que 100 % NE veut PAS dire. Un écran qui
+    affiche neuf pourcentages alignés les fait lire comme neuf fois la même
+    chose ; ils ne le sont pas, et c'est la nature qui le dit."""
+    return jsonify({
+        "ok": True,
+        "normes": [dict(n, nature_detail=conformite.NATURES[n["nature"]])
+                   for n in conformite.NORMES],
+        "natures": conformite.NATURES,
+        "compositions": conformite.COMPOSITIONS,
+        "verrous": conformite.VERROUS,
+        "reserves": conformite.RESERVES,
+        "audit_ia_act": {
+            "sections": [{"cle": c, "titre": t, "article": a}
+                         for c, t, a in conformite.AUDIT_IA_ACT_SECTIONS],
+            "points": [{"cle": c, "section": sec, "titre": t, "article": a,
+                        "prio": p}
+                       for c, sec, t, a, p in conformite.AUDIT_IA_ACT],
+            "priorites": conformite.PRIORITES_IA_ACT,
+        },
+        "version": conformite.VERSION,
+    })
+
+
+@app.route('/api/conformite/etat-des-lieux', methods=['POST'])
+@rate_limit(limit=60, window=60)
+def api_conformite_etat_des_lieux():
+    """Les neuf taux, ce qui commande, le plan, et ce que le plan ne peut pas.
+
+    LE CORPS PORTE, PAR NORME, LA DÉCLARATION QUE SON PROPRE MODULE ATTEND —
+    la même exactement. Un second vocabulaire pour dire la même chose serait
+    un second endroit à tenir d'accord, et c'est le défaut que ce module
+    passe son temps à corriger ailleurs."""
+    data = request.get_json(silent=True) or {}
+    # LE PLAFOND D'ACTIONS EST UNE CONSTANTE DU MODULE, PAS UNE VARIABLE
+    # D'ENVIRONNEMENT. Ce dépôt n'a pas de lecteur d'environnement gardé ; un
+    # `int(os.environ[...])` non protégé tuerait la route sur une valeur
+    # malformée, et le réglage ne vaut pas ce risque.
+    r = conformite.etat_des_lieux(data.get("declarations"))
     return jsonify(r), (200 if r.get("ok") else 400)
 
 

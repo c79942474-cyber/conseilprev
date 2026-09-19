@@ -52,7 +52,14 @@ NODE = shutil.which("node")
 # partagent la structure harmonisée des articles 4 à 10, et 42001 se GREFFE
 # sur ce socle — c'est ce que déclare le pont du moteur, dans les deux sens.
 # Les ranger dans l'autre ordre ferait lire la greffe avant le support.
-TIROIRS = ["rgpd-et-privacy", "iso27001", "iso42001", "nis2", "cra",
+# LE TAUX PASSE DEVANT, ET CE N'EST PAS UNE PRÉFÉRENCE D'AFFICHAGE. Les sept
+# tiroirs qui suivent sont les instruments, un par référentiel ; celui-ci est
+# la SYNTHÈSE de tous — il dit où l'on en est sur chacun et par quoi
+# commencer. Le placer après eux obligerait à connaître les sept avant de
+# savoir lequel ouvrir, ce qui est exactement la question à laquelle il
+# répond.
+TIROIRS = ["taux-conformite",
+           "rgpd-et-privacy", "iso27001", "iso42001", "nis2", "cra",
            "nist-ai-rmf", "owasp-llm"]
 
 
