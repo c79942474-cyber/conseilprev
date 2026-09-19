@@ -168,6 +168,68 @@ body{
 .sb-section.sb-pliable{cursor:pointer;user-select:none;
   transition:color .18s ease,border-color .18s ease}
 .sb-section.sb-pliable:hover{color:var(--ink)}
+
+/* ── NIST AI RMF ET OWASP LLM ─────────────────────────────────────────────
+   DEUX JEUX DE CLASSES, ET DÉLIBÉRÉMENT : le cadre NIST se lit par fonction
+   et par pièce, le Top 10 se lit en liste. Les fondre aurait fait glisser
+   les deux vues l'une vers l'autre au premier ajustement, et le lecteur
+   aurait cessé de voir qu'il change de référentiel. */
+.nist-fn{display:grid;gap:14px;margin-top:16px}
+.nist-f{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--panel)}
+.nist-f.nist-socle{border-color:var(--acc,#6ea8fe)}
+.nist-f-t{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;font-size:15px}
+.nist-f-t b{font-family:var(--mono);letter-spacing:.06em}
+.nist-b{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+        border:1px solid var(--acc,#6ea8fe);color:var(--acc,#6ea8fe);border-radius:999px;padding:1px 8px}
+.nist-n{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink2)}
+.nist-q{color:var(--ink2);font-size:13.5px;line-height:1.6;margin:8px 0 0;max-width:80ch}
+.nist-tombe{margin:10px 0 0;font-size:13px;line-height:1.6;color:var(--ink2);max-width:80ch}
+.nist-tombe span{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.1em;
+                 text-transform:uppercase;color:var(--ink2);margin-bottom:3px}
+.nist-cats{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:6px}
+.nist-cats li{font-size:13px;line-height:1.5;border-top:1px solid var(--line);padding-top:6px}
+.nist-cats code,.nist-sub code,.ow-liste code,.ow-pont code{font-family:var(--mono);font-size:11px;
+  border:1px solid var(--line);border-radius:5px;padding:1px 5px;margin-right:5px}
+.nist-cats i,.nist-carac i{display:block;color:var(--ink2);font-size:12.5px;margin-top:2px}
+.nist-carac{border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:16px;background:var(--panel)}
+.nist-carac ul{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:8px}
+.nist-cat{border:1px solid var(--line);border-radius:11px;margin-top:8px;overflow:hidden;background:var(--panel)}
+.nist-cat>summary{list-style:none;cursor:pointer;padding:11px 14px;display:flex;flex-wrap:wrap;
+                  align-items:baseline;gap:9px;font-size:14px}
+.nist-cat>summary::-webkit-details-marker{display:none}
+.nist-cat>summary:focus-visible{outline:2px solid var(--acc,#6ea8fe);outline-offset:-2px}
+.nist-cat[open]{border-color:var(--acc,#6ea8fe)}
+.nist-cat summary em{margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--ink2);font-style:normal}
+.nist-en{margin:0 14px;padding:0 0 4px;font-size:12.5px;color:var(--ink2);font-style:italic;line-height:1.55}
+.nist-sub{list-style:none;margin:0;padding:0 14px 14px}
+.nist-sub li{font-size:12.5px;line-height:1.55;padding:5px 0;border-top:1px solid var(--line)}
+.nist-gen{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:9px}
+.nist-gen li{display:flex;gap:12px;border:1px solid var(--line);border-radius:11px;padding:11px 14px;background:var(--panel)}
+.nist-gen li.gen-non{border-style:dashed}
+.gen-n{font-family:var(--mono);font-size:12px;color:var(--ink2);min-width:1.6em}
+.nist-gen b{font-size:14px}
+.nist-gen i{display:block;font-family:var(--mono);font-size:10.5px;color:var(--ink2);margin-top:3px;font-style:normal}
+.nist-gen p{margin:6px 0 0;font-size:12.5px;color:var(--ink2);line-height:1.55}
+.ow-liste{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:10px}
+.ow-liste li{border:1px solid var(--line);border-radius:12px;padding:13px 15px;background:var(--panel)}
+.ow-t{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;font-size:15px}
+.ow-t em{font-family:var(--mono);font-size:11px;color:var(--ink2);font-style:normal}
+.ow-liste p{margin:8px 0 0;font-size:13px;line-height:1.6;color:var(--ink2);max-width:82ch}
+.ow-dure span{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.1em;
+              text-transform:uppercase;color:var(--ink2);margin-bottom:3px}
+.ow-pont{width:100%;border-collapse:collapse;font-size:13px;margin-top:14px;min-width:560px}
+.ow-pont th{text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.09em;
+            text-transform:uppercase;color:var(--ink2);border-bottom:1px solid var(--line);padding:7px 8px}
+.ow-pont td{border-bottom:1px solid var(--line);padding:9px 8px;vertical-align:top;line-height:1.5}
+.ow-pont tr.ow-non td{color:var(--ink2)}
+.ow-pont tr.ow-non td:first-child{border-left:2px solid var(--warn,#e8b34a)}
+.ow-pont i{color:var(--ink2)}
+@media(max-width:760px){
+  /* LE TABLEAU DU PONT NE SE REPLIE PAS EN UNE COLONNE : trois colonnes de
+     rattachement n'ont pas de sens séparées. Il défile donc dans son propre
+     conteneur, et la page ne bouge pas. */
+  #owasp-pont-body{overflow-x:auto}
+}
 .sb-section.sb-pliable:focus-visible{outline:2px solid var(--accent);
   outline-offset:2px;border-radius:4px}
 .sb-chev{margin-left:auto;display:inline-flex;transition:transform .2s ease;
@@ -3192,6 +3254,13 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <div class="sb-item" data-grp="cra" role="button" tabindex="0" onclick="go('cra-ecarts',this,'CRA — PRODUITS','Analyse d’écart')" title="Les vingt et une exigences essentielles de l annexe I, parties I et II, cotees une par une. Une case vide n est pas une case verte."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h10M4 18h7"/><path d="M17 15l2.5 2.5L23 13"/></svg></span>Analyse d’écart</div>
     <div class="sb-item" data-grp="cra" role="button" tabindex="0" onclick="go('cra-chiffre',this,'CRA — PRODUITS','Exposition chiffrée')" title="Les trois paliers d amende de l article 64, et le chiffre d affaires a partir duquel le pourcentage depasse le montant fixe."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3v18"/><path d="M16.5 7.5c0-1.7-2-3-4.5-3s-4.5 1.3-4.5 3S9.5 10.5 12 10.5s4.5 1.3 4.5 3-2 3-4.5 3-4.5-1.3-4.5-3"/></svg></span>Exposition chiffrée</div>
     <div class="sb-item" data-grp="cra" role="button" tabindex="0" onclick="go('cra-signalement',this,'CRA — PRODUITS','Signalement art. 14')" title="Vulnerabilite activement exploitee et incident grave : 24 h, 72 h, puis le rapport final. Applicable depuis le 11 septembre 2026."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3v10"/><circle cx="12" cy="18" r="1.2"/><path d="M4.5 20h15a1.5 1.5 0 0 0 1.3-2.25l-7.5-13a1.5 1.5 0 0 0-2.6 0l-7.5 13A1.5 1.5 0 0 0 4.5 20z"/></svg></span>Signalement art. 14</div>
+    <div class="sb-section sb-pliable" data-grp="nist-ai-rmf" data-fam="conformite" role="button" tabindex="0" aria-expanded="false" onclick="sbReplier(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sbReplier(this)}" title="Replier ou déplier le cadre NIST"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 5.5v3M12 15.5v3M5.5 12h3M15.5 12h3"/><circle cx="12" cy="12" r="2.2"/></svg><span>NIST AI RMF — Gestion des risques IA</span><svg class="sb-chev" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></div>
+    <div class="sb-item" data-grp="nist-ai-rmf" role="button" tabindex="0" onclick="go('nist-profil',this,'NIST AI RMF','Profil par fonction');nistInit()" title="Les quatre fonctions notees separement — et l avertissement quand l aval devance la gouvernance"><span class="sb-icon" aria-hidden="true"></span>Profil par fonction</div>
+    <div class="sb-item" data-grp="nist-ai-rmf" role="button" tabindex="0" onclick="go('nist-cadre',this,'NIST AI RMF','Le cadre, catégorie par catégorie');nistInit()" title="Les categories du cadre, leurs points de preuve, et les sept caracteristiques de confiance"><span class="sb-icon" aria-hidden="true"></span>Le cadre, catégorie par catégorie</div>
+    <div class="sb-item" data-grp="nist-ai-rmf" role="button" tabindex="0" onclick="go('nist-genai',this,'NIST AI RMF','Profil IA générative');nistInit()" title="Les douze risques d AI 600-1, et les six qui ne relevent pas de la cyber"><span class="sb-icon" aria-hidden="true"></span>Profil IA générative</div>
+    <div class="sb-section sb-pliable" data-grp="owasp-llm" data-fam="conformite" role="button" tabindex="0" aria-expanded="false" onclick="sbReplier(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sbReplier(this)}" title="Replier ou déplier le Top 10 OWASP LLM"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 6.5h3M4 12h3M4 17.5h3"/><path d="M10.5 6.5h9.5M10.5 12h9.5M10.5 17.5h9.5"/></svg><span>OWASP Top 10 LLM — Applications</span><svg class="sb-chev" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></div>
+    <div class="sb-item" data-grp="owasp-llm" role="button" tabindex="0" onclick="go('owasp-dix',this,'OWASP LLM','Les dix risques');owaspInit()" title="Le millesime 2025, et pourquoi chacun persiste"><span class="sb-icon" aria-hidden="true"></span>Les dix risques</div>
+    <div class="sb-item" data-grp="owasp-llm" role="button" tabindex="0" onclick="go('owasp-pont',this,'OWASP LLM','Ce qu’ISO 42001 ne couvre pas');owaspInit()" title="Les trois risques qu aucune mesure de l annexe A ne rencontre — et dont on se croit couvert"><span class="sb-icon" aria-hidden="true"></span>Ce qu’ISO 42001 ne couvre pas</div>
     <div class="sb-section" data-grp="juridique"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 6.5S9.5 4.5 3.5 4.5v13c6 0 8.5 2 8.5 2s2.5-2 8.5-2v-13c-6 0-8.5 2-8.5 2z"/><path d="M12 6.5v13"/></svg><span>Juridique</span></div>
     <div class="sb-item" data-grp="juridique" role="button" tabindex="0" onclick="go('juridique',this,'JURIDIQUE','Conseil juridique assisté');juInit()" title="Qualification reglementaire deterministe, lectures possibles des textes, clausier fournisseurs et revue de contrat — droit du numerique, cyber IT/OT/ICS et IA."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3v18"/><path d="M5 7h5l-2.5 5a2.5 2.5 0 0 0 5 0L10 7"/><path d="M14 7h5l-2.5 5a2.5 2.5 0 0 0 5 0L19 7"/><path d="M5 21h14"/><path d="M9 7h6"/></svg></span>Conseil juridique</div>
     <div class="sb-section" data-grp="entreprise"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3.5 21V9.5l6-3v14.5"/><path d="M9.5 21V13l7-3v11"/><path d="M16.5 21V6.5l4 2V21"/><path d="M2.5 21h19"/></svg><span>Entreprise</span></div>
@@ -5235,6 +5304,59 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
      divergé du moteur au premier amendement, et la divergence se serait vue
      chez le client, pas dans la recette.
      ═══════════════════════════════════════════════════════════════════ -->
+<div class="page" id="p-nist-profil">
+  <span class="eyebrow">NIST AI RMF · Profil</span>
+  <h1 class="page-h">Quatre notes, et <em>laquelle commande</em></h1>
+  <p class="page-p">MAP, MEASURE et MANAGE supposent GOVERN. Une maison qui note bien sur
+    le traitement et mal sur la gouvernance ne gère rien&nbsp;: elle éteint des feux. Le profil
+    est donc rendu par fonction, jamais en note globale —
+    <strong>une moyenne des quatre monte quand on cartographie beaucoup et qu'on ne décide rien</strong>,
+    c'est-à-dire sur le profil que le cadre est écrit pour corriger.</p>
+  <div id="nist-reserve" class="band" style="margin-top:14px"></div>
+  <div id="nist-profil-body" class="veille-loading">Chargement…</div>
+</div>
+
+<div class="page" id="p-nist-cadre">
+  <span class="eyebrow">NIST AI RMF · Le cadre</span>
+  <h1 class="page-h">Le cadre, <em>catégorie par catégorie</em></h1>
+  <p class="page-p">Les énoncés sont ceux du document, en anglais et verbatim&nbsp;: ce sont
+    des œuvres du gouvernement des États-Unis, elles se citent. Et une sous-catégorie sert de
+    <strong>pièce</strong> en revue — traduite, elle ne se retrouve plus dans le document quand
+    l'auditeur demande où elle est écrite.</p>
+  <div id="nist-cadre-body" class="veille-loading">Chargement…</div>
+</div>
+
+<div class="page" id="p-nist-genai">
+  <span class="eyebrow">NIST AI RMF · Profil IA générative</span>
+  <h1 class="page-h">Douze risques, <em>dont six hors cyber</em></h1>
+  <p class="page-p">AI 600-1 est un <strong>profil</strong> du cadre, pas un second cadre&nbsp;:
+    le citer sans le cadre en dessous, c'est citer le profil de rien. Et confier « les risques de
+    l'IA générative selon le NIST » au RSSI revient à lui faire répondre de l'empreinte
+    environnementale, des biais et de la propriété intellectuelle, qu'il ne tient pas.</p>
+  <div id="nist-genai-body" class="veille-loading">Chargement…</div>
+</div>
+
+<div class="page" id="p-owasp-dix">
+  <span class="eyebrow">OWASP · Top 10 LLM</span>
+  <h1 class="page-h">Dix défaillances, <em>et pourquoi elles durent</em></h1>
+  <p class="page-p">Ce n'est ni une norme ni un référentiel certifiable&nbsp;: c'est un inventaire
+    de ce qui casse le plus souvent. On ne s'y conforme pas, on s'en sert pour vérifier qu'on n'a
+    rien oublié d'évident. <strong>Il porte un millésime</strong> — le précédent ignorait la fuite
+    d'invite système, les bases vectorielles et la consommation non bornée.</p>
+  <div id="owasp-reserve" class="band" style="margin-top:14px"></div>
+  <div id="owasp-dix-body" class="veille-loading">Chargement…</div>
+</div>
+
+<div class="page" id="p-owasp-pont">
+  <span class="eyebrow">OWASP · Pont vers ISO 42001</span>
+  <h1 class="page-h">Ce que votre certification <em>ne vous donne pas</em></h1>
+  <p class="page-p">Ce qui se vend, c'est «&nbsp;notre SMIA couvre OWASP&nbsp;». Ce qui est vrai,
+    c'est que plusieurs de ces risques ne rencontrent <strong>aucune</strong> mesure de l'annexe A —
+    parce qu'ils sont d'ordre applicatif et qu'ISO/IEC 42001 est un système de management. Ce sont
+    ceux-là qu'il faut traiter ailleurs, et ce sont ceux dont on se croit couvert.</p>
+  <div id="owasp-pont-body" class="veille-loading">Chargement…</div>
+</div>
+
 <div class="page" id="p-cra-role">
   <span class="eyebrow">CRA · Qualification</span>
   <h1 class="page-h">Quel rôle le règlement <em>vous donne</em></h1>

@@ -953,6 +953,11 @@ var PAGE_META = {
   'iso27001-millesime':{ section: 'ISO 27001', label: '2013 \u2192 2022 : ce qui a changé' },
   'iso42001':      { section: 'ISO 42001', label: 'Articles 4 à 10' },
   'iso42001-soa':  { section: 'ISO 42001', label: 'Déclaration d\u2019applicabilité' },
+  'nist-profil':   { section: 'NIST AI RMF', label: 'Profil par fonction' },
+  'nist-cadre':    { section: 'NIST AI RMF', label: 'Le cadre, cat\u00e9gorie par cat\u00e9gorie' },
+  'nist-genai':    { section: 'NIST AI RMF', label: 'Profil IA générative' },
+  'owasp-dix':     { section: 'OWASP LLM', label: 'Les dix risques' },
+  'owasp-pont':    { section: 'OWASP LLM', label: 'Ce qu\u2019ISO 42001 ne couvre pas' },
   'iso42001-certif':{ section: 'ISO 42001', label: 'Chemin de certification' },
   'iso42001-ponts':{ section: 'ISO 42001', label: 'Ponts IA Act / RGPD / NIS 2' },
   'nis2-qualifier':{ section: 'NIS 2', label: 'Suis-je concerné ?' },
@@ -9647,6 +9652,46 @@ var PAGE_GUIDES = {
       {h:"À quoi sert cette page", t:"À coter les trente-deux sous-articles du corps de la norme, et surtout à rendre DEUX taux au lieu d’un. Le premier compte tout ; le second ne compte que les neuf articles que 42001 ajoute vraiment à un système de management déjà en place. Un organisme certifié ISO 27001 hérite de la structure harmonisée — revue de direction, audit interne, non-conformités, informations documentées — et n’a devant lui que ces neuf-là. Le premier taux le flatte ; le second lui dit où va son budget."},
       {h:"Comment l’utiliser", t:"Commencez par 4.3, le périmètre : tout ce qui n’est pas exclu par écrit sera audité, et un périmètre flou est la première cause de dérive de coût d’un audit de certification. Enchaînez ensuite sur les articles marqués « propre à l’IA », qui portent la politique d’IA, l’appréciation des risques et l’évaluation d’impact. Les articles « mutualisables » se cotent vite si vous êtes déjà certifié ailleurs — vous les avez."},
       {h:"Ce qu’elle ne fait pas", t:"Elle ne reproduit AUCUNE phrase de la norme : ISO/IEC 42001:2023 est protégée par le droit d’auteur, et cette page en cite les numéros et les titres, tout le reste étant rédigé par le cabinet. Détenir le texte reste nécessaire pour se certifier. Elle n’accepte pas non plus qu’un article de 4 à 10 soit déclaré « sans objet » : ce sont des exigences, elles ne s’écartent pas. Seules les mesures de l’annexe A le peuvent, et seulement avec justification."}
+    ]
+  },
+  'nist-profil': {
+    title: "NIST AI RMF — profil par fonction",
+    sections: [
+      {h:"À quoi sert cette page", t:"À voir où vous en êtes du cadre NIST, fonction par fonction, sans jamais additionner les quatre. GOVERN est le socle : MAP, MEASURE et MANAGE le supposent. Une note honorable sur le traitement avec une gouvernance à zéro ne décrit pas une maison qui gère ses risques — elle décrit une maison qui éteint des feux."},
+      {h:"Comment l’utiliser", t:"Renseignez d’abord les six catégories de GOVERN. Si l’une des trois autres fonctions la devance d’un point entier, l’écran le dit : vous cartographiez, mesurez ou traitez des risques que personne ne s’est engagé à assumer. L’écart se résorbe par le haut, jamais en ralentissant l’aval. Distinguez « tenu » et « prouvé » : les deux se ressemblent en atelier et se séparent en revue."},
+      {h:"Ce qu’elle ne fait pas", t:"Elle ne délivre aucune conformité. Le cadre NIST ne se certifie pas : aucun organisme n’accrédite, aucun auditeur n’habilite, aucun certificat n’existe. « Conforme NIST AI RMF » ne veut rien dire — au mieux, cela signifie « nous nous en sommes servis ». Elle ne rend pas non plus de note globale, et c’est délibéré."}
+    ]
+  },
+  'nist-cadre': {
+    title: "NIST AI RMF — dix-neuf catégories, soixante-douze points",
+    sections: [
+      {h:"À quoi sert cette page", t:"À disposer du cadre complet, avec les énoncés d’origine. Les soixante-douze sous-catégories ne sont pas un questionnaire : elles servent de pièces sous les dix-neuf catégories, qui sont le niveau où une évaluation se conduit réellement en atelier."},
+      {h:"Comment l’utiliser", t:"Dépliez la catégorie sur laquelle vous travaillez et servez-vous des points comme d’une liste de preuves à demander. Les énoncés sont en anglais et verbatim, volontairement : une pièce traduite ne se retrouve plus dans le document le jour où l’auditeur demande où elle est écrite."},
+      {h:"Ce qu’elle ne fait pas", t:"Elle ne traduit pas le cadre et ne s’y substitue pas. Elle ne dit pas non plus lesquelles des sept caractéristiques de confiance priment : le document ne les hiérarchise pas, il les fait arbitrer — rendre un système plus explicable peut le rendre moins sûr."}
+    ]
+  },
+  'nist-genai': {
+    title: "NIST AI 600-1 — profil IA générative",
+    sections: [
+      {h:"À quoi sert cette page", t:"À poser les douze risques propres à l’IA générative, et surtout à dire qui les tient. Six des douze ne relèvent pas de la cybersécurité : NRBC, contenus dangereux, empreinte environnementale, biais, propriété intellectuelle, contenus obscènes."},
+      {h:"Comment l’utiliser", t:"Servez-vous en pour répartir avant d’évaluer. Confier « les risques IA selon le NIST » au RSSI revient à lui faire répondre de sujets qu’il ne tient pas et sur lesquels il n’a aucun moyen d’action — ce qui produit un registre de risques que personne n’arbitre."},
+      {h:"Ce qu’elle ne fait pas", t:"Elle ne classe pas les douze par gravité : l’ordre est alphabétique dans le document, et le NIST s’est abstenu de poser une hiérarchie. Et AI 600-1 est un PROFIL du cadre, pas un second cadre : le citer sans le cadre en dessous, c’est citer le profil de rien."}
+    ]
+  },
+  'owasp-dix': {
+    title: "OWASP Top 10 pour les applications LLM — millésime 2025",
+    sections: [
+      {h:"À quoi sert cette page", t:"À vérifier qu’aucune des dix défaillances les plus fréquentes n’a été oubliée. Ce n’est ni une norme ni un référentiel certifiable : on ne s’y conforme pas, on s’en sert comme d’une liste de contrôle. Chaque risque dit pourquoi il persiste, ce qui vaut mieux qu’une consigne."},
+      {h:"Comment l’utiliser", t:"Lisez « pourquoi ça dure » avant la description. Plusieurs de ces risques tiennent à une propriété du procédé et non à un défaut d’implémentation : pour ceux-là, tout ce qui se construit est de l’atténuation, et promettre la disparition du risque est une faute."},
+      {h:"Ce qu’elle ne fait pas", t:"Elle ne rend pas de note sur dix : les dix ne pèsent pas pareil et la liste n’est pas un barème. Et la liste porte un millésime — celui-ci n’a PAS pu être recoupé avec la publication en ligne depuis l’environnement de construction, owasp.org y étant refusé : la page le signale, et il faut la rouvrir avant de la présenter."}
+    ]
+  },
+  'owasp-pont': {
+    title: "OWASP LLM ↔ ISO/IEC 42001 — ce que la certification ne donne pas",
+    sections: [
+      {h:"À quoi sert cette page", t:"À contredire une phrase qui se vend bien : « notre SMIA couvre OWASP ». Chaque risque est rattaché aux mesures de l’annexe A qui le touchent, par numéro. Trois d’entre eux n’en rencontrent aucune."},
+      {h:"Comment l’utiliser", t:"Regardez d’abord la ligne « aucune ». Ces risques-là sont d’ordre applicatif, et ISO/IEC 42001 est un système de management : aucun référentiel ne les rattrapera, ils se traitent dans l’application. Ce sont aussi ceux dont on se croit couvert précisément parce qu’on est certifié."},
+      {h:"Ce qu’elle ne fait pas", t:"Elle ne reproduit aucune exigence de la norme — numéros et titres seulement, la norme étant sous droits. Et elle ne dit pas l’inverse non plus : les mesures citées « touchent » le risque, elles ne le closent pas."}
     ]
   },
   'iso42001-soa': {
@@ -18927,6 +18972,31 @@ document.addEventListener('DOMContentLoaded', function(){ if(window.cartoInit) w
 var DC_MILLESIME = "2026-08-d";
 var GUIDED_PATHS = [
   {
+    id: 'nist_ai_rmf',
+    icon: '\u{1F9ED}',
+    role: "Cadre NIST — je veux savoir o\u00f9 nous en sommes, sans me raconter d\u2019histoire",
+    pitch: "Le cadre NIST ne se certifie pas : il n\u2019y a rien \u00e0 quoi \u00eatre conforme, et « conforme NIST AI RMF » ne veut rien dire. Ce parcours sert \u00e0 autre chose \u2014 \u00e9tablir un profil honn\u00eate par fonction, et rep\u00e9rer le d\u00e9faut le plus r\u00e9pandu : cartographier, mesurer et traiter des risques que personne ne s\u2019est engag\u00e9 \u00e0 assumer.",
+    steps: [
+      {id:'nist-profil', label:"Profil par fonction", action:"Renseignez d\u2019abord les six cat\u00e9gories de GOVERN, avant de toucher aux trois autres fonctions.", gain:"Quatre notes s\u00e9par\u00e9es, et l\u2019avertissement quand l\u2019aval devance le socle d\u2019un point entier.", tip:"Aucune note globale n\u2019est rendue, et c\u2019est d\u00e9lib\u00e9r\u00e9 : une moyenne des quatre monte quand on cartographie beaucoup et qu\u2019on ne d\u00e9cide rien."},
+      {id:'nist-cadre', label:"Le cadre, cat\u00e9gorie par cat\u00e9gorie", action:"D\u00e9pliez la cat\u00e9gorie sur laquelle vous travaillez et servez-vous de ses points comme d\u2019une liste de preuves \u00e0 demander.", gain:"Les \u00e9nonc\u00e9s d\u2019origine, en anglais et verbatim \u2014 ceux que l\u2019auditeur retrouvera dans le document.", tip:"Les sept caract\u00e9ristiques de confiance ne s\u2019additionnent pas : elles s\u2019arbitrent. Rendre un syst\u00e8me plus explicable peut le rendre moins s\u00fbr."},
+      {id:'nist-genai', label:"Profil IA g\u00e9n\u00e9rative", action:"R\u00e9partissez les douze risques AVANT de les \u00e9valuer : la page dit qui tient chacun.", gain:"Six des douze ne rel\u00e8vent pas de la cyber \u2014 les confier au RSSI produit un registre que personne n\u2019arbitre.", tip:"AI 600-1 est un PROFIL du cadre, pas un second cadre : le citer sans le cadre en dessous, c\u2019est citer le profil de rien."},
+      {id:'iso42001', label:"ISO 42001 \u2014 articles 4 \u00e0 10", action:"Comparez ce que vous venez de renseigner avec le corps de la norme.", gain:"Ce que le cadre NIST laisse volontaire, ISO 42001 le rend exigible \u2014 et certifiable.", tip:"Le rapprochement le plus utile n\u2019est pas point \u00e0 point : GOVERN recoupe les articles 5 et 6, et rien dans le cadre n\u2019impose de d\u00e9claration d\u2019applicabilit\u00e9."},
+      {id:'cadre-normatif', label:"Cadre normatif", action:"Regardez ce que le cadre NIST apporte que les textes europ\u00e9ens n\u2019apportent pas.", gain:"Il est le seul \u00e0 donner une grammaire de RISQUE l\u00e0 o\u00f9 l\u2019IA Act donne une grammaire d\u2019OBLIGATION.", tip:"Un tiret dans une colonne n\u2019est pas un oubli : c\u2019est que le texte ne dit rien de ce module."},
+    ]
+  },
+  {
+    id: 'owasp_llm',
+    icon: '\u{1F50E}',
+    role: "OWASP LLM \u2014 je v\u00e9rifie qu\u2019aucune d\u00e9faillance \u00e9vidente n\u2019a \u00e9t\u00e9 oubli\u00e9e",
+    pitch: "Dix d\u00e9faillances qui reviennent, class\u00e9es par fr\u00e9quence constat\u00e9e. Ce n\u2019est ni une norme ni un r\u00e9f\u00e9rentiel certifiable : on ne s\u2019y conforme pas, on s\u2019en sert comme d\u2019une liste de contr\u00f4le. Le parcours finit sur la question qui f\u00e2che : ce que votre certification ISO/IEC 42001 ne vous donne pas.",
+    steps: [
+      {id:'owasp-dix', label:"Les dix risques", action:"Lisez « pourquoi \u00e7a dure » avant la description de chaque risque.", gain:"Plusieurs tiennent \u00e0 une propri\u00e9t\u00e9 du proc\u00e9d\u00e9 et non \u00e0 un d\u00e9faut d\u2019impl\u00e9mentation : pour ceux-l\u00e0, tout ce qui se construit est de l\u2019att\u00e9nuation.", tip:"La liste porte un mill\u00e9sime, et celui-ci n\u2019a PAS pu \u00eatre recoup\u00e9 avec la publication en ligne depuis la machine de construction : rouvrez top10.owasp.org avant de la pr\u00e9senter."},
+      {id:'owasp-pont', label:"Ce qu\u2019ISO 42001 ne couvre pas", action:"Regardez d\u2019abord les lignes o\u00f9 la colonne des mesures est vide.", gain:"Trois risques ne rencontrent aucune mesure de l\u2019annexe A : aucun r\u00e9f\u00e9rentiel ne les rattrapera.", tip:"Ce sont aussi ceux dont on se croit couvert pr\u00e9cis\u00e9ment parce qu\u2019on est certifi\u00e9. « Notre SMIA couvre OWASP » est la phrase que cette page existe pour contredire."},
+      {id:'iso42001-soa', label:"D\u00e9claration d\u2019applicabilit\u00e9", action:"Reprenez les mesures cit\u00e9es en face des risques, et v\u00e9rifiez leur statut chez vous.", gain:"Une mesure retenue mais non mise en \u0153uvre ne couvre rien \u2014 et c\u2019est sur la SoA que \u00e7a se voit.", tip:"Une mesure « touche » un risque ; elle ne le clot pas. Le pont ne dit pas l\u2019inverse."},
+      {id:'ia-act-hub', label:"IA Act \u2014 vue d\u2019ensemble", action:"Situez lesquels de ces risques deviennent des obligations quand le syst\u00e8me est \u00e0 haut risque.", gain:"OWASP dit ce qui casse ; le r\u00e8glement dit ce qui est exigible. Les deux ne se d\u00e9duisent pas l\u2019un de l\u2019autre.", tip:"Un risque OWASP trait\u00e9 ne vaut pas conformit\u00e9, et une obligation tenue ne vaut pas s\u00e9curit\u00e9."},
+    ]
+  },
+  {
     id: 'cra_fabricant',
     icon: '\u{1F3ED}',
     role: "Fabricant — je conçois et je mets sur le marché",
@@ -24114,3 +24184,217 @@ function iso27PeindreMillesime() {
   });
   e.innerHTML = h;
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   NIST AI RMF — QUATRE NOTES, ET L'AVERTISSEMENT DE SOCLE
+   ══════════════════════════════════════════════════════════════════════════
+   L'ÉCRAN NE CONNAÎT NI FONCTION, NI CATÉGORIE, NI ÉNONCÉ. Tout vient de
+   /api/nist-ai-rmf/referentiel. Recopier dix-neuf intitulés ici les aurait
+   fait diverger du module au premier amendement du cadre — et le cadre est
+   un document vivant, que le NIST annonce lui-même réviser.
+
+   LA RÉSERVE EST PEINTE AVANT LE PREMIER CHIFFRE. Le cadre NE SE CERTIFIE
+   PAS : aucun organisme n'accrédite, aucun auditeur n'habilite. Posée sous
+   les notes, la réserve se lirait après qu'on a déjà retenu un score.
+   ══════════════════════════════════════════════════════════════════════════ */
+var NIST_REF = null;
+
+function nistEsc(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;',
+             "'": '&#39;' }[c];
+  });
+}
+
+function nistPeindre() {
+  var R = NIST_REF && NIST_REF.referentiel;
+  if (!R) return;
+
+  var res = document.getElementById('nist-reserve');
+  if (res) {
+    res.innerHTML = '<div class="status"><span class="dot"></span>'
+      + nistEsc(R.reserve) + '</div>';
+  }
+
+  /* ── LE PROFIL : les quatre fonctions, et ce qui les fait tomber ─────── */
+  var pb = document.getElementById('nist-profil-body');
+  if (pb) {
+    pb.className = '';
+    pb.innerHTML = '<div class="nist-fn">' + R.fonctions.map(function (f) {
+      var cats = R.categories.filter(function (c) { return c.fonction === f.cle; });
+      return '<div class="nist-f' + (f.socle ? ' nist-socle' : '') + '">'
+        + '<div class="nist-f-t"><b>' + nistEsc(f.cle) + '</b> · '
+        + nistEsc(f.nom)
+        + (f.socle ? '<span class="nist-b">socle</span>' : '')
+        + '<span class="nist-n">' + cats.length + ' catégories</span></div>'
+        + '<p class="nist-q">' + nistEsc(f.quoi) + '</p>'
+        + '<p class="nist-tombe"><span>Ce qui la fait tomber</span>'
+        + nistEsc(f.ce_qui_la_fait_tomber) + '</p>'
+        + '<ul class="nist-cats">' + cats.map(function (c) {
+            return '<li><code>' + nistEsc(c.cle) + '</code> '
+              + nistEsc(c.nom) + '<i>' + nistEsc(c.dit) + '</i></li>';
+          }).join('') + '</ul></div>';
+    }).join('') + '</div>';
+  }
+
+  /* ── LE CADRE : catégories, énoncés d'origine, et les pièces ─────────── */
+  var cb = document.getElementById('nist-cadre-body');
+  if (cb) {
+    cb.className = '';
+    var parCat = {};
+    R.sous_categories.forEach(function (sc) {
+      var k = sc.cle.replace(/\.\d+$/, '');
+      (parCat[k] = parCat[k] || []).push(sc);
+    });
+    cb.innerHTML = '<div class="nist-carac"><h3>Les sept caractéristiques '
+      + 'd’une IA digne de confiance</h3><p class="nist-q">Elles ne '
+      + 's’additionnent pas&nbsp;: elles s’arbitrent. Rendre un système plus '
+      + 'explicable peut le rendre moins sûr.</p><ul>'
+      + R.caracteristiques.map(function (x) {
+          return '<li><b>' + nistEsc(x.fr) + '</b> <code>' + nistEsc(x.en)
+            + '</code><i>' + nistEsc(x.dit) + '</i></li>';
+        }).join('') + '</ul></div>'
+      + R.categories.map(function (c) {
+          var sub = parCat[c.cle] || [];
+          return '<details class="nist-cat"><summary><code>'
+            + nistEsc(c.cle) + '</code> <span>' + nistEsc(c.nom) + '</span>'
+            + '<em>' + sub.length + ' point' + (sub.length > 1 ? 's' : '')
+            + '</em></summary>'
+            + '<p class="nist-en">' + nistEsc(c.enonce) + '</p>'
+            + '<ul class="nist-sub">' + sub.map(function (x) {
+                return '<li><code>' + nistEsc(x.cle) + '</code> '
+                  + nistEsc(x.enonce) + '</li>';
+              }).join('') + '</ul></details>';
+        }).join('');
+  }
+
+  /* ── LE PROFIL IA GÉNÉRATIVE : douze risques, et QUI les tient ───────── */
+  var gb = document.getElementById('nist-genai-body');
+  if (gb) {
+    gb.className = '';
+    var horsCyber = R.risques_genai.filter(function (r) { return !r.cyber; });
+    gb.innerHTML = '<div class="band"><div class="status">'
+      + '<span class="dot"></span>' + horsCyber.length + ' de ces douze '
+      + 'risques ne relèvent pas de la cybersécurité. Les confier au RSSI '
+      + 'revient à lui faire répondre de sujets qu’il ne tient pas et sur '
+      + 'lesquels il n’a aucun moyen d’action.</div></div>'
+      + '<ul class="nist-gen">' + R.risques_genai.map(function (r) {
+          return '<li class="' + (r.cyber ? 'gen-cy' : 'gen-non') + '">'
+            + '<span class="gen-n">' + r.n + '</span>'
+            + '<div><b>' + nistEsc(r.nom) + '</b> <code>'
+            + nistEsc(r.cle) + '</code>'
+            + '<i>' + (r.cyber ? 'Cyber' : 'Hors cyber') + ' · tenu par '
+            + nistEsc(r.qui_le_tient) + '</i>'
+            + (r.note ? '<p>' + nistEsc(r.note) + '</p>' : '')
+            + '</div></li>';
+        }).join('') + '</ul>';
+  }
+}
+
+function nistInit() {
+  if (NIST_REF) { nistPeindre(); return; }
+  fetch('/api/nist-ai-rmf/referentiel')
+    .then(function (r) { return r.json(); })
+    .then(function (j) {
+      if (!j || !j.ok) throw new Error('referentiel');
+      NIST_REF = j; nistPeindre();
+    })
+    .catch(function () {
+      /* RIEN PLUTÔT QU'UN CADRE PARTIEL. Dix-neuf catégories dont il en
+         manque trois se lisent comme seize, et personne ne le voit. */
+      ['nist-profil-body', 'nist-cadre-body', 'nist-genai-body']
+        .forEach(function (id) {
+          var e = document.getElementById(id);
+          if (e) e.innerHTML = '<div class="veille-loading">Le cadre est '
+            + 'momentanément indisponible. Rien n’est affiché plutôt qu’une '
+            + 'liste partielle&nbsp;: dix-neuf catégories dont il en manque '
+            + 'trois se lisent comme seize.</div>';
+        });
+    });
+}
+window.nistInit = nistInit;
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   OWASP TOP 10 LLM — ET CE QU'ISO 42001 NE RENCONTRE PAS
+   ══════════════════════════════════════════════════════════════════════════
+   LE MILLÉSIME EST AFFICHÉ AVEC LA LISTE, jamais séparé d'elle : « le Top 10
+   OWASP LLM » sans son année désigne une liste qu'on n'a pas relue.
+
+   ET LA RÉSERVE DE VÉRIFICATION EST PEINTE. owasp.org est refusé par le
+   mandataire de sortie de la machine de construction : la liste n'a pas pu
+   être recoupée avec la publication en ligne, et ça se dit.
+   ══════════════════════════════════════════════════════════════════════════ */
+var OWASP_REF = null;
+
+function owaspPeindre() {
+  var R = OWASP_REF && OWASP_REF.referentiel;
+  if (!R) return;
+
+  var res = document.getElementById('owasp-reserve');
+  if (res && R.a_verifier) {
+    res.innerHTML = '<div class="status"><span class="dot"></span>'
+      + '<b>À revérifier avant présentation.</b> ' + nistEsc(R.a_verifier.quoi)
+      + ' — ' + nistEsc(R.a_verifier.pourquoi) + ' '
+      + nistEsc(R.a_verifier.quoi_faire) + '</div>';
+  }
+
+  var db = document.getElementById('owasp-dix-body');
+  if (db) {
+    db.className = '';
+    db.innerHTML = '<p class="nist-q">Millésime <b>'
+      + nistEsc(R.source.millesime) + '</b> · ' + nistEsc(R.source.dit) + '</p>'
+      + '<ul class="ow-liste">' + R.risques.map(function (r) {
+          return '<li><div class="ow-t"><code>' + nistEsc(r.cle) + '</code> '
+            + '<b>' + nistEsc(r.nom) + '</b> <em>' + nistEsc(r.en) + '</em></div>'
+            + '<p>' + nistEsc(r.quoi) + '</p>'
+            + '<p class="ow-dure"><span>Pourquoi ça dure</span>'
+            + nistEsc(r.pourquoi_ca_dure) + '</p></li>';
+        }).join('') + '</ul>';
+  }
+
+  var pb = document.getElementById('owasp-pont-body');
+  if (pb) {
+    pb.className = '';
+    var hors = R.risques.filter(function (r) {
+      return r.couvert_par_la_norme === 'non';
+    });
+    pb.innerHTML = '<div class="band"><div class="status">'
+      + '<span class="dot"></span>' + nistEsc(R.pont_42001.dit) + '</div></div>'
+      + '<table class="ow-pont"><thead><tr><th>Risque</th>'
+      + '<th>Mesures de l’annexe A</th><th>Portée</th></tr></thead><tbody>'
+      + R.risques.map(function (r) {
+          return '<tr class="ow-' + nistEsc(r.couvert_par_la_norme) + '">'
+            + '<td><code>' + nistEsc(r.cle) + '</code> ' + nistEsc(r.nom) + '</td>'
+            + '<td>' + (r.iso42001.length
+                ? r.iso42001.map(function (c) { return '<code>' + nistEsc(c) + '</code>'; }).join(' ')
+                : '<i>aucune</i>') + '</td>'
+            + '<td>' + nistEsc(R.couvertures[r.couvert_par_la_norme]) + '</td></tr>';
+        }).join('') + '</tbody></table>'
+      + '<p class="nist-tombe" style="margin-top:14px"><span>Ce qu’il faut en retenir</span>'
+      + 'Les ' + hors.length + ' risques sans aucune mesure en face — '
+      + hors.map(function (r) { return r.cle; }).join(', ')
+      + ' — ne seront rattrapés par aucun référentiel. Ils se traitent dans '
+      + 'l’application, et une certification ISO/IEC 42001 n’y change rien.</p>';
+  }
+}
+
+function owaspInit() {
+  if (OWASP_REF) { owaspPeindre(); return; }
+  fetch('/api/owasp-llm/referentiel')
+    .then(function (r) { return r.json(); })
+    .then(function (j) {
+      if (!j || !j.ok) throw new Error('referentiel');
+      OWASP_REF = j; owaspPeindre();
+    })
+    .catch(function () {
+      ['owasp-dix-body', 'owasp-pont-body'].forEach(function (id) {
+        var e = document.getElementById(id);
+        if (e) e.innerHTML = '<div class="veille-loading">La liste est '
+          + 'momentanément indisponible. Rien n’est affiché plutôt qu’une '
+          + 'liste tronquée&nbsp;: un Top 10 à sept entrées se lit comme un '
+          + 'Top 10.</div>';
+      });
+    });
+}
+window.owaspInit = owaspInit;

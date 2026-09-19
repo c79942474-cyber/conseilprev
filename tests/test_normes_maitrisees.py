@@ -99,15 +99,28 @@ def _carte(nom):
 #  1. LE BLOC — SEPT CARTES, ET LE TITRE QUI LES COMPTE
 # ═══════════════════════════════════════════════════════════════════════════
 
-def test_le_bloc_compte_bien_sept_cartes_comme_son_titre_l_annonce():
-    """LE TITRE ANNONCE « 7 normes maîtrisées ». Un titre qui compte et une
-    grille qui ne compte pas pareil est le genre de mensonge qu'on ne voit
-    jamais parce qu'on ne recompte pas."""
+def test_le_titre_compte_EXACTEMENT_les_cartes_du_bloc():
+    """LE TITRE COMPTE, ET LA GRILLE AUSSI. Un titre qui annonce un nombre et
+    une grille qui en montre un autre est le genre de mensonge qu'on ne voit
+    jamais, parce que personne ne recompte.
+
+    LE NOMBRE N'EST PLUS ÉCRIT ICI, ET C'EST LE POINT. Cette règle figeait
+    « 7 » ; elle est tombée le jour où deux normes se sont ajoutées, alors
+    que le produit était juste et le titre à jour. Une règle qui fige un
+    compte interdit d'en ajouter un — elle ne protège pas l'accord entre le
+    titre et la grille, elle protège un chiffre. Elle DÉRIVE désormais le
+    nombre du titre et le compare aux cartes réellement présentes.
+    """
     cartes = _cartes()
-    assert len(cartes) == 7, "le bloc compte %d cartes" % len(cartes)
-    assert "7 normes maîtrisées" in INDEX
+    annonce = re.search(r'"nr\.ttl":"(\d+) normes', INDEXJS)
+    assert annonce, "le titre du bloc n'annonce plus aucun nombre"
+    n = int(annonce.group(1))
+    assert len(cartes) == n, (
+        "le titre annonce %d normes, la grille en montre %d" % (n, len(cartes)))
     noms = sorted(re.findall(r'<div class="nn">([^<]+)</div>', _bloc()))
-    assert len(noms) == 7, "sept noms attendus : %s" % noms
+    assert len(noms) == n, "%d noms pour %d cartes : %s" % (len(noms), n, noms)
+    # LE GARDE-FOU : un bloc vide ferait passer 0 == 0.
+    assert n >= 5, "le bloc n'annonce plus que %d normes" % n
 
 
 def test_la_lecture_du_bloc_n_est_pas_vide():
@@ -467,7 +480,9 @@ def test_chaque_cle_du_bloc_existe_dans_LES_DEUX_dictionnaires():
     sur la version anglaise — et rien ne le signale à qui relit le français."""
     import json
     cles = set(re.findall(r'data-i18n="(nr\.[a-z0-9]+)"', _bloc()))
-    assert len(cles) == 7
+    # AUTANT DE CLÉS QUE DE CARTES, dérivé — pas un nombre écrit ici.
+    assert len(cles) == len(_cartes()), (
+        "%d clés de traduction pour %d cartes" % (len(cles), len(_cartes())))
     for lg in ("fr", "en"):
         m = re.search(r"\n\s*%s:JSON\.parse\(`(.*?)`\)" % lg, INDEXJS, re.S)
         d = json.loads(m.group(1).replace("\\`", "`"))
@@ -481,8 +496,18 @@ def test_les_libelles_traduits_survivent_au_cablage():
     réécrivant le bloc aurait laissé sept descriptions figées en français,
     sans que rien ne le signale côté français."""
     cles = sorted(re.findall(r'data-i18n="(nr\.[a-z0-9]+)"', _bloc()))
-    assert cles == ["nr.27", "nr.42", "nr.cra", "nr.dora", "nr.ia", "nr.nis",
-                    "nr.rgpd"], "clés de traduction perdues : %s" % cles
+    # ON N'ÉNUMÈRE PLUS LES CLÉS ATTENDUES : cette liste interdisait d'ajouter
+    # une norme sans la modifier, et c'est le produit qui décide combien il y
+    # en a. Ce qui se mesure ici est qu'AUCUNE carte ne perd la sienne —
+    # une carte sans clé garde sa description française sur la version
+    # anglaise, et rien ne le signale à qui relit le français.
+    assert len(cles) == len(set(cles)), (
+        "deux cartes partagent la même clé : %s" % cles)
+    assert len(cles) == len(_cartes()), (
+        "%d clés pour %d cartes : une carte a perdu la sienne" 
+        % (len(cles), len(_cartes())))
+    for socle in ("nr.ia", "nr.rgpd", "nr.nis"):
+        assert socle in cles, "la clé de socle %s a disparu du bloc" % socle
 
 
 @pytest.mark.parametrize("nom,_p", ATTENDUES, ids=IDS)

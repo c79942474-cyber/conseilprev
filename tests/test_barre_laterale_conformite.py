@@ -52,7 +52,8 @@ NODE = shutil.which("node")
 # partagent la structure harmonisée des articles 4 à 10, et 42001 se GREFFE
 # sur ce socle — c'est ce que déclare le pont du moteur, dans les deux sens.
 # Les ranger dans l'autre ordre ferait lire la greffe avant le support.
-TIROIRS = ["rgpd-et-privacy", "iso27001", "iso42001", "nis2", "cra"]
+TIROIRS = ["rgpd-et-privacy", "iso27001", "iso42001", "nis2", "cra",
+           "nist-ai-rmf", "owasp-llm"]
 
 
 def _executer(scenario):
@@ -458,15 +459,38 @@ rendre({affiche: famille().querySelector('.sb-famille-n').textContent,
 
 
 def test_le_compte_de_la_famille_suit_le_filtre():
+    """LE COMPTE TOMBE AU NOMBRE DE RÉSULTATS — DE TOUS LES TIROIRS.
+
+    CE QUE CETTE RÈGLE MESURAIT AVANT, ET QUI ÉTAIT UNE COÏNCIDENCE. Elle
+    comparait le compte affiché au nombre d'onglets du SEUL tiroir ISO 42001,
+    et elle passait parce qu'aucun autre tiroir ne parlait d'ISO. Le jour où
+    un onglet d'un autre tiroir a mentionné la norme — « ce qu'ISO 42001 ne
+    couvre pas », sous OWASP — la règle est tombée, alors que le produit
+    faisait exactement ce qu'il fallait : montrer les deux résultats. Elle
+    mesurait donc la taille d'un tiroir, pas le suivi du filtre.
+
+    ELLE COMPTE MAINTENANT LES ONGLETS RESTÉS VISIBLES DANS TOUTE LA FAMILLE,
+    ce qui est la définition de « nombre de résultats ».
+    """
     r = _executer(_OUTILS + r"""
 window.sbRestaurerPlis();
 window.sbFiltrer('iso 42001');
+var vus = 0, ou = [];
+%s.forEach(function(g){
+  var n = visibles(g);
+  vus += n;
+  if(n) ou.push(g + ':' + n);
+});
 rendre({pendant: famille().querySelector('.sb-famille-n').textContent,
-        iso: items('iso42001').length});
-""")
-    assert r["pendant"] == "%d onglets" % r["iso"], (
-        "pendant un filtre, le compte doit tomber au nombre de résultats : "
-        "%r pour %d onglets ISO" % (r["pendant"], r["iso"]))
+        vus: vus, ou: ou});
+""" % json.dumps(TIROIRS))
+    assert r["pendant"] == "%d onglets" % r["vus"], (
+        "pendant un filtre, le compte doit tomber au nombre de résultats de "
+        "TOUTE la famille : %r pour %d visible(s) — %s"
+        % (r["pendant"], r["vus"], ", ".join(r["ou"])))
+    assert r["vus"] >= 1, (
+        "le garde-fou : un filtre qui ne laisse rien ferait passer la règle "
+        "ci-dessus pour une comparaison de deux zéros")
 
 
 # ═══════════════════════════════════════════════════════════════════════════

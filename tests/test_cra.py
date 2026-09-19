@@ -436,17 +436,28 @@ def test_le_CRA_est_la_DEUXIEME_norme_de_l_accueil_derriere_l_IA_Act():
             for x in re.findall(r'class="nn">([^<]*)<', bloc)]
     assert noms[0] == "IA Act"
     assert noms[1] == "CRA", "les normes sortent dans l'ordre %s" % noms
-    assert len(noms) == 7
+    # LE NOMBRE N'EST PAS FIGÉ ICI : ce qui se mesure est la PLACE du CRA,
+    # pas la taille du bloc. Le figer faisait tomber cette règle-ci le jour
+    # où une norme s'ajoutait ailleurs dans la grille, pour une raison sans
+    # aucun rapport avec le rang du CRA.
+    assert len(noms) >= 7, "le bloc a perdu des normes : %s" % noms
 
 
-def test_le_titre_annonce_SEPT_normes_dans_les_trois_langues():
-    """Une clé oubliée dans une langue laisse la version anglaise annoncer six
-    normes là où la française en annonce sept — et personne ne s'en aperçoit
-    avant un prospect étranger."""
+def test_les_trois_langues_annoncent_LE_MEME_nombre_de_normes():
+    """Une clé oubliée dans une langue laisse la version anglaise annoncer un
+    nombre différent de la française — et personne ne s'en aperçoit avant un
+    prospect étranger.
+
+    LE NOMBRE LUI-MÊME N'EST PLUS ÉCRIT ICI. La règle exigeait « 7 » dans les
+    trois langues ; elle est tombée quand le bloc est passé à neuf, alors que
+    les trois langues s'accordaient parfaitement. Ce qui compte n'a jamais
+    été le chiffre : c'est que les trois disent LE MÊME.
+    """
     js = _fichier("index.page.js")
     titres = re.findall(r'"nr\.ttl":"(\d+)', js)
     assert len(titres) == 3, "%d titre(s) trouvé(s) au lieu de trois" % len(titres)
-    assert set(titres) == {"7"}, "les langues annoncent %s" % titres
+    assert len(set(titres)) == 1, (
+        "les trois langues annoncent des nombres différents : %s" % titres)
     assert js.count('"nr.cra"') == 3, "la clé nr.cra manque à une langue"
 
 

@@ -1888,6 +1888,62 @@ def api_nis2_evaluer():
 # sa table porte un champ autre que ceux-là.
 
 import iso42001  # noqa: E402
+import nist_ai_rmf  # noqa: E402  — le cadre NIST, qui ne se certifie PAS :
+                    # la réserve voyage avec chaque réponse
+import owasp_llm    # noqa: E402  — le Top 10 LLM 2025, et surtout ce qu'ISO
+                    # 42001 ne rencontre pas
+
+
+@app.route('/api/nist-ai-rmf/referentiel', methods=['GET'])
+@rate_limit(limit=120, window=60)
+def api_nist_referentiel():
+    """Les quatre fonctions, 19 catégories, 72 sous-catégories, 12 risques.
+
+    LA RÉSERVE PART AVEC LES DONNÉES, et non en note de bas d'écran : le
+    cadre NE SE CERTIFIE PAS, et c'est la première chose qu'un lecteur doit
+    savoir avant de lire une note. Reléguée, elle s'applique à un chiffre
+    qu'on a déjà cité."""
+    return jsonify({"ok": True, "referentiel": nist_ai_rmf.referentiel()})
+
+
+@app.route('/api/nist-ai-rmf/evaluer', methods=['POST'])
+@rate_limit(limit=120, window=60)
+def api_nist_evaluer():
+    """Le profil par fonction — jamais une note globale.
+
+    ADDITIONNER LES QUATRE FONCTIONS produit un chiffre qui monte quand on
+    cartographie beaucoup et qu'on ne décide rien : c'est le profil le plus
+    répandu, et celui que le cadre est écrit pour corriger."""
+    data = request.get_json(silent=True) or {}
+    r = nist_ai_rmf.evaluer(data.get("etats"), aujourdhui=data.get("date"))
+    return jsonify(r), (200 if r.get("ok") else 400)
+
+
+@app.route('/api/owasp-llm/referentiel', methods=['GET'])
+@rate_limit(limit=120, window=60)
+def api_owasp_referentiel():
+    """Les dix risques du millésime 2025, et le pont vers l'annexe A.
+
+    `a_verifier` PART AVEC LA RÉPONSE. owasp.org est refusé par le mandataire
+    de sortie de la machine de construction : la liste n'a pas pu être
+    recoupée avec la publication en ligne, et un référentiel qu'on n'a pas pu
+    rouvrir se signale plutôt que de se présenter comme vérifié."""
+    return jsonify({"ok": True, "referentiel": owasp_llm.referentiel()})
+
+
+@app.route('/api/owasp-llm/evaluer', methods=['POST'])
+@rate_limit(limit=120, window=60)
+def api_owasp_evaluer():
+    """Ce qui est traité, et l'ANGLE MORT.
+
+    Le calcul qui compte n'est pas ce que la maison couvre : ce sont les
+    risques qu'elle ne traite pas ET qu'aucune mesure de l'annexe A ne
+    rencontre. Une certification 42001 ne fournit aucun filet dessus — et ce
+    sont ceux dont on se croit couvert parce qu'on est certifié."""
+    data = request.get_json(silent=True) or {}
+    r = owasp_llm.evaluer(data.get("declares"),
+                          certifie_42001=bool(data.get("certifie_42001")))
+    return jsonify(r), (200 if r.get("ok") else 400)
 
 
 @app.route('/api/iso42001/referentiel', methods=['GET'])
