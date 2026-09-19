@@ -117,6 +117,20 @@ def test_le_titre_compte_EXACTEMENT_les_cartes_du_bloc():
     n = int(annonce.group(1))
     assert len(cartes) == n, (
         "le titre annonce %d normes, la grille en montre %d" % (n, len(cartes)))
+
+    # ── LE TITRE EST ÉCRIT DEUX FOIS, ET LA RÈGLE N'EN LISAIT QU'UN ──────
+    # `data-i18n` fait que le dictionnaire remplace le titre AU CHARGEMENT ;
+    # ce qui est dans le HTML est ce qu'on voit AVANT, ce que montre le code
+    # source, et ce que lit un robot d'indexation. Les deux normes ajoutées
+    # n'avaient été portées qu'au dictionnaire : la règle dérivait son nombre
+    # de LÀ, le comparait aux cartes, et trouvait tout en ordre — pendant que
+    # le HTML annonçait sept normes au-dessus d'une grille de neuf.
+    repli = re.search(r'data-i18n="nr\.ttl">(\d+) normes', INDEX)
+    assert repli, "le titre écrit dans le HTML n'annonce plus aucun nombre"
+    assert int(repli.group(1)) == n, (
+        "le titre écrit dans le HTML annonce %s normes, le dictionnaire %d — "
+        "c'est le HTML qu'on lit avant que la traduction s'applique"
+        % (repli.group(1), n))
     noms = sorted(re.findall(r'<div class="nn">([^<]+)</div>', _bloc()))
     assert len(noms) == n, "%d noms pour %d cartes : %s" % (len(noms), n, noms)
     # LE GARDE-FOU : un bloc vide ferait passer 0 == 0.
