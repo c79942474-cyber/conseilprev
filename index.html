@@ -636,6 +636,34 @@ footer::after{
 .diff-ico{font-size:32px;margin-bottom:14px}
 .diff-title{font-family:"Cormorant Garamond",serif;font-size:18px;font-weight:700;color:var(--wh);margin-bottom:10px}
 .diff-desc{font-size:13px;color:var(--mu);line-height:1.7}
+/* ── LES HUIT RISQUES MÈNENT AU MODULE QUI LES ADRESSE ──────────────────
+   LA BANNIÈRE DE PIED NE SUFFISAIT PAS. Elle ouvrait « /sentinel » tout
+   court : après une section qui vient de nommer huit risques, atterrir sur
+   un sommaire déplace le problème d'un cran. Chaque carte porte donc sa
+   destination, et la bannière vise le radar — le seul écran qui les pondère
+   tous les huit.
+
+   L'APPEL EST EN PIED DE CARTE, pas sur la carte entière : le titre, la
+   description et l'étiquette sont tous traduits, et envelopper l'ensemble
+   dans un <a> placerait trois éléments traduits DANS un lien — ce qui tient,
+   mais rendrait l'étiquette de catégorie cliquable alors qu'elle ne mène
+   nulle part. Un pied explicite dit où l'on va. */
+.risk-card{display:flex;flex-direction:column}
+.risk-go{align-self:flex-start;margin-top:14px;font-size:12px;font-weight:600;
+  letter-spacing:.02em;color:var(--gd,#d4a843);text-decoration:none;
+  border:1px solid rgba(212,168,67,.30);border-radius:8px;padding:7px 13px;
+  transition:background .16s,border-color .16s}
+.risk-go:hover{background:rgba(212,168,67,.10);border-color:rgba(212,168,67,.6)}
+.risk-go:focus-visible{outline:2px solid var(--gd,#d4a843);outline-offset:2px}
+/* SURVOLER N'IMPORTE OÙ SUR LA CARTE ÉCLAIRE L'APPEL : on sait où cliquer
+   sans l'avoir cherché. */
+.risk-card:hover .risk-go{background:rgba(212,168,67,.10);
+  border-color:rgba(212,168,67,.6)}
+/* L'ÉTIQUETTE DE CATÉGORIE EST POUSSÉE EN BAS, au-dessus de l'appel : sans
+   cela, une carte à description courte laisserait l'appel flotter au milieu
+   du vide pendant que sa voisine le pose en bas. */
+.risk-card .risk-tag{margin-top:auto}
+
 /* ── LES SIX OFFRES MÈNENT À LEUR MODULE ────────────────────────────────
    DEUX SORTES DE LIENS, ET ELLES NE DISENT PAS LA MÊME CHOSE. Le pied de
    carte ouvre le module PRINCIPAL de l'offre ; la flèche d'une puce ouvre
@@ -4307,53 +4335,61 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
         <h3 class="risk-title" data-i18n="rk.juri.t">Juridictionnel</h3>
         <p class="risk-desc" data-i18n="rk.juri.d">Cloud Act · lois extraterritoriales · sanctions · souveraineté des données</p>
         <span class="risk-tag rt-law" data-i18n="rk.juri.tag">Droit &amp; Régulation</span>
+        <a class="risk-go" href="/sentinel?goto=carto" title="Ouvre la carte mondiale des régulations — 46 juridictions, 12 critères dans Sentinel"><span data-i18n="sv.go">Ouvrir le module</span> →</a>
       </div>
       <div class="risk-card">
         <div class="risk-ico">📉</div>
         <h3 class="risk-title" data-i18n="rk.eco.t">Économique</h3>
         <p class="risk-desc" data-i18n="rk.eco.d">Concentration des dépenses · dépendance modèles propriétaires · élasticité tarifaire</p>
         <span class="risk-tag rt-finance" data-i18n="rk.eco.tag">Finance</span>
+        <a class="risk-go" href="/sentinel?goto=finops" title="Ouvre le coût réel du parc d’IA déjà déclaré dans Sentinel"><span data-i18n="sv.go">Ouvrir le module</span> →</a>
       </div>
       <div class="risk-card">
         <div class="risk-ico">🗄️</div>
         <h3 class="risk-title" data-i18n="rk.data.t">Data &amp; IA</h3>
         <p class="risk-desc" data-i18n="rk.data.d">Données captives · lock-in fondation · biais algorithmiques · qualité des données</p>
         <span class="risk-tag rt-tech" data-i18n="rk.data.tag">Technique</span>
+        <a class="risk-go" href="/sentinel?goto=nist-genai" title="Ouvre le profil IA générative du NIST — biais, confabulation, vie privée dans Sentinel"><span data-i18n="sv.go">Ouvrir le module</span> →</a>
       </div>
       <div class="risk-card">
         <div class="risk-ico">⚙️</div>
         <h3 class="risk-title" data-i18n="rk.ops.t">Opérationnel</h3>
         <p class="risk-desc" data-i18n="rk.ops.d">Compétences rares · supply chain GPU · dépendance fournisseurs</p>
         <span class="risk-tag rt-ops" data-i18n="rk.ops.tag">Opérations</span>
+        <a class="risk-go" href="/sentinel?goto=training" title="Ouvre le hub de formation, qui répond à la rareté des compétences dans Sentinel"><span data-i18n="sv.go">Ouvrir le module</span> →</a>
       </div>
       <div class="risk-card">
         <div class="risk-ico">🌐</div>
         <h3 class="risk-title" data-i18n="rk.geo.t">Géopolitique</h3>
         <p class="risk-desc" data-i18n="rk.geo.d">Tensions technologiques · restrictions export · fragmentation internet</p>
         <span class="risk-tag rt-strategy" data-i18n="rk.geo.tag">Stratégie</span>
+        <a class="risk-go" href="/sentinel?goto=obs-rd" title="Ouvre l’observatoire de là où l’IA est PRODUITE, et pas seulement encadrée dans Sentinel"><span data-i18n="sv.go">Ouvrir le module</span> →</a>
       </div>
       <div class="risk-card">
         <div class="risk-ico">🛡️</div>
         <h3 class="risk-title" data-i18n="rk.cyber.t">Cyber</h3>
         <p class="risk-desc" data-i18n="rk.cyber.d">Surface d'attaque élargie · adversarial attacks · hallucinations malveillantes</p>
         <span class="risk-tag rt-cyber" data-i18n="rk.cyber.tag">Sécurité</span>
+        <a class="risk-go" href="/sentinel?goto=owasp-dix" title="Ouvre les dix défaillances des applications LLM — injections, hallucinations dans Sentinel"><span data-i18n="sv.go">Ouvrir le module</span> →</a>
       </div>
       <div class="risk-card">
         <div class="risk-ico">🔗</div>
         <h3 class="risk-title" data-i18n="rk.sc.t">Supply Chain Techno</h3>
         <p class="risk-desc" data-i18n="rk.sc.d">Lock-in propriétaire · portabilité · obsolescence · interopérabilité limitée</p>
         <span class="risk-tag rt-infra" data-i18n="rk.sc.tag">Infrastructure</span>
+        <a class="risk-go" href="/sentinel?goto=nist-cadre" title="Ouvre le cadre NIST et son point « Value Chain and Component Integrity » dans Sentinel"><span data-i18n="sv.go">Ouvrir le module</span> →</a>
       </div>
       <div class="risk-card">
         <div class="risk-ico">♻️</div>
         <h3 class="risk-title" data-i18n="rk.env.t">Environnemental</h3>
         <p class="risk-desc" data-i18n="rk.env.d">Datacenters énergivores · bilan carbone cloud · empreinte IA générative</p>
         <span class="risk-tag rt-esg" data-i18n="rk.env.tag">ESG</span>
+        <a class="risk-go" href="/sentinel?goto=empreinte-ia" title="Ouvre l’empreinte environnementale du parc déclaré dans Sentinel"><span data-i18n="sv.go">Ouvrir le module</span> →</a>
       </div>
     </div>
     <div class="risk-cta-banner">
       <p data-i18n="risk.cta.txt">Ces 8 risques sont déjà cartographiés et scorés pour 46 juridictions dans Sentinel AI.</p>
-      <a href="/sentinel" target="_blank" rel="noopener" data-i18n="risk.cta.btn">Explorer Sentinel AI →</a>
+      <a href="/sentinel?goto=radar" target="_blank" rel="noopener" title="Ouvre le radar des risques, pondéré par les huit risques systémiques" data-i18n="risk.cta.btn">Explorer Sentinel AI →</a>
     </div>
   </div>
 </section>
