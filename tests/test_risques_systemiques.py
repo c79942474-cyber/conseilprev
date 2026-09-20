@@ -635,10 +635,14 @@ def test_SEUL_l_appel_redirige_et_rien_d_autre_dans_la_carte():
     pour les cartes de service, sans quoi cette règle ne prouve plus rien.
     """
     feuille = _feuille()
-    assert ".sv-card-go::after" in feuille, (
-        "le motif de surface étirée a disparu de la feuille entière : cette "
-        "règle ne prouve plus l'absence sur les cartes de RISQUE, elle "
-        "constate une absence générale — la réécrire sur ce qui l'a remplacé")
+    #  LE GARDE-FOU A CHANGÉ AVEC LE PRODUIT. Il exigeait que le motif
+    #  subsiste sur les cartes de SERVICE — c'était sa preuve que l'absence
+    #  mesurée ici était choisie et non générale. Les services l'ont perdu à
+    #  leur tour, à la demande : le garde-fou s'appuie désormais sur ce qui
+    #  reste vrai, à savoir que les huit appels sont toujours là.
+    assert len(LIENS.findall(BLOC)) == 8, (
+        "les appels des cartes de risque ont disparu : cette règle ne prouve "
+        "plus qu'une seule porte subsiste, elle constate qu'il n'y en a plus")
     assert ".risk-go::after" not in feuille, (
         "les cartes de risque ont retrouvé une surface étirée : le corps de "
         "la carte redirige à nouveau, alors que seul l'appel le doit")

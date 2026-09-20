@@ -636,88 +636,35 @@ footer::after{
 .diff-ico{font-size:32px;margin-bottom:14px}
 .diff-title{font-family:"Cormorant Garamond",serif;font-size:18px;font-weight:700;color:var(--wh);margin-bottom:10px}
 .diff-desc{font-size:13px;color:var(--mu);line-height:1.7}
-/* ── LE BLOC ENTIER EST LE LIEN, PAS SEULEMENT SON PIED ─────────────────
-   CE QUI MANQUAIT, ET QUI SE VOIT À L'USAGE. Chaque carte portait bien sa
-   destination, mais seule l'étiquette « Ouvrir le module » la déclenchait :
-   cliquer sur le titre, l'icône ou la description ne faisait rien. Une carte
-   qui s'éclaire au survol sur toute sa surface et ne répond que sur vingt
-   pixels enseigne au visiteur qu'elle n'est pas cliquable.
+/* ── SEUL L'APPEL REDIRIGE — DANS LES DEUX SECTIONS ────────────────────
+   CE QUI A ÉTÉ ESSAYÉ, PUIS RETIRÉ. Les six cartes de service et les huit
+   cartes de risque ont porté une « surface étirée » : un pseudo-élément
+   transparent du pied, tendu sur toute la carte, qui rendait le bloc entier
+   cliquable. Retiré des risques d'abord, des services ensuite, à la demande.
+   Sur les quatorze cartes, seul « Ouvrir le module » redirige désormais.
 
-   POURQUOI UN PSEUDO-ÉLÉMENT ÉTIRÉ ET PAS UN <a> AUTOUR DE LA CARTE. Les
-   cartes de service contiennent DÉJÀ des liens — les flèches des puces vers
-   leur propre module. Un <a> enveloppant en ferait des liens imbriqués, ce
-   que le navigateur défait : le résultat ne serait ni l'un ni l'autre. Le
-   pied de carte reste donc un vrai <a> — clavier, clic du milieu, « ouvrir
-   dans un nouvel onglet » fonctionnent — et son ::after couvre la carte.
+   CE QUE LE MOTIF COÛTAIT, ET QU'ON NE VOIT QU'À L'USAGE. Une surface posée
+   par-dessus le corps de la carte intercepte le clic PARTOUT : on ne peut
+   plus sélectionner un titre ni une description à la souris, et chaque
+   lecture un peu appuyée devient une navigation. Ces cartes se parcourent
+   du regard avant qu'on choisisse — le bloc est fait pour être LU, l'appel
+   pour être CLIQUÉ, et les confondre coûte la lecture.
 
-   LES LIENS INTERNES REPASSENT AU-DESSUS. Sans le z-index ci-dessous, la
-   surface étirée les recouvrirait : les treize flèches deviendraient
-   décoratives, et chaque puce ouvrirait le module de la carte au lieu du
-   sien. C'est le défaut que ce motif crée quand on l'applique sans y penser.
+   CE QUI RESTE, ET QUI SUFFIT. Le pied est un vrai <a> : clavier, clic du
+   milieu, « ouvrir dans un nouvel onglet », annonce par un lecteur d'écran.
+   Survoler la carte l'éclaire — elle DÉSIGNE où cliquer au lieu de
+   prétendre l'être. Les treize flèches des puces ouvrent leur propre module
+   sans qu'aucun z-index n'ait à les défendre : plus rien ne les recouvre.
 
-   CE QUI REND CE MOTIF FRAGILE ICI, ET QUE LE NAVIGATEUR A MESURÉ. `inset:0`
-   ne se résout pas contre la carte mais contre le PLUS PROCHE ANCÊTRE
-   POSITIONNÉ. Or une règle décorative bien plus haut dans cette feuille —
-   `.card > *,…,.diff-card > *,.risk-card > *{position:relative;z-index:1}`,
-   posée pour faire passer le contenu au-dessus du halo `::before` — positionne
-   DÉJÀ le pied de carte. Le pied devenait donc son propre bloc conteneur et la
-   surface ne couvrait que l'étiquette : 152 × 36 px au lieu de 388 × 356.
-   Sa spécificité (0,1,1) bat celle de `.sv-card-go` (0,1,0), donc on la défait
-   à la même spécificité ou mieux — d'où les sélecteurs `>` ci-dessous. Le pied
-   n'a pas besoin de repasser au-dessus de sa PROPRE surface : celle-ci est son
-   pseudo-élément, elle est transparente, et un clic dessus l'active lui.
+   CE QUI A DISPARU AVEC LA SURFACE, et qu'il ne faut pas rapporter par
+   mégarde : le `cursor:pointer` sur la carte, le `position:static` qui
+   forçait le pied à ne pas être son propre bloc conteneur, et le
+   `pointer-events:none` sur la liste des puces — trois réglages qui
+   n'existaient QUE pour tenir ce motif, et qui sans lui n'ont plus d'objet.
 
-   LA LISTE DES PUCES EST UN CONTEXTE D'EMPILEMENT, ET PAS À CAUSE D'UN
-   Z-INDEX. `.diff-sublist` porte `opacity:.75` depuis toujours, pour
-   atténuer ses lignes — et une opacité inférieure à 1 crée un contexte
-   d'empilement. Tout `z-index` posé sur une puce ou sur sa flèche reste donc
-   PRISONNIER de la liste, qui passe elle-même sous la surface étirée : les
-   treize flèches rouvraient le module de leur carte au lieu du leur. C'est
-   mesuré, pas supposé : 13 flèches sur 13 détournées.
-
-   ON ÉLÈVE DONC LA LISTE ENTIÈRE, ET ON LUI RETIRE LE POINTEUR. La liste
-   passe au-dessus de la surface (`z-index:2`) pour que ses flèches soient
-   atteignables, puis `pointer-events:none` lui rend sa transparence au clic :
-   le texte d'une puce laisse passer le clic vers la surface de la carte, et
-   seule la flèche, qui le reprend, ouvre sa propre destination.
-
-   CE QUE CELA COÛTE, ET POURQUOI C'EST DÉJÀ PAYÉ. Une liste sans pointeur ne
-   se sélectionne plus à la souris. Mais le titre et la description non plus :
-   c'est le prix du motif lui-même — une surface transparente au-dessus du
-   corps de la carte intercepte le clic initial partout. La règle ci-dessous
-   n'ajoute donc aucune perte ; elle la répartit de la même façon.
-
-   LE SURVOL SUIT LA CARTE, PLUS LA LIGNE. `li:hover` ne se déclenche plus
-   sous `pointer-events:none`. La flèche s'éclaire désormais au survol de la
-   CARTE, ce qui est de toute façon plus juste depuis qu'elle est un seul
-   objet cliquable.
-
-   ── ET POURQUOI LES HUIT CARTES DE RISQUE N'EN SONT PAS ────────────────
-   CE MOTIF NE S'APPLIQUE QU'AUX SIX OFFRES DE SERVICES. Les cartes de
-   risque l'ont porté quelques heures, puis on l'a retiré : sur elles, seul
-   « Ouvrir le module » doit rediriger.
-
-   LES DEUX SECTIONS NE FONT PAS LE MÊME MÉTIER, et c'est ce qui justifie
-   deux traitements. Une carte de service est une OFFRE : la carte entière
-   est un appel, et tout ce qu'elle dit pousse vers le même module. Une
-   carte de risque est un CONSTAT — « Cloud Act · lois extraterritoriales ·
-   sanctions » — qu'on lit pour lui-même ; son appel est un prolongement,
-   pas sa raison d'être. Rendre le constat cliquable partout transforme
-   chaque lecture en navigation involontaire, d'autant que ces huit cartes
-   sont serrées et qu'on les parcourt du regard avant de choisir.
-
-   CE QUI DISPARAÎT AVEC LA SURFACE. Le `cursor:pointer` part aussi : une
-   carte qui annonce un clic qu'elle ne rend plus est pire que l'inverse.
-   Ce qui reste : le survol éclaire l'appel — il DÉSIGNE où cliquer au lieu
-   de prétendre l'être. */
-.diff-card{position:relative}
-.diff-card:has(.sv-card-go){cursor:pointer}
-/* LE PIED REDEVIENT STATIQUE : SANS CELA LA SURFACE NE COUVRE QUE LUI. */
-.diff-card > .sv-card-go{position:static;z-index:auto}
-.sv-card-go::after{content:'';position:absolute;inset:0;z-index:1}
-/* LA LISTE PASSE AU-DESSUS, MAIS SEULE SA FLÈCHE REPREND LE POINTEUR. */
-.diff-card > .diff-sublist{position:relative;z-index:2;pointer-events:none}
-.diff-sublist .sv-go{position:relative;z-index:2;pointer-events:auto}
+   LE SURVOL DE LA FLÈCHE REVIENT SUR SA LIGNE. Il avait été déplacé sur la
+   carte parce que `pointer-events:none` empêchait `li:hover` de se
+   déclencher. La cause est partie ; le contournement aussi. */
 
 /* ── LES HUIT RISQUES MÈNENT AU MODULE QUI LES ADRESSE ──────────────────
    LA BANNIÈRE DE PIED NE SUFFISAIT PAS. Elle ouvrait « /sentinel » tout
@@ -765,7 +712,7 @@ footer::after{
 .diff-sublist li{display:flex;align-items:baseline;gap:6px}
 .sv-go{flex-shrink:0;margin-left:auto;text-decoration:none;color:var(--gd,#d4a843);
   font-size:13px;line-height:1;opacity:.55;transition:opacity .15s,transform .15s}
-.diff-card:hover .sv-go{opacity:1;transform:translateX(2px)}
+.diff-sublist li:hover .sv-go{opacity:1;transform:translateX(2px)}
 .sv-go:hover{opacity:1}
 .sv-go:focus-visible{outline:2px solid var(--gd,#d4a843);outline-offset:3px;
   border-radius:3px;opacity:1}
@@ -780,7 +727,7 @@ footer::after{
 .diff-card:hover .sv-card-go{background:rgba(212,168,67,.10);
   border-color:rgba(212,168,67,.6)}
 @media(prefers-reduced-motion:reduce){
-  .sv-go{transition:none}.diff-card:hover .sv-go{transform:none}}
+  .sv-go{transition:none}.diff-sublist li:hover .sv-go{transform:none}}
 
 
 
