@@ -19253,6 +19253,7 @@ var GUIDED_PATHS = [
       {id:'nist-genai', label:"Profil IA g\u00e9n\u00e9rative", action:"R\u00e9partissez les douze risques AVANT de les \u00e9valuer : la page dit qui tient chacun.", gain:"Six des douze ne rel\u00e8vent pas de la cyber \u2014 les confier au RSSI produit un registre que personne n\u2019arbitre.", tip:"AI 600-1 est un PROFIL du cadre, pas un second cadre : le citer sans le cadre en dessous, c\u2019est citer le profil de rien."},
       {id:'iso42001', label:"ISO 42001 \u2014 articles 4 \u00e0 10", action:"Comparez ce que vous venez de renseigner avec le corps de la norme.", gain:"Ce que le cadre NIST laisse volontaire, ISO 42001 le rend exigible \u2014 et certifiable.", tip:"Le rapprochement le plus utile n\u2019est pas point \u00e0 point : GOVERN recoupe les articles 5 et 6, et rien dans le cadre n\u2019impose de d\u00e9claration d\u2019applicabilit\u00e9."},
       {id:'cadre-normatif', label:"Cadre normatif", action:"Regardez ce que le cadre NIST apporte que les textes europ\u00e9ens n\u2019apportent pas.", gain:"Il est le seul \u00e0 donner une grammaire de RISQUE l\u00e0 o\u00f9 l\u2019IA Act donne une grammaire d\u2019OBLIGATION.", tip:"Un tiret dans une colonne n\u2019est pas un oubli : c\u2019est que le texte ne dit rien de ce module."},
+      {id:'conf-taux', label:"Le taux de conformit\u00e9", action:"Ouvrez la carte NIST AI RMF : elle porte maintenant votre profil.", gain:"Les dix-neuf cat\u00e9gories que vous venez de renseigner remontent dans la synth\u00e8se des neuf normes.", tip:"La carte dit ce que 100 % NE veut PAS dire ici : le cadre ne se certifie pas, il n'y a aucun auditeur au bout. Un taux plein signifie « tout est renseign\u00e9 et tenu », pas « conforme »."}
     ]
   },
   {
@@ -19261,10 +19262,11 @@ var GUIDED_PATHS = [
     role: "OWASP LLM \u2014 je v\u00e9rifie qu\u2019aucune d\u00e9faillance \u00e9vidente n\u2019a \u00e9t\u00e9 oubli\u00e9e",
     pitch: "Dix d\u00e9faillances qui reviennent, class\u00e9es par fr\u00e9quence constat\u00e9e. Ce n\u2019est ni une norme ni un r\u00e9f\u00e9rentiel certifiable : on ne s\u2019y conforme pas, on s\u2019en sert comme d\u2019une liste de contr\u00f4le. Le parcours finit sur la question qui f\u00e2che : ce que votre certification ISO/IEC 42001 ne vous donne pas.",
     steps: [
-      {id:'owasp-dix', label:"Les dix risques", action:"Lisez « pourquoi \u00e7a dure » avant la description de chaque risque.", gain:"Plusieurs tiennent \u00e0 une propri\u00e9t\u00e9 du proc\u00e9d\u00e9 et non \u00e0 un d\u00e9faut d\u2019impl\u00e9mentation : pour ceux-l\u00e0, tout ce qui se construit est de l\u2019att\u00e9nuation.", tip:"La liste porte un mill\u00e9sime, et celui-ci n\u2019a PAS pu \u00eatre recoup\u00e9 avec la publication en ligne depuis la machine de construction : rouvrez top10.owasp.org avant de la pr\u00e9senter."},
+      {id:'owasp-dix', label:"Les dix risques", action:"Lisez « pourquoi \u00e7a dure » avant la description de chaque risque, PUIS d\u00e9clarez l'\u00e9tat de chacun — trait\u00e9, partiel, non trait\u00e9, sans objet. Le verdict arrive sous la liste.", gain:"Plusieurs tiennent \u00e0 une propri\u00e9t\u00e9 du proc\u00e9d\u00e9 et non \u00e0 un d\u00e9faut d\u2019impl\u00e9mentation : pour ceux-l\u00e0, tout ce qui se construit est de l\u2019att\u00e9nuation.", tip:"La liste porte un mill\u00e9sime, et celui-ci n\u2019a PAS pu \u00eatre recoup\u00e9 avec la publication en ligne depuis la machine de construction : rouvrez top10.owasp.org avant de la pr\u00e9senter."},
       {id:'owasp-pont', label:"Ce qu\u2019ISO 42001 ne couvre pas", action:"Regardez d\u2019abord les lignes o\u00f9 la colonne des mesures est vide.", gain:"Trois risques ne rencontrent aucune mesure de l\u2019annexe A : aucun r\u00e9f\u00e9rentiel ne les rattrapera.", tip:"Ce sont aussi ceux dont on se croit couvert pr\u00e9cis\u00e9ment parce qu\u2019on est certifi\u00e9. « Notre SMIA couvre OWASP » est la phrase que cette page existe pour contredire."},
       {id:'iso42001-soa', label:"D\u00e9claration d\u2019applicabilit\u00e9", action:"Reprenez les mesures cit\u00e9es en face des risques, et v\u00e9rifiez leur statut chez vous.", gain:"Une mesure retenue mais non mise en \u0153uvre ne couvre rien \u2014 et c\u2019est sur la SoA que \u00e7a se voit.", tip:"Une mesure « touche » un risque ; elle ne le clot pas. Le pont ne dit pas l\u2019inverse."},
       {id:'ia-act-hub', label:"IA Act \u2014 vue d\u2019ensemble", action:"Situez lesquels de ces risques deviennent des obligations quand le syst\u00e8me est \u00e0 haut risque.", gain:"OWASP dit ce qui casse ; le r\u00e8glement dit ce qui est exigible. Les deux ne se d\u00e9duisent pas l\u2019un de l\u2019autre.", tip:"Un risque OWASP trait\u00e9 ne vaut pas conformit\u00e9, et une obligation tenue ne vaut pas s\u00e9curit\u00e9."},
+      {id:'conf-taux', label:"Le taux de conformit\u00e9", action:"Ouvrez la carte OWASP LLM : elle porte maintenant ce que vous venez de d\u00e9clarer.", gain:"Vos dix \u00e9tats remontent dans la synth\u00e8se des neuf normes. Tant que rien n'est d\u00e9clar\u00e9, la carte reste à « — » : une absence de mesure n'est pas un z\u00e9ro.", tip:"Le taux OWASP est plafonn\u00e9 par les trois risques hors annexe A. Ce plafond n'est pas un d\u00e9faut du calcul : c'est ce que la liste elle-m\u00eame dit de sa propre port\u00e9e."}
     ]
   },
   {
@@ -24501,11 +24503,21 @@ function nistPeindre() {
         + '<p class="nist-q">' + nistEsc(f.quoi) + '</p>'
         + '<p class="nist-tombe"><span>Ce qui la fait tomber</span>'
         + nistEsc(f.ce_qui_la_fait_tomber) + '</p>'
-        + '<ul class="nist-cats">' + cats.map(function (c) {
-            return '<li><code>' + nistEsc(c.cle) + '</code> '
-              + nistEsc(c.nom) + '<i>' + nistEsc(c.dit) + '</i></li>';
+        + '<ul class="nist-cats nist-q-cats">' + cats.map(function (c) {
+            return '<li><div class="nist-c-t"><code>' + nistEsc(c.cle)
+              + '</code> ' + nistEsc(c.nom) + '<i>' + nistEsc(c.dit) + '</i></div>'
+              + _choix(R.etats, NIST_ORDRE, NIST_DECL[c.cle],
+                       'nistRepondre', c.cle) + '</li>';
           }).join('') + '</ul></div>';
     }).join('') + '</div>';
+    /* LE VERDICT VIENT APRÈS LES QUESTIONS, jamais avant : un profil affiché
+       au-dessus de ce qui le produit se lit comme un constat tombé du ciel. */
+    if (!document.getElementById('nist-verdict')) {
+      var vn = document.createElement('div');
+      vn.id = 'nist-verdict';
+      pb.appendChild(vn);
+    }
+    nistEvaluer();
   }
 
   /* ── LE CADRE : catégories, énoncés d'origine, et les pièces ─────────── */
@@ -24567,7 +24579,171 @@ function nistPeindre() {
   }
 }
 
+
+/* ══ LE QUESTIONNAIRE QUI MANQUAIT AUX DEUX DERNIERS MODULES ═══════════════
+ *
+ * CE QUE LA MESURE A TROUVÉ. Les moteurs `nist_ai_rmf.evaluer` et
+ * `owasp_llm.evaluer` existent, leurs routes aussi — et RIEN ne les appelait
+ * depuis l'écran. Les cinq pages de ces deux modules ne portaient pas un seul
+ * champ de saisie : ni <select>, ni <input>, aucune persistance. Elles
+ * affichaient le référentiel, point.
+ *
+ * LA CONSÉQUENCE, SUR UN AUTRE ÉCRAN. Le taux de conformité lit
+ * `window.CONF_DECL[norme]` pour six normes. Sans questionnaire, ces deux-là
+ * ne pouvaient rien y déposer : leurs cartes affichaient « non renseigné »
+ * quoi que fasse le visiteur. Le moteur savait calculer, la page ne savait
+ * pas demander.
+ *
+ * CE QUE CES DEUX QUESTIONNAIRES REFUSENT DE FAIRE, et c'est dans les
+ * moteurs qu'on l'a écrit d'abord : rendre une note globale NIST — elle
+ * monterait en cartographiant beaucoup sans rien décider — et rendre un
+ * « 7/10 OWASP », qui se citerait en comité sans rien vouloir dire. On
+ * demande des états, on rend un profil et des angles morts. */
+
+var NIST_DECL = {};
+var OWASP_DECL = {};
+var NIST_EVAL = null;
+var OWASP_EVAL = null;
+var NIST_CLE_STOCK = 'cp-sentinel-nist-profil-v1';
+var OWASP_CLE_STOCK = 'cp-sentinel-owasp-declares-v1';
+
+function _declLire(cle) {
+  try { var b = localStorage.getItem(cle); return b ? (JSON.parse(b) || {}) : {}; }
+  catch (e) { return {}; }
+}
+function _declEcrire(cle, v) {
+  try { localStorage.setItem(cle, JSON.stringify(v)); } catch (e) {}
+}
+
+/* CE QUI REND LE TAUX DE CONFORMITÉ CAPABLE DE LES VOIR.
+   `CONF_DECL` était lu par confDeclarations() et écrit NULLE PART. Une
+   déclaration VIDE doit rester absente : le moteur rend « — » plutôt qu'un
+   zéro, parce qu'un sujet non ouvert n'est pas un sujet à zéro. */
+function declPublier() {
+  window.CONF_DECL = window.CONF_DECL || {};
+  window.CONF_DECL.nist_ai_rmf =
+    Object.keys(NIST_DECL).length ? NIST_DECL : null;
+  window.CONF_DECL.owasp_llm =
+    Object.keys(OWASP_DECL).length ? OWASP_DECL : null;
+  /* LE TAUX EST RECALCULÉ À LA PROCHAINE OUVERTURE, pas maintenant : on ne
+     va pas chercher un écran que le visiteur n'a pas demandé. */
+  CONF_ETAT = null;
+}
+
+function _choix(etats, ordre, valeur, surChange, cle) {
+  return '<select class="q-sel" data-cle="' + nistEsc(cle) + '" '
+    + 'onchange="' + surChange + '(this)" aria-label="État de '
+    + nistEsc(cle) + '">'
+    + '<option value=""' + (valeur ? '' : ' selected') + '>— non renseigné</option>'
+    + ordre.map(function (k) {
+        return '<option value="' + nistEsc(k) + '"'
+          + (valeur === k ? ' selected' : '') + '>'
+          + nistEsc(etats[k].nom) + '</option>';
+      }).join('') + '</select>';
+}
+
+/* ── OWASP : DIX ÉTATS, ET L'ANGLE MORT QUI EN DÉCOULE ─────────────────── */
+var OWASP_ORDRE = ['non', 'partiel', 'oui', 'sans_objet'];
+
+window.owaspRepondre = function (sel) {
+  var c = sel.getAttribute('data-cle');
+  if (sel.value) { OWASP_DECL[c] = sel.value; } else { delete OWASP_DECL[c]; }
+  _declEcrire(OWASP_CLE_STOCK, OWASP_DECL);
+  declPublier();
+  owaspEvaluer();
+};
+
+function owaspEvaluer() {
+  var sortie = document.getElementById('owasp-verdict');
+  if (!sortie) return;
+  if (!Object.keys(OWASP_DECL).length) {
+    OWASP_EVAL = null;
+    sortie.innerHTML = '<div class="q-vide">Rien n’est déclaré. Ce module ne '
+      + 'rend aucun chiffre par défaut&nbsp;: un inventaire vide n’est pas un '
+      + 'inventaire à zéro.</div>';
+    return;
+  }
+  fetch('/api/owasp-llm/evaluer', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ declares: OWASP_DECL })
+  }).then(function (r) { return r.json(); })
+    .then(function (j) {
+      if (!j || !j.ok) throw new Error('evaluer');
+      OWASP_EVAL = j;
+      sortie.innerHTML = '<div class="q-verdict q-' + nistEsc(j.tete) + '">'
+        + '<div class="q-chif"><b>' + j.renseignes + '</b> / ' + j.risques
+        + ' déclarés</div>'
+        + '<p>' + nistEsc(j.dit) + '</p>'
+        + (j.angles_morts && j.angles_morts.length
+            ? '<p class="q-am"><span>Angles morts</span>'
+              + j.angles_morts.map(function (c) {
+                  return '<code>' + nistEsc(c) + '</code>'; }).join(' ')
+              + '</p>'
+            : '') + '</div>';
+    })
+    .catch(function () {
+      /* RIEN PLUTÔT QU'UN VERDICT PARTIEL : un angle mort manquant se lit
+         comme une absence d'angle mort, et c'est le contraire du service. */
+      sortie.innerHTML = '<div class="q-vide">Le calcul n’a pas abouti. '
+        + 'Rechargez la page plutôt que de lire un verdict incomplet.</div>';
+    });
+}
+
+/* ── NIST : DIX-NEUF ÉTATS, QUATRE NOTES, ET LE SOCLE QUI COMMANDE ─────── */
+/* LES CINQ ÉTATS DE LA RÉFÉRENCE, ET PAS QUATRE. « Sans objet » a été
+   oublié d'une première version ; sans lui, une catégorie qui ne
+   s'applique pas doit se déclarer « absente », ce qui la compte comme un
+   zéro et tire la note de sa fonction vers le bas. Le moteur, lui, la
+   met de côté — c'est une mutation qui a montré l'écart. */
+var NIST_ORDRE = ['absent', 'amorce', 'tenu', 'prouve', 'sans_objet'];
+
+window.nistRepondre = function (sel) {
+  var c = sel.getAttribute('data-cle');
+  if (sel.value) { NIST_DECL[c] = sel.value; } else { delete NIST_DECL[c]; }
+  _declEcrire(NIST_CLE_STOCK, NIST_DECL);
+  declPublier();
+  nistEvaluer();
+};
+
+function nistEvaluer() {
+  var sortie = document.getElementById('nist-verdict');
+  if (!sortie) return;
+  if (!Object.keys(NIST_DECL).length) {
+    NIST_EVAL = null;
+    sortie.innerHTML = '<div class="q-vide">Rien n’est renseigné. Le cadre ne '
+      + 'rend aucun chiffre par défaut&nbsp;: un profil vide n’est pas un '
+      + 'profil à zéro.</div>';
+    return;
+  }
+  fetch('/api/nist-ai-rmf/evaluer', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ etats: NIST_DECL })
+  }).then(function (r) { return r.json(); })
+    .then(function (j) {
+      if (!j || !j.ok) throw new Error('evaluer');
+      NIST_EVAL = j;
+      sortie.innerHTML = '<div class="q-verdict q-' + nistEsc(j.tete) + '">'
+        + '<div class="q-chif"><b>' + j.renseignees + '</b> / ' + j.categories
+        + ' catégories renseignées</div>'
+        + '<div class="q-notes">' + j.profils.map(function (p) {
+            return '<span class="q-note' + (p.fonction === 'GOVERN' ? ' q-socle' : '')
+              + '"><i>' + nistEsc(p.fonction) + '</i>'
+              + (p.note === null ? '—' : p.note + '/' + p.sur) + '</span>';
+          }).join('') + '</div>'
+        + '<p>' + nistEsc(j.dit) + '</p></div>';
+    })
+    .catch(function () {
+      sortie.innerHTML = '<div class="q-vide">Le calcul n’a pas abouti. '
+        + 'Rechargez la page plutôt que de lire un profil incomplet.</div>';
+    });
+}
+
 function nistInit() {
+  /* LES RÉPONSES SURVIVENT À LA FERMETURE DE L'ONGLET, et repartent vers le
+     taux de conformité dès le chargement — sans quoi le visiteur qui a
+     répondu hier retrouverait ses cartes « non renseignées » aujourd'hui. */
+  NIST_DECL = _declLire(NIST_CLE_STOCK);
+  declPublier();
   if (NIST_REF) { nistPeindre(); return; }
   fetch('/api/nist-ai-rmf/referentiel')
     .then(function (r) { return r.json(); })
@@ -24625,8 +24801,12 @@ function owaspPeindre() {
             + '<b>' + nistEsc(r.nom) + '</b> <em>' + nistEsc(r.en) + '</em></div>'
             + '<p>' + nistEsc(r.quoi) + '</p>'
             + '<p class="ow-dure"><span>Pourquoi ça dure</span>'
-            + nistEsc(r.pourquoi_ca_dure) + '</p></li>';
-        }).join('') + '</ul>';
+            + nistEsc(r.pourquoi_ca_dure) + '</p>'
+            + _choix(R.etats, OWASP_ORDRE, OWASP_DECL[r.cle],
+                     'owaspRepondre', r.cle) + '</li>';
+        }).join('') + '</ul>'
+      + '<div id="owasp-verdict"></div>';
+    owaspEvaluer();
   }
 
   var pb = document.getElementById('owasp-pont-body');
@@ -24656,6 +24836,11 @@ function owaspPeindre() {
 }
 
 function owaspInit() {
+  /* LES RÉPONSES SURVIVENT À LA FERMETURE DE L'ONGLET, et repartent vers le
+     taux de conformité dès le chargement — sans quoi le visiteur qui a
+     répondu hier retrouverait ses cartes « non renseignées » aujourd'hui. */
+  OWASP_DECL = _declLire(OWASP_CLE_STOCK);
+  declPublier();
   if (OWASP_REF) { owaspPeindre(); return; }
   fetch('/api/owasp-llm/referentiel')
     .then(function (r) { return r.json(); })

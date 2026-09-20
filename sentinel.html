@@ -269,6 +269,43 @@ body{
 .nist-gen{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:9px}
 .nist-gen li{display:flex;gap:12px;border:1px solid var(--line);border-radius:11px;padding:11px 14px;background:var(--panel)}
 .nist-gen li.gen-non{border-style:dashed}
+/* ── LE QUESTIONNAIRE : LA QUESTION SE LIT, LA RÉPONSE SE VOIT ──────────
+   La liste des catégories était en lecture seule ; elle devient une suite de
+   questions. Le champ reste À DROITE du texte tant qu'il y a la place, et
+   passe dessous quand il n'y en a plus : une réponse qu'on doit chercher au
+   bout d'une ligne tronquée ne se donne pas. */
+.nist-q-cats li{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:flex-start}
+.nist-q-cats .nist-c-t{flex:1 1 240px;min-width:0}
+.q-sel{flex:0 0 auto;font-family:inherit;font-size:12px;padding:5px 8px;
+  border-radius:8px;border:1px solid var(--line);background:var(--panel);
+  color:var(--ink);max-width:100%}
+.q-sel:focus-visible{outline:2px solid var(--gd,#d4a843);outline-offset:2px}
+.ow-liste .q-sel{margin-top:8px}
+/* LE VERDICT ARRIVE APRÈS LES QUESTIONS, et dit d'abord COMBIEN ont été
+   renseignées : un profil calculé sur trois réponses sur dix-neuf n'est pas
+   le même objet qu'un profil complet, et le chiffre le dit avant la phrase. */
+.q-verdict{margin-top:18px;border:1px solid var(--line);border-radius:12px;
+  padding:14px 16px;background:var(--panel)}
+.q-verdict p{margin:8px 0 0;font-size:13px;line-height:1.65}
+.q-chif{font-family:var(--mono);font-size:12px;color:var(--ink2)}
+.q-chif b{font-size:20px;color:var(--ink)}
+.q-notes{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.q-note{display:inline-flex;align-items:baseline;gap:6px;font-family:var(--mono);
+  font-size:13px;border:1px solid var(--line);border-radius:8px;padding:4px 9px}
+.q-note i{font-style:normal;font-size:10.5px;color:var(--ink2)}
+.q-note.q-socle{border-color:var(--gd,#d4a843)}
+.q-am{font-size:12.5px}
+.q-am span{display:block;font-size:10.5px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--ink2);margin-bottom:4px}
+.q-am code{margin-right:6px}
+/* DEUX VERDICTS SE SIGNALENT, parce qu'ils démentent ce qu'on croit savoir :
+   des risques qu'aucun référentiel ne rattrape, et une gouvernance en retard
+   sur ce qu'elle est censée commander. */
+.q-verdict.q-angles_morts,.q-verdict.q-aval_devant_socle,
+.q-verdict.q-socle_absent{border-color:var(--gd,#d4a843);
+  box-shadow:0 0 0 3px rgba(212,168,67,.14)}
+.q-vide{margin-top:18px;font-size:13px;color:var(--ink2);line-height:1.65;
+  border:1px dashed var(--line);border-radius:12px;padding:14px 16px}
 /* ── CE QU'ON EST VENU VOIR SE DÉSIGNE, PUIS S'EFFACE ───────────────────
    Un lien qui annonce un point précis doit le MONTRER à l'arrivée. Amener
    l'élément à l'écran ne suffit pas : au milieu de dix-neuf lignes de même
