@@ -191,14 +191,28 @@ def test_la_banniere_de_pied_vise_le_RADAR_et_plus_l_accueil():
 # lequel elle pointe. Deux d'entre eux viennent d'ailleurs de la SOURCE que
 # le risque déclare lui-même dans `SYSTEMIC_RISKS` (voir la règle suivante),
 # ce qui est la justification la plus forte disponible.
+#  AUCUN MOT-PARAPLUIE DANS CETTE TABLE, ET C'EST UNE CORRECTION.
+#
+#  Quatre entrées acceptaient le mot que la carte porte DÉJÀ dans son titre :
+#  « juridictionnel », « économique », « géopolitique », « supply chain ». La
+#  règle passait donc sans jamais lire la description — et un mot-parapluie
+#  ne distingue rien : « géopolitique » aurait tout aussi bien justifié un
+#  lien vers l'observatoire R&D que vers les tensions normatives, et
+#  « juridictionnel » vaut autant pour la carte mondiale que pour le
+#  comparateur. Une mutation l'a montré : vider la description de la carte
+#  Géopolitique de tout son vocabulaire ne faisait tomber aucune règle.
+#
+#  Chaque entrée ne retient donc que des mots qui NOMMENT LA DESTINATION et
+#  qu'aucune autre destination du même thème ne revendiquerait. Ils se
+#  trouvent dans la description de la carte, pas dans son titre.
 NOMME = {
-    "carto": ("juridictionnel", "extraterritoriales", "souveraineté"),
-    "finops": ("dépenses", "tarifaire", "économique"),
+    "carto": ("extraterritoriales", "souveraineté"),
+    "finops": ("dépenses", "tarifaire"),
     "nist-genai": ("biais", "qualité des données"),
     "training": ("compétences",),
-    "obs-rd": ("géopolitique", "export", "technologiques"),
+    "geo": ("tensions", "fragmentation"),
     "owasp-dix": ("adversarial", "hallucinations", "attaque"),
-    "nist-cadre": ("supply chain", "lock-in", "interopérabilité"),
+    "nist-cadre": ("lock-in", "interopérabilité"),
     "empreinte-ia": ("carbone", "énergivores", "empreinte"),
 }
 
@@ -228,18 +242,25 @@ def test_chaque_carte_NOMME_le_sujet_du_module_qu_elle_ouvre():
             % (titre, cible, list(attendus)))
 
 
-def test_deux_destinations_viennent_de_la_SOURCE_declaree_du_risque():
+def test_trois_destinations_viennent_de_la_SOURCE_declaree_du_risque():
     """LA JUSTIFICATION LA PLUS FORTE DISPONIBLE, ET ELLE EST DANS LES DONNÉES.
 
-    Chaque risque de `SYSTEMIC_RISKS` déclare la source qui le fonde. Deux
-    d'entre elles nomment un cadre dont Sentinel porte le module :
+    Chaque risque de `SYSTEMIC_RISKS` déclare la source qui le fonde. Trois
+    d'entre elles nomment le sujet dont Sentinel porte le module :
 
       supply_chain    → « NIST AI RMF — Value Chain and Component Integrity »
       data_ia         → « NIST AI 600-1 — Harmful Bias, Data Privacy… »
+      geopolitique    → « OECD.AI — tensions normatives, fragmentation… »
 
     Leurs liens ne relèvent donc d'aucune interprétation : ils suivent ce que
-    le risque dit lui-même. Si une de ces sources changeait de cadre, le lien
+    le risque dit lui-même. Si une de ces sources changeait de sujet, le lien
     deviendrait faux — et cette règle tombe.
+
+    LA TROISIÈME EST ARRIVÉE EN CORRIGEANT UN LIEN. « Géopolitique » ouvrait
+    l'observatoire R&D — OÙ l'IA se fabrique — alors que sa source parle de
+    TENSIONS NORMATIVES, c'est-à-dire du sujet de la page « Tensions &
+    alliances réglementaires ». Le lien précédent n'était pas absurde : il
+    était simplement fondé sur autre chose que ce que la carte déclare.
     """
     i = PAGEJS.index("var SYSTEMIC_RISKS = [")
     corps = PAGEJS[i:PAGEJS.index("];", i)]
@@ -247,9 +268,11 @@ def test_deux_destinations_viennent_de_la_SOURCE_declaree_du_risque():
                               corps, re.S))
     assert len(sources) == 8, sources
     attendu = {"supply_chain": ("NIST AI RMF", "nist-cadre"),
-               "data_ia": ("NIST AI 600-1", "nist-genai")}
+               "data_ia": ("NIST AI 600-1", "nist-genai"),
+               "geopolitique": ("tensions normatives", "geo")}
     cartes = dict(zip([c for c, _ in _cartes()], LIENS.findall(BLOC)))
-    cle_vitrine = {"supply_chain": "sc", "data_ia": "data"}
+    cle_vitrine = {"supply_chain": "sc", "data_ia": "data",
+                   "geopolitique": "geo"}
     for rid, (cadre, cible) in attendu.items():
         assert cadre in sources[rid], (
             "le risque %s ne cite plus %s comme source : son lien vers %s "
@@ -257,6 +280,65 @@ def test_deux_destinations_viennent_de_la_SOURCE_declaree_du_risque():
         assert cartes[cle_vitrine[rid]] == cible, (
             "%s cite %s mais sa carte ouvre %r"
             % (rid, cadre, cartes[cle_vitrine[rid]]))
+
+
+def _page_meta():
+    """{identifiant: « section label »} tel que Sentinel le déclare."""
+    i = PAGEJS.index("var PAGE_META = {")
+    bloc = PAGEJS[i:PAGEJS.index("\n};", i)]
+    return {c: (sec + " " + lab).lower() for c, sec, lab in re.findall(
+        r"'?([A-Za-z0-9_-]+)'?\s*:\s*\{\s*section\s*:\s*'([^']*)'\s*,"
+        r"\s*label\s*:\s*'([^']*)'", bloc)}
+
+
+#  LE MOT QUE CHAQUE DESTINATION DOIT ENCORE PORTER.
+#
+#  Il est relevé dans PAGE_META, c'est-à-dire dans ce que SENTINEL dit de sa
+#  page — pas dans une description tenue ici, qui ne vieillirait jamais parce
+#  que personne ne la relirait. Une première version attendait « coût » sur
+#  `finops` : la page s'intitule « CARTOGRAPHIER · FinOps IA » et la règle est
+#  tombée au premier essai. C'est exactement ce qu'on lui demande de faire.
+PORTE = {
+    "geo":          "tensions",
+    "owasp-dix":    "owasp",
+    "finops":       "finops",
+    "empreinte-ia": "empreinte",
+    "nist-cadre":   "nist",
+    "carto":        "carte",
+    "nist-genai":   "générative",
+    "training":     "training",
+}
+
+
+def test_le_module_vise_PORTE_le_sujet_que_la_carte_annonce():
+    """LA RÈGLE PRÉCÉDENTE LIE UNE SOURCE À UN IDENTIFIANT ; celle-ci vérifie
+    que l'identifiant désigne encore une page qui PARLE de ce sujet.
+
+    Sans elle, renommer `geo` en « Observatoire des modèles » laisserait le
+    lien vert : la carte pointerait toujours vers `geo`, dont la source dirait
+    toujours « tensions normatives », et la page ne parlerait plus de rien de
+    tel. Un lien survit mal à une page qui a changé de sujet, et rien
+    n'avertit quand cela arrive.
+    """
+    meta = _page_meta()
+    assert len(meta) > 40, (
+        "la lecture de PAGE_META rend %d entrées : ce contrôle ne prouve "
+        "plus rien" % len(meta))
+    cibles = LIENS.findall(BLOC)
+    assert len(cibles) == 8, cibles
+    for cible in cibles:
+        mot = PORTE.get(cible)
+        assert mot, (
+            "la carte mène à « %s », dont aucun mot n'est attendu : ajoutez-le "
+            "à PORTE avec ce que la page Sentinel doit dire, ou changez de "
+            "destination" % cible)
+        assert cible in meta, (
+            "« %s » n'a plus de fiche dans PAGE_META : le visiteur y arrive "
+            "sans savoir où il est" % cible)
+        assert mot in meta[cible], (
+            "la carte mène à « %s », que Sentinel intitule désormais « %s » : "
+            "le mot « %s » qui justifiait le lien n'y est plus — relire le "
+            "lien avant de le garder" % (cible, meta[cible], mot))
 
 
 # ══════════════════════════════════════════════════════════════════════════
