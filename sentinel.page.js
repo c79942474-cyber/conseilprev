@@ -7018,7 +7018,7 @@ var SYSTEMIC_RISKS = [
    source:"ENISA Threat Landscape 2024-2025 — incidents cyber par secteur (UE)"},
   {id:"supply_chain", label:"Supply Chain Techno", baseWeight:0.50,
    influence:{securite:0.40, gouvernance:0.30, supervision:0.30},
-   source:"NIST AI RMF — Value Chain and Component Integrity"},
+   source:"NIST AI 600-1 — Value Chain and Component Integration (risque 12 sur 12)"},
   {id:"environnemental", label:"Environnemental", baseWeight:0.30,
    influence:{gouvernance:0.55, transparence:0.45},
    source:"NIST AI 600-1 — Environmental Impacts (datacenters, empreinte carbone)"}
@@ -16546,7 +16546,34 @@ window.iahRender = function(){
 };
 
 /* Ouverture directe d'une page via ?goto= (ex. redirection depuis la connexion vers la tarification) */
-window.sentinelGotoDeepLink = function(){ try{ var g=new URLSearchParams(location.search).get('goto'); if(g){ setTimeout(function(){ if(typeof hubGo==='function') hubGo(g); else if(typeof go==='function') go(g); }, 350); } }catch(e){} };
+
+/* ── ET D'UN POINT PRÉCIS DE CETTE PAGE, VIA ?point= ────────────────────
+   POURQUOI CELA MANQUAIT, ET CE QUE ÇA COÛTAIT. Une carte de l'accueil
+   public annonçait « le point Value Chain and Component Integration ».
+   `?goto=` ouvrait la page — et le visiteur tombait sur dix-neuf
+   accordéons FERMÉS, dont aucun ne porte ce nom en façade. La promesse
+   était tenue au niveau de la page et rompue au niveau de ce qu'on venait
+   voir : c'est exactement ce qui fait dire « ça ouvre le mauvais module ».
+
+   CE QUE FAIT CETTE FONCTION, ET CE QU'ELLE NE FAIT PAS. Elle déplie
+   l'élément s'il est repliable, l'amène à l'écran et le souligne quelques
+   secondes. Elle ne fabrique RIEN : un identifiant inconnu la laisse
+   silencieuse, et le visiteur garde la page demandée plutôt qu'un message
+   d'erreur sur une navigation qui, elle, a réussi. */
+window.sentinelPointer = function(id){
+  try{
+    var el = document.getElementById(id);
+    if(!el) return false;
+    var d = el.closest ? el.closest('details') : null;
+    if(d) d.open = true;
+    if(el.tagName === 'DETAILS') el.open = true;
+    el.scrollIntoView({ block:'center' });
+    el.classList.add('vise');
+    setTimeout(function(){ el.classList.remove('vise'); }, 4000);
+    return true;
+  }catch(e){ return false; }
+};
+window.sentinelGotoDeepLink = function(){ try{ var q=new URLSearchParams(location.search); var g=q.get('goto'); var pt=q.get('point'); if(g){ setTimeout(function(){ if(typeof hubGo==='function') hubGo(g); else if(typeof go==='function') go(g); if(pt){ /* LA PEINTURE DE LA PAGE EST ASYNCHRONE (elle attend son référentiel) : on retente le pointage le temps qu'elle arrive, au lieu de le tenter une fois dans le vide. */ var n=0; var t=setInterval(function(){ if(window.sentinelPointer(pt) || ++n>40) clearInterval(t); }, 150); } }, 350); } }catch(e){} };
 if(document.readyState==='complete') window.sentinelGotoDeepLink(); else window.addEventListener('load', window.sentinelGotoDeepLink);
 /* ══ Cycle de facturation échelonnée — prélèvements Stripe (Gestion des clients) ══ */
 window.billingRenderList = function(out, list){
@@ -24500,7 +24527,11 @@ function nistPeindre() {
         }).join('') + '</ul></div>'
       + R.categories.map(function (c) {
           var sub = parCat[c.cle] || [];
-          return '<details class="nist-cat"><summary><code>'
+          /* UN IDENTIFIANT STABLE PAR CATÉGORIE : sans lui, `?point=` n'a
+             rien à viser et un lien vers « MAP 4 » ne peut que promettre. */
+          return '<details class="nist-cat" id="nist-cat-'
+            + nistEsc(c.cle.replace(/[^A-Za-z0-9]+/g, '-'))
+            + '"><summary><code>'
             + nistEsc(c.cle) + '</code> <span>' + nistEsc(c.nom) + '</span>'
             + '<em>' + sub.length + ' point' + (sub.length > 1 ? 's' : '')
             + '</em></summary>'
@@ -24523,7 +24554,8 @@ function nistPeindre() {
       + 'revient à lui faire répondre de sujets qu’il ne tient pas et sur '
       + 'lesquels il n’a aucun moyen d’action.</div></div>'
       + '<ul class="nist-gen">' + R.risques_genai.map(function (r) {
-          return '<li class="' + (r.cyber ? 'gen-cy' : 'gen-non') + '">'
+          return '<li id="nist-gen-' + r.n + '" class="'
+            + (r.cyber ? 'gen-cy' : 'gen-non') + '">'
             + '<span class="gen-n">' + r.n + '</span>'
             + '<div><b>' + nistEsc(r.nom) + '</b> <code>'
             + nistEsc(r.cle) + '</code>'

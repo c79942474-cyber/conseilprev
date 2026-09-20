@@ -116,15 +116,20 @@ const RELEVE = () => {
      FR.appels.length + ' appels', (FR.appels[0] || {}).texte || '');
 
   /* ── 4-6. OÙ ILS MÈNENT ───────────────────────────────────────────── */
+  /* UNE DESTINATION EST UN COUPLE (PAGE, POINT) : `?point=` nomme l'endroit
+     de la page où le visiteur doit arriver. Un motif qui ne connaîtrait que
+     `?goto=` rejetterait le lien le plus précis des huit. */
+  const FORME = /^\/sentinel\?goto=[a-z0-9-]+(?:&point=[A-Za-z0-9_-]+)?$/;
   const tous = R.appels.slice();
   ok('chaque lien vise /sentinel avec sa destination',
-     tous.every(a => /^\/sentinel\?goto=[a-z0-9-]+$/.test(a.href)),
-     tous.filter(a => !/^\/sentinel\?goto=[a-z0-9-]+$/.test(a.href))
-         .map(a => a.href).join(', '),
+     tous.every(a => FORME.test(a.href)),
+     tous.filter(a => !FORME.test(a.href)).map(a => a.href).join(', '),
      tous.length + ' liens');
-  const cibles = R.appels.map(a => a.href.split('=')[1]);
-  ok('les huit risques visent huit modules DIFFÉRENTS',
-     new Set(cibles).size === 8, cibles.join(', '), cibles.join(' · '));
+  const cibles = R.appels.map(a => a.href.replace('/sentinel?goto=', '')
+                                         .split('&')[0]);
+  const endroits = R.appels.map(a => a.href.replace('/sentinel?goto=', ''));
+  ok('les huit risques déposent le visiteur à huit ENDROITS différents',
+     new Set(endroits).size === 8, endroits.join(', '), endroits.join(' · '));
 
   /* ── 7-8. SUIVRE UN LIEN OUVRE BIEN LE PANNEAU ────────────────────── */
   await pg.goto(BASE + '/auth/' + TOKEN, { waitUntil: 'commit' });
@@ -139,8 +144,16 @@ const RELEVE = () => {
      chacun s'ouvre par la navigation interne. Que les six destinations
      soient des panneaux ET des onglets est par ailleurs prouvé
      exhaustivement par les règles de tests/test_offres_services.py. */
-  const temoin = cibles[0];
-  const r1 = await pg.goto(BASE + '/sentinel?goto=' + temoin,
+  /* ON SUIT CELUI QUI VISE UN POINT, PAS LE PREMIER VENU. Un lien `?goto=`
+     nu prouve qu'une page s'ouvre ; seul un lien `?point=` prouve qu'on
+     arrive SUR ce que la carte annonçait — et c'est là qu'était le défaut :
+     la page s'ouvrait, l'item promis restait introuvable. */
+  const avecPoint = R.appels.find(a => a.href.indexOf('&point=') > 0);
+  const suivi = avecPoint ? avecPoint.href.replace('/sentinel?goto=', '')
+                          : cibles[0];
+  const temoin = suivi.split('&')[0];
+  const point = avecPoint ? avecPoint.href.split('&point=')[1] : null;
+  const r1 = await pg.goto(BASE + '/sentinel?goto=' + suivi,
                            { waitUntil: 'domcontentloaded' });
   ok('la page Sentinel répond au lien d\u2019un risque',
      r1 && r1.status() === 200, r1 ? 'HTTP ' + r1.status() : 'pas de réponse',
@@ -155,13 +168,42 @@ const RELEVE = () => {
   ok('suivre le lien OUVRE le panneau désigné, et pas l\u2019accueil',
      ouvert === true, 'panneau ' + temoin + ' : ' + ouvert, temoin);
 
+  /* ── LE POINT PROMIS EST-IL SOUS LES YEUX DU VISITEUR ? ───────────── */
+  if (point) {
+    const p = await pg.evaluate((id) => {
+      const el = document.getElementById(id);
+      if (!el) return { absent: true };
+      const b = el.getBoundingClientRect();
+      return { texte: el.textContent.replace(/\s+/g, ' ').trim().slice(0, 60),
+               visible: el.checkVisibility({ checkVisibilityCSS: true,
+                 contentVisibilityAuto: true, opacityProperty: true,
+                 visibilityProperty: true }),
+               dansLEcran: b.top > -5 && b.bottom < window.innerHeight + 5,
+               souligne: el.classList.contains('vise') };
+    }, point);
+    ok('le point promis par la carte est À L\u2019ÉCRAN, et désigné',
+       !p.absent && p.visible && p.dansLEcran && p.souligne,
+       JSON.stringify(p), p.texte || '');
+    /* ET UN POINT INCONNU NE DOIT PAS EMPORTER LA PAGE AVEC LUI. */
+    const apres = await pg.evaluate((c) => {
+      try { window.sentinelPointer('point-qui-n-existe-pas'); } catch (e) {
+        return 'le pointage a levé : ' + e; }
+      const pa = document.getElementById('p-' + c);
+      return pa ? pa.checkVisibility({ checkVisibilityCSS: true,
+        contentVisibilityAuto: true, opacityProperty: true,
+        visibilityProperty: true }) : 'panneau perdu';
+    }, temoin);
+    ok('un point inconnu renonce en silence, la page reste ouverte',
+       apres === true, String(apres));
+  }
+
   const autres = await pg.evaluate((cs) => cs.map(c => {
     const p = document.getElementById('p-' + c);
     const onglet = [...document.querySelectorAll('.sb-item')].some(
       i => (i.getAttribute('onclick') || '').indexOf("go('" + c + "'") >= 0);
     return { c: c, panneau: !!p, onglet: onglet };
-  }), cibles.slice(1));
-  ok('les sept autres destinations sont des panneaux réels de cette page',
+  }), cibles.filter(c => c !== temoin));
+  ok('les autres destinations sont des panneaux réels de cette page',
      autres.every(a => a.panneau),
      autres.filter(a => !a.panneau).map(a => a.c).join(', '),
      autres.length + ' vérifiées');

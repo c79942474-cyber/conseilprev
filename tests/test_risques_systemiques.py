@@ -47,7 +47,33 @@ def _bloc():
 
 
 BLOC = _bloc()
-LIENS = re.compile(r'class="risk-go" href="/sentinel\?goto=([a-z0-9-]+)"')
+
+#  UNE DESTINATION EST UN COUPLE (PAGE, POINT), PLUS UNE PAGE.
+#
+#  POURQUOI CE N'EST PAS UN RAFFINEMENT COSMÉTIQUE. La carte Supply Chain
+#  annonçait « Value Chain and Component Integration ». Le lien ouvrait la
+#  page qui contient cet item — et le visiteur tombait sur une liste où rien
+#  ne portait ce nom en façade. La navigation réussissait, la promesse non.
+#  `?point=` nomme l'endroit ; ces règles le lisent donc aussi, sans quoi
+#  elles continueraient de valider une page en ignorant ce qu'on y cherche.
+LIENS = re.compile(
+    r'class="risk-go" href="/sentinel\?goto=([a-z0-9-]+)'
+    r'(?:&amp;point=([A-Za-z0-9_-]+))?"')
+
+
+def _destinations():
+    """(page, point) pour chaque carte ; point vaut '' quand la carte vise
+    la page entière."""
+    return LIENS.findall(BLOC)
+
+
+def _pages():
+    return [pg for pg, _ in _destinations()]
+
+
+def _libelle(dest):
+    pg, pt = dest
+    return pg + ('#' + pt if pt else '')
 
 
 def _cartes():
@@ -144,18 +170,37 @@ def test_CHACUN_des_huit_risques_porte_son_lien():
     """SEPT CARTES SUR HUIT LIÉES, C'EST UNE SECTION QUI PARAÎT LIÉE et dont
     un risque reste muet — le lecteur conclut qu'il a mal cliqué, pas que ce
     lien-là n'existe pas."""
-    liens = LIENS.findall(BLOC)
+    liens = _destinations()
     assert len(liens) == len(_cartes()), (
         "%d risque(s) sur %d portent un lien" % (len(liens), len(_cartes())))
 
 
-def test_les_huit_risques_ne_menent_pas_tous_au_MEME_module():
+def test_les_huit_risques_ne_menent_pas_au_MEME_ENDROIT():
     """HUIT LIENS VERS LE MÊME ÉCRAN NE CONNECTENT RIEN : c'est la bannière de
-    pied d'avant, répétée huit fois."""
-    liens = LIENS.findall(BLOC)
-    assert len(set(liens)) == len(liens), (
-        "deux risques mènent au même module : %s"
-        % sorted(c for c in set(liens) if liens.count(c) > 1))
+    pied d'avant, répétée huit fois.
+
+    DEUX CARTES PEUVENT PARTAGER UNE PAGE, à une condition : qu'elles ne
+    déposent pas le visiteur au même endroit. « Data & IA » ouvre le profil
+    IA générative dans son ensemble — ses douze risques, dont six hors cyber,
+    c'est le propos de la carte. « Supply Chain » ouvre le douzième en
+    particulier. Exiger huit PAGES distinctes interdirait ce cas et pousserait
+    à choisir une page voisine plutôt que la bonne, ce qui est précisément le
+    défaut que ces règles existent pour empêcher. On exige donc huit ENDROITS
+    distincts, et on interdit qu'une page partagée le soit sans point nommé."""
+    dests = _destinations()
+    assert len(set(dests)) == len(dests), (
+        "deux risques déposent le visiteur au même endroit : %s"
+        % sorted(_libelle(d) for d in set(dests) if dests.count(d) > 1))
+    pages = _pages()
+    for pg in set(pages):
+        if pages.count(pg) == 1:
+            continue
+        points = [pt for p, pt in dests if p == pg]
+        assert all(points) or sum(1 for pt in points if not pt) == 1, (
+            "« %s » est visée par %d cartes dont %d sans point nommé : elles "
+            "arrivent toutes en haut de la même page, et rien ne distingue ce "
+            "que chacune promettait" % (pg, len(points),
+                                        sum(1 for pt in points if not pt)))
 
 
 def test_chaque_destination_existe_comme_PANNEAU_ET_comme_ONGLET():
@@ -165,7 +210,7 @@ def test_chaque_destination_existe_comme_PANNEAU_ET_comme_ONGLET():
     assert len(panneaux) > 50 and len(onglets) > 50, (
         "lecture de sentinel.html : %d panneaux, %d onglets — ce contrôle ne "
         "prouve plus rien" % (len(panneaux), len(onglets)))
-    for cible in LIENS.findall(BLOC):
+    for cible in _pages():
         assert cible in panneaux, "« %s » n'est pas un panneau" % cible
         assert cible in onglets, (
             "« %s » est un panneau mais aucun onglet n'y mène : le visiteur "
@@ -205,6 +250,12 @@ def test_la_banniere_de_pied_vise_le_RADAR_et_plus_l_accueil():
 #  Chaque entrée ne retient donc que des mots qui NOMMENT LA DESTINATION et
 #  qu'aucune autre destination du même thème ne revendiquerait. Ils se
 #  trouvent dans la description de la carte, pas dans son titre.
+#  LA TABLE EST CLASSÉE PAR ENDROIT, ET C'EST CE QUI PERMET LE PARTAGE.
+#  « nist-genai » sans point, c'est le profil dans son ensemble — les douze
+#  risques, dont six hors cyber. « nist-genai#nist-gen-12 », c'est le
+#  douzième en particulier. Deux cartes, deux vocabulaires attendus, un seul
+#  écran : la table le dit, au lieu de le cacher derrière un identifiant
+#  commun.
 NOMME = {
     "carto": ("extraterritoriales", "souveraineté"),
     "finops": ("dépenses", "tarifaire"),
@@ -212,7 +263,7 @@ NOMME = {
     "training": ("compétences",),
     "geo": ("tensions", "fragmentation"),
     "owasp-dix": ("adversarial", "hallucinations", "attaque"),
-    "nist-cadre": ("lock-in", "interopérabilité"),
+    "nist-genai#nist-gen-12": ("lock-in", "interopérabilité"),
     "empreinte-ia": ("carbone", "énergivores", "empreinte"),
 }
 
@@ -226,11 +277,13 @@ def test_chaque_carte_NOMME_le_sujet_du_module_qu_elle_ouvre():
         r'<h3 class="risk-title" data-i18n="rk\.([a-z]+)\.t">([^<]*)</h3>\s*'
         r'<p class="risk-desc"[^>]*>([^<]*)</p>\s*'
         r'<span class="risk-tag[^"]*"[^>]*>([^<]*)</span>\s*'
-        r'<a class="risk-go" href="/sentinel\?goto=([a-z0-9-]+)"', BLOC)
+        r'<a class="risk-go" href="/sentinel\?goto=([a-z0-9-]+)'
+        r'(?:&amp;point=([A-Za-z0-9_-]+))?"', BLOC)
     assert len(cartes) == 8, (
         "%d carte(s) relevées avec leur lien — la lecture a changé de forme"
         % len(cartes))
-    for _cle, titre, desc, tag, cible in cartes:
+    for _cle, titre, desc, tag, page, point in cartes:
+        cible = _libelle((page, point))
         attendus = NOMME.get(cible)
         assert attendus, (
             "« %s » ouvre « %s », dont aucun mot n'est attendu : ajoutez-le à "
@@ -248,9 +301,18 @@ def test_trois_destinations_viennent_de_la_SOURCE_declaree_du_risque():
     Chaque risque de `SYSTEMIC_RISKS` déclare la source qui le fonde. Trois
     d'entre elles nomment le sujet dont Sentinel porte le module :
 
-      supply_chain    → « NIST AI RMF — Value Chain and Component Integrity »
+      supply_chain    → « NIST AI 600-1 — Value Chain and Component Integration »
       data_ia         → « NIST AI 600-1 — Harmful Bias, Data Privacy… »
       geopolitique    → « OECD.AI — tensions normatives, fragmentation… »
+
+    CETTE PREMIÈRE LIGNE PORTAIT DEUX ERREURS, ET LE LIEN LES SUIVAIT. Elle
+    disait « NIST AI RMF » pour un item qui appartient à AI 600-1 — le profil
+    IA générative, où il est le risque 12 sur 12 — et l'appelait
+    « Integrity » là où `nist_ai_rmf.py`, la référence du dépôt, écrit
+    « Integration ». La carte ouvrait donc le CADRE, dix-neuf catégories
+    repliées dont aucune ne porte ce nom, en promettant un item qui vit
+    ailleurs. C'est ce qui s'est vu à l'usage sous la forme « ça ouvre le
+    mauvais module ».
 
     Leurs liens ne relèvent donc d'aucune interprétation : ils suivent ce que
     le risque dit lui-même. Si une de ces sources changeait de sujet, le lien
@@ -267,10 +329,13 @@ def test_trois_destinations_viennent_de_la_SOURCE_declaree_du_risque():
     sources = dict(re.findall(r'\{id:"([a-z_]+)".*?source:"([^"]*)"',
                               corps, re.S))
     assert len(sources) == 8, sources
-    attendu = {"supply_chain": ("NIST AI RMF", "nist-cadre"),
-               "data_ia": ("NIST AI 600-1", "nist-genai"),
-               "geopolitique": ("tensions normatives", "geo")}
-    cartes = dict(zip([c for c, _ in _cartes()], LIENS.findall(BLOC)))
+    attendu = {
+        "supply_chain": ("Value Chain and Component Integration",
+                         "nist-genai#nist-gen-12"),
+        "data_ia":      ("NIST AI 600-1", "nist-genai"),
+        "geopolitique": ("tensions normatives", "geo")}
+    cartes = dict(zip([c for c, _ in _cartes()],
+                      [_libelle(d) for d in _destinations()]))
     cle_vitrine = {"supply_chain": "sc", "data_ia": "data",
                    "geopolitique": "geo"}
     for rid, (cadre, cible) in attendu.items():
@@ -280,6 +345,49 @@ def test_trois_destinations_viennent_de_la_SOURCE_declaree_du_risque():
         assert cartes[cle_vitrine[rid]] == cible, (
             "%s cite %s mais sa carte ouvre %r"
             % (rid, cadre, cartes[cle_vitrine[rid]]))
+
+
+def test_l_infobulle_promet_le_nom_que_la_REFERENCE_porte():
+    """UNE INTERDICTION NOMMÉE N'EST PAS UNE MESURE.
+
+    Une première version interdisait la chaîne « Component Integrity » dans
+    la vitrine et dans le script. Elle empêchait le retour de CETTE faute-là
+    et d'aucune autre : renommer l'item dans `nist_ai_rmf.py` la laissait
+    verte, alors que l'infobulle se mettait à promettre un intitulé que la
+    page n'affiche plus. Mesuré par une mutation, ce contrôle n'a rien vu.
+
+    La règle joint donc les deux bouts, sans rien recopier : le point visé
+    par la carte donne le numéro du risque, le numéro donne l'item dans la
+    référence, et l'intitulé de cet item doit se lire dans l'infobulle. Le
+    jour où l'item change de nom, la carte doit changer avec lui — c'est
+    l'auditeur qui ira chercher cet intitulé dans le document du NIST.
+    """
+    import nist_ai_rmf
+    liens = re.findall(
+        r'class="risk-go" href="/sentinel\?goto=([a-z0-9-]+)'
+        r'(?:&amp;point=nist-gen-(\d+))?" title="([^"]*)"', BLOC)
+    assert len(liens) == 8, len(liens)
+    vises = [(n, html.unescape(t)) for _pg, n, t in liens if n]
+    assert vises, (
+        "aucune carte ne vise un risque numéroté du profil : cette règle ne "
+        "prouve plus rien et il faut la retirer plutôt que la laisser verte")
+    par_n = {r["n"]: r for r in nist_ai_rmf.RISQUES_GENAI}
+    for n, titre in vises:
+        item = par_n.get(int(n))
+        assert item, (
+            "la carte vise le risque %s du profil, qui n'existe pas dans la "
+            "référence — elle compte %d risques" % (n, len(par_n)))
+        assert item["cle"] in titre, (
+            "l'infobulle promet « %s » ; la référence nomme ce risque « %s » "
+            "et c'est ce que la page affichera"
+            % (titre, item["cle"]))
+        sources = dict(re.findall(r'\{id:"([a-z_]+)".*?source:"([^"]*)"',
+                                  PAGEJS[PAGEJS.index("var SYSTEMIC_RISKS = ["):
+                                         PAGEJS.index("];", PAGEJS.index(
+                                             "var SYSTEMIC_RISKS = ["))], re.S))
+        assert any(item["cle"] in v for v in sources.values()), (
+            "aucun risque ne déclare « %s » comme source : le lien vers ce "
+            "point ne repose plus sur rien" % item["cle"])
 
 
 def _page_meta():
@@ -303,7 +411,6 @@ PORTE = {
     "owasp-dix":    "owasp",
     "finops":       "finops",
     "empreinte-ia": "empreinte",
-    "nist-cadre":   "nist",
     "carto":        "carte",
     "nist-genai":   "générative",
     "training":     "training",
@@ -324,7 +431,7 @@ def test_le_module_vise_PORTE_le_sujet_que_la_carte_annonce():
     assert len(meta) > 40, (
         "la lecture de PAGE_META rend %d entrées : ce contrôle ne prouve "
         "plus rien" % len(meta))
-    cibles = LIENS.findall(BLOC)
+    cibles = _pages()
     assert len(cibles) == 8, cibles
     for cible in cibles:
         mot = PORTE.get(cible)
@@ -339,6 +446,81 @@ def test_le_module_vise_PORTE_le_sujet_que_la_carte_annonce():
             "la carte mène à « %s », que Sentinel intitule désormais « %s » : "
             "le mot « %s » qui justifiait le lien n'y est plus — relire le "
             "lien avant de le garder" % (cible, meta[cible], mot))
+
+
+def _points_rendus():
+    """Les identifiants que la peinture de Sentinel produit RÉELLEMENT.
+
+    On ne les recopie pas : on les DÉRIVE de la référence NIST du dépôt avec
+    la même recette que le JavaScript, après avoir vérifié que c'est bien
+    celle-là. Une liste tenue à la main ici vieillirait en silence, et cette
+    règle finirait par comparer deux copies au lieu de comparer au produit.
+    """
+    import nist_ai_rmf
+    ids = set("nist-gen-%d" % r["n"] for r in nist_ai_rmf.RISQUES_GENAI)
+    ids |= set("nist-cat-" + re.sub(r"[^A-Za-z0-9]+", "-", c["cle"])
+               for c in nist_ai_rmf.CATEGORIES)
+    return ids
+
+
+def test_la_recette_des_identifiants_est_bien_CELLE_du_JavaScript():
+    """LE GARDE-FOU DE LA RÈGLE SUIVANTE. Elle dérive les identifiants
+    rendus ; si le JavaScript changeait sa façon de les fabriquer, elle
+    continuerait de comparer un lien à une liste que plus rien ne produit —
+    verte, et sans rapport avec l'écran."""
+    assert '\'<li id="nist-gen-\' + r.n + \'"' in PAGEJS, (
+        "le profil IA générative ne numérote plus ses risques ainsi")
+    assert '\'<details class="nist-cat" id="nist-cat-\'' in PAGEJS and \
+           "c.cle.replace(/[^A-Za-z0-9]+/g, '-')" in PAGEJS, (
+        "le cadre ne fabrique plus ses identifiants de catégorie ainsi")
+    rendus = _points_rendus()
+    assert len(rendus) == 31, (
+        "%d identifiants dérivés (12 risques + 19 catégories attendus) : la "
+        "référence a changé de forme" % len(rendus))
+
+
+def test_chaque_POINT_visé_existe_vraiment_dans_la_page():
+    """LE DÉFAUT QUE `?point=` INTRODUIT, ET QUI NE SE VOIT PAS.
+
+    Un identifiant inconnu ne produit AUCUNE erreur : la page demandée
+    s'ouvre, le pointage échoue en silence, et le visiteur se retrouve en
+    haut d'une liste sans savoir ce qu'on lui avait promis. C'est exactement
+    le défaut qu'on vient de corriger, sous une autre forme — un lien qui
+    réussit à moitié est plus coûteux qu'un lien qui manque, parce qu'il ne
+    se signale pas.
+
+    La règle exige donc que chaque point visé soit un identifiant que la
+    page FABRIQUE réellement."""
+    rendus = _points_rendus()
+    vises = [(pg, pt) for pg, pt in _destinations() if pt]
+    assert vises, (
+        "aucune carte ne vise un point précis : cette règle ne prouve plus "
+        "rien et il faut la retirer plutôt que la laisser verte à vide")
+    for pg, pt in vises:
+        assert pt in rendus, (
+            "la carte ouvre « %s » en visant « %s », que cette page ne "
+            "fabrique jamais : la navigation réussira et le pointage "
+            "échouera en silence" % (pg, pt))
+
+
+def test_la_machinerie_du_lien_profond_existe_et_echoue_EN_SILENCE():
+    """DEUX EXIGENCES OPPOSÉES, ET LES DEUX COMPTENT. Le lien profond doit
+    atteindre son point — sinon la promesse de la carte est vide. Et il doit
+    renoncer sans bruit sur un identifiant inconnu — sinon une faute de
+    frappe casse une navigation qui, elle, a réussi."""
+    assert "window.sentinelPointer" in PAGEJS, (
+        "la fonction de pointage a disparu : `?point=` ne fait plus rien")
+    assert "q.get('point')" in PAGEJS, (
+        "le paramètre `point` n'est plus lu à l'ouverture de la page")
+    i = PAGEJS.index("window.sentinelPointer")
+    corps = PAGEJS[i:PAGEJS.index("window.sentinelGotoDeepLink", i)]
+    assert "if(!el) return false" in corps, (
+        "un identifiant inconnu ne renonce plus proprement")
+    assert "catch" in corps, (
+        "le pointage peut lever et emporter le reste du chargement")
+    assert "d.open = true" in corps or "el.open = true" in corps, (
+        "le point visé n'est plus déplié : sur une page d'accordéons fermés, "
+        "l'amener à l'écran ne le montre pas")
 
 
 # ══════════════════════════════════════════════════════════════════════════
