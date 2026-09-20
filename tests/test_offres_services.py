@@ -1,0 +1,294 @@
+# -*- coding: utf-8 -*-
+"""Les six offres de services mènent à leur module Sentinel.
+
+LA DEMANDE : « connecter avec des liens les 6 offres de services, renvoyer
+aux bons modules du site Sentinel ».
+
+TROIS FAÇONS DE RATER CE LIEN, ET ELLES SE RATENT EN SILENCE.
+
+  1. LE LIEN MÈNE À UN ÉCRAN QUI N'EXISTE PAS. `/sentinel?goto=xxx` sur un
+     identifiant inconnu n'affiche pas d'erreur : Sentinel ouvre sa page
+     d'accueil, et le visiteur croit avoir mal cliqué. Un lien mort se
+     remarque ; un lien qui atterrit à côté ne se remarque pas.
+
+  2. LE LIEN EST EFFACÉ PAR LA TRADUCTION. `applyLang` fait
+     `el.innerHTML = <traduction>` sur tout élément porteur d'un `data-i18n`.
+     Un <a> écrit à l'intérieur disparaît au chargement, sans erreur et sans
+     trace. Ce dépôt a déjà payé ce défaut : la mention « texte seul » de la
+     carte DORA était morte pour cette raison exacte, et personne ne l'a vu
+     avant une capture d'écran.
+
+  3. LE LIEN MÈNE AU MAUVAIS MODULE. Une flèche vers un écran seulement
+     voisin du sujet apprend au lecteur à ne plus croire les flèches — un
+     prix bien plus élevé que celui d'une ligne sans lien. Les règles de la
+     §3 exigent donc que la destination soit NOMMÉE par la ligne qui la
+     porte.
+"""
+import io
+import json
+import os
+import re
+
+import pytest
+
+_RACINE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+def _lire(nom):
+    with io.open(os.path.join(_RACINE, nom), encoding="utf-8") as f:
+        return f.read()
+
+
+INDEX = _lire("index.html")
+INDEXJS = _lire("index.page.js")
+SENTINEL = _lire("sentinel.html")
+
+
+def _bloc_services():
+    deb = INDEX.index('<section class="sec" id="services">')
+    fin = INDEX.index("</section>", INDEX.index("</div>\n</section>", deb))
+    return INDEX[deb:fin]
+
+
+BLOC = _bloc_services()
+CARTES = re.compile(r'class="sv-card-go" href="/sentinel\?goto=([a-z0-9-]+)"')
+PUCES = re.compile(r'class="sv-go" href="/sentinel\?goto=([a-z0-9-]+)"')
+
+
+def _panneaux():
+    return set(re.findall(r'<div class="page[^"]*" id="p-([A-Za-z0-9_-]+)"',
+                          SENTINEL))
+
+
+def _onglets():
+    return set(re.findall(r"go\('([a-z0-9-]+)',this,", SENTINEL))
+
+
+def _dico(lg):
+    m = re.search(r"\n\s*%s:JSON\.parse\(`(.*?)`\)" % lg, INDEXJS, re.S)
+    assert m, "dictionnaire %s introuvable" % lg
+    return json.loads(m.group(1).replace("\\`", "`"))
+
+
+# ══════════════════════════════════════════════════════════════════════════
+#  1. LES SIX OFFRES SONT LIÉES — TOUTES LES SIX
+# ══════════════════════════════════════════════════════════════════════════
+
+def test_la_lecture_du_bloc_n_est_pas_vide():
+    """LE GARDE-FOU DES RÈGLES SUIVANTES. Une lecture qui rendrait zéro carte
+    ferait passer toutes les comparaisons pour des comparaisons de vides —
+    c'est arrivé une fois dans ce dépôt, et la recette est restée verte."""
+    assert len(BLOC) > 2000
+    assert BLOC.count('class="diff-card"') == 6, (
+        "le bloc des services ne porte plus six cartes : %d"
+        % BLOC.count('class="diff-card"'))
+
+
+def test_CHACUNE_des_six_offres_porte_son_lien_vers_un_module():
+    """CINQ CARTES SUR SIX LIÉES, C'EST UNE SECTION QUI PARAÎT LIÉE et dont
+    une offre reste muette — le lecteur conclut qu'il a mal cliqué, pas que
+    ce lien-là n'existe pas."""
+    titres = re.findall(r'<h3 class="diff-title" data-i18n="(sv\.[a-z0-9]+)\.t">',
+                        BLOC)
+    liens = CARTES.findall(BLOC)
+    assert len(titres) == 6, titres
+    assert len(liens) == 6, (
+        "%d offre(s) sur %d portent un lien vers leur module"
+        % (len(liens), len(titres)))
+
+
+def test_les_six_offres_ne_mènent_pas_toutes_au_MEME_module():
+    """SIX LIENS VERS LE MÊME ÉCRAN NE CONNECTENT RIEN : ils déplacent le
+    problème d'un cran. Chaque offre a son instrument, et c'est ce qui rend
+    la section utile."""
+    liens = CARTES.findall(BLOC)
+    assert len(set(liens)) == len(liens), (
+        "deux offres mènent au même module : %s"
+        % [c for c in set(liens) if liens.count(c) > 1])
+
+
+# ══════════════════════════════════════════════════════════════════════════
+#  2. AUCUN LIEN NE MÈNE DANS LE VIDE
+# ══════════════════════════════════════════════════════════════════════════
+
+def test_chaque_destination_existe_comme_PANNEAU_ET_comme_ONGLET():
+    """`/sentinel?goto=xxx` SUR UN IDENTIFIANT INCONNU N'AFFICHE PAS D'ERREUR :
+    Sentinel ouvre sa page d'accueil et le visiteur croit avoir mal cliqué.
+
+    LES DEUX CONDITIONS COMPTENT. Un panneau sans onglet s'ouvre par le lien
+    mais reste introuvable ensuite ; un onglet sans panneau ouvre du vide.
+    """
+    panneaux, onglets = _panneaux(), _onglets()
+    assert len(panneaux) > 50 and len(onglets) > 50, (
+        "la lecture de sentinel.html rend %d panneaux et %d onglets : ce "
+        "contrôle ne prouve plus rien" % (len(panneaux), len(onglets)))
+    for cible in CARTES.findall(BLOC) + PUCES.findall(BLOC):
+        assert cible in panneaux, (
+            "le lien mène à « %s », qui n'est pas un panneau de Sentinel"
+            % cible)
+        assert cible in onglets, (
+            "« %s » est un panneau mais aucun onglet n'y mène : le visiteur "
+            "y arrive et ne saura pas y revenir" % cible)
+
+
+def test_aucun_lien_de_service_ne_sort_du_site():
+    """UN LIEN ABSOLU VERS LE SITE DE PRODUCTION casserait la navigation en
+    recette et en local, et personne ne s'en apercevrait avant la mise en
+    ligne suivante."""
+    for href in re.findall(r'class="sv-(?:card-)?go" href="([^"]+)"', BLOC):
+        assert href.startswith("/sentinel?goto="), (
+            "lien de service hors du site : %r" % href)
+
+
+# ══════════════════════════════════════════════════════════════════════════
+#  3. LE LIEN MÈNE LÀ OÙ SA LIGNE LE DIT
+# ══════════════════════════════════════════════════════════════════════════
+
+# CE QUE CHAQUE DESTINATION DOIT PORTER DANS LE TEXTE QUI LA DÉSIGNE. La
+# règle ne juge pas la pertinence — elle vérifie que la ligne NOMME ce vers
+# quoi elle pointe. Une flèche « ISO 27001 » qui ouvrirait le RGPD tombe ici.
+NOMME = {
+    "iso42001": ("iso 42001", "42001"),
+    "iso27001": ("iso 27001", "27001"),
+    "iso27001-risques": ("iso 27001", "27001"),
+    "nis2": ("nis2", "nis 2"),
+    "nis2-qualifier": ("nis2", "nis 2"),
+    "rgpd-pbd": ("rgpd", "privacy"),
+    "conf-plan": ("conformité", "écarts"),
+    "simulateur": ("classification", "risque"),
+    "fria": ("impact",),
+    "matrice": ("matrice",),
+    "adoption": ("change management", "adoption"),
+    "report": ("reporting", "kpi"),
+}
+
+
+def test_chaque_PUCE_liée_nomme_le_module_qu_elle_ouvre():
+    """LA RÈGLE QUI EMPÊCHE LE LIEN APPROXIMATIF. Une flèche vers un écran
+    seulement voisin du sujet apprend au lecteur à ne plus croire les
+    flèches, et ce prix-là est bien plus élevé que celui d'une ligne sans
+    lien.
+    """
+    puces = re.findall(
+        r'<li><span data-i18n="([^"]+)">([^<]*)</span>'
+        r'<a class="sv-go" href="/sentinel\?goto=([a-z0-9-]+)"', BLOC)
+    assert len(puces) >= 10, "seulement %d puces liées" % len(puces)
+    for cle, texte, cible in puces:
+        attendus = NOMME.get(cible)
+        assert attendus, (
+            "la puce « %s » mène à « %s », dont aucun mot n'est attendu : "
+            "ajoutez-le à NOMME avec ce que la ligne doit dire, ou changez "
+            "de destination" % (texte, cible))
+        bas = texte.lower()
+        assert any(a in bas for a in attendus), (
+            "la puce « %s » ouvre « %s » sans le nommer — attendu l'un de %s"
+            % (texte, cible, list(attendus)))
+
+
+def test_une_puce_qui_ne_nomme_aucun_module_N_EST_PAS_liée():
+    """LES PUCES SANS FLÈCHE NE SONT PAS UN OUBLI, et cette règle le fige.
+
+    « Jumeaux numériques & IoT », « MLOps & monitoring IA », « Coaching
+    équipes DSI/RSSI », « Monitoring post-déploiement » : aucun écran de
+    Sentinel ne porte précisément ces sujets. Les lier à un module voisin
+    serait le défaut que la règle précédente interdit — celle-ci empêche de
+    le réintroduire par l'autre bout, en « complétant » la section.
+    """
+    sans_module = ["jumeaux", "mlops", "coaching", "post-déploiement",
+                   "architecture ia"]
+    for li in re.findall(r"<li>.*?</li>", BLOC, re.S):
+        bas = re.sub(r"<[^>]+>", " ", li).lower()
+        if not any(m in bas for m in sans_module):
+            continue
+        assert 'class="sv-go"' not in li, (
+            "cette ligne a reçu une flèche alors qu'aucun écran ne porte son "
+            "sujet : %s" % re.sub(r"\s+", " ", bas).strip()[:70])
+
+
+# ══════════════════════════════════════════════════════════════════════════
+#  4. LA TRADUCTION NE PEUT PAS EFFACER LE LIEN
+# ══════════════════════════════════════════════════════════════════════════
+
+def test_applyLang_remplace_bien_l_innerHTML_et_pas_le_texte():
+    """LE GARDE-FOU DE TOUTE LA §4. Si `applyLang` posait un `textContent`,
+    le danger que les règles suivantes écartent n'existerait pas — et elles
+    passeraient au vert en ne mesurant plus rien. On vérifie donc d'abord
+    que le danger est réel."""
+    i = INDEXJS.index("function applyLang()")
+    bloc = INDEXJS[i:i + 400]
+    assert "innerHTML" in bloc, (
+        "applyLang n'écrase plus l'innerHTML : ces règles doivent être "
+        "revues, pas supprimées")
+
+
+def test_aucun_lien_de_service_ne_vit_DANS_un_element_traduit():
+    """LE DÉFAUT DÉJÀ PAYÉ UNE FOIS DANS CE DÉPÔT. Un <a> placé à l'intérieur
+    d'un porteur de `data-i18n` est effacé au chargement par
+    `el.innerHTML = <traduction>` : le lien disparaît sans erreur, et la page
+    paraît simplement ne pas en avoir.
+    """
+    for m in re.finditer(r'<(li|h3|p|div)([^>]*data-i18n="[^"]+"[^>]*)>(.*?)</\1>',
+                         BLOC, re.S):
+        assert 'class="sv-go"' not in m.group(3) \
+            and 'class="sv-card-go"' not in m.group(3), (
+            "un lien de service est écrit DANS un élément traduit (%s) : la "
+            "traduction l'effacera au chargement" % m.group(0)[:90])
+
+
+def test_le_libelle_de_l_appel_est_traduit_dans_les_TROIS_langues():
+    """UNE CLÉ PRÉSENTE D'UN CÔTÉ SEULEMENT laisse l'appel en français sur la
+    version anglaise, et rien ne le signale à qui relit le français."""
+    assert BLOC.count('<span data-i18n="sv.go">') == 6, (
+        "les six appels ne portent pas tous la clé traduite : %d"
+        % BLOC.count('<span data-i18n="sv.go">'))
+    for lg in ("fr", "en", "de"):
+        d = _dico(lg)
+        assert d.get("sv.go"), "sv.go absent du dictionnaire %s" % lg
+    assert len({_dico(lg)["sv.go"] for lg in ("fr", "en", "de")}) == 3, (
+        "deux langues partagent le même libellé d'appel : l'une des trois "
+        "n'a pas été traduite")
+
+
+def test_la_fleche_de_chaque_puce_reste_hors_du_span_traduit():
+    """LA MÊME RÈGLE, VUE DE L'AUTRE CÔTÉ : la flèche doit être VOISINE du
+    <span> traduit, jamais dedans. C'est ce qui la rend intouchable."""
+    puces = re.findall(r'<li><span data-i18n="[^"]+">[^<]*</span>'
+                       r'<a class="sv-go"', BLOC)
+    total = BLOC.count('class="sv-go"')
+    assert len(puces) == total, (
+        "%d flèche(s) sur %d ne sont pas posées en voisines d'un span "
+        "traduit" % (total - len(puces), total))
+
+
+# ══════════════════════════════════════════════════════════════════════════
+#  5. CE QUI SE CLIQUE SE VOIT, ET SE VISE AU CLAVIER
+# ══════════════════════════════════════════════════════════════════════════
+
+def test_chaque_lien_dit_OU_il_mene_avant_le_clic():
+    """UNE FLÈCHE NUE NE DIT RIEN — ni au survol, ni à un lecteur d'écran."""
+    for m in re.finditer(r'<a class="sv-go"([^>]*)>', BLOC):
+        attrs = m.group(1)
+        assert 'title="Ouvre ' in attrs, attrs[:80]
+        assert 'aria-label="Ouvrir ' in attrs, (
+            "flèche sans nom accessible : elle se lira « lien » et rien de "
+            "plus : %s" % attrs[:80])
+    for m in re.finditer(r'<a class="sv-card-go"([^>]*)>', BLOC):
+        assert 'title="Ouvre ' in m.group(1), m.group(1)[:80]
+
+
+def test_les_deux_sortes_de_liens_ont_un_etat_de_focus_visible():
+    """AU CLAVIER, UN LIEN SANS ÉTAT DE FOCUS EST UN LIEN QU'ON NE PEUT PAS
+    SUIVRE : on ne sait jamais où l'on est."""
+    for cls in (".sv-go", ".sv-card-go"):
+        assert ("%s:focus-visible{" % cls) in INDEX, (
+            "%s n'a pas d'état de focus visible" % cls)
+
+
+def test_le_mouvement_de_la_fleche_se_coupe_pour_qui_le_demande():
+    src = INDEX.replace(" ", "")
+    blocs = re.findall(r"prefers-reduced-motion:reduce\)\{(.*?)\}\n", src, re.S)
+    vise = [b for b in blocs if ".sv-go" in b]
+    assert vise, (
+        "la flèche se déplace au survol sans que `prefers-reduced-motion` "
+        "n'arrête rien")
+    assert any("transition:none" in b for b in vise), vise
