@@ -1050,6 +1050,232 @@ function _apresPeinture(fn) {
   else setTimeout(fn, 60);
 }
 
+
+/* ══ SENTINEL EN FRANÇAIS OU EN ANGLAIS ═══════════════════════════════════
+ *
+ * CE QUI N'EXISTAIT PAS. La page d'accueil se traduit depuis longtemps —
+ * trois langues, 240 porteurs de `data-i18n`. Sentinel, lui, n'en avait
+ * AUCUN : 27 000 mots, tous en français, sans le moindre point d'entrée.
+ *
+ * ── LE PIÈGE QU'ON NE REPRODUIT PAS ──────────────────────────────────────
+ * `applyLang`, sur l'accueil, fait `el.innerHTML = <traduction>`. Un lien
+ * écrit DANS un élément traduit disparaît au chargement, sans erreur et sans
+ * trace — ce dépôt l'a payé deux fois : la mention « texte seul » de la carte
+ * DORA, puis les dix-neuf liens des offres de services. Ici, la traduction
+ * écrit `textContent` et RIEN d'autre. Un élément qui contient du balisage
+ * n'est pas traduisible par ce chemin, et une règle interdit d'en marquer un.
+ *
+ * ── CE QUI EST TRADUIT, ET CE QUI NE L'EST PAS ───────────────────────────
+ * La COQUILLE NAVIGABLE : les douze rubriques du menu, ses cinquante-huit
+ * entrées, le fil d'Ariane, et l'identité de chaque page (son surtitre et son
+ * titre). Un lecteur anglophone traverse Sentinel et sait où il est.
+ * Le CORPS des panneaux — environ 24 000 mots de doctrine réglementaire —
+ * reste en français. Ce n'est pas un oubli : c'est écrit ici pour que
+ * personne ne prenne la coquille pour le tout.
+ *
+ * ── CE QUI NE SE TRADUIT PAS, ET NE DOIT PAS ─────────────────────────────
+ * Les énoncés du NIST sont cités en anglais VERBATIM parce que ce sont des
+ * œuvres du gouvernement des États-Unis et que l'auditeur les retrouvera
+ * ainsi. Les titres de clauses ISO sont cités, jamais reproduits. Les noms
+ * des règlements — IA Act, CRA, NIS 2, DORA, RGPD — sont des noms propres.
+ * Passer l'un d'eux à la moulinette d'une traduction le rendrait
+ * introuvable dans le texte officiel. */
+
+var SENT_LANG = 'fr';
+var SENT_LANG_CLE = 'cp-sentinel-langue-v1';
+
+var SENT_T = {
+  fr: {},
+  en: {
+    'sb.sub': 'Risk mapping',
+
+    'nav.sec.pilotage': 'Steering',
+    'nav.sec.cartographier': 'Map',
+    'nav.sec.evaluer-le-risque': 'Assess risk',
+    'nav.sec.traiter-et-gouverner': 'Treat & govern',
+    'nav.sec.se-tenir-informe': 'Stay informed',
+    'nav.sec.documenter-et-prouver': 'Document & prove',
+    'nav.sec.equipe-et-formation': 'Team & training',
+    'nav.sec.business': 'Business',
+    'nav.sec.juridique': 'Legal',
+    'nav.sec.entreprise': 'Enterprise',
+    'nav.sec.administration': 'Administration',
+    'nav.sec.compte': 'Account',
+
+    'nav.item.espace': 'My workspace',
+    'nav.item.report': 'Reporting',
+    'nav.item.cadre-normatif': 'Regulatory landscape',
+    'nav.item.shadow-ai': 'Shadow AI discovery',
+    'nav.item.simulateur': 'AI Act simulator',
+    'nav.item.registre': 'AI register',
+    'nav.item.finops': 'AI FinOps',
+    'nav.item.empreinte-ia': 'AI footprint of the estate',
+    'nav.item.maturite': 'AI maturity audit',
+    'nav.item.pan-sia': 'AI & data centres overview',
+    'nav.item.enveloppe': 'Investment envelope',
+    'nav.item.empreinte-parc': 'Environmental footprint',
+    'nav.item.empreinte': 'Digital footprint',
+    'nav.item.carto': 'Mapping',
+    'nav.item.carto-uc': 'Use-case mapping',
+    'nav.item.audit-ia-act': 'AI Act audit',
+    'nav.item.matrice': 'Risk matrix',
+    'nav.item.radar': 'Risk radar',
+    'nav.item.fria': 'FRIA',
+    'nav.item.sanctions': 'Penalty calculator',
+    'nav.item.gouvernance': 'AI governance',
+    'nav.item.parties': 'Stakeholders',
+    'nav.item.regs': 'Regulations',
+    'nav.item.veille': 'Qualified watch',
+    'nav.item.comp': 'Comparator',
+    'nav.item.geo': 'Geopolitics',
+    'nav.item.obs-rd': 'AI R&D observatory',
+    'nav.item.evals': 'Calculation history',
+    'nav.item.templates': 'Templates & docs',
+    'nav.item.rag': 'Knowledge base',
+    'nav.item.equipe': 'Team space',
+    'nav.item.training': 'Training hub',
+    'nav.item.adoption': 'Adoption',
+    'nav.item.ingenierie': 'AI-assisted development',
+    'nav.item.benchmark': 'Benchmark',
+    'nav.item.pricing': 'Outcome-based pricing',
+    'nav.item.roadmap': 'Roadmap',
+    'nav.item.juridique': 'Legal advice',
+    'nav.item.cra-role': 'Qualify my role',
+    'nav.item.cra': 'Products & classification',
+    'nav.item.cra-ecarts': 'Gap analysis',
+    'nav.item.cra-chiffre': 'Quantified exposure',
+    'nav.item.cra-signalement': 'Reporting, art. 14',
+    'nav.item.ia-act-hub': 'AI Act overview',
+    'nav.item.ia50': 'AI Act transparency',
+    'nav.item.conformite-globale': 'Global index',
+    'nav.item.entreprise': 'Enterprise plan',
+    'nav.item.rgpd-site': 'GDPR — CONSEILPREV',
+    'nav.item.rgpd-hub': 'Overview',
+    'nav.item.rgpd-traitements': 'Records of processing',
+    'nav.item.rgpd-cartographie': 'Processing map',
+    'nav.item.rgpd-aipd': 'DPIA (art. 35)',
+    'nav.item.rgpd-pbd': 'Privacy by design',
+    'nav.item.rgpd-doc': 'Documentation policy',
+    'nav.item.rgpd-sensibilisation': 'Awareness',
+    'nav.item.rgpd-conformite': 'GDPR compliance',
+    'nav.item.clients': 'Client management',
+    'nav.item.compte': 'Sign-in & session'
+  }
+};
+
+/*  LES RUBRIQUES DU FIL D'ARIANE, TRADUITES PAR LEUR TEXTE et non par une
+ *  clé : PAGE_META porte des chaînes en dur pour ses 107 pages, et leur
+ *  inventer une clé à chacune aurait dupliqué ce que le menu dit déjà.
+ *  Vingt-cinq rubriques distinctes suffisent à couvrir les 107.
+ *
+ *  SEPT N'ONT PAS DE TRADUCTION, ET N'EN VEULENT PAS : « EU AI ACT »,
+ *  « CRA », « NIS 2 », « ISO 42001 », « ISO 27001 », « NIST AI RMF »,
+ *  « OWASP LLM » sont des NOMS PROPRES de textes et de référentiels.
+ *  Traduits, ils deviennent introuvables dans le document officiel — ce qui
+ *  est exactement ce qu'un auditeur vient chercher. */
+var SENT_SECTIONS_EN = {
+  'PILOTAGE': 'STEERING',
+  'CARTOGRAPHIER': 'MAP',
+  'ÉVALUER LE RISQUE': 'ASSESS RISK',
+  'TRAITER & GOUVERNER': 'TREAT & GOVERN',
+  'SE TENIR INFORMÉ': 'STAY INFORMED',
+  'DOCUMENTER & PROUVER': 'DOCUMENT & PROVE',
+  'ÉQUIPE & FORMATION': 'TEAM & TRAINING',
+  'BUSINESS': 'BUSINESS',
+  'JURIDIQUE': 'LEGAL',
+  'JURIDICTION': 'JURISDICTION',
+  'ENTREPRISE': 'ENTERPRISE',
+  'ADMINISTRATION': 'ADMINISTRATION',
+  'COMPTE': 'ACCOUNT',
+  'AUDIT': 'AUDIT',
+  'CONFORMITÉ': 'COMPLIANCE',
+  'EMPREINTE': 'FOOTPRINT',
+  'RGPD & PRIVACY': 'GDPR & PRIVACY',
+  'Taux de conformité': 'Compliance rate',
+  'CRA — PRODUITS': 'CRA — PRODUCTS'
+};
+
+function sentTr(cle) {
+  var d = SENT_T[SENT_LANG];
+  return (d && d[cle]) || null;
+}
+
+/* LA TRADUCTION ÉCRIT `textContent`, JAMAIS `innerHTML`.
+   C'est la différence qui sépare ce moteur de celui de l'accueil, et elle
+   est délibérée : un lien, un bouton ou un identifiant placé dans un élément
+   traduit survivrait ici, parce que rien ne les remplace. Le prix est qu'un
+   élément contenant du balisage n'est pas traduisible par ce chemin — une
+   règle l'interdit plutôt que de le laisser échouer en silence. */
+function sentAppliquer() {
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    if (!el.hasAttribute('data-i18n-fr')) {
+      el.setAttribute('data-i18n-fr', el.textContent);
+    }
+    var cle = el.getAttribute('data-i18n');
+    var v = SENT_LANG === 'fr' ? el.getAttribute('data-i18n-fr') : sentTr(cle);
+    /* UNE CLÉ SANS TRADUCTION GARDE SON FRANÇAIS. Vider l'élément le ferait
+       disparaître de l'écran : un menu à trous est pire qu'un menu bilingue. */
+    el.textContent = (v === null || v === undefined)
+      ? el.getAttribute('data-i18n-fr') : v;
+  });
+  document.documentElement.lang = SENT_LANG;
+  document.querySelectorAll('.sb-lbtn').forEach(function (b) {
+    var a = b.getAttribute('data-lang') === SENT_LANG;
+    b.classList.toggle('on', a);
+    b.setAttribute('aria-pressed', a ? 'true' : 'false');
+  });
+  /* LE FIL D'ARIANE SUIT, sans qu'on ait à recliquer : il est peint par
+     `go()` depuis PAGE_META, et la page courante se redésigne elle-même. */
+  var courant = document.querySelector('.page.on');
+  if (courant && typeof sentFilAriane === 'function') {
+    sentFilAriane(courant.id.replace(/^p-/, ''));
+  }
+}
+
+window.sentSetLang = function (lg) {
+  SENT_LANG = (lg === 'en') ? 'en' : 'fr';
+  try { localStorage.setItem(SENT_LANG_CLE, SENT_LANG); } catch (e) {}
+  sentAppliquer();
+};
+
+/* LE FIL D'ARIANE, DANS LA LANGUE COURANTE. `go()` reçoit une section et un
+   libellé EN DUR dans le `onclick` de chaque entrée — quarante-huit chaînes
+   françaises impossibles à traduire une à une. On passe donc par PAGE_META,
+   qui porte déjà les deux pour les 107 pages, et dont les clés servent de
+   clés de traduction. */
+function sentFilAriane(id) {
+  var meta = PAGE_META[id];
+  if (!meta) return false;
+  var sec = meta.section || '';
+  var pg = meta.label || '';
+  if (SENT_LANG === 'en') {
+    /* L'ENTRÉE DE MENU DIT DÉJÀ LE LIBELLÉ DE LA PAGE dans la plupart des
+       cas : on la réemploie plutôt que de tenir une seconde liste qui
+       divergerait. À défaut, le français reste — un fil d'Ariane vide serait
+       pire qu'un fil d'Ariane bilingue. */
+    sec = SENT_SECTIONS_EN[sec] || sec;
+    pg = sentTr('nav.item.' + id) || pg;
+  }
+  var a = document.getElementById('tb-sec');
+  var b = document.getElementById('tb-pg');
+  if (a) a.textContent = sec;
+  if (b) b.textContent = pg;
+  document.title = (pg || sec) ? ((pg || sec) + ' — Sentinel') : 'Sentinel';
+  return true;
+}
+
+(function sentLangueInitiale() {
+  try {
+    var v = localStorage.getItem(SENT_LANG_CLE);
+    if (v === 'en' || v === 'fr') { SENT_LANG = v; }
+  } catch (e) {}
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', sentAppliquer);
+  } else {
+    sentAppliquer();
+  }
+})();
+
 function go(id, el, sec, pg) {
   if(window.navRefresh) setTimeout(window.navRefresh, 30);
   document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('on'); });
@@ -1089,13 +1315,22 @@ function go(id, el, sec, pg) {
      une barre latérale où le repère de position était enfermé. */
   if (typeof window.sbOuvrirFamilleDeCourant === 'function')
     window.sbOuvrirFamilleDeCourant();
-  var meta = PAGE_META[id];
-  var _tbSec = sec || (meta && meta.section) || '';
-  var _tbPg  = pg  || (meta && meta.label)   || '';
-  document.getElementById('tb-sec').textContent = _tbSec;
-  document.getElementById('tb-pg').textContent  = _tbPg;
-  var _lead = _tbPg || _tbSec;
-  document.title = _lead ? (_lead + ' \u2014 Sentinel') : 'Sentinel';
+  /* LE FIL D'ARIANE PASSE PAR PAGE_META, ET PLUS PAR LES ARGUMENTS.
+     `go()` recevait une section et un libellé EN DUR depuis le `onclick` de
+     chaque entrée : quarante-huit chaînes françaises qu'aucune bascule de
+     langue ne pouvait atteindre. PAGE_META les porte déjà pour les 107
+     pages, dans une seule table — et c'est elle qui se traduit. Les
+     arguments restent acceptés pour les rares appels qui visent une page
+     sans fiche. */
+  if (!sentFilAriane(id)) {
+    var meta = PAGE_META[id];
+    var _tbSec = sec || (meta && meta.section) || '';
+    var _tbPg  = pg  || (meta && meta.label)   || '';
+    document.getElementById('tb-sec').textContent = _tbSec;
+    document.getElementById('tb-pg').textContent  = _tbPg;
+    var _lead = _tbPg || _tbSec;
+    document.title = _lead ? (_lead + ' \u2014 Sentinel') : 'Sentinel';
+  }
   window.scrollTo(0,0);
 }
 
