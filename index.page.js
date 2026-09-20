@@ -1698,8 +1698,33 @@ window.cpScrollTop = function(){
 
 ;/* ── bloc 9/12 ── */
 
+/* ── QUELLES CARTES ENTIÈRES OUVRENT SENTINEL, ET LAQUELLE N'EN EST PLUS ──
+   CE QUE CE BLOC FAIT. Il rend une carte cliquable dans son ENSEMBLE et
+   ouvre « /sentinel » — l'accueil — dans un nouvel onglet. C'est un filet
+   pour les cartes qui n'ont AUCUN lien à elles : sans lui, elles ne mènent
+   nulle part. Onze des douze cartes de secteur sont dans ce cas.
+
+   POURQUOI LES HUIT CARTES DE RISQUE EN SORTENT. Elles portent chacune leur
+   propre appel « Ouvrir le module », vers le module qui adresse CE risque.
+   Le filet ne les rattrapait donc pas : il les DOUBLAIT, et de deux façons
+   qui se voyaient toutes les deux à l'usage.
+
+     · Cliquer le corps de la carte — titre, description, icône, étiquette —
+       ouvrait l'ACCUEIL de Sentinel dans un nouvel onglet, c'est-à-dire pas
+       le module que la carte venait d'annoncer.
+     · Cliquer « Ouvrir le module » déclenchait LES DEUX : le lien dans
+       l'onglet courant, et l'accueil dans un second onglet par-dessus.
+
+   CE QUI PART AVEC LE GESTIONNAIRE. `role="link"` et `tabindex="0"`, qu'il
+   posait sur un <div> : un lecteur d'écran annonçait donc un lien de plus
+   par carte, qui ne menait qu'au sommaire. L'appel, lui, est un vrai <a> —
+   il reste atteignable au clavier sans qu'on ait rien à lui ajouter.
+
+   CE SÉLECTEUR NE VISE PLUS QUE DES CARTES SANS LIEN PROPRE, et c'est la
+   règle à tenir : y rajouter une famille de cartes qui portent déjà leur
+   destination reproduirait exactement ce double. */
 document.addEventListener('DOMContentLoaded', function(){
-  var selectors = '.sector-card, .norm-card, .risk-card';
+  var selectors = '.sector-card, .norm-card';
   document.querySelectorAll(selectors).forEach(function(card){
     card.style.cursor = 'pointer';
     card.setAttribute('role', 'link');

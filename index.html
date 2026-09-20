@@ -690,12 +690,31 @@ footer::after{
    LE SURVOL SUIT LA CARTE, PLUS LA LIGNE. `li:hover` ne se déclenche plus
    sous `pointer-events:none`. La flèche s'éclaire désormais au survol de la
    CARTE, ce qui est de toute façon plus juste depuis qu'elle est un seul
-   objet cliquable. */
-.diff-card,.risk-card{position:relative}
-.diff-card:has(.sv-card-go),.risk-card:has(.risk-go){cursor:pointer}
+   objet cliquable.
+
+   ── ET POURQUOI LES HUIT CARTES DE RISQUE N'EN SONT PAS ────────────────
+   CE MOTIF NE S'APPLIQUE QU'AUX SIX OFFRES DE SERVICES. Les cartes de
+   risque l'ont porté quelques heures, puis on l'a retiré : sur elles, seul
+   « Ouvrir le module » doit rediriger.
+
+   LES DEUX SECTIONS NE FONT PAS LE MÊME MÉTIER, et c'est ce qui justifie
+   deux traitements. Une carte de service est une OFFRE : la carte entière
+   est un appel, et tout ce qu'elle dit pousse vers le même module. Une
+   carte de risque est un CONSTAT — « Cloud Act · lois extraterritoriales ·
+   sanctions » — qu'on lit pour lui-même ; son appel est un prolongement,
+   pas sa raison d'être. Rendre le constat cliquable partout transforme
+   chaque lecture en navigation involontaire, d'autant que ces huit cartes
+   sont serrées et qu'on les parcourt du regard avant de choisir.
+
+   CE QUI DISPARAÎT AVEC LA SURFACE. Le `cursor:pointer` part aussi : une
+   carte qui annonce un clic qu'elle ne rend plus est pire que l'inverse.
+   Ce qui reste : le survol éclaire l'appel — il DÉSIGNE où cliquer au lieu
+   de prétendre l'être. */
+.diff-card{position:relative}
+.diff-card:has(.sv-card-go){cursor:pointer}
 /* LE PIED REDEVIENT STATIQUE : SANS CELA LA SURFACE NE COUVRE QUE LUI. */
-.diff-card > .sv-card-go,.risk-card > .risk-go{position:static;z-index:auto}
-.sv-card-go::after,.risk-go::after{content:'';position:absolute;inset:0;z-index:1}
+.diff-card > .sv-card-go{position:static;z-index:auto}
+.sv-card-go::after{content:'';position:absolute;inset:0;z-index:1}
 /* LA LISTE PASSE AU-DESSUS, MAIS SEULE SA FLÈCHE REPREND LE POINTEUR. */
 .diff-card > .diff-sublist{position:relative;z-index:2;pointer-events:none}
 .diff-sublist .sv-go{position:relative;z-index:2;pointer-events:auto}

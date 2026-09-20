@@ -80,10 +80,15 @@ const ok = (t, c, d) => { n++; if (!c) ko++;
      colle(geo.s), geo.s ? Math.round(geo.s.sw) + '×' + Math.round(geo.s.sh)
        + ' pour une carte de ' + Math.round(geo.s.cw) + '×' + Math.round(geo.s.ch)
        + ' (pied ' + geo.s.pos + ')' : 'carte introuvable');
-  ok('idem pour une carte de risque',
-     colle(geo.r), geo.r ? Math.round(geo.r.sw) + '×' + Math.round(geo.r.sh)
-       + ' pour une carte de ' + Math.round(geo.r.cw) + '×' + Math.round(geo.r.ch)
-       + ' (pied ' + geo.r.pos + ')' : 'carte introuvable');
+  /* ET SUR UNE CARTE DE RISQUE, IL NE DOIT Y AVOIR AUCUNE SURFACE. Le
+     pseudo-élément n'existe plus : ses dimensions se lisent NaN, et c'est
+     la seule forme sous laquelle une absence se mesure ici. */
+  ok('une carte de risque n’a PAS de surface étirée',
+     geo.r && !(geo.r.sw > 0), geo.r
+       ? Math.round(geo.r.sw) + '×' + Math.round(geo.r.sh) + ' de surface sur '
+         + 'une carte de ' + Math.round(geo.r.cw) + '×' + Math.round(geo.r.ch)
+       : 'carte introuvable',
+     'aucune');
 
   /* ── LE CLIC : ON INTERCEPTE AU LIEU DE SUIVRE ────────────────────── */
   await pg.evaluate(() => {
@@ -156,18 +161,25 @@ const ok = (t, c, d) => { n++; if (!c) ko++;
   ok('le TEXTE d’une puce appartient à la surface de la carte',
      puce.vu === puce.att, puce.vu + ' (carte : ' + puce.att + ')');
 
-  /* ── LES HUIT CARTES DE RISQUE ────────────────────────────────────── */
+  /* ── LES HUIT CARTES DE RISQUE N'EN SONT PAS, ET C'EST VOULU ───────
+     Sur elles, seul « Ouvrir le module » redirige : une carte de risque est
+     un CONSTAT qu'on lit pour lui-même, pas un appel. Le détail est mesuré
+     par recette_appel_seul_risques.js, qui intercepte aussi `window.open` ;
+     ici on vérifie seulement que le motif ne leur est pas revenu. */
   const risques = await pg.evaluate(() =>
     [...document.querySelectorAll('#risques .risk-card')].map(c => ({
       t: c.querySelector('.risk-title').textContent.trim(),
       att: c.querySelector('.risk-go').getAttribute('href'),
       desc: window.__viser(c.querySelector('.risk-desc')),
-      tag:  window.__viser(c.querySelector('.risk-tag')) })));
-  const mr = risques.filter(c => c.desc !== c.att || c.tag !== c.att);
-  ok('le corps des huit cartes de risque navigue',
-     risques.length === 8 && mr.length === 0,
-     mr.length ? mr.map(c => c.t + ' : ' + c.desc + '/' + c.tag + ' ≠ ' + c.att).join(' | ')
-               : risques.map(c => c.att.split('=')[1]).join(' · '));
+      curseur: getComputedStyle(c).cursor })));
+  const fuites = risques.filter(c => c.desc !== 'AUCUNE NAVIGATION');
+  ok('le corps des huit cartes de risque ne navigue PAS',
+     risques.length === 8 && fuites.length === 0,
+     fuites.map(c => c.t + ' : ' + c.desc).join(' | ')
+       || '8 corps inertes, 8 appels intacts');
+  ok('et elles n’annoncent pas un clic qu’elles ne rendent pas',
+     risques.every(c => c.curseur !== 'pointer'),
+     'cursor:' + (risques[0] || {}).curseur);
 
   /* ── CE QUI NE DOIT PAS AVOIR CHANGÉ ──────────────────────────────── */
   const sain = await pg.evaluate(() => ({

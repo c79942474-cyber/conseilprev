@@ -618,26 +618,82 @@ def _declaration(propriete, selecteur, exact=False):
     return None
 
 
-def test_la_surface_etiree_couvre_la_carte_de_risque_entiere():
-    """LA CARTE EST LE REPÈRE, LE PIED NE DOIT PAS L'ÊTRE.
+def test_SEUL_l_appel_redirige_et_rien_d_autre_dans_la_carte():
+    """LA DEMANDE : « pour les 8 risques systémiques, seul le clic sur
+    Ouvrir le module doit rediriger vers la bonne page Sentinel ».
 
-    `inset:0` se résout contre le plus proche ancêtre POSITIONNÉ. Une règle
-    décorative écrite deux mille lignes plus bas — `.risk-card > *
-    {position:relative;z-index:1}`, posée pour faire passer le contenu
-    au-dessus du halo `::before` — positionne déjà le pied. La surface
-    mesurait alors la taille de l'étiquette, pas celle de la carte. On
-    mesure donc les deux faits qui décident."""
-    assert _declaration("position", ".risk-card", exact=False) is not None
-    assert ".diff-card,.risk-card{position:relative}" in _feuille(), (
-        "la carte n'est plus le repère de position : la surface étirée se "
-        "cale sur un ancêtre quelconque")
-    assert _declaration(
-        "position", ".diff-card > .sv-card-go,.risk-card > .risk-go",
-        exact=True) == "static", (
-        "le pied de carte reste positionné : il devient son propre bloc "
-        "conteneur et la surface ne couvre que l'étiquette")
-    assert _declaration("inset", ".risk-go::after") == "0", (
-        "la surface étirée ne se cale plus sur les quatre côtés")
+    CE QUE LA CARTE A PORTÉ QUELQUES HEURES, ET QU'ELLE NE PORTE PLUS. Une
+    surface étirée couvrait la carte entière et déclenchait l'appel de son
+    pied. C'est juste pour une OFFRE — la carte est un appel, tout y pousse
+    vers le même module — et faux pour un CONSTAT : « Cloud Act · lois
+    extraterritoriales · sanctions » se lit pour lui-même, et le rendre
+    cliquable partout transforme chaque lecture en navigation involontaire.
+
+    ON MESURE L'ABSENCE, PAS LA PRÉSENCE, et c'est plus fragile : une règle
+    qui exige qu'une chose manque passe aussi le jour où c'est TOUT le bloc
+    qui a disparu. D'où le garde-fou : la déclaration du motif doit exister
+    pour les cartes de service, sans quoi cette règle ne prouve plus rien.
+    """
+    feuille = _feuille()
+    assert ".sv-card-go::after" in feuille, (
+        "le motif de surface étirée a disparu de la feuille entière : cette "
+        "règle ne prouve plus l'absence sur les cartes de RISQUE, elle "
+        "constate une absence générale — la réécrire sur ce qui l'a remplacé")
+    assert ".risk-go::after" not in feuille, (
+        "les cartes de risque ont retrouvé une surface étirée : le corps de "
+        "la carte redirige à nouveau, alors que seul l'appel le doit")
+    assert _declaration("cursor", ".risk-card:has(.risk-go)") is None, (
+        "la carte de risque annonce un clic qu'elle ne rend plus")
+
+
+def test_aucun_gestionnaire_ATTRAPE_TOUT_ne_vise_les_cartes_de_risque():
+    """LE DÉFAUT QUI SE CACHAIT DERRIÈRE LE CSS, ET QUI LE PRÉCÉDAIT.
+
+    Un bloc de `index.page.js` rendait cliquables `.sector-card,
+    .norm-card, .risk-card` et ouvrait « /sentinel » — l'ACCUEIL — dans un
+    nouvel onglet. Sur les cartes de secteur, c'est un filet utile : onze
+    sur douze n'ont aucun lien propre. Sur les cartes de risque, qui
+    portent toutes leur appel vers LEUR module, il faisait deux dégâts :
+
+      · cliquer le corps ouvrait le sommaire de Sentinel, pas le module
+        que la carte venait d'annoncer ;
+      · cliquer « Ouvrir le module » déclenchait LES DEUX — le lien dans
+        l'onglet courant, l'accueil dans un second par-dessus.
+
+    ET IL ÉCHAPPAIT AUX SONDES. `window.open` n'est pas une navigation de
+    lien : une recette qui n'écoute que les clics sur <a> déclarait ces
+    cartes « inertes » alors qu'elles ouvraient un onglet. Une sonde qui ne
+    connaît qu'une sortie certifie l'absence de toutes les autres.
+    """
+    m = re.search(r"var selectors = '([^']*)';", INDEXJS)
+    assert m, (
+        "le bloc qui rend des cartes entières cliquables a changé de forme : "
+        "cette règle ne surveille plus rien et doit être réécrite")
+    vises = [x.strip() for x in m.group(1).split(",")]
+    #  ON CHERCHE LA CLASSE N'IMPORTE OÙ DANS LA LISTE, PAS UNE ENTRÉE EXACTE.
+    #  Une mutation l'a montré : `#risques .risk-card` passait la comparaison
+    #  d'entrées tout en rebranchant exactement le même gestionnaire. Une
+    #  garde qu'on contourne en préfixant un sélecteur ne garde rien.
+    assert "risk-card" not in m.group(1), (
+        "les cartes de risque sont revenues dans le gestionnaire attrape-tout "
+        "(%s) : leur corps rouvrira l'accueil de Sentinel dans un nouvel "
+        "onglet, et leur appel déclenchera deux sorties" % m.group(1))
+    assert ".sector-card" in vises, (
+        "les cartes de secteur ont quitté le filet : onze sur douze n'ont "
+        "aucun lien propre et ne mèneraient plus nulle part")
+
+
+def test_les_huit_cartes_de_risque_portent_TOUTES_leur_propre_appel():
+    """LA CONDITION QUI REND LE RETRAIT LÉGITIME. Sortir une famille de
+    cartes du filet ne se justifie que si chacune a déjà sa destination.
+    Une seule carte sans appel et le retrait la rendrait muette."""
+    cartes = BLOC.split('<div class="risk-card">')[1:]
+    assert len(cartes) == 8, len(cartes)
+    sans = [i for i, c in enumerate(cartes, 1)
+            if 'class="risk-go" href="/sentinel' not in c]
+    assert not sans, (
+        "la ou les carte(s) %s n'ont pas d'appel propre : les sortir du "
+        "gestionnaire attrape-tout les laisse sans aucune destination" % sans)
 
 
 def test_l_etiquette_de_categorie_entre_dans_la_surface_sans_devenir_un_lien():
@@ -673,13 +729,19 @@ def test_le_pied_reste_un_VRAI_lien_et_pas_un_gestionnaire_de_clic():
             "la carte navigue par script plutôt que par lien : %r" % interdit)
 
 
-def test_la_carte_cliquable_le_dit_par_son_curseur():
-    """RIEN NE SIGNALE UNE ZONE CLIQUABLE COMME LE CURSEUR. Une carte qui se
-    clique sans le montrer ne sera cliquée que par accident — et le `:has`
-    ne vise QUE celles qui portent un pied, jamais une carte sans
-    destination."""
-    assert _declaration("cursor", ".risk-card:has(.risk-go)") == "pointer", (
-        "la carte de risque ne montre pas qu'elle se clique")
-    assert ":has(.risk-go)" in _feuille(), (
-        "le curseur est posé sur toutes les cartes, y compris celles qui ne "
-        "mèneraient nulle part")
+def test_la_carte_de_risque_n_annonce_PAS_un_clic_qu_elle_ne_rend_pas():
+    """UN CURSEUR EN MAIN SUR UNE ZONE INERTE EST PIRE QUE PAS DE CURSEUR :
+    il promet, on clique, rien ne se passe, et le visiteur conclut que le
+    site est cassé plutôt que de chercher le vrai appel.
+
+    LE CURSEUR ÉTAIT POSÉ PAR UN SCRIPT, PAS PAR LA FEUILLE — `card.style
+    .cursor = 'pointer'` en style en ligne. Une règle qui n'aurait lu que le
+    CSS aurait certifié l'absence ; c'est le navigateur qui l'a dit.
+    """
+    assert _declaration("cursor", ".risk-card:has(.risk-go)") is None
+    m = re.search(r"var selectors = '([^']*)';", INDEXJS)
+    assert m and ".risk-card" not in m.group(1), (
+        "le script repose un curseur de lien sur la carte entière")
+    #  L'APPEL, LUI, DOIT TOUJOURS LE MONTRER.
+    assert ".risk-go{" in _feuille() or ".risk-go:hover" in _feuille(), (
+        "l'appel n'a plus de style propre : rien ne le distingue du texte")

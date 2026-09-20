@@ -385,13 +385,20 @@ def test_la_carte_entiere_declenche_le_lien_de_son_pied():
     rien. Une carte qui s'éclaire au survol sur toute sa surface et ne répond
     que sur vingt pixels enseigne au visiteur qu'elle n'est pas cliquable.
     """
-    assert ".diff-card,.risk-card{position:relative}" in INDEX, (
+    assert ".diff-card{position:relative}" in INDEX, (
         "sans repère de position sur la carte, la surface étirée du pied se "
         "cale sur un ancêtre quelconque")
-    assert ".sv-card-go::after,.risk-go::after{content:'';position:absolute;" \
+    assert ".sv-card-go::after{content:'';position:absolute;" \
         "inset:0;z-index:1}" in INDEX, (
         "le pied de carte ne couvre plus la carte : seule l'étiquette reste "
         "cliquable")
+    #  LE MOTIF NE DOIT PAS REVENIR SUR LES CARTES DE RISQUE. Elles l'ont
+    #  porté quelques heures, puis on l'a retiré : sur elles, seul
+    #  « Ouvrir le module » redirige. Le rebrancher par une liste de
+    #  sélecteurs élargie, sans y penser, est l'erreur facile.
+    assert ".risk-go::after" not in INDEX, (
+        "les cartes de risque ont retrouvé une surface étirée : sur elles, "
+        "seul « Ouvrir le module » doit rediriger")
 
 
 def test_le_pied_reste_un_VRAI_lien_et_pas_un_gestionnaire_de_clic():
@@ -479,8 +486,7 @@ def test_le_pied_de_carte_ne_devient_PAS_son_propre_bloc_conteneur():
     le pied est ramené à `position:static`, et il l'est par un sélecteur
     ASSEZ SPÉCIFIQUE pour battre celui qui le positionnait."""
     sel_pied, pos = _declaration(
-        "position", ".diff-card > .sv-card-go,.risk-card > .risk-go",
-        exact=True)
+        "position", ".diff-card > .sv-card-go", exact=True)
     assert pos == "static", (
         "le pied de carte est positionné (%r) : `inset:0` se résout contre "
         "LUI et la surface ne couvre plus que l'étiquette" % (pos,))
@@ -561,7 +567,8 @@ def test_le_survol_de_la_fleche_suit_la_CARTE_et_non_la_ligne():
 def test_la_carte_cliquable_le_dit_par_son_curseur():
     """RIEN NE SIGNALE UNE ZONE CLIQUABLE COMME LE CURSEUR. Une carte qui se
     clique sans le montrer ne sera cliquée que par accident."""
-    assert ".diff-card:has(.sv-card-go),.risk-card:has(.risk-go)" \
-        "{cursor:pointer}" in INDEX, (
+    assert ".diff-card:has(.sv-card-go){cursor:pointer}" in INDEX, (
         "la carte ne montre pas qu'elle se clique — et le `:has` vise celles "
         "QUI PORTENT un pied, jamais une carte sans destination")
+    assert ".risk-card:has(.risk-go){cursor:pointer}" not in INDEX, (
+        "la carte de risque annonce un clic qu'elle ne rend plus")
