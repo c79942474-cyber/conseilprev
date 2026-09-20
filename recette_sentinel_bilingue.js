@@ -16,6 +16,17 @@
  * comptées avant et après la bascule. Une seule disparition et la traduction
  * mange le balisage.
  *
+ * LES TRENTE-CINQ PAGES DE CONFORMITÉ. Sept d'entre elles sont relevées
+ * dans les deux langues : leur titre doit changer, leur mise en forme
+ * rester à l'identique, et le volume du chapeau anglais rester comparable —
+ * une traduction deux fois plus courte est une traduction tronquée.
+ *
+ * DEUX CONTRÔLES ONT DÛ ÊTRE RÉ-AIMÉS, et c'est la sonde qui se trompait :
+ * « CRA · Article 14 » est identique dans les deux langues — nom propre de
+ * règlement suivi d'un numéro d'article — et le chapeau RGPD n'a jamais
+ * porté de gras. Exiger le contraire aurait fait tomber la recette sur une
+ * identité VOULUE et sur une mise en forme qui n'existe pas.
+ *
  * LES AUTRES CONTRÔLES : la bascule marque la langue active, les douze
  * rubriques et les cinquante-huit entrées changent ensemble, le fil d'Ariane
  * suit SANS qu'on ait à recliquer sur la page ouverte, le retour au français
@@ -92,6 +103,59 @@ const RELEVE = () => ({
      /ÉVALUER LE RISQUE/i.test(r2.fil[0] || ''), r2.fil.join(' › '));
   ok('le menu aussi', r2.sections.includes('Pilotage'),
      r2.sections.slice(0,4).join(' · '));
+
+  /* ── LES TRENTE-CINQ PAGES DE CONFORMITÉ ──────────────────────────── */
+  const entetes = async (lg) => {
+    await pg.evaluate((l) => sentSetLang(l), lg);
+    await pg.waitForTimeout(500);
+    return pg.evaluate(() => {
+      const ids = ['conf-taux','nis2-chiffre','iso42001-soa','owasp-dix',
+                   'nist-profil','cra-signalement','rgpd-aipd'];
+      return ids.map(i => {
+        const p = document.getElementById('p-' + i);
+        if (!p) return { i, absent: true };
+        const eb = p.querySelector('.eyebrow'), h = p.querySelector('.page-h');
+        const t = p.querySelector('.page-lead, .page-p');
+        return { i, eb: eb && eb.textContent.trim(),
+                 h: h && h.textContent.replace(/\s+/g,' ').trim().slice(0,52),
+                 mots: t ? t.textContent.split(/\s+/).length : 0,
+                 gras: t ? t.querySelectorAll('b,strong,em').length : 0,
+                 liens: t ? t.querySelectorAll('a').length : 0 };
+      });
+    });
+  };
+  const eFr = await entetes('fr');
+  const eEn = await entetes('en');
+  ok('les sept pages témoins existent', eFr.every(x => !x.absent),
+     eFr.filter(x => x.absent).map(x => x.i).join(', '));
+  /* LE TITRE DOIT CHANGER ; LE SURTITRE, PAS FORCÉMENT.
+     « CRA · Article 14 » et « NIS 2 · Article 34 » sont identiques dans les
+     deux langues — un nom propre de règlement suivi d'un numéro d'article.
+     Exiger qu'ils diffèrent aurait fait tomber la recette sur une identité
+     VOULUE : c'est la sonde qui se serait trompée, pas le produit. */
+  const nonTrad = eEn.filter((x, k) => x.h === eFr[k].h);
+  ok('les TITRES passent en anglais', nonTrad.length === 0,
+     nonTrad.map(x => x.i).join(', ') || eEn.map(x => x.h).slice(0,2).join(' | '));
+  const surtitres = eEn.filter((x, k) => x.eb !== eFr[k].eb).length;
+  ok('et les surtitres aussi, sauf les pures références',
+     surtitres >= eEn.length - 2, surtitres + ' / ' + eEn.length + ' changés');
+  /* LA MISE EN FORME SE CONSERVE — celle qui existe. Un chapeau sans gras
+     n'en acquiert pas, un chapeau qui en a n'en perd pas. */
+  ok('les chapeaux gardent exactement leur mise en forme',
+     eEn.every((x, k) => x.gras === eFr[k].gras),
+     eEn.map((x,k) => x.i + ' ' + eFr[k].gras + '→' + x.gras).join(' · '));
+  ok('et la mise en forme n’a pas disparu partout',
+     eEn.filter(x => x.gras > 0).length >= 5,
+     eEn.filter(x => x.gras > 0).length + ' chapeaux formatés');
+  ok('et n’ont acquis aucun lien au passage',
+     eEn.every(x => x.liens === 0), '');
+  ok('les chapeaux anglais ont un volume comparable',
+     eEn.every((x, k) => x.mots > eFr[k].mots * 0.5 && x.mots < eFr[k].mots * 1.8),
+     eEn.map((x,k) => x.i + ' ' + eFr[k].mots + '→' + x.mots).join(' · '));
+  const retour = await entetes('fr');
+  ok('le retour au français restitue le texte d’origine',
+     retour.every((x, k) => x.h === eFr[k].h && x.eb === eFr[k].eb),
+     retour.filter((x,k) => x.h !== eFr[k].h).map(x => x.i).join(', '));
 
   /* ── LE CHOIX SURVIT AU RECHARGEMENT ──────────────────────────────── */
   await pg.evaluate(() => sentSetLang('en'));

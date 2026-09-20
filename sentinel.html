@@ -5251,9 +5251,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 </div>
 
 <div class="page" id="p-rgpd-hub">
-  <span class="eyebrow">RGPD &amp; Privacy</span>
-  <h1 class="page-h">Vue d'ensemble <em>RGPD &amp; Privacy</em></h1>
-  <p class="page-lead">Point d'entrée du dispositif de conformité RGPD : cartographier les traitements, évaluer les risques, documenter, sensibiliser et piloter la conformité. Toutes les briques sont reliées entre elles.</p>
+  <span class="eyebrow" data-i18n="pg.rgpd-hub.eb">RGPD &amp; Privacy</span>
+  <h1 class="page-h" data-i18n-bloc="pg.rgpd-hub.h1">Vue d'ensemble <em>RGPD &amp; Privacy</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.rgpd-hub.p">Point d'entrée du dispositif de conformité RGPD : cartographier les traitements, évaluer les risques, documenter, sensibiliser et piloter la conformité. Toutes les briques sont reliées entre elles.</p>
   <div id="hub-snapshot"></div>
   <div id="hub-cards"><div class="veille-loading">Chargement du dispositif…</div></div>
   <div class="trait-note">
@@ -5263,10 +5263,10 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 
 
 <div class="page" id="p-rgpd-traitements">
-  <span class="eyebrow">RGPD &amp; Privacy</span>
-  <h1 class="page-h">Registre des <em>traitements</em></h1>
+  <span class="eyebrow" data-i18n="pg.rgpd-traitements.eb">RGPD &amp; Privacy</span>
+  <h1 class="page-h" data-i18n-bloc="pg.rgpd-traitements.h1">Registre des <em>traitements</em></h1>
   <p style="font-size:12px;color:var(--muted);margin:-6px 0 8px 0"><strong style="color:var(--ink)">Périmètre : votre organisation.</strong></p>
-  <p class="page-lead">Registre des activités de traitement au sens de l'article 30 du RGPD, connecté à une base de données persistante. Distinct du registre des systèmes IA, il recense les traitements de données à caractère personnel.</p>
+  <p class="page-lead" data-i18n-bloc="pg.rgpd-traitements.p">Registre des activités de traitement au sens de l'article 30 du RGPD, connecté à une base de données persistante. Distinct du registre des systèmes IA, il recense les traitements de données à caractère personnel.</p>
   <div class="reg-toolbar">
     <input type="text" id="trait-search" class="reg-search-input" placeholder="Rechercher par nom, finalité, service, responsable…" oninput="traitSearch(this.value)">
     <button class="mat-export-btn" style="background:var(--accent);color:var(--ink);font-weight:700" onclick="traitOpenModal()">+ Ajouter un traitement</button>
@@ -5281,9 +5281,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 
 
 <div class="page" id="p-rgpd-cartographie">
-  <span class="eyebrow">RGPD &amp; Privacy</span>
-  <h1 class="page-h">Cartographie des <em>traitements</em></h1>
-  <p class="page-lead">Vue d'ensemble de vos traitements de données personnelles, agrégée depuis le registre de l'article 30 : répartition par service et par base légale, données sensibles et transferts hors Union européenne.</p>
+  <span class="eyebrow" data-i18n="pg.rgpd-cartographie.eb">RGPD &amp; Privacy</span>
+  <h1 class="page-h" data-i18n-bloc="pg.rgpd-cartographie.h1">Cartographie des <em>traitements</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.rgpd-cartographie.p">Vue d'ensemble de vos traitements de données personnelles, agrégée depuis le registre de l'article 30 : répartition par service et par base légale, données sensibles et transferts hors Union européenne.</p>
   <div class="reg-toolbar">
     <button class="mat-export-btn" onclick="cartoTraitLoad()">↻ Actualiser</button>
     <button class="mat-export-btn" onclick="cartoTraitOpenRegistre()">Ouvrir le registre</button>
@@ -5297,9 +5297,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 
 
 <div class="page" id="p-rgpd-aipd">
-  <span class="eyebrow">RGPD &amp; Privacy</span>
-  <h1 class="page-h">AIPD — <em>analyse d'impact</em></h1>
-  <p class="page-lead">Analyse d'impact relative à la protection des données — article 35 du RGPD (DPIA). Appréciée pour chaque traitement du registre, distincte de la FRIA de l'AI Act. Le besoin d'AIPD est déterminé selon les neuf critères de la CNIL.</p>
+  <span class="eyebrow" data-i18n="pg.rgpd-aipd.eb">RGPD &amp; Privacy</span>
+  <h1 class="page-h" data-i18n-bloc="pg.rgpd-aipd.h1">AIPD — <em>analyse d'impact</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.rgpd-aipd.p">Analyse d'impact relative à la protection des données — article 35 du RGPD (DPIA). Appréciée pour chaque traitement du registre, distincte de la FRIA de l'AI Act. Le besoin d'AIPD est déterminé selon les neuf critères de la CNIL.</p>
   <div class="reg-toolbar">
     <button class="mat-export-btn" onclick="aipdLoad()">↻ Actualiser</button>
     <button class="mat-export-btn" onclick="cartoTraitOpenRegistre()">Ouvrir le registre</button>
@@ -5315,9 +5315,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 
 
 <div class="page" id="p-rgpd-pbd">
-  <span class="eyebrow">RGPD &amp; Privacy</span>
-  <h1 class="page-h">Privacy by <em>design</em></h1>
-  <p class="page-lead">Protection des données dès la conception et par défaut — article 25 du RGPD. Auto-évaluation structurée selon les principes de la CNIL, pour intégrer la protection de la vie privée à chaque traitement.</p>
+  <span class="eyebrow" data-i18n="pg.rgpd-pbd.eb">RGPD &amp; Privacy</span>
+  <h1 class="page-h" data-i18n-bloc="pg.rgpd-pbd.h1">Privacy by <em>design</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.rgpd-pbd.p">Protection des données dès la conception et par défaut — article 25 du RGPD. Auto-évaluation structurée selon les principes de la CNIL, pour intégrer la protection de la vie privée à chaque traitement.</p>
   <div class="reg-toolbar">
     <button class="mat-export-btn" onclick="pbdExportPdf()">Exporter la check-list (PDF)</button>
     <button class="mat-export-btn" onclick="cartoTraitOpenRegistre()">Ouvrir le registre</button>
@@ -5332,9 +5332,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 
 
 <div class="page" id="p-rgpd-doc">
-  <span class="eyebrow">RGPD &amp; Privacy</span>
-  <h1 class="page-h">Politique <em>documentaire</em></h1>
-  <p class="page-lead">Référentiel de la documentation de conformité RGPD — accountability (article 5.2). Suivi de l'état, du responsable et de la dernière revue des documents attestant votre conformité.</p>
+  <span class="eyebrow" data-i18n="pg.rgpd-doc.eb">RGPD &amp; Privacy</span>
+  <h1 class="page-h" data-i18n-bloc="pg.rgpd-doc.h1">Politique <em>documentaire</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.rgpd-doc.p">Référentiel de la documentation de conformité RGPD — accountability (article 5.2). Suivi de l'état, du responsable et de la dernière revue des documents attestant votre conformité.</p>
   <div class="reg-toolbar">
     <button class="mat-export-btn" onclick="docExportPdf()">Exporter le suivi (PDF)</button>
     <span id="doc-global-wrap" style="margin-left:auto;display:flex;align-items:center;gap:8px"><span style="font-size:12px;color:var(--muted2)">Documents en place</span><strong id="doc-global" style="font-size:16px;color:var(--accent)">0 %</strong></span>
@@ -5348,9 +5348,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 
 
 <div class="page" id="p-rgpd-sensibilisation">
-  <span class="eyebrow">RGPD &amp; Privacy</span>
-  <h1 class="page-h">Sensibilisation <em>&amp; formation</em></h1>
-  <p class="page-lead">Plan de sensibilisation à la protection des données. Suivi des actions par public cible, de leur périodicité et de leur réalisation, au service de la culture de conformité.</p>
+  <span class="eyebrow" data-i18n="pg.rgpd-sensibilisation.eb">RGPD &amp; Privacy</span>
+  <h1 class="page-h" data-i18n-bloc="pg.rgpd-sensibilisation.h1">Sensibilisation <em>&amp; formation</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.rgpd-sensibilisation.p">Plan de sensibilisation à la protection des données. Suivi des actions par public cible, de leur périodicité et de leur réalisation, au service de la culture de conformité.</p>
   <div class="reg-toolbar">
     <button class="mat-export-btn" onclick="sensExportPdf()">Exporter le plan (PDF)</button>
     <span id="sens-global-wrap" style="margin-left:auto;display:flex;align-items:center;gap:8px"><span style="font-size:12px;color:var(--muted2)">Actions réalisées</span><strong id="sens-global" style="font-size:16px;color:var(--accent)">0 %</strong></span>
@@ -5364,10 +5364,10 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 
 
 <div class="page" id="p-rgpd-conformite">
-  <span class="eyebrow">RGPD &amp; Privacy</span>
-  <h1 class="page-h">Conformité <em>RGPD</em></h1>
+  <span class="eyebrow" data-i18n="pg.rgpd-conformite.eb">RGPD &amp; Privacy</span>
+  <h1 class="page-h" data-i18n-bloc="pg.rgpd-conformite.h1">Conformité <em>RGPD</em></h1>
   <p style="font-size:12px;color:var(--muted);margin:-6px 0 8px 0"><strong style="color:var(--ink)">Périmètre : votre organisation.</strong></p>
-  <p class="page-lead">Tableau de bord de conformité consolidant les briques du dispositif : registre des traitements, cartographie, AIPD, privacy by design, documentation et sensibilisation. Indice global et points d'attention.</p>
+  <p class="page-lead" data-i18n-bloc="pg.rgpd-conformite.p">Tableau de bord de conformité consolidant les briques du dispositif : registre des traitements, cartographie, AIPD, privacy by design, documentation et sensibilisation. Indice global et points d'attention.</p>
   <div class="reg-toolbar">
     <button class="mat-export-btn" onclick="confLoad()">↻ Actualiser</button>
     <button class="mat-export-btn" onclick="confExportPdf()">Exporter le bilan (PDF)</button>
@@ -5446,9 +5446,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
      promettrait 100 % partout mentirait sur quatre points connus d'avance.
      ═══════════════════════════════════════════════════════════════════ -->
 <div class="page" id="p-conf-taux">
-  <span class="eyebrow">Taux de conformité · les neuf normes</span>
-  <h1 class="page-h">Neuf taux, et <em>ce qu'ils ne disent pas</em></h1>
-  <p class="page-p">Chaque taux est composé des parts de sa norme, pondérées, puis
+  <span class="eyebrow" data-i18n="pg.conf-taux.eb">Taux de conformité · les neuf normes</span>
+  <h1 class="page-h" data-i18n-bloc="pg.conf-taux.h1">Neuf taux, et <em>ce qu'ils ne disent pas</em></h1>
+  <p class="page-p" data-i18n-bloc="pg.conf-taux.p">Chaque taux est composé des parts de sa norme, pondérées, puis
   <strong>plafonné par ses verrous</strong>&nbsp;: un défaut qui arrête un auditeur
   n'efface pas le travail fait, il interdit de s'en prévaloir au-delà. Neuf
   pourcentages alignés se lisent comme neuf fois la même chose&nbsp;; ils ne le sont
@@ -5460,9 +5460,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 </div>
 
 <div class="page" id="p-conf-plan">
-  <span class="eyebrow">Taux de conformité · plan</span>
-  <h1 class="page-h">Du verrou au détail, <em>et ce que chaque action rapporte</em></h1>
-  <p class="page-p">Trois rangs. <strong>Les verrous d'abord</strong>&nbsp;: tant
+  <span class="eyebrow" data-i18n="pg.conf-plan.eb">Taux de conformité · plan</span>
+  <h1 class="page-h" data-i18n-bloc="pg.conf-plan.h1">Du verrou au détail, <em>et ce que chaque action rapporte</em></h1>
+  <p class="page-p" data-i18n-bloc="pg.conf-plan.p">Trois rangs. <strong>Les verrous d'abord</strong>&nbsp;: tant
   qu'ils tiennent, tout le reste bute sur le même plafond — ce n'est pas une
   préférence de méthode, c'est de l'arithmétique. Puis <strong>ce qui sert
   plusieurs normes</strong>, tiré des rapprochements déjà déclarés entre les
@@ -5473,9 +5473,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 </div>
 
 <div class="page" id="p-conf-limites">
-  <span class="eyebrow">Taux de conformité · limites</span>
-  <h1 class="page-h">Ce que ce plan <em>ne peut pas faire</em></h1>
-  <p class="page-p">La moitié qu'on ne montre jamais, et celle qui fait la
+  <span class="eyebrow" data-i18n="pg.conf-limites.eb">Taux de conformité · limites</span>
+  <h1 class="page-h" data-i18n-bloc="pg.conf-limites.h1">Ce que ce plan <em>ne peut pas faire</em></h1>
+  <p class="page-p" data-i18n-bloc="pg.conf-limites.p">La moitié qu'on ne montre jamais, et celle qui fait la
   différence en comité. Ces points-là sont connus d'avance&nbsp;: les taire ne les
   supprime pas, cela les fait découvrir devant l'auditeur.</p>
   <div id="conf-limites-corps"></div>
@@ -5489,9 +5489,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
      chez le client, pas dans la recette.
      ═══════════════════════════════════════════════════════════════════ -->
 <div class="page" id="p-nist-profil">
-  <span class="eyebrow">NIST AI RMF · Profil</span>
-  <h1 class="page-h">Quatre notes, et <em>laquelle commande</em></h1>
-  <p class="page-p">MAP, MEASURE et MANAGE supposent GOVERN. Une maison qui note bien sur
+  <span class="eyebrow" data-i18n="pg.nist-profil.eb">NIST AI RMF · Profil</span>
+  <h1 class="page-h" data-i18n-bloc="pg.nist-profil.h1">Quatre notes, et <em>laquelle commande</em></h1>
+  <p class="page-p" data-i18n-bloc="pg.nist-profil.p">MAP, MEASURE et MANAGE supposent GOVERN. Une maison qui note bien sur
     le traitement et mal sur la gouvernance ne gère rien&nbsp;: elle éteint des feux. Le profil
     est donc rendu par fonction, jamais en note globale —
     <strong>une moyenne des quatre monte quand on cartographie beaucoup et qu'on ne décide rien</strong>,
@@ -5501,9 +5501,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 </div>
 
 <div class="page" id="p-nist-cadre">
-  <span class="eyebrow">NIST AI RMF · Le cadre</span>
-  <h1 class="page-h">Le cadre, <em>catégorie par catégorie</em></h1>
-  <p class="page-p">Les énoncés sont ceux du document, en anglais et verbatim&nbsp;: ce sont
+  <span class="eyebrow" data-i18n="pg.nist-cadre.eb">NIST AI RMF · Le cadre</span>
+  <h1 class="page-h" data-i18n-bloc="pg.nist-cadre.h1">Le cadre, <em>catégorie par catégorie</em></h1>
+  <p class="page-p" data-i18n-bloc="pg.nist-cadre.p">Les énoncés sont ceux du document, en anglais et verbatim&nbsp;: ce sont
     des œuvres du gouvernement des États-Unis, elles se citent. Et une sous-catégorie sert de
     <strong>pièce</strong> en revue — traduite, elle ne se retrouve plus dans le document quand
     l'auditeur demande où elle est écrite.</p>
@@ -5511,9 +5511,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 </div>
 
 <div class="page" id="p-nist-genai">
-  <span class="eyebrow">NIST AI RMF · Profil IA générative</span>
-  <h1 class="page-h">Douze risques, <em>dont six hors cyber</em></h1>
-  <p class="page-p">AI 600-1 est un <strong>profil</strong> du cadre, pas un second cadre&nbsp;:
+  <span class="eyebrow" data-i18n="pg.nist-genai.eb">NIST AI RMF · Profil IA générative</span>
+  <h1 class="page-h" data-i18n-bloc="pg.nist-genai.h1">Douze risques, <em>dont six hors cyber</em></h1>
+  <p class="page-p" data-i18n-bloc="pg.nist-genai.p">AI 600-1 est un <strong>profil</strong> du cadre, pas un second cadre&nbsp;:
     le citer sans le cadre en dessous, c'est citer le profil de rien. Et confier « les risques de
     l'IA générative selon le NIST » au RSSI revient à lui faire répondre de l'empreinte
     environnementale, des biais et de la propriété intellectuelle, qu'il ne tient pas.</p>
@@ -5521,9 +5521,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 </div>
 
 <div class="page" id="p-owasp-dix">
-  <span class="eyebrow">OWASP · Top 10 LLM</span>
-  <h1 class="page-h">Dix défaillances, <em>et pourquoi elles durent</em></h1>
-  <p class="page-p">Ce n'est ni une norme ni un référentiel certifiable&nbsp;: c'est un inventaire
+  <span class="eyebrow" data-i18n="pg.owasp-dix.eb">OWASP · Top 10 LLM</span>
+  <h1 class="page-h" data-i18n-bloc="pg.owasp-dix.h1">Dix défaillances, <em>et pourquoi elles durent</em></h1>
+  <p class="page-p" data-i18n-bloc="pg.owasp-dix.p">Ce n'est ni une norme ni un référentiel certifiable&nbsp;: c'est un inventaire
     de ce qui casse le plus souvent. On ne s'y conforme pas, on s'en sert pour vérifier qu'on n'a
     rien oublié d'évident. <strong>Il porte un millésime</strong> — le précédent ignorait la fuite
     d'invite système, les bases vectorielles et la consommation non bornée.</p>
@@ -5532,9 +5532,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 </div>
 
 <div class="page" id="p-owasp-pont">
-  <span class="eyebrow">OWASP · Pont vers ISO 42001</span>
-  <h1 class="page-h">Ce que votre certification <em>ne vous donne pas</em></h1>
-  <p class="page-p">Ce qui se vend, c'est «&nbsp;notre SMIA couvre OWASP&nbsp;». Ce qui est vrai,
+  <span class="eyebrow" data-i18n="pg.owasp-pont.eb">OWASP · Pont vers ISO 42001</span>
+  <h1 class="page-h" data-i18n-bloc="pg.owasp-pont.h1">Ce que votre certification <em>ne vous donne pas</em></h1>
+  <p class="page-p" data-i18n-bloc="pg.owasp-pont.p">Ce qui se vend, c'est «&nbsp;notre SMIA couvre OWASP&nbsp;». Ce qui est vrai,
     c'est que plusieurs de ces risques ne rencontrent <strong>aucune</strong> mesure de l'annexe A —
     parce qu'ils sont d'ordre applicatif et qu'ISO/IEC 42001 est un système de management. Ce sont
     ceux-là qu'il faut traiter ailleurs, et ce sont ceux dont on se croit couvert.</p>
@@ -5542,9 +5542,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 </div>
 
 <div class="page" id="p-cra-role">
-  <span class="eyebrow">CRA · Qualification</span>
-  <h1 class="page-h">Quel rôle le règlement <em>vous donne</em></h1>
-  <p class="page-lead">Le CRA ne demande pas comment vous vous appelez : il regarde ce que vous faites du produit. Deux gestes ordinaires du commerce changent le rôle sans changer le métier — apposer <b>son</b> nom sur un produit qu'on revend, et apporter une <b>modification substantielle</b> à un produit déjà sur le marché. L'un et l'autre font de vous un fabricant, avec le signalement en vingt-quatre heures qui est déjà applicable.</p>
+  <span class="eyebrow" data-i18n="pg.cra-role.eb">CRA · Qualification</span>
+  <h1 class="page-h" data-i18n-bloc="pg.cra-role.h1">Quel rôle le règlement <em>vous donne</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.cra-role.p">Le CRA ne demande pas comment vous vous appelez : il regarde ce que vous faites du produit. Deux gestes ordinaires du commerce changent le rôle sans changer le métier — apposer <b>son</b> nom sur un produit qu'on revend, et apporter une <b>modification substantielle</b> à un produit déjà sur le marché. L'un et l'autre font de vous un fabricant, avec le signalement en vingt-quatre heures qui est déjà applicable.</p>
 
   <div class="reg-toolbar" id="cra-role-q"></div>
   <div id="cra-role-verdict"><div class="veille-loading">Répondez aux questions ci-dessus.</div></div>
@@ -5555,9 +5555,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 </div>
 
 <div class="page" id="p-cra-chiffre">
-  <span class="eyebrow">CRA · Article 64</span>
-  <h1 class="page-h">Exposition <em>chiffrée</em></h1>
-  <p class="page-lead">Le règlement chiffre lui-même ce qu'il sanctionne : trois paliers, en euros <b>et</b> en pourcentage du chiffre d'affaires mondial, « le montant le plus élevé étant retenu ». Ce n'est donc pas un choix de l'autorité — il existe un chiffre d'affaires en dessous duquel le montant fixe commande toujours. Une PME qui lit « 2,5&nbsp;% de mon chiffre d'affaires » se rassure à tort.</p>
+  <span class="eyebrow" data-i18n="pg.cra-chiffre.eb">CRA · Article 64</span>
+  <h1 class="page-h" data-i18n-bloc="pg.cra-chiffre.h1">Exposition <em>chiffrée</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.cra-chiffre.p">Le règlement chiffre lui-même ce qu'il sanctionne : trois paliers, en euros <b>et</b> en pourcentage du chiffre d'affaires mondial, « le montant le plus élevé étant retenu ». Ce n'est donc pas un choix de l'autorité — il existe un chiffre d'affaires en dessous duquel le montant fixe commande toujours. Une PME qui lit « 2,5&nbsp;% de mon chiffre d'affaires » se rassure à tort.</p>
 
   <div class="reg-toolbar">
     <label class="cra-chk">Chiffre d'affaires annuel mondial (M€)
@@ -5572,9 +5572,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 </div>
 
 <div class="page" id="p-cra">
-  <span class="eyebrow">CRA · Produits numériques</span>
-  <h1 class="page-h">Cyber Resilience Act — <em>produits &amp; classification</em></h1>
-  <p class="page-lead">Règlement (UE) 2024/2847. Déclarez vos produits comportant des éléments numériques, qualifiez leur classe au titre des annexes&nbsp;III et&nbsp;IV, et obtenez la procédure d'évaluation de la conformité qui en découle — celle qui décide si un organisme notifié doit intervenir.</p>
+  <span class="eyebrow" data-i18n="pg.cra.eb">CRA · Produits numériques</span>
+  <h1 class="page-h" data-i18n-bloc="pg.cra.h1">Cyber Resilience Act — <em>produits &amp; classification</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.cra.p">Règlement (UE) 2024/2847. Déclarez vos produits comportant des éléments numériques, qualifiez leur classe au titre des annexes&nbsp;III et&nbsp;IV, et obtenez la procédure d'évaluation de la conformité qui en découle — celle qui décide si un organisme notifié doit intervenir.</p>
 
   <div id="cra-calendrier" class="cn-note-top">Chargement du calendrier…</div>
 
@@ -5597,9 +5597,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 </div>
 
 <div class="page" id="p-cra-ecarts">
-  <span class="eyebrow">CRA · Analyse d'écart</span>
-  <h1 class="page-h">Exigences essentielles — <em>annexe I</em></h1>
-  <p class="page-lead">Les deux parties de l'annexe&nbsp;I ne se cotent pas de la même façon, et les confondre rend une analyse fausse&nbsp;: la <b>partie&nbsp;I</b> porte sur les propriétés du produit et se vérifie sur une version donnée&nbsp;; la <b>partie&nbsp;II</b> porte sur des processus du fabricant et vaut pendant toute la période d'assistance. Un produit peut être conforme partie&nbsp;I et l'entreprise défaillante partie&nbsp;II — c'est le cas le plus courant.</p>
+  <span class="eyebrow" data-i18n="pg.cra-ecarts.eb">CRA · Analyse d'écart</span>
+  <h1 class="page-h" data-i18n-bloc="pg.cra-ecarts.h1">Exigences essentielles — <em>annexe I</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.cra-ecarts.p">Les deux parties de l'annexe&nbsp;I ne se cotent pas de la même façon, et les confondre rend une analyse fausse&nbsp;: la <b>partie&nbsp;I</b> porte sur les propriétés du produit et se vérifie sur une version donnée&nbsp;; la <b>partie&nbsp;II</b> porte sur des processus du fabricant et vaut pendant toute la période d'assistance. Un produit peut être conforme partie&nbsp;I et l'entreprise défaillante partie&nbsp;II — c'est le cas le plus courant.</p>
   <div id="cra-ec-body"><div class="veille-loading">Chargement des exigences…</div></div>
   <div class="trait-note">
     Une exigence <b>non renseignée n'est pas une exigence conforme</b>. Le taux affiché est toujours accompagné du nombre de lignes vides : un taux calculé sur trois exigences renseignées ne dit rien des dix-huit autres.
@@ -5607,9 +5607,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 </div>
 
 <div class="page" id="p-cra-signalement">
-  <span class="eyebrow">CRA · Article 14</span>
-  <h1 class="page-h">Signalement — <em>ce qui court déjà</em></h1>
-  <p class="page-lead">L'article&nbsp;14 est applicable <b>depuis le 11 septembre 2026</b>. C'est la seule obligation du règlement dont le retard se compte aujourd'hui : un fabricant qui découvre qu'une de ses vulnérabilités est activement exploitée dispose de <b>vingt-quatre heures</b> pour l'alerte précoce.</p>
+  <span class="eyebrow" data-i18n="pg.cra-signalement.eb">CRA · Article 14</span>
+  <h1 class="page-h" data-i18n-bloc="pg.cra-signalement.h1">Signalement — <em>ce qui court déjà</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.cra-signalement.p">L'article&nbsp;14 est applicable <b>depuis le 11 septembre 2026</b>. C'est la seule obligation du règlement dont le retard se compte aujourd'hui : un fabricant qui découvre qu'une de ses vulnérabilités est activement exploitée dispose de <b>vingt-quatre heures</b> pour l'alerte précoce.</p>
   <div id="cra-sig-body"><div class="veille-loading">Chargement des échéances…</div></div>
   <div class="trait-note">
     La notification part <b>simultanément</b> au CSIRT désigné coordinateur <b>et</b> à l'ENISA, par la plateforme unique de signalement de l'article&nbsp;16. Prévenir l'un puis l'autre, ou l'un seulement, n'est pas ce que le texte demande.
@@ -5625,9 +5625,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
      d'applicabilité d'abord, puis chercher des risques qui la justifient,
      produit un document qui tient debout et ne protège rien. ═════════ -->
 <div class="page" id="p-iso27001-risques">
-  <span class="eyebrow">ISO 27001 · Articles 6.1.2 et 6.1.3</span>
-  <h1 class="page-h">L'analyse de risque, <em>et les deux dates qui la valident</em></h1>
-  <p class="page-lead">Tout part d'ici. Les mesures de l'annexe&nbsp;A ne se choisissent pas dans un catalogue : elles se <b>déduisent</b> du traitement des risques. Et deux défauts suffisent à défaire l'exercice entier — l'un se joue au début, l'autre à la fin, et aucun des deux ne se voit dans le document final.</p>
+  <span class="eyebrow" data-i18n="pg.iso27001-risques.eb">ISO 27001 · Articles 6.1.2 et 6.1.3</span>
+  <h1 class="page-h" data-i18n-bloc="pg.iso27001-risques.h1">L'analyse de risque, <em>et les deux dates qui la valident</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.iso27001-risques.p">Tout part d'ici. Les mesures de l'annexe&nbsp;A ne se choisissent pas dans un catalogue : elles se <b>déduisent</b> du traitement des risques. Et deux défauts suffisent à défaire l'exercice entier — l'un se joue au début, l'autre à la fin, et aucun des deux ne se voit dans le document final.</p>
   <div class="cnf-copy"><b>ISO/IEC 27001:2022 est protégée par le droit d'auteur (© ISO/IEC).</b> Cet écran cite des <b>numéros</b> et des <b>titres</b> d'articles et de mesures ; tout ce qui les décrit est rédigé par le cabinet. Aucune phrase du texte normatif n'y est reproduite, et aucune question du questionnaire d'auto-évaluation BSI qui a servi de point de départ — il est la propriété de son éditeur. La mise en œuvre suppose de détenir la norme.</div>
   <div class="cnf-cmd bloc">
     <b>Les critères d'acceptation se fixent AVANT d'apprécier</b> (art.&nbsp;6.1.2&nbsp;a). Les écrire après avoir vu les résultats donne un registre où tout est acceptable — et c'est invisible à la lecture, puisque seul l'ordre de rédaction distingue les deux. Cet écran compare les deux dates.
@@ -5648,9 +5648,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 </div>
 
 <div class="page" id="p-iso27001-soa">
-  <span class="eyebrow">ISO 27001 · Article 6.1.3 d)</span>
-  <h1 class="page-h">Déclaration d'applicabilité — <em>trois colonnes</em></h1>
-  <p class="page-lead">93 mesures, et pour chacune <b>trois</b> choses : retenue ou écartée, <b>pourquoi</b> — dans les deux sens —, et <b>où elle en est</b>. Cette troisième colonne est propre à 27001 : celle d'ISO&nbsp;42001 n'en demande que deux. Servir le même gabarit aux deux normes fait perdre exactement celle que l'auditeur recoupe avec le terrain.</p>
+  <span class="eyebrow" data-i18n="pg.iso27001-soa.eb">ISO 27001 · Article 6.1.3 d)</span>
+  <h1 class="page-h" data-i18n-bloc="pg.iso27001-soa.h1">Déclaration d'applicabilité — <em>trois colonnes</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.iso27001-soa.p">93 mesures, et pour chacune <b>trois</b> choses : retenue ou écartée, <b>pourquoi</b> — dans les deux sens —, et <b>où elle en est</b>. Cette troisième colonne est propre à 27001 : celle d'ISO&nbsp;42001 n'en demande que deux. Servir le même gabarit aux deux normes fait perdre exactement celle que l'auditeur recoupe avec le terrain.</p>
   <div class="cnf-copy"><b>ISO/IEC 27001:2022 est protégée par le droit d'auteur (© ISO/IEC).</b> Cet écran cite des <b>numéros</b> et des <b>titres</b> d'articles et de mesures ; tout ce qui les décrit est rédigé par le cabinet. Aucune phrase du texte normatif n'y est reproduite, et aucune question du questionnaire d'auto-évaluation BSI qui a servi de point de départ — il est la propriété de son éditeur. La mise en œuvre suppose de détenir la norme.</div>
   <div class="reg-toolbar">
     <button class="mat-export-btn" onclick="iso27PeindreSoa()">↻ Recalculer</button>
@@ -5665,9 +5665,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 </div>
 
 <div class="page" id="p-iso27001">
-  <span class="eyebrow">ISO 27001 · Articles 4 à 10</span>
-  <h1 class="page-h">Le corps de la norme, <em>et ce qui se greffe</em></h1>
-  <p class="page-lead">Trente sous-articles, et la même structure harmonisée qu'ISO&nbsp;42001 : revue de direction, audit interne, non-conformités, informations documentées se reprennent d'un système de management déjà en place. Sept articles ne se reprennent pas — le domaine d'application, la politique, et les quatre qui portent l'appréciation et le traitement des risques.</p>
+  <span class="eyebrow" data-i18n="pg.iso27001.eb">ISO 27001 · Articles 4 à 10</span>
+  <h1 class="page-h" data-i18n-bloc="pg.iso27001.h1">Le corps de la norme, <em>et ce qui se greffe</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.iso27001.p">Trente sous-articles, et la même structure harmonisée qu'ISO&nbsp;42001 : revue de direction, audit interne, non-conformités, informations documentées se reprennent d'un système de management déjà en place. Sept articles ne se reprennent pas — le domaine d'application, la politique, et les quatre qui portent l'appréciation et le traitement des risques.</p>
   <div class="cnf-copy"><b>ISO/IEC 27001:2022 est protégée par le droit d'auteur (© ISO/IEC).</b> Cet écran cite des <b>numéros</b> et des <b>titres</b> d'articles et de mesures ; tout ce qui les décrit est rédigé par le cabinet. Aucune phrase du texte normatif n'y est reproduite, et aucune question du questionnaire d'auto-évaluation BSI qui a servi de point de départ — il est la propriété de son éditeur. La mise en œuvre suppose de détenir la norme.</div>
   <div class="reg-toolbar">
     <button class="mat-export-btn" onclick="iso27PeindreArticles()">↻ Recalculer</button>
@@ -5680,9 +5680,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 </div>
 
 <div class="page" id="p-iso27001-millesime">
-  <span class="eyebrow">ISO 27001 · Millésime</span>
-  <h1 class="page-h">2013 → 2022 : <em>ce qui a changé</em></h1>
-  <p class="page-lead">Le questionnaire d'auto-évaluation qui a servi de point de départ à ce module porte sur <b>ISO/IEC 27001:2013</b>. Ce n'est plus la norme. Et le changement n'est pas cosmétique : l'annexe&nbsp;A est passée de 114&nbsp;mesures en 14&nbsp;chapitres à <b>93 en 4 thèmes</b>, dont <b>onze entièrement nouvelles</b>.</p>
+  <span class="eyebrow" data-i18n="pg.iso27001-millesime.eb">ISO 27001 · Millésime</span>
+  <h1 class="page-h" data-i18n-bloc="pg.iso27001-millesime.h1">2013 → 2022 : <em>ce qui a changé</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.iso27001-millesime.p">Le questionnaire d'auto-évaluation qui a servi de point de départ à ce module porte sur <b>ISO/IEC 27001:2013</b>. Ce n'est plus la norme. Et le changement n'est pas cosmétique : l'annexe&nbsp;A est passée de 114&nbsp;mesures en 14&nbsp;chapitres à <b>93 en 4 thèmes</b>, dont <b>onze entièrement nouvelles</b>.</p>
   <div class="cnf-cmd bloc">
     <b>Ce que ça change pour un organisme déjà certifié.</b> Son reste à faire n'est ni 93, ni 114, ni « tout » : ce sont les <b>onze</b> mesures qui n'existaient pas — renseignement sur les menaces, services en nuage, préparation des TIC pour la continuité, surveillance physique, gestion des configurations, suppression d'informations, masquage des données, prévention de la fuite de données, activités de surveillance, filtrage web, codage sécurisé.
   </div>
@@ -5700,9 +5700,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
      un taux de maturité — c'est si la déclaration d'applicabilité passe
      l'audit d'étape 1, ce qui ne se déduit d'aucun pourcentage. ══════ -->
 <div class="page" id="p-iso42001">
-  <span class="eyebrow">ISO 42001 · Articles 4 à 10</span>
-  <h1 class="page-h">Le corps de la norme, <em>et l'effort réel</em></h1>
-  <p class="page-lead">Trente-deux sous-articles, et <b>deux taux</b>. Le premier compte tout ; le second ne compte que ce que 42001 ajoute vraiment à un système de management déjà en place. Un organisme certifié ISO&nbsp;27001 part avec la structure harmonisée — revue de direction, audit interne, non-conformités — et n'a devant lui que neuf articles neufs. Le premier taux le flatte ; le second lui dit où va son budget.</p>
+  <span class="eyebrow" data-i18n="pg.iso42001.eb">ISO 42001 · Articles 4 à 10</span>
+  <h1 class="page-h" data-i18n-bloc="pg.iso42001.h1">Le corps de la norme, <em>et l'effort réel</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.iso42001.p">Trente-deux sous-articles, et <b>deux taux</b>. Le premier compte tout ; le second ne compte que ce que 42001 ajoute vraiment à un système de management déjà en place. Un organisme certifié ISO&nbsp;27001 part avec la structure harmonisée — revue de direction, audit interne, non-conformités — et n'a devant lui que neuf articles neufs. Le premier taux le flatte ; le second lui dit où va son budget.</p>
   <div class="cnf-copy"><b>ISO/IEC 42001:2023 est protégée par le droit d'auteur (© ISO/IEC 2023).</b> Cet écran cite des <b>numéros</b> et des <b>titres</b> d'articles et de mesures ; tout ce qui les décrit est rédigé par le cabinet. Aucune phrase du texte normatif n'y est reproduite. La mise en œuvre suppose de détenir la norme, qui s'achète auprès de l'ISO ou de l'AFNOR.</div>
   <div class="reg-toolbar">
     <button class="mat-export-btn" onclick="isoPeindreArticles()">↻ Recalculer</button>
@@ -5715,9 +5715,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 </div>
 
 <div class="page" id="p-iso42001-soa">
-  <span class="eyebrow">ISO 42001 · Article 6.1.3 f)</span>
-  <h1 class="page-h">Déclaration <em>d'applicabilité</em></h1>
-  <p class="page-lead">C'est le premier document que l'auditeur ouvre, et le seul qui puisse arrêter la certification avant que quiconque ait regardé ce que vous faites. Chaque mesure de l'annexe&nbsp;A y est <b>retenue</b> ou <b>écartée</b> — et, dans les deux cas, <b>justifiée</b>. Une mesure laissée vide n'est pas un chantier en cours : c'est un défaut de document.</p>
+  <span class="eyebrow" data-i18n="pg.iso42001-soa.eb">ISO 42001 · Article 6.1.3 f)</span>
+  <h1 class="page-h" data-i18n-bloc="pg.iso42001-soa.h1">Déclaration <em>d'applicabilité</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.iso42001-soa.p">C'est le premier document que l'auditeur ouvre, et le seul qui puisse arrêter la certification avant que quiconque ait regardé ce que vous faites. Chaque mesure de l'annexe&nbsp;A y est <b>retenue</b> ou <b>écartée</b> — et, dans les deux cas, <b>justifiée</b>. Une mesure laissée vide n'est pas un chantier en cours : c'est un défaut de document.</p>
   <div class="cnf-copy"><b>ISO/IEC 42001:2023 est protégée par le droit d'auteur (© ISO/IEC 2023).</b> Cet écran cite des <b>numéros</b> et des <b>titres</b> d'articles et de mesures ; tout ce qui les décrit est rédigé par le cabinet. Aucune phrase du texte normatif n'y est reproduite. La mise en œuvre suppose de détenir la norme, qui s'achète auprès de l'ISO ou de l'AFNOR.</div>
   <div class="cnf-cmd bloc">
     <b>Le fait qui coûte le plus cher, et qu'aucun taux ne montre.</b> Un organisme qui a mis en œuvre trente-six mesures sur trente-huit et laissé deux cases vides <b>échoue à l'étape&nbsp;1</b>. Un organisme qui en retient dix-huit et en écarte vingt, chacune motivée, <b>passe</b>. La conformité ne se compte pas en cases cochées : elle se compte en cases <b>décidées</b>.
@@ -5734,9 +5734,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 </div>
 
 <div class="page" id="p-iso42001-certif">
-  <span class="eyebrow">ISO 42001 · Certification</span>
-  <h1 class="page-h">Le chemin, <em>et ce qui fait tomber chaque étape</em></h1>
-  <p class="page-lead">ISO&nbsp;42001 est la <b>seule</b> des quatre références de cet espace qui délivre un certificat. RGPD, NIS&nbsp;2 et CRA sont du droit : on s'y conforme, et personne ne remet d'attestation. 42001 est une norme volontaire auditée par un organisme accrédité tiers — un actif qui se montre à un client, à un acheteur public, à un assureur.</p>
+  <span class="eyebrow" data-i18n="pg.iso42001-certif.eb">ISO 42001 · Certification</span>
+  <h1 class="page-h" data-i18n-bloc="pg.iso42001-certif.h1">Le chemin, <em>et ce qui fait tomber chaque étape</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.iso42001-certif.p">ISO&nbsp;42001 est la <b>seule</b> des quatre références de cet espace qui délivre un certificat. RGPD, NIS&nbsp;2 et CRA sont du droit : on s'y conforme, et personne ne remet d'attestation. 42001 est une norme volontaire auditée par un organisme accrédité tiers — un actif qui se montre à un client, à un acheteur public, à un assureur.</p>
   <div class="cnf-copy"><b>ISO/IEC 42001:2023 est protégée par le droit d'auteur (© ISO/IEC 2023).</b> Cet écran cite des <b>numéros</b> et des <b>titres</b> d'articles et de mesures ; tout ce qui les décrit est rédigé par le cabinet. Aucune phrase du texte normatif n'y est reproduite. La mise en œuvre suppose de détenir la norme, qui s'achète auprès de l'ISO ou de l'AFNOR.</div>
   <div id="iso-certif-body"><div class="veille-loading">Chargement du cycle d'audit…</div></div>
   <div class="trait-note">
@@ -5745,9 +5745,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 </div>
 
 <div class="page" id="p-iso42001-ponts">
-  <span class="eyebrow">ISO 42001 · Articulation</span>
-  <h1 class="page-h">Ce qui se réutilise — <em>et ce qui ne se substitue pas</em></h1>
-  <p class="page-lead">Les trois évaluations d'impact portent sur le même objet et ne sont pas la même. C'est la confusion la plus coûteuse du domaine : elle fait croire qu'un document en remplace un autre, et elle se découvre au contrôle.</p>
+  <span class="eyebrow" data-i18n="pg.iso42001-ponts.eb">ISO 42001 · Articulation</span>
+  <h1 class="page-h" data-i18n-bloc="pg.iso42001-ponts.h1">Ce qui se réutilise — <em>et ce qui ne se substitue pas</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.iso42001-ponts.p">Les trois évaluations d'impact portent sur le même objet et ne sont pas la même. C'est la confusion la plus coûteuse du domaine : elle fait croire qu'un document en remplace un autre, et elle se découvre au contrôle.</p>
   <div class="cnf-copy"><b>ISO/IEC 42001:2023 est protégée par le droit d'auteur (© ISO/IEC 2023).</b> Cet écran cite des <b>numéros</b> et des <b>titres</b> d'articles et de mesures ; tout ce qui les décrit est rédigé par le cabinet. Aucune phrase du texte normatif n'y est reproduite. La mise en œuvre suppose de détenir la norme, qui s'achète auprès de l'ISO ou de l'AFNOR.</div>
   <div id="iso-ponts-body"><div class="veille-loading">Chargement des ponts…</div></div>
   <div class="trait-note">
@@ -5763,9 +5763,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
      État membre où elle opère. Les montants de l'article 34 sont des
      PLANCHERS imposés aux États, pas des plafonds opposables. ══════ -->
 <div class="page" id="p-nis2-qualifier">
-  <span class="eyebrow">NIS 2 · Articles 2 et 3</span>
-  <h1 class="page-h">Essentielle, importante, <em>ou hors champ</em></h1>
-  <p class="page-lead">La question a l'air d'un classement d'honneur ; c'est un <b>régime de contrôle</b>. Une entité essentielle subit des audits réguliers sans qu'aucun incident ne soit nécessaire (art.&nbsp;32) ; une entité importante n'est contrôlée que sur indice de manquement (art.&nbsp;33). Et l'article&nbsp;32,&nbsp;§5, réservé aux essentielles, permet d'<b>interdire temporairement au dirigeant d'exercer ses fonctions</b>.</p>
+  <span class="eyebrow" data-i18n="pg.nis2-qualifier.eb">NIS 2 · Articles 2 et 3</span>
+  <h1 class="page-h" data-i18n-bloc="pg.nis2-qualifier.h1">Essentielle, importante, <em>ou hors champ</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.nis2-qualifier.p">La question a l'air d'un classement d'honneur ; c'est un <b>régime de contrôle</b>. Une entité essentielle subit des audits réguliers sans qu'aucun incident ne soit nécessaire (art.&nbsp;32) ; une entité importante n'est contrôlée que sur indice de manquement (art.&nbsp;33). Et l'article&nbsp;32,&nbsp;§5, réservé aux essentielles, permet d'<b>interdire temporairement au dirigeant d'exercer ses fonctions</b>.</p>
   <div class="cnf-cmd">
     <b>Ce qui fait basculer n'est pas votre niveau de sécurité.</b> C'est le secteur (annexe&nbsp;I ou II) et la taille. Une entreprise de l'annexe&nbsp;I qui passe de 240 à 260 personnes devient essentielle sans avoir rien changé à son risque — et hérite des audits réguliers et d'un palier de sanction supérieur de 43&nbsp;%.
   </div>
@@ -5777,9 +5777,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 </div>
 
 <div class="page" id="p-nis2">
-  <span class="eyebrow">NIS 2 · Article 21 §2</span>
-  <h1 class="page-h">Les dix mesures — <em>un socle, pas une liste</em></h1>
-  <p class="page-lead">L'article dit que les mesures « comprennent <b>au moins</b> » ces dix éléments. Ce n'est pas une liste de contrôle qu'on épuise : c'est un plancher en dessous duquel on ne descend pas. Les cocher toutes ne prouve pas la conformité ; en manquer une la défait.</p>
+  <span class="eyebrow" data-i18n="pg.nis2.eb">NIS 2 · Article 21 §2</span>
+  <h1 class="page-h" data-i18n-bloc="pg.nis2.h1">Les dix mesures — <em>un socle, pas une liste</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.nis2.p">L'article dit que les mesures « comprennent <b>au moins</b> » ces dix éléments. Ce n'est pas une liste de contrôle qu'on épuise : c'est un plancher en dessous duquel on ne descend pas. Les cocher toutes ne prouve pas la conformité ; en manquer une la défait.</p>
   <div class="reg-toolbar">
     <button class="mat-export-btn" onclick="nis2PeindreMesures()">↻ Recalculer</button>
     <button class="mat-export-btn" onclick="go('nis2-gouvernance')">Gouvernance art. 20 →</button>
@@ -5791,9 +5791,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 </div>
 
 <div class="page" id="p-nis2-gouvernance">
-  <span class="eyebrow">NIS 2 · Article 20</span>
-  <h1 class="page-h">Ce que la directive <em>demande au conseil</em></h1>
-  <p class="page-lead">C'est l'article qui nomme une personne. Les organes de direction <b>approuvent</b> les mesures, <b>supervisent</b> leur mise en œuvre, et <b>peuvent être tenus responsables</b> de la violation de l'article&nbsp;21 par l'entité. Ce n'est plus la DSI qui porte le sujet.</p>
+  <span class="eyebrow" data-i18n="pg.nis2-gouvernance.eb">NIS 2 · Article 20</span>
+  <h1 class="page-h" data-i18n-bloc="pg.nis2-gouvernance.h1">Ce que la directive <em>demande au conseil</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.nis2-gouvernance.p">C'est l'article qui nomme une personne. Les organes de direction <b>approuvent</b> les mesures, <b>supervisent</b> leur mise en œuvre, et <b>peuvent être tenus responsables</b> de la violation de l'article&nbsp;21 par l'entité. Ce n'est plus la DSI qui porte le sujet.</p>
   <div class="cnf-cmd bloc">
     <b>Les cinq lignes ne pèsent pas pareil.</b> Quatre sont des obligations ; la formation du personnel est un <b>encouragement</b>. Une entreprise qui forme toutes ses équipes sauf son conseil d'administration a manqué la seule des deux formations qui soit obligatoire — et c'est celle qui expose personnellement quelqu'un.
   </div>
@@ -5807,9 +5807,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 </div>
 
 <div class="page" id="p-nis2-signalement">
-  <span class="eyebrow">NIS 2 · Article 23</span>
-  <h1 class="page-h">L'horloge démarre à <em>la connaissance</em></h1>
-  <p class="page-lead">« Après avoir eu connaissance de l'incident important » — pas à sa survenance, pas à sa détection technique. Ce qui déplace la question de la détection vers la <b>qualification</b> : le jour où quelqu'un, dans l'entreprise, a compris que c'était important, les vingt-quatre heures ont commencé.</p>
+  <span class="eyebrow" data-i18n="pg.nis2-signalement.eb">NIS 2 · Article 23</span>
+  <h1 class="page-h" data-i18n-bloc="pg.nis2-signalement.h1">L'horloge démarre à <em>la connaissance</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.nis2-signalement.p">« Après avoir eu connaissance de l'incident important » — pas à sa survenance, pas à sa détection technique. Ce qui déplace la question de la détection vers la <b>qualification</b> : le jour où quelqu'un, dans l'entreprise, a compris que c'était important, les vingt-quatre heures ont commencé.</p>
   <div id="nis2-sig-body"><div class="veille-loading">Chargement de la chaîne de signalement…</div></div>
   <div class="trait-note">
     Un <b>prestataire de services de confiance</b> notifie les incidents affectant ses services de confiance dans les <b>24&nbsp;heures</b>, et non 72. Et si l'incident est encore en cours au moment du rapport final, un rapport d'avancement le remplace, le rapport final venant un mois après le traitement de l'incident.
@@ -5817,9 +5817,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 </div>
 
 <div class="page" id="p-nis2-chiffre">
-  <span class="eyebrow">NIS 2 · Article 34</span>
-  <h1 class="page-h">Un <em>plancher</em> sur le plafond</h1>
-  <p class="page-lead">L'article&nbsp;34 impose aux États membres des amendes d'un maximum <b>« d'au moins »</b> ces montants. Le chiffre n'est donc pas ce que l'entreprise risque au maximum : c'est le <b>minimum que l'État doit rendre possible</b>. Une transposition nationale peut prévoir davantage.</p>
+  <span class="eyebrow" data-i18n="pg.nis2-chiffre.eb">NIS 2 · Article 34</span>
+  <h1 class="page-h" data-i18n-bloc="pg.nis2-chiffre.h1">Un <em>plancher</em> sur le plafond</h1>
+  <p class="page-lead" data-i18n-bloc="pg.nis2-chiffre.p">L'article&nbsp;34 impose aux États membres des amendes d'un maximum <b>« d'au moins »</b> ces montants. Le chiffre n'est donc pas ce que l'entreprise risque au maximum : c'est le <b>minimum que l'État doit rendre possible</b>. Une transposition nationale peut prévoir davantage.</p>
   <div class="cnf-cmd bloc">
     <b>Ne pas lire NIS&nbsp;2 comme le CRA.</b> Le règlement (UE) 2024/2847 est d'application directe : ses montants sont les montants. NIS&nbsp;2 est une directive — traiter les deux de la même façon <b>sous-estime</b> l'exposition.
   </div>
@@ -5958,8 +5958,8 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 
 
 <div class="page" id="p-empreinte">
-  <span class="eyebrow">Empreinte · Numérique responsable</span><h1 class="page-h">Empreinte <em>numérique</em></h1>
-  <p class="page-lead">Compteur automatique et temps réel de l'empreinte du site, de la plateforme et des modèles de langage utilisés, à partir de l'usage réel : jetons consommés, latence, pages servies. Trois méthodes sont calculées en parallèle sur les mêmes données, afin d'en comparer les résultats.</p>
+  <span class="eyebrow" data-i18n="pg.empreinte.eb">Empreinte · Numérique responsable</span><h1 class="page-h" data-i18n-bloc="pg.empreinte.h1">Empreinte <em>numérique</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.empreinte.p">Compteur automatique et temps réel de l'empreinte du site, de la plateforme et des modèles de langage utilisés, à partir de l'usage réel : jetons consommés, latence, pages servies. Trois méthodes sont calculées en parallèle sur les mêmes données, afin d'en comparer les résultats.</p>
 
   <div style="border:1px solid var(--rule2);border-left:3px solid var(--accent);border-radius:10px;padding:12px 14px;background:var(--white);margin-bottom:16px;font-size:11.5px;color:var(--muted);line-height:1.6">
     <strong style="color:var(--ink)">Avertissement méthodologique.</strong> Ces valeurs sont des <strong>estimations par modélisation</strong>, non des mesures. Aucun fournisseur ne publie la consommation réelle par requête. Les fourchettes d'incertitude sont affichées et la méthodologie est versionnée. Ne pas en tirer d'allégation de neutralité ni d'émissions évitées.

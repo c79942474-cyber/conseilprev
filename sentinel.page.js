@@ -1159,7 +1159,117 @@ var SENT_T = {
     'nav.item.rgpd-sensibilisation': 'Awareness',
     'nav.item.rgpd-conformite': 'GDPR compliance',
     'nav.item.clients': 'Client management',
-    'nav.item.compte': 'Sign-in & session'
+    'nav.item.compte': 'Sign-in & session',
+
+    /* ── LES TRENTE-CINQ PAGES DE CONFORMITÉ ───────────────────────
+       Surtitre, titre et chapeau de chacune. Le CORPS des panneaux
+       reste en français : ce qui est traduit ici, c'est ce qui dit au
+       lecteur OÙ il est et CE QUE la page fait. */
+    'pg.cra-role.eb': 'CRA · Qualification',
+    'pg.cra-role.h1': 'The role the Regulation <em>gives you</em>',
+    'pg.cra-role.p': 'The CRA does not ask what you call yourself: it looks at what you do with the product. Two ordinary commercial gestures change the role without changing the trade — putting <b>your own</b> name on a product you resell, and making a <b>substantial modification</b> to a product already on the market. Either one makes you a manufacturer, with the twenty-four-hour reporting duty that already applies.',
+    'pg.cra.eb': 'CRA · Digital products',
+    'pg.cra.h1': 'Cyber Resilience Act — <em>products &amp; classification</em>',
+    'pg.cra.p': 'Regulation (EU) 2024/2847. Declare your products with digital elements, qualify their class under Annexes&nbsp;III and&nbsp;IV, and obtain the conformity assessment procedure that follows — the one that decides whether a notified body must step in.',
+    'pg.cra-ecarts.eb': 'CRA · Gap analysis',
+    'pg.cra-ecarts.h1': 'Essential requirements — <em>Annex I</em>',
+    'pg.cra-ecarts.p': 'The two parts of Annex&nbsp;I are not scored the same way, and confusing them makes the analysis wrong: <b>Part&nbsp;I</b> covers properties of the product and is checked against a given version; <b>Part&nbsp;II</b> covers manufacturer processes and holds for the whole support period. A product can be compliant under Part&nbsp;I while the company fails Part&nbsp;II — that is the commonest case.',
+    'pg.cra-chiffre.eb': 'CRA · Article 64',
+    'pg.cra-chiffre.h1': 'Exposure, <em>in figures</em>',
+    'pg.cra-chiffre.p': 'The Regulation puts its own figures on what it penalises: three tiers, in euros <b>and</b> as a percentage of worldwide turnover, “whichever is higher”. So it is not the authority\'s choice — there is a turnover below which the fixed amount always governs. An SME reading “2.5&nbsp;% of my turnover” is reassuring itself wrongly.',
+    'pg.cra-signalement.eb': 'CRA · Article 14',
+    'pg.cra-signalement.h1': 'Reporting — <em>the clock already running</em>',
+    'pg.cra-signalement.p': 'Article&nbsp;14 has applied <b>since 11 September 2026</b>. It is the only duty in the Regulation whose delay is counted today: a manufacturer who discovers that one of its vulnerabilities is being actively exploited has <b>twenty-four hours</b> to file the early warning.',
+    'pg.iso27001-risques.eb': 'ISO 27001 · Clauses 6.1.2 and 6.1.3',
+    'pg.iso27001-risques.h1': 'Risk assessment, <em>and the two dates that validate it</em>',
+    'pg.iso27001-risques.p': 'Everything starts here. Annex&nbsp;A controls are not picked from a catalogue: they are <b>derived</b> from risk treatment. And two flaws are enough to undo the whole exercise — one happens at the start, the other at the end, and neither shows in the final document.',
+    'pg.iso27001-soa.eb': 'ISO 27001 · Clause 6.1.3 d)',
+    'pg.iso27001-soa.h1': 'Statement of Applicability — <em>three columns</em>',
+    'pg.iso27001-soa.p': '93 controls, and for each one <b>three</b> things: included or excluded, <b>why</b> — both ways — and <b>where it stands</b>. That third column is specific to 27001: the one in ISO&nbsp;42001 asks for only two. Using the same template for both standards loses precisely the column the auditor cross-checks against the ground.',
+    'pg.iso27001.eb': 'ISO 27001 · Clauses 4 to 10',
+    'pg.iso27001.h1': 'The body of the standard, <em>and what grafts onto it</em>',
+    'pg.iso27001.p': 'Thirty sub-clauses, and the same harmonised structure as ISO&nbsp;42001: management review, internal audit, nonconformities and documented information carry over from a management system already in place. Seven clauses do not carry over — the scope, the policy, and the four that bear risk assessment and risk treatment.',
+    'pg.iso27001-millesime.eb': 'ISO 27001 · Edition',
+    'pg.iso27001-millesime.h1': '2013 → 2022: <em>what changed</em>',
+    'pg.iso27001-millesime.p': 'The self-assessment questionnaire that served as this module\'s starting point addresses <b>ISO/IEC 27001:2013</b>. That is no longer the standard. And the change is not cosmetic: Annex&nbsp;A went from 114&nbsp;controls in 14&nbsp;clauses to <b>93 in 4 themes</b>, <b>eleven of them entirely new</b>.',
+    'pg.iso42001.eb': 'ISO 42001 · Clauses 4 to 10',
+    'pg.iso42001.h1': 'The body of the standard, <em>and the real effort</em>',
+    'pg.iso42001.p': 'Thirty-two sub-clauses, and <b>two rates</b>. The first counts everything; the second counts only what 42001 genuinely adds to a management system already in place. An organisation certified to ISO&nbsp;27001 starts with the harmonised structure — management review, internal audit, nonconformities — and has only nine new clauses ahead of it. The first rate flatters; the second tells it where the budget goes.',
+    'pg.iso42001-soa.eb': 'ISO 42001 · Clause 6.1.3 f)',
+    'pg.iso42001-soa.h1': 'Statement <em>of Applicability</em>',
+    'pg.iso42001-soa.p': 'It is the first document the auditor opens, and the only one that can stop certification before anyone has looked at what you actually do. Every Annex&nbsp;A control is <b>included</b> or <b>excluded</b> — and, either way, <b>justified</b>. A control left blank is not work in progress: it is a documentation defect.',
+    'pg.iso42001-certif.eb': 'ISO 42001 · Certification',
+    'pg.iso42001-certif.h1': 'The path, <em>and what makes each stage fail</em>',
+    'pg.iso42001-certif.p': 'ISO&nbsp;42001 is the <b>only</b> one of the four references in this space that issues a certificate. GDPR, NIS&nbsp;2 and the CRA are law: you comply with them, and nobody hands you an attestation. 42001 is a voluntary standard audited by an accredited third-party body — an asset you can show a client, a public buyer, an insurer.',
+    'pg.iso42001-ponts.eb': 'ISO 42001 · Articulation',
+    'pg.iso42001-ponts.h1': 'What carries over — <em>and what does not substitute</em>',
+    'pg.iso42001-ponts.p': 'The three impact assessments bear on the same object and are not the same thing. It is the costliest confusion in the field: it makes people believe one document replaces another, and it comes to light during an inspection.',
+    'pg.nis2-qualifier.eb': 'NIS 2 · Articles 2 and 3',
+    'pg.nis2-qualifier.h1': 'Essential, important, <em>or out of scope</em>',
+    'pg.nis2-qualifier.p': 'The question looks like an honours ranking; it is a <b>supervisory regime</b>. An essential entity undergoes regular audits without any incident being needed (Art.&nbsp;32); an important entity is inspected only where there is evidence of a breach (Art.&nbsp;33). And Article&nbsp;32(5), reserved for essential entities, allows a manager to be <b>temporarily banned from exercising their functions</b>.',
+    'pg.nis2.eb': 'NIS 2 · Article 21(2)',
+    'pg.nis2.h1': 'The ten measures — <em>a floor, not a list</em>',
+    'pg.nis2.p': 'The article says the measures “shall include <b>at least</b>” these ten items. It is not a checklist you exhaust: it is a floor you do not go below. Ticking all ten does not prove compliance; missing one undoes it.',
+    'pg.nis2-gouvernance.eb': 'NIS 2 · Article 20',
+    'pg.nis2-gouvernance.h1': 'What the Directive <em>asks of the board</em>',
+    'pg.nis2-gouvernance.p': 'This is the article that names a person. Management bodies <b>approve</b> the measures, <b>oversee</b> their implementation, and <b>can be held liable</b> for the entity\'s infringement of Article&nbsp;21. IT no longer carries this subject.',
+    'pg.nis2-signalement.eb': 'NIS 2 · Article 23',
+    'pg.nis2-signalement.h1': 'The clock starts at <em>awareness</em>',
+    'pg.nis2-signalement.p': '“Upon becoming aware of the significant incident” — not at its occurrence, not at its technical detection. Which moves the question from detection to <b>qualification</b>: the day someone inside the company understood that it was significant, the twenty-four hours had begun.',
+    'pg.nis2-chiffre.eb': 'NIS 2 · Article 34',
+    'pg.nis2-chiffre.h1': 'A <em>floor</em> on the ceiling',
+    'pg.nis2-chiffre.p': 'Article&nbsp;34 requires Member States to provide for fines with a maximum <b>“of at least”</b> these amounts. So the figure is not what the company risks at most: it is the <b>minimum the State must make possible</b>. A national transposition may provide for more.',
+    'pg.nist-profil.eb': 'NIST AI RMF · Profile',
+    'pg.nist-profil.h1': 'Four scores, and <em>which one governs</em>',
+    'pg.nist-profil.p': 'MAP, MEASURE and MANAGE presuppose GOVERN. An organisation scoring well on treatment and badly on governance is managing nothing: it is putting out fires. The profile is therefore reported per function, never as an overall score — <strong>an average of the four rises when you map a great deal and decide nothing</strong>, which is exactly the profile the framework was written to correct.',
+    'pg.nist-cadre.eb': 'NIST AI RMF · The framework',
+    'pg.nist-cadre.h1': 'The framework, <em>category by category</em>',
+    'pg.nist-cadre.p': 'The statements are those of the document, in English and verbatim: they are works of the United States Government, and they are quoted. And a subcategory serves as <strong>evidence</strong> under review — translated, it can no longer be found in the document when the auditor asks where it is written.',
+    'pg.nist-genai.eb': 'NIST AI RMF · Generative AI profile',
+    'pg.nist-genai.h1': 'Twelve risks, <em>six of them outside cyber</em>',
+    'pg.nist-genai.p': 'AI 600-1 is a <strong>profile</strong> of the framework, not a second framework: citing it without the framework underneath is citing the profile of nothing. And handing “generative AI risks according to NIST” to the CISO means making them answer for environmental footprint, bias and intellectual property, none of which they own.',
+    'pg.owasp-dix.eb': 'OWASP · Top 10 for LLMs',
+    'pg.owasp-dix.h1': 'Ten failure modes, <em>and why they persist</em>',
+    'pg.owasp-dix.p': 'It is neither a standard nor a certifiable framework: it is an inventory of what breaks most often. You do not comply with it, you use it to check that nothing obvious has been missed. <strong>It carries an edition</strong> — the previous one ignored system-prompt leakage, vector stores and unbounded consumption.',
+    'pg.owasp-pont.eb': 'OWASP · Bridge to ISO 42001',
+    'pg.owasp-pont.h1': 'What your certification <em>does not give you</em>',
+    'pg.owasp-pont.p': 'What gets sold is “our AIMS covers OWASP”. What is true is that several of these risks meet <strong>no</strong> Annex A control — because they are application-level, and ISO/IEC 42001 is a management system. Those are the ones to handle elsewhere, and they are the ones people believe they are covered on.',
+    'pg.rgpd-hub.eb': 'GDPR &amp; Privacy',
+    'pg.rgpd-hub.h1': 'Overview — <em>GDPR &amp; Privacy</em>',
+    'pg.rgpd-hub.p': 'Entry point to the GDPR compliance framework: map processing activities, assess risks, document, raise awareness and steer compliance. All the building blocks are connected to one another.',
+    'pg.rgpd-traitements.eb': 'GDPR &amp; Privacy',
+    'pg.rgpd-traitements.h1': 'Records of <em>processing activities</em>',
+    'pg.rgpd-traitements.p': 'Records of processing activities within the meaning of Article 30 GDPR, backed by a persistent database. Distinct from the AI systems register, it lists processing of personal data.',
+    'pg.rgpd-cartographie.eb': 'GDPR &amp; Privacy',
+    'pg.rgpd-cartographie.h1': 'Processing <em>map</em>',
+    'pg.rgpd-cartographie.p': 'An overview of your personal-data processing, aggregated from the Article 30 records: breakdown by department and legal basis, special-category data and transfers outside the European Union.',
+    'pg.rgpd-aipd.eb': 'GDPR &amp; Privacy',
+    'pg.rgpd-aipd.h1': 'DPIA — <em>impact assessment</em>',
+    'pg.rgpd-aipd.p': 'Data protection impact assessment — Article 35 GDPR. Assessed for each processing activity in the records, distinct from the AI Act FRIA. The need for a DPIA is determined against the CNIL\'s nine criteria.',
+    'pg.rgpd-pbd.eb': 'GDPR &amp; Privacy',
+    'pg.rgpd-pbd.h1': 'Privacy by <em>design</em>',
+    'pg.rgpd-pbd.p': 'Data protection by design and by default — Article 25 GDPR. A structured self-assessment following the CNIL\'s principles, to build privacy into every processing activity.',
+    'pg.rgpd-doc.eb': 'GDPR &amp; Privacy',
+    'pg.rgpd-doc.h1': 'Documentation <em>policy</em>',
+    'pg.rgpd-doc.p': 'Reference list of GDPR compliance documentation — accountability (Article 5(2)). Tracks the status, owner and last review of the documents evidencing your compliance.',
+    'pg.rgpd-sensibilisation.eb': 'GDPR &amp; Privacy',
+    'pg.rgpd-sensibilisation.h1': 'Awareness <em>&amp; training</em>',
+    'pg.rgpd-sensibilisation.p': 'Data protection awareness plan. Tracks actions by target audience, their frequency and their completion, in service of a compliance culture.',
+    'pg.rgpd-conformite.eb': 'GDPR &amp; Privacy',
+    'pg.rgpd-conformite.h1': 'GDPR <em>compliance</em>',
+    'pg.rgpd-conformite.p': 'A compliance dashboard consolidating the building blocks: records of processing, mapping, DPIA, privacy by design, documentation and awareness. Overall index and points of attention.',
+    'pg.empreinte.eb': 'Footprint · Responsible digital',
+    'pg.empreinte.h1': 'Digital <em>footprint</em>',
+    'pg.empreinte.p': 'An automatic, real-time counter of the footprint of the site, the platform and the language models in use, computed from actual usage: tokens consumed, latency, pages served. Three methods are run in parallel on the same data, so their results can be compared.',
+    'pg.conf-taux.eb': 'Compliance rate · the nine standards',
+    'pg.conf-taux.h1': 'Nine rates, and <em>what they do not say</em>',
+    'pg.conf-taux.p': 'Each rate is composed of its standard\'s weighted parts, then <strong>capped by its blockers</strong>: a defect that stops an auditor does not erase the work done, it forbids you to claim credit beyond it. Nine percentages in a row read as nine of the same thing; they are not, and the <em>nature</em> of each standard says what 100&nbsp;% means — <strong>and what it does not mean</strong>.',
+    'pg.conf-plan.eb': 'Compliance rate · plan',
+    'pg.conf-plan.h1': 'From blocker to detail, <em>and what each action earns</em>',
+    'pg.conf-plan.p': 'Three tiers. <strong>Blockers first</strong>: while they hold, everything else runs into the same ceiling — that is not a methodological preference, it is arithmetic. Then <strong>what serves several standards</strong>, drawn from the mappings already declared between the frameworks. Then what is specific to each. Gains are computed <strong>in sequence</strong>, on the state left by the preceding actions: they accumulate exactly up to the ceiling, never past it.',
+    'pg.conf-limites.eb': 'Compliance rate · limits',
+    'pg.conf-limites.h1': 'What this plan <em>cannot do</em>',
+    'pg.conf-limites.p': 'The half nobody ever shows, and the one that makes the difference in a steering committee. These points are known in advance: keeping quiet about them does not remove them, it means discovering them in front of the auditor.'
   }
 };
 
@@ -1217,6 +1327,26 @@ function sentAppliquer() {
        disparaître de l'écran : un menu à trous est pire qu'un menu bilingue. */
     el.textContent = (v === null || v === undefined)
       ? el.getAttribute('data-i18n-fr') : v;
+  });
+  /* ── LES BLOCS À BALISAGE SIMPLE ────────────────────────────────────
+     UN TITRE OU UN CHAPEAU PORTE DU GRAS ET DE L'ITALIQUE. Les découper en
+     fragments traduits un à un donnerait des clés illisibles et une phrase
+     recousue mot à mot — c'est ainsi qu'on obtient de la traduction qui
+     sonne faux. Ces éléments-là reçoivent donc leur HTML entier.
+
+     ET C'EST EXACTEMENT LE GESTE QUI A COÛTÉ DEUX FOIS À CE DÉPÔT, alors
+     il est ENCADRÉ plutôt qu'interdit : une règle refuse `data-i18n-bloc`
+     sur tout élément contenant un lien, un identifiant, un gestionnaire ou
+     une balise hors liste blanche. Ce qui reste — gras, italique, code,
+     retour à la ligne — ne porte aucun comportement : l'effacer et le
+     réécrire ne perd rien. */
+  document.querySelectorAll('[data-i18n-bloc]').forEach(function (el) {
+    if (!el.hasAttribute('data-i18n-bloc-fr')) {
+      el.setAttribute('data-i18n-bloc-fr', el.innerHTML);
+    }
+    var v = SENT_LANG === 'fr' ? null : sentTr(el.getAttribute('data-i18n-bloc'));
+    el.innerHTML = (v === null || v === undefined)
+      ? el.getAttribute('data-i18n-bloc-fr') : v;
   });
   document.documentElement.lang = SENT_LANG;
   document.querySelectorAll('.sb-lbtn').forEach(function (b) {

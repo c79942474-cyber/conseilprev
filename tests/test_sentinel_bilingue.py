@@ -50,6 +50,26 @@ def _marques():
     return dict(re.findall(r'data-i18n="([^"]+)">([^<]*)<', SENTINEL))
 
 
+def _blocs():
+    """{clé: HTML français} pour chaque porteur de `data-i18n-bloc`.
+
+    UN TITRE OU UN CHAPEAU PORTE DU GRAS ET DE L'ITALIQUE. Les découper en
+    fragments traduits un à un donnerait des clés illisibles et une phrase
+    recousue mot à mot. Ces éléments reçoivent donc leur HTML entier — sous
+    la garde stricte de la §3."""
+    return {cle: corps for _b, cle, corps in re.findall(
+        r'<([a-z0-9]+)[^>]*data-i18n-bloc="([^"]+)"[^>]*>(.*?)</\1>',
+        SENTINEL, re.S)}
+
+
+#  CE QU'UN BLOC TRADUIT A LE DROIT DE CONTENIR. Du gras, de l'italique, du
+#  code, un retour à la ligne : de la mise en forme, et rien qui porte un
+#  comportement. Tout le reste — un lien, un identifiant, un gestionnaire —
+#  serait DÉTRUIT par la réécriture, et c'est le défaut que ce dépôt a payé
+#  deux fois.
+BALISES_PERMISES = {"b", "strong", "em", "i", "code", "br", "sup", "sub"}
+
+
 # ══════════════════════════════════════════════════════════════════════════
 #  1. LA BASCULE EST LÀ, ET EN HAUT DU MENU
 # ══════════════════════════════════════════════════════════════════════════
@@ -88,9 +108,10 @@ def test_la_langue_active_se_lit_sans_la_couleur():
 def test_la_lecture_du_balisage_et_du_dictionnaire_n_est_pas_vide():
     """LE GARDE-FOU DE TOUTE LA §2. Une lecture qui rendrait zéro clé d'un
     côté ferait passer la comparaison pour une comparaison de vides."""
-    m, en = _marques(), _dico("en")
+    m, b, en = _marques(), _blocs(), _dico("en")
     assert len(m) >= 70, "%d porteurs de data-i18n relevés" % len(m)
-    assert len(en) >= 70, "%d entrées dans le dictionnaire anglais" % len(en)
+    assert len(b) >= 60, "%d porteurs de data-i18n-bloc relevés" % len(b)
+    assert len(en) >= 170, "%d entrées dans le dictionnaire anglais" % len(en)
 
 
 def test_CHAQUE_cle_marquee_a_sa_traduction_anglaise():
@@ -99,7 +120,7 @@ def test_CHAQUE_cle_marquee_a_sa_traduction_anglaise():
 
     Le moteur garde le français à défaut — il ne vide jamais l'élément —
     mais cette règle empêche que le défaut devienne la règle."""
-    m, en = _marques(), _dico("en")
+    m, en = dict(_marques(), **_blocs()), _dico("en")
     manquantes = sorted(k for k in m if k not in en)
     assert not manquantes, (
         "%d clé(s) marquées sans traduction anglaise : %s"
@@ -109,7 +130,7 @@ def test_CHAQUE_cle_marquee_a_sa_traduction_anglaise():
 def test_le_dictionnaire_ne_porte_pas_de_cle_MORTE():
     """UNE TRADUCTION QUI NE VISE PLUS RIEN se maintient indéfiniment : elle
     ne s'affiche jamais, donc personne ne voit qu'elle est fausse."""
-    m, en = _marques(), _dico("en")
+    m, en = dict(_marques(), **_blocs()), _dico("en")
     mortes = sorted(k for k in en if k not in m)
     assert not mortes, (
         "%d traduction(s) ne visent plus aucun élément : %s"
@@ -126,11 +147,30 @@ def test_la_traduction_ecrit_textContent_et_JAMAIS_innerHTML():
     traduit disparaît au chargement. Ce dépôt l'a payé deux fois."""
     i = PAGEJS.index("function sentAppliquer()")
     corps = PAGEJS[i:PAGEJS.index("\n}", i)]
-    assert "textContent" in corps, "la traduction n'écrit plus le texte"
-    assert "innerHTML" not in corps, (
-        "la traduction de Sentinel écrit innerHTML : tout lien, bouton ou "
-        "identifiant placé dans un élément traduit sera effacé au "
+    #  DEUX BOUCLES, DEUX RÉGIMES. Celle des `data-i18n` écrit le TEXTE et
+    #  rien d'autre : c'est elle qui couvre le menu, où vivent les icônes.
+    #  Celle des `data-i18n-bloc` réécrit le HTML, et n'a le droit de le
+    #  faire que parce que la règle suivante lui interdit tout ce qui porte
+    #  un comportement. Une règle qui bannirait `innerHTML` partout aurait
+    #  interdit le second chemin sans rien protéger de plus.
+    j = corps.index("[data-i18n-bloc]")
+    simple, bloc = corps[:j], corps[j:]
+    assert "textContent" in simple, "la traduction n'écrit plus le texte"
+    assert "innerHTML" not in simple, (
+        "la boucle des éléments simples écrit innerHTML : tout lien, bouton "
+        "ou identifiant placé dans un élément traduit sera effacé au "
         "chargement, sans erreur et sans trace")
+    assert "innerHTML" in bloc, "le chemin des blocs n'écrit plus le HTML"
+    #  DEUX GESTES, ET CHERCHER LE NOM DE L'ATTRIBUT NE PROUVE NI L'UN NI
+    #  L'AUTRE. Une première version se contentait de `"data-i18n-bloc-fr"
+    #  in bloc` : retirer la CAPTURE la laissait verte, parce que le nom
+    #  survivait dans la RESTITUTION deux lignes plus bas. Le retour au
+    #  français aurait vidé chaque titre, et rien ne serait tombé.
+    assert "setAttribute('data-i18n-bloc-fr'" in bloc, (
+        "le HTML français d'origine n'est plus CAPTURÉ : le retour en "
+        "français videra les titres et les chapeaux")
+    assert "getAttribute('data-i18n-bloc-fr')" in bloc, (
+        "le HTML français d'origine n'est plus RESTITUÉ")
 
 
 def test_AUCUN_element_traduit_ne_contient_de_balisage():
@@ -226,3 +266,62 @@ def test_le_fil_d_Ariane_passe_par_PAGE_META_et_plus_par_les_onclick():
         "chaînes françaises figées dans les onclick")
     #  ET L'ANCIEN CHEMIN RESTE, POUR LES PAGES SANS FICHE.
     assert "PAGE_META[id]" in corps
+
+
+def test_un_bloc_traduit_ne_porte_QUE_de_la_mise_en_forme():
+    """LA GARDE QUI REND LE CHEMIN « BLOC » ACCEPTABLE.
+
+    Ce chemin réécrit l'innerHTML — le geste exact qui a effacé deux fois
+    des liens dans ce dépôt. Il n'est donc pas interdit, il est ENCADRÉ :
+    un élément traduit par bloc ne peut contenir que de la mise en forme,
+    rien qui porte un comportement. Du gras et de l'italique, l'effacer et
+    le réécrire ne perd rien ; un lien, un identifiant ou un gestionnaire,
+    si — et personne ne le verrait.
+
+    LA RÈGLE PORTE SUR LES DEUX CÔTÉS : le français dans la page ET
+    l'anglais dans le dictionnaire, parce qu'une traduction peut très bien
+    introduire un lien que l'original n'avait pas."""
+    en = _dico("en")
+    for source, quoi in ((_blocs(), "la page"), 
+                         ({k: v for k, v in en.items() if k.startswith("pg.")},
+                          "le dictionnaire anglais")):
+        assert source, quoi
+        for cle, corps in source.items():
+            for interdit in ("<a ", "<a>", "id=", "onclick=", "href=",
+                             "<script", "<button", "<input", "<img"):
+                assert interdit not in corps, (
+                    "le bloc « %s » de %s contient %r : la traduction "
+                    "l'effacerait sans que rien ne le signale"
+                    % (cle, quoi, interdit))
+            balises = set(re.findall(r"</?([a-z0-9]+)", corps))
+            hors = sorted(balises - BALISES_PERMISES)
+            assert not hors, (
+                "le bloc « %s » de %s emploie %s, hors de la liste des "
+                "balises de pure mise en forme" % (cle, quoi, hors))
+
+
+def test_les_trente_cinq_pages_de_CONFORMITE_sont_traduites():
+    """CE QUI A ÉTÉ LIVRÉ, ET CE QUI NE L'A PAS ÉTÉ. Les trente-cinq pages
+    des huit tiroirs de conformité annoncent leur identité en anglais :
+    surtitre, titre, chapeau. Le corps des panneaux reste en français, et
+    c'est écrit pour que personne ne prenne l'un pour l'autre.
+
+    LA LISTE DES PAGES N'EST PAS RECOPIÉE : elle est DÉRIVÉE des tiroirs
+    marqués `data-fam="conformite"`. Ajouter une page de conformité sans la
+    traduire fait donc tomber cette règle, ce qui est le but."""
+    grp = sorted(set(re.findall(
+        r'data-grp="([a-z0-9-]+)" data-fam="conformite"', SENTINEL)))
+    assert len(grp) >= 8, "%d tiroirs de conformité relevés" % len(grp)
+    ids = []
+    for g in grp:
+        ids += re.findall(
+            r'data-grp="%s" role="button"[^>]*onclick="go\(.([a-z0-9-]+)' % g,
+            SENTINEL)
+    ids = list(dict.fromkeys(ids))
+    assert len(ids) >= 30, "%d pages de conformité relevées" % len(ids)
+    en = _dico("en")
+    sans = sorted(i for i in ids
+                  if not all("pg.%s.%s" % (i, c) in en for c in ("eb", "h1", "p")))
+    assert not sans, (
+        "%d page(s) de conformité sans en-tête anglais : %s"
+        % (len(sans), sans[:6]))
