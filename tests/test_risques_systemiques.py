@@ -313,3 +313,109 @@ def test_l_appel_reste_en_bas_de_carte_quelle_que_soit_la_description():
     différentes."""
     assert ".risk-card{display:flex;flex-direction:column}" in INDEX
     assert ".risk-card .risk-tag{margin-top:auto}" in INDEX
+
+# ══════════════════════════════════════════════════════════════════════════
+#  6. LE BLOC ENTIER EST LE LIEN, PAS SEULEMENT SON PIED
+# ══════════════════════════════════════════════════════════════════════════
+#
+# CE QUI MANQUAIT, ET QUI SE VOYAIT À L'USAGE. Chaque carte portait bien sa
+# destination, mais seule l'étiquette « Ouvrir le module » la déclenchait :
+# cliquer sur le titre, l'icône ou la description ne faisait rien. Une carte
+# qui s'éclaire au survol sur TOUTE sa surface et ne répond que sur vingt
+# pixels enseigne au visiteur qu'elle n'est pas cliquable.
+#
+# CE QUI EST MESURÉ ICI, ET CE QUI NE L'EST PAS. La mécanique commune aux
+# deux sections — surface étirée, bloc conteneur, liste des puces — est
+# gardée par tests/test_offres_services.py, où elle a été introduite. Ce
+# fichier mesure ce qui n'appartient qu'aux cartes de risque : elles n'ont
+# aucun lien interne, donc leur ÉTIQUETTE DE CATÉGORIE entre dans la surface
+# cliquable, et c'est justement pour elle que l'enveloppement par un <a>
+# avait été écarté.
+
+
+def _feuille():
+    """Le CSS de la page, commentaires retirés.
+
+    SANS CE NETTOYAGE, LA RÈGLE SE MENT À ELLE-MÊME : les commentaires de
+    cette feuille CITENT des règles CSS pour les expliquer, et un analyseur
+    naïf recolle la prose et le code en règles qui n'existent pas."""
+    css = "\n".join(re.findall(r"<style[^>]*>(.*?)</style>", INDEX, re.S))
+    return re.sub(r"/\*.*?\*/", " ", css, flags=re.S)
+
+
+def _declaration(propriete, selecteur, exact=False):
+    for sel, corps in re.findall(r"([^{}@]+)\{([^{}]*)\}", _feuille()):
+        sel = sel.strip()
+        if not sel or (sel != selecteur if exact else selecteur not in sel):
+            continue
+        m = re.search(r"(?:^|;)\s*%s\s*:\s*([^;]+)" % propriete, corps)
+        if m:
+            return m.group(1).strip()
+    return None
+
+
+def test_la_surface_etiree_couvre_la_carte_de_risque_entiere():
+    """LA CARTE EST LE REPÈRE, LE PIED NE DOIT PAS L'ÊTRE.
+
+    `inset:0` se résout contre le plus proche ancêtre POSITIONNÉ. Une règle
+    décorative écrite deux mille lignes plus bas — `.risk-card > *
+    {position:relative;z-index:1}`, posée pour faire passer le contenu
+    au-dessus du halo `::before` — positionne déjà le pied. La surface
+    mesurait alors la taille de l'étiquette, pas celle de la carte. On
+    mesure donc les deux faits qui décident."""
+    assert _declaration("position", ".risk-card", exact=False) is not None
+    assert ".diff-card,.risk-card{position:relative}" in _feuille(), (
+        "la carte n'est plus le repère de position : la surface étirée se "
+        "cale sur un ancêtre quelconque")
+    assert _declaration(
+        "position", ".diff-card > .sv-card-go,.risk-card > .risk-go",
+        exact=True) == "static", (
+        "le pied de carte reste positionné : il devient son propre bloc "
+        "conteneur et la surface ne couvre que l'étiquette")
+    assert _declaration("inset", ".risk-go::after") == "0", (
+        "la surface étirée ne se cale plus sur les quatre côtés")
+
+
+def test_l_etiquette_de_categorie_entre_dans_la_surface_sans_devenir_un_lien():
+    """LA RAISON POUR LAQUELLE L'ENVELOPPEMENT PAR UN <a> AVAIT ÉTÉ ÉCARTÉ.
+
+    Mettre la carte entière dans un <a> aurait fait de « Sécurité » ou
+    « ESG » un lien : souligné au survol, annoncé comme lien par un lecteur
+    d'écran, ouvrable dans un nouvel onglet — pour une étiquette qui n'est
+    pas une destination mais une classification. La surface étirée obtient
+    le même clic sans rien de tout cela : l'étiquette reste un <span>.
+
+    Ce que la règle mesure, c'est l'absence d'imbrication dans la SOURCE :
+    un <a> autour des cartes se verrait ici même."""
+    cartes = BLOC.split('<div class="risk-card">')[1:]
+    assert len(cartes) == 8, len(cartes)
+    for c in cartes:
+        assert re.search(r'<span class="risk-tag', c), (
+            "l'étiquette de catégorie n'est plus un <span>")
+        assert not re.search(r'<a[^>]*>\s*(?:(?!</a>).)*?<span class="risk-tag',
+                             c, re.S), (
+            "l'étiquette de catégorie est passée DANS un lien : elle "
+            "s'annonce comme une destination alors qu'elle n'en est pas")
+
+
+def test_le_pied_reste_un_VRAI_lien_et_pas_un_gestionnaire_de_clic():
+    """UN `onclick` SUR LA CARTE AURAIT ÉTÉ PLUS COURT À ÉCRIRE, et aurait
+    coûté le clavier, le clic du milieu, « ouvrir dans un nouvel onglet » et
+    l'annonce par un lecteur d'écran. La surface étirée garde un <a>."""
+    assert len(re.findall(r'<a class="risk-go" href="/sentinel\?goto=', BLOC)) == 8
+    for interdit in ('onclick="location', "onclick='location",
+                     "addEventListener('click'", "window.location"):
+        assert interdit not in BLOC, (
+            "la carte navigue par script plutôt que par lien : %r" % interdit)
+
+
+def test_la_carte_cliquable_le_dit_par_son_curseur():
+    """RIEN NE SIGNALE UNE ZONE CLIQUABLE COMME LE CURSEUR. Une carte qui se
+    clique sans le montrer ne sera cliquée que par accident — et le `:has`
+    ne vise QUE celles qui portent un pied, jamais une carte sans
+    destination."""
+    assert _declaration("cursor", ".risk-card:has(.risk-go)") == "pointer", (
+        "la carte de risque ne montre pas qu'elle se clique")
+    assert ":has(.risk-go)" in _feuille(), (
+        "le curseur est posé sur toutes les cartes, y compris celles qui ne "
+        "mèneraient nulle part")

@@ -49,9 +49,14 @@ const RELEVE = () => {
       return b ? { href: b.getAttribute('href'),
                    title: b.getAttribute('title') || '' } : null;
     })(),
-    /* LES ÉTIQUETTES DE CATÉGORIE NE DOIVENT PAS ÊTRE DEVENUES CLIQUABLES :
-       envelopper la carte entière aurait rendu « Sécurité » ou « ESG »
-       cliquables alors qu'elles ne mènent nulle part. */
+    /* L'ÉTIQUETTE DE CATÉGORIE NE DOIT PAS ÊTRE DEVENUE UN LIEN.
+       Depuis que la carte entière se clique, « Sécurité » ou « ESG » font
+       partie de la surface qui ouvre le module — c'est voulu. Ce qu'on
+       refuse, c'est qu'elles deviennent des LIENS : soulignées au survol,
+       annoncées comme destinations par un lecteur d'écran, ouvrables dans
+       un nouvel onglet, pour une classification qui ne mène nulle part.
+       C'est la raison pour laquelle la carte n'a pas été enveloppée dans un
+       <a> et porte une surface étirée à la place. */
     tagsCliquables: [...sec.querySelectorAll('.risk-tag')]
       .filter(t => !!t.closest('a')).length
   };
@@ -89,7 +94,7 @@ const RELEVE = () => {
   ok('aucun lien n’est imbriqué dans un autre',
      R.appels.every(a => !a.dansUnLien),
      'un <a> dans un <a> : le navigateur défait l’imbrication');
-  ok('les étiquettes de catégorie ne sont pas devenues cliquables',
+  ok('les étiquettes de catégorie ne sont pas devenues des LIENS',
      R.tagsCliquables === 0,
      R.tagsCliquables + ' étiquette(s) dans un lien');
 

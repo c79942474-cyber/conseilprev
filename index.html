@@ -636,6 +636,70 @@ footer::after{
 .diff-ico{font-size:32px;margin-bottom:14px}
 .diff-title{font-family:"Cormorant Garamond",serif;font-size:18px;font-weight:700;color:var(--wh);margin-bottom:10px}
 .diff-desc{font-size:13px;color:var(--mu);line-height:1.7}
+/* ── LE BLOC ENTIER EST LE LIEN, PAS SEULEMENT SON PIED ─────────────────
+   CE QUI MANQUAIT, ET QUI SE VOIT À L'USAGE. Chaque carte portait bien sa
+   destination, mais seule l'étiquette « Ouvrir le module » la déclenchait :
+   cliquer sur le titre, l'icône ou la description ne faisait rien. Une carte
+   qui s'éclaire au survol sur toute sa surface et ne répond que sur vingt
+   pixels enseigne au visiteur qu'elle n'est pas cliquable.
+
+   POURQUOI UN PSEUDO-ÉLÉMENT ÉTIRÉ ET PAS UN <a> AUTOUR DE LA CARTE. Les
+   cartes de service contiennent DÉJÀ des liens — les flèches des puces vers
+   leur propre module. Un <a> enveloppant en ferait des liens imbriqués, ce
+   que le navigateur défait : le résultat ne serait ni l'un ni l'autre. Le
+   pied de carte reste donc un vrai <a> — clavier, clic du milieu, « ouvrir
+   dans un nouvel onglet » fonctionnent — et son ::after couvre la carte.
+
+   LES LIENS INTERNES REPASSENT AU-DESSUS. Sans le z-index ci-dessous, la
+   surface étirée les recouvrirait : les treize flèches deviendraient
+   décoratives, et chaque puce ouvrirait le module de la carte au lieu du
+   sien. C'est le défaut que ce motif crée quand on l'applique sans y penser.
+
+   CE QUI REND CE MOTIF FRAGILE ICI, ET QUE LE NAVIGATEUR A MESURÉ. `inset:0`
+   ne se résout pas contre la carte mais contre le PLUS PROCHE ANCÊTRE
+   POSITIONNÉ. Or une règle décorative bien plus haut dans cette feuille —
+   `.card > *,…,.diff-card > *,.risk-card > *{position:relative;z-index:1}`,
+   posée pour faire passer le contenu au-dessus du halo `::before` — positionne
+   DÉJÀ le pied de carte. Le pied devenait donc son propre bloc conteneur et la
+   surface ne couvrait que l'étiquette : 152 × 36 px au lieu de 388 × 356.
+   Sa spécificité (0,1,1) bat celle de `.sv-card-go` (0,1,0), donc on la défait
+   à la même spécificité ou mieux — d'où les sélecteurs `>` ci-dessous. Le pied
+   n'a pas besoin de repasser au-dessus de sa PROPRE surface : celle-ci est son
+   pseudo-élément, elle est transparente, et un clic dessus l'active lui.
+
+   LA LISTE DES PUCES EST UN CONTEXTE D'EMPILEMENT, ET PAS À CAUSE D'UN
+   Z-INDEX. `.diff-sublist` porte `opacity:.75` depuis toujours, pour
+   atténuer ses lignes — et une opacité inférieure à 1 crée un contexte
+   d'empilement. Tout `z-index` posé sur une puce ou sur sa flèche reste donc
+   PRISONNIER de la liste, qui passe elle-même sous la surface étirée : les
+   treize flèches rouvraient le module de leur carte au lieu du leur. C'est
+   mesuré, pas supposé : 13 flèches sur 13 détournées.
+
+   ON ÉLÈVE DONC LA LISTE ENTIÈRE, ET ON LUI RETIRE LE POINTEUR. La liste
+   passe au-dessus de la surface (`z-index:2`) pour que ses flèches soient
+   atteignables, puis `pointer-events:none` lui rend sa transparence au clic :
+   le texte d'une puce laisse passer le clic vers la surface de la carte, et
+   seule la flèche, qui le reprend, ouvre sa propre destination.
+
+   CE QUE CELA COÛTE, ET POURQUOI C'EST DÉJÀ PAYÉ. Une liste sans pointeur ne
+   se sélectionne plus à la souris. Mais le titre et la description non plus :
+   c'est le prix du motif lui-même — une surface transparente au-dessus du
+   corps de la carte intercepte le clic initial partout. La règle ci-dessous
+   n'ajoute donc aucune perte ; elle la répartit de la même façon.
+
+   LE SURVOL SUIT LA CARTE, PLUS LA LIGNE. `li:hover` ne se déclenche plus
+   sous `pointer-events:none`. La flèche s'éclaire désormais au survol de la
+   CARTE, ce qui est de toute façon plus juste depuis qu'elle est un seul
+   objet cliquable. */
+.diff-card,.risk-card{position:relative}
+.diff-card:has(.sv-card-go),.risk-card:has(.risk-go){cursor:pointer}
+/* LE PIED REDEVIENT STATIQUE : SANS CELA LA SURFACE NE COUVRE QUE LUI. */
+.diff-card > .sv-card-go,.risk-card > .risk-go{position:static;z-index:auto}
+.sv-card-go::after,.risk-go::after{content:'';position:absolute;inset:0;z-index:1}
+/* LA LISTE PASSE AU-DESSUS, MAIS SEULE SA FLÈCHE REPREND LE POINTEUR. */
+.diff-card > .diff-sublist{position:relative;z-index:2;pointer-events:none}
+.diff-sublist .sv-go{position:relative;z-index:2;pointer-events:auto}
+
 /* ── LES HUIT RISQUES MÈNENT AU MODULE QUI LES ADRESSE ──────────────────
    LA BANNIÈRE DE PIED NE SUFFISAIT PAS. Elle ouvrait « /sentinel » tout
    court : après une section qui vient de nommer huit risques, atterrir sur
@@ -682,7 +746,7 @@ footer::after{
 .diff-sublist li{display:flex;align-items:baseline;gap:6px}
 .sv-go{flex-shrink:0;margin-left:auto;text-decoration:none;color:var(--gd,#d4a843);
   font-size:13px;line-height:1;opacity:.55;transition:opacity .15s,transform .15s}
-.diff-sublist li:hover .sv-go{opacity:1;transform:translateX(2px)}
+.diff-card:hover .sv-go{opacity:1;transform:translateX(2px)}
 .sv-go:hover{opacity:1}
 .sv-go:focus-visible{outline:2px solid var(--gd,#d4a843);outline-offset:3px;
   border-radius:3px;opacity:1}
@@ -697,7 +761,7 @@ footer::after{
 .diff-card:hover .sv-card-go{background:rgba(212,168,67,.10);
   border-color:rgba(212,168,67,.6)}
 @media(prefers-reduced-motion:reduce){
-  .sv-go{transition:none}.diff-sublist li:hover .sv-go{transform:none}}
+  .sv-go{transition:none}.diff-card:hover .sv-go{transform:none}}
 
 
 
