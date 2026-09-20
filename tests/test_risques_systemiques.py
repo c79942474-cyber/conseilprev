@@ -363,9 +363,14 @@ def test_l_infobulle_promet_le_nom_que_la_REFERENCE_porte():
     l'auditeur qui ira chercher cet intitulé dans le document du NIST.
     """
     import nist_ai_rmf
+    #  LE TITRE SE LIT OÙ QU'IL SOIT SUR LA BALISE. Une première version
+    #  exigeait `href` puis `title` COLLÉS : le jour où `target="_blank"`
+    #  s'est glissé entre les deux, la règle est tombée sans que rien du
+    #  produit n'ait bougé. Une règle qui dépend de l'ordre des attributs
+    #  mesure la mise en forme du HTML, pas ce qu'elle prétend mesurer.
     liens = re.findall(
         r'class="risk-go" href="/sentinel\?goto=([a-z0-9-]+)'
-        r'(?:&amp;point=nist-gen-(\d+))?" title="([^"]*)"', BLOC)
+        r'(?:&amp;point=nist-gen-(\d+))?"[^>]*? title="([^"]*)"', BLOC)
     assert len(liens) == 8, len(liens)
     vises = [(n, html.unescape(t)) for _pg, n, t in liens if n]
     assert vises, (

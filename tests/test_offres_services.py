@@ -546,3 +546,37 @@ def test_la_regle_decorative_qui_avait_piege_le_motif_est_toujours_la():
     assert _specificite(sel) > _specificite(".sv-card-go"), (
         "%s (%s) ne bat plus `.sv-card-go` (%s) : le piège a changé de forme"
         % (sel, _specificite(sel), _specificite(".sv-card-go")))
+
+
+def test_les_liens_PUBLICS_vers_Sentinel_gardent_la_page_d_accueil():
+    """LA RÉGRESSION QUE LE RETRAIT DU MOTIF A CRÉÉE, ET QU'ON N'AVAIT PAS VUE.
+
+    CE QUI SE PASSAIT AVANT, ET QUI FAISAIT UNE CHOSE BIEN. Un script
+    attrape-tout ouvrait « /sentinel » dans un NOUVEL ONGLET au clic sur une
+    carte. On l'a retiré — il menait au sommaire au lieu du module, et
+    doublait l'appel — et on a emporté avec lui la seule chose qu'il faisait
+    bien : garder la page d'accueil ouverte.
+
+    CE QUE ÇA DONNAIT. Ces vingt-sept liens partent d'une page PUBLIQUE et
+    visent un produit derrière authentification : ils s'adressent par
+    construction à quelqu'un qui n'est PAS connecté. En restant dans l'onglet
+    courant, un clic remplaçait l'accueil par un formulaire de connexion. Le
+    lien marchait, la destination était juste, et la visite s'arrêtait là.
+    Mesuré au navigateur : « après un vrai clic → /login?suite=… ».
+
+    `rel="noopener"` N'EST PAS DÉCORATIF : sans lui, la page ouverte reçoit
+    une référence sur celle qui l'a ouverte et peut la rediriger ailleurs.
+    """
+    liens = re.findall(
+        r'<a class="(risk-go|sv-card-go|sv-go)" href="/sentinel\?goto=[^"]*"'
+        r'([^>]*)>', INDEX)
+    assert len(liens) == 27, (
+        "%d lien(s) publics vers Sentinel relevés sur 27 : la lecture a "
+        "changé de forme et cette règle ne prouve plus rien" % len(liens))
+    for classe, attrs in liens:
+        assert 'target="_blank"' in attrs, (
+            "un lien %s reste dans l'onglet courant : le visiteur non "
+            "connecté perd la page d'accueil pour un formulaire" % classe)
+        assert "noopener" in attrs, (
+            "un lien %s ouvre un onglet sans `noopener` : la page ouverte "
+            "garde la main sur celle qui l'a ouverte" % classe)
