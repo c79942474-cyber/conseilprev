@@ -535,3 +535,94 @@ def test_chaque_carte_dit_ou_elle_mene_avant_qu_on_clique(nom, _p):
     assert 'title="' in balise, "la carte « %s » ne dit pas où elle mène" % nom
     assert "Sentinel" in balise, (
         "l'infobulle de « %s » ne nomme pas Sentinel : %r" % (nom, balise))
+
+
+# ══════════════════════════════════════════════════════════════════════════
+#  LE BANDEAU DE CHIFFRES, ET CE QU'IL DOIT À LA PAGE QUI LE PORTE
+# ══════════════════════════════════════════════════════════════════════════
+#
+# CE QUE PERSONNE NE GARDAIT. Le bandeau « 32 · 8 · 25 · 44 · 37 » n'était
+# tenu par aucune règle. Il annonçait SIX normes couvertes à trente-cinq
+# lignes d'un titre qui en revendique NEUF maîtrisées — et personne ne
+# recompte un bandeau de chiffres. C'est le défaut déjà payé une fois dans
+# ce fichier, sous une autre forme : un nombre écrit à la main qui cesse de
+# correspondre à ce que la page montre.
+#
+# CE QUI EST MESURÉ, ET CE QUI NE PEUT PAS L'ÊTRE. « Normes couvertes » est
+# une revendication du cabinet : rien dans le produit n'énumère vingt-cinq
+# normes, et une règle qui figerait ce nombre interdirait d'en ajouter une
+# sans rien prouver. Ce qui SE mesure, c'est la relation : on ne peut pas
+# maîtriser plus de normes qu'on n'en couvre. Le bandeau doit donc rester
+# supérieur ou égal à ce que le bloc des normes maîtrisées revendique — et
+# c'est exactement l'accord qui était rompu.
+
+
+def _bandeau():
+    """{clé de traduction: nombre} du bandeau de chiffres de l'accueil."""
+    i = INDEX.index('<div class="sb2">')
+    #  ON S'ARRÊTE À LA SECTION SUIVANTE, pas au premier `</div></div>` venu :
+    #  celui-ci tombe AVANT la fin du bandeau, et la lecture ne rendait qu'une
+    #  seule case — trois règles rouges pour une borne mal posée.
+    return {cle: int(n) for n, cle in re.findall(
+        r'<div class="sn">(\d+)</div><div class="slb" data-i18n="(stats\.[a-e])"',
+        INDEX[i:INDEX.index("<section", i)])}
+
+
+def test_le_bandeau_de_chiffres_se_lit_encore():
+    """LE GARDE-FOU DES DEUX RÈGLES SUIVANTES. Si la forme du bandeau change,
+    elles compareraient des cases vides en restant vertes."""
+    b = _bandeau()
+    assert len(b) == 5, (
+        "%d chiffre(s) relevés sur 5 : le bandeau a changé de forme et les "
+        "règles qui le lisent ne prouvent plus rien — %s" % (len(b), b))
+    assert all(v > 0 for v in b.values()), b
+
+
+def test_on_ne_MAITRISE_pas_plus_de_normes_qu_on_n_en_COUVRE():
+    """LA RELATION QUI ÉTAIT ROMPUE, ET QUI NE SE VOYAIT PAS.
+
+    Le bandeau annonçait « 6 normes couvertes ». Trente-cinq lignes plus
+    bas, le même écran titrait « 9 normes maîtrisées » au-dessus d'une
+    grille de neuf cartes. Couvrir moins qu'on ne maîtrise n'est pas une
+    approximation, c'est une impossibilité — et c'est le genre d'erreur
+    qu'un visiteur attentif relève avant nous.
+
+    LA RÈGLE NE FIGE AUCUN DES DEUX NOMBRES. Elle les dérive tous les deux,
+    l'un du bandeau, l'autre du titre déjà tenu par la première règle de ce
+    fichier, et n'exige que leur ordre."""
+    couvertes = _bandeau()["stats.c"]
+    annonce = re.search(r'"nr\.ttl":"(\d+) normes', INDEXJS)
+    assert annonce, "le titre du bloc n'annonce plus aucun nombre"
+    maitrisees = int(annonce.group(1))
+    assert couvertes >= maitrisees, (
+        "le bandeau annonce %d normes COUVERTES et le bloc %d normes "
+        "MAÎTRISÉES : on ne peut pas maîtriser ce qu'on ne couvre pas"
+        % (couvertes, maitrisees))
+
+
+def test_le_bandeau_compte_les_risques_que_la_page_MONTRE():
+    """LE SEUL CHIFFRE DU BANDEAU QUI SOIT VÉRIFIABLE SUR LA PAGE MÊME.
+
+    « Risques systémiques » n'est pas une revendication : la section
+    #risques en aligne les cartes, et le nombre doit être celui-là. Les
+    trois autres — années d'expertise, jeux de données indexés,
+    organisations — ne se comptent nulle part dans ce dépôt ; les figer ici
+    donnerait l'illusion d'un contrôle qui ne regarde rien."""
+    i = INDEX.index('id="risques"')
+    cartes = INDEX[i:INDEX.index("</section>", i)].count('<div class="risk-card">')
+    assert cartes > 0, "aucune carte de risque relevée : la lecture a changé"
+    assert _bandeau()["stats.b"] == cartes, (
+        "le bandeau annonce %d risques systémiques, la section en montre %d"
+        % (_bandeau()["stats.b"], cartes))
+
+
+def test_aucun_attribut_de_traduction_n_est_ECRIT_DEUX_FOIS():
+    """CINQ BALISES DU BANDEAU PORTAIENT `data-i18n` EN DOUBLE. Un analyseur
+    HTML garde le premier et jette le second sans rien dire : inoffensif
+    tant que les deux valeurs coïncident, invisible le jour où elles
+    divergent — et c'est alors la seconde, celle qu'on vient d'écrire, qui
+    est ignorée."""
+    doubles = re.findall(r'data-i18n="([^"]*)" data-i18n="\1"', INDEX)
+    assert not doubles, (
+        "%d balise(s) répètent leur attribut de traduction : %s"
+        % (len(doubles), sorted(set(doubles))))
