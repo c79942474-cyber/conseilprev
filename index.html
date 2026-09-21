@@ -2498,8 +2498,33 @@ footer::after{
    plus. Collé au bas, sa position ne dépend plus de la longueur du texte. */
 .diff-card[data-tooltip]{
   --diff-appel:36px;
+  /* LA HAUTEUR DE LA MENTION, DÉCLARÉE UNE FOIS. Elle dessine la boîte de la
+     mention ET, par `:has`, le dégagement que la bulle lui laisse en plus de
+     l'appel. Seules les cartes qui PORTENT la mention la réservent : la
+     présence de l'élément est la seule source, il n'y a pas d'attribut
+     parallèle à tenir en accord avec lui.
+     Un navigateur sans `:has` rend la mention à sa taille normale et ne
+     réserve rien : la bulle peut la recouvrir au survol, et rien d'autre. */
+  --diff-cnx-h:26px;
+  --diff-cnx:0px;
   display:flex;
   flex-direction:column;
+}
+.diff-card[data-tooltip]:has(.diff-cnx){
+  --diff-cnx:var(--diff-cnx-h);
+}
+.diff-cnx{
+  height:var(--diff-cnx-h,26px);
+  align-self:center;
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  margin-top:7px;
+  font-family:"Space Mono",monospace;
+  font-size:10.5px;
+  letter-spacing:.03em;
+  color:rgba(212,168,67,.72);
+  white-space:nowrap;
 }
 .diff-go{
   height:var(--diff-appel,36px);
@@ -2510,7 +2535,7 @@ footer::after{
 }
 .diff-card[data-tooltip]::after{
   top:auto;
-  bottom:calc(28px + var(--diff-appel,36px) + 12px);
+  bottom:calc(28px + var(--diff-appel,36px) + var(--diff-cnx,0px) + 12px);
   left:16px;
   right:16px;
   max-width:none;
@@ -4577,6 +4602,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
         <h3 class="diff-title" data-i18n="df.ai.t">Assistants IA sur mesure</h3>
         <p class="diff-desc" data-i18n="df.ai.d">Des assistants qui comprennent votre langage métier et s'intègrent parfaitement à vos flux de travail existants.</p>
         <a class="diff-go" href="/sentinel?goto=owasp-dix" target="_blank" rel="noopener"><span data-i18n="dg.ai">Ouvrir le module OWASP</span> →</a>
+        <span class="diff-cnx">🔒 <span data-i18n="dg.cnx">Connexion requise</span></span>
       </div>
       <div class="diff-card" data-tooltip="Les douze secteurs couverts sont listés plus haut sur cette page, de l’énergie au secteur public. Chacun a son vocabulaire, ses données et ses contraintes." data-i18n-tip="tip.df.ind">
         <div class="diff-ico">🏭</div>
@@ -4589,6 +4615,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
         <h3 class="diff-title" data-i18n="df.eco.t">Optimisation des coûts opérationnels</h3>
         <p class="diff-desc" data-i18n="df.eco.d">Optimisation des coûts opérationnels grâce à l'automatisation intelligente et aux modèles prédictifs.</p>
         <a class="diff-go" href="/sentinel?goto=finops" target="_blank" rel="noopener"><span data-i18n="dg.eco">Ouvrir le module FinOps</span> →</a>
+        <span class="diff-cnx">🔒 <span data-i18n="dg.cnx">Connexion requise</span></span>
       </div>
       <div class="diff-card" data-tooltip="OT/ICS/SCADA, sites Seveso, plans de continuité : des environnements où un arrêt se compte en heures de production, pas en tickets." data-i18n-tip="tip.df.exp">
         <div class="diff-ico">🎯</div>
@@ -4602,7 +4629,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
              un libellé qui ne cite pas le domaine n'a pas à être relabellisé,
              garde sa traduction, et la bascule fait quand même son travail
              sur l'adresse et sur l'infobulle native. -->
-        <a class="diff-go" href="https://i-aes.com" target="_blank" rel="noopener"><span data-i18n="dg.exp">Découvrir le site institutionnel</span> ↗</a>
+        <a class="diff-go" href="https://i-aes.com" target="_blank" rel="noopener" data-bascule-jamais><span data-i18n="dg.exp">Découvrir le site institutionnel</span> ↗</a>
       </div>
       <div class="diff-card" data-tooltip="Neuf référentiels maîtrisés et, pour huit d’entre eux, un module d’évaluation dans Sentinel. DORA fait exception : le texte, sans outil." data-i18n-tip="tip.df.jur">
         <div class="diff-ico">⚖️</div>
@@ -4615,6 +4642,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
         <h3 class="diff-title" data-i18n="df.intl.t">Couverture internationale</h3>
         <p class="diff-desc" data-i18n="df.intl.d">Intervention en France, Europe, Moyen-Orient et Amérique du Nord. Maîtrise des réglementations transversales.</p>
         <a class="diff-go" href="/sentinel?goto=carto" target="_blank" rel="noopener"><span data-i18n="dg.intl">Ouvrir la carte mondiale</span> →</a>
+        <span class="diff-cnx">🔒 <span data-i18n="dg.cnx">Connexion requise</span></span>
       </div>
     </div>
   </div>

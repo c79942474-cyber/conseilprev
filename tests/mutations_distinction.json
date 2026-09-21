@@ -1,0 +1,393 @@
+{
+ "cibles": [
+  "tests/test_infobulles_distinction.py",
+  "tests/test_offres_services.py"
+ ],
+ "mutations": [
+  {
+   "nom": "une carte perd son infobulle",
+   "fichier": "index.html",
+   "avant": " data-tooltip=\"Conversationnel, industriel ou décisionnel — le besoin est cadré avant le code, et les dix défaillances OWASP des applications LLM servent de garde-fou.\"",
+   "apres": "",
+   "regle": "test_CHACUNE_des_six_cartes_porte_son_infobulle"
+  },
+  {
+   "nom": "l'infobulle pointe la clé d'une AUTRE carte",
+   "fichier": "index.html",
+   "avant": "data-i18n-tip=\"tip.df.ai\"",
+   "apres": "data-i18n-tip=\"tip.df.intl\"",
+   "regle": "test_l_infobulle_est_APPARIEE_a_la_carte_qu_elle_explique"
+  },
+  {
+   "nom": "le texte de la page dérive du dictionnaire",
+   "fichier": "index.html",
+   "avant": "les dix défaillances OWASP",
+   "apres": "les douze défaillances OWASP",
+   "regle": "test_l_infobulle_ECRITE_dans_la_page_est_celle_du_dictionnaire_francais"
+  },
+  {
+   "nom": "l'anglais recopie le français",
+   "fichier": "index.page.js",
+   "avant": "\"tip.df.ai\":\"Conversational, industrial or decision-support — the need is framed before the code, with the ten OWASP failures of LLM applications as the guardrail.\"",
+   "apres": "\"tip.df.ai\":\"Conversationnel, industriel ou décisionnel — le besoin est cadré avant le code, et les dix défaillances OWASP des applications LLM servent de garde-fou.\"",
+   "regle": "test_les_trois_langues_disent_des_choses_DIFFERENTES[df.ai]"
+  },
+  {
+   "nom": "une clé manque au dictionnaire allemand",
+   "fichier": "index.page.js",
+   "avant": "\"tip.df.exp\":\"OT/ICS/SCADA, Seveso-Standorte, Kontinuitätspläne: Umgebungen, in denen ein Ausfall in Produktionsstunden zählt, nicht in Tickets.\",",
+   "apres": "",
+   "regle": "test_les_six_infobulles_existent_dans_la_langue[de]"
+  },
+  {
+   "nom": "applyLang lit la clé et l'écrit AILLEURS",
+   "fichier": "index.page.js",
+   "avant": "el.setAttribute('data-tooltip',v);",
+   "apres": "el.title=v;",
+   "regle": "test_applyLang_ECRIT_l_attribut_et_pas_seulement_du_texte"
+  },
+  {
+   "nom": "la bulle repart AU-DESSUS de la carte, qui la rogne",
+   "fichier": "index.html",
+   "avant": "  bottom:calc(28px + var(--diff-appel,36px) + var(--diff-cnx,0px) + 12px);\n  left:16px;",
+   "apres": "  bottom:calc(100% + 10px);\n  left:16px;",
+   "regle": "test_l_infobulle_est_reglee_DANS_la_boite_de_la_carte"
+  },
+  {
+   "nom": "l'ancrage haut hérité n'est plus annulé",
+   "fichier": "index.html",
+   "avant": ".diff-card[data-tooltip]::after{\n  top:auto;",
+   "apres": ".diff-card[data-tooltip]::after{",
+   "regle": "test_l_infobulle_est_reglee_DANS_la_boite_de_la_carte"
+  },
+  {
+   "nom": "la carte cesse de rogner",
+   "fichier": "index.html",
+   "avant": "  overflow:hidden;\n  isolation:isolate;",
+   "apres": "  overflow:visible;\n  isolation:isolate;",
+   "regle": "test_la_carte_ROGNE_toujours_ce_qui_deborde_de_sa_boite"
+  },
+  {
+   "nom": "le blob cesse de déborder",
+   "fichier": "index.html",
+   "avant": "  inset:-60%;",
+   "apres": "  inset:0;",
+   "regle": "test_la_carte_ROGNE_toujours_ce_qui_deborde_de_sa_boite"
+  },
+  {
+   "nom": "la convention range sa bulle DANS l'élément",
+   "fichier": "index.html",
+   "avant": "  bottom:calc(100% + 10px);\n  left:50%;",
+   "apres": "  bottom:10px;\n  left:50%;",
+   "regle": "test_la_convention_pose_toujours_sa_bulle_AU_DESSUS"
+  },
+  {
+   "nom": "le contour de la flèche fuit sur le blob",
+   "fichier": "index.html",
+   "avant": ".diff-card[data-tooltip]::before{\n  border:0;",
+   "apres": ".diff-card[data-tooltip]::before{",
+   "regle": "test_la_fleche_de_la_convention_ne_FUIT_pas_sur_le_blob"
+  },
+  {
+   "nom": "la translation de la flèche fuit sur le blob",
+   "fichier": "index.html",
+   "avant": "  border:0;\n  transform:none;\n}",
+   "apres": "  border:0;\n}",
+   "regle": "test_la_fleche_de_la_convention_ne_FUIT_pas_sur_le_blob"
+  },
+  {
+   "nom": "l'infobulle annonce plus de secteurs que la page n'en montre",
+   "fichier": "index.page.js",
+   "avant": "\"tip.df.ind\":\"Les douze secteurs",
+   "apres": "\"tip.df.ind\":\"Les quinze secteurs",
+   "regle": "test_les_secteurs_ANNONCES_sont_ceux_QUE_LA_PAGE_MONTRE"
+  },
+  {
+   "nom": "la page perd un secteur, l'infobulle ne bouge pas",
+   "fichier": "index.html",
+   "avant": "<div class=\"sector-card sc-lime\" data-i18n=\"sc.logistique\"><span class=\"sc-ico\">🚛</span> Logistique</div>\n      ",
+   "apres": "",
+   "regle": "test_les_secteurs_ANNONCES_sont_ceux_QUE_LA_PAGE_MONTRE"
+  },
+  {
+   "nom": "l'infobulle se trompe sur le nombre de modules",
+   "fichier": "index.page.js",
+   "avant": "pour huit d’entre eux",
+   "apres": "pour sept d’entre eux",
+   "regle": "test_les_referentiels_et_leurs_modules_sont_COMPTES_sur_la_page"
+  },
+  {
+   "nom": "l'infobulle annonce des juridictions que Sentinel ne compte pas",
+   "fichier": "index.page.js",
+   "avant": "compare 46 juridictions sur 12 critères",
+   "apres": "compare 52 juridictions sur 12 critères",
+   "regle": "test_les_juridictions_et_les_criteres_ANNONCES_existent_dans_sentinel"
+  },
+  {
+   "nom": "le bandeau de couverture disparaît du module cité",
+   "fichier": "sentinel.html",
+   "avant": "id=\"fo-couverture\"",
+   "apres": "id=\"fo-couverture-retire\"",
+   "regle": "test_le_module_NOMME_par_l_infobulle_des_couts_existe"
+  },
+  {
+   "nom": "l'infobulle cesse de nommer le module qu'elle décrit",
+   "fichier": "index.page.js",
+   "avant": "\"tip.df.eco\":\"Le module FinOps de Sentinel",
+   "apres": "\"tip.df.eco\":\"Le module de Sentinel",
+   "regle": "test_le_module_NOMME_par_l_infobulle_des_couts_existe"
+  },
+  {
+   "nom": "l'infobulle redit la description de sa carte",
+   "fichier": "index.page.js",
+   "avant": "\"tip.df.ai\":\"Conversationnel, industriel ou décisionnel — le besoin est cadré avant le code, et les dix défaillances OWASP des applications LLM servent de garde-fou.\"",
+   "apres": "\"tip.df.ai\":\"Des assistants qui comprennent votre langage métier, voilà tout.\"",
+   "regle": "test_l_infobulle_AJOUTE_quelque_chose_a_la_carte[df.ai]"
+  },
+  {
+   "nom": "une carte perd son appel",
+   "fichier": "index.html",
+   "avant": "\n        <a class=\"diff-go\" href=\"#normes\"><span data-i18n=\"dg.jur\">Voir les 9 référentiels</span> →</a>",
+   "apres": "",
+   "regle": "test_CHACUNE_des_six_cartes_porte_son_appel"
+  },
+  {
+   "nom": "un appel mène au module d'une AUTRE carte",
+   "fichier": "index.html",
+   "avant": "href=\"/sentinel?goto=owasp-dix\" target=\"_blank\" rel=\"noopener\"><span data-i18n=\"dg.ai\"",
+   "apres": "href=\"/sentinel?goto=carto\" target=\"_blank\" rel=\"noopener\"><span data-i18n=\"dg.ai\"",
+   "regle": "test_l_appel_mène_là_où_la_DEMANDE_l_a_envoyé"
+  },
+  {
+   "nom": "le panneau visé disparaît de Sentinel",
+   "fichier": "sentinel.html",
+   "avant": "<div class=\"page\" id=\"p-finops\">",
+   "apres": "<div class=\"page\" id=\"p-finops-archive\">",
+   "regle": "test_les_destinations_SENTINEL_existent_comme_panneau_ET_comme_onglet"
+  },
+  {
+   "nom": "l'onglet qui mène au panneau visé disparaît",
+   "fichier": "sentinel.html",
+   "avant": "go('carto',this,",
+   "apres": "go('carto-2',this,",
+   "regle": "test_les_destinations_SENTINEL_existent_comme_panneau_ET_comme_onglet"
+  },
+  {
+   "nom": "un appel vers Sentinel reste dans l'onglet courant",
+   "fichier": "index.html",
+   "avant": "<a class=\"diff-go\" href=\"/sentinel?goto=finops\" target=\"_blank\" rel=\"noopener\">",
+   "apres": "<a class=\"diff-go\" href=\"/sentinel?goto=finops\">",
+   "regle": "test_les_liens_vers_Sentinel_gardent_la_page_d_accueil"
+  },
+  {
+   "nom": "l'appel externe perd son noopener",
+   "fichier": "index.html",
+   "avant": "<a class=\"diff-go\" href=\"https://i-aes.com\" target=\"_blank\" rel=\"noopener\" data-bascule-jamais>",
+   "apres": "<a class=\"diff-go\" href=\"https://i-aes.com\" target=\"_blank\" data-bascule-jamais>",
+   "regle": "test_les_liens_vers_Sentinel_gardent_la_page_d_accueil"
+  },
+  {
+   "nom": "une ancre ouvre un onglet pour la même page",
+   "fichier": "index.html",
+   "avant": "<a class=\"diff-go\" href=\"#secteurs\">",
+   "apres": "<a class=\"diff-go\" href=\"#secteurs\" target=\"_blank\">",
+   "regle": "test_les_ANCRES_restent_dans_l_onglet_courant"
+  },
+  {
+   "nom": "les grilles visées repassent sous l'en-tête fixe",
+   "fichier": "index.html",
+   "avant": "#secteurs,#normes{scroll-margin-top:124px}\n",
+   "apres": "",
+   "regle": "test_les_grilles_visees_se_DEGAGENT_de_l_en_tete_fixe"
+  },
+  {
+   "nom": "le dégagement de l'en-tête devient trop court",
+   "fichier": "index.html",
+   "avant": "#secteurs,#normes{scroll-margin-top:124px}",
+   "apres": "#secteurs,#normes{scroll-margin-top:40px}",
+   "regle": "test_les_grilles_visees_se_DEGAGENT_de_l_en_tete_fixe"
+  },
+  {
+   "nom": "le panneau visé cesse de porter le chiffre promis",
+   "fichier": "sentinel.html",
+   "avant": "46 juridictions analysées selon 12 critères",
+   "apres": "50 juridictions analysées selon 12 critères",
+   "regle": "test_le_module_46_juridictions_VISE_est_bien_celui_qui_les_PORTE"
+  },
+  {
+   "nom": "la flèche passe DANS le texte traduit",
+   "fichier": "index.html",
+   "avant": "<span data-i18n=\"dg.ai\">Ouvrir le module OWASP</span> →",
+   "apres": "<span data-i18n=\"dg.ai\">Ouvrir le module OWASP →</span>",
+   "regle": "test_la_FLECHE_reste_hors_du_texte_traduit"
+  },
+  {
+   "nom": "le libellé du lien institutionnel nomme le domaine",
+   "fichier": "index.page.js",
+   "avant": "\"dg.exp\":\"Découvrir le site institutionnel\"",
+   "apres": "\"dg.exp\":\"Découvrir i-aes.com\"",
+   "regle": "test_le_libelle_du_lien_i_aes_ne_NOMME_pas_le_domaine"
+  },
+  {
+   "nom": "la bascule cesse de relabelliser par textContent",
+   "fichier": "bascule.js",
+   "avant": "el.textContent = t.replace(CIBLE",
+   "apres": "el.setAttribute('data-nom', t.replace(CIBLE",
+   "regle": "test_le_libelle_du_lien_i_aes_ne_NOMME_pas_le_domaine"
+  },
+  {
+   "nom": "le libellé de la page dérive du dictionnaire",
+   "fichier": "index.html",
+   "avant": "<span data-i18n=\"dg.intl\">Ouvrir la carte mondiale</span>",
+   "apres": "<span data-i18n=\"dg.intl\">Ouvrir la mappemonde</span>",
+   "regle": "test_le_libelle_de_l_appel_est_celui_du_dictionnaire_francais"
+  },
+  {
+   "nom": "l'anglais recopie le libellé français",
+   "fichier": "index.page.js",
+   "avant": "\"dg.ind\":\"See the 12 sectors\"",
+   "apres": "\"dg.ind\":\"Voir les 12 secteurs\"",
+   "regle": "test_les_trois_langues_donnent_des_libelles_DIFFERENTS[dg.ind]"
+  },
+  {
+   "nom": "un libellé manque au dictionnaire allemand",
+   "fichier": "index.page.js",
+   "avant": "\"dg.eco\":\"FinOps-Modul öffnen\",",
+   "apres": "",
+   "regle": "test_les_six_libelles_existent_dans_la_langue[de]"
+  },
+  {
+   "nom": "la boîte de l'appel cesse de suivre la déclaration commune",
+   "fichier": "index.html",
+   "avant": "  height:var(--diff-appel,36px);",
+   "apres": "  height:36px;",
+   "regle": "test_UN_SEUL_nombre_commande_la_boite_de_l_appel_ET_son_degagement"
+  },
+  {
+   "nom": "le dégagement de la bulle cesse de suivre la déclaration commune",
+   "fichier": "index.html",
+   "avant": "  bottom:calc(28px + var(--diff-appel,36px) + var(--diff-cnx,0px) + 12px);",
+   "apres": "  bottom:102px;",
+   "regle": "test_UN_SEUL_nombre_commande_la_boite_de_l_appel_ET_son_degagement"
+  },
+  {
+   "nom": "la bulle se règle de nouveau en pourcentage de la carte",
+   "fichier": "index.html",
+   "avant": "  bottom:calc(28px + var(--diff-appel,36px) + var(--diff-cnx,0px) + 12px);\n",
+   "apres": "  bottom:calc(100% - 40px);\n",
+   "regle": "test_l_infobulle_est_reglee_DANS_la_boite_de_la_carte"
+  },
+  {
+   "nom": "l'appel se décolle du bas de la carte",
+   "fichier": "index.html",
+   "avant": "  margin-top:auto;\n  white-space:nowrap;",
+   "apres": "  white-space:nowrap;",
+   "regle": "test_l_appel_est_COLLE_en_bas_de_la_carte"
+  },
+  {
+   "nom": "la carte cesse d'être une colonne flexible",
+   "fichier": "index.html",
+   "avant": "  display:flex;\n  flex-direction:column;\n}",
+   "apres": "}",
+   "regle": "test_l_appel_est_COLLE_en_bas_de_la_carte"
+  },
+  {
+   "nom": "l'infobulle cesse de nommer le module que l'appel ouvre",
+   "fichier": "index.page.js",
+   "avant": "et les dix défaillances OWASP des applications LLM servent de garde-fou",
+   "apres": "et les dix défaillances connues des applications LLM servent de garde-fou",
+   "regle": "test_le_module_OWASP_VISE_est_celui_que_l_infobulle_NOMME"
+  },
+  {
+   "nom": "un appel gardé perd sa mention",
+   "fichier": "index.html",
+   "avant": "<span data-i18n=\"dg.ai\">Ouvrir le module OWASP</span> →</a>\n        <span class=\"diff-cnx\">🔒 <span data-i18n=\"dg.cnx\">Connexion requise</span></span>",
+   "apres": "<span data-i18n=\"dg.ai\">Ouvrir le module OWASP</span> →</a>",
+   "regle": "test_la_mention_est_sur_les_appels_GARDES_et_sur_EUX_SEULS"
+  },
+  {
+   "nom": "un appel LIBRE reçoit une mention qui décourage pour rien",
+   "fichier": "index.html",
+   "avant": "<a class=\"diff-go\" href=\"#secteurs\"><span data-i18n=\"dg.ind\">Voir les 12 secteurs</span> →</a>",
+   "apres": "<a class=\"diff-go\" href=\"#secteurs\"><span data-i18n=\"dg.ind\">Voir les 12 secteurs</span> →</a>\n        <span class=\"diff-cnx\">🔒 <span data-i18n=\"dg.cnx\">Connexion requise</span></span>",
+   "regle": "test_la_mention_est_sur_les_appels_GARDES_et_sur_EUX_SEULS"
+  },
+  {
+   "nom": "Sentinel s'ouvre au public, la mention devient un mensonge",
+   "fichier": "app.py",
+   "avant": "@app.route('/sentinel')\n@sentinel_login_required",
+   "apres": "@app.route('/sentinel')",
+   "regle": "test_la_page_SENTINEL_exige_toujours_un_compte"
+  },
+  {
+   "nom": "la mention manque au dictionnaire allemand",
+   "fichier": "index.page.js",
+   "avant": "\"dg.cnx\":\"Anmeldung erforderlich\",",
+   "apres": "",
+   "regle": "test_la_mention_est_TRADUITE_dans_les_trois_langues"
+  },
+  {
+   "nom": "l'anglais recopie la mention française",
+   "fichier": "index.page.js",
+   "avant": "\"dg.cnx\":\"Sign-in required\"",
+   "apres": "\"dg.cnx\":\"Connexion requise\"",
+   "regle": "test_la_mention_est_TRADUITE_dans_les_trois_langues"
+  },
+  {
+   "nom": "le cadenas passe DANS le texte traduit",
+   "fichier": "index.page.js",
+   "avant": "\"dg.cnx\":\"Connexion requise\"",
+   "apres": "\"dg.cnx\":\"🔒 Connexion requise\"",
+   "regle": "test_le_CADENAS_reste_hors_du_texte_traduit"
+  },
+  {
+   "nom": "une mention perd son cadenas",
+   "fichier": "index.html",
+   "avant": "<span class=\"diff-cnx\">🔒 <span data-i18n=\"dg.cnx\">Connexion requise</span></span>\n      </div>\n      <div class=\"diff-card\" data-tooltip=\"Les douze",
+   "apres": "<span class=\"diff-cnx\"><span data-i18n=\"dg.cnx\">Connexion requise</span></span>\n      </div>\n      <div class=\"diff-card\" data-tooltip=\"Les douze",
+   "regle": "test_le_CADENAS_reste_hors_du_texte_traduit"
+  },
+  {
+   "nom": "la bulle cesse de réserver la place de la mention",
+   "fichier": "index.html",
+   "avant": "var(--diff-cnx,0px) + 12px);",
+   "apres": "12px);",
+   "regle": "test_le_degagement_de_la_bulle_COMPTE_la_mention"
+  },
+  {
+   "nom": "la boîte de la mention cesse de suivre la déclaration commune",
+   "fichier": "index.html",
+   "avant": "  height:var(--diff-cnx-h,26px);",
+   "apres": "  height:26px;",
+   "regle": "test_le_degagement_de_la_bulle_COMPTE_la_mention"
+  },
+  {
+   "nom": "l'appel institutionnel redevient détournable",
+   "fichier": "index.html",
+   "avant": "rel=\"noopener\" data-bascule-jamais>",
+   "apres": "rel=\"noopener\">",
+   "regle": "test_l_appel_institutionnel_REFUSE_le_relais"
+  },
+  {
+   "nom": "la bascule cesse d'honorer l'exception",
+   "fichier": "bascule.js",
+   "avant": "if (a[i].hasAttribute(\"data-bascule-jamais\")) continue;",
+   "apres": "",
+   "regle": "test_l_appel_institutionnel_REFUSE_le_relais"
+  },
+  {
+   "nom": "le relais de la bascule cesse d'exiger un compte",
+   "fichier": "bascule.js",
+   "avant": "var RELAIS = \"/sentinel\";",
+   "apres": "var RELAIS = \"/\";",
+   "regle": "test_le_relais_de_la_bascule_est_LUI_MEME_garde"
+  },
+  {
+   "nom": "l'exception se répand aux autres liens institutionnels",
+   "fichier": "index.html",
+   "avant": "<a href=\"https://i-aes.com\" target=\"_blank\" rel=\"noopener\" class=\"ft-social\" title=\"i-aes.com\">",
+   "apres": "<a href=\"https://i-aes.com\" target=\"_blank\" rel=\"noopener\" data-bascule-jamais class=\"ft-social\" title=\"i-aes.com\">",
+   "regle": "test_les_AUTRES_liens_institutionnels_gardent_le_relais"
+  }
+ ]
+}

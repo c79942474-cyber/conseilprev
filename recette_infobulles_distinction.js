@@ -67,11 +67,17 @@ const GEOMETRIE = () =>
      * getBoundingClientRect() et ferait comparer deux repères différents. */
     const a = c.querySelector('.diff-go');
     const aHaut = a ? a.offsetTop - bt : null;
+    const men = c.querySelector('.diff-cnx');
+    const mHaut = men ? men.offsetTop - bt : null;
     return {
       cle: (c.querySelector('.diff-title') || {}).dataset.i18n,
       bulle: c.getAttribute('data-tooltip'),
       rogne: !(haut >= -0.5 && bas >= -0.5 && gauche >= -0.5 && gauche + w <= padW + 0.5),
       recouvre: a ? (padH - bas) > aHaut + 0.5 : true,
+      recouvreMention: men ? (padH - bas) > mHaut + 0.5 : false,
+      mention: men ? men.textContent.trim() : null,
+      mentionVisible: men ? men.checkVisibility({checkVisibilityCSS:true,
+        opacityProperty:true, visibilityProperty:true}) : null,
       appel: a ? { href: a.getAttribute('href'), cible: a.getAttribute('target') || '',
                    rel: a.getAttribute('rel') || '', texte: a.textContent.trim(),
                    /* réécrit par bascule.js : ce n'est plus le lien écrit ici */
@@ -93,6 +99,14 @@ const GEOMETRIE = () =>
     Object.defineProperty(navigator, 'plugins', { get: () => [1, 2, 3, 4, 5] });
     Object.defineProperty(navigator, 'languages', { get: () => ['fr-FR', 'fr', 'en-US'] });
   });
+  /* LE SITE INSTITUTIONNEL EST SERVI PAR UNE DOUBLURE. Un environnement qui ne
+   * peut pas joindre i-aes.com ferait échouer la navigation, et le contrôle
+   * mesurerait le RÉSEAU au lieu de la destination du clic. La doublure répond
+   * à l'adresse réelle : l'URL de l'onglet est bien celle visée. Là où le site
+   * répond vraiment, elle ne change rien à ce qui est mesuré. */
+  await ctx.route('https://i-aes.com/**', r => r.fulfill({
+    status: 200, contentType: 'text/html; charset=utf-8',
+    body: '<!doctype html><title>doublure i-aes.com</title><p>doublure' }));
   const pg = await ctx.newPage();
   const err = [];
   pg.on('pageerror', e => err.push(String(e)));
@@ -352,6 +366,70 @@ const GEOMETRIE = () =>
     await onglet.close();
     await pg.bringToFront();
   }
+
+  /* ── « CONNEXION REQUISE » : DIT AVANT LE CLIC ───────────────────────── */
+  const g3 = await pg.evaluate(GEOMETRIE);
+  ok('la mention est sur les appels qui exigent un compte, et sur eux seuls',
+     g3.filter(x => x.mention).length === 3 &&
+     g3.every(x => !!x.mention === /^\/sentinel/.test(String(x.appel.href))),
+     g3.filter(x => x.mention).map(x => x.cle).join(', '));
+  ok('les trois mentions sont réellement visibles',
+     g3.filter(x => x.mentionVisible).length === 3,
+     g3.map(x => x.mention ? 'oui' : '—').join('/'));
+  let cM = 0;
+  for (const [largeur, hauteur] of [[1440,1000],[880,1000],[420,900]]) {
+    await pg.setViewportSize({ width: largeur, height: hauteur });
+    await pg.waitForTimeout(350);
+    await centrer();
+    await pg.waitForTimeout(250);
+    for (const lg of ['fr','en','de']) {
+      await pg.evaluate(l => setLang(l), lg);
+      await pg.waitForTimeout(280);
+      cM += (await pg.evaluate(GEOMETRIE)).filter(x => x.recouvreMention).length;
+    }
+  }
+  await pg.setViewportSize({ width: 1440, height: 1000 });
+  await pg.evaluate(() => setLang('fr'));
+  await pg.waitForTimeout(350);
+  ok('la bulle ne recouvre jamais la mention qu’elle surplombe', cM === 0, String(cM));
+
+  const men = {};
+  for (const lg of ['fr','en','de']) {
+    await pg.evaluate(l => setLang(l), lg);
+    await pg.waitForTimeout(320);
+    men[lg] = await pg.evaluate(() =>
+      [...document.querySelectorAll('#differenciateurs .diff-cnx')].map(e => e.textContent.trim()));
+  }
+  ok('la mention se traduit, et garde son cadenas dans les trois langues',
+     men.fr[0] !== men.en[0] && men.fr[0] !== men.de[0] && men.en[0] !== men.de[0] &&
+     ['fr','en','de'].every(l => men[l].every(t => /🔒/.test(t))),
+     [men.fr[0], men.en[0], men.de[0]].join(' · '));
+  await pg.evaluate(() => setLang('fr'));
+  await pg.waitForTimeout(320);
+
+  /* ── L’APPEL INSTITUTIONNEL N’EST PLUS DÉTOURNÉ ──────────────────────── */
+  const inst2 = await pg.evaluate(() => {
+    const a = document.querySelector('#differenciateurs .diff-card:nth-child(4) .diff-go');
+    return { href: a.getAttribute('href'), bascule: a.getAttribute('data-bascule') || '',
+             exempt: a.hasAttribute('data-bascule-jamais') };
+  });
+  ok('l’appel institutionnel reste sur i-aes.com, quoi qu’il arrive',
+     inst2.href === 'https://i-aes.com' && !inst2.bascule && inst2.exempt,
+     inst2.href + (inst2.bascule ? ' (détourné : ' + inst2.bascule + ')' : ''));
+
+  /* ON MESURE OÙ LE CLIC PART, PAS CE QUE LE RÉSEAU EN FAIT. */
+  await centrer();
+  await pg.waitForTimeout(300);
+  let dest = '(aucune navigation)';
+  const attente = ctx.waitForEvent('page', { timeout: 12000 })
+    .then(p => p.waitForTimeout(1800).then(() => { dest = p.url(); return p; }))
+    .catch(() => null);
+  await pg.click('#differenciateurs .diff-card:nth-child(4) .diff-go');
+  const ongInst = await attente;
+  if (ongInst) await ongInst.close().catch(() => {});
+  ok('un clic sur l’appel institutionnel part bien vers i-aes.com',
+     /^https:\/\/i-aes\.com/.test(dest), 'destination → ' + dest.slice(0, 60));
+  await pg.bringToFront();
 
   await nav.close();
   console.log('\n' + (n - ko) + ' contrôles passés, ' + ko + ' en échec');

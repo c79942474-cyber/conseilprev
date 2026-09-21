@@ -52,6 +52,17 @@
          le site web : basculer une adresse de contact vers une page n'aurait
          aucun sens, et priverait le visiteur du seul moyen de nous écrire. */
       if (/^mailto:/i.test(a[i].getAttribute("href") || "")) continue;
+      /* UN LIEN PEUT REFUSER LE RELAIS, ET UN SEUL LE FAIT AUJOURD'HUI.
+         Le relais mène à /sentinel, qui exige un compte : pour un visiteur
+         NON CONNECTÉ, il transforme « le site institutionnel ne répond pas »
+         en « créez un compte », ce qui est pire que le lien mort qu'il devait
+         éviter. Un appel dont l'intitulé promet ce site-là doit continuer d'y
+         mener, quitte à tomber sur une page en panne : le visiteur comprend
+         une panne, il ne comprend pas un formulaire de connexion. Mesuré au
+         navigateur : un clic anonyme aboutissait à « Connexion — Sentinel AI ».
+         Les autres liens — logo, icône, mention du pied de page — gardent le
+         relais : ils ne promettent rien de précis. */
+      if (a[i].hasAttribute("data-bascule-jamais")) continue;
       out.push(a[i]);
     }
     return out;

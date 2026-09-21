@@ -767,3 +767,241 @@ def test_l_appel_est_COLLE_en_bas_de_la_carte():
     assert _declaration(".diff-go", "margin-top") == "auto", (
         "l'appel n'est plus collé au bas : le dégagement de la bulle devient "
         "une supposition sur la longueur du texte")
+
+
+# ══════════════════════════════════════════════════════════════════════════
+#  7. CE QUI EXIGE UN COMPTE LE DIT AVANT LE CLIC
+# ══════════════════════════════════════════════════════════════════════════
+#  LE DÉFAUT SIGNALÉ, PUIS MESURÉ. « Un clic tombe sur une page de
+#  connexion ». Trois des six appels mènent à /sentinel, gardé par
+#  `sentinel_login_required` : un visiteur non connecté qui clique
+#  « Ouvrir le module OWASP » reçoit un champ mot de passe. Le lien
+#  fonctionne, la destination est juste, et la visite s'arrête là.
+#
+#  ON NE RETIRE PAS LES LIENS : le module est bien là, derrière un compte
+#  gratuit. On le DIT avant le clic, ce qui coûte une ligne et rend la
+#  décision au visiteur.
+
+APP = io.open(os.path.join(_RACINE, "app.py"), encoding="utf-8").read()
+BASCULE = io.open(os.path.join(_RACINE, "bascule.js"), encoding="utf-8").read()
+
+
+def _routes_gardees():
+    """Les adresses que `sentinel_login_required` protège, lues dans app.py.
+
+    ON NE TIENT PAS DE LISTE À LA MAIN. Une liste recopiée ici vieillirait
+    en silence : le jour où un module s'ouvrirait au public, la mention
+    « connexion requise » resterait, et personne ne la démentirait."""
+    gardees = set()
+    for m in re.finditer(r"@app\.route\((['\"])([^'\"]+)\1[^)]*\)\s*\n"
+                         r"(?:@[^\n]+\n)*?@sentinel_login_required", APP):
+        gardees.add(m.group(2))
+    return gardees
+
+
+def _mentions():
+    """Par carte : (clé du titre, href de l'appel, texte de la mention|None)."""
+    out = []
+    for carte in BLOC.split('<div class="diff-card"')[1:]:
+        titre = re.search(r'<h3 class="diff-title" data-i18n="([^"]+)\.t"', carte)
+        lien = re.search(r'<a class="diff-go" href="([^"]*)"', carte)
+        note = re.search(r'<span class="diff-cnx">(.*?)</span>\s*</span>',
+                         carte, re.S)
+        out.append((titre.group(1) if titre else None,
+                    unescape(lien.group(1)) if lien else None,
+                    note.group(1) if note else None))
+    return out
+
+
+def test_la_page_SENTINEL_exige_toujours_un_compte():
+    """LE GARDE-FOU DE TOUTE CETTE SECTION. La mention n'est vraie que tant
+    que /sentinel est gardé. Si le produit s'ouvrait au public, elle
+    deviendrait un mensonge affiché en toutes lettres — et rien d'autre ne
+    le signalerait."""
+    gardees = _routes_gardees()
+    assert "/sentinel" in gardees, (
+        "/sentinel n'est plus derrière `sentinel_login_required` : la mention "
+        "« connexion requise » des trois appels est à retirer. Routes gardées "
+        "relevées : %s" % sorted(gardees))
+
+
+def test_la_mention_est_sur_les_appels_GARDES_et_sur_EUX_SEULS():
+    """DES DEUX CÔTÉS, ET C'EST LE POINT. Un appel gardé sans mention envoie
+    le visiteur sur un formulaire sans prévenir ; une mention sur un appel
+    LIBRE décourage un clic qui n'aurait rien coûté. Les deux se mesurent
+    ici, contre ce que `app.py` garde réellement."""
+    gardees = _routes_gardees()
+    attendu, vu = [], []
+    for titre, href, note in _mentions():
+        chemin = href.split("?")[0]
+        attendu.append((titre, chemin in gardees))
+        vu.append((titre, note is not None))
+    assert vu == attendu, (
+        "mention et garde ne coïncident pas.\n  attendu : %s\n  vu      : %s"
+        % (attendu, vu))
+    assert sum(1 for _, g in attendu if g) == 3, attendu
+
+
+def test_la_mention_est_TRADUITE_dans_les_trois_langues():
+    for lg in LANGUES:
+        assert (_dico(lg).get("dg.cnx") or "").strip(), (
+            "dg.cnx absente du dictionnaire %s" % lg)
+    textes = {lg: _dico(lg)["dg.cnx"] for lg in LANGUES}
+    for a, b in (("fr", "en"), ("fr", "de"), ("en", "de")):
+        assert textes[a] != textes[b], (
+            "dg.cnx : %s et %s portent le même texte — %r" % (a, b, textes[a]))
+
+
+def test_le_CADENAS_reste_hors_du_texte_traduit():
+    """MÊME PIÈGE QUE LA FLÈCHE. `applyLang` remplace l'innerHTML du porteur
+    de `data-i18n` : un cadenas écrit dedans disparaîtrait au premier
+    changement de langue. Il est donc frère du span, jamais dedans."""
+    fr = _dico("fr")["dg.cnx"]
+    assert "🔒" not in fr, (
+        "le cadenas est DANS le texte traduit : le premier changement de "
+        "langue l'effacera")
+    for titre, _, note in _mentions():
+        if note is None:
+            continue
+        m = re.search(r'^(.*?)<span data-i18n="dg\.cnx">', note, re.S)
+        assert m and "🔒" in m.group(1), (
+            "%s : la mention n'affiche pas le cadenas avant son texte — %r"
+            % (titre, note[:60]))
+
+
+def test_le_degagement_de_la_bulle_COMPTE_la_mention():
+    """LA BULLE EST RÉGLÉE EN BAS DE LA CARTE, ET LA MENTION S'Y AJOUTE SOUS
+    L'APPEL. Sans réservation, la bulle recouvrirait la phrase qu'on vient
+    d'écrire pour prévenir le visiteur — le contraire du but.
+
+    UN SEUL NOMBRE COMMANDE LES DEUX, comme pour l'appel : `--diff-cnx-h`
+    dessine la boîte de la mention, et `:has` le reporte en réservation.
+    C'est la PRÉSENCE de la mention qui décide, pas un attribut parallèle
+    qu'il faudrait tenir en accord avec elle."""
+    var = "--diff-cnx-h"
+    hauteur = _declaration(".diff-card[data-tooltip]", var)
+    assert hauteur and re.match(r"^\d+px$", hauteur), (
+        "%s n'est pas déclarée sur la carte : %r" % (var, hauteur))
+    assert _declaration(".diff-cnx", "height") and \
+        var in _declaration(".diff-cnx", "height"), (
+        "la boîte de la mention ne suit pas %s" % var)
+    reserve = _declaration(".diff-card[data-tooltip]:has(.diff-cnx)", "--diff-cnx")
+    assert reserve and var in reserve, (
+        "la réservation ne suit pas %s : %r" % (var, reserve))
+    degagement = _declaration(".diff-card[data-tooltip]::after", "bottom")
+    assert degagement and "--diff-cnx" in degagement, (
+        "le dégagement de la bulle ignore la mention : bottom:%s" % degagement)
+
+
+# ── LE LIEN INSTITUTIONNEL N'EST PLUS DÉTOURNÉ ───────────────────────────
+
+def test_le_relais_de_la_bascule_est_LUI_MEME_garde():
+    """POURQUOI L'APPEL INSTITUTIONNEL SORT DU RELAIS — le garde-fou de la
+    règle suivante. `bascule.js` réécrit les liens i-aes.com vers /sentinel,
+    qui exige un compte : pour un visiteur non connecté, le relais change
+    « le site ne répond pas » en « créez un compte ». Mesuré au navigateur :
+    un clic anonyme aboutissait à « Connexion — Sentinel AI ».
+
+    Si le relais cessait d'être gardé, l'exception n'aurait plus d'objet et
+    il faudrait la retirer, pas la conserver par habitude."""
+    m = re.search(r'var RELAIS\s*=\s*"([^"]+)"', BASCULE)
+    assert m, "le relais de la bascule est introuvable"
+    assert m.group(1) in _routes_gardees(), (
+        "le relais %s n'exige plus de compte : l'exception posée sur l'appel "
+        "institutionnel peut être levée" % m.group(1))
+
+
+def test_l_appel_institutionnel_REFUSE_le_relais():
+    """UNE CARTE QUI PROMET LE SITE INSTITUTIONNEL DOIT Y MENER. Tomber sur
+    une page en panne se comprend ; tomber sur un formulaire de connexion,
+    non — c'est ce qui a été signalé.
+
+    LES DEUX GARDE-FOUS. Sans eux, cet attribut serait un ornement : on
+    vérifie que la bascule détourne toujours les liens i-aes.com, et qu'elle
+    HONORE l'exception au lieu de l'ignorer."""
+    assert 'a[href*="' in BASCULE and 'var CIBLE = "i-aes.com"' in BASCULE, (
+        "la bascule ne ramasse plus les liens i-aes.com : l'exception ne "
+        "protège plus de rien")
+    assert re.search(r'hasAttribute\("data-bascule-jamais"\)\s*\)\s*continue',
+                     BASCULE), (
+        "la bascule n'honore pas `data-bascule-jamais` : l'attribut posé sur "
+        "l'appel ne fait rien")
+
+    href, attrs = None, None
+    for carte in BLOC.split('<div class="diff-card"')[1:]:
+        m = re.search(r'<a class="diff-go" href="(https://i-aes\.com[^"]*)"([^>]*)>',
+                      carte)
+        if m:
+            href, attrs = m.group(1), m.group(2)
+    assert href, "aucun appel ne mène au site institutionnel"
+    assert "data-bascule-jamais" in attrs, (
+        "l'appel institutionnel est encore détournable : un visiteur dont le "
+        "réseau bloque i-aes.com recevrait un formulaire de connexion")
+
+
+def test_les_AUTRES_liens_institutionnels_gardent_le_relais():
+    """L'EXCEPTION RESTE UNE EXCEPTION. Le logo, l'icône et la mention du
+    pied de page ne promettent pas une destination précise : le relais y
+    garde son intérêt. Si l'attribut se répandait, la bascule cesserait de
+    servir sans que personne ne l'ait décidé."""
+    liens = re.findall(r'<a [^>]*href="https://i-aes\.com[^"]*"[^>]*>', INDEX)
+    assert len(liens) >= 3, (
+        "%d lien(s) vers i-aes.com relevés : la lecture a changé de forme"
+        % len(liens))
+    exemptes = [l for l in liens if "data-bascule-jamais" in l]
+    assert len(exemptes) == 1, (
+        "%d liens sortent du relais, on en attend un seul (l'appel de la "
+        "carte) : %s" % (len(exemptes), exemptes))
+
+
+# ══════════════════════════════════════════════════════════════════════════
+#  8. LA BATTERIE DE MUTATIONS NE SE PÉRIME PLUS EN SILENCE
+# ══════════════════════════════════════════════════════════════════════════
+
+def test_chaque_ancre_de_la_batterie_de_mutations_EXISTE_ENCORE():
+    """CE QUI S'EST PASSÉ TROIS FOIS, ET QUI A MOTIVÉ CETTE RÈGLE.
+
+    La batterie vit dans un fichier de chaînes littérales. Chaque fois que le
+    code qu'elle mute a changé — le réglage de la bulle, puis l'arrivée de
+    l'appel, puis celle de la mention — des ancres ont cessé de correspondre.
+    Une ancre périmée ne mute RIEN : la mutation ne tombe pas, la règle
+    qu'elle devait éprouver n'est plus éprouvée, et personne ne le sait
+    jusqu'à la prochaine exécution manuelle de la batterie.
+
+    Une batterie qu'on croit complète et qui ne couvre plus ce qu'elle
+    prétend est exactement le défaut que ce dépôt traque partout ailleurs.
+    Elle est donc vérifiée par la suite, à chaque passage.
+
+    CE QUE CETTE RÈGLE NE FAIT PAS : exécuter les mutations. Elle garde
+    l'outil, pas le résultat — la batterie se lance à part."""
+    chemin = os.path.join(_RACINE, "tests", "mutations_distinction.json")
+    table = json.loads(io.open(chemin, encoding="utf-8").read())
+    muts = table["mutations"]
+    assert len(muts) >= 50, (
+        "%d mutations seulement : la batterie a maigri sans qu'on le dise"
+        % len(muts))
+
+    fichiers, perimees, sans_effet = {}, [], []
+    for m in muts:
+        f = m["fichier"]
+        if f not in fichiers:
+            fichiers[f] = io.open(os.path.join(_RACINE, f), encoding="utf-8").read()
+        n = fichiers[f].count(m["avant"])
+        if n != 1:
+            perimees.append("%s — %s : %d occurrence(s)" % (f, m["nom"], n))
+        if m["avant"] == m["apres"]:
+            sans_effet.append(m["nom"])
+    assert not perimees, (
+        "%d ancre(s) périmée(s) : ces mutations ne modifient plus rien et "
+        "les règles qu'elles éprouvent ne sont plus éprouvées.\n  %s"
+        % (len(perimees), "\n  ".join(perimees)))
+    assert not sans_effet, "mutations sans effet : %s" % sans_effet
+
+    nommees = {m["regle"].split("[")[0] for m in muts}
+    source = io.open(os.path.abspath(__file__), encoding="utf-8").read()
+    voisin = io.open(os.path.join(_RACINE, "tests",
+                                  "test_offres_services.py"), encoding="utf-8").read()
+    absentes = [r for r in nommees
+                if ("def %s(" % r) not in source and ("def %s(" % r) not in voisin]
+    assert not absentes, (
+        "la batterie vise des règles qui n'existent plus : %s" % absentes)
