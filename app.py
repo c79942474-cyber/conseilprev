@@ -1894,6 +1894,10 @@ import nist_800_82
                     # la réserve voyage avec chaque réponse
 import owasp_llm    # noqa: E402  — le Top 10 LLM 2025, et surtout ce qu'ISO
 import conformite
+import qualification_assistee  # noqa: E402  — la proposition, jamais la
+                    # décision : ce module ne connaît ni clé ni réseau
+import qualification_moteur    # noqa: E402  — et le seul endroit qui dit
+                    # ce que le moteur a le droit de faire : rien
                     # 42001 ne rencontre pas
 
 
@@ -5246,10 +5250,18 @@ body{{background:linear-gradient(180deg,#1e1250,#3b2280);color:#1a1a2e;padding:2
 # ══════════════════════════════════════════════════════════
 # MOTEUR IA HYBRIDE — Claude (primaire) + Mistral (fallback)
 # ══════════════════════════════════════════════════════════
-def call_anthropic(messages, system='', max_tokens=800, temperature=0.7, emp_ctx=None):
-    """Appelle Claude. Retourne (ok, reply_or_error)."""
+def call_anthropic(messages, system='', max_tokens=800, temperature=0.7, emp_ctx=None,
+                   modele=None):
+    """Appelle Claude. Retourne (ok, reply_or_error).
+
+    `modele` permet a un appelant qui SAIT ce qu'il demande de nommer le
+    modele — la qualification assistee, par exemple, ne se traite pas avec
+    le modele du chat. Laisse a None, rien ne change pour les vingt autres
+    appelants.
+    """
     if not ANTHROPIC_API_KEY:
         return False, 'no_anthropic_key'
+    _modele = modele or ANTHROPIC_MODEL
     try:
         _t0 = time.time()
         # Anthropic sépare le system du tableau messages
@@ -5262,7 +5274,7 @@ def call_anthropic(messages, system='', max_tokens=800, temperature=0.7, emp_ctx
                 'content-type': 'application/json',
             },
             json={
-                'model': ANTHROPIC_MODEL,
+                'model': _modele,
                 'max_tokens': max_tokens,
                 'temperature': temperature,
                 'system': system,
@@ -5276,7 +5288,7 @@ def call_anthropic(messages, system='', max_tokens=800, temperature=0.7, emp_ctx
             text = ''.join(b.get('text', '') for b in blocks if b.get('type') == 'text')
             try:
                 _u = _data.get('usage') or {}
-                _emp_log(ANTHROPIC_MODEL, _u.get('input_tokens'), _u.get('output_tokens'),
+                _emp_log(_modele, _u.get('input_tokens'), _u.get('output_tokens'),
                          int((time.time() - _t0) * 1000), module='assistant', ctx=emp_ctx)
             except Exception:
                 pass
@@ -9713,6 +9725,75 @@ def registre_init_db():
     registre_ajouter_colonne(cur, 'systemes_ia', 'ajustement_fin', "TEXT")
     conn.commit()
 
+    # ══════════════════════════════════════════════════════════
+    # LES PROPOSITIONS DE QUALIFICATION — UNE TABLE A PART, ET C'EST LE
+    # POINT.
+    #
+    # Une proposition produite par un modele pourrait tres bien s'ecrire
+    # directement dans systemes_ia.classification : une ligne de moins, un
+    # ecran de moins. Elle deviendrait alors indiscernable d'une
+    # classification decidee par une personne — meme colonne, meme
+    # affichage, meme PDF de cartographie. Six mois plus tard, personne ne
+    # saurait plus lesquelles ont ete prononcees et lesquelles ont ete
+    # devinees.
+    #
+    # La table separee existe pour qu'on puisse toujours repondre a la
+    # question « qui a decide ca ». `decide_par` et `decide_le` ne sont pas
+    # de la tracabilite decorative : ce sont les deux colonnes qui font la
+    # difference entre un registre opposable et une base de donnees.
+    # ══════════════════════════════════════════════════════════
+    if REGISTRE_USE_PG:
+        cur.execute('''CREATE TABLE IF NOT EXISTS qualifications_ia (
+            id SERIAL PRIMARY KEY,
+            client_id INTEGER,
+            systeme_id INTEGER,
+            classe_proposee TEXT,
+            article TEXT,
+            motivation TEXT,
+            indices TEXT,
+            appui REAL DEFAULT 0,
+            fragile BOOLEAN DEFAULT FALSE,
+            confiance_declaree REAL,
+            a_completer BOOLEAN DEFAULT FALSE,
+            motif TEXT,
+            moteur TEXT,
+            modele TEXT,
+            classe_avant TEXT,
+            statut TEXT DEFAULT 'en_attente',
+            classe_retenue TEXT,
+            corrigee BOOLEAN DEFAULT FALSE,
+            motif_decision TEXT,
+            decide_par TEXT,
+            decide_le TEXT,
+            date_creation TEXT
+        )''')
+    else:
+        cur.execute('''CREATE TABLE IF NOT EXISTS qualifications_ia (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            client_id INTEGER,
+            systeme_id INTEGER,
+            classe_proposee TEXT,
+            article TEXT,
+            motivation TEXT,
+            indices TEXT,
+            appui REAL DEFAULT 0,
+            fragile INTEGER DEFAULT 0,
+            confiance_declaree REAL,
+            a_completer INTEGER DEFAULT 0,
+            motif TEXT,
+            moteur TEXT,
+            modele TEXT,
+            classe_avant TEXT,
+            statut TEXT DEFAULT 'en_attente',
+            classe_retenue TEXT,
+            corrigee INTEGER DEFAULT 0,
+            motif_decision TEXT,
+            decide_par TEXT,
+            decide_le TEXT,
+            date_creation TEXT
+        )''')
+    conn.commit()
+
     cur.execute('SELECT COUNT(*) AS n FROM systemes_ia')
     row = cur.fetchone()
     count = row['n'] if isinstance(row, dict) else row[0]
@@ -10386,6 +10467,301 @@ def registre_status():
         'moteur': 'postgres' if REGISTRE_USE_PG else 'sqlite',
         'persistant': REGISTRE_USE_PG,
         'message': 'Base de donnees externe geree (persistance garantie)' if REGISTRE_USE_PG else 'SQLite local — DATABASE_URL non configuree, donnees non persistantes entre deploiements'
+    })
+
+
+# ══════════════════════════════════════════════════════════
+# QUALIFICATION ASSISTÉE DU REGISTRE
+# La machine propose, une personne prononce.
+#
+# CE QUI EST AUTOMATISE : lire une ligne du registre, refuser quand elle
+# est trop maigre, formuler une proposition motivee et verifiee.
+# CE QUI NE L'EST PAS : ecrire la colonne `classification`. Une seule route
+# le fait — /decider — et elle exige le nom de la personne qui decide,
+# qu'elle inscrit a cote de ce qui lui avait ete propose.
+#
+# POURQUOI DEUX ROUTES PLUTOT QU'UNE. Un « qualifier automatiquement »
+# unique aurait tenu en trente lignes. Il aurait aussi rendu impossible de
+# repondre, six mois plus tard, a « qui a decide que ce systeme etait a
+# haut risque ». La separation N'EST PAS de la prudence decorative : c'est
+# ce qui fait la difference entre un registre opposable au titre de
+# l'article 49 et une base de donnees.
+# ══════════════════════════════════════════════════════════
+
+# CHAQUE LIGNE COUTE UN APPEL DE MODELE. Le plafond n'est pas une
+# politesse : sans lui, un registre de trois cents systemes lance trois
+# cents appels sur un clic, et la facture arrive avant le resultat.
+QUALIF_LOT_MAX = 10
+
+
+def _qualif_secours(prompt_txt, systeme_prompt):
+    """Le repli quand l'executable Claude Code n'est pas la.
+
+    `ai_complete()` n'est PAS employe ici, et c'est deliberé : il bascule
+    sur Mistral quand Claude ne repond pas. Une qualification reglementaire
+    qui changerait de moteur en silence changerait aussi de raisonnement,
+    sans que la trace ecrite a cote de la proposition le dise. Ici, le
+    repli est le MEME modele par un autre chemin — ou rien.
+    """
+    return call_anthropic(
+        [{'role': 'user', 'content': prompt_txt}],
+        system=systeme_prompt, max_tokens=700, temperature=0,
+        modele=qualification_moteur.MODELE)
+
+
+def _qualif_row_to_dict(row):
+    champs = ['id', 'client_id', 'systeme_id', 'classe_proposee', 'article',
+              'motivation', 'indices', 'appui', 'fragile', 'confiance_declaree',
+              'a_completer', 'motif', 'moteur', 'modele', 'classe_avant',
+              'statut', 'classe_retenue', 'corrigee', 'motif_decision',
+              'decide_par', 'decide_le', 'date_creation']
+    d = dict(row) if isinstance(row, dict) else dict(zip(champs, row))
+    try:
+        d['indices'] = json.loads(d.get('indices') or '[]')
+    except Exception:
+        d['indices'] = []
+    for b in ('fragile', 'a_completer', 'corrigee'):
+        d[b] = bool(d.get(b))
+    art = d.get('article')
+    d['article_texte'] = next(
+        (a['texte'] for a in qualification_assistee.ARTICLES if a['cle'] == art),
+        None)
+    cl = d.get('classe_proposee')
+    d['classe_nom'] = (qualification_assistee.CLASSES[cl]['libelle']
+                       if cl in qualification_assistee.CLASSES else None)
+    d['motif_texte'] = qualification_assistee.MOTIFS.get(d.get('motif'))
+    return d
+
+
+@app.route('/api/qualification/referentiel', methods=['GET'])
+@rate_limit(limit=120, window=60)
+def api_qualif_referentiel():
+    """Le vocabulaire, les articles invocables, et CE QUE LE MOTEUR PEUT FAIRE.
+
+    L'etat du moteur voyage avec le referentiel plutot que dans une note :
+    un ecran qui dit « assiste par IA » sans dire quel moteur, avec quels
+    outils et combien de tours, ne dit rien.
+    """
+    ref = qualification_assistee.referentiel()
+    ref['moteur'] = qualification_moteur.etat()
+    ref['lot_max'] = QUALIF_LOT_MAX
+    return jsonify(ref)
+
+
+@app.route('/api/qualification/proposer', methods=['POST'])
+@require_paid_plan
+@rate_limit(limit=6, window=60)
+def api_qualif_proposer():
+    """Propose une classification pour les systemes demandes.
+
+    CETTE ROUTE N'ECRIT JAMAIS `systemes_ia`. Elle ne fait qu'ajouter des
+    lignes « en attente » dans `qualifications_ia`.
+    """
+    client = sentauth_current_client()
+    data = request.get_json(force=True) or {}
+    demandes = data.get('systemes')
+    if not isinstance(demandes, list):
+        demandes = []
+    demandes = [int(i) for i in demandes if str(i).strip().lstrip('-').isdigit()]
+
+    conn = registre_get_db()
+    cur = conn.cursor()
+    if demandes:
+        cur.execute(registre_sql(
+            'SELECT * FROM systemes_ia WHERE client_id=%s ORDER BY date_maj DESC',
+            'SELECT * FROM systemes_ia WHERE client_id=? ORDER BY date_maj DESC'
+        ), (client['id'],))
+        lignes = [r for r in cur.fetchall()
+                  if registre_row_to_dict(r)['id'] in demandes]
+    else:
+        # LE DEFAUT VISE CE QUI N'EST PAS CLASSE, et rien d'autre : proposer
+        # a un systeme deja qualifie par une personne serait lui demander de
+        # se re-justifier sans motif.
+        cur.execute(registre_sql(
+            "SELECT * FROM systemes_ia WHERE client_id=%s AND "
+            "(classification IS NULL OR classification='' OR classification='a_evaluer') "
+            "ORDER BY date_maj DESC",
+            "SELECT * FROM systemes_ia WHERE client_id=? AND "
+            "(classification IS NULL OR classification='' OR classification='a_evaluer') "
+            "ORDER BY date_maj DESC"
+        ), (client['id'],))
+        lignes = cur.fetchall()
+
+    systemes = [registre_row_to_dict(r) for r in lignes][:QUALIF_LOT_MAX]
+    if not systemes:
+        conn.close()
+        return jsonify({'propositions': [], 'traites': 0, 'restants': 0,
+                        'message': "Aucun systeme a qualifier : tout le "
+                                   "registre porte deja une classification."})
+
+    repondre, moteur = qualification_moteur.repondeur(secours=_qualif_secours)
+    now = datetime.utcnow().isoformat()
+    ins = registre_sql(
+        '''INSERT INTO qualifications_ia (client_id, systeme_id, classe_proposee,
+           article, motivation, indices, appui, fragile, confiance_declaree,
+           a_completer, motif, moteur, modele, classe_avant, statut, date_creation)
+           VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''',
+        '''INSERT INTO qualifications_ia (client_id, systeme_id, classe_proposee,
+           article, motivation, indices, appui, fragile, confiance_declaree,
+           a_completer, motif, moteur, modele, classe_avant, statut, date_creation)
+           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''')
+
+    faites = []
+    for sysd in systemes:
+        prop = qualification_assistee.proposer(sysd, repondre)
+        ecart = qualification_assistee.ecart(sysd, prop)
+        cur.execute(ins, (
+            client['id'], sysd['id'], prop.get('classe_proposee'),
+            prop.get('article'), prop.get('motivation'),
+            json.dumps(prop.get('indices') or [], ensure_ascii=False),
+            prop.get('appui') or 0,
+            bool(prop.get('fragile')), prop.get('confiance_declaree'),
+            bool(prop.get('a_completer')), prop.get('motif'),
+            moteur, qualification_moteur.MODELE, ecart['avant'],
+            'en_attente', now))
+        faites.append(dict(prop, systeme_id=sysd['id'], systeme_nom=sysd['nom'],
+                           ecart=ecart, moteur=moteur,
+                           modele=qualification_moteur.MODELE))
+    conn.commit()
+    conn.close()
+
+    return jsonify({
+        'propositions': faites,
+        'traites': len(faites),
+        'restants': max(0, len(lignes) - len(systemes)),
+        'lot_max': QUALIF_LOT_MAX,
+        'moteur': moteur,
+        'reserve': qualification_assistee.RESERVE,
+        # DIT A L'ECRAN QUE RIEN N'A BOUGE. Un ecran qui ne le dit pas laisse
+        # croire que le registre vient d'etre mis a jour.
+        'registre_modifie': False,
+    })
+
+
+@app.route('/api/qualification/propositions', methods=['GET'])
+@require_paid_plan
+@rate_limit(limit=60, window=60)
+def api_qualif_propositions():
+    """Les propositions du client — en attente par defaut, l'historique sur demande."""
+    client = sentauth_current_client()
+    statut = (request.args.get('statut') or 'en_attente').strip()
+    if statut not in qualification_assistee.STATUTS and statut != 'toutes':
+        statut = 'en_attente'
+
+    conn = registre_get_db()
+    cur = conn.cursor()
+    if statut == 'toutes':
+        cur.execute(registre_sql(
+            'SELECT * FROM qualifications_ia WHERE client_id=%s ORDER BY id DESC',
+            'SELECT * FROM qualifications_ia WHERE client_id=? ORDER BY id DESC'
+        ), (client['id'],))
+    else:
+        cur.execute(registre_sql(
+            'SELECT * FROM qualifications_ia WHERE client_id=%s AND statut=%s ORDER BY id DESC',
+            'SELECT * FROM qualifications_ia WHERE client_id=? AND statut=? ORDER BY id DESC'
+        ), (client['id'], statut))
+    props = [_qualif_row_to_dict(r) for r in cur.fetchall()]
+
+    cur.execute(registre_sql(
+        'SELECT * FROM systemes_ia WHERE client_id=%s',
+        'SELECT * FROM systemes_ia WHERE client_id=?'), (client['id'],))
+    par_id = {s['id']: s for s in (registre_row_to_dict(r) for r in cur.fetchall())}
+    conn.commit()
+    conn.close()
+
+    for p in props:
+        s = par_id.get(p.get('systeme_id'))
+        p['systeme_nom'] = s['nom'] if s else None
+        p['systeme_absent'] = s is None
+        if s:
+            p['ecart'] = qualification_assistee.ecart(
+                s, {'classe_proposee': p.get('classe_proposee')})
+    return jsonify({'propositions': props, 'statut': statut,
+                    'reserve': qualification_assistee.RESERVE})
+
+
+@app.route('/api/qualification/<int:prop_id>/decider', methods=['POST'])
+@require_paid_plan
+@rate_limit(limit=30, window=60)
+def api_qualif_decider(prop_id):
+    """LA SEULE PORTE VERS `systemes_ia.classification`, et elle exige un nom.
+
+    Le nom du decideur n'est pas une formalite d'interface : c'est ce qui
+    distingue une classification prononcee d'une valeur ecrite par un
+    programme. La route refuse sans lui, et le moteur aussi.
+    """
+    client = sentauth_current_client()
+    data = request.get_json(force=True) or {}
+    decision = (data.get('decision') or '').strip()
+    qui = (data.get('decideur') or '').strip()[:200]
+    if not qui:
+        # Le compte est authentifie ; a defaut d'un nom saisi, c'est lui qui
+        # porte la decision — jamais « le systeme ».
+        qui = (client.get('email') or client.get('nom_entreprise') or '').strip()
+    classe_retenue = (data.get('classe_retenue') or '').strip() or None
+    motif = (data.get('motif') or '').strip()[:500] or None
+
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute(registre_sql(
+        'SELECT * FROM qualifications_ia WHERE id=%s AND client_id=%s',
+        'SELECT * FROM qualifications_ia WHERE id=? AND client_id=?'
+    ), (prop_id, client['id']))
+    row = cur.fetchone()
+    if not row:
+        conn.close()
+        return jsonify({'error': 'Proposition introuvable.'}), 404
+    prop = _qualif_row_to_dict(row)
+
+    cur.execute(registre_sql(
+        'SELECT * FROM systemes_ia WHERE id=%s AND client_id=%s',
+        'SELECT * FROM systemes_ia WHERE id=? AND client_id=?'
+    ), (prop['systeme_id'], client['id']))
+    srow = cur.fetchone()
+    if not srow:
+        conn.close()
+        return jsonify({'error': "Le systeme vise n'existe plus au registre."}), 404
+    sysd = registre_row_to_dict(srow)
+
+    verdict = qualification_assistee.appliquer(
+        sysd, prop, decision, qui, classe_retenue=classe_retenue, motif=motif)
+    if not verdict.get('ok'):
+        conn.close()
+        return jsonify({'error': verdict.get('motif_texte'),
+                        'motif': verdict.get('motif')}), 400
+
+    now = datetime.utcnow().isoformat()
+    ecriture = verdict.get('ecriture')
+    if ecriture:
+        cur.execute(registre_sql(
+            'UPDATE systemes_ia SET classification=%s, justification=%s, '
+            'date_maj=%s WHERE id=%s AND client_id=%s',
+            'UPDATE systemes_ia SET classification=?, justification=?, '
+            'date_maj=? WHERE id=? AND client_id=?'
+        ), (ecriture['classification'], ecriture['justification'], now,
+            sysd['id'], client['id']))
+
+    cur.execute(registre_sql(
+        'UPDATE qualifications_ia SET statut=%s, classe_retenue=%s, corrigee=%s, '
+        'motif_decision=%s, decide_par=%s, decide_le=%s WHERE id=%s AND client_id=%s',
+        'UPDATE qualifications_ia SET statut=?, classe_retenue=?, corrigee=?, '
+        'motif_decision=?, decide_par=?, decide_le=? WHERE id=? AND client_id=?'
+    ), (verdict['statut'], (ecriture or {}).get('classification'),
+        bool(verdict.get('corrigee')), verdict.get('motif_decision'),
+        qui, now, prop_id, client['id']))
+    conn.commit()
+    conn.close()
+
+    logger.info('QUALIF_DECIDEE prop=%s systeme=%s statut=%s par=%s'
+                % (prop_id, sysd['id'], verdict['statut'], qui[:60]))
+    return jsonify({
+        'ok': True,
+        'statut': verdict['statut'],
+        'decide_par': qui,
+        'decide_le': now,
+        'corrigee': bool(verdict.get('corrigee')),
+        'registre_modifie': bool(ecriture),
+        'ecriture': ecriture,
     })
 
 

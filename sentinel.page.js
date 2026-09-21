@@ -995,6 +995,7 @@ var PAGE_META = {
   gouvernance: {section:'TRAITER & GOUVERNER',  label:'Gouvernance IA'},
   parties:  {section:'TRAITER & GOUVERNER',     label:'Parties prenantes'},
   registre: {section:'CARTOGRAPHIER',        label:'Systèmes IA'},
+  'qualif-assistee': {section:'CARTOGRAPHIER', label:'Qualification assistée'},
   simulateur: {section:'CARTOGRAPHIER',      label:'Simulateur IA Act'},
   'audit-ia-act': {section:'ÉVALUER LE RISQUE', label:'Audit IA Act'},
   matrice:  {section:'ÉVALUER LE RISQUE',         label:'Matrice risques'},
@@ -1110,6 +1111,10 @@ var SENT_T = {
     'nav.item.shadow-ai': 'Shadow AI discovery',
     'nav.item.simulateur': 'AI Act simulator',
     'nav.item.registre': 'AI register',
+    'nav.item.qualif-assistee': 'Assisted qualification',
+    'pg.qualif-assistee.eb': 'Map · Register',
+    'pg.qualif-assistee.h1': 'Assisted <em>qualification</em>',
+    'pg.qualif-assistee.p': 'The engine reads the rows of the AI register, proposes a classification under Regulation (EU) 2024/1689, and quotes the excerpts of your own declaration it relies on. <strong>It writes nothing.</strong> A classification enters the register only through a decision you pronounce, which stays recorded next to what was proposed to you.',
     'nav.item.nist53-socle': 'Baseline and eighteen families',
     'nav.item.nist82-ot': 'Industrial overlay (OT)',
     'pg.nist53-socle.eb': 'NIST SP 800-53 · Rev. 4',
@@ -1447,6 +1452,12 @@ function go(id, el, sec, pg) {
   if (id.indexOf('iso42001') === 0 && typeof window.isoInit === 'function') _apresPeinture(window.isoInit);
   if (id.indexOf('iso27001') === 0 && typeof window.iso27Init === 'function') _apresPeinture(window.iso27Init);
   if (id.indexOf('nis2') === 0 && typeof window.nis2Init === 'function') _apresPeinture(window.nis2Init);
+  /* MESURÉ PAR LA RECETTE, PAS SUPPOSÉ. Le lien profond `?goto=` et les
+     étapes d'un parcours guidé passent par `go()` sans jamais exécuter le
+     `;qualifInit()` écrit dans le `onclick` de la barre latérale : la page
+     s'ouvrait alors VIDE pour qui n'y arrivait pas par le menu — c'est-à-dire
+     pour le parcours du directeur de programme, où elle figure. */
+  if (id === 'qualif-assistee' && typeof window.qualifInit === 'function') _apresPeinture(window.qualifInit);
   /* L'ONGLET COURANT EST AUSSI ANNONCÉ, pas seulement peint : à un lecteur
      d'écran, la pastille terre cuite ne dit rien. */
   function _ici(i){ i.classList.add('on'); i.setAttribute('aria-current', 'page'); }
@@ -10555,6 +10566,16 @@ var PAGE_GUIDES = {
       {h:"Comment l utiliser", t:"+ Ajouter un système pour créer une fiche complète (classification, justification Annexe III, statut). Cliquez une ligne pour la modifier. La recherche filtre par nom, secteur, type ou responsable."},
       {h:"Connexions", t:"Ce registre alimente automatiquement la Matrice des risques, le Radar, et peut être enrichi directement depuis le Simulateur."},
       {h:"C’est la source de presque tout le reste", t:"Le benchmark, le radar, la matrice, la feuille de route et la veille qualifiée lisent TOUS ce registre. Un registre vide ne rend pas ces modules neutres : il les rend faux."}
+    ]
+  },
+  'qualif-assistee': {
+    title: "Qualification assistée",
+    sections: [
+      {h:"À quoi sert cette page", t:"Le moteur lit les lignes du Registre IA qui n’ont pas de classification, et propose pour chacune une classe, l’article qui la soutient, et les extraits de votre déclaration sur lesquels il s’appuie."},
+      {h:"Comment l utiliser", t:"Lancez « Proposer », puis lisez chaque proposition. Vous pouvez la valider, la corriger en choisissant une autre classe, ou l’écarter. Votre nom accompagne la décision."},
+      {h:"Le moteur n’écrit jamais le registre", t:"Proposer et décider sont deux routes différentes. La première n’a aucun accès en écriture à la colonne « classification » ; la seconde l’écrit, et refuse sans le nom d’une personne."},
+      {h:"Un extrait qui ne se retrouve pas dans votre texte fait tomber la proposition", t:"Les indices sont comparés MOT POUR MOT à la déclaration. Une reformulation, même juste, n’est pas vérifiable : la proposition passe alors sur « à compléter », avec la liste de ce qui manque."},
+      {h:"Ce que le chiffre d’appui mesure, et ce qu’il ne mesure pas", t:"Il vient de la part des champs réellement déclarés et du nombre d’indices retrouvés. La confiance annoncée par le moteur est conservée mais n’entre pas dans le calcul : un modèle sûr de lui se trompe comme un modèle hésitant."}
     ]
   },
   matrice: {
@@ -19797,6 +19818,10 @@ var GUIDED_PATHS = [
       {id:'carto-uc', label:'Cartographie des cas d\u2019usage IA', action:'Parcourez les 5 \u00e9tapes : ciblez votre secteur et vos processus, s\u00e9lectionnez les cas d\u2019usage \u00e0 potentiel, qualifiez-les, chiffrez le retour attendu et \u00e9valuez votre maturit\u00e9.', gain:'Transforme une intention IA en une liste courte de cas d\u2019usage prioris\u00e9s, chiffr\u00e9s et jug\u00e9s d\u00e9ployables \u2014 la base d\u2019un programme orient\u00e9 valeur m\u00e9tier.', tip:'TPE : concentrez-vous sur 2 \u00e0 3 cas transverses \u00e0 ROI rapide. Grand compte : croisez cette cartographie avec les jalons de conformit\u00e9 AI Act du module RaaS pour lier valeur et conformit\u00e9.'},
             {id:'simulateur', label:'Simulateur IA Act', action:'Répondez aux 5 étapes de classification pour chaque système IA identifié (interne, fournisseur, ou en projet).', gain:'Détermine en quelques minutes le niveau de risque et les obligations légales exactes — évite de découvrir une obligation critique trop tard dans le projet.', tip:'TPE : suffit à sécuriser une décision GO/NO-GO rapide avant tout investissement. Grand compte : imposez cette étape comme jalon obligatoire avant tout comité d’engagement IA.'},
       {id:'registre', label:'Registre IA', action:'Enregistrez chaque système classifié avec sa finalité, son fournisseur et ses données utilisées.', gain:'Constitue l’inventaire central exigé par le Règlement — la preuve documentaire en cas de contrôle.', tip:'TPE : 3 à 5 systèmes suffisent souvent à démarrer. Grand compte : structurez par filiale ou direction métier dès le départ pour éviter une reprise fastidieuse.'},
+      {id:'qualif-assistee', label:'Qualification assistée',
+       action:'Lancez une proposition sur les lignes restées « à évaluer », lisez les extraits cités, puis validez, corrigez ou écartez — en signant de votre nom.',
+       gain:'Le passage à l’échelle sans perdre la trace : sur un registre de plusieurs dizaines de systèmes, la lecture est automatisée, la DÉCISION ne l’est pas, et chaque classification garde le nom de qui l’a prononcée.',
+       tip:'Une proposition dont les extraits ne se retrouvent pas mot pour mot dans votre déclaration est refusée avant de vous être montrée. Si beaucoup tombent sur « à compléter », le défaut est dans le registre, pas dans le moteur : ce sont les finalités qui manquent.'},
       {id:'maturite', label:'Audit de maturité', action:'Évaluez les 8 piliers (explicabilité, gouvernance, sécurité…) sur une échelle de 1 à 5.', gain:'Identifie les angles morts organisationnels avant même de plonger dans le détail réglementaire — où sont les vraies failles ?', tip:'TPE : concentrez-vous sur 2-3 piliers les plus critiques pour votre activité. Grand compte : répétez l’évaluation par direction pour cartographier les écarts internes.'},
       {id:'audit-ia-act', label:'Audit IA Act', action:'Passez en revue les 34 points de contrôle, en marquant chacun conforme / en cours / à traiter.', gain:'Transforme la maturité générale en plan d’action concret, point par point, avec référence légale exacte.', tip:'TPE : traitez d’abord les points P1 (sanctions directes). Grand compte : déléguez des sections entières à des référents métier identifiés.'},
       {id:'audit', label:'Lancer l’audit', action:'Ouvrez l’audit structuré en cinq étapes et faites-le porter sur le périmètre que vous venez de classer.', gain:'Le passage du constat à l’instruction : l’audit produit les pièces que la matrice suivante hiérarchisera.', tip:'Lancez-le sur un périmètre restreint et fini plutôt que sur l’organisation entière : un audit qui ne se termine pas ne produit aucune pièce.'},
@@ -25243,6 +25268,227 @@ function nist82Evaluer() {
     v.innerHTML = h;
   }).catch(function () {});
 }
+
+/* ══════════════════════════════════════════════════════════════════════
+   QUALIFICATION ASSISTÉE — L'ÉCRAN QUI SÉPARE PROPOSER DE PRONONCER
+
+   Deux boutons, deux routes, et c'est tout le sujet. « Proposer » appelle
+   une route qui n'a aucun accès en écriture à la colonne `classification`.
+   « Valider » appelle celle qui l'a, et qui refuse sans le nom d'une
+   personne.
+
+   L'ÉCRAN NE CACHE PAS LES REFUS. Une proposition tombée sur « à
+   compléter » s'affiche comme les autres, avec le motif et la liste des
+   champs manquants : la faire disparaître donnerait l'illusion d'un
+   registre entièrement traité.
+   ══════════════════════════════════════════════════════════════════════ */
+
+var QUALIF_REF = null;
+var QUALIF_PROPS = [];
+
+function qualifEsc(t) {
+  return String(t == null ? '' : t).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function qualifInit() {
+  if (QUALIF_REF) { qualifCharger(); return; }
+  fetch('/api/qualification/referentiel')
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      QUALIF_REF = d;
+      var m = d.moteur || {};
+      var el = document.getElementById('qualif-moteur');
+      if (el) {
+        el.innerHTML =
+          '<b>Moteur</b> : ' + qualifEsc(m.moteur_texte || '—')
+          + ' · modèle <code>' + qualifEsc(m.modele || '—') + '</code>'
+          + ' · <b>' + (m.sans_outils ? 'aucun outil' : 'OUTILS ACTIFS')
+          + '</b> · ' + qualifEsc(m.tours_max) + ' tour.<br>'
+          /* CE QUE LE MOTEUR NE PEUT PAS FAIRE EST ÉCRIT À L'ÉCRAN, pas
+             seulement dans le code : c'est la première question que pose
+             un auditeur, et la réponse ne doit pas demander de lire une
+             source. */
+          + '<span style="opacity:.8">Refusés nommément : '
+          + qualifEsc((m.outils_interdits || []).join(', ')) + '. '
+          + 'Les lignes du registre voyagent en données dans la demande ; '
+          + 'le moteur n’ouvre aucun fichier et n’écrit nulle part.</span>';
+      }
+      var r2 = document.getElementById('qualif-reserve');
+      if (r2) r2.textContent = d.reserve || '';
+      qualifCharger();
+    })
+    .catch(function () {
+      var el = document.getElementById('qualif-moteur');
+      if (el) el.textContent = 'Moteur indisponible.';
+    });
+}
+
+function qualifCharger() {
+  var f = document.getElementById('qualif-filtre');
+  var statut = f ? f.value : 'en_attente';
+  var box = document.getElementById('qualif-liste');
+  if (box) box.innerHTML = '<div class="veille-loading">Chargement…</div>';
+  fetch('/api/qualification/propositions?statut=' + encodeURIComponent(statut))
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      QUALIF_PROPS = d.propositions || [];
+      qualifPeindre();
+    })
+    .catch(function () {
+      if (box) box.innerHTML = '<div class="veille-loading">Chargement impossible.</div>';
+    });
+}
+
+function qualifProposer() {
+  var b = document.getElementById('qualif-btn-proposer');
+  if (b) { b.disabled = true; b.textContent = '⏳ Le moteur lit le registre…'; }
+  fetch('/api/qualification/proposer', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({})
+  })
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      if (b) { b.disabled = false; b.textContent = '⚙️ Proposer pour les systèmes non classés'; }
+      var f = document.getElementById('qualif-filtre');
+      if (f) f.value = 'en_attente';
+      if (d.message) alert(d.message);
+      else if (d.restants) {
+        alert(d.traites + ' proposition(s) préparée(s). ' + d.restants
+          + ' système(s) restent à traiter : relancez pour le lot suivant.');
+      }
+      qualifCharger();
+    })
+    .catch(function () {
+      if (b) { b.disabled = false; b.textContent = '⚙️ Proposer pour les systèmes non classés'; }
+      alert('Le moteur n’a pas répondu.');
+    });
+}
+
+function qualifClasseOptions(retenue) {
+  var cl = (QUALIF_REF && QUALIF_REF.classes) || [];
+  return cl.map(function (c) {
+    return '<option value="' + qualifEsc(c.cle) + '"'
+      + (c.cle === retenue ? ' selected' : '') + '>'
+      + qualifEsc(c.libelle) + '</option>';
+  }).join('');
+}
+
+function qualifCarte(p) {
+  var h = '<div class="tbl-wrap" style="margin:14px 0;padding:16px 18px">';
+  h += '<div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline">'
+    + '<b style="font-size:13px">' + qualifEsc(p.systeme_nom || ('système #' + p.systeme_id)) + '</b>'
+    + '<span style="font-family:var(--mono);font-size:10px;color:var(--muted2)">'
+    + 'appui ' + qualifEsc(p.appui) + (p.fragile ? ' · <b>appui faible</b>' : '')
+    + ' · ' + qualifEsc(p.moteur || '—') + ' · ' + qualifEsc(p.modele || '—')
+    + '</span></div>';
+
+  if (p.a_completer || !p.classe_proposee) {
+    h += '<div class="radar-registre-info radar-registre-warn" style="margin-top:10px">'
+      + '<b>Aucune proposition</b> — ' + qualifEsc(p.motif_texte || p.motif || '') + '</div>';
+    if ((p.manquants || []).length) {
+      h += '<ul style="font-size:11.5px;margin:8px 0 0 18px">'
+        + p.manquants.filter(function (m) { return m.obligatoire; }).map(function (m) {
+          return '<li><b>' + qualifEsc(m.nom) + '</b> — ' + qualifEsc(m.pourquoi) + '</li>';
+        }).join('') + '</ul>';
+    }
+    h += '</div>';
+    return h;
+  }
+
+  var ec = p.ecart || {};
+  h += '<div style="margin-top:10px;font-size:12.5px">'
+    + '<b>' + qualifEsc(p.classe_nom || p.classe_proposee) + '</b>'
+    + ' · ' + qualifEsc(p.article_texte || p.article) + '</div>';
+  h += '<div style="margin-top:6px;font-size:12px">' + qualifEsc(p.motivation) + '</div>';
+
+  if ((p.indices || []).length) {
+    /* LES INDICES SONT DES CITATIONS DE VOTRE PROPRE TEXTE. Les montrer
+       est ce qui permet de contredire la proposition sans ouvrir le
+       registre à côté. */
+    h += '<div style="margin-top:10px;font-size:11.5px;color:var(--muted2)">'
+      + 'Retrouvés mot pour mot dans votre déclaration :</div>'
+      + '<ul style="font-size:11.5px;margin:4px 0 0 18px">'
+      + p.indices.map(function (i) { return '<li>« ' + qualifEsc(i) + ' »</li>'; }).join('')
+      + '</ul>';
+  }
+
+  if (ec.avant_nom) {
+    h += '<div style="margin-top:10px;font-family:var(--mono);font-size:11px">'
+      + qualifEsc(ec.avant_nom) + ' → <b>' + qualifEsc(ec.apres_nom || '') + '</b>'
+      + (ec.change ? '' : ' (aucun changement)') + '</div>';
+  }
+
+  if (p.statut !== 'en_attente') {
+    h += '<div class="radar-registre-info radar-registre-ok" style="margin-top:12px">'
+      + (p.statut === 'validee' ? 'Validée' : 'Écartée')
+      + ' par <b>' + qualifEsc(p.decide_par || '—') + '</b>'
+      + ' le ' + qualifEsc((p.decide_le || '').slice(0, 16).replace('T', ' à '))
+      + (p.corrigee ? ' — <b>corrigée</b> en « ' + qualifEsc(p.classe_retenue) + ' »' : '')
+      + (p.motif_decision ? '<br>' + qualifEsc(p.motif_decision) : '')
+      + '</div></div>';
+    return h;
+  }
+
+  h += '<div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">'
+    + '<span style="font-size:11px;color:var(--muted2)">Classe retenue</span>'
+    + '<select class="reg-input" style="max-width:220px" id="qualif-classe-' + p.id + '">'
+    + qualifClasseOptions(p.classe_proposee) + '</select>'
+    + '<input type="text" class="reg-input" style="max-width:280px" id="qualif-motif-' + p.id
+    + '" placeholder="Motif de votre décision (facultatif)">'
+    + '<button class="mat-export-btn" style="background:var(--green);color:#fff" '
+    + 'onclick="qualifDecider(' + p.id + ',\'valider\')">✓ Valider et inscrire au registre</button>'
+    + '<button class="mat-export-btn" style="background:var(--bg);color:var(--ink);border:1px solid var(--rule2)" '
+    + 'onclick="qualifDecider(' + p.id + ',\'ecarter\')">✕ Écarter</button>'
+    + '</div></div>';
+  return h;
+}
+
+function qualifPeindre() {
+  var box = document.getElementById('qualif-liste');
+  var c = document.getElementById('qualif-compte');
+  if (!box) return;
+  if (c) {
+    c.textContent = QUALIF_PROPS.length
+      ? QUALIF_PROPS.length + ' proposition(s)'
+      : 'Aucune proposition';
+  }
+  if (!QUALIF_PROPS.length) {
+    box.innerHTML = '<div class="veille-loading">Aucune proposition à afficher. '
+      + 'Lancez « Proposer » pour que le moteur lise les systèmes non classés.</div>';
+    return;
+  }
+  box.innerHTML = QUALIF_PROPS.map(qualifCarte).join('');
+}
+
+/* LES QUATRE FONCTIONS DE L'ÉCRAN SONT PUBLIÉES sur `window` : les
+   `onclick` du panneau et l'aiguillage de `go()` les cherchent là. */
+window.qualifInit = qualifInit;
+window.qualifCharger = qualifCharger;
+window.qualifProposer = qualifProposer;
+
+function qualifDecider(id, decision) {
+  var qui = (document.getElementById('qualif-decideur') || {}).value || '';
+  var sel = document.getElementById('qualif-classe-' + id);
+  var mot = document.getElementById('qualif-motif-' + id);
+  fetch('/api/qualification/' + id + '/decider', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      decision: decision,
+      decideur: qui,
+      classe_retenue: sel ? sel.value : null,
+      motif: mot ? mot.value : null
+    })
+  })
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      if (d.error) { alert(d.error); return; }
+      qualifCharger();
+    })
+    .catch(function () { alert('La décision n’a pas pu être enregistrée.'); });
+}
+
+window.qualifDecider = qualifDecider;
 
 function declPublier() {
   window.CONF_DECL = window.CONF_DECL || {};

@@ -3245,6 +3245,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <div class="sb-item" data-grp="cartographier" role="button" tabindex="0" onclick="go('shadow-ai',this,'CARTOGRAPHIER','Découverte Shadow AI')" title="Recensez les systemes IA invisibles deja presents dans votre organisation, avant de les classifier."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg></span><span data-i18n="nav.item.shadow-ai">Découverte Shadow AI</span></div>
     <div class="sb-item" data-grp="cartographier" role="button" tabindex="0" onclick="go('simulateur',this,'CARTOGRAPHIER','Simulateur IA Act')" title="Classifiez un systeme IA selon le Reglement EU AI Act avant de l enregistrer au Registre."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span><span data-i18n="nav.item.simulateur">Simulateur IA Act</span></div>
     <div class="sb-item" data-grp="cartographier" role="button" tabindex="0" onclick="go('registre',this,'CARTOGRAPHIER','Systèmes IA')" title="Registre des systemes IA connecte a une base de donnees reelle (ajout, edition, suppression)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 11v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6"/></svg></span><span data-i18n="nav.item.registre">Registre IA</span></div>
+    <div class="sb-item" data-grp="cartographier" role="button" tabindex="0" onclick="go('qualif-assistee',this,'CARTOGRAPHIER','Qualification assistée');qualifInit()" title="Le moteur propose une classification pour chaque ligne du registre ; vous la prononcez, et la decision reste tracee."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3l2.2 4.5 5 .7-3.6 3.5.9 5-4.5-2.4L7.5 16.7l.9-5L4.8 8.2l5-.7z"/><path d="M5 20h14"/></svg></span><span data-i18n="nav.item.qualif-assistee">Qualification assistée</span></div>
     <!-- LE FINOPS SUIT LE REGISTRE, ET CE VOISINAGE EST L'IDÉE. Il ne tient
          aucun inventaire à lui : il LIT celui de la conformité. Un second
          inventaire tenu à part divergerait du premier dans le mois, et c'est
@@ -4316,6 +4317,30 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
   <div class="tbl-wrap"><div class="tbl-head"><span class="tbl-title" id="reg-count">Chargement…</span></div>
   <div class="comp-head-row" id="reg-sys-head" style="grid-template-columns:28px 1fr 110px 100px 100px 60px 20px;padding:9px 20px;display:grid;background:var(--bg);border-bottom:2px solid var(--rule)"><div class="comp-cell"></div><div class="comp-cell">Système IA</div><div class="comp-cell">Classification</div><div class="comp-cell">Secteur</div><div class="comp-cell">Conformité</div><div class="comp-cell">Score</div><div class="comp-cell"></div></div>
   <div id="reg-sys-body"></div></div>
+</div>
+
+<!-- QUALIFICATION ASSISTÉE -->
+<div class="page" id="p-qualif-assistee">
+  <span class="eyebrow" data-i18n="pg.qualif-assistee.eb">Cartographier · Registre</span>
+  <h1 class="page-h" data-i18n-bloc="pg.qualif-assistee.h1">Qualification <em>assistée</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.qualif-assistee.p">Le moteur lit les lignes du Registre IA, propose une classification au titre du règlement (UE) 2024/1689, et cite les extraits de votre déclaration sur lesquels il s'appuie. <strong>Il n'écrit rien.</strong> La classification n'entre au registre que par une décision que vous prononcez, et qui reste tracée à côté de ce qui vous avait été proposé.</p>
+
+  <div class="radar-registre-info radar-registre-ok" id="qualif-moteur" style="margin-bottom:14px">Chargement du moteur…</div>
+  <div class="radar-registre-info radar-registre-warn" id="qualif-reserve" style="margin-bottom:20px"></div>
+
+  <div class="reg-toolbar">
+    <button class="mat-export-btn" style="background:var(--ink);color:#fff" id="qualif-btn-proposer" onclick="qualifProposer()" title="Demande une proposition pour les systemes du registre qui n ont pas encore de classification.">⚙️ Proposer pour les systèmes non classés</button>
+    <select class="reg-input" id="qualif-filtre" style="max-width:220px" onchange="qualifCharger()" title="Choisir les propositions affichees.">
+      <option value="en_attente">En attente de décision</option>
+      <option value="validee">Validées</option>
+      <option value="ecartee">Écartées</option>
+      <option value="toutes">Toutes</option>
+    </select>
+    <input type="text" id="qualif-decideur" class="reg-input" style="max-width:280px" placeholder="Votre nom et votre rôle (ex. C. Cerf — DPO)" title="Le nom inscrit au registre a cote de la decision.">
+  </div>
+
+  <div class="tbl-wrap"><div class="tbl-head"><span class="tbl-title" id="qualif-compte">Chargement…</span></div>
+  <div id="qualif-liste" style="padding:4px 0"></div></div>
 </div>
 
 <!-- MATRICE -->

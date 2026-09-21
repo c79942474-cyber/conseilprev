@@ -11,6 +11,10 @@ openpyxl==3.1.5
 psycopg-pool==3.2.3
 fpdf2==2.7.9
 stripe>=10.0.0
+# Le SDK pilote l'executable Claude Code en sous-processus : la ou il n'est
+# pas installe, qualification_moteur le mesure et se replie sur l'API
+# Messages d'Anthropic — jamais sur un autre fournisseur.
+claude-agent-sdk>=0.2.157
 # deploy trigger - upload async
 # deploy trigger - sidebar reorg
 # deploy trigger - shared footer

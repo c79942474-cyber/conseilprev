@@ -1,0 +1,280 @@
+{
+ "cibles": [
+  "tests/test_qualification_assistee.py"
+ ],
+ "mutations": [
+  {
+   "nom": "le SDK reçoit Read, Edit et Bash — l'écriture de référence",
+   "fichier": "qualification_moteur.py",
+   "avant": "        allowed_tools=list(OUTILS_AUTORISES),",
+   "apres": "        allowed_tools=[\"Read\", \"Edit\", \"Bash\"],",
+   "regle": "test_le_SDK_ne_recoit_AUCUN_outil"
+  },
+  {
+   "nom": "les outils d'écriture cessent d'être refusés au SDK",
+   "fichier": "qualification_moteur.py",
+   "avant": "        disallowed_tools=list(OUTILS_INTERDITS),",
+   "apres": "        disallowed_tools=[],",
+   "regle": "test_les_outils_qui_touchent_la_machine_sont_refuses_NOMMEMENT[Read]"
+  },
+  {
+   "nom": "l'agent charge le CLAUDE.md et les compétences du dépôt",
+   "fichier": "qualification_moteur.py",
+   "avant": "        setting_sources=[],",
+   "apres": "        setting_sources=[\"project\", \"user\"],",
+   "regle": "test_le_SDK_ne_charge_ni_le_CLAUDE_md_du_depot_ni_ses_competences"
+  },
+  {
+   "nom": "l'agent boucle au lieu de répondre une fois",
+   "fichier": "qualification_moteur.py",
+   "avant": "        max_turns=TOURS_MAX,",
+   "apres": "        max_turns=12,",
+   "regle": "test_le_moteur_n_a_qu_UN_tour"
+  },
+  {
+   "nom": "sans moteur ni repli, on prétend quand même répondre",
+   "fichier": "qualification_moteur.py",
+   "avant": "        return False, \"aucun_moteur\"",
+   "apres": "        return True, \"{}\"",
+   "regle": "test_sans_moteur_ni_repli_rien_n_est_propose"
+  },
+  {
+   "nom": "le repli bascule sur l'autre fournisseur",
+   "fichier": "app.py",
+   "avant": "    return call_anthropic(\n        [{'role': 'user', 'content': prompt_txt}],\n        system=systeme_prompt, max_tokens=700, temperature=0,\n        modele=qualification_moteur.MODELE)",
+   "apres": "    return ai_complete(\n        [{'role': 'user', 'content': prompt_txt}],\n        system=systeme_prompt, max_tokens=700, temperature=0,\n        modele=qualification_moteur.MODELE)",
+   "regle": "test_le_repli_n_est_JAMAIS_un_autre_fournisseur"
+  },
+  {
+   "nom": "le paquet n'est pas déclaré au déploiement",
+   "fichier": "requirements.txt",
+   "avant": "claude-agent-sdk>=0.2.157\n",
+   "apres": "",
+   "regle": "test_le_paquet_du_SDK_est_DECLARE_dans_requirements"
+  },
+  {
+   "nom": "un indice paraphrasé passe pour une citation",
+   "fichier": "qualification_assistee.py",
+   "avant": "        if _normaliser(i) not in texte:",
+   "apres": "        if False:",
+   "regle": "test_un_indice_PARAPHRASE_fait_tomber_la_proposition"
+  },
+  {
+   "nom": "le contrôle de citation devient si strict qu'il refuse les accents",
+   "fichier": "qualification_assistee.py",
+   "avant": "    t = _sans_accent(_texte(txt)).lower()",
+   "apres": "    t = _texte(txt)",
+   "regle": "test_les_accents_et_la_casse_ne_font_PAS_tomber_une_vraie_citation"
+  },
+  {
+   "nom": "un article inventé est accepté",
+   "fichier": "qualification_assistee.py",
+   "avant": "    if article not in _ARTICLES:",
+   "apres": "    if False:",
+   "regle": "test_un_article_hors_de_la_liste_fermee_est_refuse"
+  },
+  {
+   "nom": "l'article 50 fait un haut risque",
+   "fichier": "qualification_assistee.py",
+   "avant": "    if classe not in _ARTICLES[article][\"soutient\"]:",
+   "apres": "    if False:",
+   "regle": "test_un_article_qui_ne_SOUTIENT_pas_la_classe_est_refuse"
+  },
+  {
+   "nom": "« à évaluer » redevient une classe qu'on propose",
+   "fichier": "qualification_assistee.py",
+   "avant": "    if classe == NON_PROPOSABLE:\n        return _refus(\"classe_non_proposable\", rec=rec)",
+   "apres": "    if False:\n        return _refus(\"classe_non_proposable\", rec=rec)",
+   "regle": "test_a_evaluer_n_est_pas_une_classe_que_le_moteur_peut_PROPOSER"
+  },
+  {
+   "nom": "une motivation absente ne bloque plus",
+   "fichier": "qualification_assistee.py",
+   "avant": "    if not motivation:\n        return _refus(\"motivation_absente\", rec=rec)",
+   "apres": "    if False:\n        return _refus(\"motivation_absente\", rec=rec)",
+   "regle": "test_une_proposition_NON_MOTIVEE_est_refusee"
+  },
+  {
+   "nom": "une ligne vide devient recevable, et le moteur est appelé pour rien",
+   "fichier": "qualification_assistee.py",
+   "avant": "    bloquants = [m for m in manquants if m[\"obligatoire\"]]",
+   "apres": "    bloquants = []",
+   "regle": "test_une_ligne_sans_finalite_ne_declenche_AUCUN_appel_de_moteur"
+  },
+  {
+   "nom": "la finalité cesse d'être obligatoire",
+   "fichier": "qualification_assistee.py",
+   "avant": "    {\"cle\": \"finalite\", \"nom\": \"Finalité\", \"obligatoire\": True, \"poids\": 3,",
+   "apres": "    {\"cle\": \"finalite\", \"nom\": \"Finalité\", \"obligatoire\": False, \"poids\": 3,",
+   "regle": "test_une_ligne_sans_finalite_ne_declenche_AUCUN_appel_de_moteur"
+  },
+  {
+   "nom": "l'appui devient la confiance que le modèle s'accorde",
+   "fichier": "qualification_assistee.py",
+   "avant": "    appui = round(rec[\"appui_champs\"] * 0.7\n                  + min(len(indices), 3) / 3.0 * 0.3, 2)",
+   "apres": "    try:\n        appui = round(float(obj.get(\"confiance\") or 0), 2)\n    except Exception:\n        appui = 0.0",
+   "regle": "test_le_chiffre_d_appui_ne_vient_PAS_de_la_confiance_du_modele"
+  },
+  {
+   "nom": "l'appui devient une constante",
+   "fichier": "qualification_assistee.py",
+   "avant": "    appui = round(rec[\"appui_champs\"] * 0.7\n                  + min(len(indices), 3) / 3.0 * 0.3, 2)",
+   "apres": "    appui = 0.8",
+   "regle": "test_l_appui_BAISSE_quand_la_declaration_porte_moins_de_champs"
+  },
+  {
+   "nom": "la validation n'exige plus de personne nommée",
+   "fichier": "qualification_assistee.py",
+   "avant": "    if not qui:\n        return {\"ok\": False, \"motif\": \"decideur_absent\",",
+   "apres": "    if False:\n        return {\"ok\": False, \"motif\": \"decideur_absent\",",
+   "regle": "test_valider_SANS_decideur_nomme_n_ecrit_RIEN"
+  },
+  {
+   "nom": "écarter écrit tout de même le registre",
+   "fichier": "qualification_assistee.py",
+   "avant": "    if not d[\"ecrit_le_registre\"]:",
+   "apres": "    if False:",
+   "regle": "test_ecarter_ne_rend_JAMAIS_de_ligne_a_ecrire"
+  },
+  {
+   "nom": "écarter rend tout de même une ligne à écrire",
+   "fichier": "qualification_assistee.py",
+   "avant": "        return {\"ok\": True, \"statut\": d[\"statut\"], \"decide_par\": qui,\n                \"ecriture\": None, \"motif_decision\": _texte(motif) or None}",
+   "apres": "        return {\"ok\": True, \"statut\": d[\"statut\"], \"decide_par\": qui,\n                \"ecriture\": {\"classification\": p.get(\"classe_proposee\"),\n                             \"justification\": \"\"},\n                \"motif_decision\": _texte(motif) or None}",
+   "regle": "test_ECARTER_laisse_le_registre_INTACT"
+  },
+  {
+   "nom": "une proposition se décide deux fois",
+   "fichier": "qualification_assistee.py",
+   "avant": "    if p.get(\"statut\") != \"en_attente\":",
+   "apres": "    if False:",
+   "regle": "test_une_proposition_DEJA_decidee_ne_se_decide_pas_deux_fois"
+  },
+  {
+   "nom": "un refus se valide comme une proposition",
+   "fichier": "qualification_assistee.py",
+   "avant": "    if p.get(\"a_completer\") or not p.get(\"classe_proposee\"):",
+   "apres": "    if False:",
+   "regle": "test_valider_un_REFUS_est_refuse"
+  },
+  {
+   "nom": "la correction humaine disparaît de la trace",
+   "fichier": "qualification_assistee.py",
+   "avant": "    if retenue != p[\"classe_proposee\"]:\n        justification = \"%s — proposition assistée (%s) CORRIGÉE en « %s » \" \\",
+   "apres": "    if False:\n        justification = \"%s — proposition assistée (%s) CORRIGÉE en « %s » \" \\",
+   "regle": "test_la_personne_peut_CORRIGER_la_classe_et_la_trace_le_dit"
+  },
+  {
+   "nom": "la justification ne nomme plus la personne",
+   "fichier": "qualification_assistee.py",
+   "avant": "    justification = \"%s — proposition assistée (%s), retenue par %s.\" % (\n        _ARTICLES[p[\"article\"]][\"texte\"] if p.get(\"article\") in _ARTICLES\n        else REGLEMENT,\n        CLASSES[p[\"classe_proposee\"]][\"libelle\"],\n        qui)",
+   "apres": "    justification = \"%s — proposition assistée (%s).\" % (\n        _ARTICLES[p[\"article\"]][\"texte\"] if p.get(\"article\") in _ARTICLES\n        else REGLEMENT,\n        CLASSES[p[\"classe_proposee\"]][\"libelle\"])",
+   "regle": "test_la_justification_inscrite_au_registre_NOMME_la_personne"
+  },
+  {
+   "nom": "une classe retenue inconnue passe",
+   "fichier": "qualification_assistee.py",
+   "avant": "    if retenue not in PROPOSABLES:",
+   "apres": "    if False:",
+   "regle": "test_une_classe_retenue_INCONNUE_est_refusee"
+  },
+  {
+   "nom": "l'écart dit toujours que quelque chose change",
+   "fichier": "qualification_assistee.py",
+   "avant": "        \"change\": apres != avant,",
+   "apres": "        \"change\": True,",
+   "regle": "test_l_ecart_dit_si_la_validation_CHANGERAIT_quelque_chose"
+  },
+  {
+   "nom": "la proposition naît déjà validée",
+   "fichier": "app.py",
+   "avant": "            moteur, qualification_moteur.MODELE, ecart['avant'],\n            'en_attente', now))",
+   "apres": "            moteur, qualification_moteur.MODELE, ecart['avant'],\n            'validee', now))",
+   "regle": "test_APRES_avoir_propose_le_registre_n_a_PAS_bouge"
+  },
+  {
+   "nom": "la route qui propose annonce que le registre a bougé",
+   "fichier": "app.py",
+   "avant": "        'registre_modifie': False,\n    })",
+   "apres": "        'registre_modifie': True,\n    })",
+   "regle": "test_APRES_avoir_propose_le_registre_n_a_PAS_bouge"
+  },
+  {
+   "nom": "le plafond du lot est déclaré mais plus appliqué",
+   "fichier": "app.py",
+   "avant": "    systemes = [registre_row_to_dict(r) for r in lignes][:QUALIF_LOT_MAX]",
+   "apres": "    systemes = [registre_row_to_dict(r) for r in lignes]",
+   "regle": "test_le_lot_est_PLAFONNE"
+  },
+  {
+   "nom": "la décision est portée par « le système »",
+   "fichier": "app.py",
+   "avant": "        qui = (client.get('email') or client.get('nom_entreprise') or '').strip()",
+   "apres": "        qui = 'systeme'",
+   "regle": "test_la_trace_NOMME_toujours_quelqu_un"
+  },
+  {
+   "nom": "une requête oublie le client et montre les propositions des autres",
+   "fichier": "app.py",
+   "avant": "        'SELECT * FROM qualifications_ia WHERE client_id=%s AND statut=%s ORDER BY id DESC',",
+   "apres": "        'SELECT * FROM qualifications_ia WHERE statut=%s ORDER BY id DESC',",
+   "regle": "test_chaque_requete_des_routes_porte_le_client"
+  },
+  {
+   "nom": "la route qui propose écrit la table des systèmes",
+   "fichier": "app.py",
+   "avant": "        '''INSERT INTO qualifications_ia (client_id, systeme_id, classe_proposee,\n           article, motivation, indices, appui, fragile, confiance_declaree,\n           a_completer, motif, moteur, modele, classe_avant, statut, date_creation)\n           VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''',",
+   "apres": "        '''INSERT INTO systemes_ia (client_id, systeme_id, classe_proposee,\n           article, motivation, indices, appui, fragile, confiance_declaree,\n           a_completer, motif, moteur, modele, classe_avant, statut, date_creation)\n           VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''',",
+   "regle": "test_la_route_qui_PROPOSE_ne_touche_pas_a_la_table_des_systemes"
+  },
+  {
+   "nom": "la décision n'écrit plus la colonne du registre",
+   "fichier": "app.py",
+   "avant": "    if ecriture:\n        cur.execute(registre_sql(\n            'UPDATE systemes_ia SET classification=%s, justification=%s, '",
+   "apres": "    if False:\n        cur.execute(registre_sql(\n            'UPDATE systemes_ia SET classification=%s, justification=%s, '",
+   "regle": "test_C_EST_LA_DECISION_qui_ecrit_le_registre"
+  },
+  {
+   "nom": "les routes sensibles s'ouvrent au plan gratuit",
+   "fichier": "app.py",
+   "avant": "@app.route('/api/qualification/proposer', methods=['POST'])\n@require_paid_plan",
+   "apres": "@app.route('/api/qualification/proposer', methods=['POST'])",
+   "regle": "test_les_deux_routes_sensibles_sont_derriere_un_plan_paye"
+  },
+  {
+   "nom": "l'écran cesse de dire ce que le moteur ne peut pas faire",
+   "fichier": "sentinel.page.js",
+   "avant": "          + 'Les lignes du registre voyagent en données dans la demande ; '\n          + 'le moteur n’ouvre aucun fichier et n’écrit nulle part.</span>';",
+   "apres": "          + '</span>';",
+   "regle": "test_l_ecran_DIT_quels_outils_le_moteur_n_a_pas"
+  },
+  {
+   "nom": "le panneau ne dit plus que le moteur n'écrit rien",
+   "fichier": "sentinel.html",
+   "avant": "<strong>Il n'écrit rien.</strong> ",
+   "apres": "",
+   "regle": "test_l_ecran_annonce_que_le_moteur_N_ECRIT_PAS"
+  },
+  {
+   "nom": "la page perd sa version anglaise",
+   "fichier": "sentinel.page.js",
+   "avant": "    'nav.item.qualif-assistee': 'Assisted qualification',\n",
+   "apres": "",
+   "regle": "test_la_page_existe_AUSSI_en_anglais[nav.item.qualif-assistee]"
+  },
+  {
+   "nom": "l'étape de parcours rouvre un panneau vide",
+   "fichier": "sentinel.page.js",
+   "avant": "  if (id === 'qualif-assistee' && typeof window.qualifInit === 'function') _apresPeinture(window.qualifInit);\n",
+   "apres": "",
+   "regle": "test_une_ETAPE_DE_PARCOURS_ouvre_la_page_PEINTE_et_non_vide"
+  },
+  {
+   "nom": "la fonction d'ouverture n'est plus publiée",
+   "fichier": "sentinel.page.js",
+   "avant": "window.qualifInit = qualifInit;\n",
+   "apres": "",
+   "regle": "test_une_ETAPE_DE_PARCOURS_ouvre_la_page_PEINTE_et_non_vide"
+  }
+ ]
+}
