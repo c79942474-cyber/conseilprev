@@ -107,7 +107,7 @@ NATURES = {
 
 
 # ══════════════════════════════════════════════════════════════════════════
-#  LES NEUF NORMES, DANS L'ORDRE DE LA PAGE D'ACCUEIL
+#  LES ONZE NORMES, DANS L'ORDRE DE LA PAGE D'ACCUEIL
 # ══════════════════════════════════════════════════════════════════════════
 #
 # `panneau` est la destination Sentinel : un taux qui ne mène pas à l'écran
@@ -152,8 +152,23 @@ NORMES = [
      "texte": "OWASP Top 10 for LLM Applications, 2025",
      "panneau": "owasp-dix",
      "mesure": "les dix risques de la liste"},
+    {"cle": "nist_800_53", "nom": "NIST SP 800-53", "nature": "cadre",
+     "texte": "NIST SP 800-53 Rev. 4 (2013)",
+     "panneau": "nist53-socle",
+     "mesure": "les dix-huit familles de mesures, et le socle qu'elles "
+               "supposent"},
+    {"cle": "nist_800_82", "nom": "NIST SP 800-82", "nature": "cadre",
+     "texte": "NIST SP 800-82 Rev. 2 (2015)",
+     "panneau": "nist82-ot",
+     "mesure": "les dix axes de la surcharge industrielle, plafonnés par le "
+               "socle 800-53 qu'ils taillent"},
 ]
 NORMES_PAR_CLE = {n["cle"]: n for n in NORMES}
+
+#: CE QUE LA PAGE D'ACCUEIL ANNONCE. Un seul endroit le décide ; la
+#: garde en bas de fichier le confronte à la table ci-dessus, et une
+#: règle de la suite le confronte au titre et à la grille de l'accueil.
+NORMES_ANNONCEES = 11
 
 
 # ══════════════════════════════════════════════════════════════════════════
@@ -360,6 +375,44 @@ COMPOSITIONS = {
         {"cle": "sensibilisation", "nom": "Sensibilisation", "poids": 1,
          "pourquoi": "article 39 : ce qui décide si le reste est appliqué"},
     ],
+    # LES CINQ GROUPES DU CATALOGUE, ET LE PREMIER PÈSE PLUS QUE LES AUTRES.
+    # Ce n'est pas une préférence : RA, PL, CA et PM produisent le socle, le
+    # plan et l'autorisation. Les quatorze familles restantes exécutent ce
+    # que ces quatre-là ont décidé.
+    "nist_800_53": [
+        {"cle": "pilotage", "nom": "Pilotage et autorisation", "poids": 3,
+         "pourquoi": "le socle, le plan et l'autorisation : sans eux, les "
+                     "autres familles s'appliquent sans mandat"},
+        {"cle": "maitrise", "nom": "Maîtrise du système et de sa chaîne",
+         "poids": 2,
+         "pourquoi": "ce qui tourne, d'où cela vient, et qui y intervient"},
+        {"cle": "acces", "nom": "Accès, personnes et lieux", "poids": 2,
+         "pourquoi": "le chemin le plus emprunté reste un accès légitime "
+                     "mal tenu"},
+        {"cle": "exploitation", "nom": "Exploitation, détection et reprise",
+         "poids": 2,
+         "pourquoi": "ce qui se passe une fois en service, y compris le "
+                     "jour où le système tombe"},
+        {"cle": "donnees", "nom": "Protection des données et des échanges",
+         "poids": 2,
+         "pourquoi": "la donnée elle-même, en transit et sur support"},
+    ],
+    # LA SURCHARGE INDUSTRIELLE EN TROIS PARTS, ET LA PREMIÈRE COMMANDE.
+    # Dans un système industriel, la sûreté prime sur la sécurité : une
+    # mesure qui peut arrêter un procédé est un événement de sûreté avant
+    # d'être un incident informatique.
+    "nist_800_82": [
+        {"cle": "socle_ot", "nom": "Sûreté, disponibilité et reprise",
+         "poids": 3,
+         "pourquoi": "les trois axes dont dépend la vie du procédé — et, "
+                     "dans cet ordre, des personnes"},
+        {"cle": "architecture", "nom": "Architecture et flux", "poids": 2,
+         "pourquoi": "segmentation, filtrage, redondance : ce qui décide "
+                     "jusqu'où une intrusion se propage"},
+        {"cle": "conduite", "nom": "Conduite au quotidien", "poids": 2,
+         "pourquoi": "authentification, surveillance, équipements hérités et "
+                     "les métiers qui tiennent le réseau"},
+    ],
 }
 
 VERROUS = {
@@ -416,6 +469,41 @@ RESERVES = {
                       "qualification, c'est la supervision — a priori ou a "
                       "posteriori — et le plafond des sanctions.",
          "ou": "nis2 · qualification"},
+    ],
+    "nist_800_53": [
+        {"cle": "millesime",
+         "dit": "Ce module vise la révision 4 du catalogue, parce que c'est "
+                "celle que la surcharge industrielle SP 800-82 Rev. 2 "
+                "adapte. La révision 5 est la version courante.",
+         "porte_sur": "La révision 5 ajoute les familles PT et SR et renomme "
+                      "CA. Un système déjà aligné sur la révision 5 lit ce "
+                      "taux contre un millésime antérieur au sien.",
+         "ou": "nist53 · millésime"},
+        {"cle": "non_certifiable",
+         "dit": "SP 800-53 ne se certifie pas : aucun organisme ne délivre "
+                "d'attestation contre ce catalogue.",
+         "porte_sur": "Le taux dit une couverture déclarée, pas une "
+                      "conformité reconnue. « Conforme 800-53 » ne veut rien "
+                      "dire hors du périmètre fédéral américain.",
+         "ou": "nist53 · portée"},
+    ],
+    "nist_800_82": [
+        {"cle": "surcharge",
+         "dit": "Ce taux mesure ce que l'industriel AJOUTE au catalogue "
+                "800-53, et il est plafonné par ce que ce catalogue porte "
+                "déjà.",
+         "porte_sur": "Une mesure taillée ne peut pas être plus solide que "
+                      "celle qu'elle taille : un axe déclaré au-dessus de "
+                      "sa famille 800-53 est ramené à elle, et le "
+                      "dépassement est signalé plutôt qu'effacé.",
+         "ou": "nist82 · surcharge"},
+        {"cle": "millesime",
+         "dit": "La révision 2 (2015) parle d'ICS et surcharge 800-53 Rev. 4. "
+                "La révision 3 (2023) parle d'OT et vise la révision 5.",
+         "porte_sur": "Les deux révisions ne recouvrent pas le même "
+                      "catalogue. Mesurer contre l'une en croyant tenir "
+                      "l'autre est le défaut que ce module refuse.",
+         "ou": "nist82 · millésime"},
     ],
     "cra": [
         {"cle": "role_absent",
@@ -606,10 +694,62 @@ def _lire_rgpd(ev, dec=None):
             for c in COMPOSITIONS["rgpd"]}, []
 
 
+def _lire_nist_800_53(ev, dec=None):
+    """Les cinq groupes du catalogue, déjà étalés par le moteur.
+
+    ON NE RECALCULE RIEN ICI. Le moteur étale chaque groupe sur TOUTES ses
+    familles — une famille muette compte comme absente — et retire du
+    dénominateur les seules familles écartées avec un motif. Refaire ce
+    calcul ici, c'est garantir qu'un jour les deux divergeront."""
+    if not ev or not ev.get("ok"):
+        return None, []
+    # LES DEUX RÉSERVES SONT PERMANENTES, PAS CONDITIONNELLES. Le millésime
+    # et l'absence de certification ne dépendent pas des réponses : elles
+    # valent pour toute lecture de ce taux, et se disent donc toujours.
+    return ({p["groupe"]: p.get("taux") for p in ev.get("profils") or []},
+            ["millesime", "non_certifiable"])
+
+
+def _lire_nist_800_82(ev, dec=None):
+    """Les dix axes industriels, regroupés en trois parts.
+
+    LA NOTE RETENUE, PAS LA NOTE DÉCLARÉE. Le moteur plafonne chaque axe par
+    la plus faible des familles 800-53 qu'il taille : c'est `note_retenue`
+    qu'on agrège, sans quoi un axe déclaré au-dessus de son socle gonflerait
+    le taux exactement là où le module vient de signaler un défaut."""
+    if not ev or not ev.get("ok"):
+        return None, []
+    import nist_800_82 as _ot
+    parts = {}
+    for part, axes in PARTS_800_82.items():
+        retenus = [p for p in ev.get("profils") or []
+                   if p["axe"] in axes and p.get("etat") != "sans_objet"]
+        if not retenus:
+            parts[part] = None
+            continue
+        acquis = sum(p.get("note_retenue") or 0.0 for p in retenus)
+        parts[part] = _pc(acquis, _ot.NOTE_MAX * len(retenus))
+    # PERMANENTES ELLES AUSSI : ce taux mesure une surcharge plafonnée par
+    # son socle, contre un millésime qui n'est plus le dernier. Les deux
+    # changent le sens du nombre, quelles que soient les réponses.
+    return parts, ["surcharge", "millesime"]
+
+
+#: QUEL AXE COMPTE DANS QUELLE PART. Écrit ici une seule fois ; la garde
+#: vérifie que les dix axes du moteur y figurent, et une seule fois chacun.
+PARTS_800_82 = {
+    "socle_ot":     ("surete", "disponibilite", "reprise"),
+    "architecture": ("segmentation", "flux", "redondance"),
+    "conduite":     ("authentification", "surveillance", "contraintes",
+                     "metier"),
+}
+
+
 LECTEURS = {
     "iso42001": _lire_iso42001, "iso27001": _lire_iso27001,
     "nis2": _lire_nis2, "cra": _lire_cra, "nist_ai_rmf": _lire_nist,
     "owasp_llm": _lire_owasp, "ia_act": _lire_ia_act, "rgpd": _lire_rgpd,
+    "nist_800_53": _lire_nist_800_53, "nist_800_82": _lire_nist_800_82,
 }
 
 
@@ -910,10 +1050,65 @@ def _ecarts_rgpd(ev, dec=None):
             if (briques.get(c["cle"]) or 0) < 100]
 
 
+def _ecarts_nist_800_53(ev, dec=None):
+    """Une famille qui n'est ni prouvée ni écartée est un écart.
+
+    L'ÉCART SE LIT SUR L'ÉVALUATION, PAS SUR LA DÉCLARATION. Le moteur rend
+    le détail famille par famille avec son état : le plan n'a donc pas
+    besoin de la déclaration brute, et ne risque pas de diverger d'elle."""
+    if not ev or not ev.get("ok"):
+        return []
+    out = []
+    for prof in ev.get("profils") or []:
+        for f in prof.get("detail") or []:
+            if f.get("etat") in ("prouve", "sans_objet"):
+                continue
+            out.append(_ec(prof["groupe"], f["famille"],
+                           "%s — %s" % (f["famille"], f["titre"]),
+                           "nist53 · " + prof["nom"], f["famille"]))
+    return out
+
+
+def _ecarts_nist_800_82(ev, dec=None):
+    """Un axe non prouvé est un écart — et un axe qui DÉPASSE son socle en
+    est un autre, d'une nature différente.
+
+    LES DEUX SE DISTINGUENT AU PLAN, et c'est ce qui rend le plan
+    utilisable : combler le premier se fait dans l'atelier industriel ;
+    combler le second demande d'abord de reprendre la famille 800-53 qui
+    manque en dessous. Les confondre ferait écrire une action impossible."""
+    if not ev or not ev.get("ok"):
+        return []
+    out = []
+    for p in ev.get("profils") or []:
+        if p.get("etat") == "sans_objet":
+            continue
+        if p.get("depasse_le_socle"):
+            manquantes = [f["cle"] for f in p.get("familles") or []
+                          if f.get("etat_800_53") in (None, "absent")]
+            out.append(_ec("socle_manquant", p["axe"],
+                           "%s — reprendre d'abord %s dans 800-53"
+                           % (p["nom"], ", ".join(manquantes) or "le socle"),
+                           "nist82 · socle", p["axe"]))
+            continue
+        if p.get("etat") != "prouve":
+            out.append(_ec(_part_de_l_axe(p["axe"]), p["axe"], p["nom"],
+                           "nist82 · surcharge", p["axe"]))
+    return out
+
+
+def _part_de_l_axe(axe):
+    for part, axes in PARTS_800_82.items():
+        if axe in axes:
+            return part
+    return "conduite"
+
+
 ECARTEURS = {
     "iso42001": _ecarts_iso42001, "iso27001": _ecarts_iso27001,
     "nis2": _ecarts_nis2, "cra": _ecarts_cra, "nist_ai_rmf": _ecarts_nist,
     "owasp_llm": _ecarts_owasp, "ia_act": _ecarts_ia_act, "rgpd": _ecarts_rgpd,
+    "nist_800_53": _ecarts_nist_800_53, "nist_800_82": _ecarts_nist_800_82,
 }
 
 
@@ -1346,9 +1541,14 @@ def etat_des_lieux(declarations=None, plafond_actions=24):
 def _verifier():
     fautes = []
 
-    if len(NORMES) != 9:
-        fautes.append("le site annonce neuf normes, ce module en déclare %d"
-                      % len(NORMES))
+    # LE COMPTE EST ÉCRIT ICI, ET LA PAGE D'ACCUEIL DOIT S'Y TENIR. Il a
+    # valu neuf ; il vaut onze depuis que les deux référentiels NIST de
+    # sécurité des systèmes industriels ont rejoint la grille. Une règle de
+    # la suite confronte ce nombre au titre et à la grille de l'accueil :
+    # c'est le seul endroit où il se décide.
+    if len(NORMES) != NORMES_ANNONCEES:
+        fautes.append("le site annonce %d normes, ce module en déclare %d"
+                      % (NORMES_ANNONCEES, len(NORMES)))
     if len(NORMES_PAR_CLE) != len(NORMES):
         fautes.append("deux normes partagent une clé")
 

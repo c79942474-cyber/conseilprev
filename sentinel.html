@@ -3403,6 +3403,19 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <div class="sb-section sb-pliable" data-grp="owasp-llm" data-fam="conformite" role="button" tabindex="0" aria-expanded="false" onclick="sbReplier(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sbReplier(this)}" title="Replier ou déplier le Top 10 OWASP LLM"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 6.5h3M4 12h3M4 17.5h3"/><path d="M10.5 6.5h9.5M10.5 12h9.5M10.5 17.5h9.5"/></svg><span>OWASP Top 10 LLM — Applications</span><svg class="sb-chev" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></div>
     <div class="sb-item" data-grp="owasp-llm" role="button" tabindex="0" onclick="go('owasp-dix',this,'OWASP LLM','Les dix risques');owaspInit()" title="Le millesime 2025, et pourquoi chacun persiste"><span class="sb-icon" aria-hidden="true"></span>Les dix risques</div>
     <div class="sb-item" data-grp="owasp-llm" role="button" tabindex="0" onclick="go('owasp-pont',this,'OWASP LLM','Ce qu’ISO 42001 ne couvre pas');owaspInit()" title="Les trois risques qu aucune mesure de l annexe A ne rencontre — et dont on se croit couvert"><span class="sb-icon" aria-hidden="true"></span>Ce qu’ISO 42001 ne couvre pas</div>
+    <!-- ═══ NIST SP 800-53 ET 800-82 — LE CATALOGUE, PUIS SA SURCHARGE ═══
+         L'ORDRE N'EST PAS ALPHABÉTIQUE, IL EST CAUSAL. 800-82 ne remplace
+         pas 800-53 : il le TAILLE pour l'industriel. Son annexe G le dit
+         — « a partial tailoring of the controls and control baselines in
+         SP 800-53, Revision 4 ». Un lecteur qui ouvrirait la surcharge en
+         premier noterait une adaptation sans savoir de quoi.
+         LES DEUX SONT DES ŒUVRES DU GOUVERNEMENT DES ÉTATS-UNIS : à la
+         différence d'ISO, les identifiants ET les intitulés se citent
+         librement. Ce qui ne se cite pas, c'est IEC 62443, auquel la
+         surcharge renvoie et que ce cabinet ne recopie pas. -->
+    <div class="sb-section sb-pliable" data-grp="nist-ot" data-fam="conformite" role="button" tabindex="0" aria-expanded="false" onclick="sbReplier(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sbReplier(this)}" title="Replier ou déplier NIST SP 800-53 et 800-82"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="4" width="18" height="6" rx="1.5"/><rect x="3" y="14" width="18" height="6" rx="1.5"/><path d="M7 7h.01M7 17h.01"/></svg><span>NIST 800-53 &amp; 800-82 — Systèmes industriels</span><svg class="sb-chev" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></div>
+    <div class="sb-item" data-grp="nist-ot" role="button" tabindex="0" onclick="go('nist53-socle',this,'NIST 800-53','Socle et dix-huit familles');nist53Init()" title="Le socle Low, Moderate ou High DECOULE de l appreciation du risque — et les dix-huit familles se declarent une par une"><span class="sb-icon" aria-hidden="true"></span><span data-i18n="nav.item.nist53-socle">Socle et dix-huit familles</span></div>
+    <div class="sb-item" data-grp="nist-ot" role="button" tabindex="0" onclick="go('nist82-ot',this,'NIST 800-82','Surcharge industrielle');nist82Init()" title="Les dix axes que l industriel AJOUTE — chacun plafonne par la famille 800-53 qu il taille"><span class="sb-icon" aria-hidden="true"></span><span data-i18n="nav.item.nist82-ot">Surcharge industrielle (OT)</span></div>
     <div class="sb-section" data-grp="juridique"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 6.5S9.5 4.5 3.5 4.5v13c6 0 8.5 2 8.5 2s2.5-2 8.5-2v-13c-6 0-8.5 2-8.5 2z"/><path d="M12 6.5v13"/></svg><span data-i18n="nav.sec.juridique">Juridique</span></div>
     <div class="sb-item" data-grp="juridique" role="button" tabindex="0" onclick="go('juridique',this,'JURIDIQUE','Conseil juridique assisté');juInit()" title="Qualification reglementaire deterministe, lectures possibles des textes, clausier fournisseurs et revue de contrat — droit du numerique, cyber IT/OT/ICS et IA."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3v18"/><path d="M5 7h5l-2.5 5a2.5 2.5 0 0 0 5 0L10 7"/><path d="M14 7h5l-2.5 5a2.5 2.5 0 0 0 5 0L19 7"/><path d="M5 21h14"/><path d="M9 7h6"/></svg></span><span data-i18n="nav.item.juridique">Conseil juridique</span></div>
     <div class="sb-section" data-grp="entreprise"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3.5 21V9.5l6-3v14.5"/><path d="M9.5 21V13l7-3v11"/><path d="M16.5 21V6.5l4 2V21"/><path d="M2.5 21h19"/></svg><span data-i18n="nav.sec.entreprise">Entreprise</span></div>
@@ -5518,6 +5531,28 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     l'IA générative selon le NIST » au RSSI revient à lui faire répondre de l'empreinte
     environnementale, des biais et de la propriété intellectuelle, qu'il ne tient pas.</p>
   <div id="nist-genai-body" class="veille-loading">Chargement…</div>
+</div>
+
+<div class="page" id="p-nist53-socle">
+  <span class="eyebrow" data-i18n="pg.nist53-socle.eb">NIST SP 800-53 · Rev. 4</span>
+  <h1 class="page-h" data-i18n-bloc="pg.nist53-socle.h1">Dix-huit familles, <em>et ce qui les commande</em></h1>
+  <p class="page-p" data-i18n-bloc="pg.nist53-socle.p">Le socle — Low, Moderate ou High — ne se choisit pas&nbsp;: il
+    <strong>découle</strong> de la catégorisation du système. L'annoncer sans avoir conduit l'appréciation du risque,
+    c'est donner un résultat sans son calcul. Et quatre familles — RA, PL, CA, PM — décident de ce que les quatorze
+    autres doivent faire&nbsp;: quand l'aval les devance, ce module le dit au lieu de le moyenner.</p>
+  <div id="nist53-reserve" class="band" style="margin-top:14px"></div>
+  <div id="nist53-body" class="veille-loading">Chargement…</div>
+</div>
+
+<div class="page" id="p-nist82-ot">
+  <span class="eyebrow" data-i18n="pg.nist82-ot.eb">NIST SP 800-82 · Rev. 2</span>
+  <h1 class="page-h" data-i18n-bloc="pg.nist82-ot.h1">Ce que l'industriel <em>ajoute</em></h1>
+  <p class="page-p" data-i18n-bloc="pg.nist82-ot.p">Ce module ne redemande <strong>rien</strong> de ce que le
+    catalogue 800-53 demande déjà&nbsp;: son annexe G est une surcharge, pas un second référentiel. Il mesure les dix
+    axes propres au procédé industriel — et il les plafonne&nbsp;: une mesure taillée ne peut pas être plus solide
+    que celle qu'elle taille.</p>
+  <div id="nist82-reserve" class="band" style="margin-top:14px"></div>
+  <div id="nist82-body" class="veille-loading">Chargement…</div>
 </div>
 
 <div class="page" id="p-owasp-dix">

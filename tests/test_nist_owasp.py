@@ -291,9 +291,16 @@ def test_les_deux_cartes_de_l_accueil_menent_a_leur_module():
         assert cible in index, "l'accueil ne mène pas à %s" % cible
 
 
-def test_le_titre_de_l_accueil_compte_les_NEUF_cartes():
+def test_le_titre_de_l_accueil_COMPTE_les_cartes_de_la_grille():
     """LE NOMBRE EST DÉRIVÉ DES DEUX CÔTÉS, jamais écrit ici : ce qui se
-    mesure est l'accord entre le titre et la grille."""
+    mesure est l'accord entre le titre, la grille et le module.
+
+    IL A ÉTÉ ÉCRIT EN DUR, ET C'EST CE QUI A DÛ CHANGER. La règle finissait
+    par « cartes == 9 » : le jour où la grille en a compté onze, elle est
+    tombée sans qu'aucune des deux surfaces ne soit en désaccord avec
+    l'autre — elle mesurait sa propre constante. Le nombre se décide
+    désormais dans `conformite.NORMES_ANNONCEES`, à un seul endroit, et les
+    trois surfaces lui sont confrontées."""
     index = _lire("index.html")
     js = _lire("index.page.js")
     i = index.index('id="normes"')
@@ -303,4 +310,7 @@ def test_le_titre_de_l_accueil_compte_les_NEUF_cartes():
     assert len(titres) == 1, "les langues annoncent %s" % titres
     assert int(titres.pop()) == cartes, (
         "le titre et la grille ne comptent pas pareil")
-    assert cartes == 9, "neuf normes attendues, %d trouvées" % cartes
+    import conformite as _c
+    assert cartes == _c.NORMES_ANNONCEES, (
+        "%d normes annoncées par le module, %d cartes sur la grille"
+        % (_c.NORMES_ANNONCEES, cartes))

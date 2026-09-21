@@ -960,6 +960,8 @@ var PAGE_META = {
   'nist-cadre':    { section: 'NIST AI RMF', label: 'Le cadre, cat\u00e9gorie par cat\u00e9gorie' },
   'nist-genai':    { section: 'NIST AI RMF', label: 'Profil IA générative' },
   'owasp-dix':     { section: 'OWASP LLM', label: 'Les dix risques' },
+  'nist53-socle':  { section: 'NIST 800-53', label: 'Socle et dix-huit familles' },
+  'nist82-ot':     { section: 'NIST 800-82', label: 'Surcharge industrielle' },
   'owasp-pont':    { section: 'OWASP LLM', label: 'Ce qu\u2019ISO 42001 ne couvre pas' },
   'iso42001-certif':{ section: 'ISO 42001', label: 'Chemin de certification' },
   'iso42001-ponts':{ section: 'ISO 42001', label: 'Ponts IA Act / RGPD / NIS 2' },
@@ -1108,6 +1110,14 @@ var SENT_T = {
     'nav.item.shadow-ai': 'Shadow AI discovery',
     'nav.item.simulateur': 'AI Act simulator',
     'nav.item.registre': 'AI register',
+    'nav.item.nist53-socle': 'Baseline and eighteen families',
+    'nav.item.nist82-ot': 'Industrial overlay (OT)',
+    'pg.nist53-socle.eb': 'NIST SP 800-53 · Rev. 4',
+    'pg.nist53-socle.h1': 'Eighteen families, <em>and what commands them</em>',
+    'pg.nist53-socle.p': 'The baseline — Low, Moderate or High — is not a choice: it <strong>follows</strong> from the system categorisation. Announcing it without having carried out the risk assessment means giving a result without its calculation. And four families — RA, PL, CA, PM — decide what the other fourteen must do: when the downstream outruns them, this module says so instead of averaging it away.',
+    'pg.nist82-ot.eb': 'NIST SP 800-82 · Rev. 2',
+    'pg.nist82-ot.h1': 'What industry <em>adds</em>',
+    'pg.nist82-ot.p': 'This module asks for <strong>nothing</strong> the 800-53 catalogue already asks: its Appendix G is an overlay, not a second framework. It measures the ten axes specific to an industrial process — and it caps them: a tailored control cannot be stronger than the control it tailors.',
     'nav.item.finops': 'AI FinOps',
     'nav.item.empreinte-ia': 'AI footprint of the estate',
     'nav.item.maturite': 'AI maturity audit',
@@ -1302,7 +1312,12 @@ var SENT_SECTIONS_EN = {
   'EMPREINTE': 'FOOTPRINT',
   'RGPD & PRIVACY': 'GDPR & PRIVACY',
   'Taux de conformité': 'Compliance rate',
-  'CRA — PRODUITS': 'CRA — PRODUCTS'
+  'CRA — PRODUITS': 'CRA — PRODUCTS',
+  /* DEUX DÉSIGNATIONS DE DOCUMENT, DONC DEUX NOMS PROPRES. « NIST SP 800-53 »
+     traduit ne se retrouve plus dans le catalogue quand un auditeur demande
+     où c'est écrit — c'est la même raison qui fige déjà « NIST AI RMF ». */
+  'NIST 800-53': 'NIST 800-53',
+  'NIST 800-82': 'NIST 800-82'
 };
 
 function sentTr(cle) {
@@ -10072,6 +10087,26 @@ var PAGE_GUIDES = {
       {h:"À quoi sert cette page", t:"À poser les douze risques propres à l’IA générative, et surtout à dire qui les tient. Six des douze ne relèvent pas de la cybersécurité : NRBC, contenus dangereux, empreinte environnementale, biais, propriété intellectuelle, contenus obscènes."},
       {h:"Comment l’utiliser", t:"Servez-vous en pour répartir avant d’évaluer. Confier « les risques IA selon le NIST » au RSSI revient à lui faire répondre de sujets qu’il ne tient pas et sur lesquels il n’a aucun moyen d’action — ce qui produit un registre de risques que personne n’arbitre."},
       {h:"Ce qu’elle ne fait pas", t:"Elle ne classe pas les douze par gravité : l’ordre est alphabétique dans le document, et le NIST s’est abstenu de poser une hiérarchie. Et AI 600-1 est un PROFIL du cadre, pas un second cadre : le citer sans le cadre en dessous, c’est citer le profil de rien."}
+    ]
+  },
+  'nist53-socle': {
+    title: "NIST SP 800-53 Rev. 4 — socle et dix-huit familles",
+    sections: [
+      {h:"À quoi sert cette page", t:"Déclarer, famille par famille, où en est la maîtrise du système — et annoncer le socle (Low, Moderate, High) contre lequel on se mesure. Le taux qui en sort alimente l’indice de conformité, au même titre que les dix autres normes."},
+      {h:"Le socle ne se choisit pas", t:"Il DÉCOULE de la catégorisation du système : l’impact d’une perte de confidentialité, d’intégrité ou de disponibilité. L’annoncer « High » sans avoir conduit l’appréciation du risque (famille RA), c’est donner un résultat sans son calcul — le module le signale comme un verrou, pas comme une réserve."},
+      {h:"Quatre familles commandent les quatorze autres", t:"RA, PL, CA et PM produisent le socle, le plan et l’autorisation. Quand les familles techniques chiffrent plus haut qu’elles, ce n’est pas un programme de sécurité : c’est un inventaire d’outils. Le module le dit au lieu de le moyenner."},
+      {h:"Pourquoi la révision 4 et non la 5", t:"Parce que c’est celle que la surcharge industrielle SP 800-82 Rev. 2 adapte — son annexe G le dit. La révision 5 est la version courante : elle ajoute les familles PT et SR et renomme CA. Un système déjà aligné sur la révision 5 lit donc ce taux contre un millésime antérieur au sien, et l’écran le rappelle avant le premier chiffre."},
+      {h:"Limites à connaître", t:"Le module mesure par FAMILLE, pas par mesure : la répartition exacte des mesures par socle n’est pas reprise ici. Un ratio dont le dénominateur serait supposé vaudrait moins que son absence. Et ce catalogue ne se certifie pas : aucun organisme ne délivre d’attestation contre lui."}
+    ]
+  },
+  'nist82-ot': {
+    title: "NIST SP 800-82 Rev. 2 — surcharge industrielle",
+    sections: [
+      {h:"À quoi sert cette page", t:"Mesurer ce que le procédé industriel AJOUTE au catalogue 800-53 : sûreté, disponibilité, segmentation, repli manuel, équipements hérités. Dix axes, chacun rattaché aux familles 800-53 qu’il taille."},
+      {h:"Elle ne redemande rien", t:"L’annexe G de 800-82 est une surcharge, pas un second référentiel. Poser deux questionnaires indépendants aurait fait répondre deux fois aux mêmes questions, puis additionné les réponses en un taux flatteur. Cette page LIT la déclaration 800-53 et n’en redemande rien."},
+      {h:"Le plafond, et pourquoi il est affiché", t:"Une mesure taillée ne peut pas être plus solide que celle qu’elle taille. Un axe déclaré au-dessus de sa famille 800-53 est ramené à elle — et le dépassement est SIGNALÉ. Le rabattre en silence ferait disparaître de l’écran le défaut qu’il faut montrer."},
+      {h:"Par où commencer", t:"Renseignez d’abord le socle 800-53 : sans lui, chaque axe est plafonné à zéro et le taux ne dit rien. Puis descendez les axes dans l’ordre — la sûreté vient en premier parce qu’elle prime sur la sécurité, et non l’inverse."},
+      {h:"Limites à connaître", t:"La révision 2 (2015) parle d’ICS et surcharge 800-53 Rev. 4 ; la révision 3 (2023) parle d’OT et vise la révision 5. Les deux ne recouvrent pas le même catalogue. Rien ne se certifie contre 800-82, et ce module ne recopie pas IEC 62443, auquel la surcharge renvoie."}
     ]
   },
   'owasp-dix': {
@@ -19608,6 +19643,30 @@ var GUIDED_PATHS = [
     ]
   },
   {
+    id: 'nist_800_53_82',
+    icon: '\u{1F3ED}',
+    role: "Syst\u00e8mes industriels \u2014 je dois s\u00e9curiser un proc\u00e9d\u00e9, pas un parc bureautique",
+    pitch: "Deux r\u00e9f\u00e9rentiels, et le second n'est pas une norme de plus : SP 800-82 SURCHARGE SP 800-53 pour l'industriel. Son annexe G le dit en toutes lettres. Ce parcours les prend dans l'ordre o\u00f9 ils se montent \u2014 le catalogue, puis ce que le proc\u00e9d\u00e9 y ajoute \u2014 parce que l'inverse fait lire une adaptation sans savoir de quoi.",
+    steps: [
+      {id:'nist53-socle', label:"Socle et dix-huit familles",
+       action:"Annoncez le socle, puis descendez les cinq groupes. Commencez par le pilotage \u2014 RA, PL, CA, PM \u2014 avant les familles techniques.",
+       gain:"Le socle DÉCOULE de la cat\u00e9gorisation : l'annoncer « High » sans appr\u00e9ciation du risque est un verrou, et l'\u00e9cran le dit avant que vous n'ayez rempli le reste.",
+       tip:"Ce module vise la r\u00e9vision 4, parce que c'est celle que la surcharge industrielle adapte. Si votre syst\u00e8me est d\u00e9j\u00e0 align\u00e9 sur la r\u00e9vision 5, lisez la r\u00e9serve de millésime avant le premier chiffre."},
+      {id:'nist82-ot', label:"Surcharge industrielle (OT)",
+       action:"Renseignez les dix axes. Chacun affiche les familles 800-53 qu'il taille, et le nombre de mesures que l'annexe G y retouche.",
+       gain:"Un axe d\u00e9clar\u00e9 au-dessus de sa famille 800-53 est ramen\u00e9 \u00e0 elle, et le d\u00e9passement est SIGNAL\u00c9 : c'est l\u00e0 que se voit l'\u00e9cart entre ce qu'on croit avoir adapt\u00e9 et ce qu'on a r\u00e9ellement en dessous.",
+       tip:"La s\u00fbret\u00e9 vient en premier, et ce n'est pas un ordre de lecture : dans un proc\u00e9d\u00e9, une mesure de s\u00e9curit\u00e9 qui peut d\u00e9clencher un arr\u00eat est un \u00e9v\u00e9nement de s\u00fbret\u00e9 avant d'\u00eatre un incident informatique."},
+      {id:'conf-taux', label:"Le taux de conformit\u00e9",
+       action:"Ouvrez les deux cartes NIST 800-53 et 800-82 : elles portent maintenant vos d\u00e9clarations.",
+       gain:"Les deux taux se lisent ensemble : le second est plafonn\u00e9 par le premier, et l'\u00e9cart entre eux dit ce qu'il reste \u00e0 monter EN DESSOUS avant d'adapter quoi que ce soit.",
+       tip:"Aucun des deux ne se certifie. « Conforme 800-53 » ne veut rien dire hors du p\u00e9rim\u00e8tre f\u00e9d\u00e9ral am\u00e9ricain : ces taux disent une couverture d\u00e9clar\u00e9e."},
+      {id:'conf-plan', label:"Plan de mise en conformit\u00e9",
+       action:"Filtrez le plan sur les deux nouvelles normes.",
+       gain:"Les \u00e9carts de la surcharge y sont s\u00e9par\u00e9s en deux natures : ceux qui se comblent dans l'atelier industriel, et ceux qui demandent d'abord de reprendre une famille 800-53 manquante. Les confondre ferait \u00e9crire une action impossible.",
+       tip:"Un \u00e9cart « reprendre d'abord X dans 800-53 » ne se planifie pas c\u00f4t\u00e9 OT : c'est une d\u00e9pendance, pas une t\u00e2che."}
+    ]
+  },
+  {
     id: 'nist_ai_rmf',
     icon: '\u{1F9ED}',
     role: "Cadre NIST — je veux savoir o\u00f9 nous en sommes, sans me raconter d\u2019histoire",
@@ -24984,12 +25043,220 @@ function _declEcrire(cle, v) {
    `CONF_DECL` était lu par confDeclarations() et écrit NULLE PART. Une
    déclaration VIDE doit rester absente : le moteur rend « — » plutôt qu'un
    zéro, parce qu'un sujet non ouvert n'est pas un sujet à zéro. */
+/* ═══════════════════════════════════════════════════════════════════════
+   NIST SP 800-53 Rev. 4 ET SA SURCHARGE INDUSTRIELLE SP 800-82 Rev. 2
+   ═══════════════════════════════════════════════════════════════════════
+
+   POURQUOI LES DEUX ÉCRANS PARTAGENT UNE DÉCLARATION, ET UNE SEULE.
+   L'annexe G de 800-82 est une SURCHARGE de 800-53 : « a partial tailoring
+   of the controls and control baselines in SP 800-53, Revision 4 ». Deux
+   questionnaires indépendants auraient fait répondre deux fois aux mêmes
+   questions, puis additionné les deux réponses en un taux flatteur. L'écran
+   industriel LIT donc la déclaration du catalogue, et n'en redemande rien.
+
+   ET IL AFFICHE LE PLAFOND PLUTÔT QUE DE LE TAIRE. Un axe déclaré au-dessus
+   de la famille qu'il taille est ramené à elle par le serveur, et le
+   dépassement est signalé ici : le rabattre en silence ferait disparaître
+   de l'écran le défaut qu'il faut montrer. */
+
+var N53_CLE_STOCK = 'cp-sentinel-nist53-v1';
+var N82_CLE_STOCK = 'cp-sentinel-nist82-v1';
+var N53_DECL = _declLire(N53_CLE_STOCK);
+var N82_DECL = _declLire(N82_CLE_STOCK);
+var N53_SOCLE = (N53_DECL && N53_DECL.__socle) || '';
+var N53_REF = null, N82_REF = null;
+
+function _n53Etats() {
+  var out = {}, k;
+  for (k in N53_DECL) { if (k !== '__socle' && N53_DECL[k]) out[k] = N53_DECL[k]; }
+  return out;
+}
+
+function nist53Init() {
+  if (N53_REF) { nist53Peindre(); return; }
+  fetch('/api/nist-800-53/referentiel').then(function (r) { return r.json(); })
+    .then(function (d) { N53_REF = d.referentiel; nist53Peindre(); })
+    .catch(function () {
+      var b = document.getElementById('nist53-body');
+      if (b) b.textContent = 'Référentiel indisponible.';
+    });
+}
+
+function nist53Peindre() {
+  var b = document.getElementById('nist53-body');
+  if (!b || !N53_REF) return;
+  var r = document.getElementById('nist53-reserve');
+  if (r) {
+    r.innerHTML = '<strong>Millésime.</strong> ' + nistEsc(N53_REF.reserve_millesime)
+      + ' <strong>Portée.</strong> Ce catalogue ne se certifie pas : le taux dit '
+      + 'une couverture déclarée, pas une conformité reconnue.';
+  }
+  var h = '<div class="nist-q-cats"><label class="q-notes" style="display:block;margin-bottom:10px">'
+    + '<strong>Socle</strong> — il DÉCOULE de la catégorisation du système, il ne se choisit pas. '
+    + '<select class="q-sel" onchange="nist53Socle(this)" aria-label="Socle 800-53">'
+    + '<option value="">— non renseigné</option>'
+    + N53_REF.socles.map(function (o) {
+        return '<option value="' + nistEsc(o.cle) + '"'
+          + (N53_SOCLE === o.cle ? ' selected' : '') + '>' + nistEsc(o.nom)
+          + ' — ' + nistEsc(o.dit) + '</option>';
+      }).join('') + '</select></label>';
+  var etats = {};
+  N53_REF.etats.forEach(function (e) { etats[e.cle] = e; });
+  var ordre = N53_REF.etats.map(function (e) { return e.cle; });
+  N53_REF.groupes.forEach(function (g) {
+    h += '<h2 class="sec-h">' + nistEsc(g.nom)
+      + (g.cle === N53_REF.socle_commandant
+          ? ' <span class="q-am">— commande les autres</span>' : '')
+      + '</h2><p class="muted" style="font-size:12.5px;margin-top:-6px">'
+      + nistEsc(g.pourquoi) + '</p>';
+    g.familles.forEach(function (f) {
+      h += '<div class="nist-cat" id="nist53-' + nistEsc(f.cle) + '">'
+        + '<div><strong>' + nistEsc(f.cle) + '</strong> — ' + nistEsc(f.titre)
+        + '<div class="q-notes">' + nistEsc(f.demande) + '</div></div>'
+        + _choix(etats, ordre, N53_DECL[f.cle] || '', 'nist53Repondre', f.cle)
+        + '</div>';
+    });
+  });
+  h += '</div><div id="nist53-verdict" class="q-verdict"></div>';
+  b.innerHTML = h;
+  b.classList.remove('veille-loading');
+  nist53Evaluer();
+}
+
+function nist53Socle(sel) {
+  N53_SOCLE = sel.value;
+  N53_DECL.__socle = N53_SOCLE;
+  _declEcrire(N53_CLE_STOCK, N53_DECL);
+  declPublier();
+  nist53Evaluer();
+}
+
+function nist53Repondre(sel) {
+  var c = sel.getAttribute('data-cle');
+  if (sel.value) { N53_DECL[c] = sel.value; } else { delete N53_DECL[c]; }
+  _declEcrire(N53_CLE_STOCK, N53_DECL);
+  declPublier();
+  nist53Evaluer();
+}
+
+function nist53Evaluer() {
+  fetch('/api/nist-800-53/evaluer', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ socle: N53_SOCLE || null, etats: _n53Etats() })
+  }).then(function (r) { return r.json(); }).then(function (d) {
+    var v = document.getElementById('nist53-verdict');
+    if (!v || !d.ok) return;
+    var h = '<h3>' + d.renseignees + ' famille(s) sur ' + d.familles
+      + ' renseignée(s)</h3><ul>';
+    d.profils.forEach(function (pr) {
+      h += '<li><strong>' + nistEsc(pr.nom) + '</strong> — '
+        + (pr.taux === null ? 'non renseigné' : pr.taux + ' %')
+        + ' <span class="q-notes">(' + pr.renseignees + '/' + pr.familles
+        + ' familles)</span></li>';
+    });
+    h += '</ul>';
+    if (d.verrous.length) {
+      h += '<div class="q-vide"><strong>Ce qui plafonne ce taux</strong><ul>'
+        + d.verrous.map(function (x) { return '<li>' + nistEsc(x.dit) + '</li>'; }).join('')
+        + '</ul></div>';
+    }
+    v.innerHTML = h;
+  }).catch(function () {});
+}
+
+function nist82Init() {
+  if (N82_REF) { nist82Peindre(); return; }
+  fetch('/api/nist-800-82/referentiel').then(function (r) { return r.json(); })
+    .then(function (d) { N82_REF = d.referentiel; nist82Peindre(); })
+    .catch(function () {
+      var b = document.getElementById('nist82-body');
+      if (b) b.textContent = 'Référentiel indisponible.';
+    });
+}
+
+function nist82Peindre() {
+  var b = document.getElementById('nist82-body');
+  if (!b || !N82_REF) return;
+  var r = document.getElementById('nist82-reserve');
+  if (r) {
+    r.innerHTML = '<strong>Surcharge.</strong> Ce taux mesure ce que '
+      + 'l’industriel AJOUTE au catalogue ' + nistEsc(N82_REF.vise)
+      + ', et il est plafonné par ce que ce catalogue porte déjà — '
+      + N82_REF.retouches_total + ' mesures y sont retouchées, sur '
+      + Object.keys(N82_REF.retouches).length + ' familles. '
+      + '<strong>Millésime.</strong> ' + nistEsc(N82_REF.reserve);
+  }
+  var etats = {};
+  N82_REF.etats.forEach(function (e) { etats[e.cle] = e; });
+  var ordre = N82_REF.etats.map(function (e) { return e.cle; });
+  var h = '<div class="nist-q-cats">';
+  N82_REF.axes.forEach(function (a) {
+    h += '<div class="nist-cat" id="nist82-' + nistEsc(a.cle) + '">'
+      + '<div><strong>' + nistEsc(a.nom) + '</strong>'
+      + '<div class="q-notes">' + nistEsc(a.demande) + '</div>'
+      + '<div class="q-notes"><em>' + nistEsc(a.section) + '</em> · taille '
+      + a.familles.map(function (f) {
+          return nistEsc(f.cle) + ' (' + f.retouches + ')';
+        }).join(', ') + '</div></div>'
+      + _choix(etats, ordre, N82_DECL[a.cle] || '', 'nist82Repondre', a.cle)
+      + '</div>';
+  });
+  h += '</div><div id="nist82-verdict" class="q-verdict"></div>';
+  b.innerHTML = h;
+  b.classList.remove('veille-loading');
+  nist82Evaluer();
+}
+
+function nist82Repondre(sel) {
+  var c = sel.getAttribute('data-cle');
+  if (sel.value) { N82_DECL[c] = sel.value; } else { delete N82_DECL[c]; }
+  _declEcrire(N82_CLE_STOCK, N82_DECL);
+  declPublier();
+  nist82Evaluer();
+}
+
+function nist82Evaluer() {
+  fetch('/api/nist-800-82/evaluer', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    /* LA DÉCLARATION DU CATALOGUE PART AVEC : sans elle, le serveur ne peut
+       pas savoir si la surcharge repose sur quelque chose. */
+    body: JSON.stringify({ etats: N82_DECL, etats_800_53: _n53Etats() })
+  }).then(function (r) { return r.json(); }).then(function (d) {
+    var v = document.getElementById('nist82-verdict');
+    if (!v || !d.ok) return;
+    var h = '<h3>Surcharge industrielle — '
+      + (d.taux === null ? 'non renseignée' : d.taux + ' %') + '</h3><ul>';
+    d.profils.forEach(function (pr) {
+      h += '<li><strong>' + nistEsc(pr.nom) + '</strong> — '
+        + (pr.etat_nom ? nistEsc(pr.etat_nom) : 'non renseigné')
+        + (pr.depasse_le_socle
+            ? ' <span class="q-am">au-dessus de son socle 800-53 : ramené à '
+              + pr.plafond + '/' + pr.sur + '</span>' : '')
+        + '</li>';
+    });
+    h += '</ul>';
+    if (d.verrous.length) {
+      h += '<div class="q-vide"><strong>Ce qui plafonne ce taux</strong><ul>'
+        + d.verrous.map(function (x) { return '<li>' + nistEsc(x.dit) + '</li>'; }).join('')
+        + '</ul></div>';
+    }
+    v.innerHTML = h;
+  }).catch(function () {});
+}
+
 function declPublier() {
   window.CONF_DECL = window.CONF_DECL || {};
   window.CONF_DECL.nist_ai_rmf =
     Object.keys(NIST_DECL).length ? NIST_DECL : null;
   window.CONF_DECL.owasp_llm =
     Object.keys(OWASP_DECL).length ? OWASP_DECL : null;
+  /* LE SOCLE N'EST PAS UNE FAMILLE : il sort de la déclaration envoyée au
+     taux, sans quoi `__socle` serait pris pour un code de famille inconnu
+     et l'évaluation entière serait refusée. */
+  window.CONF_DECL.nist_800_53 =
+    Object.keys(_n53Etats()).length ? _n53Etats() : null;
+  window.CONF_DECL.nist_800_82 =
+    Object.keys(N82_DECL).length ? N82_DECL : null;
   /* LE TAUX EST RECALCULÉ À LA PROCHAINE OUVERTURE, pas maintenant : on ne
      va pas chercher un écran que le visiteur n'a pas demandé. */
   CONF_ETAT = null;

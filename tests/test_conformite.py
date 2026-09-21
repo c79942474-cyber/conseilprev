@@ -138,18 +138,32 @@ def _norme(etat, cle):
 #  1. NEUF TAUX, ET NEUF NATURES QUI NE S'ADDITIONNENT PAS
 # ══════════════════════════════════════════════════════════════════════════
 
-def test_les_neuf_normes_sont_celles_de_la_page_d_accueil():
-    """LE MODULE ET LA VITRINE DOIVENT COMPTER PAREIL. Le site annonce neuf
-    normes maîtrisées sur sa page d'accueil ; un module qui en évaluerait huit
-    ou dix ferait mentir l'une des deux surfaces, et on ne saurait pas
-    laquelle."""
+def test_les_normes_EVALUEES_sont_celles_QUE_LA_PAGE_MONTRE():
+    """LE MODULE, LE TITRE ET LA GRILLE DOIVENT COMPTER PAREIL.
+
+    TROIS SURFACES DISENT LE MÊME NOMBRE, et ce dépôt a déjà vu deux d'entre
+    elles diverger : le titre annonçait sept normes quand la grille en
+    montrait neuf. Un titre est codé en dur, une grille se complète carte
+    par carte, et un module se déclare dans une table — rien ne les tient
+    ensemble sauf cette règle.
+
+    LE NOMBRE SE DÉCIDE À UN SEUL ENDROIT : `conformite.NORMES_ANNONCEES`.
+    Les deux autres surfaces lui sont confrontées ici."""
     index = _lire("index.html")
     i = index.index('data-i18n="nr.lbl"')
     bloc = index[i:index.index("</section>", i)]
     cartes = len(re.findall(r'<div class="nc nc-(?:lie|ext)', bloc))
-    assert len(c.NORMES) == cartes, (
-        "la page d'accueil montre %d normes, le module en évalue %d"
-        % (cartes, len(c.NORMES)))
+    assert len(c.NORMES) == c.NORMES_ANNONCEES, (
+        "le module déclare %d normes et en annonce %d"
+        % (len(c.NORMES), c.NORMES_ANNONCEES))
+    assert cartes == c.NORMES_ANNONCEES, (
+        "la page d'accueil montre %d normes, le module en annonce %d"
+        % (cartes, c.NORMES_ANNONCEES))
+    titre = re.search(r'data-i18n="nr\.ttl">(\d+) normes', bloc)
+    assert titre, "le titre de la grille n'annonce plus un nombre de normes"
+    assert int(titre.group(1)) == c.NORMES_ANNONCEES, (
+        "le titre annonce %s normes, la grille en montre %d"
+        % (titre.group(1), cartes))
 
 
 def test_chaque_taux_dit_ce_que_CENT_POUR_CENT_NE_VEUT_PAS_DIRE():

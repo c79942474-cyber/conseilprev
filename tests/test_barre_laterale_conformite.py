@@ -60,7 +60,12 @@ NODE = shutil.which("node")
 # répond.
 TIROIRS = ["taux-conformite",
            "rgpd-et-privacy", "iso27001", "iso42001", "nis2", "cra",
-           "nist-ai-rmf", "owasp-llm"]
+           "nist-ai-rmf", "owasp-llm", "nist-ot"]
+# LES DEUX RÉFÉRENTIELS NIST DE SÉCURITÉ INDUSTRIELLE FERMENT LA LISTE, et
+# dans cet ordre-là : 800-82 n'est pas une norme de plus à côté de 800-53,
+# c'est sa SURCHARGE. Les ouvrir avant le catalogue ferait lire une
+# adaptation sans savoir de quoi. Ils viennent donc après tout le reste,
+# comme sur la grille de la page d'accueil.
 
 
 def _executer(scenario):

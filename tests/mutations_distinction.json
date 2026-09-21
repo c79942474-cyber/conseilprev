@@ -112,8 +112,8 @@
   {
    "nom": "l'infobulle se trompe sur le nombre de modules",
    "fichier": "index.page.js",
-   "avant": "pour huit d’entre eux",
-   "apres": "pour sept d’entre eux",
+   "avant": "pour dix d’entre eux",
+   "apres": "pour neuf d’entre eux",
    "regle": "test_les_referentiels_et_leurs_modules_sont_COMPTES_sur_la_page"
   },
   {

@@ -1889,6 +1889,8 @@ def api_nis2_evaluer():
 
 import iso42001  # noqa: E402
 import nist_ai_rmf  # noqa: E402  — le cadre NIST, qui ne se certifie PAS :
+import nist_800_53
+import nist_800_82
                     # la réserve voyage avec chaque réponse
 import owasp_llm    # noqa: E402  — le Top 10 LLM 2025, et surtout ce qu'ISO
 import conformite
@@ -1917,6 +1919,52 @@ def api_nist_evaluer():
     répandu, et celui que le cadre est écrit pour corriger."""
     data = request.get_json(silent=True) or {}
     r = nist_ai_rmf.evaluer(data.get("etats"), aujourdhui=data.get("date"))
+    return jsonify(r), (200 if r.get("ok") else 400)
+
+
+@app.route('/api/nist-800-53/referentiel', methods=['GET'])
+@rate_limit(limit=120, window=60)
+def api_nist53_referentiel():
+    """Les dix-huit familles, les cinq groupes et les trois socles.
+
+    LE MILLÉSIME PART AVEC LES DONNÉES, et non en note de bas d'écran : ce
+    module vise la RÉVISION 4, parce que c'est celle que la surcharge
+    industrielle SP 800-82 Rev. 2 adapte. Un lecteur qui travaille sur la
+    révision 5 doit le savoir avant de lire un taux, pas après."""
+    return jsonify({"ok": True, "referentiel": nist_800_53.referentiel()})
+
+
+@app.route('/api/nist-800-53/evaluer', methods=['POST'])
+@rate_limit(limit=120, window=60)
+def api_nist53_evaluer():
+    """Le profil par groupe, et ce qui le plafonne.
+
+    LE SOCLE ANNONCÉ SANS APPRÉCIATION DU RISQUE est un verrou, pas une
+    réserve : RA produit la catégorisation dont le socle découle."""
+    data = request.get_json(silent=True) or {}
+    r = nist_800_53.evaluer(data.get("socle"), data.get("etats"))
+    return jsonify(r), (200 if r.get("ok") else 400)
+
+
+@app.route('/api/nist-800-82/referentiel', methods=['GET'])
+@rate_limit(limit=120, window=60)
+def api_nist82_referentiel():
+    """Les dix axes industriels, et les familles 800-53 que chacun taille."""
+    return jsonify({"ok": True, "referentiel": nist_800_82.referentiel()})
+
+
+@app.route('/api/nist-800-82/evaluer', methods=['POST'])
+@rate_limit(limit=120, window=60)
+def api_nist82_evaluer():
+    """La surcharge industrielle, plafonnée par le socle qu'elle taille.
+
+    DEUX DÉCLARATIONS ENTRENT ICI, et ce n'est pas une commodité : sans la
+    seconde, le module ne saurait pas si l'adaptation repose sur quelque
+    chose. Un axe déclaré au-dessus de sa famille 800-53 est ramené à elle,
+    et le dépassement est SIGNALÉ — le rabattre en silence ferait
+    disparaître de l'écran le défaut qu'il faut montrer."""
+    data = request.get_json(silent=True) or {}
+    r = nist_800_82.evaluer(data.get("etats"), data.get("etats_800_53"))
     return jsonify(r), (200 if r.get("ok") else 400)
 
 

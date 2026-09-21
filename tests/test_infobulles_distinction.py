@@ -61,6 +61,8 @@ LANGUES = ("fr", "en", "de")
 EN_LETTRES = {
     8:  {"fr": "huit",  "en": "eight",  "de": "acht"},
     9:  {"fr": "neuf",  "en": "nine",   "de": "neun"},
+    10: {"fr": "dix",   "en": "ten",    "de": "zehn"},
+    11: {"fr": "onze",  "en": "eleven", "de": "elf"},
     12: {"fr": "douze", "en": "twelve", "de": "zwölf"},
 }
 
