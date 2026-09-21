@@ -625,6 +625,7 @@ footer::after{
 .svc2-list li::before{content:"→";position:absolute;left:0;color:var(--pm);font-family:"Space Mono",monospace;font-size:10px;top:1px}
 
 /* ═══ DIFFÉRENCIATEURS ═══ */
+#secteurs,#normes{scroll-margin-top:124px}
 .diff-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
 @media(max-width:900px){.diff-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:550px){.diff-grid{grid-template-columns:1fr}}
@@ -716,15 +717,15 @@ footer::after{
 .sv-go:hover{opacity:1}
 .sv-go:focus-visible{outline:2px solid var(--gd,#d4a843);outline-offset:3px;
   border-radius:3px;opacity:1}
-.sv-card-go{display:inline-block;margin-top:16px;font-size:12.5px;font-weight:600;
+.sv-card-go,.diff-go{display:inline-block;margin-top:16px;font-size:12.5px;font-weight:600;
   letter-spacing:.02em;color:var(--gd,#d4a843);text-decoration:none;
   border:1px solid rgba(212,168,67,.32);border-radius:8px;padding:8px 15px;
   transition:background .16s,border-color .16s}
-.sv-card-go:hover{background:rgba(212,168,67,.10);border-color:rgba(212,168,67,.6)}
-.sv-card-go:focus-visible{outline:2px solid var(--gd,#d4a843);outline-offset:2px}
+.sv-card-go:hover,.diff-go:hover{background:rgba(212,168,67,.10);border-color:rgba(212,168,67,.6)}
+.sv-card-go:focus-visible,.diff-go:focus-visible{outline:2px solid var(--gd,#d4a843);outline-offset:2px}
 /* LA CARTE ENTIÈRE RESTE UNE ZONE DE SURVOL COHÉRENTE : survoler n'importe où
    éclaire l'appel, pour qu'on sache où cliquer sans l'avoir cherché. */
-.diff-card:hover .sv-card-go{background:rgba(212,168,67,.10);
+.diff-card:hover .sv-card-go,.diff-card:hover .diff-go{background:rgba(212,168,67,.10);
   border-color:rgba(212,168,67,.6)}
 @media(prefers-reduced-motion:reduce){
   .sv-go{transition:none}.diff-sublist li:hover .sv-go{transform:none}}
@@ -2484,9 +2485,32 @@ footer::after{
    arc de 5 px sur un disque flouté, et un translateX(-50%) qui le
    décalerait d'une demi-largeur. Les deux sont annulées ici.
    ══════════════════════════════════════════════════ */
+/* L'APPEL ARRIVE SOUS LA BULLE, ET LA BULLE ÉTAIT RÉGLÉE EXACTEMENT LÀ.
+   Sa hauteur est déclarée UNE fois et commande les deux : la boîte du lien,
+   et le dégagement que la bulle lui laisse. Deux nombres tenus séparément
+   auraient fini par diverger, et la bulle aurait recouvert le lien qu'elle
+   est censée laisser cliquable.
+
+   LA CARTE DEVIENT UNE COLONNE FLEXIBLE pour une raison mesurable : les
+   cartes d'une même rangée s'étirent à la plus haute, mais leur contenu
+   reste calé en haut. Sans `margin-top:auto`, l'appel d'une carte au texte
+   court remonte — et le dégagement, compté depuis le bas, ne le protège
+   plus. Collé au bas, sa position ne dépend plus de la longueur du texte. */
+.diff-card[data-tooltip]{
+  --diff-appel:36px;
+  display:flex;
+  flex-direction:column;
+}
+.diff-go{
+  height:var(--diff-appel,36px);
+  align-items:center;
+  align-self:center;
+  margin-top:auto;
+  white-space:nowrap;
+}
 .diff-card[data-tooltip]::after{
   top:auto;
-  bottom:16px;
+  bottom:calc(28px + var(--diff-appel,36px) + 12px);
   left:16px;
   right:16px;
   max-width:none;
@@ -4552,31 +4576,45 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
         <div class="diff-ico">🤖</div>
         <h3 class="diff-title" data-i18n="df.ai.t">Assistants IA sur mesure</h3>
         <p class="diff-desc" data-i18n="df.ai.d">Des assistants qui comprennent votre langage métier et s'intègrent parfaitement à vos flux de travail existants.</p>
+        <a class="diff-go" href="/sentinel?goto=owasp-dix" target="_blank" rel="noopener"><span data-i18n="dg.ai">Ouvrir le module OWASP</span> →</a>
       </div>
       <div class="diff-card" data-tooltip="Les douze secteurs couverts sont listés plus haut sur cette page, de l’énergie au secteur public. Chacun a son vocabulaire, ses données et ses contraintes." data-i18n-tip="tip.df.ind">
         <div class="diff-ico">🏭</div>
         <h3 class="diff-title" data-i18n="df.ind.t">Agents formés industrie</h3>
         <p class="diff-desc" data-i18n="df.ind.d">Pré-entraînés pour plus de 20 secteurs industriels, nos agents produisent des résultats concrets et mesurables.</p>
+        <a class="diff-go" href="#secteurs"><span data-i18n="dg.ind">Voir les 12 secteurs</span> →</a>
       </div>
       <div class="diff-card" data-tooltip="Le module FinOps de Sentinel affiche la couverture du chiffrage AVANT tout montant : un total qui ignore la moitié du parc est crédible et faux." data-i18n-tip="tip.df.eco">
         <div class="diff-ico">📈</div>
         <h3 class="diff-title" data-i18n="df.eco.t">Optimisation des coûts opérationnels</h3>
         <p class="diff-desc" data-i18n="df.eco.d">Optimisation des coûts opérationnels grâce à l'automatisation intelligente et aux modèles prédictifs.</p>
+        <a class="diff-go" href="/sentinel?goto=finops" target="_blank" rel="noopener"><span data-i18n="dg.eco">Ouvrir le module FinOps</span> →</a>
       </div>
       <div class="diff-card" data-tooltip="OT/ICS/SCADA, sites Seveso, plans de continuité : des environnements où un arrêt se compte en heures de production, pas en tickets." data-i18n-tip="tip.df.exp">
         <div class="diff-ico">🎯</div>
         <h3 class="diff-title" data-i18n="df.exp.t">32 ans d'expertise sectorielle</h3>
         <p class="diff-desc" data-i18n="df.exp.d">Énergie, Oil &amp; Gas, Industrie, Finance, Santé — une connaissance terrain des environnements les plus exigeants.</p>
+        <!-- LE LIBELLÉ NE NOMME PAS LE DOMAINE, ET C'EST VOULU. `bascule.js`
+             réécrit les liens vers i-aes.com quand le site institutionnel ne
+             répond pas, et relabellise ceux dont le TEXTE le nomme — par
+             `textContent`, qui effacerait le <span data-i18n> et la flèche.
+             C'est le premier lien i-aes.com du site à porter du balisage :
+             un libellé qui ne cite pas le domaine n'a pas à être relabellisé,
+             garde sa traduction, et la bascule fait quand même son travail
+             sur l'adresse et sur l'infobulle native. -->
+        <a class="diff-go" href="https://i-aes.com" target="_blank" rel="noopener"><span data-i18n="dg.exp">Découvrir le site institutionnel</span> ↗</a>
       </div>
       <div class="diff-card" data-tooltip="Neuf référentiels maîtrisés et, pour huit d’entre eux, un module d’évaluation dans Sentinel. DORA fait exception : le texte, sans outil." data-i18n-tip="tip.df.jur">
         <div class="diff-ico">⚖️</div>
         <h3 class="diff-title" data-i18n="df.jur.t">Double expertise Juridique &amp; Tech</h3>
         <p class="diff-desc" data-i18n="df.jur.d">Conformité réglementaire et implémentation technique réunies dans une approche intégrée et cohérente.</p>
+        <a class="diff-go" href="#normes"><span data-i18n="dg.jur">Voir les 9 référentiels</span> →</a>
       </div>
       <div class="diff-card" data-tooltip="La carte mondiale de Sentinel compare 46 juridictions sur 12 critères — pour savoir où une donnée peut aller, et sous quel régime." data-i18n-tip="tip.df.intl">
         <div class="diff-ico">🌍</div>
         <h3 class="diff-title" data-i18n="df.intl.t">Couverture internationale</h3>
         <p class="diff-desc" data-i18n="df.intl.d">Intervention en France, Europe, Moyen-Orient et Amérique du Nord. Maîtrise des réglementations transversales.</p>
+        <a class="diff-go" href="/sentinel?goto=carto" target="_blank" rel="noopener"><span data-i18n="dg.intl">Ouvrir la carte mondiale</span> →</a>
       </div>
     </div>
   </div>

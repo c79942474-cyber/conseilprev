@@ -312,16 +312,26 @@ def test_l_infobulle_est_reglee_DANS_la_boite_de_la_carte():
     au-dessus de l'élément. Posée telle quelle sur une carte qui rogne, elle
     est INVISIBLE — et rien ne le dit : l'attribut est là, la règle est là.
 
-    CE QUE CETTE RÈGLE EXIGE : un `bottom` en longueur simple, qui compte
-    depuis le bas de la carte vers l'intérieur, et un `top:auto` qui annule
-    l'ancrage hérité. Un `bottom:calc(100% + …)` recommence le défaut."""
+    CE QUE CETTE RÈGLE EXIGE : un `bottom` compté depuis le bas de la carte
+    vers l'intérieur, en longueurs ABSOLUES, et un `top:auto` qui annule
+    l'ancrage hérité. Un `bottom:calc(100% + …)` recommence le défaut.
+
+    POURQUOI « ABSOLUES » ET NON « UNE SEULE LONGUEUR ». Une première version
+    exigeait un nombre nu ; l'arrivée de l'appel sous la bulle a rendu ce
+    décalage une somme — le fond de la carte, la hauteur de l'appel, l'écart.
+    La règle tombait alors sur la FORME de l'expression, pas sur ce qu'elle
+    voulait dire. Ce qui rejette la bulle hors de la carte, c'est une unité
+    qui se résout sur la taille de la carte ou de la fenêtre ; c'est cela
+    qu'on interdit."""
     apres = ".diff-card[data-tooltip]::after"
     bas = _declaration(apres, "bottom")
     assert bas is not None, "%s ne déclare pas bottom" % apres
-    assert "%" not in bas, (
-        "bottom:%s remet la bulle HORS de la carte, qui la rognera" % bas)
-    assert re.match(r"^\d+(\.\d+)?px$", bas), (
-        "bottom:%s n'est pas une longueur simple" % bas)
+    interdites = re.findall(r"\d+\s*(%|v[hw]|svh|dvh|lvh)", bas)
+    assert not interdites, (
+        "bottom:%s se résout sur la taille de la carte ou de la fenêtre — la "
+        "bulle repasserait hors de la boîte, qui la rogne" % bas)
+    assert re.search(r"\d+(\.\d+)?px", bas), (
+        "bottom:%s ne porte aucune longueur absolue" % bas)
     assert _declaration(apres, "top") == "auto", (
         "sans top:auto, l'ancrage haut hérité de la convention subsiste")
     for cote in ("left", "right"):
@@ -467,3 +477,293 @@ def test_l_infobulle_AJOUTE_quelque_chose_a_la_carte(cle):
     assert plus_longue < 5, (
         "tip.%s reprend %d mots de suite de sa propre description"
         % (cle, plus_longue))
+
+
+# ══════════════════════════════════════════════════════════════════════════
+#  6. L'APPEL — CHAQUE CARTE MÈNE OÙ SON INFOBULLE PROMET
+# ══════════════════════════════════════════════════════════════════════════
+#  LA DEMANDE : « connecter la carte 32 ans vers i-aes.com, la carte
+#  juridique vers la grille neuf référentiels huit modules, carte
+#  international vers module 46 juridictions, carte coûts vers page finops,
+#  agent industrie vers grille 12 secteurs, assistants IA vers modules
+#  OWASP ».
+#
+#  LE CHOIX DE FORME, ET IL VIENT D'UNE CONSIGNE ANTÉRIEURE. Deux fois déjà,
+#  sur les cartes de risque puis sur celles des services : « seul le cliquage
+#  sur ouvrir le module doit rediriger ». La carte entière n'est donc PAS un
+#  lien ; c'est un appel nommé, posé au bas de chaque carte.
+
+#: OÙ MÈNE CHAQUE CARTE. Une seule table, parcourue par plusieurs règles.
+DESTINATIONS = {
+    "df.ai":   "/sentinel?goto=owasp-dix",
+    "df.ind":  "#secteurs",
+    "df.eco":  "/sentinel?goto=finops",
+    "df.exp":  "https://i-aes.com",
+    "df.jur":  "#normes",
+    "df.intl": "/sentinel?goto=carto",
+}
+
+FLECHES = {"interne": "→", "externe": "↗"}
+
+
+def _appels():
+    """Les appels des six cartes : (clé du titre, href, attributs, libellé)."""
+    out = []
+    for carte in BLOC.split('<div class="diff-card"')[1:]:
+        titre = re.search(r'<h3 class="diff-title" data-i18n="([^"]+)\.t"', carte)
+        lien = re.search(r'<a class="diff-go" href="([^"]*)"([^>]*)>(.*?)</a>',
+                         carte, re.S)
+        out.append((titre.group(1) if titre else None,
+                    unescape(lien.group(1)) if lien else None,
+                    lien.group(2) if lien else None,
+                    lien.group(3) if lien else None))
+    return out
+
+
+def test_CHACUNE_des_six_cartes_porte_son_appel():
+    """CINQ CARTES CONNECTÉES SUR SIX, C'EST UNE SECTION QUI PARAÎT INERTE :
+    le visiteur qui tombe d'abord sur la sixième conclut que ces cartes ne
+    mènent nulle part, et ne réessaie pas sur les autres."""
+    vus = _appels()
+    assert len(vus) == 6, vus
+    manquants = [t for t, href, _, _ in vus if not href]
+    assert not manquants, "cartes sans appel : %s" % manquants
+
+
+def test_l_appel_mène_là_où_la_DEMANDE_l_a_envoyé():
+    """UN APPEL JUSTE SUR LA MAUVAISE CARTE ENVOIE LE VISITEUR AILLEURS avec
+    l'assurance d'un lien nommé — le pire des deux mondes."""
+    vus = [(t, href) for t, href, _, _ in _appels()]
+    assert vus == [(c, DESTINATIONS[c]) for c in CARTES], vus
+
+
+def test_les_destinations_SENTINEL_existent_comme_panneau_ET_comme_onglet():
+    """UNE DESTINATION INCONNUE N'AFFICHE AUCUNE ERREUR DANS SENTINEL : la
+    page s'ouvre sur le sommaire, et le visiteur croit avoir mal cliqué.
+    `hubGo` retrouve l'onglet par son `onclick` : chaque cible doit donc
+    exister DEUX fois — comme panneau, et comme entrée de menu."""
+    vises = [re.search(r"goto=([a-z0-9-]+)", h).group(1)
+             for _, h, _, _ in _appels() if h.startswith("/sentinel")]
+    assert len(vises) == 3, vises
+    for cible in vises:
+        assert '<div class="page" id="p-%s">' % cible in SENTINEL, (
+            "aucun panneau p-%s dans Sentinel" % cible)
+        assert "go('%s',this," % cible in SENTINEL, (
+            "aucun onglet ne mène à %s : le lien ouvrira le sommaire" % cible)
+
+
+def test_les_liens_vers_Sentinel_gardent_la_page_d_accueil():
+    """CES APPELS PARTENT D'UNE PAGE PUBLIQUE VERS UN PRODUIT DERRIÈRE
+    AUTHENTIFICATION : ils s'adressent par construction à quelqu'un qui n'est
+    pas connecté. Dans l'onglet courant, un clic remplacerait l'accueil par un
+    formulaire de connexion — le lien marche, la destination est juste, et la
+    visite s'arrête là. Mesuré au navigateur une fois déjà, sur d'autres
+    liens de cette même page."""
+    for titre, href, attrs, _ in _appels():
+        if not href.startswith(("/sentinel", "http")):
+            continue
+        assert 'target="_blank"' in attrs, (
+            "%s reste dans l'onglet courant" % titre)
+        assert "noopener" in attrs, (
+            "%s ouvre un onglet sans noopener : la page ouverte garde la main "
+            "sur celle qui l'a ouverte" % titre)
+
+
+def test_les_ANCRES_restent_dans_l_onglet_courant():
+    """OUVRIR UN NOUVEL ONGLET POUR DESCENDRE DE DEUX SECTIONS SUR LA PAGE
+    QU'ON LIT DÉJÀ est une perte sèche : le visiteur se retrouve avec deux
+    copies de l'accueil et perd sa position dans la première."""
+    for titre, href, attrs, _ in _appels():
+        if not href.startswith("#"):
+            continue
+        assert "target=" not in attrs, (
+            "%s ouvre un onglet pour une ancre de la même page" % titre)
+
+
+def test_les_deux_grilles_VISEES_existent_sur_cette_page():
+    vises = [h[1:] for _, h, _, _ in _appels() if h.startswith("#")]
+    assert len(vises) == 2, vises
+    for cible in vises:
+        assert 'id="%s"' % cible in INDEX, "aucune section #%s" % cible
+
+
+def test_les_grilles_visees_se_DEGAGENT_de_l_en_tete_fixe():
+    """LE DÉFAUT MESURÉ AU NAVIGATEUR AVANT D'Y TOUCHER. L'en-tête fixe occupe
+    les 108 premiers pixels ; une ancre dépose la section à zéro. Le surtitre
+    et le haut du titre passaient DESSOUS — pour les liens du menu comme pour
+    les appels neufs. Les deux sections visées réservent désormais la hauteur
+    de l'en-tête ; mesuré après : le surtitre tombe à 196, l'en-tête finit à
+    108."""
+    vises = sorted(h[1:] for _, h, _, _ in _appels() if h.startswith("#"))
+    marge = None
+    for sel, corps in _regles():
+        if all(("#" + c) in sel for c in vises):
+            m = re.search(r"scroll-margin-top\s*:\s*(\d+)px", corps)
+            if m:
+                marge = int(m.group(1))
+    assert marge is not None, (
+        "les sections %s ne réservent plus la hauteur de l'en-tête fixe"
+        % vises)
+    assert marge >= 108, (
+        "scroll-margin-top:%dpx — l'en-tête fixe descend à 108px, le surtitre "
+        "repasserait dessous" % marge)
+
+
+def test_le_module_46_juridictions_VISE_est_bien_celui_qui_les_PORTE():
+    """L'INFOBULLE PROMET UNE CARTE MONDIALE DE 46 JURIDICTIONS SUR 12
+    CRITÈRES, ET L'APPEL OUVRE UN PANNEAU. Les deux doivent désigner la même
+    chose : on relève les nombres dans l'infobulle, on suit l'appel jusqu'au
+    panneau, et on exige que le panneau les porte. Une promesse et une porte
+    qui ne mènent pas au même endroit, c'est la forme la plus coûteuse de
+    lien mort — celle qui a l'air de marcher."""
+    href = dict((t, h) for t, h, _, _ in _appels())["df.intl"]
+    cible = re.search(r"goto=([a-z0-9-]+)", href).group(1)
+    debut = SENTINEL.find('<div class="page" id="p-%s">' % cible)
+    assert debut > 0, cible
+    suite = SENTINEL.find('<div class="page" id="p-', debut + 10)
+    panneau = SENTINEL[debut:suite if suite > 0 else debut + 6000]
+    for nombre in re.findall(r"\b(\d+)\b", _dico("fr")["tip.df.intl"]):
+        assert re.search(r"\b%s\b" % nombre, panneau), (
+            "l'infobulle annonce %s, le panneau p-%s ne le dit pas"
+            % (nombre, cible))
+
+
+def test_le_module_OWASP_VISE_est_celui_que_l_infobulle_NOMME():
+    href = dict((t, h) for t, h, _, _ in _appels())["df.ai"]
+    assert "owasp" in href, href
+    assert re.search(r"owasp", _dico("fr")["tip.df.ai"], re.I), (
+        "l'infobulle de la carte ne nomme plus ce que l'appel ouvre")
+
+
+def test_le_module_FinOps_VISE_est_celui_que_l_infobulle_NOMME():
+    href = dict((t, h) for t, h, _, _ in _appels())["df.eco"]
+    assert "finops" in href, href
+    assert re.search(r"finops", _dico("fr")["tip.df.eco"], re.I), (
+        "l'infobulle de la carte ne nomme plus ce que l'appel ouvre")
+
+
+# ── LE LIBELLÉ DE L'APPEL, DANS LES TROIS LANGUES ────────────────────────
+
+def _cles_appel():
+    return ["dg." + c.split(".")[1] for c in CARTES]
+
+
+def test_le_libelle_de_l_appel_est_celui_du_dictionnaire_francais():
+    fr = _dico("fr")
+    for (_, _, _, dedans), cle in zip(_appels(), _cles_appel()):
+        m = re.search(r'<span data-i18n="%s">(.*?)</span>' % re.escape(cle),
+                      dedans, re.S)
+        assert m, "l'appel ne porte pas le libellé traduisible %s" % cle
+        assert unescape(m.group(1)) == fr[cle], (
+            "%s : la page dit %r, le dictionnaire %r"
+            % (cle, unescape(m.group(1)), fr[cle]))
+
+
+@pytest.mark.parametrize("lg", LANGUES)
+def test_les_six_libelles_existent_dans_la_langue(lg):
+    dico = _dico(lg)
+    manquants = [c for c in _cles_appel() if not (dico.get(c) or "").strip()]
+    assert not manquants, "libellés absents du dictionnaire %s : %s" % (lg, manquants)
+
+
+@pytest.mark.parametrize("cle", ["dg." + c.split(".")[1] for c in CARTES])
+def test_les_trois_langues_donnent_des_libelles_DIFFERENTS(cle):
+    textes = {lg: _dico(lg)[cle] for lg in LANGUES}
+    for a, b in (("fr", "en"), ("fr", "de"), ("en", "de")):
+        assert textes[a] != textes[b], (
+            "%s : %s et %s portent le même libellé — %r"
+            % (cle, a, b, textes[a]))
+
+
+def test_la_FLECHE_reste_hors_du_texte_traduit():
+    """LE PIÈGE QUI A COÛTÉ DEUX FOIS À CE DÉPÔT. `applyLang` remplace
+    l'innerHTML de tout porteur de `data-i18n` : ce qui vit DEDANS disparaît
+    au premier changement de langue, sans erreur et sans trace. La flèche
+    reste donc à côté du span, jamais dedans.
+
+    LE GARDE-FOU : on vérifie d'abord qu'il y a bien une flèche à préserver."""
+    for titre, href, _, dedans in _appels():
+        m = re.search(r'<span data-i18n="dg\.[a-z]+">(.*?)</span>(.*)$',
+                      dedans, re.S)
+        assert m, "l'appel de %s n'a pas la forme span + flèche" % titre
+        dans, apres = m.group(1), m.group(2)
+        fleche = FLECHES["externe"] if href.startswith("http") else FLECHES["interne"]
+        assert fleche in apres, (
+            "%s : la flèche %s manque après le span (reste : %r)"
+            % (titre, fleche, apres))
+        for f in FLECHES.values():
+            assert f not in dans, (
+                "%s : la flèche est DANS le texte traduit — le premier "
+                "changement de langue l'effacera" % titre)
+
+
+def test_le_libelle_du_lien_i_aes_ne_NOMME_pas_le_domaine():
+    """LA COLLISION MESURÉE AVEC LA BASCULE DU SITE INSTITUTIONNEL.
+
+    `bascule.js` réécrit les liens vers i-aes.com quand le site ne répond pas
+    — un pare-feu d'entreprise suffit — et relabellise ceux dont le TEXTE
+    nomme le domaine, par `textContent`. Ce geste efface tout le balisage de
+    l'élément. Or cet appel est le PREMIER lien i-aes.com du site à porter du
+    balisage : son `<span data-i18n>` et sa flèche disparaîtraient, et le
+    libellé cesserait d'être traduit — silencieusement.
+
+    Un libellé qui ne cite pas le domaine n'a pas à être relabellisé : la
+    bascule fait quand même son travail sur l'adresse et sur l'infobulle
+    native, et la traduction survit. Mesuré au navigateur dans l'état dégradé,
+    que ce bac à sable reproduit naturellement.
+
+    LES DEUX GARDE-FOUS : sans eux, cette règle interdirait un mot sans
+    raison. On vérifie que la bascule existe, qu'elle relabellise toujours par
+    `textContent`, et qu'elle ne le fait QUE sur les libellés qui citent le
+    domaine."""
+    bascule = io.open(os.path.join(_RACINE, "bascule.js"), encoding="utf-8").read()
+    assert 'var CIBLE = "i-aes.com"' in bascule, (
+        "la bascule ne vise plus i-aes.com : cette règle n'a plus d'objet")
+    assert re.search(r"el\.textContent\s*=\s*t\.replace\(CIBLE", bascule), (
+        "la bascule ne relabellise plus par textContent : le balisage ne "
+        "risque plus rien, et cette contrainte peut être levée")
+    assert "t.indexOf(CIBLE) >= 0" in bascule, (
+        "la bascule relabellise désormais sans regarder le texte : éviter le "
+        "domaine ne protège plus rien")
+
+    href = dict((t, h) for t, h, _, _ in _appels())["df.exp"]
+    assert "i-aes.com" in href, href
+    for lg in LANGUES:
+        libelle = _dico(lg)["dg.exp"]
+        assert "i-aes.com" not in libelle, (
+            "le libellé %s cite le domaine (%r) : la bascule effacerait le "
+            "span traduit et la flèche" % (lg, libelle))
+
+
+# ── LA BULLE ET L'APPEL SE PARTAGENT LE BAS DE LA CARTE ──────────────────
+
+def test_UN_SEUL_nombre_commande_la_boite_de_l_appel_ET_son_degagement():
+    """LA BULLE ÉTAIT RÉGLÉE EXACTEMENT LÀ OÙ L'APPEL EST ARRIVÉ. Deux nombres
+    tenus séparément — la hauteur du lien d'un côté, le dégagement de l'autre
+    — auraient fini par diverger, et la bulle aurait recouvert le lien qu'elle
+    est censée laisser cliquable. Une seule déclaration les commande."""
+    var = "--diff-appel"
+    declare = _declaration(".diff-card[data-tooltip]", var)
+    assert declare and re.match(r"^\d+px$", declare), (
+        "%s n'est pas déclarée sur la carte : %r" % (var, declare))
+    hauteur = _declaration(".diff-go", "height")
+    assert hauteur and var in hauteur, (
+        "la boîte de l'appel ne suit pas %s : height:%s" % (var, hauteur))
+    degagement = _declaration(".diff-card[data-tooltip]::after", "bottom")
+    assert degagement and var in degagement, (
+        "le dégagement de la bulle ne suit pas %s : bottom:%s"
+        % (var, degagement))
+
+
+def test_l_appel_est_COLLE_en_bas_de_la_carte():
+    """POURQUOI LE DÉGAGEMENT NE SUFFIT PAS SEUL. Les cartes d'une même rangée
+    s'étirent à la plus haute, mais leur contenu reste calé en haut : l'appel
+    d'une carte au texte court remonte, et un dégagement compté depuis le bas
+    ne le protège plus. Collé au bas, sa position ne dépend plus de la
+    longueur du texte."""
+    assert _declaration(".diff-card[data-tooltip]", "display") == "flex", (
+        "la carte n'est plus une colonne flexible")
+    assert _declaration(".diff-card[data-tooltip]", "flex-direction") == "column"
+    assert _declaration(".diff-go", "margin-top") == "auto", (
+        "l'appel n'est plus collé au bas : le dégagement de la bulle devient "
+        "une supposition sur la longueur du texte")

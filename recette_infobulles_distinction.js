@@ -22,6 +22,20 @@
  * qui trouve la bulle visible ne prouve pas que c'est le cadrage qui la rend
  * visible — il pourrait passer pour une raison sans rapport.
  *
+ * L'APPEL, ARRIVÉ ENSUITE SOUS LA BULLE. Chaque carte mène désormais quelque
+ * part — deux vers une grille de cette page, trois vers un module Sentinel, une
+ * vers le site institutionnel. Trois choses ne se voient que dans un navigateur :
+ * la bulle ne doit JAMAIS recouvrir l'appel (elle est réglée exactement là où
+ * il se pose) ; les deux ancres doivent déposer leur grille SOUS l'en-tête fixe,
+ * qui mange les 108 premiers pixels ; et les trois modules doivent ouvrir le bon
+ * panneau, ce qu'un fichier ne peut pas dire.
+ *
+ * LE LIEN INSTITUTIONNEL EST MESURÉ DANS LES DEUX ÉTATS. `bascule.js` le réécrit
+ * quand i-aes.com ne répond pas — ce bac à sable reproduit naturellement cet
+ * état — et relabellise par `textContent` les liens dont le texte nomme le
+ * domaine, ce qui effacerait le span traduit et la flèche. On vérifie que le
+ * span survit et que le libellé se traduit encore, quel que soit l'état.
+ *
  * LES AUTRES CONTRÔLES : la bulle est cachée au repos et pleine au survol,
  * elle tient entre les deux bords de la carte, le blob n'a hérité ni du
  * contour ni de la translation de la flèche, et les trois langues écrivent
@@ -48,10 +62,21 @@ const GEOMETRIE = () =>
     const h = parseFloat(ap.height), w = parseFloat(ap.width);
     const bas = parseFloat(ap.bottom), gauche = parseFloat(ap.left);
     const haut = padH - bas - h;
+    /* L'appel est relevé en coordonnées de MISE EN PAGE, comme la bulle :
+     * offsetTop ne connaît pas le scale(1.10) du survol, qui fausserait un
+     * getBoundingClientRect() et ferait comparer deux repères différents. */
+    const a = c.querySelector('.diff-go');
+    const aHaut = a ? a.offsetTop - bt : null;
     return {
       cle: (c.querySelector('.diff-title') || {}).dataset.i18n,
       bulle: c.getAttribute('data-tooltip'),
       rogne: !(haut >= -0.5 && bas >= -0.5 && gauche >= -0.5 && gauche + w <= padW + 0.5),
+      recouvre: a ? (padH - bas) > aHaut + 0.5 : true,
+      appel: a ? { href: a.getAttribute('href'), cible: a.getAttribute('target') || '',
+                   rel: a.getAttribute('rel') || '', texte: a.textContent.trim(),
+                   /* réécrit par bascule.js : ce n'est plus le lien écrit ici */
+                   bascule: a.getAttribute('data-bascule') || '',
+                   span: !!a.querySelector('span[data-i18n]') } : null,
       dim: Math.round(w) + '×' + Math.round(h),
       overflow: cs.overflow,
       bordureFleche: getComputedStyle(c, '::before').borderTopWidth,
@@ -183,6 +208,150 @@ const GEOMETRIE = () =>
      intact.length === 6 && intact.every(x => x.ico && x.titre && x.desc && x.desc.length > 40),
      intact.filter(x => !x.ico).length + ' icône(s) perdue(s)');
   ok('aucune erreur JavaScript', err.length === 0, err.join(' | '));
+
+  /* ── L'APPEL : SIX DESTINATIONS, ET LA BULLE QUI LES LAISSE CLIQUABLES ── */
+  const ATTENDU = [
+    ['df.ai.t',   '/sentinel?goto=owasp-dix', 'p-owasp-dix'],
+    ['df.ind.t',  '#secteurs',                null],
+    ['df.eco.t',  '/sentinel?goto=finops',    'p-finops'],
+    ['df.exp.t',  'https://i-aes.com',        null],
+    ['df.jur.t',  '#normes',                  null],
+    ['df.intl.t', '/sentinel?goto=carto',     'p-carto']
+  ];
+  const g2 = await pg.evaluate(GEOMETRIE);
+  ok('les six cartes portent leur appel',
+     g2.every(x => x.appel && x.appel.span),
+     g2.filter(x => !x.appel).map(x => x.cle).join(', ') || '');
+  ok('chaque appel mène là où la demande l’a envoyé',
+     g2.every((x, k) => x.appel &&
+       (x.appel.href === ATTENDU[k][1] ||
+        /* état dégradé : bascule.js a réécrit le lien institutionnel */
+        (ATTENDU[k][1].indexOf('i-aes.com') >= 0 && /bascule=/.test(x.appel.href)))),
+     g2.map((x, k) => x.appel.href === ATTENDU[k][1] ? '' : x.cle + '→' + x.appel.href)
+       .filter(Boolean).join(' ') || '');
+  /* ON NE COMPTE QUE LES LIENS TELS QU'ILS SONT ÉCRITS ICI. Quand i-aes.com
+   * ne répond pas, `bascule.js` réécrit le lien institutionnel vers /sentinel
+   * ET lui retire son `target` — c'est sa décision, pas la nôtre, et il relaie
+   * vers notre propre domaine. Une première version les comptait quand même :
+   * elle trouvait quatre liens Sentinel au lieu de trois et tombait sur le
+   * travail d'un autre module, pas sur un défaut de celui-ci. */
+  const versSentinel = g2.filter(x => /^\/sentinel/.test(x.appel.href) && !x.appel.bascule);
+  ok('les liens vers Sentinel gardent la page d’accueil',
+     versSentinel.length === 3 &&
+     versSentinel.every(x => x.appel.cible === '_blank' && /noopener/.test(x.appel.rel)),
+     versSentinel.length + ' liens Sentinel écrits ici' +
+     (g2.some(x => x.appel.bascule) ? ' (+1 réécrit par la bascule)' : ''));
+  ok('les ancres restent dans l’onglet courant',
+     g2.filter(x => /^#/.test(x.appel.href)).every(x => x.appel.cible === ''), '');
+
+  /* LE CONTRÔLE QUI A COMMANDÉ TOUT LE RÉGLAGE : la bulle est posée en bas de
+   * la carte, l’appel aussi. À trois largeurs et dans trois langues, aucune
+   * des six ne doit recouvrir le lien qu’elle surplombe. */
+  let croisements = 0, rognees2 = 0;
+  const detail = [];
+  for (const [largeur, hauteur, nomL] of [[1440,1000,'3 col'],[880,1000,'2 col'],[420,900,'1 col']]) {
+    await pg.setViewportSize({ width: largeur, height: hauteur });
+    await pg.waitForTimeout(400);
+    await centrer();
+    await pg.waitForTimeout(300);
+    for (const lg of ['fr','en','de']) {
+      await pg.evaluate(l => setLang(l), lg);
+      await pg.waitForTimeout(300);
+      const r = await pg.evaluate(GEOMETRIE);
+      const c = r.filter(x => x.recouvre), q = r.filter(x => x.rogne);
+      croisements += c.length; rognees2 += q.length;
+      if (c.length || q.length) detail.push(nomL + '/' + lg + ' ' +
+        c.map(x => x.cle).concat(q.map(x => x.cle + '(rognée)')).join(','));
+    }
+  }
+  await pg.setViewportSize({ width: 1440, height: 1000 });
+  await pg.evaluate(l => setLang(l), 'fr');
+  await pg.waitForTimeout(400);
+  ok('à trois largeurs et en trois langues, la bulle ne recouvre JAMAIS l’appel',
+     croisements === 0, detail.join(' | ') || '9 relevés');
+  ok('et aucune n’est rognée à ces largeurs', rognees2 === 0, '');
+
+  /* ── LE LIEN INSTITUTIONNEL SURVIT À LA BASCULE ───────────────────────── */
+  const inst = await pg.evaluate(() => {
+    const a = document.querySelector('#differenciateurs .diff-card:nth-child(4) .diff-go');
+    return { span: !!a.querySelector('[data-i18n="dg.exp"]'),
+             fleche: /↗/.test(a.textContent),
+             href: a.getAttribute('href'),
+             bascule: a.getAttribute('data-bascule') || 'aucune',
+             origine: a.getAttribute('data-href-origine') || a.getAttribute('href') };
+  });
+  ok('le lien institutionnel garde son span traduit et sa flèche',
+     inst.span && inst.fleche,
+     'bascule=' + inst.bascule + ' href=' + String(inst.href).slice(0, 44));
+  ok('et il visait bien i-aes.com', /i-aes\.com/.test(inst.origine), inst.origine);
+
+  /* ── LES LIBELLÉS SUIVENT LA LANGUE, LA FLÈCHE RESTE ──────────────────── */
+  const lib = {};
+  for (const lg of ['fr','en','de']) {
+    await pg.evaluate(l => setLang(l), lg);
+    await pg.waitForTimeout(350);
+    lib[lg] = await pg.evaluate(() =>
+      [...document.querySelectorAll('#differenciateurs .diff-go')].map(a => a.textContent.trim()));
+    ok('les six libellés sont écrits en ' + lg,
+       lib[lg].length === 6 && lib[lg].every(t => t.length > 6 && /[→↗]$/.test(t)),
+       lib[lg].filter(t => !/[→↗]$/.test(t)).join(', ') || '');
+  }
+  ok('les trois langues donnent des libellés différents',
+     lib.fr.every((t, k) => t !== lib.en[k] && t !== lib.de[k] && lib.en[k] !== lib.de[k]),
+     lib.fr.map((t, k) => t === lib.en[k] ? String(k + 1) : '').filter(Boolean).join(',') || '');
+  await pg.evaluate(() => setLang('fr'));
+  await pg.waitForTimeout(350);
+
+  /* ── LES DEUX ANCRES DÉPOSENT LEUR GRILLE SOUS L’EN-TÊTE FIXE ─────────── */
+  for (const [rang, cible] of [[2, '#secteurs'], [5, '#normes']]) {
+    await pg.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+    await pg.waitForTimeout(300);
+    await centrer();
+    await pg.waitForTimeout(250);
+    await pg.click('#differenciateurs .diff-card:nth-child(' + rang + ') .diff-go');
+    await pg.waitForTimeout(1400);
+    const r = await pg.evaluate(c => {
+      const s = document.querySelector(c);
+      const t = (s.querySelector('.lb') || s.querySelector('.tt')).getBoundingClientRect();
+      const grille = (s.querySelector('.sector-grid') || s.querySelector('.ng')).getBoundingClientRect();
+      const bas = [...document.querySelectorAll('body *')].filter(e => {
+        const p = getComputedStyle(e).position, rr = e.getBoundingClientRect();
+        return (p === 'fixed' || p === 'sticky') && rr.top < 60 && rr.height > 20 && rr.height < 200;
+      }).reduce((m, e) => Math.max(m, e.getBoundingClientRect().bottom), 0);
+      return { hash: location.hash, surtitre: Math.round(t.top),
+               grille: Math.round(grille.top), enTete: Math.round(bas) };
+    }, cible);
+    ok('l’ancre ' + cible + ' dépose sa grille sous l’en-tête fixe',
+       r.hash === cible && r.surtitre >= r.enTete && r.grille > r.enTete,
+       'surtitre à ' + r.surtitre + ', en-tête jusqu’à ' + r.enTete);
+  }
+
+  /* ── LES TROIS MODULES, PAR UN VRAI CLIC ─────────────────────────────── */
+  for (const [rang, , panneau] of ATTENDU.map((a, i) => [i + 1, a[1], a[2]]).filter(a => a[2])) {
+    await centrer();
+    await pg.waitForTimeout(300);
+    const [onglet] = await Promise.all([
+      ctx.waitForEvent('page', { timeout: 25000 }),
+      pg.click('#differenciateurs .diff-card:nth-child(' + rang + ') .diff-go')
+    ]);
+    await onglet.waitForLoadState('load');
+    let vu = { ids: [], shell: false };
+    for (let k = 0; k < 16; k++) {
+      await onglet.waitForTimeout(800);
+      vu = await onglet.evaluate(() => ({
+        shell: !!document.getElementById('tb-pg'),
+        ids: [...document.querySelectorAll('.page')]
+               .filter(x => getComputedStyle(x).display !== 'none').map(x => x.id)
+      }));
+      if (vu.ids.length) break;
+    }
+    ok('la carte ' + rang + ' ouvre ' + panneau + ' dans un nouvel onglet',
+       vu.ids.indexOf(panneau) >= 0,
+       vu.shell ? ('panneau ' + (vu.ids.join(',') || 'aucun'))
+                : 'la page Sentinel n’a pas été servie (limiteur de débit ?)');
+    await onglet.close();
+    await pg.bringToFront();
+  }
 
   await nav.close();
   console.log('\n' + (n - ko) + ' contrôles passés, ' + ko + ' en échec');

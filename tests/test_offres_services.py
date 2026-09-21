@@ -357,12 +357,26 @@ def test_chaque_lien_dit_OU_il_mene_avant_le_clic():
         assert 'title="Ouvre ' in m.group(1), m.group(1)[:80]
 
 
-def test_les_deux_sortes_de_liens_ont_un_etat_de_focus_visible():
+def test_les_trois_sortes_de_liens_ont_un_etat_de_focus_visible():
     """AU CLAVIER, UN LIEN SANS ÉTAT DE FOCUS EST UN LIEN QU'ON NE PEUT PAS
-    SUIVRE : on ne sait jamais où l'on est."""
-    for cls in (".sv-go", ".sv-card-go"):
-        assert ("%s:focus-visible{" % cls) in INDEX, (
-            "%s n'a pas d'état de focus visible" % cls)
+    SUIVRE : on ne sait jamais où l'on est.
+
+    ELLE CHERCHAIT UNE SUITE D'OCTETS, PAS UNE RÈGLE. La première version
+    exigeait « .sv-card-go:focus-visible{ » tel quel dans le fichier. Le jour
+    où ce sélecteur a été GROUPÉ avec celui d'un troisième lien, la
+    déclaration était toujours là, appliquée à l'identique — et la règle est
+    tombée. Elle lit maintenant la liste de sélecteurs, et exige un contour."""
+    regles = re.findall(r"([^{}@]+)\{([^{}]*)\}",
+                        re.sub(r"/\*.*?\*/", " ",
+                               "\n".join(re.findall(r"<style[^>]*>(.*?)</style>",
+                                                    INDEX, re.S)), flags=re.S))
+    for cls in (".sv-go", ".sv-card-go", ".diff-go"):
+        vise = [corps for sel, corps in regles
+                if any(p.strip() == cls + ":focus-visible"
+                       for p in sel.split(","))]
+        assert vise, "%s n'a pas d'état de focus visible" % cls
+        assert any("outline" in c for c in vise), (
+            "%s a une règle :focus-visible sans contour : %r" % (cls, vise))
 
 
 def test_le_mouvement_de_la_fleche_se_coupe_pour_qui_le_demande():
@@ -557,7 +571,7 @@ def test_les_liens_PUBLICS_vers_Sentinel_gardent_la_page_d_accueil():
     doublait l'appel — et on a emporté avec lui la seule chose qu'il faisait
     bien : garder la page d'accueil ouverte.
 
-    CE QUE ÇA DONNAIT. Ces vingt-sept liens partent d'une page PUBLIQUE et
+    CE QUE ÇA DONNAIT. Ces trente liens partent d'une page PUBLIQUE et
     visent un produit derrière authentification : ils s'adressent par
     construction à quelqu'un qui n'est PAS connecté. En restant dans l'onglet
     courant, un clic remplaçait l'accueil par un formulaire de connexion. Le
@@ -568,10 +582,10 @@ def test_les_liens_PUBLICS_vers_Sentinel_gardent_la_page_d_accueil():
     une référence sur celle qui l'a ouverte et peut la rediriger ailleurs.
     """
     liens = re.findall(
-        r'<a class="(risk-go|sv-card-go|sv-go)" href="/sentinel\?goto=[^"]*"'
+        r'<a class="(risk-go|sv-card-go|sv-go|diff-go)" href="/sentinel\?goto=[^"]*"'
         r'([^>]*)>', INDEX)
-    assert len(liens) == 27, (
-        "%d lien(s) publics vers Sentinel relevés sur 27 : la lecture a "
+    assert len(liens) == 30, (
+        "%d lien(s) publics vers Sentinel relevés sur 30 : la lecture a "
         "changé de forme et cette règle ne prouve plus rien" % len(liens))
     for classe, attrs in liens:
         assert 'target="_blank"' in attrs, (
