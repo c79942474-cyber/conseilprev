@@ -464,8 +464,8 @@ def test_l_absence_de_l_executable_est_MESUREE_et_non_supposee():
     au premier appel."""
     e = qm.etat()
     assert isinstance(e["executable_claude_code"], bool)
-    assert e["moteur_retenu"] in ("sdk", "api")
-    if not e["executable_claude_code"]:
+    assert e["moteur_retenu"] in ("sdk", "api", "aucun")
+    if not e["executable_claude_code"] and e["moteur_voulu"] != "sdk":
         assert e["moteur_retenu"] == "api", e
 
 
@@ -850,3 +850,169 @@ def test_une_ETAPE_DE_PARCOURS_ouvre_la_page_PEINTE_et_non_vide():
     # Et l'étape existe bien dans un parcours — sans quoi la règle ci-dessus
     # protégerait un chemin que personne n'emprunte.
     assert "{id:'qualif-assistee', label:'Qualification assistée'," in SENTINEL_JS
+
+
+# ══════════════════════════════════════════════════════════════════════
+# 11. L'EXÉCUTABLE DANS L'IMAGE DE DÉPLOIEMENT
+# ══════════════════════════════════════════════════════════════════════
+# `claude_agent_sdk` lance Claude Code en sous-processus. Pour qu'il serve
+# en ligne, il faut l'installer au build — et l'installer sans jamais
+# risquer de rendre le site indéployable pour autant.
+
+BUILD_SH = io.open(os.path.join(ICI, 'build.sh'), encoding='utf-8').read()
+RENDER_YAML = io.open(os.path.join(ICI, 'render.yaml'), encoding='utf-8').read()
+GITIGNORE = io.open(os.path.join(ICI, '.gitignore'), encoding='utf-8').read()
+
+
+def test_le_build_installe_ENCORE_les_dependances_python():
+    """Le script REMPLACE la commande de build ; s'il oubliait pip, le
+    service partirait sans Flask. C'est la première chose à vérifier, avant
+    tout ce qui concerne le CLI."""
+    assert 'pip install -r' in BUILD_SH
+    # Et c'est le SEUL échec qui a le droit d'arrêter le build.
+    assert BUILD_SH.count('exit 1') == 1, (
+        "un second chemin peut faire échouer le build : %d" % BUILD_SH.count('exit 1'))
+    pip = BUILD_SH.index('pip install -r')
+    assert BUILD_SH.index('exit 1') > pip, "l'unique sortie en erreur n'est pas celle de pip"
+
+
+def test_le_build_ne_fait_JAMAIS_echouer_le_deploiement_pour_le_CLI():
+    """LA RÈGLE QUI PROTÈGE LE RESTE DU SITE. La qualification assistée a un
+    repli qui fonctionne ; les cent autres pages n'en ont aucun. Un binaire
+    tiers de 224 Mo qui ne se télécharge pas ne doit pas les emporter."""
+    apres_pip = BUILD_SH[BUILD_SH.index('Exécutable Claude Code'):]
+    assert 'exit 1' not in apres_pip, apres_pip[:200]
+    assert apres_pip.rstrip().endswith('exit 0'), apres_pip.rstrip()[-80:]
+    assert 'set -e' not in BUILD_SH, (
+        "`set -e` ferait tomber le build au premier outil manquant")
+
+
+def _shell_sans_commentaires(txt):
+    """Le script, sans ses lignes de commentaire.
+
+    MÊME DÉFAUT QUE PLUS HAUT, RETROUVÉ PAR LA BATTERIE. La première
+    écriture cherchait « --version » dans tout le fichier — et le trouvait
+    dans l'en-tête, qui EXPLIQUE que le résultat est vérifié en exécutant
+    `--version`. La mutation qui supprimait le contrôle réel laissait donc
+    la règle verte : elle mesurait la prose.
+    """
+    return "\n".join(l for l in txt.splitlines()
+                     if not l.lstrip().startswith('#'))
+
+
+def test_le_build_VERIFIE_l_executable_au_lieu_de_le_supposer():
+    """Un fichier présent n'est pas un exécutable qui répond : mauvaise
+    architecture, droits manquants, installation partielle. Le chemin n'est
+    retenu qu'après un `--version` qui rend quelque chose."""
+    code = _shell_sans_commentaires(BUILD_SH)
+    assert '--version' in code, (
+        "le contrôle d'exécution a disparu du code (il peut rester dans un "
+        "commentaire, ce qui ne vérifie rien)")
+    # Le marqueur n'est écrit QUE par la fonction qui a vérifié.
+    ecritures = re.findall(r'> ?"\$MARQUEUR"', BUILD_SH)
+    assert len(ecritures) == 1, ecritures
+    fonction = BUILD_SH[BUILD_SH.index('retenir_si_il_repond() {'):]
+    assert '> "$MARQUEUR"' in fonction[:fonction.index('\n}')], (
+        "le marqueur est écrit hors de la fonction qui vérifie")
+
+
+def test_le_build_n_invente_PAS_l_interface_de_l_installateur():
+    """Je n'ai pas pu lire `install.sh` depuis ce conteneur — le proxy
+    refuse `downloads.claude.ai`. Inventer le nom de sa variable de
+    destination aurait produit une installation silencieusement hors du
+    projet. Le script lui donne donc un HOME à lui, puis CHERCHE ce qu'il a
+    posé."""
+    assert 'HOME="$FAUX_HOME" bash' in BUILD_SH
+    assert 'find "$FAUX_HOME"' in BUILD_SH
+
+
+def test_le_dossier_du_CLI_n_est_PAS_versionne():
+    """224 Mo de binaire tiers mesurés à l'installation npm. Ils se
+    reconstruisent à chaque build ; ils n'ont rien à faire dans git."""
+    assert '.cli-claude/' in GITIGNORE, GITIGNORE[-200:]
+
+
+def test_render_yaml_appelle_le_script_de_build():
+    assert 'buildCommand: bash build.sh' in RENDER_YAML
+    # Et il DIT que le fichier ne suffit pas : le blueprint n'est pas
+    # rattaché, la commande réelle est celle du tableau de bord.
+    assert 'tableau de bord' in RENDER_YAML.split('buildCommand')[0][-1500:], (
+        "render.yaml laisse croire qu'il change le service à lui seul")
+
+
+def test_le_chemin_du_CLI_est_DONNE_au_SDK_et_non_cherche():
+    """Le SDK sait chercher `claude` dans le PATH et quatre emplacements
+    conventionnels — aucun n'est le dossier du projet, qui est justement le
+    seul où l'exécutable survit sur Render."""
+    o = qm.options_sdk("systeme")
+    assert o.cli_path == qm.chemin_cli(), (o.cli_path, qm.chemin_cli())
+
+
+def test_le_CLI_recoit_un_dossier_de_configuration_ECRIVABLE():
+    """Le CLI écrit sous `~/.claude`. Là où le home ne l'est pas, il
+    refuserait de démarrer pour une raison sans rapport avec la tâche."""
+    o = qm.options_sdk("systeme")
+    assert 'CLAUDE_CONFIG_DIR' in (o.env or {}), o.env
+
+
+def test_le_chemin_DECLARE_passe_avant_tout(monkeypatch, tmp_path):
+    """La seule façon de désigner un exécutable que ni le build ni les
+    conventions n'ont prévu."""
+    faux = tmp_path / "claude"
+    faux.write_text("#!/bin/sh\nexit 0\n")
+    monkeypatch.setenv('QUALIF_CLI_CHEMIN', str(faux))
+    assert qm.chemin_cli() == str(faux)
+    monkeypatch.setenv('QUALIF_CLI_CHEMIN', str(tmp_path / "absent"))
+    assert qm.chemin_cli() != str(tmp_path / "absent"), (
+        "un chemin déclaré mais inexistant est retenu quand même")
+
+
+def test_l_interrupteur_n_accepte_que_trois_valeurs():
+    """`QUALIF_MOTEUR=mistral` ne doit pas démarrer en silence sur le
+    défaut : le réglage serait alors ignoré sans que personne le sache."""
+    assert qm.MOTEUR_VOULU in ('auto',) + qm.MOTEURS
+    src = io.open(os.path.join(ICI, 'qualification_moteur.py'),
+                  encoding='utf-8').read()
+    assert 'assert MOTEUR_VOULU in ("auto",) + MOTEURS' in src
+
+
+def test_forcer_le_SDK_sans_executable_REFUSE_au_lieu_de_basculer(monkeypatch):
+    """L'intérêt du réglage `sdk` est justement de NE PAS se replier : un
+    essai qui basculerait en silence ne mesurerait pas ce qu'on voulait
+    mesurer."""
+    monkeypatch.setattr(qm, 'MOTEUR_VOULU', 'sdk')
+    monkeypatch.setattr(qm, 'chemin_cli', lambda: None)
+    assert qm.etat()['moteur_retenu'] == 'aucun'
+    repondre, nom = qm.repondeur(secours=lambda p, s: (True, '{}'))
+    assert nom == 'aucun', nom
+    assert repondre('p', 's') == (False, 'aucun_moteur')
+
+    # GARDE-FOU : avec un exécutable, le même réglage sert bien le SDK.
+    monkeypatch.setattr(qm, 'chemin_cli', lambda: '/un/chemin/claude')
+    assert qm.etat()['moteur_retenu'] == 'sdk'
+
+
+def test_forcer_l_API_ignore_l_executable_present(monkeypatch):
+    monkeypatch.setattr(qm, 'MOTEUR_VOULU', 'api')
+    monkeypatch.setattr(qm, 'chemin_cli', lambda: '/un/chemin/claude')
+    assert qm.etat()['moteur_retenu'] == 'api'
+    _, nom = qm.repondeur(secours=lambda p, s: (True, '{}'))
+    assert nom == 'api'
+
+
+def test_l_ecran_DIT_quand_le_moteur_exige_est_ABSENT():
+    """Sinon on cherchera un défaut de moteur là où il n'y a qu'un réglage.
+
+    LA PREMIÈRE ÉCRITURE CHERCHAIT « moteur_retenu === 'aucun' » DANS TOUT
+    LE FICHIER. La chaîne apparaît à deux endroits — le bandeau d'alerte et
+    la phrase qui l'explique — si bien que supprimer le bandeau laissait la
+    règle verte. On vise chacun des deux séparément.
+    """
+    # Le bandeau change de couleur : c'est ce qui se voit avant de lire.
+    assert re.search(
+        r"if \(m\.moteur_retenu === 'aucun'\) \{\s*"
+        r"el\.className = 'radar-registre-info radar-registre-warn';",
+        SENTINEL_JS), "le bandeau ne passe pas en alerte"
+    # Et la phrase dit le réglage en cause.
+    assert 'QUALIF_MOTEUR = ' in SENTINEL_JS
+    assert 'les propositions échoueront tant que ce réglage tient' in SENTINEL_JS

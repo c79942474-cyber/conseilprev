@@ -59,7 +59,25 @@ services:
     region: frankfurt
     plan: standard
     env: python
-    buildCommand: pip install -r requirements.txt
+    # LA COMMANDE DE CONSTRUCTION APPELLE `build.sh`, ET NON `pip` DIRECTEMENT.
+    # Le script fait d'abord exactement ce que faisait la ligne précédente —
+    # `pip install -r requirements.txt`, avec le même effet en cas d'échec —
+    # puis installe l'exécutable Claude Code dans le dossier du projet, parce
+    # que `claude_agent_sdk` le lance en sous-processus au lieu d'appeler une
+    # API. Sans lui, la qualification assistée se replie sur l'API Messages.
+    #
+    # ⚠ CE FICHIER NE SUFFIT PAS À CHANGER LE SERVICE. Le blueprint n'est pas
+    # rattaché à ce dépôt (voir le long commentaire plus haut) : la commande
+    # réelle est celle du tableau de bord, relevée le 21 septembre 2026 à
+    # `pip install -r requirements.txt`. Il faut donc modifier le champ
+    # « Build Command » du service srv-da7i2jfqj5pc738mmaj0 pour y mettre
+    # `bash build.sh`. Cette ligne décrit ce qui DEVRAIT tourner ; elle le dit
+    # plutôt que de le laisser croire.
+    #
+    # LE SCRIPT NE FAIT JAMAIS ÉCHOUER LE BUILD POUR LE CLI : le site entier
+    # ne doit pas cesser d'être déployable parce qu'un binaire tiers n'a pas
+    # pu être téléchargé. Le journal de build dit quel chemin a abouti.
+    buildCommand: bash build.sh
     # LA COMMANDE DE DÉMARRAGE EST CELLE QUI TOURNE, pas une variante. Faire
     # correspondre le nom rend le service ADOPTABLE par une synchronisation —
     # et un fichier qui déclarerait autre chose que le réel écraserait alors le
@@ -135,6 +153,17 @@ services:
       # clé de DATABASE_URL et le journal le dit à chaque démarrage.
       - key: FLASK_SECRET_KEY
         generateValue: true
+
+      # QUEL MOTEUR SERT LA QUALIFICATION ASSISTÉE — RÉGLABLE SANS REDÉPLOYER.
+      #   auto  le SDK si l'exécutable est là, l'API Messages sinon
+      #   sdk   le SDK, et rien d'autre : s'il manque, la proposition échoue
+      #         au lieu de passer en silence par un autre chemin
+      #   api   l'API Messages, même si l'exécutable est installé
+      #
+      # `auto` est le défaut du code ; la variable est déclarée ici pour
+      # qu'elle existe et se voie, plutôt que d'être un réglage caché.
+      - key: QUALIF_MOTEUR
+        value: auto
 
 # LA BASE N'EST PAS DÉPLACÉE ICI, ET C'EST DÉLIBÉRÉ. Le réseau privé de Render
 # ne franchit pas les régions : un service à Francfort ne peut pas joindre par

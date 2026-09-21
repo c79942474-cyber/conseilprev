@@ -25300,6 +25300,13 @@ function qualifInit() {
       var m = d.moteur || {};
       var el = document.getElementById('qualif-moteur');
       if (el) {
+        /* UN MOTEUR EXIGÉ ET ABSENT SE DIT FORT. Avec QUALIF_MOTEUR=sdk et
+           aucun exécutable installé, rien ne répondra — et l'écran doit le
+           dire AVANT le clic, sinon on cherchera un défaut de moteur là où
+           il n'y a qu'un réglage. */
+        if (m.moteur_retenu === 'aucun') {
+          el.className = 'radar-registre-info radar-registre-warn';
+        }
         el.innerHTML =
           '<b>Moteur</b> : ' + qualifEsc(m.moteur_texte || '—')
           + ' · modèle <code>' + qualifEsc(m.modele || '—') + '</code>'
@@ -25312,7 +25319,15 @@ function qualifInit() {
           + '<span style="opacity:.8">Refusés nommément : '
           + qualifEsc((m.outils_interdits || []).join(', ')) + '. '
           + 'Les lignes du registre voyagent en données dans la demande ; '
-          + 'le moteur n’ouvre aucun fichier et n’écrit nulle part.</span>';
+          + 'le moteur n’ouvre aucun fichier et n’écrit nulle part.'
+          + (m.moteur_voulu && m.moteur_voulu !== 'auto'
+             ? '<br>Réglage QUALIF_MOTEUR = ' + qualifEsc(m.moteur_voulu)
+               + (m.moteur_retenu === 'aucun'
+                  ? ' — et aucun exécutable Claude Code n’est installé : '
+                    + 'les propositions échoueront tant que ce réglage tient.'
+                  : '.')
+             : '')
+          + '</span>';
       }
       var r2 = document.getElementById('qualif-reserve');
       if (r2) r2.textContent = d.reserve || '';

@@ -244,8 +244,8 @@
   {
    "nom": "l'écran cesse de dire ce que le moteur ne peut pas faire",
    "fichier": "sentinel.page.js",
-   "avant": "          + 'Les lignes du registre voyagent en données dans la demande ; '\n          + 'le moteur n’ouvre aucun fichier et n’écrit nulle part.</span>';",
-   "apres": "          + '</span>';",
+   "avant": "          + 'Les lignes du registre voyagent en données dans la demande ; '\n          + 'le moteur n’ouvre aucun fichier et n’écrit nulle part.'\n",
+   "apres": "          + ''\n",
    "regle": "test_l_ecran_DIT_quels_outils_le_moteur_n_a_pas"
   },
   {
@@ -275,6 +275,97 @@
    "avant": "window.qualifInit = qualifInit;\n",
    "apres": "",
    "regle": "test_une_ETAPE_DE_PARCOURS_ouvre_la_page_PEINTE_et_non_vide"
+  },
+  {
+   "nom": "le build tombe quand le CLI ne s'installe pas",
+   "fichier": "build.sh",
+   "avant": "echo \"     La qualification assistée servira par l'API Messages d'Anthropic,\"\necho \"     avec le même modèle. L'écran l'affiche ; rien d'autre n'est touché.\"\nexit 0\n",
+   "apres": "echo \"     La qualification assistée servira par l'API Messages d'Anthropic,\"\necho \"     avec le même modèle. L'écran l'affiche ; rien d'autre n'est touché.\"\nexit 1\n",
+   "regle": "test_le_build_ne_fait_JAMAIS_echouer_le_deploiement_pour_le_CLI"
+  },
+  {
+   "nom": "set -e fait tomber le build au premier outil manquant",
+   "fichier": "build.sh",
+   "avant": "set -o pipefail\n",
+   "apres": "set -eo pipefail\n",
+   "regle": "test_le_build_ne_fait_JAMAIS_echouer_le_deploiement_pour_le_CLI"
+  },
+  {
+   "nom": "un fichier présent est pris pour un exécutable qui répond",
+   "fichier": "build.sh",
+   "avant": "  local v\n  v=\"$(\"$chemin\" --version 2>/dev/null | head -1)\" || return 1\n  [ -n \"$v\" ] || return 1\n",
+   "apres": "  local v\n  v=\"present\"\n",
+   "regle": "test_le_build_VERIFIE_l_executable_au_lieu_de_le_supposer"
+  },
+  {
+   "nom": "le build oublie les dépendances Python",
+   "fichier": "build.sh",
+   "avant": "pip install -r \"$RACINE/requirements.txt\" || exit 1\n",
+   "apres": "true\n",
+   "regle": "test_le_build_installe_ENCORE_les_dependances_python"
+  },
+  {
+   "nom": "le build invente le drapeau de destination de l'installateur",
+   "fichier": "build.sh",
+   "avant": "if curl -fsSL https://claude.ai/install.sh 2>/dev/null | HOME=\"$FAUX_HOME\" bash >/dev/null 2>&1; then\n  TROUVE=\"$(find \"$FAUX_HOME\" -type f -name claude -perm -u+x 2>/dev/null | head -1)\"\n",
+   "apres": "if curl -fsSL https://claude.ai/install.sh 2>/dev/null | bash -s -- --install-dir \"$DOSSIER_CLI\" >/dev/null 2>&1; then\n  TROUVE=\"$DOSSIER_CLI/claude\"\n",
+   "regle": "test_le_build_n_invente_PAS_l_interface_de_l_installateur"
+  },
+  {
+   "nom": "224 Mo de binaire tiers entrent dans git",
+   "fichier": ".gitignore",
+   "avant": ".cli-claude/\n",
+   "apres": "",
+   "regle": "test_le_dossier_du_CLI_n_est_PAS_versionne"
+  },
+  {
+   "nom": "render.yaml redécrit l'ancienne commande de build",
+   "fichier": "render.yaml",
+   "avant": "    buildCommand: bash build.sh\n",
+   "apres": "    buildCommand: pip install -r requirements.txt\n",
+   "regle": "test_render_yaml_appelle_le_script_de_build"
+  },
+  {
+   "nom": "le SDK cherche le CLI au lieu de le recevoir",
+   "fichier": "qualification_moteur.py",
+   "avant": "        cli_path=chemin_cli(),\n",
+   "apres": "",
+   "regle": "test_le_chemin_du_CLI_est_DONNE_au_SDK_et_non_cherche"
+  },
+  {
+   "nom": "le CLI n'a plus de dossier de configuration écrivable",
+   "fichier": "qualification_moteur.py",
+   "avant": "        env={\"CLAUDE_CONFIG_DIR\": os.environ.get(\n            \"CLAUDE_CONFIG_DIR\", os.path.join(\n                os.path.dirname(MARQUEUR_CLI), \"config\"))},\n",
+   "apres": "",
+   "regle": "test_le_CLI_recoit_un_dossier_de_configuration_ECRIVABLE"
+  },
+  {
+   "nom": "exiger le SDK bascule quand même sur l'API",
+   "fichier": "qualification_moteur.py",
+   "avant": "        retenu = \"sdk\" if possible else \"aucun\"",
+   "apres": "        retenu = \"sdk\" if possible else \"api\"",
+   "regle": "test_forcer_le_SDK_sans_executable_REFUSE_au_lieu_de_basculer"
+  },
+  {
+   "nom": "un chemin déclaré mais inexistant est retenu",
+   "fichier": "qualification_moteur.py",
+   "avant": "    if declare and os.path.exists(declare):\n",
+   "apres": "    if declare:\n",
+   "regle": "test_le_chemin_DECLARE_passe_avant_tout"
+  },
+  {
+   "nom": "l'interrupteur accepte n'importe quelle valeur",
+   "fichier": "qualification_moteur.py",
+   "avant": "    assert MOTEUR_VOULU in (\"auto\",) + MOTEURS, (\n        \"QUALIF_MOTEUR vaut « %s » : les seules valeurs sont auto, sdk, api\"\n        % MOTEUR_VOULU)\n",
+   "apres": "",
+   "regle": "test_l_interrupteur_n_accepte_que_trois_valeurs"
+  },
+  {
+   "nom": "l'écran se tait quand le moteur exigé est absent",
+   "fichier": "sentinel.page.js",
+   "avant": "        if (m.moteur_retenu === 'aucun') {\n          el.className = 'radar-registre-info radar-registre-warn';\n        }\n",
+   "apres": "",
+   "regle": "test_l_ecran_DIT_quand_le_moteur_exige_est_ABSENT"
   }
  ]
 }

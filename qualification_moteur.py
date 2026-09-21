@@ -49,6 +49,20 @@ MODELE = os.environ.get("QUALIF_MODELE", "claude-sonnet-5")
 # tâche sans outils ne fait que dépenser.
 TOURS_MAX = 1
 
+# OÙ LE BUILD A POSÉ L'EXÉCUTABLE. `build.sh` installe Claude Code dans le
+# dossier du projet et écrit le chemin RETENU — celui qui a répondu à
+# `--version` — dans ce fichier. Le script n'a donc pas besoin de connaître
+# les conventions de ce module, ni ce module celles de l'installateur.
+MARQUEUR_CLI = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                            ".cli-claude", "CHEMIN")
+
+# L'INTERRUPTEUR, POUR NE PAS AVOIR À REDÉPLOYER DU CODE POUR CHANGER D'AVIS.
+#   auto (défaut) — le SDK si l'exécutable est là, l'API sinon
+#   sdk           — le SDK, et rien d'autre : s'il manque, la proposition échoue
+#                   au lieu de passer en silence par un autre chemin
+#   api           — l'API Messages, même si l'exécutable est installé
+MOTEUR_VOULU = (os.environ.get("QUALIF_MOTEUR", "auto") or "auto").strip().lower()
+
 # AUCUN OUTIL. Ce n'est pas une précaution de plus : c'est la précaution.
 OUTILS_AUTORISES = []
 
@@ -78,22 +92,47 @@ def sdk_importable():
         return False
 
 
-def executable_present():
-    """Le SDK a besoin de l'exécutable Claude Code ; est-il là ?
+def chemin_cli():
+    """Où est l'exécutable Claude Code, ou None.
 
-    Mesuré, pas supposé : sur Render, l'image Python n'en contient pas, et
-    une promesse de SDK qui tombe au premier appel vaut moins qu'un repli
-    annoncé.
+    Mesuré, pas supposé : sur Render, l'image Python n'en contient pas par
+    elle-même, et une promesse de SDK qui tombe au premier appel vaut moins
+    qu'un repli annoncé.
+
+    L'ORDRE N'EST PAS ARBITRAIRE. Une variable d'environnement passe avant
+    tout — c'est la seule façon de désigner un exécutable que ni le build ni
+    les conventions n'ont prévu. Vient ensuite ce que `build.sh` a posé DANS
+    le projet, parce que c'est le seul emplacement dont on sait qu'il
+    survit jusqu'à l'exécution sur Render. Les emplacements standards
+    ferment la marche.
     """
     import shutil
-    if shutil.which("claude"):
-        return True
+
+    declare = (os.environ.get("QUALIF_CLI_CHEMIN") or "").strip()
+    if declare and os.path.exists(declare):
+        return declare
+
+    try:
+        with open(MARQUEUR_CLI, encoding="utf-8") as f:
+            pose = f.read().strip()
+        if pose and os.path.exists(pose):
+            return pose
+    except Exception:
+        pass
+
+    trouve = shutil.which("claude")
+    if trouve:
+        return trouve
     for chemin in (os.path.expanduser("~/.npm-global/bin/claude"),
                    "/usr/local/bin/claude",
                    os.path.expanduser("~/.local/bin/claude")):
         if os.path.exists(chemin):
-            return True
-    return False
+            return chemin
+    return None
+
+
+def executable_present():
+    return chemin_cli() is not None
 
 
 def options_sdk(systeme_prompt=""):
@@ -110,6 +149,17 @@ def options_sdk(systeme_prompt=""):
         system_prompt=systeme_prompt,
         model=MODELE,
         max_turns=TOURS_MAX,
+        # LE CHEMIN EST DONNÉ, PAS CHERCHÉ. Le SDK sait chercher `claude`
+        # dans le PATH et dans quatre emplacements conventionnels ; aucun
+        # d'eux n'est le dossier du projet, qui est justement le seul où
+        # l'exécutable survit sur Render.
+        cli_path=chemin_cli(),
+        # UN DOSSIER DE CONFIGURATION ÉCRIVABLE. Le CLI écrit sous
+        # `~/.claude` ; là où le home ne l'est pas, il refuserait de
+        # démarrer pour une raison qui n'a rien à voir avec la tâche.
+        env={"CLAUDE_CONFIG_DIR": os.environ.get(
+            "CLAUDE_CONFIG_DIR", os.path.join(
+                os.path.dirname(MARQUEUR_CLI), "config"))},
         # NI LES RÉGLAGES DU PROJET, NI CEUX DE L'UTILISATEUR. Sans cela le
         # SDK chargerait le CLAUDE.md du dépôt et ses compétences : des
         # consignes qui n'ont rien à voir avec une qualification, et que
@@ -157,7 +207,11 @@ def repondeur(secours=None, forcer=None):
     `secours` est l'appel à l'API Messages d'Anthropic, injecté par
     l'application (qui détient la clé). `forcer` sert à la recette.
     """
-    voulu = forcer if forcer in MOTEURS else None
+    # L'APPELANT PASSE AVANT L'ENVIRONNEMENT, l'environnement avant le défaut.
+    # `forcer` sert la recette ; `QUALIF_MOTEUR` sert l'exploitant, qui peut
+    # ainsi basculer sans redéployer une ligne de code.
+    voulu = forcer if forcer in MOTEURS else (
+        MOTEUR_VOULU if MOTEUR_VOULU in MOTEURS else None)
 
     if voulu in (None, "sdk") and sdk_importable() and executable_present():
         def _repondre(prompt, systeme_prompt):
@@ -178,15 +232,31 @@ def repondeur(secours=None, forcer=None):
 
 
 def etat():
-    """Ce que l'écran affiche pour dire par quoi il sera servi."""
+    """Ce que l'écran affiche pour dire par quoi il sera servi.
+
+    LE MOTEUR RETENU EST CALCULÉ COMME `repondeur()` LE CALCULE, et non
+    décrit à côté. Un écran qui annoncerait « SDK » pendant que l'API sert
+    serait pire qu'un écran muet : il ferait chercher un défaut là où il
+    n'y en a pas.
+    """
     sdk = sdk_importable()
-    cli = executable_present()
-    retenu = "sdk" if (sdk and cli) else "api"
+    chemin = chemin_cli()
+    possible = bool(sdk and chemin)
+
+    if MOTEUR_VOULU == "sdk":
+        retenu = "sdk" if possible else "aucun"
+    elif MOTEUR_VOULU == "api":
+        retenu = "api"
+    else:
+        retenu = "sdk" if possible else "api"
+
     return {
         "version": VERSION,
         "modele": MODELE,
         "sdk_installe": sdk,
-        "executable_claude_code": cli,
+        "executable_claude_code": bool(chemin),
+        "chemin_cli": chemin,
+        "moteur_voulu": MOTEUR_VOULU,
         "moteur_retenu": retenu,
         "moteur_texte": MOTEUR_TEXTE[retenu],
         "tours_max": TOURS_MAX,
@@ -206,6 +276,9 @@ def _verifier():
     assert TOURS_MAX == 1, "un seul tour"
     assert set(MOTEUR_TEXTE) == set(MOTEURS) | {"aucun"}
     assert MODELE.strip(), "aucun modèle"
+    assert MOTEUR_VOULU in ("auto",) + MOTEURS, (
+        "QUALIF_MOTEUR vaut « %s » : les seules valeurs sont auto, sdk, api"
+        % MOTEUR_VOULU)
 
 
 _verifier()
