@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Le taux de conformité des neuf normes, et le plan qui le fait monter.
+"""Le taux de conformité des onze normes, et le plan qui le fait monter.
 
 LA DEMANDE : un taux entre 0 et 100 % par norme, tiré des analyses de risque
 et des réponses aux questionnaires, puis un plan de mise en conformité et de
@@ -120,6 +120,28 @@ def _dossier():
                                if cat["fonction"] in ("MAP", "MEASURE")]),
         "owasp_llm": {"LLM01": "oui", "LLM02": "oui", "LLM06": "partiel",
                       "LLM09": "oui"},
+        # UN ÉTABLISSEMENT DE CRÉDIT, DONC LE CADRE COMPLET : c'est le seul
+        # régime qui porte les vingt-six articles du titre II, et donc le
+        # seul où un article manquant se voit. DEUX CONTRATS, dont un qui
+        # soutient une fonction critique avec une clause du paragraphe 3
+        # absente : sans lui, la part « tiers » serait pleine et le verrou
+        # du module de contrats ne serait jamais éprouvé.
+        "dora": {
+            "entite": "etablissement_credit",
+            "identifiee_nis2": True,
+            "etats": dict([(n, "prouve") for n in range(2, 16)]
+                          + [(n, "amorce") for n in range(16, 22)]),
+            "contrats": [
+                {"fonction_critique": True,
+                 "clauses": dict(
+                     [("commune_%s" % l, "presente") for l in "abcdefghi"]
+                     + [("critique_%s" % l, "presente") for l in "abcd"])},
+                {"fonction_critique": False,
+                 "clauses": {"commune_a": "presente",
+                             "commune_b": "presente",
+                             "commune_c": "partielle"}},
+            ],
+        },
     }
 
 
@@ -196,16 +218,45 @@ def test_le_cadre_NON_CERTIFIABLE_refuse_le_mot_conformite(etat):
         "le module NIST se dit certifiable : l'une des deux sources ment")
 
 
-def test_DORA_n_a_pas_de_taux_et_ce_n_est_PAS_zero(etat):
-    """ZÉRO VOUDRAIT DIRE « RIEN DE FAIT ». L'absence de mesure ne dit rien de
-    l'état réel, et les deux ne se confondent pas. Aucun module de ce site
-    n'évalue DORA ; le taux est donc absent, et la limite le dit."""
+def test_DORA_a_un_taux_ET_dit_ce_que_ce_taux_NE_COUVRE_PAS(etat):
+    """LA RÈGLE RETOURNÉE, ET C'EST UN GAIN DE MESURE.
+
+    Elle disait « DORA n'a pas de taux, et ce n'est pas zéro » — vrai tant
+    qu'aucun module ne l'évaluait. Les quatre moteurs `dora*.py` l'évaluent ;
+    la règle mesure donc l'inverse, et surtout ce qui n'a PAS changé avec le
+    branchement : un taux affiché est lu comme s'il couvrait tout le
+    règlement, et il n'en couvre que deux chapitres. La réserve permanente
+    `hors_taux` est ce qui l'empêche, et elle doit voyager AVEC le nombre.
+    """
     d = _norme(etat, "dora")
-    assert d["taux"] is None, d["taux"]
-    assert d["nature"] == "sans_instrument"
-    assert d["renseigne"] is False
-    lim = [l for l in etat["limites"] if l["cle"] == "dora_sans_instrument"]
-    assert lim, "aucune limite ne signale l'absence d'instrument sur DORA"
+    assert d["nature"] == "obligation", d["nature"]
+    assert d["renseigne"] is True
+    assert isinstance(d["taux"], int) and 0 < d["taux"] < 100, d["taux"]
+    assert {x["cle"] for x in d["composants"]} == {"cadre", "tiers"}
+    assert d["panneau"] == "dora-qualifier", (
+        "un taux qui ne mène pas à l'écran où on le corrige est un reproche")
+    portees = {r["cle"] for r in d["reserves"]}
+    assert "hors_taux" in portees, (
+        "le taux DORA s'affiche sans dire qu'il ne couvre ni la chaîne de "
+        "notification, ni les tests, ni le registre d'informations : %s"
+        % sorted(portees))
+
+
+def test_DORA_sans_regime_ne_peut_PAS_mesurer_son_cadre():
+    """LE RÉGIME COMMANDE, ET SON ABSENCE SE DIT PLUTÔT QUE DE SE COMBLER.
+
+    Un prestataire tiers de services TIC est dans le champ du règlement sans
+    avoir de régime — les chapitres II à IV ne lui sont pas opposables. Lui
+    rendre un taux de cadre reviendrait à lui prêter les devoirs de son
+    client. La part reste donc vide, et la réserve NOMME la raison."""
+    r = c.etat_des_lieux({"dora": {"entite": "prestataire_tic",
+                                   "identifiee_nis2": True}})
+    d = _norme(r, "dora")
+    cadre = [x for x in d["composants"] if x["cle"] == "cadre"][0]
+    assert cadre["taux"] is None, (
+        "un prestataire tiers reçoit un taux de cadre : %r" % cadre["taux"])
+    assert "regime_absent" in {x["cle"] for x in d["reserves"]}, (
+        "la part « cadre » est vide sans que rien ne dise pourquoi")
 
 
 def test_une_norme_JAMAIS_renseignee_ne_rend_pas_zero():
@@ -587,11 +638,19 @@ def test_un_composant_a_CENT_POUR_CENT_ne_porte_plus_aucun_ecart(etat):
 # ══════════════════════════════════════════════════════════════════════════
 
 def test_le_plan_DIT_ce_qu_il_ne_peut_pas_faire(etat):
-    """LA MOITIÉ QU'ON NE MONTRE JAMAIS. Un plan qui promet 100 % sur les neuf
-    ment sur au moins trois points connus d'avance ; les taire ne les supprime
-    pas, cela les fait découvrir devant l'auditeur."""
+    """LA MOITIÉ QU'ON NE MONTRE JAMAIS. Un plan qui promet 100 % sur les onze
+    ment sur plusieurs points connus d'avance ; les taire ne les supprime
+    pas, cela les fait découvrir devant l'auditeur.
+
+    LES TROIS LIMITES DORA ONT REMPLACÉ « SANS INSTRUMENT » — la limite s'est
+    déplacée avec le branchement au lieu de disparaître avec lui : ce n'est
+    plus l'absence de mesure, c'est la PORTÉE de ce qui est mesuré."""
     cles = {l["cle"] for l in etat["limites"]}
-    assert "dora_sans_instrument" in cles
+    assert "dora_hors_taux" in cles
+    assert "dora_tlpt_autorites" in cles
+    assert "dora_nis2_ne_se_presume_pas" in cles
+    assert "dora_sans_instrument" not in cles, (
+        "la limite « sans instrument » survit alors que DORA a ses moteurs")
     assert "nist_non_certifiable" in cles
     assert "owasp_hors_annexe_a" in cles
     for l in etat["limites"]:

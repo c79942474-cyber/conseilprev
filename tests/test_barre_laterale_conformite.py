@@ -59,8 +59,12 @@ NODE = shutil.which("node")
 # savoir lequel ouvrir, ce qui est exactement la question à laquelle il
 # répond.
 TIROIRS = ["taux-conformite",
-           "rgpd-et-privacy", "iso27001", "iso42001", "nis2", "cra",
+           "rgpd-et-privacy", "iso27001", "iso42001", "dora", "nis2", "cra",
            "nist-ai-rmf", "owasp-llm", "nist-ot"]
+# DORA PRÉCÈDE NIS 2, ET CE N'EST PAS UN CLASSEMENT. Le règlement est lex
+# specialis à l'égard de la directive (considérant 16) : pour une entité
+# financière identifiée essentielle ou importante, il l'ÉCARTE au lieu de
+# la compléter. Le lire après ferait croire qu'il s'y ajoute.
 # LES DEUX RÉFÉRENTIELS NIST DE SÉCURITÉ INDUSTRIELLE FERMENT LA LISTE, et
 # dans cet ordre-là : 800-82 n'est pas une norme de plus à côté de 800-53,
 # c'est sa SURCHARGE. Les ouvrir avant le catalogue ferait lire une
@@ -140,9 +144,10 @@ def test_le_titre_de_famille_n_est_PAS_une_sb_section():
 
 
 def test_les_tiroirs_sont_ceux_demandes_et_dans_cet_ordre():
-    """RGPD & PRIVACY, ISO 27001, ISO 42001, NIS 2, CRA — l'ordre voulu, ni
-    alphabétique ni chronologique. 27001 précède 42001 parce que c'est le
-    socle sur lequel 42001 se greffe."""
+    """RGPD & PRIVACY, ISO 27001, ISO 42001, DORA, NIS 2, CRA — l'ordre
+    voulu, ni alphabétique ni chronologique. 27001 précède 42001 parce que
+    c'est le socle sur lequel 42001 se greffe ; DORA précède NIS 2 parce
+    qu'il l'écarte au lieu de s'y ajouter."""
     r = _executer(_OUTILS + r"""
 rendre(nav.querySelectorAll('.sb-section[data-fam]')
   .map(function(s){ return s.getAttribute('data-grp'); }));

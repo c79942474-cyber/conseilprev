@@ -404,17 +404,23 @@ def test_les_secteurs_ANNONCES_sont_ceux_QUE_LA_PAGE_MONTRE():
 
 
 def test_les_referentiels_et_leurs_modules_sont_COMPTES_sur_la_page():
-    """LE CHIFFRE ET SON EXCEPTION. La grille des normes porte neuf
-    référentiels, dont huit mènent à un module Sentinel — DORA n'a que son
-    texte. L'infobulle annonce les deux nombres : si l'un des deux bouge, la
-    phrase devient fausse sans que rien d'autre ne tombe."""
+    """LE CHIFFRE, ET L'EXCEPTION QUI A DISPARU.
+
+    La règle disait : « neuf référentiels, dont huit mènent à un module —
+    DORA n'a que son texte ». L'exception est tombée avec les quatre
+    moteurs `dora*.py` ; la règle ne disparaît pas pour autant, elle change
+    de sens. Elle exigeait que les deux nombres DIFFÈRENT ; elle exige
+    maintenant qu'ils soient ÉGAUX, et c'est plus exigeant : une norme
+    ajoutée à la grille sans écran ferait retomber le second sous le
+    premier, et la phrase deviendrait fausse le jour même.
+    """
     normes = _section("normes")
     total = len(re.findall(r'<div class="nc [^"]*"', normes))
     avec_module = len(re.findall(r'class="nc-go" href="/sentinel\?goto=', normes))
     assert total > 0 and avec_module > 0, (total, avec_module)
-    assert avec_module < total, (
-        "chaque norme a désormais son module : l'exception que l'infobulle "
-        "nomme n'existe plus")
+    assert avec_module == total, (
+        "%d référentiel(s) de la grille ne mènent à aucun module : "
+        "l'infobulle annonce le contraire" % (total - avec_module))
     for nombre in (total, avec_module):
         assert nombre in EN_LETTRES, (
             "%d n'est pas dans EN_LETTRES — l'ajouter, puis réécrire les "

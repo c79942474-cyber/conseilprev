@@ -965,6 +965,12 @@ var PAGE_META = {
   'owasp-pont':    { section: 'OWASP LLM', label: 'Ce qu\u2019ISO 42001 ne couvre pas' },
   'iso42001-certif':{ section: 'ISO 42001', label: 'Chemin de certification' },
   'iso42001-ponts':{ section: 'ISO 42001', label: 'Ponts IA Act / RGPD / NIS 2' },
+  'dora-qualifier':{ section: 'DORA', label: 'Qualification et régime' },
+  'dora-risque':   { section: 'DORA', label: 'Cadre de gestion du risque' },
+  'dora-tiers':    { section: 'DORA', label: 'Contrats — article 30' },
+  'dora-incident': { section: 'DORA', label: 'Incident majeur et délais' },
+  'dora-iso':      { section: 'DORA', label: 'Ce qu\u2019un SMSI apporte déjà' },
+  'dora-supervision':{ section: 'DORA', label: 'Prestataire critique — supervision' },
   'nis2-qualifier':{ section: 'NIS 2', label: 'Suis-je concerné ?' },
   'nis2':          { section: 'NIS 2', label: 'Mesures art. 21 §2' },
   'nis2-gouvernance':{ section: 'NIS 2', label: 'Gouvernance art. 20' },
@@ -1219,6 +1225,24 @@ var SENT_T = {
     'pg.iso42001-ponts.eb': 'ISO 42001 · Articulation',
     'pg.iso42001-ponts.h1': 'What carries over — <em>and what does not substitute</em>',
     'pg.iso42001-ponts.p': 'The three impact assessments bear on the same object and are not the same thing. It is the costliest confusion in the field: it makes people believe one document replaces another, and it comes to light during an inspection.',
+    'pg.dora-qualifier.eb': 'DORA · Articles 2 and 16',
+    'pg.dora-qualifier.h1': 'The regime, <em>not the status</em>',
+    'pg.dora-qualifier.p': 'NIS&nbsp;2 turns on "essential or important". DORA does not work that way: the <b>twenty types of financial entity</b> in Article&nbsp;2(1) are ALL in scope, without gradation. What varies is the thickness of the obligations — and that is settled by Article&nbsp;16, which lifts five categories out of Articles&nbsp;5 to&nbsp;15.',
+    'pg.dora-risque.eb': 'DORA · Delegated Regulation (EU) 2024/1774',
+    'pg.dora-risque.h1': 'Forty articles, <em>and two regimes that do not overlap</em>',
+    'pg.dora-risque.p': 'The delegated regulation has forty-two articles. <b>Title&nbsp;II</b> carries twenty-six, for the full framework; <b>Title&nbsp;III</b> carries fourteen, for the simplified one. The two sets are <b>disjoint</b>. Article&nbsp;1 is a proportionality principle and Article&nbsp;42 the entry into force: neither is assessed.',
+    'pg.dora-tiers.eb': 'DORA · Article 30',
+    'pg.dora-tiers.h1': 'Nine clauses, <em>or fifteen</em>',
+    'pg.dora-tiers.p': 'Article&nbsp;30(2) imposes <b>nine clauses</b> on any arrangement covering ICT services. Paragraph&nbsp;3 adds <b>six more</b> — "in addition to those in paragraph&nbsp;2" — as soon as the service supports a critical or important function. It is a cumulation, not a replacement.',
+    'pg.dora-incident.eb': 'DORA · Articles 18 and 19',
+    'pg.dora-incident.h1': 'Major? <em>Then the clock</em>',
+    'pg.dora-incident.p': 'Delegated Regulation (EU) 2024/1772 sets a <b>conjunction</b>, not a list: the incident is major if critical services are affected AND one malicious-impact threshold is met on its own, or two other thresholds together. Criticality is a <b>gate</b>, not a seventh threshold — and until it is declared, nothing is computed.',
+    'pg.dora-iso.eb': 'DORA · ISO/IEC 27001 bridge',
+    'pg.dora-iso.h1': 'What an ISMS <em>already documents</em>',
+    'pg.dora-iso.p': 'The standard displaces nothing — no certificate stands in for compliance with a regulation. But a certified management system already produces part of the evidence Delegated Regulation (EU) 2024/1774 calls for. <b>Knowing which, and above all which NOT</b>, is the difference between a twelve-month programme and a twenty-four-month one.',
+    'pg.dora-supervision.eb': 'DORA · Articles 31 to 44',
+    'pg.dora-supervision.h1': 'Critical provider: <em>two stages, only one computes</em>',
+    'pg.dora-supervision.p': 'The European Supervisory Authorities designate, through the Joint Committee and on the Oversight Forum\'s recommendation. The delegated act of 22&nbsp;February&nbsp;2024 splits the assessment in two: a <b>stage&nbsp;1 of thresholds</b>, which computes, and a <b>stage&nbsp;2 of appraisal</b>, which does not — and which this screen refuses to simulate.',
     'pg.nis2-qualifier.eb': 'NIS 2 · Articles 2 and 3',
     'pg.nis2-qualifier.h1': 'Essential, important, <em>or out of scope</em>',
     'pg.nis2-qualifier.p': 'The question looks like an honours ranking; it is a <b>supervisory regime</b>. An essential entity undergoes regular audits without any incident being needed (Art.&nbsp;32); an important entity is inspected only where there is evidence of a breach (Art.&nbsp;33). And Article&nbsp;32(5), reserved for essential entities, allows a manager to be <b>temporarily banned from exercising their functions</b>.',
@@ -1276,9 +1300,9 @@ var SENT_T = {
     'pg.empreinte.eb': 'Footprint · Responsible digital',
     'pg.empreinte.h1': 'Digital <em>footprint</em>',
     'pg.empreinte.p': 'An automatic, real-time counter of the footprint of the site, the platform and the language models in use, computed from actual usage: tokens consumed, latency, pages served. Three methods are run in parallel on the same data, so their results can be compared.',
-    'pg.conf-taux.eb': 'Compliance rate · the nine standards',
-    'pg.conf-taux.h1': 'Nine rates, and <em>what they do not say</em>',
-    'pg.conf-taux.p': 'Each rate is composed of its standard\'s weighted parts, then <strong>capped by its blockers</strong>: a defect that stops an auditor does not erase the work done, it forbids you to claim credit beyond it. Nine percentages in a row read as nine of the same thing; they are not, and the <em>nature</em> of each standard says what 100&nbsp;% means — <strong>and what it does not mean</strong>.',
+    'pg.conf-taux.eb': 'Compliance rate · the eleven standards',
+    'pg.conf-taux.h1': 'Eleven rates, and <em>what they do not say</em>',
+    'pg.conf-taux.p': 'Each rate is composed of its standard\'s weighted parts, then <strong>capped by its blockers</strong>: a defect that stops an auditor does not erase the work done, it forbids you to claim credit beyond it. Eleven percentages in a row read as eleven of the same thing; they are not, and the <em>nature</em> of each standard says what 100&nbsp;% means — <strong>and what it does not mean</strong>.',
     'pg.conf-plan.eb': 'Compliance rate · plan',
     'pg.conf-plan.h1': 'From blocker to detail, <em>and what each action earns</em>',
     'pg.conf-plan.p': 'Three tiers. <strong>Blockers first</strong>: while they hold, everything else runs into the same ceiling — that is not a methodological preference, it is arithmetic. Then <strong>what serves several standards</strong>, drawn from the mappings already declared between the frameworks. Then what is specific to each. Gains are computed <strong>in sequence</strong>, on the state left by the preceding actions: they accumulate exactly up to the ceiling, never past it.',
@@ -1452,6 +1476,14 @@ function go(id, el, sec, pg) {
   if (id.indexOf('iso42001') === 0 && typeof window.isoInit === 'function') _apresPeinture(window.isoInit);
   if (id.indexOf('iso27001') === 0 && typeof window.iso27Init === 'function') _apresPeinture(window.iso27Init);
   if (id.indexOf('nis2') === 0 && typeof window.nis2Init === 'function') _apresPeinture(window.nis2Init);
+  /* MÊME RAISON QUE POUR LES TROIS AU-DESSUS, ET ELLE A DÉJÀ COÛTÉ UNE
+     RECETTE : le `;doraInit()` écrit dans le `onclick` de la barre
+     latérale ne s'exécute PAS quand on arrive par `?goto=`, par un
+     parcours guidé ou par un bouton « → » d'un autre écran. Sans cette
+     ligne, les six panneaux DORA s'ouvrent sur un « Chargement… » qui ne
+     finit jamais — et la carte DORA de l'accueil mène précisément par
+     `?goto=dora-qualifier`. */
+  if (id.indexOf('dora') === 0 && typeof window.doraInit === 'function') _apresPeinture(window.doraInit);
   /* MESURÉ PAR LA RECETTE, PAS SUPPOSÉ. Le lien profond `?goto=` et les
      étapes d'un parcours guidé passent par `go()` sans jamais exécuter le
      `;qualifInit()` écrit dans le `onclick` de la barre latérale : la page
@@ -10158,6 +10190,54 @@ var PAGE_GUIDES = {
       {h:"À quoi sert cette page", t:"À séparer deux choses qu’on confond tout le temps : ce qui se RÉUTILISE d’un cadre à l’autre, et ce qui ne se SUBSTITUE jamais. Les trois évaluations d’impact — celle des articles 6.1.4 et 8.4 de la norme, l’analyse d’impact sur les droits fondamentaux de l’article 27 de l’IA Act, l’analyse d’impact relative à la protection des données de l’article 35 du RGPD — portent sur le même objet et ne sont pas la même."},
       {h:"Comment l’utiliser", t:"Chaque pont nomme les articles ISO concernés : c’est ce qui le rend actionnable, on sait quoi rouvrir. Si vous êtes déjà certifié ISO 27001, lisez d’abord le pont vers 27001 : il liste exactement ce qui se greffe. Attention au piège le plus courant de cette greffe — le périmètre du système de management de l’IA n’est PAS celui du système de management de la sécurité de l’information."},
       {h:"Ce qu’elle ne fait pas", t:"Elle ne fusionne aucun document et ne prétend pas qu’un livrable en vaille un autre. Être certifié 42001 ne rend conforme à aucune obligation légale et n’en dispense d’aucune ; inversement, un système parfaitement conforme à l’IA Act ne vaut pas un système de management certifié. Un budget bâti sur « on fera une seule analyse » se défait au premier contrôle."}
+    ]
+  },
+  'dora-qualifier': {
+    title: "DORA — qualification et régime",
+    sections: [
+      {h:"À quoi sert cette page", t:"À répondre à la question qui commande tout le reste, et elle n’est PAS celle de NIS 2. Les vingt types d’entités financières de l’article 2, paragraphe 1, points a) à t), sont tous dans le champ, sans gradation : il n’y a pas d’équivalent d’« essentielle ou importante ». Ce qui varie, c’est l’épaisseur des obligations, et elle se décide à l’article 16, où cinq catégories échappent aux articles 5 à 15."},
+      {h:"Comment l’utiliser", t:"Choisissez le type d’entité, puis ouvrez les cinq catégories du cadre simplifié et les six exclusions. Déclarez enfin si vous êtes identifié essentielle ou importante au titre de NIS 2 : c’est la condition de l’article 1er, paragraphe 2, et sans elle l’articulation ne se calcule pas. Le bloc du bas dit alors ce que l’article 4 de la directive écarte — articles 20, 21, 23 et chapitre VII — et ce qui reste dû malgré tout."},
+      {h:"Ce qu’elle ne fait pas", t:"Elle ne prononce aucune qualification opposable : l’ACPR ou l’AMF le font, sur l’entité réelle. Et elle ne confond pas la taille avec le régime : l’article 3 définit microentreprise et petite entreprise, mais ces définitions ne décident PAS du cadre simplifié, qui repose sur des catégories nommées. Une microentreprise qui n’est dans aucune des cinq relève du cadre complet."}
+    ]
+  },
+  'dora-risque': {
+    title: "DORA — le cadre de gestion du risque lié aux TIC",
+    sections: [
+      {h:"À quoi sert cette page", t:"À coter les articles du règlement délégué (UE) 2024/1774 que VOTRE régime rend opposables. Il en compte quarante-deux : le titre II en porte vingt-six pour le cadre complet, le titre III quatorze pour le cadre simplifié, et les deux jeux sont disjoints. L’article premier est un principe de proportionnalité et l’article 42 l’entrée en vigueur — les compter parmi les exigences gonflerait le dénominateur de deux."},
+      {h:"Comment l’utiliser", t:"Qualifiez d’abord. Le taux est rendu par chapitre et le plus bas est nommé : c’est lui qu’il faut traiter, parce que c’est lui qui se verra en inspection. Un article non déclaré compte pour zéro et reste au dénominateur — le silence n’allège pas l’exigence."},
+      {h:"Ce qu’elle ne fait pas", t:"Elle refuse de travailler sans régime, et c’est délibéré : évaluer une entité du cadre simplifié contre les vingt-six articles du titre II lui ferait payer un programme dont la moitié ne la vise pas. Elle ne délivre non plus aucune conformité : DORA est une obligation, pas un référentiel certifiable, et aucun organisme ne délivre d’attestation contre lui."}
+    ]
+  },
+  'dora-tiers': {
+    title: "DORA — les clauses contractuelles de l’article 30",
+    sections: [
+      {h:"À quoi sert cette page", t:"À vérifier qu’un contrat de services TIC porte les clauses que le règlement impose. Neuf au paragraphe 2 pour tout accord ; six de plus au paragraphe 3 dès que le service soutient une fonction critique ou importante — « en plus de ceux qui figurent au paragraphe 2 », donc un cumul de quinze, pas un remplacement."},
+      {h:"Comment l’utiliser", t:"Déclarez d’abord la criticité de la fonction soutenue : tant qu’elle ne l’est pas, rien n’est compté, parce qu’un taux sur neuf clauses alors que quinze sont dues serait rassurant à tort. Regardez ensuite les deux que l’autorité ouvre en premier : le droit d’audit illimité (§3, e) et la stratégie de sortie (§3, f)."},
+      {h:"Ce qu’elle ne fait pas", t:"Elle ne rédige aucune clause et ne lit aucun contrat : elle constate ce que vous déclarez. Et la dérogation microentreprise du dernier alinéa du §3 ne vise QUE le point e) — l’accepter ailleurs, ou pour une entité qui n’est pas une microentreprise, ferait passer une absence pour un aménagement prévu par le texte."}
+    ]
+  },
+  'dora-incident': {
+    title: "DORA — incident majeur, et les trois échéances",
+    sections: [
+      {h:"À quoi sert cette page", t:"À trancher si un incident doit être notifié, puis à dire quand. Le règlement délégué (UE) 2024/1772 pose une CONJONCTION : des services critiques touchés ET, soit l’accès malveillant réussi à lui seul, soit deux autres seuils ensemble. La criticité est une porte, pas un septième seuil."},
+      {h:"Comment l’utiliser", t:"Déclarez la criticité, cochez les seuils atteints, puis horodatez la connaissance et la classification. L’horloge a deux bornes : quatre heures depuis la classification, vingt-quatre heures depuis la connaissance, la première échue commandant. Si la classification intervient après ces vingt-quatre heures, l’article 5, §2, du règlement délégué (UE) 2025/301 traite le cas à part."},
+      {h:"Ce qu’elle ne fait pas", t:"Elle ne notifie rien et ne remplit aucun formulaire. Et elle n’applique pas le report au midi du jour ouvrable suivant aux établissements de crédit, contreparties centrales, opérateurs de plates-formes de négociation ni aux entités essentielles ou importantes au titre de NIS 2 : pour eux, l’article 5, §5, écarte le report, et l’horloge tourne le week-end."}
+    ]
+  },
+  'dora-iso': {
+    title: "DORA ↔ ISO/IEC 27001 — la reprise de preuves",
+    sections: [
+      {h:"À quoi sert cette page", t:"À savoir ce qu’un système de management certifié documente DÉJÀ parmi les articles du règlement délégué (UE) 2024/1774, et surtout ce qu’il ne documente pas. C’est la différence entre un programme de douze mois et un de vingt-quatre, et elle se chiffre article par article."},
+      {h:"Comment l’utiliser", t:"Qualifiez d’abord, puis lisez la colonne des mesures de l’annexe A à pointer. Commencez par les lignes « propre à DORA » : ce sont celles où rien n’existe, et où tout le travail reste à faire. Les deux rapports sur le réexamen du cadre — articles 27 et 41 — en font partie : aucune mesure de la norme ne les produit."},
+      {h:"Ce qu’elle ne fait pas", t:"Le pourcentage mesure une reprise de PREUVES, pas une conformité : il ne dit pas que ces articles sont tenus, et encore moins que l’autorité l’admettra. Et le piège de cette greffe est le périmètre — celui du système de management est choisi par l’organisme, celui du règlement ne l’est pas."}
+    ]
+  },
+  'dora-supervision': {
+    title: "DORA — prestataire tiers critique et cadre de supervision",
+    sections: [
+      {h:"À quoi sert cette page", t:"À savoir si un prestataire de services TIC peut être désigné critique, et ce que la désignation entraîne. L’acte délégué du 22 février 2024 découpe l’appréciation en deux : une étape 1 de seuils — dix pour cent du nombre ET des actifs d’une catégorie, un EISm ou trois autres EIS —, et une étape 2 d’appréciation."},
+      {h:"Comment l’utiliser", t:"Commencez par les quatre exclusions de l’article 31, §8 : elles ne s’apprécient pas, elles se constatent, et l’une d’elles suffit à fermer la question. Un prestataire intragroupe, ou qui ne sert que des entités actives dans un seul État membre, ne peut pas être désigné, quelle que soit sa part de marché. Renseignez ensuite les parts mesurées."},
+      {h:"Ce qu’elle ne fait pas", t:"Elle ne prédit aucune désignation : les autorités européennes de surveillance désignent, par le comité mixte, sur recommandation du forum de supervision. Franchir l’étape 1 ne vaut pas désignation, et l’étape 2 ne se calcule pas. Elle ne reproduit pas non plus la liste des prestataires désignés : elle est publiée et mise à jour chaque année, et une liste recopiée vieillit sans prévenir."}
     ]
   },
   'nis2-qualifier': {
@@ -20613,6 +20693,39 @@ var GUIDED_PATHS = [
     ]
   },
   /* ═══════════════════════════════════════════════════════════════════════
+     DORA — DEUX PARCOURS, ET ILS NE S'ADRESSENT PAS AUX MÊMES GENS
+     ═══════════════════════════════════════════════════════════════════════
+     LE PREMIER EST CELUI DE L'ENTITÉ FINANCIÈRE ; LE SECOND, CELUI DE SON
+     FOURNISSEUR. Les mêler serait la faute de lecture que tout ce module
+     existe pour empêcher : le prestataire tiers de services TIC n'est PAS
+     une entité financière (art. 2, §2), il ne porte pas les chapitres II à
+     IV, et rien ne lui est écarté de NIS 2. ═══════════════════════════ */
+  {
+    id: 'dora_entite',
+    icon: '\u{1F3DB}\u{FE0F}',
+    role: "Entit\u00e9 financi\u00e8re \u2014 je monte ma r\u00e9silience op\u00e9rationnelle",
+    pitch: "Le r\u00e9gime de l\u2019article\u00a016 d\u00e9cide de tout ce qui suit\u00a0: vingt-six articles du r\u00e8glement d\u00e9l\u00e9gu\u00e9 (UE) 2024/1774, ou quatorze. Les deux jeux sont disjoints, et se tromper de titre fait payer un programme dont la moiti\u00e9 ne vous vise pas.",
+    steps: [
+      {id:'dora-qualifier', label:"Qualification et r\u00e9gime", action:"Commencez ici, avant d\u2019ouvrir le moindre questionnaire.", gain:"Le r\u00e9gime commande les cinq \u00e9crans suivants \u2014 et l\u2019articulation avec NIS\u00a02 se calcule au passage.", tip:"La taille ne d\u00e9cide PAS du r\u00e9gime. Le cadre simplifi\u00e9 repose sur cinq cat\u00e9gories nomm\u00e9es \u00e0 l\u2019article\u00a016, \u00a71, pas sur un seuil d\u2019effectif\u00a0: une microentreprise qui n\u2019est dans aucune des cinq rel\u00e8ve du cadre complet."},
+      {id:'dora-iso', label:"Ce qu\u2019un SMSI apporte d\u00e9j\u00e0", action:"Si vous \u00eates certifi\u00e9 ISO/IEC\u00a027001, passez par ici AVANT de coter le cadre.", gain:"Une partie des articles trouve un r\u00e9pondant direct dans l\u2019annexe\u00a0A\u00a0: autant de preuves d\u00e9j\u00e0 produites, et autant de temps qui ne se repaie pas.", tip:"Les articles\u00a027 et\u00a041 \u2014 les rapports sur le r\u00e9examen du cadre \u2014 n\u2019ont AUCUN r\u00e9pondant. Aucune mesure de la norme ne les produit."},
+      {id:'dora-risque', label:"Cadre de gestion du risque", action:"Cotez les articles de votre r\u00e9gime, chapitre par chapitre.", gain:"Le taux le plus bas est nomm\u00e9\u00a0: c\u2019est celui-l\u00e0 qui se verra en inspection, pas la moyenne.", tip:"Un article non d\u00e9clar\u00e9 compte pour z\u00e9ro et reste au d\u00e9nominateur. Le silence n\u2019all\u00e8ge pas l\u2019exigence."},
+      {id:'dora-tiers', label:"Contrats \u2014 article\u00a030", action:"Reprenez vos contrats de services TIC, un par un, en d\u00e9clarant d\u2019abord la criticit\u00e9 de la fonction soutenue.", gain:"Neuf clauses, ou quinze. La diff\u00e9rence se joue sur une seule r\u00e9ponse, et elle change le contenu de la n\u00e9gociation.", tip:"Une clause absente ne se rattrape pas apr\u00e8s la signature\u00a0: il faut rouvrir le contrat, et le prestataire n\u2019y a aucun int\u00e9r\u00eat."},
+      {id:'dora-incident', label:"Incident majeur et d\u00e9lais", action:"R\u00e9p\u00e9tez \u00e0 blanc sur un incident pass\u00e9, avec ses vrais horodatages.", gain:"Quatre heures depuis la classification, vingt-quatre depuis la connaissance\u00a0: la chaine se r\u00e9p\u00e8te, elle ne se coche pas.", tip:"Pour un \u00e9tablissement de cr\u00e9dit, le report au midi du jour ouvrable suivant NE s\u2019applique pas \u00e0 la notification initiale. L\u2019horloge tourne le samedi."}
+    ]
+  },
+  {
+    id: 'dora_prestataire',
+    icon: '\u{1F5A5}\u{FE0F}',
+    role: "Prestataire de services TIC \u2014 je sers des entit\u00e9s financi\u00e8res",
+    pitch: "Vous n\u2019\u00eates pas une entit\u00e9 financi\u00e8re, et cela change tout\u00a0: les chapitres\u00a0II \u00e0\u00a0IV ne vous sont pas opposables, RIEN ne vous est \u00e9cart\u00e9 de NIS\u00a02, et le chapitre\u00a0V vous atteint comme contrepartie de votre client.",
+    steps: [
+      {id:'dora-qualifier', label:"Qualification et r\u00e9gime", action:"Choisissez \u00ab\u00a0prestataire tiers de services TIC\u00a0\u00bb, point\u00a0u) de l\u2019article\u00a02, \u00a71.", gain:"L\u2019\u00e9cran dit alors ce qu\u2019on vous oppose \u2014 et ce qu\u2019on ne vous oppose pas.", tip:"L\u2019article\u00a01er, \u00a72, ne vise que les entit\u00e9s FINANCI\u00c8RES, que l\u2019article\u00a02, \u00a72, r\u00e9serve aux points a) \u00e0 t). Un h\u00e9bergeur qui sert des banques reste pleinement sous NIS\u00a02\u00a0: c\u2019est l\u2019erreur de lecture la plus co\u00fbteuse du march\u00e9."},
+      {id:'dora-supervision', label:"Prestataire critique \u2014 supervision", action:"Commencez par les quatre exclusions de l\u2019article\u00a031, \u00a78\u00a0: une seule suffit \u00e0 fermer la question.", gain:"Intragroupe, ou ne servant que des entit\u00e9s d\u2019un seul \u00c9tat membre\u00a0: la d\u00e9signation est impossible, quelle que soit la part de march\u00e9.", tip:"La supervision se paie. Aucun prestataire d\u00e9sign\u00e9 critique ne verse moins de 50\u00a0000\u00a0EUR par an, quel que soit son chiffre d\u2019affaires."},
+      {id:'dora-tiers', label:"Contrats \u2014 article\u00a030", action:"Lisez les quinze clauses du point de vue de celui \u00e0 qui on va les demander.", gain:"Vos clients vont exiger le droit d\u2019audit illimit\u00e9 et une strat\u00e9gie de sortie\u00a0: les anticiper vaut mieux que de les d\u00e9couvrir en n\u00e9gociation.", tip:"Le superviseur principal peut demander les CONTRATS eux-m\u00eames (RD (UE) 2025/295, art.\u00a02). Une clause de confidentialit\u00e9 n\u00e9goci\u00e9e avec un client n\u2019y fait pas obstacle."},
+      {id:'dora-incident', label:"Incident majeur et d\u00e9lais", action:"Regardez les d\u00e9lais que votre client doit tenir\u00a0: ce sont eux qui fixent les v\u00f4tres.", gain:"Quatre heures depuis la classification\u00a0: si vous d\u00e9tectez et qu\u2019il classe, votre d\u00e9lai d\u2019alerte est d\u00e9j\u00e0 dans les siennes.", tip:"L\u2019article\u00a030, \u00a73, b), exige des d\u00e9lais de pr\u00e9avis et des obligations de notification dans le contrat. C\u2019est l\u00e0 que se n\u00e9gocie votre propre horloge."}
+    ]
+  },
+  /* ═══════════════════════════════════════════════════════════════════════
      ISO/IEC 27001 — TROIS PARCOURS, ET LE PREMIER EST UN AVERTISSEMENT
      ═══════════════════════════════════════════════════════════════════════
      POURQUOI « JE SUIS DÉJÀ CERTIFIÉ » VIENT EN TÊTE. C'est la situation la
@@ -24012,6 +24125,640 @@ window.isoPeindrePonts = function () {
    AUCUN LIBELLÉ D'ANNEXE N'EST RECOPIÉ ICI : dix-huit secteurs et leurs
    sous-secteurs viennent de /api/nis2/referentiel.
    ═══════════════════════════════════════════════════════════════════════ */
+
+/* ══════════════════════════════════════════════════════════════════════
+   DORA — LES SIX ÉCRANS, ET UN SEUL RÉFÉRENTIEL
+   ══════════════════════════════════════════════════════════════════════
+   UNE SEULE REQUÊTE POUR SIX PANNEAUX. Les six écrans lisent le même
+   objet : les faire charger chacun le sien garantirait qu'un jour deux
+   d'entre eux affichent des versions différentes du même article.
+   ET LE RÉGIME EST UN PARAMÈTRE DE LA REQUÊTE, pas un défaut : tant que
+   l'entité n'est pas qualifiée, le référentiel porte les DEUX jeux
+   d'articles et les écrans disent qu'il faut qualifier d'abord. */
+
+var DORA_REF = null;
+var DORA_DECL = { entite: '', identifiee_nis2: null };
+var DORA_REGIME = null;
+var DORA_CONTRAT = { fonction_critique: null, microentreprise: false,
+                     clauses: {} };
+var DORA_INC = { services_critiques: null, criticite: null, seuils: {} };
+var DORA_SUP = {};
+
+function doraEsc(s) {
+  return s === null || s === undefined ? ''
+       : String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+                  .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function doraInit() {
+  if (DORA_REF) { doraPeindreCourant(); return; }
+  fetch('/api/dora/referentiel')
+    .then(function (r) { return r.json(); })
+    .then(function (j) {
+      if (!j || !j.ok) throw new Error('referentiel');
+      DORA_REF = j; doraRemplirChamps(); doraPeindreCourant();
+    })
+    .catch(function () {
+      ['dora-verdict', 'dora-risque-body', 'dora-tiers-body',
+       'dora-incident-body', 'dora-iso-body', 'dora-sup-body']
+        .forEach(function (id) {
+          var e = document.getElementById(id);
+          if (e) e.innerHTML = '<div class="veille-loading">Le référentiel '
+            + 'du règlement est momentanément indisponible. Rien n’est '
+            + 'affiché plutôt qu’une liste partielle : sur un texte '
+            + 'réglementaire, une liste tronquée qui ne dit pas qu’elle '
+            + 'l’est vaut moins que pas de liste du tout.</div>';
+        });
+    });
+}
+window.doraInit = doraInit;
+
+/* ── ON NE PEINT QUE L'ÉCRAN OUVERT, ET C'EST UNE CORRECTION MESURÉE ──
+   `doraInit` est accroché aux SIX entrées du menu ET à l'aiguillage de
+   `go()`. Une première version peignait les six panneaux à chaque appel :
+   chaque changement d'onglet déclenchait six requêtes, une visite ordinaire
+   du tiroir en a produit CENT DOUZE, et le limiteur a fini par bloquer
+   l'adresse — les écrans mouraient l'un après l'autre. La recette l'a vu ;
+   aucune règle de source ne pouvait le voir, parce que le code était juste
+   et que c'est son RYTHME qui ne l'était pas. */
+function doraPeindreCourant() {
+  var actif = (document.querySelector('.page.on') || {}).id || '';
+  if (actif === 'p-dora-risque') { doraPeindreRisque(); return; }
+  if (actif === 'p-dora-tiers') { doraPeindreTiers(); return; }
+  if (actif === 'p-dora-incident') { doraPeindreIncident(); return; }
+  if (actif === 'p-dora-iso') { doraPeindreIso(); return; }
+  if (actif === 'p-dora-supervision') { doraPeindreSup(); return; }
+  doraQualifier();
+}
+
+/* ── LE FORMULAIRE DE QUALIFICATION ───────────────────────────────────
+   LES VINGT ENTITÉS FINANCIÈRES ET LE PRESTATAIRE TIERS SONT SÉPARÉS
+   DANS LA LISTE, et ce n'est pas cosmétique : le point u) n'est pas une
+   entité financière (art. 2, §2), il n'a donc pas de régime, et rien ne
+   lui est écarté de NIS 2. Une liste à plat laisserait croire le
+   contraire. */
+function doraRemplirChamps() {
+  var q = document.getElementById('dora-q');
+  if (!q || q.innerHTML.trim()) return;
+  var ents = (DORA_REF.qualification || {}).entites || [];
+  var opts = '<option value="">— choisir le type d’entité —</option>'
+           + '<optgroup label="Entités financières — art. 2, §1, a) à t)">';
+  ents.forEach(function (e) {
+    if (!e.financiere) return;
+    opts += '<option value="' + doraEsc(e.cle) + '">' + doraEsc(e.lettre)
+          + ') ' + doraEsc(e.nom) + '</option>';
+  });
+  opts += '</optgroup><optgroup label="Hors entités financières — art. 2, §1, u)">';
+  ents.forEach(function (e) {
+    if (e.financiere) return;
+    opts += '<option value="' + doraEsc(e.cle) + '">' + doraEsc(e.lettre)
+          + ') ' + doraEsc(e.nom) + '</option>';
+  });
+  opts += '</optgroup>';
+
+  var portes = ((DORA_REF.qualification || {}).simplifie || [])
+    .map(function (s) {
+      return '<label class="cnf-chk" title="' + doraEsc(s.quoi) + '">'
+           + '<input type="checkbox" onchange="doraPorte(\'' + s.cle
+           + '\', this.checked)"> ' + doraEsc(s.quoi)
+           + ' <span class="cnf-art">art. 16, §1</span></label>';
+    }).join('');
+  var excl = ((DORA_REF.qualification || {}).exclusions || [])
+    .map(function (x) {
+      return '<label class="cnf-chk" title="' + doraEsc(x.quoi) + '">'
+           + '<input type="checkbox" onchange="doraPorte(\'' + x.cle
+           + '\', this.checked)"> ' + doraEsc(x.quoi)
+           + ' <span class="cnf-art">art. 2, §3, ' + doraEsc(x.lettre)
+           + ')</span></label>';
+    }).join('');
+
+  q.innerHTML =
+      '<label class="cnf-chk">Type d’entité <select id="dora-entite" '
+    + 'class="cnf-in" onchange="doraChamp(\'entite\', this.value)">' + opts
+    + '</select></label>'
+    + '<label class="cnf-chk">Identifiée essentielle ou importante au titre '
+    + 'de NIS 2 <select id="dora-nis2" class="cnf-in" '
+    + 'onchange="doraChamp(\'identifiee_nis2\', this.value)">'
+    + '<option value="">— non déclaré —</option>'
+    + '<option value="oui">Oui</option><option value="non">Non</option>'
+    + '</select></label>'
+    + '<details class="cnf-det"><summary>Les cinq catégories du cadre '
+    + 'simplifié — article 16, §1</summary>' + portes + '</details>'
+    + '<details class="cnf-det"><summary>Les six exclusions — article 2, '
+    + '§3</summary>' + excl + '</details>';
+}
+
+function doraChamp(cle, v) {
+  if (cle === 'identifiee_nis2') {
+    DORA_DECL.identifiee_nis2 = v === 'oui' ? true : (v === 'non' ? false : null);
+  } else {
+    DORA_DECL[cle] = v;
+  }
+  doraQualifier();
+}
+window.doraChamp = doraChamp;
+
+function doraPorte(cle, on) {
+  if (on) { DORA_DECL[cle] = true; } else { delete DORA_DECL[cle]; }
+  doraQualifier();
+}
+window.doraPorte = doraPorte;
+
+/* ── LA QUALIFICATION, ET L'ARTICULATION AVEC NIS 2 ───────────────────
+   LES DEUX SONT PEINTES ENSEMBLE parce qu'elles se commandent : ce que
+   l'article 4 de la directive écarte dépend du fait que l'entité soit
+   FINANCIÈRE, ce que seule la qualification dit. */
+function doraQualifier() {
+  var v = document.getElementById('dora-verdict');
+  var a = document.getElementById('dora-articulation');
+  if (!v) return;
+  if (!DORA_DECL.entite) {
+    v.innerHTML = '<div class="veille-loading">Renseignez le type '
+                + 'd’entité ci-dessus.</div>';
+    if (a) a.innerHTML = '';
+    DORA_REGIME = null;
+    return;
+  }
+  fetch('/api/dora/qualifier', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(DORA_DECL)
+  }).then(function (r) { return r.json(); }).then(function (j) {
+    var q = j.qualification || {};
+    DORA_REGIME = q.regime || null;
+    var e = q.entite || {};
+    var cls = q.dans_le_champ === false ? 'cnf-hors'
+            : (q.regime === 'simplifie' ? 'cnf-part' : 'cnf-ok');
+    var reg = (((DORA_REF.qualification || {}).regimes || {})[q.regime]) || {};
+    v.innerHTML =
+        '<div class="cnf-verdict ' + cls + '">'
+      + '<div class="cnf-verdict-t">' + doraEsc(reg.nom || 'À compléter')
+      + '</div>'
+      + '<div class="cnf-verdict-s">' + doraEsc(e.nom || '') + '</div>'
+      + '<p>' + doraEsc(q.motif || '') + '</p>'
+      + '<p class="cnf-art">' + doraEsc(q.article || '') + '</p>'
+      + (reg.quoi ? '<p>' + doraEsc(reg.quoi) + '</p>' : '')
+      + '</div>';
+    if (a) a.innerHTML = doraArticulation(j.articulation || {});
+    doraPeindreRisque(); doraPeindreIso();
+  }).catch(function () {
+    v.innerHTML = '<div class="veille-loading">Qualification momentanément '
+                + 'indisponible.</div>';
+  });
+}
+
+function doraArticulation(art) {
+  if (!art || !art.ok) return '';
+  var h = '<div class="tbl-wrap"><div class="tbl-head">'
+        + '<span class="tbl-title">DORA ↔ NIS 2 — '
+        + doraEsc(art.nom) + '</span></div>'
+        + '<p>' + doraEsc(art.quoi) + '</p>'
+        + '<p class="cnf-art">' + doraEsc(art.motif) + '</p>';
+  if (art.alerte_dit) {
+    h += '<div class="cnf-cmd"><b>À vérifier.</b> '
+       + doraEsc(art.alerte_dit.quoi) + ' '
+       + doraEsc(art.alerte_dit.a_verifier) + '</div>';
+  }
+  if ((art.ecarte || []).length) {
+    h += '<p><b>Ce que l’article 4 écarte</b></p><ul>';
+    art.ecarte.forEach(function (x) {
+      h += '<li>' + doraEsc(x.nis2)
+         + ' <span class="cnf-art">' + doraEsc(x.certitude === 'texte'
+             ? 'un article le nomme' : 'déduit — voir les lignes directrices')
+         + '</span><br>' + doraEsc(x.remplace_par) + '</li>';
+    });
+    h += '</ul>';
+  }
+  h += '<p><b>Ce qui reste debout, écarté ou non</b></p><ul>';
+  (art.reste || []).forEach(function (x) {
+    h += '<li>' + doraEsc(x.quoi) + ' <span class="cnf-art">'
+       + doraEsc(x.article) + '</span></li>';
+  });
+  h += '</ul></div>';
+  return h;
+}
+
+/* ── LE CADRE DE GESTION DU RISQUE ────────────────────────────────────
+   L'ÉCRAN REFUSE DE PEINDRE SANS RÉGIME, et il le dit au lieu de rester
+   vide. Un « Chargement… » qui ne finit pas se lit comme une panne ; un
+   refus motivé se lit comme une étape à faire. */
+function doraPeindreRisque() {
+  var b = document.getElementById('dora-risque-body');
+  if (!b || !DORA_REF) return;
+  if (!DORA_REGIME) {
+    b.innerHTML = '<div class="cnf-cmd">Le régime n’est pas déterminé. '
+      + 'Le titre II porte vingt-six articles et le titre III quatorze ; '
+      + 'ils ne se recouvrent pas, et il n’y a pas de défaut '
+      + 'raisonnable. <a onclick="go(\'dora-qualifier\')">Qualifier '
+      + 'l’entité →</a></div>';
+    return;
+  }
+  var art = ((DORA_REF.risque || {}).articles || {})[DORA_REGIME] || [];
+  var chaps = ((DORA_REF.risque || {}).chapitres || {})[DORA_REGIME] || [];
+  var etats = (DORA_REF.risque || {}).etats || {};
+  var opts = Object.keys(etats).map(function (k) {
+    return '<option value="' + doraEsc(k) + '">' + doraEsc(etats[k].nom)
+         + '</option>';
+  }).join('');
+  var h = '<div class="tbl-wrap"><div class="tbl-head"><span class="tbl-title">'
+        + doraEsc(((DORA_REF.risque || {}).regimes || {})[DORA_REGIME].nom)
+        + ' — ' + art.length + ' articles</span></div>';
+  chaps.forEach(function (c) {
+    h += '<div class="cnf-chap"><b>Chapitre ' + doraEsc(c.cle) + ' — '
+       + doraEsc(c.nom) + '</b></div><table class="tbl"><tbody>';
+    art.filter(function (a) { return a.chapitre === c.cle; })
+       .forEach(function (a) {
+      h += '<tr><td style="width:64px">art. ' + a.n + '</td><td>'
+         + doraEsc(a.titre) + '</td><td style="width:180px">'
+         + '<select class="cnf-in" onchange="doraEtat(' + a.n
+         + ', this.value)"><option value="">— non déclaré —</option>'
+         + opts + '</select></td></tr>';
+    });
+    h += '</tbody></table>';
+  });
+  h += '</div><div id="dora-risque-taux"></div>';
+  b.innerHTML = h;
+  doraCalculerRisque();
+}
+window.doraPeindreRisque = doraPeindreRisque;
+
+var DORA_ETATS = {};
+function doraEtat(n, v) {
+  if (v) { DORA_ETATS[n] = v; } else { delete DORA_ETATS[n]; }
+  doraCalculerRisque();
+}
+window.doraEtat = doraEtat;
+
+function doraCalculerRisque() {
+  var z = document.getElementById('dora-risque-taux');
+  if (!z || !DORA_REGIME) return;
+  fetch('/api/dora/evaluer', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ entite: DORA_DECL.entite,
+                           identifiee_nis2: DORA_DECL.identifiee_nis2,
+                           etats: DORA_ETATS })
+  }).then(function (r) { return r.json(); }).then(function (j) {
+    var r = (j || {}).risque;
+    if (!r || !r.ok) { z.innerHTML = ''; return; }
+    var h = '<div class="cnf-verdict cnf-ok"><div class="cnf-verdict-t">'
+          + (r.taux === null ? '—' : r.taux.toFixed(1) + ' %')
+          + '</div><div class="cnf-verdict-s">' + r.evalues + ' article(s) '
+          + 'déclaré(s) sur ' + r.articles_du_regime + '</div>';
+    if (r.plus_faible) {
+      h += '<p><b>Le chapitre le plus bas :</b> ' + doraEsc(r.plus_faible.nom)
+         + ' — ' + r.plus_faible.taux.toFixed(1) + ' %. C’est lui '
+         + 'qui se verra en inspection, pas la moyenne.</p>';
+    }
+    (r.verrous || []).forEach(function (v) {
+      h += '<div class="cnf-cmd">' + doraEsc(v.dit) + '</div>';
+    });
+    h += '</div>';
+    z.innerHTML = h;
+  }).catch(function () { z.innerHTML = ''; });
+}
+
+/* ── LES CONTRATS ─────────────────────────────────────────────────────
+   LA CRITICITÉ SE DÉCLARE AVANT TOUT LE RESTE, parce qu'elle décide du
+   NOMBRE de clauses dues — neuf ou quinze. Peindre les neuf communes
+   d'abord ferait croire que la liste est complète. */
+function doraPeindreTiers() {
+  var f = document.getElementById('dora-contrat-form');
+  if (f && !f.innerHTML.trim()) {
+    f.innerHTML =
+        '<label class="cnf-chk">La fonction soutenue est-elle critique ou '
+      + 'importante ? <select class="cnf-in" '
+      + 'onchange="doraContrat(\'fonction_critique\', this.value)">'
+      + '<option value="">— non déclaré —</option>'
+      + '<option value="oui">Oui</option><option value="non">Non</option>'
+      + '</select></label>'
+      + '<label class="cnf-chk"><input type="checkbox" '
+      + 'onchange="doraContrat(\'microentreprise\', this.checked)"> '
+      + 'L’entité financière est une microentreprise</label>';
+  }
+  doraCalculerTiers();
+}
+
+function doraContrat(cle, v) {
+  if (cle === 'fonction_critique') {
+    DORA_CONTRAT.fonction_critique =
+      v === 'oui' ? true : (v === 'non' ? false : null);
+  } else {
+    DORA_CONTRAT[cle] = v;
+  }
+  doraCalculerTiers();
+}
+window.doraContrat = doraContrat;
+
+function doraClause(cle, v) {
+  if (v) { DORA_CONTRAT.clauses[cle] = v; }
+  else { delete DORA_CONTRAT.clauses[cle]; }
+  doraCalculerTiers();
+}
+window.doraClause = doraClause;
+
+function doraCalculerTiers() {
+  var b = document.getElementById('dora-tiers-body');
+  if (!b || !DORA_REF) return;
+  if (DORA_CONTRAT.fonction_critique === null) {
+    b.innerHTML = '<div class="cnf-cmd"><b>Rien n\u2019est compté tant que '
+      + 'la criticité n\u2019est pas déclarée.</b> Un taux sur neuf clauses '
+      + 'alors que quinze sont dues serait rassurant à tort \u2014 et il ne '
+      + 'se découvrirait qu\u2019au contrôle, contrat déjà signé.</div>';
+    return;
+  }
+  fetch('/api/dora/contrat', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(DORA_CONTRAT)
+  }).then(function (r) { return r.json(); }).then(function (j) {
+    if (!j.ok) {
+      b.innerHTML = '<div class="cnf-cmd"><b>Rien n’est compté.</b> '
+                  + doraEsc(j.motif_texte || '') + '</div>';
+      return;
+    }
+    var etats = (DORA_REF.tiers || {}).etats || {};
+    var opts = Object.keys(etats).map(function (k) {
+      return '<option value="' + doraEsc(k) + '">' + doraEsc(etats[k].nom)
+           + '</option>';
+    }).join('');
+    var h = '<div class="cnf-verdict ' + (j.taux === 100 ? 'cnf-ok' : 'cnf-part')
+          + '"><div class="cnf-verdict-t">' + j.taux.toFixed(1) + ' %</div>'
+          + '<div class="cnf-verdict-s">' + j.attendues + ' clause(s) due(s), '
+          + j.combien_manquent + ' manquante(s)</div>';
+    (j.verrous || []).forEach(function (v) {
+      h += '<div class="cnf-cmd">' + doraEsc(v.dit) + '</div>';
+    });
+    h += '</div><div class="tbl-wrap"><table class="tbl"><tbody>';
+    (j.clauses || []).forEach(function (c) {
+      var cle = c.serie + '_' + c.lettre;
+      var sel = DORA_CONTRAT.clauses[cle] || '';
+      h += '<tr><td style="width:190px">' + doraEsc(c.article) + '</td><td>'
+         + doraEsc(c.quoi)
+         + (c.derogation ? '<br><span class="cnf-art">Dérogation '
+             + 'microentreprise applicable — '
+             + doraEsc(c.derogation.article) + '</span>' : '')
+         + '</td><td style="width:180px"><select class="cnf-in" '
+         + 'onchange="doraClause(\'' + cle + '\', this.value)">'
+         + '<option value="">— non déclaré —</option>'
+         + opts.replace('value="' + sel + '"',
+                        'value="' + sel + '" selected')
+         + '</select></td></tr>';
+    });
+    h += '</tbody></table></div>';
+    b.innerHTML = h;
+  }).catch(function () {
+    b.innerHTML = '<div class="veille-loading">Examen momentanément '
+                + 'indisponible.</div>';
+  });
+}
+
+/* ── L'INCIDENT ───────────────────────────────────────────────────────
+   LA CRITICITÉ EST UNE PORTE, PAS UN SEPTIÈME SEUIL. Tant qu'elle n'est
+   pas déclarée, le moteur rend `null` et l'écran le dit — au lieu de
+   rendre « pas majeur », qui se lirait comme une bonne nouvelle. */
+function doraPeindreIncident() {
+  var f = document.getElementById('dora-incident-form');
+  if (!f || !DORA_REF) return;
+  if (f.innerHTML.trim()) { doraCalculerIncident(); return; }
+  var seuils = (DORA_REF.incident || {}).seuils || [];
+  var h = '<label class="cnf-chk">Des services critiques sont-ils touchés ? '
+        + '<select class="cnf-in" onchange="doraInc(\'criticite\', this.value)">'
+        + '<option value="">— non déclaré —</option>'
+        + '<option value="oui">Oui</option><option value="non">Non</option>'
+        + '</select></label>'
+        + '<details class="cnf-det" open><summary>Les six seuils du '
+        + 'règlement délégué (UE) 2024/1772</summary>';
+  seuils.forEach(function (s) {
+    h += '<label class="cnf-chk" title="' + doraEsc(s.quoi || '') + '">'
+       + '<input type="checkbox" onchange="doraSeuil(\'' + doraEsc(s.cle)
+       + '\', this.checked)"> ' + doraEsc(s.nom || s.cle)
+       + ' <span class="cnf-art">' + doraEsc(s.article || '') + '</span>'
+       + '</label>';
+  });
+  h += '</details>'
+     + '<label class="cnf-chk">Connaissance de l’incident '
+     + '<input class="cnf-in" type="datetime-local" '
+     + 'onchange="doraInc(\'connaissance\', this.value)"></label>'
+     + '<label class="cnf-chk">Classification '
+     + '<input class="cnf-in" type="datetime-local" '
+     + 'onchange="doraInc(\'classification\', this.value)"></label>';
+  f.innerHTML = h;
+  doraCalculerIncident();
+}
+
+function doraInc(cle, v) {
+  if (cle === 'criticite') {
+    DORA_INC.services_critiques = v === 'oui' ? true : (v === 'non' ? false : null);
+  } else {
+    DORA_INC[cle] = v || null;
+  }
+  doraCalculerIncident();
+}
+window.doraInc = doraInc;
+
+function doraSeuil(cle, on) {
+  if (on) { DORA_INC.seuils[cle] = true; } else { delete DORA_INC.seuils[cle]; }
+  doraCalculerIncident();
+}
+window.doraSeuil = doraSeuil;
+
+function doraCalculerIncident() {
+  var b = document.getElementById('dora-incident-body');
+  if (!b) return;
+  var charge = { services_critiques: DORA_INC.services_critiques,
+                 entite: DORA_DECL.entite,
+                 connaissance: DORA_INC.connaissance,
+                 classification: DORA_INC.classification };
+  Object.keys(DORA_INC.seuils).forEach(function (k) { charge[k] = true; });
+  fetch('/api/dora/incident', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(charge)
+  }).then(function (r) { return r.json(); }).then(function (j) {
+    if (!j.ok) {
+      b.innerHTML = '<div class="cnf-cmd">' + doraEsc(j.motif_texte || j.motif)
+                  + '</div>';
+      return;
+    }
+    var cls = j.majeur === true ? 'cnf-hors'
+            : (j.majeur === false ? 'cnf-ok' : 'cnf-part');
+    var h = '<div class="cnf-verdict ' + cls + '"><div class="cnf-verdict-t">'
+          + (j.majeur === true ? 'Incident majeur'
+             : (j.majeur === false ? 'Pas un incident majeur'
+                : 'Indéterminé')) + '</div>'
+          + '<p>' + doraEsc(j.motif || '') + '</p></div>';
+    if (j.delais && j.delais.ok !== false) {
+      h += '<div class="tbl-wrap"><div class="tbl-head"><span class="tbl-title">'
+         + 'Les trois échéances</span></div><table class="tbl"><tbody>';
+      ['initial', 'intermediaire', 'final'].forEach(function (k) {
+        var d = j.delais[k];
+        if (!d) return;
+        h += '<tr><td style="width:150px">' + doraEsc(k) + '</td><td>'
+           + doraEsc(d.echeance || '—') + '</td><td>'
+           + doraEsc(d.pourquoi || '') + '</td></tr>';
+      });
+      h += '</tbody></table></div>';
+    }
+    b.innerHTML = h;
+  }).catch(function () {
+    b.innerHTML = '<div class="veille-loading">Évaluation momentanément '
+                + 'indisponible.</div>';
+  });
+}
+
+/* ── LE PONT ISO 27001 ────────────────────────────────────────────────
+   LE TAUX SE DÉSAMORCE DANS LE MÊME BLOC QUE SON AFFICHAGE. Un chiffre
+   d'appui lu comme un taux de conformité est pire qu'aucun chiffre : il
+   rassure. */
+function doraPeindreIso() {
+  var b = document.getElementById('dora-iso-body');
+  if (!b || !DORA_REF) return;
+  if (!DORA_REGIME) {
+    b.innerHTML = '<div class="cnf-cmd">Le régime n’est pas déterminé. '
+      + 'La correspondance n’a de sens que dans un régime déclaré. '
+      + '<a onclick="go(\'dora-qualifier\')">Qualifier l’entité '
+      + '→</a></div>';
+    return;
+  }
+  var ap = ((DORA_REF.ponts || {}) || {}).apport;
+  if (!ap || !ap.ok || ap.regime !== DORA_REGIME) {
+    fetch('/api/dora/referentiel?regime=' + encodeURIComponent(DORA_REGIME))
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        if (j && j.ok) { DORA_REF.ponts = j.ponts; doraPeindreIso(); }
+      }).catch(function () {});
+    return;
+  }
+  var h = '<div class="cnf-verdict cnf-part"><div class="cnf-verdict-t">'
+        + ap.taux_appui.toFixed(1) + ' %</div>'
+        + '<div class="cnf-verdict-s">reprise de preuves — '
+        + ap.reprise_directe + ' article(s) en reprise directe, '
+        + ap.reprise_partielle + ' partielle(s) sur ' + ap.total + '</div>'
+        + '<p>' + doraEsc(ap.ce_que_le_taux_ne_dit_pas) + '</p></div>';
+  if ((ap.propres_a_dora || []).length) {
+    h += '<div class="cnf-cmd bloc"><b>Sans aucun répondant dans la norme</b>'
+       + '<ul>';
+    ap.propres_a_dora.forEach(function (x) {
+      h += '<li>art. ' + x.article + ' — ' + doraEsc(x.titre) + '<br>'
+         + doraEsc(x.pourquoi) + '</li>';
+    });
+    h += '</ul></div>';
+  }
+  h += '<div class="tbl-wrap"><div class="tbl-head"><span class="tbl-title">'
+     + 'Article par article</span></div><table class="tbl"><tbody>';
+  (ap.lignes || []).forEach(function (l) {
+    h += '<tr><td style="width:64px">art. ' + l.article + '</td><td>'
+       + doraEsc(l.titre) + '</td><td style="width:130px">'
+       + doraEsc(l.couverture_nom) + '</td><td>'
+       + doraEsc((l.mesures || []).join(', ') || '—')
+       + (l.ne_couvre_pas ? '<br><span class="cnf-art">La norme ne couvre '
+           + 'pas : ' + doraEsc(l.ne_couvre_pas) + '</span>' : '')
+       + '</td></tr>';
+  });
+  h += '</tbody></table></div>';
+  h += '<div class="cnf-cmd bloc"><b>Ce qu’aucun certificat ne couvre</b>'
+     + '<ul>';
+  (ap.ne_remplace_pas || []).forEach(function (x) {
+    h += '<li>' + doraEsc(x.quoi) + ' <span class="cnf-art">'
+       + doraEsc(x.article) + '</span></li>';
+  });
+  h += '</ul></div>';
+  b.innerHTML = h;
+}
+window.doraPeindreIso = doraPeindreIso;
+
+/* ── LE PRESTATAIRE CRITIQUE ──────────────────────────────────────────
+   L'ÉTAPE 2 N'EST JAMAIS CALCULÉE, ET L'ÉCRAN LE DIT AVEC LE RÉSULTAT.
+   Franchir l'étape 1 ne vaut pas désignation ; afficher un verdict sans
+   cette phrase ferait construire une stratégie sur une moitié de règle. */
+function doraPeindreSup() {
+  var f = document.getElementById('dora-sup-form');
+  if (!f || !DORA_REF) return;
+  if (f.innerHTML.trim()) { doraCalculerSup(); return; }
+  var sup = DORA_REF.supervision || {};
+  var h = '<details class="cnf-det" open><summary>Les quatre exclusions '
+        + '— article 31, §8</summary>';
+  (sup.exclusions || []).forEach(function (x) {
+    h += '<label class="cnf-chk" title="' + doraEsc(x.pourquoi) + '">'
+       + '<input type="checkbox" onchange="doraSup(\'' + doraEsc(x.cle)
+       + '\', this.checked)"> ' + doraEsc(x.quoi)
+       + ' <span class="cnf-art">point ' + doraEsc(x.point) + '</span></label>';
+  });
+  h += '</details>'
+     + '<label class="cnf-chk">Part du nombre d’entités servies, dans '
+     + 'la catégorie la plus exposée (%) <input class="cnf-in" type="number" '
+     + 'min="0" max="100" step="0.1" style="width:110px" '
+     + 'onchange="doraSupPart(\'part_nombre\', this.value)"></label>'
+     + '<label class="cnf-chk">Part de leurs actifs (%) <input class="cnf-in" '
+     + 'type="number" min="0" max="100" step="0.1" style="width:110px" '
+     + 'onchange="doraSupPart(\'part_actifs\', this.value)"></label>'
+     + '<label class="cnf-chk">EISm servis <input class="cnf-in" '
+     + 'type="number" min="0" step="1" style="width:90px" '
+     + 'onchange="doraSupN(\'eism\', this.value)"></label>'
+     + '<label class="cnf-chk">Autres EIS servis <input class="cnf-in" '
+     + 'type="number" min="0" step="1" style="width:90px" '
+     + 'onchange="doraSupN(\'autres_eis\', this.value)"></label>';
+  f.innerHTML = h;
+  doraCalculerSup();
+}
+
+function doraSup(cle, on) { DORA_SUP[cle] = !!on; doraCalculerSup(); }
+window.doraSup = doraSup;
+
+function doraSupN(cle, v) {
+  var n = parseInt(v, 10);
+  if (isNaN(n)) { delete DORA_SUP[cle]; } else { DORA_SUP[cle] = n; }
+  doraCalculerSup();
+}
+window.doraSupN = doraSupN;
+
+var DORA_SUP_PARTS = {};
+function doraSupPart(cle, v) {
+  var n = parseFloat(v);
+  if (isNaN(n)) { delete DORA_SUP_PARTS[cle]; } else { DORA_SUP_PARTS[cle] = n; }
+  doraCalculerSup();
+}
+window.doraSupPart = doraSupPart;
+
+function doraCalculerSup() {
+  var b = document.getElementById('dora-sup-body');
+  if (!b) return;
+  var charge = {};
+  Object.keys(DORA_SUP).forEach(function (k) { charge[k] = DORA_SUP[k]; });
+  if (Object.keys(DORA_SUP_PARTS).length === 2) {
+    charge.categories_servies = [DORA_SUP_PARTS];
+  }
+  fetch('/api/dora/supervision', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(charge)
+  }).then(function (r) { return r.json(); }).then(function (j) {
+    if (!j.ok) { b.innerHTML = ''; return; }
+    var cls = j.issue === 'exclu' ? 'cnf-ok'
+            : (j.issue === 'etape_1_franchie' ? 'cnf-hors' : 'cnf-part');
+    var h = '<div class="cnf-verdict ' + cls + '"><div class="cnf-verdict-t">'
+          + doraEsc(j.nom) + '</div><p>' + doraEsc(j.quoi) + '</p>'
+          + '<p class="cnf-art">' + doraEsc(j.l_etape_2_ne_se_calcule_pas)
+          + '</p></div>';
+    if ((j.etape_1 || {}).lignes) {
+      h += '<div class="tbl-wrap"><div class="tbl-head">'
+         + '<span class="tbl-title">Étape 1 — les sous-critères de '
+         + 'seuil</span></div><table class="tbl"><tbody>';
+      j.etape_1.lignes.forEach(function (l) {
+        h += '<tr><td style="width:60px">' + doraEsc(l.cle) + '</td><td>'
+           + doraEsc(l.quoi) + '</td><td style="width:150px">'
+           + doraEsc(l.etat) + '</td><td>' + doraEsc(l.dit) + '</td></tr>';
+      });
+      h += '</tbody></table></div>';
+    }
+    if (j.redevance && j.redevance.plancher_eur) {
+      h += '<div class="cnf-cmd bloc"><b>Ce que la supervision coûte.</b> '
+         + 'Aucun prestataire critique ne paie moins de '
+         + j.redevance.plancher_eur.toLocaleString('fr-FR') + '&nbsp;EUR par '
+         + 'an, quel que soit son chiffre d’affaires '
+         + '(acte délégué C(2024) 902, article 3, §3).</div>';
+    }
+    b.innerHTML = h;
+  }).catch(function () { b.innerHTML = ''; });
+}
+window.doraPeindreSup = doraPeindreSup;
+
 
 var NIS2_REF = null;
 var NIS2_ETAT = { secteur: '', effectif: null, ca: null, bilan: null,

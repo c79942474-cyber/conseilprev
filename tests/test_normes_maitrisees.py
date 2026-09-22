@@ -1,9 +1,16 @@
 # -*- coding: utf-8 -*-
-"""LES SEPT NORMES DE L'ACCUEIL, ET LE CHEMIN JUSQU'AU MODULE.
+"""LES NORMES DE L'ACCUEIL, ET LE CHEMIN JUSQU'AU MODULE.
 
 CE QUI A DÉCLENCHÉ CE FICHIER. Une demande : « dans ce menu, connecter chaque
 bloc concerné au module de la mise en conformité correspondant dans Sentinel
 (sauf DORA) et aller à la page de la norme concernée ».
+
+L'EXCEPTION EST TOMBÉE, ET C'EST LA DEMANDE SUIVANTE QUI L'A FAIT TOMBER :
+« connecter et ajouter DORA à votre mise en conformité réglementaire du menu
+latéral ». DORA a désormais ses quatre moteurs et son panneau ; les règles
+qui le tenaient à part sont retournées plutôt que supprimées — celle qui
+disait « DORA est la seule sans module » dit maintenant « AUCUNE carte n'est
+sans module », et elle lève au premier ajout d'une norme sans écran.
 
 CE QUE LA MESURE A TROUVÉ AVANT D'ÉCRIRE UNE LIGNE, et qui rendait la demande
 irréalisable telle quelle :
@@ -57,6 +64,7 @@ ATTENDUES = (
     ("CRA", "cra-role"),
     ("ISO 42001", "iso42001"),
     ("ISO 27001", "iso27001-risques"),
+    ("DORA", "dora-qualifier"),
     ("NIS2", "nis2-qualifier"),
     ("RGPD", "rgpd-hub"),
 )
@@ -68,10 +76,10 @@ ATTENDUES = (
 #: absente alors qu'elle a bien levé.
 IDS = [n.replace(" ", "-") for n, _p in ATTENDUES]
 
-#: LA SEULE EXCLUE, ET C'EST UNE DÉCISION — aucun module Sentinel ne couvre
-#: DORA. Une carte muette au milieu de six cliquables se lirait comme un lien
-#: cassé ; elle mène donc au texte officiel, et le dit.
-SANS_MODULE = "DORA"
+#: PLUS AUCUNE EXCLUE. La table est vide, et elle reste écrite : une norme
+#: qu'on ajouterait sans écran devrait y figurer explicitement, ce qui oblige
+#: à le décider au lieu de le subir.
+SANS_MODULE = ()
 
 
 def _bloc():
@@ -419,26 +427,42 @@ def test_la_source_n_est_PAS_imbriquee_dans_le_lien_de_carte():
         "la pastille de source n'est plus positionnée sur la carte")
 
 
-def test_DORA_est_la_SEULE_sans_module_et_le_dit():
-    """UNE CARTE MUETTE AU MILIEU DE SIX CLIQUABLES SE LIT COMME UN LIEN
-    CASSÉ. Celle-ci mène au texte officiel — sur toute sa surface, ce qui est
-    déjà mieux qu'avant — et son intitulé annonce qu'aucun module ne la
-    couvre, au lieu de laisser le lecteur le découvrir en cliquant."""
-    c = _carte(SANS_MODULE)
-    assert c, "la carte DORA a disparu"
-    m = re.search(r'class="nc-go" href="([^"]+)"', c)
-    assert m and m.group(1).startswith("https://"), (
-        "DORA doit mener au texte officiel : %r" % (m.group(1) if m else None))
-    assert "/sentinel" not in c, (
-        "DORA a reçu un module Sentinel — la demande l'excluait explicitement")
-    assert "Aucun module Sentinel" in c, (
-        "la carte DORA ne dit pas pourquoi elle est à part")
-    # ET C'EST BIEN LA SEULE : toutes les autres mènent à Sentinel.
+def test_AUCUNE_carte_ne_reste_sans_module():
+    """LA RÈGLE RETOURNÉE, ET ELLE MESURE PLUS QU'AVANT.
+
+    Elle disait « DORA est la seule sans module ». DORA en a un ; la règle
+    devient donc « aucune carte n'est sans module », et ce qu'elle mesure
+    s'élargit : elle lève désormais au premier ajout d'une norme à la grille
+    sans écran pour la corriger. C'est le défaut qu'elle existe pour
+    attraper, et il n'a pas disparu avec DORA — il s'est déplacé au
+    PROCHAIN ajout.
+    """
     sans = [re.search(r'<div class="nn">([^<]+)</div>', x).group(1).strip()
             for x in _cartes()
             if 'href="/sentinel' not in x]
-    assert sans == ["DORA ↗"], (
-        "ces cartes ne mènent à aucun module : %s" % sans)
+    assert sans == list(SANS_MODULE), (
+        "ces cartes ne mènent à aucun module : %s. Une carte muette au milieu "
+        "de dix cliquables se lit comme un lien cassé." % sans)
+
+
+def test_la_carte_DORA_mene_bien_au_panneau_et_garde_sa_source():
+    """CE QUE LE RECÂBLAGE DE DORA NE DOIT PAS AVOIR PERDU.
+
+    La carte menait à EUR-Lex sur toute sa surface. En la branchant sur
+    Sentinel, le risque était de perdre le texte officiel — la seule chose
+    vérifiable de la carte. Il redevient la pastille, comme sur les dix
+    autres.
+    """
+    c = _carte("DORA")
+    assert c, "la carte DORA a disparu"
+    m = re.search(r'class="nc-go" href="([^"]+)"', c)
+    assert m and m.group(1) == "/sentinel?goto=dora-qualifier", (
+        "la carte DORA ne mène pas à son panneau : %r"
+        % (m.group(1) if m else None))
+    s = re.search(r'class="nc-src" href="(https://[^"]+)"', c)
+    assert s and "32022R2554" in s.group(1), (
+        "la carte DORA a perdu le texte officiel en gagnant son module : %r"
+        % (s.group(1) if s else None))
 
 
 def test_aucune_carte_liee_au_module_ne_porte_la_fleche_d_ouverture_externe():
@@ -451,9 +475,14 @@ def test_aucune_carte_liee_au_module_ne_porte_la_fleche_d_ouverture_externe():
         assert "↗" not in m.group(1), (
             "la carte « %s » mène à Sentinel et garde la flèche d'ouverture "
             "externe : %r" % (nom, m.group(1)))
-    # ET LA SEULE QUI SORT VRAIMENT LA GARDE.
-    assert "↗" in re.search(r'<div class="nn">([^<]+)</div>',
-                            _carte(SANS_MODULE)).group(1)
+    # PLUS AUCUNE NE SORT : la flèche ne vit que sur la pastille de source,
+    # qui est un autre lien. En laisser une sur un intitulé promettrait une
+    # sortie du site qui n'a plus lieu.
+    for x in _cartes():
+        m = re.search(r'<div class="nn">([^<]+)</div>', x)
+        assert "↗" not in m.group(1), (
+            "un intitulé de carte porte encore la flèche externe : %r"
+            % m.group(1))
 
 
 def test_le_libelle_ecrit_dans_le_HTML_n_est_pas_ECRASE_par_le_dictionnaire():
@@ -465,15 +494,20 @@ def test_le_libelle_ecrit_dans_le_HTML_n_est_pas_ECRASE_par_le_dictionnaire():
     la page rendue disait simplement « Résilience num. ». Le HTML avait
     raison et l'écran disait autre chose.
 
+    LA MENTION A DISPARU AVEC L'EXCEPTION — mais le défaut qu'elle a révélé,
+    lui, reste entier : c'est lui que la règle mesure, sur le même libellé.
+    Les trois endroits doivent dire la même chose, et aucun des trois ne doit
+    promettre un texte seul alors que le module existe.
+
     LA RÈGLE MESURE LES TROIS ENDROITS : l'intitulé du HTML, et les deux
     dictionnaires. Un libellé qui porte une information ne la porte vraiment
     que s'il la porte partout."""
     import json
-    c = _carte(SANS_MODULE)
+    c = _carte("DORA")
     inline = re.search(r'<div class="nd" data-i18n="nr\.dora">([^<]+)</div>',
                        c).group(1)
-    assert "texte seul" in inline, (
-        "l'intitulé DORA du HTML ne signale plus l'absence de module : %r"
+    assert "texte seul" not in inline and "module" not in inline.lower(), (
+        "l'intitulé DORA du HTML annonce encore une absence de module : %r"
         % inline)
     dicos = {}
     for lg in ("fr", "en"):
@@ -484,8 +518,8 @@ def test_le_libelle_ecrit_dans_le_HTML_n_est_pas_ECRASE_par_le_dictionnaire():
         "le dictionnaire français écrase l'intitulé du HTML par %r : la "
         "mention écrite dans le HTML ne s'affichera jamais"
         % dicos["fr"]["nr.dora"])
-    assert "text only" in dicos["en"]["nr.dora"], (
-        "la version anglaise ne signale pas l'absence de module : %r"
+    assert "text only" not in dicos["en"]["nr.dora"], (
+        "la version anglaise annonce encore une absence de module : %r"
         % dicos["en"]["nr.dora"])
 
 

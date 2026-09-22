@@ -110,10 +110,10 @@
    "regle": "test_les_secteurs_ANNONCES_sont_ceux_QUE_LA_PAGE_MONTRE"
   },
   {
-   "nom": "l'infobulle se trompe sur le nombre de modules",
-   "fichier": "index.page.js",
-   "avant": "pour dix d’entre eux",
-   "apres": "pour neuf d’entre eux",
+   "nom": "une carte de la grille cesse de mener à son module",
+   "fichier": "index.html",
+   "avant": "/sentinel?goto=dora-qualifier",
+   "apres": "https://eur-lex.europa.eu/eli/reg/2022/2554/oj",
    "regle": "test_les_referentiels_et_leurs_modules_sont_COMPTES_sur_la_page"
   },
   {

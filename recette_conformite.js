@@ -1,7 +1,7 @@
 /* RECETTE — LE TAUX DE CONFORMITÉ DES NEUF NORMES
  * ═══════════════════════════════════════════════════════════════════════════
  *
- * LA DEMANDE : un taux entre 0 et 100 % pour chacune des neuf normes de
+ * LA DEMANDE : un taux entre 0 et 100 % pour chacune des onze normes de
  * Sentinel, tiré des analyses de risque et des réponses aux questionnaires,
  * puis un plan de mise en conformité et de remédiation.
  *
@@ -123,7 +123,7 @@ const DOSSIER = {
       mene: !!c.querySelector('.conf-go')
     }));
   });
-  ok('les neuf normes sont rendues', cartes.length === 9, '',
+  ok('les onze normes sont rendues', cartes.length === 11, '',
      cartes.length + ' cartes');
   const dora = cartes.find(c => /DORA/.test(c.nom || ''));
   ok('DORA affiche « — » et jamais « 0 % »',

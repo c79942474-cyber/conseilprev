@@ -366,6 +366,7 @@ body{
 .sb-nav [data-grp="iso27001"]{--sb-ic:var(--teal)}
 .sb-nav [data-grp="iso42001"]{--sb-ic:var(--emerald)}
 .sb-nav [data-grp="nis2"]{--sb-ic:var(--plum)}
+.sb-nav [data-grp="dora"]{--sb-ic:var(--violet)}
 @media(prefers-reduced-motion:reduce){
   .sb-chev{transition:none}
 }
@@ -3321,8 +3322,8 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
          frères d'une section jusqu'à la suivante, et une section de plus
          aurait coupé le groupe RGPD en deux. -->
     <div class="sb-famille" data-fam="conformite"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 2.5 20 6v6.2c0 4.9-3.3 8.6-8 9.8-4.7-1.2-8-4.9-8-9.8V6z"/><path d="M8.6 12.1 11 14.5l4.4-4.6"/></svg><span>Votre Mise en Conformité Réglementaire</span><span class="sb-famille-n" id="sb-fam-n" aria-hidden="true"></span></div>
-    <div class="sb-section sb-pliable" data-grp="taux-conformite" data-fam="conformite" role="button" tabindex="0" aria-expanded="false" onclick="sbReplier(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sbReplier(this)}" title="Le taux de chacune des neuf normes, et le plan qui le fait monter"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg><span>Taux de conformité — les neuf normes</span><svg class="sb-chev" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></div>
-    <div class="sb-item" data-grp="taux-conformite" role="button" tabindex="0" onclick="go('conf-taux',this,'TAUX DE CONFORMITÉ','Les neuf taux');confInit()" title="Un taux par norme, ce qu il mesure, et ce qui le plafonne"><span class="sb-icon" aria-hidden="true"></span>Les neuf taux</div>
+    <div class="sb-section sb-pliable" data-grp="taux-conformite" data-fam="conformite" role="button" tabindex="0" aria-expanded="false" onclick="sbReplier(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sbReplier(this)}" title="Le taux de chacune des onze normes, et le plan qui le fait monter"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg><span>Taux de conformité — les onze normes</span><svg class="sb-chev" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></div>
+    <div class="sb-item" data-grp="taux-conformite" role="button" tabindex="0" onclick="go('conf-taux',this,'TAUX DE CONFORMITÉ','Les onze taux');confInit()" title="Un taux par norme, ce qu il mesure, et ce qui le plafonne"><span class="sb-icon" aria-hidden="true"></span>Les onze taux</div>
     <div class="sb-item" data-grp="taux-conformite" role="button" tabindex="0" onclick="go('conf-plan',this,'TAUX DE CONFORMITÉ','Plan de mise en conformité');confInit()" title="Les actions, du verrou au detail — et ce que chacune rapporte reellement"><span class="sb-icon" aria-hidden="true"></span>Plan de mise en conformité</div>
     <div class="sb-item" data-grp="taux-conformite" role="button" tabindex="0" onclick="go('conf-limites',this,'TAUX DE CONFORMITÉ','Ce que le plan ne peut pas faire');confInit()" title="DORA sans instrument, le NIST non certifiable, et les trois risques LLM hors annexe A"><span class="sb-icon" aria-hidden="true"></span>Ce que le plan ne peut pas faire</div>
     <div class="sb-section sb-pliable" data-grp="rgpd-et-privacy" data-fam="conformite" role="button" tabindex="0" aria-expanded="false" onclick="sbReplier(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sbReplier(this)}" title="Replier ou déplier RGPD &amp; Privacy"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="10.5" width="16" height="10" rx="2"/><path d="M7.8 10.5V7.5a4.2 4.2 0 0 1 8.4 0v3"/></svg><span>RGPD &amp; Privacy</span></div>
@@ -3374,6 +3375,23 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
          ET SON UNITÉ DE COMPTE EST L'ENTITÉ, pas le produit ni le
          traitement : la qualification se calcule sur le secteur et la
          taille, et elle commande le régime de supervision. -->
+    <!-- ═══ DORA — LE RÈGLEMENT (UE) 2022/2554 ═══
+         POURQUOI AVANT NIS 2 ET NON APRÈS. DORA est lex specialis à
+         l'égard de la directive (considérant 16) : pour une entité
+         financière identifiée essentielle ou importante, il l'ÉCARTE au
+         lieu de la compléter. Le lire après ferait croire l'inverse, et
+         c'est l'erreur de lecture la plus coûteuse du sujet.
+         ET LE PREMIER ÉCRAN EST LA QUALIFICATION, pas l'analyse de
+         risque : le régime de l'article 16 décide de QUELS articles du
+         règlement délégué sont opposables — vingt-six ou quatorze —, et
+         les deux jeux ne se recouvrent pas. -->
+    <div class="sb-section sb-pliable" data-grp="dora" data-fam="conformite" role="button" tabindex="0" aria-expanded="false" onclick="sbReplier(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sbReplier(this)}" title="Replier ou déplier DORA"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 21h18M5 21V9.5L12 5l7 4.5V21"/><path d="M9.5 21v-5.5h5V21"/></svg><span>DORA — Résilience opérationnelle</span><svg class="sb-chev" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></div>
+    <div class="sb-item" data-grp="dora" role="button" tabindex="0" onclick="go('dora-qualifier',this,'DORA','Qualification et régime');doraInit()" title="Dans le champ ou non, sous quel regime — et ce que l article 4 de NIS 2 ecarte vraiment"><span class="sb-icon" aria-hidden="true"></span>Qualification et régime</div>
+    <div class="sb-item" data-grp="dora" role="button" tabindex="0" onclick="go('dora-risque',this,'DORA','Cadre de gestion du risque');doraInit()" title="Les articles du reglement delegue (UE) 2024/1774 de VOTRE regime, chapitre par chapitre"><span class="sb-icon" aria-hidden="true"></span>Cadre de gestion du risque</div>
+    <div class="sb-item" data-grp="dora" role="button" tabindex="0" onclick="go('dora-tiers',this,'DORA','Contrats — article 30');doraInit()" title="Neuf clauses communes, six de plus si la fonction est critique — et la derogation micro qui ne vaut que pour une"><span class="sb-icon" aria-hidden="true"></span>Contrats — article 30</div>
+    <div class="sb-item" data-grp="dora" role="button" tabindex="0" onclick="go('dora-incident',this,'DORA','Incident majeur et délais');doraInit()" title="Cet incident est-il majeur ? Puis les quatre heures, les vingt-quatre heures, les soixante-douze heures et le mois"><span class="sb-icon" aria-hidden="true"></span>Incident majeur et délais</div>
+    <div class="sb-item" data-grp="dora" role="button" tabindex="0" onclick="go('dora-iso',this,'DORA','Ce qu\u2019un SMSI apporte déjà');doraInit()" title="Ce qu une certification ISO/IEC 27001 documente deja — et les deux rapports qu elle ne produira jamais"><span class="sb-icon" aria-hidden="true"></span>Ce qu’un SMSI apporte déjà</div>
+    <div class="sb-item" data-grp="dora" role="button" tabindex="0" onclick="go('dora-supervision',this,'DORA','Prestataire critique — supervision');doraInit()" title="Peut-on etre designe prestataire tiers critique, et ce que la supervision coute — plancher de 50 000 EUR par an"><span class="sb-icon" aria-hidden="true"></span>Prestataire critique — supervision</div>
     <div class="sb-section sb-pliable" data-grp="nis2" data-fam="conformite" role="button" tabindex="0" aria-expanded="false" onclick="sbReplier(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sbReplier(this)}" title="Replier ou déplier NIS 2"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="5" cy="6" r="2.2"/><circle cx="19" cy="6" r="2.2"/><circle cx="12" cy="18" r="2.2"/><path d="M6.6 7.4 10.6 16M17.4 7.4 13.4 16M7.2 6h9.6"/></svg><span>NIS 2 — Entités essentielles</span><svg class="sb-chev" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></div>
     <div class="sb-item" data-grp="nis2" role="button" tabindex="0" onclick="go('nis2-qualifier',this,'NIS 2','Suis-je concerné ?');nis2Init()" title="Essentielle, importante ou hors champ — et le fait qui l a decide : un effet de seuil sur l effectif, pas un jugement sur votre securite"><span class="sb-icon" aria-hidden="true"></span>Suis-je concerné ?</div>
     <div class="sb-item" data-grp="nis2" role="button" tabindex="0" onclick="go('nis2',this,'NIS 2','Mesures art. 21 §2');nis2Init()" title="Les dix mesures « tous risques » — un socle, pas une liste a epuiser"><span class="sb-icon" aria-hidden="true"></span>Mesures art. 21 §2</div>
@@ -5484,12 +5502,12 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
      promettrait 100 % partout mentirait sur quatre points connus d'avance.
      ═══════════════════════════════════════════════════════════════════ -->
 <div class="page" id="p-conf-taux">
-  <span class="eyebrow" data-i18n="pg.conf-taux.eb">Taux de conformité · les neuf normes</span>
-  <h1 class="page-h" data-i18n-bloc="pg.conf-taux.h1">Neuf taux, et <em>ce qu'ils ne disent pas</em></h1>
+  <span class="eyebrow" data-i18n="pg.conf-taux.eb">Taux de conformité · les onze normes</span>
+  <h1 class="page-h" data-i18n-bloc="pg.conf-taux.h1">Onze taux, et <em>ce qu'ils ne disent pas</em></h1>
   <p class="page-p" data-i18n-bloc="pg.conf-taux.p">Chaque taux est composé des parts de sa norme, pondérées, puis
   <strong>plafonné par ses verrous</strong>&nbsp;: un défaut qui arrête un auditeur
-  n'efface pas le travail fait, il interdit de s'en prévaloir au-delà. Neuf
-  pourcentages alignés se lisent comme neuf fois la même chose&nbsp;; ils ne le sont
+  n'efface pas le travail fait, il interdit de s'en prévaloir au-delà. Onze
+  pourcentages alignés se lisent comme onze fois la même chose&nbsp;; ils ne le sont
   pas, et la <em>nature</em> de chaque norme dit ce que 100&nbsp;% veut dire —
   <strong>et ce qu'il ne veut pas dire</strong>.</p>
   <div id="conf-commande" class="conf-commande"></div>
@@ -5822,6 +5840,110 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
      qui oblige une entreprise, c'est la loi de transposition de chaque
      État membre où elle opère. Les montants de l'article 34 sont des
      PLANCHERS imposés aux États, pas des plafonds opposables. ══════ -->
+<!-- ═══════════════════════════════════════════════════════════════════
+     DORA — LE RÈGLEMENT (UE) 2022/2554, EN SIX ÉCRANS
+     ═══════════════════════════════════════════════════════════════════
+     LA RÉSERVE QUI TIENT TOUS CES ÉCRANS : DORA est un RÈGLEMENT, donc
+     directement applicable — pas de loi de transposition à attendre,
+     contrairement à NIS 2. Ce qui n'en fait pas un référentiel
+     certifiable pour autant : aucun organisme ne délivre d'attestation
+     contre lui, et c'est l'autorité compétente — ACPR ou AMF en France —
+     qui apprécie, sur pièces.
+     ET L'ORDRE DES SIX ÉCRANS EST CELUI DU RAISONNEMENT, pas celui du
+     règlement : qualifier, puis mesurer le cadre, puis les contrats,
+     puis l'incident, puis ce qu'on peut réutiliser, puis le cas du
+     prestataire. Chacun suppose le précédent. ══════════════════════ -->
+<div class="page" id="p-dora-qualifier">
+  <span class="eyebrow" data-i18n="pg.dora-qualifier.eb">DORA · Articles 2 et 16</span>
+  <h1 class="page-h" data-i18n-bloc="pg.dora-qualifier.h1">Le régime, <em>pas le statut</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.dora-qualifier.p">NIS&nbsp;2 se joue sur «&nbsp;essentielle ou importante&nbsp;». DORA ne fonctionne pas ainsi&nbsp;: les <b>vingt types d'entités financières</b> de l'article&nbsp;2,&nbsp;§1, sont TOUS dans le champ, sans gradation. Ce qui varie, c'est l'épaisseur des obligations — et elle se décide à l'article&nbsp;16, qui fait échapper cinq catégories aux articles&nbsp;5 à&nbsp;15.</p>
+  <div class="cnf-cmd">
+    <b>La taille ne décide pas du régime, et les confondre coûte cher.</b> L'article&nbsp;3 définit microentreprise, petite et moyenne entreprise&nbsp;; ces définitions servent ailleurs — notamment pour écarter la règle des incidents récurrents. Le cadre simplifié repose sur des <b>catégories nommées</b> à l'article&nbsp;16,&nbsp;§1, pas sur des seuils d'effectif. Une microentreprise qui n'est dans aucune des cinq relève du cadre complet.
+  </div>
+  <div class="reg-toolbar" id="dora-q"></div>
+  <div id="dora-verdict"><div class="veille-loading">Renseignez le type d'entité ci-dessus.</div></div>
+  <div id="dora-articulation"></div>
+  <div class="trait-note">
+    Cette qualification suit ce que vous déclarez&nbsp;; elle est prononcée par l'autorité compétente — ACPR ou AMF en France, autorités européennes de surveillance au niveau de l'Union. Elle ne ferme pas la discussion, elle la prépare.
+  </div>
+</div>
+
+<div class="page" id="p-dora-risque">
+  <span class="eyebrow" data-i18n="pg.dora-risque.eb">DORA · Règlement délégué (UE) 2024/1774</span>
+  <h1 class="page-h" data-i18n-bloc="pg.dora-risque.h1">Quarante articles, <em>et deux régimes qui ne se recouvrent pas</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.dora-risque.p">Le règlement délégué compte quarante-deux articles. Le <b>titre&nbsp;II</b> en porte vingt-six, pour le cadre complet&nbsp;; le <b>titre&nbsp;III</b> en porte quatorze, pour le cadre simplifié. Les deux jeux sont <b>disjoints</b>. L'article&nbsp;premier est un principe de proportionnalité et l'article&nbsp;42 l'entrée en vigueur&nbsp;: ni l'un ni l'autre ne s'évalue.</p>
+  <div class="cnf-cmd bloc">
+    <b>Évaluer une entité du cadre simplifié contre le titre&nbsp;II serait la faute la plus coûteuse possible&nbsp;:</b> le client paierait un programme dont la moitié ne le vise pas, et le découvrirait au premier contrôle. Cet écran refuse donc de travailler sans régime déclaré — il ne choisit pas «&nbsp;par défaut&nbsp;».
+  </div>
+  <div class="reg-toolbar">
+    <button class="mat-export-btn" onclick="doraPeindreRisque()">↻ Recalculer</button>
+    <button class="mat-export-btn" onclick="go('dora-qualifier')">← Qualifier d'abord</button>
+  </div>
+  <div id="dora-risque-body"><div class="veille-loading">Qualifiez l'entité pour connaître le régime, puis revenez.</div></div>
+  <div class="trait-note">
+    Le taux est donné <b>par chapitre</b>, et le plus bas est nommé. Un global de 80&nbsp;% obtenu avec un chapitre à 20&nbsp;% décrit mal la situation&nbsp;: le chapitre faible est précisément celui qui se verra en inspection.
+  </div>
+</div>
+
+<div class="page" id="p-dora-tiers">
+  <span class="eyebrow" data-i18n="pg.dora-tiers.eb">DORA · Article 30</span>
+  <h1 class="page-h" data-i18n-bloc="pg.dora-tiers.h1">Neuf clauses, <em>ou quinze</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.dora-tiers.p">L'article&nbsp;30,&nbsp;§2, impose <b>neuf clauses</b> à tout accord portant sur des services TIC. Le §3 en ajoute <b>six autres</b> — «&nbsp;en plus de ceux qui figurent au paragraphe&nbsp;2&nbsp;» — dès que le service soutient une fonction critique ou importante. C'est un cumul, pas un remplacement.</p>
+  <div class="cnf-cmd">
+    <b>Une clause absente ne se rattrape pas après la signature.</b> Il faut rouvrir le contrat, et le prestataire n'y a aucun intérêt. Les deux que l'autorité regarde en premier sont le <b>droit d'audit illimité</b> (§3,&nbsp;e) et la <b>stratégie de sortie</b> (§3,&nbsp;f)&nbsp;: sans la seconde, la dépendance est irréversible et le contrat n'a plus de terme réel.
+  </div>
+  <div class="reg-toolbar" id="dora-contrat-form"></div>
+  <div id="dora-tiers-body"><div class="veille-loading">Déclarez la criticité de la fonction soutenue, puis l'état de chaque clause.</div></div>
+  <div class="trait-note">
+    La <b>dérogation microentreprise</b> du dernier alinéa du §3 ne vise QUE le point&nbsp;e), et seulement pour une microentreprise. L'accepter ailleurs ferait passer une absence pour un aménagement prévu par le texte.
+  </div>
+</div>
+
+<div class="page" id="p-dora-incident">
+  <span class="eyebrow" data-i18n="pg.dora-incident.eb">DORA · Articles 18 et 19</span>
+  <h1 class="page-h" data-i18n-bloc="pg.dora-incident.h1">Majeur&nbsp;? <em>Puis l'horloge</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.dora-incident.p">Le règlement délégué (UE) 2024/1772 pose une <b>conjonction</b>, pas une liste&nbsp;: l'incident est majeur si des services critiques sont touchés ET si un seuil d'impact malveillant est atteint seul, ou deux autres seuils ensemble. La criticité est une <b>porte</b>, pas un septième seuil — et tant qu'elle n'est pas déclarée, rien ne se calcule.</p>
+  <div class="cnf-cmd bloc">
+    <b>L'horloge a deux bornes, et le calcul naïf se trompe sur la seconde.</b> Quatre heures depuis la classification, vingt-quatre heures depuis la connaissance&nbsp;: la première échue commande. Mais si la classification intervient APRÈS ces vingt-quatre heures, l'article&nbsp;5,&nbsp;§2, du règlement délégué (UE) 2025/301 traite le cas à part — un simple minimum rendrait une échéance déjà passée.
+  </div>
+  <div class="reg-toolbar" id="dora-incident-form"></div>
+  <div id="dora-incident-body"><div class="veille-loading">Renseignez les seuils atteints et les horodatages.</div></div>
+  <div class="trait-note">
+    Le report au midi du jour ouvrable suivant (§4) <b>ne s'applique pas</b> à la notification initiale ni au rapport intermédiaire des établissements de crédit, des contreparties centrales, des opérateurs de plates-formes de négociation, ni des entités essentielles ou importantes au titre de NIS&nbsp;2. Pour eux, l'horloge tourne le week-end.
+  </div>
+</div>
+
+<div class="page" id="p-dora-iso">
+  <span class="eyebrow" data-i18n="pg.dora-iso.eb">DORA · Pont ISO/IEC 27001</span>
+  <h1 class="page-h" data-i18n-bloc="pg.dora-iso.h1">Ce qu'un SMSI <em>documente déjà</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.dora-iso.p">La norme n'écarte rien — aucune certification ne tient lieu de conformité à un règlement. Mais un système de management certifié produit déjà une partie des pièces que le règlement délégué (UE) 2024/1774 réclame. <b>Savoir lesquelles, et surtout lesquelles NON</b>, c'est la différence entre un programme de douze mois et un programme de vingt-quatre.</p>
+  <div class="cnf-cmd">
+    <b>Le piège de cette greffe est le périmètre.</b> Celui du SMSI est choisi par l'organisme&nbsp;; celui du règlement ne l'est pas — il couvre tout ce qui soutient les fonctions critiques ou importantes. Reprendre le premier pour le second est l'erreur la plus courante, et elle ne se voit qu'en inspection.
+  </div>
+  <div class="reg-toolbar">
+    <button class="mat-export-btn" onclick="doraPeindreIso()">↻ Recalculer</button>
+    <button class="mat-export-btn" onclick="go('iso27001-risques')">Ouvrir ISO 27001 →</button>
+  </div>
+  <div id="dora-iso-body"><div class="veille-loading">Qualifiez l'entité pour connaître le régime, puis revenez.</div></div>
+  <div class="trait-note">
+    Le pourcentage affiché mesure une <b>reprise de preuves</b>, pas une conformité. Il dit quelle part des articles trouve un répondant dans un SMSI certifié&nbsp;; il ne dit pas que ces articles sont tenus, et encore moins que l'autorité l'admettra.
+  </div>
+</div>
+
+<div class="page" id="p-dora-supervision">
+  <span class="eyebrow" data-i18n="pg.dora-supervision.eb">DORA · Articles 31 à 44</span>
+  <h1 class="page-h" data-i18n-bloc="pg.dora-supervision.h1">Prestataire critique&nbsp;: <em>deux étapes, une seule se calcule</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.dora-supervision.p">Les autorités européennes de surveillance désignent, par l'intermédiaire du comité mixte et sur recommandation du forum de supervision. L'acte délégué du 22&nbsp;février&nbsp;2024 découpe l'appréciation en deux&nbsp;: une <b>étape&nbsp;1 de seuils</b>, qui se calcule, et une <b>étape&nbsp;2 d'appréciation</b>, qui ne se calcule pas — et que cet écran refuse de simuler.</p>
+  <div class="cnf-cmd bloc">
+    <b>Quatre situations ferment la désignation d'avance</b> (article&nbsp;31,&nbsp;§8)&nbsp;: être soi-même une entité financière fournissant des services TIC, relever d'un cadre de supervision au titre de l'article&nbsp;127,&nbsp;§2, du traité, être un prestataire <b>intragroupe</b>, ou ne servir que des entités actives dans un seul État membre. Elles ne s'apprécient pas&nbsp;: elles se constatent.
+  </div>
+  <div class="reg-toolbar" id="dora-sup-form"></div>
+  <div id="dora-sup-body"><div class="veille-loading">Déclarez les quatre exclusions, puis les parts mesurées.</div></div>
+  <div class="trait-note">
+    Les AES évaluent ces seuils à partir des <b>registres d'informations</b> de l'article&nbsp;28,&nbsp;§3, que les entités financières tiennent. Le registre qu'une banque remplit sert à désigner son fournisseur&nbsp;: ce n'est pas une formalité déclarative.
+  </div>
+</div>
+
 <div class="page" id="p-nis2-qualifier">
   <span class="eyebrow" data-i18n="pg.nis2-qualifier.eb">NIS 2 · Articles 2 et 3</span>
   <h1 class="page-h" data-i18n-bloc="pg.nis2-qualifier.h1">Essentielle, importante, <em>ou hors champ</em></h1>

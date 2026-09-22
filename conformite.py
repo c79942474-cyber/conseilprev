@@ -131,10 +131,11 @@ NORMES = [
      "panneau": "iso27001-risques",
      "mesure": "l'appréciation du risque, les articles et la déclaration "
                "d'applicabilité"},
-    {"cle": "dora", "nom": "DORA", "nature": "sans_instrument",
+    {"cle": "dora", "nom": "DORA", "nature": "obligation",
      "texte": "Règlement (UE) 2022/2554",
-     "panneau": None,
-     "mesure": None},
+     "panneau": "dora-qualifier",
+     "mesure": "les articles du règlement délégué (UE) 2024/1774 du régime "
+               "qui est le vôtre, et les quinze clauses de l'article 30"},
     {"cle": "nis2", "nom": "NIS 2", "nature": "obligation",
      "texte": "Directive (UE) 2022/2555",
      "panneau": "nis2-qualifier",
@@ -375,6 +376,22 @@ COMPOSITIONS = {
         {"cle": "sensibilisation", "nom": "Sensibilisation", "poids": 1,
          "pourquoi": "article 39 : ce qui décide si le reste est appliqué"},
     ],
+    # DEUX PARTS, ET PAS TROIS. La chaîne de notification des incidents se
+    # mesure sur un incident réel, pas sur un questionnaire : lui donner une
+    # part reviendrait à noter une intention. Elle est donc dite en réserve,
+    # là où elle ne gonfle aucun taux.
+    "dora": [
+        {"cle": "cadre", "nom": "Cadre de gestion du risque lié aux TIC",
+         "poids": 3,
+         "pourquoi": "l'objet même du règlement : les articles du règlement "
+                     "délégué (UE) 2024/1774 que votre régime rend "
+                     "opposables, et ce que l'autorité ouvre en premier"},
+        {"cle": "tiers", "nom": "Clauses contractuelles de l'article 30",
+         "poids": 2,
+         "pourquoi": "une clause absente ne se rattrape pas après la "
+                     "signature — il faut rouvrir le contrat, et le "
+                     "prestataire n'y a aucun intérêt"},
+    ],
     # LES CINQ GROUPES DU CATALOGUE, ET LE PREMIER PÈSE PLUS QUE LES AUTRES.
     # Ce n'est pas une préférence : RA, PL, CA et PM produisent le socle, le
     # plan et l'autorisation. Les quatorze familles restantes exécutent ce
@@ -515,6 +532,26 @@ RESERVES = {
                       "pas — et d'autres, qui ne sont pas mesurées, vous "
                       "incombent.",
          "ou": "cra · rôle"},
+    ],
+    "dora": [
+        {"cle": "regime_absent",
+         "dit": "Le régime n'est pas déterminé : on ne sait pas si le cadre "
+                "complet ou le cadre simplifié de l'article 16 s'applique.",
+         "porte_sur": "Les deux cadres ne portent pas les mêmes articles — "
+                      "vingt-six d'un côté, quatorze de l'autre — et ils ne "
+                      "se recouvrent pas. Tant que la qualification n'est "
+                      "pas faite, la part « cadre » ne peut pas être "
+                      "mesurée, et compte donc pour zéro.",
+         "ou": "dora · qualification"},
+        {"cle": "hors_taux",
+         "dit": "Ce taux porte sur le cadre de gestion du risque et sur les "
+                "contrats. Il ne porte sur rien d'autre.",
+         "porte_sur": "La chaîne de notification et ses délais en heures, "
+                      "les tests de pénétration fondés sur la menace, et le "
+                      "registre d'informations de l'article 28, "
+                      "paragraphe 3, ne sont pas dans ce nombre. Cent pour "
+                      "cent ici ne veut pas dire DORA tenu.",
+         "ou": "dora · portée du taux"},
     ],
     "nist_ai_rmf": [
         {"cle": "socle_devance",
@@ -694,6 +731,29 @@ def _lire_rgpd(ev, dec=None):
             for c in COMPOSITIONS["rgpd"]}, []
 
 
+def _lire_dora(ev, dec=None):
+    """Le cadre et les contrats, tels que les quatre moteurs les rendent.
+
+    LE TAUX DES CONTRATS EST CELUI DU PIRE, ET IL VIENT DÉJÀ COMME TEL. Le
+    recomposer en moyenne ici ferait disparaître le contrat vide qui est
+    précisément celui que l'autorité ouvrira.
+    """
+    if not ev or not ev.get("ok"):
+        return None, []
+    # PERMANENTE : ce taux ne couvre ni la chaîne de notification, ni les
+    # tests, ni le registre d'informations. Le dire toujours, parce que le
+    # nombre, lui, s'affiche toujours.
+    signaux = ["hors_taux"]
+    if not ev.get("mesurable"):
+        signaux.append("regime_absent")
+    r = ev.get("risque") or {}
+    cadre = r.get("taux") if r.get("ok") else None
+    contrats = ev.get("taux_contrats")
+    return ({"cadre": int(round(cadre)) if cadre is not None else None,
+             "tiers": int(round(contrats)) if contrats is not None else None},
+            signaux)
+
+
 def _lire_nist_800_53(ev, dec=None):
     """Les cinq groupes du catalogue, déjà étalés par le moteur.
 
@@ -750,6 +810,7 @@ LECTEURS = {
     "nis2": _lire_nis2, "cra": _lire_cra, "nist_ai_rmf": _lire_nist,
     "owasp_llm": _lire_owasp, "ia_act": _lire_ia_act, "rgpd": _lire_rgpd,
     "nist_800_53": _lire_nist_800_53, "nist_800_82": _lire_nist_800_82,
+    "dora": _lire_dora,
 }
 
 
@@ -884,11 +945,14 @@ def consolide(taux_par_norme):
                "c'est lui qui commande. La moyenne (%d %%) ne remplace pas "
                "cette lecture : elle dilue précisément ce qu'il faut traiter "
                "en premier." % (pire["taux"], pire["nom"], len(mesures), moyenne),
-        "avertissement": "Neuf normes de natures différentes ne s'additionnent "
+        # LE COMPTE SE DÉRIVE DE LA TABLE, IL NE SE RÉÉCRIT PAS. Cette
+        # phrase disait « Neuf normes » alors que la grille en portait onze —
+        # exactement le défaut que le titre de l'accueil avait déjà eu.
+        "avertissement": "%d normes de natures différentes ne s'additionnent "
                          "pas. Une moyenne entre une obligation légale, une "
                          "norme certifiable et un cadre volontaire produit un "
                          "nombre qu'aucun auditeur, aucune autorité et aucun "
-                         "assureur ne reconnaîtra.",
+                         "assureur ne reconnaîtra." % NORMES_ANNONCEES,
     }
 
 
@@ -1097,6 +1161,38 @@ def _ecarts_nist_800_82(ev, dec=None):
     return out
 
 
+def _ecarts_dora(ev, dec=None):
+    """Les articles du régime qui ne sont pas tenus, et les clauses absentes.
+
+    CHAQUE CONTRAT PORTE SON RANG, parce que deux contrats n'ont pas le même
+    poids : une clause manquante sur un contrat qui soutient une fonction
+    critique se règle avant la même clause sur un contrat ordinaire.
+    """
+    if not ev or not ev.get("ok"):
+        return []
+    out = []
+    er = ev.get("ecarts_risque") or {}
+    if er.get("ok"):
+        for x in er.get("ecarts") or []:
+            out.append(_ec("cadre", "art_%d" % x["article"], x["titre"],
+                           "dora · cadre de gestion du risque",
+                           "RD (UE) 2024/1774, art. %d" % x["article"]))
+    for rang, examen in enumerate(ev.get("contrats") or [], start=1):
+        if not examen.get("ok"):
+            continue
+        critique = examen.get("fonction_critique")
+        for cl in examen.get("manquantes") or []:
+            out.append(_ec(
+                "tiers",
+                "contrat%d_%s_%s" % (rang, cl["serie"], cl["lettre"]),
+                "Contrat %d%s — %s" % (rang,
+                                       " (fonction critique)" if critique
+                                       else "", cl["quoi"]),
+                "dora · contrats de prestation TIC",
+                cl["article"]))
+    return out
+
+
 def _part_de_l_axe(axe):
     for part, axes in PARTS_800_82.items():
         if axe in axes:
@@ -1105,6 +1201,7 @@ def _part_de_l_axe(axe):
 
 
 ECARTEURS = {
+    "dora": _ecarts_dora,
     "iso42001": _ecarts_iso42001, "iso27001": _ecarts_iso27001,
     "nis2": _ecarts_nis2, "cra": _ecarts_cra, "nist_ai_rmf": _ecarts_nist,
     "owasp_llm": _ecarts_owasp, "ia_act": _ecarts_ia_act, "rgpd": _ecarts_rgpd,
@@ -1396,25 +1493,62 @@ def plan(etats, ecarts_par_norme, plafond_actions=24):
 # ══════════════════════════════════════════════════════════════════════════
 #
 # LA MOITIÉ QU'ON NE MONTRE JAMAIS, et celle qui fait la différence en comité.
-# Un plan qui promet 100 % sur les neuf normes ment sur au moins quatre
-# points, et ces quatre points sont connus d'avance. Les taire n'aide
-# personne : ils se découvrent au pire moment, c'est-à-dire devant
-# l'auditeur.
+# Un plan qui promet 100 % sur les onze normes ment sur plusieurs points, et
+# ces points sont connus d'avance. Les taire n'aide personne : ils se
+# découvrent au pire moment, c'est-à-dire devant l'auditeur.
 
 def limites(etats):
     import owasp_llm as _ow
     out = []
-    dora = [e for e in etats if e["cle"] == "dora"]
+    # DORA A DÉSORMAIS UN TAUX — CE QUI DÉPLACE LA LIMITE, SANS LA SUPPRIMER.
+    # Tant qu'il n'était pas mesuré, la limite était l'absence de mesure.
+    # Maintenant qu'il l'est, la limite est la PORTÉE de ce qui est mesuré :
+    # un nombre affiché est lu comme s'il couvrait tout le règlement, et il
+    # n'en couvre que deux chapitres.
+    dora = [e for e in etats if e["cle"] == "dora" and e.get("renseigne")]
     if dora:
         out.append({
-            "cle": "dora_sans_instrument",
-            "quoi": "DORA n'a pas de taux ici, et n'en aura pas par ce plan.",
-            "pourquoi": "Aucun module de ce site n'évalue DORA. Le taux est "
-                        "absent — ce qui ne veut pas dire zéro, et encore "
-                        "moins « non conforme ». Pour une entité financière, "
-                        "DORA prime d'ailleurs sur NIS 2 en tant que lex "
-                        "specialis : un bon taux NIS 2 ne se reporte pas.",
-            "quoi_faire": "Traiter DORA hors de cet outil, avec le texte.",
+            "cle": "dora_hors_taux",
+            "quoi": "Le taux DORA porte sur le cadre de gestion du risque et "
+                    "sur les contrats. Trois obligations lourdes en sont "
+                    "absentes.",
+            "pourquoi": "La chaîne de notification et ses délais en heures "
+                        "(article 19 ; règlement délégué (UE) 2025/301, "
+                        "article 5), les tests de pénétration fondés sur la "
+                        "menace (articles 26 et 27) et le registre "
+                        "d'informations (article 28, paragraphe 3) ne "
+                        "s'évaluent pas par un questionnaire. Cent pour cent "
+                        "ici ne veut pas dire DORA tenu.",
+            "quoi_faire": "Traiter ces trois-là comme des chantiers propres, "
+                          "hors de ce taux — la classification d'un incident "
+                          "se répète à blanc, elle ne se coche pas.",
+        })
+        out.append({
+            "cle": "dora_tlpt_autorites",
+            "quoi": "Ce n'est pas vous qui décidez si vous devez conduire un "
+                    "test de pénétration fondé sur la menace.",
+            "pourquoi": "L'article 2 du règlement délégué (UE) 2025/1190 "
+                        "confie cette détermination aux autorités désignées, "
+                        "sur six facteurs d'incidence et neuf facteurs de "
+                        "risque. Aucun questionnaire ne s'y substitue, et "
+                        "s'en dispenser parce qu'on ne s'est pas désigné "
+                        "soi-même est un contresens.",
+            "quoi_faire": "Demander à l'autorité compétente si l'entité "
+                          "figure parmi celles qu'elle a retenues.",
+        })
+        out.append({
+            "cle": "dora_nis2_ne_se_presume_pas",
+            "quoi": "La mise à l'écart de NIS 2 ne se présume pas, et elle "
+                    "n'est jamais totale.",
+            "pourquoi": "L'article 1er, paragraphe 2, ne vise que les "
+                        "entités FINANCIÈRES identifiées essentielles ou "
+                        "importantes — pas les prestataires tiers de "
+                        "services TIC. Et même lorsqu'il joue, "
+                        "l'identification et l'enregistrement de "
+                        "l'article 3, paragraphes 3 et 4, de la directive "
+                        "restent dus.",
+            "quoi_faire": "Ouvrir le panneau « DORA · qualification » : "
+                          "l'articulation s'y calcule, article par article.",
         })
     nist = [e for e in etats if e["cle"] == "nist_ai_rmf"]
     if nist:
@@ -1464,7 +1598,7 @@ def limites(etats):
 # ══════════════════════════════════════════════════════════════════════════
 
 def etat_des_lieux(declarations=None, plafond_actions=24):
-    """Les neuf taux, ce qui commande, le plan, et ce que le plan ne peut pas.
+    """Les onze taux, ce qui commande, le plan, et ce que le plan ne peut pas.
 
     `declarations` porte, par clé de norme, la déclaration que le module de
     cette norme attend — la même, exactement. On ne redéfinit aucun format :
@@ -1481,13 +1615,14 @@ def etat_des_lieux(declarations=None, plafond_actions=24):
     import cra as _cra
     import nist_ai_rmf as _nist
     import owasp_llm as _ow
+    import dora as _dora
 
     evaluations = {
         "ia_act": evaluer_audit_ia_act(d.get("ia_act")),
         "cra": _cra.evaluer_produit(d.get("cra")) if d.get("cra") else None,
         "iso42001": _i42.evaluer(d.get("iso42001")) if d.get("iso42001") else None,
         "iso27001": _i27.evaluer(d.get("iso27001")) if d.get("iso27001") else None,
-        "dora": None,
+        "dora": _dora.evaluer(d.get("dora")) if d.get("dora") else None,
         "nis2": _n2.evaluer(d.get("nis2")) if d.get("nis2") else None,
         "rgpd": (dict(d["rgpd"], ok=True) if isinstance(d.get("rgpd"), dict)
                  else None),
@@ -1552,12 +1687,19 @@ def _verifier():
     if len(NORMES_PAR_CLE) != len(NORMES):
         fautes.append("deux normes partagent une clé")
 
+    # PLUS AUCUNE NORME DE LA GRILLE N'EST SANS INSTRUMENT. DORA fut la
+    # dernière, et il ne l'est plus depuis que les quatre moteurs
+    # `dora*.py` le mesurent. La règle ne disparaît pas pour autant : elle
+    # change de sens et devient plus exigeante — une norme affichée sur
+    # l'accueil sans moyen de la mesurer est désormais un défaut, pas une
+    # exception à documenter.
     sans = [n["cle"] for n in NORMES if n["nature"] == "sans_instrument"]
-    if sans != ["dora"]:
+    if sans:
         fautes.append(
-            "le cas « sans instrument » doit rester l'exception nommée : "
-            "attendu ['dora'], trouvé %s. Une seconde norme sans taux "
-            "banaliserait l'absence de mesure au lieu de la signaler." % sans)
+            "%s figure(nt) dans la grille sans instrument de mesure. Depuis "
+            "que DORA a ses moteurs, aucune norme annoncée n'est sans "
+            "module : en afficher une reviendrait à promettre une maîtrise "
+            "qu'aucun écran ne soutient." % sans)
 
     for n in NORMES:
         if n["nature"] not in NATURES:

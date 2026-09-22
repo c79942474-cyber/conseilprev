@@ -208,7 +208,7 @@ def test_une_cle_sans_traduction_GARDE_son_francais():
 #  introuvables dans le document officiel — ce qu'un auditeur vient
 #  précisément chercher. La règle les fige des deux côtés.
 NOMS_PROPRES = ("EU AI ACT", "NIS 2", "ISO 42001", "ISO 27001",
-                "NIST AI RMF", "OWASP LLM")
+                "NIST AI RMF", "OWASP LLM", "DORA")
 
 
 def test_les_noms_de_reglements_ne_sont_PAS_traduits():

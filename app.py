@@ -1887,6 +1887,148 @@ def api_nis2_evaluer():
 # publiquement serait une contrefaçon — et le moteur refuse de démarrer si
 # sa table porte un champ autre que ceux-là.
 
+# ═══════════════════════════════════════════════════════════════════════════
+#  DORA — LE RÈGLEMENT (UE) 2022/2554, ET SES QUATRE MOTEURS
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# QUATRE MODULES ET UNE SEULE PORTE. `dora.evaluer` compose la qualification,
+# l'analyse de risque, les contrats et les ponts ; l'écran n'a pas à savoir
+# qu'ils sont quatre, et surtout il n'a pas à décider dans quel ordre les
+# appeler — c'est le régime de l'article 16 qui commande, et il sort du
+# premier.
+
+import dora  # noqa: E402
+import dora_risque  # noqa: E402
+import dora_tiers  # noqa: E402
+import dora_incident  # noqa: E402
+import dora_ponts  # noqa: E402
+import dora_supervision  # noqa: E402
+
+
+@app.route('/api/dora/referentiel', methods=['GET'])
+@rate_limit(limit=120, window=60)
+def api_dora_referentiel():
+    """Tout ce que l'écran affiche, pris aux moteurs et jamais recopié.
+
+    LE RÉGIME EST UN PARAMÈTRE, PAS UN DÉFAUT. Sans lui, la réponse porte
+    les DEUX jeux d'articles et laisse l'écran dire qu'il faut qualifier
+    d'abord ; en choisir un ici reviendrait à décider à la place du client
+    lequel des deux cadres lui est opposable.
+    """
+    regime = (request.args.get("regime") or "").strip() or None
+    return jsonify({
+        "ok": True,
+        "qualification": dora.referentiel(),
+        "risque": dora_risque.referentiel(regime),
+        "tiers": dora_tiers.referentiel(),
+        "incident": dora_incident.referentiel(),
+        "ponts": dora_ponts.referentiel(regime),
+        "supervision": dora_supervision.referentiel(),
+    })
+
+
+@app.route('/api/dora/qualifier', methods=['POST'])
+@rate_limit(limit=120, window=60)
+def api_dora_qualifier():
+    """Dans le champ ou non, sous quel régime, et ce que NIS 2 devient.
+
+    LES DEUX RÉPONSES VOYAGENT ENSEMBLE parce qu'elles se commandent :
+    l'articulation de l'article 4 de la directive dépend du fait que
+    l'entité soit une entité FINANCIÈRE, ce que seule la qualification
+    dit. Les séparer en deux routes garantirait qu'un écran affiche un
+    jour l'une sans l'autre.
+    """
+    d = request.get_json(silent=True) or {}
+    try:
+        q = dora.qualifier(d)
+        a = dora_ponts.articulation(q, d.get("identifiee_nis2"))
+    except Exception:
+        app.logger.exception("qualification DORA")
+        return jsonify({"ok": False, "erreur": "qualification_impossible"}), 500
+    return (jsonify({"ok": q.get("ok", False), "qualification": q,
+                     "articulation": a}),
+            200 if q.get("ok") else 400)
+
+
+@app.route('/api/dora/evaluer', methods=['POST'])
+@rate_limit(limit=60, window=60)
+def api_dora_evaluer():
+    """L'évaluation d'ensemble : cadre, contrats, ponts, écarts."""
+    d = request.get_json(silent=True) or {}
+    try:
+        r = dora.evaluer(d)
+    except Exception:
+        app.logger.exception("evaluation DORA")
+        return jsonify({"ok": False, "erreur": "evaluation_impossible"}), 500
+    return jsonify(r), (200 if r.get("ok") else 400)
+
+
+@app.route('/api/dora/incident', methods=['POST'])
+@rate_limit(limit=120, window=60)
+def api_dora_incident():
+    """« Cet incident est-il majeur ? », puis les heures qui restent.
+
+    LE CALCUL DES DÉLAIS NE SE FAIT QUE SI L'INCIDENT EST MAJEUR. Rendre
+    des échéances sur un incident qui n'est pas à notifier ferait courir
+    un client après une obligation qu'il n'a pas — et, la fois suivante,
+    lui ferait douter de celles qu'il a.
+    """
+    d = request.get_json(silent=True) or {}
+    try:
+        r = dora_incident.evaluer(d)
+        delais = None
+        if r.get("ok") and r.get("majeur"):
+            delais = dora_incident.delais(
+                d.get("connaissance"), d.get("classification"),
+                d.get("entite"), d.get("nis2_essentielle_ou_importante"),
+                d.get("feries"), d.get("initial_soumis"),
+                d.get("intermediaire_soumis"))
+    except Exception:
+        app.logger.exception("incident DORA")
+        return jsonify({"ok": False, "erreur": "evaluation_impossible"}), 500
+    return (jsonify(dict(r, delais=delais)),
+            200 if r.get("ok") else 400)
+
+
+@app.route('/api/dora/supervision', methods=['POST'])
+@rate_limit(limit=120, window=60)
+def api_dora_supervision():
+    """Un prestataire peut-il être désigné critique, et ce que cela coûte.
+
+    LES DEUX RÉPONSES SONT DANS LA MÊME CHARGE PARCE QU'ELLES SE LISENT
+    ENSEMBLE. Franchir l'étape 1 sans savoir que la supervision se paie
+    au moins cinquante mille euros par an, c'est ne connaître que la
+    moitié de la question — et c'est la moitié qui ne décide de rien.
+    """
+    d = request.get_json(silent=True) or {}
+    try:
+        r = dora_supervision.eligibilite(d)
+        cout = dora_supervision.redevance(
+            couts_totaux_eur=d.get("couts_totaux_eur"),
+            ca_prestataire_eur=d.get("ca_prestataire_eur"),
+            ca_tous_prestataires_eur=d.get("ca_tous_prestataires_eur"),
+            nombre_prestataires=d.get("nombre_prestataires"),
+            premiere_liste=bool(d.get("premiere_liste")),
+            jours_supervises=d.get("jours_supervises"))
+    except Exception:
+        app.logger.exception("supervision DORA")
+        return jsonify({"ok": False, "erreur": "evaluation_impossible"}), 500
+    return jsonify(dict(r, redevance=cout)), (200 if r.get("ok") else 400)
+
+
+@app.route('/api/dora/contrat', methods=['POST'])
+@rate_limit(limit=120, window=60)
+def api_dora_contrat():
+    """Les quinze clauses de l'article 30, et celles qui manquent."""
+    d = request.get_json(silent=True) or {}
+    try:
+        r = dora_tiers.examiner(d)
+    except Exception:
+        app.logger.exception("contrat DORA")
+        return jsonify({"ok": False, "erreur": "examen_impossible"}), 500
+    return jsonify(r), (200 if r.get("ok") else 400)
+
+
 import iso42001  # noqa: E402
 import nist_ai_rmf  # noqa: E402  — le cadre NIST, qui ne se certifie PAS :
 import nist_800_53

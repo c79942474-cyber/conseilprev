@@ -1,0 +1,201 @@
+{
+  "cibles": [
+    "tests/test_dora.py",
+    "tests/test_conformite.py",
+    "tests/test_normes_maitrisees.py",
+    "tests/test_barre_laterale_conformite.py",
+    "tests/test_guides_sentinel.py",
+    "tests/test_parcours_couverture.py"
+  ],
+  "mutations": [
+    {
+      "nom": "le prestataire tiers reçoit un régime",
+      "fichier": "dora.py",
+      "avant": "    if not e[3]:",
+      "apres": "    if e[3] is None:",
+      "regle": "test_le_prestataire_tiers_n_a_PAS_de_regime"
+    },
+    {
+      "nom": "la porte du cadre simplifié ne s'ouvre plus",
+      "fichier": "dora.py",
+      "avant": "    if portes:",
+      "apres": "    if portes and False:",
+      "regle": "test_une_des_cinq_categories_de_l_article_16_donne_le_cadre_SIMPLIFIE"
+    },
+    {
+      "nom": "l'analyse de risque accepte de travailler sans régime",
+      "fichier": "dora_risque.py",
+      "avant": "        return {\"ok\": False, \"motif\": \"regime_absent\",",
+      "apres": "        return {\"ok\": True, \"motif\": \"regime_absent\",",
+      "regle": "test_le_module_de_risque_REFUSE_d_evaluer_sans_regime"
+    },
+    {
+      "nom": "les articles hors régime sont ignorés en silence",
+      "fichier": "dora_risque.py",
+      "avant": "    if intrus:",
+      "apres": "    if intrus and False:",
+      "regle": "test_un_article_HORS_REGIME_est_ignore_ET_signale"
+    },
+    {
+      "nom": "le titre de l'article 23 redevient tronqué",
+      "fichier": "dora_risque.py",
+      "avant": "'des incidents liés aux TIC et la réponse à ces incidents'",
+      "apres": "'des incidents liés aux TIC et la réponse à ces'",
+      "regle": "test_le_titre_de_l_article_23_n_est_PAS_tronque"
+    },
+    {
+      "nom": "examiner compte le contrat critique sur neuf clauses",
+      "fichier": "dora_tiers.py",
+      "avant": "    attendues = clauses_attendues(critique, micro)",
+      "apres": "    attendues = clauses_attendues(False, micro)",
+      "regle": "test_neuf_clauses_communes_et_SIX_de_plus_pour_une_fonction_critique"
+    },
+    {
+      "nom": "le contrat se note sans criticité déclarée",
+      "fichier": "dora_tiers.py",
+      "avant": "    if critique is None:",
+      "apres": "    if critique is False and None:",
+      "regle": "test_le_contrat_REFUSE_d_etre_note_sans_criticite_declaree"
+    },
+    {
+      "nom": "la dérogation micro vaut pour toutes les clauses",
+      "fichier": "dora_tiers.py",
+      "avant": "        if e == \"deleguee\" and \"derogation\" not in cl:",
+      "apres": "        if e == \"deleguee\" and \"derogation\" not in cl and False:",
+      "regle": "test_la_derogation_micro_ne_vaut_QUE_pour_le_point_e_ET_QUE_pour_une_micro"
+    },
+    {
+      "nom": "un seul seuil suffit à rendre l'incident majeur",
+      "fichier": "dora_incident.py",
+      "avant": "    elif len(atteints) >= SEUILS_REQUIS:",
+      "apres": "    elif len(atteints) >= SEUILS_REQUIS - 1:",
+      "regle": "test_UN_seuil_ne_suffit_pas_mais_DEUX_oui_et_l_acces_malveillant_SEUL_suffit"
+    },
+    {
+      "nom": "la criticité non déclarée cesse d'être une porte",
+      "fichier": "dora_incident.py",
+      "avant": "    if critiques is None:",
+      "apres": "    if critiques is None and False:",
+      "regle": "test_la_criticite_est_une_PORTE_et_son_absence_rend_None"
+    },
+    {
+      "nom": "les seuils suffisent sans service critique touché",
+      "fichier": "dora_incident.py",
+      "avant": "    elif not critiques:",
+      "apres": "    elif not critiques and False:",
+      "regle": "test_sans_services_critiques_AUCUN_nombre_de_seuils_ne_rend_majeur"
+    },
+    {
+      "nom": "NIS 2 est écarté au prestataire tiers de services TIC",
+      "fichier": "dora_ponts.py",
+      "avant": "    if e.get(\"financiere\") is False:",
+      "apres": "    if e.get(\"financiere\") is None:",
+      "regle": "test_RIEN_n_est_ecarte_a_un_prestataire_tiers_de_services_TIC"
+    },
+    {
+      "nom": "l'identification NIS 2 est présumée acquise",
+      "fichier": "dora_ponts.py",
+      "avant": "    if identifiee_nis2 is None:",
+      "apres": "    if identifiee_nis2 is None and False:",
+      "regle": "test_l_articulation_REFUSE_de_presumer_l_identification_NIS2"
+    },
+    {
+      "nom": "l'article 20 est annoncé comme nommé par un texte",
+      "fichier": "dora_ponts.py",
+      "avant": "     \"certitude\": \"deduit\",\n     \"pourquoi\": \"L'article 20 porte",
+      "apres": "     \"certitude\": \"texte\",\n     \"pourquoi\": \"L'article 20 porte",
+      "regle": "test_chaque_mise_a_l_ecart_dit_AVEC_QUELLE_CERTITUDE"
+    },
+    {
+      "nom": "l'identification hors annexe ne lève plus d'alerte",
+      "fichier": "dora_ponts.py",
+      "avant": "        alerte = \"identifiee_hors_annexe\"",
+      "apres": "        alerte = None",
+      "regle": "test_une_identification_HORS_ANNEXE_est_signalee_au_lieu_de_passer"
+    },
+    {
+      "nom": "les articles propres à DORA sont comptés à l'envers",
+      "fichier": "dora_ponts.py",
+      "avant": "    propres = [l for l in lignes if l[\"couverture\"] == \"aucune\"]",
+      "apres": "    propres = [l for l in lignes if l[\"couverture\"] == \"directe\"]",
+      "regle": "test_les_deux_rapports_a_l_autorite_n_ont_AUCUN_repondant_dans_la_norme"
+    },
+    {
+      "nom": "le pont ISO accepte de travailler sans régime",
+      "fichier": "dora_ponts.py",
+      "avant": "    if regime not in dora_risque.REGIMES:\n        return {\"ok\": False, \"motif\": \"regime_absent\",",
+      "apres": "    if regime not in dora_risque.REGIMES:\n        return {\"ok\": True, \"motif\": \"regime_absent\",",
+      "regle": "test_le_pont_ISO_REFUSE_de_travailler_sans_regime"
+    },
+    {
+      "nom": "la barre des dix pour cent descend à neuf",
+      "fichier": "dora_supervision.py",
+      "avant": "SEUIL_PART = 10.0",
+      "apres": "SEUIL_PART = 9.0",
+      "regle": "test_l_etape_1_se_calcule_a_DIX_POUR_CENT_et_l_etape_2_JAMAIS"
+    },
+    {
+      "nom": "les exclusions de l'article 31 ne ferment plus rien",
+      "fichier": "dora_supervision.py",
+      "avant": "    if declarees:\n        issue = \"exclu\"",
+      "apres": "    if declarees and False:\n        issue = \"exclu\"",
+      "regle": "test_les_quatre_exclusions_de_l_article_31_FERMENT_la_designation"
+    },
+    {
+      "nom": "une exclusion muette passe pour écartée",
+      "fichier": "dora_supervision.py",
+      "avant": "    elif muettes:\n        issue = \"a_completer\"",
+      "apres": "    elif muettes:\n        issue = \"etape_1_franchie\"",
+      "regle": "test_une_exclusion_NON_DECLAREE_n_est_pas_une_exclusion_ECARTEE"
+    },
+    {
+      "nom": "le plancher de redevance cesse de relever le montant",
+      "fichier": "dora_supervision.py",
+      "avant": "    due = max(brut, REDEVANCE_PLANCHER_EUR)",
+      "apres": "    due = brut",
+      "regle": "test_la_redevance_a_un_PLANCHER_de_cinquante_mille_euros"
+    },
+    {
+      "nom": "la lecture incertaine est tranchée en silence",
+      "fichier": "dora_supervision.py",
+      "avant": "    elif etape[\"verdict\"] == \"lecture_incertaine\":",
+      "apres": "    elif etape[\"verdict\"] == \"jamais\":",
+      "regle": "test_la_lecture_INCERTAINE_de_la_substituabilite_est_DITE_et_non_tranchee"
+    },
+    {
+      "nom": "le taux DORA mène à un panneau qui n'existe pas",
+      "fichier": "conformite.py",
+      "avant": "     \"panneau\": \"dora-qualifier\",",
+      "apres": "     \"panneau\": \"dora-hub\",",
+      "regle": "test_le_panneau_du_taux_est_un_panneau_DORA_reellement_declare"
+    },
+    {
+      "nom": "go() cesse d'amorcer les panneaux DORA",
+      "fichier": "sentinel.page.js",
+      "avant": "  if (id.indexOf('dora') === 0 && typeof window.doraInit === 'function') _apresPeinture(window.doraInit);",
+      "apres": "  /* retiré */",
+      "regle": "test_go_amorce_les_panneaux_DORA_sans_passer_par_le_menu"
+    },
+    {
+      "nom": "le tiroir DORA quitte la barre latérale",
+      "fichier": "sentinel.html",
+      "avant": "data-grp=\"dora\" data-fam=\"conformite\"",
+      "apres": "data-grp=\"dora-resilience\" data-fam=\"conformite\"",
+      "regle": "test_les_tiroirs_sont_ceux_demandes_et_dans_cet_ordre"
+    },
+    {
+      "nom": "une branche de l'aiguillage ne rend plus la main",
+      "fichier": "sentinel.page.js",
+      "avant": "  if (actif === 'p-dora-risque') { doraPeindreRisque(); return; }",
+      "apres": "  if (actif === 'p-dora-risque') { doraPeindreRisque(); }",
+      "regle": "test_ouvrir_un_ecran_DORA_ne_peint_QUE_cet_ecran"
+    },
+    {
+      "nom": "le contrat redemande au serveur un refus déjà connu",
+      "fichier": "sentinel.page.js",
+      "avant": "  if (DORA_CONTRAT.fonction_critique === null) {",
+      "apres": "  if (DORA_CONTRAT.fonction_critique === undefined) {",
+      "regle": "test_le_contrat_ne_va_PAS_demander_au_serveur_un_refus_deja_connu"
+    }
+  ]
+}

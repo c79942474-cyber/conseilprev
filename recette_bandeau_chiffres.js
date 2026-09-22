@@ -17,7 +17,7 @@
  *
  * CE QUI RESTE UNE REVENDICATION, ET QUI EST DIT COMME TEL. « 25 normes
  * couvertes » ne se compte nulle part dans ce dépôt : les énumérations
- * donnent neuf normes au module de conformité, sept cadres d'explication,
+ * donnent onze normes au module de conformité, sept cadres d'explication,
  * dix-neuf références ISO tolérées. Le chiffre appartient au cabinet. Ce qui
  * se mesure, c'est sa cohérence avec le reste de la page.
  */
