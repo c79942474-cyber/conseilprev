@@ -4625,13 +4625,18 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
         <p class="diff-desc" data-i18n="df.exp.d">Énergie, Oil &amp; Gas, Industrie, Finance, Santé — une connaissance terrain des environnements les plus exigeants.</p>
         <!-- LE LIBELLÉ NE NOMME PAS LE DOMAINE, ET C'EST VOULU. `bascule.js`
              réécrit les liens vers i-aes.com quand le site institutionnel ne
-             répond pas, et relabellise ceux dont le TEXTE le nomme — par
-             `textContent`, qui effacerait le <span data-i18n> et la flèche.
-             C'est le premier lien i-aes.com du site à porter du balisage :
-             un libellé qui ne cite pas le domaine n'a pas à être relabellisé,
-             garde sa traduction, et la bascule fait quand même son travail
-             sur l'adresse et sur l'infobulle native. -->
-        <a class="diff-go" href="https://i-aes.com" target="_blank" rel="noopener" data-bascule-jamais><span data-i18n="dg.exp">Découvrir le site institutionnel</span> ↗</a>
+             répond pas, et ajoute « (indisponible) » à ceux dont le TEXTE le
+             nomme — par `textContent`, qui effacerait le <span data-i18n> et
+             la flèche. Un libellé qui ne cite pas le domaine garde donc sa
+             traduction, et la bascule fait quand même son travail sur
+             l'adresse et sur l'infobulle native.
+             CET APPEL SORTAIT DU RELAIS, IL N'A PLUS À LE FAIRE. Tant que la
+             bascule menait à /sentinel, l'exception `data-bascule-jamais` lui
+             épargnait un formulaire de connexion. Le relais est maintenant
+             /relais-iaes, page publique qui explique la panne et REDONNE
+             cette adresse : garder l'exception renverrait le visiteur sur une
+             erreur de navigateur, hors du site, sans explication. -->
+        <a class="diff-go" href="https://i-aes.com" target="_blank" rel="noopener"><span data-i18n="dg.exp">Découvrir le site institutionnel</span> ↗</a>
       </div>
       <div class="diff-card" data-tooltip="Onze référentiels maîtrisés, et onze modules d’évaluation dans Sentinel. DORA fut le dernier sans outil ; il a désormais les siens." data-i18n-tip="tip.df.jur">
         <div class="diff-ico">⚖️</div>
@@ -5980,6 +5985,13 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 
 
 
+<!-- LES INFOBULLES S'OUVRENT AUSSI AU DOIGT ET AU CLAVIER.
+     Mesuré en contexte tactile : l'opacité de la bulle restait à 0 avant ET
+     après un appui — les infobulles de cette page ne s'ouvraient jamais sur
+     un téléphone, et les cartes, étant des <div> sans tabindex, n'étaient
+     pas davantage atteignables au clavier. Ce script ne dessine aucune
+     bulle : il dérive l'état ouvert des règles de survol déjà écrites ici. -->
+<script src="/infobulles.js" defer></script>
 <script src="/fleches.js" defer></script>
 <script src="/bascule.js" defer></script>
 </html>

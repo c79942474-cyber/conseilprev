@@ -54,8 +54,15 @@ RESERVE = (
 # 1. LES SOURCES DES DEUX PONTS
 # ═══════════════════════════════════════════════════════════════════════
 
+# CHAQUE SOURCE DIT AUSSI SI ELLE A ÉTÉ LUE.
+# `apporte` dit ce qu'on en a tiré ; `lue` dit si le texte lui-même était à
+# disposition. Les deux ne se déduisent pas l'un de l'autre : on peut tirer
+# beaucoup d'un texte qu'on cite sans l'avoir ouvert — et c'est précisément
+# ce qui s'est passé pour SP 800-53 Rev. 4, dont le registre laissait croire
+# le contraire. Voir la raison, en toutes lettres, en tête du registre de
+# `nist_800_53`.
 SOURCES = (
-    {"cle": "dora", "titre": "Règlement (UE) 2022/2554 (DORA)",
+    {"cle": "dora", "lue": True, "titre": "Règlement (UE) 2022/2554 (DORA)",
      "celex": "32022R2554",
      "lien": "https://eur-lex.europa.eu/legal-content/FR/TXT/?uri="
              "CELEX:32022R2554",
@@ -63,20 +70,20 @@ SOURCES = (
      "apporte": "L'article 1er, paragraphe 2, qui fait de DORA un acte "
                 "juridique sectoriel, et le considérant 16, qui le dit "
                 "lex specialis."},
-    {"cle": "nis2", "titre": "Directive (UE) 2022/2555 (NIS 2)",
+    {"cle": "nis2", "lue": True, "titre": "Directive (UE) 2022/2555 (NIS 2)",
      "celex": "32022L2555",
      "lien": "https://eur-lex.europa.eu/legal-content/FR/TXT/?uri="
              "CELEX:32022L2555",
      "licence": "Texte de l'Union, réutilisable avec attribution",
      "apporte": "L'article 4, qui dit ce qu'un acte sectoriel écarte, et "
                 "l'annexe I, qui dit quels types financiers y figurent."},
-    {"cle": "rts_1774", "titre": "Règlement délégué (UE) 2024/1774",
+    {"cle": "rts_1774", "lue": True, "titre": "Règlement délégué (UE) 2024/1774",
      "celex": "32024R1774",
      "lien": "https://eur-lex.europa.eu/eli/reg_del/2024/1774/oj",
      "licence": "Texte de l'Union, réutilisable avec attribution",
      "apporte": "Les quarante-deux articles contre lesquels la "
                 "correspondance ISO est établie."},
-    {"cle": "iso27001", "titre": "ISO/IEC 27001:2022",
+    {"cle": "iso27001", "lue": False, "titre": "ISO/IEC 27001:2022",
      "celex": None,
      "lien": "https://www.iso.org/standard/27001",
      "licence": "Norme sous droit d'auteur. Numéros et intitulés de "

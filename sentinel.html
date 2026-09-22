@@ -257,6 +257,19 @@ body{
 .nist-carac{border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:16px;background:var(--panel)}
 .nist-carac ul{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:8px}
 .nist-cat{border:1px solid var(--line);border-radius:11px;margin-top:8px;overflow:hidden;background:var(--panel)}
+/* ── LE REGISTRE DES SOURCES, AVEC L'ÉTAT DE CHACUNE ─────────────────
+      « lu » et « cité » ne disent pas la même chose, et la différence
+      doit se voir sans lire : un texte qu'on n'a pas ouvert ne peut pas
+      avoir la même autorité que celui dont on a compté les articles. */
+.nist-srcs{margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}
+.nist-src{margin-top:8px;font-size:12.5px;line-height:1.5}
+.nist-src-etat{display:inline-block;min-width:38px;text-align:center;
+  font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+  padding:2px 7px;border-radius:999px;vertical-align:1px;
+  background:var(--ok-bg,#e8f5ee);color:var(--ok,#15703c)}
+.nist-src.non-lue .nist-src-etat{background:var(--warn-bg,#fdf1dc);
+  color:var(--warn,#8a5a00)}
+.nist-src.non-lue .q-notes{color:var(--warn,#8a5a00)}
 .nist-cat>summary{list-style:none;cursor:pointer;padding:11px 14px;display:flex;flex-wrap:wrap;
                   align-items:baseline;gap:9px;font-size:14px}
 .nist-cat>summary::-webkit-details-marker{display:none}
@@ -394,6 +407,34 @@ body{
   background .18s ease,color .18s ease}
 .dr-bloc:hover{border-color:var(--ink2)}
 .dr-bloc:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+/* ── L'INFOBULLE DU BLOC, QUI S'OUVRE AUSSI AU DOIGT ───────────────────
+      ELLE ÉTAIT UN `title` NATIF, et un `title` ne s'ouvre pas au doigt :
+      sur un téléphone, les six infobulles du rail — ce que le bloc fait,
+      pourquoi il est là, son piège, et ce que son état veut dire —
+      n'existaient tout simplement pas. Or c'est ce parcours-là qu'on
+      demande de suivre pas à pas.
+
+      ELLE PASSE DONC À LA CONVENTION DU DÉPÔT, `data-tooltip`, que
+      `/infobulles.js` ouvre au survol, au doigt ET au clavier. Rien n'est
+      recopié : le script dérive l'ouverture de la règle de survol
+      ci-dessous.
+
+      ELLE S'OUVRE VERS LE BAS, contrairement à la convention maison. Le
+      rail est en TÊTE du panneau : une bulle posée au-dessus sortirait de
+      la zone défilante par le haut, là où rien ne la rattraperait.
+
+      `white-space:pre-line` PARCE QUE LE TEXTE PORTE SES PROPRES SAUTS DE
+      LIGNE : il est construit avec des « \n\n » qui séparent quatre
+      paragraphes. Sans cette déclaration, tout se collerait en un bloc. */
+.dr-bloc[data-tooltip]{position:relative}
+.dr-bloc[data-tooltip]::after{
+  content:attr(data-tooltip);position:absolute;top:calc(100% + 9px);left:0;
+  width:290px;max-width:78vw;background:var(--ink,#111827);color:#fff;
+  font-size:11px;font-weight:400;line-height:1.5;white-space:pre-line;
+  text-align:left;padding:9px 11px;border-radius:7px;z-index:70;
+  box-shadow:0 6px 20px rgba(0,0,0,.28);opacity:0;pointer-events:none;
+  transition:opacity .18s ease}
+.dr-bloc[data-tooltip]:hover::after{opacity:1}
 .dr-puce{font-size:12px;line-height:1}
 .dr-rang{font-variant-numeric:tabular-nums;opacity:.55;font-weight:500}
 /* ── LA FLÈCHE, QUI DIT L'ORDRE. Sans elle, six pastilles alignées se
@@ -9380,6 +9421,13 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
   </div>
 </div>
 
+<!-- LES INFOBULLES S'OUVRENT AUSSI AU DOIGT ET AU CLAVIER.
+     Mesuré en contexte tactile : l'opacité de la bulle restait à 0 avant ET
+     après un appui — les infobulles de cette page ne s'ouvraient jamais sur
+     un téléphone, et les cartes, étant des <div> sans tabindex, n'étaient
+     pas davantage atteignables au clavier. Ce script ne dessine aucune
+     bulle : il dérive l'état ouvert des règles de survol déjà écrites ici. -->
+<script src="/infobulles.js" defer></script>
 <script src="/fleches.js" defer></script>
 </html
 >

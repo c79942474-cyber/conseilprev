@@ -55,6 +55,29 @@ plus dans le catalogue quand un auditeur demande où il est écrit. Ce qui
 est en français est le travail du cabinet.
 """
 
+# ══════════════════════════════════════════════════════════════════════════
+#  LES SOURCES — ET CE QUE CHACUNE A RÉELLEMENT APPORTÉ
+# ══════════════════════════════════════════════════════════════════════════
+#
+# POURQUOI CE CHAMP `apporte` EXISTE. Ce registre listait deux publications
+# de la même façon, avec le même titre, la même date et le même DOI. Un
+# lecteur de /api/nist53/referentiel en concluait raisonnablement que les
+# deux avaient été lues. Une seule l'a été.
+#
+# LE DOCUMENT QUI MANQUE. Le texte de SP 800-53 Rev. 4 n'est pas dans ce
+# dépôt. Il a été demandé — le fichier joint, `NIST.SP.800-53r4.docx`, est
+# arrivé VIDE. Tout ce que ce module contient vient d'ailleurs : les
+# dix-huit familles et leurs définitions anglaises sont énumérées par
+# SP 800-82 Rev. 2 au §6.2, pour les besoins de sa surcharge industrielle.
+#
+# CE QUE CELA CHANGE, ET C'EST DÉJÀ DIT PLUS HAUT : le module travaille par
+# FAMILLE et non par mesure, faute du catalogue. Ce champ le rattache à sa
+# cause plutôt que de laisser croire à un choix de méthode.
+#
+# UNE SOURCE SANS `apporte` EST REFUSÉE PAR LA SUITE. Citer un document
+# qu'on n'a pas lu n'est pas une faute — c'est même souvent nécessaire. Le
+# laisser croire lu en est une.
+
 SOURCES = (
     {"cle": "sp80053r4",
      "titre": "NIST SP 800-53 Rev. 4 — Security and Privacy Controls for "
@@ -62,6 +85,12 @@ SOURCES = (
      "date": "2013-04",
      "doi": "https://doi.org/10.6028/NIST.SP.800-53r4",
      "droits": "Œuvre du gouvernement des États-Unis — libre de citation.",
+     "lue": False,
+     "apporte": "RIEN DIRECTEMENT — le texte n'est pas disponible ici. Ce "
+                "module vise ce catalogue et en porte le nom, mais n'en a "
+                "lu aucune page : les familles viennent de SP 800-82 "
+                "Rev. 2. C'est la raison pour laquelle rien n'est mesuré "
+                "à la maille de la mesure.",
      "certifiable": False},
     {"cle": "sp80082r2",
      "titre": "NIST SP 800-82 Rev. 2 — Guide to Industrial Control Systems "
@@ -69,6 +98,10 @@ SOURCES = (
      "date": "2015-05",
      "doi": "https://doi.org/10.6028/NIST.SP.800-82r2",
      "droits": "Œuvre du gouvernement des États-Unis — libre de citation.",
+     "lue": True,
+     "apporte": "Les dix-huit familles et leurs définitions anglaises, "
+                "énumérées au §6.2 ; et la surcharge industrielle de "
+                "l'annexe G, qui adapte la révision 4 du catalogue.",
      "role": "source des dix-huit familles énumérées ici (§6.2) et de la "
              "surcharge industrielle",
      "certifiable": False},

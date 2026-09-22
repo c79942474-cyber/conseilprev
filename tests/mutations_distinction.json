@@ -182,8 +182,8 @@
   {
    "nom": "l'appel externe perd son noopener",
    "fichier": "index.html",
-   "avant": "<a class=\"diff-go\" href=\"https://i-aes.com\" target=\"_blank\" rel=\"noopener\" data-bascule-jamais>",
-   "apres": "<a class=\"diff-go\" href=\"https://i-aes.com\" target=\"_blank\" data-bascule-jamais>",
+   "avant": "<a class=\"diff-go\" href=\"https://i-aes.com\" target=\"_blank\" rel=\"noopener\">",
+   "apres": "<a class=\"diff-go\" href=\"https://i-aes.com\" target=\"_blank\">",
    "regle": "test_les_liens_vers_Sentinel_gardent_la_page_d_accueil"
   },
   {
@@ -231,8 +231,8 @@
   {
    "nom": "la bascule cesse de relabelliser par textContent",
    "fichier": "bascule.js",
-   "avant": "el.textContent = t.replace(CIBLE",
-   "apres": "el.setAttribute('data-nom', t.replace(CIBLE",
+   "avant": "el.textContent = t + ETAT;",
+   "apres": "el.setAttribute('data-nom', t + ETAT);",
    "regle": "test_le_libelle_du_lien_i_aes_ne_NOMME_pas_le_domaine"
   },
   {
@@ -362,32 +362,60 @@
    "regle": "test_le_degagement_de_la_bulle_COMPTE_la_mention"
   },
   {
-   "nom": "l'appel institutionnel redevient détournable",
+   "nom": "l'appel institutionnel ressort du relais",
    "fichier": "index.html",
-   "avant": "rel=\"noopener\" data-bascule-jamais>",
-   "apres": "rel=\"noopener\">",
-   "regle": "test_l_appel_institutionnel_REFUSE_le_relais"
+   "avant": "<a class=\"diff-go\" href=\"https://i-aes.com\" target=\"_blank\" rel=\"noopener\">",
+   "apres": "<a class=\"diff-go\" href=\"https://i-aes.com\" target=\"_blank\" rel=\"noopener\" data-bascule-jamais>",
+   "regle": "test_AUCUN_lien_du_site_ne_sort_du_relais"
   },
   {
    "nom": "la bascule cesse d'honorer l'exception",
    "fichier": "bascule.js",
    "avant": "if (a[i].hasAttribute(\"data-bascule-jamais\")) continue;",
    "apres": "",
-   "regle": "test_l_appel_institutionnel_REFUSE_le_relais"
+   "regle": "test_AUCUN_lien_du_site_ne_sort_du_relais"
   },
   {
-   "nom": "le relais de la bascule cesse d'exiger un compte",
+   "nom": "le relais de la bascule redevient une page gardée",
    "fichier": "bascule.js",
-   "avant": "var RELAIS = \"/sentinel\";",
-   "apres": "var RELAIS = \"/\";",
-   "regle": "test_le_relais_de_la_bascule_est_LUI_MEME_garde"
+   "avant": "var RELAIS = \"/relais-iaes\";",
+   "apres": "var RELAIS = \"/sentinel\";",
+   "regle": "test_le_relais_de_la_bascule_est_PUBLIC"
   },
   {
    "nom": "l'exception se répand aux autres liens institutionnels",
    "fichier": "index.html",
    "avant": "<a href=\"https://i-aes.com\" target=\"_blank\" rel=\"noopener\" class=\"ft-social\" title=\"i-aes.com\">",
    "apres": "<a href=\"https://i-aes.com\" target=\"_blank\" rel=\"noopener\" data-bascule-jamais class=\"ft-social\" title=\"i-aes.com\">",
-   "regle": "test_les_AUTRES_liens_institutionnels_gardent_le_relais"
+   "regle": "test_AUCUN_lien_du_site_ne_sort_du_relais"
+  },
+  {
+   "nom": "le relais cesse d'offrir l'adresse qu'il remplace",
+   "fichier": "relais-iaes.html",
+   "avant": "<a href=\"https://i-aes.com\" target=\"_blank\" rel=\"noopener\" id=\"lien-origine\" data-bascule-jamais>",
+   "apres": "<a href=\"/\" id=\"lien-origine\" data-bascule-jamais>",
+   "regle": "test_le_relais_REDONNE_l_adresse_qu_il_remplace"
+  },
+  {
+   "nom": "le relais recopie le paramètre d'URL",
+   "fichier": "relais-iaes.html",
+   "avant": "if (motif && Object.prototype.hasOwnProperty.call(PHRASES, motif)) {",
+   "apres": "if (motif) { PHRASES[motif] = motif;",
+   "regle": "test_le_relais_N_AFFICHE_PAS_le_parametre_qu_on_lui_donne"
+  },
+  {
+   "nom": "le marqueur d'état s'empile à chaque bascule",
+   "fichier": "bascule.js",
+   "avant": "t.indexOf(CIBLE) >= 0 && t.indexOf(ETAT) < 0",
+   "apres": "t.indexOf(CIBLE) >= 0",
+   "regle": "test_la_bascule_AJOUTE_un_etat_au_lieu_de_changer_de_sujet"
+  },
+  {
+   "nom": "le logo et l'icône perdent leur libellé accessible",
+   "fichier": "bascule.js",
+   "avant": "if (!t) el.setAttribute(\"aria-label\", dit);",
+   "apres": "if (false) el.setAttribute(\"aria-label\", dit);",
+   "regle": "test_la_bascule_AJOUTE_un_etat_au_lieu_de_changer_de_sujet"
   }
  ]
 }

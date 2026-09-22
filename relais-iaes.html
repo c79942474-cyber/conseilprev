@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>i-aes.com ne répond pas — CONSEILPREV</title>
+<!-- PAGE DE PANNE D'UN TIERS : elle n'a rien à faire dans un index de moteur
+     de recherche, et son contenu change avec l'état d'un site qui n'est pas
+     le nôtre. -->
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" media="print" onload="this.media='all';this.onload=null" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap"></noscript>
+<style>
+:root{--bg:#F5F2ED;--white:#FFFFFF;--ink:#1C1C1C;--ink2:#3D3D3D;--muted:#767676;--rule:#E0DDD8;--accent:#B83222;--teal:#0F6F6C;--serif:'Instrument Serif',Georgia,serif;--sans:'Inter',system-ui,sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.box{background:var(--white);border:1px solid var(--rule);border-radius:10px;padding:40px 38px;width:100%;max-width:560px;box-shadow:0 8px 32px rgba(0,0,0,.06)}
+.logo{font-family:var(--serif);font-size:26px;margin-bottom:22px}
+.logo .ai{display:inline-block;background:var(--accent);color:#fff;font-family:monospace;font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;margin-left:4px;vertical-align:middle}
+h1{font-family:var(--serif);font-size:27px;font-weight:400;line-height:1.25;margin-bottom:14px}
+p{font-size:14px;color:var(--ink2);line-height:1.65;margin-bottom:14px}
+.signal{font-size:12.5px;color:var(--muted);border-left:3px solid var(--rule);padding:8px 0 8px 12px;margin-bottom:22px}
+.sortie{border-top:1px solid var(--rule);padding-top:20px;margin-top:4px}
+.sortie h2{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+ul{list-style:none;display:flex;flex-direction:column;gap:11px}
+li{font-size:14px;line-height:1.5}
+a{color:var(--accent);text-decoration:none;font-weight:600}
+a:hover,a:focus-visible{text-decoration:underline}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+.quoi{display:block;font-size:12.5px;font-weight:400;color:var(--muted);margin-top:2px}
+.cnx{color:var(--teal);font-weight:600}
+@media(max-width:560px){.box{padding:30px 20px}h1{font-size:23px}}
+</style>
+</head>
+<body>
+  <main class="box">
+    <div class="logo">CONSEILPREV <span class="ai">AI</span></div>
+
+    <h1>Le site institutionnel i-aes.com ne répond pas.</h1>
+
+    <p>Vous avez suivi un lien vers <strong>i-aes.com</strong>. Ce site est
+      hébergé séparément du nôtre, et il ne répond pas en ce moment. Cette page
+      vous le dit plutôt que de vous laisser sur un lien mort.</p>
+
+    <!-- LE MOTIF EST ÉCRIT PAR LE SCRIPT, JAMAIS PAR L'URL. `bascule.js` ne
+         produit que trois motifs connus ; tout autre contenu du paramètre est
+         ignoré, et la phrase générique s'affiche. Ce paramètre est visible
+         dans la barre d'adresse : n'importe qui peut le réécrire, et ce qu'il
+         écrirait ne doit pas pouvoir s'afficher sous notre nom. -->
+    <p class="signal" id="signal">Le site n'a pas pu être atteint.</p>
+
+    <nav class="sortie">
+      <h2>Ce qui reste accessible</h2>
+      <ul>
+        <li>
+          <!-- L'ADRESSE D'ORIGINE RESTE OFFERTE, et c'est le point. Une panne
+               se répare : le visiteur doit pouvoir réessayer lui-même, sans
+               avoir à retrouver l'adresse. `rel="noopener"` parce que le lien
+               s'ouvre dans un onglet neuf. -->
+          <a href="https://i-aes.com" target="_blank" rel="noopener" id="lien-origine" data-bascule-jamais>Réessayer i-aes.com ↗</a>
+          <span class="quoi">La panne peut être passagère, ou tenir à votre réseau.</span>
+        </li>
+        <li>
+          <a href="mailto:contact@i-aes.com">contact@i-aes.com</a>
+          <span class="quoi">Le courriel ne tombe pas avec le site web.</span>
+        </li>
+        <li>
+          <a href="/">Accueil CONSEILPREV</a>
+          <span class="quoi">Nos prestations, nos modules et nos publications.</span>
+        </li>
+        <li>
+          <a href="/sentinel">Sentinel AI</a> <span class="cnx">— connexion requise</span>
+          <span class="quoi">La plateforme de conformité, réservée aux comptes clients.</span>
+        </li>
+      </ul>
+    </nav>
+  </main>
+
+<script>
+/* CE QUE CE SCRIPT FAIT, ET CE QU'IL REFUSE DE FAIRE.
+   Il nomme le signal qui a déclenché la bascule — notre serveur, ou le
+   navigateur du visiteur — parce que les deux ne veulent pas dire la même
+   chose : « injoignable depuis notre hébergeur » et « injoignable depuis
+   votre réseau » n'appellent pas la même conclusion.
+   Il ne recopie JAMAIS le paramètre. Trois motifs connus, trois phrases
+   écrites ici ; tout le reste retombe sur la phrase générique déjà dans le
+   HTML. Un paramètre d'URL est du texte fourni par celui qui clique. */
+(function () {
+  "use strict";
+  var PHRASES = {
+    "serveur":
+      "Notre serveur a sondé i-aes.com et n'a pas obtenu de réponse : la "
+      + "panne est du côté du site institutionnel, pas de votre réseau.",
+    "navigateur:image en échec":
+      "Votre navigateur n'a pas pu charger une ressource d'i-aes.com. Le "
+      + "site est peut-être en panne — ou votre réseau en bloque l'accès.",
+    "navigateur:delai":
+      "Votre navigateur a attendu i-aes.com sans réponse pendant six "
+      + "secondes. Le site est peut-être en panne, ou très lent depuis chez "
+      + "vous."
+  };
+  try {
+    var motif = new URLSearchParams(window.location.search).get("bascule");
+    if (motif && Object.prototype.hasOwnProperty.call(PHRASES, motif)) {
+      document.getElementById("signal").textContent = PHRASES[motif];
+    }
+  } catch (e) { /* pas d'URLSearchParams : la phrase générique tient */ }
+})();
+</script>
+<!-- LE GUIDE DE PAGE, comme toute adresse publiée du site. Ici il sert
+     plus qu'ailleurs : on n'arrive jamais sur cette page par choix, et rien
+     dans son titre ne dit ce qu'il faut en faire. -->
+<script src="/guide.js" defer></script>
+<script src="/fleches.js" defer></script>
+</body>
+</html>

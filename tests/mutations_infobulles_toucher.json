@@ -1,0 +1,191 @@
+{
+ "_pourquoi": "Chaque mutation FABRIQUE un défaut réel et doit faire TOMBER la règle nommée. Une mutation qui survit dit que la règle ne mesure pas ce qu'elle prétend ; une mutation qui fait tomber une AUTRE règle dit que la règle nommée vise à côté.",
+ "cibles": [
+  "tests/test_infobulles_toucher.py",
+  "tests/test_infobulles_distinction.py"
+ ],
+ "mutations": [
+  {
+   "nom": "le script se referme de nouveau au défilement",
+   "fichier": "infobulles.js",
+   "avant": "    window.addEventListener(\"orientationchange\", fermer);",
+   "apres": "    window.addEventListener(\"scroll\", fermer, { passive: true });",
+   "regle": "test_la_bulle_ne_se_referme_PAS_au_defilement"
+  },
+  {
+   "nom": "la touche d'échappement ne referme plus",
+   "fichier": "infobulles.js",
+   "avant": "if (ev.key === \"Escape\" || ev.key === \"Esc\") fermer();",
+   "apres": "if (ev.key === \"ImpossibleKey\") fermer();",
+   "regle": "test_la_bulle_ne_se_referme_PAS_au_defilement"
+  },
+  {
+   "nom": "un second appui ne referme plus",
+   "fichier": "infobulles.js",
+   "avant": "if (ouvert === el) return fermer();",
+   "apres": "if (false) return fermer();",
+   "regle": "test_la_bulle_ne_se_referme_PAS_au_defilement"
+  },
+  {
+   "nom": "un appui ailleurs ne referme plus",
+   "fichier": "infobulles.js",
+   "avant": "if (!el) return fermer();",
+   "apres": "if (!el) return;",
+   "regle": "test_la_bulle_ne_se_referme_PAS_au_defilement"
+  },
+  {
+   "nom": "tout redimensionnement referme, barre d'adresse comprise",
+   "fichier": "infobulles.js",
+   "avant": "if (window.innerWidth === largeur) return;",
+   "apres": "if (false) return;",
+   "regle": "test_le_redimensionnement_ne_compte_que_s_il_change_la_LARGEUR"
+  },
+  {
+   "nom": "l'état ouvert cesse d'être dérivé des feuilles de la page",
+   "fichier": "infobulles.js",
+   "avant": "      try { regles = feuilles[i].cssRules; } catch (e) { continue; }",
+   "apres": "      try { regles = null; } catch (e) { continue; }",
+   "regle": "test_l_etat_ouvert_est_DERIVE_des_regles_de_survol_de_la_page"
+  },
+  {
+   "nom": "la jumelle cesse de remplacer :hover par la classe",
+   "fichier": "infobulles.js",
+   "avant": "out.push(s2.split(\":hover\").join(\".\" + OUVERTE) + \"{\"",
+   "apres": "out.push(s2 + \"{\"",
+   "regle": "test_l_etat_ouvert_est_DERIVE_des_regles_de_survol_de_la_page"
+  },
+  {
+   "nom": "la jumelle invente ses déclarations au lieu de les reprendre",
+   "fichier": "infobulles.js",
+   "avant": "               + regles[i].style.cssText + \"}\");",
+   "apres": "               + \"opacity:1\" + \"}\");",
+   "regle": "test_l_etat_ouvert_est_DERIVE_des_regles_de_survol_de_la_page"
+  },
+  {
+   "nom": "le filtre cesse de reconnaître l'attribut rendu",
+   "fichier": "infobulles.js",
+   "avant": "      if (css.indexOf(\"attr(data-tooltip\") >= 0\n          || css.indexOf(\"attr(data-tip\") >= 0",
+   "apres": "      if (false\n          || false",
+   "regle": "test_le_filtre_des_jumelles_est_ETROIT"
+  },
+  {
+   "nom": "le filtre jumelle TOUT survol, carte comprise",
+   "fichier": "infobulles.js",
+   "avant": "      if (!bases[_base(s2)]) continue;",
+   "apres": "      if (false) continue;",
+   "regle": "test_le_filtre_des_jumelles_est_ETROIT"
+  },
+  {
+   "nom": "le filtre redevient une liste de noms de classes",
+   "fichier": "infobulles.js",
+   "avant": "  function _base(sel) {",
+   "apres": "  var FAMILLES = [\".ent-tip\", \".ttip\"];\n  function _base(sel) {",
+   "regle": "test_le_filtre_des_jumelles_est_ETROIT"
+  },
+  {
+   "nom": "le script ramasse aussi les title natifs",
+   "fichier": "infobulles.js",
+   "avant": "  var SELECTEUR = \"[data-tooltip],[data-tip]\";",
+   "apres": "  var SELECTEUR = \"[data-tooltip],[data-tip],[title]\";",
+   "regle": "test_le_script_ne_ramasse_QUE_les_deux_conventions_du_depot"
+  },
+  {
+   "nom": "le script vole le survol au poste fixe",
+   "fichier": "infobulles.js",
+   "avant": "if (ev.pointerType === \"mouse\") return;",
+   "apres": "if (false) return;",
+   "regle": "test_la_souris_est_IGNOREE_par_le_script"
+  },
+  {
+   "nom": "les div ne redeviennent pas atteignables au clavier",
+   "fichier": "infobulles.js",
+   "avant": "    if (!focusable) el.setAttribute(\"tabindex\", \"0\");",
+   "apres": "    if (false) el.setAttribute(\"tabindex\", \"0\");",
+   "regle": "test_le_script_ne_pose_PAS_de_tabindex_sur_ce_qui_est_deja_focusable"
+  },
+  {
+   "nom": "le bouton reçoit un tabindex qu'il a déjà",
+   "fichier": "infobulles.js",
+   "avant": "    var focusable = /^(A|BUTTON|INPUT|SELECT|TEXTAREA)$/.test(el.tagName)",
+   "apres": "    var focusable = /^(NEANT)$/.test(el.tagName)",
+   "regle": "test_le_script_ne_pose_PAS_de_tabindex_sur_ce_qui_est_deja_focusable"
+  },
+  {
+   "nom": "la région d'annonce cesse d'être live",
+   "fichier": "infobulles.js",
+   "avant": "r.setAttribute(\"aria-live\", \"polite\");",
+   "apres": "r.setAttribute(\"data-live\", \"polite\");",
+   "regle": "test_le_texte_est_ANNONCE_au_lecteur_d_ecran"
+  },
+  {
+   "nom": "la région d'annonce est masquée par display:none",
+   "fichier": "infobulles.js",
+   "avant": "+ \"clip-path:inset(50%);white-space:nowrap}\";",
+   "apres": "+ \"display:none}\";",
+   "regle": "test_le_texte_est_ANNONCE_au_lecteur_d_ecran"
+  },
+  {
+   "nom": "le rail DORA revient au title natif",
+   "fichier": "sentinel.page.js",
+   "avant": "      + ' data-tooltip=\"' + doraEsc(bulle) + '\"'",
+   "apres": "      + ' title=\"' + doraEsc(bulle) + '\"'",
+   "regle": "test_le_rail_DORA_a_quitte_le_title_natif"
+  },
+  {
+   "nom": "le rail perd la lecture avant la navigation",
+   "fichier": "sentinel.page.js",
+   "avant": "      + ' data-bulle-avant-clic>'",
+   "apres": "      + '>'",
+   "regle": "test_le_premier_appui_sur_le_rail_OUVRE_avant_de_naviguer"
+  },
+  {
+   "nom": "le script n'honore plus l'opt-in de lecture",
+   "fichier": "infobulles.js",
+   "avant": "el.hasAttribute(AVANT_CLIC)) ? el : null;",
+   "apres": "false) ? el : null;",
+   "regle": "test_le_premier_appui_sur_le_rail_OUVRE_avant_de_naviguer"
+  },
+  {
+   "nom": "le clic retenu n'est plus arrêté",
+   "fichier": "infobulles.js",
+   "avant": "      ev.preventDefault();\n      ev.stopPropagation();",
+   "apres": "      void 0;\n      void 0;",
+   "regle": "test_le_premier_appui_sur_le_rail_OUVRE_avant_de_naviguer"
+  },
+  {
+   "nom": "l'opt-in se répand aux liens de l'accueil",
+   "fichier": "index.html",
+   "avant": "<a class=\"diff-go\" href=\"https://i-aes.com\" target=\"_blank\" rel=\"noopener\">",
+   "apres": "<a class=\"diff-go\" href=\"https://i-aes.com\" target=\"_blank\" rel=\"noopener\" data-bulle-avant-clic>",
+   "regle": "test_l_opt_in_reste_une_EXCEPTION"
+  },
+  {
+   "nom": "la bulle du rail remonte au-dessus du bloc",
+   "fichier": "sentinel.html",
+   "avant": "  content:attr(data-tooltip);position:absolute;top:calc(100% + 9px);left:0;",
+   "apres": "  content:attr(data-tooltip);position:absolute;bottom:calc(100% + 9px);left:0;",
+   "regle": "test_la_bulle_du_rail_s_ouvre_VERS_LE_BAS"
+  },
+  {
+   "nom": "la bulle du rail perd ses sauts de ligne",
+   "fichier": "sentinel.html",
+   "avant": "font-size:11px;font-weight:400;line-height:1.5;white-space:pre-line;",
+   "apres": "font-size:11px;font-weight:400;line-height:1.5;white-space:normal;",
+   "regle": "test_la_bulle_du_rail_s_ouvre_VERS_LE_BAS"
+  },
+  {
+   "nom": "la bulle du rail perd sa règle de survol, donc sa jumelle",
+   "fichier": "sentinel.html",
+   "avant": ".dr-bloc[data-tooltip]:hover::after{opacity:1}",
+   "apres": ".dr-bloc[data-tooltip].jamais::after{opacity:1}",
+   "regle": "test_la_bulle_du_rail_s_ouvre_VERS_LE_BAS"
+  },
+  {
+   "nom": "une page à infobulles ne charge plus le script",
+   "fichier": "formation.html",
+   "avant": "<script src=\"/infobulles.js\" defer></script>",
+   "apres": "<script src=\"/fleches.js\" defer></script>",
+   "regle": "test_CHAQUE_page_qui_porte_une_infobulle_charge_le_script"
+  }
+ ]
+}

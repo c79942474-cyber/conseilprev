@@ -24287,7 +24287,18 @@ function doraRailPeindre() {
     piste += '<button type="button" class="dr-bloc ' + doraEsc(b.etat) + '"'
       + (cliquable ? ' onclick="go(\'' + doraEsc(b.panneau) + '\')"'
                    : ' disabled aria-disabled="true"')
-      + ' title="' + doraEsc(bulle) + '">'
+      /* `data-tooltip` ET NON `title` : un `title` natif ne s'ouvre pas au
+         doigt, et ce rail est fait pour être suivi pas à pas — y compris
+         sur un téléphone. `/infobulles.js` l'ouvre au survol, à l'appui et
+         au clavier. Le bloc est un <button> : il est déjà focusable, le
+         script ne lui posera pas de tabindex. */
+      + ' data-tooltip="' + doraEsc(bulle) + '"'
+      /* LE PREMIER APPUI OUVRE, LE SECOND Y VA. Sans cela, au doigt,
+         l'appui navigue — et la navigation repeint le rail, donc détruit
+         le bouton qui portait la bulle : elle n'est jamais lisible.
+         Mesuré au navigateur, opacité 0. À la souris, rien ne change :
+         le survol ouvre, le clic mène. */
+      + ' data-bulle-avant-clic>'
       + '<span class="dr-puce" aria-hidden="true">' + doraEsc(e.puce)
       + '</span><span class="dr-rang">' + b.rang + '.</span>'
       + '<span>' + doraEsc(b.nom) + '</span></button>';
@@ -26141,6 +26152,38 @@ function nist53Init() {
     });
 }
 
+/* LE REGISTRE DES SOURCES, ET CE QUE CHACUNE A RÉELLEMENT APPORTÉ.
+   ═══════════════════════════════════════════════════════════════════════
+   CE QUI ÉTAIT AFFICHÉ : rien. Le registre existait côté serveur, il sortait
+   dans `/api/nist53/referentiel`, et aucun écran ne le montrait. Un client
+   lisant « NIST SP 800-53 Rev. 4 » en tête de son questionnaire n'avait
+   aucun moyen de savoir ce qui, dans ce module, vient réellement de ce
+   document-là.
+
+   ET LA RÉPONSE EST : RIEN. Le texte du catalogue n'est pas au dossier — le
+   fichier attendu est arrivé vide. Les dix-huit familles viennent de
+   SP 800-82 Rev. 2, qui les énumère au §6.2 pour sa propre surcharge. C'est
+   aussi la raison pour laquelle ce module travaille par famille et non par
+   mesure.
+
+   UNE SOURCE CITÉE N'EST PAS UNE FAUTE. Nommer un référentiel qu'on n'a pas
+   ouvert est souvent nécessaire — c'est lui qui donne son nom à ce qu'on
+   mesure. Laisser croire qu'on l'a lu en est une. */
+function nistSources(sources) {
+  if (!sources || !sources.length) return '';
+  return '<div class="nist-srcs"><strong>Ce sur quoi ce module repose.</strong>'
+    + sources.map(function (s) {
+        return '<div class="nist-src' + (s.lue ? '' : ' non-lue') + '">'
+          + '<span class="nist-src-etat">' + (s.lue ? 'lu' : 'cité') + '</span> '
+          + (s.doi
+              ? '<a href="' + nistEsc(s.doi) + '" target="_blank" rel="noopener">'
+                + nistEsc(s.titre) + '</a>'
+              : nistEsc(s.titre))
+          + '<div class="q-notes">' + nistEsc(s.apporte || '') + '</div></div>';
+      }).join('')
+    + '</div>';
+}
+
 function nist53Peindre() {
   var b = document.getElementById('nist53-body');
   if (!b || !N53_REF) return;
@@ -26148,7 +26191,8 @@ function nist53Peindre() {
   if (r) {
     r.innerHTML = '<strong>Millésime.</strong> ' + nistEsc(N53_REF.reserve_millesime)
       + ' <strong>Portée.</strong> Ce catalogue ne se certifie pas : le taux dit '
-      + 'une couverture déclarée, pas une conformité reconnue.';
+      + 'une couverture déclarée, pas une conformité reconnue.'
+      + nistSources(N53_REF.sources);
   }
   var h = '<div class="nist-q-cats"><label class="q-notes" style="display:block;margin-bottom:10px">'
     + '<strong>Socle</strong> — il DÉCOULE de la catégorisation du système, il ne se choisit pas. '
@@ -26243,7 +26287,8 @@ function nist82Peindre() {
       + ', et il est plafonné par ce que ce catalogue porte déjà — '
       + N82_REF.retouches_total + ' mesures y sont retouchées, sur '
       + Object.keys(N82_REF.retouches).length + ' familles. '
-      + '<strong>Millésime.</strong> ' + nistEsc(N82_REF.reserve);
+      + '<strong>Millésime.</strong> ' + nistEsc(N82_REF.reserve)
+      + nistSources(N82_REF.sources);
   }
   var etats = {};
   N82_REF.etats.forEach(function (e) { etats[e.cle] = e; });

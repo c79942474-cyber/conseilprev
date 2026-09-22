@@ -63,6 +63,20 @@
     l: [["Questions fréquentes", "/faq"], ["Ressources", "/ressources"]]
   };
 
+  /* LA PAGE DE RELAIS N'EST PAS UNE PAGE COMME LES AUTRES : on n'y arrive
+     jamais par choix. Son guide doit donc commencer par dire POURQUOI le
+     lecteur est là, ce qu'aucun titre ne fait. */
+  GUIDES["/relais-iaes"] = {
+    t: "Pourquoi vous êtes ici",
+    p: "Vous avez suivi un lien vers i-aes.com, le site institutionnel du cabinet. Il est hébergé séparément de celui-ci et ne répond pas en ce moment : cette page vous le dit plutôt que de vous laisser sur un lien mort.",
+    s: ["Réessayez l’adresse d’origine : une panne de site se répare souvent en quelques minutes, et le lien est ici.",
+      "Si vous êtes sur un réseau d’entreprise, la cause peut être un filtrage local plutôt qu’une panne — le message vous dit lequel des deux signaux s’est déclenché.",
+      "Le courriel ne tombe pas avec le site web : pour une demande, c’est la voie la plus sûre pendant une indisponibilité."],
+    k: [["Ce que cette page ne fait pas", "Elle ne rétablit rien et ne surveille rien pour vous : c’est un constat, pas un dépannage. Elle ne dit pas non plus quand le site reviendra, parce que personne ici ne le sait."],
+      ["Deux signaux, deux conclusions", "« Notre serveur » veut dire que la panne est du côté du site. « Votre navigateur » veut dire que c’est votre réseau qui n’y accède pas — vos collègues peuvent très bien y arriver."]],
+    l: [["Accueil CONSEILPREV", "/"], ["Support", "/support"]]
+  };
+
   GUIDES["/faq"] = {
     t: "Questions fréquentes",
     p: "Les réponses courtes sur l’IA Act, le RGPD et la conformité — celles qui reviennent avant tout engagement.",

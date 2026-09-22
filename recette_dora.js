@@ -245,7 +245,15 @@ const PANNEAUX = ['dora-qualifier', 'dora-risque', 'dora-tiers',
       bat: cour.length === 1
         && getComputedStyle(cour[0]).animationName === 'dr-battement',
       manque: (r.querySelector('.dr-manque') || {}).textContent || '',
-      bulle: (bs[0] || {}).title || ''
+      /* L'INFOBULLE A QUITTÉ `title` POUR `data-tooltip`, et cette ancre
+         est passée avec elle. Un `title` natif ne s'ouvre pas au doigt :
+         sur un téléphone, les six infobulles du rail n'existaient pas.
+         La convention `data-tooltip` est ouverte au survol, à l'appui ET
+         au clavier par /infobulles.js. */
+      bulle: bs[0] ? (bs[0].getAttribute('data-tooltip') || '') : '',
+      /* ET ON MESURE QUE `title` A BIEN DISPARU : deux infobulles sur le
+         même bouton s'afficheraient l'une sur l'autre à la souris. */
+      titreNatif: bs.filter(b => b.getAttribute('title')).length
     };
   });
   ok('le rail est peint sur le panneau de qualification', !repos.absent,
@@ -264,6 +272,9 @@ const PANNEAUX = ['dora-qualifier', 'dora-risque', 'dora-tiers',
   ok('l’infobulle porte le piège du bloc',
      /Le piège ?:/.test(repos.bulle) || /Le piège :/.test(repos.bulle),
      repos.bulle.slice(0, 70));
+  ok('aucun bloc ne garde un `title` natif en plus',
+     repos.titreNatif === 0,
+     repos.titreNatif + ' bloc(s) porteraient deux infobulles');
 
   /* ── LA VALIDATION VERDIT, ET LE DÉCOMPTE PART ─────────────────── */
   await pg.evaluate(() => {

@@ -1,0 +1,99 @@
+{
+ "_pourquoi": "Chaque mutation FABRIQUE un défaut réel et doit faire TOMBER la règle nommée. Le défaut d'origine : un registre où la source LUE et la source seulement CITÉE se présentaient de la même façon.",
+ "cibles": [
+  "tests/test_sources_lues.py"
+ ],
+ "mutations": [
+  {
+   "nom": "une source cesse de dire ce qu'elle a apporté",
+   "fichier": "nist_800_82.py",
+   "avant": "     \"apporte\": \"L'annexe G — les mesures que la surcharge industrielle \"",
+   "apres": "     \"_apporte\": \"L'annexe G — les mesures que la surcharge industrielle \"",
+   "regle": "test_CHAQUE_source_dit_ce_qu_elle_a_apporte[nist_800_82]"
+  },
+  {
+   "nom": "un apport se réduit à trois mots",
+   "fichier": "nist_ai_rmf.py",
+   "avant": "     \"apporte\": \"Les douze risques propres à l'IA générative, et leur \"\n                \"rattachement aux sous-catégories du cadre.\",",
+   "apres": "     \"apporte\": \"Le cadre.\",",
+   "regle": "test_CHAQUE_source_dit_ce_qu_elle_a_apporte[nist_ai_rmf]"
+  },
+  {
+   "nom": "une source cesse de dire si elle a été lue",
+   "fichier": "dora_ponts.py",
+   "avant": "{\"cle\": \"iso27001\", \"lue\": False,",
+   "apres": "{\"cle\": \"iso27001\",",
+   "regle": "test_CHAQUE_source_dit_si_elle_a_ete_LUE[dora_ponts]"
+  },
+  {
+   "nom": "« lue » devient une nuance au lieu d'un booléen",
+   "fichier": "dora_supervision.py",
+   "avant": "{\"cle\": \"rd_295\", \"lue\": True,",
+   "apres": "{\"cle\": \"rd_295\", \"lue\": \"en partie\",",
+   "regle": "test_CHAQUE_source_dit_si_elle_a_ete_LUE[dora_supervision]"
+  },
+  {
+   "nom": "le catalogue 800-53 se déclare lu alors qu'il est absent",
+   "fichier": "nist_800_53.py",
+   "avant": "     \"lue\": False,\n     \"apporte\": \"RIEN DIRECTEMENT",
+   "apres": "     \"lue\": True,\n     \"apporte\": \"RIEN DIRECTEMENT",
+   "regle": "test_le_catalogue_800_53_est_declare_NON_LU"
+  },
+  {
+   "nom": "toutes les sources d'un module deviennent non lues",
+   "fichier": "nist_800_53.py",
+   "avant": "     \"lue\": True,\n     \"apporte\": \"Les dix-huit familles",
+   "apres": "     \"lue\": False,\n     \"apporte\": \"Les dix-huit familles",
+   "regle": "test_un_module_ne_repose_PAS_uniquement_sur_du_non_lu[nist_800_53]"
+  },
+  {
+   "nom": "l'apport est recopié d'une source à l'autre",
+   "fichier": "nist_800_53.py",
+   "avant": "     \"apporte\": \"Les dix-huit familles et leurs définitions anglaises, \"\n                \"énumérées au §6.2 ; et la surcharge industrielle de \"\n                \"l'annexe G, qui adapte la révision 4 du catalogue.\",",
+   "apres": "     \"apporte\": \"RIEN DIRECTEMENT — le texte n'est pas disponible ici. Ce \"\n                \"module vise ce catalogue et en porte le nom, mais n'en a \"\n                \"lu aucune page : les familles viennent de SP 800-82 \"\n                \"Rev. 2. C'est la raison pour laquelle rien n'est mesuré \"\n                \"à la maille de la mesure.\",",
+   "regle": "test_deux_sources_n_ont_pas_le_MEME_apport[nist_800_53]"
+  },
+  {
+   "nom": "le module promet la maille de la mesure qu'il n'a pas",
+   "fichier": "nist_800_53.py",
+   "avant": "        \"maille\": \"Le module travaille par FAMILLE, pas par mesure : la \"",
+   "apres": "        \"maille\": \"Le module travaille mesure par mesure : la \"",
+   "regle": "test_le_module_800_53_NE_PROMET_PAS_une_maille_qu_il_n_a_pas"
+  },
+  {
+   "nom": "l'écran cesse d'afficher le registre des sources",
+   "fichier": "sentinel.page.js",
+   "avant": "      + nistSources(N53_REF.sources);",
+   "apres": "      + '';",
+   "regle": "test_l_ecran_MONTRE_le_registre_et_separe_les_deux_etats"
+  },
+  {
+   "nom": "l'écran cesse de distinguer une source lue d'une source citée",
+   "fichier": "sentinel.page.js",
+   "avant": "'<div class=\"nist-src' + (s.lue ? '' : ' non-lue') + '\">'",
+   "apres": "'<div class=\"nist-src\">'",
+   "regle": "test_l_ecran_MONTRE_le_registre_et_separe_les_deux_etats"
+  },
+  {
+   "nom": "l'écran n'écrit plus l'état en toutes lettres",
+   "fichier": "sentinel.page.js",
+   "avant": "+ (s.lue ? 'lu' : 'cité') + '</span> '",
+   "apres": "+ 'source' + '</span> '",
+   "regle": "test_l_ecran_MONTRE_le_registre_et_separe_les_deux_etats"
+  },
+  {
+   "nom": "l'écran ne montre plus que des titres",
+   "fichier": "sentinel.page.js",
+   "avant": "+ '<div class=\"q-notes\">' + nistEsc(s.apporte || '') + '</div></div>';",
+   "apres": "+ '</div>';",
+   "regle": "test_l_ecran_MONTRE_le_registre_et_separe_les_deux_etats"
+  },
+  {
+   "nom": "la source citée reprend la couleur de la source lue",
+   "fichier": "sentinel.html",
+   "avant": ".nist-src.non-lue .nist-src-etat{background:var(--warn-bg,#fdf1dc);",
+   "apres": ".nist-src.jamais .nist-src-etat{background:var(--warn-bg,#fdf1dc);",
+   "regle": "test_l_ecran_MONTRE_le_registre_et_separe_les_deux_etats"
+  }
+ ]
+}

@@ -50,6 +50,9 @@ français est le travail du cabinet.
 
 import nist_800_53 as socle53
 
+# CHAQUE SOURCE DIT CE QU'ELLE A APPORTÉ — voir la raison en tête du
+# registre de `nist_800_53`, où deux publications listées à l'identique
+# laissaient croire que les deux avaient été lues.
 SOURCES = (
     {"cle": "sp80082r2",
      "titre": "NIST SP 800-82 Rev. 2 — Guide to Industrial Control Systems "
@@ -57,6 +60,10 @@ SOURCES = (
      "date": "2015-05",
      "doi": "https://doi.org/10.6028/NIST.SP.800-82r2",
      "droits": "Œuvre du gouvernement des États-Unis — libre de citation.",
+     "lue": True,
+     "apporte": "L'annexe G — les mesures que la surcharge industrielle "
+                "retouche, famille par famille — et les raisons qu'elle "
+                "donne de les retoucher.",
      "certifiable": False},
 )
 

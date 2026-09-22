@@ -727,7 +727,7 @@ def test_le_libelle_du_lien_i_aes_ne_NOMME_pas_le_domaine():
     bascule = io.open(os.path.join(_RACINE, "bascule.js"), encoding="utf-8").read()
     assert 'var CIBLE = "i-aes.com"' in bascule, (
         "la bascule ne vise plus i-aes.com : cette règle n'a plus d'objet")
-    assert re.search(r"el\.textContent\s*=\s*t\.replace\(CIBLE", bascule), (
+    assert re.search(r"el\.textContent\s*=\s*t\s*\+\s*ETAT", bascule), (
         "la bascule ne relabellise plus par textContent : le balisage ne "
         "risque plus rien, et cette contrainte peut être levée")
     assert "t.indexOf(CIBLE) >= 0" in bascule, (
@@ -805,6 +805,18 @@ def _routes_gardees():
                          r"(?:@[^\n]+\n)*?@sentinel_login_required", APP):
         gardees.add(m.group(2))
     return gardees
+
+
+def _routes_publiques():
+    """Les adresses que la boucle « tout public » publie, lues dans app.py.
+
+    MÊME RAISON QUE POUR `_routes_gardees` : une liste recopiée ici ne
+    saurait pas qu'une page a changé de registre. `PAGES` est publié sans
+    aucun contrôle d'accès ; `PAGES_RESERVEES` passe par
+    `reserve_abonne_page` et n'a donc rien à faire ici."""
+    m = re.search(r"^PAGES = \{(.*?)^\}", APP, re.S | re.M)
+    assert m, "le registre PAGES est introuvable dans app.py"
+    return set(re.findall(r"'([^']+)'\s*:", m.group(1)))
 
 
 def _mentions():
@@ -903,63 +915,153 @@ def test_le_degagement_de_la_bulle_COMPTE_la_mention():
 
 # ── LE LIEN INSTITUTIONNEL N'EST PLUS DÉTOURNÉ ───────────────────────────
 
-def test_le_relais_de_la_bascule_est_LUI_MEME_garde():
-    """POURQUOI L'APPEL INSTITUTIONNEL SORT DU RELAIS — le garde-fou de la
-    règle suivante. `bascule.js` réécrit les liens i-aes.com vers /sentinel,
-    qui exige un compte : pour un visiteur non connecté, le relais change
-    « le site ne répond pas » en « créez un compte ». Mesuré au navigateur :
-    un clic anonyme aboutissait à « Connexion — Sentinel AI ».
+RELAIS_HTML = io.open(os.path.join(_RACINE, "relais-iaes.html"),
+                      encoding="utf-8").read()
 
-    Si le relais cessait d'être gardé, l'exception n'aurait plus d'objet et
-    il faudrait la retirer, pas la conserver par habitude."""
+
+def _relais():
+    """L'adresse que `bascule.js` substitue aux liens i-aes.com."""
     m = re.search(r'var RELAIS\s*=\s*"([^"]+)"', BASCULE)
     assert m, "le relais de la bascule est introuvable"
-    assert m.group(1) in _routes_gardees(), (
-        "le relais %s n'exige plus de compte : l'exception posée sur l'appel "
-        "institutionnel peut être levée" % m.group(1))
+    return m.group(1)
 
 
-def test_l_appel_institutionnel_REFUSE_le_relais():
-    """UNE CARTE QUI PROMET LE SITE INSTITUTIONNEL DOIT Y MENER. Tomber sur
-    une page en panne se comprend ; tomber sur un formulaire de connexion,
-    non — c'est ce qui a été signalé.
+def test_le_relais_de_la_bascule_est_PUBLIC():
+    """LE DÉFAUT MESURÉ, ET SA CORRECTION.
 
-    LES DEUX GARDE-FOUS. Sans eux, cet attribut serait un ornement : on
-    vérifie que la bascule détourne toujours les liens i-aes.com, et qu'elle
-    HONORE l'exception au lieu de l'ignorer."""
+    CE QUI SE PASSAIT. Le relais était /sentinel, qui exige un compte. Un
+    visiteur NON CONNECTÉ qui cliquait « i-aes.com » dans le pied de page
+    recevait « Connexion — Sentinel AI » : la bascule changeait « le site
+    institutionnel ne répond pas » en « créez un compte », ce qui est pire
+    que le lien mort qu'elle devait éviter. Trois des quatre liens du site
+    tombaient là ; le quatrième n'y échappait que par une exception.
+
+    Un lien de pied de page s'adresse par construction à quelqu'un qui n'est
+    PAS connecté. Un relais gardé ne sert donc personne — c'est la mesure au
+    navigateur qui l'a montré, pas une lecture de fichier.
+
+    CETTE RÈGLE EST LE SOCLE DES SUIVANTES. Si le relais redevenait gardé,
+    les exceptions qu'on vient de retirer redeviendraient nécessaires."""
+    relais = _relais()
+    gardees = _routes_gardees()
+    assert relais not in gardees, (
+        "le relais %s exige un compte : la bascule renvoie les visiteurs "
+        "anonymes sur un formulaire de connexion. Routes gardées : %s"
+        % (relais, sorted(gardees)))
+    assert relais in _routes_publiques(), (
+        "le relais %s n'est publié par aucune route publique : il rendrait "
+        "404" % relais)
+
+
+def test_le_relais_REDONNE_l_adresse_qu_il_remplace():
+    """UN RELAIS QUI N'OFFRE PAS LE SITE QU'IL REMPLACE EST UNE IMPASSE.
+
+    C'est la contrepartie de la règle précédente. Détourner un lien vers une
+    page publique ne vaut que si cette page rend au visiteur ce qu'il venait
+    chercher : l'adresse d'origine, pour qu'il réessaie lui-même. Une panne
+    de tiers se répare, et souvent vite.
+
+    ET CE LIEN-LÀ DOIT SORTIR DU RELAIS. Posé sur la page de relais, il
+    pointerait vers la page déjà affichée si une bascule s'y chargeait un
+    jour — c'est le seul emploi légitime de `data-bascule-jamais`, et il
+    garde la mécanique vivante."""
+    m = re.search(r'<a href="(https://i-aes\.com[^"]*)"([^>]*)>', RELAIS_HTML)
+    assert m, "la page de relais n'offre plus l'adresse d'origine"
+    assert "data-bascule-jamais" in m.group(2), (
+        "le lien de retour vers i-aes.com est détournable : il renverrait "
+        "vers la page de relais elle-même")
+    assert "mailto:contact@i-aes.com" in RELAIS_HTML, (
+        "le relais n'offre plus le courriel — le seul canal qui ne tombe "
+        "pas avec le site web")
+
+
+def test_le_relais_N_AFFICHE_PAS_le_parametre_qu_on_lui_donne():
+    """UN PARAMÈTRE D'URL EST DU TEXTE FOURNI PAR CELUI QUI CLIQUE.
+
+    `bascule.js` passe le motif dans l'adresse, et cette adresse est visible
+    dans la barre du navigateur : n'importe qui peut la réécrire et l'envoyer
+    à quelqu'un d'autre. Si la page recopiait ce paramètre, elle afficherait
+    sous notre nom un texte écrit par un tiers.
+
+    Trois motifs connus, trois phrases écrites dans la page ; tout le reste
+    retombe sur la phrase générique. On vérifie qu'aucune écriture ne prend
+    le paramètre pour source, et que les trois motifs que la bascule produit
+    RÉELLEMENT sont ceux que la page sait nommer."""
+    assert not re.search(r"innerHTML\s*=", RELAIS_HTML), (
+        "la page de relais écrit de l'HTML : un motif forgé s'y injecterait")
+    assert "textContent" in RELAIS_HTML, (
+        "la page de relais n'écrit plus par textContent")
+    assert "hasOwnProperty.call(PHRASES, motif)" in RELAIS_HTML, (
+        "le motif n'est plus confronté à une liste close : n'importe quelle "
+        "valeur d'URL pourrait s'afficher")
+
+    produits = set(re.findall(r'basculer\("([^"]+)"', BASCULE))
+    produits |= set('navigateur:' + d for d in
+                    re.findall(r'apres\(false, "([^"]+)"\)', BASCULE))
+    produits = set(m for m in produits if not m.endswith(":"))
+    nommes = set(re.findall(r'^\s*"([^"]+)":\n?', RELAIS_HTML, re.M))
+    manquants = sorted(m for m in produits if m not in RELAIS_HTML)
+    assert not manquants, (
+        "la bascule produit des motifs que le relais ne sait pas nommer, et "
+        "qui retomberont sur la phrase générique : %s (nommés : %s)"
+        % (manquants, sorted(nommes)))
+
+
+def test_AUCUN_lien_du_site_ne_sort_du_relais():
+    """L'EXCEPTION N'A PLUS D'OBJET, ET ELLE A ÉTÉ RETIRÉE.
+
+    Elle existait pour une seule raison, écrite dans le code : le relais
+    exigeait un compte. Maintenant qu'il est public et qu'il redonne
+    l'adresse d'origine, la garder coûterait au visiteur exactement ce
+    qu'elle devait lui épargner — une erreur de navigateur, hors de notre
+    site, sans explication ni retour.
+
+    LE GARDE-FOU : on vérifie d'abord que la bascule ramasse toujours les
+    liens i-aes.com et HONORE toujours l'attribut. Sans cela, cette règle
+    dirait « aucun lien n'est exempté » d'un mécanisme qui n'exempte plus
+    rien — elle passerait pour une raison sans rapport avec ce qu'elle
+    prétend."""
     assert 'a[href*="' in BASCULE and 'var CIBLE = "i-aes.com"' in BASCULE, (
-        "la bascule ne ramasse plus les liens i-aes.com : l'exception ne "
-        "protège plus de rien")
+        "la bascule ne ramasse plus les liens i-aes.com : cette règle n'a "
+        "plus d'objet")
     assert re.search(r'hasAttribute\("data-bascule-jamais"\)\s*\)\s*continue',
                      BASCULE), (
-        "la bascule n'honore pas `data-bascule-jamais` : l'attribut posé sur "
-        "l'appel ne fait rien")
+        "la bascule n'honore plus `data-bascule-jamais` : l'attribut posé "
+        "sur le lien de retour du relais ne le protège plus")
 
-    href, attrs = None, None
-    for carte in BLOC.split('<div class="diff-card"')[1:]:
-        m = re.search(r'<a class="diff-go" href="(https://i-aes\.com[^"]*)"([^>]*)>',
-                      carte)
-        if m:
-            href, attrs = m.group(1), m.group(2)
-    assert href, "aucun appel ne mène au site institutionnel"
-    assert "data-bascule-jamais" in attrs, (
-        "l'appel institutionnel est encore détournable : un visiteur dont le "
-        "réseau bloque i-aes.com recevrait un formulaire de connexion")
-
-
-def test_les_AUTRES_liens_institutionnels_gardent_le_relais():
-    """L'EXCEPTION RESTE UNE EXCEPTION. Le logo, l'icône et la mention du
-    pied de page ne promettent pas une destination précise : le relais y
-    garde son intérêt. Si l'attribut se répandait, la bascule cesserait de
-    servir sans que personne ne l'ait décidé."""
     liens = re.findall(r'<a [^>]*href="https://i-aes\.com[^"]*"[^>]*>', INDEX)
     assert len(liens) >= 3, (
         "%d lien(s) vers i-aes.com relevés : la lecture a changé de forme"
         % len(liens))
     exemptes = [l for l in liens if "data-bascule-jamais" in l]
-    assert len(exemptes) == 1, (
-        "%d liens sortent du relais, on en attend un seul (l'appel de la "
-        "carte) : %s" % (len(exemptes), exemptes))
+    assert not exemptes, (
+        "%d lien(s) de l'accueil sortent encore du relais : un visiteur dont "
+        "le réseau bloque i-aes.com recevrait une erreur de navigateur au "
+        "lieu d'une explication — %s" % (len(exemptes), exemptes))
+
+
+def test_la_bascule_AJOUTE_un_etat_au_lieu_de_changer_de_sujet():
+    """LE LIBELLÉ DISAIT « Sentinel », ET C'EST DEVENU FAUX.
+
+    Tant que le relais menait à /sentinel, remplacer « i-aes.com » par
+    « Sentinel » dans le texte était la seule façon de ne pas mentir sur la
+    destination. Le relais mène maintenant à une page qui PARLE d'i-aes.com
+    et en redonne l'adresse : effacer le domaine effacerait le sujet du lien.
+
+    ET L'ÉTAT DOIT ÊTRE DANS LE TEXTE. Un `title` ne s'ouvre pas au doigt :
+    le visiteur au téléphone ne lirait jamais que le site est tombé. C'est le
+    même défaut que celui des infobulles, et il se corrige de la même façon
+    — en rendant l'information visible sans survol."""
+    assert re.search(r'var ETAT\s*=\s*" \([^"]+\)"', BASCULE), (
+        "la bascule n'a plus de marqueur d'état déclaré")
+    assert 't.replace(CIBLE, "Sentinel")' not in BASCULE, (
+        "la bascule remplace encore le domaine par « Sentinel » : le lien "
+        "ne mène plus à Sentinel, et le libellé mentirait sur son sujet")
+    assert "t.indexOf(ETAT) < 0" in BASCULE, (
+        "rien n'empêche la bascule d'empiler le marqueur à chaque passage")
+    assert re.search(r'if \(!t\) el\.setAttribute\("aria-label"', BASCULE), (
+        "le logo et l'icône, qui n'ont pas de texte, n'annoncent leur "
+        "changement d'état à personne")
 
 
 # ══════════════════════════════════════════════════════════════════════════

@@ -53,33 +53,40 @@ RESERVE = (
 # l'Union sont réutilisables avec attribution : on cite les numéros et les
 # intitulés d'articles, et ce que chacun exige est écrit par le cabinet.
 
+# CHAQUE SOURCE DIT AUSSI SI ELLE A ÉTÉ LUE.
+# `apporte` dit ce qu'on en a tiré ; `lue` dit si le texte lui-même était à
+# disposition. Les deux ne se déduisent pas l'un de l'autre : on peut tirer
+# beaucoup d'un texte qu'on cite sans l'avoir ouvert — et c'est précisément
+# ce qui s'est passé pour SP 800-53 Rev. 4, dont le registre laissait croire
+# le contraire. Voir la raison, en toutes lettres, en tête du registre de
+# `nist_800_53`.
 SOURCES = (
-    {"cle": "dora", "celex": "32022R2554",
+    {"cle": "dora", "lue": True, "celex": "32022R2554",
      "titre": "Règlement (UE) 2022/2554 (DORA)",
      "lien": "https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32022R2554",
      "apporte": "Le socle : champ d'application, gestion du risque lié aux "
                 "TIC, incidents, tests, prestataires tiers. 64 articles."},
-    {"cle": "directive", "celex": "32022L2556",
+    {"cle": "directive", "lue": True, "celex": "32022L2556",
      "titre": "Directive (UE) 2022/2556",
      "lien": "https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32022L2556",
      "apporte": "Aligne huit directives sectorielles financières sur la "
                 "résilience opérationnelle numérique."},
-    {"cle": "rts_1772", "celex": "32024R1772",
+    {"cle": "rts_1772", "lue": True, "celex": "32024R1772",
      "titre": "Règlement délégué (UE) 2024/1772",
      "lien": "https://eur-lex.europa.eu/eli/reg_del/2024/1772/oj",
      "apporte": "Classification des incidents liés aux TIC et des "
                 "cybermenaces, et seuils d'importance significative."},
-    {"cle": "rts_1773", "celex": "32024R1773",
+    {"cle": "rts_1773", "lue": True, "celex": "32024R1773",
      "titre": "Règlement délégué (UE) 2024/1773",
      "lien": "https://eur-lex.europa.eu/eli/reg_del/2024/1773/oj",
      "apporte": "Contenu de la politique relative aux accords contractuels "
                 "sur les services TIC soutenant des fonctions critiques."},
-    {"cle": "rts_1774", "celex": "32024R1774",
+    {"cle": "rts_1774", "lue": True, "celex": "32024R1774",
      "titre": "Règlement délégué (UE) 2024/1774",
      "lien": "https://eur-lex.europa.eu/eli/reg_del/2024/1774/oj",
      "apporte": "Outils, méthodes, processus et politiques de gestion du "
                 "risque lié aux TIC, et cadre simplifié. 42 articles."},
-    {"cle": "rts_532", "celex": "32025R0532",
+    {"cle": "rts_532", "lue": True, "celex": "32025R0532",
      "titre": "Règlement délégué (UE) 2025/532",
      "lien": "https://eur-lex.europa.eu/eli/reg_del/2025/532/oj",
      "apporte": "Ce qu'une entité doit déterminer et évaluer lorsqu'elle "

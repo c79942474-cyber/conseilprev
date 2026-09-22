@@ -40,7 +40,20 @@
   "use strict";
 
   var CIBLE = "i-aes.com";
-  var RELAIS = "/sentinel";
+  /* LE RELAIS EST PUBLIC, ET C'EST LA CONDITION DE TOUT LE RESTE.
+     Il a d'abord été /sentinel. Mesuré au navigateur : un visiteur NON
+     CONNECTÉ qui cliquait « i-aes.com » dans le pied de page atterrissait sur
+     « Connexion — Sentinel AI ». La bascule transformait alors « le site
+     institutionnel ne répond pas » en « créez un compte » — pire que le lien
+     mort qu'elle devait éviter. Un seul lien y avait échappé, par exception ;
+     les trois autres tombaient tous sur le formulaire.
+     /relais-iaes ne garde rien, dit quel signal a déclenché la bascule, et
+     REDONNE l'adresse d'origine pour que le visiteur réessaie lui-même. */
+  var RELAIS = "/relais-iaes";
+  /* Écrit une seule fois : l'ajout du marqueur et le contrôle « déjà posé »
+     doivent viser exactement la même chaîne, sinon une seconde bascule
+     l'empilerait. */
+  var ETAT = " (indisponible)";
   var BALISE = "https://i-aes.com/wp-content/uploads/2026/02/LOGOv3.jpg";
   var DELAI_BALISE = 6000;
 
@@ -52,16 +65,17 @@
          le site web : basculer une adresse de contact vers une page n'aurait
          aucun sens, et priverait le visiteur du seul moyen de nous écrire. */
       if (/^mailto:/i.test(a[i].getAttribute("href") || "")) continue;
-      /* UN LIEN PEUT REFUSER LE RELAIS, ET UN SEUL LE FAIT AUJOURD'HUI.
-         Le relais mène à /sentinel, qui exige un compte : pour un visiteur
-         NON CONNECTÉ, il transforme « le site institutionnel ne répond pas »
-         en « créez un compte », ce qui est pire que le lien mort qu'il devait
-         éviter. Un appel dont l'intitulé promet ce site-là doit continuer d'y
-         mener, quitte à tomber sur une page en panne : le visiteur comprend
-         une panne, il ne comprend pas un formulaire de connexion. Mesuré au
-         navigateur : un clic anonyme aboutissait à « Connexion — Sentinel AI ».
-         Les autres liens — logo, icône, mention du pied de page — gardent le
-         relais : ils ne promettent rien de précis. */
+      /* UN LIEN PEUT REFUSER LE RELAIS — ET PLUS AUCUN LIEN DU SITE NE LE
+         FAIT. L'exception avait été posée sur l'appel « Découvrir le site
+         institutionnel » quand le relais menait à /sentinel : mieux valait
+         une page en panne, qui se comprend, qu'un formulaire de connexion,
+         qui ne se comprend pas. Le relais est désormais public et rend
+         l'adresse d'origine : l'exception coûterait au visiteur ce qu'elle
+         devait lui épargner — un message d'erreur du navigateur, hors de
+         notre site, sans explication ni retour.
+         L'ATTRIBUT RESTE HONORÉ, et il sert : la page de relais elle-même
+         porte un lien « Réessayer i-aes.com », qu'une bascule chargée là
+         réécrirait vers la page déjà affichée. */
       if (a[i].hasAttribute("data-bascule-jamais")) continue;
       out.push(a[i]);
     }
@@ -79,14 +93,23 @@
       el.setAttribute("href", RELAIS + "?bascule=" + encodeURIComponent(motif)
         + "&depuis=" + encodeURIComponent(CIBLE));
       el.removeAttribute("target");
-      /* Le lien change de destination : il doit changer d'intitulé, sinon le
-         visiteur clique sur « i-aes.com » et atterrit ailleurs sans le savoir.
-         On ne touche pas aux liens dont le contenu est une image ou une icône :
-         leur libellé est le title, qu'on met à jour. */
+      /* L'INTITULÉ DISAIT « Sentinel », ET C'EST DEVENU FAUX. Tant que le
+         relais menait à /sentinel, remplacer « i-aes.com » par « Sentinel »
+         était la seule façon de ne pas mentir sur la destination. Le relais
+         mène maintenant à une page qui PARLE d'i-aes.com et en redonne
+         l'adresse : effacer le domaine de l'intitulé effacerait justement le
+         sujet du lien.
+         ON AJOUTE DONC UN ÉTAT, AU LIEU DE CHANGER DE SUJET — et on l'ajoute
+         DANS LE TEXTE, pas seulement dans le `title` : un title ne s'ouvre
+         pas au doigt, et le visiteur au téléphone ne le lirait jamais. */
       var t = (el.textContent || "").trim();
-      if (t && t.indexOf(CIBLE) >= 0) el.textContent = t.replace(CIBLE, "Sentinel");
-      el.setAttribute("title", "Le site " + CIBLE + " ne répond pas — ce lien conduit à "
-        + "Sentinel, hébergé séparément.");
+      if (t && t.indexOf(CIBLE) >= 0 && t.indexOf(ETAT) < 0) el.textContent = t + ETAT;
+      var dit = "Le site " + CIBLE + " ne répond pas — ce lien explique pourquoi "
+        + "et redonne l'adresse.";
+      el.setAttribute("title", dit);
+      /* Le logo et l'icône n'ont pas de texte : sans libellé accessible, leur
+         changement d'état ne serait annoncé à personne. */
+      if (!t) el.setAttribute("aria-label", dit);
     }
     document.documentElement.setAttribute("data-iaes", "injoignable");
     try {

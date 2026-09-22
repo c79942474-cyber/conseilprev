@@ -44,16 +44,26 @@ fait tomber une fonction — est le travail du cabinet, pas une traduction.
 import datetime
 
 
+# CHAQUE SOURCE DIT CE QU'ELLE A APPORTÉ — voir la raison en tête du
+# registre de `nist_800_53`, où deux publications listées à l'identique
+# laissaient croire que les deux avaient été lues.
 SOURCES = (
     {"cle": "rmf",
      "titre": "NIST AI 100-1 — AI Risk Management Framework (AI RMF 1.0)",
      "date": "2023-01", "doi": "https://doi.org/10.6028/NIST.AI.100-1",
      "droits": "Œuvre du gouvernement des États-Unis — libre de citation.",
+     "lue": True,
+     "apporte": "Les quatre fonctions, les dix-neuf catégories et les "
+                "soixante-douze sous-catégories, comptées dans le document "
+                "et recomptées à chaque chargement par la garde du module.",
      "certifiable": False},
     {"cle": "genai",
      "titre": "NIST AI 600-1 — AI RMF: Generative Artificial Intelligence Profile",
      "date": "2024-07", "doi": "https://doi.org/10.6028/NIST.AI.600-1",
      "droits": "Œuvre du gouvernement des États-Unis — libre de citation.",
+     "lue": True,
+     "apporte": "Les douze risques propres à l'IA générative, et leur "
+                "rattachement aux sous-catégories du cadre.",
      "certifiable": False},
 )
 

@@ -53,21 +53,28 @@ RESERVE = (
 # 1. LES SOURCES
 # ═══════════════════════════════════════════════════════════════════════
 
+# CHAQUE SOURCE DIT AUSSI SI ELLE A ÉTÉ LUE.
+# `apporte` dit ce qu'on en a tiré ; `lue` dit si le texte lui-même était à
+# disposition. Les deux ne se déduisent pas l'un de l'autre : on peut tirer
+# beaucoup d'un texte qu'on cite sans l'avoir ouvert — et c'est précisément
+# ce qui s'est passé pour SP 800-53 Rev. 4, dont le registre laissait croire
+# le contraire. Voir la raison, en toutes lettres, en tête du registre de
+# `nist_800_53`.
 SOURCES = (
-    {"cle": "dora", "titre": "Règlement (UE) 2022/2554 (DORA)",
+    {"cle": "dora", "lue": True, "titre": "Règlement (UE) 2022/2554 (DORA)",
      "celex": "32022R2554",
      "lien": "https://eur-lex.europa.eu/legal-content/FR/TXT/?uri="
              "CELEX:32022R2554",
      "apporte": "Les articles 31 à 44 : la désignation, le superviseur "
                 "principal, les pouvoirs, et le suivi par les autorités "
                 "compétentes."},
-    {"cle": "rd_295", "titre": "Règlement délégué (UE) 2025/295",
+    {"cle": "rd_295", "lue": True, "titre": "Règlement délégué (UE) 2025/295",
      "celex": "32025R0295",
      "lien": "https://eur-lex.europa.eu/eli/reg_del/2025/295/oj",
      "apporte": "Ce que le prestataire désigné doit fournir, sous quelle "
                 "forme, et ce que l'autorité compétente apprécie ensuite "
                 "chez l'entité financière cliente."},
-    {"cle": "rd_420", "titre": "Règlement délégué (UE) 2025/420",
+    {"cle": "rd_420", "lue": True, "titre": "Règlement délégué (UE) 2025/420",
      "celex": "32025R0420",
      "lien": "https://eur-lex.europa.eu/eli/reg_del/2025/420/oj",
      "apporte": "L'équipe d'examen conjoint : qui supervise réellement, "
@@ -76,13 +83,13 @@ SOURCES = (
     # les textes ADOPTÉS par la Commission le 22 février 2024 ; ce corpus
     # porte leur version C(2024), et non leur numérotation au Journal
     # officiel. On cite donc ce qu'on tient, et la lacune le dit.
-    {"cle": "criteres", "titre": "Acte délégué C(2024) 896 de la "
+    {"cle": "criteres", "lue": True, "titre": "Acte délégué C(2024) 896 de la "
                                   "Commission du 22 février 2024",
      "celex": None,
      "lien": None,
      "apporte": "LES CRITÈRES DE DÉSIGNATION, CHIFFRÉS : deux étapes, "
                 "quatre sous-critères de seuil, et la barre des 10 %."},
-    {"cle": "redevances", "titre": "Acte délégué C(2024) 902 de la "
+    {"cle": "redevances", "lue": True, "titre": "Acte délégué C(2024) 902 de la "
                                     "Commission du 22 février 2024",
      "celex": None,
      "lien": None,

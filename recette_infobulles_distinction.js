@@ -407,28 +407,68 @@ const GEOMETRIE = () =>
   await pg.evaluate(() => setLang('fr'));
   await pg.waitForTimeout(320);
 
-  /* ── L’APPEL INSTITUTIONNEL N’EST PLUS DÉTOURNÉ ──────────────────────── */
+  /* ── L’APPEL INSTITUTIONNEL EST DÉTOURNÉ — VERS UNE PAGE PUBLIQUE ────
+     CE QUE CETTE SECTION MESURAIT AVANT, ET POURQUOI ELLE A CHANGÉ.
+     Elle vérifiait que l’appel « Découvrir le site institutionnel » RESTAIT
+     sur i-aes.com quoi qu’il arrive. C’était la bonne exigence tant que la
+     bascule menait à /sentinel : mieux valait une page en panne, qui se
+     comprend, qu’un formulaire de connexion, qui ne se comprend pas.
+
+     LE RELAIS EST DEVENU PUBLIC. /relais-iaes n’exige aucun compte, dit
+     quel signal a déclenché la bascule, et REDONNE l’adresse d’origine
+     pour que le visiteur réessaie lui-même. Garder l’exception coûterait
+     désormais au visiteur ce qu’elle devait lui épargner : une erreur de
+     navigateur, hors du site, sans explication ni retour.
+
+     ON MESURE DONC L’INVERSE — et surtout, on mesure que la destination
+     N’EST PAS un formulaire de connexion, ce qui était le défaut signalé. */
   const inst2 = await pg.evaluate(() => {
     const a = document.querySelector('#differenciateurs .diff-card:nth-child(4) .diff-go');
     return { href: a.getAttribute('href'), bascule: a.getAttribute('data-bascule') || '',
-             exempt: a.hasAttribute('data-bascule-jamais') };
+             exempt: a.hasAttribute('data-bascule-jamais'),
+             origine: a.getAttribute('data-href-origine') || '' };
   });
-  ok('l’appel institutionnel reste sur i-aes.com, quoi qu’il arrive',
-     inst2.href === 'https://i-aes.com' && !inst2.bascule && inst2.exempt,
-     inst2.href + (inst2.bascule ? ' (détourné : ' + inst2.bascule + ')' : ''));
+  ok('l’appel institutionnel ne sort plus du relais', !inst2.exempt,
+     'il porte encore data-bascule-jamais');
+  ok('la bascule l’a bien détourné vers le relais PUBLIC',
+     /^\/relais-iaes\?/.test(inst2.href) && !!inst2.bascule,
+     inst2.href.slice(0, 60));
+  ok('l’adresse d’origine est conservée pour le retour',
+     inst2.origine === 'https://i-aes.com', inst2.origine || '(perdue)');
 
-  /* ON MESURE OÙ LE CLIC PART, PAS CE QUE LE RÉSEAU EN FAIT. */
+  /* ON MESURE OÙ LE CLIC ABOUTIT, PAS CE QUE LE RÉSEAU EN FAIT. */
   await centrer();
   await pg.waitForTimeout(300);
-  let dest = '(aucune navigation)';
-  const attente = ctx.waitForEvent('page', { timeout: 12000 })
-    .then(p => p.waitForTimeout(1800).then(() => { dest = p.url(); return p; }))
-    .catch(() => null);
+  /* ═══ ON LAISSE LA FENÊTRE DU LIMITEUR SE ROULER, ET C'EST MESURÉ ═══
+     Le serveur local plafonne à 120 requêtes par minute et par adresse.
+     Cette recette en consomme l'essentiel : arrivée ici, la navigation
+     revenait 429, le document était vide — et le contrôle « ce n'est pas
+     un formulaire de connexion » PASSAIT, parce qu'un titre vide ne
+     contient pas le mot « connexion ». Un contrôle qui réussit sur une
+     page absente ne mesure rien. On attend donc, et on exige un titre. */
+  console.log('     … attente de la fenêtre de débit (65 s)');
+  await pg.waitForTimeout(65000);
+
   await pg.click('#differenciateurs .diff-card:nth-child(4) .diff-go');
-  const ongInst = await attente;
-  if (ongInst) await ongInst.close().catch(() => {});
-  ok('un clic sur l’appel institutionnel part bien vers i-aes.com',
-     /^https:\/\/i-aes\.com/.test(dest), 'destination → ' + dest.slice(0, 60));
+  /* ON ATTEND LA PAGE, PAS UN DÉLAI. Une première version lisait le titre
+     après 1 500 ms fixes : l'adresse avait changé, le document non. */
+  await pg.waitForSelector('#lien-origine', { timeout: 15000 }).catch(() => {});
+  const arrivee = { url: pg.url(), titre: await pg.title() };
+  ok('le clic aboutit sur une VRAIE page de relais',
+     /\/relais-iaes/.test(arrivee.url) && /i-aes\.com/.test(arrivee.titre),
+     (arrivee.titre || '(page vide)') + ' — ' + arrivee.url.replace(BASE, ''));
+  ok('et ce n\u2019est pas un formulaire de connexion',
+     !!arrivee.titre && !/connexion|login|sign/i.test(arrivee.titre),
+     arrivee.titre || '(page vide — le contrôle serait faussement vert)');
+  /* LE CONTRÔLE QUI COMPTE VRAIMENT : le visiteur peut-il encore atteindre
+     le site qu’il venait chercher ? */
+  const retourIaes = await pg.evaluate(() => {
+    const a = document.getElementById('lien-origine');
+    return a ? a.getAttribute('href') : null;
+  });
+  ok('la page de relais REDONNE l’adresse d’origine',
+     retourIaes === 'https://i-aes.com', String(retourIaes));
+  await pg.goBack({ waitUntil: 'domcontentloaded' }).catch(() => {});
   await pg.bringToFront();
 
   await nav.close();

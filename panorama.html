@@ -12787,6 +12787,12 @@ if(window.parent&&window.parent!==window){
   if(window.ResizeObserver){try{new ResizeObserver(annonce).observe(document.body);}catch(e){}}
 }
 </script>
+<!-- LES INFOBULLES S'OUVRENT AUSSI AU DOIGT ET AU CLAVIER.
+     Un `:hover` n'existe pas sur un écran tactile : mesuré au navigateur,
+     l'opacité de la bulle restait à 0 avant ET après un appui. Ce script ne
+     dessine aucune bulle — il dérive l'état ouvert des règles de survol
+     déjà écrites ici, et se contente de poser une classe. -->
+<script src="/infobulles.js" defer></script>
 <script src="/fleches.js" defer></script>
 
 <script>

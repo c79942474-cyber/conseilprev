@@ -170,6 +170,15 @@ SANS_PIED_DE_PAGE = {
     "invitation.html":    "écran d'accès : une invitation se poursuit ou se ferme",
     "invitation-expiree.html": "écran d'accès, invitation périmée",
     "reset-password.html": "écran d'accès : réinitialisation en cours",
+    # PAGE DE PANNE D'UN TIERS, ET SES SORTIES SONT LES SIENNES. Le pied de
+    # page partagé porte précisément les liens i-aes.com qui ont amené le
+    # visiteur ici — il lui re-proposerait le lien qui vient d'échouer, et
+    # il charge `bascule.js`, qui les réécrirait vers la page déjà affichée.
+    # Cette page offre à la place quatre sorties choisies : l'adresse
+    # d'origine pour réessayer, le courriel, l'accueil et Sentinel.
+    "relais-iaes.html":   "page de panne d'un tiers : ses sorties lui sont "
+                          "propres, et le pied de page partagé re-proposerait "
+                          "le lien qui a échoué",
 }
 
 

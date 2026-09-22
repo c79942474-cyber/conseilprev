@@ -6263,6 +6263,14 @@ PAGES = {
     '/livre-blanc':   'livre-blanc.html',
     '/accessibility': 'accessibility.html',
     '/map':           'map.html',
+    # LE RELAIS DE LA BASCULE, ET IL EST ICI POUR UNE RAISON PRECISE.
+    # `bascule.js` reecrit les liens vers i-aes.com quand ce site ne repond
+    # pas. Le relais a d'abord ete /sentinel : mesure au navigateur, un
+    # visiteur NON CONNECTE recevait « Connexion — Sentinel AI » au lieu du
+    # site institutionnel. Cette page-ci est dans PAGES, donc publiee par la
+    # boucle « tout public » — c'est exactement ce qu'on veut : une page de
+    # panne derriere un compte ne serait lue par personne.
+    '/relais-iaes':   'relais-iaes.html',
 }
 
 # /observatoire et /panorama ne figurent PLUS ici : la boucle qui suit publie
