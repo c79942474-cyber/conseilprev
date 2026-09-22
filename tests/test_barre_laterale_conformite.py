@@ -573,8 +573,12 @@ def test_go_appelle_l_ouverture_du_tiroir_courant():
 #  6. LES DEUX NOUVEAUX MODULES SONT BRANCHÉS DE BOUT EN BOUT
 # ═══════════════════════════════════════════════════════════════════════════
 
+# LE TIROIR NIS 2 EN PORTE SEPT DEPUIS QUE LE CALQUE FRANÇAIS EXISTE, et
+# les deux nouveaux sont rangés LÀ plutôt que dans un tiroir à eux : le
+# ReCyF n'est pas une norme de plus à côté de NIS 2, c'est ce que la France
+# fera de NIS 2. Les séparer laisserait croire à deux obligations.
 @pytest.mark.parametrize("grp,attendus", [
-    ("iso27001", 4), ("iso42001", 4), ("nis2", 5)])
+    ("iso27001", 4), ("iso42001", 4), ("nis2", 7)])
 def test_chaque_nouveau_tiroir_porte_ses_onglets(grp, attendus):
     r = _executer(_OUTILS + "rendre(items(%s).length);" % json.dumps(grp))
     assert r == attendus, "%s porte %d onglets au lieu de %d" % (grp, r, attendus)

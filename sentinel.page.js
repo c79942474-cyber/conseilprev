@@ -976,6 +976,8 @@ var PAGE_META = {
   'nis2-gouvernance':{ section: 'NIS 2', label: 'Gouvernance art. 20' },
   'nis2-signalement':{ section: 'NIS 2', label: 'Signalement art. 23' },
   'nis2-chiffre':  { section: 'NIS 2', label: 'Exposition chiffrée' },
+  'recyf-objectifs': { section: 'ReCyF', label: 'Les vingt objectifs' },
+  'recyf-analyse':   { section: 'ReCyF', label: 'Analyse de risque' },
     'rgpd-hub': { section: 'RGPD & PRIVACY', label: 'Vue d\u2019ensemble' },
     'rgpd-conformite': { section: 'RGPD & PRIVACY', label: 'Conformité RGPD' },
     'rgpd-sensibilisation': { section: 'RGPD & PRIVACY', label: 'Sensibilisation' },
@@ -1255,6 +1257,12 @@ var SENT_T = {
     'pg.nis2-signalement.eb': 'NIS 2 · Article 23',
     'pg.nis2-signalement.h1': 'The clock starts at <em>awareness</em>',
     'pg.nis2-signalement.p': '“Upon becoming aware of the significant incident” — not at its occurrence, not at its technical detection. Which moves the question from detection to <b>qualification</b>: the day someone inside the company understood that it was significant, the twenty-four hours had begun.',
+    'pg.recyf-objectifs.eb': 'ReCyF · French transposition',
+    'pg.recyf-objectifs.h1': 'Twenty objectives, <em>and half of them for an important entity</em>',
+    'pg.recyf-objectifs.p': 'At its Article&nbsp;14, the French bill replaces the directive\u2019s ten measures with <b>four families</b> \u2014 steering, protection, defence, resilience \u2014 and refers to a reference framework: the <b>ReCyF</b>. Twenty security objectives, <b>152 means of compliance</b> for an essential entity, <b>76</b> for an important one. That is what ANSSI will audit against.',
+    'pg.recyf-analyse.eb': 'ReCyF · Objective 16',
+    'pg.recyf-analyse.h1': 'Risk analysis <em>stops being a tick-box</em>',
+    'pg.recyf-analyse.p': 'In the directive, risk analysis is <b>one measure out of ten</b>. The ReCyF makes it an objective of its own, with four verifiable requirements \u2014 and <b>reserves it for essential entities</b>. An important entity need not formalise a risk-based approach; it must still carry one out to justify any exclusion from scope.',
     'pg.nis2-chiffre.eb': 'NIS 2 · Article 34',
     'pg.nis2-chiffre.h1': 'A <em>floor</em> on the ceiling',
     'pg.nis2-chiffre.p': 'Article&nbsp;34 requires Member States to provide for fines with a maximum <b>“of at least”</b> these amounts. So the figure is not what the company risks at most: it is the <b>minimum the State must make possible</b>. A national transposition may provide for more.',
@@ -1476,6 +1484,10 @@ function go(id, el, sec, pg) {
   if (id.indexOf('iso42001') === 0 && typeof window.isoInit === 'function') _apresPeinture(window.isoInit);
   if (id.indexOf('iso27001') === 0 && typeof window.iso27Init === 'function') _apresPeinture(window.iso27Init);
   if (id.indexOf('nis2') === 0 && typeof window.nis2Init === 'function') _apresPeinture(window.nis2Init);
+  /* Le calque français a son propre chargement : son préfixe n'est pas
+     « nis2 », et sans cette ligne les deux panneaux resteraient sur
+     « Chargement… » pour qui y arrive par un lien direct. */
+  if (id.indexOf('recyf') === 0 && typeof window.recyfInit === 'function') _apresPeinture(window.recyfInit);
   /* MÊME RAISON QUE POUR LES TROIS AU-DESSUS, ET ELLE A DÉJÀ COÛTÉ UNE
      RECETTE : le `;doraInit()` écrit dans le `onclick` de la barre
      latérale ne s'exécute PAS quand on arrive par `?goto=`, par un
@@ -10278,6 +10290,22 @@ var PAGE_GUIDES = {
       {h:"À quoi sert cette page", t:"À chiffrer ce que le texte chiffre, en disant ce que le chiffre EST. L’article 34 impose aux États membres des amendes d’un maximum « d’au moins » 10 M€ ou 2 % du chiffre d’affaires mondial pour les entités essentielles, 7 M€ ou 1,4 % pour les importantes. Ce sont des PLANCHERS imposés aux États, pas des plafonds opposables à l’administration."},
       {h:"Comment l’utiliser", t:"Saisissez le chiffre d’affaires mondial du GROUPE, pas celui de la filiale concernée : l’assiette est celle de l’entreprise à laquelle l’entité appartient, et lire le chiffre de la filiale divise l’exposition par l’écart entre les deux. Un repère utile : les deux paliers pivotent au même chiffre d’affaires, 500 M€. En dessous, ce sont les planchers forfaitaires qui commandent ; au-dessus, les pourcentages. L’écart entre les deux qualifications reste de 43 % de part et d’autre."},
       {h:"Ce qu’elle ne fait pas", t:"Elle n’annonce jamais une exposition maximale, parce que la directive n’en fixe pas : votre plafond réel se lit dans la loi de transposition de chaque État membre où vous opérez, et elle peut aller au-delà. Ne lisez surtout pas ces montants comme ceux du CRA, qui est un règlement d’application directe : là-bas, les montants sont les montants. Et elle n’estime aucun coût de mise en conformité."}
+    ]
+  },
+  'recyf-objectifs': {
+    title: "ReCyF — les vingt objectifs de la transposition française",
+    sections: [
+      {h:"À quoi sert cette page", t:"À montrer ce que la France va demander, et qui n'a pas la forme de la directive. Le projet de loi remplace à son article 14 les dix mesures de l'article 21 §2 par quatre familles — pilotage, protection, défense, résilience — et renvoie au ReCyF : vingt objectifs de sécurité et 152 moyens acceptables de conformité. Un contrôle de l'ANSSI portera sur ceux-là."},
+      {h:"Comment l'utiliser", t:"Renseignez d'abord votre qualification : la page refuse de chiffrer sans elle, et ce refus est le premier service rendu. Le principe de proportionnalité réserve les objectifs 16 à 20 aux entités essentielles, et réduit le nombre de moyens attendus pour quinze autres — 152 pour une essentielle, 76 pour une importante, exactement la moitié. C'est le premier texte où la distinction essentielle / importante change LES MESURES, et pas seulement la supervision et le plafond d'amende."},
+      {h:"Ce qu'elle ne fait pas", t:"Elle ne rend JAMAIS un taux de conformité. Ni le projet de loi ni le référentiel ne sont en vigueur : le PJL n'est pas voté, le ReCyF porte « DOCUMENT DE TRAVAIL » sur chaque page, et le décret en Conseil d'État qui doit fixer les objectifs n'existe pas. Ce qui vous oblige aujourd'hui reste la directive. Le chiffre rendu ici est un taux de PRÉPARATION, il n'entre dans aucun indice consolidé, et il changera de nature le jour du décret — par une décision, pas par un basculement automatique."}
+    ]
+  },
+  'recyf-analyse': {
+    title: "ReCyF — l'analyse de risque, objectif 16",
+    sections: [
+      {h:"À quoi sert cette page", t:"À sortir l'analyse de risque du statut de case à cocher. Dans la directive, c'est la mesure a) parmi dix. L'objectif 16 en fait quatre exigences distinctes : une gouvernance par les risques portée par le dirigeant exécutif avec des moyens alloués ; chaque système couvert, sur cinq entrées nommées ; les risques résiduels explicitement acceptés et un plan d'action où chaque action a une échéance et un responsable ; un réexamen au moins tous les trois ans."},
+      {h:"Comment l'utiliser", t:"Commencez par le périmètre, pas par l'analyse. L'objectif 1 impose que TOUS les systèmes soient couverts, et n'admet une exclusion que si une analyse de risques montre l'absence d'exposition aux trois risques nommés — interruption, divulgation, altération. Le référentiel ferme explicitement la porte du contournement : la présence de mesures de sécurité ne vaut pas justification. Vérifiez ensuite vos deux voies de preuve : un SMSI ISO/CEI 27001:2022 certifié, borné par son périmètre de certification, et une PACS qualifiée par l'ANSSI, bornée par le suivi du plan de traitement."},
+      {h:"Ce qu'elle ne fait pas", t:"Elle ne juge pas la QUALITÉ de votre analyse de risque : elle mesure la complétude de ce que vous déclarez. Et elle ne s'adresse pas à tout le monde — l'objectif 16 est réservé aux entités essentielles par proportionnalité. Pour une entité importante, la page le dit au lieu d'afficher un zéro qui serait lu comme un manquement ; l'analyse reste pourtant nécessaire pour justifier toute exclusion de périmètre, et la mesure a) de la directive reste due."}
     ]
   },
   // ── Cinq panneaux qui retombaient sur le guide générique.
@@ -20653,6 +20681,7 @@ var GUIDED_PATHS = [
       {id:'nis2-qualifier', label:"Suis-je concern\u00e9 ?", action:"Renseignez le secteur et la taille. Ouvrez ensuite \u00ab\u00a0les cas o\u00f9 la taille ne compte pas\u00a0\u00bb.", gain:"Huit portes ignorent totalement la taille, et deux m\u00e8nent directement au statut d\u2019entit\u00e9 essentielle.", tip:"Le \u00ab\u00a0OU\u00a0\u00bb des seuils financiers est le pi\u00e8ge\u00a0: 60\u00a0M\u20ac de chiffre d\u2019affaires avec 20\u00a0M\u20ac de bilan reste une MOYENNE entreprise. Le lire comme un \u00ab\u00a0ET\u00a0\u00bb surqualifie."},
       {id:'nis2', label:"Mesures art.\u00a021 \u00a72", action:"Cotez les dix mesures, m\u00eame grossi\u00e8rement, pour situer l\u2019\u00e9cart.", gain:"Le socle est le m\u00eame pour les entit\u00e9s essentielles et importantes\u00a0: seule la SUPERVISION diff\u00e8re.", tip:"Une mesure non renseign\u00e9e n\u2019est pas une mesure conforme. Le nombre de lignes vides est affich\u00e9 \u00e0 c\u00f4t\u00e9 du taux, expr\u00e8s."},
       {id:'nis2-chiffre', label:"Exposition chiffr\u00e9e", action:"Regardez l\u2019\u00e9cart entre les deux paliers pour VOTRE chiffre d\u2019affaires.", gain:"43\u00a0% d\u2019\u00e9cart entre importante et essentielle, quel que soit le chiffre d\u2019affaires\u00a0: les deux paliers pivotent au m\u00eame endroit, 500\u00a0M\u20ac.", tip:"Ce sont des PLANCHERS impos\u00e9s aux \u00c9tats, pas des plafonds. La loi de transposition peut aller au-del\u00e0\u00a0\u2014 ne les lisez pas comme les montants du CRA."},
+      {id:'recyf-objectifs', label:"ReCyF \u2014 les vingt objectifs", action:"Renseignez la m\u00eame qualification qu\u2019\u00e0 l\u2019\u00e9tape 1, et regardez ce que la France demandera \u00e0 votre place dans la liste.", gain:"La distinction essentielle\u00a0/\u00a0importante cesse d\u2019\u00eatre une affaire de supervision\u00a0: elle retire cinq objectifs sur vingt \u00e0 une entit\u00e9 importante, et fait passer les moyens attendus de 152 \u00e0 76.", tip:"Le taux rendu ici est un taux de PR\u00c9PARATION. Ni le projet de loi ni le r\u00e9f\u00e9rentiel ne sont en vigueur\u00a0: ce qui vous oblige aujourd\u2019hui reste la directive."},
       {id:'cadre-normatif', label:"Cadre normatif", action:"Regardez la colonne NIS\u00a02 en face de vos modules existants.", gain:"Montre o\u00f9 NIS\u00a02 recouvre ce que vous portez d\u00e9j\u00e0 au titre d\u2019un autre cadre.", tip:"Recouvrir n\u2019est pas remplacer\u00a0: NIS\u00a02 impose des D\u00c9LAIS que les autres cadres ne fixent pas."}
     ]
   },
@@ -20665,7 +20694,8 @@ var GUIDED_PATHS = [
       {id:'nis2-qualifier', label:"Suis-je concern\u00e9 ?", action:"V\u00e9rifiez d\u2019abord si vous \u00eates essentielle ou importante. L\u2019escalade sur votre personne n\u2019existe que dans un cas.", gain:"L\u2019article\u00a032,\u00a0\u00a75, ne vise QUE les entit\u00e9s essentielles. L\u2019article\u00a033 n\u2019a pas d\u2019\u00e9quivalent.", tip:"Ce qui fait basculer n\u2019est pas votre niveau de s\u00e9curit\u00e9\u00a0: c\u2019est le secteur et la taille. On y entre en recrutant."},
       {id:'nis2-gouvernance', label:"Gouvernance art.\u00a020", action:"Regardez les cinq lignes, et surtout laquelle des cinq n\u2019est PAS une obligation.", gain:"Quatre obligations, un encouragement. Le taux affich\u00e9 ne compte que les quatre, expr\u00e8s.", tip:"La formation des dirigeants est l\u2019obligation, celle du personnel l\u2019encouragement. Une entreprise qui forme toutes ses \u00e9quipes sauf son conseil a manqu\u00e9 la seule des deux qui l\u2019expose personnellement."},
       {id:'nis2-chiffre', label:"Exposition chiffr\u00e9e", action:"Situez le palier, et lisez l\u2019assiette avant le montant.", gain:"L\u2019assiette est le chiffre d\u2019affaires mondial du GROUPE, pas celui de la filiale concern\u00e9e.", tip:"Lire le chiffre de la filiale divise l\u2019exposition par l\u2019\u00e9cart entre la filiale et le groupe. C\u2019est le plus gros facteur d\u2019erreur de ce calcul."},
-      {id:'nis2-signalement', label:"Signalement art.\u00a023", action:"Sachez qui, chez vous, peut d\u00e9clencher une alerte pr\u00e9coce un vendredi soir.", gain:"L\u2019horloge d\u00e9marre \u00e0 la CONNAISSANCE de l\u2019incident\u00a0: elle a pu d\u00e9marrer sans que vous le sachiez.", tip:"Vingt-quatre heures, c\u2019est un week-end. La d\u00e9l\u00e9gation doit exister avant, pas s\u2019improviser."}
+      {id:'nis2-signalement', label:"Signalement art.\u00a023", action:"Sachez qui, chez vous, peut d\u00e9clencher une alerte pr\u00e9coce un vendredi soir.", gain:"L\u2019horloge d\u00e9marre \u00e0 la CONNAISSANCE de l\u2019incident\u00a0: elle a pu d\u00e9marrer sans que vous le sachiez.", tip:"Vingt-quatre heures, c\u2019est un week-end. La d\u00e9l\u00e9gation doit exister avant, pas s\u2019improviser."},
+      {id:'recyf-analyse', label:"ReCyF \u2014 analyse de risque", action:"Si vous \u00eates entit\u00e9 essentielle, lisez les quatre exigences de l\u2019objectif\u00a016\u00a0: c\u2019est vous qu\u2019il nomme, pas la DSI.", gain:"L\u2019approche par les risques est plac\u00e9e sous la responsabilit\u00e9 du DIRIGEANT EX\u00c9CUTIF, et elle exige que des moyens financiers, humains ou techniques soient allou\u00e9s \u2014 un arbitrage qui ne se d\u00e9l\u00e8gue pas.", tip:"Une entit\u00e9 importante n\u2019a pas \u00e0 formaliser cette approche\u00a0: l\u2019\u00e9cran le dit au lieu d\u2019afficher un z\u00e9ro qui serait lu comme un manquement."},
     ]
   },
   {
@@ -26831,3 +26861,348 @@ function owaspInit() {
     });
 }
 window.owaspInit = owaspInit;
+
+/* ═══════════════════════════════════════════════════════════════════════
+ *  RECYF — LA TRANSPOSITION FRANÇAISE, ET SON TAUX DE PRÉPARATION
+ * ═══════════════════════════════════════════════════════════════════════
+ *
+ * CE QUE CET ÉCRAN NE FERA JAMAIS : afficher le nombre sans sa nature. Le
+ * moteur renvoie `nature` et `ne_pas_confondre` DANS le résultat, pas à
+ * côté — et la peinture les rend visibles avec le taux, pas après. Un
+ * chiffre présenté comme une conformité contre un document de travail
+ * serait faux d'une manière qui ne se voit pas.
+ *
+ * LES LIBELLÉS VIENNENT DU MOTEUR. Vingt objectifs recopiés ici auraient
+ * divergé du référentiel à la première mise à jour, et la divergence se
+ * serait vue chez le client — ce dépôt a déjà payé ce défaut-là.
+ */
+var RECYF_REF = null;
+var RECYF_ETATS = {};
+
+function recyfEsc(x) {
+  return String(x == null ? '' : x)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function recyfInit() {
+  if (RECYF_REF) { recyfStatut(); recyfPeindre(); recyfAnalyse(); return; }
+  fetch('/api/recyf/referentiel')
+    .then(function (r) { return r.json(); })
+    .then(function (j) {
+      if (!j || !j.ok) throw new Error('referentiel');
+      RECYF_REF = j.referentiel;
+      recyfStatut(); recyfPeindre(); recyfAnalyse();
+    })
+    .catch(function () {
+      var b = document.getElementById('recyf-body');
+      if (b) b.textContent = 'Référentiel indisponible.';
+    });
+}
+
+/* LE BANDEAU DE STATUT, PEINT DEPUIS LE MOTEUR.
+   Il est le premier élément du panneau parce qu'il commande la lecture de
+   tout le reste. Le jour où le décret paraît, `en_vigueur` passe à vrai
+   côté serveur et ce bandeau change tout seul — aucune phrase recopiée
+   dans le HTML n'aurait suivi. */
+function recyfStatut() {
+  var z = document.getElementById('recyf-statut');
+  if (!z || !RECYF_REF) return;
+  var s = RECYF_REF.statut;
+  z.className = 'cnf-cmd bloc' + (s.en_vigueur ? '' : ' recyf-pas-en-vigueur');
+  z.innerHTML =
+    '<b>' + (s.en_vigueur ? 'Texte en vigueur.' : 'Ce texte n’est pas en vigueur.')
+    + '</b> ' + recyfEsc(s.dit)
+    + '<div class="q-notes" style="margin-top:6px">'
+    + '<b>Ce qui vous oblige aujourd’hui :</b> ' + recyfEsc(s.ce_qui_oblige_aujourdhui)
+    + '</div>'
+    + '<div class="q-notes" style="margin-top:4px"><b>Pourquoi s’y préparer quand même :</b> '
+    + recyfEsc(s.pourquoi_quand_meme) + '</div>'
+    + '<div class="q-notes" style="margin-top:4px"><b>Ce qui manque :</b> '
+    + (s.ce_qui_manque || []).map(recyfEsc).join(' · ') + '</div>';
+}
+
+function recyfStatutChoisi() {
+  var e = document.getElementById('recyf-statut-sel');
+  return e && e.value ? e.value : null;
+}
+
+/* UN CHANGEMENT D'ÉTAT NE REPEINT QUE LE TAUX, PAS LA LISTE.
+   ═══════════════════════════════════════════════════════════════════════
+   DÉFAUT MESURÉ AU NAVIGATEUR. `recyfEtat` appelait `recyfPeindre`, qui
+   reconstruit tout le corps du panneau — y compris les vingt sélecteurs.
+   Cocher quinze objectifs d'affilée donnait 93,3 % au lieu de 100 : chaque
+   repeinture DÉTACHE les champs, et une sélection faite sur un élément qui
+   vient d'être remplacé se perd. Sur un écran réel, c'est un client qui
+   coche et ne retrouve pas son choix — sans erreur, sans trace.
+   La liste n'a d'ailleurs aucune raison de changer : c'est le TAUX qui
+   dépend des états, pas les objectifs. */
+function recyfEtat(numero, sel) {
+  RECYF_ETATS[numero] = sel.value;
+  recyfMajTaux();
+}
+
+function recyfMajTaux() {
+  var statut = recyfStatutChoisi();
+  if (!statut) return;
+  fetch('/api/recyf/preparation', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ statut: statut, etats: RECYF_ETATS })
+  }).then(function (r) { return r.json(); })
+    .then(function (j) {
+      if (!j || !j.ok) return;
+      var b = document.getElementById('recyf-body');
+      var t = b && b.querySelector('.recyf-taux');
+      var p = b && b.querySelector('.recyf-piliers');
+      if (!t || !p) { recyfPeindre(); return; }
+      /* On remplace les DEUX blocs chiffrés, et rien d'autre. */
+      t.outerHTML = recyfBloTaux(j);
+      var p2 = document.getElementById('recyf-body').querySelector('.recyf-piliers');
+      if (p2) p2.outerHTML = recyfBlocPiliers(j);
+      recyfAnalyse();
+    })
+    .catch(function () { /* le taux reste celui d'avant, la liste est intacte */ });
+}
+
+function recyfPeindre() {
+  var b = document.getElementById('recyf-body');
+  if (!b || !RECYF_REF) return;
+  var statut = recyfStatutChoisi();
+  if (!statut) {
+    /* LA PHRASE VIENT DU MOTEUR, et du référentiel DÉJÀ CHARGÉ. Elle était
+       recopiée ici — deux exemplaires qui auraient divergé — puis obtenue
+       par un second appel, ce qui laissait le panneau muet le temps de la
+       requête et perdait l'explication si celle-ci échouait. */
+    var r = (RECYF_REF && RECYF_REF.refus_sans_statut) || {};
+    b.innerHTML = '<div class="cnf-cmd bloc"><b>Le module refuse de chiffrer '
+      + 'sans qualification, et ce refus est le premier service rendu.</b> '
+      + recyfEsc(r.dit || '')
+      + (r.ou_la_trouver ? '<div class="q-notes" style="margin-top:6px">'
+          + recyfEsc(r.ou_la_trouver) + '</div>' : '') + '</div>';
+    recyfAnalyse();
+    return;
+  }
+  fetch('/api/recyf/preparation', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ statut: statut, etats: RECYF_ETATS })
+  }).then(function (r) { return r.json(); })
+    .then(function (j) {
+      if (!j || !j.ok) { b.textContent = 'Calcul impossible.'; return; }
+      b.innerHTML = recyfRendu(j);
+      /* LES DEUX PANNEAUX PARTAGENT UNE SEULE QUALIFICATION, et le sélecteur
+         n'en est présent que sur celui-ci.
+         DÉFAUT MESURÉ AU NAVIGATEUR : en passant d'« importante » à
+         « essentielle », l'écran de l'objectif 16 gardait son « hors champ ».
+         Il est réservé aux entités essentielles — le lire encore après avoir
+         changé de qualification est exactement la fausse information que ce
+         panneau est censé éviter. Pas de boucle : `recyfAnalyse` ne rappelle
+         jamais `recyfPeindre`. */
+      recyfAnalyse();
+    })
+    .catch(function () { b.textContent = 'Calcul indisponible.'; });
+}
+
+/* LE TAUX ET SA NATURE, DANS LE MÊME BLOC. Séparés, le nombre partirait
+   seul dans une capture d’écran ou un comité. */
+function recyfBloTaux(j) {
+  return '<div class="recyf-taux">'
+    + '<div class="recyf-chiffre">' + (j.taux_preparation == null ? '—'
+        : recyfEsc(j.taux_preparation) + '&nbsp;%') + '</div>'
+    + '<div class="recyf-quoi"><b>Taux de ' + recyfEsc(j.nature) + '</b>'
+    + ' — sur ' + j.sur + ' objectifs dans le champ, '
+    + j.nombre_moyens + ' moyens de conformité attendus.'
+    + '<div class="q-notes">' + recyfEsc(j.ne_pas_confondre) + '</div></div></div>';
+}
+
+var RECYF_ORDRE = ['gouvernance', 'protection', 'defense', 'resilience'];
+
+function recyfBlocPiliers(j) {
+  var h = '<div class="recyf-piliers">';
+  RECYF_ORDRE.forEach(function (c) {
+    var p = j.par_pilier[c];
+    if (!p) return;
+    h += '<div class="recyf-pilier"><div class="recyf-pilier-n">'
+      + recyfEsc(p.nom) + '</div><div class="recyf-pilier-t">'
+      + (p.taux == null ? '—' : recyfEsc(p.taux) + '&nbsp;%')
+      + '</div><div class="q-notes">' + p.den + ' objectif(s)</div></div>';
+  });
+  return h + '</div>';
+}
+
+function recyfRendu(j) {
+  var h = recyfBloTaux(j) + recyfBlocPiliers(j);
+  var ordre = RECYF_ORDRE;
+
+  ordre.forEach(function (c) {
+    var dedans = j.objectifs.filter(function (o) { return o.pilier === c; });
+    if (!dedans.length) return;
+    h += '<h2 class="sec-h">' + recyfEsc(dedans[0].pilier_nom) + '</h2>';
+    dedans.forEach(function (o) {
+      h += '<div class="nist-cat' + (o.compte ? '' : ' recyf-hors') + '">'
+        + '<div><strong>Objectif ' + o.numero + '</strong> — '
+        + recyfEsc(o.titre)
+        + '<div class="q-notes">' + recyfEsc(o.demande) + '</div>'
+        + '<div class="q-notes recyf-meta">'
+        + o.moyens + ' moyen(s) attendu(s) · directive : '
+        + (o.correspondance_nis2 || []).map(function (a) {
+            return 'art. ' + recyfEsc(a); }).join(', ')
+        + (o.reserve_ee ? ' · <b>réservé aux entités essentielles</b>' : '')
+        + '</div></div>';
+      if (o.compte) {
+        h += '<select class="q-sel" aria-label="État de l’objectif ' + o.numero
+          + '" onchange="recyfEtat(' + o.numero + ',this)">'
+          + (RECYF_REF.etats || []).filter(function (e) {
+              return e.cle !== 'hors_champ'; }).map(function (e) {
+              return '<option value="' + recyfEsc(e.cle) + '"'
+                + (o.etat === e.cle ? ' selected' : '') + '>'
+                + recyfEsc(e.nom) + '</option>'; }).join('')
+          + '</select>';
+      } else {
+        h += '<span class="recyf-sansobjet">Hors champ</span>';
+      }
+      h += '</div>';
+    });
+  });
+  return h;
+}
+
+/* ── L’OBJECTIF 16, ET LES DEUX PONTS ─────────────────────────────────── */
+function recyfDeclarationAnalyse() {
+  function on(id) {
+    var e = document.getElementById(id);
+    return !!(e && e.checked);
+  }
+  var entrees = [];
+  (RECYF_REF && RECYF_REF.entrees_analyse || []).forEach(function (x) {
+    if (on('recyf-e-' + x.cle)) entrees.push(x.cle);
+  });
+  var m = document.getElementById('recyf-reexamen-mois');
+  return {
+    gouvernance: on('recyf-a-gouvernance'),
+    moyens_alloues: on('recyf-moyens'),
+    couverture: on('recyf-a-couverture'),
+    entrees: entrees,
+    acceptation: on('recyf-a-acceptation'),
+    risques_residuels_acceptes: on('recyf-residuels'),
+    plan_date_et_responsable: on('recyf-plan'),
+    reexamen: on('recyf-a-reexamen'),
+    dernier_reexamen_mois: (m && m.value !== '') ? Number(m.value) : null
+  };
+}
+
+function recyfAnalyse() {
+  var b = document.getElementById('recyf-analyse-body');
+  if (!b || !RECYF_REF) return;
+  var statut = recyfStatutChoisi();
+  if (!statut) {
+    b.innerHTML = '<div class="cnf-cmd bloc">Renseignez votre qualification '
+      + 'sur le panneau des vingt objectifs : l’objectif 16 est réservé aux '
+      + 'entités essentielles, et le dire suppose de savoir laquelle vous '
+      + 'êtes.</div>';
+    return;
+  }
+  fetch('/api/recyf/analyse', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ statut: statut,
+                           declaration: recyfDeclarationAnalyse() })
+  }).then(function (r) { return r.json(); })
+    .then(function (j) {
+      if (!j || !j.ok) { b.textContent = 'Calcul impossible.'; return; }
+      b.innerHTML = recyfRenduAnalyse(j) + recyfRenduPerimetre();
+      recyfPonts();
+    })
+    .catch(function () { b.textContent = 'Calcul indisponible.'; });
+}
+
+function recyfRenduAnalyse(j) {
+  /* LE « HORS CHAMP » N’EST PAS UN ZÉRO, et l’écran le dit plutôt que
+     d’afficher un chiffre qui serait lu comme un manquement. */
+  if (j.hors_champ) {
+    return '<div class="cnf-cmd bloc"><b>Hors champ pour une entité '
+      + 'importante.</b> ' + recyfEsc(j.dit)
+      + '<div class="q-notes" style="margin-top:6px"><b>Ce que cela ne veut '
+      + 'pas dire :</b> ' + recyfEsc(j.ne_veut_pas_dire) + '</div></div>';
+  }
+  var h = '<div class="recyf-taux">'
+    + '<div class="recyf-chiffre">' + recyfEsc(j.taux) + '&nbsp;%</div>'
+    + '<div class="recyf-quoi"><b>Objectif 16 — ' + j.acquises + ' exigence(s) '
+    + 'sur ' + j.total + '</b><div class="q-notes">'
+    + recyfEsc(j.ne_pas_confondre) + '</div></div></div>';
+  j.exigences.forEach(function (e) {
+    h += '<div class="nist-cat"><div><strong>' + recyfEsc(e.reference)
+      + '</strong> — ' + recyfEsc(e.titre)
+      + '<div class="q-notes">' + recyfEsc(e.demande) + '</div>'
+      + '<div class="q-notes recyf-piege"><b>Le piège :</b> '
+      + recyfEsc(e.piege) + '</div>'
+      + (e.manque && e.manque.length
+          ? '<div class="q-notes recyf-manque"><b>Il manque :</b> '
+            + e.manque.map(recyfEsc).join(' ; ') + '</div>' : '')
+      + '</div><label class="cnf-chk"><input type="checkbox" id="recyf-a-'
+      + recyfEsc(e.cle) + '"' + (e.declare ? ' checked' : '')
+      + ' onchange="recyfAnalyse()"> ' + (e.acquis ? '✓ acquis' : 'déclaré')
+      + '</label></div>';
+  });
+  h += '<h2 class="sec-h">Les cinq entrées de l’analyse (16.2)</h2>'
+    + '<div class="q-notes">Le référentiel les nomme. Une analyse qui n’en '
+    + 'cite aucune est une opinion, pas une analyse.</div>';
+  (RECYF_REF.entrees_analyse || []).forEach(function (x) {
+    h += '<label class="cnf-chk"><input type="checkbox" id="recyf-e-'
+      + recyfEsc(x.cle) + '" onchange="recyfAnalyse()"> '
+      + recyfEsc(x.nom) + '</label>';
+  });
+  h += '<h2 class="sec-h">Ce que 16.1, 16.3 et 16.4 exigent en plus</h2>'
+    + '<label class="cnf-chk"><input type="checkbox" id="recyf-moyens" onchange="recyfAnalyse()"> '
+    + 'Des moyens financiers, humains ou techniques sont alloués (16.1)</label>'
+    + '<label class="cnf-chk"><input type="checkbox" id="recyf-residuels" onchange="recyfAnalyse()"> '
+    + 'Les risques résiduels sont explicitement acceptés (16.3)</label>'
+    + '<label class="cnf-chk"><input type="checkbox" id="recyf-plan" onchange="recyfAnalyse()"> '
+    + 'Chaque action du plan a une échéance ET un responsable (16.3)</label>'
+    + '<label class="cnf-chk">Dernier réexamen, en mois (16.4 — plancher : '
+    + RECYF_REF.reexamen_mois_max + ')'
+    + '<input id="recyf-reexamen-mois" class="cnf-in" type="number" min="0" '
+    + 'step="1" style="width:110px" onchange="recyfAnalyse()"></label>';
+  return h;
+}
+
+function recyfRenduPerimetre() {
+  var h = '<h2 class="sec-h">Le périmètre — objectif 1</h2>'
+    + '<div class="q-notes">Les objectifs s’appliquent à TOUS les systèmes. '
+    + 'Une exclusion n’est recevable que si une analyse de risques montre '
+    + 'l’absence d’exposition aux trois risques ci-dessous.</div>';
+  (RECYF_REF.risques_perimetre || []).forEach(function (r) {
+    h += '<div class="nist-cat"><div>' + recyfEsc(r.dit) + '</div></div>';
+  });
+  h += '<div class="cnf-cmd bloc"><b>Le motif que le référentiel refuse.</b> '
+    + recyfEsc((RECYF_REF.refus_perimetre || {}).securise) + '</div>';
+  return h;
+}
+
+function recyfPonts() {
+  /* LES DEUX VOIES DE PREUVE, AVEC LEUR BORNE. Un pont recopié sans sa
+     borne vaudrait moins que pas de pont. */
+  var b = document.getElementById('recyf-analyse-body');
+  if (!b || !RECYF_REF) return;
+  var h = '<h2 class="sec-h">Les deux voies de preuve, et ce qui les borne</h2>';
+  (RECYF_REF.ponts || []).forEach(function (p) {
+    h += '<div class="nist-cat"><div><strong>' + recyfEsc(p.quoi)
+      + '</strong><div class="q-notes">Objectif(s) '
+      + (p.objectifs || []).join(', ') + '</div>'
+      + '<div class="q-notes recyf-borne"><b>La borne :</b> '
+      + recyfEsc(p.borne) + '</div>'
+      + '<div class="q-notes">' + recyfEsc(p.ce_que_le_cabinet_en_fait)
+      + '</div></div></div>';
+  });
+  var pr = RECYF_REF.preuve || {};
+  h += '<div class="cnf-cmd bloc"><b>La charge de la preuve bascule ('
+    + recyfEsc((pr.avec_referentiel || {}).article) + ').</b> '
+    + recyfEsc((pr.avec_referentiel || {}).dit)
+    + '<div class="q-notes" style="margin-top:6px"><b>Sinon ('
+    + recyfEsc((pr.sans_referentiel || {}).article) + ') :</b> '
+    + recyfEsc((pr.sans_referentiel || {}).dit) + '</div></div>';
+  b.insertAdjacentHTML('beforeend', h);
+}
+
+window.recyfInit = recyfInit;
+window.recyfPeindre = recyfPeindre;
+window.recyfAnalyse = recyfAnalyse;
+window.recyfEtat = recyfEtat;

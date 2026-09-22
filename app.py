@@ -1878,6 +1878,79 @@ def api_nis2_evaluer():
 
 
 # ═══════════════════════════════════════════════════════════════════════════
+#  RECYF — CE QUE LA FRANCE VA DEMANDER, ET QUI N'EST PAS ENCORE DU DROIT
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# CES ROUTES SONT À COTE DE CELLES DE NIS 2, JAMAIS A LEUR PLACE. La
+# directive oblige ; le ReCyF est un document de travail attache a un projet
+# de loi non vote. Les fondre rendrait un seul chiffre pour deux natures.
+#
+# ET LE TAUX QU'ELLES RENDENT S'APPELLE « preparation », pas « conformite ».
+# La mention voyage DANS la reponse, pas a cote : un ecran qui n'afficherait
+# que le nombre afficherait un taux de conformite contre un texte qui
+# n'existe pas encore.
+import nis2_recyf  # noqa: E402
+
+
+@app.route('/api/recyf/referentiel')
+@rate_limit(limit=60, window=60)
+def api_recyf_referentiel():
+    """Les vingt objectifs, les quatre piliers, et le statut des textes."""
+    return jsonify({"ok": True, "referentiel": nis2_recyf.referentiel()})
+
+
+@app.route('/api/recyf/attendus', methods=['POST'])
+@rate_limit(limit=120, window=60)
+def api_recyf_attendus():
+    """Ce que le referentiel attend de CETTE entite — et le refus sans statut.
+
+    La moitie du referentiel depend de la qualification : cinq objectifs sur
+    vingt sont reserves aux entites essentielles. Un chiffre rendu sans
+    statut serait une moyenne entre deux regimes qui ne se moyennent pas.
+    """
+    d = request.get_json(silent=True) or {}
+    r = nis2_recyf.attendus(d.get("statut"))
+    return jsonify(r), (200 if r.get("ok") else 400)
+
+
+@app.route('/api/recyf/preparation', methods=['POST'])
+@rate_limit(limit=120, window=60)
+def api_recyf_preparation():
+    """LE TAUX DE PREPARATION, et il ne se fond dans aucun autre."""
+    d = request.get_json(silent=True) or {}
+    r = nis2_recyf.preparation(d.get("statut"), d.get("etats"))
+    return jsonify(r), (200 if r.get("ok") else 400)
+
+
+@app.route('/api/recyf/perimetre', methods=['POST'])
+@rate_limit(limit=120, window=60)
+def api_recyf_perimetre():
+    """Le verrou de l'objectif 1 : une exclusion se justifie, ou n'existe pas."""
+    d = request.get_json(silent=True) or {}
+    r = nis2_recyf.perimetre(d.get("systemes"))
+    return jsonify(r), (200 if r.get("ok") else 400)
+
+
+@app.route('/api/recyf/analyse', methods=['POST'])
+@rate_limit(limit=120, window=60)
+def api_recyf_analyse():
+    """L'objectif 16 — l'analyse de risque, reservee aux entites essentielles."""
+    d = request.get_json(silent=True) or {}
+    r = nis2_recyf.analyse_de_risque(d.get("declaration"), d.get("statut"))
+    return jsonify(r), (200 if r.get("ok") else 400)
+
+
+@app.route('/api/recyf/ponts', methods=['POST'])
+@rate_limit(limit=120, window=60)
+def api_recyf_ponts():
+    """ISO 27001 plafonne par son perimetre, et la PACS qualifiee ANSSI."""
+    d = request.get_json(silent=True) or {}
+    return jsonify(nis2_recyf.ponts(d.get("iso_certifie"),
+                                    d.get("iso_perimetre_complet"),
+                                    d.get("pacs")))
+
+
+# ═══════════════════════════════════════════════════════════════════════════
 #  ISO/IEC 42001 — UNE NORME PROTÉGÉE PAR LE DROIT D'AUTEUR
 # ═══════════════════════════════════════════════════════════════════════════
 #

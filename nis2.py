@@ -107,6 +107,39 @@ SOURCE = {
 
 
 # ═══════════════════════════════════════════════════════════════════════════
+#  ET POUR LA FRANCE, LA TRANSPOSITION A UNE AUTRE FORME
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# LA RÉSERVE CI-DESSUS ÉTAIT EXACTE ET S'ARRÊTAIT TROP TÔT. Elle disait que
+# c'est la loi de transposition qui oblige — sans dire ce que celle-ci
+# prépare. Un client français mesurait donc dix mesures quand l'ANSSI le
+# contrôlera sur vingt objectifs.
+#
+# CE RENVOI N'IMPORTE RIEN. `nis2_recyf` lit ce module ; un import en tête de
+# fichier fermerait le cercle. Il nomme le calque, il ne l'appelle pas.
+
+TRANSPOSITION_FR = {
+    "existe": True,
+    "module": "nis2_recyf",
+    "panneau": "recyf-objectifs",
+    "quoi": "Le projet de loi relatif à la résilience des infrastructures "
+            "critiques et au renforcement de la cybersécurité remplace, à "
+            "son article 14, les dix mesures de l'article 21 §2 par quatre "
+            "familles, et renvoie au ReCyF — vingt objectifs de sécurité, "
+            "152 moyens de conformité pour une entité essentielle, 76 pour "
+            "une entité importante.",
+    "ce_qui_change_le_plus": "La distinction essentielle / importante cesse "
+                             "d'être une affaire de supervision et de "
+                             "plafond d'amende : elle retire cinq objectifs "
+                             "sur vingt à une entité importante.",
+    "en_vigueur": False,
+    "reserve": "Ni le projet de loi ni le référentiel ne sont en vigueur. Ce "
+               "que le calque français rend est un taux de PRÉPARATION, qui "
+               "ne se confond avec aucun taux de conformité.",
+}
+
+
+# ═══════════════════════════════════════════════════════════════════════════
 #  LE CALENDRIER — ET CE QUI EST DÉJÀ DERRIÈRE NOUS
 # ═══════════════════════════════════════════════════════════════════════════
 #

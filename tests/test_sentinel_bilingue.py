@@ -207,7 +207,11 @@ def test_une_cle_sans_traduction_GARDE_son_francais():
 #  LES NOMS PROPRES DE TEXTES ET DE RÉFÉRENTIELS. Traduits, ils deviennent
 #  introuvables dans le document officiel — ce qu'un auditeur vient
 #  précisément chercher. La règle les fige des deux côtés.
-NOMS_PROPRES = ("EU AI ACT", "NIS 2", "ISO 42001", "ISO 27001",
+# « ReCyF » EST UN NOM PROPRE, pas une rubrique à traduire : c'est le
+# titre du Référentiel Cyber France publié par l'ANSSI. Le traduire
+# ferait chercher au lecteur anglophone un document qui n'existe pas
+# sous ce nom-là.
+NOMS_PROPRES = ("EU AI ACT", "NIS 2", "ReCyF", "ISO 42001", "ISO 27001",
                 "NIST AI RMF", "OWASP LLM", "DORA")
 
 

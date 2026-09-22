@@ -1,0 +1,191 @@
+{
+ "_pourquoi": "Chaque mutation FABRIQUE un défaut réel et doit faire TOMBER la règle nommée. Le défaut de fond que ce calque doit rendre impossible : un taux de PRÉPARATION contre un document de travail qui s'afficherait, ou se consoliderait, comme un taux de CONFORMITÉ.",
+ "cibles": [
+  "tests/test_nis2_recyf.py",
+  "tests/test_sources_lues.py"
+ ],
+ "mutations": [
+  {
+   "nom": "la garde cesse de refuser un taux rebaptisé conformité",
+   "fichier": "nis2_recyf.py",
+   "avant": "    if p.get(\"nature\") != \"préparation\" or \"taux_conformite\" in p:",
+   "apres": "    if False:",
+   "regle": "test_la_GARDE_refuse_de_charger_un_module_fausse[nature-preparation]"
+  },
+  {
+   "nom": "la garde cesse de compter les moyens d'une essentielle",
+   "fichier": "nis2_recyf.py",
+   "avant": "    if ee != 152:",
+   "apres": "    if False:",
+   "regle": "test_la_GARDE_refuse_de_charger_un_module_fausse[total-152]"
+  },
+  {
+   "nom": "la réserve cesse de voyager avec le chiffre",
+   "fichier": "nis2_recyf.py",
+   "avant": "        \"statut_du_texte\": dict(STATUT),",
+   "apres": "",
+   "regle": "test_la_reserve_VOYAGE_avec_le_chiffre"
+  },
+  {
+   "nom": "la garde cesse de refuser un texte déclaré en vigueur",
+   "fichier": "nis2_recyf.py",
+   "avant": "    if STATUT[\"en_vigueur\"] is not False:",
+   "apres": "    if False:",
+   "regle": "test_la_GARDE_refuse_de_charger_un_module_fausse[en-vigueur]"
+  },
+  {
+   "nom": "l'indice de conformité absorbe le calque",
+   "fichier": "conformite.py",
+   "avant": "def consolide(",
+   "apres": "import nis2_recyf  # noqa\n\n\ndef consolide(",
+   "regle": "test_l_indice_de_conformite_IGNORE_ce_calque"
+  },
+  {
+   "nom": "la garde cesse de protéger la réserve aux essentielles",
+   "fichier": "nis2_recyf.py",
+   "avant": "        if OBJECTIFS_PAR_NUMERO[n][4] != 0:",
+   "apres": "        if False:",
+   "regle": "test_la_GARDE_refuse_de_charger_un_module_fausse[reserve-ee]"
+  },
+  {
+   "nom": "le module chiffre sans qualification",
+   "fichier": "nis2_recyf.py",
+   "avant": "    if statut not in (\"essentielle\", \"importante\"):\n        return {\"ok\": False,\n                \"refus\": \"statut_absent\",",
+   "apres": "    if statut not in (\"essentielle\", \"importante\"):\n        statut = \"essentielle\"\n    if False:\n        return {\"ok\": False,\n                \"refus\": \"statut_absent\",",
+   "regle": "test_le_module_REFUSE_de_chiffrer_sans_qualification"
+  },
+  {
+   "nom": "le hors-champ entre au dénominateur",
+   "fichier": "nis2_recyf.py",
+   "avant": "        if not o[\"dans_le_champ\"]:\n            lignes.append(dict(o, etat=\"hors_champ\", compte=False))\n            continue",
+   "apres": "        if not o[\"dans_le_champ\"]:\n            lignes.append(dict(o, etat=\"hors_champ\", compte=True))\n            den += 1\n            continue",
+   "regle": "test_le_HORS_CHAMP_ne_compte_ni_au_numerateur_ni_au_denominateur"
+  },
+  {
+   "nom": "une exclusion motivée par la sécurité passe",
+   "fichier": "nis2_recyf.py",
+   "avant": "        if just and any(m in bas for m in MOTIFS_REFUSES):",
+   "apres": "        if just and False:",
+   "regle": "test_une_exclusion_motivee_par_la_SECURITE_est_refusee"
+  },
+  {
+   "nom": "une exclusion sans analyse de risques passe",
+   "fichier": "nis2_recyf.py",
+   "avant": "        if not analyse:\n            motifs.append(PERIMETRE_REFUS[\"sans_analyse\"])",
+   "apres": "        if False:\n            motifs.append(PERIMETRE_REFUS[\"sans_analyse\"])",
+   "regle": "test_une_exclusion_SANS_justification_ou_SANS_analyse_est_refusee"
+  },
+  {
+   "nom": "toute exclusion est refusée, même justifiée",
+   "fichier": "nis2_recyf.py",
+   "avant": "        motifs = []\n        if not just:",
+   "apres": "        motifs = [\"refus systematique\"]\n        if not just:",
+   "regle": "test_une_exclusion_RECEVABLE_le_reste"
+  },
+  {
+   "nom": "l'objectif 16 rend zéro au lieu de dire hors champ",
+   "fichier": "nis2_recyf.py",
+   "avant": "        return {\"ok\": True, \"hors_champ\": True, \"taux\": None,",
+   "apres": "        return {\"ok\": True, \"hors_champ\": True, \"taux\": 0.0,",
+   "regle": "test_l_analyse_de_risque_est_HORS_CHAMP_pour_une_importante"
+  },
+  {
+   "nom": "une analyse déclarée sans ses entrées devient acquise",
+   "fichier": "nis2_recyf.py",
+   "avant": "            if absentes:\n                manque.append(\"entrées non citées : \" + \" ; \".join(absentes))",
+   "apres": "            if False:\n                manque.append(\"entrées non citées : \" + \" ; \".join(absentes))",
+   "regle": "test_une_analyse_DECLAREE_mais_incomplete_n_est_pas_acquise"
+  },
+  {
+   "nom": "le plancher de réexamen passe à cinq ans",
+   "fichier": "nis2_recyf.py",
+   "avant": "REEXAMEN_MOIS_MAX = 36",
+   "apres": "REEXAMEN_MOIS_MAX = 60",
+   "regle": "test_le_reexamen_a_un_PLANCHER_de_trente_six_mois"
+  },
+  {
+   "nom": "le pont ISO perd sa borne de périmètre",
+   "fichier": "nis2_recyf.py",
+   "avant": "            elif iso_perimetre_complet:",
+   "apres": "            elif True:",
+   "regle": "test_le_pont_ISO_est_PLAFONNE_par_son_perimetre_de_certification"
+  },
+  {
+   "nom": "le pont PACS perd le suivi du plan",
+   "fichier": "nis2_recyf.py",
+   "avant": "     \"borne\": \"Pour la réalisation de l'analyse de risques ET le suivi par \"\n              \"l'entité du plan de traitement qui en est issu. La \"\n              \"prestation seule, sans suivi du plan, ne suffit pas.\",",
+   "apres": "     \"borne\": \"Pour la réalisation de l'analyse de risques.\",",
+   "regle": "test_le_pont_PACS_est_borne_par_le_SUIVI_du_plan"
+  },
+  {
+   "nom": "nis2 cesse de nommer le calque français",
+   "fichier": "nis2.py",
+   "avant": "    \"module\": \"nis2_recyf\",",
+   "apres": "    \"module\": None,",
+   "regle": "test_nis2_NOMME_le_calque_francais"
+  },
+  {
+   "nom": "une route du calque disparaît",
+   "fichier": "app.py",
+   "avant": "@app.route('/api/recyf/analyse', methods=['POST'])",
+   "apres": "@app.route('/api/recyf/analyse2', methods=['POST'])",
+   "regle": "test_chaque_route_du_calque_EXISTE[/api/recyf/analyse]"
+  },
+  {
+   "nom": "un panneau perd son guide",
+   "fichier": "sentinel.page.js",
+   "avant": "  'recyf-analyse': {\n    title: \"ReCyF — l'analyse de risque, objectif 16\",",
+   "apres": "  'recyf-analyse-x': {\n    title: \"ReCyF — l'analyse de risque, objectif 16\",",
+   "regle": "test_chaque_panneau_a_son_ecran_son_META_et_son_GUIDE[recyf-analyse]"
+  },
+  {
+   "nom": "l'écran cesse d'afficher la nature du taux",
+   "fichier": "sentinel.page.js",
+   "avant": "    + '<div class=\"recyf-quoi\"><b>Taux de ' + recyfEsc(j.nature) + '</b>'",
+   "apres": "    + '<div class=\"recyf-quoi\"><b>Taux</b>'",
+   "regle": "test_l_ecran_affiche_la_NATURE_du_taux_avec_le_nombre"
+  },
+  {
+   "nom": "le chiffre sort de la boîte qui porte sa nature",
+   "fichier": "sentinel.page.js",
+   "avant": "  return '<div class=\"recyf-taux\">'\n    + '<div class=\"recyf-chiffre\">'",
+   "apres": "  return '<div class=\"recyf-chiffre-seul\">'\n    + '<div class=\"recyf-chiffre\">'",
+   "regle": "test_l_ecran_affiche_la_NATURE_du_taux_avec_le_nombre"
+  },
+  {
+   "nom": "le bandeau de statut se fige sur une phrase",
+   "fichier": "sentinel.page.js",
+   "avant": "  z.innerHTML =\n    '<b>' + (s.en_vigueur ? 'Texte en vigueur.' : 'Ce texte n’est pas en vigueur.')",
+   "apres": "  z.innerHTML =\n    '<b>' + ('Ce texte n’est pas en vigueur.')",
+   "regle": "test_le_bandeau_de_statut_vient_du_MOTEUR"
+  },
+  {
+   "nom": "la garde cesse d'exiger l'apport et la lecture des sources",
+   "fichier": "nis2_recyf.py",
+   "avant": "        if not s.get(\"apporte\") or \"lue\" not in s:",
+   "apres": "        if False:",
+   "regle": "test_la_GARDE_refuse_de_charger_un_module_fausse[source-lue]"
+  },
+  {
+   "nom": "la marque visuelle de la réserve se fige",
+   "fichier": "sentinel.page.js",
+   "avant": "  z.className = 'cnf-cmd bloc' + (s.en_vigueur ? '' : ' recyf-pas-en-vigueur');",
+   "apres": "  z.className = 'cnf-cmd bloc';",
+   "regle": "test_le_bandeau_de_statut_vient_du_MOTEUR"
+  },
+  {
+   "nom": "le refus sans qualification perd son explication chiffrée",
+   "fichier": "nis2_recyf.py",
+   "avant": "                           sum(o[3] for o in OBJECTIFS),\n                           sum(o[4] for o in OBJECTIFS))),",
+   "apres": "                           0, 0)),",
+   "regle": "test_le_module_REFUSE_de_chiffrer_sans_qualification"
+  },
+  {
+   "nom": "un changement d'état repeint toute la liste",
+   "fichier": "sentinel.page.js",
+   "avant": "  RECYF_ETATS[numero] = sel.value;\n  recyfMajTaux();",
+   "apres": "  RECYF_ETATS[numero] = sel.value;\n  recyfPeindre();",
+   "regle": "test_l_ecran_affiche_la_NATURE_du_taux_avec_le_nombre"
+  }
+ ]
+}

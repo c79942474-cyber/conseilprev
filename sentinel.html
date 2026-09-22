@@ -257,6 +257,37 @@ body{
 .nist-carac{border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:16px;background:var(--panel)}
 .nist-carac ul{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:8px}
 .nist-cat{border:1px solid var(--line);border-radius:11px;margin-top:8px;overflow:hidden;background:var(--panel)}
+/* ── RECYF : LE TAUX, SA NATURE, ET CE QUI EST HORS CHAMP ────────────
+      LE NOMBRE NE PART JAMAIS SEUL. Le chiffre et la phrase qui le
+      qualifie sont dans la MÊME boîte : séparés, le nombre s'en irait
+      seul dans une capture d'écran ou un comité, et on lirait un taux de
+      conformité là où il n'y en a pas. */
+.recyf-taux{display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:12px;padding:14px 16px;
+  background:var(--panel);margin-top:10px}
+.recyf-chiffre{font-size:34px;font-weight:700;line-height:1;
+  font-variant-numeric:tabular-nums;white-space:nowrap}
+.recyf-quoi{flex:1 1 260px;font-size:12.5px;line-height:1.5}
+/* Le bandeau d'un texte pas encore en vigueur porte la couleur de la
+   réserve, pas celle d'une obligation. */
+.recyf-pas-en-vigueur{border-left:4px solid var(--warn,#8a5a00)}
+.recyf-piliers{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+.recyf-pilier{flex:1 1 150px;border:1px solid var(--line);border-radius:10px;
+  padding:9px 11px;background:var(--panel)}
+.recyf-pilier-n{font-size:10.5px;font-weight:700;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--muted2,#767676)}
+.recyf-pilier-t{font-size:20px;font-weight:700;
+  font-variant-numeric:tabular-nums;margin-top:2px}
+/* Un objectif hors champ n'est pas un écart : il s'efface, il ne rougit
+   pas. Une entité importante en compte cinq, et aucun n'est un manque. */
+.recyf-hors{opacity:.55}
+.recyf-sansobjet{font-size:11px;font-weight:600;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--muted2,#767676);padding:0 12px 10px;
+  display:inline-block}
+.recyf-meta{font-variant-numeric:tabular-nums}
+.recyf-piege,.recyf-borne{border-left:3px solid var(--line);padding-left:9px;
+  margin-top:5px}
+.recyf-manque{color:var(--warn,#8a5a00);margin-top:5px}
 /* ── LE REGISTRE DES SOURCES, AVEC L'ÉTAT DE CHACUNE ─────────────────
       « lu » et « cité » ne disent pas la même chose, et la différence
       doit se voir sans lire : un texte qu'on n'a pas ouvert ne peut pas
@@ -3518,6 +3549,8 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <div class="sb-item" data-grp="nis2" role="button" tabindex="0" onclick="go('nis2',this,'NIS 2','Mesures art. 21 §2');nis2Init()" title="Les dix mesures « tous risques » — un socle, pas une liste a epuiser"><span class="sb-icon" aria-hidden="true"></span>Mesures art. 21 §2</div>
     <div class="sb-item" data-grp="nis2" role="button" tabindex="0" onclick="go('nis2-gouvernance',this,'NIS 2','Gouvernance art. 20');nis2Init()" title="Les dirigeants approuvent, supervisent, PEUVENT ETRE TENUS RESPONSABLES — et doivent suivre une formation"><span class="sb-icon" aria-hidden="true"></span>Gouvernance art. 20</div>
     <div class="sb-item" data-grp="nis2" role="button" tabindex="0" onclick="go('nis2-signalement',this,'NIS 2','Signalement art. 23');nis2Init()" title="24 h, 72 h, un mois — et l horloge demarre a la CONNAISSANCE de l incident, pas a sa survenance"><span class="sb-icon" aria-hidden="true"></span>Signalement art. 23</div>
+    <div class="sb-item" data-grp="nis2" role="button" tabindex="0" onclick="go('recyf-objectifs',this,'ReCyF','Les vingt objectifs');recyfInit()" title="La transposition francaise : 20 objectifs, 152 moyens pour une essentielle, 76 pour une importante — texte pas encore en vigueur"><span class="sb-icon" aria-hidden="true"></span>ReCyF · 20 objectifs</div>
+    <div class="sb-item" data-grp="nis2" role="button" tabindex="0" onclick="go('recyf-analyse',this,'ReCyF','Analyse de risque');recyfInit()" title="L objectif 16 : gouvernance, couverture, risques residuels acceptes, reexamen triennal — reserve aux entites essentielles"><span class="sb-icon" aria-hidden="true"></span>ReCyF · Analyse de risque</div>
     <div class="sb-item" data-grp="nis2" role="button" tabindex="0" onclick="go('nis2-chiffre',this,'NIS 2','Exposition chiffrée');nis2Init()" title="Le PLANCHER europeen du plafond : 10 M EUR ou 2 % pour les essentielles, 7 M EUR ou 1,4 % pour les importantes"><span class="sb-icon" aria-hidden="true"></span>Exposition chiffrée</div>
     <!-- ═══ LE CRA EST UN PILIER, PAS UNE RUBRIQUE D'UN AUTRE ═══
          POURQUOI UN GROUPE DE PREMIER NIVEAU, comme RGPD & Privacy.
@@ -6146,6 +6179,50 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
   <div id="nis2-chiffre-body"><div class="veille-loading">Saisissez un chiffre d'affaires, ou calculez sans pour voir les montants planchers.</div></div>
   <div class="trait-note">
     L'assiette est le <b>chiffre d'affaires mondial total de l'entreprise à laquelle l'entité appartient</b> — pas celui de la seule filiale concernée. Lire le chiffre de la filiale divise l'exposition par l'écart entre la filiale et le groupe : c'est le plus gros facteur d'erreur possible sur ce calcul.
+  </div>
+</div>
+
+<div class="page" id="p-recyf-objectifs">
+  <span class="eyebrow" data-i18n="pg.recyf-objectifs.eb">ReCyF · Transposition française</span>
+  <h1 class="page-h" data-i18n-bloc="pg.recyf-objectifs.h1">Vingt objectifs, <em>et la moitié pour une importante</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.recyf-objectifs.p">Le projet de loi français remplace, à son article&nbsp;14, les dix mesures de la directive par <b>quatre familles</b> — pilotage, protection, défense, résilience — et renvoie à un référentiel : le <b>ReCyF</b>. Vingt objectifs de sécurité, <b>152 moyens de conformité</b> pour une entité essentielle, <b>76</b> pour une importante. C'est contre eux que l'ANSSI contrôlera.</p>
+  <!-- LE BANDEAU DE STATUT EST LE PREMIER ÉLÉMENT DU PANNEAU, ET C'EST
+       VOULU : afficher ces objectifs sans dire qu'ils sortent d'un projet
+       de loi non voté et d'un document de travail ferait passer une
+       intention pour une obligation. Il est peint depuis le moteur, jamais
+       recopié ici — une mention recopiée se périme le jour du décret. -->
+  <div id="recyf-statut" class="veille-loading">Chargement du statut des textes…</div>
+  <div class="reg-toolbar">
+    <label class="cnf-chk">Votre qualification
+      <select id="recyf-statut-sel" class="q-sel" onchange="recyfPeindre()">
+        <option value="">— non renseignée</option>
+        <option value="essentielle">Entité essentielle</option>
+        <option value="importante">Entité importante</option>
+      </select></label>
+    <button class="mat-export-btn" onclick="go('nis2-qualifier')">La calculer →</button>
+    <button class="mat-export-btn" onclick="go('recyf-analyse')">Analyse de risque (obj. 16) →</button>
+  </div>
+  <div id="recyf-body"><div class="veille-loading">Choisissez une qualification : la moitié du référentiel en dépend.</div></div>
+  <div class="trait-note">
+    Le taux affiché est un taux de <b>préparation</b>, jamais un taux de conformité, et il n'entre dans aucun indice consolidé. Le référentiel qu'il mesure est un document de travail attaché à un projet de loi non voté : noter une conformité contre un texte qui n'existe pas encore serait un chiffre qui a l'air de mesurer autre chose que ce qu'il mesure.
+  </div>
+</div>
+
+<div class="page" id="p-recyf-analyse">
+  <span class="eyebrow" data-i18n="pg.recyf-analyse.eb">ReCyF · Objectif 16</span>
+  <h1 class="page-h" data-i18n-bloc="pg.recyf-analyse.h1">L'analyse de risque <em>cesse d'être une case</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.recyf-analyse.p">Dans la directive, l'analyse de risque est <b>une mesure sur dix</b>. Le ReCyF en fait un objectif à part entière, avec quatre exigences vérifiables — et il le <b>réserve aux entités essentielles</b>. Une entité importante n'a pas à formaliser d'approche par les risques ; elle doit toujours en conduire une pour justifier toute exclusion de périmètre.</p>
+  <div class="cnf-cmd bloc">
+    <b>Le verrou de périmètre, et il se contourne d'un mot.</b> Les objectifs s'appliquent à <b>tous</b> les systèmes. Une exclusion n'est recevable que si une analyse de risques montre que le système n'est exposé à <b>aucun</b> des trois risques nommés — et le référentiel ajoute que la présence de mesures de sécurité <b>ne vaut pas</b> justification. « C'est cloisonné, donc c'est hors périmètre » est refusé en toutes lettres.
+  </div>
+  <div class="reg-toolbar">
+    <button class="mat-export-btn" onclick="recyfAnalyse()">↻ Recalculer</button>
+    <button class="mat-export-btn" onclick="go('recyf-objectifs')">← Les vingt objectifs</button>
+    <button class="mat-export-btn" onclick="go('iso27001-soa')">Périmètre ISO 27001 →</button>
+  </div>
+  <div id="recyf-analyse-body"><div class="veille-loading">Chargement de l'objectif 16…</div></div>
+  <div class="trait-note">
+    Le référentiel ouvre lui-même <b>deux voies de preuve</b>, et il les borne : un SMSI certifié <b>ISO/CEI 27001:2022</b> vaut pour les objectifs 2 et 16, mais <b>seulement sur les systèmes couverts par la certification</b> ; une <b>PACS qualifiée par l'ANSSI</b> vaut pour l'objectif 16, à condition que le plan de traitement soit suivi par l'entité.
   </div>
 </div>
 
