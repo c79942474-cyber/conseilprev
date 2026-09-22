@@ -219,6 +219,119 @@ const PANNEAUX = ['dora-qualifier', 'dora-risque', 'dora-tiers',
   ok('il propose la marche à suivre', /Qualifier l’entité/.test(refus),
      'aucun renvoi vers la qualification');
 
+  /* ── 5 bis. LE RAIL — CE QUI NE VIT QUE DANS UN NAVIGATEUR ────────
+     LES RÈGLES PYTHON LISENT LE MOTEUR ET LA SOURCE. Elles ne savent pas
+     si le bloc courant BAT réellement, si les flèches sont tracées, ni
+     si le passage automatique déplace vraiment quelqu'un. Trois choses
+     n'existent qu'ici, et ce sont celles que le client voit. */
+  titre('5 bis. Le rail : les couleurs, les flèches, et le passage automatique');
+  await pg.evaluate(() => {
+    window.DORA_DECL = { entite: '', identifiee_nis2: null };
+    window.DORA_ETATS = {};
+    window.go('dora-qualifier');
+  });
+  await pg.waitForTimeout(900);
+  await pg.evaluate(() => { window.doraParcours(); });
+  await pg.waitForTimeout(1500);
+
+  const repos = await pg.evaluate(() => {
+    const r = document.querySelector('#p-dora-qualifier .dora-rail');
+    if (!r) return { absent: true };
+    const bs = [...r.querySelectorAll('.dr-bloc')];
+    const cour = bs.filter(b => b.classList.contains('courante'));
+    return {
+      etats: bs.map(b => [...b.classList].filter(c => c !== 'dr-bloc')[0]),
+      fleches: r.querySelectorAll('.dr-fleche').length,
+      bat: cour.length === 1
+        && getComputedStyle(cour[0]).animationName === 'dr-battement',
+      manque: (r.querySelector('.dr-manque') || {}).textContent || '',
+      bulle: (bs[0] || {}).title || ''
+    };
+  });
+  ok('le rail est peint sur le panneau de qualification', !repos.absent,
+     'aucun rail dans le DOM');
+  ok('cinq flèches relient les six blocs', repos.fleches === 5,
+     repos.fleches + ' flèche(s)', repos.fleches + ' flèches');
+  ok('un seul bloc bat, et il bat vraiment', repos.bat,
+     'aucun bloc ne porte l’animation dr-battement');
+  ok('les cinq autres sont verrouillés faute de qualification',
+     repos.etats.filter(e => e === 'verrouillee').length === 5,
+     repos.etats.join(' · '), repos.etats.join(' · '));
+  ok('le bloc qui bat NOMME ce qui lui manque',
+     /type d[’']entité/.test(repos.manque)
+     && /identification/i.test(repos.manque),
+     'le rail dit qu’il attend, sans dire quoi');
+  ok('l’infobulle porte le piège du bloc',
+     /Le piège ?:/.test(repos.bulle) || /Le piège :/.test(repos.bulle),
+     repos.bulle.slice(0, 70));
+
+  /* ── LA VALIDATION VERDIT, ET LE DÉCOMPTE PART ─────────────────── */
+  await pg.evaluate(() => {
+    window.doraChamp('entite', 'etablissement_credit');
+  });
+  await pg.waitForTimeout(1200);
+  await pg.evaluate(() => { window.doraChamp('identifiee_nis2', 'oui'); });
+  await pg.waitForTimeout(2000);
+
+  const valide = await pg.evaluate(() => {
+    const r = document.querySelector('.page.on .dora-rail');
+    const bs = r ? [...r.querySelectorAll('.dr-bloc')] : [];
+    return {
+      etats: bs.map(b => [...b.classList].filter(c => c !== 'dr-bloc')[0]),
+      barre: r ? ((r.querySelector('.dr-barre i') || {}).style || {}).width : '',
+      auto: r ? ((r.querySelector('.dr-auto') || {}).textContent || '')
+                  .replace(/\s+/g, ' ') : ''
+    };
+  });
+  ok('le premier bloc passe au VERT', valide.etats[0] === 'validee',
+     'état : ' + valide.etats[0], valide.etats[0]);
+  ok('le bloc suivant prend le relais en bleu',
+     valide.etats[1] === 'courante', valide.etats.join(' · '));
+  ok('la supervision devient SANS OBJET pour une entité financière',
+     valide.etats[5] === 'sans_objet', valide.etats.join(' · '),
+     'article 31, §8, i)');
+  ok('la barre suit l’avancement', valide.barre === '20%',
+     'largeur : ' + valide.barre, valide.barre);
+  ok('le décompte du passage automatique s’affiche',
+     /Passage à/.test(valide.auto), valide.auto.slice(0, 90),
+     valide.auto.slice(0, 60) + '…');
+  ok('il offre de rester', /Rester ici/.test(valide.auto),
+     'on est déplacé sans pouvoir refuser');
+
+  /* ── ET IL DÉPLACE VRAIMENT ────────────────────────────────────── */
+  await pg.waitForTimeout(5200);
+  const arrive = await pg.evaluate(() => (document.querySelector('.page.on')
+                                          || {}).id || '');
+  ok('le passage automatique ouvre le bloc suivant',
+     arrive === 'p-dora-iso', 'page ouverte : ' + arrive, arrive);
+
+  /* ── LE FREIN MARCHE, ET C'EST AUSSI IMPORTANT QUE LE DÉPART ───── */
+  titre('5 ter. Le frein : « Rester ici » retient vraiment');
+  await pg.evaluate(() => {
+    window.go('dora-iso');
+    window.DORA_ISO.certifie = null;
+  });
+  await pg.waitForTimeout(900);
+  await pg.evaluate(() => { window.doraIso('iso27001_certifie', 'non'); });
+  await pg.waitForTimeout(1600);
+  const avant = await pg.evaluate(() => (document.querySelector('.page.on')
+                                         || {}).id || '');
+  await pg.evaluate(() => {
+    const b = [...document.querySelectorAll('.page.on .dr-auto button')]
+      .find(x => /Rester ici/.test(x.textContent));
+    if (b) b.click();
+  });
+  await pg.waitForTimeout(5200);
+  const apresFrein = await pg.evaluate(() => ({
+    page: (document.querySelector('.page.on') || {}).id || '',
+    auto: document.querySelectorAll('.page.on .dr-auto').length
+  }));
+  ok('« Rester ici » retient sur place',
+     apresFrein.page === avant && avant === 'p-dora-iso',
+     'parti de ' + avant + ' vers ' + apresFrein.page, apresFrein.page);
+  ok('le décompte disparaît une fois annulé', apresFrein.auto === 0,
+     apresFrein.auto + ' décompte(s) encore à l’écran');
+
   /* ── 6. AUCUNE ERREUR DE PAGE ────────────────────────────────────── */
   titre('6. La console');
   ok('aucune erreur JavaScript', err.length === 0, err.join(' | '),

@@ -24150,6 +24150,268 @@ function doraEsc(s) {
                   .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
+/* ══════════════════════════════════════════════════════════════════════
+   LE RAIL — UN PARCOURS QUI SE VALIDE, PAS QUI SE VISITE
+   ══════════════════════════════════════════════════════════════════════
+   CE QUI LE SÉPARE DU GUIDAGE GÉNÉRAL DU SITE. Celui-ci peint trois états
+   — ouverte, à faire, pas atteinte — et porte partout la réserve qu'il ne
+   peut pas mesurer le travail. C'est vrai de la plupart des écrans ; ce
+   ne l'est pas de DORA, dont chaque bloc porte un jeu FERMÉ de
+   déclarations. Le vert du rail dit donc « tous les champs attendus sont
+   renseignés », ce que le moteur `dora_parcours` calcule — et jamais
+   l'écran, qui recopierait la règle à un second endroit.
+
+   LE PASSAGE AUTOMATIQUE A UN FREIN VISIBLE. Déplacer quelqu'un sans
+   prévenir est hostile : le décompte s'affiche, il s'annule d'un clic, et
+   il ne part QUE lorsqu'un bloc vient de passer au vert. */
+
+var DORA_ISO = { certifie: null, mesures: null, themes: {}, apport: null };
+var DORA_PARCOURS = null;
+var DORA_AUTO = null;      /* le minuteur du passage automatique */
+var DORA_AUTO_VU = null;   /* le dernier bloc courant connu */
+
+/* LA DÉCLARATION EST ASSEMBLÉE ICI, UNE SEULE FOIS. Six écrans tiennent
+   chacun un morceau ; les recoller à six endroits garantirait qu'un
+   morceau soit oublié par l'un d'eux — et le rail dirait alors qu'un bloc
+   est incomplet alors qu'il vient d'être rempli. */
+function doraDeclaration() {
+  var d = { entite: DORA_DECL.entite,
+            identifiee_nis2: DORA_DECL.identifiee_nis2,
+            etats: DORA_ETATS,
+            contrats: [DORA_CONTRAT],
+            services_critiques: DORA_INC.services_critiques,
+            connaissance: DORA_INC.connaissance,
+            classification: DORA_INC.classification,
+            iso27001_certifie: DORA_ISO.certifie,
+            mesures_iso: DORA_ISO.mesures };
+  Object.keys(DORA_DECL).forEach(function (k) {
+    if (d[k] === undefined) d[k] = DORA_DECL[k];
+  });
+  Object.keys(DORA_SUP).forEach(function (k) { d[k] = DORA_SUP[k]; });
+  Object.keys(DORA_INC.seuils).forEach(function (k) { d[k] = true; });
+  return d;
+}
+
+/* LES THÈMES AFFINENT LA CARTE, ILS NE CONDITIONNENT PAS LE BLOC. Le
+   moteur valide sur la seule question « êtes-vous certifié ? » ; exiger
+   davantage sans offrir de champ avait créé une impasse dont le parcours
+   ne sortait jamais. */
+function doraIso(cle, v) {
+  if (cle === 'iso27001_certifie') {
+    DORA_ISO.certifie = v === 'oui' ? true : (v === 'non' ? false : null);
+    if (!DORA_ISO.certifie) { DORA_ISO.themes = {}; DORA_ISO.mesures = null; }
+    doraIsoThemes();
+  }
+  doraPeindreIso();
+  doraParcours();
+}
+window.doraIso = doraIso;
+
+function doraIsoTheme(cle, on) {
+  if (on) { DORA_ISO.themes[cle] = true; } else { delete DORA_ISO.themes[cle]; }
+  var tout = [];
+  (((DORA_REF || {}).ponts || {}).themes_iso || []).forEach(function (th) {
+    if (DORA_ISO.themes[th.cle]) tout = tout.concat(th.mesures);
+  });
+  DORA_ISO.mesures = tout.length ? tout : null;
+  doraPeindreIso();
+  doraParcours();
+}
+window.doraIsoTheme = doraIsoTheme;
+
+/* LES QUATRE THÈMES N'APPARAISSENT QU'UNE FOIS LA CERTIFICATION DÉCLARÉE.
+   Les poser d'emblée ferait remplir un questionnaire à qui vient de
+   répondre qu'il n'a rien à reprendre. */
+function doraIsoThemes() {
+  var f = document.getElementById('dora-iso-form');
+  if (!f) return;
+  var zone = document.getElementById('dora-iso-themes');
+  if (!DORA_ISO.certifie) { if (zone) zone.remove(); return; }
+  if (!zone) {
+    zone = document.createElement('div');
+    zone.id = 'dora-iso-themes';
+    zone.style.cssText = 'width:100%;margin-top:8px';
+    f.appendChild(zone);
+  }
+  var th = ((DORA_REF || {}).ponts || {}).themes_iso || [];
+  zone.innerHTML = '<span class="cnf-art">Facultatif — les thèmes '
+    + 'de l’annexe A réellement en place précisent la carte. '
+    + 'Le bloc se valide sans.</span>'
+    + th.map(function (x) {
+        return '<label class="cnf-chk"><input type="checkbox"'
+          + (DORA_ISO.themes[x.cle] ? ' checked' : '')
+          + ' onchange="doraIsoTheme(\'' + doraEsc(x.cle) + '\', this.checked)"> '
+          + doraEsc(x.cle) + ' — ' + doraEsc(x.nom)
+          + ' <span class="cnf-art">' + x.mesures.length
+          + ' mesures citées</span></label>';
+      }).join('');
+}
+
+/* CHAQUE CHAMP RENSEIGNÉ REDEMANDE L'AVANCEMENT. C'est ce qui rend le
+   guidage vivant : un rail qui ne se rafraîchirait qu'au changement
+   d'écran laisserait le bloc courant clignoter alors qu'il vient d'être
+   complété, et le client chercherait ce qui manque encore. */
+function doraParcours() {
+  if (!DORA_REF) return;
+  fetch('/api/dora/parcours', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(doraDeclaration())
+  }).then(function (r) { return r.json(); }).then(function (j) {
+    if (!j || !j.ok) return;
+    var avant = DORA_PARCOURS;
+    DORA_PARCOURS = j;
+    doraRailPeindre();
+    doraAutoSuite(avant, j);
+  }).catch(function () {});
+}
+window.doraParcours = doraParcours;
+
+function doraRailPeindre() {
+  var rails = document.querySelectorAll('.dora-rail');
+  if (!rails.length || !DORA_PARCOURS) return;
+  var p = DORA_PARCOURS;
+  var etats = p.etats || {};
+  var piste = '';
+  (p.blocs || []).forEach(function (b, k) {
+    var e = etats[b.etat] || { nom: '', dit: '', puce: '' };
+    /* L'INFOBULLE PORTE LES TROIS CHOSES QU'ON NE PEUT PAS METTRE DANS
+       UNE PASTILLE : ce que le bloc fait, pourquoi il est là, et le piège
+       qui lui est propre. Une pastille sans légende ne se lit pas. */
+    var bulle = b.nom + ' — ' + e.nom + '\n\n' + b.quoi
+              + '\n\nPourquoi ici : ' + b.pourquoi
+              + '\n\nLe piège : ' + b.piege
+              + (b.motif ? '\n\n' + b.motif : '')
+              + '\n\n' + e.dit;
+    var cliquable = (b.etat !== 'sans_objet' && b.etat !== 'verrouillee');
+    if (k) piste += '<span class="dr-fleche" aria-hidden="true">→</span>';
+    piste += '<button type="button" class="dr-bloc ' + doraEsc(b.etat) + '"'
+      + (cliquable ? ' onclick="go(\'' + doraEsc(b.panneau) + '\')"'
+                   : ' disabled aria-disabled="true"')
+      + ' title="' + doraEsc(bulle) + '">'
+      + '<span class="dr-puce" aria-hidden="true">' + doraEsc(e.puce)
+      + '</span><span class="dr-rang">' + b.rang + '.</span>'
+      + '<span>' + doraEsc(b.nom) + '</span></button>';
+  });
+
+  /* CE QUI MANQUE AU BLOC COURANT, NOMMÉ — ET PLAFONNÉ À SIX LIGNES.
+     Vingt-six articles listés d'un coup ne se lisent pas ; le reste est
+     compté, pas caché. */
+  var manque = '';
+  var courant = (p.blocs || []).filter(function (b) {
+    return b.cle === p.courante; })[0];
+  if (courant && (courant.manque || []).length) {
+    var l = courant.manque;
+    manque = '<div class="dr-manque"><b>' + doraEsc(courant.nom)
+      + '</b> attend ' + l.length + ' réponse(s) :<ul>'
+      + l.slice(0, 6).map(function (m) {
+          return '<li>' + doraEsc(m.quoi) + '</li>'; }).join('')
+      + '</ul>'
+      + (l.length > 6 ? '<p class="dr-reste">… et ' + (l.length - 6)
+          + ' autre(s). Elles se remplissent sur cet écran.</p>' : '')
+      + '</div>';
+  }
+
+  var fin = '';
+  if (p.fini && p.conclusion) {
+    fin = '<div class="dr-fin"><b>✓ Les blocs qui vous concernent sont '
+        + 'renseignés.</b><br>' + doraEsc(p.conclusion) + '</div>';
+  }
+
+  var html = '<div class="dr-piste">' + piste + '</div>'
+    + '<div class="dr-barre" role="progressbar" aria-valuenow="' + p.valides
+    + '" aria-valuemin="0" aria-valuemax="' + p.total + '" aria-label="'
+    + p.valides + ' des ' + p.total + ' blocs validés"><i style="width:'
+    + p.part + '%"></i></div>'
+    + manque + fin
+    /* UNE CLASSE, ET NON UN IDENTIFIANT — MESURÉ PAR LA RECETTE, ET
+       C'ÉTAIT UN VRAI DÉFAUT. Le rail est peint dans les SIX panneaux ;
+       un `id` y devenait donc six fois le même, et `getElementById`
+       rendait toujours le PREMIER, c'est-à-dire celui du panneau de
+       qualification. Le décompte du passage automatique s'affichait sur
+       un écran CACHÉ : le client ne le voyait pas, ne pouvait pas
+       cliquer « Rester ici », et se retrouvait déplacé sans avoir rien
+       pu refuser. La recette l'a vu en mesurant le frein depuis un autre
+       panneau que le premier. */
+    + '<div class="dr-auto-zone"></div>';
+  Array.prototype.forEach.call(rails, function (r) { r.innerHTML = html; });
+}
+window.doraRailPeindre = doraRailPeindre;
+
+/* ── LE PASSAGE AUTOMATIQUE ────────────────────────────────────────────
+   IL NE PART QUE SUR UNE VALIDATION, ET JAMAIS AU PREMIER AFFICHAGE.
+   Partir sans cela déplacerait quelqu'un qui vient d'ouvrir l'écran, et
+   qui n'a rien validé du tout. */
+function doraAutoSuite(avant, apres) {
+  if (!avant || !apres.courante) {
+    DORA_AUTO_VU = apres.courante;
+    doraAutoAnnuler();
+    return;
+  }
+  if (avant.courante === apres.courante) return;
+  /* UN DÉCOMPTE LANCÉ NE SURVIT PAS À CE QUI LE REND CADUC — MESURÉ.
+     On valide un bloc, le décompte part ; on change alors le type
+     d'entité, et le bloc suivant n'est plus le même. L'ancien minuteur
+     continuait pourtant de courir et déplaçait vers une cible périmée.
+     Toute reprise de l'avancement qui change le bloc courant annule donc
+     le décompte en cours AVANT de décider s'il faut en lancer un autre. */
+  doraAutoAnnuler();
+  var valide = (avant.blocs || []).filter(function (b) {
+    return b.cle === avant.courante; })[0];
+  var devenu = (apres.blocs || []).filter(function (b) {
+    return b.cle === (valide || {}).cle; })[0];
+  DORA_AUTO_VU = apres.courante;
+  if (!devenu || devenu.etat !== 'validee') return;
+  /* ON NE DÉPLACE PAS QUELQU'UN QUI REGARDE UN AUTRE ÉCRAN que celui
+     qu'il vient de valider : il a navigué, il sait où il va. */
+  var ouvert = (document.querySelector('.page.on') || {}).id || '';
+  if (ouvert !== 'p-' + devenu.panneau) return;
+  doraAutoLancer(devenu, apres);
+}
+
+function doraAutoLancer(valide, p) {
+  var cible = (p.blocs || []).filter(function (b) {
+    return b.cle === p.courante; })[0];
+  if (!cible) return;
+  doraAutoAnnuler();
+  var reste = 4;
+  function peindre() {
+    var zones = document.querySelectorAll('.dr-auto-zone');
+    if (!zones.length) return;
+    var vue = '<div class="dr-auto" role="status">'
+      + '<span class="dr-auto-txt">✓ <b>' + doraEsc(valide.nom)
+      + '</b> est validé. Passage à <b>' + doraEsc(cible.nom)
+      + '</b> dans ' + reste + ' s.</span>'
+      + '<button type="button" onclick="doraAutoAnnuler()">Rester ici</button>'
+      + '<button type="button" onclick="doraAutoMaintenant()">Y aller '
+      + 'maintenant →</button></div>';
+    /* LES SIX ZONES REÇOIVENT LE MÊME DÉCOMPTE : une seule est visible à
+       la fois, et le code n'a pas à savoir laquelle. */
+    Array.prototype.forEach.call(zones, function (z) { z.innerHTML = vue; });
+  }
+  window.__doraAutoCible = cible.panneau;
+  peindre();
+  DORA_AUTO = setInterval(function () {
+    reste -= 1;
+    if (reste <= 0) { doraAutoMaintenant(); return; }
+    peindre();
+  }, 1000);
+}
+
+function doraAutoAnnuler() {
+  if (DORA_AUTO) { clearInterval(DORA_AUTO); DORA_AUTO = null; }
+  Array.prototype.forEach.call(document.querySelectorAll('.dr-auto-zone'),
+    function (z) { z.innerHTML = ''; });
+}
+window.doraAutoAnnuler = doraAutoAnnuler;
+
+function doraAutoMaintenant() {
+  var cible = window.__doraAutoCible;
+  doraAutoAnnuler();
+  if (cible) go(cible);
+}
+window.doraAutoMaintenant = doraAutoMaintenant;
+
+
 function doraInit() {
   if (DORA_REF) { doraPeindreCourant(); return; }
   fetch('/api/dora/referentiel')
@@ -24157,6 +24419,7 @@ function doraInit() {
     .then(function (j) {
       if (!j || !j.ok) throw new Error('referentiel');
       DORA_REF = j; doraRemplirChamps(); doraPeindreCourant();
+      doraParcours();
     })
     .catch(function () {
       ['dora-verdict', 'dora-risque-body', 'dora-tiers-body',
@@ -24182,6 +24445,7 @@ window.doraInit = doraInit;
    aucune règle de source ne pouvait le voir, parce que le code était juste
    et que c'est son RYTHME qui ne l'était pas. */
 function doraPeindreCourant() {
+  if (DORA_PARCOURS) doraRailPeindre();
   var actif = (document.querySelector('.page.on') || {}).id || '';
   if (actif === 'p-dora-risque') { doraPeindreRisque(); return; }
   if (actif === 'p-dora-tiers') { doraPeindreTiers(); return; }
@@ -24255,12 +24519,14 @@ function doraChamp(cle, v) {
     DORA_DECL[cle] = v;
   }
   doraQualifier();
+  doraParcours();
 }
 window.doraChamp = doraChamp;
 
 function doraPorte(cle, on) {
   if (on) { DORA_DECL[cle] = true; } else { delete DORA_DECL[cle]; }
   doraQualifier();
+  doraParcours();
 }
 window.doraPorte = doraPorte;
 
@@ -24385,6 +24651,7 @@ var DORA_ETATS = {};
 function doraEtat(n, v) {
   if (v) { DORA_ETATS[n] = v; } else { delete DORA_ETATS[n]; }
   doraCalculerRisque();
+  doraParcours();
 }
 window.doraEtat = doraEtat;
 
@@ -24445,6 +24712,7 @@ function doraContrat(cle, v) {
     DORA_CONTRAT[cle] = v;
   }
   doraCalculerTiers();
+  doraParcours();
 }
 window.doraContrat = doraContrat;
 
@@ -24452,6 +24720,7 @@ function doraClause(cle, v) {
   if (v) { DORA_CONTRAT.clauses[cle] = v; }
   else { delete DORA_CONTRAT.clauses[cle]; }
   doraCalculerTiers();
+  doraParcours();
 }
 window.doraClause = doraClause;
 
@@ -24551,12 +24820,14 @@ function doraInc(cle, v) {
     DORA_INC[cle] = v || null;
   }
   doraCalculerIncident();
+  doraParcours();
 }
 window.doraInc = doraInc;
 
 function doraSeuil(cle, on) {
   if (on) { DORA_INC.seuils[cle] = true; } else { delete DORA_INC.seuils[cle]; }
   doraCalculerIncident();
+  doraParcours();
 }
 window.doraSeuil = doraSeuil;
 
@@ -24617,13 +24888,27 @@ function doraPeindreIso() {
       + '→</a></div>';
     return;
   }
-  var ap = ((DORA_REF.ponts || {}) || {}).apport;
-  if (!ap || !ap.ok || ap.regime !== DORA_REGIME) {
-    fetch('/api/dora/referentiel?regime=' + encodeURIComponent(DORA_REGIME))
-      .then(function (r) { return r.json(); })
-      .then(function (j) {
-        if (j && j.ok) { DORA_REF.ponts = j.ponts; doraPeindreIso(); }
-      }).catch(function () {});
+  /* LA CARTE EST DEMANDÉE À `evaluer`, ET NON AU RÉFÉRENTIEL, parce que
+     le référentiel ne connaît PAS les mesures déclarées : il rendait la
+     carte théorique même après que le client eut coché ses thèmes de
+     l'annexe A. Cocher ne changeait alors rien à l'écran — un champ qui
+     ne fait rien est pire qu'un champ absent. */
+  var ap = DORA_ISO.apport;
+  if (!ap || !ap.ok || ap.regime !== DORA_REGIME
+      || ap._mesures !== JSON.stringify(DORA_ISO.mesures || null)) {
+    var signature = JSON.stringify(DORA_ISO.mesures || null);
+    fetch('/api/dora/evaluer', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ entite: DORA_DECL.entite,
+                             identifiee_nis2: DORA_DECL.identifiee_nis2,
+                             mesures_iso: DORA_ISO.mesures })
+    }).then(function (r) { return r.json(); }).then(function (j) {
+      var a = (j || {}).apport_iso27001;
+      if (!a || !a.ok) return;
+      a._mesures = signature;
+      DORA_ISO.apport = a;
+      doraPeindreIso();
+    }).catch(function () {});
     return;
   }
   var h = '<div class="cnf-verdict cnf-part"><div class="cnf-verdict-t">'
@@ -24699,7 +24984,9 @@ function doraPeindreSup() {
   doraCalculerSup();
 }
 
-function doraSup(cle, on) { DORA_SUP[cle] = !!on; doraCalculerSup(); }
+function doraSup(cle, on) {
+  DORA_SUP[cle] = !!on; doraCalculerSup(); doraParcours();
+}
 window.doraSup = doraSup;
 
 function doraSupN(cle, v) {

@@ -1903,6 +1903,7 @@ import dora_tiers  # noqa: E402
 import dora_incident  # noqa: E402
 import dora_ponts  # noqa: E402
 import dora_supervision  # noqa: E402
+import dora_parcours  # noqa: E402
 
 
 @app.route('/api/dora/referentiel', methods=['GET'])
@@ -1924,6 +1925,7 @@ def api_dora_referentiel():
         "incident": dora_incident.referentiel(),
         "ponts": dora_ponts.referentiel(regime),
         "supervision": dora_supervision.referentiel(),
+        "parcours": dora_parcours.referentiel(),
     })
 
 
@@ -1988,6 +1990,26 @@ def api_dora_incident():
         return jsonify({"ok": False, "erreur": "evaluation_impossible"}), 500
     return (jsonify(dict(r, delais=delais)),
             200 if r.get("ok") else 400)
+
+
+@app.route('/api/dora/parcours', methods=['POST'])
+@rate_limit(limit=240, window=60)
+def api_dora_parcours():
+    """Où en est le parcours, et ce qui manque au bloc courant.
+
+    LA CADENCE EST PLUS LARGE QUE LES AUTRES ROUTES, ET C'EST VOULU.
+    Celle-ci est appelée à CHAQUE champ renseigné — c'est ce qui rend le
+    guidage vivant. Lui donner la cadence d'un calcul ferait mourir le
+    rail au milieu d'un questionnaire de vingt-six articles, c'est-à-dire
+    exactement là où il sert.
+    """
+    d = request.get_json(silent=True) or {}
+    try:
+        r = dora_parcours.avancement(d)
+    except Exception:
+        app.logger.exception("parcours DORA")
+        return jsonify({"ok": False, "erreur": "avancement_impossible"}), 500
+    return jsonify(r), 200
 
 
 @app.route('/api/dora/supervision', methods=['POST'])

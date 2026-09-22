@@ -1,0 +1,169 @@
+{
+ "cibles": [
+  "tests/test_dora_parcours.py",
+  "tests/test_dora.py"
+ ],
+ "mutations": [
+  {
+   "nom": "le vert redevient « visité » au lieu de « validé »",
+   "fichier": "dora_parcours.py",
+   "avant": "        if not manque and not absents:",
+   "apres": "        if not absents:",
+   "regle": "test_ouvrir_un_bloc_ne_le_valide_PAS"
+  },
+  {
+   "nom": "un bloc incomplet cesse de nommer ce qui lui manque",
+   "fichier": "dora_parcours.py",
+   "avant": "        out.append({\"champ\": champ, \"quoi\": quoi})",
+   "apres": "        out.append({\"champ\": champ, \"quoi\": \"À compléter\"})",
+   "regle": "test_chaque_bloc_NON_valide_nomme_ce_qui_lui_manque"
+  },
+  {
+   "nom": "les vingt-six articles se comptent au lieu de se nommer",
+   "fichier": "dora_parcours.py",
+   "avant": "            if etats.get(num) not in dora_risque.ETATS:\n                _il_manque(\"article_%d\" % num,\n                           \"Article %d — %s\" % (num, titre))",
+   "apres": "            if etats.get(num) not in dora_risque.ETATS:\n                _il_manque(\"articles\", \"Des articles restent à déclarer.\")\n                break",
+   "regle": "test_les_vingt_six_articles_du_cadre_complet_sont_nommes_UN_A_UN"
+  },
+  {
+   "nom": "deux blocs clignotent à la fois",
+   "fichier": "dora_parcours.py",
+   "avant": "        if courante is None:\n            courante = l[\"cle\"]\n            l[\"etat\"] = \"courante\"\n        else:\n            l[\"etat\"] = \"attente\"",
+   "apres": "        courante = courante or l[\"cle\"]\n        l[\"etat\"] = \"courante\"",
+   "regle": "test_un_seul_bloc_est_COURANT_a_la_fois"
+  },
+  {
+   "nom": "la garde cesse de refuser un second état animé",
+   "fichier": "dora_parcours.py",
+   "avant": "    if len(ANIMES) != 1 or ANIMES[0] != \"courante\":",
+   "apres": "    if False:",
+   "regle": "test_la_GARDE_D_IMPORT_refuse_un_second_etat_anime"
+  },
+  {
+   "nom": "le courant devient le suivant du dernier rempli",
+   "fichier": "dora_parcours.py",
+   "avant": "    courante = None\n    for l in lignes:\n        if l[\"etat\"] is not None:\n            continue",
+   "apres": "    courante = None\n    for l in reversed(lignes):\n        if l[\"etat\"] is not None:\n            continue",
+   "regle": "test_le_courant_est_le_PREMIER_non_valide_et_non_le_suivant_du_dernier"
+  },
+  {
+   "nom": "le passage automatique perd sa cible quand tout est verrouillé",
+   "fichier": "dora_parcours.py",
+   "avant": "                 and l[\"etat\"] != \"sans_objet\"]",
+   "apres": "                 and l[\"etat\"] in (\"courante\", \"attente\")]",
+   "regle": "test_le_SUIVANT_existe_meme_quand_les_blocs_d_apres_sont_VERROUILLES"
+  },
+  {
+   "nom": "le passage automatique vise un bloc barré",
+   "fichier": "dora_parcours.py",
+   "avant": "        reste = [l for l in lignes\n                 if l[\"rang\"] > BLOCS_PAR_CLE[courante][\"rang\"]",
+   "apres": "        reste = [l for l in lignes\n                 if l[\"rang\"] > BLOCS_PAR_CLE[courante][\"rang\"] or True",
+   "regle": "test_le_suivant_SAUTE_les_blocs_sans_objet"
+  },
+  {
+   "nom": "le prestataire tiers reçoit le cadre de gestion du risque",
+   "fichier": "dora_parcours.py",
+   "avant": "        if cle in (\"risque\", \"iso\"):",
+   "apres": "        if cle in (\"jamais\",):",
+   "regle": "test_le_prestataire_tiers_n_a_PAS_les_memes_blocs_qu_une_banque"
+  },
+  {
+   "nom": "un bloc sans objet cesse de dire pourquoi",
+   "fichier": "dora_parcours.py",
+   "avant": "        return (\"L'article 31, paragraphe 8, point i), exclut expressément de \"",
+   "apres": "        return (\"Sans objet. \"",
+   "regle": "test_tout_bloc_SANS_OBJET_porte_son_motif"
+  },
+  {
+   "nom": "un bloc verrouillé ne nomme plus son prérequis",
+   "fichier": "dora_parcours.py",
+   "avant": "            l[\"motif\"] = (\"Ce bloc dépend de : %s. Complétez-le d'abord.\"",
+   "apres": "            l[\"motif\"] = (\"Ce bloc est verrouillé.%.0s\"",
+   "regle": "test_tout_bloc_VERROUILLE_nomme_celui_dont_il_depend"
+  },
+  {
+   "nom": "cent pour cent se félicite d'une sortie du champ",
+   "fichier": "dora_parcours.py",
+   "avant": "        return (\"Le parcours s'arrête au premier bloc, et c'est le bon \"",
+   "apres": "        return (\"Parcours terminé.%.0s\" % \"\" or \"Le parcours s'arrête au premier bloc, et c'est le bon \"",
+   "regle": "test_la_CONCLUSION_dit_ce_que_cent_pour_cent_signifie"
+  },
+  {
+   "nom": "le bloc ISO redevient une impasse",
+   "fichier": "dora_parcours.py",
+   "avant": "        if d.get(\"iso27001_certifie\") is None:\n            _il_manque(\"iso27001_certifie\",",
+   "apres": "        if d.get(\"iso27001_certifie\") is None or not d.get(\"mesures_iso\"):\n            _il_manque(\"iso27001_certifie\",",
+   "regle": "test_chaque_bloc_ouvrable_PEUT_reellement_etre_valide"
+  },
+  {
+   "nom": "les quatre thèmes ISO sont recopiés au lieu d'être dérivés",
+   "fichier": "dora_ponts.py",
+   "avant": "    citees = {m for _n, _c, mes, _ch, _m in CORRESPONDANCE for m in mes}",
+   "apres": "    citees = {m for _n, _c, mes, _ch, _m in CORRESPONDANCE for m in mes[:1]}",
+   "regle": "test_les_quatre_themes_de_l_annexe_A_sont_offerts_pour_AFFINER"
+  },
+  {
+   "nom": "le battement ne s'arrête plus pour qui le demande",
+   "fichier": "sentinel.html",
+   "avant": "  .dr-bloc.courante{animation:none;border-width:2.5px}",
+   "apres": "  .dr-bloc.courante{border-width:2.5px}",
+   "regle": "test_le_battement_S_ARRETE_pour_qui_le_demande"
+  },
+  {
+   "nom": "l'état « validé » se met à battre dans la feuille de style",
+   "fichier": "sentinel.html",
+   "avant": ".dr-bloc.validee{border-color:var(--green);background:rgba(45,122,71,.10);",
+   "apres": ".dr-bloc.validee{animation:dr-battement 1.6s ease-in-out infinite;border-color:var(--green);background:rgba(45,122,71,.10);",
+   "regle": "test_les_CINQ_etats_ont_leur_classe_et_UNE_SEULE_est_animee"
+  },
+  {
+   "nom": "les flèches disparaissent du rail",
+   "fichier": "sentinel.page.js",
+   "avant": "    if (k) piste += '<span class=\"dr-fleche\" aria-hidden=\"true\">→</span>';",
+   "apres": "    if (k && false) piste += '<span class=\"dr-f\" aria-hidden=\"true\">→</span>';",
+   "regle": "test_les_fleches_relient_les_blocs"
+  },
+  {
+   "nom": "le passage automatique part sans validation",
+   "fichier": "sentinel.page.js",
+   "avant": "  if (!devenu || devenu.etat !== 'validee') return;",
+   "apres": "  if (!devenu) return;",
+   "regle": "test_le_passage_automatique_ne_part_QUE_sur_une_validation"
+  },
+  {
+   "nom": "le décompte perd son frein",
+   "fichier": "sentinel.page.js",
+   "avant": "      + '<button type=\"button\" onclick=\"doraAutoAnnuler()\">Rester ici</button>'",
+   "apres": "      + ''",
+   "regle": "test_le_passage_automatique_a_un_FREIN_visible"
+  },
+  {
+   "nom": "l'infobulle du rail perd le piège de chaque bloc",
+   "fichier": "sentinel.page.js",
+   "avant": "              + '\\n\\nLe piège : ' + b.piege",
+   "apres": "              + ''",
+   "regle": "test_l_infobulle_du_rail_porte_le_piege_de_chaque_bloc"
+  },
+  {
+   "nom": "la cadence du rail tombe à celle d'un calcul",
+   "fichier": "app.py",
+   "avant": "@app.route('/api/dora/parcours', methods=['POST'])\n@rate_limit(limit=240, window=60)",
+   "apres": "@app.route('/api/dora/parcours', methods=['POST'])\n@rate_limit(limit=30, window=60)",
+   "regle": "test_la_route_du_parcours_existe_et_sa_cadence_est_LARGE"
+  },
+  {
+   "nom": "une saisie cesse de rafraîchir le rail",
+   "fichier": "sentinel.page.js",
+   "avant": "  doraCalculerRisque();\n  doraParcours();\n}\nwindow.doraEtat = doraEtat;",
+   "apres": "  doraCalculerRisque();\n}\nwindow.doraEtat = doraEtat;",
+   "regle": "test_chaque_saisie_DORA_redemande_l_avancement"
+  },
+  {
+   "nom": "un panneau perd son rail",
+   "fichier": "sentinel.html",
+   "avant": "id=\"dora-rail-supervision\"",
+   "apres": "id=\"dora-rail-sup\"",
+   "regle": "test_chaque_panneau_DORA_porte_le_rail[dora-supervision]"
+  }
+ ]
+}

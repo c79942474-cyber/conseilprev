@@ -712,9 +712,33 @@ def _ordre_mesure(num):
     return tuple(int(b) for b in bouts)
 
 
+def themes_iso():
+    """Les quatre thèmes de l'annexe A, avec les mesures que ce pont cite.
+
+    DÉRIVÉ DE `iso27001`, JAMAIS RECOPIÉ. Un second tableau des
+    quatre-vingt-treize mesures divergerait du premier à la première mise
+    à jour, et la divergence se verrait chez le client.
+
+    ET SEULEMENT LES MESURES QUE LA CORRESPONDANCE CITE : demander les
+    quatre-vingt-treize alors que soixante-sept seulement servent au pont
+    ferait remplir un questionnaire dont un tiers ne change rien.
+    """
+    import iso27001
+    citees = {m for _n, _c, mes, _ch, _m in CORRESPONDANCE for m in mes}
+    par_theme = {}
+    for num in sorted(citees, key=_ordre_mesure):
+        d = iso27001.MESURES[num]
+        par_theme.setdefault(d["theme"], {"cle": d["theme"],
+                                          "nom": d["theme_titre"],
+                                          "mesures": []})
+        par_theme[d["theme"]]["mesures"].append(num)
+    return [par_theme[k] for k in sorted(par_theme)]
+
+
 def referentiel(regime=None):
     r = {
         "version": VERSION,
+        "themes_iso": themes_iso(),
         "reserve": RESERVE,
         "sources": [dict(s) for s in SOURCES],
         "lacunes": list(LACUNES),
