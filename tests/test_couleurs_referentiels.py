@@ -369,17 +369,17 @@ def test_un_tiroir_voue_a_AUCUN_referentiel_reste_NEUTRE():
 
 
 def test_la_pastille_VIDE_porte_la_couleur_par_un_POINT():
-    """LE DÉFAUT CONSTATÉ À L'ÉCRAN. Vingt-huit onglets de référentiel n'ont
-    pas de dessin dans leur pastille. Teintée à 9 %, elle rendait la couleur
-    presque invisible : DORA et NIS 2 paraissaient gris.
+    """LE DÉFAUT CONSTATÉ À L'ÉCRAN. Trente et un onglets de référentiel
+    n'avaient pas de dessin dans leur pastille. Teintée à 9 %, elle rendait
+    la couleur presque invisible : DORA et NIS 2 paraissaient gris. Ils ont
+    depuis chacun leur dessin (tests/test_barre_dessins.py) ; le point reste
+    le repli d'une pastille vide — un onglet ajouté avant d'être dessiné
+    porte au moins sa couleur.
 
     Le point doit prendre `currentColor` — c'est ce qui le fait suivre la
     couleur de l'icône : celle du référentiel au repos, la terre cuite au
     survol, le blanc sur l'onglet ouvert. Une couleur écrite en dur ne
     suivrait aucun des trois états."""
-    vides = re.findall(r'<div class="sb-item" data-norme="[^"]+"[^>]*>'
-                       r'<span class="sb-icon"[^>]*></span>', HTML)
-    assert len(vides) >= 20, "%d pastille(s) vide(s) relevée(s)" % len(vides)
     corps = _corps(".sb-item .sb-icon:empty::before", "background")
     assert re.search(r"(^|;|\s)background\s*:\s*currentColor", corps), corps
     assert "content:''" in corps.replace('"', "'"), corps

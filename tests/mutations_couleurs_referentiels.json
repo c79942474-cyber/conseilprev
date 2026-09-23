@@ -175,8 +175,8 @@
   {
    "nom": "un onglet NIS 2 perd son nom écrit",
    "fichier": "sentinel.html",
-   "avant": "<span class=\"sb-icon\" aria-hidden=\"true\"></span>Suis-je concerné ?</div>",
-   "apres": "<span class=\"sb-icon\" aria-hidden=\"true\"></span></div>",
+   "avant": "</svg></span>Suis-je concerné ?</div>",
+   "apres": "</svg></span></div>",
    "regle": "test_chaque_referentiel_garde_son_NOM_ecrit[nis2]"
   },
   {

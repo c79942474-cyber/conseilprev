@@ -1,0 +1,64 @@
+{
+ "_pourquoi": "Chaque règle de la barre doit tomber sur SON défaut : un onglet sans dessin, un dessin annoncé ou focalisable, deux dessins identiques dans une rubrique ou l'écho du chapeau, une rubrique sans teinte, et « Compte » peint de la couleur qui dit « ici ».",
+ "cibles": [
+  "tests/test_barre_dessins.py"
+ ],
+ "mutations": [
+  {
+   "nom": "un onglet perd son dessin",
+   "fichier": "sentinel.html",
+   "avant": "<span class=\"sb-icon\"><svg width=\"14\" height=\"14\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" viewBox=\"0 0 24 24\" aria-hidden=\"true\" focusable=\"false\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6M12 17h.01\"/></svg></span>Suis-je concerné ?",
+   "apres": "<span class=\"sb-icon\" aria-hidden=\"true\"></span>Suis-je concerné ?",
+   "regle": "test_CHAQUE_onglet_porte_son_dessin"
+  },
+  {
+   "nom": "un dessin se fait annoncer",
+   "fichier": "sentinel.html",
+   "avant": "aria-hidden=\"true\" focusable=\"false\"><path d=\"M3 21V11l5 3v-3l5 3v-3l5 3V4h3v17z\"/>",
+   "apres": "focusable=\"false\"><path d=\"M3 21V11l5 3v-3l5 3v-3l5 3V4h3v17z\"/>",
+   "regle": "test_chaque_dessin_est_MUET_et_HORS_de_la_tabulation"
+  },
+  {
+   "nom": "un dessin prend la tabulation",
+   "fichier": "sentinel.html",
+   "avant": "aria-hidden=\"true\" focusable=\"false\"><path d=\"M17.5 6.5a7 7 0 1 0 0 11\"/>",
+   "apres": "aria-hidden=\"true\"><path d=\"M17.5 6.5a7 7 0 1 0 0 11\"/>",
+   "regle": "test_chaque_dessin_est_MUET_et_HORS_de_la_tabulation"
+  },
+  {
+   "nom": "deux onglets de DORA partagent un dessin",
+   "fichier": "sentinel.html",
+   "avant": "<rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\"/><path d=\"M3 9h18M3 15h18M9 3v18M15 3v18\"/></svg></span>Cadre de gestion du risque",
+   "apres": "<path d=\"M12 4v16M7 20h10M5 7h14\"/><path d=\"M5 7 2.5 13a2.5 2.5 0 0 0 5 0zM19 7l-2.5 6a2.5 2.5 0 0 0 5 0z\"/></svg></span>Cadre de gestion du risque",
+   "regle": "test_dans_une_rubrique_DEUX_onglets_ne_partagent_jamais_un_dessin"
+  },
+  {
+   "nom": "un onglet ISO 27001 recopie son chapeau",
+   "fichier": "sentinel.html",
+   "avant": "<path d=\"M3.5 12a8.5 8.5 0 1 0 2.5-6\"/><path d=\"M3 4v4.5h4.5\"/><path d=\"M12 7.5V12l3 2\"/></svg></span>2013",
+   "apres": "<path d=\"M12 2.5 20 6v6.2c0 4.9-3.3 8.6-8 9.8-4.7-1.2-8-4.9-8-9.8V6z\"/><path d=\"M12 9v4M12 16h.01\"/></svg></span>2013",
+   "regle": "test_dans_une_rubrique_DEUX_onglets_ne_partagent_jamais_un_dessin"
+  },
+  {
+   "nom": "« Compte » perd sa teinte",
+   "fichier": "sentinel.html",
+   "avant": ".sb-nav [data-grp=\"compte\"]{--sb-ic:var(--muted)}",
+   "apres": ".sb-nav [data-grp=\"compte-x\"]{--sb-ic:var(--muted)}",
+   "regle": "test_CHAQUE_rubrique_declare_sa_teinte"
+  },
+  {
+   "nom": "« Compte » dit « ici » en permanence",
+   "fichier": "sentinel.html",
+   "avant": ".sb-nav [data-grp=\"compte\"]{--sb-ic:var(--muted)}",
+   "apres": ".sb-nav [data-grp=\"compte\"]{--sb-ic:var(--accent)}",
+   "regle": "test_la_rubrique_COMPTE_ne_porte_pas_la_terre_cuite"
+  },
+  {
+   "nom": "une rubrique ancienne perd sa teinte",
+   "fichier": "sentinel.html",
+   "avant": ".sb-nav [data-grp=\"juridique\"]{--sb-ic:var(--violet)}",
+   "apres": ".sb-nav [data-grp=\"juridique-x\"]{--sb-ic:var(--violet)}",
+   "regle": "test_CHAQUE_rubrique_declare_sa_teinte"
+  }
+ ]
+}

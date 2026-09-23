@@ -32,6 +32,20 @@
  *   6. RIEN N'EST POUSSÉ HORS DE LA COLONNE — 240 px, et des intitulés qui se
  *      replient sur deux lignes.
  *
+ * DEUX DÉCISIONS PRISES APRÈS CETTE RECETTE, ET QU'ELLE MESURE DÉSORMAIS AU
+ * LIEU DE LES CONTREDIRE. Elle échouait sur huit contrôles ; quatre venaient
+ * d'elle :
+ *   · les tiroirs de « Votre Mise en Conformité Réglementaire » sont REPLIÉS
+ *     par défaut. « Filtre vide » ne veut donc plus dire « tout est affiché »,
+ *     mais « le filtre ne masque rien, et chaque pli reste celui qu'on a
+ *     laissé » ;
+ *   · un filtre qui ne trouve rien REND LE MENU ENTIER, depuis qu'un
+ *     navigateur l'a rempli d'une adresse e-mail et vidé la barre de toutes
+ *     les pages. Il le dit, et ne laisse plus de colonne vide.
+ * Les quatre autres étaient de vrais défauts : trente et un onglets de
+ * référentiel sans dessin — d'où trois échecs —, et la rubrique « Compte »
+ * sans teinte, dont le titre portait la terre cuite qui dit « ici ».
+ *
  * Lancement :
  *     BASE=http://127.0.0.1:5901 node recette_barre_sentinel.js
  */
@@ -432,7 +446,15 @@ const RELEVE = () => {
         return k === 0;
       }).map(x => x.textContent.trim());
       const cpt = document.getElementById('sb-filtre-cpt');
-      return { total: it.length, visibles: visibles.length,
+      /* CE QUE LE FILTRE MASQUE, ET CE QUE LE PLI D'UN TIROIR TIENT FERMÉ :
+         deux mécanismes, deux attributs — le filtre écrit `hidden`, le pli
+         `data-replie`. Les confondre ferait accuser l'un de ce que fait
+         l'autre. */
+      const masques = it.filter(x => x.hasAttribute('hidden')).length;
+      const replies = it.filter(x => !x.hasAttribute('hidden')
+                                     && x.hasAttribute('data-replie')).length;
+      return { total: it.length, visibles: visibles.length, masques, replies,
+               pager: window.pagerGetSections ? window.pagerGetSections().length : null,
                rubriques: secVisibles.length, orphelines,
                dit: cpt ? cpt.textContent.trim() : null,
                premiers: visibles.slice(0, 3).map(x => x.textContent.trim()),
@@ -441,8 +463,12 @@ const RELEVE = () => {
   };
 
   const tout = await filtre('');
-  ok('à vide, tout est là', !tout.err && tout.visibles === tout.total, tout.err,
-     tout.err ? '' : tout.visibles + ' onglet(s), ' + tout.rubriques + ' rubrique(s)');
+  ok('à vide, le filtre ne masque rien — et les tiroirs repliés le restent',
+     !tout.err && tout.masques === 0 && tout.visibles + tout.replies === tout.total,
+     tout.err || (tout.masques + ' masqué(s), ' + tout.visibles + ' visible(s), '
+                  + tout.replies + ' dans un tiroir replié, sur ' + tout.total),
+     tout.err ? '' : tout.visibles + ' onglet(s) visibles, ' + tout.replies
+       + ' dans les tiroirs repliés, ' + tout.rubriques + ' rubrique(s)');
 
   const fRisque = await filtre('risque');
   ok('LE POINT QUI DÉCIDE — le filtre réduit vraiment la liste',
@@ -475,25 +501,31 @@ const RELEVE = () => {
      !fRgpd.err && fRgpd.visibles >= 9, fRgpd.err,
      fRgpd.err ? '' : fRgpd.visibles + ' onglet(s) pour « rgpd »');
 
-  const fRien = await filtre('zzzzq');
-  ok('quand rien ne correspond, il le DIT au lieu de laisser une colonne vide',
-     !fRien.err && fRien.visibles === 0 && /aucun/.test(fRien.dit || ''),
-     fRien.err || ('« ' + fRien.dit + ' »'), fRien.err ? '' : '« ' + fRien.dit + ' »');
-
-  /* LE PAGER NE DOIT PAS SAUTER : replié, `offsetTop` vaut zéro et les flèches
-     précédent/suivant menaient toutes au même endroit. */
-  const pager = await sur(() => {
-    const vues = window.pagerGetSections ? window.pagerGetSections() : [];
-    return { n: vues.length, tops: vues.map(s => s.offsetTop) };
-  });
+  /* LE PAGER NE DOIT PAS SAUTER : une rubrique masquée a un `offsetTop` nul,
+     et les flèches précédent/suivant menaient toutes au même endroit. On le
+     mesure sous un filtre qui masque vraiment des rubriques. */
   ok('…et les flèches de rubrique ne comptent que ce qui est visible',
-     !pager.err && pager.n === 0, pager.err,
-     pager.err ? '' : pager.n + ' rubrique(s) retenue(s) quand tout est masqué');
+     !fRisque.err && fRisque.pager === fRisque.rubriques
+     && fRisque.rubriques < tout.rubriques,
+     fRisque.err || (fRisque.pager + ' retenue(s) pour ' + fRisque.rubriques + ' visible(s)'),
+     fRisque.err ? '' : fRisque.pager + ' rubrique(s) retenue(s) sous « risque »');
+
+  /* UN FILTRE SANS RÉSULTAT REND LE MENU ENTIER — le défaut d'une barre vidée
+     par un remplissage automatique ne doit pas revenir. */
+  const fRien = await filtre('zzzzq');
+  ok('quand rien ne correspond, il le DIT — et rend le menu au lieu d’une colonne vide',
+     !fRien.err && fRien.masques === 0 && fRien.visibles > 0
+     && /aucun onglet ne correspond/.test(fRien.dit || '') && /menu complet/.test(fRien.dit || ''),
+     fRien.err || ('« ' + fRien.dit + ' », ' + fRien.masques + ' masqué(s)'),
+     fRien.err ? '' : '« ' + fRien.dit + ' », ' + fRien.visibles + ' onglet(s) visibles');
 
   const retour = await filtre('');
-  ok('vider le champ rend TOUT le menu',
-     !retour.err && retour.visibles === tout.total && retour.dit === '',
-     retour.err, retour.err ? '' : retour.visibles + ' onglet(s)');
+  ok('vider le champ rend le menu tel qu’on l’avait laissé, plis compris',
+     !retour.err && retour.masques === 0 && retour.visibles === tout.visibles
+     && retour.replies === tout.replies && retour.dit === '',
+     retour.err || (retour.visibles + ' visible(s) pour ' + tout.visibles + ', '
+                    + retour.replies + ' replié(s) pour ' + tout.replies),
+     retour.err ? '' : retour.visibles + ' onglet(s) visibles, ' + retour.replies + ' repliés');
 
   // ── 10 ──────────────────────────────────────────────────────────────────
   titre('10. Rien de flottant ne recouvre plus la barre');
