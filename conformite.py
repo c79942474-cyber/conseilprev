@@ -22,10 +22,11 @@ CE QUI REND L'EXERCICE DANGEREUX, ET QUE CE MODULE REFUSE DE FAIRE.
      ce qu'il laisse passer. Le maillon le plus faible commande — la même
      règle que securite_ia applique à la chaîne d'autonomie.
 
-  3. UN TAUX SUR UNE NORME QU'ON NE MESURE PAS EST UN MENSONGE POLI. DORA n'a
-     pas de module ici : son taux est None, jamais 0. Zéro voudrait dire « rien
-     de fait » ; None veut dire « nous ne le mesurons pas », et c'est la
-     vérité.
+  3. UN TAUX SUR UNE NORME QU'ON NE MESURE PAS EST UN MENSONGE POLI. Une norme
+     dont l'écran ne porte aucune réponse rend None, jamais 0 ; une norme que
+     la qualification déclarée écarte rend « sans objet ». Zéro voudrait dire
+     « rien de fait » ; None veut dire « nous ne le mesurons pas », et c'est
+     la vérité.
 
   4. UNE MOYENNE DES NEUF SERAIT LE PIRE DES DEUX MONDES. On rend donc ce qui
      COMMANDE — le plus bas des taux mesurés — et la moyenne à côté, nommée
@@ -41,7 +42,7 @@ cadres de l'écran (voir plus bas, RECALAGE).
 """
 import copy
 
-VERSION = "2026-09-a"
+VERSION = "2026-09-b"
 
 # ══════════════════════════════════════════════════════════════════════════
 #  LES NATURES — CE QUE 100 % VEUT DIRE, ET CE QU'IL NE VEUT PAS DIRE
@@ -643,6 +644,26 @@ RESERVES = {
     ],
 }
 
+# ── QUAND LA NORME NE S'APPLIQUE PAS : NI TAUX, NI ZÉRO ────────────────────
+#
+# CE N'EST NI UN VERROU NI UNE RÉSERVE. Un verrou plafonne un taux, une
+# réserve le met en doute ; ici, il n'y a pas de taux du tout, parce que la
+# qualification DÉCLARÉE écarte la norme. Mesuré avant cette table : une
+# entité hors du champ de NIS 2 recevait « 0 % », dix écarts et dix actions
+# au plan — le chantier que le module NIS 2 refuse justement de vendre à
+# une entreprise hors champ —, pendant que le rail de son écran passait
+# tous les blocs en « sans objet ».
+SANS_OBJET = {
+    "nis2": {
+        "cle": "hors_champ",
+        "dit": "Hors du champ de la directive, selon la qualification "
+               "déclarée : il n'y a pas de taux à mesurer, et ce n'est pas un "
+               "zéro. La qualification se revoit le jour où le secteur ou la "
+               "taille change.",
+        "ou": "nis2 · qualification",
+    },
+}
+
 
 # ══════════════════════════════════════════════════════════════════════════
 #  LIRE CE QUE CHAQUE MODULE REND DÉJÀ
@@ -704,18 +725,30 @@ def _lire_iso27001(ev, dec=None):
 def _lire_nis2(ev, dec=None):
     if not ev or not ev.get("ok"):
         return None, []
+    # LA QUALIFICATION SE LIT SUR LA DÉCLARATION, AVEC LA FONCTION DU RAIL.
+    # `qualifier` rend toujours un statut — et « hors champ » sur un
+    # formulaire VIDE. Le lire ici aurait fait dire au taux « hors champ » à
+    # qui n'a pas encore choisi son secteur, pendant que le rail lui disait
+    # « il manque le secteur ». Une seule lecture, donc : celle du rail.
+    import parcours_normes as _pn
+    manque, verdict = _pn.qualification_nis2(dec or {})
+    statut = ((verdict or {}).get("statut") or {}).get("cle")
+    # HORS CHAMP, IL N'Y A PAS DE TAUX — ET CE N'EST PAS UN ZÉRO. Mesuré :
+    # une entité hors du champ recevait « 0 % » et dix actions au plan,
+    # pendant que le rail passait tous ses blocs en « sans objet ».
+    if not manque and statut == "hors_champ":
+        return None, ["hors_champ"]
     parts = {
         "mesures": (ev.get("mesures") or {}).get("taux"),
         "gouvernance": (ev.get("gouvernance") or {}).get("taux"),
     }
-    # LE VERROU NE TOMBE PAS SUR « PAS DE STATUT » MAIS SUR UN STATUT QUI NE
-    # DIT RIEN. `qualifier` rend toujours un statut ; celui qui bloque est
-    # « indetermine » — on ne sait pas quel régime s'applique, donc on ne sait
-    # pas à quel niveau d'exigence les dix mesures doivent être tenues.
+    # LA RÉSERVE TOMBE QUAND LA QUALIFICATION N'EST PAS PRONONÇABLE : il
+    # manque le secteur, ou la taille d'un secteur des annexes. On ne sait
+    # alors pas quel régime s'applique, donc pas à quel niveau d'exigence
+    # les dix mesures doivent être tenues.
     q = ev.get("qualification") or {}
-    statut = q.get("statut") or {}
-    verrous = ["non_qualifie"] if (q.get("indetermine")
-                                   or not statut.get("cle")) else []
+    verrous = ["non_qualifie"] if (manque or q.get("indetermine")
+                                   or not statut) else []
     return parts, verrous
 
 
@@ -930,7 +963,29 @@ def taux_norme(cle, evaluation, declaration=None):
     parts, signaux = (lire(evaluation, declaration) if lire else (None, []))
     composition = COMPOSITIONS[cle]
 
+    so = SANS_OBJET.get(cle)
+    if parts is None and so and so["cle"] in signaux:
+        # RENSEIGNÉE, ET SANS TAUX. La qualification a été faite — c'est elle
+        # qui écarte la norme. « — » y dirait « pas encore regardé », ce qui
+        # serait faux ; « 0 % » dirait « rien de fait », ce qui l'est aussi.
+        return {"ok": True, "cle": cle, "nom": norme["nom"],
+                "texte": norme["texte"],
+                "nature": norme["nature"], "nature_nom": nature["nom"],
+                "taux": None, "brut": None, "plafond": None,
+                "composants": [dict(c, taux=None, renseigne=False)
+                               for c in composition],
+                "verrous": [], "reserves": [], "renseigne": True,
+                "sans_objet": True,
+                "mesure": norme["mesure"], "panneau": norme["panneau"],
+                "taux_dit": nature["taux_dit"], "dit": so["dit"]}
+
     if parts is None:
+        # UN REFUS N'EST PAS UN SILENCE. Quand le module refuse d'évaluer ce
+        # que l'écran lui a transmis, dire « rien n'a été évalué » ferait
+        # croire à qui vient de remplir trois écrans que rien n'est parti.
+        motif = ((evaluation or {}).get("motif")
+                 if isinstance(evaluation, dict) and not evaluation.get("ok")
+                 else None)
         return {"ok": True, "cle": cle, "nom": norme["nom"],
                 "nature": norme["nature"], "nature_nom": nature["nom"],
                 "taux": None, "brut": None, "plafond": None,
@@ -939,7 +994,10 @@ def taux_norme(cle, evaluation, declaration=None):
                 "verrous": [], "reserves": [], "renseigne": False,
                 "mesure": norme["mesure"], "panneau": norme["panneau"],
                 "taux_dit": nature["taux_dit"],
-                "dit": "Rien n'a encore été évalué sur cette norme."}
+                "dit": ("Le module refuse d'évaluer la déclaration de son "
+                        "écran (%s) : le rail de cet écran nomme ce qui "
+                        "manque." % motif) if motif else
+                       "Rien n'a encore été évalué sur cette norme."}
 
     composants, poids_total, acquis = [], 0, 0.0
     for c in composition:
@@ -1673,6 +1731,318 @@ def limites(etats):
 
 
 # ══════════════════════════════════════════════════════════════════════════
+#  ÉVALUER CHAQUE NORME — UNE TABLE, POUR QUE LA GARDE PUISSE LA COMPTER
+# ══════════════════════════════════════════════════════════════════════════
+#
+# MESURÉ AVANT CETTE TABLE : les deux référentiels NIST de sécurité des
+# systèmes industriels avaient un lecteur, un extracteur d'écarts, une
+# composition — et AUCUNE évaluation. Leurs cartes restaient « — » quoi que
+# l'on déclare. Le défaut ne se voyait pas parce que les évaluations
+# étaient écrites en dur dans le corps de la fonction ; en table, la garde
+# de ce module vérifie que chaque norme de la grille en a une.
+#
+# Les imports restent locaux : ces modules importent beaucoup, et le taux
+# n'en a besoin qu'au moment d'évaluer.
+
+def _ev_ia_act(dec, d):
+    return evaluer_audit_ia_act(dec)
+
+
+def _ev_cra(dec, d):
+    import cra as _cra
+    return _cra.evaluer_produit(dec)
+
+
+def _ev_iso42001(dec, d):
+    import iso42001 as _i42
+    return _i42.evaluer(dec)
+
+
+def _ev_iso27001(dec, d):
+    import iso27001 as _i27
+    return _i27.evaluer(dec)
+
+
+def _ev_dora(dec, d):
+    import dora as _dora
+    return _dora.evaluer(dec)
+
+
+def _ev_nis2(dec, d):
+    import nis2 as _n2
+    return _n2.evaluer(dec)
+
+
+def _ev_rgpd(dec, d):
+    return dict(dec, ok=True)
+
+
+def _ev_nist_ai_rmf(dec, d):
+    import nist_ai_rmf as _nist
+    return _nist.evaluer(dec)
+
+
+def _ev_owasp_llm(dec, d):
+    import owasp_llm as _ow
+    return _ow.evaluer(dec)
+
+
+def _ev_nist_800_53(dec, d):
+    import nist_800_53 as _n53
+    return _n53.evaluer(dec.get("socle"), dec.get("etats"))
+
+
+def _ev_nist_800_82(dec, d):
+    # LA SURCHARGE SE MESURE CONTRE SON SOCLE, qui voyage avec elle : le
+    # moteur ramène chaque axe à la plus faible des familles 800-53 qu'il
+    # taille, et sans elles il ne saurait pas sur quoi l'axe repose.
+    import nist_800_82 as _n82
+    return _n82.evaluer(dec.get("etats"), dec.get("etats_800_53"))
+
+
+EVALUATEURS = {
+    "ia_act": _ev_ia_act, "cra": _ev_cra, "iso42001": _ev_iso42001,
+    "iso27001": _ev_iso27001, "dora": _ev_dora, "nis2": _ev_nis2,
+    "rgpd": _ev_rgpd, "nist_ai_rmf": _ev_nist_ai_rmf,
+    "owasp_llm": _ev_owasp_llm, "nist_800_53": _ev_nist_800_53,
+    "nist_800_82": _ev_nist_800_82,
+}
+
+
+def _evaluer(cle, dec, d):
+    """L'évaluation d'une norme, ou None si rien n'est déclaré.
+
+    UNE DÉCLARATION ABSENTE NE S'ÉVALUE PAS. Plusieurs moteurs rendent
+    ok=True sur rien — l'audit IA Act, le NIST AI RMF, le Top 10 OWASP — et
+    certains rendent 0 % : c'est la DÉCLARATION qui dit si le sujet a été
+    ouvert, pas le résultat.
+
+    UNE DÉCLARATION ILLISIBLE NE FAIT PAS TOMBER LES DIX AUTRES. Mesuré :
+    l'enveloppe `{"etats": …}` d'un écran, passée telle quelle au moteur
+    NIST AI RMF, levait une TypeError — et l'écran du taux perdait ses onze
+    cartes pour une seule déclaration de travers. Elle rend désormais un
+    refus, que la carte de CETTE norme affiche."""
+    if not dec or not isinstance(dec, dict):
+        return None
+    f = EVALUATEURS.get(cle)
+    if not f:
+        return None
+    try:
+        return f(dec, d)
+    except (TypeError, ValueError, AttributeError, KeyError):
+        return {"ok": False, "motif": "declaration_illisible"}
+
+
+# ══════════════════════════════════════════════════════════════════════════
+#  CE QUE LES ÉCRANS TIENNENT → CE QUE CHAQUE MOTEUR ATTEND
+# ══════════════════════════════════════════════════════════════════════════
+#
+# LE DÉFAUT QUI A FAIT ÉCRIRE CETTE SECTION, MESURÉ DANS UN NAVIGATEUR. Le
+# taux lisait `window.CONF_DECL`, que quatre modules sur onze n'écrivaient
+# jamais ; deux autres l'écrivaient sans qu'il soit lu, et DORA n'y figurait
+# pas. Qui remplissait NIS 2 jusqu'à voir trois blocs verts dans le rail
+# trouvait, sur l'écran du taux, « — ». Le rail et le taux lisaient deux
+# collectes différentes : ils ne pouvaient que se contredire.
+#
+# DÉSORMAIS UNE SEULE COLLECTE. L'écran envoie au taux ce qu'il envoie au
+# rail — les mêmes objets, rassemblés par les mêmes fonctions —, et la
+# traduction vers le format de chaque moteur se fait ICI, une fois, en
+# Python, là où des règles peuvent la mesurer.
+#
+# UN ÉCRAN SANS AUCUNE RÉPONSE NE DEVIENT PAS UNE DÉCLARATION. Les moteurs
+# rendent 0 % sur un questionnaire vide, et le moteur NIS 2 rend même
+# « hors champ » sur un formulaire vierge : traduire un écran vide, ce
+# serait afficher un zéro — ou un verdict — que personne n'a déclaré.
+
+#: LE NOM QUE QUATRE MOTEURS EXIGENT, ET QU'AUCUN TAUX NE LIT. ISO 27001,
+#: ISO 42001, NIS 2 et le CRA refusent d'évaluer sans nom, parce que leur
+#: restitution complète est un document nommé. Le taux n'en affiche rien, et
+#: une règle vérifie que deux noms différents rendent les mêmes taux.
+NOM_INERTE = "Déclaration des écrans Sentinel"
+
+#: LE VOCABULAIRE DE L'ÉCRAN D'AUDIT IA ACT, et celui du moteur. Tout autre
+#: état — « à faire », une valeur inconnue — est un point non tenu.
+AUDIT_ECRAN = {"done": "tenu", "partial": "partiel", "na": "sans_objet"}
+
+
+def _rempli(v):
+    """Une RÉPONSE, et pas l'état initial d'un écran : un texte non blanc, un
+    nombre, un vrai, une collection non vide."""
+    if v is None or v is False:
+        return False
+    if isinstance(v, str):
+        return bool(v.strip())
+    if isinstance(v, (dict, list, tuple)):
+        return bool(v)
+    return True
+
+
+def _dict_de(v, cle):
+    x = v.get(cle)
+    return dict(x) if isinstance(x, dict) else {}
+
+
+def _de_iso27001(v, e):
+    criteres = _dict_de(v, "criteres")
+    # LE SEUIL N'EST PAS UNE RÉPONSE : l'écran l'initialise à 6. Les deux
+    # dates, elles, ne se remplissent que si quelqu'un les écrit.
+    if not any(_rempli(x) for x in (
+            v.get("perimetre"), criteres.get("etabli_le"),
+            criteres.get("apprecie_le"), v.get("risques"), v.get("mesures"),
+            v.get("articles"))):
+        return None
+    risques = v.get("risques") if isinstance(v.get("risques"), list) else []
+    return {"nom": NOM_INERTE, "perimetre": v.get("perimetre") or "",
+            "criteres": criteres, "risques": risques,
+            "mesures": _dict_de(v, "mesures"),
+            "articles": _dict_de(v, "articles")}
+
+
+def _de_iso42001(v, e):
+    if not (_rempli(v.get("mesures")) or _rempli(v.get("articles"))):
+        return None
+    return {"nom": NOM_INERTE, "mesures": _dict_de(v, "mesures"),
+            "articles": _dict_de(v, "articles")}
+
+
+#: CE QUE L'ÉCRAN NIS 2 TIENT DE LA QUALIFICATION. Le chiffre d'affaires de
+#: l'exposition et les vingt objectifs du calque de l'ANSSI n'y sont pas : le
+#: premier chiffre une sanction, les seconds ont leur propre taux — de
+#: PRÉPARATION, séparé. La traduction ne recopie donc que ce qui suit, les
+#: portes de l'article 2, les mesures et la gouvernance.
+NIS2_QUALIFICATION = ("secteur", "effectif", "ca_eur", "bilan_eur")
+
+
+def _de_nis2(v, e):
+    import parcours_normes as _pn
+    portes = {k: True for k in _pn.NIS2_PORTES if v.get(k)}
+    if not (any(_rempli(v.get(k)) for k in NIS2_QUALIFICATION) or portes
+            or _rempli(v.get("mesures")) or _rempli(v.get("gouvernance"))):
+        return None
+    d = {k: v.get(k) for k in NIS2_QUALIFICATION}
+    d.update(portes)
+    d.update(nom=NOM_INERTE, mesures=_dict_de(v, "mesures"),
+             gouvernance=_dict_de(v, "gouvernance"))
+    return d
+
+
+def _de_cra(v, e):
+    """L'analyse d'écart de l'écran, et le rôle QU'IL A QUALIFIÉ.
+
+    LE RÔLE SE LIT SUR LES RÉPONSES, COMME DANS LE RAIL. Sans réponse, le
+    moteur de qualification rend « distributeur » par défaut — et le taux
+    du produit, lui, suppose « fabricant ». Transmettre l'un ou l'autre
+    ferait disparaître la réserve qui dit que le rôle n'est pas qualifié."""
+    import cra as _cra
+    import parcours_normes as _pn
+    role = _dict_de(v, "role")
+    repondu = any(role.get(k) for k in _pn.CRA_ROLE_CLES)
+    nommes = [p for p in (v.get("produits") or [])
+              if isinstance(p, dict) and str(p.get("nom") or "").strip()]
+    ecarts = _dict_de(v, "ecarts")
+    if not (repondu or nommes or ecarts):
+        return None
+    return {"nom": NOM_INERTE, "ecarts": ecarts,
+            "role": (_cra.qualifier_role(role)["role"]["cle"]
+                     if repondu else None)}
+
+
+def _de_dora(v, e):
+    """La déclaration que le module DORA assemble lui-même, telle quelle.
+
+    SON ÉCRAN L'A DÉJÀ AU FORMAT DU MOTEUR : `doraDeclaration()` recolle les
+    six écrans en un seul objet, pour son propre rail. Le taux lit ce
+    même objet."""
+    contrats = [c for c in (v.get("contrats") or []) if isinstance(c, dict)]
+    if not (_rempli(v.get("entite")) or _rempli(v.get("etats"))
+            or any(_rempli(c.get("clauses"))
+                   or c.get("fonction_critique") is not None
+                   for c in contrats)):
+        return None
+    return dict(v)
+
+
+def _de_etats(v, e):
+    etats = _dict_de(v, "etats")
+    return etats or None
+
+
+def _de_nist_800_53(v, e):
+    etats = _dict_de(v, "etats")
+    socle = v.get("socle") or None
+    if not (socle or etats):
+        return None
+    return {"socle": socle, "etats": etats}
+
+
+def _de_nist_800_82(v, e):
+    etats = _dict_de(v, "etats")
+    if not etats:
+        return None
+    socle53 = e.get("nist_800_53") if isinstance(e.get("nist_800_53"), dict) \
+        else {}
+    return {"etats": etats, "etats_800_53": _dict_de(socle53, "etats")}
+
+
+def _pourcentage(x):
+    if isinstance(x, bool) or not isinstance(x, (int, float)):
+        return 0
+    return max(0, min(100, int(round(x))))
+
+
+def _de_rgpd(v, e):
+    """Les quatre briques, telles que le tableau de bord RGPD les calcule.
+
+    LE REGISTRE N'EST PAS RECALCULÉ ICI. L'écran « Conformité RGPD » en
+    affiche déjà le pourcentage ; le refaire en Python donnerait deux
+    arrondis pour le même nombre. Ce qui se décide ici, c'est seulement si
+    le sujet a été ouvert : un registre sans traitement et trois briques à
+    zéro ne sont pas un RGPD « à 0 % », ils sont un RGPD pas encore regardé.
+    """
+    traitements = [t for t in (v.get("traitements") or [])
+                   if isinstance(t, dict)]
+    b = _dict_de(v, "briques")
+    briques = {c["cle"]: _pourcentage(b.get(c["cle"]))
+               for c in COMPOSITIONS["rgpd"]}
+    if not traitements and not any(briques.values()):
+        return None
+    return {"briques": briques}
+
+
+def _de_ia_act(v, e):
+    audit = _dict_de(v, "audit")
+    if not audit:
+        return None
+    return {k: AUDIT_ECRAN.get(x, "absent") for k, x in audit.items()}
+
+
+TRADUCTEURS = {
+    "ia_act": _de_ia_act, "cra": _de_cra, "iso42001": _de_iso42001,
+    "iso27001": _de_iso27001, "dora": _de_dora, "nis2": _de_nis2,
+    "rgpd": _de_rgpd, "nist_ai_rmf": _de_etats, "owasp_llm": _de_etats,
+    "nist_800_53": _de_nist_800_53, "nist_800_82": _de_nist_800_82,
+}
+
+
+def depuis_les_ecrans(ecrans):
+    """Les déclarations des écrans → celles que `etat_des_lieux` attend.
+
+    `ecrans` porte, par clé de norme, l'objet que l'écran envoie aussi au
+    rail. Une norme dont l'écran ne porte aucune réponse est ABSENTE du
+    résultat : son taux sera « — », jamais 0."""
+    e = ecrans if isinstance(ecrans, dict) else {}
+    out = {}
+    for cle, traduire in TRADUCTEURS.items():
+        v = e.get(cle)
+        if not isinstance(v, dict):
+            continue
+        t = traduire(v, e)
+        if t is not None:
+            out[cle] = t
+    return out
+
+
+# ══════════════════════════════════════════════════════════════════════════
 #  L'ENTRÉE
 # ══════════════════════════════════════════════════════════════════════════
 
@@ -1688,41 +2058,17 @@ def etat_des_lieux(declarations=None, plafond_actions=24):
     if not isinstance(d, dict):
         return {"ok": False, "motif": "declarations_illisibles"}
 
-    import iso42001 as _i42
-    import iso27001 as _i27
-    import nis2 as _n2
-    import cra as _cra
-    import nist_ai_rmf as _nist
-    import owasp_llm as _ow
-    import dora as _dora
-
-    evaluations = {
-        "ia_act": evaluer_audit_ia_act(d.get("ia_act")),
-        "cra": _cra.evaluer_produit(d.get("cra")) if d.get("cra") else None,
-        "iso42001": _i42.evaluer(d.get("iso42001")) if d.get("iso42001") else None,
-        "iso27001": _i27.evaluer(d.get("iso27001")) if d.get("iso27001") else None,
-        "dora": _dora.evaluer(d.get("dora")) if d.get("dora") else None,
-        "nis2": _n2.evaluer(d.get("nis2")) if d.get("nis2") else None,
-        "rgpd": (dict(d["rgpd"], ok=True) if isinstance(d.get("rgpd"), dict)
-                 else None),
-        "nist_ai_rmf": _nist.evaluer(d.get("nist_ai_rmf") or {}),
-        "owasp_llm": _ow.evaluer(d.get("owasp_llm") or {}),
-    }
-    # L'AUDIT IA ACT ET LES DEUX DERNIERS NE SE DISTINGUENT PAS D'UNE
-    # DÉCLARATION VIDE PAR LEUR ÉVALUATION : ils rendent ok=True sur rien.
-    # C'est la DÉCLARATION qui dit si le sujet a été ouvert.
-    for cle in ("ia_act", "nist_ai_rmf", "owasp_llm"):
-        if not d.get(cle):
-            evaluations[cle] = None
-
     etats, ecarts = [], {}
     for norme in NORMES:
         cle = norme["cle"]
-        ev = evaluations.get(cle)
         dec = d.get(cle)
+        ev = _evaluer(cle, dec, d)
         et = taux_norme(cle, ev, dec)
         extracteur = ECARTEURS.get(cle)
-        liste = extracteur(ev, dec) if (extracteur and ev) else []
+        # UNE NORME SANS OBJET N'A PAS D'ÉCARTS : le plan ne vend pas un
+        # chantier à qui la qualification déclarée l'a épargné.
+        liste = (extracteur(ev, dec)
+                 if (extracteur and ev and not et.get("sans_objet")) else [])
         ecarts[cle] = liste
         par_comp = {}
         for x in liste:
@@ -1831,12 +2177,37 @@ def _verifier():
             fautes.append("%s : aucun extracteur d'écarts — son taux "
                           "monterait sans qu'aucune action ne le dise"
                           % n["cle"])
+        # LES DEUX MAILLONS QUI MANQUAIENT, ET QUI NE SE VOYAIENT PAS : un
+        # lecteur sans évaluation lit toujours None, et une évaluation sans
+        # traducteur n'est jamais appelée depuis l'écran. Sept cartes sur
+        # onze restaient « — » quoi que l'on remplisse.
+        if n["cle"] not in EVALUATEURS:
+            fautes.append("%s : aucune évaluation — sa carte resterait "
+                          "« — » quoi que l'on déclare" % n["cle"])
+        if n["cle"] not in TRADUCTEURS:
+            fautes.append("%s : aucun traducteur d'écran — le taux ne "
+                          "verrait jamais ce que son écran déclare"
+                          % n["cle"])
         if not n.get("panneau"):
             fautes.append("%s : aucun panneau Sentinel. Un taux qui ne mène "
                           "pas à l'écran où on le corrige est un reproche, "
                           "pas un outil." % n["cle"])
         if not n.get("mesure"):
             fautes.append("%s : ne dit pas ce qu'il mesure" % n["cle"])
+
+    for cle, so in SANS_OBJET.items():
+        if cle not in COMPOSITIONS:
+            fautes.append("« sans objet » sur %s, qui n'a pas de composition"
+                          % cle)
+        deja = ({v["cle"] for v in VERROUS.get(cle, ())}
+                | {r["cle"] for r in RESERVES.get(cle, ())})
+        if so["cle"] in deja:
+            fautes.append("%s : %s est à la fois « sans objet » et verrou ou "
+                          "réserve — une norme écartée n'a pas de taux à "
+                          "plafonner ni à mettre en doute" % (cle, so["cle"]))
+        if not so.get("dit") or not so.get("ou"):
+            fautes.append("%s : « sans objet » sans dire pourquoi ni où cela "
+                          "se revoit" % cle)
 
     for cle, reserves in RESERVES.items():
         if cle not in COMPOSITIONS:

@@ -385,7 +385,8 @@ def test_l_appreciation_ISO27001_attend_SES_DEUX_DATES():
     """LES DATES NE SONT PAS DÉCORATIVES : sans elles, rien ne montre que les
     critères précèdent l'appréciation. Un registre complet sans dates n'est
     pas un bloc rempli."""
-    d = {"criteres": {"seuil_acceptation": 6}, "risques": [_risque_complet()]}
+    d = {"perimetre": "SI de production", "criteres": {"seuil_acceptation": 6},
+         "risques": [_risque_complet()]}
     b = _bloc(pn.avancement("iso27001", d), "risques")
     assert b["etat"] != "validee"
     quoi = " ".join(m["quoi"] for m in b["manque"])
@@ -394,8 +395,28 @@ def test_l_appreciation_ISO27001_attend_SES_DEUX_DATES():
     assert _etats(pn.avancement("iso27001", d))["risques"] == "validee"
 
 
-def test_une_ligne_de_risque_INCOMPLETE_est_nommee_avec_ce_qui_lui_manque():
+def test_le_PERIMETRE_du_SMSI_est_une_reponse_que_le_bloc_attend():
+    """LE MOTEUR LE LIT EN PREMIER, LE RAIL AUSSI. Sans périmètre, le moteur
+    ISO 27001 s'arrête à « perimetre_absent », et le taux de conformité en
+    fait un verrou qui plafonne la norme. Un bloc vert au-dessus d'un taux
+    verrouillé par ce que l'écran n'a jamais demandé : c'est la
+    contradiction mesurée — l'écran n'avait pas même de champ pour l'écrire."""
     d = {"criteres": {"seuil_acceptation": 6, "etabli_le": "2026-01-10",
+                      "apprecie_le": "2026-02-01"},
+         "risques": [_risque_complet()]}
+    b = _bloc(pn.avancement("iso27001", d), "risques")
+    assert [m["quoi"] for m in b["manque"]] == [
+        "Le domaine d'application du SMSI (art. 4.3)"]
+    d["perimetre"] = "   "
+    assert _etats(pn.avancement("iso27001", d))["risques"] != "validee", (
+        "des blancs passent pour un périmètre écrit")
+    d["perimetre"] = "SI de production"
+    assert _etats(pn.avancement("iso27001", d))["risques"] == "validee"
+
+
+def test_une_ligne_de_risque_INCOMPLETE_est_nommee_avec_ce_qui_lui_manque():
+    d = {"perimetre": "SI de production",
+         "criteres": {"seuil_acceptation": 6, "etabli_le": "2026-01-10",
                       "apprecie_le": "2026-02-01"},
          "risques": [_risque_complet(), _risque_complet(nom="Fuite", proprietaire="")]}
     b = _bloc(pn.avancement("iso27001", d), "risques")

@@ -2301,11 +2301,20 @@ def api_conformite_etat_des_lieux():
     un second endroit à tenir d'accord, et c'est le défaut que ce module
     passe son temps à corriger ailleurs."""
     data = request.get_json(silent=True) or {}
+    # L'ÉCRAN ENVOIE CE QU'IL ENVOIE AU RAIL. Sous `ecrans`, les objets que
+    # le rail reçoit déjà, traduits ici vers le format de chaque moteur ;
+    # sous `declarations`, ce format directement — celui des règles.
+    # Deux collectes différentes pour le rail et le taux, c'était la
+    # garantie qu'ils se contredisent : sept cartes sur onze restaient
+    # « — » pendant que le rail passait au vert.
+    decl = (conformite.depuis_les_ecrans(data.get("ecrans"))
+            if isinstance(data.get("ecrans"), dict)
+            else data.get("declarations"))
     # LE PLAFOND D'ACTIONS EST UNE CONSTANTE DU MODULE, PAS UNE VARIABLE
     # D'ENVIRONNEMENT. Ce dépôt n'a pas de lecteur d'environnement gardé ; un
     # `int(os.environ[...])` non protégé tuerait la route sur une valeur
     # malformée, et le réglage ne vaut pas ce risque.
-    r = conformite.etat_des_lieux(data.get("declarations"))
+    r = conformite.etat_des_lieux(decl)
     return jsonify(r), (200 if r.get("ok") else 400)
 
 

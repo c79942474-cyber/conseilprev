@@ -59,11 +59,17 @@ def _dossier():
     return {
         "ia_act": dict([(p[0], "tenu") for p in c.AUDIT_IA_ACT[:12]]
                        + [(p[0], "partiel") for p in c.AUDIT_IA_ACT[12:18]]),
-        "nis2": {"nom": "Assureur", "secteur": "finance", "effectif": 900,
+        # UN SECTEUR QUI EXISTE, ET C'EST LE POINT. Ce banc a longtemps
+        # déclaré « finance », qu'aucune des deux annexes ne porte : le
+        # moteur NIS 2 le jugeait HORS CHAMP, et le taux mesurait quand même
+        # ses dix mesures — le défaut que « sans objet » corrige. Il fallait
+        # un secteur réel pour que le banc éprouve encore NIS 2. Un
+        # assureur n'est pas dans NIS 2 ; une banque l'est (annexe I).
+        "nis2": {"nom": "Banque", "secteur": "banque", "effectif": 900,
                  "ca_eur": 400e6,
                  "mesures": {k: "conforme" for k in list("abcdef")},
-                 "gouvernance": {"approbation": "tenue",
-                                 "supervision": "tenue"}},
+                 "gouvernance": {"approbation": "conforme",
+                                 "supervision": "partiel"}},
         "cra": {"nom": "Boîtier", "marche_ue": True, "role": "fabricant",
                 "fonctions": ["reseau"],
                 "ecarts": dict([(e[0], "conforme")

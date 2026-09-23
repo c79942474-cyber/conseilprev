@@ -37,24 +37,37 @@ const ok = (t, cond, siKo, mesure) => {
 
 /* LE DOSSIER D'ESSAI est posé dans la page AVANT que l'écran s'initialise :
    c'est le seul moyen d'éprouver un rendu qui dépend de données, sans
-   dépendre de ce qu'un compte de recette contient ce jour-là. */
+   dépendre de ce qu'un compte de recette contient ce jour-là.
+
+   IL EST AU FORMAT DES ÉCRANS, et il passe par où passent leurs réponses.
+   Le taux ne lit plus de global à part (`CONF_DECL`, que quatre modules
+   n'écrivaient jamais) : il lit la collecte du rail, `declarationsDesEcrans()`.
+   La recette remplace cette collecte par le dossier — rien d'autre. */
 const DOSSIER = {
-  ia_act: {a5_1: 'tenu', a5_2: 'partiel', a6_1: 'tenu'},
-  nis2: {nom: 'Assureur', secteur: 'finance', effectif: 900, ca_eur: 400000000,
+  ia_act: {audit: {a5_1: 'done', a5_2: 'partial', a6_1: 'done'}},
+  /* UNE BANQUE, PAS « FINANCE ». Ce dossier déclarait un secteur qu'aucune
+     des deux annexes ne porte : le moteur NIS 2 le jugeait hors champ, et le
+     taux mesurait quand même ses mesures. */
+  nis2: {secteur: 'banque', effectif: 900, ca_eur: 400000000, bilan_eur: null,
          mesures: {a: 'conforme', b: 'conforme', c: 'conforme'},
-         gouvernance: {approbation: 'tenue'}},
-  owasp_llm: {LLM01: 'oui', LLM02: 'oui', LLM06: 'partiel'},
-  nist_ai_rmf: {'GOVERN 1': 'tenu', 'GOVERN 2': 'amorce', 'MAP 1': 'prouve'},
+         gouvernance: {approbation: 'conforme'}},
+  owasp_llm: {etats: {LLM01: 'oui', LLM02: 'oui', LLM06: 'partiel'}},
+  nist_ai_rmf: {etats: {'GOVERN 1': 'tenu', 'GOVERN 2': 'amorce', 'MAP 1': 'prouve'}},
   /* UNE NORME DÉLIBÉRÉMENT VERROUILLÉE. Sans elle, le contrôle du trait de
      plafond passait « 0 verrouillée(s) » — c'est-à-dire qu'il ne mesurait
      rien tout en s'affichant en vert. Les articles sont tenus, et une mesure
      est retenue SANS justification : la déclaration d'applicabilité devient
      irrecevable, l'auditeur s'arrête à la porte, et le plafond doit se voir. */
-  iso42001: {nom: 'Assureur',
-             articles: {'4.1': 'conforme', '4.2': 'conforme', '5.1': 'conforme'},
+  iso42001: {articles: {'4.1': 'conforme', '4.2': 'conforme', '5.1': 'conforme'},
              mesures: {'A.2.2': {decision: 'retenue', justification: 'SoA',
                                  mise_en_oeuvre: 'conforme'},
-                       'A.2.3': {decision: 'retenue'}}}
+                       'A.2.3': {decision: 'retenue'}}},
+  /* DORA A SON MODULE, ET SON TAUX DÈS QU'IL EST DÉCLARÉ. Cette recette a été
+     écrite quand il n'en avait pas : elle exigeait « — » et « ne mène nulle
+     part ». Ces deux contrôles échouaient depuis ; ils disent maintenant ce
+     qui est vrai. */
+  dora: {entite: 'etablissement_credit', identifiee_nis2: true,
+         etats: {'2': 'prouve', '3': 'amorce'}, contrats: []}
 };
 
 (async () => {
@@ -97,9 +110,8 @@ const DOSSIER = {
 
   /* ── 3. L'ÉCRAN S'OUVRE SUR DES DONNÉES POSÉES ───────────────────── */
   await pg.evaluate((d) => {
-    window.CONF_DECL = d;
-    window.AUDIT_STATE = {a5_1: 'done', a5_2: 'partial', a6_1: 'done'};
-    window.CONF_ETAT = null;
+    window.declarationsDesEcrans = function () { return d; };
+    window.declarationsChangees();
   }, DOSSIER);
   await pg.evaluate(() => {
     const it = [...document.querySelectorAll('.sb-item[data-grp="taux-conformite"]')];
@@ -125,12 +137,17 @@ const DOSSIER = {
   });
   ok('les onze normes sont rendues', cartes.length === 11, '',
      cartes.length + ' cartes');
+  /* UNE NORME SANS AUCUNE RÉPONSE DIT « — », JAMAIS « 0 % ». Le CRA n'est
+     pas dans le dossier : sa carte est celle d'un écran jamais ouvert. */
+  const muette = cartes.find(c => /^CRA$/.test((c.nom || '').trim()));
+  ok('une norme sans réponse affiche « — » et jamais « 0 % »',
+     muette && muette.val.trim() === '—', muette ? muette.val : 'carte absente',
+     muette ? muette.val.trim() : '');
   const dora = cartes.find(c => /DORA/.test(c.nom || ''));
-  ok('DORA affiche « — » et jamais « 0 % »',
-     dora && dora.val.trim() === '—', dora ? dora.val : 'carte absente',
+  ok('DORA déclaré a son taux, et mène à son module',
+     dora && /%/.test(dora.val) && dora.mene,
+     dora ? (dora.val + (dora.mene ? '' : ', sans lien')) : 'carte absente',
      dora ? dora.val.trim() : '');
-  ok('DORA ne mène nulle part, puisqu\'il n\'a pas de module',
-     dora && !dora.mene, 'un lien pointe vers un écran inexistant');
 
   /* ── 4. LA PHRASE QUI EMPÊCHE DE LIRE UN TAUX COMME UNE ATTESTATION ─ */
   const mesurees = cartes.filter(c => c.val && c.val.indexOf('%') >= 0);

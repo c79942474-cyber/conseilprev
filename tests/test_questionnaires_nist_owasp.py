@@ -7,9 +7,10 @@ leurs routes aussi — et RIEN ne les appelait. Les cinq pages de ces deux
 modules ne portaient pas un seul champ de saisie : ni <select>, ni <input>,
 aucune persistance. Elles affichaient le référentiel, point.
 
-LA CONSÉQUENCE, SUR UN AUTRE ÉCRAN. `confDeclarations()` lit
+LA CONSÉQUENCE, SUR UN AUTRE ÉCRAN. `confDeclarations()` lisait
 `window.CONF_DECL[norme]` pour six normes. Ce global était lu à un seul
-endroit et ÉCRIT NULLE PART. Deux cartes du taux de conformité ne pouvaient
+endroit et ÉCRIT NULLE PART. (Le taux lit aujourd'hui la collecte du rail,
+et ce global n'existe plus.) Deux cartes du taux de conformité ne pouvaient
 donc afficher qu'un tiret, quoi que fasse le visiteur — et pas parce qu'il
 n'avait rien rempli : parce qu'il n'y avait rien à remplir.
 
@@ -111,37 +112,49 @@ def test_chaque_question_est_un_CHAMP_et_pas_une_ligne_de_lecture():
 #  2. CE QUI EST RÉPONDU REMONTE — SINON LE QUESTIONNAIRE NE SERT À RIEN
 # ══════════════════════════════════════════════════════════════════════════
 
-def test_CONF_DECL_est_enfin_ECRIT_et_pas_seulement_lu():
-    """LE DÉFAUT CENTRAL. `confDeclarations()` lisait `window.CONF_DECL[k]`
-    pour six normes ; rien n'écrivait jamais ce global. Deux cartes du taux
-    de conformité étaient condamnées au tiret."""
-    assert "window.CONF_DECL = window.CONF_DECL || {}" in PAGEJS, (
-        "plus personne n'écrit CONF_DECL : le taux de conformité ne verra "
-        "jamais ce que le visiteur déclare")
-    for m, cfg in MODULES.items():
-        assert "window.CONF_DECL.%s" % cfg["norme"] in PAGEJS, (
-            "%s ne dépose plus sa déclaration" % cfg["norme"])
-    #  ET LE LECTEUR EST TOUJOURS LÀ : sans lui, écrire CONF_DECL ne sert
-    #  plus à rien, et la règle ci-dessus garderait un dépôt que personne
-    #  ne relève.
-    assert "window.CONF_DECL && window.CONF_DECL[k]" in PAGEJS, (
-        "confDeclarations() ne lit plus CONF_DECL : les déclarations sont "
-        "déposées et jamais relevées")
+def _code(src):
+    """Le JavaScript sans ses commentaires : un nom cité dans l'historique
+    d'un défaut n'est pas un nom que le code lit."""
+    src = re.sub(r"/\*.*?\*/", "", src, flags=re.S)
+    return re.sub(r"(?m)^\s*//.*$", "", src)
+
+
+def test_le_taux_lit_ces_reponses_par_la_COLLECTE_DU_RAIL():
+    """LE DÉFAUT CENTRAL, ET SA SUITE. `confDeclarations()` lisait
+    `window.CONF_DECL[k]` ; rien ne l'écrivait, puis ces deux modules l'ont
+    écrit — et quatre autres ne l'ont jamais fait. Le taux lit désormais la
+    collecte du rail : ces deux questionnaires y partent tels quels, et plus
+    aucun code ne lit l'ancien global."""
+    code = _code(PAGEJS)
+    assert "CONF_DECL" not in code, (
+        "un global CONF_DECL est encore lu ou écrit : une seconde collecte "
+        "pour les mêmes réponses, et le rail et le taux se contrediront")
+    for cfg in MODULES.values():
+        decl = "NIST_DECL" if cfg["norme"] == "nist_ai_rmf" else "OWASP_DECL"
+        assert re.search(r"%s: function \(\) \{ return \{ etats: %s \}; \}"
+                         % (cfg["norme"], decl), code), (
+            "le rail ne collecte plus %s : ni lui ni le taux ne verront ces "
+            "réponses" % cfg["norme"])
+    assert "body: JSON.stringify({ecrans: ecrans})" in code, (
+        "le taux n'envoie plus la collecte du rail")
 
 
 def test_une_declaration_VIDE_reste_absente_et_ne_devient_pas_un_zero():
-    """LA DOCTRINE DU MODULE, TENUE JUSQU'À L'ÉCRAN. Une norme dont rien
-    n'est renseigné doit partir ABSENTE, pour que le serveur rende « — ».
-    Déposer un objet vide la ferait passer pour mesurée à zéro, et un zéro
-    se lit comme un constat."""
-    bloc = PAGEJS[PAGEJS.index("function declPublier()"):]
-    bloc = bloc[:bloc.index("\n}")]
-    for cfg in MODULES.values():
-        motif = (r"window\.CONF_DECL\.%s\s*=\s*\n?\s*Object\.keys\([A-Z]+_DECL\)"
-                 r"\.length \? [A-Z]+_DECL : null" % cfg["norme"])
-        assert re.search(motif, bloc), (
-            "%s dépose peut-être un objet vide : la carte afficherait 0 %% "
-            "là où elle doit afficher « — »" % cfg["norme"])
+    """LA DOCTRINE DU MODULE, TENUE JUSQU'AU SERVEUR. Un questionnaire sans
+    réponse doit rester ABSENT, pour que le taux rende « — ». Le traduire en
+    déclaration vide le ferait passer pour mesuré à zéro, et un zéro se lit
+    comme un constat."""
+    import sys
+    sys.path.insert(0, _RACINE)
+    import conformite as c
+    vides = {cfg["norme"]: {"etats": {}} for cfg in MODULES.values()}
+    assert c.depuis_les_ecrans(vides) == {}, (
+        "un questionnaire vide devient une déclaration")
+    r = c.etat_des_lieux(c.depuis_les_ecrans(vides))
+    for n in r["normes"]:
+        if n["cle"] in vides:
+            assert n["taux"] is None and not n["renseigne"], (
+                "%s affiche %r sans une seule réponse" % (n["cle"], n["taux"]))
 
 
 def test_les_reponses_survivent_a_la_fermeture_de_l_onglet():
@@ -151,12 +164,17 @@ def test_les_reponses_survivent_a_la_fermeture_de_l_onglet():
         assert "'%s'" % cfg["stock"] in PAGEJS, (
             "%s ne conserve plus les réponses" % m)
     assert "_declLire" in PAGEJS and "_declEcrire" in PAGEJS
-    #  ET ELLES REPARTENT VERS LE TAUX DÈS LE CHARGEMENT.
-    for fn in ("function nistInit()", "function owaspInit()"):
-        i = PAGEJS.index(fn)
-        assert "declPublier()" in PAGEJS[i:i + 700], (
-            "%s relit les réponses sans les republier : le visiteur qui a "
-            "répondu hier retrouve ses cartes « non renseignées »" % fn)
+    #  ET ELLES SONT LUES DÈS LE CHARGEMENT, pas à l'ouverture de leur écran :
+    #  le rail et le taux les lisent par la même collecte, et le visiteur qui
+    #  a répondu hier ne doit pas retrouver ses cartes « non renseignées ».
+    for decl, cle in (("NIST_DECL", "NIST_CLE_STOCK"),
+                      ("OWASP_DECL", "OWASP_CLE_STOCK")):
+        assert "var %s = _declLire(%s);" % (decl, cle) in PAGEJS, (
+            "%s n'est plus relu au chargement" % decl)
+        i = PAGEJS.index("var %s = _declLire(%s);" % (decl, cle))
+        assert PAGEJS.index("var %s = " % cle) < i, (
+            "la clé %s est lue avant d'être définie : la lecture rend {}"
+            % cle)
 
 
 # ══════════════════════════════════════════════════════════════════════════

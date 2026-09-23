@@ -20,7 +20,7 @@
  *
  * LES AUTRES CONTRÔLES : les dix-huit familles et les dix axes sont peints,
  * le socle annoncé sans appréciation du risque lève son verrou, les deux
- * déclarations arrivent dans CONF_DECL — dont le socle est EXCLU, sans quoi
+ * déclarations arrivent dans la collecte du taux — le socle À CÔTÉ, sans quoi
  * il serait pris pour un code de famille inconnu et l'évaluation refusée —,
  * le parcours guidé existe, et les deux écrans se lisent en anglais.
  */
@@ -140,16 +140,21 @@ const repondre = (prefixe, cle, valeur) => {
      d2.replace(/\s+/g, ' ').slice(0, 86));
 
   /* ── CE QUI PART VERS LE TAUX ─────────────────────────────────────────── */
-  const decl = await pg.evaluate(() => ({
-    d53: window.CONF_DECL ? window.CONF_DECL.nist_800_53 : null,
-    d82: window.CONF_DECL ? window.CONF_DECL.nist_800_82 : null
-  }));
-  ok('la déclaration 800-53 rejoint CONF_DECL',
-     decl.d53 && Object.keys(decl.d53).length >= 3, JSON.stringify(decl.d53));
-  ok('le socle en est EXCLU — sinon il passerait pour une famille inconnue',
-     decl.d53 && !('__socle' in decl.d53), '');
-  ok('la déclaration industrielle rejoint CONF_DECL',
-     decl.d82 && Object.keys(decl.d82).length >= 1, JSON.stringify(decl.d82));
+  /* LE TAUX LIT LA COLLECTE DU RAIL, `declarationsDesEcrans()` — plus un
+     global à part. C'est elle qu'on relit ici. */
+  const decl = await pg.evaluate(() => {
+    const e = window.declarationsDesEcrans ? window.declarationsDesEcrans() : {};
+    return { d53: e.nist_800_53 || null, d82: e.nist_800_82 || null };
+  });
+  ok('la déclaration 800-53 rejoint la collecte du taux',
+     decl.d53 && decl.d53.etats && Object.keys(decl.d53.etats).length >= 3,
+     JSON.stringify(decl.d53));
+  ok('le socle voyage À CÔTÉ des familles — pas comme une famille inconnue',
+     decl.d53 && decl.d53.etats && !('__socle' in decl.d53.etats)
+       && typeof decl.d53.socle === 'string', JSON.stringify(decl.d53 && decl.d53.socle));
+  ok('la déclaration industrielle rejoint la collecte du taux',
+     decl.d82 && decl.d82.etats && Object.keys(decl.d82.etats).length >= 1,
+     JSON.stringify(decl.d82));
 
   /* ── LE PARCOURS, ET L’ANGLAIS ────────────────────────────────────────── */
   const p = await pg.evaluate(() => {

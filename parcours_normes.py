@@ -47,7 +47,7 @@ import nist_800_53
 import nist_800_82
 import owasp_llm
 
-VERSION = "2026-09-b"
+VERSION = "2026-09-c"
 
 
 # ═══════════════════════════════════════════════════════════════════════
@@ -221,13 +221,15 @@ BLOCS = {
     ),
     "iso27001": (
         _b("risques", "iso27001-risques", "Analyse de risque", "saisie",
-           "Les critères d'acceptation et leurs deux dates, puis chaque "
-           "risque avec sa cotation, la propriété atteinte et son "
-           "propriétaire.",
+           "Le domaine d'application du SMSI (art. 4.3), les critères "
+           "d'acceptation et leurs deux dates, puis chaque risque avec sa "
+           "cotation, la propriété atteinte et son propriétaire.",
            "L'appréciation des risques de l'article 6.1.2 commande la "
-           "déclaration d'applicabilité qui suit.",
+           "déclaration d'applicabilité qui suit — et elle se conduit DANS "
+           "un périmètre écrit.",
            "Les deux dates ne sont pas décoratives : sans elles, rien ne "
-           "montre que les critères précèdent l'appréciation."),
+           "montre que les critères précèdent l'appréciation. Et tout ce "
+           "que le périmètre n'exclut pas par écrit sera audité."),
         _b("soa", "iso27001-soa", "Déclaration d’applicabilité", "saisie",
            "Les 93 mesures de l'annexe A 2022 : retenue ou écartée, justifiée "
            "dans les deux cas, et le statut de mise en œuvre des retenues.",
@@ -469,18 +471,23 @@ def _nombre(v):
 #: comme un secteur déclaré hors champ ; celle-ci en est une.
 SECTEUR_HORS_ANNEXES = "hors_annexes"
 
-_NIS2_PORTES = set(nis2.HORS_TAILLE_PAR_CLE) | set(nis2.ESSENTIELLE_HORS_TAILLE)
+NIS2_PORTES = set(nis2.HORS_TAILLE_PAR_CLE) | set(nis2.ESSENTIELLE_HORS_TAILLE)
 
 
-def _nis2_qualification(d):
+def qualification_nis2(d):
     """Ce qui manque pour que la qualification soit PRONONCÉE, et le verdict.
 
     UNE QUALIFICATION VIDE REND DÉJÀ « HORS CHAMP » — mesuré sur le moteur :
     sans secteur, il répond « Aucun secteur déclaré ». Le rail ne peut donc
     pas lire le verdict pour savoir si la question a reçu une réponse ; il
-    lit la DÉCLARATION."""
+    lit la DÉCLARATION.
+
+    PUBLIQUE, PARCE QUE LE TAUX DE CONFORMITÉ LA LIT AUSSI. Deux lectures de
+    « la qualification est-elle faite ? » finiraient par se contredire : le
+    rail dirait le bloc vert pendant que le taux réserverait « entité non
+    qualifiée », ou dirait « hors champ » sur un formulaire à moitié rempli."""
     manque = []
-    portes = [c for c in _NIS2_PORTES if d.get(c)]
+    portes = [c for c in NIS2_PORTES if d.get(c)]
     directes = [c for c in nis2.ESSENTIELLE_HORS_TAILLE if d.get(c)]
     if not directes:
         secteur = d.get("secteur")
@@ -503,7 +510,7 @@ def _nis2_qualification(d):
 
 def _nis2(d):
     manque, sans_objet = {}, {}
-    manque["qualifier"], verdict = _nis2_qualification(d)
+    manque["qualifier"], verdict = qualification_nis2(d)
 
     mesures = _dict(d, "mesures")
     manque["mesures"] = [
@@ -557,6 +564,13 @@ def _iso27001(d):
     manque = {}
     c = _dict(d, "criteres")
     m = []
+    # LE PÉRIMÈTRE D'ABORD, parce que le moteur le lit d'abord : sans lui, son
+    # évaluation s'arrête à « perimetre_absent », et le taux de conformité
+    # plafonne la norme à ce seul verrou. Un bloc vert au-dessus d'un taux
+    # verrouillé par ce qu'il n'a pas demandé serait la contradiction même
+    # que le rail et le taux ne doivent plus se faire.
+    if not str(d.get("perimetre") or "").strip():
+        m.append(_q("Le domaine d'application du SMSI (art. 4.3)"))
     if not str(c.get("etabli_le") or "").strip():
         m.append(_q("La date à laquelle les critères d'acceptation ont été "
                     "établis"))

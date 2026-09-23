@@ -273,8 +273,15 @@ def test_le_premier_appui_sur_le_rail_OUVRE_avant_de_naviguer():
         "le script n'honore plus l'opt-in : le premier appui naviguerait")
     assert "ev.stopPropagation();" in SCRIPT and "ev.preventDefault();" in SCRIPT, (
         "le clic n'est plus retenu")
-    assert "data-bulle-avant-clic" in PAGE_JS, (
-        "le rail ne demande plus la lecture avant la navigation")
+    # LES DEUX RAILS, CHACUN. La règle cherchait l'attribut n'importe où
+    # dans la page : le rail des dix référentiels l'a ajouté à ses pastilles,
+    # et cette seconde occurrence rendait muette la perte de la première —
+    # la mutation qui l'ôte au rail DORA survivait.
+    assert "+ ' data-bulle-avant-clic>'" in PAGE_JS, (
+        "le rail DORA ne demande plus la lecture avant la navigation")
+    assert "puce.setAttribute('data-bulle-avant-clic', '');" in PAGE_JS, (
+        "le rail des dix référentiels ne demande plus la lecture avant la "
+        "navigation")
 
 
 def test_l_opt_in_reste_une_EXCEPTION():

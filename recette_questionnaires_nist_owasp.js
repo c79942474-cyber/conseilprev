@@ -12,8 +12,9 @@
  * pourtant déjà « Renseignez d'abord les six catégories de GOVERN » — une
  * consigne adressée à une page en lecture seule.
  *
- * ET UN GLOBAL LU MAIS JAMAIS ÉCRIT. `confDeclarations()` relève
+ * ET UN GLOBAL LU MAIS JAMAIS ÉCRIT. `confDeclarations()` relevait
  * `window.CONF_DECL[norme]` pour six normes ; rien n'écrivait ce global.
+ * (Le taux lit aujourd'hui la collecte du rail : c'est elle qu'on relit.)
  * Deux cartes du taux de conformité étaient condamnées au tiret, quoi que
  * fasse le visiteur — et pas faute d'avoir rempli : faute d'avoir eu quoi
  * remplir.
@@ -64,7 +65,9 @@ const TOKEN = 'recette_locale_idf_0123456789abcdef';
         ? document.getElementById('nist-verdict').textContent.replace(/\s+/g,' ').trim().slice(0,150) : null,
       owaspVerdict: (document.getElementById('owasp-verdict')||{}).textContent
         ? document.getElementById('owasp-verdict').textContent.replace(/\s+/g,' ').trim().slice(0,170) : null,
-      confDecl: window.CONF_DECL ? JSON.stringify(window.CONF_DECL) : null,
+      collecte: window.declarationsDesEcrans
+        ? JSON.stringify({ nist_ai_rmf: window.declarationsDesEcrans().nist_ai_rmf,
+                           owasp_llm: window.declarationsDesEcrans().owasp_llm }) : null,
       stock: [localStorage.getItem('cp-sentinel-nist-profil-v1'),
               localStorage.getItem('cp-sentinel-owasp-declares-v1')]
     };

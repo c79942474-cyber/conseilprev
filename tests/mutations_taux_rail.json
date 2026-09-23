@@ -1,0 +1,326 @@
+{
+ "_pourquoi": "Le rail et le taux de conformité lisent les MÊMES déclarations. Chaque règle doit tomber sur SON défaut : la traduction des écrans (vierge ≠ déclaration, vocabulaires, socle 800-53, rôle CRA, nom inerte), la qualification NIS 2 lue une seule fois (hors champ ≠ zéro, formulaire incomplet ≠ hors champ), la garde (évaluation et traducteur pour chaque norme — portée sur ses propres lignes, pour ne pas faire refuser l'import), la route, et l'écran (collecte unique, cache qui suit les réponses, préalables, champ périmètre).",
+ "cibles": [
+  "tests/test_taux_rail.py",
+  "tests/test_parcours_normes.py",
+  "tests/test_questionnaires_nist_owasp.py",
+  "tests/test_nis2_recyf.py"
+ ],
+ "mutations": [
+  {
+   "nom": "le seuil par défaut d'ISO 27001 passe pour une réponse",
+   "fichier": "conformite.py",
+   "avant": "v.get(\"perimetre\"), criteres.get(\"etabli_le\"),",
+   "apres": "v.get(\"perimetre\"), criteres.get(\"seuil_acceptation\"),",
+   "regle": "test_un_ecran_VIERGE_ne_devient_pas_une_declaration[iso27001]"
+  },
+  {
+   "nom": "un écran NIS 2 vierge devient une déclaration",
+   "fichier": "conformite.py",
+   "avant": "            or _rempli(v.get(\"mesures\")) or _rempli(v.get(\"gouvernance\"))):",
+   "apres": "            or True):",
+   "regle": "test_un_ecran_VIERGE_ne_devient_pas_une_declaration[nis2]"
+  },
+  {
+   "nom": "un RGPD jamais ouvert rend 0 %",
+   "fichier": "conformite.py",
+   "avant": "    if not traitements and not any(briques.values()):",
+   "apres": "    if False:",
+   "regle": "test_RGPD_ouvert_ou_pas_regarde[rien]"
+  },
+  {
+   "nom": "un booléen compte comme un pourcentage",
+   "fichier": "conformite.py",
+   "avant": "    if isinstance(x, bool) or not isinstance(x, (int, float)):",
+   "apres": "    if not isinstance(x, (int, float)):",
+   "regle": "test_RGPD_ouvert_ou_pas_regarde[un-booleen-n-est-pas-un-pourcentage]"
+  },
+  {
+   "nom": "une brique sort de 0-100",
+   "fichier": "conformite.py",
+   "avant": "    return max(0, min(100, int(round(x))))",
+   "apres": "    return int(round(x))",
+   "regle": "test_une_brique_RGPD_reste_un_POURCENTAGE"
+  },
+  {
+   "nom": "le contrat vide de l'écran DORA passe pour une réponse",
+   "fichier": "conformite.py",
+   "avant": "                   or c.get(\"fonction_critique\") is not None",
+   "apres": "                   or c.get(\"microentreprise\") is not None",
+   "regle": "test_un_ecran_VIERGE_ne_devient_pas_une_declaration[dora]"
+  },
+  {
+   "nom": "« partiel » de l'audit IA Act devient « tenu »",
+   "fichier": "conformite.py",
+   "avant": "AUDIT_ECRAN = {\"done\": \"tenu\", \"partial\": \"partiel\", \"na\": \"sans_objet\"}",
+   "apres": "AUDIT_ECRAN = {\"done\": \"tenu\", \"partial\": \"tenu\", \"na\": \"sans_objet\"}",
+   "regle": "test_le_vocabulaire_de_l_AUDIT_IA_ACT"
+  },
+  {
+   "nom": "un état d'audit inconnu devient « partiel »",
+   "fichier": "conformite.py",
+   "avant": "    return {k: AUDIT_ECRAN.get(x, \"absent\") for k, x in audit.items()}",
+   "apres": "    return {k: AUDIT_ECRAN.get(x, \"partiel\") for k, x in audit.items()}",
+   "regle": "test_le_vocabulaire_de_l_AUDIT_IA_ACT"
+  },
+  {
+   "nom": "hors champ redevient un taux",
+   "fichier": "conformite.py",
+   "avant": "    if not manque and statut == \"hors_champ\":\n        return None, [\"hors_champ\"]",
+   "apres": "    if False:\n        return None, [\"hors_champ\"]",
+   "regle": "test_HORS_CHAMP_au_rail_c_est_SANS_OBJET_au_taux[aucune-annexe]"
+  },
+  {
+   "nom": "le taux lit le VERDICT du moteur, pas la déclaration",
+   "fichier": "conformite.py",
+   "avant": "    if not manque and statut == \"hors_champ\":",
+   "apres": "    if ((ev.get(\"qualification\") or {}).get(\"statut\") or {}).get(\"cle\") == \"hors_champ\":",
+   "regle": "test_une_qualification_INCOMPLETE_est_une_reserve_pas_un_hors_champ[aucun-secteur]"
+  },
+  {
+   "nom": "la réserve « non qualifiée » se lit sur le moteur seul",
+   "fichier": "conformite.py",
+   "avant": "    verrous = [\"non_qualifie\"] if (manque or q.get(\"indetermine\")\n                                   or not statut) else []",
+   "apres": "    verrous = [\"non_qualifie\"] if (q.get(\"indetermine\")) else []",
+   "regle": "test_une_qualification_INCOMPLETE_est_une_reserve_pas_un_hors_champ[aucun-secteur]"
+  },
+  {
+   "nom": "« sans objet » se lit « pas encore regardé »",
+   "fichier": "conformite.py",
+   "avant": "                \"verrous\": [], \"reserves\": [], \"renseigne\": True,\n                \"sans_objet\": True,",
+   "apres": "                \"verrous\": [], \"reserves\": [], \"renseigne\": False,\n                \"sans_objet\": True,",
+   "regle": "test_HORS_CHAMP_au_rail_c_est_SANS_OBJET_au_taux[aucune-annexe]"
+  },
+  {
+   "nom": "le plan vend un chantier NIS 2 à qui est hors champ",
+   "fichier": "conformite.py",
+   "avant": "                 if (extracteur and ev and not et.get(\"sans_objet\")) else [])",
+   "apres": "                 if (extracteur and ev) else [])",
+   "regle": "test_HORS_CHAMP_au_rail_c_est_SANS_OBJET_au_taux[aucune-annexe]"
+  },
+  {
+   "nom": "une déclaration illisible fait tomber les onze cartes",
+   "fichier": "conformite.py",
+   "avant": "    try:\n        return f(dec, d)\n    except (TypeError, ValueError, AttributeError, KeyError):\n        return {\"ok\": False, \"motif\": \"declaration_illisible\"}",
+   "apres": "    return f(dec, d)",
+   "regle": "test_une_declaration_ILLISIBLE_ne_fait_pas_tomber_les_dix_autres"
+  },
+  {
+   "nom": "un refus se dit « rien n'a été évalué »",
+   "fichier": "conformite.py",
+   "avant": "                        \"manque.\" % motif) if motif else",
+   "apres": "                        \"manque.\" % motif) if False else",
+   "regle": "test_une_declaration_ILLISIBLE_ne_fait_pas_tomber_les_dix_autres"
+  },
+  {
+   "nom": "la surcharge 800-82 perd son socle en route",
+   "fichier": "conformite.py",
+   "avant": "    return {\"etats\": etats, \"etats_800_53\": _dict_de(socle53, \"etats\")}",
+   "apres": "    return {\"etats\": etats, \"etats_800_53\": {}}",
+   "regle": "test_la_surcharge_800_82_se_mesure_CONTRE_son_socle_800_53"
+  },
+  {
+   "nom": "le moteur 800-82 n'entend pas le socle",
+   "fichier": "conformite.py",
+   "avant": "    return _n82.evaluer(dec.get(\"etats\"), dec.get(\"etats_800_53\"))",
+   "apres": "    return _n82.evaluer(dec.get(\"etats\"), None)",
+   "regle": "test_la_surcharge_800_82_se_mesure_CONTRE_son_socle_800_53"
+  },
+  {
+   "nom": "le moteur 800-53 n'entend pas les familles",
+   "fichier": "conformite.py",
+   "avant": "    return _n53.evaluer(dec.get(\"socle\"), dec.get(\"etats\"))",
+   "apres": "    return _n53.evaluer(dec.get(\"socle\"), {})",
+   "regle": "test_un_TAUX_LU_n_est_pas_un_taux_plafonne_a_cent"
+  },
+  {
+   "nom": "le rôle CRA par défaut passe pour une réponse",
+   "fichier": "conformite.py",
+   "avant": "            \"role\": (_cra.qualifier_role(role)[\"role\"][\"cle\"]\n                     if repondu else None)}",
+   "apres": "            \"role\": _cra.qualifier_role(role)[\"role\"][\"cle\"]}",
+   "regle": "test_le_role_CRA_se_lit_sur_les_MEMES_reponses"
+  },
+  {
+   "nom": "le nom inventé entre dans un taux",
+   "fichier": "conformite.py",
+   "avant": "    d.update(nom=NOM_INERTE, mesures=_dict_de(v, \"mesures\"),",
+   "apres": "    d.update(nom=NOM_INERTE if NOM_INERTE.startswith(\"D\") else \"\", mesures=_dict_de(v, \"mesures\"),",
+   "regle": "test_le_NOM_exige_par_les_moteurs_n_entre_dans_AUCUN_taux"
+  },
+  {
+   "nom": "la traduction ISO 42001 perd la déclaration d'applicabilité",
+   "fichier": "conformite.py",
+   "avant": "    return {\"nom\": NOM_INERTE, \"mesures\": _dict_de(v, \"mesures\"),\n            \"articles\": _dict_de(v, \"articles\")}",
+   "apres": "    return {\"nom\": NOM_INERTE, \"mesures\": {},\n            \"articles\": _dict_de(v, \"articles\")}",
+   "regle": "test_la_declaration_d_applicabilite_VERTE_n_est_jamais_IRRECEVABLE[iso42001]"
+  },
+  {
+   "nom": "la traduction ISO 27001 perd le périmètre",
+   "fichier": "conformite.py",
+   "avant": "    return {\"nom\": NOM_INERTE, \"perimetre\": v.get(\"perimetre\") or \"\",",
+   "apres": "    return {\"nom\": NOM_INERTE, \"perimetre\": \"\",",
+   "regle": "test_ISO27001_le_perimetre_du_bloc_vert_leve_le_VERROU"
+  },
+  {
+   "nom": "la garde oublie les traducteurs",
+   "fichier": "conformite.py",
+   "avant": "        if n[\"cle\"] not in TRADUCTEURS:",
+   "apres": "        if False:",
+   "regle": "test_la_GARDE_refuse_une_norme_que_le_taux_ne_peut_pas_voir[traducteurs]"
+  },
+  {
+   "nom": "la garde oublie les évaluations",
+   "fichier": "conformite.py",
+   "avant": "        if n[\"cle\"] not in EVALUATEURS:",
+   "apres": "        if False:",
+   "regle": "test_la_GARDE_refuse_une_norme_que_le_taux_ne_peut_pas_voir[evaluateurs]"
+  },
+  {
+   "nom": "le rail prend des blancs pour un périmètre",
+   "fichier": "parcours_normes.py",
+   "avant": "    if not str(d.get(\"perimetre\") or \"\").strip():",
+   "apres": "    if not d.get(\"perimetre\"):",
+   "regle": "test_le_PERIMETRE_du_SMSI_est_une_reponse_que_le_bloc_attend"
+  },
+  {
+   "nom": "le rail ne demande plus le périmètre",
+   "fichier": "parcours_normes.py",
+   "avant": "        m.append(_q(\"Le domaine d'application du SMSI (art. 4.3)\"))",
+   "apres": "        pass",
+   "regle": "test_ISO27001_le_perimetre_du_bloc_vert_leve_le_VERROU"
+  },
+  {
+   "nom": "la route ignore les écrans",
+   "fichier": "app.py",
+   "avant": "    decl = (conformite.depuis_les_ecrans(data.get(\"ecrans\"))\n            if isinstance(data.get(\"ecrans\"), dict)\n            else data.get(\"declarations\"))",
+   "apres": "    decl = data.get(\"declarations\")",
+   "regle": "test_la_route_traduit_les_ECRANS_que_la_page_envoie"
+  },
+  {
+   "nom": "le taux renvoie sa collecte sous l'ancienne clé",
+   "fichier": "sentinel.page.js",
+   "avant": "      body: JSON.stringify({ecrans: ecrans})",
+   "apres": "      body: JSON.stringify({declarations: ecrans})",
+   "regle": "test_le_taux_envoie_la_COLLECTE_DU_RAIL_et_rien_d_autre"
+  },
+  {
+   "nom": "DORA ne part plus vers le taux",
+   "fichier": "sentinel.page.js",
+   "avant": "  try { if (typeof doraDeclaration === 'function') d.dora = doraDeclaration(); }",
+   "apres": "  try { }",
+   "regle": "test_le_taux_envoie_la_COLLECTE_DU_RAIL_et_rien_d_autre"
+  },
+  {
+   "nom": "le cache ignore les réponses nouvelles",
+   "fichier": "sentinel.page.js",
+   "avant": "  if(CONF_ETAT && CONF_VERSION === version){ confRendre(); return; }",
+   "apres": "  if(CONF_ETAT){ confRendre(); return; }",
+   "regle": "test_le_cache_du_taux_suit_la_VERSION_des_declarations"
+  },
+  {
+   "nom": "le défaut mesuré revient : remise à zéro d'une autre variable",
+   "fichier": "sentinel.page.js",
+   "avant": "  if (typeof declarationsChangees === 'function') declarationsChangees();\n}",
+   "apres": "  CONF_ETAT = null;\n}",
+   "regle": "test_le_cache_du_taux_suit_la_VERSION_des_declarations"
+  },
+  {
+   "nom": "les réponses DORA ne changent plus la version",
+   "fichier": "sentinel.page.js",
+   "avant": "  declarationsChangees();\n  var n = railNormeDuPanneau(pg.id.replace(/^p-/, ''));\n  if (n && n !== 'dora') railDemander(n);",
+   "apres": "  var n = railNormeDuPanneau(pg.id.replace(/^p-/, ''));\n  if (n && n !== 'dora') { railDemander(n); declarationsChangees(); }",
+   "regle": "test_TOUTE_reponse_change_la_version_DORA_compris"
+  },
+  {
+   "nom": "le collecteur ISO 27001 oublie le périmètre",
+   "fichier": "sentinel.page.js",
+   "avant": "    return { perimetre: ISO27_ETAT.perimetre,\n             criteres: ISO27_ETAT.criteres,",
+   "apres": "    return { criteres: ISO27_ETAT.criteres,",
+   "regle": "test_les_collecteurs_du_rail_portent_ce_que_le_taux_lit"
+  },
+  {
+   "nom": "la brique sensibilisation ne part plus",
+   "fichier": "sentinel.page.js",
+   "avant": "sensibilisation: b(window.confSensPct) } };",
+   "apres": "sensibilisation: 0 } };",
+   "regle": "test_les_collecteurs_du_rail_portent_ce_que_le_taux_lit"
+  },
+  {
+   "nom": "l'audit IA Act ne part plus",
+   "fichier": "sentinel.page.js",
+   "avant": "  ia_act: function () { return { audit: window.AUDIT_STATE || {} }; }",
+   "apres": "  ia_act: function () { return {}; }",
+   "regle": "test_les_collecteurs_du_rail_portent_ce_que_le_taux_lit"
+  },
+  {
+   "nom": "le champ périmètre n'écrit rien",
+   "fichier": "sentinel.page.js",
+   "avant": "    + 'onchange=\"iso27Perimetre(this.value)\"></label>'",
+   "apres": "    + '></label>'",
+   "regle": "test_le_perimetre_ISO27001_a_ENFIN_un_champ"
+  },
+  {
+   "nom": "un référentiel refusé se redemande en boucle",
+   "fichier": "sentinel.page.js",
+   "avant": "    railInit(function (ok) { if (ok) railPrealables(apres, echec); else if (echec) echec(); });",
+   "apres": "    railInit(function () { railPrealables(apres, echec); });",
+   "regle": "test_le_taux_attend_le_REFERENTIEL_et_le_REGISTRE_comme_le_rail"
+  },
+  {
+   "nom": "une coupure laisse le taux attendre sans fin",
+   "fichier": "sentinel.page.js",
+   "avant": "    .catch(function () {\n      RAIL_REF_EN_COURS = false;\n      var attentes = RAIL_REF_ATTENTES; RAIL_REF_ATTENTES = [];\n      attentes.forEach(function (f) { try { f(false); } catch (e) {} });\n    });",
+   "apres": "    .catch(function () { RAIL_REF_EN_COURS = false; });",
+   "regle": "test_le_taux_attend_le_REFERENTIEL_et_le_REGISTRE_comme_le_rail"
+  },
+  {
+   "nom": "le tableau de bord RGPD compte un champ de moins que le rail",
+   "fichier": "sentinel.page.js",
+   "avant": "\"duree_conservation\",\"mesures_securite\"];",
+   "apres": "\"duree_conservation\"];",
+   "regle": "test_le_registre_du_tableau_de_bord_compte_les_MEMES_champs_que_le_rail"
+  },
+  {
+   "nom": "la carte hors champ dit « — »",
+   "fichier": "sentinel.page.js",
+   "avant": ": (n.sans_objet ? 'sans objet' : '",
+   "apres": ": (false ? 'sans objet' : '",
+   "regle": "test_la_carte_DIT_sans_objet"
+  },
+  {
+   "nom": "les réponses NIST d'hier attendent l'ouverture de leur écran",
+   "fichier": "sentinel.page.js",
+   "avant": "var NIST_DECL = _declLire(NIST_CLE_STOCK);",
+   "apres": "var NIST_DECL = {};",
+   "regle": "test_les_reponses_NIST_et_OWASP_d_hier_sont_lues_au_CHARGEMENT"
+  },
+  {
+   "nom": "partir voir son taux ne coupe plus le décompte du rail",
+   "fichier": "sentinel.page.js",
+   "avant": "  if (id !== window.__railAutoDepuis && id !== window.__railAutoCible) railAutoAnnuler();\n",
+   "apres": "",
+   "regle": "test_PARTIR_voir_son_taux_annule_le_decompte_des_DEUX_rails"
+  },
+  {
+   "nom": "le décompte DORA survit à la navigation",
+   "fichier": "sentinel.page.js",
+   "avant": "  if (typeof doraAutoAnnuler === 'function'\n      && id !== window.__doraAutoDepuis && id !== window.__doraAutoCible) doraAutoAnnuler();\n",
+   "apres": "",
+   "regle": "test_PARTIR_voir_son_taux_annule_le_decompte_des_DEUX_rails"
+  },
+  {
+   "nom": "une réponse ancienne repeint le taux de conformité",
+   "fichier": "sentinel.page.js",
+   "avant": "      .then(function(j){\n        if(demande !== CONF_DEMANDE) return;\n",
+   "apres": "      .then(function(j){\n",
+   "regle": "test_une_reponse_ANCIENNE_ne_repeint_pas_le_taux"
+  },
+  {
+   "nom": "une réponse ancienne repeint le taux de préparation ReCyF",
+   "fichier": "sentinel.page.js",
+   "avant": "      if (demande !== RECYF_DEMANDE) return;\n",
+   "apres": "",
+   "regle": "test_le_taux_de_preparation_ne_repeint_que_la_DERNIERE_demande"
+  }
+ ]
+}

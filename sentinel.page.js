@@ -1311,6 +1311,7 @@ var SENT_T = {
     'pg.conf-taux.eb': 'Compliance rate · the eleven standards',
     'pg.conf-taux.h1': 'Eleven rates, and <em>what they do not say</em>',
     'pg.conf-taux.p': 'Each rate is composed of its standard\'s weighted parts, then <strong>capped by its blockers</strong>: a defect that stops an auditor does not erase the work done, it forbids you to claim credit beyond it. Eleven percentages in a row read as eleven of the same thing; they are not, and the <em>nature</em> of each standard says what 100&nbsp;% means — <strong>and what it does not mean</strong>.',
+    'pg.conf-taux.rail': 'These rates read <strong>the same answers</strong> as each module\'s rail. The rail says what is <em>filled in</em>; the rate says what is <em>in place</em>. A module filled entirely with “partial” answers is all green on the rail and low here: that is not a contradiction, it is what remains to be done.',
     'pg.conf-plan.eb': 'Compliance rate · plan',
     'pg.conf-plan.h1': 'From blocker to detail, <em>and what each action earns</em>',
     'pg.conf-plan.p': 'Three tiers. <strong>Blockers first</strong>: while they hold, everything else runs into the same ceiling — that is not a methodological preference, it is arithmetic. Then <strong>what serves several standards</strong>, drawn from the mappings already declared between the frameworks. Then what is specific to each. Gains are computed <strong>in sequence</strong>, on the state left by the preceding actions: they accumulate exactly up to the ceiling, never past it.',
@@ -16792,59 +16793,71 @@ window.raasMsCell = function(p){
 /* ══ Indice de conformité global — consolide IA Act / RGPD / ISO 42001 ══ */
 
 /* ═══════════════════════════════════════════════════════════════════════
-   LE TAUX DE CONFORMITÉ DES NEUF NORMES
+   LE TAUX DE CONFORMITÉ DES ONZE NORMES
    Tout le calcul est au serveur, dans `conformite.py` : cet écran ne fait
    que l'afficher. Refaire ici la moindre arithmétique donnerait DEUX vérités
    sur le même taux — c'est le défaut qui existait entre `gcAuditPct` et
    `auditUpdateScore`, et qu'on vient de corriger plus bas.
+
+   CE QU'IL ENVOIE : LA COLLECTE DU RAIL, ET RIEN D'AUTRE. Il lisait un
+   global, `CONF_DECL`, que quatre modules n'écrivaient jamais : mesuré,
+   NIS 2 rempli jusqu'à trois blocs verts restait « — » ici. Le rail et le
+   taux lisent désormais les mêmes objets — `declarationsDesEcrans()` —, et
+   le serveur les traduit une fois pour chaque moteur.
    ═══════════════════════════════════════════════════════════════════════ */
 var CONF_ETAT = null;
+/* LA VERSION DES DÉCLARATIONS SUR LAQUELLE CONF_ETAT A ÉTÉ CALCULÉ. Un taux
+   calculé avant la dernière réponse n'est plus le taux : il se recalcule. */
+var CONF_VERSION = -1;
+var CONF_EN_COURS = -1;
+/* LA DERNIÈRE DEMANDE PARTIE. Deux calculs peuvent se croiser — une
+   réponse donnée pendant qu'un calcul est en route —, et le plus ancien
+   peut revenir le dernier : il repeindrait alors des taux déjà dépassés. */
+var CONF_DEMANDE = 0;
 
-function confDeclarations(){
-  /* CE QUE L'ÉCRAN SAIT DÉJÀ, et rien de plus. On ne fabrique aucune donnée :
-     les déclarations partent telles que les autres modules les tiennent. Une
-     norme dont rien n'est renseigné part absente, et le serveur rend « — »
-     plutôt qu'un zéro qui se lirait comme un constat. */
-  var d = {};
-  try{
-    if(window.AUDIT_STATE && Object.keys(window.AUDIT_STATE).length){
-      var a = {};
-      Object.keys(window.AUDIT_STATE).forEach(function(k){
-        var v = window.AUDIT_STATE[k];
-        a[k] = (v === 'done') ? 'tenu' : (v === 'partial') ? 'partiel'
-             : (v === 'na') ? 'sans_objet' : 'absent';
-      });
-      d.ia_act = a;
-    }
-  }catch(e){}
-  try{
-    var briques = {registre:'confRegPct', pbd:'confPbdPct', doc:'confDocPct',
-                   sensibilisation:'confSensPct'}, b = {}, n = 0;
-    Object.keys(briques).forEach(function(k){
-      var f = window[briques[k]];
-      if(typeof f === 'function'){ b[k] = f() || 0; n++; }
-    });
-    if(n) d.rgpd = {briques:b};
-  }catch(e){}
-  ['iso42001','iso27001','nis2','cra','nist_ai_rmf','owasp_llm'].forEach(function(k){
-    try{ if(window.CONF_DECL && window.CONF_DECL[k]) d[k] = window.CONF_DECL[k]; }catch(e){}
-  });
-  return d;
+function confEchec(){
+  var g = document.getElementById('conf-grille');
+  if(g) g.innerHTML = '<p class="page-p">Le calcul n’a pas pu être '
+    + 'obtenu. Aucun taux n’est affiché : un écran vide se '
+    + 'voit, un taux inventé ne se voit pas.</p>';
 }
 
 function confInit(){
-  if(CONF_ETAT){ confRendre(); return; }
-  fetch('/api/conformite/etat-des-lieux', {
-    method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({declarations: confDeclarations()})
-  }).then(function(r){ return r.json(); })
-    .then(function(j){ CONF_ETAT = j; confRendre(); })
-    .catch(function(){
-      var g = document.getElementById('conf-grille');
-      if(g) g.innerHTML = '<p class="page-p">Le calcul n’a pas pu être '
-        + 'obtenu. Aucun taux n’est affiché : un écran vide se '
-        + 'voit, un taux inventé ne se voit pas.</p>';
-    });
+  var version = window.DECL_VERSION || 0;
+  if(CONF_ETAT && CONF_VERSION === version){ confRendre(); return; }
+  /* LES TROIS ÉCRANS DU TIROIR APPELLENT CETTE FONCTION : un calcul déjà
+     parti pour ces déclarations-là peindra les trois à son retour. */
+  if(CONF_EN_COURS === version) return;
+  CONF_EN_COURS = version;
+  var calculer = function(){
+    var ecrans = (typeof window.declarationsDesEcrans === 'function')
+      ? window.declarationsDesEcrans() : {};
+    var demande = ++CONF_DEMANDE;
+    fetch('/api/conformite/etat-des-lieux', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ecrans: ecrans})
+    }).then(function(r){ return r.json(); })
+      .then(function(j){
+        if(demande !== CONF_DEMANDE) return;
+        CONF_EN_COURS = -1;
+        /* UN REFUS NE SE MET PAS EN CACHE : il se dit, et le prochain
+           passage redemande. */
+        if(!j || !j.ok){ confEchec(); return; }
+        CONF_ETAT = j; CONF_VERSION = version; confRendre();
+      })
+      .catch(function(){
+        if(demande !== CONF_DEMANDE) return;
+        CONF_EN_COURS = -1; confEchec();
+      });
+  };
+  /* LE TAUX ATTEND CE QUE LE RAIL ATTEND : son référentiel, et le registre
+     RGPD, qui vit sur le serveur. Sans eux, un registre de vingt
+     traitements partirait vide — faute d'avoir été lu. */
+  if(typeof window.railPrealables === 'function'){
+    window.railPrealables(calculer, function(){ CONF_EN_COURS = -1; confEchec(); });
+  } else {
+    calculer();
+  }
 }
 window.confInit = confInit;
 
@@ -16883,7 +16896,8 @@ function confRendre(){
           + confEsc(n.cent_ne_veut_pas_dire) + '</div>' : '';
       return '<div class="' + cls + '">'
         + '<div class="conf-c-t"><span class="conf-c-n">' + confEsc(n.nom) + '</span>'
-        + '<span class="conf-c-v">' + (mesure ? n.taux + ' %' : '—') + '</span></div>'
+        + '<span class="conf-c-v">' + (mesure ? n.taux + ' %'
+          : (n.sans_objet ? 'sans objet' : '—')) + '</span></div>'
         + '<div class="conf-c-nat">' + confEsc(n.nature_nom)
         + (n.taux_dit ? ' · ' + confEsc(n.taux_dit) : '') + '</div>'
         + barre
@@ -24438,6 +24452,7 @@ function doraAutoLancer(valide, p) {
     Array.prototype.forEach.call(zones, function (z) { z.innerHTML = vue; });
   }
   window.__doraAutoCible = cible.panneau;
+  window.__doraAutoDepuis = (typeof _ecranCourant === 'function') ? _ecranCourant() : null;
   peindre();
   DORA_AUTO = setInterval(function () {
     reste -= 1;
@@ -25499,6 +25514,7 @@ function nis2RendreExposition(e, j) {
 
 var ISO27_REF = null;
 var ISO27_ETAT = {
+  perimetre: '',
   criteres: { seuil_acceptation: 6, etabli_le: '', apprecie_le: '' },
   risques: [], mesures: {}, articles: {}, soa_filtre: 'tout'
 };
@@ -25544,8 +25560,18 @@ function iso27RemplirCriteres() {
   var z = document.getElementById('iso27-criteres');
   if (!z || z.innerHTML.trim()) return;
   var c = ISO27_ETAT.criteres;
+  /* LE PÉRIMÈTRE D'ABORD — ET IL N'AVAIT PAS DE CHAMP. Le moteur le lit en
+     premier (art. 4.3) et s'arrête à « périmètre absent » sans lui ; le
+     taux de conformité en faisait un verrou que rien, sur cet écran, ne
+     permettait de lever. Les risques s'apprécient DANS un périmètre écrit. */
   z.innerHTML =
-      '<label class="cnf-chk" title="Au-delà de ce niveau (vraisemblance × '
+      '<label class="cnf-chk" title="Ce que le SMSI couvre — tout ce qui n’en '
+    + 'est pas exclu par écrit sera audité">'
+    + 'Domaine d’application du SMSI (art. 4.3) <input id="iso27-perimetre" '
+    + 'class="cnf-in" type="text" style="width:min(340px,100%)" '
+    + 'placeholder="ex. le SI de production du siège, hors filiales" '
+    + 'onchange="iso27Perimetre(this.value)"></label>'
+    + '<label class="cnf-chk" title="Au-delà de ce niveau (vraisemblance × '
     + 'conséquence), un risque ne peut pas être simplement maintenu">'
     + 'Seuil d’acceptation <input id="iso27-seuil" class="cnf-in" '
     + 'type="number" min="1" max="16" step="1" style="width:80px" value="'
@@ -25558,6 +25584,10 @@ function iso27RemplirCriteres() {
     + 'Appréciation faite le <input id="iso27-apprecie" class="cnf-in" '
     + 'type="date" onchange="iso27Critere(\'apprecie_le\', this.value)"></label>';
 }
+
+window.iso27Perimetre = function (valeur) {
+  ISO27_ETAT.perimetre = String(valeur || '');
+};
 
 window.iso27Critere = function (nom, valeur) {
   ISO27_ETAT.criteres[nom] = (nom === 'seuil_acceptation'
@@ -26125,11 +26155,12 @@ function nistPeindre() {
  * champ de saisie : ni <select>, ni <input>, aucune persistance. Elles
  * affichaient le référentiel, point.
  *
- * LA CONSÉQUENCE, SUR UN AUTRE ÉCRAN. Le taux de conformité lit
+ * LA CONSÉQUENCE, SUR UN AUTRE ÉCRAN. Le taux de conformité lisait alors
  * `window.CONF_DECL[norme]` pour six normes. Sans questionnaire, ces deux-là
  * ne pouvaient rien y déposer : leurs cartes affichaient « non renseigné »
  * quoi que fasse le visiteur. Le moteur savait calculer, la page ne savait
- * pas demander.
+ * pas demander. (Le taux lit aujourd'hui la collecte du rail,
+ * `declarationsDesEcrans()` : NIST_DECL et OWASP_DECL y partent tels quels.)
  *
  * CE QUE CES DEUX QUESTIONNAIRES REFUSENT DE FAIRE, et c'est dans les
  * moteurs qu'on l'a écrit d'abord : rendre une note globale NIST — elle
@@ -26137,12 +26168,15 @@ function nistPeindre() {
  * « 7/10 OWASP », qui se citerait en comité sans rien vouloir dire. On
  * demande des états, on rend un profil et des angles morts. */
 
-var NIST_DECL = {};
-var OWASP_DECL = {};
-var NIST_EVAL = null;
-var OWASP_EVAL = null;
 var NIST_CLE_STOCK = 'cp-sentinel-nist-profil-v1';
 var OWASP_CLE_STOCK = 'cp-sentinel-owasp-declares-v1';
+/* LUES DÈS LE CHARGEMENT, comme celles de 800-53 et 800-82. Lues seulement
+   à l'ouverture de leur écran, les réponses d'hier restaient invisibles au
+   rail et au taux tant que le visiteur n'y retournait pas. */
+var NIST_DECL = _declLire(NIST_CLE_STOCK);
+var OWASP_DECL = _declLire(OWASP_CLE_STOCK);
+var NIST_EVAL = null;
+var OWASP_EVAL = null;
 
 function _declLire(cle) {
   try { var b = localStorage.getItem(cle); return b ? (JSON.parse(b) || {}) : {}; }
@@ -26152,10 +26186,6 @@ function _declEcrire(cle, v) {
   try { localStorage.setItem(cle, JSON.stringify(v)); } catch (e) {}
 }
 
-/* CE QUI REND LE TAUX DE CONFORMITÉ CAPABLE DE LES VOIR.
-   `CONF_DECL` était lu par confDeclarations() et écrit NULLE PART. Une
-   déclaration VIDE doit rester absente : le moteur rend « — » plutôt qu'un
-   zéro, parce qu'un sujet non ouvert n'est pas un sujet à zéro. */
 /* ═══════════════════════════════════════════════════════════════════════
    NIST SP 800-53 Rev. 4 ET SA SURCHARGE INDUSTRIELLE SP 800-82 Rev. 2
    ═══════════════════════════════════════════════════════════════════════
@@ -26627,22 +26657,16 @@ function qualifDecider(id, decision) {
 
 window.qualifDecider = qualifDecider;
 
+/* LE TAUX LIT CES DÉCLARATIONS PAR LA COLLECTE DU RAIL, plus par un global
+   à part. Cette fonction ne fait plus que dire qu'elles ont changé : le
+   taux se recalcule à sa prochaine ouverture, pas maintenant — on ne va
+   pas chercher un écran que le visiteur n'a pas demandé.
+   CE QU'ELLE FAISAIT, ET POURQUOI CE N'ÉTAIT PAS ASSEZ. Elle écrivait
+   `CONF_DECL`, que le taux lisait pour six normes sur onze, puis remettait
+   à zéro un `CONF_ETAT` global — alors que le cache du taux vit dans une
+   fermeture, sous le même nom. Mesuré : le taux ne se recalculait jamais. */
 function declPublier() {
-  window.CONF_DECL = window.CONF_DECL || {};
-  window.CONF_DECL.nist_ai_rmf =
-    Object.keys(NIST_DECL).length ? NIST_DECL : null;
-  window.CONF_DECL.owasp_llm =
-    Object.keys(OWASP_DECL).length ? OWASP_DECL : null;
-  /* LE SOCLE N'EST PAS UNE FAMILLE : il sort de la déclaration envoyée au
-     taux, sans quoi `__socle` serait pris pour un code de famille inconnu
-     et l'évaluation entière serait refusée. */
-  window.CONF_DECL.nist_800_53 =
-    Object.keys(_n53Etats()).length ? _n53Etats() : null;
-  window.CONF_DECL.nist_800_82 =
-    Object.keys(N82_DECL).length ? N82_DECL : null;
-  /* LE TAUX EST RECALCULÉ À LA PROCHAINE OUVERTURE, pas maintenant : on ne
-     va pas chercher un écran que le visiteur n'a pas demandé. */
-  CONF_ETAT = null;
+  if (typeof declarationsChangees === 'function') declarationsChangees();
 }
 
 function _choix(etats, ordre, valeur, surChange, cle) {
@@ -26955,14 +26979,21 @@ function recyfEtat(numero, sel) {
   recyfMajTaux();
 }
 
+/* LA DERNIÈRE DEMANDE PARTIE. Chaque réponse relance le calcul sans
+   attendre le précédent ; MESURÉ EN RECETTE, quinze objectifs passés à
+   « atteint » d'affilée ont affiché 93,3 % — le calcul du quatorzième,
+   revenu après celui du quinzième, avait repeint le taux. */
+var RECYF_DEMANDE = 0;
 function recyfMajTaux() {
   var statut = recyfStatutChoisi();
   if (!statut) return;
+  var demande = ++RECYF_DEMANDE;
   fetch('/api/recyf/preparation', {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ statut: statut, etats: RECYF_ETATS })
   }).then(function (r) { return r.json(); })
     .then(function (j) {
+      if (demande !== RECYF_DEMANDE) return;
       if (!j || !j.ok) return;
       var b = document.getElementById('recyf-body');
       var t = b && b.querySelector('.recyf-taux');
@@ -27296,7 +27327,8 @@ var RAIL_DECL = {
     return d;
   },
   iso27001: function () {
-    return { criteres: ISO27_ETAT.criteres, risques: ISO27_ETAT.risques,
+    return { perimetre: ISO27_ETAT.perimetre,
+             criteres: ISO27_ETAT.criteres, risques: ISO27_ETAT.risques,
              mesures: ISO27_ETAT.mesures, articles: ISO27_ETAT.articles };
   },
   iso42001: function () {
@@ -27317,14 +27349,80 @@ var RAIL_DECL = {
      mesures de sécurité n'a rien à faire dans un calcul d'avancement. */
   rgpd: function () {
     var champs = (RAIL_REF && RAIL_REF.rgpd_champs) || [];
+    /* LES QUATRE BRIQUES, TELLES QUE LE TABLEAU DE BORD RGPD LES AFFICHE.
+       Le rail ne les lit pas ; le taux de conformité, si. Les recalculer au
+       serveur donnerait deux arrondis pour le même pourcentage. */
+    var b = function (f) { try { return typeof f === 'function' ? (f() || 0) : 0; }
+                           catch (e) { return 0; } };
     return { traitements: (window.TRAIT_DATA || []).map(function (t) {
       var c = {};
       champs.forEach(function (k) { c[k] = !!String(t[k] || '').trim(); });
       return { nom: t.nom, champs: c };
-    }) };
+    }),
+      briques: { registre: b(window.confRegPct), pbd: b(window.confPbdPct),
+                 doc: b(window.confDocPct), sensibilisation: b(window.confSensPct) } };
   },
-  ia_act: function () { return {}; }
+  /* L'AUDIT, TEL QUE SON ÉCRAN LE TIENT. Le rail valide ce bloc sur une
+     revue déclarée ; le taux, lui, compte les points. */
+  ia_act: function () { return { audit: window.AUDIT_STATE || {} }; }
 };
+
+/* ── UNE SEULE COLLECTE, DEUX LECTEURS ───────────────────────────────────
+   MESURÉ DANS CE NAVIGATEUR : NIS 2 rempli jusqu'à trois blocs verts, et la
+   carte NIS 2 du taux de conformité restait « — ». Le taux lisait
+   `CONF_DECL`, qu'aucun des quatre modules ISO 27001, ISO 42001, NIS 2 et
+   CRA n'écrivait ; 800-53 et 800-82 y écrivaient sans être lus, et DORA n'y
+   était pas. Deux collectes pour les mêmes réponses, c'était la garantie
+   que le rail et le taux se contredisent. Le taux reçoit désormais CES
+   objets-ci — ceux du rail, plus la déclaration que DORA assemble pour son
+   propre rail — et le serveur les traduit une fois pour chaque moteur. */
+function declarationsDesEcrans() {
+  var d = {};
+  Object.keys(RAIL_DECL).forEach(function (n) {
+    try { d[n] = RAIL_DECL[n]() || {}; } catch (e) { d[n] = {}; }
+  });
+  try { if (typeof doraDeclaration === 'function') d.dora = doraDeclaration(); }
+  catch (e) {}
+  return d;
+}
+window.declarationsDesEcrans = declarationsDesEcrans;
+
+/* ── CE QUE LE TAUX ATTEND AVANT DE CALCULER, ET QUE LE RAIL ATTEND AUSSI ──
+   Le référentiel du rail (la liste des champs de l'article 30) et le
+   registre RGPD, qui vit sur le serveur. Sans eux, le taux compterait un
+   registre de vingt traitements comme vide — faute de l'avoir lu. */
+function railPrealables(apres, echec) {
+  /* UN ÉCHEC S'ARRÊTE ICI, IL NE SE RELANCE PAS. Relancer aussitôt un
+     référentiel refusé par le limiteur, c'est lui envoyer une requête de
+     plus à chaque refus — et ne jamais sortir de la fenêtre. */
+  if (!RAIL_REF) {
+    railInit(function (ok) { if (ok) railPrealables(apres, echec); else if (echec) echec(); });
+    return;
+  }
+  if (!window.TRAIT_DATA) { railRegistre(function () { railPrealables(apres, echec); }); return; }
+  apres();
+}
+window.railPrealables = railPrealables;
+
+/* LE REGISTRE SE CHARGE ICI, ET SEULEMENT ICI. Le rail RGPD et le taux le
+   demandaient chacun de leur côté ; une coupure laissait l'un à jour et
+   l'autre non. En cas d'échec, un registre vide plutôt qu'une attente sans
+   fin — le bloc dira qu'il n'y a aucun traitement, ce qui se voit. */
+function railRegistre(apres) {
+  fetch('/api/rgpd/traitements', { credentials: 'same-origin' })
+    .then(function (r) { return r.json(); })
+    .then(function (j) { window.TRAIT_DATA = (j && j.traitements) || []; apres(); })
+    .catch(function () { window.TRAIT_DATA = window.TRAIT_DATA || []; apres(); });
+}
+
+/* ── LA VERSION DES DÉCLARATIONS ─────────────────────────────────────────
+   LE TAUX RESTAIT FIGÉ APRÈS SA PREMIÈRE OUVERTURE, et c'est mesuré : son
+   cache vit dans une fermeture, et la remise à zéro écrite ailleurs visait
+   une AUTRE variable, globale, du même nom. Une réponse change désormais ce
+   compteur ; le taux se recalcule à sa prochaine ouverture s'il a bougé. */
+window.DECL_VERSION = window.DECL_VERSION || 0;
+function declarationsChangees() { window.DECL_VERSION = (window.DECL_VERSION || 0) + 1; }
+window.declarationsChangees = declarationsChangees;
 
 /* ── LE CALCUL, REGROUPÉ ──────────────────────────────────────────────
    UNE RAFALE DE RÉPONSES FAIT UN SEUL APPEL. Les modules interrogent déjà
@@ -27364,10 +27462,7 @@ function railCalculer(norme) {
   /* LE REGISTRE RGPD SE CHARGE D'ABORD S'IL NE L'EST PAS. Sans cela, le bloc
      dirait « aucun traitement » à qui en a vingt, faute de les avoir lus. */
   if (norme === 'rgpd' && !window.TRAIT_DATA) {
-    fetch('/api/rgpd/traitements', { credentials: 'same-origin' })
-      .then(function (r) { return r.json(); })
-      .then(function (j) { window.TRAIT_DATA = (j && j.traitements) || []; railCalculer('rgpd'); })
-      .catch(function () {});
+    railRegistre(function () { railCalculer('rgpd'); });
     return;
   }
   var d;
@@ -27569,6 +27664,7 @@ function railAutoLancer(valide, cible) {
       });
   }
   window.__railAutoCible = cible.panneau;
+  window.__railAutoDepuis = _ecranCourant();
   peindre();
   RAIL_AUTO = setInterval(function () {
     reste -= 1;
@@ -27597,6 +27693,14 @@ window.railAutoMaintenant = railAutoMaintenant;
    remonte de l'élément touché à l'écran qui le contient, et de l'écran au
    référentiel. Aucun module n'a eu à être modifié pour prévenir le rail. */
 function railApresGo(id) {
+  /* PARTIR AILLEURS ANNULE LE DÉCOMPTE. MESURÉ : un bloc validé lance
+     quatre secondes de décompte ; qui allait voir son taux de conformité
+     pendant ce temps était ramené de force au bloc suivant — le rail DORA
+     faisait de même. L'écran d'où part le décompte et celui où il mène ne
+     l'annulent pas : le premier se repeint, le second est son arrivée. */
+  if (id !== window.__railAutoDepuis && id !== window.__railAutoCible) railAutoAnnuler();
+  if (typeof doraAutoAnnuler === 'function'
+      && id !== window.__doraAutoDepuis && id !== window.__doraAutoCible) doraAutoAnnuler();
   var n = railNormeDuPanneau(id);
   if (!n || n === 'dora') return;
   railAutoAnnuler();
@@ -27604,6 +27708,13 @@ function railApresGo(id) {
   railDemander(n, true);
 }
 window.railApresGo = railApresGo;
+
+/* L'ÉCRAN D'OÙ PART UN DÉCOMPTE — lu au lancement, pour que la navigation
+   sache ce qui est « ailleurs ». */
+function _ecranCourant() {
+  var p = document.querySelector('.page.on');
+  return p ? p.id.replace(/^p-/, '') : null;
+}
 
 function railTiroirOuvert(sec) {
   var vus = {};
@@ -27624,6 +27735,9 @@ function _railSurReponse(ev) {
      comptent — champs, boutons, étiquettes, et les éléments qui portent
      leur propre action. */
   if (ev.type === 'click' && !t.closest('button, input, select, textarea, label, [onclick]')) return;
+  /* TOUTE RÉPONSE, DANS TOUT ÉCRAN — DORA compris, que le rail laisse à son
+     propre moteur : le taux de conformité, lui, les lit toutes. */
+  declarationsChangees();
   var n = railNormeDuPanneau(pg.id.replace(/^p-/, ''));
   if (n && n !== 'dora') railDemander(n);
 }
@@ -27631,15 +27745,25 @@ document.addEventListener('change', _railSurReponse, true);
 document.addEventListener('click', _railSurReponse, true);
 
 var RAIL_REF_EN_COURS = false;
+/* CEUX QUI ATTENDENT LE RÉFÉRENTIEL. Un chargement déjà en cours ne se
+   relance pas — mais qui arrive pendant ce temps ne doit pas être oublié :
+   le taux de conformité, ouvert au même instant, attendrait pour rien. */
+var RAIL_REF_ATTENTES = [];
 function railInit(apres) {
+  if (typeof apres === 'function') RAIL_REF_ATTENTES.push(apres);
   if (RAIL_REF_EN_COURS) return;
   RAIL_REF_EN_COURS = true;
   fetch('/api/parcours/referentiel')
     .then(function (r) { return r.json(); })
     .then(function (j) {
       RAIL_REF_EN_COURS = false;
-      if (!j || !j.ok) return;
+      var attentes = RAIL_REF_ATTENTES; RAIL_REF_ATTENTES = [];
+      if (!j || !j.ok) {
+        attentes.forEach(function (f) { try { f(false); } catch (e) {} });
+        return;
+      }
       RAIL_REF = j;
+      attentes.forEach(function (f) { try { f(true); } catch (e) {} });
       if (typeof apres === 'string') { railDemander(apres, true); return; }
       /* LES TIROIRS DÉJÀ OUVERTS AU CHARGEMENT — mémorisés, ou celui de
          l'onglet courant — reçoivent leur rail tout de suite. */
@@ -27649,7 +27773,11 @@ function railInit(apres) {
       var pg = document.querySelector('.page.on');
       if (pg) railApresGo(pg.id.replace(/^p-/, ''));
     })
-    .catch(function () { RAIL_REF_EN_COURS = false; });
+    .catch(function () {
+      RAIL_REF_EN_COURS = false;
+      var attentes = RAIL_REF_ATTENTES; RAIL_REF_ATTENTES = [];
+      attentes.forEach(function (f) { try { f(false); } catch (e) {} });
+    });
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', railInit);
 else railInit();

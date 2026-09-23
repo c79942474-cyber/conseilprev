@@ -514,3 +514,15 @@ def test_la_garde_LAISSE_passer_le_module_intact():
     # et dans l'analyse de risque — donc on vise la ligne de la garde.
     assert _charger_mute('    fautes = []\n    if len(OBJECTIFS) != 20:',
                          '    fautes = []  # inchangé\n    if len(OBJECTIFS) != 20:') is None
+
+
+def test_le_taux_de_preparation_ne_repeint_que_la_DERNIERE_demande():
+    """MESURÉ EN RECETTE : quinze objectifs passés à « atteint » d'affilée
+    ont affiché 93,3 %. Chaque réponse relance le calcul sans attendre le
+    précédent ; celui du quatorzième, revenu APRÈS celui du quinzième, avait
+    repeint le taux. Seule la réponse à la dernière demande repeint."""
+    i = JS.index("function recyfMajTaux()")
+    corps = JS[i:JS.index("\n}", i)]
+    assert "var demande = ++RECYF_DEMANDE;" in corps
+    assert re.search(r"\.then\(function \(j\) \{\s*if \(demande !== RECYF_DEMANDE\) return;",
+                     corps), "une réponse ancienne repeint encore le taux"
