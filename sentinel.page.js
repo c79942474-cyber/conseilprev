@@ -1502,6 +1502,10 @@ function go(id, el, sec, pg) {
      s'ouvrait alors VIDE pour qui n'y arrivait pas par le menu — c'est-à-dire
      pour le parcours du directeur de programme, où elle figure. */
   if (id === 'qualif-assistee' && typeof window.qualifInit === 'function') _apresPeinture(window.qualifInit);
+  /* LE RAIL DU RÉFÉRENTIEL SE REPEINT SUR L'ÉCRAN QU'ON OUVRE — quel que
+     soit le chemin : onglet, lien profond, parcours guidé ou passage
+     automatique. */
+  if (typeof window.railApresGo === 'function') _apresPeinture(function () { window.railApresGo(id); });
   /* L'ONGLET COURANT EST AUSSI ANNONCÉ, pas seulement peint : à un lecteur
      d'écran, la pastille terre cuite ne dit rien. */
   function _ici(i){ i.classList.add('on'); i.setAttribute('aria-current', 'page'); }
@@ -22379,6 +22383,7 @@ window.sbAppliquerPli = function(sec, replie){
   if(!sec) return;
   sec.classList.toggle('replie', !!replie);
   sec.setAttribute('aria-expanded', replie ? 'false' : 'true');
+  if (!replie && typeof window.railTiroirOuvert === 'function') window.railTiroirOuvert(sec);
   var n = sec.nextElementSibling;
   while(n && !n.classList.contains('sb-section')){
     if(n.classList.contains('sb-item')){
@@ -24375,6 +24380,9 @@ function doraRailPeindre() {
        panneau que le premier. */
     + '<div class="dr-auto-zone"></div>';
   Array.prototype.forEach.call(rails, function (r) { r.innerHTML = html; });
+  /* LE MÊME AVANCEMENT, DANS LA BARRE : les onze référentiels y montrent
+     leur rail de la même façon, DORA compris. */
+  if (typeof window.railPeindreBarre === 'function') window.railPeindreBarre('dora', p);
 }
 window.doraRailPeindre = doraRailPeindre;
 
@@ -25134,7 +25142,12 @@ function nis2Peindre() {
 function nis2RemplirChamps() {
   var q = document.getElementById('nis2-q');
   if (!q || q.innerHTML.trim()) return;
-  var opts = '<option value="">— aucun secteur des annexes I ou II —</option>';
+  /* « AUCUNE DES DEUX ANNEXES » EST UNE RÉPONSE, ET ELLE A SA VALEUR. La
+     première option disait « — aucun secteur des annexes I ou II — » avec
+     une valeur VIDE : celle-là même d'une question laissée sans réponse. Le
+     rail ne pouvait pas savoir si la qualification avait été faite. */
+  var opts = '<option value="">— choisir un secteur —</option>'
+    + '<option value="hors_annexes">Aucune des deux annexes — hors du champ sectoriel</option>';
   [['annexe_i', 'Annexe I — secteurs hautement critiques'],
    ['annexe_ii', 'Annexe II — autres secteurs critiques']].forEach(function (p) {
     opts += '<optgroup label="' + p[1] + '">';
@@ -27206,3 +27219,437 @@ window.recyfInit = recyfInit;
 window.recyfPeindre = recyfPeindre;
 window.recyfAnalyse = recyfAnalyse;
 window.recyfEtat = recyfEtat;
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+   LE RAIL DES ONZE RÉFÉRENTIELS — DANS LA BARRE, PAS SEULEMENT DANS DORA
+   ═══════════════════════════════════════════════════════════════════════
+
+   LA DEMANDE. Dans chaque module de « Votre Mise en Conformité » : quand un
+   bloc est rempli, il passe au vert et l'écran passe au bloc suivant, avec
+   une infobulle à chaque fois et une flèche vers le bas — pour les onze
+   référentiels. DORA avait déjà son rail dans ses écrans ; les dix autres
+   l'ont ici, et les onze le montrent dans la barre.
+
+   CE QUE CE CODE NE DÉCIDE PAS. L'ordre des blocs, ce qui manque à chacun,
+   le bloc courant et le suivant viennent du serveur (`parcours_normes`).
+   L'écran rassemble ce que les modules tiennent déjà, l'envoie, et peint.
+
+   TROIS SORTES DE BLOCS, TROIS FAÇONS DE FINIR. Un bloc « à remplir » se
+   valide seul, quand ses champs sont renseignés. Un bloc « à passer en
+   revue » se valide sur une déclaration : ses cases ont une valeur par
+   défaut qui se confond avec « pas encore regardé ». Un bloc « à lire » se
+   marque lu — et « lu » n'est pas vert. */
+
+var RAIL_REF = null;
+var RAIL_AV = {};              /* norme → dernier avancement rendu */
+var RAIL_ATTENTE = {};         /* norme → minuteur de regroupement */
+var RAIL_AUTO = null;          /* le décompte du passage automatique */
+var RAIL_DIRECT = null;        /* norme dont un clic « ↓ » demande la suite */
+var RAIL_CLE_STOCK = 'cp-sentinel-rail-v1';
+
+function railEsc(t) {
+  return String(t == null ? '' : t).replace(/[&<>"]/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; });
+}
+
+/* LES DÉCLARATIONS « LU » ET « PASSÉ EN REVUE » SONT CELLES DU VISITEUR :
+   elles survivent au rechargement, comme les questionnaires qui gardent
+   leurs réponses. Rien d'autre n'est stocké ici. */
+function _railStock() {
+  try { return JSON.parse(localStorage.getItem(RAIL_CLE_STOCK)) || {}; }
+  catch (e) { return {}; }
+}
+function _railStocker(s) {
+  try { localStorage.setItem(RAIL_CLE_STOCK, JSON.stringify(s)); } catch (e) {}
+}
+
+/* LA NORME D'UN ÉCRAN SE LIT DANS LA BARRE, jamais dans une table écrite
+   ici : c'est l'attribut `data-norme` de l'onglet qui l'ouvre. */
+function _railPanneau(it) {
+  var m = (it.getAttribute('onclick') || '').match(/go\('([\w-]+)'/);
+  return m ? m[1] : null;
+}
+function railNormeDuPanneau(id) {
+  var items = document.querySelectorAll('.sb-nav .sb-item[data-norme]');
+  for (var i = 0; i < items.length; i++) {
+    if (_railPanneau(items[i]) === id) return items[i].getAttribute('data-norme');
+  }
+  return null;
+}
+window.railNormeDuPanneau = railNormeDuPanneau;
+
+/* ── CE QUE CHAQUE MODULE TIENT DÉJÀ ───────────────────────────────────
+   UN COLLECTEUR PAR RÉFÉRENTIEL, ET AUCUNE DONNÉE FABRIQUÉE. Un module qui
+   n'a encore rien chargé rend une déclaration vide, et le serveur dit ce
+   qui manque — il ne suppose rien. */
+var RAIL_DECL = {
+  nis2: function () {
+    var d = (typeof nis2Charge === 'function') ? nis2Charge() : {};
+    d.mesures = NIS2_ETAT.mesures;
+    d.gouvernance = NIS2_ETAT.gouvernance;
+    var ca = document.getElementById('nis2-ca');
+    d.chiffre_affaires = (ca && ca.value !== '') ? Number(ca.value) * 1000000 : null;
+    d.recyf = { statut: (typeof recyfStatutChoisi === 'function')
+                  ? recyfStatutChoisi() : null,
+                etats: RECYF_ETATS };
+    return d;
+  },
+  iso27001: function () {
+    return { criteres: ISO27_ETAT.criteres, risques: ISO27_ETAT.risques,
+             mesures: ISO27_ETAT.mesures, articles: ISO27_ETAT.articles };
+  },
+  iso42001: function () {
+    return { mesures: ISO_ETAT.mesures, articles: ISO_ETAT.articles };
+  },
+  cra: function () {
+    var ca = document.getElementById('cra-ca');
+    return { role: CRA_ROLE_ETAT, produits: CRA_ETAT.produits,
+             ecarts: CRA_ETAT.ecarts,
+             chiffre_affaires: (ca && ca.value !== '') ? Number(ca.value) : null };
+  },
+  nist_ai_rmf: function () { return { etats: NIST_DECL }; },
+  owasp_llm: function () { return { etats: OWASP_DECL }; },
+  nist_800_53: function () { return { socle: N53_SOCLE || null, etats: _n53Etats() }; },
+  nist_800_82: function () { return { etats: N82_DECL }; },
+  /* LE REGISTRE N'EST PAS ENVOYÉ : seulement, pour chaque traitement, quels
+     champs de l'article 30 sont remplis. Le texte des finalités ou des
+     mesures de sécurité n'a rien à faire dans un calcul d'avancement. */
+  rgpd: function () {
+    var champs = (RAIL_REF && RAIL_REF.rgpd_champs) || [];
+    return { traitements: (window.TRAIT_DATA || []).map(function (t) {
+      var c = {};
+      champs.forEach(function (k) { c[k] = !!String(t[k] || '').trim(); });
+      return { nom: t.nom, champs: c };
+    }) };
+  },
+  ia_act: function () { return {}; }
+};
+
+/* ── LE CALCUL, REGROUPÉ ──────────────────────────────────────────────
+   UNE RAFALE DE RÉPONSES FAIT UN SEUL APPEL. Les modules interrogent déjà
+   leur propre moteur à chaque champ ; un second appel par champ doublerait
+   la cadence, et le limiteur coupe à cent vingt requêtes par minute — le
+   rail mourrait au milieu d'une déclaration d'applicabilité de 93 lignes,
+   exactement là où il sert. */
+function railDemander(norme, tout_de_suite) {
+  if (!norme) return;
+  if (RAIL_ATTENTE[norme]) clearTimeout(RAIL_ATTENTE[norme]);
+  RAIL_ATTENTE[norme] = setTimeout(function () {
+    RAIL_ATTENTE[norme] = null;
+    railCalculer(norme);
+  }, tout_de_suite ? 0 : 600);
+}
+window.railDemander = railDemander;
+
+function railCalculer(norme) {
+  /* DORA GARDE SON MOTEUR ET SON RAIL. S'il tient déjà son avancement, la
+     barre se peint depuis celui-là, SANS le recalculer — MESURÉ AU DOIGT :
+     redemander l'avancement à l'ouverture du tiroir faisait repeindre le
+     rail de l'écran un instant après le chargement, et le repeint détruisait
+     le bouton dont la bulle venait de s'ouvrir. DORA recalcule lui-même à
+     chaque réponse ; la barre n'a qu'à suivre. */
+  if (norme === 'dora') {
+    if (typeof DORA_PARCOURS !== 'undefined' && DORA_PARCOURS) railPeindreBarre('dora', DORA_PARCOURS);
+    else if (typeof DORA_REF !== 'undefined' && DORA_REF) doraParcours();
+    else if (typeof doraInit === 'function') doraInit();
+    return;
+  }
+  var f = RAIL_DECL[norme];
+  if (!f) return;
+  /* LE RÉFÉRENTIEL MANQUE ? On le redemande, puis on revient. Chargé une
+     seule fois au démarrage, un échec — le limiteur, une coupure — laissait
+     la barre sans rail jusqu'au rechargement de la page. */
+  if (!RAIL_REF) { railInit(norme); return; }
+  /* LE REGISTRE RGPD SE CHARGE D'ABORD S'IL NE L'EST PAS. Sans cela, le bloc
+     dirait « aucun traitement » à qui en a vingt, faute de les avoir lus. */
+  if (norme === 'rgpd' && !window.TRAIT_DATA) {
+    fetch('/api/rgpd/traitements', { credentials: 'same-origin' })
+      .then(function (r) { return r.json(); })
+      .then(function (j) { window.TRAIT_DATA = (j && j.traitements) || []; railCalculer('rgpd'); })
+      .catch(function () {});
+    return;
+  }
+  var d;
+  try { d = f() || {}; } catch (e) { d = {}; }
+  var st = _railStock()[norme] || {};
+  d.lus = st.lus || [];
+  d.revus = st.revus || [];
+  fetch('/api/parcours/' + norme, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(d)
+  }).then(function (r) { return r.json(); }).then(function (j) {
+    if (!j || !j.ok) return;
+    var avant = RAIL_AV[norme];
+    RAIL_AV[norme] = j;
+    railPeindreBarre(norme, j);
+    railPeindreEcran(norme);
+    railAutoSuite(norme, avant, j);
+  }).catch(function () {});
+}
+
+/* ── LA BARRE ─────────────────────────────────────────────────────────
+   UNE PASTILLE PAR ONGLET, ET L'ÉTAT DANS LE NOM DE L'ONGLET. La pastille
+   se voit ; l'`aria-label` fait entendre l'état à qui ne la voit pas. Elle
+   reste hors de la tabulation : quarante onglets de plus à traverser au
+   clavier ne diraient rien que le bandeau de l'écran ne dise déjà. */
+function railBulle(b, e, p) {
+  var n = (b.manque || []).length;
+  var nat = b.nature && p.natures ? p.natures[b.nature] : null;
+  return b.nom + ' — ' + (e.nom || '') + '\n' + (e.dit || '')
+    + (n ? '\n\nIl manque ' + n + ' réponse' + (n > 1 ? 's' : '') + ' : '
+          + (b.manque || []).slice(0, 2).map(function (m) { return m.quoi; }).join(' ; ')
+          + (n > 2 ? ' …' : '') : '')
+    + (b.motif ? '\n\n' + b.motif : '')
+    + (nat ? '\n\n' + nat.nom + ' — ' + nat.dit : '');
+}
+
+function railPeindreBarre(norme, p) {
+  if (!p || !p.blocs) return;
+  var etats = p.etats || {};
+  var parPanneau = {};
+  p.blocs.forEach(function (b) { parPanneau[b.panneau] = b; });
+  var items = document.querySelectorAll('.sb-nav .sb-item[data-norme="' + norme + '"]');
+  Array.prototype.forEach.call(items, function (it) {
+    var b = parPanneau[_railPanneau(it)];
+    var puce = it.querySelector('.rail-puce');
+    if (!b) {
+      if (puce) puce.parentNode.removeChild(puce);
+      it.removeAttribute('data-rail');
+      return;
+    }
+    var e = etats[b.etat] || {};
+    if (!puce) {
+      puce = document.createElement('span');
+      puce.className = 'rail-puce';
+      puce.setAttribute('tabindex', '-1');
+      /* LE PREMIER APPUI AU DOIGT OUVRE LA BULLE, LE SECOND OUVRE L'ÉCRAN.
+         Sans cela, l'appui naviguerait avant que la bulle soit lisible. */
+      puce.setAttribute('data-bulle-avant-clic', '');
+      it.appendChild(puce);
+    }
+    it.setAttribute('data-rail', b.etat);
+    /* LA FLÈCHE VERS LE BAS DÉSIGNE LE BLOC ATTENDU. */
+    puce.textContent = (b.etat === 'courante') ? '↓' : (e.puce || '');
+    puce.setAttribute('aria-label', ' — ' + (e.nom || ''));
+    puce.setAttribute('data-tooltip', railBulle(b, e, p));
+  });
+}
+window.railPeindreBarre = railPeindreBarre;
+
+/* ── L'ÉCRAN : UN BANDEAU EN TÊTE, UN BOUTON EN PIED ──────────────────── */
+function railPeindreEcran(norme) {
+  var pg = document.querySelector('.page.on');
+  if (!pg || norme === 'dora') return;
+  var id = pg.id.replace(/^p-/, '');
+  if (railNormeDuPanneau(id) !== norme) return;
+  var p = RAIL_AV[norme];
+  if (!p) return;
+  var b = (p.blocs || []).filter(function (x) { return x.panneau === id; })[0];
+  if (!b) return;
+  var e = (p.etats || {})[b.etat] || {};
+  var nat = (p.natures || {})[b.nature] || {};
+  var courant = (p.blocs || []).filter(function (x) { return x.cle === p.courante; })[0];
+
+  var ban = pg.querySelector('.rail-bandeau');
+  if (!ban) {
+    ban = document.createElement('div');
+    ban.className = 'rail-bandeau';
+    ban.setAttribute('role', 'status');
+    var h1 = pg.querySelector('.page-h');
+    var lead = h1 && h1.nextElementSibling && h1.nextElementSibling.classList.contains('page-lead')
+      ? h1.nextElementSibling : h1;
+    if (lead && lead.parentNode === pg) pg.insertBefore(ban, lead.nextSibling);
+    else pg.insertBefore(ban, pg.firstChild);
+  }
+  ban.setAttribute('data-etat', b.etat);
+  var l = b.manque || [];
+  var manque = '';
+  if (l.length && b.etat !== 'validee' && b.etat !== 'lue' && b.etat !== 'sans_objet') {
+    manque = '<div class="rail-manque"><b>Il manque ' + l.length + ' réponse'
+      + (l.length > 1 ? 's' : '') + ' :</b><ul>'
+      + l.slice(0, 6).map(function (m) { return '<li>' + railEsc(m.quoi) + '</li>'; }).join('')
+      + '</ul>' + (l.length > 6 ? '<p class="rail-reste">… et ' + (l.length - 6)
+      + ' autre(s), sur cet écran.</p>' : '') + '</div>';
+  }
+  var suite = '';
+  if (courant && courant.cle !== b.cle && b.etat !== 'courante') {
+    suite = '<div style="margin-top:8px">Le parcours attend : <button type="button" '
+      + 'class="mat-export-btn" onclick="go(\'' + railEsc(courant.panneau) + '\')">↓ '
+      + railEsc(courant.nom) + '</button></div>';
+  }
+  var fin = (p.fini && p.conclusion)
+    ? '<div class="rail-auto"><b>✓ Parcours terminé.</b> ' + railEsc(p.conclusion) + '</div>' : '';
+  ban.innerHTML = '<div class="rail-tete"><b>Bloc ' + b.rang + ' sur '
+    + (p.blocs || []).length + ' · ' + railEsc(b.nom) + ' — ' + railEsc(e.nom || '')
+    /* LA NATURE NE S'AFFICHE QUE LORSQU'ELLE CHANGE LE SENS DU VERT : un
+       bloc à remplir est le cas ordinaire, et « À remplir maintenant — À
+       remplir » ne disait rien deux fois. */
+    + '</b>' + (b.nature !== 'saisie' ? '<span class="rail-nature">' + railEsc(nat.nom || '')
+    + ' — ' + railEsc(nat.dit || '') + '</span>' : '') + '</div>'
+    + '<div class="rail-barre" role="progressbar" aria-valuemin="0" aria-valuemax="'
+    + p.total + '" aria-valuenow="' + p.faits + '" aria-label="' + p.faits + ' blocs faits sur '
+    + p.total + '"><i style="width:' + p.part + '%"></i></div>'
+    + (b.motif ? '<div>' + railEsc(b.motif) + '</div>' : '')
+    + manque + suite + fin
+    + '<div class="rail-auto-zone"></div>'
+    + '<div class="rail-reserve">' + railEsc(p.reserve) + '</div>';
+
+  var pied = pg.querySelector('.rail-pied');
+  var decl = (b.nature === 'lecture') ? 'lus' : (b.nature === 'revue') ? 'revus' : null;
+  if (!decl || b.etat === 'sans_objet' || b.etat === 'verrouillee') {
+    if (pied) pied.parentNode.removeChild(pied);
+    return;
+  }
+  if (!pied) {
+    pied = document.createElement('div');
+    pied.className = 'rail-pied';
+    pg.appendChild(pied);
+  }
+  var fait = (b.etat === 'lue' || b.etat === 'validee');
+  var libelle = (decl === 'lus')
+    ? (fait ? 'Marqué lu ✓' : 'J’ai lu cet écran — bloc suivant ↓')
+    : (fait ? 'Déclaré passé en revue ✓' : 'J’ai passé cette liste en revue — bloc suivant ↓');
+  pied.innerHTML = '<button type="button" class="mat-export-btn" onclick="railDeclarer(\''
+    + norme + '\', \'' + decl + '\', \'' + railEsc(b.panneau) + '\', ' + (fait ? 'false' : 'true')
+    + ')">' + (fait ? libelle + ' — annuler' : libelle) + '</button>'
+    + '<span>' + railEsc(nat.dit || '') + '</span>';
+}
+
+/* UN BOUTON « ↓ » EST UNE DEMANDE EXPLICITE D'ALLER AU BLOC SUIVANT : pas
+   de décompte pour celui qui vient de cliquer. Annuler une déclaration, en
+   revanche, ne déplace personne. */
+function railDeclarer(norme, genre, panneau, oui) {
+  var s = _railStock();
+  var n = s[norme] || (s[norme] = {});
+  var l = n[genre] || (n[genre] = []);
+  var i = l.indexOf(panneau);
+  if (oui && i < 0) l.push(panneau);
+  if (!oui && i >= 0) l.splice(i, 1);
+  _railStocker(s);
+  RAIL_DIRECT = oui ? norme : null;
+  railDemander(norme, true);
+}
+window.railDeclarer = railDeclarer;
+
+/* ── LE PASSAGE AUTOMATIQUE — MÊMES FREINS QUE DORA ────────────────────
+   Il ne part QUE lorsque le bloc courant vient de passer au vert ou d'être
+   marqué lu, QUE si l'on regarde cet écran-là, et il s'annule d'un clic.
+   Un décompte en cours ne survit pas à un changement du bloc courant. */
+function railAutoSuite(norme, avant, apres) {
+  if (!avant || !apres.courante) {
+    if (!apres.courante) railAutoAnnuler();
+    return;
+  }
+  if (avant.courante === apres.courante) return;
+  railAutoAnnuler();
+  var valide = (apres.blocs || []).filter(function (b) {
+    return b.cle === avant.courante; })[0];
+  if (!valide || (valide.etat !== 'validee' && valide.etat !== 'lue')) return;
+  var ouvert = (document.querySelector('.page.on') || {}).id || '';
+  if (ouvert !== 'p-' + valide.panneau) return;
+  var cible = (apres.blocs || []).filter(function (b) {
+    return b.cle === apres.courante; })[0];
+  if (!cible) return;
+  if (RAIL_DIRECT === norme) { RAIL_DIRECT = null; go(cible.panneau); return; }
+  railAutoLancer(valide, cible);
+}
+
+function railAutoLancer(valide, cible) {
+  var reste = 4;
+  function peindre() {
+    Array.prototype.forEach.call(document.querySelectorAll('.page.on .rail-auto-zone'),
+      function (z) {
+        z.innerHTML = '<div class="rail-auto" role="status">✓ <b>' + railEsc(valide.nom)
+          + '</b> est ' + (valide.etat === 'lue' ? 'marqué lu' : 'validé') + '. ↓ Passage à <b>'
+          + railEsc(cible.nom) + '</b> dans ' + reste + ' s.'
+          + ' <button type="button" class="mat-export-btn" onclick="railAutoAnnuler()">Rester ici</button>'
+          + ' <button type="button" class="mat-export-btn" onclick="railAutoMaintenant()">'
+          + 'Y aller maintenant ↓</button></div>';
+      });
+  }
+  window.__railAutoCible = cible.panneau;
+  peindre();
+  RAIL_AUTO = setInterval(function () {
+    reste -= 1;
+    if (reste <= 0) { railAutoMaintenant(); return; }
+    peindre();
+  }, 1000);
+}
+
+function railAutoAnnuler() {
+  if (RAIL_AUTO) { clearInterval(RAIL_AUTO); RAIL_AUTO = null; }
+  Array.prototype.forEach.call(document.querySelectorAll('.rail-auto-zone'),
+    function (z) { z.innerHTML = ''; });
+}
+window.railAutoAnnuler = railAutoAnnuler;
+
+function railAutoMaintenant() {
+  var cible = window.__railAutoCible;
+  railAutoAnnuler();
+  if (cible) go(cible);
+}
+window.railAutoMaintenant = railAutoMaintenant;
+
+/* ── QUAND LE RAIL SE REDEMANDE ────────────────────────────────────────
+   À L'OUVERTURE D'UN ÉCRAN DE RÉFÉRENTIEL, À L'OUVERTURE D'UN TIROIR, ET
+   APRÈS CHAQUE RÉPONSE. Pour les réponses, un seul écouteur suffit : il
+   remonte de l'élément touché à l'écran qui le contient, et de l'écran au
+   référentiel. Aucun module n'a eu à être modifié pour prévenir le rail. */
+function railApresGo(id) {
+  var n = railNormeDuPanneau(id);
+  if (!n || n === 'dora') return;
+  railAutoAnnuler();
+  if (RAIL_AV[n]) railPeindreEcran(n);
+  railDemander(n, true);
+}
+window.railApresGo = railApresGo;
+
+function railTiroirOuvert(sec) {
+  var vus = {};
+  var n = sec.nextElementSibling;
+  while (n && !n.classList.contains('sb-section')) {
+    var k = n.getAttribute && n.getAttribute('data-norme');
+    if (k && !vus[k]) { vus[k] = true; railDemander(k); }
+    n = n.nextElementSibling;
+  }
+}
+window.railTiroirOuvert = railTiroirOuvert;
+
+function _railSurReponse(ev) {
+  var t = ev.target;
+  var pg = t && t.closest && t.closest('.page');
+  if (!pg || t.closest('.rail-pied, .rail-bandeau')) return;
+  /* UN CLIC SUR DU TEXTE NE CHANGE AUCUNE RÉPONSE : seuls les contrôles
+     comptent — champs, boutons, étiquettes, et les éléments qui portent
+     leur propre action. */
+  if (ev.type === 'click' && !t.closest('button, input, select, textarea, label, [onclick]')) return;
+  var n = railNormeDuPanneau(pg.id.replace(/^p-/, ''));
+  if (n && n !== 'dora') railDemander(n);
+}
+document.addEventListener('change', _railSurReponse, true);
+document.addEventListener('click', _railSurReponse, true);
+
+var RAIL_REF_EN_COURS = false;
+function railInit(apres) {
+  if (RAIL_REF_EN_COURS) return;
+  RAIL_REF_EN_COURS = true;
+  fetch('/api/parcours/referentiel')
+    .then(function (r) { return r.json(); })
+    .then(function (j) {
+      RAIL_REF_EN_COURS = false;
+      if (!j || !j.ok) return;
+      RAIL_REF = j;
+      if (typeof apres === 'string') { railDemander(apres, true); return; }
+      /* LES TIROIRS DÉJÀ OUVERTS AU CHARGEMENT — mémorisés, ou celui de
+         l'onglet courant — reçoivent leur rail tout de suite. */
+      Array.prototype.forEach.call(
+        document.querySelectorAll('.sb-nav .sb-section[aria-expanded="true"]'),
+        railTiroirOuvert);
+      var pg = document.querySelector('.page.on');
+      if (pg) railApresGo(pg.id.replace(/^p-/, ''));
+    })
+    .catch(function () { RAIL_REF_EN_COURS = false; });
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', railInit);
+else railInit();

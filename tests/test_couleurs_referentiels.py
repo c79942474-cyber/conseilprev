@@ -249,11 +249,17 @@ def _classes_posees_sur_les_onglets():
 
 
 def _tiroirs_voues():
-    """Les tiroirs qui ne portent qu'UN référentiel — ceux dont le titre prend
-    sa couleur. « Pilotage » n'en est pas un : il abrite l'IA Act parmi dix
-    autres écrans qui ne sont pas des référentiels."""
-    return {g: next(iter(n)) for g, n in _tiroirs().items()
-            if len(n) == 1 and g != "pilotage"}
+    """Les tiroirs de la famille « conformité » qui ne portent qu'UN
+    référentiel — ceux dont le titre prend sa couleur.
+
+    LA FAMILLE, PAS UNE LISTE D'EXCLUSIONS. Une première version écartait
+    « Pilotage » par son nom ; le jour où l'audit IA Act a porté son
+    référentiel, « Évaluer le risque » est passé pour un tiroir voué à l'IA
+    Act. Une rubrique hors de la famille abrite des écrans de toute sorte :
+    elle garde sa teinte de rubrique."""
+    tiroirs, famille = _releve_barre()
+    return {g: next(iter(n)) for g, n in tiroirs.items()
+            if len(n) == 1 and famille.get(g)}
 
 
 # ══ LES RÈGLES ══════════════════════════════════════════════════════════

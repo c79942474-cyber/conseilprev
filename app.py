@@ -1977,6 +1977,7 @@ import dora_incident  # noqa: E402
 import dora_ponts  # noqa: E402
 import dora_supervision  # noqa: E402
 import dora_parcours  # noqa: E402
+import parcours_normes  # noqa: E402
 
 
 @app.route('/api/dora/referentiel', methods=['GET'])
@@ -2083,6 +2084,32 @@ def api_dora_parcours():
         app.logger.exception("parcours DORA")
         return jsonify({"ok": False, "erreur": "avancement_impossible"}), 500
     return jsonify(r), 200
+
+
+@app.route('/api/parcours/referentiel', methods=['GET'])
+@rate_limit(limit=60, window=60)
+def api_parcours_referentiel():
+    """Les blocs des dix autres référentiels, leurs états et leurs natures —
+    de quoi peindre les infobulles avant la première réponse."""
+    return jsonify(dict(parcours_normes.referentiel(), ok=True)), 200
+
+
+@app.route('/api/parcours/<norme>', methods=['POST'])
+@rate_limit(limit=240, window=60)
+def api_parcours_norme(norme):
+    """Où en est le parcours d'un référentiel, et ce qui manque au bloc
+    courant.
+
+    MÊME CADENCE QUE LE RAIL DORA, POUR LA MÊME RAISON : le rail se
+    redemande à chaque réponse. L'écran regroupe les réponses d'une même
+    rafale en un seul appel ; cette cadence reste la marge de sécurité."""
+    d = request.get_json(silent=True) or {}
+    try:
+        r = parcours_normes.avancement(norme, d)
+    except Exception:
+        app.logger.exception("parcours %s", norme)
+        return jsonify({"ok": False, "erreur": "avancement_impossible"}), 500
+    return jsonify(r), (200 if r.get("ok") else 404)
 
 
 @app.route('/api/dora/supervision', methods=['POST'])

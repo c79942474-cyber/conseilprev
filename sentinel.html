@@ -537,6 +537,85 @@ body{
 @media(prefers-reduced-motion:reduce){
   .dr-bloc.courante{animation:none;border-width:2.5px}
 }
+/* ══ LE RAIL DANS LA BARRE — LES ONZE RÉFÉRENTIELS ═══════════════════════
+   LES COULEURS SONT CELLES DU RAIL DORA, ET LES ONZE TEINTES DE RÉFÉRENTIEL
+   ONT ÉTÉ CHOISIES POUR NE PAS LES IMITER : le vert dit « validé », le bleu
+   qui bat dit « c'est ici qu'on attend », l'ambre « verrouillé ». « Lu » n'est
+   pas vert : un écran sans champ n'a pas été rempli.
+
+   LA FLÈCHE VERS LE BAS EST LA PASTILLE DU BLOC ATTENDU. Dans une barre qui
+   se lit de haut en bas, c'est elle qui dit où le parcours continue ; le
+   bandeau de l'écran et le décompte la reprennent (« ↓ Passage à … »).
+
+   L'INFOBULLE S'OUVRE SOUS L'ONGLET, DANS LA LARGEUR DE LA BARRE. La barre
+   masque ce qui déborde à droite : une bulle posée à droite de la pastille
+   y serait coupée. La pastille reste statique pour que la bulle se place
+   par rapport à l'onglet entier. */
+.sb-item .rail-puce{margin-left:auto;flex:0 0 auto;align-self:center;
+  min-width:18px;height:18px;padding:0 4px;border-radius:9px;
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:10.5px;font-weight:700;line-height:1;cursor:help;
+  border:1.5px solid var(--rule2);color:var(--muted2);background:var(--white)}
+.sb-item[data-rail="validee"] .rail-puce{border-color:var(--green);
+  background:var(--green);color:#fff}
+.sb-item[data-rail="courante"] .rail-puce{border-color:var(--blue);
+  color:var(--blue);animation:rail-battement 1.6s ease-in-out infinite}
+.sb-item[data-rail="verrouillee"] .rail-puce{border-color:var(--orange);
+  color:var(--orange);font-size:9px}
+.sb-item[data-rail="sans_objet"] .rail-puce{opacity:.55}
+.sb-item[data-rail="lue"] .rail-puce{border-color:var(--ink2);color:var(--ink2)}
+@keyframes rail-battement{
+  0%,100%{box-shadow:0 0 0 0 rgba(28,90,138,.34)}
+  50%    {box-shadow:0 0 0 5px rgba(28,90,138,0)}
+}
+.rail-puce[data-tooltip]::after{
+  content:attr(data-tooltip);position:absolute;left:12px;right:8px;
+  top:calc(100% + 4px);background:var(--ink,#111827);color:#fff;
+  font-size:11px;font-weight:400;line-height:1.5;white-space:pre-line;
+  text-align:left;padding:8px 10px;border-radius:7px;z-index:70;
+  box-shadow:0 6px 20px rgba(0,0,0,.28);opacity:0;pointer-events:none;
+  transition:opacity .18s ease}
+.rail-puce[data-tooltip]:hover::after{opacity:1}
+/* L'ONGLET DONT LA BULLE EST OUVERTE PASSE AU-DESSUS DE SES VOISINS —
+   MESURÉ À L'ÉCRAN. Le survol pose un `transform` sur l'onglet, et un
+   `transform` enferme la bulle dans le plan de son onglet : les onglets
+   suivants, peints après, la recouvraient ligne à ligne. Au doigt, c'est la
+   classe d'ouverture de la bulle qui compte, d'où le `:has`. */
+.sb-item[data-rail]:hover,.sb-item[data-rail]:focus-within,
+.sb-item[data-rail]:has(.bulle-ouverte){z-index:6}
+/* SANS ANNEAU QUAND IL N'Y A RIEN À FAIRE : un « ○ » dans un cercle se lisait
+   comme une cible. L'anneau reste aux états qui demandent quelque chose. */
+.sb-item[data-rail="attente"] .rail-puce,
+.sb-item[data-rail="sans_objet"] .rail-puce{border-color:transparent;
+  background:transparent}
+/* ── LE BANDEAU DE L'ÉCRAN : où en est le parcours, ce qui manque, la suite. */
+.rail-bandeau{margin:0 0 18px;padding:12px 14px;border:1px solid var(--rule);
+  border-left:3px solid var(--blue);border-radius:0 10px 10px 0;
+  background:var(--bg2,var(--bg));font-size:12.5px;line-height:1.55;
+  color:var(--ink2)}
+.rail-bandeau[data-etat="validee"]{border-left-color:var(--green)}
+.rail-bandeau[data-etat="lue"]{border-left-color:var(--ink2)}
+.rail-bandeau[data-etat="verrouillee"]{border-left-color:var(--orange)}
+.rail-bandeau[data-etat="sans_objet"]{border-left-color:var(--rule2)}
+.rail-tete{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline}
+.rail-tete b{color:var(--ink)}
+.rail-nature{font-size:11px;color:var(--muted2)}
+.rail-barre{height:4px;border-radius:2px;background:var(--rule);
+  margin:9px 0 7px;overflow:hidden}
+.rail-barre i{display:block;height:100%;background:var(--green)}
+.rail-manque ul{margin:6px 0 0;padding-left:18px}
+.rail-manque li{margin:2px 0}
+.rail-reste{color:var(--muted2);font-style:italic}
+.rail-reserve{margin-top:8px;font-size:11px;color:var(--muted2)}
+.rail-auto{display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+  margin-top:10px;padding:8px 10px;border-radius:8px;
+  background:rgba(45,122,71,.10);color:var(--ink)}
+.rail-pied{margin:22px 0 0;padding-top:14px;border-top:1px dashed var(--rule);
+  display:flex;flex-wrap:wrap;gap:10px;align-items:center;font-size:12px;
+  color:var(--muted)}
+@media(prefers-reduced-motion:reduce){
+  .sb-item[data-rail="courante"] .rail-puce{animation:none;border-width:2.5px}
+}
 /* ── CE QUI MANQUE, NOMMÉ. Un bloc qui bat sans dire ce qu'il attend
       n'est pas un guidage, c'est une humeur. */
 .dr-manque{width:100%;margin-top:11px;padding-top:11px;
@@ -3478,7 +3557,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
          module où un client calcule SA propre empreinte numérique, et deux
          modules de même nom se seraient écrasés en silence. -->
     <div class="sb-item" data-grp="evaluer-le-risque" role="button" tabindex="0" onclick="go('empreinte-parc',this,'ÉVALUER LE RISQUE','Empreinte environnementale du parc')" title="Ce que pèse le parc sur tout son cycle de vie : électricité, CO₂e, fabrication amortie et les deux eaux."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 21c-4-2.5-6-5.5-6-9a6 6 0 0 1 12 0c0 3.5-2 6.5-6 9z"/><path d="M12 21V9"/><path d="M12 13l3-3M12 15l-3-3"/></svg></span><span data-i18n="nav.item.empreinte-parc">Empreinte environnementale</span></div>
-    <div class="sb-item" data-grp="evaluer-le-risque" role="button" tabindex="0" onclick="go('audit-ia-act',this,'ÉVALUER LE RISQUE','Audit IA Act')" title="Audit de conformité structuré, Règlement (UE) 2024/1689."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 11l3 3 8-8"/><path d="M21 12a9 9 0 1 1-9-9"/></svg></span><span data-i18n="nav.item.audit-ia-act">Audit IA Act</span></div>
+    <div class="sb-item" data-norme="ia_act" data-grp="evaluer-le-risque" role="button" tabindex="0" onclick="go('audit-ia-act',this,'ÉVALUER LE RISQUE','Audit IA Act')" title="Audit de conformité structuré, Règlement (UE) 2024/1689."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 11l3 3 8-8"/><path d="M21 12a9 9 0 1 1-9-9"/></svg></span><span data-i18n="nav.item.audit-ia-act">Audit IA Act</span></div>
     <div class="sb-item" data-grp="evaluer-le-risque" role="button" tabindex="0" onclick="go('matrice',this,'ÉVALUER LE RISQUE','Matrice risques')" title="Positionnement de vos systèmes IA selon la probabilité de non-conformité et l’impact potentiel."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 3v18h18"/><circle cx="9" cy="15" r="1.6"/><circle cx="15" cy="9" r="1.6"/><circle cx="18" cy="6" r="1.6"/><circle cx="7" cy="18" r="1.6"/></svg></span><span data-i18n="nav.item.matrice">Matrice risques</span></div>
     <div class="sb-item" data-grp="evaluer-le-risque" role="button" tabindex="0" onclick="go('radar',this,'ÉVALUER LE RISQUE','Radar multi-critères')" title="Votre posture de conformité sur six dimensions réglementaires."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg></span><span data-i18n="nav.item.radar">Radar des risques</span></div>
     <div class="sb-item" data-grp="evaluer-le-risque" role="button" tabindex="0" onclick="go('fria',this,'ÉVALUER LE RISQUE','Évaluation FRIA')" title="Évaluation d’impact sur les droits fondamentaux (Art. 27) — obligation du déployeur, à partir du 2 décembre 2027."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg></span><span data-i18n="nav.item.fria">FRIA</span></div>
@@ -3586,10 +3665,10 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
          les deux jeux ne se recouvrent pas. -->
     <div class="sb-section sb-pliable" data-grp="dora" data-fam="conformite" role="button" tabindex="0" aria-expanded="false" onclick="sbReplier(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sbReplier(this)}" title="Replier ou déplier DORA"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 21h18M5 21V9.5L12 5l7 4.5V21"/><path d="M9.5 21v-5.5h5V21"/></svg><span>DORA — Résilience opérationnelle</span><svg class="sb-chev" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></div>
     <div class="sb-item" data-norme="dora" data-grp="dora" role="button" tabindex="0" onclick="go('dora-qualifier',this,'DORA','Qualification et régime');doraInit()" title="Dans le champ ou non, sous quel regime — et ce que l article 4 de NIS 2 ecarte vraiment"><span class="sb-icon" aria-hidden="true"></span>Qualification et régime</div>
+    <div class="sb-item" data-norme="dora" data-grp="dora" role="button" tabindex="0" onclick="go('dora-iso',this,'DORA','Ce qu\u2019un SMSI apporte déjà');doraInit()" title="Ce qu une certification ISO/IEC 27001 documente deja — et les deux rapports qu elle ne produira jamais"><span class="sb-icon" aria-hidden="true"></span>Ce qu’un SMSI apporte déjà</div>
     <div class="sb-item" data-norme="dora" data-grp="dora" role="button" tabindex="0" onclick="go('dora-risque',this,'DORA','Cadre de gestion du risque');doraInit()" title="Les articles du reglement delegue (UE) 2024/1774 de VOTRE regime, chapitre par chapitre"><span class="sb-icon" aria-hidden="true"></span>Cadre de gestion du risque</div>
     <div class="sb-item" data-norme="dora" data-grp="dora" role="button" tabindex="0" onclick="go('dora-tiers',this,'DORA','Contrats — article 30');doraInit()" title="Neuf clauses communes, six de plus si la fonction est critique — et la derogation micro qui ne vaut que pour une"><span class="sb-icon" aria-hidden="true"></span>Contrats — article 30</div>
     <div class="sb-item" data-norme="dora" data-grp="dora" role="button" tabindex="0" onclick="go('dora-incident',this,'DORA','Incident majeur et délais');doraInit()" title="Cet incident est-il majeur ? Puis les quatre heures, les vingt-quatre heures, les soixante-douze heures et le mois"><span class="sb-icon" aria-hidden="true"></span>Incident majeur et délais</div>
-    <div class="sb-item" data-norme="dora" data-grp="dora" role="button" tabindex="0" onclick="go('dora-iso',this,'DORA','Ce qu\u2019un SMSI apporte déjà');doraInit()" title="Ce qu une certification ISO/IEC 27001 documente deja — et les deux rapports qu elle ne produira jamais"><span class="sb-icon" aria-hidden="true"></span>Ce qu’un SMSI apporte déjà</div>
     <div class="sb-item" data-norme="dora" data-grp="dora" role="button" tabindex="0" onclick="go('dora-supervision',this,'DORA','Prestataire critique — supervision');doraInit()" title="Peut-on etre designe prestataire tiers critique, et ce que la supervision coute — plancher de 50 000 EUR par an"><span class="sb-icon" aria-hidden="true"></span>Prestataire critique — supervision</div>
     <div class="sb-section sb-pliable" data-grp="nis2" data-fam="conformite" role="button" tabindex="0" aria-expanded="false" onclick="sbReplier(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sbReplier(this)}" title="Replier ou déplier NIS 2"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="5" cy="6" r="2.2"/><circle cx="19" cy="6" r="2.2"/><circle cx="12" cy="18" r="2.2"/><path d="M6.6 7.4 10.6 16M17.4 7.4 13.4 16M7.2 6h9.6"/></svg><span>NIS 2 — Entités essentielles</span><svg class="sb-chev" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></div>
     <div class="sb-item" data-norme="nis2" data-grp="nis2" role="button" tabindex="0" onclick="go('nis2-qualifier',this,'NIS 2','Suis-je concerné ?');nis2Init()" title="Essentielle, importante ou hors champ — et le fait qui l a decide : un effet de seuil sur l effectif, pas un jugement sur votre securite"><span class="sb-icon" aria-hidden="true"></span>Suis-je concerné ?</div>

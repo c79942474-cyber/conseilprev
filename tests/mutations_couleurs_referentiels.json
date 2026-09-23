@@ -1,5 +1,5 @@
 {
- "_pourquoi": "Chaque règle des couleurs de référentiel doit tomber sur SON défaut : la palette (moteur), la garde du module, la feuille de style et le balisage. Les mutations qui feraient refuser l'import du module sont portées sur les lignes de la garde elle-même : un refus d'import se lit en erreur de collecte, que le banc prendrait pour une survivante.",
+ "_pourquoi": "Chaque règle des couleurs de référentiel doit tomber sur SON défaut : la palette (moteur), la garde du module, la feuille de style et le balisage. Les mutations qui feraient refuser l'import du module sont portées sur les lignes de la garde elle-même : un refus d'import se lit en erreur de collecte, que le banc prendrait pour une survivante. La mutation d'atteignabilité vise un référentiel à onglet unique : depuis que l'audit IA Act porte aussi son référentiel, retirer le marqueur de la vue d'ensemble IA Act ne le rend plus inatteignable — ce défaut-là est gardé par la règle du rail qui confronte chaque onglet à son bloc.",
  "cibles": [
   "tests/test_couleurs_referentiels.py"
  ],
@@ -166,10 +166,10 @@
    "regle": "test_l_icone_reste_LISIBLE_sur_sa_propre_pastille"
   },
   {
-   "nom": "l'IA Act n'est plus marqué comme référentiel",
+   "nom": "le seul onglet de NIST 800-53 perd son référentiel",
    "fichier": "sentinel.html",
-   "avant": "<div class=\"sb-item\" data-norme=\"ia_act\" data-grp=\"pilotage\"",
-   "apres": "<div class=\"sb-item\" data-grp=\"pilotage\"",
+   "avant": "<div class=\"sb-item\" data-norme=\"nist_800_53\" data-grp=\"nist-ot\"",
+   "apres": "<div class=\"sb-item\" data-grp=\"nist-ot\"",
    "regle": "test_CHAQUE_norme_est_ATTEIGNABLE_depuis_la_barre"
   },
   {

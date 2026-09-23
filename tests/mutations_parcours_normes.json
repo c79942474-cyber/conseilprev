@@ -1,0 +1,344 @@
+{
+ "_pourquoi": "Chaque règle du rail des onze référentiels doit tomber sur SON défaut : le moteur (ce que « rempli » veut dire), sa garde, l'écran (flèche, tabulation, regroupement des appels, collecteurs), la feuille de style (lu non vert, bulle au-dessus des voisins) et les routes. Les défauts qui feraient refuser l'import du module sont portés sur les lignes de la garde elle-même.",
+ "cibles": [
+  "tests/test_parcours_normes.py"
+ ],
+ "mutations": [
+  {
+   "nom": "un écran à lire se valide sans avoir été lu",
+   "fichier": "parcours_normes.py",
+   "avant": "            if b[\"panneau\"] in lus and not absents:",
+   "apres": "            if not absents:",
+   "regle": "test_une_declaration_VIDE_ne_valide_RIEN[rgpd]"
+  },
+  {
+   "nom": "une liste passe au vert sans revue déclarée",
+   "fichier": "parcours_normes.py",
+   "avant": "            if b[\"panneau\"] in revus and not absents and not l[\"manque\"]:",
+   "apres": "            if not absents and not l[\"manque\"]:",
+   "regle": "test_une_REVUE_se_DECLARE_et_ne_se_devine_pas"
+  },
+  {
+   "nom": "un bloc à remplir lit les déclarations « lu »",
+   "fichier": "parcours_normes.py",
+   "avant": "            l[\"manque\"] = list(manque.get(b[\"cle\"]) or [])\n            if not l[\"manque\"] and not absents:",
+   "apres": "            l[\"manque\"] = list(manque.get(b[\"cle\"]) or [])\n            if (not l[\"manque\"] or b[\"panneau\"] in lus) and not absents:",
+   "regle": "test_un_LU_ne_valide_JAMAIS_un_bloc_a_remplir"
+  },
+  {
+   "nom": "NIS 2 lit le verdict d'un formulaire vide",
+   "fichier": "parcours_normes.py",
+   "avant": "        if not secteur:\n            manque.append(_q(\"Le secteur",
+   "apres": "        if False:\n            manque.append(_q(\"Le secteur",
+   "regle": "test_une_declaration_VIDE_ne_valide_RIEN[nis2]"
+  },
+  {
+   "nom": "la taille manquante n'est plus demandée",
+   "fichier": "parcours_normes.py",
+   "avant": "        elif secteur in nis2.SECTEURS and not portes:",
+   "apres": "        elif False:",
+   "regle": "test_la_taille_manquante_est_NOMMEE_pas_comptee"
+  },
+  {
+   "nom": "une porte directe ne suffit plus",
+   "fichier": "parcours_normes.py",
+   "avant": "    directes = [c for c in nis2.ESSENTIELLE_HORS_TAILLE if d.get(c)]",
+   "apres": "    directes = []",
+   "regle": "test_une_porte_DIRECTE_suffit_a_prononcer_la_qualification"
+  },
+  {
+   "nom": "le hors champ ne ferme plus le parcours",
+   "fichier": "parcours_normes.py",
+   "avant": "    if verdict and verdict.get(\"ok\") and verdict[\"statut\"][\"cle\"] == \"hors_champ\":",
+   "apres": "    if False:",
+   "regle": "test_AUCUNE_des_deux_annexes_est_une_REPONSE_et_ferme_le_parcours"
+  },
+  {
+   "nom": "l'objectif 16 s'impose à une entité importante",
+   "fichier": "parcours_normes.py",
+   "avant": "        if statut == \"importante\":\n            sans_objet[\"recyf_analyse\"]",
+   "apres": "        if False:\n            sans_objet[\"recyf_analyse\"]",
+   "regle": "test_l_analyse_ReCyF_est_SANS_OBJET_pour_une_entite_importante"
+  },
+  {
+   "nom": "une mesure NIS 2 disparaît de la liste",
+   "fichier": "parcours_normes.py",
+   "avant": "_q(\"Mesure %s) — %s\" % (cle, nom)) for cle, nom, _dit in nis2.MESURES\n",
+   "apres": "_q(\"Mesure %s) — %s\" % (cle, nom)) for cle, nom, _dit in nis2.MESURES[:9]\n",
+   "regle": "test_les_manques_sont_COMPTES_PAR_LES_MODULES_pas_ici"
+  },
+  {
+   "nom": "l'encouragement devient obligatoire",
+   "fichier": "parcours_normes.py",
+   "avant": "        if g[\"cle\"] in nis2.GOUVERNANCE_OBLIGATOIRE\n        and gouv.get",
+   "apres": "        if True\n        and gouv.get",
+   "regle": "test_les_manques_sont_COMPTES_PAR_LES_MODULES_pas_ici"
+  },
+  {
+   "nom": "les dates de l'appréciation ne sont plus demandées",
+   "fichier": "parcours_normes.py",
+   "avant": "    if not str(c.get(\"etabli_le\") or \"\").strip():",
+   "apres": "    if False:",
+   "regle": "test_l_appreciation_ISO27001_attend_SES_DEUX_DATES"
+  },
+  {
+   "nom": "une ligne de risque incomplète passe",
+   "fichier": "parcours_normes.py",
+   "avant": "            for df in a[\"defauts\"]:",
+   "apres": "            for df in []:",
+   "regle": "test_une_ligne_de_risque_INCOMPLETE_est_nommee_avec_ce_qui_lui_manque"
+  },
+  {
+   "nom": "une mesure non justifiée passe",
+   "fichier": "parcours_normes.py",
+   "avant": "        + [_q(\"%s %s — justification\" % (n, titre(n)))\n           for n in s[\"sans_justification\"]]\n        + [_q(\"%s %s — statut de mise en œuvre\" % (n, titre(n)))",
+   "apres": "        + [_q(\"%s %s — statut de mise en œuvre\" % (n, titre(n)))",
+   "regle": "test_une_mesure_decidee_SANS_justification_n_est_pas_renseignee"
+  },
+  {
+   "nom": "le rôle CRA se lit sur le verdict",
+   "fichier": "parcours_normes.py",
+   "avant": "    manque[\"role\"] = ([] if any(role.get(k) for k in CRA_ROLE_CLES) else",
+   "apres": "    manque[\"role\"] = ([] if True else",
+   "regle": "test_une_declaration_VIDE_ne_valide_RIEN[cra]"
+  },
+  {
+   "nom": "un produit sans nom compte",
+   "fichier": "parcours_normes.py",
+   "avant": "              if isinstance(p, dict) and str(p.get(\"nom\") or \"\").strip()]",
+   "apres": "              if isinstance(p, dict)]",
+   "regle": "test_un_produit_SANS_NOM_ne_remplit_pas_le_registre_CRA"
+  },
+  {
+   "nom": "un booléen passe pour un chiffre d'affaires",
+   "fichier": "parcours_normes.py",
+   "avant": "    return isinstance(v, (int, float)) and not isinstance(v, bool) and v >= 0",
+   "apres": "    return isinstance(v, (int, float)) and v >= 0",
+   "regle": "test_le_chiffre_d_affaires_est_un_NOMBRE_ou_il_manque[booleen]"
+  },
+  {
+   "nom": "le socle 800-53 n'est plus demandé",
+   "fichier": "parcours_normes.py",
+   "avant": "    m = ([] if d.get(\"socle\") in nist_800_53.SOCLES else",
+   "apres": "    m = ([] if True else",
+   "regle": "test_les_manques_sont_COMPTES_PAR_LES_MODULES_pas_ici"
+  },
+  {
+   "nom": "un registre RGPD vide est rempli",
+   "fichier": "parcours_normes.py",
+   "avant": "    if not traitements:\n        m.append(_q(\"Au moins un traitement au registre\"))",
+   "apres": "    if False:\n        m.append(_q(\"Au moins un traitement au registre\"))",
+   "regle": "test_une_declaration_VIDE_ne_valide_RIEN[rgpd]"
+  },
+  {
+   "nom": "les champs vides d'un traitement ne sont plus nommés",
+   "fichier": "parcours_normes.py",
+   "avant": "        vides = [nom for cle, nom in RGPD_CHAMPS_ART30 if not champs.get(cle)]",
+   "apres": "        vides = []",
+   "regle": "test_le_registre_RGPD_nomme_le_traitement_ET_ses_champs_vides"
+  },
+  {
+   "nom": "tous les blocs non faits battent",
+   "fichier": "parcours_normes.py",
+   "avant": "        if courante is None:\n            courante = l[\"cle\"]",
+   "apres": "        if True:\n            courante = l[\"cle\"]",
+   "regle": "test_UN_SEUL_bloc_bat[nis2-qualifie]"
+  },
+  {
+   "nom": "le suivant saute les blocs verrouillés",
+   "fichier": "parcours_normes.py",
+   "avant": "        reste = [l for l in lignes if l[\"rang\"] > rang\n                 and l[\"etat\"] != \"sans_objet\"]",
+   "apres": "        reste = [l for l in lignes if l[\"rang\"] > rang\n                 and l[\"etat\"] not in (\"sans_objet\", \"verrouillee\")]",
+   "regle": "test_le_SUIVANT_est_le_bloc_d_apres_MEME_verrouille"
+  },
+  {
+   "nom": "les prérequis ne verrouillent plus",
+   "fichier": "parcours_normes.py",
+   "avant": "        absents = [p for p in b[\"prerequis\"] if p not in valides]",
+   "apres": "        absents = []",
+   "regle": "test_le_VERROU_nomme_le_bloc_dont_il_depend"
+  },
+  {
+   "nom": "la conclusion ne dit plus qui juge",
+   "fichier": "parcours_normes.py",
+   "avant": "               QUI_JUGE[norme]))",
+   "apres": "               \"le marché\"))",
+   "regle": "test_la_conclusion_dit_QUI_JUGE_et_ne_se_felicite_pas"
+  },
+  {
+   "nom": "la garde laisse un prérequis postérieur",
+   "fichier": "parcours_normes.py",
+   "avant": "                elif BLOCS_PAR_NORME[n][p][\"rang\"] >= b[\"rang\"]:",
+   "apres": "                elif False:",
+   "regle": "test_la_GARDE_nomme_le_parcours_qui_se_contredit[prerequis-apres]"
+  },
+  {
+   "nom": "la garde laisse un prérequis inconnu",
+   "fichier": "parcours_normes.py",
+   "avant": "                if p not in BLOCS_PAR_NORME[n]:\n                    fautes.append",
+   "apres": "                if False:\n                    fautes.append",
+   "regle": "test_la_GARDE_nomme_le_parcours_qui_se_contredit[prerequis-inconnu]"
+  },
+  {
+   "nom": "la garde laisse un premier bloc verrouillé",
+   "fichier": "parcours_normes.py",
+   "avant": "        if bs and bs[0][\"prerequis\"]:",
+   "apres": "        if False:",
+   "regle": "test_la_GARDE_nomme_le_parcours_qui_se_contredit[premier-bloque]"
+  },
+  {
+   "nom": "la garde laisse une nature inconnue",
+   "fichier": "parcours_normes.py",
+   "avant": "            if b[\"nature\"] not in NATURES:",
+   "apres": "            if False:",
+   "regle": "test_la_GARDE_nomme_le_parcours_qui_se_contredit[nature]"
+  },
+  {
+   "nom": "la garde laisse un champ vide",
+   "fichier": "parcours_normes.py",
+   "avant": "                if not b.get(champ):\n                    fautes.append(\"%s/%s : %s manquant\"",
+   "apres": "                if False:\n                    fautes.append(\"%s/%s : %s manquant\"",
+   "regle": "test_la_GARDE_nomme_le_parcours_qui_se_contredit[champ-vide]"
+  },
+  {
+   "nom": "la garde laisse « lu » prendre le vert",
+   "fichier": "parcours_normes.py",
+   "avant": "    if ETATS[\"lue\"][\"couleur\"] == ETATS[\"validee\"][\"couleur\"]:",
+   "apres": "    if False:",
+   "regle": "test_la_GARDE_refuse_que_LU_prenne_le_vert"
+  },
+  {
+   "nom": "la garde laisse deux états battre",
+   "fichier": "parcours_normes.py",
+   "avant": "    if len(ANIMES) != 1 or ANIMES[0] != \"courante\":",
+   "apres": "    if False:",
+   "regle": "test_la_GARDE_refuse_DEUX_etats_qui_battent"
+  },
+  {
+   "nom": "la garde laisse un écran dans deux parcours",
+   "fichier": "parcours_normes.py",
+   "avant": "            if b[\"panneau\"] in panneaux:",
+   "apres": "            if False:",
+   "regle": "test_la_GARDE_refuse_un_ecran_dans_DEUX_parcours"
+  },
+  {
+   "nom": "le bloc attendu perd sa flèche vers le bas",
+   "fichier": "sentinel.page.js",
+   "avant": "puce.textContent = (b.etat === 'courante') ? '↓' : (e.puce || '');",
+   "apres": "puce.textContent = (b.etat === 'courante') ? '▶' : (e.puce || '');",
+   "regle": "test_la_pastille_du_bloc_attendu_est_la_FLECHE_VERS_LE_BAS"
+  },
+  {
+   "nom": "les pastilles entrent dans la tabulation",
+   "fichier": "sentinel.page.js",
+   "avant": "      puce.setAttribute('tabindex', '-1');",
+   "apres": "      puce.setAttribute('tabindex', '0');",
+   "regle": "test_la_pastille_reste_HORS_de_la_tabulation_mais_DIT_son_etat"
+  },
+  {
+   "nom": "chaque réponse fait son appel",
+   "fichier": "sentinel.page.js",
+   "avant": "  }, tout_de_suite ? 0 : 600);",
+   "apres": "  }, tout_de_suite ? 0 : 0);",
+   "regle": "test_UNE_rafale_de_reponses_fait_UN_appel"
+  },
+  {
+   "nom": "go() ne repeint plus le rail",
+   "fichier": "sentinel.page.js",
+   "avant": "  if (typeof window.railApresGo === 'function') _apresPeinture(function () { window.railApresGo(id); });\n",
+   "apres": "",
+   "regle": "test_le_rail_se_redemande_a_l_OUVERTURE_d_un_ecran_et_d_un_TIROIR"
+  },
+  {
+   "nom": "DORA ne peint plus sa barre",
+   "fichier": "sentinel.page.js",
+   "avant": "  if (typeof window.railPeindreBarre === 'function') window.railPeindreBarre('dora', p);\n",
+   "apres": "",
+   "regle": "test_DORA_peint_aussi_ses_onglets_de_la_barre"
+  },
+  {
+   "nom": "OWASP perd son collecteur",
+   "fichier": "sentinel.page.js",
+   "avant": "  owasp_llm: function () { return { etats: OWASP_DECL }; },\n",
+   "apres": "",
+   "regle": "test_l_ecran_rassemble_les_DIX_referentiels_du_moteur"
+  },
+  {
+   "nom": "le collecteur RGPD envoie le texte du registre",
+   "fichier": "sentinel.page.js",
+   "avant": "      champs.forEach(function (k) { c[k] = !!String(t[k] || '').trim(); });",
+   "apres": "      champs.forEach(function (k) { c[k] = t[k]; });",
+   "regle": "test_le_collecteur_RGPD_n_envoie_PAS_le_texte_du_registre"
+  },
+  {
+   "nom": "« aucune des deux annexes » change de valeur",
+   "fichier": "sentinel.page.js",
+   "avant": "+ '<option value=\"hors_annexes\">Aucune des deux annexes",
+   "apres": "+ '<option value=\"aucune\">Aucune des deux annexes",
+   "regle": "test_la_valeur_hors_annexes_de_l_ecran_est_CELLE_DU_MOTEUR"
+  },
+  {
+   "nom": "« lu » prend le vert à l'écran",
+   "fichier": "sentinel.html",
+   "avant": ".sb-item[data-rail=\"lue\"] .rail-puce{border-color:var(--ink2);color:var(--ink2)}",
+   "apres": ".sb-item[data-rail=\"lue\"] .rail-puce{border-color:var(--green);color:var(--ink2)}",
+   "regle": "test_LU_n_est_PAS_vert_ni_dans_le_moteur_ni_a_l_ecran"
+  },
+  {
+   "nom": "la bulle repasse sous les onglets voisins",
+   "fichier": "sentinel.html",
+   "avant": ".sb-item[data-rail]:has(.bulle-ouverte){z-index:6}",
+   "apres": ".sb-item[data-rail]:has(.bulle-ouverte){z-index:auto}",
+   "regle": "test_la_bulle_passe_AU_DESSUS_des_onglets_voisins"
+  },
+  {
+   "nom": "la bulle déborde à droite de la barre",
+   "fichier": "sentinel.html",
+   "avant": "content:attr(data-tooltip);position:absolute;left:12px;right:8px;",
+   "apres": "content:attr(data-tooltip);position:absolute;left:100%;right:auto;",
+   "regle": "test_la_bulle_s_ouvre_DANS_la_largeur_de_la_barre"
+  },
+  {
+   "nom": "le vert du rail n'est plus celui de DORA",
+   "fichier": "sentinel.html",
+   "avant": ".sb-item[data-rail=\"validee\"] .rail-puce{border-color:var(--green);",
+   "apres": ".sb-item[data-rail=\"validee\"] .rail-puce{border-color:var(--teal);",
+   "regle": "test_les_couleurs_du_rail_sont_celles_du_RAIL_DORA"
+  },
+  {
+   "nom": "l'onglet SMSI de DORA retombe après l'analyse de risque",
+   "fichier": "sentinel.html",
+   "avant": "    <div class=\"sb-item\" data-norme=\"dora\" data-grp=\"dora\" role=\"button\" tabindex=\"0\" onclick=\"go('dora-iso',this,'DORA','Ce qu\\u2019un SMSI apporte déjà');doraInit()\" title=\"Ce qu une certification ISO/IEC 27001 documente deja — et les deux rapports qu elle ne produira jamais\"><span class=\"sb-icon\" aria-hidden=\"true\"></span>Ce qu’un SMSI apporte déjà</div>\n    <div class=\"sb-item\" data-norme=\"dora\" data-grp=\"dora\" role=\"button\" tabindex=\"0\" onclick=\"go('dora-risque',this,'DORA','Cadre de gestion du risque');doraInit()\" title=\"Les articles du reglement delegue (UE) 2024/1774 de VOTRE regime, chapitre par chapitre\"><span class=\"sb-icon\" aria-hidden=\"true\"></span>Cadre de gestion du risque</div>",
+   "apres": "    <div class=\"sb-item\" data-norme=\"dora\" data-grp=\"dora\" role=\"button\" tabindex=\"0\" onclick=\"go('dora-risque',this,'DORA','Cadre de gestion du risque');doraInit()\" title=\"Les articles du reglement delegue (UE) 2024/1774 de VOTRE regime, chapitre par chapitre\"><span class=\"sb-icon\" aria-hidden=\"true\"></span>Cadre de gestion du risque</div>\n    <div class=\"sb-item\" data-norme=\"dora\" data-grp=\"dora\" role=\"button\" tabindex=\"0\" onclick=\"go('dora-iso',this,'DORA','Ce qu\\u2019un SMSI apporte déjà');doraInit()\" title=\"Ce qu une certification ISO/IEC 27001 documente deja — et les deux rapports qu elle ne produira jamais\"><span class=\"sb-icon\" aria-hidden=\"true\"></span>Ce qu’un SMSI apporte déjà</div>",
+   "regle": "test_DORA_aussi_a_sa_barre_dans_l_ordre_de_SON_rail"
+  },
+  {
+   "nom": "l'audit IA Act perd son référentiel",
+   "fichier": "sentinel.html",
+   "avant": "<div class=\"sb-item\" data-norme=\"ia_act\" data-grp=\"evaluer-le-risque\"",
+   "apres": "<div class=\"sb-item\" data-grp=\"evaluer-le-risque\"",
+   "regle": "test_chaque_bloc_est_UN_ONGLET_de_la_barre_dans_le_MEME_ordre[ia_act]"
+  },
+  {
+   "nom": "la route du rail prend la cadence d'un calcul",
+   "fichier": "app.py",
+   "avant": "@app.route('/api/parcours/<norme>', methods=['POST'])\n@rate_limit(limit=240, window=60)",
+   "apres": "@app.route('/api/parcours/<norme>', methods=['POST'])\n@rate_limit(limit=60, window=60)",
+   "regle": "test_la_route_du_rail_a_la_CADENCE_du_rail_DORA"
+  },
+  {
+   "nom": "une norme inconnue n'est plus un 404",
+   "fichier": "app.py",
+   "avant": "    return jsonify(r), (200 if r.get(\"ok\") else 404)",
+   "apres": "    return jsonify(r), (200 if r.get(\"ok\") else 400)",
+   "regle": "test_les_routes_rendent_le_referentiel_et_l_avancement"
+  },
+  {
+   "nom": "la barre DORA redemande son avancement à DORA",
+   "fichier": "sentinel.page.js",
+   "avant": "    if (typeof DORA_PARCOURS !== 'undefined' && DORA_PARCOURS) railPeindreBarre('dora', DORA_PARCOURS);\n    else if (typeof DORA_REF !== 'undefined' && DORA_REF) doraParcours();",
+   "apres": "    if (typeof DORA_REF !== 'undefined' && DORA_REF) doraParcours();",
+   "regle": "test_la_barre_DORA_se_peint_SANS_recalculer_DORA"
+  }
+ ]
+}
