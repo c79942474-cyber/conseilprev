@@ -273,8 +273,8 @@
   {
    "nom": "« aucune des deux annexes » change de valeur",
    "fichier": "sentinel.page.js",
-   "avant": "+ '<option value=\"hors_annexes\">Aucune des deux annexes",
-   "apres": "+ '<option value=\"aucune\">Aucune des deux annexes",
+   "avant": "+ '<option value=\"hors_annexes\"' + choisi('hors_annexes')",
+   "apres": "+ '<option value=\"aucune\"' + choisi('hors_annexes')",
    "regle": "test_la_valeur_hors_annexes_de_l_ecran_est_CELLE_DU_MOTEUR"
   },
   {

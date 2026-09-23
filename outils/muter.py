@@ -126,13 +126,25 @@ def lancer(cibles, racine=RACINE):
 
 def tombees(sortie):
     """Les règles tombées. Une ERREUR de collecte compte aussi : elle dit
-    que le module ne se charge plus, et c'est une chute, pas une survie."""
+    que le module ne se charge plus, et c'est une chute, pas une survie.
+
+    LES LIGNES DU JOURNAL NE SONT PAS DES CHUTES. Une règle qui tombe affiche
+    le journal capturé pendant son exécution, dont les lignes commencent
+    aussi par « ERROR » — mais suivi de l'alignement du niveau, puis du nom
+    du journal : « ERROR    conseilprev:app.py:76 … ». Mesuré : les cinq
+    avertissements du démarrage de l'application étaient comptés comme cinq
+    règles tombées de plus. Le résumé, lui, met UNE espace après le mot,
+    puis le fichier de règles."""
     noms = set()
     for l in sortie.splitlines():
         for prefixe in ("FAILED ", "ERROR "):
-            if l.startswith(prefixe):
-                lieu = l[len(prefixe):].split(" - ")[0]
-                noms.add(lieu.split("::")[-1].split()[0])
+            if not l.startswith(prefixe):
+                continue
+            reste = l[len(prefixe):]
+            if reste[:1] in ("", " "):
+                continue
+            lieu = reste.split(" - ")[0]
+            noms.add(lieu.split("::")[-1].split()[0])
     return sorted(noms)
 
 

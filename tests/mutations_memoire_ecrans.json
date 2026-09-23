@@ -1,0 +1,420 @@
+{
+ "cibles": [
+  "tests/test_memoire_ecrans.py"
+ ],
+ "mutations": [
+  {
+   "nom": "la mémoire n'est jamais relue au chargement",
+   "fichier": "sentinel.page.js",
+   "avant": "window.memoireEffacer = memoireEffacer;\n\nmemoireRelire();",
+   "apres": "window.memoireEffacer = memoireEffacer;\n\n// memoireRelire();",
+   "regle": "test_apres_rechargement_le_rail_et_le_taux_lisent_les_memes_declarations[nis2]"
+  },
+  {
+   "nom": "rien n'est jamais écrit",
+   "fichier": "sentinel.page.js",
+   "avant": "    if (txt === MEMOIRE_ECRIT[n]) return;",
+   "apres": "    if (txt === MEMOIRE_ECRIT[n] || true) return;",
+   "regle": "test_apres_rechargement_le_rail_et_le_taux_lisent_les_memes_declarations[iso27001]"
+  },
+  {
+   "nom": "l'écriture part AVANT le gestionnaire du champ",
+   "fichier": "sentinel.page.js",
+   "avant": "  MEMOIRE_ATTENTE = setTimeout(memoireEcrire, 250);",
+   "apres": "  memoireEcrire();",
+   "regle": "test_une_reponse_est_ecrite_APRES_son_gestionnaire"
+  },
+  {
+   "nom": "la page qui part n'écrit pas ce qui attendait",
+   "fichier": "sentinel.page.js",
+   "avant": "window.addEventListener('pagehide', memoireEcrire);",
+   "apres": "window.addEventListener('pagehide', function () {});",
+   "regle": "test_une_reponse_suivie_d_un_rechargement_immediat_n_est_pas_perdue"
+  },
+  {
+   "nom": "l'état relu n'est pas pris comme déjà écrit",
+   "fichier": "sentinel.page.js",
+   "avant": "    try { MEMOIRE_ECRIT[n] = JSON.stringify(m.lire()); } catch (e) {}\n  });\n}",
+   "apres": "  });\n}",
+   "regle": "test_rien_n_est_ecrit_tant_que_rien_n_a_ete_repondu"
+  },
+  {
+   "nom": "une mémoire illisible fait tomber le chargement",
+   "fichier": "sentinel.page.js",
+   "avant": "    if (brut) { try { o = JSON.parse(brut); } catch (e) { o = null; } }",
+   "apres": "    if (brut) { o = JSON.parse(brut); }",
+   "regle": "test_une_memoire_illisible_ne_coute_que_son_propre_ecran"
+  },
+  {
+   "nom": "un référentiel du rail sort de la mémoire",
+   "fichier": "sentinel.page.js",
+   "avant": "  dora: { norme: 'dora', nom: 'DORA', cle: 'cp-sentinel-dora-v1',",
+   "apres": "  dora: { norme: 'dora_', nom: 'DORA', cle: 'cp-sentinel-dora-v1',",
+   "regle": "test_chaque_referentiel_du_rail_garde_ses_reponses_quelque_part"
+  },
+  {
+   "nom": "un nombre accepte du texte",
+   "fichier": "sentinel.page.js",
+   "avant": "    case 'nombre?': return (v === null || (typeof v === 'number' && isFinite(v))) ? v : undefined;",
+   "apres": "    case 'nombre?': return v;",
+   "regle": "test_une_valeur_d_un_autre_type_est_ecartee_pas_recopiee"
+  },
+  {
+   "nom": "le seuil d'acceptation accepte le vide",
+   "fichier": "sentinel.page.js",
+   "avant": "    case 'nombre': return (typeof v === 'number' && isFinite(v)) ? v : undefined;",
+   "apres": "    case 'nombre': return v;",
+   "regle": "test_une_valeur_d_un_autre_type_est_ecartee_pas_recopiee"
+  },
+  {
+   "nom": "un texte accepte un nombre",
+   "fichier": "sentinel.page.js",
+   "avant": "    case 'texte': return typeof v === 'string' ? v : undefined;",
+   "apres": "    case 'texte': return v;",
+   "regle": "test_une_valeur_d_un_autre_type_est_ecartee_pas_recopiee"
+  },
+  {
+   "nom": "une réponse oui/non accepte « oui »",
+   "fichier": "sentinel.page.js",
+   "avant": "    case 'oui_non?': return (v === null || typeof v === 'boolean') ? v : undefined;",
+   "apres": "    case 'oui_non?': return v;",
+   "regle": "test_une_valeur_d_un_autre_type_est_ecartee_pas_recopiee"
+  },
+  {
+   "nom": "une case accepte « oui »",
+   "fichier": "sentinel.page.js",
+   "avant": "    case 'booleen': return typeof v === 'boolean' ? v : undefined;",
+   "apres": "    case 'booleen': return v;",
+   "regle": "test_une_valeur_d_un_autre_type_est_ecartee_pas_recopiee"
+  },
+  {
+   "nom": "une table de réponses garde ses entrées abîmées",
+   "fichier": "sentinel.page.js",
+   "avant": "    case 'textes': return objet(v) ? garder(v, function (x) { return typeof x === 'string'; }) : undefined;",
+   "apres": "    case 'textes': return objet(v) ? v : undefined;",
+   "regle": "test_une_valeur_d_un_autre_type_est_ecartee_pas_recopiee"
+  },
+  {
+   "nom": "une table de portes garde ses entrées abîmées",
+   "fichier": "sentinel.page.js",
+   "avant": "    case 'drapeaux': return objet(v) ? garder(v, function (x) { return x === true; }) : undefined;",
+   "apres": "    case 'drapeaux': return objet(v) ? v : undefined;",
+   "regle": "test_une_valeur_d_un_autre_type_est_ecartee_pas_recopiee"
+  },
+  {
+   "nom": "une table de mesures garde ses entrées abîmées",
+   "fichier": "sentinel.page.js",
+   "avant": "    case 'objets': return objet(v) ? garder(v, objet) : undefined;",
+   "apres": "    case 'objets': return objet(v) ? v : undefined;",
+   "regle": "test_une_valeur_d_un_autre_type_est_ecartee_pas_recopiee"
+  },
+  {
+   "nom": "une liste garde ses éléments abîmés",
+   "fichier": "sentinel.page.js",
+   "avant": "    case 'liste_objets': return Array.isArray(v) ? v.filter(objet) : undefined;",
+   "apres": "    case 'liste_objets': return Array.isArray(v) ? v : undefined;",
+   "regle": "test_une_valeur_d_un_autre_type_est_ecartee_pas_recopiee"
+  },
+  {
+   "nom": "une liste d'entrées garde ses éléments abîmés",
+   "fichier": "sentinel.page.js",
+   "avant": "      return Array.isArray(v) ? v.filter(function (x) { return typeof x === 'string'; }) : undefined;",
+   "apres": "      return Array.isArray(v) ? v : undefined;",
+   "regle": "test_une_valeur_d_un_autre_type_est_ecartee_pas_recopiee"
+  },
+  {
+   "nom": "une chaîne passe pour un objet",
+   "fichier": "sentinel.page.js",
+   "avant": "  var objet = function (x) { return !!x && typeof x === 'object' && !Array.isArray(x); };",
+   "apres": "  var objet = function (x) { return !!x; };",
+   "regle": "test_une_valeur_d_un_autre_type_est_ecartee_pas_recopiee"
+  },
+  {
+   "nom": "les critères imbriqués ne sont pas relus",
+   "fichier": "sentinel.page.js",
+   "avant": "    if (typeof schema[k] === 'object') { _memFondre(cible[k], source[k], schema[k]); return; }",
+   "apres": "    if (typeof schema[k] === 'object') { return; }",
+   "regle": "test_ISO27001_le_perimetre_et_les_deux_dates_sont_reaffiches"
+  },
+  {
+   "nom": "le chiffre d'affaires du groupe n'est pas relu",
+   "fichier": "sentinel.page.js",
+   "avant": "      _memPoser('nis2-ca', m.ca_groupe);\n",
+   "apres": "",
+   "regle": "test_NIS2_la_qualification_est_reaffichee"
+  },
+  {
+   "nom": "la qualification ReCyF n'est pas relue",
+   "fichier": "sentinel.page.js",
+   "avant": "      _memPoser('recyf-statut-sel', m.statut);\n",
+   "apres": "",
+   "regle": "test_RECYF_la_qualification_et_l_objectif_16_sont_reaffiches"
+  },
+  {
+   "nom": "les objectifs ReCyF ne sont pas relus",
+   "fichier": "sentinel.page.js",
+   "avant": "RECYF_ETATS[k] = e[k];",
+   "apres": "RECYF_ETATS[k] = RECYF_ETATS[k];",
+   "regle": "test_apres_rechargement_le_rail_et_le_taux_lisent_les_memes_declarations[nis2]"
+  },
+  {
+   "nom": "l'objectif 16 n'est pas relu",
+   "fichier": "sentinel.page.js",
+   "avant": "      _memFondre(RECYF_ANALYSE, m.analyse, { gouvernance: 'booleen',",
+   "apres": "      _memFondre({}, m.analyse, { gouvernance: 'booleen',",
+   "regle": "test_RECYF_la_qualification_et_l_objectif_16_sont_reaffiches"
+  },
+  {
+   "nom": "les risques ISO 27001 ne sont pas relus",
+   "fichier": "sentinel.page.js",
+   "avant": "        risques: 'liste_objets', mesures: 'objets', articles: 'textes' });",
+   "apres": "        mesures: 'objets', articles: 'textes' });",
+   "regle": "test_apres_rechargement_le_rail_et_le_taux_lisent_les_memes_declarations[iso27001]"
+  },
+  {
+   "nom": "la déclaration d'applicabilité ISO 42001 n'est pas relue",
+   "fichier": "sentinel.page.js",
+   "avant": "      _memFondre(ISO_ETAT, m, { mesures: 'objets', articles: 'textes' });",
+   "apres": "      _memFondre(ISO_ETAT, m, { articles: 'textes' });",
+   "regle": "test_apres_rechargement_le_rail_et_le_taux_lisent_les_memes_declarations[iso42001]"
+  },
+  {
+   "nom": "le registre des produits CRA n'est pas relu",
+   "fichier": "sentinel.page.js",
+   "avant": "      _memFondre(CRA_ETAT, m, { produits: 'liste_objets', ecarts: 'textes' });",
+   "apres": "      _memFondre(CRA_ETAT, m, { ecarts: 'textes' });",
+   "regle": "test_apres_rechargement_le_rail_et_le_taux_lisent_les_memes_declarations[cra]"
+  },
+  {
+   "nom": "le rôle CRA n'est pas relu",
+   "fichier": "sentinel.page.js",
+   "avant": "          if (typeof m.role[q.k] === 'boolean') CRA_ROLE_ETAT[q.k] = m.role[q.k];",
+   "apres": "          if (false) CRA_ROLE_ETAT[q.k] = m.role[q.k];",
+   "regle": "test_apres_rechargement_le_rail_et_le_taux_lisent_les_memes_declarations[cra]"
+  },
+  {
+   "nom": "le chiffre d'affaires CRA n'est pas relu",
+   "fichier": "sentinel.page.js",
+   "avant": "      _memPoser('cra-ca', m.ca);\n",
+   "apres": "",
+   "regle": "test_CRA_le_role_l_ecart_et_le_registre_sont_reaffiches"
+  },
+  {
+   "nom": "les portes DORA ne sont pas relues",
+   "fichier": "sentinel.page.js",
+   "avant": "          if (k !== 'entite' && k !== 'identifiee_nis2' && d[k] === true) DORA_DECL[k] = true;",
+   "apres": "          if (false) DORA_DECL[k] = true;",
+   "regle": "test_apres_rechargement_le_rail_et_le_taux_lisent_les_memes_declarations[dora]"
+  },
+  {
+   "nom": "les articles DORA ne sont pas relus",
+   "fichier": "sentinel.page.js",
+   "avant": "DORA_ETATS[k] = e[k];",
+   "apres": "DORA_ETATS[k] = DORA_ETATS[k];",
+   "regle": "test_apres_rechargement_le_rail_et_le_taux_lisent_les_memes_declarations[dora]"
+  },
+  {
+   "nom": "la liste ISO de DORA n'est pas reposée",
+   "fichier": "sentinel.page.js",
+   "avant": "      var sel = document.getElementById('dora-iso-certifie');",
+   "apres": "      var sel = document.getElementById('dora-iso-certifie-x');",
+   "regle": "test_DORA_la_qualification_est_reaffichee"
+  },
+  {
+   "nom": "la liste ISO de DORA perd son identifiant",
+   "fichier": "sentinel.html",
+   "avant": "<select id=\"dora-iso-certifie\" class=\"cnf-in\"",
+   "apres": "<select class=\"cnf-in\"",
+   "regle": "test_DORA_la_qualification_est_reaffichee"
+  },
+  {
+   "nom": "NIS 2 : le secteur se peint à vide",
+   "fichier": "sentinel.page.js",
+   "avant": "  var choisi = function (v) { return st.secteur === v ? ' selected' : ''; };",
+   "apres": "  var choisi = function (v) { return ''; };",
+   "regle": "test_NIS2_la_qualification_est_reaffichee"
+  },
+  {
+   "nom": "NIS 2 : les nombres se peignent à vide",
+   "fichier": "sentinel.page.js",
+   "avant": "    return (v === null || v === undefined) ? '' : ' value=\"' + nis2Esc(v) + '\"'; };",
+   "apres": "    return ''; };",
+   "regle": "test_NIS2_la_qualification_est_reaffichee"
+  },
+  {
+   "nom": "NIS 2 : les portes se peignent décochées",
+   "fichier": "sentinel.page.js",
+   "avant": "(st.portes[h.cle] ? ' checked' : '')",
+   "apres": "''",
+   "regle": "test_NIS2_la_qualification_est_reaffichee"
+  },
+  {
+   "nom": "ReCyF : l'exigence se peint depuis la réponse du serveur",
+   "fichier": "sentinel.page.js",
+   "avant": "(RECYF_ANALYSE[e.cle] ? ' checked' : '')",
+   "apres": "(e.declare ? ' checked' : '')",
+   "regle": "test_RECYF_la_qualification_et_l_objectif_16_sont_reaffiches"
+  },
+  {
+   "nom": "ReCyF : les trois cases se peignent décochées",
+   "fichier": "sentinel.page.js",
+   "avant": "    + (RECYF_ANALYSE[cle] ? ' checked' : '')\n",
+   "apres": "",
+   "regle": "test_RECYF_une_case_cochee_le_reste_au_repeint_suivant"
+  },
+  {
+   "nom": "ReCyF : « moyens alloués » ne part pas au calcul",
+   "fichier": "sentinel.page.js",
+   "avant": "    moyens_alloues: !!a.moyens_alloues,",
+   "apres": "    moyens_alloues: false,",
+   "regle": "test_RECYF_une_case_cochee_le_reste_au_repeint_suivant"
+  },
+  {
+   "nom": "ReCyF : les entrées se peignent décochées",
+   "fichier": "sentinel.page.js",
+   "avant": "((RECYF_ANALYSE.entrees || []).indexOf(x.cle) >= 0 ? ' checked' : '')",
+   "apres": "''",
+   "regle": "test_RECYF_la_qualification_et_l_objectif_16_sont_reaffiches"
+  },
+  {
+   "nom": "ReCyF : la durée du réexamen se peint vide",
+   "fichier": "sentinel.page.js",
+   "avant": "       : ' value=\"' + recyfEsc(RECYF_ANALYSE.dernier_reexamen_mois) + '\"')",
+   "apres": "       : '')",
+   "regle": "test_RECYF_la_qualification_et_l_objectif_16_sont_reaffiches"
+  },
+  {
+   "nom": "ISO 27001 : le périmètre se peint vide",
+   "fichier": "sentinel.page.js",
+   "avant": "    + 'value=\"' + iso27Esc(ISO27_ETAT.perimetre) + '\" '\n",
+   "apres": "",
+   "regle": "test_ISO27001_le_perimetre_et_les_deux_dates_sont_reaffiches"
+  },
+  {
+   "nom": "ISO 27001 : la date des critères se peint vide",
+   "fichier": "sentinel.page.js",
+   "avant": "    + 'value=\"' + iso27Esc(c.etabli_le) + '\" '\n",
+   "apres": "",
+   "regle": "test_ISO27001_le_perimetre_et_les_deux_dates_sont_reaffiches"
+  },
+  {
+   "nom": "CRA : le rôle se peint décoché",
+   "fichier": "sentinel.page.js",
+   "avant": "      + '\"' + (CRA_ROLE_ETAT[q.k] ? ' checked' : '')",
+   "apres": "      + '\"'",
+   "regle": "test_CRA_le_role_l_ecart_et_le_registre_sont_reaffiches"
+  },
+  {
+   "nom": "CRA : l'écart se peint « non renseigné »",
+   "fichier": "sentinel.page.js",
+   "avant": "(v === o[0] ? ' selected' : '')",
+   "apres": "''",
+   "regle": "test_CRA_revenir_sur_l_analyse_d_ecart_montre_l_exigence_cotee"
+  },
+  {
+   "nom": "DORA : l'entité se peint à vide",
+   "fichier": "sentinel.page.js",
+   "avant": "  var choisi = function (v) { return DORA_DECL.entite === v ? ' selected' : ''; };",
+   "apres": "  var choisi = function (v) { return ''; };",
+   "regle": "test_DORA_la_qualification_est_reaffichee"
+  },
+  {
+   "nom": "DORA : les portes se peignent décochées",
+   "fichier": "sentinel.page.js",
+   "avant": "  var coche = function (k) { return DORA_DECL[k] === true ? ' checked' : ''; };",
+   "apres": "  var coche = function (k) { return ''; };",
+   "regle": "test_DORA_la_qualification_est_reaffichee"
+  },
+  {
+   "nom": "DORA : « oui » se peint « non déclaré »",
+   "fichier": "sentinel.page.js",
+   "avant": "    + '<option value=\"oui\"' + (v === true ? ' selected' : '') + '>Oui</option>'",
+   "apres": "    + '<option value=\"oui\">Oui</option>'",
+   "regle": "test_DORA_la_qualification_est_reaffichee"
+  },
+  {
+   "nom": "DORA : les articles se peignent « non déclaré »",
+   "fichier": "sentinel.page.js",
+   "avant": "           + (DORA_ETATS[n] === k ? ' selected' : '') + '>'",
+   "apres": "           + '>'",
+   "regle": "test_DORA_le_cadre_de_risque_montre_les_articles_declares"
+  },
+  {
+   "nom": "DORA : la microentreprise se peint décochée",
+   "fichier": "sentinel.page.js",
+   "avant": "      + (DORA_CONTRAT.microentreprise ? ' checked' : '')\n",
+   "apres": "",
+   "regle": "test_DORA_contrats_incident_et_supervision_sont_reaffiches"
+  },
+  {
+   "nom": "DORA : les seuils se peignent décochés",
+   "fichier": "sentinel.page.js",
+   "avant": "(DORA_INC.seuils[s.cle] ? ' checked' : '')",
+   "apres": "''",
+   "regle": "test_DORA_contrats_incident_et_supervision_sont_reaffiches"
+  },
+  {
+   "nom": "DORA : l'heure de connaissance se peint vide",
+   "fichier": "sentinel.page.js",
+   "avant": "     + doraEsc(DORA_INC.connaissance || '') + '\" '",
+   "apres": "     + '' + '\" '",
+   "regle": "test_DORA_contrats_incident_et_supervision_sont_reaffiches"
+  },
+  {
+   "nom": "DORA : les exclusions se peignent décochées",
+   "fichier": "sentinel.page.js",
+   "avant": "(DORA_SUP[x.cle] === true ? ' checked' : '')",
+   "apres": "''",
+   "regle": "test_DORA_contrats_incident_et_supervision_sont_reaffiches"
+  },
+  {
+   "nom": "DORA : les parts et les effectifs se peignent vides",
+   "fichier": "sentinel.page.js",
+   "avant": "  var val = function (v) { return typeof v === 'number' ? ' value=\"' + v + '\"' : ''; };",
+   "apres": "  var val = function (v) { return ''; };",
+   "regle": "test_DORA_contrats_incident_et_supervision_sont_reaffiches"
+  },
+  {
+   "nom": "DORA : le régime n'est pas redemandé",
+   "fichier": "sentinel.page.js",
+   "avant": "  var sansRegime = !DORA_REGIME && !!DORA_DECL.entite;",
+   "apres": "  var sansRegime = false;",
+   "regle": "test_DORA_le_regime_se_recalcule_quand_on_rouvre_un_ecran_qui_en_depend"
+  },
+  {
+   "nom": "effacer ne demande rien",
+   "fichier": "sentinel.page.js",
+   "avant": "  if (!confirm('Effacer de ce navigateur les réponses ' + noms",
+   "apres": "  if (false && !confirm('Effacer de ce navigateur les réponses ' + noms",
+   "regle": "test_effacer_demande_confirmation"
+  },
+  {
+   "nom": "effacer NIS 2 laisse ReCyF",
+   "fichier": "sentinel.page.js",
+   "avant": "  var ecrans = Object.keys(MEMOIRE).filter(function (n) { return MEMOIRE[n].norme === norme; });",
+   "apres": "  var ecrans = Object.keys(MEMOIRE).filter(function (n) { return n === norme; });",
+   "regle": "test_effacer_NIS2_efface_NIS2_et_ReCyF_et_rien_d_autre"
+  },
+  {
+   "nom": "effacer n'écrit pas d'abord ce qui attendait",
+   "fichier": "sentinel.page.js",
+   "avant": "  memoireEcrire();\n  ecrans.forEach(function (n) {",
+   "apres": "  ecrans.forEach(function (n) {",
+   "regle": "test_effacer_NIS2_efface_NIS2_et_ReCyF_et_rien_d_autre"
+  },
+  {
+   "nom": "effacer laisse les marques du rail",
+   "fichier": "sentinel.page.js",
+   "avant": "  try { var s = _railStock(); delete s[norme]; _railStocker(s); } catch (e) {}\n",
+   "apres": "",
+   "regle": "test_effacer_NIS2_efface_NIS2_et_ReCyF_et_rien_d_autre"
+  },
+  {
+   "nom": "le bouton NIS 2 efface un référentiel qui n'existe pas",
+   "fichier": "sentinel.html",
+   "avant": "onclick=\"memoireEffacer('nis2')\"",
+   "apres": "onclick=\"memoireEffacer('nis')\"",
+   "regle": "test_le_premier_ecran_de_chaque_referentiel_dit_ou_sont_les_reponses[nis2-nis2-qualifier]"
+  }
+ ]
+}

@@ -172,6 +172,19 @@ def test_une_erreur_de_COLLECTE_est_une_chute_pas_une_survie():
     assert banc.tombees(sortie) == ["test_y[z]", "tests/test_mod.py"]
 
 
+def test_une_ligne_de_JOURNAL_n_est_pas_une_chute():
+    """MESURÉ en rejouant la mémoire des écrans : chaque mutation qui faisait
+    tomber la première règle à démarrer l'application affichait « (+6) » au
+    lieu de « (+1) ». Les cinq de trop étaient les lignes « ERROR » du
+    journal capturé — des avertissements de démarrage, pas des règles."""
+    sortie = ("----------------------------- Captured log call ---------\n"
+              "ERROR    conseilprev:app.py:76 FLASK_SECRET_KEY absente - repli\n"
+              "ERROR    conseilprev:app.py:3890 ADRESSE DU SITE non configuree\n"
+              "=================== short test summary info ============\n"
+              "FAILED tests/test_x.py::test_y[z] - assert\n")
+    assert banc.tombees(sortie) == ["test_y[z]"]
+
+
 def test_une_BASE_rouge_ne_joue_rien(tmp_path):
     racine = _depot(tmp_path)
     lignes = []

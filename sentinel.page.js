@@ -23514,9 +23514,10 @@ document.addEventListener('keydown', function(e){
    règlement, l'écran et le moteur auraient dit deux choses différentes — et
    c'est l'écran que le client lit.
 
-   CE QU'IL GARDE, LUI : l'état du registre. Les produits déclarés restent
-   dans la page, ne partent nulle part tant qu'on n'évalue pas, et ne sont pas
-   conservés : c'est un outil de qualification, pas un dépôt.
+   CE QU'IL GARDE, LUI : l'état du registre. Les produits déclarés ne partent
+   nulle part tant qu'on n'évalue pas ; ils sont gardés dans CE navigateur,
+   comme toutes les réponses des écrans de conformité, et s'effacent d'un
+   bouton (voir « La mémoire des écrans »).
    ═══════════════════════════════════════════════════════════════════════ */
 var CRA_REF = null;
 var CRA_ETAT = { produits: [], courant: 0, ecarts: {} };
@@ -23693,15 +23694,20 @@ function craEcarts() {
       + craEsc(pa[2]) + '</span></div><div class="cn-scroll">'
       + '<table class="cn-table"><thead><tr><th>Exigence</th><th>Ce qu’elle '
       + 'demande</th><th>État</th></tr></thead><tbody>';
+    /* LA LISTE SE PEINT DEPUIS L'ÉTAT. Chaque ouverture d'un écran du CRA
+       repeint cette analyse ; peinte à vide, elle affichait « non renseigné »
+       sur les exigences déjà cotées — mesuré au navigateur — pendant que le
+       bilan, juste en dessous, les comptait. */
     t.forEach(function (x) {
+      var v = CRA_ETAT.ecarts[x[0]] || '';
       h += '<tr><td><b>' + craEsc(x[1]) + '</b></td><td>' + craEsc(x[2])
         + '</td><td><select class="cra-in" data-ex="' + craEsc(x[0])
         + '" onchange="craCoter(this)">'
-        + '<option value="">non renseigné</option>'
-        + '<option value="conforme">conforme</option>'
-        + '<option value="partiel">partiel</option>'
-        + '<option value="absent">absent</option>'
-        + '<option value="sans_objet">sans objet</option></select></td></tr>';
+        + [['', 'non renseigné'], ['conforme', 'conforme'], ['partiel', 'partiel'],
+           ['absent', 'absent'], ['sans_objet', 'sans objet']].map(function (o) {
+            return '<option value="' + o[0] + '"' + (v === o[0] ? ' selected' : '')
+              + '>' + o[1] + '</option>'; }).join('')
+        + '</select></td></tr>';
     });
     h += '</tbody></table></div></div>';
   });
@@ -23793,7 +23799,8 @@ function craRolePeindre() {
   var h = '';
   CRA_ROLE_Q.forEach(function (q) {
     h += '<label class="cra-chk"><input type="checkbox" data-q="' + q.k
-      + '" onchange="craRoleCoche(this)"> ' + craEsc(q.l) + '</label>';
+      + '"' + (CRA_ROLE_ETAT[q.k] ? ' checked' : '')
+      + ' onchange="craRoleCoche(this)"> ' + craEsc(q.l) + '</label>';
   });
   z.innerHTML = h;
   z.dataset.pret = '1';
@@ -23917,8 +23924,9 @@ function craRendreExposition(j) {
    passif.
 
    CE QU'ILS GARDENT : les décisions de la déclaration d'applicabilité, dans
-   la page et nulle part ailleurs. C'est un outil de qualification, pas un
-   dépôt : rien ne part, rien n'est conservé entre deux visites.
+   CE navigateur et nulle part ailleurs — le serveur ne les reçoit que pour
+   calculer. Elles survivent au rechargement (voir « La mémoire des
+   écrans »).
    ═══════════════════════════════════════════════════════════════════════ */
 
 var ISO_REF = null;
@@ -24482,7 +24490,7 @@ function doraInit() {
     .then(function (r) { return r.json(); })
     .then(function (j) {
       if (!j || !j.ok) throw new Error('referentiel');
-      DORA_REF = j; doraRemplirChamps(); doraPeindreCourant();
+      DORA_REF = j; doraRemplirChamps(); doraIsoThemes(); doraPeindreCourant();
       doraParcours();
     })
     .catch(function () {
@@ -24511,10 +24519,16 @@ window.doraInit = doraInit;
 function doraPeindreCourant() {
   if (DORA_PARCOURS) doraRailPeindre();
   var actif = (document.querySelector('.page.on') || {}).id || '';
-  if (actif === 'p-dora-risque') { doraPeindreRisque(); return; }
+  /* LE RÉGIME NE SE GARDE PAS : IL SE RECALCULE. Après un rechargement,
+     l'entité déclarée la veille est relue, mais pas le régime que le
+     serveur en tire — et les deux écrans qui en dépendent disaient « le
+     régime n'est pas déterminé » à qui l'avait déterminé. On le redemande ;
+     la qualification repeint elle-même ces deux écrans à son retour. */
+  var sansRegime = !DORA_REGIME && !!DORA_DECL.entite;
+  if (actif === 'p-dora-risque') { if (sansRegime) doraQualifier(); else doraPeindreRisque(); return; }
   if (actif === 'p-dora-tiers') { doraPeindreTiers(); return; }
   if (actif === 'p-dora-incident') { doraPeindreIncident(); return; }
-  if (actif === 'p-dora-iso') { doraPeindreIso(); return; }
+  if (actif === 'p-dora-iso') { if (sansRegime) doraQualifier(); else doraPeindreIso(); return; }
   if (actif === 'p-dora-supervision') { doraPeindreSup(); return; }
   doraQualifier();
 }
@@ -24525,36 +24539,48 @@ function doraPeindreCourant() {
    entité financière (art. 2, §2), il n'a donc pas de régime, et rien ne
    lui est écarté de NIS 2. Une liste à plat laisserait croire le
    contraire. */
+/* LES TROIS RÉPONSES D'UNE QUESTION FERMÉE, et celle qui a été donnée.
+   Les listes des écrans DORA se peignent depuis l'état : peintes à vide, un
+   rechargement — ou, pour le cadre de risque, une simple réouverture —
+   affichait « non déclaré » sur des questions répondues. */
+function doraOuiNon(v) {
+  return '<option value="">— non déclaré —</option>'
+    + '<option value="oui"' + (v === true ? ' selected' : '') + '>Oui</option>'
+    + '<option value="non"' + (v === false ? ' selected' : '') + '>Non</option>';
+}
+
 function doraRemplirChamps() {
   var q = document.getElementById('dora-q');
   if (!q || q.innerHTML.trim()) return;
   var ents = (DORA_REF.qualification || {}).entites || [];
+  var choisi = function (v) { return DORA_DECL.entite === v ? ' selected' : ''; };
+  var coche = function (k) { return DORA_DECL[k] === true ? ' checked' : ''; };
   var opts = '<option value="">— choisir le type d’entité —</option>'
            + '<optgroup label="Entités financières — art. 2, §1, a) à t)">';
   ents.forEach(function (e) {
     if (!e.financiere) return;
-    opts += '<option value="' + doraEsc(e.cle) + '">' + doraEsc(e.lettre)
-          + ') ' + doraEsc(e.nom) + '</option>';
+    opts += '<option value="' + doraEsc(e.cle) + '"' + choisi(e.cle) + '>'
+          + doraEsc(e.lettre) + ') ' + doraEsc(e.nom) + '</option>';
   });
   opts += '</optgroup><optgroup label="Hors entités financières — art. 2, §1, u)">';
   ents.forEach(function (e) {
     if (e.financiere) return;
-    opts += '<option value="' + doraEsc(e.cle) + '">' + doraEsc(e.lettre)
-          + ') ' + doraEsc(e.nom) + '</option>';
+    opts += '<option value="' + doraEsc(e.cle) + '"' + choisi(e.cle) + '>'
+          + doraEsc(e.lettre) + ') ' + doraEsc(e.nom) + '</option>';
   });
   opts += '</optgroup>';
 
   var portes = ((DORA_REF.qualification || {}).simplifie || [])
     .map(function (s) {
       return '<label class="cnf-chk" title="' + doraEsc(s.quoi) + '">'
-           + '<input type="checkbox" onchange="doraPorte(\'' + s.cle
+           + '<input type="checkbox"' + coche(s.cle) + ' onchange="doraPorte(\'' + s.cle
            + '\', this.checked)"> ' + doraEsc(s.quoi)
            + ' <span class="cnf-art">art. 16, §1</span></label>';
     }).join('');
   var excl = ((DORA_REF.qualification || {}).exclusions || [])
     .map(function (x) {
       return '<label class="cnf-chk" title="' + doraEsc(x.quoi) + '">'
-           + '<input type="checkbox" onchange="doraPorte(\'' + x.cle
+           + '<input type="checkbox"' + coche(x.cle) + ' onchange="doraPorte(\'' + x.cle
            + '\', this.checked)"> ' + doraEsc(x.quoi)
            + ' <span class="cnf-art">art. 2, §3, ' + doraEsc(x.lettre)
            + ')</span></label>';
@@ -24567,8 +24593,7 @@ function doraRemplirChamps() {
     + '<label class="cnf-chk">Identifiée essentielle ou importante au titre '
     + 'de NIS 2 <select id="dora-nis2" class="cnf-in" '
     + 'onchange="doraChamp(\'identifiee_nis2\', this.value)">'
-    + '<option value="">— non déclaré —</option>'
-    + '<option value="oui">Oui</option><option value="non">Non</option>'
+    + doraOuiNon(DORA_DECL.identifiee_nis2)
     + '</select></label>'
     + '<details class="cnf-det"><summary>Les cinq catégories du cadre '
     + 'simplifié — article 16, §1</summary>' + portes + '</details>'
@@ -24685,10 +24710,13 @@ function doraPeindreRisque() {
   var art = ((DORA_REF.risque || {}).articles || {})[DORA_REGIME] || [];
   var chaps = ((DORA_REF.risque || {}).chapitres || {})[DORA_REGIME] || [];
   var etats = (DORA_REF.risque || {}).etats || {};
-  var opts = Object.keys(etats).map(function (k) {
-    return '<option value="' + doraEsc(k) + '">' + doraEsc(etats[k].nom)
-         + '</option>';
-  }).join('');
+  var opts = function (n) {
+    return Object.keys(etats).map(function (k) {
+      return '<option value="' + doraEsc(k) + '"'
+           + (DORA_ETATS[n] === k ? ' selected' : '') + '>'
+           + doraEsc(etats[k].nom) + '</option>';
+    }).join('');
+  };
   var h = '<div class="tbl-wrap"><div class="tbl-head"><span class="tbl-title">'
         + doraEsc(((DORA_REF.risque || {}).regimes || {})[DORA_REGIME].nom)
         + ' — ' + art.length + ' articles</span></div>';
@@ -24701,7 +24729,7 @@ function doraPeindreRisque() {
          + doraEsc(a.titre) + '</td><td style="width:180px">'
          + '<select class="cnf-in" onchange="doraEtat(' + a.n
          + ', this.value)"><option value="">— non déclaré —</option>'
-         + opts + '</select></td></tr>';
+         + opts(a.n) + '</select></td></tr>';
     });
     h += '</tbody></table>';
   });
@@ -24758,11 +24786,11 @@ function doraPeindreTiers() {
         '<label class="cnf-chk">La fonction soutenue est-elle critique ou '
       + 'importante ? <select class="cnf-in" '
       + 'onchange="doraContrat(\'fonction_critique\', this.value)">'
-      + '<option value="">— non déclaré —</option>'
-      + '<option value="oui">Oui</option><option value="non">Non</option>'
+      + doraOuiNon(DORA_CONTRAT.fonction_critique)
       + '</select></label>'
-      + '<label class="cnf-chk"><input type="checkbox" '
-      + 'onchange="doraContrat(\'microentreprise\', this.checked)"> '
+      + '<label class="cnf-chk"><input type="checkbox"'
+      + (DORA_CONTRAT.microentreprise ? ' checked' : '')
+      + ' onchange="doraContrat(\'microentreprise\', this.checked)"> '
       + 'L’entité financière est une microentreprise</label>';
   }
   doraCalculerTiers();
@@ -24854,24 +24882,26 @@ function doraPeindreIncident() {
   var seuils = (DORA_REF.incident || {}).seuils || [];
   var h = '<label class="cnf-chk">Des services critiques sont-ils touchés ? '
         + '<select class="cnf-in" onchange="doraInc(\'criticite\', this.value)">'
-        + '<option value="">— non déclaré —</option>'
-        + '<option value="oui">Oui</option><option value="non">Non</option>'
+        + doraOuiNon(DORA_INC.services_critiques)
         + '</select></label>'
         + '<details class="cnf-det" open><summary>Les six seuils du '
         + 'règlement délégué (UE) 2024/1772</summary>';
   seuils.forEach(function (s) {
     h += '<label class="cnf-chk" title="' + doraEsc(s.quoi || '') + '">'
-       + '<input type="checkbox" onchange="doraSeuil(\'' + doraEsc(s.cle)
+       + '<input type="checkbox"' + (DORA_INC.seuils[s.cle] ? ' checked' : '')
+       + ' onchange="doraSeuil(\'' + doraEsc(s.cle)
        + '\', this.checked)"> ' + doraEsc(s.nom || s.cle)
        + ' <span class="cnf-art">' + doraEsc(s.article || '') + '</span>'
        + '</label>';
   });
   h += '</details>'
      + '<label class="cnf-chk">Connaissance de l’incident '
-     + '<input class="cnf-in" type="datetime-local" '
+     + '<input class="cnf-in" type="datetime-local" value="'
+     + doraEsc(DORA_INC.connaissance || '') + '" '
      + 'onchange="doraInc(\'connaissance\', this.value)"></label>'
      + '<label class="cnf-chk">Classification '
-     + '<input class="cnf-in" type="datetime-local" '
+     + '<input class="cnf-in" type="datetime-local" value="'
+     + doraEsc(DORA_INC.classification || '') + '" '
      + 'onchange="doraInc(\'classification\', this.value)"></label>';
   f.innerHTML = h;
   doraCalculerIncident();
@@ -25022,27 +25052,31 @@ function doraPeindreSup() {
   if (!f || !DORA_REF) return;
   if (f.innerHTML.trim()) { doraCalculerSup(); return; }
   var sup = DORA_REF.supervision || {};
+  var val = function (v) { return typeof v === 'number' ? ' value="' + v + '"' : ''; };
   var h = '<details class="cnf-det" open><summary>Les quatre exclusions '
         + '— article 31, §8</summary>';
   (sup.exclusions || []).forEach(function (x) {
     h += '<label class="cnf-chk" title="' + doraEsc(x.pourquoi) + '">'
-       + '<input type="checkbox" onchange="doraSup(\'' + doraEsc(x.cle)
+       + '<input type="checkbox"' + (DORA_SUP[x.cle] === true ? ' checked' : '')
+       + ' onchange="doraSup(\'' + doraEsc(x.cle)
        + '\', this.checked)"> ' + doraEsc(x.quoi)
        + ' <span class="cnf-art">point ' + doraEsc(x.point) + '</span></label>';
   });
   h += '</details>'
      + '<label class="cnf-chk">Part du nombre d’entités servies, dans '
      + 'la catégorie la plus exposée (%) <input class="cnf-in" type="number" '
-     + 'min="0" max="100" step="0.1" style="width:110px" '
+     + 'min="0" max="100" step="0.1" style="width:110px"'
+     + val(DORA_SUP_PARTS.part_nombre) + ' '
      + 'onchange="doraSupPart(\'part_nombre\', this.value)"></label>'
      + '<label class="cnf-chk">Part de leurs actifs (%) <input class="cnf-in" '
-     + 'type="number" min="0" max="100" step="0.1" style="width:110px" '
+     + 'type="number" min="0" max="100" step="0.1" style="width:110px"'
+     + val(DORA_SUP_PARTS.part_actifs) + ' '
      + 'onchange="doraSupPart(\'part_actifs\', this.value)"></label>'
      + '<label class="cnf-chk">EISm servis <input class="cnf-in" '
-     + 'type="number" min="0" step="1" style="width:90px" '
+     + 'type="number" min="0" step="1" style="width:90px"' + val(DORA_SUP.eism) + ' '
      + 'onchange="doraSupN(\'eism\', this.value)"></label>'
      + '<label class="cnf-chk">Autres EIS servis <input class="cnf-in" '
-     + 'type="number" min="0" step="1" style="width:90px" '
+     + 'type="number" min="0" step="1" style="width:90px"' + val(DORA_SUP.autres_eis) + ' '
      + 'onchange="doraSupN(\'autres_eis\', this.value)"></label>';
   f.innerHTML = h;
   doraCalculerSup();
@@ -25161,19 +25195,28 @@ function nis2RemplirChamps() {
      première option disait « — aucun secteur des annexes I ou II — » avec
      une valeur VIDE : celle-là même d'une question laissée sans réponse. Le
      rail ne pouvait pas savoir si la qualification avait été faite. */
+  /* LE FORMULAIRE SE PEINT DEPUIS L'ÉTAT : après un rechargement, il montre
+     les réponses relues, pas des champs vides devant un rail qui les
+     tiendrait. */
+  var st = NIS2_ETAT;
+  var choisi = function (v) { return st.secteur === v ? ' selected' : ''; };
+  var nombre = function (v) {
+    return (v === null || v === undefined) ? '' : ' value="' + nis2Esc(v) + '"'; };
   var opts = '<option value="">— choisir un secteur —</option>'
-    + '<option value="hors_annexes">Aucune des deux annexes — hors du champ sectoriel</option>';
+    + '<option value="hors_annexes"' + choisi('hors_annexes')
+    + '>Aucune des deux annexes — hors du champ sectoriel</option>';
   [['annexe_i', 'Annexe I — secteurs hautement critiques'],
    ['annexe_ii', 'Annexe II — autres secteurs critiques']].forEach(function (p) {
     opts += '<optgroup label="' + p[1] + '">';
     (NIS2_REF[p[0]] || []).forEach(function (s) {
-      opts += '<option value="' + nis2Esc(s.cle) + '">' + nis2Esc(s.nom)
-            + '</option>'; });
+      opts += '<option value="' + nis2Esc(s.cle) + '"' + choisi(s.cle) + '>'
+            + nis2Esc(s.nom) + '</option>'; });
     opts += '</optgroup>';
   });
   var portes = (NIS2_REF.hors_taille || []).map(function (h) {
     return '<label class="cnf-chk" title="' + nis2Esc(h.quoi) + '">'
-         + '<input type="checkbox" onchange="nis2Porte(\'' + h.cle
+         + '<input type="checkbox"' + (st.portes[h.cle] ? ' checked' : '')
+         + ' onchange="nis2Porte(\'' + h.cle
          + '\', this.checked)"> ' + nis2Esc(h.quoi.slice(0, 64))
          + (h.quoi.length > 64 ? '…' : '')
          + ' <span class="cnf-art">' + nis2Esc(h.article) + '</span></label>';
@@ -25182,13 +25225,14 @@ function nis2RemplirChamps() {
       '<label class="cnf-chk">Secteur <select id="nis2-secteur" class="cnf-in" '
     + 'onchange="nis2Champ(\'secteur\', this.value)">' + opts + '</select></label>'
     + '<label class="cnf-chk">Effectif <input id="nis2-eff" class="cnf-in" '
-    + 'type="number" min="0" step="1" style="width:100px" '
+    + 'type="number" min="0" step="1" style="width:100px"' + nombre(st.effectif) + ' '
     + 'onchange="nis2Champ(\'effectif\', this.value)"></label>'
     + '<label class="cnf-chk">CA annuel (M€) <input id="nis2-ca2" class="cnf-in" '
-    + 'type="number" min="0" step="1" style="width:110px" '
+    + 'type="number" min="0" step="1" style="width:110px"' + nombre(st.ca) + ' '
     + 'onchange="nis2Champ(\'ca\', this.value)"></label>'
     + '<label class="cnf-chk">Total du bilan (M€) <input id="nis2-bilan" '
-    + 'class="cnf-in" type="number" min="0" step="1" style="width:120px" '
+    + 'class="cnf-in" type="number" min="0" step="1" style="width:120px"'
+    + nombre(st.bilan) + ' '
     + 'onchange="nis2Champ(\'bilan\', this.value)"></label>'
     + '<details class="cnf-det" style="flex-basis:100%"><summary>Les cas où la '
     + 'taille ne compte pas <span class="cnf-art">art. 2, §§2 à 4</span>'
@@ -25559,6 +25603,8 @@ function iso27Peindre() {
 function iso27RemplirCriteres() {
   var z = document.getElementById('iso27-criteres');
   if (!z || z.innerHTML.trim()) return;
+  /* LES CHAMPS SE PEIGNENT DEPUIS L'ÉTAT : relus après un rechargement, le
+     périmètre et les deux dates doivent se voir, pas seulement compter. */
   var c = ISO27_ETAT.criteres;
   /* LE PÉRIMÈTRE D'ABORD — ET IL N'AVAIT PAS DE CHAMP. Le moteur le lit en
      premier (art. 4.3) et s'arrête à « périmètre absent » sans lui ; le
@@ -25570,6 +25616,7 @@ function iso27RemplirCriteres() {
     + 'Domaine d’application du SMSI (art. 4.3) <input id="iso27-perimetre" '
     + 'class="cnf-in" type="text" style="width:min(340px,100%)" '
     + 'placeholder="ex. le SI de production du siège, hors filiales" '
+    + 'value="' + iso27Esc(ISO27_ETAT.perimetre) + '" '
     + 'onchange="iso27Perimetre(this.value)"></label>'
     + '<label class="cnf-chk" title="Au-delà de ce niveau (vraisemblance × '
     + 'conséquence), un risque ne peut pas être simplement maintenu">'
@@ -25579,10 +25626,12 @@ function iso27RemplirCriteres() {
     + '</label>'
     + '<label class="cnf-chk" title="La date à laquelle les critères d’acceptation ont été ARRÊTÉS">'
     + 'Critères établis le <input id="iso27-etabli" class="cnf-in" type="date" '
+    + 'value="' + iso27Esc(c.etabli_le) + '" '
     + 'onchange="iso27Critere(\'etabli_le\', this.value)"></label>'
     + '<label class="cnf-chk" title="La date à laquelle les risques ont été cotés">'
     + 'Appréciation faite le <input id="iso27-apprecie" class="cnf-in" '
-    + 'type="date" onchange="iso27Critere(\'apprecie_le\', this.value)"></label>';
+    + 'type="date" value="' + iso27Esc(c.apprecie_le) + '" '
+    + 'onchange="iso27Critere(\'apprecie_le\', this.value)"></label>';
 }
 
 window.iso27Perimetre = function (valeur) {
@@ -26916,6 +26965,17 @@ window.owaspInit = owaspInit;
 var RECYF_REF = null;
 var RECYF_ETATS = {};
 
+/* L'OBJECTIF 16 TEL QUE LE VISITEUR L'A DÉCLARÉ. Il vivait dans les cases de
+   l'écran, et c'est mesuré au navigateur : le repeint qui suit chaque case
+   recréait les autres DÉCOCHÉES — « moyens alloués » se décochait, et la
+   gouvernance retombait d'« acquis » à « déclaré » à la case suivante.
+   L'écran se peint désormais depuis cet état, et c'est cet état qui part
+   au calcul. */
+var RECYF_ANALYSE = { gouvernance: false, moyens_alloues: false,
+  couverture: false, entrees: [], acceptation: false,
+  risques_residuels_acceptes: false, plan_date_et_responsable: false,
+  reexamen: false, dernier_reexamen_mois: null };
+
 function recyfEsc(x) {
   return String(x == null ? '' : x)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -27112,26 +27172,38 @@ function recyfRendu(j) {
 
 /* ── L’OBJECTIF 16, ET LES DEUX PONTS ─────────────────────────────────── */
 function recyfDeclarationAnalyse() {
-  function on(id) {
-    var e = document.getElementById(id);
-    return !!(e && e.checked);
-  }
-  var entrees = [];
-  (RECYF_REF && RECYF_REF.entrees_analyse || []).forEach(function (x) {
-    if (on('recyf-e-' + x.cle)) entrees.push(x.cle);
-  });
-  var m = document.getElementById('recyf-reexamen-mois');
+  var a = RECYF_ANALYSE;
   return {
-    gouvernance: on('recyf-a-gouvernance'),
-    moyens_alloues: on('recyf-moyens'),
-    couverture: on('recyf-a-couverture'),
-    entrees: entrees,
-    acceptation: on('recyf-a-acceptation'),
-    risques_residuels_acceptes: on('recyf-residuels'),
-    plan_date_et_responsable: on('recyf-plan'),
-    reexamen: on('recyf-a-reexamen'),
-    dernier_reexamen_mois: (m && m.value !== '') ? Number(m.value) : null
+    gouvernance: !!a.gouvernance,
+    moyens_alloues: !!a.moyens_alloues,
+    couverture: !!a.couverture,
+    entrees: (a.entrees || []).slice(),
+    acceptation: !!a.acceptation,
+    risques_residuels_acceptes: !!a.risques_residuels_acceptes,
+    plan_date_et_responsable: !!a.plan_date_et_responsable,
+    reexamen: !!a.reexamen,
+    dernier_reexamen_mois: a.dernier_reexamen_mois
   };
+}
+
+/* UNE CASE, UNE ENTRÉE, UNE DURÉE : chacune écrit l'état, puis recalcule. */
+function recyfCoche(cle, on) {
+  if (!Object.prototype.hasOwnProperty.call(RECYF_ANALYSE, cle) || cle === 'entrees'
+      || cle === 'dernier_reexamen_mois') return;
+  RECYF_ANALYSE[cle] = !!on;
+  recyfAnalyse();
+}
+function recyfEntree(cle, on) {
+  var l = (RECYF_ANALYSE.entrees || []).filter(function (x) { return x !== cle; });
+  if (on) l.push(cle);
+  RECYF_ANALYSE.entrees = l;
+  recyfAnalyse();
+}
+function recyfReexamen(v) {
+  var n = Number(v);
+  RECYF_ANALYSE.dernier_reexamen_mois =
+    (v === '' || v === null || v === undefined || !isFinite(n)) ? null : n;
+  recyfAnalyse();
 }
 
 function recyfAnalyse() {
@@ -27182,8 +27254,9 @@ function recyfRenduAnalyse(j) {
           ? '<div class="q-notes recyf-manque"><b>Il manque :</b> '
             + e.manque.map(recyfEsc).join(' ; ') + '</div>' : '')
       + '</div><label class="cnf-chk"><input type="checkbox" id="recyf-a-'
-      + recyfEsc(e.cle) + '"' + (e.declare ? ' checked' : '')
-      + ' onchange="recyfAnalyse()"> ' + (e.acquis ? '✓ acquis' : 'déclaré')
+      + recyfEsc(e.cle) + '"' + (RECYF_ANALYSE[e.cle] ? ' checked' : '')
+      + ' onchange="recyfCoche(\'' + recyfEsc(e.cle) + '\', this.checked)"> '
+      + (e.acquis ? '✓ acquis' : 'déclaré')
       + '</label></div>';
   });
   h += '<h2 class="sec-h">Les cinq entrées de l’analyse (16.2)</h2>'
@@ -27191,21 +27264,33 @@ function recyfRenduAnalyse(j) {
     + 'cite aucune est une opinion, pas une analyse.</div>';
   (RECYF_REF.entrees_analyse || []).forEach(function (x) {
     h += '<label class="cnf-chk"><input type="checkbox" id="recyf-e-'
-      + recyfEsc(x.cle) + '" onchange="recyfAnalyse()"> '
+      + recyfEsc(x.cle) + '"'
+      + ((RECYF_ANALYSE.entrees || []).indexOf(x.cle) >= 0 ? ' checked' : '')
+      + ' onchange="recyfEntree(\'' + recyfEsc(x.cle) + '\', this.checked)"> '
       + recyfEsc(x.nom) + '</label>';
   });
   h += '<h2 class="sec-h">Ce que 16.1, 16.3 et 16.4 exigent en plus</h2>'
-    + '<label class="cnf-chk"><input type="checkbox" id="recyf-moyens" onchange="recyfAnalyse()"> '
-    + 'Des moyens financiers, humains ou techniques sont alloués (16.1)</label>'
-    + '<label class="cnf-chk"><input type="checkbox" id="recyf-residuels" onchange="recyfAnalyse()"> '
-    + 'Les risques résiduels sont explicitement acceptés (16.3)</label>'
-    + '<label class="cnf-chk"><input type="checkbox" id="recyf-plan" onchange="recyfAnalyse()"> '
-    + 'Chaque action du plan a une échéance ET un responsable (16.3)</label>'
+    + recyfCase('recyf-moyens', 'moyens_alloues',
+                'Des moyens financiers, humains ou techniques sont alloués (16.1)')
+    + recyfCase('recyf-residuels', 'risques_residuels_acceptes',
+                'Les risques résiduels sont explicitement acceptés (16.3)')
+    + recyfCase('recyf-plan', 'plan_date_et_responsable',
+                'Chaque action du plan a une échéance ET un responsable (16.3)')
     + '<label class="cnf-chk">Dernier réexamen, en mois (16.4 — plancher : '
     + RECYF_REF.reexamen_mois_max + ')'
     + '<input id="recyf-reexamen-mois" class="cnf-in" type="number" min="0" '
-    + 'step="1" style="width:110px" onchange="recyfAnalyse()"></label>';
+    + 'step="1" style="width:110px"'
+    + (RECYF_ANALYSE.dernier_reexamen_mois === null ? ''
+       : ' value="' + recyfEsc(RECYF_ANALYSE.dernier_reexamen_mois) + '"')
+    + ' onchange="recyfReexamen(this.value)"></label>';
   return h;
+}
+
+function recyfCase(id, cle, libelle) {
+  return '<label class="cnf-chk"><input type="checkbox" id="' + id + '"'
+    + (RECYF_ANALYSE[cle] ? ' checked' : '')
+    + ' onchange="recyfCoche(\'' + cle + '\', this.checked)"> '
+    + recyfEsc(libelle) + '</label>';
 }
 
 function recyfRenduPerimetre() {
@@ -27250,6 +27335,262 @@ window.recyfInit = recyfInit;
 window.recyfPeindre = recyfPeindre;
 window.recyfAnalyse = recyfAnalyse;
 window.recyfEtat = recyfEtat;
+window.recyfCoche = recyfCoche;
+window.recyfEntree = recyfEntree;
+window.recyfReexamen = recyfReexamen;
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+   LA MÉMOIRE DES ÉCRANS — CE QUI A ÉTÉ RÉPONDU SURVIT AU RECHARGEMENT
+   ═══════════════════════════════════════════════════════════════════════
+
+   LE DÉFAUT, MESURÉ DANS UN NAVIGATEUR. NIS 2 rempli jusqu'à trois blocs
+   verts, puis la page rechargée : le rail repartait de « Suis-je
+   concerné ? », la carte du taux retombait à « — », et les formulaires
+   étaient vides. ISO 27001, ISO 42001, le CRA, DORA et ReCyF perdaient de
+   même leurs réponses — pendant que NIST AI RMF, OWASP, 800-53 et 800-82
+   gardaient les leurs, et que le rail se souvenait des blocs « lus » et
+   « passés en revue ». Il se souvenait qu'on avait lu, et oubliait qu'on
+   avait répondu.
+
+   CE QUI EST GARDÉ, ET OÙ. Les réponses, telles que chaque écran les tient
+   déjà, dans CE navigateur (localStorage), comme les autres
+   questionnaires. Le serveur ne reçoit rien de plus qu'avant : il ne voit
+   que ce qu'on lui envoie pour calculer.
+
+   CE QUI NE L'EST PAS. Ce que le serveur recalcule — le régime DORA, les
+   verdicts, les taux —, et ce qui n'est pas encore une réponse : le nom
+   d'un produit tapé mais pas ajouté au registre.
+
+   UNE CLÉ PAR ÉCRAN. Une mémoire illisible — tronquée, ou écrite par une
+   version antérieure — ne coûte que son propre écran : les autres se
+   relisent.
+
+   CHAQUE CHAMP EST RELU AVEC SON TYPE. Une valeur d'un autre type est
+   écartée, jamais recopiée : un « mesures » devenu une chaîne ferait
+   tomber la peinture de tout l'écran, au lieu d'une seule réponse.
+
+   LA MÉMOIRE EST RELUE ICI, AVANT QUE QUOI QUE CE SOIT NE PEIGNE. Le script
+   est chargé en `defer` : quand cette ligne s'exécute, la page est lue, les
+   champs fixes existent, et aucun écran n'a encore rien calculé — le rail
+   et le taux partent des réponses d'hier, pas d'un formulaire vide. */
+
+/* LES TYPES QU'UNE RÉPONSE PEUT AVOIR, ET CE QU'ON FAIT D'UNE VALEUR QUI
+   N'EN EST PAS : `undefined`, et la valeur d'origine reste en place.
+   Les quatre familles d'objets gardent ce qui est valable et écartent le
+   reste, entrée par entrée — une mesure illisible ne coûte pas les
+   quatre-vingt-douze autres. */
+function _memValeur(v, t) {
+  var objet = function (x) { return !!x && typeof x === 'object' && !Array.isArray(x); };
+  var garder = function (source, bon) {
+    var o = {};
+    Object.keys(source).forEach(function (k) { if (bon(source[k])) o[k] = source[k]; });
+    return o;
+  };
+  switch (t) {
+    case 'texte': return typeof v === 'string' ? v : undefined;
+    case 'texte?': return (v === null || typeof v === 'string') ? v : undefined;
+    case 'nombre': return (typeof v === 'number' && isFinite(v)) ? v : undefined;
+    case 'nombre?': return (v === null || (typeof v === 'number' && isFinite(v))) ? v : undefined;
+    case 'oui_non?': return (v === null || typeof v === 'boolean') ? v : undefined;
+    case 'booleen': return typeof v === 'boolean' ? v : undefined;
+    case 'textes': return objet(v) ? garder(v, function (x) { return typeof x === 'string'; }) : undefined;
+    case 'drapeaux': return objet(v) ? garder(v, function (x) { return x === true; }) : undefined;
+    case 'objets': return objet(v) ? garder(v, objet) : undefined;
+    case 'liste_objets': return Array.isArray(v) ? v.filter(objet) : undefined;
+    case 'liste_textes?':
+      if (v === null) return null;
+      return Array.isArray(v) ? v.filter(function (x) { return typeof x === 'string'; }) : undefined;
+  }
+  return undefined;
+}
+
+/* VERSE DANS L'OBJET EXISTANT, champ par champ, ce que le schéma connaît.
+   Ce que la mémoire ne porte pas — un champ ajouté depuis, une valeur
+   écartée — garde sa valeur de départ. */
+function _memFondre(cible, source, schema) {
+  if (!cible || !source || typeof source !== 'object' || Array.isArray(source)) return;
+  Object.keys(schema).forEach(function (k) {
+    if (!Object.prototype.hasOwnProperty.call(source, k)) return;
+    if (typeof schema[k] === 'object') { _memFondre(cible[k], source[k], schema[k]); return; }
+    var v = _memValeur(source[k], schema[k]);
+    if (v !== undefined) cible[k] = v;
+  });
+}
+
+/* LES TROIS CHAMPS FIXES DE LA PAGE qui portent une réponse : le chiffre
+   d'affaires du groupe (NIS 2), celui du fabricant (CRA), et la
+   qualification ReCyF. Le rail et le taux les lisent dans la page ; la
+   mémoire fait donc de même. */
+function _memChamp(id) {
+  var e = document.getElementById(id);
+  return e ? String(e.value == null ? '' : e.value) : '';
+}
+function _memPoser(id, v) {
+  var e = document.getElementById(id);
+  if (e && typeof v === 'string') e.value = v;
+}
+
+var MEMOIRE = {
+  nis2: { norme: 'nis2', nom: 'NIS 2', cle: 'cp-sentinel-nis2-v1',
+    lire: function () { return { etat: NIS2_ETAT, ca_groupe: _memChamp('nis2-ca') }; },
+    relire: function (m) {
+      _memFondre(NIS2_ETAT, m.etat, { secteur: 'texte', effectif: 'nombre?',
+        ca: 'nombre?', bilan: 'nombre?', portes: 'drapeaux', mesures: 'textes',
+        gouvernance: 'textes' });
+      _memPoser('nis2-ca', m.ca_groupe);
+    } },
+  recyf: { norme: 'nis2', nom: 'ReCyF', cle: 'cp-sentinel-recyf-v1',
+    lire: function () {
+      return { statut: _memChamp('recyf-statut-sel'), etats: RECYF_ETATS,
+               analyse: RECYF_ANALYSE };
+    },
+    relire: function (m) {
+      _memPoser('recyf-statut-sel', m.statut);
+      var e = _memValeur(m.etats, 'textes');
+      if (e) Object.keys(e).forEach(function (k) { RECYF_ETATS[k] = e[k]; });
+      _memFondre(RECYF_ANALYSE, m.analyse, { gouvernance: 'booleen',
+        moyens_alloues: 'booleen', couverture: 'booleen', entrees: 'liste_textes?',
+        acceptation: 'booleen', risques_residuels_acceptes: 'booleen',
+        plan_date_et_responsable: 'booleen', reexamen: 'booleen',
+        dernier_reexamen_mois: 'nombre?' });
+    } },
+  iso27001: { norme: 'iso27001', nom: 'ISO 27001', cle: 'cp-sentinel-iso27001-v1',
+    lire: function () {
+      return { perimetre: ISO27_ETAT.perimetre, criteres: ISO27_ETAT.criteres,
+               risques: ISO27_ETAT.risques, mesures: ISO27_ETAT.mesures,
+               articles: ISO27_ETAT.articles };
+    },
+    relire: function (m) {
+      _memFondre(ISO27_ETAT, m, { perimetre: 'texte',
+        criteres: { seuil_acceptation: 'nombre', etabli_le: 'texte', apprecie_le: 'texte' },
+        risques: 'liste_objets', mesures: 'objets', articles: 'textes' });
+    } },
+  iso42001: { norme: 'iso42001', nom: 'ISO 42001', cle: 'cp-sentinel-iso42001-v1',
+    lire: function () { return { mesures: ISO_ETAT.mesures, articles: ISO_ETAT.articles }; },
+    relire: function (m) {
+      _memFondre(ISO_ETAT, m, { mesures: 'objets', articles: 'textes' });
+    } },
+  cra: { norme: 'cra', nom: 'CRA', cle: 'cp-sentinel-cra-v1',
+    lire: function () {
+      return { produits: CRA_ETAT.produits, ecarts: CRA_ETAT.ecarts,
+               role: CRA_ROLE_ETAT, ca: _memChamp('cra-ca') };
+    },
+    relire: function (m) {
+      _memFondre(CRA_ETAT, m, { produits: 'liste_objets', ecarts: 'textes' });
+      if (m.role && typeof m.role === 'object' && !Array.isArray(m.role)) {
+        CRA_ROLE_Q.forEach(function (q) {
+          if (typeof m.role[q.k] === 'boolean') CRA_ROLE_ETAT[q.k] = m.role[q.k];
+        });
+      }
+      _memPoser('cra-ca', m.ca);
+    } },
+  dora: { norme: 'dora', nom: 'DORA', cle: 'cp-sentinel-dora-v1',
+    lire: function () {
+      return { decl: DORA_DECL, etats: DORA_ETATS, contrat: DORA_CONTRAT,
+               incident: DORA_INC, sup: DORA_SUP, sup_parts: DORA_SUP_PARTS,
+               iso: { certifie: DORA_ISO.certifie, themes: DORA_ISO.themes,
+                      mesures: DORA_ISO.mesures } };
+    },
+    relire: function (m) {
+      /* LES PORTES DE LA QUALIFICATION SONT DES CLÉS LIBRES, à `true` : on
+         garde celles-là, et les deux champs nommés avec leur type. */
+      var d = m.decl;
+      if (d && typeof d === 'object' && !Array.isArray(d)) {
+        _memFondre(DORA_DECL, d, { entite: 'texte', identifiee_nis2: 'oui_non?' });
+        Object.keys(d).forEach(function (k) {
+          if (k !== 'entite' && k !== 'identifiee_nis2' && d[k] === true) DORA_DECL[k] = true;
+        });
+      }
+      var e = _memValeur(m.etats, 'textes');
+      if (e) Object.keys(e).forEach(function (k) { DORA_ETATS[k] = e[k]; });
+      _memFondre(DORA_CONTRAT, m.contrat, { fonction_critique: 'oui_non?',
+        microentreprise: 'booleen', clauses: 'textes' });
+      _memFondre(DORA_INC, m.incident, { services_critiques: 'oui_non?',
+        connaissance: 'texte?', classification: 'texte?', seuils: 'drapeaux' });
+      _memFondre(DORA_ISO, m.iso, { certifie: 'oui_non?', themes: 'drapeaux',
+        mesures: 'liste_textes?' });
+      var s = m.sup;
+      if (s && typeof s === 'object' && !Array.isArray(s)) {
+        Object.keys(s).forEach(function (k) {
+          var v = s[k];
+          if (typeof v === 'boolean' || (typeof v === 'number' && isFinite(v))) DORA_SUP[k] = v;
+        });
+      }
+      _memFondre(DORA_SUP_PARTS, m.sup_parts, { part_nombre: 'nombre?', part_actifs: 'nombre?' });
+      var sel = document.getElementById('dora-iso-certifie');
+      if (sel) sel.value = DORA_ISO.certifie === true ? 'oui'
+                         : (DORA_ISO.certifie === false ? 'non' : '');
+    } }
+};
+
+/* CE QUI A ÉTÉ ÉCRIT EN DERNIER, écran par écran : on ne réécrit que ce qui
+   a changé, et rien tant que le visiteur n'a rien répondu. */
+var MEMOIRE_ECRIT = {};
+var MEMOIRE_ATTENTE = null;
+
+function memoireEcrire() {
+  if (MEMOIRE_ATTENTE) { clearTimeout(MEMOIRE_ATTENTE); MEMOIRE_ATTENTE = null; }
+  Object.keys(MEMOIRE).forEach(function (n) {
+    var m = MEMOIRE[n], txt;
+    try { txt = JSON.stringify(m.lire()); } catch (e) { return; }
+    if (txt === MEMOIRE_ECRIT[n]) return;
+    try { localStorage.setItem(m.cle, txt); MEMOIRE_ECRIT[n] = txt; } catch (e) {}
+  });
+}
+window.memoireEcrire = memoireEcrire;
+
+function memoireRelire() {
+  Object.keys(MEMOIRE).forEach(function (n) {
+    var m = MEMOIRE[n], brut = null, o = null;
+    try { brut = localStorage.getItem(m.cle); } catch (e) {}
+    if (brut) { try { o = JSON.parse(brut); } catch (e) { o = null; } }
+    if (o && typeof o === 'object' && !Array.isArray(o)) {
+      try { m.relire(o); } catch (e) {}
+    }
+    try { MEMOIRE_ECRIT[n] = JSON.stringify(m.lire()); } catch (e) {}
+  });
+}
+
+/* APRÈS la réponse, pas pendant : l'écouteur est posé en capture, il passe
+   AVANT le gestionnaire du champ, qui n'a encore rien écrit dans l'état.
+   Une rafale de réponses fait une seule écriture. */
+function memoireDemander() {
+  if (MEMOIRE_ATTENTE) clearTimeout(MEMOIRE_ATTENTE);
+  MEMOIRE_ATTENTE = setTimeout(memoireEcrire, 250);
+}
+document.addEventListener('change', memoireDemander, true);
+document.addEventListener('click', memoireDemander, true);
+/* ET SI L'ON RECHARGE DANS LE QUART DE SECONDE : la page qui part écrit
+   ce qui attendait encore. */
+window.addEventListener('pagehide', memoireEcrire);
+
+/* GARDER A UN PRIX, ET CE BOUTON LE PAIE. Qui remplit NIS 2 pour une entité,
+   puis pour une autre sur le même poste, retrouverait la première. Effacer
+   porte sur les réponses d'UN référentiel et sur ses marques « lu » et
+   « passé en revue » ; les autres gardent les leurs. La page est ensuite
+   rechargée : c'est la seule façon sûre de remettre chaque champ, chaque
+   calcul et le rail dans leur état de départ. */
+function memoireEffacer(norme) {
+  var ecrans = Object.keys(MEMOIRE).filter(function (n) { return MEMOIRE[n].norme === norme; });
+  if (!ecrans.length) return;
+  var noms = ecrans.map(function (n) { return MEMOIRE[n].nom; }).join(' et ');
+  if (!confirm('Effacer de ce navigateur les réponses ' + noms
+               + ' ? Les autres référentiels gardent les leurs.')) return;
+  /* CE QUI ATTENDAIT D'ÊTRE ÉCRIT L'EST D'ABORD. Les autres référentiels
+     ne perdent pas leur dernière réponse ; et celui-ci, dont la mémoire est
+     alors à jour, n'a plus rien à réécrire quand la page part — sans quoi
+     une réponse en attente ressusciterait ce qu'on vient d'effacer. */
+  memoireEcrire();
+  ecrans.forEach(function (n) {
+    try { localStorage.removeItem(MEMOIRE[n].cle); } catch (e) {}
+  });
+  try { var s = _railStock(); delete s[norme]; _railStocker(s); } catch (e) {}
+  location.reload();
+}
+window.memoireEffacer = memoireEffacer;
+
+memoireRelire();
 
 
 /* ═══════════════════════════════════════════════════════════════════════

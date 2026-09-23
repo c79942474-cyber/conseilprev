@@ -532,8 +532,17 @@ def test_le_taux_envoie_la_COLLECTE_DU_RAIL_et_rien_d_autre():
         "DORA, qui garde son propre rail, n'est plus transmis au taux")
 
 
+def _collecteur(norme):
+    """Le corps du collecteur du rail pour cette norme, et lui seul."""
+    c = CODE[CODE.index("  %s: function () {" % norme):]
+    return c[:c.index("\n  },")]
+
+
 def test_les_collecteurs_du_rail_portent_ce_que_le_taux_lit():
-    assert "perimetre: ISO27_ETAT.perimetre" in CODE
+    # DANS LE COLLECTEUR, PAS AILLEURS. La même chaîne figure aussi dans la
+    # mémoire des écrans, qui garde le périmètre : chercher dans tout le
+    # fichier laissait survivre le collecteur qui l'aurait perdu (M33).
+    assert "perimetre: ISO27_ETAT.perimetre" in _collecteur("iso27001")
     rgpd = CODE[CODE.index("  rgpd: function () {"):]
     rgpd = rgpd[:rgpd.index("\n  },")]
     for f in ("confRegPct", "confPbdPct", "confDocPct", "confSensPct"):

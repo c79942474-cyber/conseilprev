@@ -186,8 +186,8 @@
     {
       "nom": "une branche de l'aiguillage ne rend plus la main",
       "fichier": "sentinel.page.js",
-      "avant": "  if (actif === 'p-dora-risque') { doraPeindreRisque(); return; }",
-      "apres": "  if (actif === 'p-dora-risque') { doraPeindreRisque(); }",
+      "avant": "  if (actif === 'p-dora-risque') { if (sansRegime) doraQualifier(); else doraPeindreRisque(); return; }",
+      "apres": "  if (actif === 'p-dora-risque') { if (sansRegime) doraQualifier(); else doraPeindreRisque(); }",
       "regle": "test_ouvrir_un_ecran_DORA_ne_peint_QUE_cet_ecran"
     },
     {

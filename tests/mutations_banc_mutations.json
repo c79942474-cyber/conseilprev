@@ -59,6 +59,13 @@
    "avant": "    if tombees(base) or not resume or \" failed\" in resume[-1]:",
    "apres": "    if False:",
    "regle": "test_une_BASE_rouge_ne_joue_rien"
+  },
+  {
+   "nom": "une ligne du journal compte comme une règle tombée",
+   "fichier": "outils/muter.py",
+   "avant": "            if reste[:1] in (\"\", \" \"):\n                continue\n",
+   "apres": "",
+   "regle": "test_une_ligne_de_JOURNAL_n_est_pas_une_chute"
   }
  ]
 }
