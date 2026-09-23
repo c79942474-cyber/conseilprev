@@ -2,7 +2,8 @@
  "_pourquoi": "Chaque mutation FABRIQUE un défaut réel et doit faire TOMBER la règle nommée. Une mutation qui survit dit que la règle ne mesure pas ce qu'elle prétend ; une mutation qui fait tomber une AUTRE règle dit que la règle nommée vise à côté.",
  "cibles": [
   "tests/test_infobulles_toucher.py",
-  "tests/test_infobulles_distinction.py"
+  "tests/test_infobulles_distinction.py",
+  "tests/test_bulles_enfants.py"
  ],
  "mutations": [
   {
@@ -90,11 +91,11 @@
    "regle": "test_le_script_ne_ramasse_QUE_les_deux_conventions_du_depot"
   },
   {
-   "nom": "le script vole le survol au poste fixe",
+   "nom": "le script vole le survol au poste fixe : la souris n'est plus écartée, ni au contact ni au relâcher",
    "fichier": "infobulles.js",
-   "avant": "if (ev.pointerType === \"mouse\") return;",
-   "apres": "if (false) return;",
-   "regle": "test_la_souris_est_IGNOREE_par_le_script"
+   "avant": "      geste = (ev.pointerType !== \"mouse\")\n        ? { id: ev.pointerId, x: ev.clientX, y: ev.clientY, cible: ev.target }\n        : null;\n    }, true);\n    /* Le navigateur a pris le geste pour lui : il défile, il zoome. */\n    document.addEventListener(\"pointercancel\", function () { geste = null; }, true);\n    /* Un doigt qui glisse sans que le navigateur annule — un stylet, une\n       zone en `touch-action:none` — ne fait pas un appui non plus. Passif :\n       cet écouteur ne doit jamais retarder le défilement. */\n    document.addEventListener(\"pointermove\", function (ev) {\n      if (geste && geste.id === ev.pointerId\n          && Math.hypot(ev.clientX - geste.x, ev.clientY - geste.y) > 10) geste = null;\n    }, { capture: true, passive: true });\n    document.addEventListener(\"pointerup\", function (ev) {\n      if (ev.pointerType === \"mouse\") return;\n",
+   "apres": "      geste = (true)\n        ? { id: ev.pointerId, x: ev.clientX, y: ev.clientY, cible: ev.target }\n        : null;\n    }, true);\n    /* Le navigateur a pris le geste pour lui : il défile, il zoome. */\n    document.addEventListener(\"pointercancel\", function () { geste = null; }, true);\n    /* Un doigt qui glisse sans que le navigateur annule — un stylet, une\n       zone en `touch-action:none` — ne fait pas un appui non plus. Passif :\n       cet écouteur ne doit jamais retarder le défilement. */\n    document.addEventListener(\"pointermove\", function (ev) {\n      if (geste && geste.id === ev.pointerId\n          && Math.hypot(ev.clientX - geste.x, ev.clientY - geste.y) > 10) geste = null;\n    }, { capture: true, passive: true });\n    document.addEventListener(\"pointerup\", function (ev) {\n",
+   "regle": "test_la_SOURIS_n_ouvre_rien_et_ne_retient_aucun_clic[mat-tooltip-wrap-mat-tooltip]"
   },
   {
    "nom": "les div ne redeviennent pas atteignables au clavier",
@@ -186,6 +187,90 @@
    "avant": "<script src=\"/infobulles.js\" defer></script>",
    "apres": "<script src=\"/fleches.js\" defer></script>",
    "regle": "test_CHAQUE_page_qui_porte_une_infobulle_charge_le_script"
+  },
+  {
+   "nom": "le balayage ouvre de nouveau la bulle : l'annulation n'oublie plus le geste",
+   "fichier": "infobulles.js",
+   "avant": "document.addEventListener(\"pointercancel\", function () { geste = null; }, true);",
+   "apres": "document.addEventListener(\"pointercancel\", function () {}, true);",
+   "regle": "test_un_BALAYAGE_n_ouvre_rien[mat-tooltip-wrap-mat-tooltip]"
+  },
+  {
+   "nom": "la décision revient au contact — l'ancien défaut, rejoué",
+   "fichier": "infobulles.js",
+   "avant": "        ? { id: ev.pointerId, x: ev.clientX, y: ev.clientY, cible: ev.target }\n        : null;\n",
+   "apres": "        ? { id: ev.pointerId, x: ev.clientX, y: ev.clientY, cible: ev.target }\n        : null;\n      if (geste) { var e0 = ev.target.closest(DECLENCHEURS); if (e0) { var o0 = (ouvert === e0); ouvrir(e0); aRetenir = (!o0 && e0.hasAttribute(AVANT_CLIC)) ? e0 : null; geste = null; } }\n",
+   "regle": "test_un_balayage_ne_CONSOMME_PAS_la_lecture_d_abord[mat-tooltip-wrap-mat-tooltip]"
+  },
+  {
+   "nom": "le seuil de déplacement a disparu",
+   "fichier": "infobulles.js",
+   "avant": "Math.hypot(ev.clientX - geste.x, ev.clientY - geste.y) > 10",
+   "apres": "Math.hypot(ev.clientX - geste.x, ev.clientY - geste.y) > 1e9",
+   "regle": "test_un_doigt_qui_GLISSE_n_appuie_pas_un_doigt_qui_TREMBLE_si[mat-tooltip-wrap-mat-tooltip]"
+  },
+  {
+   "nom": "le moindre tremblement annule l'appui",
+   "fichier": "infobulles.js",
+   "avant": "Math.hypot(ev.clientX - geste.x, ev.clientY - geste.y) > 10",
+   "apres": "Math.hypot(ev.clientX - geste.x, ev.clientY - geste.y) > 0",
+   "regle": "test_un_doigt_qui_GLISSE_n_appuie_pas_un_doigt_qui_TREMBLE_si[mat-tooltip-wrap-mat-tooltip]"
+  },
+  {
+   "nom": "le glissé d'un autre doigt annule l'appui du premier",
+   "fichier": "infobulles.js",
+   "avant": "if (geste && geste.id === ev.pointerId\n",
+   "apres": "if (geste\n",
+   "regle": "test_un_doigt_qui_GLISSE_n_appuie_pas_un_doigt_qui_TREMBLE_si[mat-tooltip-wrap-mat-tooltip]"
+  },
+  {
+   "nom": "le relâcher d'un autre doigt décide de l'appui",
+   "fichier": "infobulles.js",
+   "avant": "if (!geste || geste.id !== ev.pointerId) return;",
+   "apres": "if (!geste) return;",
+   "regle": "test_le_relacher_d_un_AUTRE_doigt_ou_sur_une_AUTRE_cible_ne_decide_rien[mat-tooltip-wrap-mat-tooltip]"
+  },
+  {
+   "nom": "un geste relâché hors de sa cible décide quand même",
+   "fichier": "infobulles.js",
+   "avant": "      if (el !== el0) return;",
+   "apres": "      if (false) return;",
+   "regle": "test_le_relacher_d_un_AUTRE_doigt_ou_sur_une_AUTRE_cible_ne_decide_rien[mat-tooltip-wrap-mat-tooltip]"
+  },
+  {
+   "nom": "la région d'annonce redevient paresseuse",
+   "fichier": "infobulles.js",
+   "avant": "    region();\n    window.infobulles.selecteur = DECLENCHEURS;",
+   "apres": "    window.infobulles.selecteur = DECLENCHEURS;",
+   "regle": "test_la_region_d_annonce_existe_DES_LE_DEMARRAGE"
+  },
+  {
+   "nom": "Échap ferme aussi la modale",
+   "fichier": "infobulles.js",
+   "avant": "if (etaitOuverte) { ev.preventDefault(); ev.stopImmediatePropagation(); }",
+   "apres": "if (etaitOuverte) { ev.preventDefault(); }",
+   "regle": "test_Echap_ferme_la_BULLE_puis_la_FENETRE_une_frappe_chacune[mat-tooltip-wrap-mat-tooltip]"
+  },
+  {
+   "nom": "Échap retient la frappe même quand aucune bulle n'a été ouverte au doigt",
+   "fichier": "infobulles.js",
+   "avant": "var etaitOuverte = !!ouvert && ouvert.getClientRects().length > 0;",
+   "apres": "var etaitOuverte = true;",
+   "regle": "test_Echap_ferme_la_BULLE_puis_la_FENETRE_une_frappe_chacune[mat-tooltip-wrap-mat-tooltip]"
+  },
+  {
+   "nom": "Échap revient sur document",
+   "fichier": "infobulles.js",
+   "avant": "    window.addEventListener(\"keydown\", function (ev) {",
+   "apres": "    document.addEventListener(\"keydown\", function (ev) {",
+   "regle": "test_Echap_est_ecoute_sur_WINDOW_en_CAPTURE"
+  },
+  {
+   "nom": "Échap perd la capture",
+   "fichier": "infobulles.js",
+   "avant": "    }, true);\n    var largeur = window.innerWidth;",
+   "apres": "    });\n    var largeur = window.innerWidth;",
+   "regle": "test_Echap_est_ecoute_sur_WINDOW_en_CAPTURE"
   }
  ]
 }

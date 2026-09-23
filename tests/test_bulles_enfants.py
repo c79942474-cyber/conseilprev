@@ -174,10 +174,30 @@ El.prototype.querySelector = function (sel) {
   return null;
 };
 El.prototype.contains = function (o) { for (let e = o; e; e = e.parentElement) if (e === this) return true; return false; };
+/* AFFICHÉ OU NON, comme le navigateur le dit : aucun rectangle pour un
+   élément démonté (il ne remonte plus à la racine) ni pour un élément dont
+   un ancêtre est `masque` (le `display:none` d'un écran que `go()` quitte). */
+El.prototype.getClientRects = function () {
+  let e = this;
+  for (; e; e = e.parentElement) { if (e.masque) return []; if (e === racine) return [{}]; }
+  return [];
+};
+El.prototype.remove = function () {
+  if (this.parentElement) { const p = this.parentElement; p.enfants = p.enfants.filter(x => x !== this); this.parentElement = null; }
+};
 function tous(e) { return [e].concat(...e.enfants.map(tous)); }
 
 const racine = new El("html"), head = racine.appendChild(new El("head")), body = racine.appendChild(new El("body"));
-const ecouteurs = {};
+/* LES ÉCOUTEURS, rangés par NŒUD et par PHASE — comme le navigateur les
+   appelle : `window` en capture, `document` en capture, `document` en
+   remontée, `window` en remontée. Sans cet ordre, « écouter sur window en
+   capture pour passer AVANT la fenêtre modale » ne se mesurerait pas. */
+const ecouteurs = {}, inscrits = [];
+const inscrire = (ou) => function (type, fn, opt) {
+  const capture = opt === true || !!(opt && opt.capture);
+  (ecouteurs[ou + ":" + type + ":" + capture] = ecouteurs[ou + ":" + type + ":" + capture] || []).push(fn);
+  inscrits.push({ ou, type, capture, passif: !!(opt && opt.passive) });
+};
 const document = {
   readyState: "complete",
   styleSheets: [...html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/gi)].map(m => ({ cssRules: regles(m[1]) })),
@@ -188,26 +208,67 @@ const document = {
     if (sel === ":hover") return tous(racine).filter(e => e.survole);
     return tous(racine).filter(e => { try { return e.matches(sel); } catch (x) { return false; } });
   },
-  addEventListener(type, fn) { (ecouteurs[type] = ecouteurs[type] || []).push(fn); },
+  addEventListener: inscrire("document"),
 };
-const window = { innerWidth: 1280, addEventListener(type, fn) { (ecouteurs["w:" + type] = ecouteurs["w:" + type] || []).push(fn); } };
+const window = { innerWidth: 1280, addEventListener: inscrire("window") };
+/* /bulle-titre.js, réduit à la question que ce script lui pose au relâcher :
+   « ce geste est-il à toi ? ». Il répond OUI pour une cible marquée
+   `data-titre-proche` — un `title` plus proche qu'un déclencheur — et
+   garde les événements qu'on lui a posés, pour vérifier que c'est bien LE
+   relâcher qu'on lui soumet. */
+const questions = [];
+window.bulleTitre = { prend(ev) { questions.push(ev); return !!(ev && ev.target && ev.target.hasAttribute
+                                                                   && ev.target.hasAttribute("data-titre-proche")); } };
 function MutationObserver() { return { observe() {} }; }
-function emettre(type, ev) { (ecouteurs[type] || []).forEach(fn => fn(ev)); return ev; }
+function emettre(type, ev) {
+  for (const [ou, cap] of [["window", true], ["document", true], ["document", false], ["window", false]]) {
+    for (const fn of (ecouteurs[ou + ":" + type + ":" + cap] || []).slice()) {
+      fn(ev);
+      if (ev.immediat) return ev;
+    }
+    if (ev.arrete) return ev;
+  }
+  return ev;
+}
+/* Un événement de pointeur porte un identifiant et une position : le script
+   décide d'un appui au RELÂCHER, en comparant les deux au contact. */
 function evenement(extra) {
-  const ev = Object.assign({ retenu: false, arrete: false }, extra);
+  const ev = Object.assign({ retenu: false, arrete: false, immediat: false,
+                             pointerId: 1, clientX: 0, clientY: 0 }, extra);
   ev.preventDefault = () => { ev.retenu = true; };
   ev.stopPropagation = () => { ev.arrete = true; };
+  ev.stopImmediatePropagation = () => { ev.immediat = true; ev.arrete = true; };
   return ev;
+}
+/* UN APPUI, tel que le navigateur l'émet quand le doigt ne bouge pas : un
+   contact, puis un relâcher, du même doigt et sur la même cible. */
+function appui(cible, extra) {
+  emettre("pointerdown", evenement(Object.assign({ pointerType: "touch", target: cible }, extra)));
+  return emettre("pointerup", evenement(Object.assign({ pointerType: "touch", target: cible }, extra)));
 }
 
 new Function("window", "document", "MutationObserver", src)(window, document, MutationObserver);
+/* Ce que le SCRIPT a inscrit — relevé avant que le harnais n'ajoute les
+   écouteurs de la page. */
+const inscritsParLeScript = inscrits.slice();
+
+/* LA RÉGION D'ANNONCE, LUE AVANT LE MOINDRE GESTE : sinon le premier appui
+   l'aurait créée, et la mesure passerait pour une raison sans rapport. */
+const regionAuDemarrage = (r => r ? { presente: true, texte: r.textContent, live: r.getAttribute("aria-live") }
+                                  : { presente: false })(document.getElementById("bulle-annonce"));
+/* LA FENÊTRE MODALE DE SENTINEL, telle qu'elle écoute Échap : sur
+   `document`, en remontée (sentinel.page.js, bloc « Echap pour fermer les
+   modales »). Chaque frappe qui l'atteint la fermerait. */
+let modaleFermee = 0;
+document.addEventListener("keydown", ev => { if (ev.key === "Escape") modaleFermee++; });
 
 const api = window.infobulles;
 const publiee = document.getElementById("css-bulle-ouverte");
 const annonce = () => (document.getElementById("bulle-annonce") || {}).textContent || "";
 const etat = el => ({ ouverte: el.cls.has("bulle-ouverte"), fermee: el.cls.has("bulle-fermee") });
 const out = { css: publiee ? publiee.textContent : null, selecteur: api.selecteur,
-              enfants: api.enfants || null, familles: {} };
+              enfants: api.enfants || null, familles: {}, regionAuDemarrage,
+              inscrits: inscritsParLeScript };
 
 /* ── LES SCÉNARIOS, famille par famille : un déclencheur et sa bulle. */
 for (const [a, b] of familles) {
@@ -238,7 +299,7 @@ for (const [a, b] of familles) {
     emettre("focusout", evenement({ target: t, relatedTarget: body }));
     r.departSousSurvol = etat(t);
     t.survole = false; document.activeElement = body;
-    emettre("pointerdown", evenement({ pointerType: "touch", target: body }));
+    appui(body);
     r.appuiAilleurs = etat(t);
 
     // 3. Échap sous la SOURIS, sans focus : fermé ; la souris qui s'en va rend la bulle.
@@ -253,12 +314,138 @@ for (const [a, b] of familles) {
     const carte = body.appendChild(new El("div", ["carte"], { onclick: "agir()" }));
     t = neuf({ "data-bulle-avant-clic": "" }); body.enfants.pop(); carte.appendChild(t);
     const cible = t.enfants[0];
-    emettre("pointerdown", evenement({ pointerType: "touch", target: cible }));
+    appui(cible);
     const c1 = emettre("click", evenement({ target: cible }));
     r.appui1 = Object.assign(etat(t), { retenu: c1.retenu, arrete: c1.arrete });
-    emettre("pointerdown", evenement({ pointerType: "touch", target: cible }));
+    appui(cible);
     const c2 = emettre("click", evenement({ target: cible }));
     r.appui2 = Object.assign(etat(t), { retenu: c2.retenu, arrete: c2.arrete });
+    api.fermer();
+
+    // 5. UN BALAYAGE : contact, le navigateur annule (il défile), relâcher.
+    //    Rien ne s'ouvre, rien n'est annoncé. La région est vidée d'abord :
+    //    un texte laissé par un scénario précédent ne doit rien prouver.
+    const vider = () => { const a = document.getElementById("bulle-annonce"); if (a) a.textContent = ""; };
+    t = neuf(); vider();
+    emettre("pointerdown", evenement({ pointerType: "touch", target: t.enfants[0] }));
+    emettre("pointercancel", evenement({ pointerType: "touch", target: t.enfants[0] }));
+    emettre("pointerup", evenement({ pointerType: "touch", target: t.enfants[0] }));
+    r.balayage = Object.assign(etat(t), { annonce: annonce() });
+    api.fermer();
+
+    // 6. BALAYAGE PUIS APPUI sur un « lire d'abord » : le balayage n'a rien
+    //    consommé — l'appui qui suit LIT (bulle ouverte, clic retenu).
+    const carte2 = body.appendChild(new El("div", ["carte"], { onclick: "agir()" }));
+    t = neuf({ "data-bulle-avant-clic": "" }); body.enfants.pop(); carte2.appendChild(t);
+    emettre("pointerdown", evenement({ pointerType: "touch", target: t.enfants[0] }));
+    emettre("pointercancel", evenement({ pointerType: "touch", target: t.enfants[0] }));
+    appui(t.enfants[0]);
+    const c3 = emettre("click", evenement({ target: t.enfants[0] }));
+    r.balayagePuisAppui = Object.assign(etat(t), { retenu: c3.retenu, arrete: c3.arrete });
+    api.fermer();
+
+    // 7. LE DOIGT QUI GLISSE sans que le navigateur annule (stylet, zone
+    //    `touch-action:none`) : au-delà de 10 px, ce n'est pas un appui ; en
+    //    deçà — un doigt qui tremble —, c'en est un. Et un AUTRE doigt qui
+    //    glisse n'annule pas l'appui du premier.
+    t = neuf(); vider();
+    emettre("pointerdown", evenement({ pointerType: "touch", target: t }));
+    emettre("pointermove", evenement({ pointerType: "touch", target: t, clientY: 40 }));
+    emettre("pointerup", evenement({ pointerType: "touch", target: t, clientY: 40 }));
+    r.glisse = Object.assign(etat(t), { annonce: annonce() });
+    api.fermer();
+    t = neuf();
+    emettre("pointerdown", evenement({ pointerType: "touch", target: t }));
+    emettre("pointermove", evenement({ pointerType: "touch", target: t, clientX: 3, clientY: 5 }));
+    emettre("pointerup", evenement({ pointerType: "touch", target: t, clientX: 3, clientY: 5 }));
+    r.tremble = etat(t);
+    api.fermer();
+    t = neuf();
+    emettre("pointerdown", evenement({ pointerType: "touch", target: t }));
+    emettre("pointermove", evenement({ pointerType: "touch", target: body, pointerId: 2, clientY: 60 }));
+    emettre("pointerup", evenement({ pointerType: "touch", target: t }));
+    r.autreGlisse = etat(t);
+    api.fermer();
+
+    // 8. LE RELÂCHER QUI NE DÉCIDE RIEN : celui d'un AUTRE doigt, et celui
+    //    qui tombe sur une autre cible que le contact — ni ouverture, ni
+    //    fermeture de la bulle déjà ouverte.
+    t = neuf();
+    emettre("pointerdown", evenement({ pointerType: "touch", target: t, pointerId: 1 }));
+    emettre("pointerup", evenement({ pointerType: "touch", target: t, pointerId: 2 }));
+    r.autreDoigt = etat(t);
+    api.fermer();
+    const deja = neuf(); appui(deja);
+    t = neuf();
+    emettre("pointerdown", evenement({ pointerType: "touch", target: t }));
+    emettre("pointerup", evenement({ pointerType: "touch", target: body }));
+    r.relacheAilleurs = { cible: etat(t), deja: etat(deja) };
+    api.fermer();
+
+    // 9. ÉCHAP DANS UNE FENÊTRE MODALE. Bulle ouverte au doigt : la première
+    //    frappe ferme la bulle SEULE, la seconde atteint la fenêtre. Bulle
+    //    tenue par le seul focus : la frappe atteint la fenêtre du premier
+    //    coup — rien n'a été « ouvert » au doigt.
+    t = neuf(); modaleFermee = 0;
+    appui(t);
+    const e1 = emettre("keydown", evenement({ key: "Escape" }));
+    r.echapModale = { bulle: etat(t), modale1: modaleFermee, retenu: e1.retenu };
+    emettre("keydown", evenement({ key: "Escape" }));
+    r.echapModale.modale2 = modaleFermee;
+    t = neuf(); modaleFermee = 0; document.activeElement = t;
+    emettre("keydown", evenement({ key: "Escape" }));
+    r.echapModale.focusSeul = modaleFermee;
+    document.activeElement = body;
+    api.fermer();
+
+    // 10. UNE BULLE QU'ON NE VOIT PLUS : son déclencheur masqué (l'écran
+    //     quitté par `go()`, un bouton qui se cache en ouvrant la fenêtre),
+    //     puis démonté. Échap atteint la fenêtre du premier coup.
+    t = neuf(); modaleFermee = 0;
+    appui(t); r.masqueAvant = etat(t);
+    t.masque = true;
+    emettre("keydown", evenement({ key: "Escape" }));
+    r.echapMasque = { modale: modaleFermee, bulle: etat(t) };
+    t.masque = false; api.fermer();
+    t = neuf(); modaleFermee = 0;
+    appui(t); r.demonteAvant = etat(t);
+    t.remove();
+    emettre("keydown", evenement({ key: "Escape" }));
+    r.echapDemonte = { modale: modaleFermee };
+    api.fermer();
+
+    // 11. LA SOURIS N'OUVRE RIEN ET NE RETIENT AUCUN CLIC, même sur un
+    //     « lire d'abord » : le poste fixe a déjà le survol. Contact,
+    //     relâcher et clic de type souris, sur la cible exacte.
+    const carte3 = body.appendChild(new El("div", ["carte"], { onclick: "agir()" }));
+    t = neuf({ "data-bulle-avant-clic": "" }); body.enfants.pop(); carte3.appendChild(t); vider();
+    emettre("pointerdown", evenement({ pointerType: "mouse", target: t.enfants[0] }));
+    emettre("pointerup", evenement({ pointerType: "mouse", target: t.enfants[0] }));
+    const c4 = emettre("click", evenement({ target: t.enfants[0] }));
+    r.souris = Object.assign(etat(t), { retenu: c4.retenu, arrete: c4.arrete, annonce: annonce() });
+    //     LE TÉMOIN : le même déclencheur, au doigt, lit d'abord.
+    api.fermer();
+    appui(t.enfants[0]);
+    const c5 = emettre("click", evenement({ target: t.enfants[0] }));
+    r.sourisTemoin = Object.assign(etat(t), { retenu: c5.retenu });
+    api.fermer();
+
+    // 12. UN `title` PLUS PROCHE QUE LE DÉCLENCHEUR : /bulle-titre.js répond
+    //     que le geste est le sien — rien ne s'ouvre ici, rien n'est
+    //     annoncé, et la bulle déjà ouverte ailleurs se ferme. Le témoin :
+    //     un enfant sans `title` ouvre le déclencheur.
+    const deja2 = neuf(); appui(deja2);
+    t = neuf(); const proche = t.appendChild(new El("span", [], { "data-titre-proche": "" })); vider();
+    questions.length = 0;
+    appui(proche);
+    r.titreProche = Object.assign(etat(t), { annonce: annonce(), deja: etat(deja2),
+                                             question: questions.length === 1 && questions[0].target === proche
+                                                       && questions[0].pointerId === 1 });
+    api.fermer();
+    const libre = t.appendChild(new El("span", [], {}));
+    appui(libre);
+    r.titreProcheTemoin = etat(t);
+    api.fermer();
   } catch (e) {
     r.erreur = String(e && e.message || e);
   }
@@ -584,6 +771,164 @@ def test_dans_une_carte_cliquable_le_premier_appui_LIT_et_le_second_AGIT(declenc
 
 
 # ══════════════════════════════════════════════════════════════════════════
+#  3 bis. L'APPUI EST DÉCIDÉ AU RELÂCHER — UN BALAYAGE N'EST PAS UN APPUI
+# ══════════════════════════════════════════════════════════════════════════
+#
+# LE DÉFAUT MESURÉ AU NAVIGATEUR (Pixel 7, recette_infobulles_toucher.js,
+# section 3 bis). Le script décidait au `pointerdown`, c'est-à-dire au
+# CONTACT, avant que le navigateur sache si le doigt appuie ou fait défiler :
+#   · un balayage commencé sur une carte de l'accueil OUVRAIT sa bulle et
+#     annonçait son texte (le navigateur annule le pointeur 24 ms plus tard) ;
+#   · un balayage commencé ailleurs refermait la bulle qu'on lisait (185 px) ;
+#   · sur le rail DORA, un balayage « consommait » la lecture d'abord :
+#     l'appui suivant naviguait sans que la bulle ait été lue (1 clic passé).
+# CES RÈGLES JOUENT LES GESTES dans le harnais, sur le vrai script : chacune
+# tombe sur le code d'avant — qui ouvrait tout au contact.
+
+@pytest.mark.parametrize("declencheur,bulle", FAMILLES)
+def test_un_BALAYAGE_n_ouvre_rien(declencheur, bulle):
+    """CONTACT, ANNULATION, RELÂCHER. Le navigateur annule le pointeur dès
+    que la page défile : ce geste n'est pas un appui. Avant : bulle ouverte
+    et texte annoncé au contact."""
+    r = _scenario(declencheur)["balayage"]
+    assert not r["ouverte"], "un balayage a ouvert la bulle : %r" % r
+    assert r["annonce"] == "", "un balayage a annoncé %r" % r["annonce"]
+
+
+@pytest.mark.parametrize("declencheur,bulle", FAMILLES)
+def test_un_balayage_ne_CONSOMME_PAS_la_lecture_d_abord(declencheur, bulle):
+    """LE CLIC RETENU DÉSYNCHRONISÉ, MESURÉ SUR LE RAIL DORA. Le balayage
+    ouvrait la bulle et retenait un clic qui ne venait jamais ; l'appui
+    suivant, trouvant la bulle « déjà ouverte », la refermait et laissait
+    passer son clic. Attendu : l'appui qui suit un balayage LIT — bulle
+    ouverte, clic retenu."""
+    r = _scenario(declencheur)["balayagePuisAppui"]
+    assert r["ouverte"], "après un balayage, l'appui n'ouvre pas la bulle : %r" % r
+    assert r["retenu"] and r["arrete"], (
+        "après un balayage, l'appui laisse passer son clic : le conteneur agit "
+        "avant que la bulle soit lue — %r" % r)
+
+
+@pytest.mark.parametrize("declencheur,bulle", FAMILLES)
+def test_un_doigt_qui_GLISSE_n_appuie_pas_un_doigt_qui_TREMBLE_si(declencheur, bulle):
+    """LE SEUIL DE 10 PX. Sans annulation du navigateur (stylet, zone en
+    `touch-action:none`), un glissé de 40 px n'est pas un appui ; un
+    tremblement de 6 px en est un — sinon un doigt réel, qui bouge toujours
+    un peu, n'ouvrirait plus rien. Et le glissé d'un AUTRE doigt n'annule pas
+    l'appui du premier."""
+    r = _scenario(declencheur)
+    assert not r["glisse"]["ouverte"] and r["glisse"]["annonce"] == "", (
+        "un glissé de 40 px a ouvert la bulle : %r" % r["glisse"])
+    assert r["tremble"]["ouverte"], "un tremblement de 6 px n'ouvre plus la bulle"
+    assert r["autreGlisse"]["ouverte"], (
+        "le glissé d'un autre doigt a annulé l'appui du premier")
+
+
+@pytest.mark.parametrize("declencheur,bulle", FAMILLES)
+def test_le_relacher_d_un_AUTRE_doigt_ou_sur_une_AUTRE_cible_ne_decide_rien(declencheur, bulle):
+    """UN APPUI, C'EST LE MÊME DOIGT ET LA MÊME CIBLE du contact au relâcher.
+    Relâché ailleurs, le geste n'ouvre pas la cible et ne ferme pas la bulle
+    déjà ouverte : il ne s'est rien passé."""
+    r = _scenario(declencheur)
+    assert not r["autreDoigt"]["ouverte"], "le relâcher d'un autre doigt a ouvert la bulle"
+    assert not r["relacheAilleurs"]["cible"]["ouverte"], (
+        "un geste relâché hors de sa cible l'a ouverte")
+    assert r["relacheAilleurs"]["deja"]["ouverte"], (
+        "un geste relâché hors de sa cible a fermé la bulle déjà ouverte")
+
+
+def test_la_region_d_annonce_existe_DES_LE_DEMARRAGE():
+    """LUE AVANT LE MOINDRE GESTE. Avant : absente au chargement de Sentinel,
+    créée au premier texte — et une région `aria-live` insérée avec son
+    premier contenu est souvent tue par les lecteurs d'écran."""
+    r = _executer("sentinel.html")["regionAuDemarrage"]
+    assert r["presente"], "la région d'annonce n'existe pas au démarrage"
+    assert r["texte"] == "" and r["live"] == "polite", (
+        "la région d'annonce n'est pas vide et « live » au démarrage : %r" % r)
+
+
+def test_Echap_est_ecoute_sur_WINDOW_en_CAPTURE():
+    """LE PREMIER MAILLON DE LA PROPAGATION. La fenêtre modale écoute Échap
+    sur `document` ; pour pouvoir consommer la frappe AVANT elle, le script
+    doit écouter plus tôt. Relevé sur ce que le script INSCRIT à
+    l'exécution, pas lu dans son texte."""
+    ins = _executer("sentinel.html")["inscrits"]
+    touches = [i for i in ins if i["type"] == "keydown"]
+    assert touches, "le script n'écoute plus aucune touche"
+    assert touches == [{"ou": "window", "type": "keydown", "capture": True, "passif": False}], (
+        "Échap n'est pas écouté sur window en capture : %r" % touches)
+
+
+@pytest.mark.parametrize("declencheur,bulle", FAMILLES)
+def test_Echap_ferme_la_BULLE_puis_la_FENETRE_une_frappe_chacune(declencheur, bulle):
+    """LE DÉFAUT MESURÉ : une bulle ouverte au doigt dans une `.mat-modal`,
+    une frappe d'Échap — bulle ET fenêtre fermées. La fenêtre est jouée ici
+    telle que Sentinel l'écrit : un écouteur `keydown` sur `document`.
+    Attendu : la première frappe ferme la bulle seule, la seconde la
+    fenêtre ; et une bulle tenue par le seul FOCUS ne retient pas la
+    frappe — la fenêtre se ferme du premier coup pour qui tabule."""
+    r = _scenario(declencheur)["echapModale"]
+    assert not r["bulle"]["ouverte"], "Échap n'a pas fermé la bulle : %r" % r
+    assert r["modale1"] == 0, "la première frappe d'Échap a AUSSI fermé la fenêtre"
+    assert r["modale2"] == 1, "la seconde frappe d'Échap n'atteint pas la fenêtre : %r" % r
+    assert r["focusSeul"] == 1, (
+        "une bulle tenue par le seul focus retient Échap : la fenêtre ne se "
+        "ferme plus du premier coup au clavier")
+
+
+@pytest.mark.parametrize("declencheur,bulle", FAMILLES)
+def test_une_bulle_QU_ON_NE_VOIT_PLUS_ne_retient_pas_Echap(declencheur, bulle):
+    """LE DÉFAUT MESURÉ (revue de robustesse, banc) : `ouvert` n'était jamais
+    revu. Un déclencheur masqué juste après l'appui — un bouton qui se cache
+    en ouvrant une fenêtre, un écran que `go()` quitte — gardait sa bulle
+    « ouverte », et le premier Échap était avalé par une bulle invisible :
+    la fenêtre restait. Masqué ou démonté, il ne retient plus la frappe ;
+    affiché, il la retient toujours (la règle d'Échap ci-dessus en est le
+    témoin)."""
+    r = _scenario(declencheur)
+    assert r["masqueAvant"]["ouverte"] and r["demonteAvant"]["ouverte"], (
+        "la bulle n'était pas ouverte : le contrôle ne mesurerait rien")
+    assert r["echapModale"]["modale1"] == 0, "témoin : une bulle AFFICHÉE ne retient plus Échap"
+    assert r["echapMasque"]["modale"] == 1, "déclencheur masqué : Échap est avalé, la fenêtre reste"
+    assert r["echapDemonte"]["modale"] == 1, "déclencheur démonté : Échap est avalé, la fenêtre reste"
+
+
+@pytest.mark.parametrize("declencheur,bulle", FAMILLES)
+def test_la_SOURIS_n_ouvre_rien_et_ne_retient_aucun_clic(declencheur, bulle):
+    """EXÉCUTÉ, ET NON PLUS SEULEMENT LU. La souris est écartée deux fois : au
+    contact (aucun geste retenu) et au relâcher. Retirer l'une ne change rien
+    — retirer les deux est le défaut, et seule une règle statique le voyait
+    (revue de conformité, constat 1). Contact, relâcher et clic de souris
+    sur un « lire d'abord » : ni bulle, ni annonce, ni clic retenu — le poste
+    fixe a déjà le survol. Le témoin : le même déclencheur, au doigt, lit
+    d'abord."""
+    r = _scenario(declencheur)
+    assert r["sourisTemoin"]["ouverte"] and r["sourisTemoin"]["retenu"], (
+        "témoin : au doigt, le déclencheur ne lit pas d'abord — %r" % r["sourisTemoin"])
+    assert not r["souris"]["ouverte"] and r["souris"]["annonce"] == "", (
+        "un clic de souris ouvre la bulle : %r" % r["souris"])
+    assert not r["souris"]["retenu"] and not r["souris"]["arrete"], (
+        "un clic de souris est retenu : la carte n'agit plus au poste fixe — %r" % r["souris"])
+
+
+@pytest.mark.parametrize("declencheur,bulle", FAMILLES)
+def test_un_title_PLUS_PROCHE_que_le_declencheur_parle_SEUL(declencheur, bulle):
+    """LE DÉFAUT MESURÉ (revue de robustesse, banc) : un `title` DANS un
+    déclencheur data-tip ouvrait les DEUX bulles à l'appui — celle du
+    `title` (/bulle-titre.js, le plus proche) et celle du déclencheur. Ce
+    script pose donc la question au relâcher (`bulleTitre.prend`) et, sur
+    un oui, n'ouvre ni n'annonce rien — c'est un appui ailleurs : la bulle
+    ouverte ailleurs se ferme. La question porte sur LE relâcher : sa
+    cible, son doigt."""
+    r = _scenario(declencheur)
+    assert r["titreProcheTemoin"]["ouverte"], "témoin : un enfant sans title n'ouvre pas le déclencheur"
+    assert r["titreProche"]["question"], "la question n'a pas été posée sur le relâcher : %r" % r["titreProche"]
+    assert not r["titreProche"]["ouverte"] and r["titreProche"]["annonce"] == "", (
+        "le déclencheur s'ouvre sous un title plus proche : %r" % r["titreProche"])
+    assert not r["titreProche"]["deja"]["ouverte"], "la bulle ouverte ailleurs reste ouverte"
+
+
+# ══════════════════════════════════════════════════════════════════════════
 #  4. LES ÉLÉMENTS NICHÉS DANS UN CLIQUABLE DÉCLARENT « LIRE D'ABORD »
 # ══════════════════════════════════════════════════════════════════════════
 
@@ -672,7 +1017,8 @@ def test_AUCUN_declencheur_ecrit_dans_un_element_cliquable_n_est_laisse_nu():
 # ══════════════════════════════════════════════════════════════════════════
 
 @pytest.mark.parametrize("ancre", ["tmpl-modal", "plan-card", "plan-selected",
-                                   "bulle-annonce", "css-bulle-ouverte"])
+                                   "bulle-annonce", "css-bulle-ouverte",
+                                   "procOpenDoc", "proc-modal-body", "mat-modal"])
 def test_la_recette_vise_des_ancres_QUI_EXISTENT(ancre):
     """UNE RECETTE QUI VISE UN IDENTIFIANT DISPARU NE MESURE PLUS RIEN."""
     recette = _lire("recette_bulles_sentinel.js")

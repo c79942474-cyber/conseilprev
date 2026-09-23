@@ -49,7 +49,9 @@
      site public, `data-tip` dans Sentinel. Un `title` natif n'est PAS
      ramassé : il appartient au navigateur, sert aussi aux champs de
      formulaire, et le détourner produirait deux infobulles sur un poste
-     fixe — celle du navigateur et la nôtre.
+     fixe — celle du navigateur et la nôtre. L'attribut title natif est pris
+     en charge ailleurs, par /bulle-titre.js, qui ne réagit jamais à la
+     souris.
 
      Les bulles ENFANTS s'y ajoutent à l'exécution, lues dans les feuilles de
      la page (voir `jumelles`) : aucune n'est nommée ici. */
@@ -443,16 +445,81 @@
 
   function demarrer() {
     publierLaRegle();
+    /* LA RÉGION D'ANNONCE EXISTE DÈS LE DÉMARRAGE, VIDE.
+       LE DÉFAUT MESURÉ : elle n'était créée qu'au premier texte à annoncer
+       — absente au chargement de Sentinel. Or une région `aria-live`
+       insérée dans le même geste que son premier contenu est souvent TUE
+       par les lecteurs d'écran : ils ne l'observaient pas encore quand le
+       texte y est arrivé. La première bulle ouverte était donc la seule
+       qu'on risquait de ne pas entendre. */
+    region();
     window.infobulles.selecteur = DECLENCHEURS;
     balayer();
 
-    /* L'APPUI. `pointerdown` couvre le doigt, le stylet et la souris ; on ne
-       retient que ce qui n'est PAS une souris, pour ne pas voler le survol
-       à un poste fixe. Un clic de souris sur une carte doit continuer de
-       suivre son lien, pas d'ouvrir une bulle. */
+    /* L'APPUI EST DÉCIDÉ AU RELÂCHER — JAMAIS AU CONTACT.
+       ═══════════════════════════════════════════════════════════════════
+       LE DÉFAUT MESURÉ. La décision se prenait au `pointerdown`, c'est-à-
+       dire avant que le navigateur sache si le doigt APPUIE ou FAIT
+       DÉFILER. Relevé au navigateur, contexte tactile :
+         · un balayage commencé sur un grand déclencheur (une carte de
+           l'accueil, un bloc) OUVRAIT sa bulle et annonçait son texte — le
+           navigateur annule le pointeur 24 ms après le contact, trop tard ;
+         · ce même balayage retenait un clic qui ne venait jamais. L'appui
+           suivant trouvait la bulle « déjà ouverte », la refermait et
+           LAISSAIT PASSER son clic : le bloc du rail DORA naviguait sans
+           avoir été lu — exactement ce que « lire d'abord » devait empêcher ;
+         · un balayage commencé AILLEURS refermait la bulle qu'on lisait,
+           alors que la page ne faisait que défiler (185 px).
+
+       CE QU'ON FAIT. Le contact ne fait que MÉMORISER le geste : quel
+       pointeur, où, sur quoi. Le relâcher décide. N'est PAS un appui — et
+       n'ouvre ni ne ferme rien — un geste que le navigateur annule (il
+       défile), un geste qui glisse de plus de 10 px, un geste relâché sur
+       une autre cible, un relâcher d'un autre doigt.
+
+       POURQUOI PAS `click`. iOS ne synthétise pas de clic sur un <div> non
+       cliquable quand l'écouteur est délégué sur `document` : une carte ou
+       une pastille ne s'ouvrirait plus sur iPhone. Un `pointerup`
+       sans annulation est une activation « au relâcher » (WCAG 2.5.2).
+
+       ET TOUJOURS PAS LA SOURIS. `pointerdown` couvre le doigt, le stylet
+       et la souris ; on ne retient que ce qui n'est PAS une souris, pour ne
+       pas voler le survol à un poste fixe. Un clic de souris sur une carte
+       doit continuer de suivre son lien, pas d'ouvrir une bulle. */
+    var geste = null;
     document.addEventListener("pointerdown", function (ev) {
+      geste = (ev.pointerType !== "mouse")
+        ? { id: ev.pointerId, x: ev.clientX, y: ev.clientY, cible: ev.target }
+        : null;
+    }, true);
+    /* Le navigateur a pris le geste pour lui : il défile, il zoome. */
+    document.addEventListener("pointercancel", function () { geste = null; }, true);
+    /* Un doigt qui glisse sans que le navigateur annule — un stylet, une
+       zone en `touch-action:none` — ne fait pas un appui non plus. Passif :
+       cet écouteur ne doit jamais retarder le défilement. */
+    document.addEventListener("pointermove", function (ev) {
+      if (geste && geste.id === ev.pointerId
+          && Math.hypot(ev.clientX - geste.x, ev.clientY - geste.y) > 10) geste = null;
+    }, { capture: true, passive: true });
+    document.addEventListener("pointerup", function (ev) {
       if (ev.pointerType === "mouse") return;
+      if (!geste || geste.id !== ev.pointerId) return;
+      var g = geste; geste = null;
       var el = ev.target && ev.target.closest && ev.target.closest(DECLENCHEURS);
+      var el0 = g.cible && g.cible.closest && g.cible.closest(DECLENCHEURS);
+      /* Relâché sur une autre cible que celle du contact : ce n'est pas un
+         appui — ni ouverture, ni fermeture. */
+      if (el !== el0) return;
+      /* UN `title` PLUS PROCHE QUE LE DÉCLENCHEUR PARLE SEUL. Le script des
+         `title` natifs (`window.bulleTitre`, chargé après celui-ci) a son
+         écouteur qui passe APRÈS celui-ci. Quand il
+         répond que ce geste est le sien — un `title` inerte DANS ce
+         déclencheur, ou un appui long qu'il a servi —, cet appui n'ouvre
+         rien ici : il est « ailleurs ». MESURÉ AVANT, au banc : un `title`
+         dans un déclencheur data-tip ouvrait les DEUX bulles, à chaque
+         appui impair. Lu à l'usage : l'autre script peut être absent. */
+      var bt = window.bulleTitre;
+      if (el && bt && typeof bt.prend === "function" && bt.prend(ev)) el = null;
       /* Un appui AILLEURS emporte le survol collé : la fermeture demandée
          n'a plus rien à retenir. */
       if (ferme && ferme !== el) lever();
@@ -534,14 +601,37 @@
        téléphone, la barre d'adresse qui se rétracte pendant un défilement
        émet un `resize` — de hauteur seulement. Le prendre pour un
        changement de mise en page ramènerait le défaut qu'on vient de
-       corriger, par une autre porte. */
-    document.addEventListener("keydown", function (ev) {
+       corriger, par une autre porte.
+
+       ÉCHAP NE FERME QU'UNE CHOSE À LA FOIS.
+       LE DÉFAUT MESURÉ : une bulle ouverte au doigt dans une fenêtre
+       `.mat-modal`, une frappe d'Échap — et la bulle ET la fenêtre se
+       fermaient. Les deux écoutaient `keydown` sur `document` ; on perdait
+       la fenêtre, et ce qu'on y avait saisi, en voulant seulement fermer
+       une explication.
+       CE QU'ON FAIT : on écoute sur `window`, EN CAPTURE — le tout premier
+       maillon de la propagation, avant tout écouteur de `document`. Si une
+       bulle était ouverte, cette frappe-là est consommée ; la suivante
+       ferme la fenêtre. Une bulle ouverte par le focus ou le survol ne
+       retient PAS la frappe : rien ne l'a « ouverte » au sens du doigt, et
+       Échap doit continuer de fermer la fenêtre du premier coup pour qui
+       tabule.
+       UNE BULLE QU'ON NE VOIT PLUS NE RETIENT PAS LA FRAPPE. LE DÉFAUT
+       MESURÉ (revue de robustesse, banc) : `ouvert` n'est jamais revu. Un
+       déclencheur masqué juste après l'appui — un bouton qui se cache en
+       ouvrant une fenêtre, un écran masqué par `go()` — gardait sa bulle
+       « ouverte » : le premier Échap était avalé par une bulle invisible,
+       et la fenêtre restait. On ne compte donc que ce qui est encore
+       affiché : un élément masqué ou démonté n'a plus aucun rectangle. */
+    window.addEventListener("keydown", function (ev) {
       if (ev.key === "Escape" || ev.key === "Esc") {
         var tenu = _tenu();
+        var etaitOuverte = !!ouvert && ouvert.getClientRects().length > 0;
         fermer();
         if (tenu) replier(tenu);
+        if (etaitOuverte) { ev.preventDefault(); ev.stopImmediatePropagation(); }
       }
-    });
+    }, true);
     var largeur = window.innerWidth;
     window.addEventListener("resize", function () {
       if (window.innerWidth === largeur) return;

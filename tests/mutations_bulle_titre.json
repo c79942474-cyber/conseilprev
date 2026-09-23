@@ -1,0 +1,626 @@
+{
+ "_pourquoi": "Chaque mutation FABRIQUE un défaut réel de /bulle-titre.js (ou de son chargement) et doit faire TOMBER la règle nommée. Une mutation qui survit dit que la règle ne mesure pas ce qu'elle prétend ; une mutation qui fait tomber une AUTRE règle dit que la règle nommée vise à côté.",
+ "cibles": [
+  "tests/test_bulle_titre.py",
+  "tests/test_infobulles_toucher.py",
+  "tests/test_bulles_enfants.py"
+ ],
+ "mutations": [
+  {
+   "nom": "le panorama ne charge plus /bulle-titre.js",
+   "fichier": "panorama.html",
+   "avant": "<script src=\"/bulle-titre.js\" defer></script>",
+   "apres": "",
+   "regle": "test_toute_page_a_title_qui_charge_infobulles_charge_AUSSI_bulle_titre"
+  },
+  {
+   "nom": "l'accueil charge /bulle-titre.js AVANT /infobulles.js",
+   "fichier": "index.html",
+   "avant": "<script src=\"/infobulles.js\" defer></script>",
+   "apres": "<script src=\"/bulle-titre.js\" defer></script><script src=\"/infobulles.js\" defer></script>",
+   "regle": "test_la_page_charge_bulle_titre_APRES_infobulles[index.html]"
+  },
+  {
+   "nom": "la formation charge le script sans aucun title",
+   "fichier": "formation.html",
+   "avant": "<script src=\"/infobulles.js\" defer></script>",
+   "apres": "<script src=\"/infobulles.js\" defer></script><script src=\"/bulle-titre.js\" defer></script>",
+   "regle": "test_la_formation_n_a_aucun_title_et_ne_charge_pas_le_script"
+  },
+  {
+   "nom": "/infobulles.js ne dit plus où vit le chemin title",
+   "fichier": "infobulles.js",
+   "avant": "en charge ailleurs, par /bulle-titre.js, qui",
+   "apres": "en charge ailleurs, qui",
+   "regle": "test_infobulles_garde_ses_DEUX_conventions_et_rien_d_autre"
+  },
+  {
+   "nom": "le script pose un tabindex (écrit comme la spécification l'interdit)",
+   "fichier": "bulle-titre.js",
+   "avant": "    if (estAide(el)) el.setAttribute(\"aria-expanded\", \"true\");",
+   "apres": "    el.setAttribute(\"tabindex\", \"0\");\n    if (estAide(el)) el.setAttribute(\"aria-expanded\", \"true\");",
+   "regle": "test_le_script_n_ecrit_pas[tabindex]"
+  },
+  {
+   "nom": "le script pose un tabindex (écrit autrement) : vu à l'exécution",
+   "fichier": "bulle-titre.js",
+   "avant": "    if (estAide(el)) el.setAttribute(\"aria-expanded\", \"true\");",
+   "apres": "    el.setAttribute('tabindex', '0');\n    if (estAide(el)) el.setAttribute(\"aria-expanded\", \"true\");",
+   "regle": "test_le_script_ne_pose_AUCUN_tabindex_a_l_execution"
+  },
+  {
+   "nom": "le script écoute le survol de la souris",
+   "fichier": "bulle-titre.js",
+   "avant": "    window.addEventListener(\"orientationchange\", fermer);",
+   "apres": "    window.addEventListener(\"orientationchange\", fermer);\n    document.addEventListener(\"mouseover\", function () {}, true);",
+   "regle": "test_le_script_n_ecrit_pas[mouseover]"
+  },
+  {
+   "nom": "le script balaie la page avec un observateur",
+   "fichier": "bulle-titre.js",
+   "avant": "  function demarrer() {\n    publierLaFeuille();",
+   "apres": "  function demarrer() {\n    try { new MutationObserver(function () {}).observe(document.documentElement, { childList: true, subtree: true }); } catch (e) {}\n    publierLaFeuille();",
+   "regle": "test_le_script_n_ecrit_pas[MutationObserver]"
+  },
+  {
+   "nom": "la bulle se ferme au défilement",
+   "fichier": "bulle-titre.js",
+   "avant": "      annulerMinuteur();\n      planifier();",
+   "apres": "      annulerMinuteur();\n      fermer();",
+   "regle": "test_aucun_ecouteur_de_DEFILEMENT_n_appelle_fermer"
+  },
+  {
+   "nom": "la bulle ne suit plus son élément au défilement",
+   "fichier": "bulle-titre.js",
+   "avant": "      annulerMinuteur();\n      planifier();",
+   "apres": "      annulerMinuteur();",
+   "regle": "test_au_DEFILEMENT_la_bulle_SUIT_son_element"
+  },
+  {
+   "nom": "la barre d'adresse qui se rétracte ferme la bulle",
+   "fichier": "bulle-titre.js",
+   "avant": "if (window.innerWidth !== largeur) {",
+   "apres": "if (true) {",
+   "regle": "test_le_redimensionnement_ne_ferme_que_s_il_change_la_LARGEUR"
+  },
+  {
+   "nom": "la bulle n'est plus muette",
+   "fichier": "bulle-titre.js",
+   "avant": "    bulle.setAttribute(\"aria-hidden\", \"true\");\n",
+   "apres": "",
+   "regle": "test_la_bulle_existe_au_demarrage_CACHEE_et_MUETTE"
+  },
+  {
+   "nom": "la bulle passe sous la fenêtre modale (z-index 100)",
+   "fichier": "bulle-titre.js",
+   "avant": "z-index:10060;",
+   "apres": "z-index:100;",
+   "regle": "test_la_feuille_est_A_PART_et_la_bulle_passe_AU_DESSUS_des_fenetres"
+  },
+  {
+   "nom": "l'appui long sur un lien ne sélectionne plus et perd son aperçu",
+   "fichier": "bulle-titre.js",
+   "avant": "\"button[title],[role=button][title]",
+   "apres": "\"a[title],button[title],[role=button][title]",
+   "regle": "test_l_appui_long_ne_selectionne_pas_ce_qui_AGIT_et_seulement_cela"
+  },
+  {
+   "nom": "le script crée window.infobulles",
+   "fichier": "bulle-titre.js",
+   "avant": "  window.bulleTitre = { fermer: fermer, ouvrirPour: ouvrirPour,",
+   "apres": "  window.infobulles = window.infobulles || { selecteur: \"\" };\n  window.bulleTitre = { fermer: fermer, ouvrirPour: ouvrirPour,",
+   "regle": "test_l_API_est_publiee_et_window_infobulles_n_est_pas_touche"
+  },
+  {
+   "nom": "ouvrir rouvre une bulle déjà ouverte",
+   "fichier": "bulle-titre.js",
+   "avant": "    if (ouverte === el && bulle && !bulle.hidden) return;\n",
+   "apres": "",
+   "regle": "test_l_API_ouvre_sans_basculer"
+  },
+  {
+   "nom": "le second appui ne ferme plus",
+   "fichier": "bulle-titre.js",
+   "avant": "      if (ouverte === a) fermer(); else ouvrirPour(a);\n    }, true);",
+   "apres": "      ouvrirPour(a);\n    }, true);",
+   "regle": "test_l_APPUI_sur_un_element_inerte_ouvre_et_le_second_ferme"
+  },
+  {
+   "nom": "un appui ailleurs ne ferme plus",
+   "fichier": "bulle-titre.js",
+   "avant": "      if (ouverte && ouverte !== a && !(estAide(ouverte) && ouverte.contains(ev.target))) fermer();\n",
+   "apres": "",
+   "regle": "test_un_appui_AILLEURS_ferme_ou_passe_a_l_autre"
+  },
+  {
+   "nom": "le filtre pointerType a disparu : la souris ouvre",
+   "fichier": "bulle-titre.js",
+   "avant": "      if (ev.pointerType === \"mouse\") return;\n      var a = ancreDe(ev.target);",
+   "apres": "      var a = ancreDe(ev.target);",
+   "regle": "test_la_SOURIS_n_ouvre_jamais_rien"
+  },
+  {
+   "nom": "le balayage ouvre de nouveau la bulle",
+   "fichier": "bulle-titre.js",
+   "avant": "    document.addEventListener(\"pointercancel\", function () {\n      var g = geste; geste = null;",
+   "apres": "    document.addEventListener(\"pointercancel\", function () {\n      var g = geste;",
+   "regle": "test_un_BALAYAGE_n_ouvre_rien_et_ne_ferme_rien"
+  },
+  {
+   "nom": "le seuil de déplacement a disparu",
+   "fichier": "bulle-titre.js",
+   "avant": "Math.hypot(ev.clientX - geste.x, ev.clientY - geste.y) > SEUIL",
+   "apres": "Math.hypot(ev.clientX - geste.x, ev.clientY - geste.y) > 1e9",
+   "regle": "test_le_seuil_de_10_px_et_le_MEME_doigt_sur_la_MEME_ancre"
+  },
+  {
+   "nom": "l'appui long sur un élément inerte ouvre la bulle",
+   "fichier": "bulle-titre.js",
+   "avant": "      if (maintenant() - g.t0 >= LONG) return;\n",
+   "apres": "",
+   "regle": "test_l_appui_long_sur_un_element_INERTE_garde_la_selection_native"
+  },
+  {
+   "nom": "le clic du relâcher d'un appui long n'est plus avalé",
+   "fichier": "bulle-titre.js",
+   "avant": "if (m && maintenant() <= m.jusqua && m.el.contains(ev.target)) {",
+   "apres": "if (false) {",
+   "regle": "test_l_APPUI_LONG_ouvre_sur_ce_qui_agit_et_AVALE_le_clic_du_relacher"
+  },
+  {
+   "nom": "le clic avalé l'est pour toujours",
+   "fichier": "bulle-titre.js",
+   "avant": "mangerClic.jusqua = maintenant() + APRES_LONG;",
+   "apres": "mangerClic.jusqua = maintenant() + 1e9;",
+   "regle": "test_l_APPUI_LONG_ouvre_sur_ce_qui_agit_et_AVALE_le_clic_du_relacher"
+  },
+  {
+   "nom": "un défilement pendant l'appui n'annule plus l'appui long",
+   "fichier": "bulle-titre.js",
+   "avant": "      annulerMinuteur();\n      planifier();",
+   "apres": "      planifier();",
+   "regle": "test_l_appui_long_est_ANNULE_par_un_defilement_un_glisse_ou_le_navigateur[defile]"
+  },
+  {
+   "nom": "un glissé n'annule plus l'appui long",
+   "fichier": "bulle-titre.js",
+   "avant": "        var g = geste; geste = null;\n        finir(g);\n",
+   "apres": "        var g = geste; geste = null;\n",
+   "regle": "test_l_appui_long_est_ANNULE_par_un_defilement_un_glisse_ou_le_navigateur[glisse]"
+  },
+  {
+   "nom": "l'annulation du navigateur n'arrête plus le minuteur",
+   "fichier": "bulle-titre.js",
+   "avant": "      var g = geste; geste = null;\n      finir(g);\n    }, true);",
+   "apres": "      var g = geste; geste = null;\n    }, true);",
+   "regle": "test_l_appui_long_est_ANNULE_par_un_defilement_un_glisse_ou_le_navigateur[annule]"
+  },
+  {
+   "nom": "l'appui court sur un bouton ouvre la bulle",
+   "fichier": "bulle-titre.js",
+   "avant": "if (g.mode !== \"appui\") { if (ouverte === a) fermer(); return; }",
+   "apres": "if (g.mode === \"lien\") { if (ouverte === a) fermer(); return; }",
+   "regle": "test_l_appui_COURT_sur_ce_qui_agit_garde_son_action_sans_bulle"
+  },
+  {
+   "nom": "un lien est traité comme un bouton",
+   "fichier": "bulle-titre.js",
+   "avant": "    if (t.closest(\"a[href]\")) return \"lien\";\n",
+   "apres": "",
+   "regle": "test_un_LIEN_garde_son_menu_et_n_a_aucun_geste"
+  },
+  {
+   "nom": "la sélection n'est plus vidée à contextmenu",
+   "fichier": "bulle-titre.js",
+   "avant": "      try { window.getSelection().removeAllRanges(); } catch (e) { /* rien */ }\n",
+   "apres": "",
+   "regle": "test_contextmenu_au_DOIGT_ouvre_annule_le_menu_et_vide_la_selection"
+  },
+  {
+   "nom": "contextmenu ne regarde plus son pointerType : la touche Menu est avalée",
+   "fichier": "bulle-titre.js",
+   "avant": "var tactile = ev.pointerType === \"touch\" || ev.pointerType === \"pen\"",
+   "apres": "var tactile = true || ev.pointerType === \"pen\"",
+   "regle": "test_contextmenu_au_DOIGT_ouvre_annule_le_menu_et_vide_la_selection"
+  },
+  {
+   "nom": "contextmenu teste le type par une autre écriture",
+   "fichier": "bulle-titre.js",
+   "avant": "var tactile = ev.pointerType === \"touch\" || ev.pointerType === \"pen\"",
+   "apres": "var tactile = /^(touch|pen)$/.test(ev.pointerType)",
+   "regle": "test_contextmenu_teste_pointerType_touch"
+  },
+  {
+   "nom": "contextmenu en bascule",
+   "fichier": "bulle-titre.js",
+   "avant": "      ouvrirPour(a);\n      annulerMinuteur();",
+   "apres": "      if (ouverte === a) fermer(); else ouvrirPour(a);\n      annulerMinuteur();",
+   "regle": "test_contextmenu_OUVRE_il_ne_bascule_pas"
+  },
+  {
+   "nom": "la cible texte de selectstart n'est plus remontée à son parent",
+   "fichier": "bulle-titre.js",
+   "avant": "    if (n && n.nodeType === 3) n = n.parentElement;\n",
+   "apres": "",
+   "regle": "test_pas_de_SELECTION_pendant_un_appui_long_sur_ce_qui_agit"
+  },
+  {
+   "nom": "un <input> qui porte son title a une bulle (la case à cocher : le champ de saisie, lui, est aussi écarté par l'élément touché)",
+   "fichier": "bulle-titre.js",
+   "avant": "/^(IFRAME|INPUT|SELECT|TEXTAREA|OPTION)$/",
+   "apres": "/^(IFRAME|SELECT|TEXTAREA|OPTION)$/",
+   "regle": "test_les_EXCLUS_n_ont_pas_de_bulle[caseTitree]"
+  },
+  {
+   "nom": "un iframe a une bulle",
+   "fichier": "bulle-titre.js",
+   "avant": "/^(IFRAME|INPUT|SELECT|TEXTAREA|OPTION)$/",
+   "apres": "/^(INPUT|SELECT|TEXTAREA|OPTION)$/",
+   "regle": "test_les_EXCLUS_n_ont_pas_de_bulle[iframe]"
+  },
+  {
+   "nom": "un élément de SVG a une bulle",
+   "fichier": "bulle-titre.js",
+   "avant": "if (t.closest(\"svg\") || t.closest(\"[data-graphe]\")) return null;",
+   "apres": "if (t.closest(\"[data-graphe]\")) return null;",
+   "regle": "test_les_EXCLUS_n_ont_pas_de_bulle[svgRect]"
+  },
+  {
+   "nom": "un graphique a une seconde bulle",
+   "fichier": "bulle-titre.js",
+   "avant": "if (t.closest(\"svg\") || t.closest(\"[data-graphe]\")) return null;",
+   "apres": "if (t.closest(\"svg\")) return null;",
+   "regle": "test_les_EXCLUS_n_ont_pas_de_bulle[dansGraphe]"
+  },
+  {
+   "nom": "le panorama a une seconde bulle sur ses data-tt",
+   "fichier": "bulle-titre.js",
+   "avant": "    if (t.closest(\"[data-tt]\")) return null;\n",
+   "apres": "",
+   "regle": "test_les_EXCLUS_n_ont_pas_de_bulle[tt]"
+  },
+  {
+   "nom": "la préséance ne vaut plus pour une data-tip DANS le title",
+   "fichier": "bulle-titre.js",
+   "avant": "if (d && (t === d || t.contains(d))) return null;",
+   "apres": "if (d && t === d) return null;",
+   "regle": "test_la_PRESEANCE_le_declencheur_le_plus_proche_parle"
+  },
+  {
+   "nom": "un title suivi d'un raccourci est informatif",
+   "fichier": "bulle-titre.js",
+   "avant": "    if (n && ti.indexOf(n) === 0 && RACCOURCI.test(ti.slice(n.length))) return false;\n",
+   "apres": "",
+   "regle": "test_un_title_qui_n_APPREND_RIEN_n_a_pas_de_bulle[raccourci]"
+  },
+  {
+   "nom": "les guillemets comptent dans la comparaison",
+   "fichier": "bulle-titre.js",
+   "avant": "      .replace(/[\"«»“”„]/g, \"\")\n",
+   "apres": "",
+   "regle": "test_un_title_qui_n_APPREND_RIEN_n_a_pas_de_bulle[repete]"
+  },
+  {
+   "nom": "un title d'un caractère est informatif",
+   "fichier": "bulle-titre.js",
+   "avant": "    if (ti.length < 2) return false;\n",
+   "apres": "",
+   "regle": "test_un_title_qui_n_APPREND_RIEN_n_a_pas_de_bulle[court]"
+  },
+  {
+   "nom": "aria-labelledby n'est plus lu",
+   "fichier": "bulle-titre.js",
+   "avant": "      if (norm(parts)) return parts;\n",
+   "apres": "",
+   "regle": "test_un_title_qui_n_APPREND_RIEN_n_a_pas_de_bulle[nomme]"
+  },
+  {
+   "nom": "aria-label n'est plus lu",
+   "fichier": "bulle-titre.js",
+   "avant": "    if (al && norm(al)) return al;\n",
+   "apres": "",
+   "regle": "test_un_title_qui_n_APPREND_RIEN_n_a_pas_de_bulle[etiquete]"
+  },
+  {
+   "nom": "le curseur pointer n'est plus lu",
+   "fichier": "bulle-titre.js",
+   "avant": "    try { if (window.getComputedStyle(t).cursor === \"pointer\") return \"long\"; } catch (e) { /* rien */ }\n",
+   "apres": "",
+   "regle": "test_un_div_au_curseur_POINTER_est_traite_comme_ce_qui_agit"
+  },
+  {
+   "nom": "la bulle s'ouvre sans délai au clavier",
+   "fichier": "bulle-titre.js",
+   "avant": "  var DELAI_CLAVIER = 500;",
+   "apres": "  var DELAI_CLAVIER = 0;",
+   "regle": "test_la_TABULATION_ouvre_500_ms_apres_et_le_depart_ferme"
+  },
+  {
+   "nom": "le focus passé DANS l'élément ferme sa bulle",
+   "fichier": "bulle-titre.js",
+   "avant": "if (ouverte && ouverte.contains(ev.target) && !(vers && ouverte.contains(vers))) fermer();",
+   "apres": "if (ouverte && ouverte.contains(ev.target)) fermer();",
+   "regle": "test_la_TABULATION_ouvre_500_ms_apres_et_le_depart_ferme"
+  },
+  {
+   "nom": "le délai clavier ouvre la bulle d'un élément déjà quitté",
+   "fichier": "bulle-titre.js",
+   "avant": "        if (a.contains(document.activeElement)) ouvrirPour(a);",
+   "apres": "        ouvrirPour(a);",
+   "regle": "test_la_TABULATION_ouvre_500_ms_apres_et_le_depart_ferme"
+  },
+  {
+   "nom": "un délai trop court : une bulle par ligne traversée",
+   "fichier": "bulle-titre.js",
+   "avant": "  var DELAI_CLAVIER = 500;",
+   "apres": "  var DELAI_CLAVIER = 50;",
+   "regle": "test_CINQ_tabulations_rapides_une_seule_bulle_a_la_fin"
+  },
+  {
+   "nom": "Entrée compte comme une tabulation",
+   "fichier": "bulle-titre.js",
+   "avant": "      derniereTouche = 0;\n",
+   "apres": "",
+   "regle": "test_un_focus_QUI_N_A_PAS_ETE_TABULE_n_ouvre_rien[focusApresEntree]"
+  },
+  {
+   "nom": "le doigt ne change plus la modalité",
+   "fichier": "bulle-titre.js",
+   "avant": "      modalite = ev.pointerType;\n",
+   "apres": "",
+   "regle": "test_un_focus_QUI_N_A_PAS_ETE_TABULE_n_ouvre_rien[focusApresDoigt]"
+  },
+  {
+   "nom": "un focus d'il y a longtemps compte",
+   "fichier": "bulle-titre.js",
+   "avant": "  var FENETRE_CLAVIER = 1000;",
+   "apres": "  var FENETRE_CLAVIER = 1e9;",
+   "regle": "test_un_focus_QUI_N_A_PAS_ETE_TABULE_n_ouvre_rien[focusTardif]"
+  },
+  {
+   "nom": "les flèches ne comptent plus",
+   "fichier": "bulle-titre.js",
+   "avant": "ArrowUp: 1, ArrowDown: 1, ArrowLeft: 1,",
+   "apres": "ArrowUp: 1, ArrowLeft: 1,",
+   "regle": "test_les_FLECHES_et_les_LIENS_comptent_au_clavier_les_CHAMPS_non"
+  },
+  {
+   "nom": "Échap écouté sur document",
+   "fichier": "bulle-titre.js",
+   "avant": "window.addEventListener(\"keydown\", function (ev) {",
+   "apres": "document.addEventListener(\"keydown\", function (ev) {",
+   "regle": "test_Echap_est_ecoute_sur_WINDOW_en_CAPTURE"
+  },
+  {
+   "nom": "Échap ferme aussi la modale (stopImmediatePropagation retiré)",
+   "fichier": "bulle-titre.js",
+   "avant": "        fermer();\n        ev.preventDefault();\n        ev.stopImmediatePropagation();",
+   "apres": "        fermer();\n        ev.preventDefault();",
+   "regle": "test_Echap_ferme_la_BULLE_puis_la_FENETRE_une_frappe_chacune"
+  },
+  {
+   "nom": "la bulle fermée par Échap se rouvre",
+   "fichier": "bulle-titre.js",
+   "avant": "if (!a || a === repliee) return;",
+   "apres": "if (!a) return;",
+   "regle": "test_apres_Echap_la_bulle_ne_se_ROUVRE_pas_tant_que_le_focus_reste"
+  },
+  {
+   "nom": "la bulle recouvre l'élément",
+   "fichier": "bulle-titre.js",
+   "avant": "var dessous = r.bottom + 6,",
+   "apres": "var dessous = r.bottom - 6,",
+   "regle": "test_la_bulle_se_place_DESSOUS_centree_sans_jamais_recouvrir_l_element"
+  },
+  {
+   "nom": "la bulle ne passe plus dessus",
+   "fichier": "bulle-titre.js",
+   "avant": "      if (dessous + h <= basVV - 8) haut = dessous;",
+   "apres": "      if (true) haut = dessous;",
+   "regle": "test_la_bulle_passe_DESSUS_quand_la_place_manque_dessous"
+  },
+  {
+   "nom": "la bulle est bornée à innerWidth",
+   "fichier": "bulle-titre.js",
+   "avant": "    if (vv && vv.width) return vv;\n",
+   "apres": "",
+   "regle": "test_la_bulle_reste_dans_la_FENETRE_VISUELLE"
+  },
+  {
+   "nom": "la bulle du menu ne passe plus à droite",
+   "fichier": "bulle-titre.js",
+   "avant": "var aDroite = !!rs && droiteVV - rs.right >= 208;",
+   "apres": "var aDroite = false;",
+   "regle": "test_dans_le_MENU_la_bulle_passe_A_DROITE_quand_il_y_a_la_place"
+  },
+  {
+   "nom": "un élément démonté garde sa bulle",
+   "fichier": "bulle-titre.js",
+   "avant": "if (!a.isConnected || !a.getClientRects().length",
+   "apres": "if (!a.getClientRects().length",
+   "regle": "test_le_TEXTE_est_relu_et_une_bulle_sans_objet_se_ferme"
+  },
+  {
+   "nom": "un écran masqué garde sa bulle",
+   "fichier": "bulle-titre.js",
+   "avant": "if (!a.isConnected || !a.getClientRects().length || !norm(txt)",
+   "apres": "if (!a.isConnected || !norm(txt)",
+   "regle": "test_le_TEXTE_est_relu_et_une_bulle_sans_objet_se_ferme"
+  },
+  {
+   "nom": "l'intervalle tourne encore bulle fermée",
+   "fichier": "bulle-titre.js",
+   "avant": "    if (intervalle) { clearInterval(intervalle); intervalle = null; }\n",
+   "apres": "",
+   "regle": "test_l_intervalle_ne_tourne_QUE_bulle_ouverte"
+  },
+  {
+   "nom": "le bouton d'aide ne bascule plus",
+   "fichier": "bulle-titre.js",
+   "avant": "if (b) { if (ouverte === b) fermer(); else ouvrirPour(b); }",
+   "apres": "if (b) ouvrirPour(b);",
+   "regle": "test_le_bouton_d_AIDE_bascule_a_la_souris_comme_au_doigt"
+  },
+  {
+   "nom": "aria-expanded ne passe plus à true",
+   "fichier": "bulle-titre.js",
+   "avant": "    if (estAide(el)) el.setAttribute(\"aria-expanded\", \"true\");\n",
+   "apres": "",
+   "regle": "test_le_bouton_d_AIDE_bascule_a_la_souris_comme_au_doigt"
+  },
+  {
+   "nom": "aria-expanded ne revient plus à false",
+   "fichier": "bulle-titre.js",
+   "avant": "    if (estAide(a)) a.setAttribute(\"aria-expanded\", \"false\");\n",
+   "apres": "",
+   "regle": "test_le_bouton_d_aide_se_REFERME_et_le_dit[echap]"
+  },
+  {
+   "nom": "la pastille du rail hérite de nouveau le title de la ligne",
+   "fichier": "sentinel.page.js",
+   "avant": "      puce.setAttribute('title', '');\n",
+   "apres": "",
+   "regle": "test_la_pastille_du_rail_porte_un_title_VIDE"
+  },
+  {
+   "nom": "Entrée sur l'élément laisse sa bulle ouverte (par-dessus la fenêtre qu'il ouvre)",
+   "fichier": "bulle-titre.js",
+   "avant": "if ((ev.key === \"Enter\" || ev.key === \" \" || ev.key === \"Spacebar\") && ouverte",
+   "apres": "if (false && ouverte",
+   "regle": "test_ENTREE_sur_l_element_ferme_sa_bulle_et_ne_la_rouvre_pas"
+  },
+  {
+   "nom": "Espace ne compte plus : la ligne du menu garde sa bulle en naviguant",
+   "fichier": "bulle-titre.js",
+   "avant": "if ((ev.key === \"Enter\" || ev.key === \" \" || ev.key === \"Spacebar\") && ouverte",
+   "apres": "if ((ev.key === \"Enter\") && ouverte",
+   "regle": "test_ENTREE_sur_l_element_ferme_sa_bulle_et_ne_la_rouvre_pas"
+  },
+  {
+   "nom": "Entrée ferme aussi le bouton d'aide, que son clic rouvre",
+   "fichier": "bulle-titre.js",
+   "avant": "          && !estAide(ouverte) && ouverte.contains(document.activeElement)) {",
+   "apres": "          && ouverte.contains(document.activeElement)) {",
+   "regle": "test_ENTREE_sur_le_bouton_d_aide_reste_une_BASCULE"
+  },
+  {
+   "nom": "Espace ferme la bulle d'un élément qui n'a pas le focus",
+   "fichier": "bulle-titre.js",
+   "avant": "          && !estAide(ouverte) && ouverte.contains(document.activeElement)) {",
+   "apres": "          && !estAide(ouverte)) {",
+   "regle": "test_ESPACE_qui_fait_defiler_ne_ferme_pas_la_bulle_d_un_AUTRE_element"
+  },
+  {
+   "nom": "ouvrir ici laisse ouverte la bulle d'/infobulles.js",
+   "fichier": "bulle-titre.js",
+   "avant": "    if (ib && typeof ib.fermer === \"function\") ib.fermer();\n",
+   "apres": "",
+   "regle": "test_OUVRIR_ici_ferme_la_bulle_d_infobulles"
+  },
+  {
+   "nom": "la pastille tue DANS la ligne ouverte n'est plus un appui ailleurs",
+   "fichier": "bulle-titre.js",
+   "avant": "!(estAide(ouverte) && ouverte.contains(ev.target))",
+   "apres": "!ouverte.contains(ev.target)",
+   "regle": "test_un_appui_sur_une_partie_TUE_de_l_element_est_un_appui_AILLEURS"
+  },
+  {
+   "nom": "le relâcher ferme le bouton d'aide ouvert, que son clic rouvre",
+   "fichier": "bulle-titre.js",
+   "avant": "!(estAide(ouverte) && ouverte.contains(ev.target))",
+   "apres": "true",
+   "regle": "test_un_APPUI_sur_le_bouton_d_aide_OUVERT_le_referme"
+  },
+  {
+   "nom": "prend ne répond jamais",
+   "fichier": "bulle-titre.js",
+   "avant": "prend: function (ev) { return prendre(ev); }",
+   "apres": "prend: function (ev) { return false; }",
+   "regle": "test_prend_dit_si_le_relacher_est_A_NOUS[inerte-True]"
+  },
+  {
+   "nom": "prend oublie l'appui long qu'il a servi",
+   "fichier": "bulle-titre.js",
+   "avant": "return g.long || (g.mode === \"appui\" && maintenant() - g.t0 < LONG);",
+   "apres": "return (g.mode === \"appui\" && maintenant() - g.t0 < LONG);",
+   "regle": "test_prend_dit_si_le_relacher_est_A_NOUS[long-True]"
+  },
+  {
+   "nom": "prend réclame l'appui court sur ce qui agit (la lecture d'abord perdue)",
+   "fichier": "bulle-titre.js",
+   "avant": "return g.long || (g.mode === \"appui\" && maintenant() - g.t0 < LONG);",
+   "apres": "return g.long || (maintenant() - g.t0 < LONG);",
+   "regle": "test_prend_dit_si_le_relacher_est_A_NOUS[boutonCourt-False]"
+  },
+  {
+   "nom": "prend réclame l'élément inerte tenu (sélection native)",
+   "fichier": "bulle-titre.js",
+   "avant": "return g.long || (g.mode === \"appui\" && maintenant() - g.t0 < LONG);",
+   "apres": "return g.long || (g.mode === \"appui\");",
+   "regle": "test_prend_dit_si_le_relacher_est_A_NOUS[inerteTenu-False]"
+  },
+  {
+   "nom": "prend ne regarde plus le doigt",
+   "fichier": "bulle-titre.js",
+   "avant": "if (!g || !ev || g.id !== ev.pointerId || !g.ancre) return false;",
+   "apres": "if (!g || !ev || !g.ancre) return false;",
+   "regle": "test_prend_dit_si_le_relacher_est_A_NOUS[autreDoigt-False]"
+  },
+  {
+   "nom": "prend ne regarde plus la cible du relâcher",
+   "fichier": "bulle-titre.js",
+   "avant": "      if (ancreDe(ev.target) !== g.ancre) return false;\n",
+   "apres": "",
+   "regle": "test_prend_dit_si_le_relacher_est_A_NOUS[autreAncre-False]"
+  },
+  {
+   "nom": "un champ emprunte de nouveau la bulle de son conteneur",
+   "fichier": "bulle-titre.js",
+   "avant": "    if (saisie(n)) return null;\n",
+   "apres": "",
+   "regle": "test_un_CHAMP_n_emprunte_pas_la_bulle_de_son_CONTENEUR[appuiDansBloc]"
+  },
+  {
+   "nom": "la zone de texte n'est plus un champ",
+   "fichier": "bulle-titre.js",
+   "avant": "var SAISIE = /^(INPUT|SELECT|TEXTAREA|OPTION)$/;",
+   "apres": "var SAISIE = /^(INPUT|SELECT|OPTION)$/;",
+   "regle": "test_un_CHAMP_n_emprunte_pas_la_bulle_de_son_CONTENEUR[zoneDansBloc]"
+  },
+  {
+   "nom": "la case à cocher perd la bulle de son libellé",
+   "fichier": "bulle-titre.js",
+   "avant": "      && !/^(checkbox|radio)$/i.test(n.getAttribute(\"type\") || \"\");",
+   "apres": "      && true;",
+   "regle": "test_la_CASE_a_cocher_garde_la_bulle_de_son_LIBELLE"
+  },
+  {
+   "nom": "à droite du menu, la bulle garde sa pleine largeur et déborde sur la ligne",
+   "fichier": "bulle-titre.js",
+   "avant": "    if (aDroite) largeurMax = Math.min(largeurMax, droiteVV - rs.right - 16);\n",
+   "apres": "",
+   "regle": "test_a_droite_du_menu_la_bulle_ne_deborde_PAS_sur_la_ligne"
+  },
+  {
+   "nom": "la largeur de la bulle n'est plus bornée par la fenêtre visuelle",
+   "fichier": "bulle-titre.js",
+   "avant": "var largeurMax = Math.min(320, vv.width - 16);",
+   "apres": "var largeurMax = 320 + vv.width;",
+   "regle": "test_une_bulle_plus_LARGE_que_la_fenetre_est_BORNEE"
+  },
+  {
+   "nom": "le redimensionnement de la fenêtre visuelle n'est plus écouté",
+   "fichier": "bulle-titre.js",
+   "avant": "      window.visualViewport.addEventListener(\"resize\", planifier);\n",
+   "apres": "",
+   "regle": "test_la_bulle_SUIT_la_fenetre_visuelle_avant_l_intervalle[resize]"
+  },
+  {
+   "nom": "le défilement de la fenêtre visuelle n'est plus écouté",
+   "fichier": "bulle-titre.js",
+   "avant": "      window.visualViewport.addEventListener(\"scroll\", planifier);\n",
+   "apres": "",
+   "regle": "test_la_bulle_SUIT_la_fenetre_visuelle_avant_l_intervalle[scroll]"
+  }
+ ]
+}

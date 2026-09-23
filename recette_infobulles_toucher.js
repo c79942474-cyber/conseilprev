@@ -45,6 +45,24 @@ const BULLE = (s) => {
            bas: cs.bottom, gauche: cs.left, largeur: cs.width };
 };
 
+/* LE BALAYAGE, TEL QUE LE DOIGT LE FAIT : un contact, dix déplacements sur
+ * 200 px vers le haut, un relâcher. Envoyé au navigateur par le protocole
+ * de débogage, et non par des événements fabriqués dans la page : c'est le
+ * navigateur lui-même qui décide que le geste défile et qui ANNULE le
+ * pointeur — exactement ce qu'un téléphone fait. Rend le défilement de la
+ * fenêtre, en pixels. */
+const BALAYER = async (p, cdp, x, y) => {
+  const y0 = await p.evaluate(() => window.scrollY);
+  await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x, y }] });
+  for (let i = 1; i <= 10; i++) {
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x, y: y - 20 * i }] });
+    await p.waitForTimeout(16);
+  }
+  await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+  await p.waitForTimeout(700);
+  return { defile: Math.round((await p.evaluate(() => window.scrollY)) - y0) };
+};
+
 const FURTIF = (ctx) => ctx.addInitScript(() => {
   Object.defineProperty(navigator, 'webdriver', { get: () => false });
   Object.defineProperty(navigator, 'plugins', { get: () => [1, 2, 3, 4, 5] });
@@ -197,6 +215,99 @@ const FURTIF = (ctx) => ctx.addInitScript(() => {
   ok('le focus annonce le texte', clav.annonce.length > 30);
   await ctx.close();
 
+  // ══ 3 bis. UN BALAYAGE N'EST PAS UN APPUI ═════════════════════════════
+  console.log('\n3 bis. Le geste est décidé au RELÂCHER — un balayage n’est pas un appui (I-1, I-3)');
+  /* AVANT LE RAIL DORA, ET CE N'EST PAS UN HASARD : l'accueil coûte sept
+     requêtes, Sentinel près d'une centaine. Placée après les deux
+     chargements de Sentinel, cette section se faisait refuser l'accueil par
+     le limiteur (429) — mesuré.
+     LE DÉFAUT MESURÉ. La décision se prenait au `pointerdown`, c'est-à-dire
+     au CONTACT — avant que le navigateur sache si le doigt appuie ou fait
+     défiler. Deux effets, relevés au navigateur :
+       · un balayage commencé sur une grande carte OUVRAIT sa bulle et
+         annonçait son texte — le navigateur annule le pointeur 24 ms plus
+         tard, trop tard ;
+       · un balayage commencé AILLEURS refermait la bulle qu'on lisait, alors
+         que la page défilait seulement (185 px).
+     CHAQUE CONTRÔLE VÉRIFIE D'ABORD QUE LE GESTE EST UN VRAI BALAYAGE —
+     pointeur annulé, fenêtre défilée. Sans ce témoin, un geste qui n'aurait
+     rien fait du tout passerait « aucune bulle ouverte » à vide. */
+  ctx = await nav.newContext({ ...devices['Pixel 7'], hasTouch: true, isMobile: true });
+  await FURTIF(ctx);
+  p = await ctx.newPage();
+  await p.goto(BASE + '/', { waitUntil: 'domcontentloaded' });
+  await p.waitForSelector(SEL);
+  await p.waitForFunction(() => !!document.getElementById('css-bulle-ouverte'),
+                          null, { timeout: 8000 });
+  const cdp6 = await ctx.newCDPSession(p);
+  await p.evaluate(() => { window.__gestes = [];
+    ['pointerdown', 'pointercancel', 'pointerup'].forEach(t =>
+      document.addEventListener(t, () => window.__gestes.push(t), true)); });
+  const CARTE = (s) => {
+    const e = document.querySelector(s);
+    return { ouverte: e.classList.contains('bulle-ouverte'),
+             opacite: getComputedStyle(e, '::after').opacity,
+             annonce: (document.getElementById('bulle-annonce') || {}).textContent || '' };
+  };
+  const auCentre = async () => {
+    await p.evaluate(s => document.querySelector(s)
+      .scrollIntoView({ block: 'center', behavior: 'instant' }), SEL);
+    await p.waitForTimeout(400);
+    return p.locator(SEL).first().boundingBox();
+  };
+
+  // I-1 — le balayage commence SUR la carte.
+  let bc = await auCentre();
+  await p.evaluate(() => { window.__gestes = []; });
+  let rb = await BALAYER(p, cdp6, bc.x + bc.width / 2, bc.y + bc.height / 2);
+  let g = await p.evaluate(() => window.__gestes.join(' '));
+  ok('I-1 le geste est un vrai balayage : pointeur annulé, page défilée',
+     /pointercancel/.test(g) && rb.defile > 50, g + ' · ' + rb.defile + ' px');
+  let ec = await p.evaluate(CARTE, SEL);
+  ok('I-1 un balayage commencé SUR la carte n’ouvre PAS sa bulle', !ec.ouverte,
+     'classe ' + ec.ouverte + ', opacité ' + ec.opacite);
+  ok('I-1 …et n’annonce rien au lecteur d’écran', ec.annonce === '',
+     '« ' + ec.annonce.slice(0, 40) + ' »');
+
+  // I-3 — la bulle est ouverte par un appui, puis un balayage commence AILLEURS.
+  /* On repart d'un état REPOSÉ : sur le code d'avant, le balayage de I-1
+     avait laissé la bulle ouverte, et l'appui suivant l'aurait refermée —
+     I-3 aurait mesuré la séquelle de I-1 au lieu de son propre geste. */
+  await p.evaluate(() => window.infobulles.fermer());
+  bc = await auCentre();
+  await p.touchscreen.tap(bc.x + bc.width / 2, bc.y + bc.height / 2);
+  await p.waitForTimeout(500);
+  ec = await p.evaluate(CARTE, SEL);
+  ok('I-3 la bulle est ouverte par l’appui avant d’éprouver le balayage',
+     ec.ouverte && ec.opacite === '1', 'opacité ' + ec.opacite);
+  /* AILLEURS, VRAIMENT : un point de l'écran qui n'est dans AUCUN
+     déclencheur ni aucun lien — sinon on éprouverait un appui sur une autre
+     bulle, qui a le droit de fermer celle-ci. */
+  const loin = await p.evaluate(() => {
+    const sel = window.infobulles.selecteur;
+    for (let y = 240; y < innerHeight - 40; y += 20) {
+      for (const x of [8, 20, innerWidth - 12]) {
+        const e = document.elementFromPoint(x, y);
+        if (e && !e.closest(sel) && !e.closest('a,button,input,select,textarea,label,[onclick]')) {
+          return { x, y, quoi: e.tagName + '.' + String(e.className).split(' ')[0] };
+        }
+      }
+    }
+    return null;
+  });
+  ok('I-3 un point hors de toute bulle est à l’écran', !!loin, loin && loin.quoi);
+  if (loin) {
+    await p.evaluate(() => { window.__gestes = []; });
+    rb = await BALAYER(p, cdp6, loin.x, loin.y);
+    g = await p.evaluate(() => window.__gestes.join(' '));
+    ok('I-3 le geste est un vrai balayage : pointeur annulé, page défilée',
+       /pointercancel/.test(g) && rb.defile > 50, g + ' · ' + rb.defile + ' px');
+    ec = await p.evaluate(CARTE, SEL);
+    ok('I-3 UN BALAYAGE AILLEURS NE FERME PAS la bulle qu’on lisait',
+       ec.ouverte && ec.opacite === '1', 'classe ' + ec.ouverte + ', opacité ' + ec.opacite);
+  }
+  await ctx.close();
+
   // ══ 4. LE RAIL DORA, QUI PORTAIT UN `title` NATIF ══════════════════════
   console.log('\n4. Le rail DORA — son infobulle était un `title`, muet au doigt');
   ctx = await nav.newContext({ ...devices['Pixel 7'], hasTouch: true, isMobile: true });
@@ -241,6 +352,52 @@ const FURTIF = (ctx) => ctx.addInitScript(() => {
          var v = document.getElementById('p-dora-qualifier');
          return !!v && getComputedStyle(v).display !== 'none';
        }));
+
+    /* I-2 — UN BALAYAGE NE DOIT PAS « CONSOMMER » LA LECTURE D'ABORD.
+       LE DÉFAUT MESURÉ : la bulle s'ouvrait au `pointerdown`, donc AU DÉBUT
+       d'un balayage, et retenait un clic qui ne venait jamais (le navigateur
+       annule le pointeur dès que la page défile). L'appui suivant trouvait
+       la bulle « déjà ouverte », la refermait et LAISSAIT PASSER son clic :
+       le bloc naviguait sans avoir été lu.
+       ON COMPTE LES CLICS QUI PASSENT, en capture sur <body> : l'arrêt du
+       script se fait en capture sur `document`, avant <body> — un clic
+       compté ici est un clic que le bouton reçoit. Le rail est repeint par la
+       navigation : on relit le bloc à chaque étape. */
+    const cdp4 = await ctx.newCDPSession(p);
+    await p.evaluate(() => {
+      window.__passes = 0; window.__gestes = []; window.__defile = 0;
+      document.body.addEventListener('click', e => {
+        if (e.target.closest && e.target.closest('.dr-bloc')) window.__passes++;
+      }, true);
+      ['pointerdown', 'pointercancel', 'pointerup'].forEach(t =>
+        document.addEventListener(t, () => window.__gestes.push(t), true));
+      document.addEventListener('scroll', () => { window.__defile++; }, true);
+    });
+    await p.evaluate(s => { if (window.infobulles) window.infobulles.fermer();
+      document.querySelector(s).scrollIntoView({ block: 'center', behavior: 'instant' }); }, RAIL);
+    await p.waitForTimeout(400);
+    const bb = await p.locator(RAIL).first().boundingBox();
+    const r2 = await BALAYER(p, cdp4, bb.x + bb.width / 2, bb.y + bb.height / 2);
+    const d2 = await p.evaluate(() => ({ defile: window.__defile, gestes: window.__gestes.join(' ') }));
+    /* LE TÉMOIN, ICI, EST L'ANNULATION SEULE. Sur cet écran, en Pixel 7, la
+       fenêtre de mise en page est aussi haute que le document (2652 px) :
+       rien ne défile sous le rail — mesuré. Le navigateur reconnaît pourtant
+       le glissement et ANNULE le pointeur sans relâcher, et c'est ce qui
+       fait un balayage aux yeux du script. */
+    ok('I-2 le geste est un vrai balayage : le navigateur a annulé le pointeur, sans relâcher',
+       /pointercancel/.test(d2.gestes) && !/pointerup/.test(d2.gestes),
+       d2.gestes + ' · ' + d2.defile + ' défilement(s), ' + r2.defile + ' px de fenêtre');
+    ok('I-2 le balayage n’a laissé passer aucun clic', await p.evaluate(() => window.__passes) === 0);
+    await p.locator(RAIL).first().tap();
+    await p.waitForTimeout(500);
+    const t1 = await p.evaluate(s => ({ passes: window.__passes,
+      ouverte: document.querySelector(s).classList.contains('bulle-ouverte') }), RAIL);
+    ok('I-2 LE PREMIER APPUI APRÈS UN BALAYAGE LIT : bulle ouverte, aucun clic',
+       t1.ouverte && t1.passes === 0, 'ouverte ' + t1.ouverte + ', ' + t1.passes + ' clic(s)');
+    await p.locator(RAIL).first().tap();
+    await p.waitForTimeout(900);
+    const t2 = await p.evaluate(() => window.__passes);
+    ok('I-2 …et le second appui AGIT : un clic, un seul', t2 === 1, t2 + ' clic(s)');
   }
   await ctx.close();
 

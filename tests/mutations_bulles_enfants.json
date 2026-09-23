@@ -222,6 +222,20 @@
    "avant": "return ' <span class=\"mat-tooltip-wrap\" onclick=\"event.stopPropagation()\">",
    "apres": "return ' <span class=\"mat-tooltip-wrap\">",
    "regle": "test_la_maturite_ARRETE_toujours_son_clic"
+  },
+  {
+   "nom": "un title plus proche n'est plus demandé : les deux bulles s'ouvrent",
+   "fichier": "infobulles.js",
+   "avant": "      if (el && bt && typeof bt.prend === \"function\" && bt.prend(ev)) el = null;\n",
+   "apres": "",
+   "regle": "test_un_title_PLUS_PROCHE_que_le_declencheur_parle_SEUL[mat-tooltip-wrap-mat-tooltip]"
+  },
+  {
+   "nom": "une bulle masquée ou démontée retient encore Échap",
+   "fichier": "infobulles.js",
+   "avant": "var etaitOuverte = !!ouvert && ouvert.getClientRects().length > 0;",
+   "apres": "var etaitOuverte = !!ouvert;",
+   "regle": "test_une_bulle_QU_ON_NE_VOIT_PLUS_ne_retient_pas_Echap[mat-tooltip-wrap-mat-tooltip]"
   }
  ]
 }

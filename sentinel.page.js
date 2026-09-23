@@ -28220,6 +28220,12 @@ function railPeindreBarre(norme, p) {
       /* LE PREMIER APPUI AU DOIGT OUVRE LA BULLE, LE SECOND OUVRE L'ÉCRAN.
          Sans cela, l'appui naviguerait avant que la bulle soit lisible. */
       puce.setAttribute('data-bulle-avant-clic', '');
+      /* UN `title` VIDE EST UN SILENCE EXPLICITE. La puce a sa bulle
+         (data-tooltip) ; sans lui, elle héritait AUSSI de celle, native, de
+         la ligne du menu qui la porte — deux bulles l'une sur l'autre au
+         survol de la puce. Le vide coupe aussi, par la même règle, le
+         chemin `title` de /bulle-titre.js sur la puce. */
+      puce.setAttribute('title', '');
       it.appendChild(puce);
     }
     it.setAttribute('data-rail', b.etat);

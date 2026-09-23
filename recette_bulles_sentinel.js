@@ -151,6 +151,22 @@ async function fermerLaFiche(p) {
   await p.waitForTimeout(2500);
   ok('le contexte est bien tactile', await p.evaluate(() => matchMedia('(hover:none)').matches));
 
+  /* I-4 — LA RÉGION D'ANNONCE EXISTE DÈS LE CHARGEMENT, VIDE.
+     LE DÉFAUT MESURÉ : elle n'était créée qu'au premier texte à annoncer —
+     absente au chargement. Une région `aria-live` insérée dans le même
+     geste que son premier contenu est souvent TUE par les lecteurs d'écran :
+     ils ne l'observaient pas encore quand le texte y est arrivé. Mesuré
+     AVANT tout geste : sinon un appui l'aurait créée, et le contrôle
+     passerait pour une raison sans rapport. */
+  const r4 = await p.evaluate(() => {
+    const r = document.getElementById('bulle-annonce');
+    return r ? { presente: true, texte: r.textContent, live: r.getAttribute('aria-live') }
+             : { presente: false };
+  });
+  ok('I-4 la région d’annonce existe dès le chargement, avant tout appui', r4.presente);
+  ok('I-4 …vide, et déjà « live »', r4.presente && r4.texte === '' && r4.live === 'polite',
+     r4.presente ? '« ' + r4.texte.slice(0, 30) + ' », aria-live=' + r4.live : 'absente');
+
   for (const f of FAMILLES) {
     console.log('\n  — ' + f.nom + ' (' + f.decl + ')');
     await aller(p, f.page);
@@ -252,6 +268,58 @@ async function fermerLaFiche(p) {
     const apres = await p.evaluate(ETAT, ['doigt-champ', '.prx-tip-bubble']);
     ok('…et la bulle du champ s’est refermée quand le focus est passé au champ',
        !apres.ouverte, apres.display);
+  }
+
+  // — I-5 : une bulle ouverte au doigt DANS une fenêtre modale, puis Échap.
+  console.log('\n  — I-5 : une bulle ouverte dans une fenêtre modale, puis Échap');
+  /* LE DÉFAUT MESURÉ : une seule frappe d'Échap fermait la bulle ET la
+     fenêtre modale qui la contient — les deux écoutaient `keydown` sur
+     `document`. On perdait la fenêtre (et ce qu'on y avait saisi) en voulant
+     seulement fermer une explication.
+     LA FENÊTRE : celle d'un guide de procédure, ouverte par sa fonction
+     d'ouverture, qui ne fait QUE l'afficher — la génération par IA attend un
+     bouton sur lequel la recette n'appuie jamais. Aucune modale de Sentinel
+     ne porte aujourd'hui de bulle `data-tip` : la recette en pose une dans
+     le corps de la fenêtre, et le script la ramasse comme n'importe quelle
+     autre (son observateur la rend atteignable au clavier). */
+  await aller(p, 'maturite');
+  const pose = await p.evaluate(() => {
+    if (typeof window.procOpenDoc !== 'function') return 'procOpenDoc absente';
+    window.procOpenDoc('01');
+    const m = document.getElementById('proc-modal'), corps = document.getElementById('proc-modal-body');
+    if (!m || !corps || !m.classList.contains('on') || !m.classList.contains('mat-modal')) return 'la fenêtre ne s’est pas ouverte';
+    const t = document.createElement('span');
+    t.id = 'recette-tip-modale';
+    t.setAttribute('data-tip', 'Bulle posée par la recette dans la fenêtre modale');
+    t.textContent = '(i)';
+    t.style.cssText = 'display:inline-block;padding:10px 14px';
+    corps.insertBefore(t, corps.firstChild);
+    return '';
+  });
+  ok('I-5 une fenêtre .mat-modal est ouverte, une bulle data-tip posée dedans', pose === '', pose);
+  if (pose === '') {
+    const I5 = () => p.evaluate(() => ({
+      bulle: document.getElementById('recette-tip-modale').classList.contains('bulle-ouverte'),
+      modale: document.getElementById('proc-modal').classList.contains('on'),
+      annonce: ((document.getElementById('bulle-annonce') || {}).textContent || '').slice(0, 40) }));
+    await p.waitForTimeout(300);
+    await p.locator('#recette-tip-modale').tap(); await p.waitForTimeout(500);
+    let e5 = await I5();
+    ok('I-5 l’appui ouvre la bulle dans la fenêtre', e5.bulle && e5.modale, JSON.stringify(e5));
+    await p.keyboard.press('Escape'); await p.waitForTimeout(400);
+    e5 = await I5();
+    ok('I-5 LE PREMIER ÉCHAP ferme la bulle', !e5.bulle);
+    ok('I-5 …et LAISSE la fenêtre ouverte', e5.modale, 'fenêtre .on = ' + e5.modale);
+    /* Le second Échap ne se juge que sur une fenêtre ENCORE ouverte : sinon
+       « fermée » serait vrai d'avance. */
+    const ouverteAvant = e5.modale;
+    await p.keyboard.press('Escape'); await p.waitForTimeout(400);
+    e5 = await I5();
+    ok('I-5 le SECOND Échap ferme la fenêtre', ouverteAvant && !e5.modale,
+       'ouverte avant : ' + ouverteAvant + ', après : ' + e5.modale);
+    await p.evaluate(() => { const m = document.getElementById('proc-modal'); if (m) m.classList.remove('on');
+      const t = document.getElementById('recette-tip-modale'); if (t) t.remove();
+      if (window.infobulles) window.infobulles.fermer(); });
   }
 
   // ══ 2. LE RECENSEMENT ══════════════════════════════════════════════════

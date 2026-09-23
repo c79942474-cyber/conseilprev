@@ -12793,6 +12793,13 @@ if(window.parent&&window.parent!==window){
      dessine aucune bulle — il dérive l'état ouvert des règles de survol
      déjà écrites ici, et se contente de poser une classe. -->
 <script src="/infobulles.js" defer></script>
+<!-- LES `title` NATIFS SE LISENT AUSSI AU DOIGT ET AU CLAVIER.
+     Un `title` ne s'affiche qu'au survol de la souris : mesuré au
+     navigateur, rien ne s'ouvrait à l'appui ni à la tabulation. Chargé
+     APRÈS /infobulles.js, dont il lit le sélecteur pour lui céder la
+     place là où les deux se recouvrent. Rien à la souris : le navigateur y
+     montre déjà le `title`. -->
+<script src="/bulle-titre.js" defer></script>
 <script src="/fleches.js" defer></script>
 
 <script>
