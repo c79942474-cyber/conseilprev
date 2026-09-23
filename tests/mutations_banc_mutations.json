@@ -1,0 +1,64 @@
+{
+ "_pourquoi": "Le banc qui rejoue les mutations se garde lui-même : il remet toujours le fichier en état (même interrompu), n'écrase jamais ce qu'on a écrit pendant la batterie, refuse les ancres absentes ou doubles et les règles disparues, compte une erreur de collecte comme une chute, et ne confond pas la chute d'une autre règle avec celle qu'il vise.",
+ "cibles": [
+  "tests/test_banc_mutations.py"
+ ],
+ "mutations": [
+  {
+   "nom": "la restauration disparaît du finally",
+   "fichier": "outils/muter.py",
+   "avant": "        try:\n            chute = tombees(lanceur(t[\"cibles\"]))\n        finally:\n            restaurer()",
+   "apres": "        chute = tombees(lanceur(t[\"cibles\"]))\n        restaurer()",
+   "regle": "test_un_banc_INTERROMPU_remet_le_fichier_en_etat"
+  },
+  {
+   "nom": "la restauration écrase ce qu'on a écrit pendant la batterie",
+   "fichier": "outils/muter.py",
+   "avant": "    if actuel == mute:\n        _ecrire(chemin, origine)",
+   "apres": "    if True:\n        _ecrire(chemin, origine)",
+   "regle": "test_une_modification_PENDANT_la_batterie_n_est_pas_ecrasee"
+  },
+  {
+   "nom": "une ancre double passe la vérification",
+   "fichier": "outils/muter.py",
+   "avant": "            if n != 1:",
+   "apres": "            if n == 0:",
+   "regle": "test_une_ANCRE_double_est_une_faute"
+  },
+  {
+   "nom": "une ancre absente passe la vérification",
+   "fichier": "outils/muter.py",
+   "avant": "            if n != 1:",
+   "apres": "            if n > 1:",
+   "regle": "test_une_ANCRE_absente_est_une_faute"
+  },
+  {
+   "nom": "une règle disparue passe la vérification",
+   "fichier": "outils/muter.py",
+   "avant": "        if not any(motif.search(s) for s in sources):",
+   "apres": "        if False:",
+   "regle": "test_une_REGLE_inconnue_est_une_faute"
+  },
+  {
+   "nom": "une erreur de collecte redevient une survie",
+   "fichier": "outils/muter.py",
+   "avant": "        for prefixe in (\"FAILED \", \"ERROR \"):",
+   "apres": "        for prefixe in (\"FAILED \",):",
+   "regle": "test_une_erreur_de_COLLECTE_est_une_chute_pas_une_survie"
+  },
+  {
+   "nom": "une chute d'une AUTRE règle compte comme la bonne",
+   "fichier": "outils/muter.py",
+   "avant": "        elif m[\"regle\"] in chute:",
+   "apres": "        elif chute:",
+   "regle": "test_le_banc_distingue_TOMBE_SURVIT_et_MAL_VISEE"
+  },
+  {
+   "nom": "une base rouge est jouée quand même",
+   "fichier": "outils/muter.py",
+   "avant": "    if tombees(base) or not resume or \" failed\" in resume[-1]:",
+   "apres": "    if False:",
+   "regle": "test_une_BASE_rouge_ne_joue_rien"
+  }
+ ]
+}
