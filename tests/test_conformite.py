@@ -433,11 +433,15 @@ def test_le_MEME_audit_ne_donne_pas_deux_pourcentages_selon_l_ecran():
                       else i + 1200]
     a = _bloc("window.gcAuditPct = function()")
     b = _bloc("function auditUpdateScore()")
+    # LES DEUX PASSENT DÉSORMAIS PAR LE MÊME DÉCOMPTE, et c'est lui qui
+    # compte le point partiel — neuf écrans lisent l'audit, un seul compte.
+    # tests/test_revues_mesurees.py l'exécute ; ici, on vérifie le passage.
     for nom, bloc in (("gcAuditPct", a), ("auditUpdateScore", b)):
-        assert "'partial'" in bloc, (
-            "%s ne regarde pas les points partiels" % nom)
-        assert "0.5" in bloc, (
-            "%s ne compte pas un point partiel pour une moitié" % nom)
+        assert "auditComptes(" in bloc, (
+            "%s recompte l'audit à sa façon au lieu du décompte commun" % nom)
+    c = _bloc("function auditComptes(garder)")
+    assert "c.partial * 0.5" in c, (
+        "le décompte commun ne compte plus un point partiel pour une moitié")
 
 
 def test_le_serveur_compte_AUSSI_le_point_partiel_pour_une_moitie():

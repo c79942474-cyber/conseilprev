@@ -14,22 +14,26 @@ DORA avait déjà ce rail (`dora_parcours`). Ce module le donne aux dix
 autres, avec les mêmes états, les mêmes couleurs, et la même règle : le
 vert dit ce qu'il MESURE, jamais une conformité.
 
-═══ TROIS SORTES DE BLOCS, ET POURQUOI IL EN FAUT TROIS ════════════════
+═══ DEUX SORTES DE BLOCS — IL Y EN AVAIT TROIS ═════════════════════════
 Les écrans ont été ouverts un par un dans le navigateur, et leurs champs
 comptés. Sur les trente-six écrans hors DORA :
 
-  · À REMPLIR — vingt et un. Chaque champ a une valeur « non renseigné »
+  · À REMPLIR — vingt-sept. Chaque question a une valeur « non renseigné »
     distincte des réponses : la complétude se CONSTATE, et le bloc dit, par
     leur nom, les réponses qui manquent encore.
-  · À PASSER EN REVUE — six. Des cases à cocher, ou des listes dont la
-    valeur par défaut est une vraie réponse (« absent », « à planifier »,
-    gravité 1). « Pas coché » s'y confond avec « pas encore regardé » :
-    AUCUN calcul ne peut dire que la liste a été lue. Le bloc se valide donc
-    sur une DÉCLARATION — « liste passée en revue » —, et son infobulle le
-    dit en ces termes. Prétendre le mesurer serait inventer une donnée.
   · À LIRE — treize. Rien à saisir : l'écran explique. Il se marque « lu »,
     et « lu » n'est PAS vert. Le vert dit « rempli » ; un écran sans champ
     ne peut pas l'être.
+
+LES SIX QUI SE VALIDAIENT SUR UNE DÉCLARATION. L'audit IA Act, l'AIPD, la
+privacy by design, la politique documentaire, la sensibilisation et
+l'analyse de risque ReCyF étaient des cases à cocher, ou des listes dont la
+valeur par défaut était une vraie réponse (« absent », « à planifier »,
+gravité 1) : « pas coché » s'y confondait avec « pas encore regardé ». Leur
+bloc passait au vert sur un clic — « liste passée en revue ». Chacune de
+leurs questions porte désormais une réponse explicite, « non renseigné »
+compris, et le bloc se MESURE comme les autres : il ne passe au vert que
+lorsque chaque question a été répondue, et il nomme celles qui restent.
 
 ═══ L'ORDRE EST CELUI DE LA BARRE LATÉRALE ═════════════════════════════
 La flèche vers le bas relie deux onglets VOISINS : si l'ordre du rail
@@ -65,8 +69,8 @@ import dora_parcours
 #: de DORA — une première version les recopiait, et la recopie divergeait
 #: déjà : 🔒 ici, ⚠ dans DORA pour le même état.
 _DITS = {
-    "validee": "Ce que ce bloc attend est renseigné — ou, pour une liste à "
-               "cases, déclaré passé en revue. Cela ne vaut pas conformité.",
+    "validee": "Ce que ce bloc attend est renseigné. Cela ne vaut pas "
+               "conformité.",
     "courante": "Le bloc que le parcours attend. La flèche y mène, et le "
                 "bandeau de l'écran nomme ce qui lui manque.",
     "attente": "Viendra à son tour. Rien n'empêche de l'ouvrir dès "
@@ -93,13 +97,6 @@ NATURES = {
         "nom": "À remplir",
         "dit": "Chaque champ a une valeur « non renseigné » : le vert dit que "
                "tous ceux que le bloc attend portent une réponse.",
-    },
-    "revue": {
-        "nom": "À passer en revue",
-        "dit": "Des cases dont la valeur par défaut est aussi une réponse : "
-               "« pas coché » ne se distingue pas de « pas encore regardé ». "
-               "Le vert dit que vous avez DÉCLARÉ la liste passée en revue — "
-               "pas qu'un calcul l'a constaté.",
     },
     "lecture": {
         "nom": "À lire",
@@ -140,8 +137,8 @@ QUI_JUGE = {
 
 def reserve(norme):
     return ("Le vert de ce parcours dit que ce qu'un bloc attend est "
-            "renseigné — ou déclaré passé en revue. Il ne dit pas que vous "
-            "êtes en conformité : %s." % QUI_JUGE[norme])
+            "renseigné. Il ne dit pas que vous êtes en conformité : %s."
+            % QUI_JUGE[norme])
 
 
 # ═══════════════════════════════════════════════════════════════════════
@@ -202,9 +199,10 @@ BLOCS = {
            "« exigé aujourd'hui ».",
            ("qualifier",)),
         _b("recyf_analyse", "recyf-analyse", "ReCyF · Analyse de risque",
-           "revue",
-           "Les quatre exigences de l'objectif 16 : gouvernance, couverture, "
-           "acceptation des risques résiduels, réexamen.",
+           "saisie",
+           "Les quatre exigences de l'objectif 16 — gouvernance, couverture, "
+           "acceptation des risques résiduels, réexamen —, chacune « oui » "
+           "ou « non », et ce que chaque « oui » engage.",
            "L'analyse de risque y cesse d'être une case sur dix et devient "
            "quatre exigences vérifiables.",
            "Réservé aux entités essentielles : pour une importante, le bloc "
@@ -385,35 +383,37 @@ BLOCS = {
            "Ce qui ne se voit pas ligne à ligne se voit en carte.",
            "Elle ne montre que ce que le registre contient.",
            ("traitements",)),
-        _b("aipd", "rgpd-aipd", "AIPD (art. 35)", "revue",
-           "Pour chaque traitement : les neuf critères, puis la gravité et "
-           "la vraisemblance de trois événements redoutés.",
+        _b("aipd", "rgpd-aipd", "AIPD (art. 35)", "saisie",
+           "Pour chaque traitement : une réponse à chacun des neuf critères, "
+           "puis, dès que deux sont réunis, la gravité et la vraisemblance "
+           "de trois événements redoutés.",
            "Deux critères réunis rendent l'AIPD obligatoire (article 35).",
-           "Gravité et vraisemblance valent 1 par défaut : une AIPD jamais "
-           "ouverte ressemble à une AIPD qui conclut au risque minimal.",
+           "Un critère sans réponse n'est pas un « non » : tant qu'il en "
+           "reste un, l'AIPD ne peut pas être dite « non requise ».",
            ("traitements",)),
-        _b("pbd", "rgpd-pbd", "Privacy by design", "revue",
-           "Les contrôles de l'article 25 : minimisation, droits, "
-           "sous-traitance, réexamen.",
+        _b("pbd", "rgpd-pbd", "Privacy by design", "saisie",
+           "Les contrôles de l'article 25 — minimisation, droits, "
+           "sous-traitance, réexamen —, chacun « oui », « non » ou « sans "
+           "objet ».",
            "La protection des données se conçoit avant la mise en "
            "production, pas après.",
-           "Une case non cochée dit « pas en place » ou « pas encore "
-           "regardé » — la liste ne permet pas de les distinguer."),
-        _b("doc", "rgpd-doc", "Politique documentaire", "revue",
-           "Les documents d'accountability, avec leur statut, leur "
-           "responsable et leur date de revue.",
+           "« Sans objet » sort le contrôle du calcul ; « non » l'y laisse, "
+           "à zéro. Les confondre flatte le taux."),
+        _b("doc", "rgpd-doc", "Politique documentaire", "saisie",
+           "Les documents d'accountability, chacun avec un statut choisi — "
+           "« absent » compris.",
            "L'article 5, paragraphe 2, fait de la documentation la preuve "
            "de la conformité.",
-           "« Absent » est la valeur par défaut : un document jamais "
-           "regardé s'affiche comme absent."),
+           "« Absent » est une réponse, et compte au dénominateur ; un "
+           "document sans statut n'a pas encore été regardé."),
         _b("sensibilisation", "rgpd-sensibilisation", "Sensibilisation",
-           "revue",
-           "Le plan de sensibilisation, public par public, avec sa "
-           "fréquence.",
+           "saisie",
+           "Le plan de sensibilisation, public par public : l'état de "
+           "chaque action, choisi.",
            "Une mesure organisationnelle qui ne se forme pas ne se tient "
            "pas.",
-           "« À planifier » est la valeur par défaut : une action jamais "
-           "regardée s'affiche comme à planifier."),
+           "« À planifier » est une réponse ; une action sans état n'a pas "
+           "encore été regardée."),
         _b("conformite", "rgpd-conformite", "Conformité RGPD", "lecture",
            "Le tableau de bord qui consolide le registre, l'AIPD, la privacy "
            "by design, la documentation et la sensibilisation.",
@@ -428,12 +428,14 @@ BLOCS = {
            "évaluer, documenter, prouver.",
            "Savoir quels systèmes sont concernés avant d'auditer.",
            "La vue d'ensemble ne mesure rien : elle oriente."),
-        _b("audit", "audit-ia-act", "Audit IA Act", "revue",
+        _b("audit", "audit-ia-act", "Audit IA Act", "saisie",
            "Les trente-quatre points de contrôle de l'audit, en huit "
-           "sections, des pratiques interdites aux modèles à usage général.",
+           "sections, des pratiques interdites aux modèles à usage général "
+           "— chacun avec une réponse.",
            "C'est l'audit que le taux de conformité de l'IA Act lit.",
-           "Un point non coché dit « pas fait » ou « pas encore regardé » : "
-           "la bascule ne permet pas de les distinguer."),
+           "« À réaliser » est une réponse, qui compte à zéro ; « sans "
+           "objet » sort le point du calcul ; un point sans réponse n'a "
+           "pas encore été regardé."),
     ),
 }
 
@@ -462,6 +464,109 @@ def _dict(d, cle):
 
 def _nombre(v):
     return isinstance(v, (int, float)) and not isinstance(v, bool) and v >= 0
+
+
+def _repondu(v):
+    """UNE RÉPONSE, C'EST UNE VALEUR CHOISIE. Ni `None`, ni la chaîne vide :
+    ce sont les deux formes que prend « non renseigné » à l'écran."""
+    return v is not None and v != ""
+
+
+def _liste(d, cle):
+    """Une liste de l'écran, telle qu'il l'envoie : [{cle, nom, reponse}].
+
+    LES QUESTIONS VIENNENT DE L'ÉCRAN, qui les tient déjà et les affiche.
+    Les recopier ici ferait deux listes, et la première divergence ferait
+    valider un bloc sur une question que l'écran ne pose plus — ou manquer
+    celle qu'il pose. Une règle de la suite exécute le collecteur et vérifie
+    qu'il envoie la liste ENTIÈRE."""
+    v = d.get(cle)
+    return [x for x in v if isinstance(x, dict)] if isinstance(v, list) else []
+
+
+def _sans_reponse(d, cle, faute):
+    """Les questions d'une liste restées sans réponse, par leur nom.
+
+    UNE LISTE ABSENTE N'EST PAS UNE LISTE COMPLÈTE : elle n'a rien à
+    montrer, et le bloc le dit au lieu de passer au vert sur rien."""
+    l = _liste(d, cle)
+    if not l:
+        return [_q(faute)]
+    return [_q(str(x.get("nom") or x.get("cle") or "(question sans nom)"))
+            for x in l if not _repondu(x.get("reponse"))]
+
+
+#: DEUX CRITÈRES RÉUNIS RENDENT L'AIPD OBLIGATOIRE — c'est le seuil que
+#: l'écran applique pour dire « AIPD requise », et une règle vérifie que
+#: les deux lisent le même.
+AIPD_SEUIL = 2
+AIPD_NIVEAUX = (1, 2, 3, 4)
+
+
+def _manque_aipd(traitements):
+    """Pour chaque traitement : les neuf critères, puis — dès que le seuil
+    est atteint — la gravité et la vraisemblance de chaque événement.
+
+    UN CRITÈRE SANS RÉPONSE N'EST PAS UN « NON ». Tant qu'il en reste un,
+    l'AIPD n'est ni « requise » ni « non requise » : elle n'est pas finie.
+    Et les événements ne sont demandés qu'à qui doit une AIPD — les exiger
+    de tous ferait coter des risques qu'aucune analyse n'a à apprécier."""
+    m = []
+    for t in traitements:
+        nom = str(t.get("nom") or "(sans nom)")
+        a = _dict(t, "aipd")
+        crit = [c for c in (a.get("criteres") or []) if isinstance(c, dict)]
+        if not crit:
+            m.append(_q("« %s » : les critères de l'AIPD" % nom))
+            continue
+        vides = [c for c in crit if c.get("reponse") not in (True, False)]
+        for c in vides:
+            m.append(_q("« %s » : %s" % (nom, c.get("nom") or "critère")))
+        if sum(1 for c in crit if c.get("reponse") is True) < AIPD_SEUIL:
+            continue
+        evs = [e for e in (a.get("evenements") or []) if isinstance(e, dict)]
+        if not evs:
+            m.append(_q("« %s » : les événements redoutés" % nom))
+        for e in evs:
+            if e.get("g") not in AIPD_NIVEAUX or e.get("v") not in AIPD_NIVEAUX:
+                m.append(_q("« %s » : gravité et vraisemblance — %s"
+                            % (nom, e.get("nom") or "événement")))
+    return m
+
+
+#: LES RÉPONSES QUE L'AUDIT IA ACT ACCEPTE. « none » — la valeur d'un point
+#: jamais touché — n'en est pas une.
+AUDIT_REPONSES = ("done", "partial", "todo", "na")
+
+
+def _manque_analyse_recyf(a):
+    """L'objectif 16, question par question — et ce que chaque « oui »
+    engage, puisque le référentiel l'exige avec lui."""
+    m = []
+    entrees = _dict(a, "entrees")
+    for cle, ref, titre, _dit, _piege in nis2_recyf.ANALYSE_EXIGENCES:
+        v = a.get(cle)
+        if v not in (True, False):
+            m.append(_q("%s — %s" % (ref, titre)))
+            continue
+        if not v:
+            continue
+        if cle == "gouvernance" and a.get("moyens_alloues") not in (True, False):
+            m.append(_q("%s — des moyens sont-ils alloués ?" % ref))
+        if cle == "couverture":
+            for c, nom in nis2_recyf.ANALYSE_ENTREES:
+                if entrees.get(c) not in (True, False):
+                    m.append(_q("%s — l'analyse cite-t-elle : %s ?" % (ref, nom)))
+        if cle == "acceptation":
+            if a.get("risques_residuels_acceptes") not in (True, False):
+                m.append(_q("%s — les risques résiduels sont-ils explicitement "
+                            "acceptés ?" % ref))
+            if a.get("plan_date_et_responsable") not in (True, False):
+                m.append(_q("%s — chaque action du plan a-t-elle une échéance "
+                            "et un responsable ?" % ref))
+        if cle == "reexamen" and not _nombre(a.get("dernier_reexamen_mois")):
+            m.append(_q("%s — le dernier réexamen, en mois" % ref))
+    return m
 
 
 #: LA RÉPONSE « AUCUNE DES DEUX ANNEXES ». Sans elle, la liste des secteurs
@@ -539,6 +644,7 @@ def _nis2(d):
             if o["dans_le_champ"]
             and etats.get(str(o["numero"]),
                           etats.get(o["numero"])) not in nis2_recyf.ETATS]
+        manque["recyf_analyse"] = _manque_analyse_recyf(_dict(recyf, "analyse"))
         if statut == "importante":
             sans_objet["recyf_analyse"] = (
                 "L'objectif 16 est réservé aux entités essentielles par "
@@ -715,11 +821,31 @@ def _rgpd(d):
         if vides:
             m.append(_q("« %s » : %s" % (str(t.get("nom") or "(sans nom)"),
                                           ", ".join(vides))))
-    return {"traitements": m}, {}, {}
+    return {"traitements": m,
+            "aipd": _manque_aipd([t if isinstance(t, dict) else {}
+                                  for t in traitements]),
+            "pbd": _sans_reponse(d, "pbd", "La liste des contrôles de la "
+                                 "privacy by design n'a pas été transmise"),
+            "doc": _sans_reponse(d, "doc", "La liste des documents n'a pas "
+                                 "été transmise"),
+            "sensibilisation": _sans_reponse(
+                d, "sensibilisation", "Le plan de sensibilisation n'a pas "
+                "été transmis")}, {}, {}
 
 
 def _ia_act(d):
-    return {}, {}, {}
+    """Les trente-quatre points, chacun avec une réponse.
+
+    LA LISTE VIENT DE L'ÉCRAN — la même règle que pour les listes RGPD ; les
+    réponses viennent de l'audit, tel que l'écran le garde."""
+    points = _liste(d, "points")
+    if not points:
+        return {"audit": [_q("La liste des points de l'audit n'a pas été "
+                             "transmise")]}, {}, {}
+    audit = _dict(d, "audit")
+    return {"audit": [_q(str(p.get("titre") or p.get("cle")))
+                      for p in points
+                      if audit.get(p.get("cle")) not in AUDIT_REPONSES]}, {}, {}
 
 
 EVALUATEURS = {
@@ -735,13 +861,12 @@ EVALUATEURS = {
 # ═══════════════════════════════════════════════════════════════════════
 
 def _declares(d, cle, norme):
-    """Les panneaux déclarés lus, ou passés en revue — ceux de CE parcours.
+    """Les panneaux déclarés lus — ceux de CE parcours.
 
-    UNE DÉCLARATION NE VALIDE QUE CE QUI SE VALIDE PAR DÉCLARATION, et ce
-    n'est pas ce filtre qui le garantit : c'est que chaque branche de
-    `avancement` ne lit que la sienne. Un bloc à remplir ne consulte ni
-    « lus » ni « revus » — sans quoi un clic validerait ce qu'il demande de
-    renseigner. Une règle de la suite le vérifie."""
+    UN CLIC NE VALIDE RIEN QUI SE REMPLIT. Un bloc à remplir ne consulte pas
+    « lus » — sans quoi un clic validerait ce qu'il demande de renseigner.
+    Une règle de la suite le vérifie ; une autre, que l'ancienne
+    déclaration « passé en revue » ne valide plus rien."""
     brut = d.get(cle)
     brut = brut if isinstance(brut, (list, tuple)) else ()
     admis = {b["panneau"] for b in BLOCS[norme]}
@@ -761,7 +886,6 @@ def avancement(norme, declaration=None):
     d = declaration if isinstance(declaration, dict) else {}
     manque, sans_objet, contexte = EVALUATEURS[norme](d)
     lus = _declares(d, "lus", norme)
-    revus = _declares(d, "revus", norme)
 
     lignes, valides = [], set()
     for b in BLOCS[norme]:
@@ -778,14 +902,6 @@ def avancement(norme, declaration=None):
                 l["etat"] = "lue"
             elif b["panneau"] not in lus:
                 l["manque"].append(_q("Lisez l'écran, puis marquez-le lu — "
-                                      "le bouton est au bas de l'écran"))
-        elif b["nature"] == "revue":
-            l["manque"] = list(manque.get(b["cle"]) or [])
-            if b["panneau"] in revus and not absents and not l["manque"]:
-                valides.add(b["cle"])
-                l["etat"] = "validee"
-            elif b["panneau"] not in revus:
-                l["manque"].append(_q("Déclarez la liste passée en revue — "
                                       "le bouton est au bas de l'écran"))
         else:
             l["manque"] = list(manque.get(b["cle"]) or [])
@@ -856,14 +972,8 @@ def _conclusion(norme, lignes, ouvrables, faits, contexte):
                 "résultat : l'entité est hors du champ de la directive. Cent "
                 "pour cent ne dit pas que le travail est fait — il dit qu'il "
                 "n'y en a pas.")
-    revues = sum(1 for l in ouvrables
-                 if l["nature"] == "revue" and l["etat"] == "validee")
-    return ("Les %d blocs du parcours sont faits%s. Ce n'est pas une "
-            "conformité : %s."
-            % (len(ouvrables),
-               (" — dont %d par une revue que vous avez déclarée" % revues
-                if revues else ""),
-               QUI_JUGE[norme]))
+    return ("Les %d blocs du parcours sont faits. Ce n'est pas une "
+            "conformité : %s." % (len(ouvrables), QUI_JUGE[norme]))
 
 
 def referentiel():

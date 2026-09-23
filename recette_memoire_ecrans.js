@@ -136,16 +136,18 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
   await pause(800);
   await choisir(pg.locator('#recyf-body select').first(), 'atteint');
   await aller('recyf-analyse', 1800);
-  await pg.check('#recyf-a-gouvernance'); await pause(1400);
-  await pg.check('#recyf-moyens'); await pause(1400);
-  await pg.check('#recyf-e-pssi'); await pause(1400);
+  /* OUI, NON OU « NON RENSEIGNÉ » : l'objectif 16 se répond dans des listes
+     depuis qu'une case décochée ne dit plus « non » à la place du visiteur. */
+  await pg.selectOption('#recyf-a-gouvernance', 'oui'); await pause(1400);
+  await pg.selectOption('#recyf-moyens', 'oui'); await pause(1400);
+  await pg.selectOption('#recyf-e-pssi', 'oui'); await pause(1400);
   const moyens = await valeur('#recyf-moyens');
   const acquis = await pg.evaluate(() => {
     const c = document.getElementById('recyf-a-gouvernance');
     return c ? c.parentElement.textContent.trim() : '';
   });
-  ok('ReCyF 16.1 — la case « moyens alloués » reste cochée après deux repeints',
-     moyens === true, 'décochée par le repeint : la réponse est perdue dans la session');
+  ok('ReCyF 16.1 — la réponse « moyens alloués » reste après deux repeints',
+     moyens === 'oui', 'effacée par le repeint : la réponse est perdue dans la session');
   ok('…et la gouvernance reste « acquise », puisque ses moyens le sont',
      /acquis/.test(acquis), 'l\'exigence est retombée à « ' + acquis + ' »');
 
@@ -267,8 +269,8 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
      (await pg.locator('#recyf-body select').first().inputValue().catch(() => '')) === 'atteint');
   await aller('recyf-analyse', 1800);
   ok('ReCyF — l\'objectif 16 réaffiché (gouvernance, moyens, entrée PSSI)',
-     (await valeur('#recyf-a-gouvernance')) === true && (await valeur('#recyf-moyens')) === true
-     && (await valeur('#recyf-e-pssi')) === true,
+     (await valeur('#recyf-a-gouvernance')) === 'oui' && (await valeur('#recyf-moyens')) === 'oui'
+     && (await valeur('#recyf-e-pssi')) === 'oui',
      JSON.stringify([await valeur('#recyf-a-gouvernance'), await valeur('#recyf-moyens'),
                      await valeur('#recyf-e-pssi')]));
 

@@ -50,7 +50,7 @@ NODE = shutil.which("node")
 #: LES CINQ RÉFÉRENTIELS DONT LES RÉPONSES SE PERDAIENT, et la clé de
 #: chacun dans le stockage du navigateur. ReCyF a la sienne : c'est le
 #: calque français de NIS 2, et son rail est celui de NIS 2.
-CLES = {"nis2": "cp-sentinel-nis2-v1", "recyf": "cp-sentinel-recyf-v1",
+CLES = {"nis2": "cp-sentinel-nis2-v1", "recyf": "cp-sentinel-recyf-v2",
         "iso27001": "cp-sentinel-iso27001-v1",
         "iso42001": "cp-sentinel-iso42001-v1",
         "cra": "cp-sentinel-cra-v1", "dora": "cp-sentinel-dora-v1"}
@@ -258,8 +258,8 @@ const REPONDRE = {
     document.getElementById('nis2-ca').value = '450';
     document.getElementById('recyf-statut-sel').value = 'essentielle';
     recyfEtat(1, { value: 'atteint' });
-    recyfCoche('gouvernance', true); recyfCoche('moyens_alloues', true);
-    recyfEntree('pssi', true); recyfReexamen('12');
+    recyfRepondre('gouvernance', 'oui'); recyfRepondre('moyens_alloues', 'oui');
+    recyfEntree('pssi', 'oui'); recyfReexamen('12');
   },
   iso27001() {
     iso27Perimetre('SI de production du siège');
@@ -436,9 +436,9 @@ def test_RECYF_la_qualification_et_l_objectif_16_sont_reaffiches():
     assert o["etats"] == {"1": "atteint"}, o["etats"]
     a = o["a"]
     for id_ in ("recyf-a-gouvernance", "recyf-moyens", "recyf-e-pssi"):
-        assert _champ(a, id=id_)["coche"], "%s décochée après rechargement" % id_
-    assert not _champ(a, id="recyf-e-ecosysteme")["coche"], (
-        "une entrée jamais cochée l'est après rechargement")
+        assert _champ(a, id=id_)["valeur"] == "oui", "%s perdue après rechargement" % id_
+    assert _champ(a, id="recyf-e-ecosysteme")["valeur"] == "", (
+        "une entrée jamais répondue a une réponse après rechargement")
     assert _champ(a, id="recyf-reexamen-mois")["valeur"] == "12"
 
 
@@ -450,14 +450,14 @@ def test_RECYF_une_case_cochee_le_reste_au_repeint_suivant():
     o = _executer("""
       RECYF_REF = REFS.recyf.referentiel;
       document.getElementById('recyf-statut-sel').value = 'essentielle';
-      recyfCoche('gouvernance', true);
-      recyfCoche('moyens_alloues', true);
+      recyfRepondre('gouvernance', 'oui');
+      recyfRepondre('moyens_alloues', 'oui');
       document.getElementById('recyf-analyse-body').innerHTML =
         recyfRenduAnalyse(REFS.recyf_analyse);
       out.a = affiche('recyf-analyse-body');
       out.envoi = recyfDeclarationAnalyse();
     """)
-    assert _champ(o["a"], id="recyf-moyens")["coche"], "« moyens alloués » décochée par le repeint"
+    assert _champ(o["a"], id="recyf-moyens")["valeur"] == "oui", "« moyens alloués » perdue au repeint"
     assert o["envoi"]["moyens_alloues"] is True and o["envoi"]["gouvernance"] is True, o["envoi"]
 
 
@@ -593,20 +593,25 @@ def test_une_valeur_d_un_autre_type_est_ecartee_pas_recopiee():
         etat: { secteur: 'energie', effectif: '300', ca: 60, mesures: 'conforme',
                 portes: { a: true, b: 'oui' }, gouvernance: { x: 'conforme', y: 3 } },
         ca_groupe: 450 }));
-      localStorage.setItem('cp-sentinel-recyf-v1', JSON.stringify({
-        analyse: { moyens_alloues: 'oui', gouvernance: true, entrees: ['pssi', 3] } }));
+      localStorage.setItem('cp-sentinel-recyf-v2', JSON.stringify({
+        analyse: { moyens_alloues: 'oui', gouvernance: true,
+                   entrees: { pssi: true, si: 'oui', ecosysteme: false } } }));
       localStorage.setItem('cp-sentinel-iso27001-v1', JSON.stringify({
         perimetre: 42, risques: [{ nom: 'R' }, 'S', null],
         criteres: { seuil_acceptation: null, etabli_le: '2026-01-10' },
         mesures: { '5.1': { decision: 'retenue' }, '5.2': 'retenue' } }));
       localStorage.setItem('cp-sentinel-cra-v1', JSON.stringify({
         produits: [{ nom: 'A' }, 'B', [1]] }));
+      /* UNE CASE REÇUE EN TEXTE, UNE LISTE QUI PORTE UN NOMBRE : depuis que
+         l'objectif 16 se répond oui/non, ce sont DORA qui portent encore ces
+         deux types — le contrat et le pont ISO. */
       localStorage.setItem('cp-sentinel-dora-v1', JSON.stringify({
-        decl: { entite: 'etablissement_credit', identifiee_nis2: 'oui' } }));
+        decl: { entite: 'etablissement_credit', identifiee_nis2: 'oui' },
+        contrat: { microentreprise: 'oui' }, iso: { mesures: ['5.1', 7] } }));
       chargerPage();
       out.etat = NIS2_ETAT; out.ca = document.getElementById('nis2-ca').value;
       out.analyse = RECYF_ANALYSE; out.iso = ISO27_ETAT; out.cra = CRA_ETAT.produits;
-      out.dora = DORA_DECL;
+      out.dora = DORA_DECL; out.dora_contrat = DORA_CONTRAT; out.dora_iso = DORA_ISO;
     """)
     e = o["etat"]
     assert e["secteur"] == "energie" and e["ca"] == 60, e
@@ -616,8 +621,8 @@ def test_une_valeur_d_un_autre_type_est_ecartee_pas_recopiee():
     assert e["gouvernance"] == {"x": "conforme"}, e["gouvernance"]
     assert o["ca"] == "", "un nombre a été posé dans le champ texte : %r" % o["ca"]
     a = o["analyse"]
-    assert a["gouvernance"] is True and a["moyens_alloues"] is False, a
-    assert a["entrees"] == ["pssi"], a["entrees"]
+    assert a["gouvernance"] is True and a["moyens_alloues"] is None, a
+    assert a["entrees"] == {"pssi": True, "ecosysteme": False}, a["entrees"]
     i = o["iso"]
     assert i["perimetre"] == "", "un périmètre numérique a été recopié : %r" % i["perimetre"]
     assert i["criteres"]["seuil_acceptation"] == 6 and i["criteres"]["etabli_le"] == "2026-01-10", (
@@ -626,6 +631,9 @@ def test_une_valeur_d_un_autre_type_est_ecartee_pas_recopiee():
     assert i["mesures"] == {"5.1": {"decision": "retenue"}}, i["mesures"]
     assert o["cra"] == [{"nom": "A"}], o["cra"]
     assert o["dora"]["entite"] == "etablissement_credit" and o["dora"]["identifiee_nis2"] is None, o["dora"]
+    assert o["dora_contrat"]["microentreprise"] is False, (
+        "une case reçue en texte a été recopiée : %r" % o["dora_contrat"])
+    assert o["dora_iso"]["mesures"] == ["5.1"], o["dora_iso"]["mesures"]
 
 
 def test_un_stockage_refuse_ne_casse_ni_le_chargement_ni_les_reponses():
@@ -681,6 +689,10 @@ def test_effacer_NIS2_efface_NIS2_et_ReCyF_et_rien_d_autre():
     et la page qui part ne les réécrit pas."""
     o = _executer("""
       REPONDRE.nis2(); REPONDRE.iso27001(); quitter();
+      /* L'ANCIENNE CLÉ DE ReCyF, CELLE D'AVANT LE « NON RENSEIGNÉ » : effacée
+         aussi, sans quoi elle ressusciterait au rechargement par sa migration. */
+      localStorage.setItem('cp-sentinel-recyf-v1', JSON.stringify(
+        { analyse: { gouvernance: true } }));
       localStorage.setItem('cp-sentinel-rail-v1', JSON.stringify(
         { nis2: { lus: ['nis2-signalement'] }, iso27001: { lus: ['iso27001-millesime'] } }));
       chargerPage();
@@ -698,6 +710,8 @@ def test_effacer_NIS2_efface_NIS2_et_ReCyF_et_rien_d_autre():
     assert CLES["nis2"] not in o["cles"], (
         "la réponse NIS 2 en attente a ressuscité ce qu'on venait d'effacer")
     assert CLES["recyf"] not in o["cles"], "ReCyF n'est pas effacé avec NIS 2"
+    assert "cp-sentinel-recyf-v1" not in o["cles"], (
+        "l'ancienne clé ReCyF survit à l'effacement, et sa migration la ressusciterait")
     assert "Le siège et ses deux filiales" in o["iso"], (
         "effacer NIS 2 a coûté à ISO 27001 sa dernière réponse")
     assert "nis2" not in o["rail"] and "iso27001" in o["rail"], o["rail"]

@@ -12,11 +12,11 @@
    "regle": "test_une_declaration_VIDE_ne_valide_RIEN[rgpd]"
   },
   {
-   "nom": "une liste passe au vert sans revue déclarée",
+   "nom": "une question sans réponse ne manque plus",
    "fichier": "parcours_normes.py",
-   "avant": "            if b[\"panneau\"] in revus and not absents and not l[\"manque\"]:",
-   "apres": "            if not absents and not l[\"manque\"]:",
-   "regle": "test_une_REVUE_se_DECLARE_et_ne_se_devine_pas"
+   "avant": "            for x in l if not _repondu(x.get(\"reponse\"))]",
+   "apres": "            for x in l if False]",
+   "regle": "test_une_liste_se_MESURE_et_ne_se_DECLARE_plus"
   },
   {
    "nom": "un bloc à remplir lit les déclarations « lu »",
@@ -161,8 +161,8 @@
   {
    "nom": "la conclusion ne dit plus qui juge",
    "fichier": "parcours_normes.py",
-   "avant": "               QUI_JUGE[norme]))",
-   "apres": "               \"le marché\"))",
+   "avant": "            \"conformité : %s.\" % (len(ouvrables), QUI_JUGE[norme]))",
+   "apres": "            \"conformité : %s.\" % (len(ouvrables), \"le marché\"))",
    "regle": "test_la_conclusion_dit_QUI_JUGE_et_ne_se_felicite_pas"
   },
   {

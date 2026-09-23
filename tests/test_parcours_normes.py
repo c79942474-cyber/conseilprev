@@ -201,6 +201,16 @@ def _nis2_qualifie():
     return {"secteur": secteur, "effectif": 300, "ca_eur": 60e6}
 
 
+def _analyse_repondue():
+    """L'objectif 16, chaque question répondue — « non » compris."""
+    return {"gouvernance": True, "moyens_alloues": False,
+            "couverture": True,
+            "entrees": {c: i % 2 == 0
+                        for i, (c, _n) in enumerate(nis2_recyf.ANALYSE_ENTREES)},
+            "acceptation": False, "reexamen": True,
+            "dernier_reexamen_mois": 0}
+
+
 def test_un_bloc_REMPLI_passe_au_vert_et_le_SUIVANT_devient_courant():
     """LE SCÉNARIO DE LA DEMANDE, PAS À PAS. Chaque bloc rempli passe au vert,
     et le bloc attendu avance d'un cran — jusqu'à la fin."""
@@ -219,6 +229,9 @@ def test_un_bloc_REMPLI_passe_au_vert_et_le_SUIVANT_devient_courant():
                             if o["dans_le_champ"]}}
     assert pn.avancement("nis2", d)["courante"] == "recyf_analyse"
     d["revus"] = ["recyf-analyse"]
+    assert pn.avancement("nis2", d)["courante"] == "recyf_analyse", (
+        "l'objectif 16 passe encore au vert sur une revue déclarée")
+    d["recyf"]["analyse"] = _analyse_repondue()
     assert pn.avancement("nis2", d)["courante"] == "chiffre"
     d["chiffre_affaires"] = 60e6
     av = pn.avancement("nis2", d)
@@ -257,7 +270,8 @@ def test_le_VERROU_nomme_le_bloc_dont_il_depend():
 @pytest.mark.parametrize("norme,decl", [
     pytest.param("nis2", {}, id="nis2-vide"),
     pytest.param("nis2", _nis2_qualifie(), id="nis2-qualifie"),
-    pytest.param("rgpd", {"revus": ["rgpd-pbd", "rgpd-doc"]}, id="rgpd-revus"),
+    pytest.param("rgpd", {"pbd": [{"cle": "x", "nom": "X", "reponse": "oui"}]},
+                 id="rgpd-une-liste"),
     pytest.param("cra", {"role": {"je_distribue": True}}, id="cra-role"),
     pytest.param("iso27001", {"articles": {"4.1": "conforme"}}, id="iso27001-un"),
 ])
@@ -279,15 +293,30 @@ def test_un_LU_ne_valide_JAMAIS_un_bloc_a_remplir():
     assert et["signalement"] == "lue"
 
 
-def test_une_REVUE_se_DECLARE_et_ne_se_devine_pas():
-    """« PAS COCHÉ » NE SE DISTINGUE PAS DE « PAS ENCORE REGARDÉ ». La liste
-    ne passe au vert que sur la déclaration, et le bloc dit qu'il l'attend."""
-    av = pn.avancement("rgpd", {})
+def test_une_liste_se_MESURE_et_ne_se_DECLARE_plus():
+    """LE DÉFAUT : SIX BLOCS PASSAIENT AU VERT SUR UN CLIC. « Pas coché » se
+    confondait avec « pas encore regardé » ; le bloc se validait donc sur la
+    déclaration « liste passée en revue ». Chaque question porte désormais
+    une réponse explicite : l'ancienne déclaration ne valide plus rien, et
+    le bloc nomme les questions restées sans réponse."""
+    liste = [{"cle": "a", "nom": "Minimisation", "reponse": "oui"},
+             {"cle": "b", "nom": "Portabilité", "reponse": None}]
+    av = pn.avancement("rgpd", {"revus": ["rgpd-pbd"], "pbd": liste})
     b = _bloc(av, "pbd")
-    assert b["etat"] != "validee"
-    assert any("passée en revue" in m["quoi"] for m in b["manque"])
-    av = pn.avancement("rgpd", {"revus": ["rgpd-pbd"]})
-    assert _etats(av)["pbd"] == "validee"
+    assert b["etat"] != "validee", "une revue déclarée valide encore la liste"
+    assert [m["quoi"] for m in b["manque"]] == ["Portabilité"], b["manque"]
+    liste[1]["reponse"] = "sans_objet"
+    assert _etats(pn.avancement("rgpd", {"pbd": liste}))["pbd"] == "validee"
+
+
+def test_aucun_bloc_ne_se_valide_sur_une_simple_declaration():
+    """LA GARDE : il n'y a plus que deux natures — ce qui se remplit, et ce
+    qui se lit. Un bloc qui se validerait sur un clic devrait en inventer
+    une troisième."""
+    assert set(pn.NATURES) == {"saisie", "lecture"}
+    for norme, blocs in pn.BLOCS.items():
+        for b in blocs:
+            assert b["nature"] in pn.NATURES, (norme, b["cle"], b["nature"])
 
 
 def test_un_ecran_A_LIRE_se_marque_LU_et_seulement_ainsi():
@@ -583,7 +612,9 @@ def test_le_collecteur_RGPD_n_envoie_PAS_le_texte_du_registre():
     calcul d'avancement : seul « rempli ou non » part, champ par champ."""
     corps = _bloc_js("  rgpd: function () {")
     assert "c[k] = !!String(t[k] || '').trim();" in corps
-    assert "return { nom: t.nom, champs: c };" in corps
+    # L'AIPD PART AVEC LUI : les critères et les cotations, jamais le texte
+    # du traitement. tests/test_revues_mesurees.py l'exécute.
+    assert "return { nom: t.nom, champs: c, aipd: a };" in corps
 
 
 def test_la_pastille_du_bloc_attendu_est_la_FLECHE_VERS_LE_BAS():

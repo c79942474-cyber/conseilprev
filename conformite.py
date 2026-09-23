@@ -1860,9 +1860,13 @@ def _evaluer(cle, dec, d):
 #: une règle vérifie que deux noms différents rendent les mêmes taux.
 NOM_INERTE = "Déclaration des écrans Sentinel"
 
-#: LE VOCABULAIRE DE L'ÉCRAN D'AUDIT IA ACT, et celui du moteur. Tout autre
-#: état — « à faire », une valeur inconnue — est un point non tenu.
-AUDIT_ECRAN = {"done": "tenu", "partial": "partiel", "na": "sans_objet"}
+#: LE VOCABULAIRE DE L'ÉCRAN D'AUDIT IA ACT, et celui du moteur.
+#: « À réaliser » est une RÉPONSE : le point est déclaré non tenu. Un point
+#: jamais touché (« none ») n'en est pas une : il n'est pas traduit, et le
+#: moteur le compte « non renseigné » — non tenu lui aussi, mais nommé comme
+#: tel. Les deux se confondaient ; l'écran demande désormais une réponse.
+AUDIT_ECRAN = {"done": "tenu", "partial": "partiel", "na": "sans_objet",
+               "todo": "absent"}
 
 
 def _rempli(v):
@@ -2011,9 +2015,8 @@ def _de_rgpd(v, e):
 
 def _de_ia_act(v, e):
     audit = _dict_de(v, "audit")
-    if not audit:
-        return None
-    return {k: AUDIT_ECRAN.get(x, "absent") for k, x in audit.items()}
+    reponses = {k: AUDIT_ECRAN[x] for k, x in audit.items() if x in AUDIT_ECRAN}
+    return reponses or None
 
 
 TRADUCTEURS = {

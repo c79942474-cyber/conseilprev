@@ -129,6 +129,22 @@ def _articles(module):
                     ("conforme", "partiel", "non_conforme"))
 
 
+def _liste_repondue(prefixe, reponses, n=6):
+    """Une liste d'écran dont CHAQUE question a une réponse — telle que le
+    collecteur l'envoie : [{cle, nom, reponse}]."""
+    return [{"cle": "%s-%d" % (prefixe, i), "nom": "Question %d" % i,
+             "reponse": reponses[i % len(reponses)]} for i in range(n)]
+
+
+def _aipd_repondue():
+    """Neuf critères répondus, dont deux « oui » : l'AIPD est requise, et
+    ses trois événements sont cotés."""
+    return {"criteres": [{"nom": "Critère %d" % i, "reponse": i < 2}
+                         for i in range(9)],
+            "evenements": [{"nom": n, "g": 2, "v": 3}
+                           for n in ("Accès", "Modification", "Disparition")]}
+
+
 def _remplis():
     """Chaque écran rempli jusqu'au dernier bloc à remplir — avec des
     réponses MOYENNES, ni toutes favorables ni toutes défavorables : un
@@ -161,7 +177,15 @@ def _remplis():
                  "chiffre_affaires": 60e6,
                  "recyf": {"statut": "essentielle",
                            "etats": {str(o[0]): "engage"
-                                     for o in nis2_recyf.OBJECTIFS}}},
+                                     for o in nis2_recyf.OBJECTIFS},
+                           "analyse": {"gouvernance": True,
+                                       "moyens_alloues": True,
+                                       "couverture": False,
+                                       "acceptation": True,
+                                       "risques_residuels_acceptes": True,
+                                       "plan_date_et_responsable": False,
+                                       "reexamen": True,
+                                       "dernier_reexamen_mois": 12}}},
         "cra": {"role": {"je_concois": True},
                 "produits": [{"nom": "Boîtier", "marche_ue": True,
                               "classe": "ordinaire"}],
@@ -181,11 +205,18 @@ def _remplis():
                                           ("prouve", "tenu", "amorce"))},
         "rgpd": {"traitements": [{"nom": "Paie",
                                   "champs": {k: True for k, _l
-                                             in pn.RGPD_CHAMPS_ART30}}],
+                                             in pn.RGPD_CHAMPS_ART30},
+                                  "aipd": _aipd_repondue()}],
+                 "pbd": _liste_repondue("pbd", ("oui", "non", "sans_objet")),
+                 "doc": _liste_repondue("doc", ("en_place", "absent")),
+                 "sensibilisation": _liste_repondue(
+                     "sens", ("realise", "a_planifier")),
                  "briques": {"registre": 100, "pbd": 40, "doc": 20,
                              "sensibilisation": 0}},
-        "ia_act": {"audit": {c.AUDIT_IA_ACT[0][0]: "done",
-                             c.AUDIT_IA_ACT[1][0]: "partial"}},
+        "ia_act": {"audit": _alterne([p[0] for p in c.AUDIT_IA_ACT],
+                                     ("done", "partial", "todo", "na")),
+                   "points": [{"cle": p[0], "titre": p[2]}
+                              for p in c.AUDIT_IA_ACT]},
         "dora": {"entite": "etablissement_credit", "identifiee_nis2": True,
                  "etats": {"2": "prouve", "3": "amorce"},
                  "contrats": [{"fonction_critique": False,
@@ -417,9 +448,12 @@ def test_la_surcharge_800_82_se_mesure_CONTRE_son_socle_800_53():
 
 
 def test_le_vocabulaire_de_l_AUDIT_IA_ACT():
-    points = [p[0] for p in c.AUDIT_IA_ACT[:4]]
+    points = [p[0] for p in c.AUDIT_IA_ACT[:6]]
     d = c.depuis_les_ecrans({"ia_act": {"audit": dict(zip(
-        points, ["done", "partial", "na", "todo"]))}})
+        points, ["done", "partial", "na", "todo", "none", "conforme"]))}})
+    # « none » — un point jamais touché dans l'ancien écran — et une valeur
+    # inconnue ne sont PAS des réponses : elles ne se traduisent pas, et le
+    # moteur compte ces points « non renseignés ».
     assert d["ia_act"] == dict(zip(points, ["tenu", "partiel", "sans_objet",
                                             "absent"]))
 
@@ -547,7 +581,12 @@ def test_les_collecteurs_du_rail_portent_ce_que_le_taux_lit():
     rgpd = rgpd[:rgpd.index("\n  },")]
     for f in ("confRegPct", "confPbdPct", "confDocPct", "confSensPct"):
         assert "window.%s" % f in rgpd, "la brique %s ne part plus" % f
-    assert "ia_act: function () { return { audit: window.AUDIT_STATE || {} }; }" in CODE
+    ia = CODE[CODE.index("  ia_act: function () {"):]
+    ia = ia[:ia.index("\n  }")]
+    assert "audit: window.AUDIT_STATE || {}" in ia, "l'audit IA Act ne part plus"
+    assert "window.auditPoints()" in ia, (
+        "la liste des points ne part plus : le rail ne peut plus nommer ceux "
+        "qui attendent une réponse")
 
 
 def test_le_perimetre_ISO27001_a_ENFIN_un_champ():

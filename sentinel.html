@@ -1379,8 +1379,8 @@ textarea.form-el{min-height:86px;resize:vertical}
 
 /* ── Audit IA Act ── */
 .audit-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding:18px 22px;background:var(--white);border:1px solid var(--rule);border-radius:4px}
-.audit-kpi-row{display:flex;gap:12px;margin-bottom:24px}
-.audit-kpi{flex:1;background:var(--white);border:1px solid var(--rule);border-radius:4px;padding:14px 16px;text-align:center}
+.audit-kpi-row{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:24px}
+.audit-kpi{flex:1;min-width:110px;background:var(--white);border:1px solid var(--rule);border-radius:4px;padding:14px 16px;text-align:center}
 .audit-kpi-val{font-family:var(--serif);font-size:28px;color:var(--ink);line-height:1}
 .audit-kpi-lbl{font-size:9px;font-family:var(--mono);color:var(--muted2);letter-spacing:.06em;margin-top:4px;text-transform:uppercase}
 #audit-sections{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
@@ -1394,10 +1394,13 @@ textarea.form-el{min-height:86px;resize:vertical}
 .audit-item{display:flex;align-items:flex-start;gap:12px;padding:11px 14px;border-bottom:1px solid var(--rule);transition:background .1s}
 .audit-item:last-child{border-bottom:none}
 .audit-item:hover{background:var(--bg)}
-.audit-check{width:18px;height:18px;border:2px solid var(--rule2);border-radius:3px;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;transition:all .15s;margin-top:1px}
-.audit-check:hover{border-color:var(--accent)}
+/* LE CARRÉ NE SE CLIQUE PLUS : il dit la réponse choisie dans la liste. */
+.audit-check{width:18px;height:18px;border:2px solid var(--rule2);border-radius:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;transition:all .15s;margin-top:1px}
 .audit-check.done{background:var(--green);border-color:var(--green);color:#fff}
 .audit-check.partial{background:var(--orange);border-color:var(--orange);color:#fff}
+.audit-check.todo{background:var(--accent);border-color:var(--accent);color:#fff}
+.audit-check.na{border-style:dashed;color:var(--muted2)}
+.audit-rep{margin-top:7px;font-size:11px;padding:3px 6px;max-width:100%}
 .audit-item-body{flex:1}
 .audit-item-title{font-size:12px;font-weight:500;color:var(--ink);margin-bottom:2px}
 .audit-item-desc{font-size:11px;color:var(--muted);line-height:1.55}
@@ -3127,6 +3130,8 @@ textarea.form-el{min-height:86px;resize:vertical}
 .aipd-crit-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px}
 .aipd-crit{display:flex;align-items:flex-start;gap:7px;font-size:11.5px;color:var(--ink);cursor:pointer;line-height:1.35}
 .aipd-crit input{margin-top:2px;flex:0 0 auto}
+.aipd-crit span,.pbd-item span{flex:1}
+.aipd-crit select,.pbd-item select{flex:0 0 auto}
 .aipd-matrix{width:100%;border-collapse:collapse;font-size:11.5px}
 .aipd-matrix th{text-align:left;font-size:10px;color:var(--muted2);padding:4px 6px;border-bottom:1px solid var(--rule2)}
 .aipd-matrix td{padding:5px 6px;border-bottom:1px solid var(--rule)}
@@ -5662,7 +5667,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
   <div class="pbd-track"><div class="pbd-fill" id="pbd-global-fill" style="width:0%"></div></div>
   <div id="pbd-list" style="margin-top:16px"></div>
   <div class="trait-note">
-    Cette check-list matérialise l'article 25 du RGPD et les principes de la protection des données dès la conception. Elle constitue une aide à la décision : les mesures cochées doivent correspondre à des dispositifs réellement en place et documentés. CONSEILPREV peut vous accompagner dans leur mise en œuvre et leur preuve.
+    Cette check-list matérialise l'article 25 du RGPD et les principes de la protection des données dès la conception. Elle constitue une aide à la décision : les mesures déclarées en place doivent correspondre à des dispositifs réellement en place et documentés. « Sans objet » sort un contrôle du calcul ; « non » l’y laisse, à zéro. CONSEILPREV peut vous accompagner dans leur mise en œuvre et leur preuve.
   </div>
 </div>
 
@@ -7492,10 +7497,16 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
       <button class="audit-export-btn" style="background:var(--bg);color:var(--ink);border:1px solid var(--rule2)" onclick="ragShowRelevantDocs('audit conformité EU AI Act contrôle','audit','Documents pertinents — Audit IA Act')" title="Consulter les documents de votre base de connaissance liés à l’Audit IA Act.">📚 Base de connaissance</button>
     </div>
     <div class="audit-kpi-row">
-      <div class="audit-kpi" title="Calcul : (points conformes + points en cours × 0,5) / total des points × 100. Tous les points comptent à égalité, quelle que soit leur priorité."><div class="audit-kpi-val" id="audit-score-pct">0%</div><div class="audit-kpi-lbl">Score global</div></div>
-      <div class="audit-kpi" title="Points marqués comme entièrement satisfaits — cliquez sur la case jusqu’à obtenir une coche verte."><div class="audit-kpi-val" style="color:var(--green)" id="audit-done-count">0</div><div class="audit-kpi-lbl">Conformes</div></div>
-      <div class="audit-kpi" title="Points partiellement traités — comptés pour moitié dans le score global."><div class="audit-kpi-val" style="color:var(--orange)" id="audit-partial-count">0</div><div class="audit-kpi-lbl">En cours</div></div>
-      <div class="audit-kpi" title="Points non encore traités, sur le total du référentiel."><div class="audit-kpi-val" style="color:var(--accent)" id="audit-todo-count" data-audit-total>34</div><div class="audit-kpi-lbl">À réaliser</div></div>
+      <!-- UNE RÉPONSE PAR POINT, ET SIX COMPTEURS QUI LES DISENT TOUTES. « À
+           réaliser » comptait aussi les points jamais regardés : c'est
+           désormais une réponse, et « sans réponse » a son propre compteur.
+           « Sans objet » sort le point du score. -->
+      <div class="audit-kpi" title="Calcul : (points conformes + points en cours × 0,5) / points applicables × 100. « Sans objet » sort un point du calcul ; un point sans réponse compte zéro. Tous les points comptent à égalité, quelle que soit leur priorité."><div class="audit-kpi-val" id="audit-score-pct">0%</div><div class="audit-kpi-lbl">Score global</div></div>
+      <div class="audit-kpi" title="Points répondus « Conforme »."><div class="audit-kpi-val" style="color:var(--green)" id="audit-done-count">0</div><div class="audit-kpi-lbl">Conformes</div></div>
+      <div class="audit-kpi" title="Points répondus « En cours » — comptés pour moitié dans le score global."><div class="audit-kpi-val" style="color:var(--orange)" id="audit-partial-count">0</div><div class="audit-kpi-lbl">En cours</div></div>
+      <div class="audit-kpi" title="Points répondus « À réaliser » — ils comptent zéro dans le score."><div class="audit-kpi-val" style="color:var(--accent)" id="audit-todo-count">0</div><div class="audit-kpi-lbl">À réaliser</div></div>
+      <div class="audit-kpi" title="Points qui n’ont pas encore de réponse. Ils comptent zéro dans le score, et le bloc du parcours ne passe au vert qu’une fois chacun répondu."><div class="audit-kpi-val" style="color:var(--muted2)" id="audit-none-count" data-audit-total>34</div><div class="audit-kpi-lbl">Sans réponse</div></div>
+      <div class="audit-kpi" title="Points répondus « Sans objet » — hors du calcul du score."><div class="audit-kpi-val" style="color:var(--muted2)" id="audit-na-count">0</div><div class="audit-kpi-lbl">Sans objet</div></div>
     </div>
     <div class="audit-progress-bar" style="margin-bottom:24px"><div class="audit-progress-fill" id="audit-progress-fill" style="width:0%"></div></div>
     <div id="audit-sections"></div>

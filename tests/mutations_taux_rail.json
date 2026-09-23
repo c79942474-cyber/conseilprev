@@ -52,15 +52,15 @@
   {
    "nom": "« partiel » de l'audit IA Act devient « tenu »",
    "fichier": "conformite.py",
-   "avant": "AUDIT_ECRAN = {\"done\": \"tenu\", \"partial\": \"partiel\", \"na\": \"sans_objet\"}",
-   "apres": "AUDIT_ECRAN = {\"done\": \"tenu\", \"partial\": \"tenu\", \"na\": \"sans_objet\"}",
+   "avant": "AUDIT_ECRAN = {\"done\": \"tenu\", \"partial\": \"partiel\", \"na\": \"sans_objet\",\n               \"todo\": \"absent\"}",
+   "apres": "AUDIT_ECRAN = {\"done\": \"tenu\", \"partial\": \"tenu\", \"na\": \"sans_objet\",\n               \"todo\": \"absent\"}",
    "regle": "test_le_vocabulaire_de_l_AUDIT_IA_ACT"
   },
   {
    "nom": "un état d'audit inconnu devient « partiel »",
    "fichier": "conformite.py",
-   "avant": "    return {k: AUDIT_ECRAN.get(x, \"absent\") for k, x in audit.items()}",
-   "apres": "    return {k: AUDIT_ECRAN.get(x, \"partiel\") for k, x in audit.items()}",
+   "avant": "    reponses = {k: AUDIT_ECRAN[x] for k, x in audit.items() if x in AUDIT_ECRAN}",
+   "apres": "    reponses = {k: AUDIT_ECRAN.get(x, \"partiel\") for k, x in audit.items()}",
    "regle": "test_le_vocabulaire_de_l_AUDIT_IA_ACT"
   },
   {
@@ -248,8 +248,8 @@
   {
    "nom": "l'audit IA Act ne part plus",
    "fichier": "sentinel.page.js",
-   "avant": "  ia_act: function () { return { audit: window.AUDIT_STATE || {} }; }",
-   "apres": "  ia_act: function () { return {}; }",
+   "avant": "    return { audit: window.AUDIT_STATE || {},",
+   "apres": "    return { audit: {},",
    "regle": "test_les_collecteurs_du_rail_portent_ce_que_le_taux_lit"
   },
   {

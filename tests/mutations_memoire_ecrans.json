@@ -160,8 +160,8 @@
   {
    "nom": "l'objectif 16 n'est pas relu",
    "fichier": "sentinel.page.js",
-   "avant": "      _memFondre(RECYF_ANALYSE, m.analyse, { gouvernance: 'booleen',",
-   "apres": "      _memFondre({}, m.analyse, { gouvernance: 'booleen',",
+   "avant": "      _memFondre(RECYF_ANALYSE, m.analyse, { gouvernance: 'oui_non?',",
+   "apres": "      _memFondre({}, m.analyse, { gouvernance: 'oui_non?',",
    "regle": "test_RECYF_la_qualification_et_l_objectif_16_sont_reaffiches"
   },
   {
@@ -251,29 +251,29 @@
   {
    "nom": "ReCyF : l'exigence se peint depuis la réponse du serveur",
    "fichier": "sentinel.page.js",
-   "avant": "(RECYF_ANALYSE[e.cle] ? ' checked' : '')",
-   "apres": "(e.declare ? ' checked' : '')",
+   "avant": "      + recyfChoix('recyf-a-' + e.cle, RECYF_ANALYSE[e.cle],",
+   "apres": "      + recyfChoix('recyf-a-' + e.cle, e.declare,",
    "regle": "test_RECYF_la_qualification_et_l_objectif_16_sont_reaffiches"
   },
   {
-   "nom": "ReCyF : les trois cases se peignent décochées",
+   "nom": "ReCyF : les trois engagements se peignent sans réponse",
    "fichier": "sentinel.page.js",
-   "avant": "    + (RECYF_ANALYSE[cle] ? ' checked' : '')\n",
-   "apres": "",
+   "avant": "    + recyfChoix(id, RECYF_ANALYSE[cle], \"recyfRepondre('\" + cle + \"', this.value)\", libelle)",
+   "apres": "    + recyfChoix(id, null, \"recyfRepondre('\" + cle + \"', this.value)\", libelle)",
    "regle": "test_RECYF_une_case_cochee_le_reste_au_repeint_suivant"
   },
   {
    "nom": "ReCyF : « moyens alloués » ne part pas au calcul",
    "fichier": "sentinel.page.js",
-   "avant": "    moyens_alloues: !!a.moyens_alloues,",
-   "apres": "    moyens_alloues: false,",
+   "avant": "  RECYF_QUESTIONS.forEach(function (k) { d[k] = recyfOuiNon(a[k]); });",
+   "apres": "  RECYF_QUESTIONS.forEach(function (k) { d[k] = k === 'moyens_alloues' ? false : recyfOuiNon(a[k]); });",
    "regle": "test_RECYF_une_case_cochee_le_reste_au_repeint_suivant"
   },
   {
-   "nom": "ReCyF : les entrées se peignent décochées",
+   "nom": "ReCyF : les entrées se peignent sans réponse",
    "fichier": "sentinel.page.js",
-   "avant": "((RECYF_ANALYSE.entrees || []).indexOf(x.cle) >= 0 ? ' checked' : '')",
-   "apres": "''",
+   "avant": "      + recyfChoix('recyf-e-' + x.cle, (RECYF_ANALYSE.entrees || {})[x.cle],",
+   "apres": "      + recyfChoix('recyf-e-' + x.cle, null,",
    "regle": "test_RECYF_la_qualification_et_l_objectif_16_sont_reaffiches"
   },
   {
@@ -415,6 +415,20 @@
    "avant": "onclick=\"memoireEffacer('nis2')\"",
    "apres": "onclick=\"memoireEffacer('nis')\"",
    "regle": "test_le_premier_ecran_de_chaque_referentiel_dit_ou_sont_les_reponses[nis2-nis2-qualifier]"
+  },
+  {
+   "nom": "une entrée ReCyF d'un autre type est recopiée",
+   "fichier": "sentinel.page.js",
+   "avant": "case 'oui_non_par_cle': return objet(v) ? garder(v, function (x) { return typeof x === 'boolean'; }) : undefined;",
+   "apres": "case 'oui_non_par_cle': return objet(v) ? garder(v, function (x) { return true; }) : undefined;",
+   "regle": "test_une_valeur_d_un_autre_type_est_ecartee_pas_recopiee"
+  },
+  {
+   "nom": "l'effacement oublie l'ancienne clé ReCyF",
+   "fichier": "sentinel.page.js",
+   "avant": "    [MEMOIRE[n].cle, MEMOIRE[n].ancienne].forEach(function (k) {",
+   "apres": "    [MEMOIRE[n].cle].forEach(function (k) {",
+   "regle": "test_effacer_NIS2_efface_NIS2_et_ReCyF_et_rien_d_autre"
   }
  ]
 }

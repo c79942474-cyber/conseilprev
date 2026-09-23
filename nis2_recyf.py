@@ -680,7 +680,13 @@ def analyse_de_risque(declaration=None, statut=None):
         if cle == "couverture" and tenu:
             # LES CINQ ENTRÉES SONT NOMMÉES PAR LE RÉFÉRENTIEL : une analyse
             # qui n'en cite aucune ne s'appuie sur rien de vérifiable.
-            citees = set(d.get("entrees") or ())
+            # L'écran les envoie EN CARTE — {entrée : oui ou non} — depuis
+            # qu'il distingue « non citée » de « pas encore répondue ». Lire
+            # une carte comme une liste en prendrait les CLÉS : chaque « non »
+            # compterait pour une entrée citée. Une liste reste lue.
+            e = d.get("entrees") or ()
+            citees = ({c for c, v in e.items() if v is True}
+                      if isinstance(e, dict) else set(e))
             absentes = [nom for c, nom in ANALYSE_ENTREES if c not in citees]
             if absentes:
                 manque.append("entrées non citées : " + " ; ".join(absentes))

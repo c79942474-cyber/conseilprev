@@ -81,7 +81,11 @@ def _audit_js(audit):
         return ''
     d = MOTEUR.index('var AUDIT_SECTIONS')
     sections = MOTEUR[d:MOTEUR.index('\n];', d) + 3]
-    return '%s\nvar AUDIT_STATE = %s;' % (sections, json.dumps(audit))
+    # LE DÉCOMPTE COMMUN, que `simEtatAudit` appelle depuis que tous les
+    # écrans comptent l'audit de la même façon — « sans objet » compris.
+    c = MOTEUR.index('var AUDIT_REPONSES')
+    decompte = MOTEUR[c:MOTEUR.index('window.auditComptes = auditComptes;', c)]
+    return '%s\nvar AUDIT_STATE = %s;\n%s' % (sections, json.dumps(audit), decompte)
 
 
 def _evaluer(reponses, classif=None, expression='simGap(CLASSIF).map(function(x){return x.obl.id;})'):

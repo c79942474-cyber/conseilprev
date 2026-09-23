@@ -1,0 +1,358 @@
+{
+ "_pourquoi": "Six listes se validaient sur un clic « passé en revue ». Chaque règle doit tomber sur SON défaut : le moteur (une question sans réponse est nommée, un oui engage ses suites, une carte d'entrées n'est pas une liste), le taux (« à réaliser » traduit, « non renseigné » ignoré), l'écran (la valeur « non renseigné », le décompte commun de l'audit, « sans objet » hors du dénominateur, les migrations prudentes, la présomption du registre) et le rail (les listes entières, plus de revue).",
+ "cibles": [
+  "tests/test_revues_mesurees.py"
+ ],
+ "mutations": [
+  {
+   "nom": "l'audit redevient une liste à passer en revue",
+   "fichier": "parcours_normes.py",
+   "avant": "_b(\"audit\", \"audit-ia-act\", \"Audit IA Act\", \"saisie\",",
+   "apres": "_b(\"audit\", \"audit-ia-act\", \"Audit IA Act\", \"lecture\",",
+   "regle": "test_les_SIX_blocs_se_remplissent_et_ne_se_declarent_plus"
+  },
+  {
+   "nom": "un point jamais touché passe pour répondu",
+   "fichier": "parcours_normes.py",
+   "avant": "if audit.get(p.get(\"cle\")) not in AUDIT_REPONSES]}, {}, {}",
+   "apres": "if audit.get(p.get(\"cle\")) in (None, \"\")]}, {}, {}",
+   "regle": "test_AUDIT_un_point_sans_reponse_est_NOMME"
+  },
+  {
+   "nom": "une liste de points absente passe pour complète",
+   "fichier": "parcours_normes.py",
+   "avant": "        return {\"audit\": [_q(\"La liste des points de l'audit n'a pas été \"\n                             \"transmise\")]}, {}, {}",
+   "apres": "        return {\"audit\": []}, {}, {}",
+   "regle": "test_AUDIT_sans_la_liste_des_points_le_bloc_le_DIT"
+  },
+  {
+   "nom": "un critère sans réponse vaut un non",
+   "fichier": "parcours_normes.py",
+   "avant": "vides = [c for c in crit if c.get(\"reponse\") not in (True, False)]",
+   "apres": "vides = [c for c in crit if c.get(\"reponse\") not in (True, False, None)]",
+   "regle": "test_AIPD_un_critere_sans_reponse_n_est_pas_un_NON"
+  },
+  {
+   "nom": "les cotations sont exigées de tous",
+   "fichier": "parcours_normes.py",
+   "avant": "if sum(1 for c in crit if c.get(\"reponse\") is True) < AIPD_SEUIL:",
+   "apres": "if sum(1 for c in crit if c.get(\"reponse\") is True) < 0:",
+   "regle": "test_AIPD_les_cotations_ne_sont_demandees_qu_au_SEUIL"
+  },
+  {
+   "nom": "une cotation hors échelle passe",
+   "fichier": "parcours_normes.py",
+   "avant": "if e.get(\"g\") not in AIPD_NIVEAUX or e.get(\"v\") not in AIPD_NIVEAUX:",
+   "apres": "if e.get(\"g\") is None or e.get(\"v\") is None:",
+   "regle": "test_AIPD_les_cotations_ne_sont_demandees_qu_au_SEUIL"
+  },
+  {
+   "nom": "le oui à la gouvernance n'engage plus les moyens",
+   "fichier": "parcours_normes.py",
+   "avant": "if cle == \"gouvernance\" and a.get(\"moyens_alloues\") not in (True, False):",
+   "apres": "if cle == \"couverture\" and a.get(\"moyens_alloues\") not in (True, False):",
+   "regle": "test_RECYF_chaque_OUI_engage_ce_que_le_referentiel_exige_avec_lui"
+  },
+  {
+   "nom": "le oui au réexamen n'en demande plus la date",
+   "fichier": "parcours_normes.py",
+   "avant": "if cle == \"reexamen\" and not _nombre(a.get(\"dernier_reexamen_mois\")):",
+   "apres": "if False and not _nombre(a.get(\"dernier_reexamen_mois\")):",
+   "regle": "test_RECYF_chaque_OUI_engage_ce_que_le_referentiel_exige_avec_lui"
+  },
+  {
+   "nom": "une exigence sans réponse passe",
+   "fichier": "parcours_normes.py",
+   "avant": "        v = a.get(cle)\n        if v not in (True, False):",
+   "apres": "        v = a.get(cle)\n        if v not in (True, False, None):",
+   "regle": "test_RECYF_chaque_OUI_engage_ce_que_le_referentiel_exige_avec_lui"
+  },
+  {
+   "nom": "la privacy by design n'est plus mesurée",
+   "fichier": "parcours_normes.py",
+   "avant": "\"pbd\": _sans_reponse(d, \"pbd\",",
+   "apres": "\"pbd\": [], \"_pbd\": _sans_reponse(d, \"pbd\",",
+   "regle": "test_de_l_ECRAN_au_MOTEUR_les_six_blocs_se_mesurent[une-question-vide]"
+  },
+  {
+   "nom": "une carte d'entrées se lit comme une liste",
+   "fichier": "nis2_recyf.py",
+   "avant": "citees = ({c for c, v in e.items() if v is True}\n                      if isinstance(e, dict) else set(e))",
+   "apres": "citees = set(e)",
+   "regle": "test_RECYF_une_entree_NON_n_est_pas_une_entree_CITEE"
+  },
+  {
+   "nom": "« à réaliser » ne se traduit plus",
+   "fichier": "conformite.py",
+   "avant": "AUDIT_ECRAN = {\"done\": \"tenu\", \"partial\": \"partiel\", \"na\": \"sans_objet\",\n               \"todo\": \"absent\"}",
+   "apres": "AUDIT_ECRAN = {\"done\": \"tenu\", \"partial\": \"partiel\", \"na\": \"sans_objet\"}",
+   "regle": "test_le_TAUX_IA_Act_lit_A_REALISER_et_ignore_le_NON_RENSEIGNE"
+  },
+  {
+   "nom": "un point non renseigné entre au taux comme absent",
+   "fichier": "conformite.py",
+   "avant": "reponses = {k: AUDIT_ECRAN[x] for k, x in audit.items() if x in AUDIT_ECRAN}",
+   "apres": "reponses = {k: AUDIT_ECRAN.get(x, \"absent\") for k, x in audit.items()}",
+   "regle": "test_le_TAUX_IA_Act_lit_A_REALISER_et_ignore_le_NON_RENSEIGNE"
+  },
+  {
+   "nom": "la liste de l'audit perd son « non renseigné »",
+   "fichier": "sentinel.page.js",
+   "avant": "  return '<option value=\"\"' + (rep ? '' : ' selected') + '>— non renseigné —</option>'\n    + AUDIT_REPONSES",
+   "apres": "  return AUDIT_REPONSES",
+   "regle": "test_l_ecran_d_audit_pose_UNE_question_par_point"
+  },
+  {
+   "nom": "« sans objet » reste au dénominateur",
+   "fichier": "sentinel.page.js",
+   "avant": "  c.applicables = c.total - c.na;",
+   "apres": "  c.applicables = c.total;",
+   "regle": "test_le_DECOMPTE_de_l_audit"
+  },
+  {
+   "nom": "un audit tout « sans objet » affiche zéro",
+   "fichier": "sentinel.page.js",
+   "avant": "c.pct = c.applicables ? Math.round((c.done + c.partial * 0.5) / c.applicables * 100) : null;",
+   "apres": "c.pct = c.applicables ? Math.round((c.done + c.partial * 0.5) / c.applicables * 100) : 0;",
+   "regle": "test_le_DECOMPTE_de_l_audit"
+  },
+  {
+   "nom": "« none » redevient une réponse",
+   "fichier": "sentinel.page.js",
+   "avant": "  for(var i = 0; i < AUDIT_REPONSES.length; i++){ if(AUDIT_REPONSES[i][0] === v) return v; }\n  return '';",
+   "apres": "  for(var i = 0; i < AUDIT_REPONSES.length; i++){ if(AUDIT_REPONSES[i][0] === v) return v; }\n  return v === 'none' ? 'todo' : '';",
+   "regle": "test_le_DECOMPTE_de_l_audit"
+  },
+  {
+   "nom": "« non renseigné » laisse une réponse",
+   "fichier": "sentinel.page.js",
+   "avant": "  if(admise) AUDIT_STATE[id] = v; else delete AUDIT_STATE[id];",
+   "apres": "  AUDIT_STATE[id] = v;",
+   "regle": "test_revenir_a_NON_RENSEIGNE_retire_la_reponse"
+  },
+  {
+   "nom": "une mémoire d'audit abîmée est recopiée",
+   "fichier": "sentinel.page.js",
+   "avant": "if(_auditRelu && typeof _auditRelu === \"object\" && !Array.isArray(_auditRelu)) AUDIT_STATE = _auditRelu;",
+   "apres": "if(_auditRelu) AUDIT_STATE = _auditRelu;",
+   "regle": "test_une_memoire_d_audit_abimee_ne_casse_pas_l_ecran"
+  },
+  {
+   "nom": "la cloche recompte à sa façon",
+   "fichier": "sentinel.page.js",
+   "avant": "    if(typeof auditComptes !== 'function') return 0;\n    var c = auditComptes();\n    return c.todo + c.sans_reponse;",
+   "apres": "    return 0;",
+   "regle": "test_NEUF_lecteurs_UN_decompte"
+  },
+  {
+   "nom": "un article tout « sans objet » passe pour traité",
+   "fichier": "sentinel.page.js",
+   "avant": "statut: (c.applicables && c.done === c.applicables) ? 'ok'",
+   "apres": "statut: (c.done === c.applicables) ? 'ok'",
+   "regle": "test_le_simulateur_n_appelle_pas_TRAITE_un_article_tout_SANS_OBJET"
+  },
+  {
+   "nom": "un critère jamais répondu vaut non",
+   "fichier": "sentinel.page.js",
+   "avant": "var c = (s.criteria || [])[i]; return (c === true || c === false) ? c : null; }),",
+   "apres": "var c = (s.criteria || [])[i]; return c === true; }),",
+   "regle": "test_AIPD_rien_n_est_repondu_par_defaut"
+  },
+  {
+   "nom": "« Non (hors art. 9) » présume de nouveau",
+   "fichier": "sentinel.page.js",
+   "avant": "return !!t && !/^non\\b/.test(t) && t!==\"-\"",
+   "apres": "return !!t && t!==\"non\" && t!==\"-\"",
+   "regle": "test_AIPD_le_registre_ne_presume_que_sur_un_OUI"
+  },
+  {
+   "nom": "la migration garde les cotations par défaut",
+   "fichier": "sentinel.page.js",
+   "avant": "e2[e[0]] = { g: (aipdNiveau(x.g) && x.g !== 1) ? x.g : null,",
+   "apres": "e2[e[0]] = { g: aipdNiveau(x.g) ? x.g : null,",
+   "regle": "test_AIPD_la_premiere_version_se_relit_avec_PRUDENCE"
+  },
+  {
+   "nom": "la migration garde les cases décochées pour des non",
+   "fichier": "sentinel.page.js",
+   "avant": "return (s.criteria || [])[i] === true ? true : null; }),",
+   "apres": "return (s.criteria || [])[i] === true; }),",
+   "regle": "test_AIPD_la_premiere_version_se_relit_avec_PRUDENCE"
+  },
+  {
+   "nom": "le verdict conclut sur des critères sans réponse",
+   "fichier": "sentinel.page.js",
+   "avant": "  if(aipdSansReponse(t,s)) return [\"À compléter\",\"var(--muted2)\"];\n",
+   "apres": "",
+   "regle": "test_AIPD_le_verdict_et_l_EVALUATION"
+  },
+  {
+   "nom": "une AIPD cotée à moitié passe pour évaluée",
+   "fichier": "sentinel.page.js",
+   "avant": "if(req && aipdCotee(s)) traitees++;",
+   "apres": "if(req) traitees++;",
+   "regle": "test_AIPD_le_verdict_et_l_EVALUATION"
+  },
+  {
+   "nom": "retirer une cotation la remet à 1",
+   "fichier": "sentinel.page.js",
+   "avant": "s.events[ev][dim] = aipdNiveau(n) ? n : null;",
+   "apres": "s.events[ev][dim] = aipdNiveau(n) ? n : 1;",
+   "regle": "test_AIPD_le_verdict_et_l_EVALUATION"
+  },
+  {
+   "nom": "« sans objet » reste au taux de la privacy by design",
+   "fichier": "sentinel.page.js",
+   "avant": "  c.applicables = c.total - c.sans_objet;\n  c.done = c.oui;",
+   "apres": "  c.applicables = c.total;\n  c.done = c.oui;",
+   "regle": "test_PBD_sans_objet_sort_du_taux_NON_y_reste_le_VIDE_aussi"
+  },
+  {
+   "nom": "« non renseigné » laisse une réponse de privacy by design",
+   "fichier": "sentinel.page.js",
+   "avant": "if(PBD_REPONSES.some(function(r){ return r[0] === val; })) st[id]=val; else delete st[id];",
+   "apres": "st[id]=val;",
+   "regle": "test_PBD_sans_objet_sort_du_taux_NON_y_reste_le_VIDE_aussi"
+  },
+  {
+   "nom": "la migration prend une case décochée pour un non",
+   "fichier": "sentinel.page.js",
+   "avant": "Object.keys(v1).forEach(function(k){ if(v1[k] === true) o[k] = \"oui\"; });",
+   "apres": "Object.keys(v1).forEach(function(k){ o[k] = v1[k] ? \"oui\" : \"non\"; });",
+   "regle": "test_PBD_la_premiere_version_ne_gardait_que_les_OUI"
+  },
+  {
+   "nom": "la migration garde « absent » par défaut",
+   "fichier": "sentinel.page.js",
+   "avant": "o[k] = { statut: (r.statut && r.statut !== \"absent\") ? r.statut : \"\",",
+   "apres": "o[k] = { statut: r.statut || \"\",",
+   "regle": "test_DOC_ABSENT_est_une_reponse_mais_plus_un_DEFAUT"
+  },
+  {
+   "nom": "« sans objet » reste au taux documentaire",
+   "fichier": "sentinel.page.js",
+   "avant": "  c.applicables = c.total - c.sans_objet;\n  c.pct = c.applicables ? Math.round(c.enPlace/c.applicables*100) : 0;",
+   "apres": "  c.applicables = c.total;\n  c.pct = c.applicables ? Math.round(c.enPlace/c.applicables*100) : 0;",
+   "regle": "test_DOC_ABSENT_est_une_reponse_mais_plus_un_DEFAUT"
+  },
+  {
+   "nom": "un statut inconnu est relu tel quel",
+   "fichier": "sentinel.page.js",
+   "avant": "  return { statut: docStatut(r.statut), resp:",
+   "apres": "  return { statut: r.statut || \"\", resp:",
+   "regle": "test_DOC_ABSENT_est_une_reponse_mais_plus_un_DEFAUT"
+  },
+  {
+   "nom": "un statut inconnu est écrit tel quel",
+   "fichier": "sentinel.page.js",
+   "avant": "st[id][field] = field===\"statut\" ? docStatut(val) : String(val||\"\");",
+   "apres": "st[id][field] = String(val||\"\");",
+   "regle": "test_DOC_ABSENT_est_une_reponse_mais_plus_un_DEFAUT"
+  },
+  {
+   "nom": "la migration garde « à planifier » par défaut",
+   "fichier": "sentinel.page.js",
+   "avant": "o[k] = { statut: (r.statut && r.statut !== \"a_planifier\") ? r.statut : \"\",",
+   "apres": "o[k] = { statut: r.statut || \"\",",
+   "regle": "test_SENS_A_PLANIFIER_est_une_reponse_mais_plus_un_DEFAUT"
+  },
+  {
+   "nom": "« sans objet » reste au taux de sensibilisation",
+   "fichier": "sentinel.page.js",
+   "avant": "  c.applicables = c.total - c.sans_objet;\n  c.pct = c.applicables ? Math.round(c.done/c.applicables*100) : 0;",
+   "apres": "  c.applicables = c.total;\n  c.pct = c.applicables ? Math.round(c.done/c.applicables*100) : 0;",
+   "regle": "test_SENS_A_PLANIFIER_est_une_reponse_mais_plus_un_DEFAUT"
+  },
+  {
+   "nom": "un état de sensibilisation inconnu est relu tel quel",
+   "fichier": "sentinel.page.js",
+   "avant": "  return { statut: sensStatut(r.statut), date:",
+   "apres": "  return { statut: r.statut || \"\", date:",
+   "regle": "test_SENS_A_PLANIFIER_est_une_reponse_mais_plus_un_DEFAUT"
+  },
+  {
+   "nom": "un état de sensibilisation inconnu est écrit tel quel",
+   "fichier": "sentinel.page.js",
+   "avant": "st[id][field] = field===\"statut\" ? sensStatut(val) : String(val||\"\");",
+   "apres": "st[id][field] = String(val||\"\");",
+   "regle": "test_SENS_A_PLANIFIER_est_une_reponse_mais_plus_un_DEFAUT"
+  },
+  {
+   "nom": "la gouvernance vaut non avant toute réponse",
+   "fichier": "sentinel.page.js",
+   "avant": "var RECYF_ANALYSE = { gouvernance: null, moyens_alloues: null,",
+   "apres": "var RECYF_ANALYSE = { gouvernance: false, moyens_alloues: null,",
+   "regle": "test_RECYF_oui_non_ou_RIEN"
+  },
+  {
+   "nom": "« non renseigné » vaut non",
+   "fichier": "sentinel.page.js",
+   "avant": "  return (v === true || v === 'oui') ? true : (v === false || v === 'non') ? false : null;",
+   "apres": "  return (v === true || v === 'oui');",
+   "regle": "test_RECYF_oui_non_ou_RIEN"
+  },
+  {
+   "nom": "les entrées repartent en liste",
+   "fichier": "sentinel.page.js",
+   "avant": "  d.entrees = e;\n  d.dernier_reexamen_mois = a.dernier_reexamen_mois;",
+   "apres": "  d.entrees = Object.keys(e);\n  d.dernier_reexamen_mois = a.dernier_reexamen_mois;",
+   "regle": "test_RECYF_oui_non_ou_RIEN"
+  },
+  {
+   "nom": "la migration ReCyF garde false pour un non",
+   "fichier": "sentinel.page.js",
+   "avant": "RECYF_QUESTIONS.forEach(function (k) { o[k] = a[k] === true ? true : null; });",
+   "apres": "RECYF_QUESTIONS.forEach(function (k) { o[k] = a[k]; });",
+   "regle": "test_RECYF_la_premiere_version_se_relit_avec_PRUDENCE"
+  },
+  {
+   "nom": "l'ancienne clé ReCyF n'est plus relue",
+   "fichier": "sentinel.page.js",
+   "avant": "    if (!brut && m.ancienne) {",
+   "apres": "    if (false) {",
+   "regle": "test_RECYF_la_premiere_version_se_relit_avec_PRUDENCE"
+  },
+  {
+   "nom": "la privacy by design ne part plus au rail",
+   "fichier": "sentinel.page.js",
+   "avant": "      pbd: liste(window.pbdDeclaration), doc: liste(window.docDeclaration),",
+   "apres": "      pbd: [], doc: liste(window.docDeclaration),",
+   "regle": "test_les_listes_partent_ENTIERES_et_le_texte_du_registre_JAMAIS"
+  },
+  {
+   "nom": "l'AIPD ne part plus au rail",
+   "fichier": "sentinel.page.js",
+   "avant": "      return { nom: t.nom, champs: c, aipd: a };",
+   "apres": "      return { nom: t.nom, champs: c, aipd: null };",
+   "regle": "test_les_listes_partent_ENTIERES_et_le_texte_du_registre_JAMAIS"
+  },
+  {
+   "nom": "les points de l'audit ne partent plus",
+   "fichier": "sentinel.page.js",
+   "avant": "             points: (typeof window.auditPoints === 'function') ? window.auditPoints() : [] };",
+   "apres": "             points: [] };",
+   "regle": "test_les_listes_partent_ENTIERES_et_le_texte_du_registre_JAMAIS"
+  },
+  {
+   "nom": "la revue déclarée repart au serveur",
+   "fichier": "sentinel.page.js",
+   "avant": "  d.lus = st.lus || [];\n",
+   "apres": "  d.lus = st.lus || [];\n  d.revus = st.revus || [];\n",
+   "regle": "test_le_rail_n_envoie_PLUS_de_revue"
+  },
+  {
+   "nom": "le pied propose de nouveau la revue",
+   "fichier": "sentinel.page.js",
+   "avant": "  var decl = (b.nature === 'lecture') ? 'lus' : null;",
+   "apres": "  var decl = (b.nature === 'lecture') ? 'lus' : 'revus';",
+   "regle": "test_le_pied_du_rail_ne_propose_PLUS_de_revue"
+  },
+  {
+   "nom": "l'objectif 16 ne part plus au rail",
+   "fichier": "sentinel.page.js",
+   "avant": "                etats: RECYF_ETATS, analyse: recyfDeclarationAnalyse() };",
+   "apres": "                etats: RECYF_ETATS };",
+   "regle": "test_de_l_ECRAN_au_MOTEUR_les_six_blocs_se_mesurent[tout-repondu]"
+  }
+ ]
+}

@@ -221,17 +221,27 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
   ok('…dans l’ordre de son rail, le SMSI en deuxième', ordre[1] === 'dora-iso', ordre.join(' '));
 
   // ── 9 ───────────────────────────────────────────────────────────────────
-  titre('9. Une liste à cases se valide sur une revue déclarée');
+  /* CETTE SECTION DISAIT L'INVERSE, ET C'ÉTAIT LE DÉFAUT : « une liste à
+     cases se valide sur une revue déclarée ». L'audit demande désormais une
+     réponse par point, et se mesure — recette_revues_mesurees.js le suit
+     écran par écran, pour les six listes. */
+  titre('9. Une liste se mesure : plus de revue à déclarer');
 
   await pg.evaluate(() => go('audit-ia-act'));
   await pg.waitForTimeout(1800);
   ban = await bandeau();
-  ok('le bandeau dit que ce vert est une déclaration', /À passer en revue/.test(ban)
-     && /pas qu'un calcul l'a constaté/.test(ban), ban.slice(0, 160));
-  await pg.click('.page.on .rail-pied button');
-  await pg.waitForTimeout(1600);
+  ok('le bandeau nomme les points sans réponse, et ne parle plus de revue',
+     /Il manque 34 réponses/.test(ban) && !/en revue/.test(ban), ban.slice(0, 160));
+  const piedAudit = await pg.evaluate(() => (document.querySelector('.page.on .rail-pied') || {}).innerText || '');
+  ok('…et l’écran n’offre plus de bouton pour la déclarer', !/en revue/i.test(piedAudit),
+     piedAudit.replace(/\s+/g, ' ').slice(0, 80) || '(aucun pied)');
+  await pg.evaluate(() => {
+    document.querySelectorAll('#audit-sections select').forEach(s => {
+      s.value = 'done'; s.dispatchEvent(new Event('change', { bubbles: true })); });
+  });
+  await pg.waitForTimeout(2200);
   b = await barre('ia_act');
-  ok('LE POINT QUI DÉCIDE — l’audit passe au vert sur la revue déclarée',
+  ok('LE POINT QUI DÉCIDE — chaque point répondu, l’audit passe au vert',
      b.length === 2 && b[1].etat === 'validee' && b[1].fond === vert, JSON.stringify(b[1]));
   ok('…et la vue d’ensemble, jamais lue, reste le bloc attendu', b[0].etat === 'courante',
      b[0].etat);

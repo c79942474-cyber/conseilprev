@@ -2036,7 +2036,10 @@ window.openSimulateurTab = function(){
 var AUDIT_STATE = {};
 try {
   var _savedAuditState = localStorage.getItem("cpAuditState");
-  if(_savedAuditState) AUDIT_STATE = JSON.parse(_savedAuditState);
+  /* UNE MÉMOIRE ABÎMÉE NE COÛTE QUE SES RÉPONSES : ce qui n'est pas un objet
+     est écarté, et l'audit repart vide au lieu de ne plus s'afficher. */
+  var _auditRelu = _savedAuditState ? JSON.parse(_savedAuditState) : null;
+  if(_auditRelu && typeof _auditRelu === "object" && !Array.isArray(_auditRelu)) AUDIT_STATE = _auditRelu;
 } catch(e) {}
 function auditPersistState(){
   try { localStorage.setItem("cpAuditState", JSON.stringify(AUDIT_STATE)); } catch(e) {}
@@ -2143,6 +2146,68 @@ if(document.readyState === 'loading')
 else auditStamperTotal();
 window.auditTotalPoints = auditTotalPoints;
 
+/* UNE RÉPONSE PAR POINT, ET « NON RENSEIGNÉ » N'EN EST PAS UNE.
+   MESURÉ DANS LE NAVIGATEUR : chaque point avait une case qui basculait au
+   clic, « à réaliser → conforme → en cours → à réaliser ». Un point jamais
+   regardé et un point qu'on savait à réaliser portaient le même état, et le
+   bloc du rail passait au vert sur un clic « liste passée en revue » sans
+   qu'un seul point ait reçu de réponse. Chaque point se répond désormais
+   dans une liste. « Sans objet » est une réponse : il sort le point du
+   calcul, là où « à réaliser » l'y laisse, à zéro. */
+var AUDIT_REPONSES = [['todo', 'À réaliser'], ['partial', 'En cours'],
+                      ['done', 'Conforme'], ['na', 'Sans objet']];
+function auditReponse(id){
+  var v = AUDIT_STATE[id];
+  for(var i = 0; i < AUDIT_REPONSES.length; i++){ if(AUDIT_REPONSES[i][0] === v) return v; }
+  return '';
+}
+window.auditReponse = auditReponse;
+
+/* LE DÉCOMPTE, ÉCRIT UNE FOIS. Neuf écrans lisaient l'audit, chacun avec sa
+   boucle — le score de la page, le rapport, l'historique, le simulateur,
+   l'indice consolidé, la tarification, la cloche… Un « sans objet » exclu
+   ici et compté là rendrait deux scores pour un même audit : le défaut que
+   ce fichier a déjà payé avec les points partiels. Tous passent par ici.
+   Un point sans réponse RESTE au dénominateur : ne pas avoir répondu n'est
+   pas être en règle. */
+function auditComptes(garder){
+  var c = { total: 0, done: 0, partial: 0, todo: 0, na: 0, sans_reponse: 0 };
+  AUDIT_SECTIONS.forEach(function(s){
+    (s.items || []).forEach(function(it){
+      if(garder && !garder(it, s)) return;
+      c.total++;
+      var r = auditReponse(it.id);
+      if(r) c[r]++; else c.sans_reponse++;
+    });
+  });
+  c.applicables = c.total - c.na;
+  c.pct = c.applicables ? Math.round((c.done + c.partial * 0.5) / c.applicables * 100) : null;
+  return c;
+}
+window.auditComptes = auditComptes;
+
+/* LES POINTS, PAR LEUR NOM : le rail dit lesquels attendent une réponse. */
+window.auditPoints = function(){
+  var l = [];
+  AUDIT_SECTIONS.forEach(function(s){
+    (s.items || []).forEach(function(it){ l.push({ cle: it.id, titre: it.title }); });
+  });
+  return l;
+};
+
+function auditMarque(rep){
+  return { done: '✓', partial: '~', todo: '✗', na: '—' }[rep] || '';
+}
+function auditOptions(rep){
+  return '<option value=""' + (rep ? '' : ' selected') + '>— non renseigné —</option>'
+    + AUDIT_REPONSES.map(function(o){
+        return '<option value="' + o[0] + '"' + (rep === o[0] ? ' selected' : '') + '>' + o[1] + '</option>';
+      }).join('');
+}
+function auditAttr(t){
+  return String(t == null ? '' : t).replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+}
+
 
 var auditInitDone = false;
 function auditInit(){
@@ -2153,16 +2218,16 @@ function auditInit(){
 
   var html = AUDIT_SECTIONS.map(function(sec){
     var items = sec.items.map(function(item){
-      var state = AUDIT_STATE[item.id] || 'none';
-      var checkCls = state === 'done' ? 'done' : state === 'partial' ? 'partial' : '';
-      var checkTxt = state === 'done' ? '✓' : state === 'partial' ? '~' : '';
+      var rep = auditReponse(item.id);
       var prioTips = {p1:'Priorité 1 — obligation critique, directement sanctionnable (jusqu\'à 35M€ ou 7% du CA mondial). À traiter en premier.', p2:'Priorité 2 — obligation importante, impact significatif sur la conformité globale.', p3:'Priorité 3 — bonne pratique recommandée, renforce la robustesse de la démarche.'};
       return '<div class="audit-item" id="aitem-'+item.id+'">'
-        +'<div class="audit-check '+checkCls+'" id="check-'+item.id+'" onclick="auditToggle(\''+item.id+'\')" title="Cliquez pour faire défiler : à réaliser → en cours → conforme.">'+checkTxt+'</div>'
+        +'<div class="audit-check'+(rep ? ' '+rep : '')+'" id="check-'+item.id+'" aria-hidden="true">'+auditMarque(rep)+'</div>'
         +'<div class="audit-item-body">'
         +'<div class="audit-item-title">'+item.title+'</div>'
         +'<div class="audit-item-desc">'+item.desc+'</div>'
         +'<div class="audit-item-art">'+item.art+'</div>'
+        +'<select class="cnf-in audit-rep" id="audit-rep-'+item.id+'" aria-label="Réponse — '+auditAttr(item.title)+'" onchange="auditRepondre(\''+item.id+'\', this.value)">'
+        + auditOptions(rep) + '</select>'
         +'</div>'
         +'<span class="audit-item-prio '+item.prio+'" title="'+(prioTips[item.prio]||'')+'">'+item.prio.toUpperCase()+'</span>'
         +'</div>';
@@ -2184,58 +2249,50 @@ function auditInit(){
   if(typeof auditInitSectorBar === "function"){ auditInitSectorBar(); auditRenderSectorRelevance(); }
 }
 
-window.auditToggle = function(id){
-  var cur = AUDIT_STATE[id] || 'none';
-  var next = cur === 'none' ? 'done' : cur === 'done' ? 'partial' : 'none';
-  AUDIT_STATE[id] = next;
+/* RÉPONDRE, C'EST CHOISIR — et revenir à « non renseigné » retire la
+   réponse, au lieu d'en inventer une. */
+window.auditRepondre = function(id, v){
+  var admise = AUDIT_REPONSES.some(function(o){ return o[0] === v; });
+  if(admise) AUDIT_STATE[id] = v; else delete AUDIT_STATE[id];
   auditPersistState();
+  var rep = auditReponse(id);
   var check = document.getElementById('check-'+id);
   if(check){
-    check.className = 'audit-check' + (next !== 'none' ? ' '+next : '');
-    check.textContent = next === 'done' ? '✓' : next === 'partial' ? '~' : '';
+    check.className = 'audit-check' + (rep ? ' '+rep : '');
+    check.textContent = auditMarque(rep);
   }
   auditUpdateScore();
 };
 
 function auditUpdateScore(){
-  var total = 0, done = 0, partial = 0;
   AUDIT_SECTIONS.forEach(function(sec){
-    var secDone = 0;
-    sec.items.forEach(function(item){
-      total++;
-      var st = AUDIT_STATE[item.id] || 'none';
-      if(st === 'done'){ done++; secDone++; }
-      else if(st === 'partial'){ partial++; secDone += 0.5; }
-    });
+    var cs = auditComptes(function(it, s){ return s === sec; });
     var el = document.getElementById('sec-score-'+sec.id);
-    if(el) el.textContent = Math.round(secDone)+'/'+sec.items.length;
+    if(el) el.textContent = Math.round(cs.done + cs.partial * 0.5)+'/'+cs.applicables;
   });
-  var todo = total - done - partial;
-  var pct = Math.round((done + partial * 0.5) / total * 100);
-  var pctEl = document.getElementById('audit-score-pct');
-  var doneEl = document.getElementById('audit-done-count');
-  var partEl = document.getElementById('audit-partial-count');
-  var todoEl = document.getElementById('audit-todo-count');
+  var c = auditComptes();
+  var champs = { 'audit-score-pct': c.pct === null ? '—' : c.pct+'%',
+                 'audit-done-count': c.done, 'audit-partial-count': c.partial,
+                 'audit-todo-count': c.todo, 'audit-none-count': c.sans_reponse,
+                 'audit-na-count': c.na };
+  Object.keys(champs).forEach(function(id){
+    var el = document.getElementById(id);
+    if(el) el.textContent = champs[id];
+  });
   var fillEl = document.getElementById('audit-progress-fill');
-  if(pctEl) pctEl.textContent = pct+'%';
-  if(doneEl) doneEl.textContent = done;
-  if(partEl) partEl.textContent = partial;
-  if(todoEl) todoEl.textContent = todo;
-  if(fillEl) fillEl.style.width = pct+'%';
+  if(fillEl) fillEl.style.width = (c.pct || 0)+'%';
 }
 
 window.auditExportPDF = function(){
   var w = window.open('','_blank');
   if(!w){ alert('Autorisez les pop-ups pour générer le rapport.'); return; }
   var today = new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
-  var done=0,partial=0,total=0;
-  AUDIT_SECTIONS.forEach(function(s){ s.items.forEach(function(i){ total++; var st=AUDIT_STATE[i.id]||'none'; if(st==='done')done++; else if(st==='partial')partial++; }); });
-  var pct = Math.round((done+partial*0.5)/total*100);
+  var c = auditComptes();
   var sectHtml = AUDIT_SECTIONS.map(function(sec){
     var rows = sec.items.map(function(item){
-      var st = AUDIT_STATE[item.id] || 'none';
-      var stLabel = {done:'Conforme',partial:'En cours',none:'A realiser'}[st];
-      var stColor = {done:'#2D7A47',partial:'#C47C1A',none:'#B83222'}[st];
+      var st = auditReponse(item.id) || 'none';
+      var stLabel = {done:'Conforme',partial:'En cours',todo:'A realiser',na:'Sans objet',none:'Non renseigne'}[st];
+      var stColor = {done:'#2D7A47',partial:'#C47C1A',todo:'#B83222',na:'#777777',none:'#999999'}[st];
       return '<tr><td style="padding:8px;font-size:11px;border-bottom:1px solid #eee">'+item.title+'</td>'
         +'<td style="padding:8px;font-size:10px;font-family:monospace;color:#666;border-bottom:1px solid #eee">'+item.art+'</td>'
         +'<td style="padding:8px;font-size:10px;font-family:monospace;color:'+stColor+';border-bottom:1px solid #eee;font-weight:600">'+stLabel+'</td></tr>';
@@ -2253,10 +2310,12 @@ window.auditExportPDF = function(){
     +'<h1>Rapport d\'audit AI Act</h1>'
     +'<div class="sub">Règlement (UE) 2024/1689 · Généré le '+today+' · CONSEILPREV</div>'
     +'<div class="kpi-row">'
-    +'<div class="kpi"><div class="kpi-v">'+pct+'%</div><div class="kpi-l">Score global</div></div>'
-    +'<div class="kpi"><div class="kpi-v" style="color:#2D7A47">'+done+'</div><div class="kpi-l">Conformes</div></div>'
-    +'<div class="kpi"><div class="kpi-v" style="color:#C47C1A">'+partial+'</div><div class="kpi-l">En cours</div></div>'
-    +'<div class="kpi"><div class="kpi-v" style="color:#B83222">'+(total-done-partial)+'</div><div class="kpi-l">A realiser</div></div>'
+    +'<div class="kpi"><div class="kpi-v">'+(c.pct === null ? '—' : c.pct+'%')+'</div><div class="kpi-l">Score global</div></div>'
+    +'<div class="kpi"><div class="kpi-v" style="color:#2D7A47">'+c.done+'</div><div class="kpi-l">Conformes</div></div>'
+    +'<div class="kpi"><div class="kpi-v" style="color:#C47C1A">'+c.partial+'</div><div class="kpi-l">En cours</div></div>'
+    +'<div class="kpi"><div class="kpi-v" style="color:#B83222">'+c.todo+'</div><div class="kpi-l">A realiser</div></div>'
+    +'<div class="kpi"><div class="kpi-v" style="color:#999999">'+c.sans_reponse+'</div><div class="kpi-l">Non renseignes</div></div>'
+    +'<div class="kpi"><div class="kpi-v" style="color:#777777">'+c.na+'</div><div class="kpi-l">Sans objet</div></div>'
     +'</div>'
     + sectHtml
     +'<p style="font-size:10px;color:#999;margin-top:30px;font-family:Arial;font-style:italic">Les scores sont auto-declares. Cette evaluation ne constitue pas un avis juridique. Pour un audit certifie, contactez christophe.cerf@outlook.com</p>'
@@ -2941,18 +3000,14 @@ window.simReset = function(){
 function simEtatAudit(numero){
   if(typeof AUDIT_SECTIONS === 'undefined' || typeof AUDIT_STATE === 'undefined') return null;
   var rx = new RegExp('Art\\.\\s*' + numero + '(?![0-9])');
-  var total = 0, faits = 0, partiels = 0;
-  AUDIT_SECTIONS.forEach(function(s){
-    (s.items || []).forEach(function(it){
-      if(!rx.test(it.art || '')) return;
-      total++;
-      var st = AUDIT_STATE[it.id] || 'none';
-      if(st === 'done') faits++; else if(st === 'partial') partiels++;
-    });
-  });
-  if(!total) return null;
-  return { total:total, faits:faits, partiels:partiels,
-           statut: (faits === total) ? 'ok' : (faits || partiels) ? 'partial' : 'none' };
+  /* « SANS OBJET » SORT DU COMPTE, COMME SUR LA PAGE DE L'AUDIT — et un
+     article dont tous les points sont déclarés sans objet n'est pas « traité » :
+     rien n'y a été démontré. */
+  var c = auditComptes(function(it){ return rx.test(it.art || ''); });
+  if(!c.total) return null;
+  return { total:c.applicables, faits:c.done, partiels:c.partial, sans_objet:c.na,
+           statut: (c.applicables && c.done === c.applicables) ? 'ok'
+                 : (c.done || c.partial) ? 'partial' : 'none' };
 }
 
 /* Les sept articles que l'étape 3 interrogeait, désormais lus dans l'audit. */
@@ -2983,7 +3038,8 @@ function simRendreLectureAudit(){
     if(!e){ libelle = 'aucun point d\'audit rattaché'; couleur = 'var(--muted2)'; }
     else {
       examines += e.faits + e.partiels;
-      libelle = e.faits + ' traité(s), ' + e.partiels + ' en cours, sur ' + e.total;
+      libelle = e.faits + ' traité(s), ' + e.partiels + ' en cours, sur ' + e.total
+        + (e.sans_objet ? ' — ' + e.sans_objet + ' déclaré(s) sans objet' : '');
       couleur = e.statut === 'ok' ? 'var(--green)' : e.statut === 'partial' ? 'var(--orange)' : 'var(--accent)';
     }
     lignes += '<div style="display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid var(--rule);font-size:12px">'
@@ -4475,24 +4531,16 @@ window.cpEvalSaveAudit = function(){
     alert("Le module audit n est pas encore charge. Ouvrez d abord l onglet Audit IA Act.");
     return;
   }
-  var total = 0, done = 0, partial = 0;
-  AUDIT_SECTIONS.forEach(function(sec){
-    sec.items.forEach(function(item){
-      total++;
-      var st = AUDIT_STATE[item.id] || "none";
-      if(st === "done") done++;
-      else if(st === "partial") partial++;
-    });
-  });
-  var pct = total > 0 ? Math.round((done + partial * 0.5) / total * 100) : 0;
-  var todo = total - done - partial;
+  var c = auditComptes();
+  var pct = c.pct === null ? 0 : c.pct;
   var badge = pct >= 80 ? "CONFORME" : pct >= 40 ? "EN COURS" : "A DEMARRER";
   var level = pct >= 80 ? "minimal" : pct >= 40 ? "limite" : "haut";
 
   cpEvalAdd({
     type: "audit",
     title: "Audit de conformite IA Act",
-    subtitle: total + " points de controle -- " + done + " conformes, " + partial + " en cours, " + todo + " a realiser",
+    subtitle: c.total + " points de controle -- " + c.done + " conformes, " + c.partial + " en cours, "
+      + c.todo + " a realiser, " + c.sans_reponse + " non renseignes, " + c.na + " sans objet",
     score: pct,
     scoreMax: 100,
     badge: badge,
@@ -8096,16 +8144,10 @@ function friaRenderSysCard(systeme){
     }
 
     /* Connexion croisee : score Audit IA Act du secteur + positionnement Matrice (probabilite x impact) deja calcules ailleurs */
-    var auditPct = 0, auditTotal = 0, auditDone = 0;
-    if(window.AUDIT_SECTIONS){
-      window.AUDIT_SECTIONS.forEach(function(sec){
-        sec.items.forEach(function(item){
-          auditTotal++;
-          var st = (window.AUDIT_STATE && window.AUDIT_STATE[item.id]) || "none";
-          if(st === "done") auditDone++;
-        });
-      });
-      auditPct = auditTotal>0 ? Math.round(auditDone/auditTotal*100) : 0;
+    var auditPct = 0;
+    if(window.AUDIT_SECTIONS && window.auditComptes){
+      var ac = auditComptes();
+      auditPct = ac.applicables ? Math.round(ac.done/ac.applicables*100) : 0;
     }
     var probLabel = systeme.statut_conformite === "non_conforme" ? "Très élevée" : systeme.statut_conformite === "en_cours" ? "Élevée" : systeme.statut_conformite === "conforme" ? "Très faible" : "Moyenne";
     head += '<div class="fria-cross-links">'
@@ -8264,17 +8306,14 @@ window.cpGetDashboardData = function(callback){
     data.registreNonConforme = data.registre.filter(function(s){ return s.statut_conformite==='non_conforme' || s.statut_conformite==='a_evaluer'; }).length;
     data.registreHautRisque = data.registre.filter(function(s){ return s.classification==='haut' || s.classification==='inacceptable'; }).length;
 
-    if(window.AUDIT_SECTIONS){
-      window.AUDIT_SECTIONS.forEach(function(sec){
-        sec.items.forEach(function(item){
-          data.auditTotal++;
-          var st = (window.AUDIT_STATE && window.AUDIT_STATE[item.id]) || "none";
-          if(st === "done") data.auditDone++;
-          else if(st === "partial") data.auditPartial++;
-        });
-      });
-      data.auditTodo = data.auditTotal - data.auditDone - data.auditPartial;
-      data.auditPct = data.auditTotal>0 ? Math.round((data.auditDone + data.auditPartial*0.5)/data.auditTotal*100) : 0;
+    if(window.AUDIT_SECTIONS && window.auditComptes){
+      var ac = auditComptes();
+      data.auditTotal = ac.applicables;
+      data.auditDone = ac.done;
+      data.auditPartial = ac.partial;
+      /* « À COMPLÉTER » : ce qui reste à réaliser, et ce qui n'a pas de réponse. */
+      data.auditTodo = ac.todo + ac.sans_reponse;
+      data.auditPct = ac.pct === null ? 0 : ac.pct;
     }
 
     try{ data.evaluations = JSON.parse(localStorage.getItem("cpEvaluations") || "[]"); } catch(e){}
@@ -9625,15 +9664,11 @@ function cardsGetData(callback){
     var hautRisque = (byClassif.haut||0) + (byClassif.inacceptable||0);
 
     var auditPct = 0, auditDone=0, auditTotal=0;
-    if(window.AUDIT_SECTIONS){
-      window.AUDIT_SECTIONS.forEach(function(sec){
-        sec.items.forEach(function(item){
-          auditTotal++;
-          var st = (window.AUDIT_STATE && window.AUDIT_STATE[item.id]) || "none";
-          if(st === "done") auditDone++;
-        });
-      });
-      auditPct = auditTotal>0 ? Math.round(auditDone/auditTotal*100) : 0;
+    if(window.AUDIT_SECTIONS && window.auditComptes){
+      var ac = auditComptes();
+      auditDone = ac.done;
+      auditTotal = ac.applicables;
+      auditPct = ac.applicables ? Math.round(ac.done/ac.applicables*100) : 0;
     }
 
     /* FRIA : nb systemes evalues avec score connu */
@@ -9842,10 +9877,10 @@ window.go = function(id){
   return r;
 };
 
-var _cardsOrigToggle = window.auditToggle;
-if(typeof _cardsOrigToggle === "function"){
-  window.auditToggle = function(){
-    var r = _cardsOrigToggle.apply(this, arguments);
+var _cardsOrigRepondre = window.auditRepondre;
+if(typeof _cardsOrigRepondre === "function"){
+  window.auditRepondre = function(){
+    var r = _cardsOrigRepondre.apply(this, arguments);
     setTimeout(cardsRender, 50);
     return r;
   };
@@ -11028,16 +11063,12 @@ function pricingGetData(callback){
   window.sentRegistre().then(function(d){
     var registre = d.systemes || [];
     var auditPct = 0, auditTotal = 0, auditDone = 0, auditEngage = false;
-    if(window.AUDIT_SECTIONS){
-      window.AUDIT_SECTIONS.forEach(function(sec){
-        sec.items.forEach(function(item){
-          auditTotal++;
-          var st = (window.AUDIT_STATE && window.AUDIT_STATE[item.id]) || "none";
-          if(st === "done") auditDone++;
-          if(st !== "none") auditEngage = true;
-        });
-      });
-      auditPct = auditTotal>0 ? Math.round(auditDone/auditTotal*100) : 0;
+    if(window.AUDIT_SECTIONS && window.auditComptes){
+      var ac = auditComptes();
+      auditTotal = ac.applicables;
+      auditDone = ac.done;
+      auditEngage = ac.sans_reponse < ac.total;
+      auditPct = ac.applicables ? Math.round(ac.done/ac.applicables*100) : 0;
     }
     var conformes = registre.filter(function(s){ return s.statut_conformite === 'conforme'; }).length;
     /* Poids pondere du registre selon la classification reelle des systemes */
@@ -16160,7 +16191,11 @@ window.ctBase = function(s){
   if(!t) return "Non précisée";
   return "Autre / à préciser";
 };
-window.ctFilled = function(v){ var t=ctNorm(v).trim(); return !!t && t!=="non" && t!=="-" && t!=="n/a" && t!=="na" && t!=="aucun" && t!=="aucune" && t!=="neant"; };
+/* « NON (HORS ART. 9) » N'EST PAS UN OUI. MESURÉ : le traitement livré avec
+   chaque compte porte cette réponse au champ des données sensibles, et la
+   carte le rangeait parmi les traitements sensibles — l'AIPD en présumait
+   même son critère 4. Une réponse qui COMMENCE par « non » dit non. */
+window.ctFilled = function(v){ var t=ctNorm(v).trim(); return !!t && !/^non\b/.test(t) && t!=="-" && t!=="n/a" && t!=="na" && t!=="aucun" && t!=="aucune" && t!=="neant"; };
 window.cartoTraitRender = function(){
   var box=document.getElementById("ctrait-body"); if(!box) return;
   var list=window.TRAIT_DATA||[];
@@ -16200,7 +16235,49 @@ window.cartoTraitRender = function(){
 };
 
 /* ══ AIPD — analyse d'impact RGPD (art. 35), calquee sur la FRIA, pilotee par le registre des traitements ══ */
-window.AIPD_KEY = "sentinel_aipd_v1";
+/* ══ UNE RÉPONSE PAR QUESTION — le socle des quatre écrans RGPD qui suivent ══
+   MESURÉ DANS LE NAVIGATEUR : l'AIPD, la privacy by design, la politique
+   documentaire et la sensibilisation avaient chacune une valeur par défaut
+   qui était AUSSI une réponse — une case décochée, « absent », « à
+   planifier », une gravité de 1. Rien ne distinguait « non » de « pas
+   encore regardé », et le rail validait ces blocs sur un clic « liste
+   passée en revue ». Chaque question porte désormais une valeur « non
+   renseigné », distincte de toutes les réponses : le bloc se mesure. */
+window.RGPD_VIDE = "— non renseigné —";
+window.rgpdOptions = function(liste, valeur){
+  return '<option value=""'+(valeur ? '' : ' selected')+'>'+RGPD_VIDE+'</option>'
+    + liste.map(function(o){ return '<option value="'+o[0]+'"'+(valeur===o[0]?' selected':'')+'>'+traitEsc(o[1])+'</option>'; }).join("");
+};
+/* UN ÉCRAN QUI CHANGE LE SENS DE SES VALEURS CHANGE DE CLÉ. Relire l'ancienne
+   clé comme la nouvelle aurait pris chaque ancien défaut pour une réponse
+   choisie. L'ancienne est relue UNE fois, avec la prudence que dit sa
+   fonction de migration, puis la nouvelle prend le relais ; l'ancienne
+   reste en place, intacte. Une mémoire illisible ne coûte que son écran. */
+window.rgpdRelire = function(cle, ancienne, migrer){
+  var v = null;
+  try { v = JSON.parse(localStorage.getItem(cle)); } catch(e){ v = null; }
+  if(v && typeof v === "object" && !Array.isArray(v)) return v;
+  var a = null;
+  try { a = JSON.parse(localStorage.getItem(ancienne)); } catch(e){ a = null; }
+  if(a && typeof a === "object" && !Array.isArray(a)){
+    var m = {};
+    try { m = migrer(a) || {}; } catch(e){ m = {}; }
+    try { localStorage.setItem(cle, JSON.stringify(m)); } catch(e){}
+    return m;
+  }
+  return {};
+};
+/* LA LISTE QUE LE RAIL LIT : chaque question, par son nom, avec sa réponse
+   — vide si elle n'en a pas. Le serveur ne recopie aucune de ces listes :
+   il lit celle que l'écran affiche. */
+window.rgpdDeclarer = function(groupes, reponse){
+  var l = [];
+  groupes.forEach(function(g){ g[1].forEach(function(it){ l.push({ cle: it[0], nom: it[1], reponse: reponse(it[0]) }); }); });
+  return l;
+};
+
+window.AIPD_KEY = "sentinel_aipd_v2";
+window.AIPD_KEY_V1 = "sentinel_aipd_v1";
 window.AIPD_CRITERIA = [
   "Évaluation ou notation (y compris profilage)",
   "Décision automatisée à effet juridique ou significatif",
@@ -16217,15 +16294,50 @@ window.AIPD_EVENTS = [
   ["modif", "Modification non désirée des données"],
   ["dispar", "Disparition des données"]
 ];
-window.AIPD_SCALE = ["", "Négligeable", "Limitée", "Importante", "Maximale"];
+window.AIPD_SCALE = ["Non évalué", "Négligeable", "Limitée", "Importante", "Maximale"];
 window.__aipdLoaded = false;
 
-window.aipdStateAll = function(){ try { return JSON.parse(localStorage.getItem(AIPD_KEY)) || {}; } catch(e){ return {}; } };
+/* UN CRITÈRE SANS RÉPONSE N'EST PAS UN « NON ». MESURÉ DANS LE NAVIGATEUR :
+   les neuf critères étaient des cases, décochées par défaut, et chaque
+   gravité, chaque vraisemblance valait 1 avant qu'on y touche. Une AIPD
+   jamais ouverte concluait « non requise a priori », risque « négligeable »
+   — et le bloc du rail passait au vert sur un clic « liste passée en
+   revue ». Chaque critère se répond désormais oui ou non ; chaque cotation
+   se choisit ; tant qu'il manque une réponse, le verdict le dit. */
+window.aipdNiveau = function(n){ return n === 1 || n === 2 || n === 3 || n === 4; };
+
+/* CE QUE LA PREMIÈRE VERSION A GARDÉ SE RELIT AVEC PRUDENCE. Elle ne
+   distinguait pas « non » de « pas regardé » : un critère décoché valait
+   false, une cotation jamais choisie valait 1. Un « oui » reste un oui, une
+   cotation de 2 à 4 reste choisie ; un false et un 1 redeviennent « non
+   renseigné » — les garder aurait fait passer un défaut pour une réponse. */
+window.aipdMigrer = function(v1){
+  var out = {};
+  Object.keys(v1).forEach(function(id){
+    var s = v1[id] || {}, ev = s.events || {}, e2 = {};
+    AIPD_EVENTS.forEach(function(e){
+      var x = ev[e[0]] || {};
+      e2[e[0]] = { g: (aipdNiveau(x.g) && x.g !== 1) ? x.g : null,
+                   v: (aipdNiveau(x.v) && x.v !== 1) ? x.v : null };
+    });
+    out[id] = { criteria: AIPD_CRITERIA.map(function(_, i){
+                  return (s.criteria || [])[i] === true ? true : null; }),
+                events: e2, mesures: typeof s.mesures === "string" ? s.mesures : "" };
+  });
+  return out;
+};
+window.aipdStateAll = function(){ return rgpdRelire(AIPD_KEY, AIPD_KEY_V1, aipdMigrer); };
 window.aipdStateSave = function(all){ try { localStorage.setItem(AIPD_KEY, JSON.stringify(all)); } catch(e){} };
+/* UNE ENTRÉE ABÎMÉE EST ÉCARTÉE, CHAMP PAR CHAMP : jamais recopiée. */
 window.aipdGet = function(id){
-  var all=aipdStateAll(), s=all[id];
-  if(!s) s={ criteria:[false,false,false,false,false,false,false,false,false], events:{acces:{g:1,v:1},modif:{g:1,v:1},dispar:{g:1,v:1}}, mesures:"" };
-  return s;
+  var s = aipdStateAll()[id] || {}, ev = s.events || {}, events = {};
+  AIPD_EVENTS.forEach(function(e){
+    var x = ev[e[0]] || {};
+    events[e[0]] = { g: aipdNiveau(x.g) ? x.g : null, v: aipdNiveau(x.v) ? x.v : null };
+  });
+  return { criteria: AIPD_CRITERIA.map(function(_, i){
+             var c = (s.criteria || [])[i]; return (c === true || c === false) ? c : null; }),
+           events: events, mesures: typeof s.mesures === "string" ? s.mesures : "" };
 };
 window.aipdSet = function(id, s){ var all=aipdStateAll(); all[id]=s; aipdStateSave(all); };
 
@@ -16238,29 +16350,66 @@ window.aipdLoad = function(){
     .catch(function(){ var b=document.getElementById("aipd-list"); if(b) b.innerHTML='<div class="veille-empty">Module momentanément indisponible. Vérifiez votre connexion.</div>'; });
 };
 
+/* LE REGISTRE RÉPOND POUR LE CRITÈRE 4 — QUAND IL DIT « OUI ». Le critère
+   des données sensibles est présumé dès que le registre en déclare pour ce
+   traitement : c'est la même question, et le registre y a répondu. */
+window.aipdPresume = function(t){ return ctFilled(t && t.donnees_sensibles); };
+window.aipdCritere = function(t, s, i){ return (i === 3 && aipdPresume(t)) ? true : s.criteria[i]; };
 window.aipdCritCount = function(t, s){
-  var n=0; for(var i=0;i<9;i++){ if(s.criteria[i]) n++; }
-  // Critere 4 (donnees sensibles) presume si le registre le renseigne
-  if(!s.criteria[3] && ctFilled(t.donnees_sensibles)) n++;
+  var n=0; for(var i=0;i<AIPD_CRITERIA.length;i++){ if(aipdCritere(t,s,i) === true) n++; }
+  return n;
+};
+window.aipdSansReponse = function(t, s){
+  var n=0; for(var i=0;i<AIPD_CRITERIA.length;i++){ if(aipdCritere(t,s,i) === null) n++; }
   return n;
 };
 window.aipdVerdict = function(t, s){
   var n=aipdCritCount(t,s);
   if(n>=2) return ["AIPD requise","#c0392b"];
+  /* « NON REQUISE » SERAIT UNE CONCLUSION TIRÉE DE RIEN tant qu'un critère
+     reste sans réponse. */
+  if(aipdSansReponse(t,s)) return ["À compléter","var(--muted2)"];
   if(n===1) return ["À évaluer","#c98a00"];
   return ["Non requise a priori","var(--green)"];
 };
 window.aipdEventLevel = function(g,v){
+  if(!aipdNiveau(g) || !aipdNiveau(v)) return 0;
   if(g>=3 && v>=3) return 4;
   if(g>=3 || v>=3) return 3;
   if(g>=2 || v>=2) return 2;
   return 1;
 };
 window.aipdRiskLevel = function(s){
-  var m=1; AIPD_EVENTS.forEach(function(e){ var ev=s.events[e[0]]; m=Math.max(m, aipdEventLevel(ev.g,ev.v)); });
+  var m=0; AIPD_EVENTS.forEach(function(e){ var ev=s.events[e[0]]; m=Math.max(m, aipdEventLevel(ev.g,ev.v)); });
   return m;
 };
-window.aipdLevelColor = function(l){ return ["","var(--green)","#2d7dd2","#c98a00","#c0392b"][l]; };
+window.aipdCotee = function(s){
+  return AIPD_EVENTS.every(function(e){ var ev=s.events[e[0]]; return aipdNiveau(ev.g) && aipdNiveau(ev.v); });
+};
+window.aipdLevelColor = function(l){ return ["var(--muted2)","var(--green)","#2d7dd2","#c98a00","#c0392b"][l]; };
+
+/* CE QUE LE RAIL ET LE TAUX LISENT : chaque critère avec sa réponse — la
+   présomption comprise —, chaque événement avec ses deux cotations. */
+window.aipdDeclaration = function(t){
+  var s=aipdGet(t.id);
+  return { criteres: AIPD_CRITERIA.map(function(nom, i){ return { nom: nom, reponse: aipdCritere(t,s,i) }; }),
+           evenements: AIPD_EVENTS.map(function(e){ return { nom: e[1], g: s.events[e[0]].g, v: s.events[e[0]].v }; }) };
+};
+
+window.aipdKpis = function(){
+  var list=window.TRAIT_DATA||[], requises=0, eleves=0, ouvertes=0;
+  list.forEach(function(t){
+    var s=aipdGet(t.id), req=aipdCritCount(t,s)>=2;
+    if(req) requises++;
+    if(aipdRiskLevel(s)>=3) eleves++;
+    if(aipdSansReponse(t,s) || (req && !aipdCotee(s))) ouvertes++;
+  });
+  function kpi(v,l,c){ return '<div class="ct-kpi"><div class="ct-kpi-v" style="color:'+(c||"var(--accent)")+'">'+v+'</div><div class="ct-kpi-l">'+l+'</div></div>'; }
+  return '<div class="ct-kpis">'+kpi(list.length,"Traitements","var(--accent)")
+    +kpi(ouvertes,"À compléter", ouvertes?"#c98a00":"var(--muted2)")
+    +kpi(requises,"AIPD requises", requises?"#c0392b":"var(--muted2)")
+    +kpi(eleves,"Risque élevé", eleves?"#c98a00":"var(--muted2)")+'</div>';
+};
 
 window.aipdRenderAll = function(){
   var box=document.getElementById("aipd-list"); if(!box) return;
@@ -16268,35 +16417,39 @@ window.aipdRenderAll = function(){
   var cnt=document.getElementById("aipd-count"); if(cnt) cnt.textContent=list.length+" traitement(s)";
   var sumEl=document.getElementById("aipd-summary");
   if(!list.length){ if(sumEl) sumEl.innerHTML=""; box.innerHTML='<div class="veille-empty">Aucun traitement enregistré. Alimentez d\'abord le registre des traitements.</div>'; return; }
-  var requises=0, eleves=0;
-  list.forEach(function(t){ var s=aipdGet(t.id); if(aipdCritCount(t,s)>=2) requises++; if(aipdRiskLevel(s)>=3) eleves++; });
-  if(sumEl){
-    function kpi(v,l,c){ return '<div class="ct-kpi"><div class="ct-kpi-v" style="color:'+(c||"var(--accent)")+'">'+v+'</div><div class="ct-kpi-l">'+l+'</div></div>'; }
-    sumEl.innerHTML='<div class="ct-kpis">'+kpi(list.length,"Traitements","var(--accent)")+kpi(requises,"AIPD requises", requises?"#c0392b":"var(--muted2)")+kpi(eleves,"Risque élevé", eleves?"#c98a00":"var(--muted2)")+'</div>';
-  }
+  if(sumEl) sumEl.innerHTML=aipdKpis();
   box.innerHTML=list.map(aipdCardHtml).join("");
 };
 
 window.aipdCardHtml = function(t){
   var s=aipdGet(t.id);
-  var vd=aipdVerdict(t,s), n=aipdCritCount(t,s);
+  var vd=aipdVerdict(t,s), n=aipdCritCount(t,s), vides=aipdSansReponse(t,s);
   var crits=AIPD_CRITERIA.map(function(lbl,i){
-    var checked = s.criteria[i] || (i===3 && ctFilled(t.donnees_sensibles));
-    var lock = (i===3 && ctFilled(t.donnees_sensibles)) ? ' title="Présumé : données sensibles renseignées au registre"' : '';
-    return '<label class="aipd-crit"'+lock+'><input type="checkbox" '+(checked?"checked":"")+' onchange="aipdToggleCrit('+t.id+','+i+',this.checked)"><span>'+traitEsc(lbl)+'</span></label>';
+    var pres = (i===3 && aipdPresume(t)), v = aipdCritere(t,s,i);
+    return '<label class="aipd-crit"'+(pres ? ' title="Présumé : le registre déclare des données sensibles pour ce traitement"' : '')+'>'
+      + '<span>'+traitEsc(lbl)+'</span>'
+      + '<select class="aipd-sel" id="aipd-c-'+t.id+'-'+i+'"'+(pres ? ' disabled' : '')
+      + ' onchange="aipdRepondreCrit('+t.id+','+i+',this.value)">'
+      + rgpdOptions([["oui", pres ? "Oui — présumé (registre)" : "Oui"],["non","Non"]], v===true ? "oui" : v===false ? "non" : "")
+      + '</select></label>';
   }).join("");
+  var niveaux=[1,2,3,4].map(function(k){ return [String(k), k+' — '+AIPD_SCALE[k]]; });
   var evs=AIPD_EVENTS.map(function(e){
     var ev=s.events[e[0]], lvl=aipdEventLevel(ev.g,ev.v);
-    function sel(dim,val){ var o=""; for(var k=1;k<=4;k++){ o+='<option value="'+k+'"'+(val===k?" selected":"")+'>'+k+' — '+AIPD_SCALE[k]+'</option>'; } return '<select class="aipd-sel" onchange="aipdSetEv('+t.id+',\''+e[0]+'\',\''+dim+'\',this.value)">'+o+'</select>'; }
+    function sel(dim,val){
+      return '<select class="aipd-sel" id="aipd-e-'+t.id+'-'+e[0]+'-'+dim+'" aria-label="'+(dim==="g" ? "Gravité" : "Vraisemblance")+' — '+traitEsc(e[1])+'"'
+        + ' onchange="aipdSetEv('+t.id+',\''+e[0]+'\',\''+dim+'\',this.value)">'+rgpdOptions(niveaux, val ? String(val) : "")+'</select>';
+    }
     return '<tr><td class="aipd-ev-lbl">'+traitEsc(e[1])+'</td><td>'+sel("g",ev.g)+'</td><td>'+sel("v",ev.v)+'</td><td style="text-align:center"><span class="aipd-lvl" id="aipd-ev-'+t.id+'-'+e[0]+'" style="background:'+aipdLevelColor(lvl)+'">'+AIPD_SCALE[lvl]+'</span></td></tr>';
   }).join("");
   var rl=aipdRiskLevel(s);
   return '<div class="aipd-card" id="aipd-card-'+t.id+'">'
     + '<div class="aipd-head"><div><strong>'+traitEsc(t.nom)+'</strong><div class="aipd-sub">'+traitEsc(t.service||"")+'</div></div>'
     + '<span class="aipd-verdict" id="aipd-verdict-'+t.id+'" style="background:'+vd[1]+'">'+vd[0]+'</span></div>'
-    + '<div class="aipd-sec-t">Besoin d\'AIPD — critères CNIL (<span id="aipd-crit-'+t.id+'">'+n+'</span>/9 · seuil 2)</div>'
+    + '<div class="aipd-sec-t">Besoin d\'AIPD — critères CNIL (<span id="aipd-crit-'+t.id+'">'+n+'</span>/9 · seuil 2'
+    + '<span id="aipd-vides-'+t.id+'">'+(vides ? ' · '+vides+' sans réponse' : '')+'</span>)</div>'
     + '<div class="aipd-crit-grid">'+crits+'</div>'
-    + '<div class="aipd-sec-t">Appréciation des risques — gravité × vraisemblance</div>'
+    + '<div class="aipd-sec-t">Appréciation des risques — gravité × vraisemblance <span class="aipd-sub">· demandée dès que deux critères sont réunis</span></div>'
     + '<table class="aipd-matrix"><thead><tr><th>Événement redouté</th><th>Gravité</th><th>Vraisemblance</th><th>Niveau</th></tr></thead><tbody>'+evs+'</tbody></table>'
     + '<div class="aipd-risk-line">Risque global : <span class="aipd-lvl" id="aipd-risk-'+t.id+'" style="background:'+aipdLevelColor(rl)+'">'+AIPD_SCALE[rl]+'</span></div>'
     + '<div class="aipd-sec-t">Mesures envisagées</div>'
@@ -16305,16 +16458,20 @@ window.aipdCardHtml = function(t){
     + '</div>';
 };
 
-window.aipdToggleCrit = function(id, idx, checked){
-  var s=aipdGet(id); s.criteria[idx]=!!checked; aipdSet(id,s);
+window.aipdRafraichirTete = function(id){
   var t=(window.TRAIT_DATA||[]).filter(function(x){return x.id===id;})[0]; if(!t) return;
-  var n=aipdCritCount(t,s), vd=aipdVerdict(t,s);
+  var s=aipdGet(id), n=aipdCritCount(t,s), vides=aipdSansReponse(t,s), vd=aipdVerdict(t,s);
   var cEl=document.getElementById("aipd-crit-"+id); if(cEl) cEl.textContent=n;
+  var wEl=document.getElementById("aipd-vides-"+id); if(wEl) wEl.textContent=vides ? ' · '+vides+' sans réponse' : '';
   var vEl=document.getElementById("aipd-verdict-"+id); if(vEl){ vEl.textContent=vd[0]; vEl.style.background=vd[1]; }
   aipdRefreshSummary();
 };
+window.aipdRepondreCrit = function(id, idx, val){
+  var s=aipdGet(id); s.criteria[idx] = val==="oui" ? true : val==="non" ? false : null; aipdSet(id,s);
+  aipdRafraichirTete(id);
+};
 window.aipdSetEv = function(id, ev, dim, val){
-  var s=aipdGet(id); s.events[ev][dim]=parseInt(val,10)||1; aipdSet(id,s);
+  var s=aipdGet(id), n=parseInt(val,10); s.events[ev][dim] = aipdNiveau(n) ? n : null; aipdSet(id,s);
   var lvl=aipdEventLevel(s.events[ev].g, s.events[ev].v);
   var cell=document.getElementById("aipd-ev-"+id+"-"+ev); if(cell){ cell.textContent=AIPD_SCALE[lvl]; cell.style.background=aipdLevelColor(lvl); }
   var rl=aipdRiskLevel(s); var rEl=document.getElementById("aipd-risk-"+id); if(rEl){ rEl.textContent=AIPD_SCALE[rl]; rEl.style.background=aipdLevelColor(rl); }
@@ -16322,19 +16479,16 @@ window.aipdSetEv = function(id, ev, dim, val){
 };
 window.aipdSetMesures = function(id, val){ var s=aipdGet(id); s.mesures=val||""; aipdSet(id,s); };
 window.aipdRefreshSummary = function(){
-  var list=window.TRAIT_DATA||[], requises=0, eleves=0;
-  list.forEach(function(t){ var s=aipdGet(t.id); if(aipdCritCount(t,s)>=2) requises++; if(aipdRiskLevel(s)>=3) eleves++; });
   var sumEl=document.getElementById("aipd-summary"); if(!sumEl) return;
-  function kpi(v,l,c){ return '<div class="ct-kpi"><div class="ct-kpi-v" style="color:'+(c||"var(--accent)")+'">'+v+'</div><div class="ct-kpi-l">'+l+'</div></div>'; }
-  sumEl.innerHTML='<div class="ct-kpis">'+kpi(list.length,"Traitements","var(--accent)")+kpi(requises,"AIPD requises", requises?"#c0392b":"var(--muted2)")+kpi(eleves,"Risque élevé", eleves?"#c98a00":"var(--muted2)")+'</div>';
+  sumEl.innerHTML=aipdKpis();
 };
 
 window.aipdExportPdf = function(id){
   var t=(window.TRAIT_DATA||[]).filter(function(x){return x.id===id;})[0]; if(!t) return;
   var s=aipdGet(id), vd=aipdVerdict(t,s), rl=aipdRiskLevel(s), today=new Date().toLocaleDateString("fr-FR");
   function esc(x){ return String(x==null?"":x).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
-  var critHtml=AIPD_CRITERIA.map(function(l,i){ var c=s.criteria[i]||(i===3&&ctFilled(t.donnees_sensibles)); return '<li style="color:'+(c?"#c0392b":"#999")+'">'+(c?"☑":"☐")+" "+esc(l)+'</li>'; }).join("");
-  var evHtml=AIPD_EVENTS.map(function(e){ var ev=s.events[e[0]], lvl=aipdEventLevel(ev.g,ev.v); return '<tr><td>'+esc(e[1])+'</td><td>'+AIPD_SCALE[ev.g]+'</td><td>'+AIPD_SCALE[ev.v]+'</td><td>'+AIPD_SCALE[lvl]+'</td></tr>'; }).join("");
+  var critHtml=AIPD_CRITERIA.map(function(l,i){ var c=aipdCritere(t,s,i); return '<li style="color:'+(c===true?"#c0392b":c===false?"#1a7d3c":"#999")+'">'+(c===true?"☑ Oui":c===false?"☐ Non":"… Non renseigné")+" — "+esc(l)+'</li>'; }).join("");
+  var evHtml=AIPD_EVENTS.map(function(e){ var ev=s.events[e[0]], lvl=aipdEventLevel(ev.g,ev.v); return '<tr><td>'+esc(e[1])+'</td><td>'+(ev.g?AIPD_SCALE[ev.g]:"—")+'</td><td>'+(ev.v?AIPD_SCALE[ev.v]:"—")+'</td><td>'+AIPD_SCALE[lvl]+'</td></tr>'; }).join("");
   var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>AIPD — '+esc(t.nom)+'</title>'
     +'<style>@page{margin:1.6cm}body{font-family:Arial,sans-serif;color:#1C1C1C;max-width:900px;margin:0 auto;padding:16px}'
     +'h1{font-size:19px;border-bottom:3px solid #6B46C1;padding-bottom:8px;margin-bottom:2px}.sub{color:#666;font-size:11px;margin-bottom:14px}'
@@ -16356,7 +16510,8 @@ window.aipdExportPdf = function(id){
 };
 
 /* ══ Privacy by design (art. 25 RGPD) — check-list, localStorage ══ */
-window.PBD_KEY = "sentinel_pbd_v1";
+window.PBD_KEY = "sentinel_pbd_v2";
+window.PBD_KEY_V1 = "sentinel_pbd_v1";
 window.PBD_ITEMS = [
   ["Minimisation des données (art. 5.1.c)", [
     ["pbd-min-1","Seules les données strictement nécessaires sont collectées"],
@@ -16393,25 +16548,52 @@ window.PBD_ITEMS = [
     ["pbd-conc-3","La protection des données est réexaminée à chaque évolution"]
   ]]
 ];
+/* « SANS OBJET » SORT LE CONTRÔLE DU CALCUL ; « NON » L'Y LAISSE, À ZÉRO.
+   Les confondre flatterait le taux — ou le noircirait. */
+window.PBD_REPONSES = [["oui","Oui"],["non","Non"],["sans_objet","Sans objet"]];
 
-window.pbdState = function(){ try { return JSON.parse(localStorage.getItem(PBD_KEY)) || {}; } catch(e){ return {}; } };
+/* LA PREMIÈRE VERSION NE GARDAIT QUE LES CASES COCHÉES : une case cochée
+   reste un « oui » ; le reste n'a jamais été répondu. */
+window.pbdMigrer = function(v1){
+  var o = {};
+  Object.keys(v1).forEach(function(k){ if(v1[k] === true) o[k] = "oui"; });
+  return o;
+};
+window.pbdState = function(){ return rgpdRelire(PBD_KEY, PBD_KEY_V1, pbdMigrer); };
 window.pbdSave = function(st){ try { localStorage.setItem(PBD_KEY, JSON.stringify(st)); } catch(e){} };
+window.pbdReponse = function(st, id){
+  var v = st[id];
+  return PBD_REPONSES.some(function(r){ return r[0] === v; }) ? v : "";
+};
 window.pbdAllItems = function(){ var a=[]; PBD_ITEMS.forEach(function(g){ g[1].forEach(function(it){ a.push(it[0]); }); }); return a; };
-window.pbdCounts = function(){
-  var st=pbdState(), all=pbdAllItems(), done=all.filter(function(id){ return st[id]; }).length;
-  return { done:done, total:all.length, pct: all.length? Math.round(done/all.length*100):0 };
+window.pbdCompter = function(st, ids){
+  var c = { oui: 0, non: 0, sans_objet: 0, sans_reponse: 0, total: ids.length };
+  ids.forEach(function(id){ var r = pbdReponse(st, id); if(r) c[r]++; else c.sans_reponse++; });
+  c.applicables = c.total - c.sans_objet;
+  c.done = c.oui;
+  c.pct = c.applicables ? Math.round(c.oui / c.applicables * 100) : 0;
+  return c;
+};
+window.pbdCounts = function(){ return pbdCompter(pbdState(), pbdAllItems()); };
+window.pbdDeclaration = function(){
+  var st = pbdState();
+  return rgpdDeclarer(PBD_ITEMS, function(id){ return pbdReponse(st, id); });
+};
+window.pbdTheme = function(st, items){
+  var c = pbdCompter(st, items.map(function(it){ return it[0]; }));
+  return c.oui + "/" + c.applicables + (c.sans_reponse ? " · " + c.sans_reponse + " sans réponse" : "");
 };
 
 window.pbdRender = function(){
   var box=document.getElementById("pbd-list"); if(!box) return;
   var st=pbdState();
   box.innerHTML = PBD_ITEMS.map(function(g, gi){
-    var items=g[1], dn=items.filter(function(it){ return st[it[0]]; }).length;
-    var pct=items.length? Math.round(dn/items.length*100):0;
-    var rows=items.map(function(it){
-      return '<label class="pbd-item"><input type="checkbox" '+(st[it[0]]?"checked":"")+' onchange="pbdToggle(\''+it[0]+'\',this.checked)"><span>'+traitEsc(it[1])+'</span></label>';
+    var rows=g[1].map(function(it){
+      return '<label class="pbd-item"><span>'+traitEsc(it[1])+'</span>'
+        + '<select class="aipd-sel" id="pbd-r-'+it[0]+'" onchange="pbdRepondre(\''+it[0]+'\',this.value)">'
+        + rgpdOptions(PBD_REPONSES, pbdReponse(st, it[0]))+'</select></label>';
     }).join("");
-    return '<div class="ct-card" style="margin-bottom:12px"><div class="pbd-theme-head"><div class="ct-card-t" style="margin:0">'+traitEsc(g[0])+'</div><span class="pbd-theme-pct" id="pbd-theme-'+gi+'">'+dn+'/'+items.length+'</span></div><div class="pbd-items">'+rows+'</div></div>';
+    return '<div class="ct-card" style="margin-bottom:12px"><div class="pbd-theme-head"><div class="ct-card-t" style="margin:0">'+traitEsc(g[0])+'</div><span class="pbd-theme-pct" id="pbd-theme-'+gi+'">'+pbdTheme(st, g[1])+'</span></div><div class="pbd-items">'+rows+'</div></div>';
   }).join("");
   pbdUpdateGlobal();
 };
@@ -16420,13 +16602,13 @@ window.pbdUpdateGlobal = function(){
   var g=document.getElementById("pbd-global"); if(g) g.textContent=c.pct+" %";
   var f=document.getElementById("pbd-global-fill"); if(f) f.style.width=c.pct+"%";
 };
-window.pbdToggle = function(id, checked){
-  var st=pbdState(); if(checked) st[id]=true; else delete st[id]; pbdSave(st);
-  // MAJ du compteur de theme concerne
+window.pbdRepondre = function(id, val){
+  var st=pbdState();
+  if(PBD_REPONSES.some(function(r){ return r[0] === val; })) st[id]=val; else delete st[id];
+  pbdSave(st);
   PBD_ITEMS.forEach(function(g, gi){
-    var items=g[1]; if(items.some(function(it){ return it[0]===id; })){
-      var dn=items.filter(function(it){ return st[it[0]]; }).length;
-      var el=document.getElementById("pbd-theme-"+gi); if(el) el.textContent=dn+"/"+items.length;
+    if(g[1].some(function(it){ return it[0]===id; })){
+      var el=document.getElementById("pbd-theme-"+gi); if(el) el.textContent=pbdTheme(st, g[1]);
     }
   });
   pbdUpdateGlobal();
@@ -16436,8 +16618,9 @@ window.pbdInit = function(){ if(document.getElementById("pbd-list")) pbdRender()
 window.pbdExportPdf = function(){
   var st=pbdState(), c=pbdCounts(), today=new Date().toLocaleDateString("fr-FR");
   function esc(x){ return String(x==null?"":x).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+  var MARQUES={ oui:["#1a7d3c","☑ Oui"], non:["#c0392b","☐ Non"], sans_objet:["#777","— Sans objet"], "":["#999","… Non renseigné"] };
   var body=PBD_ITEMS.map(function(g){
-    var items=g[1].map(function(it){ var d=!!st[it[0]]; return '<li style="color:'+(d?"#1a7d3c":"#999")+'">'+(d?"☑":"☐")+" "+esc(it[1])+'</li>'; }).join("");
+    var items=g[1].map(function(it){ var m=MARQUES[pbdReponse(st, it[0])]; return '<li style="color:'+m[0]+'">'+m[1]+" — "+esc(it[1])+'</li>'; }).join("");
     return '<h2>'+esc(g[0])+'</h2><ul>'+items+'</ul>';
   }).join("");
   var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Privacy by design — check-list</title>'
@@ -16446,17 +16629,21 @@ window.pbdExportPdf = function(){
     +'h2{font-size:13px;color:#6B46C1;margin:14px 0 4px}ul{font-size:11.5px;line-height:1.8;margin:0 0 6px;padding-left:2px;list-style:none}'
     +'.foot{font-size:9px;color:#999;margin-top:18px;border-top:1px solid #eee;padding-top:8px}</style></head><body>'
     +'<h1>Privacy by design — protection dès la conception (art. 25 RGPD)</h1>'
-    +'<div class="sub">CONSEILPREV — Sentinel · Progression : '+c.done+'/'+c.total+' ('+c.pct+' %) · '+today+'</div>'
+    +'<div class="sub">CONSEILPREV — Sentinel · En place : '+c.oui+'/'+c.applicables+' contrôles applicables ('+c.pct+' %) · '+c.sans_objet+' sans objet · '+c.sans_reponse+' non renseigné(s) · '+today+'</div>'
     +body
-    +'<div class="foot">Aide à la décision. Les mesures cochées doivent correspondre à des dispositifs en place et documentés. Généré par Sentinel — à valider avec le délégué à la protection des données.</div>'
+    +'<div class="foot">Aide à la décision. Les mesures déclarées en place doivent correspondre à des dispositifs en place et documentés. Généré par Sentinel — à valider avec le délégué à la protection des données.</div>'
     +'</body></html>';
   var w=window.open("","_blank"); if(!w){ alert("Autorisez les pop-ups pour exporter."); return; }
   w.document.write(html+'<scr'+'ipt>window.onload=function(){window.print();}<'+'/scr'+'ipt>'); w.document.close();
 };
 
 /* ══ Politique documentaire RGPD — suivi des documents d'accountability, localStorage ══ */
-window.DOC_KEY = "sentinel_rgpddoc_v1";
-window.DOC_STATUSES = [["absent","Absent","var(--muted2)"],["projet","En projet","#c98a00"],["en_place","En place","var(--green)"],["a_reviser","À réviser","#c0392b"]];
+window.DOC_KEY = "sentinel_rgpddoc_v2";
+window.DOC_KEY_V1 = "sentinel_rgpddoc_v1";
+/* « ABSENT » EST UNE RÉPONSE, qui compte au dénominateur ; « SANS OBJET »
+   sort le document du calcul — un registre de sous-traitant n'est dû que
+   par un sous-traitant, une lettre de mission de DPO que par qui en a un. */
+window.DOC_STATUSES = [["absent","Absent","var(--muted2)"],["projet","En projet","#c98a00"],["en_place","En place","var(--green)"],["a_reviser","À réviser","#c0392b"],["sans_objet","Sans objet","var(--muted2)"]];
 window.DOC_ITEMS = [
   ["Documents socles", [
     ["doc-registre-t","Registre des activités de traitement (art. 30)"],
@@ -16484,28 +16671,55 @@ window.DOC_ITEMS = [
   ]]
 ];
 
-window.docState = function(){ try { return JSON.parse(localStorage.getItem(DOC_KEY)) || {}; } catch(e){ return {}; } };
+/* LA PREMIÈRE VERSION ENREGISTRAIT « ABSENT » — sa valeur par défaut — dès
+   qu'on touchait au responsable ou à la date : relu, il ne dit pas qu'on
+   l'a choisi. Les autres statuts, eux, ne s'obtenaient qu'en les choisissant. */
+window.docMigrer = function(v1){
+  var o = {};
+  Object.keys(v1).forEach(function(k){
+    var r = v1[k] || {};
+    o[k] = { statut: (r.statut && r.statut !== "absent") ? r.statut : "",
+             resp: typeof r.resp === "string" ? r.resp : "", revue: typeof r.revue === "string" ? r.revue : "" };
+  });
+  return o;
+};
+window.docState = function(){ return rgpdRelire(DOC_KEY, DOC_KEY_V1, docMigrer); };
 window.docSave = function(st){ try { localStorage.setItem(DOC_KEY, JSON.stringify(st)); } catch(e){} };
-window.docRec = function(id){ var st=docState(); return st[id] || {statut:"absent",resp:"",revue:""}; };
+window.docStatut = function(v){ return DOC_STATUSES.some(function(s){ return s[0] === v; }) ? v : ""; };
+window.docRec = function(id){
+  var r = docState()[id] || {};
+  return { statut: docStatut(r.statut), resp: typeof r.resp === "string" ? r.resp : "",
+           revue: typeof r.revue === "string" ? r.revue : "" };
+};
 window.docAllIds = function(){ var a=[]; DOC_ITEMS.forEach(function(g){ g[1].forEach(function(it){ a.push(it[0]); }); }); return a; };
 window.docCounts = function(){
-  var st=docState(), all=docAllIds();
-  var enPlace=all.filter(function(id){ return (st[id]||{}).statut==="en_place"; }).length;
-  return { enPlace:enPlace, total:all.length, pct: all.length? Math.round(enPlace/all.length*100):0 };
+  var all=docAllIds(), c={ enPlace:0, sans_objet:0, sans_reponse:0, total:all.length };
+  all.forEach(function(id){
+    var s=docRec(id).statut;
+    if(s==="en_place") c.enPlace++;
+    else if(s==="sans_objet") c.sans_objet++;
+    else if(!s) c.sans_reponse++;
+  });
+  c.applicables = c.total - c.sans_objet;
+  c.pct = c.applicables ? Math.round(c.enPlace/c.applicables*100) : 0;
+  return c;
 };
-window.docStatusMeta = function(code){ for(var i=0;i<DOC_STATUSES.length;i++){ if(DOC_STATUSES[i][0]===code) return DOC_STATUSES[i]; } return DOC_STATUSES[0]; };
+window.docDeclaration = function(){ return rgpdDeclarer(DOC_ITEMS, function(id){ return docRec(id).statut; }); };
+window.docStatusMeta = function(code){
+  for(var i=0;i<DOC_STATUSES.length;i++){ if(DOC_STATUSES[i][0]===code) return DOC_STATUSES[i]; }
+  return ["","Non renseigné","var(--rule2)"];
+};
 
 window.docRender = function(){
   var box=document.getElementById("doc-list"); if(!box) return;
   box.innerHTML = DOC_ITEMS.map(function(g){
     var rows=g[1].map(function(it){
-      var r=docRec(it[0]);
-      var opts=DOC_STATUSES.map(function(s){ return '<option value="'+s[0]+'"'+(r.statut===s[0]?" selected":"")+'>'+s[1]+'</option>'; }).join("");
-      var m=docStatusMeta(r.statut);
+      var r=docRec(it[0]), m=docStatusMeta(r.statut);
       return '<tr>'
         + '<td class="doc-name">'+traitEsc(it[1])+'</td>'
         + '<td><span class="aipd-lvl" id="doc-badge-'+it[0]+'" style="background:'+m[2]+'">'+m[1]+'</span></td>'
-        + '<td><select class="aipd-sel" onchange="docSet(\''+it[0]+'\',\'statut\',this.value)">'+opts+'</select></td>'
+        + '<td><select class="aipd-sel" id="doc-s-'+it[0]+'" aria-label="Statut — '+traitEsc(it[1])+'" onchange="docSet(\''+it[0]+'\',\'statut\',this.value)">'
+        + rgpdOptions(DOC_STATUSES.map(function(s){ return [s[0], s[1]]; }), r.statut)+'</select></td>'
         + '<td><input type="text" class="doc-in" value="'+traitEsc(r.resp)+'" placeholder="Responsable" onchange="docSet(\''+it[0]+'\',\'resp\',this.value)"></td>'
         + '<td><input type="text" class="doc-in" value="'+traitEsc(r.revue)+'" placeholder="jj/mm/aaaa" onchange="docSet(\''+it[0]+'\',\'revue\',this.value)"></td>'
         + '</tr>';
@@ -16521,13 +16735,15 @@ window.docUpdateGlobal = function(){
   var f=document.getElementById("doc-global-fill"); if(f) f.style.width=c.pct+"%";
 };
 window.docSet = function(id, field, val){
-  var st=docState(); if(!st[id]) st[id]={statut:"absent",resp:"",revue:""}; st[id][field]=val; docSave(st);
-  if(field==="statut"){ var m=docStatusMeta(val); var b=document.getElementById("doc-badge-"+id); if(b){ b.textContent=m[1]; b.style.background=m[2]; } docUpdateGlobal(); }
+  var st=docState(); if(!st[id] || typeof st[id] !== "object") st[id]={statut:"",resp:"",revue:""};
+  st[id][field] = field==="statut" ? docStatut(val) : String(val||"");
+  docSave(st);
+  if(field==="statut"){ var m=docStatusMeta(st[id].statut); var b=document.getElementById("doc-badge-"+id); if(b){ b.textContent=m[1]; b.style.background=m[2]; } docUpdateGlobal(); }
 };
 window.docInit = function(){ if(document.getElementById("doc-list")) docRender(); };
 
 window.docExportPdf = function(){
-  var st=docState(), c=docCounts(), today=new Date().toLocaleDateString("fr-FR");
+  var c=docCounts(), today=new Date().toLocaleDateString("fr-FR");
   function esc(x){ return String(x==null?"":x).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
   var body=DOC_ITEMS.map(function(g){
     var rows=g[1].map(function(it){ var r=docRec(it[0]), m=docStatusMeta(r.statut); return '<tr><td>'+esc(it[1])+'</td><td>'+m[1]+'</td><td>'+esc(r.resp||"—")+'</td><td>'+esc(r.revue||"—")+'</td></tr>'; }).join("");
@@ -16540,7 +16756,7 @@ window.docExportPdf = function(){
     +'td,th{border:1px solid #ddd;padding:5px 8px;text-align:left}th{background:#faf9f7}'
     +'.foot{font-size:9px;color:#999;margin-top:18px;border-top:1px solid #eee;padding-top:8px}</style></head><body>'
     +'<h1>Politique documentaire RGPD — accountability (art. 5.2)</h1>'
-    +'<div class="sub">CONSEILPREV — Sentinel · Documents en place : '+c.enPlace+'/'+c.total+' ('+c.pct+' %) · '+today+'</div>'
+    +'<div class="sub">CONSEILPREV — Sentinel · Documents en place : '+c.enPlace+'/'+c.applicables+' applicables ('+c.pct+' %) · '+c.sans_objet+' sans objet · '+c.sans_reponse+' non renseigné(s) · '+today+'</div>'
     +body
     +'<div class="foot">Aide au pilotage. Les états déclarés ne préjugent pas de la validité juridique des pièces. Généré par Sentinel — à valider avec le délégué à la protection des données.</div>'
     +'</body></html>';
@@ -16549,7 +16765,8 @@ window.docExportPdf = function(){
 };
 
 /* ══ Sensibilisation RGPD — plan d'actions, localStorage ══ */
-window.SENS_KEY = "sentinel_sens_v1";
+window.SENS_KEY = "sentinel_sens_v2";
+window.SENS_KEY_V1 = "sentinel_sens_v1";
 window.SENS_ITEMS = [
   ["Ensemble du personnel", [
     ["sens-all-1","Sensibilisation générale RGPD à l'embauche","À l'arrivée"],
@@ -16570,30 +16787,58 @@ window.SENS_ITEMS = [
     ["sens-it-2","Gestion des habilitations et journalisation","Annuelle"]
   ]]
 ];
-window.SENS_STATUSES = [["a_planifier","À planifier","var(--muted2)"],["planifie","Planifiée","#c98a00"],["realise","Réalisée","var(--green)"],["a_renouveler","À renouveler","#c0392b"]];
+/* « À PLANIFIER » EST UNE RÉPONSE ; « SANS OBJET » sort l'action du calcul
+   — pas de formation au développement sûr pour qui ne développe rien. */
+window.SENS_STATUSES = [["a_planifier","À planifier","var(--muted2)"],["planifie","Planifiée","#c98a00"],["realise","Réalisée","var(--green)"],["a_renouveler","À renouveler","#c0392b"],["sans_objet","Sans objet","var(--muted2)"]];
 
-window.sensState = function(){ try { return JSON.parse(localStorage.getItem(SENS_KEY)) || {}; } catch(e){ return {}; } };
+/* LA PREMIÈRE VERSION ENREGISTRAIT « À PLANIFIER » — sa valeur par défaut —
+   dès qu'on saisissait une date : relu, il ne dit pas qu'on l'a choisi. */
+window.sensMigrer = function(v1){
+  var o = {};
+  Object.keys(v1).forEach(function(k){
+    var r = v1[k] || {};
+    o[k] = { statut: (r.statut && r.statut !== "a_planifier") ? r.statut : "",
+             date: typeof r.date === "string" ? r.date : "" };
+  });
+  return o;
+};
+window.sensState = function(){ return rgpdRelire(SENS_KEY, SENS_KEY_V1, sensMigrer); };
 window.sensSave = function(st){ try { localStorage.setItem(SENS_KEY, JSON.stringify(st)); } catch(e){} };
-window.sensRec = function(id){ var st=sensState(); return st[id] || {statut:"a_planifier",date:""}; };
+window.sensStatut = function(v){ return SENS_STATUSES.some(function(s){ return s[0] === v; }) ? v : ""; };
+window.sensRec = function(id){
+  var r = sensState()[id] || {};
+  return { statut: sensStatut(r.statut), date: typeof r.date === "string" ? r.date : "" };
+};
 window.sensAllIds = function(){ var a=[]; SENS_ITEMS.forEach(function(g){ g[1].forEach(function(it){ a.push(it[0]); }); }); return a; };
 window.sensCounts = function(){
-  var st=sensState(), all=sensAllIds();
-  var done=all.filter(function(id){ return (st[id]||{}).statut==="realise"; }).length;
-  return { done:done, total:all.length, pct: all.length? Math.round(done/all.length*100):0 };
+  var all=sensAllIds(), c={ done:0, sans_objet:0, sans_reponse:0, total:all.length };
+  all.forEach(function(id){
+    var s=sensRec(id).statut;
+    if(s==="realise") c.done++;
+    else if(s==="sans_objet") c.sans_objet++;
+    else if(!s) c.sans_reponse++;
+  });
+  c.applicables = c.total - c.sans_objet;
+  c.pct = c.applicables ? Math.round(c.done/c.applicables*100) : 0;
+  return c;
 };
-window.sensMeta = function(code){ for(var i=0;i<SENS_STATUSES.length;i++){ if(SENS_STATUSES[i][0]===code) return SENS_STATUSES[i]; } return SENS_STATUSES[0]; };
+window.sensDeclaration = function(){ return rgpdDeclarer(SENS_ITEMS, function(id){ return sensRec(id).statut; }); };
+window.sensMeta = function(code){
+  for(var i=0;i<SENS_STATUSES.length;i++){ if(SENS_STATUSES[i][0]===code) return SENS_STATUSES[i]; }
+  return ["","Non renseigné","var(--rule2)"];
+};
 
 window.sensRender = function(){
   var box=document.getElementById("sens-list"); if(!box) return;
   box.innerHTML = SENS_ITEMS.map(function(g){
     var rows=g[1].map(function(it){
       var r=sensRec(it[0]), m=sensMeta(r.statut);
-      var opts=SENS_STATUSES.map(function(s){ return '<option value="'+s[0]+'"'+(r.statut===s[0]?" selected":"")+'>'+s[1]+'</option>'; }).join("");
       return '<tr>'
         + '<td class="doc-name">'+traitEsc(it[1])+'</td>'
         + '<td style="font-size:10.5px;color:var(--muted2)">'+traitEsc(it[2])+'</td>'
         + '<td><span class="aipd-lvl" id="sens-badge-'+it[0]+'" style="background:'+m[2]+'">'+m[1]+'</span></td>'
-        + '<td><select class="aipd-sel" onchange="sensSet(\''+it[0]+'\',\'statut\',this.value)">'+opts+'</select></td>'
+        + '<td><select class="aipd-sel" id="sens-s-'+it[0]+'" aria-label="Statut — '+traitEsc(it[1])+'" onchange="sensSet(\''+it[0]+'\',\'statut\',this.value)">'
+        + rgpdOptions(SENS_STATUSES.map(function(s){ return [s[0], s[1]]; }), r.statut)+'</select></td>'
         + '<td><input type="text" class="doc-in" value="'+traitEsc(r.date)+'" placeholder="jj/mm/aaaa" onchange="sensSet(\''+it[0]+'\',\'date\',this.value)"></td>'
         + '</tr>';
     }).join("");
@@ -16608,8 +16853,10 @@ window.sensUpdateGlobal = function(){
   var f=document.getElementById("sens-global-fill"); if(f) f.style.width=c.pct+"%";
 };
 window.sensSet = function(id, field, val){
-  var st=sensState(); if(!st[id]) st[id]={statut:"a_planifier",date:""}; st[id][field]=val; sensSave(st);
-  if(field==="statut"){ var m=sensMeta(val); var b=document.getElementById("sens-badge-"+id); if(b){ b.textContent=m[1]; b.style.background=m[2]; } sensUpdateGlobal(); }
+  var st=sensState(); if(!st[id] || typeof st[id] !== "object") st[id]={statut:"",date:""};
+  st[id][field] = field==="statut" ? sensStatut(val) : String(val||"");
+  sensSave(st);
+  if(field==="statut"){ var m=sensMeta(st[id].statut); var b=document.getElementById("sens-badge-"+id); if(b){ b.textContent=m[1]; b.style.background=m[2]; } sensUpdateGlobal(); }
 };
 window.sensInit = function(){ if(document.getElementById("sens-list")) sensRender(); };
 
@@ -16627,7 +16874,7 @@ window.sensExportPdf = function(){
     +'td,th{border:1px solid #ddd;padding:5px 8px;text-align:left}th{background:#faf9f7}'
     +'.foot{font-size:9px;color:#999;margin-top:18px;border-top:1px solid #eee;padding-top:8px}</style></head><body>'
     +'<h1>Plan de sensibilisation à la protection des données</h1>'
-    +'<div class="sub">CONSEILPREV — Sentinel · Actions réalisées : '+c.done+'/'+c.total+' ('+c.pct+' %) · '+today+'</div>'
+    +'<div class="sub">CONSEILPREV — Sentinel · Actions réalisées : '+c.done+'/'+c.applicables+' applicables ('+c.pct+' %) · '+c.sans_objet+' sans objet · '+c.sans_reponse+' non renseignée(s) · '+today+'</div>'
     +body
     +'<div class="foot">Aide à la planification et à la preuve des actions de sensibilisation. Généré par Sentinel.</div>'
     +'</body></html>';
@@ -16651,9 +16898,11 @@ window.confSensPct = function(){ try { return sensCounts().pct; } catch(e){ retu
 window.confAipdStats = function(){
   var list=window.TRAIT_DATA||[]; var requises=0, traitees=0, eleves=0;
   try {
+    /* ÉVALUÉE, C'EST COTÉE : les trois événements, gravité ET vraisemblance.
+       Une cotation laissée à 1 passait pour une AIPD « non évaluée », et une
+       seule cotation à 2 suffisait à la dire « évaluée ». */
     list.forEach(function(t){ var s=aipdGet(t.id); var req=aipdCritCount(t,s)>=2; if(req) requises++;
-      var hasRisk=false; try { AIPD_EVENTS.forEach(function(e){ var ev=s.events[e[0]]; if(ev.g>1||ev.v>1) hasRisk=true; }); } catch(x){}
-      if(req && hasRisk) traitees++; if(aipdRiskLevel(s)>=3) eleves++; });
+      if(req && aipdCotee(s)) traitees++; if(aipdRiskLevel(s)>=3) eleves++; });
   } catch(e){}
   return { requises:requises, traitees:traitees, eleves:eleves };
 };
@@ -16977,15 +17226,8 @@ window.gcAuditPct = function(){
      l'autre, sans qu'aucun des deux écrans ne soit signalé comme approximatif.
      Les deux comptent désormais pareil, et une règle le vérifie. */
   try{
-    if(!window.AUDIT_SECTIONS) return null;
-    var tot=0, acquis=0;
-    window.AUDIT_SECTIONS.forEach(function(sec){ (sec.items||[]).forEach(function(it){
-      tot++;
-      var st=(window.AUDIT_STATE&&window.AUDIT_STATE[it.id])||'none';
-      if(st==='done') acquis+=1;
-      else if(st==='partial') acquis+=0.5;
-    }); });
-    return tot? Math.round(acquis/tot*100) : 0;
+    if(!window.AUDIT_SECTIONS || !window.auditComptes) return null;
+    return auditComptes().pct;
   }catch(e){ return null; }
 };
 window.gcRgpdPct = function(){
@@ -21672,18 +21914,10 @@ window.guidedPathsClose = function(){
 /* ══ CLOCHE DE NOTIFICATIONS — agrege veille + rapports (serveur) + audit (local) ══ */
 function bellComputeAuditPending(){
   try{
-    var state = JSON.parse(localStorage.getItem('cpAuditState') || '{}');
-    var total = 0, pending = 0;
-    if(typeof AUDIT_SECTIONS !== 'undefined'){
-      AUDIT_SECTIONS.forEach(function(sec){
-        sec.items.forEach(function(item){
-          total++;
-          var st = state[item.id] || 'none';
-          if(st === 'none') pending++;
-        });
-      });
-    }
-    return pending;
+    /* À TRAITER : ce qui est à réaliser, et ce qui n'a pas encore de réponse. */
+    if(typeof auditComptes !== 'function') return 0;
+    var c = auditComptes();
+    return c.todo + c.sans_reponse;
   } catch(e){ return 0; }
 }
 
@@ -26970,11 +27204,20 @@ var RECYF_ETATS = {};
    recréait les autres DÉCOCHÉES — « moyens alloués » se décochait, et la
    gouvernance retombait d'« acquis » à « déclaré » à la case suivante.
    L'écran se peint désormais depuis cet état, et c'est cet état qui part
-   au calcul. */
-var RECYF_ANALYSE = { gouvernance: false, moyens_alloues: false,
-  couverture: false, entrees: [], acceptation: false,
-  risques_residuels_acceptes: false, plan_date_et_responsable: false,
-  reexamen: false, dernier_reexamen_mois: null };
+   au calcul.
+   OUI, NON — OU PAS ENCORE RÉPONDU. Une case décochée disait « non » et
+   « pas regardé » à la fois, et le bloc du rail se validait sur un clic
+   « liste passée en revue ». Chaque question vaut désormais true, false,
+   ou null tant qu'on n'y a pas répondu ; chaque entrée de l'analyse aussi. */
+var RECYF_ANALYSE = { gouvernance: null, moyens_alloues: null,
+  couverture: null, entrees: {}, acceptation: null,
+  risques_residuels_acceptes: null, plan_date_et_responsable: null,
+  reexamen: null, dernier_reexamen_mois: null };
+var RECYF_QUESTIONS = ['gouvernance', 'moyens_alloues', 'couverture', 'acceptation',
+  'risques_residuels_acceptes', 'plan_date_et_responsable', 'reexamen'];
+function recyfOuiNon(v) {
+  return (v === true || v === 'oui') ? true : (v === false || v === 'non') ? false : null;
+}
 
 function recyfEsc(x) {
   return String(x == null ? '' : x)
@@ -27171,32 +27414,32 @@ function recyfRendu(j) {
 }
 
 /* ── L’OBJECTIF 16, ET LES DEUX PONTS ─────────────────────────────────── */
+/* CE QUI PART AU CALCUL, AU RAIL ET AU TAUX : la même déclaration. Les
+   entrées vont en carte — {entrée : oui ou non} —, car une entrée « non
+   citée » et une entrée « pas encore répondue » ne sont pas la même chose. */
 function recyfDeclarationAnalyse() {
-  var a = RECYF_ANALYSE;
-  return {
-    gouvernance: !!a.gouvernance,
-    moyens_alloues: !!a.moyens_alloues,
-    couverture: !!a.couverture,
-    entrees: (a.entrees || []).slice(),
-    acceptation: !!a.acceptation,
-    risques_residuels_acceptes: !!a.risques_residuels_acceptes,
-    plan_date_et_responsable: !!a.plan_date_et_responsable,
-    reexamen: !!a.reexamen,
-    dernier_reexamen_mois: a.dernier_reexamen_mois
-  };
+  var a = RECYF_ANALYSE, d = {}, e = {};
+  RECYF_QUESTIONS.forEach(function (k) { d[k] = recyfOuiNon(a[k]); });
+  Object.keys(a.entrees || {}).forEach(function (k) {
+    var v = recyfOuiNon(a.entrees[k]);
+    if (v !== null) e[k] = v;
+  });
+  d.entrees = e;
+  d.dernier_reexamen_mois = a.dernier_reexamen_mois;
+  return d;
 }
 
-/* UNE CASE, UNE ENTRÉE, UNE DURÉE : chacune écrit l'état, puis recalcule. */
-function recyfCoche(cle, on) {
-  if (!Object.prototype.hasOwnProperty.call(RECYF_ANALYSE, cle) || cle === 'entrees'
-      || cle === 'dernier_reexamen_mois') return;
-  RECYF_ANALYSE[cle] = !!on;
+/* UNE RÉPONSE, UNE ENTRÉE, UNE DURÉE : chacune écrit l'état, puis
+   recalcule. « Non renseigné » retire la réponse, il n'en invente pas. */
+function recyfRepondre(cle, v) {
+  if (RECYF_QUESTIONS.indexOf(cle) < 0) return;
+  RECYF_ANALYSE[cle] = recyfOuiNon(v);
   recyfAnalyse();
 }
-function recyfEntree(cle, on) {
-  var l = (RECYF_ANALYSE.entrees || []).filter(function (x) { return x !== cle; });
-  if (on) l.push(cle);
-  RECYF_ANALYSE.entrees = l;
+function recyfEntree(cle, v) {
+  var e = RECYF_ANALYSE.entrees || (RECYF_ANALYSE.entrees = {});
+  var r = recyfOuiNon(v);
+  if (r === null) delete e[cle]; else e[cle] = r;
   recyfAnalyse();
 }
 function recyfReexamen(v) {
@@ -27253,21 +27496,22 @@ function recyfRenduAnalyse(j) {
       + (e.manque && e.manque.length
           ? '<div class="q-notes recyf-manque"><b>Il manque :</b> '
             + e.manque.map(recyfEsc).join(' ; ') + '</div>' : '')
-      + '</div><label class="cnf-chk"><input type="checkbox" id="recyf-a-'
-      + recyfEsc(e.cle) + '"' + (RECYF_ANALYSE[e.cle] ? ' checked' : '')
-      + ' onchange="recyfCoche(\'' + recyfEsc(e.cle) + '\', this.checked)"> '
-      + (e.acquis ? '✓ acquis' : 'déclaré')
+      + '</div><label class="cnf-chk">'
+      + recyfChoix('recyf-a-' + e.cle, RECYF_ANALYSE[e.cle],
+                   "recyfRepondre('" + recyfEsc(e.cle) + "', this.value)",
+                   e.reference + ' — ' + e.titre)
+      + (e.acquis ? ' ✓ acquis' : e.declare ? ' déclaré' : '')
       + '</label></div>';
   });
   h += '<h2 class="sec-h">Les cinq entrées de l’analyse (16.2)</h2>'
     + '<div class="q-notes">Le référentiel les nomme. Une analyse qui n’en '
     + 'cite aucune est une opinion, pas une analyse.</div>';
   (RECYF_REF.entrees_analyse || []).forEach(function (x) {
-    h += '<label class="cnf-chk"><input type="checkbox" id="recyf-e-'
-      + recyfEsc(x.cle) + '"'
-      + ((RECYF_ANALYSE.entrees || []).indexOf(x.cle) >= 0 ? ' checked' : '')
-      + ' onchange="recyfEntree(\'' + recyfEsc(x.cle) + '\', this.checked)"> '
-      + recyfEsc(x.nom) + '</label>';
+    h += '<label class="cnf-chk">'
+      + recyfChoix('recyf-e-' + x.cle, (RECYF_ANALYSE.entrees || {})[x.cle],
+                   "recyfEntree('" + recyfEsc(x.cle) + "', this.value)",
+                   'L’analyse cite-t-elle : ' + x.nom)
+      + ' ' + recyfEsc(x.nom) + '</label>';
   });
   h += '<h2 class="sec-h">Ce que 16.1, 16.3 et 16.4 exigent en plus</h2>'
     + recyfCase('recyf-moyens', 'moyens_alloues',
@@ -27287,10 +27531,20 @@ function recyfRenduAnalyse(j) {
 }
 
 function recyfCase(id, cle, libelle) {
-  return '<label class="cnf-chk"><input type="checkbox" id="' + id + '"'
-    + (RECYF_ANALYSE[cle] ? ' checked' : '')
-    + ' onchange="recyfCoche(\'' + cle + '\', this.checked)"> '
-    + recyfEsc(libelle) + '</label>';
+  return '<label class="cnf-chk">'
+    + recyfChoix(id, RECYF_ANALYSE[cle], "recyfRepondre('" + cle + "', this.value)", libelle)
+    + ' ' + recyfEsc(libelle) + '</label>';
+}
+
+/* OUI, NON, OU « NON RENSEIGNÉ » — la valeur qu'une question garde tant
+   qu'on n'y a pas répondu. */
+function recyfChoix(id, valeur, onchange, libelle) {
+  var v = valeur === true ? 'oui' : valeur === false ? 'non' : '';
+  return '<select id="' + recyfEsc(id) + '" class="cnf-in recyf-rep" aria-label="'
+    + recyfEsc(libelle) + '" onchange="' + onchange + '">'
+    + '<option value=""' + (v ? '' : ' selected') + '>— non renseigné —</option>'
+    + '<option value="oui"' + (v === 'oui' ? ' selected' : '') + '>Oui</option>'
+    + '<option value="non"' + (v === 'non' ? ' selected' : '') + '>Non</option></select>';
 }
 
 function recyfRenduPerimetre() {
@@ -27335,7 +27589,7 @@ window.recyfInit = recyfInit;
 window.recyfPeindre = recyfPeindre;
 window.recyfAnalyse = recyfAnalyse;
 window.recyfEtat = recyfEtat;
-window.recyfCoche = recyfCoche;
+window.recyfRepondre = recyfRepondre;
 window.recyfEntree = recyfEntree;
 window.recyfReexamen = recyfReexamen;
 
@@ -27396,6 +27650,7 @@ function _memValeur(v, t) {
     case 'booleen': return typeof v === 'boolean' ? v : undefined;
     case 'textes': return objet(v) ? garder(v, function (x) { return typeof x === 'string'; }) : undefined;
     case 'drapeaux': return objet(v) ? garder(v, function (x) { return x === true; }) : undefined;
+    case 'oui_non_par_cle': return objet(v) ? garder(v, function (x) { return typeof x === 'boolean'; }) : undefined;
     case 'objets': return objet(v) ? garder(v, objet) : undefined;
     case 'liste_objets': return Array.isArray(v) ? v.filter(objet) : undefined;
     case 'liste_textes?':
@@ -27440,7 +27695,21 @@ var MEMOIRE = {
         gouvernance: 'textes' });
       _memPoser('nis2-ca', m.ca_groupe);
     } },
-  recyf: { norme: 'nis2', nom: 'ReCyF', cle: 'cp-sentinel-recyf-v1',
+  /* LA CLÉ A CHANGÉ AVEC LE SENS DES RÉPONSES. La première version gardait
+     des cases : false y disait « pas coché », qui n'est pas « non ». Elle
+     est relue une fois par sa migration — un oui reste un oui, le reste
+     redevient « non renseigné » — puis la nouvelle clé prend le relais. */
+  recyf: { norme: 'nis2', nom: 'ReCyF', cle: 'cp-sentinel-recyf-v2',
+    ancienne: 'cp-sentinel-recyf-v1',
+    migrer: function (v1) {
+      var a = (v1 && v1.analyse) || {}, o = {}, e = {};
+      RECYF_QUESTIONS.forEach(function (k) { o[k] = a[k] === true ? true : null; });
+      (Array.isArray(a.entrees) ? a.entrees : []).forEach(function (k) {
+        if (typeof k === 'string') e[k] = true; });
+      o.entrees = e;
+      o.dernier_reexamen_mois = a.dernier_reexamen_mois;
+      return { statut: v1 && v1.statut, etats: v1 && v1.etats, analyse: o };
+    },
     lire: function () {
       return { statut: _memChamp('recyf-statut-sel'), etats: RECYF_ETATS,
                analyse: RECYF_ANALYSE };
@@ -27449,10 +27718,10 @@ var MEMOIRE = {
       _memPoser('recyf-statut-sel', m.statut);
       var e = _memValeur(m.etats, 'textes');
       if (e) Object.keys(e).forEach(function (k) { RECYF_ETATS[k] = e[k]; });
-      _memFondre(RECYF_ANALYSE, m.analyse, { gouvernance: 'booleen',
-        moyens_alloues: 'booleen', couverture: 'booleen', entrees: 'liste_textes?',
-        acceptation: 'booleen', risques_residuels_acceptes: 'booleen',
-        plan_date_et_responsable: 'booleen', reexamen: 'booleen',
+      _memFondre(RECYF_ANALYSE, m.analyse, { gouvernance: 'oui_non?',
+        moyens_alloues: 'oui_non?', couverture: 'oui_non?', entrees: 'oui_non_par_cle',
+        acceptation: 'oui_non?', risques_residuels_acceptes: 'oui_non?',
+        plan_date_et_responsable: 'oui_non?', reexamen: 'oui_non?',
         dernier_reexamen_mois: 'nombre?' });
     } },
   iso27001: { norme: 'iso27001', nom: 'ISO 27001', cle: 'cp-sentinel-iso27001-v1',
@@ -27545,6 +27814,12 @@ function memoireRelire() {
     var m = MEMOIRE[n], brut = null, o = null;
     try { brut = localStorage.getItem(m.cle); } catch (e) {}
     if (brut) { try { o = JSON.parse(brut); } catch (e) { o = null; } }
+    /* UNE MÉMOIRE DONT LE SENS A CHANGÉ se relit par sa migration, tant que
+       la nouvelle clé n'a rien. */
+    if (!brut && m.ancienne) {
+      try { brut = localStorage.getItem(m.ancienne); } catch (e) {}
+      if (brut) { try { o = m.migrer(JSON.parse(brut)); } catch (e) { o = null; } }
+    }
     if (o && typeof o === 'object' && !Array.isArray(o)) {
       try { m.relire(o); } catch (e) {}
     }
@@ -27567,8 +27842,8 @@ window.addEventListener('pagehide', memoireEcrire);
 
 /* GARDER A UN PRIX, ET CE BOUTON LE PAIE. Qui remplit NIS 2 pour une entité,
    puis pour une autre sur le même poste, retrouverait la première. Effacer
-   porte sur les réponses d'UN référentiel et sur ses marques « lu » et
-   « passé en revue » ; les autres gardent les leurs. La page est ensuite
+   porte sur les réponses d'UN référentiel — ancienne clé comprise — et sur
+   ses marques « lu » ; les autres gardent les leurs. La page est ensuite
    rechargée : c'est la seule façon sûre de remettre chaque champ, chaque
    calcul et le rail dans leur état de départ. */
 function memoireEffacer(norme) {
@@ -27583,7 +27858,9 @@ function memoireEffacer(norme) {
      une réponse en attente ressusciterait ce qu'on vient d'effacer. */
   memoireEcrire();
   ecrans.forEach(function (n) {
-    try { localStorage.removeItem(MEMOIRE[n].cle); } catch (e) {}
+    [MEMOIRE[n].cle, MEMOIRE[n].ancienne].forEach(function (k) {
+      if (k) { try { localStorage.removeItem(k); } catch (e) {} }
+    });
   });
   try { var s = _railStock(); delete s[norme]; _railStocker(s); } catch (e) {}
   location.reload();
@@ -27607,11 +27884,13 @@ memoireRelire();
    le bloc courant et le suivant viennent du serveur (`parcours_normes`).
    L'écran rassemble ce que les modules tiennent déjà, l'envoie, et peint.
 
-   TROIS SORTES DE BLOCS, TROIS FAÇONS DE FINIR. Un bloc « à remplir » se
-   valide seul, quand ses champs sont renseignés. Un bloc « à passer en
-   revue » se valide sur une déclaration : ses cases ont une valeur par
-   défaut qui se confond avec « pas encore regardé ». Un bloc « à lire » se
-   marque lu — et « lu » n'est pas vert. */
+   DEUX SORTES DE BLOCS, DEUX FAÇONS DE FINIR. Un bloc « à remplir » se
+   valide seul, quand chacune de ses questions a une réponse. Un bloc « à
+   lire » se marque lu — et « lu » n'est pas vert. Il y en avait une
+   troisième : six listes se validaient sur une déclaration, « liste passée
+   en revue », parce que leurs cases avaient une valeur par défaut qui se
+   confondait avec « pas encore regardé ». Elles demandent désormais une
+   réponse par question, et se mesurent comme les autres. */
 
 var RAIL_REF = null;
 var RAIL_AV = {};              /* norme → dernier avancement rendu */
@@ -27625,9 +27904,10 @@ function railEsc(t) {
     return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; });
 }
 
-/* LES DÉCLARATIONS « LU » ET « PASSÉ EN REVUE » SONT CELLES DU VISITEUR :
-   elles survivent au rechargement, comme les questionnaires qui gardent
-   leurs réponses. Rien d'autre n'est stocké ici. */
+/* LES MARQUES « LU » SONT CELLES DU VISITEUR : elles survivent au
+   rechargement, comme les questionnaires qui gardent leurs réponses. Rien
+   d'autre n'est stocké ici — une ancienne marque « passé en revue » peut y
+   dormir : elle n'est plus envoyée, et ne validerait plus rien. */
 function _railStock() {
   try { return JSON.parse(localStorage.getItem(RAIL_CLE_STOCK)) || {}; }
   catch (e) { return {}; }
@@ -27664,7 +27944,7 @@ var RAIL_DECL = {
     d.chiffre_affaires = (ca && ca.value !== '') ? Number(ca.value) * 1000000 : null;
     d.recyf = { statut: (typeof recyfStatutChoisi === 'function')
                   ? recyfStatutChoisi() : null,
-                etats: RECYF_ETATS };
+                etats: RECYF_ETATS, analyse: recyfDeclarationAnalyse() };
     return d;
   },
   iso27001: function () {
@@ -27695,17 +27975,30 @@ var RAIL_DECL = {
        serveur donnerait deux arrondis pour le même pourcentage. */
     var b = function (f) { try { return typeof f === 'function' ? (f() || 0) : 0; }
                            catch (e) { return 0; } };
+    /* LES LISTES, TELLES QUE LEURS ÉCRANS LES AFFICHENT — chaque question
+       avec sa réponse, vide si elle n'en a pas. Le serveur n'en recopie
+       aucune : il lit celle-ci. */
+    var liste = function (f) { try { return typeof f === 'function' ? f() : []; }
+                               catch (e) { return []; } };
     return { traitements: (window.TRAIT_DATA || []).map(function (t) {
       var c = {};
       champs.forEach(function (k) { c[k] = !!String(t[k] || '').trim(); });
-      return { nom: t.nom, champs: c };
+      var a = null;
+      try { a = (typeof window.aipdDeclaration === 'function') ? window.aipdDeclaration(t) : null; }
+      catch (e) { a = null; }
+      return { nom: t.nom, champs: c, aipd: a };
     }),
+      pbd: liste(window.pbdDeclaration), doc: liste(window.docDeclaration),
+      sensibilisation: liste(window.sensDeclaration),
       briques: { registre: b(window.confRegPct), pbd: b(window.confPbdPct),
                  doc: b(window.confDocPct), sensibilisation: b(window.confSensPct) } };
   },
-  /* L'AUDIT, TEL QUE SON ÉCRAN LE TIENT. Le rail valide ce bloc sur une
-     revue déclarée ; le taux, lui, compte les points. */
-  ia_act: function () { return { audit: window.AUDIT_STATE || {} }; }
+  /* L'AUDIT, TEL QUE SON ÉCRAN LE TIENT, et la liste de ses points : le
+     rail nomme ceux qui n'ont pas de réponse, le taux compte les autres. */
+  ia_act: function () {
+    return { audit: window.AUDIT_STATE || {},
+             points: (typeof window.auditPoints === 'function') ? window.auditPoints() : [] };
+  }
 };
 
 /* ── UNE SEULE COLLECTE, DEUX LECTEURS ───────────────────────────────────
@@ -27810,7 +28103,6 @@ function railCalculer(norme) {
   try { d = f() || {}; } catch (e) { d = {}; }
   var st = _railStock()[norme] || {};
   d.lus = st.lus || [];
-  d.revus = st.revus || [];
   fetch('/api/parcours/' + norme, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(d)
@@ -27932,7 +28224,7 @@ function railPeindreEcran(norme) {
     + '<div class="rail-reserve">' + railEsc(p.reserve) + '</div>';
 
   var pied = pg.querySelector('.rail-pied');
-  var decl = (b.nature === 'lecture') ? 'lus' : (b.nature === 'revue') ? 'revus' : null;
+  var decl = (b.nature === 'lecture') ? 'lus' : null;
   if (!decl || b.etat === 'sans_objet' || b.etat === 'verrouillee') {
     if (pied) pied.parentNode.removeChild(pied);
     return;
@@ -27943,9 +28235,7 @@ function railPeindreEcran(norme) {
     pg.appendChild(pied);
   }
   var fait = (b.etat === 'lue' || b.etat === 'validee');
-  var libelle = (decl === 'lus')
-    ? (fait ? 'Marqué lu ✓' : 'J’ai lu cet écran — bloc suivant ↓')
-    : (fait ? 'Déclaré passé en revue ✓' : 'J’ai passé cette liste en revue — bloc suivant ↓');
+  var libelle = fait ? 'Marqué lu ✓' : 'J’ai lu cet écran — bloc suivant ↓';
   pied.innerHTML = '<button type="button" class="mat-export-btn" onclick="railDeclarer(\''
     + norme + '\', \'' + decl + '\', \'' + railEsc(b.panneau) + '\', ' + (fait ? 'false' : 'true')
     + ')">' + (fait ? libelle + ' — annuler' : libelle) + '</button>'
