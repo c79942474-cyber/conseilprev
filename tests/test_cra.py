@@ -320,8 +320,10 @@ def test_le_CRA_a_SON_groupe_de_premier_niveau_dans_la_barre_laterale():
     # LE TÉMOIN : il n'est PAS rangé sous un autre cadre. Les quatre tiroirs
     # sont des sections FRÈRES ; si le CRA devenait un `.sb-item` du groupe
     # RGPD, cette ligne tomberait.
-    assert '<div class="sb-item" data-grp="rgpd-et-privacy" role="button" ' \
-           'tabindex="0" onclick="go(\'cra' not in h, \
+    # L'ordre des attributs ne compte pas : écrite pour un ordre précis, la
+    # recherche ne verrait plus une entrée qui porte aussi `data-norme`.
+    assert not re.search(r'<div class="sb-item"[^>]*\sdata-grp="rgpd-et-privacy"'
+                         r'[^>]*onclick="go\(\'cra', h), \
         "le CRA est devenu une entrée du groupe RGPD : deux unités de compte " \
         "différentes rangées comme si elles n'en faisaient qu'une"
     # ═══ ON NOMME LES VUES, ON NE LES COMPTE PAS ══════════════════════
@@ -331,7 +333,11 @@ def test_le_CRA_a_SON_groupe_de_premier_niveau_dans_la_barre_laterale():
     # tomber la règle sur la seule chose qui compte, et le message dit quoi.
     manquantes = [v for v in VUES_CRA if ("go('%s'," % v) not in h]
     assert not manquantes, "vues CRA absentes de la barre : %s" % manquantes
-    items = re.findall(r'<div class="sb-item" data-grp="cra"', h)
+    # L'ORDRE DES ATTRIBUTS NE DIT RIEN : chaque entrée porte désormais aussi
+    # `data-norme`, posé avant `data-grp`. Une règle qui exigerait `data-grp`
+    # juste après la classe compterait zéro entrée — et tomberait pour une
+    # raison sans rapport avec ce qu'elle garde.
+    items = re.findall(r'<div class="sb-item"[^>]*\sdata-grp="cra"', h)
     assert len(items) == len(VUES_CRA), \
         "%d entrées dans la barre pour %d vues déclarées : une vue est " \
         "servie sans être déclarée ici, ou l'inverse" % (len(items), len(VUES_CRA))

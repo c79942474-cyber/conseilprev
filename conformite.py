@@ -166,6 +166,85 @@ NORMES = [
 ]
 NORMES_PAR_CLE = {n["cle"]: n for n in NORMES}
 
+
+# ══════════════════════════════════════════════════════════════════════════
+#  UNE COULEUR PAR RÉFÉRENTIEL — DÉCLARÉE ICI, DÉRIVÉE PARTOUT
+# ══════════════════════════════════════════════════════════════════════════
+#
+# POURQUOI ELLE EST DANS CE FICHIER. C'est lui qui tient la liste des onze
+# normes. Une seconde liste de couleurs, dans la feuille de style, se
+# séparerait de celle-ci au premier référentiel ajouté : la douzième norme
+# arriverait sans couleur, ou hériterait de celle d'une autre — et rien ne
+# le dirait. La barre latérale et le rail lisent CELLE-CI.
+#
+# CE QUE LA COULEUR DIT, ET CE QU'ELLE NE DIT PAS. Elle dit « cet écran
+# appartient à ce référentiel-là », et rien d'autre. Elle ne classe pas, ne
+# hiérarchise pas, ne signale aucun état.
+#
+# ELLE N'EST JAMAIS SEULE À PORTER L'INFORMATION. Chaque entrée de la barre
+# garde son nom écrit. Onze teintes ne peuvent pas être TOUTES séparables
+# deux à deux : mesurées toutes paires confondues, la plus proche tombe à
+# ΔE 12,2 en vision normale (sarcelle et ciel) et à 3,6 en protanopie
+# (violet et bleu). C'est le nom, pas la couleur, qui identifie ; la
+# couleur fait retrouver d'un coup d'œil ce que le nom a déjà dit.
+#
+# L'ORDRE EST CELUI DE LA BARRE LATÉRALE, ET C'EST LE POINT. Deux couleurs
+# ne se comparent à l'œil que si elles se touchent : ce sont les tiroirs
+# VOISINS qui doivent se séparer. `ORDRE_BARRE` fixe l'ordre réel des
+# tiroirs, une règle le confronte à la page, et c'est dans CET ordre que la
+# palette a été validée — pire voisinage ΔE 20,8 en vision normale (plancher
+# 15) et 17,4 en deutéranopie (cible 8). Les deux NIST, qui partagent un
+# tiroir, sont voisins et comptent comme tels.
+#
+# TROIS COULEURS DISENT DÉJÀ AUTRE CHOSE DANS SENTINEL, ET AUCUNE DES ONZE
+# NE LES IMITE. La terre cuite dit « ici » — elle prend l'icône au survol et
+# remplit la pastille de l'onglet ouvert ; le vert dit « bloc validé », le
+# bleu « bloc attendu », l'ambre « bloc verrouillé ». Aucune des onze n'est
+# à moins de ΔE 8 de l'une d'elles : ce n'est jamais le même pas de
+# couleur. ET LE VERT EST TENU À L'ÉCART TOUT ENTIER, pas seulement son pas
+# exact : c'est la couleur que le parcours donne à un bloc rempli, dans ces
+# onze modules mêmes. Un référentiel vert dans la barre se lirait « acquis ».
+# D'où l'absence d'un rouge franc, d'un orange et d'un vert : les deux
+# premiers tomberaient sur la terre cuite ou sur l'ambre, le troisième sur
+# le sens que le rail lui donne.
+#
+# MESURÉ AVANT D'ÊTRE ÉCRIT, avec le validateur de palettes, dans l'ordre
+# de la barre : bande de clarté, plancher de chroma, séparation en vision
+# normale et déficiente, contraste. Tout passe ; le contraste de l'icône sur
+# sa propre pastille teintée ne descend pas sous 3:1 (WCAG 1.4.11).
+
+COULEURS = {
+    "rgpd":        "#C50759",   # cramoisi
+    "iso27001":    "#355CD4",   # bleu
+    "iso42001":    "#0A8D83",   # sarcelle
+    "dora":        "#9650E8",   # violet
+    "nis2":        "#8F7515",   # ocre
+    "cra":         "#9B0D9F",   # magenta
+    "nist_ai_rmf": "#804810",   # bronze
+    "owasp_llm":   "#D35D94",   # rose
+    "nist_800_53": "#7F2E55",   # prune
+    "nist_800_82": "#138BCF",   # ciel
+    # L'IA ACT N'EST PAS DANS LES TIROIRS DE CONFORMITÉ : son écran d'entrée
+    # vit sous « Pilotage », parmi des onglets en terre cuite. Sa couleur ne
+    # voisine donc aucune des dix autres, et n'entre pas dans le contrôle
+    # d'adjacence ; elle reste loin de la terre cuite qui l'entoure.
+    "ia_act":      "#5F24B7",   # indigo
+}
+
+#: L'ORDRE OÙ LES RÉFÉRENTIELS SE SUIVENT DANS LA BARRE LATÉRALE. Il ne se
+#: devine pas de `NORMES`, dont l'ordre est celui de la page d'accueil.
+ORDRE_BARRE = ("rgpd", "iso27001", "iso42001", "dora", "nis2", "cra",
+               "nist_ai_rmf", "owasp_llm", "nist_800_53", "nist_800_82")
+
+
+def couleur(cle):
+    """La couleur d'un référentiel, ou None s'il n'en a pas.
+
+    ON NE REND PAS UNE COULEUR PAR DÉFAUT. Une teinte de repli ferait
+    passer un référentiel oublié pour un référentiel gris — et personne ne
+    verrait qu'il manque."""
+    return COULEURS.get(cle)
+
 #: CE QUE LA PAGE D'ACCUEIL ANNONCE. Un seul endroit le décide ; la
 #: garde en bas de fichier le confronte à la table ci-dessus, et une
 #: règle de la suite le confronte au titre et à la grille de l'accueil.
@@ -1673,8 +1752,37 @@ def etat_des_lieux(declarations=None, plafond_actions=24):
 #  LA GARDE — CE QUE CE MODULE REFUSE DE LAISSER PASSER
 # ══════════════════════════════════════════════════════════════════════════
 
+def _verifier_couleurs():
+    """LA PALETTE SE GARDE COMME LE RESTE — par recomptage, pas par confiance.
+
+    TROIS CHOSES PEUVENT SE DÉFAIRE EN SILENCE : une norme ajoutée sans
+    couleur, deux normes qui finissent par partager la même teinte, et un
+    ordre de barre qui cite une clé disparue. Les trois se voient à l'écran
+    comme un détail ; aucune ne se voit dans le code."""
+    f = []
+    for n in NORMES:
+        if n["cle"] not in COULEURS:
+            f.append("la norme %s n'a pas de couleur" % n["cle"])
+    for cle in COULEURS:
+        if cle not in NORMES_PAR_CLE:
+            f.append("la couleur %s ne vise aucune norme" % cle)
+    vues = {}
+    for cle, coul in COULEURS.items():
+        c = coul.upper()
+        if c in vues:
+            f.append("%s et %s partagent la couleur %s" % (vues[c], cle, c))
+        vues[c] = cle
+        if len(c) != 7 or not c.startswith("#"):
+            f.append("la couleur de %s n'est pas un hexadécimal à six "
+                     "chiffres : %r" % (cle, coul))
+    for cle in ORDRE_BARRE:
+        if cle not in COULEURS:
+            f.append("l'ordre de barre cite %s, qui n'a pas de couleur" % cle)
+    return tuple(f)
+
+
 def _verifier():
-    fautes = []
+    fautes = list(_verifier_couleurs())
 
     # LE COMPTE EST ÉCRIT ICI, ET LA PAGE D'ACCUEIL DOIT S'Y TENIR. Il a
     # valu neuf ; il vaut onze depuis que les deux référentiels NIST de

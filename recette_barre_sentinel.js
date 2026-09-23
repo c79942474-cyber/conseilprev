@@ -69,6 +69,7 @@ const RELEVE = () => {
     return {
       titre: s.textContent.trim(),
       grp: s.getAttribute('data-grp'),
+      fam: s.getAttribute('data-fam'),
       teinte: getComputedStyle(s).getPropertyValue('--sb-ic').trim(),
       couleurIc: svc ? getComputedStyle(svc).color : null,
       dessin: svc ? svc.innerHTML.replace(/\s+/g, '') : null,
@@ -79,6 +80,7 @@ const RELEVE = () => {
         return {
           label: a.textContent.trim(),
           grp: a.getAttribute('data-grp'),
+          norme: a.getAttribute('data-norme'),
           dessin: sv ? sv.innerHTML.replace(/\s+/g, '') : null,
           muette: sv ? sv.getAttribute('aria-hidden') === 'true' : null,
           focusable: sv ? sv.getAttribute('focusable') !== 'false' : null,
@@ -169,9 +171,24 @@ const RELEVE = () => {
   /* CE QUI FAIT LE BLOC, C'EST LA TEINTE PARTAGÉE. Un onglet resté gris au
      milieu d'un groupe coloré se lirait comme rangé ailleurs. L'onglet COURANT
      est écarté : sa puce est pleine et terre cuite, c'est voulu (contrôle 5). */
-  let apparies = 0, orphelins = [];
+  /* UNE EXCEPTION, ET ELLE EST VOULUE : l'onglet d'un référentiel rangé
+     hors d'un tiroir qui lui est voué — l'IA Act sous « Pilotage », les deux
+     NIST qui partagent un tiroir — porte la couleur de SON référentiel, pas
+     celle de la rubrique. On ne l'écarte pas en silence : on exige qu'il
+     s'en DISTINGUE, et `recette_couleurs_referentiels.js` mesure qu'il porte
+     exactement la couleur déclarée pour son référentiel. */
+  const voue = s => {
+    const n = new Set(s.onglets.filter(o => o.norme).map(o => o.norme));
+    return s.fam === 'conformite' && n.size === 1 ? [...n][0] : null;
+  };
+  let apparies = 0, propres = 0, orphelins = [], confondus = [];
   G.forEach(s => s.onglets.forEach(o => {
     if (o.actif) return;
+    if (o.norme && o.norme !== voue(s)) {
+      if (o.couleur !== s.couleurIc) propres++;
+      else confondus.push(s.titre + ' → ' + o.label);
+      return;
+    }
     if (o.grp === s.grp && o.couleur === s.couleurIc) apparies++;
     else orphelins.push(s.titre + ' → ' + o.label + ' (' + o.couleur + ' ≠ '
                         + s.couleurIc + ')');
@@ -180,6 +197,10 @@ const RELEVE = () => {
      + 'rubrique',
      orphelins.length === 0, orphelins.slice(0, 3).join(' | '),
      apparies + ' onglet(s) appariés');
+  ok('…sauf l’onglet d’un référentiel rangé hors de son tiroir, qui porte la '
+     + 'sienne',
+     propres >= 3 && confondus.length === 0, confondus.join(' | '),
+     propres + ' onglet(s)');
   /* …ET LES RUBRIQUES NE PORTENT PAS TOUTES LA MÊME. Sans ce contrôle, une
      feuille de style qui perdrait `--sb-ic` rendrait tout gris — et le
      contrôle ci-dessus passerait quand même, tout étant « apparié ». */

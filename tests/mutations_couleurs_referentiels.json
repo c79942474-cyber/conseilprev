@@ -1,0 +1,197 @@
+{
+ "_pourquoi": "Chaque règle des couleurs de référentiel doit tomber sur SON défaut : la palette (moteur), la garde du module, la feuille de style et le balisage. Les mutations qui feraient refuser l'import du module sont portées sur les lignes de la garde elle-même : un refus d'import se lit en erreur de collecte, que le banc prendrait pour une survivante.",
+ "cibles": [
+  "tests/test_couleurs_referentiels.py"
+ ],
+ "mutations": [
+  {
+   "nom": "NIS 2 repasse au vert — la couleur que le rail donne à un bloc validé",
+   "fichier": "conformite.py",
+   "avant": "\"nis2\":        \"#8F7515\",   # ocre",
+   "apres": "\"nis2\":        \"#3E8E41\",   # ocre",
+   "regle": "test_le_VERT_de_validation_n_est_la_couleur_d_AUCUN_referentiel"
+  },
+  {
+   "nom": "ISO 42001 retombe sur l'ambre du verrou",
+   "fichier": "conformite.py",
+   "avant": "\"iso42001\":    \"#0A8D83\",   # sarcelle",
+   "apres": "\"iso42001\":    \"#C77B0F\",   # sarcelle",
+   "regle": "test_aucune_couleur_n_IMITE_une_couleur_d_ETAT"
+  },
+  {
+   "nom": "ISO 27001 prend la teinte de son voisin ISO 42001",
+   "fichier": "conformite.py",
+   "avant": "\"iso27001\":    \"#355CD4\",   # bleu",
+   "apres": "\"iso27001\":    \"#0B8C8A\",   # bleu",
+   "regle": "test_les_tiroirs_VOISINS_se_distinguent_meme_en_vision_deficiente"
+  },
+  {
+   "nom": "OWASP pâlit au point de disparaître sur sa pastille",
+   "fichier": "conformite.py",
+   "avant": "\"owasp_llm\":   \"#D35D94\",   # rose",
+   "apres": "\"owasp_llm\":   \"#F4A6C8\",   # rose",
+   "regle": "test_l_icone_reste_LISIBLE_sur_sa_propre_pastille"
+  },
+  {
+   "nom": "l'ordre de barre validé n'est plus celui de l'écran",
+   "fichier": "conformite.py",
+   "avant": "ORDRE_BARRE = (\"rgpd\", \"iso27001\", \"iso42001\", \"dora\", \"nis2\", \"cra\",",
+   "apres": "ORDRE_BARRE = (\"rgpd\", \"iso42001\", \"iso27001\", \"dora\", \"nis2\", \"cra\",",
+   "regle": "test_l_ORDRE_de_la_barre_est_celui_qui_a_ete_VALIDE"
+  },
+  {
+   "nom": "la garde ne voit plus une norme sans couleur",
+   "fichier": "conformite.py",
+   "avant": "            f.append(\"la norme %s n'a pas de couleur\" % n[\"cle\"])",
+   "apres": "            pass",
+   "regle": "test_la_GARDE_des_couleurs_NOMME_ce_qui_se_defait[sans-couleur]"
+  },
+  {
+   "nom": "la garde ne voit plus une couleur orpheline",
+   "fichier": "conformite.py",
+   "avant": "            f.append(\"la couleur %s ne vise aucune norme\" % cle)",
+   "apres": "            pass",
+   "regle": "test_la_GARDE_des_couleurs_NOMME_ce_qui_se_defait[orpheline]"
+  },
+  {
+   "nom": "la garde ne voit plus deux normes de même teinte",
+   "fichier": "conformite.py",
+   "avant": "        if c in vues:",
+   "apres": "        if False:",
+   "regle": "test_la_GARDE_des_couleurs_NOMME_ce_qui_se_defait[partagee]"
+  },
+  {
+   "nom": "la garde accepte un hexadécimal mal formé",
+   "fichier": "conformite.py",
+   "avant": "        if len(c) != 7 or not c.startswith(\"#\"):",
+   "apres": "        if False:",
+   "regle": "test_la_GARDE_des_couleurs_NOMME_ce_qui_se_defait[mal-ecrite]"
+  },
+  {
+   "nom": "la garde laisse l'ordre de barre citer une clé perdue",
+   "fichier": "conformite.py",
+   "avant": "            f.append(\"l'ordre de barre cite %s, qui n'a pas de couleur\" % cle)",
+   "apres": "            pass",
+   "regle": "test_la_GARDE_refuse_un_ORDRE_de_barre_qui_cite_une_cle_perdue"
+  },
+  {
+   "nom": "une couleur changée d'un seul côté",
+   "fichier": "sentinel.html",
+   "avant": ".sb-nav .sb-item[data-norme=\"dora\"]{--sb-ic:#9650E8}",
+   "apres": ".sb-nav .sb-item[data-norme=\"dora\"]{--sb-ic:#9650E9}",
+   "regle": "test_la_feuille_de_style_NE_SE_SEPARE_PAS_de_la_table"
+  },
+  {
+   "nom": "le titre du tiroir NIS 2 perd sa couleur",
+   "fichier": "sentinel.html",
+   "avant": ".sb-nav [data-grp=\"nis2\"]{--sb-ic:#8F7515}\n",
+   "apres": "",
+   "regle": "test_le_TITRE_d_un_tiroir_voue_a_un_referentiel_porte_SA_couleur"
+  },
+  {
+   "nom": "une ancienne teinte de rubrique reste derrière",
+   "fichier": "sentinel.html",
+   "avant": ".sb-nav [data-grp=\"business\"]{--sb-ic:var(--amber)}\n",
+   "apres": ".sb-nav [data-grp=\"business\"]{--sb-ic:var(--amber)}\n.sb-nav [data-grp=\"iso27001\"]{--sb-ic:var(--teal)}\n",
+   "regle": "test_le_TITRE_d_un_tiroir_voue_a_un_referentiel_porte_SA_couleur"
+  },
+  {
+   "nom": "le tiroir des deux NIST retombe sur la terre cuite",
+   "fichier": "sentinel.html",
+   "avant": ".sb-nav [data-grp=\"nist-ot\"]{--sb-ic:var(--muted)}",
+   "apres": ".sb-nav [data-grp=\"nist-ot\"]{--sb-ic:var(--accent)}",
+   "regle": "test_un_tiroir_voue_a_AUCUN_referentiel_reste_NEUTRE"
+  },
+  {
+   "nom": "le tiroir du taux prend la couleur d'un référentiel",
+   "fichier": "sentinel.html",
+   "avant": ".sb-nav [data-grp=\"taux-conformite\"]{--sb-ic:var(--muted)}",
+   "apres": ".sb-nav [data-grp=\"taux-conformite\"]{--sb-ic:#C50759}",
+   "regle": "test_un_tiroir_voue_a_AUCUN_referentiel_reste_NEUTRE"
+  },
+  {
+   "nom": "le tiroir partagé n'est plus rangé dans la famille conformité",
+   "fichier": "sentinel.html",
+   "avant": "data-grp=\"nist-ot\" data-fam=\"conformite\"",
+   "apres": "data-grp=\"nist-ot\"",
+   "regle": "test_un_tiroir_voue_a_AUCUN_referentiel_reste_NEUTRE"
+  },
+  {
+   "nom": "le point prend une couleur écrite en dur",
+   "fichier": "sentinel.html",
+   "avant": "border-radius:50%;background:currentColor}",
+   "apres": "border-radius:50%;background:#888888}",
+   "regle": "test_la_pastille_VIDE_porte_la_couleur_par_un_POINT"
+  },
+  {
+   "nom": "le point devient invisible",
+   "fichier": "sentinel.html",
+   "avant": ".sb-item .sb-icon:empty::before{content:'';width:8px;height:8px;",
+   "apres": ".sb-item .sb-icon:empty::before{content:'';width:2px;height:2px;",
+   "regle": "test_la_pastille_VIDE_porte_la_couleur_par_un_POINT"
+  },
+  {
+   "nom": "la règle de couleur teint aussi le texte",
+   "fichier": "sentinel.html",
+   "avant": ".sb-nav .sb-item[data-norme=\"rgpd\"]{--sb-ic:#C50759}",
+   "apres": ".sb-nav .sb-item[data-norme=\"rgpd\"]{--sb-ic:#C50759;color:#C50759}",
+   "regle": "test_la_couleur_passe_par_le_CANAL_de_la_barre_et_ne_teint_NI_texte_NI_fond"
+  },
+  {
+   "nom": "le titre du tiroir écrit son texte dans la couleur",
+   "fichier": "sentinel.html",
+   "avant": "  border-bottom:1px solid color-mix(in srgb,var(--sb-ic,var(--rule2)) 34%,transparent);",
+   "apres": "  color:var(--sb-ic);border-bottom:1px solid color-mix(in srgb,var(--sb-ic,var(--rule2)) 34%,transparent);",
+   "regle": "test_la_couleur_passe_par_le_CANAL_de_la_barre_et_ne_teint_NI_texte_NI_fond"
+  },
+  {
+   "nom": "une règle d'état vise `.active`, que rien ne pose",
+   "fichier": "sentinel.html",
+   "avant": ".sb-icon svg{width:14px;height:14px}",
+   "apres": ".sb-icon svg{width:14px;height:14px}\n.sb-item.active .sb-icon{background:var(--accent)}",
+   "regle": "test_une_classe_d_ETAT_de_l_onglet_est_une_classe_que_le_script_POSE"
+  },
+  {
+   "nom": "l'ambre du verrou devient la couleur de NIS 2",
+   "fichier": "sentinel.html",
+   "avant": "--orange:   #C47C1A;",
+   "apres": "--orange:   #8F7515;",
+   "regle": "test_aucune_couleur_n_IMITE_une_couleur_d_ETAT"
+  },
+  {
+   "nom": "la pastille se teinte au point d'effacer l'icône",
+   "fichier": "sentinel.html",
+   "avant": "background:color-mix(in srgb,var(--sb-ic,var(--muted)) 9%,var(--bg))",
+   "apres": "background:color-mix(in srgb,var(--sb-ic,var(--muted)) 60%,var(--bg))",
+   "regle": "test_l_icone_reste_LISIBLE_sur_sa_propre_pastille"
+  },
+  {
+   "nom": "l'IA Act n'est plus marqué comme référentiel",
+   "fichier": "sentinel.html",
+   "avant": "<div class=\"sb-item\" data-norme=\"ia_act\" data-grp=\"pilotage\"",
+   "apres": "<div class=\"sb-item\" data-grp=\"pilotage\"",
+   "regle": "test_CHAQUE_norme_est_ATTEIGNABLE_depuis_la_barre"
+  },
+  {
+   "nom": "un onglet NIS 2 perd son nom écrit",
+   "fichier": "sentinel.html",
+   "avant": "<span class=\"sb-icon\" aria-hidden=\"true\"></span>Suis-je concerné ?</div>",
+   "apres": "<span class=\"sb-icon\" aria-hidden=\"true\"></span></div>",
+   "regle": "test_chaque_referentiel_garde_son_NOM_ecrit[nis2]"
+  },
+  {
+   "nom": "la barre change d'ordre sans que la palette soit revalidée",
+   "fichier": "sentinel.html",
+   "avant": "<div class=\"sb-item\" data-norme=\"rgpd\" data-grp=\"rgpd-et-privacy\" role=\"button\" tabindex=\"0\" onclick=\"go('rgpd-hub'",
+   "apres": "<div class=\"sb-item\" data-norme=\"iso27001\" data-grp=\"rgpd-et-privacy\" role=\"button\" tabindex=\"0\" onclick=\"go('rgpd-hub'",
+   "regle": "test_l_ORDRE_de_la_barre_est_celui_qui_a_ete_VALIDE"
+  },
+  {
+   "nom": "le script cesse de poser `on` sur l'onglet ouvert",
+   "fichier": "sentinel.page.js",
+   "avant": "function _ici(i){ i.classList.add('on');",
+   "apres": "function _ici(i){ i.classList.add('ici');",
+   "regle": "test_une_classe_d_ETAT_de_l_onglet_est_une_classe_que_le_script_POSE"
+  }
+ ]
+}
