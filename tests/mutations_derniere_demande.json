@@ -1,0 +1,85 @@
+{
+ "_pourquoi": "Chaque mutation FABRIQUE un défaut réel et doit faire TOMBER la règle nommée. Une mutation qui survit dit que la règle ne mesure pas ce qu'elle prétend ; une mutation qui fait tomber une AUTRE règle dit que la règle nommée vise à côté.",
+ "cibles": [
+  "tests/test_derniere_demande.py"
+ ],
+ "mutations": [
+  {
+   "nom": "la qualification peint la réponse périmée",
+   "fichier": "sentinel.page.js",
+   "avant": "    if (!aJour()) return;\n    var q = j.qualification || {};",
+   "apres": "    var q = j.qualification || {};",
+   "regle": "test_la_reponse_PERIMEE_ne_repeint_pas_l_articulation_DORA"
+  },
+  {
+   "nom": "un échec périmé efface le verdict",
+   "fichier": "sentinel.page.js",
+   "avant": "  }).catch(function () {\n    if (!aJour()) return;\n    v.innerHTML = '<div class=\"veille-loading\">Qualification momentanément '",
+   "apres": "  }).catch(function () {\n    v.innerHTML = '<div class=\"veille-loading\">Qualification momentanément '",
+   "regle": "test_un_ECHEC_perime_n_efface_pas_un_verdict_frais"
+  },
+  {
+   "nom": "le numéro est pris après la remise à zéro",
+   "fichier": "sentinel.page.js",
+   "avant": "  var aJour = derniereDemande('dora-qualifier');\n  if (!DORA_DECL.entite) {",
+   "apres": "  if (!DORA_DECL.entite) {",
+   "regle": "test_une_reponse_en_route_ne_repeint_pas_un_ecran_REMIS_A_ZERO"
+  },
+  {
+   "nom": "la garde reconnaît toute demande",
+   "fichier": "sentinel.page.js",
+   "avant": "  return function () { return tours[cle] === n; };",
+   "apres": "  return function () { return true; };",
+   "regle": "test_derniereDemande_ne_reconnait_QUE_la_derniere_demande_de_sa_cle"
+  },
+  {
+   "nom": "toutes les clés partagent un compteur",
+   "fichier": "sentinel.page.js",
+   "avant": "  var n = tours[cle] = (tours[cle] || 0) + 1;\n  return function () { return tours[cle] === n; };",
+   "apres": "  var n = tours.x = (tours.x || 0) + 1;\n  return function () { return tours.x === n; };",
+   "regle": "test_derniereDemande_ne_reconnait_QUE_la_derniere_demande_de_sa_cle"
+  },
+  {
+   "nom": "l'exposition CRA repart sans garde",
+   "fichier": "sentinel.page.js",
+   "avant": "    .then(function (j) { if (aJour()) craRendreExposition(j); })",
+   "apres": "    .then(function (j) { craRendreExposition(j); })",
+   "regle": "test_CHAQUE_calcul_des_ecrans_de_conformite_prend_un_numero_et_le_VERIFIE"
+  },
+  {
+   "nom": "le rail prend son numéro sans le vérifier",
+   "fichier": "sentinel.page.js",
+   "avant": "    if (!aJour() || !j || !j.ok) return;\n    var avant = RAIL_AV[norme];",
+   "apres": "    if (!j || !j.ok) return;\n    var avant = RAIL_AV[norme];",
+   "regle": "test_CHAQUE_calcul_des_ecrans_de_conformite_prend_un_numero_et_le_VERIFIE"
+  },
+  {
+   "nom": "ReCyF repeint pour l'ancienne qualification",
+   "fichier": "sentinel.page.js",
+   "avant": "      if (demande !== RECYF_DEMANDE) return;\n      if (!j || !j.ok) { b.textContent = 'Calcul impossible.'; return; }\n      b.innerHTML = recyfRendu(j);",
+   "apres": "      if (!j || !j.ok) { b.textContent = 'Calcul impossible.'; return; }\n      b.innerHTML = recyfRendu(j);",
+   "regle": "test_CHAQUE_calcul_des_ecrans_de_conformite_prend_un_numero_et_le_VERIFIE"
+  },
+  {
+   "nom": "le parcours DORA peint la réponse périmée",
+   "fichier": "sentinel.page.js",
+   "avant": "    if (!aJour() || !j || !j.ok) return;\n    var avant = DORA_PARCOURS;",
+   "apres": "    if (!j || !j.ok) return;\n    var avant = DORA_PARCOURS;",
+   "regle": "test_CHAQUE_calcul_des_ecrans_de_conformite_prend_un_numero_et_le_VERIFIE"
+  },
+  {
+   "nom": "un échec périmé du contrat DORA efface l'examen",
+   "fichier": "sentinel.page.js",
+   "avant": "  }).catch(function () {\n    if (!aJour()) return;\n    b.innerHTML = '<div class=\"veille-loading\">Examen momentanément '",
+   "apres": "  }).catch(function () {\n    b.innerHTML = '<div class=\"veille-loading\">Examen momentanément '",
+   "regle": "test_CHAQUE_calcul_des_ecrans_de_conformite_prend_un_numero_et_le_VERIFIE"
+  },
+  {
+   "nom": "un échec périmé de la supervision vide la zone",
+   "fichier": "sentinel.page.js",
+   "avant": "  }).catch(function () { if (aJour()) b.innerHTML = ''; });",
+   "apres": "  }).catch(function () { b.innerHTML = ''; });",
+   "regle": "test_CHAQUE_calcul_des_ecrans_de_conformite_prend_un_numero_et_le_VERIFIE"
+  }
+ ]
+}

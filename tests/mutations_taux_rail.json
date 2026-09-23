@@ -318,8 +318,8 @@
   {
    "nom": "une réponse ancienne repeint le taux de préparation ReCyF",
    "fichier": "sentinel.page.js",
-   "avant": "      if (demande !== RECYF_DEMANDE) return;\n",
-   "apres": "",
+   "avant": "      if (demande !== RECYF_DEMANDE) return;\n      if (!j || !j.ok) return;\n",
+   "apres": "      if (!j || !j.ok) return;\n",
    "regle": "test_le_taux_de_preparation_ne_repeint_que_la_DERNIERE_demande"
   }
  ]

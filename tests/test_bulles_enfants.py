@@ -552,8 +552,9 @@ def test_la_fermeture_TOMBE_quand_l_element_n_est_plus_tenu(declencheur, bulle):
     quand le focus part, quand la souris s'en va, sur un appui ailleurs —
     MAIS PAS quand le focus part et que le survol tient encore l'élément :
     la fermeture tient tant que l'élément est tenu, par l'un OU l'autre.
-    Ce dernier cas n'a pas été reproduit au navigateur (Chromium y déplace
-    le survol avec le défilement) : c'est ce harnais qui l'exerce."""
+    Reproduit au navigateur, au poste fixe : focus clavier, souris posée,
+    Échap, Tab — sans la garde, la bulle se rouvrait sous la souris
+    (recette_bulles_sentinel.js, section 4 bis)."""
     r = _scenario(declencheur)
     assert not r["apresDepart"]["fermee"], "le focus parti, la bulle reste fermée"
     assert r["departSousSurvol"]["fermee"], (

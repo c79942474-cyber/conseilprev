@@ -23763,6 +23763,32 @@ document.addEventListener('keydown', function(e){
    bouton (voir « La mémoire des écrans »).
    ═══════════════════════════════════════════════════════════════════════ */
 var CRA_REF = null;
+
+/* ══ LA DERNIÈRE DEMANDE, PAS LA DERNIÈRE RÉPONSE ═══════════════════════
+   LE DÉFAUT MESURÉ. Un écran qui recalcule à chaque champ envoie une
+   requête par changement, sans annuler la précédente. Deux réponses sont
+   alors en route, et c'est la DERNIÈRE ARRIVÉE qui peint — pas la réponse à
+   la dernière demande. Relevé sur la qualification DORA : « établissement
+   de crédit » puis « identifié NIS 2 », deux requêtes parties à la même
+   milliseconde ; quand la première (NIS 2 encore inconnu) répondait après la
+   seconde, l'articulation était repeinte à vide — 0 disposition écartée au
+   lieu de 4. Deux fois sur seize, au naturel ; à chaque fois quand la
+   réponse périmée est retardée de 300 ms.
+   Allonger une attente ne ferait que rendre la course plus rare. L'écran
+   ne dépend plus que de l'ORDRE DES DEMANDES : chaque demande prend un
+   numéro, et une réponse qui n'est pas celle du dernier numéro ne peint
+   rien — ni en cas de succès, ni en cas d'échec.
+   Deux écrans avaient déjà leur propre compteur (le taux de conformité,
+   le taux ReCyF) ; celui-ci sert à tous les autres.
+   ELLE EST DÉCLARÉE ICI, en tête des écrans de conformité, parce que
+   c'est à partir d'ici que les règles exécutent la page (harnais de
+   tests/test_memoire_ecrans.py) : déclarée plus haut, elle manquerait à
+   chaque écran exécuté. */
+function derniereDemande(cle) {
+  var tours = derniereDemande.tours || (derniereDemande.tours = {});
+  var n = tours[cle] = (tours[cle] || 0) + 1;
+  return function () { return tours[cle] === n; };
+}
 var CRA_ETAT = { produits: [], courant: 0, ecarts: {} };
 
 function craInit() {
@@ -23872,12 +23898,14 @@ function craRegistre() {
     e.innerHTML = '<div class="veille-loading">Aucun produit déclaré. '
       + 'Ajoutez-en un pour obtenir sa procédure.</div>'; return; }
   e.innerHTML = '<div class="veille-loading">Évaluation…</div>';
+  var aJour = derniereDemande('cra-registre');
   fetch('/api/cra/evaluer', { method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ produits: CRA_ETAT.produits }) })
     .then(function (r) { return r.json(); })
-    .then(function (j) { craRendreParc(j); })
+    .then(function (j) { if (aJour()) craRendreParc(j); })
     .catch(function () {
+      if (!aJour()) return;
       e.innerHTML = '<div class="veille-loading">L’évaluation n’a pas '
         + 'abouti. Rien n’est affiché plutôt qu’un résultat partiel.</div>'; });
 }
@@ -23968,13 +23996,14 @@ window.craCoter = craCoter;
 function craBilanEcarts() {
   var e = document.getElementById('cra-ec-bilan');
   if (!e || !CRA_REF) return;
+  var aJour = derniereDemande('cra-ecarts');
   fetch('/api/cra/evaluer', { method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ nom: 'analyse', marche_ue: true,
       classe: 'ordinaire', ecarts: CRA_ETAT.ecarts }) })
     .then(function (r) { return r.json(); })
     .then(function (j) {
-      if (!j || !j.ok) return;
+      if (!aJour() || !j || !j.ok) return;
       var c = j.ecarts;
       /* LE TAUX NE PART JAMAIS SEUL. Un taux de 100 % sur trois exigences
          renseignées ne dit rien des dix-huit autres — et c'est celui-là
@@ -24059,12 +24088,13 @@ window.craRoleCoche = craRoleCoche;
 function craRoleCalculer() {
   var e = document.getElementById('cra-role-verdict');
   if (!e) return;
+  var aJour = derniereDemande('cra-role');
   fetch('/api/cra/role', { method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(CRA_ROLE_ETAT) })
     .then(function (r) { return r.json(); })
     .then(function (j) {
-      if (!j || !j.ok) return;
+      if (!aJour() || !j || !j.ok) return;
       var h = '<div class="cra-cmd"><b>' + craEsc(j.role.nom) + '</b> — '
         + craEsc(j.pourquoi) + '<span class="cra-art">'
         + craEsc(j.role.article) + '</span></div>';
@@ -24105,12 +24135,14 @@ function craExposition() {
      deux sens, sur le seul chiffre qui commande le résultat. */
   var ca = (v === '' || v === null || v === undefined) ? null : Number(v) * 1e6;
   e.innerHTML = '<div class="veille-loading">Calcul…</div>';
+  var aJour = derniereDemande('cra-exposition');
   fetch('/api/cra/exposition', { method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ chiffre_affaires: ca }) })
     .then(function (r) { return r.json(); })
-    .then(function (j) { craRendreExposition(j); })
+    .then(function (j) { if (aJour()) craRendreExposition(j); })
     .catch(function () {
+      if (!aJour()) return;
       e.innerHTML = '<div class="veille-loading">Le calcul n’a pas abouti.</div>'; });
 }
 window.craExposition = craExposition;
@@ -24553,11 +24585,12 @@ function doraIsoThemes() {
    complété, et le client chercherait ce qui manque encore. */
 function doraParcours() {
   if (!DORA_REF) return;
+  var aJour = derniereDemande('dora-parcours');
   fetch('/api/dora/parcours', {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(doraDeclaration())
   }).then(function (r) { return r.json(); }).then(function (j) {
-    if (!j || !j.ok) return;
+    if (!aJour() || !j || !j.ok) return;
     var avant = DORA_PARCOURS;
     DORA_PARCOURS = j;
     doraRailPeindre();
@@ -24870,6 +24903,9 @@ function doraQualifier() {
   var v = document.getElementById('dora-verdict');
   var a = document.getElementById('dora-articulation');
   if (!v) return;
+  /* Le numéro est pris AVANT la remise à zéro : une réponse encore en route
+     ne doit pas repeindre un écran que l'on vient de vider. */
+  var aJour = derniereDemande('dora-qualifier');
   if (!DORA_DECL.entite) {
     v.innerHTML = '<div class="veille-loading">Renseignez le type '
                 + 'd’entité ci-dessus.</div>';
@@ -24881,6 +24917,7 @@ function doraQualifier() {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(DORA_DECL)
   }).then(function (r) { return r.json(); }).then(function (j) {
+    if (!aJour()) return;
     var q = j.qualification || {};
     DORA_REGIME = q.regime || null;
     var e = q.entite || {};
@@ -24899,6 +24936,7 @@ function doraQualifier() {
     if (a) a.innerHTML = doraArticulation(j.articulation || {});
     doraPeindreRisque(); doraPeindreIso();
   }).catch(function () {
+    if (!aJour()) return;
     v.innerHTML = '<div class="veille-loading">Qualification momentanément '
                 + 'indisponible.</div>';
   });
@@ -24993,12 +25031,14 @@ window.doraEtat = doraEtat;
 function doraCalculerRisque() {
   var z = document.getElementById('dora-risque-taux');
   if (!z || !DORA_REGIME) return;
+  var aJour = derniereDemande('dora-risque');
   fetch('/api/dora/evaluer', {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ entite: DORA_DECL.entite,
                            identifiee_nis2: DORA_DECL.identifiee_nis2,
                            etats: DORA_ETATS })
   }).then(function (r) { return r.json(); }).then(function (j) {
+    if (!aJour()) return;
     var r = (j || {}).risque;
     if (!r || !r.ok) { z.innerHTML = ''; return; }
     var h = '<div class="cnf-verdict cnf-ok"><div class="cnf-verdict-t">'
@@ -25015,7 +25055,7 @@ function doraCalculerRisque() {
     });
     h += '</div>';
     z.innerHTML = h;
-  }).catch(function () { z.innerHTML = ''; });
+  }).catch(function () { if (aJour()) z.innerHTML = ''; });
 }
 
 /* ── LES CONTRATS ─────────────────────────────────────────────────────
@@ -25069,10 +25109,12 @@ function doraCalculerTiers() {
       + 'se découvrirait qu\u2019au contrôle, contrat déjà signé.</div>';
     return;
   }
+  var aJour = derniereDemande('dora-tiers');
   fetch('/api/dora/contrat', {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(DORA_CONTRAT)
   }).then(function (r) { return r.json(); }).then(function (j) {
+    if (!aJour()) return;
     if (!j.ok) {
       b.innerHTML = '<div class="cnf-cmd"><b>Rien n’est compté.</b> '
                   + doraEsc(j.motif_texte || '') + '</div>';
@@ -25109,6 +25151,7 @@ function doraCalculerTiers() {
     h += '</tbody></table></div>';
     b.innerHTML = h;
   }).catch(function () {
+    if (!aJour()) return;
     b.innerHTML = '<div class="veille-loading">Examen momentanément '
                 + 'indisponible.</div>';
   });
@@ -25176,10 +25219,12 @@ function doraCalculerIncident() {
                  connaissance: DORA_INC.connaissance,
                  classification: DORA_INC.classification };
   Object.keys(DORA_INC.seuils).forEach(function (k) { charge[k] = true; });
+  var aJour = derniereDemande('dora-incident');
   fetch('/api/dora/incident', {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(charge)
   }).then(function (r) { return r.json(); }).then(function (j) {
+    if (!aJour()) return;
     if (!j.ok) {
       b.innerHTML = '<div class="cnf-cmd">' + doraEsc(j.motif_texte || j.motif)
                   + '</div>';
@@ -25206,6 +25251,7 @@ function doraCalculerIncident() {
     }
     b.innerHTML = h;
   }).catch(function () {
+    if (!aJour()) return;
     b.innerHTML = '<div class="veille-loading">Évaluation momentanément '
                 + 'indisponible.</div>';
   });
@@ -25234,6 +25280,7 @@ function doraPeindreIso() {
   if (!ap || !ap.ok || ap.regime !== DORA_REGIME
       || ap._mesures !== JSON.stringify(DORA_ISO.mesures || null)) {
     var signature = JSON.stringify(DORA_ISO.mesures || null);
+    var aJour = derniereDemande('dora-iso');
     fetch('/api/dora/evaluer', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ entite: DORA_DECL.entite,
@@ -25241,7 +25288,7 @@ function doraPeindreIso() {
                              mesures_iso: DORA_ISO.mesures })
     }).then(function (r) { return r.json(); }).then(function (j) {
       var a = (j || {}).apport_iso27001;
-      if (!a || !a.ok) return;
+      if (!aJour() || !a || !a.ok) return;
       a._mesures = signature;
       DORA_ISO.apport = a;
       doraPeindreIso();
@@ -25353,10 +25400,12 @@ function doraCalculerSup() {
   if (Object.keys(DORA_SUP_PARTS).length === 2) {
     charge.categories_servies = [DORA_SUP_PARTS];
   }
+  var aJour = derniereDemande('dora-supervision');
   fetch('/api/dora/supervision', {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(charge)
   }).then(function (r) { return r.json(); }).then(function (j) {
+    if (!aJour()) return;
     if (!j.ok) { b.innerHTML = ''; return; }
     var cls = j.issue === 'exclu' ? 'cnf-ok'
             : (j.issue === 'etape_1_franchie' ? 'cnf-hors' : 'cnf-part');
@@ -25383,7 +25432,7 @@ function doraCalculerSup() {
          + '(acte délégué C(2024) 902, article 3, §3).</div>';
     }
     b.innerHTML = h;
-  }).catch(function () { b.innerHTML = ''; });
+  }).catch(function () { if (aJour()) b.innerHTML = ''; });
 }
 window.doraPeindreSup = doraPeindreSup;
 
@@ -27338,11 +27387,16 @@ function recyfPeindre() {
     recyfAnalyse();
     return;
   }
+  /* LE MÊME COMPTEUR QUE `recyfMajTaux` : les deux peignent la même zone
+     depuis la même route. Un taux encore en route pour l'ANCIENNE
+     qualification ne doit pas écraser l'écran repeint pour la nouvelle. */
+  var demande = ++RECYF_DEMANDE;
   fetch('/api/recyf/preparation', {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ statut: statut, etats: RECYF_ETATS })
   }).then(function (r) { return r.json(); })
     .then(function (j) {
+      if (demande !== RECYF_DEMANDE) return;
       if (!j || !j.ok) { b.textContent = 'Calcul impossible.'; return; }
       b.innerHTML = recyfRendu(j);
       /* LES DEUX PANNEAUX PARTAGENT UNE SEULE QUALIFICATION, et le sélecteur
@@ -27355,7 +27409,7 @@ function recyfPeindre() {
          jamais `recyfPeindre`. */
       recyfAnalyse();
     })
-    .catch(function () { b.textContent = 'Calcul indisponible.'; });
+    .catch(function () { if (demande === RECYF_DEMANDE) b.textContent = 'Calcul indisponible.'; });
 }
 
 /* LE TAUX ET SA NATURE, DANS LE MÊME BLOC. Séparés, le nombre partirait
@@ -27469,17 +27523,19 @@ function recyfAnalyse() {
       + 'êtes.</div>';
     return;
   }
+  var aJour = derniereDemande('recyf-analyse');
   fetch('/api/recyf/analyse', {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ statut: statut,
                            declaration: recyfDeclarationAnalyse() })
   }).then(function (r) { return r.json(); })
     .then(function (j) {
+      if (!aJour()) return;
       if (!j || !j.ok) { b.textContent = 'Calcul impossible.'; return; }
       b.innerHTML = recyfRenduAnalyse(j) + recyfRenduPerimetre();
       recyfPonts();
     })
-    .catch(function () { b.textContent = 'Calcul indisponible.'; });
+    .catch(function () { if (aJour()) b.textContent = 'Calcul indisponible.'; });
 }
 
 function recyfRenduAnalyse(j) {
@@ -28112,11 +28168,12 @@ function railCalculer(norme) {
   try { d = f() || {}; } catch (e) { d = {}; }
   var st = _railStock()[norme] || {};
   d.lus = st.lus || [];
+  var aJour = derniereDemande('rail-' + norme);
   fetch('/api/parcours/' + norme, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(d)
   }).then(function (r) { return r.json(); }).then(function (j) {
-    if (!j || !j.ok) return;
+    if (!aJour() || !j || !j.ok) return;
     var avant = RAIL_AV[norme];
     RAIL_AV[norme] = j;
     railPeindreBarre(norme, j);

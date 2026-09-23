@@ -108,6 +108,7 @@ const ETAT = ([marque, bulle]) => {
     reconnue: !!(window.infobulles && el.matches(window.infobulles.selecteur)),
     focus: document.activeElement === el,
     focusVisible: el.matches(':focus-visible'),
+    survol: el.matches(':hover'),
     texte: norme(b.textContent),
     annonce: norme((document.getElementById('bulle-annonce') || {}).textContent),
     fiche: !!document.querySelector('#tmpl-modal.open'),
@@ -383,6 +384,45 @@ async function fermerLaFiche(p) {
          await p.evaluate(() => document.querySelectorAll('.bulle-ouverte').length === 0));
       await fermerLaFiche(p);
     }
+  }
+
+  // ══ 4 bis. LE FOCUS PART, LA SOURIS RESTE ══════════════════════════════
+  console.log('\n══ 4 bis. Fermée par Échap : le focus part, la souris reste — elle reste fermée ══\n');
+  /* LE CAS QUI JUSTIFIE LA GARDE DU FOCUS, REPRODUIT AU NAVIGATEUR. Une
+     bulle fermée par Échap tient tant que l'élément est tenu — survolé OU
+     focalisé. Focus clavier sur le déclencheur, souris posée dessus, Échap,
+     puis Tab : le focus part, la souris reste. Mesuré sur le code sans la
+     garde : la bulle se ROUVRAIT sous la souris, que l'on venait de fermer.
+     Au doigt, le cas ne se produit pas dans Chromium (le survol collé part
+     avec le défilement) — c'est au poste fixe qu'il se reproduit. */
+  for (const f of FAMILLES.filter(x => !x.carte)) {
+    await aller(p, f.page);
+    const marque = 'tenu-' + f.page + f.decl;
+    const m = await p.evaluate(MARQUER, [f.page, f.decl, 'seul', marque, CLIQUABLE]);
+    if (!m) { ok(f.nom + ' — un déclencheur est à l’écran', false); continue; }
+    await p.evaluate(mq => document.querySelector('[data-recette="' + mq + '"]')
+      .scrollIntoView({ block: 'center', behavior: 'instant' }), marque);
+    await p.keyboard.press('Shift');
+    await p.evaluate(mq => document.querySelector('[data-recette="' + mq + '"]').focus(), marque);
+    const b = await p.locator('[data-recette="' + marque + '"]').boundingBox();
+    await p.mouse.move(b.x + b.width / 2, b.y + b.height / 2);
+    await p.waitForTimeout(600);
+    let e = await p.evaluate(ETAT, [marque, f.bulle]);
+    ok(f.nom + ' — focus clavier ET souris dessus : la bulle est ouverte',
+       e.focus && e.survol && e.ouverte, 'focus ' + e.focus + ', survol ' + e.survol);
+    await p.keyboard.press('Escape'); await p.waitForTimeout(500);
+    ok(f.nom + ' — Échap la ferme', !(await p.evaluate(ETAT, [marque, f.bulle])).ouverte);
+    await p.keyboard.press('Tab'); await p.waitForTimeout(600);
+    e = await p.evaluate(ETAT, [marque, f.bulle]);
+    ok(f.nom + ' — Tab : le focus est parti, la souris est restée', !e.focus && e.survol,
+       'focus ' + e.focus + ', survol ' + e.survol);
+    ok(f.nom + ' — LE POINT QUI DÉCIDE : la bulle fermée ne se rouvre pas sous la souris',
+       !e.ouverte, e.display + '/' + e.visibility + '/' + e.opacite);
+    await p.mouse.move(2, 2); await p.waitForTimeout(500);
+    await p.mouse.move(b.x + b.width / 2, b.y + b.height / 2); await p.waitForTimeout(700);
+    ok(f.nom + ' — la souris partie puis revenue, le survol la rouvre',
+       (await p.evaluate(ETAT, [marque, f.bulle])).ouverte);
+    await p.mouse.move(2, 2); await p.waitForTimeout(300);
   }
   await ctx.close();
 

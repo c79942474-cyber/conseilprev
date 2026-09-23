@@ -493,10 +493,13 @@
     document.addEventListener("focusout", function (ev) {
       /* LE FOCUS PART : la fermeture demandée tombe — SAUF si le survol tient
          encore l'élément. C'est la même règle que pour la souris qui s'en va
-         (plus bas), vue de l'autre côté : lever la fermeture sous un survol
-         collé la rouvrirait sous le doigt. Ce cas précis n'a pas été
-         reproduit dans Chromium — le survol y part avec le défilement ou le
-         focus déplacé par la page — ; le harnais des règles l'exerce. */
+         (plus bas), vue de l'autre côté.
+         MESURÉ AU NAVIGATEUR, AU POSTE FIXE : focus clavier sur la bulle,
+         souris posée dessus, Échap, puis Tab. Sans cette garde, la bulle
+         qu'on venait de fermer se ROUVRAIT sous la souris dès que le focus
+         partait — sur les quatre familles éprouvées (accueil, rail DORA,
+         tarification, maturité). Au doigt, le cas ne se produit pas dans
+         Chromium : le survol collé part avec le défilement. */
       if (ferme && ev.target === ferme
           && !(ev.relatedTarget && ferme.contains(ev.relatedTarget))
           && !ferme.matches(":hover")) lever();

@@ -89,11 +89,48 @@ const PANNEAUX = ['dora-qualifier', 'dora-risque', 'dora-tiers',
 
   /* ── 2. UNE BANQUE IDENTIFIÉE : L'ARTICLE 4 ÉCARTE ────────────────── */
   titre('2. Établissement de crédit identifié — ce que l\'article 4 écarte');
+  /* LA COURSE, FORCÉE — CE CONTRÔLE ÉTAIT INSTABLE, ET C'ÉTAIT L'APPLICATION.
+     Les deux champs partent dans la même milliseconde : deux requêtes de
+     qualification sont en route, la première avec NIS 2 encore inconnu. Au
+     naturel, sa réponse arrivait APRÈS l'autre deux fois sur seize — et
+     repeignait l'articulation à vide : « 0 disposition ». Mesuré sur
+     l'ancien code comme sur le nouveau, jamais sur un contrôle voisin.
+     On ne laisse plus le hasard choisir : la réponse PÉRIMÉE est retardée
+     de 400 ms, à chaque passage. L'ancien écran la peignait en dernier,
+     à chaque fois ; l'écran corrigé ne peint que la réponse à la DERNIÈRE
+     demande. */
+  let retardees = 0;
+  const retarder = async (route) => {
+    const corps = route.request().postData() || '';
+    if (/"identifiee_nis2":null/.test(corps)) {
+      retardees++;
+      const rep = await route.fetch();
+      await new Promise(r => setTimeout(r, 400));
+      return route.fulfill({ response: rep });
+    }
+    return route.continue();
+  };
+  await pg.route('**/api/dora/qualifier', retarder);
   await pg.evaluate(() => {
     window.doraChamp('entite', 'etablissement_credit');
     window.doraChamp('identifiee_nis2', 'oui');
   });
+  const lire = () => pg.evaluate(() => {
+    const a = document.getElementById('dora-articulation');
+    return a ? (a.textContent.match(/Article 2[013]|Chapitre VII/g) || []).length : 0;
+  });
+  /* Deux lectures : AVANT que la réponse retardée n'arrive (la bonne est là),
+     puis bien APRÈS. C'est la seconde qui tombait à 0. */
+  await pg.waitForTimeout(250);
+  const avantPerimee = await lire();
   await pg.waitForTimeout(1600);
+  const apresPerimee = await lire();
+  ok('la réponse périmée a bien été retardée — la course est forcée, pas espérée',
+     retardees >= 1, retardees + ' réponse(s) retardée(s)');
+  ok('LA RÉPONSE PÉRIMÉE NE REPEINT PAS l\'articulation',
+     avantPerimee >= 4 && apresPerimee >= 4,
+     'avant la réponse périmée : ' + avantPerimee + ', après : ' + apresPerimee);
+  await pg.unroute('**/api/dora/qualifier', retarder);
   const banque = await pg.evaluate(() => {
     const v = document.getElementById('dora-verdict');
     const a = document.getElementById('dora-articulation');
