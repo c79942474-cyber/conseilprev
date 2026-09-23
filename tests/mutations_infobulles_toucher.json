@@ -15,15 +15,15 @@
   {
    "nom": "la touche d'échappement ne referme plus",
    "fichier": "infobulles.js",
-   "avant": "if (ev.key === \"Escape\" || ev.key === \"Esc\") fermer();",
-   "apres": "if (ev.key === \"ImpossibleKey\") fermer();",
+   "avant": "if (ev.key === \"Escape\" || ev.key === \"Esc\") {",
+   "apres": "if (ev.key === \"ImpossibleKey\") {",
    "regle": "test_la_bulle_ne_se_referme_PAS_au_defilement"
   },
   {
    "nom": "un second appui ne referme plus",
    "fichier": "infobulles.js",
-   "avant": "if (ouvert === el) return fermer();",
-   "apres": "if (false) return fermer();",
+   "avant": "if (ouvert === el) { fermer(); return replier(el); }",
+   "apres": "if (false) { fermer(); return replier(el); }",
    "regle": "test_la_bulle_ne_se_referme_PAS_au_defilement"
   },
   {
@@ -50,15 +50,15 @@
   {
    "nom": "la jumelle cesse de remplacer :hover par la classe",
    "fichier": "infobulles.js",
-   "avant": "out.push(s2.split(\":hover\").join(\".\" + OUVERTE) + \"{\"",
-   "apres": "out.push(s2 + \"{\"",
+   "avant": "out.ouvertes.push(s2.split(\":hover\").join(\".\" + OUVERTE) + \"{\"",
+   "apres": "out.ouvertes.push(s2 + \"{\"",
    "regle": "test_l_etat_ouvert_est_DERIVE_des_regles_de_survol_de_la_page"
   },
   {
    "nom": "la jumelle invente ses déclarations au lieu de les reprendre",
    "fichier": "infobulles.js",
-   "avant": "               + regles[i].style.cssText + \"}\");",
-   "apres": "               + \"opacity:1\" + \"}\");",
+   "avant": "out.ouvertes.push(s2.split(\":hover\").join(\".\" + OUVERTE) + \"{\"\n                          + regles[i].style.cssText + \"}\");",
+   "apres": "out.ouvertes.push(s2.split(\":hover\").join(\".\" + OUVERTE) + \"{\"\n                          + \"opacity:1\" + \"}\");",
    "regle": "test_l_etat_ouvert_est_DERIVE_des_regles_de_survol_de_la_page"
   },
   {
@@ -120,8 +120,8 @@
   {
    "nom": "la région d'annonce est masquée par display:none",
    "fichier": "infobulles.js",
-   "avant": "+ \"clip-path:inset(50%);white-space:nowrap}\";",
-   "apres": "+ \"display:none}\";",
+   "avant": "+ \"clip-path:inset(50%);white-space:nowrap}\"",
+   "apres": "+ \"display:none}\"",
    "regle": "test_le_texte_est_ANNONCE_au_lecteur_d_ecran"
   },
   {

@@ -11,6 +11,18 @@
    POURQUOI. L'ouverture est écrite `:hover::after` et rien d'autre. Il n'y a
    pas de survol sur un écran tactile, et un <div> n'est pas focusable.
 
+   LE MÊME DÉFAUT, MESURÉ ENSUITE DANS SENTINEL, PAR UNE AUTRE PORTE. Le
+   script ne reconnaissait que les bulles écrites dans un ATTRIBUT. Sentinel
+   en porte quatre autres familles dont le texte est un ÉLÉMENT ENFANT,
+   révélé par `A:hover B` — maturité, modèles, tarification, budget : cent
+   quatre-vingt-sept déclencheurs, aucun reconnu. Au doigt, les badges
+   d'article n'ouvraient JAMAIS leur bulle : chacun est posé dans une carte
+   cliquable, et l'appui ouvrait la fiche du document par-dessus. Les trois
+   autres familles ne s'ouvraient que par accident — un survol ou un focus
+   que le navigateur laisse collés à l'élément touché — et c'est ce même
+   accident qui les empêchait de se refermer : ni le second appui ni Échap
+   n'ôtent un survol collé. Aucune n'était annoncée.
+
    CE QUE CE FICHIER FAIT, ET CE QU'IL NE FAIT PAS
 
    Il ne dessine AUCUNE bulle. Chaque page a déjà la sienne — position,
@@ -37,10 +49,28 @@
      site public, `data-tip` dans Sentinel. Un `title` natif n'est PAS
      ramassé : il appartient au navigateur, sert aussi aux champs de
      formulaire, et le détourner produirait deux infobulles sur un poste
-     fixe — celle du navigateur et la nôtre. */
+     fixe — celle du navigateur et la nôtre.
+
+     Les bulles ENFANTS s'y ajoutent à l'exécution, lues dans les feuilles de
+     la page (voir `jumelles`) : aucune n'est nommée ici. */
   var ATTRS = ["data-tooltip", "data-tip"];
   var SELECTEUR = "[data-tooltip],[data-tip]";
   var OUVERTE = "bulle-ouverte";
+  /* FERMÉE À LA DEMANDE — ET NON SIMPLEMENT « PAS OUVERTE ».
+     ═══════════════════════════════════════════════════════════════════
+     LE DÉFAUT MESURÉ. Au doigt, Chromium laisse le survol COLLÉ à
+     l'élément touché, et donne le focus à tout élément `tabindex`. Une
+     bulle de maturité s'ouvrait donc par son `:hover`, une bulle de
+     tarification par son `:focus` — et ni le second appui ni Échap ne la
+     refermaient : retirer notre classe ne retire ni un survol ni un focus.
+     Relevé au navigateur : opacité 1 après le second appui, 1 après Échap.
+
+     CE QU'ON FAIT : fermer à la demande pose une SECONDE classe, dont la
+     règle éteint la bulle malgré le survol ou le focus. Elle tient tant que
+     l'élément est TENU — survolé ou focalisé, l'un comme l'autre — et tombe
+     dès qu'il ne l'est plus : un appui ailleurs, le pointeur qui s'en va sans
+     focus derrière lui, le focus qui part sans survol derrière lui. */
+  var FERMEE = "bulle-fermee";
   var REGION = "bulle-annonce";
   /* « LIRE D'ABORD, AGIR ENSUITE » — ET SEULEMENT LÀ OÙ C'EST DEMANDÉ.
      ═══════════════════════════════════════════════════════════════════
@@ -62,10 +92,28 @@
      doigt. L'élément qui le veut le déclare. */
   var AVANT_CLIC = "data-bulle-avant-clic";
 
+  /* LES BULLES ENFANTS RECONNUES DANS LA PAGE : [déclencheur, bulle], lues
+     dans les feuilles au démarrage. Et le sélecteur de TOUS les
+     déclencheurs, les deux conventions d'abord. */
+  var ENFANTS = [];
+  var DECLENCHEURS = SELECTEUR;
+
+  function _norme(s) {
+    return (s || "").replace(/\s+/g, " ").trim();
+  }
+
   function texte(el) {
     for (var i = 0; i < ATTRS.length; i++) {
       var v = el.getAttribute(ATTRS[i]);
       if (v) return v;
+    }
+    /* Une bulle ENFANT porte son texte dans l'élément qu'elle révèle. */
+    for (var j = 0; j < ENFANTS.length; j++) {
+      var b = null;
+      try {
+        if (el.matches(ENFANTS[j][0])) b = el.querySelector(ENFANTS[j][1]);
+      } catch (e) { /* sélecteur illisible par ce navigateur */ }
+      if (b) return _norme(b.textContent);
     }
     return "";
   }
@@ -118,12 +166,123 @@
     return out;
   }
 
+  /* UNE LISTE DE SÉLECTEURS SE TRAITE PARTIE PAR PARTIE — c'est un défaut
+     mesuré, pas une précaution. Collée devant une liste, une pseudo-classe
+     ne vise que sa DERNIÈRE partie : « [data-tooltip],[data-tip] » suivi de
+     « :focus-visible{outline…} » donnait `[data-tooltip]` tout court, et
+     CHAQUE infobulle de l'accueil portait un contour permanent. De même,
+     jumeler en bloc `.prx-tip-icon:hover .x,.prx-tip-icon:focus .x`
+     recopiait la moitié `:focus` telle quelle — sans dommage à
+     l'ouverture, mais une règle de FERMETURE écrite ainsi aurait éteint la
+     bulle de tout élément qui a le focus.
+     On coupe aux virgules de premier niveau seulement : `:is(a, b)` et
+     `[x="a,b"]` ne sont pas deux sélecteurs. */
+  function _parties(sel) {
+    var out = [], prof = 0, guillemet = "", debut = 0;
+    for (var i = 0; i < sel.length; i++) {
+      var c = sel.charAt(i);
+      if (guillemet) {
+        if (c === guillemet && sel.charAt(i - 1) !== "\\") guillemet = "";
+      } else if (c === '"' || c === "'") {
+        guillemet = c;
+      } else if (c === "(" || c === "[") {
+        prof++;
+      } else if (c === ")" || c === "]") {
+        prof--;
+      } else if (c === "," && prof === 0) {
+        out.push(sel.slice(debut, i).trim());
+        debut = i + 1;
+      }
+    }
+    out.push(sel.slice(debut).trim());
+    return out;
+  }
+
+  /* Chaque partie d'une liste, suivie du même suffixe. */
+  function _suffixer(liste, suffixe) {
+    return _parties(liste).map(function (p) { return p + suffixe; }).join(",");
+  }
+
   function _base(sel) {
     return sel.split("::")[0].split(":hover")[0].trim();
   }
 
+  /* CE QU'« ALLUMER » VEUT DIRE, ET SON CONTRAIRE. Une bulle se montre par
+     l'une de quatre propriétés, et chaque famille choisit la sienne :
+     `display` (modèles, tarification, budget), `opacity` et `visibility`
+     (maturité, accueil), `content` (une bulle `::after` qui n'existe pas au
+     repos, comme `.ent-tip`). Éteindre, c'est rendre à CELLES QUE LE SURVOL
+     ALLUME leur valeur éteinte — rien d'autre : ni position, ni couleur. */
+  var ETEINT = { display: "none", visibility: "hidden", opacity: "0", content: "none" };
+
+  function _allume(style) {
+    var d = style.getPropertyValue("display");
+    var v = style.getPropertyValue("visibility");
+    var o = style.getPropertyValue("opacity");
+    return (d !== "" && d !== "none") || v === "visible"
+           || (o !== "" && parseFloat(o) > 0);
+  }
+
+  function _eteindre(style) {
+    var out = "";
+    for (var p in ETEINT) {
+      if (style.getPropertyValue(p) !== "") out += p + ":" + ETEINT[p] + " !important;";
+    }
+    return out;
+  }
+
+  /* LES BULLES ENFANTS, RECONNUES À CE QU'ELLES FONT, ELLES AUSSI.
+     ═══════════════════════════════════════════════════════════════════
+     Leur texte n'est dans aucun attribut : il est dans un élément que le
+     survol de son parent révèle — `A:hover B`. Mais un MENU déroulant
+     s'écrit exactement ainsi, et le prendre pour une bulle retiendrait
+     son clic. La différence est dans ce que devient B : une bulle FLOTTE
+     hors du flux (`position:absolute` ou `fixed`) et se laisse TRAVERSER
+     par le pointeur (`pointer-events:none`) — on la lit, on n'y clique
+     pas, ouverte ou fermée. Un menu, lui, doit recevoir le clic une fois
+     ouvert, et sa règle de survol le dit : le menu de l'accueil repose en
+     `pointer-events:none` comme une bulle, et s'ouvre en
+     `pointer-events:all`. Une première version s'arrêtait à l'état de
+     repos et l'a pris pour une bulle — mesuré au navigateur.
+     Rendu : [A, B], ou rien si la partie n'a pas cette forme. B est UN
+     élément — ni pseudo-élément, ni pseudo-classe, ni seconde combinaison. */
+  function _enfant(partie) {
+    var i = partie.indexOf(":hover");
+    if (i < 0) return null;
+    var a = partie.slice(0, i).trim();
+    var reste = partie.slice(i + ":hover".length);
+    var combinaison = /^(\s*>\s*|\s+)/.exec(reste);
+    if (!a || !combinaison) return null;
+    var b = reste.slice(combinaison[0].length).trim();
+    if (!b || /[\s>+~:]/.test(b)) return null;
+    return [a, b];
+  }
+
+  /* La règle de survol ne rend pas B cliquable. */
+  function _inerte(style) {
+    var pe = style.getPropertyValue("pointer-events");
+    return pe === "" || pe === "none";
+  }
+
+  function _flottante(styles) {
+    var hors = false, traversee = false;
+    for (var i = 0; i < styles.length; i++) {
+      var pos = styles[i].getPropertyValue("position");
+      if (pos === "absolute" || pos === "fixed") hors = true;
+      if (styles[i].getPropertyValue("pointer-events") === "none") traversee = true;
+    }
+    return hors && traversee;
+  }
+
   function jumelles() {
-    var regles = _toutesLesRegles(), bases = {}, out = [], i;
+    var regles = _toutesLesRegles(), bases = {}, parSelecteur = {};
+    var out = { ouvertes: [], fermees: [] }, vus = {}, i, j;
+    for (i = 0; i < regles.length; i++) {
+      var ps = _parties(regles[i].selectorText);
+      for (j = 0; j < ps.length; j++) {
+        (parSelecteur[ps[j]] = parSelecteur[ps[j]] || []).push(regles[i].style);
+      }
+    }
     /* Premier passage : QUI REND UN ATTRIBUT D'INFOBULLE. */
     for (i = 0; i < regles.length; i++) {
       var css = regles[i].style.cssText || "";
@@ -136,22 +295,50 @@
         if (b) bases[b] = true;
       }
     }
-    /* Second passage : tout ce qui survole une de ces bases. */
+    /* …et QUI RÉVÈLE UNE BULLE ENFANT au survol de son parent. */
     for (i = 0; i < regles.length; i++) {
-      var s2 = regles[i].selectorText;
-      if (s2.indexOf(":hover") < 0) continue;
-      if (!bases[_base(s2)]) continue;
-      out.push(s2.split(":hover").join("." + OUVERTE) + "{"
-               + regles[i].style.cssText + "}");
+      if (!_allume(regles[i].style) || !_inerte(regles[i].style)) continue;
+      var pr = _parties(regles[i].selectorText);
+      for (j = 0; j < pr.length; j++) {
+        var ab = _enfant(pr[j]);
+        if (!ab || !_flottante(parSelecteur[ab[1]] || [])) continue;
+        bases[ab[0]] = true;
+        if (!vus[ab[0] + " " + ab[1]]) {
+          vus[ab[0] + " " + ab[1]] = true;
+          ENFANTS.push(ab);
+        }
+      }
     }
+    /* Second passage : tout ce qui survole une de ces bases — partie par
+       partie. Chaque règle de survol donne trois jumelles : la CLASSE qui
+       ouvre au doigt, le FOCUS CLAVIER qui ouvre au clavier, et la classe
+       qui FERME à la demande malgré un survol ou un focus collés. */
+    for (i = 0; i < regles.length; i++) {
+      var parties = _parties(regles[i].selectorText);
+      for (j = 0; j < parties.length; j++) {
+        var s2 = parties[j];
+        if (s2.indexOf(":hover") < 0) continue;
+        if (!bases[_base(s2)]) continue;
+        out.ouvertes.push(s2.split(":hover").join("." + OUVERTE) + "{"
+                          + regles[i].style.cssText + "}");
+        out.ouvertes.push(s2.split(":hover").join(":focus-visible") + "{"
+                          + regles[i].style.cssText + "}");
+        var eteint = _eteindre(regles[i].style);
+        if (eteint) out.fermees.push(s2.split(":hover").join("." + FERMEE)
+                                     + "{" + eteint + "}");
+      }
+    }
+    DECLENCHEURS = [SELECTEUR].concat(ENFANTS.map(function (e) { return e[0]; }))
+      .filter(function (s, k, t) { return t.indexOf(s) === k; }).join(",");
     return out;
   }
 
   function publierLaRegle() {
     if (document.getElementById("css-bulle-ouverte")) return;
+    var j = jumelles();
     var s = document.createElement("style");
     s.id = "css-bulle-ouverte";
-    s.textContent = jumelles().join("")
+    s.textContent = j.ouvertes.join("")
       /* LE SOCLE, qui tient même si aucune jumelle n'a pu être lue.
          `!important` n'est pas un confort : cette feuille passe après celle
          de la page, dont certaines rouvrent `[data-tooltip]::after` avec
@@ -160,14 +347,17 @@
       + "." + OUVERTE + "::after{opacity:1 !important;pointer-events:none}"
       + "." + OUVERTE + "::before{opacity:1 !important}"
       /* Ce que le doigt révèle, le clavier doit le révéler aussi. */
-      + SELECTEUR + ":focus-visible::after{opacity:1 !important}"
-      + SELECTEUR + ":focus-visible::before{opacity:1 !important}"
-      + SELECTEUR + ":focus-visible{outline:2px solid currentColor;"
+      + _suffixer(SELECTEUR, ":focus-visible::after") + "{opacity:1 !important}"
+      + _suffixer(SELECTEUR, ":focus-visible::before") + "{opacity:1 !important}"
+      + _suffixer(DECLENCHEURS, ":focus-visible") + "{outline:2px solid currentColor;"
       + "outline-offset:2px}"
       /* La région d'annonce est lue, jamais vue. `clip-path` plutôt que
          `display:none`, qui la retirerait de l'arbre d'accessibilité. */
       + "#" + REGION + "{position:absolute;width:1px;height:1px;overflow:hidden;"
-      + "clip-path:inset(50%);white-space:nowrap}";
+      + "clip-path:inset(50%);white-space:nowrap}"
+      /* LA FERMETURE EN DERNIER : à spécificité égale, la règle écrite
+         après l'emporte — et elle doit l'emporter sur le socle du focus. */
+      + j.fermees.join("");
     (document.head || document.documentElement).appendChild(s);
   }
 
@@ -187,6 +377,20 @@
   /* L'élément dont le PROCHAIN clic doit être retenu. Il est posé à
      l'appui et consommé par le clic qui suit — jamais conservé au-delà. */
   var aRetenir = null;
+  /* L'élément fermé à la demande, que le survol ou le focus rouvriraient. */
+  var ferme = null;
+
+  function lever() {
+    if (!ferme) return;
+    ferme.classList.remove(FERMEE);
+    ferme = null;
+  }
+
+  function replier(el) {
+    lever();
+    el.classList.add(FERMEE);
+    ferme = el;
+  }
 
   function fermer() {
     if (!ouvert) return;
@@ -196,11 +400,28 @@
   }
 
   function ouvrir(el) {
-    if (ouvert === el) return fermer();   /* un second appui referme */
+    /* Un second appui referme — À LA DEMANDE : un survol ou un focus collés
+       à l'élément le garderaient ouvert sans cela. */
+    if (ouvert === el) { fermer(); return replier(el); }
     fermer();
+    lever();
     el.classList.add(OUVERTE);
     ouvert = el;
     try { region().textContent = texte(el); } catch (e) { /* idem */ }
+  }
+
+  /* L'ÉLÉMENT QUE L'ON TIENT QUAND ON APPUIE SUR ÉCHAP : celui que le doigt
+     a ouvert, sinon celui qui a le focus, sinon celui sous la souris. Une
+     bulle ouverte par le focus ou le survol doit pouvoir se fermer sans
+     déplacer ni l'un ni l'autre (WCAG 1.4.13). */
+  function _tenu() {
+    if (ouvert) return ouvert;
+    var a = document.activeElement;
+    var el = a && a.closest ? a.closest(DECLENCHEURS) : null;
+    if (el) return el;
+    var survoles = document.querySelectorAll(":hover");
+    var d = survoles.length ? survoles[survoles.length - 1] : null;
+    return d && d.closest ? d.closest(DECLENCHEURS) : null;
   }
 
   /* CE QUI REND LA CIBLE ATTEIGNABLE AU CLAVIER. Un <div> n'est pas
@@ -215,13 +436,14 @@
   }
 
   function balayer() {
-    var n = document.querySelectorAll(SELECTEUR);
+    var n = document.querySelectorAll(DECLENCHEURS);
     for (var i = 0; i < n.length; i++) preparer(n[i]);
     return n.length;
   }
 
   function demarrer() {
     publierLaRegle();
+    window.infobulles.selecteur = DECLENCHEURS;
     balayer();
 
     /* L'APPUI. `pointerdown` couvre le doigt, le stylet et la souris ; on ne
@@ -230,7 +452,10 @@
        suivre son lien, pas d'ouvrir une bulle. */
     document.addEventListener("pointerdown", function (ev) {
       if (ev.pointerType === "mouse") return;
-      var el = ev.target && ev.target.closest && ev.target.closest(SELECTEUR);
+      var el = ev.target && ev.target.closest && ev.target.closest(DECLENCHEURS);
+      /* Un appui AILLEURS emporte le survol collé : la fermeture demandée
+         n'a plus rien à retenir. */
+      if (ferme && ferme !== el) lever();
       if (!el) return fermer();
       /* UN APPUI SUR UN LIEN OU UN BOUTON DOIT RESTER UN APPUI SUR CE
          LIEN. On ouvre la bulle SANS empêcher l'action : l'infobulle
@@ -247,10 +472,12 @@
     /* LE CLIC EST RETENU ICI, ET NON À L'APPUI. `preventDefault` sur
        `pointerdown` ne supprime pas partout le clic que le navigateur
        synthétise après un appui : on attend donc ce clic-là et on l'arrête
-       au vol, en capture, avant que le gestionnaire du bouton ne le voie. */
+       au vol, en capture, avant que le gestionnaire du bouton ne le voie.
+       `preventDefault` a ici un second office : dans un <label for>, c'est
+       lui qui empêche le libellé de donner le focus à son champ. */
     document.addEventListener("click", function (ev) {
       if (!aRetenir) return;
-      var el = ev.target && ev.target.closest && ev.target.closest(SELECTEUR);
+      var el = ev.target && ev.target.closest && ev.target.closest(DECLENCHEURS);
       if (el !== aRetenir) { aRetenir = null; return; }
       aRetenir = null;
       ev.preventDefault();
@@ -260,11 +487,29 @@
     /* La tabulation ouvre par `:focus-visible` (règle CSS ci-dessus) ; il
        reste à annoncer le texte, ce que le CSS ne sait pas faire. */
     document.addEventListener("focusin", function (ev) {
-      var el = ev.target && ev.target.closest && ev.target.closest(SELECTEUR);
+      var el = ev.target && ev.target.closest && ev.target.closest(DECLENCHEURS);
       if (el) { try { region().textContent = texte(el); } catch (e) {} }
     });
     document.addEventListener("focusout", function (ev) {
+      /* LE FOCUS PART : la fermeture demandée tombe — SAUF si le survol tient
+         encore l'élément. C'est la même règle que pour la souris qui s'en va
+         (plus bas), vue de l'autre côté : lever la fermeture sous un survol
+         collé la rouvrirait sous le doigt. Ce cas précis n'a pas été
+         reproduit dans Chromium — le survol y part avec le défilement ou le
+         focus déplacé par la page — ; le harnais des règles l'exerce. */
+      if (ferme && ev.target === ferme
+          && !(ev.relatedTarget && ferme.contains(ev.relatedTarget))
+          && !ferme.matches(":hover")) lever();
       if (ouvert !== ev.target) { try { region().textContent = ""; } catch (e) {} }
+    });
+    /* LA SOURIS QUI S'EN VA rend la bulle à son survol : Échap l'avait
+       fermée sous le pointeur, le passage suivant doit la rouvrir. */
+    document.addEventListener("pointerout", function (ev) {
+      if (!ferme || ev.pointerType !== "mouse") return;
+      if (!ferme.contains(ev.target)) return;
+      if (ev.relatedTarget && ferme.contains(ev.relatedTarget)) return;
+      if (ferme.contains(document.activeElement)) return;
+      lever();
     });
 
     /* LES SORTIES, parce qu'une bulle ouverte qu'on ne sait pas fermer masque
@@ -288,7 +533,11 @@
        changement de mise en page ramènerait le défaut qu'on vient de
        corriger, par une autre porte. */
     document.addEventListener("keydown", function (ev) {
-      if (ev.key === "Escape" || ev.key === "Esc") fermer();
+      if (ev.key === "Escape" || ev.key === "Esc") {
+        var tenu = _tenu();
+        fermer();
+        if (tenu) replier(tenu);
+      }
     });
     var largeur = window.innerWidth;
     window.addEventListener("resize", function () {
@@ -307,7 +556,8 @@
   }
 
   window.infobulles = { ouvrir: ouvrir, fermer: fermer, balayer: balayer,
-                        selecteur: SELECTEUR, classe: OUVERTE };
+                        selecteur: SELECTEUR, classe: OUVERTE, fermee: FERMEE,
+                        enfants: ENFANTS };
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", demarrer);

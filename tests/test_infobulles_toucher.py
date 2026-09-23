@@ -131,7 +131,7 @@ def test_l_etat_ouvert_est_DERIVE_des_regles_de_survol_de_la_page():
         "le script ne lit plus les règles des feuilles de la page : l'état "
         "ouvert est redéclaré au lieu d'être dérivé, et divergera du survol")
     assert re.search(
-        r'out\.push\(s2\.split\(":hover"\)\.join\("\." \+ OUVERTE\)\s*\+\s*"\{"\s*'
+        r'out\.ouvertes\.push\(s2\.split\(":hover"\)\.join\("\." \+ OUVERTE\)\s*\+\s*"\{"\s*'
         r'\+\s*regles\[i\]\.style\.cssText\s*\+\s*"\}"\);', SCRIPT), (
         "la jumelle n'est plus construite à partir de la règle de survol : "
         "soit `:hover` n'est plus remplacé par la classe, soit les "
@@ -187,7 +187,10 @@ def test_la_bulle_ne_se_referme_PAS_au_defilement():
         "bulle se referme avant d'avoir été lue")
     assert re.search(r'ev\.key === "Escape"', SCRIPT), (
         "la touche d'échappement ne referme plus")
-    assert "if (ouvert === el) return fermer();" in SCRIPT, (
+    # LE SECOND APPUI FERME « À LA DEMANDE » : retirer la classe ne suffit
+    # pas quand un survol ou un focus restent collés à l'élément touché —
+    # mesuré dans Sentinel, voir tests/test_bulles_enfants.py.
+    assert "if (ouvert === el) { fermer(); return replier(el); }" in SCRIPT, (
         "un second appui ne referme plus")
     assert re.search(r'if \(!el\) return fermer\(\);', SCRIPT), (
         "un appui ailleurs ne referme plus")

@@ -8737,9 +8737,15 @@ var TMPL_DATA = [
 ];
 
 function renderCard(d){
+  /* LE BADGE EST POSÉ DANS UNE CARTE CLIQUABLE. Au doigt, l'appui ouvrait la
+     fiche du document par-dessus la page, et l'explication de l'article
+     n'était lisible qu'à la souris — mesuré : bulle jamais ouverte, fiche
+     ouverte au premier appui. Le badge déclare donc « lire d'abord » : le
+     premier appui ouvre sa bulle, le second rend la carte à son action. La
+     souris, qui a déjà lu au survol, ouvre la fiche du premier clic. */
   var artBadges = (d.arts||[]).map(function(a){
     var tip = ART_TIPS[a]||'';
-    return '<span class="tmpl-art-badge" data-art="'+a+'">'
+    return '<span class="tmpl-art-badge" data-art="'+a+'" data-bulle-avant-clic>'
       +a.replace('art','Art.\u00a0')
       +'<span class="tmpl-tip">'+tip+'</span>'
       +'</span>';
@@ -11905,7 +11911,10 @@ var _SP=[
    cta:{lbl:'Demander un devis Entreprise',act:'pricingRequestAccess(\'entreprise\')',sty:'btn-primary'},ctaSub:'Engagement recommandé : 12 mois'}
 ];
 function _e(n){return n.toLocaleString('fr-FR')+' €';}
-function _t(h){return '<span class="prx-tip-icon" tabindex="0" style="margin-left:4px;vertical-align:middle">?<span class="prx-tip-bubble" style="width:220px">'+h+'</span></span>';}
+/* Le « ? » d'un prix est posé DANS la carte de sa formule, qui se choisit au
+   clic : au doigt, l'appui choisissait la formule au lieu d'expliquer le prix.
+   « Lire d'abord », comme les badges d'article. */
+function _t(h){return '<span class="prx-tip-icon" tabindex="0" data-bulle-avant-clic style="margin-left:4px;vertical-align:middle">?<span class="prx-tip-bubble" style="width:220px">'+h+'</span></span>';}
 window.plansRender=function(){
   var el=document.getElementById('plans-grid-container');
   if(!el) return;

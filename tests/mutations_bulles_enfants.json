@@ -1,0 +1,227 @@
+{
+ "_pourquoi": "Chaque mutation FABRIQUE un défaut réel et doit faire TOMBER la règle nommée. Une mutation qui survit dit que la règle ne mesure pas ce qu'elle prétend ; une mutation qui fait tomber une AUTRE règle dit que la règle nommée vise à côté.",
+ "cibles": [
+  "tests/test_bulles_enfants.py",
+  "tests/test_infobulles_toucher.py",
+  "tests/test_infobulles_distinction.py"
+ ],
+ "mutations": [
+  {
+   "nom": "le script ne reconnaît plus aucune bulle enfant",
+   "fichier": "infobulles.js",
+   "avant": "if (!ab || !_flottante(parSelecteur[ab[1]] || [])) continue;",
+   "apres": "if (true) continue;",
+   "regle": "test_les_QUATRE_familles_de_Sentinel_sont_reconnues"
+  },
+  {
+   "nom": "les déclencheurs des bulles enfants sortent du sélecteur de l'appui",
+   "fichier": "infobulles.js",
+   "avant": "DECLENCHEURS = [SELECTEUR].concat(ENFANTS.map(function (e) { return e[0]; }))",
+   "apres": "DECLENCHEURS = [SELECTEUR].concat([])",
+   "regle": "test_les_QUATRE_familles_de_Sentinel_sont_reconnues"
+  },
+  {
+   "nom": "un menu qui redevient cliquable est pris pour une bulle",
+   "fichier": "infobulles.js",
+   "avant": "if (!_allume(regles[i].style) || !_inerte(regles[i].style)) continue;",
+   "apres": "if (!_allume(regles[i].style)) continue;",
+   "regle": "test_un_MENU_deroulant_n_est_PAS_une_bulle"
+  },
+  {
+   "nom": "un survol qui ne révèle rien suffit à faire une bulle",
+   "fichier": "infobulles.js",
+   "avant": "if (!_allume(regles[i].style) || !_inerte(regles[i].style)) continue;",
+   "apres": "if (!_inerte(regles[i].style)) continue;",
+   "regle": "test_ce_qui_N_EST_PAS_une_bulle_n_est_pas_pris"
+  },
+  {
+   "nom": "une bulle n'a plus besoin de flotter hors du flux",
+   "fichier": "infobulles.js",
+   "avant": "return hors && traversee;",
+   "apres": "return traversee;",
+   "regle": "test_ce_qui_N_EST_PAS_une_bulle_n_est_pas_pris"
+  },
+  {
+   "nom": "une bulle n'a plus besoin de se laisser traverser",
+   "fichier": "infobulles.js",
+   "avant": "return hors && traversee;",
+   "apres": "return hors;",
+   "regle": "test_ce_qui_N_EST_PAS_une_bulle_n_est_pas_pris"
+  },
+  {
+   "nom": "un pseudo-élément est pris pour une bulle enfant",
+   "fichier": "infobulles.js",
+   "avant": "if (!b || /[\\s>+~:]/.test(b)) return null;",
+   "apres": "if (!b || /[\\s>+~]/.test(b)) return null;",
+   "regle": "test_ce_qui_N_EST_PAS_une_bulle_n_est_pas_pris"
+  },
+  {
+   "nom": "le script nomme les familles en dur",
+   "fichier": "infobulles.js",
+   "avant": "var DECLENCHEURS = SELECTEUR;",
+   "apres": "var DECLENCHEURS = SELECTEUR + \",.mat-tooltip-wrap,.tmpl-art-badge\";",
+   "regle": "test_le_script_ne_NOMME_aucune_famille"
+  },
+  {
+   "nom": "la jumelle du clavier n'est plus publiée",
+   "fichier": "infobulles.js",
+   "avant": "out.ouvertes.push(s2.split(\":hover\").join(\":focus-visible\") + \"{\"",
+   "apres": "out.ouvertes.push(s2.split(\":hover\").join(\":hover\") + \"{\"",
+   "regle": "test_chaque_bulle_enfant_a_ses_TROIS_jumelles[mat-tooltip-wrap-mat-tooltip]"
+  },
+  {
+   "nom": "la fermeture à la demande n'est plus publiée",
+   "fichier": "infobulles.js",
+   "avant": "if (eteint) out.fermees.push(",
+   "apres": "if (false) out.fermees.push(",
+   "regle": "test_chaque_bulle_enfant_a_ses_TROIS_jumelles[mat-tooltip-wrap-mat-tooltip]"
+  },
+  {
+   "nom": "la liste de sélecteurs n'est plus coupée partie par partie",
+   "fichier": "infobulles.js",
+   "avant": "function _parties(sel) {",
+   "apres": "function _parties(sel) { return [sel];",
+   "regle": "test_le_script_ne_touche_JAMAIS_un_element_au_repos[sentinel.html]"
+  },
+  {
+   "nom": "le contour du focus revient sur chaque infobulle au repos",
+   "fichier": "infobulles.js",
+   "avant": "+ _suffixer(DECLENCHEURS, \":focus-visible\") + \"{outline:2px solid currentColor;\"",
+   "apres": "+ DECLENCHEURS + \":focus-visible\" + \"{outline:2px solid currentColor;\"",
+   "regle": "test_le_script_ne_touche_JAMAIS_un_element_au_repos[sentinel.html]"
+  },
+  {
+   "nom": "la fermeture est publiée avant le socle du focus",
+   "fichier": "infobulles.js",
+   "avant": "s.textContent = j.ouvertes.join(\"\")",
+   "apres": "s.textContent = j.fermees.join(\"\") + j.ouvertes.join(\"\")",
+   "regle": "test_la_fermeture_est_publiee_EN_DERNIER"
+  },
+  {
+   "nom": "fermer touche aussi le déplacement de la bulle",
+   "fichier": "infobulles.js",
+   "avant": "var ETEINT = { display: \"none\", visibility: \"hidden\", opacity: \"0\", content: \"none\" };",
+   "apres": "var ETEINT = { display: \"none\", visibility: \"hidden\", opacity: \"0\", content: \"none\", transform: \"none\" };",
+   "regle": "test_fermer_n_eteint_QUE_la_visibilite"
+  },
+  {
+   "nom": "fermer perd son !important et cède au survol collé",
+   "fichier": "infobulles.js",
+   "avant": "out += p + \":\" + ETEINT[p] + \" !important;\";",
+   "apres": "out += p + \":\" + ETEINT[p] + \";\";",
+   "regle": "test_fermer_n_eteint_QUE_la_visibilite"
+  },
+  {
+   "nom": "la bulle enfant n'est plus annoncée",
+   "fichier": "infobulles.js",
+   "avant": "if (b) return _norme(b.textContent);",
+   "apres": "if (b) return \"\";",
+   "regle": "test_la_bulle_enfant_est_ANNONCEE[mat-tooltip-wrap-mat-tooltip]"
+  },
+  {
+   "nom": "le second appui retire la classe sans fermer à la demande",
+   "fichier": "infobulles.js",
+   "avant": "if (ouvert === el) { fermer(); return replier(el); }",
+   "apres": "if (ouvert === el) { return fermer(); }",
+   "regle": "test_le_second_appui_ferme_A_LA_DEMANDE[mat-tooltip-wrap-mat-tooltip]"
+  },
+  {
+   "nom": "la réouverture ne lève plus la fermeture demandée",
+   "fichier": "infobulles.js",
+   "avant": "    fermer();\n    lever();\n    el.classList.add(OUVERTE);",
+   "apres": "    fermer();\n    el.classList.add(OUVERTE);",
+   "regle": "test_le_second_appui_ferme_A_LA_DEMANDE[mat-tooltip-wrap-mat-tooltip]"
+  },
+  {
+   "nom": "Échap ne ferme plus que la bulle ouverte au doigt",
+   "fichier": "infobulles.js",
+   "avant": "        if (tenu) replier(tenu);\n",
+   "apres": "",
+   "regle": "test_Echap_ferme_sans_DEPLACER_ni_le_focus_ni_la_souris[mat-tooltip-wrap-mat-tooltip]"
+  },
+  {
+   "nom": "Échap ignore la bulle qui a le focus",
+   "fichier": "infobulles.js",
+   "avant": "var el = a && a.closest ? a.closest(DECLENCHEURS) : null;",
+   "apres": "var el = null;",
+   "regle": "test_Echap_ferme_sans_DEPLACER_ni_le_focus_ni_la_souris[mat-tooltip-wrap-mat-tooltip]"
+  },
+  {
+   "nom": "Échap ignore la bulle sous la souris",
+   "fichier": "infobulles.js",
+   "avant": "return d && d.closest ? d.closest(DECLENCHEURS) : null;",
+   "apres": "return null;",
+   "regle": "test_Echap_ferme_sans_DEPLACER_ni_le_focus_ni_la_souris[mat-tooltip-wrap-mat-tooltip]"
+  },
+  {
+   "nom": "le focus parti lève la fermeture même sous un survol collé",
+   "fichier": "infobulles.js",
+   "avant": "          && !ferme.matches(\":hover\")) lever();",
+   "apres": "          ) lever();",
+   "regle": "test_la_fermeture_TOMBE_quand_l_element_n_est_plus_tenu[mat-tooltip-wrap-mat-tooltip]"
+  },
+  {
+   "nom": "le focus parti ne lève plus jamais la fermeture",
+   "fichier": "infobulles.js",
+   "avant": "          && !ferme.matches(\":hover\")) lever();",
+   "apres": "          && !ferme.matches(\":hover\") && false) lever();",
+   "regle": "test_la_fermeture_TOMBE_quand_l_element_n_est_plus_tenu[mat-tooltip-wrap-mat-tooltip]"
+  },
+  {
+   "nom": "un appui ailleurs ne lève plus la fermeture",
+   "fichier": "infobulles.js",
+   "avant": "      if (ferme && ferme !== el) lever();\n",
+   "apres": "",
+   "regle": "test_la_fermeture_TOMBE_quand_l_element_n_est_plus_tenu[mat-tooltip-wrap-mat-tooltip]"
+  },
+  {
+   "nom": "la souris partie ne lève plus la fermeture",
+   "fichier": "infobulles.js",
+   "avant": "      if (ferme.contains(document.activeElement)) return;\n      lever();",
+   "apres": "      return;",
+   "regle": "test_la_fermeture_TOMBE_quand_l_element_n_est_plus_tenu[mat-tooltip-wrap-mat-tooltip]"
+  },
+  {
+   "nom": "le premier clic retenu n'empêche plus l'action par défaut",
+   "fichier": "infobulles.js",
+   "avant": "      aRetenir = null;\n      ev.preventDefault();",
+   "apres": "      aRetenir = null;",
+   "regle": "test_dans_une_carte_cliquable_le_premier_appui_LIT_et_le_second_AGIT[mat-tooltip-wrap-mat-tooltip]"
+  },
+  {
+   "nom": "le badge d'article ne déclare plus « lire d'abord »",
+   "fichier": "sentinel.page.js",
+   "avant": "data-art=\"'+a+'\" data-bulle-avant-clic>'",
+   "apres": "data-art=\"'+a+'\">'",
+   "regle": "test_les_badges_d_article_declarent_LIRE_D_ABORD"
+  },
+  {
+   "nom": "le « ? » d'un prix ne déclare plus « lire d'abord »",
+   "fichier": "sentinel.page.js",
+   "avant": "<span class=\"prx-tip-icon\" tabindex=\"0\" data-bulle-avant-clic style=\"margin-left:4px;vertical-align:middle\">?",
+   "apres": "<span class=\"prx-tip-icon\" tabindex=\"0\" style=\"margin-left:4px;vertical-align:middle\">?",
+   "regle": "test_le_point_d_interrogation_d_une_FORMULE_declare_LIRE_D_ABORD"
+  },
+  {
+   "nom": "le « ? » de la formule Entreprise redevient nu",
+   "fichier": "sentinel.html",
+   "avant": "Sentinel Entreprise <span class=\"prx-tip-icon\" tabindex=\"0\" data-bulle-avant-clic>",
+   "apres": "Sentinel Entreprise <span class=\"prx-tip-icon\" tabindex=\"0\">",
+   "regle": "test_AUCUN_declencheur_ecrit_dans_un_element_cliquable_n_est_laisse_nu"
+  },
+  {
+   "nom": "le « ? » d'un libellé de champ redevient nu",
+   "fichier": "sentinel.html",
+   "avant": "for=\"pricing-req-systemes\">Nombre de systèmes IA estimé <span class=\"prx-tip-icon\" tabindex=\"0\" data-bulle-avant-clic>",
+   "apres": "for=\"pricing-req-systemes\">Nombre de systèmes IA estimé <span class=\"prx-tip-icon\" tabindex=\"0\">",
+   "regle": "test_AUCUN_declencheur_ecrit_dans_un_element_cliquable_n_est_laisse_nu"
+  },
+  {
+   "nom": "la bulle de maturité cesse d'arrêter son clic",
+   "fichier": "sentinel.page.js",
+   "avant": "return ' <span class=\"mat-tooltip-wrap\" onclick=\"event.stopPropagation()\">",
+   "apres": "return ' <span class=\"mat-tooltip-wrap\">",
+   "regle": "test_la_maturite_ARRETE_toujours_son_clic"
+  }
+ ]
+}

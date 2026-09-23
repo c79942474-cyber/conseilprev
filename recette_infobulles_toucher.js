@@ -113,6 +113,23 @@ const FURTIF = (ctx) => ctx.addInitScript(() => {
   await p.waitForSelector(SEL);
   await p.locator(SEL).first().scrollIntoViewIfNeeded();
   await p.waitForTimeout(600);
+  await p.waitForFunction(() => !!document.getElementById('css-bulle-ouverte'),
+                          null, { timeout: 8000 });
+  /* LE CONTOUR AU REPOS — UN DÉFAUT TROUVÉ APRÈS COUP, EN RELISANT LE SOCLE.
+     Collée derrière « [data-tooltip],[data-tip] », la pseudo-classe
+     `:focus-visible` ne visait que la dernière partie de la liste : la
+     première restait `[data-tooltip]` tout court, et CHAQUE infobulle
+     portait un contour de 2 px sans avoir le focus. Mesuré : 32 sur 32. */
+  const contours = await p.evaluate(() => {
+    const t = [...document.querySelectorAll('[data-tooltip],[data-tip]')];
+    const avec = t.filter(e => { const cs = getComputedStyle(e);
+      return cs.outlineStyle !== 'none' && parseFloat(cs.outlineWidth) > 0; });
+    return { total: t.length, avec: avec.length,
+             focus: document.activeElement === document.body };
+  });
+  ok('au repos, AUCUNE infobulle ne porte de contour',
+     contours.focus && contours.total > 0 && contours.avec === 0,
+     contours.avec + ' sur ' + contours.total + (contours.focus ? '' : ' (le focus n’est pas au repos)'));
   const b = await p.locator(SEL).first().boundingBox();
   await p.mouse.move(b.x + b.width / 2, b.y + b.height / 2);
   await p.waitForTimeout(700);
