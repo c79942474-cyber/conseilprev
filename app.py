@@ -14135,6 +14135,37 @@ def _fils_du_processus():
 # A valider en mode TEST Stripe avant production. CONSEILPREV/Sentinel.
 # ══════════════════════════════════════════════════════════
 
+def _stripe_pret(secret):
+    """La bibliotheque `stripe`, prete a appeler — le SEUL endroit qui regle
+    son transport.
+
+    CE QUI ETAIT FAIT AVANT, CINQ FOIS, ET POURQUOI C'ETAIT FAUX. Chaque route
+    posait `stripe.max_network_retries = 0` : un reglage de MODULE, donc de
+    tout le processus. Une seule reservation de formation coupait ainsi les
+    reessais de toutes les requetes Stripe qui suivaient, y compris la caisse
+    d'abonnement : une erreur 500 passagere, absorbee avant, devenait un 502
+    (mesure). Et `stripe.http_client.RequestsClient(timeout=8)` n'existe plus
+    en 15.x : l'AttributeError etait avalee, le delai restait a 80 s.
+
+    CE QUI EST FAIT. Deux reessais : la bibliotheque pose une cle
+    d'idempotence sur CHAQUE POST, un reessai ne cree donc jamais un second
+    objet. Quinze secondes de delai : une requete de navigateur ne reste pas
+    suspendue 80 s. Le client HTTP n'est remplace que s'il n'est pas deja le
+    notre — on garde ses connexions ouvertes d'un appel a l'autre.
+    """
+    import stripe
+    stripe.api_key = secret
+    stripe.max_network_retries = 2
+    try:
+        if not getattr(stripe.default_http_client, '_conseilprev', False):
+            client = stripe.RequestsClient(timeout=15)
+            client._conseilprev = True
+            stripe.default_http_client = client
+    except Exception:
+        pass            # doublure d'essai sans client HTTP : rien a regler
+    return stripe
+
+
 def _stripe_event_seen(event_id):
     """Verifie seulement si un evenement Stripe a deja ete traite.
     L'enregistrement n'a lieu qu'apres traitement reussi (_stripe_event_mark),
@@ -14478,13 +14509,7 @@ def clients_subscription():
                 return None
 
     try:
-        import stripe
-        stripe.api_key = secret
-        stripe.max_network_retries = 0
-        try:
-            stripe.default_http_client = stripe.http_client.RequestsClient(timeout=8)
-        except Exception:
-            pass
+        stripe = _stripe_pret(secret)
         sub = None
         if sub_id:
             sub = stripe.Subscription.retrieve(sub_id)
@@ -14558,11 +14583,7 @@ def clients_set_plan():
     sub_id = (dict(_r2).get('stripe_subscription_id') if _r2 else None)
     if secret and sub_id:
         try:
-            import stripe
-            stripe.api_key = secret
-            stripe.max_network_retries = 0
-            try: stripe.default_http_client = stripe.http_client.RequestsClient(timeout=8)
-            except Exception: pass
+            stripe = _stripe_pret(secret)
             if plan == 'gratuit':
                 try:
                     stripe.Subscription.delete(sub_id)
@@ -17438,9 +17459,7 @@ def formations_inscription():
                         'message': 'Demande enregistree. Le paiement en ligne n est pas encore configure : '
                                    'CONSEILPREV vous contactera pour finaliser la reservation.'})
     try:
-        import stripe
-        stripe.api_key = secret
-        stripe.max_network_retries = 0
+        stripe = _stripe_pret(secret)
         base = request.url_root.rstrip('/')
         taux = _form_tax_rate(stripe)
         ligne = {'price_data': {'currency': 'eur',
@@ -18311,9 +18330,7 @@ def formation_ia_inscription():
     # redirections successives feraient abandonner au deuxieme paiement.
     if veut_stripe:
         try:
-            import stripe
-            stripe.api_key = secret
-            stripe.max_network_retries = 0
+            stripe = _stripe_pret(secret)
             taux = _form_tax_rate(stripe)
             items = []
             for x in recap:
@@ -18414,9 +18431,7 @@ def _formation_ia_rembourser(r, cents, jeton):
     rembourse, refund_id, du = 0, None, int(cents)
     if secret and sid:
         try:
-            import stripe
-            stripe.api_key = secret
-            stripe.max_network_retries = 0
+            stripe = _stripe_pret(secret)
             sess = stripe.checkout.Session.retrieve(sid)
             pi = (sess.get('payment_intent') if isinstance(sess, dict)
                   else getattr(sess, 'payment_intent', None))
