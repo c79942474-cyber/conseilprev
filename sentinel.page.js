@@ -1715,14 +1715,463 @@ function jRow(j){ var id=j.c.toLowerCase(); return '<div class="jrow" onclick="g
 
 /* Tableau comparatif statique (EU/US/UK/CN figes) supprime - redondant avec le Comparateur dynamique 46 juridictions */
 
+/* ══ LES BULLES DES GRAPHIQUES SE LISENT AU DOIGT, AU CLAVIER, ET SE FERMENT À ÉCHAP ══
+   (pilote délégué `grapheBulle` — cinq graphiques : barres géopolitiques,
+   radar de maturité, radar de risque, courbe de tarification, schéma de
+   l'écosystème)
+
+   LE DÉFAUT MESURÉ (recette_graphes_bulles.js sur be93b64, serveur neuf ;
+   Pixel 7, et poste 1280 × 900) :
+     · au doigt, la bulle d'un point du radar de maturité s'ouvrait et se
+       refermait en 13 à 16 ms (trois passes) : 0 point sur 8 lisible, et
+       la page défilait jusqu'à 516 px ; même chose pour le radar de
+       risque, la courbe de tarification (24 cercles de 8,8 px, jusqu'à
+       0 px entre deux centres), le schéma de l'écosystème ;
+     · au clavier, aucune cible sur quatre graphiques, et onze arrêts muets
+       dans le schéma (que /infobulles.js ramassait pour leur `data-tip`) ;
+     · Échap ne fermait aucune bulle de graphique ; la bulle du radar
+       restait `display:block` à opacité 0, lue par l'arbre d'accessibilité ;
+     · un clic sur une barre géopolitique la détruisait (11 mutations du
+       graphique, focus sur <body>) ;
+     · au poste, 4 bulles sur 5 recouvraient leur propre cible : deux
+       suivaient le curseur à 14 px (barres, schéma), deux se posaient sur
+       le point (radar de risque, courbe).
+
+   POURQUOI. Chaque graphique écoutait la SOURIS : `mouseenter`,
+   `mousemove`, `mouseleave`, posés un par un sur chaque point, chaque barre,
+   chaque nœud. Au doigt, le navigateur émet ces événements PAR
+   COMPATIBILITÉ, dans la foulée de l'appui — l'entrée ouvre, la sortie
+   referme treize à seize millisecondes plus tard. Au clavier, rien : aucune
+   cible ne prend le focus, ou alors onze à la file sans rien montrer. Et la
+   bulle suivait le curseur : un pointeur qui ne bouge pas n'a pas de
+   curseur à suivre.
+
+   CE QUI CHANGE. Un seul pilote, délégué sur `document`, pour les cinq :
+     · chaque cible se DÉCLARE (`data-graphe="<famille>"`) ; chaque famille
+       s'enregistre ici avec `montrer(el, source)`, `cacher(el)` et sa bulle ;
+       `source` vaut 'souris', 'toucher' ou 'clavier' ;
+     · LA SOURIS ET LE STYLET gardent le survol (`pointerover`/`pointerout`,
+       filtrés sur `pointerType !== 'touch'`) ; la bulle se laisse SURVOLER
+       (WCAG 1.4.13) : on a trois cents millisecondes pour aller de la cible
+       à sa bulle, et elle reste tant que le pointeur est sur l'une ou
+       l'autre ;
+     · LE DOIGT : un appui ouvre, un second ferme, un appui ailleurs ferme —
+       décidé au RELÂCHER, comme /infobulles.js et /bulle-titre.js : un
+       balayage n'ouvre rien ;
+     · LE CLAVIER : un arrêt de tabulation par graphique (tabindex
+       itinérant), les flèches passent d'une barre, d'un mois, d'un nœud à
+       l'autre, Début et Fin vont aux extrémités ;
+     · ÉCHAP ferme la bulle, et elle seule ;
+     · la bulle est ANCRÉE à sa cible — au-dessus, dessous si la place
+       manque —, bornée à la fenêtre VISUELLE et sous la barre du haut ; elle
+       suit sa cible au défilement.
+   Les radars ne prennent pas le focus : leurs listes disent déjà tout, et
+   leurs lignes allument le point du radar. */
+window.grapheBulle = (function(){
+  'use strict';
+
+  var GRAPHES = {};
+  /* Une cible porte sa bulle ; une LIGNE (la liste qui double un radar)
+     allume son point, sans bulle — elle dit déjà ce que la bulle dirait. */
+  var CIBLE = '[data-graphe],[data-graphe-ligne]';
+  /* Un doigt réel bouge toujours un peu ; au-delà, il glisse (le même seuil
+     qu'/infobulles.js et /bulle-titre.js). */
+  var SEUIL = 10;
+  /* Le temps d'aller de la cible à sa bulle, ou d'y revenir. */
+  var GRACE = 300;
+  /* Entre la cible et sa bulle, et entre la bulle et les bords. */
+  var ECART = 8;
+  /* Un focus ne vient du clavier que s'il suit, de moins d'une seconde, une
+     touche qui DÉPLACE le focus (même règle que /bulle-titre.js). */
+  var FENETRE_CLAVIER = 1000;
+  var NAVIGATION = { Tab: 1, ArrowUp: 1, ArrowDown: 1, ArrowLeft: 1, ArrowRight: 1, Home: 1, End: 1 };
+  var PAS = { ArrowLeft: -1, ArrowUp: -1, ArrowRight: 1, ArrowDown: 1 };
+
+  /* CE QUI EST MONTRÉ : une cible à la fois — { el, famille, source, pointeur }. */
+  var courant = null;
+  /* LA CIBLE FERMÉE PAR ÉCHAP : ni le survol ni le focus ne la rouvrent tant
+     que le pointeur ou le focus y restent. */
+  var repliee = null;
+  var grace = null, intervalle = null, rafEnCours = false;
+  var geste = null, modalite = null, derniereTouche = 0;
+
+  function maintenant(){ return Date.now(); }
+  function familleDe(el){
+    return el ? (el.getAttribute('data-graphe') || el.getAttribute('data-graphe-ligne')) : null;
+  }
+  function cibleDe(n){
+    if(n && n.nodeType === 3) n = n.parentNode;
+    if(!n || !n.closest) return null;
+    var c = n.closest(CIBLE);
+    return (c && GRAPHES[familleDe(c)]) ? c : null;
+  }
+  /* LA PRÉSÉANCE. Un déclencheur d'/infobulles.js posé DANS la cible — le
+     « i » d'une ligne du radar de maturité — garde sa bulle : le pilote
+     s'efface. Lu à l'usage : /infobulles.js démarre après ce fichier. */
+  function cede(n, c){
+    var sel = window.infobulles && window.infobulles.selecteur;
+    if(!sel || !c || !n || !n.closest) return false;
+    var d = null;
+    try { d = n.closest(sel); } catch(e){ return false; }
+    return !!d && d !== c && c.contains(d);
+  }
+  function bulleDe(f){
+    var g = GRAPHES[f];
+    if(!g) return null;
+    return typeof g.bulle === 'function' ? g.bulle() : (g.bulle || null);
+  }
+  /* VISIBLE : un rectangle au moins. Un écran masqué par `go()` masque sa
+     bulle avec lui — elle ne doit plus retenir Échap. */
+  function visible(b){ return !!b && b.isConnected !== false && b.getClientRects().length > 0; }
+  function bulleVisible(){ return !!courant && visible(bulleDe(courant.famille)); }
+  function dansBulle(n){
+    if(!courant || !n) return false;
+    var b = bulleDe(courant.famille);
+    return !!b && b.contains(n);
+  }
+  function survolee(el){ try { return !!el && el.matches(':hover'); } catch(e){ return false; } }
+
+  function annulerGrace(){ if(grace){ clearTimeout(grace); grace = null; } }
+
+  function fermer(){
+    annulerGrace();
+    if(intervalle){ clearInterval(intervalle); intervalle = null; }
+    var c = courant;
+    courant = null;
+    var g = c && GRAPHES[c.famille];
+    if(g) g.cacher(c.el);
+  }
+
+  function montrer(el, source, pointeur){
+    var f = familleDe(el), g = GRAPHES[f];
+    if(!g) return;
+    annulerGrace();
+    if(courant && courant.el !== el) fermer();
+    var nouveau = !courant;
+    courant = { el: el, famille: f, source: source, pointeur: pointeur || null };
+    if(nouveau && el.hasAttribute('data-graphe')){
+      /* UNE BULLE À LA FOIS, D'UN SYSTÈME À L'AUTRE. Ouvrir ici ferme celle
+         d'/infobulles.js et celle de /bulle-titre.js — au survol comme au
+         clavier ; au doigt, l'appui sur une cible de graphique est déjà un
+         « appui ailleurs » pour eux. Lus à l'usage. PAS POUR UNE LIGNE : elle
+         n'ouvre aucune bulle, et c'est le focus de son « i » — dont la bulle
+         vient de s'ouvrir — qui l'allume. */
+      var ib = window.infobulles, bt = window.bulleTitre;
+      if(ib && typeof ib.fermer === 'function') ib.fermer();
+      if(bt && typeof bt.fermer === 'function') bt.fermer();
+    }
+    g.montrer(el, source);
+    /* MUETTE, TOUJOURS : ce qu'elle montre est déjà le nom de la cible, ou
+       la ligne de la liste. */
+    var b = bulleDe(f);
+    if(b) b.setAttribute('aria-hidden', 'true');
+    /* L'INTERVALLE couvre ce qu'aucun événement ne signale : un écran masqué
+       par `go()`, un graphique redessiné sous la bulle. */
+    if(!intervalle) intervalle = setInterval(verifier, 250);
+  }
+
+  /* LA CIBLE A-T-ELLE ENCORE LIEU D'ÊTRE : démontée, masquée, ou sortie de
+     la fenêtre visuelle, sa bulle se ferme. */
+  function verifier(){
+    if(!courant) return;
+    var el = courant.el;
+    if(!el.isConnected || !el.getClientRects().length) return fermer();
+    var r = el.getBoundingClientRect(), vv = fenetre();
+    if(r.bottom < vv.offsetTop || r.top > vv.offsetTop + vv.height
+       || r.right < vv.offsetLeft || r.left > vv.offsetLeft + vv.width) fermer();
+  }
+
+  function replacer(){
+    rafEnCours = false;
+    verifier();
+    if(!courant) return;
+    GRAPHES[courant.famille].montrer(courant.el, courant.source, { replacer: true });
+  }
+  function planifier(){
+    if(!courant || rafEnCours) return;
+    rafEnCours = true;
+    if(window.requestAnimationFrame) window.requestAnimationFrame(replacer); else setTimeout(replacer, 16);
+  }
+
+  /* ── LE PLACEMENT ────────────────────────────────────────────────────
+     LA FENÊTRE VISUELLE, et non `innerWidth` : mesuré au Pixel 7, la mise
+     en page de l'écran géopolitique fait 649 px de large pour 412 visibles ;
+     celle de la maturité 491. */
+  function fenetre(){
+    var vv = window.visualViewport;
+    if(vv && vv.width) return vv;
+    return { offsetLeft: 0, offsetTop: 0, width: window.innerWidth, height: window.innerHeight };
+  }
+  /* LA ZONE OÙ UNE BULLE SE LIT : la fenêtre visuelle, moins la barre du
+     haut — fixe, 52 px, mesurée au Pixel 7 comme au poste. Une bulle
+     « au-dessus » d'une cible proche du haut passait dessous. */
+  function zone(){
+    var vv = fenetre();
+    var z = { g: vv.offsetLeft + ECART, d: vv.offsetLeft + vv.width - ECART,
+              h: vv.offsetTop + ECART, b: vv.offsetTop + vv.height - ECART };
+    var barre = document.querySelector('header.topbar');
+    if(barre){
+      var rb = barre.getBoundingClientRect();
+      if(rb.height > 0 && window.getComputedStyle(barre).position === 'fixed') z.h = Math.max(z.h, rb.bottom + ECART);
+    }
+    return z;
+  }
+  /* AU-DESSUS DE LA CIBLE, DESSOUS SI LA PLACE MANQUE — jamais sur elle, et
+     le moins possible sur ses VOISINES (`opts.cible` : les cibles de la même
+     famille, dans le même graphique) : la bulle se survole, elle volerait
+     leur survol. Dessus de préférence ; dessous quand dessus recouvrirait
+     une voisine que dessous épargne — le schéma de l'écosystème a des nœuds
+     sous d'autres nœuds. Centrée sur `x` (le centre de la cible par défaut),
+     bornée dans la zone. Le point d'origine du bloc conteneur est MESURÉ, pas
+     supposé : la même fonction place une bulle fixe ou absolue. Rend ce
+     qu'elle a fait. */
+  function placer(b, r, opts){
+    opts = opts || {};
+    var z = zone();
+    b.style.transform = 'none';
+    b.style.maxWidth = '';
+    var mw = parseFloat(window.getComputedStyle(b).maxWidth);
+    var large = z.d - z.g;
+    b.style.maxWidth = Math.max(0, Math.min(isNaN(mw) ? large : mw, large)) + 'px';
+    b.style.left = '0px';
+    b.style.top = '0px';
+    var o = b.getBoundingClientRect(), w = o.width, h = o.height;
+    var x = (opts.x !== undefined && opts.x !== null) ? opts.x : (r.left + r.right) / 2;
+    var gauche = Math.max(z.g, Math.min(x - w / 2, z.d - w));
+    var dessus = r.top - ECART - h, dessous = r.bottom + ECART, haut, sous;
+    var voisines = [], c = opts.cible, f = c && c.getAttribute && c.getAttribute('data-graphe');
+    if(f && c.parentNode){
+      for(var i = 0; i < c.parentNode.children.length; i++){
+        var e = c.parentNode.children[i];
+        if(e === c || e.getAttribute('data-graphe') !== f) continue;
+        var q = e.getBoundingClientRect();
+        if(q.width > 0 && q.height > 0) voisines.push(q);
+      }
+    }
+    function recouvre(y){
+      var s = 0;
+      voisines.forEach(function(q){
+        var dx = Math.min(gauche + w, q.right) - Math.max(gauche, q.left);
+        var dy = Math.min(y + h, q.bottom) - Math.max(y, q.top);
+        if(dx > 0 && dy > 0) s += dx * dy;
+      });
+      return s;
+    }
+    var tient = [];
+    if(dessus >= z.h) tient.push({ haut: dessus, sous: false, r: recouvre(dessus) });
+    if(dessous + h <= z.b) tient.push({ haut: dessous, sous: true, r: recouvre(dessous) });
+    if(tient.length){
+      /* À égalité — rien de recouvert des deux côtés —, dessus. */
+      var choix = (tient.length === 2 && tient[1].r < tient[0].r) ? tient[1] : tient[0];
+      haut = choix.haut; sous = choix.sous;
+    }
+    else {
+      /* Aucun côté ne tient : le plus grand, borné. */
+      sous = (z.b - r.bottom) > (r.top - z.h);
+      haut = Math.max(z.h, Math.min(sous ? dessous : dessus, z.b - h));
+    }
+    b.style.left = Math.round(gauche - o.left) + 'px';
+    b.style.top = Math.round(haut - o.top) + 'px';
+    if(b.classList) b.classList.toggle('dessous', sous);
+    /* La flèche de la bulle vise la cible, même quand la bulle est bornée. */
+    b.style.setProperty('--fleche', Math.round(Math.max(12, Math.min(w - 12, x - gauche))) + 'px');
+    return { gauche: gauche, haut: haut, largeur: w, hauteur: h, dessous: sous };
+  }
+
+  /* ── LE TABINDEX ITINÉRANT : un arrêt par graphique ─────────────────── */
+  function groupe(el){
+    var f = el.getAttribute('data-graphe'), p = el.parentNode, out = [];
+    if(!f || !p) return out;
+    for(var i = 0; i < p.children.length; i++){
+      var e = p.children[i];
+      if(e.getAttribute('data-graphe') === f && e.hasAttribute('tabindex')) out.push(e);
+    }
+    return out;
+  }
+  function arret(el){
+    if(!el.hasAttribute('tabindex')) return;
+    groupe(el).forEach(function(e){ e.setAttribute('tabindex', e === el ? '0' : '-1'); });
+  }
+
+  /* ── LE SURVOL : la souris, et le stylet qui plane ───────────────────── */
+  document.addEventListener('pointerover', function(ev){
+    if(ev.pointerType === 'touch') return;
+    var n = ev.target;
+    if(dansBulle(n)){ annulerGrace(); return; }
+    var c = cibleDe(n);
+    if(!c || cede(n, c) || c === repliee) return;
+    annulerGrace();
+    if(courant && courant.el === c) return;
+    montrer(c, 'souris', ev.pointerType);
+  }, true);
+
+  document.addEventListener('pointerout', function(ev){
+    if(ev.pointerType === 'touch') return;
+    var vers = ev.relatedTarget;
+    if(repliee && repliee.contains(ev.target) && !(vers && repliee.contains(vers))
+       && !repliee.contains(document.activeElement)) repliee = null;
+    if(!courant || courant.source !== 'souris') return;
+    /* SEULE LA SORTIE DE LA CIBLE OU DE SA BULLE COMPTE. MESURÉ (recette,
+       poste) : la souris posée sur le bas du menu reçoit une paire
+       `pointerout`/`pointerover` toutes les 16 à 50 ms, le menu bougeant
+       sous elle ; chacune relançait la grâce, et la bulle ne se fermait
+       jamais. */
+    if(!courant.el.contains(ev.target) && !dansBulle(ev.target)) return;
+    /* LE POINTEUR RESTE DANS LA CIBLE — sur le « i » d'une ligne, que le
+       survol ignore (préséance) : ce n'est pas une sortie. Vers la bulle, la
+       grâce part, et le survol de la bulle l'arrête. */
+    if(vers && courant.el.contains(vers)) return;
+    annulerGrace();
+    grace = setTimeout(function(){
+      grace = null;
+      if(courant && courant.source === 'souris') fermer();
+    }, GRACE);
+  }, true);
+
+  /* ── LE DOIGT : rien n'est décidé au contact ──────────────────────────
+     Le contact mémorise, le relâcher décide (un `pointerup` sans annulation
+     est une activation « au relâcher », WCAG 2.5.2). Pas `click` : iOS n'en
+     émet pas sur un élément inerte quand l'écouteur est délégué. */
+  document.addEventListener('pointerdown', function(ev){
+    modalite = ev.pointerType;
+    geste = (ev.pointerType !== 'mouse')
+      ? { id: ev.pointerId, x: ev.clientX, y: ev.clientY, cible: ev.target }
+      : null;
+  }, true);
+  /* Le navigateur a pris le geste : il défile. Un balayage n'ouvre rien et
+     ne ferme rien — la bulle survit au défilement du doigt. */
+  document.addEventListener('pointercancel', function(){ geste = null; }, true);
+  document.addEventListener('pointermove', function(ev){
+    if(geste && geste.id === ev.pointerId
+       && Math.hypot(ev.clientX - geste.x, ev.clientY - geste.y) > SEUIL) geste = null;
+  }, { capture: true, passive: true });
+  /* La souris n'a jamais de geste en mémoire (voir le contact) : son
+     relâcher s'arrête à la première ligne. */
+  document.addEventListener('pointerup', function(ev){
+    if(!geste || geste.id !== ev.pointerId) return;
+    var g = geste; geste = null;
+    var n = ev.target, c = cibleDe(n), c0 = cibleDe(g.cible);
+    /* Relâché sur une autre cible que celle du contact : pas un appui. */
+    if(c !== c0) return;
+    /* LE « i » D'UNE LIGNE : sa bulle est à /infobulles.js — pour le
+       pilote, c'est un appui AILLEURS. */
+    if(c && cede(n, c)) c = null;
+    if(!c){
+      /* La bulle se lit ; l'appui sur elle ne la ferme pas. */
+      if(dansBulle(n)) return;
+      if(courant) fermer();
+      return;
+    }
+    repliee = null;
+    if(courant && courant.el === c){
+      /* OUVERTE PAR LE SURVOL DU STYLET, sur la même cible : l'appui qui suit
+         le survol la garde ouverte — il ne la referme pas sous la pointe. */
+      if(courant.source === 'souris' && courant.pointeur === 'pen'){ courant.source = 'toucher'; return; }
+      fermer();
+      return;
+    }
+    montrer(c, 'toucher', ev.pointerType);
+  }, true);
+
+  /* ── LE CLAVIER ───────────────────────────────────────────────────────
+     ÉCHAP, SUR `window` ET EN CAPTURE : ce fichier est chargé AVANT
+     /infobulles.js et /bulle-titre.js, son écouteur passe donc le premier.
+     Si une bulle de graphique est VISIBLE, cette frappe est la sienne, et
+     elle seule : les deux autres ne la voient pas. Sinon, elle passe. */
+  window.addEventListener('keydown', function(ev){
+    if(NAVIGATION[ev.key] && !ev.altKey && !ev.ctrlKey && !ev.metaKey){
+      modalite = 'clavier';
+      derniereTouche = maintenant();
+    }
+    if(ev.key === 'Escape' || ev.key === 'Esc'){
+      if(!courant || !bulleVisible()) return;
+      var el = courant.el;
+      fermer();
+      repliee = el;
+      ev.preventDefault();
+      ev.stopImmediatePropagation();
+      return;
+    }
+    /* LES FLÈCHES, dans un graphique à arrêt unique. Alt+flèche reste à la
+       navigation entre modules. */
+    if(ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey) return;
+    var t = document.activeElement;
+    if(!t || !t.getAttribute || !t.getAttribute('data-graphe') || !t.hasAttribute('tabindex')) return;
+    var pas = PAS[ev.key];
+    if(!pas && ev.key !== 'Home' && ev.key !== 'End') return;
+    var soeurs = groupe(t), i = soeurs.indexOf(t);
+    if(i < 0) return;
+    ev.preventDefault();
+    var j = ev.key === 'Home' ? 0 : ev.key === 'End' ? soeurs.length - 1
+          : Math.max(0, Math.min(soeurs.length - 1, i + pas));
+    if(j === i) return;
+    arret(soeurs[j]);
+    soeurs[j].focus();
+  }, true);
+
+  document.addEventListener('focusin', function(ev){
+    var n = ev.target, c = cibleDe(n);
+    if(!c) return;
+    /* LE « i » D'UNE LIGNE PREND LE FOCUS : le point de son pilier s'allume,
+       sans bulle — la bulle du « i » est celle d'/infobulles.js. */
+    if(cede(n, c)){
+      if(c.hasAttribute('data-graphe-ligne') && !(courant && courant.el === c)) montrer(c, 'clavier');
+      return;
+    }
+    if(n !== c) return;
+    /* Le focus qui arrive EST l'arrêt de tabulation du graphique. */
+    arret(c);
+    if(c === repliee) return;
+    /* UN FOCUS QUI SUIT UN APPUI OU UN CLIC N'OUVRE RIEN : l'appui a déjà
+       décidé, et le clic de la souris suit un survol. Seule une touche qui
+       déplace le focus, dans la seconde, ouvre la bulle. */
+    if(modalite !== 'clavier' || maintenant() - derniereTouche >= FENETRE_CLAVIER) return;
+    if(courant && courant.el === c) return;
+    montrer(c, 'clavier');
+  });
+
+  document.addEventListener('focusout', function(ev){
+    var vers = ev.relatedTarget;
+    if(repliee && repliee.contains(ev.target) && !(vers && repliee.contains(vers))
+       && !survolee(repliee)) repliee = null;
+    if(!courant || courant.source !== 'clavier') return;
+    if(!courant.el.contains(ev.target)) return;
+    if(vers && courant.el.contains(vers)) return;
+    fermer();
+  });
+
+  /* ── LE REPLACEMENT : le défilement déplace la bulle, il ne la ferme
+     jamais — /infobulles.js l'a payé. */
+  document.addEventListener('scroll', planifier, { capture: true, passive: true });
+  window.addEventListener('resize', planifier);
+  if(window.visualViewport && window.visualViewport.addEventListener){
+    window.visualViewport.addEventListener('resize', planifier);
+    window.visualViewport.addEventListener('scroll', planifier);
+  }
+
+  return {
+    /* Une famille s'enregistre : { montrer(el, source, opts), cacher(el), bulle }. */
+    enregistrer: function(famille, def){ GRAPHES[famille] = def; },
+    fermer: fermer,
+    placer: placer,
+    zone: zone,
+    ouverte: function(){ return courant ? courant.el : null; },
+    graphes: GRAPHES
+  };
+})();
+
 (function(){
 
 /* DONNEES */
+/* Les libellés et descriptions sont désormais LUS : ils forment le nom de
+   chaque barre. Sans accents, « Modere » et « Eleve » se prononçaient
+   « modère » et « élève ». La clé `key` de la barre « low » (« moderate »)
+   est un défaut du filtre, signalé à part — voir geoFilterRisk. */
 var GEO_DIST = [
   {lbl:'low',      key:'moderate', count:10, color:'#2D7A47', label:'Faible',   desc:'Cadre souple, peu de contraintes'},
-  {lbl:'moderate', key:'moderate', count:10, color:'#C9A227', label:'Modere',   desc:'Regulation sectorielle en place'},
-  {lbl:'elevated', key:'high',     count:3,  color:'#D9763A', label:'Eleve',    desc:'Cadre contraignant, sanctions actives'},
-  {lbl:'high',     key:'high',     count:1,  color:'#C85A3A', label:'Haut',     desc:'Tensions geopolitiques majeures'},
+  {lbl:'moderate', key:'moderate', count:10, color:'#C9A227', label:'Modéré',   desc:'Régulation sectorielle en place'},
+  {lbl:'elevated', key:'high',     count:3,  color:'#D9763A', label:'Élevé',    desc:'Cadre contraignant, sanctions actives'},
+  {lbl:'high',     key:'high',     count:1,  color:'#C85A3A', label:'Haut',     desc:'Tensions géopolitiques majeures'},
   {lbl:'critical', key:'critical', count:1,  color:'#C0282D', label:'Critique', desc:'Sous sanctions / isolement'},
 ];
 
@@ -1788,39 +2237,70 @@ var GEO_TL = [
 var geoTLSort = 'recent';
 var geoTLCatFilter = 'all';
 
+function geoJuridictions(n){ return n + (n > 1 ? ' juridictions' : ' juridiction'); }
+
 function geoRenderChart(){
   var chart = document.getElementById('geo-chart');
   if(!chart) return;
+  /* LE FOCUS SURVIT AU REDESSIN. `innerHTML = ''` détruit la barre qui a le
+     focus — il retombait sur <body> (mesuré avant, filtre appliqué depuis
+     une barre). On retient laquelle l'avait, et laquelle portait l'arrêt de
+     tabulation du graphique. */
+  var actif = document.activeElement;
+  var cleFocus = (actif && actif !== chart && chart.contains(actif)) ? actif.getAttribute('data-geo-key') : null;
+  var ancien = chart.querySelector('.geo-bar-col[tabindex="0"]');
+  var cleArret = ancien ? ancien.getAttribute('data-geo-key') : null;
   chart.innerHTML = '';
+  chart.setAttribute('role', 'group');
+  chart.setAttribute('aria-label', 'Répartition des juridictions par niveau de risque');
   var maxV = 12;
   [0,3,6,9,12].forEach(function(v){
     var line = document.createElement('div');
     line.className='geo-chart-grid';
+    /* La graduation se voit ; chaque barre dit déjà son nombre. */
+    line.setAttribute('aria-hidden', 'true');
     line.style.bottom = (v/maxV*100)+'%';
     line.textContent = v;
     chart.appendChild(line);
   });
-  GEO_DIST.forEach(function(d){
+  GEO_DIST.forEach(function(d, i){
     var col = document.createElement('div');
     col.className='geo-bar-col';
+    /* UNE CIBLE DE GRAPHIQUE, PAS UN BOUTON. Son clic appelait un filtre qui
+       ne filtre rien (voir geoFilterRisk) et redessinait le graphique sous
+       le pointeur : il est retiré. La barre se NOMME, se lit au survol, au
+       doigt, au clavier — le pilote grapheBulle. `data-geo-key` porte
+       `d.lbl`, le SEUL identifiant propre à une barre : `d.key` vaut
+       « moderate » pour deux barres et « high » pour deux autres, et y
+       chercher la barre montrait la bulle « Modéré » sur « low ». */
+    col.setAttribute('data-graphe', 'geo');
+    col.setAttribute('data-geo-key', d.lbl);
+    col.setAttribute('role', 'img');
+    col.setAttribute('aria-label', d.label + ' : ' + geoJuridictions(d.count) + ' — ' + d.desc);
+    col.setAttribute('tabindex', (cleArret ? d.lbl === cleArret : i === 0) ? '0' : '-1');
     var h = (d.count/maxV)*100;
     col.innerHTML = '<div class="geo-bar-count">'+d.count+'</div><div class="geo-bar" style="height:'+h+'%;background:'+d.color+'"></div><div class="geo-bar-label">'+d.lbl+'</div>';
-    col.addEventListener('mousemove', function(e){ geoShowTip(e, '<div class="geo-tooltip-title">'+d.label+' - '+d.count+' juridictions</div><div class="geo-tooltip-sub">'+d.desc+'</div>'); });
-    col.addEventListener('mouseleave', geoHideTip);
-    col.addEventListener('click', function(){ geoFilterRisk(d.key, null); });
     chart.appendChild(col);
   });
+  if(cleFocus){
+    var f = chart.querySelector('.geo-bar-col[data-geo-key="'+cleFocus+'"]');
+    if(f) f.focus();
+  }
 }
 
+/* LA BULLE EST ANCRÉE À LA BARRE, elle ne suit plus le curseur : au doigt
+   comme au clavier, il n'y a pas de curseur à suivre. `e` est l'événement
+   ou le pseudo-événement du pilote ({ clientX, clientY, target }). Bornée à
+   la fenêtre VISUELLE, et non plus à `innerWidth` — 649 px de mise en page
+   pour 412 visibles au Pixel 7 sur cet écran. */
 function geoShowTip(e, html){
   var tip = document.getElementById('geo-tooltip');
   if(!tip) return;
   tip.innerHTML = html;
   tip.style.display = 'block';
-  var x = e.clientX + 14, y = e.clientY + 14;
-  if(x + 230 > window.innerWidth) x = e.clientX - 230;
-  tip.style.left = x+'px';
-  tip.style.top = y+'px';
+  var cible = (e.target && e.target.getBoundingClientRect) ? e.target.getBoundingClientRect()
+    : { left: e.clientX, right: e.clientX, top: e.clientY, bottom: e.clientY };
+  if(window.grapheBulle) window.grapheBulle.placer(tip, cible, { x: e.clientX, cible: e.target });
 }
 function geoHideTip(){ var tip=document.getElementById('geo-tooltip'); if(tip) tip.style.display='none'; }
 
@@ -1877,18 +2357,28 @@ window.geoTogglePick = function(code){
   geoRenderIndicators();
 };
 
+/* LES PUCES SONT DES BOUTONS À BASCULE : `aria-pressed` dit laquelle est
+   active, ce que la seule couleur de `.on` ne disait qu'à l'œil. */
+function geoPresser(sel, actif){
+  document.querySelectorAll(sel).forEach(function(c){
+    c.classList.toggle('on', c === actif);
+    c.setAttribute('aria-pressed', c === actif ? 'true' : 'false');
+  });
+}
 window.geoFilterCat = function(cat, el){
   geoTLCatFilter = cat;
-  document.querySelectorAll('[data-cat]').forEach(function(c){ c.classList.remove('on'); });
-  if(el) el.classList.add('on');
+  geoPresser('.geo-filter-chip[data-cat]', el || document.querySelector('.geo-filter-chip[data-cat="'+cat+'"]'));
   geoRenderTL();
 };
 window.geoSortTL = function(val){ geoTLSort = val; geoRenderTL(); };
 
+/* DÉFAUT PRODUIT, HORS DU LOT 4 — SIGNALÉ, PAS CORRIGÉ : ce filtre ne
+   filtre rien. Il allume une puce et redessine les MÊMES barres depuis
+   GEO_DIST ; aucun code ne lit le filtre choisi (et la barre « low » porte la
+   clé « moderate »). Le lot 4 retire seulement le clic des barres, qui
+   l'appelait et détruisait la barre sous le focus. */
 window.geoFilterRisk = function(risk, el){
-  document.querySelectorAll('[data-filter]').forEach(function(c){ c.classList.remove('on'); });
-  if(el) el.classList.add('on');
-  else { var t=document.querySelector('[data-filter="'+risk+'"]'); if(t) t.classList.add('on'); }
+  geoPresser('.geo-filter-chip[data-filter]', el || document.querySelector('.geo-filter-chip[data-filter="'+risk+'"]'));
   geoRenderChart();
 };
 
@@ -1946,6 +2436,21 @@ window.geoExportCSV = function(){
   a.click();
   URL.revokeObjectURL(url);
 };
+
+/* LA FAMILLE « geo » DU PILOTE : la barre retrouve ses données par sa
+   clé propre, la bulle s'ancre au-dessus du graphique. */
+if(window.grapheBulle) window.grapheBulle.enregistrer('geo', {
+  bulle: function(){ return document.getElementById('geo-tooltip'); },
+  montrer: function(el){
+    var cle = el.getAttribute('data-geo-key');
+    var d = GEO_DIST.filter(function(x){ return x.lbl === cle; })[0];
+    if(!d) return;
+    var r = el.getBoundingClientRect();
+    geoShowTip({ clientX: r.left + r.width / 2, clientY: r.top, target: el },
+      '<div class="geo-tooltip-title">'+d.label+' — '+geoJuridictions(d.count)+'</div><div class="geo-tooltip-sub">'+d.desc+'</div>');
+  },
+  cacher: function(){ geoHideTip(); }
+});
 
 geoRenderChart();
 geoRenderIndicators();
@@ -4897,7 +5402,10 @@ function matRadar(pillars){
     pts.push(px.toFixed(1)+","+py.toFixed(1));
 
     markers.push('<circle class="mat-radar-pt" data-pillar="'+pid+'" cx="'+px.toFixed(1)+'" cy="'+py.toFixed(1)+'" r="5.5" fill="'+pillarColor+'" stroke="#fff" stroke-width="1.8" style="transition:r .15s,filter .15s"/>');
-    hitzones.push('<circle class="mat-radar-hitzone" data-pillar="'+pid+'" cx="'+px.toFixed(1)+'" cy="'+py.toFixed(1)+'" r="17" fill="transparent" style="cursor:pointer" onmouseenter="matRadarHighlight(\''+pid+'\' , event)" onmouseleave="matRadarUnhighlight()"/>');
+    /* Ni tabindex ni nom : le radar se lit dans la liste des piliers, qui
+       dit tout ce que dirait la bulle. Le pilote grapheBulle sert le survol
+       et le doigt. */
+    hitzones.push('<circle class="mat-radar-hitzone" data-graphe="mat" data-pillar="'+pid+'" cx="'+px.toFixed(1)+'" cy="'+py.toFixed(1)+'" r="17" fill="transparent" style="cursor:pointer"/>');
 
     var ex = cx + Math.cos(ang)*R, ey = cy + Math.sin(ang)*R;
     axisLines.push('<line class="mat-radar-axis" data-pillar="'+pid+'" data-color="'+pillarColor+'" x1="'+cx+'" y1="'+cy+'" x2="'+ex.toFixed(1)+'" y2="'+ey.toFixed(1)+'" stroke="#C4C0B8" stroke-width="0.9" style="transition:stroke .15s,stroke-width .15s"/>');
@@ -4912,16 +5420,23 @@ function matRadar(pillars){
     labels.push('<text class="mat-radar-label" data-pillar="'+pid+'" x="'+lx.toFixed(1)+'" y="'+ly.toFixed(1)+'" font-size="11" font-family="monospace" fill="#3D3D3D" text-anchor="'+anchor+'" dominant-baseline="middle" style="transition:fill .15s,font-weight .15s">'+tspans+'</text>');
   }
 
-  return '<svg class="mat-radar-svg" id="mat-radar-svg-el" viewBox="0 0 460 440" xmlns="http://www.w3.org/2000/svg">'
+  return '<svg class="mat-radar-svg" id="mat-radar-svg-el" viewBox="0 0 460 440" role="img" aria-label="Radar de maturité — détail par pilier dans la liste ci-dessous" xmlns="http://www.w3.org/2000/svg">'
     + rings.join("") + axisLines.join("")
     + '<polygon points="'+pts.join(" ")+'" fill="'+dataColor+'" fill-opacity="0.12" stroke="'+dataColor+'" stroke-width="2.4" stroke-linejoin="round"/>'
     + markers.join("") + hitzones.join("") + labels.join("")
     + '</svg>'
-    + '<div id="mat-radar-tooltip" class="mat-radar-tooltip"></div>';
+    + '<div id="mat-radar-tooltip" class="mat-radar-tooltip" aria-hidden="true"></div>';
 }
 
 /* ══ INTERACTIVITE CROISEE — survol radar <-> liste des 8 piliers, couleur par pilier ══ */
-window.matRadarHighlight = function(pillarId, evt){
+/* `opts` : { defiler, bulle }. LE DÉFILEMENT N'EST PLUS AUTOMATIQUE.
+   MESURÉ AU PIXEL 7 (avant) : un appui sur un point du radar faisait
+   défiler la page jusqu'à la ligne du pilier — le point et sa bulle
+   sortaient de l'écran. Le pilote ne le demande plus qu'à la SOURIS, qui
+   survole le radar à côté de la liste. `bulle: false` : la mise en évidence
+   seule, pour une ligne de la liste qui dit déjà tout. */
+window.matRadarHighlight = function(pillarId, evt, opts){
+  opts = opts || {};
   var pillarColor = (window.MAT_PILLAR_COLORS || {})[pillarId] || 'var(--ink)';
   var pt = document.querySelector('.mat-radar-pt[data-pillar="'+pillarId+'"]');
   var axis = document.querySelector('.mat-radar-axis[data-pillar="'+pillarId+'"]');
@@ -4936,22 +5451,21 @@ window.matRadarHighlight = function(pillarId, evt){
     rowEl.classList.add('mat-pillar-row-highlighted');
     rowEl.style.borderColor = pillarColor;
     rowEl.style.boxShadow = '0 2px 10px ' + pillarColor + '22';
-    rowEl.scrollIntoView({block:'nearest', behavior:'smooth'});
+    if(opts.defiler === true) rowEl.scrollIntoView({block:'nearest', behavior:'smooth'});
   }
 
   var pillarDef = (window.MAT_PILLARS || []).find(function(p){ return p.id === pillarId; });
   var tooltip = document.getElementById('mat-radar-tooltip');
+  if(opts.bulle === false){ if(tooltip) tooltip.classList.remove('on'); return; }
   if(tooltip && pillarDef && pt){
     var val = window.curPillarScore ? window.curPillarScore(pillarId) : null;
     tooltip.innerHTML = '<strong style="color:'+pillarColor+'">●</strong> <strong>'+pillarDef.label+'</strong><br>'+pillarDef.desc+(val!==null?'<div class="mat-radar-tooltip-score" style="color:'+pillarColor+'">'+val.toFixed(1)+'/5</div>':'');
     tooltip.style.borderTop = '3px solid ' + pillarColor;
-    var svgEl = document.getElementById('mat-radar-svg-el');
-    var rect = svgEl.getBoundingClientRect();
-    var ptX = parseFloat(pt.getAttribute('cx')), ptY = parseFloat(pt.getAttribute('cy'));
-    var scaleX = rect.width / 460, scaleY = rect.height / 440;
-    tooltip.style.left = (ptX*scaleX) + 'px';
-    tooltip.style.top = (ptY*scaleY) + 'px';
     tooltip.classList.add('on');
+    /* ANCRÉE AU POINT : au-dessus de sa zone, dessous si la place manque —
+       en haut de l'écran, la bulle passait sous la barre du haut. */
+    var zone = document.querySelector('.mat-radar-hitzone[data-pillar="'+pillarId+'"]') || pt;
+    if(window.grapheBulle) window.grapheBulle.placer(tooltip, zone.getBoundingClientRect(), { cible: zone });
   }
 };
 
@@ -4966,6 +5480,21 @@ window.matRadarUnhighlight = function(){
   var tooltip = document.getElementById('mat-radar-tooltip');
   if(tooltip){ tooltip.classList.remove('on'); tooltip.style.borderTop = ''; }
 };
+
+/* LA FAMILLE « mat » DU PILOTE : un point du radar montre sa bulle ; une
+   ligne de la liste (ou le focus de son « i ») allume son point, sans
+   bulle et sans défilement. */
+if(window.grapheBulle) window.grapheBulle.enregistrer('mat', {
+  bulle: function(){ return document.getElementById('mat-radar-tooltip'); },
+  montrer: function(el, source, opts){
+    var ligne = el.hasAttribute('data-graphe-ligne');
+    var r = el.getBoundingClientRect();
+    window.matRadarHighlight(el.getAttribute('data-pillar'),
+      { clientX: r.left + r.width / 2, clientY: r.top, target: el },
+      { defiler: source === 'souris' && !ligne && !(opts && opts.replacer), bulle: !ligne });
+  },
+  cacher: function(){ window.matRadarUnhighlight(); }
+});
 
 function matRender(){
   var s = MAT_SECTORS[MAT_CUR];
@@ -5059,7 +5588,7 @@ function matRender(){
         var v = curPillarScore(p.id);
         var col = matPillarColor(Math.round(v));
         var arts = (window.PILLAR_ARTICLES && window.PILLAR_ARTICLES[p.id]) ? window.PILLAR_ARTICLES[p.id].arts.join(" · ") : "";
-        return '<div class="mat-pillar-row" onmouseenter="matRadarHighlight(\'' + p.id + '\')" onmouseleave="matRadarUnhighlight()"><div class="mat-pillar-info"><div class="mat-pillar-name"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:'+(window.MAT_PILLAR_COLORS?window.MAT_PILLAR_COLORS[p.id]:'#999')+';margin-right:6px;vertical-align:middle"></span>'+p.label+' <span style="font-size:8px;font-family:var(--mono);color:var(--blue)">'+arts+'</span>'+tip(PILLAR_TIPS[p.id]||p.desc)+'</div><div class="mat-pillar-desc">'+p.desc+'</div></div>'
+        return '<div class="mat-pillar-row" data-graphe-ligne="mat" data-pillar="'+p.id+'"><div class="mat-pillar-info"><div class="mat-pillar-name"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:'+(window.MAT_PILLAR_COLORS?window.MAT_PILLAR_COLORS[p.id]:'#999')+';margin-right:6px;vertical-align:middle"></span>'+p.label+' <span style="font-size:8px;font-family:var(--mono);color:var(--blue)">'+arts+'</span>'+tip(PILLAR_TIPS[p.id]||p.desc)+'</div><div class="mat-pillar-desc">'+p.desc+'</div></div>'
           + '<div class="mat-pillar-bar"><div class="mat-pillar-fill matq-bar" data-pillar="'+p.id+'" style="width:'+(v*20)+'%;background:'+col+'"></div></div>'
           + '<div class="mat-pillar-score matq-score" data-pillar="'+p.id+'" style="color:'+col+'">'+v.toFixed(1)+'/5</div></div>';
       }).join("")
@@ -7779,7 +8308,7 @@ function radarRenderSVG(you, avg){
     ptsYou.push(p.join(','));
 
     markers.push('<circle class="radar-pt" data-dim="'+d.id+'" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="5.5" fill="'+dimColor+'" stroke="#fff" stroke-width="1.8" style="transition:r .15s,filter .15s"/>');
-    hitzones.push('<circle class="radar-hitzone" data-dim="'+d.id+'" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="17" fill="transparent" style="cursor:pointer" onmouseenter="radarHighlight(\''+d.id+'\')" onmouseleave="radarUnhighlight()"/>');
+    hitzones.push('<circle class="radar-hitzone" data-graphe="risque" data-dim="'+d.id+'" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="17" fill="transparent" style="cursor:pointer"/>');
 
     var axisEnd = pt(1,i,R);
     axisLines.push('<line class="radar-axis" data-dim="'+d.id+'" x1="'+cx+'" y1="'+cy+'" x2="'+axisEnd[0].toFixed(1)+'" y2="'+axisEnd[1].toFixed(1)+'" stroke="#C4C0B8" stroke-width="0.9" style="transition:stroke .15s,stroke-width .15s"/>');
@@ -7807,11 +8336,14 @@ function radarRenderSVG(you, avg){
   var tooltipExists = document.getElementById('radar-tooltip');
   if(!tooltipExists){
     var holder = svg.closest('.tbl-wrap') || svg.parentElement;
-    if(holder){ var tt = document.createElement('div'); tt.id = 'radar-tooltip'; tt.className = 'mat-radar-tooltip'; holder.style.position = 'relative'; holder.appendChild(tt); }
+    if(holder){ var tt = document.createElement('div'); tt.id = 'radar-tooltip'; tt.className = 'mat-radar-tooltip'; tt.setAttribute('aria-hidden', 'true'); holder.style.position = 'relative'; holder.appendChild(tt); }
   }
 }
 
-window.radarHighlight = function(dimId){
+/* `opts.bulle === false` : la mise en évidence seule, pour une ligne de la
+   liste des scores. */
+window.radarHighlight = function(dimId, opts){
+  opts = opts || {};
   var dimColor = (window.RADAR_DIM_COLORS || {})[dimId] || 'var(--ink)';
   var pt = document.querySelector('.radar-pt[data-dim="'+dimId+'"]');
   var axis = document.querySelector('.radar-axis[data-dim="'+dimId+'"]');
@@ -7820,10 +8352,12 @@ window.radarHighlight = function(dimId){
   if(axis){ axis.setAttribute('stroke', dimColor); axis.setAttribute('stroke-width','2'); }
   if(label){ label.style.fontWeight = '700'; label.setAttribute('fill', dimColor); }
 
-  var rows = document.querySelectorAll('#radar-scores .reg-item');
+  /* La ligne se retrouve par sa dimension (`data-dim`), et non plus par le
+     début de son texte. */
+  var rows = document.querySelectorAll('#radar-scores .reg-item[data-dim="'+dimId+'"]');
   var dimDef = RADAR_DIMENSIONS.find(function(d){ return d.id === dimId; });
   rows.forEach(function(row){
-    if(dimDef && row.querySelector('.reg-name') && row.querySelector('.reg-name').textContent.indexOf(dimDef.label) === 0){
+    if(dimDef){
       row.classList.add('mat-pillar-row-highlighted');
       row.style.borderColor = dimColor;
       row.style.boxShadow = '0 2px 10px ' + dimColor + '22';
@@ -7831,18 +8365,16 @@ window.radarHighlight = function(dimId){
   });
 
   var tooltip = document.getElementById('radar-tooltip');
+  if(opts.bulle === false){ if(tooltip) tooltip.classList.remove('on'); return; }
   if(tooltip && dimDef && pt){
     var pct = Math.round((window.__radarLastYou ? window.__radarLastYou[dimId] : 0) * 100);
     tooltip.innerHTML = '<strong style="color:'+dimColor+'">●</strong> <strong>'+dimDef.label+'</strong><br>'+dimDef.arts+'<div class="mat-radar-tooltip-score" style="color:'+dimColor+'">'+pct+'%</div>';
     tooltip.style.borderTop = '3px solid ' + dimColor;
-    var svgEl = document.getElementById('radar-svg');
-    var rect = svgEl.getBoundingClientRect();
-    var holderRect = svgEl.closest('.tbl-wrap').getBoundingClientRect();
-    var ptX = parseFloat(pt.getAttribute('cx')), ptY = parseFloat(pt.getAttribute('cy'));
-    var scaleX = rect.width / 460, scaleY = rect.height / 440;
-    tooltip.style.left = ((rect.left - holderRect.left) + ptX*scaleX) + 'px';
-    tooltip.style.top = ((rect.top - holderRect.top) + ptY*scaleY) + 'px';
     tooltip.classList.add('on');
+    /* ANCRÉE AU POINT, et FIXE : dans `.tbl-wrap`, qui coupe ce qui déborde
+       (`overflow:hidden`), une bulle absolue était rognée au bord du cadre. */
+    var zone = document.querySelector('.radar-hitzone[data-dim="'+dimId+'"]') || pt;
+    if(window.grapheBulle) window.grapheBulle.placer(tooltip, zone.getBoundingClientRect(), { cible: zone });
   }
 };
 
@@ -7856,6 +8388,16 @@ window.radarUnhighlight = function(){
   var tooltip = document.getElementById('radar-tooltip');
   if(tooltip){ tooltip.classList.remove('on'); tooltip.style.borderTop=''; }
 };
+
+/* LA FAMILLE « risque » DU PILOTE : le point montre sa bulle, la ligne de la
+   liste allume son point, sans bulle. */
+if(window.grapheBulle) window.grapheBulle.enregistrer('risque', {
+  bulle: function(){ return document.getElementById('radar-tooltip'); },
+  montrer: function(el){
+    window.radarHighlight(el.getAttribute('data-dim'), { bulle: !el.hasAttribute('data-graphe-ligne') });
+  },
+  cacher: function(){ window.radarUnhighlight(); }
+});
 
 /* ── Rendu complet de la page ── */
 function radarRenderPage(){
@@ -7877,7 +8419,7 @@ function radarRenderAll(){
     sc.innerHTML = RADAR_DIMENSIONS.map(function(d){
       var pct = Math.round(result.dims[d.id]*100);
       var dimColor = (window.RADAR_DIM_COLORS||{})[d.id] || 'var(--accent)';
-      return '<div class="reg-item" onmouseenter="radarHighlight(\''+d.id+'\')" onmouseleave="radarUnhighlight()" style="cursor:pointer"><div class="reg-name"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:'+dimColor+';margin-right:6px;vertical-align:middle"></span>'+d.label+' <span style="font-size:8px;font-family:var(--mono);color:var(--blue)">'+d.arts+'</span></div>'
+      return '<div class="reg-item" data-graphe-ligne="risque" data-dim="'+d.id+'"><div class="reg-name"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:'+dimColor+';margin-right:6px;vertical-align:middle"></span>'+d.label+' <span style="font-size:8px;font-family:var(--mono);color:var(--blue)">'+d.arts+'</span></div>'
         + '<div style="display:flex;align-items:center;gap:10px"><div class="reg-val" style="font-size:18px">'+pct+'%</div>'
         + '<div class="reg-bar" style="flex:1"><div class="reg-fill" style="width:'+pct+'%;background:'+dimColor+'"></div></div></div></div>';
     }).join('');
@@ -11377,37 +11919,62 @@ function pricingRenderChartFull(saasMonthly,scenarios,months,view){
     parts.push('<circle cx="'+ex+'" cy="'+ey+'" r="2.2" fill="var(--white)" class="chart-eq-line"/>');
     parts.push('<text x="'+(ex+8)+'" y="'+(ey-8)+'" font-size="9" font-family="var(--mono)" fill="var(--green)" font-weight="700" class="chart-axis-lbl" style="animation-delay:1s">\u00c9quilibre M'+eqM+'</text>');
   }
-  svg.setAttribute('viewBox','0 0 '+W+' '+H);
-  svg.innerHTML=parts.join('');
-  /* Zones de survol interactives (createElementNS) */
-  function addHover(arr,lbl,col){
-    var hzi;
-    for(hzi=0;hzi<n;hzi++){
-      var c=document.createElementNS('http://www.w3.org/2000/svg','circle');
-      c.setAttribute('cx',xv(hzi));c.setAttribute('cy',yv(arr[hzi].total));c.setAttribute('r','10');
-      c.setAttribute('class','pricing-chart-hover-zone');
-      (function(h,m2,cl,cx,cy){
-        c.addEventListener('mouseenter',function(e){
-          pricingShowTooltip(e,lbl,String(m2),h.socle,h.variable,h.total,cl);
-          var halo=document.createElementNS('http://www.w3.org/2000/svg','circle');
-          halo.setAttribute('cx',cx);halo.setAttribute('cy',cy);halo.setAttribute('r','6.5');
-          halo.setAttribute('fill','none');halo.setAttribute('stroke',cl);halo.setAttribute('stroke-width','2');
-          halo.setAttribute('opacity','0.55');halo.setAttribute('id','chart-hover-halo');
-          svg.appendChild(halo);
-        });
-        c.addEventListener('mouseleave',function(){
-          pricingHideTooltip();
-          var halo=document.getElementById('chart-hover-halo');
-          if(halo&&halo.parentNode) halo.parentNode.removeChild(halo);
-        });
-      })(arr[hzi],hzi+1,col,xv(hzi),yv(arr[hzi].total));
-      svg.appendChild(c);
-    }
+  /* ── UNE BANDE PAR MOIS, À LA PLACE DES VINGT-QUATRE CERCLES ──────────
+     MESURÉ AVANT (Pixel 7) : 24 cercles de survol de 8,8 px, jusqu'à 0 px
+     entre deux centres (quatre séries au même mois), et aucun au clavier.
+     Une bande couvre toute la hauteur du tracé ; elle est CENTRÉE sur son
+     mois, et large de l'écart entre deux mois — « tracé / n » laissait le
+     point du mois 1 au bord gauche de sa bande. Elle porte les quatre séries
+     du mois en `data-*` : la bulle les relit, elle ne reçoit plus d'arguments
+     d'un gestionnaire. Un seul arrêt de tabulation par graphique (tabindex
+     itinérant) ; les flèches passent d'un mois à l'autre. */
+  var SERIES=[{cle:'hybride',lbl:'Hybride continu',arr:sR,col:'var(--accent)'},
+              {cle:'pessimiste',lbl:'Pessimiste',arr:sP,col:'var(--accent)'},
+              {cle:'optimiste',lbl:'Optimiste',arr:sO,col:'var(--green)'}];
+  if(sJ) SERIES.push({cle:'jalons',lbl:'RaaS Jalons',arr:sJ,col:'var(--blue)'});
+  var actifBande=document.activeElement;
+  var moisFocus=(actifBande&&actifBande!==svg&&svg.contains(actifBande))?actifBande.getAttribute('data-mois'):null;
+  var ancienArret=svg.querySelector('[data-graphe="tarif"][tabindex="0"]');
+  var moisArret=moisFocus||(ancienArret?ancienArret.getAttribute('data-mois'):'1');
+  if(+moisArret>n) moisArret=String(n);
+  var ecartMois=n>1?cW/(n-1):cW,bi2;
+  for(bi2=0;bi2<n;bi2++){
+    var bx0=Math.max(0,xv(bi2)-ecartMois/2),bx1=Math.min(W,xv(bi2)+ecartMois/2);
+    var battrs={'class':'pricing-chart-bande','data-graphe':'tarif','data-mois':String(bi2+1),'data-x':String(xv(bi2)),
+                role:'img',tabindex:String(bi2+1)===moisArret?'0':'-1',
+                x:String(bx0),y:String(padT),width:String(bx1-bx0),height:String(cH),fill:'transparent'};
+    var bnom=[];
+    SERIES.forEach(function(s){
+      var hs=s.arr[bi2];
+      battrs['data-lbl-'+s.cle]=s.lbl;battrs['data-socle-'+s.cle]=String(hs.socle);
+      battrs['data-variable-'+s.cle]=String(hs.variable);battrs['data-total-'+s.cle]=String(hs.total);
+      battrs['data-couleur-'+s.cle]=s.col;battrs['data-y-'+s.cle]=String(yv(hs.total));
+      bnom.push(s.lbl+' '+pricingEuros(hs.total)+(s.cle==='jalons'?' (socle '+pricingEuros(hs.socle)+', variable '+pricingEuros(hs.variable)+')':''));
+    });
+    battrs['aria-label']='Mois '+(bi2+1)+' : '+bnom.join(', ');
+    for(var bk in battrs) battrs[bk]=pricingAttr(battrs[bk]);
+    parts.push(_pChartTag('rect',battrs));
   }
-  addHover(sR,'Hybride continu','var(--accent)');
-  addHover(sP,'Hybride pessimiste','var(--accent)');
-  addHover(sO,'Hybride optimiste','var(--green)');
-  if(sJ) addHover(sJ,'RaaS Jalons','var(--blue)');
+  svg.setAttribute('viewBox','0 0 '+W+' '+H);
+  /* UN GROUPE NOMMÉ PAR SON TITRE : les bandes sont ses images. */
+  svg.setAttribute('role','group');
+  svg.setAttribute('aria-label',titleEl?titleEl.textContent:'Projection des coûts');
+  svg.innerHTML=parts.join('');
+  if(moisFocus){
+    var bf=svg.querySelector('[data-graphe="tarif"][data-mois="'+moisArret+'"]');
+    if(bf) bf.focus();
+  }
+  /* LES DONNÉES EN TABLEAU, sous le graphique : les mois en lignes, les
+     séries en colonnes — ce que le graphique montre, lisible sans lui. */
+  var donnees=document.getElementById('pricing-chart-donnees');
+  if(donnees){
+    var tl='<table class="chart-donnees-table"><caption>'+(titleEl?titleEl.textContent:'Projection')+'</caption><thead><tr><th scope="col">Mois</th>'
+      +SERIES.map(function(s){return '<th scope="col">'+s.lbl+'</th>';}).join('')+'</tr></thead><tbody>',ti;
+    for(ti=0;ti<n;ti++){
+      tl+='<tr><th scope="row">M'+(ti+1)+'</th>'+SERIES.map(function(s){return '<td>'+pricingEuros(s.arr[ti].total)+'</td>';}).join('')+'</tr>';
+    }
+    donnees.innerHTML=tl+'</tbody></table>';
+  }
   /* Insight comparatif final (apres construction de toutes les series) */
   if(insEl){
     if(sJ){
@@ -11457,30 +12024,64 @@ window.pricingChartSetView=function(view){
 };
 
 
-window.pricingShowTooltip = function(evt, label, month, socle, variable, total, color){
+function pricingEuros(v){ return Number(v||0).toLocaleString('fr-FR')+'\u00a0\u20ac'; }
+/* Une valeur posée dans un attribut : un guillemet le couperait. */
+function pricingAttr(v){ return String(v).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+
+/* LA BULLE D'UN MOIS : ses quatre séries, relues sur la bande (`data-*`).
+   RÉÉCRITE. L'ancienne lisait le curseur (`evt.target`) et convertissait
+   avec une échelle 600 × 280 écrite en dur, pour un graphique de 640 × 320 :
+   mesuré avant, la bulle tombait à droite du point, de 28 px au mois 4 et
+   de 43 px au mois 6 (poste). L'échelle vient maintenant du `viewBox` réel.
+   Le halo, qui naissait dans le gestionnaire de survol, marque ici les
+   quatre points du mois ; il ne capte aucun pointeur. */
+window.pricingShowTooltip = function(el){
   var tt = document.getElementById('pricing-chart-tooltip');
   var svg = document.getElementById('pricing-chart-svg');
-  if(!tt || !svg) return;
-  var svgRect = svg.getBoundingClientRect();
-  var pt = svg.createSVGPoint ? null : null;
-  var scaleX = svgRect.width / 600;
-  var scaleY = svgRect.height / 280;
-  var cx = parseFloat(evt.target.getAttribute('cx')) * scaleX;
-  var cy = parseFloat(evt.target.getAttribute('cy')) * scaleY;
-
-  tt.innerHTML = '<div class="ptt-title" style="color:'+color+'">'+label+' — Mois '+month+'</div>'
-    + '<div class="ptt-row"><span>Socle fixe</span><span>'+socle.toLocaleString('fr-FR')+'€</span></div>'
-    + '<div class="ptt-row"><span>Part variable</span><span>'+variable.toLocaleString('fr-FR')+'€</span></div>'
-    + '<div class="ptt-row"><span><strong>Total</strong></span><span><strong>'+total.toLocaleString('fr-FR')+'€</strong></span></div>';
-  tt.style.left = cx + 'px';
-  tt.style.top = (cy - 8) + 'px';
+  if(!tt || !svg || !el || !el.getAttribute) return;
+  var series = ['hybride','pessimiste','optimiste','jalons'].filter(function(s){ return el.hasAttribute('data-total-'+s); });
+  var h = '<div class="ptt-title">Mois '+el.getAttribute('data-mois')+'</div>';
+  series.forEach(function(s){
+    var g = function(k){ return el.getAttribute('data-'+k+'-'+s); };
+    h += '<div class="ptt-serie"><div class="ptt-row"><span><span class="ptt-pastille" style="background:'+g('couleur')+'"></span>'+g('lbl')+'</span>'
+      + '<span><strong>'+pricingEuros(g('total'))+'</strong></span></div>'
+      + '<div class="ptt-detail">socle '+pricingEuros(g('socle'))+' · variable '+pricingEuros(g('variable'))+'</div></div>';
+  });
+  tt.innerHTML = h;
   tt.style.display = 'block';
+  pricingHalos(svg);
+  var x0 = parseFloat(el.getAttribute('data-x'));
+  series.forEach(function(s){
+    var c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('class','chart-hover-halo'); c.setAttribute('cx', x0);
+    c.setAttribute('cy', el.getAttribute('data-y-'+s)); c.setAttribute('r','6.5');
+    c.setAttribute('fill','none'); c.setAttribute('stroke', el.getAttribute('data-couleur-'+s));
+    c.setAttribute('stroke-width','2'); c.setAttribute('opacity','0.55'); c.setAttribute('pointer-events','none');
+    svg.appendChild(c);
+  });
+  var vb = svg.viewBox && svg.viewBox.baseVal;
+  var sr = svg.getBoundingClientRect();
+  var echelle = (vb && vb.width) ? sr.width / vb.width : 1;
+  if(window.grapheBulle) window.grapheBulle.placer(tt, el.getBoundingClientRect(), { x: sr.left + (x0 - (vb ? vb.x : 0)) * echelle, cible: el });
 };
+
+function pricingHalos(svg){
+  if(!svg) return;
+  [].slice.call(svg.querySelectorAll('.chart-hover-halo')).forEach(function(c){ c.parentNode.removeChild(c); });
+}
 
 window.pricingHideTooltip = function(){
   var tt = document.getElementById('pricing-chart-tooltip');
   if(tt) tt.style.display = 'none';
+  pricingHalos(document.getElementById('pricing-chart-svg'));
 };
+
+/* LA FAMILLE « tarif » DU PILOTE. */
+if(window.grapheBulle) window.grapheBulle.enregistrer('tarif', {
+  bulle: function(){ return document.getElementById('pricing-chart-tooltip'); },
+  montrer: function(el){ window.pricingShowTooltip(el); },
+  cacher: function(){ window.pricingHideTooltip(); }
+});
 
 function pricingProjectScenario(auditDepart, paceMultiplier, caAnnuel, nbSystemes, poidsTotal, months, segment, sector){
   var results = [];
@@ -19191,17 +19792,31 @@ window.veilleRenderOne = function(reg){
   if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', initVeille); } else { initVeille(); }
 })();
 
+/* LE SCHÉMA DE L'ÉCOSYSTÈME. Ses onze nœuds portaient `data-tip` : /infobulles.js
+   les ramassait, leur posait un tabindex (onze arrêts de tabulation) et
+   annonçait leur texte — pendant que la bulle du schéma suivait la souris.
+   Ils portent `data-eco-tip`, se nomment (texte visible d'abord, puis
+   l'explication), et un seul arrêt de tabulation mène au schéma. La bulle
+   est ancrée au nœud ; `ev` est l'événement ou le pseudo-événement du
+   pilote. */
 window.ecoTip = function(ev, el){
   var tip=document.getElementById('carto-eco-tip'); if(!tip||!el) return;
-  var txt=el.getAttribute('data-tip'); if(!txt) return;
-  var cont=tip.parentNode; var r=cont.getBoundingClientRect();
+  var txt=el.getAttribute('data-eco-tip'); if(!txt) return;
   tip.textContent=txt; tip.style.display='block';
-  var x=ev.clientX-r.left+14, y=ev.clientY-r.top+14;
-  var maxX=cont.clientWidth-tip.offsetWidth-8;
-  if(x>maxX) x=maxX; if(x<4) x=4;
-  tip.style.left=x+'px'; tip.style.top=y+'px';
+  var r=el.getBoundingClientRect();
+  if(window.grapheBulle) window.grapheBulle.placer(tip, r, { x: (ev && ev.clientX !== undefined) ? ev.clientX : (r.left + r.right) / 2, cible: el });
 };
 window.ecoTipHide = function(){ var tip=document.getElementById('carto-eco-tip'); if(tip) tip.style.display='none'; };
+
+/* LA FAMILLE « eco » DU PILOTE. */
+if(window.grapheBulle) window.grapheBulle.enregistrer('eco', {
+  bulle: function(){ return document.getElementById('carto-eco-tip'); },
+  montrer: function(el){
+    var r = el.getBoundingClientRect();
+    window.ecoTip({ clientX: r.left + r.width / 2, clientY: r.top, target: el }, el);
+  },
+  cacher: function(){ window.ecoTipHide(); }
+});
 
 window.cartoAttachInit = function(){
   var box=document.getElementById('carto-attach'); if(!box) return;

@@ -1,0 +1,757 @@
+{
+ "_pourquoi": "Chaque mutation FABRIQUE un défaut réel du lot 4 — un balayage qui ouvre, un Échap qui passe ou qui est avalé, une bulle qui défile, qui se rogne, qui se lit, qui suit le curseur, une barre qui redevient cliquable, un nœud qui retombe dans /infobulles.js — et doit faire TOMBER la règle nommée de tests/test_graphes_bulles.py. Une mutation qui survit dit que la règle ne mesure pas ce qu'elle prétend ; une qui fait tomber une AUTRE règle dit que la règle nommée vise à côté.",
+ "cibles": [
+  "tests/test_graphes_bulles.py"
+ ],
+ "mutations": [
+  {
+   "nom": "le pilote écoute Échap sur document, en remontée (après la fenêtre modale)",
+   "fichier": "sentinel.page.js",
+   "avant": "  window.addEventListener('keydown', function(ev){\n    if(NAVIGATION[ev.key]",
+   "apres": "  document.addEventListener('keydown', function(ev){\n    if(NAVIGATION[ev.key]",
+   "regle": "test_le_pilote_est_la_et_s_inscrit_AU_CHARGEMENT"
+  },
+  {
+   "nom": "le glissé du doigt n'est plus passif : il retarderait le défilement",
+   "fichier": "sentinel.page.js",
+   "avant": "&& Math.hypot(ev.clientX - geste.x, ev.clientY - geste.y) > SEUIL) geste = null;\n  }, { capture: true, passive: true });",
+   "apres": "&& Math.hypot(ev.clientX - geste.x, ev.clientY - geste.y) > SEUIL) geste = null;\n  }, true);",
+   "regle": "test_le_pilote_est_la_et_s_inscrit_AU_CHARGEMENT"
+  },
+  {
+   "nom": "le balayage (pointercancel) redevient un appui",
+   "fichier": "sentinel.page.js",
+   "avant": "document.addEventListener('pointercancel', function(){ geste = null; }, true);",
+   "apres": "document.addEventListener('pointercancel', function(){ }, true);",
+   "regle": "test_ce_qui_n_est_PAS_un_appui_n_ouvre_rien[annule]"
+  },
+  {
+   "nom": "le seuil de 10 px a disparu",
+   "fichier": "sentinel.page.js",
+   "avant": "Math.hypot(ev.clientX - geste.x, ev.clientY - geste.y) > SEUIL) geste = null;",
+   "apres": "Math.hypot(ev.clientX - geste.x, ev.clientY - geste.y) > 1e9) geste = null;",
+   "regle": "test_ce_qui_n_est_PAS_un_appui_n_ouvre_rien[glisse]"
+  },
+  {
+   "nom": "relâché sur une autre cible, c'est encore un appui",
+   "fichier": "sentinel.page.js",
+   "avant": "    /* Relâché sur une autre cible que celle du contact : pas un appui. */\n    if(c !== c0) return;",
+   "apres": "    /* Relâché sur une autre cible que celle du contact : pas un appui. */\n    if(false) return;",
+   "regle": "test_ce_qui_n_est_PAS_un_appui_n_ouvre_rien[relacheAilleurs]"
+  },
+  {
+   "nom": "le relâcher d'un autre doigt compte",
+   "fichier": "sentinel.page.js",
+   "avant": "  document.addEventListener('pointerup', function(ev){\n    if(!geste || geste.id !== ev.pointerId) return;",
+   "apres": "  document.addEventListener('pointerup', function(ev){\n    if(!geste) return;",
+   "regle": "test_ce_qui_n_est_PAS_un_appui_n_ouvre_rien[autreDoigt]"
+  },
+  {
+   "nom": "le clic de souris est mémorisé comme un appui",
+   "fichier": "sentinel.page.js",
+   "avant": "    geste = (ev.pointerType !== 'mouse')\n      ? { id: ev.pointerId, x: ev.clientX, y: ev.clientY, cible: ev.target }",
+   "apres": "    geste = (true)\n      ? { id: ev.pointerId, x: ev.clientX, y: ev.clientY, cible: ev.target }",
+   "regle": "test_ce_qui_n_est_PAS_un_appui_n_ouvre_rien[souris]"
+  },
+  {
+   "nom": "un appui ailleurs ne ferme plus",
+   "fichier": "sentinel.page.js",
+   "avant": "      if(dansBulle(n)) return;\n      if(courant) fermer();\n      return;",
+   "apres": "      if(dansBulle(n)) return;\n      return;",
+   "regle": "test_au_DOIGT_un_appui_ouvre_le_second_ferme_un_appui_ailleurs_ferme"
+  },
+  {
+   "nom": "un appui sur la bulle la ferme",
+   "fichier": "sentinel.page.js",
+   "avant": "      /* La bulle se lit ; l'appui sur elle ne la ferme pas. */\n      if(dansBulle(n)) return;",
+   "apres": "      /* La bulle se lit ; l'appui sur elle ne la ferme pas. */",
+   "regle": "test_au_DOIGT_un_appui_ouvre_le_second_ferme_un_appui_ailleurs_ferme"
+  },
+  {
+   "nom": "le second appui ne ferme plus",
+   "fichier": "sentinel.page.js",
+   "avant": "courant.source = 'toucher'; return; }\n      fermer();\n      return;",
+   "apres": "courant.source = 'toucher'; return; }\n      return;",
+   "regle": "test_au_DOIGT_un_appui_ouvre_le_second_ferme_un_appui_ailleurs_ferme"
+  },
+  {
+   "nom": "le balayage ailleurs ferme la bulle",
+   "fichier": "sentinel.page.js",
+   "avant": "document.addEventListener('pointercancel', function(){ geste = null; }, true);",
+   "apres": "document.addEventListener('pointercancel', function(){ geste = null; if(courant) fermer(); }, true);",
+   "regle": "test_un_balayage_AILLEURS_ne_ferme_pas_la_bulle"
+  },
+  {
+   "nom": "l'appui du stylet referme ce que son survol vient d'ouvrir",
+   "fichier": "sentinel.page.js",
+   "avant": "if(courant.source === 'souris' && courant.pointeur === 'pen'){ courant.source = 'toucher'; return; }",
+   "apres": "if(false){ courant.source = 'toucher'; return; }",
+   "regle": "test_le_STYLET_garde_son_survol_et_l_appui_qui_suit_la_garde"
+  },
+  {
+   "nom": "le stylet perd son survol (filtre sur la souris seule)",
+   "fichier": "sentinel.page.js",
+   "avant": "  document.addEventListener('pointerover', function(ev){\n    if(ev.pointerType === 'touch') return;",
+   "apres": "  document.addEventListener('pointerover', function(ev){\n    if(ev.pointerType !== 'mouse') return;",
+   "regle": "test_le_STYLET_garde_son_survol_et_l_appui_qui_suit_la_garde"
+  },
+  {
+   "nom": "le doigt « survole » : pointerover non filtré",
+   "fichier": "sentinel.page.js",
+   "avant": "  document.addEventListener('pointerover', function(ev){\n    if(ev.pointerType === 'touch') return;",
+   "apres": "  document.addEventListener('pointerover', function(ev){",
+   "regle": "test_la_SOURIS_survole_et_la_bulle_se_SURVOLE"
+  },
+  {
+   "nom": "plus de grâce : la bulle ferme dès que le pointeur sort",
+   "fichier": "sentinel.page.js",
+   "avant": "  var GRACE = 300;",
+   "apres": "  var GRACE = 0;",
+   "regle": "test_la_SOURIS_survole_et_la_bulle_se_SURVOLE"
+  },
+  {
+   "nom": "toute sortie relance la grâce, même d'un élément étranger (la bulle ne se ferme plus)",
+   "fichier": "sentinel.page.js",
+   "avant": "    if(!courant.el.contains(ev.target) && !dansBulle(ev.target)) return;\n",
+   "apres": "",
+   "regle": "test_la_SOURIS_survole_et_la_bulle_se_SURVOLE"
+  },
+  {
+   "nom": "le survol de la bulle n'arrête plus la grâce",
+   "fichier": "sentinel.page.js",
+   "avant": "    if(dansBulle(n)){ annulerGrace(); return; }",
+   "apres": "    if(dansBulle(n)){ return; }",
+   "regle": "test_la_SOURIS_survole_et_la_bulle_se_SURVOLE"
+  },
+  {
+   "nom": "le pointeur passé sur le « i » d'une ligne l'éteint",
+   "fichier": "sentinel.page.js",
+   "avant": "    if(vers && courant.el.contains(vers)) return;\n    annulerGrace();",
+   "apres": "    annulerGrace();",
+   "regle": "test_la_PRESEANCE_le_i_d_une_ligne_garde_sa_bulle"
+  },
+  {
+   "nom": "le survol du « i » allume sa ligne (préséance oubliée)",
+   "fichier": "sentinel.page.js",
+   "avant": "    if(!c || cede(n, c) || c === repliee) return;",
+   "apres": "    if(!c || c === repliee) return;",
+   "regle": "test_la_PRESEANCE_le_i_d_une_ligne_garde_sa_bulle"
+  },
+  {
+   "nom": "l'appui sur le « i » bascule sa ligne (préséance oubliée)",
+   "fichier": "sentinel.page.js",
+   "avant": "    if(c && cede(n, c)) c = null;",
+   "apres": "",
+   "regle": "test_la_PRESEANCE_le_i_d_une_ligne_garde_sa_bulle"
+  },
+  {
+   "nom": "le focus du « i » n'allume plus son point",
+   "fichier": "sentinel.page.js",
+   "avant": "      if(c.hasAttribute('data-graphe-ligne') && !(courant && courant.el === c)) montrer(c, 'clavier');",
+   "apres": "",
+   "regle": "test_la_PRESEANCE_le_i_d_une_ligne_garde_sa_bulle"
+  },
+  {
+   "nom": "une ligne ferme aussi les autres bulles (le « i » perd la sienne)",
+   "fichier": "sentinel.page.js",
+   "avant": "    if(nouveau && el.hasAttribute('data-graphe')){",
+   "apres": "    if(nouveau){",
+   "regle": "test_UNE_BULLE_A_LA_FOIS_ouvrir_un_graphique_ferme_les_deux_autres"
+  },
+  {
+   "nom": "ouvrir un graphique ne ferme plus /infobulles.js",
+   "fichier": "sentinel.page.js",
+   "avant": "      if(ib && typeof ib.fermer === 'function') ib.fermer();\n      if(bt && typeof bt.fermer === 'function') bt.fermer();",
+   "apres": "      if(bt && typeof bt.fermer === 'function') bt.fermer();",
+   "regle": "test_UNE_BULLE_A_LA_FOIS_ouvrir_un_graphique_ferme_les_deux_autres"
+  },
+  {
+   "nom": "ouvrir un graphique ne ferme plus /bulle-titre.js",
+   "fichier": "sentinel.page.js",
+   "avant": "      if(ib && typeof ib.fermer === 'function') ib.fermer();\n      if(bt && typeof bt.fermer === 'function') bt.fermer();",
+   "apres": "      if(ib && typeof ib.fermer === 'function') ib.fermer();",
+   "regle": "test_UNE_BULLE_A_LA_FOIS_ouvrir_un_graphique_ferme_les_deux_autres"
+  },
+  {
+   "nom": "Échap ferme aussi les autres (la frappe passe)",
+   "fichier": "sentinel.page.js",
+   "avant": "      ev.preventDefault();\n      ev.stopImmediatePropagation();\n      return;",
+   "apres": "      ev.preventDefault();\n      return;",
+   "regle": "test_ECHAP_ferme_la_bulle_du_graphique_ET_ELLE_SEULE"
+  },
+  {
+   "nom": "Échap est retenu par une bulle invisible",
+   "fichier": "sentinel.page.js",
+   "avant": "      if(!courant || !bulleVisible()) return;",
+   "apres": "      if(!courant) return;",
+   "regle": "test_ECHAP_une_bulle_qu_on_ne_voit_plus_ne_retient_pas_la_frappe"
+  },
+  {
+   "nom": "après Échap, la bulle se rouvre sous le pointeur",
+   "fichier": "sentinel.page.js",
+   "avant": "      fermer();\n      repliee = el;",
+   "apres": "      fermer();",
+   "regle": "test_apres_ECHAP_la_bulle_ne_revient_pas_tant_que_le_pointeur_ou_le_focus_reste"
+  },
+  {
+   "nom": "après Échap, le focus resté rouvre la bulle",
+   "fichier": "sentinel.page.js",
+   "avant": "    arret(c);\n    if(c === repliee) return;",
+   "apres": "    arret(c);",
+   "regle": "test_apres_ECHAP_la_bulle_ne_revient_pas_tant_que_le_pointeur_ou_le_focus_reste"
+  },
+  {
+   "nom": "tout focus ouvre la bulle, clavier ou non",
+   "fichier": "sentinel.page.js",
+   "avant": "    if(modalite !== 'clavier' || maintenant() - derniereTouche >= FENETRE_CLAVIER) return;",
+   "apres": "    if(false) return;",
+   "regle": "test_un_focus_qui_ne_vient_pas_du_CLAVIER_n_ouvre_rien[sansTouche]"
+  },
+  {
+   "nom": "l'appui ne remet pas la modalité au pointeur",
+   "fichier": "sentinel.page.js",
+   "avant": "  document.addEventListener('pointerdown', function(ev){\n    modalite = ev.pointerType;",
+   "apres": "  document.addEventListener('pointerdown', function(ev){",
+   "regle": "test_un_focus_qui_ne_vient_pas_du_CLAVIER_n_ouvre_rien[apresAppui]"
+  },
+  {
+   "nom": "l'arrêt de tabulation ne suit plus le focus (tous à 0)",
+   "fichier": "sentinel.page.js",
+   "avant": "groupe(el).forEach(function(e){ e.setAttribute('tabindex', e === el ? '0' : '-1'); });",
+   "apres": "groupe(el).forEach(function(e){ e.setAttribute('tabindex', '0'); });",
+   "regle": "test_au_CLAVIER_un_arret_itinerant_et_les_fleches"
+  },
+  {
+   "nom": "les flèches font défiler la page aussi",
+   "fichier": "sentinel.page.js",
+   "avant": "    if(i < 0) return;\n    ev.preventDefault();",
+   "apres": "    if(i < 0) return;",
+   "regle": "test_au_CLAVIER_un_arret_itinerant_et_les_fleches"
+  },
+  {
+   "nom": "Alt+flèche est pris par le graphique",
+   "fichier": "sentinel.page.js",
+   "avant": "    if(ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey) return;",
+   "apres": "    if(ev.ctrlKey || ev.metaKey || ev.shiftKey) return;",
+   "regle": "test_au_CLAVIER_un_arret_itinerant_et_les_fleches"
+  },
+  {
+   "nom": "Début et Fin inversés",
+   "fichier": "sentinel.page.js",
+   "avant": "    var j = ev.key === 'Home' ? 0 : ev.key === 'End' ? soeurs.length - 1",
+   "apres": "    var j = ev.key === 'End' ? 0 : ev.key === 'Home' ? soeurs.length - 1",
+   "regle": "test_au_CLAVIER_un_arret_itinerant_et_les_fleches"
+  },
+  {
+   "nom": "le départ du focus ne ferme plus",
+   "fichier": "sentinel.page.js",
+   "avant": "    if(!courant.el.contains(ev.target)) return;\n    if(vers && courant.el.contains(vers)) return;\n    fermer();",
+   "apres": "    if(!courant.el.contains(ev.target)) return;\n    if(vers && courant.el.contains(vers)) return;",
+   "regle": "test_au_CLAVIER_un_arret_itinerant_et_les_fleches"
+  },
+  {
+   "nom": "le défilement ne replace plus la bulle",
+   "fichier": "sentinel.page.js",
+   "avant": "  document.addEventListener('scroll', planifier, { capture: true, passive: true });",
+   "apres": "",
+   "regle": "test_le_DEFILEMENT_replace_la_bulle_et_une_cible_disparue_la_ferme"
+  },
+  {
+   "nom": "plus d'intervalle : une cible démontée garde sa bulle",
+   "fichier": "sentinel.page.js",
+   "avant": "    if(!intervalle) intervalle = setInterval(verifier, 250);",
+   "apres": "",
+   "regle": "test_le_DEFILEMENT_replace_la_bulle_et_une_cible_disparue_la_ferme"
+  },
+  {
+   "nom": "une cible masquée garde sa bulle",
+   "fichier": "sentinel.page.js",
+   "avant": "    if(!el.isConnected || !el.getClientRects().length) return fermer();",
+   "apres": "    if(!el.isConnected) return fermer();",
+   "regle": "test_le_DEFILEMENT_replace_la_bulle_et_une_cible_disparue_la_ferme"
+  },
+  {
+   "nom": "la barre du haut est oubliée : la bulle passe dessous",
+   "fichier": "sentinel.page.js",
+   "avant": "      if(rb.height > 0 && window.getComputedStyle(barre).position === 'fixed') z.h = Math.max(z.h, rb.bottom + ECART);",
+   "apres": "",
+   "regle": "test_la_bulle_est_AU_DESSUS_centree_et_passe_DESSOUS_sous_la_barre_du_haut"
+  },
+  {
+   "nom": "la bulle est posée SUR la cible",
+   "fichier": "sentinel.page.js",
+   "avant": "    var dessus = r.top - ECART - h, dessous = r.bottom + ECART, haut, sous;",
+   "apres": "    var dessus = r.top, dessous = r.bottom + ECART, haut, sous;",
+   "regle": "test_la_bulle_est_AU_DESSUS_centree_et_passe_DESSOUS_sous_la_barre_du_haut"
+  },
+  {
+   "nom": "les voisines sont ignorées : dessus toujours",
+   "fichier": "sentinel.page.js",
+   "avant": "      var choix = (tient.length === 2 && tient[1].r < tient[0].r) ? tient[1] : tient[0];",
+   "apres": "      var choix = tient[0];",
+   "regle": "test_la_bulle_evite_ses_VOISINES_et_reste_dans_la_FENETRE_VISUELLE"
+  },
+  {
+   "nom": "la bulle n'est plus bornée à la fenêtre visuelle",
+   "fichier": "sentinel.page.js",
+   "avant": "    var gauche = Math.max(z.g, Math.min(x - w / 2, z.d - w));",
+   "apres": "    var gauche = x - w / 2;",
+   "regle": "test_la_bulle_evite_ses_VOISINES_et_reste_dans_la_FENETRE_VISUELLE"
+  },
+  {
+   "nom": "la largeur de la bulle n'est plus bornée",
+   "fichier": "sentinel.page.js",
+   "avant": "    b.style.maxWidth = Math.max(0, Math.min(isNaN(mw) ? large : mw, large)) + 'px';",
+   "apres": "    b.style.maxWidth = '';",
+   "regle": "test_la_bulle_evite_ses_VOISINES_et_reste_dans_la_FENETRE_VISUELLE"
+  },
+  {
+   "nom": "la barre ne se déclare plus au pilote",
+   "fichier": "sentinel.page.js",
+   "avant": "    col.setAttribute('data-graphe', 'geo');\n",
+   "apres": "",
+   "regle": "test_les_barres_sont_des_IMAGES_NOMMEES_sans_ecouteur_de_souris"
+  },
+  {
+   "nom": "la barre n'est plus une image",
+   "fichier": "sentinel.page.js",
+   "avant": "    col.setAttribute('role', 'img');\n",
+   "apres": "",
+   "regle": "test_les_barres_sont_des_IMAGES_NOMMEES_sans_ecouteur_de_souris"
+  },
+  {
+   "nom": "le clic de filtre revient sur la barre",
+   "fichier": "sentinel.page.js",
+   "avant": "    chart.appendChild(col);\n  });\n  if(cleFocus){",
+   "apres": "    col.addEventListener('click', function(){ geoFilterRisk(d.key, null); });\n    chart.appendChild(col);\n  });\n  if(cleFocus){",
+   "regle": "test_les_barres_sont_des_IMAGES_NOMMEES_sans_ecouteur_de_souris"
+  },
+  {
+   "nom": "la graduation se lit",
+   "fichier": "sentinel.page.js",
+   "avant": "    line.setAttribute('aria-hidden', 'true');\n",
+   "apres": "",
+   "regle": "test_les_barres_sont_des_IMAGES_NOMMEES_sans_ecouteur_de_souris"
+  },
+  {
+   "nom": "toutes les barres sont des arrêts de tabulation",
+   "fichier": "sentinel.page.js",
+   "avant": "    col.setAttribute('tabindex', (cleArret ? d.lbl === cleArret : i === 0) ? '0' : '-1');",
+   "apres": "    col.setAttribute('tabindex', '0');",
+   "regle": "test_les_barres_ont_UN_arret_de_tabulation"
+  },
+  {
+   "nom": "la clé de la barre redevient d.key (partagée par deux barres)",
+   "fichier": "sentinel.page.js",
+   "avant": "    col.setAttribute('data-geo-key', d.lbl);",
+   "apres": "    col.setAttribute('data-geo-key', d.key);",
+   "regle": "test_chaque_barre_montre_SES_donnees"
+  },
+  {
+   "nom": "la famille cherche la barre par sa clé de filtre",
+   "fichier": "sentinel.page.js",
+   "avant": "    var d = GEO_DIST.filter(function(x){ return x.lbl === cle; })[0];",
+   "apres": "    var d = GEO_DIST.filter(function(x){ return x.key === cle; })[0];",
+   "regle": "test_chaque_barre_montre_SES_donnees"
+  },
+  {
+   "nom": "le redessin perd le focus",
+   "fichier": "sentinel.page.js",
+   "avant": "    if(f) f.focus();",
+   "apres": "",
+   "regle": "test_apres_un_redessin_le_focus_et_l_arret_RESTENT_sur_la_meme_barre"
+  },
+  {
+   "nom": "aria-pressed n'est plus tenu",
+   "fichier": "sentinel.page.js",
+   "avant": "    c.setAttribute('aria-pressed', c === actif ? 'true' : 'false');",
+   "apres": "",
+   "regle": "test_les_puces_de_filtre_disent_laquelle_est_PRESSEE"
+  },
+  {
+   "nom": "le filtre de la frise touche tout [data-cat]",
+   "fichier": "sentinel.page.js",
+   "avant": "  geoPresser('.geo-filter-chip[data-cat]', el ||",
+   "apres": "  geoPresser('[data-cat]', el ||",
+   "regle": "test_les_puces_de_filtre_disent_laquelle_est_PRESSEE"
+  },
+  {
+   "nom": "une puce redevient un <span onclick>",
+   "fichier": "sentinel.html",
+   "avant": "<button type=\"button\" class=\"geo-filter-chip\" data-filter=\"high\" aria-pressed=\"false\" onclick=\"geoFilterRisk('high',this)\">Élevé</button>",
+   "apres": "<span class=\"geo-filter-chip\" data-filter=\"high\" onclick=\"geoFilterRisk('high',this)\">Élevé</span>",
+   "regle": "test_les_puces_sont_des_BOUTONS_a_bascule_dans_la_page"
+  },
+  {
+   "nom": "la zone du radar ne se déclare plus",
+   "fichier": "sentinel.page.js",
+   "avant": "<circle class=\"mat-radar-hitzone\" data-graphe=\"mat\" data-pillar=",
+   "apres": "<circle class=\"mat-radar-hitzone\" data-pillar=",
+   "regle": "test_le_radar_de_maturite_est_UNE_image_nommee_et_ses_zones_ne_prennent_pas_le_focus"
+  },
+  {
+   "nom": "le radar de maturité perd son rôle d'image",
+   "fichier": "sentinel.page.js",
+   "avant": "viewBox=\"0 0 460 440\" role=\"img\" aria-label=\"Radar de maturité",
+   "apres": "viewBox=\"0 0 460 440\" aria-label=\"Radar de maturité",
+   "regle": "test_le_radar_de_maturite_est_UNE_image_nommee_et_ses_zones_ne_prennent_pas_le_focus"
+  },
+  {
+   "nom": "la bulle du radar de maturité naît lisible",
+   "fichier": "sentinel.page.js",
+   "avant": "<div id=\"mat-radar-tooltip\" class=\"mat-radar-tooltip\" aria-hidden=\"true\"></div>",
+   "apres": "<div id=\"mat-radar-tooltip\" class=\"mat-radar-tooltip\"></div>",
+   "regle": "test_le_radar_de_maturite_est_UNE_image_nommee_et_ses_zones_ne_prennent_pas_le_focus"
+  },
+  {
+   "nom": "la mise en évidence fait toujours défiler la page",
+   "fichier": "sentinel.page.js",
+   "avant": "    if(opts.defiler === true) rowEl.scrollIntoView({block:'nearest', behavior:'smooth'});",
+   "apres": "    rowEl.scrollIntoView({block:'nearest', behavior:'smooth'});",
+   "regle": "test_mettre_en_evidence_ne_fait_PLUS_defiler_la_page"
+  },
+  {
+   "nom": "le doigt fait défiler aussi (défilement hors souris)",
+   "fichier": "sentinel.page.js",
+   "avant": "{ defiler: source === 'souris' && !ligne",
+   "apres": "{ defiler: !ligne",
+   "regle": "test_mettre_en_evidence_ne_fait_PLUS_defiler_la_page"
+  },
+  {
+   "nom": "le replacement fait défiler à chaque défilement",
+   "fichier": "sentinel.page.js",
+   "avant": "!ligne && !(opts && opts.replacer), bulle: !ligne }",
+   "apres": "!ligne, bulle: !ligne }",
+   "regle": "test_mettre_en_evidence_ne_fait_PLUS_defiler_la_page"
+  },
+  {
+   "nom": "la ligne de maturité ouvre la bulle",
+   "fichier": "sentinel.page.js",
+   "avant": "  var tooltip = document.getElementById('mat-radar-tooltip');\n  if(opts.bulle === false){ if(tooltip) tooltip.classList.remove('on'); return; }",
+   "apres": "  var tooltip = document.getElementById('mat-radar-tooltip');",
+   "regle": "test_le_point_a_sa_bulle_la_ligne_non"
+  },
+  {
+   "nom": "la bulle du radar de maturité n'est plus ancrée à sa zone",
+   "fichier": "sentinel.page.js",
+   "avant": "    if(window.grapheBulle) window.grapheBulle.placer(tooltip, zone.getBoundingClientRect(), { cible: zone });\n  }\n};\n\nwindow.matRadarUnhighlight",
+   "apres": "  }\n};\n\nwindow.matRadarUnhighlight",
+   "regle": "test_le_point_a_sa_bulle_la_ligne_non"
+  },
+  {
+   "nom": "la ligne de pilier écoute de nouveau la souris",
+   "fichier": "sentinel.page.js",
+   "avant": "'<div class=\"mat-pillar-row\" data-graphe-ligne=\"mat\" data-pillar=\"'+p.id+'\">",
+   "apres": "'<div class=\"mat-pillar-row\" onmouseenter=\"matRadarHighlight(\\''+p.id+'\\')\" data-pillar=\"'+p.id+'\">",
+   "regle": "test_la_ligne_de_pilier_n_ecoute_plus_la_souris_et_se_declare"
+  },
+  {
+   "nom": "la zone du radar de risque ne se déclare plus",
+   "fichier": "sentinel.page.js",
+   "avant": "<circle class=\"radar-hitzone\" data-graphe=\"risque\" data-dim=",
+   "apres": "<circle class=\"radar-hitzone\" data-dim=",
+   "regle": "test_le_radar_de_risque_se_declare_au_pilote_et_sa_bulle_est_muette"
+  },
+  {
+   "nom": "la bulle du radar de risque naît lisible",
+   "fichier": "sentinel.page.js",
+   "avant": "tt.className = 'mat-radar-tooltip'; tt.setAttribute('aria-hidden', 'true');",
+   "apres": "tt.className = 'mat-radar-tooltip';",
+   "regle": "test_le_radar_de_risque_se_declare_au_pilote_et_sa_bulle_est_muette"
+  },
+  {
+   "nom": "la ligne de risque perd sa dimension",
+   "fichier": "sentinel.page.js",
+   "avant": "'<div class=\"reg-item\" data-graphe-ligne=\"risque\" data-dim=\"'+d.id+'\">",
+   "apres": "'<div class=\"reg-item\" data-graphe-ligne=\"risque\">",
+   "regle": "test_le_radar_de_risque_se_declare_au_pilote_et_sa_bulle_est_muette"
+  },
+  {
+   "nom": "le radar de risque perd son nom",
+   "fichier": "sentinel.html",
+   "avant": "id=\"radar-svg\" role=\"img\" aria-label=\"Radar de risque — détail dans la liste ci-dessous\"",
+   "apres": "id=\"radar-svg\"",
+   "regle": "test_le_radar_de_risque_a_UN_nom_de_synthese"
+  },
+  {
+   "nom": "la ligne de risque ouvre la bulle",
+   "fichier": "sentinel.page.js",
+   "avant": "  var tooltip = document.getElementById('radar-tooltip');\n  if(opts.bulle === false){ if(tooltip) tooltip.classList.remove('on'); return; }",
+   "apres": "  var tooltip = document.getElementById('radar-tooltip');",
+   "regle": "test_la_ligne_du_radar_de_risque_allume_son_point_SANS_bulle"
+  },
+  {
+   "nom": "toutes les lignes de risque s'allument",
+   "fichier": "sentinel.page.js",
+   "avant": "document.querySelectorAll('#radar-scores .reg-item[data-dim=\"'+dimId+'\"]')",
+   "apres": "document.querySelectorAll('#radar-scores .reg-item')",
+   "regle": "test_la_ligne_du_radar_de_risque_allume_son_point_SANS_bulle"
+  },
+  {
+   "nom": "la bande n'est plus une image",
+   "fichier": "sentinel.page.js",
+   "avant": "                role:'img',tabindex:",
+   "apres": "                tabindex:",
+   "regle": "test_la_courbe_a_UNE_bande_par_mois_nommee_par_ses_quatre_series"
+  },
+  {
+   "nom": "le nom du mois ne dit plus ses séries",
+   "fichier": "sentinel.page.js",
+   "avant": "      bnom.push(s.lbl+' '+pricingEuros(hs.total)",
+   "apres": "      bnom.push(pricingEuros(hs.total)",
+   "regle": "test_la_courbe_a_UNE_bande_par_mois_nommee_par_ses_quatre_series"
+  },
+  {
+   "nom": "le svg de la courbe n'est plus un groupe",
+   "fichier": "sentinel.page.js",
+   "avant": "  svg.setAttribute('role','group');\n",
+   "apres": "",
+   "regle": "test_la_courbe_a_UNE_bande_par_mois_nommee_par_ses_quatre_series"
+  },
+  {
+   "nom": "bandes larges du tracé / n (le mois 1 au bord)",
+   "fichier": "sentinel.page.js",
+   "avant": "  var ecartMois=n>1?cW/(n-1):cW,bi2;",
+   "apres": "  var ecartMois=cW/n,bi2;",
+   "regle": "test_les_bandes_couvrent_le_trace_centrees_sur_leur_mois"
+  },
+  {
+   "nom": "toutes les bandes sont des arrêts de tabulation",
+   "fichier": "sentinel.page.js",
+   "avant": "tabindex:String(bi2+1)===moisArret?'0':'-1',",
+   "apres": "tabindex:'0',",
+   "regle": "test_la_courbe_a_UN_arret_de_tabulation_qui_survit_au_redessin"
+  },
+  {
+   "nom": "le redessin de la courbe perd le focus",
+   "fichier": "sentinel.page.js",
+   "avant": "    if(bf) bf.focus();",
+   "apres": "",
+   "regle": "test_la_courbe_a_UN_arret_de_tabulation_qui_survit_au_redessin"
+  },
+  {
+   "nom": "un horizon plus court perd l'arrêt de tabulation",
+   "fichier": "sentinel.page.js",
+   "avant": "  if(+moisArret>n) moisArret=String(n);\n",
+   "apres": "",
+   "regle": "test_la_courbe_a_UN_arret_de_tabulation_qui_survit_au_redessin"
+  },
+  {
+   "nom": "le tableau perd une série",
+   "fichier": "sentinel.page.js",
+   "avant": "'</th>'+SERIES.map(function(s){return '<td>'",
+   "apres": "'</th>'+SERIES.slice(0,3).map(function(s){return '<td>'",
+   "regle": "test_les_donnees_se_lisent_aussi_en_TABLEAU"
+  },
+  {
+   "nom": "« Voir les données » disparaît",
+   "fichier": "sentinel.html",
+   "avant": "<details class=\"chart-donnees\"><summary>Voir les données</summary>",
+   "apres": "<details class=\"chart-donnees\"><summary>Données</summary>",
+   "regle": "test_les_donnees_se_lisent_aussi_en_TABLEAU"
+  },
+  {
+   "nom": "l'échelle 600 en dur revient",
+   "fichier": "sentinel.page.js",
+   "avant": "  var echelle = (vb && vb.width) ? sr.width / vb.width : 1;",
+   "apres": "  var echelle = sr.width / 600;",
+   "regle": "test_la_bulle_d_un_mois_lit_la_bande_et_l_echelle_du_VIEWBOX"
+  },
+  {
+   "nom": "le halo capte le pointeur",
+   "fichier": "sentinel.page.js",
+   "avant": " c.setAttribute('pointer-events','none');",
+   "apres": "",
+   "regle": "test_la_bulle_d_un_mois_lit_la_bande_et_l_echelle_du_VIEWBOX"
+  },
+  {
+   "nom": "cacher la bulle laisse les halos",
+   "fichier": "sentinel.page.js",
+   "avant": "  if(tt) tt.style.display = 'none';\n  pricingHalos(document.getElementById('pricing-chart-svg'));",
+   "apres": "  if(tt) tt.style.display = 'none';",
+   "regle": "test_la_bulle_d_un_mois_lit_la_bande_et_l_echelle_du_VIEWBOX"
+  },
+  {
+   "nom": "un nœud garde data-tip (et retombe dans /infobulles.js)",
+   "fichier": "sentinel.html",
+   "avant": "<g class=\"eco-est eco-node\" data-graphe=\"eco\" data-eco-tip=\"Lien établi : la cartographie",
+   "apres": "<g class=\"eco-est eco-node\" data-graphe=\"eco\" data-tip=\"Lien établi : la cartographie",
+   "regle": "test_les_noeuds_du_schema_sortent_du_chemin_data_tip"
+  },
+  {
+   "nom": "un nœud ne se déclare plus au pilote",
+   "fichier": "sentinel.html",
+   "avant": "<g class=\"eco-log eco-node\" data-graphe=\"eco\" data-eco-tip=\"Lien établi : rattacher",
+   "apres": "<g class=\"eco-log eco-node\" data-eco-tip=\"Lien établi : rattacher",
+   "regle": "test_les_noeuds_du_schema_sortent_du_chemin_data_tip"
+  },
+  {
+   "nom": "un nœud écoute de nouveau la souris",
+   "fichier": "sentinel.html",
+   "avant": "<g class=\"eco-log eco-node\" data-graphe=\"eco\" data-eco-tip=\"Lien logique : les vagues",
+   "apres": "<g class=\"eco-log eco-node\" onmousemove=\"ecoTip(event,this)\" data-graphe=\"eco\" data-eco-tip=\"Lien logique : les vagues",
+   "regle": "test_plus_aucune_bulle_de_graphique_n_ecoute_la_souris"
+  },
+  {
+   "nom": "le nom d'un nœud commence par l'explication",
+   "fichier": "sentinel.html",
+   "avant": "aria-label=\"Module RaaS, Jalons de conformité — Lien établi : les cas prioritaires deviennent des jalons de conformité facturables.\"",
+   "apres": "aria-label=\"Lien établi : les cas prioritaires deviennent des jalons de conformité facturables. — Module RaaS, Jalons de conformité\"",
+   "regle": "test_chaque_noeud_est_une_image_nommee_D_ABORD_par_son_texte_visible"
+  },
+  {
+   "nom": "deux arrêts de tabulation dans le schéma",
+   "fichier": "sentinel.html",
+   "avant": "Vagues de déploiement — Lien logique : les vagues de déploiement issues de la priorisation nourrissent la feuille de route.\" tabindex=\"-1\">",
+   "apres": "Vagues de déploiement — Lien logique : les vagues de déploiement issues de la priorisation nourrissent la feuille de route.\" tabindex=\"0\">",
+   "regle": "test_chaque_noeud_est_une_image_nommee_D_ABORD_par_son_texte_visible"
+  },
+  {
+   "nom": "le schéma redevient une image unique",
+   "fichier": "sentinel.html",
+   "avant": "class=\"carto-eco-svg\" role=\"group\"",
+   "apres": "class=\"carto-eco-svg\" role=\"img\"",
+   "regle": "test_chaque_noeud_est_une_image_nommee_D_ABORD_par_son_texte_visible"
+  },
+  {
+   "nom": "la séquence \\u2019 revient",
+   "fichier": "sentinel.html",
+   "avant": "data-eco-tip=\"Lien prioritaire (établi) : classer un cas retenu selon les niveaux de risque de l’AI Act.\"",
+   "apres": "data-eco-tip=\"Lien prioritaire (établi) : classer un cas retenu selon les niveaux de risque de l\\u2019AI Act.\"",
+   "regle": "test_plus_aucune_sequence_litterale_backslash_u2019"
+  },
+  {
+   "nom": "ecoTip relit data-tip",
+   "fichier": "sentinel.page.js",
+   "avant": "  var txt=el.getAttribute('data-eco-tip'); if(!txt) return;",
+   "apres": "  var txt=el.getAttribute('data-tip'); if(!txt) return;",
+   "regle": "test_la_bulle_du_schema_dit_le_texte_du_noeud_ancree_au_noeud"
+  },
+  {
+   "nom": "la bulle du schéma vise le bord gauche du nœud",
+   "fichier": "sentinel.page.js",
+   "avant": "    window.ecoTip({ clientX: r.left + r.width / 2, clientY: r.top, target: el }, el);",
+   "apres": "    window.ecoTip({ clientX: r.left, clientY: r.top, target: el }, el);",
+   "regle": "test_la_bulle_du_schema_dit_le_texte_du_noeud_ancree_au_noeud"
+  },
+  {
+   "nom": "la bulle géopolitique ne se survole plus",
+   "fichier": "sentinel.html",
+   "avant": "border-radius:4px;pointer-events:auto;z-index:9999;display:none;max-width:220px",
+   "apres": "border-radius:4px;pointer-events:none;z-index:9999;display:none;max-width:220px",
+   "regle": "test_la_bulle_est_FIXE_SURVOLABLE_et_AU_DESSUS_de_la_barre_du_haut[.geo-tooltip]"
+  },
+  {
+   "nom": "la bulle du radar redevient absolue (rognée par .tbl-wrap)",
+   "fichier": "sentinel.html",
+   "avant": ".mat-radar-tooltip{position:fixed;display:none;",
+   "apres": ".mat-radar-tooltip{position:absolute;display:none;",
+   "regle": "test_la_bulle_est_FIXE_SURVOLABLE_et_AU_DESSUS_de_la_barre_du_haut[.mat-radar-tooltip]"
+  },
+  {
+   "nom": "la bulle de la courbe passe sous la barre du haut",
+   "fichier": "sentinel.html",
+   "avant": "border-radius:6px;pointer-events:auto;z-index:9999;max-width:300px",
+   "apres": "border-radius:6px;pointer-events:auto;z-index:20;max-width:300px",
+   "regle": "test_la_bulle_est_FIXE_SURVOLABLE_et_AU_DESSUS_de_la_barre_du_haut[.pricing-chart-tooltip]"
+  },
+  {
+   "nom": "la bulle du schéma ne se survole plus",
+   "fichier": "sentinel.html",
+   "avant": "border-radius:7px;pointer-events:auto;z-index:9999;",
+   "apres": "border-radius:7px;pointer-events:none;z-index:9999;",
+   "regle": "test_la_bulle_est_FIXE_SURVOLABLE_et_AU_DESSUS_de_la_barre_du_haut[.carto-eco-tip]"
+  },
+  {
+   "nom": "la bulle du radar se cache de nouveau par l'opacité",
+   "fichier": "sentinel.html",
+   "avant": ".mat-radar-tooltip.on{display:block}",
+   "apres": ".mat-radar-tooltip.on{opacity:1}",
+   "regle": "test_la_bulle_du_radar_se_CACHE_par_display_et_non_par_l_opacite"
+  },
+  {
+   "nom": "la bulle géopolitique est lue",
+   "fichier": "sentinel.html",
+   "avant": "id=\"geo-tooltip\" aria-hidden=\"true\"",
+   "apres": "id=\"geo-tooltip\"",
+   "regle": "test_la_bulle_est_MUETTE_dans_la_page[geo-tooltip]"
+  },
+  {
+   "nom": "la bulle de la courbe est lue",
+   "fichier": "sentinel.html",
+   "avant": "class=\"pricing-chart-tooltip\" aria-hidden=\"true\"",
+   "apres": "class=\"pricing-chart-tooltip\"",
+   "regle": "test_la_bulle_est_MUETTE_dans_la_page[pricing-chart-tooltip]"
+  },
+  {
+   "nom": "la bulle du schéma est lue",
+   "fichier": "sentinel.html",
+   "avant": "class=\"carto-eco-tip\" aria-hidden=\"true\"",
+   "apres": "class=\"carto-eco-tip\"",
+   "regle": "test_la_bulle_est_MUETTE_dans_la_page[carto-eco-tip]"
+  },
+  {
+   "nom": "le contour d'un nœud n'est plus dessiné",
+   "fichier": "sentinel.html",
+   "avant": "g[data-graphe]:focus-visible > :first-child{stroke:currentColor;stroke-width:3}",
+   "apres": "g[data-graphe]:focus-visible{outline:1px dotted}",
+   "regle": "test_le_focus_d_une_cible_est_DESSINE"
+  },
+  {
+   "nom": "sentinel.page.js chargé APRÈS les bulles (Échap passerait après elles)",
+   "fichier": "sentinel.html",
+   "avant": "<script src=\"/sentinel.page.js\" defer></script>",
+   "apres": "",
+   "regle": "test_sentinel_page_js_est_charge_AVANT_infobulles_et_bulle_titre"
+  },
+  {
+   "nom": "un conteneur de graphique reçoit un title",
+   "fichier": "sentinel.html",
+   "avant": "<div class=\"geo-chart\" id=\"geo-chart\"></div>",
+   "apres": "<div class=\"geo-chart\" id=\"geo-chart\" title=\"Répartition des juridictions\"></div>",
+   "regle": "test_aucune_cible_de_graphique_ni_son_graphique_ne_porte_de_TITLE"
+  },
+  {
+   "nom": "/bulle-titre.js n'éteint plus la bulle d'un graphique",
+   "fichier": "bulle-titre.js",
+   "avant": "    if (gb && typeof gb.fermer === \"function\") gb.fermer();\n",
+   "apres": "",
+   "regle": "test_bulle_titre_qui_s_ouvre_FERME_la_bulle_d_un_graphique[clavier600]"
+  },
+  {
+   "nom": "la recette vise des barres qui n'existent pas",
+   "fichier": "recette_graphes_bulles.js",
+   "avant": "geo:    { ecran: 'geo',      cible: '#geo-chart .geo-bar-col',",
+   "apres": "geo:    { ecran: 'geo',      cible: '#geo-chart .geo-barre',",
+   "regle": "test_les_cibles_de_la_recette_sont_PEINTES_par_le_code[geo]"
+  },
+  {
+   "nom": "la recette ne vise plus que le cercle de be93b64 (la bande d'aujourd'hui est mal nommée)",
+   "fichier": "recette_graphes_bulles.js",
+   "avant": "cible: '#pricing-chart-svg [data-graphe=\"tarif\"], #pricing-chart-svg .pricing-chart-hover-zone'",
+   "apres": "cible: '#pricing-chart-svg [data-graphe=\"courbe\"], #pricing-chart-svg .pricing-chart-hover-zone'",
+   "regle": "test_les_cibles_de_la_recette_sont_PEINTES_par_le_code[tarif]"
+  },
+  {
+   "nom": "le code ne peint plus la classe des barres que la recette vise (la feuille de style la nomme encore)",
+   "fichier": "sentinel.page.js",
+   "avant": "    col.className='geo-bar-col';",
+   "apres": "    col.className='geo-barre';",
+   "regle": "test_la_recette_vise_des_ancres_QUI_EXISTENT[geo-bar-col]"
+  },
+  {
+   "nom": "la bulle de la courbe perd l'identifiant que la recette vise",
+   "fichier": "sentinel.html",
+   "avant": "<div id=\"pricing-chart-tooltip\" class=\"pricing-chart-tooltip\"",
+   "apres": "<div id=\"pricing-chart-bulle\" class=\"pricing-chart-tooltip\"",
+   "regle": "test_la_recette_vise_des_ancres_QUI_EXISTENT[pricing-chart-tooltip]"
+  },
+  {
+   "nom": "la colonne d'avant est vidée",
+   "fichier": "recette_graphes_bulles.js",
+   "avant": "const AVANT_FIGE = {\n",
+   "apres": "const AVANT_FIGE = { /* vidée */ };\nconst ANCIENNE = {\n",
+   "regle": "test_la_recette_compare_a_une_colonne_AVANT_relevee"
+  }
+ ]
+}

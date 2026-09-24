@@ -359,6 +359,11 @@
        jusqu'au relâcher. Lu à l'usage, comme `selecteur`. */
     var ib = window.infobulles;
     if (ib && typeof ib.fermer === "function") ib.fermer();
+    /* …ET CELLE D'UN GRAPHIQUE (le pilote `grapheBulle` de Sentinel) : une
+       bulle de graphique ouverte au survol restait à côté de celle-ci,
+       ouverte à la tabulation ou à l'appui long. */
+    var gb = window.grapheBulle;
+    if (gb && typeof gb.fermer === "function") gb.fermer();
     creerLaBulle();
     ouverte = el;
     bulle.hidden = false;

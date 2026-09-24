@@ -1241,9 +1241,8 @@ textarea.form-el{min-height:86px;resize:vertical}
 .geo-filter-chip{font-size:10px;font-family:var(--mono);padding:5px 11px;border-radius:20px;cursor:pointer;border:1px solid var(--rule2);background:var(--white);color:var(--muted);transition:all .12s;user-select:none}
 .geo-filter-chip:hover{border-color:var(--accent)}
 .geo-filter-chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
-.geo-bar-col{cursor:pointer}
 .geo-bar:hover{opacity:.82}
-.geo-tooltip{position:fixed;background:var(--ink);color:#fff;font-size:11px;font-family:var(--sans);padding:8px 12px;border-radius:4px;pointer-events:none;z-index:9999;display:none;max-width:220px;line-height:1.5;box-shadow:0 4px 16px rgba(0,0,0,.25)}
+.geo-tooltip{position:fixed;background:var(--ink);color:#fff;font-size:11px;font-family:var(--sans);padding:8px 12px;border-radius:4px;pointer-events:auto;z-index:9999;display:none;max-width:220px;line-height:1.5;box-shadow:0 4px 16px rgba(0,0,0,.25)}
 .geo-tooltip-title{font-weight:600;margin-bottom:3px}
 .geo-tooltip-sub{font-size:10px;color:rgba(255,255,255,.7);font-family:var(--mono)}
 .geo-watch-card{cursor:pointer;transition:border-color .15s,box-shadow .15s}
@@ -1535,11 +1534,12 @@ textarea.form-el{min-height:86px;resize:vertical}
 .mat-radar-wrap{display:grid;grid-template-columns:460px 1fr;gap:28px;align-items:center}
 #mat-radar-holder{position:relative;background:var(--white);border:1px solid var(--rule2);border-radius:12px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,.05)}
 .mat-radar-svg{width:100%;max-width:460px;display:block}
-.mat-radar-tooltip{position:absolute;transform:translate(-50%,calc(-100% - 14px));background:var(--ink);color:#fff;padding:8px 12px;border-radius:6px;font-size:11px;line-height:1.5;max-width:200px;pointer-events:none;opacity:0;transition:opacity .15s;z-index:30;box-shadow:0 4px 16px rgba(0,0,0,.2)}
-.mat-radar-tooltip.on{opacity:1}
+.mat-radar-tooltip{position:fixed;display:none;background:var(--ink);color:#fff;padding:8px 12px;border-radius:6px;font-size:11px;line-height:1.5;max-width:200px;pointer-events:auto;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.2)}
+.mat-radar-tooltip.on{display:block}
 .mat-radar-tooltip strong{font-size:12px}
 .mat-radar-tooltip-score{font-family:var(--mono);font-size:10px;color:#D4D0CA;margin-top:4px;font-weight:600}
-.mat-radar-tooltip::after{content:'';position:absolute;left:50%;top:100%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--ink)}
+.mat-radar-tooltip::after{content:'';position:absolute;left:var(--fleche,50%);top:100%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--ink)}
+.mat-radar-tooltip.dessous::after{top:auto;bottom:100%;border-top-color:transparent;border-bottom-color:var(--ink)}
 .mat-pillar-row-highlighted{border-color:var(--accent) !important;box-shadow:0 2px 10px rgba(184,50,34,.12) !important;background:rgba(184,50,34,.03) !important}
 .mat-pillars-list{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-content:start}
 @media(max-width:1100px){.mat-pillars-list{grid-template-columns:1fr}}
@@ -2135,10 +2135,18 @@ textarea.form-el{min-height:86px;resize:vertical}
 .pricing-legend-item:hover{background:var(--bg2);border-color:var(--rule)}
 .pricing-legend-swatch{width:22px;height:0;border-top:3.5px solid;display:inline-block;border-radius:2px}
 .pricing-legend-swatch.dashed{border-top-style:dashed}
-.pricing-chart-tooltip{position:absolute;background:var(--ink);color:#fff;font-size:11px;padding:8px 12px;border-radius:6px;pointer-events:none;z-index:20;transform:translate(-50%,-100%);white-space:nowrap;box-shadow:0 4px 12px rgba(0,0,0,.25)}
+.pricing-chart-tooltip{position:fixed;background:var(--ink);color:#fff;font-size:11px;padding:8px 12px;border-radius:6px;pointer-events:auto;z-index:9999;max-width:300px;white-space:normal;box-shadow:0 4px 12px rgba(0,0,0,.25)}
 .pricing-chart-tooltip .ptt-title{font-weight:700;font-family:var(--mono);font-size:10px;margin-bottom:3px;color:#fff}
 .pricing-chart-tooltip .ptt-row{display:flex;justify-content:space-between;gap:10px;color:rgba(255,255,255,.85)}
-.pricing-chart-hover-zone{fill:transparent;cursor:pointer}
+.pricing-chart-tooltip .ptt-serie{margin-top:4px}
+.pricing-chart-tooltip .ptt-detail{font-family:var(--mono);font-size:9.5px;color:rgba(255,255,255,.7)}
+.pricing-chart-tooltip .ptt-pastille{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:middle}
+.chart-donnees{margin:10px auto 0;max-width:680px;font-size:11px}
+.chart-donnees summary{cursor:pointer;color:var(--muted2);font-family:var(--mono);font-size:10.5px}
+.chart-donnees-table{border-collapse:collapse;margin-top:6px;width:100%;font-family:var(--mono)}
+.chart-donnees-table caption{text-align:left;color:var(--muted2);padding:2px 0 4px}
+.chart-donnees-table th,.chart-donnees-table td{border:1px solid var(--rule);padding:3px 6px;text-align:right}
+.chart-donnees-table th[scope=col],.chart-donnees-table th[scope=row]{text-align:left;font-weight:600}
 
 /* ══ BIBLIOTHEQUE DE CAS D USAGE IA ══ */
 .uc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
@@ -2644,8 +2652,14 @@ textarea.form-el{min-height:86px;resize:vertical}
 .chart-eq-dot{animation:chartPulse 2s ease-in-out infinite}
 .chart-eq-line{animation:chartZoneFade .6s ease .8s backwards}
 .chart-axis-lbl{animation:chartFadeUp .5s ease backwards}
-.pricing-chart-hover-zone{transition:r .15s ease}
-.pricing-chart-hover-zone:hover{r:13}
+/* LES CIBLES DES GRAPHIQUES (pilote grapheBulle) : aucun contour carré du
+   navigateur au clic ; au clavier, un contour DESSINÉ — par le trait pour
+   une forme SVG, par le premier enfant pour un nœud <g> (le schéma est en
+   `overflow:hidden`, un contour extérieur serait rogné). */
+[data-graphe]:focus{outline:none}
+rect[data-graphe]:focus-visible,circle[data-graphe]:focus-visible{stroke:currentColor;stroke-width:2}
+g[data-graphe]:focus-visible > :first-child{stroke:currentColor;stroke-width:3}
+div[data-graphe]:focus-visible{outline:2px solid currentColor;outline-offset:2px}
 #pricing-chart-svg text{user-select:none}
 @media(prefers-reduced-motion:reduce){
   .chart-line-main,.chart-line-alt,.chart-line-saas{animation:none;stroke-dashoffset:0}
@@ -2911,7 +2925,7 @@ textarea.form-el{min-height:86px;resize:vertical}
 .carto-eco-svg .eco-node{cursor:default}
 .carto-eco-svg .eco-node:hover rect{filter:brightness(0.97)}
 .carto-hint{cursor:help;text-decoration:underline dotted;text-underline-offset:3px;text-decoration-color:var(--muted2)}
-.carto-eco-tip{position:absolute;display:none;max-width:260px;padding:8px 11px;background:var(--ink);color:var(--white);font-size:11.5px;line-height:1.45;border-radius:7px;pointer-events:none;z-index:40;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+.carto-eco-tip{position:fixed;display:none;max-width:260px;padding:8px 11px;background:var(--ink);color:var(--white);font-size:11.5px;line-height:1.45;border-radius:7px;pointer-events:auto;z-index:9999;box-shadow:0 4px 14px rgba(0,0,0,.25)}
 .carto-eco-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px}
 .carto-eco-title{font-size:13px;font-weight:600;color:var(--ink)}
 .carto-eco-legend{display:flex;gap:13px;font-size:11px;color:var(--muted2);flex-wrap:wrap}
@@ -4213,10 +4227,10 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <button class="geo-btn" onclick="geoExportCSV()" title="Telecharger les donnees geopolitiques au format CSV.">⬇ Données CSV</button>
     <div style="margin-left:auto;display:flex;gap:6px;align-items:center">
       <span style="font-size:10px;font-family:var(--mono);color:var(--muted2)">FILTRER :</span>
-      <span class="geo-filter-chip on" data-filter="all" onclick="geoFilterRisk('all',this)">Tous</span>
-      <span class="geo-filter-chip" data-filter="critical" onclick="geoFilterRisk('critical',this)">Critique</span>
-      <span class="geo-filter-chip" data-filter="high" onclick="geoFilterRisk('high',this)">Élevé</span>
-      <span class="geo-filter-chip" data-filter="moderate" onclick="geoFilterRisk('moderate',this)">Modéré</span>
+      <button type="button" class="geo-filter-chip on" data-filter="all" aria-pressed="true" onclick="geoFilterRisk('all',this)">Tous</button>
+      <button type="button" class="geo-filter-chip" data-filter="critical" aria-pressed="false" onclick="geoFilterRisk('critical',this)">Critique</button>
+      <button type="button" class="geo-filter-chip" data-filter="high" aria-pressed="false" onclick="geoFilterRisk('high',this)">Élevé</button>
+      <button type="button" class="geo-filter-chip" data-filter="moderate" aria-pressed="false" onclick="geoFilterRisk('moderate',this)">Modéré</button>
     </div>
   </div>
 
@@ -4243,10 +4257,10 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
   <div class="sec-h" style="font-size:18px;margin:28px 0 16px">Chronologie des évolutions</div>
   <div class="geo-tl-filterbar">
     <span style="font-size:10px;font-family:var(--mono);color:var(--muted2)">CATÉGORIE :</span>
-    <span class="geo-filter-chip on" data-cat="all" onclick="geoFilterCat('all',this)">Toutes</span>
-    <span class="geo-filter-chip" data-cat="ENTRÉE EN VIGUEUR" onclick="geoFilterCat('ENTRÉE EN VIGUEUR',this)">Entrée en vigueur</span>
-    <span class="geo-filter-chip" data-cat="CHANGEMENT POLITIQUE" onclick="geoFilterCat('CHANGEMENT POLITIQUE',this)">Politique</span>
-    <span class="geo-filter-chip" data-cat="RUPTURE TECHNOLOGIQUE" onclick="geoFilterCat('RUPTURE TECHNOLOGIQUE',this)">Technologie</span>
+    <button type="button" class="geo-filter-chip on" data-cat="all" aria-pressed="true" onclick="geoFilterCat('all',this)">Toutes</button>
+    <button type="button" class="geo-filter-chip" data-cat="ENTRÉE EN VIGUEUR" aria-pressed="false" onclick="geoFilterCat('ENTRÉE EN VIGUEUR',this)">Entrée en vigueur</button>
+    <button type="button" class="geo-filter-chip" data-cat="CHANGEMENT POLITIQUE" aria-pressed="false" onclick="geoFilterCat('CHANGEMENT POLITIQUE',this)">Politique</button>
+    <button type="button" class="geo-filter-chip" data-cat="RUPTURE TECHNOLOGIQUE" aria-pressed="false" onclick="geoFilterCat('RUPTURE TECHNOLOGIQUE',this)">Technologie</button>
     <select class="geo-sort-select" id="geo-tl-sort" onchange="geoSortTL(this.value)" style="margin-left:auto">
       <option value="recent">Plus récent d'abord</option>
       <option value="old">Plus ancien d'abord</option>
@@ -4302,7 +4316,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
   <p class="geo-disclaimer">Sources : textes officiels (Federal Register, EUR-Lex, Commission européenne, Cyberspace Administration of China) et analyses de cabinets juridiques. Les scores de risque sont des estimations CONSEILPREV à vocation d'aide à la décision et ne constituent pas un avis juridique. Dernière mise à jour : juin 2026.</p>
 
   <!-- Tooltip + Modal picker -->
-  <div class="geo-tooltip" id="geo-tooltip"></div>
+  <div class="geo-tooltip" id="geo-tooltip" aria-hidden="true"></div>
   <div class="geo-modal-overlay" id="geo-picker-modal">
     <div class="geo-modal">
       <div class="geo-modal-head">
@@ -4697,7 +4711,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
   <div class="radar-sector-bar" id="radar-sector-bar-holder"></div>
 
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start">
-    <div class="tbl-wrap" style="padding:24px"><div class="tbl-head" style="border:none;padding:0 0 16px"><span class="tbl-title">Votre profil de risque</span><span style="font-size:10px;font-family:var(--mono);color:var(--muted2)">vs. Moyenne tous secteurs</span></div><svg class="radar-svg" viewBox="0 0 300 280" id="radar-svg"></svg>
+    <div class="tbl-wrap" style="padding:24px"><div class="tbl-head" style="border:none;padding:0 0 16px"><span class="tbl-title">Votre profil de risque</span><span style="font-size:10px;font-family:var(--mono);color:var(--muted2)">vs. Moyenne tous secteurs</span></div><svg class="radar-svg" viewBox="0 0 300 280" id="radar-svg" role="img" aria-label="Radar de risque — détail dans la liste ci-dessous"></svg>
     <div class="radar-registre-info" id="radar-registre-info"></div></div>
     <div><div class="reg-stack" id="radar-scores"></div></div>
   </div>
@@ -4883,8 +4897,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <div id="pricing-chart-legend" class="pricing-legend"></div>
     <div style="position:relative;max-width:680px;margin:0 auto">
       <svg id="pricing-chart-svg" viewBox="0 0 640 320" style="width:100%;display:block"></svg>
-      <div id="pricing-chart-tooltip" class="pricing-chart-tooltip" style="display:none"></div>
+      <div id="pricing-chart-tooltip" class="pricing-chart-tooltip" aria-hidden="true" style="display:none"></div>
     </div>
+    <details class="chart-donnees"><summary>Voir les données</summary><div id="pricing-chart-donnees"></div></details>
     <div id="pricing-chart-insight" class="chart-insight"></div>
   </div>
 
@@ -5324,7 +5339,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
         <span><span class="carto-eco-l l-coh"></span> cohérence</span>
       </div>
     </div>
-    <svg viewBox="0 0 680 610" class="carto-eco-svg" role="img" aria-label="Schéma des interactions de la cartographie avec les modules Sentinel, par statut de lien">
+    <svg viewBox="0 0 680 610" class="carto-eco-svg" role="group" aria-label="Schéma des interactions de l’écosystème">
       <defs>
         <marker id="aEst" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="var(--green)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></marker>
         <marker id="aPrio" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></marker>
@@ -5343,19 +5358,19 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
       <line x1="342" y1="352" x2="342" y2="522" stroke="var(--muted2)" stroke-width="1.4" stroke-dasharray="2 4" marker-end="url(#aCoh)"/>
       <line x1="386" y1="352" x2="500" y2="522" stroke="var(--muted2)" stroke-width="1.4" stroke-dasharray="2 4" marker-end="url(#aCoh)"/>
 
-      <g class="eco-hub eco-node" data-tip="Point d\u2019entrée valeur métier : identifier, qualifier, chiffrer, évaluer la maturité puis redessiner le processus (6 étapes)." onmousemove="ecoTip(event,this)" onmouseleave="ecoTipHide()"><rect x="250" y="290" width="180" height="62" rx="10"/><text class="eco-t" x="340" y="314">Cartographie cas d’usage</text><text class="eco-s" x="340" y="334">6 étapes · valeur métier</text></g>
-      <g class="eco-prio eco-node" data-tip="Lien prioritaire (établi) : classer un cas retenu selon les niveaux de risque de l\u2019AI Act." onmousemove="ecoTip(event,this)" onmouseleave="ecoTipHide()"><rect x="90" y="122" width="180" height="56" rx="10"/><text class="eco-t" x="180" y="144">Simulateur IA Act</text><text class="eco-s" x="180" y="162">Classer un cas retenu</text></g>
-      <g class="eco-prio eco-node" data-tip="Lien prioritaire (établi) : inscrire un cas retenu à l\u2019inventaire central du registre." onmousemove="ecoTip(event,this)" onmouseleave="ecoTipHide()"><rect x="290" y="122" width="180" height="56" rx="10"/><text class="eco-t" x="380" y="144">Registre IA</text><text class="eco-s" x="380" y="162">Inscrire à l’inventaire</text></g>
-      <g class="eco-est eco-node" data-tip="Lien établi : la cartographie est la 1re étape des parcours par rôle (directeur programme, CEO, CDO, CAIO)." onmousemove="ecoTip(event,this)" onmouseleave="ecoTipHide()"><rect x="482" y="122" width="168" height="56" rx="10"/><text class="eco-t" x="566" y="144">Parcours guidés</text><text class="eco-s" x="566" y="162">1re étape par rôle</text></g>
-      <g class="eco-log eco-node" data-tip="Lien établi : rattacher la synthèse de la cartographie à la fiche client (onglet Notes) et y produire les livrables PDF." onmousemove="ecoTip(event,this)" onmouseleave="ecoTipHide()"><rect x="30" y="302" width="172" height="56" rx="10"/><text class="eco-t" x="116" y="324">Gestion clients</text><text class="eco-s" x="116" y="342">Livrables PDF</text></g>
-      <g class="eco-est eco-node" data-tip="Lien établi : les cas prioritaires deviennent des jalons de conformité facturables." onmousemove="ecoTip(event,this)" onmouseleave="ecoTipHide()"><rect x="482" y="410" width="168" height="56" rx="10"/><text class="eco-t" x="566" y="432">Module RaaS</text><text class="eco-s" x="566" y="450">Jalons de conformité</text></g>
-      <g class="eco-log eco-node" data-tip="Lien logique : les vagues de déploiement issues de la priorisation nourrissent la feuille de route." onmousemove="ecoTip(event,this)" onmouseleave="ecoTipHide()"><rect x="30" y="410" width="180" height="56" rx="10"/><text class="eco-t" x="120" y="432">Roadmap</text><text class="eco-s" x="120" y="450">Vagues de déploiement</text></g>
-      <g class="eco-log eco-node" data-tip="Lien établi : reporter le dossier de valeur pour dimensionner l\u2019enveloppe RaaS et le ROI." onmousemove="ecoTip(event,this)" onmouseleave="ecoTipHide()"><rect x="250" y="410" width="180" height="56" rx="10"/><text class="eco-t" x="340" y="432">Tarification</text><text class="eco-s" x="340" y="450">Enveloppe · ROI</text></g>
-      <g class="eco-coh eco-node" data-tip="Renvoi de cohérence : complète l\u2019évaluation de gouvernance (8 piliers) sans la dupliquer." onmousemove="ecoTip(event,this)" onmouseleave="ecoTipHide()"><rect x="40" y="524" width="180" height="56" rx="10"/><text class="eco-t" x="130" y="546">Audit de maturité</text><text class="eco-s" x="130" y="564">Se citer, ne pas dupliquer</text></g>
-      <g class="eco-coh eco-node" data-tip="Renvoi de cohérence : évaluation approfondie du risque, en écho à l\u2019axe risque de la qualification." onmousemove="ecoTip(event,this)" onmouseleave="ecoTipHide()"><rect x="256" y="524" width="168" height="56" rx="10"/><text class="eco-t" x="340" y="546">Matrice des risques</text><text class="eco-s" x="340" y="564">Axe risque partagé</text></g>
-      <g class="eco-coh eco-node" data-tip="Renvoi de cohérence : repères sectoriels et cadre réglementaire par pays pour un déploiement multi-pays." onmousemove="ecoTip(event,this)" onmouseleave="ecoTipHide()"><rect x="456" y="524" width="194" height="56" rx="10"/><text class="eco-t" x="553" y="546">Benchmark · Juridictions</text><text class="eco-s" x="553" y="564">Secteur · déploiement pays</text></g>
+      <g class="eco-hub eco-node" data-graphe="eco" data-eco-tip="Point d’entrée valeur métier : identifier, qualifier, chiffrer, évaluer la maturité puis redessiner le processus (6 étapes)." role="img" aria-label="Cartographie cas d’usage, 6 étapes · valeur métier — Point d’entrée valeur métier : identifier, qualifier, chiffrer, évaluer la maturité puis redessiner le processus (6 étapes)." tabindex="0"><rect x="250" y="290" width="180" height="62" rx="10"/><text class="eco-t" x="340" y="314">Cartographie cas d’usage</text><text class="eco-s" x="340" y="334">6 étapes · valeur métier</text></g>
+      <g class="eco-prio eco-node" data-graphe="eco" data-eco-tip="Lien prioritaire (établi) : classer un cas retenu selon les niveaux de risque de l’AI Act." role="img" aria-label="Simulateur IA Act, Classer un cas retenu — Lien prioritaire (établi) : classer un cas retenu selon les niveaux de risque de l’AI Act." tabindex="-1"><rect x="90" y="122" width="180" height="56" rx="10"/><text class="eco-t" x="180" y="144">Simulateur IA Act</text><text class="eco-s" x="180" y="162">Classer un cas retenu</text></g>
+      <g class="eco-prio eco-node" data-graphe="eco" data-eco-tip="Lien prioritaire (établi) : inscrire un cas retenu à l’inventaire central du registre." role="img" aria-label="Registre IA, Inscrire à l’inventaire — Lien prioritaire (établi) : inscrire un cas retenu à l’inventaire central du registre." tabindex="-1"><rect x="290" y="122" width="180" height="56" rx="10"/><text class="eco-t" x="380" y="144">Registre IA</text><text class="eco-s" x="380" y="162">Inscrire à l’inventaire</text></g>
+      <g class="eco-est eco-node" data-graphe="eco" data-eco-tip="Lien établi : la cartographie est la 1re étape des parcours par rôle (directeur programme, CEO, CDO, CAIO)." role="img" aria-label="Parcours guidés, 1re étape par rôle — Lien établi : la cartographie est la 1re étape des parcours par rôle (directeur programme, CEO, CDO, CAIO)." tabindex="-1"><rect x="482" y="122" width="168" height="56" rx="10"/><text class="eco-t" x="566" y="144">Parcours guidés</text><text class="eco-s" x="566" y="162">1re étape par rôle</text></g>
+      <g class="eco-log eco-node" data-graphe="eco" data-eco-tip="Lien établi : rattacher la synthèse de la cartographie à la fiche client (onglet Notes) et y produire les livrables PDF." role="img" aria-label="Gestion clients, Livrables PDF — Lien établi : rattacher la synthèse de la cartographie à la fiche client (onglet Notes) et y produire les livrables PDF." tabindex="-1"><rect x="30" y="302" width="172" height="56" rx="10"/><text class="eco-t" x="116" y="324">Gestion clients</text><text class="eco-s" x="116" y="342">Livrables PDF</text></g>
+      <g class="eco-est eco-node" data-graphe="eco" data-eco-tip="Lien établi : les cas prioritaires deviennent des jalons de conformité facturables." role="img" aria-label="Module RaaS, Jalons de conformité — Lien établi : les cas prioritaires deviennent des jalons de conformité facturables." tabindex="-1"><rect x="482" y="410" width="168" height="56" rx="10"/><text class="eco-t" x="566" y="432">Module RaaS</text><text class="eco-s" x="566" y="450">Jalons de conformité</text></g>
+      <g class="eco-log eco-node" data-graphe="eco" data-eco-tip="Lien logique : les vagues de déploiement issues de la priorisation nourrissent la feuille de route." role="img" aria-label="Roadmap, Vagues de déploiement — Lien logique : les vagues de déploiement issues de la priorisation nourrissent la feuille de route." tabindex="-1"><rect x="30" y="410" width="180" height="56" rx="10"/><text class="eco-t" x="120" y="432">Roadmap</text><text class="eco-s" x="120" y="450">Vagues de déploiement</text></g>
+      <g class="eco-log eco-node" data-graphe="eco" data-eco-tip="Lien établi : reporter le dossier de valeur pour dimensionner l’enveloppe RaaS et le ROI." role="img" aria-label="Tarification, Enveloppe · ROI — Lien établi : reporter le dossier de valeur pour dimensionner l’enveloppe RaaS et le ROI." tabindex="-1"><rect x="250" y="410" width="180" height="56" rx="10"/><text class="eco-t" x="340" y="432">Tarification</text><text class="eco-s" x="340" y="450">Enveloppe · ROI</text></g>
+      <g class="eco-coh eco-node" data-graphe="eco" data-eco-tip="Renvoi de cohérence : complète l’évaluation de gouvernance (8 piliers) sans la dupliquer." role="img" aria-label="Audit de maturité, Se citer, ne pas dupliquer — Renvoi de cohérence : complète l’évaluation de gouvernance (8 piliers) sans la dupliquer." tabindex="-1"><rect x="40" y="524" width="180" height="56" rx="10"/><text class="eco-t" x="130" y="546">Audit de maturité</text><text class="eco-s" x="130" y="564">Se citer, ne pas dupliquer</text></g>
+      <g class="eco-coh eco-node" data-graphe="eco" data-eco-tip="Renvoi de cohérence : évaluation approfondie du risque, en écho à l’axe risque de la qualification." role="img" aria-label="Matrice des risques, Axe risque partagé — Renvoi de cohérence : évaluation approfondie du risque, en écho à l’axe risque de la qualification." tabindex="-1"><rect x="256" y="524" width="168" height="56" rx="10"/><text class="eco-t" x="340" y="546">Matrice des risques</text><text class="eco-s" x="340" y="564">Axe risque partagé</text></g>
+      <g class="eco-coh eco-node" data-graphe="eco" data-eco-tip="Renvoi de cohérence : repères sectoriels et cadre réglementaire par pays pour un déploiement multi-pays." role="img" aria-label="Benchmark · Juridictions, Secteur · déploiement pays — Renvoi de cohérence : repères sectoriels et cadre réglementaire par pays pour un déploiement multi-pays." tabindex="-1"><rect x="456" y="524" width="194" height="56" rx="10"/><text class="eco-t" x="553" y="546">Benchmark · Juridictions</text><text class="eco-s" x="553" y="564">Secteur · déploiement pays</text></g>
     </svg>
-    <div id="carto-eco-tip" class="carto-eco-tip"></div>
+    <div id="carto-eco-tip" class="carto-eco-tip" aria-hidden="true"></div>
   </div>
 
   <div class="carto-mp-cta"><div class="carto-mp-cta-txt"><strong>Créer mon parcours chiffré</strong><span>Générez un parcours guidé à partir de vos cas d’usage et allez jusqu’au coût et à l’enveloppe RaaS.</span></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="carto-mp-cta-btn" onclick="monParcoursStart()">Lancer (auto) →</button><button class="carto-mp-cta-btn2" onclick="monParcoursBuilder()">Composer</button></div></div>
