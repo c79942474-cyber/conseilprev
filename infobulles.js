@@ -648,7 +648,15 @@
     } catch (e) { /* pas d'observateur : le balayage initial tient */ }
   }
 
-  window.infobulles = { ouvrir: ouvrir, fermer: fermer, balayer: balayer,
+  /* `replier` EST PUBLIC pour UNE BULLE À LA FOIS : `fermer` ne ferme que
+     ce que le doigt a ouvert, et rien ne ferme de l'extérieur une bulle que
+     `:focus-visible` tient ouverte — sinon ce que fait Échap ici. MESURÉ
+     (poste) : Tab jusqu'au « i » d'une ligne de pilier, puis la souris sur
+     le point d'un autre pilier du radar — les deux bulles restaient
+     ouvertes. Le pilote des graphiques de Sentinel replie donc le
+     déclencheur qui a le focus quand il ouvre la sienne ; la bulle revient
+     quand le focus part puis revient, comme après Échap. */
+  window.infobulles = { ouvrir: ouvrir, fermer: fermer, replier: replier, balayer: balayer,
                         selecteur: SELECTEUR, classe: OUVERTE, fermee: FERMEE,
                         enfants: ENFANTS };
 

@@ -17,6 +17,17 @@
  * `title` sur une cible de graphique (sinon /bulle-titre.js, ou le
  * navigateur, ouvrirait une seconde bulle).
  *
+ * CE QUE LES REVUES DU LOT 4 ONT MESURÉ, ET QUE CETTE RECETTE NE VOYAIT PAS
+ * (lot 4c) : la bulle de la courbe prenait le clic de « Cumul » (F) ; le
+ * survol d'un point faisait encore défiler la page à 1024 et 640 px, et au
+ * stylet (G-1 poste étroit, G-1 stylet) ; au doigt, la bulle prenait l'appui
+ * destiné à la voisine qu'elle recouvre ; deux bulles restaient ouvertes
+ * quand le focus et la souris tenaient chacun la leur ; G-5 n'était joué
+ * qu'à 6 mois ; G-3 relevait une bulle neuve, recréée par le changement
+ * d'écran, et pas celle qu'on venait de quitter. Et ce que la correction
+ * elle-même a dû tenir : décalée pour épargner les commandes, la bulle d'un
+ * mois se survole encore, en diagonale comme par le haut (F survolable).
+ *
  * DEUX CONTEXTES :
  *   · « tactile » : Pixel 7 — gestes envoyés par le protocole de débogage
  *     (`Input.dispatchTouchEvent`), en coordonnées de la fenêtre VISUELLE
@@ -47,16 +58,23 @@ const joue = (s) => SECTIONS.indexOf(s) >= 0;
 const pause = (ms) => new Promise(r => setTimeout(r, ms));
 
 /* LA COLONNE « AVANT » : relevée par cette recette sur le commit be93b64,
-   serveur neuf, le 24 septembre 2026 : 8 contrôles verts sur 44. Les huit
-   sont légitimes — la page répond (deux contextes), le contexte est
-   tactile, un balayage n'ouvrait déjà rien sur l'histogramme, aucun title
-   sur les graphiques, le stylet ouvrait déjà la barre (par les événements
-   de souris de compatibilité), ni erreur JavaScript ni refus du limiteur.
-   Une valeur absente se lit « — ». */
+   serveur neuf, le 24 septembre 2026 (lot 4c) : 9 contrôles verts sur 54.
+   Les neuf sont légitimes — la page répond (deux contextes), le contexte
+   est tactile, un balayage n'ouvrait déjà rien sur l'histogramme, aucun
+   title sur les graphiques, le stylet ouvrait déjà la barre (par les
+   événements de souris de compatibilité), ni erreur JavaScript ni refus du
+   limiteur ; et « F cumul » : l'ancienne bulle de la courbe, posée sur le
+   point et traversable (`pointer-events:none`), ne prenait pas le clic des
+   commandes de la carte — c'est le lot 4 qui a introduit ce défaut
+   (357f9c2, même recette : « Cumul » atteint 0 fois sur 2 après un survol ;
+   9 bulles sur 24 posées sur une commande, 18 mois au poste et 6 mois à
+   1024 px — sur be93b64, 1 : à 1024 px, celle du mois 1 couvrait déjà la
+   flèche de navigation fixe). Sur 357f9c2, 43 verts sur 54 : les onze
+   contrôles du lot 4c tombent. Une valeur absente se lit « — ». */
 const AVANT_FIGE = {
   'G-1 points': '0/8 ; défilement 0 à +516 px ; ouvertes à 600 ms : 0/8',
   'G-1 haut': 'fermée (block, opacité 0) ; bulle 170,-93,304,41 / point 246,64,268,85 ; défilement 0',
-  'G-2 lecture': '100 ms : fermée, 500 ms : fermée (ouverte puis refermée en 16 ms)',
+  'G-2 lecture': '100 ms : fermée, 500 ms : fermée (ouverte puis refermée en 12 ms)',
   'G-2 second appui': 'fermée (block, opacité 0)',
   'G-4 ligne doigt': 'point éteint, bulle fermée, défilement 0',
   'préséance i': '« i » ouvert, graphique fermé, 1 ouverture(s) de la bulle du radar pendant l’appui',
@@ -65,23 +83,33 @@ const AVANT_FIGE = {
   'risque point': '100 ms fermée, 500 ms fermée (block, opacité 0), 2e appui fermée',
   'risque ligne': 'ligne éteinte, bulle fermée, défilement 0',
   'G-5 cibles': '24 circle, la plus étroite 8.8 × 8.8 px, 0 px au plus près entre centres, 0 arrêt(s)',
-  'G-6 tarification': 'défilement 185 px, 0 ouverture(s) ; témoin : fermée (none, opacité 1)',
+  'G-5 horizons': '6 mois : 24 bandes de 8.8 px, 0 arrêt(s), tableau 0 × 0, résumé absent KO ; 12 mois : 48 bandes de 8.8 px, 0 arrêt(s), tableau 0 × 0, résumé absent KO ; 18 mois : 72 bandes de 8.8 px, 0 arrêt(s), tableau 0 × 0, résumé absent KO',
+  'G-6 tarification': 'balayage parti À CÔTÉ de la cible ; défilement 185 px, 0 ouverture(s) ; témoin : fermée (none, opacité 1)',
   'G-5 bulle doigt': '1 série(s) ; fermée (none, opacité 1)',
   'G-6 géo': 'défilement 185 px, 0 ouverture(s) ; témoin : ouverte « Haut - 1 juridictionsTensions geopolitiques  » HORS fenêtre visuelle 234,732,445,783',
   'G-8 défilement': 'page -200 px, barre DÉTRUITE par l’appui, bulle 0 px (top 732 → 732)',
   'eco doigt': '100 ms fermée, 500 ms fermée (none, opacité 1), ailleurs fermée, annonce « Lien prioritaire (établi) : classer un c »',
+  'voisine au doigt': '0/4 voisines ouvertes (témoins 0/4) — maturité 3→2 rien (témoin KO), 4→1 rien (témoin KO) ; risque 2→1 rien (témoin KO), 3→1 rien (témoin KO) ; schéma ',
+  'G-1 stylet': '0/6 ; défilement 0 à +352 px ; plane 3 FERMÉE, plane 5, plane 6 FERMÉE, contact 3 FERMÉE, contact 5, contact 6 FERMÉE',
   'échap ordre': 'infobulles.js → bulle-titre.js',
   'survol poste': '1/5 (mat ok, risque recouvre sa cible, tarif recouvre sa cible, geo recouvre sa cible, eco recouvre sa cible)',
   'titres': '0 sur 5 graphiques (témoin : 1 title relevé(s) sur un bouton de secteur)',
   'une à la fois poste': 'survol : ouverte ; Tab + 250 ms : graphique ouvert, title fermé ; + 700 ms : title ouvert, graphique ENCORE OUVERT',
-  'G-3 maturité': 'display block, opacité 0, aria-hidden null, ignorée false',
+  'G-3 maturité': 'pendant le survol affichée (block) ; après la sortie display block, opacité 0, aria-hidden null, ignorée false',
+  'G-1 poste étroit': '4/13 ; défilement -213 à +482 px ; fermées : 1024 px n°0, 1024 px n°2, 1024 px n°6, 1024 px n°7, 640 px n°1, 640 px n°2, 640 px n°3 ; masqués par un bouton fixe : 3',
   'G-3 toutes': 'geo-tooltip=null mat-radar-tooltip=null radar-tooltip=null pricing-chart-tooltip=null carto-eco-tip=null',
   'G-4 radars': 'zones à tabindex 0 + 0 ; maturité — «  » ; risque — «  »',
   'G-4 Tab i': 'focus sur le « i », point éteint, bulle fermée, défilement 0',
-  'échap une chose': 'avant : « i » ouvert, graphique ouvert ; 1re : « i » fermé, graphique OUVERT ; 2e : « i » fermé',
+  'une à la fois clavier puis souris': '« i » ouvert ; souris sur un autre point → graphique ouvert, « i » ENCORE OUVERT ; souris partie → graphique fermé, « i » ouvert ; Tab puis Maj+Tab → « i » rouvert',
+  'échap une chose': 'avant : graphique ouvert, « i » OUVERT aussi ; 1re frappe : graphique OUVERT, vue par la page 1 fois ; 2e (sans bulle) : vue 1 fois',
   'G-5 clavier': '0 arrêt(s) ; Tab → SPAN (pas de bulle) ; → mois null, bulle HORS de la bande ; Fin → null, Début → null',
   'G-5 nom et tableau': 'nom «  » ; tableau 0 × 0 ()',
   'G-12 contour': 'aucune bande focalisée au clavier',
+  'F cumul': 'survol M1 → clic sur « chart-btn-cumul » → cumul ; survol M2 → clic sur « chart-btn-cumul » → cumul ; sans survol → clic sur « chart-btn-cumul » → cumul',
+  'F survolable': 'mois 1 en diagonale : ouverte « Hybride continu — Mois 1Socle fixe158€Part v » → sur sa bulle : ouverte « Hybride optimiste — Mois 1Socle fixe158€Part » ; mois 1 par le haut, puis le long : ouverte « Hybride continu — Mois 1Socle fixe158€Part v » → sur sa bulle : ouverte « Hybride optimiste — Mois 1Socle fixe158€Part » ; mois 2 droit vers le haut : ouverte « Hybride continu — Mois 2Socle fixe158€Part v » → sur sa bulle : ouverte « Hybride optimiste — Mois 2Socle fixe158€Part » | témoins : arrêt HORS de la bande 2 → —, 600 ms → — ; balayage → —',
+  'F commandes': '24/24 ouvertes ; 1 sur des commandes — 1024 px M1:nav-prev',
+  'une à la fois souris puis clavier': 'témoin Tab seul : « ? » ouvert ; survol : bande ouverte ; Tab → bande OUVERTE, « ? » ouvert ; la souris bouge sur la bande → bande ROUVERTE, « ? » ouvert',
+  'une à la fois clavier et « ? »': 'souris sur le « ? » : ouvert ; Tab → mois null, bande FERMÉE, « ? » ENCORE OUVERT ; puis la souris revient sur le « ? » (bande FERMÉE) → bande fermée, « ? » ouvert',
   'G-7 clic': 'élément DÉTRUIT, 11 mutation(s) du graphique, focus sur BODY.',
   'G-7 noms': 'generic «  » · generic «  » · generic «  » · generic «  » · generic «  »',
   'G-7 puces': 'SPAN SPAN SPAN SPAN SPAN SPAN SPAN SPAN ; Entrée sur « Critique » : all=null critical=null high=null moderate=null ; sur « Tous » : all=null critical=null high=null moderate=null',
@@ -460,6 +488,44 @@ async function voisines(p, sel, bulleSel) {
   return { n, vues, fautes, detail, partMax };
 }
 
+/* AU DOIGT, L'APPUI SUR UNE VOISINE QUE LA BULLE RECOUVRE : pour chaque
+   cible, sa bulle ouverte au doigt ; la première voisine dont le CENTRE est
+   sous la bulle reçoit l'appui — sa bulle doit s'ouvrir (même texte que son
+   TÉMOIN : la même voisine, bulle fermée, touchée). Au plus `max` cas. */
+async function voisineRecouverte(p, cdp, g, max) {
+  const r = { essais: 0, ouvre: 0, temoins: 0, detail: [] };
+  const texte = () => p.evaluate((b) => { const e = document.querySelector(b); if (!e) return null; const cs = getComputedStyle(e);
+    const vue = cs.display !== 'none' && parseFloat(cs.opacity) > 0.5 && (!e.classList.contains('mat-radar-tooltip') || e.classList.contains('on'));
+    return vue ? e.textContent.replace(/\s+/g, ' ').trim() : null; }, g.bulle);
+  const n = await p.evaluate((s) => document.querySelectorAll(s).length, g.cible);
+  for (let i = 0; i < n && r.essais < max; i++) {
+    await p.evaluate(REPOS);
+    if (!(await marquer(p, g.cible, i, 'vi'))) continue;
+    await p.waitForTimeout(300);
+    await appui(p, cdp, 'vi', 450);
+    const j = await p.evaluate(([sb, sc, i]) => { const b = document.querySelector(sb); if (!b || getComputedStyle(b).display === 'none') return -1;
+      const rb = b.getBoundingClientRect();
+      return [...document.querySelectorAll(sc)].findIndex((e, k) => { if (k === i) return false; const q = e.getBoundingClientRect(); if (!q.width) return false;
+        const x = q.left + q.width / 2, y = q.top + q.height / 2; return x > rb.left + 2 && x < rb.right - 2 && y > rb.top + 2 && y < rb.bottom - 2; }); }, [g.bulle, g.cible, i]);
+    if (j < 0) continue;
+    await p.evaluate(([sc, j]) => { document.querySelectorAll('[data-recette="vj"]').forEach(e => e.removeAttribute('data-recette'));
+      document.querySelectorAll(sc)[j].setAttribute('data-recette', 'vj'); }, [g.cible, j]);
+    const cv = await centre(p, 'vj');
+    await TOUCHER(cdp, cv.x, cv.y); await p.waitForTimeout(450);
+    const apres = await texte();
+    await p.evaluate(REPOS); await p.waitForTimeout(200);
+    const cv2 = await centre(p, 'vj');
+    await TOUCHER(cdp, cv2.x, cv2.y); await p.waitForTimeout(450);
+    const attendu = await texte();
+    r.essais++;
+    if (attendu) r.temoins++;
+    if (attendu && apres === attendu) r.ouvre++;
+    r.detail.push((i + 1) + '→' + (j + 1) + (attendu && apres === attendu ? ' ouverte' : apres ? ' « ' + apres.slice(0, 14) + ' » restée' : ' rien') + (attendu ? '' : ' (témoin KO)'));
+  }
+  await p.evaluate(REPOS);
+  return r;
+}
+
 (async () => {
   const nav = await chromium.launch();
   let ctx, p, cdp, v, c, tr;
@@ -530,6 +596,9 @@ async function voisines(p, sel, bulleSel) {
      '100 ms : ' + (a100.visible ? 'ouverte' : 'fermée') + ', 500 ms : ' + (a500.visible ? 'ouverte' : 'fermée')
        + (dur !== null && dur !== Infinity ? ' (ouverte puis refermée en ' + dur + ' ms)' : ''));
   ok('G-2 second appui', 'G-2 le second appui la ferme', a500.visible && !second.visible, dit(second));
+
+  const vMat = await voisineRecouverte(p, cdp, G.mat, 2);
+  dire('voisines recouvertes, radar de maturité : ' + vMat.detail.join(', '));
 
   /* LA LIGNE D'UN PILIER, AU DOIGT : son point s'allume, sans bulle ni
      défilement — la ligne dit déjà tout. */
@@ -637,6 +706,8 @@ async function voisines(p, sel, bulleSel) {
   ok('risque ligne', 'radar de risque : appui sur une ligne, point allumé sans bulle ni défilement',
      c.touche && rl.allume && !rl.bulle && Math.round(rl.y) === Math.round(yr),
      'ligne ' + (rl.allume ? 'allumée' : 'éteinte') + ', bulle ' + (rl.bulle ? 'OUVERTE' : 'fermée') + ', défilement ' + Math.round(rl.y - yr));
+  const vRq = await voisineRecouverte(p, cdp, G.risque, 2);
+  dire('voisines recouvertes, radar de risque : ' + vRq.detail.join(', '));
 
   /* G-5 (doigt) et G-6 — LA COURBE DE TARIFICATION. */
   console.log('\n  G-5 / G-6 — la courbe de tarification au doigt');
@@ -657,6 +728,36 @@ async function voisines(p, sel, bulleSel) {
   ok('G-5 cibles', 'G-5 une cible par mois, 24 px de large au moins, un seul arrêt de tabulation',
      cibles.n >= 6 && cibles.n <= 18 && cibles.largeur >= 24 && cibles.arrets === 1,
      cibles.n + ' ' + cibles.forme + ', la plus étroite ' + cibles.largeur + ' × ' + cibles.hauteur + ' px, ' + cibles.ecart + ' px au plus près entre centres, ' + cibles.arrets + ' arrêt(s)');
+  /* G-5 AUX TROIS HORIZONS. MESURÉ (revue du lot 4, puis avant cette
+     correction) : une bande fait 34,9 à 48,6 px à 6 mois, mais 21,6 px à 12
+     mois et 14,3 px à 18 mois ; le résumé « Voir les données », 16,3 px. LA
+     SPÉCIFICATION EST AMENDÉE (exception « équivalent » de WCAG 2.5.8) :
+     sous 24 px, chaque valeur du mois se lit dans le tableau, derrière une
+     cible de 24 px. */
+  const horizons = [];
+  for (const mois of [6, 12, 18]) {
+    await p.evaluate((m) => { const s = document.getElementById('pricing-chart-horizon'); if (s) s.value = String(m);
+      if (window.pricingChartSetHorizon) window.pricingChartSetHorizon(m); }, mois);
+    await p.waitForTimeout(900);
+    horizons.push(await p.evaluate(([sel, mois]) => {
+      const els = [...document.querySelectorAll(sel)].filter(e => e.getBoundingClientRect().width > 0);
+      const t = document.querySelector('#pricing-chart-donnees table');
+      const s = document.querySelector('#p-pricing details.chart-donnees > summary'), rs = s ? s.getBoundingClientRect() : null;
+      const svg = document.getElementById('pricing-chart-svg');
+      return { mois, n: els.length, min: els.length ? Math.round(Math.min(...els.map(e => e.getBoundingClientRect().width)) * 10) / 10 : 0,
+               arrets: svg ? [...svg.querySelectorAll('[tabindex]')].filter(e => e.tabIndex >= 0).length : 0,
+               lignes: t ? t.querySelectorAll('tbody tr').length : 0, valeurs: t ? t.querySelectorAll('tbody td').length : 0,
+               resume: rs ? [Math.round(rs.width), Math.round(rs.height * 10) / 10] : null };
+    }, [G.tarif.cible, mois]));
+  }
+  await p.evaluate(() => { const s = document.getElementById('pricing-chart-horizon'); if (s) s.value = '6'; if (window.pricingChartSetHorizon) window.pricingChartSetHorizon(6); });
+  await p.waitForTimeout(900);
+  const hOk = (h) => h.n === h.mois && h.arrets === 1
+    && (h.min >= 24 || (h.lignes === h.n && h.valeurs === h.n * 4 && !!h.resume && h.resume[0] >= 24 && h.resume[1] >= 24));
+  ok('G-5 horizons', 'G-5 aux trois horizons : des bandes de 24 px, ou — plus étroites — le tableau « Voir les données » (n × 4 valeurs) derrière une cible de 24 px (2.5.8, équivalent)',
+     horizons.length === 3 && horizons.every(hOk),
+     horizons.map(h => h.mois + ' mois : ' + h.n + ' bandes de ' + h.min + ' px, ' + h.arrets + ' arrêt(s), tableau ' + h.lignes + ' × ' + (h.lignes ? h.valeurs / h.lignes : 0)
+       + ', résumé ' + (h.resume ? h.resume.join(' × ') + ' px' : 'absent') + (hOk(h) ? '' : ' KO')).join(' ; '));
   await marquer(p, G.tarif.cible, 2, 'tf');
   await p.waitForTimeout(400);
   const tfb = await balayer(p, cdp, 'tf');
@@ -668,8 +769,8 @@ async function voisines(p, sel, bulleSel) {
   const tfv = await p.evaluate(VUE, [G.tarif.bulle, 'tf']);
   const series = ['Hybride', 'Pessimiste', 'Optimiste', 'RaaS Jalons'].filter(s => tfv.texte && tfv.texte.indexOf(s) >= 0).length;
   ok('G-6 tarification', 'G-6 un balayage à travers la courbe n’ouvre aucune bulle (témoin : l’appui qui suit l’ouvre)',
-     tfb.defile !== 0 && ouvTf === 0 && tfv.visible,
-     'défilement ' + tfb.defile + ' px, ' + ouvTf + ' ouverture(s) ; témoin : ' + dit(tfv));
+     tfb.touche && tfb.defile !== 0 && ouvTf === 0 && tfv.visible,
+     (tfb.touche ? '' : 'balayage parti À CÔTÉ de la cible ; ') + 'défilement ' + tfb.defile + ' px, ' + ouvTf + ' ouverture(s) ; témoin : ' + dit(tfv));
   ok('G-5 bulle doigt', 'G-5 l’appui sur un mois ouvre sa bulle : quatre séries, dans la fenêtre visuelle, sans recouvrir la cible',
      c.touche && tfv.visible && series === 4 && tfv.dansVV && !tfv.croise && tfv.sousBarre,
      series + ' série(s) ; ' + dit(tfv) + (tfv.croise ? ' ; RECOUVRE la cible' : ''));
@@ -687,7 +788,8 @@ async function voisines(p, sel, bulleSel) {
   c = await appui(p, cdp, 'gb', 600);
   const gv = await p.evaluate(VUE, [G.geo.bulle, 'gb']);
   ok('G-6 géo', 'G-6 un balayage à travers l’histogramme n’ouvre aucune bulle (témoin : l’appui qui suit l’ouvre)',
-     gbb.defile !== 0 && ouvGeo === 0 && gv.visible, 'défilement ' + gbb.defile + ' px, ' + ouvGeo + ' ouverture(s) ; témoin : ' + dit(gv));
+     gbb.touche && gbb.defile !== 0 && ouvGeo === 0 && gv.visible,
+     (gbb.touche ? '' : 'balayage parti À CÔTÉ de la cible ; ') + 'défilement ' + gbb.defile + ' px, ' + ouvGeo + ' ouverture(s) ; témoin : ' + dit(gv));
   const g8a = await p.evaluate(() => { const e = document.querySelector('[data-recette="gb"]'); return e ? Math.round(e.getBoundingClientRect().top) : null; });
   const sy8 = await p.evaluate(() => scrollY);
   /* VERS LE HAUT : la barre descend de 200 px et garde la place de sa bulle
@@ -726,6 +828,55 @@ async function voisines(p, sel, bulleSel) {
      c.touche && e100.visible && e500.visible && e500.dansVV && !eAilleurs.visible && annonce === '',
      '100 ms ' + (e100.visible ? 'ouverte' : 'fermée') + ', 500 ms ' + dit(e500) + ', ailleurs ' + (eAilleurs.visible ? 'OUVERTE' : 'fermée')
        + (annonce ? ', annonce « ' + annonce.slice(0, 40) + ' »' : ''));
+  const vEco = await voisineRecouverte(p, cdp, G.eco, 2);
+  dire('voisines recouvertes, schéma : ' + vEco.detail.join(', '));
+  /* H — L'APPUI SUR UNE VOISINE RECOUVERTE PAR LA BULLE. MESURÉ (revue du
+     lot 4, puis avant cette correction) : la bulle se survole, donc elle
+     prend aussi le doigt — 0 voisine recouverte ouverte sur 14 (5 points du
+     radar de maturité, 4 du radar de risque, 5 nœuds du schéma), 14 sur 14
+     bulle fermée. */
+  const vTot = [vMat, vRq, vEco].reduce((a, x) => ({ essais: a.essais + x.essais, ouvre: a.ouvre + x.ouvre, temoins: a.temoins + x.temoins }), { essais: 0, ouvre: 0, temoins: 0 });
+  ok('voisine au doigt', 'au doigt, l’appui sur une voisine que la bulle recouvre ouvre la voisine (témoin : la même, bulle fermée, s’ouvre) — radars et schéma',
+     vTot.essais >= 5 && vTot.temoins === vTot.essais && vTot.ouvre === vTot.essais,
+     vTot.ouvre + '/' + vTot.essais + ' voisines ouvertes (témoins ' + vTot.temoins + '/' + vTot.essais + ') — maturité ' + vMat.detail.join(', ') + ' ; risque ' + vRq.detail.join(', ') + ' ; schéma ' + vEco.detail.join(', '));
+
+  /* G-1 AU STYLET, EN DERNIER DANS CE CONTEXTE : le stylet laissé en survol
+     change la suite (MESURÉ sur be93b64 : placé plus tôt, des appuis du doigt
+     gardaient ensuite leur bulle, et deux contrôles passaient pour cette
+     raison-là). La page ne défile plus sous lui. MESURÉ (revue du lot 4,
+     puis avant cette correction) : sur les points 3, 5 et 6, le survol du
+     stylet — ou son contact direct — faisait défiler la page de 127 à 352 px
+     (le défilement était demandé « à la souris », et un stylet en est une
+     pour le pilote) : 0 bulle lisible sur 3, parfois un autre pilier allumé. */
+  console.log('\n  G-1 (stylet) — trois points, le stylet qui plane, puis au contact');
+  await aller(p, 'maturite', 2000);
+  const st = [];
+  for (const mode of ['plane', 'contact']) {
+    for (const i of [3, 5, 6]) {
+      await p.evaluate(REPOS);
+      await cdp.send('Input.dispatchMouseEvent', { type: 'mouseMoved', x: 5, y: 830, pointerType: 'pen' });
+      await p.waitForTimeout(300);
+      if (!(await marquer(p, G.mat.cible, i, 'sty'))) { st.push({ mode, i, absent: true, dy: 0 }); continue; }
+      await p.waitForTimeout(400);
+      c = await centre(p, 'sty');
+      const y0 = await p.evaluate(() => scrollY);
+      if (mode === 'plane') await cdp.send('Input.dispatchMouseEvent', { type: 'mouseMoved', x: c.x, y: c.y, pointerType: 'pen' });
+      else {
+        await cdp.send('Input.dispatchMouseEvent', { type: 'mousePressed', x: c.x, y: c.y, button: 'left', clickCount: 1, pointerType: 'pen' });
+        await pause(90);
+        await cdp.send('Input.dispatchMouseEvent', { type: 'mouseReleased', x: c.x, y: c.y, button: 'left', clickCount: 1, pointerType: 'pen' });
+      }
+      await p.waitForTimeout(900);
+      v = await p.evaluate(VUE, [G.mat.bulle, 'sty']);
+      st.push({ mode, i, touche: c.touche, dy: v.scrollY - Math.round(y0), vue: v.visible, dansVV: v.dansVV });
+    }
+  }
+  await cdp.send('Input.dispatchMouseEvent', { type: 'mouseMoved', x: 5, y: 830, pointerType: 'pen' });
+  await p.waitForTimeout(400);
+  const stOk = st.filter(x => x.touche && x.dy === 0 && x.vue && x.dansVV).length;
+  ok('G-1 stylet', 'G-1 au stylet, qui plane puis au contact : la page ne défile pas, la bulle du point reste lisible',
+     stOk === 6, stOk + '/6 ; défilement ' + Math.min(...st.map(x => x.dy)) + ' à +' + Math.max(...st.map(x => x.dy)) + ' px ; '
+       + st.map(x => x.mode + ' ' + x.i + (x.absent ? ' absent' : (x.vue ? '' : ' FERMÉE') + (x.touche ? '' : ' (à côté)'))).join(', '));
   await ctx.close();
   }
 
@@ -825,20 +976,77 @@ async function voisines(p, sel, bulleSel) {
   await p.evaluate(() => { if (window.bulleTitre) window.bulleTitre.fermer(); if (document.activeElement) document.activeElement.blur(); });
   await p.mouse.move(2, 890, { steps: 3 });
 
-  /* G-3 — LA BULLE DU RADAR DE MATURITÉ APRÈS SURVOL ET SORTIE. */
+  /* G-3 — LA BULLE DU RADAR DE MATURITÉ APRÈS SURVOL ET SORTIE : LA MÊME
+     BULLE, SANS CHANGER D'ÉCRAN. LE DÉFAUT DE LA RECETTE (revue du lot 4,
+     mesuré) : relevée après `aller()`, qui redessine le radar et RECRÉE
+     `#mat-radar-tooltip`, elle mesurait une bulle neuve, cachée par la seule
+     feuille de style — elle passait même si la sortie laissait la bulle
+     ouverte. On survole, on sort, on attend 700 ms, et on relève l'élément
+     retenu AVANT le survol. LE TÉMOIN : pendant le survol, il est affiché. */
   console.log('\n  G-3 — #mat-radar-tooltip après survol et sortie');
   await aller(p, 'maturite', 1500);
-  const g3 = await p.evaluate(() => { const b = document.getElementById('mat-radar-tooltip'); if (!b) return null;
-    const cs = getComputedStyle(b); return { display: cs.display, opacite: cs.opacity, ah: b.getAttribute('aria-hidden') }; });
+  await p.evaluate(REPOS);
+  await p.mouse.move(2, 890);
+  await marquer(p, G.mat.cible, 2, 'g3');
+  await p.waitForTimeout(400);
+  await p.evaluate(() => { window.__g3 = document.getElementById('mat-radar-tooltip'); });
+  c = await centre(p, 'g3');
+  await p.mouse.move(c.x, c.y, { steps: 4 });
+  await p.waitForTimeout(500);
+  const g3pendant = await p.evaluate(() => { const b = window.__g3; if (!b) return null; const cs = getComputedStyle(b);
+    return { vue: cs.display !== 'none' && parseFloat(cs.opacity) > 0.5 && (!b.classList.contains('mat-radar-tooltip') || b.classList.contains('on')), display: cs.display }; });
+  await p.mouse.move(2, 890, { steps: 4 });
+  await p.waitForTimeout(700);
+  const g3 = await p.evaluate(() => { const b = window.__g3; if (!b) return null;
+    const cs = getComputedStyle(b); return { display: cs.display, opacite: cs.opacity, ah: b.getAttribute('aria-hidden'),
+      meme: b.isConnected && b === document.getElementById('mat-radar-tooltip') }; });
   const axTip = await (async () => { try {
     const { root } = await cdp.send('DOM.getDocument', { depth: 0 });
     const { nodeId } = await cdp.send('DOM.querySelector', { nodeId: root.nodeId, selector: '#mat-radar-tooltip' });
     if (!nodeId) return null;
     const r = await cdp.send('Accessibility.getPartialAXTree', { nodeId, fetchRelatives: false });
     return !!(r.nodes[0] || {}).ignored; } catch (e) { return null; } })();
-  ok('G-3 maturité', 'G-3 après survol puis sortie : display:none, aria-hidden="true", ignorée par l’arbre d’accessibilité',
-     !!g3 && g3.display === 'none' && g3.ah === 'true' && axTip === true,
-     g3 ? 'display ' + g3.display + ', opacité ' + g3.opacite + ', aria-hidden ' + g3.ah + ', ignorée ' + axTip : 'absente');
+  ok('G-3 maturité', 'G-3 survol puis sortie, LA MÊME bulle (témoin : affichée pendant le survol) : display:none, aria-hidden="true", ignorée par l’arbre d’accessibilité',
+     c.touche && !!g3pendant && g3pendant.vue && !!g3 && g3.meme && g3.display === 'none' && g3.ah === 'true' && axTip === true,
+     (g3pendant ? 'pendant le survol ' + (g3pendant.vue ? 'affichée (' + g3pendant.display + ')' : 'PAS affichée') : 'absente') + ' ; après la sortie '
+       + (g3 ? (g3.meme ? '' : 'AUTRE élément, ') + 'display ' + g3.display + ', opacité ' + g3.opacite + ', aria-hidden ' + g3.ah + ', ignorée ' + axTip : 'absente'));
+
+  /* G-1 AU POSTE ÉTROIT : LE SURVOL NE FAIT PLUS DÉFILER LA PAGE. MESURÉ
+     (revue du lot 4, puis avant cette correction) : fenêtre de 1024 px, le
+     survol des points 0, 6 et 7 faisait défiler de −148 à +275 px et deux
+     bulles se fermaient ; de 640 px, 6 points sur 8, jusqu'à 482 px, 4 bulles
+     fermées sur les 5 points atteignables — la page glissait sous le pointeur
+     immobile. Un point que le
+     bouton de navigation fixe recouvre (à 640 px) n'est pas compté : hors
+     lot, signalé. */
+  console.log('\n  G-1 (poste étroit) — le survol des huit points à 1024 et 640 px');
+  const etroit = [];
+  for (const l of [1024, 640]) {
+    await p.setViewportSize({ width: l, height: 900 });
+    await p.waitForTimeout(600);
+    for (let i = 0; i < 8; i++) {
+      await p.mouse.move(l - 5, 895); await p.waitForTimeout(350);
+      await p.evaluate(REPOS);
+      if (!(await marquer(p, G.mat.cible, i, 'et'))) continue;
+      await p.waitForTimeout(350);
+      c = await centre(p, 'et');
+      if (!c.touche) { etroit.push({ l, i, cache: true }); continue; }
+      const y0 = await p.evaluate(() => scrollY);
+      await p.mouse.move(c.x, c.y, { steps: 4 });
+      await p.waitForTimeout(1000);
+      v = await p.evaluate(VUE, [G.mat.bulle, 'et']);
+      etroit.push({ l, i, dy: v.scrollY - Math.round(y0), vue: v.visible });
+    }
+  }
+  await p.setViewportSize({ width: 1280, height: 900 });
+  await p.mouse.move(2, 890);
+  await p.waitForTimeout(500);
+  await p.evaluate(REPOS);
+  const vus = etroit.filter(x => !x.cache), etOk = vus.filter(x => x.dy === 0 && x.vue).length;
+  ok('G-1 poste étroit', 'G-1 à la souris, fenêtre de 1024 puis 640 px : le survol d’un point ne fait plus défiler la page, sa bulle reste ouverte',
+     vus.filter(x => x.l === 1024).length === 8 && vus.filter(x => x.l === 640).length >= 5 && etOk === vus.length,
+     etOk + '/' + vus.length + ' ; défilement ' + (vus.length ? Math.min(...vus.map(x => x.dy)) + ' à +' + Math.max(...vus.map(x => x.dy)) : '—') + ' px ; fermées : '
+       + (vus.filter(x => !x.vue).map(x => x.l + ' px n°' + x.i).join(', ') || 'aucune') + ' ; masqués par un bouton fixe : ' + etroit.filter(x => x.cache).length);
   const ah = await p.evaluate((ids) => ids.map(id => { const b = document.getElementById(id); return id + '=' + (b ? b.getAttribute('aria-hidden') : 'absente'); }), BULLES);
   ok('G-3 toutes', 'G-3 les cinq bulles de graphique portent aria-hidden="true"', ah.every(x => /=true$/.test(x)), ah.join(' '));
 
@@ -879,28 +1087,60 @@ async function voisines(p, sel, bulleSel) {
      pretI && g4.focus && g4.allume && !g4.bulle && Math.round(g4.y) === Math.round(yi),
      'focus ' + (g4.focus ? 'sur le « i »' : 'AILLEURS') + ', point ' + (g4.allume ? 'allumé' : 'éteint') + ', bulle ' + (g4.bulle ? 'OUVERTE' : 'fermée') + ', défilement ' + Math.round(g4.y - yi));
 
-  /* ÉCHAP NE FERME QU'UNE CHOSE À LA FOIS : le « i » a le focus (sa bulle
-     est ouverte par /infobulles.js), la souris survole le point du même
-     pilier (la bulle du graphique). */
-  console.log('\n  Échap — deux bulles, deux frappes');
+  /* UNE BULLE À LA FOIS, LE CLAVIER PUIS LA SOURIS. MESURÉ (revue du lot 4,
+     puis avant cette correction) : le « i » ouvert au clavier, puis la
+     souris sur le point d'un AUTRE pilier — les deux bulles ouvertes :
+     `infobulles.fermer()` ne ferme que ce que le doigt a ouvert. Le « i » se
+     REPLIE ; il revient quand le focus part puis revient (le TÉMOIN qu'il
+     n'est pas perdu). */
+  console.log('\n  Une bulle à la fois — le « i » au clavier, puis la souris sur un autre point');
+  const zAutre = await p.evaluate(() => { const w = document.querySelector('[data-recette="i4"]'); const f = w && w.closest('.mat-pillar-row').querySelector('.mat-pillar-fill');
+    const pid = f && f.getAttribute('data-pillar'); const zs = [...document.querySelectorAll('.mat-radar-hitzone')].filter(z => z.getAttribute('data-pillar') !== pid);
+    document.querySelectorAll('[data-recette="za"]').forEach(e => e.removeAttribute('data-recette')); if (zs[1]) zs[1].setAttribute('data-recette', 'za'); return !!zs[1]; });
+  const c1i = await p.evaluate(BULLE_I, 'i4');
+  c = await centre(p, 'za');
+  await p.mouse.move(c.x, c.y, { steps: 4 });
+  await p.waitForTimeout(500);
+  const c1 = { i: await p.evaluate(BULLE_I, 'i4'), g: await p.evaluate(VUE, [G.mat.bulle, 'za']) };
+  await p.mouse.move(2, 890, { steps: 3 });
+  await p.waitForTimeout(700);
+  const c1b = { i: await p.evaluate(BULLE_I, 'i4'), g: await p.evaluate(VUE, [G.mat.bulle, 'za']) };
+  await p.keyboard.press('Tab'); await p.waitForTimeout(250);
+  await p.keyboard.press('Shift+Tab'); await p.waitForTimeout(500);
+  const c1c = { i: await p.evaluate(BULLE_I, 'i4'), focus: await p.evaluate(() => document.activeElement === document.querySelector('[data-recette="i4"]')) };
+  ok('une à la fois clavier puis souris', 'une bulle à la fois : le « i » ouvert au clavier, puis la souris sur le point d’un autre pilier — le « i » se replie ; il revient quand le focus part puis revient',
+     zAutre && c1i.visible && c.touche && c1.g.visible && !c1.i.visible && !c1b.g.visible && c1c.focus && c1c.i.visible,
+     '« i » ' + (c1i.visible ? 'ouvert' : 'FERMÉ (témoin)') + ' ; souris sur un autre point → graphique ' + (c1.g.visible ? 'ouvert' : 'FERMÉ') + ', « i » ' + (c1.i.visible ? 'ENCORE OUVERT' : 'replié')
+       + ' ; souris partie → graphique ' + (c1b.g.visible ? 'OUVERT' : 'fermé') + ', « i » ' + (c1b.i.visible ? 'ouvert' : 'replié')
+       + ' ; Tab puis Maj+Tab → « i » ' + (c1c.i.visible ? 'rouvert' : 'FERMÉ') + (c1c.focus ? '' : ' (focus AILLEURS)'));
+
+  /* ÉCHAP NE FERME QU'UNE CHOSE À LA FOIS : le « i » a le focus, la souris
+     survole le point du même pilier — une seule bulle ouverte, celle du
+     graphique (le « i » s'est replié, contrôle précédent). La frappe la
+     ferme ET S'ARRÊTE LÀ : un écouteur posé sur `document` — là où écoute
+     la fenêtre modale — ne la voit pas. LE TÉMOIN : sans bulle, la frappe
+     suivante lui parvient. */
+  console.log('\n  Échap — la bulle du graphique, et la frappe s’arrête là');
   const pidI = await p.evaluate(() => { const w = document.querySelector('[data-recette="i4"]'); const f = w && w.closest('.mat-pillar-row').querySelector('.mat-pillar-fill');
     const pid = f && f.getAttribute('data-pillar'); const z = pid && document.querySelector('.mat-radar-hitzone[data-pillar="' + pid + '"]');
     document.querySelectorAll('[data-recette="zi"]').forEach(e => e.removeAttribute('data-recette')); if (z) z.setAttribute('data-recette', 'zi'); return pid; });
+  await p.evaluate(() => { window.__echapVu = 0;
+    if (!window.__echapPose) { window.__echapPose = true; document.addEventListener('keydown', e => { if (e.key === 'Escape' || e.key === 'Esc') window.__echapVu++; }); } });
   c = await centre(p, 'zi');
   await p.mouse.move(c.x, c.y, { steps: 4 });
   await p.waitForTimeout(500);
   const e0 = { i: await p.evaluate(BULLE_I, 'i4'), g: await p.evaluate(VUE, [G.mat.bulle, 'zi']) };
   await p.keyboard.press('Escape');
   await p.waitForTimeout(400);
-  const e1 = { i: await p.evaluate(BULLE_I, 'i4'), g: await p.evaluate(VUE, [G.mat.bulle, 'zi']) };
+  const e1 = { i: await p.evaluate(BULLE_I, 'i4'), g: await p.evaluate(VUE, [G.mat.bulle, 'zi']), vu: await p.evaluate(() => window.__echapVu) };
   await p.keyboard.press('Escape');
   await p.waitForTimeout(400);
-  const e2 = { i: await p.evaluate(BULLE_I, 'i4'), g: await p.evaluate(VUE, [G.mat.bulle, 'zi']) };
-  ok('échap une chose', 'Échap : la 1re frappe ferme la bulle du graphique SEULE, la 2e celle du « i »',
-     !!pidI && c.touche && e0.i.visible && e0.g.visible && !e1.g.visible && e1.i.visible && !e2.i.visible,
-     'avant : « i » ' + (e0.i.visible ? 'ouvert' : 'fermé') + ', graphique ' + (e0.g.visible ? 'ouvert' : 'fermé')
-       + ' ; 1re : « i » ' + (e1.i.visible ? 'ouvert' : 'fermé') + ', graphique ' + (e1.g.visible ? 'OUVERT' : 'fermé')
-       + ' ; 2e : « i » ' + (e2.i.visible ? 'OUVERT' : 'fermé'));
+  const e2 = { vu: await p.evaluate(() => window.__echapVu) };
+  ok('échap une chose', 'Échap : une seule bulle (celle du graphique), la frappe la ferme et s’arrête là ; sans bulle, la suivante passe (témoin)',
+     !!pidI && c.touche && e0.g.visible && !e0.i.visible && !e1.g.visible && !e1.i.visible && e1.vu === 0 && e2.vu === 1,
+     'avant : graphique ' + (e0.g.visible ? 'ouvert' : 'FERMÉ') + ', « i » ' + (e0.i.visible ? 'OUVERT aussi' : 'replié')
+       + ' ; 1re frappe : graphique ' + (e1.g.visible ? 'OUVERT' : 'fermé') + ', vue par la page ' + e1.vu + ' fois'
+       + ' ; 2e (sans bulle) : vue ' + (e2.vu - e1.vu) + ' fois');
   await p.mouse.move(2, 890, { steps: 3 });
   await p.evaluate(REPOS);
 
@@ -930,7 +1170,14 @@ async function voisines(p, sel, bulleSel) {
   const k2 = await p.evaluate(([b]) => { const a = document.activeElement; const g = document.querySelector(b);
     const r = a && a.getBoundingClientRect ? a.getBoundingClientRect() : null, q = g ? g.getBoundingClientRect() : null;
     return { mois: a && a.getAttribute ? a.getAttribute('data-mois') : null, bulle: !!g && getComputedStyle(g).display !== 'none',
-             texte: g ? g.textContent.replace(/\s+/g, ' ').slice(0, 30) : '', dans: !!r && !!q && q.left + q.width / 2 >= r.left && q.left + q.width / 2 <= r.right,
+             texte: g ? g.textContent.replace(/\s+/g, ' ').slice(0, 30) : '',
+             /* ANCRÉE À LA BANDE : centrée sur elle ; au-dessus ou au-dessous
+                d'elle, sur sa largeur, quand elle est DÉCALÉE pour ne pas
+                couvrir une commande de la carte (mois 1 et 2 au poste) ; ou À
+                CÔTÉ, collée — voir « F commandes ». */
+             dans: !!r && !!q && ((q.left + q.width / 2 >= r.left && q.left + q.width / 2 <= r.right)
+               || (q.left < r.right && r.left < q.right && (q.bottom <= r.top + 1 || q.top >= r.bottom - 1))
+               || ((Math.abs(q.left - r.right) <= 10 || Math.abs(r.left - q.right) <= 10) && q.top < r.bottom && r.top < q.bottom)),
              arrets: [...document.querySelectorAll('#pricing-chart-svg [tabindex="0"]')].length }; }, [G.tarif.bulle]);
   await p.keyboard.press('End');
   await p.waitForTimeout(300);
@@ -939,11 +1186,11 @@ async function voisines(p, sel, bulleSel) {
   await p.waitForTimeout(300);
   const kDebut = await p.evaluate(() => { const a = document.activeElement; return a && a.getAttribute ? a.getAttribute('data-mois') : null; });
   const quatre = k1.label ? ['Hybride continu', 'Pessimiste', 'Optimiste', 'RaaS Jalons'].filter(s => k1.label.indexOf(s) >= 0).length : 0;
-  ok('G-5 clavier', 'G-5 un seul arrêt ; Tab ouvre le mois 1 ; → passe au mois 2, focus ET bulle (centre x dans la bande) ; Fin, Début',
+  ok('G-5 clavier', 'G-5 un seul arrêt ; Tab ouvre le mois 1 ; → passe au mois 2, focus ET bulle (ancrée à la bande : centrée, ou à côté) ; Fin, Début',
      !!avantTf && avantTf.arrets === 1 && k1.mois === '1' && k1.bulle && k2.mois === '2' && k2.bulle && k2.dans && k2.arrets === 1
        && /Mois 2/.test(k2.texte) && kDebut === '1' && kFin && +kFin > 2,
      (avantTf ? avantTf.arrets : '?') + ' arrêt(s) ; Tab → ' + (k1.mois ? 'mois ' + k1.mois : k1.tag) + ' (' + (k1.bulle ? 'bulle ouverte' : 'pas de bulle') + ') ; → mois '
-       + k2.mois + ', ' + (k2.dans ? 'bulle centrée sur la bande' : 'bulle HORS de la bande') + ' ; Fin → ' + kFin + ', Début → ' + kDebut);
+       + k2.mois + ', ' + (k2.dans ? 'bulle ancrée à la bande' : 'bulle HORS de la bande') + ' ; Fin → ' + kFin + ', Début → ' + kDebut);
   const table = await p.evaluate(() => { const t = document.querySelector('#pricing-chart-donnees table');
     const d = document.querySelector('#p-pricing details.chart-donnees > summary');
     return { lignes: t ? t.querySelectorAll('tbody tr').length : 0, valeurs: t ? t.querySelectorAll('tbody td').length : 0,
@@ -976,6 +1223,220 @@ async function voisines(p, sel, bulleSel) {
      zoneG12 ? 'contour ' + zoneG12.contour + ', trait ' + zoneG12.trait + ' ; ' + (g12 ? g12.changes + ' pixels changés, contraste médian '
        + g12.mediane + ':1 (max ' + g12.max + ':1)' : '—') : 'aucune bande focalisée au clavier');
   await p.evaluate(REPOS);
+
+  /* F — LA BULLE DE LA COURBE NE PREND PAS LE CLIC DES COMMANDES DE SA
+     CARTE. MESURÉ (revue du lot 4, puis avant cette correction) : posée
+     au-dessus de sa bande — la bande a toute la hauteur du tracé —, la bulle
+     couvrait « Mensuel », « Cumul » et les « ? » (mois 1 et 2 à 6 mois, 1 à 6
+     à 18 mois) ; survolable, elle prenait le clic : « survoler la courbe,
+     puis cliquer sur Cumul » n'atteignait pas le bouton (0 fois sur 2).
+     TÉMOIN : le même clic, sans survol, l'atteint. */
+  console.log('\n  F — la courbe : les commandes de la carte restent atteignables');
+  const clics = [];
+  for (const [k, survol] of [[0, true], [1, true], [0, false]]) {
+    await p.evaluate(() => { if (window.pricingChartSetView) window.pricingChartSetView('monthly');
+      const svg = document.getElementById('pricing-chart-svg'); if (svg) svg.scrollIntoView({ block: 'center', behavior: 'instant' }); });
+    await p.waitForTimeout(500);
+    await p.mouse.move(1275, 895); await p.waitForTimeout(450);
+    let ouverte = null;
+    if (survol) {
+      await marquer(p, G.tarif.cible, k, 'fk', false);
+      const q = await centre(p, 'fk');
+      await p.mouse.move(q.x, q.y, { steps: 4 }); await p.waitForTimeout(400);
+      ouverte = (await p.evaluate(VUE, [G.tarif.bulle, 'fk'])).visible;
+    }
+    const b = await p.evaluate(() => { const e = document.getElementById('chart-btn-cumul'); if (!e) return null;
+      const r = e.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; });
+    if (!b) { clics.push({ k, survol, vue: 'bouton absent' }); continue; }
+    await p.mouse.move(b.x, b.y, { steps: 10 }); await p.waitForTimeout(120);
+    const sous = await p.evaluate(([x, y]) => { const e = document.elementFromPoint(x, y); return e ? (e.id || String(e.className).split(' ')[0] || e.tagName) : null; }, [b.x, b.y]);
+    await p.mouse.down(); await p.mouse.up(); await p.waitForTimeout(500);
+    clics.push({ k, survol, ouverte, sous, vue: await p.evaluate(() => window.__chartView) });
+  }
+  await p.evaluate(() => { if (window.pricingChartSetView) window.pricingChartSetView('monthly'); });
+  ok('F cumul', 'survol du mois 1, puis du mois 2, puis clic sur « Cumul » : la vue passe à cumul — la bulle ne prend pas le clic (témoin : sans survol)',
+     clics.length === 3 && clics.every(x => x.vue === 'cumul') && clics.filter(x => x.survol).every(x => x.ouverte),
+     clics.map(x => (x.survol ? 'survol M' + (x.k + 1) + (x.ouverte ? '' : ' (bulle FERMÉE)') : 'sans survol') + ' → clic sur « ' + x.sous + ' » → ' + x.vue).join(' ; '));
+  /* LA BULLE D'UN MOIS SE SURVOLE (1.4.13), même DÉCALÉE, par les chemins
+     qu'on prend : du mois 1 EN DIAGONALE, droit vers sa bulle — par-dessus
+     la bande du mois 2 —, et PAR LE HAUT du tracé, puis le long du bord de
+     la bulle ; du mois 2, DROIT VERS LE HAUT. Pas de 4 px (≈ 240 px/s) :
+     elle reste ouverte, et reste celle de son mois.
+     MESURÉ (une première version de cette correction, sans passage) : en
+     diagonale, la bulle disait le mois 2 ; par le haut, la grâce expirait
+     en route (816 ms le long du bord), fermée.
+     TÉMOINS : la même diagonale ARRÊTÉE sur la bande du mois 2 (18 mois)
+     l'ouvre, la grâce passée ; le BALAYAGE du mois 1 au mois 2, à
+     mi-hauteur, ouvre le mois 2 — le passage ne retient pas la courbe. */
+  const vers = async (x0, y0, x1, y1) => { if ([x0, y0, x1, y1].every(Number.isFinite))
+    await p.mouse.move(x1, y1, { steps: Math.max(2, Math.ceil(Math.hypot(x1 - x0, y1 - y0) / 4)) }); };
+  const moisDe = (v) => { const m = /^Mois (\d+)/.exec((v && v.texte) || ''); return m ? +m[1] : null; };
+  const surCourbe = async (mois, k) => {
+    await p.evaluate((m) => { if (window.pricingChartSetView) window.pricingChartSetView('monthly');
+      const s = document.getElementById('pricing-chart-horizon'); if (s) s.value = String(m); if (window.pricingChartSetHorizon) window.pricingChartSetHorizon(m);
+      const svg = document.getElementById('pricing-chart-svg'); if (svg) svg.scrollIntoView({ block: 'center', behavior: 'instant' }); }, mois);
+    await p.waitForTimeout(700);
+    await p.mouse.move(1275, 895); await p.waitForTimeout(450);
+    await marquer(p, G.tarif.cible, k, 'fs', false);
+    const q = await centre(p, 'fs');
+    await p.mouse.move(q.x, q.y, { steps: 4 }); await p.waitForTimeout(400);
+    const v = await p.evaluate(VUE, [G.tarif.bulle, 'fs']);
+    const rb = await p.evaluate(() => { const e = document.querySelector('[data-recette="fs"]'); if (!e) return null;
+      const r = e.getBoundingClientRect(); return [r.left, r.top, r.right, r.bottom]; });
+    const b2 = await p.evaluate((i) => { const e = [...document.querySelectorAll('#pricing-chart-svg [data-graphe="tarif"]')][i]; if (!e) return null;
+      const r = e.getBoundingClientRect(); return [r.left, r.top, r.right, r.bottom]; }, k + 1);
+    return { q, v, rb, b2 };
+  };
+  const survolables = [];
+  for (const [k, chemin] of [[0, 'en diagonale'], [0, 'par le haut, puis le long'], [1, 'droit vers le haut']]) {
+    const d = await surCourbe(6, k);
+    let fin = null;
+    if (d.v.visible && d.rb) {
+      const rt = d.v.rect, cx = (rt[0] + rt[2]) / 2, cy = (rt[1] + rt[3]) / 2;
+      if (chemin === 'en diagonale') await vers(d.q.x, d.q.y, cx, cy);
+      else if (chemin === 'droit vers le haut') {
+        const x = (Math.max(d.rb[0], rt[0]) + Math.min(d.rb[2], rt[2])) / 2;
+        await vers(d.q.x, d.q.y, x, d.q.y); await vers(x, d.q.y, x, cy);
+      } else {
+        const y = (d.rb[1] + rt[3]) / 2;
+        await vers(d.q.x, d.q.y, d.q.x, y); await vers(d.q.x, y, cx, y); await vers(cx, y, cx, cy);
+      }
+      await p.waitForTimeout(500);
+      fin = await p.evaluate(VUE, [G.tarif.bulle, 'fs']);
+    }
+    survolables.push({ k, chemin, touche: d.q.touche, v0: d.v, fin, decalee: !!d.rb && d.v.visible && (d.v.rect[0] > d.rb[2] || d.v.rect[2] < d.rb[0]) });
+  }
+  /* Témoin 1 : la diagonale arrêtée au milieu de la bande du mois 2 — là
+     où elle la traverse (une bulle qui n'est pas au-delà du mois 2 ne s'y
+     prête pas : le témoin tombe, sans geste). */
+  const arret = { d: await surCourbe(18, 0) };
+  if (arret.d.v.visible && arret.d.b2) {
+    const rt = arret.d.v.rect, cx = (rt[0] + rt[2]) / 2, cy = (rt[1] + rt[3]) / 2;
+    const xm = (arret.d.b2[0] + arret.d.b2[2]) / 2, t = (xm - arret.d.q.x) / (cx - arret.d.q.x), ym = arret.d.q.y + t * (cy - arret.d.q.y);
+    arret.surBande = t > 0 && t < 1 && ym > arret.d.b2[1] + 4;
+    if (arret.surBande) await vers(arret.d.q.x, arret.d.q.y, xm, ym);
+    arret.t0 = await p.evaluate(VUE, [G.tarif.bulle, 'fs']);
+    await p.waitForTimeout(600);
+    arret.t600 = await p.evaluate(VUE, [G.tarif.bulle, 'fs']);
+  }
+  /* Témoin 2 : le balayage, à mi-hauteur, jusqu'au centre du mois 2. */
+  const balai = { d: await surCourbe(6, 0) };
+  if (balai.d.v.visible && balai.d.b2) {
+    await vers(balai.d.q.x, balai.d.q.y, (balai.d.b2[0] + balai.d.b2[2]) / 2, balai.d.q.y);
+    balai.fin = await p.evaluate(VUE, [G.tarif.bulle, 'fs']);
+  }
+  await p.mouse.move(1275, 895); await p.waitForTimeout(450);
+  await p.evaluate(() => { const s = document.getElementById('pricing-chart-horizon'); if (s) s.value = '6'; if (window.pricingChartSetHorizon) window.pricingChartSetHorizon(6); });
+  const temoinsF = !!arret.t0 && arret.surBande && moisDe(arret.t0) === 1 && !!arret.t600 && arret.t600.visible && moisDe(arret.t600) === 2
+    && !!balai.fin && balai.fin.visible && moisDe(balai.fin) === 2;
+  ok('F survolable', 'la bulle d’un mois se survole, même décalée : du mois 1 en diagonale (par-dessus le mois 2) et par le haut du tracé, du mois 2 droit vers le haut — elle reste ouverte, et reste celle de son mois (témoins : arrêté sur le mois 2, puis le balayage, le mois 2 s’ouvre)',
+     survolables.length === 3 && survolables.every(x => x.touche && x.v0.visible && moisDe(x.v0) === x.k + 1 && x.fin && x.fin.visible && moisDe(x.fin) === x.k + 1)
+       && survolables[0].decalee && temoinsF,
+     survolables.map(x => 'mois ' + (x.k + 1) + ' ' + x.chemin + (x.decalee ? ' (décalée)' : '') + ' : ' + dit(x.v0) + ' → sur sa bulle : ' + (x.fin ? dit(x.fin) : '—')).join(' ; ')
+       + ' | témoins : arrêt ' + (arret.surBande ? 'sur la bande 2' : 'HORS de la bande 2') + ' → ' + (arret.t0 ? dit(arret.t0) : '—') + ', 600 ms → ' + (arret.t600 ? dit(arret.t600) : '—')
+       + ' ; balayage → ' + (balai.fin ? dit(balai.fin) : '—'));
+
+  /* …ET AUCUNE BULLE NE COUVRE UNE COMMANDE — de sa carte, ni de la page :
+     à 18 mois au poste (le cas le plus serré : mois 1 à 6 avant cette
+     correction), et à 6 mois dans une fenêtre de 1024 px, où la carte
+     longe le menu latéral. MESURÉ (première version de cette correction,
+     posée « à côté » sans rester dans la carte) : à gauche du mois 1, la
+     bulle couvrait la flèche de navigation fixe (1280 px) et quatre lignes
+     du menu latéral (1024 px). */
+  const COUVERT = ([b]) => { const e = document.querySelector(b); const cs = e && getComputedStyle(e);
+    if (!cs || cs.display === 'none') return null; const rb = e.getBoundingClientRect();
+    return [...document.querySelectorAll('a[href],button,input,select,textarea,summary,[tabindex],[onclick],[role="button"]')]
+      .filter(x => !x.hasAttribute('data-graphe') && !e.contains(x)).filter(x => { const r = x.getBoundingClientRect();
+        return r.width > 0 && r.height > 0 && rb.left < r.right && r.left < rb.right && rb.top < r.bottom && r.top < rb.bottom; })
+      .map(x => x.id || x.tagName.toLowerCase() + '.' + String(x.className).split(' ')[0]); };
+  const couvertes = []; let vuesF = 0, nbF = 0;
+  for (const [l, mois] of [[1280, 18], [1024, 6]]) {
+    await p.setViewportSize({ width: l, height: 900 });
+    await p.waitForTimeout(500);
+    await p.evaluate((m) => { const s = document.getElementById('pricing-chart-horizon'); if (s) s.value = String(m);
+      if (window.pricingChartSetHorizon) window.pricingChartSetHorizon(m);
+      const svg = document.getElementById('pricing-chart-svg'); if (svg) svg.scrollIntoView({ block: 'center', behavior: 'instant' }); }, mois);
+    await p.waitForTimeout(900);
+    const nb = Math.min(mois, await p.evaluate((s) => document.querySelectorAll(s).length, G.tarif.cible));
+    nbF += nb;
+    for (let k = 0; k < nb; k++) {
+      await p.mouse.move(l - 5, 895); await p.waitForTimeout(380);
+      await marquer(p, G.tarif.cible, k, 'fg', false);
+      const q = await centre(p, 'fg');
+      await p.mouse.move(q.x, q.y, { steps: 3 }); await p.waitForTimeout(350);
+      const m = await p.evaluate(COUVERT, [G.tarif.bulle]);
+      if (m) { vuesF++; if (m.length) couvertes.push(l + ' px M' + (k + 1) + ':' + m.slice(0, 4).join('+')); }
+    }
+    await p.mouse.move(l - 5, 895);
+  }
+  await p.setViewportSize({ width: 1280, height: 900 });
+  await p.evaluate(() => { const s = document.getElementById('pricing-chart-horizon'); if (s) s.value = '6'; if (window.pricingChartSetHorizon) window.pricingChartSetHorizon(6); });
+  await p.waitForTimeout(700);
+  ok('F commandes', 'aucune bulle de la courbe ne couvre une commande — de sa carte (horizon, « ? », « Mensuel », « Cumul », « Voir les données ») ni de la page (menu, flèches) : 18 mois au poste, 6 mois à 1024 px',
+     nbF >= 24 && vuesF === nbF && couvertes.length === 0,
+     vuesF + '/' + nbF + ' ouvertes ; ' + (couvertes.length ? couvertes.length + ' sur des commandes — ' + couvertes.join(' · ') : 'aucune sur une commande'));
+
+  /* UNE BULLE À LA FOIS, LA SOURIS PUIS LE CLAVIER, et l'inverse, avec le
+     « ? » de l'horizon (un déclencheur d'/infobulles.js, bulle enfant).
+     MESURÉ (revue du lot 4, puis avant cette correction) :
+       · une bande survolée, puis Tab sur le « ? » : les deux bulles — et
+         elles le restaient tant que la souris bougeait sur la bande ;
+       · la souris posée sur le « ? », puis Tab jusqu'à la courbe : les deux.
+     TÉMOINS : le Tab seul ouvre la bulle du « ? » ; le survol seul, celle
+     de la bande. */
+  console.log('\n  Une bulle à la fois — la courbe et le « ? » de l’horizon');
+  const QUESTION = () => { const q = document.querySelector('[data-recette="q"]'); if (!q) return null;
+    const enfants = (window.infobulles && window.infobulles.enfants || []).filter(e => { try { return q.matches(e[0]); } catch (x) { return false; } })
+      .map(e => q.querySelector(e[1])).filter(Boolean);
+    return enfants.some(b => { const cs = getComputedStyle(b); return cs.display !== 'none' && cs.visibility !== 'hidden' && parseFloat(cs.opacity) > 0.5; }); };
+  const AVANT_DE = (m) => { const t = document.querySelector('[data-recette="' + m + '"]') || document.querySelector(m);
+    const T = [...document.querySelectorAll('a[href],button:not([disabled]),input:not([disabled]),select,textarea,[tabindex]')].filter(e => e.tabIndex >= 0 && e.getBoundingClientRect().width > 0);
+    const i = t ? T.indexOf(t) : -1; if (i >= 1) { T[i - 1].focus({ preventScroll: true }); return true; } return false; };
+  const PREMIERE_BANDE = () => { const svg = document.getElementById('pricing-chart-svg');
+    const T = [...document.querySelectorAll('a[href],button:not([disabled]),input:not([disabled]),select,textarea,[tabindex]')].filter(e => e.tabIndex >= 0 && e.getBoundingClientRect().width > 0);
+    const dans = T.filter(e => svg && svg.contains(e)); const i = dans.length ? T.indexOf(dans[0]) : -1; if (i >= 1) { T[i - 1].focus({ preventScroll: true }); return true; } return false; };
+  const quest = await p.evaluate(() => { document.querySelectorAll('[data-recette="q"]').forEach(e => e.removeAttribute('data-recette'));
+    const q = document.querySelector('#p-pricing .chart-controls .prx-tip-icon'); if (!q) return null;
+    q.setAttribute('data-recette', 'q'); document.getElementById('pricing-chart-svg').scrollIntoView({ block: 'center', behavior: 'instant' });
+    const r = q.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; });
+  await p.mouse.move(1275, 895); await p.evaluate(REPOS); await p.waitForTimeout(300);
+  /* Témoin : Tab seul sur le « ? ». */
+  await p.evaluate(AVANT_DE, 'q'); await p.keyboard.press('Tab'); await p.waitForTimeout(400);
+  const qSeul = await p.evaluate(QUESTION);
+  await p.evaluate(() => { if (document.activeElement) document.activeElement.blur(); });
+  /* La souris sur une bande, puis Tab sur le « ? ». */
+  await marquer(p, G.tarif.cible, 3, 'qb', false);
+  c = await centre(p, 'qb');
+  await p.mouse.move(c.x, c.y, { steps: 4 }); await p.waitForTimeout(400);
+  const qb0 = await p.evaluate(VUE, [G.tarif.bulle, 'qb']);
+  await p.evaluate(AVANT_DE, 'q'); await p.keyboard.press('Tab'); await p.waitForTimeout(400);
+  const qb1 = { g: await p.evaluate(VUE, [G.tarif.bulle, 'qb']), q: await p.evaluate(QUESTION) };
+  await p.mouse.move(c.x + 4, c.y + 3, { steps: 2 }); await p.waitForTimeout(350);
+  const qb2 = { g: await p.evaluate(VUE, [G.tarif.bulle, 'qb']), q: await p.evaluate(QUESTION) };
+  ok('une à la fois souris puis clavier', 'une bulle à la fois : une bande survolée, puis Tab sur le « ? » — la bulle de la bande se ferme, et ne revient pas tant que la souris reste (témoins : chacune seule s’ouvre)',
+     !!quest && qSeul && c.touche && qb0.visible && !qb1.g.visible && qb1.q && !qb2.g.visible && qb2.q,
+     'témoin Tab seul : « ? » ' + (qSeul ? 'ouvert' : 'FERMÉ') + ' ; survol : bande ' + (qb0.visible ? 'ouverte' : 'FERMÉE') + ' ; Tab → bande ' + (qb1.g.visible ? 'OUVERTE' : 'fermée')
+       + ', « ? » ' + (qb1.q ? 'ouvert' : 'FERMÉ') + ' ; la souris bouge sur la bande → bande ' + (qb2.g.visible ? 'ROUVERTE' : 'fermée') + ', « ? » ' + (qb2.q ? 'ouvert' : 'fermé'));
+  await p.mouse.move(1275, 895); await p.evaluate(REPOS); await p.waitForTimeout(400);
+  /* La souris sur le « ? », puis Tab jusqu'à la courbe. */
+  if (quest) { await p.mouse.move(20, quest.y); await p.mouse.move(quest.x, quest.y, { steps: 6 }); }
+  await p.waitForTimeout(450);
+  const qs0 = await p.evaluate(QUESTION);
+  await p.evaluate(PREMIERE_BANDE); await p.keyboard.press('Tab'); await p.waitForTimeout(500);
+  const qs1 = { g: await p.evaluate(VUE, [G.tarif.bulle, null]), q: await p.evaluate(QUESTION),
+                mois: await p.evaluate(() => { const a = document.activeElement; return a && a.getAttribute ? a.getAttribute('data-mois') : null; }) };
+  /* Et l'inverse : la bande ouverte au clavier, la souris revient sur le « ? »
+     (par la gauche, sans traverser la courbe). */
+  await p.mouse.move(20, quest ? quest.y : 200); await p.waitForTimeout(400);
+  const kb0 = await p.evaluate(VUE, [G.tarif.bulle, null]);
+  if (quest) await p.mouse.move(quest.x, quest.y, { steps: 6 });
+  await p.waitForTimeout(450);
+  const kb1 = { g: await p.evaluate(VUE, [G.tarif.bulle, null]), q: await p.evaluate(QUESTION) };
+  ok('une à la fois clavier et « ? »', 'une bulle à la fois : la souris sur le « ? », puis Tab jusqu’à la courbe — le « ? » se replie ; la bande ouverte au clavier, puis la souris sur le « ? » — la bande se ferme',
+     !!quest && qs0 && !!qs1.mois && qs1.g.visible && !qs1.q && kb0.visible && !kb1.g.visible && kb1.q,
+     'souris sur le « ? » : ' + (qs0 ? 'ouvert' : 'FERMÉ (témoin)') + ' ; Tab → mois ' + qs1.mois + ', bande ' + (qs1.g.visible ? 'ouverte' : 'FERMÉE') + ', « ? » ' + (qs1.q ? 'ENCORE OUVERT' : 'replié')
+       + ' ; puis la souris revient sur le « ? » (bande ' + (kb0.visible ? 'ouverte' : 'FERMÉE') + ') → bande ' + (kb1.g.visible ? 'ENCORE OUVERTE' : 'fermée') + ', « ? » ' + (kb1.q ? 'ouvert' : 'FERMÉ'));
+  await p.mouse.move(1275, 895); await p.evaluate(REPOS);
 
   /* G-7, G-11 — LES BARRES GÉOPOLITIQUES. */
   console.log('\n  G-7 / G-11 — les barres géopolitiques');

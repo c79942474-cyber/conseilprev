@@ -1815,6 +1815,24 @@ window.grapheBulle = (function(){
     try { d = n.closest(sel); } catch(e){ return false; }
     return !!d && d !== c && c.contains(d);
   }
+  /* LE DÉCLENCHEUR D'/infobulles.js qui porte `n`, s'il y en a un. */
+  function declencheur(n){
+    var sel = window.infobulles && window.infobulles.selecteur;
+    if(!sel || !n || !n.closest) return null;
+    try { return n.closest(sel); } catch(e){ return null; }
+  }
+  /* CELUI QUI TIENT SA BULLE OUVERTE hors du doigt : le focus d'abord,
+     sinon la souris (le dernier élément `:hover`, le plus profond) — le
+     même ordre que `_tenu` d'/infobulles.js pour Échap. */
+  function declencheurTenu(){
+    var tenus = [document.activeElement];
+    try { var s = document.querySelectorAll(':hover'); if(s.length) tenus.push(s[s.length - 1]); } catch(e){ /* pas de :hover lisible */ }
+    for(var i = 0; i < tenus.length; i++){
+      var d = declencheur(tenus[i]);
+      if(d) return d;
+    }
+    return null;
+  }
   function bulleDe(f){
     var g = GRAPHES[f];
     if(!g) return null;
@@ -1829,9 +1847,20 @@ window.grapheBulle = (function(){
     var b = bulleDe(courant.famille);
     return !!b && b.contains(n);
   }
+  /* CE QUE LA BULLE RECOUVRE en ce point de l'écran : le premier élément qui
+     n'est pas elle, et la cible de graphique qu'il porte. */
+  function sousLaBulle(x, y){
+    if(!document.elementsFromPoint) return null;
+    var pile = document.elementsFromPoint(x, y) || [];
+    for(var i = 0; i < pile.length; i++){
+      if(!dansBulle(pile[i])) return { el: pile[i], cible: cibleDe(pile[i]) };
+    }
+    return null;
+  }
   function survolee(el){ try { return !!el && el.matches(':hover'); } catch(e){ return false; } }
 
-  function annulerGrace(){ if(grace){ clearTimeout(grace); grace = null; } }
+  /* La grâce finie, le passage vers la bulle l'est aussi (voir le survol). */
+  function annulerGrace(){ passage = null; if(grace){ clearTimeout(grace); grace = null; } }
 
   function fermer(){
     annulerGrace();
@@ -1858,6 +1887,16 @@ window.grapheBulle = (function(){
          vient de s'ouvrir — qui l'allume. */
       var ib = window.infobulles, bt = window.bulleTitre;
       if(ib && typeof ib.fermer === 'function') ib.fermer();
+      /* …Y COMPRIS CELLE QUE LE FOCUS OU LA SOURIS TIENT OUVERTE. `fermer` ne
+         ferme que ce que le doigt a ouvert ; une bulle montrée par
+         `:focus-visible` ou par `:hover` restait. MESURÉ (poste, avant cette
+         correction) : Tab jusqu'au « i » d'une ligne de pilier, puis la
+         souris sur le point d'un autre pilier — les deux bulles ouvertes ; la
+         souris posée sur le « ? » de l'horizon, puis Tab jusqu'à la courbe —
+         les deux aussi. On REPLIE ce déclencheur, comme Échap : sa bulle
+         revient quand le focus, ou la souris, part puis revient. */
+      var d = (ib && typeof ib.replier === 'function') ? declencheurTenu() : null;
+      if(d) ib.replier(d);
       if(bt && typeof bt.fermer === 'function') bt.fermer();
     }
     g.montrer(el, source);
@@ -1916,6 +1955,10 @@ window.grapheBulle = (function(){
     }
     return z;
   }
+  /* CE QU'UN POINTEUR DOIT POUVOIR ATTEINDRE dans la carte d'un graphique :
+     ses commandes. */
+  var COMMANDES = 'a[href],button,input,select,textarea,summary,[tabindex],[onclick],[role="button"]';
+
   /* AU-DESSUS DE LA CIBLE, DESSOUS SI LA PLACE MANQUE — jamais sur elle, et
      le moins possible sur ses VOISINES (`opts.cible` : les cibles de la même
      famille, dans le même graphique) : la bulle se survole, elle volerait
@@ -1924,7 +1967,23 @@ window.grapheBulle = (function(){
      sous d'autres nœuds. Centrée sur `x` (le centre de la cible par défaut),
      bornée dans la zone. Le point d'origine du bloc conteneur est MESURÉ, pas
      supposé : la même fonction place une bulle fixe ou absolue. Rend ce
-     qu'elle a fait. */
+     qu'elle a fait.
+
+     ET JAMAIS SUR LES COMMANDES DE SA CARTE (`opts.carte`), quand une autre
+     place les épargne.
+     LE DÉFAUT MESURÉ (revue du lot 4, poste 1280 × 900) : la bande d'un mois
+     a toute la hauteur du tracé ; « au-dessus » d'elle, la bulle de la courbe
+     (184 × 175 px) couvrait « Mensuel », « Cumul » et les deux « ? » de la
+     carte — mois 1 et 2 à 6 mois, 1 à 4 à 12 mois, 1 à 6 à 18 mois. Et elle
+     se survole : « survoler la courbe, puis cliquer sur Cumul » atteignait
+     le bouton 0 fois sur 2 (le clic tombait sur la bulle), le même clic sans
+     survol 2 fois sur 2. Dessous, elle couvrirait « Voir les données ».
+     CE QU'ON FAIT : une place qui couvre MOINS de commandes l'emporte ; à
+     égalité, dessus puis dessous comme avant ; quand dessus et dessous en
+     couvrent une, dessus DÉCALÉE le long de la carte jusqu'à la place libre
+     la plus proche (puis dessous) ; à défaut, À CÔTÉ de la cible, collée à
+     elle, centrée sur `opts.y` (les points du mois) ; toujours DANS la
+     carte. Sans carte, rien ne change. */
   function placer(b, r, opts){
     opts = opts || {};
     var z = zone();
@@ -1938,7 +1997,7 @@ window.grapheBulle = (function(){
     var o = b.getBoundingClientRect(), w = o.width, h = o.height;
     var x = (opts.x !== undefined && opts.x !== null) ? opts.x : (r.left + r.right) / 2;
     var gauche = Math.max(z.g, Math.min(x - w / 2, z.d - w));
-    var dessus = r.top - ECART - h, dessous = r.bottom + ECART, haut, sous;
+    var dessus = r.top - ECART - h, dessous = r.bottom + ECART, haut, sous, cote = null;
     var voisines = [], c = opts.cible, f = c && c.getAttribute && c.getAttribute('data-graphe');
     if(f && c.parentNode){
       for(var i = 0; i < c.parentNode.children.length; i++){
@@ -1948,23 +2007,96 @@ window.grapheBulle = (function(){
         if(q.width > 0 && q.height > 0) voisines.push(q);
       }
     }
-    function recouvre(y){
+    var commandes = [];
+    if(opts.carte && opts.carte.querySelectorAll){
+      var cs = opts.carte.querySelectorAll(COMMANDES);
+      for(var k = 0; k < cs.length; k++){
+        if(cs[k].hasAttribute('data-graphe') || b.contains(cs[k])) continue;
+        var qc = cs[k].getBoundingClientRect();
+        if(qc.width > 0 && qc.height > 0) commandes.push(qc);
+      }
+    }
+    /* Ce que couvrirait la bulle posée en (g, y) : la surface des voisines,
+       le NOMBRE des commandes. */
+    function recouvre(g, y){
       var s = 0;
       voisines.forEach(function(q){
-        var dx = Math.min(gauche + w, q.right) - Math.max(gauche, q.left);
+        var dx = Math.min(g + w, q.right) - Math.max(g, q.left);
         var dy = Math.min(y + h, q.bottom) - Math.max(y, q.top);
         if(dx > 0 && dy > 0) s += dx * dy;
       });
       return s;
     }
-    var tient = [];
-    if(dessus >= z.h) tient.push({ haut: dessus, sous: false, r: recouvre(dessus) });
-    if(dessous + h <= z.b) tient.push({ haut: dessous, sous: true, r: recouvre(dessous) });
+    function heurte(g, y){
+      var n = 0;
+      commandes.forEach(function(q){
+        if(Math.min(g + w, q.right) > Math.max(g, q.left) && Math.min(y + h, q.bottom) > Math.max(y, q.top)) n++;
+      });
+      return n;
+    }
+    /* À la hauteur `y`, la position libre la plus proche de `gauche`, entre
+       `gmin` et `gmax` : chaque commande à cette hauteur interdit les
+       positions qui la couvriraient ou l'approcheraient de moins de 8 px. */
+    function decaler(y, gmin, gmax){
+      if(gmax < gmin) return null;
+      var interdits = [], meilleur = null;
+      commandes.forEach(function(q){
+        if(Math.min(y + h, q.bottom) > Math.max(y, q.top)) interdits.push([q.left - ECART - w, q.right + ECART]);
+      });
+      var essais = [Math.max(gmin, Math.min(gauche, gmax))];
+      interdits.forEach(function(iv){ essais.push(iv[0], iv[1]); });
+      essais.forEach(function(g){
+        if(g < gmin || g > gmax) return;
+        for(var i = 0; i < interdits.length; i++) if(g > interdits[i][0] && g < interdits[i][1]) return;
+        if(meilleur === null || Math.abs(g - gauche) < Math.abs(meilleur - gauche)) meilleur = g;
+      });
+      return meilleur;
+    }
+    var tient = [], choix = null;
+    if(dessus >= z.h) tient.push({ g: gauche, haut: dessus, sous: false, r: recouvre(gauche, dessus), c: heurte(gauche, dessus) });
+    if(dessous + h <= z.b) tient.push({ g: gauche, haut: dessous, sous: true, r: recouvre(gauche, dessous), c: heurte(gauche, dessous) });
     if(tient.length){
       /* À égalité — rien de recouvert des deux côtés —, dessus. */
-      var choix = (tient.length === 2 && tient[1].r < tient[0].r) ? tient[1] : tient[0];
-      haut = choix.haut; sous = choix.sous;
+      var d2 = tient[1];
+      choix = (d2 && (d2.c < tient[0].c || (d2.c === tient[0].c && d2.r < tient[0].r))) ? d2 : tient[0];
     }
+    if(commandes.length && (!choix || choix.c > 0)){
+      /* DANS LA CARTE : hors d'elle, rien ne dit ce que la bulle couvrirait.
+         MESURÉ (poste, une première version de cette correction, posée à
+         côté de la bande sans cette borne) : à gauche du mois 1, la bulle
+         sortait de la carte et couvrait la flèche de navigation fixe
+         (1280 px) et quatre lignes du menu latéral (1024 px). */
+      var bord = opts.carte.getBoundingClientRect();
+      var gmin = Math.max(z.g, bord.left), gmax = Math.min(z.d, bord.right) - w;
+      /* 1. DÉCALÉE : dessus (puis dessous), glissée le long de la carte
+         jusqu'à la place libre la plus proche, 8 px au moins de chaque
+         commande. Elle ne couvre ni commande ni bande voisine (elle reste
+         hors du tracé), et elle ne barre pas le balayage de la courbe.
+         MESURÉ (la même première version, posée À CÔTÉ de la bande) : la
+         bulle du mois 1 couvrait les mois 2 et 3 à la hauteur des courbes —
+         le pointeur qui allait au mois 2 s'arrêtait sur elle. Éloignée de sa
+         cible, elle se survole par le PASSAGE (voir le survol). */
+      tient.forEach(function(t){
+        if(choix && choix.c === 0) return;
+        var g = decaler(t.haut, gmin, gmax);
+        if(g !== null) choix = { g: g, haut: t.haut, sous: t.sous, r: recouvre(g, t.haut), c: heurte(g, t.haut) };
+      });
+      /* 2. À CÔTÉ, quand aucune place n'est libre au-dessus ni au-dessous —
+         COLLÉE à la cible : les bandes de la courbe se touchent, et un écart
+         tomberait sur la bande voisine ; le pointeur qui va vers la bulle y
+         passerait et changerait de mois en route (la bulle se survole, WCAG
+         1.4.13). Centrée sur `opts.y`, les points du mois. */
+      if((!choix || choix.c > 0) && h <= z.b - z.h){
+        var y0 = (opts.y !== undefined && opts.y !== null) ? opts.y : (r.top + r.bottom) / 2;
+        var yc = Math.max(z.h, Math.min(y0 - h / 2, z.b - h));
+        [{ g: Math.ceil(r.right), cote: 'droite' }, { g: Math.floor(r.left - w), cote: 'gauche' }].forEach(function(s){
+          if(s.g < gmin || s.g > gmax) return;
+          s.haut = yc; s.sous = false; s.r = recouvre(s.g, yc); s.c = heurte(s.g, yc);
+          if(!choix || s.c < choix.c || (s.c === choix.c && choix.cote && s.r < choix.r)) choix = s;
+        });
+      }
+    }
+    if(choix){ haut = choix.haut; sous = choix.sous; gauche = choix.g; cote = choix.cote || null; }
     else {
       /* Aucun côté ne tient : le plus grand, borné. */
       sous = (z.b - r.bottom) > (r.top - z.h);
@@ -1975,7 +2107,7 @@ window.grapheBulle = (function(){
     if(b.classList) b.classList.toggle('dessous', sous);
     /* La flèche de la bulle vise la cible, même quand la bulle est bornée. */
     b.style.setProperty('--fleche', Math.round(Math.max(12, Math.min(w - 12, x - gauche))) + 'px');
-    return { gauche: gauche, haut: haut, largeur: w, hauteur: h, dessous: sous };
+    return { gauche: gauche, haut: haut, largeur: w, hauteur: h, dessous: sous, cote: cote };
   }
 
   /* ── LE TABINDEX ITINÉRANT : un arrêt par graphique ─────────────────── */
@@ -1994,12 +2126,111 @@ window.grapheBulle = (function(){
   }
 
   /* ── LE SURVOL : la souris, et le stylet qui plane ───────────────────── */
+  /* LE PASSAGE VERS UNE BULLE ÉLOIGNÉE DE SA CIBLE. Une bulle que `placer` a
+     décalée le long de la carte pour épargner ses commandes n'est plus
+     contre sa cible : elle doit se survoler quand même (WCAG 1.4.13).
+     LE DÉFAUT MESURÉ (poste 1280 × 900, 6 mois, une première version de
+     cette correction) : la bulle du mois 1, décalée au-dessus du tracé, à
+     44 px à droite de sa bande. En diagonale, le pointeur qui y allait
+     passait sur la bande du mois 2 — la bulle, à la même place, disait alors
+     le mois 2 ; par le haut du tracé, 195 px le long de son bord, la grâce
+     (300 ms) expirait en route : fermée à 4 et à 8 px par pas (816 et
+     416 ms), ouverte à 16 px (216 ms).
+     CE QU'ON FAIT (le « triangle » des sous-menus) : à la sortie de la
+     cible, le PASSAGE est l'enveloppe du point de sortie et de la bulle.
+     Tant que le pointeur y reste, une autre cible survolée ne s'ouvre pas,
+     et chaque pas qui le RAPPROCHE du centre de la bulle relance la grâce
+     (du centre : le long de son bord, la distance au bord ne baisse plus —
+     mesuré, fermée en route). Hors du passage, la cible sous le pointeur
+     s'ouvre aussitôt ; arrêté en route sur une cible, elle s'ouvre quand la
+     grâce expire ; la bulle atteinte, ou un déclencheur d'/infobulles.js
+     sur le chemin, et le passage finit. Une bulle contre sa cible (8 px ou
+     moins, `ECART`) n'a pas de passage : rien ne change pour elle — ni pour
+     le balayage, qui sort par le côté, hors de l'enveloppe. */
+  var passage = null;
+  /* L'enveloppe convexe (chaîne monotone) : ses sommets, dans un sens où
+     l'intérieur est à gauche de chaque arête. */
+  function enveloppe(pts){
+    pts = pts.slice().sort(function(a, b){ return a[0] - b[0] || a[1] - b[1]; });
+    function tour(o, a, b){ return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]); }
+    var bas = [], haut = [], i;
+    for(i = 0; i < pts.length; i++){
+      while(bas.length >= 2 && tour(bas[bas.length - 2], bas[bas.length - 1], pts[i]) <= 0) bas.pop();
+      bas.push(pts[i]);
+    }
+    for(i = pts.length - 1; i >= 0; i--){
+      while(haut.length >= 2 && tour(haut[haut.length - 2], haut[haut.length - 1], pts[i]) <= 0) haut.pop();
+      haut.push(pts[i]);
+    }
+    return bas.slice(0, -1).concat(haut.slice(0, -1));
+  }
+  /* Dans l'enveloppe, à 1 px près. */
+  function dedans(poly, x, y){
+    for(var i = 0; i < poly.length; i++){
+      var a = poly[i], b = poly[(i + 1) % poly.length], l = Math.hypot(b[0] - a[0], b[1] - a[1]) || 1;
+      if(((b[0] - a[0]) * (y - a[1]) - (b[1] - a[1]) * (x - a[0])) / l < -1) return false;
+    }
+    return true;
+  }
+  function distanceA(q, x, y){ return Math.hypot(x - (q.left + q.right) / 2, y - (q.top + q.bottom) / 2); }
+  function ouvrirPassage(x, y){
+    var b = courant && bulleDe(courant.famille);
+    if(!visible(b)) return null;
+    var q = b.getBoundingClientRect(), r = courant.el.getBoundingClientRect();
+    if(Math.hypot(Math.max(0, q.left - r.right, r.left - q.right), Math.max(0, q.top - r.bottom, r.top - q.bottom)) <= ECART + 1) return null;
+    /* LE SOMMET, RECULÉ de 8 px à l'opposé de la bulle : pris au point de
+       sortie même, l'enveloppe est trop étroite là où le pointeur la quitte.
+       MESURÉ (poste, 6 mois) : sorti par le haut de sa bande, le pointeur qui
+       monte encore de 4 px en sortait déjà — la bulle, décalée à droite, se
+       fermait en route. */
+    var d = distanceA(q, x, y) || 1, ux = ((q.left + q.right) / 2 - x) / d, uy = ((q.top + q.bottom) / 2 - y) / d;
+    return { poly: enveloppe([[x - ECART * ux, y - ECART * uy], [q.left, q.top], [q.right, q.top], [q.right, q.bottom], [q.left, q.bottom]]),
+             q: q, d: d, sur: null, type: null };
+  }
+  /* LA GRÂCE EXPIRE : la bulle ouverte au survol se ferme ; le pointeur
+     arrêté en route sur une autre cible l'ouvre. */
+  function expirer(){
+    var p = passage;
+    grace = null; passage = null;
+    if(courant && courant.source === 'souris') fermer();
+    if(p && p.sur && survolee(p.sur)) survoler(p.sur, p.type);
+  }
+  /* LE POINTEUR SUR `n` : la cible qu'il porte s'ouvre. */
+  function survoler(n, type){
+    var c = cibleDe(n);
+    if(!c || cede(n, c) || c === repliee) return;
+    annulerGrace();
+    if(courant && courant.el === c) return;
+    montrer(c, 'souris', type);
+  }
   document.addEventListener('pointerover', function(ev){
     if(ev.pointerType === 'touch') return;
     var n = ev.target;
     if(dansBulle(n)){ annulerGrace(); return; }
     var c = cibleDe(n);
-    if(!c || cede(n, c) || c === repliee) return;
+    if(!c || cede(n, c)){
+      /* UN DÉCLENCHEUR SUR LE CHEMIN : le passage finit là. Sa bulle s'ouvre
+         par `:hover` ; celle du graphique n'a plus que la grâce — les deux
+         ensemble 300 ms au plus, comme sans passage. */
+      if(passage && declencheur(n)) passage = null;
+      /* UNE BULLE À LA FOIS : la souris entre sur un déclencheur
+         d'/infobulles.js, qui montre sa bulle par `:hover`. Celle d'un
+         graphique ouverte au clavier ou au doigt se ferme — repliée tant que
+         le focus reste sur sa cible. Ouverte au survol, la grâce s'en charge
+         déjà. */
+      if(courant && courant.source !== 'souris' && declencheur(n)){
+        var el = courant.el, clavier = courant.source === 'clavier';
+        fermer();
+        if(clavier) repliee = el;
+      }
+      return;
+    }
+    if(c === repliee) return;
+    /* EN ROUTE VERS LA BULLE, dans le passage : cette cible attend. */
+    if(passage && courant && c !== courant.el && dedans(passage.poly, ev.clientX, ev.clientY)){
+      passage.sur = c; passage.type = ev.pointerType;
+      return;
+    }
     annulerGrace();
     if(courant && courant.el === c) return;
     montrer(c, 'souris', ev.pointerType);
@@ -2022,11 +2253,28 @@ window.grapheBulle = (function(){
        grâce part, et le survol de la bulle l'arrête. */
     if(vers && courant.el.contains(vers)) return;
     annulerGrace();
-    grace = setTimeout(function(){
-      grace = null;
-      if(courant && courant.source === 'souris') fermer();
-    }, GRACE);
+    if(courant.el.contains(ev.target) && !dansBulle(vers)) passage = ouvrirPassage(ev.clientX, ev.clientY);
+    grace = setTimeout(expirer, GRACE);
   }, true);
+  /* DANS LE PASSAGE, chaque pas qui rapproche du centre de la bulle relance
+     la grâce ; hors de lui, la cible sous le pointeur s'ouvre. */
+  document.addEventListener('pointermove', function(ev){
+    if(!passage || ev.pointerType === 'touch' || dansBulle(ev.target)) return;
+    var x = ev.clientX, y = ev.clientY;
+    if(dedans(passage.poly, x, y)){
+      var c = cibleDe(ev.target), d = distanceA(passage.q, x, y);
+      passage.sur = (c && courant && c !== courant.el) ? c : null;
+      passage.type = ev.pointerType;
+      if(d < passage.d){
+        passage.d = d;
+        clearTimeout(grace);
+        grace = setTimeout(expirer, GRACE);
+      }
+      return;
+    }
+    passage = null;
+    survoler(ev.target, ev.pointerType);
+  }, { capture: true, passive: true });
 
   /* ── LE DOIGT : rien n'est décidé au contact ──────────────────────────
      Le contact mémorise, le relâcher décide (un `pointerup` sans annulation
@@ -2057,8 +2305,25 @@ window.grapheBulle = (function(){
        pilote, c'est un appui AILLEURS. */
     if(c && cede(n, c)) c = null;
     if(!c){
-      /* La bulle se lit ; l'appui sur elle ne la ferme pas. */
-      if(dansBulle(n)) return;
+      /* LA BULLE SE LIT : l'appui sur elle ne la ferme pas — SAUF S'IL VISE
+         UNE CIBLE QU'ELLE RECOUVRE.
+         LE DÉFAUT MESURÉ (Pixel 7, avant cette correction) : la bulle se
+         survole, elle prend donc aussi le doigt ; un appui au centre d'une
+         voisine qu'elle recouvre (5 points sur 8 du radar de maturité, 4 sur
+         6 du radar de risque, 5 nœuds sur 11 du schéma) tombait sur elle :
+         0 voisine ouverte sur 14 — les mêmes, bulle fermée, 14 sur 14. Au
+         zoom, la bulle couvre jusqu'à son propre point, et le second appui
+         ne la fermait plus.
+         CE QU'ON FAIT : on regarde SOUS la bulle. Sa propre cible : c'est le
+         second appui, elle se ferme. Une autre cible : elle s'ouvre. Autre
+         chose — un bouton, un lien — : rien ; on n'actionne pas ce qu'on ne
+         voit pas. */
+      if(dansBulle(n)){
+        var s = sousLaBulle(ev.clientX, ev.clientY);
+        if(s && s.cible && s.cible === courant.el){ fermer(); return; }
+        if(s && s.cible && !cede(s.el, s.cible)){ repliee = null; montrer(s.cible, 'toucher', ev.pointerType); }
+        return;
+      }
       if(courant) fermer();
       return;
     }
@@ -2111,7 +2376,23 @@ window.grapheBulle = (function(){
 
   document.addEventListener('focusin', function(ev){
     var n = ev.target, c = cibleDe(n);
-    if(!c) return;
+    if(!c){
+      /* UNE BULLE À LA FOIS, DANS L'AUTRE SENS : le focus arrive sur un
+         déclencheur d'/infobulles.js, dont la bulle s'ouvre par
+         `:focus-visible`. MESURÉ (poste, avant cette correction) : une bande
+         de la courbe survolée, puis Tab sur le « ? » de l'horizon — les deux
+         bulles ouvertes, et elles le restaient tant que la souris bougeait
+         sur la bande. Celle du graphique se ferme ; sous le pointeur resté
+         sur sa cible, elle est REPLIÉE (elle revient quand il en sort puis y
+         revient). */
+      if(!courant || !declencheur(n)) return;
+      /* Sans grâce en cours, le pointeur est encore sur la cible (ou sur sa
+         bulle). */
+      var el = courant.el, survol = courant.source === 'souris' && !grace;
+      fermer();
+      if(survol) repliee = el;
+      return;
+    }
     /* LE « i » D'UNE LIGNE PREND LE FOCUS : le point de son pilier s'allume,
        sans bulle — la bulle du « i » est celle d'/infobulles.js. */
     if(cede(n, c)){
@@ -5432,9 +5713,17 @@ function matRadar(pillars){
 /* `opts` : { defiler, bulle }. LE DÉFILEMENT N'EST PLUS AUTOMATIQUE.
    MESURÉ AU PIXEL 7 (avant) : un appui sur un point du radar faisait
    défiler la page jusqu'à la ligne du pilier — le point et sa bulle
-   sortaient de l'écran. Le pilote ne le demande plus qu'à la SOURIS, qui
-   survole le radar à côté de la liste. `bulle: false` : la mise en évidence
-   seule, pour une ligne de la liste qui dit déjà tout. */
+   sortaient de l'écran. Le pilote ne le demande PLUS JAMAIS, pas même à la
+   souris : MESURÉ ensuite (revue du lot 4, puis avant cette correction),
+   la page défilait sous le pointeur immobile, le point partait avec elle et
+   sa bulle se fermait — souris, fenêtre de 1024 px : −148 à +275 px sur 3
+   points sur 8, 2 bulles fermées ; de 640 px : jusqu'à 482 px sur 6 points
+   sur 8, 4 bulles fermées sur les 5 points que le bouton de navigation fixe
+   ne masque pas ; stylet au Pixel 7 : 127 à 352 px sur 3 points sur 3,
+   aucune bulle lisible. La ligne allumée dit déjà tout ; qui veut la
+   lire la trouve. `defiler: true` reste pour qui le demande explicitement.
+   `bulle: false` : la mise en évidence seule, pour une ligne de la liste
+   qui dit déjà tout. */
 window.matRadarHighlight = function(pillarId, evt, opts){
   opts = opts || {};
   var pillarColor = (window.MAT_PILLAR_COLORS || {})[pillarId] || 'var(--ink)';
@@ -5483,15 +5772,16 @@ window.matRadarUnhighlight = function(){
 
 /* LA FAMILLE « mat » DU PILOTE : un point du radar montre sa bulle ; une
    ligne de la liste (ou le focus de son « i ») allume son point, sans
-   bulle et sans défilement. */
+   bulle. Et rien ne défile, quelle que soit la source (voir
+   matRadarHighlight). */
 if(window.grapheBulle) window.grapheBulle.enregistrer('mat', {
   bulle: function(){ return document.getElementById('mat-radar-tooltip'); },
-  montrer: function(el, source, opts){
+  montrer: function(el){
     var ligne = el.hasAttribute('data-graphe-ligne');
     var r = el.getBoundingClientRect();
     window.matRadarHighlight(el.getAttribute('data-pillar'),
       { clientX: r.left + r.width / 2, clientY: r.top, target: el },
-      { defiler: source === 'souris' && !ligne && !(opts && opts.replacer), bulle: !ligne });
+      { defiler: false, bulle: !ligne });
   },
   cacher: function(){ window.matRadarUnhighlight(); }
 });
@@ -12062,7 +12352,14 @@ window.pricingShowTooltip = function(el){
   var vb = svg.viewBox && svg.viewBox.baseVal;
   var sr = svg.getBoundingClientRect();
   var echelle = (vb && vb.width) ? sr.width / vb.width : 1;
-  if(window.grapheBulle) window.grapheBulle.placer(tt, el.getBoundingClientRect(), { x: sr.left + (x0 - (vb ? vb.x : 0)) * echelle, cible: el });
+  /* LA CARTE DU GRAPHIQUE porte ses commandes (horizon, « Mensuel »,
+     « Cumul », les « ? », « Voir les données ») : la bulle ne les couvre pas
+     — à côté de la bande s'il le faut, à la hauteur des points du mois
+     (voir `placer`). */
+  var ys = series.map(function(s){ return parseFloat(el.getAttribute('data-y-'+s)); }).filter(function(v){ return !isNaN(v); });
+  var yPoints = ys.length ? sr.top + (ys.reduce(function(a, v){ return a + v; }, 0) / ys.length - (vb ? vb.y : 0)) * echelle : null;
+  if(window.grapheBulle) window.grapheBulle.placer(tt, el.getBoundingClientRect(),
+    { x: sr.left + (x0 - (vb ? vb.x : 0)) * echelle, y: yPoints, cible: el, carte: svg.closest ? svg.closest('.tbl-wrap') : null });
 };
 
 function pricingHalos(svg){

@@ -166,6 +166,15 @@ El.prototype.appendChild = function (e) { if (e.parentNode) e.parentNode.removeC
 El.prototype.removeChild = function (e) { this.enfants = this.enfants.filter(x => x !== e); e.parentNode = null; return e; };
 El.prototype.remove = function () { if (this.parentNode) this.parentNode.removeChild(this); };
 El.prototype.addEventListener = function (type) { this.ecoutes.push(type); };
+/* UN GESTIONNAIRE POSÉ PAR PROPRIÉTÉ (`col.onmousemove = …`) écoute tout
+   autant qu'un `addEventListener` : il est compté de même. MESURÉ (revue du
+   lot 4) : sans cela, `col.onmousemove = …` dans le rendu des barres
+   survivait aux règles « plus aucun écouteur de souris ». */
+["onclick", "onmousedown", "onmouseup", "onmouseenter", "onmouseleave", "onmousemove", "onmouseover", "onmouseout",
+ "onpointerdown", "onpointerup", "onpointerenter", "onpointerleave", "onpointermove", "onpointerover", "onpointerout",
+ "ontouchstart", "ontouchend", "ontouchmove"].forEach(k => Object.defineProperty(El.prototype, k, {
+  get() { return this["_" + k] || null; },
+  set(v) { this["_" + k] = v; this.ecoutes.push(k); } }));
 El.prototype.scrollIntoView = function () { defilements.push(this.attrs.id || this.attrs["class"] || this.localName); };
 El.prototype.focus = function () {
   const avant = document.activeElement;
@@ -246,9 +255,10 @@ El.prototype.getClientRects = function () {
 };
 El.prototype.contains = function (o) { for (let e = o; e; e = e.parentNode) if (e === this) return true; return false; };
 /* LES SÉLECTEURS : composés (balise, #id, .classe, [attr], [attr=v],
-   [attr="v"]), listes, et la DESCENDANCE (espace). `:hover` et les autres
-   pseudo-classes LÈVENT : aucun contrôle ne passe sur un sélecteur que le
-   harnais n'a pas su lire. */
+   [attr="v"]), listes, et la DESCENDANCE (espace). `:hover` SEUL se lit : un
+   élément que le pointeur du harnais survole (`survole`, posé par le
+   scénario). Les autres pseudo-classes LÈVENT : aucun contrôle ne passe sur
+   un sélecteur que le harnais n'a pas su lire. */
 function coupe(txt, sep) {
   const out = []; let prof = 0, q = "", d = 0;
   for (let i = 0; i < txt.length; i++) {
@@ -291,7 +301,10 @@ El.prototype.chaine = function (parts) {
   }
   return true;
 };
-El.prototype.matches = function (sel) { return coupe(sel, /,/).some(s => this.chaine(coupe(s, /\s/))); };
+El.prototype.matches = function (sel) {
+  if (sel === ":hover") return !!this.survole;
+  return coupe(sel, /,/).some(s => this.chaine(coupe(s, /\s/)));
+};
 El.prototype.closest = function (sel) { for (let e = this; e && e.nodeType === 1; e = e.parentNode) if (e.matches(sel)) return e; return null; };
 function tous(e) { return [].concat(...e.enfants.filter(x => x.nodeType === 1).map(x => [x].concat(tous(x)))); }
 El.prototype.querySelectorAll = function (sel) { return tous(this).filter(e => e.matches(sel)); };
@@ -344,13 +357,18 @@ const document = { readyState: "interactive", head, body, documentElement: racin
   getElementById: id => par(id), createElement: t => new El(t),
   querySelector: s => tous(racine).find(e => e.matches(s)) || null,
   querySelectorAll: s => tous(racine).filter(e => e.matches(s)),
+  /* CE QUI EST SOUS UN POINT, du dessus vers le dessous : un élément posé
+     plus loin dans le document passe devant (les bulles sont en fin de page). */
+  elementsFromPoint: (x, y) => tous(racine).filter(e => { const r = e.getBoundingClientRect();
+    return r.width > 0 && r.height > 0 && x >= r.left && x <= r.right && y >= r.top && y <= r.bottom; }).reverse(),
   addEventListener: inscrire("document") };
 const visualViewport = { offsetLeft: 0, offsetTop: 0, width: 400, height: 800, scale: 1, addEventListener: inscrire("vv") };
 let ibFermes = 0, btFermes = 0;
+const replis = [];
 const window = { innerWidth: 400, innerHeight: 800, visualViewport, addEventListener: inscrire("window"),
   getComputedStyle: e => ({ position: e.position || "static", maxWidth: e.maxWidthCss || "none", cursor: "auto" }),
   requestAnimationFrame: fn => _setTimeout(fn, 16),
-  infobulles: { selecteur: "[data-tooltip],[data-tip],.mat-tooltip-wrap", fermer() { ibFermes++; } },
+  infobulles: { selecteur: "[data-tooltip],[data-tip],.mat-tooltip-wrap", fermer() { ibFermes++; }, replier(e) { replis.push(e.id); } },
   bulleTitre: { fermer() { btFermes++; } } };
 
 /* ── LA PAGE : un exemplaire de chaque cas que le pilote doit trancher. */
@@ -396,26 +414,34 @@ document.addEventListener("keydown", ev => { if (ev.key === "Escape") modale++; 
 /* LES FAMILLES : elles notent ce que le pilote leur demande, et placent leur
    bulle par le VRAI `placer`. */
 const journal = [];
-function famille(nom, bulle) {
+/* `carte()` : la carte du graphique, dont la bulle évite les commandes — la
+   courbe de tarification passe la sienne (`.tbl-wrap`). */
+function famille(nom, bulle, carte) {
   return {
     bulle: () => bulle,
     montrer(e, source, opts) {
       journal.push({ quoi: "montrer", id: e.id, source, replacer: !!(opts && opts.replacer) });
       if (e.hasAttribute("data-graphe-ligne")) { bulle.hidden = true; return; }
       bulle.hidden = false;
-      bulle.dernier = window.grapheBulle.placer(bulle, e.getBoundingClientRect(), { cible: e });
+      bulle.dernier = window.grapheBulle.placer(bulle, e.getBoundingClientRect(), { cible: e, carte: carte ? carte() : null });
     },
     cacher(e) { journal.push({ quoi: "cacher", id: e.id }); bulle.hidden = true; },
   };
 }
 const GB = window.grapheBulle;
-if (GB) { GB.enregistrer("geo", famille("geo", bGeo)); GB.enregistrer("mat", famille("mat", bMat)); GB.enregistrer("eco", famille("eco", bEco)); }
+let carteGeo = null;
+if (GB) { GB.enregistrer("geo", famille("geo", bGeo, () => carteGeo)); GB.enregistrer("mat", famille("mat", bMat)); GB.enregistrer("eco", famille("eco", bEco)); }
 
 const pt = (type, cible, extra) => emettre(type, evenement(Object.assign({ pointerType: "touch", target: cible }, extra)));
 function appui(cible, extra) { pt("pointerdown", cible, extra); avancer(60); pt("pointerup", cible, extra); avancer(20); }
-function survol(vers, depuis, type) {
-  if (depuis) emettre("pointerout", evenement({ pointerType: type || "mouse", target: depuis, relatedTarget: vers }));
-  if (vers) emettre("pointerover", evenement({ pointerType: type || "mouse", target: vers, relatedTarget: depuis }));
+/* LE POINTEUR QUI PASSE de `depuis` à `vers` : les deux événements, et
+   l'état `:hover` (la cible et ses ancêtres) que le navigateur tiendrait. */
+function survol(vers, depuis, type, xy) {
+  const ou = xy ? { clientX: xy[0], clientY: xy[1] } : {};
+  if (depuis) emettre("pointerout", evenement(Object.assign({ pointerType: type || "mouse", target: depuis, relatedTarget: vers }, ou)));
+  tous(racine).forEach(e => { e.survole = false; });
+  for (let e = vers; e && e.nodeType === 1; e = e.parentNode) e.survole = true;
+  if (vers) emettre("pointerover", evenement(Object.assign({ pointerType: type || "mouse", target: vers, relatedTarget: depuis }, ou)));
 }
 const touche = (key, extra) => emettre("keydown", evenement(Object.assign({ key, target: document.activeElement }, extra)));
 function tab(cible) { touche("Tab"); cible.focus(); }
@@ -560,8 +586,15 @@ scenario("replacement", () => {
   emettre("scroll", evenement({ target: document })); avancer(20);
   r.defilement = journal.slice(j0).map(j => j.quoi + ":" + j.id + (j.replacer ? ":replacer" : ""));
   r.resteOuverte = ouverte(bGeo);
-  const j1 = journal.length; emettreVV("resize"); emettreVV("scroll"); avancer(20);
-  r.vv = journal.slice(j1).filter(j => j.replacer).length;
+  /* CHAQUE ÉVÉNEMENT À SON TOUR, chacun sa trame : émis ensemble, un seul
+     replacement suffisait — trois écouteurs sur quatre pouvaient manquer
+     sans que rien ne tombe (MESURÉ, revue du lot 4). */
+  const replace = (emettreUn) => { const j = journal.length; emettreUn(); avancer(20); return journal.slice(j).filter(x => x.replacer).length; };
+  r.vvResize = replace(() => emettreVV("resize"));
+  r.vvScroll = replace(() => emettreVV("scroll"));
+  r.resize = replace(() => emettre("resize", evenement({ target: window })));
+  /* LE TÉMOIN : un événement que personne n'écoute ne replace rien. */
+  r.rien = replace(() => emettre("orientationchange", evenement({ target: window })));
   g2.remove(); avancer(260); r.demontee = ouverte(bGeo);
   geo.appendChild(g2);
   reinit(); appui(g3); geo.masque = true; avancer(260); r.masquee = ouverte(bGeo); geo.masque = false;
@@ -590,6 +623,184 @@ scenario("placement", () => {
   return r;
 });
 
+/* LES COMMANDES DE LA CARTE : un bouton là où irait la bulle (au-dessus de
+   g2), puis un autre dessous ; puis des « murs » de commandes sur toute la
+   largeur de la carte, dessus et dessous. */
+scenario("commandes", () => {
+  const r = {}, rect = (b) => { const q = b.getBoundingClientRect(); return { gauche: q.left, haut: q.top, droite: q.right, bas: q.bottom }; };
+  const haut = el("button", { id: "cmd-haut" }, geo, [100, 255, 200, 290]);
+  appui(g2); r.sansCarte = Object.assign(rect(bGeo), { cote: bGeo.dernier.cote });
+  reinit(); carteGeo = geo;
+  appui(g2); r.commandeDessus = Object.assign(rect(bGeo), { cote: bGeo.dernier.cote, dessous: bGeo.classList.contains("dessous") });
+  const bas = el("button", { id: "cmd-bas" }, geo, [100, 490, 200, 530]);
+  reinit(); appui(g2); r.lesDeux = Object.assign(rect(bGeo), { cote: bGeo.dernier.cote });
+  /* DES MURS : aucune place libre au-dessus ni au-dessous — à côté. */
+  haut.remove(); bas.remove();
+  const murH = el("button", { id: "mur-haut" }, geo, [20, 255, 380, 290]), murB = el("button", { id: "mur-bas" }, geo, [20, 490, 380, 530]);
+  reinit(); appui(g2); r.murs = Object.assign(rect(bGeo), { cote: bGeo.dernier.cote });
+  /* g3 : à droite, la bulle sortirait de la carte — à gauche. */
+  reinit(); appui(g3); r.bordDroit = Object.assign(rect(bGeo), { cote: bGeo.dernier.cote });
+  /* Une commande DANS la bulle (un lien qu'elle porterait) ne compte pas :
+     la bulle est dans la carte (comme celle de la courbe, dans sa
+     `.tbl-wrap`), et son lien, posé là où elle irait au-dessus, la ferait
+     fuir dessous. */
+  reinit(); murH.remove(); murB.remove(); geo.appendChild(bGeo);
+  const dedans = el("a", { id: "cmd-dedans", href: "#" }, bGeo, [100, 260, 110, 270]);
+  appui(g2); r.dansLaBulle = Object.assign(rect(bGeo), { cote: bGeo.dernier.cote });
+  dedans.remove(); body.appendChild(bGeo);
+  /* TOUJOURS DANS LA CARTE : une carte étroite, une commande dessus et
+     dessous ; décalée ou à gauche, la bulle tiendrait dans la fenêtre mais
+     sortirait de la carte (MESURÉ : sur la flèche de navigation, sur le menu
+     latéral) ; à droite, elle sortirait de la fenêtre — elle reste dessus. */
+  reinit(); const carte2 = el("div", { id: "carte2" }, body, [200, 250, 390, 540]);
+  const t2 = el("div", { id: "t2", "data-graphe": "geo" }, carte2, [250, 300, 290, 480]);
+  el("button", { id: "h2" }, carte2, [230, 255, 330, 290]); el("button", { id: "b2" }, carte2, [230, 490, 330, 530]);
+  carteGeo = carte2; appui(t2); r.carteEtroite = Object.assign(rect(bGeo), { cote: bGeo.dernier.cote });
+  reinit(); carte2.remove(); carteGeo = null;
+  return r;
+});
+
+/* AU DOIGT, L'APPUI QUI TOMBE SUR LA BULLE : ce qu'elle recouvre décide. */
+scenario("sousLaBulle", () => {
+  const r = {};
+  const poser = (b, x, y) => { b.style.left = x + "px"; b.style.top = y + "px"; };
+  /* Une VOISINE recouverte : z2 (centre 175,540) sous la bulle de z1. */
+  appui(z1); r.avant = ouverte(bMat);
+  poser(bMat, 150, 520);
+  appui(bMat, { clientX: 175, clientY: 540 });
+  r.voisine = { vue: ouverte(bMat), tenue: GB.ouverte() ? GB.ouverte().id : null, source: derniers(1)[0] };
+  /* SA PROPRE cible recouverte (le zoom) : le second appui la ferme. */
+  reinit(); appui(z1); poser(bMat, 90, 520);
+  appui(bMat, { clientX: 115, clientY: 540 });
+  r.soi = { vue: ouverte(bMat), tenue: GB.ouverte() ? GB.ouverte().id : null };
+  /* AUTRE CHOSE sous la bulle (ici un bloc de la page) : rien — ni fermée,
+     ni rien d'actionné. */
+  reinit(); appui(z1); poser(bMat, 10, 690);
+  appui(bMat, { clientX: 50, clientY: 720 });
+  r.autreChose = { vue: ouverte(bMat), tenue: GB.ouverte() ? GB.ouverte().id : null };
+  /* LE « i » d'une ligne sous la bulle : c'est à /infobulles.js, pas au
+     pilote — rien. */
+  reinit(); appui(z1); poser(bMat, 300, 600);
+  appui(bMat, { clientX: 350, clientY: 620 });
+  r.i = { vue: ouverte(bMat), tenue: GB.ouverte() ? GB.ouverte().id : null };
+  return r;
+});
+
+/* UNE BULLE À LA FOIS : le déclencheur d'/infobulles.js que le FOCUS ou la
+   SOURIS tient ouvert est replié quand une bulle de graphique s'ouvre. */
+scenario("replier", () => {
+  const r = {};
+  replis.length = 0; touche("Tab"); tip.focus();
+  survol(z1, null, "mouse"); r.focusPuisSurvol = { vue: ouverte(bMat), replis: replis.slice() };
+  reinit(); replis.length = 0; survol(z1, null, "mouse"); r.sansDeclencheur = { vue: ouverte(bMat), replis: replis.slice() };
+  /* Le « i » d'une LIGNE qui prend le focus : sa ligne s'allume, lui garde sa
+     bulle ; puis la souris sur un point, et il se replie. */
+  reinit(); replis.length = 0; touche("Tab"); i1.focus(); r.focusI = replis.slice();
+  survol(z1, null, "mouse"); r.iPuisPoint = { vue: ouverte(bMat), replis: replis.slice() };
+  /* La SOURIS posée sur un déclencheur, puis Tab jusqu'à une barre. */
+  reinit(); replis.length = 0; survol(tip, null, "mouse"); tab(g1);
+  r.survolPuisTab = { vue: ouverte(bGeo), replis: replis.slice() };
+  return r;
+});
+
+/* UNE BULLE À LA FOIS, DANS L'AUTRE SENS : un déclencheur qui prend le focus,
+   ou la souris, ferme la bulle du graphique. */
+scenario("declencheurApres", () => {
+  const r = {};
+  survol(z1, null, "mouse"); r.avant = ouverte(bMat);
+  touche("Tab"); tip.focus(); r.focus = ouverte(bMat);
+  survol(z1, z1); avancer(50); r.bouge = ouverte(bMat);
+  survol(ailleurs, z1); avancer(400); survol(z1, ailleurs); r.retour = ouverte(bMat);
+  /* LE POINTEUR DÉJÀ SORTI (la grâce court) : fermée, mais pas repliée — le
+     prochain passage la rouvre. */
+  reinit(); survol(z1, null, "mouse"); survol(ailleurs, z1); avancer(100);
+  touche("Tab"); tip.focus(); r.sortieFocus = ouverte(bMat);
+  survol(z1, ailleurs); r.sortieRetour = ouverte(bMat);
+  /* LE TÉMOIN : un focus qui n'est pas un déclencheur ne ferme rien. */
+  reinit(); survol(z1, null, "mouse"); touche("Tab"); ailleurs.focus(); r.autreFocus = ouverte(bMat);
+  /* Ouverte au CLAVIER, puis la souris sur un déclencheur. */
+  reinit(); tab(g1); r.clavier = ouverte(bGeo);
+  survol(tip, null, "mouse"); r.clavierPuisSurvol = ouverte(bGeo);
+  emettre("focusin", evenement({ target: g1, relatedTarget: body })); r.refocus = ouverte(bGeo);
+  /* → va à la barre qui suit dans le graphique (l'ordre du DOM : une règle
+     plus haut a démonté puis remis g2). */
+  const apres = geo.children.filter(x => x.getAttribute("data-graphe") === "geo")[1].id;
+  touche("ArrowRight"); r.suivante = { actif: document.activeElement.id, vue: ouverte(bGeo), attendu: apres };
+  /* LE TÉMOIN : la souris sur autre chose ne ferme pas la bulle du clavier. */
+  reinit(); tab(g1); survol(ailleurs, null, "mouse"); r.clavierAutreSurvol = ouverte(bGeo);
+  /* Ouverte au DOIGT, puis la souris sur le « i » d'une ligne. */
+  reinit(); appui(z1); survol(i1, null, "mouse"); r.doigtPuisI = ouverte(bMat);
+  return r;
+});
+
+/* LE PASSAGE VERS UNE BULLE DÉCALÉE. Une commande au-dessus de g2 et une
+   au-dessous : sa bulle est décalée à droite (208 → 358), au-dessus de g3 ;
+   le pointeur qui y va en diagonale passe sur g3. Chaque pas : 100 ms, ou
+   50 — plus que la grâce, en tout. */
+scenario("passage", () => {
+  const r = {};
+  carteGeo = geo;
+  const h = el("button", { id: "p-haut" }, geo, [100, 255, 200, 290]), b = el("button", { id: "p-bas" }, geo, [100, 490, 200, 530]);
+  let sous = null;
+  const aller = (n, x, y, ms) => {
+    if (n !== sous) { survol(n, sous, "mouse", [x, y]); sous = n; }
+    emettre("pointermove", evenement({ pointerType: "mouse", target: n, clientX: x, clientY: y }));
+    avancer(ms === undefined ? 100 : ms);
+  };
+  const tenue = () => (ouverte(bGeo) && GB.ouverte()) ? GB.ouverte().id : null;
+  let g2Bulle = null;
+  const depart = () => { reinit(); sous = null; aller(g2, 150, 390); g2Bulle = bGeo.getBoundingClientRect(); };
+  /* LA DIAGONALE, du centre de g2 au centre de la bulle (t = 0,1 … 1). */
+  const DIAG = [[g2, 163.3, 378.2], [g2, 176.6, 366.4], [geo, 189.9, 354.6], [g3, 203.2, 342.8], [g3, 216.5, 331],
+                [g3, 229.8, 319.2], [g3, 243.1, 307.4], [geo, 256.4, 295.6], [bGeo, 269.7, 283.8], [bGeo, 283, 272]];
+  depart();
+  const q = bGeo.getBoundingClientRect();
+  r.bulle = { gauche: q.left, haut: q.top, droite: q.right, bas: q.bottom, cote: bGeo.dernier.cote };
+  const j0 = journal.length, enRoute = [];
+  DIAG.forEach(([n, x, y]) => { aller(n, x, y); enRoute.push(tenue()); });
+  avancer(400);
+  r.diagonale = { enRoute, fin: tenue(), g3: journal.slice(j0).some(j => j.quoi === "montrer" && j.id === "g3") };
+  /* PAR LE HAUT : sorti de g2 vers le haut, dans les 8 px entre le tracé et
+     la bulle, puis le long de son bord, 4 px dessous (MESURÉ au poste : sans
+     sommet reculé, le premier pas sortait déjà du passage ; mesurée au bord,
+     la distance ne baissait plus — fermée en route, les deux fois). */
+  depart(); const haut = [];
+  [[g2, 150, 340], [g2, 150, 301], [geo, 150, 299.6], [geo, 150, 296], [geo, 180, 296], [geo, 210, 296], [geo, 240, 296],
+   [geo, 270, 296], [bGeo, 283, 288]].forEach(([n, x, y]) => { aller(n, x, y); haut.push(tenue()); });
+  avancer(400);
+  r.parLeHaut = { enRoute: haut, fin: tenue() };
+  /* ARRÊTÉ EN ROUTE, sur g3 : g2 tient la grâce, puis g3 s'ouvre. */
+  depart(); DIAG.slice(0, 5).forEach(([n, x, y]) => aller(n, x, y, 50));
+  r.arret = { t50: tenue() }; avancer(100); r.arret.t150 = tenue(); avancer(250); r.arret.t400 = tenue();
+  /* DES PAS QUI NE RAPPROCHENT PAS de la bulle : ils ne relancent rien. */
+  depart(); DIAG.slice(0, 5).forEach(([n, x, y]) => aller(n, x, y, 50));
+  aller(g3, 210, 336.9); aller(g3, 216.5, 331); r.progres = { t250: tenue() }; avancer(150); r.progres.t400 = tenue();
+  /* LE BALAYAGE, par le côté, à la hauteur de g2 : sorti du passage, g3
+     s'ouvre dès l'entrée (le survol seul, sans pas). */
+  depart(); aller(g2, 176, 390); aller(geo, 184, 390); survol(g3, geo, "mouse", [204, 390]); sous = g3; r.balayage = tenue();
+  /* HORS DU PASSAGE, sur g3 : le pointeur y redescend — g3 s'ouvre aussitôt. */
+  depart(); DIAG.slice(0, 4).forEach(([n, x, y]) => aller(n, x, y, 50)); r.horsPassage = { dedans: tenue() };
+  aller(g3, 204, 420, 0); r.horsPassage.dehors = tenue();
+  /* UN DÉCLENCHEUR d'/infobulles.js sur le chemin (le « ? » d'une carte) :
+     le passage finit là, la bulle du graphique n'a plus que la grâce.
+     LE TÉMOIN : le même chemin, sans le déclencheur, la garde. */
+  const ptip = el("span", { id: "ptip", "data-tip": "Une aide" }, geo, [262, 296, 290, 312]);
+  const versTip = (sur) => { depart(); DIAG.slice(0, 4).forEach(([n, x, y]) => aller(n, x, y, 50));
+    aller(g3, 240, 322); aller(sur, 265, 308); aller(sur, 275, 305); aller(sur, 285, 302); return tenue(); };
+  r.declencheur = { avec: versTip(ptip) };
+  ptip.remove(); r.declencheur.sans = versTip(geo);
+  /* LA BULLE ATTEINTE, le passage est fini : ressorti par le bas sur g3,
+     g3 s'ouvre aussitôt. */
+  depart(); DIAG.forEach(([n, x, y]) => aller(n, x, y, 50)); aller(g3, 243.1, 307.4, 0); r.apresBulle = tenue();
+  /* LE TÉMOIN : une bulle CONTRE sa cible (sans les commandes, au-dessus
+     de g2) n'a pas de passage — g3, en diagonale, s'ouvre aussitôt. */
+  h.remove(); b.remove();
+  depart(); aller(g2, 165, 360); aller(g2, 178, 345); aller(geo, 190, 330); aller(g3, 203, 315, 0);
+  r.collee = { tenue: tenue(), gauche: g2Bulle.left, bas: g2Bulle.bottom };
+  reinit(); carteGeo = null;
+  return r;
+});
+
 process.stdout.write(JSON.stringify(out));
 """
 
@@ -608,12 +819,17 @@ def _sc(nom):
 def test_le_pilote_est_la_et_s_inscrit_AU_CHARGEMENT():
     """LE PILOTE EST UN BLOC DE sentinel.page.js, et il écoute dès son
     exécution — pas à `DOMContentLoaded` : c'est ce qui place son Échap AVANT
-    ceux d'/infobulles.js et de /bulle-titre.js (voir la règle d'ordre)."""
+    ceux d'/infobulles.js et de /bulle-titre.js (voir la règle d'ordre). Et
+    le REPLACEMENT écoute les quatre sources que le §4.1 nomme : le
+    défilement, `resize` de la fenêtre, `resize` et `scroll` de la fenêtre
+    VISUELLE (le zoom du doigt, le clavier virtuel) — trois d'entre elles
+    pouvaient manquer sans que rien ne tombe (MESURÉ, revue du lot 4)."""
     inscrits = _pilote()["inscrits"]
     types = set((i["ou"], i["type"], i["capture"]) for i in inscrits)
     for attendu in [("window", "keydown", True), ("document", "pointerover", True), ("document", "pointerout", True),
                     ("document", "pointerdown", True), ("document", "pointerup", True), ("document", "pointercancel", True),
-                    ("document", "focusin", False), ("document", "focusout", False), ("document", "scroll", True)]:
+                    ("document", "focusin", False), ("document", "focusout", False), ("document", "scroll", True),
+                    ("window", "resize", False), ("vv", "resize", False), ("vv", "scroll", False)]:
         assert attendu in types, "le pilote n'écoute pas %s au chargement : %s" % (attendu, sorted(types))
     passifs = [i for i in inscrits if i["ou"] == "document" and i["type"] in ("pointermove", "scroll")]
     assert passifs and all(i["passif"] for i in passifs), "un écouteur de défilement ou de glissé n'est pas passif : %s" % passifs
@@ -779,12 +995,17 @@ def test_UNE_BULLE_A_LA_FOIS_ouvrir_un_graphique_ferme_les_deux_autres():
 
 def test_le_DEFILEMENT_replace_la_bulle_et_une_cible_disparue_la_ferme():
     """LE DÉFILEMENT REPLACE, IL NE FERME JAMAIS (G-8) ; la fenêtre visuelle
-    aussi. Une cible démontée (graphique redessiné) ou masquée (écran quitté
-    par `go()`) ferme sa bulle en 250 ms. L'intervalle ne tourne que bulle
-    ouverte."""
+    aussi, et le redimensionnement — CHACUN À SON TOUR, une trame chacun :
+    émis ensemble, un seul replacement suffisait, et trois écouteurs sur
+    quatre pouvaient manquer (MESURÉ, revue du lot 4). LE TÉMOIN : un
+    événement que le pilote n'écoute pas ne replace rien. Une cible démontée
+    (graphique redessiné) ou masquée (écran quitté par `go()`) ferme sa bulle
+    en 250 ms. L'intervalle ne tourne que bulle ouverte."""
     r = _sc("replacement")
     assert r["defilement"] == ["montrer:g2:replacer"] and r["resteOuverte"], r["defilement"]
-    assert r["vv"] >= 1, "la fenêtre visuelle qui bouge ne replace pas la bulle"
+    assert r["rien"] == 0, "un événement que personne n'écoute replace la bulle : le relevé compterait n'importe quoi"
+    assert (r["vvResize"], r["vvScroll"], r["resize"]) == (1, 1, 1), (
+        "fenêtre visuelle redimensionnée, défilée, fenêtre redimensionnée : %r replacement(s)" % [r["vvResize"], r["vvScroll"], r["resize"]])
     assert not r["demontee"] and not r["masquee"], "une cible démontée ou masquée garde sa bulle : %r" % r
     assert (r["intervalleAuRepos"], r["intervalleOuvert"], r["intervalleFerme"]) == (0, 1, 0), r
 
@@ -814,6 +1035,157 @@ def test_la_bulle_evite_ses_VOISINES_et_reste_dans_la_FENETRE_VISUELLE():
     assert lg["gauche"] >= lg["borneGauche"] and lg["droite"] <= lg["borneDroite"], "trop large pour la fenêtre : %r" % lg
 
 
+def test_la_bulle_ne_couvre_pas_les_COMMANDES_de_sa_carte():
+    """LE DÉFAUT MESURÉ (revue du lot 4, poste 1280 × 900) : la bulle d'un mois
+    de la courbe, « au-dessus » de sa bande — qui a toute la hauteur du tracé
+    —, couvrait « Mensuel », « Cumul » et les « ? » de la carte ; survolable,
+    elle prenait le clic (« Cumul » atteint 0 fois sur 2 après un survol, 2
+    sur 2 sans). Exécuté : le vrai `placer`, une carte qui porte un bouton là
+    où irait la bulle. Elle passe DESSOUS ; avec un second bouton dessous,
+    DESSUS DÉCALÉE jusqu'à la place libre la plus proche, à 8 px du bouton —
+    hors du tracé, elle ne couvre aucune voisine (MESURÉ, première version
+    posée à côté : la bulle du mois 1 barrait les mois 2 et 3 à la hauteur
+    des courbes) ; avec des murs de commandes dessus et dessous, À CÔTÉ,
+    COLLÉE à la cible (un écart tomberait sur la bande voisine) — à droite,
+    à gauche contre le bord ; jamais hors de la carte (MESURÉ : sur la
+    flèche de navigation et le menu latéral) ; un lien DANS la bulle ne
+    compte pas. LE TÉMOIN : sans carte, le même bouton n'empêche pas
+    « dessus »."""
+    r = _sc("commandes")
+    s = r["sansCarte"]
+    assert s["bas"] == 300 - 8 and s["cote"] is None, "sans carte, la bulle n'est plus au-dessus : le contrôle ne mesurerait rien (%r)" % s
+    d = r["commandeDessus"]
+    assert d["haut"] == 480 + 8 and d["dessous"] and d["cote"] is None, "une commande au-dessus de la cible : la bulle la couvre (%r)" % d
+    l = r["lesDeux"]
+    assert l["cote"] is None and l["bas"] == 300 - 8, "commandes dessus et dessous : la bulle ne reste pas au-dessus (%r)" % l
+    assert l["gauche"] == 200 + 8, "au-dessus, la bulle n'est pas décalée jusqu'à 8 px du bouton (%r)" % l
+    m = r["murs"]
+    assert m["cote"] == "droite" and m["haut"] == 370, "des murs dessus et dessous : pas à côté de la cible (%r)" % m
+    assert m["gauche"] == 180, "à côté, la bulle n'est pas COLLÉE à sa cible : l'écart tombe sur la voisine (%r)" % m
+    b = r["bordDroit"]
+    assert b["cote"] == "gauche" and b["droite"] == 200, "contre le bord de la carte, la bulle ne passe pas à gauche, collée (%r)" % b
+    i = r["dansLaBulle"]
+    assert i["bas"] == 300 - 8 and i["cote"] is None and i["gauche"] == 150 - 75, "un lien DANS la bulle la fait fuir (%r)" % i
+    e = r["carteEtroite"]
+    assert e["cote"] is None and e["bas"] == 300 - 8 and e["gauche"] == 270 - 75, "la bulle sort de sa carte (%r)" % e
+
+
+def test_au_DOIGT_l_appui_sur_la_bulle_vise_ce_qu_elle_RECOUVRE():
+    """LE DÉFAUT MESURÉ (Pixel 7, avant cette correction) : la bulle se
+    survole, donc elle prend aussi le doigt ; l'appui au centre d'une voisine
+    qu'elle recouvre tombait sur elle — 0 voisine ouverte sur 14 (radars,
+    schéma), 14 sur 14 bulle fermée ; au zoom ×3, le second appui sur un
+    point qu'elle couvrait ne la fermait plus. Exécuté : ce qui est SOUS la
+    bulle décide — une voisine s'ouvre, sa propre cible la ferme, autre chose
+    (un bloc, le « i » d'/infobulles.js) ne fait rien, et la bulle reste."""
+    r = _sc("sousLaBulle")
+    assert r["avant"], "la bulle n'était pas ouverte : le contrôle ne mesurerait rien"
+    assert r["voisine"] == {"vue": True, "tenue": "z2", "source": "montrer:z2:toucher"}, "la voisine recouverte : %r" % r["voisine"]
+    assert r["soi"] == {"vue": False, "tenue": None}, "sa propre cible recouverte : le second appui ne ferme pas (%r)" % r["soi"]
+    assert r["autreChose"] == {"vue": True, "tenue": "z1"}, "autre chose sous la bulle : %r" % r["autreChose"]
+    assert r["i"] == {"vue": True, "tenue": "z1"}, "le « i » d'une ligne sous la bulle : %r" % r["i"]
+
+
+def test_UNE_BULLE_A_LA_FOIS_le_declencheur_tenu_par_le_FOCUS_ou_la_SOURIS_se_replie():
+    """LE DÉFAUT MESURÉ (poste, avant cette correction) : Tab jusqu'au « i »
+    d'une ligne de pilier, puis la souris sur le point d'un autre pilier —
+    les deux bulles ouvertes : `infobulles.fermer()` ne ferme que ce que le
+    doigt a ouvert, et la règle d'avant comptait des appels, pas des
+    fermetures. De même la souris posée sur le « ? » de l'horizon, puis Tab
+    jusqu'à la courbe. Exécuté : à l'ouverture d'une bulle de graphique, le
+    déclencheur qui a le focus — sinon celui sous la souris — est REPLIÉ
+    (`infobulles.replier`). LE TÉMOIN : sans déclencheur tenu, rien n'est
+    replié ; le focus du « i » d'une ligne allume la ligne sans replier le
+    « i »."""
+    r = _sc("replier")
+    assert r["sansDeclencheur"] == {"vue": True, "replis": []}, "rien de tenu, et pourtant replié : %r" % r["sansDeclencheur"]
+    assert r["focusPuisSurvol"] == {"vue": True, "replis": ["tip"]}, "le déclencheur qui a le focus : %r" % r["focusPuisSurvol"]
+    assert r["focusI"] == [], "le focus du « i » replie sa propre bulle : %r" % r["focusI"]
+    assert r["iPuisPoint"] == {"vue": True, "replis": ["i1"]}, "le « i » focalisé, puis un point : %r" % r["iPuisPoint"]
+    assert r["survolPuisTab"] == {"vue": True, "replis": ["tip"]}, "le déclencheur sous la souris, puis Tab : %r" % r["survolPuisTab"]
+
+
+def test_UNE_BULLE_A_LA_FOIS_le_FOCUS_d_un_declencheur_ferme_le_graphique_survole():
+    """LE DÉFAUT MESURÉ (revue du lot 4, poste) : une bande survolée, puis Tab
+    sur le « ? » de l'horizon — les deux bulles, et elles le restaient tant
+    que la souris bougeait sur la bande. La bulle du graphique se ferme,
+    REPLIÉE sous le pointeur resté (elle revient quand il sort puis revient).
+    LE TÉMOIN : un focus qui n'est pas un déclencheur ne ferme rien."""
+    r = _sc("declencheurApres")
+    assert r["avant"], "la bulle n'était pas ouverte : le contrôle ne mesurerait rien"
+    assert r["autreFocus"], "un focus quelconque ferme la bulle : le contrôle ne distinguerait rien"
+    assert not r["focus"], "le focus d'un déclencheur laisse la bulle du graphique ouverte"
+    assert not r["bouge"], "la souris restée sur la cible rouvre la bulle"
+    assert r["retour"], "sortie puis retour : la bulle ne revient plus"
+    assert not r["sortieFocus"] and r["sortieRetour"], (
+        "le pointeur déjà sorti : la bulle fermée par le focus ne se rouvre plus au passage suivant (%r)" % [r["sortieFocus"], r["sortieRetour"]])
+
+
+def test_UNE_BULLE_A_LA_FOIS_la_SOURIS_sur_un_declencheur_ferme_le_graphique_du_clavier():
+    """Ouverte au CLAVIER (ou au doigt), la bulle d'un graphique restait quand
+    la souris montrait celle d'un déclencheur par `:hover`. Elle se ferme —
+    repliée tant que le focus reste sur la barre ; → ouvre la suivante. LE
+    TÉMOIN : la souris sur autre chose ne ferme rien."""
+    r = _sc("declencheurApres")
+    assert r["clavier"] and r["clavierAutreSurvol"], "témoin : la bulle du clavier ne tient pas (%r)" % r
+    assert not r["clavierPuisSurvol"], "la souris sur un déclencheur laisse la bulle du clavier ouverte"
+    assert not r["refocus"], "le focus resté sur la barre rouvre la bulle"
+    sv = r["suivante"]
+    assert sv["actif"] == sv["attendu"] != "g1" and sv["vue"], "→ après le repli n'ouvre pas la barre suivante : %r" % sv
+    assert not r["doigtPuisI"], "ouverte au doigt, la bulle reste quand la souris passe sur le « i » d'une ligne"
+
+
+def test_la_bulle_DECALEE_se_survole_par_le_PASSAGE():
+    """LE DÉFAUT MESURÉ (poste 1280 × 900, une première version de cette
+    correction) : décalée pour épargner les commandes de sa carte, la bulle
+    du mois 1 n'était plus contre sa bande ; le pointeur qui y allait en
+    diagonale passait sur le mois 2 — la bulle disait le mois 2 —, et par le
+    haut du tracé la grâce expirait en route. Exécuté : g2 a sa bulle
+    décalée au-dessus de g3 (commandes dessus et dessous) ; la diagonale du
+    centre de g2 au centre de sa bulle traverse g3, un pas toutes les
+    100 ms (700 ms hors de g2, plus que la grâce) : g2 reste, jusque dans
+    sa bulle, et g3 ne s'ouvre jamais. Et PAR LE HAUT : sorti vers le haut
+    de g2, puis le long du bord de la bulle, 4 px dessous — le chemin qui
+    fermait la bulle au poste."""
+    r = _sc("passage")
+    q = r["bulle"]
+    assert q["gauche"] == 208 and q["bas"] == 292 and q["cote"] is None, \
+        "la bulle de g2 n'est pas décalée au-dessus de g3 : le scénario ne mesurerait rien (%r)" % q
+    d = r["diagonale"]
+    assert d["enRoute"] == ["g2"] * 10 and d["fin"] == "g2" and not d["g3"], \
+        "en route vers sa bulle décalée, le pointeur change de cible ou la perd : %r" % d
+    h = r["parLeHaut"]
+    assert h["enRoute"] == ["g2"] * 9 and h["fin"] == "g2", \
+        "par le haut du tracé, le long du bord de la bulle, elle se ferme en route : %r" % h
+
+
+def test_le_PASSAGE_arrete_en_route_ouvre_la_cible_quand_la_grace_expire():
+    """Le pointeur ARRÊTÉ sur g3, dans le passage : g2 tient la grâce (300 ms
+    après le dernier pas qui rapprochait de sa bulle), puis g3 s'ouvre. Des
+    pas qui ne rapprochent pas — un recul, un retour au même point — ne la
+    relancent pas."""
+    r = _sc("passage")
+    assert r["arret"] == {"t50": "g2", "t150": "g2", "t400": "g3"}, "arrêté en route : %r" % r["arret"]
+    assert r["progres"] == {"t250": "g2", "t400": "g3"}, "des pas qui ne rapprochent pas relancent la grâce : %r" % r["progres"]
+
+
+@pytest.mark.parametrize("cas", ["balayage", "horsPassage", "apresBulle", "declencheur", "collee"])
+def test_le_PASSAGE_ne_retient_rien_d_autre(cas):
+    """Le passage ne retient QUE le chemin vers la bulle. Le BALAYAGE, qui sort
+    par le côté : g3 s'ouvre dès son entrée. HORS du passage (le pointeur
+    redescend sur g3) : aussitôt. La bulle ATTEINTE, le passage est fini :
+    ressorti sur g3, g3 s'ouvre. UN DÉCLENCHEUR d'/infobulles.js sur le
+    chemin (le « ? » d'une carte) l'arrête : la bulle du graphique n'a plus
+    que la grâce, une bulle à la fois (témoin : sans lui, elle est gardée).
+    LE TÉMOIN : une bulle CONTRE sa cible (centrée au-dessus de g2) n'a pas
+    de passage — la même diagonale ouvre g3 aussitôt."""
+    r = _sc("passage")
+    attendu = {"balayage": "g3", "horsPassage": {"dedans": "g2", "dehors": "g3"}, "apresBulle": "g3",
+               "declencheur": {"avec": None, "sans": "g2"},
+               "collee": {"tenue": "g3", "gauche": 150 - 75, "bas": 300 - 8}}[cas]
+    assert r[cas] == attendu, "%s : %r (attendu %r)" % (cas, r[cas], attendu)
+
+
 # ══════════════════════════════════════════════════════════════════════════
 #  2. LES FAMILLES, EXÉCUTÉES PAR LEURS VRAIES FONCTIONS
 # ══════════════════════════════════════════════════════════════════════════
@@ -840,7 +1212,8 @@ const contexte = { document, console,
 contexte.window = contexte;
 contexte.grapheBulle = { defs: {}, enregistrer(f, d) { this.defs[f] = d; },
   placer(b, r, o) { placements.push({ bulle: b.id, r: { left: r.left, top: r.top, right: r.right, bottom: r.bottom },
-    x: o && o.x !== undefined ? o.x : null, cible: o && o.cible ? o.cible : null }); return {}; },
+    x: o && o.x !== undefined ? o.x : null, y: o && o.y !== undefined ? o.y : null,
+    cible: o && o.cible ? o.cible : null, carte: o && o.carte ? o.carte : null }); return {}; },
   fermer() {} };
 vm.createContext(contexte);
 function essai(nom, fn) { try { contexte.sortie[nom] = fn(); } catch (e) { contexte.sortie[nom] = { erreur: String(e && e.stack || e).slice(0, 700) }; } }
@@ -861,6 +1234,12 @@ def _essai(sortie, nom):
     assert r is not None, "le scénario %s n'a rien rendu" % nom
     assert not (isinstance(r, dict) and "erreur" in r), "le scénario %s a levé : %s" % (nom, r["erreur"])
     return r
+
+
+#: UN ATTRIBUT QUI ÉCOUTE LE POINTEUR : `onmouse…`, et aussi `onpointer…`,
+#: `ontouch…`, `onclick` — MESURÉ (revue du lot 4) : la règle ne voyait que
+#: `onmouse…`, et `onmouseenter` posé sur les bandes de la courbe survivait.
+_ECOUTE = re.compile(r"^on(?:mouse|pointer|touch|click)", re.I)
 
 
 def _registration(famille):
@@ -937,6 +1316,7 @@ def test_les_barres_sont_des_IMAGES_NOMMEES_sans_ecouteur_de_souris():
     assert all(e == [] for e in r["ecoutes"]), "des barres écoutent encore : %r" % r["ecoutes"]
     for a in r["attrs"]:
         assert a.get("data-graphe") == "geo" and a.get("role") == "img", a
+        assert not any(_ECOUTE.match(k) for k in a), "une barre écoute par attribut : %r" % a
         assert re.match(r"^\S.* : \d+ juridictions? — \S", a.get("aria-label", "")), a.get("aria-label")
     assert len(set(a.get("data-geo-key") for a in r["attrs"])) == 5, (
         "deux barres partagent une clé : %r" % [a.get("data-geo-key") for a in r["attrs"]])
@@ -983,11 +1363,28 @@ def test_apres_un_redessin_le_focus_et_l_arret_RESTENT_sur_la_meme_barre():
 
 def test_les_puces_sont_des_BOUTONS_a_bascule_dans_la_page():
     """<span onclick> ne prend ni le focus ni Entrée : huit <button type="button"
-    aria-pressed>, la même classe (le même style)."""
+    aria-pressed>, la même classe (le même style). DANS CHAQUE GROUPE, UNE
+    SEULE EST PRESSÉE au chargement, et c'est celle qui est allumée (`on`) —
+    « Tous », « Toutes » : l'état dit à l'oreille ce que la couleur dit à
+    l'œil (MESURÉ, revue du lot 4 : « Tous » à `false` survivait)."""
     puces = re.findall(r"<(\w+)([^>]*class=\"geo-filter-chip[^\"]*\"[^>]*)>", SENTINEL)
     assert len(puces) == 8, "%d puces" % len(puces)
     for tag, attrs in puces:
         assert tag == "button" and 'type="button"' in attrs and re.search(r'aria-pressed="(true|false)"', attrs), (tag, attrs)
+    for groupe in ("data-filter", "data-cat"):
+        g = [a for _, a in puces if groupe + '="' in a]
+        pressees = [a for a in g if 'aria-pressed="true"' in a]
+        allumees = [a for a in g if re.search(r'class="geo-filter-chip on"', a)]
+        assert len(g) == 4 and len(pressees) == 1 and pressees == allumees and groupe + '="all"' in pressees[0], (groupe, g)
+
+
+def test_les_puces_gardent_leur_INTERLIGNE():
+    """« Style conservé » (§4.3). MESURÉ AU NAVIGATEUR : devenues des
+    <button>, les puces prenaient l'interligne du bouton (`normal`) — 23 px
+    de haut au lieu des 27,5 px des <span> de be93b64, sous les 24 px.
+    `line-height:inherit` leur rend celui du texte : 27,5 px mesurés."""
+    r = _regle_css(".geo-filter-chip")
+    assert "line-height:inherit" in r, "l'interligne des puces n'est plus hérité : %s" % r
 
 
 # ── 2 b. LE RADAR DE MATURITÉ ───────────────────────────────────────────
@@ -1046,21 +1443,24 @@ def test_le_radar_de_maturite_est_UNE_image_nommee_et_ses_zones_ne_prennent_pas_
     assert r["svg"].get("role") == "img" and "liste" in (r["svg"].get("aria-label") or ""), r["svg"]
     assert len(r["zones"]) == 8
     for z in r["zones"]:
-        assert z.get("data-graphe") == "mat" and "tabindex" not in z and not any(k.startswith("onmouse") for k in z), z
+        assert z.get("data-graphe") == "mat" and "tabindex" not in z and not any(_ECOUTE.match(k) for k in z), z
     assert r["tip"] and r["tip"].get("aria-hidden") == "true", r["tip"]
 
 
 def test_mettre_en_evidence_ne_fait_PLUS_defiler_la_page():
     """P3, G-1. MESURÉ AU PIXEL 7 (avant) : un appui sur un point faisait
     défiler la page jusqu'à 516 px, le point et la bulle sortaient de
-    l'écran. Exécuté : `matRadarHighlight` ne défile que si on le lui
-    demande — et le pilote ne le demande qu'à la souris, qui survole le radar
-    à côté de la liste."""
+    l'écran. PUIS À LA SOURIS ET AU STYLET (revue du lot 4, avant cette
+    correction) : fenêtre de 1024 px, −148 à +275 px sur 3 points sur 8 (2
+    bulles fermées) ; de 640 px, jusqu'à 482 px sur 6 sur 8 (4 bulles
+    fermées sur 5 points atteignables) ; stylet au Pixel 7, 127 à 352 px sur
+    3 sur 3 (aucune lisible) — la page défilait sous le pointeur immobile. Exécuté : `matRadarHighlight` ne défile que si on le lui demande
+    (LE TÉMOIN : demandé, il défile) — et le pilote ne le demande plus
+    jamais, pas même à la souris."""
     m = _mat()
     assert _essai(m, "defaut")["defile"] == 0, "matRadarHighlight défile sans qu'on le demande"
-    assert _essai(m, "defilerSouris")["defile"] == 1, "le défilement demandé (souris) ne se fait plus"
-    assert _essai(m, "familleSouris")["defile"] == 1, "la famille ne fait plus défiler à la souris"
-    for cas in ("familleDoigt", "familleClavier", "familleReplacer", "familleLigne"):
+    assert _essai(m, "defilerSouris")["defile"] == 1, "le défilement demandé explicitement ne se fait plus : le contrôle ne mesurerait rien"
+    for cas in ("familleSouris", "familleDoigt", "familleClavier", "familleReplacer", "familleLigne"):
         assert _essai(m, cas)["defile"] == 0, "%s fait défiler la page" % cas
 
 
@@ -1087,7 +1487,7 @@ def test_la_ligne_de_pilier_n_ecoute_plus_la_souris_et_se_declare():
     assert m, "le gabarit de la ligne de pilier est introuvable"
     attrs = m.group(1)
     assert 'data-graphe-ligne="mat"' in attrs and "data-pillar=" in attrs, attrs
-    assert "onmouse" not in attrs and "tabindex" not in attrs and "role=" not in attrs, attrs
+    assert not re.search(r"\bon(?:mouse|pointer|touch)", attrs) and "tabindex" not in attrs and "role=" not in attrs, attrs
 
 
 # ── 2 c. LE RADAR DE RISQUE ─────────────────────────────────────────────
@@ -1140,9 +1540,9 @@ def test_le_radar_de_risque_se_declare_au_pilote_et_sa_bulle_est_muette():
     r = _essai(_risque(), "rendu")
     assert len(r["zones"]) == 6 and len(r["lignes"]) == 6, r
     for z in r["zones"]:
-        assert z.get("data-graphe") == "risque" and "tabindex" not in z and not any(k.startswith("onmouse") for k in z), z
+        assert z.get("data-graphe") == "risque" and "tabindex" not in z and not any(_ECOUTE.match(k) for k in z), z
     for l in r["lignes"]:
-        assert l.get("data-graphe-ligne") == "risque" and l.get("data-dim") and not any(k.startswith("onmouse") for k in l), l
+        assert l.get("data-graphe-ligne") == "risque" and l.get("data-dim") and not any(_ECOUTE.match(k) for k in l), l
     assert r["tip"] and r["tip"].get("aria-hidden") == "true", r["tip"]
 
 
@@ -1168,7 +1568,9 @@ const titre = el("span", { id: "pricing-chart-title" });
 el("div", { id: "pricing-chart-legend" }); el("div", { id: "pricing-chart-insight" }); el("span", { id: "pricing-chart-eq-badge" });
 const donnees = el("div", { id: "pricing-chart-donnees" });
 const tt = el("div", { id: "pricing-chart-tooltip", "class": "pricing-chart-tooltip" });
-const svg = el("svg", { id: "pricing-chart-svg", viewBox: "0 0 640 320" });
+/* LA CARTE du graphique : ses commandes, que la bulle évite (voir `placer`). */
+const carteTarif = el("div", { "class": "tbl-wrap" });
+const svg = el("svg", { id: "pricing-chart-svg", viewBox: "0 0 640 320" }, carteTarif);
 svg.rect = [100, 200, 420, 360];
 const sec = el("select", { id: "pricing-secteur" }); sec.value = "it";
 const seg = el("select", { id: "pricing-segment" }); seg.value = "pme";
@@ -1190,7 +1592,8 @@ essai("bulle", () => {
   placements.length = 0;
   window.grapheBulle.defs.tarif.montrer(b, "toucher");
   const halos = svg.querySelectorAll(".chart-hover-halo");
-  return { texte: tt.textContent, display: tt.style.display, placer: placements.map(p => ({ x: p.x, cible: p.cible === b })),
+  return { texte: tt.textContent, display: tt.style.display,
+           placer: placements.map(p => ({ x: p.x, y: p.y, cible: p.cible === b, carte: p.carte === carteTarif })),
            dataX: +b.getAttribute("data-x"), halos: halos.map(h => ({ pe: h.getAttribute("pointer-events"), cy: h.getAttribute("cy") })),
            ys: ["hybride", "pessimiste", "optimiste", "jalons"].map(s => b.getAttribute("data-y-" + s)) };
 });
@@ -1208,11 +1611,12 @@ essai("horizon", () => {
   pricingRenderChartFull(2000, SC, 18, "monthly");
   const b = bandes();
   const l = b.map(x => +x.getAttribute("width"));
+  const table18 = { lignes: donnees.querySelectorAll("tbody tr").length, valeurs: donnees.querySelectorAll("tbody td").length };
   const long = { n: b.length, arret: b.filter(x => x.getAttribute("tabindex") === "0").map(x => x.getAttribute("data-mois")) };
   b.forEach(x => x.setAttribute("tabindex", x.getAttribute("data-mois") === "12" ? "0" : "-1"));
   pricingRenderChartFull(2000, SC, 6, "monthly");
   return { avant, n: long.n, arret: long.arret, court: bandes().filter(x => x.getAttribute("tabindex") === "0").map(x => x.getAttribute("data-mois")),
-           plusEtroite: Math.min(...l), ecart: 552 / 17 };
+           plusEtroite: Math.min(...l), ecart: 552 / 17, table18 };
 });
 """
 
@@ -1244,6 +1648,7 @@ def test_la_courbe_a_UNE_bande_par_mois_nommee_par_ses_quatre_series():
     assert len(r["bandes"]) == 6 and r["cercles"] == 0 and r["ecoutes"] == 0, (len(r["bandes"]), r["cercles"], r["ecoutes"])
     for i, b in enumerate(r["bandes"]):
         assert b.get("data-graphe") == "tarif" and b.get("data-mois") == str(i + 1) and b.get("role") == "img", b
+        assert not any(_ECOUTE.match(k) for k in b), "une bande écoute le pointeur par attribut : %r" % sorted(k for k in b if _ECOUTE.match(k))
         nom = b.get("aria-label", "")
         assert nom.startswith("Mois %d : " % (i + 1)) and nom.count("€") >= 4, nom
         for s in ("Hybride continu", "Pessimiste", "Optimiste", "RaaS Jalons"):
@@ -1304,10 +1709,41 @@ def test_la_bulle_d_un_mois_lit_la_bande_et_l_echelle_du_VIEWBOX():
     for s in ("Mois 3", "Hybride continu", "Pessimiste", "Optimiste", "RaaS Jalons", "socle", "variable"):
         assert s in r["texte"], "%r absent de la bulle « %s »" % (s, r["texte"])
     assert r["display"] == "block"
-    assert r["placer"] == [{"x": 100 + r["dataX"] * 320 / 640, "cible": True}], r["placer"]
+    assert [{"x": p["x"], "cible": p["cible"]} for p in r["placer"]] == [{"x": 100 + r["dataX"] * 320 / 640, "cible": True}], r["placer"]
     assert len(r["halos"]) == 4 and all(h["pe"] == "none" for h in r["halos"]), r["halos"]
     assert sorted(h["cy"] for h in r["halos"]) == sorted(r["ys"]), (r["halos"], r["ys"])
     assert _essai(t, "cacher") == {"display": "none", "halos": 0}
+
+
+def test_la_bulle_d_un_mois_connait_sa_CARTE_et_la_hauteur_de_ses_points():
+    """LE DÉFAUT MESURÉ (revue du lot 4, poste 1280 × 900) : ancrée à la bande
+    (toute la hauteur du tracé), la bulle d'un mois couvrait les commandes de
+    la carte et prenait le clic de « Cumul ». Exécuté : la bulle passe à
+    `placer` la carte du graphique (`.tbl-wrap`, dont les commandes sont à
+    éviter) et la hauteur MOYENNE des points du mois à l'écran (`y`), où la
+    poser si elle doit aller à côté de la bande."""
+    r = _essai(_tarif(), "bulle")
+    assert len(r["placer"]) == 1, r["placer"]
+    p = r["placer"][0]
+    assert p["carte"], "la carte du graphique n'est pas passée à placer : ses commandes seront couvertes"
+    ys = [float(y) for y in r["ys"]]
+    attendu = 200 + (sum(ys) / len(ys)) * 320 / 640
+    assert p["y"] is not None and abs(p["y"] - attendu) < 1e-6, "hauteur des points : %r, attendu %r" % (p["y"], attendu)
+
+
+def test_sous_24_px_le_TABLEAU_est_l_equivalent_et_son_resume_une_cible_de_24_px():
+    """G-5, A5, WCAG 2.5.8. MESURÉ AU PIXEL 7 (revue du lot 4, puis ici) : une
+    bande fait 34,9 à 48,6 px à 6 mois, mais 21,6 px à 12 mois et 14,3 px à
+    18 mois — sous les 24 px. L'EXCEPTION « ÉQUIVALENT » : chaque valeur du
+    mois se lit aussi dans le tableau « Voir les données », dont le résumé
+    est une cible de 24 px (16,3 px mesurés avant). Exécuté : à 18 mois (ici
+    16,2 px la bande), le tableau a 18 lignes de 4 valeurs."""
+    h = _essai(_tarif(), "horizon")
+    largeur = h["plusEtroite"] * 320 / 640
+    assert largeur < 24, "la bande fait %.1f px : le cas mesuré n'est plus reproduit, le contrôle ne mesurerait rien" % largeur
+    assert h["table18"] == {"lignes": 18, "valeurs": 72}, "le tableau ne rend pas les 18 mois : %r" % h["table18"]
+    r = _regle_css(".chart-donnees summary")
+    assert "min-height:24px" in r and "line-height:24px" in r, "le résumé « Voir les données » n'est plus une cible de 24 px : %s" % r
 
 
 # ── 2 e. LE SCHÉMA DE L'ÉCOSYSTÈME ──────────────────────────────────────
@@ -1390,7 +1826,7 @@ def test_les_noeuds_du_schema_sortent_du_chemin_data_tip():
     for g in n.g:
         a = g["attrs"]
         assert "data-tip" not in a and a.get("data-eco-tip") and a.get("data-graphe") == "eco", a
-        assert not any(k.startswith("onmouse") for k in a), a
+        assert not any(_ECOUTE.match(k) for k in a), a
 
 
 def test_chaque_noeud_est_une_image_nommee_D_ABORD_par_son_texte_visible():
@@ -1533,14 +1969,29 @@ def test_le_focus_d_une_cible_est_DESSINE():
 def test_plus_aucune_bulle_de_graphique_n_ecoute_la_souris():
     """§4.2, R3 : les sept sites, relus dans le code (hors commentaires).
     Au doigt, les événements de souris de compatibilité qui suivent l'appui
-    refermaient la bulle en 13 à 16 ms."""
+    refermaient la bulle en 13 à 16 ms. TOUTES LES ÉCRITURES : un attribut
+    `on…=` dans le HTML peint, une propriété `.on…=`, un `addEventListener` —
+    de la souris, du pointeur, du toucher. MESURÉ (revue du lot 4) : la
+    règle ne reconnaissait que `onmouse…="matRadar…"` et `addEventListener(
+    'mouse…'` ; `col.onmousemove = …` et `onmouseenter` sur les bandes
+    survivaient. LE TÉMOIN : le même relevé, sur un gabarit qui écoute, en
+    trouve un de chaque sorte."""
+    motifs = [r"""\bon(?:mouse|pointer|touch)\w+\s*=""",
+              r"""addEventListener\(\s*['"](?:mouse|pointer|touch)\w+['"]"""]
+    temoin = "x.onmouseenter = f; '<g onpointermove=\"g()\">'; y.addEventListener('mouseleave', h);"
+    assert sum(len(re.findall(m, temoin)) for m in motifs) == 3, "le relevé ne reconnaît plus ce qu'il cherche"
     code = re.sub(r"/\*.*?\*/", "", PAGE_JS, flags=re.S)
-    fautes = re.findall(r"onmouse(?:enter|leave|move)=\\?\"(?:matRadar|radar|ecoTip)\w*", code)
-    fautes += re.findall(r"onmouse(?:enter|leave|move)=\"(?:matRadar|radar|ecoTip)\w*", SENTINEL)
-    for f in ("function geoRenderChart(){", "function pricingRenderChartFull(saasMonthly,scenarios,months,view){"):
+    fautes = re.findall(r"on(?:mouse|pointer)\w+=\\?[\"'](?:matRadar|radar|ecoTip|pricingShowTooltip|geoShowTip)\w*", code)
+    fautes += re.findall(r"on(?:mouse|pointer)\w+=[\"'](?:matRadar|radar|ecoTip|pricingShowTooltip|geoShowTip)\w*", SENTINEL)
+    for f in ("function geoRenderChart(){", "function matRadar(pillars){", "function matRender(){",
+              "function radarRenderSVG(you, avg){", "function radarRenderAll(){",
+              "function pricingRenderChartFull(saasMonthly,scenarios,months,view){"):
         corps = re.sub(r"/\*.*?\*/", "", _fonction(f), flags=re.S)
-        fautes += re.findall(r"addEventListener\(\s*'mouse\w+'", corps)
-    assert not fautes, "écouteurs de souris restants : %s" % fautes
+        for m in motifs:
+            fautes += ["%s : %s" % (f[9:30], x) for x in re.findall(m, corps)]
+    for m in motifs:
+        fautes += ["schéma : %s" % x for x in re.findall(m, _schema())]
+    assert not fautes, "écouteurs de pointeur restants : %s" % fautes
 
 
 def test_sentinel_page_js_est_charge_AVANT_infobulles_et_bulle_titre():
@@ -1621,11 +2072,78 @@ def test_bulle_titre_qui_s_ouvre_FERME_la_bulle_d_un_graphique(pourquoi):
     assert sans[pourquoi]["vue"], "sans pilote de graphique, /bulle-titre.js ne s'ouvre plus"
 
 
+# ── /infobulles.js REPLIE SUR DEMANDE : le pilote s'en sert ─────────────
+
+INFOBULLES = _lire("infobulles.js")
+
+_IB = _DOM + r"""
+const fs = require("fs");
+const src = fs.readFileSync(process.argv[2], "utf8");
+const ecouteurs = {};
+const inscrire = (ou) => function (type, fn, opt) {
+  const capture = opt === true || !!(opt && opt.capture);
+  (ecouteurs[ou + ":" + type + ":" + capture] = ecouteurs[ou + ":" + type + ":" + capture] || []).push(fn);
+};
+function emettre(type, ev) {
+  for (const [ou, cap] of [["window", true], ["document", true], ["document", false], ["window", false]]) {
+    for (const fn of (ecouteurs[ou + ":" + type + ":" + cap] || []).slice()) { fn(ev); if (ev.immediat) return ev; }
+    if (ev.arrete) return ev;
+  }
+  return ev;
+}
+function evenement(extra) {
+  const ev = Object.assign({ retenu: false, arrete: false, immediat: false, pointerId: 1, clientX: 0, clientY: 0 }, extra);
+  ev.preventDefault = () => { ev.retenu = true; }; ev.stopPropagation = () => { ev.arrete = true; };
+  ev.stopImmediatePropagation = () => { ev.immediat = true; ev.arrete = true; };
+  return ev;
+}
+const document = { readyState: "complete", styleSheets: [], head, body, documentElement: racine, activeElement: body,
+  getElementById: id => par(id), createElement: t => new El(t),
+  querySelector: s => tous(racine).find(e => { try { return e.matches(s); } catch (x) { return false; } }) || null,
+  querySelectorAll: s => tous(racine).filter(e => { try { return e.matches(s); } catch (x) { return false; } }),
+  addEventListener: inscrire("document") };
+const window = { innerWidth: 1280, addEventListener: inscrire("window") };
+function MutationObserver() { return { observe() {} }; }
+const t = el("span", { id: "t", "data-tip": "Une explication" }, body, [10, 10, 30, 30]);
+new Function("window", "document", "MutationObserver", src)(window, document, MutationObserver);
+const api = window.infobulles, replie = () => t.classList.contains(api.fermee || "bulle-fermee");
+const out = { type: typeof api.replier };
+/* Le focus CLAVIER tient la bulle du déclencheur (`:focus-visible`). */
+document.activeElement = t;
+api.fermer(); out.fermerSeul = replie();
+if (typeof api.replier === "function") api.replier(t);
+out.replie = replie();
+/* Le focus part, sans survol derrière lui : la bulle revient à la prochaine fois. */
+document.activeElement = body; emettre("focusout", evenement({ target: t, relatedTarget: body }));
+out.apresDepart = replie();
+process.stdout.write(JSON.stringify(out));
+"""
+
+
+def test_infobulles_REPLIE_sur_demande_le_declencheur_que_le_focus_tient():
+    """UNE BULLE À LA FOIS a besoin de `infobulles.replier` : `fermer()` ne
+    ferme que ce que le doigt a ouvert, et rien ne fermait de l'extérieur une
+    bulle que `:focus-visible` tient ouverte. Exécuté : le vrai
+    /infobulles.js. `replier(t)` pose la classe qui éteint la bulle malgré le
+    focus ; le départ du focus la lève. LE TÉMOIN : `fermer()` seul ne replie
+    rien."""
+    r = _node(_IB, INFOBULLES)
+    assert r["type"] == "function", "infobulles.replier n'est pas public : le pilote ne peut pas replier la bulle du focus"
+    assert not r["fermerSeul"], "fermer() replie à lui seul : le contrôle ne distinguerait rien"
+    assert r["replie"], "replier() ne replie pas le déclencheur"
+    assert not r["apresDepart"], "le départ du focus ne lève pas le repli : la bulle ne reviendrait plus"
+
+
 # ══════════════════════════════════════════════════════════════════════════
 #  5. LA RECETTE NE SE PÉRIME PAS EN SILENCE (règles sur la recette elle-même)
 # ══════════════════════════════════════════════════════════════════════════
 
-RECETTE = _lire("recette_graphes_bulles.js")
+@functools.lru_cache(maxsize=None)
+def _recette():
+    """LUE À L'USAGE, et par les seules règles de la recette. MESURÉ (revue du
+    lot 4) : lue à l'import, son absence faisait tomber aussi les règles du
+    produit, en erreur de collecte."""
+    return _lire("recette_graphes_bulles.js")
 
 
 def _peint(genre, nom, code=None):
@@ -1660,7 +2178,9 @@ _ANCRES = [("classe", "geo-bar-col"), ("classe", "mat-radar-hitzone"), ("classe"
            ("id", "carto-eco-tip"), ("classe", "mat-pillar-row"), ("classe", "mat-tooltip-wrap"),
            ("id", "pricing-chart-donnees"), ("classe", "geo-filter-chip"), ("classe", "mat-sector-btn"),
            ("balise", "header.topbar"), ("global", "grapheBulle"), ("id", "radar-scores"),
-           ("id", "mat-radar-svg-el"), ("id", "radar-svg")]
+           ("id", "mat-radar-svg-el"), ("id", "radar-svg"),
+           ("id", "chart-btn-cumul"), ("id", "pricing-chart-horizon"), ("classe", "chart-controls"),
+           ("classe", "prx-tip-icon"), ("classe", "chart-donnees")]
 
 
 @pytest.mark.parametrize("genre,ancre", _ANCRES, ids=[a for _, a in _ANCRES])
@@ -1668,7 +2188,7 @@ def test_la_recette_vise_des_ancres_QUI_EXISTENT(genre, ancre):
     """Chaque identifiant que la recette vise est encore PEINT par le code —
     pas seulement nommé dans une feuille de style. LE TÉMOIN : le même relevé
     ne trouve aucune peinture d'un nom inventé."""
-    assert ancre in RECETTE, "la recette ne vise plus %r" % ancre
+    assert ancre in _recette(), "la recette ne vise plus %r" % ancre
     assert _peint(genre, ancre + "-inconnu" if genre != "attribut" else 'data-graphe="inconnu"') == 0, "le relevé compte n'importe quoi"
     assert _peint(genre, ancre) >= 1, "%r n'est plus peint par le code : la recette mesure un identifiant mort" % ancre
 
@@ -1676,7 +2196,7 @@ def test_la_recette_vise_des_ancres_QUI_EXISTENT(genre, ancre):
 def _cibles_recette():
     """La table `G` de la recette : pour chaque graphique, les sélecteurs de
     sa cible, de sa bulle, de sa ligne — ce que TOUS ses contrôles visent."""
-    m = re.search(r"^const G = \{\n(.*?)\n\};", RECETTE, re.S | re.M)
+    m = re.search(r"^const G = \{\n(.*?)\n\};", _recette(), re.S | re.M)
     assert m, "la table G de la recette est introuvable"
     out = {}
     for fam, corps in re.findall(r"^\s*(\w+):\s*\{(.*)\},?$", m.group(1), re.M):
@@ -1721,9 +2241,9 @@ def test_les_cibles_de_la_recette_sont_PEINTES_par_le_code(famille):
 def test_la_recette_compare_a_une_colonne_AVANT_relevee():
     """Les deux colonnes : AVANT_FIGE relevé sur be93b64 par CETTE recette —
     une colonne vide ne comparerait rien."""
-    m = re.search(r"const AVANT_FIGE = \{\n(.*?)\n\};", RECETTE, re.S)
+    m = re.search(r"const AVANT_FIGE = \{\n(.*?)\n\};", _recette(), re.S)
     assert m, "AVANT_FIGE introuvable"
     cles = re.findall(r"^\s*'([^']+)':", m.group(1), re.M)
     assert len(cles) >= 25, "%d mesures d'avant seulement" % len(cles)
-    faites = set(re.findall(r"ok\('([^']+)'", RECETTE))
+    faites = set(re.findall(r"ok\('([^']+)'", _recette()))
     assert set(cles) <= faites, "des mesures d'avant ne correspondent à aucun contrôle : %s" % sorted(set(cles) - faites)
