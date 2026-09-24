@@ -589,6 +589,18 @@ def security_middleware():
                        '/invitation/')
     is_auth_link = path.startswith(CHEMINS_A_JETON)
 
+    # ── Dossiers JAMAIS servis en direct, avant toute autre regle ──────────
+    # `static_folder='.'` sert tout fichier du depot. uploads_cv/ contient les
+    # CV deposes par les candidats — servis a l'anonyme alors que
+    # /api/admin/cv/… exige une session (mesure : GET /uploads_cv/<cv>.pdf →
+    # 200, /api/admin/cv/<cv>.pdf → 403). courriels_repli/ contient les
+    # courriels non partis, jetons compris. 404, pas 403 : ne pas confirmer
+    # qu'un nom de fichier existe.
+    DOSSIERS_PRIVES = ('uploads_cv/', 'courriels_repli/')
+    if path.lstrip('/').lower().startswith(DOSSIERS_PRIVES):
+        logger.warning(f"DOSSIER_PRIVE {ip} → {path}")
+        abort(404)
+
     # ── Whitelist assets statiques (pas de check UA) ──
     static_exts = ('.jpg','.jpeg','.png','.gif','.svg','.ico',
                    '.css','.js','.woff','.woff2','.mp4','.json')
@@ -695,7 +707,116 @@ SMTP_PORT     = int(os.environ.get('SMTP_PORT', '2525'))  # Brevo : 2525 (STARTT
 SMTP_USER     = os.environ.get('SMTP_USER', '')      # Votre email Brevo (login)
 SMTP_PASSWORD = os.environ.get('SMTP_PASSWORD', '')  # Clé SMTP Brevo (pas votre mdp)
 BREVO_API_KEY = os.environ.get('BREVO_API_KEY', '')  # Clé API Brevo (v3)
-BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email'
+# UNE SEULE BASE D'URL pour tous les appels Brevo. L'envoi transactionnel, les
+# contacts et le compte partaient vers trois adresses codees en dur : la recette
+# ne pouvait rediriger que la premiere, et les deux autres restaient invisibles
+# (mesure : `add_contact_to_brevo` et `/api/health` injoignables sans reseau).
+BREVO_API_BASE = 'https://api.brevo.com'
+BREVO_API_URL = BREVO_API_BASE + '/v3/smtp/email'
+# Delai d'un appel, et attentes entre deux tentatives (voir send_via_brevo_api).
+BREVO_DELAI = 20
+BREVO_REESSAIS_ATTENTES = (0.5, 1.0)
+# Le jeton que Brevo doit presenter au webhook (voir brevo_webhook).
+BREVO_WEBHOOK_TOKEN = os.environ.get('BREVO_WEBHOOK_TOKEN', '').strip()
+
+# LE DOSSIER DU COURRIEL DE REPLI, ET POURQUOI CE N'EST PLUS uploads_cv/.
+# Quand ni Brevo ni SMTP ne repondent, le courriel est ecrit sur disque pour ne
+# pas etre perdu. Il l'etait dans uploads_cv/ — un dossier que Flask SERT
+# (static_folder='.'), sous un nom previsible (horodatage a la seconde + partie
+# locale de l'adresse). Mesure : `GET /uploads_cv/email_<date>_<nom>.html`
+# repondait 200, jeton de reinitialisation compris. Le dossier dedie n'est ni
+# suivi par git ni servi (security_middleware), le nom porte un alea, le
+# fichier est cree en 0600.
+REPLI_COURRIELS_DOSSIER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'courriels_repli')
+
+_BREVO_SESSION = None
+_BREVO_SESSION_VERROU = threading.Lock()
+
+
+def _brevo_session():
+    """La Session HTTP partagee par tous les appels Brevo du processus.
+
+    `requests.post` cree une Session — donc un pool, donc une poignee de main
+    TLS — a chaque appel. Mesure : 10 envois → 10 Session et 20 HTTPAdapter.
+    Une rafale de relances payait une negociation TLS par courriel. Ici la
+    connexion vers api.brevo.com est gardee et reutilisee. Les reessais ne sont
+    PAS confies a l'adaptateur : ils sont decides dans send_via_brevo_api, ou
+    l'on sait quel statut merite une seconde chance.
+    """
+    global _BREVO_SESSION
+    if _BREVO_SESSION is None:
+        with _BREVO_SESSION_VERROU:
+            if _BREVO_SESSION is None:
+                s = requests.Session()
+                adaptateur = requests.adapters.HTTPAdapter(
+                    pool_connections=2, pool_maxsize=8, max_retries=0)
+                s.mount('https://', adaptateur)
+                s.mount('http://', adaptateur)
+                _BREVO_SESSION = s
+    return _BREVO_SESSION
+
+
+def _brevo_entetes(cle=None):
+    return {'api-key': cle or BREVO_API_KEY, 'Content-Type': 'application/json',
+            'Accept': 'application/json'}
+
+
+def _masquer_courriel(adresse):
+    """`a***@domaine` : de quoi reconnaitre un incident dans le journal sans y
+    recopier l'adresse (art. 5.1.c)."""
+    a = str(adresse or '')
+    if '@' not in a:
+        return '***'
+    local, domaine = a.rsplit('@', 1)
+    return (local[:1] or '*') + '***@' + domaine
+
+
+def _adresse_non_routable(adresse):
+    """`conseilprev@internal.system` n'existe pas : Brevo accepte l'envoi (201),
+    decompte le credit, puis le message rebondit. Sur le compte reel, 6 des 13
+    derniers envois visaient cette adresse — pres de la moitie du quota
+    quotidien pour des messages qui n'arrivent jamais, et autant de rebonds qui
+    degradent la reputation de l'expediteur. On refuse AVANT l'appel."""
+    return str(adresse or '').strip().lower().endswith('@internal.system')
+
+
+def _brevo_pause(secondes):
+    """L'attente entre deux tentatives — isolee pour que la recette la mesure
+    sans la subir."""
+    time.sleep(secondes)
+
+
+def _brevo_reessayable(statut):
+    """Un 429 (quota ou rafale) et un 5xx sont passagers : on retente. Un
+    autre 4xx (400 expediteur non verifie, 401 cle invalide) ne changera pas
+    en le rejouant — et le rejouer consommerait un credit de plus par essai."""
+    return statut == 429 or 500 <= statut <= 599
+
+
+def _deposer_courriel_repli(to_email, subject, contenu, extension='html'):
+    """Ecrit le courriel qui n'a pas pu partir. Rend le chemin, ou None.
+
+    Nom imprevisible (alea de 8 octets), fichier cree en 0600 dans un dossier
+    en 0700 que Flask ne sert pas. Le destinataire et le sujet vont en tete du
+    fichier, pas dans son nom.
+    """
+    import datetime as _dt
+    import secrets as _sec
+    try:
+        os.makedirs(REPLI_COURRIELS_DOSSIER, mode=0o700, exist_ok=True)
+        ts = _dt.datetime.now().strftime('%Y%m%d_%H%M%S')
+        chemin = os.path.join(REPLI_COURRIELS_DOSSIER,
+                              'courriel_%s_%s.%s' % (ts, _sec.token_hex(8), extension))
+        fd = os.open(chemin, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+        with os.fdopen(fd, 'w', encoding='utf-8') as f:
+            f.write('<!-- To: %s | Subject: %s -->\n' % (to_email, subject) if extension == 'html'
+                    else 'TO: %s\nSUBJECT: %s\n\n' % (to_email, subject))
+            f.write(contenu)
+        logger.warning('EMAIL_SAVED_LOCAL: %s', os.path.basename(chemin))
+        return chemin
+    except Exception as e:                                     # noqa: BLE001
+        logger.error('EMAIL_SAVE_ERR: %s', e)
+        return None
 
 
 # ══════════════════════════════════════════════════════════════
@@ -703,30 +824,66 @@ BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email'
 # ══════════════════════════════════════════════════════════════
 def send_via_brevo_api(to_email, to_name, subject, html_content,
                        reply_to=None, attachments=None, tags=None):
+    """Un courriel par l'API transactionnelle. Rend (ok, motif ou messageId).
+
+    DEUX REFUS AVANT TOUT APPEL, parce que l'appel coute un credit sur 300 :
+    une adresse non routable (voir _adresse_non_routable) et une adresse que
+    Brevo nous a signalee (desinscription, rebond dur, plainte : voir
+    brevo_webhook). Chaque refus est journalise et inscrit dans email_log.
+
+    REESSAI BORNE, ICI SEULEMENT. Sur 429, 5xx, delai depasse ou connexion
+    refusee, l'envoi est retente deux fois (attentes de 0,5 s puis 1 s).
+    Mesure avant : un 429 passager perdait definitivement un courriel de
+    confirmation ou de reinitialisation. Les boucles de relance, elles, ne
+    reessaient PAS : leur idempotence est en base (colonne datee), et un
+    reessai a ce niveau-la renverrait des doublons.
+    """
     if not BREVO_API_KEY:
         return False, 'no_brevo_api_key'
-    try:
-        payload = {
-            'sender':      {'name': 'CONSEILPREV', 'email': MAIL_FROM},
-            'to':          [{'email': to_email, 'name': to_name or to_email}],
-            'subject':     subject,
-            'htmlContent': html_content,
-        }
-        if reply_to:    payload['replyTo']    = {'email': reply_to}
-        if tags:        payload['tags']       = tags[:10]
-        if attachments: payload['attachment'] = attachments
-        resp = requests.post(BREVO_API_URL,
-            headers={'api-key': BREVO_API_KEY, 'Content-Type': 'application/json', 'Accept': 'application/json'},
-            json=payload, timeout=20)
+    if _adresse_non_routable(to_email):
+        logger.error('BREVO_API_NON_ROUTABLE: envoi refuse vers %s (%s)',
+                     _masquer_courriel(to_email), subject)
+        email_log_record(to_email, subject, 'refuse', False, 'adresse_non_routable')
+        return False, 'adresse_non_routable'
+    motif_suppression = email_supprime(to_email)
+    if motif_suppression:
+        logger.warning('BREVO_API_SUPPRIME: envoi refuse vers %s (%s)',
+                       _masquer_courriel(to_email), motif_suppression)
+        email_log_record(to_email, subject, 'refuse', False, 'supprime:' + motif_suppression)
+        return False, 'supprime'
+    payload = {
+        'sender':      {'name': 'CONSEILPREV', 'email': MAIL_FROM},
+        'to':          [{'email': to_email, 'name': to_name or to_email}],
+        'subject':     subject,
+        'htmlContent': html_content,
+    }
+    if reply_to:    payload['replyTo']    = {'email': reply_to}
+    if tags:        payload['tags']       = tags[:10]
+    if attachments: payload['attachment'] = attachments
+    dernier = 'aucune_tentative'
+    for tentative in range(1 + len(BREVO_REESSAIS_ATTENTES)):
+        if tentative:
+            _brevo_pause(BREVO_REESSAIS_ATTENTES[tentative - 1])
+        try:
+            resp = _brevo_session().post(BREVO_API_URL, headers=_brevo_entetes(),
+                                         json=payload, timeout=BREVO_DELAI)
+        except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as e:
+            dernier = 'reseau: %s' % str(e)[:120]
+            logger.error('BREVO_API_RESEAU (tentative %d): %s', tentative + 1, dernier)
+            continue
+        except Exception as e:                                 # noqa: BLE001
+            logger.error(f'BREVO_API_EXCEPTION: {e}')
+            return False, str(e)
         if resp.status_code in (201, 200):
             mid = resp.json().get('messageId', 'ok')
-            logger.info(f'BREVO_API_OK: {to_email} — {mid}')
+            logger.info('BREVO_API_OK: %s — %s', _masquer_courriel(to_email), mid)
             return True, mid
-        logger.error(f'BREVO_API_ERR {resp.status_code}: {resp.text[:200]}')
-        return False, f'http_{resp.status_code}'
-    except Exception as e:
-        logger.error(f'BREVO_API_EXCEPTION: {e}')
-        return False, str(e)
+        logger.error('BREVO_API_ERR %d (tentative %d): %s',
+                     resp.status_code, tentative + 1, resp.text[:200])
+        dernier = 'http_%d' % resp.status_code
+        if not _brevo_reessayable(resp.status_code):
+            return False, dernier
+    return False, dernier
 
 
 def _pour_courriel(valeur):
@@ -756,7 +913,22 @@ def send_email_smart(to_email, to_name, subject, html_content,
                      reply_to=None, tags=None):
     """Brevo API → SMTP Brevo → sauvegarde locale. Chaque tentative est journalisee
     dans la table email_log pour permettre un diagnostic immediat (page Gestion des
-    clients) sans avoir a chercher dans les logs Render a chaque incident."""
+    clients) sans avoir a chercher dans les logs Render a chaque incident.
+
+    LES DEUX REFUS SONT PRIS ICI AUSSI, ET AVANT L'API : sinon un refus de
+    send_via_brevo_api serait suivi du repli SMTP puis du fichier local, et
+    l'adresse desinscrite recevrait le courriel par une autre porte."""
+    if _adresse_non_routable(to_email):
+        logger.error('EMAIL_NON_ROUTABLE: envoi refuse vers %s (%s)',
+                     _masquer_courriel(to_email), subject)
+        email_log_record(to_email, subject, 'refuse', False, 'adresse_non_routable')
+        return False, 'adresse_non_routable'
+    motif_suppression = email_supprime(to_email)
+    if motif_suppression:
+        logger.warning('EMAIL_SUPPRIME: envoi refuse vers %s (%s)',
+                       _masquer_courriel(to_email), motif_suppression)
+        email_log_record(to_email, subject, 'refuse', False, 'supprime:' + motif_suppression)
+        return False, 'supprime'
     if BREVO_API_KEY:
         ok, result = send_via_brevo_api(to_email, to_name, subject, html_content,
                                         reply_to=reply_to, tags=tags)
@@ -790,14 +962,7 @@ def send_email_smart(to_email, to_name, subject, html_content,
         except Exception as e:
             logger.error(f'BREVO_SMTP_FAILED: {e}')
             email_log_record(to_email, subject, 'brevo_smtp', False, str(e)[:200])
-    import datetime as _dt
-    ts   = _dt.datetime.now().strftime('%Y%m%d_%H%M%S')
-    path = os.path.join(UPLOAD_FOLDER, f'email_{ts}_{to_email.split("@")[0]}.html')
-    try:
-        with open(path, 'w', encoding='utf-8') as f:
-            f.write(f'<!-- To: {to_email} | Subject: {subject} -->\n' + html_content)
-        logger.warning(f'EMAIL_SAVED_LOCAL: {path}')
-    except Exception: pass
+    _deposer_courriel_repli(to_email, subject, html_content)
     email_log_record(to_email, subject, 'saved_locally', False, 'Brevo API et SMTP indisponibles ou non configures')
     return False, 'saved_locally'
 
@@ -891,9 +1056,9 @@ def add_contact_to_brevo(email, prenom, nom, entreprise='', liste_id=None):
             'updateEnabled': True,
         }
         if liste_id: payload['listIds'] = [int(liste_id)]
-        resp = requests.post('https://api.brevo.com/v3/contacts',
-            headers={'api-key': BREVO_API_KEY, 'Content-Type': 'application/json'},
-            json=payload, timeout=15)
+        # api.brevo.com, mais par la base commune : la recette la redirige.
+        resp = _brevo_session().post(BREVO_API_BASE + '/v3/contacts',
+            headers=_brevo_entetes(), json=payload, timeout=15)
         if resp.status_code in (201, 204):
             # Pas l adresse dans le journal : voir la docstring (art. 5.1.c).
             logger.info('BREVO_CONTACT_OK')
@@ -906,14 +1071,47 @@ def add_contact_to_brevo(email, prenom, nom, entreprise='', liste_id=None):
 
 MAIL_FROM     = os.environ.get('MAIL_FROM', 'noreply@conseilprev.onrender.com')
 _FREE_EMAIL_DOMAINS = ('outlook.com', 'hotmail.com', 'live.com', 'gmail.com', 'yahoo.com', 'icloud.com', 'aol.com', 'protonmail.com')
-if MAIL_FROM.split('@')[-1].lower() in _FREE_EMAIL_DOMAINS:
-    logger.error(
-        f"CONFIGURATION INVALIDE : MAIL_FROM='{MAIL_FROM}' utilise un domaine grand public "
-        f"({MAIL_FROM.split('@')[-1]}), qui ne peut JAMAIS etre authentifie sur Brevo. "
-        f"Tous les envois d'email seront rejetes par les fournisseurs (Outlook, Gmail...). "
-        f"Definissez MAIL_FROM sur Render avec une adresse de votre propre domaine, deja "
-        f"verifie dans Brevo (Senders & IP -> Domains)."
-    )
+# Des domaines dont PERSONNE ne peut prouver la propriete a Brevo : l'hebergeur
+# (onrender.com), l'adresse interne fictive, la machine locale. Un expediteur
+# qui y finit est rejete en « 400 sender not valid » a chaque envoi.
+_DOMAINES_NON_VERIFIABLES = ('onrender.com', 'internal.system', 'localhost', 'localdomain',
+                             'example.com', 'exemple.fr', 'invalid', 'test')
+
+
+def verifier_mail_from(adresse, journal=None):
+    """Le motif pour lequel cet expediteur ne passera pas chez Brevo, ou None.
+
+    LA GARDE PRECEDENTE NE VOYAIT PAS LA VALEUR PAR DEFAUT. Elle n'alertait que
+    sur les domaines grand public ; or le defaut du code est
+    `noreply@conseilprev.onrender.com`, un domaine de l'hebergeur qu'aucun compte
+    Brevo ne peut verifier — et le seul expediteur verifie du compte reel est
+    ailleurs. Si MAIL_FROM manque sur Render, TOUT envoi est refuse, et rien ne
+    le disait au demarrage. La valeur par defaut n'est pas changee : c'est le
+    journal qui doit crier, pas le code qui doit deviner une adresse.
+    """
+    a = str(adresse or '').strip()
+    motif = None
+    if not a or '@' not in a:
+        motif = "MAIL_FROM est vide ou n'est pas une adresse : Brevo refusera chaque envoi (sender not valid)."
+    else:
+        domaine = a.split('@')[-1].lower()
+        if domaine in _FREE_EMAIL_DOMAINS:
+            motif = (f"MAIL_FROM='{a}' utilise un domaine grand public ({domaine}), qui ne peut "
+                     f"JAMAIS etre authentifie sur Brevo. Tous les envois seront rejetes par les "
+                     f"fournisseurs (Outlook, Gmail...).")
+        elif domaine in _DOMAINES_NON_VERIFIABLES or any(
+                domaine.endswith('.' + d) for d in _DOMAINES_NON_VERIFIABLES):
+            motif = (f"MAIL_FROM='{a}' finit par un domaine non verifiable ({domaine}) : c'est "
+                     f"la valeur par defaut du code ou une adresse fictive, et Brevo la refusera "
+                     f"(400 sender not valid).")
+    if motif:
+        motif += (" Definissez MAIL_FROM sur Render avec l'expediteur verifie dans Brevo "
+                  "(Senders & IP -> Senders).")
+        (journal or logger).error('CONFIGURATION INVALIDE : ' + motif)
+    return motif
+
+
+_MAIL_FROM_MOTIF_REFUS = verifier_mail_from(MAIL_FROM)
 MAIL_TO       = os.environ.get('MAIL_TO', 'christophe.cerf@outlook.com')
 MAIL_CC       = os.environ.get('MAIL_CC', 'c79942474@gmail.com')
 
@@ -1014,7 +1212,12 @@ def save_cv_local(data, filename, context=''):
 
 
 def build_html_email(data, cv_filename=None):
-    """Construit le corps HTML de l'email."""
+    """Construit le corps HTML de l'email.
+
+    CHAQUE VALEUR SAISIE PASSE PAR _pour_courriel. `sanitize_input` ne retire
+    que les caracteres de controle : un nom `<a href="https://piege.test/…">
+    Dossier urgent</a>` arrivait tel quel, rendu et cliquable, dans la boite de
+    CONSEILPREV — sous l'expediteur du site. Mesure sur /api/apply."""
     rows = ''
     fields = [
         ('Prénom',     data.get('prenom','')),
@@ -1032,14 +1235,14 @@ def build_html_email(data, cv_filename=None):
         if not val: continue
         bg = '#f8f5ff' if alt else '#ffffff'
         color = '#6d28d9' if label == 'Email' else '#1a1a2e'
-        rows += f'<tr style="background:{bg}"><td style="padding:9px 12px;color:#666;font-size:13px;width:130px">{label}</td><td style="padding:9px 12px;color:{color};font-size:13px;font-weight:500">{val}</td></tr>'
+        rows += f'<tr style="background:{bg}"><td style="padding:9px 12px;color:#666;font-size:13px;width:130px">{label}</td><td style="padding:9px 12px;color:{color};font-size:13px;font-weight:500">{_pour_courriel(val)}</td></tr>'
         alt = not alt
 
-    msg_html = data.get('message','').replace('\n','<br>') or '—'
-    cv_html  = f'<span style="color:#22c55e;font-weight:700">📎 {cv_filename}</span>' if cv_filename else '<span style="color:#ef4444">⚠ Aucun CV joint</span>'
-    source   = data.get('source_url','/')
-    form_type = data.get('form_type','candidature')
-    consent_date = data.get('consent_date','N/A')
+    msg_html = _pour_courriel(data.get('message','')).replace('\n','<br>') or '—'
+    cv_html  = f'<span style="color:#22c55e;font-weight:700">📎 {_pour_courriel(cv_filename)}</span>' if cv_filename else '<span style="color:#ef4444">⚠ Aucun CV joint</span>'
+    source   = _pour_courriel(data.get('source_url','/'))
+    form_type = _pour_courriel(data.get('form_type','candidature'))
+    consent_date = _pour_courriel(data.get('consent_date','N/A'))
 
     return f"""<!DOCTYPE html>
 <html><head><meta charset="UTF-8"></head>
@@ -1074,7 +1277,7 @@ def send_email_with_attachment(data, cv_data=None, cv_filename=None):
     Envoie email candidature + CV en pièce jointe.
     Flux: 1) Brevo API (HTTP, pas de port SMTP) → 2) SMTP Brevo → 3) local.
     """
-    import base64 as _b64, datetime as _dt
+    import base64 as _b64
 
     prenom  = data.get('prenom','')
     nom     = data.get('nom','')
@@ -1109,13 +1312,9 @@ def send_email_with_attachment(data, cv_data=None, cv_filename=None):
                     'content': _b64.b64encode(cv_data).decode('ascii'),
                 }]
                 logger.info(f'BREVO_CV_ATTACH: {safe_fn} ({len(cv_data)} bytes)')
-            resp = requests.post(
+            resp = _brevo_session().post(
                 BREVO_API_URL,
-                headers={
-                    'api-key':      _brevo_key,
-                    'Content-Type': 'application/json',
-                    'Accept':       'application/json',
-                },
+                headers=_brevo_entetes(_brevo_key),
                 json=payload,
                 timeout=25,
             )
@@ -1162,19 +1361,11 @@ def send_email_with_attachment(data, cv_data=None, cv_filename=None):
         except Exception as e:
             logger.error(f'APPLY_SMTP_ERR: {e}')
 
-    # ── 3. Sauvegarde locale ──
-    try:
-        ts   = _dt.datetime.now().strftime('%Y%m%d_%H%M%S')
-        path = os.path.join(UPLOAD_FOLDER, f'email_{ts}.txt')
-        with open(path, 'w', encoding='utf-8') as _f:
-            _f.write(f"TO: {MAIL_TO}\nCC: {MAIL_CC}\nSUBJECT: {subject}\n\n")
-            for k, v in data.items():
-                _f.write(f"{k}: {v}\n")
-            if cv_filename:
-                _f.write(f"\nCV: {cv_filename} ({len(cv_data or b'')} bytes)\n")
-        logger.warning(f'APPLY_SAVED_LOCAL: {path}')
-    except Exception as _e:
-        logger.error(f'APPLY_SAVE_ERR: {_e}')
+    # ── 3. Sauvegarde locale (dossier dedie, non servi : voir _deposer_courriel_repli) ──
+    contenu = ''.join(f"{k}: {v}\n" for k, v in data.items())
+    if cv_filename:
+        contenu += f"\nCV: {cv_filename} ({len(cv_data or b'')} bytes)\n"
+    _deposer_courriel_repli(MAIL_TO, subject, contenu, extension='txt')
     return False, 'smtp_not_configured'
 
 def fetch_jobboard_signals(domaine='', skills=None):
@@ -4393,9 +4584,19 @@ def api_apply():
 
 @app.route('/api/test-brevo-cv', methods=['GET'])
 def test_brevo_cv():
-    """Test direct API Brevo avec pièce jointe — diagnostic CV."""
+    """Test direct API Brevo avec pièce jointe — diagnostic CV.
+
+    ADMINISTRATEUR CONNECTE UNIQUEMENT. Cette route etait publique et envoyait
+    DEUX vrais courriels par visite : mesure, 160 GET anonymes depuis une seule
+    adresse → 120 servis, 240 envois — le quota du compte (300 par jour) en
+    une minute. Elle affichait aussi la longueur et les douze premiers
+    caracteres de la cle : un fragment de secret n'a rien a faire dans une
+    reponse HTTP, meme pour l'administrateur."""
     import base64 as _b64
     ip = limiter.get_ip(request)
+    refus = admin_session_conseilprev()
+    if refus:
+        return refus
 
     # Mini PDF valide (1 page)
     mini_pdf = (
@@ -4408,8 +4609,6 @@ def test_brevo_cv():
 
     result = {
         'brevo_api_key_set':  bool(BREVO_API_KEY),
-        'brevo_api_key_len':  len(BREVO_API_KEY) if BREVO_API_KEY else 0,
-        'brevo_api_key_start': BREVO_API_KEY[:12] + '...' if BREVO_API_KEY else '',
         'mail_from':  MAIL_FROM,
         'mail_to':    MAIL_TO,
     }
@@ -4420,9 +4619,9 @@ def test_brevo_cv():
 
     # Test 1 : Appel API sans pièce jointe
     try:
-        resp1 = requests.post(
+        resp1 = _brevo_session().post(
             BREVO_API_URL,
-            headers={'api-key': BREVO_API_KEY, 'Content-Type': 'application/json'},
+            headers=_brevo_entetes(),
             json={
                 'sender':      {'name': 'CONSEILPREV TEST', 'email': MAIL_FROM},
                 'to':          [{'email': MAIL_TO}],
@@ -4442,9 +4641,9 @@ def test_brevo_cv():
 
     # Test 2 : Appel API avec CV en pièce jointe
     try:
-        resp2 = requests.post(
+        resp2 = _brevo_session().post(
             BREVO_API_URL,
-            headers={'api-key': BREVO_API_KEY, 'Content-Type': 'application/json'},
+            headers=_brevo_entetes(),
             json={
                 'sender':      {'name': 'CONSEILPREV TEST', 'email': MAIL_FROM},
                 'to':          [{'email': MAIL_TO}],
@@ -4479,10 +4678,16 @@ def test_brevo_cv():
 
 @app.route('/api/test-email', methods=['GET'])
 def test_email():
-    """Route de diagnostic email — reservee au domaine du service lui-meme."""
+    """Route de diagnostic email — ADMINISTRATEUR CONNECTE UNIQUEMENT.
+
+    La docstring disait « reservee au domaine du service » ; le controle
+    d'origine etait calcule puis jamais lu, et la route livrait a tout visiteur
+    les adresses de notification, l'hote SMTP, le dossier des CV — et, si SMTP
+    est configure, ouvrait une connexion et envoyait un courriel par visite."""
     ip = limiter.get_ip(request)
-    # Vérifier que la requête vient du même domaine
-    origin = request.headers.get('Origin','') + request.headers.get('Referer','')
+    refus = admin_session_conseilprev()
+    if refus:
+        return refus
     result = {
         # L'ADRESSE QUE PORTERONT LES LIENS DES COURRIERS. C'est le
         # renseignement qui manquait ici : trois courriers portent un jeton, et
@@ -4612,19 +4817,21 @@ def check_csrf(req):
 
 
 # ══════════════════════════════════════════════════════════════
-# INPUT SANITIZATION — Protection XSS + injection
+# INPUT SANITIZATION — caracteres de controle et longueur
 # ══════════════════════════════════════════════════════════════
-_HTML_ESCAPE = {
-    '&': '&amp;', '<': '&lt;', '>': '&gt;',
-    '"': '&quot;', "'": '&#x27;', '/': '&#x2F;',
-}
 def sanitize_input(text, max_len=3000, allow_newlines=True):
     """
     Nettoie un input utilisateur :
     - Supprime les caractères de contrôle dangereux
-    - Échappe les entités HTML
     - Limite la longueur
     - Normalise les espaces
+
+    ELLE N'ECHAPPE PAS LE HTML, ET C'EST VOULU. Sa docstring le promettait, un
+    dictionnaire d'echappement etait defini a cote — et jamais employe. La
+    promesse a fait croire trois courriers proteges qui ne l'etaient pas.
+    Echapper ICI abimerait ce qui est STOCKE (« O'Brien » deviendrait
+    « O&#x27;Brien » en base et dans chaque reponse JSON) : l'echappement se
+    fait a l'endroit ou la valeur entre dans du HTML, par _pour_courriel.
     """
     if not isinstance(text, str):
         return ''
@@ -4785,37 +4992,53 @@ def auth_admin_login():
 # NOTIFICATIONS SÉLECTION CANDIDAT(S)
 # Double envoi : client (confirmation + pré-contrat) + CONSEILPREV
 # ══════════════════════════════════════════════════════════════
+def _nombre(valeur):
+    """Un montant venu du JSON d'un navigateur : nombre, ou 0."""
+    try:
+        n = float(valeur or 0)
+    except (TypeError, ValueError):
+        return 0
+    return int(n) if n == int(n) else n
+
+
 def build_precontract_html(client, candidates):
-    """Génère le HTML du pré-contrat client."""
+    """Génère le HTML du pré-contrat client.
+
+    TOUT CE QUE LE NAVIGATEUR ENVOIE PASSE PAR _pour_courriel (`e`, `ec`) :
+    la route qui appelle ce gabarit est publique, et un nom de client
+    `<a href="https://piege.test/…">` arrivait rendu et cliquable dans un
+    courriel signe CONSEILPREV — mesure sur /api/notify-selection."""
     import datetime
     today = datetime.datetime.now().strftime("%d/%m/%Y")
     cands_html = ""
+    ec = lambda k, d="": _pour_courriel(client.get(k) or d)  # noqa: E731
     for i, c in enumerate(candidates):
-        tjm_client     = c.get("tjm", 0)
+        e = lambda k, d="": _pour_courriel(c.get(k) or d)  # noqa: E731
+        tjm_client     = _nombre(c.get("tjm", 0))
         tjm_consultant = round(tjm_client * 0.85)
         mission_days   = 20  # moyenne mensuelle
         est_mois       = round(tjm_client * mission_days)
         cands_html += f"""
         <div style="background:#f8f5ff;border-radius:10px;padding:18px 20px;margin-bottom:16px;border-left:4px solid #6d28d9">
           <div style="font-size:15px;font-weight:700;color:#1a1a2e;margin-bottom:10px">
-            Candidat {i+1} — {c.get("label","Consultant")}
-            <span style="font-size:11px;background:#6d28d9;color:#fff;padding:2px 10px;border-radius:100px;margin-left:8px">Match {c.get("score",0)}%</span>
+            Candidat {i+1} — {e("label", "Consultant")}
+            <span style="font-size:11px;background:#6d28d9;color:#fff;padding:2px 10px;border-radius:100px;margin-left:8px">Match {_pour_courriel(c.get("score",0))}%</span>
           </div>
           <table style="width:100%;border-collapse:collapse;font-size:13px">
-            <tr><td style="padding:5px 0;color:#666;width:180px">Poste</td><td style="font-weight:600;color:#1a1a2e">{c.get("titre","")}</td></tr>
-            <tr style="background:#f0ebff"><td style="padding:5px 6px;color:#666">Domaine</td><td style="padding:5px 6px;font-weight:600;color:#1a1a2e">{c.get("domaine","")}</td></tr>
-            <tr><td style="padding:5px 0;color:#666">Séniorité</td><td style="font-weight:600;color:#1a1a2e">{c.get("seniority","")}</td></tr>
-            <tr style="background:#f0ebff"><td style="padding:5px 6px;color:#666">Localisation</td><td style="padding:5px 6px;font-weight:600;color:#1a1a2e">{c.get("ville","")} ({c.get("lieu","")})</td></tr>
-            <tr><td style="padding:5px 0;color:#666">Disponibilité</td><td style="font-weight:600;color:#22c55e">{c.get("dispo","")}</td></tr>
-            <tr style="background:#f0ebff"><td style="padding:5px 6px;color:#666">Démarrage</td><td style="padding:5px 6px;font-weight:600;color:#1a1a2e">{c.get("start","ASAP")}</td></tr>
-            <tr><td style="padding:5px 0;color:#666">Durée mission</td><td style="font-weight:600;color:#1a1a2e">{c.get("duree","6 mois")}</td></tr>
-            <tr style="background:#f0ebff"><td style="padding:5px 6px;color:#666">Type contrat</td><td style="padding:5px 6px;font-weight:600;color:#1a1a2e">{c.get("contrat","").upper()}</td></tr>
+            <tr><td style="padding:5px 0;color:#666;width:180px">Poste</td><td style="font-weight:600;color:#1a1a2e">{e("titre", "")}</td></tr>
+            <tr style="background:#f0ebff"><td style="padding:5px 6px;color:#666">Domaine</td><td style="padding:5px 6px;font-weight:600;color:#1a1a2e">{e("domaine", "")}</td></tr>
+            <tr><td style="padding:5px 0;color:#666">Séniorité</td><td style="font-weight:600;color:#1a1a2e">{e("seniority", "")}</td></tr>
+            <tr style="background:#f0ebff"><td style="padding:5px 6px;color:#666">Localisation</td><td style="padding:5px 6px;font-weight:600;color:#1a1a2e">{e("ville", "")} ({e("lieu", "")})</td></tr>
+            <tr><td style="padding:5px 0;color:#666">Disponibilité</td><td style="font-weight:600;color:#22c55e">{e("dispo", "")}</td></tr>
+            <tr style="background:#f0ebff"><td style="padding:5px 6px;color:#666">Démarrage</td><td style="padding:5px 6px;font-weight:600;color:#1a1a2e">{e("start", "ASAP")}</td></tr>
+            <tr><td style="padding:5px 0;color:#666">Durée mission</td><td style="font-weight:600;color:#1a1a2e">{e("duree", "6 mois")}</td></tr>
+            <tr style="background:#f0ebff"><td style="padding:5px 6px;color:#666">Type contrat</td><td style="padding:5px 6px;font-weight:600;color:#1a1a2e">{e("contrat", "").upper()}</td></tr>
             <tr><td style="padding:5px 0;color:#666;font-weight:700">TJM consultant</td><td style="font-weight:700;color:#6d28d9;font-size:15px">{tjm_consultant} € HT <span style="font-size:11px;color:#888">(TJM −15%)</span></td></tr>
             <tr style="background:#f0ebff"><td style="padding:5px 6px;color:#666;font-weight:700">TJM facturé client</td><td style="padding:5px 6px;font-weight:700;color:#d946ef;font-size:15px">{tjm_client} € HT</td></tr>
             <tr><td style="padding:5px 0;color:#666">Estimation mensuelle</td><td style="font-weight:600;color:#1a1a2e">~{est_mois:,} € HT ({mission_days}j)</td></tr>
           </table>
           <div style="margin-top:12px;font-size:11px;color:#888">
-            Hard skills : {", ".join(c.get("skills",[])[:6]) or "—"}
+            Hard skills : {", ".join(_pour_courriel(x) for x in c.get("skills",[])[:6]) or "—"}
           </div>
         </div>"""
 
@@ -4833,7 +5056,7 @@ def build_precontract_html(client, candidates):
   <!-- Corps -->
   <div style="background:#fff;padding:28px 32px;border:1px solid #e8e0ff;border-top:none">
     <p style="font-size:15px;color:#1a1a2e;line-height:1.7">
-      Bonjour <strong>{client.get("prenom","")} {client.get("nom","")}</strong>,<br><br>
+      Bonjour <strong>{ec("prenom", "")} {ec("nom", "")}</strong>,<br><br>
       Nous avons bien reçu votre sélection de <strong>{len(candidates)} candidat(s)</strong>.
       Notre équipe CONSEILPREV vous contactera sous <strong>48h ouvrées</strong> pour organiser
       la mise en relation et confirmer les modalités définitives.
@@ -4852,9 +5075,9 @@ def build_precontract_html(client, candidates):
     <div style="background:#f8f5ff;border-radius:10px;padding:14px 18px;margin-bottom:20px;font-size:13px">
       <div style="font-weight:700;color:#6d28d9;margin-bottom:8px">📋 Vos coordonnées</div>
       <div style="color:#444;line-height:1.8">
-        {client.get("prenom","")} {client.get("nom","")} · {client.get("email","")}
-        {" · " + client.get("tel","") if client.get("tel") else ""}
-        {" · " + client.get("entreprise","") if client.get("entreprise") else ""}
+        {ec("prenom", "")} {ec("nom", "")} · {ec("email", "")}
+        {" · " + ec("tel") if client.get("tel") else ""}
+        {" · " + ec("entreprise") if client.get("entreprise") else ""}
       </div>
     </div>
 
@@ -4903,27 +5126,34 @@ def build_precontract_html(client, candidates):
 
 
 def build_conseilprev_notif_html(client, candidates):
-    """Email interne CONSEILPREV — identités complètes + sources."""
+    """Email interne CONSEILPREV — identités complètes + sources.
+
+    Meme regle que build_precontract_html : ce courrier arrive dans la boite
+    de l'administrateur, c'est la cible la plus interessante pour un lien
+    forge. `e`, `ei`, `ec` echappent candidat, identite et client."""
     import datetime
     today = datetime.datetime.now().strftime("%d/%m/%Y %H:%M")
     cands_rows = ""
+    ec = lambda k, d="": _pour_courriel(client.get(k) or d)  # noqa: E731
     for i, c in enumerate(candidates):
-        ident = c.get("ident", {})
-        tjm_client = c.get("tjm", 0)
+        ident = c.get("ident") or {}
+        e = lambda k, d="": _pour_courriel(c.get(k) or d)  # noqa: E731
+        ei = lambda k, d="": _pour_courriel(ident.get(k) or d)  # noqa: E731
+        tjm_client = _nombre(c.get("tjm", 0))
         tjm_cons   = round(tjm_client * 0.85)
         marge      = tjm_client - tjm_cons
         cands_rows += f"""
         <tr style="background:{'#f8f5ff' if i%2==0 else '#fff'}">
           <td style="padding:10px;border:1px solid #e0d8f8;font-weight:700;color:#6d28d9">{i+1}</td>
           <td style="padding:10px;border:1px solid #e0d8f8">
-            <div style="font-weight:700">{c.get("label","")}</div>
-            <div style="font-size:11px;color:#666">{c.get("titre","")} · {c.get("domaine","")}</div>
+            <div style="font-weight:700">{e("label", "")}</div>
+            <div style="font-size:11px;color:#666">{e("titre", "")} · {e("domaine", "")}</div>
           </td>
           <td style="padding:10px;border:1px solid #e0d8f8">
-            <div style="font-weight:700;color:#22c55e">{ident.get("prenom","")} {ident.get("nom","")}</div>
-            <div style="font-size:11px"><a href="mailto:{ident.get("email","")}" style="color:#6d28d9">{ident.get("email","")}</a></div>
-            <div style="font-size:11px;color:#666">{ident.get("tel","")}</div>
-            <div style="font-size:10px;color:#888;margin-top:3px">CV : {ident.get("cv","—")}</div>
+            <div style="font-weight:700;color:#22c55e">{ei("prenom", "")} {ei("nom", "")}</div>
+            <div style="font-size:11px"><a href="mailto:{ei("email", "")}" style="color:#6d28d9">{ei("email", "")}</a></div>
+            <div style="font-size:11px;color:#666">{ei("tel", "")}</div>
+            <div style="font-size:10px;color:#888;margin-top:3px">CV : {ei("cv", "—")}</div>
           </td>
           <td style="padding:10px;border:1px solid #e0d8f8;text-align:center">
             <div style="font-weight:700;color:#d946ef">{tjm_client} €</div>
@@ -4934,12 +5164,12 @@ def build_conseilprev_notif_html(client, candidates):
             <div style="font-size:10px;color:#666">marge</div>
           </td>
           <td style="padding:10px;border:1px solid #e0d8f8">
-            <div style="font-size:11px;color:#9333ea">{ident.get("source","—")}</div>
-            <div style="font-size:10px;color:#888">{ident.get("date_source","")}</div>
-            <div style="font-size:11px;margin-top:4px;color:#22c55e">Dispo : {c.get("dispo","")}</div>
-            <div style="font-size:11px;color:#444">{c.get("ville","")}</div>
+            <div style="font-size:11px;color:#9333ea">{ei("source", "—")}</div>
+            <div style="font-size:10px;color:#888">{ei("date_source", "")}</div>
+            <div style="font-size:11px;margin-top:4px;color:#22c55e">Dispo : {e("dispo", "")}</div>
+            <div style="font-size:11px;color:#444">{e("ville", "")}</div>
           </td>
-          <td style="padding:10px;border:1px solid #e0d8f8;font-size:11px;color:#666;font-weight:700;color:#e67e22">{c.get("score",0)}%</td>
+          <td style="padding:10px;border:1px solid #e0d8f8;font-size:11px;color:#666;font-weight:700;color:#e67e22">{_pour_courriel(c.get("score",0))}%</td>
         </tr>"""
 
     return f"""<!DOCTYPE html>
@@ -4956,10 +5186,10 @@ def build_conseilprev_notif_html(client, candidates):
     <div style="background:#f0ebff;border-radius:10px;padding:14px 18px;margin-bottom:20px">
       <div style="font-weight:700;color:#6d28d9;font-size:13px;margin-bottom:8px">👤 Client demandeur</div>
       <table style="font-size:13px;border-collapse:collapse;width:100%">
-        <tr><td style="color:#666;width:120px;padding:3px 0">Nom</td><td style="font-weight:600">{client.get("prenom","")} {client.get("nom","")}</td>
-            <td style="color:#666;width:120px;padding:3px 0">Entreprise</td><td style="font-weight:600">{client.get("entreprise","—")}</td></tr>
-        <tr><td style="color:#666;padding:3px 0">Email</td><td><a href="mailto:{client.get("email","")}" style="color:#6d28d9">{client.get("email","")}</a></td>
-            <td style="color:#666;padding:3px 0">Téléphone</td><td>{client.get("tel","—")}</td></tr>
+        <tr><td style="color:#666;width:120px;padding:3px 0">Nom</td><td style="font-weight:600">{ec("prenom", "")} {ec("nom", "")}</td>
+            <td style="color:#666;width:120px;padding:3px 0">Entreprise</td><td style="font-weight:600">{ec("entreprise", "—")}</td></tr>
+        <tr><td style="color:#666;padding:3px 0">Email</td><td><a href="mailto:{ec("email", "")}" style="color:#6d28d9">{ec("email", "")}</a></td>
+            <td style="color:#666;padding:3px 0">Téléphone</td><td>{ec("tel", "—")}</td></tr>
       </table>
     </div>
 
@@ -4999,12 +5229,58 @@ def build_conseilprev_notif_html(client, candidates):
 </body></html>"""
 
 
+# LE RELAIS DE /api/notify-selection, BORNE. La page /platform est publique et
+# son navigateur choisit le destinataire du courriel « Votre sélection » :
+# mesure, un POST anonyme faisait partir un courriel a la marque du site vers
+# n'importe quelle adresse, et la rotation d'X-Forwarded-For contournait la
+# borne par IP (30 appels → 60 envois, 0 refus). Aucune table ne connait les
+# clients de cette page (les candidats sont des donnees de demonstration cote
+# navigateur) : on ne peut pas exiger une adresse « deja connue ». On borne
+# donc par destinataire et par jour, puis globalement par jour, en comptant
+# dans email_log — un compteur qui survit aux redemarrages et vaut pour tous
+# les workers. Trois envois par adresse et par jour couvrent l'usage legitime
+# (une selection, une correction) ; vingt par jour couvrent dix clients.
+NOTIFY_SELECTION_SUJET = '[CONSEILPREV] Votre sélection'
+NOTIFY_SELECTION_PLAFOND_DESTINATAIRE_JOUR = 3
+NOTIFY_SELECTION_PLAFOND_GLOBAL_JOUR = 20
+
+
+def _notify_selection_autorise(destinataire):
+    """(True, None) ou (False, motif) selon ce qu'email_log compte aujourd'hui.
+    Une base injoignable REFUSE : c'est un relais, l'incertitude ne l'ouvre pas."""
+    try:
+        jour = datetime.utcnow().strftime('%Y-%m-%d')
+        conn = registre_get_db(); cur = conn.cursor()
+        cur.execute(registre_sql(
+            "SELECT COUNT(*) AS n FROM email_log WHERE sujet LIKE %s AND date_envoi >= %s",
+            "SELECT COUNT(*) AS n FROM email_log WHERE sujet LIKE ? AND date_envoi >= ?"),
+            (NOTIFY_SELECTION_SUJET + '%', jour))
+        total = dict(cur.fetchone())['n']
+        cur.execute(registre_sql(
+            "SELECT COUNT(*) AS n FROM email_log WHERE sujet LIKE %s AND date_envoi >= %s AND LOWER(destinataire)=%s",
+            "SELECT COUNT(*) AS n FROM email_log WHERE sujet LIKE ? AND date_envoi >= ? AND LOWER(destinataire)=?"),
+            (NOTIFY_SELECTION_SUJET + '%', jour, destinataire.lower()))
+        pour_lui = dict(cur.fetchone())['n']
+        conn.commit(); conn.close()
+    except Exception as e:                                     # noqa: BLE001
+        logger.error('NOTIFY_SELECTION_COMPTEUR_ERR: %s', e)
+        return False, 'compteur_illisible'
+    if pour_lui >= NOTIFY_SELECTION_PLAFOND_DESTINATAIRE_JOUR:
+        return False, 'plafond_destinataire'
+    if total >= NOTIFY_SELECTION_PLAFOND_GLOBAL_JOUR:
+        return False, 'plafond_global'
+    return True, None
+
+
 @app.route('/api/notify-selection', methods=['POST'])
 def notify_selection():
     """
     Déclenche 2 emails simultanés lors de la sélection d'un ou plusieurs candidats :
     1. Email CLIENT  → confirmation + récapitulatif + pré-contrat (sans identités candidats)
     2. Email CONSEILPREV → dossier complet confidentiel (identités, sources, marges)
+
+    Le destinataire du premier est choisi par le navigateur : voir la borne
+    _notify_selection_autorise et l'echappement dans les deux gabarits.
     """
     ip = limiter.get_ip(request)
     if not limiter.check_soft(ip, limit=10, window=300):
@@ -5013,82 +5289,60 @@ def notify_selection():
     try:
         d = request.get_json(force=True, silent=True) or {}
 
-        client = d.get('client', {})
-        candidates = d.get('candidates', [])
+        client = d.get('client') if isinstance(d.get('client'), dict) else {}
+        candidates = d.get('candidates') if isinstance(d.get('candidates'), list) else []
 
-        if not client.get('email'):
-            return jsonify({'ok': False, 'error': 'Email client manquant'}), 400
-        if not candidates:
+        destinataire = sanitize_email(client.get('email') or '')
+        if not destinataire:
+            return jsonify({'ok': False, 'error': 'Email client manquant ou invalide'}), 400
+        if not candidates or not all(isinstance(c, dict) for c in candidates):
             return jsonify({'ok': False, 'error': 'Aucun candidat sélectionné'}), 400
+        autorise, motif = _notify_selection_autorise(destinataire)
+        if not autorise:
+            logger.warning('NOTIFY_SELECTION_REFUSE %s: %s vers %s', ip, motif,
+                           _masquer_courriel(destinataire))
+            return jsonify({'ok': False, 'error': 'Plafond journalier atteint pour cette adresse'}), 429
 
-        import datetime
-        now_str = datetime.datetime.now().strftime('%d/%m/%Y %H:%M:%S')
         results = {'client_email': False, 'conseilprev_email': False}
+        nb = len(candidates)
+        nom_client = f'{client.get("prenom","")} {client.get("nom","")}'
 
         # ── EMAIL 1 : CLIENT (confirmation + pré-contrat, anonyme) ──
         try:
-            msg1 = MIMEMultipart('mixed')
-            nb = len(candidates)
-            msg1['Subject'] = f"[CONSEILPREV] Votre sélection — {nb} candidat(s) | Pré-accord"
-            msg1['From']    = MAIL_FROM
-            msg1['To']      = client['email']
-            if MAIL_CC:
-                msg1['Cc'] = MAIL_CC
-            msg1['Reply-To'] = MAIL_TO  # répondre à CONSEILPREV
-
-            msg1.attach(MIMEText(
-                build_precontract_html(client, candidates),
-                'html', 'utf-8'
-            ))
-
             ok_c, method_c = send_email_smart(
-                client['email'], f'{client.get("prenom","")} {client.get("nom","")}',
-                f'[CONSEILPREV] Votre sélection — {nb} candidat(s) | Pré-accord',
+                destinataire, nom_client,
+                f'{NOTIFY_SELECTION_SUJET} — {nb} candidat(s) | Pré-accord',
                 build_precontract_html(client, candidates),
                 reply_to=MAIL_TO,
                 tags=['selection', 'precontrat']
             )
             if ok_c:
                 results['client_email'] = True
-                logger.info(f'NOTIFY_CLIENT_OK via {method_c} {ip}: {client["email"]}')
+                logger.info('NOTIFY_CLIENT_OK via %s %s: %s', method_c, ip, _masquer_courriel(destinataire))
             else:
-                logger.warning(f'NOTIFY_CLIENT_FAIL: {client["email"]}')
+                logger.warning('NOTIFY_CLIENT_FAIL: %s', _masquer_courriel(destinataire))
 
         except Exception as e:
             logger.error(f'NOTIFY_CLIENT_ERR {ip}: {e}')
 
         # ── EMAIL 2 : CONSEILPREV (confidentiel, identités + sources + marges) ──
         try:
-            msg2 = MIMEMultipart('mixed')
-            msg2['Subject'] = f"[CONSEILPREV] 🔐 Sélection — {client.get('prenom','')} {client.get('nom','')} — {len(candidates)} candidat(s)"
-            msg2['From']    = MAIL_FROM
-            msg2['To']      = MAIL_TO
-            msg2['Reply-To'] = client.get('email', MAIL_TO)
-
-            msg2.attach(MIMEText(
-                build_conseilprev_notif_html(client, candidates),
-                'html', 'utf-8'
-            ))
-
+            sujet_cp = f'[CONSEILPREV] 🔐 Sélection — {nom_client} — {nb} candidat(s)'
             ok_cp, method_cp = send_email_smart(
-                MAIL_TO, 'CONSEILPREV',
-                f'[CONSEILPREV] 🔐 Sélection — {client.get("prenom","")} {client.get("nom","")} — {len(candidates)} candidat(s)',
+                MAIL_TO, 'CONSEILPREV', sujet_cp,
                 build_conseilprev_notif_html(client, candidates),
-                reply_to=client.get('email', MAIL_TO),
+                reply_to=destinataire,
                 tags=['selection', 'confidentiel', 'interne']
             )
             if ok_cp:
                 results['conseilprev_email'] = True
                 logger.info(f'NOTIFY_CP_OK via {method_cp} {ip}: → {MAIL_TO}')
             else:
-                logger.warning(f'NOTIFY_CP_FAIL')
-                # Sauvegarder localement
-                import os, datetime as _dt
-                ts = _dt.datetime.now().strftime('%Y%m%d_%H%M%S')
-                path = os.path.join(UPLOAD_FOLDER, f'selection_{ts}_{client.get("nom","")}.html')
-                with open(path, 'w', encoding='utf-8') as f:
-                    f.write(build_conseilprev_notif_html(client, candidates))
-                logger.info(f'NOTIFY_CP_SAVED: {path}')
+                logger.warning('NOTIFY_CP_FAIL')
+                # Le dossier confidentiel n'est pas perdu : meme dossier de
+                # repli que les autres courriels, nom imprevisible, non servi.
+                _deposer_courriel_repli(MAIL_TO, sujet_cp,
+                                        build_conseilprev_notif_html(client, candidates))
 
         except Exception as e:
             logger.error(f'NOTIFY_CP_ERR {ip}: {e}')
@@ -5108,6 +5362,29 @@ def notify_selection():
 
 
 
+# Les evenements Brevo qui INTERDISENT tout envoi ulterieur a l'adresse, et le
+# motif inscrit dans email_suppression. Brevo nomme l'evenement transactionnel
+# de desinscription `unsubscribed` dans ses charges et `unsubscribe` dans la
+# liste des evenements d'un webhook : les deux formes sont acceptees.
+BREVO_EVENEMENTS_SUPPRESSION = {
+    'unsubscribe': 'desinscription', 'unsubscribed': 'desinscription',
+    'hard_bounce': 'rebond_dur', 'spam': 'plainte', 'blocked': 'bloque',
+    'invalid_email': 'adresse_invalide',
+}
+
+
+def _brevo_webhook_jeton_fourni():
+    """Le jeton tel que Brevo peut le presenter : en-tete `X-Brevo-Token`,
+    en-tete `Authorization: Bearer …`, ou parametre d'URL `?token=`."""
+    entete = request.headers.get('X-Brevo-Token', '').strip()
+    if entete:
+        return entete
+    auth = request.headers.get('Authorization', '').strip()
+    if auth.lower().startswith('bearer '):
+        return auth[7:].strip()
+    return (request.args.get('token') or '').strip()
+
+
 @app.route('/api/brevo/webhook', methods=['POST'])
 def brevo_webhook():
     """
@@ -5118,7 +5395,36 @@ def brevo_webhook():
     ici a suivi le service d'un nom à l'autre sans être corrigée, et une
     consigne de configuration périmée envoie régler un webhook au mauvais
     endroit. `GET /api/test-email` affiche l'adresse courante.
+
+    UN JETON EST EXIGE. Le webhook acceptait tout POST : un evenement forge
+    « desinscription » ou « rebond » etait accepte sans preuve — et, une fois
+    la table de suppression en place, aurait suffi a couper les courriels a
+    n'importe quel client. Le jeton vient de BREVO_WEBHOOK_TOKEN (Render), et
+    Brevo le presente selon ce que sa configuration permet :
+      · en en-tete, `X-Brevo-Token: <jeton>` ou `Authorization: Bearer <jeton>`
+        — la forme a preferer : l'API de Brevo (POST /v3/webhooks, champs
+        `headers` et `auth`) sait poser un en-tete sur chaque livraison ;
+      · a defaut, en parametre d'URL, `…/api/brevo/webhook?token=<jeton>` — la
+        seule forme que l'ecran « Webhooks » de Brevo accepte quand il ne
+        propose qu'une adresse. Un jeton dans une URL finit dans les journaux
+        de l'hebergeur : preferer la premiere forme des qu'elle est possible.
+    La comparaison est a temps constant. Sans jeton configure, la route repond
+    503 et le journal le dit : un webhook ouvert n'est pas un repli acceptable.
+
+    CE QUE LES EVENEMENTS FONT DESORMAIS : une desinscription, un rebond dur,
+    une plainte ou un blocage inscrivent l'adresse dans email_suppression, que
+    send_email_smart et send_via_brevo_api consultent avant tout envoi. Le
+    journal ne porte plus l'adresse en clair (masque a***@domaine).
     """
+    if not BREVO_WEBHOOK_TOKEN:
+        logger.error('BREVO_WEBHOOK_SANS_JETON: BREVO_WEBHOOK_TOKEN absent, evenement ignore')
+        return jsonify({'ok': False, 'error': 'webhook non configure'}), 503
+    import hmac as _hm
+    fourni = _brevo_webhook_jeton_fourni()
+    if not fourni or not _hm.compare_digest(fourni.encode('utf-8'),
+                                            BREVO_WEBHOOK_TOKEN.encode('utf-8')):
+        logger.warning('BREVO_WEBHOOK_REFUSE %s: jeton absent ou faux', limiter.get_ip(request))
+        return jsonify({'ok': False, 'error': 'jeton invalide'}), 401
     try:
         events = request.get_json(force=True, silent=True)
         if not events:
@@ -5135,18 +5441,22 @@ def brevo_webhook():
 
 
 def _process_brevo_event(evt):
-    """Traite un événement Brevo."""
-    event_type = evt.get('event', '')
-    email      = evt.get('email', '')
-    msg_id     = evt.get('message-id', '')
-    ts         = evt.get('ts_epoch', 0)
+    """Traite un événement Brevo : journal masque, suppression si l'evenement
+    l'exige (voir BREVO_EVENEMENTS_SUPPRESSION)."""
+    if not isinstance(evt, dict):
+        return
+    event_type = str(evt.get('event', ''))
+    email      = str(evt.get('email', ''))
+    msg_id     = str(evt.get('message-id', ''))
     tags       = evt.get('tags', [])
-    logger.info(f'BREVO_EVT: {event_type} | {email} | tags={tags} | msg={msg_id[:20]}')
-    if event_type in ('hard_bounce', 'soft_bounce', 'blocked'):
-        logger.warning(f'BREVO_BOUNCE: {email} ({event_type})')
-    elif event_type == 'unsubscribe':
-        logger.warning(f'BREVO_UNSUB: {email}')
-        # TODO: marquer comme désabonné dans users_db.json
+    masque     = _masquer_courriel(email)
+    logger.info(f'BREVO_EVT: {event_type} | {masque} | tags={tags} | msg={msg_id[:20]}')
+    motif = BREVO_EVENEMENTS_SUPPRESSION.get(event_type)
+    if motif:
+        email_supprimer(email, motif)
+        logger.warning(f'BREVO_SUPPRESSION: {masque} ({motif})')
+    elif event_type == 'soft_bounce':
+        logger.warning(f'BREVO_BOUNCE: {masque} (soft_bounce)')
 
 
 @app.route('/api/admin/candidate', methods=['POST'])
@@ -5313,8 +5623,27 @@ def admin_cv_list():
 
 @app.route('/api/health', methods=['GET'])
 def health_check():
-    """Diagnostic complet : SMTP, clés API, système. Format HTML lisible ou JSON."""
+    """Diagnostic complet : SMTP, clés API, système. Format HTML lisible ou JSON.
+
+    POUR UN VISITEUR ANONYME, UNE REPONSE COURTE ET RIEN D'AUTRE. Cette route
+    est en liste blanche du security_middleware (une sonde doit pouvoir
+    l'atteindre sans en-tetes de navigateur), et elle faisait, a chaque appel,
+    un GET /v3/account chez Brevo et un appel au fournisseur du modele de
+    conversation pour eprouver sa cle, puis affichait
+    l'adresse et l'offre du compte Brevo, MAIL_TO, MAIL_CC, l'hote SMTP et un
+    prefixe de cle. Mesure : 200 appels anonymes en une minute depuis une
+    adresse → 200 GET /v3/account. Render, lui, sonde /health (render.yaml),
+    pas cette route. Les controles complets — appels sortants compris — ne
+    sont faits que pour l'administrateur connecte."""
     import datetime
+    admin = sentauth_current_client()
+    if not (admin and admin.get('is_conseilprev')):
+        if request.args.get('format') == 'json':
+            return jsonify({'status': 'ok', 'diagnostic': 'reserve a l administrateur connecte'})
+        return ('<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">'
+                '<title>CONSEILPREV</title></head><body>'
+                '<p>Service en ligne. Le diagnostic complet est r&eacute;serv&eacute; '
+                '&agrave; l&#39;administrateur connect&eacute;.</p></body></html>')
 
     # ── SMTP ──
     smtp_ready = bool(SMTP_USER and SMTP_PASSWORD)
@@ -5325,8 +5654,8 @@ def health_check():
     brevo_api_msg = 'BREVO_API_KEY non configurée'
     if BREVO_API_KEY:
         try:
-            r_brevo = requests.get(
-                'https://api.brevo.com/v3/account',
+            r_brevo = _brevo_session().get(
+                BREVO_API_BASE + '/v3/account',
                 headers={'api-key': BREVO_API_KEY, 'Accept': 'application/json'},
                 timeout=8
             )
@@ -5425,12 +5754,13 @@ def health_check():
             'mode':       '✅ API HTTP (recommandé)' if brevo_api_ok else ('⚠ SMTP' if smtp_conn=='OK' else '❌ non configuré'),
             'conseil':    '✅ Opérationnel' if brevo_api_ok else '→ Ajouter BREVO_API_KEY dans Render → Environment',
         },
+        # Aucun fragment de cle dans une reponse HTTP, meme pour l'administrateur.
         'anthropic': {
-            'key': (ANTHROPIC_API_KEY[:12] + '***') if ANTHROPIC_API_KEY else 'NON CONFIGURÉ',
+            'key': 'configurée' if ANTHROPIC_API_KEY else 'NON CONFIGURÉ',
             'ready': anthropic_ready, 'valid': anthropic_valid, 'status': anthropic_msg,
         },
         'mistral': {
-            'key': (MISTRAL_API_KEY[:6] + '***') if MISTRAL_API_KEY else 'NON CONFIGURÉ',
+            'key': 'configurée' if MISTRAL_API_KEY else 'NON CONFIGURÉ',
             'ready': mistral_ready,
         },
         'uploads_folder': os.path.isdir(UPLOAD_FOLDER),
@@ -7593,6 +7923,25 @@ try:
 except Exception as _e:
     logger.error(f"EMAIL_LOG — erreur init DB : {_e}")
 
+# RETENTION DU JOURNAL : 90 JOURS. `destinataire` est une adresse en clair, et
+# rien ne purgeait la table (mesure : aucun DELETE FROM email_log). Un journal
+# d'exploitation qui grossit sans fin avec des donnees personnelles est une
+# conservation sans duree — ce que l'art. 5.1.e interdit. La purge est faite
+# a l'ecriture, par paquets bornes : un DELETE de 200 lignes par insertion
+# suffit a rattraper n'importe quel retard sans jamais peser sur une requete.
+EMAIL_LOG_RETENTION_JOURS = 90
+EMAIL_LOG_PURGE_PAQUET = 200
+
+
+def email_log_purger(cur):
+    """Efface, par paquet borne, les lignes plus vieilles que la retention."""
+    limite = (datetime.utcnow() - timedelta(days=EMAIL_LOG_RETENTION_JOURS)).isoformat()
+    cur.execute(registre_sql(
+        'DELETE FROM email_log WHERE id IN (SELECT id FROM email_log WHERE date_envoi < %s LIMIT %s)',
+        'DELETE FROM email_log WHERE id IN (SELECT id FROM email_log WHERE date_envoi < ? LIMIT ?)'
+    ), (limite, EMAIL_LOG_PURGE_PAQUET))
+
+
 def email_log_record(destinataire, sujet, methode, succes, raison_echec=None):
     try:
         conn = registre_get_db()
@@ -7602,10 +7951,78 @@ def email_log_record(destinataire, sujet, methode, succes, raison_echec=None):
             'INSERT INTO email_log (destinataire, sujet, methode, succes, raison_echec, date_envoi) VALUES (%s,%s,%s,%s,%s,%s)',
             'INSERT INTO email_log (destinataire, sujet, methode, succes, raison_echec, date_envoi) VALUES (?,?,?,?,?,?)'
         ), (destinataire, sujet, methode, succes, raison_echec, now))
+        email_log_purger(cur)
         conn.commit()
         conn.close()
     except Exception as _e:
         logger.error(f"EMAIL_LOG_RECORD_FAILED : {_e}")
+
+
+# ══════════════════════════════════════════════════════════
+# LISTE DE SUPPRESSION — ce que Brevo nous a dit de ne plus ecrire
+# ══════════════════════════════════════════════════════════
+# Une desinscription, un rebond dur, une plainte ou un blocage recus par le
+# webhook n'avaient AUCUN effet : mesure, apres les deux evenements,
+# send_email_smart renvoyait vers ces adresses. C'est un manquement au droit
+# d'opposition (art. 21) et une degradation de la reputation d'envoi a chaque
+# rebond. La table est consultee avant tout envoi, par les deux chemins.
+def email_suppression_init_db():
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute('''CREATE TABLE IF NOT EXISTS email_suppression (
+        email TEXT PRIMARY KEY, motif TEXT, date TEXT NOT NULL
+    )''')
+    conn.commit()
+    conn.close()
+
+
+try:
+    email_suppression_init_db()
+except Exception as _e:
+    logger.error(f"EMAIL_SUPPRESSION — erreur init DB : {_e}")
+
+
+def email_supprimer(email, motif):
+    """Inscrit l'adresse (en minuscules) ; une inscription repetee garde la
+    premiere date et prend le dernier motif."""
+    em = str(email or '').strip().lower()
+    if not em or '@' not in em:
+        return False
+    try:
+        conn = registre_get_db(); cur = conn.cursor()
+        now = datetime.utcnow().isoformat()
+        if REGISTRE_USE_PG:
+            cur.execute('INSERT INTO email_suppression (email, motif, date) VALUES (%s,%s,%s) '
+                        'ON CONFLICT (email) DO UPDATE SET motif=EXCLUDED.motif', (em, motif, now))
+        else:
+            cur.execute('INSERT INTO email_suppression (email, motif, date) VALUES (?,?,?) '
+                        'ON CONFLICT (email) DO UPDATE SET motif=excluded.motif', (em, motif, now))
+        conn.commit(); conn.close()
+        return True
+    except Exception as _e:                                    # noqa: BLE001
+        logger.error(f"EMAIL_SUPPRESSION_ECRITURE_FAILED : {_e}")
+        return False
+
+
+def email_supprime(email):
+    """Le motif de suppression de l'adresse, ou None si l'on peut lui ecrire.
+    Une table illisible rend None : un incident de base ne doit pas couper
+    les courriels de reinitialisation — l'erreur est journalisee."""
+    em = str(email or '').strip().lower()
+    if not em:
+        return None
+    try:
+        conn = registre_get_db(); cur = conn.cursor()
+        cur.execute(registre_sql('SELECT motif FROM email_suppression WHERE email=%s',
+                                 'SELECT motif FROM email_suppression WHERE email=?'), (em,))
+        row = cur.fetchone()
+        conn.commit(); conn.close()
+    except Exception as _e:                                    # noqa: BLE001
+        logger.error(f"EMAIL_SUPPRESSION_LECTURE_FAILED : {_e}")
+        return None
+    if not row:
+        return None
+    return dict(row).get('motif') or 'supprime'
 
 # ══════════════════════════════════════════════════════════
 # RAPPORT DE CARTOGRAPHIE AUTOMATIQUE — genere cote serveur
@@ -7737,8 +8154,14 @@ def schedule_cartographie_report(client_id, client_email, client_nom):
     """Repousse la date d'envoi prevue de 5 minutes (upsert). Remplace l'ancien
     threading.Timer : la date est persistante en base, donc survit a un
     redemarrage ou une mise en veille du processus — seule une requete
-    ulterieure (check_pending_reports) declenche l'envoi reel."""
+    ulterieure (check_pending_reports) declenche l'envoi reel.
+
+    LE COMPTE CONSEILPREV PORTE L'ADRESSE INTERNE FICTIVE (c'est son identite
+    en base, pas une boite) : son rapport est route vers la boite de
+    notification, sinon il partait vers @internal.system et rebondissait."""
     try:
+        if _adresse_non_routable(client_email) or not client_email:
+            client_email = CONSEILPREV_NOTIFY_EMAIL
         next_send = (datetime.utcnow() + timedelta(seconds=REPORT_DEBOUNCE_SECONDS)).isoformat()
         conn = registre_get_db()
         cur = conn.cursor()
@@ -8055,14 +8478,18 @@ def _essai_relances():
 @app.route('/api/sentinel-auth/me', methods=['GET'])
 @rate_limit(limit=120, window=60)
 def sentauth_me():
+    # LE TRAVAIL DE FOND VIENT APRES L'AUTHENTIFICATION. Il la precedait :
+    # mesure, un GET anonyme (repondu 401) declenchait 5 relances d'essai et
+    # prenait 2,5 s. Les envois sont idempotents en base, donc pas de rafale,
+    # mais un chemin non authentifie ne doit porter ni envoi ni latence.
+    client = sentauth_current_client()
+    if not client:
+        return jsonify({'authenticated': False}), 401
     check_pending_reports()  # verifie les rapports en attente a chaque chargement de page
     try:
         _essai_relances()  # rappels d'essai (3 jours avant, puis a l'expiration)
     except Exception:
         pass
-    client = sentauth_current_client()
-    if not client:
-        return jsonify({'authenticated': False}), 401
     return jsonify({'authenticated': True, **client})
 
 
@@ -9639,6 +10066,14 @@ def pricing_request():
     plan_label = 'Sentinel Pro' if plan == 'pro' else 'Sentinel Entreprise'
     now_str = datetime.utcnow().strftime('%d/%m/%Y à %H:%M UTC')
 
+    # Ce courriel arrive dans la boite de CONSEILPREV avec `reply_to` sur le
+    # prospect : un nom `<a href="https://piege.test/…">Facture</a>` y etait
+    # rendu et cliquable. Mesure. Les valeurs saisies sont echappees ici, au
+    # point ou elles entrent dans du HTML ; `email` reste brut pour reply_to.
+    nom_h, email_h, secteur_h, systemes_h, message_h = (
+        _pour_courriel(nom), _pour_courriel(email), _pour_courriel(secteur),
+        _pour_courriel(systemes), _pour_courriel(message))
+
     html = f"""<div style="font-family:Arial,sans-serif;max-width:560px;padding:24px">
   <div style="background:#1C1C1C;color:#fff;border-radius:8px 8px 0 0;padding:16px 20px;margin-bottom:0">
     <span style="font-size:16px;font-weight:700">Sentinel <span style="background:#B83222;font-size:10px;padding:2px 6px;border-radius:3px;vertical-align:middle">AI</span></span>
@@ -9648,15 +10083,15 @@ def pricing_request():
     <tr style="background:#F6F4FC"><td style="padding:10px 16px;color:#767676;width:180px;border-bottom:1px solid #E0DDD8">Plan demandé</td>
         <td style="padding:10px 16px;font-weight:700;color:#B83222;border-bottom:1px solid #E0DDD8">{plan_label}</td></tr>
     <tr><td style="padding:10px 16px;color:#767676;border-bottom:1px solid #E0DDD8">Entreprise</td>
-        <td style="padding:10px 16px;font-weight:600;border-bottom:1px solid #E0DDD8">{nom}</td></tr>
+        <td style="padding:10px 16px;font-weight:600;border-bottom:1px solid #E0DDD8">{nom_h}</td></tr>
     <tr style="background:#F6F4FC"><td style="padding:10px 16px;color:#767676;border-bottom:1px solid #E0DDD8">Email</td>
-        <td style="padding:10px 16px;border-bottom:1px solid #E0DDD8"><a href="mailto:{email}">{email}</a></td></tr>
+        <td style="padding:10px 16px;border-bottom:1px solid #E0DDD8"><a href="mailto:{email_h}">{email_h}</a></td></tr>
     <tr><td style="padding:10px 16px;color:#767676;border-bottom:1px solid #E0DDD8">Secteur</td>
-        <td style="padding:10px 16px;border-bottom:1px solid #E0DDD8">{secteur or 'Non précisé'}</td></tr>
+        <td style="padding:10px 16px;border-bottom:1px solid #E0DDD8">{secteur_h or 'Non précisé'}</td></tr>
     <tr style="background:#F6F4FC"><td style="padding:10px 16px;color:#767676;border-bottom:1px solid #E0DDD8">Systèmes IA</td>
-        <td style="padding:10px 16px;border-bottom:1px solid #E0DDD8">{systemes or 'Non précisé'}</td></tr>
+        <td style="padding:10px 16px;border-bottom:1px solid #E0DDD8">{systemes_h or 'Non précisé'}</td></tr>
     <tr><td style="padding:10px 16px;color:#767676;border-bottom:1px solid #E0DDD8">Message</td>
-        <td style="padding:10px 16px;border-bottom:1px solid #E0DDD8;white-space:pre-wrap">{message or '—'}</td></tr>
+        <td style="padding:10px 16px;border-bottom:1px solid #E0DDD8;white-space:pre-wrap">{message_h or '—'}</td></tr>
     <tr style="background:#F6F4FC"><td style="padding:10px 16px;color:#767676">Origine</td>
         <td style="padding:10px 16px;font-size:11px;color:#767676">IP {ip} — {now_str}</td></tr>
   </table>
@@ -10436,7 +10871,7 @@ def registre_create():
         row = cur.fetchone()
     conn.commit()
     conn.close()
-    schedule_cartographie_report(client['id'], client.get('email') or CONSEILPREV_INTERNAL_EMAIL, client.get('nom_entreprise') or 'CONSEILPREV')
+    schedule_cartographie_report(client['id'], client.get('email') or CONSEILPREV_NOTIFY_EMAIL, client.get('nom_entreprise') or 'CONSEILPREV')
     return jsonify({'systeme': registre_row_to_dict(row)}), 201
 
 def _registre_ajustement_fin(brut):
@@ -10528,7 +10963,7 @@ def registre_update(sys_id):
         conn.close()
         if not row:
             return jsonify({'error': 'Systeme introuvable'}), 404
-        schedule_cartographie_report(client['id'], client.get('email') or CONSEILPREV_INTERNAL_EMAIL, client.get('nom_entreprise') or 'CONSEILPREV')
+        schedule_cartographie_report(client['id'], client.get('email') or CONSEILPREV_NOTIFY_EMAIL, client.get('nom_entreprise') or 'CONSEILPREV')
         return jsonify({'systeme': registre_row_to_dict(row)})
     else:
         cur.execute('SELECT * FROM systemes_ia WHERE id=? AND client_id=?', (sys_id, client['id']))
@@ -10564,7 +10999,7 @@ def registre_update(sys_id):
         cur.execute('SELECT * FROM systemes_ia WHERE id=?', (sys_id,))
         row = cur.fetchone()
         conn.close()
-        schedule_cartographie_report(client['id'], client.get('email') or CONSEILPREV_INTERNAL_EMAIL, client.get('nom_entreprise') or 'CONSEILPREV')
+        schedule_cartographie_report(client['id'], client.get('email') or CONSEILPREV_NOTIFY_EMAIL, client.get('nom_entreprise') or 'CONSEILPREV')
         return jsonify({'systeme': registre_row_to_dict(row)})
 
 @app.route('/api/registre/<int:sys_id>', methods=['DELETE'])
@@ -10586,7 +11021,7 @@ def registre_delete(sys_id):
     conn.close()
     if deleted_count == 0:
         return jsonify({'error': 'Systeme introuvable'}), 404
-    schedule_cartographie_report(client['id'], client.get('email') or CONSEILPREV_INTERNAL_EMAIL, client.get('nom_entreprise') or 'CONSEILPREV')
+    schedule_cartographie_report(client['id'], client.get('email') or CONSEILPREV_NOTIFY_EMAIL, client.get('nom_entreprise') or 'CONSEILPREV')
     return jsonify({'deleted': sys_id})
 
 @app.route('/api/finops', methods=['GET'])
@@ -11195,7 +11630,7 @@ def notifications_summary():
         cur.execute(registre_sql(
             "SELECT * FROM email_log WHERE destinataire=%s AND sujet LIKE %s AND succes=TRUE AND date_envoi > %s ORDER BY date_envoi DESC",
             "SELECT * FROM email_log WHERE destinataire=? AND sujet LIKE ? AND succes=1 AND date_envoi > ? ORDER BY date_envoi DESC"
-        ), (client.get('email') or CONSEILPREV_INTERNAL_EMAIL, 'Cartographie IA%', cutoff))
+        ), (client.get('email') or CONSEILPREV_NOTIFY_EMAIL, 'Cartographie IA%', cutoff))
         rows = [dict(r) if not isinstance(r, dict) else r for r in cur.fetchall()]
         conn.commit()
         conn.close()
@@ -17430,7 +17865,7 @@ def formations_inscription():
     # Notification interne (CONSEILPREV) et accuse de reception (participant)
     libelle = '%s — %s (%s)' % (titre, sess.get('date_session'), sess.get('lieu'))
     try:
-        send_email_smart(CONSEILPREV_INTERNAL_EMAIL, 'CONSEILPREV',
+        send_email_smart(CONSEILPREV_NOTIFY_EMAIL, 'CONSEILPREV',
                          'Nouvelle demande d inscription : ' + titre,
                          '<p>Demande d inscription recue.</p><p><strong>%s</strong><br>%s %s — %s<br>%s / %s<br>'
                          'Participants : %d — Montant : %.2f EUR HT</p><p>%s</p>'
@@ -17533,7 +17968,7 @@ def _form_confirmer_paiement(insc_id):
     except Exception:
         pass
     try:
-        send_email_smart(CONSEILPREV_INTERNAL_EMAIL, 'CONSEILPREV',
+        send_email_smart(CONSEILPREV_NOTIFY_EMAIL, 'CONSEILPREV',
                          'Inscription payee : ' + titre,
                          '<p>Inscription confirmee et payee.</p><p>%s %s (%s) — %s participant(s) — %.2f EUR HT<br>'
                          'Session du %s — %s</p>'
@@ -17808,7 +18243,7 @@ def _formation_ia_confirmer_paiement(commande=None, resa_id=None):
     except Exception:
         pass
     try:
-        send_email_smart(CONSEILPREV_INTERNAL_EMAIL, 'CONSEILPREV',
+        send_email_smart(CONSEILPREV_NOTIFY_EMAIL, 'CONSEILPREV',
                          'Formation IA payée : %d séance(s)' % len(a_payer),
                          '<p>Commande réglée.</p><p>%s %s (%s) — %s</p><ul>%s</ul>'
                          '<p>Total : %.2f € TTC</p>'
@@ -17936,7 +18371,7 @@ def _formation_ia_envoyer_relance(x):
     except Exception:
         pass
     try:
-        send_email_smart(CONSEILPREV_INTERNAL_EMAIL, 'CONSEILPREV',
+        send_email_smart(CONSEILPREV_NOTIFY_EMAIL, 'CONSEILPREV',
                          'Relance %s : %s' % (quand, titre),
                          '<p>Relance <strong>%s</strong> envoyée au client.</p>'
                          '<p>%s %s (%s) — %s<br>Séance : %s<br>Lieu : %s</p>'
@@ -18289,7 +18724,7 @@ def formation_ia_inscription():
                       % (dev['ht_cents'] // 100, dev['ttc_cents'] // 100))
 
     try:
-        send_email_smart(CONSEILPREV_INTERNAL_EMAIL, 'CONSEILPREV',
+        send_email_smart(CONSEILPREV_NOTIFY_EMAIL, 'CONSEILPREV',
                          'Réservation formation : %d séance(s)' % len(recap),
                          '<p>Nouvelle réservation « Formations conformité IA ».</p>'
                          '<p>%s %s — %s<br>%s / %s<br>SIRET : %s<br>Lieu : %s<br>'
@@ -18593,7 +19028,7 @@ def formation_ia_annulation():
     except Exception:
         pass
     try:
-        send_email_smart(CONSEILPREV_INTERNAL_EMAIL, 'CONSEILPREV',
+        send_email_smart(CONSEILPREV_NOTIFY_EMAIL, 'CONSEILPREV',
                          'Annulation formation — ' + su['titre'],
                          '<p>%s %s (%s) annule la séance <strong>%s</strong> du %s.</p>'
                          '<p>%s</p><p>Statut avant annulation : %s. %s</p>'

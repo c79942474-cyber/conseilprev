@@ -9,6 +9,11 @@ uploads_cv/*.txt
 # En developpement local, SMTP n'est jamais configure — chaque connexion de
 # recette en depose un.
 uploads_cv/email_*.html
+uploads_cv/selection_*.html
+# Le dossier ou send_email_smart depose desormais les courriels qui n'ont pu
+# partir (courriel_<date>_<alea>.html, 0600) : jetons et adresses en clair,
+# jamais dans le depot, et jamais servi (security_middleware).
+courriels_repli/
 __pycache__/
 *.pyc
 registre_ia.db
