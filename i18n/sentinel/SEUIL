@@ -1,0 +1,5 @@
+# Part minimale (0 a 1) des MOTS du catalogue i18n/sentinel/CATALOGUE.json
+# couverts par les dictionnaires i18n/sentinel/*.json — lue par
+# tests/test_sentinel_langue_gardien.py. Valeur initiale 0 : le lot de
+# traduction la monte a mesure qu il traduit.
+0

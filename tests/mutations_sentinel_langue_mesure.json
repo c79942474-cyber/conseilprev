@@ -1,0 +1,170 @@
+{
+ "_pourquoi": "Chaque mutation FABRIQUE un défaut réel de la mesure (heuristique, agrégation, verdict, point de départ, gardien) et doit faire TOMBER la règle nommée. Une mutation qui survit dit que la règle ne mesure pas ce qu'elle prétend ; une mutation qui fait tomber une AUTRE règle dit que la règle nommée vise à côté.",
+ "cibles": [
+  "tests/test_sentinel_langue_mesure.py",
+  "tests/test_sentinel_langue_gardien.py"
+ ],
+ "mutations": [
+  {
+   "nom": "une lettre accentuée ne compte plus pour le français : « Coûts » devient neutre",
+   "fichier": "outils/sentinel_langue.js",
+   "avant": "    if (ACCENT.test(bas)) { fr++; continue; }\n",
+   "apres": "",
+   "regle": "test_un_texte_francais_est_classe_fr[un-seul-mot-accentue]"
+  },
+  {
+   "nom": "l'élision ne compte plus : « l'audit » seul devient neutre",
+   "fichier": "outils/sentinel_langue.js",
+   "avant": "    if (ELISION_FR.test(j)) { fr++; bas = bas.replace(ELISION_FR, ''); }\n",
+   "apres": "    if (ELISION_FR.test(j)) { bas = bas.replace(ELISION_FR, ''); }\n",
+   "regle": "test_un_texte_francais_est_classe_fr[elision-seule]"
+  },
+  {
+   "nom": "un mot-outil français ne rapporte plus de point : « Voir » devient neutre",
+   "fichier": "outils/sentinel_langue.js",
+   "avant": "    if (MOTS_FR.indexOf(bas) >= 0) { fr++; continue; }\n",
+   "apres": "    if (MOTS_FR.indexOf(bas) >= 0) { continue; }\n",
+   "regle": "test_un_texte_francais_est_classe_fr[bouton-d-un-mot]"
+  },
+  {
+   "nom": "un mot-outil anglais ne rapporte plus de point : « View all » devient neutre",
+   "fichier": "outils/sentinel_langue.js",
+   "avant": "    if (MOTS_EN.indexOf(bas) >= 0) { en++; continue; }\n",
+   "apres": "    if (MOTS_EN.indexOf(bas) >= 0) { continue; }\n",
+   "regle": "test_un_texte_anglais_est_classe_en[libelle-d-interface]"
+  },
+  {
+   "nom": "la terminaison -ing n'est plus un signal anglais : « Steering » devient neutre",
+   "fichier": "outils/sentinel_langue.js",
+   "avant": "var FINALES_EN = /(ing|ings|ly|",
+   "apres": "var FINALES_EN = /(ly|",
+   "regle": "test_un_texte_anglais_est_classe_en[terminaison-ing]"
+  },
+  {
+   "nom": "l'égalité de points tourne au français : « Budget » et « a » deviennent français",
+   "fichier": "outils/sentinel_langue.js",
+   "avant": "  var langue = fr > en ? 'fr' : (en > fr ? 'en' : 'neutre');\n",
+   "apres": "  var langue = fr >= en ? 'fr' : 'en';\n",
+   "regle": "test_un_texte_sans_signal_est_NEUTRE[mot-sans-signal]"
+  },
+  {
+   "nom": "un nom propre se retire au milieu d'un mot : « DORADE » perd « DORA » et il reste « DE », mot-outil français",
+   "fichier": "outils/sentinel_langue.js",
+   "avant": "}).join('|') + ')(?![A-Za-zÀ-ÿ])', 'g');\n",
+   "apres": "}).join('|') + ')', 'g');\n",
+   "regle": "test_un_nom_propre_ne_se_retire_qu_ENTIER"
+  },
+  {
+   "nom": "les noms propres comptent dans les mots : « ISO » pèse dans le score",
+   "fichier": "outils/sentinel_langue.js",
+   "avant": "  var mots = compterMots(reste);\n",
+   "apres": "  var mots = compterMots(t);\n",
+   "regle": "test_les_mots_se_comptent_en_lettres_sans_les_noms_propres_et_l_elision_est_un_seul_mot"
+  },
+  {
+   "nom": "les restes ne sont plus dédoublonnés : un texte répété paraît deux fois dans la liste de travail",
+   "fichier": "outils/sentinel_langue.js",
+   "avant": "      if (!vus[cle]) { vus[cle] = true; m.restes.push(",
+   "apres": "      { m.restes.push(",
+   "regle": "test_chaque_occurrence_compte_dans_les_mots_et_une_seule_fois_dans_les_restes"
+  },
+  {
+   "nom": "les mots neutres entrent au dénominateur : la part française baisse sans qu'un mot soit traduit",
+   "fichier": "outils/sentinel_langue.js",
+   "avant": "  var decide = m.mots_fr + m.mots_en;\n",
+   "apres": "  var decide = m.mots_fr + m.mots_en + m.mots_neutres;\n",
+   "regle": "test_la_part_francaise_ne_compte_que_les_mots_DECIDES"
+  },
+  {
+   "nom": "la liste des restes passe à vingt",
+   "fichier": "outils/sentinel_langue.js",
+   "avant": "var RESTES_MAX = 15;",
+   "apres": "var RESTES_MAX = 20;",
+   "regle": "test_les_restes_sont_limites_a_quinze_et_tries_des_plus_longs_aux_plus_courts"
+  },
+  {
+   "nom": "le texte des cadres n'est plus séparé : l'iframe gonfle la page et le verdict",
+   "fichier": "outils/sentinel_langue.js",
+   "avant": ".indexOf('cadre:') === 0) dansCadre.push",
+   "apres": ".indexOf('cadre:') === 1) dansCadre.push",
+   "regle": "test_les_cadres_sont_mesures_A_PART_et_hors_verdict"
+  },
+  {
+   "nom": "le verdict tombe dès l'égalité au seuil : un seuil à 0 avec zéro mot français rend 1",
+   "fichier": "outils/sentinel_langue.js",
+   "avant": "  return part > s ? 1 : 0;\n",
+   "apres": "  return part >= s ? 1 : 0;\n",
+   "regle": "test_le_verdict_vaut_1_quand_la_part_DEPASSE_le_seuil[egal]"
+  },
+  {
+   "nom": "le seuil par défaut passe à 10 %",
+   "fichier": "outils/sentinel_langue.js",
+   "avant": "var SEUIL_DEFAUT = 0.05;",
+   "apres": "var SEUIL_DEFAUT = 0.1;",
+   "regle": "test_le_seuil_par_defaut_est_5_pour_cent"
+  },
+  {
+   "nom": "une page sans mot décidé passe en tête des pires",
+   "fichier": "outils/sentinel_langue.js",
+   "avant": "    if (pa === null) return 1;\n",
+   "apres": "    if (pa === null) return -1;\n",
+   "regle": "test_les_dix_pires_pages_viennent_par_part_puis_par_masse_et_les_indecises_en_dernier"
+  },
+  {
+   "nom": "la recette accepte un seuil hors de [0, 1] : --seuil 2 rend un verdict vert",
+   "fichier": "recette_sentinel_langue.js",
+   "avant": "  if (!(o.seuil >= 0 && o.seuil <= 1)) throw new Error('--seuil attend un nombre entre 0 et 1, reçu : ' + o.seuil);\n",
+   "apres": "",
+   "regle": "test_une_option_mal_ecrite_est_une_erreur_de_recette_code_2[seuil-hors-bornes]"
+  },
+  {
+   "nom": "la recette sort toujours en 0 : le verdict n'atteint plus le code de sortie",
+   "fichier": "recette_sentinel_langue.js",
+   "avant": "  main().then(code => process.exit(code))",
+   "apres": "  main().then(code => process.exit(0))",
+   "regle": "test_la_recette_en_mode_relire_rend_le_code_du_verdict_sans_navigateur"
+  },
+  {
+   "nom": "une page de PAGE_META disparaît du point de départ commité",
+   "fichier": "i18n/sentinel/MESURE_AVANT.json",
+   "avant": "  \"pan-sia\": {\n   \"mots_fr\": 80,\n",
+   "apres": "  \"pan-sia-x\": {\n   \"mots_fr\": 80,\n",
+   "regle": "test_MESURE_AVANT_couvre_chaque_page_de_PAGE_META"
+  },
+  {
+   "nom": "le gardien compte toute clé comme traduite : 100 % de couverture sans un mot d'anglais",
+   "fichier": "outils/sentinel_langue_couverture.py",
+   "avant": "            if cle in cible:\n",
+   "apres": "            if True:\n",
+   "regle": "test_la_couverture_est_en_MOTS_et_pas_en_cles"
+  },
+  {
+   "nom": "les attributs se cherchent dans le dictionnaire bloc : un title traduit compte pour manquant",
+   "fichier": "outils/sentinel_langue_couverture.py",
+   "avant": "'attr': 'texte'}",
+   "apres": "'attr': 'bloc'}",
+   "regle": "test_un_attribut_se_cherche_dans_le_dictionnaire_TEXTE"
+  },
+  {
+   "nom": "le catalogue et les mesures passent pour des dictionnaires : du français compte comme traduit",
+   "fichier": "outils/sentinel_langue_couverture.py",
+   "avant": "    if nom == 'CATALOGUE.json' or nom.startswith('MESURE_'):\n",
+   "apres": "    if False:\n",
+   "regle": "test_le_dossier_reel_ne_prend_ni_le_catalogue_ni_une_mesure_pour_un_dictionnaire"
+  },
+  {
+   "nom": "un seuil hors de [0, 1] est accepté",
+   "fichier": "outils/sentinel_langue_couverture.py",
+   "avant": "    if not (0.0 <= s <= 1.0):\n",
+   "apres": "    if False:\n",
+   "regle": "test_un_SEUIL_mal_ecrit_est_une_ERREUR_nommee[trop-grand]"
+  },
+  {
+   "nom": "un catalogue sans aucun régime passe pour vide, donc couvert à 100 %",
+   "fichier": "outils/sentinel_langue_couverture.py",
+   "avant": "    if not out:\n",
+   "apres": "    if False:\n",
+   "regle": "test_un_catalogue_de_forme_inconnue_est_une_ERREUR_nommee_et_pas_un_catalogue_vide[sans-regime]"
+  }
+ ]
+}
