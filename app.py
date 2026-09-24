@@ -6217,6 +6217,42 @@ def donnees_structurees():
     return resp
 
 
+import sentinel_i18n  # noqa: E402  — le dictionnaire anglais du corps de Sentinel
+
+
+@app.route('/sentinel.en.json')
+@rate_limit(limit=60, window=60)
+def sentinel_en_json():
+    """Le dictionnaire anglais du CORPS de Sentinel, en un seul JSON.
+
+    Le corps des pages ne porte aucune marque de traduction : le navigateur
+    retrouve chaque texte francais dans ce dictionnaire, par son contenu
+    normalise (sentinel.i18n.js). Les fichiers i18n/sentinel/*.json sont
+    fusionnes ici, relus quand l'un d'eux change ; une meme cle avec deux
+    valeurs est journalisee, la premiere gagne.
+
+    PUBLIC, UNE HEURE, AVEC ETAG : rien de personnel dedans, et le meme corps
+    pour tout le monde — un 304 sans octet a la revisite, plutot qu'un
+    re-telechargement a chaque bascule. Un dossier vide rend un dictionnaire
+    vide, pas une erreur : la coquille reste traduite et le corps en francais,
+    exactement l'etat d'avant."""
+    try:
+        corps, etag = sentinel_i18n.servir(journal=logger)
+    except Exception as e:  # noqa: BLE001
+        logger.error(f'SENTINEL_I18N_ERR: {e}')
+        corps, etag = '{"bloc":{},"texte":{}}', None
+    if etag and etag in (request.headers.get('If-None-Match') or ''):
+        r304 = Response(status=304)
+        r304.headers['ETag'] = etag
+        r304.headers['Cache-Control'] = 'public, max-age=3600'
+        return r304
+    resp = Response(corps, mimetype='application/json')
+    if etag:
+        resp.headers['ETag'] = etag
+    resp.headers['Cache-Control'] = 'public, max-age=3600'
+    return resp
+
+
 @app.route('/sitemap.xml')
 @rate_limit(limit=60, window=60)
 def sitemap_xml():
