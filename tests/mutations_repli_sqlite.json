@@ -1,0 +1,22 @@
+{
+ "_pourquoi": "Chaque mutation FABRIQUE un défaut réel et doit faire TOMBER la règle nommée. Une mutation qui survit dit que la règle ne mesure pas ce qu'elle prétend ; une mutation qui fait tomber une AUTRE règle dit que la règle nommée vise à côté.",
+ "cibles": [
+  "tests/test_repli_sqlite.py"
+ ],
+ "mutations": [
+  {
+   "nom": "le journal WAL de la base n'est plus ignoré",
+   "fichier": ".gitignore",
+   "avant": "registre_ia.db-wal\n",
+   "apres": "",
+   "regle": "test_les_compagnons_WAL_du_repli_sont_IGNORES[registre_ia.db-wal]"
+  },
+  {
+   "nom": "la mémoire partagée WAL de la base n'est plus ignorée",
+   "fichier": ".gitignore",
+   "avant": "registre_ia.db-shm\n",
+   "apres": "",
+   "regle": "test_les_compagnons_WAL_du_repli_sont_IGNORES[registre_ia.db-shm]"
+  }
+ ]
+}

@@ -12,6 +12,12 @@ uploads_cv/email_*.html
 __pycache__/
 *.pyc
 registre_ia.db
+# Ses deux compagnons du mode WAL (app.py, registre_get_db) : le journal et
+# la memoire partagee existent tant qu'une connexion est ouverte, et restent
+# apres un arret brutal ou une lecture seule. Ils recopient des pages de la
+# base : meme sort qu'elle, jamais dans le depot.
+registre_ia.db-wal
+registre_ia.db-shm
 
 # Le CLI Claude Code, posé par build.sh dans l image de deploiement.
 # 92 Mo de binaire tiers : il se reconstruit a chaque build, il ne se versionne pas.

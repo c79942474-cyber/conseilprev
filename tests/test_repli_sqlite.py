@@ -271,3 +271,25 @@ def test_le_fichier_de_repli_nest_pas_suivi_par_git():
     suivis = subprocess.check_output(
         ['git', '-C', ICI, 'ls-files'], text=True).split('\n')
     assert 'registre_ia.db' not in suivis
+
+
+@pytest.mark.parametrize("compagnon", ["registre_ia.db-wal", "registre_ia.db-shm"])
+def test_les_compagnons_WAL_du_repli_sont_IGNORES(compagnon):
+    """LE MODE WAL (registre_get_db) POSE DEUX FICHIERS À CÔTÉ DE LA BASE :
+    le journal `-wal` et la mémoire partagée `-shm`. Ils existent tant
+    qu'une connexion est ouverte, et restent après un arrêt brutal ou une
+    lecture seule. MESURÉ : après une recette, `git status` les montrait
+    comme fichiers nouveaux — prêts à partir dans un commit avec les pages
+    de données qu'ils recopient. Ignorés, comme la base.
+    La règle lit les motifs de .gitignore (elle vaut aussi dans une copie
+    sans dépôt, où tournent les batteries), et demande à git quand il est
+    là."""
+    import fnmatch
+    import subprocess
+    motifs = [l.strip() for l in io.open(os.path.join(ICI, '.gitignore'), encoding='utf-8')
+              if l.strip() and not l.lstrip().startswith('#')]
+    assert any(fnmatch.fnmatch(compagnon, m) for m in motifs), (
+        "%s n'est couvert par aucun motif de .gitignore" % compagnon)
+    if os.path.isdir(os.path.join(ICI, '.git')):
+        r = subprocess.run(['git', '-C', ICI, 'check-ignore', '-q', compagnon])
+        assert r.returncode == 0, "git ne l'ignore pas : %s" % compagnon
