@@ -3894,6 +3894,10 @@ em,.hero-em{
   color:#fff;letter-spacing:-.02em;line-height:1.15}
 .cpc-title em{font-style:italic}
 .cpc-sub{font-size:10px;color:rgba(255,255,255,.45);margin-top:5px;line-height:1.4}
+/* Le bouton « ? » (lot 3) : sa taille minimale et son contour de focus sont
+   posés par le script bulle-titre.js ; l'allure, sur l'en-tête sombre, ici. */
+.cpc-sub .aide-titre{display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;width:24px;height:24px;margin-left:6px;padding:0;border:1px solid rgba(255,255,255,.45);border-radius:50%;background:transparent;color:rgba(255,255,255,.85);font:700 11px/1 monospace;vertical-align:middle;cursor:pointer}
+.cpc-sub .aide-titre[aria-expanded="true"]{background:rgba(255,255,255,.14);color:#fff}
 .cpc-close{position:absolute;top:12px;right:14px;background:none;border:none;
   color:rgba(255,255,255,.4);font-size:20px;cursor:pointer;padding:4px 8px;
   border-radius:3px;line-height:1}
@@ -4182,28 +4186,26 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 <div id="nav-arrows" aria-label="Navigation sections" role="navigation">
   <button class="nav-arrow-btn" id="nav-haut"
     onclick="navBorne(0)"
-    aria-label="Haut de page"
+    aria-label="Haut de page" aria-keyshortcuts="Alt+Home"
     title="Haut de page (Alt + Origine)">
     ⤒
   </button>
   <button class="nav-arrow-btn" id="nav-up"
     onclick="navSection(-1)"
-    aria-label="Section précédente"
-    data-tooltip="Section précédente"
-    title="Section précédente (Alt + flèche haut)">
+    aria-label="Section précédente" aria-keyshortcuts="Alt+ArrowUp"
+    data-tooltip="Section précédente (Alt + flèche haut)">
     ▲
   </button>
   <div id="nav-section-dots" role="tablist" aria-label="Sections de la page"></div>
   <button class="nav-arrow-btn" id="nav-down"
     onclick="navSection(1)"
-    aria-label="Section suivante"
-    data-tooltip="Section suivante"
-    title="Section suivante (Alt + flèche bas)">
+    aria-label="Section suivante" aria-keyshortcuts="Alt+ArrowDown"
+    data-tooltip="Section suivante (Alt + flèche bas)">
     ▼
   </button>
   <button class="nav-arrow-btn" id="nav-bas"
     onclick="navBorne(1)"
-    aria-label="Bas de page"
+    aria-label="Bas de page" aria-keyshortcuts="Alt+End"
     title="Bas de page (Alt + Fin)">
     ⤓
   </button>
@@ -4296,15 +4298,15 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
   </ul>
   <div style="display:flex;align-items:center;gap:12px">
     <div class="lsw">
-      <button class="lbtn on" data-lang="fr" onclick="setLang('fr')">FR</button>
-      <button class="lbtn" data-lang="en" onclick="setLang('en')">EN</button>
-      <button class="lbtn" data-lang="de" onclick="setLang('de')">DE</button>
+      <button class="lbtn on" data-lang="fr" onclick="setLang('fr')" aria-label="FR — français">FR</button>
+      <button class="lbtn" data-lang="en" onclick="setLang('en')" aria-label="EN — English">EN</button>
+      <button class="lbtn" data-lang="de" onclick="setLang('de')" aria-label="DE — Deutsch">DE</button>
     </div>
     <a href="/sentinel" target="_blank" rel="noopener" class="nav-sentinel-btn" style="font-size:11px;font-family:'Space Mono',monospace;letter-spacing:.06em;padding:7px 14px;border-radius:7px;border:1px solid rgba(196,181,232,.35);color:rgba(240,236,255,.92);text-decoration:none;font-weight:600;transition:all .18s;white-space:nowrap;background:rgba(109,40,217,.18);" onmouseover="this.style.background='rgba(109,40,217,.5)';this.style.transform='translateY(-1px) scale(1.04)';this.style.color='#fff';this.style.borderColor='rgba(196,181,232,.8)';this.style.boxShadow='0 0 16px rgba(109,40,217,.5)'" onmouseout="this.style.background='rgba(109,40,217,.18)';this.style.transform='';this.style.color='rgba(240,236,255,.92)';this.style.borderColor='rgba(196,181,232,.35)';this.style.boxShadow=''">✦ Sentinel AI</a>
     <a href="/empreinte" class="nl2" data-tooltip="Empreinte numérique : méthodologie, sources ouvertes et compteurs en direct" style="color:rgba(240,236,255,.92);text-decoration:none;font-weight:600;font-size:13px;padding:6px 10px;white-space:nowrap">Empreinte</a>
     <a href="/formations" class="nl2" data-tooltip="Catalogue de 10 formations : IA Act, RGPD, ISO 42001" style="color:rgba(240,236,255,.92);text-decoration:none;font-weight:600;font-size:13px;padding:6px 10px;white-space:nowrap">Formations</a>
     <a href="#contact" class="ncta" data-tooltip="Soumettre votre projet IA & Cyber" data-i18n="nav.contact2">Contact</a>
-    <button type="button" id="cp-nav-down" class="cp-arrow-btn" onclick="cpScrollBottom()" aria-label="Aller en bas de la page" data-tooltip="Aller directement en bas de la page" title="Aller en bas de la page">&#8595;</button>
+    <button type="button" id="cp-nav-down" class="cp-arrow-btn" onclick="cpScrollBottom()" aria-label="Aller en bas de la page" data-tooltip="Aller directement en bas de la page">&#8595;</button>
   </div>
 </nav>
 
@@ -5129,14 +5131,14 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 
 
 
-<button id="btt" data-tooltip="Retour en haut de page" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Retour en haut">↑</button>
+<button id="btt" data-tooltip="Retour en haut de page" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Retour en haut">↑</button>
 
 
 
 <!-- ═══ SYSTÈME COOKIES RGPD ═══ -->
 
 <!-- Bouton flottant paramètres cookies -->
-<button id="ck-btn" data-tooltip="Gérer mes préférences cookies (RGPD)" onclick="ckOpenModal()" aria-label="Paramètres des cookies" title="Gérer mes préférences cookies">
+<button id="ck-btn" data-tooltip="Gérer mes préférences cookies (RGPD)" onclick="ckOpenModal()" aria-label="Paramètres des cookies">
   <span id="ck-btn-dot" class="refused"></span>
   🍪 Cookies
 </button>
@@ -5276,21 +5278,18 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 <div class="acc-float-bar" role="group" aria-label="Options d'accessibilité">
   <button id="acc-reading-btn" data-tooltip="Activer le mode lecture (espacement optimisé)" class="acc-float-btn"
     onclick="accToggle('reading')"
-    title="Mode lecture"
     aria-label="Activer le mode lecture"
     aria-pressed="false">
     📖
   </button>
   <button id="acc-dyslexia-btn" data-tooltip="Activer la police dyslexie (OpenDyslexic)" class="acc-float-btn"
     onclick="accToggle('dyslexia')"
-    title="Mode dyslexie"
     aria-label="Activer le mode dyslexie"
     aria-pressed="false">
     𝔸
   </button>
   <button id="acc-contrast-btn" data-tooltip="Activer le contraste élevé (accessibilité visuelle)" class="acc-float-btn"
     onclick="accToggle('contrast')"
-    title="Contraste élevé"
     aria-label="Activer le contraste élevé"
     aria-pressed="false">
     👁
@@ -5298,7 +5297,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 </div>
 
 <!-- WIDGET VEILLE IA -->
-<button id="vbtn" data-tooltip="Actualités IA en direct — 9 sources RSS" onclick="vOpen()" title="Veille IA · Actualités en direct">
+<button id="vbtn" data-tooltip="Actualités IA en direct — 9 sources RSS" onclick="vOpen()" aria-label="Veille IA · Actualités en direct">
   📰<span class="vbtn-live"></span>
 </button>
 
@@ -5311,8 +5310,8 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     </div>
     <div id="vhead-acts">
       <div id="vlive-badge"><div id="vlive-dot"></div>Live</div>
-      <button class="cpx-expand-btn" onclick="cpxExpandToggle('vbox')" title="Agrandir pour une meilleure lecture">⤢</button><button onclick="vRefresh()" title="Rafraîchir">↻</button>
-      <button onclick="vOpen()" title="Fermer">✕</button>
+      <button class="cpx-expand-btn" onclick="cpxExpandToggle('vbox')" title="Agrandir pour une meilleure lecture" aria-label="Agrandir pour une meilleure lecture">⤢</button><button onclick="vRefresh()" title="Rafraîchir" aria-label="Rafraîchir">↻</button>
+      <button onclick="vOpen()" title="Fermer la veille" aria-label="Fermer la veille">✕</button>
     </div>
   </div>
   <div id="vfilters">
@@ -5328,9 +5327,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <span class="vl-lbl">LANGUE :</span>
     <button class="vl-btn on" data-lang="all" onclick="vLang(this,'all')">ALL</button>
     <span class="vl-sep">|</span>
-    <button class="vl-btn" data-lang="fr" onclick="vLang(this,'fr')">🇫🇷 FR</button>
+    <button class="vl-btn" data-lang="fr" onclick="vLang(this,'fr')" aria-label="FR — actualités en français">🇫🇷 FR</button>
     <span class="vl-sep">|</span>
-    <button class="vl-btn" data-lang="en" onclick="vLang(this,'en')">🇬🇧 EN</button>
+    <button class="vl-btn" data-lang="en" onclick="vLang(this,'en')" aria-label="EN — actualités en anglais">🇬🇧 EN</button>
   </div>
   <div id="vloading"><div class="vspinner"></div>Chargement des actualités…</div>
   <div id="vitems"></div>
@@ -5340,12 +5339,12 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
   </div>
 </div>
 
-<button id="xbtn" data-tooltip="Chat IA — Expert conformité CONSEILPREV (Mistral)" onclick="xOpen()">💬</button>
+<button id="xbtn" data-tooltip="Chat IA — Expert conformité CONSEILPREV (Mistral)" onclick="xOpen()" aria-label="Chat IA — Expert conformité">💬</button>
 <div id="xbox">
   <div id="xhead">
     <div style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;flex-shrink:0;font-family:Space Mono,monospace">AI</div>
     <div><h4 data-i18n="ch.ttl">Expert CONSEILPREV</h4><p data-i18n="ch.sub">Mistral AI · Conformité · Cyber</p></div>
-    <button id="xcls" onclick="xOpen()">✕</button>
+    <button id="xcls" onclick="xOpen()" aria-label="Fermer le chat">✕</button>
   </div>
   <div id="xmsgs"></div>
   <div id="xsugg">
@@ -5356,7 +5355,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
   </div>
   <div id="xfot">
     <textarea id="xinp" rows="1" placeholder="Posez votre question…"></textarea>
-    <button id="xsnd" onclick="xSend()">➤</button>
+    <button id="xsnd" onclick="xSend()" aria-label="Envoyer">➤</button>
   </div>
 </div>
 
@@ -5383,10 +5382,10 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
         </a>
         <p class="ft-desc" data-i18n="ft.brand">Business Unit IA · Data · Cyber<br>Connecteur MCP data.gouv.fr · Paris 2025</p>
         <div class="ft-socials">
-          <a href="https://www.linkedin.com/company/conseilprev" target="_blank" rel="noopener" class="ft-social" title="LinkedIn">in</a>
-          <a href="https://i-aes.com" target="_blank" rel="noopener" class="ft-social" title="i-aes.com">🌐</a>
-          <a href="/sentinel" target="_blank" rel="noopener" class="ft-social ft-social-aies" title="Sentinel AI Platform">AI</a>
-          <a href="mailto:christophe.cerf@outlook.com" class="ft-social" title="Email">✉</a>
+          <a href="https://www.linkedin.com/company/conseilprev" target="_blank" rel="noopener" class="ft-social" title="LinkedIn" aria-label="LinkedIn">in</a>
+          <a href="https://i-aes.com" target="_blank" rel="noopener" class="ft-social" title="i-aes.com" aria-label="i-aes.com">🌐</a>
+          <a href="/sentinel" target="_blank" rel="noopener" class="ft-social ft-social-aies" title="Sentinel AI Platform" aria-label="Sentinel AI Platform">AI</a>
+          <a href="mailto:christophe.cerf@outlook.com" class="ft-social" title="Email" aria-label="Email">✉</a>
         </div>
         <div class="ft-badge-aies">
           <span class="fba-dot">◎</span>
@@ -5515,7 +5514,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <div class="ft-bar">
       <span>© 2025 <strong>CONSEILPREV</strong> · ERSIA IA MANAGEMENT · <a href="https://i-aes.com" target="_blank" rel="noopener" style="color:var(--teal);text-decoration:none">i-aes.com</a> · <a href="/sentinel" target="_blank" rel="noopener" style="color:var(--pl);text-decoration:none">Sentinel AI</a></span>
       <span data-i18n="ft.tag">MCP · DATA.GOUV.FR · PARIS</span>
-      <button type="button" id="cp-ft-top" class="cp-arrow-btn" onclick="cpScrollTop()" aria-label="Retour en haut de la page" data-tooltip="Retour rapide en haut de la page" title="Retour en haut de la page">&#8593;</button>
+      <button type="button" id="cp-ft-top" class="cp-arrow-btn" onclick="cpScrollTop()" aria-label="Retour en haut de la page" data-tooltip="Retour rapide en haut de la page">&#8593;</button>
     </div>
 
   </div>
@@ -5527,10 +5526,12 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 </button>
 <div id="cpcPanel">
   <div class="cpc-head">
-    <button class="cpx-expand-btn" onclick="cpxExpandToggle('cpcPanel')" title="Agrandir pour une meilleure lecture" style="position:absolute;top:14px;right:42px">⤢</button><button class="cpc-close" onclick="cpcToggle()" title="Fermer l'assistant réglementaire">×</button>
+    <button class="cpx-expand-btn" onclick="cpxExpandToggle('cpcPanel')" title="Agrandir pour une meilleure lecture" aria-label="Agrandir pour une meilleure lecture" style="position:absolute;top:14px;right:42px">⤢</button><button class="cpc-close" onclick="cpcToggle()" title="Fermer l'assistant réglementaire" aria-label="Fermer l'assistant réglementaire">×</button>
     <div class="cpc-eyebrow">Chat Conformité</div>
     <div class="cpc-title">Assistant <em>réglementaire</em></div>
-    <div class="cpc-sub" title="Réponses fondées sur les textes officiels (EUR-Lex), double vérification croisée Claude + Mistral pour limiter les erreurs factuelles">EU AI Act · NIS2 · RGPD — fondé sur les textes officiels</div>
+    <!-- LA MÉTHODE DES RÉPONSES DANS UN BOUTON « ? », plus dans un `title` que
+         seule une souris posée lisait (ni le clavier, ni le doigt). -->
+    <div class="cpc-sub">EU AI Act · NIS2 · RGPD — fondé sur les textes officiels<button type="button" class="aide-titre" aria-label="Aide : méthode des réponses" aria-expanded="false" aria-describedby="aide-cpc-methode">?</button><span id="aide-cpc-methode" hidden>Réponses fondées sur les textes officiels (EUR-Lex), double vérification croisée Claude + Mistral pour limiter les erreurs factuelles</span></div>
     <div style="font-size:10px;font-family:var(--mono);color:rgba(255,255,255,.82);background:rgba(255,255,255,.07);border-top:1px solid rgba(255,255,255,.12);padding:6px 20px;letter-spacing:.03em">🤖 Vous interagissez avec une IA — <a href="https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:2px" title="Texte officiel Art. 50 sur EUR-Lex">Art. 50 Règl. (UE) 2024/1689</a></div>
   </div>
   <div class="cpc-tags" id="cpcTags"></div>

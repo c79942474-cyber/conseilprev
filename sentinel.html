@@ -1137,7 +1137,7 @@ textarea.form-el{min-height:86px;resize:vertical}
   background:var(--bg);border:1px solid var(--rule2);border-radius:20px;padding:4px 10px;
   color:var(--ink2);font-weight:500}
 .cj-tag-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.cj-tag-rm{cursor:pointer;color:var(--muted2);font-size:13px;line-height:1;margin-left:2px}
+.cj-tag-rm{cursor:pointer;color:var(--muted2);font-size:13px;line-height:1;margin-left:2px;background:none;border:0;padding:0 2px;font-family:inherit}
 .cj-tag-rm:hover{color:var(--accent)}
 .cj-add{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-family:var(--mono);
   background:transparent;border:1px dashed var(--rule2);border-radius:20px;padding:4px 12px;
@@ -1946,8 +1946,25 @@ textarea.form-el{min-height:86px;resize:vertical}
 .reg-empty a{color:var(--accent)}
 .reg-sys-row{display:grid;grid-template-columns:28px 1fr 100px 100px 100px 60px 20px;padding:12px 20px;align-items:center;border-bottom:1px solid var(--rule);cursor:pointer;transition:background .12s}
 .reg-sys-row:hover{background:var(--bg)}
-.rs-del{font-size:16px;color:var(--rule2);text-align:center;cursor:pointer;transition:color .12s}
+.rs-del{font-size:16px;color:var(--rule2);text-align:center;cursor:pointer;transition:color .12s;background:none;border:0;padding:0;font-family:inherit;line-height:1}
 .rs-del:hover{color:var(--accent)}
+/* ── CE QU'UN `title` DISAIT, LU PAR TOUS (lot 3) ─────────────────────────
+   · .legende-badges : la légende d'une pastille répétée, une fois par écran ;
+   · .aide-titre : le bouton « ? » d'un bloc dont l'explication compte — la
+     taille minimale et le contour de focus sont posés par le script bulle-titre.js,
+     l'allure ici ;
+   · .aide-champ : l'aide d'un champ, visible sous lui, reliée par
+     aria-describedby — elle vivait dans un `title` qu'aucun clavier virtuel
+     ne laisse lire ;
+   · .suppr-x : le « × » devenu un vrai bouton, sans l'allure d'un bouton ;
+   · .gb-avert : l'avertissement du bandeau de parcours, visible. */
+.legende-badges{font-size:11.5px;line-height:1.5;color:var(--muted);margin:0 0 12px}
+.legende-badges b{color:var(--ink2,var(--ink));font-weight:700}
+.aide-titre{display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;width:24px;height:24px;margin:0 0 0 4px;padding:0;border:1px solid var(--rule2);border-radius:50%;background:var(--white,#fff);color:var(--muted);font:700 11px/1 var(--mono,monospace);letter-spacing:0;text-transform:none;vertical-align:middle;cursor:pointer}
+.aide-titre:hover,.aide-titre[aria-expanded="true"]{border-color:var(--ink);color:var(--ink)}
+.aide-champ{display:block;flex-basis:100%;font-size:10.5px;line-height:1.4;color:var(--muted);margin-top:3px}
+.suppr-x{background:none;border:0;font-family:inherit;line-height:1}
+.gb-avert{font-size:10.5px;color:var(--muted);align-self:center;max-width:260px;line-height:1.35}
 .reg-form{display:flex;flex-direction:column;gap:14px}
 .reg-form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .reg-form-section-title{font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.06em;margin:18px 0 4px;padding-top:14px;border-top:1px solid var(--rule)}
@@ -2941,6 +2958,7 @@ textarea.form-el{min-height:86px;resize:vertical}
 .guided-banner .gb-next:hover{filter:brightness(1.06)}
 .guided-banner .gb-close{background:transparent;border:none;color:rgba(255,255,255,.7);font-size:20px;line-height:1;cursor:pointer;padding:2px 6px}
 .guided-banner .gb-close:hover{color:var(--white)}
+.guided-banner .gb-avert{color:rgba(255,255,255,.85)}
 @media(max-width:640px){.guided-banner .gb-btn{max-width:150px}}
 
 /* ══ INDICATEUR CLIGNOTANT PARCOURS EN COURS ══ */
@@ -3458,14 +3476,18 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <!-- LA BASCULE EST EN HAUT DU MENU, ET PAS DANS UN RÉGLAGE. Un visiteur
          anglophone qui doit d'abord trouver un menu de préférences pour
          comprendre le menu ne le trouvera pas : le choix se présente là où
-         le regard arrive, avant toute lecture. -->
+         le regard arrive, avant toute lecture.
+         LE `title` ÉGALE LE NOM. Il disait « Afficher Sentinel en français »
+         pour un nom « FR — français » : la bulle des `title` s'ouvrait donc
+         à chaque tabulation, pour redire autrement la même chose
+         (mesuré, revue du lot 3). Le nom dit l'action ; la bulle se tait. -->
     <div class="sb-lang" role="group" aria-label="Langue / Language">
       <button type="button" class="sb-lbtn on" data-lang="fr"
-              onclick="sentSetLang('fr')" aria-pressed="true"
-              title="Afficher Sentinel en français">FR</button>
+              onclick="sentSetLang('fr')" aria-pressed="true" aria-label="FR — afficher Sentinel en français"
+              title="FR — afficher Sentinel en français">FR</button>
       <button type="button" class="sb-lbtn" data-lang="en"
-              onclick="sentSetLang('en')" aria-pressed="false"
-              title="Display Sentinel in English">EN</button>
+              onclick="sentSetLang('en')" aria-pressed="false" aria-label="EN — display Sentinel in English"
+              title="EN — display Sentinel in English">EN</button>
     </div>
   </div>
   <!-- Les parcours vivaient derrière un bouton et une fenêtre : un
@@ -3479,9 +3501,13 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
   <div class="sb-guided-wrap">
     <label class="sb-guided-lab" for="sb-role">
       <span aria-hidden="true">🧭</span> Parcours guidés — votre rôle</label>
+    <!-- L'AIDE DU CHAMP EST ÉCRITE SOUS LUI, plus dans un `title` : sur un
+         <select>, le `title` ne se lit qu'à la souris posée — jamais au
+         doigt (le sélecteur natif recouvre tout), jamais au clavier. -->
     <select id="sb-role" class="sb-guided-select"
             onchange="sbRoleChoisi(this.value)"
-            title="Un chemin de lecture par métier — gouvernance, RGPD, centres de données : le parcours enchaîne les pages dans l’ordre qui vous concerne."></select>
+            aria-describedby="aide-sb-role"></select>
+    <small class="aide-champ" id="aide-sb-role">Un chemin de lecture par métier — gouvernance, RGPD, centres de données : le parcours enchaîne les pages dans l’ordre qui vous concerne.</small>
     <button class="sb-guided-mp" onclick="monParcoursBuilder()"
             title="Composer votre propre parcours à partir de vos cas d’usage, jusqu’au coût et à l’enveloppe RaaS.">
       Créer mon parcours chiffré</button>
@@ -3748,8 +3774,8 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <div class="sb-item" data-grp="compte" role="button" tabindex="0" id="sb-compte" onclick="go('compte',this,'COMPTE','Connexion et session')" title="Qui est connecte, sous quelle offre, et comment se connecter ou se deconnecter."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg></span><span data-i18n="nav.item.compte">Connexion &amp; session</span></div>
   </nav>
   <div class="sb-pager">
-    <button class="sb-pager-btn" onclick="pagerGo(-1)" title="Section precedente">‹</button>
-    <button class="sb-pager-btn" onclick="pagerGo(1)" title="Section suivante">›</button>
+    <button type="button" class="sb-pager-btn" onclick="pagerGo(-1)" aria-label="Section précédente" title="Section précédente">‹</button>
+    <button type="button" class="sb-pager-btn" onclick="pagerGo(1)" aria-label="Section suivante" title="Section suivante">›</button>
     <div class="sb-bell" id="sb-bell-el" onclick="bellToggleMenu()">🔔<span class="sb-bell-badge" id="sb-bell-badge"></span></div>
   </div>
   <div class="sb-edition" id="sb-edition-el">Édition</div>
@@ -4281,7 +4307,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <div class="geo-modal">
       <div class="geo-modal-head">
         <span class="geo-modal-title">Gérer les juridictions à surveiller</span>
-        <button class="geo-modal-close" onclick="geoClosePicker()">×</button>
+        <button type="button" class="geo-modal-close" aria-label="Fermer" onclick="geoClosePicker()">×</button>
       </div>
       <div class="geo-modal-body" id="geo-picker-list"></div>
     </div>
@@ -4387,9 +4413,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <span class="vl-lbl">LANGUE :</span>
     <button class="vl-btn on" data-lang="all" onclick="veilleLang(this,'all')" title="Afficher les actualites dans toutes les langues.">ALL</button>
     <span class="vl-sep">|</span>
-    <button class="vl-btn" data-lang="fr" onclick="veilleLang(this,'fr')" title="Filtrer les actualites en francais uniquement.">🇫🇷 FR</button>
+    <button class="vl-btn" data-lang="fr" onclick="veilleLang(this,'fr')" aria-label="FR — filtrer les actualités en français" title="FR — filtrer les actualités en français">🇫🇷 FR</button>
     <span class="vl-sep">|</span>
-    <button class="vl-btn" data-lang="en" onclick="veilleLang(this,'en')" title="Filtrer les actualites en anglais uniquement.">🇬🇧 EN</button>
+    <button class="vl-btn" data-lang="en" onclick="veilleLang(this,'en')" aria-label="EN — filtrer les actualités en anglais" title="EN — filtrer les actualités en anglais">🇬🇧 EN</button>
   </div>
 
   <div id="veille-panel-qual">
@@ -4638,14 +4664,18 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 
   <div class="reg-toolbar">
     <button class="mat-export-btn" style="background:var(--ink);color:#fff" id="qualif-btn-proposer" onclick="qualifProposer()" title="Demande une proposition pour les systemes du registre qui n ont pas encore de classification.">⚙️ Proposer pour les systèmes non classés</button>
-    <select class="reg-input" id="qualif-filtre" style="max-width:220px" onchange="qualifCharger()" title="Choisir les propositions affichees.">
+    <!-- DEUX CHAMPS SANS NOM : le `title` en tenait lieu, à la souris
+         seulement. Le premier reçoit un nom (le `title` le répétait, il est
+         retiré) ; le second un nom ET son aide, visible et reliée. -->
+    <select class="reg-input" id="qualif-filtre" style="max-width:220px" onchange="qualifCharger()" aria-label="Choisir les propositions affichées">
       <option value="en_attente">En attente de décision</option>
       <option value="validee">Validées</option>
       <option value="ecartee">Écartées</option>
       <option value="toutes">Toutes</option>
     </select>
-    <input type="text" id="qualif-decideur" class="reg-input" style="max-width:280px" placeholder="Votre nom et votre rôle (ex. C. Cerf — DPO)" title="Le nom inscrit au registre a cote de la decision.">
+    <input type="text" id="qualif-decideur" class="reg-input" style="max-width:280px" placeholder="Votre nom et votre rôle (ex. C. Cerf — DPO)" aria-label="Décideur" aria-describedby="aide-qualif-decideur">
   </div>
+  <small class="aide-champ" id="aide-qualif-decideur" style="margin:-10px 0 14px">Décideur : le nom inscrit au registre à côté de la décision.</small>
 
   <div class="tbl-wrap"><div class="tbl-head"><span class="tbl-title" id="qualif-compte">Chargement…</span></div>
   <div id="qualif-liste" style="padding:4px 0"></div></div>
@@ -4708,6 +4738,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
   <span class="eyebrow">Analyse</span><h1 class="page-h">Benchmark <em>sectoriel</em></h1><p class="page-lead">Comparez le taux de conformité réel de vos systèmes (Registre IA) avec le score de maturité moyen calculé pour chaque secteur.</p>
   <div class="col12" style="margin-bottom:24px"><div class="kpi"><div class="kpi-lbl">Votre score moyen</div><div class="kpi-val" id="bench-top-you" style="color:var(--accent)">—</div><div class="kpi-tr" id="bench-top-you-tr"></div></div><div class="kpi"><div class="kpi-lbl" id="bench-top-sector-lbl">Moyenne secteur</div><div class="kpi-val" id="bench-top-avg">—</div><div class="kpi-tr" id="bench-top-avg-tr"></div></div></div>
   <div class="tbl-wrap"><div class="tbl-head"><span class="tbl-title">Scores par secteur</span><span class="tbl-link">↓ Rapport complet</span></div><div class="comp-head-row" style="display:grid;grid-template-columns:1fr 60px 160px 60px;padding:9px 20px;background:var(--bg);border-bottom:2px solid var(--rule)"><div class="comp-cell">Secteur</div><div class="comp-cell">Score</div><div class="comp-cell">Répartition</div><div class="comp-cell">vs. vous</div></div><div id="bench-list"></div></div>
+  <!-- LE TIRET SE LIT SOUS LE TABLEAU, pas seulement dans un `title` : treize
+       « — » dont le sens ne s'ouvrait qu'à la souris posée. -->
+  <p class="legende-badges" data-legende="bench-na"><b>—</b> : socle non relevé pour ce secteur, aucune référence à comparer.</p>
 </div>
 
 <!-- TEMPLATES -->
@@ -5118,7 +5151,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
   <div id="histo-rgpd-info" class="radar-registre-info radar-registre-ok" style="margin-bottom:20px">Chargement…</div>
 
   <div class="reg-toolbar">
-    <select id="histo-filter-select" class="reg-input" style="max-width:260px" onchange="histoRenderPage()" title="Filtrer l historique par outil d origine">
+    <select id="histo-filter-select" class="reg-input" style="max-width:260px" onchange="histoRenderPage()" aria-label="Filtrer l’historique par outil d’origine">
       <option value="">— Toutes les pages —</option>
       <option value="simulateur">Simulateur IA Act</option>
       <option value="sanctions">Calculateur sanctions</option>
@@ -5139,11 +5172,13 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 
   <div class="tbl-wrap" style="padding:24px;margin-bottom:24px">
     <div class="tbl-head" style="border:none;padding:0 0 16px"><span class="tbl-title">Importer un document</span></div>
-    <div id="rag-drop-zone" class="rag-drop-zone" ondrop="ragHandleDrop(event)" ondragover="event.preventDefault()" ondragenter="this.classList.add('rag-drop-active')" ondragleave="this.classList.remove('rag-drop-active')" title="Glissez-deposez un fichier ou cliquez pour parcourir">
+    <div id="rag-drop-zone" class="rag-drop-zone" ondrop="ragHandleDrop(event)" ondragover="event.preventDefault()" ondragenter="this.classList.add('rag-drop-active')" ondragleave="this.classList.remove('rag-drop-active')">
       <input type="file" id="rag-file-input" accept=".pdf,.docx,.xlsx,.xlsm,.txt,.md,.csv,.log,.json,.yaml,.yml" style="display:none" onchange="ragHandleFileSelect(this.files)">
       <div onclick="document.getElementById('rag-file-input').click()" style="cursor:pointer" title="Cliquez pour selectionner un fichier (PDF, Word, Excel, texte, Markdown, CSV, JSON, YAML, journal)">
         <div style="font-size:28px;margin-bottom:8px">📎</div>
-        <div style="font-size:13px;font-weight:600">Cliquez ou déposez un fichier ici</div>
+        <!-- CE QUE LE `title` DE LA ZONE DISAIT EST ÉCRIT ICI : il répétait ce
+             texte, à la souris seulement ; il est retiré. -->
+        <div style="font-size:13px;font-weight:600">Glissez-déposez un fichier ici, ou cliquez pour parcourir</div>
         <div style="font-size:11px;color:var(--muted);margin-top:4px">PDF, Word, Excel, texte, Markdown, CSV, JSON, YAML, journal — 30 Mo maximum</div>
       </div>
     </div>
@@ -5168,7 +5203,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
   </div>
 
   <div class="reg-toolbar">
-    <select id="rag-filter-select" class="reg-input" style="max-width:260px" onchange="ragRenderList()" title="Filtrer les documents par page enrichie">
+    <select id="rag-filter-select" class="reg-input" style="max-width:260px" onchange="ragRenderList()" aria-label="Filtrer les documents par page enrichie">
       <option value="">— Tous les documents —</option>
       <option value="audit">Audit IA Act</option>
       <option value="registre">Registre IA</option>
@@ -6441,7 +6476,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
       <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Filiales, entités et périmètres d'un groupe, pilotés depuis un espace unique. Enregistrez ici les entités couvertes par votre déploiement.</div>
       <div id="ent-entites"></div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
-        <input id="ent-ent-name" title="Nom de la filiale, du site ou du périmètre" placeholder="Nom de l'entité" style="flex:1;min-width:120px;font-size:12px;padding:6px 8px;border:1px solid var(--rule2);border-radius:4px">
+        <input id="ent-ent-name" aria-label="Nom de la filiale, du site ou du périmètre" placeholder="Nom de l'entité" style="flex:1;min-width:120px;font-size:12px;padding:6px 8px;border:1px solid var(--rule2);border-radius:4px">
         <select id="ent-ent-type" style="font-size:12px;padding:6px 8px;border:1px solid var(--rule2);border-radius:4px"><option>Filiale</option><option>Groupe</option><option>Périmètre</option><option>Site</option></select>
         <button class="mat-export-btn" title="Enregistrer cette entité (côté serveur)" onclick="entAddEntite()">Ajouter</button>
       </div>
@@ -6456,9 +6491,12 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
         <input id="conn-nom" placeholder="Nom (ex. ServiceNow)" style="flex:1;min-width:110px;font-size:12px;padding:6px 8px;border:1px solid var(--rule2);border-radius:4px">
       </div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">
-        <input id="conn-url" title="URL HTTPS de l'API de l'outil à connecter" placeholder="URL de l'API (https://...)" style="flex:1;min-width:150px;font-size:12px;padding:6px 8px;border:1px solid var(--rule2);border-radius:4px">
-        <input id="conn-sec" title="Jeton Bearer, transmis mais jamais réaffiché" placeholder="Jeton (optionnel)" style="font-size:12px;padding:6px 8px;border:1px solid var(--rule2);border-radius:4px">
+        <input id="conn-url" aria-label="URL HTTPS de l'API de l'outil à connecter" placeholder="URL de l'API (https://...)" style="flex:1;min-width:150px;font-size:12px;padding:6px 8px;border:1px solid var(--rule2);border-radius:4px">
+        <input id="conn-sec" aria-label="Jeton Bearer (optionnel)" aria-describedby="aide-conn-sec" placeholder="Jeton (optionnel)" style="font-size:12px;padding:6px 8px;border:1px solid var(--rule2);border-radius:4px">
         <button class="mat-export-btn" title="Déclarer ce connecteur" onclick="connAdd()">Ajouter</button>
+        <!-- Ce que le `title` du jeton disait, écrit sous la ligne : c'est ce
+             qu'on veut savoir AVANT de coller un secret. -->
+        <small class="aide-champ" id="aide-conn-sec">Jeton Bearer, transmis mais jamais réaffiché.</small>
       </div>
       <div id="conn-msg" style="font-size:11px;color:var(--accent);margin-top:4px"></div>
       <div style="font-size:11px;color:var(--muted);margin-top:6px">Le test de connexion vérifie l'accès réel à l'API configurée (HTTPS).</div>
@@ -6483,7 +6521,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
       <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Deux sessions de formation par an, dispensées sur votre site.</div>
       <div id="form-list"></div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
-        <input id="form-date" type="date" title="Date prévue de la session" style="font-size:12px;padding:6px 8px;border:1px solid var(--rule2);border-radius:4px">
+        <input id="form-date" type="date" aria-label="Date prévue de la session" style="font-size:12px;padding:6px 8px;border:1px solid var(--rule2);border-radius:4px">
         <input id="form-theme" placeholder="Thème de la session" style="flex:1;min-width:120px;font-size:12px;padding:6px 8px;border:1px solid var(--rule2);border-radius:4px">
         <button class="mat-export-btn" title="Planifier cette session (côté serveur)" onclick="formAdd()">Planifier</button>
       </div>
@@ -6736,7 +6774,10 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
       <label style="font-size:10.5px;color:var(--muted);display:inline-flex;align-items:center;gap:5px;cursor:pointer" title="Re-mesure automatiquement toutes les 30 secondes tant que cette page est ouverte"><input type="checkbox" id="ia50-auto" checked onchange="ia50AutoToggle()"> Temps réel</label>
     </div>
     <div style="font-size:11px;color:var(--muted);margin-bottom:8px">Les mentions d'IA, le bandeau « AI GENERATED » et le marquage des documents sont mesurés sur les fichiers servis et sur un document généré à l'instant — jamais déclarés. Ce qui n'est pas mesurable par une machine (l'examen humain de l'art. 50.4) est rendu comme attestation, pas converti en vert.</div>
-    <div id="ia50-mesures" style="font-size:12px">Mesure en cours…</div>
+    <!-- LA PREUVE DE CHAQUE MESURE EST ÉCRITE ICI, EN TOUTES LETTRES : c'est la
+         légende des mentions « mesuré ✓ » du registre plus bas, dont le `title`
+         n'en est qu'un rappel pour la souris (data-legende). -->
+    <div id="ia50-mesures" data-legende="ia50-preuve" style="font-size:12px">Mesure en cours…</div>
   </div>
 
   <!-- LE CADRE, AVANT LE REGISTRE. Le registre dit ce que la maison FAIT ; il ne
@@ -6756,7 +6797,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 
   <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white);margin-bottom:16px">
     <div class="rgpd-h" style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">Registre des usages d'IA (art. 50)</div>
-    <div style="font-size:11.5px;color:var(--muted);margin-bottom:8px">Cochez « Conforme » lorsque la mesure est effectivement en place et vérifiée. La colonne <strong>Dû</strong> est calculée depuis le cadre ci-dessus à partir du rôle déclaré : le fournisseur doit l'information d'interaction (50.1) et le marquage lisible par machine (50.2) ; le déployeur doit l'information sur la reconnaissance des émotions (50.3) et le signalement des hypertrucages et textes d'intérêt public (50.4). Ce que la ligne porte au-delà est un engagement, pas une obligation — et le dire est ce qui donne sa valeur au marquage là où il est dû.</div>
+    <!-- LA LÉGENDE DE LA COLONNE « DÛ » : ce que le `title` de chaque case
+         disait, écrit une fois au-dessus du tableau (data-legende). -->
+    <div data-legende="ia50-du" style="font-size:11.5px;color:var(--muted);margin-bottom:8px">Cochez « Conforme » lorsque la mesure est effectivement en place et vérifiée. La colonne <strong>Dû</strong> est calculée depuis le cadre ci-dessus à partir du rôle déclaré : le fournisseur doit l'information d'interaction (50.1) et le marquage lisible par machine (50.2) ; le déployeur doit l'information sur la reconnaissance des émotions (50.3) et le signalement des hypertrucages et textes d'intérêt public (50.4). Ce que la ligne porte au-delà est un engagement, pas une obligation — et le dire est ce qui donne sa valeur au marquage là où il est dû. <strong>Rôle inconnu</strong> : rôle inconnu du cadre, aucun paragraphe ne peut lui être rattaché.</div>
     <div id="ia50-liste" style="overflow-x:auto">Chargement…</div>
     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
       <input id="ia50-sys" placeholder="Système ou usage" style="flex:1;min-width:120px;font-size:11.5px;padding:6px 8px;border:1px solid var(--rule2);border-radius:5px">
@@ -7038,7 +7081,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
   <div id="shadow-panel-cas">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap">
       <select id="shadow-risk-filter" class="reg-input" style="max-width:280px;font-size:11.5px"
-        onchange="shadowAiFilterByRisk()" title="Filtrer les cas d'usage par niveau de risque réglementaire">
+        onchange="shadowAiFilterByRisk()" aria-label="Filtrer les cas d'usage par niveau de risque réglementaire">
         <option value="">🔍 Tous les niveaux de risque (16)</option>
         <option value="haut">🔴 Haut risque — Annexe III</option>
         <option value="interdit">🚫 Potentiellement interdit — Art. 5</option>
@@ -7505,15 +7548,29 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
       <!-- UNE RÉPONSE PAR POINT, ET SIX COMPTEURS QUI LES DISENT TOUTES. « À
            réaliser » comptait aussi les points jamais regardés : c'est
            désormais une réponse, et « sans réponse » a son propre compteur.
-           « Sans objet » sort le point du score. -->
-      <div class="audit-kpi" title="Calcul : (points conformes + points en cours × 0,5) / points applicables × 100. « Sans objet » sort un point du calcul ; un point sans réponse compte zéro. Tous les points comptent à égalité, quelle que soit leur priorité."><div class="audit-kpi-val" id="audit-score-pct">0%</div><div class="audit-kpi-lbl">Score global</div></div>
-      <div class="audit-kpi" title="Points répondus « Conforme »."><div class="audit-kpi-val" style="color:var(--green)" id="audit-done-count">0</div><div class="audit-kpi-lbl">Conformes</div></div>
-      <div class="audit-kpi" title="Points répondus « En cours » — comptés pour moitié dans le score global."><div class="audit-kpi-val" style="color:var(--orange)" id="audit-partial-count">0</div><div class="audit-kpi-lbl">En cours</div></div>
-      <div class="audit-kpi" title="Points répondus « À réaliser » — ils comptent zéro dans le score."><div class="audit-kpi-val" style="color:var(--accent)" id="audit-todo-count">0</div><div class="audit-kpi-lbl">À réaliser</div></div>
-      <div class="audit-kpi" title="Points qui n’ont pas encore de réponse. Ils comptent zéro dans le score, et le bloc du parcours ne passe au vert qu’une fois chacun répondu."><div class="audit-kpi-val" style="color:var(--muted2)" id="audit-none-count" data-audit-total>34</div><div class="audit-kpi-lbl">Sans réponse</div></div>
-      <div class="audit-kpi" title="Points répondus « Sans objet » — hors du calcul du score."><div class="audit-kpi-val" style="color:var(--muted2)" id="audit-na-count">0</div><div class="audit-kpi-lbl">Sans objet</div></div>
+           « Sans objet » sort le point du score.
+           CE QUE CHAQUE COMPTEUR VEUT DIRE EST DANS SON BOUTON « ? », plus
+           dans un `title`. Mesuré avant : le bloc n'était pas focalisable, son
+           explication (la formule du score, entre autres) ne se lisait qu'à la
+           souris posée — ni au clavier, ni au doigt. Un `tabindex` sur le bloc
+           aurait fait de ce `title` son NOM, et « 72 % » aurait disparu de ce
+           qu'entend un lecteur d'écran. Le bouton se lit, se tabule, s'ouvre au
+           clic (script bulle-titre.js). -->
+      <div class="audit-kpi"><div class="audit-kpi-val" id="audit-score-pct">0%</div><div class="audit-kpi-lbl">Score global<button type="button" class="aide-titre" aria-label="Aide : Score global" aria-expanded="false" aria-describedby="aide-audit-score">?</button><span id="aide-audit-score" hidden>Calcul : (points conformes + points en cours × 0,5) / points applicables × 100. « Sans objet » sort un point du calcul ; un point sans réponse compte zéro. Tous les points comptent à égalité, quelle que soit leur priorité.</span></div></div>
+      <div class="audit-kpi"><div class="audit-kpi-val" style="color:var(--green)" id="audit-done-count">0</div><div class="audit-kpi-lbl">Conformes<button type="button" class="aide-titre" aria-label="Aide : Conformes" aria-expanded="false" aria-describedby="aide-audit-conformes">?</button><span id="aide-audit-conformes" hidden>Points répondus « Conforme ».</span></div></div>
+      <div class="audit-kpi"><div class="audit-kpi-val" style="color:var(--orange)" id="audit-partial-count">0</div><div class="audit-kpi-lbl">En cours<button type="button" class="aide-titre" aria-label="Aide : En cours" aria-expanded="false" aria-describedby="aide-audit-en-cours">?</button><span id="aide-audit-en-cours" hidden>Points répondus « En cours » — comptés pour moitié dans le score global.</span></div></div>
+      <div class="audit-kpi"><div class="audit-kpi-val" style="color:var(--accent)" id="audit-todo-count">0</div><div class="audit-kpi-lbl">À réaliser<button type="button" class="aide-titre" aria-label="Aide : À réaliser" aria-expanded="false" aria-describedby="aide-audit-a-realiser">?</button><span id="aide-audit-a-realiser" hidden>Points répondus « À réaliser » — ils comptent zéro dans le score.</span></div></div>
+      <div class="audit-kpi"><div class="audit-kpi-val" style="color:var(--muted2)" id="audit-none-count" data-audit-total>34</div><div class="audit-kpi-lbl">Sans réponse<button type="button" class="aide-titre" aria-label="Aide : Sans réponse" aria-expanded="false" aria-describedby="aide-audit-sans-reponse">?</button><span id="aide-audit-sans-reponse" hidden>Points qui n’ont pas encore de réponse. Ils comptent zéro dans le score, et le bloc du parcours ne passe au vert qu’une fois chacun répondu.</span></div></div>
+      <div class="audit-kpi"><div class="audit-kpi-val" style="color:var(--muted2)" id="audit-na-count">0</div><div class="audit-kpi-lbl">Sans objet<button type="button" class="aide-titre" aria-label="Aide : Sans objet" aria-expanded="false" aria-describedby="aide-audit-sans-objet">?</button><span id="aide-audit-sans-objet" hidden>Points répondus « Sans objet » — hors du calcul du score.</span></div></div>
     </div>
     <div class="audit-progress-bar" style="margin-bottom:24px"><div class="audit-progress-fill" id="audit-progress-fill" style="width:0%"></div></div>
+    <!-- LA LÉGENDE DES PASTILLES, UNE FOIS, AU-DESSUS DE LA LISTE. Mesuré
+         avant : trente-quatre pastilles « P1 », « P2 », « P3 » dont le sens
+         n'était que dans un `title` — lu à la souris, jamais au clavier (une
+         pastille ne prend pas le focus). Trente-quatre `tabindex` auraient
+         porté l'écran de 41 à 75 arrêts de tabulation pour relire trois
+         phrases. Le `title` reste pour la souris et l'appui au doigt. -->
+    <p class="legende-badges" data-legende="audit-item-prio"><b>P1</b> : obligation critique, directement sanctionnable (jusqu’à 35&nbsp;M€ ou 7&nbsp;% du CA mondial), à traiter en premier · <b>P2</b> : obligation importante, impact significatif sur la conformité globale · <b>P3</b> : bonne pratique recommandée, renforce la robustesse de la démarche.</p>
     <div id="audit-sections"></div>
     <!-- L'ACCOMPAGNEMENT EST UNE OFFRE, PAS UNE ÉTAPE DE L'AUDIT. Ce lien
          s'intercalait entre les trois cartes et l'audit lui-même, coupé de deux
@@ -9526,7 +9583,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 </button>
 <div id="cpcPanel">
   <div class="cpc-head">
-    <button class="cpc-close" onclick="cpcToggle()">x</button>
+    <button type="button" class="cpc-close" aria-label="Fermer l’assistant réglementaire" onclick="cpcToggle()">x</button>
     <div class="cpc-eyebrow">Chat Conformite -- Sentinel AI</div>
     <div class="cpc-title-row">
       <div class="cpc-title">Assistant <em>reglementaire</em></div>

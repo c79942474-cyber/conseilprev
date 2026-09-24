@@ -385,8 +385,8 @@
   {
    "nom": "l'exception se répand aux autres liens institutionnels",
    "fichier": "index.html",
-   "avant": "<a href=\"https://i-aes.com\" target=\"_blank\" rel=\"noopener\" class=\"ft-social\" title=\"i-aes.com\">",
-   "apres": "<a href=\"https://i-aes.com\" target=\"_blank\" rel=\"noopener\" data-bascule-jamais class=\"ft-social\" title=\"i-aes.com\">",
+   "avant": "<a href=\"https://i-aes.com\" target=\"_blank\" rel=\"noopener\" class=\"ft-social\" title=\"i-aes.com\" aria-label=\"i-aes.com\">",
+   "apres": "<a href=\"https://i-aes.com\" target=\"_blank\" rel=\"noopener\" data-bascule-jamais class=\"ft-social\" title=\"i-aes.com\" aria-label=\"i-aes.com\">",
    "regle": "test_AUCUN_lien_du_site_ne_sort_du_relais"
   },
   {

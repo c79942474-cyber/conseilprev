@@ -289,9 +289,13 @@ const erreurs = [], refus = [];
      t16.ouverte ? (t16.a_jour ? t16.ms + ' ms' : 'jamais mis à jour') : 'bulle non ouverte');
   await p.evaluate(() => window.bulleTitre && window.bulleTitre.fermer());
 
-  /* T-3 — UN BALAYAGE COMMENCÉ SUR UN BLOC DE SCORE. */
-  console.log('\n  T-3 — balayage commencé sur div.audit-kpi');
-  await marquer(p, '#p-audit-ia-act .audit-kpi[title]', 'kpi');
+  /* T-3 — UN BALAYAGE COMMENCÉ SUR UN ÉLÉMENT INERTE À `title`. */
+  /* LE BLOC DE SCORE N'A PLUS DE `title` DEPUIS LE LOT 3 : son explication
+     est passée dans un bouton d'aide (recette_complements.js, C-4). Le
+     balayage part donc d'une pastille de priorité — un élément inerte à
+     `title`, ce que ce contrôle éprouve. */
+  console.log('\n  T-3 — balayage commencé sur span.audit-item-prio');
+  await marquer(p, '#p-audit-ia-act .audit-item-prio[title]', 'kpi');
   await p.waitForTimeout(400);
   const b3 = await BALAYER(p, cdp, 'kpi');
   v = await p.evaluate(VUE, 'kpi');
@@ -300,7 +304,7 @@ const erreurs = [], refus = [];
      b3.ouvertures + ' ouverture(s), ' + dit(v));
   await APPUI(p, cdp, 'kpi');
   v = await p.evaluate(VUE, 'kpi');
-  ok('T-3 témoin : le même bloc, appuyé, S’OUVRE', visible(v), dit(v));
+  ok('T-3 témoin : la même pastille, appuyée, S’OUVRE', visible(v), dit(v));
   await p.evaluate(() => window.bulleTitre && window.bulleTitre.fermer());
 
   /* T-6 — L'APPUI COURT SUR UN BOUTON À `title` : son action, pas de bulle. */
@@ -532,6 +536,18 @@ const erreurs = [], refus = [];
   o0 = await ouvertures(p);
   await p.mouse.move(c.x, c.y); await p.waitForTimeout(1200);
   const v1a = await p.evaluate(VUE, 'survol');
+  /* LE LOT 3 A RETIRÉ LE `title` DE TOUS LES CHAMPS DE SENTINEL (§3.4 : un
+     nom, ou une aide visible). Un champ à `title` reste pourtant possible —
+     et l'exclusion du script doit tenir : la recette en pose un, à côté des
+     vrais champs de l'écran, s'il n'y en a plus. */
+  await p.evaluate(() => {
+    if (document.querySelector('#p-entreprise input[title]')) return;
+    const vrai = document.getElementById('ent-ent-name');
+    const i = document.createElement('input');
+    i.id = 'recette-champ-titre'; i.title = 'Champ à title posé par la recette';
+    i.setAttribute('aria-label', 'Champ de recette');
+    vrai.parentNode.insertBefore(i, vrai);
+  });
   await marquer(p, '#p-entreprise input[title]', 'champ');
   c = await centre(p, 'champ');
   await p.mouse.click(c.x, c.y); await p.waitForTimeout(1200);
@@ -547,6 +563,11 @@ const erreurs = [], refus = [];
   }, [ecran, TABULABLE]);
   await aller(p, 'audit-ia-act');
   const t13 = { 'audit-ia-act': await arrets('audit-ia-act') };
+  /* LES BOUTONS D'AIDE DU LOT 3 SONT DÉCOMPTÉS. Ils ajoutent six arrêts à
+     l'audit, voulus (recette_complements.js les compte) ; sans ce décompte,
+     « inchangés » contredisait le lot 3 dès qu'on fournissait T13_AVANT. */
+  const aidesT13 = { 'audit-ia-act': await p.evaluate(() => [...document.querySelectorAll('#p-audit-ia-act .aide-titre')]
+    .filter(e => { const q = e.getBoundingClientRect(); return q.width > 0 && q.height > 0; }).length) };
 
   /* T-9 — LA TABULATION JUSQU'À UNE LIGNE DU MENU. */
   console.log('\n  T-9 — Tab jusqu’à un .sb-item, attente de 600 ms');
@@ -678,7 +699,7 @@ const erreurs = [], refus = [];
   await p.waitForTimeout(650);
   v = await p.evaluate(VUE, 'croix');
   lot3('T-12 le × n’a pas de bulle (title égal au nom)', 'mesuré : ' + (t12x ? dit(v) : 'focus non atteint par Tab')
-       + ' — le nom du × est « × », son title « ' + (v.title || '') + ' » : informatif tant que le lot 3 ne lui donne pas de nom');
+       + ' — compté, avec son témoin, par recette_complements.js');
   await p.evaluate(() => window.bulleTitre && window.bulleTitre.fermer());
   await marquer(p, '#recette-info-modale', 'info');
   const t12 = await tabulerVers(p, 'info');
@@ -700,12 +721,13 @@ const erreurs = [], refus = [];
   console.log('  ..   T-13 relevé : ' + JSON.stringify(t13));
   const t13ref = JSON.parse(process.env.T13_AVANT || 'null');
   if (t13ref) {
-    ok('T-13 les arrêts de tabulation sont INCHANGÉS par rapport au code d’avant',
-       Object.keys(t13ref).every(k => t13ref[k] === t13[k]), 'avant ' + JSON.stringify(t13ref) + ', après ' + JSON.stringify(t13));
+    ok('T-13 les arrêts de tabulation sont INCHANGÉS par rapport au code d’avant (boutons d’aide du lot 3 décomptés)',
+       Object.keys(t13ref).every(k => t13ref[k] === t13[k] - (aidesT13[k] || 0)),
+       'avant ' + JSON.stringify(t13ref) + ', après ' + JSON.stringify(t13) + ', dont boutons d’aide ' + JSON.stringify(aidesT13));
   } else {
     console.log('  ..   T-13 (pas de relevé d’avant fourni par T13_AVANT : comparaison à faire à la main)');
   }
-  lot3('T-13 plus 6 boutons d’aide sur audit-ia-act', 'posés par le lot 3');
+  lot3('T-13 plus 6 boutons d’aide sur audit-ia-act', 'posés par le lot 3, comptés par recette_complements.js');
 
   /* T-11 (menu) — ENTRÉE SUR UNE LIGNE DU MENU DONT LA BULLE EST OUVERTE AU
      CLAVIER : elle navigue. LE DÉFAUT MESURÉ (revue navigateur) : la ligne

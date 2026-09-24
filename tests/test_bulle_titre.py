@@ -718,6 +718,11 @@ scenario("aide", () => {
      que son clic ne fasse la bascule — sinon le clic le rouvre. */
   reinit(); clicSouris(P.aide); avant = vue().visible;
   appui(P.aide); r.doigtFerme = { vue: vue(), expanded: P.aide.getAttribute("aria-expanded"), avant };
+  /* OUVERT À LA SOURIS, PUIS UN CLIC AILLEURS, SANS AUCUN MOUVEMENT DE
+     FOCUS : `clicSouris` ne déplace pas le focus — c'est Safari, et
+     Firefox sous macOS, qui ne le donnent pas à un bouton cliqué. */
+  reinit(); clicSouris(P.aide); avant = vue().visible && P.aide.getAttribute("aria-expanded") === "true";
+  clicSouris(body); r.sourisAilleurs = { vue: vue(), expanded: P.aide.getAttribute("aria-expanded"), avant };
   return r;
 });
 
@@ -1400,8 +1405,11 @@ def test_le_bouton_d_AIDE_bascule_a_la_souris_comme_au_doigt():
     assert r["doigt"]["vue"]["visible"] and r["doigt"]["expanded"] == "true", r["doigt"]
 
 
-@pytest.mark.parametrize("sortie", ["echap", "depart", "ailleurs"])
+@pytest.mark.parametrize("sortie", ["echap", "depart", "ailleurs", "sourisAilleurs"])
 def test_le_bouton_d_aide_se_REFERME_et_le_dit(sortie):
+    """« sourisAilleurs » : un clic de souris ailleurs, le focus n'ayant
+    jamais été sur le bouton (Safari, Firefox sous macOS). Sa seule sortie
+    était le départ du focus — qui ne vient pas."""
     r = _sc("aide")[sortie]
     assert r["avant"], "la bulle d'aide n'était pas ouverte : le contrôle ne mesurerait rien"
     assert not r["vue"]["visible"] and r["expanded"] == "false", r
@@ -1577,7 +1585,7 @@ def test_la_pastille_du_rail_porte_un_title_VIDE():
 #  10. LA RECETTE NE SE PÉRIME PAS EN SILENCE
 # ══════════════════════════════════════════════════════════════════════════
 
-@pytest.mark.parametrize("ancre", ["sb-item", "audit-item-prio", "audit-kpi", "rail-puce",
+@pytest.mark.parametrize("ancre", ["sb-item", "audit-item-prio", "rail-puce",
                                    "procOpenDoc", "proc-modal-body", "mat-modal-close",
                                    "legal-ref-link", "pan-sia-iframe", "page-guide-btn",
                                    "audit-export-btn", "mat-sector-btn", "pricingSetEstim",

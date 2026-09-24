@@ -135,8 +135,8 @@
   {
    "nom": "le filtre pointerType a disparu : la souris ouvre",
    "fichier": "bulle-titre.js",
-   "avant": "      if (ev.pointerType === \"mouse\") return;\n      var a = ancreDe(ev.target);",
-   "apres": "      var a = ancreDe(ev.target);",
+   "avant": "      if (ev.pointerType === \"mouse\") {\n        if (ouverte && estAide(ouverte)",
+   "apres": "      if (false) {\n        if (ouverte && estAide(ouverte)",
    "regle": "test_la_SOURIS_n_ouvre_jamais_rien"
   },
   {
@@ -466,6 +466,20 @@
    "fichier": "bulle-titre.js",
    "avant": "    if (estAide(el)) el.setAttribute(\"aria-expanded\", \"true\");\n",
    "apres": "",
+   "regle": "test_le_bouton_d_AIDE_bascule_a_la_souris_comme_au_doigt"
+  },
+  {
+   "nom": "un clic de souris ailleurs ne ferme plus la bulle d'aide (Safari)",
+   "fichier": "bulle-titre.js",
+   "avant": "        if (ouverte && estAide(ouverte) && !ouverte.contains(ev.target)) fermer();\n",
+   "apres": "",
+   "regle": "test_le_bouton_d_aide_se_REFERME_et_le_dit[sourisAilleurs]"
+  },
+  {
+   "nom": "un clic de souris SUR le bouton d'aide ouvert compte comme ailleurs",
+   "fichier": "bulle-titre.js",
+   "avant": "if (ouverte && estAide(ouverte) && !ouverte.contains(ev.target)) fermer();",
+   "apres": "if (ouverte && estAide(ouverte)) fermer();",
    "regle": "test_le_bouton_d_AIDE_bascule_a_la_souris_comme_au_doigt"
   },
   {

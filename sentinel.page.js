@@ -122,6 +122,75 @@ window.sentRegistre = function(){
 };
 window.sentRegistreOublier = function(){ _regPromesse = null; };
 
+/* ══ LE BOUTON D'AIDE — CE QU'UN `title` DISAIT, POUR TOUS ══════════════
+   LE DÉFAUT MESURÉ. Un bloc de score, un en-tête de colonne portaient leur
+   explication dans un `title` : lue à la souris posée, jamais au clavier
+   (un <div> ne reçoit pas le focus), et lue au doigt seulement depuis
+   /bulle-titre.js. Lui donner un `tabindex` aurait été pire — mesuré dans
+   Chromium : le `title` devient alors le NOM du bloc, et la valeur affichée
+   (« 72 % ») disparaît de ce qu'entend un lecteur d'écran.
+
+   CE QU'ON FAIT. Un vrai bouton « ? » à côté du libellé. Son texte est la
+   DESCRIPTION du bouton (`aria-describedby` vers un élément `hidden` — un
+   calcul valide) ; /bulle-titre.js le montre au clic, à la souris comme au
+   doigt, et à Entrée. Le `title` de l'élément est RETIRÉ : gardé, il
+   ferait deux bulles à la souris et une double lecture.
+
+   `id` doit être unique dans la page : deux tableaux peints ensemble ne
+   partagent pas un préfixe. Le texte est échappé ici — l'appelant passe du
+   texte, pas du HTML. */
+window.aideTitre = function (id, libelle, texte) {
+  var e = function (s) {
+    return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  };
+  return '<button type="button" class="aide-titre" aria-label="Aide : ' + e(libelle)
+    + '" aria-expanded="false" aria-describedby="' + e(id) + '">?</button>'
+    + '<span id="' + e(id) + '" hidden>' + e(texte) + '</span>';
+};
+
+/* UN EN-TÊTE DE COLONNE QUI PORTE UN BOUTON D'AIDE GARDE SON NOM.
+   LE DÉFAUT MESURÉ (revue du lot 3, arbre d'accessibilité de Chromium) : un
+   <th> se nomme par son contenu, bouton compris — la colonne s'appelait
+   « ASSIETTE ANNUELLE Aide : Assiette annuelle », et un lecteur d'écran le
+   répétait À CHAQUE CELLULE parcourue, sur les douze colonnes du chiffrage.
+   Le nom de la colonne est donc posé par `aria-label` : son libellé, rien de
+   plus ; le bouton reste dans la cellule, atteignable, avec SON nom. */
+window.enTeteAide = function (visible, id, libelle, texte) {
+  var nom = String(libelle == null ? '' : libelle).replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  return '<th aria-label="' + nom + '">' + visible + window.aideTitre(id, libelle, texte) + '</th>';
+};
+
+/* ══ APRÈS UN RETRAIT, LE FOCUS NE TOMBE PAS SUR <body> ═══════════════════
+   LE DÉFAUT MESURÉ (revue du lot 3). Les « × » du registre, du comparateur
+   et des évaluations sont devenus des boutons : on les atteint au clavier.
+   Mais la liste est REPEINTE après le retrait (innerHTML) — le bouton qui
+   avait le focus disparaît, et le focus retombe sur <body> : Entrée sur
+   « Retirer DE du comparateur », et l'on se retrouve en haut du document,
+   sans savoir où l'on est (WCAG 2.4.3).
+   CE QU'ON FAIT. Avant le repeint, le RANG du « × » qui a le focus ; après,
+   le focus va au « × » de même rang (le suivant, donc), sinon au dernier,
+   sinon au premier contrôle de la liste repeinte — chacune en garde un
+   quand elle se vide : « + Ajouter un pays », « Ajouter le premier
+   système », les liens vers la simulation et l'audit. Si le focus n'était
+   pas sur un « × » (un clic de souris sous Safari ne le donne pas), rien ne
+   bouge : on ne vole pas le focus. */
+window.focusRang = function (boite, selecteur) {
+  var b = document.getElementById(boite), a = document.activeElement;
+  if (!b || !a) return -1;
+  return Array.prototype.indexOf.call(b.querySelectorAll(selecteur), a);
+};
+window.focusRendre = function (boite, selecteur, rang) {
+  if (!(rang >= 0)) return null;
+  var b = document.getElementById(boite);
+  if (!b) return null;
+  var l = b.querySelectorAll(selecteur);
+  var c = l.length ? l[Math.min(rang, l.length - 1)] : b.querySelector('a[href], button:not([disabled])');
+  if (c) c.focus();
+  return c;
+};
+
 ;/* ── bloc 1/59 ── */
 
 /* ── Prechargement des modules cartographiques ────────────────────────────
@@ -3754,8 +3823,11 @@ function cjAddCountry(code){
 }
 
 function cjRemove(code){
+  /* Le focus suit le retrait (window.focusRendre) : sinon <body>. */
+  var rang = window.focusRang('cj-tags', '.cj-tag-rm');
   cjSelected = cjSelected.filter(function(c){ return c !== code; });
   cjRender();
+  window.focusRendre('cj-tags', '.cj-tag-rm', rang);
 }
 
 function cjRender(){
@@ -3776,7 +3848,10 @@ function cjRenderTags(){
       + '<span style="font-size:10px">'+d.flag+'</span>'
       + ' <span>'+code+'</span>'
       + ' <span style="font-weight:400;color:var(--muted)">'+d.name+'</span>'
-      + ' <span class="cj-tag-rm" onclick="cjRemove(\''+code+'\')">×</span>'
+      /* UN VRAI BOUTON, plus un <span> cliquable : mesuré avant, le « × »
+         n'avait ni nom ni focus — ni le clavier ni un lecteur d'écran ne
+         pouvaient retirer un pays. */
+      + ' <button type="button" class="cj-tag-rm" onclick="cjRemove(\''+code+'\')" aria-label="Retirer '+code+' du comparateur" title="Retirer '+code+' du comparateur">×</button>'
       + '</span>';
   });
   html += '<button class="cj-add" id="cj-add-btn" onclick="cjToggleAdd()" title="Ajouter un pays au comparateur (4 maximum)." style="'+(cjSelected.length>=4?'opacity:.4;pointer-events:none':'')+'">+ Ajouter un pays ▾</button>';
@@ -4477,11 +4552,33 @@ function cpEvalAdd(entry){
   cpEvalRenderList();
 }
 
+/* « × » : CE QUI PART, DIT PAR SON NOM, ET DEMANDÉ AVANT.
+   LE DÉFAUT MESURÉ (revue du lot 3). Le « × » d'une évaluation l'effaçait
+   d'une seule touche, sans question — c'est la seule des suppressions « × »
+   du § 3.5 qui ne demandait rien. Et son nom disait la POSITION à l'écran
+   (« Supprimer l'évaluation 01 ») : après une suppression, celle qui
+   s'appelait 02 devenait 01. Le nom et la question disent maintenant
+   laquelle : son titre, sa date et son heure. */
+function cpEvalQuoi(e){
+  var h = '';
+  try { h = new Date(e.date).toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'}); } catch(x){ h = ''; }
+  return '\u00ab\u00a0' + (e.title || 'sans titre') + '\u00a0\u00bb du ' + cpEvalFmtDate(e.date) + (h ? ' \u00e0 ' + h : '');
+}
+function cpEvalAttr(v){
+  return String(v == null ? '' : v).replace(/&/g,'&amp;').replace(/"/g,'&quot;')
+    .replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
 window.cpEvalRemove = function(id){
-  var list = cpEvalGetAll().filter(function(e){ return e.id !== id; });
+  var e = cpEvalGetAll().filter(function(x){ return x.id === id; })[0];
+  if(!e) return;
+  if(!confirm('Supprimer d\u00e9finitivement l\u2019\u00e9valuation ' + cpEvalQuoi(e)
+              + ' ? Elle est effac\u00e9e de ce navigateur et ne pourra pas \u00eatre r\u00e9cup\u00e9r\u00e9e.')) return;
+  var rang = window.focusRang('evals-rows', '.suppr-x');
+  var list = cpEvalGetAll().filter(function(x){ return x.id !== id; });
   cpEvalSetAll(list);
   cpEvalUpdateBadge();
   cpEvalRenderList();
+  window.focusRendre('evals-rows', '.suppr-x', rang);
 };
 
 window.cpEvalClearAll = function(){
@@ -4615,7 +4712,10 @@ function cpEvalRenderList(){
       + '</div>'
       + '<div class="eval-sc" style="color:' + color + '">' + scoreTxt + '</div>'
       + '<div class="eval-date">' + cpEvalFmtDate(e.date) + '</div>'
-      + '<div onclick="event.stopPropagation();cpEvalRemove(' + e.id + ')" style="font-size:14px;color:var(--rule2);cursor:pointer;padding:0 4px" title="Supprimer">\u00D7</div>'
+      /* UN VRAI BOUTON, plus un <div> cliquable : ni focus, ni nom — le
+         « × » ne se supprimait qu'à la souris. Le nom dit QUOI : le titre,
+         la date et l'heure (cpEvalQuoi) — pas le rang, qui change. */
+      + '<button type="button" class="suppr-x" onclick="event.stopPropagation();cpEvalRemove(' + e.id + ')" style="font-size:14px;color:var(--rule2);cursor:pointer;padding:0 4px" aria-label="Supprimer l\u2019\u00e9valuation ' + cpEvalAttr(cpEvalQuoi(e)) + '" title="Supprimer l\u2019\u00e9valuation ' + cpEvalAttr(cpEvalQuoi(e)) + '">\u00D7</button>'
       + '</div>';
   }).join("");
 }
@@ -5650,7 +5750,7 @@ window.matGenerateDeliverable = function(delivId){
     + '<div class="mat-modal-head">'
     + '<div><div class="mat-modal-eyebrow">Livrable · '+s.label+' · '+(api==="claude"?"Claude":"Mistral")+'</div>'
     + '<div class="mat-modal-title">'+deliv.icon+' '+deliv.title+'</div></div>'
-    + '<button class="mat-modal-close" onclick="matCloseDeliv()" title="Fermer cette fenêtre">×</button>'
+    + '<button type="button" class="mat-modal-close" aria-label="Fermer cette fenêtre" onclick="matCloseDeliv()" title="Fermer cette fenêtre">×</button>'
     + '</div>'
     + '<div class="mat-modal-body" id="mat-modal-body">'
     + '<div class="mat-modal-loading"><div class="mat-spinner"></div>'
@@ -5806,7 +5906,7 @@ window.procOpenDoc = function(stepNum){
     + '<div class="mat-modal-head">'
     + '<div><div class="mat-modal-eyebrow">Procedure d audit · Étape '+stepNum+' · '+s.label+'</div>'
     + '<div class="mat-modal-title">'+doc.icon+' '+doc.docTitle+'</div></div>'
-    + '<button class="mat-modal-close" onclick="procClose()" title="Fermer cette fenêtre">×</button>'
+    + '<button type="button" class="mat-modal-close" aria-label="Fermer cette fenêtre" onclick="procClose()" title="Fermer cette fenêtre">×</button>'
     + '</div>'
     + '<div class="mat-modal-body" id="proc-modal-body">'
     + procSetupHTML(doc, s)
@@ -6117,7 +6217,7 @@ window.matOpenBudget = function(){
       + '<div class="mat-modal-head"><div>'
       + '<div class="mat-modal-eyebrow">Budget prévisionnel · '+(sc.label||sectorKey)+'</div>'
       + '<div class="mat-modal-title">Aucun budget relevé pour ce secteur</div></div>'
-      + '<button class="mat-modal-close" onclick="matCloseModal(\'mat-budget-modal\')" title="Fermer cette fenêtre">×</button>'
+      + '<button type="button" class="mat-modal-close" aria-label="Fermer cette fenêtre" onclick="matCloseModal(\'mat-budget-modal\')" title="Fermer cette fenêtre">×</button>'
       + '</div><div class="mat-modal-body"><p>'
       + 'Les budgets affichés pour les autres secteurs viennent de missions réelles. '
       + 'Pour celui-ci, le régime réglementaire a été relevé dans les textes, mais '
@@ -6134,7 +6234,7 @@ window.matOpenBudget = function(){
     + '<div class="mat-modal-head">'
     + '<div><div class="mat-modal-eyebrow">Budget previsionnel detaille · '+b.sector+'</div>'
     + '<div class="mat-modal-title">Budget previsionnel sectoriel</div></div>'
-    + '<button class="mat-modal-close" onclick="matCloseModal(\'mat-budget-modal\')" title="Fermer cette fenêtre">×</button>'
+    + '<button type="button" class="mat-modal-close" aria-label="Fermer cette fenêtre" onclick="matCloseModal(\'mat-budget-modal\')" title="Fermer cette fenêtre">×</button>'
     + '</div>'
     + '<div class="mat-modal-body">' + budgetBodyHTML(b) + '</div>'
     + '<div class="mat-modal-foot">'
@@ -6221,7 +6321,7 @@ window.matOpenKPIs = function(){
     + '<div class="mat-modal-head">'
     + '<div><div class="mat-modal-eyebrow">Tableau de bord · '+s.label+'</div>'
     + '<div class="mat-modal-title">KPIs sectoriels detailles</div></div>'
-    + '<button class="mat-modal-close" onclick="matCloseModal(\'mat-kpi-modal\')" title="Fermer cette fenêtre">×</button>'
+    + '<button type="button" class="mat-modal-close" aria-label="Fermer cette fenêtre" onclick="matCloseModal(\'mat-kpi-modal\')" title="Fermer cette fenêtre">×</button>'
     + '</div>'
     + '<div class="mat-modal-body">'
     + '<p class="proc-intro">Indicateurs de pilotage de la conformite IA, incluant '+(kpis.length-7)+' KPIs specifiques au secteur '+s.label+'. Cibles, frequences de mesure, outils et responsables.</p>'
@@ -6628,10 +6728,10 @@ window.raciRenderPage = function(){
     + '<button class="mat-export-btn" style="background:var(--bg);color:var(--muted);border:1px solid var(--rule2)" onclick="raciReset()" title="Reinitialiser la matrice RACI au profil de reference CONSEILPREV.">↻ Reinitialiser</button>'
     + '</div></div>'
     + '<div class="raci-table-wrap-outer">'
-    + '<button class="raci-nav-btn raci-nav-up" onclick="raciScroll(0,-150)" title="Défiler vers le haut">▲</button>'
-    + '<button class="raci-nav-btn raci-nav-down" onclick="raciScroll(0,150)" title="Défiler vers le bas">▼</button>'
-    + '<button class="raci-nav-btn raci-nav-left" onclick="raciScroll(-200,0)" title="Défiler vers la gauche">◀</button>'
-    + '<button class="raci-nav-btn raci-nav-right" onclick="raciScroll(200,0)" title="Défiler vers la droite">▶</button>'
+    + '<button class="raci-nav-btn raci-nav-up" onclick="raciScroll(0,-150)" title="Défiler vers le haut" aria-label="Défiler vers le haut">▲</button>'
+    + '<button class="raci-nav-btn raci-nav-down" onclick="raciScroll(0,150)" title="Défiler vers le bas" aria-label="Défiler vers le bas">▼</button>'
+    + '<button class="raci-nav-btn raci-nav-left" onclick="raciScroll(-200,0)" title="Défiler vers la gauche" aria-label="Défiler vers la gauche">◀</button>'
+    + '<button class="raci-nav-btn raci-nav-right" onclick="raciScroll(200,0)" title="Défiler vers la droite" aria-label="Défiler vers la droite">▶</button>'
     + '<div class="raci-table-wrap" id="raci-table-wrap-inner"><div class="raci-table" id="raci-table-holder">'+raciRenderTable()+'</div></div>'
     + '</div>'
     + '<p class="raci-help">Cliquez sur une cellule pour faire defiler les assignations : vide → R → A → C → I → vide. Chaque processus ne devrait avoir qu un seul A (Approbateur) pour eviter les conflits de decision.</p>';
@@ -6650,7 +6750,7 @@ window.raciGenerateDoc = function(){
   modal.innerHTML = '<div class="mat-modal-box mat-modal-wide">'
     + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">Cartographie des parties prenantes · '+s.label+'</div>'
     + '<div class="mat-modal-title">📐 Document de cartographie complet</div></div>'
-    + '<button class="mat-modal-close" onclick="raciCloseModal()" title="Fermer cette fenêtre">×</button></div>'
+    + '<button type="button" class="mat-modal-close" aria-label="Fermer cette fenêtre" onclick="raciCloseModal()" title="Fermer cette fenêtre">×</button></div>'
     + '<div class="mat-modal-body" id="raci-modal-body"><div class="mat-modal-loading"><div class="mat-spinner"></div>Generation en cours par '+(api==="claude"?"Claude":"Mistral")+'…</div></div>'
     + '<div class="mat-modal-foot" id="raci-modal-foot" style="display:none">'
     + '<button class="mat-export-btn mat-export-pdf" onclick="raciDocPDF()" title="Telecharger le document de cartographie genere par IA au format PDF.">↓ PDF</button>'
@@ -6853,6 +6953,12 @@ function regRender(){
     production: {label:"④ Production", color:"var(--green)"},
     revue: {label:"⑤ Revue en cours", color:"var(--accent)"}
   };
+  /* Le nom du système entre dans un ATTRIBUT (le nom du bouton « × ») :
+     un guillemet le couperait. */
+  function regAttr(v){
+    return String(v == null ? '' : v).replace(/&/g,'&amp;').replace(/"/g,'&quot;')
+      .replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
   function regCompleteness(s){
     // Les 10 questions essentielles (Hub France IA) : outil, service, usage,
     // donnees, personnes concernees, role, transparence, haut risque, preuves, fournisseur.
@@ -6877,7 +6983,10 @@ function regRender(){
       + '<div><span class="chip chip-b">'+(s.secteur||"—")+'</span></div>'
       + '<div><span class="chip '+st.cls+'">'+st.label+'</span></div>'
       + '<div class="rs-risk" style="font-family:var(--serif);font-size:16px;color:'+scoreColor+'">'+s.score_risque+'/10</div>'
-      + '<div class="rs-del" onclick="event.stopPropagation();regDelete('+s.id+')" title="Supprimer">×</div>'
+      /* UN VRAI BOUTON, plus un <div> cliquable : mesuré avant, quatre
+         « × » sans nom ni focus sur l'écran du registre. Le nom dit quel
+         système ; la confirmation (regDelete) dit que c'est définitif. */
+      + '<button type="button" class="rs-del" onclick="event.stopPropagation();regDelete('+s.id+')" aria-label="Supprimer '+regAttr(s.nom)+' du registre" title="Supprimer '+regAttr(s.nom)+' du registre">×</button>'
       + '</div>';
   }).join("");
 }
@@ -6901,7 +7010,7 @@ window.regOpenModal = function(id){
   modal.innerHTML = '<div class="mat-modal-box">'
     + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">'+(sys?"Modifier le système":"Nouveau système IA")+'</div>'
     + '<div class="mat-modal-title">'+(sys?sys.nom:"Ajouter au registre")+'</div></div>'
-    + '<button class="mat-modal-close" onclick="regCloseModal()" title="Fermer cette fenêtre">×</button></div>'
+    + '<button type="button" class="mat-modal-close" aria-label="Fermer cette fenêtre" onclick="regCloseModal()" title="Fermer cette fenêtre">×</button></div>'
     + '<div class="mat-modal-body">'
     + '<div class="reg-form">'
     + regField("Nom du système *", '<input type="text" id="rf-nom" class="reg-input" value="'+val("nom")+'" placeholder="Ex: Chatbot service client">')
@@ -7098,6 +7207,8 @@ window.regSave = function(){
 
 window.regDelete = function(id){
   if(!confirm("Supprimer définitivement ce système du registre ?")) return;
+  /* Le focus suit le retrait (window.focusRendre) : sinon <body>. */
+  var rang = window.focusRang('reg-sys-body', '.rs-del');
   fetch("/api/registre/"+id, {method:"DELETE"})
     .then(function(r){ return r.json().then(function(d){ return {status:r.status, data:d}; }); })
     .then(function(res){
@@ -7107,6 +7218,7 @@ window.regDelete = function(id){
       /* Retrait local de REG_DATA, sans recharger toute la liste depuis le serveur. */
       REG_DATA = REG_DATA.filter(function(s){ return s.id !== id; });
       regRender();
+      window.focusRendre('reg-sys-body', '.rs-del', rang);
     })
     .catch(function(){ alert("Erreur réseau lors de la suppression."); });
 };
@@ -8599,7 +8711,7 @@ window.benchmarkRenderPage = function(){
       var diffTxt = diff !== null ? (diff>=0?'+':'')+diff+' pts' : '—';
       var diffColor = diff !== null ? (diff>=0?'var(--green)':'var(--accent)') : 'var(--muted2)';
       return '<div class="bench-row"><div class="bench-sector">'+r.label+(r.you!==null?' <span style="font-size:9px;font-family:var(--mono);color:var(--accent)">● VOUS ('+r.count+' syst.)</span>':'')+'</div>'
-        + '<div class="bench-score">'+(r.avg === null ? '<span title="Socle non relevé pour ce secteur : aucune référence à comparer.">—</span>' : r.avg+'%')+'</div>'
+        + '<div class="bench-score">'+(r.avg === null ? '<span class="bench-na" title="Socle non relevé pour ce secteur : aucune référence à comparer.">—</span>' : r.avg+'%')+'</div>'
         + '<div class="bench-bar-wrap">'+(r.you!==null?'<div class="bench-track"><div class="bench-fill bench-fill-you" style="width:'+r.you+'%"></div></div><span class="bench-you">vous '+r.you+'%</span>':'<span style="font-size:10px;color:var(--muted2)">Aucun système enregistré</span>')
         + '<div class="bench-track"><div class="bench-fill bench-fill-avg" style="width:'+r.avg+'%"></div></div></div>'
         + '<div><span style="font-family:var(--mono);font-size:10px;color:'+diffColor+'">'+diffTxt+'</span></div></div>';
@@ -9132,7 +9244,7 @@ window.formRenderModal = function(f){
   ov.innerHTML =
     '<div style="background:var(--white,#fff);max-width:640px;width:100%;border-radius:14px;box-shadow:0 30px 70px rgba(5,8,14,.45);overflow:hidden">'
     + '<div style="background:linear-gradient(135deg,#0c1017,#131a26);color:#fff;padding:20px 24px;position:relative">'
-    + '<button onclick="document.getElementById(\'form-modal\').remove()" style="position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#ddd;cursor:pointer;font-size:15px;line-height:1">&#10005;</button>'
+    + '<button type="button" aria-label="Fermer cette fenêtre" onclick="document.getElementById(\'form-modal\').remove()" style="position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#ddd;cursor:pointer;font-size:15px;line-height:1">&#10005;</button>'
     + '<div style="font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:#e6c65a;font-weight:700">' + f.ref + ' \u00b7 Formation ' + (f.n < 10 ? '0' : '') + f.n + '</div>'
     + '<div style="font-size:17px;font-weight:700;margin-top:4px;line-height:1.3">' + f.t + '</div>'
     + '<div style="font-size:11.5px;color:#c4cad4;margin-top:5px">' + f.d + ' \u00b7 ' + f.p + '</div></div>'
@@ -9299,7 +9411,7 @@ window.jursOpenCriteria = function(){
   modal.innerHTML = '<div class="mat-modal-box">'
     + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">Méthodologie Sentinel AI</div>'
     + '<div class="mat-modal-title">12 critères d évaluation</div></div>'
-    + '<button class="mat-modal-close" onclick="document.getElementById(\'jurs-criteria-modal\').classList.remove(\'on\')" title="Fermer cette fenêtre">×</button></div>'
+    + '<button type="button" class="mat-modal-close" aria-label="Fermer cette fenêtre" onclick="document.getElementById(\'jurs-criteria-modal\').classList.remove(\'on\')" title="Fermer cette fenêtre">×</button></div>'
     + '<div class="mat-modal-body">'
     + '<p style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:16px">Chaque juridiction est évaluée sur ces 12 critères (échelle 0-10). Le score global affiché est une moyenne pondérée. Pour les juridictions majeures, le détail par critère est consultable via le bouton "Voir le détail" sur la fiche.</p>'
     + JURS_CRITERIA.map(function(c,i){
@@ -9330,7 +9442,7 @@ window.jursOpenDetail = function(code, name){
   modal.innerHTML = '<div class="mat-modal-box">'
     + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">Détail des 12 critères</div>'
     + '<div class="mat-modal-title">'+name+'</div></div>'
-    + '<button class="mat-modal-close" onclick="document.getElementById(\'jurs-detail-modal\').classList.remove(\'on\')" title="Fermer cette fenêtre">×</button></div>'
+    + '<button type="button" class="mat-modal-close" aria-label="Fermer cette fenêtre" onclick="document.getElementById(\'jurs-detail-modal\').classList.remove(\'on\')" title="Fermer cette fenêtre">×</button></div>'
     + '<div class="mat-modal-body">' + bodyHtml + '</div>'
     + '<div class="mat-modal-foot"><button class="mat-export-btn" style="background:var(--blue);color:#fff" onclick="jursRefreshAI(\''+code+'\',\''+name+'\')">🤖 Actualiser via IA</button></div>'
     + '</div>';
@@ -9802,7 +9914,7 @@ function cardsModal(title, eyebrow, bodyHtml, footHtml){
   if(!modal){ modal = document.createElement("div"); modal.id = "cards-modal"; modal.className = "mat-modal"; document.body.appendChild(modal); }
   modal.innerHTML = '<div class="mat-modal-box mat-modal-wide">'
     + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">'+eyebrow+'</div><div class="mat-modal-title">'+title+'</div></div>'
-    + '<button class="mat-modal-close" onclick="document.getElementById(\'cards-modal\').classList.remove(\'on\')" title="Fermer cette fenêtre">×</button></div>'
+    + '<button type="button" class="mat-modal-close" aria-label="Fermer cette fenêtre" onclick="document.getElementById(\'cards-modal\').classList.remove(\'on\')" title="Fermer cette fenêtre">×</button></div>'
     + '<div class="mat-modal-body">'+bodyHtml+'</div>'
     + (footHtml ? '<div class="mat-modal-foot">'+footHtml+'</div>' : '')
     + '</div>';
@@ -10012,7 +10124,7 @@ window.trainingOpenFiche = function(key){
   modal.innerHTML = '<div class="mat-modal-box mat-modal-wide">'
     + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">Fiche de formation · '+f.duree+' · Niveau '+f.niveau+'</div>'
     + '<div class="mat-modal-title">'+f.icon+' '+f.title+'</div></div>'
-    + '<button class="mat-modal-close" onclick="document.getElementById(\'training-modal\').classList.remove(\'on\')" title="Fermer cette fenêtre">×</button></div>'
+    + '<button type="button" class="mat-modal-close" aria-label="Fermer cette fenêtre" onclick="document.getElementById(\'training-modal\').classList.remove(\'on\')" title="Fermer cette fenêtre">×</button></div>'
     + '<div class="mat-modal-body">'
     + '<div class="radar-registre-info radar-registre-ok" style="margin-bottom:18px">👥 Public concerné : <strong>'+f.public+'</strong></div>'
     + '<div class="sec-h" style="margin-bottom:10px;font-size:14px">Objectifs pédagogiques</div>'
@@ -10952,7 +11064,7 @@ window.guideOpenModal = function(pid){
   modal.innerHTML = '<div class="mat-modal-box">'
     + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">Guide d’utilisation</div>'
     + '<div class="mat-modal-title">'+(guide?guide.title:"Aide")+'</div></div>'
-    + '<button class="mat-modal-close" onclick="document.getElementById(\'guide-modal\').classList.remove(\'on\')" title="Fermer cette fenêtre">×</button></div>'
+    + '<button type="button" class="mat-modal-close" aria-label="Fermer cette fenêtre" onclick="document.getElementById(\'guide-modal\').classList.remove(\'on\')" title="Fermer cette fenêtre">×</button></div>'
     + '<div class="mat-modal-body">'+bodyHtml+'</div>'
     + '</div>';
   modal.classList.add("on");
@@ -12338,7 +12450,7 @@ window.ucOpenLibrary = function(){
   modal.innerHTML = '<div class="mat-modal-box mat-modal-wide">'
     + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">Bibliothèque de cas d usage IA</div>'
     + '<div class="mat-modal-title">📚 Identifier un cas d usage à étudier</div></div>'
-    + '<button class="mat-modal-close" onclick="document.getElementById(\'uc-modal\').classList.remove(\'on\')" title="Fermer cette fenêtre">×</button></div>'
+    + '<button type="button" class="mat-modal-close" aria-label="Fermer cette fenêtre" onclick="document.getElementById(\'uc-modal\').classList.remove(\'on\')" title="Fermer cette fenêtre">×</button></div>'
     + '<div class="mat-modal-body">'
     + '<div class="radar-sector-bar" style="margin-bottom:18px"><span class="radar-sector-lbl">Filtrer par secteur :</span>'
     + '<select id="uc-sector-select" class="radar-sector-select" onchange="ucRenderContent()"><option value="">— Cas génériques uniquement —</option>'+sectorOptions+'</select>'
@@ -12458,7 +12570,7 @@ window.histoOpenDetail = function(id){
     modal.innerHTML = '<div class="mat-modal-box mat-modal-wide">'
       + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">'+pageLabel+' · #'+calc.id+'</div>'
       + '<div class="mat-modal-title">'+(calc.label||calc.type_calcul)+'</div></div>'
-      + '<button class="mat-modal-close" onclick="document.getElementById(\'histo-modal\').classList.remove(\'on\')" title="Fermer cette fenêtre">×</button></div>'
+      + '<button type="button" class="mat-modal-close" aria-label="Fermer cette fenêtre" onclick="document.getElementById(\'histo-modal\').classList.remove(\'on\')" title="Fermer cette fenêtre">×</button></div>'
       + '<div class="mat-modal-body">'
       + '<div class="sec-h" style="margin-bottom:8px;font-size:13px">Paramètres saisis</div>' + jsonToRows(params)
       + '<div class="sec-h" style="margin:18px 0 8px;font-size:13px">Résultat obtenu</div>' + jsonToRows(resultat)
@@ -14248,7 +14360,7 @@ window.ragShowRelevantDocs = function(query, page, titre, perimetre){
   if(!modal){ modal = document.createElement("div"); modal.id = "rag-docs-modal"; modal.className = "mat-modal"; document.body.appendChild(modal); }
   modal.innerHTML = '<div class="mat-modal-box"><div class="mat-modal-head"><div><div class="mat-modal-eyebrow">Base de connaissance</div>'
     + '<div class="mat-modal-title">📚 '+titre+'</div></div>'
-    + '<button class="mat-modal-close" onclick="document.getElementById(\'rag-docs-modal\').classList.remove(\'on\')" title="Fermer cette fenêtre">×</button></div>'
+    + '<button type="button" class="mat-modal-close" aria-label="Fermer cette fenêtre" onclick="document.getElementById(\'rag-docs-modal\').classList.remove(\'on\')" title="Fermer cette fenêtre">×</button></div>'
     + '<div class="mat-modal-body"><div class="reg-loading">Recherche dans vos documents…</div></div></div>';
   modal.classList.add("on");
 
@@ -14343,7 +14455,7 @@ window.roadmapOpenPhaseModal = function(phaseIndex){
   modal.innerHTML = '<div class="mat-modal-box mat-modal-wide">'
     + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">Plan d action · Phase ' + p.n + '</div>'
     + '<div class="mat-modal-title">' + p.title + '</div></div>'
-    + '<button class="mat-modal-close" onclick="document.getElementById(\'roadmap-modal\').classList.remove(\'on\')" title="Fermer cette fenêtre">×</button></div>'
+    + '<button type="button" class="mat-modal-close" aria-label="Fermer cette fenêtre" onclick="document.getElementById(\'roadmap-modal\').classList.remove(\'on\')" title="Fermer cette fenêtre">×</button></div>'
     + '<div class="mat-modal-body">'
     + '<p style="font-size:12px;color:var(--muted);margin-bottom:16px">Génère un livrable détaillé et actionnable pour cette phase, basé sur vos données réelles (Registre IA, Audit) et votre secteur d activité.</p>'
     + '<div class="mat-api-row" style="margin-bottom:16px">'
@@ -16073,7 +16185,7 @@ window.traitOpenModal = function(){
   var m=traitModalEl();
   m.innerHTML='<div class="mat-modal-card" style="max-width:680px">'
     + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">RGPD — article 30</div><div class="mat-modal-title">Nouveau traitement</div></div>'
-    + '<button class="mat-modal-close" onclick="traitClose()">×</button></div>'
+    + '<button type="button" class="mat-modal-close" aria-label="Fermer cette fenêtre" onclick="traitClose()">×</button></div>'
     + '<div class="trait-grid">'
     + traitField("tf-nom","Nom du traitement *","Ex : Gestion de la paie",false)
     + traitField("tf-service","Service / entité","Ex : Ressources humaines",false)
@@ -16126,7 +16238,7 @@ window.traitDetails = function(id){
   var m=traitModalEl();
   m.innerHTML='<div class="mat-modal-card" style="max-width:680px">'
     + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">RGPD — article 30</div><div class="mat-modal-title">'+traitEsc(t.nom)+'</div></div>'
-    + '<button class="mat-modal-close" onclick="traitClose()">×</button></div>'
+    + '<button type="button" class="mat-modal-close" aria-label="Fermer cette fenêtre" onclick="traitClose()">×</button></div>'
     + row("Service / entité",t.service)
     + row("Finalité(s)",t.finalites)
     + row("Base légale (art. 6)",t.base_legale)
@@ -17442,13 +17554,13 @@ window.clientEntApercu = function(cid){
       var h = '<div style="border:1px solid var(--rule2);border-radius:10px;padding:12px 14px;background:var(--white)"><div style="font-weight:700;font-size:12px;margin-bottom:6px">P\u00e9rim\u00e8tre Entreprise \u2014 gestion</div>';
       h += '<div style="font-weight:600;font-size:11px;color:var(--ink);margin:8px 0 3px 0">Entit\u00e9s ('+(d.entites||[]).length+')</div>';
       h += (d.entites||[]).map(function(e){ return '<div style="display:flex;justify-content:space-between;font-size:11px;padding:2px 0"><span style="color:var(--muted)">'+String(e.nom).replace(/</g,"&lt;")+' \u00b7 '+String(e.type).replace(/</g,"&lt;")+'</span><button onclick="caeDelEntite('+e.id+')" style="'+lnk+';color:var(--accent)">Retirer</button></div>'; }).join('');
-      h += '<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px"><input id="cae-ent-nom" placeholder="Nom" style="'+inp+';flex:1;min-width:80px"><select id="cae-ent-type" style="'+inp+'"><option>Filiale</option><option>Groupe</option><option>P\u00e9rim\u00e8tre</option><option>Site</option></select><button onclick="caeAddEntite()" title="Ajouter une entit\u00e9" style="'+addb+'">+</button></div>';
+      h += '<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px"><input id="cae-ent-nom" placeholder="Nom" style="'+inp+';flex:1;min-width:80px"><select id="cae-ent-type" style="'+inp+'"><option>Filiale</option><option>Groupe</option><option>P\u00e9rim\u00e8tre</option><option>Site</option></select><button type="button" onclick="caeAddEntite()" title="Ajouter une entit\u00e9" aria-label="Ajouter une entit\u00e9" style="'+addb+'">+</button></div>';
       h += '<div style="font-weight:600;font-size:11px;color:var(--ink);margin:10px 0 3px 0">Connecteurs ('+(d.connecteurs||[]).length+')</div>';
       h += (d.connecteurs||[]).map(function(c){ return '<div style="padding:2px 0;font-size:11px"><div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">'+String(c.categorie).replace(/</g,"&lt;")+' \u00b7 '+String(c.nom||'').replace(/</g,"&lt;")+'</span><span style="color:'+(SC[c.statut]||'var(--muted)')+'">'+(SL[c.statut]||String(c.statut||'').replace(/</g,"&lt;"))+'</span></div><div style="display:flex;gap:8px;margin-top:1px"><button onclick="caeTestConn('+c.id+')" style="'+lnk+';color:var(--ink);text-decoration:underline">Tester</button><button onclick="caeSyncConn('+c.id+',\''+c.categorie+'\')" style="'+lnk+';color:var(--ink);text-decoration:underline">Synchroniser</button><button onclick="caeDelConn('+c.id+')" style="'+lnk+';color:var(--accent)">Retirer</button></div></div>'; }).join('');
-      h += '<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px"><select id="cae-conn-cat" style="'+inp+'"><option>GRC</option><option>ERP</option><option>ITSM</option></select><input id="cae-conn-nom" placeholder="Nom" style="'+inp+';flex:1;min-width:60px"><input id="cae-conn-url" placeholder="https://..." style="'+inp+';flex:1;min-width:90px"><input id="cae-conn-sec" placeholder="Jeton" style="'+inp+';width:60px"><button onclick="caeAddConn()" title="Ajouter un connecteur" style="'+addb+'">+</button></div><div id="cae-conn-msg" style="font-size:10px;color:var(--accent);margin-top:2px"></div>';
+      h += '<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px"><select id="cae-conn-cat" style="'+inp+'"><option>GRC</option><option>ERP</option><option>ITSM</option></select><input id="cae-conn-nom" placeholder="Nom" style="'+inp+';flex:1;min-width:60px"><input id="cae-conn-url" placeholder="https://..." style="'+inp+';flex:1;min-width:90px"><input id="cae-conn-sec" placeholder="Jeton" style="'+inp+';width:60px"><button type="button" onclick="caeAddConn()" title="Ajouter un connecteur" aria-label="Ajouter un connecteur" style="'+addb+'">+</button></div><div id="cae-conn-msg" style="font-size:10px;color:var(--accent);margin-top:2px"></div>';
       h += '<div style="font-weight:600;font-size:11px;color:var(--ink);margin:10px 0 3px 0">Formations ('+(d.formations||[]).length+')</div>';
       h += (d.formations||[]).map(function(f){ return '<div style="display:flex;justify-content:space-between;font-size:11px;padding:2px 0"><span style="color:var(--muted)">'+String(f.date_prevue).replace(/</g,"&lt;")+' \u00b7 '+String(f.theme||'').replace(/</g,"&lt;")+'</span><button onclick="caeDelForm('+f.id+')" style="'+lnk+';color:var(--accent)">Retirer</button></div>'; }).join('');
-      h += '<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px"><input id="cae-form-date" type="date" style="'+inp+'"><input id="cae-form-theme" placeholder="Th\u00e8me" style="'+inp+';flex:1;min-width:70px"><button onclick="caeAddForm()" title="Planifier une session" style="'+addb+'">+</button></div>';
+      h += '<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px"><input id="cae-form-date" type="date" style="'+inp+'"><input id="cae-form-theme" placeholder="Th\u00e8me" style="'+inp+';flex:1;min-width:70px"><button type="button" onclick="caeAddForm()" title="Planifier une session" aria-label="Planifier une session" style="'+addb+'">+</button></div>';
       h += '</div>';
       box.innerHTML = h;
     })
@@ -17697,9 +17809,18 @@ window.navRefresh = function(){
 window.navInit = function(){
   if(document.getElementById('nav-prev')) return;
   var base = 'position:fixed;z-index:9995;width:38px;height:38px;border-radius:50%;border:1px solid rgba(201,162,39,.55);background:var(--white,#fff);color:#4a5260;cursor:pointer;box-shadow:0 2px 10px rgba(5,8,14,.12);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:600;line-height:1;opacity:.9;transition:all .18s ease';
-  function make(id, style, titre, texte, action){
+  /* LE NOM EST L'ACTION, LE RACCOURCI EST À PART. Mesuré avant : ces
+     quatre boutons s'appelaient « ← », « → », « ↑ », « ↓ » pour un lecteur
+     d'écran — le `title` n'arrivait qu'en description. Le nom court va dans
+     `aria-label`, le raccourci dans `aria-keyshortcuts` (les touches que
+     l'écouteur plus bas reconnaît vraiment). Le `title` reste pour la
+     souris : il vaut le nom suivi du raccourci, et /bulle-titre.js n'ouvre
+     donc rien au clavier — le sens est déjà dans le nom. */
+  function make(id, style, titre, texte, action, nom, touches){
     var b = document.createElement('button');
     b.id = id; b.type = 'button'; b.title = titre; b.innerHTML = texte;
+    b.setAttribute('aria-label', nom);
+    b.setAttribute('aria-keyshortcuts', touches);
     b.style.cssText = base + ';' + style;
     b.onmouseenter = function(){ b.style.background = 'rgba(201,162,39,.14)'; b.style.color = '#14181f'; b.style.borderColor = '#c9a227'; b.style.opacity = '1'; };
     b.onmouseleave = function(){ b.style.background = 'var(--white,#fff)'; b.style.color = '#4a5260'; b.style.borderColor = 'rgba(201,162,39,.55)'; b.style.opacity = '.9'; };
@@ -17707,10 +17828,10 @@ window.navInit = function(){
     document.body.appendChild(b);
     return b;
   }
-  make('nav-prev', 'left:calc(var(--sidebar, 240px) + 18px);top:50%;transform:translateY(-50%)', 'Module pr\u00e9c\u00e9dent (Alt+\u2190)', '\u2190', function(){ window.navGoRelative(-1); });
-  make('nav-next', 'right:18px;top:50%;transform:translateY(-50%)', 'Module suivant (Alt+\u2192)', '\u2192', function(){ window.navGoRelative(1); });
-  make('nav-top', 'right:18px;bottom:132px', 'Haut de page (Alt+\u2191)', '\u2191', function(){ window.navScrollTo('top'); });
-  make('nav-bottom', 'right:18px;bottom:78px', 'Bas de page (Alt+\u2193)', '\u2193', function(){ window.navScrollTo('bottom'); });
+  make('nav-prev', 'left:calc(var(--sidebar, 240px) + 18px);top:50%;transform:translateY(-50%)', 'Module pr\u00e9c\u00e9dent (Alt+\u2190)', '\u2190', function(){ window.navGoRelative(-1); }, 'Module pr\u00e9c\u00e9dent', 'Alt+ArrowLeft');
+  make('nav-next', 'right:18px;top:50%;transform:translateY(-50%)', 'Module suivant (Alt+\u2192)', '\u2192', function(){ window.navGoRelative(1); }, 'Module suivant', 'Alt+ArrowRight');
+  make('nav-top', 'right:18px;bottom:132px', 'Haut de page (Alt+\u2191)', '\u2191', function(){ window.navScrollTo('top'); }, 'Haut de page', 'Alt+ArrowUp');
+  make('nav-bottom', 'right:18px;bottom:78px', 'Bas de page (Alt+\u2193)', '\u2193', function(){ window.navScrollTo('bottom'); }, 'Bas de page', 'Alt+ArrowDown');
   var pos = document.createElement('div');
   pos.id = 'nav-pos';
   pos.style.cssText = 'position:fixed;left:calc(var(--sidebar, 240px) + 18px);top:calc(50% + 34px);transform:translateY(-50%);z-index:9995;font-size:10px;font-weight:600;color:#6b7280;background:var(--white,#fff);border:1px solid rgba(201,162,39,.35);border-radius:9px;padding:2px 7px;opacity:.85';
@@ -18371,8 +18492,12 @@ window.gouvRenderKpis = function(){
     var i = tb.indicateurs.filter(function(x){ return x.cle === cle; })[0];
     if (!i) return '';
     var val = i.mesure ? (i.valeur + (i.unite === '%' ? ' %' : '')) : '—';
-    return '<div class="kpi" title="' + rgpdEsc(i.lecture) + '">'
-      + '<div class="kpi-lbl">' + rgpdEsc(i.nom) + '</div>'
+    /* LA LECTURE DE L'INDICATEUR DANS UN BOUTON D'AIDE, plus dans un
+       `title` : le bloc n'est pas focalisable, son `title` ne se lisait
+       qu'à la souris (voir `aideTitre`). */
+    return '<div class="kpi">'
+      + '<div class="kpi-lbl">' + rgpdEsc(i.nom)
+      + window.aideTitre('aide-gouv-' + cle, i.nom, i.lecture) + '</div>'
       + '<div class="kpi-val" style="color:' + gouvCouleurInd(i) + '">' + rgpdEsc(val) + '</div>'
       + '<div class="kpi-tr" style="color:var(--muted2)">' + (i.mesure ? ('Cible : ' + rgpdEsc(i.cible)) : 'non mesuré') + '</div>'
       + '</div>';
@@ -18608,10 +18733,10 @@ window.ia50Load = function(){
       var mesCol = function(u){
         var m = parLigne[u.id];
         if(!m) return '<span style="font-size:10px;color:var(--muted)">\u2014</span>';
-        if(m.statut === 'conforme') return '<span style="font-size:10px;color:var(--green,#0E7C7B);font-weight:700" title="' + rgpdEsc(m.preuve) + '">mesur\u00e9 \u2713</span>';
-        if(m.statut === 'non-conforme') return '<span style="font-size:10px;color:var(--accent);font-weight:800" title="' + rgpdEsc(m.preuve) + '">mesur\u00e9 \u2717</span>';
-        if(m.statut === 'partiel') return '<span style="font-size:10px;color:#c98a00;font-weight:700" title="' + rgpdEsc(m.preuve) + '">partiel</span>';
-        return '<span style="font-size:10px;color:var(--muted)" title="' + rgpdEsc(m.preuve) + '">attestation</span>';
+        if(m.statut === 'conforme') return '<span class="ia50-preuve" style="font-size:10px;color:var(--green,#0E7C7B);font-weight:700" title="' + rgpdEsc(m.preuve) + '">mesur\u00e9 \u2713</span>';
+        if(m.statut === 'non-conforme') return '<span class="ia50-preuve" style="font-size:10px;color:var(--accent);font-weight:800" title="' + rgpdEsc(m.preuve) + '">mesur\u00e9 \u2717</span>';
+        if(m.statut === 'partiel') return '<span class="ia50-preuve" style="font-size:10px;color:#c98a00;font-weight:700" title="' + rgpdEsc(m.preuve) + '">partiel</span>';
+        return '<span class="ia50-preuve" style="font-size:10px;color:var(--muted)" title="' + rgpdEsc(m.preuve) + '">attestation</span>';
       };
       /* Ce que le role declare DOIT. Calcule par le serveur depuis la doctrine
          et servi avec la ligne : jamais stocke dans la ligne, jamais recopie
@@ -18620,9 +18745,9 @@ window.ia50Load = function(){
       var duCol = function(u){
         var du = u.du || {};
         var ps = du.paragraphes || [];
-        if(!du.connu) return '<span style="font-size:10px;color:var(--accent);font-weight:700" title="R\u00f4le inconnu du cadre : aucun paragraphe ne peut lui \u00eatre rattach\u00e9.">r\u00f4le inconnu</span>';
+        if(!du.connu) return '<span class="ia50-du" style="font-size:10px;color:var(--accent);font-weight:700" title="R\u00f4le inconnu du cadre : aucun paragraphe ne peut lui \u00eatre rattach\u00e9.">r\u00f4le inconnu</span>';
         if(!ps.length) return '<span style="font-size:10px;color:var(--muted)">\u2014</span>';
-        return '<span style="font-size:10px;font-weight:700;color:var(--ink)" title="Ce que ce r\u00f4le doit au titre de l\u2019article 50. Ce que la ligne porte au-del\u00e0 est un engagement, pas une obligation.">art. '
+        return '<span class="ia50-du" style="font-size:10px;font-weight:700;color:var(--ink)" title="Ce que ce r\u00f4le doit au titre de l\u2019article 50. Ce que la ligne porte au-del\u00e0 est un engagement, pas une obligation.">art. '
           + ps.map(rgpdEsc).join(' + ') + '</span><br><span style="font-size:9.5px;color:var(--muted)">+ '
           + (du.modalites || []).map(rgpdEsc).join(', ') + ' (modalit\u00e9s)</span>';
       };
@@ -19849,7 +19974,15 @@ window.cartoRenderRoi = function(){
   }).join('');
   box.innerHTML =
     '<div style="overflow-x:auto"><table class="ms-table"><thead><tr>'
-    + '<th>Cas d\u2019usage</th><th class="carto-hint" title="Assiette annuelle : cout annuel actuel du processus vise (masse salariale, achats, pertes evitables).">Assiette annuelle</th><th class="carto-hint" title="Taux de gain estime : productivite, qualite ou delais gagnes, en % de l assiette. Pre-rempli par famille technologique.">Taux de gain</th><th class="carto-hint" title="Cout de mise en oeuvre : investissement initial (build, integration, conduite du changement).">Coût projet</th><th class="carto-hint" title="Cout recurrent annuel : exploitation, licences, maintenance, supervision (run).">Coût récurrent/an</th><th class="carto-hint" title="Gain annuel = assiette annuelle x taux de gain.">Gain annuel</th><th class="carto-hint" title="Retour net annee 1 = gain annuel - cout projet - cout recurrent.">Retour net an 1</th><th class="carto-hint" title="Retour sur investissement annee 1 = retour net / (cout projet + cout recurrent).">ROI an 1</th><th class="carto-hint" title="Delai de recuperation : temps d amortissement du cout projet.">Récupération</th>'
+    + '<th>Cas d\u2019usage</th>'
+    + window.enTeteAide('Assiette annuelle', 'aide-carto-roi-1', 'Assiette annuelle', 'Assiette annuelle : coût annuel actuel du processus visé (masse salariale, achats, pertes évitables).')
+    + window.enTeteAide('Taux de gain', 'aide-carto-roi-2', 'Taux de gain', 'Taux de gain estimé : productivité, qualité ou délais gagnés, en % de l’assiette. Prérempli par famille technologique.')
+    + window.enTeteAide('Coût projet', 'aide-carto-roi-3', 'Coût projet', 'Coût de mise en œuvre : investissement initial (développement, intégration, conduite du changement).')
+    + window.enTeteAide('Coût récurrent/an', 'aide-carto-roi-4', 'Coût récurrent/an', 'Coût récurrent annuel : exploitation, licences, maintenance, supervision.')
+    + window.enTeteAide('Gain annuel', 'aide-carto-roi-5', 'Gain annuel', 'Gain annuel = assiette annuelle × taux de gain.')
+    + window.enTeteAide('Retour net an 1', 'aide-carto-roi-6', 'Retour net an 1', 'Retour net année 1 = gain annuel − coût projet − coût récurrent.')
+    + window.enTeteAide('ROI an 1', 'aide-carto-roi-7', 'ROI an 1', 'Retour sur investissement année 1 = retour net ÷ (coût projet + coût récurrent).')
+    + window.enTeteAide('Récupération', 'aide-carto-roi-8', 'Récupération', 'Délai de récupération : temps d’amortissement du coût projet.')
     + '</tr></thead><tbody>'+rows+'</tbody></table></div>'
     + '<div id="carto-roi-totals" style="margin-top:12px;padding:12px 14px;background:var(--bg);border:1px solid var(--rule2);border-radius:8px;font-size:12.5px"></div>'
     + '<div style="font-size:10px;color:var(--muted2);margin-top:8px">Assiette annuelle : coût annuel du processus visé (masse salariale, achats, pertes évitables). Taux de gain : productivité, qualité ou délais. Retour net année 1 = gain annuel − coût projet − coût récurrent. Récupération = délai d\u2019amortissement du coût projet.</div>';
@@ -19960,7 +20093,12 @@ window.cartoRenderShortlist = function(){
   }).join('');
   box.innerHTML =
     '<div style="font-size:11px;color:var(--muted2);margin-bottom:8px">Notez chaque axe de 1 (très faible) à 5 (très fort). Le score global pondéré, la priorité et le positionnement se calculent en temps réel. Pondérations : impact 35 %, faisabilité 25 %, données 20 %, risque maîtrisé 20 %.</div>'
-    + '<table class="ms-table"><thead><tr><th>Cas d\u2019usage</th><th class="carto-hint" title="Impact metier attendu : ampleur des gains (productivite, qualite, revenus, reduction de risque). 1 = faible, 5 = fort.">Impact</th><th class="carto-hint" title="Faisabilite : maturite technique, complexite d integration et disponibilite des moyens. 1 = difficile, 5 = aisee.">Faisab.</th><th class="carto-hint" title="Donnees : disponibilite, qualite et accessibilite des donnees necessaires. 1 = insuffisantes, 5 = pretes.">Données</th><th class="carto-hint" title="Risque maitrise : maitrise des risques reglementaire, ethique et securite. 1 = risque eleve, 5 = bien maitrise.">Risque</th><th>Score /5</th><th>Priorité</th><th>Positionnement / vague</th><th>Passer à</th></tr></thead><tbody>'+rows+'</tbody></table>'
+    + '<table class="ms-table"><thead><tr><th>Cas d\u2019usage</th>'
+    + window.enTeteAide('Impact', 'aide-carto-prio-1', 'Impact', 'Impact métier attendu : ampleur des gains (productivité, qualité, revenus, réduction de risque). 1 = faible, 5 = fort.')
+    + window.enTeteAide('Faisab.', 'aide-carto-prio-2', 'Faisabilité', 'Faisabilité : maturité technique, complexité d’intégration et disponibilité des moyens. 1 = difficile, 5 = aisée.')
+    + window.enTeteAide('Données', 'aide-carto-prio-3', 'Données', 'Données : disponibilité, qualité et accessibilité des données nécessaires. 1 = insuffisantes, 5 = prêtes.')
+    + window.enTeteAide('Risque', 'aide-carto-prio-4', 'Risque', 'Risque maîtrisé : maîtrise des risques réglementaire, éthique et sécurité. 1 = risque élevé, 5 = bien maîtrisé.')
+    + '<th>Score /5</th><th>Priorité</th><th>Positionnement / vague</th><th>Passer à</th></tr></thead><tbody>'+rows+'</tbody></table>'
     + '<div id="carto-synthese" style="margin-top:10px;padding:10px 12px;background:var(--bg);border:1px solid var(--rule2);border-radius:8px;font-size:12px"></div>';
   cartoUpdateSynthese();
 };
@@ -21512,7 +21650,7 @@ window.guidedPathsOpen = function(){
 
   modal.innerHTML = '<div class="mat-modal-card" style="max-width:760px;max-height:84vh;overflow-y:auto">'
     + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">Onboarding</div><div class="mat-modal-title">Parcours guidés par profil</div></div>'
-    + '<button class="mat-modal-close" onclick="guidedPathsClose()">×</button></div>'
+    + '<button type="button" class="mat-modal-close" aria-label="Fermer cette fenêtre" onclick="guidedPathsClose()">×</button></div>'
     + '<p style="font-size:12.5px;color:var(--muted);margin:0 0 10px;line-height:1.6">Sélectionnez votre rôle pour un enchaînement recommandé des pages — pertinent aussi bien pour une TPE qu’un grand compte, le niveau de détail s’adapte à votre contexte.</p>'
     /* LE GUIDE DE LECTURE DES COULEURS VIT ICI, au-dessus de la liste, et non
        dans une aide séparée : c'est le seul endroit où l'on voit les trois
@@ -21741,7 +21879,7 @@ window.monParcoursBuilder = function(){
   if(!modal){ modal=document.createElement('div'); modal.id='mp-builder-modal'; modal.className='mat-modal'; document.body.appendChild(modal); }
   modal.innerHTML='<div class="mat-modal-card" style="max-width:600px">'
     + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">Mon parcours chiffré</div><div class="mat-modal-title">Composer mon parcours</div></div>'
-    + '<button class="mat-modal-close" onclick="mpBuilderClose()">×</button></div>'
+    + '<button type="button" class="mat-modal-close" aria-label="Fermer cette fenêtre" onclick="mpBuilderClose()">×</button></div>'
     + '<p style="font-size:12.5px;color:var(--muted);margin:0 0 14px;line-height:1.6">Cochez les modules à inclure et ordonnez-les. Le parcours vous guidera d\u2019un module à l\u2019autre jusqu\u2019au coût et à la synthèse.</p>'
     + '<div id="mp-builder-list"></div>'
     /* Onze modules dépassent la hauteur de la fenêtre : sans barre collée en
@@ -21761,8 +21899,8 @@ window.mpBuilderRender = function(){
     return '<div class="mp-row">'
       + '<label class="mp-check"><input type="checkbox" '+(row.on?'checked':'')+' onchange="mpBuilderToggle('+idx+')"><span></span></label>'
       + '<div class="mp-row-txt"><strong>'+(idx+1)+'. '+m.label+'</strong><span>'+m.desc+'</span></div>'
-      + '<div class="mp-row-move"><button onclick="mpBuilderMove('+idx+',-1)" title="Monter" '+(idx===0?'disabled':'')+'>\u2191</button>'
-      + '<button onclick="mpBuilderMove('+idx+',1)" title="Descendre" '+(idx===window.__mpBuilder.length-1?'disabled':'')+'>\u2193</button></div>'
+      + '<div class="mp-row-move"><button onclick="mpBuilderMove('+idx+',-1)" title="Monter" aria-label="Monter" '+(idx===0?'disabled':'')+'>\u2191</button>'
+      + '<button onclick="mpBuilderMove('+idx+',1)" title="Descendre" aria-label="Descendre" '+(idx===window.__mpBuilder.length-1?'disabled':'')+'>\u2193</button></div>'
       + '</div>';
   }).join('');
 };
@@ -21806,7 +21944,7 @@ window.monParcoursSyntheseShow = function(){
   if(!modal){ modal=document.createElement('div'); modal.id='mp-synthese-modal'; modal.className='mat-modal'; document.body.appendChild(modal); }
   modal.innerHTML='<div class="mat-modal-card" style="max-width:600px">'
     + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">Mon parcours chiffré</div><div class="mat-modal-title">Synthèse coût &amp; valeur</div></div>'
-    + '<button class="mat-modal-close" onclick="mpSyntheseClose()">×</button></div>'
+    + '<button type="button" class="mat-modal-close" aria-label="Fermer cette fenêtre" onclick="mpSyntheseClose()">×</button></div>'
     + '<div class="mp-syn-grid">'
     + card('Cas d\u2019usage', n+'', 'retenus')
     + card('Gain annuel estimé', eur(gain), 'cumulé')
@@ -21870,14 +22008,22 @@ window.guidedRenderBanner = function(){
   if(next) html += '<button class="gb-btn gb-next gb-next-anim" title="Ouvrir « '
     + esc(next.label) + ' » et avancer le parcours d\u2019une \u00e9tape" '
     + 'onclick="guidedStartStep(\''+g.pathId+'\','+(i+1)+')">Suivant : '+esc(next.label)+' <span class="gb-arrow">\u2192</span></button>';
-  /* « TERMINER » NE VALIDE RIEN, ET L'INFOBULLE LE DIT. Sur un bandeau qui
+  /* « TERMINER » NE VALIDE RIEN, ET LE BANDEAU L'ÉCRIT. Sur un bandeau qui
      porte une barre de progression, un bouton « Terminer ✓ » se lit comme une
      validation. Il ferme le bandeau : l'avancement enregistré ne change pas,
-     et rien n'est déclaré conforme. */
-  else html += '<button class="gb-btn gb-next" title="Fermer le bandeau. '
-    + 'L\u2019avancement enregistr\u00e9 est conserv\u00e9, et rien n\u2019est '
-    + 'd\u00e9clar\u00e9 conforme." onclick="guidedEndBanner()">Terminer \u2713</button>';
-  html += '<button class="gb-close" title="Quitter le parcours. Vous le '
+     et rien n'est déclaré conforme.
+     LE DÉFAUT MESURÉ : cet avertissement n'était que dans le `title` — lu à
+     la souris posée, jamais au doigt ni au clavier, c'est-à-dire jamais par
+     qui en avait le plus besoin avant d'appuyer. Il est maintenant ÉCRIT à
+     côté du bouton, et le bouton le porte en description.
+     PLUS DE `title` : il redisait, dans une autre version, ce que le bandeau
+     écrit juste à côté — et /bulle-titre.js l'ouvrait à chaque tabulation
+     (mesuré, revue du lot 3). Ce qui est écrit n'a pas besoin de bulle. */
+  else html += '<button class="gb-btn gb-next" aria-describedby="gb-avert" '
+    + 'onclick="guidedEndBanner()">Terminer \u2713</button>'
+    + '<span class="gb-avert" id="gb-avert">Ferme le bandeau\u00a0: l\u2019avancement '
+    + 'est conserv\u00e9, rien n\u2019est d\u00e9clar\u00e9 conforme.</span>';
+  html += '<button type="button" class="gb-close" aria-label="Quitter le parcours" title="Quitter le parcours. Vous le '
     + 'retrouverez o\u00f9 vous l\u2019avez laiss\u00e9." onclick="guidedEndBanner()">\u00d7</button>';
   html += '</div>';
   b.innerHTML = html;
@@ -24262,8 +24408,8 @@ window.isoPeindreArticles = function () {
       h += '<div style="padding:8px 0;border-top:1px solid var(--line,#2a2a2a)">'
          + '<b>' + isoEsc(a.numero) + '</b> ' + isoEsc(a.titre)
          + (propres[a.numero]
-            ? ' <span class="cnf-art" title="Cet article ne se reprend pas d’un système de management existant">propre à l’IA</span>'
-            : ' <span class="cnf-art" title="Se greffe sur un système de management déjà en place (ISO 27001, 9001…)">mutualisable</span>')
+            ? ' <span class="cnf-art cnf-portee" title="Cet article ne se reprend pas d’un système de management existant">propre à l’IA</span>'
+            : ' <span class="cnf-art cnf-portee" title="Se greffe sur un système de management déjà en place (ISO 27001, 9001…)">mutualisable</span>')
          + '<span class="cnf-pq">' + isoEsc(a.dit) + '</span>'
          + '<select class="cnf-in" style="margin-top:6px" '
          + 'onchange="isoArticle(\'' + a.numero + '\', this.value)">'
@@ -24288,7 +24434,14 @@ window.isoPeindreArticles = function () {
     + '<div class="cnf-cmd">C’est le <b>second</b> taux qui dit l’effort réel. '
     + 'Les articles « mutualisables » se greffent sur un système de management '
     + 'déjà en place ; ceux marqués « propre à l’IA » sont ce que 42001 ajoute, '
-    + 'et il n’y en a que ' + nbP + '.</div>' + h;
+    + 'et il n’y en a que ' + nbP + '.</div>'
+    /* LA LÉGENDE DES PASTILLES, une fois au-dessus de la liste : leur sens
+       n'était que dans un `title`, lu à la souris seulement (une pastille
+       ne prend pas le focus). Le `title` reste, pour la souris et le doigt. */
+    + '<p class="legende-badges" data-legende="cnf-portee"><b>propre à l’IA</b> : '
+    + 'cet article ne se reprend pas d’un système de management existant · '
+    + '<b>mutualisable</b> : se greffe sur un système de management déjà en '
+    + 'place (ISO 27001, 9001…).</p>' + h;
 };
 
 window.isoArticle = function (numero, valeur) {
@@ -24333,6 +24486,12 @@ function isoRendreSoa(e, j) {
      + (j.recevable ? 'Recevable pour un audit d’étape 1.'
                     : 'NON recevable pour un audit d’étape 1.')
      + '</b> ' + isoEsc(j.dit) + '</div>';
+  /* La légende de la pastille « justification manquante », seulement quand
+     une ligne la porte. */
+  if ((j.sans_justification || []).length)
+    h += '<p class="legende-badges" data-legende="cnf-justif"><b>justification '
+       + 'manquante</b> : l’article 6.1.3 f) exige une justification de '
+       + 'l’inclusion COMME de l’exclusion.</p>';
   (j.bloquants || []).forEach(function (b) {
     h += '<div class="cnf-cmd bloc">' + isoEsc(b) + '</div>'; });
   (j.objectifs || []).forEach(function (g) {
@@ -24347,7 +24506,7 @@ function isoRendreSoa(e, j) {
       h += '<div style="padding:8px 0;border-top:1px solid var(--line,#2a2a2a)">'
          + '<b>' + isoEsc(l.numero) + '</b> ' + isoEsc(l.titre)
          + (l.justification_manquante
-            ? ' <span class="cnf-bloc" title="L’article 6.1.3 f) exige une justification de l’inclusion COMME de l’exclusion">justification manquante</span>'
+            ? ' <span class="cnf-bloc cnf-justif" title="L’article 6.1.3 f) exige une justification de l’inclusion COMME de l’exclusion">justification manquante</span>'
             : '')
          + '<div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap">'
          + '<select class="cnf-in" onchange="isoDecision(\'' + l.numero + '\', this.value)">'
@@ -25702,8 +25861,8 @@ window.nis2PeindreGouvernance = function () {
        + '<b>' + nis2Esc(g.quoi) + '</b> <span class="cnf-art">'
        + nis2Esc(g.article) + '</span> '
        + (obl[g.cle]
-          ? '<span class="cnf-bloc" title="Obligation : « sont tenus de »">obligation</span>'
-          : '<span class="cnf-art" title="Encouragement : « encouragent »">encouragement</span>')
+          ? '<span class="cnf-bloc cnf-force" title="Obligation : « sont tenus de »">obligation</span>'
+          : '<span class="cnf-art cnf-force" title="Encouragement : « encouragent »">encouragement</span>')
        + '<span class="cnf-pq"><b>Preuve attendue — </b>' + nis2Esc(g.preuve)
        + '</span>'
        + '<select class="cnf-in" style="margin-top:6px" '
@@ -25724,7 +25883,12 @@ window.nis2PeindreGouvernance = function () {
     + '<div class="cnf-cmd">Le taux ci-dessus ne compte que les <b>' + nb
     + ' obligations</b>. La formation du personnel, qui est un encouragement, '
     + 'est affichée mais n’entre pas au dénominateur : l’y mettre ferait '
-    + 'gagner des points à qui a manqué la seule ligne obligatoire.</div>' + h;
+    + 'gagner des points à qui a manqué la seule ligne obligatoire.</div>'
+    /* La légende des deux pastilles : leur sens (le verbe de l'article 20)
+       n'était que dans un `title`. */
+    + '<p class="legende-badges" data-legende="cnf-force"><b>obligation</b> : '
+    + 'le texte dit « sont tenus de » · <b>encouragement</b> : le texte dit '
+    + '« encouragent ».</p>' + h;
 };
 
 window.nis2Gouv = function (cle, valeur) {
@@ -26139,7 +26303,11 @@ function iso27RendreSoa(e, j) {
   h += '<div class="cnf-cmd"><b>Les ' + j.nouvelles_2022.total
      + ' mesures apparues en 2022 — dont ' + j.nouvelles_2022.non_decidees.length
      + ' non décidées.</b><span class="cnf-pq">'
-     + iso27Esc(j.nouvelles_2022.dit) + '</span></div>';
+     + iso27Esc(j.nouvelles_2022.dit) + '</span></div>'
+     /* La légende de la pastille « nouvelle en 2022 » : son sens n'était que
+        dans un `title`. */
+     + '<p class="legende-badges" data-legende="cnf-nouveau"><b>nouvelle en '
+     + '2022</b> : cette mesure n’existait pas dans ISO/IEC 27001:2013.</p>';
 
   (j.themes || []).forEach(function (g) {
     var lignes = neuf ? g.lignes.filter(function (l) { return l.nouvelle_2022; })
@@ -26157,7 +26325,7 @@ function iso27RendreSoa(e, j) {
       h += '<div style="padding:8px 0;border-top:1px solid var(--line,#2a2a2a)">'
          + '<b>' + iso27Esc(l.numero) + '</b> ' + iso27Esc(l.titre)
          + (l.nouvelle_2022
-            ? ' <span class="cnf-bloc" title="Cette mesure n’existait pas dans ISO/IEC 27001:2013">nouvelle en 2022</span>'
+            ? ' <span class="cnf-bloc cnf-nouveau" title="Cette mesure n’existait pas dans ISO/IEC 27001:2013">nouvelle en 2022</span>'
             : '')
          + (l.justification_manquante
             ? ' <span class="cnf-bloc">justification manquante</span>' : '')
@@ -26254,8 +26422,8 @@ window.iso27PeindreArticles = function () {
       h += '<div style="padding:8px 0;border-top:1px solid var(--line,#2a2a2a)">'
          + '<b>' + iso27Esc(a.numero) + '</b> ' + iso27Esc(a.titre)
          + (propres[a.numero]
-            ? ' <span class="cnf-art" title="Cet article ne se reprend pas d’un autre système de management">propre à la sécurité</span>'
-            : ' <span class="cnf-art" title="Se greffe sur un système de management déjà en place (ISO 42001, 9001…)">mutualisable</span>')
+            ? ' <span class="cnf-art cnf-portee" title="Cet article ne se reprend pas d’un autre système de management">propre à la sécurité</span>'
+            : ' <span class="cnf-art cnf-portee" title="Se greffe sur un système de management déjà en place (ISO 42001, 9001…)">mutualisable</span>')
          + '<span class="cnf-pq">' + iso27Esc(a.dit) + '</span>'
          + '<select class="cnf-in" style="margin-top:6px" '
          + 'onchange="iso27Article(\'' + a.numero + '\', this.value)">'
@@ -26281,7 +26449,12 @@ window.iso27PeindreArticles = function () {
     + 'Les articles « mutualisables » se greffent sur un système de management '
     + 'déjà en place — ISO 42001 partage exactement la même structure — et '
     + 'ceux marqués « propre à la sécurité » sont les ' + nbP + ' qui ne se '
-    + 'reprennent de nulle part.</div>' + h;
+    + 'reprennent de nulle part.</div>'
+    /* La légende des pastilles, comme pour ISO 42001. */
+    + '<p class="legende-badges" data-legende="cnf-portee"><b>propre à la '
+    + 'sécurité</b> : cet article ne se reprend pas d’un autre système de '
+    + 'management · <b>mutualisable</b> : se greffe sur un système de '
+    + 'management déjà en place (ISO 42001, 9001…).</p>' + h;
 };
 
 window.iso27Article = function (numero, valeur) {
@@ -28438,6 +28611,13 @@ function _railSurReponse(ev) {
      comptent — champs, boutons, étiquettes, et les éléments qui portent
      leur propre action. */
   if (ev.type === 'click' && !t.closest('button, input, select, textarea, label, [onclick]')) return;
+  /* LIRE UNE AIDE N'EST PAS RÉPONDRE. Le bouton « ? » (window.aideTitre)
+     est un <button> dans une .page : LE DÉFAUT MESURÉ (revue du lot 3,
+     audit IA Act), sept clics sur des « ? » = sept POST /api/parcours/ia_act,
+     sept versions de déclarations, et sept réécritures du bandeau du rail,
+     une zone `role="status"` qu'un lecteur d'écran relit. Consulter
+     l'explication d'un compteur consommait le limiteur. */
+  if (t.closest('.aide-titre')) return;
   /* TOUTE RÉPONSE, DANS TOUT ÉCRAN — DORA compris, que le rail laisse à son
      propre moteur : le taux de conformité, lui, les lit toutes. */
   declarationsChangees();

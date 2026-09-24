@@ -1,0 +1,5 @@
+{
+ "_pourquoi": "LA LISTE NOMINATIVE DES ÉLÉMENTS INERTES À `title` INFORMATIF QUI RESTENT LISIBLES AU DOIGT ET À LA SOURIS SEULEMENT. Un élément inerte (une pastille, un bloc, un en-tête) ne prend pas le focus : son `title` ne se lit jamais au clavier, et lui donner un `tabindex` ferait de ce `title` son NOM (mesuré dans Chromium). Chacun doit donc être couvert par une LÉGENDE visible de son écran (un élément `[data-legende]` qui nomme sa classe), recevoir un bouton d'aide, ou figurer ici, avec l'écran, la classe et la raison. recette_complements.js (section D) parcourt tous les écrans de Sentinel et l'accueil : un générique qui n'est ni couvert ni nommé ici fait échouer la recette, et une entrée qui ne correspond plus à rien aussi. La liste est VIDE au lot 3 : les 151 génériques relevés sur le code d'avant sont tous couverts par une légende ou ont perdu leur `title` au profit d'un bouton d'aide.",
+ "_format": "chaque entrée : {\"ecran\": \"p-<id de l'écran>\", \"classe\": \"<classe CSS portée par l'élément>\", \"justification\": \"<pourquoi ni légende ni bouton d'aide>\"}",
+ "admis": []
+}

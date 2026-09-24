@@ -403,8 +403,19 @@
       dernierContact = { t: maintenant(), type: ev.pointerType };
       annulerMinuteur();
       geste = null;
-      /* LA SOURIS N'OUVRE RIEN : le navigateur montre déjà le `title`. */
-      if (ev.pointerType === "mouse") return;
+      /* LA SOURIS N'OUVRE RIEN : le navigateur montre déjà le `title`.
+         MAIS UN CLIC AILLEURS FERME LA BULLE DU BOUTON D'AIDE. Sa seule
+         sortie à la souris était le départ du focus : or Safari, et Firefox
+         sous macOS, ne donnent pas le focus à un bouton cliqué — aucun
+         `focusout` ne vient. MESURÉ (Chromium, le mousedown du bouton
+         annulé pour reproduire ce comportement) : bulle ouverte et
+         aria-expanded="true" après un clic sur le texte de l'écran. Un
+         clic sur le bouton lui-même n'est pas « ailleurs » : son `click`,
+         qui suit, fait la bascule. */
+      if (ev.pointerType === "mouse") {
+        if (ouverte && estAide(ouverte) && !ouverte.contains(ev.target)) fermer();
+        return;
+      }
       var a = ancreDe(ev.target);
       var g = geste = { id: ev.pointerId, x: ev.clientX, y: ev.clientY, t0: maintenant(),
                         ancre: a, mode: a ? mode(a) : null, long: false };

@@ -1809,7 +1809,10 @@ window.cpxExpandToggle = function(panelId){
     overlay.classList.add('on');
     var btn = panel.querySelector('.cpx-expand-btn');
     if(btn) btn.textContent = '⤡';
+    /* LE NOM SUIT LE `title` : le glyphe change, l'action aussi — un nom
+       resté « Agrandir » mentirait au lecteur d'écran. */
     if(btn) btn.title = 'Réduire';
+    if(btn) btn.setAttribute('aria-label', 'Réduire');
   }
 };
 window.cpxCollapseAll = function(){
@@ -1818,7 +1821,8 @@ window.cpxCollapseAll = function(){
     if(p){
       p.classList.remove('cpx-expanded');
       var btn = p.querySelector('.cpx-expand-btn');
-      if(btn){ btn.textContent = '⤢'; btn.title = 'Agrandir pour une meilleure lecture'; }
+      if(btn){ btn.textContent = '⤢'; btn.title = 'Agrandir pour une meilleure lecture';
+               btn.setAttribute('aria-label', 'Agrandir pour une meilleure lecture'); }
     }
   });
   var overlay = document.getElementById('cpx-overlay');

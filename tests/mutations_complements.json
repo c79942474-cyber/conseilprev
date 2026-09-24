@@ -1,0 +1,638 @@
+{
+ "_pourquoi": "Chaque mutation FABRIQUE un défaut réel du lot 3 (une légende qui ne couvre plus, un bouton d'aide qui naît ouvert, un glyphe sans nom, un champ sans nom, un avertissement caché, une croix redevenue <div>…) et doit faire TOMBER la règle nommée de tests/test_complements_pages.py. Une mutation qui survit dit que la règle ne mesure pas ce qu'elle prétend ; une qui fait tomber une AUTRE règle dit que la règle nommée vise à côté.",
+ "cibles": [
+  "tests/test_complements_pages.py"
+ ],
+ "mutations": [
+  {
+   "nom": "la légende des articles ISO 42001 nomme une autre classe que les pastilles",
+   "fichier": "sentinel.page.js",
+   "avant": "    + '<p class=\"legende-badges\" data-legende=\"cnf-portee\"><b>propre à l’IA</b> : '",
+   "apres": "    + '<p class=\"legende-badges\" data-legende=\"cnf-autre\"><b>propre à l’IA</b> : '",
+   "regle": "test_chaque_pastille_titree_d_un_ecran_de_conformite_a_sa_LEGENDE[isoArticles]"
+  },
+  {
+   "nom": "la légende d'ISO 42001 ne dit plus ce que dit le title de « propre à l'IA »",
+   "fichier": "sentinel.page.js",
+   "avant": "    + 'cet article ne se reprend pas d’un système de management existant · '",
+   "apres": "    + 'article spécifique · '",
+   "regle": "test_chaque_pastille_titree_d_un_ecran_de_conformite_a_sa_LEGENDE[isoArticles]"
+  },
+  {
+   "nom": "la légende « justification manquante » ne nomme plus sa classe",
+   "fichier": "sentinel.page.js",
+   "avant": "    h += '<p class=\"legende-badges\" data-legende=\"cnf-justif\"><b>justification '",
+   "apres": "    h += '<p class=\"legende-badges\" data-legende=\"\"><b>justification '",
+   "regle": "test_chaque_pastille_titree_d_un_ecran_de_conformite_a_sa_LEGENDE[isoSoa]"
+  },
+  {
+   "nom": "la légende des articles ISO 27001 disparaît",
+   "fichier": "sentinel.page.js",
+   "avant": "    + '<p class=\"legende-badges\" data-legende=\"cnf-portee\"><b>propre à la '",
+   "apres": "    + '<p class=\"legende-badges\"><b>propre à la '",
+   "regle": "test_chaque_pastille_titree_d_un_ecran_de_conformite_a_sa_LEGENDE[iso27Articles]"
+  },
+  {
+   "nom": "la pastille « nouvelle en 2022 » perd la classe que sa légende nomme",
+   "fichier": "sentinel.page.js",
+   "avant": "' <span class=\"cnf-bloc cnf-nouveau\" title=\"Cette mesure n’existait pas dans ISO/IEC 27001:2013\">",
+   "apres": "' <span class=\"cnf-bloc\" title=\"Cette mesure n’existait pas dans ISO/IEC 27001:2013\">",
+   "regle": "test_chaque_pastille_titree_d_un_ecran_de_conformite_a_sa_LEGENDE[iso27Soa]"
+  },
+  {
+   "nom": "la légende NIS 2 ne dit plus « sont tenus de »",
+   "fichier": "sentinel.page.js",
+   "avant": "    + 'le texte dit « sont tenus de » · <b>encouragement</b> : le texte dit '",
+   "apres": "    + 'le texte oblige · <b>encouragement</b> : le texte dit '",
+   "regle": "test_chaque_pastille_titree_d_un_ecran_de_conformite_a_sa_LEGENDE[nis2Gouv]"
+  },
+  {
+   "nom": "un nouveau title sur une pastille NIS 2, sans légende",
+   "fichier": "sentinel.page.js",
+   "avant": "          : '<span class=\"cnf-art cnf-force\" title=\"Encouragement : « encouragent »\">encouragement</span>')",
+   "apres": "          : '<span class=\"cnf-art\" title=\"Formation du personnel : encouragée\">encouragement</span>')",
+   "regle": "test_chaque_pastille_titree_d_un_ecran_de_conformite_a_sa_LEGENDE[nis2Gouv]"
+  },
+  {
+   "nom": "la légende « justification manquante » s'affiche sans pastille",
+   "fichier": "sentinel.page.js",
+   "avant": "  if ((j.sans_justification || []).length)",
+   "apres": "  if (true)",
+   "regle": "test_la_legende_de_la_pastille_n_apparait_qu_avec_la_pastille"
+  },
+  {
+   "nom": "la légende des priorités ne nomme plus la classe des pastilles",
+   "fichier": "sentinel.html",
+   "avant": "<p class=\"legende-badges\" data-legende=\"audit-item-prio\">",
+   "apres": "<p class=\"legende-badges\" data-legende=\"audit-prio\">",
+   "regle": "test_la_legende_des_priorites_est_AU_DESSUS_de_la_liste_de_l_audit"
+  },
+  {
+   "nom": "la légende des priorités ne dit plus « obligation importante »",
+   "fichier": "sentinel.html",
+   "avant": "<b>P2</b> : obligation importante, impact significatif",
+   "apres": "<b>P2</b> : importante, impact significatif",
+   "regle": "test_la_legende_des_priorites_est_AU_DESSUS_de_la_liste_de_l_audit"
+  },
+  {
+   "nom": "le tiret du benchmark perd sa classe",
+   "fichier": "sentinel.page.js",
+   "avant": "'<span class=\"bench-na\" title=\"Socle non relevé",
+   "apres": "'<span title=\"Socle non relevé",
+   "regle": "test_le_tiret_du_benchmark_et_la_colonne_du_de_l_article_50_ont_leur_legende[tiret]"
+  },
+  {
+   "nom": "la légende de la colonne « Dû » ne dit plus l'engagement",
+   "fichier": "sentinel.html",
+   "avant": "Ce que la ligne porte au-delà est un engagement, pas une obligation — et le dire",
+   "apres": "Ce que la ligne porte au-delà compte aussi — et le dire",
+   "regle": "test_le_tiret_du_benchmark_et_la_colonne_du_de_l_article_50_ont_leur_legende[du]"
+  },
+  {
+   "nom": "la légende ne dit plus « rôle inconnu »",
+   "fichier": "sentinel.html",
+   "avant": " <strong>Rôle inconnu</strong> : rôle inconnu du cadre, aucun paragraphe ne peut lui être rattaché.</div>",
+   "apres": "</div>",
+   "regle": "test_le_tiret_du_benchmark_et_la_colonne_du_de_l_article_50_ont_leur_legende[role-inconnu]"
+  },
+  {
+   "nom": "le bloc des mesures ne se déclare plus légende des preuves",
+   "fichier": "sentinel.html",
+   "avant": "<div id=\"ia50-mesures\" data-legende=\"ia50-preuve\" style",
+   "apres": "<div id=\"ia50-mesures\" style",
+   "regle": "test_les_preuves_de_l_article_50_sont_ecrites_dans_leur_ecran"
+  },
+  {
+   "nom": "le bouton d'aide naît ouvert",
+   "fichier": "sentinel.page.js",
+   "avant": "    + '\" aria-expanded=\"false\" aria-describedby=\"' + e(id) + '\">?</button>'",
+   "apres": "    + '\" aria-expanded=\"true\" aria-describedby=\"' + e(id) + '\">?</button>'",
+   "regle": "test_le_bouton_d_aide_est_un_BOUTON_nomme_decrit_et_echappe"
+  },
+  {
+   "nom": "le bouton d'aide n'échappe plus les guillemets",
+   "fichier": "sentinel.page.js",
+   "avant": "    return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;')\n      .replace(/>/g, '&gt;').replace(/\"/g, '&quot;');",
+   "apres": "    return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;')\n      .replace(/>/g, '&gt;');",
+   "regle": "test_le_bouton_d_aide_est_un_BOUTON_nomme_decrit_et_echappe"
+  },
+  {
+   "nom": "le bouton d'aide perd type=button (il enverrait un formulaire)",
+   "fichier": "sentinel.page.js",
+   "avant": "  return '<button type=\"button\" class=\"aide-titre\" aria-label=\"Aide : ' + e(libelle)",
+   "apres": "  return '<button class=\"aide-titre\" aria-label=\"Aide : ' + e(libelle)",
+   "regle": "test_le_bouton_d_aide_est_un_BOUTON_nomme_decrit_et_echappe"
+  },
+  {
+   "nom": "le score global retrouve son title",
+   "fichier": "sentinel.html",
+   "avant": "<div class=\"audit-kpi\"><div class=\"audit-kpi-val\" id=\"audit-score-pct\">",
+   "apres": "<div class=\"audit-kpi\" title=\"Calcul du score\"><div class=\"audit-kpi-val\" id=\"audit-score-pct\">",
+   "regle": "test_les_six_compteurs_de_l_audit_ont_un_bouton_d_aide_et_plus_de_title"
+  },
+  {
+   "nom": "le bouton d'aide du score est nommé autrement que son compteur",
+   "fichier": "sentinel.html",
+   "avant": "aria-label=\"Aide : Score global\"",
+   "apres": "aria-label=\"Aide : score\"",
+   "regle": "test_les_six_compteurs_de_l_audit_ont_un_bouton_d_aide_et_plus_de_title"
+  },
+  {
+   "nom": "les six indicateurs de gouvernance partagent un même identifiant d'aide",
+   "fichier": "sentinel.page.js",
+   "avant": "      + window.aideTitre('aide-gouv-' + cle, i.nom, i.lecture) + '</div>'",
+   "apres": "      + window.aideTitre('aide-gouv', i.nom, i.lecture) + '</div>'",
+   "regle": "test_les_indicateurs_de_gouvernance_ont_leur_lecture_dans_un_bouton_d_aide"
+  },
+  {
+   "nom": "un indicateur de gouvernance retrouve son title",
+   "fichier": "sentinel.page.js",
+   "avant": "    return '<div class=\"kpi\">'",
+   "apres": "    return '<div class=\"kpi\" title=\"' + rgpdEsc(i.lecture) + '\">'",
+   "regle": "test_les_indicateurs_de_gouvernance_ont_leur_lecture_dans_un_bouton_d_aide"
+  },
+  {
+   "nom": "deux en-têtes du chiffrage partagent un identifiant",
+   "fichier": "sentinel.page.js",
+   "avant": "window.enTeteAide('Taux de gain', 'aide-carto-roi-2', ",
+   "apres": "window.enTeteAide('Taux de gain', 'aide-carto-roi-1', ",
+   "regle": "test_les_en_tetes_du_chiffrage_ont_un_bouton_d_aide[roi]"
+  },
+  {
+   "nom": "un en-tête des priorités retrouve son title",
+   "fichier": "sentinel.page.js",
+   "avant": "<thead><tr><th>Cas d\\u2019usage</th>'",
+   "apres": "<thead><tr><th title=\"Cas d’usage retenus\">Cas d\\u2019usage</th>'",
+   "regle": "test_les_en_tetes_du_chiffrage_ont_un_bouton_d_aide[priorites]"
+  },
+  {
+   "nom": "la méthode de l'assistant retourne dans un title",
+   "fichier": "index.html",
+   "avant": "<div class=\"cpc-sub\">EU AI Act",
+   "apres": "<div class=\"cpc-sub\" title=\"Méthode\">EU AI Act",
+   "regle": "test_la_methode_de_l_assistant_de_l_accueil_est_dans_un_bouton_d_aide"
+  },
+  {
+   "nom": "la zone de dépôt ne dit plus « glissez-déposez »",
+   "fichier": "sentinel.html",
+   "avant": ">Glissez-déposez un fichier ici, ou cliquez pour parcourir</div>",
+   "apres": ">Cliquez ou déposez un fichier ici</div>",
+   "regle": "test_la_zone_de_depot_dit_en_TEXTE_ce_que_disait_son_title"
+  },
+  {
+   "nom": "le × du sélecteur de pays redevient anonyme",
+   "fichier": "sentinel.html",
+   "avant": "<button type=\"button\" class=\"geo-modal-close\" aria-label=\"Fermer\" onclick",
+   "apres": "<button type=\"button\" class=\"geo-modal-close\" onclick",
+   "regle": "test_aucun_bouton_a_GLYPHE_n_est_nomme_par_son_glyphe[sentinel.html]"
+  },
+  {
+   "nom": "la flèche ▲ du RACI s'appelle « ▲ »",
+   "fichier": "sentinel.page.js",
+   "avant": "title=\"Défiler vers le haut\" aria-label=\"Défiler vers le haut\">▲</button>",
+   "apres": "title=\"Défiler vers le haut\">▲</button>",
+   "regle": "test_aucun_bouton_a_GLYPHE_n_est_nomme_par_son_glyphe[sentinel.page.js]"
+  },
+  {
+   "nom": "le bouton d'envoi du chat s'appelle « ➤ »",
+   "fichier": "index.html",
+   "avant": "<button id=\"xsnd\" onclick=\"xSend()\" aria-label=\"Envoyer\">➤</button>",
+   "apres": "<button id=\"xsnd\" onclick=\"xSend()\">➤</button>",
+   "regle": "test_aucun_bouton_a_GLYPHE_n_est_nomme_par_son_glyphe[index.html]"
+  },
+  {
+   "nom": "le × d'une fenêtre porte un title qui en dit plus que son nom",
+   "fichier": "sentinel.page.js",
+   "avant": "aria-label=\"Fermer cette fenêtre\" onclick=\"procClose()\" title=\"Fermer cette fenêtre\">",
+   "apres": "aria-label=\"Fermer cette fenêtre\" onclick=\"procClose()\" title=\"Fermer cette fenêtre de procédure\">",
+   "regle": "test_le_x_des_fenetres_n_ouvre_pas_de_bulle_son_title_EGALE_son_nom"
+  },
+  {
+   "nom": "un × de fenêtre perd son nom",
+   "fichier": "sentinel.page.js",
+   "avant": "<button type=\"button\" class=\"mat-modal-close\" aria-label=\"Fermer cette fenêtre\" onclick=\"guidedPathsClose()\">×</button>",
+   "apres": "<button type=\"button\" class=\"mat-modal-close\" onclick=\"guidedPathsClose()\">×</button>",
+   "regle": "test_le_x_des_fenetres_n_ouvre_pas_de_bulle_son_title_EGALE_son_nom"
+  },
+  {
+   "nom": "le raccourci déclaré de « Module suivant » n'est pas celui que la page écoute",
+   "fichier": "sentinel.page.js",
+   "avant": "'Module suivant', 'Alt+ArrowRight');",
+   "apres": "'Module suivant', 'Alt+ArrowLeft');",
+   "regle": "test_les_fleches_de_navigation_disent_l_action_et_le_VRAI_raccourci"
+  },
+  {
+   "nom": "les flèches de navigation ne reçoivent plus de nom",
+   "fichier": "sentinel.page.js",
+   "avant": "    b.setAttribute('aria-label', nom);",
+   "apres": "    b.setAttribute('data-nom', nom);",
+   "regle": "test_les_fleches_de_navigation_disent_l_action_et_le_VRAI_raccourci"
+  },
+  {
+   "nom": "le nom de FR ne contient plus « FR »",
+   "fichier": "sentinel.html",
+   "avant": "aria-label=\"FR — afficher Sentinel en français\"",
+   "apres": "aria-label=\"Afficher Sentinel en français\"",
+   "regle": "test_le_texte_VISIBLE_est_dans_le_nom[sb-lbtn]"
+  },
+  {
+   "nom": "le nom du filtre EN de la veille ne contient plus « EN »",
+   "fichier": "sentinel.html",
+   "avant": "aria-label=\"EN — filtrer les actualités en anglais\"",
+   "apres": "aria-label=\"Filtrer les actualités en anglais\"",
+   "regle": "test_le_texte_VISIBLE_est_dans_le_nom[vl-btn]"
+  },
+  {
+   "nom": "le nom de DE sur l'accueil ne contient plus « DE »",
+   "fichier": "index.html",
+   "avant": "aria-label=\"DE — Deutsch\"",
+   "apres": "aria-label=\"Allemand\"",
+   "regle": "test_le_texte_VISIBLE_est_dans_le_nom[lbtn]"
+  },
+  {
+   "nom": "« in » s'appelle autrement que LinkedIn",
+   "fichier": "index.html",
+   "avant": "title=\"LinkedIn\" aria-label=\"LinkedIn\">in</a>",
+   "apres": "title=\"LinkedIn\" aria-label=\"Réseau professionnel\">in</a>",
+   "regle": "test_le_texte_VISIBLE_est_dans_le_nom[ft-social]"
+  },
+  {
+   "nom": "le nom du bouton d'agrandissement ne suit plus",
+   "fichier": "index.page.js",
+   "avant": "    if(btn) btn.setAttribute('aria-label', 'Réduire');",
+   "apres": "    if(btn) btn.setAttribute('data-x', 'Réduire');",
+   "regle": "test_le_bouton_d_agrandissement_de_l_accueil_garde_un_nom_JUSTE"
+  },
+  {
+   "nom": "le × du registre redevient un <div> cliquable",
+   "fichier": "sentinel.page.js",
+   "avant": "      + '<button type=\"button\" class=\"rs-del\" onclick=\"event.stopPropagation();regDelete('+s.id+')\" aria-label=\"Supprimer '+regAttr(s.nom)+' du registre\" title=\"Supprimer '+regAttr(s.nom)+' du registre\">×</button>'",
+   "apres": "      + '<div class=\"rs-del\" onclick=\"event.stopPropagation();regDelete('+s.id+')\" title=\"Supprimer\">×</div>'",
+   "regle": "test_aucun_div_ni_span_CLIQUABLE_ne_porte_une_croix"
+  },
+  {
+   "nom": "le × du comparateur ne dit plus quel pays",
+   "fichier": "sentinel.page.js",
+   "avant": "aria-label=\"Retirer '+code+' du comparateur\" ",
+   "apres": "aria-label=\"Retirer\" ",
+   "regle": "test_chaque_croix_de_suppression_est_un_bouton_qui_dit_QUOI[comparateur]"
+  },
+  {
+   "nom": "le × d'une évaluation perd type=button",
+   "fichier": "sentinel.page.js",
+   "avant": "'<button type=\"button\" class=\"suppr-x\" onclick",
+   "apres": "'<button class=\"suppr-x\" onclick",
+   "regle": "test_chaque_croix_de_suppression_est_un_bouton_qui_dit_QUOI[evaluation]"
+  },
+  {
+   "nom": "le × du registre ne dit plus quel système",
+   "fichier": "sentinel.page.js",
+   "avant": "aria-label=\"Supprimer '+regAttr(s.nom)+' du registre\" ",
+   "apres": "aria-label=\"Supprimer\" ",
+   "regle": "test_chaque_croix_de_suppression_est_un_bouton_qui_dit_QUOI[registre]"
+  },
+  {
+   "nom": "le nom du système n'est plus échappé dans l'attribut",
+   "fichier": "sentinel.page.js",
+   "avant": "    return String(v == null ? '' : v).replace(/&/g,'&amp;').replace(/\"/g,'&quot;')",
+   "apres": "    return String(v == null ? '' : v).replace(/&/g,'&amp;')",
+   "regle": "test_le_nom_du_systeme_ne_casse_pas_le_nom_du_bouton"
+  },
+  {
+   "nom": "« retour en haut » retrouve son title à côté de data-tooltip",
+   "fichier": "index.html",
+   "avant": "onclick=\"window.scrollTo({top:0,behavior:'smooth'})\" aria-label=\"Retour en haut\">",
+   "apres": "onclick=\"window.scrollTo({top:0,behavior:'smooth'})\" aria-label=\"Retour en haut\" title=\"Retour en haut\">",
+   "regle": "test_aucun_element_de_l_accueil_ne_porte_title_ET_data_tooltip"
+  },
+  {
+   "nom": "« retour en haut » perd son nom avec son title",
+   "fichier": "index.html",
+   "avant": "onclick=\"window.scrollTo({top:0,behavior:'smooth'})\" aria-label=\"Retour en haut\">",
+   "apres": "onclick=\"window.scrollTo({top:0,behavior:'smooth'})\">",
+   "regle": "test_les_dix_gardent_leur_bulle_et_un_NOM"
+  },
+  {
+   "nom": "le bouton des cookies perd sa bulle data-tooltip avec son title",
+   "fichier": "index.html",
+   "avant": "<button id=\"ck-btn\" data-tooltip=\"Gérer mes préférences cookies (RGPD)\" onclick",
+   "apres": "<button id=\"ck-btn\" onclick",
+   "regle": "test_les_dix_gardent_leur_bulle_et_un_NOM"
+  },
+  {
+   "nom": "« haut de page » déclare un raccourci que la page n'écoute pas pour lui",
+   "fichier": "index.html",
+   "avant": "aria-keyshortcuts=\"Alt+Home\"",
+   "apres": "aria-keyshortcuts=\"Alt+PageUp\"",
+   "regle": "test_les_fleches_de_section_de_l_accueil_declarent_le_raccourci_que_la_page_ECOUTE"
+  },
+  {
+   "nom": "la date de session retrouve un title",
+   "fichier": "sentinel.html",
+   "avant": "<input id=\"form-date\" type=\"date\" aria-label=\"Date prévue de la session\" ",
+   "apres": "<input id=\"form-date\" type=\"date\" aria-label=\"Date prévue de la session\" title=\"Date prévue de la session\" ",
+   "regle": "test_aucun_champ_de_sentinel_ne_garde_un_title"
+  },
+  {
+   "nom": "le champ qualif-filtre n'a plus de nom",
+   "fichier": "sentinel.html",
+   "avant": " aria-label=\"Choisir les propositions affichées\">",
+   "apres": " data-x=\"\">",
+   "regle": "test_le_champ_a_un_NOM[qualif-filtre]"
+  },
+  {
+   "nom": "le champ qualif-decideur n'a plus de nom",
+   "fichier": "sentinel.html",
+   "avant": " aria-label=\"Décideur\" aria-describedby=\"aide-qualif-decideur\">",
+   "apres": " data-x=\"\" aria-describedby=\"aide-qualif-decideur\">",
+   "regle": "test_le_champ_a_un_NOM[qualif-decideur]"
+  },
+  {
+   "nom": "le champ histo-filter-select n'a plus de nom",
+   "fichier": "sentinel.html",
+   "avant": " aria-label=\"Filtrer l’historique par outil d’origine\">",
+   "apres": " data-x=\"\">",
+   "regle": "test_le_champ_a_un_NOM[histo-filter-select]"
+  },
+  {
+   "nom": "le champ rag-filter-select n'a plus de nom",
+   "fichier": "sentinel.html",
+   "avant": " aria-label=\"Filtrer les documents par page enrichie\">",
+   "apres": " data-x=\"\">",
+   "regle": "test_le_champ_a_un_NOM[rag-filter-select]"
+  },
+  {
+   "nom": "le champ ent-ent-name n'a plus de nom",
+   "fichier": "sentinel.html",
+   "avant": "<input id=\"ent-ent-name\" aria-label=\"Nom de la filiale, du site ou du périmètre\" ",
+   "apres": "<input id=\"ent-ent-name\" data-x=\"\" ",
+   "regle": "test_le_champ_a_un_NOM[ent-ent-name]"
+  },
+  {
+   "nom": "le champ conn-url n'a plus de nom",
+   "fichier": "sentinel.html",
+   "avant": "<input id=\"conn-url\" aria-label=\"URL HTTPS de l'API de l'outil à connecter\" ",
+   "apres": "<input id=\"conn-url\" data-x=\"\" ",
+   "regle": "test_le_champ_a_un_NOM[conn-url]"
+  },
+  {
+   "nom": "le champ conn-sec n'a plus de nom",
+   "fichier": "sentinel.html",
+   "avant": "<input id=\"conn-sec\" aria-label=\"Jeton Bearer (optionnel)\" ",
+   "apres": "<input id=\"conn-sec\" data-x=\"\" ",
+   "regle": "test_le_champ_a_un_NOM[conn-sec]"
+  },
+  {
+   "nom": "le champ form-date n'a plus de nom",
+   "fichier": "sentinel.html",
+   "avant": "<input id=\"form-date\" type=\"date\" aria-label=\"Date prévue de la session\" ",
+   "apres": "<input id=\"form-date\" type=\"date\" data-x=\"\" ",
+   "regle": "test_le_champ_a_un_NOM[form-date]"
+  },
+  {
+   "nom": "le champ shadow-risk-filter n'a plus de nom",
+   "fichier": "sentinel.html",
+   "avant": " aria-label=\"Filtrer les cas d'usage par niveau de risque réglementaire\">",
+   "apres": " data-x=\"\">",
+   "regle": "test_le_champ_a_un_NOM[shadow-risk-filter]"
+  },
+  {
+   "nom": "l'aide du parcours guidé est cachée",
+   "fichier": "sentinel.html",
+   "avant": "<small class=\"aide-champ\" id=\"aide-sb-role\">",
+   "apres": "<small class=\"aide-champ\" id=\"aide-sb-role\" hidden>",
+   "regle": "test_l_aide_d_un_champ_est_VISIBLE_et_reliee[sb-role]"
+  },
+  {
+   "nom": "le champ décideur n'est plus relié à son aide",
+   "fichier": "sentinel.html",
+   "avant": " aria-label=\"Décideur\" aria-describedby=\"aide-qualif-decideur\">",
+   "apres": " aria-label=\"Décideur\">",
+   "regle": "test_l_aide_d_un_champ_est_VISIBLE_et_reliee[qualif-decideur]"
+  },
+  {
+   "nom": "l'aide du jeton ne dit plus qu'il n'est jamais réaffiché",
+   "fichier": "sentinel.html",
+   "avant": ">Jeton Bearer, transmis mais jamais réaffiché.</small>",
+   "apres": ">Jeton Bearer.</small>",
+   "regle": "test_l_aide_d_un_champ_est_VISIBLE_et_reliee[conn-sec]"
+  },
+  {
+   "nom": "l'avertissement de « Terminer » est écrit mais caché",
+   "fichier": "sentinel.page.js",
+   "avant": "    + '<span class=\"gb-avert\" id=\"gb-avert\">Ferme le bandeau",
+   "apres": "    + '<span class=\"gb-avert\" id=\"gb-avert\" hidden>Ferme le bandeau",
+   "regle": "test_Terminer_ECRIT_que_rien_n_est_declare_conforme"
+  },
+  {
+   "nom": "« Terminer » ne porte plus l'avertissement en description",
+   "fichier": "sentinel.page.js",
+   "avant": "'<button class=\"gb-btn gb-next\" aria-describedby=\"gb-avert\" '",
+   "apres": "'<button class=\"gb-btn gb-next\" '",
+   "regle": "test_Terminer_ECRIT_que_rien_n_est_declare_conforme"
+  },
+  {
+   "nom": "les prélèvements partent sans confirmation",
+   "fichier": "sentinel.page.js",
+   "avant": "  if(!window.confirm('Déclencher les prélèvements Stripe pour toutes les échéances dues ? Cette action prélève réellement les clients.')) return;",
+   "apres": "  if(false) return;",
+   "regle": "test_une_action_irreversible_DEMANDE_et_DIT_avant_d_agir[prelevement]"
+  },
+  {
+   "nom": "la purge part sans confirmation",
+   "fichier": "sentinel.page.js",
+   "avant": "  if(!simulation && !confirm('Ex",
+   "apres": "  if(false && !confirm('Ex",
+   "regle": "test_une_action_irreversible_DEMANDE_et_DIT_avant_d_agir[purge]"
+  },
+  {
+   "nom": "l'historique se vide sans confirmation",
+   "fichier": "sentinel.page.js",
+   "avant": "  if(!confirm(\"Supprimer DÉFINITIVEMENT tout votre historique",
+   "apres": "  if(false && !confirm(\"Supprimer DÉFINITIVEMENT tout votre historique",
+   "regle": "test_une_action_irreversible_DEMANDE_et_DIT_avant_d_agir[historique]"
+  },
+  {
+   "nom": "la confirmation de suppression ne dit plus « définitivement »",
+   "fichier": "sentinel.page.js",
+   "avant": "  if(!confirm(\"Supprimer définitivement ce système du registre ?\")) return;",
+   "apres": "  if(!confirm(\"Supprimer ce système du registre ?\")) return;",
+   "regle": "test_une_action_irreversible_DEMANDE_et_DIT_avant_d_agir[registre]"
+  },
+  {
+   "nom": "une entrée admise nomme un écran qui n'existe pas",
+   "fichier": "tests/titres_generiques_admis.json",
+   "avant": " \"admis\": []",
+   "apres": " \"admis\": [{\"ecran\": \"p-inexistant\", \"classe\": \"audit-kpi\", \"justification\": \"une entrée posée sans écran réel, pour voir si la règle la refuse\"}]",
+   "regle": "test_la_liste_des_generiques_admis_est_NOMINATIVE_et_justifiee"
+  },
+  {
+   "nom": "une entrée admise sans justification",
+   "fichier": "tests/titres_generiques_admis.json",
+   "avant": " \"admis\": []",
+   "apres": " \"admis\": [{\"ecran\": \"p-ia50\", \"classe\": \"ia50-preuve\", \"justification\": \"parce que\"}]",
+   "regle": "test_la_liste_des_generiques_admis_est_NOMINATIVE_et_justifiee"
+  },
+  {
+   "nom": "la recette compte un rôle de moins comme interactif",
+   "fichier": "recette_complements.js",
+   "avant": "[role=switch],[role=option],[contenteditable=\"\"],[contenteditable=true]';\n  const nom",
+   "apres": "[role=switch],[contenteditable=\"\"],[contenteditable=true]';\n  const nom",
+   "regle": "test_la_recette_applique_le_MEME_critere_que_le_script"
+  },
+  {
+   "nom": "la recette pose ses évaluations sous une autre clé",
+   "fichier": "recette_complements.js",
+   "avant": "localStorage.setItem('cpEvaluations', ",
+   "apres": "localStorage.setItem('cpEvals', ",
+   "regle": "test_la_recette_vise_des_ancres_QUI_EXISTENT[cpEvaluations]"
+  },
+  {
+   "nom": "un clic sur « ? » redevient une réponse pour le rail",
+   "fichier": "sentinel.page.js",
+   "avant": "  if (t.closest('.aide-titre')) return;",
+   "apres": "",
+   "regle": "test_un_clic_sur_un_bouton_d_aide_N_EST_PAS_une_reponse"
+  },
+  {
+   "nom": "l'en-tête à aide perd son nom propre",
+   "fichier": "sentinel.page.js",
+   "avant": "  return '<th aria-label=\"' + nom + '\">' + visible",
+   "apres": "  return '<th>' + visible",
+   "regle": "test_les_colonnes_du_chiffrage_s_appellent_par_leur_LIBELLE[roi]"
+  },
+  {
+   "nom": "une colonne des priorités revient à l'ancien en-tête",
+   "fichier": "sentinel.page.js",
+   "avant": "    + window.enTeteAide('Données', 'aide-carto-prio-3', 'Données', ",
+   "apres": "    + '<th>Données'+window.aideTitre('aide-carto-prio-3', 'Données', 'x')+'</th>' + ('Données', ",
+   "regle": "test_les_colonnes_du_chiffrage_s_appellent_par_leur_LIBELLE[priorites]"
+  },
+  {
+   "nom": "le libellé de l'en-tête n'échappe plus le guillemet",
+   "fichier": "sentinel.page.js",
+   "avant": ".replace(/>/g, '&gt;').replace(/\"/g, '&quot;');\n  return '<th aria-label",
+   "apres": ".replace(/>/g, '&gt;');\n  return '<th aria-label",
+   "regle": "test_l_en_tete_a_aide_echappe_son_libelle"
+  },
+  {
+   "nom": "le focus va toujours au premier « × »",
+   "fichier": "sentinel.page.js",
+   "avant": "var c = l.length ? l[Math.min(rang, l.length - 1)] :",
+   "apres": "var c = l.length ? l[0] :",
+   "regle": "test_apres_un_retrait_le_focus_RESTE_dans_la_liste[comparateur]"
+  },
+  {
+   "nom": "le focus est pris même quand il n'était pas sur un « × »",
+   "fichier": "sentinel.page.js",
+   "avant": "  if (!(rang >= 0)) return null;\n  var b = document.getElementById(boite);",
+   "apres": "  if (!(rang >= 0)) rang = 0;\n  var b = document.getElementById(boite);",
+   "regle": "test_apres_un_retrait_le_focus_RESTE_dans_la_liste[registre]"
+  },
+  {
+   "nom": "une liste vidée ne rend le focus à personne",
+   "fichier": "sentinel.page.js",
+   "avant": " : b.querySelector('a[href], button:not([disabled])');",
+   "apres": " : null;",
+   "regle": "test_apres_un_retrait_le_focus_RESTE_dans_la_liste[evaluations]"
+  },
+  {
+   "nom": "le comparateur ne rend plus le focus",
+   "fichier": "sentinel.page.js",
+   "avant": "  window.focusRendre('cj-tags', '.cj-tag-rm', rang);",
+   "apres": "",
+   "regle": "test_apres_un_retrait_le_focus_RESTE_dans_la_liste[comparateur]"
+  },
+  {
+   "nom": "les évaluations ne rendent plus le focus",
+   "fichier": "sentinel.page.js",
+   "avant": "  window.focusRendre('evals-rows', '.suppr-x', rang);",
+   "apres": "",
+   "regle": "test_apres_un_retrait_le_focus_RESTE_dans_la_liste[evaluations]"
+  },
+  {
+   "nom": "le registre ne rend plus le focus",
+   "fichier": "sentinel.page.js",
+   "avant": "      window.focusRendre('reg-sys-body', '.rs-del', rang);",
+   "apres": "",
+   "regle": "test_apres_un_retrait_le_focus_RESTE_dans_la_liste[registre]"
+  },
+  {
+   "nom": "le « × » d'une évaluation efface sans demander",
+   "fichier": "sentinel.page.js",
+   "avant": "  if(!confirm('Supprimer d\\u00e9finitivement l\\u2019\\u00e9valuation ' + cpEvalQuoi(e)",
+   "apres": "  if(false && !confirm('Supprimer d\\u00e9finitivement l\\u2019\\u00e9valuation ' + cpEvalQuoi(e)",
+   "regle": "test_le_x_d_une_evaluation_DEMANDE_et_dit_LAQUELLE"
+  },
+  {
+   "nom": "le nom d'une évaluation perd sa date",
+   "fichier": "sentinel.page.js",
+   "avant": "'\\u00a0\\u00bb du ' + cpEvalFmtDate(e.date) + (h ? ' \\u00e0 ' + h : '');",
+   "apres": "'\\u00a0\\u00bb';",
+   "regle": "test_le_nom_du_x_d_une_evaluation_dit_LAQUELLE_pas_son_rang"
+  },
+  {
+   "nom": "deux évaluations du même jour ont le même nom",
+   "fichier": "sentinel.page.js",
+   "avant": "(h ? ' \\u00e0 ' + h : '');",
+   "apres": "'';",
+   "regle": "test_le_nom_du_x_d_une_evaluation_dit_LAQUELLE_pas_son_rang"
+  },
+  {
+   "nom": "un guillemet du titre casse le nom du « × »",
+   "fichier": "sentinel.page.js",
+   "avant": "function cpEvalAttr(v){\n  return String(v == null ? '' : v).replace(/&/g,'&amp;').replace(/\"/g,'&quot;')",
+   "apres": "function cpEvalAttr(v){\n  return String(v == null ? '' : v).replace(/&/g,'&amp;')",
+   "regle": "test_le_nom_du_x_d_une_evaluation_dit_LAQUELLE_pas_son_rang"
+  },
+  {
+   "nom": "le nom du « × » d'une évaluation redevient son rang",
+   "fichier": "sentinel.page.js",
+   "avant": "aria-label=\"Supprimer l\\u2019\\u00e9valuation ' + cpEvalAttr(cpEvalQuoi(e)) + '\"",
+   "apres": "aria-label=\"Supprimer l\\u2019\\u00e9valuation ' + num + '\"",
+   "regle": "test_le_nom_du_x_d_une_evaluation_dit_LAQUELLE_pas_son_rang"
+  },
+  {
+   "nom": "« Terminer » retrouve son title",
+   "fichier": "sentinel.page.js",
+   "avant": "'<button class=\"gb-btn gb-next\" aria-describedby=\"gb-avert\" '",
+   "apres": "'<button class=\"gb-btn gb-next\" aria-describedby=\"gb-avert\" title=\"Fermer le bandeau.\" '",
+   "regle": "test_Terminer_ECRIT_que_rien_n_est_declare_conforme"
+  },
+  {
+   "nom": "le globe d'i-aes.com perd son nom",
+   "fichier": "index.html",
+   "avant": "class=\"ft-social\" title=\"i-aes.com\" aria-label=\"i-aes.com\">🌐</a>",
+   "apres": "class=\"ft-social\" title=\"i-aes.com\">🌐</a>",
+   "regle": "test_aucun_LIEN_a_glyphe_de_l_accueil_n_est_nomme_par_son_glyphe"
+  },
+  {
+   "nom": "le globe d'i-aes.com s'appelle par son glyphe",
+   "fichier": "index.html",
+   "avant": "class=\"ft-social\" title=\"i-aes.com\" aria-label=\"i-aes.com\">🌐</a>",
+   "apres": "class=\"ft-social\" title=\"i-aes.com\" aria-label=\"🌐\">🌐</a>",
+   "regle": "test_le_texte_VISIBLE_est_dans_le_nom[ft-social]"
+  },
+  {
+   "nom": "le title de FR redit le nom autrement",
+   "fichier": "sentinel.html",
+   "avant": "title=\"FR — afficher Sentinel en français\">FR</button>",
+   "apres": "title=\"Afficher Sentinel en français\">FR</button>",
+   "regle": "test_un_title_qui_REDIT_le_nom_autrement_n_ouvre_pas_de_bulle[sb-lbtn]"
+  },
+  {
+   "nom": "le title du filtre EN de la veille redit le nom autrement",
+   "fichier": "sentinel.html",
+   "avant": "title=\"EN — filtrer les actualités en anglais\">",
+   "apres": "title=\"Filtrer les actualites en anglais uniquement.\">",
+   "regle": "test_un_title_qui_REDIT_le_nom_autrement_n_ouvre_pas_de_bulle[vl-btn]"
+  },
+  {
+   "nom": "le ✕ de la veille dit moins que son nom",
+   "fichier": "index.html",
+   "avant": "title=\"Fermer la veille\" aria-label=\"Fermer la veille\">✕</button>",
+   "apres": "title=\"Fermer\" aria-label=\"Fermer la veille\">✕</button>",
+   "regle": "test_un_title_qui_REDIT_le_nom_autrement_n_ouvre_pas_de_bulle[fermer-veille]"
+  }
+ ]
+}
