@@ -1,0 +1,274 @@
+{
+ "_pourquoi": "Le diagnostic des connexions dit si Stripe et Brevo sont VRAIMENT branchés sur ce service. Chaque mutation retire ou fausse UN contrôle (ou une garde de la route, de l'outil ou de l'écran) : la règle qui mesure ce contrôle doit tomber. Une mutation qui survit dirait qu'un contrôle est décoratif — exactement ce qu'on a vécu un mois avec un point de réception vers un hôte sans service.",
+ "cibles": [
+  "tests/test_connexions.py"
+ ],
+ "mutations": [
+  {
+   "nom": "un point de réception vers un autre hôte passe pour le nôtre",
+   "fichier": "connexions.py",
+   "avant": "    notres = [p for p in lus if p[\"url\"] == attendu]\n",
+   "apres": "    notres = list(lus)\n",
+   "regle": "test_un_point_de_reception_vers_un_autre_hote_est_bloquant"
+  },
+  {
+   "nom": "un point désactivé compte comme actif",
+   "fichier": "connexions.py",
+   "avant": "    actifs = [p for p in notres if p[\"status\"] == \"enabled\"]\n",
+   "apres": "    actifs = list(notres)\n",
+   "regle": "test_un_point_desactive_ne_compte_pas"
+  },
+  {
+   "nom": "les adresses trouvées ne sont plus citées dans l'alerte",
+   "fichier": "connexions.py",
+   "avant": "                       \"du compte : %s.\" % (attendu, trouvees))\n",
+   "apres": "                       \"du compte : %s.\" % (attendu, \"voir Stripe\"))\n",
+   "regle": "test_le_compte_tel_qu_il_etait_declenche_exactement_les_alertes_documentees"
+  },
+  {
+   "nom": "les autres points du compte ne sont plus listés",
+   "fichier": "connexions.py",
+   "avant": "    if res[\"autres_points\"]:\n",
+   "apres": "    if False:\n",
+   "regle": "test_le_compte_tel_qu_il_etait_declenche_exactement_les_alertes_documentees"
+  },
+  {
+   "nom": "les événements manquants ne sont plus signalés",
+   "fichier": "connexions.py",
+   "avant": "        if manquants:\n            rapport.alerte(\"stripe_webhook_evenements_manquants\"",
+   "apres": "        if manquants and False:\n            rapport.alerte(\"stripe_webhook_evenements_manquants\"",
+   "regle": "test_les_evenements_manquants_sont_signales_et_nommes"
+  },
+  {
+   "nom": "l'abonnement à tous les événements (*) n'est plus reconnu",
+   "fichier": "connexions.py",
+   "avant": "        manquants = [] if \"*\" in couverts else [e for e in requis if e not in couverts]\n",
+   "apres": "        manquants = [e for e in requis if e not in couverts]\n",
+   "regle": "test_un_point_abonne_a_tout_couvre_tout"
+  },
+  {
+   "nom": "la version d'API du point n'est plus comparée à la bibliothèque",
+   "fichier": "connexions.py",
+   "avant": "                and point[\"api_version\"] != version_bibliotheque):\n",
+   "apres": "                and False):\n",
+   "regle": "test_une_version_d_api_differente_est_une_info"
+  },
+  {
+   "nom": "le secret de signature absent n'est plus signalé",
+   "fichier": "connexions.py",
+   "avant": "    if not res[\"secret_webhook_present\"]:\n",
+   "apres": "    if False:\n",
+   "regle": "test_le_secret_de_signature_absent_est_bloquant"
+  },
+  {
+   "nom": "un prix archivé passe pour actif",
+   "fichier": "connexions.py",
+   "avant": "        etat[\"actif\"] = bool(_champ(p, \"active\", False))\n",
+   "apres": "        etat[\"actif\"] = True\n",
+   "regle": "test_un_prix_d_abonnement_inutilisable_est_signale[inactif-stripe_prix_inactif]"
+  },
+  {
+   "nom": "un prix ponctuel passe pour récurrent",
+   "fichier": "connexions.py",
+   "avant": "        etat[\"recurrent\"] = _champ(p, \"recurring\") is not None\n",
+   "apres": "        etat[\"recurrent\"] = True\n",
+   "regle": "test_un_prix_d_abonnement_inutilisable_est_signale[ponctuel-stripe_prix_non_recurrent]"
+  },
+  {
+   "nom": "un prix non configuré n'est plus signalé",
+   "fichier": "connexions.py",
+   "avant": "        if not pid:\n",
+   "apres": "        if False:\n",
+   "regle": "test_un_prix_d_abonnement_inutilisable_est_signale[absent-stripe_prix_absent]"
+  },
+  {
+   "nom": "un compte qui ne peut pas encaisser passe",
+   "fichier": "connexions.py",
+   "avant": "    if not encaisse:\n",
+   "apres": "    if False:\n",
+   "regle": "test_un_compte_qui_ne_peut_pas_encaisser_est_bloquant"
+  },
+  {
+   "nom": "une clé de test n'est plus signalée",
+   "fichier": "connexions.py",
+   "avant": "    if not livemode:\n",
+   "apres": "    if False:\n",
+   "regle": "test_une_cle_de_test_est_une_info"
+  },
+  {
+   "nom": "le seuil de crédits Brevo tombe à zéro",
+   "fichier": "connexions.py",
+   "avant": "CREDITS_BREVO_MINIMUM = 50\n",
+   "apres": "CREDITS_BREVO_MINIMUM = 0\n",
+   "regle": "test_des_credits_brevo_sous_le_seuil_sont_signales[49-important]"
+  },
+  {
+   "nom": "l'expéditeur n'est plus comparé aux expéditeurs vérifiés",
+   "fichier": "connexions.py",
+   "avant": "    res[\"expediteur_verifie\"] = mail_from.lower() in {a.lower() for a in actifs}\n",
+   "apres": "    res[\"expediteur_verifie\"] = True\n",
+   "regle": "test_un_expediteur_non_verifie_est_bloquant_et_les_actifs_sont_cites"
+  },
+  {
+   "nom": "un expéditeur inactif compte comme vérifié",
+   "fichier": "connexions.py",
+   "avant": "              if isinstance(s, dict) and s.get(\"active\") and s.get(\"email\")]\n",
+   "apres": "              if isinstance(s, dict) and s.get(\"email\")]\n",
+   "regle": "test_un_expediteur_verifie_mais_inactif_ne_compte_pas"
+  },
+  {
+   "nom": "les envois vers l'adresse non routable ne sont plus signalés",
+   "fichier": "connexions.py",
+   "avant": "    if n > 0:\n",
+   "apres": "    if n < 0:\n",
+   "regle": "test_des_envois_vers_une_adresse_non_routable_sont_signales"
+  },
+  {
+   "nom": "une panne du compte Stripe remonte en exception",
+   "fichier": "connexions.py",
+   "avant": "    except Exception as e:                                    # noqa: BLE001\n        rapport.alerte(\"stripe_compte_illisible\", \"bloquant\",\n                       \"Le compte Stripe ne répond pas : \"",
+   "apres": "    except ZeroDivisionError as e:\n        rapport.alerte(\"stripe_compte_illisible\", \"bloquant\",\n                       \"Le compte Stripe ne répond pas : \"",
+   "regle": "test_une_panne_du_service_donne_une_alerte_pas_une_exception[stripe_compte]"
+  },
+  {
+   "nom": "une panne du compte Brevo remonte en exception",
+   "fichier": "connexions.py",
+   "avant": "    except Exception as e:                                    # noqa: BLE001\n        rapport.alerte(\"brevo_compte_illisible\", \"bloquant\",\n                       \"Le compte Brevo ne répond pas : \"",
+   "apres": "    except ZeroDivisionError as e:\n        rapport.alerte(\"brevo_compte_illisible\", \"bloquant\",\n                       \"Le compte Brevo ne répond pas : \"",
+   "regle": "test_une_panne_du_service_donne_une_alerte_pas_une_exception[brevo_compte]"
+  },
+  {
+   "nom": "le délai n'est plus passé au client Stripe (80 s par défaut)",
+   "fichier": "connexions.py",
+   "avant": "        http_client=stripe.RequestsClient(timeout=delai),\n",
+   "apres": "        http_client=stripe.RequestsClient(),\n",
+   "regle": "test_un_service_lent_est_abandonne_dans_le_delai[stripe]"
+  },
+  {
+   "nom": "le délai n'est plus passé à l'appel Brevo",
+   "fichier": "connexions.py",
+   "avant": "    r = session.get(url, headers=entetes, timeout=delai)\n",
+   "apres": "    r = session.get(url, headers=entetes)\n",
+   "regle": "test_un_service_lent_est_abandonne_dans_le_delai[brevo]"
+  },
+  {
+   "nom": "le délai par défaut passe à trente secondes",
+   "fichier": "connexions.py",
+   "avant": "DELAI = 8\n",
+   "apres": "DELAI = 30\n",
+   "regle": "test_le_delai_par_defaut_ne_depasse_pas_huit_secondes"
+  },
+  {
+   "nom": "une base sans journal fait tomber le diagnostic",
+   "fichier": "connexions.py",
+   "avant": "    except Exception:                                         # noqa: BLE001\n        return\n    ok = echecs = 0\n",
+   "apres": "    except ZeroDivisionError:\n        return\n    ok = echecs = 0\n",
+   "regle": "test_une_base_absente_ou_sans_journal_est_toleree[sans_tables]"
+  },
+  {
+   "nom": "sans clé Stripe, le diagnostic appelle Stripe quand même",
+   "fichier": "connexions.py",
+   "avant": "    if not res[\"cle_presente\"]:\n        rapport.alerte(\"stripe_non_configure\"",
+   "apres": "    if False:\n        rapport.alerte(\"stripe_non_configure\"",
+   "regle": "test_sans_module_stripe_le_diagnostic_le_dit_et_ne_l_appelle_pas"
+  },
+  {
+   "nom": "la clé Brevo est recopiée dans le rapport",
+   "fichier": "connexions.py",
+   "avant": "        \"cle_presente\": bool(cle),\n",
+   "apres": "        \"cle_presente\": cle,\n",
+   "regle": "test_aucune_cle_ne_figure_dans_le_rapport"
+  },
+  {
+   "nom": "le masque des secrets ne masque plus rien",
+   "fichier": "connexions.py",
+   "avant": "            t = t.replace(s, \"***\")\n",
+   "apres": "            pass\n",
+   "regle": "test_une_cle_mal_copiee_n_est_pas_recopiee_dans_l_alerte"
+  },
+  {
+   "nom": "la racine Brevo garde le suffixe /v3",
+   "fichier": "connexions.py",
+   "avant": "    for suffixe in (\"/smtp/email\", \"/v3\"):\n",
+   "apres": "    for suffixe in (\"/smtp/email\",):\n",
+   "regle": "test_la_racine_de_l_api_brevo_est_derivee_de_l_adresse_d_envoi[envoi]"
+  },
+  {
+   "nom": "la route s'ouvre à tout le monde",
+   "fichier": "app.py",
+   "avant": "    refus = admin_session_conseilprev()\n    if refus is not None:\n        return refus\n    import connexions\n",
+   "apres": "    import connexions\n",
+   "regle": "test_un_anonyme_recoit_403_sans_qu_aucun_compte_soit_interroge"
+  },
+  {
+   "nom": "la route recopie l'adresse Brevo au lieu de la dériver de l'envoi",
+   "fichier": "app.py",
+   "avant": "        'brevo_api_base': globals().get('BREVO_API_BASE') or connexions.base_brevo(BREVO_API_URL),\n",
+   "apres": "        'brevo_api_base': 'https://api.brevo.com',\n",
+   "regle": "test_l_administrateur_voit_tout_branche_quand_le_compte_est_juste"
+  },
+  {
+   "nom": "la route ignore les événements requis publiés par l'application",
+   "fichier": "app.py",
+   "avant": "        'stripe_evenements_requis': globals().get('STRIPE_EVENEMENTS_REQUIS') or connexions.EVENEMENTS_TRAITES,\n",
+   "apres": "        'stripe_evenements_requis': connexions.EVENEMENTS_TRAITES,\n",
+   "regle": "test_la_route_lit_les_evenements_requis_publies_par_l_application[True]"
+  },
+  {
+   "nom": "la route suppose le secret de signature présent",
+   "fichier": "app.py",
+   "avant": "        'stripe_webhook_secret_present': bool(os.environ.get('STRIPE_WEBHOOK_SECRET', '').strip()),\n",
+   "apres": "        'stripe_webhook_secret_present': True,\n",
+   "regle": "test_sans_secret_de_signature_la_route_le_dit"
+  },
+  {
+   "nom": "l'outil importe l'application",
+   "fichier": "outils/verifier_connexions.py",
+   "avant": "import connexions                                                   # noqa: E402\n",
+   "apres": "import connexions                                                   # noqa: E402\nimport app                                                          # noqa: E402,F401\n",
+   "regle": "test_l_outil_n_importe_pas_l_application"
+  },
+  {
+   "nom": "l'outil sort en 0 malgré une alerte bloquante",
+   "fichier": "outils/verifier_connexions.py",
+   "avant": "    return 1 if connexions.bloquant(diag) else 0\n",
+   "apres": "    return 0\n",
+   "regle": "test_l_outil_dit_ce_qui_manque_et_sort_en_1"
+  },
+  {
+   "nom": "l'outil imprime la clé Stripe",
+   "fichier": "outils/verifier_connexions.py",
+   "avant": "    ligne(bool(s.get(\"cle_presente\")), \"Stripe : clé présente\")\n",
+   "apres": "    ligne(bool(s.get(\"cle_presente\")), \"Stripe : clé présente \" + str(os.environ.get(\"STRIPE_SECRET_KEY\")))\n",
+   "regle": "test_l_outil_n_imprime_aucune_cle"
+  },
+  {
+   "nom": "l'écran ne dit plus « Tout est branché »",
+   "fichier": "sentinel.page.js",
+   "avant": "✅ Tout est branché — Stripe et Brevo répondent",
+   "apres": "✅ Rien à signaler — Stripe et Brevo répondent",
+   "regle": "test_l_ecran_liste_les_alertes_et_dit_tout_est_branche_quand_il_n_y_en_a_pas[vide]"
+  },
+  {
+   "nom": "l'écran n'échappe plus les messages",
+   "fichier": "sentinel.page.js",
+   "avant": "esc(a.message)",
+   "apres": "a.message",
+   "regle": "test_l_ecran_liste_les_alertes_et_dit_tout_est_branche_quand_il_n_y_en_a_pas[alertes]"
+  },
+  {
+   "nom": "l'écran ne charge plus le diagnostic avec la santé email",
+   "fichier": "sentinel.page.js",
+   "avant": "      window.emailHealthRender();\n      window.connexionsRender();\n",
+   "apres": "      window.emailHealthRender();\n",
+   "regle": "test_l_ecran_charge_le_diagnostic_avec_la_sante_email"
+  },
+  {
+   "nom": "le bloc de l'écran disparaît",
+   "fichier": "sentinel.html",
+   "avant": "      <div id=\"connexions-widget\"></div>\n",
+   "apres": "",
+   "regle": "test_l_ecran_a_un_bloc_connexions_a_cote_de_la_sante_email"
+  }
+ ]
+}

@@ -8271,6 +8271,63 @@ def email_health():
         'alerte': echec_24h > 0 and (taux_succes is None or taux_succes < 80)
     })
 
+@app.route('/api/admin/connexions', methods=['GET'])
+def admin_connexions():
+    """Stripe et Brevo sont-ils VRAIMENT branches sur CE service ?
+
+    CE QUE PERSONNE N'A VU PENDANT UN MOIS. Le seul point de reception Stripe
+    du compte visait `conseilprev.onrender.com`, un hote sans service, alors
+    que le site vit sur `conseilprevia.onrender.com`. Les paiements partaient,
+    les confirmations n'arrivaient nulle part, et aucune page ne cessait de
+    s'afficher. Cote Brevo, l'expediteur par defaut n'est pas verifie et des
+    envois visent une adresse non routable. Rien dans le code ne le mesurait :
+    ces defauts sont dans l'ecart entre la configuration et les comptes.
+
+    CE QUE FAIT CETTE ROUTE. Elle reunit ce que le service a reellement en
+    configuration — l'adresse du site (la meme source que les liens des
+    courriers), l'expediteur, les prix, la presence des secrets — et la confie
+    a `connexions.diagnostic()`, qui interroge les deux comptes en LECTURE
+    SEULE. Toujours 200 pour l'administrateur : les alertes sont DANS la
+    reponse, un compte en panne est une alerte et non un 500. Aucune cle ni
+    fragment de cle n'y figure, seulement des booleens.
+    """
+    refus = admin_session_conseilprev()
+    if refus is not None:
+        return refus
+    import connexions
+
+    def _lire(sql, params=()):
+        # Une lecture, une connexion, fermee quoi qu'il arrive : `connexions`
+        # tolere une table absente, il ne doit pas heriter d'une connexion
+        # laissee ouverte par une requete qui a echoue.
+        conn = registre_get_db()
+        try:
+            cur = conn.cursor()
+            cur.execute(registre_sql(sql.replace('?', '%s'), sql), tuple(params))
+            return [dict(r) if not isinstance(r, dict) else r for r in cur.fetchall()]
+        finally:
+            try: conn.close()
+            except Exception: pass
+
+    secret = os.environ.get('STRIPE_SECRET_KEY', '').strip()
+    config = {
+        'site_base_url': seo.BASE,
+        'stripe_webhook_secret_present': bool(os.environ.get('STRIPE_WEBHOOK_SECRET', '').strip()),
+        # Les evenements que le point de reception DOIT recevoir : ceux que
+        # l'application publie si elle le fait, sinon ceux qu'elle traite.
+        'stripe_evenements_requis': globals().get('STRIPE_EVENEMENTS_REQUIS') or connexions.EVENEMENTS_TRAITES,
+        'stripe_prix': {'pro': os.environ.get('STRIPE_PRICE_PRO', ''),
+                        'entreprise': os.environ.get('STRIPE_PRICE_ENTREPRISE', '')},
+        'brevo_api_key': BREVO_API_KEY,
+        # Derivee de l'adresse d'envoi, jamais recopiee : en recette, l'envoi
+        # est redirige vers un faux serveur et la lecture du compte le suit.
+        'brevo_api_base': globals().get('BREVO_API_BASE') or connexions.base_brevo(BREVO_API_URL),
+        'mail_from': MAIL_FROM,
+    }
+    return jsonify(connexions.diagnostic(
+        stripe=_stripe_pret(secret) if secret else None,
+        session=requests.Session(), config=config, base=_lire))
+
 @app.route('/auth/<token>')
 @rate_limit_strict(limit=10, window=300)
 def sentauth_master_link(token):
