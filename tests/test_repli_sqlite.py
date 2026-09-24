@@ -186,6 +186,26 @@ def test_le_nombre_de_tables_est_compte_et_non_ecrit():
     assert not en_dur, 'nombre écrit à la main dans l\'annonce : %s' % en_dur
 
 
+# LE NOM D'UNE TABLE PEUT PORTER DES CHIFFRES, ET LE MOTIF L'OUBLIAIT.
+# `[a-z_]+` s'arrêtait au premier chiffre : `ia50_usages` et `ia50_meta`
+# étaient comptées comme UNE table nommée « ia ». La base locale en portait
+# 39, le code en « déclarait » 38, et la règle du compte tombait le jour où
+# la recette avait créé les tables paresseuses — mesuré à la fusion des
+# lots Stripe/Brevo, sans qu'aucune table ne soit en trop. Le motif est
+# déclaré une fois, pour que les deux règles qui le lisent ne divergent pas.
+TABLE_DECLAREE = re.compile(r"CREATE TABLE IF NOT EXISTS ([a-z][a-z0-9_]*)")
+
+
+def test_le_motif_compte_les_tables_dont_le_nom_porte_des_chiffres():
+    """DISCRIMINATION. Les deux tables du registre IA 50 existent sous leur
+    vrai nom, pas sous un préfixe tronqué qui les confondrait."""
+    declarees = set(TABLE_DECLAREE.findall(SOURCE))
+    assert {'ia50_usages', 'ia50_meta'} <= declarees, sorted(
+        t for t in declarees if t.startswith('ia'))
+    assert 'ia' not in declarees, (
+        "un nom tronqué au premier chiffre est compté comme une table")
+
+
 def test_le_compte_annonce_est_celui_de_la_base_A_CET_INSTANT():
     """La mesure elle-même doit être juste — et elle l'est sur ce qui EXISTE.
 
@@ -214,7 +234,7 @@ def test_le_compte_annonce_est_celui_de_la_base_A_CET_INSTANT():
     c.close()
     assert n > 0, "la base de repli ne porte aucune table : l'annonce ne peut " \
                   "rien annoncer"
-    declarees = set(re.findall(r'CREATE TABLE IF NOT EXISTS ([a-z_]+)', SOURCE))
+    declarees = set(TABLE_DECLAREE.findall(SOURCE))
     assert n <= len(declarees), (
         "la base porte %d tables pour %d DÉCLARÉES dans app.py : elle en "
         "contient que le code ne crée plus — un reste d'une version "
@@ -247,7 +267,7 @@ def test_aucune_table_declaree_n_est_ORPHELINE():
     fausses orphelines, et l'on apprendrait à ne plus le lire.
     """
     orphelines = []
-    for m in re.finditer(r"CREATE TABLE IF NOT EXISTS ([a-z_]+)", SOURCE):
+    for m in TABLE_DECLAREE.finditer(SOURCE):
         table = m.group(1)
         fn = _fonction_contenant(SOURCE, m.start())
         if fn is None:

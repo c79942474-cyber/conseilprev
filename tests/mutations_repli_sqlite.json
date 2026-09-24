@@ -17,6 +17,13 @@
    "avant": "registre_ia.db-shm\n",
    "apres": "",
    "regle": "test_les_compagnons_WAL_du_repli_sont_IGNORES[registre_ia.db-shm]"
+  },
+  {
+   "nom": "le motif des tables déclarées s'arrête de nouveau au premier chiffre",
+   "fichier": "tests/test_repli_sqlite.py",
+   "avant": "TABLE_DECLAREE = re.compile(r\"CREATE TABLE IF NOT EXISTS ([a-z][a-z0-9_]*)\")",
+   "apres": "TABLE_DECLAREE = re.compile(r\"CREATE TABLE IF NOT EXISTS ([a-z_]+)\")",
+   "regle": "test_le_motif_compte_les_tables_dont_le_nom_porte_des_chiffres"
   }
  ]
 }
