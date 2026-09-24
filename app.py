@@ -8112,40 +8112,196 @@ def sentinel_checkout():
     price_id = os.environ.get('STRIPE_PRICE_PRO' if plan == 'pro' else 'STRIPE_PRICE_ENTREPRISE')
     if not secret or not price_id:
         return jsonify({'error': "Paiement non configure.", 'configured': False}), 501
-    try:
-        import stripe
-    except Exception:
-        return jsonify({'error': "Module de paiement indisponible.", 'configured': False}), 501
-    stripe.api_key = secret
+    cid = int(client['id'])
     base = request.host_url.rstrip('/')
     try:
-        _existing_customer = None
+        stripe = _stripe_pret(secret)
+        _row = {}
         try:
             _cc = registre_get_db(); _ccur = _cc.cursor()
-            _ccur.execute(registre_sql('SELECT stripe_customer_id FROM clients WHERE id=%s', 'SELECT stripe_customer_id FROM clients WHERE id=?'), (int(client['id']),))
+            _ccur.execute(registre_sql('SELECT stripe_customer_id, stripe_subscription_id FROM clients WHERE id=%s',
+                                       'SELECT stripe_customer_id, stripe_subscription_id FROM clients WHERE id=?'), (cid,))
             _crow = _ccur.fetchone()
-            if _crow: _existing_customer = dict(_crow).get('stripe_customer_id')
+            _row = dict(_crow) if _crow else {}
             _cc.close()
-        except Exception:
-            _existing_customer = None
+        except Exception as _le:
+            logger.warning('STRIPE_CHECKOUT_LECTURE_CLIENT client=%s : %s', cid, _le)
+        _existing_customer = _row.get('stripe_customer_id')
+        _sub_id = _row.get('stripe_subscription_id')
+        # UN ABONNEMENT EXISTE DEJA : ON CHANGE SON PRIX, ON N'EN OUVRE PAS UN
+        # SECOND. Mesure : la fenetre de verrou propose « Entreprise » a un
+        # client Pro ; la caisse ouvrait un nouvel abonnement, le webhook
+        # ecrasait l'identifiant, et le premier continuait d'etre preleve —
+        # deux prelevements mensuels, dont un orphelin.
+        if _sub_id:
+            try:
+                sub = stripe.Subscription.retrieve(_sub_id)
+                articles = list(sub['items'].data) if 'items' in sub else []
+                if sub['status'] not in ('canceled', 'incomplete_expired') and articles:
+                    stripe.Subscription.modify(
+                        _sub_id, items=[{'id': articles[0]['id'], 'price': price_id}],
+                        proration_behavior='create_prorations',
+                        metadata={'client_id': str(cid), 'plan': plan, 'site': 'conseilprev'})
+                    activate_client_plan(cid, plan)
+                    logger.info('STRIPE_ABONNEMENT_MODIFIE client=%s plan=%s abonnement=%s', cid, plan, _sub_id)
+                    return jsonify({'ok': True, 'modifie': True, 'plan': plan})
+            except stripe.InvalidRequestError as _ie:
+                # L'abonnement n'existe plus chez Stripe : une nouvelle caisse.
+                if getattr(_ie, 'code', '') != 'resource_missing':
+                    raise
+        # LES METADONNEES SONT POSEES SUR L'ABONNEMENT AUSSI : les evenements
+        # customer.subscription.* et invoice.* portent celles de l'abonnement,
+        # pas celles de la session de caisse — sans elles, ils ne diraient
+        # pas quel client. `site` distingue ce site de l'autre du meme compte.
+        _meta = {'client_id': str(cid), 'plan': plan, 'site': 'conseilprev'}
         _sk = dict(mode='subscription', line_items=[{'price': price_id, 'quantity': 1}],
-                   client_reference_id=str(client['id']),
-                   metadata={'client_id': str(client['id']), 'plan': plan},
-                   success_url=base + '/sentinel?activation=ok', cancel_url=base + '/tarifications')
+                   client_reference_id=str(cid),
+                   metadata=_meta, subscription_data={'metadata': _meta},
+                   success_url=base + '/sentinel?activation=ok&session_id={CHECKOUT_SESSION_ID}',
+                   cancel_url=base + '/tarifications')
         if _existing_customer:
             _sk['customer'] = _existing_customer
         else:
             _sk['customer_email'] = client.get('email')
         sess = stripe.checkout.Session.create(**_sk)
-        return jsonify({'url': sess.url})
-    except Exception:
+        return jsonify({'ok': True, 'url': sess.url})
+    except Exception as _e:
+        logger.error('STRIPE_CHECKOUT_ECHEC client=%s plan=%s : %s', cid, plan, _e)
         return jsonify({'error': "Echec de creation de la session de paiement."}), 502
+
+
+# LES EVENEMENTS QUE CE SITE TRAITE. Le point de reception chez Stripe doit
+# y etre abonne, et le diagnostic (lot D) lit ce tuple pour le verifier :
+# un evenement absent de l'abonnement n'arrive jamais, et rien ne le dit.
+STRIPE_EVENEMENTS_REQUIS = (
+    'checkout.session.completed',
+    'checkout.session.async_payment_succeeded',
+    'checkout.session.async_payment_failed',
+    'checkout.session.expired',
+    'invoice.paid',
+    'invoice.payment_failed',
+    'customer.subscription.deleted',
+)
+
+
+def _stripe_session_encaissee(obj):
+    """L'ARGENT EST-IL LA ? `checkout.session.completed` arrive AUSSI pour un
+    paiement differe (prelevement SEPA…) avec payment_status='unpaid' : la
+    caisse est fermee, rien n'est encaisse. Mesure : une offre Entreprise
+    etait activee et une seance passait « payee » sur un tel evenement.
+    `no_payment_required` couvre une caisse a zero (bon d'achat, essai)."""
+    return (obj.get('payment_status') or '') in ('paid', 'no_payment_required')
+
+
+def _sentinel_activer_offre(cid, plan, customer=None, subscription=None):
+    """Active l'offre d'un compte Sentinel, retient ses identifiants Stripe et
+    previent le client — UNE seule fois.
+
+    IDEMPOTENT PARCE QUE DEUX CHEMINS Y MENENT : la notification Stripe et le
+    retour de caisse (/api/stripe/retour), qui peuvent arriver dans n'importe
+    quel ordre. Le second trouve l'offre deja posee et ne renvoie pas le
+    courriel d'activation. Le courriel qui echoue est journalise, pas
+    remonte : le remonter ferait rejouer l'evenement, qui trouverait l'offre
+    activee et n'enverrait plus rien — le client n'aurait jamais le courriel."""
+    conn = registre_get_db(); cur = conn.cursor()
+    cur.execute(registre_sql('SELECT email, nom_entreprise, plan, stripe_subscription_id FROM clients WHERE id=%s',
+                             'SELECT email, nom_entreprise, plan, stripe_subscription_id FROM clients WHERE id=?'), (int(cid),))
+    row = cur.fetchone()
+    try: conn.close()
+    except Exception: pass
+    if not row:
+        logger.error('STRIPE_ACTIVATION_CLIENT_INCONNU client=%s plan=%s', cid, plan)
+        return False
+    row = dict(row)
+    deja = (row.get('plan') == plan
+            and (not subscription or row.get('stripe_subscription_id') == str(subscription)))
+    if deja:
+        return True
+    activate_client_plan(int(cid), plan)
+    if customer:
+        _billing_set_customer(int(cid), customer)
+    if subscription:
+        _billing_set_subscription(int(cid), subscription)
+    logger.info('STRIPE_OFFRE_ACTIVEE client=%s plan=%s', cid, plan)
+    if row.get('email'):
+        _plabel = 'Entreprise' if plan == 'entreprise' else 'Pro'
+        try:
+            send_email_smart(row['email'], row.get('nom_entreprise') or 'Client',
+                'Votre offre Sentinel ' + _plabel + ' est activee',
+                '<p>Bonjour,</p><p>Votre paiement a bien ete recu et votre offre <strong>Sentinel ' + _plabel + '</strong> est desormais active. Vous avez acces a l ensemble des modules correspondants.</p><p>L equipe CONSEILPREV</p>',
+                tags=['activation'])
+        except Exception as _e:
+            logger.error('STRIPE_ACTIVATION_COURRIEL_ECHEC client=%s : %s', cid, _e)
+    return True
+
+
+def _stripe_confirmer_session(obj, faire):
+    """Les confirmateurs d'une caisse ENCAISSEE, choisis par metadata.type
+    ou metadata.plan. Appeles par la notification ET par le retour de caisse ;
+    chacun est idempotent. `faire(nom, fonction)` execute et journalise.
+
+    LE COMPTE SENTINEL VIENT DES METADONNEES, JAMAIS DE client_reference_id.
+    Ce champ porte un numero de compte pour l'abonnement, mais un NUMERO
+    D'INSCRIPTION pour une formation du catalogue et une COMMANDE pour la
+    formation IA. Lu comme un numero de compte, il faisait ecrire le client
+    Stripe d'un acheteur de formation sur le compte Sentinel de meme numero
+    — qui aurait ensuite ete preleve dessus (mesure)."""
+    meta = obj.get('metadata') or {}
+    if meta.get('type') == 'formation':
+        faire('formation', lambda: _form_confirmer_paiement(int(meta.get('inscription_id'))))
+    elif meta.get('type') == 'formation-ia':
+        # LA COMMANDE, PAS LA LIGNE : une session regle jusqu'a quatre seances.
+        # Le montant note est celui que Stripe a ENCAISSE, pas un recalcul.
+        faire('formation-ia', lambda: _formation_ia_confirmer_paiement(
+            commande=meta.get('commande'), resa_id=meta.get('resa_id'),
+            montant_ttc_cents=obj.get('amount_total')))
+    cid = meta.get('client_id')
+    plan = meta.get('plan')
+    if cid and plan in ('pro', 'entreprise'):
+        faire('offre', lambda: _sentinel_activer_offre(
+            int(cid), plan, obj.get('customer'), obj.get('subscription')))
+
+
+def _stripe_liberer_session(obj, etype, faire):
+    """Une caisse SANS paiement : expiree, ou prelevement differe refuse.
+    La formation IA rend son creneau (c'est le paiement qui retient la
+    place). L'inscription du catalogue reste en attente : elle se facture
+    hors ligne, CONSEILPREV rappelle. L'abonnement n'a rien a defaire :
+    aucune offre n'a ete activee."""
+    meta = obj.get('metadata') or {}
+    if meta.get('type') == 'formation-ia' and meta.get('commande'):
+        motif = ('caisse expiree sans paiement' if etype == 'checkout.session.expired'
+                 else 'paiement differe refuse')
+        faire('formation-ia-liberation',
+              lambda: _formation_ia_liberer_commande(meta.get('commande'), motif))
+    else:
+        logger.info('STRIPE_CAISSE_SANS_PAIEMENT type=%s metadata=%s : rien a liberer', etype, dict(meta))
+
+
+def _stripe_abonnement_de_facture(obj):
+    """L'abonnement d'une facture : `parent.subscription_details.subscription`
+    en version d'API dahlia, `subscription` avant."""
+    parent = obj.get('parent') or {}
+    details = parent.get('subscription_details') or {}
+    return details.get('subscription') or obj.get('subscription')
 
 
 @app.route('/api/stripe/webhook', methods=['POST'])
 def stripe_webhook():
-    """Notification Stripe. Verifie la signature puis active l'offre du client
-    sur 'checkout.session.completed'. Desactive si le secret n'est pas defini."""
+    """Notification Stripe : signature verifiee, evenement RECLAME puis traite.
+
+    CE QUI ETAIT FAIT, ET CE QUE CA COUTAIT. Chaque branche avalait ses
+    exceptions (« except Exception: pass ») et l'evenement etait marque vu
+    quoi qu'il arrive, avec une reponse 200. Une base indisponible dix
+    secondes suffisait : le paiement etait perdu pour toujours, Stripe ne
+    reessayant jamais un 200. Mesure : activation en panne, 200, rejeu
+    « duplicate », offre restee gratuite.
+
+    CE QUI EST FAIT. L'evenement est reclame AVANT traitement, atomiquement
+    (INSERT sur la cle primaire) : deux livraisons simultanees n'en traitent
+    qu'une. Un echec libere la reclamation et repond 500 : Stripe reessaie
+    pendant trois jours. Une base muette repond 503, pour la meme raison.
+    Chaque echec est journalise avec l'etape et l'identifiant."""
     secret = os.environ.get('STRIPE_WEBHOOK_SECRET')
     if not secret:
         return jsonify({'error': "Webhook non configure."}), 501
@@ -8156,7 +8312,7 @@ def stripe_webhook():
     payload = request.get_data()
     sig = request.headers.get('Stripe-Signature', '')
     try:
-        event = stripe.Webhook.construct_event(payload, sig, secret)
+        stripe.Webhook.construct_event(payload, sig, secret)
     except Exception:
         return jsonify({'error': "Signature invalide."}), 400
     try:
@@ -8164,98 +8320,112 @@ def stripe_webhook():
         evt = _jwh.loads(payload.decode('utf-8') if isinstance(payload, (bytes, bytearray)) else payload)
     except Exception:
         evt = {}
+    eid = evt.get('id')
+    reclame = _stripe_event_claim(eid)
+    if reclame is None:
+        return jsonify({'received': False}), 503          # base muette : Stripe reessaiera
+    if not reclame:
+        return jsonify({'received': True, 'duplicate': True}), 200
+    echecs = []
+
+    def _faire(nom, fonction):
+        try:
+            fonction()
+        except Exception as _e:
+            echecs.append(nom)
+            logger.error('STRIPE_WEBHOOK_ECHEC etape=%s evenement=%s : %s', nom, eid, _e)
+
     try:
-        if _stripe_event_seen(evt.get('id')):
-            return jsonify({'received': True, 'duplicate': True}), 200
         etype = evt.get('type')
         obj = (evt.get('data') or {}).get('object') or {}
         meta = obj.get('metadata') or {}
-        if etype == 'checkout.session.completed':
-            # Reservation d'une formation du catalogue : confirmer et notifier.
-            if meta.get('type') == 'formation':
-                try:
-                    _form_confirmer_paiement(int(meta.get('inscription_id')))
-                except Exception:
-                    pass
-            # Reservation « Formations conformite IA » (offre a quatre sujets).
-            if meta.get('type') == 'formation-ia':
-                try:
-                    # LA COMMANDE, PAS LA LIGNE. Une session Stripe regle
-                    # JUSQU'A QUATRE seances ; ne confirmer que la premiere
-                    # laisserait les trois autres « en attente de paiement »
-                    # alors qu'elles sont reglees — et, a l'annulation, sans
-                    # remboursement parce qu'on les croirait impayees.
-                    _formation_ia_confirmer_paiement(
-                        commande=meta.get('commande'),
-                        resa_id=meta.get('resa_id'))
-                except Exception:
-                    pass
-            cid = meta.get('client_id') or obj.get('client_reference_id')
-            plan = meta.get('plan')
-            if cid and plan in ('pro', 'entreprise'):
-                try:
-                    activate_client_plan(int(cid), plan)
-                except Exception:
-                    pass
-                try:
-                    _conn_e = registre_get_db(); _cur_e = _conn_e.cursor()
-                    _cur_e.execute(registre_sql('SELECT email, nom_entreprise FROM clients WHERE id=%s', 'SELECT email, nom_entreprise FROM clients WHERE id=?'), (int(cid),))
-                    _ce = _cur_e.fetchone()
-                    try: _conn_e.close()
-                    except Exception: pass
-                    _ce = dict(_ce) if _ce else {}
-                    if _ce.get('email'):
-                        _plabel = 'Entreprise' if plan == 'entreprise' else 'Pro'
-                        send_email_smart(_ce['email'], _ce.get('nom_entreprise') or 'Client',
-                            'Votre offre Sentinel ' + _plabel + ' est activee',
-                            '<p>Bonjour,</p><p>Votre paiement a bien ete recu et votre offre <strong>Sentinel ' + _plabel + '</strong> est desormais active. Vous avez acces a l ensemble des modules correspondants.</p><p>L equipe CONSEILPREV</p>',
-                            tags=['activation'])
-                except Exception:
-                    pass
-            cust = obj.get('customer')
-            if cid and cust:
-                try:
-                    _billing_set_customer(int(cid), cust)
-                except Exception:
-                    pass
-            sub = obj.get('subscription')
-            if cid and sub:
-                try:
-                    _billing_set_subscription(int(cid), sub)
-                except Exception:
-                    pass
+        if etype in ('checkout.session.completed', 'checkout.session.async_payment_succeeded'):
+            if _stripe_session_encaissee(obj):
+                _stripe_confirmer_session(obj, _faire)
+            else:
+                logger.info('STRIPE_WEBHOOK_NON_ENCAISSE evenement=%s type=%s payment_status=%s : rien confirme',
+                            eid, etype, obj.get('payment_status'))
+        elif etype in ('checkout.session.async_payment_failed', 'checkout.session.expired'):
+            _stripe_liberer_session(obj, etype, _faire)
         elif etype == 'invoice.paid':
             numero = meta.get('numero'); ech = meta.get('echeance')
             if numero and ech:
-                try:
-                    _billing_on_invoice_paid(numero, int(ech))
-                except Exception:
-                    pass
+                _faire('facture', lambda: _billing_on_invoice_paid(numero, int(ech), obj.get('amount_paid')))
         elif etype == 'invoice.payment_failed':
             numero = meta.get('numero'); ech = meta.get('echeance'); cid = meta.get('client_id')
             if numero and ech:
-                try:
-                    _billing_on_invoice_failed(numero, int(ech), int(cid) if cid else None)
-                except Exception:
-                    pass
-        try: _stripe_event_mark(evt.get('id'))
-        except Exception: pass
-        return jsonify({'received': True}), 200
-
-
-
-    # ══════════════════════════════════════════════════════════
-    # AGENT SENTINEL PRICING ORCHESTRATOR — TARIFICATION RAAS PAR JALONS
-    # Modules : Observateur (lecture des scores), Verificateur (double
-    # declencheur), Facturier (echeancier, gel des acquis), Mediateur
-    # (validation humaine CONSEILPREV requise pour verifier un jalon).
-    # Regles inviolables : jalon verified = irrevocable ; aucun jalon
-    # facture sans verification ; enveloppe bornee a 60 % du SaaS annuel.
-    # ══════════════════════════════════════════════════════════
+                _faire('impaye', lambda: _billing_on_invoice_failed(numero, int(ech), int(cid) if cid else None))
+            else:
+                # UNE FACTURE D'ABONNEMENT (pas une echeance RaaS) : le client
+                # et CONSEILPREV doivent le savoir, CGV 3.4.
+                sub_id = _stripe_abonnement_de_facture(obj)
+                if sub_id:
+                    _faire('abonnement-impaye', lambda: _abonnement_impaye(sub_id))
+        elif etype == 'customer.subscription.deleted':
+            _faire('abonnement-resilie', lambda: _abonnement_resilie(obj.get('id'), meta.get('client_id')))
     except Exception as _we:
-        try: logger.error('STRIPE_WEBHOOK_ERROR: ' + str(_we))
-        except Exception: pass
+        echecs.append('webhook')
+        logger.error('STRIPE_WEBHOOK_ECHEC etape=webhook evenement=%s : %s', eid, _we)
+    if echecs:
+        _stripe_event_release(eid)
+        return jsonify({'received': False, 'echecs': echecs}), 500
     return jsonify({'received': True}), 200
+
+
+@app.route('/api/stripe/retour', methods=['GET'])
+@rate_limit(limit=30, window=60)
+def stripe_retour():
+    """Le retour de caisse : le filet quand la notification n'arrive pas.
+
+    UN MOIS SANS NOTIFICATION VIENT D'ETRE CONSTATE : le point de reception
+    visait un hote sans service. Pendant ce temps, les pages annoncaient
+    « offre activee » et « Paiement recu » sans rien verifier. Ici, la
+    session est RELUE chez Stripe avec la vraie bibliotheque ; si elle est
+    encaissee, les MEMES confirmateurs idempotents que la notification sont
+    appeles. La page n'affiche « confirme » qu'apres la reponse « paye ».
+
+    LA ROUTE EST PUBLIQUE (la caisse formation IA l'est), donc elle ne rend
+    que le statut — jamais un montant, une adresse, un nom. Un identifiant
+    de session devine ne permet que de confirmer un paiement deja encaisse
+    par Stripe, ce que la notification aurait fait de toute facon."""
+    sid = (request.args.get('session_id') or '').strip()
+    if not sid or not sid.startswith('cs_') or len(sid) > 200:
+        return jsonify({'statut': 'inconnu'}), 400
+    secret = os.environ.get('STRIPE_SECRET_KEY')
+    if not secret:
+        return jsonify({'statut': 'inconnu'}), 501
+    try:
+        import json as _jr
+        stripe = _stripe_pret(secret)
+        obj = _jr.loads(str(stripe.checkout.Session.retrieve(sid)))
+    except Exception as _e:
+        logger.warning('STRIPE_RETOUR_RELECTURE session=%s : %s', sid, _e)
+        return jsonify({'statut': 'inconnu'}), 200
+    if not _stripe_session_encaissee(obj):
+        return jsonify({'statut': 'en_attente'}), 200
+    echecs = []
+
+    def _faire(nom, fonction):
+        try:
+            fonction()
+        except Exception as _e:
+            echecs.append(nom)
+            logger.error('STRIPE_RETOUR_ECHEC etape=%s session=%s : %s', nom, sid, _e)
+
+    _stripe_confirmer_session(obj, _faire)
+    # Encaisse chez Stripe mais non confirme ici : la page dira « en cours »,
+    # la notification (reessayee par Stripe) finira le travail.
+    return jsonify({'statut': 'paye' if not echecs else 'en_attente'}), 200
+
+
+# ══════════════════════════════════════════════════════════
+# AGENT SENTINEL PRICING ORCHESTRATOR — TARIFICATION RAAS PAR JALONS
+# Modules : Observateur (lecture des scores), Verificateur (double
+# declencheur), Facturier (echeancier, gel des acquis), Mediateur
+# (validation humaine CONSEILPREV requise pour verifier un jalon).
+# Regles inviolables : jalon verified = irrevocable ; aucun jalon
+# facture sans verification ; enveloppe bornee a 60 % du SaaS annuel.
+# ══════════════════════════════════════════════════════════
 
 def raas_require_conseilprev():
     """Retourne le client CONSEILPREV ou None. Les operations de
@@ -14166,50 +14336,126 @@ def _stripe_pret(secret):
     return stripe
 
 
-def _stripe_event_seen(event_id):
-    """Verifie seulement si un evenement Stripe a deja ete traite.
-    L'enregistrement n'a lieu qu'apres traitement reussi (_stripe_event_mark),
-    afin qu'un evenement en echec puisse etre rejoue et retraite."""
+def _stripe_event_claim(event_id):
+    """RECLAME l'evenement AVANT de le traiter, atomiquement.
+
+    True : a traiter ; False : deja reclame (doublon) ; None : base injoignable.
+
+    UNE SEULE INSTRUCTION, SUR LA CLE PRIMAIRE. L'ancienne version lisait
+    (SELECT) avant de traiter et ecrivait (INSERT) apres : deux livraisons
+    simultanees passaient toutes deux le SELECT, et la commande etait
+    confirmee deux fois — quatre courriels (mesure). Ici, `ON CONFLICT DO
+    NOTHING` laisse la base departager : une ligne inseree, un traitement.
+    L'echec du traitement REND la reclamation (_stripe_event_release), pour
+    que le prochain envoi de Stripe soit retraite."""
     if not event_id:
-        return False
+        return True             # Stripe met toujours un identifiant ; sans lui, rien a dedoublonner
     conn = None
     try:
         conn = registre_get_db(); cur = conn.cursor()
         cur.execute("CREATE TABLE IF NOT EXISTS stripe_events (event_id TEXT PRIMARY KEY, processed_at TEXT)")
+        cur.execute(registre_sql(
+            'INSERT INTO stripe_events (event_id, processed_at) VALUES (%s, %s) ON CONFLICT (event_id) DO NOTHING',
+            'INSERT INTO stripe_events (event_id, processed_at) VALUES (?, ?) ON CONFLICT (event_id) DO NOTHING'),
+            (str(event_id), datetime.utcnow().isoformat()))
+        pris = cur.rowcount == 1
         conn.commit()
-        cur.execute(registre_sql('SELECT 1 FROM stripe_events WHERE event_id=%s',
-                                 'SELECT 1 FROM stripe_events WHERE event_id=?'), (event_id,))
-        seen = cur.fetchone() is not None
+        return pris
+    except Exception as _e:
+        logger.error('STRIPE_EVENEMENT_RECLAMATION_ECHEC evenement=%s : %s', event_id, _e)
+        try: conn.rollback()
+        except Exception: pass
+        return None
+    finally:
         try: conn.close()
         except Exception: pass
-        return seen
-    except Exception:
-        try: conn.close()
-        except Exception: pass
-        return False
 
 
-def _stripe_event_mark(event_id):
-    """Enregistre un evenement Stripe comme traite, apres un traitement reussi."""
+def _stripe_event_release(event_id):
+    """Rend l'evenement a Stripe : son prochain envoi sera retraite."""
     if not event_id:
         return
-    conn = None
     try:
         conn = registre_get_db(); cur = conn.cursor()
-        cur.execute("CREATE TABLE IF NOT EXISTS stripe_events (event_id TEXT PRIMARY KEY, processed_at TEXT)")
-        try:
-            cur.execute(registre_sql('INSERT INTO stripe_events (event_id, processed_at) VALUES (%s, %s)',
-                                     'INSERT INTO stripe_events (event_id, processed_at) VALUES (?, ?)'),
-                        (str(event_id), datetime.utcnow().isoformat()))
-            conn.commit()
-        except Exception:
-            try: conn.rollback()
-            except Exception: pass
+        cur.execute(registre_sql('DELETE FROM stripe_events WHERE event_id=%s',
+                                 'DELETE FROM stripe_events WHERE event_id=?'), (str(event_id),))
+        conn.commit(); conn.close()
+    except Exception as _e:
+        # La reclamation reste posee : ce doublon-la serait perdu. Il faut le dire.
+        logger.error('STRIPE_EVENEMENT_LIBERATION_ECHEC evenement=%s : %s', event_id, _e)
+
+
+def _abonnement_resilie(sub_id, client_id=None):
+    """customer.subscription.deleted : l'offre est retiree, l'identifiant oublie.
+
+    Mesure : un abonnement resilie chez Stripe laissait le client en « pro »
+    pour toujours — l'offre n'etait jamais retiree. On ne touche QUE le compte
+    qui porte cet abonnement : un evenement tardif sur un ancien abonnement
+    ne doit pas retrograder un client qui en a souscrit un nouveau."""
+    if not sub_id:
+        return
+    conn = registre_get_db(); cur = conn.cursor()
+    cur.execute(registre_sql("UPDATE clients SET plan='gratuit', stripe_subscription_id=NULL WHERE stripe_subscription_id=%s",
+                             "UPDATE clients SET plan='gratuit', stripe_subscription_id=NULL WHERE stripe_subscription_id=?"),
+                (str(sub_id),))
+    touches = cur.rowcount
+    if not touches and client_id:
+        # L'identifiant n'a jamais ete memorise (notification d'activation
+        # perdue) : les metadonnees de l'abonnement nomment le client.
+        cur.execute(registre_sql("UPDATE clients SET plan='gratuit' WHERE id=%s AND stripe_subscription_id IS NULL",
+                                 "UPDATE clients SET plan='gratuit' WHERE id=? AND stripe_subscription_id IS NULL"),
+                    (int(client_id),))
+        touches = cur.rowcount
+    conn.commit()
+    try: conn.close()
+    except Exception: pass
+    logger.info('STRIPE_ABONNEMENT_RESILIE abonnement=%s client=%s comptes_retrogrades=%s', sub_id, client_id, touches)
+
+
+def _abonnement_impaye(sub_id):
+    """invoice.payment_failed d'un ABONNEMENT : relance, courriel au client,
+    notification interne. Mesure : un impaye d'abonnement ne produisait ni
+    trace ni courriel, alors que les CGV (3.4) annoncent une suspension."""
+    conn = registre_get_db(); cur = conn.cursor()
+    cur.execute(registre_sql('SELECT id, email, nom_entreprise, plan FROM clients WHERE stripe_subscription_id=%s',
+                             'SELECT id, email, nom_entreprise, plan FROM clients WHERE stripe_subscription_id=?'),
+                (str(sub_id),))
+    row = cur.fetchone()
+    row = dict(row) if row else None
+    if not row:
         try: conn.close()
         except Exception: pass
-    except Exception:
-        try: conn.close()
+        logger.warning('STRIPE_ABONNEMENT_IMPAYE_CLIENT_INCONNU abonnement=%s', sub_id)
+        return
+    try:
+        cur.execute(registre_sql(
+            "INSERT INTO client_relances (client_id, type, objet, canal, priorite, due_date, status, related_ref, created_at) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+            "INSERT INTO client_relances (client_id, type, objet, canal, priorite, due_date, status, related_ref, created_at) VALUES (?,?,?,?,?,?,?,?,?)"),
+            (int(row['id']), 'paiement', 'Echec de prelevement - abonnement Sentinel %s' % (row.get('plan') or ''),
+             'email', 'haute', datetime.utcnow().date().isoformat(), 'planifiee', str(sub_id), datetime.utcnow().isoformat()))
+        conn.commit()
+    except Exception as _e:
+        try: conn.rollback()
         except Exception: pass
+        logger.error('STRIPE_ABONNEMENT_IMPAYE_RELANCE_ECHEC client=%s : %s', row['id'], _e)
+    try: conn.close()
+    except Exception: pass
+    logger.warning('STRIPE_ABONNEMENT_IMPAYE abonnement=%s client=%s', sub_id, row['id'])
+    if row.get('email'):
+        send_email_smart(row['email'], row.get('nom_entreprise') or 'Client',
+                         'Echec de prelevement - abonnement Sentinel',
+                         '<p>Bonjour,</p><p>Le prelevement de votre abonnement Sentinel n a pas abouti. '
+                         'Merci de verifier votre moyen de paiement ; sans regularisation, l acces a l offre '
+                         'sera suspendu.</p><p>L equipe CONSEILPREV</p>',
+                         tags=['paiement-echec'])
+    send_email_smart(CONSEILPREV_NOTIFY_EMAIL, 'CONSEILPREV',
+                     'Impaye abonnement Sentinel : %s' % (row.get('nom_entreprise') or row.get('email')),
+                     '<p>Le prelevement de l abonnement <strong>%s</strong> du client n°%s (%s) a echoue.</p>'
+                     '<p>Une relance « paiement » est planifiee dans la gestion des clients.</p>'
+                     % (sub_id, row['id'], row.get('email')),
+                     tags=['paiement-echec'])
+
+
 def _billing_set_subscription(client_id, sub_id):
     """Memorise l'identifiant d'abonnement Stripe du client (pour pouvoir le
     resilier lors du passage a la facturation par resultats)."""
@@ -14229,38 +14475,55 @@ def _billing_cancel_subscription(client_id):
     """Resilie l'abonnement Stripe d'un client. Exclusion du cumul : un client
     est facture soit par abonnement recurrent, soit par resultats (echeances RaAS),
     jamais les deux. Des qu'une facture RaAS est emise, l'abonnement est resilie.
-    Idempotent (ne fait rien si aucun abonnement)."""
+    Idempotent (ne fait rien si aucun abonnement).
+
+    Rend True quand plus aucun abonnement ne preleve ce client (resilie, ou
+    deja disparu chez Stripe), False sinon.
+
+    LE LIEN LOCAL N'EST EFFACE QU'APRES LA RESILIATION. Mesure : six DELETE
+    refuses par Stripe, et pourtant stripe_subscription_id passait a NULL —
+    l'abonnement continuait de prelever, la facturation par resultats
+    demarrait, et plus rien ne permettait de voir le cumul. Seuls
+    `status == 'canceled'` ou « resource_missing » (deja resilie) valent
+    preuve. En 15.x, `Subscription.cancel` est l'appel de resiliation
+    (DELETE /v1/subscriptions/{id}) ; `delete` n'en est qu'un alias ancien."""
     secret = os.environ.get('STRIPE_SECRET_KEY')
-    try:
-        conn = registre_get_db(); cur = conn.cursor()
-        cur.execute(registre_sql('SELECT stripe_subscription_id FROM clients WHERE id=%s',
-                                 'SELECT stripe_subscription_id FROM clients WHERE id=?'), (int(client_id),))
-        row = cur.fetchone()
-        sub = (dict(row).get('stripe_subscription_id') if row else None)
-        if not sub:
-            try: conn.close()
-            except Exception: pass
-            return
-        if secret:
-            try:
-                import stripe
-                stripe.api_key = secret
-                try:
-                    stripe.Subscription.delete(sub)
-                except Exception:
-                    try:
-                        stripe.Subscription.cancel(sub)
-                    except Exception:
-                        pass
-            except Exception:
-                pass
-        cur.execute(registre_sql('UPDATE clients SET stripe_subscription_id=NULL WHERE id=%s',
-                                 'UPDATE clients SET stripe_subscription_id=NULL WHERE id=?'), (int(client_id),))
-        conn.commit()
+    conn = registre_get_db(); cur = conn.cursor()
+    cur.execute(registre_sql('SELECT stripe_subscription_id FROM clients WHERE id=%s',
+                             'SELECT stripe_subscription_id FROM clients WHERE id=?'), (int(client_id),))
+    row = cur.fetchone()
+    sub = (dict(row).get('stripe_subscription_id') if row else None)
+    if not sub:
         try: conn.close()
         except Exception: pass
-    except Exception:
-        pass
+        return True
+    if not secret:
+        try: conn.close()
+        except Exception: pass
+        logger.error('STRIPE_RESILIATION_IMPOSSIBLE client=%s abonnement=%s : STRIPE_SECRET_KEY absente', client_id, sub)
+        return False
+    resilie = False
+    try:
+        stripe = _stripe_pret(secret)
+        try:
+            resilie = stripe.Subscription.cancel(sub)['status'] == 'canceled'
+        except stripe.InvalidRequestError as _ie:
+            resilie = getattr(_ie, 'code', '') == 'resource_missing'
+            if not resilie:
+                raise
+    except Exception as _e:
+        logger.error('STRIPE_RESILIATION_ECHEC client=%s abonnement=%s : %s', client_id, sub, _e)
+    if not resilie:
+        try: conn.close()
+        except Exception: pass
+        return False
+    cur.execute(registre_sql('UPDATE clients SET stripe_subscription_id=NULL WHERE id=%s',
+                             'UPDATE clients SET stripe_subscription_id=NULL WHERE id=?'), (int(client_id),))
+    conn.commit()
+    try: conn.close()
+    except Exception: pass
+    logger.info('STRIPE_ABONNEMENT_RESILIE client=%s abonnement=%s', client_id, sub)
+    return True
 
 
 def _billing_set_customer(client_id, customer_id):
@@ -14335,8 +14598,51 @@ def _billing_update_echeance(numero, echeance, status, stripe_invoice_id=None):
     return True
 
 
-def _billing_on_invoice_paid(numero, echeance):
+def _billing_montant_echeance_cents(numero, echeance):
+    """Le montant HT attendu d'une echeance, en centimes — None si inconnue."""
+    import json as _json
+    conn = registre_get_db(); cur = conn.cursor()
+    cur.execute(registre_sql('SELECT due_json FROM raas_invoices WHERE numero=%s',
+                             'SELECT due_json FROM raas_invoices WHERE numero=?'), (numero,))
+    row = cur.fetchone()
+    try: conn.close()
+    except Exception: pass
+    if not row:
+        return None
+    try:
+        for e in _json.loads(dict(row).get('due_json') or '[]'):
+            if e.get('echeance') == echeance:
+                return int(e.get('montant') or 0) * 100
+    except Exception:
+        return None
+    return None
+
+
+def _billing_on_invoice_paid(numero, echeance, amount_paid=None):
+    """invoice.paid : l'echeance n'est soldee que si de l'argent est ENTRE.
+
+    Mesure : une facture a 0 EUR (ligne restee en attente, ou avoir) soldait
+    une echeance de 1 000 EUR. `amount_paid` est ce que Stripe a encaisse ;
+    absent des anciens evenements, il n'est pas exige. Un ecart avec le
+    montant attendu — HT si le taux de TVA Stripe n'a pas ete applique, TTC
+    sinon — est journalise, pas corrige : c'est a un humain de regarder."""
+    if amount_paid is not None:
+        try:
+            paye = int(amount_paid)
+        except (TypeError, ValueError):
+            paye = 0
+        if paye <= 0:
+            logger.error('STRIPE_FACTURE_NON_ENCAISSEE numero=%s echeance=%s amount_paid=%s : echeance non soldee',
+                         numero, echeance, amount_paid)
+            return False
+        attendu_ht = _billing_montant_echeance_cents(numero, echeance)
+        if attendu_ht is not None:
+            attendu_ttc = int(round(attendu_ht * (100 + max(0.0, FORM_TVA_PCT)) / 100.0))
+            if paye not in (attendu_ht, attendu_ttc):
+                logger.warning('STRIPE_FACTURE_ECART numero=%s echeance=%s paye=%s attendu=%s HT / %s TTC',
+                               numero, echeance, paye, attendu_ht, attendu_ttc)
     _billing_update_echeance(numero, echeance, 'payee')
+    return True
 
 
 def _billing_on_invoice_failed(numero, echeance, client_id=None):
@@ -14404,7 +14710,7 @@ def clients_billing_run():
         try: conn.close()
         except Exception: pass
         return jsonify({'ok': False, 'error': "Module Stripe indisponible.", 'configured': False}), 501
-    stripe.api_key = secret
+    stripe = _stripe_pret(secret)
     try:
         _lim = int(d.get('limit', 200))
     except (TypeError, ValueError):
@@ -14419,18 +14725,20 @@ def clients_billing_run():
         for _r in cur.fetchall():
             _r = dict(_r); _cust_map[_r['id']] = _r.get('stripe_customer_id')
     results = []
-    _cancelled = set()
+    _cancelled = {}
     for item in _batch:
         cust = _cust_map.get(item['client_id'])
         if not cust:
             results.append({'numero': item['numero'], 'echeance': item['echeance'], 'ok': False, 'error': 'Aucun moyen de paiement Stripe enregistre'})
             continue
+        # PAS DE CUMUL : tant que l'abonnement n'est pas resilie chez Stripe,
+        # aucune echeance par resultats n'est emise pour ce client.
         if item['client_id'] not in _cancelled:
-            try:
-                _billing_cancel_subscription(item['client_id'])
-            except Exception:
-                pass
-            _cancelled.add(item['client_id'])
+            _cancelled[item['client_id']] = _billing_cancel_subscription(item['client_id'])
+        if not _cancelled[item['client_id']]:
+            results.append({'numero': item['numero'], 'echeance': item['echeance'], 'ok': False,
+                            'error': 'Abonnement Stripe non resilie : echeance non emise (pas de cumul)'})
+            continue
         try:
             _ikey = 'raas-' + str(item['numero']) + '-e' + str(item['echeance'])
             # TVA : le montant du jalon est HT ; le taux Stripe ajoute la TVA en ligne
@@ -14441,19 +14749,28 @@ def clients_billing_run():
             except Exception:
                 _taux = None
             _kw = {'tax_rates': [_taux]} if _taux else {}
-            stripe.InvoiceItem.create(customer=cust, amount=int(item['montant']) * 100, currency='eur',
-                                      description='%s - echeance %s' % (item['numero'], item['echeance']),
-                                      idempotency_key=_ikey + '-item', **_kw)
+            # LA FACTURE D'ABORD, LA LIGNE RATTACHEE ENSUITE. Avant : la ligne
+            # etait creee « en attente » et la facture sans elle — Stripe
+            # exclut par defaut les lignes en attente (pending_invoice_items_
+            # behavior = exclude), la facture sortait a 0 EUR. Puis
+            # `inv.get('id')` levait AttributeError (StripeObject n'est plus
+            # un dict en 15.x) : « Echec de creation », facture pourtant
+            # creee et finalisee, echeance restee a_venir, et le passage
+            # suivant recommencait. Cles d'idempotence NEUVES (-inv2/-item2) :
+            # les parametres ont change, une cle de 24 h rejouerait l'ancien.
             inv = stripe.Invoice.create(customer=cust, auto_advance=True, collection_method='charge_automatically',
+                                        pending_invoice_items_behavior='exclude',
                                         metadata={'numero': item['numero'], 'echeance': str(item['echeance']), 'client_id': str(item['client_id'])},
-                                        idempotency_key=_ikey + '-inv')
-            try:
-                stripe.Invoice.finalize_invoice(inv['id'])
-            except Exception:
-                pass
-            _billing_update_echeance(item['numero'], item['echeance'], 'envoyee', inv.get('id'))
-            results.append({'numero': item['numero'], 'echeance': item['echeance'], 'ok': True, 'stripe_invoice': inv.get('id')})
-        except Exception:
+                                        idempotency_key=_ikey + '-inv2')
+            stripe.InvoiceItem.create(customer=cust, invoice=inv['id'], amount=int(item['montant']) * 100, currency='eur',
+                                      description='%s - echeance %s' % (item['numero'], item['echeance']),
+                                      idempotency_key=_ikey + '-item2', **_kw)
+            stripe.Invoice.finalize_invoice(inv['id'])
+            # « envoyee » SEULEMENT apres finalisation : un brouillon ne preleve rien.
+            _billing_update_echeance(item['numero'], item['echeance'], 'envoyee', inv['id'])
+            results.append({'numero': item['numero'], 'echeance': item['echeance'], 'ok': True, 'stripe_invoice': inv['id']})
+        except Exception as _e:
+            logger.error('STRIPE_FACTURE_RAAS_ECHEC numero=%s echeance=%s : %s', item['numero'], item['echeance'], _e)
             results.append({'numero': item['numero'], 'echeance': item['echeance'], 'ok': False, 'error': 'Echec de creation de la facture Stripe'})
     conn.commit()
     try: conn.close()
@@ -14508,30 +14825,40 @@ def clients_subscription():
             except Exception:
                 return None
 
+    def _prix_de(sub_obj):
+        data = _g(_g(sub_obj, 'items'), 'data') or []
+        return _g(_g(data[0], 'price'), 'id') if data else None
+
+    # SEULS LES PRIX DE CE SITE SE RATTACHENT. Le compte Stripe est partage
+    # avec un autre site : un abonnement d'un autre produit porte le meme
+    # e-mail. Rattache ici, il serait RESILIE par set-plan ou billing-run
+    # (mesure). Sans prix configure, on ne rattache rien.
+    prix_du_site = {p for p in (os.environ.get('STRIPE_PRICE_PRO'),
+                                os.environ.get('STRIPE_PRICE_ENTREPRISE')) if p}
     try:
         stripe = _stripe_pret(secret)
         sub = None
         if sub_id:
             sub = stripe.Subscription.retrieve(sub_id)
-        elif email:
+        elif email and prix_du_site:
             custs = stripe.Customer.list(email=email, limit=10)
             for c in (_g(custs, 'data') or []):
-                subs = stripe.Subscription.list(customer=_g(c, 'id'), status='active', limit=1)
-                dl = _g(subs, 'data') or []
-                if dl:
-                    sub = dl[0]
-                    try:
+                subs = stripe.Subscription.list(customer=_g(c, 'id'), status='active', limit=10)
+                for s in (_g(subs, 'data') or []):
+                    if _prix_de(s) in prix_du_site:
+                        sub = s
                         _billing_set_customer(client_id, _g(c, 'id'))
                         _billing_set_subscription(client_id, _g(sub, 'id'))
-                    except Exception:
-                        pass
+                        break
+                if sub is not None:
                     break
         if sub is None:
             return jsonify({'ok': True, 'has_sub': False, 'plan': plan})
-    except Exception:
+    except Exception as _e:
+        logger.error('STRIPE_ABONNEMENT_LECTURE_ECHEC client=%s : %s', client_id, _e)
         return jsonify({'ok': True, 'has_sub': bool(sub_id), 'plan': plan, 'configured': True, 'error_stripe': True})
 
-    amount = None; currency = 'eur'; interval = None
+    amount = None; currency = 'eur'; interval = None; fin_periode = None
     try:
         items_obj = _g(sub, 'items')
         data = _g(items_obj, 'data') or []
@@ -14541,13 +14868,16 @@ def clients_subscription():
             currency = _g(price, 'currency') or 'eur'
             rec = _g(price, 'recurring')
             interval = _g(rec, 'interval') if rec else None
+            # En version d'API dahlia, la fin de periode est portee par
+            # l'ARTICLE d'abonnement, plus par l'abonnement (toujours null ici).
+            fin_periode = _g(data[0], 'current_period_end')
     except Exception:
         pass
     return jsonify({'ok': True, 'has_sub': True, 'plan': plan,
                     'status': _g(sub, 'status'),
                     'amount_eur': (amount / 100.0 if amount is not None else None),
                     'currency': currency, 'interval': interval,
-                    'current_period_end': _g(sub, 'current_period_end'),
+                    'current_period_end': fin_periode if fin_periode is not None else _g(sub, 'current_period_end'),
                     'cancel_at_period_end': _g(sub, 'cancel_at_period_end')})
 
 
@@ -14567,12 +14897,6 @@ def clients_set_plan():
     plan = d.get('plan')
     if plan not in ('gratuit', 'pro', 'entreprise'):
         return jsonify({'ok': False, 'error': 'Offre invalide'}), 400
-    conn = registre_get_db(); cur = conn.cursor()
-    cur.execute(registre_sql('UPDATE clients SET plan=%s WHERE id=%s',
-                             'UPDATE clients SET plan=? WHERE id=?'), (plan, client_id))
-    conn.commit()
-    try: conn.close()
-    except Exception: pass
     stripe_sync = None
     secret = os.environ.get('STRIPE_SECRET_KEY')
     _c2 = registre_get_db(); _cur2 = _c2.cursor()
@@ -14581,34 +14905,40 @@ def clients_set_plan():
     try: _c2.close()
     except Exception: pass
     sub_id = (dict(_r2).get('stripe_subscription_id') if _r2 else None)
-    if secret and sub_id:
+    # STRIPE D'ABORD POUR UN PASSAGE EN GRATUIT. L'ancien code ecrivait le plan
+    # puis annoncait « abonnement_resilie » meme quand Stripe refusait :
+    # l'offre retiree ici, le prelevement continuant la-bas. Une resiliation
+    # refusee est desormais REPONDUE, et rien n'est change.
+    if plan == 'gratuit' and secret and sub_id:
+        if not _billing_cancel_subscription(client_id):
+            return jsonify({'ok': False, 'stripe_sync': 'resiliation_echouee',
+                            'error': "Stripe a refuse la resiliation de l'abonnement : offre inchangee."}), 502
+        stripe_sync = 'abonnement_resilie'
+    conn = registre_get_db(); cur = conn.cursor()
+    cur.execute(registre_sql('UPDATE clients SET plan=%s WHERE id=%s',
+                             'UPDATE clients SET plan=? WHERE id=?'), (plan, client_id))
+    conn.commit()
+    try: conn.close()
+    except Exception: pass
+    if plan != 'gratuit' and secret and sub_id:
         try:
             stripe = _stripe_pret(secret)
-            if plan == 'gratuit':
-                try:
-                    stripe.Subscription.delete(sub_id)
-                except Exception:
-                    try: stripe.Subscription.cancel(sub_id)
-                    except Exception: pass
-                _c3 = registre_get_db(); _cur3 = _c3.cursor()
-                _cur3.execute(registre_sql('UPDATE clients SET stripe_subscription_id=NULL WHERE id=%s', 'UPDATE clients SET stripe_subscription_id=NULL WHERE id=?'), (client_id,))
-                _c3.commit()
-                try: _c3.close()
-                except Exception: pass
-                stripe_sync = 'abonnement_resilie'
+            price_id = os.environ.get('STRIPE_PRICE_PRO') if plan == 'pro' else os.environ.get('STRIPE_PRICE_ENTREPRISE')
+            if not price_id:
+                stripe_sync = 'tarif_non_configure'
             else:
-                price_id = os.environ.get('STRIPE_PRICE_PRO') if plan == 'pro' else os.environ.get('STRIPE_PRICE_ENTREPRISE')
-                if not price_id:
-                    stripe_sync = 'tarif_non_configure'
+                sub = stripe.Subscription.retrieve(sub_id)
+                # StripeObject n'est pas un dict en 15.x : `sub.get('items')`
+                # levait AttributeError, et « erreur_stripe » etait repondu
+                # sans que le tarif change (mesure).
+                items = list(sub['items'].data) if 'items' in sub else []
+                if items:
+                    stripe.Subscription.modify(sub_id, items=[{'id': items[0]['id'], 'price': price_id}], proration_behavior='create_prorations')
+                    stripe_sync = 'tarif_mis_a_jour'
                 else:
-                    sub = stripe.Subscription.retrieve(sub_id)
-                    items = (sub.get('items') or {}).get('data') or []
-                    if items:
-                        stripe.Subscription.modify(sub_id, items=[{'id': items[0].get('id'), 'price': price_id}], proration_behavior='create_prorations')
-                        stripe_sync = 'tarif_mis_a_jour'
-                    else:
-                        stripe_sync = 'aucun_article'
-        except Exception:
+                    stripe_sync = 'aucun_article'
+        except Exception as _e:
+            logger.error('STRIPE_SET_PLAN_ECHEC client=%s plan=%s : %s', client_id, plan, _e)
             stripe_sync = 'erreur_stripe'
     return jsonify({'ok': True, 'plan': plan, 'stripe_sync': stripe_sync})
 
@@ -15687,10 +16017,22 @@ def rgpd_effacement():
     conn = registre_get_db(); cur = conn.cursor()
     _rgpd_table(cur); conn.commit()
     bilan = {}
-    cur.execute(registre_sql('SELECT id FROM clients WHERE LOWER(email)=%s', 'SELECT id FROM clients WHERE LOWER(email)=?'), (email,))
+    cur.execute(registre_sql('SELECT id, stripe_subscription_id FROM clients WHERE LOWER(email)=%s',
+                             'SELECT id, stripe_subscription_id FROM clients WHERE LOWER(email)=?'), (email,))
     row = cur.fetchone()
     cid = dict(row).get('id') if row else None
     if cid:
+        # RESILIER AVANT D'OUBLIER. L'identifiant d'abonnement etait mis a
+        # NULL sans resiliation : le compte efface continuait d'etre preleve,
+        # et plus rien ne permettait de l'arreter. Au mieux : resilie ; sinon,
+        # journalise et dit dans le bilan — l'effacement, lui, a lieu.
+        if dict(row).get('stripe_subscription_id'):
+            bilan['abonnement'] = 'resilie' if _billing_cancel_subscription(cid) else 'non_resilie'
+            if bilan['abonnement'] == 'non_resilie':
+                logger.error('RGPD_EFFACEMENT_ABONNEMENT_NON_RESILIE client=%s abonnement=%s',
+                             cid, dict(row).get('stripe_subscription_id'))
+        else:
+            bilan['abonnement'] = 'aucun'
         anonyme = 'efface-' + _rgpd_hash(email) + '@anonyme.invalid'
         cur.execute(registre_sql(
             "UPDATE clients SET email=%s, nom_entreprise='COMPTE EFFACE', mot_de_passe_hash='', actif=FALSE, stripe_customer_id=NULL, stripe_subscription_id=NULL WHERE id=%s",
@@ -17203,10 +17545,13 @@ def form_prix_cents(cat):
 # Taux de TVA applique au paiement (en pourcentage). Mettre 0 en cas d'exoneration
 # de la formation professionnelle continue (art. 261-4-4 a du CGI, sur attestation).
 # A valider avec l'expert-comptable avant toute mise en paiement reel.
-try:
-    FORM_TVA_PCT = float(os.environ.get('FORMATION_TVA_PCT', '20'))
-except (TypeError, ValueError):
-    FORM_TVA_PCT = 20.0
+#
+# UNE SEULE LECTURE, DANS formations_ia. La variable etait lue DEUX fois :
+# ici en float, la-bas en int — et « 5.5 » y levait ValueError a l'import,
+# l'application ne demarrait plus (mesure). Le taux est lu une fois, en
+# nombre, et repris ici pour qu'il n'y ait qu'un format.
+import formations_ia
+FORM_TVA_PCT = formations_ia.TVA_PCT
 
 
 _FORM_TAX_RATE_CACHE = {'id': None}
@@ -17406,24 +17751,48 @@ def formations_inscription():
         except Exception: pass
         return jsonify({'ok': False, 'error': 'Session introuvable.'}), 404
     sess = dict(row)
+    # UNE SESSION PASSEE OU COMPLETE N'ENCAISSE PAS. Mesure : la session du
+    # 2026-09-07 ouvrait une caisse le 24 ; une session pleine aussi. Les
+    # places prises sont les inscriptions PAYEES, comme dans le calendrier.
+    if (sess.get('date_session') or '') and str(sess['date_session'])[:10] < datetime.utcnow().date().isoformat():
+        try: conn.close()
+        except Exception: pass
+        return jsonify({'ok': False, 'error': 'Cette session est passee (%s) : elle ne peut plus etre reservee.'
+                        % sess['date_session']}), 400
+    try:
+        cur.execute(registre_sql(
+            "SELECT COALESCE(SUM(participants),0) AS n FROM form_inscriptions WHERE session_id=%s AND statut='payee'",
+            "SELECT COALESCE(SUM(participants),0) AS n FROM form_inscriptions WHERE session_id=? AND statut='payee'"),
+            (session_id,))
+        pris = int(dict(cur.fetchone()).get('n', 0) or 0)
+    except Exception:
+        pris = 0
+    places = int(sess.get('places') or 12)
+    if pris + participants > places:
+        try: conn.close()
+        except Exception: pass
+        return jsonify({'ok': False, 'error': 'Session complete : %d place(s) restante(s) pour %d participant(s) demande(s).'
+                        % (max(0, places - pris), participants)}), 400
     cat = next((c for c in FORM_CATALOGUE if c['id'] == sess['formation_id']), None)
     titre = cat['titre'] if cat else 'Formation CONSEILPREV'
     montant = int(sess.get('prix_cents') or 95000) * participants          # HT
     montant_ttc = _form_ttc(sess.get('prix_cents') or 95000) * participants   # TTC preleve
 
-    cur.execute(registre_sql(
-        'INSERT INTO form_inscriptions (session_id, client_id, nom, prenom, email, entreprise, fonction, telephone, '
-        'participants, message, montant_cents, statut, created_at) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',
-        'INSERT INTO form_inscriptions (session_id, client_id, nom, prenom, email, entreprise, fonction, telephone, '
-        'participants, message, montant_cents, statut, created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)'),
-        (session_id, int(client.get('id') or 0) if client else 0, nom, prenom, email, entreprise, fonction,
-         telephone, participants, message, montant, 'en_attente_paiement', datetime.utcnow().isoformat()))
+    # L'IDENTIFIANT EST CELUI DE LA LIGNE ECRITE — lastrowid sous SQLite,
+    # RETURNING id sous PostgreSQL. Un SELECT MAX(id) rendait celui d'une
+    # autre inscription ecrite entre notre COMMIT et la relecture (mesure par
+    # entrelacement) : la caisse portait l'inscription d'un autre.
+    _ins_sql = ('INSERT INTO form_inscriptions (session_id, client_id, nom, prenom, email, entreprise, fonction, telephone, '
+                'participants, message, montant_cents, statut, created_at) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)')
+    _ins_args = (session_id, int(client.get('id') or 0) if client else 0, nom, prenom, email, entreprise, fonction,
+                 telephone, participants, message, montant, 'en_attente_paiement', datetime.utcnow().isoformat())
+    if REGISTRE_USE_PG:
+        cur.execute(_ins_sql + ' RETURNING id', _ins_args)
+        insc_id = int(dict(cur.fetchone())['id'])
+    else:
+        cur.execute(_ins_sql.replace('%s', '?'), _ins_args)
+        insc_id = int(cur.lastrowid)
     conn.commit()
-    try:
-        cur.execute('SELECT MAX(id) AS id FROM form_inscriptions')
-        insc_id = int(dict(cur.fetchone()).get('id') or 0)
-    except Exception:
-        insc_id = 0
     try: conn.close()
     except Exception: pass
 
@@ -17478,7 +17847,7 @@ def formations_inscription():
             customer_email=email,
             client_reference_id=str(insc_id),
             metadata={'type': 'formation', 'inscription_id': str(insc_id), 'session_id': str(session_id)},
-            success_url=base + '/sentinel?formation=ok',
+            success_url=base + '/sentinel?formation=ok&session_id={CHECKOUT_SESSION_ID}',
             cancel_url=base + '/sentinel?formation=annule')
         conn2 = registre_get_db(); cur2 = conn2.cursor()
         cur2.execute(registre_sql('UPDATE form_inscriptions SET stripe_session_id=%s WHERE id=%s',
@@ -17489,8 +17858,9 @@ def formations_inscription():
         except Exception: pass
         url = sk.get('url') if isinstance(sk, dict) else getattr(sk, 'url', None)
         return jsonify({'ok': True, 'paiement': True, 'url': url, 'inscription_id': insc_id})
-    except Exception:
-        return jsonify({'ok': True, 'paiement': False,
+    except Exception as _e:
+        logger.error('STRIPE_CAISSE_CATALOGUE_ECHEC inscription=%s : %s', insc_id, _e)
+        return jsonify({'ok': True, 'paiement': False, 'inscription_id': insc_id,
                         'message': 'Demande enregistree. La session de paiement n a pas pu etre ouverte ; '
                                    'CONSEILPREV vous contactera pour finaliser la reservation.'})
 
@@ -17731,7 +18101,36 @@ def _formation_ia_tient_le_creneau():
             "AND COALESCE(created_at, '') < " + ph + ")", limite)
 
 
-def _formation_ia_confirmer_paiement(commande=None, resa_id=None):
+def _formation_ia_liberer_commande(commande, motif):
+    """Une caisse SANS paiement (expiree, prelevement refuse) : les seances
+    payantes encore « en attente de paiement » rendent leur creneau.
+
+    L'ETAT CHOISI EST « annulee », PAS « devis ». Mesure de la retenue de
+    RETENUE_MINUTES : elle laisse la ligne en attente et cesse simplement de
+    la compter pour le creneau. Un « devis », lui, TIENT le creneau (c'est
+    une facture hors ligne a venir, comme apres une panne Stripe) : y
+    remettre un panier abandonne bloquerait la date jusqu'a la fin de la
+    campagne. « annulee » avec son motif libere le creneau ET le sujet pour
+    ce client, comme la retenue le fait, et le dit dans le registre.
+    Les seances offertes (confirmees d'emblee) et les seances deja payees ne
+    sont pas touchees : un evenement tardif ne defait pas un encaissement."""
+    conn = registre_get_db(); cur = conn.cursor()
+    _formation_ia_table(cur, conn)
+    cur.execute(registre_sql(
+        "UPDATE formation_ia_resa SET statut='annulee', annule_le=%s, annule_motif=%s "
+        "WHERE commande=%s AND gratuit=0 AND statut='en_attente_paiement'",
+        "UPDATE formation_ia_resa SET statut='annulee', annule_le=?, annule_motif=? "
+        "WHERE commande=? AND gratuit=0 AND statut='en_attente_paiement'"),
+        (datetime.utcnow().isoformat(), motif, commande))
+    liberees = cur.rowcount
+    conn.commit()
+    try: conn.close()
+    except Exception: pass
+    logger.info('FORMATION_IA_CAISSE_SANS_PAIEMENT commande=%s motif=%s seances_liberees=%s', commande, motif, liberees)
+    return liberees
+
+
+def _formation_ia_confirmer_paiement(commande=None, resa_id=None, montant_ttc_cents=None):
     """Une commande encaissee : passer TOUTES ses seances en « payee », noter
     ce qui a ete regle, et notifier une seule fois.
 
@@ -17746,6 +18145,13 @@ def _formation_ia_confirmer_paiement(commande=None, resa_id=None):
     REELLEMENT regle sur cette seance. Le remboursement s'en deduira : le
     recalculer plus tard a partir du tarif du jour rendrait un autre montant
     que celui encaisse le jour ou le tarif aura change.
+
+    LE MONTANT VIENT DE L'EVENEMENT (`amount_total`), pas d'un recalcul.
+    Mesure : le taux de TVA porte par STRIPE_TAX_RATE_ID faisait encaisser
+    84 400 c, et la base notait 96 000 c — base du remboursement fausse. Il
+    est reparti au prorata du HT de chaque seance payante, l'arrondi sur la
+    premiere. Sans montant (ancien evenement, appel direct), le recalcul
+    reste le repli.
 
     IDEMPOTENT — une notification Stripe peut arriver deux fois, et une seance
     deja payee ne se reconfirme pas.
@@ -17771,9 +18177,17 @@ def _formation_ia_confirmer_paiement(commande=None, resa_id=None):
         return
     horo = datetime.utcnow().isoformat()
     tva = formations_ia.TVA_PCT
-    for r in a_payer:
-        ht = int(r.get('montant_cents') or 0)
-        ttc = int(round(ht * (100 + tva) / 100.0))
+    hts = [int(r.get('montant_cents') or 0) for r in a_payer]
+    try:
+        total = int(montant_ttc_cents) if montant_ttc_cents is not None else 0
+    except (TypeError, ValueError):
+        total = 0
+    if total > 0 and sum(hts) > 0:
+        ttcs = [total * ht // sum(hts) for ht in hts]
+        ttcs[0] += total - sum(ttcs)
+    else:
+        ttcs = [int(round(ht * (100 + tva) / 100.0)) for ht in hts]
+    for r, ttc in zip(a_payer, ttcs):
         cur.execute(registre_sql(
             "UPDATE formation_ia_resa SET statut='payee', paye_le=%s, paye_ttc_cents=%s "
             "WHERE id=%s AND statut != 'payee'",
@@ -17787,8 +18201,7 @@ def _formation_ia_confirmer_paiement(commande=None, resa_id=None):
     cal = {c['date']: c['libelle']
            for c in formations_ia.creneaux(datetime.utcnow().date()
                                            - timedelta(days=400))}
-    total_ttc = sum(int(round(int(r.get('montant_cents') or 0)
-                             * (100 + tva) / 100.0)) for r in a_payer)
+    total_ttc = sum(ttcs)
     lignes_html = ''.join(
         '<li><strong>%s</strong> — %s</li>'
         % ((formations_ia.sujet(r.get('sujet')) or {}).get('titre') or r.get('sujet'),
@@ -18318,11 +18731,16 @@ def formation_ia_inscription():
                          '<p><strong>%s</strong> %s %s</p>'
                          '<p>Support de workshop remis à chaque participant. %s</p>'
                          '<p>L’équipe CONSEILPREV</p>'
-                         % (lignes_html, accuse, ann['titre'], ann['payante'],
-                            ann['libre'], formations_ia.SUPPORT['participants']),
+                         # `avant` et `apres` sont les deux phrases de la regle
+                         # d'annulation. Les cles `payante` et `libre` n'ont
+                         # jamais existe : la KeyError etait avalee et le client
+                         # ne recevait AUCUN accuse — donc aucun lien
+                         # d'annulation (mesure, une et deux seances).
+                         % (lignes_html, accuse, ann['titre'], ann['avant'],
+                            ann['apres'], formations_ia.SUPPORT['participants']),
                          tags=['formation-ia-accuse'])
-    except Exception:
-        pass
+    except Exception as _e:
+        logger.error('FORMATION_IA_ACCUSE_ECHEC commande=%s destinataire=%s : %s', commande, email, _e)
 
     # ── PAIEMENT EN LIGNE (flux B : price_data en ligne, mode paiement) ──
     # LE PRIX N'EST JAMAIS RECOPIE : il vient du devis, la meme source que
@@ -18350,9 +18768,15 @@ def formation_ia_inscription():
                 line_items=items,
                 customer_email=email,
                 client_reference_id=str(commande),
+                # LA CAISSE FERME AVEC LA RETENUE DU CRENEAU. Par defaut une
+                # session Stripe vit 24 h alors que la place n'est tenue que
+                # RETENUE_MINUTES : X ne payait pas, Y prenait le creneau a
+                # H+61, puis X et Y payaient tous deux la meme date (mesure).
+                # Stripe exige au moins 30 minutes.
+                expires_at=int(time.time()) + max(30, formations_ia.RETENUE_MINUTES) * 60,
                 metadata={'type': 'formation-ia', 'commande': commande,
                           'resa_id': str(recap[0]['id'] if recap else 0)},
-                success_url=base + '/formation?paiement=ok',
+                success_url=base + '/formation?paiement=ok&session_id={CHECKOUT_SESSION_ID}',
                 cancel_url=base + '/formation?paiement=annule')
             sid = sk.get('id') if isinstance(sk, dict) else getattr(sk, 'id', None)
             conn2 = registre_get_db(); cur2 = conn2.cursor()

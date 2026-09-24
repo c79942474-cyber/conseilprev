@@ -1067,17 +1067,32 @@ label.fl span{color:var(--pf)}
     });
   })();
 
-  // ── Retour depuis Stripe (?paiement=ok|annule) ──
-  // Le paiement est confirmé côté serveur par le webhook Stripe ; ce bandeau
-  // n'est que le retour visible pour le client.
+  // ── Retour depuis Stripe (?paiement=ok&session_id=…|annule) ──
+  // « Paiement reçu » n'est affiché qu'après la réponse « paye » du serveur,
+  // qui relit la session chez Stripe (/api/stripe/retour). Avant : le
+  // bandeau l'annonçait sans condition, y compris pendant le mois où aucune
+  // notification Stripe n'arrivait — des clients ont lu « confirmée » pour
+  // une place restée en attente.
   (function retourPaiement(){
     var q = (location.search || '');
     var el = document.getElementById('retour-paiement');
     if(!el) return;
+    function montrer(classe, html){ el.className = classe; el.innerHTML = html; el.hidden = false; }
     if(q.indexOf('paiement=ok') > -1){
-      el.className = 'ok';
-      el.innerHTML = '<strong>Paiement reçu.</strong> Votre séance est confirmée — vous recevez un accusé par courriel. Merci !';
-      el.hidden = false;
+      var attente = '<strong>Paiement en cours de confirmation.</strong> Vos places seront confirmées dès que Stripe nous aura notifié l’encaissement — vous recevrez alors un accusé par courriel.';
+      var m = /[?&]session_id=([^&]+)/.exec(q);
+      if(!m){ montrer('annule', attente); return; }
+      montrer('annule', 'Vérification du paiement…');
+      fetch('/api/stripe/retour?session_id=' + encodeURIComponent(decodeURIComponent(m[1])), {credentials:'same-origin'})
+        .then(function(r){ return r.json(); })
+        .then(function(j){
+          if(j && j.statut === 'paye'){
+            montrer('ok', '<strong>Paiement reçu.</strong> Votre séance est confirmée — vous recevez un accusé par courriel. Merci !');
+          }else{
+            montrer('annule', attente);
+          }
+        })
+        .catch(function(){ montrer('annule', attente); });
     }else if(q.indexOf('paiement=annule') > -1){
       el.className = 'annule';
       el.innerHTML = '<strong>Paiement interrompu.</strong> Votre réservation n’a pas été finalisée. Vous pouvez la reprendre ci-dessous, ou nous écrire.';
