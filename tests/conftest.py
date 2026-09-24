@@ -280,16 +280,32 @@ def faux_stripe(monkeypatch, reseau_ferme):
 
 
 @pytest.fixture
-def faux_brevo(monkeypatch, reseau_ferme):
+def faux_brevo(monkeypatch, reseau_ferme, tmp_path):
     """Le VRAI transport HTTP de l'envoi Brevo, vers un faux serveur local.
     `BREVO_API_KEY` et `SMTP_*` sont lus à l'IMPORT d'app.py : on remplace les
-    attributs du module, pas les variables d'environnement."""
+    attributs du module, pas les variables d'environnement.
+
+    LES DEUX NOMS DE L'ADRESSE BREVO SONT REDIRIGÉS ENSEMBLE. app.py porte
+    `BREVO_API_BASE` (la racine : compte, expéditeurs, contacts) et
+    `BREVO_API_URL` (l'envoi), la seconde calculée depuis la première À
+    L'IMPORT. N'en rediriger qu'une laissait l'autre viser api.brevo.com :
+    mesuré à la fusion, le diagnostic des connexions lisait la racine réelle
+    et tombait sur le mandataire (quatre règles rouges), pendant que l'envoi
+    parlait bien au faux serveur. `raising=False` : sur un code qui n'a pas
+    encore la racine, la fixture ne doit pas tomber avant la règle.
+
+    LE COURRIEL DE REPLI VA DANS LE DOSSIER DE L'ESSAI. Un Brevo en panne
+    dépose le message sur disque ; sans cette redirection, chaque essai de
+    panne en laissait un dans le dépôt."""
     import app as A
     from faux_services import FauxBrevo
     fb = FauxBrevo(int(_os.environ.get("FAUX_BREVO_PORT", "0"))).demarrer()
     reseau_ferme.add(fb.port)
     monkeypatch.setattr(A, "BREVO_API_KEY", "xkeysib-recette-locale")
+    monkeypatch.setattr(A, "BREVO_API_BASE", fb.url, raising=False)
     monkeypatch.setattr(A, "BREVO_API_URL", fb.url + "/v3/smtp/email")
+    monkeypatch.setattr(A, "REPLI_COURRIELS_DOSSIER", str(tmp_path / "repli"),
+                        raising=False)
     monkeypatch.setattr(A, "SMTP_USER", "")
     monkeypatch.setattr(A, "SMTP_PASSWORD", "")
     yield fb
