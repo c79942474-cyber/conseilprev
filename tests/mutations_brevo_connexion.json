@@ -1,0 +1,267 @@
+{
+ "_pourquoi": "Chaque mutation FABRIQUE un défaut réel dans app.py (ou .gitignore) et doit faire TOMBER la règle nommée de tests/test_brevo_connexion.py. Une mutation qui survit dit que la règle ne mesure pas ce qu'elle prétend ; une mutation qui fait tomber une AUTRE règle dit que la règle nommée vise à côté. Au moins une mutation par point de la mission (diagnostics, relais, échappement, repli, réessai, session, webhook, expéditeur, adresse non routable, rétention, /me).",
+ "cibles": [
+  "tests/test_brevo_connexion.py"
+ ],
+ "mutations": [
+  {
+   "nom": "le diagnostic Brevo redevient public",
+   "fichier": "app.py",
+   "avant": "    ip = limiter.get_ip(request)\n    refus = admin_session_conseilprev()\n    if refus:\n        return refus\n\n    # Mini PDF valide (1 page)",
+   "apres": "    ip = limiter.get_ip(request)\n\n    # Mini PDF valide (1 page)",
+   "regle": "test_le_diagnostic_brevo_cv_est_refuse_a_l_anonyme_sans_aucun_envoi"
+  },
+  {
+   "nom": "le diagnostic Brevo affiche à nouveau un fragment de la clé",
+   "fichier": "app.py",
+   "avant": "        'brevo_api_key_set':  bool(BREVO_API_KEY),\n        'mail_from':  MAIL_FROM,",
+   "apres": "        'brevo_api_key_set':  bool(BREVO_API_KEY),\n        'brevo_api_key_start': BREVO_API_KEY[:12] + '...',\n        'mail_from':  MAIL_FROM,",
+   "regle": "test_le_diagnostic_brevo_cv_ne_livre_aucun_fragment_de_cle_a_l_administrateur"
+  },
+  {
+   "nom": "le diagnostic e-mail redevient public",
+   "fichier": "app.py",
+   "avant": "    ip = limiter.get_ip(request)\n    refus = admin_session_conseilprev()\n    if refus:\n        return refus\n    result = {\n        # L'ADRESSE QUE PORTERONT",
+   "apres": "    ip = limiter.get_ip(request)\n    result = {\n        # L'ADRESSE QUE PORTERONT",
+   "regle": "test_le_diagnostic_email_est_refuse_a_l_anonyme_sans_livrer_la_configuration"
+  },
+  {
+   "nom": "/api/health fait à nouveau les contrôles complets pour un anonyme",
+   "fichier": "app.py",
+   "avant": "    admin = sentauth_current_client()\n    if not (admin and admin.get('is_conseilprev')):\n        if request.args.get('format') == 'json':",
+   "apres": "    admin = sentauth_current_client()\n    if False:\n        if request.args.get('format') == 'json':",
+   "regle": "test_api_health_anonyme_repond_court_sans_appel_sortant_ni_donnee_du_compte"
+  },
+  {
+   "nom": "/api/health interroge une adresse Brevo codée en dur",
+   "fichier": "app.py",
+   "avant": "BREVO_API_BASE + '/v3/account'",
+   "apres": "'https://api.brevo.com/v3/account'",
+   "regle": "test_api_health_administrateur_interroge_le_compte_brevo_par_la_base_redirigeable"
+  },
+  {
+   "nom": "le plafond par destinataire ne s'applique plus",
+   "fichier": "app.py",
+   "avant": "    if pour_lui >= NOTIFY_SELECTION_PLAFOND_DESTINATAIRE_JOUR:",
+   "apres": "    if False:",
+   "regle": "test_la_selection_est_plafonnee_par_destinataire_et_par_jour"
+  },
+  {
+   "nom": "le plafond global ne s'applique plus",
+   "fichier": "app.py",
+   "avant": "    if total >= NOTIFY_SELECTION_PLAFOND_GLOBAL_JOUR:",
+   "apres": "    if False:",
+   "regle": "test_la_selection_est_plafonnee_globalement_par_jour"
+  },
+  {
+   "nom": "une adresse de destinataire n'est plus validée",
+   "fichier": "app.py",
+   "avant": "        destinataire = sanitize_email(client.get('email') or '')",
+   "apres": "        destinataire = str(client.get('email') or '')",
+   "regle": "test_une_adresse_de_destinataire_invalide_est_refusee_sans_envoi"
+  },
+  {
+   "nom": "le pré-contrat rend à nouveau les champs du candidat bruts",
+   "fichier": "app.py",
+   "avant": "        e = lambda k, d=\"\": _pour_courriel(c.get(k) or d)  # noqa: E731\n        tjm_client     = _nombre(c.get(\"tjm\", 0))",
+   "apres": "        e = lambda k, d=\"\": str(c.get(k) or d)  # noqa: E731\n        tjm_client     = _nombre(c.get(\"tjm\", 0))",
+   "regle": "test_chaque_gabarit_de_courriel_echappe_une_valeur_libre[build_precontract_html]"
+  },
+  {
+   "nom": "la notification interne rend à nouveau l'identité brute",
+   "fichier": "app.py",
+   "avant": "        ei = lambda k, d=\"\": _pour_courriel(ident.get(k) or d)  # noqa: E731",
+   "apres": "        ei = lambda k, d=\"\": str(ident.get(k) or d)  # noqa: E731",
+   "regle": "test_chaque_gabarit_de_courriel_echappe_une_valeur_libre[build_conseilprev_notif_html]"
+  },
+  {
+   "nom": "le courriel de candidature rend à nouveau les champs bruts",
+   "fichier": "app.py",
+   "avant": "font-weight:500\">{_pour_courriel(val)}</td></tr>'",
+   "apres": "font-weight:500\">{val}</td></tr>'",
+   "regle": "test_chaque_gabarit_de_courriel_echappe_une_valeur_libre[build_html_email]"
+  },
+  {
+   "nom": "la demande de tarification rend à nouveau le nom brut",
+   "fichier": "app.py",
+   "avant": "        _pour_courriel(nom), _pour_courriel(email), _pour_courriel(secteur),",
+   "apres": "        nom, _pour_courriel(email), _pour_courriel(secteur),",
+   "regle": "test_la_demande_de_tarification_echappe_les_valeurs_saisies"
+  },
+  {
+   "nom": "le dictionnaire d'échappement mort réapparaît",
+   "fichier": "app.py",
+   "avant": "def sanitize_input(text, max_len=3000, allow_newlines=True):",
+   "apres": "_HTML_ESCAPE = {'<': '&lt;'}\ndef sanitize_input(text, max_len=3000, allow_newlines=True):",
+   "regle": "test_sanitize_input_ne_pretend_plus_echapper_et_le_dictionnaire_mort_est_parti"
+  },
+  {
+   "nom": "le courriel de repli retourne dans uploads_cv/",
+   "fichier": "app.py",
+   "avant": "        chemin = os.path.join(REPLI_COURRIELS_DOSSIER,",
+   "apres": "        chemin = os.path.join(UPLOAD_FOLDER,",
+   "regle": "test_le_courriel_de_repli_va_dans_un_dossier_dedie_sous_un_nom_imprevisible_en_0600"
+  },
+  {
+   "nom": "le courriel de repli est lisible par tous (0644)",
+   "fichier": "app.py",
+   "avant": "os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)",
+   "apres": "os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o644)",
+   "regle": "test_le_courriel_de_repli_va_dans_un_dossier_dedie_sous_un_nom_imprevisible_en_0600"
+  },
+  {
+   "nom": "le nom du courriel de repli redevient prévisible",
+   "fichier": "app.py",
+   "avant": "'courriel_%s_%s.%s' % (ts, _sec.token_hex(8), extension)",
+   "apres": "'courriel_%s_%s.%s' % (ts, to_email.split('@')[0], extension)",
+   "regle": "test_le_courriel_de_repli_va_dans_un_dossier_dedie_sous_un_nom_imprevisible_en_0600"
+  },
+  {
+   "nom": "les dossiers privés sont à nouveau servis",
+   "fichier": "app.py",
+   "avant": "    if path.lstrip('/').lower().startswith(DOSSIERS_PRIVES):",
+   "apres": "    if False:",
+   "regle": "test_un_fichier_des_dossiers_prives_n_est_pas_servi[uploads_cv]"
+  },
+  {
+   "nom": "le dossier de repli n'est plus ignoré par git",
+   "fichier": ".gitignore",
+   "avant": "courriels_repli/\n",
+   "apres": "",
+   "regle": "test_le_dossier_de_repli_est_ignore_par_git"
+  },
+  {
+   "nom": "plus aucun réessai",
+   "fichier": "app.py",
+   "avant": "    for tentative in range(1 + len(BREVO_REESSAIS_ATTENTES)):",
+   "apres": "    for tentative in range(1):",
+   "regle": "test_un_429_passager_est_reessaye_puis_reussit"
+  },
+  {
+   "nom": "un 400 est réessayé comme un 5xx",
+   "fichier": "app.py",
+   "avant": "    return statut == 429 or 500 <= statut <= 599",
+   "apres": "    return 400 <= statut <= 599",
+   "regle": "test_un_refus_4xx_n_est_jamais_reessaye[400]"
+  },
+  {
+   "nom": "une panne réseau n'est plus réessayée",
+   "fichier": "app.py",
+   "avant": "            logger.error('BREVO_API_RESEAU (tentative %d): %s', tentative + 1, dernier)\n            continue",
+   "apres": "            logger.error('BREVO_API_RESEAU (tentative %d): %s', tentative + 1, dernier)\n            return False, dernier",
+   "regle": "test_une_connexion_refusee_est_reessayee_deux_fois"
+  },
+  {
+   "nom": "une Session est créée à chaque appel",
+   "fichier": "app.py",
+   "avant": "    global _BREVO_SESSION\n    if _BREVO_SESSION is None:",
+   "apres": "    global _BREVO_SESSION\n    _BREVO_SESSION = None\n    if _BREVO_SESSION is None:",
+   "regle": "test_dix_envois_reutilisent_une_seule_session_http"
+  },
+  {
+   "nom": "les contacts partent vers une adresse codée en dur",
+   "fichier": "app.py",
+   "avant": "_brevo_session().post(BREVO_API_BASE + '/v3/contacts',",
+   "apres": "_brevo_session().post('https://api.brevo.com/v3/contacts',",
+   "regle": "test_l_inscription_d_un_contact_consenti_passe_par_la_base_redirigeable"
+  },
+  {
+   "nom": "le webhook accepte tout sans jeton configuré",
+   "fichier": "app.py",
+   "avant": "    if not BREVO_WEBHOOK_TOKEN:\n        logger.error('BREVO_WEBHOOK_SANS_JETON",
+   "apres": "    if False:\n        logger.error('BREVO_WEBHOOK_SANS_JETON",
+   "regle": "test_le_webhook_sans_jeton_configure_repond_503_et_le_journalise"
+  },
+  {
+   "nom": "le jeton du webhook est comparé par ==",
+   "fichier": "app.py",
+   "avant": "    if not fourni or not _hm.compare_digest(fourni.encode('utf-8'),\n                                            BREVO_WEBHOOK_TOKEN.encode('utf-8')):",
+   "apres": "    if not fourni or fourni != BREVO_WEBHOOK_TOKEN:",
+   "regle": "test_le_jeton_du_webhook_est_compare_en_temps_constant"
+  },
+  {
+   "nom": "un jeton faux est accepté",
+   "fichier": "app.py",
+   "avant": "    if not fourni or not _hm.compare_digest(fourni.encode('utf-8'),",
+   "apres": "    if False and not _hm.compare_digest(fourni.encode('utf-8'),",
+   "regle": "test_le_webhook_refuse_un_jeton_faux_ou_absent_et_accepte_le_bon[en-tete]"
+  },
+  {
+   "nom": "un rebond dur ne supprime plus l'adresse",
+   "fichier": "app.py",
+   "avant": "    'hard_bounce': 'rebond_dur', 'spam': 'plainte', 'blocked': 'bloque',",
+   "apres": "    'spam': 'plainte', 'blocked': 'bloque',",
+   "regle": "test_un_evenement_de_suppression_bloque_les_envois_suivants_sans_POST[hard_bounce]"
+  },
+  {
+   "nom": "send_email_smart ne consulte plus la liste de suppression",
+   "fichier": "app.py",
+   "avant": "    motif_suppression = email_supprime(to_email)\n    if motif_suppression:\n        logger.warning('EMAIL_SUPPRIME",
+   "apres": "    motif_suppression = None\n    if motif_suppression:\n        logger.warning('EMAIL_SUPPRIME",
+   "regle": "test_un_evenement_de_suppression_bloque_les_envois_suivants_sans_POST[unsubscribe]"
+  },
+  {
+   "nom": "le webhook journalise l'adresse en clair",
+   "fichier": "app.py",
+   "avant": "    masque     = _masquer_courriel(email)",
+   "apres": "    masque     = email",
+   "regle": "test_le_webhook_ne_journalise_pas_l_adresse_en_clair"
+  },
+  {
+   "nom": "la garde MAIL_FROM ne voit plus onrender.com",
+   "fichier": "app.py",
+   "avant": "_DOMAINES_NON_VERIFIABLES = ('onrender.com', 'internal.system',",
+   "apres": "_DOMAINES_NON_VERIFIABLES = ('internal.system',",
+   "regle": "test_un_expediteur_non_verifiable_est_signale_au_demarrage[noreply@conseilprev.onrender.com]"
+  },
+  {
+   "nom": "la garde MAIL_FROM n'est plus appelée au démarrage",
+   "fichier": "app.py",
+   "avant": "_MAIL_FROM_MOTIF_REFUS = verifier_mail_from(MAIL_FROM)",
+   "apres": "_MAIL_FROM_MOTIF_REFUS = None",
+   "regle": "test_la_garde_est_appelee_au_demarrage_sur_MAIL_FROM_et_le_defaut_est_inchange"
+  },
+  {
+   "nom": "l'adresse interne fictive redevient routable",
+   "fichier": "app.py",
+   "avant": "    return str(adresse or '').strip().lower().endswith('@internal.system')",
+   "apres": "    return False",
+   "regle": "test_aucun_envoi_ne_cible_une_adresse_internal_system[send_email_smart]"
+  },
+  {
+   "nom": "le rapport de cartographie du compte CONSEILPREV repart vers l'adresse fictive",
+   "fichier": "app.py",
+   "avant": "        if _adresse_non_routable(client_email) or not client_email:\n            client_email = CONSEILPREV_NOTIFY_EMAIL",
+   "apres": "        if False:\n            client_email = CONSEILPREV_NOTIFY_EMAIL",
+   "regle": "test_le_rapport_de_cartographie_du_compte_conseilprev_est_route_vers_une_boite_reelle"
+  },
+  {
+   "nom": "une relance interne repart vers l'adresse fictive",
+   "fichier": "app.py",
+   "avant": "        send_email_smart(CONSEILPREV_NOTIFY_EMAIL, 'CONSEILPREV',\n                         'Relance %s : %s' % (quand, titre),",
+   "apres": "        send_email_smart(CONSEILPREV_INTERNAL_EMAIL, 'CONSEILPREV',\n                         'Relance %s : %s' % (quand, titre),",
+   "regle": "test_les_notifications_internes_visent_l_adresse_de_notification"
+  },
+  {
+   "nom": "la rétention d'email_log passe à 9000 jours",
+   "fichier": "app.py",
+   "avant": "EMAIL_LOG_RETENTION_JOURS = 90\n",
+   "apres": "EMAIL_LOG_RETENTION_JOURS = 9000\n",
+   "regle": "test_email_log_purge_les_lignes_de_plus_de_90_jours_et_garde_les_recentes"
+  },
+  {
+   "nom": "la purge n'est plus déclenchée à l'écriture",
+   "fichier": "app.py",
+   "avant": "        email_log_purger(cur)\n        conn.commit()",
+   "apres": "        conn.commit()",
+   "regle": "test_email_log_purge_les_lignes_de_plus_de_90_jours_et_garde_les_recentes"
+  },
+  {
+   "nom": "les relances repassent avant l'authentification sur /me",
+   "fichier": "app.py",
+   "avant": "    client = sentauth_current_client()\n    if not client:\n        return jsonify({'authenticated': False}), 401\n    check_pending_reports()  # verifie",
+   "apres": "    check_pending_reports()\n    client = sentauth_current_client()\n    if not client:\n        return jsonify({'authenticated': False}), 401\n    pass  # verifie",
+   "regle": "test_un_visiteur_anonyme_sur_me_ne_declenche_aucune_relance"
+  }
+ ]
+}
