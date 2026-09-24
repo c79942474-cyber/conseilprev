@@ -15525,6 +15525,7 @@ window.clientsInitPage = function(){
       if(deniedEl) deniedEl.style.display = 'none';
       window.clientsRenderList();
       window.emailHealthRender();
+      window.connexionsRender();
       window.infraStatusRender();
     } else {
       if(contentEl) contentEl.style.display = 'none';
@@ -15593,6 +15594,46 @@ window.emailHealthRender = function(){
       + (recentHtml || '<div class="reg-empty">Aucun envoi récent.</div>');
   }).catch(function(){
     holder.innerHTML = '<div class="reg-empty" style="color:var(--accent)">Impossible de charger le statut email.</div>';
+  });
+};
+
+/* ══ CONNEXIONS STRIPE ET BREVO — ce que les COMPTES disent, pas le code ══
+   Pendant un mois, le point de réception Stripe visait un hôte sans service et
+   rien ne l'affichait. /api/admin/connexions interroge les deux comptes avec la
+   configuration réelle du service ; ici on ne fait que lister ses alertes, par
+   gravité, et dire « Tout est branché » quand il n'y en a aucune. Les messages
+   viennent du serveur mais citent des adresses lues chez Stripe : échappés. */
+window.connexionsRender = function(){
+  var holder = document.getElementById('connexions-widget');
+  if(!holder) return;
+  function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+  holder.innerHTML = '<div class="reg-loading">Vérification des comptes Stripe et Brevo…</div>';
+  fetch('/api/admin/connexions').then(function(r){ return r.json().then(function(d){ return {status:r.status, data:d}; }); }).then(function(res){
+    if(res.status !== 200){
+      holder.innerHTML = '<div class="reg-empty" style="color:var(--accent)">Erreur serveur : ' + esc(res.data.error || 'cause inconnue') + '</div>';
+      return;
+    }
+    var d = res.data, alertes = d.alertes || [];
+    /* Les classes existantes : ok (vert) et warn (orange) ; le rouge suit le
+       même style en ligne que l'alerte de la santé email, juste au-dessus. */
+    var classes = {bloquant:'radar-registre-info', important:'radar-registre-info radar-registre-warn', info:'radar-registre-info'};
+    var styles  = {bloquant:'background:rgba(184,50,34,.06);border-color:rgba(184,50,34,.2);color:var(--accent);margin-top:8px', important:'margin-top:8px', info:'margin-top:8px'};
+    var icones  = {bloquant:'⛔', important:'⚠️', info:'ℹ️'};
+    var html = alertes.length
+      ? alertes.map(function(a){
+          var g = classes[a.gravite] ? a.gravite : 'info';
+          return '<div class="' + classes[g] + '" style="' + styles[g] + '">' + icones[g] + ' <strong>' + esc(a.code) + '</strong> — ' + esc(a.message) + '</div>';
+        }).join('')
+      : '<div class="radar-registre-info radar-registre-ok" style="margin-top:0">✅ Tout est branché — Stripe et Brevo répondent avec la configuration de ce service.</div>';
+    var de = (d.stripe || {}).dernier_evenement || {};
+    var dernier = !de.disponible ? 'journal non lu'
+      : de.recu_le ? 'il y a ' + de.age_heures + ' h (' + new Date(de.recu_le).toLocaleString('fr-FR', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'}) + ')'
+      : 'jamais';
+    html += '<div style="font-size:10.5px;color:var(--muted);margin-top:10px">Dernier événement Stripe reçu : ' + esc(dernier)
+      + ' · vérifié le ' + esc(d.verifie_le) + '</div>';
+    holder.innerHTML = html;
+  }).catch(function(){
+    holder.innerHTML = '<div class="reg-empty" style="color:var(--accent)">Impossible de vérifier les connexions.</div>';
   });
 };
 
