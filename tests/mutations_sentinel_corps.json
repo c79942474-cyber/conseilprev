@@ -1,0 +1,148 @@
+{
+ "_pourquoi": "Chaque mutation FABRIQUE un défaut réel de la traduction par contenu et doit faire TOMBER la règle nommée. Une mutation qui survit dit que la règle ne mesure pas ce qu'elle prétend ; une mutation qui fait tomber une AUTRE règle dit que la règle nommée vise à côté.",
+ "cibles": [
+  "tests/test_sentinel_corps.py"
+ ],
+ "mutations": [
+  {
+   "nom": "un span à classe passe pour de la mise en forme nue : le bloc réécrit son innerHTML et efface la classe",
+   "fichier": "sentinel.i18n.js",
+   "avant": "    if (e.attributes && e.attributes.length) return false;\n",
+   "apres": "",
+   "regle": "test_le_classement_decide_bloc_texte_ou_exclu[span-a-classe-texte]"
+  },
+  {
+   "nom": "un élément sans enfant élément devient un bloc : innerHTML s'écrit sur du texte nu",
+   "fichier": "sentinel.i18n.js",
+   "avant": "  return vus > 0 ? true : null;\n",
+   "apres": "  return true;\n",
+   "regle": "test_le_classement_decide_bloc_texte_ou_exclu[texte-seul-texte]"
+  },
+  {
+   "nom": "les blancs de tête du nœud sont perdus : deux mots se collent autour d'un lien",
+   "fichier": "sentinel.i18n.js",
+   "avant": "  val = m[1] + val + m[3];\n",
+   "apres": "  val = val + m[3];\n",
+   "regle": "test_les_blancs_de_tete_et_de_queue_du_noeud_sont_CONSERVES"
+  },
+  {
+   "nom": "une traduction avec moins de # que le français s'affiche quand même, chiffres perdus",
+   "fichier": "sentinel.i18n.js",
+   "avant": "  return n === nombres.length ? sortie : null;\n",
+   "apres": "  return sortie;\n",
+   "regle": "test_les_chiffres_du_francais_reviennent_dans_l_anglais[pas-assez-de-rien]"
+  },
+  {
+   "nom": "le # d'une entité HTML (&#39;) est pris pour un emplacement de chiffre",
+   "fichier": "sentinel.i18n.js",
+   "avant": "    if (c === '#' && (k === 0 || s.charAt(k - 1) !== '&')) {\n",
+   "apres": "    if (c === '#') {\n",
+   "regle": "test_les_chiffres_du_francais_reviennent_dans_l_anglais[une-entite-HTML-n-est-pas-un-emplacement]"
+  },
+  {
+   "nom": "la mémoire des originaux n'est plus vidée à la restitution des éléments",
+   "fichier": "sentinel.i18n.js",
+   "avant": "    if (rec.h) compte += sentBlocRestituer(n, rec);\n    SENT_ORIG['delete'](n);\n",
+   "apres": "    if (rec.h) compte += sentBlocRestituer(n, rec);\n",
+   "regle": "test_la_memoire_des_originaux_est_VIDEE_au_retour"
+  },
+  {
+   "nom": "un nœud déjà traduit est retraduit : la chaîne Un → Deux → Trois boucle",
+   "fichier": "sentinel.i18n.js",
+   "avant": "  if (rec && rec.t && rec.t.en === v) return 0;  /* déjà traduit */\n",
+   "apres": "",
+   "regle": "test_un_noeud_deja_traduit_est_SAUTE_meme_si_sa_traduction_est_une_cle"
+  },
+  {
+   "nom": "translate=\"no\" n'est plus respecté par le parcours",
+   "fichier": "sentinel.i18n.js",
+   "avant": "  if (el.getAttribute('translate') === 'no') return;\n  page = sentPageDe(el, page);\n",
+   "apres": "  page = sentPageDe(el, page);\n",
+   "regle": "test_ce_qui_est_EXCLU_reste_en_francais[translate-no]"
+  },
+  {
+   "nom": "les porteurs de data-i18n sont parcourus : deux moteurs sur le même élément",
+   "fichier": "sentinel.i18n.js",
+   "avant": "  if (el.hasAttribute('data-i18n') || el.hasAttribute('data-i18n-bloc')) return;\n",
+   "apres": "",
+   "regle": "test_ce_qui_est_EXCLU_reste_en_francais[data-i18n]"
+  },
+  {
+   "nom": "le régime texte écrit innerHTML sur le parent : le piège de l'accueil, de retour",
+   "fichier": "sentinel.i18n.js",
+   "avant": "  n.nodeValue = val;\n",
+   "apres": "  n.parentNode.innerHTML = val;\n",
+   "regle": "test_innerHTML_ne_s_ecrit_QUE_dans_le_regime_bloc"
+  },
+  {
+   "nom": "l'observateur n'écoute plus characterData : un compteur réécrit sur place reste en français",
+   "fichier": "sentinel.page.js",
+   "avant": "  SENT_CORPS_OBS.observe(document.body, { childList: true, subtree: true, characterData: true });\n",
+   "apres": "  SENT_CORPS_OBS.observe(document.body, { childList: true, subtree: true });\n",
+   "regle": "test_l_observateur_est_demarre_en_anglais_avec_les_trois_types_de_mutation"
+  },
+  {
+   "nom": "l'observateur n'est plus déconnecté au retour en français",
+   "fichier": "sentinel.page.js",
+   "avant": "    if (SENT_CORPS_OBS) { SENT_CORPS_OBS.disconnect(); SENT_CORPS_OBS = null; }\n",
+   "apres": "    SENT_CORPS_OBS = null;\n",
+   "regle": "test_l_observateur_est_ARRETE_au_retour_en_francais_et_le_corps_restitue"
+  },
+  {
+   "nom": "nos propres écritures restent dans la file de l'observateur : une passe en appelle une autre",
+   "fichier": "sentinel.page.js",
+   "avant": "  /* NOS PROPRES ÉCRITURES NE SONT PAS DES MUTATIONS À TRADUIRE. */\n  SENT_CORPS_OBS.takeRecords();\n",
+   "apres": "",
+   "regle": "test_une_mutation_est_traduite_a_l_image_suivante_sur_sa_cible_et_les_records_sont_repris"
+  },
+  {
+   "nom": "deux demandes d'anglais pendant le téléchargement appliquent le corps deux fois",
+   "fichier": "sentinel.page.js",
+   "avant": "      if (SENT_CORPS_ATTENTE) return;\n",
+   "apres": "",
+   "regle": "test_le_dictionnaire_est_telecharge_UNE_fois_puis_applique"
+  },
+  {
+   "nom": "la coquille ne fait plus suivre le corps",
+   "fichier": "sentinel.page.js",
+   "avant": "  if (typeof sentCorpsAppliquer === 'function') sentCorpsAppliquer();\n",
+   "apres": "",
+   "regle": "test_sentAppliquer_appelle_le_corps_APRES_la_coquille"
+  },
+  {
+   "nom": "le module est chargé après sentinel.page.js : sentTraduireCorps n'existe pas au démarrage en anglais",
+   "fichier": "sentinel.html",
+   "avant": "<script src=\"/sentinel.i18n.js\" defer></script>\n<script src=\"/sentinel.page.js\" defer></script>",
+   "apres": "<script src=\"/sentinel.page.js\" defer></script>\n<script src=\"/sentinel.i18n.js\" defer></script>",
+   "regle": "test_le_module_est_charge_AVANT_sentinel_page_js_et_en_differe"
+  },
+  {
+   "nom": "la route ne porte plus d'ETag : chaque bascule retélécharge le dictionnaire entier",
+   "fichier": "app.py",
+   "avant": "    if etag:\n        resp.headers['ETag'] = etag\n    resp.headers['Cache-Control'] = 'public, max-age=3600'\n",
+   "apres": "    resp.headers['Cache-Control'] = 'public, max-age=3600'\n",
+   "regle": "test_la_route_porte_Cache_Control_public_une_heure_et_un_ETag"
+  },
+  {
+   "nom": "un conflit de clé n'est plus journalisé",
+   "fichier": "sentinel_i18n.py",
+   "avant": "                elif deja != val:\n",
+   "apres": "                elif False:\n",
+   "regle": "test_un_conflit_est_JOURNALISE_et_la_premiere_valeur_gagne"
+  },
+  {
+   "nom": "la dernière valeur gagne au lieu de la première",
+   "fichier": "sentinel_i18n.py",
+   "avant": "                if deja is None:\n",
+   "apres": "                if deja is None or deja != val:\n",
+   "regle": "test_un_conflit_est_JOURNALISE_et_la_premiere_valeur_gagne"
+  },
+  {
+   "nom": "un fichier modifié n'est plus relu : le cache ignore la signature du dossier",
+   "fichier": "sentinel_i18n.py",
+   "avant": "    if ent is not None and ent[0] == sig:\n",
+   "apres": "    if ent is not None:\n",
+   "regle": "test_un_fichier_modifie_est_RELU_et_l_ETag_change"
+  }
+ ]
+}
