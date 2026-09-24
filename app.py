@@ -641,7 +641,10 @@ def security_middleware():
     #     donnees structurees ne sont JAMAIS lus par un navigateur. Leur
     #     appliquer un test de « ressemblance a un navigateur » revient a
     #     fermer la porte a leurs seuls lecteurs.
-    _machines = ('/robots.txt', '/sitemap.xml', '/donnees-structurees.json')
+    #     `llms.txt` est du meme cote : un resume POUR les assistants, que
+    #     leurs lecteurs vont chercher sans Accept-Language (mesure : 404).
+    _machines = ('/robots.txt', '/sitemap.xml', '/donnees-structurees.json',
+                 '/llms.txt')
     _moteur_declare = bool(ua) and any(b in ua.lower() for b in ALLOWED_BOTS)
     if (not is_auth_link and not path.startswith('/api/')
             and path not in _machines and not _moteur_declare
@@ -6287,9 +6290,11 @@ def robots_txt():
          '# Moteurs generatifs (GEO) : memes regles que le web classique —',
          '# tout le public est citable, rien du prive n\'est offert.', '']
         + [groupe(bot) + '\n' for bot in ROBOTS_IA]
-        + ['Sitemap: https://conseilprev.onrender.com/sitemap.xml',
-           '# Resume du site pour les assistants : '
-           'https://conseilprev.onrender.com/llms.txt', ''])
+        # L'ADRESSE VIENT DE LA CONFIGURATION, comme la canonique et le plan
+        # du site : ecrite en dur, elle designait encore l'ancien service
+        # apres la bascule (mesure avec SITE_BASE_URL sur conseilprevia).
+        + ['Sitemap: %s/sitemap.xml' % seo.BASE,
+           '# Resume du site pour les assistants : %s/llms.txt' % seo.BASE, ''])
     return Response(corps, mimetype='text/plain')
 
 
@@ -6300,7 +6305,7 @@ def llms_txt():
     nous sommes, ce que chaque page publique contient, et ce que les etudes
     reservees CALCULENT — pour qu'un moteur qui ne peut pas les lire puisse
     quand meme les decrire exactement. Aucune adresse reservee n'y figure."""
-    b = 'https://conseilprev.onrender.com'
+    b = seo.BASE                      # la meme source que robots.txt et le plan
     corps = """# ConseilPrev — Sentinel
 
 > Cabinet de conseil français : gouvernance de l'intelligence artificielle et
@@ -15136,18 +15141,37 @@ def clients_entreprise_apercu():
 
 
 
-@app.route('/api/cron/essai-relances', methods=['POST', 'GET'])
-def cron_essai_relances():
-    """Point d'entree pour une tache planifiee (Render Cron Job) : declenche les
-    rappels d'essai a heure fixe. Protege par un secret partage (CRON_SECRET),
-    transmis en en-tete 'X-Cron-Secret' ou en parametre 'secret'.
-    Sans CRON_SECRET configure, l'acces est refuse."""
+def _cron_refus():
+    """La garde commune des taches planifiees : None si l'appel est legitime,
+    sinon la reponse a rendre. Le secret vient de l'en-tete X-Cron-Secret,
+    compare en temps constant avec `_hmac` (le seul nom sous lequel le module
+    est importe dans ce fichier)."""
     secret = os.environ.get('CRON_SECRET')
     if not secret:
         return jsonify({'ok': False, 'error': 'Tache planifiee non configuree.'}), 501
-    fourni = request.headers.get('X-Cron-Secret') or request.args.get('secret')
-    if not fourni or not hmac.compare_digest(str(fourni), str(secret)):
+    fourni = request.headers.get('X-Cron-Secret')
+    if not fourni or not _hmac.compare_digest(str(fourni), str(secret)):
         return jsonify({'ok': False, 'error': 'Non autorise.'}), 403
+    return None
+
+
+@app.route('/api/cron/essai-relances', methods=['POST'])
+def cron_essai_relances():
+    """Point d'entree pour une tache planifiee (Render Cron Job) : declenche les
+    rappels d'essai a heure fixe. Protege par un secret partage (CRON_SECRET),
+    transmis en en-tete 'X-Cron-Secret' SEULEMENT. Sans CRON_SECRET configure,
+    l'acces est refuse.
+
+    CETTE ROUTE N'A JAMAIS PU ABOUTIR. Elle comparait le secret avec
+    `hmac.compare_digest`, or ce module n'est importe ici que sous le nom
+    `_hmac` : avec le BON secret, la reponse etait 500 (NameError) — mesure.
+    Un mauvais secret, lui, etait bien refuse : le defaut ne se voyait que
+    du cote de celui qui avait raison. Le secret n'est plus accepte dans
+    l'adresse (`?secret=`) : une adresse finit dans les journaux d'acces du
+    mandataire, un en-tete non."""
+    refus = _cron_refus()
+    if refus:
+        return refus
     try:
         _essai_relances()
     except Exception:
@@ -16050,15 +16074,13 @@ def rgpd_purge_journal():
     return jsonify({'ok': True, 'journal': rows})
 
 
-@app.route('/api/cron/rgpd-purge', methods=['POST', 'GET'])
+@app.route('/api/cron/rgpd-purge', methods=['POST'])
 def cron_rgpd_purge():
-    """Tache planifiee : application automatique de la politique de retention."""
-    secret = os.environ.get('CRON_SECRET')
-    if not secret:
-        return jsonify({'ok': False, 'error': 'Tache planifiee non configuree.'}), 501
-    fourni = request.headers.get('X-Cron-Secret') or request.args.get('secret')
-    if not fourni or not hmac.compare_digest(str(fourni), str(secret)):
-        return jsonify({'ok': False, 'error': 'Non autorise.'}), 403
+    """Tache planifiee : application automatique de la politique de retention.
+    Meme garde que /api/cron/essai-relances (et meme NameError corrige)."""
+    refus = _cron_refus()
+    if refus:
+        return refus
     try:
         res = rgpd_purge_run(simulation=False)
     except Exception:

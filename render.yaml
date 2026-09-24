@@ -165,6 +165,56 @@ services:
       - key: QUALIF_MOTEUR
         value: auto
 
+      # CE QUI BRANCHE LE SITE AUX SERVICES EXTÉRIEURS — DÉCLARÉ, JAMAIS ÉCRIT.
+      # Ces variables existaient dans le tableau de bord et nulle part ici :
+      # un service recréé depuis ce fichier partait donc sans caisse Stripe
+      # (501 sur chaque paiement), sans courrier (Brevo muet), et avec pour
+      # expéditeur une adresse onrender.com qu'aucun compte Brevo n'a
+      # vérifiée. Rien ne le disait avant le premier client.
+      #
+      # `sync: false` : Render DEMANDE la valeur à la création et ne la lit
+      # jamais dans le dépôt. Aucun secret n'entre ici ; ce bloc dit seulement
+      # ce qui doit exister, et /api/admin/connexions dit si c'est branché.
+      #
+      # Stripe — la clé secrète du compte (partagée avec conseilprevcyber), le
+      # secret DE CE point de réception (propre à chaque site : celui de
+      # conseilprevia n'est pas celui de conseilprevcyber), les deux tarifs
+      # d'abonnement et le taux de TVA des formations.
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: STRIPE_PRICE_PRO
+        sync: false
+      - key: STRIPE_PRICE_ENTREPRISE
+        sync: false
+      - key: STRIPE_TAX_RATE_ID
+        sync: false
+      # Brevo — la clé API v3, le jeton que Brevo doit présenter sur
+      # /api/brevo/webhook, l'expéditeur (OBLIGATOIREMENT un expéditeur
+      # vérifié dans le compte Brevo), la boîte qui reçoit les candidatures et
+      # sa copie, et la boîte des notifications internes (paiements,
+      # inscriptions, annulations).
+      - key: BREVO_API_KEY
+        sync: false
+      - key: BREVO_WEBHOOK_TOKEN
+        sync: false
+      - key: MAIL_FROM
+        sync: false
+      - key: MAIL_TO
+        sync: false
+      - key: MAIL_CC
+        sync: false
+      - key: CONSEILPREV_NOTIFY_EMAIL
+        sync: false
+      # L'adresse publique du service, source des liens de confirmation, des
+      # canoniques, de robots.txt et de l'URL de retour des caisses ; et le
+      # secret que la tâche planifiée présente en en-tête X-Cron-Secret.
+      - key: SITE_BASE_URL
+        sync: false
+      - key: CRON_SECRET
+        sync: false
+
 # LA BASE N'EST PAS DÉPLACÉE ICI, ET C'EST DÉLIBÉRÉ. Le réseau privé de Render
 # ne franchit pas les régions : un service à Francfort ne peut pas joindre par
 # `connectionString` interne une base restée en Oregon. Avant toute recréation

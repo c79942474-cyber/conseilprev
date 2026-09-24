@@ -22,3 +22,6 @@ registre_ia.db-shm
 # Le CLI Claude Code, posé par build.sh dans l image de deploiement.
 # 92 Mo de binaire tiers : il se reconstruit a chaque build, il ne se versionne pas.
 .cli-claude/
+
+# Les worktrees crees par les agents de la session : jamais dans le depot
+.claude/worktrees/

@@ -1,0 +1,78 @@
+{
+ "_pourquoi": "Chaque mutation FABRIQUE un défaut réel et doit faire TOMBER la règle nommée. Une mutation qui survit dit que la règle ne mesure pas ce qu'elle prétend ; une mutation qui fait tomber une AUTRE règle dit que la règle nommée vise à côté.",
+ "cibles": [
+  "tests/test_deploiement_connexions.py"
+ ],
+ "mutations": [
+  {
+   "nom": "la garde des tâches planifiées retrouve le NameError d'origine",
+   "fichier": "app.py",
+   "avant": "    if not fourni or not _hmac.compare_digest(str(fourni), str(secret)):\n        return jsonify({'ok': False, 'error': 'Non autorise.'}), 403\n    return None",
+   "apres": "    if not fourni or not hmac.compare_digest(str(fourni), str(secret)):\n        return jsonify({'ok': False, 'error': 'Non autorise.'}), 403\n    return None",
+   "regle": "test_la_tache_planifiee_aboutit_avec_le_bon_secret[/api/cron/essai-relances]"
+  },
+  {
+   "nom": "la purge planifiée ne passe plus par la garde commune",
+   "fichier": "app.py",
+   "avant": "    refus = _cron_refus()\n    if refus:\n        return refus\n    try:\n        res = rgpd_purge_run(simulation=False)",
+   "apres": "    refus = None\n    if refus:\n        return refus\n    try:\n        res = rgpd_purge_run(simulation=False)",
+   "regle": "test_un_mauvais_secret_est_refuse_sans_rien_lancer[/api/cron/rgpd-purge]"
+  },
+  {
+   "nom": "le secret est de nouveau accepté dans l'adresse",
+   "fichier": "app.py",
+   "avant": "    fourni = request.headers.get('X-Cron-Secret')\n    if not fourni or not _hmac",
+   "apres": "    fourni = request.headers.get('X-Cron-Secret') or request.args.get('secret')\n    if not fourni or not _hmac",
+   "regle": "test_le_secret_dans_l_adresse_est_refuse[/api/cron/essai-relances]"
+  },
+  {
+   "nom": "les relances planifiées répondent de nouveau en GET",
+   "fichier": "app.py",
+   "avant": "@app.route('/api/cron/essai-relances', methods=['POST'])",
+   "apres": "@app.route('/api/cron/essai-relances', methods=['POST', 'GET'])",
+   "regle": "test_la_tache_planifiee_ne_repond_pas_en_GET[/api/cron/essai-relances]"
+  },
+  {
+   "nom": "l'absence de CRON_SECRET n'est plus un refus",
+   "fichier": "app.py",
+   "avant": "    secret = os.environ.get('CRON_SECRET')\n    if not secret:\n        return jsonify({'ok': False, 'error': 'Tache planifiee non configuree.'}), 501\n    fourni = request.headers.get('X-Cron-Secret')",
+   "apres": "    secret = os.environ.get('CRON_SECRET') or 'x'\n    if not secret:\n        return jsonify({'ok': False, 'error': 'Tache planifiee non configuree.'}), 501\n    fourni = request.headers.get('X-Cron-Secret')",
+   "regle": "test_sans_secret_configure_la_tache_est_desactivee"
+  },
+  {
+   "nom": "robots.txt désigne de nouveau l'ancien service en dur",
+   "fichier": "app.py",
+   "avant": "        + ['Sitemap: %s/sitemap.xml' % seo.BASE,",
+   "apres": "        + ['Sitemap: https://conseilprev.onrender.com/sitemap.xml',",
+   "regle": "test_le_fichier_suit_l_adresse_du_site[/robots.txt]"
+  },
+  {
+   "nom": "llms.txt désigne de nouveau l'ancien service en dur",
+   "fichier": "app.py",
+   "avant": "    b = seo.BASE                      # la meme source que robots.txt et le plan",
+   "apres": "    b = 'https://conseilprev.onrender.com'",
+   "regle": "test_le_fichier_suit_l_adresse_du_site[/llms.txt]"
+  },
+  {
+   "nom": "le secret du point de réception Stripe n'est plus déclaré au déploiement",
+   "fichier": "render.yaml",
+   "avant": "      - key: STRIPE_WEBHOOK_SECRET\n        sync: false\n",
+   "apres": "",
+   "regle": "test_le_deploiement_declare_la_variable_sans_en_ecrire_la_valeur[STRIPE_WEBHOOK_SECRET]"
+  },
+  {
+   "nom": "la clé Brevo serait lue dans le dépôt",
+   "fichier": "render.yaml",
+   "avant": "      - key: BREVO_API_KEY\n        sync: false\n",
+   "apres": "      - key: BREVO_API_KEY\n        value: xkeysib-exemple\n",
+   "regle": "test_aucune_valeur_de_connexion_n_est_ecrite_dans_le_depot"
+  },
+  {
+   "nom": "llms.txt retombe sous l'heuristique « vrai navigateur »",
+   "fichier": "app.py",
+   "avant": "    _machines = ('/robots.txt', '/sitemap.xml', '/donnees-structurees.json',\n                 '/llms.txt')\n",
+   "apres": "    _machines = ('/robots.txt', '/sitemap.xml', '/donnees-structurees.json')\n",
+   "regle": "test_llms_txt_se_lit_sans_ressembler_a_un_navigateur"
+  }
+ ]
+}
