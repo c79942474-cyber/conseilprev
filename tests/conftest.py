@@ -209,3 +209,88 @@ def _run_garde(args, *reste, **nommes):
 
 
 _subprocess.run = _run_garde
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  STRIPE ET BREVO SANS RÉSEAU : LES VRAIES BIBLIOTHÈQUES, DE FAUX SERVEURS
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# Non automatiques : seul un essai qui les DEMANDE ouvre un faux serveur. Voir
+# tests/faux_services.py pour la raison d'être (un faux MODULE rend des dict,
+# la bibliothèque 15.x rend des StripeObject sans `.get()`).
+#
+# LA VRAIE BIBLIOTHÈQUE EST RETENUE ICI, AU CHARGEMENT DE conftest — donc avant
+# tout fichier d'essai. test_formation_ia_paiement.py pose un faux module dans
+# sys.modules["stripe"] le temps d'un essai ; un `import stripe` fait à ce
+# moment-là attraperait le faux. On ne l'importe jamais qu'ici.
+
+import os as _os
+import socket as _socket
+
+try:
+    import stripe as _STRIPE_REEL
+except Exception:                                              # pragma: no cover
+    _STRIPE_REEL = None
+
+SECRET_WEBHOOK_RECETTE = "whsec_recette_locale"
+
+
+@pytest.fixture
+def reseau_ferme(monkeypatch):
+    """Toute connexion sortante hors des faux serveurs est REFUSÉE : un essai
+    qui viserait api.stripe.com ou api.brevo.com tombe au lieu de partir.
+    Le mandataire du conteneur écoute lui aussi sur 127.0.0.1 : on n'autorise
+    donc pas l'adresse locale entière, seulement les ports des faux serveurs."""
+    permis = set()
+    vrai = _socket.socket.connect
+
+    def connect(self, adresse):
+        if isinstance(adresse, tuple) and not (
+                adresse[0] in ("127.0.0.1", "::1") and adresse[1] in permis):
+            raise ConnectionRefusedError("recette hors réseau : %r" % (adresse,))
+        return vrai(self, adresse)
+    monkeypatch.setattr(_socket.socket, "connect", connect)
+    return permis
+
+
+@pytest.fixture
+def faux_stripe(monkeypatch, reseau_ferme):
+    """La VRAIE bibliothèque `stripe`, `api_base` redirigé vers un faux
+    serveur local, clés de recette, et les réglages PARTAGÉS PAR TOUT LE
+    PROCESSUS (réessais, client HTTP) sauvés puis restaurés."""
+    import app as A
+    from faux_services import FauxStripe
+    if _STRIPE_REEL is None:                                   # pragma: no cover
+        pytest.skip("bibliothèque stripe absente")
+    fs = FauxStripe(int(_os.environ.get("FAUX_STRIPE_PORT", "0"))).demarrer()
+    reseau_ferme.add(fs.port)
+    st = _STRIPE_REEL
+    monkeypatch.setitem(sys.modules, "stripe", st)
+    monkeypatch.setattr(st, "api_base", fs.url)
+    monkeypatch.setattr(st, "api_key", None)
+    monkeypatch.setattr(st, "max_network_retries", st.max_network_retries)
+    monkeypatch.setattr(st, "default_http_client", None)
+    monkeypatch.setenv("STRIPE_SECRET_KEY", "sk_test_recette_locale")
+    monkeypatch.setenv("STRIPE_WEBHOOK_SECRET", SECRET_WEBHOOK_RECETTE)
+    monkeypatch.setenv("STRIPE_TAX_RATE_ID", "txr_recette")
+    if hasattr(A, "_FORM_TAX_RATE_CACHE"):
+        monkeypatch.setitem(A._FORM_TAX_RATE_CACHE, "id", None)
+    yield fs
+    fs.arreter()
+
+
+@pytest.fixture
+def faux_brevo(monkeypatch, reseau_ferme):
+    """Le VRAI transport HTTP de l'envoi Brevo, vers un faux serveur local.
+    `BREVO_API_KEY` et `SMTP_*` sont lus à l'IMPORT d'app.py : on remplace les
+    attributs du module, pas les variables d'environnement."""
+    import app as A
+    from faux_services import FauxBrevo
+    fb = FauxBrevo(int(_os.environ.get("FAUX_BREVO_PORT", "0"))).demarrer()
+    reseau_ferme.add(fb.port)
+    monkeypatch.setattr(A, "BREVO_API_KEY", "xkeysib-recette-locale")
+    monkeypatch.setattr(A, "BREVO_API_URL", fb.url + "/v3/smtp/email")
+    monkeypatch.setattr(A, "SMTP_USER", "")
+    monkeypatch.setattr(A, "SMTP_PASSWORD", "")
+    yield fb
+    fb.arreter()
