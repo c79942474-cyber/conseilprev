@@ -15739,18 +15739,48 @@ window.sentinelCheckout = function(plan){
   function _fin(){ if(_ov && _ov.parentNode) _ov.parentNode.removeChild(_ov); }
   fetch('/api/sentinel/checkout', {method:'POST', credentials:'same-origin', headers:{'Content-Type':'application/json'}, body:JSON.stringify({plan:plan})})
     .then(function(r){ return r.json().then(function(j){ return j; }).catch(function(){ return {}; }); })
-    .then(function(j){ if(j && j.url){ window.location.href = j.url; } else { _fin(); window.location.href = '/tarifications'; } })
+    .then(function(j){
+      // Un client déjà abonné : le serveur a CHANGÉ le prix de son abonnement,
+      // il n'y a pas de caisse à ouvrir — la page se recharge avec l'offre.
+      if(j && j.modifie){ _fin(); window.location.reload(); return; }
+      if(j && j.url){ window.location.href = j.url; } else { _fin(); window.location.href = '/tarifications'; }
+    })
     .catch(function(){ _fin(); window.location.href = '/tarifications'; });
 };
 window.sentinelActivationToast = function(){
+  // « Offre activée » et « inscription confirmée » ne s'affichent qu'après
+  // la réponse « paye » du serveur, qui relit la session chez Stripe
+  // (/api/stripe/retour). Avant : « Votre offre est activée » s'affichait
+  // sans condition, y compris pendant le mois où aucune notification
+  // n'arrivait — l'offre restait gratuite derrière le message.
   try{
-    if(new URLSearchParams(location.search).get('activation') === 'ok'){
-      var t = document.createElement('div');
-      t.style.cssText = 'position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:10001;background:var(--green,#0E7C7B);color:#fff;padding:12px 22px;border-radius:10px;font-size:13px;font-weight:600;box-shadow:0 8px 30px rgba(0,0,0,.25)';
-      t.textContent = '\u2713 Votre offre est activée. Bienvenue !';
-      document.body.appendChild(t);
-      setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); }, 6000);
+    var q = new URLSearchParams(location.search);
+    var quoi = q.get('activation') === 'ok' ? 'offre' : (q.get('formation') === 'ok' ? 'formation' : null);
+    if(!quoi) return;
+    var t = document.createElement('div');
+    t.style.cssText = 'position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:10001;background:var(--green,#0E7C7B);color:#fff;padding:12px 22px;border-radius:10px;font-size:13px;font-weight:600;box-shadow:0 8px 30px rgba(0,0,0,.25)';
+    document.body.appendChild(t);
+    function montrer(txt, fond){
+      t.textContent = txt; t.style.background = fond;
+      setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); }, 8000);
     }
+    var attente = 'Paiement en cours de confirmation… ' + (quoi === 'offre'
+      ? 'votre offre s’ouvrira dès réception de l’encaissement.'
+      : 'votre inscription sera confirmée dès réception de l’encaissement.');
+    var sid = q.get('session_id');
+    if(!sid){ montrer(attente, '#7a5c00'); return; }
+    t.textContent = 'Vérification du paiement…';
+    fetch('/api/stripe/retour?session_id=' + encodeURIComponent(sid), {credentials:'same-origin'})
+      .then(function(r){ return r.json(); })
+      .then(function(j){
+        if(j && j.statut === 'paye'){
+          montrer(quoi === 'offre' ? '✓ Votre offre est activée. Bienvenue !'
+                                   : '✓ Paiement reçu : votre inscription est confirmée.', 'var(--green,#0E7C7B)');
+        }else{
+          montrer(attente, '#7a5c00');
+        }
+      })
+      .catch(function(){ montrer(attente, '#7a5c00'); });
   }catch(e){}
 };
 if(document.readyState === 'complete'){ window.sentinelActivationToast(); } else { window.addEventListener('load', window.sentinelActivationToast); }

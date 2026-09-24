@@ -1,0 +1,295 @@
+{
+ "_pourquoi": "Chaque mutation FABRIQUE un défaut réel dans la connexion Stripe (webhook, caisses, retour de caisse, facturation, pages de retour) et doit faire TOMBER la règle nommée de tests/test_stripe_connexion.py. Une mutation qui survit dit que la règle ne mesure pas ce qu'elle prétend ; une mutation qui fait tomber une AUTRE règle dit que la règle nommée vise à côté.",
+ "cibles": [
+  "tests/test_stripe_connexion.py"
+ ],
+ "mutations": [
+  {
+   "nom": "1a. un échec de traitement est avalé : 200 et événement gardé",
+   "fichier": "app.py",
+   "avant": "            echecs.append(nom)\n            logger.error('STRIPE_WEBHOOK_ECHEC etape=%s evenement=%s : %s', nom, eid, _e)",
+   "apres": "            logger.error('STRIPE_WEBHOOK_ECHEC etape=%s evenement=%s : %s', nom, eid, _e)",
+   "regle": "test_un_echec_de_traitement_n_est_pas_acquitte_et_le_reessai_confirme"
+  },
+  {
+   "nom": "1a. une base muette répond 200 au lieu de 503",
+   "fichier": "app.py",
+   "avant": "    if reclame is None:\n        return jsonify({'received': False}), 503",
+   "apres": "    if reclame is None:\n        return jsonify({'received': True}), 200",
+   "regle": "test_une_base_muette_a_la_reclamation_rend_503_sans_rien_acquitter"
+  },
+  {
+   "nom": "1a. la réclamation n'est plus atomique : toute livraison est « à traiter »",
+   "fichier": "app.py",
+   "avant": "        pris = cur.rowcount == 1\n",
+   "apres": "        pris = True\n",
+   "regle": "test_deux_livraisons_simultanees_ne_traitent_qu_une_fois"
+  },
+  {
+   "nom": "1b. payment_status n'est plus lu : tout checkout.session.completed confirme",
+   "fichier": "app.py",
+   "avant": "    return (obj.get('payment_status') or '') in ('paid', 'no_payment_required')",
+   "apres": "    return True",
+   "regle": "test_un_paiement_non_encaisse_ne_confirme_pas_la_formation_ia"
+  },
+  {
+   "nom": "1b. le paiement différé abouti est ignoré",
+   "fichier": "app.py",
+   "avant": "        if etype in ('checkout.session.completed', 'checkout.session.async_payment_succeeded'):",
+   "apres": "        if etype == 'checkout.session.completed':",
+   "regle": "test_le_paiement_differe_abouti_confirme"
+  },
+  {
+   "nom": "1b. une caisse expirée ne libère plus le créneau",
+   "fichier": "app.py",
+   "avant": "        \"WHERE commande=? AND gratuit=0 AND statut='en_attente_paiement'\"),\n        (datetime.utcnow().isoformat(), motif, commande))",
+   "apres": "        \"WHERE commande=? AND gratuit=0 AND statut='jamais'\"),\n        (datetime.utcnow().isoformat(), motif, commande))",
+   "regle": "test_une_caisse_sans_paiement_libere_le_creneau[checkout.session.expired]"
+  },
+  {
+   "nom": "1c. client_reference_id repris comme numéro de compte, customer réécrit",
+   "fichier": "app.py",
+   "avant": "    cid = meta.get('client_id')\n    plan = meta.get('plan')\n    if cid and plan in ('pro', 'entreprise'):\n        faire('offre'",
+   "apres": "    cid = meta.get('client_id') or obj.get('client_reference_id')\n    if cid and obj.get('customer'):\n        _billing_set_customer(int(cid), obj.get('customer'))\n    plan = meta.get('plan')\n    if cid and plan in ('pro', 'entreprise'):\n        faire('offre'",
+   "regle": "test_une_session_de_formation_ne_relie_pas_un_client_stripe_a_un_compte"
+  },
+  {
+   "nom": "1d. une facture à zéro solde l'échéance",
+   "fichier": "app.py",
+   "avant": "        if paye <= 0:\n            logger.error('STRIPE_FACTURE_NON_ENCAISSEE",
+   "apres": "        if paye < 0:\n            logger.error('STRIPE_FACTURE_NON_ENCAISSEE",
+   "regle": "test_une_facture_a_zero_ne_solde_pas_l_echeance"
+  },
+  {
+   "nom": "1d. l'écart de montant n'est plus journalisé",
+   "fichier": "app.py",
+   "avant": "            if paye not in (attendu_ht, attendu_ttc):",
+   "apres": "            if False:",
+   "regle": "test_un_ecart_entre_montant_paye_et_attendu_est_journalise"
+  },
+  {
+   "nom": "1e. l'abonnement résilié efface l'identifiant mais garde l'offre",
+   "fichier": "app.py",
+   "avant": "\"UPDATE clients SET plan='gratuit', stripe_subscription_id=NULL WHERE stripe_subscription_id=?\"",
+   "apres": "\"UPDATE clients SET stripe_subscription_id=NULL WHERE stripe_subscription_id=?\"",
+   "regle": "test_un_abonnement_resilie_chez_stripe_repasse_le_client_en_gratuit"
+  },
+  {
+   "nom": "1e. l'abonnement d'une facture n'est lu que dans parent.subscription_details",
+   "fichier": "app.py",
+   "avant": "    return details.get('subscription') or obj.get('subscription')",
+   "apres": "    return details.get('subscription')",
+   "regle": "test_une_facture_d_abonnement_impayee_previent_le_client_et_conseilprev[ancienne]"
+  },
+  {
+   "nom": "1e. l'impayé d'abonnement ne prévient plus CONSEILPREV",
+   "fichier": "app.py",
+   "avant": "    send_email_smart(CONSEILPREV_NOTIFY_EMAIL, 'CONSEILPREV',\n                     'Impaye abonnement Sentinel : %s'",
+   "apres": "    return\n    send_email_smart(CONSEILPREV_NOTIFY_EMAIL, 'CONSEILPREV',\n                     'Impaye abonnement Sentinel : %s'",
+   "regle": "test_une_facture_d_abonnement_impayee_previent_le_client_et_conseilprev[dahlia]"
+  },
+  {
+   "nom": "1f. customer.subscription.deleted disparaît des événements requis",
+   "fichier": "app.py",
+   "avant": "    'invoice.payment_failed',\n    'customer.subscription.deleted',\n)",
+   "apres": "    'invoice.payment_failed',\n)",
+   "regle": "test_les_evenements_requis_sont_declares_pour_le_diagnostic"
+  },
+  {
+   "nom": "2. les métadonnées ne sont plus posées sur l'abonnement",
+   "fichier": "app.py",
+   "avant": "                   metadata=_meta, subscription_data={'metadata': _meta},",
+   "apres": "                   metadata=_meta,",
+   "regle": "test_la_caisse_d_abonnement_pose_les_metadonnees_sur_l_abonnement"
+  },
+  {
+   "nom": "2. un client déjà abonné ouvre une seconde caisse",
+   "fichier": "app.py",
+   "avant": "        if _sub_id:\n            try:\n                sub = stripe.Subscription.retrieve(_sub_id)",
+   "apres": "        if _sub_id and False:\n            try:\n                sub = stripe.Subscription.retrieve(_sub_id)",
+   "regle": "test_un_client_deja_abonne_change_de_prix_au_lieu_d_ouvrir_une_seconde_caisse"
+  },
+  {
+   "nom": "2. la caisse d'abonnement revient sans identifiant de session",
+   "fichier": "app.py",
+   "avant": "                   success_url=base + '/sentinel?activation=ok&session_id={CHECKOUT_SESSION_ID}',",
+   "apres": "                   success_url=base + '/sentinel?activation=ok',",
+   "regle": "test_les_trois_caisses_reviennent_avec_l_identifiant_de_session"
+  },
+  {
+   "nom": "2. la page ne recharge plus quand l'abonnement est modifié",
+   "fichier": "sentinel.page.js",
+   "avant": "      if(j && j.modifie){ _fin(); window.location.reload(); return; }\n",
+   "apres": "",
+   "regle": "test_la_page_recharge_quand_l_abonnement_est_modifie"
+  },
+  {
+   "nom": "3. le retour de caisse confirme une session non payée",
+   "fichier": "app.py",
+   "avant": "    if not _stripe_session_encaissee(obj):\n        return jsonify({'statut': 'en_attente'}), 200",
+   "apres": "    if False:\n        return jsonify({'statut': 'en_attente'}), 200",
+   "regle": "test_le_retour_de_caisse_ne_confirme_pas_une_session_non_payee"
+  },
+  {
+   "nom": "3. le retour de caisse renvoie la session entière (route publique)",
+   "fichier": "app.py",
+   "avant": "    return jsonify({'statut': 'paye' if not echecs else 'en_attente'}), 200",
+   "apres": "    return jsonify({'statut': 'paye' if not echecs else 'en_attente', 'session': obj}), 200",
+   "regle": "test_le_retour_de_caisse_confirme_une_formation_ia_encaissee"
+  },
+  {
+   "nom": "3. le retour de caisse n'est plus limité en débit",
+   "fichier": "app.py",
+   "avant": "@rate_limit(limit=30, window=60)\ndef stripe_retour():",
+   "apres": "def stripe_retour():",
+   "regle": "test_le_retour_de_caisse_est_limite_en_debit"
+  },
+  {
+   "nom": "3. formation.html annonce « Paiement reçu » quelle que soit la réponse",
+   "fichier": "formation.html",
+   "avant": "          if(j && j.statut === 'paye'){\n            montrer('ok',",
+   "apres": "          if(j){\n            montrer('ok',",
+   "regle": "test_la_page_formation_n_annonce_le_paiement_recu_qu_apres_confirmation[en_attente]"
+  },
+  {
+   "nom": "3. sentinel annonce « offre activée » quelle que soit la réponse",
+   "fichier": "sentinel.page.js",
+   "avant": "        if(j && j.statut === 'paye'){\n          montrer(quoi === 'offre'",
+   "apres": "        if(j){\n          montrer(quoi === 'offre'",
+   "regle": "test_la_page_sentinel_n_annonce_l_offre_activee_qu_apres_confirmation[en_attente]"
+  },
+  {
+   "nom": "4. la caisse formation IA vit de nouveau 24 h",
+   "fichier": "app.py",
+   "avant": "                expires_at=int(time.time()) + max(30, formations_ia.RETENUE_MINUTES) * 60,\n",
+   "apres": "",
+   "regle": "test_la_caisse_ferme_quand_la_retenue_du_creneau_expire"
+  },
+  {
+   "nom": "4. le montant encaissé est de nouveau recalculé",
+   "fichier": "app.py",
+   "avant": "    if total > 0 and sum(hts) > 0:",
+   "apres": "    if False:",
+   "regle": "test_le_montant_encaisse_est_celui_de_l_evenement"
+  },
+  {
+   "nom": "4. l'accusé lit de nouveau des clés absentes de la règle d'annulation",
+   "fichier": "app.py",
+   "avant": "                         % (lignes_html, accuse, ann['titre'], ann['avant'],\n                            ann['apres'], formations_ia.SUPPORT['participants']),",
+   "apres": "                         % (lignes_html, accuse, ann['titre'], ann['payante'],\n                            ann['libre'], formations_ia.SUPPORT['participants']),",
+   "regle": "test_le_client_recoit_l_accuse_de_reservation[1]"
+  },
+  {
+   "nom": "4. un accusé qui échoue est de nouveau avalé",
+   "fichier": "app.py",
+   "avant": "        logger.error('FORMATION_IA_ACCUSE_ECHEC commande=%s destinataire=%s : %s', commande, email, _e)",
+   "apres": "        pass",
+   "regle": "test_un_accuse_qui_echoue_est_journalise"
+  },
+  {
+   "nom": "5. l'identifiant d'inscription revient d'un SELECT MAX(id)",
+   "fichier": "app.py",
+   "avant": "        insc_id = int(cur.lastrowid)\n    conn.commit()",
+   "apres": "        pass\n    conn.commit()\n    cur.execute('SELECT MAX(id) AS id FROM form_inscriptions'); insc_id = int(dict(cur.fetchone())['id'])",
+   "regle": "test_l_identifiant_d_inscription_est_celui_de_la_ligne_ecrite"
+  },
+  {
+   "nom": "5. une session passée redevient encaissable",
+   "fichier": "app.py",
+   "avant": "    if (sess.get('date_session') or '') and str(sess['date_session'])[:10] < datetime.utcnow().date().isoformat():",
+   "apres": "    if False:",
+   "regle": "test_une_session_passee_est_refusee"
+  },
+  {
+   "nom": "5. une session complète redevient encaissable",
+   "fichier": "app.py",
+   "avant": "    if pris + participants > places:",
+   "apres": "    if False:",
+   "regle": "test_une_session_complete_est_refusee"
+  },
+  {
+   "nom": "6. la ligne RaaS n'est plus rattachée à sa facture",
+   "fichier": "app.py",
+   "avant": "            stripe.InvoiceItem.create(customer=cust, invoice=inv['id'], amount=",
+   "apres": "            stripe.InvoiceItem.create(customer=cust, amount=",
+   "regle": "test_la_facture_raas_contient_sa_ligne_et_l_echeance_est_notee"
+  },
+  {
+   "nom": "6. la facture RaaS est créée sans pending_invoice_items_behavior",
+   "fichier": "app.py",
+   "avant": "                                        pending_invoice_items_behavior='exclude',\n",
+   "apres": "",
+   "regle": "test_la_facture_raas_contient_sa_ligne_et_l_echeance_est_notee"
+  },
+  {
+   "nom": "6. une finalisation refusée est avalée et l'échéance notée envoyée",
+   "fichier": "app.py",
+   "avant": "            stripe.Invoice.finalize_invoice(inv['id'])\n            # « envoyee » SEULEMENT apres finalisation",
+   "apres": "            try: stripe.Invoice.finalize_invoice(inv['id'])\n            except Exception: pass\n            # « envoyee » SEULEMENT apres finalisation",
+   "regle": "test_une_echeance_n_est_notee_envoyee_qu_apres_finalisation"
+  },
+  {
+   "nom": "6. une résiliation refusée par Stripe efface quand même le lien local",
+   "fichier": "app.py",
+   "avant": "            resilie = stripe.Subscription.cancel(sub)['status'] == 'canceled'\n        except stripe.InvalidRequestError as _ie:\n            resilie = getattr(_ie, 'code', '') == 'resource_missing'\n            if not resilie:\n                raise",
+   "apres": "            resilie = True\n            stripe.Subscription.cancel(sub)\n        except Exception:\n            pass",
+   "regle": "test_une_resiliation_refusee_par_stripe_garde_le_lien_local"
+  },
+  {
+   "nom": "6. le billing-run émet la facture malgré l'abonnement non résilié",
+   "fichier": "app.py",
+   "avant": "        if not _cancelled[item['client_id']]:\n            results.append(",
+   "apres": "        if False:\n            results.append(",
+   "regle": "test_le_billing_run_n_emet_pas_de_facture_si_la_resiliation_echoue"
+  },
+  {
+   "nom": "6. set-plan annonce la résiliation même refusée",
+   "fichier": "app.py",
+   "avant": "        if not _billing_cancel_subscription(client_id):\n            return jsonify({'ok': False, 'stripe_sync': 'resiliation_echouee',",
+   "apres": "        if not _billing_cancel_subscription(client_id) and False:\n            return jsonify({'ok': False, 'stripe_sync': 'resiliation_echouee',",
+   "regle": "test_passer_en_gratuit_n_annonce_pas_une_resiliation_refusee"
+  },
+  {
+   "nom": "6. set-plan relit les articles avec .get() sur un StripeObject",
+   "fichier": "app.py",
+   "avant": "                items = list(sub['items'].data) if 'items' in sub else []\n                if items:\n                    stripe.Subscription.modify(sub_id,",
+   "apres": "                items = (sub.get('items') or {}).get('data') or []\n                if items:\n                    stripe.Subscription.modify(sub_id,",
+   "regle": "test_changer_d_offre_met_a_jour_l_abonnement_stripe"
+  },
+  {
+   "nom": "6. la fin de période n'est plus lue sur l'article d'abonnement",
+   "fichier": "app.py",
+   "avant": "            fin_periode = _g(data[0], 'current_period_end')",
+   "apres": "            fin_periode = None",
+   "regle": "test_le_detail_d_abonnement_lit_la_fin_de_periode_sur_l_article"
+  },
+  {
+   "nom": "6. le rattachement par e-mail prend n'importe quel abonnement du compte",
+   "fichier": "app.py",
+   "avant": "                    if _prix_de(s) in prix_du_site:",
+   "apres": "                    if True:",
+   "regle": "test_le_rattachement_par_email_ignore_un_abonnement_d_un_autre_produit"
+  },
+  {
+   "nom": "7. l'effacement RGPD oublie l'abonnement sans le résilier",
+   "fichier": "app.py",
+   "avant": "            bilan['abonnement'] = 'resilie' if _billing_cancel_subscription(cid) else 'non_resilie'",
+   "apres": "            bilan['abonnement'] = 'non_resilie'",
+   "regle": "test_l_effacement_rgpd_resilie_l_abonnement_avant_de_l_oublier"
+  },
+  {
+   "nom": "8. la TVA est de nouveau lue avec int()",
+   "fichier": "formations_ia.py",
+   "avant": "    try:\n        v = float(str(brut if brut not in (None, \"\") else \"20\").replace(\",\", \".\"))\n    except ValueError:\n        v = 20.0",
+   "apres": "    v = int(str(brut if brut not in (None, \"\") else \"20\"))",
+   "regle": "test_une_tva_ecrite_en_decimal_ne_bloque_plus_le_demarrage"
+  },
+  {
+   "nom": "8. app.py relit la TVA de son côté, dans un autre format",
+   "fichier": "app.py",
+   "avant": "FORM_TVA_PCT = formations_ia.TVA_PCT",
+   "apres": "FORM_TVA_PCT = float(os.environ.get('FORMATION_TVA_PCT', '20'))",
+   "regle": "test_une_tva_ecrite_en_decimal_ne_bloque_plus_le_demarrage"
+  }
+ ]
+}
