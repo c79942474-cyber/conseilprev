@@ -382,24 +382,93 @@ def test_le_courriel_de_repli_va_dans_un_dossier_dedie_sous_un_nom_imprevisible_
     assert 'JETON-SECRET' in io.open(str(repli / nom), encoding='utf-8').read()
 
 
+#: LES ÉCRITURES QUI DÉSIGNENT LE MÊME FICHIER. La garde comparait le chemin
+#: BRUT, la route statique le NORMALISE ensuite : les deux ne regardaient donc
+#: pas le même fichier. Mesuré avec le client de test puis sous gunicorn avec
+#: `curl --path-as-is` : « /uploads_cv/<cv>.pdf » rendait bien 404, mais
+#: « /./uploads_cv/<cv>.pdf » et « /%2e/uploads_cv/… » servaient le CV en 200
+#: (1 199 octets, %PDF-1.4) — donc des données personnelles de candidats, et
+#: des courriels de repli jeton compris. Le filtre anti-injection ne cherche
+#: que « ../ » et laisse passer « ./ ».
+ECRITURES_DU_MEME_CHEMIN = [
+    '/%s/%s',            # la forme canonique
+    '/.%%2f%s/%s',       # le point, puis la barre encodée
+    '/./%s/%s',
+    '/%%2e/%s/%s',
+    '/.//%s/%s',
+    '/././/%s/%s',
+    '/%s/../%s/%s',      # un aller-retour par le parent
+    'CASSE',             # le dossier en majuscules (traité à part)
+]
+#: Des identifiants lisibles : les écritures elles-mêmes portent des « % »
+#: que pytest recopie dans le nom de la règle, et une table de mutations
+#: nomme cette règle.
+NOMS_DES_ECRITURES = ['canonique', 'point-puis-barre-encodee', 'point-barre',
+                      'point-encode', 'point-double-barre', 'points-repetes',
+                      'aller-retour-par-le-parent', 'casse']
+
+
 @pytest.mark.parametrize('dossier', ['uploads_cv', 'courriels_repli'])
-def test_un_fichier_des_dossiers_prives_n_est_pas_servi(dossier):
-    """Un fichier qui EXISTE, dans le vrai dossier, demandé par l'URL que
-    static_folder='.' servirait : 404, sans son contenu."""
+@pytest.mark.parametrize('ecriture', ECRITURES_DU_MEME_CHEMIN,
+                         ids=NOMS_DES_ECRITURES)
+def test_un_fichier_des_dossiers_prives_n_est_pas_servi(dossier, ecriture):
+    """Un fichier qui EXISTE, dans le vrai dossier, demandé par CHACUNE des
+    écritures que `static_folder='.'` sert : 404, sans son contenu."""
     chemin_dossier = os.path.join(ICI, dossier)
     cree_dossier = not os.path.isdir(chemin_dossier)
     os.makedirs(chemin_dossier, exist_ok=True)
     nom = 'recette_prive_%s.html' % secrets.token_hex(4)
     chemin = os.path.join(chemin_dossier, nom)
     io.open(chemin, 'w', encoding='utf-8').write('<p>JETON-SECRET-RECETTE</p>')
+    if ecriture == 'CASSE':
+        demande = '/%s/%s' % (dossier.upper(), nom)
+    elif ecriture.count('%s') == 3:
+        demande = ecriture % (dossier, dossier, nom)
+    else:
+        demande = ecriture % (dossier, nom)
     try:
-        r = _anonyme().get('/%s/%s' % (dossier, nom), headers=_entetes(Accept='text/html'))
-        assert r.status_code == 404, '/%s/%s est servi (%d)' % (dossier, nom, r.status_code)
-        assert b'JETON-SECRET-RECETTE' not in r.data
+        r = _anonyme().get(demande, headers=_entetes(Accept='text/html'))
+        assert r.status_code == 404, '%s est servi (%d)' % (demande, r.status_code)
+        assert b'JETON-SECRET-RECETTE' not in r.data, '%s livre le contenu' % demande
     finally:
         os.remove(chemin)
         if cree_dossier:
             os.rmdir(chemin_dossier)
+
+
+@pytest.mark.parametrize('dossier', ['uploads_cv', 'courriels_repli'])
+def test_le_dossier_prive_lui_meme_n_est_pas_listable(dossier, caplog):
+    """Sans barre finale, le chemin désigne le DOSSIER. Werkzeug rend 404 sur
+    un dossier de toute façon : c'est le JOURNAL qu'on lit, pour vérifier que
+    la garde a bien statué — sinon la règle passerait sur une garde qui ne
+    voit plus ce cas, et le jour où la route statique changerait de
+    comportement, rien ne le dirait."""
+    with caplog.at_level(logging.WARNING, logger='conseilprev'):
+        r = _anonyme().get('/' + dossier, headers=_entetes(Accept='text/html'))
+    assert r.status_code == 404, '/%s répond %d' % (dossier, r.status_code)
+    assert 'DOSSIER_PRIVE' in caplog.text, (
+        'la garde ne voit plus /%s : %s' % (dossier, caplog.text))
+
+
+def test_le_chemin_livre_par_le_mandataire_est_normalise_lui_aussi():
+    """Werkzeug réécrit certaines formes AVANT la vue ; un mandataire, non.
+    On pose donc le PATH_INFO tel qu'un serveur le livrerait."""
+    d = os.path.join(ICI, 'uploads_cv')
+    cree = not os.path.isdir(d)
+    os.makedirs(d, exist_ok=True)
+    nom = 'recette_prive_%s.html' % secrets.token_hex(4)
+    io.open(os.path.join(d, nom), 'w', encoding='utf-8').write('<p>JETON-SECRET-RECETTE</p>')
+    try:
+        for brut in ('//./uploads_cv/' + nom, '/.//uploads_cv/' + nom,
+                     '/uploads_cv/./' + nom):
+            r = _anonyme().get('/', environ_overrides={'PATH_INFO': brut},
+                               headers=_entetes(Accept='text/html'))
+            assert r.status_code == 404, '%s est servi (%d)' % (brut, r.status_code)
+            assert b'JETON-SECRET-RECETTE' not in r.data
+    finally:
+        os.remove(os.path.join(d, nom))
+        if cree:
+            os.rmdir(d)
 
 
 def test_un_cv_de_demonstration_n_est_plus_servi_en_direct():
@@ -553,13 +622,56 @@ def test_le_webhook_refuse_un_jeton_faux_ou_absent_et_accepte_le_bon(monkeypatch
     assert r.status_code == 200, (forme, r.status_code, r.get_json())
 
 
+# « -- » est la forme que `secrets.token_urlsafe` produit tout seul (son
+# alphabet porte le tiret) ; l'apostrophe, celle d'un jeton écrit à la main.
+# « # » n'est pas ici : aucun client HTTP ne l'envoie dans une adresse, il y
+# ouvre un fragment — un jeton qui en contient serait tronqué avant d'arriver,
+# ce qui est un autre défaut et pas celui-ci.
+@pytest.mark.parametrize('jeton', ['Ab3--xY7zKlmNop', "Ab3'xY7zKlmNop"])
+def test_un_jeton_a_caracteres_suspects_passe_en_parametre_sans_bloquer_brevo(monkeypatch, jeton):
+    """LE DÉFAUT MESURÉ. La docstring du webhook donne `?token=<jeton>` comme
+    forme de repli — la seule que l'écran « Webhooks » de Brevo accepte quand
+    il ne propose qu'une adresse — sans contraindre l'alphabet. Or le filtre
+    anti-injection s'applique à `request.url`, et un jeton tiré par
+    `secrets.token_urlsafe` contient « -- » environ une fois sur cent (le code
+    le mesure : 0,98 % sur 200 000 tirages). Avec un tel jeton, CHAQUE
+    livraison Brevo recevait 403 et l'adresse de Brevo était bloquée une
+    heure : plus un seul événement de suppression enregistré, et même les
+    livraisons en en-tête recevant ensuite 429."""
+    monkeypatch.setattr(A, 'BREVO_WEBHOOK_TOKEN', jeton, raising=False)
+    c = _anonyme()
+    r = c.post('/api/brevo/webhook?token=' + jeton, json=[], headers=_entetes())
+    assert r.status_code == 200, (jeton, r.status_code, r.get_data(as_text=True)[:120])
+    assert not A.limiter.is_blocked('203.0.113.9'), 'adresse de Brevo bloquée'
+    # Et la livraison suivante, en en-tête, passe toujours.
+    assert _webhook(c, jeton).status_code == 200
+
+
+def test_le_filtre_anti_injection_reste_arme_ailleurs():
+    """L'EXEMPTION S'ARRÊTE AU POINT DE RÉCEPTION. Un chemin à saisie libre
+    doit toujours faire tomber le filtre, sinon on a échangé un faux positif
+    contre un trou."""
+    r = _anonyme().get("/api/registre?q=' OR 1=1--", headers=_entetes())
+    assert r.status_code == 403, r.status_code
+
+
 def test_le_jeton_du_webhook_est_compare_en_temps_constant():
     i = SOURCE.index('def brevo_webhook(')
     corps = SOURCE[i:SOURCE.index('\ndef ', i + 1)]
     assert 'compare_digest' in corps, 'comparaison de jeton par == : mesurable au chronomètre'
 
 
-@pytest.mark.parametrize('evenement', ['unsubscribe', 'hard_bounce', 'spam', 'blocked'])
+# LES FORMES QUE BREVO EMPLOIE RÉELLEMENT. La charge transactionnelle porte
+# « unsubscribed » ; la liste des événements d'un webhook dit « unsubscribe ».
+# Seule la seconde était mesurée : retirer la première du code laissait les
+# désinscriptions réelles sans effet, relances et courriels continuant de
+# partir vers une personne qui s'est désinscrite — et la recette restait
+# verte. « invalid_email » n'était pas mesuré non plus.
+EVENEMENTS_DE_SUPPRESSION = ['unsubscribe', 'unsubscribed', 'hard_bounce',
+                             'spam', 'blocked', 'invalid_email']
+
+
+@pytest.mark.parametrize('evenement', EVENEMENTS_DE_SUPPRESSION)
 def test_un_evenement_de_suppression_bloque_les_envois_suivants_sans_POST(brevo, monkeypatch, evenement):
     monkeypatch.setattr(A, 'BREVO_WEBHOOK_TOKEN', 'jeton-recette-0123', raising=False)
     r = _webhook(_anonyme(), 'jeton-recette-0123',
@@ -567,8 +679,13 @@ def test_un_evenement_de_suppression_bloque_les_envois_suivants_sans_POST(brevo,
     assert r.status_code == 200, r.status_code
     assert A.send_email_smart('signale@exemple.test', 'S', 'Votre essai', '<p/>') == (False, 'supprime')
     assert A.send_via_brevo_api('signale@exemple.test', 'S', 'Votre essai', '<p/>') == (False, 'supprime')
+    # LA CASSE NE COMPTE PAS, et rien ne le mesurait : Brevo signale l'adresse
+    # en minuscules, le site écrit ensuite à celle que le client a SAISIE
+    # (« Signale@Exemple.test »). Sans lecture insensible à la casse, l'envoi
+    # repart vers une adresse désinscrite.
+    assert A.send_email_smart('Signale@Exemple.test', 'S', 'Votre essai', '<p/>') == (False, 'supprime')
     assert _posts(brevo) == [], 'envoyé malgré %s : %s' % (evenement, _destinataires(brevo))
-    lignes = _sql("SELECT methode, raison_echec FROM email_log WHERE destinataire='signale@exemple.test'")
+    lignes = _sql("SELECT methode, raison_echec FROM email_log WHERE LOWER(destinataire)='signale@exemple.test'")
     assert lignes and all(l['methode'] == 'refuse' and str(l['raison_echec']).startswith('supprime')
                           for l in lignes), lignes
 

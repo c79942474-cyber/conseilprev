@@ -73,6 +73,69 @@
    "avant": "    _machines = ('/robots.txt', '/sitemap.xml', '/donnees-structurees.json',\n                 '/llms.txt')\n",
    "apres": "    _machines = ('/robots.txt', '/sitemap.xml', '/donnees-structurees.json')\n",
    "regle": "test_llms_txt_se_lit_sans_ressembler_a_un_navigateur"
+  },
+  {
+   "nom": "les taches planifiees retombent sous le filtre d'agent",
+   "fichier": "app.py",
+   "avant": "    est_point_machine = (path in POINTS_MACHINE\n                         or (path.startswith('/api/cron/')\n                             and request.method == 'POST'))",
+   "apres": "    est_point_machine = path in POINTS_MACHINE",
+   "regle": "test_la_tache_aboutit_quel_que_soit_l_agent_de_la_commande[curl/8.5.0-/api/cron/rgpd-purge]"
+  },
+  {
+   "nom": "l'exemption d'agent gagne une route ordinaire",
+   "fichier": "app.py",
+   "avant": "    POINTS_MACHINE = ('/api/stripe/webhook', '/api/brevo/webhook')",
+   "apres": "    POINTS_MACHINE = ('/api/stripe/webhook', '/api/brevo/webhook', '/api/registre')",
+   "regle": "test_l_exemption_ne_vaut_que_pour_les_chemins_de_tache[/api/registre-curl/8.5.0]"
+  },
+  {
+   "nom": "l'exemption des taches vaut aussi en GET",
+   "fichier": "app.py",
+   "avant": "                         or (path.startswith('/api/cron/')\n                             and request.method == 'POST'))",
+   "apres": "                         or path.startswith('/api/cron/'))",
+   "regle": "test_l_exemption_ne_vaut_pas_en_GET[/api/cron/rgpd-purge]"
+  },
+  {
+   "nom": "l'adresse lue redevient le premier element de X-Forwarded-For",
+   "fichier": "app.py",
+   "avant": "        if sauts:\n            return sauts[-1]",
+   "apres": "        if sauts:\n            return sauts[0]",
+   "regle": "test_l_adresse_lue_est_le_dernier_saut_ajoute[usurpee-puis-reelle]"
+  },
+  {
+   "nom": "l'en-tete entier sert de cle au lieu du dernier saut",
+   "fichier": "app.py",
+   "avant": "        sauts = [p.strip() for p in xff.split(',') if p.strip()]",
+   "apres": "        sauts = [xff.strip()] if xff.strip() else []",
+   "regle": "test_un_anonyme_ne_fait_plus_bloquer_l_adresse_d_un_service"
+  },
+  {
+   "nom": "un point de reception retombe sous le refus par blocage",
+   "fichier": "app.py",
+   "avant": "    if limiter.is_blocked(ip) and not est_point_machine:",
+   "apres": "    if limiter.is_blocked(ip):",
+   "regle": "test_un_point_de_reception_n_est_jamais_refuse_sur_le_blocage[/api/stripe/webhook-entetes0]"
+  },
+  {
+   "nom": "la limite globale refuse de nouveau sur le blocage",
+   "fichier": "app.py",
+   "avant": "                         tenir_compte_du_blocage=not est_point_machine):",
+   "apres": "                         tenir_compte_du_blocage=True):",
+   "regle": "test_un_point_de_reception_n_est_jamais_refuse_sur_le_blocage[/api/brevo/webhook-entetes1]"
+  },
+  {
+   "nom": "un point de reception retombe sous le filtre d'agent",
+   "fichier": "app.py",
+   "avant": "    if is_bot_blocked(ua) and not est_point_machine:",
+   "apres": "    if is_bot_blocked(ua):",
+   "regle": "test_un_point_de_reception_ne_tombe_pas_sur_le_filtre_d_agent[/api/brevo/webhook]"
+  },
+  {
+   "nom": "le secret de la tache n'est plus exige",
+   "fichier": "app.py",
+   "avant": "    if not fourni or not _hmac.compare_digest(str(fourni), str(secret)):\n        return jsonify({'ok': False, 'error': 'Non autorise.'}), 403",
+   "apres": "    if False:\n        return jsonify({'ok': False, 'error': 'Non autorise.'}), 403",
+   "regle": "test_le_secret_reste_exige_malgre_l_exemption[/api/cron/rgpd-purge]"
   }
  ]
 }

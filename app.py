@@ -11,6 +11,7 @@ from werkzeug.utils import secure_filename
 from functools import wraps
 from collections import defaultdict
 from urllib.parse import quote
+import posixpath as _posixpath
 from flask import Flask, send_from_directory, jsonify, request, abort, make_response, after_this_request, Response, session, redirect, g, has_request_context
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import timedelta as _timedelta_auth
@@ -126,10 +127,37 @@ class RateLimiter:
         self.chat_req   = defaultdict(list)    # ip → chat timestamps
 
     def get_ip(self, req):
-        # Support proxies (Render, Cloudflare)
-        xff = req.headers.get('X-Forwarded-For','')
-        if xff:
-            return xff.split(',')[0].strip()
+        """L'adresse du client, telle que LE MANDATAIRE l'a constatee.
+
+        LE PREMIER ELEMENT D'X-FORWARDED-FOR EST ECRIT PAR LE CLIENT, et c'est
+        celui qui etait lu. Un anonyme envoyait donc « X-Forwarded-For:
+        3.18.12.63 » (une adresse publique des livraisons Stripe) sur un
+        chemin piege : le honeypot bloquait 3.18.12.63 une heure, et la
+        notification Stripe suivante recevait 429 avant meme d'atteindre la
+        route. Mesure : GET /wp-admin avec cet en-tete, puis POST
+        /api/stripe/webhook depuis 3.18.12.63 → 429. Quelques requetes par
+        heure suffisaient a couper toutes les confirmations de paiement, et
+        Stripe desactive un point de reception apres plusieurs jours d'echec.
+        Le meme en-tete, change a chaque appel, annulait aussi toutes les
+        bornes par adresse (mesure : 40 appels sur /api/stripe/retour, 10
+        refus depuis une adresse fixe, 0 refus en faisant tourner l'en-tete).
+
+        CE QU'ON LIT DESORMAIS, ET POURQUOI. Chaque mandataire AJOUTE a la fin
+        l'adresse dont il a recu la connexion. Le DERNIER element est donc le
+        seul que le client ne choisit pas : c'est celui que le mandataire de
+        Render vient d'ecrire. Tout ce qui precede est recopie tel quel depuis
+        la requete entrante, donc forgeable.
+
+        CE QUE CE CHOIX COÛTE, ET C'EST ASSUME : derriere DEUX mandataires de
+        confiance, le dernier element serait l'adresse du premier mandataire,
+        et tous les clients partageraient une seule cle. Render n'en pose
+        qu'un devant le service. Un mandataire de plus se traduirait ici par
+        un saut de plus a remonter — jamais par un retour au premier element.
+        """
+        xff = req.headers.get('X-Forwarded-For', '')
+        sauts = [p.strip() for p in xff.split(',') if p.strip()]
+        if sauts:
+            return sauts[-1]
         return req.remote_addr or '0.0.0.0'
 
     def is_blocked(self, ip):
@@ -143,13 +171,23 @@ class RateLimiter:
         self.blocked[ip] = time.time() + duration
         logger.warning(f"BLOCKED {ip} for {duration}s — {reason}")
 
-    def check(self, ip, limit=60, window=60, endpoint=''):
+    def check(self, ip, limit=60, window=60, endpoint='', tenir_compte_du_blocage=True):
         """Retourne True si la requête est autorisée.
         Clé par (ip, endpoint) pour ne pas pénaliser globalement
         une IP active sur plusieurs routes différentes.
         3 dépassements successifs avant le 1er blocage (30s).
+
+        `tenir_compte_du_blocage=False` COMPTE SANS REFUSER SUR LE BLOCAGE, et
+        c'est le seul moyen d'exempter vraiment un chemin. Un blocage ferme le
+        site par DEUX portes independantes : le `is_blocked` du middleware, et
+        cette methode qui commence par le meme test. Neutraliser la premiere
+        seule ne rouvrait rien — mesure : la livraison Stripe recevait encore
+        429, par la limite globale. Les points de reception machine passent
+        donc ici avec ce reglage : leur debit reste borne (et un depassement
+        peut toujours bloquer l'adresse pour le RESTE du site), mais une
+        adresse bloquee ailleurs continue d'etre servie sur eux.
         """
-        if self.is_blocked(ip):
+        if tenir_compte_du_blocage and self.is_blocked(ip):
             return False
         now = time.time()
         # Clé par route pour isoler les compteurs par endpoint
@@ -589,6 +627,40 @@ def security_middleware():
                        '/invitation/')
     is_auth_link = path.startswith(CHEMINS_A_JETON)
 
+    # ── LES TROIS POINTS D'ENTREE MACHINE, PROTEGES PAR UNE PREUVE ────────
+    # Aucun des filtres anti-anonyme d'en dessous n'a de sens sur eux, et
+    # CHACUN LES A DEJA COUPES EN PRODUCTION :
+    #
+    #  · /api/cron/* — un Render Cron Job execute une commande, donc `curl`,
+    #    `wget` ou `python-requests`, tous trois dans BLOCKED_BOTS. Mesure
+    #    avec le bon X-Cron-Secret : curl/8.5.0 → 404, Wget/1.21 → 404,
+    #    python-requests/2.32.3 → 404, Mozilla/5.0 → 200, et le journal dit
+    #    « BOT_BLOCKED … → /api/cron/rgpd-purge ». La purge RGPD automatique
+    #    et les relances d'essai n'ont donc JAMAIS tourne, et le 404 faisait
+    #    croire a une route absente. La recette ne le voyait pas : le client
+    #    de test envoie l'agent « Werkzeug/… ».
+    #
+    #  · /api/stripe/webhook et /api/brevo/webhook — leur adresse d'origine
+    #    est celle de Stripe ou de Brevo, et un anonyme pouvait la faire
+    #    bloquer une heure (voir RateLimiter.get_ip). Une adresse bloquee
+    #    recevait 429 AVANT la route : plus aucune confirmation de paiement,
+    #    plus aucune desinscription enregistree. Le filtre anti-injection les
+    #    coupait aussi : le jeton Brevo en `?token=` est tire par
+    #    `secrets.token_urlsafe`, dont l'alphabet contient le tiret — environ
+    #    un jeton sur cent porte « -- », lu comme un debut de commentaire SQL
+    #    (mesure : 403, puis l'adresse de Brevo bloquee 3 600 s, et meme les
+    #    livraisons en en-tete recevant ensuite 429).
+    #
+    # CE QUI RESTE APPLIQUE, ET C'EST LA CONTREPARTIE : la limite de debit
+    # globale (120/min par adresse), plus la preuve propre a chaque point —
+    # signature Stripe, jeton Brevo, X-Cron-Secret en temps constant. On
+    # n'echange pas un refus pour un acces libre : on echange un refus fonde
+    # sur l'apparence contre un refus fonde sur une preuve.
+    POINTS_MACHINE = ('/api/stripe/webhook', '/api/brevo/webhook')
+    est_point_machine = (path in POINTS_MACHINE
+                         or (path.startswith('/api/cron/')
+                             and request.method == 'POST'))
+
     # ── Dossiers JAMAIS servis en direct, avant toute autre regle ──────────
     # `static_folder='.'` sert tout fichier du depot. uploads_cv/ contient les
     # CV deposes par les candidats — servis a l'anonyme alors que
@@ -596,8 +668,28 @@ def security_middleware():
     # 200, /api/admin/cv/<cv>.pdf → 403). courriels_repli/ contient les
     # courriels non partis, jetons compris. 404, pas 403 : ne pas confirmer
     # qu'un nom de fichier existe.
-    DOSSIERS_PRIVES = ('uploads_cv/', 'courriels_repli/')
-    if path.lstrip('/').lower().startswith(DOSSIERS_PRIVES):
+    #
+    # LA GARDE COMPARAIT LE CHEMIN BRUT, ET LA ROUTE STATIQUE LE NORMALISE
+    # ENSUITE : les deux ne regardaient donc pas le meme fichier. Mesure sur le
+    # client de test Flask, un CV de candidat servi en 200 (1 199 octets,
+    # %PDF-1.4) par « /./uploads_cv/<cv>.pdf », « /%2e/uploads_cv/… » (werkzeug
+    # decode %2e en « . » avant la vue), « /.//uploads_cv/… » et
+    # « /././/uploads_cv/… », quand « /uploads_cv/<cv>.pdf » rendait bien 404.
+    # Le filtre anti-injection plus bas ne cherche que « ../ » et laisse passer
+    # « ./ ». ON COMPARE DESORMAIS CE QUE LA ROUTE STATIQUE OUVRIRA : le
+    # chemin normalise, puis mis en minuscules. `request.path` est DEJA
+    # decode par werkzeug — mesure : « /%2e/… » et « /.%2fuploads_cv/… »
+    # arrivent ici en « /./uploads_cv/… ». Un `unquote` de plus a donc ete
+    # retire : il ne changeait la decision d'AUCUNE requete mesurable, et du
+    # code de securite qu'aucune regle ne peut faire tomber est une dette.
+    #
+    # LE PREMIER SEGMENT SUFFIT ET C'EST VOULU : « uploads_cv » seul, sans
+    # barre finale, designe le dossier lui-meme — son listage est un refus tout
+    # autant que celui d'un fichier. 404, pas 403 : ne pas confirmer qu'un nom
+    # de fichier existe.
+    DOSSIERS_PRIVES = ('uploads_cv', 'courriels_repli')
+    _norme = _posixpath.normpath('/' + path.replace('\\', '/')).lstrip('/').lower()
+    if _norme.split('/')[0] in DOSSIERS_PRIVES:
         logger.warning(f"DOSSIER_PRIVE {ip} → {path}")
         abort(404)
 
@@ -617,18 +709,18 @@ def security_middleware():
         return  # Health check légitime — pas de vérif UA ni blocage
 
     # ── Vérifier si IP bloquée ──
-    if limiter.is_blocked(ip):
+    if limiter.is_blocked(ip) and not est_point_machine:
         logger.warning(f"BLOCKED_IP {ip} → {path}")
         abort(429)
 
     # ── Anti-scraping UA ──
-    if is_bot_blocked(ua):
+    if is_bot_blocked(ua) and not est_point_machine:
         logger.warning(f"BOT_BLOCKED {ip} UA={ua[:60]} → {path}")
         # Retourner 404 pour ne pas révéler le blocage
         abort(404)
 
     # ── Anti-scraping comportemental (check_scraping etait definie mais jamais appelee) ──
-    if path.startswith('/api/') and check_scraping(request):
+    if path.startswith('/api/') and not est_point_machine and check_scraping(request):
         logger.warning(f"SCRAPING_PATTERN {ip} UA={ua[:60]} → {path}")
         abort(404)
 
@@ -668,7 +760,8 @@ def security_middleware():
             abort(404)
 
     # ── Rate limit global : 120 req/min par IP ──
-    if not limiter.check(ip, limit=120, window=60, endpoint='global'):
+    if not limiter.check(ip, limit=120, window=60, endpoint='global',
+                         tenir_compte_du_blocage=not est_point_machine):
         abort(429)
 
     # ── Honeypot paths (pièges pour scanners) ──
@@ -679,7 +772,9 @@ def security_middleware():
         '/etc/passwd', '/proc/self', '/../', '/xmlrpc.php',
         '/wp-content', '/wp-includes', '/.htaccess',
     ]
-    if any(path.lower().startswith(hp) or path.lower() == hp for hp in honeypot_paths):
+    if (not est_point_machine
+            and any(path.lower().startswith(hp) or path.lower() == hp
+                    for hp in honeypot_paths)):
         limiter.block(ip, 3600, f'honeypot:{path}')
         logger.warning(f"HONEYPOT {ip} → {path}")
         abort(404)
@@ -693,7 +788,7 @@ def security_middleware():
         r"(etc/passwd|/proc/self)",            # LFI
     ]
     full_url = request.url
-    if not is_auth_link:
+    if not is_auth_link and not est_point_machine:
         for pat in suspicious_patterns:
             if _re.search(pat, full_url, _re.IGNORECASE):
                 limiter.block(ip, 3600, f'injection_attempt:{pat}')
