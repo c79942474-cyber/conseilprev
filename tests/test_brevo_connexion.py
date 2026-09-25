@@ -31,6 +31,7 @@ le commit de base, compte Brevo gratuit à 300 envois par jour) :
   · email_log gardait les adresses sans fin ; un anonyme sur /me déclenchait
     les relances.
 """
+import ast
 import io
 import logging
 import os
@@ -38,6 +39,7 @@ import re
 import secrets
 import socket
 import stat
+import subprocess
 import sys
 import threading
 from datetime import datetime, timedelta
@@ -81,6 +83,29 @@ def _admin():
     return c
 
 
+def _client_ordinaire():
+    """UN COMPTE SENTINEL GRATUIT, CONNECTÉ — ni anonyme, ni CONSEILPREV.
+
+    Les règles de ce fichier n'éprouvaient que les deux extrêmes. Entre les
+    deux vit la population la plus nombreuse du site : les comptes gratuits
+    qui ont un cookie de session valide. Une garde écrite « si personne n'est
+    connecté » au lieu de « si ce n'est pas CONSEILPREV » leur ouvre tout, et
+    aucune des deux règles existantes ne le verrait.
+
+    Le nom d'entreprise NE DOIT PAS être « CONSEILPREV » : `sentauth_current_
+    client` reconnaît l'administrateur à ce nom autant qu'à son adresse."""
+    email = 'ordinaire_%s@exemple.test' % secrets.token_hex(4)
+    _sql('INSERT INTO clients (nom_entreprise, email, mot_de_passe_hash, actif, '
+         'date_creation, plan, generation_session) VALUES (?,?,?,?,?,?,0)',
+         ('RECETTE Compte gratuit', email, 'x', 1, datetime.utcnow().isoformat(), 'gratuit'))
+    cid = _sql('SELECT id FROM clients WHERE email=?', (email,))[0]['id']
+    c = A.app.test_client()
+    with c.session_transaction() as s:
+        s['client_id'] = cid
+        s['sgen'] = 0
+    return c, cid
+
+
 def _posts(fb):
     return fb.recues('POST', SMTP_EMAIL, exact=True)
 
@@ -111,6 +136,9 @@ def _nettoyer():
                     # bornes de /api/formation/inscription : une ligne laissée
                     # fausserait la mesure suivante.
                     "DELETE FROM formation_ia_resa WHERE email LIKE '%@exemple.test'",
+                    # Les comptes ouverts par _client_ordinaire : laissés en
+                    # base, ils s'accumuleraient d'un passage à l'autre.
+                    "DELETE FROM clients WHERE email LIKE 'ordinaire\\_%@exemple.test' ESCAPE '\\'",
                     "DELETE FROM pending_reports WHERE client_id >= 999000"):
         try:
             _sql(requete)
@@ -271,6 +299,36 @@ def test_api_health_anonyme_repond_court_sans_appel_sortant_ni_donnee_du_compte(
     assert 'brevo' not in (rj.get_json() or {}), rj.get_json()
 
 
+def test_api_health_pour_un_compte_connecte_ordinaire_repond_court_sans_appel_sortant(brevo, monkeypatch):
+    """LE CAS DU MILIEU, QUE RIEN NE MESURAIT : connecté, mais pas CONSEILPREV.
+
+    Mutation jouée sur le code corrigé : la garde `if not (admin and
+    admin.get('is_conseilprev'))` réécrite `if not admin` — elle survivait aux
+    227 règles des quatre fichiers. N'importe quel compte Sentinel gratuit
+    obtenait alors MAIL_TO, MAIL_CC, l'hôte SMTP, l'adresse et l'offre du
+    compte Brevo, et chacune de ses visites déclenchait un GET /v3/account
+    chez Brevo plus un appel au fournisseur du modèle."""
+    c, _ = _client_ordinaire()
+    monkeypatch.setattr(A, 'ANTHROPIC_API_KEY', 'sk-ant-recette-locale')
+    tentatives = []
+    vrai = socket.socket.connect
+
+    def connect(self, adresse):
+        tentatives.append(adresse)
+        return vrai(self, adresse)
+    monkeypatch.setattr(socket.socket, 'connect', connect)
+    r = c.get('/api/health', headers=_entetes(Accept='text/html'))
+    corps = r.get_data(as_text=True)
+    assert r.status_code == 200, r.status_code
+    assert tentatives == [], 'appels sortants tentés pour un compte gratuit : %r' % tentatives
+    assert brevo.recues('GET', '/v3/account', exact=True) == [], 'le compte Brevo a été interrogé'
+    assert len(r.data) < 600, '%d octets pour un compte gratuit' % len(r.data)
+    for donnee in (A.MAIL_TO, A.MAIL_CC, A.SMTP_HOST, 'compte@exemple.test', 'sk-ant'):
+        assert donnee not in corps, 'la réponse d un compte gratuit contient %r' % donnee
+    rj = c.get('/api/health?format=json', headers=_entetes())
+    assert rj.status_code == 200 and 'brevo' not in (rj.get_json() or {}), rj.get_json()
+
+
 def test_api_health_administrateur_interroge_le_compte_brevo_par_la_base_redirigeable(brevo):
     r = _admin().get('/api/health?format=json', headers=_entetes())
     assert r.status_code == 200, r.status_code
@@ -418,6 +476,24 @@ def test_une_base_illisible_refuse_le_relais_sans_aucun_envoi(brevo, monkeypatch
     r = _anonyme().post('/api/notify-selection', json=_charge(), headers=_entetes())
     assert r.status_code == 429, (r.status_code, r.get_json())
     assert _posts(brevo) == [], 'envoyé malgré une base illisible : %s' % _destinataires(brevo)
+def test_une_base_illisible_ferme_le_relais_au_lieu_de_l_ouvrir(brevo, monkeypatch, caplog):
+    """L'INCERTITUDE NE L'OUVRE PAS — la docstring le dit, rien ne le mesurait.
+
+    Mutation jouée sur le code corrigé : `_notify_selection_autorise` rendant
+    (True, None) au lieu de (False, 'compteur_illisible') quand la base est
+    injoignable. Elle survivait aux 227 règles. Les plafonds de 3 par adresse
+    et de 20 par jour disparaissent alors ensemble, et le relais public envoie
+    des courriels signés CONSEILPREV vers n'importe quelle adresse — le seul
+    reste étant le `check_soft` par IP, que l'en-tête X-Forwarded-For contourne."""
+    def muette():
+        raise RuntimeError('PostgreSQL injoignable (simulé)')
+    monkeypatch.setattr(A, 'registre_get_db', muette)
+    with caplog.at_level(logging.WARNING, logger='conseilprev'):
+        r = _anonyme().post('/api/notify-selection', json=_charge(), headers=_entetes())
+    assert r.status_code == 429, 'base illisible et pourtant %d : %s' % (r.status_code, r.get_json())
+    assert _posts(brevo) == [], 'relais ouvert malgré la base illisible : %s' % _destinataires(brevo)
+    assert 'NOTIFY_SELECTION_REFUSE' in caplog.text, caplog.text
+    assert 'cible@exemple.test' not in caplog.text, 'adresse en clair dans le journal'
 
 
 def test_une_adresse_de_destinataire_invalide_est_refusee_sans_envoi(brevo):
@@ -830,6 +906,17 @@ EVENEMENTS_DE_SUPPRESSION = ['unsubscribe', 'unsubscribed', 'hard_bounce',
 
 @pytest.mark.parametrize('evenement', EVENEMENTS_DE_SUPPRESSION)
 def test_un_evenement_de_suppression_bloque_les_envois_suivants_sans_POST(brevo, monkeypatch, evenement):
+    """LES DEUX ÉCRITURES DE LA DÉSINSCRIPTION SONT MESURÉES. Brevo nomme
+    l'événement `unsubscribe` dans la liste d'abonnement d'un webhook et
+    `unsubscribed` dans la charge qu'il livre : c'est la SECONDE qui arrive en
+    production, et c'était la seule des deux que rien n'éprouvait. Mutation
+    jouée sur le code corrigé (entrée 'unsubscribed' retirée de la table) :
+    elle survivait aux 227 règles, pendant que les désinscriptions réelles
+    cessaient d'être enregistrées. Même mesure pour `invalid_email`, dont le
+    rebond est garanti et coûte un crédit à chaque envoi.
+
+    ET LA CASSE, à la fin : Brevo signale l'adresse en minuscules, le site
+    écrit à celle que la personne a saisie."""
     monkeypatch.setattr(A, 'BREVO_WEBHOOK_TOKEN', 'jeton-recette-0123', raising=False)
     r = _webhook(_anonyme(), 'jeton-recette-0123',
                  charge=[{'event': evenement, 'email': 'signale@exemple.test', 'message-id': '<m>'}])
@@ -1012,9 +1099,42 @@ def test_un_expediteur_de_domaine_propre_n_est_pas_signale():
     assert A.verifier_mail_from('contact@i-aes.com') is None
 
 
+def test_la_garde_crie_dans_le_journal_de_l_application_quand_personne_ne_lui_en_passe(caplog):
+    """LE JOURNAL PAR DÉFAUT, celui du démarrage — jamais mesuré.
+
+    Toutes les règles paramétrées ci-dessus passent un `journal` explicite.
+    Mutation jouée sur le code corrigé : `(journal or logger).error(...)`
+    réécrit `if journal: journal.error(...)`. Elle survivait aux 227 règles
+    des quatre fichiers, et pourtant, au démarrage — le seul appel qui ne
+    passe pas de journal —, plus une ligne ne sortait : exactement ce que la
+    correction devait faire crier."""
+    with caplog.at_level(logging.ERROR, logger='conseilprev'):
+        motif = A.verifier_mail_from('x@internal.system')
+    assert motif, 'x@internal.system accepté sans un mot'
+    lignes = [m.getMessage() for m in caplog.records if m.name == 'conseilprev']
+    assert any('CONFIGURATION INVALIDE' in l for l in lignes), (
+        'la garde est muette sans journal explicite : %s' % lignes)
+
+
 def test_la_garde_est_appelee_au_demarrage_sur_MAIL_FROM_et_le_defaut_est_inchange():
-    assert re.search(r'^_MAIL_FROM_MOTIF_REFUS = verifier_mail_from\(MAIL_FROM\)$', SOURCE, re.M), \
-        'la garde existe mais rien ne l appelle au démarrage'
+    """MESURÉ AU DÉMARRAGE, DANS UN SOUS-PROCESSUS, et non lu dans le source.
+
+    Ce que cette règle cherchait à l'expression régulière — la ligne
+    `_MAIL_FROM_MOTIF_REFUS = verifier_mail_from(MAIL_FROM)` — pouvait rester
+    en place et ne plus rien produire (voir la règle précédente). On importe
+    donc l'application avec un MAIL_FROM que Brevo refusera, et l'on regarde
+    ce qui sort sur la sortie d'erreur : c'est ce que l'exploitant verra dans
+    le journal de Render, et c'est la seule chose qui compte.
+
+    `AUTO_MAJ=0` : l'import ne doit rien aller chercher au dehors."""
+    env = dict(os.environ, MAIL_FROM='x@internal.system', AUTO_MAJ='0',
+               PYTHONDONTWRITEBYTECODE='1')
+    p = subprocess.run([sys.executable, '-c', 'import app'], cwd=ICI, env=env,
+                       capture_output=True, text=True, timeout=180)
+    assert p.returncode == 0, (p.stderr or '').strip().splitlines()[-3:]
+    assert 'CONFIGURATION INVALIDE' in (p.stderr + p.stdout), (
+        'MAIL_FROM=x@internal.system : l application démarre sans une ligne de journal ; '
+        'sortie d erreur : %r' % (p.stderr or '')[-600:])
     assert "os.environ.get('MAIL_FROM', 'noreply@conseilprev.onrender.com')" in SOURCE, \
         'la valeur par défaut a changé : ce n était pas demandé'
 
@@ -1030,11 +1150,47 @@ def test_aucun_envoi_ne_cible_une_adresse_internal_system(brevo, chemin):
     _sql("DELETE FROM email_log WHERE destinataire='conseilprev@internal.system'")
 
 
-def test_les_notifications_internes_visent_l_adresse_de_notification():
-    assert 'send_email_smart(CONSEILPREV_INTERNAL_EMAIL' not in SOURCE, \
-        'un envoi vise encore l adresse interne fictive'
-    assert ' or CONSEILPREV_INTERNAL_EMAIL' not in SOURCE, \
-        'un repli de destinataire vise encore l adresse interne fictive'
+def _envois_vers_l_adresse_fictive(source):
+    """Les lignes d'app.py où l'adresse interne fictive sert de DESTINATAIRE.
+
+    POURQUOI UNE ANALYSE DE L'ARBRE ET NON UNE RECHERCHE DE TEXTE. La règle
+    cherchait la chaîne exacte « send_email_smart(CONSEILPREV_INTERNAL_EMAIL ».
+    Mutation jouée sur le code corrigé : la notification d'annulation de
+    formation réécrite avec un simple retour à la ligne après la parenthèse.
+    Le texte cherché disparaît, la règle reste verte, et `send_email_smart`
+    refuse l'adresse @internal.system : CONSEILPREV ne reçoit plus jamais les
+    annulations. L'arbre, lui, ne voit pas la mise en page.
+
+    Le nom reste employé ailleurs pour de bonnes raisons — c'est l'identifiant
+    du compte CONSEILPREV en base, et on le COMPARE. Seule sa présence dans le
+    PREMIER argument d'un envoi est une faute ; `ast.walk` sur cet argument
+    attrape aussi le repli « x or CONSEILPREV_INTERNAL_EMAIL »."""
+    fautes = []
+    for noeud in ast.walk(ast.parse(source)):
+        if not isinstance(noeud, ast.Call) or not noeud.args:
+            continue
+        f = noeud.func
+        nom = f.attr if isinstance(f, ast.Attribute) else getattr(f, 'id', '')
+        if not nom.startswith('send_email'):
+            continue
+        for sous in ast.walk(noeud.args[0]):
+            if isinstance(sous, ast.Name) and sous.id == 'CONSEILPREV_INTERNAL_EMAIL':
+                fautes.append('%s ligne %d' % (nom, noeud.lineno))
+    return sorted(set(fautes))
+
+
+def test_les_notifications_internes_visent_l_adresse_de_notification(brevo):
+    fautes = _envois_vers_l_adresse_fictive(SOURCE)
+    assert fautes == [], 'un envoi vise encore l adresse interne fictive : %s' % fautes
+    # ET LE COMPORTEMENT, sur une notification interne réellement déclenchée :
+    # la demande de tarification est la plus courte à parcourir sans compte.
+    r = _anonyme().post('/api/pricing-request', headers=_entetes(),
+                        json={'plan': 'pro', 'nom': 'Essai', 'email': 'p@exemple.test',
+                              'message': 'bonjour', 'secteur': 'industrie'})
+    assert r.status_code == 200, (r.status_code, r.get_json())
+    dest = _destinataires(brevo)
+    assert A.CONSEILPREV_NOTIFY_EMAIL in dest, 'notification interne partie vers %s' % dest
+    assert not [d for d in dest if d.endswith('@internal.system')], dest
 
 
 def test_le_rapport_de_cartographie_du_compte_conseilprev_est_route_vers_une_boite_reelle():

@@ -451,6 +451,97 @@
    "avant": "        _garder = bilan['abonnement'] == 'non_resilie'",
    "apres": "        _garder = False",
    "regle": "test_l_effacement_rgpd_garde_le_lien_quand_stripe_refuse_la_resiliation"
+  },
+  {
+   "nom": "4. la caisse formation IA vit de nouveau 24 h",
+   "fichier": "app.py",
+   "avant": "                expires_at=int(time.time()) + max(30, formations_ia.RETENUE_MINUTES) * 60,\n",
+   "apres": "",
+   "regle": "test_la_caisse_ferme_quand_la_retenue_du_creneau_expire"
+  },
+  {
+   "nom": "4. un accusé qui échoue est de nouveau avalé",
+   "fichier": "app.py",
+   "avant": "        logger.error('FORMATION_IA_ACCUSE_ECHEC commande=%s destinataire=%s : %s', commande, email, _e)",
+   "apres": "        pass",
+   "regle": "test_un_accuse_qui_echoue_est_journalise"
+  },
+  {
+   "nom": "6. une résiliation refusée par Stripe efface quand même le lien local",
+   "fichier": "app.py",
+   "avant": "            resilie = stripe.Subscription.cancel(sub)['status'] == 'canceled'\n        except stripe.InvalidRequestError as _ie:\n            resilie = getattr(_ie, 'code', '') == 'resource_missing'\n            if not resilie:\n                raise",
+   "apres": "            resilie = True\n            stripe.Subscription.cancel(sub)\n        except Exception:\n            pass",
+   "regle": "test_une_resiliation_refusee_par_stripe_garde_le_lien_local"
+  },
+  {
+   "nom": "6. set-plan annonce la résiliation même refusée",
+   "fichier": "app.py",
+   "avant": "        if not _billing_cancel_subscription(client_id):\n            return jsonify({'ok': False, 'stripe_sync': 'resiliation_echouee',",
+   "apres": "        if not _billing_cancel_subscription(client_id) and False:\n            return jsonify({'ok': False, 'stripe_sync': 'resiliation_echouee',",
+   "regle": "test_passer_en_gratuit_n_annonce_pas_une_resiliation_refusee"
+  },
+  {
+   "nom": "7. l'effacement RGPD oublie l'abonnement sans le résilier",
+   "fichier": "app.py",
+   "avant": "            bilan['abonnement'] = 'resilie' if _billing_cancel_subscription(cid) else 'non_resilie'",
+   "apres": "            bilan['abonnement'] = 'non_resilie'",
+   "regle": "test_l_effacement_rgpd_resilie_l_abonnement_avant_de_l_oublier"
+  },
+  {
+   "nom": "3. le retour de caisse annonce « paiement reçu » même quand le confirmateur a échoué",
+   "fichier": "app.py",
+   "avant": "    return jsonify({'statut': 'paye' if not echecs else 'en_attente'}), 200",
+   "apres": "    return jsonify({'statut': 'paye'}), 200",
+   "regle": "test_le_retour_de_caisse_encaisse_mais_non_confirme_dit_en_attente"
+  },
+  {
+   "nom": "3. le retour de caisse relit chez Stripe n'importe quel identifiant",
+   "fichier": "app.py",
+   "avant": "    if not sid or not sid.startswith('cs_') or len(sid) > 200:",
+   "apres": "    if not sid:",
+   "regle": "test_le_retour_de_caisse_refuse_un_identifiant_qui_n_est_pas_une_session[evt_1MxAbCdEfGh]"
+  },
+  {
+   "nom": "2. la caisse modifie un abonnement résilié au lieu d'en ouvrir un neuf",
+   "fichier": "app.py",
+   "avant": "                if sub['status'] not in ('canceled', 'incomplete_expired') and articles:",
+   "apres": "                if articles:",
+   "regle": "test_un_abonnement_mort_chez_stripe_rouvre_une_caisse[canceled]"
+  },
+  {
+   "nom": "2. un abonnement inconnu de Stripe rend 502 au lieu d'une nouvelle caisse",
+   "fichier": "app.py",
+   "avant": "                if getattr(_ie, 'code', '') != 'resource_missing':\n                    raise",
+   "apres": "                if True:\n                    raise",
+   "regle": "test_un_abonnement_mort_chez_stripe_rouvre_une_caisse[inconnu]"
+  },
+  {
+   "nom": "2. le changement de prix ne pose plus les métadonnées sur l'abonnement",
+   "fichier": "app.py",
+   "avant": "                        proration_behavior='create_prorations',\n                        metadata={'client_id': str(cid), 'plan': plan, 'site': 'conseilprev'})",
+   "apres": "                        proration_behavior='create_prorations')",
+   "regle": "test_un_client_deja_abonne_change_de_prix_au_lieu_d_ouvrir_une_seconde_caisse"
+  },
+  {
+   "nom": "1b. une caisse sans paiement remet la séance en « devis », qui TIENT le créneau",
+   "fichier": "app.py",
+   "avant": "        \"UPDATE formation_ia_resa SET statut='annulee', annule_le=?, annule_motif=? \"\n        \"WHERE commande=? AND gratuit=0 AND statut='en_attente_paiement'\"),",
+   "apres": "        \"UPDATE formation_ia_resa SET statut='devis', annule_le=?, annule_motif=? \"\n        \"WHERE commande=? AND gratuit=0 AND statut='en_attente_paiement'\"),",
+   "regle": "test_une_caisse_sans_paiement_libere_le_creneau[checkout.session.expired]"
+  },
+  {
+   "nom": "1e. le repli par client_id rétrograde un client qui porte un AUTRE abonnement",
+   "fichier": "app.py",
+   "avant": "                                 \"UPDATE clients SET plan='gratuit' WHERE id=? AND stripe_subscription_id IS NULL\"),",
+   "apres": "                                 \"UPDATE clients SET plan='gratuit' WHERE id=?\"),",
+   "regle": "test_un_evenement_de_resiliation_tardif_ne_retrograde_pas_un_client_reabonne"
+  },
+  {
+   "nom": "1e. la relance « paiement » d'un impayé d'abonnement n'est jamais écrite en base",
+   "fichier": "app.py",
+   "avant": "             'email', 'haute', datetime.utcnow().date().isoformat(), 'planifiee', str(sub_id), datetime.utcnow().isoformat()))\n        conn.commit()",
+   "apres": "             'email', 'haute', datetime.utcnow().date().isoformat(), 'planifiee', str(sub_id), datetime.utcnow().isoformat()))\n        conn.rollback()",
+   "regle": "test_une_facture_d_abonnement_impayee_previent_le_client_et_conseilprev[dahlia]"
   }
  ]
 }

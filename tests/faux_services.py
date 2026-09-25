@@ -27,6 +27,7 @@ import hashlib
 import hmac
 import itertools
 import json
+import sys
 import threading
 import time
 import urllib.parse
@@ -106,6 +107,21 @@ class _Gestionnaire(BaseHTTPRequestHandler):
     do_GET = do_POST = do_DELETE = _traiter
 
 
+class _Serveur(ThreadingHTTPServer):
+    """Un client qui abandonne (essai ralenti, plafond atteint, fil coupé à la
+    fin d'une mesure de simultanéité) ferme sa moitié de la connexion pendant
+    que le faux service écrit encore : `socketserver` imprime alors une trace
+    complète sur la sortie d'erreur, au milieu des points de la recette, pour
+    un incident qui n'en est pas un. La coupure du client est avalée ; toute
+    autre erreur remonte comme avant."""
+
+    def handle_error(self, request, client_address):
+        if issubclass(sys.exc_info()[0] or Exception,
+                      (BrokenPipeError, ConnectionResetError)):
+            return
+        ThreadingHTTPServer.handle_error(self, request, client_address)
+
+
 class _FauxServeur(object):
     def __init__(self, port=0):
         self.port_demande = port
@@ -117,8 +133,7 @@ class _FauxServeur(object):
         self._n = itertools.count(1)
 
     def demarrer(self):
-        self.serveur = ThreadingHTTPServer(("127.0.0.1", self.port_demande),
-                                           _Gestionnaire)
+        self.serveur = _Serveur(("127.0.0.1", self.port_demande), _Gestionnaire)
         self.serveur.daemon_threads = True
         self.serveur.faux = self
         self.port = self.serveur.server_address[1]
