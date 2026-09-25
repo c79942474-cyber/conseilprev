@@ -11,1265 +11,1265 @@
  "_rubrique": "TRAITER & GOUVERNER + ÉQUIPE & FORMATION",
  "bloc": {
   "Cartographie des parties prenantes": {
-   "en": "",
+   "en": "<em>Stakeholder</em> map",
    "fr": "Cartographie des parties prenantes",
    "html": "Cartographie des <em>parties prenantes</em>"
   },
   "Dix formations animées par CONSEILPREV, du cadrage réglementaire à la preuve opposable en contrôle. Modalités : à distance en visioconférence, ou en présentiel à Paris uniquement. Les sessions sur site, dans vos locaux, sont réservées à l'offre Entreprise, à raison de deux par an incluses. Tarifs par participant : # € HT (# jour) et # # € HT (# jours), TVA # % en sus.": {
-   "en": "",
+   "en": "Ten training courses run by CONSEILPREV, from regulatory scoping to enforceable evidence in an inspection. <strong>Formats: remotely by videoconference, or in person in Paris only.</strong> Sessions <strong>on site, at your premises</strong>, are <strong>reserved for the Enterprise plan</strong>, with two per year included. Prices per participant: €# excl. VAT (# day) and €# # excl. VAT (# days), <strong>plus VAT at # %</strong>.",
    "fr": "Dix formations animées par CONSEILPREV, du cadrage réglementaire à la preuve opposable en contrôle. Modalités : à distance en visioconférence, ou en présentiel à Paris uniquement. Les sessions sur site, dans vos locaux, sont réservées à l'offre Entreprise, à raison de deux par an incluses. Tarifs par participant : 950 € HT (1 jour) et 1 750 € HT (2 jours), TVA 20 % en sus.",
    "html": "Dix formations animées par CONSEILPREV, du cadrage réglementaire à la preuve opposable en contrôle. <strong>Modalités : à distance en visioconférence, ou en présentiel à Paris uniquement.</strong> Les sessions <strong>sur site, dans vos locaux</strong>, sont <strong>réservées à l'offre Entreprise</strong>, à raison de deux par an incluses. Tarifs par participant : 950 € HT (1 jour) et 1 750 € HT (2 jours), <strong>TVA 20 % en sus</strong>."
   },
   "Formations conformité IA": {
-   "en": "",
+   "en": "<em>AI</em> compliance training",
    "fr": "Formations conformité IA",
    "html": "Formations conformité <em>IA</em>"
   },
   "Gouvernance opérationnelle de l’IA": {
-   "en": "",
+   "en": "<em>Operational</em> AI governance",
    "fr": "Gouvernance opérationnelle de l’IA",
    "html": "Gouvernance <em>opérationnelle</em> de l’IA"
   },
   "Objectif. Bâtir un dispositif unique couvrant les trois référentiels, sans redondance, et en démontrer l'efficacité.": {
-   "en": "",
+   "en": "<strong>Objective.</strong> Build a single framework covering the three frameworks, without redundancy, and demonstrate its effectiveness.",
    "fr": "Objectif. Bâtir un dispositif unique couvrant les trois référentiels, sans redondance, et en démontrer l'efficacité.",
    "html": "<strong>Objectif.</strong> Bâtir un dispositif unique couvrant les trois référentiels, sans redondance, et en démontrer l'efficacité."
   },
   "Objectif. Comprendre l'architecture du règlement (UE) #/#, identifier les rôles et situer l'organisation dans le calendrier.": {
-   "en": "",
+   "en": "<strong>Objective.</strong> Understand the architecture of Regulation (EU) #/#, identify the roles and place the organisation in the timetable.",
    "fr": "Objectif. Comprendre l'architecture du règlement (UE) 2024/1689, identifier les rôles et situer l'organisation dans le calendrier.",
    "html": "<strong>Objectif.</strong> Comprendre l'architecture du règlement (UE) 2024/1689, identifier les rôles et situer l'organisation dans le calendrier."
   },
   "Objectif. Comprendre la norme, structurer un SMIA et préparer la certification.": {
-   "en": "",
+   "en": "<strong>Objective.</strong> Understand the standard, structure an AIMS and prepare for certification.",
    "fr": "Objectif. Comprendre la norme, structurer un SMIA et préparer la certification.",
    "html": "<strong>Objectif.</strong> Comprendre la norme, structurer un SMIA et préparer la certification."
   },
   "Objectif. Concilier innovation et protection des données sur tout le cycle de vie d'un système d'IA.": {
-   "en": "",
+   "en": "<strong>Objective.</strong> Reconcile innovation and data protection across the whole life cycle of an AI system.",
    "fr": "Objectif. Concilier innovation et protection des données sur tout le cycle de vie d'un système d'IA.",
    "html": "<strong>Objectif.</strong> Concilier innovation et protection des données sur tout le cycle de vie d'un système d'IA."
   },
   "Objectif. Conduire et formaliser l'analyse d'impact prévue à l'article #.": {
-   "en": "",
+   "en": "<strong>Objective.</strong> Carry out and formalise the impact assessment provided for in Article #.",
    "fr": "Objectif. Conduire et formaliser l'analyse d'impact prévue à l'article 27.",
    "html": "<strong>Objectif.</strong> Conduire et formaliser l'analyse d'impact prévue à l'article 27."
   },
   "Objectif. Constituer un dossier de preuve conforme aux articles #, #, #, # et #, et automatiser la rétention.": {
-   "en": "",
+   "en": "<strong>Objective.</strong> Build an evidence file compliant with Articles #, #, #, # and #, and automate retention.",
    "fr": "Objectif. Constituer un dossier de preuve conforme aux articles 5, 7, 12, 17 et 30, et automatiser la rétention.",
    "html": "<strong>Objectif.</strong> Constituer un dossier de preuve conforme aux articles 5, 7, 12, 17 et 30, et automatiser la rétention."
   },
   "Objectif. Installer le relais qui fait tenir l'usage entre deux formations — et savoir à quoi on reconnaît qu'il ne tient pas.": {
-   "en": "",
+   "en": "<strong>Objective.</strong> Put in place the relay that keeps usage going between two training courses — and know how to recognise when it is not holding.",
    "fr": "Objectif. Installer le relais qui fait tenir l'usage entre deux formations — et savoir à quoi on reconnaît qu'il ne tient pas.",
    "html": "<strong>Objectif.</strong> Installer le relais qui fait tenir l'usage entre deux formations — et savoir à quoi on reconnaît qu'il ne tient pas."
   },
   "Objectif. Maîtriser les obligations des articles # à # et construire le dossier technique exigé.": {
-   "en": "",
+   "en": "<strong>Objective.</strong> Master the obligations of Articles # to # and build the required technical file.",
    "fr": "Objectif. Maîtriser les obligations des articles 8 à 27 et construire le dossier technique exigé.",
    "html": "<strong>Objectif.</strong> Maîtriser les obligations des articles 8 à 27 et construire le dossier technique exigé."
   },
   "Objectif. Mettre en œuvre le cadre de gouvernance IA de son organisation en deux semaines, et repartir avec les cadres de référence, les modèles prêts à déployer et la clarté nécessaire pour ancrer des pratiques d'IA responsable — construire la confiance des parties prenantes et préparer la conformité à l'IA Act et aux autres réglementations.": {
-   "en": "",
+   "en": "<strong>Objective.</strong> Implement your organisation’s AI governance framework in two weeks, and leave with the reference frameworks, templates ready to deploy and the clarity needed to anchor responsible AI practices — building stakeholder trust and preparing for compliance with the AI Act and other regulations.",
    "fr": "Objectif. Mettre en œuvre le cadre de gouvernance IA de son organisation en deux semaines, et repartir avec les cadres de référence, les modèles prêts à déployer et la clarté nécessaire pour ancrer des pratiques d'IA responsable — construire la confiance des parties prenantes et préparer la conformité à l'IA Act et aux autres réglementations.",
    "html": "<strong>Objectif.</strong> Mettre en œuvre le cadre de gouvernance IA de son organisation en deux semaines, et repartir avec les cadres de référence, les modèles prêts à déployer et la clarté nécessaire pour ancrer des pratiques d'IA responsable — construire la confiance des parties prenantes et préparer la conformité à l'IA Act et aux autres réglementations."
   },
   "Objectif. Mettre en œuvre les obligations applicables au # août # et constituer la preuve opposable.": {
-   "en": "",
+   "en": "<strong>Objective.</strong> Implement the obligations applicable from # August # and build enforceable evidence.",
    "fr": "Objectif. Mettre en œuvre les obligations applicables au 2 août 2026 et constituer la preuve opposable.",
    "html": "<strong>Objectif.</strong> Mettre en œuvre les obligations applicables au 2 août 2026 et constituer la preuve opposable."
   },
   "Objectif. Préparer, conduire et restituer un audit interne du SMIA.": {
-   "en": "",
+   "en": "<strong>Objective.</strong> Prepare, conduct and report on an internal audit of the AIMS.",
    "fr": "Objectif. Préparer, conduire et restituer un audit interne du SMIA.",
    "html": "<strong>Objectif.</strong> Préparer, conduire et restituer un audit interne du SMIA."
   },
   "Objectif. Repartir avec le redécoupage écrit d'un processus réel : ce que fait la machine, ce que garde l'humain, CE QUI DISPARAÎT et qui arbitre.": {
-   "en": "",
+   "en": "<strong>Objective.</strong> Leave with the written redesign of a real process: what the machine does, what the human keeps, WHAT DISAPPEARS and who decides.",
    "fr": "Objectif. Repartir avec le redécoupage écrit d'un processus réel : ce que fait la machine, ce que garde l'humain, CE QUI DISPARAÎT et qui arbitre.",
    "html": "<strong>Objectif.</strong> Repartir avec le redécoupage écrit d'un processus réel : ce que fait la machine, ce que garde l'humain, CE QUI DISPARAÎT et qui arbitre."
   },
   "Objectif. Réaliser le test de seuil, conduire l'analyse et formaliser un document opposable.": {
-   "en": "",
+   "en": "<strong>Objective.</strong> Run the threshold test, conduct the assessment and formalise an enforceable document.",
    "fr": "Objectif. Réaliser le test de seuil, conduire l'analyse et formaliser un document opposable.",
    "html": "<strong>Objectif.</strong> Réaliser le test de seuil, conduire l'analyse et formaliser un document opposable."
   },
   "Objectif. Savoir ce qu'un système génératif fait, ce qu'il ne fait pas, et à quel moment il faut le contredire. Aucun prérequis technique.": {
-   "en": "",
+   "en": "<strong>Objective.</strong> Know what a generative system does, what it does not do, and when you need to contradict it. No technical prerequisites.",
    "fr": "Objectif. Savoir ce qu'un système génératif fait, ce qu'il ne fait pas, et à quel moment il faut le contredire. Aucun prérequis technique.",
    "html": "<strong>Objectif.</strong> Savoir ce qu'un système génératif fait, ce qu'il ne fait pas, et à quel moment il faut le contredire. Aucun prérequis technique."
   },
   "Objectif. Savoir conduire soi-même l'atelier de redécoupage dans son organisation, y compris quand la salle est hostile.": {
-   "en": "",
+   "en": "<strong>Objective.</strong> Be able to run the redesign workshop yourself in your organisation, even when the room is hostile.",
    "fr": "Objectif. Savoir conduire soi-même l'atelier de redécoupage dans son organisation, y compris quand la salle est hostile.",
    "html": "<strong>Objectif.</strong> Savoir conduire soi-même l'atelier de redécoupage dans son organisation, y compris quand la salle est hostile."
   },
   "Roadmap conformité": {
-   "en": "",
+   "en": "<em>Compliance</em> roadmap",
    "fr": "Roadmap conformité",
    "html": "Roadmap <em>conformité</em>"
   }
  },
  "texte": {
   "# AOÛT #": {
-   "en": "",
+   "en": "# AUGUST #",
    "fr": "02 AOÛT 2026"
   },
   "# jour (# h) · Conformité, juristes, métiers": {
-   "en": "",
+   "en": "# day (# h) · Compliance, lawyers, business lines",
    "fr": "1 jour (7 h) · Conformité, juristes, métiers"
   },
   "# jour (# h) · DPO, conformité, chefs de projet": {
-   "en": "",
+   "en": "# day (# h) · DPOs, compliance, project managers",
    "fr": "1 jour (7 h) · DPO, conformité, chefs de projet"
   },
   "# jour (# h) · DPO, responsables numériques, marketing": {
-   "en": "",
+   "en": "# day (# h) · DPOs, digital managers, marketing",
    "fr": "1 jour (7 h) · DPO, responsables numériques, marketing"
   },
   "# jour (# h) · Direction, RH, responsables de la transformation, futurs ambassadeurs": {
-   "en": "",
+   "en": "# day (# h) · Senior management, HR, transformation leads, future ambassadors",
    "fr": "1 jour (7 h) · Direction, RH, responsables de la transformation, futurs ambassadeurs"
   },
   "# jour (# h) · Dirigeants, chefs de projet, juristes, DSI": {
-   "en": "",
+   "en": "# day (# h) · Executives, project managers, lawyers, IT department",
    "fr": "1 jour (7 h) · Dirigeants, chefs de projet, juristes, DSI"
   },
   "# jour (# h) · Marketing, communication, éditeurs, DPO": {
-   "en": "",
+   "en": "# day (# h) · Marketing, communications, publishers, DPOs",
    "fr": "1 jour (7 h) · Marketing, communication, éditeurs, DPO"
   },
   "# jour (# h) · Responsables de processus, équipes métier, chefs de projet": {
-   "en": "",
+   "en": "# day (# h) · Process owners, business teams, project managers",
    "fr": "1 jour (7 h) · Responsables de processus, équipes métier, chefs de projet"
   },
   "# jours (# h) · Auditeurs internes, conformité, qualité": {
-   "en": "",
+   "en": "# days (# h) · Internal auditors, compliance, quality",
    "fr": "2 jours (14 h) · Auditeurs internes, conformité, qualité"
   },
   "# jours (# h) · Conformité, ingénieurs, chefs de produit": {
-   "en": "",
+   "en": "# days (# h) · Compliance, engineers, product managers",
    "fr": "2 jours (14 h) · Conformité, ingénieurs, chefs de produit"
   },
   "# jours (# h) · DPO, juristes, data scientists": {
-   "en": "",
+   "en": "# days (# h) · DPOs, lawyers, data scientists",
    "fr": "2 jours (14 h) · DPO, juristes, data scientists"
   },
   "# jours (# h) · Direction générale, conformité, DSI, DPO": {
-   "en": "",
+   "en": "# days (# h) · Executive management, compliance, IT department, DPOs",
    "fr": "2 jours (14 h) · Direction générale, conformité, DSI, DPO"
   },
   "# jours (# h) · Qualité, conformité, RSSI, direction": {
-   "en": "",
+   "en": "# days (# h) · Quality, compliance, CISOs, senior management",
    "fr": "2 jours (14 h) · Qualité, conformité, RSSI, direction"
   },
   "# jours (# h) · Référents IA, responsables de la transformation, formateurs internes": {
-   "en": "",
+   "en": "# days (# h) · AI leads, transformation leads, internal trainers",
    "fr": "2 jours (14 h) · Référents IA, responsables de la transformation, formateurs internes"
   },
   "# phases du programme CONSEILPREV (même méthodologie que l'Audit de maturité IA), avec progression calculée à partir de votre Registre IA et de l'Audit IA Act réels.": {
-   "en": "",
+   "en": "# phases of the CONSEILPREV programme (same methodology as the AI maturity audit), with progress computed from your actual AI register and AI Act audit.",
    "fr": "4 phases du programme CONSEILPREV (même méthodologie que l'Audit de maturité IA), avec progression calculée à partir de votre Registre IA et de l'Audit IA Act réels."
   },
   "# semaines (# j) · # # € HT · Direction générale, CAIO, conformité, DPO, RSSI, responsables de programme IA": {
-   "en": "",
+   "en": "# weeks (# d) · €# # excl. VAT · Executive management, CAIO, compliance, DPO, CISO, AI programme leads",
    "fr": "2 semaines (10 j) · 6 000 € HT · Direction générale, CAIO, conformité, DPO, RSSI, responsables de programme IA"
   },
   "# système(s) inventoriés": {
-   "en": "",
+   "en": "# system(s) inventoried",
    "fr": "0 système(s) inventoriés"
   },
   "# système(s) à haut risque identifiés": {
-   "en": "",
+   "en": "# high-risk system(s) identified",
    "fr": "0 système(s) à haut risque identifiés"
   },
   "# € HT": {
-   "en": "",
+   "en": "€# excl. VAT",
    "fr": "800 € HT"
   },
   "#% — échéance # décembre # (Digital Omnibus, haut risque annexe III)": {
-   "en": "",
+   "en": "#% — deadline # December # (Digital Omnibus, Annex III high-risk)",
    "fr": "0% — échéance 2 décembre 2027 (Digital Omnibus, haut risque annexe III)"
   },
   "#/# contrôles conformes": {
-   "en": "",
+   "en": "#/# compliant controls",
    "fr": "0/34 contrôles conformes"
   },
   "#h": {
-   "en": "",
+   "en": "#h",
    "fr": "3h"
   },
   "#h#": {
-   "en": "",
+   "en": "#h#",
    "fr": "2h30"
   },
   "+ Inviter": {
-   "en": "",
+   "en": "+ Invite",
    "fr": "+ Inviter"
   },
   ", jusqu'en mars #.": {
-   "en": "",
+   "en": ", until March #.",
    "fr": ", jusqu'en mars 2027."
   },
   ": ce module ne la duplique pas, il l’applique.": {
-   "en": "",
+   "en": ": this module does not duplicate it, it applies it.",
    "fr": ": ce module ne la duplique pas, il l’applique."
   },
   "; les suivantes sont à": {
-   "en": "",
+   "en": "; subsequent sessions cost",
    "fr": "; les suivantes sont à"
   },
   "A": {
-   "en": "",
+   "en": "A",
    "fr": "A"
   },
   "A — Approbateur (valide)": {
-   "en": "",
+   "en": "A — Accountable (approves)",
    "fr": "A — Approbateur (valide)"
   },
   "AI Act — Systèmes haut risque (Art. #)": {
-   "en": "",
+   "en": "AI Act — High-risk systems (Art. #)",
    "fr": "AI Act — Systèmes haut risque (Art. 113)"
   },
   "AI Business Partners": {
-   "en": "",
+   "en": "AI business partners",
    "fr": "AI Business Partners"
   },
   "Accompagnement commercial": {
-   "en": "",
+   "en": "Sales support",
    "fr": "Accompagnement commercial"
   },
   "Adoption": {
-   "en": "",
+   "en": "Adoption",
    "fr": "Adoption"
   },
   "Adoption (#)": {
-   "en": "",
+   "en": "Adoption (#)",
    "fr": "Adoption (4)"
   },
   "Analyse d'impact sur les droits fondamentaux (FRIA)": {
-   "en": "",
+   "en": "Fundamental rights impact assessment (FRIA)",
    "fr": "Analyse d'impact sur les droits fondamentaux (FRIA)"
   },
   "Angles morts de la conformité IA": {
-   "en": "",
+   "en": "Blind spots of AI compliance",
    "fr": "Angles morts de la conformité IA"
   },
   "Animer un atelier d'adoption — former les formateurs": {
-   "en": "",
+   "en": "Running an adoption workshop — training the trainers",
    "fr": "Animer un atelier d'adoption — former les formateurs"
   },
   "Annexe A : mesures de contrôle": {
-   "en": "",
+   "en": "Annex A: controls",
    "fr": "Annexe A : mesures de contrôle"
   },
   "Annexes I et III : qualification": {
-   "en": "",
+   "en": "Annexes I and III: qualification",
    "fr": "Annexes I et III : qualification"
   },
   "Approbateur (valide)": {
-   "en": "",
+   "en": "Accountable (approves)",
    "fr": "Approbateur (valide)"
   },
   "Approche par les risques : interdit, haut risque, transparence, minimal": {
-   "en": "",
+   "en": "Risk-based approach: prohibited, high-risk, transparency, minimal",
    "fr": "Approche par les risques : interdit, haut risque, transparence, minimal"
   },
   "Art. # EU AI Act": {
-   "en": "",
+   "en": "Art. # EU AI Act",
    "fr": "Art. 14 EU AI Act"
   },
   "Art. # EU AI Act / Annexe III": {
-   "en": "",
+   "en": "Art. # EU AI Act / Annex III",
    "fr": "Art. 6 EU AI Act / Annexe III"
   },
   "Art. # EU AI Act / ISO # A.#": {
-   "en": "",
+   "en": "Art. # EU AI Act / ISO # A.#",
    "fr": "Art. 10 EU AI Act / ISO 42001 A.7"
   },
   "Art. # EU AI Act / ISO # cl. #": {
-   "en": "",
+   "en": "Art. # EU AI Act / ISO # cl. #",
    "fr": "Art. 9 EU AI Act / ISO 42001 cl. 6.1"
   },
   "Art. # EU AI Act / ISO # cl. #-#": {
-   "en": "",
+   "en": "Art. # EU AI Act / ISO # cl. #-#",
    "fr": "Art. 4 EU AI Act / ISO 42001 cl. 7.2-7.3"
   },
   "Art. #, # EU AI Act": {
-   "en": "",
+   "en": "Art. #, # EU AI Act",
    "fr": "Art. 49, 71 EU AI Act"
   },
   "Art. L#-#, L#-#, L#-# Code du travail": {
-   "en": "",
+   "en": "Art. L#-#, L#-#, L#-# French Labour Code",
    "fr": "Art. L2312-8, L2312-37, L2312-38 Code du travail"
   },
   "Article # : charge de la preuve": {
-   "en": "",
+   "en": "Article #: burden of proof",
    "fr": "Article 7 : charge de la preuve"
   },
   "Article # : fournisseurs et déployeurs": {
-   "en": "",
+   "en": "Article #: providers and deployers",
    "fr": "Article 50 : fournisseurs et déployeurs"
   },
   "Article # : registre à jour": {
-   "en": "",
+   "en": "Article #: an up-to-date register",
    "fr": "Article 30 : registre à jour"
   },
   "Article #.e : durées, purge, preuve de suppression": {
-   "en": "",
+   "en": "Article #.e: retention periods, purging, evidence of deletion",
    "fr": "Article 5.1.e : durées, purge, preuve de suppression"
   },
   "Articles #, #, # et # : traiter une demande": {
-   "en": "",
+   "en": "Articles #, #, # and #: handling a request",
    "fr": "Articles 12, 15, 17 et 20 : traiter une demande"
   },
   "Articles #, #, #, #, #, #, #, # obligatoires": {
-   "en": "",
+   "en": "Articles #, #, #, #, #, #, #, # mandatory",
    "fr": "Articles 6, 9, 10, 11, 12, 13, 14, 15 obligatoires"
   },
   "Articulation avec l'AIPD du RGPD": {
-   "en": "",
+   "en": "Articulation with the GDPR DPIA",
    "fr": "Articulation avec l'AIPD du RGPD"
   },
   "Articuler FRIA, AIPD et risques ISO": {
-   "en": "",
+   "en": "Articulating the FRIA, the DPIA and ISO risks",
    "fr": "Articuler FRIA, AIPD et risques ISO"
   },
   "Atelier : AIPD sur un traitement IA": {
-   "en": "",
+   "en": "Workshop: a DPIA on an AI processing activity",
    "fr": "Atelier : AIPD sur un traitement IA"
   },
   "Atelier : FRIA de bout en bout": {
-   "en": "",
+   "en": "Workshop: a FRIA from end to end",
    "fr": "Atelier : FRIA de bout en bout"
   },
   "Atelier : cadrer un projet conforme": {
-   "en": "",
+   "en": "Workshop: scoping a compliant project",
    "fr": "Atelier : cadrer un projet conforme"
   },
   "Atelier : chaque participant anime une séquence, et reçoit la critique du groupe": {
-   "en": "",
+   "en": "Workshop: each participant runs a sequence and receives the group’s critique",
    "fr": "Atelier : chaque participant anime une séquence, et reçoit la critique du groupe"
   },
   "Atelier : dossier probant pour un contrôle": {
-   "en": "",
+   "en": "Workshop: an evidential file for an inspection",
    "fr": "Atelier : dossier probant pour un contrôle"
   },
   "Atelier : dossier technique sur cas réel": {
-   "en": "",
+   "en": "Workshop: a technical file on a real case",
    "fr": "Atelier : dossier technique sur cas réel"
   },
   "Atelier : feuille de route de certification": {
-   "en": "",
+   "en": "Workshop: a certification roadmap",
    "fr": "Atelier : feuille de route de certification"
   },
   "Atelier : feuille de route à douze mois": {
-   "en": "",
+   "en": "Workshop: a twelve-month roadmap",
    "fr": "Atelier : feuille de route à douze mois"
   },
   "Atelier : produire l'artefact avant / après d'un processus du service, et désigner qui l'arbitre": {
-   "en": "",
+   "en": "Workshop: produce the before / after artefact for one of the department’s processes, and name who decides on it",
    "fr": "Atelier : produire l'artefact avant / après d'un processus du service, et désigner qui l'arbitre"
   },
   "Atelier : qualifier trois cas d'usage": {
-   "en": "",
+   "en": "Workshop: qualifying three use cases",
    "fr": "Atelier : qualifier trois cas d'usage"
   },
   "Atelier : registre de transparence": {
-   "en": "",
+   "en": "Workshop: a transparency register",
    "fr": "Atelier : registre de transparence"
   },
   "Atelier : simulation d'audit": {
-   "en": "",
+   "en": "Workshop: audit simulation",
    "fr": "Atelier : simulation d'audit"
   },
   "Atelier : sur trois productions réelles du service, dire ce qu'on garde, ce qu'on corrige, ce qu'on jette": {
-   "en": "",
+   "en": "Workshop: on three real outputs from the department, say what you keep, what you correct and what you discard",
    "fr": "Atelier : sur trois productions réelles du service, dire ce qu'on garde, ce qu'on corrige, ce qu'on jette"
   },
   "Atelier : écrire la lettre de mission d'un ambassadeur, avec son temps, son périmètre et sa durée": {
-   "en": "",
+   "en": "Workshop: write an ambassador’s engagement letter, with their time, scope and duration",
    "fr": "Atelier : écrire la lettre de mission d'un ambassadeur, avec son temps, son périmètre et sa durée"
   },
   "Audit interne et revue de conformite": {
-   "en": "",
+   "en": "Internal audit and compliance review",
    "fr": "Audit interne et revue de conformite"
   },
   "Auditer un système de management de l'IA": {
-   "en": "",
+   "en": "Auditing an AI management system",
    "fr": "Auditer un système de management de l'IA"
   },
   "Autorité, redevabilité et structures : droits de décision et RACI ; constituer son instance (conseil de gouvernance IA, comité de pilotage, comité d'éthique) ; modèles centralisé ou fédéré — arbitrages et conditions dans lesquelles chacun fonctionne": {
-   "en": "",
+   "en": "Authority, accountability and structures: decision rights and RACI; setting up your body (AI governance board, steering committee, ethics committee); centralised or federated models — trade-offs and the conditions under which each one works",
    "fr": "Autorité, redevabilité et structures : droits de décision et RACI ; constituer son instance (conseil de gouvernance IA, comité de pilotage, comité d'éthique) ; modèles centralisé ou fédéré — arbitrages et conditions dans lesquelles chacun fonctionne"
   },
   "Bannières : recueil, refus, retrait": {
-   "en": "",
+   "en": "Banners: collection, refusal, withdrawal",
    "fr": "Bannières : recueil, refus, retrait"
   },
   "Base légale, minimisation, droits des personnes dans les systèmes IA.": {
-   "en": "",
+   "en": "Legal basis, minimisation and data subject rights in AI systems.",
    "fr": "Base légale, minimisation, droits des personnes dans les systèmes IA."
   },
   "Bases légales : entraînement et inférence": {
-   "en": "",
+   "en": "Legal bases: training and inference",
    "fr": "Bases légales : entraînement et inférence"
   },
   "Basé sur vos scores réels (Audit de maturité, secteur Télécom)": {
-   "en": "",
+   "en": "Based on your actual scores (maturity audit, Telecom sector)",
    "fr": "Basé sur vos scores réels (Audit de maturité, secteur Télécom)"
   },
   "C": {
-   "en": "",
+   "en": "C",
    "fr": "C"
   },
   "C — Consulte (avis requis)": {
-   "en": "",
+   "en": "C — Consulted (opinion required)",
    "fr": "C — Consulte (avis requis)"
   },
   "CAIO (Chief AI Officer)": {
-   "en": "",
+   "en": "CAIO (Chief AI Officer)",
    "fr": "CAIO (Chief AI Officer)"
   },
   "CDIO (Chief Digital & Information Officer)": {
-   "en": "",
+   "en": "CDIO (Chief Digital & Information Officer)",
    "fr": "CDIO (Chief Digital & Information Officer)"
   },
   "CSE (Comite Social et Economique)": {
-   "en": "",
+   "en": "CSE (French works council)",
    "fr": "CSE (Comite Social et Economique)"
   },
   "CSRD / Bilan carbone IA": {
-   "en": "",
+   "en": "CSRD / AI carbon assessment",
    "fr": "CSRD / Bilan carbone IA"
   },
   "CTO": {
-   "en": "",
+   "en": "CTO",
    "fr": "CTO"
   },
   "Calendrier et effets de l'Omnibus": {
-   "en": "",
+   "en": "Timetable and effects of the Omnibus",
    "fr": "Calendrier et effets de l'Omnibus"
   },
   "Capacités, mise en œuvre et évolution : plan d'habilitation des personnes — littératie IA, communication, conduite du changement ; capacités numériques — architecture de référence, outillage, garde-fous (caviardage des données personnelles), données et actifs numériques ; operating model, pilotage de la performance et mécanismes d'adaptation — la gouvernance comme système vivant": {
-   "en": "",
+   "en": "Capabilities, implementation and evolution: a people enablement plan — AI literacy, communication, change management; digital capabilities — reference architecture, tooling, guardrails (redaction of personal data), data and digital assets; operating model, performance steering and adaptation mechanisms — governance as a living system",
    "fr": "Capacités, mise en œuvre et évolution : plan d'habilitation des personnes — littératie IA, communication, conduite du changement ; capacités numériques — architecture de référence, outillage, garde-fous (caviardage des données personnelles), données et actifs numériques ; operating model, pilotage de la performance et mécanismes d'adaptation — la gouvernance comme système vivant"
   },
   "Cartographier exigences communes et spécifiques": {
-   "en": "",
+   "en": "Mapping common and specific requirements",
    "fr": "Cartographier exigences communes et spécifiques"
   },
   "Catalogue des formations CONSEILPREV": {
-   "en": "",
+   "en": "CONSEILPREV training catalogue",
    "fr": "Catalogue des formations CONSEILPREV"
   },
   "Ce qu'on anime : un redécoupage de processus, pas une démonstration d'outil": {
-   "en": "",
+   "en": "What you facilitate: a redesign of processes, not a tool demonstration",
    "fr": "Ce qu'on anime : un redécoupage de processus, pas une démonstration d'outil"
   },
   "Ce qu'on ne promet pas : les gains non mesurés, les délais qu'on ne tient pas, les emplois": {
-   "en": "",
+   "en": "What we do not promise: unmeasured gains, deadlines we do not meet, jobs",
    "fr": "Ce qu'on ne promet pas : les gains non mesurés, les délais qu'on ne tient pas, les emplois"
   },
   "Ce qu'un ambassadeur fait et ce qu'il ne fait pas : il n'est ni le support, ni le contrôleur, ni le porte-parole de la direction": {
-   "en": "",
+   "en": "What an ambassador does and does not do: they are neither the support desk, nor the controller, nor management’s spokesperson",
    "fr": "Ce qu'un ambassadeur fait et ce qu'il ne fait pas : il n'est ni le support, ni le contrôleur, ni le porte-parole de la direction"
   },
   "Ce que dit l'IA Act à ceux qui utilisent (et non à ceux qui fournissent) — article #, littératie, et ce que l'employeur doit pouvoir démontrer": {
-   "en": "",
+   "en": "What the AI Act says to those who use AI (and not to those who provide it) — article #, literacy, and what the employer must be able to demonstrate",
    "fr": "Ce que dit l'IA Act à ceux qui utilisent (et non à ceux qui fournissent) — article 4, littératie, et ce que l'employeur doit pouvoir démontrer"
   },
   "Ce que la machine produit : un texte plausible, pas un texte vrai — et pourquoi la distinction décide de tout": {
-   "en": "",
+   "en": "What the machine produces: plausible text, not true text — and why that distinction decides everything",
    "fr": "Ce que la machine produit : un texte plausible, pas un texte vrai — et pourquoi la distinction décide de tout"
   },
   "Ce qui doit rester sous décision humaine, et comment l'inscrire dans le déroulé plutôt que dans une charte": {
-   "en": "",
+   "en": "What must remain subject to human decision, and how to write it into the workflow rather than into a charter",
    "fr": "Ce qui doit rester sous décision humaine, et comment l'inscrire dans le déroulé plutôt que dans une charte"
   },
   "Ce qui ne se délègue jamais : la décision qui engage, le jugement sur une personne, la signature": {
-   "en": "",
+   "en": "What is never delegated: the decision that commits, the judgement on a person, the signature",
    "fr": "Ce qui ne se délègue jamais : la décision qui engage, le jugement sur une personne, la signature"
   },
   "Celle de CONSEILPREV": {
-   "en": "",
+   "en": "CONSEILPREV’s own",
    "fr": "Celle de CONSEILPREV"
   },
   "Ces documents sont produits par calcul déterministe à partir d'un référentiel versionné : aucun modèle de langage n'intervient dans leur rédaction, et leurs propriétés de fichier le déclarent. Ils ne valent pas conseil juridique — la politique d'une organisation se lit au regard de ses contrats et du droit qui lui est applicable.": {
-   "en": "",
+   "en": "These documents are produced by deterministic calculation from a versioned framework: no language model takes part in drafting them, and their file properties say so. They do not constitute legal advice — an organisation’s policy is read in the light of its contracts and of the law applicable to it.",
    "fr": "Ces documents sont produits par calcul déterministe à partir d'un référentiel versionné : aucun modèle de langage n'intervient dans leur rédaction, et leurs propriétés de fichier le déclarent. Ils ne valent pas conseil juridique — la politique d'une organisation se lit au regard de ses contrats et du droit qui lui est applicable."
   },
   "Champ d'application et redevables": {
-   "en": "",
+   "en": "Scope and obligated parties",
    "fr": "Champ d'application et redevables"
   },
   "Chiffrement des metadonnees et donnees de communication": {
-   "en": "",
+   "en": "Encryption of metadata and communication data",
    "fr": "Chiffrement des metadonnees et donnees de communication"
   },
   "Choisir un sujet et réserver une date →": {
-   "en": "",
+   "en": "Choose a topic and book a date →",
    "fr": "Choisir un sujet et réserver une date →"
   },
   "Circuit de validation": {
-   "en": "",
+   "en": "Approval workflow",
    "fr": "Circuit de validation"
   },
   "Classification des risques, obligations par catégorie, calendrier de conformité.": {
-   "en": "",
+   "en": "Risk classification, obligations by category, compliance timetable.",
    "fr": "Classification des risques, obligations par catégorie, calendrier de conformité."
   },
   "Cliquez sur une cellule pour faire defiler les assignations : vide → R → A → C → I → vide. Chaque processus ne devrait avoir qu un seul A (Approbateur) pour eviter les conflits de decision.": {
-   "en": "",
+   "en": "Click a cell to cycle through the assignments: empty → R → A → C → I → empty. Each process should have only one A (Accountable) to avoid decision conflicts.",
    "fr": "Cliquez sur une cellule pour faire defiler les assignations : vide → R → A → C → I → vide. Chaque processus ne devrait avoir qu un seul A (Approbateur) pour eviter les conflits de decision."
   },
   "Code de bonnes pratiques du # juin #": {
-   "en": "",
+   "en": "Code of practice of # June #",
    "fr": "Code de bonnes pratiques du 10 juin 2026"
   },
   "Comite de Gouvernance IA": {
-   "en": "",
+   "en": "AI governance committee",
    "fr": "Comite de Gouvernance IA"
   },
   "Comité de gouvernance IA": {
-   "en": "",
+   "en": "AI governance committee",
    "fr": "Comité de gouvernance IA"
   },
   "Commercial / Avant-vente": {
-   "en": "",
+   "en": "Sales / Pre-sales",
    "fr": "Commercial / Avant-vente"
   },
   "Conduire : faire décrire le réel, faire nommer les suppressions, empêcher la séance de devenir une liste de souhaits": {
-   "en": "",
+   "en": "Leading: get people to describe what really happens, get them to name what is removed, stop the session becoming a wish list",
    "fr": "Conduire : faire décrire le réel, faire nommer les suppressions, empêcher la séance de devenir une liste de souhaits"
   },
   "Constituer un réseau d'ambassadeurs": {
-   "en": "",
+   "en": "Building a network of ambassadors",
    "fr": "Constituer un réseau d'ambassadeurs"
   },
   "Consultation préalable de l'autorité": {
-   "en": "",
+   "en": "Prior consultation of the authority",
    "fr": "Consultation préalable de l'autorité"
   },
   "Consulte (avis requis)": {
-   "en": "",
+   "en": "Consulted (opinion required)",
    "fr": "Consulte (avis requis)"
   },
   "Contexte, parties intéressées, périmètre": {
-   "en": "",
+   "en": "Context, interested parties, scope",
    "fr": "Contexte, parties intéressées, périmètre"
   },
   "Continu": {
-   "en": "",
+   "en": "Continuous",
    "fr": "Continu"
   },
   "Controle des reponses des chatbots (anti-desinformation, biais)": {
-   "en": "",
+   "en": "Checking chatbot answers (anti-disinformation, bias)",
    "fr": "Controle des reponses des chatbots (anti-desinformation, biais)"
   },
   "Cybersecurite": {
-   "en": "",
+   "en": "Cybersecurity",
    "fr": "Cybersecurite"
   },
   "Cybersécurité IA (NIS# / Sûreté)": {
-   "en": "",
+   "en": "AI cybersecurity (NIS # / Safety)",
    "fr": "Cybersécurité IA (NIS2 / Sûreté)"
   },
   "DM": {
-   "en": "",
+   "en": "DM",
    "fr": "DM"
   },
   "DPO": {
-   "en": "",
+   "en": "DPO",
    "fr": "DPO"
   },
   "Data / Expert Gouvernance": {
-   "en": "",
+   "en": "Data / Governance expert",
    "fr": "Data / Expert Gouvernance"
   },
   "Direction Financiere": {
-   "en": "",
+   "en": "Finance department",
    "fr": "Direction Financiere"
   },
   "Direction Generale / Comex": {
-   "en": "",
+   "en": "Executive management / Executive committee",
    "fr": "Direction Generale / Comex"
   },
   "Direction Marketing & Produits": {
-   "en": "",
+   "en": "Marketing & Products department",
    "fr": "Direction Marketing & Produits"
   },
   "Documentation technique et journalisation": {
-   "en": "",
+   "en": "Technical documentation and logging",
    "fr": "Documentation technique et journalisation"
   },
   "Données d'entraînement et anonymisation": {
-   "en": "",
+   "en": "Training data and anonymisation",
    "fr": "Données d'entraînement et anonymisation"
   },
   "Données de phases indisponibles.": {
-   "en": "",
+   "en": "Phase data unavailable.",
    "fr": "Données de phases indisponibles."
   },
   "Décision automatisée et profilage (art. #)": {
-   "en": "",
+   "en": "Automated decision-making and profiling (art. #)",
    "fr": "Décision automatisée et profilage (art. 22)"
   },
   "Déclarer un nouvel usage & le qualifier": {
-   "en": "",
+   "en": "Declare a new use & qualify it",
    "fr": "Déclarer un nouvel usage & le qualifier"
   },
   "Découper : la tâche, le jugement, la décision — et ce qui relève de chacun": {
-   "en": "",
+   "en": "Breaking down: the task, the judgement, the decision — and what belongs to each",
    "fr": "Découper : la tâche, le jugement, la décision — et ce qui relève de chacun"
   },
   "Défiler vers la droite": {
-   "en": "",
+   "en": "Scroll right",
    "fr": "Défiler vers la droite"
   },
   "Défiler vers la gauche": {
-   "en": "",
+   "en": "Scroll left",
    "fr": "Défiler vers la gauche"
   },
   "Défiler vers le bas": {
-   "en": "",
+   "en": "Scroll down",
    "fr": "Défiler vers le bas"
   },
   "Défiler vers le haut": {
-   "en": "",
+   "en": "Scroll up",
    "fr": "Défiler vers le haut"
   },
   "EU AI Act — Fondamentaux": {
-   "en": "",
+   "en": "EU AI Act — Fundamentals",
    "fr": "EU AI Act — Fondamentaux"
   },
   "Enregistrer l etat actuel de la matrice RACI dans l historique persistant et tracable (RGPD).": {
-   "en": "",
+   "en": "Save the current state of the RACI matrix to the persistent, traceable history (GDPR).",
    "fr": "Enregistrer l etat actuel de la matrice RACI dans l historique persistant et tracable (RGPD)."
   },
   "Envoyer la matrice RACI par email a un collegue.": {
-   "en": "",
+   "en": "Send the RACI matrix to a colleague by email.",
    "fr": "Envoyer la matrice RACI par email a un collegue."
   },
   "Equipes Metiers": {
-   "en": "",
+   "en": "Business teams",
    "fr": "Equipes Metiers"
   },
   "Espace équipe": {
-   "en": "",
+   "en": "Team space",
    "fr": "Espace équipe"
   },
   "Evaluation des impacts RSE et environnementaux des systemes IA": {
-   "en": "",
+   "en": "Assessment of the CSR and environmental impacts of AI systems",
    "fr": "Evaluation des impacts RSE et environnementaux des systemes IA"
   },
   "Evaluation des risques et impacts (FRIA)": {
-   "en": "",
+   "en": "Risk and impact assessment (FRIA)",
    "fr": "Evaluation des risques et impacts (FRIA)"
   },
   "Exceptions du § # et contrôle éditorial": {
-   "en": "",
+   "en": "Exceptions under paragraph # and editorial control",
    "fr": "Exceptions du § 4 et contrôle éditorial"
   },
   "FORMATION #": {
-   "en": "",
+   "en": "TRAINING #",
    "fr": "FORMATION 01"
   },
   "File de validation": {
-   "en": "",
+   "en": "Approval queue",
    "fr": "File de validation"
   },
   "Finalité, principes et direction : articuler pourquoi la gouvernance est nécessaire ICI ; rédiger ses principes d'IA éthique ; délimiter le périmètre — ce qui est un système d'IA, quel rôle dans la chaîne de valeur, quelles obligations ; fixer le curseur entre conformité minimale et IA de confiance, et les critères de réussite": {
-   "en": "",
+   "en": "Purpose, principles and direction: articulate why governance is needed HERE; write your ethical AI principles; define the scope — what is an AI system, which role in the value chain, which obligations; set the cursor between minimum compliance and trustworthy AI, and the success criteria",
    "fr": "Finalité, principes et direction : articuler pourquoi la gouvernance est nécessaire ICI ; rédiger ses principes d'IA éthique ; délimiter le périmètre — ce qui est un système d'IA, quel rôle dans la chaîne de valeur, quelles obligations ; fixer le curseur entre conformité minimale et IA de confiance, et les critères de réussite"
   },
   "Fondamentaux du règlement européen sur l'IA": {
-   "en": "",
+   "en": "Fundamentals of the European AI Regulation",
    "fr": "Fondamentaux du règlement européen sur l'IA"
   },
   "Formalisation et mise à jour": {
-   "en": "",
+   "en": "Formalisation and updating",
    "fr": "Formalisation et mise à jour"
   },
   "Formation et sensibilisation des equipes": {
-   "en": "",
+   "en": "Team training and awareness",
    "fr": "Formation et sensibilisation des equipes"
   },
   "Generer par IA le document complet de cartographie (analyse, recommandations, plan de communication).": {
-   "en": "",
+   "en": "Generate the complete mapping document with AI (analysis, recommendations, communication plan).",
    "fr": "Generer par IA le document complet de cartographie (analyse, recommandations, plan de communication)."
   },
   "Genèse, champ d'application et définitions": {
-   "en": "",
+   "en": "Origins, scope and definitions",
    "fr": "Genèse, champ d'application et définitions"
   },
   "Gestion des accès": {
-   "en": "",
+   "en": "Access management",
    "fr": "Gestion des accès"
   },
   "Gestion des donnees d entrainement et de leur qualite": {
-   "en": "",
+   "en": "Management of training data and its quality",
    "fr": "Gestion des donnees d entrainement et de leur qualite"
   },
   "Gestion des incidents IA (biais, fuites, attaques)": {
-   "en": "",
+   "en": "AI incident management (bias, leaks, attacks)",
    "fr": "Gestion des incidents IA (biais, fuites, attaques)"
   },
   "Gestion des risques et gouvernance des données": {
-   "en": "",
+   "en": "Risk management and data governance",
    "fr": "Gestion des risques et gouvernance des données"
   },
   "Gouvernance IA — ISO #": {
-   "en": "",
+   "en": "AI governance — ISO #",
    "fr": "Gouvernance IA — ISO 42001"
   },
   "Gouvernance de l'IA : IA Act, RGPD et ISO # en un dispositif unique": {
-   "en": "",
+   "en": "AI governance: the AI Act, the GDPR and ISO # in a single framework",
    "fr": "Gouvernance de l'IA : IA Act, RGPD et ISO 42001 en un dispositif unique"
   },
   "Gouvernance du cycle de vie, IA agentique comprise : rendre l'inventaire et l'intake opérationnels ; analyse d'impact et de risque à chaque étape ; gouvernance de la conception, du développement et du déploiement, artefacts (model cards, datasheets) ; après le déploiement — surveillance, gestion des incidents, retrait": {
-   "en": "",
+   "en": "Life-cycle governance, agentic AI included: making the inventory and intake operational; impact and risk assessment at every stage; governance of design, development and deployment, artefacts (model cards, datasheets); after deployment — monitoring, incident management, withdrawal",
    "fr": "Gouvernance du cycle de vie, IA agentique comprise : rendre l'inventaire et l'intake opérationnels ; analyse d'impact et de risque à chaque étape ; gouvernance de la conception, du développement et du déploiement, artefacts (model cards, datasheets) ; après le déploiement — surveillance, gestion des incidents, retrait"
   },
   "Gouvernance · Comité & circuit": {
-   "en": "",
+   "en": "Governance · Committee & workflow",
    "fr": "Gouvernance · Comité & circuit"
   },
   "Gouvernance · Parties prenantes": {
-   "en": "",
+   "en": "Governance · Stakeholders",
    "fr": "Gouvernance · Parties prenantes"
   },
   "I": {
-   "en": "",
+   "en": "I",
    "fr": "I"
   },
   "I — Informe (tenu au courant)": {
-   "en": "",
+   "en": "I — Informed (kept up to date)",
    "fr": "I — Informe (tenu au courant)"
   },
   "IA Act": {
-   "en": "",
+   "en": "AI Act",
    "fr": "IA Act"
   },
   "IA Act (#)": {
-   "en": "",
+   "en": "AI Act (#)",
    "fr": "IA Act (4)"
   },
   "ISO #": {
-   "en": "",
+   "en": "ISO #",
    "fr": "ISO 42001"
   },
   "ISO # (#)": {
-   "en": "",
+   "en": "ISO # (#)",
    "fr": "ISO 42001 (2)"
   },
   "ISO # cl. #": {
-   "en": "",
+   "en": "ISO # cl. #",
    "fr": "ISO 42001 cl. 9.2"
   },
   "ISO/IEC # : construire un système de management de l'IA": {
-   "en": "",
+   "en": "ISO/IEC #: building an AI management system",
    "fr": "ISO/IEC 42001 : construire un système de management de l'IA"
   },
   "IT / Infrastructure": {
-   "en": "",
+   "en": "IT / Infrastructure",
    "fr": "IT / Infrastructure"
   },
   "Identification et classification des systemes IA": {
-   "en": "",
+   "en": "Identification and classification of AI systems",
    "fr": "Identification et classification des systemes IA"
   },
   "Indicateurs de gouvernance": {
-   "en": "",
+   "en": "Governance indicators",
    "fr": "Indicateurs de gouvernance"
   },
   "Indicateurs, preuve et jalons": {
-   "en": "",
+   "en": "Indicators, evidence and milestones",
    "fr": "Indicateurs, preuve et jalons"
   },
   "Information et droits des personnes": {
-   "en": "",
+   "en": "Information and data subject rights",
    "fr": "Information et droits des personnes"
   },
   "Information-consultation du CSE avant introduction d un systeme IA": {
-   "en": "",
+   "en": "Information and consultation of the CSE (works council) before introducing an AI system",
    "fr": "Information-consultation du CSE avant introduction d un systeme IA"
   },
   "Juridique / Conformite": {
-   "en": "",
+   "en": "Legal / Compliance",
    "fr": "Juridique / Conformite"
   },
   "La première séance est offerte": {
-   "en": "",
+   "en": "The first session is free",
    "fr": "La première séance est offerte"
   },
   "Le choisir : le volontariat, la légitimité métier, et pourquoi le plus enthousiaste n'est pas toujours le bon": {
-   "en": "",
+   "en": "Choosing them: volunteering, business legitimacy, and why the most enthusiastic is not always the right one",
    "fr": "Le choisir : le volontariat, la légitimité métier, et pourquoi le plus enthousiaste n'est pas toujours le bon"
   },
   "Le modèle à compléter": {
-   "en": "",
+   "en": "The template to fill in",
    "fr": "Le modèle à compléter"
   },
   "Le rythme : ce qui remonte, à qui, et ce qui redescend": {
-   "en": "",
+   "en": "The rhythm: what goes up, to whom, and what comes back down",
    "fr": "Le rythme : ce qui remonte, à qui, et ce qui redescend"
   },
   "Leadership, politique et rôles": {
-   "en": "",
+   "en": "Leadership, policy and roles",
    "fr": "Leadership, politique et rôles"
   },
   "Les objections qu'on rencontre vraiment — « on va nous remplacer », « ça ne marchera pas ici », « on l'a déjà essayé » — et ce qu'il est honnête d'y répondre": {
-   "en": "",
+   "en": "The objections you really encounter — “we are going to be replaced”, “it will not work here”, “we have already tried it” — and what it is honest to answer",
    "fr": "Les objections qu'on rencontre vraiment — « on va nous remplacer », « ça ne marchera pas ici », « on l'a déjà essayé » — et ce qu'il est honnête d'y répondre"
   },
   "Les roles metiers et processus de gouvernance ci-dessous sont contextualises selon le secteur selectionne (EU AI Act + ISO/IEC #:#).": {
-   "en": "",
+   "en": "The business roles and governance processes below are contextualised for the selected sector (EU AI Act + ISO/IEC #:#).",
    "fr": "Les roles metiers et processus de gouvernance ci-dessous sont contextualises selon le secteur selectionne (EU AI Act + ISO/IEC 42001:2023)."
   },
   "Les trois erreurs qui coûtent : l'invention confiante, la donnée qui sort de l'entreprise, le raisonnement qu'on ne vérifie pas": {
-   "en": "",
+   "en": "The three mistakes that cost: confident invention, data that leaves the company, reasoning nobody checks",
    "fr": "Les trois erreurs qui coûtent : l'invention confiante, la donnée qui sort de l'entreprise, le raisonnement qu'on ne vérifie pas"
   },
   "Littératie IA pour les métiers": {
-   "en": "",
+   "en": "AI literacy for business lines",
    "fr": "Littératie IA pour les métiers"
   },
   "Lui donner du temps réel — un réseau sans heures dégagées s'éteint en un trimestre": {
-   "en": "",
+   "en": "Give them real time — a network without protected hours dies out within a quarter",
    "fr": "Lui donner du temps réel — un réseau sans heures dégagées s'éteint en un trimestre"
   },
   "Marquage à deux niveaux : métadonnées et filigrane": {
-   "en": "",
+   "en": "Two-level marking: metadata and watermark",
    "fr": "Marquage à deux niveaux : métadonnées et filigrane"
   },
   "Matrice RACI interactive (Responsable / Approbateur / Consulté / Informé) des processus de gouvernance IA. Cliquez sur une cellule pour assigner un rôle, puis générez le document complet par IA.": {
-   "en": "",
+   "en": "Interactive RACI matrix (Responsible / Accountable / Consulted / Informed) of the AI governance processes. Click a cell to assign a role, then generate the complete document with AI.",
    "fr": "Matrice RACI interactive (Responsable / Approbateur / Consulté / Informé) des processus de gouvernance IA. Cliquez sur une cellule pour assigner un rôle, puis générez le document complet par IA."
   },
   "Membres actifs": {
-   "en": "",
+   "en": "Active members",
    "fr": "Membres actifs"
   },
   "Mesurer sans surveiller : usage hebdomadaire, abandon à quatre-vingt-dix jours, et la frontière avec le contrôle des personnes": {
-   "en": "",
+   "en": "Measuring without surveilling: weekly use, drop-off at ninety days, and the boundary with monitoring people",
    "fr": "Mesurer sans surveiller : usage hebdomadaire, abandon à quatre-vingt-dix jours, et la frontière avec le contrôle des personnes"
   },
   "Mesures d'atténuation et contrôle humain": {
-   "en": "",
+   "en": "Mitigation measures and human oversight",
    "fr": "Mesures d'atténuation et contrôle humain"
   },
   "Mesures, risque résiduel, avis du DPO": {
-   "en": "",
+   "en": "Measures, residual risk, DPO’s opinion",
    "fr": "Mesures, risque résiduel, avis du DPO"
   },
   "Minimisation, exactitude, conservation": {
-   "en": "",
+   "en": "Minimisation, accuracy, retention",
    "fr": "Minimisation, exactitude, conservation"
   },
   "Mise en place d'un système de management IA conforme au standard international.": {
-   "en": "",
+   "en": "Setting up an AI management system that complies with the international standard.",
    "fr": "Mise en place d'un système de management IA conforme au standard international."
   },
   "Modules certifiants — progression calculée à partir de vos scores réels de l Audit de maturité IA par pilier.": {
-   "en": "",
+   "en": "Certifying modules — progress computed from your real AI maturity audit scores, pillar by pillar.",
    "fr": "Modules certifiants — progression calculée à partir de vos scores réels de l Audit de maturité IA par pilier."
   },
   "Neuf critères et test de seuil": {
-   "en": "",
+   "en": "Nine criteria and threshold test",
    "fr": "Neuf critères et test de seuil"
   },
   "Nommer la suppression : sans elle, le nouveau processus s'ajoute à l'ancien et le gain n'arrive jamais": {
-   "en": "",
+   "en": "Name what is removed: without it, the new process is added to the old one and the gain never arrives",
    "fr": "Nommer la suppression : sans elle, le nouveau processus s'ajoute à l'ancien et le gain n'arrive jamais"
   },
   "Non-conformités et actions correctives": {
-   "en": "",
+   "en": "Nonconformities and corrective actions",
    "fr": "Non-conformités et actions correctives"
   },
   "Nouveau · Réservation en ligne · Sur site en Île-de-France": {
-   "en": "",
+   "en": "New · Online booking · On site in Île-de-France",
    "fr": "Nouveau · Réservation en ligne · Sur site en Île-de-France"
   },
   "Nécessité et proportionnalité": {
-   "en": "",
+   "en": "Necessity and proportionality",
    "fr": "Nécessité et proportionnalité"
   },
   "OPTIONNEL": {
-   "en": "",
+   "en": "OPTIONAL",
    "fr": "OPTIONNEL"
   },
   "Obligations de sécurité pour les systèmes IA dans les entités essentielles.": {
-   "en": "",
+   "en": "Security obligations for AI systems in essential entities.",
    "fr": "Obligations de sécurité pour les systèmes IA dans les entités essentielles."
   },
   "PDF": {
-   "en": "",
+   "en": "PDF",
    "fr": "PDF"
   },
   "Politique de gouvernance de l'IA — à télécharger": {
-   "en": "",
+   "en": "AI governance policy — to download",
    "fr": "Politique de gouvernance de l'IA — à télécharger"
   },
   "Pourquoi gouverner, et l'architecture d'un cadre : comment un système d'IA échoue juridiquement, opérationnellement, en réputation et en stratégie, sur cas réels ; articulation IA Act, ISO # et NIST ; définir les éléments constitutifs de son cadre": {
-   "en": "",
+   "en": "Why govern, and the architecture of a framework: how an AI system fails legally, operationally, reputationally and strategically, on real cases; articulating the AI Act, ISO # and NIST; defining the building blocks of your framework",
    "fr": "Pourquoi gouverner, et l'architecture d'un cadre : comment un système d'IA échoue juridiquement, opérationnellement, en réputation et en stratégie, sur cas réels ; articulation IA Act, ISO 42001 et NIST ; définir les éléments constitutifs de son cadre"
   },
   "Pourquoi un outil posé sur un processus inchangé produit du double travail, puis l'abandon": {
-   "en": "",
+   "en": "Why a tool placed on an unchanged process produces double work, and then abandonment",
    "fr": "Pourquoi un outil posé sur un processus inchangé produit du double travail, puis l'abandon"
   },
   "Preuve du consentement, rétention et droits des personnes": {
-   "en": "",
+   "en": "Evidence of consent, retention and data subject rights",
    "fr": "Preuve du consentement, rétention et droits des personnes"
   },
   "Preuves et conduite des entretiens": {
-   "en": "",
+   "en": "Evidence and conducting interviews",
    "fr": "Preuves et conduite des entretiens"
   },
   "Principes d'audit et compétences": {
-   "en": "",
+   "en": "Audit principles and competence",
    "fr": "Principes d'audit et compétences"
   },
   "Processus de gouvernance IA": {
-   "en": "",
+   "en": "AI governance processes",
    "fr": "Processus de gouvernance IA"
   },
   "Prochaine échéance critique": {
-   "en": "",
+   "en": "Next critical deadline",
    "fr": "Prochaine échéance critique"
   },
   "Programme": {
-   "en": "",
+   "en": "Programme",
    "fr": "Programme"
   },
   "Programme (#)": {
-   "en": "",
+   "en": "Programme (#)",
    "fr": "Programme (1)"
   },
   "Programme détaillé": {
-   "en": "",
+   "en": "Detailed programme",
    "fr": "Programme détaillé"
   },
   "Programme, plan, échantillonnage": {
-   "en": "",
+   "en": "Programme, plan, sampling",
    "fr": "Programme, plan, échantillonnage"
   },
   "Préparer : choisir le processus, réunir les bonnes personnes, obtenir un arbitre avant la séance": {
-   "en": "",
+   "en": "Preparing: choose the process, bring together the right people, secure a decision-maker before the session",
    "fr": "Préparer : choisir le processus, réunir les bonnes personnes, obtenir un arbitre avant la séance"
   },
   "Quatre critères de détection": {
-   "en": "",
+   "en": "Four detection criteria",
    "fr": "Quatre critères de détection"
   },
   "Quatre sujets au choix — gouvernance IA, gouvernance agentique, sécurité de l'IA, ingénierie de projet. Une séance de # h par semaine,": {
-   "en": "",
+   "en": "Four topics to choose from — AI governance, agentic governance, AI security, project engineering. One # h session per week,",
    "fr": "Quatre sujets au choix — gouvernance IA, gouvernance agentique, sécurité de l'IA, ingénierie de projet. Une séance de 4 h par semaine,"
   },
   "Qui décide, ce qu’il a le droit de trancher, et par quel chemin passe un nouvel usage": {
-   "en": "",
+   "en": "Who decides, what they are entitled to decide, and which route a new use takes",
    "fr": "Qui décide, ce qu’il a le droit de trancher, et par quel chemin passe un nouvel usage"
   },
   "R": {
-   "en": "",
+   "en": "R",
    "fr": "R"
   },
   "R — Responsable (execute)": {
-   "en": "",
+   "en": "R — Responsible (executes)",
    "fr": "R — Responsable (execute)"
   },
   "RC": {
-   "en": "",
+   "en": "RC",
    "fr": "RC"
   },
   "RD": {
-   "en": "",
+   "en": "RD",
    "fr": "RD"
   },
   "REQUIS": {
-   "en": "",
+   "en": "REQUIRED",
    "fr": "REQUIS"
   },
   "RGPD & Données d'entraînement": {
-   "en": "",
+   "en": "GDPR & training data",
    "fr": "RGPD & Données d'entraînement"
   },
   "RGPD (#)": {
-   "en": "",
+   "en": "GDPR (#)",
    "fr": "RGPD (3)"
   },
   "RGPD pour les projets d'intelligence artificielle": {
-   "en": "",
+   "en": "GDPR for artificial intelligence projects",
    "fr": "RGPD pour les projets d'intelligence artificielle"
   },
   "RH / Direction des Ressources Humaines": {
-   "en": "",
+   "en": "HR / Human Resources department",
    "fr": "RH / Direction des Ressources Humaines"
   },
   "RO": {
-   "en": "",
+   "en": "RO",
    "fr": "RO"
   },
   "Rapport et revue de direction": {
-   "en": "",
+   "en": "Reporting and management review",
    "fr": "Rapport et revue de direction"
   },
   "Redaction et mise a jour des politiques IA": {
-   "en": "",
+   "en": "Drafting and updating AI policies",
    "fr": "Redaction et mise a jour des politiques IA"
   },
   "Registre unique : systèmes, traitements, mesures": {
-   "en": "",
+   "en": "Single register: systems, processing activities, measures",
    "fr": "Registre unique : systèmes, traitements, mesures"
   },
   "Reinitialiser la matrice RACI au profil de reference CONSEILPREV.": {
-   "en": "",
+   "en": "Reset the RACI matrix to the CONSEILPREV reference profile.",
    "fr": "Reinitialiser la matrice RACI au profil de reference CONSEILPREV."
   },
   "Relation Client / Service Client": {
-   "en": "",
+   "en": "Customer relations / Customer service",
    "fr": "Relation Client / Service Client"
   },
   "Relation avec les fournisseurs et sous-traitants IA": {
-   "en": "",
+   "en": "Relationship with AI suppliers and processors",
    "fr": "Relation avec les fournisseurs et sous-traitants IA"
   },
   "Relever le processus tel qu'il se fait, et non tel qu'il est écrit": {
-   "en": "",
+   "en": "Record the process as it is actually done, not as it is written",
    "fr": "Relever le processus tel qu'il se fait, et non tel qu'il est écrit"
   },
   "Remplie. Ce que le cabinet s'applique à lui-même : son inventaire réel, ses trois systèmes génératifs — et les trois moteurs déterministes qu'il refuse d'y ranger.": {
-   "en": "",
+   "en": "Filled in. What the firm applies to itself: its actual inventory, its three generative systems — and the three deterministic engines it refuses to file among them.",
    "fr": "Remplie. Ce que le cabinet s'applique à lui-même : son inventaire réel, ses trois systèmes génératifs — et les trois moteurs déterministes qu'il refuse d'y ranger."
   },
   "Rendre la gouvernance de l'IA opérationnelle": {
-   "en": "",
+   "en": "Making AI governance operational",
    "fr": "Rendre la gouvernance de l'IA opérationnelle"
   },
   "Repartir avec : modèles de politiques IA, RACI et charte d'instance, registre d'inventaire, grille d'analyse d'impact et de risque, trame de model card — prêts à déployer": {
-   "en": "",
+   "en": "Leave with: AI policy templates, RACI and body charter, inventory register, impact and risk assessment grid, model card outline — ready to deploy",
    "fr": "Repartir avec : modèles de politiques IA, RACI et charte d'instance, registre d'inventaire, grille d'analyse d'impact et de risque, trame de model card — prêts à déployer"
   },
   "Repenser mon processus en IA-first": {
-   "en": "",
+   "en": "Rethink my process as AI-first",
    "fr": "Repenser mon processus en IA-first"
   },
   "Reponses aux demandes clients sur la gouvernance IA": {
-   "en": "",
+   "en": "Answers to client requests about AI governance",
    "fr": "Reponses aux demandes clients sur la gouvernance IA"
   },
   "Reporting executif et revue de direction": {
-   "en": "",
+   "en": "Executive reporting and management review",
    "fr": "Reporting executif et revue de direction"
   },
   "Responsable (execute)": {
-   "en": "",
+   "en": "Responsible (executes)",
    "fr": "Responsable (execute)"
   },
   "Responsable IA": {
-   "en": "",
+   "en": "AI lead",
    "fr": "Responsable IA"
   },
   "Responsable Operations Reseau": {
-   "en": "",
+   "en": "Network operations manager",
    "fr": "Responsable Operations Reseau"
   },
   "Responsable RSE / Environnement": {
-   "en": "",
+   "en": "CSR / Environment manager",
    "fr": "Responsable RSE / Environnement"
   },
   "Responsable de Plateforme IA": {
-   "en": "",
+   "en": "AI platform manager",
    "fr": "Responsable de Plateforme IA"
   },
   "Risques et impacts liés à l'IA": {
-   "en": "",
+   "en": "AI-related risks and impacts",
    "fr": "Risques et impacts liés à l'IA"
   },
   "Risques pour les droits et libertés": {
-   "en": "",
+   "en": "Risks to the rights and freedoms",
    "fr": "Risques pour les droits et libertés"
   },
   "Risques pour les personnes": {
-   "en": "",
+   "en": "Risks to individuals",
    "fr": "Risques pour les personnes"
   },
   "Risques, environnement de contrôle et assurance : cadre de gestion des risques (risques, mesures d'atténuation, contrôles) et classification faible / moyen / élevé alignée sur l'IA Act ; quelles politiques IA écrire, et les écrire sur modèles ; inventaire, intake, analyse d'impact et de risque, gouvernance des fournisseurs tiers": {
-   "en": "",
+   "en": "Risks, control environment and assurance: risk management framework (risks, mitigation measures, controls) and a low / medium / high classification aligned with the AI Act; which AI policies to write, and writing them from templates; inventory, intake, impact and risk assessment, governance of third-party suppliers",
    "fr": "Risques, environnement de contrôle et assurance : cadre de gestion des risques (risques, mesures d'atténuation, contrôles) et classification faible / moyen / élevé alignée sur l'IA Act ; quelles politiques IA écrire, et les écrire sur modèles ; inventaire, intake, analyse d'impact et de risque, gouvernance des fournisseurs tiers"
   },
   "Roles de gouvernance IA issus de votre matrice RACI (Parties prenantes), avec statut d assignation reel.": {
-   "en": "",
+   "en": "AI governance roles taken from your RACI matrix (Stakeholders), with their actual assignment status.",
    "fr": "Roles de gouvernance IA issus de votre matrice RACI (Parties prenantes), avec statut d assignation reel."
   },
   "Résumé avancement": {
-   "en": "",
+   "en": "Progress summary",
    "fr": "Résumé avancement"
   },
   "Rôle de gouvernance IA — secteur Télécom": {
-   "en": "",
+   "en": "AI governance role — Telecom sector",
    "fr": "Rôle de gouvernance IA — secteur Télécom"
   },
   "Rôles le long de la chaîne de valeur": {
-   "en": "",
+   "en": "Roles along the value chain",
    "fr": "Rôles le long de la chaîne de valeur"
   },
   "Sanctions et gouvernance": {
-   "en": "",
+   "en": "Penalties and governance",
    "fr": "Sanctions et gouvernance"
   },
   "Secteur d activite :": {
-   "en": "",
+   "en": "Sector:",
    "fr": "Secteur d activite :"
   },
   "Sectoriel": {
-   "en": "",
+   "en": "Sectoral",
    "fr": "Sectoriel"
   },
   "Seize sections : inventaire des systèmes, évaluation des risques, règles d'usage, vérification avant livrable, supervision humaine, agents, fournisseurs, transparence, incidents. Deux versions.": {
-   "en": "",
+   "en": "Sixteen sections: inventory of systems, risk assessment, rules of use, checks before a deliverable, human oversight, agents, suppliers, transparency, incidents. Two versions.",
    "fr": "Seize sections : inventaire des systèmes, évaluation des risques, règles d'usage, vérification avant livrable, supervision humaine, agents, fournisseurs, transparence, incidents. Deux versions."
   },
   "Sentinel en démonstration": {
-   "en": "",
+   "en": "Sentinel in demonstration",
    "fr": "Sentinel en démonstration"
   },
   "Structure de haut niveau et lien avec ISO #": {
-   "en": "",
+   "en": "High-level structure and link with ISO #",
    "fr": "Structure de haut niveau et lien avec ISO 27001"
   },
   "Supervision humaine des systemes en production": {
-   "en": "",
+   "en": "Human oversight of systems in production",
    "fr": "Supervision humaine des systemes en production"
   },
   "Systèmes à haut risque : obligations et mise en conformité": {
-   "en": "",
+   "en": "High-risk systems: obligations and compliance",
    "fr": "Systèmes à haut risque : obligations et mise en conformité"
   },
   "S’inscrire · dates et tarif": {
-   "en": "",
+   "en": "Enrol · dates and price",
    "fr": "S’inscrire · dates et tarif"
   },
   "Telecharger la charte du comite et le circuit au format Word.": {
-   "en": "",
+   "en": "Download the committee charter and the workflow in Word format.",
    "fr": "Telecharger la charte du comite et le circuit au format Word."
   },
   "Telecharger la matrice RACI brute au format PDF (format paysage).": {
-   "en": "",
+   "en": "Download the raw RACI matrix as a PDF (landscape format).",
    "fr": "Telecharger la matrice RACI brute au format PDF (format paysage)."
   },
   "Telecharger la matrice RACI brute au format Word.": {
-   "en": "",
+   "en": "Download the raw RACI matrix in Word format.",
    "fr": "Telecharger la matrice RACI brute au format Word."
   },
   "Tenue du registre des systemes IA": {
-   "en": "",
+   "en": "Keeping the AI systems register",
    "fr": "Tenue du registre des systemes IA"
   },
   "Toutes (#)": {
-   "en": "",
+   "en": "All (#)",
    "fr": "Toutes (15)"
   },
   "Transparence (article #) : marquage, étiquetage et preuve": {
-   "en": "",
+   "en": "Transparency (article #): marking, labelling and evidence",
    "fr": "Transparence (article 50) : marquage, étiquetage et preuve"
   },
   "Transparence, contrôle humain, robustesse": {
-   "en": "",
+   "en": "Transparency, human oversight, robustness",
    "fr": "Transparence, contrôle humain, robustesse"
   },
   "Transverse": {
-   "en": "",
+   "en": "Cross-functional",
    "fr": "Transverse"
   },
   "Transverse (#)": {
-   "en": "",
+   "en": "Cross-functional (#)",
    "fr": "Transverse (1)"
   },
   "Validation des nouveaux projets IA avant deploiement": {
-   "en": "",
+   "en": "Validation of new AI projects before deployment",
    "fr": "Validation des nouveaux projets IA avant deploiement"
   },
   "Veille reglementaire et diffusion aux parties prenantes": {
-   "en": "",
+   "en": "Regulatory watch and dissemination to stakeholders",
    "fr": "Veille reglementaire et diffusion aux parties prenantes"
   },
   "Vierge. Les champs entre crochets sont à remplir. Une annexe donne la correspondance entre les références françaises et européennes et leurs équivalents québécois.": {
-   "en": "",
+   "en": "Blank. The fields in square brackets are to be filled in. An annex gives the correspondence between the French and European references and their Quebec equivalents.",
    "fr": "Vierge. Les champs entre crochets sont à remplir. Une annexe donne la correspondance entre les références françaises et européennes et leurs équivalents québécois."
   },
   "Voir la fiche de formation →": {
-   "en": "",
+   "en": "View course details →",
    "fr": "Voir la fiche de formation →"
   },
   "Word": {
-   "en": "",
+   "en": "Word",
    "fr": "Word"
   },
   "avant": {
-   "en": "",
+   "en": "before",
    "fr": "avant"
   },
   "ce que le comité regarde": {
-   "en": "",
+   "en": "what the committee looks at",
    "fr": "ce que le comité regarde"
   },
   "d’exister. La matrice RACI détaillée reste dans": {
-   "en": "",
+   "en": "it exists. The detailed RACI matrix stays in",
    "fr": "d’exister. La matrice RACI détaillée reste dans"
   },
   "ePrivacy / ISO # A.#": {
-   "en": "",
+   "en": "ePrivacy / ISO # A.#",
    "fr": "ePrivacy / ISO 42001 A.7"
   },
   "référentiel indisponible": {
-   "en": "",
+   "en": "framework unavailable",
    "fr": "référentiel indisponible"
   },
   "sur votre site, en Île-de-France": {
-   "en": "",
+   "en": "on your site, in Île-de-France",
    "fr": "sur votre site, en Île-de-France"
   },
   "½ journée (# h #) · # € HT · Toute équipe métier — marketing, RH, juridique, finance, opérations": {
-   "en": "",
+   "en": "½ day (# h #) · €# excl. VAT · Any business team — marketing, HR, legal, finance, operations",
    "fr": "½ journée (3 h 30) · 550 € HT · Toute équipe métier — marketing, RH, juridique, finance, opérations"
   },
   "Écrire une demande qui obtient une réponse utilisable, et reconnaître une réponse qui ne l'est pas": {
-   "en": "",
+   "en": "Writing a request that gets a usable answer, and recognising an answer that is not usable",
    "fr": "Écrire une demande qui obtient une réponse utilisable, et reconnaître une réponse qui ne l'est pas"
   },
   "Étiquetage des hypertrucages et textes d'intérêt public": {
-   "en": "",
+   "en": "Labelling of deepfakes and texts of public interest",
    "fr": "Étiquetage des hypertrucages et textes d'intérêt public"
   },
   "Évaluation de conformité et marquage CE": {
-   "en": "",
+   "en": "Conformity assessment and CE marking",
    "fr": "Évaluation de conformité et marquage CE"
   },
   "↓ PDF": {
-   "en": "",
+   "en": "↓ PDF",
    "fr": "↓ PDF"
   },
   "↓ Word": {
-   "en": "",
+   "en": "↓ Word",
    "fr": "↓ Word"
   },
   "↻ Reinitialiser": {
-   "en": "",
+   "en": "↻ Reset",
    "fr": "↻ Reinitialiser"
   },
   "○ À DÉFINIR": {
-   "en": "",
+   "en": "○ TO BE DEFINED",
    "fr": "○ À DÉFINIR"
   },
   "✉ Envoyer a un collegue": {
-   "en": "",
+   "en": "✉ Send to a colleague",
    "fr": "✉ Envoyer a un collegue"
   },
   "🤖 Generer la cartographie complete par IA": {
-   "en": "",
+   "en": "🤖 Generate the complete mapping with AI",
    "fr": "🤖 Generer la cartographie complete par IA"
   }
  }
