@@ -52,6 +52,19 @@ NAVIGATEUR = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) Firefox/130.0",
 AUJOURD_HUI = datetime.datetime.utcnow().date().isoformat()
 
 
+def _date(jours):
+    """Une date relative au jour où la règle tourne, jamais écrite en dur.
+
+    LE DÉFAUT MESURÉ. La session « complète » était posée au 2027-11-04. Or
+    `formations_inscription` teste « session passée » AVANT « session
+    complète » (app.py) : dès le 5 novembre 2027, la réponse serait devenue
+    « Cette session est passee… », et `'compl' in error` aurait échoué sur du
+    code parfaitement juste — une règle rouge qui n'accuse rien. Reproduit en
+    rejouant la même règle avec une date déjà passée : AssertionError, 'compl'
+    absent de « cette session est passee (…) »."""
+    return (datetime.datetime.utcnow().date() + datetime.timedelta(days=jours)).isoformat()
+
+
 # ══════════════════════════════════════════════════════════════════════════
 #  LA BASE : clients, réservations, factures — nettoyée avant et après
 # ══════════════════════════════════════════════════════════════════════════
@@ -79,6 +92,10 @@ def purger():
                 "DELETE FROM stripe_events",
                 "DELETE FROM raas_invoices WHERE numero LIKE 'F-RECETTE-%'",
                 "DELETE FROM client_relances WHERE related_ref LIKE 'F-RECETTE-%'",
+                # La relance d'impayé d'abonnement porte l'identifiant de
+                # l'abonnement : laissée en base, elle ferait compter deux
+                # lignes au passage suivant.
+                "DELETE FROM client_relances WHERE related_ref='sub_impaye'",
                 "DELETE FROM form_sessions WHERE lieu LIKE 'RECETTE %'",
                 "DELETE FROM clients WHERE email LIKE '%@recette.test'",
                 "DELETE FROM clients WHERE email LIKE 'efface-%@anonyme.invalid'"):
@@ -131,7 +148,18 @@ def vu(event_id):
 
 
 def creneaux():
-    return [x["date"] for x in F.creneaux(datetime.datetime.utcnow().date())]
+    """Les créneaux encore ouverts de la campagne formation IA.
+
+    LA CAMPAGNE A UNE FIN (`FIN_CAMPAGNE`). Le jour où elle sera passée,
+    `F.creneaux` rendra une liste vide et ces règles tomberaient sur un
+    `IndexError` sans nom, qui enverrait chercher un défaut dans la caisse.
+    Elles mesurent la CAISSE, pas le calendrier : qu'elles le disent."""
+    c = [x["date"] for x in F.creneaux(datetime.datetime.utcnow().date())]
+    assert len(c) >= 3, (
+        "le calendrier de la campagne formation IA est épuisé (%d créneau(x) le %s) : "
+        "ces règles mesurent la caisse, pas le calendrier — rouvrez la campagne "
+        "(formations_ia.FIN_CAMPAGNE) avant de chercher ailleurs" % (len(c), AUJOURD_HUI))
+    return c
 
 
 def panier(c, n=2, siret="900000777", email="payeur@recette.test", dates=None):
@@ -183,10 +211,20 @@ def sujets(fb):
 
 def session_catalogue_future():
     """Une session du catalogue encore réservable (le refus des sessions
-    passées fait partie de ce qui est mesuré ici)."""
+    passées fait partie de ce qui est mesuré ici).
+
+    LE CALENDRIER AMORCÉ A UNE DERNIÈRE SESSION (2027-09-30) : passée cette
+    date, toutes les règles de caisse du catalogue seraient rouges d'un coup,
+    et pour une raison qui n'a rien à voir avec la caisse. On en pose donc
+    une, du dossier de recette, quand il n'en reste plus — `purger` la
+    reprend avec les autres lignes « RECETTE % »."""
     rows = _q("SELECT id FROM form_sessions WHERE actif=1 AND date_session > ? "
               "ORDER BY date_session LIMIT 1", (AUJOURD_HUI,))
-    assert rows, "aucune session future dans le calendrier amorcé"
+    if not rows:
+        _exec("INSERT INTO form_sessions (formation_id, date_session, date_fin, lieu, "
+              "prix_cents, places, actif) VALUES (?,?,?,?,?,?,1)",
+              (15, _date(90), _date(90), "RECETTE future", 95000, 12))
+        rows = _q("SELECT id FROM form_sessions WHERE lieu='RECETTE future'")
     return rows[0]["id"]
 
 
@@ -287,6 +325,32 @@ def test_une_notification_signee_active_l_offre(client, faux_stripe, faux_brevo)
     assert r.status_code == 200, r.get_data(as_text=True)
     assert (row["plan"], row["stripe_customer_id"], row["stripe_subscription_id"]) == ("pro", "cus_ab", "sub_ab"), row
     assert "abonne@recette.test" in destinataires(faux_brevo), destinataires(faux_brevo)
+
+
+def test_l_activation_memorise_l_abonnement_meme_quand_le_plan_est_deja_le_bon(
+        client, faux_stripe, faux_brevo):
+    """LE CAS QUE L'IDEMPOTENCE NE DOIT PAS AVALER : plan déjà égal, mais
+    abonnement pas encore mémorisé.
+
+    Un client passé « pro » à la main (set-plan) n'a AUCUN identifiant Stripe
+    en base. S'il souscrit ensuite l'offre Pro à la caisse, le plan ne change
+    pas — et c'est justement là que l'abonnement et le client Stripe doivent
+    être écrits. Mutation jouée sur le code corrigé : `deja = (row.get('plan')
+    == plan)` seul. Elle survivait aux 227 règles des quatre fichiers, qui
+    partent toutes d'un client « gratuit » ou d'un plan ET d'un abonnement
+    déjà identiques. Sans ces deux identifiants, un passage en « gratuit » ne
+    résilie rien : Stripe continue de prélever, et plus rien en base ne dit
+    quel abonnement arrêter."""
+    cid = creer_client("deja-pro@recette.test", plan="pro")
+    r, _ = poster(client, {"id": "cs_dp", "object": "checkout.session", "mode": "subscription",
+                           "payment_status": "paid", "client_reference_id": str(cid),
+                           "customer": "cus_dp", "subscription": "sub_dp",
+                           "metadata": {"client_id": str(cid), "plan": "pro"}})
+    row = client_row(cid)
+    assert r.status_code == 200, r.get_data(as_text=True)
+    assert (row["plan"], row["stripe_subscription_id"], row["stripe_customer_id"]) == (
+        "pro", "sub_dp", "cus_dp"), (
+        "offre Pro payée et l abonnement n est pas mémorisé : %s" % row)
 
 
 @pytest.mark.parametrize("cas", ["alteree", "autre_secret", "perimee", "essais_actuels", "absente"])
@@ -483,13 +547,30 @@ def test_le_paiement_differe_abouti_confirme(client, faux_stripe, faux_brevo):
 def test_une_caisse_sans_paiement_libere_le_creneau(client, faux_stripe, faux_brevo, type_):
     """Le paiement retient la place. Une caisse expirée ou un prélèvement
     refusé, c'est un paiement qui n'a pas eu lieu : le créneau redevient
-    libre pour un autre client, sans attendre la fin de la retenue."""
+    libre pour un autre client, sans attendre la fin de la retenue.
+
+    ET RIEN D'AUTRE N'EST TOUCHÉ. La docstring promet que « les séances
+    offertes et déjà payées ne sont pas touchées », et la règle ne lisait que
+    les lignes payantes, avec un simple « différent de en_attente_paiement ».
+    Mutation jouée sur le code corrigé : le `WHERE commande=?` seul, sans
+    `gratuit=0 AND statut='en_attente_paiement'`. Elle survivait aux 227
+    règles des quatre fichiers, et le client perdait sa séance gratuite du
+    même panier parce qu'il avait abandonné la payante."""
     cr = creneaux()
     jx = panier(client, n=2, dates=cr)
+    avant = [(x["gratuit"], x["statut"]) for x in _q(
+        "SELECT gratuit, statut FROM formation_ia_resa WHERE commande=? ORDER BY id",
+        (jx["commande"],))]
     r, _ = poster(client, session_payee(jx["commande"], payment_status="unpaid", status="expired"), type_)
     assert r.status_code == 200, r.get_json()
-    st = statuts(jx["commande"])
-    assert st != ["en_attente_paiement"], "la séance payante reste %s après %s" % (st, type_)
+    apres = [(x["gratuit"], x["statut"]) for x in _q(
+        "SELECT gratuit, statut FROM formation_ia_resa WHERE commande=? ORDER BY id",
+        (jx["commande"],))]
+    offerte_avant = [x for x in avant if x[0] == 1]
+    assert [x for x in apres if x[0] == 1] == offerte_avant, (
+        "la séance OFFERTE du même panier a changé d état : %s → %s" % (avant, apres))
+    assert [x[1] for x in apres if x[0] == 0] == ["annulee"], (
+        "la séance payante devait être « annulee » après %s : %s" % (type_, apres))
     # Le créneau payant de X (cr[1]) est repris par Y : accepté, pas 409.
     ry = client.post("/api/formation/inscription", json={
         "seances": [{"sujet": F.SUJETS[2]["cle"], "creneau": cr[1]}],
@@ -553,6 +634,30 @@ def test_un_abonnement_resilie_chez_stripe_repasse_le_client_en_gratuit(client, 
         r.status_code, row["plan"], row["stripe_subscription_id"])
 
 
+def test_un_evenement_de_resiliation_tardif_ne_retrograde_pas_un_client_reabonne(
+        client, faux_stripe, faux_brevo):
+    """LA PROMESSE DE LA DOCSTRING, ENFIN MESURÉE : « un événement tardif sur
+    un ancien abonnement ne doit pas rétrograder un client qui en a souscrit
+    un nouveau ».
+
+    Le compte Stripe est PARTAGÉ avec l'autre site : un customer.subscription.
+    deleted portant `metadata.client_id` arrive ici pour un abonnement que
+    cette base ne connaît pas. Mutation jouée sur le code corrigé : le repli
+    par client_id sans sa condition `AND stripe_subscription_id IS NULL`. Elle
+    survivait aux 227 règles, et faisait perdre tous ses modules à un client
+    qui paie."""
+    cid = creer_client("reabonne@recette.test", plan="entreprise",
+                       sub="sub_neuf", cust="cus_reabonne")
+    r, _ = poster(client, {"id": "sub_ancien", "object": "subscription",
+                           "customer": "cus_reabonne", "status": "canceled",
+                           "metadata": {"client_id": str(cid), "site": "conseilprev"}},
+                  "customer.subscription.deleted")
+    row = client_row(cid)
+    assert r.status_code == 200, r.get_json()
+    assert (row["plan"], row["stripe_subscription_id"]) == ("entreprise", "sub_neuf"), (
+        "la résiliation de sub_ancien a rétrogradé un client abonné à sub_neuf : %s" % row)
+
+
 @pytest.mark.parametrize("forme", ["dahlia", "ancienne"])
 def test_une_facture_d_abonnement_impayee_previent_le_client_et_conseilprev(
         client, faux_stripe, faux_brevo, forme):
@@ -569,6 +674,15 @@ def test_une_facture_d_abonnement_impayee_previent_le_client_et_conseilprev(
     assert r.status_code == 200
     assert "impaye2@recette.test" in dest and A.CONSEILPREV_NOTIFY_EMAIL in dest, (
         "impayé d'abonnement : courriels partis vers %s" % dest)
+    # LA TRACE EN BASE, ET PAS SEULEMENT LES COURRIELS. Le lot annonce une
+    # relance « paiement » dans la gestion des clients : c'est ce que
+    # CONSEILPREV voit le lendemain, quand le courriel est enterré. Mutation
+    # jouée sur le code corrigé (rollback au lieu du commit de cet INSERT) :
+    # elle survivait aux 227 règles, parce que celle-ci ne lisait que les
+    # destinataires.
+    relances = _q("SELECT type, status, related_ref FROM client_relances WHERE client_id=?", (cid,))
+    assert relances == [{"type": "paiement", "status": "planifiee", "related_ref": "sub_impaye"}], (
+        "aucune relance « paiement » dans la gestion des clients : %s" % relances)
 
 
 # ══════════════════════════════════════════════════════════════════════════
@@ -615,7 +729,50 @@ def test_un_client_deja_abonne_change_de_prix_au_lieu_d_ouvrir_une_seconde_caiss
     assert modifs[0].get("items[0][price]") == "price_ent_recette", modifs[0]
     assert modifs[0].get("items[0][id]") == "si_sub_montee", modifs[0]
     assert modifs[0].get("proration_behavior") == "create_prorations", modifs[0]
+    # LES MÉTADONNÉES SUIVENT LE CHANGEMENT DE PRIX, elles aussi. Mutation
+    # jouée sur le code corrigé : `metadata=` retiré de Subscription.modify.
+    # Elle survivait aux 227 règles — seule la caisse NEUVE était mesurée
+    # (`subscription_data[metadata]`). Sans elles, le customer.subscription.
+    # deleted de cet abonnement arrive sans client_id ni site : il ne nomme
+    # personne, et sur un compte Stripe partagé rien ne dit qu'il est d'ici.
+    attendu = {"metadata[client_id]": str(cid), "metadata[plan]": "entreprise",
+               "metadata[site]": "conseilprev"}
+    assert {k: modifs[0].get(k) for k in attendu} == attendu, sorted(modifs[0])
     assert client_row(cid)["plan"] == "entreprise", client_row(cid)["plan"]
+
+
+@pytest.mark.parametrize("cas", ["canceled", "inconnu"])
+def test_un_abonnement_mort_chez_stripe_rouvre_une_caisse(client, faux_stripe, monkeypatch, cas):
+    """C'EST L'ÉTAT DE PRODUCTION. Le point de réception n'a longtemps pas été
+    abonné à customer.subscription.deleted : un abonnement résilié chez Stripe
+    laisse son identifiant en base. Le client revient à la caisse, et le code
+    doit le reconnaître — abonnement « canceled », ou disparu de Stripe
+    (resource_missing) — puis OUVRIR UNE CAISSE NEUVE.
+
+    Deux mutations jouées sur le code corrigé survivaient aux 227 règles :
+    `if articles:` à la place du test de statut (Stripe refuse alors la
+    modification d'un abonnement résilié : 502, le client ne peut plus se
+    réabonner), et le `raise` rendu inconditionnel sur resource_missing (502
+    aussi). Aucune offre n'est activée : rien n'a été encaissé."""
+    monkeypatch.setenv("STRIPE_PRICE_ENTREPRISE", "price_ent_recette")
+    cid = creer_client("mort@recette.test", plan="pro", sub="sub_mort", cust="cus_mort")
+    connecter(client, cid)
+    if cas == "canceled":
+        faux_stripe._abonnement("sub_mort")["status"] = "canceled"
+    else:
+        faux_stripe.route("GET", "/v1/subscriptions/sub_mort", lambda r: (
+            404, {"error": {"type": "invalid_request_error", "code": "resource_missing",
+                            "message": "No such subscription: sub_mort"}}))
+    r = client.post("/api/sentinel/checkout", json={"plan": "entreprise"}, headers=NAVIGATEUR)
+    j = r.get_json() or {}
+    caisses = faux_stripe.recues("POST", "/v1/checkout/sessions")
+    modifs = faux_stripe.recues("POST", "/v1/subscriptions/sub_mort")
+    etat = {"http": r.status_code, "reponse": j, "caisses": len(caisses), "modifications": len(modifs)}
+    assert r.status_code == 200 and j.get("ok") is True, etat
+    assert str(j.get("url") or "").startswith(faux_stripe.url), etat
+    assert len(caisses) == 1 and modifs == [], etat
+    assert client_row(cid)["plan"] == "pro", (
+        "l offre est activée alors que rien n a été encaissé : %s" % client_row(cid)["plan"])
 
 
 def test_les_trois_caisses_reviennent_avec_l_identifiant_de_session(client, faux_stripe, faux_brevo, monkeypatch):
@@ -712,6 +869,50 @@ def test_le_retour_de_caisse_d_une_session_inconnue_ne_dit_rien_d_autre(client, 
     assert r.get_json() == {"statut": "inconnu"}, (r.status_code, r.get_json())
     r2 = client.get("/api/stripe/retour", headers=NAVIGATEUR)
     assert r2.status_code == 400 and set(r2.get_json()) == {"statut"}, (r2.status_code, r2.get_json())
+
+
+def test_le_retour_de_caisse_encaisse_mais_non_confirme_dit_en_attente(
+        client, faux_stripe, faux_brevo, monkeypatch, caplog):
+    """ENCAISSÉ CHEZ STRIPE, PAS CONFIRMÉ ICI : la page ne doit pas annoncer
+    « Paiement reçu ».
+
+    C'est une décision du lot, et rien ne la mesurait. Mutation jouée sur le
+    code corrigé : `{'statut': 'paye'}` rendu sans condition. Elle survivait
+    aux 227 règles des quatre fichiers, alors que le client lit « Paiement
+    reçu » pendant que ses séances restent en attente de paiement, que la
+    retenue du créneau expire et qu'aucun accusé n'est parti."""
+    j = panier(client, n=2)
+    sid = _q("SELECT stripe_session_id FROM formation_ia_resa WHERE commande=? AND gratuit=0",
+             (j["commande"],))[0]["stripe_session_id"]
+    faux_stripe.payer(sid, amount_total=96000)
+
+    def panne(**kw):
+        raise RuntimeError("base momentanément injoignable (simulée)")
+    monkeypatch.setattr(A, "_formation_ia_confirmer_paiement", panne)
+    with caplog.at_level(logging.ERROR, logger="conseilprev"):
+        r = client.get("/api/stripe/retour?session_id=" + sid, headers=NAVIGATEUR)
+    assert r.get_json() == {"statut": "en_attente"}, (r.status_code, r.get_json())
+    assert statuts(j["commande"]) == ["en_attente_paiement"], statuts(j["commande"])
+    lignes = [m.getMessage() for m in caplog.records if "STRIPE_RETOUR_ECHEC" in m.getMessage()]
+    assert lignes, "rien dans le journal ne dit que la confirmation a échoué : %s" % (
+        [m.getMessage() for m in caplog.records][-5:])
+
+
+@pytest.mark.parametrize("sid", ["evt_1MxAbCdEfGh", "sub_montee", "cs", "cs_" + "x" * 300])
+def test_le_retour_de_caisse_refuse_un_identifiant_qui_n_est_pas_une_session(client, faux_stripe, sid):
+    """LA ROUTE EST PUBLIQUE, et chaque appel accepté déclenche un
+    Session.retrieve sur le compte Stripe PARTAGÉ avec l'autre site.
+
+    Mutation jouée sur le code corrigé : la garde réduite à `if not sid:`.
+    Elle survivait aux 227 règles — la seule règle voisine n'appelle la route
+    qu'avec un identifiant absent, ce que cette garde-là couvre encore. Rien
+    ne doit partir chez Stripe : ni un identifiant d'événement, ni un
+    identifiant d'abonnement, ni une chaîne de 300 caractères."""
+    r = client.get("/api/stripe/retour?session_id=" + sid, headers=NAVIGATEUR)
+    assert r.status_code == 400 and r.get_json() == {"statut": "inconnu"}, (
+        r.status_code, r.get_json())
+    relues = faux_stripe.recues("GET", "/v1/checkout/sessions/")
+    assert relues == [], "relecture chez Stripe pour %r : %s" % (sid, relues)
 
 
 def test_le_retour_de_caisse_est_limite_en_debit(client, faux_stripe):
@@ -883,25 +1084,27 @@ def test_une_session_passee_est_refusee(client, faux_stripe, faux_brevo):
     cid = creer_client("passe@recette.test")
     connecter(client, cid)
     _exec("INSERT INTO form_sessions (formation_id, date_session, date_fin, lieu, prix_cents, places, actif) "
-          "VALUES (?,?,?,?,?,?,1)", (15, "2026-09-07", "2026-09-07", "RECETTE passee", 95000, 12))
+          "VALUES (?,?,?,?,?,?,1)", (15, _date(-18), _date(-18), "RECETTE passee", 95000, 12))
     sid = _q("SELECT id FROM form_sessions WHERE lieu='RECETTE passee'")[0]["id"]
     r = client.post("/api/formations/inscription", json={"session_id": sid, "participants": 1,
                     "nom": "N", "prenom": "P", "email": "passe@recette.test"}, headers=NAVIGATEUR)
     assert r.status_code == 400 and not r.get_json().get("paiement"), (
-        "session du 2026-09-07 encaissable le %s : HTTP %s %s" % (AUJOURD_HUI, r.status_code, r.get_json()))
+        "session du %s encaissable le %s : HTTP %s %s" % (_date(-18), AUJOURD_HUI, r.status_code, r.get_json()))
     assert "pass" in (r.get_json().get("error") or "").lower(), r.get_json()
     assert not faux_stripe.recues("POST", "/v1/checkout/sessions"), "une caisse a été ouverte"
 
 
 def test_une_session_complete_est_refusee(client, faux_stripe, faux_brevo):
+    """LA DATE EST CALCULÉE, PAS ÉCRITE. Voir `_date` : « passée » est testé
+    avant « complète », et une date en dur finit par être passée."""
     cid = creer_client("complet@recette.test")
     connecter(client, cid)
     _exec("INSERT INTO form_sessions (formation_id, date_session, date_fin, lieu, prix_cents, places, actif) "
-          "VALUES (?,?,?,?,?,?,1)", (15, "2027-11-04", "2027-11-04", "RECETTE complete", 95000, 2))
+          "VALUES (?,?,?,?,?,?,1)", (15, _date(60), _date(60), "RECETTE complete", 95000, 2))
     sid = _q("SELECT id FROM form_sessions WHERE lieu='RECETTE complete'")[0]["id"]
     _exec("INSERT INTO form_inscriptions (session_id, client_id, nom, prenom, email, participants, "
           "montant_cents, statut, created_at) VALUES (?,?,?,?,?,?,?,?,?)",
-          (sid, 0, "Deja", "Inscrit", "deja@recette.test", 2, 190000, "payee", "2026-09-01"))
+          (sid, 0, "Deja", "Inscrit", "deja@recette.test", 2, 190000, "payee", _date(-24)))
     r = client.post("/api/formations/inscription", json={"session_id": sid, "participants": 1,
                     "nom": "N", "prenom": "P", "email": "complet@recette.test"}, headers=NAVIGATEUR)
     assert r.status_code == 400 and not r.get_json().get("paiement"), (
