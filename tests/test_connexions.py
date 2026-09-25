@@ -25,6 +25,7 @@ import importlib.util
 import io
 import json
 import os
+import secrets
 import shutil
 import sqlite3
 import subprocess
@@ -515,12 +516,48 @@ def test_un_anonyme_recoit_403_sans_qu_aucun_compte_soit_interroge(faux_stripe, 
     assert faux_stripe.recues() == [] and faux_brevo.recues() == []
 
 
-def test_un_client_connecte_mais_pas_conseilprev_recoit_403():
+@pytest.fixture
+def client_ordinaire():
+    """UN COMPTE SENTINEL QUI EXISTE VRAIMENT, connecté et NON administrateur.
+
+    CE QUE CETTE RÈGLE MESURAIT EN CROYANT MESURER AUTRE CHOSE. Elle posait
+    `client_id = 987654321`, un numéro qu'aucune ligne de `clients` ne porte :
+    `sentauth_current_client` ne trouvait personne et rendait None. La règle
+    remesurait donc le cas ANONYME, déjà couvert par sa voisine, sous le nom
+    du cas « connecté mais pas CONSEILPREV » — celui qui n'était pas mesuré.
+
+    Mutation jouée sur le code corrigé : `admin_session_conseilprev` réduite à
+    `if client:`. Elle survivait, et le diagnostic des connexions — adresses
+    des points de réception, expéditeurs, état des comptes Stripe et Brevo —
+    s'ouvrait à tout compte gratuit connecté.
+
+    Le nom d'entreprise ne doit pas être « CONSEILPREV » : `sentauth_current_
+    client` reconnaît l'administrateur à ce nom autant qu'à son adresse."""
+    email = "ordinaire_%s@recette.test" % secrets.token_hex(4)
+    conn = A.registre_get_db(); cur = conn.cursor()
+    cur.execute("INSERT INTO clients (nom_entreprise, email, mot_de_passe_hash, actif, "
+                "date_creation, plan, generation_session) VALUES (?,?,?,?,?,?,0)",
+                ("RECETTE Compte gratuit", email, "x", 1,
+                 datetime.datetime.utcnow().isoformat(), "gratuit"))
+    conn.commit()
+    cur.execute("SELECT id FROM clients WHERE email=?", (email,))
+    cid = dict(cur.fetchone())["id"]
+    conn.close()
     c = A.app.test_client()
     with c.session_transaction() as s:
-        s["client_id"] = 987654321
-    r = c.get("/api/admin/connexions")
+        s["client_id"] = cid
+        s["sgen"] = 0
+    yield c
+    conn = A.registre_get_db(); cur = conn.cursor()
+    cur.execute("DELETE FROM clients WHERE id=?", (cid,))
+    conn.commit(); conn.close()
+
+
+def test_un_client_connecte_mais_pas_conseilprev_recoit_403(client_ordinaire, faux_stripe, faux_brevo):
+    r = client_ordinaire.get("/api/admin/connexions")
     assert r.status_code == 403, (r.status_code, r.get_data(as_text=True)[:200])
+    assert faux_stripe.recues() == [] and faux_brevo.recues() == [], (
+        "les comptes Stripe et Brevo ont été interrogés pour un compte gratuit")
 
 
 def test_l_administrateur_voit_le_compte_tel_qu_il_etait(admin, service_regle, faux_stripe, faux_brevo):

@@ -269,6 +269,13 @@
    "avant": "      <div id=\"connexions-widget\"></div>\n",
    "apres": "",
    "regle": "test_l_ecran_a_un_bloc_connexions_a_cote_de_la_sante_email"
+  },
+  {
+   "nom": "la route s'ouvre à tout compte connecté, pas seulement à CONSEILPREV",
+   "fichier": "app.py",
+   "avant": "    client = sentauth_current_client()\n    if client and client.get('is_conseilprev'):\n        return None",
+   "apres": "    client = sentauth_current_client()\n    if client:\n        return None",
+   "regle": "test_un_client_connecte_mais_pas_conseilprev_recoit_403"
   }
  ]
 }
