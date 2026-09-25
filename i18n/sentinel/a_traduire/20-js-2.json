@@ -1,0 +1,1266 @@
+{
+ "_lot": "20-js-2",
+ "_mots": 2309,
+ "_pages": [
+  "_js"
+ ],
+ "_rubrique": "_js",
+ "bloc": {
+  "Un comité sans décisions réservées ne gouverne pas : il informe.": {
+   "en": "",
+   "fr": "Un comité sans décisions réservées ne gouverne pas : il informe.",
+   "html": "<i>Un comité sans décisions réservées ne gouverne pas : il informe.</i>"
+  },
+  "Un usage déclaré n’est pas un usage observé.": {
+   "en": "",
+   "fr": "Un usage déclaré n’est pas un usage observé.",
+   "html": "<strong>Un usage déclaré n’est pas un usage observé.</strong>"
+  },
+  "Une case cochée dit qu’un levier est déclaré, jamais qu’il est branché : cette page ne peut pas le vérifier.": {
+   "en": "",
+   "fr": "Une case cochée dit qu’un levier est déclaré, jamais qu’il est branché : cette page ne peut pas le vérifier.",
+   "html": "Une case cochée dit qu’un levier est <em>déclaré</em>, jamais qu’il est <em>branché</em> : cette page ne peut pas le vérifier."
+  },
+  "Une partie": {
+   "en": "",
+   "fr": "Une partie",
+   "html": "<b>Une partie"
+  },
+  "Une sauvegarde est un objet portant une liste documents.": {
+   "en": "",
+   "fr": "Une sauvegarde est un objet portant une liste documents.",
+   "html": "Une sauvegarde est un objet portant une liste <code>documents</code>."
+  },
+  "Votre audit IA Act n'a pas encore été rempli. Ces sept obligations seront donc comptées comme non traitées, ce qui est exact : ce qui n'est pas documenté n'est pas démontrable. Renseignez l'audit pour que le calcul d'écart ait un sens.": {
+   "en": "",
+   "fr": "Votre audit IA Act n'a pas encore été rempli. Ces sept obligations seront donc comptées comme non traitées, ce qui est exact : ce qui n'est pas documenté n'est pas démontrable. Renseignez l'audit pour que le calcul d'écart ait un sens.",
+   "html": "<strong>Votre audit IA Act n'a pas encore été rempli.</strong> Ces sept obligations seront donc comptées comme non traitées, ce qui est exact : ce qui n'est pas documenté n'est pas démontrable. Renseignez l'audit pour que le calcul d'écart ait un sens."
+  },
+  "Vous échangez avec un assistant fondé sur l’intelligence artificielle, et non avec une personne. Ses réponses peuvent comporter des erreurs et ne constituent pas un conseil juridique.": {
+   "en": "",
+   "fr": "Vous échangez avec un assistant fondé sur l’intelligence artificielle, et non avec une personne. Ses réponses peuvent comporter des erreurs et ne constituent pas un conseil juridique.",
+   "html": "<span>Vous échangez avec un <strong>assistant fondé sur l’intelligence artificielle</strong>, et non avec une personne. Ses réponses peuvent comporter des erreurs et ne constituent pas un conseil juridique.</span>"
+  },
+  "Vérifiez que c’est bien le fichier produit par le bouton 💾 Sauvegarder": {
+   "en": "",
+   "fr": "Vérifiez que c’est bien le fichier produit par le bouton 💾 Sauvegarder",
+   "html": "Vérifiez que c’est bien le fichier produit par le bouton <b>💾 Sauvegarder</b>"
+  },
+  "bouton 💾 Sauvegarder de /admin/base-connaissance.": {
+   "en": "",
+   "fr": "bouton 💾 Sauvegarder de /admin/base-connaissance.",
+   "html": "bouton <b>💾 Sauvegarder</b> de /admin/base-connaissance."
+  },
+  "cas retenu(s) redessiné(s)": {
+   "en": "",
+   "fr": "cas retenu(s) redessiné(s)",
+   "html": "</strong> cas retenu(s) redessiné(s)"
+  },
+  "conseilprevcyber commence par .": {
+   "en": "",
+   "fr": "conseilprevcyber commence par .",
+   "html": "conseilprevcyber commence par <code></code>."
+  },
+  "conseilprevcyber est un objet portant une liste documents.": {
+   "en": "",
+   "fr": "conseilprevcyber est un objet portant une liste documents.",
+   "html": "conseilprevcyber est un <i>objet</i> portant une liste <code>documents</code>."
+  },
+  "contradiction(s) — attesté conforme au registre, mais la mesure dit le contraire :": {
+   "en": "",
+   "fr": "contradiction(s) — attesté conforme au registre, mais la mesure dit le contraire :",
+   "html": "contradiction(s)</strong> — attesté conforme au registre, mais la mesure dit le contraire :"
+  },
+  "contrôles conformes.": {
+   "en": "",
+   "fr": "contrôles conformes.",
+   "html": "</strong> contrôles conformes."
+  },
+  "critère(s) : AIPD non requise en principe (seuil : # critères).": {
+   "en": "",
+   "fr": "critère(s) : AIPD non requise en principe (seuil : 2 critères).",
+   "html": "critère(s) : AIPD non requise en principe (seuil : 2 critères).</span>"
+  },
+  "critères) — AIPD requise (art. #).": {
+   "en": "",
+   "fr": "critères) — AIPD requise (art. 35).",
+   "html": "critères) — AIPD requise (art. 35).</span>"
+  },
+  "de cette section": {
+   "en": "",
+   "fr": "de cette section",
+   "html": "de cette section</b>"
+  },
+  "de chiffre d’affaires": {
+   "en": "",
+   "fr": "de chiffre d’affaires",
+   "html": "de chiffre d’affaires</span>"
+  },
+  "de conformité déclarée sur": {
+   "en": "",
+   "fr": "de conformité déclarée sur",
+   "html": "de conformité déclarée</b> sur"
+  },
+  "document(s) entier(s) sont malgré tout lisibles": {
+   "en": "",
+   "fr": "document(s) entier(s) sont malgré tout lisibles",
+   "html": "document(s) entier(s)</b> sont malgré tout lisibles"
+  },
+  "document(s) trouvé(s) =": {
+   "en": "",
+   "fr": "document(s) trouvé(s) =",
+   "html": "document(s) trouvé(s) = <b>"
+  },
+  "du parc porte un volume déclaré.": {
+   "en": "",
+   "fr": "du parc porte un volume déclaré.",
+   "html": "</strong> du parc porte un volume déclaré."
+  },
+  "d’entre elles portent un": {
+   "en": "",
+   "fr": "d’entre elles portent un",
+   "html": "d’entre elles</b> portent un"
+  },
+  "en fonction des résultats de votre audit (score de maturité, scores des # piliers, budget). Il inclut planning et budget de l étape.": {
+   "en": "",
+   "fr": "en fonction des résultats de votre audit (score de maturité, scores des 8 piliers, budget). Il inclut planning et budget de l étape.",
+   "html": "</strong> en fonction des résultats de votre audit (score de maturité, scores des 8 piliers, budget). Il inclut planning et budget de l étape."
+  },
+  "entité essentielle :": {
+   "en": "",
+   "fr": "entité essentielle :",
+   "html": "<b>entité essentielle</b> :"
+  },
+  "erreur — le fichier est bon, c’est la lecture qui ne l’était pas. Rechargez": {
+   "en": "",
+   "fr": "erreur — le fichier est bon, c’est la lecture qui ne l’était pas. Rechargez",
+   "html": "erreur — <b>le fichier est bon, c’est la lecture qui ne l’était pas</b>. Rechargez"
+  },
+  "essentielle. Un dirigeant de PME qui lit « moins de # salariés »": {
+   "en": "",
+   "fr": "essentielle. Un dirigeant de PME qui lit « moins de 50 salariés »",
+   "html": "<b>essentielle</b>. Un dirigeant de PME qui lit « moins de 50 salariés »"
+  },
+  "est conservé, rien n’est déclaré conforme.": {
+   "en": "",
+   "fr": "est conservé, rien n’est déclaré conforme.",
+   "html": "est conservé, rien n’est déclaré conforme.</span>"
+  },
+  "est validé. Passage à": {
+   "en": "",
+   "fr": "est validé. Passage à",
+   "html": "</b> est validé. Passage à <b>"
+  },
+  "et referme le dossier passe à côté de celles-là.": {
+   "en": "",
+   "fr": "et referme le dossier passe à côté de celles-là.",
+   "html": "et referme le dossier passe à côté de celles-là.</span>"
+  },
+  "et rédaction méthodologique sectorielle.": {
+   "en": "",
+   "fr": "et rédaction méthodologique sectorielle.",
+   "html": "et rédaction méthodologique sectorielle.</span>"
+  },
+  "et transféré au fil de l’eau — la mémoire occupée ne dépasse jamais quelques": {
+   "en": "",
+   "fr": "et transféré au fil de l’eau — la mémoire occupée ne dépasse jamais quelques",
+   "html": "et transféré au fil de l’eau</b> — la mémoire occupée ne dépasse jamais quelques"
+  },
+  "et à mesure. Le transfert reste rejouable — un document déjà présent est sauté, et": {
+   "en": "",
+   "fr": "et à mesure. Le transfert reste rejouable — un document déjà présent est sauté, et",
+   "html": "et à mesure. <b>Le transfert reste rejouable</b> — un document déjà présent est sauté, et"
+  },
+  "facturation « requêtes » là où c’est le cas pour les compter entièrement.": {
+   "en": "",
+   "fr": "facturation « requêtes » là où c’est le cas pour les compter entièrement.",
+   "html": "facturation « requêtes » là où c’est le cas pour les compter entièrement.</span>"
+  },
+  "fichier : il en rend une vide, sans erreur. Ce fichier sera donc lu par tranches": {
+   "en": "",
+   "fr": "fichier : il en rend une vide, sans erreur. Ce fichier sera donc lu par tranches",
+   "html": "fichier : il en rend une <b>vide</b>, sans erreur. Ce fichier sera donc <b>lu par tranches"
+  },
+  "fichier(s) écarté(s) :": {
+   "en": "",
+   "fr": "fichier(s) écarté(s) :",
+   "html": "fichier(s) écarté(s) :</b>"
+  },
+  "hors périmètre": {
+   "en": "",
+   "fr": "hors périmètre",
+   "html": "<em>hors périmètre</em>"
+  },
+  "il fait remonter ses documents en tête": {
+   "en": "",
+   "fr": "il fait remonter ses documents en tête",
+   "html": "il fait <b>remonter</b> ses documents en tête"
+  },
+  "inexploitable(s), ils seront signalés": {
+   "en": "",
+   "fr": "inexploitable(s), ils seront signalés",
+   "html": "inexploitable(s), ils seront signalés</span>"
+  },
+  "jalon(s) vérifié(s) en attente de facturation": {
+   "en": "",
+   "fr": "jalon(s) vérifié(s) en attente de facturation",
+   "html": "jalon(s) vérifié(s) en attente de facturation</span>"
+  },
+  "juridictions analysées sur # critères": {
+   "en": "",
+   "fr": "juridictions analysées sur 12 critères",
+   "html": "</strong> juridictions analysées sur <strong>12 critères</strong></span>"
+  },
+  "la criticité n’est pas déclarée. Un taux sur neuf clauses": {
+   "en": "",
+   "fr": "la criticité n’est pas déclarée. Un taux sur neuf clauses",
+   "html": "la criticité n’est pas déclarée.</b> Un taux sur neuf clauses"
+  },
+  "le texte dit « sont tenus de » · encouragement : le texte dit": {
+   "en": "",
+   "fr": "le texte dit « sont tenus de » · encouragement : le texte dit",
+   "html": "le texte dit « sont tenus de » · <b>encouragement</b> : le texte dit"
+  },
+  "les montants fixes sont affichés. Ils constituent le plancher": {
+   "en": "",
+   "fr": "les montants fixes sont affichés. Ils constituent le plancher",
+   "html": "les montants fixes sont affichés. Ils constituent le <b>plancher</b>"
+  },
+  "les échéances et la qualification — pas seulement le texte rédigé.": {
+   "en": "",
+   "fr": "les échéances et la qualification — pas seulement le texte rédigé.",
+   "html": "les échéances et la qualification — pas seulement le texte rédigé.</span>"
+  },
+  "liste documents. Le nom du fichier peut très bien commencer par": {
+   "en": "",
+   "fr": "liste documents. Le nom du fichier peut très bien commencer par",
+   "html": "liste <code>documents</code>. Le nom du fichier peut très bien commencer par"
+  },
+  "management · mutualisable : se greffe sur un système de": {
+   "en": "",
+   "fr": "management · mutualisable : se greffe sur un système de",
+   "html": "management · <b>mutualisable</b> : se greffe sur un système de"
+  },
+  "manquante : l’article # f) exige une justification de": {
+   "en": "",
+   "fr": "manquante : l’article 6.1.3 f) exige une justification de",
+   "html": "manquante</b> : l’article 6.1.3 f) exige une justification de"
+  },
+  "mensualités égales.": {
+   "en": "",
+   "fr": "mensualités égales.",
+   "html": "mensualités égales.<br>"
+  },
+  "mesures citées": {
+   "en": "",
+   "fr": "mesures citées",
+   "html": "mesures citées</span>"
+  },
+  "mutualisable : se greffe sur un système de management déjà en": {
+   "en": "",
+   "fr": "mutualisable : se greffe sur un système de management déjà en",
+   "html": "<b>mutualisable</b> : se greffe sur un système de management déjà en"
+  },
+  "non renseignée(s) sur": {
+   "en": "",
+   "fr": "non renseignée(s) sur",
+   "html": "non renseignée(s)</b> sur"
+  },
+  "obligations. La formation du personnel, qui est un encouragement,": {
+   "en": "",
+   "fr": "obligations. La formation du personnel, qui est un encouragement,",
+   "html": "obligations</b>. La formation du personnel, qui est un encouragement,"
+  },
+  "pas dire :": {
+   "en": "",
+   "fr": "pas dire :",
+   "html": "pas dire :</b>"
+  },
+  "pas une exigence conforme : elle n’entre pas au numérateur.": {
+   "en": "",
+   "fr": "pas une exigence conforme : elle n’entre pas au numérateur.",
+   "html": "pas une exigence conforme : elle n’entre pas au numérateur.</span>"
+  },
+  "plafond(s) ne peuvent être ni respectés ni dépassés — aucun montant": {
+   "en": "",
+   "fr": "plafond(s) ne peuvent être ni respectés ni dépassés — aucun montant",
+   "html": "plafond(s) ne peuvent être ni respectés ni dépassés</b> — aucun montant"
+  },
+  "plus lourde entre les deux statuts.": {
+   "en": "",
+   "fr": "plus lourde entre les deux statuts.",
+   "html": "plus lourde entre les deux statuts.</span>"
+  },
+  "propre à la": {
+   "en": "",
+   "fr": "propre à la",
+   "html": "<b>propre à la"
+  },
+  "propre à l’IA :": {
+   "en": "",
+   "fr": "propre à l’IA :",
+   "html": "<b>propre à l’IA</b> :"
+  },
+  "refusé(s)": {
+   "en": "",
+   "fr": "refusé(s)",
+   "html": "refusé(s)</span>"
+  },
+  "répartie sur # jalons AI Act, facturés uniquement après vérificationTotal max annuel :": {
+   "en": "",
+   "fr": "répartie sur 7 jalons AI Act, facturés uniquement après vérificationTotal max annuel :",
+   "html": "</em> répartie sur 7 jalons AI Act, facturés uniquement après vérification<br><strong>Total max annuel :"
+  },
+  "sans qualification, et ce refus est le premier service rendu.": {
+   "en": "",
+   "fr": "sans qualification, et ce refus est le premier service rendu.",
+   "html": "sans qualification, et ce refus est le premier service rendu.</b>"
+  },
+  "sauvegarde conseilprevcyber — ni conseilprevcyber-rag, ni une": {
+   "en": "",
+   "fr": "sauvegarde conseilprevcyber — ni conseilprevcyber-rag, ni une",
+   "html": "sauvegarde conseilprevcyber</b> — ni <code>conseilprevcyber-rag</code>, ni une"
+  },
+  "sections désignent un profil sectoriel.": {
+   "en": "",
+   "fr": "sections désignent un profil sectoriel.",
+   "html": "sections</b> désignent un profil sectoriel."
+  },
+  "seulement de cette section relève de :": {
+   "en": "",
+   "fr": "seulement de cette section relève de :",
+   "html": "seulement de cette section relève de&nbsp;:</b>"
+  },
+  "soumis à FRIA au titre de l Art. # EU AI Act.": {
+   "en": "",
+   "fr": "soumis à FRIA au titre de l Art. 27 EU AI Act.",
+   "html": "soumis à FRIA</strong> au titre de l Art. 27 EU AI Act."
+  },
+  "systeme(s) de votre Registre IA. Moteur :": {
+   "en": "",
+   "fr": "systeme(s) de votre Registre IA. Moteur :",
+   "html": "systeme(s)</strong> de votre Registre IA. Moteur :"
+  },
+  "système(s) au Registre IA (pondérés par classification), score Audit actuel": {
+   "en": "",
+   "fr": "système(s) au Registre IA (pondérés par classification), score Audit actuel",
+   "html": "système(s)</strong> au Registre IA (pondérés par classification), score Audit actuel <strong>"
+  },
+  "système(s) au Registre IA, mais aucun Audit IA Act réalisé — score de départ à estimer manuellement ci-dessous.": {
+   "en": "",
+   "fr": "système(s) au Registre IA, mais aucun Audit IA Act réalisé — score de départ à estimer manuellement ci-dessous.",
+   "html": "système(s)</strong> au Registre IA, mais aucun Audit IA Act réalisé — score de départ à estimer manuellement ci-dessous."
+  },
+  "système(s) concerné(s)": {
+   "en": "",
+   "fr": "système(s) concerné(s)",
+   "html": "système(s) concerné(s)</span>"
+  },
+  "système(s) du Registre IA pour": {
+   "en": "",
+   "fr": "système(s) du Registre IA pour",
+   "html": "système(s)</strong> du Registre IA pour"
+  },
+  "système(s) du Registre IA pris en compte pour": {
+   "en": "",
+   "fr": "système(s) du Registre IA pris en compte pour",
+   "html": "système(s)</strong> du Registre IA pris en compte pour"
+  },
+  "système(s) du secteur": {
+   "en": "",
+   "fr": "système(s) du secteur",
+   "html": "système(s)</strong> du secteur"
+  },
+  "système(s) à haut risque identifié(s).": {
+   "en": "",
+   "fr": "système(s) à haut risque identifié(s).",
+   "html": "système(s)</strong> à haut risque identifié(s)."
+  },
+  "système(s) évalué(s).": {
+   "en": "",
+   "fr": "système(s) évalué(s).",
+   "html": "</strong> système(s) évalué(s)."
+  },
+  "sécurité : cet article ne se reprend pas d’un autre système de": {
+   "en": "",
+   "fr": "sécurité : cet article ne se reprend pas d’un autre système de",
+   "html": "sécurité</b> : cet article ne se reprend pas d’un autre système de"
+  },
+  "vectorisé(s)": {
+   "en": "",
+   "fr": "vectorisé(s)",
+   "html": "vectorisé(s)</span>"
+  },
+  "versé(s)": {
+   "en": "",
+   "fr": "versé(s)",
+   "html": "</b> versé(s)"
+  },
+  "versé(s) +": {
+   "en": "",
+   "fr": "versé(s) +",
+   "html": "</b> versé(s) +"
+  },
+  "· Investissement année # :": {
+   "en": "",
+   "fr": "· Investissement année 1 :",
+   "html": "</strong> · Investissement année 1 : <strong>"
+  },
+  "· Retour net année # :": {
+   "en": "",
+   "fr": "· Retour net année 1 :",
+   "html": "</strong> · Retour net année 1 :"
+  },
+  "· réservé aux entités essentielles": {
+   "en": "",
+   "fr": "· réservé aux entités essentielles",
+   "html": "· <b>réservé aux entités essentielles</b>"
+  },
+  "À VENIR le": {
+   "en": "",
+   "fr": "À VENIR le",
+   "html": "<b>À VENIR</b> le"
+  },
+  "À faire :": {
+   "en": "",
+   "fr": "À faire :",
+   "html": "<b>À faire :</b>"
+  },
+  "À revérifier avant présentation.": {
+   "en": "",
+   "fr": "À revérifier avant présentation.",
+   "html": "<b>À revérifier avant présentation.</b>"
+  },
+  "À un seuil du régime supérieur.": {
+   "en": "",
+   "fr": "À un seuil du régime supérieur.",
+   "html": "<b>À un seuil du régime supérieur.</b>"
+  },
+  "À vérifier.": {
+   "en": "",
+   "fr": "À vérifier.",
+   "html": "<b>À vérifier.</b>"
+  },
+  "Écart cumulé # mois": {
+   "en": "",
+   "fr": "Écart cumulé 6 mois",
+   "html": "<strong>Écart cumulé 6 mois</strong><br>"
+  },
+  "Économie de": {
+   "en": "",
+   "fr": "Économie de",
+   "html": "<strong>Économie de"
+  },
+  "ÉmetteurCONSEILPREV — SARL au capital de # # €Christophe CERF, gérant# rue Auguste Chabrières, # ParisSIREN # # # — RCS ParisTVA : FR # # # #christophe.cerf@outlook.com": {
+   "en": "",
+   "fr": "ÉmetteurCONSEILPREV — SARL au capital de 8 000 €Christophe CERF, gérant19 rue Auguste Chabrières, 75015 ParisSIREN 494 530 157 — RCS ParisTVA : FR 24 494 530 157christophe.cerf@outlook.com",
+   "html": "<strong>Émetteur</strong><br>CONSEILPREV — SARL au capital de 8 000 €<br>Christophe CERF, gérant<br>19 rue Auguste Chabrières, 75015 Paris<br>SIREN 494 530 157 — RCS Paris<br>TVA : FR 24 494 530 157<br>christophe.cerf@outlook.com"
+  },
+  "Étendue de vos obligations —": {
+   "en": "",
+   "fr": "Étendue de vos obligations —",
+   "html": "<b>Étendue de vos obligations</b> —"
+  },
+  "à trancher": {
+   "en": "",
+   "fr": "à trancher",
+   "html": "à trancher</span>"
+  },
+  "étape(s)": {
+   "en": "",
+   "fr": "étape(s)",
+   "html": "étape(s)</span>"
+  },
+  "— Règlement (UE) #/#": {
+   "en": "",
+   "fr": "— Règlement (UE) 2024/1689",
+   "html": "— Règlement (UE) 2024/1689</span>"
+  },
+  "— consolidation par contrôle opérationnel": {
+   "en": "",
+   "fr": "— consolidation par contrôle opérationnel",
+   "html": "— consolidation par <em>contrôle opérationnel</em>"
+  },
+  "— corrigée en «": {
+   "en": "",
+   "fr": "— corrigée en «",
+   "html": "— <b>corrigée</b> en «"
+  },
+  "— non instruit, ce qui n’est pas la même chose que zéro.": {
+   "en": "",
+   "fr": "— non instruit, ce qui n’est pas la même chose que zéro.",
+   "html": "— <em>non instruit</em>, ce qui n’est pas la même chose que zéro."
+  },
+  "— trop volumineux pour être ouvert d’un seul tenant.": {
+   "en": "",
+   "fr": "— trop volumineux pour être ouvert d’un seul tenant.",
+   "html": "</b> — trop volumineux pour être ouvert d’un seul tenant."
+  },
+  "— à revérifier": {
+   "en": "",
+   "fr": "— à revérifier",
+   "html": "— <b>à revérifier</b>"
+  },
+  "€ pour le modèle hybride. Extrapolation # mois : économie estimée": {
+   "en": "",
+   "fr": "€ pour le modèle hybride. Extrapolation 12 mois : économie estimée",
+   "html": "€</strong> pour le modèle hybride. Extrapolation 12 mois : économie estimée <strong>"
+  },
+  "€/mois (∵# % du SaaS": {
+   "en": "",
+   "fr": "€/mois (∵35 % du SaaS",
+   "html": "€/mois</strong> (∵35 % du SaaS"
+  },
+  "∵# % du SaaS — seul coût fixe": {
+   "en": "",
+   "fr": "∵35 % du SaaS — seul coût fixe",
+   "html": "</b><small>∵35 % du SaaS — seul coût fixe</small>"
+  },
+  "⏱ Échéances réglementaires": {
+   "en": "",
+   "fr": "⏱ Échéances réglementaires",
+   "html": "<b>⏱ Échéances réglementaires</b><br>"
+  },
+  "⚠ Décision(s) citée(s) hors de la liste fournie —": {
+   "en": "",
+   "fr": "⚠ Décision(s) citée(s) hors de la liste fournie —",
+   "html": "<b>⚠ Décision(s) citée(s) hors de la liste fournie</b> —"
+  },
+  "⚠ Références non reconnues —": {
+   "en": "",
+   "fr": "⚠ Références non reconnues —",
+   "html": "<b>⚠ Références non reconnues</b> —"
+  },
+  "✅ Pré-rempli avec vos données réelles :": {
+   "en": "",
+   "fr": "✅ Pré-rempli avec vos données réelles :",
+   "html": "✅ Pré-rempli avec vos données réelles : <strong>"
+  },
+  "✅ Pré-rempli depuis Shadow AI —": {
+   "en": "",
+   "fr": "✅ Pré-rempli depuis Shadow AI —",
+   "html": "✅ Pré-rempli depuis Shadow AI — <strong>"
+  },
+  "✓ Les blocs qui vous concernent sont": {
+   "en": "",
+   "fr": "✓ Les blocs qui vous concernent sont",
+   "html": "<b>✓ Les blocs qui vous concernent sont"
+  },
+  "✓ Parcours terminé.": {
+   "en": "",
+   "fr": "✓ Parcours terminé.",
+   "html": "<b>✓ Parcours terminé.</b>"
+  },
+  "✓ terminé quand toutes les étapes ont été ouvertes, ● suivi du compte quand il reste des étapes à voir, rien quand il n’a pas été commencé.": {
+   "en": "",
+   "fr": "✓ terminé quand toutes les étapes ont été ouvertes, ● suivi du compte quand il reste des étapes à voir, rien quand il n’a pas été commencé.",
+   "html": "<b>✓ terminé</b> quand toutes les étapes ont été ouvertes, <b>●</b> suivi du compte quand il reste des étapes à voir, rien quand il n’a pas été commencé."
+  },
+  "🎯 Analyse personnalisee sur": {
+   "en": "",
+   "fr": "🎯 Analyse personnalisee sur",
+   "html": "🎯 Analyse personnalisee sur <strong>"
+  },
+  "👥 Public concerné :": {
+   "en": "",
+   "fr": "👥 Public concerné :",
+   "html": "👥 Public concerné : <strong>"
+  },
+  "📅 Échéance critique : # décembre # — obligations complètes pour les systèmes haut risque (Art. #(#), Annexe III — Digital Omnibus).": {
+   "en": "",
+   "fr": "📅 Échéance critique : 2 décembre 2027 — obligations complètes pour les systèmes haut risque (Art. 6(2), Annexe III — Digital Omnibus).",
+   "html": "📅 Échéance critique : <strong>2 décembre 2027</strong> — obligations complètes pour les systèmes haut risque (Art. 6(2), Annexe III — Digital Omnibus)."
+  },
+  "📊 Matrice : probabilité": {
+   "en": "",
+   "fr": "📊 Matrice : probabilité",
+   "html": "📊 Matrice : probabilité <strong>"
+  },
+  "🔒 Traçabilité RGPD —": {
+   "en": "",
+   "fr": "🔒 Traçabilité RGPD —",
+   "html": "🔒 <strong>Traçabilité RGPD</strong> —"
+  },
+  "🟡 Base de connaissance — Recherche textuelle (mode de repli, pgvector inactif)": {
+   "en": "",
+   "fr": "🟡 Base de connaissance — Recherche textuelle (mode de repli, pgvector inactif)",
+   "html": "🟡 <strong>Base de connaissance</strong> — Recherche textuelle (mode de repli, pgvector inactif)"
+  },
+  "🟡 Registre IA — SQLite local (non persistant)": {
+   "en": "",
+   "fr": "🟡 Registre IA — SQLite local (non persistant)",
+   "html": "🟡 <strong>Registre IA</strong> — SQLite local (non persistant)"
+  },
+  "🟢 Base de connaissance — Recherche sémantique active (pgvector)": {
+   "en": "",
+   "fr": "🟢 Base de connaissance — Recherche sémantique active (pgvector)",
+   "html": "🟢 <strong>Base de connaissance</strong> — Recherche sémantique active (pgvector)"
+  }
+ },
+ "texte": {
+  "\" et tous ses segments indexés ?": {
+   "en": "",
+   "fr": "\" et tous ses segments indexés ?"
+  },
+  "\" indexé — recherche par mots-clés (": {
+   "en": "",
+   "fr": "\" indexé — recherche par mots-clés ("
+  },
+  "\" partiellement indexé (": {
+   "en": "",
+   "fr": "\" partiellement indexé ("
+  },
+  "\"Oui — mention explicite requise\" si chatbot ou contenu généré diffusé.": {
+   "en": "",
+   "fr": "\"Oui — mention explicite requise\" si chatbot ou contenu généré diffusé."
+  },
+  "# % ; temps d’analyse divisé par #.": {
+   "en": "",
+   "fr": "95 % ; temps d’analyse divisé par 5."
+  },
+  "# % d’écart entre importante et essentielle, quel que soit le chiffre d’affaires : les deux paliers pivotent au même endroit, # M€.": {
+   "en": "",
+   "fr": "43 % d’écart entre importante et essentielle, quel que soit le chiffre d’affaires : les deux paliers pivotent au même endroit, 500 M€."
+  },
+  "# Directeur de Programme (# mois)": {
+   "en": "",
+   "fr": "1 Directeur de Programme (6 mois)"
+  },
+  "# M€ ou #% CA mondial (max)": {
+   "en": "",
+   "fr": "35 M€ ou 7% CA mondial (max)"
+  },
+  "# a # items statiques affiches si tous les flux RSS echouent simultanement (timeout ou indisponibilite).": {
+   "en": "",
+   "fr": "3 a 4 items statiques affiches si tous les flux RSS echouent simultanement (timeout ou indisponibilite)."
+  },
+  "# critères d évaluation": {
+   "en": "",
+   "fr": "12 critères d évaluation"
+  },
+  "# h pour l’alerte précoce, # h pour la notification, un mois pour le rapport final : trois échéances, un seul point de départ.": {
+   "en": "",
+   "fr": "24 h pour l’alerte précoce, 72 h pour la notification, un mois pour le rapport final : trois échéances, un seul point de départ."
+  },
+  "# h, # h, un mois — la norme n’en fixe aucun. Un processus d’incident parfaitement conforme à A.# peut manquer entièrement l’horloge de l’article #.": {
+   "en": "",
+   "fr": "24 h, 72 h, un mois — la norme n’en fixe aucun. Un processus d’incident parfaitement conforme à A.5.24 peut manquer entièrement l’horloge de l’article 23."
+  },
+  "# indicateurs de pilotage + KPIs spécifiques": {
+   "en": "",
+   "fr": "7 indicateurs de pilotage + KPIs spécifiques"
+  },
+  "# mensualités de": {
+   "en": "",
+   "fr": "2 mensualités de"
+  },
+  "# mensualités égales": {
+   "en": "",
+   "fr": "2 mensualités égales"
+  },
+  "# modules de formation dont la progression est calculée depuis vos scores réels de l Audit de maturité IA (un pilier faible = formation prioritaire).": {
+   "en": "",
+   "fr": "4 modules de formation dont la progression est calculée depuis vos scores réels de l Audit de maturité IA (un pilier faible = formation prioritaire)."
+  },
+  "# piliers de l'audit de maturite IA": {
+   "en": "",
+   "fr": "8 piliers de l'audit de maturite IA"
+  },
+  "# points de controle (# sections)": {
+   "en": "",
+   "fr": "34 points de controle (8 sections)"
+  },
+  "# points de contrôle": {
+   "en": "",
+   "fr": "34 points de contrôle"
+  },
+  "# protège l’information, # gouverne l’IA. Aucune des deux certifications n’emporte l’autre : ce sont deux audits et deux certificats.": {
+   "en": "",
+   "fr": "27001 protège l’information, 42001 gouverne l’IA. Aucune des deux certifications n’emporte l’autre : ce sont deux audits et deux certificats."
+  },
+  "# rue Auguste Chabrières, # Paris · Responsable : Christophe CERF · référentiel": {
+   "en": "",
+   "fr": "19 rue Auguste Chabrières, 75015 Paris · Responsable : Christophe CERF · référentiel"
+  },
+  "# · Ce que CONSEILPREV ne fait pas": {
+   "en": "",
+   "fr": "4 · Ce que CONSEILPREV ne fait pas"
+  },
+  "# · Ce qui exige une signature humaine": {
+   "en": "",
+   "fr": "3 · Ce qui exige une signature humaine"
+  },
+  "# · Ce qu’on vérifie sur du code généré, en plus de la revue ordinaire": {
+   "en": "",
+   "fr": "2 · Ce qu’on vérifie sur du code généré, en plus de la revue ordinaire"
+  },
+  "# · Les décisions": {
+   "en": "",
+   "fr": "1 · Les décisions"
+  },
+  "#% CA mondial (#% récidive)": {
+   "en": "",
+   "fr": "10% CA mondial (20% récidive)"
+  },
+  "#% du CA mondial": {
+   "en": "",
+   "fr": "7% du CA mondial"
+  },
+  "#) Analyse des points de vigilance (processus sans Approbateur clair, processus avec plusieurs R, charge excessive sur un role),": {
+   "en": "",
+   "fr": "3) Analyse des points de vigilance (processus sans Approbateur clair, processus avec plusieurs R, charge excessive sur un role),"
+  },
+  "#) Désignez votre activité dans le classement européen NACE, en haut de page — c’est celui que porte votre extrait d’immatriculation. Sentinel vous renvoie alors vers le profil sectoriel relevé qui la couvre, s’il en existe un. #) Répondez au questionnaire de # questions — les scores se recalculent en temps réel. #) Générez les # livrables IA (registre, manuel de gouvernance, rapport, formation, outils, plan de maintenance) ou les # guides de procédure d audit, avec vos propres données si besoin.": {
+   "en": "",
+   "fr": "1) Désignez votre activité dans le classement européen NACE, en haut de page — c’est celui que porte votre extrait d’immatriculation. Sentinel vous renvoie alors vers le profil sectoriel relevé qui la couvre, s’il en existe un. 2) Répondez au questionnaire de 16 questions — les scores se recalculent en temps réel. 3) Générez les 6 livrables IA (registre, manuel de gouvernance, rapport, formation, outils, plan de maintenance) ou les 4 guides de procédure d audit, avec vos propres données si besoin."
+  },
+  "#) Plan de communication aux parties prenantes (qui informer, a quelle frequence, par quel canal). Reference les articles EU AI Act (Art. #, #) et la norme ISO/IEC #:# (clause #, Annexe A.#) pour les roles et responsabilites. Format professionnel, en francais.": {
+   "en": "",
+   "fr": "5) Plan de communication aux parties prenantes (qui informer, a quelle frequence, par quel canal). Reference les articles EU AI Act (Art. 17, 26) et la norme ISO/IEC 42001:2023 (clause 5.3, Annexe A.3) pour les roles et responsabilites. Format professionnel, en francais."
+  },
+  "#) Presentation de la matrice RACI ci-dessus sous forme de tableau markdown clair (colonnes : Processus, Role Responsable, Role Approbateur, Roles Consultes, Roles Informes),": {
+   "en": "",
+   "fr": "2) Presentation de la matrice RACI ci-dessus sous forme de tableau markdown clair (colonnes : Processus, Role Responsable, Role Approbateur, Roles Consultes, Roles Informes),"
+  },
+  "#) Recommandations pour structurer le Comite de Gouvernance IA (frequence des reunions, ordre du jour type, livrables attendus),": {
+   "en": "",
+   "fr": "4) Recommandations pour structurer le Comite de Gouvernance IA (frequence des reunions, ordre du jour type, livrables attendus),"
+  },
+  "#. Analyse d’écarts méthodologiques": {
+   "en": "",
+   "fr": "8. Analyse d’écarts méthodologiques"
+  },
+  "#. Appréciation des risques": {
+   "en": "",
+   "fr": "3. Appréciation des risques"
+  },
+  "#. Besoin d'AIPD — critères CNIL": {
+   "en": "",
+   "fr": "2. Besoin d'AIPD — critères CNIL"
+  },
+  "#. Circuit de validation d’un nouvel usage": {
+   "en": "",
+   "fr": "4. Circuit de validation d’un nouvel usage"
+  },
+  "#. Cout structurel — Outils et infrastructure": {
+   "en": "",
+   "fr": "2. Cout structurel — Outils et infrastructure"
+  },
+  "#. Couts caches et extra": {
+   "en": "",
+   "fr": "4. Couts caches et extra"
+  },
+  "#. Description du traitement": {
+   "en": "",
+   "fr": "1. Description du traitement"
+  },
+  "#. Décisions réservées au comité": {
+   "en": "",
+   "fr": "3. Décisions réservées au comité"
+  },
+  "#. Détail des calculs": {
+   "en": "",
+   "fr": "4. Détail des calculs"
+  },
+  "#. En cas de progression partielle, seuls les jalons atteints sont dus — le risque d’exécution est porté par CONSEILPREV.": {
+   "en": "",
+   "fr": "5. En cas de progression partielle, seuls les jalons atteints sont dus — le risque d’exécution est porté par CONSEILPREV."
+  },
+  "#. Facteurs d’émission et paramètres": {
+   "en": "",
+   "fr": "5. Facteurs d’émission et paramètres"
+  },
+  "#. File de validation à la date d’édition": {
+   "en": "",
+   "fr": "6. File de validation à la date d’édition"
+  },
+  "#. GHG Protocol — scopes #, # et #": {
+   "en": "",
+   "fr": "3. GHG Protocol — scopes 1, 2 et 3"
+  },
+  "#. Incertitudes et limites": {
+   "en": "",
+   "fr": "9. Incertitudes et limites"
+  },
+  "#. Indicateurs de gouvernance": {
+   "en": "",
+   "fr": "7. Indicateurs de gouvernance"
+  },
+  "#. Mandat du comité": {
+   "en": "",
+   "fr": "1. Mandat du comité"
+  },
+  "#. Mesures envisagées": {
+   "en": "",
+   "fr": "4. Mesures envisagées"
+  },
+  "#. Outils et infrastructure": {
+   "en": "",
+   "fr": "2. Outils et infrastructure"
+  },
+  "#. Paiement de chaque jalon étalé sur": {
+   "en": "",
+   "fr": "4. Paiement de chaque jalon étalé sur"
+  },
+  "#. Plafond annuel borné : le total socle + jalons ne dépasse jamais ≈": {
+   "en": "",
+   "fr": "1. Plafond annuel borné : le total socle + jalons ne dépasse jamais ≈"
+  },
+  "#. Répartition par client": {
+   "en": "",
+   "fr": "7. Répartition par client"
+  },
+  "#. Résultat consolidé": {
+   "en": "",
+   "fr": "2. Résultat consolidé"
+  },
+  "#. Synthese mensuelle et annuelle": {
+   "en": "",
+   "fr": "5. Synthese mensuelle et annuelle"
+  },
+  "#M€ ou #% CA mondial": {
+   "en": "",
+   "fr": "15M€ ou 2,5% CA mondial"
+  },
+  "#M€ ou #% CA mondial (EE), #M€ ou #% (EI)": {
+   "en": "",
+   "fr": "10M€ ou 2% CA mondial (EE), 7M€ ou 1,4% (EI)"
+  },
+  "#^# FLOPs : évaluation adversariale (red-teaming), évaluation des risques systémiques, rapport à la Commission.": {
+   "en": "",
+   "fr": "10^25 FLOPs : évaluation adversariale (red-teaming), évaluation des risques systémiques, rapport à la Commission."
+  },
+  "#^# FLOPs) ou si la Commission le désigne sur la base de capacités équivalentes.": {
+   "en": "",
+   "fr": "10^25 FLOPs) ou si la Commission le désigne sur la base de capacités équivalentes."
+  },
+  "#er août #": {
+   "en": "",
+   "fr": "1er août 2024"
+  },
+  "% (amplitude de la fourchette rapportée à la valeur centrale) · Version de méthodologie :": {
+   "en": "",
+   "fr": "% (amplitude de la fourchette rapportée à la valeur centrale) · Version de méthodologie :"
+  },
+  "% du CA mondial": {
+   "en": "",
+   "fr": "% du CA mondial"
+  },
+  "% du SaaS": {
+   "en": "",
+   "fr": "% du SaaS"
+  },
+  "% du SaaS (": {
+   "en": "",
+   "fr": "% du SaaS ("
+  },
+  "% du SaaS)": {
+   "en": "",
+   "fr": "% du SaaS)"
+  },
+  "% — échéance # décembre # (Digital Omnibus, haut risque annexe III)": {
+   "en": "",
+   "fr": "% — échéance 2 décembre 2027 (Digital Omnibus, haut risque annexe III)"
+  },
+  "%). Méthode retenue : cycle de vie étendu (usage + fabrication amont + hébergement).": {
+   "en": "",
+   "fr": "%). Méthode retenue : cycle de vie étendu (usage + fabrication amont + hébergement)."
+  },
+  "%, qui dilue précisément ce qu'il faut traiter en premier": {
+   "en": "",
+   "fr": "%, qui dilue précisément ce qu'il faut traiter en premier"
+  },
+  "%. Aucune allégation de neutralité, de compensation ou d’émissions évitées n’est formulée.": {
+   "en": "",
+   "fr": "%. Aucune allégation de neutralité, de compensation ou d’émissions évitées n’est formulée."
+  },
+  "%. C’est lui": {
+   "en": "",
+   "fr": "%. C’est lui"
+  },
+  "&nbsp;EUR par": {
+   "en": "",
+   "fr": "&nbsp;EUR par"
+  },
+  "&nbsp;·&nbsp; Genere le": {
+   "en": "",
+   "fr": "&nbsp;·&nbsp; Genere le"
+  },
+  "(acte délégué C(#) #, article #, §#).": {
+   "en": "",
+   "fr": "(acte délégué C(2024) 902, article 3, §3)."
+  },
+  "(aucun changement)": {
+   "en": "",
+   "fr": "(aucun changement)"
+  },
+  "(c) CONSEILPREV - Sentinel AI - Cartographie des risques reglementaires IA - christophe.cerf@outlook.com": {
+   "en": "",
+   "fr": "(c) CONSEILPREV - Sentinel AI - Cartographie des risques reglementaires IA - christophe.cerf@outlook.com"
+  },
+  "(hors délai)": {
+   "en": "",
+   "fr": "(hors délai)"
+  },
+  "(intitulé officiel :": {
+   "en": "",
+   "fr": "(intitulé officiel :"
+  },
+  "(plafonnée à": {
+   "en": "",
+   "fr": "(plafonnée à"
+  },
+  "(première anomalie au caractère": {
+   "en": "",
+   "fr": "(première anomalie au caractère"
+  },
+  "(sans nom)": {
+   "en": "",
+   "fr": "(sans nom)"
+  },
+  "(socle non calibré)": {
+   "en": "",
+   "fr": "(socle non calibré)"
+  },
+  "(sur une partie du groupe)": {
+   "en": "",
+   "fr": "(sur une partie du groupe)"
+  },
+  "(à demander à": {
+   "en": "",
+   "fr": "(à demander à"
+  },
+  ") sans message exploitable.": {
+   "en": "",
+   "fr": ") sans message exploitable."
+  },
+  ") · Méthodologie v": {
+   "en": "",
+   "fr": ") · Méthodologie v"
+  },
+  ") — CONSEILPREV · Règl. (UE) #/#": {
+   "en": "",
+   "fr": ") — CONSEILPREV · Règl. (UE) 2024/1689"
+  },
+  ") — toujours inférieur": {
+   "en": "",
+   "fr": ") — toujours inférieur"
+  },
+  "). Les obligations ci-dessous sont celles de ce rôle, et de lui seul. Un même système peut être à haut risque pour tous les opérateurs sans que chacun doive la même chose.": {
+   "en": "",
+   "fr": "). Les obligations ci-dessous sont celles de ce rôle, et de lui seul. Un même système peut être à haut risque pour tous les opérateurs sans que chacun doive la même chose."
+  },
+  "). Rechargez la page ou réessayez dans quelques secondes.": {
+   "en": "",
+   "fr": "). Rechargez la page ou réessayez dans quelques secondes."
+  },
+  "). Vérifiez la connexion au serveur.": {
+   "en": "",
+   "fr": "). Vérifiez la connexion au serveur."
+  },
+  "+ # jalons vérifiés → max annuel": {
+   "en": "",
+   "fr": "+ 7 jalons vérifiés → max annuel"
+  },
+  "+ Ajouter un système pour créer une fiche complète (classification, justification Annexe III, statut). Cliquez une ligne pour la modifier. La recherche filtre par nom, secteur, type ou responsable.": {
+   "en": "",
+   "fr": "+ Ajouter un système pour créer une fiche complète (classification, justification Annexe III, statut). Cliquez une ligne pour la modifier. La recherche filtre par nom, secteur, type ou responsable."
+  },
+  "+ jalons vérifiés → max annuel": {
+   "en": "",
+   "fr": "+ jalons vérifiés → max annuel"
+  },
+  ", applicable depuis le": {
+   "en": "",
+   "fr": ", applicable depuis le"
+  },
+  ", de vos données importées": {
+   "en": "",
+   "fr": ", de vos données importées"
+  },
+  ", et il est plafonné par ce que ce catalogue porte déjà —": {
+   "en": "",
+   "fr": ", et il est plafonné par ce que ce catalogue porte déjà —"
+  },
+  ", mais l email d invitation n a pas pu être envoyé (vérifiez la configuration SMTP).": {
+   "en": "",
+   "fr": ", mais l email d invitation n a pas pu être envoyé (vérifiez la configuration SMTP)."
+  },
+  ", or la compétence interne est": {
+   "en": "",
+   "fr": ", or la compétence interne est"
+  },
+  ", pas une sauvegarde.": {
+   "en": "",
+   "fr": ", pas une sauvegarde."
+  },
+  "- Cout total du projet :": {
+   "en": "",
+   "fr": "- Cout total du projet :"
+  },
+  "- Couts caches et extra :": {
+   "en": "",
+   "fr": "- Couts caches et extra :"
+  },
+  "- Inclus des champs à compléter par l'utilisateur (ex: [Nom du système], [Date]) là où c'est pertinent.": {
+   "en": "",
+   "fr": "- Inclus des champs à compléter par l'utilisateur (ex: [Nom du système], [Date]) là où c'est pertinent."
+  },
+  "- Outils et infrastructure :": {
+   "en": "",
+   "fr": "- Outils et infrastructure :"
+  },
+  "- Pour chaque section, référence explicitement les articles applicables.": {
+   "en": "",
+   "fr": "- Pour chaque section, référence explicitement les articles applicables."
+  },
+  "- Produis un document structuré, complet et directement utilisable par une organisation soumise à l'AI Act.": {
+   "en": "",
+   "fr": "- Produis un document structuré, complet et directement utilisable par une organisation soumise à l'AI Act."
+  },
+  "- Rédige en français professionnel, précis et sans redondance.": {
+   "en": "",
+   "fr": "- Rédige en français professionnel, précis et sans redondance."
+  },
+  "- Systemes IA inventories au Registre :": {
+   "en": "",
+   "fr": "- Systemes IA inventories au Registre :"
+  },
+  "- Utilise des titres markdown (## et ###), des listes à puces et des tableaux markdown lorsque pertinent.": {
+   "en": "",
+   "fr": "- Utilise des titres markdown (## et ###), des listes à puces et des tableaux markdown lorsque pertinent."
+  },
+  "--- autour du caractère": {
+   "en": "",
+   "fr": "--- autour du caractère"
+  },
+  "--- documents refusés ---": {
+   "en": "",
+   "fr": "--- documents refusés ---"
+  },
+  "--- début réel du fichier ---": {
+   "en": "",
+   "fr": "--- début réel du fichier ---"
+  },
+  ". Ces décisions ne font pas partie de celles qui ont été rapportées du": {
+   "en": "",
+   "fr": ". Ces décisions ne font pas partie de celles qui ont été rapportées du"
+  },
+  ". Ces références ne figurent pas au référentiel : traitez-les comme non fiables et vérifiez-les": {
+   "en": "",
+   "fr": ". Ces références ne figurent pas au référentiel : traitez-les comme non fiables et vérifiez-les"
+  },
+  ". Cibles, frequences de mesure, outils et responsables.": {
+   "en": "",
+   "fr": ". Cibles, frequences de mesure, outils et responsables."
+  },
+  ". Il n’a pas été changé pour vous&nbsp;:": {
+   "en": "",
+   "fr": ". Il n’a pas été changé pour vous&nbsp;:"
+  },
+  ". La licence est peut-être libre, le régime reste entier.": {
+   "en": "",
+   "fr": ". La licence est peut-être libre, le régime reste entier."
+  },
+  ". La relance a été enregistrée.": {
+   "en": "",
+   "fr": ". La relance a été enregistrée."
+  },
+  ". Le client va définir son propre mot de passe.": {
+   "en": "",
+   "fr": ". Le client va définir son propre mot de passe."
+  },
+  ". Résultats attendus :": {
+   "en": "",
+   "fr": ". Résultats attendus :"
+  },
+  "/ # — Score de maturite global": {
+   "en": "",
+   "fr": "/ 5 — Score de maturite global"
+  },
+  "/# renseigné(s))": {
+   "en": "",
+   "fr": "/3 renseigné(s))"
+  },
+  "/# — Dernière vérification :": {
+   "en": "",
+   "fr": "/10 — Dernière vérification :"
+  },
+  "/#). Prévoir montée en compétence, recrutement ou partenariat.": {
+   "en": "",
+   "fr": "/5). Prévoir montée en compétence, recrutement ou partenariat."
+  },
+  "/#). Prévoir une remédiation data préalable.": {
+   "en": "",
+   "fr": "/5). Prévoir une remédiation data préalable."
+  },
+  ": qualifier, chiffrer, puis découvrir le coût et l’enveloppe RaaS.": {
+   "en": "",
+   "fr": ": qualifier, chiffrer, puis découvrir le coût et l’enveloppe RaaS."
+  },
+  "; la limite est de": {
+   "en": "",
+   "fr": "; la limite est de"
+  },
+  "<#-# phrases expliquant la situation actuelle et les evolutions recentes>": {
+   "en": "",
+   "fr": "<2-3 phrases expliquant la situation actuelle et les evolutions recentes>"
+  },
+  "= #, orange >= #, vert < #). Geocodage non verifie officiellement.": {
+   "en": "",
+   "fr": "= 8, orange >= 5, vert < 5). Geocodage non verifie officiellement."
+  },
+  "=#, haut risque), orange (#-#, modere), vert (<#, faible). Scores : EU #, DE #, FR #, CN #, RU #, KR #, CA #, CH #, BR #, GB #, SG #, US #, JP #, AE #, NG #. Chaque juridiction a une fiche detail avec obligations, sanctions et textes.": {
+   "en": "",
+   "fr": "=8, haut risque), orange (5-8, modere), vert (<5, faible). Scores : EU 9.2, DE 8.8, FR 8.5, CN 8.0, RU 7.5, KR 7.0, CA 6.5, CH 6.5, BR 6.0, GB 5.5, SG 5.0, US 4.5, JP 4.0, AE 4.0, NG 2.5. Chaque juridiction a une fiche detail avec obligations, sanctions et textes."
+  },
+  "? Cette action est irréversible.": {
+   "en": "",
+   "fr": "? Cette action est irréversible."
+  },
+  "? Elle est effacée de ce navigateur et ne pourra pas être récupérée.": {
+   "en": "",
+   "fr": "? Elle est effacée de ce navigateur et ne pourra pas être récupérée."
+  },
+  "? Les autres référentiels gardent les leurs.": {
+   "en": "",
+   "fr": "? Les autres référentiels gardent les leurs."
+  },
+  "ADEME — Base Empreinte, facteurs d’émission sur cycle de vie, appliqués par le référentiel d’empreinte version #-#-a": {
+   "en": "",
+   "fr": "ADEME — Base Empreinte, facteurs d’émission sur cycle de vie, appliqués par le référentiel d’empreinte version 2026-07-a"
+  },
+  "ADEME, AIE, GIEC — facteurs d’émission sur cycle de vie": {
+   "en": "",
+   "fr": "ADEME, AIE, GIEC — facteurs d’émission sur cycle de vie"
+  },
+  "ADEME, AIE, JRC et GIEC pour les facteurs appliqués": {
+   "en": "",
+   "fr": "ADEME, AIE, JRC et GIEC pour les facteurs appliqués"
+  },
+  "AI #-# est un PROFIL du cadre, pas un second cadre : le citer sans le cadre en dessous, c’est citer le profil de rien.": {
+   "en": "",
+   "fr": "AI 600-1 est un PROFIL du cadre, pas un second cadre : le citer sans le cadre en dessous, c’est citer le profil de rien."
+  },
+  "AI Act Annexe I (machines). PME : # €. Marché en formation, peu de SaaS natifs.": {
+   "en": "",
+   "fr": "AI Act Annexe I (machines). PME : 400 €. Marché en formation, peu de SaaS natifs."
+  },
+  "AI Act Annexe III (mobilité). PME : # €. Internalisation fréquente grands groupes.": {
+   "en": "",
+   "fr": "AI Act Annexe III (mobilité). PME : 420 €. Internalisation fréquente grands groupes."
+  },
+  "AI Act Art. # + MDR + HDS. PME : # €. ETI/GE : sur-mesure, tarifs premium.": {
+   "en": "",
+   "fr": "AI Act Art. 22 + MDR + HDS. PME : 600 €. ETI/GE : sur-mesure, tarifs premium."
+  },
+  "AI Act — Guide ENISA systèmes cybersécurité IA": {
+   "en": "",
+   "fr": "AI Act — Guide ENISA systèmes cybersécurité IA"
+  },
+  "AIPD des traitements à risque (art. #)": {
+   "en": "",
+   "fr": "AIPD des traitements à risque (art. 35)"
+  },
+  "AIPD enregistrée.": {
+   "en": "",
+   "fr": "AIPD enregistrée."
+  },
+  "AIPD obligatoire si le traitement présente un risque élevé. Les projets IA impliquant profilage, décision automatisée ou traitement à grande échelle déclenchent quasi systématiquement cette obligation.": {
+   "en": "",
+   "fr": "AIPD obligatoire si le traitement présente un risque élevé. Les projets IA impliquant profilage, décision automatisée ou traitement à grande échelle déclenchent quasi systématiquement cette obligation."
+  },
+  "API api.mistral.ai, modele mistral-large-latest. Cle API actuellement en dur dans le code source cote client — A MIGRER en variable d environnement pour la securite.": {
+   "en": "",
+   "fr": "API api.mistral.ai, modele mistral-large-latest. Cle API actuellement en dur dans le code source cote client — A MIGRER en variable d environnement pour la securite."
+  },
+  "API de modèles dans les produits": {
+   "en": "",
+   "fr": "API de modèles dans les produits"
+  },
+  "API modèle IA intégrée": {
+   "en": "",
+   "fr": "API modèle IA intégrée"
+  },
+  "AUCUNE porte, et c’est constaté : Sentinel ne porte ni GTB, ni DCIM, ni gamme de maintenance. Ses compétences se forment et s’outillent ailleurs. Lui composer un parcours à partir des panneaux de gouvernance serait le promener.": {
+   "en": "",
+   "fr": "AUCUNE porte, et c’est constaté : Sentinel ne porte ni GTB, ni DCIM, ni gamme de maintenance. Ses compétences se forment et s’outillent ailleurs. Lui composer un parcours à partir des panneaux de gouvernance serait le promener."
+  },
+  "AUDIT DE MATURITÉ": {
+   "en": "",
+   "fr": "AUDIT DE MATURITÉ"
+  },
+  "Abonnement Stripe non encore rattaché.": {
+   "en": "",
+   "fr": "Abonnement Stripe non encore rattaché."
+  },
+  "Absence de compréhension de la logique du score": {
+   "en": "",
+   "fr": "Absence de compréhension de la logique du score"
+  },
+  "Absence de manipulation subliminale ou de techniques inconscientes (Art. #(#)(a))": {
+   "en": "",
+   "fr": "Absence de manipulation subliminale ou de techniques inconscientes (Art. 5(1)(a))"
+  },
+  "Absence d’exploitation des vulnerabilites de groupes specifiques (Art. #(#)(b))": {
+   "en": "",
+   "fr": "Absence d’exploitation des vulnerabilites de groupes specifiques (Art. 5(1)(b))"
+  },
+  "Acces aux journaux garanti pour les autorites competentes (Art. #(#))": {
+   "en": "",
+   "fr": "Acces aux journaux garanti pour les autorites competentes (Art. 12(3))"
+  },
+  "Accessible à vous et à CONSEILPREV (support/audit).": {
+   "en": "",
+   "fr": "Accessible à vous et à CONSEILPREV (support/audit)."
+  },
+  "Accompagnement, resistance au changement": {
+   "en": "",
+   "fr": "Accompagnement, resistance au changement"
+  },
+  "Accordez-vous avec le fabricant d’origine sur qui signale quoi. À défaut, vous signalerez tous les deux, ou aucun — et le second cas est le plus fréquent.": {
+   "en": "",
+   "fr": "Accordez-vous avec le fabricant d’origine sur qui signale quoi. À défaut, vous signalerez tous les deux, ou aucun — et le second cas est le plus fréquent."
+  },
+  "Accords de siège": {
+   "en": "",
+   "fr": "Accords de siège"
+  },
+  "Accès aux données et aux raisons de la décision": {
+   "en": "",
+   "fr": "Accès aux données et aux raisons de la décision"
+  },
+  "Accès illégitime aux données": {
+   "en": "",
+   "fr": "Accès illégitime aux données"
+  },
+  "Accès refusé": {
+   "en": "",
+   "fr": "Accès refusé"
+  },
+  "Accès réservé aux plans Pro/Entreprise.": {
+   "en": "",
+   "fr": "Accès réservé aux plans Pro/Entreprise."
+  },
+  "Accès réservé à CONSEILPREV — entrez la clé d accès à la base de connaissance :": {
+   "en": "",
+   "fr": "Accès réservé à CONSEILPREV — entrez la clé d accès à la base de connaissance :"
+  },
+  "Acquis — irrévocable": {
+   "en": "",
+   "fr": "Acquis — irrévocable"
+  },
+  "Actions correctives et devoir d'information": {
+   "en": "",
+   "fr": "Actions correctives et devoir d'information"
+  },
+  "ActuIA, ANSSI, CNIL, Le Monde Informatique, Usine Digitale, Cybersecurite-info": {
+   "en": "",
+   "fr": "ActuIA, ANSSI, CNIL, Le Monde Informatique, Usine Digitale, Cybersecurite-info"
+  },
+  "Actualisez après chaque ajout au registre. Regardez d’abord les données sensibles (art. #) et les transferts hors UE : ce sont les deux postes qui appellent des garanties spécifiques.": {
+   "en": "",
+   "fr": "Actualisez après chaque ajout au registre. Regardez d’abord les données sensibles (art. 9) et les transferts hors UE : ce sont les deux postes qui appellent des garanties spécifiques."
+  }
+ }
+}

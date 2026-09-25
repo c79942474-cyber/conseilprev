@@ -1,0 +1,839 @@
+{
+ "_lot": "26-js-8",
+ "_mots": 2460,
+ "_pages": [
+  "_js"
+ ],
+ "_rubrique": "_js",
+ "bloc": {},
+ "texte": {
+  "Deux limites à respecter": {
+   "en": "",
+   "fr": "Deux limites à respecter"
+  },
+  "Deux obligations qui se traitent avant le déploiement et deviennent impossibles à rattraper après.": {
+   "en": "",
+   "fr": "Deux obligations qui se traitent avant le déploiement et deviennent impossibles à rattraper après."
+  },
+  "Deux référentiels, et le second n'est pas une norme de plus : SP #-# SURCHARGE SP #-# pour l'industriel. Son annexe G le dit en toutes lettres. Ce parcours les prend dans l'ordre où ils se montent — le catalogue, puis ce que le procédé y ajoute — parce que l'inverse fait lire une adaptation sans savoir de quoi.": {
+   "en": "",
+   "fr": "Deux référentiels, et le second n'est pas une norme de plus : SP 800-82 SURCHARGE SP 800-53 pour l'industriel. Son annexe G le dit en toutes lettres. Ce parcours les prend dans l'ordre où ils se montent — le catalogue, puis ce que le procédé y ajoute — parce que l'inverse fait lire une adaptation sans savoir de quoi."
+  },
+  "Deux régimes peuvent obtenir un score voisin par des chemins opposés — l’un exigeant sur la donnée, l’autre sur la transparence. Lisez les dimensions, pas seulement le total.": {
+   "en": "",
+   "fr": "Deux régimes peuvent obtenir un score voisin par des chemins opposés — l’un exigeant sur la donnée, l’autre sur la transparence. Lisez les dimensions, pas seulement le total."
+  },
+  "Deux sorties possibles y sont vérifiées avant tout le reste : ce n’est peut-être pas un système d’IA, et ce n’est peut-être pas à vous de porter le régime.": {
+   "en": "",
+   "fr": "Deux sorties possibles y sont vérifiées avant tout le reste : ce n’est peut-être pas un système d’IA, et ce n’est peut-être pas à vous de porter le régime."
+  },
+  "Deux taux : le global, et celui des neuf articles que # ajoute vraiment. C’est le second qui dit où va le budget.": {
+   "en": "",
+   "fr": "Deux taux : le global, et celui des neuf articles que 42001 ajoute vraiment. C’est le second qui dit où va le budget."
+  },
+  "Diagnostic copié": {
+   "en": "",
+   "fr": "Diagnostic copié"
+  },
+  "Diagnostic de cadrage — à valider avec la DSI et les métiers. Barème : # absent, # en construction, # maîtrisé. Généré par Sentinel AI.": {
+   "en": "",
+   "fr": "Diagnostic de cadrage — à valider avec la DSI et les métiers. Barème : 1 absent, 3 en construction, 5 maîtrisé. Généré par Sentinel AI."
+  },
+  "Diagnostic de maturité IA": {
+   "en": "",
+   "fr": "Diagnostic de maturité IA"
+  },
+  "Diagnostic de maturité data et compétences techniques": {
+   "en": "",
+   "fr": "Diagnostic de maturité data et compétences techniques"
+  },
+  "Diagnostic du compteur.": {
+   "en": "",
+   "fr": "Diagnostic du compteur."
+  },
+  "Diagnostic vocal automatise des pannes box/mobile avant transfert agent.": {
+   "en": "",
+   "fr": "Diagnostic vocal automatise des pannes box/mobile avant transfert agent."
+  },
+  "Difference AI Act et NIS# ?": {
+   "en": "",
+   "fr": "Difference AI Act et NIS2 ?"
+  },
+  "Differents niveaux de risque ?": {
+   "en": "",
+   "fr": "Differents niveaux de risque ?"
+  },
+  "Diffusez ce réflexe aux chefs de projet IA : qualifier avant de coder, pas après.": {
+   "en": "",
+   "fr": "Diffusez ce réflexe aux chefs de projet IA : qualifier avant de coder, pas après."
+  },
+  "Différence avec Mon Espace": {
+   "en": "",
+   "fr": "Différence avec Mon Espace"
+  },
+  "Différence avec Reporting": {
+   "en": "",
+   "fr": "Différence avec Reporting"
+  },
+  "Dignité humaine": {
+   "en": "",
+   "fr": "Dignité humaine"
+  },
+  "Dimensionnement dynamique de capacite reseau": {
+   "en": "",
+   "fr": "Dimensionnement dynamique de capacite reseau"
+  },
+  "Directeur de Programme IA Act": {
+   "en": "",
+   "fr": "Directeur de Programme IA Act"
+  },
+  "Directeur de programme IA Act": {
+   "en": "",
+   "fr": "Directeur de programme IA Act"
+  },
+  "Direction commerciale & développement": {
+   "en": "",
+   "fr": "Direction commerciale & développement"
+  },
+  "Direction commerciale & développement — où est le marché, et ce qu’il coûte": {
+   "en": "",
+   "fr": "Direction commerciale & développement — où est le marché, et ce qu’il coûte"
+  },
+  "Direction de l’exploitation": {
+   "en": "",
+   "fr": "Direction de l’exploitation"
+  },
+  "Direction de l’exploitation — arbitrer sur un parc, pas sur un site": {
+   "en": "",
+   "fr": "Direction de l’exploitation — arbitrer sur un parc, pas sur un site"
+  },
+  "Direction de programme / de projet": {
+   "en": "",
+   "fr": "Direction de programme / de projet"
+  },
+  "Direction des Risques / Credit": {
+   "en": "",
+   "fr": "Direction des Risques / Credit"
+  },
+  "Direction des Systemes d Information (DSI) Publique": {
+   "en": "",
+   "fr": "Direction des Systemes d Information (DSI) Publique"
+  },
+  "Direction des Systemes d Information de Sante (DSIS)": {
+   "en": "",
+   "fr": "Direction des Systemes d Information de Sante (DSIS)"
+  },
+  "Direction des systèmes d’information et de la technologie": {
+   "en": "",
+   "fr": "Direction des systèmes d’information et de la technologie"
+  },
+  "Direction générale": {
+   "en": "",
+   "fr": "Direction générale"
+  },
+  "Direction générale, CAIO, conformité, DPO, RSSI, responsables de programme IA": {
+   "en": "",
+   "fr": "Direction générale, CAIO, conformité, DPO, RSSI, responsables de programme IA"
+  },
+  "Direction générale, conformité, DSI, DPO": {
+   "en": "",
+   "fr": "Direction générale, conformité, DSI, DPO"
+  },
+  "Direction — dois-je faire certifier mon système de management de l’IA ?": {
+   "en": "",
+   "fr": "Direction — dois-je faire certifier mon système de management de l’IA ?"
+  },
+  "Direction — je veux savoir où nous en sommes sur les neuf, et par quoi commencer": {
+   "en": "",
+   "fr": "Direction — je veux savoir où nous en sommes sur les neuf, et par quoi commencer"
+  },
+  "Direction, RH, responsables de la transformation, futurs ambassadeurs": {
+   "en": "",
+   "fr": "Direction, RH, responsables de la transformation, futurs ambassadeurs"
+  },
+  "Directive #/# (voyages à forfait)": {
+   "en": "",
+   "fr": "Directive 2015/2302 (voyages à forfait)"
+  },
+  "Directive #/# — Non-conformité ANSSI signalée": {
+   "en": "",
+   "fr": "Directive 2022/2555 — Non-conformité ANSSI signalée"
+  },
+  "Directive #/#/CE (déchets d'extraction)": {
+   "en": "",
+   "fr": "Directive 2006/21/CE (déchets d'extraction)"
+  },
+  "Directive #/#/CE (travail intérimaire)": {
+   "en": "",
+   "fr": "Directive 2008/104/CE (travail intérimaire)"
+  },
+  "Directive #/#/UE (performance énergétique)": {
+   "en": "",
+   "fr": "Directive 2010/31/UE (performance énergétique)"
+  },
+  "Dirigeant — c’est moi que l’article # nomme": {
+   "en": "",
+   "fr": "Dirigeant — c’est moi que l’article 20 nomme"
+  },
+  "Dirigeants, chefs de projet, juristes, DSI": {
+   "en": "",
+   "fr": "Dirigeants, chefs de projet, juristes, DSI"
+  },
+  "Disparition des données": {
+   "en": "",
+   "fr": "Disparition des données"
+  },
+  "Disponibilite des systemes critiques": {
+   "en": "",
+   "fr": "Disponibilite des systemes critiques"
+  },
+  "Disponibilité et volume des données": {
+   "en": "",
+   "fr": "Disponibilité et volume des données"
+  },
+  "Distingue une architecture éprouvée d’une architecture à la mode — la seconde se paie à la reprise.": {
+   "en": "",
+   "fr": "Distingue une architecture éprouvée d’une architecture à la mode — la seconde se paie à la reprise."
+  },
+  "Distinguer la personnalisation légitime (Art. # → transparence) des pratiques manipulatoires (Art. # → interdiction). La frontière peut être ténue selon les techniques utilisées.": {
+   "en": "",
+   "fr": "Distinguer la personnalisation légitime (Art. 50 → transparence) des pratiques manipulatoires (Art. 5 → interdiction). La frontière peut être ténue selon les techniques utilisées."
+  },
+  "Distinguer les usages internes des contenus publiés — seuls ces derniers déclenchent l'obligation de signalement.": {
+   "en": "",
+   "fr": "Distinguer les usages internes des contenus publiés — seuls ces derniers déclenchent l'obligation de signalement."
+  },
+  "Distinguer votre empreinte de celle de vos outils": {
+   "en": "",
+   "fr": "Distinguer votre empreinte de celle de vos outils"
+  },
+  "Distinguez les publics : tout le monde n’a pas les mêmes obligations. Les équipes qui manipulent des données sensibles et celles qui conçoivent des traitements appellent des sessions distinctes. Exportez le plan pour le faire valider.": {
+   "en": "",
+   "fr": "Distinguez les publics : tout le monde n’a pas les mêmes obligations. Les équipes qui manipulent des données sensibles et celles qui conçoivent des traitements appellent des sessions distinctes. Exportez le plan pour le faire valider."
+  },
+  "Distributeur (met à disposition sur le marché UE)": {
+   "en": "",
+   "fr": "Distributeur (met à disposition sur le marché UE)"
+  },
+  "Distributeur — je mets à disposition sans concevoir ni importer": {
+   "en": "",
+   "fr": "Distributeur — je mets à disposition sans concevoir ni importer"
+  },
+  "Distribution, négoce, commerce de détail physique et en ligne, places de marché.": {
+   "en": "",
+   "fr": "Distribution, négoce, commerce de détail physique et en ligne, places de marché."
+  },
+  "Dix défaillances qui reviennent, classées par fréquence constatée. Ce n’est ni une norme ni un référentiel certifiable : on ne s’y conforme pas, on s’en sert comme d’une liste de contrôle. Le parcours finit sur la question qui fâche : ce que votre certification ISO/IEC # ne vous donne pas.": {
+   "en": "",
+   "fr": "Dix défaillances qui reviennent, classées par fréquence constatée. Ce n’est ni une norme ni un référentiel certifiable : on ne s’y conforme pas, on s’en sert comme d’une liste de contrôle. Le parcours finit sur la question qui fâche : ce que votre certification ISO/IEC 42001 ne vous donne pas."
+  },
+  "Document contractuel généré par Sentinel AI. Les seuils et montants sont ceux de l’échéancier en vigueur à la date d’établissement. CONSEILPREV — Christophe CERF — christophe.cerf@outlook.com": {
+   "en": "",
+   "fr": "Document contractuel généré par Sentinel AI. Les seuils et montants sont ceux de l’échéancier en vigueur à la date d’établissement. CONSEILPREV — Christophe CERF — christophe.cerf@outlook.com"
+  },
+  "Document de cadrage — cas d’usage qualifiés (scoring pondéré : impact # %, faisabilité # %, données # %, risque maîtrisé # %) et priorisés (P# ≥ # ; P# ≥ #). Estimations à valider avec les métiers et la DSI. Généré par Sentinel AI.": {
+   "en": "",
+   "fr": "Document de cadrage — cas d’usage qualifiés (scoring pondéré : impact 35 %, faisabilité 25 %, données 20 %, risque maîtrisé 20 %) et priorisés (P1 ≥ 4,0 ; P2 ≥ 3,2). Estimations à valider avec les métiers et la DSI. Généré par Sentinel AI."
+  },
+  "Document de conformité RGPD (art. #). À tenir à jour et à valider avec le délégué à la protection des données. Généré par Sentinel.": {
+   "en": "",
+   "fr": "Document de conformité RGPD (art. 30). À tenir à jour et à valider avec le délégué à la protection des données. Généré par Sentinel."
+  },
+  "Document généré automatiquement par Sentinel AI à partir des données réelles de votre Registre IA. Imprimez (Ctrl+P) ou enregistrez en PDF.": {
+   "en": "",
+   "fr": "Document généré automatiquement par Sentinel AI à partir des données réelles de votre Registre IA. Imprimez (Ctrl+P) ou enregistrez en PDF."
+  },
+  "Document généré depuis Sentinel. Les indices reflètent l’état de vos évaluations à la date d’édition.": {
+   "en": "",
+   "fr": "Document généré depuis Sentinel. Les indices reflètent l’état de vos évaluations à la date d’édition."
+  },
+  "Document généré par IA à partir des résultats de l'audit de maturité. À valider par un expert. CONSEILPREV — Christophe CERF — +# # # # # # — christophe.cerf@outlook.com": {
+   "en": "",
+   "fr": "Document généré par IA à partir des résultats de l'audit de maturité. À valider par un expert. CONSEILPREV — Christophe CERF — +33 6 60 69 21 45 — christophe.cerf@outlook.com"
+  },
+  "Document généré par Sentinel AI (": {
+   "en": "",
+   "fr": "Document généré par Sentinel AI ("
+  },
+  "Document généré par un système d’intelligence artificielle (IA Act, art. #).": {
+   "en": "",
+   "fr": "Document généré par un système d’intelligence artificielle (IA Act, art. 50)."
+  },
+  "Document interne CONSEILPREV — données de suivi client à usage strictement interne. Généré par Sentinel AI.": {
+   "en": "",
+   "fr": "Document interne CONSEILPREV — données de suivi client à usage strictement interne. Généré par Sentinel AI."
+  },
+  "Document méthodologique généré par IA à partir des résultats de l audit de maturité. À valider par un expert. CONSEILPREV — Christophe CERF — +# # # # # # — christophe.cerf@outlook.com": {
+   "en": "",
+   "fr": "Document méthodologique généré par IA à partir des résultats de l audit de maturité. À valider par un expert. CONSEILPREV — Christophe CERF — +33 6 60 69 21 45 — christophe.cerf@outlook.com"
+  },
+  "Document produit par la plateforme Sentinel ; certaines sections peuvent être générées par IA (IA Act, art. #).": {
+   "en": "",
+   "fr": "Document produit par la plateforme Sentinel ; certaines sections peuvent être générées par IA (IA Act, art. 50)."
+  },
+  "Document technique. Ne constitue ni une déclaration réglementaire au titre de l’article L. #-# du code de l’environnement, ni un avis juridique. Les facteurs et paramètres doivent être revus au moins annuellement.": {
+   "en": "",
+   "fr": "Document technique. Ne constitue ni une déclaration réglementaire au titre de l’article L. 229-25 du code de l’environnement, ni un avis juridique. Les facteurs et paramètres doivent être revus au moins annuellement."
+  },
+  "Documentation & Modèles": {
+   "en": "",
+   "fr": "Documentation & Modèles"
+  },
+  "Documentation claire sur les capacités, limites, performances, conditions d'utilisation prévue et restrictions.": {
+   "en": "",
+   "fr": "Documentation claire sur les capacités, limites, performances, conditions d'utilisation prévue et restrictions."
+  },
+  "Documentation de la provenance des données": {
+   "en": "",
+   "fr": "Documentation de la provenance des données"
+  },
+  "Documentation des mesures d’attenuation et de leur efficacite": {
+   "en": "",
+   "fr": "Documentation des mesures d’attenuation et de leur efficacite"
+  },
+  "Documentation des sources, methodes de collecte et traitements appliques": {
+   "en": "",
+   "fr": "Documentation des sources, methodes de collecte et traitements appliques"
+  },
+  "Documentation et supports": {
+   "en": "",
+   "fr": "Documentation et supports"
+  },
+  "Documentation technique des modeles GPAI etablie (Art. #(#)(a))": {
+   "en": "",
+   "fr": "Documentation technique des modeles GPAI etablie (Art. 53(1)(a))"
+  },
+  "Documentation technique et resume d entrainement des modeles GPAI": {
+   "en": "",
+   "fr": "Documentation technique et resume d entrainement des modeles GPAI"
+  },
+  "Documentation technique, contrat fournisseur, politique de marquage, captures d'écran…": {
+   "en": "",
+   "fr": "Documentation technique, contrat fournisseur, politique de marquage, captures d'écran…"
+  },
+  "Documentation technique, politique de droits d'auteur respectant les réservations des détenteurs, résumé du contenu d'entraînement publiquement disponible, coopération avec l'AI Office.": {
+   "en": "",
+   "fr": "Documentation technique, politique de droits d'auteur respectant les réservations des détenteurs, résumé du contenu d'entraînement publiquement disponible, coopération avec l'AI Office."
+  },
+  "Documente formellement un risque souvent sous-estimé : l’impact humain, pas seulement technique.": {
+   "en": "",
+   "fr": "Documente formellement un risque souvent sous-estimé : l’impact humain, pas seulement technique."
+  },
+  "Documente l’impact humain, que les indicateurs de performance d’un modèle ne mesurent jamais.": {
+   "en": "",
+   "fr": "Documente l’impact humain, que les indicateurs de performance d’un modèle ne mesurent jamais."
+  },
+  "Documenter et justifier toute décision de modération": {
+   "en": "",
+   "fr": "Documenter et justifier toute décision de modération"
+  },
+  "Documenter et prouver": {
+   "en": "",
+   "fr": "Documenter et prouver"
+  },
+  "Documenter et traiter toute non-conformité identifiée": {
+   "en": "",
+   "fr": "Documenter et traiter toute non-conformité identifiée"
+  },
+  "Documenter l'analyse via l'outil dédié (module FRIA de Sentinel)": {
+   "en": "",
+   "fr": "Documenter l'analyse via l'outil dédié (module FRIA de Sentinel)"
+  },
+  "Documenter l'investigation et les actions correctives engagées après signalement": {
+   "en": "",
+   "fr": "Documenter l'investigation et les actions correctives engagées après signalement"
+  },
+  "Documenter l'origine et les caractéristiques des données d'entraînement": {
+   "en": "",
+   "fr": "Documenter l'origine et les caractéristiques des données d'entraînement"
+  },
+  "Documenter la décision de classification avant mise sur le marché": {
+   "en": "",
+   "fr": "Documenter la décision de classification avant mise sur le marché"
+  },
+  "Documenter la finalité précise de chaque traitement par IA dès la conception": {
+   "en": "",
+   "fr": "Documenter la finalité précise de chaque traitement par IA dès la conception"
+  },
+  "Documenter le contexte interne et externe pertinent pour vos systèmes IA": {
+   "en": "",
+   "fr": "Documenter le contexte interne et externe pertinent pour vos systèmes IA"
+  },
+  "Documenter les actions de formation": {
+   "en": "",
+   "fr": "Documenter les actions de formation"
+  },
+  "Documenter les biais identifiés et leur traitement (Art. #)": {
+   "en": "",
+   "fr": "Documenter les biais identifiés et leur traitement (Art. 10)"
+  },
+  "Documenter les contrôles retenus et leur justification (déclaration d'applicabilité)": {
+   "en": "",
+   "fr": "Documenter les contrôles retenus et leur justification (déclaration d'applicabilité)"
+  },
+  "Documenter les garanties mises en place (réexamen, explication, contestation)": {
+   "en": "",
+   "fr": "Documenter les garanties mises en place (réexamen, explication, contestation)"
+  },
+  "Documenter les interfaces techniques d'interopérabilité": {
+   "en": "",
+   "fr": "Documenter les interfaces techniques d'interopérabilité"
+  },
+  "Documenter les métriques de performance dans le dossier technique": {
+   "en": "",
+   "fr": "Documenter les métriques de performance dans le dossier technique"
+  },
+  "Documenter les procédures de contrôle et d'intervention": {
+   "en": "",
+   "fr": "Documenter les procédures de contrôle et d'intervention"
+  },
+  "Documenter les procédures de préparation des données": {
+   "en": "",
+   "fr": "Documenter les procédures de préparation des données"
+  },
+  "Documenter quelles données sont accessibles — un agent RAG mal cloisonné peut exposer des données sensibles.": {
+   "en": "",
+   "fr": "Documenter quelles données sont accessibles — un agent RAG mal cloisonné peut exposer des données sensibles."
+  },
+  "Documenter techniquement le fonctionnement du modèle pour pouvoir répondre": {
+   "en": "",
+   "fr": "Documenter techniquement le fonctionnement du modèle pour pouvoir répondre"
+  },
+  "Documenter une AIIA pour les systèmes à impact potentiel élevé sur les individus ou la société": {
+   "en": "",
+   "fr": "Documenter une AIIA pour les systèmes à impact potentiel élevé sur les individus ou la société"
+  },
+  "Documentez précisément les jeux de données utilisés par chaque système IA.": {
+   "en": "",
+   "fr": "Documentez précisément les jeux de données utilisés par chaque système IA."
+  },
+  "Documentez systématiquement la base légale du traitement pour chaque système, dès l’enregistrement.": {
+   "en": "",
+   "fr": "Documentez systématiquement la base légale du traitement pour chaque système, dès l’enregistrement."
+  },
+  "Donne une trajectoire claire vers l’échéance du # décembre # (obligations haut risque, annexe III).": {
+   "en": "",
+   "fr": "Donne une trajectoire claire vers l’échéance du 2 décembre 2027 (obligations haut risque, annexe III)."
+  },
+  "Donnees de sante hebergees HDS": {
+   "en": "",
+   "fr": "Donnees de sante hebergees HDS"
+  },
+  "Donnée d’activité": {
+   "en": "",
+   "fr": "Donnée d’activité"
+  },
+  "Données : disponibilité, qualité et accessibilité des données nécessaires. # = insuffisantes, # = prêtes.": {
+   "en": "",
+   "fr": "Données : disponibilité, qualité et accessibilité des données nécessaires. 1 = insuffisantes, 5 = prêtes."
+  },
+  "Données capteurs/IoT, historiques de pannes.": {
+   "en": "",
+   "fr": "Données capteurs/IoT, historiques de pannes."
+  },
+  "Données de géolocalisation": {
+   "en": "",
+   "fr": "Données de géolocalisation"
+  },
+  "Données de santé (catégorie spéciale)": {
+   "en": "",
+   "fr": "Données de santé (catégorie spéciale)"
+  },
+  "Données des saisonniers": {
+   "en": "",
+   "fr": "Données des saisonniers"
+  },
+  "Données et gouvernance des données": {
+   "en": "",
+   "fr": "Données et gouvernance des données"
+  },
+  "Données financières, ESG, incidents, dépendance.": {
+   "en": "",
+   "fr": "Données financières, ESG, incidents, dépendance."
+  },
+  "Données sensibles (Art. # RGPD) et systèmes IA": {
+   "en": "",
+   "fr": "Données sensibles (Art. 9 RGPD) et systèmes IA"
+  },
+  "Données sensibles (art. #)": {
+   "en": "",
+   "fr": "Données sensibles (art. 9)"
+  },
+  "Données sensibles RGPD Art. #. Hébergement HDS (Hébergeur de Données de Santé) certifié obligatoire en France.": {
+   "en": "",
+   "fr": "Données sensibles RGPD Art. 9. Hébergement HDS (Hébergeur de Données de Santé) certifié obligatoire en France."
+  },
+  "Données sensibles ou à caractère hautement personnel": {
+   "en": "",
+   "fr": "Données sensibles ou à caractère hautement personnel"
+  },
+  "Données sensibles — article #": {
+   "en": "",
+   "fr": "Données sensibles — article 9"
+  },
+  "Données transmises (": {
+   "en": "",
+   "fr": "Données transmises ("
+  },
+  "Données utilisées": {
+   "en": "",
+   "fr": "Données utilisées"
+  },
+  "Dossier de preuve exportable en DOCX et PDF, marquage IA porté dans les métadonnées du fichier (art. # du règlement (UE) #/#), avec le nom exact du modèle employé.": {
+   "en": "",
+   "fr": "Dossier de preuve exportable en DOCX et PDF, marquage IA porté dans les métadonnées du fichier (art. 50 du règlement (UE) 2024/1689), avec le nom exact du modèle employé."
+  },
+  "Dossier de valeur — cas d’usage IA": {
+   "en": "",
+   "fr": "Dossier de valeur — cas d’usage IA"
+  },
+  "Dossier de valeur — estimations de cadrage à valider avec les métiers et la direction financière. Retour net année # = gain annuel − coût projet − coût récurrent. Généré par Sentinel AI.": {
+   "en": "",
+   "fr": "Dossier de valeur — estimations de cadrage à valider avec les métiers et la direction financière. Retour net année 1 = gain annuel − coût projet − coût récurrent. Généré par Sentinel AI."
+  },
+  "Dossier documentaire — sources, millésimes, hypothèses, formules — exportable en DOCX et PDF, marquage IA porté dans les métadonnées du fichier (art. # du règlement (UE) #/#), avec le nom exact du modèle employé.": {
+   "en": "",
+   "fr": "Dossier documentaire — sources, millésimes, hypothèses, formules — exportable en DOCX et PDF, marquage IA porté dans les métadonnées du fichier (art. 50 du règlement (UE) 2024/1689), avec le nom exact du modèle employé."
+  },
+  "Dossier technique complet avant mise sur le marché : architecture, données, performances, limitations, évaluation de conformité.": {
+   "en": "",
+   "fr": "Dossier technique complet avant mise sur le marché : architecture, données, performances, limitations, évaluation de conformité."
+  },
+  "Dossier technique complet établi avant mise sur le marché, conforme à l'Annexe IV. Contient : description générale, architecture, données utilisées, évaluation de conformité, performances et limites.": {
+   "en": "",
+   "fr": "Dossier technique complet établi avant mise sur le marché, conforme à l'Annexe IV. Contient : description générale, architecture, données utilisées, évaluation de conformité, performances et limites."
+  },
+  "Double evaluation de conformite (EU AI Act + MDR/IVDR)": {
+   "en": "",
+   "fr": "Double evaluation de conformite (EU AI Act + MDR/IVDR)"
+  },
+  "Double régime : EU AI Act + Règlement dispositifs médicaux (MDR/IVDR). Évaluation de conformité par organisme notifié obligatoire.": {
+   "en": "",
+   "fr": "Double régime : EU AI Act + Règlement dispositifs médicaux (MDR/IVDR). Évaluation de conformité par organisme notifié obligatoire."
+  },
+  "Droit d'accès": {
+   "en": "",
+   "fr": "Droit d'accès"
+  },
+  "Droit d'exprimer son point de vue": {
+   "en": "",
+   "fr": "Droit d'exprimer son point de vue"
+  },
+  "Droit d'obtenir une intervention humaine": {
+   "en": "",
+   "fr": "Droit d'obtenir une intervention humaine"
+  },
+  "Droit d'opposition aux décisions automatisées": {
+   "en": "",
+   "fr": "Droit d'opposition aux décisions automatisées"
+  },
+  "Droit de contestation : par quel canal, sous quel délai ?": {
+   "en": "",
+   "fr": "Droit de contestation : par quel canal, sous quel délai ?"
+  },
+  "Droit de contester la décision": {
+   "en": "",
+   "fr": "Droit de contester la décision"
+  },
+  "Droit de la non-discrimination": {
+   "en": "",
+   "fr": "Droit de la non-discrimination"
+  },
+  "Droit de ne pas faire l'objet d'une décision fondée exclusivement sur un traitement automatisé (y compris le profilage) produisant des effets juridiques ou affectant significativement la personne. # exceptions strictes : nécessité contractuelle, autorisation légale, consentement explicite.": {
+   "en": "",
+   "fr": "Droit de ne pas faire l'objet d'une décision fondée exclusivement sur un traitement automatisé (y compris le profilage) produisant des effets juridiques ou affectant significativement la personne. 3 exceptions strictes : nécessité contractuelle, autorisation légale, consentement explicite."
+  },
+  "Droit à l explication et droit de recours": {
+   "en": "",
+   "fr": "Droit à l explication et droit de recours"
+  },
+  "Droit à un recours effectif": {
+   "en": "",
+   "fr": "Droit à un recours effectif"
+  },
+  "Droit à une bonne administration": {
+   "en": "",
+   "fr": "Droit à une bonne administration"
+  },
+  "Droits de l'enfant": {
+   "en": "",
+   "fr": "Droits de l'enfant"
+  },
+  "Droits des personnes (art. # à #)": {
+   "en": "",
+   "fr": "Droits des personnes (art. 15 à 22)"
+  },
+  "Duplication manuelle des scores du tableau JURS de la page Apercu. Risque de desynchronisation si les scores source sont modifies sans repercuter ici.": {
+   "en": "",
+   "fr": "Duplication manuelle des scores du tableau JURS de la page Apercu. Risque de desynchronisation si les scores source sont modifies sans repercuter ici."
+  },
+  "Durée (mois)": {
+   "en": "",
+   "fr": "Durée (mois)"
+  },
+  "Durée de clôture −# % ; erreurs de saisie −# %.": {
+   "en": "",
+   "fr": "Durée de clôture −30 % ; erreurs de saisie −50 %."
+  },
+  "Durée de conservation": {
+   "en": "",
+   "fr": "Durée de conservation"
+  },
+  "Dès qu'ils attribuent des missions sur le comportement ou les caractéristiques d'un intervenant, ou qu'ils suivent ses performances. Une tournée optimisée sur le seul temps de trajet n'y est pas ; une tournée optimisée sur une note de l'intervenant y est.": {
+   "en": "",
+   "fr": "Dès qu'ils attribuent des missions sur le comportement ou les caractéristiques d'un intervenant, ou qu'ils suivent ses performances. Une tournée optimisée sur le seul temps de trajet n'y est pas ; une tournée optimisée sur une note de l'intervenant y est."
+  },
+  "Début réel du fichier": {
+   "en": "",
+   "fr": "Début réel du fichier"
+  },
+  "Décision automatisée": {
+   "en": "",
+   "fr": "Décision automatisée"
+  },
+  "Décision automatisée à effet juridique ou significatif": {
+   "en": "",
+   "fr": "Décision automatisée à effet juridique ou significatif"
+  },
+  "Décision fondée EXCLUSIVEMENT sur un traitement automatisé, profilage compris": {
+   "en": "",
+   "fr": "Décision fondée EXCLUSIVEMENT sur un traitement automatisé, profilage compris"
+  },
+  "Décision individuelle automatisée": {
+   "en": "",
+   "fr": "Décision individuelle automatisée"
+  },
+  "Décision légitime, à condition d’être appliquée. Interdire sans moyen de le constater produit l’usage clandestin : le code généré entre quand même, et sans aucune des vérifications du point #.": {
+   "en": "",
+   "fr": "Décision légitime, à condition d’être appliquée. Interdire sans moyen de le constater produit l’usage clandestin : le code généré entre quand même, et sans aucune des vérifications du point 2."
+  },
+  "Décision refusée (HTTP": {
+   "en": "",
+   "fr": "Décision refusée (HTTP"
+  },
+  "Décisions automatisées, scoring et intervention humaine": {
+   "en": "",
+   "fr": "Décisions automatisées, scoring et intervention humaine"
+  },
+  "Décisions de désactivation temporaire ou définitive de comptes chauffeurs": {
+   "en": "",
+   "fr": "Décisions de désactivation temporaire ou définitive de comptes chauffeurs"
+  },
+  "Décisions entièrement automatisées (Art. # RGPD)": {
+   "en": "",
+   "fr": "Décisions entièrement automatisées (Art. 22 RGPD)"
+  },
+  "Décisions individuelles (Annexe III)": {
+   "en": "",
+   "fr": "Décisions individuelles (Annexe III)"
+  },
+  "Décisions qui lui sont réservées": {
+   "en": "",
+   "fr": "Décisions qui lui sont réservées"
+  },
+  "Déclaration UE de conformité et marquage CE": {
+   "en": "",
+   "fr": "Déclaration UE de conformité et marquage CE"
+  },
+  "Déclaration d’applicabilité — article # d)": {
+   "en": "",
+   "fr": "Déclaration d’applicabilité — article 6.1.3 d)"
+  },
+  "Déclaration d’applicabilité — article # f)": {
+   "en": "",
+   "fr": "Déclaration d’applicabilité — article 6.1.3 f)"
+  },
+  "Déclaration écrite tenue à disposition des autorités pendant dix ans, et apposition du marquage CE avant mise sur le marché.": {
+   "en": "",
+   "fr": "Déclaration écrite tenue à disposition des autorités pendant dix ans, et apposition du marquage CE avant mise sur le marché."
+  },
+  "Déclarer le périmètre avant de le peser": {
+   "en": "",
+   "fr": "Déclarer le périmètre avant de le peser"
+  },
+  "Déclarer, famille par famille, où en est la maîtrise du système — et annoncer le socle (Low, Moderate, High) contre lequel on se mesure. Le taux qui en sort alimente l’indice de conformité, au même titre que les dix autres normes.": {
+   "en": "",
+   "fr": "Déclarer, famille par famille, où en est la maîtrise du système — et annoncer le socle (Low, Moderate, High) contre lequel on se mesure. Le taux qui en sort alimente l’indice de conformité, au même titre que les dix autres normes."
+  },
+  "Déclarez d’abord la criticité de la fonction soutenue : tant qu’elle ne l’est pas, rien n’est compté, parce qu’un taux sur neuf clauses alors que quinze sont dues serait rassurant à tort. Regardez ensuite les deux que l’autorité ouvre en premier : le droit d’audit illimité (§#, e) et la stratégie de sortie (§#, f).": {
+   "en": "",
+   "fr": "Déclarez d’abord la criticité de la fonction soutenue : tant qu’elle ne l’est pas, rien n’est compté, parce qu’un taux sur neuf clauses alors que quinze sont dues serait rassurant à tort. Regardez ensuite les deux que l’autorité ouvre en premier : le droit d’audit illimité (§3, e) et la stratégie de sortie (§3, f)."
+  },
+  "Déclarez la criticité, cochez les seuils atteints, puis horodatez la connaissance et la classification. L’horloge a deux bornes : quatre heures depuis la classification, vingt-quatre heures depuis la connaissance, la première échue commandant. Si la classification intervient après ces vingt-quatre heures, l’article #, §#, du règlement délégué (UE) #/# traite le cas à part.": {
+   "en": "",
+   "fr": "Déclarez la criticité, cochez les seuils atteints, puis horodatez la connaissance et la classification. L’horloge a deux bornes : quatre heures depuis la classification, vingt-quatre heures depuis la connaissance, la première échue commandant. Si la classification intervient après ces vingt-quatre heures, l’article 5, §2, du règlement délégué (UE) 2025/301 traite le cas à part."
+  },
+  "Déclarez l’unité de facturation « requêtes » là où c’est le cas : les systèmes facturés au jeton sortiront avec un hébergement non compté, et le reporting devra le dire.": {
+   "en": "",
+   "fr": "Déclarez l’unité de facturation « requêtes » là où c’est le cas : les systèmes facturés au jeton sortiront avec un hébergement non compté, et le reporting devra le dire."
+  },
+  "Déclarez vos produits et choisissez leur classe. Commencez par celui dont vous doutez, pas par le plus simple.": {
+   "en": "",
+   "fr": "Déclarez vos produits et choisissez leur classe. Commencez par celui dont vous doutez, pas par le plus simple."
+  },
+  "Déclarée par qui connaît le cas d’usage. Elle ne se devine pas depuis la finalité, qui est du texte libre et dirait n’importe quoi.": {
+   "en": "",
+   "fr": "Déclarée par qui connaît le cas d’usage. Elle ne se devine pas depuis la finalité, qui est du texte libre et dirait n’importe quoi."
+  },
+  "Déclencher les prélèvements Stripe pour toutes les échéances dues ? Cette action prélève réellement les clients.": {
+   "en": "",
+   "fr": "Déclencher les prélèvements Stripe pour toutes les échéances dues ? Cette action prélève réellement les clients."
+  },
+  "Déclenchées sur suspicion de fraude et sur de faibles notes clients": {
+   "en": "",
+   "fr": "Déclenchées sur suspicion de fraude et sur de faibles notes clients"
+  },
+  "Découpez en jalons trimestriels — un programme sans étapes intermédiaires perd en visibilité après #-# mois.": {
+   "en": "",
+   "fr": "Découpez en jalons trimestriels — un programme sans étapes intermédiaires perd en visibilité après 2-3 mois."
+  },
+  "Découverte Shadow AI": {
+   "en": "",
+   "fr": "Découverte Shadow AI"
+  },
+  "Découvrez les briques du dispositif et l’indice global de conformité.": {
+   "en": "",
+   "fr": "Découvrez les briques du dispositif et l’indice global de conformité."
+  },
+  "Découvrir le coût": {
+   "en": "",
+   "fr": "Découvrir le coût"
+  },
+  "Décrivez le système (étape #), répondez aux questions de classification (étape #), indiquez vos pratiques actuelles (étape #), précisez les aspects GPAI/données si pertinent (étape #), puis consultez le résultat détaillé (étape #). Vous pourrez ensuite l ajouter directement au Registre IA, sauvegarder la simulation dans l historique, ou lancer l audit complet.": {
+   "en": "",
+   "fr": "Décrivez le système (étape 1), répondez aux questions de classification (étape 2), indiquez vos pratiques actuelles (étape 3), précisez les aspects GPAI/données si pertinent (étape 4), puis consultez le résultat détaillé (étape 5). Vous pourrez ensuite l ajouter directement au Registre IA, sauvegarder la simulation dans l historique, ou lancer l audit complet."
+  },
+  "Décrivez qui qualifie un incident d’« important », et à quel moment.": {
+   "en": "",
+   "fr": "Décrivez qui qualifie un incident d’« important », et à quel moment."
+  },
+  "Définir clairement votre rôle (fournisseur, déployeur, ou les deux)": {
+   "en": "",
+   "fr": "Définir clairement votre rôle (fournisseur, déployeur, ou les deux)"
+  },
+  "Définir des indicateurs de performance du SMIA et les suivre régulièrement": {
+   "en": "",
+   "fr": "Définir des indicateurs de performance du SMIA et les suivre régulièrement"
+  },
+  "Définir et mesurer les niveaux d'exactitude cibles": {
+   "en": "",
+   "fr": "Définir et mesurer les niveaux d'exactitude cibles"
+  },
+  "Définir la durée de conservation des journaux": {
+   "en": "",
+   "fr": "Définir la durée de conservation des journaux"
+  },
+  "Définir le périmètre du mandat (vérification déclaration conformité, coopération autorités)": {
+   "en": "",
+   "fr": "Définir le périmètre du mandat (vérification déclaration conformité, coopération autorités)"
+  },
+  "Définir les critères déclenchant une intervention humaine": {
+   "en": "",
+   "fr": "Définir les critères déclenchant une intervention humaine"
+  },
+  "Définir les seuils déclenchant un signalement aux autorités": {
+   "en": "",
+   "fr": "Définir les seuils déclenchant un signalement aux autorités"
+  },
+  "Définir un plan d'action correctif (mise en conformité, retrait, désactivation, rappel)": {
+   "en": "",
+   "fr": "Définir un plan d'action correctif (mise en conformité, retrait, désactivation, rappel)"
+  },
+  "Définir une période de support et la communiquer": {
+   "en": "",
+   "fr": "Définir une période de support et la communiquer"
+  },
+  "Définit # termes clés. Système d'IA : machine utilisant des techniques d'apprentissage automatique, de raisonnement ou d'apprentissage profond, produisant des sorties influençant des environnements réels.": {
+   "en": "",
+   "fr": "Définit 65 termes clés. Système d'IA : machine utilisant des techniques d'apprentissage automatique, de raisonnement ou d'apprentissage profond, produisant des sorties influençant des environnements réels."
+  },
+  "Définitions clés : système IA, fournisseur, déployeur (Art. #)": {
+   "en": "",
+   "fr": "Définitions clés : système IA, fournisseur, déployeur (Art. 3)"
+  },
+  "Déjà certifié ISO # — qu’est-ce que # ajoute ?": {
+   "en": "",
+   "fr": "Déjà certifié ISO 27001 — qu’est-ce que 42001 ajoute ?"
+  },
+  "Déjà certifié ISO #:# — qu’est-ce qui a changé ?": {
+   "en": "",
+   "fr": "Déjà certifié ISO 27001:2013 — qu’est-ce qui a changé ?"
+  },
+  "Déjà conforme (mention affichée)": {
+   "en": "",
+   "fr": "Déjà conforme (mention affichée)"
+  },
+  "Déjà recueilli par": {
+   "en": "",
+   "fr": "Déjà recueilli par"
+  },
+  "Délai de production −# % ; déclinaisons par canal ×#.": {
+   "en": "",
+   "fr": "Délai de production −50 % ; déclinaisons par canal ×3."
+  },
+  "Délai de présélection −# % ; volume traité sans renfort.": {
+   "en": "",
+   "fr": "Délai de présélection −60 % ; volume traité sans renfort."
+  },
+  "Délai de publication −# % ; formulations homogènes.": {
+   "en": "",
+   "fr": "Délai de publication −40 % ; formulations homogènes."
+  },
+  "Délai de récupération : temps d’amortissement du coût projet.": {
+   "en": "",
+   "fr": "Délai de récupération : temps d’amortissement du coût projet."
+  },
+  "Délai de rédaction −# % ; complétude des critères +# %.": {
+   "en": "",
+   "fr": "Délai de rédaction −40 % ; complétude des critères +30 %."
+  },
+  "Démontre une trajectoire (amélioration ou dégradation) plutôt qu’une photo isolée — bien plus convaincant en comité.": {
+   "en": "",
+   "fr": "Démontre une trajectoire (amélioration ou dégradation) plutôt qu’une photo isolée — bien plus convaincant en comité."
+  },
+  "Déontologies ordinales": {
+   "en": "",
+   "fr": "Déontologies ordinales"
+  },
+  "Département qui utilise le système (RH, IT, Marketing, Finance…).": {
+   "en": "",
+   "fr": "Département qui utilise le système (RH, IT, Marketing, Finance…)."
+  },
+  "Dépend du produit final. Vérifier si le produit tombe sous l'Annexe III.": {
+   "en": "",
+   "fr": "Dépend du produit final. Vérifier si le produit tombe sous l'Annexe III."
+  },
+  "Dépend — risque limité sauf si décisions sur des personnes (RH, crédit)": {
+   "en": "",
+   "fr": "Dépend — risque limité sauf si décisions sur des personnes (RH, crédit)"
+  },
+  "Dépenses média, conversions, modèle d’attribution.": {
+   "en": "",
+   "fr": "Dépenses média, conversions, modèle d’attribution."
+  },
+  "Déplace la charge sur la revue, qui devient le point de contrôle réel. À ne choisir que si les relecteurs ont le temps et le mandat de refuser.": {
+   "en": "",
+   "fr": "Déplace la charge sur la revue, qui devient le point de contrôle réel. À ne choisir que si les relecteurs ont le temps et le mandat de refuser."
+  },
+  "Déplace la conversation de « faut-il le faire » à « où en sont ceux qui l’ont fait » — et c’est la seule des deux qui se conclut.": {
+   "en": "",
+   "fr": "Déplace la conversation de « faut-il le faire » à « où en sont ceux qui l’ont fait » — et c’est la seule des deux qui se conclut."
+  },
+  "Déplace la discussion de « est-ce faisable » à « où en sont ceux qui l’ont fait ».": {
+   "en": "",
+   "fr": "Déplace la discussion de « est-ce faisable » à « où en sont ceux qui l’ont fait »."
+  },
+  "Déplacements, documentation": {
+   "en": "",
+   "fr": "Déplacements, documentation"
+  },
+  "Dépliez la catégorie sur laquelle vous travaillez et servez-vous de ses points comme d’une liste de preuves à demander.": {
+   "en": "",
+   "fr": "Dépliez la catégorie sur laquelle vous travaillez et servez-vous de ses points comme d’une liste de preuves à demander."
+  },
+  "Dépliez la catégorie sur laquelle vous travaillez et servez-vous des points comme d’une liste de preuves à demander. Les énoncés sont en anglais et verbatim, volontairement : une pièce traduite ne se retrouve plus dans le document le jour où l’auditeur demande où elle est écrite.": {
+   "en": "",
+   "fr": "Dépliez la catégorie sur laquelle vous travaillez et servez-vous des points comme d’une liste de preuves à demander. Les énoncés sont en anglais et verbatim, volontairement : une pièce traduite ne se retrouve plus dans le document le jour où l’auditeur demande où elle est écrite."
+  }
+ }
+}

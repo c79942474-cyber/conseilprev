@@ -1,0 +1,1070 @@
+{
+ "_lot": "06-business-3",
+ "_mots": 2304,
+ "_pages": [
+  "pricing"
+ ],
+ "_rubrique": "BUSINESS",
+ "bloc": {
+  "Intervalle de confiance mois #Pessimiste (# €) : progression # % plus lente.Optimiste (# €) : progression # % plus rapide (orgs. ISO #/#).L’écart reflète l’incertitude sur votre vitesse de mise en conformité.": {
+   "en": "",
+   "fr": "Intervalle de confiance mois 6Pessimiste (563 €) : progression 45 % plus lente.Optimiste (632 €) : progression 50 % plus rapide (orgs. ISO 9001/27001).L’écart reflète l’incertitude sur votre vitesse de mise en conformité.",
+   "html": "<strong>Intervalle de confiance mois&nbsp;6</strong><br><em>Pessimiste (563 €)</em>&nbsp;: progression 45&nbsp;% plus lente.<br><em>Optimiste (632 €)</em>&nbsp;: progression 50&nbsp;% plus rapide (orgs. ISO&nbsp;9001/27001).<br>L’écart reflète l’incertitude sur votre vitesse de mise en conformité."
+  },
+  "Le modèle RaaS (Results as a Service) renverse la logique de l’abonnement classique : au lieu de payer un forfait fixe indépendant de vos progrès, vous réglez un socle réduit puis des jalons de conformité uniquement lorsqu’ils sont vérifiés. Le coût total reste toujours inférieur au SaaS équivalent. Suivez les cinq étapes ci-dessous pour comprendre, simuler et choisir.": {
+   "en": "",
+   "fr": "Le modèle RaaS (Results as a Service) renverse la logique de l’abonnement classique : au lieu de payer un forfait fixe indépendant de vos progrès, vous réglez un socle réduit puis des jalons de conformité uniquement lorsqu’ils sont vérifiés. Le coût total reste toujours inférieur au SaaS équivalent. Suivez les cinq étapes ci-dessous pour comprendre, simuler et choisir.",
+   "html": "Le modèle <strong>RaaS (Results as a Service)</strong> renverse la logique de l’abonnement classique&nbsp;: au lieu de payer un forfait fixe indépendant de vos progrès, vous réglez un socle réduit puis des jalons de conformité <strong>uniquement lorsqu’ils sont vérifiés</strong>. Le coût total reste toujours inférieur au SaaS équivalent. Suivez les cinq étapes ci-dessous pour comprendre, simuler et choisir."
+  },
+  "Ouvrez le cycle de facturation depuis la Gestion des clients. L'aperçu liste les échéances dues, sans aucun prélèvement : vérifiez-le.Après confirmation, chaque échéance donne lieu à l'émission d'une facture Stripe, prélevée automatiquement. Le montant du jalon est hors taxes ; la TVA de # % est ajoutée en ligne distincte sur la facture.Chaque prélèvement est idempotent : un même jalon ne peut être facturé deux fois, même en cas de double clic ou de rejeu.": {
+   "en": "",
+   "fr": "Ouvrez le cycle de facturation depuis la Gestion des clients. L'aperçu liste les échéances dues, sans aucun prélèvement : vérifiez-le.Après confirmation, chaque échéance donne lieu à l'émission d'une facture Stripe, prélevée automatiquement. Le montant du jalon est hors taxes ; la TVA de 20 % est ajoutée en ligne distincte sur la facture.Chaque prélèvement est idempotent : un même jalon ne peut être facturé deux fois, même en cas de double clic ou de rejeu.",
+   "html": "Ouvrez le <strong>cycle de facturation</strong> depuis la Gestion des clients. L'<strong>aperçu</strong> liste les échéances dues, sans aucun prélèvement : vérifiez-le.<br><br>Après confirmation, chaque échéance donne lieu à l'émission d'une facture Stripe, prélevée automatiquement. Le montant du jalon est <strong>hors taxes</strong> ; la TVA de 20 % est ajoutée en ligne distincte sur la facture.<br><br>Chaque prélèvement est <strong>idempotent</strong> : un même jalon ne peut être facturé deux fois, même en cas de double clic ou de rejeu."
+  },
+  "Part variable RaaSCalculée chaque mois à partir de vos données réelles Sentinel :• # €/point d'audit gagné• # % de la réduction d'exposition Art. #• # €/système conforme (pondéré par classification)Plafonnée à #× le socle fixe (# # €/mois max).": {
+   "en": "",
+   "fr": "Part variable RaaSCalculée chaque mois à partir de vos données réelles Sentinel :• 45 €/point d'audit gagné• 0,4 % de la réduction d'exposition Art. 99• 65 €/système conforme (pondéré par classification)Plafonnée à 4× le socle fixe (3 600 €/mois max).",
+   "html": "<strong>Part variable RaaS</strong><br>Calculée chaque mois à partir de vos données réelles Sentinel :<br>• <em>45 €/point d'audit gagné</em><br>• <em>0,4 % de la réduction d'exposition Art. 99</em><br>• <em>65 €/système conforme</em> (pondéré par classification)<br>Plafonnée à 4× le socle fixe (3 600 €/mois max)."
+  },
+  "Principe du paiement par jalons Vous payez un socle mensuel réduit (∵# % du SaaS), puis chaque jalon de conformité AI Act uniquement lorsqu’il est vérifié : score Sentinel du domaine atteint et validation documentaire par CONSEILPREV. Chaque jalon acquis est irrévocable et payé en # mensualités. Total maximal contractuellement borné à ≈# % du SaaS — le RaaS ne peut jamais coûter plus cher que l’abonnement classique.": {
+   "en": "",
+   "fr": "Principe du paiement par jalons Vous payez un socle mensuel réduit (∵35 % du SaaS), puis chaque jalon de conformité AI Act uniquement lorsqu’il est vérifié : score Sentinel du domaine atteint et validation documentaire par CONSEILPREV. Chaque jalon acquis est irrévocable et payé en 2 mensualités. Total maximal contractuellement borné à ≈95 % du SaaS — le RaaS ne peut jamais coûter plus cher que l’abonnement classique.",
+   "html": "<strong>Principe du paiement par jalons</strong><br> Vous payez un socle mensuel réduit (∵35&nbsp;% du SaaS), puis chaque jalon de conformité AI Act uniquement lorsqu’il est <em>vérifié</em>&nbsp;: score Sentinel du domaine atteint <em>et</em> validation documentaire par CONSEILPREV.<br> Chaque jalon acquis est <strong>irrévocable</strong> et payé en 2 mensualités.<br> Total maximal contractuellement borné à ≈95&nbsp;% du SaaS — le RaaS ne peut jamais coûter plus cher que l’abonnement classique."
+  },
+  "Protection contractuelleLe contrat RaaS doit impérativement définir :• Périmètre de responsabilité : distinction entre les obligations de moyens (CONSEILPREV) et les obligations de résultat dépendant du client• Plafond mensuel (recommandé : #× socle)• Plancher : le socle est toujours dû, même si aucun progrès n'est réalisé": {
+   "en": "",
+   "fr": "Protection contractuelleLe contrat RaaS doit impérativement définir :• Périmètre de responsabilité : distinction entre les obligations de moyens (CONSEILPREV) et les obligations de résultat dépendant du client• Plafond mensuel (recommandé : 4× socle)• Plancher : le socle est toujours dû, même si aucun progrès n'est réalisé",
+   "html": "<strong>Protection contractuelle</strong><br>Le contrat RaaS doit impérativement définir :<br>• <em>Périmètre de responsabilité</em> : distinction entre les obligations de moyens (CONSEILPREV) et les obligations de résultat dépendant du client<br>• <em>Plafond mensuel</em> (recommandé : 4× socle)<br>• <em>Plancher</em> : le socle est toujours dû, même si aucun progrès n'est réalisé"
+  },
+  "Périmètre IAEstimation du nombre de systèmes utilisant de l'IA dans votre organisation. Un système IA = tout outil prenant des décisions assistées par des algorithmes d'apprentissage automatique, de NLP ou de vision artificielle.": {
+   "en": "",
+   "fr": "Périmètre IAEstimation du nombre de systèmes utilisant de l'IA dans votre organisation. Un système IA = tout outil prenant des décisions assistées par des algorithmes d'apprentissage automatique, de NLP ou de vision artificielle.",
+   "html": "<strong>Périmètre IA</strong><br>Estimation du nombre de systèmes utilisant de l'IA dans votre organisation. Un système IA = tout outil prenant des décisions assistées par des algorithmes d'apprentissage automatique, de NLP ou de vision artificielle."
+  },
+  "Périmètre des systèmes IAIncluez tous les systèmes utilisant de l'IA dans vos processus métier : outils décisionnels, chatbots, systèmes de scoring, automatisations ML. Le coût SaaS augmente de # €/système au-delà de #, avec remises volume à partir de # systèmes.": {
+   "en": "",
+   "fr": "Périmètre des systèmes IAIncluez tous les systèmes utilisant de l'IA dans vos processus métier : outils décisionnels, chatbots, systèmes de scoring, automatisations ML. Le coût SaaS augmente de 180 €/système au-delà de 10, avec remises volume à partir de 20 systèmes.",
+   "html": "<strong>Périmètre des systèmes IA</strong><br>Incluez tous les systèmes utilisant de l'IA dans vos processus métier : outils décisionnels, chatbots, systèmes de scoring, automatisations ML. Le coût SaaS augmente de <em>180 €/système</em> au-delà de 10, avec remises volume à partir de 20 systèmes."
+  },
+  "RaaS par jalons — paiement sur résultats vérifiésSocle : # €/mois (∵# % du SaaS)Enveloppe résultats : # # € répartie sur # jalons AI Act, facturés uniquement après vérificationTotal max annuel : # # € — # % du SaaS, toujours inférieurJalon acquis = irrévocable ; paiement étalé sur # mensualités.": {
+   "en": "",
+   "fr": "RaaS par jalons — paiement sur résultats vérifiésSocle : 158 €/mois (∵35 % du SaaS)Enveloppe résultats : 3 240 € répartie sur 7 jalons AI Act, facturés uniquement après vérificationTotal max annuel : 5 136 € — 95 % du SaaS, toujours inférieurJalon acquis = irrévocable ; paiement étalé sur 2 mensualités.",
+   "html": "<strong>RaaS par jalons — paiement sur résultats vérifiés</strong><br>Socle&nbsp;: <em>158 €/mois</em> (∵35&nbsp;% du SaaS)<br>Enveloppe résultats&nbsp;: <em>3 240 €</em> répartie sur 7 jalons AI Act, facturés uniquement après vérification<br><strong>Total max annuel&nbsp;: 5 136 € — 95&nbsp;% du SaaS, toujours inférieur</strong><br>Jalon acquis = irrévocable&nbsp;; paiement étalé sur 2 mensualités."
+  },
+  "RaaS — Results as a ServiceModèle contractuel où la part variable de la facturation est indexée sur des résultats mesurables (score d'audit, systèmes conformes, réduction de l'exposition aux sanctions) plutôt que sur un forfait fixe.": {
+   "en": "",
+   "fr": "RaaS — Results as a ServiceModèle contractuel où la part variable de la facturation est indexée sur des résultats mesurables (score d'audit, systèmes conformes, réduction de l'exposition aux sanctions) plutôt que sur un forfait fixe.",
+   "html": "<strong>RaaS — Results as a Service</strong><br>Modèle contractuel où la part variable de la facturation est indexée sur des <em>résultats mesurables</em> (score d'audit, systèmes conformes, réduction de l'exposition aux sanctions) plutôt que sur un forfait fixe."
+  },
+  "SaaS classiqueAbonnement mensuel ou annuel fixe, indépendant de vos progrès de conformité. Le simulateur le calcule à partir d’un tarif de base propre à votre secteur et à la taille de votre organisation (de # à # # €/mois selon le profil), majoré pour chaque système IA au-delà de dix, avec remises volume et remise annuelle.": {
+   "en": "",
+   "fr": "SaaS classiqueAbonnement mensuel ou annuel fixe, indépendant de vos progrès de conformité. Le simulateur le calcule à partir d’un tarif de base propre à votre secteur et à la taille de votre organisation (de 300 à 3 600 €/mois selon le profil), majoré pour chaque système IA au-delà de dix, avec remises volume et remise annuelle.",
+   "html": "<strong>SaaS classique</strong><br>Abonnement mensuel ou annuel fixe, indépendant de vos progrès de conformité. Le simulateur le calcule à partir d’un tarif de base propre à votre secteur et à la taille de votre organisation (de 300 à 3 600 €/mois selon le profil), majoré pour chaque système IA au-delà de dix, avec remises volume et remise annuelle."
+  },
+  "Score de départ AI ActPourcentage des # critères d'audit validés à ce jour. Si vous ne le connaissez pas, utilisez les boutons d'estimation. La part variable RaaS est indexée à # €/point gagné — un passage de #% à #% rapporte # # €/mois de part variable.": {
+   "en": "",
+   "fr": "Score de départ AI ActPourcentage des 33 critères d'audit validés à ce jour. Si vous ne le connaissez pas, utilisez les boutons d'estimation. La part variable RaaS est indexée à 45 €/point gagné — un passage de 20% à 60% rapporte 1 800 €/mois de part variable.",
+   "html": "<strong>Score de départ AI Act</strong><br>Pourcentage des 33 critères d'audit validés à ce jour. Si vous ne le connaissez pas, utilisez les boutons d'estimation. La part variable RaaS est indexée à <em>45 €/point gagné</em> — un passage de 20% à 60% rapporte 1 800 €/mois de part variable."
+  },
+  "Segment de marchéPME (< # sal.) : #–# €/mois — OGMA # €, TARANIS # €, agences IA #–# €.ETI (#–# # sal.) : #–# # €/mois — Dastra, Tenacy.Grands comptes (> # # sal.) : # #–# # €/mois — OneTrust, EQS, Data Legal Drive.": {
+   "en": "",
+   "fr": "Segment de marchéPME (< 250 sal.) : 80–600 €/mois — OGMA 99 €, TARANIS 559 €, agences IA 300–500 €.ETI (250–5 000 sal.) : 750–1 800 €/mois — Dastra, Tenacy.Grands comptes (> 5 000 sal.) : 2 100–3 600 €/mois — OneTrust, EQS, Data Legal Drive.",
+   "html": "<strong>Segment de marché</strong><br><em>PME (&lt; 250 sal.)</em>&nbsp;: 80–600 €/mois — OGMA 99 €, TARANIS 559 €, agences IA 300–500 €.<br><em>ETI (250–5 000 sal.)</em>&nbsp;: 750–1 800 €/mois — Dastra, Tenacy.<br><em>Grands comptes (&gt; 5 000 sal.)</em>&nbsp;: 2 100–3 600 €/mois — OneTrust, EQS, Data Legal Drive."
+  },
+  "Sentinel EntrepriseToutes les fonctionnalités Pro + déploiement multi-entités, API d'intégration, SLA contractuel dédié, formation sur site, accompagnement personnalisé CONSEILPREV.Tarification sur devis — indexée sur vos résultats AI Act à l'échelle du groupe.": {
+   "en": "",
+   "fr": "Sentinel EntrepriseToutes les fonctionnalités Pro + déploiement multi-entités, API d'intégration, SLA contractuel dédié, formation sur site, accompagnement personnalisé CONSEILPREV.Tarification sur devis — indexée sur vos résultats AI Act à l'échelle du groupe.",
+   "html": "<strong>Sentinel Entreprise</strong><br>Toutes les fonctionnalités Pro + déploiement multi-entités, API d'intégration, SLA contractuel dédié, formation sur site, accompagnement personnalisé CONSEILPREV.<br><em>Tarification sur devis</em> — indexée sur vos résultats AI Act à l'échelle du groupe."
+  },
+  "Socle fixeCouvre l'infrastructure réelle : hébergement Render, API Mistral/Claude, base PostgreSQL Frankfurt, maintenance.Environ #-# % d'un SaaS équivalent. Stable quel que soit votre niveau de conformité.": {
+   "en": "",
+   "fr": "Socle fixeCouvre l'infrastructure réelle : hébergement Render, API Mistral/Claude, base PostgreSQL Frankfurt, maintenance.Environ 30-40 % d'un SaaS équivalent. Stable quel que soit votre niveau de conformité.",
+   "html": "<strong>Socle fixe</strong><br>Couvre l'infrastructure réelle : hébergement Render, API Mistral/Claude, base PostgreSQL Frankfurt, maintenance.<br><em>Environ 30-40 % d'un SaaS équivalent</em>. Stable quel que soit votre niveau de conformité."
+  },
+  "Sélectionnez le client, choisissez le cadre (IA Act, RGPD ou ISO/IEC #) et saisissez la valeur mensuelle du SaaS de référence, qui sert d'assiette à la part variable. L'échéancier de jalons est alors créé.L'opération est idempotente : elle n'écrase jamais un jalon existant. C'est la garantie du gel des acquis — un jalon déjà atteint ne peut être remis en cause par une réinitialisation.": {
+   "en": "",
+   "fr": "Sélectionnez le client, choisissez le cadre (IA Act, RGPD ou ISO/IEC 42001) et saisissez la valeur mensuelle du SaaS de référence, qui sert d'assiette à la part variable. L'échéancier de jalons est alors créé.L'opération est idempotente : elle n'écrase jamais un jalon existant. C'est la garantie du gel des acquis — un jalon déjà atteint ne peut être remis en cause par une réinitialisation.",
+   "html": "Sélectionnez le client, choisissez le <strong>cadre</strong> (IA Act, RGPD ou ISO/IEC 42001) et saisissez la <strong>valeur mensuelle du SaaS de référence</strong>, qui sert d'assiette à la part variable. L'échéancier de jalons est alors créé.<br><br>L'opération est <strong>idempotente</strong> : elle n'écrase jamais un jalon existant. C'est la garantie du gel des acquis — un jalon déjà atteint ne peut être remis en cause par une réinitialisation."
+  },
+  "Tarification par résultats": {
+   "en": "",
+   "fr": "Tarification par résultats",
+   "html": "Tarification <em>par résultats</em>"
+  },
+  "Un client est facturé soit par abonnement récurrent, soit par résultats — jamais les deux. À l'émission de la première facture par résultats, l'abonnement Stripe du client est automatiquement résilié.Annoncez clairement cette règle au client : elle évite tout litige sur une double facturation.": {
+   "en": "",
+   "fr": "Un client est facturé soit par abonnement récurrent, soit par résultats — jamais les deux. À l'émission de la première facture par résultats, l'abonnement Stripe du client est automatiquement résilié.Annoncez clairement cette règle au client : elle évite tout litige sur une double facturation.",
+   "html": "Un client est facturé <strong>soit</strong> par abonnement récurrent, <strong>soit</strong> par résultats — jamais les deux. À l'émission de la première facture par résultats, l'abonnement Stripe du client est automatiquement <strong>résilié</strong>.<br><br>Annoncez clairement cette règle au client : elle évite tout litige sur une double facturation."
+  },
+  "Un jalon ne devient facturable qu'à double condition : le score atteint le seuil, et une preuve documentaire est jointe. Aucune facturation n'est déclenchée automatiquement par un score : votre vérification est requise.Un jalon vérifié ou facturé devient immuable : il ne peut plus être modifié, ce qui protège le client comme vous en cas de litige.": {
+   "en": "",
+   "fr": "Un jalon ne devient facturable qu'à double condition : le score atteint le seuil, et une preuve documentaire est jointe. Aucune facturation n'est déclenchée automatiquement par un score : votre vérification est requise.Un jalon vérifié ou facturé devient immuable : il ne peut plus être modifié, ce qui protège le client comme vous en cas de litige.",
+   "html": "Un jalon ne devient facturable qu'à <strong>double condition</strong> : le score atteint le seuil, <strong>et</strong> une preuve documentaire est jointe. Aucune facturation n'est déclenchée automatiquement par un score : votre vérification est requise.<br><br>Un jalon vérifié ou facturé devient <strong>immuable</strong> : il ne peut plus être modifié, ce qui protège le client comme vous en cas de litige."
+  },
+  "VueMensuelle : coût de chaque mois.Cumulée : total depuis M#, révèle le mois où l’hybride devient avantageux.": {
+   "en": "",
+   "fr": "VueMensuelle : coût de chaque mois.Cumulée : total depuis M1, révèle le mois où l’hybride devient avantageux.",
+   "html": "<strong>Vue</strong><br>Mensuelle : coût de chaque mois.<br>Cumulée : total depuis M1, révèle le mois où l’hybride devient avantageux."
+  },
+  "Écart cumulé # moisSaaS : # # €Hybride : # # €SaaS moins coûteux de # € sur # mois. L’écart s’inverse généralement dès M#-M#.": {
+   "en": "",
+   "fr": "Écart cumulé 6 moisSaaS : 2 700 €Hybride : 3 420 €SaaS moins coûteux de 720 € sur 6 mois. L’écart s’inverse généralement dès M8-M10.",
+   "html": "<strong>Écart cumulé 6 mois</strong><br>SaaS&nbsp;: <em>2 700 €</em><br>Hybride&nbsp;: <em>3 420 €</em><br>SaaS moins coûteux de 720 € sur 6&nbsp;mois. L’écart s’inverse généralement dès M8-M10."
+  },
+  "📊 Socle hybride : # €/mois (∵# % du SaaS PME — secteur Télécom). Part variable plafonnée à #× le socle. Systèmes pondérés par classification. Outil d’aide à la décision commerciale — pas un engagement contractuel.": {
+   "en": "",
+   "fr": "📊 Socle hybride : 158 €/mois (∵35 % du SaaS PME — secteur Télécom). Part variable plafonnée à 3× le socle. Systèmes pondérés par classification. Outil d’aide à la décision commerciale — pas un engagement contractuel.",
+   "html": "📊 Socle hybride&nbsp;: <strong>158 €/mois</strong> (∵35&nbsp;% du SaaS PME — secteur <strong>Télécom</strong>). Part variable plafonnée à 3× le socle. Systèmes pondérés par classification. <strong>Outil d’aide à la décision commerciale — pas un engagement contractuel.</strong>"
+  }
+ },
+ "texte": {
+  "# % du SaaS": {
+   "en": "",
+   "fr": "86 % du SaaS"
+  },
+  "# % du SaaS (# # €) — toujours inférieur": {
+   "en": "",
+   "fr": "86 % du SaaS (5 400 €) — toujours inférieur"
+  },
+  "# modules : Registre IA, FRIA, Audit AI Act, Maturité, Veille qualifiée, Sanctions, Roadmap, RAG…": {
+   "en": "",
+   "fr": "27 modules : Registre IA, FRIA, Audit AI Act, Maturité, Veille qualifiée, Sanctions, Roadmap, RAG…"
+  },
+  "# modules essentiels (Observatoire, Simulateur, Réglementations, Formation)": {
+   "en": "",
+   "fr": "4 modules essentiels (Observatoire, Simulateur, Réglementations, Formation)"
+  },
+  "# modules verrouillés (Registre IA, FRIA, Audit, Maturité, Veille…)": {
+   "en": "",
+   "fr": "23 modules verrouillés (Registre IA, FRIA, Audit, Maturité, Veille…)"
+  },
+  "# modules. Tarification indexée sur vos résultats réels.": {
+   "en": "",
+   "fr": "27 modules. Tarification indexée sur vos résultats réels."
+  },
+  "# · Comprendre les sept jalons (cadre IA Act)": {
+   "en": "",
+   "fr": "2 · Comprendre les sept jalons (cadre IA Act)"
+  },
+  "# · Facturer et prélever": {
+   "en": "",
+   "fr": "4 · Facturer et prélever"
+  },
+  "# · Initialiser l'échéancier d'un client": {
+   "en": "",
+   "fr": "1 · Initialiser l'échéancier d'un client"
+  },
+  "# · Règle d'exclusion du cumul": {
+   "en": "",
+   "fr": "5 · Règle d'exclusion du cumul"
+  },
+  "# · Vérifier un jalon (l'humain dans la boucle)": {
+   "en": "",
+   "fr": "3 · Vérifier un jalon (l'humain dans la boucle)"
+  },
+  "# · Échec de paiement et suivi": {
+   "en": "",
+   "fr": "6 · Échec de paiement et suivi"
+  },
+  "# €/mois": {
+   "en": "",
+   "fr": "158 €/mois"
+  },
+  "#–# # €/mois": {
+   "en": "",
+   "fr": "300–2 800 €/mois"
+  },
+  "(engagement # mois)": {
+   "en": "",
+   "fr": "(engagement 12 mois)"
+  },
+  "(optionnel)": {
+   "en": "",
+   "fr": "(optionnel)"
+  },
+  "(plafonné)": {
+   "en": "",
+   "fr": "(plafonné)"
+  },
+  "(sans engagement)": {
+   "en": "",
+   "fr": "(sans engagement)"
+  },
+  "(score de maturité Sentinel)": {
+   "en": "",
+   "fr": "(score de maturité Sentinel)"
+  },
+  "+ # jalons vérifiés → max annuel # # € (# % du SaaS)": {
+   "en": "",
+   "fr": "+ 7 jalons vérifiés → max annuel 5 136 € (95 % du SaaS)"
+  },
+  "+ jalons vérifiés → max annuel # # € (# % du SaaS)": {
+   "en": "",
+   "fr": "+ jalons vérifiés → max annuel 5 136 € (95 % du SaaS)"
+  },
+  "/mois": {
+   "en": "",
+   "fr": "/mois"
+  },
+  ": la part variable ne peut excéder #× le socle fixe": {
+   "en": "",
+   "fr": ": la part variable ne peut excéder 4× le socle fixe"
+  },
+  "API d’intégration avec vos outils internes (GRC, ITSM, ERP)": {
+   "en": "",
+   "fr": "API d’intégration avec vos outils internes (GRC, ITSM, ERP)"
+  },
+  "ARCEP + AI Act + NIS#. PME : # €. ETI/GE : intégrateurs GRC, # #–# # €.": {
+   "en": "",
+   "fr": "ARCEP + AI Act + NIS2. PME : 450 €. ETI/GE : intégrateurs GRC, 1 200–2 800 €."
+  },
+  "Accès # modules · Registre IA · FRIA · Audit · Veille": {
+   "en": "",
+   "fr": "Accès 27 modules · Registre IA · FRIA · Audit · Veille"
+  },
+  "Accès gratuit en cours": {
+   "en": "",
+   "fr": "Accès gratuit en cours"
+  },
+  "Ajouter des systèmes →": {
+   "en": "",
+   "fr": "Ajouter des systèmes →"
+  },
+  "Annexe III": {
+   "en": "",
+   "fr": "Annexe III"
+  },
+  "Annuel": {
+   "en": "",
+   "fr": "Annuel"
+  },
+  "Articles applicables : Art. # · # · # · # · # — Règlement (UE) #/#": {
+   "en": "",
+   "fr": "Articles applicables : Art. 26 · 27 · 9 · 43 · 49 — Règlement (UE) 2024/1689"
+  },
+  "Attestation finale": {
+   "en": "",
+   "fr": "Attestation finale"
+  },
+  "Aucun engagement, aucune carte bancaire": {
+   "en": "",
+   "fr": "Aucun engagement, aucune carte bancaire"
+  },
+  "Aucune démarche (~#%)": {
+   "en": "",
+   "fr": "Aucune démarche (~10%)"
+  },
+  "Audit de conformité ≥ # %": {
+   "en": "",
+   "fr": "Audit de conformité ≥ 80 %"
+  },
+  "Audit de maturité": {
+   "en": "",
+   "fr": "Audit de maturité"
+  },
+  "CONSEILPREV est incité contractuellement à maximiser vos progrès de conformité": {
+   "en": "",
+   "fr": "CONSEILPREV est incité contractuellement à maximiser vos progrès de conformité"
+  },
+  "Calendrier AI Act consolidé": {
+   "en": "",
+   "fr": "Calendrier AI Act consolidé"
+  },
+  "Ce profil déclenche # jalon(s) de conformité sur les #, selon les modules Sentinel qu’il mobilise.": {
+   "en": "",
+   "fr": "Ce profil déclenche 7 jalon(s) de conformité sur les 7, selon les modules Sentinel qu’il mobilise."
+  },
+  "Chaque formule s’adapte automatiquement à votre secteur et à la taille de votre organisation, de la TPE au grand compte. Les tarifs affichés reflètent votre simulation ; le modèle RaaS par jalons s’applique aux formules Pro et Entreprise, avec un coût total toujours inférieur au SaaS équivalent.": {
+   "en": "",
+   "fr": "Chaque formule s’adapte automatiquement à votre secteur et à la taille de votre organisation, de la TPE au grand compte. Les tarifs affichés reflètent votre simulation ; le modèle RaaS par jalons s’applique aux formules Pro et Entreprise, avec un coût total toujours inférieur au SaaS équivalent."
+  },
+  "Chaque jalon porte une pondération et un seuil de déclenchement :": {
+   "en": "",
+   "fr": "Chaque jalon porte une pondération et un seuil de déclenchement :"
+  },
+  "Chiffre d'affaires annuel (€)": {
+   "en": "",
+   "fr": "Chiffre d'affaires annuel (€)"
+  },
+  "Choisir votre formule Sentinel AI": {
+   "en": "",
+   "fr": "Choisir votre formule Sentinel AI"
+  },
+  "Classification des risques": {
+   "en": "",
+   "fr": "Classification des risques"
+  },
+  "Comment fonctionne le modèle hybride": {
+   "en": "",
+   "fr": "Comment fonctionne le modèle hybride"
+  },
+  "Comment se déroule la mise en place du RaaS ?": {
+   "en": "",
+   "fr": "Comment se déroule la mise en place du RaaS ?"
+  },
+  "Comparer les formules": {
+   "en": "",
+   "fr": "Comparer les formules"
+  },
+  "Comprendre le modèle RaaS": {
+   "en": "",
+   "fr": "Comprendre le modèle RaaS"
+  },
+  "Contexte et attentes": {
+   "en": "",
+   "fr": "Contexte et attentes"
+  },
+  "Convaincu ? Envoyez votre demande — réponse personnalisée sous #h ouvrables.": {
+   "en": "",
+   "fr": "Convaincu ? Envoyez votre demande — réponse personnalisée sous 24h ouvrables."
+  },
+  "Couvre les coûts réels d'infrastructure (hébergement, API IA, base de données) — environ # à #% du tarif SaaS classique équivalent.": {
+   "en": "",
+   "fr": "Couvre les coûts réels d'infrastructure (hébergement, API IA, base de données) — environ 30 à 40% du tarif SaaS classique équivalent."
+  },
+  "Cumul": {
+   "en": "",
+   "fr": "Cumul"
+  },
+  "DPO, RSSI ou Direction juridique d’une PME ou ETI soumise à l’AI Act avec # à # systèmes IA. Idéal si vous souhaitez un modèle de facturation aligné sur vos résultats réels.": {
+   "en": "",
+   "fr": "DPO, RSSI ou Direction juridique d’une PME ou ETI soumise à l’AI Act avec 5 à 50 systèmes IA. Idéal si vous souhaitez un modèle de facturation aligné sur vos résultats réels."
+  },
+  "Demande de tarification par résultats": {
+   "en": "",
+   "fr": "Demande de tarification par résultats"
+  },
+  "Demander un accès Pro": {
+   "en": "",
+   "fr": "Demander un accès Pro"
+  },
+  "Demander un devis Entreprise": {
+   "en": "",
+   "fr": "Demander un devis Entreprise"
+  },
+  "Demander votre tarification": {
+   "en": "",
+   "fr": "Demander votre tarification"
+  },
+  "Données persistantes et traçables, historique complet": {
+   "en": "",
+   "fr": "Données persistantes et traçables, historique complet"
+  },
+  "Déclenchement projeté": {
+   "en": "",
+   "fr": "Déclenchement projeté"
+  },
+  "Découverte": {
+   "en": "",
+   "fr": "Découverte"
+  },
+  "Découvrez les # jalons de conformité AI Act, leur montant et leur déclenchement.": {
+   "en": "",
+   "fr": "Découvrez les 7 jalons de conformité AI Act, leur montant et leur déclenchement."
+  },
+  "Délai de mise en place : # à # semaines": {
+   "en": "",
+   "fr": "Délai de mise en place : 2 à 4 semaines"
+  },
+  "Démarche avancée (~#%)": {
+   "en": "",
+   "fr": "Démarche avancée (~55%)"
+  },
+  "Démarche initiale (~#%)": {
+   "en": "",
+   "fr": "Démarche initiale (~30%)"
+  },
+  "Déploiement multi-entités et multi-périmètres (groupes, filiales)": {
+   "en": "",
+   "fr": "Déploiement multi-entités et multi-périmètres (groupes, filiales)"
+  },
+  "Détailler votre échéancier": {
+   "en": "",
+   "fr": "Détailler votre échéancier"
+  },
+  "Email de contact": {
+   "en": "",
+   "fr": "Email de contact"
+  },
+  "En tant que deployeur (Art. #), vous utilisez un systeme IA sous votre propre autorite. Vos obligations portent sur l'usage conforme : enregistrement, classification, systeme de gestion des risques operationnel, analyse d'impact sur les droits fondamentaux (FRIA, Art. #) obligatoire pour les organismes publics et certains cas, audit et attestation. La documentation technique de conception releve du fournisseur et ne vous est pas imputee.": {
+   "en": "",
+   "fr": "En tant que deployeur (Art. 26), vous utilisez un systeme IA sous votre propre autorite. Vos obligations portent sur l'usage conforme : enregistrement, classification, systeme de gestion des risques operationnel, analyse d'impact sur les droits fondamentaux (FRIA, Art. 27) obligatoire pour les organismes publics et certains cas, audit et attestation. La documentation technique de conception releve du fournisseur et ne vous est pas imputee."
+  },
+  "Engagement recommandé : # mois": {
+   "en": "",
+   "fr": "Engagement recommandé : 12 mois"
+  },
+  "Enveloppe résultats (# jalons)": {
+   "en": "",
+   "fr": "Enveloppe résultats (6 jalons)"
+  },
+  "Envoyer la demande de tarification": {
+   "en": "",
+   "fr": "Envoyer la demande de tarification"
+  },
+  "Exporter l’échéancier (PDF)": {
+   "en": "",
+   "fr": "Exporter l’échéancier (PDF)"
+  },
+  "FRIA réalisée": {
+   "en": "",
+   "fr": "FRIA réalisée"
+  },
+  "Facturation calculée depuis vos données Sentinel — aucun forfait arbitraire": {
+   "en": "",
+   "fr": "Facturation calculée depuis vos données Sentinel — aucun forfait arbitraire"
+  },
+  "Formation sur site jusqu’à # jours/an inclus": {
+   "en": "",
+   "fr": "Formation sur site jusqu’à 2 jours/an inclus"
+  },
+  "Formation sur site non incluse": {
+   "en": "",
+   "fr": "Formation sur site non incluse"
+  },
+  "Formule grands comptes": {
+   "en": "",
+   "fr": "Formule grands comptes"
+  },
+  "Formule professionnelle": {
+   "en": "",
+   "fr": "Formule professionnelle"
+  },
+  "Fourchette marché (tous segments) :": {
+   "en": "",
+   "fr": "Fourchette marché (tous segments) :"
+  },
+  "Fourchette mois #": {
+   "en": "",
+   "fr": "Fourchette mois 6"
+  },
+  "Fourchette orient. : # €–# €/mois": {
+   "en": "",
+   "fr": "Fourchette orient. : 450 €–630 €/mois"
+  },
+  "Grandes entreprises · groupes · secteur public": {
+   "en": "",
+   "fr": "Grandes entreprises · groupes · secteur public"
+  },
+  "Grandes entreprises, groupes ou collectivités avec plusieurs dizaines de systèmes IA sur plusieurs entités. Recommandé si votre exposition aux sanctions AI Act Art. # dépasse # M€.": {
+   "en": "",
+   "fr": "Grandes entreprises, groupes ou collectivités avec plusieurs dizaines de systèmes IA sur plusieurs entités. Recommandé si votre exposition aux sanctions AI Act Art. 99 dépasse 1 M€."
+  },
+  "Gratuit": {
+   "en": "",
+   "fr": "Gratuit"
+  },
+  "Guide d'exploitation — réservé à CONSEILPREV": {
+   "en": "",
+   "fr": "Guide d'exploitation — réservé à CONSEILPREV"
+  },
+  "Hub de formation et équipe RACI intégrés": {
+   "en": "",
+   "fr": "Hub de formation et équipe RACI intégrés"
+  },
+  "Hybride RaaS — mois #": {
+   "en": "",
+   "fr": "Hybride RaaS — mois 6"
+  },
+  "Hybride avantageux dès M#-M#": {
+   "en": "",
+   "fr": "Hybride avantageux dès M8-M10"
+  },
+  "Hybride continu": {
+   "en": "",
+   "fr": "Hybride continu"
+  },
+  "Inscription ouverte — aucune carte requise": {
+   "en": "",
+   "fr": "Inscription ouverte — aucune carte requise"
+  },
+  "Jalon": {
+   "en": "",
+   "fr": "Jalon"
+  },
+  "Jalon de conformité": {
+   "en": "",
+   "fr": "Jalon de conformité"
+  },
+  "Les cadres RGPD et ISO/IEC # suivent une logique équivalente, adossée à leur propre indice de conformité.": {
+   "en": "",
+   "fr": "Les cadres RGPD et ISO/IEC 42001 suivent une logique équivalente, adossée à leur propre indice de conformité."
+  },
+  "Les données saisies sont transmises uniquement à CONSEILPREV (christophe.cerf@outlook.com) et ne sont pas conservées sur le serveur. Réponse personnalisée sous #h ouvrables.": {
+   "en": "",
+   "fr": "Les données saisies sont transmises uniquement à CONSEILPREV (christophe.cerf@outlook.com) et ne sont pas conservées sur le serveur. Réponse personnalisée sous 24h ouvrables."
+  },
+  "Les résultats dépendent aussi des actions du client (qualité des données fournies, adoption interne). Le contrat doit définir clairement le périmètre de responsabilité de chaque partie et un plafond/plancher de facturation variable.": {
+   "en": "",
+   "fr": "Les résultats dépendent aussi des actions du client (qualité des données fournies, adoption interne). Le contrat doit définir clairement le périmètre de responsabilité de chaque partie et un plafond/plancher de facturation variable."
+  },
+  "M#": {
+   "en": "",
+   "fr": "M1"
+  },
+  "M# — SaaS : # € · RaaS Jalons : # € · Hybride continu : # €": {
+   "en": "",
+   "fr": "M6 — SaaS : 450 € · RaaS Jalons : 320 € · Hybride continu : 632 €"
+  },
+  "M#–M#": {
+   "en": "",
+   "fr": "M1–M2"
+  },
+  "Marché Télécom : #–# # €/mois": {
+   "en": "",
+   "fr": "Marché Télécom : 300–2 800 €/mois"
+  },
+  "Matrice risques": {
+   "en": "",
+   "fr": "Matrice risques"
+  },
+  "Mensuel": {
+   "en": "",
+   "fr": "Mensuel"
+  },
+  "Mensuel (sans engagement)": {
+   "en": "",
+   "fr": "Mensuel (sans engagement)"
+  },
+  "Mise en œuvre de la facturation par résultats pour un client, de la définition des jalons au prélèvement. Ce guide n'est pas visible par les clients. Outillage technique : le modèle contractuel et son traitement comptable doivent être validés par vos conseils.": {
+   "en": "",
+   "fr": "Mise en œuvre de la facturation par résultats pour un client, de la définition des jalons au prélèvement. Ce guide n'est pas visible par les clients. Outillage technique : le modèle contractuel et son traitement comptable doivent être validés par vos conseils."
+  },
+  "Modèle commercial innovant": {
+   "en": "",
+   "fr": "Modèle commercial innovant"
+  },
+  "Mois": {
+   "en": "",
+   "fr": "Mois"
+  },
+  "Montant": {
+   "en": "",
+   "fr": "Montant"
+  },
+  "Multi-entités · API · SLA dédié · Formation sur site": {
+   "en": "",
+   "fr": "Multi-entités · API · SLA dédié · Formation sur site"
+  },
+  "Multi-entités, API, SLA dédié et accompagnement CONSEILPREV.": {
+   "en": "",
+   "fr": "Multi-entités, API, SLA dédié et accompagnement CONSEILPREV."
+  },
+  "Nombre de systèmes IA": {
+   "en": "",
+   "fr": "Nombre de systèmes IA"
+  },
+  "Nombre de systèmes IA estimé": {
+   "en": "",
+   "fr": "Nombre de systèmes IA estimé"
+  },
+  "Nécessite un point de contact technique dédié côté client": {
+   "en": "",
+   "fr": "Nécessite un point de contact technique dédié côté client"
+  },
+  "Optimiste": {
+   "en": "",
+   "fr": "Optimiste"
+  },
+  "PME (< # sal.)": {
+   "en": "",
+   "fr": "PME (< 250 sal.)"
+  },
+  "PME — sans engagement": {
+   "en": "",
+   "fr": "PME — sans engagement"
+  },
+  "Paramètres de simulation": {
+   "en": "",
+   "fr": "Paramètres de simulation"
+  },
+  "Parcours guidé « Directeur de programme IA Act » — # modules Sentinel": {
+   "en": "",
+   "fr": "Parcours guidé « Directeur de programme IA Act » — 8 modules Sentinel"
+  },
+  "Part variable": {
+   "en": "",
+   "fr": "Part variable"
+  },
+  "Pas de persistance des données de conformité": {
+   "en": "",
+   "fr": "Pas de persistance des données de conformité"
+  },
+  "Pas d’API d’intégration avec vos outils internes": {
+   "en": "",
+   "fr": "Pas d’API d’intégration avec vos outils internes"
+  },
+  "Pas d’accès aux rapports et livrables IA": {
+   "en": "",
+   "fr": "Pas d’accès aux rapports et livrables IA"
+  },
+  "Pessimiste": {
+   "en": "",
+   "fr": "Pessimiste"
+  },
+  "Pessimiste → Optimiste": {
+   "en": "",
+   "fr": "Pessimiste → Optimiste"
+  },
+  "Plafond : # × # € = # # €/mois": {
+   "en": "",
+   "fr": "Plafond : 4 × 900 € = 3 600 €/mois"
+  },
+  "Plafond contractuel": {
+   "en": "",
+   "fr": "Plafond contractuel"
+  },
+  "Poids": {
+   "en": "",
+   "fr": "Poids"
+  },
+  "Pond.": {
+   "en": "",
+   "fr": "Pond."
+  },
+  "Pour qui ?": {
+   "en": "",
+   "fr": "Pour qui ?"
+  },
+  "Pourquoi ces jalons pour le rôle « Déployeur » ?": {
+   "en": "",
+   "fr": "Pourquoi ces jalons pour le rôle « Déployeur » ?"
+  },
+  "Profil métier (parcours guidé Sentinel)": {
+   "en": "",
+   "fr": "Profil métier (parcours guidé Sentinel)"
+  },
+  "Projection sur # mois — coûts mensuels": {
+   "en": "",
+   "fr": "Projection sur 6 mois — coûts mensuels"
+  },
+  "Périmètre limité à une seule entité juridique": {
+   "en": "",
+   "fr": "Périmètre limité à une seule entité juridique"
+  },
+  "RaaS Jalons": {
+   "en": "",
+   "fr": "RaaS Jalons"
+  },
+  "RaaS Jalons — recommandé": {
+   "en": "",
+   "fr": "RaaS Jalons — recommandé"
+  },
+  "RaaS jalons groupe": {
+   "en": "",
+   "fr": "RaaS jalons groupe"
+  },
+  "RaaS jalons — paiement sur résultats": {
+   "en": "",
+   "fr": "RaaS jalons — paiement sur résultats"
+  },
+  "Rapport de conformité AI Act annuel personnalisé": {
+   "en": "",
+   "fr": "Rapport de conformité AI Act annuel personnalisé"
+  },
+  "Rapports exécutifs et livrables automatisés par IA": {
+   "en": "",
+   "fr": "Rapports exécutifs et livrables automatisés par IA"
+  },
+  "Recalculer la simulation": {
+   "en": "",
+   "fr": "Recalculer la simulation"
+  },
+  "Recommandé": {
+   "en": "",
+   "fr": "Recommandé"
+  },
+  "Registre IA": {
+   "en": "",
+   "fr": "Registre IA"
+  },
+  "Registre IA complet": {
+   "en": "",
+   "fr": "Registre IA complet"
+  },
+  "Registre IA, FRIA, Audit, Maturité, Veille, # modules": {
+   "en": "",
+   "fr": "Registre IA, FRIA, Audit, Maturité, Veille, 23 modules"
+  },
+  "Remise annuelle :": {
+   "en": "",
+   "fr": "Remise annuelle :"
+  },
+  "Renseignez vos paramètres et visualisez instantanément le coût comparé au SaaS classique.": {
+   "en": "",
+   "fr": "Renseignez vos paramètres et visualisez instantanément le coût comparé au SaaS classique."
+  },
+  "Roadmap": {
+   "en": "",
+   "fr": "Roadmap"
+  },
+  "Réduction sanctions": {
+   "en": "",
+   "fr": "Réduction sanctions"
+  },
+  "Référence": {
+   "en": "",
+   "fr": "Référence"
+  },
+  "Référence marché Télécom": {
+   "en": "",
+   "fr": "Référence marché Télécom"
+  },
+  "Réponse personnalisée sous #h ouvrables": {
+   "en": "",
+   "fr": "Réponse personnalisée sous 24h ouvrables"
+  },
+  "Rôle de votre organisation (Art. # — AI Act)": {
+   "en": "",
+   "fr": "Rôle de votre organisation (Art. 3 — AI Act)"
+  },
+  "SGR opérationnel": {
+   "en": "",
+   "fr": "SGR opérationnel"
+  },
+  "SLA contractuel dédié et interlocuteur CONSEILPREV attitré": {
+   "en": "",
+   "fr": "SLA contractuel dédié et interlocuteur CONSEILPREV attitré"
+  },
+  "SaaS PME": {
+   "en": "",
+   "fr": "SaaS PME"
+  },
+  "SaaS référence / mois": {
+   "en": "",
+   "fr": "SaaS référence / mois"
+  },
+  "Sans engagement — toujours gratuit": {
+   "en": "",
+   "fr": "Sans engagement — toujours gratuit"
+  },
+  "Score Audit IA Act de départ (%)": {
+   "en": "",
+   "fr": "Score Audit IA Act de départ (%)"
+  },
+  "Secteur d’activité": {
+   "en": "",
+   "fr": "Secteur d’activité"
+  },
+  "Segment :": {
+   "en": "",
+   "fr": "Segment :"
+  },
+  "Sentinel AI": {
+   "en": "",
+   "fr": "Sentinel AI"
+  },
+  "Sentinel Entreprise": {
+   "en": "",
+   "fr": "Sentinel Entreprise"
+  },
+  "Sentinel Gratuit": {
+   "en": "",
+   "fr": "Sentinel Gratuit"
+  },
+  "Sentinel Pro": {
+   "en": "",
+   "fr": "Sentinel Pro"
+  },
+  "Seuil": {
+   "en": "",
+   "fr": "Seuil"
+  },
+  "Seuil Sentinel": {
+   "en": "",
+   "fr": "Seuil Sentinel"
+  },
+  "Simulateur IA Act": {
+   "en": "",
+   "fr": "Simulateur IA Act"
+  },
+  "Simulateur de tarification RaaS": {
+   "en": "",
+   "fr": "Simulateur de tarification RaaS"
+  },
+  "Simuler votre tarification": {
+   "en": "",
+   "fr": "Simuler votre tarification"
+  },
+  "Simulez un modèle hybride RaaS": {
+   "en": "",
+   "fr": "Simulez un modèle hybride RaaS"
+  },
+  "Situez votre choix parmi les trois offres Sentinel AI.": {
+   "en": "",
+   "fr": "Situez votre choix parmi les trois offres Sentinel AI."
+  },
+  "Socle # € + variable # €": {
+   "en": "",
+   "fr": "Socle 158 € + variable 474 €"
+  },
+  "Socle :": {
+   "en": "",
+   "fr": "Socle :"
+  },
+  "Socle GE :": {
+   "en": "",
+   "fr": "Socle GE :"
+  },
+  "Socle fixe réduit + variable indexé sur vos progrès réels": {
+   "en": "",
+   "fr": "Socle fixe réduit + variable indexé sur vos progrès réels"
+  },
+  "Socle mensuel garanti": {
+   "en": "",
+   "fr": "Socle mensuel garanti"
+  },
+  "Sources : OGMA # €/mois (TPE), TARANIS # €/mois (PME), agences IA France #–# € (YouFeel/Nerolia #).": {
+   "en": "",
+   "fr": "Sources : OGMA 99 €/mois (TPE), TARANIS 559 €/mois (PME), agences IA France 300–500 € (YouFeel/Nerolia 2026)."
+  },
+  "Sources : OGMA # €/mois (TPE), TARANIS # €/mois (PME).": {
+   "en": "",
+   "fr": "Sources : OGMA 99 €/mois (TPE), TARANIS 559 €/mois (PME)."
+  },
+  "Support standard (pas de SLA dédié)": {
+   "en": "",
+   "fr": "Support standard (pas de SLA dédié)"
+  },
+  "Sur devis": {
+   "en": "",
+   "fr": "Sur devis"
+  },
+  "Surcoût hybride vs SaaS": {
+   "en": "",
+   "fr": "Surcoût hybride vs SaaS"
+  },
+  "Systèmes conformes": {
+   "en": "",
+   "fr": "Systèmes conformes"
+  },
+  "TPE, PME, ETI — jusqu’à # systèmes IA": {
+   "en": "",
+   "fr": "TPE, PME, ETI — jusqu’à 50 systèmes IA"
+  },
+  "Taille de l'organisation": {
+   "en": "",
+   "fr": "Taille de l'organisation"
+  },
+  "Tarif SaaS de référence": {
+   "en": "",
+   "fr": "Tarif SaaS de référence"
+  },
+  "Tarif sur devis — engagement minimum recommandé : # mois": {
+   "en": "",
+   "fr": "Tarif sur devis — engagement minimum recommandé : 12 mois"
+  },
+  "Tarification RaaS : socle réduit + variable indexée sur vos progrès réels Sentinel": {
+   "en": "",
+   "fr": "Tarification RaaS : socle réduit + variable indexée sur vos progrès réels Sentinel"
+  },
+  "Tarifs calculés depuis le simulateur. Modifiez le secteur ou le segment pour mettre à jour les plans.": {
+   "en": "",
+   "fr": "Tarifs calculés depuis le simulateur. Modifiez le secteur ou le segment pour mettre à jour les plans."
+  },
+  "Tarifs calculés depuis vos paramètres — devis personnalisé sur demande": {
+   "en": "",
+   "fr": "Tarifs calculés depuis vos paramètres — devis personnalisé sur demande"
+  },
+  "Tester la plateforme sans engagement.": {
+   "en": "",
+   "fr": "Tester la plateforme sans engagement."
+  },
+  "Total des jalons applicables à votre rôle (socle # mois inclus)": {
+   "en": "",
+   "fr": "Total des jalons applicables à votre rôle (socle 12 mois inclus)"
+  },
+  "Total maximal annuel": {
+   "en": "",
+   "fr": "Total maximal annuel"
+  },
+  "Toutes les fonctionnalités Pro, plus :": {
+   "en": "",
+   "fr": "Toutes les fonctionnalités Pro, plus :"
+  },
+  "Voir les données": {
+   "en": "",
+   "fr": "Voir les données"
+  },
+  "Votre plan actuel": {
+   "en": "",
+   "fr": "Votre plan actuel"
+  },
+  "Vous avez accès à # modules sur #. Passez à Pro ou Entreprise pour accéder à l’intégralité de la plateforme avec le modèle tarifaire par résultats.": {
+   "en": "",
+   "fr": "Vous avez accès à 4 modules sur 27. Passez à Pro ou Entreprise pour accéder à l’intégralité de la plateforme avec le modèle tarifaire par résultats."
+  },
+  "Vous ne payez plus si vos résultats stagnent — la part variable est nulle sans progrès": {
+   "en": "",
+   "fr": "Vous ne payez plus si vos résultats stagnent — la part variable est nulle sans progrès"
+  },
+  "Vous ne payez que les résultats de conformité réellement obtenus — voici comment.": {
+   "en": "",
+   "fr": "Vous ne payez que les résultats de conformité réellement obtenus — voici comment."
+  },
+  "Vous pilotez la mise en conformité de bout en bout. Ce parco": {
+   "en": "",
+   "fr": "Vous pilotez la mise en conformité de bout en bout. Ce parco"
+  },
+  "Vue direction": {
+   "en": "",
+   "fr": "Vue direction"
+  },
+  "au-delà de l’horizon": {
+   "en": "",
+   "fr": "au-delà de l’horizon"
+  },
+  "et": {
+   "en": "",
+   "fr": "et"
+  },
+  "jalons applicables à votre rôle — payés si vérifiés": {
+   "en": "",
+   "fr": "jalons applicables à votre rôle — payés si vérifiés"
+  },
+  "maturité organisationnelle réelle": {
+   "en": "",
+   "fr": "maturité organisationnelle réelle"
+  },
+  "pondérés par classification réelle": {
+   "en": "",
+   "fr": "pondérés par classification réelle"
+  },
+  "sans engagement": {
+   "en": "",
+   "fr": "sans engagement"
+  },
+  "score ≥ #": {
+   "en": "",
+   "fr": "score ≥ 30"
+  },
+  "secteur d activité": {
+   "en": "",
+   "fr": "secteur d activité"
+  },
+  "vs # €/mois annuel (−# %)": {
+   "en": "",
+   "fr": "vs 374 €/mois annuel (−17 %)"
+  },
+  "Écart cumulé — # mois": {
+   "en": "",
+   "fr": "Écart cumulé — 6 mois"
+  },
+  "Échéancier RaaS par jalons — paiement dynamique sur résultats vérifiés": {
+   "en": "",
+   "fr": "Échéancier RaaS par jalons — paiement dynamique sur résultats vérifiés"
+  },
+  "Échéancier recalculé depuis vos paramètres simulateur (segment, secteur, trajectoire réaliste projetée). Les jalons affichés s’adaptent au rôle de votre organisation au sens de l’AI Act. Les mois de déclenchement sont prévisionnels ; la facturation réelle n’intervient qu’après vérification.": {
+   "en": "",
+   "fr": "Échéancier recalculé depuis vos paramètres simulateur (segment, secteur, trajectoire réaliste projetée). Les jalons affichés s’adaptent au rôle de votre organisation au sens de l’AI Act. Les mois de déclenchement sont prévisionnels ; la facturation réelle n’intervient qu’après vérification."
+  },
+  "Équilibre": {
+   "en": "",
+   "fr": "Équilibre"
+  },
+  "Équipes souhaitant évaluer Sentinel avant engagement. Idéal pour une première simulation RaaS avant décision d’achat.": {
+   "en": "",
+   "fr": "Équipes souhaitant évaluer Sentinel avant engagement. Idéal pour une première simulation RaaS avant décision d’achat."
+  },
+  "× #–# %": {
+   "en": "",
+   "fr": "× 0,1–0,4 %"
+  },
+  "× (# € / # € / # €) × poids": {
+   "en": "",
+   "fr": "× (4 € / 20 € / 60 €) × poids"
+  },
+  "× (# € PME / # € ETI / # € GE)": {
+   "en": "",
+   "fr": "× (2 € PME / 12 € ETI / 40 € GE)"
+  },
+  "Δ Audit": {
+   "en": "",
+   "fr": "Δ Audit"
+  },
+  "— Mode :": {
+   "en": "",
+   "fr": "— Mode :"
+  },
+  "— socle fixe réduit + part variable indexée sur vos résultats réels de conformité — comparé à un abonnement SaaS classique": {
+   "en": "",
+   "fr": "— socle fixe réduit + part variable indexée sur vos résultats réels de conformité — comparé à un abonnement SaaS classique"
+  },
+  "— un système haut risque pèse #× plus qu un système à risque minimal": {
+   "en": "",
+   "fr": "— un système haut risque pèse 1,4× plus qu un système à risque minimal"
+  },
+  "• Progression du score Audit IA Act (# €/pt PME — # €/pt ETI — # €/pt GE)": {
+   "en": "",
+   "fr": "• Progression du score Audit IA Act (2 €/pt PME — 12 €/pt ETI — 40 €/pt GE)"
+  },
+  "• Réduction estimée de l'exposition aux sanctions Art. # (#% de la réduction calculée)": {
+   "en": "",
+   "fr": "• Réduction estimée de l'exposition aux sanctions Art. 99 (0,4% de la réduction calculée)"
+  },
+  "• Systèmes du Registre IA passés au statut « conforme » (# €/sys PME — # € ETI — # € GE),": {
+   "en": "",
+   "fr": "• Systèmes du Registre IA passés au statut « conforme » (4 €/sys PME — 20 € ETI — 60 € GE),"
+  },
+  "• Vitesse de progression calibrée par": {
+   "en": "",
+   "fr": "• Vitesse de progression calibrée par"
+  },
+  "↑ Alignement d'intérêts": {
+   "en": "",
+   "fr": "↑ Alignement d'intérêts"
+  },
+  "↓ Risque réduit": {
+   "en": "",
+   "fr": "↓ Risque réduit"
+  },
+  "∵# % du SaaS — seul coût fixe": {
+   "en": "",
+   "fr": "∵35 % du SaaS — seul coût fixe"
+  },
+  "⊞ Données réelles": {
+   "en": "",
+   "fr": "⊞ Données réelles"
+  },
+  "① Socle fixe réduit — ≈# % du SaaS équivalent": {
+   "en": "",
+   "fr": "① Socle fixe réduit — ≈35 % du SaaS équivalent"
+  },
+  "② Part variable — indexée sur # résultats mesurables": {
+   "en": "",
+   "fr": "② Part variable — indexée sur 3 résultats mesurables"
+  },
+  "③ Garde-fous contractuels": {
+   "en": "",
+   "fr": "③ Garde-fous contractuels"
+  },
+  "○ Limites": {
+   "en": "",
+   "fr": "○ Limites"
+  },
+  "⚠️ Aucune donnée réelle au Registre IA — valeurs par défaut utilisées.": {
+   "en": "",
+   "fr": "⚠️ Aucune donnée réelle au Registre IA — valeurs par défaut utilisées."
+  },
+  "✅ Inclus": {
+   "en": "",
+   "fr": "✅ Inclus"
+  },
+  "✏️ Aucun audit réalisé sur Sentinel — estimez ce score avec les parties prenantes du prospect, ou utilisez un raccourci ci-dessous.": {
+   "en": "",
+   "fr": "✏️ Aucun audit réalisé sur Sentinel — estimez ce score avec les parties prenantes du prospect, ou utilisez un raccourci ci-dessous."
+  },
+  "✔ Accès illimité Sentinel Pro": {
+   "en": "",
+   "fr": "✔ Accès illimité Sentinel Pro"
+  },
+  "✔ Tarification par résultats": {
+   "en": "",
+   "fr": "✔ Tarification par résultats"
+  },
+  "💾 Enregistrer dans l'historique": {
+   "en": "",
+   "fr": "💾 Enregistrer dans l'historique"
+  }
+ }
+}

@@ -1,0 +1,755 @@
+{
+ "_lot": "07-cartographier-1",
+ "_mots": 2330,
+ "_pages": [
+  "empreinte-ia",
+  "finops",
+  "maturite"
+ ],
+ "_rubrique": "CARTOGRAPHIER",
+ "bloc": {
+  "Audit de maturité IA": {
+   "en": "",
+   "fr": "Audit de maturité IA",
+   "html": "Audit de <em>maturité IA</em>"
+  },
+  "Ce que coûte le parc que vous avez déjà déclaré. Cette page ne tient aucun inventaire à elle : elle lit le registre des systèmes d’IA — le même que celui de la conformité. L’attribution que le FinOps réclame (propriétaire, service, finalité) y est déjà, et c’est la moitié la plus coûteuse de la démarche.": {
+   "en": "",
+   "fr": "Ce que coûte le parc que vous avez déjà déclaré. Cette page ne tient aucun inventaire à elle : elle lit le registre des systèmes d’IA — le même que celui de la conformité. L’attribution que le FinOps réclame (propriétaire, service, finalité) y est déjà, et c’est la moitié la plus coûteuse de la démarche.",
+   "html": "Ce que coûte le parc que vous avez déjà déclaré. Cette page ne tient aucun inventaire à elle : elle lit le <strong>registre des systèmes d’IA</strong> — le même que celui de la conformité. L’attribution que le FinOps réclame (propriétaire, service, finalité) y est déjà, et c’est la moitié la plus coûteuse de la démarche."
+  },
+  "Ce que pèse le parc de systèmes d’IA que vous avez déjà déclaré au Registre. Cette page ne tient aucun inventaire à elle : le même volume déclaré donne le coût quand on le divise par un tarif, et l’énergie quand on le multiplie par des wattheures par millier de jetons. Un second inventaire, tenu à côté, divergerait du premier dans le mois.": {
+   "en": "",
+   "fr": "Ce que pèse le parc de systèmes d’IA que vous avez déjà déclaré au Registre. Cette page ne tient aucun inventaire à elle : le même volume déclaré donne le coût quand on le divise par un tarif, et l’énergie quand on le multiplie par des wattheures par millier de jetons. Un second inventaire, tenu à côté, divergerait du premier dans le mois.",
+   "html": "Ce que pèse le parc de systèmes d’IA que vous avez déjà déclaré au <strong>Registre</strong>. Cette page ne tient aucun inventaire à elle&nbsp;: le même volume déclaré donne le coût quand on le divise par un tarif, et l’énergie quand on le multiplie par des wattheures par millier de jetons. Un second inventaire, tenu à côté, divergerait du premier dans le mois."
+  },
+  "Ces champs se saisissent sur la fiche du système, au Registre. Aucun n’est deviné : une campagne d’ajustement ne s’estime pas depuis un volume d’usage.": {
+   "en": "",
+   "fr": "Ces champs se saisissent sur la fiche du système, au Registre. Aucun n’est deviné : une campagne d’ajustement ne s’estime pas depuis un volume d’usage.",
+   "html": "Ces champs se saisissent sur la fiche du système, au <strong>Registre</strong>. Aucun n’est deviné&nbsp;: une campagne d’ajustement ne s’estime pas depuis un volume d’usage."
+  },
+  "Chaque montant porte sa formule chiffrée et la provenance du volume. Un montant dont on ne peut pas dire d’où vient le volume n’est pas opposable en comité.": {
+   "en": "",
+   "fr": "Chaque montant porte sa formule chiffrée et la provenance du volume. Un montant dont on ne peut pas dire d’où vient le volume n’est pas opposable en comité.",
+   "html": "Chaque montant porte <strong>sa formule chiffrée</strong> et <strong>la provenance du volume</strong>. Un montant dont on ne peut pas dire d’où vient le volume n’est pas opposable en comité."
+  },
+  "Déclarés, jamais mesurés : cette page ne peut pas savoir si un cache est réellement branché. Ce qu’elle apporte est la question posée à chaque ligne — une case jamais cochée sur vingt lignes se voit, l’absence de la question ne se voit pas.": {
+   "en": "",
+   "fr": "Déclarés, jamais mesurés : cette page ne peut pas savoir si un cache est réellement branché. Ce qu’elle apporte est la question posée à chaque ligne — une case jamais cochée sur vingt lignes se voit, l’absence de la question ne se voit pas.",
+   "html": "<strong>Déclarés, jamais mesurés</strong>&nbsp;: cette page ne peut pas savoir si un cache est réellement branché. Ce qu’elle apporte est la question posée à chaque ligne — une case jamais cochée sur vingt lignes se voit, l’absence de la question ne se voit pas."
+  },
+  "Empreinte IA du parc déclaré": {
+   "en": "",
+   "fr": "Empreinte IA du parc déclaré",
+   "html": "Empreinte IA <em>du parc déclaré</em>"
+  },
+  "FinOps de l’IA": {
+   "en": "",
+   "fr": "FinOps de l’IA",
+   "html": "FinOps <em>de l’IA</em>"
+  },
+  "La classification vient du Simulateur IA Act et du Registre IA : elle n’est pas redemandée ici. L’ordre suit le règlement, jamais les effectifs — un seul système haut risque se lit avant quinze systèmes à risque minimal.": {
+   "en": "",
+   "fr": "La classification vient du Simulateur IA Act et du Registre IA : elle n’est pas redemandée ici. L’ordre suit le règlement, jamais les effectifs — un seul système haut risque se lit avant quinze systèmes à risque minimal.",
+   "html": "La classification vient du <strong>Simulateur IA&nbsp;Act</strong> et du <strong>Registre IA</strong>&nbsp;: elle n’est pas redemandée ici. L’ordre suit le règlement, jamais les effectifs — un seul système haut risque se lit avant quinze systèmes à risque minimal."
+  },
+  "L’inférence et l’ajustement fin sont rendus séparément. Les mêler ferait disparaître le terme qui, sur un parc qui affine ses modèles, est souvent le plus lourd.": {
+   "en": "",
+   "fr": "L’inférence et l’ajustement fin sont rendus séparément. Les mêler ferait disparaître le terme qui, sur un parc qui affine ses modèles, est souvent le plus lourd.",
+   "html": "L’<strong>inférence</strong> et l’<strong>ajustement fin</strong> sont rendus séparément. Les mêler ferait disparaître le terme qui, sur un parc qui affine ses modèles, est souvent le plus lourd."
+  },
+  "Servis par le moteur, jamais recopiés ici — sans quoi l’écran et le code dériveraient, et c’est l’écran qu’on croirait. Chacun porte sa nature : texte réglementaire, relevé, ou hypothèse du cabinet.": {
+   "en": "",
+   "fr": "Servis par le moteur, jamais recopiés ici — sans quoi l’écran et le code dériveraient, et c’est l’écran qu’on croirait. Chacun porte sa nature : texte réglementaire, relevé, ou hypothèse du cabinet.",
+   "html": "Servis par le moteur, jamais recopiés ici — sans quoi l’écran et le code dériveraient, et c’est l’écran qu’on croirait. Chacun porte sa <strong>nature</strong>&nbsp;: texte réglementaire, relevé, ou hypothèse du cabinet."
+  },
+  "Un indicateur absent est déclaré absent, avec ce qu’il faudrait pour l’établir. Le remplir d’un nombre sans auteur serait pire que de ne rien afficher.": {
+   "en": "",
+   "fr": "Un indicateur absent est déclaré absent, avec ce qu’il faudrait pour l’établir. Le remplir d’un nombre sans auteur serait pire que de ne rien afficher.",
+   "html": "Un indicateur absent est <strong>déclaré absent</strong>, avec ce qu’il faudrait pour l’établir. Le remplir d’un nombre sans auteur serait pire que de ne rien afficher."
+  },
+  "Une heuristique, jamais un verdict : « ce modèle est trop gros » suppose de connaître la qualité attendue, le taux d’erreur toléré et ce qu’une erreur coûte. L’écart de rang dit où regarder.": {
+   "en": "",
+   "fr": "Une heuristique, jamais un verdict : « ce modèle est trop gros » suppose de connaître la qualité attendue, le taux d’erreur toléré et ce qu’une erreur coûte. L’écart de rang dit où regarder.",
+   "html": "Une <strong>heuristique</strong>, jamais un verdict&nbsp;: « ce modèle est trop gros » suppose de connaître la qualité attendue, le taux d’erreur toléré et ce qu’une erreur coûte. L’écart de rang dit où regarder."
+  }
+ },
+ "texte": {
+  "# indicateurs de pilotage + KPIs spécifiques Télécom — cibles, fréquences, outils, responsables. Téléchargeable et partageable.": {
+   "en": "",
+   "fr": "7 indicateurs de pilotage + KPIs spécifiques Télécom — cibles, fréquences, outils, responsables. Téléchargeable et partageable."
+  },
+  "# livrables professionnels generes par IA (Mistral ou Claude) a partir des resultats reels de votre audit. Telechargeables en PDF et Word.": {
+   "en": "",
+   "fr": "6 livrables professionnels generes par IA (Mistral ou Claude) a partir des resultats reels de votre audit. Telechargeables en PDF et Word."
+  },
+  "# questions (# par pilier) basees sur les exigences exactes des articles de l'AI Act. Vos reponses (Non / Partiel / Oui) recalculent en temps reel tous les scores et le radar.": {
+   "en": "",
+   "fr": "16 questions (2 par pilier) basees sur les exigences exactes des articles de l'AI Act. Vos reponses (Non / Partiel / Oui) recalculent en temps reel tous les scores et le radar."
+  },
+  "# questions fondées sur les exigences du Règlement (UE) #/#. Vos réponses recalculent les scores de maturité en temps réel.": {
+   "en": "",
+   "fr": "16 questions fondées sur les exigences du Règlement (UE) 2024/1689. Vos réponses recalculent les scores de maturité en temps réel."
+  },
+  "# étapes méthodologiques CONSEILPREV. Cliquez sur une étape pour générer son guide sectoriel par IA (planning + budget), avec analyse optionnelle de vos données.": {
+   "en": "",
+   "fr": "4 étapes méthodologiques CONSEILPREV. Cliquez sur une étape pour générer son guide sectoriel par IA (planning + budget), avec analyse optionnelle de vos données."
+  },
+  "#GPP": {
+   "en": "",
+   "fr": "3GPP"
+  },
+  "#–# semaines · #/# – #/#": {
+   "en": "",
+   "fr": "3–4 semaines · 01/07 – 28/07"
+  },
+  "Agriculture, agroalimentaire, forêt et pêche": {
+   "en": "",
+   "fr": "Agriculture, agroalimentaire, forêt et pêche"
+  },
+  "Alignement avec les normes locales (ex. lois chinoises sur la cybersécurité pour les filiales asiatiques).": {
+   "en": "",
+   "fr": "Alignement avec les normes locales (ex. lois chinoises sur la cybersécurité pour les filiales asiatiques)."
+  },
+  "Analyse automatisée des processus et de la documentation.": {
+   "en": "",
+   "fr": "Analyse automatisée des processus et de la documentation."
+  },
+  "Analyse de données réseau (QoS)": {
+   "en": "",
+   "fr": "Analyse de données réseau (QoS)"
+  },
+  "Analyse des processus et de la documentation : politiques IA, registres de données, contrats fournisseurs, gap analysis vis-à-vis des # piliers, des articles de l'AI Act et des exigences d'information documentée de l'ISO/IEC # (Art. #, Annexe A et B).": {
+   "en": "",
+   "fr": "Analyse des processus et de la documentation : politiques IA, registres de données, contrats fournisseurs, gap analysis vis-à-vis des 8 piliers, des articles de l'AI Act et des exigences d'information documentée de l'ISO/IEC 42001 (Art. 7.5, Annexe A et B)."
+  },
+  "Art. # / Art. #": {
+   "en": "",
+   "fr": "Art. 13 / Art. 86"
+  },
+  "Art. # · Art. #": {
+   "en": "",
+   "fr": "Art. 13 · Art. 86"
+  },
+  "Art. # · Art. # · Art. #": {
+   "en": "",
+   "fr": "Art. 17 · Art. 16 · Art. 26"
+  },
+  "Art. #(#)": {
+   "en": "",
+   "fr": "Art. 13(3)"
+  },
+  "Art. #(#)(f)": {
+   "en": "",
+   "fr": "Art. 10(2)(f)"
+  },
+  "Art. #(#)-(#)": {
+   "en": "",
+   "fr": "Art. 9(6)-(8)"
+  },
+  "Arts, sport, médias et loisirs": {
+   "en": "",
+   "fr": "Arts, sport, médias et loisirs"
+  },
+  "Assurer la conformité dans la durée. Audits trimestriels, mises à jour réglementaires, amélioration continue (KPIs), veille technologique, reporting exécutif au Comex, gestion des incidents IA.": {
+   "en": "",
+   "fr": "Assurer la conformité dans la durée. Audits trimestriels, mises à jour réglementaires, amélioration continue (KPIs), veille technologique, reporting exécutif au Comex, gestion des incidents IA."
+  },
+  "Attribution": {
+   "en": "",
+   "fr": "Attribution"
+  },
+  "Aucun fournisseur ne publie la consommation réelle d’une requête. Les volumes viennent de votre registre, les facteurs portent leur source et leur nature, et rien n’est estimé à votre place. N’en tirez ni allégation de neutralité ni émissions évitées.": {
+   "en": "",
+   "fr": "Aucun fournisseur ne publie la consommation réelle d’une requête. Les volumes viennent de votre registre, les facteurs portent leur source et leur nature, et rien n’est estimé à votre place. N’en tirez ni allégation de neutralité ni émissions évitées."
+  },
+  "Audit de maturité IA · CONSEILPREV": {
+   "en": "",
+   "fr": "Audit de maturité IA · CONSEILPREV"
+  },
+  "Audit documentaire": {
+   "en": "",
+   "fr": "Audit documentaire"
+  },
+  "Audit terrain": {
+   "en": "",
+   "fr": "Audit terrain"
+  },
+  "Autres services et vie associative": {
+   "en": "",
+   "fr": "Autres services et vie associative"
+  },
+  "Budget detaille : couts structurels (RH au TJM, outils), operationnels, mensuels et annuels, couts caches et extra, duree moyenne du projet.": {
+   "en": "",
+   "fr": "Budget detaille : couts structurels (RH au TJM, outils), operationnels, mensuels et annuels, couts caches et extra, duree moyenne du projet."
+  },
+  "Budget professionnel détaillé adapté au secteur Télécom.": {
+   "en": "",
+   "fr": "Budget professionnel détaillé adapté au secteur Télécom."
+  },
+  "Budget prévisionnel sectoriel": {
+   "en": "",
+   "fr": "Budget prévisionnel sectoriel"
+  },
+  "CONFIDENTIALITE & SECURITE (Art. #, #). Protection des donnees et des modeles. On evalue : les mesures de cybersecurite contre les attaques adversariales, la protection RGPD et la minimisation des donnees personnelles.": {
+   "en": "",
+   "fr": "CONFIDENTIALITE & SECURITE (Art. 15, 10). Protection des donnees et des modeles. On evalue : les mesures de cybersecurite contre les attaques adversariales, la protection RGPD et la minimisation des donnees personnelles."
+  },
+  "CONTROLABILITE (Art. #). Mecanismes de supervision humaine permettant de surveiller, interrompre ou corriger le systeme. On evalue : les interfaces de controle, la capacite d arret, la formation des operateurs habilites.": {
+   "en": "",
+   "fr": "CONTROLABILITE (Art. 14). Mecanismes de supervision humaine permettant de surveiller, interrompre ou corriger le systeme. On evalue : les interfaces de controle, la capacite d arret, la formation des operateurs habilites."
+  },
+  "Calendrier des audits trimestriels, processus de veille réglementaire et technologique, gestion des incidents IA, reporting exécutif. Assure la conformité dans la durée (Art. # EU AI Act - surveillance post-commercialisation) et l'amélioration continue exigée par l'ISO/IEC # (Art. #).": {
+   "en": "",
+   "fr": "Calendrier des audits trimestriels, processus de veille réglementaire et technologique, gestion des incidents IA, reporting exécutif. Assure la conformité dans la durée (Art. 72 EU AI Act - surveillance post-commercialisation) et l'amélioration continue exigée par l'ISO/IEC 42001 (Art. 10)."
+  },
+  "Calendrier des audits trimestriels, processus de veille réglementaire et technologique, ge…": {
+   "en": "",
+   "fr": "Calendrier des audits trimestriels, processus de veille réglementaire et technologique, ge…"
+  },
+  "Cartographier l'existant et identifier les écarts de conformité (EU AI Act, # piliers). Kick-off, audit documentaire, cartographie RACI, recensement des systèmes IA, évaluation des risques (outil AIRI), benchmark réglementaire, pré-audit technique.": {
+   "en": "",
+   "fr": "Cartographier l'existant et identifier les écarts de conformité (EU AI Act, 8 piliers). Kick-off, audit documentaire, cartographie RACI, recensement des systèmes IA, évaluation des risques (outil AIRI), benchmark réglementaire, pré-audit technique."
+  },
+  "Cartographier · Coûts": {
+   "en": "",
+   "fr": "Cartographier · Coûts"
+  },
+  "Cartographier · Empreinte": {
+   "en": "",
+   "fr": "Cartographier · Empreinte"
+  },
+  "Cas d'usage IA frequents dans ce secteur. Chacun doit etre inscrit au registre des systemes IA (Art. #, #) et classe par niveau de risque selon l'Annexe III de l'AI Act.": {
+   "en": "",
+   "fr": "Cas d'usage IA frequents dans ce secteur. Chacun doit etre inscrit au registre des systemes IA (Art. 49, 71) et classe par niveau de risque selon l'Annexe III de l'AI Act."
+  },
+  "Cas d'usage couramment rencontrés et à inscrire au registre des systèmes IA.": {
+   "en": "",
+   "fr": "Cas d'usage couramment rencontrés et à inscrire au registre des systèmes IA."
+  },
+  "Ce que cette page ne sait pas": {
+   "en": "",
+   "fr": "Ce que cette page ne sait pas"
+  },
+  "Ce qui n’est pas chiffré, et pourquoi": {
+   "en": "",
+   "fr": "Ce qui n’est pas chiffré, et pourquoi"
+  },
+  "Ce qui se déclare, et où": {
+   "en": "",
+   "fr": "Ce qui se déclare, et où"
+  },
+  "Ce qu’il faut déclarer pour compter un ajustement fin": {
+   "en": "",
+   "fr": "Ce qu’il faut déclarer pour compter un ajustement fin"
+  },
+  "Chatbots service client": {
+   "en": "",
+   "fr": "Chatbots service client"
+  },
+  "Chiffrage indisponible pour le moment.": {
+   "en": "",
+   "fr": "Chiffrage indisponible pour le moment."
+  },
+  "Choisissez le modele qui redige les livrables. Mistral Large (api.mistral.ai) ou Claude Sonnet (Anthropic via le proxy serveur). En cas d indisponibilite de Claude, bascule automatique sur Mistral.": {
+   "en": "",
+   "fr": "Choisissez le modele qui redige les livrables. Mistral Large (api.mistral.ai) ou Claude Sonnet (Anthropic via le proxy serveur). En cas d indisponibilite de Claude, bascule automatique sur Mistral."
+  },
+  "Claude Sonnet": {
+   "en": "",
+   "fr": "Claude Sonnet"
+  },
+  "Cliquez pour repondre — recalcule le score de maturite en temps reel.": {
+   "en": "",
+   "fr": "Cliquez pour repondre — recalcule le score de maturite en temps reel."
+  },
+  "Cliquez sur un livrable pour le générer avec l'IA à partir des résultats de votre audit, puis téléchargez-le en PDF ou Word.": {
+   "en": "",
+   "fr": "Cliquez sur un livrable pour le générer avec l'IA à partir des résultats de votre audit, puis téléchargez-le en PDF ou Word."
+  },
+  "Commerce de gros et de détail": {
+   "en": "",
+   "fr": "Commerce de gros et de détail"
+  },
+  "Comprendre et évaluer les réponses du système.": {
+   "en": "",
+   "fr": "Comprendre et évaluer les réponses du système."
+  },
+  "Confidentialité & Sécurité": {
+   "en": "",
+   "fr": "Confidentialité & Sécurité"
+  },
+  "Conformité client": {
+   "en": "",
+   "fr": "Conformité client"
+  },
+  "Construction et BTP": {
+   "en": "",
+   "fr": "Construction et BTP"
+  },
+  "Construire un cadre de gouvernance aligné EU AI Act. Définition des rôles (Responsable IA, DPO, Comité), élaboration des politiques IA, registre centralisé, processus de contrôle, intégration des # piliers, veille réglementaire.": {
+   "en": "",
+   "fr": "Construire un cadre de gouvernance aligné EU AI Act. Définition des rôles (Responsable IA, DPO, Comité), élaboration des politiques IA, registre centralisé, processus de contrôle, intégration des 8 piliers, veille réglementaire."
+  },
+  "Consulter le budget prévisionnel détaillé": {
+   "en": "",
+   "fr": "Consulter le budget prévisionnel détaillé"
+  },
+  "Consulter les KPIs sectoriels détaillés": {
+   "en": "",
+   "fr": "Consulter les KPIs sectoriels détaillés"
+  },
+  "Continu · À partir du #/#": {
+   "en": "",
+   "fr": "Continu · À partir du 02/12"
+  },
+  "Contrôlabilité": {
+   "en": "",
+   "fr": "Contrôlabilité"
+  },
+  "Contrôle des réponses (éviter désinformation, biais). Transparence sur les données utilisées (historique des conversations).": {
+   "en": "",
+   "fr": "Contrôle des réponses (éviter désinformation, biais). Transparence sur les données utilisées (historique des conversations)."
+  },
+  "Couverture de l’étude": {
+   "en": "",
+   "fr": "Couverture de l’étude"
+  },
+  "Couverture du chiffrage": {
+   "en": "",
+   "fr": "Couverture du chiffrage"
+  },
+  "Coûts structurels (RH au TJM, outils), opérationnels, mensuels & annuels, coûts cachés et extra, durée moyenne. Téléchargeable (PDF/Word) et partageable par email.": {
+   "en": "",
+   "fr": "Coûts structurels (RH au TJM, outils), opérationnels, mensuels & annuels, coûts cachés et extra, durée moyenne. Téléchargeable (PDF/Word) et partageable par email."
+  },
+  "Des mesures de cybersécurité protègent-elles le système contre les attaques adversariales ?": {
+   "en": "",
+   "fr": "Des mesures de cybersécurité protègent-elles le système contre les attaques adversariales ?"
+  },
+  "Des tests sont-ils réalisés avant déploiement pour identifier et atténuer les risques ?": {
+   "en": "",
+   "fr": "Des tests sont-ils réalisés avant déploiement pour identifier et atténuer les risques ?"
+  },
+  "Dimensionnement des modèles": {
+   "en": "",
+   "fr": "Dimensionnement des modèles"
+  },
+  "Disposer de mécanismes pour surveiller et orienter le comportement des systèmes d'IA.": {
+   "en": "",
+   "fr": "Disposer de mécanismes pour surveiller et orienter le comportement des systèmes d'IA."
+  },
+  "Données sensibles": {
+   "en": "",
+   "fr": "Données sensibles"
+  },
+  "Déclaré, jamais mesuré.": {
+   "en": "",
+   "fr": "Déclaré, jamais mesuré."
+  },
+  "Défini": {
+   "en": "",
+   "fr": "Défini"
+  },
+  "Déployer le cadre et former les équipes. Formation (EU AI Act, # piliers), déploiement des outils, audit terrain complémentaire, mise en œuvre des processus, tests de conformité, intégration aux systèmes existants (CRM, ERP, SIEM).": {
+   "en": "",
+   "fr": "Déployer le cadre et former les équipes. Formation (EU AI Act, 8 piliers), déploiement des outils, audit terrain complémentaire, mise en œuvre des processus, tests de conformité, intégration aux systèmes existants (CRM, ERP, SIEM)."
+  },
+  "Détection de fraude": {
+   "en": "",
+   "fr": "Détection de fraude"
+  },
+  "EQUITE (Art. #). Prise en compte des impacts sur les differents groupes. On evalue : l examen des biais dans les donnees d entrainement, la representativite et la qualite des jeux de donnees, la non-discrimination.": {
+   "en": "",
+   "fr": "EQUITE (Art. 10). Prise en compte des impacts sur les differents groupes. On evalue : l examen des biais dans les donnees d entrainement, la representativite et la qualite des jeux de donnees, la non-discrimination."
+  },
+  "ETSI": {
+   "en": "",
+   "fr": "ETSI"
+  },
+  "EXPLICABILITE (Art. #, #). Capacite a comprendre et expliquer les decisions du systeme IA aux utilisateurs et personnes concernees. On evalue : la notice d utilisation, la clarte des sorties, le droit a l explication des decisions individuelles.": {
+   "en": "",
+   "fr": "EXPLICABILITE (Art. 13, 86). Capacite a comprendre et expliquer les decisions du systeme IA aux utilisateurs et personnes concernees. On evalue : la notice d utilisation, la clarte des sorties, le droit a l explication des decisions individuelles."
+  },
+  "Enjeux propres pris en compte dans le plan d'action (données sensibles, résilience, IA générative).": {
+   "en": "",
+   "fr": "Enjeux propres pris en compte dans le plan d'action (données sensibles, résilience, IA générative)."
+  },
+  "Enjeux reglementaires propres a ce secteur : donnees sensibles, resilience des infrastructures, IA generative, conformite client. Pris en compte dans le plan d action et les livrables.": {
+   "en": "",
+   "fr": "Enjeux reglementaires propres a ce secteur : donnees sensibles, resilience des infrastructures, IA generative, conformite client. Pris en compte dans le plan d action et les livrables."
+  },
+  "Enregistrer cet audit de maturite dans l historique persistant et tracable (RGPD).": {
+   "en": "",
+   "fr": "Enregistrer cet audit de maturite dans l historique persistant et tracable (RGPD)."
+  },
+  "Enseignement et formation": {
+   "en": "",
+   "fr": "Enseignement et formation"
+  },
+  "Existe-t-il des mécanismes de supervision humaine permettant d'interrompre ou corriger le système ?": {
+   "en": "",
+   "fr": "Existe-t-il des mécanismes de supervision humaine permettant d'interrompre ou corriger le système ?"
+  },
+  "Explicabilité": {
+   "en": "",
+   "fr": "Explicabilité"
+  },
+  "Export synthetique de toute la page (hors livrables IA) au format imprimable PDF ou editable Word. Reprend le score, les # piliers, KPIs, phases, budget et procedure pour le secteur selectionne.": {
+   "en": "",
+   "fr": "Export synthetique de toute la page (hors livrables IA) au format imprimable PDF ou editable Word. Reprend le score, les 8 piliers, KPIs, phases, budget et procedure pour le secteur selectionne."
+  },
+  "Finance / Banque / Assurance": {
+   "en": "",
+   "fr": "Finance / Banque / Assurance"
+  },
+  "GOUVERNANCE (Art. #, #, #). Integration des bonnes pratiques dans toute la chaine IA, y compris fournisseurs. On evalue : le systeme de gestion de la qualite (SGQ), la definition des roles (Responsable IA, DPO, Comite), les obligations fournisseurs/deployeurs.": {
+   "en": "",
+   "fr": "GOUVERNANCE (Art. 17, 16, 26). Integration des bonnes pratiques dans toute la chaine IA, y compris fournisseurs. On evalue : le systeme de gestion de la qualite (SGQ), la definition des roles (Responsable IA, DPO, Comite), les obligations fournisseurs/deployeurs."
+  },
+  "Gouvernance": {
+   "en": "",
+   "fr": "Gouvernance"
+  },
+  "Générer avec IA →": {
+   "en": "",
+   "fr": "Générer avec IA →"
+  },
+  "Horizon": {
+   "en": "",
+   "fr": "Horizon"
+  },
+  "Hôtellerie, restauration et tourisme": {
+   "en": "",
+   "fr": "Hôtellerie, restauration et tourisme"
+  },
+  "IA générative et chatbots": {
+   "en": "",
+   "fr": "IA générative et chatbots"
+  },
+  "IT / Tech / SaaS": {
+   "en": "",
+   "fr": "IT / Tech / SaaS"
+  },
+  "Immobilier et gestion d'actifs bâtis": {
+   "en": "",
+   "fr": "Immobilier et gestion d'actifs bâtis"
+  },
+  "Indicateurs cles de suivi de la conformite et de la gouvernance IA, avec cibles, frequences, outils et responsables. KPIs generiques + specifiques au secteur.": {
+   "en": "",
+   "fr": "Indicateurs cles de suivi de la conformite et de la gouvernance IA, avec cibles, frequences, outils et responsables. KPIs generiques + specifiques au secteur."
+  },
+  "Indicateurs de pilotage de la conformité IA, incluant des KPIs spécifiques au secteur Télécom.": {
+   "en": "",
+   "fr": "Indicateurs de pilotage de la conformité IA, incluant des KPIs spécifiques au secteur Télécom."
+  },
+  "Industrie / Manufacturing": {
+   "en": "",
+   "fr": "Industrie / Manufacturing"
+  },
+  "Industries extractives et matières premières": {
+   "en": "",
+   "fr": "Industries extractives et matières premières"
+  },
+  "Intégrer les meilleures pratiques dans la chaîne d'approvisionnement de l'IA, y compris fournisseurs et sous-traitants.": {
+   "en": "",
+   "fr": "Intégrer les meilleures pratiques dans la chaîne d'approvisionnement de l'IA, y compris fournisseurs et sous-traitants."
+  },
+  "Invocation directe des systèmes IA pour tester les propriétés critiques : explicabilité, robustesse, sécurité, équité (biais). Tests adversariaux et cas limites, en cohérence avec l'évaluation des performances et le traitement des risques exigés par l'ISO/IEC # (Art. #, #).": {
+   "en": "",
+   "fr": "Invocation directe des systèmes IA pour tester les propriétés critiques : explicabilité, robustesse, sécurité, équité (biais). Tests adversariaux et cas limites, en cohérence avec l'évaluation des performances et le traitement des risques exigés par l'ISO/IEC 42001 (Art. 6.1, 9.1)."
+  },
+  "Invocation directe du système d'IA pour tester les propriétés critiques.": {
+   "en": "",
+   "fr": "Invocation directe du système d'IA pour tester les propriétés critiques."
+  },
+  "Le coût par niveau de risque": {
+   "en": "",
+   "fr": "Le coût par niveau de risque"
+  },
+  "Le détail, ligne à ligne": {
+   "en": "",
+   "fr": "Le détail, ligne à ligne"
+  },
+  "Le détail, système par système": {
+   "en": "",
+   "fr": "Le détail, système par système"
+  },
+  "Le système est-il résilient face aux erreurs, entrées erronées ou conditions dégradées ?": {
+   "en": "",
+   "fr": "Le système est-il résilient face aux erreurs, entrées erronées ou conditions dégradées ?"
+  },
+  "Le système maintient-il un niveau d'exactitude approprié, mesuré et documenté ?": {
+   "en": "",
+   "fr": "Le système maintient-il un niveau d'exactitude approprié, mesuré et documenté ?"
+  },
+  "Les # piliers issus de l'EU AI Act : Explicabilite, Controlabilite, Transparence, Surete, Equite, Gouvernance, Confidentialite & Securite, Robustesse. Chaque pilier est mappe aux articles concernes du Reglement #/#.": {
+   "en": "",
+   "fr": "Les 8 piliers issus de l'EU AI Act : Explicabilite, Controlabilite, Transparence, Surete, Equite, Gouvernance, Confidentialite & Securite, Robustesse. Chaque pilier est mappe aux articles concernes du Reglement 2024/1689."
+  },
+  "Les contenus générés par IA sont-ils marqués (watermarking) de façon lisible par machine ?": {
+   "en": "",
+   "fr": "Les contenus générés par IA sont-ils marqués (watermarking) de façon lisible par machine ?"
+  },
+  "Les données personnelles sont-elles protégées conformément au RGPD et minimisées ?": {
+   "en": "",
+   "fr": "Les données personnelles sont-elles protégées conformément au RGPD et minimisées ?"
+  },
+  "Les données sont-elles pertinentes, représentatives et de qualité pour la finalité visée ?": {
+   "en": "",
+   "fr": "Les données sont-elles pertinentes, représentatives et de qualité pour la finalité visée ?"
+  },
+  "Les décisions du système IA peuvent-elles être expliquées aux utilisateurs et personnes concernées ?": {
+   "en": "",
+   "fr": "Les décisions du système IA peuvent-elles être expliquées aux utilisateurs et personnes concernées ?"
+  },
+  "Les facteurs, et d’où ils viennent": {
+   "en": "",
+   "fr": "Les facteurs, et d’où ils viennent"
+  },
+  "Les indicateurs servis, et celui qui ne l’est pas": {
+   "en": "",
+   "fr": "Les indicateurs servis, et celui qui ne l’est pas"
+  },
+  "Les jeux de données d'entraînement sont-ils examinés pour détecter et corriger les biais ?": {
+   "en": "",
+   "fr": "Les jeux de données d'entraînement sont-ils examinés pour détecter et corriger les biais ?"
+  },
+  "Les opérateurs sont-ils formés et habilités à superviser le système IA ?": {
+   "en": "",
+   "fr": "Les opérateurs sont-ils formés et habilités à superviser le système IA ?"
+  },
+  "Les rôles et responsabilités (Responsable IA, DPO, Comité) sont-ils définis et documentés ?": {
+   "en": "",
+   "fr": "Les rôles et responsabilités (Responsable IA, DPO, Comité) sont-ils définis et documentés ?"
+  },
+  "Les utilisateurs sont-ils informés qu'ils interagissent avec un système d'IA ?": {
+   "en": "",
+   "fr": "Les utilisateurs sont-ils informés qu'ils interagissent avec un système d'IA ?"
+  },
+  "Les valeurs acceptées, servies par le moteur et non recopiées ici — sans quoi l’écran et le code dériveraient, et c’est l’écran qu’on croirait.": {
+   "en": "",
+   "fr": "Les valeurs acceptées, servies par le moteur et non recopiées ici — sans quoi l’écran et le code dériveraient, et c’est l’écran qu’on croirait."
+  },
+  "Leviers d’optimisation": {
+   "en": "",
+   "fr": "Leviers d’optimisation"
+  },
+  "Liste exhaustive des systèmes IA classés par niveau de risque (Annexe III EU AI Act), avec fiches techniques : données utilisées, modèles, finalité et conformité. Obligatoire pour les systèmes à haut risque (Art. #, #). Structure alignée sur l'inventaire des ressources IA exigé par ISO/IEC # (Annexe A.#, A.#).": {
+   "en": "",
+   "fr": "Liste exhaustive des systèmes IA classés par niveau de risque (Annexe III EU AI Act), avec fiches techniques : données utilisées, modèles, finalité et conformité. Obligatoire pour les systèmes à haut risque (Art. 49, 71). Structure alignée sur l'inventaire des ressources IA exigé par ISO/IEC 42001 (Annexe A.4, A.7)."
+  },
+  "Liste exhaustive des systèmes IA classés par niveau de risque (Annexe III EU AI Act), avec…": {
+   "en": "",
+   "fr": "Liste exhaustive des systèmes IA classés par niveau de risque (Annexe III EU AI Act), avec…"
+  },
+  "Livrables finaux générés par IA": {
+   "en": "",
+   "fr": "Livrables finaux générés par IA"
+  },
+  "Livrables produits a l issue de cette phase. Duree : #–# semaines (#/# – #/#).": {
+   "en": "",
+   "fr": "Livrables produits a l issue de cette phase. Duree : 3–4 semaines (01/07 – 28/07)."
+  },
+  "Livrables produits a l issue de cette phase. Duree : Continu (À partir du #/#).": {
+   "en": "",
+   "fr": "Livrables produits a l issue de cette phase. Duree : Continu (À partir du 02/12)."
+  },
+  "Maintenance prédictive réseau": {
+   "en": "",
+   "fr": "Maintenance prédictive réseau"
+  },
+  "Manuel de gouvernance IA": {
+   "en": "",
+   "fr": "Manuel de gouvernance IA"
+  },
+  "Maturité / #": {
+   "en": "",
+   "fr": "Maturité / 5"
+  },
+  "Methodologie d'audit en # etapes : Pre-audit (applicabilite), Audit documentaire automatise, Audit terrain, Tests directs sur les systemes IA.": {
+   "en": "",
+   "fr": "Methodologie d'audit en 4 etapes : Pre-audit (applicabilite), Audit documentaire automatise, Audit terrain, Tests directs sur les systemes IA."
+  },
+  "Mistral Large": {
+   "en": "",
+   "fr": "Mistral Large"
+  },
+  "Mix électrique": {
+   "en": "",
+   "fr": "Mix électrique"
+  },
+  "Moteur IA :": {
+   "en": "",
+   "fr": "Moteur IA :"
+  },
+  "Obtenir des réponses correctes du système, même en cas d'entrées erronées ou contradictoires.": {
+   "en": "",
+   "fr": "Obtenir des réponses correctes du système, même en cas d'entrées erronées ou contradictoires."
+  },
+  "Obtenir, utiliser et protéger correctement les données et les modèles.": {
+   "en": "",
+   "fr": "Obtenir, utiliser et protéger correctement les données et les modèles."
+  },
+  "Optimisation allocation spectre": {
+   "en": "",
+   "fr": "Optimisation allocation spectre"
+  },
+  "Opérateurs, équipementiers réseau, fournisseurs de services de communication.": {
+   "en": "",
+   "fr": "Opérateurs, équipementiers réseau, fournisseurs de services de communication."
+  },
+  "Organisations internationales et extraterritoriales": {
+   "en": "",
+   "fr": "Organisations internationales et extraterritoriales"
+  },
+  "Ou choisir directement parmi les huit profils relevés": {
+   "en": "",
+   "fr": "Ou choisir directement parmi les huit profils relevés"
+  },
+  "Outils de gouvernance IA": {
+   "en": "",
+   "fr": "Outils de gouvernance IA"
+  },
+  "Ouvrir →": {
+   "en": "",
+   "fr": "Ouvrir →"
+  },
+  "Par centre de coût, par service et par modèle. Un groupe dont aucune ligne n’est instruite reste affiché avec un montant vide : le faire disparaître le ferait lire « ce service ne consomme rien ».": {
+   "en": "",
+   "fr": "Par centre de coût, par service et par modèle. Un groupe dont aucune ligne n’est instruite reste affiché avec un montant vide : le faire disparaître le ferait lire « ce service ne consomme rien »."
+  },
+  "Partiel": {
+   "en": "",
+   "fr": "Partiel"
+  },
+  "Permettre aux parties prenantes de faire des choix éclairés concernant leur engagement dans un système d'IA.": {
+   "en": "",
+   "fr": "Permettre aux parties prenantes de faire des choix éclairés concernant leur engagement dans un système d'IA."
+  },
+  "Phase # — Conception du cadre de gouvernance": {
+   "en": "",
+   "fr": "Phase 2 — Conception du cadre de gouvernance"
+  },
+  "Phase # — Diagnostic initial": {
+   "en": "",
+   "fr": "Phase 1 — Diagnostic initial"
+  },
+  "Phase # — Déploiement opérationnel": {
+   "en": "",
+   "fr": "Phase 3 — Déploiement opérationnel"
+  },
+  "Phase # — Maintenance et amélioration continue": {
+   "en": "",
+   "fr": "Phase 4 — Maintenance et amélioration continue"
+  },
+  "Plafonds": {
+   "en": "",
+   "fr": "Plafonds"
+  },
+  "Plan d'action — # phases": {
+   "en": "",
+   "fr": "Plan d'action — 4 phases"
+  },
+  "Plan de maintenance & amélioration continue": {
+   "en": "",
+   "fr": "Plan de maintenance & amélioration continue"
+  },
+  "Politiques et procédures conformes à l'EU AI Act (gestion des données, développement responsable, contrôle des modèles, transparence) et au système de management de l'IA ISO/IEC # (Art. # Leadership, Art. # Planification). Inclut les rôles (Responsable IA, DPO, Comité de Gouvernance) — Art. # EU AI Act / Annexe A.# ISO #.": {
+   "en": "",
+   "fr": "Politiques et procédures conformes à l'EU AI Act (gestion des données, développement responsable, contrôle des modèles, transparence) et au système de management de l'IA ISO/IEC 42001 (Art. 5 Leadership, Art. 6 Planification). Inclut les rôles (Responsable IA, DPO, Comité de Gouvernance) — Art. 17 EU AI Act / Annexe A.3 ISO 42001."
+  },
+  "Politiques et procédures conformes à l'EU AI Act (gestion des données, développement respo…": {
+   "en": "",
+   "fr": "Politiques et procédures conformes à l'EU AI Act (gestion des données, développement respo…"
+  },
+  "Prise en compte des impacts sur les différents groupes de parties prenantes.": {
+   "en": "",
+   "fr": "Prise en compte des impacts sur les différents groupes de parties prenantes."
+  },
+  "Processus documentés mais déploiement partiel.": {
+   "en": "",
+   "fr": "Processus documentés mais déploiement partiel."
+  },
+  "Procédure d'audit de maturité": {
+   "en": "",
+   "fr": "Procédure d'audit de maturité"
+  },
+  "Programme de formation": {
+   "en": "",
+   "fr": "Programme de formation"
+  },
+  "Programme de mise en conformite en # phases : Diagnostic, Conception du cadre de gouvernance, Deploiement operationnel, Maintenance continue. Methodologie CONSEILPREV.": {
+   "en": "",
+   "fr": "Programme de mise en conformite en 4 phases : Diagnostic, Conception du cadre de gouvernance, Deploiement operationnel, Maintenance continue. Methodologie CONSEILPREV."
+  },
+  "Programme de mise en conformité sur # semaines environ.": {
+   "en": "",
+   "fr": "Programme de mise en conformité sur 24 semaines environ."
+  },
+  "Protection renforcée des données clients (RGPD, ePrivacy). Chiffrement des communications et des métadonnées de connexion.": {
+   "en": "",
+   "fr": "Protection renforcée des données clients (RGPD, ePrivacy). Chiffrement des communications et des métadonnées de connexion."
+  },
+  "Pré-audit": {
+   "en": "",
+   "fr": "Pré-audit"
+  },
+  "Prévention des réponses nuisibles et des utilisations abusives du système.": {
+   "en": "",
+   "fr": "Prévention des réponses nuisibles et des utilisations abusives du système."
+  },
+  "Questionnaire d'auto-évaluation": {
+   "en": "",
+   "fr": "Questionnaire d'auto-évaluation"
+  },
+  "ROBUSTESSE & VERACITE (Art. #, #). Exactitude des reponses meme face a des entrees erronees. On evalue : le niveau d exactitude mesure et documente, la resilience aux erreurs et conditions degradees, les tests adversariaux.": {
+   "en": "",
+   "fr": "ROBUSTESSE & VERACITE (Art. 15, 9). Exactitude des reponses meme face a des entrees erronees. On evalue : le niveau d exactitude mesure et documente, la resilience aux erreurs et conditions degradees, les tests adversariaux."
+  },
+  "Rapport complet : tableau de bord KPIs, budget, calendrier, spécificités sectorielles, # piliers, procédure d'audit et livrables.": {
+   "en": "",
+   "fr": "Rapport complet : tableau de bord KPIs, budget, calendrier, spécificités sectorielles, 8 piliers, procédure d'audit et livrables."
+  },
+  "Rapport d'audit de maturité": {
+   "en": "",
+   "fr": "Rapport d'audit de maturité"
+  },
+  "Recommandations d'outils : registre IA (OneTrust/ServiceNow), tableau de bord de conformité (Power BI/Tableau), outil AIRI (CONSEILPREV) pour l'analyse automatisée des risques. Spécifications de mise en œuvre alignées sur les exigences de support et d'information documentée de l'ISO/IEC # (Art. #).": {
+   "en": "",
+   "fr": "Recommandations d'outils : registre IA (OneTrust/ServiceNow), tableau de bord de conformité (Power BI/Tableau), outil AIRI (CONSEILPREV) pour l'analyse automatisée des risques. Spécifications de mise en œuvre alignées sur les exigences de support et d'information documentée de l'ISO/IEC 42001 (Art. 7)."
+  },
+  "Selectionner ce secteur pour recalculer l audit de maturite.": {
+   "en": "",
+   "fr": "Selectionner ce secteur pour recalculer l audit de maturite."
+  },
+  "Telecharger la synthese de l audit de maturite au format PDF.": {
+   "en": "",
+   "fr": "Telecharger la synthese de l audit de maturite au format PDF."
+  },
+  "Telecharger la synthese de l audit de maturite au format Word.": {
+   "en": "",
+   "fr": "Telecharger la synthese de l audit de maturite au format Word."
+  },
+  "Trajectoires à l’horizon": {
+   "en": "",
+   "fr": "Trajectoires à l’horizon"
+  },
+  "Un système sans volume déclaré ne coûte pas zéro : personne n’a encore dit ce qu’il consomme. La distinction décide de la lecture du total.": {
+   "en": "",
+   "fr": "Un système sans volume déclaré ne coûte pas zéro : personne n’a encore dit ce qu’il consomme. La distinction décide de la lecture du total."
+  },
+  "Utiliser Claude Sonnet pour generer ce livrable.": {
+   "en": "",
+   "fr": "Utiliser Claude Sonnet pour generer ce livrable."
+  },
+  "Utiliser Mistral Large pour generer ce livrable.": {
+   "en": "",
+   "fr": "Utiliser Mistral Large pour generer ce livrable."
+  },
+  "Étude indisponible pour le moment.": {
+   "en": "",
+   "fr": "Étude indisponible pour le moment."
+  }
+ }
+}

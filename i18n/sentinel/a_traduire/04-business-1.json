@@ -1,0 +1,796 @@
+{
+ "_lot": "04-business-1",
+ "_mots": 2353,
+ "_pages": [
+  "adoption",
+  "benchmark",
+  "carto-uc",
+  "ingenierie"
+ ],
+ "_rubrique": "BUSINESS",
+ "bloc": {
+  "Benchmark sectoriel": {
+   "en": "",
+   "fr": "Benchmark sectoriel",
+   "html": "Benchmark <em>sectoriel</em>"
+  },
+  "Ce que cela implique. Ce n’est pas une option, c’est l’état par défaut quand on ne décide pas. Devant un auditeur, un client ou un tribunal, « l’IA l’a écrit » n’a jamais constitué une réponse.": {
+   "en": "",
+   "fr": "Ce que cela implique. Ce n’est pas une option, c’est l’état par défaut quand on ne décide pas. Devant un auditeur, un client ou un tribunal, « l’IA l’a écrit » n’a jamais constitué une réponse.",
+   "html": "<b>Ce que cela implique.</b> Ce n’est pas une option, c’est l’état par défaut quand on ne décide pas. Devant un auditeur, un client ou un tribunal, « l’IA l’a écrit » n’a jamais constitué une réponse."
+  },
+  "Ce que son absence bloque. Généraliser sans point de départ rend toute variation ultérieure ininterprétable : il n’y aura plus rien à comparer, et personne ne pourra dire si le programme a servi.": {
+   "en": "",
+   "fr": "Ce que son absence bloque. Généraliser sans point de départ rend toute variation ultérieure ininterprétable : il n’y aura plus rien à comparer, et personne ne pourra dire si le programme a servi.",
+   "html": "<b>Ce que son absence bloque.</b> Généraliser sans point de départ rend toute variation ultérieure ininterprétable : il n’y aura plus rien à comparer, et personne ne pourra dire si le programme a servi."
+  },
+  "Ce que son absence bloque. Sans liste nominative, la vague # n’aura pas de dénominateur : « part d’équipe qui s’en sert » suppose qu’on sache de quelle équipe on parle.": {
+   "en": "",
+   "fr": "Ce que son absence bloque. Sans liste nominative, la vague 3 n’aura pas de dénominateur : « part d’équipe qui s’en sert » suppose qu’on sache de quelle équipe on parle.",
+   "html": "<b>Ce que son absence bloque.</b> Sans liste nominative, la vague 3 n’aura pas de dénominateur : « part d’équipe qui s’en sert » suppose qu’on sache de quelle équipe on parle."
+  },
+  "Ce que son absence bloque. Sans suppression nommée, le nouveau processus s’ajoute à l’ancien : le temps rendu mesuré en vague # sera nul, et il aura raison de l’être.": {
+   "en": "",
+   "fr": "Ce que son absence bloque. Sans suppression nommée, le nouveau processus s’ajoute à l’ancien : le temps rendu mesuré en vague 3 sera nul, et il aura raison de l’être.",
+   "html": "<b>Ce que son absence bloque.</b> Sans suppression nommée, le nouveau processus s’ajoute à l’ancien : le temps rendu mesuré en vague 3 sera nul, et il aura raison de l’être."
+  },
+  "Ce que son absence bloque. Une vague # déclarée finie au jour du déploiement laisse l’abandon se produire sans témoin, et le programme se conclut sur son meilleur jour.": {
+   "en": "",
+   "fr": "Ce que son absence bloque. Une vague 4 déclarée finie au jour du déploiement laisse l’abandon se produire sans témoin, et le programme se conclut sur son meilleur jour.",
+   "html": "<b>Ce que son absence bloque.</b> Une vague 4 déclarée finie au jour du déploiement laisse l’abandon se produire sans témoin, et le programme se conclut sur son meilleur jour."
+  },
+  "Ce qu’elle produit. La mesure d’usage posée AVANT la généralisation : point de départ daté, méthode écrite, cohorte nominative.": {
+   "en": "",
+   "fr": "Ce qu’elle produit. La mesure d’usage posée AVANT la généralisation : point de départ daté, méthode écrite, cohorte nominative.",
+   "html": "<b>Ce qu’elle produit.</b> La mesure d’usage posée AVANT la généralisation : point de départ daté, méthode écrite, cohorte nominative."
+  },
+  "Ce qu’elle produit. Les accès ouverts aux personnes visées, une littératie IA suffisante pour ne pas croire la machine sur parole, et un cas pilote sur un périmètre où l’erreur se rattrape.": {
+   "en": "",
+   "fr": "Ce qu’elle produit. Les accès ouverts aux personnes visées, une littératie IA suffisante pour ne pas croire la machine sur parole, et un cas pilote sur un périmètre où l’erreur se rattrape.",
+   "html": "<b>Ce qu’elle produit.</b> Les accès ouverts aux personnes visées, une littératie IA suffisante pour ne pas croire la machine sur parole, et un cas pilote sur un périmètre où l’erreur se rattrape."
+  },
+  "Ce qu’elle produit. L’extension au reste du périmètre, un réseau d’ambassadeurs qui porte l’usage au quotidien, et une revue à quatre-vingt-dix jours inscrite au calendrier.": {
+   "en": "",
+   "fr": "Ce qu’elle produit. L’extension au reste du périmètre, un réseau d’ambassadeurs qui porte l’usage au quotidien, et une revue à quatre-vingt-dix jours inscrite au calendrier.",
+   "html": "<b>Ce qu’elle produit.</b> L’extension au reste du périmètre, un réseau d’ambassadeurs qui porte l’usage au quotidien, et une revue à quatre-vingt-dix jours inscrite au calendrier."
+  },
+  "Ce qu’elle produit. Pour chaque cas prioritaire, l’artefact avant / après de l’étape # : ce que fait la machine, ce que garde l’humain, ce qui disparaît, qui arbitre.": {
+   "en": "",
+   "fr": "Ce qu’elle produit. Pour chaque cas prioritaire, l’artefact avant / après de l’étape 6 : ce que fait la machine, ce que garde l’humain, ce qui disparaît, qui arbitre.",
+   "html": "<b>Ce qu’elle produit.</b> Pour chaque cas prioritaire, l’artefact avant / après de l’étape 6 : ce que fait la machine, ce que garde l’humain, ce qui disparaît, qui arbitre."
+  },
+  "Comment on sait qu’elle est finie. La liste nominative des destinataires existe, et chacun a ouvert l’outil au moins une fois.": {
+   "en": "",
+   "fr": "Comment on sait qu’elle est finie. La liste nominative des destinataires existe, et chacun a ouvert l’outil au moins une fois.",
+   "html": "<b>Comment on sait qu’elle est finie.</b> La liste nominative des destinataires existe, et chacun a ouvert l’outil au moins une fois."
+  },
+  "Comment on sait qu’elle est finie. La revue à quatre-vingt-dix jours a eu lieu et son taux d’abandon est relevé — la vague ne se termine pas au déploiement.": {
+   "en": "",
+   "fr": "Comment on sait qu’elle est finie. La revue à quatre-vingt-dix jours a eu lieu et son taux d’abandon est relevé — la vague ne se termine pas au déploiement.",
+   "html": "<b>Comment on sait qu’elle est finie.</b> La revue à quatre-vingt-dix jours a eu lieu et son taux d’abandon est relevé — la vague ne se termine pas au déploiement."
+  },
+  "Comment on sait qu’elle est finie. Les trois indicateurs de cette page sont OBSERVÉS — c’est-à-dire qu’une méthode est écrite pour chacun, et qu’on saurait refaire le relevé.": {
+   "en": "",
+   "fr": "Comment on sait qu’elle est finie. Les trois indicateurs de cette page sont OBSERVÉS — c’est-à-dire qu’une méthode est écrite pour chacun, et qu’on saurait refaire le relevé.",
+   "html": "<b>Comment on sait qu’elle est finie.</b> Les trois indicateurs de cette page sont OBSERVÉS — c’est-à-dire qu’une méthode est écrite pour chacun, et qu’on saurait refaire le relevé."
+  },
+  "Comment on sait qu’elle est finie. L’indicateur « processus effectivement redessinés » est au complet, et chaque ligne nomme une suppression.": {
+   "en": "",
+   "fr": "Comment on sait qu’elle est finie. L’indicateur « processus effectivement redessinés » est au complet, et chaque ligne nomme une suppression.",
+   "html": "<b>Comment on sait qu’elle est finie.</b> L’indicateur « processus effectivement redessinés » est au complet, et chaque ligne nomme une suppression."
+  },
+  "Créer mon parcours chiffréGénérez un parcours guidé à partir de vos cas d’usage et allez jusqu’au coût et à l’enveloppe RaaS.": {
+   "en": "",
+   "fr": "Créer mon parcours chiffréGénérez un parcours guidé à partir de vos cas d’usage et allez jusqu’au coût et à l’enveloppe RaaS.",
+   "html": "<strong>Créer mon parcours chiffré</strong><span>Générez un parcours guidé à partir de vos cas d’usage et allez jusqu’au coût et à l’enveloppe RaaS.</span>"
+  },
+  "Identifier, qualifier et prioriser les cas d’usage IA à fort impact métier — pour les organisations industrielles comme pour leurs fonctions transverses (marketing, ressources humaines, juridique, finance). Un parcours guidé en six temps : cibler le secteur et les processus, explorer les cas d’usage pertinents, les qualifier, chiffrer le retour attendu, évaluer la maturité de déploiement, puis redessiner le processus — la seule étape qui transforme un outil installé en travail réellement changé.": {
+   "en": "",
+   "fr": "Identifier, qualifier et prioriser les cas d’usage IA à fort impact métier — pour les organisations industrielles comme pour leurs fonctions transverses (marketing, ressources humaines, juridique, finance). Un parcours guidé en six temps : cibler le secteur et les processus, explorer les cas d’usage pertinents, les qualifier, chiffrer le retour attendu, évaluer la maturité de déploiement, puis redessiner le processus — la seule étape qui transforme un outil installé en travail réellement changé.",
+   "html": "Identifier, qualifier et prioriser les cas d’usage IA à fort impact métier — pour les organisations industrielles comme pour leurs fonctions transverses (marketing, ressources humaines, juridique, finance). Un parcours guidé en six temps : cibler le secteur et les processus, explorer les cas d’usage pertinents, les qualifier, chiffrer le retour attendu, évaluer la maturité de déploiement, puis <strong>redessiner le processus</strong> — la seule étape qui transforme un outil installé en travail réellement changé."
+  },
+  "L’indice de conformité dit si vous êtes en règle. Celui-ci dit si l’organisation s’en sert. Les deux échouent séparément : on peut être parfaitement conforme sur un outil que personne n’ouvre.": {
+   "en": "",
+   "fr": "L’indice de conformité dit si vous êtes en règle. Celui-ci dit si l’organisation s’en sert. Les deux échouent séparément : on peut être parfaitement conforme sur un outil que personne n’ouvre.",
+   "html": "L’indice de conformité dit si vous êtes en règle. Celui-ci dit si l’organisation <strong>s’en sert</strong>. Les deux échouent séparément : on peut être parfaitement conforme sur un outil que personne n’ouvre."
+  },
+  "Méthode attendue. Deux extractions des mêmes journaux, à trente et à quatre-vingt-dix jours, sur la même cohorte nominative. Sans la date de départ écrite quelque part, le chiffre ne veut rien dire.": {
+   "en": "",
+   "fr": "Méthode attendue. Deux extractions des mêmes journaux, à trente et à quatre-vingt-dix jours, sur la même cohorte nominative. Sans la date de départ écrite quelque part, le chiffre ne veut rien dire.",
+   "html": "<strong>Méthode attendue.</strong> Deux extractions des mêmes journaux, à trente et à quatre-vingt-dix jours, sur la même cohorte nominative. Sans la date de départ écrite quelque part, le chiffre ne veut rien dire."
+  },
+  "Méthode attendue. Journaux de connexion de l’outil, sur quatre semaines glissantes, rapportés à la liste nominative des destinataires. Une extraction ponctuelle un lendemain de formation ne mesure rien.": {
+   "en": "",
+   "fr": "Méthode attendue. Journaux de connexion de l’outil, sur quatre semaines glissantes, rapportés à la liste nominative des destinataires. Une extraction ponctuelle un lendemain de formation ne mesure rien.",
+   "html": "<strong>Méthode attendue.</strong> Journaux de connexion de l’outil, sur quatre semaines glissantes, rapportés à la liste nominative des destinataires. Une extraction ponctuelle un lendemain de formation ne mesure rien."
+  },
+  "Méthode attendue. Un relevé du même processus avant et après, sur les mêmes personnes et le même volume. Le taux de gain saisi à l’étape # de la cartographie est une hypothèse de cadrage : la reprendre ici transformerait une hypothèse en constat.": {
+   "en": "",
+   "fr": "Méthode attendue. Un relevé du même processus avant et après, sur les mêmes personnes et le même volume. Le taux de gain saisi à l’étape 4 de la cartographie est une hypothèse de cadrage : la reprendre ici transformerait une hypothèse en constat.",
+   "html": "<strong>Méthode attendue.</strong> Un relevé du même processus avant et après, sur les mêmes personnes et le même volume. Le taux de gain saisi à l’étape 4 de la cartographie est une hypothèse de cadrage : la reprendre ici transformerait une hypothèse en constat."
+  },
+  "Tableau de bord d’adoption": {
+   "en": "",
+   "fr": "Tableau de bord d’adoption",
+   "html": "Tableau de bord <em>d’adoption</em>"
+  },
+  "Tant que la méthode n’est pas écrite assez précisément pour qu’on sache la refaire, ce chiffre reste déclaré. Ce n’est pas une punition : une mesure qu’on ne sait pas reproduire n’est pas une mesure.": {
+   "en": "",
+   "fr": "Tant que la méthode n’est pas écrite assez précisément pour qu’on sache la refaire, ce chiffre reste déclaré. Ce n’est pas une punition : une mesure qu’on ne sait pas reproduire n’est pas une mesure.",
+   "html": "Tant que la méthode n’est pas écrite assez précisément pour qu’on sache la refaire, ce chiffre reste <strong>déclaré</strong>. Ce n’est pas une punition : une mesure qu’on ne sait pas reproduire n’est pas une mesure."
+  },
+  "Un cas d’usage installé sur un processus inchangé produit un double travail, puis l’abandon. Pour chaque cas retenu, décrivez le déroulé d’aujourd’hui, celui d’après, ce qui disparaît — et nommez qui arbitre. Le gain chiffré à l’étape # suppose ce redécoupage : sans lui, il n’est pas prudent, il est faux.": {
+   "en": "",
+   "fr": "Un cas d’usage installé sur un processus inchangé produit un double travail, puis l’abandon. Pour chaque cas retenu, décrivez le déroulé d’aujourd’hui, celui d’après, ce qui disparaît — et nommez qui arbitre. Le gain chiffré à l’étape 4 suppose ce redécoupage : sans lui, il n’est pas prudent, il est faux.",
+   "html": "Un cas d’usage installé sur un processus inchangé produit un double travail, puis l’abandon. Pour chaque cas retenu, décrivez le déroulé <strong>d’aujourd’hui</strong>, celui <strong>d’après</strong>, ce qui <strong>disparaît</strong> — et nommez qui arbitre. Le gain chiffré à l’étape 4 suppose ce redécoupage : sans lui, il n’est pas prudent, il est faux."
+  },
+  "Un usage déclaré n’est pas un usage observé. « Les équipes ont bien adopté l’outil » est la phrase la plus répétée et la moins vérifiée des comités de pilotage. Chaque indicateur ci-dessous porte la nature de sa source. Un indicateur qui ne nomme pas sa méthode de mesure reste déclaré — il ne devient pas observé parce qu’on y croit.": {
+   "en": "",
+   "fr": "Un usage déclaré n’est pas un usage observé. « Les équipes ont bien adopté l’outil » est la phrase la plus répétée et la moins vérifiée des comités de pilotage. Chaque indicateur ci-dessous porte la nature de sa source. Un indicateur qui ne nomme pas sa méthode de mesure reste déclaré — il ne devient pas observé parce qu’on y croit.",
+   "html": "<strong>Un usage déclaré n’est pas un usage observé.</strong> « Les équipes ont bien adopté l’outil » est la phrase la plus répétée et la moins vérifiée des comités de pilotage. Chaque indicateur ci-dessous porte la nature de sa source. Un indicateur qui ne nomme pas sa méthode de mesure reste <em>déclaré</em> — il ne devient pas <em>observé</em> parce qu’on y croit."
+  },
+  "— : socle non relevé pour ce secteur, aucune référence à comparer.": {
+   "en": "",
+   "fr": "— : socle non relevé pour ce secteur, aucune référence à comparer.",
+   "html": "<b>—</b> : socle non relevé pour ce secteur, aucune référence à comparer."
+  }
+ },
+ "texte": {
+  "# indicateur(s) sur # réellement observé(s).": {
+   "en": "",
+   "fr": "0 indicateur(s) sur 3 réellement observé(s)."
+  },
+  ", qui seul détermine le niveau de risque et les obligations exactes.": {
+   "en": "",
+   "fr": ", qui seul détermine le niveau de risque et les obligations exactes."
+  },
+  ", sans quoi on ne saura jamais ce que la généralisation a changé.": {
+   "en": "",
+   "fr": ", sans quoi on ne saura jamais ce que la généralisation a changé."
+  },
+  ". C’est l’étape #. Les cas prioritaires, chiffrés et jugés déployables peuvent aussi être rattachés à des jalons de conformité AI Act dans le module RaaS, reliant valeur métier, faisabilité et trajectoire de conformité.": {
+   "en": "",
+   "fr": ". C’est l’étape 6. Les cas prioritaires, chiffrés et jugés déployables peuvent aussi être rattachés à des jalons de conformité AI Act dans le module RaaS, reliant valeur métier, faisabilité et trajectoire de conformité."
+  },
+  "Abandon à quatre-vingt-dix jours": {
+   "en": "",
+   "fr": "Abandon à quatre-vingt-dix jours"
+  },
+  "Achats": {
+   "en": "",
+   "fr": "Achats"
+  },
+  "Analyse": {
+   "en": "",
+   "fr": "Analyse"
+  },
+  "Aucun cas retenu : commencez par l’étape # de la cartographie.": {
+   "en": "",
+   "fr": "Aucun cas retenu : commencez par l’étape 2 de la cartographie."
+  },
+  "Aucun cas retenu dans la cartographie. Un déploiement sans processus redessiné n’a rien à mesurer ici.": {
+   "en": "",
+   "fr": "Aucun cas retenu dans la cartographie. Un déploiement sans processus redessiné n’a rien à mesurer ici."
+  },
+  "Aucun cas retenu.": {
+   "en": "",
+   "fr": "Aucun cas retenu."
+  },
+  "Aucun système au Registre IA": {
+   "en": "",
+   "fr": "Aucun système au Registre IA"
+  },
+  "Aucun système enregistré": {
+   "en": "",
+   "fr": "Aucun système enregistré"
+  },
+  "Auto-évaluez vos données et vos compétences techniques. Le diagnostic signale les écarts à combler avant de déployer les cas retenus.": {
+   "en": "",
+   "fr": "Auto-évaluez vos données et vos compétences techniques. Le diagnostic signale les écarts à combler avant de déployer les cas retenus."
+  },
+  "Besoin d’accompagnement ? CONSEILPREV peut animer ce parcours avec vos équipes et approfondir chaque cas retenu.": {
+   "en": "",
+   "fr": "Besoin d’accompagnement ? CONSEILPREV peut animer ce parcours avec vos équipes et approfondir chaque cas retenu."
+  },
+  "Bon à savoir": {
+   "en": "",
+   "fr": "Bon à savoir"
+  },
+  "Business · Adoption": {
+   "en": "",
+   "fr": "Business · Adoption"
+  },
+  "Business — Valeur métier": {
+   "en": "",
+   "fr": "Business — Valeur métier"
+  },
+  "CALCULÉ": {
+   "en": "",
+   "fr": "CALCULÉ"
+  },
+  "Cartographie des cas d’usage IA": {
+   "en": "",
+   "fr": "Cartographie des cas d’usage IA"
+  },
+  "Ce diagnostic clôt la phase d’identification et de préparation : vous savez quoi faire, ce que ça vaut et si vous saurez le déployer. Il reste la question qui décide du résultat —": {
+   "en": "",
+   "fr": "Ce diagnostic clôt la phase d’identification et de préparation : vous savez quoi faire, ce que ça vaut et si vous saurez le déployer. Il reste la question qui décide du résultat —"
+  },
+  "Ce document est celui qu’on emmène devant les équipes concernées. Il ne dit pas « nous allons déployer un outil » ; il dit ce que chacun ne fera plus, et ce qu’il fera à la place. C’est la seule version de l’annonce à laquelle on puisse répondre.": {
+   "en": "",
+   "fr": "Ce document est celui qu’on emmène devant les équipes concernées. Il ne dit pas « nous allons déployer un outil » ; il dit ce que chacun ne fera plus, et ce qu’il fera à la place. C’est la seule version de l’annonce à laquelle on puisse répondre."
+  },
+  "Ce que vous écrivez ici n’est vérifié par personne — c’est une intention de conception. Ce qui se mesure ensuite, c’est l’usage réel : part d’équipe qui s’en sert chaque semaine, processus effectivement redessinés, temps rendu.": {
+   "en": "",
+   "fr": "Ce que vous écrivez ici n’est vérifié par personne — c’est une intention de conception. Ce qui se mesure ensuite, c’est l’usage réel : part d’équipe qui s’en sert chaque semaine, processus effectivement redessinés, temps rendu."
+  },
+  "Ces relevés restent dans ce navigateur : rien n’est envoyé ni conservé sur nos serveurs. Ils décrivent le fonctionnement interne d’une organisation, et ce n’est pas à nous de le détenir.": {
+   "en": "",
+   "fr": "Ces relevés restent dans ce navigateur : rien n’est envoyé ni conservé sur nos serveurs. Ils décrivent le fonctionnement interne d’une organisation, et ce n’est pas à nous de le détenir."
+  },
+  "Cette cartographie vous accompagne, en six étapes, pour passer d’une intention d’adopter l’IA à un plan d’action concret, chiffré et réaliste. Chaque étape produit un résultat qui alimente la suivante ; vous pouvez revenir en arrière à tout moment.": {
+   "en": "",
+   "fr": "Cette cartographie vous accompagne, en six étapes, pour passer d’une intention d’adopter l’IA à un plan d’action concret, chiffré et réaliste. Chaque étape produit un résultat qui alimente la suivante ; vous pouvez revenir en arrière à tout moment."
+  },
+  "Cette maturité mesure votre capacité à déployer les cas retenus.": {
+   "en": "",
+   "fr": "Cette maturité mesure votre capacité à déployer les cas retenus."
+  },
+  "Chiffrer le retour": {
+   "en": "",
+   "fr": "Chiffrer le retour"
+  },
+  "Chiffrer le retour →": {
+   "en": "",
+   "fr": "Chiffrer le retour →"
+  },
+  "Choisissez votre secteur industriel et, si vous le souhaitez, les processus métiers prioritaires (achats, finance, supply chain, opérations, relation client). La cartographie s’adapte à votre contexte.": {
+   "en": "",
+   "fr": "Choisissez votre secteur industriel et, si vous le souhaitez, les processus métiers prioritaires (achats, finance, supply chain, opérations, relation client). La cartographie s’adapte à votre contexte."
+  },
+  "Cibler": {
+   "en": "",
+   "fr": "Cibler"
+  },
+  "Comment ce chiffre a été obtenu": {
+   "en": "",
+   "fr": "Comment ce chiffre a été obtenu"
+  },
+  "Comparez le taux de conformité réel de vos systèmes (Registre IA) avec le score de maturité moyen calculé pour chaque secteur.": {
+   "en": "",
+   "fr": "Comparez le taux de conformité réel de vos systèmes (Registre IA) avec le score de maturité moyen calculé pour chaque secteur."
+  },
+  "Composer": {
+   "en": "",
+   "fr": "Composer"
+  },
+  "Constituer la liste courte →": {
+   "en": "",
+   "fr": "Constituer la liste courte →"
+  },
+  "Date du relevé": {
+   "en": "",
+   "fr": "Date du relevé"
+  },
+  "Déploiement prévu dans plusieurs pays ?": {
+   "en": "",
+   "fr": "Déploiement prévu dans plusieurs pays ?"
+  },
+  "Effacer mes relevés": {
+   "en": "",
+   "fr": "Effacer mes relevés"
+  },
+  "Elle complète, sans la remplacer, l’évaluation de gouvernance de l’Audit de maturité IA (# piliers).": {
+   "en": "",
+   "fr": "Elle complète, sans la remplacer, l’évaluation de gouvernance de l’Audit de maturité IA (8 piliers)."
+  },
+  "Explorer et sélectionner": {
+   "en": "",
+   "fr": "Explorer et sélectionner"
+  },
+  "Explorer les cas d’usage →": {
+   "en": "",
+   "fr": "Explorer les cas d’usage →"
+  },
+  "Exporter la liste priorisée (PDF)": {
+   "en": "",
+   "fr": "Exporter la liste priorisée (PDF)"
+  },
+  "Exporter le diagnostic (PDF)": {
+   "en": "",
+   "fr": "Exporter le diagnostic (PDF)"
+  },
+  "Exporter le dossier de valeur (PDF)": {
+   "en": "",
+   "fr": "Exporter le dossier de valeur (PDF)"
+  },
+  "Exporter le tableau de bord (PDF)": {
+   "en": "",
+   "fr": "Exporter le tableau de bord (PDF)"
+  },
+  "Exporter l’avant / après (PDF)": {
+   "en": "",
+   "fr": "Exporter l’avant / après (PDF)"
+  },
+  "Finance": {
+   "en": "",
+   "fr": "Finance"
+  },
+  "Guide d’utilisation — comment utiliser cette cartographie": {
+   "en": "",
+   "fr": "Guide d’utilisation — comment utiliser cette cartographie"
+  },
+  "Généraliser et tenir": {
+   "en": "",
+   "fr": "Généraliser et tenir"
+  },
+  "Interactions de la cartographie des cas d’usage": {
+   "en": "",
+   "fr": "Interactions de la cartographie des cas d’usage"
+  },
+  "Juridique": {
+   "en": "",
+   "fr": "Juridique"
+  },
+  "Lancer (auto) →": {
+   "en": "",
+   "fr": "Lancer (auto) →"
+  },
+  "Le redécoupage se décide, il ne se déduit pas.": {
+   "en": "",
+   "fr": "Le redécoupage se décide, il ne se déduit pas."
+  },
+  "Le seul indicateur que cette plateforme calcule elle-même": {
+   "en": "",
+   "fr": "Le seul indicateur que cette plateforme calcule elle-même"
+  },
+  "Le temps que les personnes ne passent plus à faire ce qu’elles faisaient. Mesuré, pas estimé à partir d’un taux de gain théorique.": {
+   "en": "",
+   "fr": "Le temps que les personnes ne passent plus à faire ce qu’elles faisaient. Mesuré, pas estimé à partir d’un taux de gain théorique."
+  },
+  "Les cas prioritaires peuvent être rattachés à des jalons de conformité AI Act dans le module RaaS, pour relier valeur métier et trajectoire de conformité.": {
+   "en": "",
+   "fr": "Les cas prioritaires peuvent être rattachés à des jalons de conformité AI Act dans le module RaaS, pour relier valeur métier et trajectoire de conformité."
+  },
+  "Les estimations de retour et de risque sont des repères de cadrage, à valider avec vos équipes métiers et votre direction financière.": {
+   "en": "",
+   "fr": "Les estimations de retour et de risque sont des repères de cadrage, à valider avec vos équipes métiers et votre direction financière."
+  },
+  "Les obligations varient selon la juridiction. Vérifiez le cadre applicable avant d’industrialiser un cas hors de France.": {
+   "en": "",
+   "fr": "Les obligations varient selon la juridiction. Vérifiez le cadre applicable avant d’industrialiser un cas hors de France."
+  },
+  "Les pastilles réglementaires signalent, elles ne qualifient pas.": {
+   "en": "",
+   "fr": "Les pastilles réglementaires signalent, elles ne qualifient pas."
+  },
+  "L’axe « risque maîtrisé » reste une appréciation rapide.": {
+   "en": "",
+   "fr": "L’axe « risque maîtrisé » reste une appréciation rapide."
+  },
+  "Marketing": {
+   "en": "",
+   "fr": "Marketing"
+  },
+  "Mesurer": {
+   "en": "",
+   "fr": "Mesurer"
+  },
+  "Moyenne secteur": {
+   "en": "",
+   "fr": "Moyenne secteur"
+  },
+  "NON RELEVÉ": {
+   "en": "",
+   "fr": "NON RELEVÉ"
+  },
+  "Notez chaque cas retenu de # à # sur quatre axes : impact, faisabilité, données et maîtrise du risque. Le score, la priorité (P# à P#) et le positionnement se calculent automatiquement.": {
+   "en": "",
+   "fr": "Notez chaque cas retenu de 1 à 5 sur quatre axes : impact, faisabilité, données et maîtrise du risque. Le score, la priorité (P1 à P3) et le positionnement se calculent automatiquement."
+  },
+  "Notez chaque cas retenu sur quatre axes. Le score pondéré, la priorité (P# à P#) et le positionnement dans la matrice impact-faisabilité se calculent en temps réel. Exportez ensuite la liste priorisée.": {
+   "en": "",
+   "fr": "Notez chaque cas retenu sur quatre axes. Le score pondéré, la priorité (P1 à P3) et le positionnement dans la matrice impact-faisabilité se calculent en temps réel. Exportez ensuite la liste priorisée."
+  },
+  "Opérations": {
+   "en": "",
+   "fr": "Opérations"
+  },
+  "Ouvrir la Carte mondiale des juridictions →": {
+   "en": "",
+   "fr": "Ouvrir la Carte mondiale des juridictions →"
+  },
+  "Ouvrir la Matrice risques →": {
+   "en": "",
+   "fr": "Ouvrir la Matrice risques →"
+  },
+  "Ouvrir le Benchmark sectoriel →": {
+   "en": "",
+   "fr": "Ouvrir le Benchmark sectoriel →"
+  },
+  "Ouvrir le tableau de bord d’adoption →": {
+   "en": "",
+   "fr": "Ouvrir le tableau de bord d’adoption →"
+  },
+  "Ouvrir l’Audit de maturité IA →": {
+   "en": "",
+   "fr": "Ouvrir l’Audit de maturité IA →"
+  },
+  "Ouvrir l’étape # — Redessiner le processus →": {
+   "en": "",
+   "fr": "Ouvrir l’étape 6 — Redessiner le processus →"
+  },
+  "Parcourez les cas d’usage proposés. Chaque carte indique la famille technologique (IA générative, apprentissage automatique ou automatisation), les résultats mesurables attendus et les données requises. Cliquez pour retenir les cas pertinents.": {
+   "en": "",
+   "fr": "Parcourez les cas d’usage proposés. Chaque carte indique la famille technologique (IA générative, apprentissage automatique ou automatisation), les résultats mesurables attendus et les données requises. Cliquez pour retenir les cas pertinents."
+  },
+  "Part d’équipe qui s’en sert chaque semaine": {
+   "en": "",
+   "fr": "Part d’équipe qui s’en sert chaque semaine"
+  },
+  "Pour chaque cas retenu, renseignez l’assiette annuelle du processus concerné, le taux de gain estimé, le coût de mise en œuvre et le coût récurrent annuel. Le gain annuel, le retour net la première année, le retour sur investissement et le délai de récupération se calculent en temps réel. Les valeurs sont des estimations de cadrage, à valider avec les métiers et la direction financière.": {
+   "en": "",
+   "fr": "Pour chaque cas retenu, renseignez l’assiette annuelle du processus concerné, le taux de gain estimé, le coût de mise en œuvre et le coût récurrent annuel. Le gain annuel, le retour net la première année, le retour sur investissement et le délai de récupération se calculent en temps réel. Les valeurs sont des estimations de cadrage, à valider avec les métiers et la direction financière."
+  },
+  "Pour chaque cas retenu, écrivez le déroulé d’aujourd’hui, celui d’après, ce qui disparaît, et nommez qui arbitre. C’est l’étape que les projets d’IA sautent le plus souvent, et celle dont l’absence explique la plupart des abandons : un outil posé sur un processus inchangé ajoute du travail au lieu d’en retirer.": {
+   "en": "",
+   "fr": "Pour chaque cas retenu, écrivez le déroulé d’aujourd’hui, celui d’après, ce qui disparaît, et nommez qui arbitre. C’est l’étape que les projets d’IA sautent le plus souvent, et celle dont l’absence explique la plupart des abandons : un outil posé sur un processus inchangé ajoute du travail au lieu d’en retirer."
+  },
+  "Pour situer votre secteur,": {
+   "en": "",
+   "fr": "Pour situer votre secteur,"
+  },
+  "Pour une évaluation approfondie d’un cas sensible, ouvrez la matrice dédiée plutôt que de dupliquer l’analyse ici.": {
+   "en": "",
+   "fr": "Pour une évaluation approfondie d’un cas sensible, ouvrez la matrice dédiée plutôt que de dupliquer l’analyse ici."
+  },
+  "Processus effectivement redessinés": {
+   "en": "",
+   "fr": "Processus effectivement redessinés"
+  },
+  "Processus métiers (facultatif)": {
+   "en": "",
+   "fr": "Processus métiers (facultatif)"
+  },
+  "Prochaine étape du parcours : qualifier chaque cas retenu (scoring pondéré) puis estimer les résultats mesurables. Chaque cas prioritaire pourra être rattaché à un jalon de conformité AI Act dans le module RaaS, reliant la valeur métier à la trajectoire de conformité.": {
+   "en": "",
+   "fr": "Prochaine étape du parcours : qualifier chaque cas retenu (scoring pondéré) puis estimer les résultats mesurables. Chaque cas prioritaire pourra être rattaché à un jalon de conformité AI Act dans le module RaaS, reliant la valeur métier à la trajectoire de conformité."
+  },
+  "Qualifier & prioriser": {
+   "en": "",
+   "fr": "Qualifier & prioriser"
+  },
+  "Qualifier et prioriser": {
+   "en": "",
+   "fr": "Qualifier et prioriser"
+  },
+  "Quatre vagues, à côté des quatre phases de la": {
+   "en": "",
+   "fr": "Quatre vagues, à côté des quatre phases de la"
+  },
+  "Rattacher la synthese de la cartographie a la fiche d un client (Gestion des clients)": {
+   "en": "",
+   "fr": "Rattacher la synthese de la cartographie a la fiche d un client (Gestion des clients)"
+  },
+  "Redessiner": {
+   "en": "",
+   "fr": "Redessiner"
+  },
+  "Redessiner le processus": {
+   "en": "",
+   "fr": "Redessiner le processus"
+  },
+  "Redessiner le processus →": {
+   "en": "",
+   "fr": "Redessiner le processus →"
+  },
+  "Relation client": {
+   "en": "",
+   "fr": "Relation client"
+  },
+  "Rendre l’usage possible": {
+   "en": "",
+   "fr": "Rendre l’usage possible"
+  },
+  "Renseignez l’assiette annuelle du processus, le taux de gain estimé et les coûts. Le gain annuel, le retour net, le retour sur investissement et le délai de récupération s’affichent en temps réel.": {
+   "en": "",
+   "fr": "Renseignez l’assiette annuelle du processus, le taux de gain estimé et les coûts. Le gain annuel, le retour net, le retour sur investissement et le délai de récupération s’affichent en temps réel."
+  },
+  "Reporter le perimetre et la valeur vers la Tarification et l enveloppe RaaS": {
+   "en": "",
+   "fr": "Reporter le perimetre et la valeur vers la Tarification et l enveloppe RaaS"
+  },
+  "Ressources humaines": {
+   "en": "",
+   "fr": "Ressources humaines"
+  },
+  "Rien n’a été mesuré ni déclaré.": {
+   "en": "",
+   "fr": "Rien n’a été mesuré ni déclaré."
+  },
+  "Roadmap d’adoption": {
+   "en": "",
+   "fr": "Roadmap d’adoption"
+  },
+  "Répartition": {
+   "en": "",
+   "fr": "Répartition"
+  },
+  "Scores par secteur": {
+   "en": "",
+   "fr": "Scores par secteur"
+  },
+  "Secteur industriel": {
+   "en": "",
+   "fr": "Secteur industriel"
+  },
+  "Socle non relevé pour ce secteur : aucune référence à comparer.": {
+   "en": "",
+   "fr": "Socle non relevé pour ce secteur : aucune référence à comparer."
+  },
+  "Supply chain": {
+   "en": "",
+   "fr": "Supply chain"
+  },
+  "Sur les personnes qui s’en servaient au premier mois, combien ont cessé au troisième. C’est l’indicateur que les tableaux de bord d’adoption omettent le plus souvent, et le seul qui distingue un lancement réussi d’un changement tenu.": {
+   "en": "",
+   "fr": "Sur les personnes qui s’en servaient au premier mois, combien ont cessé au troisième. C’est l’indicateur que les tableaux de bord d’adoption omettent le plus souvent, et le seul qui distingue un lancement réussi d’un changement tenu."
+  },
+  "Sur les personnes à qui l’usage est destiné, combien l’ouvrent au moins une fois par semaine. Pas « ont un accès » : « s’en servent ».": {
+   "en": "",
+   "fr": "Sur les personnes à qui l’usage est destiné, combien l’ouvrent au moins une fois par semaine. Pas « ont un accès » : « s’en servent »."
+  },
+  "Sélectionnez le secteur et, si vous le souhaitez, les processus métiers prioritaires. La cartographie s’adapte à votre choix.": {
+   "en": "",
+   "fr": "Sélectionnez le secteur et, si vous le souhaitez, les processus métiers prioritaires. La cartographie s’adapte à votre choix."
+  },
+  "Tant que l’abandon à quatre-vingt-dix jours n’est pas relevé, le programme se conclut sur son meilleur jour.": {
+   "en": "",
+   "fr": "Tant que l’abandon à quatre-vingt-dix jours n’est pas relevé, le programme se conclut sur son meilleur jour."
+  },
+  "Temps rendu, par personne et par semaine": {
+   "en": "",
+   "fr": "Temps rendu, par personne et par semaine"
+  },
+  "Une carte sans mention n’est": {
+   "en": "",
+   "fr": "Une carte sans mention n’est"
+  },
+  "Vague #": {
+   "en": "",
+   "fr": "Vague 1"
+  },
+  "Valeur relevée (%)": {
+   "en": "",
+   "fr": "Valeur relevée (%)"
+  },
+  "Valeur relevée (h)": {
+   "en": "",
+   "fr": "Valeur relevée (h)"
+  },
+  "Votre score moyen": {
+   "en": "",
+   "fr": "Votre score moyen"
+  },
+  "cas d’usage ·": {
+   "en": "",
+   "fr": "cas d’usage ·"
+  },
+  "cohérence": {
+   "en": "",
+   "fr": "cohérence"
+  },
+  "comment le travail sera fait après": {
+   "en": "",
+   "fr": "comment le travail sera fait après"
+  },
+  "consultez les repères de maturité, d’investissement et de risque IA propres à votre filière.": {
+   "en": "",
+   "fr": "consultez les repères de maturité, d’investissement et de risque IA propres à votre filière."
+  },
+  "en cours": {
+   "en": "",
+   "fr": "en cours"
+  },
+  "est le nombre de processus redessinés, lu à l’étape # de la cartographie. Les trois autres se mesurent chez vous, avec vos outils.": {
+   "en": "",
+   "fr": "est le nombre de processus redessinés, lu à l’étape 6 de la cartographie. Les trois autres se mesurent chez vous, avec vos outils."
+  },
+  "et non à leur place. Une vague ne s’ouvre pas parce que la précédente est « lancée » : elle s’ouvre quand la précédente a produit ce qu’elle devait produire, et l’ordre porte une contrainte réelle —": {
+   "en": "",
+   "fr": "et non à leur place. Une vague ne s’ouvre pas parce que la précédente est « lancée » : elle s’ouvre quand la précédente a produit ce qu’elle devait produire, et l’ordre porte une contrainte réelle —"
+  },
+  "logique": {
+   "en": "",
+   "fr": "logique"
+  },
+  "mesurer avant de généraliser": {
+   "en": "",
+   "fr": "mesurer avant de généraliser"
+  },
+  "pas": {
+   "en": "",
+   "fr": "pas"
+  },
+  "prioritaire": {
+   "en": "",
+   "fr": "prioritaire"
+  },
+  "roadmap de conformité": {
+   "en": "",
+   "fr": "roadmap de conformité"
+  },
+  "sélectionné(s)": {
+   "en": "",
+   "fr": "sélectionné(s)"
+  },
+  "une carte sans obligation : la qualification dépend de l’usage réel, du rôle tenu dans la chaîne de valeur et des données mobilisées. Passez chaque cas retenu au": {
+   "en": "",
+   "fr": "une carte sans obligation : la qualification dépend de l’usage réel, du rôle tenu dans la chaîne de valeur et des données mobilisées. Passez chaque cas retenu au"
+  },
+  "vs. vous": {
+   "en": "",
+   "fr": "vs. vous"
+  },
+  "À chaque étape, un bouton d’export produit un document PDF : liste prioritée, dossier de valeur, diagnostic de maturité.": {
+   "en": "",
+   "fr": "À chaque étape, un bouton d’export produit un document PDF : liste prioritée, dossier de valeur, diagnostic de maturité."
+  },
+  "Étape # — Chiffrer le retour attendu": {
+   "en": "",
+   "fr": "Étape 4 — Chiffrer le retour attendu"
+  },
+  "Étape # — Cibler le contexte industriel": {
+   "en": "",
+   "fr": "Étape 1 — Cibler le contexte industriel"
+  },
+  "Étape # — Explorer et sélectionner": {
+   "en": "",
+   "fr": "Étape 2 — Explorer et sélectionner"
+  },
+  "Étape # — Maturité data et compétences techniques": {
+   "en": "",
+   "fr": "Étape 5 — Maturité data et compétences techniques"
+  },
+  "Étape # — Qualifier et prioriser": {
+   "en": "",
+   "fr": "Étape 3 — Qualifier et prioriser"
+  },
+  "Étape # — Redessiner le processus": {
+   "en": "",
+   "fr": "Étape 6 — Redessiner le processus"
+  },
+  "Évaluer la maturité": {
+   "en": "",
+   "fr": "Évaluer la maturité"
+  },
+  "Évaluer la maturité →": {
+   "en": "",
+   "fr": "Évaluer la maturité →"
+  },
+  "Évaluez la capacité de l’organisation à déployer les cas d’usage retenus. Notez chaque critère de # (absent) à # (maîtrisé). Le diagnostic croise votre maturité technique avec les familles technologiques de votre liste courte, et signale les écarts à combler avant le déploiement.": {
+   "en": "",
+   "fr": "Évaluez la capacité de l’organisation à déployer les cas d’usage retenus. Notez chaque critère de 1 (absent) à 5 (maîtrisé). Le diagnostic croise votre maturité technique avec les familles technologiques de votre liste courte, et signale les écarts à combler avant le déploiement."
+  },
+  "établi": {
+   "en": "",
+   "fr": "établi"
+  },
+  "← Modifier la sélection": {
+   "en": "",
+   "fr": "← Modifier la sélection"
+  },
+  "← Revenir": {
+   "en": "",
+   "fr": "← Revenir"
+  },
+  "← Revenir au chiffrage": {
+   "en": "",
+   "fr": "← Revenir au chiffrage"
+  },
+  "← Revenir à la maturité": {
+   "en": "",
+   "fr": "← Revenir à la maturité"
+  },
+  "← Revenir à la qualification": {
+   "en": "",
+   "fr": "← Revenir à la qualification"
+  },
+  "→ Tarification & enveloppe RaaS": {
+   "en": "",
+   "fr": "→ Tarification & enveloppe RaaS"
+  },
+  "↓ Rapport complet": {
+   "en": "",
+   "fr": "↓ Rapport complet"
+  },
+  "↗ Rattacher à un client": {
+   "en": "",
+   "fr": "↗ Rattacher à un client"
+  },
+  "⚡ Énergie / Utilities": {
+   "en": "",
+   "fr": "⚡ Énergie / Utilities"
+  },
+  "⛏ Industries extractives et matières premières": {
+   "en": "",
+   "fr": "⛏ Industries extractives et matières premières"
+  },
+  "🌐 Organisations internationales et extraterritoriales": {
+   "en": "",
+   "fr": "🌐 Organisations internationales et extraterritoriales"
+  },
+  "🌾 Agriculture, agroalimentaire, forêt et pêche": {
+   "en": "",
+   "fr": "🌾 Agriculture, agroalimentaire, forêt et pêche"
+  },
+  "🎓 Enseignement et formation": {
+   "en": "",
+   "fr": "🎓 Enseignement et formation"
+  },
+  "🎭 Arts, sport, médias et loisirs": {
+   "en": "",
+   "fr": "🎭 Arts, sport, médias et loisirs"
+  },
+  "🏗 Construction et BTP": {
+   "en": "",
+   "fr": "🏗 Construction et BTP"
+  },
+  "🏛 Secteur public / Administration": {
+   "en": "",
+   "fr": "🏛 Secteur public / Administration"
+  },
+  "🏡 Services à la personne et particuliers employeurs": {
+   "en": "",
+   "fr": "🏡 Services à la personne et particuliers employeurs"
+  },
+  "🏢 Immobilier et gestion d'actifs bâtis": {
+   "en": "",
+   "fr": "🏢 Immobilier et gestion d'actifs bâtis"
+  },
+  "🏦 Finance / Banque / Assurance": {
+   "en": "",
+   "fr": "🏦 Finance / Banque / Assurance"
+  },
+  "🏨 Hôtellerie, restauration et tourisme": {
+   "en": "",
+   "fr": "🏨 Hôtellerie, restauration et tourisme"
+  },
+  "🏭 Industrie / Manufacturing": {
+   "en": "",
+   "fr": "🏭 Industrie / Manufacturing"
+  },
+  "💻 IT / Tech / SaaS": {
+   "en": "",
+   "fr": "💻 IT / Tech / SaaS"
+  },
+  "📐 Services professionnels, scientifiques et techniques": {
+   "en": "",
+   "fr": "📐 Services professionnels, scientifiques et techniques"
+  },
+  "📶 Télécom": {
+   "en": "",
+   "fr": "📶 Télécom"
+  },
+  "🚇 Transport / Mobilité": {
+   "en": "",
+   "fr": "🚇 Transport / Mobilité"
+  },
+  "🛒 Commerce de gros et de détail": {
+   "en": "",
+   "fr": "🛒 Commerce de gros et de détail"
+  },
+  "🤝 Autres services et vie associative": {
+   "en": "",
+   "fr": "🤝 Autres services et vie associative"
+  },
+  "🧾 Services administratifs et de soutien": {
+   "en": "",
+   "fr": "🧾 Services administratifs et de soutien"
+  },
+  "🩺 Santé / Médical": {
+   "en": "",
+   "fr": "🩺 Santé / Médical"
+  }
+ }
+}

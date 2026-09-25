@@ -1,0 +1,605 @@
+{
+ "_lot": "48-evaluer-le-risque-1",
+ "_mots": 1351,
+ "_pages": [
+  "audit-ia-act"
+ ],
+ "_rubrique": "ÉVALUER LE RISQUE",
+ "bloc": {
+  "Audit IA Act": {
+   "en": "",
+   "fr": "Audit IA Act",
+   "html": "Audit <em>IA Act</em>"
+  },
+  "Feuille de route priorisée avec délais réglementaires et plan d'action CONSEILPREV. #/# contrôles conformes.": {
+   "en": "",
+   "fr": "Feuille de route priorisée avec délais réglementaires et plan d'action CONSEILPREV. 0/34 contrôles conformes.",
+   "html": "Feuille de route priorisée avec délais réglementaires et plan d'action CONSEILPREV. <strong>0/34</strong> contrôles conformes."
+  },
+  "Inventaire et classification selon l'Annexe III de l'AI Act. # système(s) à haut risque identifié(s).": {
+   "en": "",
+   "fr": "Inventaire et classification selon l'Annexe III de l'AI Act. 0 système(s) à haut risque identifié(s).",
+   "html": "Inventaire et classification selon l'Annexe III de l'AI Act. <strong>0 système(s)</strong> à haut risque identifié(s)."
+  },
+  "P# : obligation critique, directement sanctionnable (jusqu’à # M€ ou # % du CA mondial), à traiter en premier · P# : obligation importante, impact significatif sur la conformité globale · P# : bonne pratique recommandée, renforce la robustesse de la démarche.": {
+   "en": "",
+   "fr": "P1 : obligation critique, directement sanctionnable (jusqu’à 35 M€ ou 7 % du CA mondial), à traiter en premier · P2 : obligation importante, impact significatif sur la conformité globale · P3 : bonne pratique recommandée, renforce la robustesse de la démarche.",
+   "html": "<b>P1</b> : obligation critique, directement sanctionnable (jusqu’à 35&nbsp;M€ ou 7&nbsp;% du CA mondial), à traiter en premier · <b>P2</b> : obligation importante, impact significatif sur la conformité globale · <b>P3</b> : bonne pratique recommandée, renforce la robustesse de la démarche."
+  },
+  "Scoring multicritère : droits fondamentaux (FRIA), sécurité, performance, gouvernance des données. # système(s) évalué(s).": {
+   "en": "",
+   "fr": "Scoring multicritère : droits fondamentaux (FRIA), sécurité, performance, gouvernance des données. 0 système(s) évalué(s).",
+   "html": "Scoring multicritère : droits fondamentaux (FRIA), sécurité, performance, gouvernance des données. <strong>0</strong> système(s) évalué(s)."
+  }
+ },
+ "texte": {
+  "# systèmes": {
+   "en": "",
+   "fr": "0 systèmes"
+  },
+  "#% avancé": {
+   "en": "",
+   "fr": "0% avancé"
+  },
+  "Absence d'identification biométrique à distance non autorisée": {
+   "en": "",
+   "fr": "Absence d'identification biométrique à distance non autorisée"
+  },
+  "Aide : Conformes": {
+   "en": "",
+   "fr": "Aide : Conformes"
+  },
+  "Aide : En cours": {
+   "en": "",
+   "fr": "Aide : En cours"
+  },
+  "Aide : Sans objet": {
+   "en": "",
+   "fr": "Aide : Sans objet"
+  },
+  "Aide : Sans réponse": {
+   "en": "",
+   "fr": "Aide : Sans réponse"
+  },
+  "Aide : Score global": {
+   "en": "",
+   "fr": "Aide : Score global"
+  },
+  "Aide : À réaliser": {
+   "en": "",
+   "fr": "Aide : À réaliser"
+  },
+  "Apposition du marquage CE visible sur le système ou l'emballage après évaluation de conformité concluante.": {
+   "en": "",
+   "fr": "Apposition du marquage CE visible sur le système ou l'emballage après évaluation de conformité concluante."
+  },
+  "Art. # + Annexe III": {
+   "en": "",
+   "fr": "Art. 6 + Annexe III"
+  },
+  "Art. #(#)(#)": {
+   "en": "",
+   "fr": "Art. 9(1)(2)"
+  },
+  "Art. #(#)(a)(b)": {
+   "en": "",
+   "fr": "Art. 55(1)(a)(b)"
+  },
+  "Art. #(#)(a)(b)(c)": {
+   "en": "",
+   "fr": "Art. 5(1)(a)(b)(c)"
+  },
+  "Art. #(#)(c)": {
+   "en": "",
+   "fr": "Art. 53(1)(c)"
+  },
+  "Art. #(#)(d)": {
+   "en": "",
+   "fr": "Art. 55(1)(d)"
+  },
+  "Art. #(#)(f)(g)": {
+   "en": "",
+   "fr": "Art. 5(1)(f)(g)"
+  },
+  "Art. #(#)(k), Art. #": {
+   "en": "",
+   "fr": "Art. 17(1)(k), Art. 72"
+  },
+  "Art. #(#), Annexe III": {
+   "en": "",
+   "fr": "Art. 6(2), Annexe III"
+  },
+  "Art. #(#), RGPD": {
+   "en": "",
+   "fr": "Art. 10(5), RGPD"
+  },
+  "Art. #, #, Annexe VI": {
+   "en": "",
+   "fr": "Art. 43, 44, Annexe VI"
+  },
+  "Art. #, Annexe IV": {
+   "en": "",
+   "fr": "Art. 11, Annexe IV"
+  },
+  "Art. #, Art. #": {
+   "en": "",
+   "fr": "Art. 6, Art. 51"
+  },
+  "Art. #-#, #": {
+   "en": "",
+   "fr": "Art. 43-49, 51"
+  },
+  "Audit de conformité structuré —": {
+   "en": "",
+   "fr": "Audit de conformité structuré —"
+  },
+  "Base légale pour l'utilisation de données personnelles en entraînement. Mesures de protection des données dès la conception.": {
+   "en": "",
+   "fr": "Base légale pour l'utilisation de données personnelles en entraînement. Mesures de protection des données dès la conception."
+  },
+  "Calcul : (points conformes + points en cours × #) / points applicables × #. « Sans objet » sort un point du calcul ; un point sans réponse compte zéro. Tous les points comptent à égalité, quelle que soit leur priorité.": {
+   "en": "",
+   "fr": "Calcul : (points conformes + points en cours × 0,5) / points applicables × 100. « Sans objet » sort un point du calcul ; un point sans réponse compte zéro. Tous les points comptent à égalité, quelle que soit leur priorité."
+  },
+  "Capacité d'enregistrement automatique des événements : horodatage, identifiants, données d'entrée, décisions de sortie, identité des opérateurs ayant validé.": {
+   "en": "",
+   "fr": "Capacité d'enregistrement automatique des événements : horodatage, identifiants, données d'entrée, décisions de sortie, identité des opérateurs ayant validé."
+  },
+  "Cartographie complète des systèmes IA": {
+   "en": "",
+   "fr": "Cartographie complète des systèmes IA"
+  },
+  "Classification haut risque": {
+   "en": "",
+   "fr": "Classification haut risque"
+  },
+  "Classification selon l'Annexe III (# domaines)": {
+   "en": "",
+   "fr": "Classification selon l'Annexe III (8 domaines)"
+  },
+  "Confirmer l'absence de systèmes de reconnaissance émotionnelle au travail/éducation ou de catégorisation biométrique de données sensibles non autorisés.": {
+   "en": "",
+   "fr": "Confirmer l'absence de systèmes de reconnaissance émotionnelle au travail/éducation ou de catégorisation biométrique de données sensibles non autorisés."
+  },
+  "Conformes": {
+   "en": "",
+   "fr": "Conformes"
+  },
+  "Conservation de la documentation technique (# ans)": {
+   "en": "",
+   "fr": "Conservation de la documentation technique (10 ans)"
+  },
+  "Conservation des journaux": {
+   "en": "",
+   "fr": "Conservation des journaux"
+  },
+  "Consulter les documents de votre base de connaissance liés à l’Audit IA Act.": {
+   "en": "",
+   "fr": "Consulter les documents de votre base de connaissance liés à l’Audit IA Act."
+  },
+  "Documentation GPAI (Art. #)": {
+   "en": "",
+   "fr": "Documentation GPAI (Art. 53)"
+  },
+  "Documentation claire pour les déployeurs : identité du fournisseur, capacités et limites, performances attendues, données d'entrée requises, risques résiduels connus.": {
+   "en": "",
+   "fr": "Documentation claire pour les déployeurs : identité du fournisseur, capacités et limites, performances attendues, données d'entrée requises, risques résiduels connus."
+  },
+  "Documentation de la décision de classification": {
+   "en": "",
+   "fr": "Documentation de la décision de classification"
+  },
+  "Documentation technique & Journalisation": {
+   "en": "",
+   "fr": "Documentation technique & Journalisation"
+  },
+  "Documentation élaborée avant mise sur le marché : description générale, architecture, données utilisées, performances, méthode d'entraînement, fiches tests.": {
+   "en": "",
+   "fr": "Documentation élaborée avant mise sur le marché : description générale, architecture, données utilisées, performances, méthode d'entraînement, fiches tests."
+  },
+  "Données personnelles dans l'entraînement": {
+   "en": "",
+   "fr": "Données personnelles dans l'entraînement"
+  },
+  "Dossier technique complet (Annexe IV)": {
+   "en": "",
+   "fr": "Dossier technique complet (Annexe IV)"
+  },
+  "Déclaration UE de conformité": {
+   "en": "",
+   "fr": "Déclaration UE de conformité"
+  },
+  "Déclaration sans délai des incidents graves ou des actions correctives à l'AI Office de la Commission.": {
+   "en": "",
+   "fr": "Déclaration sans délai des incidents graves ou des actions correctives à l'AI Office de la Commission."
+  },
+  "Déclaration écrite signée par le fournisseur confirmant la conformité du système à l'AI Act et aux autres règlements applicables.": {
+   "en": "",
+   "fr": "Déclaration écrite signée par le fournisseur confirmant la conformité du système à l'AI Act et aux autres règlements applicables."
+  },
+  "Désignation et formation des superviseurs": {
+   "en": "",
+   "fr": "Désignation et formation des superviseurs"
+  },
+  "En cours": {
+   "en": "",
+   "fr": "En cours"
+  },
+  "Enregistrement dans la base de données EU": {
+   "en": "",
+   "fr": "Enregistrement dans la base de données EU"
+  },
+  "Enregistrement obligatoire dans la base de données EU AI Office avant mise sur le marché pour les systèmes haut risque.": {
+   "en": "",
+   "fr": "Enregistrement obligatoire dans la base de données EU AI Office avant mise sur le marché pour les systèmes haut risque."
+  },
+  "Enregistrer l’état actuel de l’audit dans l’historique de Mes évaluations.": {
+   "en": "",
+   "fr": "Enregistrer l’état actuel de l’audit dans l’historique de Mes évaluations."
+  },
+  "Faire relire cet audit par un expert CONSEILPREV →": {
+   "en": "",
+   "fr": "Faire relire cet audit par un expert CONSEILPREV →"
+  },
+  "Formation adéquate des équipes manipulant ou supervisant des systèmes IA. Documenté et régulièrement mis à jour.": {
+   "en": "",
+   "fr": "Formation adéquate des équipes manipulant ou supervisant des systèmes IA. Documenté et régulièrement mis à jour."
+  },
+  "Formation littératie IA (Art. #)": {
+   "en": "",
+   "fr": "Formation littératie IA (Art. 4)"
+  },
+  "Gestion des risques & Gouvernance des données": {
+   "en": "",
+   "fr": "Gestion des risques & Gouvernance des données"
+  },
+  "Gouvernance des données d'entraînement": {
+   "en": "",
+   "fr": "Gouvernance des données d'entraînement"
+  },
+  "Indique pour chaque section, a partir des systemes reels du Registre IA, si elle est applicable au secteur selectionne.": {
+   "en": "",
+   "fr": "Indique pour chaque section, a partir des systemes reels du Registre IA, si elle est applicable au secteur selectionne."
+  },
+  "Information claire que l'utilisateur interagit avec un système IA (chatbot, agent). Marquage des contenus synthétiques (watermarking machine-readable).": {
+   "en": "",
+   "fr": "Information claire que l'utilisateur interagit avec un système IA (chatbot, agent). Marquage des contenus synthétiques (watermarking machine-readable)."
+  },
+  "Interfaces homme-machine permettant la compréhension des sorties, l'interruption ou la correction du système par des opérateurs qualifiés.": {
+   "en": "",
+   "fr": "Interfaces homme-machine permettant la compréhension des sorties, l'interruption ou la correction du système par des opérateurs qualifiés."
+  },
+  "Inventaire de tous les systèmes IA déployés ou en développement, avec identification de leur type, finalité et secteur d'application.": {
+   "en": "",
+   "fr": "Inventaire de tous les systèmes IA déployés ou en développement, avec identification de leur type, finalité et secteur d'application."
+  },
+  "Inventaire des pratiques potentiellement interdites": {
+   "en": "",
+   "fr": "Inventaire des pratiques potentiellement interdites"
+  },
+  "Jeux de validation et test satisfaisant aux critères de qualité : représentativité, absence de biais connus, adéquation à la finalité.": {
+   "en": "",
+   "fr": "Jeux de validation et test satisfaisant aux critères de qualité : représentativité, absence de biais connus, adéquation à la finalité."
+  },
+  "Journalisation automatique des décisions": {
+   "en": "",
+   "fr": "Journalisation automatique des décisions"
+  },
+  "Journaux conservés au minimum pour la durée prescrite et accessibles aux autorités compétentes sur demande.": {
+   "en": "",
+   "fr": "Journaux conservés au minimum pour la durée prescrite et accessibles aux autorités compétentes sur demande."
+  },
+  "Le fournisseur conserve la documentation technique (Annexe IV), la déclaration UE de conformité et la documentation du système de gestion de la qualité pendant # ans après la mise sur le marché ou la mise en service du système — obligation distincte de la conservation des journaux (Art. #).": {
+   "en": "",
+   "fr": "Le fournisseur conserve la documentation technique (Annexe IV), la déclaration UE de conformité et la documentation du système de gestion de la qualité pendant 10 ans après la mise sur le marché ou la mise en service du système — obligation distincte de la conservation des journaux (Art. 12)."
+  },
+  "Marquage CE apposé": {
+   "en": "",
+   "fr": "Marquage CE apposé"
+  },
+  "Mise à jour continue du dossier technique": {
+   "en": "",
+   "fr": "Mise à jour continue du dossier technique"
+  },
+  "Modèles GPAI": {
+   "en": "",
+   "fr": "Modèles GPAI"
+  },
+  "Mécanisme de surveillance permettant de reclassifier un système si son usage ou ses capacités évoluent.": {
+   "en": "",
+   "fr": "Mécanisme de surveillance permettant de reclassifier un système si son usage ou ses capacités évoluent."
+  },
+  "Mécanismes de supervision humaine fonctionnels": {
+   "en": "",
+   "fr": "Mécanismes de supervision humaine fonctionnels"
+  },
+  "Métriques de performance définies, mesurées avant déploiement et surveillées en continu. Documentation des variations acceptables.": {
+   "en": "",
+   "fr": "Métriques de performance définies, mesurées avant déploiement et surveillées en continu. Documentation des variations acceptables."
+  },
+  "Niveaux d'exactitude définis et mesurés": {
+   "en": "",
+   "fr": "Niveaux d'exactitude définis et mesurés"
+  },
+  "Notice d'utilisation conforme Art. #": {
+   "en": "",
+   "fr": "Notice d'utilisation conforme Art. 13"
+  },
+  "P#": {
+   "en": "",
+   "fr": "P1"
+  },
+  "Personnes responsables de la supervision formellement désignées, formées aux capacités et limites du système, aptes à détecter les anomalies.": {
+   "en": "",
+   "fr": "Personnes responsables de la supervision formellement désignées, formées aux capacités et limites du système, aptes à détecter les anomalies."
+  },
+  "Pertinence sectorielle :": {
+   "en": "",
+   "fr": "Pertinence sectorielle :"
+  },
+  "Plan de surveillance continue des performances et de la conformité après déploiement. Collecte et analyse des retours utilisateurs.": {
+   "en": "",
+   "fr": "Plan de surveillance continue des performances et de la conformité après déploiement. Collecte et analyse des retours utilisateurs."
+  },
+  "Points qui n’ont pas encore de réponse. Ils comptent zéro dans le score, et le bloc du parcours ne passe au vert qu’une fois chacun répondu.": {
+   "en": "",
+   "fr": "Points qui n’ont pas encore de réponse. Ils comptent zéro dans le score, et le bloc du parcours ne passe au vert qu’une fois chacun répondu."
+  },
+  "Points répondus « Conforme ».": {
+   "en": "",
+   "fr": "Points répondus « Conforme »."
+  },
+  "Points répondus « En cours » — comptés pour moitié dans le score global.": {
+   "en": "",
+   "fr": "Points répondus « En cours » — comptés pour moitié dans le score global."
+  },
+  "Points répondus « Sans objet » — hors du calcul du score.": {
+   "en": "",
+   "fr": "Points répondus « Sans objet » — hors du calcul du score."
+  },
+  "Points répondus « À réaliser » — ils comptent zéro dans le score.": {
+   "en": "",
+   "fr": "Points répondus « À réaliser » — ils comptent zéro dans le score."
+  },
+  "Politique de droits d'auteur et droit d'opposition": {
+   "en": "",
+   "fr": "Politique de droits d'auteur et droit d'opposition"
+  },
+  "Pour les fournisseurs GPAI : documentation technique, résumé du contenu d'entraînement, politique de droits d'auteur (Art. #(#)(a)), résumé publiquement disponible.": {
+   "en": "",
+   "fr": "Pour les fournisseurs GPAI : documentation technique, résumé du contenu d'entraînement, politique de droits d'auteur (Art. 53(1)(a)), résumé publiquement disponible."
+  },
+  "Pour les modèles >#^# FLOPs : évaluation adversariale (red-teaming), évaluation des risques systémiques, rapport à la Commission.": {
+   "en": "",
+   "fr": "Pour les modèles >10^25 FLOPs : évaluation adversariale (red-teaming), évaluation des risques systémiques, rapport à la Commission."
+  },
+  "Pour les systèmes non classés haut risque issus de domaines Annexe III (en application de l'exception de l'Art. #(#)), documenter formellement l'évaluation avant mise sur le marché — le fournisseur reste soumis à l'obligation d'enregistrement (Art. #(#)).": {
+   "en": "",
+   "fr": "Pour les systèmes non classés haut risque issus de domaines Annexe III (en application de l'exception de l'Art. 6(3)), documenter formellement l'évaluation avant mise sur le marché — le fournisseur reste soumis à l'obligation d'enregistrement (Art. 49(2))."
+  },
+  "Pratiques de gestion des données : choix de conception, collecte, origine, objectifs, nature, pertinence, exactitude, complétude, biais potentiels.": {
+   "en": "",
+   "fr": "Pratiques de gestion des données : choix de conception, collecte, origine, objectifs, nature, pertinence, exactitude, complétude, biais potentiels."
+  },
+  "Pratiques interdites": {
+   "en": "",
+   "fr": "Pratiques interdites"
+  },
+  "Processus itératif continu : identification des risques connus et prévisibles, estimation, évaluation, mesures de gestion. Planifié sur tout le cycle de vie.": {
+   "en": "",
+   "fr": "Processus itératif continu : identification des risques connus et prévisibles, estimation, évaluation, mesures de gestion. Planifié sur tout le cycle de vie."
+  },
+  "Procédure d'évaluation de conformité complète avant mise sur le marché : autoévaluation (contrôle interne, Annexe VI) ou évaluation par organisme notifié selon la catégorie de système. L'Annexe VI détaille les critères vérifiés : système de gestion de la qualité, documentation technique, conformité aux exigences de robustesse et cybersécurité.": {
+   "en": "",
+   "fr": "Procédure d'évaluation de conformité complète avant mise sur le marché : autoévaluation (contrôle interne, Annexe VI) ou évaluation par organisme notifié selon la catégorie de système. L'Annexe VI détaille les critères vérifiés : système de gestion de la qualité, documentation technique, conformité aux exigences de robustesse et cybersécurité."
+  },
+  "Procédure de mise à jour du dossier lors de toute modification substantielle du système. Identification des versions.": {
+   "en": "",
+   "fr": "Procédure de mise à jour du dossier lors de toute modification substantielle du système. Identification des versions."
+  },
+  "Procédure de reclassification continue": {
+   "en": "",
+   "fr": "Procédure de reclassification continue"
+  },
+  "Qualité des données de validation et de test": {
+   "en": "",
+   "fr": "Qualité des données de validation et de test"
+  },
+  "Respecter les réservations de droits des détenteurs de droits d'auteur (Art. #(#)(c)). Mécanisme d'opt-out conforme.": {
+   "en": "",
+   "fr": "Respecter les réservations de droits des détenteurs de droits d'auteur (Art. 53(1)(c)). Mécanisme d'opt-out conforme."
+  },
+  "Robustesse aux erreurs et aux manipulations": {
+   "en": "",
+   "fr": "Robustesse aux erreurs et aux manipulations"
+  },
+  "Robustesse, Exactitude & Qualité": {
+   "en": "",
+   "fr": "Robustesse, Exactitude & Qualité"
+  },
+  "Réponse — Absence d'identification biométrique à distance non autorisée": {
+   "en": "",
+   "fr": "Réponse — Absence d'identification biométrique à distance non autorisée"
+  },
+  "Réponse — Cartographie complète des systèmes IA": {
+   "en": "",
+   "fr": "Réponse — Cartographie complète des systèmes IA"
+  },
+  "Réponse — Classification selon l'Annexe III (# domaines)": {
+   "en": "",
+   "fr": "Réponse — Classification selon l'Annexe III (8 domaines)"
+  },
+  "Réponse — Conservation de la documentation technique (# ans)": {
+   "en": "",
+   "fr": "Réponse — Conservation de la documentation technique (10 ans)"
+  },
+  "Réponse — Conservation des journaux": {
+   "en": "",
+   "fr": "Réponse — Conservation des journaux"
+  },
+  "Réponse — Documentation GPAI (Art. #)": {
+   "en": "",
+   "fr": "Réponse — Documentation GPAI (Art. 53)"
+  },
+  "Réponse — Documentation de la décision de classification": {
+   "en": "",
+   "fr": "Réponse — Documentation de la décision de classification"
+  },
+  "Réponse — Données personnelles dans l'entraînement": {
+   "en": "",
+   "fr": "Réponse — Données personnelles dans l'entraînement"
+  },
+  "Réponse — Dossier technique complet (Annexe IV)": {
+   "en": "",
+   "fr": "Réponse — Dossier technique complet (Annexe IV)"
+  },
+  "Réponse — Déclaration UE de conformité": {
+   "en": "",
+   "fr": "Réponse — Déclaration UE de conformité"
+  },
+  "Réponse — Désignation et formation des superviseurs": {
+   "en": "",
+   "fr": "Réponse — Désignation et formation des superviseurs"
+  },
+  "Réponse — Enregistrement dans la base de données EU": {
+   "en": "",
+   "fr": "Réponse — Enregistrement dans la base de données EU"
+  },
+  "Réponse — Formation littératie IA (Art. #)": {
+   "en": "",
+   "fr": "Réponse — Formation littératie IA (Art. 4)"
+  },
+  "Réponse — Gouvernance des données d'entraînement": {
+   "en": "",
+   "fr": "Réponse — Gouvernance des données d'entraînement"
+  },
+  "Réponse — Inventaire des pratiques potentiellement interdites": {
+   "en": "",
+   "fr": "Réponse — Inventaire des pratiques potentiellement interdites"
+  },
+  "Réponse — Journalisation automatique des décisions": {
+   "en": "",
+   "fr": "Réponse — Journalisation automatique des décisions"
+  },
+  "Réponse — Marquage CE apposé": {
+   "en": "",
+   "fr": "Réponse — Marquage CE apposé"
+  },
+  "Réponse — Mise à jour continue du dossier technique": {
+   "en": "",
+   "fr": "Réponse — Mise à jour continue du dossier technique"
+  },
+  "Réponse — Mécanismes de supervision humaine fonctionnels": {
+   "en": "",
+   "fr": "Réponse — Mécanismes de supervision humaine fonctionnels"
+  },
+  "Réponse — Niveaux d'exactitude définis et mesurés": {
+   "en": "",
+   "fr": "Réponse — Niveaux d'exactitude définis et mesurés"
+  },
+  "Réponse — Notice d'utilisation conforme Art. #": {
+   "en": "",
+   "fr": "Réponse — Notice d'utilisation conforme Art. 13"
+  },
+  "Réponse — Politique de droits d'auteur et droit d'opposition": {
+   "en": "",
+   "fr": "Réponse — Politique de droits d'auteur et droit d'opposition"
+  },
+  "Réponse — Procédure de reclassification continue": {
+   "en": "",
+   "fr": "Réponse — Procédure de reclassification continue"
+  },
+  "Réponse — Qualité des données de validation et de test": {
+   "en": "",
+   "fr": "Réponse — Qualité des données de validation et de test"
+  },
+  "Réponse — Robustesse aux erreurs et aux manipulations": {
+   "en": "",
+   "fr": "Réponse — Robustesse aux erreurs et aux manipulations"
+  },
+  "Réponse — Signalement des incidents (GPAI systémiques)": {
+   "en": "",
+   "fr": "Réponse — Signalement des incidents (GPAI systémiques)"
+  },
+  "Réponse — Surveillance post-commercialisation": {
+   "en": "",
+   "fr": "Réponse — Surveillance post-commercialisation"
+  },
+  "Réponse — Système de gestion de la qualité (Art. #)": {
+   "en": "",
+   "fr": "Réponse — Système de gestion de la qualité (Art. 17)"
+  },
+  "Réponse — Système de gestion des risques documenté et opérationnel": {
+   "en": "",
+   "fr": "Réponse — Système de gestion des risques documenté et opérationnel"
+  },
+  "Réponse — Tests avant mise sur le marché": {
+   "en": "",
+   "fr": "Réponse — Tests avant mise sur le marché"
+  },
+  "Réponse — Transparence envers les utilisateurs finaux (Art. #)": {
+   "en": "",
+   "fr": "Réponse — Transparence envers les utilisateurs finaux (Art. 50)"
+  },
+  "Réponse — Vérification du périmètre émotionnel et de catégorisation": {
+   "en": "",
+   "fr": "Réponse — Vérification du périmètre émotionnel et de catégorisation"
+  },
+  "Réponse — Évaluation adversariale (modèles systémiques)": {
+   "en": "",
+   "fr": "Réponse — Évaluation adversariale (modèles systémiques)"
+  },
+  "Réponse — Évaluation de conformité réalisée": {
+   "en": "",
+   "fr": "Réponse — Évaluation de conformité réalisée"
+  },
+  "S'assurer que toute identification biométrique en temps réel dans des espaces publics dispose d'une autorisation légale explicite (forces de l'ordre, Art. #(#)(h)).": {
+   "en": "",
+   "fr": "S'assurer que toute identification biométrique en temps réel dans des espaces publics dispose d'une autorisation légale explicite (forces de l'ordre, Art. 5(1)(h))."
+  },
+  "SGQ documenté : stratégie réglementaire, techniques de conception, vérification, surveillance post-commercialisation, gestion des modifications, incidents.": {
+   "en": "",
+   "fr": "SGQ documenté : stratégie réglementaire, techniques de conception, vérification, surveillance post-commercialisation, gestion des modifications, incidents."
+  },
+  "Sans objet": {
+   "en": "",
+   "fr": "Sans objet"
+  },
+  "Sans réponse": {
+   "en": "",
+   "fr": "Sans réponse"
+  },
+  "Score global": {
+   "en": "",
+   "fr": "Score global"
+  },
+  "Signalement des incidents (GPAI systémiques)": {
+   "en": "",
+   "fr": "Signalement des incidents (GPAI systémiques)"
+  },
+  "Surveillance post-commercialisation": {
+   "en": "",
+   "fr": "Surveillance post-commercialisation"
+  },
+  "Système de gestion de la qualité (Art. #)": {
+   "en": "",
+   "fr": "Système de gestion de la qualité (Art. 17)"
+  },
+  "Système de gestion des risques documenté et opérationnel": {
+   "en": "",
+   "fr": "Système de gestion des risques documenté et opérationnel"
+  },
+  "Tests avant mise sur le marché": {
+   "en": "",
+   "fr": "Tests avant mise sur le marché"
+  },
+  "Tests de robustesse face aux erreurs, perturbations, attaques adversariales. Mesures de résilience documentées.": {
+   "en": "",
+   "fr": "Tests de robustesse face aux erreurs, perturbations, attaques adversariales. Mesures de résilience documentées."
+  },
+  "Télécharger le rapport d’audit complet au format PDF.": {
+   "en": "",
+   "fr": "Télécharger le rapport d’audit complet au format PDF."
+  }
+ }
+}

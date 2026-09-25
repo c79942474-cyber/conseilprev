@@ -61,8 +61,16 @@ def normaliser(s):
     return _CHIFFRES.sub(u'#', aplanir(s))
 
 
+#: LE CATALOGUE N'EST PAS UN DICTIONNAIRE : c'est l'inventaire de ce qu'il y a
+#: à traduire (outils/i18n_sentinel.js), rangé dans le même dossier pour
+#: rester à côté de ce qu'il mesure. Ses valeurs sont des fiches, pas des
+#: chaînes : le servir ferait une faute par entrée et 900 Ko de plus.
+CATALOGUE = 'CATALOGUE.json'
+
+
 def _fichiers(dossier):
-    return sorted(glob.glob(os.path.join(dossier, '*.json')))
+    return sorted(p for p in glob.glob(os.path.join(dossier, '*.json'))
+                  if os.path.basename(p) != CATALOGUE)
 
 
 def signature(dossier=None):

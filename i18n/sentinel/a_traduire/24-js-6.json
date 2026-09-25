@@ -1,0 +1,699 @@
+{
+ "_lot": "24-js-6",
+ "_mots": 2459,
+ "_pages": [
+  "_js"
+ ],
+ "_rubrique": "_js",
+ "bloc": {},
+ "texte": {
+  "Cliquez sur chaque carte pour déplier le détail : exemples concrets, applicabilité réelle, obligation légale exacte et conseil pratique. Une fois un système identifié, utilisez le bouton en bas de page pour l envoyer directement au Simulateur IA Act.": {
+   "en": "",
+   "fr": "Cliquez sur chaque carte pour déplier le détail : exemples concrets, applicabilité réelle, obligation légale exacte et conseil pratique. Une fois un système identifié, utilisez le bouton en bas de page pour l envoyer directement au Simulateur IA Act."
+  },
+  "Cliquez sur les # cartes (Explorer, Comparer, Simuler) pour accéder directement aux outils correspondants. Les listes de droite sont triées par score, cliquables vers les fiches détaillées.": {
+   "en": "",
+   "fr": "Cliquez sur les 3 cartes (Explorer, Comparer, Simuler) pour accéder directement aux outils correspondants. Les listes de droite sont triées par score, cliquables vers les fiches détaillées."
+  },
+  "Cliquez sur une cellule pour faire défiler son statut. Changez de secteur pour voir les rôles et processus spécifiques apparaître (badge Sectoriel). Le bouton 🤖 génère un document complet d analyse de votre matrice par IA.": {
+   "en": "",
+   "fr": "Cliquez sur une cellule pour faire défiler son statut. Changez de secteur pour voir les rôles et processus spécifiques apparaître (badge Sectoriel). Le bouton 🤖 génère un document complet d analyse de votre matrice par IA."
+  },
+  "Cliquez sur une ligne pour ouvrir le suivi détaillé du client.": {
+   "en": "",
+   "fr": "Cliquez sur une ligne pour ouvrir le suivi détaillé du client."
+  },
+  "Cliquez sur « Recalculer » après chaque campagne d’évaluation. Chaque cadre renvoie à ses modules : traitez d’abord la composante la plus basse, c’est elle qui tire l’indice vers le bas.": {
+   "en": "",
+   "fr": "Cliquez sur « Recalculer » après chaque campagne d’évaluation. Chaque cadre renvoie à ses modules : traitez d’abord la composante la plus basse, c’est elle qui tire l’indice vers le bas."
+  },
+  "Cliquez un module pour ouvrir sa fiche complète : objectifs, programme détaillé, articles couverts, quiz et certification visée.": {
+   "en": "",
+   "fr": "Cliquez un module pour ouvrir sa fiche complète : objectifs, programme détaillé, articles couverts, quiz et certification visée."
+  },
+  "Cliquez une carte pour être redirigé directement vers l outil qui génère ce document, avec vos données réelles déjà chargées.": {
+   "en": "",
+   "fr": "Cliquez une carte pour être redirigé directement vers l outil qui génère ce document, avec vos données réelles déjà chargées."
+  },
+  "Cliquez une icône dans la grille ou un système en zone critique pour ouvrir directement sa fiche dans le Registre IA.": {
+   "en": "",
+   "fr": "Cliquez une icône dans la grille ou un système en zone critique pour ouvrir directement sa fiche dans le Registre IA."
+  },
+  "Cliquez une ligne pour revenir directement à l outil correspondant (Simulateur ou Audit). Utile pour suivre votre progression dans le temps.": {
+   "en": "",
+   "fr": "Cliquez une ligne pour revenir directement à l outil correspondant (Simulateur ou Audit). Utile pour suivre votre progression dans le temps."
+  },
+  "Clé d accès incorrecte ou absente. Réessayez.": {
+   "en": "",
+   "fr": "Clé d accès incorrecte ou absente. Réessayez."
+  },
+  "Cochez ce que vous faites réellement, pas ce qui figure dans votre plaquette. Si le verdict est « requalifié fabricant » ou « intégrateur », lisez la ligne « étendue » : elle dit si vous répondez de la partie que vous avez modifiée ou du produit entier, et c’est cette ligne-là qui décide de l’ampleur de la documentation technique à produire. Le chemin suivi est affiché sous le verdict : il sert à le contester.": {
+   "en": "",
+   "fr": "Cochez ce que vous faites réellement, pas ce qui figure dans votre plaquette. Si le verdict est « requalifié fabricant » ou « intégrateur », lisez la ligne « étendue » : elle dit si vous répondez de la partie que vous avez modifiée ou du produit entier, et c’est cette ligne-là qui décide de l’ampleur de la documentation technique à produire. Le chemin suivi est affiché sous le verdict : il sert à le contester."
+  },
+  "Cochez les modules à inclure et ordonnez-les. Le parcours vous guidera d’un module à l’autre jusqu’au coût et à la synthèse.": {
+   "en": "",
+   "fr": "Cochez les modules à inclure et ordonnez-les. Le parcours vous guidera d’un module à l’autre jusqu’au coût et à la synthèse."
+  },
+  "Code de l'action sociale et des familles": {
+   "en": "",
+   "fr": "Code de l'action sociale et des familles"
+  },
+  "Code de l'éducation": {
+   "en": "",
+   "fr": "Code de l'éducation"
+  },
+  "Code du travail": {
+   "en": "",
+   "fr": "Code du travail"
+  },
+  "Code du travail (particulier employeur)": {
+   "en": "",
+   "fr": "Code du travail (particulier employeur)"
+  },
+  "Collez le texte du contrat (# caractères minimum) ou chargez un fichier.": {
+   "en": "",
+   "fr": "Collez le texte du contrat (200 caractères minimum) ou chargez un fichier."
+  },
+  "Commencez ici, avant de rouvrir le moindre document.": {
+   "en": "",
+   "fr": "Commencez ici, avant de rouvrir le moindre document."
+  },
+  "Commencez ici, avant d’ouvrir le moindre questionnaire.": {
+   "en": "",
+   "fr": "Commencez ici, avant d’ouvrir le moindre questionnaire."
+  },
+  "Commencez par # à # cas transverses.": {
+   "en": "",
+   "fr": "Commencez par 2 à 3 cas transverses."
+  },
+  "Commencez par #, le domaine d’application : c’est la décision la plus structurante de toute la certification, parce que tout ce qui n’en est pas exclu par écrit sera audité. Un périmètre large rassure le client et double la facture ; un périmètre étroit passe l’audit et ne prouve rien à personne. Vérifiez ensuite #, planification des modifications : c’est le seul article que la version # a ajouté au corps de la norme.": {
+   "en": "",
+   "fr": "Commencez par 4.3, le domaine d’application : c’est la décision la plus structurante de toute la certification, parce que tout ce qui n’en est pas exclu par écrit sera audité. Un périmètre large rassure le client et double la facture ; un périmètre étroit passe l’audit et ne prouve rien à personne. Vérifiez ensuite 6.3, planification des modifications : c’est le seul article que la version 2022 a ajouté au corps de la norme."
+  },
+  "Commencez par #, le périmètre : tout ce qui n’est pas exclu par écrit sera audité, et un périmètre flou est la première cause de dérive de coût d’un audit de certification. Enchaînez ensuite sur les articles marqués « propre à l’IA », qui portent la politique d’IA, l’appréciation des risques et l’évaluation d’impact. Les articles « mutualisables » se cotent vite si vous êtes déjà certifié ailleurs — vous les avez.": {
+   "en": "",
+   "fr": "Commencez par 4.3, le périmètre : tout ce qui n’est pas exclu par écrit sera audité, et un périmètre flou est la première cause de dérive de coût d’un audit de certification. Enchaînez ensuite sur les articles marqués « propre à l’IA », qui portent la politique d’IA, l’appréciation des risques et l’évaluation d’impact. Les articles « mutualisables » se cotent vite si vous êtes déjà certifié ailleurs — vous les avez."
+  },
+  "Commencez par b) et d). La gestion des incidents commande l’horloge de l’article # ; la sécurité de la chaîne d’approvisionnement est la mesure que l’article #, §#, détaille le plus — il exige de tenir compte des vulnérabilités PROPRES à chaque fournisseur direct, ce qu’une politique fournisseurs générique ne fait pas. La mesure e), traitement et divulgation des vulnérabilités, recouvre largement l’annexe I du CRA : si vous fabriquez aussi un produit, le travail se fait une fois.": {
+   "en": "",
+   "fr": "Commencez par b) et d). La gestion des incidents commande l’horloge de l’article 23 ; la sécurité de la chaîne d’approvisionnement est la mesure que l’article 21, §3, détaille le plus — il exige de tenir compte des vulnérabilités PROPRES à chaque fournisseur direct, ce qu’une politique fournisseurs générique ne fait pas. La mesure e), traitement et divulgation des vulnérabilités, recouvre largement l’annexe I du CRA : si vous fabriquez aussi un produit, le travail se fait une fois."
+  },
+  "Commencez par la fin : regardez ce qui fait échouer chacune des deux étapes.": {
+   "en": "",
+   "fr": "Commencez par la fin : regardez ce qui fait échouer chacune des deux étapes."
+  },
+  "Commencez par la politique : sans elle, la revue de code n’a pas de critère et se réduit à un avis.": {
+   "en": "",
+   "fr": "Commencez par la politique : sans elle, la revue de code n’a pas de critère et se réduit à un avis."
+  },
+  "Commencez par le circuit d’un usage nouveau : c’est lui qui révèle les décisions que personne n’assume.": {
+   "en": "",
+   "fr": "Commencez par le circuit d’un usage nouveau : c’est lui qui révèle les décisions que personne n’assume."
+  },
+  "Commencez par le produit dont vous doutez, pas par le plus simple. Si vous le rangez en classe I, la case « normes harmonisées appliquées intégralement » décide de tout : cochée, vous restez en contrôle interne ; décochée, vous basculez chez l’organisme notifié. C’est la bascule la plus coûteuse du texte, et elle se joue là. En partie appliquées, ou pas encore publiées, comptent comme non appliquées.": {
+   "en": "",
+   "fr": "Commencez par le produit dont vous doutez, pas par le plus simple. Si vous le rangez en classe I, la case « normes harmonisées appliquées intégralement » décide de tout : cochée, vous restez en contrôle interne ; décochée, vous basculez chez l’organisme notifié. C’est la bascule la plus coûteuse du texte, et elle se joue là. En partie appliquées, ou pas encore publiées, comptent comme non appliquées."
+  },
+  "Commencez par le périmètre, pas par l'analyse. L'objectif # impose que TOUS les systèmes soient couverts, et n'admet une exclusion que si une analyse de risques montre l'absence d'exposition aux trois risques nommés — interruption, divulgation, altération. Le référentiel ferme explicitement la porte du contournement : la présence de mesures de sécurité ne vaut pas justification. Vérifiez ensuite vos deux voies de preuve : un SMSI ISO/CEI #:# certifié, borné par son périmètre de certification, et une PACS qualifiée par l'ANSSI, bornée par le suivi du plan de traitement.": {
+   "en": "",
+   "fr": "Commencez par le périmètre, pas par l'analyse. L'objectif 1 impose que TOUS les systèmes soient couverts, et n'admet une exclusion que si une analyse de risques montre l'absence d'exposition aux trois risques nommés — interruption, divulgation, altération. Le référentiel ferme explicitement la porte du contournement : la présence de mesures de sécurité ne vaut pas justification. Vérifiez ensuite vos deux voies de preuve : un SMSI ISO/CEI 27001:2022 certifié, borné par son périmètre de certification, et une PACS qualifiée par l'ANSSI, bornée par le suivi du plan de traitement."
+  },
+  "Commencez par le rang #. Ne descendez au rang # qu’une fois les verrous levés.": {
+   "en": "",
+   "fr": "Commencez par le rang 1. Ne descendez au rang 2 qu’une fois les verrous levés."
+  },
+  "Commencez par les quatre exclusions de l’article #, §# : elles ne s’apprécient pas, elles se constatent, et l’une d’elles suffit à fermer la question. Un prestataire intragroupe, ou qui ne sert que des entités actives dans un seul État membre, ne peut pas être désigné, quelle que soit sa part de marché. Renseignez ensuite les parts mesurées.": {
+   "en": "",
+   "fr": "Commencez par les quatre exclusions de l’article 31, §8 : elles ne s’apprécient pas, elles se constatent, et l’une d’elles suffit à fermer la question. Un prestataire intragroupe, ou qui ne sert que des entités actives dans un seul État membre, ne peut pas être désigné, quelle que soit sa part de marché. Renseignez ensuite les parts mesurées."
+  },
+  "Commencez par les quatre exclusions de l’article #, §# : une seule suffit à fermer la question.": {
+   "en": "",
+   "fr": "Commencez par les quatre exclusions de l’article 31, §8 : une seule suffit à fermer la question."
+  },
+  "Commencez par les traitements les plus sensibles ou à grande échelle.": {
+   "en": "",
+   "fr": "Commencez par les traitements les plus sensibles ou à grande échelle."
+  },
+  "Commencez par là, avant tout inventaire.": {
+   "en": "",
+   "fr": "Commencez par là, avant tout inventaire."
+  },
+  "Commencez par là.": {
+   "en": "",
+   "fr": "Commencez par là."
+  },
+  "Commencez toujours par le registre des traitements : sans lui, les autres modules n’ont rien à traiter. Ajoutez vos traitements, puis laissez les autres pages en dériver.": {
+   "en": "",
+   "fr": "Commencez toujours par le registre des traitements : sans lui, les autres modules n’ont rien à traiter. Ajoutez vos traitements, puis laissez les autres pages en dériver."
+  },
+  "Comment calculer les sanctions ?": {
+   "en": "",
+   "fr": "Comment calculer les sanctions ?"
+  },
+  "Comment exporter le rapport audit ?": {
+   "en": "",
+   "fr": "Comment exporter le rapport audit ?"
+  },
+  "Comment le lire": {
+   "en": "",
+   "fr": "Comment le lire"
+  },
+  "Comment lire la carte ?": {
+   "en": "",
+   "fr": "Comment lire la carte ?"
+  },
+  "Comment lire les gains": {
+   "en": "",
+   "fr": "Comment lire les gains"
+  },
+  "Commission europeenne, publiees le # fevrier #.": {
+   "en": "",
+   "fr": "Commission europeenne, publiees le 4 fevrier 2025."
+  },
+  "Comparaison internationale — où ce système serait-il moins contraint ?": {
+   "en": "",
+   "fr": "Comparaison internationale — où ce système serait-il moins contraint ?"
+  },
+  "Comparaison à titre indicatif sur la sévérité réglementaire générale (cadre IA global), ne reflète pas une classification formelle de ce système dans chaque juridiction. Voir": {
+   "en": "",
+   "fr": "Comparaison à titre indicatif sur la sévérité réglementaire générale (cadre IA global), ne reflète pas une classification formelle de ce système dans chaque juridiction. Voir"
+  },
+  "Comparateur — Sources et methodologie": {
+   "en": "",
+   "fr": "Comparateur — Sources et methodologie"
+  },
+  "Compare jusqu à # juridictions côte à côte sur # dimensions (Sévérité, Transparence, Responsabilité, Souveraineté, Sanctions, Innovation).": {
+   "en": "",
+   "fr": "Compare jusqu à 4 juridictions côte à côte sur 6 dimensions (Sévérité, Transparence, Responsabilité, Souveraineté, Sanctions, Innovation)."
+  },
+  "Compare le taux de conformité réel de vos systèmes (Registre IA) à la moyenne de maturité calculée pour chaque secteur d activité.": {
+   "en": "",
+   "fr": "Compare le taux de conformité réel de vos systèmes (Registre IA) à la moyenne de maturité calculée pour chaque secteur d activité."
+  },
+  "Comparer EU et USA ?": {
+   "en": "",
+   "fr": "Comparer EU et USA ?"
+  },
+  "Comparer les formules →": {
+   "en": "",
+   "fr": "Comparer les formules →"
+  },
+  "Comparer suppose un registre à jour": {
+   "en": "",
+   "fr": "Comparer suppose un registre à jour"
+  },
+  "Comparez avec le début réel affiché ci-dessous.": {
+   "en": "",
+   "fr": "Comparez avec le début réel affiché ci-dessous."
+  },
+  "Comparez avec le régime de l’IA Act.": {
+   "en": "",
+   "fr": "Comparez avec le régime de l’IA Act."
+  },
+  "Comparez ce chiffre au coût de la mise en conformité — l’arbitrage devient évident.": {
+   "en": "",
+   "fr": "Comparez ce chiffre au coût de la mise en conformité — l’arbitrage devient évident."
+  },
+  "Comparez ce que pèse votre parc déclaré et ce que pèse la plateforme elle-même, mesurée appel par appel.": {
+   "en": "",
+   "fr": "Comparez ce que pèse votre parc déclaré et ce que pèse la plateforme elle-même, mesurée appel par appel."
+  },
+  "Comparez ce que vous venez de renseigner avec le corps de la norme.": {
+   "en": "",
+   "fr": "Comparez ce que vous venez de renseigner avec le corps de la norme."
+  },
+  "Comparez jusqu’à quatre cadres nationaux sur les dimensions qui décident de votre offre.": {
+   "en": "",
+   "fr": "Comparez jusqu’à quatre cadres nationaux sur les dimensions qui décident de votre offre."
+  },
+  "Comparez jusqu’à quatre juridictions sur les six dimensions réglementaires, côte à côte plutôt que l’une après l’autre.": {
+   "en": "",
+   "fr": "Comparez jusqu’à quatre juridictions sur les six dimensions réglementaires, côte à côte plutôt que l’une après l’autre."
+  },
+  "Comparez les sites entre eux plutôt que de lire un total : c’est l’écart qui désigne où agir.": {
+   "en": "",
+   "fr": "Comparez les sites entre eux plutôt que de lire un total : c’est l’écart qui désigne où agir."
+  },
+  "Comparez maturité, investissement et risque IA de votre secteur.": {
+   "en": "",
+   "fr": "Comparez maturité, investissement et risque IA de votre secteur."
+  },
+  "Comparez votre lecture à l’empreinte environnementale du parc cartographié : électricité, CO₂e, fabrication amortie, eau.": {
+   "en": "",
+   "fr": "Comparez votre lecture à l’empreinte environnementale du parc cartographié : électricité, CO₂e, fabrication amortie, eau."
+  },
+  "Comparez votre profil sur # dimensions (gouvernance, sécurité, droits fondamentaux…) à la moyenne du secteur.": {
+   "en": "",
+   "fr": "Comparez votre profil sur 6 dimensions (gouvernance, sécurité, droits fondamentaux…) à la moyenne du secteur."
+  },
+  "Comparez à densité et à mode de refroidissement comparables : un site en eau perdue et un site en boucle fermée ne se comparent pas sur l’eau.": {
+   "en": "",
+   "fr": "Comparez à densité et à mode de refroidissement comparables : un site en eau perdue et un site en boucle fermée ne se comparent pas sur l’eau."
+  },
+  "Compilation datée du cabinet — communiqués et décisions d’autorités": {
+   "en": "",
+   "fr": "Compilation datée du cabinet — communiqués et décisions d’autorités"
+  },
+  "Complète votre AIPD existante — la FRIA couvre des angles que le RGPD seul ne traite pas (biais, discrimination algorithmique).": {
+   "en": "",
+   "fr": "Complète votre AIPD existante — la FRIA couvre des angles que le RGPD seul ne traite pas (biais, discrimination algorithmique)."
+  },
+  "Complémentaire de l’étape maturité de la cartographie.": {
+   "en": "",
+   "fr": "Complémentaire de l’étape maturité de la cartographie."
+  },
+  "Complémentaire à la Cartographie (qui est quantitative) : ici vous trouvez le contexte stratégique et les instruments clés de chaque bloc.": {
+   "en": "",
+   "fr": "Complémentaire à la Cartographie (qui est quantitative) : ici vous trouvez le contexte stratégique et les instruments clés de chaque bloc."
+  },
+  "Compléter le registre des systèmes IA": {
+   "en": "",
+   "fr": "Compléter le registre des systèmes IA"
+  },
+  "Complétude des champs art. #": {
+   "en": "",
+   "fr": "Complétude des champs art. 30"
+  },
+  "Comportement normal et attendu du middleware anti-scraping (app.py, fonction is_bot_blocked). Une requete dont le User-Agent correspond a un client HTTP generique (ex: Go-http-client, curl, python-requests) est journalisee et bloquee automatiquement. Exemple observe : IP #.x.x.x (plage Google Cloud Platform), UA Go-http-client/# -- probable scanner ou bot de monitoring tiers, sans lien avec Render lui-meme. Action requise : aucune, sauf si le volume de blocages devient anormalement eleve (scan agressif) ou si les tentatives ciblent specifiquement des routes sensibles (/api/registre, formulaires). A ne pas confondre avec les health checks internes Render (IP #, deja whitelistes dans le middleware).": {
+   "en": "",
+   "fr": "Comportement normal et attendu du middleware anti-scraping (app.py, fonction is_bot_blocked). Une requete dont le User-Agent correspond a un client HTTP generique (ex: Go-http-client, curl, python-requests) est journalisee et bloquee automatiquement. Exemple observe : IP 34.x.x.x (plage Google Cloud Platform), UA Go-http-client/2.0 -- probable scanner ou bot de monitoring tiers, sans lien avec Render lui-meme. Action requise : aucune, sauf si le volume de blocages devient anormalement eleve (scan agressif) ou si les tentatives ciblent specifiquement des routes sensibles (/api/registre, formulaires). A ne pas confondre avec les health checks internes Render (IP 127.0.0.1, deja whitelistes dans le middleware)."
+  },
+  "Composants de sécurité (Annexe I)": {
+   "en": "",
+   "fr": "Composants de sécurité (Annexe I)"
+  },
+  "Composants de sécurité de machines": {
+   "en": "",
+   "fr": "Composants de sécurité de machines"
+  },
+  "Comprehension des sorties du systeme par les superviseurs (Art. #(#)(b))": {
+   "en": "",
+   "fr": "Comprehension des sorties du systeme par les superviseurs (Art. 14(4)(b))"
+  },
+  "Comprendre l'architecture du règlement (UE) #/#, identifier les rôles et situer l'organisation dans le calendrier.": {
+   "en": "",
+   "fr": "Comprendre l'architecture du règlement (UE) 2024/1689, identifier les rôles et situer l'organisation dans le calendrier."
+  },
+  "Comprendre la norme, structurer un SMIA et préparer la certification.": {
+   "en": "",
+   "fr": "Comprendre la norme, structurer un SMIA et préparer la certification."
+  },
+  "Comprendre la structure d un système de management de l IA (SMIA) selon ISO/IEC #:#": {
+   "en": "",
+   "fr": "Comprendre la structure d un système de management de l IA (SMIA) selon ISO/IEC 42001:2023"
+  },
+  "Comprendre le champ d application et la portée extraterritoriale du Règlement (UE) #/#": {
+   "en": "",
+   "fr": "Comprendre le champ d application et la portée extraterritoriale du Règlement (UE) 2024/1689"
+  },
+  "Comprendre les exigences de sécurité applicables aux systèmes IA (Art. # EU AI Act)": {
+   "en": "",
+   "fr": "Comprendre les exigences de sécurité applicables aux systèmes IA (Art. 15 EU AI Act)"
+  },
+  "Compteur en temps réel de l’empreinte du site, de la plateforme et des modèles de langage utilisés, à partir de l’usage réel : jetons consommés, latence, pages servies. Trois méthodes de calcul sont conduites en parallèle.": {
+   "en": "",
+   "fr": "Compteur en temps réel de l’empreinte du site, de la plateforme et des modèles de langage utilisés, à partir de l’usage réel : jetons consommés, latence, pages servies. Trois méthodes de calcul sont conduites en parallèle."
+  },
+  "Comptez les exigences non couvertes : ce sont elles qui ouvrent le palier lourd.": {
+   "en": "",
+   "fr": "Comptez les exigences non couvertes : ce sont elles qui ouvrent le palier lourd."
+  },
+  "Comptez les produits qui passent par un organisme notifié.": {
+   "en": "",
+   "fr": "Comptez les produits qui passent par un organisme notifié."
+  },
+  "Compétences techniques": {
+   "en": "",
+   "fr": "Compétences techniques"
+  },
+  "Concentration lue sur la carte : plusieurs preneurs peuvent dépendre du même point de raccordement. Aucun modèle actuariel n’est appliqué.": {
+   "en": "",
+   "fr": "Concentration lue sur la carte : plusieurs preneurs peuvent dépendre du même point de raccordement. Aucun modèle actuariel n’est appliqué."
+  },
+  "Concentrez-vous d’abord sur # à # cas transverses à retour rapide.": {
+   "en": "",
+   "fr": "Concentrez-vous d’abord sur 2 à 3 cas transverses à retour rapide."
+  },
+  "Concentrez-vous sur le pilier Confidentialité & Sécurité — où en êtes-vous réellement ?": {
+   "en": "",
+   "fr": "Concentrez-vous sur le pilier Confidentialité & Sécurité — où en êtes-vous réellement ?"
+  },
+  "Conception / Développement / Pré-production / Production / Revue.": {
+   "en": "",
+   "fr": "Conception / Développement / Pré-production / Production / Revue."
+  },
+  "Conception assistée (BIM)": {
+   "en": "",
+   "fr": "Conception assistée (BIM)"
+  },
+  "Conception du cadre de gouvernance": {
+   "en": "",
+   "fr": "Conception du cadre de gouvernance"
+  },
+  "Conception et sous-traitance (art. #, #)": {
+   "en": "",
+   "fr": "Conception et sous-traitance (art. 25.1, 28)"
+  },
+  "Concevoir des interfaces permettant la supervision effective": {
+   "en": "",
+   "fr": "Concevoir des interfaces permettant la supervision effective"
+  },
+  "Concilier innovation et protection des données sur tout le cycle de vie d'un système d'IA.": {
+   "en": "",
+   "fr": "Concilier innovation et protection des données sur tout le cycle de vie d'un système d'IA."
+  },
+  "Conditions et garanties contractuelles": {
+   "en": "",
+   "fr": "Conditions et garanties contractuelles"
+  },
+  "Conditions imposées (si autorisation sous conditions)": {
+   "en": "",
+   "fr": "Conditions imposées (si autorisation sous conditions)"
+  },
+  "Conduire et formaliser l'analyse d'impact prévue à l'article #.": {
+   "en": "",
+   "fr": "Conduire et formaliser l'analyse d'impact prévue à l'article 27."
+  },
+  "Conduisez la FRIA exigée pour certains systèmes à haut risque.": {
+   "en": "",
+   "fr": "Conduisez la FRIA exigée pour certains systèmes à haut risque."
+  },
+  "Conduisez l’évaluation d’impact sur les droits fondamentaux si la classification l’exige (art. #).": {
+   "en": "",
+   "fr": "Conduisez l’évaluation d’impact sur les droits fondamentaux si la classification l’exige (art. 27)."
+  },
+  "Conduite assistée / autonome": {
+   "en": "",
+   "fr": "Conduite assistée / autonome"
+  },
+  "Conduite autonome et gestion du trafic = haut risque. Robustesse et sûreté maximales. Homologation sectorielle (EASA aérien, UNECE automobile).": {
+   "en": "",
+   "fr": "Conduite autonome et gestion du trafic = haut risque. Robustesse et sûreté maximales. Homologation sectorielle (EASA aérien, UNECE automobile)."
+  },
+  "Conduite à tenir en cas de violation de données": {
+   "en": "",
+   "fr": "Conduite à tenir en cas de violation de données"
+  },
+  "Confier la supervision humaine à des personnes compétentes": {
+   "en": "",
+   "fr": "Confier la supervision humaine à des personnes compétentes"
+  },
+  "Confirmer la réception de chaque notification sans délai": {
+   "en": "",
+   "fr": "Confirmer la réception de chaque notification sans délai"
+  },
+  "Confirmer l’effacement (art. #) des données de": {
+   "en": "",
+   "fr": "Confirmer l’effacement (art. 17) des données de"
+  },
+  "Confirmez-vous définitivement cet effacement ?": {
+   "en": "",
+   "fr": "Confirmez-vous définitivement cet effacement ?"
+  },
+  "Conformite RGPD pour les donnees personnelles utilisees (Art. #(#))": {
+   "en": "",
+   "fr": "Conformite RGPD pour les donnees personnelles utilisees (Art. 10(5))"
+  },
+  "Conformité Audit": {
+   "en": "",
+   "fr": "Conformité Audit"
+  },
+  "Conformité RGPD consolidée": {
+   "en": "",
+   "fr": "Conformité RGPD consolidée"
+  },
+  "Conformité RGPD — mise en place": {
+   "en": "",
+   "fr": "Conformité RGPD — mise en place"
+  },
+  "Conformité RGPD — tableau de bord": {
+   "en": "",
+   "fr": "Conformité RGPD — tableau de bord"
+  },
+  "Conformité largement atteinte, processus mesurés.": {
+   "en": "",
+   "fr": "Conformité largement atteinte, processus mesurés."
+  },
+  "Conformité native à l’obligation RGPD de traçabilité (# ans), sans dispositif supplémentaire à maintenir.": {
+   "en": "",
+   "fr": "Conformité native à l’obligation RGPD de traçabilité (3 ans), sans dispositif supplémentaire à maintenir."
+  },
+  "Conformité par exigence, système de qualité (art. #).": {
+   "en": "",
+   "fr": "Conformité par exigence, système de qualité (art. 17)."
+  },
+  "Conformité par référentiel": {
+   "en": "",
+   "fr": "Conformité par référentiel"
+  },
+  "Conformité réglementaire": {
+   "en": "",
+   "fr": "Conformité réglementaire"
+  },
+  "Conformité technique — Systèmes haut risque": {
+   "en": "",
+   "fr": "Conformité technique — Systèmes haut risque"
+  },
+  "Conformité, ingénieurs, chefs de produit": {
+   "en": "",
+   "fr": "Conformité, ingénieurs, chefs de produit"
+  },
+  "Conformité, juristes, métiers": {
+   "en": "",
+   "fr": "Conformité, juristes, métiers"
+  },
+  "Connaissance de l’incident": {
+   "en": "",
+   "fr": "Connaissance de l’incident"
+  },
+  "Connaître le calendrier d application et les échéances clés jusqu en #": {
+   "en": "",
+   "fr": "Connaître le calendrier d application et les échéances clés jusqu en 2027"
+  },
+  "Connecté sur ce navigateur": {
+   "en": "",
+   "fr": "Connecté sur ce navigateur"
+  },
+  "Connectée à vos vraies données": {
+   "en": "",
+   "fr": "Connectée à vos vraies données"
+  },
+  "Connexion et session": {
+   "en": "",
+   "fr": "Connexion et session"
+  },
+  "Conseil juridique assisté": {
+   "en": "",
+   "fr": "Conseil juridique assisté"
+  },
+  "Conseil, ingénierie, bureaux d'études, professions juridiques et comptables, recherche et développement.": {
+   "en": "",
+   "fr": "Conseil, ingénierie, bureaux d'études, professions juridiques et comptables, recherche et développement."
+  },
+  "Consentement, contrat, obligation légale, intérêt légitime…": {
+   "en": "",
+   "fr": "Consentement, contrat, obligation légale, intérêt légitime…"
+  },
+  "Consentement, intérêt légitime, intérêt public": {
+   "en": "",
+   "fr": "Consentement, intérêt légitime, intérêt public"
+  },
+  "Conservation # ans apres la derniere mise sur le marche (Art. #)": {
+   "en": "",
+   "fr": "Conservation 10 ans apres la derniere mise sur le marche (Art. 18)"
+  },
+  "Conservation # ans conforme RGPD — utile en cas de contrôle a posteriori.": {
+   "en": "",
+   "fr": "Conservation 3 ans conforme RGPD — utile en cas de contrôle a posteriori."
+  },
+  "Conservation des logs pendant toute la duree de vie (Art. #(#))": {
+   "en": "",
+   "fr": "Conservation des logs pendant toute la duree de vie (Art. 12(1))"
+  },
+  "Conserver # ans après mise sur le marché": {
+   "en": "",
+   "fr": "Conserver 10 ans après mise sur le marché"
+  },
+  "Conserver la documentation technique # ans": {
+   "en": "",
+   "fr": "Conserver la documentation technique 10 ans"
+  },
+  "Conserver la preuve d'enregistrement dans le dossier de conformité": {
+   "en": "",
+   "fr": "Conserver la preuve d'enregistrement dans le dossier de conformité"
+  },
+  "Conserver la preuve de chaque revue humaine : sans trace, l'intervention est réputée absente": {
+   "en": "",
+   "fr": "Conserver la preuve de chaque revue humaine : sans trace, l'intervention est réputée absente"
+  },
+  "Conserver les CGU et garanties du fournisseur d'API — utile en cas de modification substantielle (Art. #).": {
+   "en": "",
+   "fr": "Conserver les CGU et garanties du fournisseur d'API — utile en cas de modification substantielle (Art. 25)."
+  },
+  "Conserver les journaux générés automatiquement": {
+   "en": "",
+   "fr": "Conserver les journaux générés automatiquement"
+  },
+  "Conservez les preuves dans la Base de connaissance pour une traçabilité immédiate.": {
+   "en": "",
+   "fr": "Conservez les preuves dans la Base de connaissance pour une traçabilité immédiate."
+  },
+  "Conservez une copie datée de l’indice au moment de la signature : c’est l’état des lieux que vous pourrez opposer.": {
+   "en": "",
+   "fr": "Conservez une copie datée de l’indice au moment de la signature : c’est l’état des lieux que vous pourrez opposer."
+  },
+  "Conservez une trace datée de ce qui est affiché : la preuve compte autant que la pratique.": {
+   "en": "",
+   "fr": "Conservez une trace datée de ce qui est affiché : la preuve compte autant que la pratique."
+  },
+  "Conservons-nous les preuves de la logique du dispositif et de la revue humaine ?": {
+   "en": "",
+   "fr": "Conservons-nous les preuves de la logique du dispositif et de la revue humaine ?"
+  },
+  "Consignes de rédaction :": {
+   "en": "",
+   "fr": "Consignes de rédaction :"
+  },
+  "Consignez chaque cotation avec sa date et sa preuve.": {
+   "en": "",
+   "fr": "Consignez chaque cotation avec sa date et sa preuve."
+  },
+  "Consignez chaque vérification, produit par produit, avec sa date.": {
+   "en": "",
+   "fr": "Consignez chaque vérification, produit par produit, avec sa date."
+  },
+  "Consolidation ; aucun nouveau calcul.": {
+   "en": "",
+   "fr": "Consolidation ; aucun nouveau calcul."
+  },
+  "Consolidation des résultats des étapes précédentes ; aucun nouveau calcul.": {
+   "en": "",
+   "fr": "Consolidation des résultats des étapes précédentes ; aucun nouveau calcul."
+  },
+  "Consolide les briques du dispositif — registre, cartographie, AIPD, privacy by design, documentation, sensibilisation — en un indice global assorti de points d’attention.": {
+   "en": "",
+   "fr": "Consolide les briques du dispositif — registre, cartographie, AIPD, privacy by design, documentation, sensibilisation — en un indice global assorti de points d’attention."
+  },
+  "Consolide vos évaluations des trois cadres en un indice unique, destiné à un comité de direction. C’est un instrument de pilotage et de dialogue, pas une attestation de conformité.": {
+   "en": "",
+   "fr": "Consolide vos évaluations des trois cadres en un indice unique, destiné à un comité de direction. C’est un instrument de pilotage et de dialogue, pas une attestation de conformité."
+  },
+  "Consolidez IA Act, RGPD et ISO/IEC # en une vue unique avant de figer la déclaration UE de conformité.": {
+   "en": "",
+   "fr": "Consolidez IA Act, RGPD et ISO/IEC 42001 en une vue unique avant de figer la déclaration UE de conformité."
+  },
+  "Consolidez le classement, l’empreinte et les réserves juridiques en une vue de direction.": {
+   "en": "",
+   "fr": "Consolidez le classement, l’empreinte et les réserves juridiques en une vue de direction."
+  },
+  "Constats des étapes précédentes, rattachés à la version #-#-a du référentiel": {
+   "en": "",
+   "fr": "Constats des étapes précédentes, rattachés à la version 2026-07-a du référentiel"
+  },
+  "Constats des étapes précédentes, rattachés à la version du référentiel employée": {
+   "en": "",
+   "fr": "Constats des étapes précédentes, rattachés à la version du référentiel employée"
+  },
+  "Constitue l’inventaire central exigé par le Règlement — la preuve documentaire en cas de contrôle.": {
+   "en": "",
+   "fr": "Constitue l’inventaire central exigé par le Règlement — la preuve documentaire en cas de contrôle."
+  },
+  "Constituer le dossier de preuve": {
+   "en": "",
+   "fr": "Constituer le dossier de preuve"
+  },
+  "Constituer le dossier technique conforme Annexe IV": {
+   "en": "",
+   "fr": "Constituer le dossier technique conforme Annexe IV"
+  },
+  "Constituer un dossier de preuve conforme aux articles #, #, #, # et #, et automatiser la rétention.": {
+   "en": "",
+   "fr": "Constituer un dossier de preuve conforme aux articles 5, 7, 12, 17 et 30, et automatiser la rétention."
+  },
+  "Constituez la pièce qui part en comité : périmètre, couverture, méthode, montants et ce qui n’est pas chiffré.": {
+   "en": "",
+   "fr": "Constituez la pièce qui part en comité : périmètre, couverture, méthode, montants et ce qui n’est pas chiffré."
+  },
+  "Constituez la vue direction à partir des étapes précédentes plutôt qu’en ressaisissant.": {
+   "en": "",
+   "fr": "Constituez la vue direction à partir des étapes précédentes plutôt qu’en ressaisissant."
+  },
+  "Constituez le dossier : exposition, écarts, produits en organisme notifié, jours restants.": {
+   "en": "",
+   "fr": "Constituez le dossier : exposition, écarts, produits en organisme notifié, jours restants."
+  },
+  "Constituez le dossier : sources, millésimes, hypothèses et formules retenues.": {
+   "en": "",
+   "fr": "Constituez le dossier : sources, millésimes, hypothèses et formules retenues."
+  },
+  "Constituez le dossier d’arbitrage : cas retenus, classification, risques, trajectoire.": {
+   "en": "",
+   "fr": "Constituez le dossier d’arbitrage : cas retenus, classification, risques, trajectoire."
+  },
+  "Constituez le dossier technique : architecture, données d’entraînement et de validation, performances mesurées, limitations connues, mesures de supervision humaine.": {
+   "en": "",
+   "fr": "Constituez le dossier technique : architecture, données d’entraînement et de validation, performances mesurées, limitations connues, mesures de supervision humaine."
+  },
+  "Constitution du dossier technique complet (# rubriques, Annexe IV)": {
+   "en": "",
+   "fr": "Constitution du dossier technique complet (9 rubriques, Annexe IV)"
+  },
+  "Consultant IA — cadrage et architecture des cas d’usage": {
+   "en": "",
+   "fr": "Consultant IA — cadrage et architecture des cas d’usage"
+  },
+  "Consultation de la base de connaissance…": {
+   "en": "",
+   "fr": "Consultation de la base de connaissance…"
+  },
+  "Consultation des representants des groupes potentiellement impactes": {
+   "en": "",
+   "fr": "Consultation des representants des groupes potentiellement impactes"
+  },
+  "Consultez en début de semaine, intégrez les alertes critiques au point d’équipe.": {
+   "en": "",
+   "fr": "Consultez en début de semaine, intégrez les alertes critiques au point d’équipe."
+  },
+  "Consultez en particulier les obligations de transparence (Art. #, #) qui recoupent directement l’information des personnes.": {
+   "en": "",
+   "fr": "Consultez en particulier les obligations de transparence (Art. 13, 50) qui recoupent directement l’information des personnes."
+  },
+  "Consultez le positionnement réglementaire de vos marchés cibles.": {
+   "en": "",
+   "fr": "Consultez le positionnement réglementaire de vos marchés cibles."
+  },
+  "Consultez le récapitulatif : nombre de cas, gain annuel estimé, coût d’accompagnement, retour net et retour sur investissement.": {
+   "en": "",
+   "fr": "Consultez le récapitulatif : nombre de cas, gain annuel estimé, coût d’accompagnement, retour net et retour sur investissement."
+  },
+  "Consultez le récapitulatif coût, gain et ROI.": {
+   "en": "",
+   "fr": "Consultez le récapitulatif coût, gain et ROI."
+  },
+  "Consultez le texte officiel article par article, filtré selon votre rôle (fournisseur, déployeur, GPAI).": {
+   "en": "",
+   "fr": "Consultez le texte officiel article par article, filtré selon votre rôle (fournisseur, déployeur, GPAI)."
+  },
+  "Consultez les indicateurs clés en moins de # minutes avant un comité.": {
+   "en": "",
+   "fr": "Consultez les indicateurs clés en moins de 2 minutes avant un comité."
+  },
+  "Consultez l’analyse d’impact automatique de chaque actualité réglementaire.": {
+   "en": "",
+   "fr": "Consultez l’analyse d’impact automatique de chaque actualité réglementaire."
+  },
+  "Consultez l’indice global consolidant l’ensemble du dispositif.": {
+   "en": "",
+   "fr": "Consultez l’indice global consolidant l’ensemble du dispositif."
+  },
+  "Consultez l’évolution de vos scores de risque dans le temps.": {
+   "en": "",
+   "fr": "Consultez l’évolution de vos scores de risque dans le temps."
+  },
+  "Consultez-la avant un déploiement dans le pays concerné ou avant de contractualiser avec un prestataire qui y opère. Le comparateur met jusqu’à quatre juridictions en regard sur six dimensions.": {
+   "en": "",
+   "fr": "Consultez-la avant un déploiement dans le pays concerné ou avant de contractualiser avec un prestataire qui y opère. Le comparateur met jusqu’à quatre juridictions en regard sur six dimensions."
+  }
+ }
+}
