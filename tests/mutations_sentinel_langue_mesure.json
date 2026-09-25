@@ -83,11 +83,11 @@
    "regle": "test_les_restes_sont_limites_a_quinze_et_tries_des_plus_longs_aux_plus_courts"
   },
   {
-   "nom": "le texte des cadres n'est plus séparé : l'iframe gonfle la page et le verdict",
+   "nom": "le texte des cadres n'est plus dit à part : une page qui régresse dans son iframe ne se nomme plus",
    "fichier": "outils/sentinel_langue.js",
-   "avant": ".indexOf('cadre:') === 0) dansCadre.push",
-   "apres": ".indexOf('cadre:') === 1) dansCadre.push",
-   "regle": "test_les_cadres_sont_mesures_A_PART_et_hors_verdict"
+   "avant": "  return String((e || {}).ou || '').indexOf(MARQUE_CADRE) === 0;",
+   "apres": "  return String((e || {}).ou || '').indexOf(MARQUE_CADRE) === 1;",
+   "regle": "test_les_cadres_sont_dits_A_PART_et_COMPTENT_dans_le_verdict"
   },
   {
    "nom": "le verdict tombe dès l'égalité au seuil : un seuil à 0 avec zéro mot français rend 1",

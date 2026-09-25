@@ -51,6 +51,19 @@ def _peintre():
 
 PEINTRE = _peintre()
 
+
+def _aides():
+    """LES AIDES DU FICHIER, PAS DES POSTICHES. Le peintre écrit les valeurs
+    saisies par `sentDonnee()`, définie HORS du bloc découpé ci-dessus : sans
+    elle, chaque zone lève et reste vide — mesuré, dix-sept règles rouges. On
+    prend donc la VRAIE fonction dans le même fichier, pour que les règles
+    mesurent l'échappement réel et non une imitation."""
+    d = JS.index("function sentDonneeEch(")
+    return JS[d:JS.index("window.sentDonnee = sentDonnee;", d)]
+
+
+AIDES = _aides()
+
 #: Les zones que le panneau peint. Relevées sur la PAGE, pas listées de tête :
 #: une zone ajoutée demain sans peintre tombe dans le filet le jour même.
 ZONES = sorted(set(re.findall(r'id="(ei-[a-z-]+)"', PAGE)))
@@ -81,6 +94,7 @@ var CORPS = null;
 function Blob(parts){ CORPS = parts.join(''); }
 var URL = {createObjectURL: function(){ return 'blob:x'; }, revokeObjectURL: function(){}};
 var window = {};
+%s
 var REPONSE = %s;
 var OK = %s;
 function fetch(){ return Promise.resolve({ok: OK, json: function(){ return Promise.resolve(REPONSE); }}); }
@@ -90,7 +104,8 @@ setTimeout(function(){
   if(window.empIaExport) window.empIaExport();
   console.log(JSON.stringify({peint: peint, csv: CORPS}));
 }, 30);
-""" % (json.dumps(ZONES), json.dumps(reponse), "true" if ok else "false", PEINTRE)
+""" % (json.dumps(ZONES), AIDES, json.dumps(reponse),
+       "true" if ok else "false", PEINTRE)
     r = subprocess.run(["node", "-e", code], capture_output=True, text=True)
     assert r.returncode == 0, "le peintre n'est plus évaluable : %s" % r.stderr[-900:]
     return json.loads(r.stdout)

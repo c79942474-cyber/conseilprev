@@ -1,0 +1,8 @@
+# Part minimale (0 a 1) des MOTS du catalogue i18n/sentinel/CATALOGUE.json
+# couverts par les dictionnaires i18n/sentinel/*.json — lue par
+# tests/test_sentinel_langue_gardien.py. C'est un PLANCHER : il monte a
+# mesure que le lot de traduction avance, et ne redescend pas.
+#
+# NE PAS CONFONDRE avec i18n/sentinel/SEUIL, qui est un PLAFOND : la part
+# francaise encore visible a l'ecran que le depot promet de ne pas depasser.
+0.99

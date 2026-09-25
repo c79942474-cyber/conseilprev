@@ -1,0 +1,49 @@
+{
+ "_lot": "62-derniers",
+ "_mots": 95,
+ "_pages": [
+  "_derniers"
+ ],
+ "_rubrique": "derniers textes releves au navigateur, une fois les donnees ecartees",
+ "bloc": {
+  "🎯 Analyse personnalisee sur # systeme(s) de votre Registre IA. Moteur : IA.": {
+   "fr": "🎯 Analyse personnalisee sur # systeme(s) de votre Registre IA. Moteur : IA.",
+   "html": "🎯 Analyse personnalisee sur # systeme(s) de votre Registre IA. Moteur : IA.",
+   "en": "🎯 Personalised analysis on # system(s) from your AI register. Engine: AI."
+  }
+ },
+ "texte": {
+  "# systeme(s)": {
+   "fr": "# systeme(s)",
+   "en": "# system(s)"
+  },
+  "Agit sur le petit facteur : un PUE de # ramené à # retire # % de l'énergie d'infrastructure, pas # % du total.": {
+   "fr": "Agit sur le petit facteur : un PUE de # ramené à # retire # % de l'énergie d'infrastructure, pas # % du total.",
+   "en": "Acts on the small factor: a PUE of # brought down to # removes # % of the infrastructure energy, not # % of the total."
+  },
+  "Aucun facteur d'épuisement abiotique sourçable n'a été retenu. Le calculer demande soit une base ACV donnant l'ADP par équipement, soit la fiche d'empreinte produit du constructeur. Sans elle, l'indicateur serait un nombre sans auteur.": {
+   "fr": "Aucun facteur d'épuisement abiotique sourçable n'a été retenu. Le calculer demande soit une base ACV donnant l'ADP par équipement, soit la fiche d'empreinte produit du constructeur. Sans elle, l'indicateur serait un nombre sans auteur.",
+   "en": "No sourceable abiotic depletion factor has been retained. Computing one requires either an LCA database giving the ADP per item of equipment, or the manufacturer's product footprint sheet. Without it, the indicator would be a number with no author."
+  },
+  "CNIL · ANSSI · EU AI Act · Commission — rafraîchi côté serveur (# min)": {
+   "fr": "CNIL · ANSSI · EU AI Act · Commission — rafraîchi côté serveur (# min)",
+   "en": "CNIL · ANSSI · EU AI Act · Commission — refreshed server-side (# min)"
+  },
+  "Chargement du moteur…": {
+   "fr": "Chargement du moteur…",
+   "en": "Loading the engine…"
+  },
+  "de votre Registre IA. Moteur :": {
+   "fr": "de votre Registre IA. Moteur :",
+   "en": "from your AI register. Engine:"
+  },
+  "source non jointe : source muette": {
+   "fr": "source non jointe : source muette",
+   "en": "source not attached: silent source"
+  },
+  "— fournisseur «": {
+   "fr": "— fournisseur «",
+   "en": "— provider «"
+  }
+ }
+}

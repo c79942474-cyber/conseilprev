@@ -126,10 +126,45 @@ function classer(texte) {
 /* ── L'AGRÉGATION : des relevés au JSON de mesure ─────────────────────────
    `releves` = { pages: { id: [ {t, ou} … ] }, coquille: [ {t, ou} … ] }
    où `t` est le texte visible et `ou` sa provenance ('texte', 'title',
-   'aria-label', 'placeholder', 'value', 'option'). Chaque OCCURRENCE compte :
-   un « Voir » répété vingt fois est vingt mots lus. La liste des restes,
-   elle, est dédoublonnée : c'est une liste de travail pour qui traduit. */
+   'aria-label', 'placeholder', 'value', 'option'), éventuellement préfixée
+   par « cadre: » (un iframe de même origine) et par « donnee: » (un élément
+   sous translate="no"). Chaque OCCURRENCE compte : un « Voir » répété vingt
+   fois est vingt mots lus. La liste des restes, elle, est dédoublonnée :
+   c'est une liste de travail pour qui traduit.
+
+   DEUX LOTS SORTENT DU RANG, ET PAS DE LA MÊME MANIÈRE :
+
+   · LES DONNÉES SAISIES (« donnee: ») — le nom d'un système au registre, son
+     fournisseur, sa finalité, le nom d'un client. Elles sont relevées À PART
+     et N'ENTRENT PAS dans la part française qui rend le verdict : ce sont
+     les systèmes d'IA du client, écrits dans SA langue, et personne ne les
+     traduit — c'est ce que déclare translate="no" dans la page. Leur volume
+     est dit, pour qu'on ne croie jamais qu'elles ont disparu de la mesure.
+     MESURÉ : sans cette séparation, 57 255 des 70 061 mots français relevés
+     — 82 % — étaient des entrées de registre réaffichées des milliers de
+     fois, et aucun seuil n'était atteignable.
+
+   · LES CADRES (« cadre: ») — les cinq documents que Sentinel embarque en
+     iframe. Ils ENTRENT DÉSORMAIS DANS LE VERDICT : depuis qu'ils chargent
+     sentinel.i18n.js (data-sent-cadre), ils se traduisent par la même
+     mécanique que Sentinel, et les tenir dehors reviendrait à ne pas
+     regarder un cinquième de ce qu'un lecteur voit. Ils restent comptés à
+     part, en plus, parce qu'une page qui régresse doit se nommer. */
 var RESTES_MAX = 15;
+
+/* LE MARQUEUR D'UNE DONNÉE SAISIE, posé par le relevé navigateur en tête de
+   la provenance. Il peut suivre « cadre: » — une donnée s'affiche aussi dans
+   un cadre. */
+var MARQUE_DONNEE = 'donnee:';
+var MARQUE_CADRE = 'cadre:';
+
+function estDonnee(e) {
+  return String((e || {}).ou || '').indexOf(MARQUE_DONNEE) >= 0;
+}
+
+function estCadre(e) {
+  return String((e || {}).ou || '').indexOf(MARQUE_CADRE) === 0;
+}
 
 function mesurerLot(entrees) {
   var m = { mots_fr: 0, mots_en: 0, mots_neutres: 0, textes: 0, part_fr: null, restes: [] };
@@ -155,46 +190,77 @@ function mesurerLot(entrees) {
   return m;
 }
 
+/* LE PARTAGE D'UN LOT DE RELEVÉS EN TROIS : ce qui rend le verdict (les
+   textes de site, CADRES COMPRIS), les cadres seuls (pour les dire à part) et
+   les données saisies (hors verdict). Une donnée affichée DANS un cadre est
+   une donnée d'abord : elle ne se traduit pas plus là qu'ailleurs. */
+function trier(entrees) {
+  var out = { verdict: [], cadres: [], donnees: [] };
+  for (var i = 0; i < (entrees || []).length; i++) {
+    var e = entrees[i];
+    if (estDonnee(e)) { out.donnees.push(e); continue; }
+    out.verdict.push(e);
+    if (estCadre(e)) out.cadres.push(e);
+  }
+  return out;
+}
+
+function vide() {
+  return { mots_fr: 0, mots_en: 0, mots_neutres: 0, textes: 0, pages: 0, part_fr: null };
+}
+
+function cumuler(total, lot) {
+  total.pages++;
+  total.mots_fr += lot.mots_fr; total.mots_en += lot.mots_en;
+  total.mots_neutres += lot.mots_neutres; total.textes += lot.textes;
+}
+
+function clore(total) {
+  var decide = total.mots_fr + total.mots_en;
+  total.part_fr = decide ? Math.round(total.mots_fr / decide * 10000) / 10000 : null;
+  return total;
+}
+
 function agreger(releves, options) {
   options = options || {};
+  var coq = trier((releves && releves.coquille) || []);
   var out = {
     _quoi: 'Ce qui reste en français, à l\'écran, quand EN est choisi — mesuré par recette_sentinel_langue.js. '
-      + 'part_fr = mots français / (mots français + mots anglais) ; les mots neutres (sans lettre, nom propre, indécis) sont comptés à part.',
+      + 'part_fr = mots français / (mots français + mots anglais) ; les mots neutres (sans lettre, nom propre, indécis) sont comptés à part. '
+      + 'Les DONNÉES SAISIES (éléments translate="no" : noms de systèmes, fournisseurs, finalités, clients) sont relevées à part, '
+      + 'dans « donnees », et n\'entrent PAS dans le verdict : elles sont écrites dans la langue du client et personne ne les traduit. '
+      + 'Les cadres (iframes) sont comptés à part ET compris dans le verdict, depuis qu\'ils se traduisent eux-mêmes.',
     date: options.date || new Date().toISOString(),
     base: options.base || null,
     seuil: (options.seuil === undefined || options.seuil === null) ? SEUIL_DEFAUT : options.seuil,
     dictionnaire: options.dictionnaire || null,
     global: { mots_fr: 0, mots_en: 0, mots_neutres: 0, textes: 0, pages: 0, part_fr: null },
-    coquille: mesurerLot((releves && releves.coquille) || []),
+    coquille: mesurerLot(coq.verdict),
     pages: {}
   };
+  if (coq.donnees.length) out.coquille.donnees = mesurerLot(coq.donnees);
   var pages = (releves && releves.pages) || {};
   var ids = Object.keys(pages);
-  var cadres = { mots_fr: 0, mots_en: 0, mots_neutres: 0, textes: 0, pages: 0, part_fr: null };
+  var cadres = vide();
+  var donnees = vide();
   for (var i = 0; i < ids.length; i++) {
-    /* CE QUI VIENT D'UN CADRE (ou = « cadre:… ») est un autre document, hors
-       de portée du dictionnaire : mesuré à part, jamais dans la part de la
-       page ni dans le verdict. */
-    var propres = [], dansCadre = [];
-    var lot = pages[ids[i]] || [];
-    for (var j = 0; j < lot.length; j++) {
-      if (String((lot[j] || {}).ou || '').indexOf('cadre:') === 0) dansCadre.push(lot[j]);
-      else propres.push(lot[j]);
-    }
-    var m = mesurerLot(propres);
+    var part = trier(pages[ids[i]] || []);
+    var m = mesurerLot(part.verdict);
     out.pages[ids[i]] = m;
     out.global.pages++;
-    if (dansCadre.length) {
-      var mc = mesurerLot(dansCadre);
-      m.cadres = mc;
-      cadres.pages++;
-      cadres.mots_fr += mc.mots_fr; cadres.mots_en += mc.mots_en;
-      cadres.mots_neutres += mc.mots_neutres; cadres.textes += mc.textes;
+    /* LES CADRES : dans le verdict avec le reste de la page, ET dits à part. */
+    if (part.cadres.length) {
+      m.cadres = mesurerLot(part.cadres);
+      cumuler(cadres, m.cadres);
+    }
+    /* LES DONNÉES SAISIES : hors du verdict, mais jamais tues. */
+    if (part.donnees.length) {
+      m.donnees = mesurerLot(part.donnees);
+      cumuler(donnees, m.donnees);
     }
   }
-  var decideCadres = cadres.mots_fr + cadres.mots_en;
-  cadres.part_fr = decideCadres ? Math.round(cadres.mots_fr / decideCadres * 10000) / 10000 : null;
-  out.cadres = cadres;
+  out.cadres = clore(cadres);
+  out.donnees = clore(donnees);
   var lots = ids.map(function (id) { return out.pages[id]; }).concat([out.coquille]);
   for (var k = 0; k < lots.length; k++) {
     out.global.mots_fr += lots[k].mots_fr;
@@ -256,7 +322,15 @@ function resumer(mesure, seuil) {
   l.push('coquille (menu + barre) : ' + pct(c.part_fr) + ' · ' + c.mots_fr + ' fr / ' + c.mots_en + ' en');
   var k = mesure.cadres;
   if (k && k.pages) {
-    l.push('cadres (iframes, hors verdict) : ' + pct(k.part_fr) + ' · ' + k.mots_fr + ' fr / ' + k.mots_en + ' en sur ' + k.pages + ' page(s)');
+    l.push('cadres (iframes, COMPRIS dans le verdict) : ' + pct(k.part_fr) + ' · ' + k.mots_fr + ' fr / ' + k.mots_en + ' en sur ' + k.pages + ' page(s)');
+  }
+  /* LE VOLUME DES DONNÉES EST DIT, TOUJOURS. Une part qui tombe parce qu'on
+     a cessé de compter doit pouvoir se relire : sans cette ligne, on
+     croirait ces mots disparus au lieu de les savoir mis de côté. */
+  var dn = mesure.donnees;
+  if (dn && dn.pages) {
+    l.push('données (saisies, hors verdict) : ' + dn.mots_fr + ' mots fr / ' + dn.mots_en + ' en / '
+      + dn.mots_neutres + ' neutres · ' + dn.textes + ' textes sur ' + dn.pages + ' page(s)');
   }
   l.push('');
   l.push('LES DIX PAGES LES PLUS FRANÇAISES');
@@ -273,6 +347,8 @@ function resumer(mesure, seuil) {
 module.exports = {
   MOTS_FR: MOTS_FR, MOTS_EN: MOTS_EN, NOMS_PROPRES: NOMS_PROPRES,
   SEUIL_DEFAUT: SEUIL_DEFAUT, RESTES_MAX: RESTES_MAX,
+  MARQUE_DONNEE: MARQUE_DONNEE, MARQUE_CADRE: MARQUE_CADRE,
+  estDonnee: estDonnee, estCadre: estCadre, trier: trier,
   compterMots: compterMots, classer: classer, mesurerLot: mesurerLot,
   agreger: agreger, pires: pires, verdict: verdict, resumer: resumer
 };

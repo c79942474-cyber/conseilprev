@@ -11,9 +11,16 @@ traduction : c'est ce qui se rapproche le plus de ce qu'un lecteur verrait.
 LE GARDIEN DURABLE. tests/test_sentinel_langue_gardien.py lit le catalogue
 (i18n/sentinel/CATALOGUE.json, produit par l'outil d'inventaire), les
 dictionnaires i18n/sentinel/*.json, et exige la couverture minimale écrite
-dans i18n/sentinel/SEUIL. Quand quelqu'un ajoutera une page en français sans
-la traduire, le catalogue grossira, la couverture baissera, et la règle
-tombera — sans navigateur, à chaque passage de la suite.
+dans i18n/sentinel/SEUIL_COUVERTURE. Quand quelqu'un ajoutera une page en
+français sans la traduire, le catalogue grossira, la couverture baissera, et
+la règle tombera — sans navigateur, à chaque passage de la suite.
+
+DEUX SEUILS, ET ILS NE DISENT PAS LA MÊME CHOSE. i18n/sentinel/SEUIL porte
+la PART FRANÇAISE MESURÉE À L'ÉCRAN qu'on promet de ne pas dépasser (gardée
+par tests/test_sentinel_donnees_saisies.py sur MESURE_APRES.json) ;
+i18n/sentinel/SEUIL_COUVERTURE porte la couverture MINIMALE du catalogue par
+les dictionnaires, gardée ici. L'une est un plafond, l'autre un plancher :
+les confondre dans un seul fichier désarmerait l'un des deux en silence.
 
 CE QUI N'EST PAS UN DICTIONNAIRE dans le dossier : le catalogue lui-même
 (des clés françaises, pas des traductions) et les mesures (MESURE_*.json).
@@ -28,7 +35,7 @@ import re
 RACINE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DOSSIER = os.path.join(RACINE, 'i18n', 'sentinel')
 CATALOGUE = os.path.join(DOSSIER, 'CATALOGUE.json')
-SEUIL = os.path.join(DOSSIER, 'SEUIL')
+SEUIL = os.path.join(DOSSIER, 'SEUIL_COUVERTURE')
 
 #: Les régimes du catalogue et le dictionnaire où chacun se cherche : les
 #: attributs (title, aria-label…) se traduisent par le dictionnaire « texte ».
@@ -133,7 +140,7 @@ def couverture(catalogue, dico):
 
 
 def lire_seuil(chemin=None):
-    """Le seuil (0 à 1) écrit dans i18n/sentinel/SEUIL : les lignes vides et
+    """Le seuil (0 à 1) écrit dans un fichier de seuil : les lignes vides et
     celles qui commencent par « # » sont des commentaires ; il reste UNE
     valeur. Tout autre contenu est une erreur nommée."""
     chemin = SEUIL if chemin is None else chemin

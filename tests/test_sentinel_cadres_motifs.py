@@ -314,8 +314,13 @@ def _sources():
     """Où un libellé composé peut naître : le script de Sentinel (accents
     échappés ou non), son HTML, et les modules serveur qui écrivent les
     motifs du rail de validation."""
+    #  app.py EN FAIT PARTIE, ET IL A FALLU LE MESURER. Le libellé « a
+    #  arbitrer (qualification ou reference, pas les deux) — <ligne> » est
+    #  composé par la route du registre IA 50 (app.py), pas par le script de
+    #  la page : la règle le déclarait « construit nulle part » alors qu'il
+    #  s'affiche. Un motif qui vise le serveur doit pouvoir le prouver.
     src = [PAGE_JS, SENTINEL]
-    for nom in ("parcours_normes.py", "dora_parcours.py"):
+    for nom in ("parcours_normes.py", "dora_parcours.py", "app.py"):
         src.append(_lire(nom))
     #  APLANIES AUSSI : le code écrit « réponse(s)&nbsp;: » avec une
     #  insécable, la clé porte l'espace que le navigateur calcule.

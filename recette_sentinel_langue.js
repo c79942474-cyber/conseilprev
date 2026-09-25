@@ -38,9 +38,20 @@
  * (pages_429), pour qu'on ne lise pas un « Chargement… » comme du produit.
  *
  * LES CADRES (iframes : panorama, enveloppe, empreinte du parc,
- * observatoire) sont d'autres documents, hors de portée du dictionnaire de
- * Sentinel ; leur texte est relevé À PART (« cadres ») et n'entre pas dans
- * la part française qui rend le verdict — il est compté pour être vu.
+ * observatoire) sont d'autres documents ; depuis qu'ils chargent
+ * sentinel.i18n.js (data-sent-cadre), ils se traduisent par LA MÊME
+ * mécanique que Sentinel. Leur texte est donc relevé à part (« cadres »)
+ * pour être vu, ET COMPRIS DANS LE VERDICT : les tenir dehors reviendrait à
+ * ne pas regarder un cinquième de ce qu'un lecteur voit.
+ *
+ * LES DONNÉES SAISIES NE SONT PAS DU FRANÇAIS À TRADUIRE. Le nom d'un
+ * système au registre, son fournisseur, sa finalité, le nom d'un client :
+ * ce sont les systèmes d'IA du client, écrits dans SA langue. La page les
+ * déclare translate="no" ; le relevé les marque « donnee: », l'agrégation
+ * les compte À PART et les tient HORS DU VERDICT, en disant leur volume.
+ * MESURÉ AVANT CE PARTAGE : 57 255 des 70 061 mots français relevés — 82 % —
+ * étaient des entrées de registre réaffichées des milliers de fois par le
+ * registre, la matrice, l'empreinte, le FinOps et la qualification assistée.
  *
  * Usage :
  *   (cd <dossier> && PORT=9931 AUTH_MASTER_TOKEN=recette_locale_idf_0123456789abcdef nohup python app.py > log 2>&1 &)
@@ -103,6 +114,15 @@ const RELEVER = ([selecteurs, ATTRIBUTS]) => {
     const tag = String(el.tagName || '').toUpperCase();
     if (EXCLUS[tag]) return;
     if (!visible(el)) return;
+    /* UNE DONNÉE SAISIE SE DÉCLARE translate="no", ET TOUT CE QU'ELLE
+       CONTIENT EN EST UNE AUSSI — exactement la règle que le moteur de
+       traduction applique (sentinel.i18n.js, sentMarcher). Le marqueur est
+       posé en tête de la provenance ; l'agrégation relève ces textes à part
+       et les tient hors du verdict. Les ATTRIBUTS de l'élément marqué le
+       sont avec lui : le moteur ne les traduit pas non plus. */
+    if (el.getAttribute && el.getAttribute('translate') === 'no' && prefixe.indexOf('donnee:') < 0) {
+      prefixe = prefixe + 'donnee:';
+    }
     for (const a of ATTRIBUTS) pousser(el.getAttribute(a), a, prefixe);
     if (tag === 'INPUT' && /^(submit|button|reset)$/i.test(el.getAttribute('type') || '')) pousser(el.value, 'value', prefixe);
     if (tag === 'SELECT') {

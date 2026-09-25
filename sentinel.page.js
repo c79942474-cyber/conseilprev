@@ -1432,6 +1432,54 @@ function sentTr(cle) {
   return (d && d[cle]) || null;
 }
 
+/* ══ UNE DONNÉE SAISIE N'EST PAS DU FRANÇAIS À TRADUIRE ═══════════════════
+ *
+ * CE QUE LA MESURE NAVIGATEUR A MONTRÉ. Sur les 61 275 mots français relevés
+ * à l'écran alors que EN était choisi, l'immense majorité n'était pas du
+ * texte de site : c'étaient les ENTRÉES DU REGISTRE — nom d'un système,
+ * fournisseur, modèle, finalité, secteur, nom d'un client — que le registre,
+ * la matrice, l'empreinte, le FinOps et la FRIA réaffichent des milliers de
+ * fois. En production ce sont les systèmes d'IA du client, écrits dans SA
+ * langue : les compter comme « du français qui reste à traduire » est faux
+ * par construction, et rendait tout seuil inatteignable.
+ *
+ * LA DÉCLARATION JUSTE EXISTE DÉJÀ EN HTML : translate="no" — « ceci est une
+ * donnée, personne ne la traduit ». Le moteur de traduction par contenu
+ * (sentinel.i18n.js, sentClasser / sentMarcher) écarte depuis toujours
+ * l'élément qui la porte ET tout ce qu'il contient, ses attributs compris ;
+ * la mesure (outils/sentinel_langue.js) relève désormais ces textes À PART,
+ * hors du verdict, mais en disant leur volume.
+ *
+ * LA VALEUR EST MARQUÉE, PAS SON CONTENEUR. La phrase d'interface autour de
+ * la donnée doit rester traduite : on enveloppe la seule valeur, jamais la
+ * cellule, la carte ou la ligne qui la présente.
+ *
+ * ET LES ATTRIBUTS ? Un title ou un aria-label ne porte pas de balise : on ne
+ * peut pas y marquer la seule partie variable. Deux cas, donc :
+ *   · l'attribut est ENTIÈREMENT une donnée (« <nom> — <secteur> ») :
+ *     translate="no" va sur l'ÉLÉMENT qui le porte (SENT_ATTR_DONNEE) ;
+ *   · l'attribut MÊLE une phrase et une donnée (« Supprimer <nom> du
+ *     registre ») : on ne touche à rien. Les motifs du dictionnaire
+ *     (section « motif ») traduisent la phrase et recopient la donnée — les
+ *     exclure casserait ce mécanisme et laisserait la phrase en français. */
+function sentDonneeEch(v) {
+  return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+  });
+}
+
+/* LA VALEUR SAISIE, ÉCHAPPÉE ET MARQUÉE — à écrire à la place de la valeur
+   nue dans le HTML que le JavaScript peint. */
+function sentDonnee(v) {
+  return '<span translate="no">' + sentDonneeEch(v) + '</span>';
+}
+
+/* L'ÉLÉMENT DONT UN ATTRIBUT EST ENTIÈREMENT UNE DONNÉE — à coller dans la
+   balise ouvrante, avant le « > ». */
+var SENT_ATTR_DONNEE = ' translate="no"';
+
+window.sentDonnee = sentDonnee;
+
 /* LA TRADUCTION ÉCRIT `textContent`, JAMAIS `innerHTML`.
    C'est la différence qui sépare ce moteur de celui de l'accueil, et elle
    est délibérée : un lien, un bouton ou un identifiant placé dans un élément
@@ -7848,9 +7896,9 @@ function regRender(){
     var pctBadge = '<span title="Fiche '+pct+'% complète (10 questions essentielles IA Act)" style="font-size:9px;font-family:var(--mono);color:'+pctColor+';border:1px solid '+pctColor+';border-radius:8px;padding:1px 6px;margin-left:6px">'+pct+'%</span>';
     return '<div class="reg-sys-row" onclick="regOpenModal('+s.id+')">'
       + '<div class="rs-ico">🤖</div>'
-      + '<div><div class="rs-name">'+s.nom+pctBadge+'</div><div class="rs-type">'+(s.type_systeme||"—")+' · <span style="color:'+cy.color+'">'+cy.label+'</span></div></div>'
+      + '<div><div class="rs-name">'+sentDonnee(s.nom)+pctBadge+'</div><div class="rs-type">'+(s.type_systeme?sentDonnee(s.type_systeme):"—")+' · <span style="color:'+cy.color+'">'+cy.label+'</span></div></div>'
       + '<div><span class="chip '+cl.cls+'">'+cl.label+'</span></div>'
-      + '<div><span class="chip chip-b">'+(s.secteur||"—")+'</span></div>'
+      + '<div><span class="chip chip-b">'+(s.secteur?sentDonnee(s.secteur):"—")+'</span></div>'
       + '<div><span class="chip '+st.cls+'">'+st.label+'</span></div>'
       + '<div class="rs-risk" style="font-family:var(--serif);font-size:16px;color:'+scoreColor+'">'+s.score_risque+'/10</div>'
       /* UN VRAI BOUTON, plus un <div> cliquable : mesuré avant, quatre
@@ -7879,7 +7927,7 @@ window.regOpenModal = function(id){
 
   modal.innerHTML = '<div class="mat-modal-box">'
     + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">'+(sys?"Modifier le système":"Nouveau système IA")+'</div>'
-    + '<div class="mat-modal-title">'+(sys?sys.nom:"Ajouter au registre")+'</div></div>'
+    + '<div class="mat-modal-title">'+(sys?sentDonnee(sys.nom):"Ajouter au registre")+'</div></div>'
     + '<button type="button" class="mat-modal-close" aria-label="Fermer cette fenêtre" onclick="regCloseModal()" title="Fermer cette fenêtre">×</button></div>'
     + '<div class="mat-modal-body">'
     + '<div class="reg-form">'
@@ -8159,7 +8207,11 @@ function veilleRenderQualifiee(d){
 
   if(banner){
     if(d.personnalise){
-      banner.innerHTML = '🎯 Analyse personnalisee sur <strong>'+d.registre_count+' systeme(s)</strong> de votre Registre IA. Moteur : '+(d.model||"IA")+'.';
+      /* LE NOM DU MOTEUR EST UNE DONNÉE D'EXÉCUTION, pas un mot de
+         l'interface : le marquer évite qu'il entre dans une clé de
+         traduction — et qu'on traduise un identifiant. Le repli « IA », lui,
+         est bien un mot, et se traduit. */
+      banner.innerHTML = '🎯 Analyse personnalisee sur <strong>'+d.registre_count+' systeme(s)</strong> de votre Registre IA. Moteur : '+(d.model?sentDonnee(d.model):"IA")+'.';
       banner.className = "veille-qual-banner veille-qual-ok";
     } else {
       banner.innerHTML = "\u26A0\uFE0F Aucun systeme dans votre Registre IA \u2014 scoring generique non personnalise. <a href=\"#\" onclick=\"go(\'registre\',null,\'REGISTRE\',\'Syst\u00e8mes IA\');return false;\">Ajouter des systemes \u2192</a>";
@@ -8314,7 +8366,10 @@ function matriceRender(systemes){
       var key = pi + '-' + ci;
       var inCell = cellSystems[key] || [];
       var dots = inCell.slice(0,3).map(function(s){
-        return '<div class="matrix-dot" title="'+s.nom+' — '+(s.secteur||'')+'" onclick="matriceOpenSys('+s.id+')">'+matriceIco(s.secteur)+'</div>';
+        /* LE title EST ENTIÈREMENT UNE DONNÉE (« <nom> — <secteur> ») : rien
+           à traduire dedans, et rien qu'on puisse y marquer — c'est donc
+           l'élément qui se déclare donnée. */
+        return '<div class="matrix-dot"' + SENT_ATTR_DONNEE + ' title="'+sentDonneeEch(s.nom)+' — '+sentDonneeEch(s.secteur||'')+'" onclick="matriceOpenSys('+s.id+')">'+matriceIco(s.secteur)+'</div>';
       }).join('');
       var more = inCell.length > 3 ? '<div class="matrix-dot-more">+'+(inCell.length-3)+'</div>' : '';
       return '<div class="matrix-cell '+cls+'">'+dots+more+'</div>';
@@ -8347,7 +8402,7 @@ function matriceRender(systemes){
   c.innerHTML = critiques.map(function(s){
     return '<div class="eval-row" style="cursor:pointer" onclick="matriceOpenSys('+s.id+')">'
       + '<div class="eval-ico">'+matriceIco(s.secteur)+'</div>'
-      + '<div class="eval-body"><div class="eval-n">'+s.nom+'</div><div class="eval-d">'+(CLASSIF_LABELS[s.classification]||s.classification)+' · '+(STATUT_LABELS[s.statut_conformite]||s.statut_conformite)+' · '+(s.secteur||"")+'</div></div>'
+      + '<div class="eval-body"><div class="eval-n">'+sentDonnee(s.nom)+'</div><div class="eval-d">'+(CLASSIF_LABELS[s.classification]||s.classification)+' · '+(STATUT_LABELS[s.statut_conformite]||s.statut_conformite)+' · '+sentDonnee(s.secteur||"")+'</div></div>'
       + '<div class="eval-sc">'+(s.score_risque||0)+'/10</div>'
       + '</div>';
   }).join('');
@@ -9113,7 +9168,7 @@ function friaRenderSysCard(systeme){
 
   var head = '<div class="fria-sys-card'+(app.applicable?'':' fria-sys-na')+'">'
     + '<div class="fria-sys-head">'
-    + '<div><div class="fria-sys-name">'+systeme.nom+'</div><div class="fria-sys-meta">'+(systeme.secteur||'')+' · '+(systeme.type_systeme||'')+' · <span style="color:'+cy.color+'">'+cy.label+'</span></div></div>'
+    + '<div><div class="fria-sys-name">'+sentDonnee(systeme.nom)+'</div><div class="fria-sys-meta">'+sentDonnee(systeme.secteur||'')+' · '+sentDonnee(systeme.type_systeme||'')+' · <span style="color:'+cy.color+'">'+cy.label+'</span></div></div>'
     + (app.applicable
         ? '<div class="fria-score-ring" id="fria-score-'+systeme.id+'"><div class="fria-ring-val">'+(result?result.score.toFixed(1):'—')+'</div><div class="fria-ring-lbl">/ 10</div></div>'
         : '<span class="fria-na-badge">FRIA non requise</span>')
@@ -15556,7 +15611,7 @@ window.clientsRenderList = function(){
       var dateCreation = new Date(c.date_creation).toLocaleDateString('fr-FR');
       return '<div class="reg-sys-row" style="cursor:default">'
         + '<div class="rs-ico">🏢</div>'
-        + '<div><div class="rs-name">' + c.nom_entreprise + '</div><div class="rs-type">' + c.email + '</div></div>'
+        + '<div><div class="rs-name">' + sentDonnee(c.nom_entreprise) + '</div><div class="rs-type">' + sentDonnee(c.email) + '</div></div>'
         + '<div style="font-size:11px;color:var(--muted)">Créé le ' + dateCreation + '</div>'
         + '<div style="font-size:11px;color:var(--muted)">' + derniereConnexion + '</div>'
         + '<div><span class="chip ' + (c.actif ? 'chip-g' : 'chip-r') + '">' + (c.actif ? 'Actif' : 'Désactivé') + '</span></div>'
@@ -24361,16 +24416,16 @@ document.addEventListener('keydown', function(e){
         }
         document.getElementById('fo-angles').innerHTML =
             bloc(am.pratiques_interdites, 'Pratiques interdites (art. 5)', 'var(--accent)',
-                 function(x){ return '<li><b>' + ech(x.nom) + '</b> — '
+                 function(x){ return '<li><b>' + sentDonnee(x.nom) + '</b> — '
                    + (x.instruit ? (ech(unMontant(x.montant, x.devise)) + ' par mois')
                                  : 'montant non instruit') + '</li>'; })
           + bloc(am.haut_risque_non_chiffre, 'Haut risque, et coût inconnu', 'var(--amber)',
-                 function(x){ return '<li><b>' + ech(x.nom) + '</b> — ' + ech(x.pourquoi)
-                   + (x.product_owner ? ' <span class="muted">(à demander à ' + ech(x.product_owner) + ')</span>' : '')
+                 function(x){ return '<li><b>' + sentDonnee(x.nom) + '</b> — ' + ech(x.pourquoi)
+                   + (x.product_owner ? ' <span class="muted">(à demander à ' + sentDonnee(x.product_owner) + ')</span>' : '')
                    + '</li>'; })
           + bloc(am.fournisseur_sans_modele, 'Fournisseur nommé, modèle non déclaré', 'var(--blue)',
-                 function(x){ return '<li><b>' + ech(x.nom) + '</b> — fournisseur « '
-                   + ech(x.fournisseur) + ' »'
+                 function(x){ return '<li><b>' + sentDonnee(x.nom) + '</b> — fournisseur « '
+                   + sentDonnee(x.fournisseur) + ' »'
                    + (x.en_service ? ', <b>en service</b>' : '') + '</li>'; });
 
         /* Le coût par niveau de risque — la classification vient du Simulateur
@@ -24402,8 +24457,8 @@ document.addEventListener('keydown', function(e){
           ? ('<table class="tbl"><thead><tr><th>Système</th><th>Modèle</th><th>Mensuel</th>'
              + '<th>Calcul</th><th>Provenance du volume</th></tr></thead><tbody>'
              + lignes.map(function(l){
-                 return '<tr><td>' + ech(l.nom) + '</td><td>'
-                   + (l.modele ? ech(l.modele) : '<span class="muted">—</span>') + '</td><td>'
+                 return '<tr><td>' + sentDonnee(l.nom) + '</td><td>'
+                   + (l.modele ? sentDonnee(l.modele) : '<span class="muted">—</span>') + '</td><td>'
                    + (l.instruit ? ech(unMontant(l.montant, l.devise))
                                  : '<span class="muted">non instruit</span>')
                    + '</td><td style="font-size:11.5px">'
@@ -24434,7 +24489,7 @@ document.addEventListener('keydown', function(e){
             + '<table class="tbl"><thead><tr><th>Système</th><th>Étape</th><th>Ce qui manque</th>'
             + '<th>Pourquoi c’est ainsi</th></tr></thead><tbody>'
             + items.map(function(x){
-                return '<tr><td>' + ech(x.nom) + '</td><td>'
+                return '<tr><td>' + sentDonnee(x.nom) + '</td><td>'
                   + (x.cycle_vie_libelle ? ech(x.cycle_vie_libelle) : '<span class="muted">non déclarée</span>')
                   + '</td><td>' + ech(x.motif) + '</td><td style="font-size:11.5px">'
                   + ech(x.pourquoi) + '</td></tr>';
@@ -24475,7 +24530,7 @@ document.addEventListener('keydown', function(e){
                  + '<th>Leviers non déclarés</th></tr></thead><tbody>'
                  + lignesLev.map(function(l){
                      var abs = lm[String(l.id)] || [];
-                     return '<tr><td>' + ech(l.nom) + '</td><td>'
+                     return '<tr><td>' + sentDonnee(l.nom) + '</td><td>'
                        + (totalLev - abs.length) + ' / ' + totalLev + '</td><td>'
                        + abs.map(function(k){
                            return ech(refLev[k] || k); }).join(' · ')
@@ -24495,7 +24550,7 @@ document.addEventListener('keydown', function(e){
             + '<table class="tbl"><thead><tr><th>' + ech(p[0]) + '</th>'
             + '<th>Systèmes</th><th>Chiffrés</th><th>Mensuel</th></tr></thead><tbody>'
             + g.map(function(x){
-                return '<tr><td>' + ech(x.cle) + '</td><td>' + x.systemes + '</td><td>'
+                return '<tr><td>' + sentDonnee(x.cle) + '</td><td>' + x.systemes + '</td><td>'
                   + x.instruites + '</td><td>'
                   + (x.lisible ? ech(montants(x.mensuel_par_devise)) : '<span class="muted">non instruit</span>')
                   + '</td></tr>';
@@ -24511,7 +24566,7 @@ document.addEventListener('keydown', function(e){
              + '<table class="tbl"><thead><tr><th>Système</th><th>Modèle</th>'
              + '<th>Tâche</th><th>Écart</th><th>Lecture</th></tr></thead><tbody>'
              + dim.map(function(d){
-                 return '<tr><td>' + ech(d.nom) + '</td><td>' + ech(d.modele)
+                 return '<tr><td>' + sentDonnee(d.nom) + '</td><td>' + sentDonnee(d.modele)
                    + '</td><td>' + ech(d.classe_tache) + '</td><td>'
                    + (d.ecart > 0 ? '+' : '') + d.ecart + '</td><td>'
                    + ech(d.note) + '</td></tr>';
@@ -24532,7 +24587,7 @@ document.addEventListener('keydown', function(e){
             ? ('<table class="tbl"><thead><tr><th>Centre de coût</th><th>Mensuel</th>'
                + '<th>Plafond</th><th>Part</th></tr></thead><tbody>'
                + dep.atteints.map(function(a){
-                   return '<tr><td>' + ech(a.cle) + '</td><td>' + ech(unMontant(a.montant, a.devise))
+                   return '<tr><td>' + sentDonnee(a.cle) + '</td><td>' + ech(unMontant(a.montant, a.devise))
                      + '</td><td>' + ech(unMontant(a.plafond, a.devise)) + '</td><td>'
                      + (a.depasse ? '<b>' : '') + Math.round((a.part || 0) * 100) + ' %'
                      + (a.depasse ? ' — dépassé</b>' : '')
@@ -24707,10 +24762,10 @@ document.addEventListener('keydown', function(e){
       : 'Aucun système au registre : rien à peser tant que le parc n’est pas inscrit.';
     if(c.volume_manquant && c.volume_manquant.length)
       t += '<br><span style="color:var(--amber,#b45309)">Sans volume déclaré&nbsp;: </span>'
-         + c.volume_manquant.map(ech).join(', ')
+         + c.volume_manquant.map(sentDonnee).join(', ')
          + ' — <em>non instruit</em>, ce qui n’est pas la même chose que zéro.';
     if(c.ajustement_incomplet && c.ajustement_incomplet.length)
-      t += '<br>Ajustement fin incomplet&nbsp;: ' + c.ajustement_incomplet.map(ech).join(', ') + '.';
+      t += '<br>Ajustement fin incomplet&nbsp;: ' + c.ajustement_incomplet.map(sentDonnee).join(', ') + '.';
     document.getElementById('ei-couv-detail').innerHTML = t;
   }
 
@@ -24723,7 +24778,7 @@ document.addEventListener('keydown', function(e){
     z.innerHTML = '<div style="border:1px solid var(--rule2);border-left:3px solid var(--amber,#b45309);'
       + 'border-radius:10px;padding:12px 14px;background:var(--white);font-size:12px;line-height:1.6">'
       + '<strong>Périmètre incomplet sur ' + l.length + ' système' + (l.length > 1 ? 's' : '')
-      + '&nbsp;:</strong> ' + l.map(ech).join(', ')
+      + '&nbsp;:</strong> ' + l.map(sentDonnee).join(', ')
       + '.<br><span class="muted">Le terme d’hébergement vaut 0,15 Wh par REQUÊTE. '
       + 'Ces systèmes déclarent des jetons&nbsp;: le nombre d’appels est inconnu, et le déduire '
       + 'd’une longueur de réponse moyenne ferait entrer un chiffre que personne n’a déclaré. '
@@ -24780,7 +24835,7 @@ document.addEventListener('keydown', function(e){
       if(m.nature === 'declare' && m.profil_connu === false)
         etat.push('profil de modèle inconnu — classe moyenne retenue');
       h += '<tr style="border-bottom:1px solid var(--rule2)">'
-        + '<td style="padding:6px 8px"><strong>' + ech(l.nom) + '</strong></td>'
+        + '<td style="padding:6px 8px"><strong>' + sentDonnee(l.nom) + '</strong></td>'
         + '<td style="padding:6px 8px;font-variant-numeric:tabular-nums">'
         + kilo(m.wh, 1) + '</td>'
         + '<td style="padding:6px 8px;font-variant-numeric:tabular-nums">'
@@ -28092,7 +28147,7 @@ function qualifClasseOptions(retenue) {
 function qualifCarte(p) {
   var h = '<div class="tbl-wrap" style="margin:14px 0;padding:16px 18px">';
   h += '<div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline">'
-    + '<b style="font-size:13px">' + qualifEsc(p.systeme_nom || ('système #' + p.systeme_id)) + '</b>'
+    + '<b style="font-size:13px">' + (p.systeme_nom ? sentDonnee(p.systeme_nom) : qualifEsc('système #' + p.systeme_id)) + '</b>'
     + '<span style="font-family:var(--mono);font-size:10px;color:var(--muted2)">'
     + 'appui ' + qualifEsc(p.appui) + (p.fragile ? ' · <b>appui faible</b>' : '')
     + ' · ' + qualifEsc(p.moteur || '—') + ' · ' + qualifEsc(p.modele || '—')
@@ -28124,7 +28179,7 @@ function qualifCarte(p) {
     h += '<div style="margin-top:10px;font-size:11.5px;color:var(--muted2)">'
       + 'Retrouvés mot pour mot dans votre déclaration :</div>'
       + '<ul style="font-size:11.5px;margin:4px 0 0 18px">'
-      + p.indices.map(function (i) { return '<li>« ' + qualifEsc(i) + ' »</li>'; }).join('')
+      + p.indices.map(function (i) { return '<li>« ' + sentDonnee(i) + ' »</li>'; }).join('')
       + '</ul>';
   }
 
@@ -28137,10 +28192,10 @@ function qualifCarte(p) {
   if (p.statut !== 'en_attente') {
     h += '<div class="radar-registre-info radar-registre-ok" style="margin-top:12px">'
       + (p.statut === 'validee' ? 'Validée' : 'Écartée')
-      + ' par <b>' + qualifEsc(p.decide_par || '—') + '</b>'
+      + ' par <b>' + sentDonnee(p.decide_par || '—') + '</b>'
       + ' le ' + qualifEsc((p.decide_le || '').slice(0, 16).replace('T', ' à '))
       + (p.corrigee ? ' — <b>corrigée</b> en « ' + qualifEsc(p.classe_retenue) + ' »' : '')
-      + (p.motif_decision ? '<br>' + qualifEsc(p.motif_decision) : '')
+      + (p.motif_decision ? '<br>' + sentDonnee(p.motif_decision) : '')
       + '</div></div>';
     return h;
   }

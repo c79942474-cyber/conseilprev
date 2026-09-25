@@ -1,5 +1,28 @@
-# Part minimale (0 a 1) des MOTS du catalogue i18n/sentinel/CATALOGUE.json
-# couverts par les dictionnaires i18n/sentinel/*.json — lue par
-# tests/test_sentinel_langue_gardien.py. Valeur initiale 0 : le lot de
-# traduction la monte a mesure qu il traduit.
-0
+# Part maximale (0 a 1) de FRANCAIS ENCORE VISIBLE A L'ECRAN quand EN est
+# choisi — la promesse du depot, mesuree par recette_sentinel_langue.js et
+# ecrite dans i18n/sentinel/MESURE_APRES.json, relue sans navigateur par
+# tests/test_sentinel_donnees_saisies.py.
+#
+# CE QUI N'Y ENTRE PAS : les DONNEES SAISIES (noms de systemes, fournisseurs,
+# finalites, clients), declarees translate="no" et comptees a part — elles
+# sont ecrites dans la langue du client, personne ne les traduit.
+# CE QUI Y ENTRE : les cadres (iframes), qui se traduisent eux-memes.
+#
+# NE PAS CONFONDRE avec i18n/sentinel/SEUIL_COUVERTURE, qui est un PLANCHER.
+#
+# LA VALEUR EST CELLE QUI EST TENUE AUJOURD'HUI, PAS CELLE QU'ON VISE. Mesure
+# du 25 septembre 2026 : 9,8 % (21 536 mots francais / 198 282 anglais), contre
+# 23,5 % avant que les donnees saisies soient declarees, et 88,1 % avant la
+# traduction du corps. Un seuil plus bas que la mesure serait une promesse que
+# le depot ne tient pas : la regle tomberait a chaque passage et l'on
+# apprendrait a ne plus la lire.
+#
+# CE QUI RESTE, ET QUI FERA BAISSER CE CHIFFRE (mesure, page par page) :
+#   - matrice 99,7 % : les cellules concatenent un libelle d'interface et une
+#     donnee (« Haut risque - A evaluer - <secteur> ») ; ni traduites ni
+#     declarees donnees.
+#   - enveloppe 44 %, empreinte-parc 31 %, pan-sia 26 % : le texte PROPRE de
+#     ces documents embarques, qui n'etait pas dans l'inventaire.
+#   - registre 27 %, finops et empreinte-ia : les listes deroulantes et les
+#     etiquettes qui reprennent un nom de systeme sans le declarer.
+0.10

@@ -1,21 +1,21 @@
 {
- "_quoi": "Ce qui reste en français, à l'écran, quand EN est choisi — mesuré par recette_sentinel_langue.js. part_fr = mots français / (mots français + mots anglais) ; les mots neutres (sans lettre, nom propre, indécis) sont comptés à part.",
- "date": "2026-09-25T08:37:48.449Z",
+ "_quoi": "Ce qui reste en français, à l'écran, quand EN est choisi — mesuré par recette_sentinel_langue.js. part_fr = mots français / (mots français + mots anglais) ; les mots neutres (sans lettre, nom propre, indécis) sont comptés à part. Les DONNÉES SAISIES (éléments translate=\"no\" : noms de systèmes, fournisseurs, finalités, clients) sont relevées à part, dans « donnees », et n'entrent PAS dans le verdict : elles sont écrites dans la langue du client et personne ne les traduit. Les cadres (iframes) sont comptés à part ET compris dans le verdict, depuis qu'ils se traduisent eux-mêmes.",
+ "date": "2026-09-25T17:02:45.086Z",
  "base": "http://127.0.0.1:9931",
  "seuil": 0.05,
  "dictionnaire": {
   "charge": true,
-  "texte": 10897,
-  "bloc": 670,
-  "motif": 40
+  "texte": 10906,
+  "bloc": 671,
+  "motif": 41
  },
  "global": {
-  "mots_fr": 61275,
-  "mots_en": 199943,
-  "mots_neutres": 41630,
-  "textes": 55485,
+  "mots_fr": 21536,
+  "mots_en": 198282,
+  "mots_neutres": 40325,
+  "textes": 42570,
   "pages": 118,
-  "part_fr": 0.2346
+  "part_fr": 0.098
  },
  "coquille": {
   "mots_fr": 11,
@@ -48,18 +48,94 @@
  },
  "pages": {
   "pan-sia": {
-   "mots_fr": 0,
-   "mots_en": 70,
-   "mots_neutres": 3,
-   "textes": 9,
-   "part_fr": 0,
-   "restes": [],
+   "mots_fr": 1954,
+   "mots_en": 5688,
+   "mots_neutres": 1758,
+   "textes": 1580,
+   "part_fr": 0.2557,
+   "restes": [
+    {
+     "texte": "eau (publiée il y a 51 mois ; l'éditeur publie tous les 12 mois — 39 mois de retard sur le cycle) · prix (publiée il y a 21 mois ; l'éditeur publie tous les 6 mois — 15 mois de retard sur le cycle) · mix (publiée il y a 21 mois ; l'éditeur publie tous les 12 mois — 9 mois de retard sur le cycle) · feux (publiée il y a 13 mois ; l'éditeur publie tous les 12 mois — 1 mois de retard sur le cycle) · inondations (publiée il y a 12 mois ; l'éditeur publie tous les 12 mois — 0 mois de retard sur le cycle) Une tâche hebdomadaire rafraîchit les familles VIVANTES — celles qui viennent d'une source interrogée. Les autres reposent sur des rapports : un rapport ne se met pas à jour, il est remplacé par son édition suivante, à une date que son éditeur choisit. Pour celles-là, la tâche ne rafraîchit rien : elle dit ce qui aurait dû l'être.",
+     "mots": 141,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "« Feu de forêt — horizon retenu » recouvre « Risque de feu de forêt à l'horizon 2050 (XDI) » · « Étiage et régime des cours d'eau — horizon retenu » recouvre « Disponibilité en eau (WEI+, compétition d'usages) » · « Précipitations extrêmes et ruissellement — horizon retenu » recouvre « Risque d'inondation à l'horizon 2050 (XDI) » · « Précipitations extrêmes et ruissellement — horizon retenu » recouvre « Risque climatique physique du bâti (XDI) » · « Sécheresse — horizon retenu » recouvre « Disponibilité en eau (WEI+, compétition d'usages) » · « Submersion côtière — horizon retenu » recouvre « Risque climatique physique du bâti (XDI) ». Ce n’est pas une erreur, c’est un arbitrage : les critères",
+     "mots": 85,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "Un pays est signalé quand il réunit les DEUX conditions : (1) son climat a conçu le refroidissement pour un été doux — classe nordique ou tempérée ; (2) l’eau s’y tend, soit par l’aléa sécheresse à l’horizon retenu (niveau élevé ou très élevé), soit par le stress hydrique national déjà classé élevé. Un pays méridional n’est jamais signalé : non parce qu’il est épargné, mais parce que son point de conception a été posé pour la chaleur. À l’horizon affiché,",
+     "mots": 75,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "sont les seules qui ne renvoient à aucune publication : les gabarits de capacité et les consommations typiques de systèmes d’IA n’existent nulle part sous cette forme. Elles sont construites depuis des capacités publiées par tranche et des dossiers de raccordement publics, et c’est précisément pour cela que toute valeur qui en dérive porte l’étiquette « classe ».",
+     "mots": 55,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "Un chiffre de cette page peut entrer dans une note d’investissement, un dossier de crédit, un questionnaire de souscription ou un inventaire d’émissions. Aucun de ces usages ne se satisfait d’un résultat : il faut la source, le millésime et le moyen de refaire le chemin. Tout est donc listé ici —",
+     "mots": 50,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": ": un registre qui n’afficherait que ses succès ne serait pas vérifiable, il serait promotionnel. Quand un contrôle a conduit à corriger une valeur, la valeur d’origine reste écrite — sans elle, un lecteur qui aurait cité l’ancienne ne saurait pas qu’il doit se corriger.",
+     "mots": 43,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "porte, sur sa fiche, la source qui l’atteste, le type de cette source (communiqué d’exploitant, presse, décision d’autorité, registre public), un niveau de confiance et une note de vérification qui dit ce qui a été retenu et ce qui a été écarté.",
+     "mots": 42,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "Un podium Suède / Finlande / Norvège et un podium Espagne / Italie / Grèce ont les mêmes rangs et ne disent pas la même chose : l’un envoie au nord, l’autre au sud. La carte le montre d’un coup d’œil.",
+     "mots": 36,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "dans le texte qui suit : les trois premiers sont cerclés de bleu et clignotent brièvement pour vous les désigner, et le survol de n’importe quel pays en donne le détail chiffré avant même de cliquer.",
+     "mots": 35,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "— pays et puissance — pour ne pas le ressaisir. Il vous montre ce qu’il contient avant que vous n’en fassiez quoi que ce soit : rien n’est envoyé tant que vous ne suivez pas le lien.",
+     "mots": 34,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "engagent leur auteur, pas la réalité. Et lorsqu’un fait postérieur rend optimiste une valeur affichée ailleurs sur cette page — la classe de prix finlandaise en est l’exemple —, il est inscrit en",
+     "mots": 31,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "Le risque n’est donc PAS maximal là où il fait le plus chaud. Il est maximal là où l’on ne s’y attendait pas — Rennes, Pantin, Londres, et non Séville.",
+     "mots": 29,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "documentés (POC, pilotes, production, abandons) mi-2023 → mi-2026, classés selon le Règlement (UE) 2024/1689, avec profil de vulnérabilités cyber, couche réglementaire des 27 États membres et score d'exposition calculé. Et le",
+     "mots": 28,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "couvrent vingt-neuf pays et deux horizons, avec une résolution moindre. Gardez les deux si vous voulez les croiser ; mettez l’un à 0 si vous voulez un poids net.",
+     "mots": 28,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": ": +0,116 m · valeur CALCULÉE par interpolation — le GIEC ne publie pas cet horizon · À cet horizon, la trajectoire d'émissions ne change que 4 cm : l'élévation est déjà engagée.",
+     "mots": 26,
+     "ou": "cadre:texte"
+    }
+   ],
    "cadres": {
-    "mots_fr": 1989,
-    "mots_en": 5546,
+    "mots_fr": 1954,
+    "mots_en": 5618,
     "mots_neutres": 1755,
     "textes": 1571,
-    "part_fr": 0.264,
+    "part_fr": 0.2581,
     "restes": [
      {
       "texte": "eau (publiée il y a 51 mois ; l'éditeur publie tous les 12 mois — 39 mois de retard sur le cycle) · prix (publiée il y a 21 mois ; l'éditeur publie tous les 6 mois — 15 mois de retard sur le cycle) · mix (publiée il y a 21 mois ; l'éditeur publie tous les 12 mois — 9 mois de retard sur le cycle) · feux (publiée il y a 13 mois ; l'éditeur publie tous les 12 mois — 1 mois de retard sur le cycle) · inondations (publiée il y a 12 mois ; l'éditeur publie tous les 12 mois — 0 mois de retard sur le cycle) Une tâche hebdomadaire rafraîchit les familles VIVANTES — celles qui viennent d'une source interrogée. Les autres reposent sur des rapports : un rapport ne se met pas à jour, il est remplacé par son édition suivante, à une date que son éditeur choisit. Pour celles-là, la tâche ne rafraîchit rien : elle dit ce qui aurait dû l'être.",
@@ -140,12 +216,88 @@
    }
   },
   "enveloppe": {
-   "mots_fr": 0,
-   "mots_en": 96,
-   "mots_neutres": 3,
-   "textes": 10,
-   "part_fr": 0,
-   "restes": [],
+   "mots_fr": 1996,
+   "mots_en": 2537,
+   "mots_neutres": 288,
+   "textes": 535,
+   "part_fr": 0.4403,
+   "restes": [
+    {
+     "texte": "C'est ce que ce moteur tient et qu'un tableur ne tient pas : il connaît l'incertitude de ses grandeurs. Une enveloppe à ±30 % qui dépasse sa cible de 12 % n'a rien franchi — l'écart est dans le bruit. Le rouge exige un dépassement supérieur à la fois à la tolérance et à l'incertitude ; entre les deux, l'état affiché est « écart non démontré ». Sans cette règle, le troisième faux positif éteint la vigilance sur tous les autres.",
+     "mots": 72,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "La demande existe-t-elle, le calendrier tient-il face à l’accès à l’électricité, à partir de quel remplissage le site couvre-t-il ses coûts. Huit tests qui entrent dans le MÊME verdict que le chiffrage. Les huit constats s’affichent dans le dossier du pays que vous ouvrez sur la carte, sous l’enveloppe.",
+     "mots": 54,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "la colocation ni le site régional, dont la nature reste marquée en conséquence. Et elle reste un ordre de grandeur de marché : ce module ne fabrique pas VOTRE prix — aucun des 97 centres du référentiel ne publiant sa capacité, rien ici ne remplace vos devis. Ce que le module apporte est ailleurs : la",
+     "mots": 52,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "elle en est une, « le modèle l'a détectée » n'étant pas une raison qu'on oppose à un exploitant ; et un commentaire annexé à un dossier ne doit rien pouvoir inventer. Composé depuis les grandeurs déjà calculées, celui-ci n'affirme que ce qui a été mesuré et pose les causes en question.",
+     "mots": 50,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "Recalibrer une ambition en ouverture coûte une réunion ; expliquer six mois plus tard pourquoi le tableau de bord n'est pas utilisé coûte le projet — et la confiance qui allait avec. La note de restitution ci-dessous porte le verdict en tête, jamais en annexe.",
+     "mots": 44,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "Le bilan énergie-eau-carbone, ou la séquence des pièces — et, sur le site d’ingénierie, la suite de la chaîne d’argent : le coût des travaux poste par poste, puis les honoraires qu’ils portent, avec une part technique CALCULÉE au lieu d’être supposée.",
+     "mots": 42,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": ": Revenu annuel attendu et Coût moyen pondéré du capital et Taux d'impôt sur les sociétés. Ce module refuse de les proposer — ce sont des décisions, pas des résultats, et le coût du capital est précisément le taux qui juge ce projet.",
+     "mots": 41,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": ", et quand le même maître d'ouvrage porte les deux, elles pèsent le tiers de l'investissement total. Raisonner sur la seule enveloppe travaux fait arbitrer des économies de génie civil pendant que le poste le plus lourd passe sans discussion.",
+     "mots": 39,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": ", sans que le lecteur ait à comparer mentalement chaque valeur à sa cible. Trois mécanismes s'en chargent ici — la forme choisie pour la donnée, le seuil coloré, et la tendance mesurée. S'y ajoutent les trois apports de l'analyse augmentée :",
+     "mots": 39,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "— Puissance, gabarit, scénario, calendrier — les critères d’ingénierie sous « Aller plus loin », et le BUSINESS CASE sous son propre dépliant : prix d’hébergement, puissance contractée, année de puissance ferme. Sans eux, le verdict ne parlera que de construction.",
+     "mots": 36,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "Puissance, gabarit, scénario, calendrier — les critères d’ingénierie sous « Aller plus loin », et le BUSINESS CASE sous son propre dépliant : prix d’hébergement, puissance contractée, année de puissance ferme. Sans eux, le verdict ne parlera que de construction.",
+     "mots": 36,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "qui les qualifient. Aucun modèle de langage n’intervient dans leur rédaction : ils sont composés par calcul déterministe, et le disent en toutes lettres. Ils ne portent donc pas le marquage de l’article 50, qui ne s’appliquerait pas.",
+     "mots": 36,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "— et ils ne peuvent pas se calculer sans vous : revenu attendu, coût du capital et taux d’impôt sont des décisions d’investisseur, pas des données de référentiel. Tant qu’elles ne sont pas saisies, les trois sont",
+     "mots": 35,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "— pays et puissance — pour ne pas le ressaisir. Il vous montre ce qu’il contient avant que vous n’en fassiez quoi que ce soit : rien n’est envoyé tant que vous ne suivez pas le lien.",
+     "mots": 34,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "Un comité qui reçoit une enveloppe à ±30 % sans série datée ni grille de lecture ne décide pas mieux avec un graphique de plus — il décide à l'intuition, avec un chiffre pour se rassurer.",
+     "mots": 33,
+     "ou": "cadre:texte"
+    }
+   ],
    "cadres": {
     "mots_fr": 1996,
     "mots_en": 2441,
@@ -232,12 +384,88 @@
    }
   },
   "empreinte-parc": {
-   "mots_fr": 0,
-   "mots_en": 67,
-   "mots_neutres": 8,
-   "textes": 12,
-   "part_fr": 0,
-   "restes": [],
+   "mots_fr": 656,
+   "mots_en": 1473,
+   "mots_neutres": 398,
+   "textes": 398,
+   "part_fr": 0.3081,
+   "restes": [
+    {
+     "texte": "Aucune de ces valeurs n’est mesurée. Elles sont calculées à partir d’ordres de grandeur de catégorie, avec la formule affichée, et servent à situer un parc — jamais à comparer deux sites nommément, ni à établir un bilan réglementaire. Le bilan réglementaire viendra de la base européenne créée par la directive (UE) 2023/1791, qui recueillera des valeurs DÉCLARÉES.",
+     "mots": 56,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "Consommation annuelle estimée × intensité carbone du pays pour l’usage ; énergie informatique × 22 kgCO₂e/MWh pour la fabrication amortie. Moyennes annuelles 2024, approche cycle de vie, d’après les séries Ember (facteurs GIEC AR5), recoupées avec l’Agence européenne pour l’environnement. Approche production : pour un pays fortement importateur, l’intensité vue au point de raccordement est plus élevée.",
+     "mots": 53,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "Les deux fourchettes SE RECOUVRENT : au bas des hypothèses de WUE, l’eau amont domine largement ; au haut, c’est l’eau de site. Le total du parc ne tranche donc pas l’arbitrage — c’est le rapport EWIF × PUE ÷ WUE, mode de refroidissement par mode, qui le tranche.",
+     "mots": 44,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "Sur un site alimenté en électricité peu carbonée — Suède à 45 g, France à 60 g — la fabrication des serveurs pèse plus lourd que leur usage. Une carte qui n’afficherait que l’usage classerait ces pays quasiment à zéro, ce qui serait faux.",
+     "mots": 40,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": ", et quand le même maître d'ouvrage porte les deux, elles pèsent le tiers de l'investissement total. Raisonner sur la seule enveloppe travaux fait arbitrer des économies de génie civil pendant que le poste le plus lourd passe sans discussion.",
+     "mots": 39,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "documentés (POC, pilotes, production, abandons) mi-2023 → mi-2026, classés selon le Règlement (UE) 2024/1689, avec profil de vulnérabilités cyber, couche réglementaire des 27 États membres et score d'exposition calculé. Et le",
+     "mots": 28,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "couvre les planchers techniques, les chemins de câbles et la distribution en salle — il porte lui-même la mention « hors serveurs ». Les machines sont un investissement",
+     "mots": 26,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "qui les fait tourner : électricité, CO₂e sur cycle de vie, eau de refroidissement et critères d’implantation, pays par pays. Base de travail pour décideurs.",
+     "mots": 25,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "Côté investissement : combien d'équipements la puissance informatique impose, à quel prix indicatif, et quelle part du total. Côté empreinte : leur carbone de fabrication au",
+     "mots": 24,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": ": statut, mise en service, capacité et investissement annoncés, électricité, eau, refroidissement, CO₂e — et, pour chaque valeur, si elle est",
+     "mots": 20,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "Ce bloc en déduit les quantités, le prix indicatif et le carbone de fabrication — puis il rend le montant qui",
+     "mots": 20,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": ", catégories 1 et 2 — la troisième composante, sans laquelle les scopes 1 et 2 ne font pas un bilan. Le module est partagé",
+     "mots": 19,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "de la création de valeur, deux blocs plus bas. Le lire après l’EVA donnerait un ROCE surestimé d’un tiers.",
+     "mots": 19,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "avec la page d'ingénierie de conseilprevcyber : les quantités y sont les mêmes, à la ligne près.",
+     "mots": 16,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "Le même calcul répond à deux questions, c'est pourquoi ce bloc figure dans les deux vues.",
+     "mots": 16,
+     "ou": "cadre:texte"
+    }
+   ],
    "cadres": {
     "mots_fr": 656,
     "mots_en": 1406,
@@ -324,12 +552,88 @@
    }
   },
   "obs-rd": {
-   "mots_fr": 0,
-   "mots_en": 52,
-   "mots_neutres": 6,
-   "textes": 11,
-   "part_fr": 0,
-   "restes": [],
+   "mots_fr": 250,
+   "mots_en": 930,
+   "mots_neutres": 171,
+   "textes": 185,
+   "part_fr": 0.2119,
+   "restes": [
+    {
+     "texte": "à NeurIPS (~top 2 % des publications). * Royaume-Uni, Allemagne, France et Canada : entre 2 et 4 % chacun des lieux de travail selon la carte source (lecture graphique — valeur précise non publiée). Inde : lieu de travail non disponible.",
+     "mots": 34,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "y sont joints en image, dans la vue que vous avez choisie. Chaque chapitre porte sa source, sa licence, son millésime et sa précision — et le dossier rappelle les crédits à reproduire, dont la",
+     "mots": 34,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": ". Survoler une ligne pour le détail. « Autres » — le reste du monde — y figure aussi : sur une carte il n’avait pas de territoire, dans une figure de flux il a sa ligne comme les autres.",
+     "mots": 34,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": ": modèles remarquables par pays, brevets accordés (parts, volumes et facteurs de croissance), chercheurs d’élite et soldes nets, adoption par les entreprises de l’Union, cadre et gouvernance. Les",
+     "mots": 27,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "; la flèche donne le sens du mouvement et la colonne de droite le solde en points. Les États-Unis forment 28 % des chercheurs d’élite et en emploient 57 % —",
+     "mots": 26,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "Carto No 89, 2025 © Areion/Capri — “Recherche et développement dans le domaine de l’IA” [Research and development in the field of AI]",
+     "mots": 19,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": ", la plus forte attraction nette ; la Chine en forme 26 % et n’en emploie que 12 % —",
+     "mots": 13,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "Définition (N.B. de la carte source) : auteurs d’articles retenus pour",
+     "mots": 11,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "le classement des écarts d’un coup d’œil — la vue",
+     "mots": 9,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "cartes et graphiques affichés à l’écran",
+     "mots": 6,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "tout ce que cette page calcule",
+     "mots": 6,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "le range sur un seul axe.",
+     "mots": 6,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "Ce qu’elle ne montre pas :",
+     "mots": 5,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "chaque ligne va du point",
+     "mots": 5,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "des données de brevets.",
+     "mots": 4,
+     "ou": "cadre:texte"
+    }
+   ],
    "cadres": {
     "mots_fr": 250,
     "mots_en": 878,
@@ -443,11 +747,11 @@
    ]
   },
   "finops": {
-   "mots_fr": 20198,
-   "mots_en": 96541,
-   "mots_neutres": 2075,
-   "textes": 17763,
-   "part_fr": 0.173,
+   "mots_fr": 259,
+   "mots_en": 96799,
+   "mots_neutres": 2051,
+   "textes": 11922,
+   "part_fr": 0.0027,
    "restes": [
     {
      "texte": "— Les tarifs d'OpenAI, Google, Mistral, Meta et des hébergeurs de modèles ouverts ne figurent pas dans la table : ils ne sont pas relevés ici. Les ajouter demande de reporter le prix publié, sa devise, sa date de relevé et son adresse — pas de l'estimer.",
@@ -475,18 +779,13 @@
      "ou": "texte"
     },
     {
-     "texte": "du parc déclaré est chiffrable. Les 1954 autres ligne(s) ne coûtent pas zéro : personne n’a encore dit ce qu’elles consomment.",
+     "texte": "du parc déclaré est chiffrable. Les 1959 autres ligne(s) ne coûtent pas zéro : personne n’a encore dit ce qu’elles consomment.",
      "mots": 20,
      "ou": "texte"
     },
     {
      "texte": "Aucun plafond n’est posé. Les plafonds se passent à /api/finops par le paramètre",
      "mots": 14,
-     "ou": "texte"
-    },
-    {
-     "texte": "— ce système est ④ Production : il consomme, et personne n'a encore dit combien",
-     "mots": 12,
      "ou": "texte"
     },
     {
@@ -520,24 +819,68 @@
      "ou": "texte"
     },
     {
-     "texte": "Detection de fraude transactionnelle",
+     "texte": "— Rédaction ou reformulation guidée",
+     "mots": 4,
+     "ou": "texte"
+    },
+    {
+     "texte": "— Raisonnement long ou agentique",
      "mots": 4,
      "ou": "texte"
     }
-   ]
+   ],
+   "donnees": {
+    "mots_fr": 19967,
+    "mots_en": 15,
+    "mots_neutres": 29,
+    "textes": 5890,
+    "part_fr": 0.9992,
+    "restes": [
+     {
+      "texte": "Detection de fraude transactionnelle",
+      "mots": 4,
+      "ou": "donnee:texte"
+     },
+     {
+      "texte": "Recette — proposition sans écriture",
+      "mots": 4,
+      "ou": "donnee:texte"
+     },
+     {
+      "texte": "Recette — la décision écrit",
+      "mots": 4,
+      "ou": "donnee:texte"
+     },
+     {
+      "texte": "Recette — sans nom saisi",
+      "mots": 4,
+      "ou": "donnee:texte"
+     },
+     {
+      "texte": "Recette — deux fois",
+      "mots": 3,
+      "ou": "donnee:texte"
+     },
+     {
+      "texte": "Recette — écartée",
+      "mots": 2,
+      "ou": "donnee:texte"
+     },
+     {
+      "texte": "— non renseigné —",
+      "mots": 2,
+      "ou": "donnee:texte"
+     }
+    ]
+   }
   },
   "empreinte-ia": {
-   "mots_fr": 13518,
-   "mots_en": 33815,
-   "mots_neutres": 132,
-   "textes": 4028,
-   "part_fr": 0.2856,
+   "mots_fr": 190,
+   "mots_en": 33956,
+   "mots_neutres": 126,
+   "textes": 2078,
+   "part_fr": 0.0056,
    "restes": [
-    {
-     "texte": "Chatbot service client, Detection de fraude transactionnelle, Maintenance predictive reseau, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — deux fois, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — la décision écrit, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — proposition sans écriture, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — sans nom saisi, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Recette — écartée, Scoring credit automatise —",
-     "mots": 6643,
-     "ou": "texte"
-    },
     {
      "texte": "HYPOTHÈSE DU CABINET, PAS UNE MESURE. Ordre de grandeur calé sur l'approche Boavizta, simplifié en pourcentage ajouté à l'usage. À REMPLACER par une analyse de cycle de vie du matériel réel — `equipements_it` porte déjà les empreintes produit par poste. ·",
      "mots": 40,
@@ -551,11 +894,6 @@
     {
      "texte": "Rien n’est mesuré : Sentinel ne tourne pas dans vos applications. Les volumes viennent de votre registre, et un système que personne n’y a inscrit ne pèse rien ici — ce qui ne veut pas dire qu’il ne consomme pas.",
      "mots": 37,
-     "ou": "texte"
-    },
-    {
-     "texte": "Aucun facteur d'épuisement abiotique sourçable n'a été retenu. Le calculer demande soit une base ACV donnant l'ADP par équipement, soit la fiche d'empreinte produit du constructeur. Sans elle, l'indicateur serait un nombre sans auteur.",
-     "mots": 34,
      "ou": "texte"
     },
     {
@@ -574,41 +912,60 @@
      "ou": "texte"
     },
     {
-     "texte": "Agit sur le petit facteur : un PUE de 1,6 ramené à 1,2 retire 25 % de l'énergie d'infrastructure, pas 25 % du total.",
-     "mots": 17,
-     "ou": "texte"
-    },
-    {
-     "texte": "Detection de fraude transactionnelle",
-     "mots": 4,
-     "ou": "texte"
-    },
-    {
-     "texte": "Recette — proposition sans écriture",
-     "mots": 4,
-     "ou": "texte"
-    },
-    {
-     "texte": "Recette — la décision écrit",
-     "mots": 4,
-     "ou": "texte"
-    },
-    {
-     "texte": "Recette — sans nom saisi",
-     "mots": 4,
-     "ou": "texte"
-    },
-    {
-     "texte": "Recette — deux fois",
-     "mots": 3,
-     "ou": "texte"
-    },
-    {
      "texte": "nombre_accelerateurs",
      "mots": 2,
      "ou": "texte"
+    },
+    {
+     "texte": "heures_accelerateur",
+     "mots": 2,
+     "ou": "texte"
+    },
+    {
+     "texte": "texte_reglementaire",
+     "mots": 2,
+     "ou": "texte"
     }
-   ]
+   ],
+   "donnees": {
+    "mots_fr": 13302,
+    "mots_en": 6,
+    "mots_neutres": 12,
+    "textes": 3918,
+    "part_fr": 0.9995,
+    "restes": [
+     {
+      "texte": "Detection de fraude transactionnelle",
+      "mots": 4,
+      "ou": "donnee:texte"
+     },
+     {
+      "texte": "Recette — proposition sans écriture",
+      "mots": 4,
+      "ou": "donnee:texte"
+     },
+     {
+      "texte": "Recette — la décision écrit",
+      "mots": 4,
+      "ou": "donnee:texte"
+     },
+     {
+      "texte": "Recette — sans nom saisi",
+      "mots": 4,
+      "ou": "donnee:texte"
+     },
+     {
+      "texte": "Recette — deux fois",
+      "mots": 3,
+      "ou": "donnee:texte"
+     },
+     {
+      "texte": "Recette — écartée",
+      "mots": 2,
+      "ou": "donnee:texte"
+     }
+    ]
+   }
   },
   "ia50": {
    "mots_fr": 294,
@@ -618,7 +975,7 @@
    "part_fr": 0.2025,
    "restes": [
     {
-     "texte": "a arbitrer (qualification ou reference, pas les deux) — « Assistants conversationnels du site publ » declare « deployeur » mais invoque l'art. 50.1, qui oblige le fournisseur ; « Copilote Sentinel (assistant de la plate » declare « deployeur » mais invoque l'art. 50.1, qui oblige le fournisseur",
+     "texte": "to be arbitrated (qualification or reference, not both) — « Assistants conversationnels du site publ » declare « deployeur » mais invoque l'art. 50.1, qui oblige le fournisseur ; « Copilote Sentinel (assistant de la plate » declare « deployeur » mais invoque l'art. 50.1, qui oblige le fournisseur",
      "mots": 36,
      "ou": "texte"
     },
@@ -697,7 +1054,7 @@
   "rgpd-site": {
    "mots_fr": 5,
    "mots_en": 1397,
-   "mots_neutres": 4000,
+   "mots_neutres": 3995,
    "textes": 1522,
    "part_fr": 0.0036,
    "restes": [
@@ -1764,10 +2121,10 @@
   },
   "carto": {
    "mots_fr": 5,
-   "mots_en": 590,
-   "mots_neutres": 498,
-   "textes": 255,
-   "part_fr": 0.0084,
+   "mots_en": 665,
+   "mots_neutres": 505,
+   "textes": 266,
+   "part_fr": 0.0075,
    "restes": [
     {
      "texte": "Kuwait",
@@ -1887,22 +2244,12 @@
    ]
   },
   "veille": {
-   "mots_fr": 10,
-   "mots_en": 120,
-   "mots_neutres": 36,
-   "textes": 38,
-   "part_fr": 0.0769,
+   "mots_fr": 1,
+   "mots_en": 129,
+   "mots_neutres": 34,
+   "textes": 36,
+   "part_fr": 0.0077,
    "restes": [
-    {
-     "texte": "de votre Registre IA. Moteur : IA.",
-     "mots": 6,
-     "ou": "texte"
-    },
-    {
-     "texte": "🎯 Analyse personnalisee sur",
-     "mots": 3,
-     "ou": "texte"
-    },
     {
      "texte": "🇬🇧 EN",
      "mots": 1,
@@ -2070,11 +2417,11 @@
    ]
   },
   "registre": {
-   "mots_fr": 18728,
-   "mots_en": 16513,
-   "mots_neutres": 27755,
-   "textes": 19559,
-   "part_fr": 0.5314,
+   "mots_fr": 6256,
+   "mots_en": 16549,
+   "mots_neutres": 23899,
+   "textes": 13732,
+   "part_fr": 0.2743,
    "restes": [
     {
      "texte": "Delete Recette — la décision écrit from the register",
@@ -2085,60 +2432,69 @@
      "texte": "Delete Recette — la décision écrit from the register",
      "mots": 8,
      "ou": "aria-label"
-    },
-    {
-     "texte": "Modele de regression / ML supervise ·",
-     "mots": 5,
-     "ou": "texte"
-    },
-    {
-     "texte": "Recette — proposition sans écriture",
-     "mots": 4,
-     "ou": "texte"
-    },
-    {
-     "texte": "Recette — la décision écrit",
-     "mots": 4,
-     "ou": "texte"
-    },
-    {
-     "texte": "Recette — sans nom saisi",
-     "mots": 4,
-     "ou": "texte"
-    },
-    {
-     "texte": "Regression logistique / XGBoost ·",
-     "mots": 3,
-     "ou": "texte"
-    },
-    {
-     "texte": "Recette — deux fois",
-     "mots": 3,
-     "ou": "texte"
-    },
-    {
-     "texte": "Recette — écartée",
-     "mots": 2,
-     "ou": "texte"
     }
-   ]
+   ],
+   "donnees": {
+    "mots_fr": 12524,
+    "mots_en": 6,
+    "mots_neutres": 1967,
+    "textes": 5877,
+    "part_fr": 0.9995,
+    "restes": [
+     {
+      "texte": "Modele de regression / ML supervise",
+      "mots": 5,
+      "ou": "donnee:texte"
+     },
+     {
+      "texte": "Detection de fraude transactionnelle",
+      "mots": 4,
+      "ou": "donnee:texte"
+     },
+     {
+      "texte": "Recette — proposition sans écriture",
+      "mots": 4,
+      "ou": "donnee:texte"
+     },
+     {
+      "texte": "Recette — la décision écrit",
+      "mots": 4,
+      "ou": "donnee:texte"
+     },
+     {
+      "texte": "Recette — sans nom saisi",
+      "mots": 4,
+      "ou": "donnee:texte"
+     },
+     {
+      "texte": "Regression logistique / XGBoost",
+      "mots": 3,
+      "ou": "donnee:texte"
+     },
+     {
+      "texte": "Recette — deux fois",
+      "mots": 3,
+      "ou": "donnee:texte"
+     },
+     {
+      "texte": "Recette — écartée",
+      "mots": 2,
+      "ou": "donnee:texte"
+     }
+    ]
+   }
   },
   "qualif-assistee": {
-   "mots_fr": 7,
-   "mots_en": 101,
+   "mots_fr": 4,
+   "mots_en": 104,
    "mots_neutres": 8,
    "textes": 17,
-   "part_fr": 0.0648,
+   "part_fr": 0.037,
    "restes": [
     {
      "texte": "En attente de décision",
      "mots": 4,
      "ou": "option"
-    },
-    {
-     "texte": "Chargement du moteur…",
-     "mots": 3,
-     "ou": "texte"
     }
    ]
   },
@@ -2201,68 +2557,102 @@
    ]
   },
   "matrice": {
-   "mots_fr": 6672,
-   "mots_en": 12549,
-   "mots_neutres": 37,
-   "textes": 3938,
-   "part_fr": 0.3471,
+   "mots_fr": 7828,
+   "mots_en": 23,
+   "mots_neutres": 26,
+   "textes": 1978,
+   "part_fr": 0.9971,
    "restes": [
     {
-     "texte": "Detection de fraude transactionnelle — Finance",
-     "mots": 5,
-     "ou": "title"
-    },
-    {
-     "texte": "Recette — proposition sans écriture — Finance",
-     "mots": 5,
-     "ou": "title"
-    },
-    {
-     "texte": "Recette — la décision écrit — Finance",
-     "mots": 5,
-     "ou": "title"
-    },
-    {
-     "texte": "Recette — sans nom saisi — Finance",
-     "mots": 5,
-     "ou": "title"
-    },
-    {
-     "texte": "Recette — proposition sans écriture",
+     "texte": "Risque minimal · À évaluer ·",
      "mots": 4,
      "ou": "texte"
     },
     {
-     "texte": "Recette — deux fois — Finance",
-     "mots": 4,
-     "ou": "title"
-    },
-    {
-     "texte": "Recette — la décision écrit",
+     "texte": "Haut risque · À évaluer ·",
      "mots": 4,
      "ou": "texte"
     },
     {
-     "texte": "Recette — sans nom saisi",
+     "texte": "Haut risque · En cours ·",
      "mots": 4,
      "ou": "texte"
     },
     {
-     "texte": "Recette — écartée — Finance",
-     "mots": 3,
-     "ou": "title"
-    },
-    {
-     "texte": "Recette — deux fois",
-     "mots": 3,
-     "ou": "texte"
-    },
-    {
-     "texte": "Recette — écartée",
-     "mots": 2,
+     "texte": "À évaluer · À évaluer ·",
+     "mots": 4,
      "ou": "texte"
     }
-   ]
+   ],
+   "donnees": {
+    "mots_fr": 6693,
+    "mots_en": 7,
+    "mots_neutres": 1965,
+    "textes": 3927,
+    "part_fr": 0.999,
+    "restes": [
+     {
+      "texte": "Detection de fraude transactionnelle — Finance",
+      "mots": 5,
+      "ou": "donnee:title"
+     },
+     {
+      "texte": "Recette — proposition sans écriture — Finance",
+      "mots": 5,
+      "ou": "donnee:title"
+     },
+     {
+      "texte": "Recette — la décision écrit — Finance",
+      "mots": 5,
+      "ou": "donnee:title"
+     },
+     {
+      "texte": "Recette — sans nom saisi — Finance",
+      "mots": 5,
+      "ou": "donnee:title"
+     },
+     {
+      "texte": "Detection de fraude transactionnelle",
+      "mots": 4,
+      "ou": "donnee:texte"
+     },
+     {
+      "texte": "Recette — proposition sans écriture",
+      "mots": 4,
+      "ou": "donnee:texte"
+     },
+     {
+      "texte": "Recette — deux fois — Finance",
+      "mots": 4,
+      "ou": "donnee:title"
+     },
+     {
+      "texte": "Recette — la décision écrit",
+      "mots": 4,
+      "ou": "donnee:texte"
+     },
+     {
+      "texte": "Recette — sans nom saisi",
+      "mots": 4,
+      "ou": "donnee:texte"
+     },
+     {
+      "texte": "Recette — écartée — Finance",
+      "mots": 3,
+      "ou": "donnee:title"
+     },
+     {
+      "texte": "Recette — deux fois",
+      "mots": 3,
+      "ou": "donnee:texte"
+     },
+     {
+      "texte": "Recette — écartée",
+      "mots": 2,
+      "ou": "donnee:texte"
+     }
+    ]
+   }
   },
   "radar": {
    "mots_fr": 1,
@@ -2368,7 +2758,7 @@
      "ou": "option"
     },
     {
-     "texte": "1954 système(s)",
+     "texte": "1959 système(s)",
      "mots": 2,
      "ou": "texte"
     },
@@ -2425,8 +2815,8 @@
   "clients": {
    "mots_fr": 65,
    "mots_en": 254,
-   "mots_neutres": 105,
-   "textes": 75,
+   "mots_neutres": 102,
+   "textes": 73,
    "part_fr": 0.2038,
    "restes": [
     {
@@ -2464,7 +2854,15 @@
      "mots": 3,
      "ou": "texte"
     }
-   ]
+   ],
+   "donnees": {
+    "mots_fr": 0,
+    "mots_en": 0,
+    "mots_neutres": 3,
+    "textes": 2,
+    "part_fr": null,
+    "restes": []
+   }
   },
   "carto-uc": {
    "mots_fr": 2,
@@ -2715,15 +3113,23 @@
   }
  },
  "cadres": {
-  "mots_fr": 4891,
-  "mots_en": 10346,
+  "mots_fr": 4856,
+  "mots_en": 10418,
   "mots_neutres": 2602,
   "textes": 2667,
   "pages": 5,
-  "part_fr": 0.321
+  "part_fr": 0.3179
+ },
+ "donnees": {
+  "mots_fr": 52486,
+  "mots_en": 34,
+  "mots_neutres": 3976,
+  "textes": 19614,
+  "pages": 5,
+  "part_fr": 0.9994
  },
  "erreurs": [],
- "attentes_limiteur": 79,
+ "attentes_limiteur": 78,
  "reponses_429": 0,
  "pages_429": []
 }

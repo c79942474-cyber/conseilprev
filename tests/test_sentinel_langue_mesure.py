@@ -9,6 +9,12 @@ vrai navigateur, EN choisi, chaque page de PAGE_META visitée, tout ce qui est
 visible relevé et classé français / anglais / neutre. La recette fait cela ;
 ces règles gardent ce dont elle dépend et ce qu'elle a produit.
 
+CE QUI A CHANGÉ DEPUIS. Les DONNÉES SAISIES (noms de systèmes, fournisseurs,
+finalités, clients — déclarées translate="no") sont désormais relevées à part
+et tenues hors du verdict ; les CADRES, eux, y entrent, parce qu'ils se
+traduisent maintenant eux-mêmes. Ces deux partages sont gardés par
+tests/test_sentinel_donnees_saisies.py ; ce qui suit garde le reste.
+
 CES RÈGLES EXÉCUTENT LE CODE. L'heuristique de classement tourne sous node,
 sur le VRAI outils/sentinel_langue.js, avec des phrases françaises, anglaises,
 neutres et mixtes — et les cas qu'elle classe MAL sont écrits ici aussi, pour
@@ -256,17 +262,22 @@ def test_la_part_francaise_ne_compte_que_les_mots_DECIDES():
     assert m["pages"]["espace"]["part_fr"] == 0.8, m["pages"]["espace"]          # 12 / (12 + 3)
     assert m["pages"]["training"]["part_fr"] is None, m["pages"]["training"]   # rien de décidé
     assert m["coquille"]["part_fr"] == 0.8333, m["coquille"]                    # 5 / 6
-    # global : espace 12 fr + pan-sia 3 fr + coquille 5 fr = 20 fr ; 3 + 1 en = 4 en
-    assert (m["global"]["mots_fr"], m["global"]["mots_en"]) == (20, 4), m["global"]
-    assert m["global"]["part_fr"] == 0.8333, m["global"]
+    # global : espace 12 fr + pan-sia 3 + 6 fr (cadre compris) + coquille 5 fr
+    #          = 26 fr ; 3 + 3 + 1 = 7 en
+    assert (m["global"]["mots_fr"], m["global"]["mots_en"]) == (26, 7), m["global"]
+    assert m["global"]["part_fr"] == 0.7879, m["global"]
 
 
-def test_les_cadres_sont_mesures_A_PART_et_hors_verdict():
-    """Un iframe est un autre document que le dictionnaire n'atteint pas : ses
-    mots ne doivent ni gonfler la page, ni peser dans la part globale."""
+def test_les_cadres_sont_dits_A_PART_et_COMPTENT_dans_le_verdict():
+    """CE QUI A CHANGÉ, ET POURQUOI. Un iframe restait hors du verdict tant
+    que le dictionnaire ne l'atteignait pas. Depuis que ces documents
+    chargent sentinel.i18n.js (data-sent-cadre), ils se traduisent par LA
+    MÊME mécanique que Sentinel : les tenir dehors reviendrait à ne pas
+    regarder un cinquième de ce qu'un lecteur voit. Ils restent comptés à
+    part, EN PLUS, parce qu'une page qui régresse doit se nommer."""
     m = _agreger()
     p = m["pages"]["pan-sia"]
-    assert (p["mots_fr"], p["mots_en"]) == (3, 0), p
+    assert (p["mots_fr"], p["mots_en"]) == (9, 3), p
     assert p["cadres"]["mots_fr"] == 6 and p["cadres"]["mots_en"] == 3, p["cadres"]
     assert m["cadres"]["pages"] == 1 and m["cadres"]["mots_fr"] == 6, m["cadres"]
     assert "cadres" not in m["pages"]["espace"]
@@ -284,10 +295,10 @@ def test_les_restes_sont_limites_a_quinze_et_tries_des_plus_longs_aux_plus_court
 def test_les_dix_pires_pages_viennent_par_part_puis_par_masse_et_les_indecises_en_dernier():
     m = _agreger()
     pires = _node(["pires", [m, 10]])[0]
-    assert [p["page"] for p in pires] == ["pan-sia", "espace", "training"], pires
+    assert [p["page"] for p in pires] == ["espace", "pan-sia", "training"], pires
     m2 = json.loads(json.dumps(m))
     m2["pages"]["autre"] = dict(m["pages"]["pan-sia"], mots_fr=30, part_fr=1)
-    assert [p["page"] for p in _node(["pires", [m2, 2]])[0]] == ["autre", "pan-sia"]
+    assert [p["page"] for p in _node(["pires", [m2, 2]])[0]] == ["autre", "espace"]
 
 
 # ══════════════════════════════════════════════════════════════════════════
@@ -315,9 +326,9 @@ def test_le_seuil_par_defaut_est_5_pour_cent():
 def test_le_resume_dit_les_chiffres_globaux_et_les_dix_pires_pages():
     m = _agreger()
     r = _node(["resumer", [m]])[0]
-    assert u"PART FRANÇAISE GLOBALE : 83.3 %" in r, r
+    assert u"PART FRANÇAISE GLOBALE : 78.8 %" in r, r
     assert u"pan-sia" in r and u"espace" in r and u"training" in r, r
-    assert u"cadres (iframes, hors verdict)" in r, r
+    assert u"cadres (iframes, COMPRIS dans le verdict)" in r, r
     assert u"code 1" in r, r
 
 
@@ -334,7 +345,7 @@ def test_la_recette_en_mode_relire_rend_le_code_du_verdict_sans_navigateur(tmp_p
     io.open(p, "w", encoding="utf-8").write(json.dumps(_agreger()))
     r = _recette("--relire", p)
     assert r.returncode == 1, (r.returncode, r.stdout[-600:], r.stderr[-600:])
-    assert u"PART FRANÇAISE GLOBALE : 83.3 %" in r.stdout, r.stdout
+    assert u"PART FRANÇAISE GLOBALE : 78.8 %" in r.stdout, r.stdout
     r2 = _recette("--relire", p, "--seuil", "0.9")
     assert r2.returncode == 0, (r2.returncode, r2.stdout[-600:], r2.stderr[-600:])
 

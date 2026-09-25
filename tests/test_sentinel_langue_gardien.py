@@ -12,9 +12,16 @@ CE QUE CES RÈGLES MESURENT. Le catalogue (i18n/sentinel/CATALOGUE.json,
 produit par l'outil d'inventaire) porte toutes les clés françaises du corps
 de Sentinel ; les dictionnaires (i18n/sentinel/*.json) portent les
 traductions. La COUVERTURE EN MOTS — part des mots du catalogue dont la clé
-est traduite — doit atteindre le seuil écrit dans i18n/sentinel/SEUIL. Le
-seuil vaut 0 tant que le lot de traduction n'a pas commencé ; il monte
-ensuite, et ne redescend pas.
+est traduite — doit atteindre le PLANCHER écrit dans
+i18n/sentinel/SEUIL_COUVERTURE. Il valait 0 tant que le lot de traduction
+n'avait pas commencé ; il monte ensuite, et ne redescend pas.
+
+DEUX SEUILS, ET ILS NE DISENT PAS LA MÊME CHOSE. Celui-ci est un PLANCHER de
+couverture, lu ici. i18n/sentinel/SEUIL est un PLAFOND : la part française
+encore visible À L'ÉCRAN que le dépôt promet de ne pas dépasser, gardée par
+tests/test_sentinel_donnees_saisies.py sur i18n/sentinel/MESURE_APRES.json.
+Un seul fichier pour les deux désarmerait l'un en silence — un plancher à
+5 % est tenu par n'importe quoi.
 
 TANT QUE LE CATALOGUE N'EXISTE PAS, la règle de couverture SAUTE en le
 disant : elle ne peut rien garder, et un « passe » silencieux serait un
@@ -32,7 +39,7 @@ import pytest
 _RACINE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DOSSIER = os.path.join(_RACINE, 'i18n', 'sentinel')
 CATALOGUE = os.path.join(DOSSIER, 'CATALOGUE.json')
-SEUIL = os.path.join(DOSSIER, 'SEUIL')
+SEUIL = os.path.join(DOSSIER, 'SEUIL_COUVERTURE')
 
 
 def _charger():
@@ -61,8 +68,10 @@ def _ecrire(dossier, nom, contenu):
 def test_le_fichier_SEUIL_existe_et_porte_une_part_entre_0_et_1():
     """Le seuil est un FICHIER, pas une constante de test : le lot de
     traduction le monte sans toucher aux règles, et sa valeur se lit dans
-    l'historique."""
-    assert os.path.isfile(SEUIL), 'i18n/sentinel/SEUIL manque'
+    l'historique. Les DEUX seuils du dossier se lisent de la même manière."""
+    assert os.path.isfile(os.path.join(DOSSIER, 'SEUIL')), 'i18n/sentinel/SEUIL manque'
+    assert 0.0 <= C.lire_seuil(os.path.join(DOSSIER, 'SEUIL')) <= 1.0
+    assert os.path.isfile(SEUIL), 'i18n/sentinel/SEUIL_COUVERTURE manque'
     s = C.lire_seuil(SEUIL)
     assert 0.0 <= s <= 1.0, s
 
@@ -95,6 +104,7 @@ def test_le_dossier_reel_ne_prend_ni_le_catalogue_ni_une_mesure_pour_un_dictionn
     assert not C.est_dictionnaire(os.path.join(DOSSIER, 'MESURE_AVANT.json'))
     assert C.est_dictionnaire(os.path.join(DOSSIER, '_exemple.json'))
     assert not C.est_dictionnaire(os.path.join(DOSSIER, 'SEUIL'))
+    assert not C.est_dictionnaire(os.path.join(DOSSIER, 'SEUIL_COUVERTURE'))
 
 
 # ══════════════════════════════════════════════════════════════════════════
