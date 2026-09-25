@@ -353,6 +353,34 @@
    "avant": "      history.replaceState(null, '', location.pathname + (reste ? '?' + reste : '') + (location.hash || ''));",
    "apres": "      void reste;",
    "regle": "test_la_page_de_retour_efface_l_identifiant_de_session_de_la_barre_d_adresse[sentinel]"
+  },
+  {
+   "nom": "11. l'offre supérieure est accordée sur un abonnement qui ne paie pas",
+   "fichier": "app.py",
+   "avant": "                if _statut in STRIPE_ABONNEMENT_ACTIF and articles:",
+   "apres": "                if _statut not in ('canceled', 'incomplete_expired') and articles:",
+   "regle": "test_un_abonnement_impaye_n_obtient_pas_l_offre_superieure[past_due]"
+  },
+  {
+   "nom": "11. un abonnement mort chez Stripe reçoit un refus au lieu d'une caisse",
+   "fichier": "app.py",
+   "avant": "                if _statut not in ('canceled', 'incomplete_expired') and _statut:",
+   "apres": "                if _statut:",
+   "regle": "test_un_abonnement_mort_chez_stripe_rouvre_une_caisse[canceled]"
+  },
+  {
+   "nom": "11. un abonnement disparu de Stripe fait échouer la caisse",
+   "fichier": "app.py",
+   "avant": "                if getattr(_ie, 'code', '') != 'resource_missing':\n                    raise",
+   "apres": "                raise",
+   "regle": "test_un_abonnement_mort_chez_stripe_rouvre_une_caisse[resource_missing]"
+  },
+  {
+   "nom": "11. l'activation se croit faite dès que l'offre porte le bon nom",
+   "fichier": "app.py",
+   "avant": "    deja = (row.get('plan') == plan\n            and (not subscription or row.get('stripe_subscription_id') == str(subscription)))",
+   "apres": "    deja = (row.get('plan') == plan)",
+   "regle": "test_l_activation_memorise_l_abonnement_meme_quand_l_offre_est_deja_posee"
   }
  ]
 }

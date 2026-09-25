@@ -8662,7 +8662,8 @@ def sentinel_checkout():
             try:
                 sub = stripe.Subscription.retrieve(_sub_id)
                 articles = list(sub['items'].data) if 'items' in sub else []
-                if sub['status'] not in ('canceled', 'incomplete_expired') and articles:
+                _statut = sub['status'] or ''
+                if _statut in STRIPE_ABONNEMENT_ACTIF and articles:
                     stripe.Subscription.modify(
                         _sub_id, items=[{'id': articles[0]['id'], 'price': price_id}],
                         proration_behavior='create_prorations',
@@ -8670,6 +8671,20 @@ def sentinel_checkout():
                     activate_client_plan(cid, plan)
                     logger.info('STRIPE_ABONNEMENT_MODIFIE client=%s plan=%s abonnement=%s', cid, plan, _sub_id)
                     return jsonify({'ok': True, 'modifie': True, 'plan': plan})
+                if _statut not in ('canceled', 'incomplete_expired') and _statut:
+                    # IMPAYE, INCOMPLET OU EN PAUSE : ON NE DONNE PAS PLUS.
+                    # `create_prorations` ne facture RIEN tout de suite — il
+                    # ajoute la difference a une facture que ce client ne paie
+                    # deja pas — et l'offre la plus chere etait posee dans la
+                    # foulee (mesure, sur past_due, unpaid, incomplete et
+                    # paused). CGV 3.4 : un impaye suspend, il n'ouvre pas.
+                    # Ouvrir une SECONDE caisse serait pire : deux abonnements,
+                    # deux prelevements, dont un que personne ne suit.
+                    logger.warning('STRIPE_MONTEE_REFUSEE client=%s plan=%s abonnement=%s statut=%s',
+                                   cid, plan, _sub_id, _statut)
+                    return jsonify({'error': "Votre abonnement en cours n est pas a jour de paiement. "
+                                             "Regularisez-le avant de changer d offre, ou ecrivez-nous.",
+                                    'regulariser': True, 'statut': _statut}), 402
             except stripe.InvalidRequestError as _ie:
                 # L'abonnement n'existe plus chez Stripe : une nouvelle caisse.
                 if getattr(_ie, 'code', '') != 'resource_missing':

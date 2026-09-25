@@ -1296,3 +1296,67 @@ def test_la_page_de_retour_efface_l_identifiant_de_session_de_la_barre_d_adresse
     assert all("session_id" not in u and "=ok" not in u for u in o["remplacements"]), o["remplacements"]
 
 
+# ══════════════════════════════════════════════════════════════════════════
+#  11. UNE OFFRE SUPÉRIEURE NE S'ACCORDE PAS SUR UN ABONNEMENT QUI NE PAIE PAS
+# ══════════════════════════════════════════════════════════════════════════
+@pytest.mark.parametrize("statut", ["past_due", "unpaid", "incomplete", "paused"])
+def test_un_abonnement_impaye_n_obtient_pas_l_offre_superieure(client, faux_stripe, monkeypatch, statut):
+    """MESURÉ AVANT CORRECTION : `Subscription.modify` avec
+    `create_prorations` ne facture RIEN tout de suite — il ajoute la
+    différence à une facture que ce client ne paie déjà pas — et l'offre la
+    plus chère était posée dans la foulée. CGV 3.4 : un impayé suspend."""
+    monkeypatch.setenv("STRIPE_PRICE_ENTREPRISE", "price_ent_recette")
+    cid = creer_client("impaye3@recette.test", plan="pro", sub="sub_impaye3", cust="cus_impaye3")
+    faux_stripe._abonnement("sub_impaye3")["status"] = statut
+    connecter(client, cid)
+    r = client.post("/api/sentinel/checkout", json={"plan": "entreprise"}, headers=NAVIGATEUR)
+    modifs = [x.form for x in faux_stripe.recues("POST", "/v1/subscriptions/sub_impaye3")]
+    etat = {"http": r.status_code, "reponse": r.get_json(),
+            "plan": client_row(cid)["plan"], "modifications": modifs}
+    assert client_row(cid)["plan"] == "pro", (
+        "abonnement %s : l'offre %r est accordée sans encaissement — %s" % (statut, etat["plan"], etat))
+    assert r.status_code == 402 and not modifs, etat
+    assert not faux_stripe.recues("POST", "/v1/checkout/sessions"), (
+        "une seconde caisse est ouverte alors que la première n'est pas réglée")
+
+
+@pytest.mark.parametrize("cas", ["canceled", "resource_missing"])
+def test_un_abonnement_mort_chez_stripe_rouvre_une_caisse(client, faux_stripe, monkeypatch, cas):
+    """C'est l'état de la production : un abonnement résilié chez Stripe laisse
+    son identifiant en base. Le client qui revient à la caisse doit pouvoir se
+    réabonner — pas recevoir un 502 parce qu'on a tenté de modifier un mort."""
+    monkeypatch.setenv("STRIPE_PRICE_ENTREPRISE", "price_ent_recette")
+    cid = creer_client("mort@recette.test", plan="pro", sub="sub_mort")
+    if cas == "canceled":
+        faux_stripe._abonnement("sub_mort")["status"] = "canceled"
+    else:
+        faux_stripe.pannes["GET /v1/subscriptions/sub_mort"] = (
+            404, {"error": {"type": "invalid_request_error", "code": "resource_missing",
+                            "message": "No such subscription"}})
+    connecter(client, cid)
+    r = client.post("/api/sentinel/checkout", json={"plan": "entreprise"}, headers=NAVIGATEUR)
+    j = r.get_json()
+    caisses = faux_stripe.recues("POST", "/v1/checkout/sessions")
+    assert r.status_code == 200 and j.get("ok") is True and j.get("url"), (cas, r.status_code, j)
+    assert len(caisses) == 1, "%s : %d caisse(s) ouverte(s)" % (cas, len(caisses))
+    assert not faux_stripe.recues("POST", "/v1/subscriptions/sub_mort"), (
+        "%s : l'abonnement mort a été modifié" % cas)
+
+
+def test_l_activation_memorise_l_abonnement_meme_quand_l_offre_est_deja_posee(
+        client, faux_stripe, faux_brevo):
+    """Un client passé « pro » à la main par CONSEILPREV, sans abonnement, paie
+    ensuite l'offre Pro. Si l'activation se croit déjà faite, l'abonnement et le
+    client Stripe ne sont jamais mémorisés : un passage en « gratuit » ne
+    résilierait rien, et Stripe continuerait de prélever."""
+    cid = creer_client("deja@recette.test", plan="pro")
+    r, _ = poster(client, {"id": "cs_deja", "object": "checkout.session", "mode": "subscription",
+                           "payment_status": "paid", "customer": "cus_deja",
+                           "subscription": "sub_deja",
+                           "metadata": {"client_id": str(cid), "plan": "pro"}})
+    row = client_row(cid)
+    assert r.status_code == 200, r.get_json()
+    assert (row["plan"], row["stripe_subscription_id"], row["stripe_customer_id"]) \
+        == ("pro", "sub_deja", "cus_deja"), row
+
+
