@@ -5,175 +5,175 @@
  "texte": {
   "Preuve attendue : Le document qui les porte, daté et diffusé.": {
    "fr": "Preuve attendue : Le document qui les porte, daté et diffusé.",
-   "en": "",
+   "en": "Expected evidence: The document that carries them, dated and circulated.",
    "_pages": [
     "enveloppe"
    ]
   },
   "Preuve attendue : Le flux ou la procédure, et son dernier passage.": {
    "fr": "Preuve attendue : Le flux ou la procédure, et son dernier passage.",
-   "en": "",
+   "en": "Expected evidence: The flow or the procedure, and its last run.",
    "_pages": [
     "enveloppe"
    ]
   },
   "Preuve attendue : Le plan d'actions, avec ses dates.": {
    "fr": "Preuve attendue : Le plan d'actions, avec ses dates.",
-   "en": "",
+   "en": "Expected evidence: The action plan, with its dates.",
    "_pages": [
     "enveloppe"
    ]
   },
   "Preuve attendue : Les comptes rendus, et ce qu'ils ont changé.": {
    "fr": "Preuve attendue : Les comptes rendus, et ce qu'ils ont changé.",
-   "en": "",
+   "en": "Expected evidence: The minutes, and what they changed.",
    "_pages": [
     "enveloppe"
    ]
   },
   "Preuve attendue : Un extrait quelconque : la date doit y être, sans avoir à la demander à quelqu'un.": {
    "fr": "Preuve attendue : Un extrait quelconque : la date doit y être, sans avoir à la demander à quelqu'un.",
-   "en": "",
+   "en": "Expected evidence: Any extract: the date must be on it, without having to ask someone for it.",
    "_pages": [
     "enveloppe"
    ]
   },
   "Preuve attendue : Une analyse de sensibilité déjà produite.": {
    "fr": "Preuve attendue : Une analyse de sensibilité déjà produite.",
-   "en": "",
+   "en": "Expected evidence: A sensitivity analysis already produced.",
    "_pages": [
     "enveloppe"
    ]
   },
   "Prix de la maîtrise d’œuvre, phase par phase": {
    "fr": "Prix de la maîtrise d’œuvre, phase par phase",
-   "en": "",
+   "en": "Price of design and supervision, phase by phase",
    "_pages": [
     "enveloppe"
    ]
   },
   "Prochaine étape :": {
    "fr": "Prochaine étape :",
-   "en": "",
+   "en": "Next step:",
    "_pages": [
     "enveloppe"
    ]
   },
   "Projet et dossier de consultation des entreprises — Les pièces sur lesquelles les entreprises remettent prix : descriptifs, plans d'exécution de principe, DPGF.": {
    "fr": "Projet et dossier de consultation des entreprises — Les pièces sur lesquelles les entreprises remettent prix : descriptifs, plans d'exécution de principe, DPGF.",
-   "en": "",
+   "en": "Detailed design and tender documents — The documents on which contractors submit their prices: specifications, outline construction drawings, DPGF.",
    "_pages": [
     "enveloppe"
    ]
   },
   "Puissance, gabarit, scénario, calendrier — les critères d’ingénierie sous « Aller plus loin », et le BUSINESS CASE sous son propre dépliant : prix d’hébergement, puissance contractée, année de puissance ferme. Sans eux, le verdict ne parlera que de construction.": {
    "fr": "Puissance, gabarit, scénario, calendrier — les critères d’ingénierie sous « Aller plus loin », et le BUSINESS CASE sous son propre dépliant : prix d’hébergement, puissance contractée, année de puissance ferme. Sans eux, le verdict ne parlera que de construction.",
-   "en": "",
+   "en": "Power, template, scenario, timetable — the engineering criteria under “Go further”, and the BUSINESS CASE under its own drop-down: hosting price, contracted power, year of firm power. Without them, the verdict will speak only of construction.",
    "_pages": [
     "enveloppe"
    ]
   },
   "Quel BFR le plan retient-il, une fois le site en régime ?": {
    "fr": "Quel BFR le plan retient-il, une fois le site en régime ?",
-   "en": "",
+   "en": "What working capital requirement does the plan assume, once the site is in steady state?",
    "_pages": [
     "enveloppe"
    ]
   },
   "Quel CMPC le comité d'investissement retient-il pour cette classe d'actif, et sur quelle durée ?": {
    "fr": "Quel CMPC le comité d'investissement retient-il pour cette classe d'actif, et sur quelle durée ?",
-   "en": "",
+   "en": "What WACC does the investment committee apply to this asset class, and over what period?",
    "_pages": [
     "enveloppe"
    ]
   },
   "Quel montant annuel de renouvellement le plan prévoit-il — onduleurs, groupes, GTB ?": {
    "fr": "Quel montant annuel de renouvellement le plan prévoit-il — onduleurs, groupes, GTB ?",
-   "en": "",
+   "en": "What annual replacement amount does the plan provide for — UPS, generators, BMS?",
    "_pages": [
     "enveloppe"
    ]
   },
   "Quel revenu annuel le plan d'affaires retient-il à pleine charge, et à partir de quelle année l'atteint-il ?": {
    "fr": "Quel revenu annuel le plan d'affaires retient-il à pleine charge, et à partir de quelle année l'atteint-il ?",
-   "en": "",
+   "en": "What annual revenue does the business plan assume at full load, and from which year does it reach it?",
    "_pages": [
     "enveloppe"
    ]
   },
   "Quel taux effectif s'applique au véhicule qui portera l'actif, après crédits et exonérations ?": {
    "fr": "Quel taux effectif s'applique au véhicule qui portera l'actif, après crédits et exonérations ?",
-   "en": "",
+   "en": "What effective rate applies to the vehicle that will hold the asset, after credits and exemptions?",
    "_pages": [
     "enveloppe"
    ]
   },
   "Quelle durée le plan comptable retient-il pour le gros œuvre et pour les lots techniques ?": {
    "fr": "Quelle durée le plan comptable retient-il pour le gros œuvre et pour les lots techniques ?",
-   "en": "",
+   "en": "What period does the accounting plan use for the structural works and for the technical packages?",
    "_pages": [
     "enveloppe"
    ]
   },
   "Quelle forme pour quelle donnée — et quand ce moteur refuse d'en produire une": {
    "fr": "Quelle forme pour quelle donnée — et quand ce moteur refuse d'en produire une",
-   "en": "",
+   "en": "Which form for which data — and when this engine refuses to produce one",
    "_pages": [
     "enveloppe"
    ]
   },
   "Recalibrer une ambition en ouverture coûte une réunion ; expliquer six mois plus tard pourquoi le tableau de bord n'est pas utilisé coûte le projet — et la confiance qui allait avec. La note de restitution ci-dessous porte le verdict en tête, jamais en annexe.": {
    "fr": "Recalibrer une ambition en ouverture coûte une réunion ; expliquer six mois plus tard pourquoi le tableau de bord n'est pas utilisé coûte le projet — et la confiance qui allait avec. La note de restitution ci-dessous porte le verdict en tête, jamais en annexe.",
-   "en": "",
+   "en": "Recalibrating an ambition at the outset costs a meeting; explaining six months later why the dashboard is not used costs the project — and the trust that came with it. The debrief note below carries the verdict at the top, never in an annex.",
    "_pages": [
     "enveloppe"
    ]
   },
   "Référentiel de choix d'implantation": {
    "fr": "Référentiel de choix d'implantation",
-   "en": "",
+   "en": "Siting choice framework",
    "_pages": [
     "enveloppe"
    ]
   },
   "SE": {
    "fr": "SE",
-   "en": "",
+   "en": "SE",
    "_pages": [
     "enveloppe"
    ]
   },
   "Sans cap écrit, l'écart ne se mesure pas — et tout tableau de bord devient une collection d'indicateurs dont personne ne sait lequel devrait bouger.": {
    "fr": "Sans cap écrit, l'écart ne se mesure pas — et tout tableau de bord devient une collection d'indicateurs dont personne ne sait lequel devrait bouger.",
-   "en": "",
+   "en": "Without a written target, the gap cannot be measured — and every dashboard becomes a collection of indicators where nobody knows which one should move.",
    "_pages": [
     "enveloppe"
    ]
   },
   "Sert au coût total de possession.": {
    "fr": "Sert au coût total de possession.",
-   "en": "",
+   "en": "Used for the total cost of ownership.",
    "_pages": [
     "enveloppe"
    ]
   },
   "Seuils, tendances et alertes : où une action est attendue — sans crier au loup sur un écart qui tient dans l’incertitude.": {
    "fr": "Seuils, tendances et alertes : où une action est attendue — sans crier au loup sur un écart qui tient dans l’incertitude.",
-   "en": "",
+   "en": "Thresholds, trends and alerts: where action is expected — without crying wolf over a gap that sits within the uncertainty.",
    "_pages": [
     "enveloppe"
    ]
   },
   "Sont-elles hiérarchisées selon leur effet sur la maturité — et non selon leur facilité ?": {
    "fr": "Sont-elles hiérarchisées selon leur effet sur la maturité — et non selon leur facilité ?",
-   "en": "",
+   "en": "Are they prioritised by their effect on maturity — and not by how easy they are?",
    "_pages": [
     "enveloppe"
    ]
   },
   "Suivre le parcours « Enveloppe d’investissement et DPGF » à partir d’ici": {
    "fr": "Suivre le parcours « Enveloppe d’investissement et DPGF » à partir d’ici",
-   "en": "",
+   "en": "Follow the “Investment envelope and DPGF” path from here",
    "_pages": [
     "pan-sia",
     "enveloppe"
@@ -181,119 +181,119 @@
   },
   "Suivre le parcours « Enveloppe d’investissement et DPGF » →": {
    "fr": "Suivre le parcours « Enveloppe d’investissement et DPGF » →",
-   "en": "",
+   "en": "Follow the “Investment envelope and DPGF” path →",
    "_pages": [
     "enveloppe"
    ]
   },
   "Suivre le parcours « Exploitant — à quel remplissage j'équilibre » à partir d’ici": {
    "fr": "Suivre le parcours « Exploitant — à quel remplissage j'équilibre » à partir d’ici",
-   "en": "",
+   "en": "Follow the “Operator — at what occupancy do I break even” path from here",
    "_pages": [
     "enveloppe"
    ]
   },
   "Suivre le parcours « Porteur de projet — monter le tour de table » à partir d’ici": {
    "fr": "Suivre le parcours « Porteur de projet — monter le tour de table » à partir d’ici",
-   "en": "",
+   "en": "Follow the “Project sponsor — putting together the funding round” path from here",
    "_pages": [
     "enveloppe"
    ]
   },
   "Sécurité et protection de la santé des travailleurs sur le chantier. — Obligatoire dès que plusieurs entreprises interviennent sur le même chantier — ce qui est le cas de tout centre de données. Ce n'est pas une option d'économie. (Code du travail, art. L#-#)": {
    "fr": "Sécurité et protection de la santé des travailleurs sur le chantier. — Obligatoire dès que plusieurs entreprises interviennent sur le même chantier — ce qui est le cas de tout centre de données. Ce n'est pas une option d'économie. (Code du travail, art. L4532-2)",
-   "en": "",
+   "en": "Safety and health protection of workers on the site. — Mandatory as soon as several contractors work on the same site — which is the case for every data centre. It is not a cost-saving option. (Code du travail [Labour Code], art. L#-#)",
    "_pages": [
     "enveloppe"
    ]
   },
   "Série (séparée par des virgules)": {
    "fr": "Série (séparée par des virgules)",
-   "en": "",
+   "en": "Series (comma-separated)",
    "_pages": [
     "enveloppe"
    ]
   },
   "Taux NOMINAUX statutaires, servis à titre indicatif : ils changent, et plusieurs États les ont modifiés récemment. Le taux EFFECTIF de votre véhicule s'en écarte par les crédits d'impôt, les régimes locaux, les déficits reportables et les conventions — c'est lui qu'il faut saisir, et il se confirme auprès de votre conseil fiscal.": {
    "fr": "Taux NOMINAUX statutaires, servis à titre indicatif : ils changent, et plusieurs États les ont modifiés récemment. Le taux EFFECTIF de votre véhicule s'en écarte par les crédits d'impôt, les régimes locaux, les déficits reportables et les conventions — c'est lui qu'il faut saisir, et il se confirme auprès de votre conseil fiscal.",
-   "en": "",
+   "en": "Statutory NOMINAL rates, provided for information only: they change, and several States have amended them recently. The EFFECTIVE rate of your vehicle departs from them through tax credits, local regimes, carried-forward losses and tax treaties — it is the one you must enter, and it is confirmed with your tax adviser.",
    "_pages": [
     "enveloppe"
    ]
   },
   "Taux d'impôt sur les sociétés (%)": {
    "fr": "Taux d'impôt sur les sociétés (%)",
-   "en": "",
+   "en": "Corporate income tax rate (%)",
    "_pages": [
     "enveloppe"
    ]
   },
   "Tendances #, jalons réglementaires datés, structure de marché et réserves sur le référentiel — chaque entrée avec sa citation et sa page.": {
    "fr": "Tendances 2026, jalons réglementaires datés, structure de marché et réserves sur le référentiel — chaque entrée avec sa citation et sa page.",
-   "en": "",
+   "en": "# trends, dated regulatory milestones, market structure and caveats on the framework — each entry with its citation and its page.",
    "_pages": [
     "enveloppe"
    ]
   },
   "Traitement et analyse": {
    "fr": "Traitement et analyse",
-   "en": "",
+   "en": "Processing and analysis",
    "_pages": [
     "enveloppe"
    ]
   },
   "Télécharger les dossiers — Word et PDF": {
    "fr": "Télécharger les dossiers — Word et PDF",
-   "en": "",
+   "en": "Download the files — Word and PDF",
    "_pages": [
     "enveloppe"
    ]
   },
   "Un comité qui reçoit une enveloppe à ±# % sans série datée ni grille de lecture ne décide pas mieux avec un graphique de plus — il décide à l'intuition, avec un chiffre pour se rassurer.": {
    "fr": "Un comité qui reçoit une enveloppe à ±30 % sans série datée ni grille de lecture ne décide pas mieux avec un graphique de plus — il décide à l'intuition, avec un chiffre pour se rassurer.",
-   "en": "",
+   "en": "A committee that receives an envelope at ±# % with no dated series and no reading grid does not decide better with one more chart — it decides on intuition, with a figure for reassurance.",
    "_pages": [
     "enveloppe"
    ]
   },
   "Un tableau de bord ne doit pas seulement afficher des données : il doit signaler": {
    "fr": "Un tableau de bord ne doit pas seulement afficher des données : il doit signaler",
-   "en": "",
+   "en": "A dashboard must not only display data: it must flag",
    "_pages": [
     "enveloppe"
    ]
   },
   "Une alerte ne se déclenche pas sur du bruit.": {
    "fr": "Une alerte ne se déclenche pas sur du bruit.",
-   "en": "",
+   "en": "An alert is not triggered by noise.",
    "_pages": [
     "enveloppe"
    ]
   },
   "Une donnée non datée ou non traçable est inutilisable en contexte décisionnel : elle ne se compare à rien, et personne ne peut dire si elle vaut encore.": {
    "fr": "Une donnée non datée ou non traçable est inutilisable en contexte décisionnel : elle ne se compare à rien, et personne ne peut dire si elle vaut encore.",
-   "en": "",
+   "en": "Undated or untraceable data is unusable in a decision-making context: it compares with nothing, and nobody can say whether it still holds.",
    "_pages": [
     "enveloppe"
    ]
   },
   "Une grille de lecture existe-t-elle, disant quel écart appelle quelle question ?": {
    "fr": "Une grille de lecture existe-t-elle, disant quel écart appelle quelle question ?",
-   "en": "",
+   "en": "Is there a reading grid, saying which gap calls for which question?",
    "_pages": [
     "enveloppe"
    ]
   },
   "Une projection doit pouvoir être refaite à la main par celui qui la conteste ; une anomalie doit dire": {
    "fr": "Une projection doit pouvoir être refaite à la main par celui qui la conteste ; une anomalie doit dire",
-   "en": "",
+   "en": "A projection must be reproducible by hand by whoever challenges it; an anomaly must state",
    "_pages": [
     "enveloppe"
    ]
   },
   "Valeur": {
    "fr": "Valeur",
-   "en": "",
+   "en": "Value",
    "_pages": [
     "enveloppe",
     "gouvernance"
@@ -301,182 +301,182 @@
   },
   "Voiries et réseaux. Le taux paraît élevé parce que son assiette est étroite : il ne porte que sur les VRD, pas sur le bâtiment.": {
    "fr": "Voiries et réseaux. Le taux paraît élevé parce que son assiette est étroite : il ne porte que sur les VRD, pas sur le bâtiment.",
-   "en": "",
+   "en": "Roads and utility networks. The rate looks high because its base is narrow: it covers only the roads and networks, not the building.",
    "_pages": [
     "enveloppe"
    ]
   },
   "Vos devis remplacent l’hypothèse de filière.": {
    "fr": "Vos devis remplacent l’hypothèse de filière.",
-   "en": "",
+   "en": "Your quotes replace the industry assumption.",
    "_pages": [
     "enveloppe"
    ]
   },
   "Vous avez un investissement et un coût d’exploitation.": {
    "fr": "Vous avez un investissement et un coût d’exploitation.",
-   "en": "",
+   "en": "You have an investment and an operating cost.",
    "_pages": [
     "enveloppe"
    ]
   },
   "Vous avez une enveloppe et un pays retenu.": {
    "fr": "Vous avez une enveloppe et un pays retenu.",
-   "en": "",
+   "en": "You have an envelope and a chosen country.",
    "_pages": [
     "enveloppe"
    ]
   },
   "Vous avez une enveloppe. Personne n’a encore demandé si quelqu’un louera.": {
    "fr": "Vous avez une enveloppe. Personne n’a encore demandé si quelqu’un louera.",
-   "en": "",
+   "en": "You have an envelope. Nobody has yet asked whether anyone will rent.",
    "_pages": [
     "enveloppe"
    ]
   },
   "Vous n’avez pas encore de plan d’affaires ?": {
    "fr": "Vous n’avez pas encore de plan d’affaires ?",
-   "en": "",
+   "en": "No business plan yet?",
    "_pages": [
     "enveloppe"
    ]
   },
   "capital employé": {
    "fr": "capital employé",
-   "en": "",
+   "en": "capital employed",
    "_pages": [
     "enveloppe"
    ]
   },
   "ce que le site consommera": {
    "fr": "ce que le site consommera",
-   "en": "",
+   "en": "what the site will consume",
    "_pages": [
     "enveloppe"
    ]
   },
   "ce que les études coûteront": {
    "fr": "ce que les études coûteront",
-   "en": "",
+   "en": "what the studies will cost",
    "_pages": [
     "enveloppe"
    ]
   },
   "cinq indicateurs": {
    "fr": "cinq indicateurs",
-   "en": "",
+   "en": "five indicators",
    "_pages": [
     "enveloppe"
    ]
   },
   "combien ce projet doit-il rapporter pour ne pas détruire de valeur ?": {
    "fr": "combien ce projet doit-il rapporter pour ne pas détruire de valeur ?",
-   "en": "",
+   "en": "how much must this project earn so as not to destroy value?",
    "_pages": [
     "enveloppe"
    ]
   },
   "commentaire en langage naturel": {
    "fr": "commentaire en langage naturel",
-   "en": "",
+   "en": "natural-language commentary",
    "_pages": [
     "enveloppe"
    ]
   },
   "coût total de possession": {
    "fr": "coût total de possession",
-   "en": "",
+   "en": "total cost of ownership",
    "_pages": [
     "enveloppe"
    ]
   },
   "coûte": {
    "fr": "coûte",
-   "en": "",
+   "en": "costs",
    "_pages": [
     "enveloppe"
    ]
   },
   "de cette page, la": {
    "fr": "de cette page, la",
-   "en": "",
+   "en": "of this page, the",
    "_pages": [
     "enveloppe"
    ]
   },
   "de chaque valeur, ses": {
    "fr": "de chaque valeur, ses",
-   "en": "",
+   "en": "of each value, its",
    "_pages": [
     "enveloppe"
    ]
   },
   "de l'indicateur,": {
    "fr": "de l'indicateur,",
-   "en": "",
+   "en": "of the indicator,",
    "_pages": [
     "enveloppe"
    ]
   },
   "de tous les référentiels mobilisés, la": {
    "fr": "de tous les référentiels mobilisés, la",
-   "en": "",
+   "en": "of all the frameworks used, the",
    "_pages": [
     "enveloppe"
    ]
   },
   "deux chiffres seulement": {
    "fr": "deux chiffres seulement",
-   "en": "",
+   "en": "only two figures",
    "_pages": [
     "enveloppe"
    ]
   },
   "du": {
    "fr": "du",
-   "en": "",
+   "en": "of the",
    "_pages": [
     "enveloppe"
    ]
   },
   "du pays retenu partent vers la section # de la page d’ingénierie de projet, où ils pré-remplissent le calcul —": {
    "fr": "du pays retenu partent vers la section 6 de la page d’ingénierie de projet, où ils pré-remplissent le calcul —",
-   "en": "",
+   "en": "of the chosen country go to section # of the project engineering page, where they pre-fill the calculation —",
    "_pages": [
     "enveloppe"
    ]
   },
   "du pays retenu — elles ne se saisissent pas ici : le tableau ci-dessus et le barème doivent dire la même assiette.": {
    "fr": "du pays retenu — elles ne se saisissent pas ici : le tableau ci-dessus et le barème doivent dire la même assiette.",
-   "en": "",
+   "en": "of the chosen country — they are not entered here: the table above and the fee scale must state the same base.",
    "_pages": [
     "enveloppe"
    ]
   },
   "défaut #": {
    "fr": "défaut 3",
-   "en": "",
+   "en": "default #",
    "_pages": [
     "enveloppe"
    ]
   },
   "détection d'anomalies": {
    "fr": "détection d'anomalies",
-   "en": "",
+   "en": "anomaly detection",
    "_pages": [
     "enveloppe"
    ]
   },
   "elle en est une, « le modèle l'a détectée » n'étant pas une raison qu'on oppose à un exploitant ; et un commentaire annexé à un dossier ne doit rien pouvoir inventer. Composé depuis les grandeurs déjà calculées, celui-ci n'affirme que ce qui a été mesuré et pose les causes en question.": {
    "fr": "elle en est une, « le modèle l'a détectée » n'étant pas une raison qu'on oppose à un exploitant ; et un commentaire annexé à un dossier ne doit rien pouvoir inventer. Composé depuis les grandeurs déjà calculées, celui-ci n'affirme que ce qui a été mesuré et pose les causes en question.",
-   "en": "",
+   "en": "it is one, “the model detected it” not being a reason you can put to an operator; and a commentary attached to a file must not be able to invent anything. Composed from quantities already calculated, this one asserts only what has been measured and frames the causes as questions.",
    "_pages": [
     "enveloppe"
    ]
   },
   "et la": {
    "fr": "et la",
-   "en": "",
+   "en": "and the",
    "_pages": [
     "pan-sia",
     "enveloppe"
@@ -484,7 +484,7 @@
   },
   "et les": {
    "fr": "et les",
-   "en": "",
+   "en": "and the",
    "_pages": [
     "pan-sia",
     "enveloppe"
@@ -492,42 +492,42 @@
   },
   "ex. #-# · vide = hypothèse": {
    "fr": "ex. 8-12 · vide = hypothèse",
-   "en": "",
+   "en": "e.g. #-# · empty = assumption",
    "_pages": [
     "enveloppe"
    ]
   },
   "il n'y a pas de seuil universel : un ROCE se juge contre le CMPC — en dessous, le capital serait mieux employé ailleurs — et contre l'objectif que vous fixez": {
    "fr": "il n'y a pas de seuil universel : un ROCE se juge contre le CMPC — en dessous, le capital serait mieux employé ailleurs — et contre l'objectif que vous fixez",
-   "en": "",
+   "en": "there is no universal threshold: a ROCE is judged against the WACC — below it, the capital would be better employed elsewhere — and against the target you set",
    "_pages": [
     "enveloppe"
    ]
   },
   "l'organisation a-t-elle de quoi l'instruire, et ensuite suivre son exécution ?": {
    "fr": "l'organisation a-t-elle de quoi l'instruire, et ensuite suivre son exécution ?",
-   "en": "",
+   "en": "does the organisation have what it needs to examine it, and then to monitor its execution?",
    "_pages": [
     "enveloppe"
    ]
   },
   "la colocation ni le site régional, dont la nature reste marquée en conséquence. Et elle reste un ordre de grandeur de marché : ce module ne fabrique pas VOTRE prix — aucun des # centres du référentiel ne publiant sa capacité, rien ici ne remplace vos devis. Ce que le module apporte est ailleurs : la": {
    "fr": "la colocation ni le site régional, dont la nature reste marquée en conséquence. Et elle reste un ordre de grandeur de marché : ce module ne fabrique pas VOTRE prix — aucun des 97 centres du référentiel ne publiant sa capacité, rien ici ne remplace vos devis. Ce que le module apporte est ailleurs : la",
-   "en": "",
+   "en": "colocation or the regional site, whose nature remains flagged accordingly. And it remains a market order of magnitude: this module does not produce YOUR price — since none of the # centres in the framework publishes its capacity, nothing here replaces your quotes. What the module brings lies elsewhere: the",
    "_pages": [
     "enveloppe"
    ]
   },
   "le même barème des deux côtés": {
    "fr": "le même barème des deux côtés",
-   "en": "",
+   "en": "the same fee scale on both sides",
    "_pages": [
     "enveloppe"
    ]
   },
   "le profil technique": {
    "fr": "le profil technique",
-   "en": "",
+   "en": "the technical profile",
    "_pages": [
     "pan-sia",
     "enveloppe"
@@ -535,322 +535,322 @@
   },
   "liste explicite de ce qu’il ne peut pas trancher": {
    "fr": "liste explicite de ce qu’il ne peut pas trancher",
-   "en": "",
+   "en": "explicit list of what it cannot decide",
    "_pages": [
     "enveloppe"
    ]
   },
   "lot technique": {
    "fr": "lot technique",
-   "en": "",
+   "en": "technical package",
    "_pages": [
     "enveloppe"
    ]
   },
   "lues sur la DPGF": {
    "fr": "lues sur la DPGF",
-   "en": "",
+   "en": "read from the DPGF",
    "_pages": [
     "enveloppe"
    ]
   },
   "mois · tolérance # % · incertitude ±# %": {
    "fr": "mois · tolérance 10 % · incertitude ±20 %",
-   "en": "",
+   "en": "months · tolerance # % · uncertainty ±# %",
    "_pages": [
     "enveloppe"
    ]
   },
   "montant des travaux": {
    "fr": "montant des travaux",
-   "en": "",
+   "en": "amount of the works",
    "_pages": [
     "enveloppe"
    ]
   },
   "non instruits": {
    "fr": "non instruits",
-   "en": "",
+   "en": "not yet examined",
    "_pages": [
     "enveloppe"
    ]
   },
   "ouvrir quand même": {
    "fr": "ouvrir quand même",
-   "en": "",
+   "en": "open anyway",
    "_pages": [
     "enveloppe"
    ]
   },
   "où une décision est attendue": {
    "fr": "où une décision est attendue",
-   "en": "",
+   "en": "where a decision is expected",
    "_pages": [
     "enveloppe"
    ]
   },
   "part du lot technique": {
    "fr": "part du lot technique",
-   "en": "",
+   "en": "share of the technical package",
    "_pages": [
     "enveloppe"
    ]
   },
   "que vous confiez et les": {
    "fr": "que vous confiez et les",
-   "en": "",
+   "en": "you entrust and the",
    "_pages": [
     "enveloppe"
    ]
   },
   "que vous retenez : le chiffrage suit. Les honoraires portent sur le montant des": {
    "fr": "que vous retenez : le chiffrage suit. Les honoraires portent sur le montant des",
-   "en": "",
+   "en": "you select: the costing follows. The fees are based on the amount of the",
    "_pages": [
     "enveloppe"
    ]
   },
   "qui les qualifient. Aucun modèle de langage n’intervient dans leur rédaction : ils sont composés par calcul déterministe, et le disent en toutes lettres. Ils ne portent donc pas le marquage de l’article #, qui ne s’appliquerait pas.": {
    "fr": "qui les qualifient. Aucun modèle de langage n’intervient dans leur rédaction : ils sont composés par calcul déterministe, et le disent en toutes lettres. Ils ne portent donc pas le marquage de l’article 50, qui ne s’appliquerait pas.",
-   "en": "",
+   "en": "that qualify them. No language model is involved in writing them: they are composed by deterministic calculation, and say so in plain words. They therefore do not carry the Article # marking, which would not apply.",
    "_pages": [
     "enveloppe"
    ]
   },
   "rapporte au regard du capital immobilisé": {
    "fr": "rapporte au regard du capital immobilisé",
-   "en": "",
+   "en": "earns relative to the capital tied up",
    "_pages": [
     "enveloppe"
    ]
   },
   "remplissage au point mort": {
    "fr": "remplissage au point mort",
-   "en": "",
+   "en": "break-even occupancy",
    "_pages": [
     "enveloppe"
    ]
   },
   "référentiel — valeur du référentiel": {
    "fr": "référentiel — valeur du référentiel",
-   "en": "",
+   "en": "framework — framework value",
    "_pages": [
     "enveloppe"
    ]
   },
   "réserves": {
    "fr": "réserves",
-   "en": "",
+   "en": "caveats",
    "_pages": [
     "enveloppe"
    ]
   },
   "sans unité · tolérance # % · incertitude ±# %": {
    "fr": "sans unité · tolérance 5 % · incertitude ±8 %",
-   "en": "",
+   "en": "unitless · tolerance # % · uncertainty ±# %",
    "_pages": [
     "enveloppe"
    ]
   },
   "seuls critères sourcés": {
    "fr": "seuls critères sourcés",
-   "en": "",
+   "en": "only sourced criteria",
    "_pages": [
     "enveloppe"
    ]
   },
   "site d’ingénierie": {
    "fr": "site d’ingénierie",
-   "en": "",
+   "en": "engineering site",
    "_pages": [
     "enveloppe"
    ]
   },
   "structure complète de la DPGF": {
    "fr": "structure complète de la DPGF",
-   "en": "",
+   "en": "full structure of the DPGF",
    "_pages": [
     "enveloppe"
    ]
   },
   "votre question restante porte-t-elle sur": {
    "fr": "votre question restante porte-t-elle sur",
-   "en": "",
+   "en": "does your remaining question concern",
    "_pages": [
     "enveloppe"
    ]
   },
   "zéro : c'est exactement le point où le projet rémunère son capital, ni plus ni moins": {
    "fr": "zéro : c'est exactement le point où le projet rémunère son capital, ni plus ni moins",
-   "en": "",
+   "en": "zero: this is exactly the point where the project pays for its capital, no more and no less",
    "_pages": [
     "enveloppe"
    ]
   },
   "zéro : en dessous, le projet APPELLE de la trésorerie au lieu d'en dégager, et il faut dire d'où elle vient": {
    "fr": "zéro : en dessous, le projet APPELLE de la trésorerie au lieu d'en dégager, et il faut dire d'où elle vient",
-   "en": "",
+   "en": "zero: below it, the project CONSUMES cash instead of generating it, and you must say where the cash comes from",
    "_pages": [
     "enveloppe"
    ]
   },
   "À présenter aux sponsors dès le départ, y compris si la conclusion déçoit.": {
    "fr": "À présenter aux sponsors dès le départ, y compris si la conclusion déçoit.",
-   "en": "",
+   "en": "To be presented to the sponsors from the outset, even if the conclusion disappoints.",
    "_pages": [
     "enveloppe"
    ]
   },
   "Éprouver le business case": {
    "fr": "Éprouver le business case",
-   "en": "",
+   "en": "Test the business case",
    "_pages": [
     "enveloppe"
    ]
   },
   "Établir le diagnostic": {
    "fr": "Établir le diagnostic",
-   "en": "",
+   "en": "Establish the diagnosis",
    "_pages": [
     "enveloppe"
    ]
   },
   "Établir le tableau de bord": {
    "fr": "Établir le tableau de bord",
-   "en": "",
+   "en": "Build the dashboard",
    "_pages": [
     "enveloppe"
    ]
   },
   "Étape # sur # · À venir — Chiffrer la maîtrise d’œuvre": {
    "fr": "Étape 5 sur 10 · À venir — Chiffrer la maîtrise d’œuvre",
-   "en": "",
+   "en": "Step # of # · Upcoming — Cost the design and supervision",
    "_pages": [
     "enveloppe"
    ]
   },
   "Étape # sur # · À venir — Lire la création de valeur": {
    "fr": "Étape 7 sur 10 · À venir — Lire la création de valeur",
-   "en": "",
+   "en": "Step # of # · Upcoming — Read the value creation",
    "_pages": [
     "enveloppe"
    ]
   },
   "Étape # sur # · À venir — Poursuivre sur l’ingénierie": {
    "fr": "Étape 10 sur 10 · À venir — Poursuivre sur l’ingénierie",
-   "en": "",
+   "en": "Step # of # · Upcoming — Continue with engineering",
    "_pages": [
     "enveloppe"
    ]
   },
   "Étape # sur # · À venir — Éprouver le business case": {
    "fr": "Étape 4 sur 10 · À venir — Éprouver le business case",
-   "en": "",
+   "en": "Step # of # · Upcoming — Test the business case",
    "_pages": [
     "enveloppe"
    ]
   },
   "à renseigner": {
    "fr": "à renseigner",
-   "en": "",
+   "en": "to be provided",
    "_pages": [
     "enveloppe"
    ]
   },
   "— Montée en charge commerciale, Besoin en fonds de roulement, Investissement de maintien, Durée d'amortissement. Chacune porte sa provenance et reste modifiable.": {
    "fr": "— Montée en charge commerciale, Besoin en fonds de roulement, Investissement de maintien, Durée d'amortissement. Chacune porte sa provenance et reste modifiable.",
-   "en": "",
+   "en": "— Commercial ramp-up, Working capital requirement, Maintenance capex, Depreciation period. Each one carries its provenance and remains editable.",
    "_pages": [
     "enveloppe"
    ]
   },
   "— Puissance, gabarit, scénario, calendrier — les critères d’ingénierie sous « Aller plus loin », et le BUSINESS CASE sous son propre dépliant : prix d’hébergement, puissance contractée, année de puissance ferme. Sans eux, le verdict ne parlera que de construction.": {
    "fr": "— Puissance, gabarit, scénario, calendrier — les critères d’ingénierie sous « Aller plus loin », et le BUSINESS CASE sous son propre dépliant : prix d’hébergement, puissance contractée, année de puissance ferme. Sans eux, le verdict ne parlera que de construction.",
-   "en": "",
+   "en": "— Power, template, scenario, timetable — the engineering criteria under “Go further”, and the BUSINESS CASE under its own drop-down: hosting price, contracted power, year of firm power. Without them, the verdict will speak only of construction.",
    "_pages": [
     "enveloppe"
    ]
   },
   "— car sur le seul investissement, elle afficherait zéro.": {
    "fr": "— car sur le seul investissement, elle afficherait zéro.",
-   "en": "",
+   "en": "— because on investment alone, it would show zero.",
    "_pages": [
     "enveloppe"
    ]
   },
   "— coût du capital et taux d’impôt, qui sont des décisions, pas des prévisions. Il s’affiche en tête du résultat ; les trois indicateurs viennent ensuite, pour qui a le plan.": {
    "fr": "— coût du capital et taux d’impôt, qui sont des décisions, pas des prévisions. Il s’affiche en tête du résultat ; les trois indicateurs viennent ensuite, pour qui a le plan.",
-   "en": "",
+   "en": "— cost of capital and tax rate, which are decisions, not forecasts. It is shown at the top of the result; the three indicators come next, for whoever has the plan.",
    "_pages": [
     "enveloppe"
    ]
   },
   "— et il le dit sur la page d’arrivée. Accès abonné.": {
    "fr": "— et il le dit sur la page d’arrivée. Accès abonné.",
-   "en": "",
+   "en": "— and it says so on the landing page. Subscriber access.",
    "_pages": [
     "enveloppe"
    ]
   },
   "— et ils ne peuvent pas se calculer sans vous : revenu attendu, coût du capital et taux d’impôt sont des décisions d’investisseur, pas des données de référentiel. Tant qu’elles ne sont pas saisies, les trois sont": {
    "fr": "— et ils ne peuvent pas se calculer sans vous : revenu attendu, coût du capital et taux d’impôt sont des décisions d’investisseur, pas des données de référentiel. Tant qu’elles ne sont pas saisies, les trois sont",
-   "en": "",
+   "en": "— and they cannot be calculated without you: expected revenue, cost of capital and tax rate are investor decisions, not framework data. As long as they are not entered, all three are",
    "_pages": [
     "enveloppe"
    ]
   },
   "— et ses huit constats entrent dans le même verdict GO / NO GO.": {
    "fr": "— et ses huit constats entrent dans le même verdict GO / NO GO.",
-   "en": "",
+   "en": "— and its eight findings feed into the same GO / NO-GO verdict.",
    "_pages": [
     "enveloppe"
    ]
   },
   "— honoraires, phases, pièces à produire ? Prenez le second. Les deux se prennent l’un après l’autre : ils ne s’excluent pas, et aucun ne referme l’étude en cours.": {
    "fr": "— honoraires, phases, pièces à produire ? Prenez le second. Les deux se prennent l’un après l’autre : ils ne s’excluent pas, et aucun ne referme l’étude en cours.",
-   "en": "",
+   "en": "— fees, phases, documents to produce? Take the second. The two can be taken one after the other: they are not mutually exclusive, and neither closes the study in progress.",
    "_pages": [
     "enveloppe"
    ]
   },
   "— je saisis ma valeur —": {
    "fr": "— je saisis ma valeur —",
-   "en": "",
+   "en": "— I enter my own value —",
    "_pages": [
     "enveloppe"
    ]
   },
   "— la demande, le calendrier électrique, la concurrence, le phasage et les risques. Huit tests de viabilité qui rejoignent le MÊME avis GO / NO GO que le chiffrage.": {
    "fr": "— la demande, le calendrier électrique, la concurrence, le phasage et les risques. Huit tests de viabilité qui rejoignent le MÊME avis GO / NO GO que le chiffrage.",
-   "en": "",
+   "en": "— demand, the electricity timetable, competition, phasing and risks. Eight viability tests that feed into the SAME GO / NO-GO opinion as the costing.",
    "_pages": [
     "enveloppe"
    ]
   },
   "— la ligne de maîtrise d’œuvre et la provision pour aléas en sont retirées —, et le barème distingue le": {
    "fr": "— la ligne de maîtrise d’œuvre et la provision pour aléas en sont retirées —, et le barème distingue le",
-   "en": "",
+   "en": "— the design and supervision line and the contingency provision are removed from it —, and the fee scale distinguishes the",
    "_pages": [
     "enveloppe"
    ]
   },
   "— les deux seules grandeurs dont dépendent les honoraires de maîtrise d’œuvre.": {
    "fr": "— les deux seules grandeurs dont dépendent les honoraires de maîtrise d’œuvre.",
-   "en": "",
+   "en": "— the only two quantities on which the design and supervision fees depend.",
    "_pages": [
     "enveloppe"
    ]
   },
   "— non instruit —": {
    "fr": "— non instruit —",
-   "en": "",
+   "en": "— not yet examined —",
    "_pages": [
     "enveloppe"
    ]
   },
   "— pays et puissance — pour ne pas le ressaisir. Il vous montre ce qu’il contient avant que vous n’en fassiez quoi que ce soit : rien n’est envoyé tant que vous ne suivez pas le lien.": {
    "fr": "— pays et puissance — pour ne pas le ressaisir. Il vous montre ce qu’il contient avant que vous n’en fassiez quoi que ce soit : rien n’est envoyé tant que vous ne suivez pas le lien.",
-   "en": "",
+   "en": "— country and power — so that you do not re-enter it. It shows you what it contains before you do anything with it: nothing is sent until you follow the link.",
    "_pages": [
     "pan-sia",
     "enveloppe"
@@ -858,735 +858,735 @@
   },
   "— refroidissement imposé, classe d’air ASHRAE, PUE contractuel, taux de charge, prix et intensité carbone de votre contrat. Chacun remplace une déduction par VOTRE donnée.": {
    "fr": "— refroidissement imposé, classe d’air ASHRAE, PUE contractuel, taux de charge, prix et intensité carbone de votre contrat. Chacun remplace une déduction par VOTRE donnée.",
-   "en": "",
+   "en": "— imposed cooling, ASHRAE air class, contractual PUE, load rate, price and carbon intensity of your contract. Each one replaces an inference with YOUR data.",
    "_pages": [
     "enveloppe"
    ]
   },
   "— énergie, eau, carbone ? Prenez le premier. Porte-t-elle sur": {
    "fr": "— énergie, eau, carbone ? Prenez le premier. Porte-t-elle sur",
-   "en": "",
+   "en": "— energy, water, carbon? Take the first. Does it concern",
    "_pages": [
     "enveloppe"
    ]
   },
   "↩ Me ramener ici à chaque étape": {
    "fr": "↩ Me ramener ici à chaque étape",
-   "en": "",
+   "en": "↩ Bring me back here at each step",
    "_pages": [
     "enveloppe"
    ]
   },
   "↻ Revenir aux valeurs de l’étude": {
    "fr": "↻ Revenir aux valeurs de l’étude",
-   "en": "",
+   "en": "↻ Revert to the study values",
    "_pages": [
     "enveloppe"
    ]
   },
   "⏸ Arrêter le guidage": {
    "fr": "⏸ Arrêter le guidage",
-   "en": "",
+   "en": "⏸ Stop the guidance",
    "_pages": [
     "enveloppe"
    ]
   },
   "⤵ Poser le revenu d’ÉQUILIBRE (EVA nulle) — pour voir le cas limite": {
    "fr": "⤵ Poser le revenu d’ÉQUILIBRE (EVA nulle) — pour voir le cas limite",
-   "en": "",
+   "en": "⤵ Set the BREAK-EVEN revenue (zero EVA) — to see the limiting case",
    "_pages": [
     "enveloppe"
    ]
   },
   "# système(s) à haut risque — vérifier FRIA applicable": {
    "fr": "1130 système(s) à haut risque — vérifier FRIA applicable",
-   "en": "",
+   "en": "# high-risk system(s) — check whether a FRIA applies",
    "_pages": [
     "espace"
    ]
   },
   "# système(s) à évaluer ou non conformes": {
    "fr": "1940 système(s) à évaluer ou non conformes",
-   "en": "",
+   "en": "# system(s) to be assessed or non-compliant",
    "_pages": [
     "espace"
    ]
   },
   "LGPD — Lei Geral de Proteção de Dados [General Data Protection Law]": {
    "fr": "LGPD — Lei Geral de Proteção de Dados [General Data Protection Law]",
-   "en": "",
+   "en": "LGPD — Lei Geral de Proteção de Dados [General Data Protection Law]",
    "_pages": [
     "fiche-br"
    ]
   },
   "PL #/# — Projeto de Lei IA [AI Bill]": {
    "fr": "PL 2338/2023 — Projeto de Lei IA [AI Bill]",
-   "en": "",
+   "en": "PL #/# — Projeto de Lei IA [AI Bill]",
    "_pages": [
     "fiche-br"
    ]
   },
   "LPD — Loi fédérale sur la protection des données [Federal Act on Data Protection]": {
    "fr": "LPD — Loi fédérale sur la protection des données [Federal Act on Data Protection]",
-   "en": "",
+   "en": "LPD — Loi fédérale sur la protection des données [Federal Act on Data Protection]",
    "_pages": [
     "fiche-ch"
    ]
   },
   "Política Nacional de IA (#) [National AI Policy]": {
    "fr": "Política Nacional de IA (2021) [National AI Policy]",
-   "en": "",
+   "en": "Política Nacional de IA (#) [National AI Policy]",
    "_pages": [
     "fiche-cl"
    ]
   },
   ", par centre de coût — un plafond est une décision de comité, révisée à chaque exercice, et le figer dans une table obligerait à une migration pour changer un nombre.": {
    "fr": ", par centre de coût — un plafond est une décision de comité, révisée à chaque exercice, et le figer dans une table obligerait à une migration pour changer un nombre.",
-   "en": "",
+   "en": ", per cost centre — a cap is a committee decision, revised each financial year, and freezing it in a table would require a migration to change a number.",
    "_pages": [
     "finops"
    ]
   },
   "Aucun plafond n’est posé. Les plafonds se passent à /api/finops par le paramètre": {
    "fr": "Aucun plafond n’est posé. Les plafonds se passent à /api/finops par le paramètre",
-   "en": "",
+   "en": "No cap is set. Caps are passed to /api/finops through the parameter",
    "_pages": [
     "finops"
    ]
   },
   "Aucun système ne porte à la fois un modèle connu et une classe de tâche déclarée. La classe ne se devine pas depuis la finalité, qui est du texte libre.": {
    "fr": "Aucun système ne porte à la fois un modèle connu et une classe de tâche déclarée. La classe ne se devine pas depuis la finalité, qui est du texte libre.",
-   "en": "",
+   "en": "No system carries both a known model and a declared task class. The class cannot be guessed from the purpose, which is free text.",
    "_pages": [
     "finops"
    ]
   },
   "Chiffrés": {
    "fr": "Chiffrés",
-   "en": "",
+   "en": "Costed",
    "_pages": [
     "finops"
    ]
   },
   "Classification lue chez : Simulateur IA Act, puis le Registre IA.": {
    "fr": "Classification lue chez : Simulateur IA Act, puis le Registre IA.",
-   "en": "",
+   "en": "Classification read from: AI Act simulator, then the AI register.",
    "_pages": [
     "finops"
    ]
   },
   "La classification n'est pas faite. Le montant se lit, le risque non — et c'est le second qui commande le premier.": {
    "fr": "La classification n'est pas faite. Le montant se lit, le risque non — et c'est le second qui commande le premier.",
-   "en": "",
+   "en": "The classification has not been done. The amount can be read, the risk cannot — and it is the second that governs the first.",
    "_pages": [
     "finops"
    ]
   },
   "Le coût d'usage est ici l'essentiel du coût.": {
    "fr": "Le coût d'usage est ici l'essentiel du coût.",
-   "en": "",
+   "en": "Usage cost is the bulk of the cost here.",
    "_pages": [
     "finops"
    ]
   },
   "Le coût d'usage n'est qu'une part du coût réel : la gestion des risques, la documentation technique, la journalisation et l'évaluation de conformité en portent une autre, que ce module ne chiffre pas.": {
    "fr": "Le coût d'usage n'est qu'une part du coût réel : la gestion des risques, la documentation technique, la journalisation et l'évaluation de conformité en portent une autre, que ce module ne chiffre pas.",
-   "en": "",
+   "en": "Usage cost is only part of the real cost: risk management, technical documentation, logging and conformity assessment carry another part, which this module does not cost.",
    "_pages": [
     "finops"
    ]
   },
   "Le fournisseur est déclaré, le modèle non : le tarif est relevable chez un éditeur nommé. C'est la lacune la moins coûteuse à combler du lot.": {
    "fr": "Le fournisseur est déclaré, le modèle non : le tarif est relevable chez un éditeur nommé. C'est la lacune la moins coûteuse à combler du lot.",
-   "en": "",
+   "en": "The provider is declared, the model is not: the price can be read from a named vendor. It is the cheapest gap to close in the batch.",
    "_pages": [
     "finops"
    ]
   },
   "Les réponses répétitives sont mises en cache · Les traitements non urgents partent en lot différé · Un modèle plus petit traite les étapes simples · La taille des requêtes est bornée (contexte élagué)": {
    "fr": "Les réponses répétitives sont mises en cache · Les traitements non urgents partent en lot différé · Un modèle plus petit traite les étapes simples · La taille des requêtes est bornée (contexte élagué)",
-   "en": "",
+   "en": "Repetitive responses are cached · Non-urgent processing runs in a deferred batch · A smaller model handles the simple steps · Request size is bounded (pruned context)",
    "_pages": [
     "finops"
    ]
   },
   "Modèle": {
    "fr": "Modèle",
-   "en": "",
+   "en": "Model",
    "_pages": [
     "finops"
    ]
   },
   "Moteur FinOps #-#-b.": {
    "fr": "Moteur FinOps 2026-09-b.",
-   "en": "",
+   "en": "FinOps engine #-#-b.",
    "_pages": [
     "finops"
    ]
   },
   "Normales — pas encore en service · #": {
    "fr": "Normales — pas encore en service · 1940",
-   "en": "",
+   "en": "Normal — not yet in service · #",
    "_pages": [
     "finops"
    ]
   },
   "Ordre de grandeur CATALOGUE. Un contrat entreprise, une remise au volume, un cache de contexte ou un traitement différé donnent un coût réel différent, parfois d'un ordre de grandeur. Ce montant ne remplace pas la lecture de votre facture.": {
    "fr": "Ordre de grandeur CATALOGUE. Un contrat entreprise, une remise au volume, un cache de contexte ou un traitement différé donnent un coût réel différent, parfois d'un ordre de grandeur. Ce montant ne remplace pas la lecture de votre facture.",
-   "en": "",
+   "en": "CATALOGUE order of magnitude. An enterprise contract, a volume discount, a context cache or deferred processing give a different real cost, sometimes by an order of magnitude. This amount does not replace reading your invoice.",
    "_pages": [
     "finops"
    ]
   },
   "Posés": {
    "fr": "Posés",
-   "en": "",
+   "en": "Set",
    "_pages": [
     "finops"
    ]
   },
   "Projection annuelle": {
    "fr": "Projection annuelle",
-   "en": "",
+   "en": "Annual projection",
    "_pages": [
     "finops"
    ]
   },
   "Risque limité (transparence)": {
    "fr": "Risque limité (transparence)",
-   "en": "",
+   "en": "Limited risk (transparency)",
    "_pages": [
     "finops"
    ]
   },
   "S'y ajoute le coût du marquage et de l'information des personnes, hors du périmètre de ce module.": {
    "fr": "S'y ajoute le coût du marquage et de l'information des personnes, hors du périmètre de ce module.",
-   "en": "",
+   "en": "Add to this the cost of marking and informing individuals, outside the scope of this module.",
    "_pages": [
     "finops"
    ]
   },
   "Systèmes": {
    "fr": "Systèmes",
-   "en": "",
+   "en": "Systems",
    "_pages": [
     "finops"
    ]
   },
   "Tarifs catalogue Anthropic, par million de jetons, relevés le # juin #": {
    "fr": "Tarifs catalogue Anthropic, par million de jetons, relevés le 24 juin 2026",
-   "en": "",
+   "en": "Anthropic catalogue prices, per million tokens, read on # June #",
    "_pages": [
     "finops"
    ]
   },
   "Un système classé haut risque dont le coût n'est pas connu est le pire des deux mondes : il porte les obligations les plus lourdes du règlement, et son budget n'est pas instruit. C'est la première ligne à traiter, avant tout arbitrage de plafond.": {
    "fr": "Un système classé haut risque dont le coût n'est pas connu est le pire des deux mondes : il porte les obligations les plus lourdes du règlement, et son budget n'est pas instruit. C'est la première ligne à traiter, avant tout arbitrage de plafond.",
-   "en": "",
+   "en": "A system classified as high-risk whose cost is not known is the worst of both worlds: it carries the heaviest obligations of the Regulation, and its budget has not been examined. It is the first row to deal with, before any decision on caps.",
    "_pages": [
     "finops"
    ]
   },
   "ce système est ① Conception : l'absence de volume y est normale, pas une lacune": {
    "fr": "ce système est ① Conception : l'absence de volume y est normale, pas une lacune",
-   "en": "",
+   "en": "this system is ① Design: the absence of volume is normal here, not a gap",
    "_pages": [
     "finops"
    ]
   },
   "ce système est ④ Production : il consomme, et personne n'a encore dit combien": {
    "fr": "ce système est ④ Production : il consomme, et personne n'a encore dit combien",
-   "en": "",
+   "en": "this system is ④ Production: it consumes, and nobody has yet said how much",
    "_pages": [
     "finops"
    ]
   },
   "coûts hors modèle": {
    "fr": "coûts hors modèle",
-   "en": "",
+   "en": "costs outside the model",
    "_pages": [
     "finops"
    ]
   },
   "du parc déclaré est chiffrable. Les # autres ligne(s) ne coûtent pas zéro : personne n’a encore dit ce qu’elles consomment.": {
    "fr": "du parc déclaré est chiffrable. Les 1944 autres ligne(s) ne coûtent pas zéro : personne n’a encore dit ce qu’elles consomment.",
-   "en": "",
+   "en": "of the declared estate can be costed. The # other row(s) do not cost zero: nobody has yet said what they consume.",
    "_pages": [
     "finops"
    ]
   },
   "en service": {
    "fr": "en service",
-   "en": "",
+   "en": "in service",
    "_pages": [
     "finops"
    ]
   },
   "forfait": {
    "fr": "forfait",
-   "en": "",
+   "en": "flat fee",
    "_pages": [
     "finops"
    ]
   },
   "le mensuel × #, à volume constant — un usage qui croît ne se projette pas ainsi": {
    "fr": "le mensuel × 12, à volume constant — un usage qui croît ne se projette pas ainsi",
-   "en": "",
+   "en": "the monthly figure × #, at constant volume — a growing use is not projected this way",
    "_pages": [
     "finops"
    ]
   },
   "relevé il y a # jours": {
    "fr": "relevé il y a 93 jours",
-   "en": "",
+   "en": "read # days ago",
    "_pages": [
     "finops"
    ]
   },
   "remises et contrats": {
    "fr": "remises et contrats",
-   "en": "",
+   "en": "discounts and contracts",
    "_pages": [
     "finops"
    ]
   },
   "tarifs autres editeurs": {
    "fr": "tarifs autres editeurs",
-   "en": "",
+   "en": "other vendors’ prices",
    "_pages": [
     "finops"
    ]
   },
   "taux de change": {
    "fr": "taux de change",
-   "en": "",
+   "en": "exchange rate",
    "_pages": [
     "finops"
    ]
   },
   "unité de facturation non déclarée": {
    "fr": "unité de facturation non déclarée",
-   "en": "",
+   "en": "billing unit not declared",
    "_pages": [
     "finops"
    ]
   },
   "À combler — ces systèmes sont en service · #": {
    "fr": "À combler — ces systèmes sont en service · 4",
-   "en": "",
+   "en": "To close — these systems are in service · #",
    "_pages": [
     "finops"
    ]
   },
   "Étape du cycle de vie lue chez : Registre IA — étape du cycle de vie.": {
    "fr": "Étape du cycle de vie lue chez : Registre IA — étape du cycle de vie.",
-   "en": "",
+   "en": "Lifecycle stage read from: AI register — lifecycle stage.",
    "_pages": [
     "finops"
    ]
   },
   "— Analyse sur documents longs": {
    "fr": "— Analyse sur documents longs",
-   "en": "",
+   "en": "— Analysis of long documents",
    "_pages": [
     "finops"
    ]
   },
   "— Aucun taux n'est appliqué. Les montants sortent en dollars quand le tarif l'est. Convertir suppose un taux daté, et un taux inventé produirait un montant faux d'apparence précise.": {
    "fr": "— Aucun taux n'est appliqué. Les montants sortent en dollars quand le tarif l'est. Convertir suppose un taux daté, et un taux inventé produirait un montant faux d'apparence précise.",
-   "en": "",
+   "en": "— No rate is applied. Amounts come out in dollars when the price is in dollars. Converting requires a dated rate, and an invented rate would produce a wrong amount that looks precise.",
    "_pages": [
     "finops"
    ]
   },
   "— Extraction ou classification sur texte court": {
    "fr": "— Extraction ou classification sur texte court",
-   "en": "",
+   "en": "— Extraction or classification on short text",
    "_pages": [
     "finops"
    ]
   },
   "— Les tarifs d'OpenAI, Google, Mistral, Meta et des hébergeurs de modèles ouverts ne figurent pas dans la table : ils ne sont pas relevés ici. Les ajouter demande de reporter le prix publié, sa devise, sa date de relevé et son adresse — pas de l'estimer.": {
    "fr": "— Les tarifs d'OpenAI, Google, Mistral, Meta et des hébergeurs de modèles ouverts ne figurent pas dans la table : ils ne sont pas relevés ici. Les ajouter demande de reporter le prix publié, sa devise, sa date de relevé et son adresse — pas de l'estimer.",
-   "en": "",
+   "en": "— Prices from OpenAI, Google, Mistral, Meta and open-model hosts are not in the table: they are not read here. Adding them requires recording the published price, its currency, the date it was read and its address — not estimating it.",
    "_pages": [
     "finops"
    ]
   },
   "— Raisonnement long ou agentique": {
    "fr": "— Raisonnement long ou agentique",
-   "en": "",
+   "en": "— Long or agentic reasoning",
    "_pages": [
     "finops"
    ]
   },
   "— Rédaction ou reformulation guidée": {
    "fr": "— Rédaction ou reformulation guidée",
-   "en": "",
+   "en": "— Guided drafting or rewording",
    "_pages": [
     "finops"
    ]
   },
   "— Stockage vectoriel, orchestration, supervision, temps humain de relecture : ces postes sont réels et absents ici. Un coût de modèle n'est pas un coût de cas d'usage.": {
    "fr": "— Stockage vectoriel, orchestration, supervision, temps humain de relecture : ces postes sont réels et absents ici. Un coût de modèle n'est pas un coût de cas d'usage.",
-   "en": "",
+   "en": "— Vector storage, orchestration, monitoring, human review time: these items are real and absent here. A model cost is not a use-case cost.",
    "_pages": [
     "finops"
    ]
   },
   "— Un contrat entreprise, une remise au volume, un cache de contexte ou un traitement différé changent le coût réel, parfois d'un ordre de grandeur. Le module ne les connaît pas et ne les devine pas.": {
    "fr": "— Un contrat entreprise, une remise au volume, un cache de contexte ou un traitement différé changent le coût réel, parfois d'un ordre de grandeur. Le module ne les connaît pas et ne les devine pas.",
-   "en": "",
+   "en": "— An enterprise contract, a volume discount, a context cache or deferred processing change the real cost, sometimes by an order of magnitude. The module does not know them and does not guess them.",
    "_pages": [
     "finops"
    ]
   },
   "— ce système est ④ Production : il consomme, et personne n'a encore dit combien": {
    "fr": "— ce système est ④ Production : il consomme, et personne n'a encore dit combien",
-   "en": "",
+   "en": "— this system is ④ Production: it consumes, and nobody has yet said how much",
    "_pages": [
     "finops"
    ]
   },
   "— facturé au jeton consommé (entrée + sortie)": {
    "fr": "— facturé au jeton consommé (entrée + sortie)",
-   "en": "",
+   "en": "— billed per token consumed (input + output)",
    "_pages": [
     "finops"
    ]
   },
   "— facturé au temps de calcul réservé": {
    "fr": "— facturé au temps de calcul réservé",
-   "en": "",
+   "en": "— billed on reserved compute time",
    "_pages": [
     "finops"
    ]
   },
   "— facturé par utilisateur et par mois": {
    "fr": "— facturé par utilisateur et par mois",
-   "en": "",
+   "en": "— billed per user per month",
    "_pages": [
     "finops"
    ]
   },
   "— facturé à la requête, quel que soit sa taille": {
    "fr": "— facturé à la requête, quel que soit sa taille",
-   "en": "",
+   "en": "— billed per request, whatever its size",
    "_pages": [
     "finops"
    ]
   },
   "— fournisseur « Interne »,": {
    "fr": "— fournisseur « Interne »,",
-   "en": "",
+   "en": "— fournisseur « Interne »,",
    "_pages": [
     "finops"
    ]
   },
   "— fournisseur « OpenAI/Interne »,": {
    "fr": "— fournisseur « OpenAI/Interne »,",
-   "en": "",
+   "en": "— fournisseur « OpenAI/Interne »,",
    "_pages": [
     "finops"
    ]
   },
   "— montant fixe, indépendant de l'usage": {
    "fr": "— montant fixe, indépendant de l'usage",
-   "en": "",
+   "en": "— fixed amount, independent of use",
    "_pages": [
     "finops"
    ]
   },
   "⚠️ Aucun système du secteur Télécom dans le Registre IA. Ajoutez vos systèmes pour une évaluation FRIA réelle.": {
    "fr": "⚠️ Aucun système du secteur Télécom dans le Registre IA. Ajoutez vos systèmes pour une évaluation FRIA réelle.",
-   "en": "",
+   "en": "⚠️ No system from the Telecom sector in the AI register. Add your systems for a real FRIA assessment.",
    "_pages": [
     "fria"
    ]
   },
   "Plus récent d'abord": {
    "fr": "Plus récent d'abord",
-   "en": "",
+   "en": "Newest first",
    "_pages": [
     "geo"
    ]
   },
   "📋 AI Act (Reg. #/#) — EUR-Lex ↗": {
    "fr": "📋 AI Act (Reg. 2024/1689) — EUR-Lex ↗",
-   "en": "",
+   "en": "📋 AI Act (Reg. #/#) — EUR-Lex ↗",
    "_pages": [
     "geo"
    ]
   },
   "📋 DORA (Reg. #/#) — EUR-Lex ↗": {
    "fr": "📋 DORA (Reg. 2022/2554) — EUR-Lex ↗",
-   "en": "",
+   "en": "📋 DORA (Reg. #/#) — EUR-Lex ↗",
    "_pages": [
     "geo"
    ]
   },
   "📋 GDPR (Reg. #/#) — EUR-Lex ↗": {
    "fr": "📋 GDPR (Reg. 2016/679) — EUR-Lex ↗",
-   "en": "",
+   "en": "📋 GDPR (Reg. #/#) — EUR-Lex ↗",
    "_pages": [
     "geo"
    ]
   },
   "📋 NIS # (Dir. #/#) — EUR-Lex ↗": {
    "fr": "📋 NIS 2 (Dir. 2022/2555) — EUR-Lex ↗",
-   "en": "",
+   "en": "📋 NIS # (Dir. #/#) — EUR-Lex ↗",
    "_pages": [
     "geo"
    ]
   },
   "# % des usages connus": {
    "fr": "100 % des usages connus",
-   "en": "",
+   "en": "# % of known uses",
    "_pages": [
     "gouvernance"
    ]
   },
   "# questions · référentiel #-#-a": {
    "fr": "7 questions · référentiel 2026-07-a",
-   "en": "",
+   "en": "# questions · framework #-#-a",
    "_pages": [
     "gouvernance"
    ]
   },
   "> # % des populations exposées": {
    "fr": "> 90 % des populations exposées",
-   "en": "",
+   "en": "> # % of the populations exposed",
    "_pages": [
     "gouvernance"
    ]
   },
   "Aide : Demandes en attente de décision": {
    "fr": "Aide : Demandes en attente de décision",
-   "en": "",
+   "en": "Help: Requests awaiting decision",
    "_pages": [
     "gouvernance"
    ]
   },
   "Aide : Demandes refusées ou ajournées": {
    "fr": "Aide : Demandes refusées ou ajournées",
-   "en": "",
+   "en": "Help: Requests rejected or deferred",
    "_pages": [
     "gouvernance"
    ]
   },
   "Aide : Délai moyen de décision (jours)": {
    "fr": "Aide : Délai moyen de décision (jours)",
-   "en": "",
+   "en": "Help: Average decision time (days)",
    "_pages": [
     "gouvernance"
    ]
   },
   "Aide : Part des usages qualifiés AI Act": {
    "fr": "Aide : Part des usages qualifiés AI Act",
-   "en": "",
+   "en": "Help: Share of uses qualified under the AI Act",
    "_pages": [
     "gouvernance"
    ]
   },
   "Aide : Systèmes à haut risque en exploitation": {
    "fr": "Aide : Systèmes à haut risque en exploitation",
-   "en": "",
+   "en": "Help: High-risk systems in operation",
    "_pages": [
     "gouvernance"
    ]
   },
   "Aide : Usages déclarés au registre": {
    "fr": "Aide : Usages déclarés au registre",
-   "en": "",
+   "en": "Help: Uses declared in the register",
    "_pages": [
     "gouvernance"
    ]
   },
   "Aucune demande enregistrée. Une file vide ne signifie pas qu’aucun usage n’existe : elle signifie qu’aucun n’est passé par le circuit.": {
    "fr": "Aucune demande enregistrée. Une file vide ne signifie pas qu’aucun usage n’existe : elle signifie qu’aucun n’est passé par le circuit.",
-   "en": "",
+   "en": "No request recorded. An empty queue does not mean that no use exists: it means that none has gone through the workflow.",
    "_pages": [
     "gouvernance"
    ]
   },
   "Autorisation, autorisation sous conditions, ajournement ou refus. Toute décision est motivée et tracée, y compris le refus.": {
    "fr": "Autorisation, autorisation sous conditions, ajournement ou refus. Toute décision est motivée et tracée, y compris le refus.",
-   "en": "",
+   "en": "Authorisation, conditional authorisation, deferral or rejection. Every decision is reasoned and traced, including a rejection.",
    "_pages": [
     "gouvernance"
    ]
   },
   "Cible : # % des usages connus": {
    "fr": "Cible : 100 % des usages connus",
-   "en": "",
+   "en": "Target: # % of known uses",
    "_pages": [
     "gouvernance"
    ]
   },
   "Cible : aucune au-delà d'un trimestre": {
    "fr": "Cible : aucune au-delà d'un trimestre",
-   "en": "",
+   "en": "Target: none older than a quarter",
    "_pages": [
     "gouvernance"
    ]
   },
   "Cible : connu et documenté": {
    "fr": "Cible : connu et documenté",
-   "en": "",
+   "en": "Target: known and documented",
    "_pages": [
     "gouvernance"
    ]
   },
   "Cible : non nul": {
    "fr": "Cible : non nul",
-   "en": "",
+   "en": "Target: non-zero",
    "_pages": [
     "gouvernance"
    ]
   },
   "Classe AI Act présumée, nécessité d'une AIPD ou d'une FRIA, obligations de transparence (art. #). C'est ICI que se décide la lourdeur de tout le reste — jamais à la fin.": {
    "fr": "Classe AI Act présumée, nécessité d'une AIPD ou d'une FRIA, obligations de transparence (art. 50). C'est ICI que se décide la lourdeur de tout le reste — jamais à la fin.",
-   "en": "",
+   "en": "Presumed AI Act class, need for a DPIA or a FRIA, transparency obligations (art. #). It is HERE that the weight of everything else is decided — never at the end.",
    "_pages": [
     "gouvernance"
    ]
   },
   "Collaborateurs sensibilisés": {
    "fr": "Collaborateurs sensibilisés",
-   "en": "",
+   "en": "Staff made aware",
    "_pages": [
     "gouvernance"
    ]
   },
   "Comité de gouvernance IA (ou délégation selon la classe)": {
    "fr": "Comité de gouvernance IA (ou délégation selon la classe)",
-   "en": "",
+   "en": "AI governance committee (or delegation depending on the class)",
    "_pages": [
     "gouvernance"
    ]
   },
   "Comité de gouvernance IA · # étape(s)": {
    "fr": "Comité de gouvernance IA · 6 étape(s)",
-   "en": "",
+   "en": "AI governance committee · # step(s)",
    "_pages": [
     "gouvernance"
    ]
   },
   "Conditions de la décision mises en œuvre, inscription au registre des systèmes IA, information des utilisateurs.": {
    "fr": "Conditions de la décision mises en œuvre, inscription au registre des systèmes IA, information des utilisateurs.",
-   "en": "",
+   "en": "Decision conditions implemented, recording in the AI systems register, information of users.",
    "_pages": [
     "gouvernance"
    ]
   },
   "Conditions réelles d'usage, contournements observés": {
    "fr": "Conditions réelles d'usage, contournements observés",
-   "en": "",
+   "en": "Actual conditions of use, workarounds observed",
    "_pages": [
     "gouvernance"
    ]
   },
   "Conformité + métier, comité informé · # étape(s)": {
    "fr": "Conformité + métier, comité informé · 5 étape(s)",
-   "en": "",
+   "en": "Compliance + business, committee informed · # step(s)",
    "_pages": [
     "gouvernance"
    ]
   },
   "Conformité / Juridique": {
    "fr": "Conformité / Juridique",
-   "en": "",
+   "en": "Compliance / Legal",
    "_pages": [
     "gouvernance"
    ]
   },
   "Conformité / Risque": {
    "fr": "Conformité / Risque",
-   "en": "",
+   "en": "Compliance / Risk",
    "_pages": [
     "gouvernance"
    ]
   },
   "Contrôle réglementaire et éthique, veto motivé": {
    "fr": "Contrôle réglementaire et éthique, veto motivé",
-   "en": "",
+   "en": "Regulatory and ethical review, reasoned veto",
    "_pages": [
     "gouvernance"
    ]
   },
   "Cybersécurité": {
    "fr": "Cybersécurité",
-   "en": "",
+   "en": "Cybersecurity",
    "_pages": [
     "gouvernance"
    ]
   },
   "Demande & description de l'usage": {
    "fr": "Demande & description de l'usage",
-   "en": "",
+   "en": "Request & description of the use",
    "_pages": [
     "gouvernance"
    ]
   },
   "Demandes en attente de décision": {
    "fr": "Demandes en attente de décision",
-   "en": "",
+   "en": "Requests awaiting decision",
    "_pages": [
     "gouvernance"
    ]
   },
   "Demandes refusées ou ajournées": {
    "fr": "Demandes refusées ou ajournées",
-   "en": "",
+   "en": "Requests rejected or deferred",
    "_pages": [
     "gouvernance"
    ]
   },
   "Direction, Conformité/Risque et Métiers doivent être représentés. Sans l'un des trois, la séance informe mais ne décide pas.": {
    "fr": "Direction, Conformité/Risque et Métiers doivent être représentés. Sans l'un des trois, la séance informe mais ne décide pas.",
-   "en": "",
+   "en": "Senior management, Compliance/Risk and the business lines must be represented. Without one of the three, the session informs but does not decide.",
    "_pages": [
     "gouvernance"
    ]
   },
   "Données réellement nécessaires, hébergement, exposition, supervision humaine prévue, journalisation.": {
    "fr": "Données réellement nécessaires, hébergement, exposition, supervision humaine prévue, journalisation.",
-   "en": "",
+   "en": "Data actually needed, hosting, exposure, planned human oversight, logging.",
    "_pages": [
     "gouvernance"
    ]
   },
   "Décision": {
    "fr": "Décision",
-   "en": "",
+   "en": "Decision",
    "_pages": [
     "gouvernance"
    ]
   },
   "Délai moyen de décision (jours)": {
    "fr": "Délai moyen de décision (jours)",
-   "en": "",
+   "en": "Average decision time (days)",
    "_pages": [
     "gouvernance"
    ]
   },
   "Exposition, sécurité des données et du modèle": {
    "fr": "Exposition, sécurité des données et du modèle",
-   "en": "",
+   "en": "Exposure, security of the data and of the model",
    "_pages": [
     "gouvernance"
    ]
   },
   "Faisabilité, architecture, sécurité technique": {
    "fr": "Faisabilité, architecture, sécurité technique",
-   "en": "",
+   "en": "Feasibility, architecture, technical security",
    "_pages": [
     "gouvernance"
    ]
   },
   "Finalité, population concernée, données envisagées, gain attendu. Une demande sans finalité écrite n'est pas instruite.": {
    "fr": "Finalité, population concernée, données envisagées, gain attendu. Une demande sans finalité écrite n'est pas instruite.",
-   "en": "",
+   "en": "Purpose, population concerned, data envisaged, expected gain. A request without a written purpose is not examined.",
    "_pages": [
     "gouvernance"
    ]

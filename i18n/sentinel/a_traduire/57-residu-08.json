@@ -5,336 +5,336 @@
  "texte": {
   "Les mesures de l'annexe A ne sont pas exhaustives : un organisme peut en concevoir d'autres, ou s'inspirer de sources existantes, si le traitement des risques l'exige. Une déclaration d'applicabilité qui couvre les trente-huit mesures de l'annexe A n'est pas pour autant complète : elle l'est si elle couvre les options de traitement retenues, ce qui peut demander davantage.": {
    "fr": "Les mesures de l'annexe A ne sont pas exhaustives : un organisme peut en concevoir d'autres, ou s'inspirer de sources existantes, si le traitement des risques l'exige. Une déclaration d'applicabilité qui couvre les trente-huit mesures de l'annexe A n'est pas pour autant complète : elle l'est si elle couvre les options de traitement retenues, ce qui peut demander davantage.",
-   "en": "",
+   "en": "Annex A controls are not exhaustive: an organisation can design others, or draw on existing sources, if risk treatment requires it. A Statement of Applicability that covers the thirty-eight Annex A controls is not complete for all that: it is complete if it covers the risk treatment options selected, which may demand more.",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Objectifs d'utilisation responsable": {
    "fr": "Objectifs d'utilisation responsable",
-   "en": "",
+   "en": "Objectives for responsible use",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Objectifs pour un développement responsable du système d'IA": {
    "fr": "Objectifs pour un développement responsable du système d'IA",
-   "en": "",
+   "en": "Objectives for responsible development of AI system",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Processus d'utilisation responsable des systèmes d'IA": {
    "fr": "Processus d'utilisation responsable des systèmes d'IA",
-   "en": "",
+   "en": "Processes for responsible use of AI systems",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Processus d'évaluation de l'impact du système d'IA": {
    "fr": "Processus d'évaluation de l'impact du système d'IA",
-   "en": "",
+   "en": "AI system impact assessment process",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Processus de conception et de développement responsables du système d'IA": {
    "fr": "Processus de conception et de développement responsables du système d'IA",
-   "en": "",
+   "en": "Processes for responsible AI system design and development",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Provenance des données": {
    "fr": "Provenance des données",
-   "en": "",
+   "en": "Data provenance",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Préparation des données": {
    "fr": "Préparation des données",
-   "en": "",
+   "en": "Data preparation",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Qualité des données pour les systèmes d'IA": {
    "fr": "Qualité des données pour les systèmes d'IA",
-   "en": "",
+   "en": "Quality of data for AI systems",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Recenser ce dont les systèmes dépendent — données, outils, infrastructure, humains — pour pouvoir en apprécier les risques.": {
    "fr": "Recenser ce dont les systèmes dépendent — données, outils, infrastructure, humains — pour pouvoir en apprécier les risques.",
-   "en": "",
+   "en": "Identify what the systems depend on — data, tools, infrastructure, people — so that you can assess their risks.",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Ressources d'outillage": {
    "fr": "Ressources d'outillage",
-   "en": "",
+   "en": "Tooling resources",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Ressources de données": {
    "fr": "Ressources de données",
-   "en": "",
+   "en": "Data resources",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Ressources système et informatiques": {
    "fr": "Ressources système et informatiques",
-   "en": "",
+   "en": "System and computing resources",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Répartir les responsabilités avec les fournisseurs et les clients — et s'assurer que ce qu'on achète tient les mêmes engagements.": {
    "fr": "Répartir les responsabilités avec les fournisseurs et les clients — et s'assurer que ce qu'on achète tient les mêmes engagements.",
-   "en": "",
+   "en": "Allocate responsibilities with suppliers and clients — and make sure that what you buy holds to the same commitments.",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Répartition des responsabilités": {
    "fr": "Répartition des responsabilités",
-   "en": "",
+   "en": "Allocating responsibilities",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Rôles et responsabilités en matière d'IA": {
    "fr": "Rôles et responsabilités en matière d'IA",
-   "en": "",
+   "en": "AI roles and responsibilities",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Savoir d'où viennent les données, ce qu'elles valent, et ce qu'on leur a fait subir avant l'entraînement.": {
    "fr": "Savoir d'où viennent les données, ce qu'elles valent, et ce qu'on leur a fait subir avant l'entraînement.",
-   "en": "",
+   "en": "Know where the data comes from, what it is worth, and what has been done to it before training.",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Signalement des préoccupations": {
    "fr": "Signalement des préoccupations",
-   "en": "",
+   "en": "Reporting of concerns",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Tenir le système de bout en bout : objectifs de développement, conception, vérification, déploiement, exploitation, journalisation.": {
    "fr": "Tenir le système de bout en bout : objectifs de développement, conception, vérification, déploiement, exploitation, journalisation.",
-   "en": "",
+   "en": "Cover the system end to end: development objectives, design, verification, deployment, operation, logging.",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Utilisation prévue du système d'IA": {
    "fr": "Utilisation prévue du système d'IA",
-   "en": "",
+   "en": "Intended use of the AI system",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Vérification et validation du système d'IA": {
    "fr": "Vérification et validation du système d'IA",
-   "en": "",
+   "en": "AI system verification and validation",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "art. # d) et NOTE #": {
    "fr": "art. 6.1.3 d) et NOTE 2",
-   "en": "",
+   "en": "clause # d) and NOTE #",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Évaluation de l'impact du système d'IA sur des personnes ou groupes potentiels": {
    "fr": "Évaluation de l'impact du système d'IA sur des personnes ou groupes potentiels",
-   "en": "",
+   "en": "Assessing AI system impact on individuals or groups of individuals",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Évaluation des impacts sociétaux des systèmes d'IA": {
    "fr": "Évaluation des impacts sociétaux des systèmes d'IA",
-   "en": "",
+   "en": "Assessing societal impacts of AI systems",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Évaluer ce que les systèmes font subir aux personnes, aux groupes et à la société — le point de couture avec l'IA Act et le RGPD.": {
    "fr": "Évaluer ce que les systèmes font subir aux personnes, aux groupes et à la société — le point de couture avec l'IA Act et le RGPD.",
-   "en": "",
+   "en": "Assess what the systems do to individuals, groups and society — the seam with the AI Act and the GDPR.",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Detection de fraude transactionnelle — Finance": {
    "fr": "Detection de fraude transactionnelle — Finance",
-   "en": "",
+   "en": "Detection de fraude transactionnelle — Finance",
    "_pages": [
     "matrice"
    ]
   },
   "Haut risque · En cours · Finance": {
    "fr": "Haut risque · En cours · Finance",
-   "en": "",
+   "en": "High risk · In progress · Finance",
    "_pages": [
     "matrice"
    ]
   },
   "Haut risque · À évaluer · Finance": {
    "fr": "Haut risque · À évaluer · Finance",
-   "en": "",
+   "en": "High risk · To be assessed · Finance",
    "_pages": [
     "matrice"
    ]
   },
   "Recette — deux fois — Finance": {
    "fr": "Recette — deux fois — Finance",
-   "en": "",
+   "en": "Recette — deux fois — Finance",
    "_pages": [
     "matrice"
    ]
   },
   "Recette — la décision écrit — Finance": {
    "fr": "Recette — la décision écrit — Finance",
-   "en": "",
+   "en": "Recette — la décision écrit — Finance",
    "_pages": [
     "matrice"
    ]
   },
   "Recette — proposition sans écriture — Finance": {
    "fr": "Recette — proposition sans écriture — Finance",
-   "en": "",
+   "en": "Recette — proposition sans écriture — Finance",
    "_pages": [
     "matrice"
    ]
   },
   "Recette — sans nom saisi — Finance": {
    "fr": "Recette — sans nom saisi — Finance",
-   "en": "",
+   "en": "Recette — sans nom saisi — Finance",
    "_pages": [
     "matrice"
    ]
   },
   "Recette — écartée — Finance": {
    "fr": "Recette — écartée — Finance",
-   "en": "",
+   "en": "Recette — écartée — Finance",
    "_pages": [
     "matrice"
    ]
   },
   "Risque minimal · À évaluer · Finance": {
    "fr": "Risque minimal · À évaluer · Finance",
-   "en": "",
+   "en": "Minimal risk · To be assessed · Finance",
    "_pages": [
     "matrice"
    ]
   },
   "À évaluer · À évaluer · Finance": {
    "fr": "À évaluer · À évaluer · Finance",
-   "en": "",
+   "en": "To be assessed · To be assessed · Finance",
    "_pages": [
     "matrice"
    ]
   },
   "# d’entre elles": {
    "fr": "9 d’entre elles",
-   "en": "",
+   "en": "# of them",
    "_pages": [
     "maturite"
    ]
   },
   ", applicable depuis le #-#-#. Les": {
    "fr": ", applicable depuis le 2025-01-01. Les",
-   "en": "",
+   "en": ", applicable since #-#-#. The",
    "_pages": [
     "maturite"
    ]
   },
   "Les intitulés officiels reproduits ici sont ceux de la version ANGLAISE de l'annexe. Les intitulés français sont une traduction de travail faite ici, non une reprise de la version française du règlement, qui n'a pas pu être consultée. `outils/recette_nace.py` dit comment la revérifier.": {
    "fr": "Les intitulés officiels reproduits ici sont ceux de la version ANGLAISE de l'annexe. Les intitulés français sont une traduction de travail faite ici, non une reprise de la version française du règlement, qui n'a pas pu être consultée. `outils/recette_nace.py` dit comment la revérifier.",
-   "en": "",
+   "en": "The official titles reproduced here are those of the ENGLISH version of the Annex. The French titles are a working translation made here, not taken from the French version of the Regulation, which could not be consulted. `outils/recette_nace.py` explains how to re-check them.",
    "_pages": [
     "maturite"
    ]
   },
   "NACE Rév. #, Règlement délégué (UE) #/# de la Commission du # octobre # modifiant le règlement (CE) n° #/# du Parlement européen et du Conseil établissant la nomenclature statistique des activités économiques NACE Rév. # —": {
    "fr": "NACE Rév. 2.1, Règlement délégué (UE) 2023/137 de la Commission du 10 octobre 2022 modifiant le règlement (CE) n° 1893/2006 du Parlement européen et du Conseil établissant la nomenclature statistique des activités économiques NACE Rév. 2 —",
-   "en": "",
+   "en": "NACE Rev. #, Commission Delegated Regulation (EU) #/# of # October # amending Regulation (EC) No #/# of the European Parliament and of the Council establishing the statistical classification of economic activities NACE Revision # —",
    "_pages": [
     "maturite"
    ]
   },
   "Self-assessment questionnaire": {
    "fr": "Self-assessment questionnaire",
-   "en": "",
+   "en": "Self-assessment questionnaire",
    "_pages": [
     "maturite"
    ]
   },
   "désignent un profil sectoriel.": {
    "fr": "désignent un profil sectoriel.",
-   "en": "",
+   "en": "denote a sector profile.",
    "_pages": [
     "maturite"
    ]
   },
   "portent un socle relevé — point de départ observé, budget et durée issus de missions réelles ; les # autres portent un régime lu dans les textes et le disent, sans socle ni budget.": {
    "fr": "portent un socle relevé — point de départ observé, budget et durée issus de missions réelles ; les 13 autres portent un régime lu dans les textes et le disent, sans socle ni budget.",
-   "en": "",
+   "en": "carry a recorded baseline — observed starting point, budget and duration drawn from real engagements; the # others carry a regime read from the texts and say so, with no baseline and no budget.",
    "_pages": [
     "maturite"
    ]
   },
   "— Section d’activité (NACE Rév. #) —": {
    "fr": "— Section d’activité (NACE Rév. 2.1) —",
-   "en": "",
+   "en": "— Activity section (NACE Rev. #) —",
    "_pages": [
     "maturite"
    ]
   },
   "Analyse des risques et sécurité des systèmes d'information": {
    "fr": "Analyse des risques et sécurité des systèmes d'information",
-   "en": "",
+   "en": "Risk analysis and information system security",
    "_pages": [
     "nis2"
    ]
   },
   "Approche « tous risques » — protéger les réseaux et les systèmes d'information ET leur environnement physique. La proportionnalité tient compte du degré d'exposition, de la taille de l'entité, et de la probabilité et de la gravité des incidents.": {
    "fr": "Approche « tous risques » — protéger les réseaux et les systèmes d'information ET leur environnement physique. La proportionnalité tient compte du degré d'exposition, de la taille de l'entité, et de la probabilité et de la gravité des incidents.",
-   "en": "",
+   "en": "“All-hazards” approach — protect network and information systems AND their physical environment. Proportionality takes into account the degree of exposure, the size of the entity, and the likelihood and severity of incidents.",
    "_pages": [
     "nis2"
    ]
   },
   "Authentification à plusieurs facteurs ou continue, communications sécurisées": {
    "fr": "Authentification à plusieurs facteurs ou continue, communications sécurisées",
-   "en": "",
+   "en": "Multi-factor or continuous authentication, secured communications",
    "_pages": [
     "nis2"
    ]
   },
   "Bloc # sur # · Mesures art. # §# — Verrouillé": {
    "fr": "Bloc 2 sur 7 · Mesures art. 21 §2 — Verrouillé",
-   "en": "",
+   "en": "Block # of # · Measures, art. #(#) — Locked",
    "_pages": [
     "nis2"
    ]
   },
   "Ce bloc dépend de : Suis-je concerné ?. Complétez-le d'abord.": {
    "fr": "Ce bloc dépend de : Suis-je concerné ?. Complétez-le d'abord.",
-   "en": "",
+   "en": "This block depends on: Am I in scope? Complete it first.",
    "_pages": [
     "nis2",
     "nis2-gouvernance",
@@ -345,42 +345,42 @@
   },
   "Continuité des activités": {
    "fr": "Continuité des activités",
-   "en": "",
+   "en": "Business continuity",
    "_pages": [
     "nis2"
    ]
   },
   "Cryptographie et, le cas échéant, chiffrement": {
    "fr": "Cryptographie et, le cas échéant, chiffrement",
-   "en": "",
+   "en": "Cryptography and, where appropriate, encryption",
    "_pages": [
     "nis2"
    ]
   },
   "Cyberhygiène de base et formation à la cybersécurité": {
    "fr": "Cyberhygiène de base et formation à la cybersécurité",
-   "en": "",
+   "en": "Basic cyber hygiene practices and cybersecurity training",
    "_pages": [
     "nis2"
    ]
   },
   "Détecter, qualifier, traiter, clore — et savoir à quel moment l'horloge des # heures de l'article # démarre.": {
    "fr": "Détecter, qualifier, traiter, clore — et savoir à quel moment l'horloge des 24 heures de l'article 23 démarre.",
-   "en": "",
+   "en": "Detect, qualify, handle, close — and know at what moment the #-hour clock of Article # starts.",
    "_pages": [
     "nis2"
    ]
   },
   "Gestion des incidents": {
    "fr": "Gestion des incidents",
-   "en": "",
+   "en": "Incident handling",
    "_pages": [
     "nis2"
    ]
   },
   "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : l'autorité nationale compétente l'apprécie — l'ANSSI selon le projet de loi de transposition —, sur pièces et par audit.": {
    "fr": "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : l'autorité nationale compétente l'apprécie — l'ANSSI selon le projet de loi de transposition —, sur pièces et par audit.",
-   "en": "",
+   "en": "The green of this path says that what a block expects has been filled in. It does not say that you are compliant: the national competent authority assesses that — ANSSI under the transposition bill — on the documents and by audit.",
    "_pages": [
     "nis2-qualifier",
     "nis2",
@@ -391,154 +391,154 @@
   },
   "Les mesures « comprennent au moins » ces dix éléments : c'est un plancher, pas une liste à épuiser.": {
    "fr": "Les mesures « comprennent au moins » ces dix éléments : c'est un plancher, pas une liste à épuiser.",
-   "en": "",
+   "en": "The measures “shall include at least” these ten elements: it is a floor, not a list to exhaust.",
    "_pages": [
     "nis2"
    ]
   },
   "Les politiques et procédures qui disent quoi chiffrer, avec quoi, et qui détient les clés.": {
    "fr": "Les politiques et procédures qui disent quoi chiffrer, avec quoi, et qui détient les clés.",
-   "en": "",
+   "en": "The policies and procedures that say what to encrypt, with what, and who holds the keys.",
    "_pages": [
     "nis2"
    ]
   },
   "Les politiques qui disent comment le risque est apprécié, et comment la sécurité des systèmes en découle.": {
    "fr": "Les politiques qui disent comment le risque est apprécié, et comment la sécurité des systèmes en découle.",
-   "en": "",
+   "en": "The policies that say how risk is assessed, and how the security of systems follows from it.",
    "_pages": [
     "nis2"
    ]
   },
   "Les pratiques élémentaires, et la formation — à distinguer de la formation des dirigeants, qui relève de l'article #, §#.": {
    "fr": "Les pratiques élémentaires, et la formation — à distinguer de la formation des dirigeants, qui relève de l'article 20, §2.",
-   "en": "",
+   "en": "Basic practices, and training — to be distinguished from the training of managers, which falls under Article #(#).",
    "_pages": [
     "nis2"
    ]
   },
   "Les relations avec les fournisseurs et prestataires DIRECTS, en tenant compte des vulnérabilités propres à chacun et de la qualité de leurs pratiques (art. #, §#).": {
    "fr": "Les relations avec les fournisseurs et prestataires DIRECTS, en tenant compte des vulnérabilités propres à chacun et de la qualité de leurs pratiques (art. 21, §3).",
-   "en": "",
+   "en": "Relationships with DIRECT suppliers and service providers, taking into account the vulnerabilities specific to each and the quality of their practices (art. #(#)).",
    "_pages": [
     "nis2"
    ]
   },
   "Les trois se tiennent : un inventaire d'actifs sans gestion des arrivées et des départs ne protège rien.": {
    "fr": "Les trois se tiennent : un inventaire d'actifs sans gestion des arrivées et des départs ne protège rien.",
-   "en": "",
+   "en": "The three hold together: an asset inventory without management of arrivals and departures protects nothing.",
    "_pages": [
     "nis2"
    ]
   },
   "Mesure a) — Analyse des risques et sécurité des systèmes d'information": {
    "fr": "Mesure a) — Analyse des risques et sécurité des systèmes d'information",
-   "en": "",
+   "en": "Measure (a) — Risk analysis and information system security",
    "_pages": [
     "nis2"
    ]
   },
   "Mesure b) — Gestion des incidents": {
    "fr": "Mesure b) — Gestion des incidents",
-   "en": "",
+   "en": "Measure (b) — Incident handling",
    "_pages": [
     "nis2"
    ]
   },
   "Mesure c) — Continuité des activités": {
    "fr": "Mesure c) — Continuité des activités",
-   "en": "",
+   "en": "Measure (c) — Business continuity",
    "_pages": [
     "nis2"
    ]
   },
   "Mesure d) — Sécurité de la chaîne d'approvisionnement": {
    "fr": "Mesure d) — Sécurité de la chaîne d'approvisionnement",
-   "en": "",
+   "en": "Measure (d) — Supply chain security",
    "_pages": [
     "nis2"
    ]
   },
   "Mesure e) — Sécurité de l'acquisition, du développement et de la maintenance": {
    "fr": "Mesure e) — Sécurité de l'acquisition, du développement et de la maintenance",
-   "en": "",
+   "en": "Measure (e) — Security in acquisition, development and maintenance",
    "_pages": [
     "nis2"
    ]
   },
   "Mesure f) — Politiques et procédures d'évaluation de l'efficacité des mesures": {
    "fr": "Mesure f) — Politiques et procédures d'évaluation de l'efficacité des mesures",
-   "en": "",
+   "en": "Measure (f) — Policies and procedures to assess the effectiveness of measures",
    "_pages": [
     "nis2"
    ]
   },
   "Mesurer ce que les mesures produisent, pas seulement qu'elles existent.": {
    "fr": "Mesurer ce que les mesures produisent, pas seulement qu'elles existent.",
-   "en": "",
+   "en": "Measure what the measures produce, not merely that they exist.",
    "_pages": [
     "nis2"
    ]
   },
   "Politiques et procédures d'évaluation de l'efficacité des mesures": {
    "fr": "Politiques et procédures d'évaluation de l'efficacité des mesures",
-   "en": "",
+   "en": "Policies and procedures to assess the effectiveness of measures",
    "_pages": [
     "nis2"
    ]
   },
   "Sauvegardes, reprise d'activité et gestion de crise : ce qui permet de continuer à servir quand le système principal ne répond plus.": {
    "fr": "Sauvegardes, reprise d'activité et gestion de crise : ce qui permet de continuer à servir quand le système principal ne répond plus.",
-   "en": "",
+   "en": "Backups, disaster recovery and crisis management: what lets you keep serving when the main system no longer responds.",
    "_pages": [
     "nis2"
    ]
   },
   "Sécurité de l'acquisition, du développement et de la maintenance": {
    "fr": "Sécurité de l'acquisition, du développement et de la maintenance",
-   "en": "",
+   "en": "Security in acquisition, development and maintenance",
    "_pages": [
     "nis2"
    ]
   },
   "Sécurité de la chaîne d'approvisionnement": {
    "fr": "Sécurité de la chaîne d'approvisionnement",
-   "en": "",
+   "en": "Supply chain security",
    "_pages": [
     "nis2"
    ]
   },
   "Sécurité des ressources humaines, contrôle d'accès, gestion des actifs": {
    "fr": "Sécurité des ressources humaines, contrôle d'accès, gestion des actifs",
-   "en": "",
+   "en": "Human resources security, access control, asset management",
    "_pages": [
     "nis2"
    ]
   },
   "Une entité qui constate qu'elle ne se conforme pas prend sans retard injustifié les mesures correctives nécessaires (art. #, §#).": {
    "fr": "Une entité qui constate qu'elle ne se conforme pas prend sans retard injustifié les mesures correctives nécessaires (art. 21, §4).",
-   "en": "",
+   "en": "An entity that finds it is not complying takes, without undue delay, all the necessary corrective measures (art. #(#)).",
    "_pages": [
     "nis2"
    ]
   },
   "Voix, vidéo et texte sécurisés, et des systèmes sécurisés de communication d'urgence au sein de l'entité, selon les besoins.": {
    "fr": "Voix, vidéo et texte sécurisés, et des systèmes sécurisés de communication d'urgence au sein de l'entité, selon les besoins.",
-   "en": "",
+   "en": "Secured voice, video and text, and secured emergency communication systems within the entity, where appropriate.",
    "_pages": [
     "nis2"
    ]
   },
   "Y compris le traitement et la divulgation des vulnérabilités — le point de couture avec le CRA, qui impose la même chose côté produit.": {
    "fr": "Y compris le traitement et la divulgation des vulnérabilités — le point de couture avec le CRA, qui impose la même chose côté produit.",
-   "en": "",
+   "en": "Including vulnerability handling and disclosure — the seam with the CRA, which imposes the same thing on the product side.",
    "_pages": [
     "nis2"
    ]
   },
   "↓ Suis-je concerné ?": {
    "fr": "↓ Suis-je concerné ?",
-   "en": "",
+   "en": "↓ Am I in scope?",
    "_pages": [
     "nis2",
     "nis2-gouvernance",
@@ -549,63 +549,63 @@
   },
   "Chiffre d'affaires annuel mondial total de l'entreprise à laquelle l'entité appartient — pas celui de la seule entité concernée.": {
    "fr": "Chiffre d'affaires annuel mondial total de l'entreprise à laquelle l'entité appartient — pas celui de la seule entité concernée.",
-   "en": "",
+   "en": "Total worldwide annual turnover of the undertaking to which the entity belongs — not that of the entity concerned alone.",
    "_pages": [
     "nis2-chiffre"
    ]
   },
   "Entités essentielles": {
    "fr": "Entités essentielles",
-   "en": "",
+   "en": "Essential entities",
    "_pages": [
     "nis2-chiffre"
    ]
   },
   "Entités importantes": {
    "fr": "Entités importantes",
-   "en": "",
+   "en": "Important entities",
    "_pages": [
     "nis2-chiffre"
    ]
   },
   "L'exposition réelle se lit dans la loi de transposition de chaque État membre où l'entité fournit ses services. Le chiffre ci-dessous est un minimum européen.": {
    "fr": "L'exposition réelle se lit dans la loi de transposition de chaque État membre où l'entité fournit ses services. Le chiffre ci-dessous est un minimum européen.",
-   "en": "",
+   "en": "The actual exposure is read in the transposition law of each Member State where the entity provides its services. The figure below is a European minimum.",
    "_pages": [
     "nis2-chiffre"
    ]
   },
   "Le règlement (UE) #/# (CRA), lui, est d'application directe : ses montants sont les montants. Traiter NIS # comme le CRA sous-estime l'exposition.": {
    "fr": "Le règlement (UE) 2024/2847 (CRA), lui, est d'application directe : ses montants sont les montants. Traiter NIS 2 comme le CRA sous-estime l'exposition.",
-   "en": "",
+   "en": "Regulation (EU) #/# (CRA), for its part, is directly applicable: its amounts are the amounts. Treating NIS # like the CRA underestimates the exposure.",
    "_pages": [
     "nis2-chiffre"
    ]
   },
   "Les deux paliers pivotent au même chiffre d'affaires — # M€ : en dessous, ce sont les planchers forfaitaires qui commandent ; au-dessus, les pourcentages. L'écart entre les deux qualifications reste de # % de part et d'autre.": {
    "fr": "Les deux paliers pivotent au même chiffre d'affaires — 500 M€ : en dessous, ce sont les planchers forfaitaires qui commandent ; au-dessus, les pourcentages. L'écart entre les deux qualifications reste de 43 % de part et d'autre.",
-   "en": "",
+   "en": "The two tiers pivot at the same turnover — €# million: below it, the flat-rate floors govern; above it, the percentages. The gap between the two qualifications remains # % on either side.",
    "_pages": [
     "nis2-chiffre"
    ]
   },
   "Les montants de l'article # sont des PLANCHERS imposés aux États membres (« un maximum d'au moins »), pas des plafonds opposables à l'administration.": {
    "fr": "Les montants de l'article 34 sont des PLANCHERS imposés aux États membres (« un maximum d'au moins »), pas des plafonds opposables à l'administration.",
-   "en": "",
+   "en": "The amounts in Article # are FLOORS imposed on the Member States (“of a maximum of at least”), not ceilings enforceable against the administration.",
    "_pages": [
     "nis2-chiffre"
    ]
   },
   "Plancher forfaitaire": {
    "fr": "Plancher forfaitaire",
-   "en": "",
+   "en": "Flat-rate floor",
    "_pages": [
     "nis2-chiffre"
    ]
   },
   "art. #, §§# et #": {
    "fr": "art. 23, §§1 et 4",
-   "en": "",
+   "en": "art. #(#) and (#)",
    "_pages": [
     "nis2-signalement",
     "nis2-chiffre"
@@ -613,189 +613,189 @@
   },
   ". La formation du personnel, qui est un encouragement, est affichée mais n’entre pas au dénominateur : l’y mettre ferait gagner des points à qui a manqué la seule ligne obligatoire.": {
    "fr": ". La formation du personnel, qui est un encouragement, est affichée mais n’entre pas au dénominateur : l’y mettre ferait gagner des points à qui a manqué la seule ligne obligatoire.",
-   "en": "",
+   "en": ". Staff training, which is an encouragement, is displayed but does not enter the denominator: putting it there would give points to whoever missed the only mandatory line.",
    "_pages": [
     "nis2-gouvernance"
    ]
   },
   ": le texte dit « encouragent ».": {
    "fr": ": le texte dit « encouragent ».",
-   "en": "",
+   "en": ": the text says “encourage”.",
    "_pages": [
     "nis2-gouvernance"
    ]
   },
   ": le texte dit « sont tenus de » ·": {
    "fr": ": le texte dit « sont tenus de » ·",
-   "en": "",
+   "en": ": the text says “are required to” ·",
    "_pages": [
     "nis2-gouvernance"
    ]
   },
   "Bloc # sur # · Gouvernance art. # — Verrouillé": {
    "fr": "Bloc 3 sur 7 · Gouvernance art. 20 — Verrouillé",
-   "en": "",
+   "en": "Block # of # · Governance, art. # — Locked",
    "_pages": [
     "nis2-gouvernance"
    ]
   },
   "L'entité est encouragée à offrir régulièrement une formation similaire à son personnel": {
    "fr": "L'entité est encouragée à offrir régulièrement une formation similaire à son personnel",
-   "en": "",
+   "en": "The entity is encouraged to offer similar training to its employees on a regular basis",
    "_pages": [
     "nis2-gouvernance"
    ]
   },
   "L'organe de direction approuve les mesures de gestion des risques en matière de cybersécurité": {
    "fr": "L'organe de direction approuve les mesures de gestion des risques en matière de cybersécurité",
-   "en": "",
+   "en": "The management body approves the cybersecurity risk-management measures",
    "_pages": [
     "nis2-gouvernance"
    ]
   },
   "L'organe de direction approuve les mesures de gestion des risques en matière de cybersécurité (art. #, §#)": {
    "fr": "L'organe de direction approuve les mesures de gestion des risques en matière de cybersécurité (art. 20, §1)",
-   "en": "",
+   "en": "The management body approves the cybersecurity risk-management measures (art. #(#))",
    "_pages": [
     "nis2-gouvernance"
    ]
   },
   "L'organe de direction supervise la mise en œuvre de ces mesures": {
    "fr": "L'organe de direction supervise la mise en œuvre de ces mesures",
-   "en": "",
+   "en": "The management body oversees the implementation of these measures",
    "_pages": [
     "nis2-gouvernance"
    ]
   },
   "L'organe de direction supervise la mise en œuvre de ces mesures (art. #, §#)": {
    "fr": "L'organe de direction supervise la mise en œuvre de ces mesures (art. 20, §1)",
-   "en": "",
+   "en": "The management body oversees the implementation of these measures (art. #(#))",
    "_pages": [
     "nis2-gouvernance"
    ]
   },
   "La chaîne de délégation écrite, et ce qu'elle ne délègue pas.": {
    "fr": "La chaîne de délégation écrite, et ce qu'elle ne délègue pas.",
-   "en": "",
+   "en": "The written chain of delegation, and what it does not delegate.",
    "_pages": [
     "nis2-gouvernance"
    ]
   },
   "Le plan de formation et son taux de réalisation.": {
    "fr": "Le plan de formation et son taux de réalisation.",
-   "en": "",
+   "en": "The training plan and its completion rate.",
    "_pages": [
     "nis2-gouvernance"
    ]
   },
   "Les attestations nominatives et datées des dirigeants eux-mêmes — pas celles des équipes.": {
    "fr": "Les attestations nominatives et datées des dirigeants eux-mêmes — pas celles des équipes.",
-   "en": "",
+   "en": "Named, dated attestations for the managers themselves — not those of the teams.",
    "_pages": [
     "nis2-gouvernance"
    ]
   },
   "Les membres de l'organe de direction SONT TENUS de suivre une formation": {
    "fr": "Les membres de l'organe de direction SONT TENUS de suivre une formation",
-   "en": "",
+   "en": "Members of the management body ARE REQUIRED to follow training",
    "_pages": [
     "nis2-gouvernance"
    ]
   },
   "Les membres de l'organe de direction SONT TENUS de suivre une formation (art. #, §#)": {
    "fr": "Les membres de l'organe de direction SONT TENUS de suivre une formation (art. 20, §2)",
-   "en": "",
+   "en": "Members of the management body ARE REQUIRED to follow training (art. #(#))",
    "_pages": [
     "nis2-gouvernance"
    ]
   },
   "Les membres de l'organe de direction peuvent être tenus responsables de la violation de l'article # par l'entité": {
    "fr": "Les membres de l'organe de direction peuvent être tenus responsables de la violation de l'article 21 par l'entité",
-   "en": "",
+   "en": "Members of the management body can be held liable for infringements of Article # by the entity",
    "_pages": [
     "nis2-gouvernance"
    ]
   },
   "Les membres de l'organe de direction peuvent être tenus responsables de la violation de l'article # par l'entité (art. #, §#)": {
    "fr": "Les membres de l'organe de direction peuvent être tenus responsables de la violation de l'article 21 par l'entité (art. 20, §1)",
-   "en": "",
+   "en": "Members of the management body can be held liable for infringements of Article # by the entity (art. #(#))",
    "_pages": [
     "nis2-gouvernance"
    ]
   },
   "Un point récurrent à l'ordre du jour, avec des indicateurs et des décisions tracées.": {
    "fr": "Un point récurrent à l'ordre du jour, avec des indicateurs et des décisions tracées.",
-   "en": "",
+   "en": "A recurring agenda item, with indicators and recorded decisions.",
    "_pages": [
     "nis2-gouvernance"
    ]
   },
   "Une délibération datée, nommant les mesures approuvées.": {
    "fr": "Une délibération datée, nommant les mesures approuvées.",
-   "en": "",
+   "en": "A dated resolution, naming the measures approved.",
    "_pages": [
     "nis2-gouvernance"
    ]
   },
   "Aucun secteur déclaré.": {
    "fr": "Aucun secteur déclaré.",
-   "en": "",
+   "en": "No sector declared.",
    "_pages": [
     "nis2-qualifier"
    ]
   },
   "Bloc # sur # · Suis-je concerné ? — À remplir maintenant": {
    "fr": "Bloc 1 sur 7 · Suis-je concerné ? — À remplir maintenant",
-   "en": "",
+   "en": "Block # of # · Am I in scope? — To fill in now",
    "_pages": [
     "nis2-qualifier"
    ]
   },
   "Hors du champ de la directive": {
    "fr": "Hors du champ de la directive",
-   "en": "",
+   "en": "Outside the scope of the Directive",
    "_pages": [
     "nis2-qualifier"
    ]
   },
   "Indéterminée": {
    "fr": "Indéterminée",
-   "en": "",
+   "en": "Undetermined",
    "_pages": [
     "nis2-qualifier"
    ]
   },
   "L'article #, §#, de l'annexe à la recommandation #/#/CE — qui exclut du statut de PME une entreprise détenue à # % ou plus par un organisme public — ne s'applique pas aux fins de NIS #. Une entreprise publique ou à capitaux publics se mesure sur son effectif et ses comptes, comme les autres.": {
    "fr": "L'article 3, §4, de l'annexe à la recommandation 2003/361/CE — qui exclut du statut de PME une entreprise détenue à 25 % ou plus par un organisme public — ne s'applique pas aux fins de NIS 2. Une entreprise publique ou à capitaux publics se mesure sur son effectif et ses comptes, comme les autres.",
-   "en": "",
+   "en": "Article #(#) of the Annex to Recommendation #/#/EC — which excludes from SME status an enterprise # % or more of which is held by a public body — does not apply for the purposes of NIS #. A public enterprise or one with public capital is measured on its headcount and its accounts, like the others.",
    "_pages": [
     "nis2-qualifier"
    ]
   },
   "La catégorie de taille ne se prononce pas sans effectif ni chiffre d'affaires ou total du bilan.": {
    "fr": "La catégorie de taille ne se prononce pas sans effectif ni chiffre d'affaires ou total du bilan.",
-   "en": "",
+   "en": "The size category cannot be determined without headcount and either turnover or balance sheet total.",
    "_pages": [
     "nis2-qualifier"
    ]
   },
   "Le secteur d'activité — ou « aucune des deux annexes »": {
    "fr": "Le secteur d'activité — ou « aucune des deux annexes »",
-   "en": "",
+   "en": "The sector — or “neither of the two Annexes”",
    "_pages": [
     "nis2-qualifier"
    ]
   },
   "Les cas où la taille ne compte pas": {
    "fr": "Les cas où la taille ne compte pas",
-   "en": "",
+   "en": "The cases where size does not matter",
    "_pages": [
     "nis2-qualifier"
    ]
   },
   "art. #, §#, second alinéa": {
    "fr": "art. 2, §1, second alinéa",
-   "en": "",
+   "en": "art. #(#), second subparagraph",
    "_pages": [
     "nis2-qualifier",
     "nis2-signalement"
@@ -803,154 +803,154 @@
   },
   "— choisir un secteur —": {
    "fr": "— choisir un secteur —",
-   "en": "",
+   "en": "— choose a sector —",
    "_pages": [
     "nis2-qualifier"
    ]
   },
   "# mois après la notification": {
    "fr": "1 mois après la notification",
-   "en": "",
+   "en": "# month after the notification",
    "_pages": [
     "nis2-signalement"
    ]
   },
   "#. Alerte précoce": {
    "fr": "1. Alerte précoce",
-   "en": "",
+   "en": "#. Early warning",
    "_pages": [
     "nis2-signalement"
    ]
   },
   "#. Notification d'incident": {
    "fr": "2. Notification d'incident",
-   "en": "",
+   "en": "#. Incident notification",
    "_pages": [
     "nis2-signalement"
    ]
   },
   "#. Rapport intermédiaire": {
    "fr": "3. Rapport intermédiaire",
-   "en": "",
+   "en": "#. Intermediate report",
    "_pages": [
     "nis2-signalement"
    ]
   },
   "Ces deux communications sont DISTINCTES de la notification au CSIRT et ne s'y substituent pas. La liste des destinataires à prévenir ne se fabrique pas le jour de l'incident.": {
    "fr": "Ces deux communications sont DISTINCTES de la notification au CSIRT et ne s'y substituent pas. La liste des destinataires à prévenir ne se fabrique pas le jour de l'incident.",
-   "en": "",
+   "en": "These two communications are SEPARATE from the notification to the CSIRT and do not replace it. The list of recipients to warn is not built on the day of the incident.",
    "_pages": [
     "nis2-signalement"
    ]
   },
   "Communiquer aux destinataires potentiellement affectés par une cybermenace importante les mesures ou corrections qu'ils peuvent appliquer eux-mêmes.": {
    "fr": "Communiquer aux destinataires potentiellement affectés par une cybermenace importante les mesures ou corrections qu'ils peuvent appliquer eux-mêmes.",
-   "en": "",
+   "en": "Communicate to the recipients potentially affected by a significant cyber threat the measures or remedies they can take themselves.",
    "_pages": [
     "nis2-signalement"
    ]
   },
   "Description détaillée de l'incident, type de menace ou cause profonde, mesures d'atténuation appliquées et en cours, et impact transfrontière le cas échéant.": {
    "fr": "Description détaillée de l'incident, type de menace ou cause profonde, mesures d'atténuation appliquées et en cours, et impact transfrontière le cas échéant.",
-   "en": "",
+   "en": "Detailed description of the incident, type of threat or root cause, mitigation measures applied and ongoing, and cross-border impact where applicable.",
    "_pages": [
     "nis2-signalement"
    ]
   },
   "Destinataire : Le CSIRT ou, selon le cas, l'autorité compétente": {
    "fr": "Destinataire : Le CSIRT ou, selon le cas, l'autorité compétente",
-   "en": "",
+   "en": "Recipient: The CSIRT or, where applicable, the competent authority",
    "_pages": [
     "nis2-signalement"
    ]
   },
   "Et une SECONDE notification, que tout le monde oublie.": {
    "fr": "Et une SECONDE notification, que tout le monde oublie.",
-   "en": "",
+   "en": "And a SECOND notification, which everybody forgets.",
    "_pages": [
     "nis2-signalement"
    ]
   },
   "Indique, le cas échéant, si l'incident est suspecté d'avoir été causé par des actes illicites ou malveillants, et s'il pourrait avoir un impact transfrontière.": {
    "fr": "Indique, le cas échéant, si l'incident est suspecté d'avoir été causé par des actes illicites ou malveillants, et s'il pourrait avoir un impact transfrontière.",
-   "en": "",
+   "en": "Indicates, where applicable, whether the incident is suspected of being caused by unlawful or malicious acts, and whether it could have a cross-border impact.",
    "_pages": [
     "nis2-signalement"
    ]
   },
   "L'argument « ne notifions pas, ça nous incriminerait » est écarté par le texte lui-même.": {
    "fr": "L'argument « ne notifions pas, ça nous incriminerait » est écarté par le texte lui-même.",
-   "en": "",
+   "en": "The argument “let us not notify, it would incriminate us” is dismissed by the text itself.",
    "_pages": [
     "nis2-signalement"
    ]
   },
   "La CONNAISSANCE de l'incident important — pas sa survenance, pas sa détection technique.": {
    "fr": "La CONNAISSANCE de l'incident important — pas sa survenance, pas sa détection technique.",
-   "en": "",
+   "en": "AWARENESS of the significant incident — not its occurrence, not its technical detection.",
    "_pages": [
     "nis2-signalement"
    ]
   },
   "Le simple fait de notifier un incident n'accroît pas la responsabilité de l'entité qui est à l'origine de la notification.": {
    "fr": "Le simple fait de notifier un incident n'accroît pas la responsabilité de l'entité qui est à l'origine de la notification.",
-   "en": "",
+   "en": "The mere act of notification does not subject the notifying entity to increased liability.",
    "_pages": [
     "nis2-signalement"
    ]
   },
   "Les mises à jour pertinentes de la situation.": {
    "fr": "Les mises à jour pertinentes de la situation.",
-   "en": "",
+   "en": "Relevant status updates.",
    "_pages": [
     "nis2-signalement"
    ]
   },
   "Met à jour l'alerte précoce, fournit une évaluation initiale — gravité, impact — et les indicateurs de compromission lorsqu'ils sont disponibles.": {
    "fr": "Met à jour l'alerte précoce, fournit une évaluation initiale — gravité, impact — et les indicateurs de compromission lorsqu'ils sont disponibles.",
-   "en": "",
+   "en": "Updates the early warning, provides an initial assessment — severity, impact — and the indicators of compromise where available.",
    "_pages": [
     "nis2-signalement"
    ]
   },
   "Notifier aux destinataires des services les incidents importants susceptibles de nuire à la fourniture de ces services. Sans retard injustifié — aucun délai chiffré, ce qui n'en fait pas une obligation molle : « sans retard injustifié » se juge après coup, sur ce qu'on aurait pu faire.": {
    "fr": "Notifier aux destinataires des services les incidents importants susceptibles de nuire à la fourniture de ces services. Sans retard injustifié — aucun délai chiffré, ce qui n'en fait pas une obligation molle : « sans retard injustifié » se juge après coup, sur ce qu'on aurait pu faire.",
-   "en": "",
+   "en": "Notify the recipients of the services of significant incidents that are likely to adversely affect the provision of those services. Without undue delay — no deadline in figures, which does not make it a soft obligation: “without undue delay” is judged after the fact, on what could have been done.",
    "_pages": [
     "nis2-signalement"
    ]
   },
   "Si l'incident est toujours en cours à la date du rapport final, l'entité fournit à cette date un RAPPORT D'AVANCEMENT, puis un rapport final dans un délai d'un mois à compter du traitement de l'incident.": {
    "fr": "Si l'incident est toujours en cours à la date du rapport final, l'entité fournit à cette date un RAPPORT D'AVANCEMENT, puis un rapport final dans un délai d'un mois à compter du traitement de l'incident.",
-   "en": "",
+   "en": "If the incident is still ongoing at the time of the final report, the entity provides a PROGRESS REPORT at that time, then a final report within one month of its handling of the incident.",
    "_pages": [
     "nis2-signalement"
    ]
   },
   "Un prestataire de services de confiance notifie les incidents importants affectant la fourniture de ses services de confiance dans les # heures — et non #.": {
    "fr": "Un prestataire de services de confiance notifie les incidents importants affectant la fourniture de ses services de confiance dans les 24 heures — et non 72.",
-   "en": "",
+   "en": "A trust service provider notifies significant incidents affecting the provision of its trust services within # hours — not #.",
    "_pages": [
     "nis2-signalement"
    ]
   },
   "à la demande du CSIRT": {
    "fr": "à la demande du CSIRT",
-   "en": "",
+   "en": "at the request of the CSIRT",
    "_pages": [
     "nis2-signalement"
    ]
   },
   "Bloc # sur # · Le cadre, catégorie par catégorie — Pas encore atteint": {
    "fr": "Bloc 2 sur 3 · Le cadre, catégorie par catégorie — Pas encore atteint",
-   "en": "",
+   "en": "Block # of # · The framework, category by category — Not yet reached",
    "_pages": [
     "nist-cadre"
    ]
   },
   "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : ce cadre est volontaire et ne se certifie pas : il n'y a pas de conformité à prononcer.": {
    "fr": "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : ce cadre est volontaire et ne se certifie pas : il n'y a pas de conformité à prononcer.",
-   "en": "",
+   "en": "The green of this path says that what a block expects has been filled in. It does not say that you are compliant: this framework is voluntary and is not certified: there is no compliance to declare.",
    "_pages": [
     "nist-profil",
     "nist-cadre",
@@ -959,7 +959,7 @@
   },
   "↓ Profil par fonction": {
    "fr": "↓ Profil par fonction",
-   "en": "",
+   "en": "↓ Profile by function",
    "_pages": [
     "nist-cadre",
     "nist-genai"
@@ -967,224 +967,224 @@
   },
   "Bloc # sur # · Profil IA générative — Pas encore atteint": {
    "fr": "Bloc 3 sur 3 · Profil IA générative — Pas encore atteint",
-   "en": "",
+   "en": "Block # of # · Generative AI profile — Not yet reached",
    "_pages": [
     "nist-genai"
    ]
   },
   "Bloc # sur # · Profil par fonction — À remplir maintenant": {
    "fr": "Bloc 1 sur 3 · Profil par fonction — À remplir maintenant",
-   "en": "",
+   "en": "Block # of # · Profile by function — To fill in now",
    "_pages": [
     "nist-profil"
    ]
   },
   "GOVERN # — Compétences et diversité des équipes": {
    "fr": "GOVERN 3 — Compétences et diversité des équipes",
-   "en": "",
+   "en": "GOVERN # — Team skills and diversity",
    "_pages": [
     "nist-profil"
    ]
   },
   "GOVERN # — Culture du risque": {
    "fr": "GOVERN 4 — Culture du risque",
-   "en": "",
+   "en": "GOVERN # — Risk culture",
    "_pages": [
     "nist-profil"
    ]
   },
   "GOVERN # — Engagement des parties prenantes": {
    "fr": "GOVERN 5 — Engagement des parties prenantes",
-   "en": "",
+   "en": "GOVERN # — Stakeholder engagement",
    "_pages": [
     "nist-profil"
    ]
   },
   "GOVERN # — Politiques, processus et pratiques": {
    "fr": "GOVERN 1 — Politiques, processus et pratiques",
-   "en": "",
+   "en": "GOVERN # — Policies, processes and practices",
    "_pages": [
     "nist-profil"
    ]
   },
   "GOVERN # — Redevabilité et rôles nommés": {
    "fr": "GOVERN 2 — Redevabilité et rôles nommés",
-   "en": "",
+   "en": "GOVERN # — Accountability and named roles",
    "_pages": [
     "nist-profil"
    ]
   },
   "GOVERN # — Risques des tiers": {
    "fr": "GOVERN 6 — Risques des tiers",
-   "en": "",
+   "en": "GOVERN # — Third-party risks",
    "_pages": [
     "nist-profil"
    ]
   },
   "Bloc # sur # · Socle et dix-huit familles — À remplir maintenant": {
    "fr": "Bloc 1 sur 1 · Socle et dix-huit familles — À remplir maintenant",
-   "en": "",
+   "en": "Block # of # · Baseline and eighteen families — To fill in now",
    "_pages": [
     "nist53-socle"
    ]
   },
   "Le socle retenu : Low, Moderate ou High": {
    "fr": "Le socle retenu : Low, Moderate ou High",
-   "en": "",
+   "en": "The selected baseline: Low, Moderate or High",
    "_pages": [
     "nist53-socle"
    ]
   },
   "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : ce catalogue ne se certifie pas hors du cadre fédéral américain : il n'y a pas de conformité à prononcer.": {
    "fr": "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : ce catalogue ne se certifie pas hors du cadre fédéral américain : il n'y a pas de conformité à prononcer.",
-   "en": "",
+   "en": "The green of this path says that what a block expects has been filled in. It does not say that you are compliant: this catalogue is not certified outside the US federal framework: there is no compliance to declare.",
    "_pages": [
     "nist53-socle"
    ]
   },
   "Authentification en conduite": {
    "fr": "Authentification en conduite",
-   "en": "",
+   "en": "Authentication during operations",
    "_pages": [
     "nist82-ot"
    ]
   },
   "Bloc # sur # · Surcharge industrielle (OT) — À remplir maintenant": {
    "fr": "Bloc 1 sur 1 · Surcharge industrielle (OT) — À remplir maintenant",
-   "en": "",
+   "en": "Block # of # · Industrial overlay (OT) — To fill in now",
    "_pages": [
     "nist82-ot"
    ]
   },
   "Disponibilité et fenêtres d'arrêt": {
    "fr": "Disponibilité et fenêtres d'arrêt",
-   "en": "",
+   "en": "Availability and shutdown windows",
    "_pages": [
     "nist82-ot"
    ]
   },
   "La sûreté commande la sécurité": {
    "fr": "La sûreté commande la sécurité",
-   "en": "",
+   "en": "Safety governs security",
    "_pages": [
     "nist82-ot"
    ]
   },
   "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : ce guide ne se certifie pas : il n'y a pas de conformité à prononcer.": {
    "fr": "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : ce guide ne se certifie pas : il n'y a pas de conformité à prononcer.",
-   "en": "",
+   "en": "The green of this path says that what a block expects has been filled in. It does not say that you are compliant: this guide is not certified: there is no compliance to declare.",
    "_pages": [
     "nist82-ot"
    ]
   },
   "Points uniques de défaillance et redondance": {
    "fr": "Points uniques de défaillance et redondance",
-   "en": "",
+   "en": "Single points of failure and redundancy",
    "_pages": [
     "nist82-ot"
    ]
   },
   "Règles de filtrage et flux unidirectionnels": {
    "fr": "Règles de filtrage et flux unidirectionnels",
-   "en": "",
+   "en": "Filtering rules and unidirectional flows",
    "_pages": [
     "nist82-ot"
    ]
   },
   "Segmentation et protection de frontière": {
    "fr": "Segmentation et protection de frontière",
-   "en": "",
+   "en": "Segmentation and boundary protection",
    "_pages": [
     "nist82-ot"
    ]
   },
   "# · révisé #": {
    "fr": "2018 · révisé 2021",
-   "en": "",
+   "en": "# · revised #",
    "_pages": [
     "obs-rd"
    ]
   },
   ", la plus forte attraction nette ; la Chine en forme # % et n’en emploie que # % —": {
    "fr": ", la plus forte attraction nette ; la Chine en forme 26 % et n’en emploie que 12 % —",
-   "en": "",
+   "en": ", the strongest net attraction; China trains # % and employs only # % —",
    "_pages": [
     "obs-rd"
    ]
   },
   ", l’Europe de": {
    "fr": ", l’Europe de",
-   "en": "",
+   "en": ", Europe from",
    "_pages": [
     "obs-rd"
    ]
   },
   ". Survoler une ligne pour le détail. « Autres » — le reste du monde — y figure aussi : sur une carte il n’avait pas de territoire, dans une figure de flux il a sa ligne comme les autres.": {
    "fr": ". Survoler une ligne pour le détail. « Autres » — le reste du monde — y figure aussi : sur une carte il n’avait pas de territoire, dans une figure de flux il a sa ligne comme les autres.",
-   "en": "",
+   "en": ". Hover over a row for the detail. “Other” — the rest of the world — appears too: on a map it had no territory; in a flow figure it has its row like the others.",
    "_pages": [
     "obs-rd"
    ]
   },
   ": modèles remarquables par pays, brevets accordés (parts, volumes et facteurs de croissance), chercheurs d’élite et soldes nets, adoption par les entreprises de l’Union, cadre et gouvernance. Les": {
    "fr": ": modèles remarquables par pays, brevets accordés (parts, volumes et facteurs de croissance), chercheurs d’élite et soldes nets, adoption par les entreprises de l’Union, cadre et gouvernance. Les",
-   "en": "",
+   "en": ": notable models by country, patents granted (shares, volumes and growth factors), elite researchers and net balances, adoption by Union companies, framework and governance. The",
    "_pages": [
     "obs-rd"
    ]
   },
   "; la flèche donne le sens du mouvement et la colonne de droite le solde en points. Les États-Unis forment # % des chercheurs d’élite et en emploient # % —": {
    "fr": "; la flèche donne le sens du mouvement et la colonne de droite le solde en points. Les États-Unis forment 28 % des chercheurs d’élite et en emploient 57 % —",
-   "en": "",
+   "en": "; the arrow gives the direction of movement and the right-hand column the balance in points. The United States trains # % of elite researchers and employs # % —",
    "_pages": [
     "obs-rd"
    ]
   },
   "AI Index (Stanford HAI) · données CSET · #–#": {
    "fr": "AI Index (Stanford HAI) · données CSET · 2010–2023",
-   "en": "",
+   "en": "AI Index (Stanford HAI) · CSET data · #–#",
    "_pages": [
     "obs-rd"
    ]
   },
   "AI Index Report, Stanford HAI — données brevets : CSET (Georgetown)": {
    "fr": "AI Index Report, Stanford HAI — données brevets : CSET (Georgetown)",
-   "en": "",
+   "en": "AI Index Report, Stanford HAI — patent data: CSET (Georgetown)",
    "_pages": [
     "obs-rd"
    ]
   },
   "AI Watch — suivi de l’IA par la Commission (Centre commun de recherche, JRC)": {
    "fr": "AI Watch — suivi de l’IA par la Commission (Centre commun de recherche, JRC)",
-   "en": "",
+   "en": "AI Watch — the Commission’s AI monitoring (Joint Research Centre, JRC)",
    "_pages": [
     "obs-rd"
    ]
   },
   "Actualité gouvernance": {
    "fr": "Actualité gouvernance",
-   "en": "",
+   "en": "Governance news",
    "_pages": [
     "obs-rd"
    ]
   },
   "Adoption de l’IA par les entreprises (UE)": {
    "fr": "Adoption de l’IA par les entreprises (UE)",
-   "en": "",
+   "en": "AI adoption by companies (EU)",
    "_pages": [
     "obs-rd"
    ]
   },
   "Agrandir : les volumes, puis les pays sans modèle. Double-clic sur un pays : détail direct.": {
    "fr": "Agrandir : les volumes, puis les pays sans modèle. Double-clic sur un pays : détail direct.",
-   "en": "",
+   "en": "Zoom in: the volumes, then the countries with no model. Double-click a country: direct detail.",
    "_pages": [
     "obs-rd"
    ]
   },
   "Agrandir la carte": {
    "fr": "Agrandir la carte",
-   "en": "",
+   "en": "Enlarge the map",
    "_pages": [
     "pan-sia",
     "obs-rd"
@@ -1192,7 +1192,7 @@
   },
   "Agrandir — touche +, ou molette vers le haut": {
    "fr": "Agrandir — touche +, ou molette vers le haut",
-   "en": "",
+   "en": "Zoom in — + key, or scroll wheel up",
    "_pages": [
     "pan-sia",
     "obs-rd"
@@ -1200,7 +1200,7 @@
   },
   "Agrandissement. Molette pour zoomer, main pour déplacer — les deux en même temps.": {
    "fr": "Agrandissement. Molette pour zoomer, main pour déplacer — les deux en même temps.",
-   "en": "",
+   "en": "Enlarged view. Scroll wheel to zoom, hand to pan — both at the same time.",
    "_pages": [
     "pan-sia",
     "obs-rd"
@@ -1208,294 +1208,294 @@
   },
   "Aller à un pays": {
    "fr": "Aller à un pays",
-   "en": "",
+   "en": "Go to a country",
    "_pages": [
     "obs-rd"
    ]
   },
   "Aller à — pays ou code ISO": {
    "fr": "Aller à — pays ou code ISO",
-   "en": "",
+   "en": "Go to — country or ISO code",
    "_pages": [
     "obs-rd"
    ]
   },
   "Alliance européenne pour l’IA": {
    "fr": "Alliance européenne pour l’IA",
-   "en": "",
+   "en": "European AI Alliance",
    "_pages": [
     "obs-rd"
    ]
   },
   "Alliance européenne pour l’IA (plateforme Futurium de la Commission)": {
    "fr": "Alliance européenne pour l’IA (plateforme Futurium de la Commission)",
-   "en": "",
+   "en": "European AI Alliance (the Commission’s Futurium platform)",
    "_pages": [
     "obs-rd"
    ]
   },
   "Aucun titre en cache — disponible au prochain rafraîchissement en production.": {
    "fr": "Aucun titre en cache — disponible au prochain rafraîchissement en production.",
-   "en": "",
+   "en": "No headline cached — available at the next refresh in production.",
    "_pages": [
     "obs-rd"
    ]
   },
   "Brevets d’IA": {
    "fr": "Brevets d’IA",
-   "en": "",
+   "en": "AI patents",
    "_pages": [
     "obs-rd"
    ]
   },
   "Brevets d’IA accordés — part du total mondial (%)": {
    "fr": "Brevets d’IA accordés — part du total mondial (%)",
-   "en": "",
+   "en": "AI patents granted — share of the world total (%)",
    "_pages": [
     "obs-rd"
    ]
   },
   "Bureau de l’IA": {
    "fr": "Bureau de l’IA",
-   "en": "",
+   "en": "AI Office",
    "_pages": [
     "obs-rd"
    ]
   },
   "Carte mondiale : nombre de modèles d’IA remarquables créés par pays entre # et l’été #, en cinq classes de #-# à #-#. Les États-Unis et la Chine dominent (classe #-#).": {
    "fr": "Carte mondiale : nombre de modèles d’IA remarquables créés par pays entre 2003 et l’été 2024, en cinq classes de 1-10 à 101-560. Les États-Unis et la Chine dominent (classe 101-560).",
-   "en": "",
+   "en": "World map: number of notable AI models created per country between # and summer #, in five classes from #-# to #-#. The United States and China dominate (class #-#).",
    "_pages": [
     "obs-rd"
    ]
   },
   "Carto n°#, # © Areion/Capri — « Recherche et développement dans le domaine de l’IA »": {
    "fr": "Carto n°89, 2025 © Areion/Capri — « Recherche et développement dans le domaine de l’IA »",
-   "en": "",
+   "en": "Carto No #, # © Areion/Capri — “Recherche et développement dans le domaine de l’IA” [Research and development in the field of AI]",
    "_pages": [
     "obs-rd"
    ]
   },
   "Ce que montre cette vue.": {
    "fr": "Ce que montre cette vue.",
-   "en": "",
+   "en": "What this view shows.",
    "_pages": [
     "obs-rd"
    ]
   },
   "Ce qu’elle ne montre pas :": {
    "fr": "Ce qu’elle ne montre pas :",
-   "en": "",
+   "en": "What it does not show:",
    "_pages": [
     "obs-rd"
    ]
   },
   "Chercheurs d’élite": {
    "fr": "Chercheurs d’élite",
-   "en": "",
+   "en": "Elite researchers",
    "_pages": [
     "obs-rd"
    ]
   },
   "Chercheurs d’élite en IA (#) — origine vs lieu de travail": {
    "fr": "Chercheurs d’élite en IA (2022) — origine vs lieu de travail",
-   "en": "",
+   "en": "Elite AI researchers (#) — origin vs place of work",
    "_pages": [
     "obs-rd"
    ]
   },
   "Composition (barres empilées)": {
    "fr": "Composition (barres empilées)",
-   "en": "",
+   "en": "Composition (stacked bars)",
    "_pages": [
     "obs-rd"
    ]
   },
   "Couches de la carte": {
    "fr": "Couches de la carte",
-   "en": "",
+   "en": "Map layers",
    "_pages": [
     "obs-rd"
    ]
   },
   "Derniers titres — flux stratégie UE": {
    "fr": "Derniers titres — flux stratégie UE",
-   "en": "",
+   "en": "Latest headlines — EU strategy feed",
    "_pages": [
     "obs-rd"
    ]
   },
   "Données de la carte (tableau)": {
    "fr": "Données de la carte (tableau)",
-   "en": "",
+   "en": "Map data (table)",
    "_pages": [
     "obs-rd"
    ]
   },
   "Données du graphique (tableau)": {
    "fr": "Données du graphique (tableau)",
-   "en": "",
+   "en": "Chart data (table)",
    "_pages": [
     "obs-rd"
    ]
   },
   "Dossier complet — les cinq panneaux, leurs tableaux et leurs figures": {
    "fr": "Dossier complet — les cinq panneaux, leurs tableaux et leurs figures",
-   "en": "",
+   "en": "Full file — the five panels, their tables and their figures",
    "_pages": [
     "obs-rd"
    ]
   },
   "Définition (N.B. de la carte source) : auteurs d’articles retenus pour": {
    "fr": "Définition (N.B. de la carte source) : auteurs d’articles retenus pour",
-   "en": "",
+   "en": "Definition (NB from the source map): authors of papers accepted at",
    "_pages": [
     "obs-rd"
    ]
   },
   "Emporter l’Observatoire — Word et PDF": {
    "fr": "Emporter l’Observatoire — Word et PDF",
-   "en": "",
+   "en": "Take the Observatory with you — Word and PDF",
    "_pages": [
     "obs-rd"
    ]
   },
   "Eurostat — enquête TIC entreprises (isoc_eb_ai)": {
    "fr": "Eurostat — enquête TIC entreprises (isoc_eb_ai)",
-   "en": "",
+   "en": "Eurostat — survey on ICT usage in enterprises (isoc_eb_ai)",
    "_pages": [
     "obs-rd"
    ]
   },
   "Eurostat, ci-dessus, appartient au même socle public que Copernicus (observation de la Terre, règlement délégué UE #/#), NASA (domaine public) et data.gouv.fr (DINUM · Licence Ouverte). Ces sources sont interrogées en direct, sans clé d’API, et documentées avec leurs limites dans le module": {
    "fr": "Eurostat, ci-dessus, appartient au même socle public que Copernicus (observation de la Terre, règlement délégué UE 1159/2013), NASA (domaine public) et data.gouv.fr (DINUM · Licence Ouverte). Ces sources sont interrogées en direct, sans clé d’API, et documentées avec leurs limites dans le module",
-   "en": "",
+   "en": "Eurostat, above, belongs to the same public foundation as Copernicus (Earth observation, Delegated Regulation (EU) #/#), NASA (public domain) and data.gouv.fr (DINUM · Licence Ouverte). These sources are queried live, with no API key, and documented with their limits in the module",
    "_pages": [
     "obs-rd"
    ]
   },
   "Explication : Adoption par les entreprises": {
    "fr": "Explication : Adoption par les entreprises",
-   "en": "",
+   "en": "Explanation: Adoption by companies",
    "_pages": [
     "obs-rd"
    ]
   },
   "Explication : Brevets d’IA accordés": {
    "fr": "Explication : Brevets d’IA accordés",
-   "en": "",
+   "en": "Explanation: AI patents granted",
    "_pages": [
     "obs-rd"
    ]
   },
   "Explication : Flux des chercheurs d’élite": {
    "fr": "Explication : Flux des chercheurs d’élite",
-   "en": "",
+   "en": "Explanation: Flows of elite researchers",
    "_pages": [
     "obs-rd"
    ]
   },
   "Explication : Où l’IA est produite": {
    "fr": "Explication : Où l’IA est produite",
-   "en": "",
+   "en": "Explanation: Where AI is produced",
    "_pages": [
     "obs-rd"
    ]
   },
   "Explication : Sources et fraîcheur": {
    "fr": "Explication : Sources et fraîcheur",
-   "en": "",
+   "en": "Explanation: Sources and freshness",
    "_pages": [
     "obs-rd"
    ]
   },
   "Flux stratégie UE (Commission européenne — digital-strategy.ec.europa.eu ; artificialintelligenceact.eu, Future of Life Institute)": {
    "fr": "Flux stratégie UE (Commission européenne — digital-strategy.ec.europa.eu ; artificialintelligenceact.eu, Future of Life Institute)",
-   "en": "",
+   "en": "EU strategy feed (European Commission — digital-strategy.ec.europa.eu; artificialintelligenceact.eu, Future of Life Institute)",
    "_pages": [
     "obs-rd"
    ]
   },
   "Groupe d’experts de haut niveau sur l’IA (AI HLEG) — Lignes directrices en matière d’éthique pour une IA digne de confiance, et liste d’évaluation ALTAI": {
    "fr": "Groupe d’experts de haut niveau sur l’IA (AI HLEG) — Lignes directrices en matière d’éthique pour une IA digne de confiance, et liste d’évaluation ALTAI",
-   "en": "",
+   "en": "High-Level Expert Group on AI (AI HLEG) — Ethics Guidelines for Trustworthy AI, and the ALTAI assessment list",
    "_pages": [
     "obs-rd"
    ]
   },
   "La feuille de route politique UE/États membres : utile pour anticiper les priorités de financement et les stratégies nationales qui encadreront vos projets.": {
    "fr": "La feuille de route politique UE/États membres : utile pour anticiper les priorités de financement et les stratégies nationales qui encadreront vos projets.",
-   "en": "",
+   "en": "The EU/Member State policy roadmap: useful for anticipating the funding priorities and national strategies that will frame your projects.",
    "_pages": [
     "obs-rd"
    ]
   },
   "La grille d’auto-évaluation de référence : utilisez ALTAI pour documenter, exigence par exigence (# au total), la fiabilité d’un système avant sa mise en service.": {
    "fr": "La grille d’auto-évaluation de référence : utilisez ALTAI pour documenter, exigence par exigence (7 au total), la fiabilité d’un système avant sa mise en service.",
-   "en": "",
+   "en": "The reference self-assessment grid: use ALTAI to document, requirement by requirement (# in total), the trustworthiness of a system before it is put into service.",
    "_pages": [
     "obs-rd"
    ]
   },
   "La répartition du gâteau. La Chine passe d’environ": {
    "fr": "La répartition du gâteau. La Chine passe d’environ",
-   "en": "",
+   "en": "Splitting the pie. China goes from about",
    "_pages": [
     "obs-rd"
    ]
   },
   "Le canal de consultation : suivez-y les consultations publiques et ateliers de la Commission pour anticiper les actes d’exécution et lignes directrices à venir.": {
    "fr": "Le canal de consultation : suivez-y les consultations publiques et ateliers de la Commission pour anticiper les actes d’exécution et lignes directrices à venir.",
-   "en": "",
+   "en": "The consultation channel: follow the Commission’s public consultations and workshops there to anticipate forthcoming implementing acts and guidelines.",
    "_pages": [
     "obs-rd"
    ]
   },
   "Le document reprend": {
    "fr": "Le document reprend",
-   "en": "",
+   "en": "The document includes",
    "_pages": [
     "obs-rd"
    ]
   },
   "Le socle juridique : vérifiez la classification de risque de chacun de vos systèmes d’IA et le calendrier d’application (transparence de l’article # depuis le # août #, haut risque de l’annexe III au # décembre #) ; le Bureau de l’IA supervise les modèles à usage général.": {
    "fr": "Le socle juridique : vérifiez la classification de risque de chacun de vos systèmes d’IA et le calendrier d’application (transparence de l’article 50 depuis le 2 août 2026, haut risque de l’annexe III au 2 décembre 2027) ; le Bureau de l’IA supervise les modèles à usage général.",
-   "en": "",
+   "en": "The legal foundation: check the risk classification of each of your AI systems and the application timetable (Article # transparency since # August #, Annex III high-risk from # December #); the AI Office oversees general-purpose models.",
    "_pages": [
     "obs-rd"
    ]
   },
   "Lecture du graphique": {
    "fr": "Lecture du graphique",
-   "en": "",
+   "en": "Reading the chart",
    "_pages": [
     "obs-rd"
    ]
   },
   "Les indicateurs officiels (investissements, adoption, talents) : citez-les pour étayer une analyse d’impact ou un dossier de conformité auprès d’une autorité.": {
    "fr": "Les indicateurs officiels (investissements, adoption, talents) : citez-les pour étayer une analyse d’impact ou un dossier de conformité auprès d’une autorité.",
-   "en": "",
+   "en": "The official indicators (investment, adoption, talent): cite them to support an impact assessment or a compliance file before an authority.",
    "_pages": [
     "obs-rd"
    ]
   },
   "Les systèmes d’IA réellement déployés dans l’UE": {
    "fr": "Les systèmes d’IA réellement déployés dans l’UE",
-   "en": "",
+   "en": "AI systems actually deployed in the EU",
    "_pages": [
     "obs-rd"
    ]
   },
   "MacroPolo · d’après NeurIPS # · en %": {
    "fr": "MacroPolo · d’après NeurIPS 2022 · en %",
-   "en": "",
+   "en": "MacroPolo · based on NeurIPS # · in %",
    "_pages": [
     "obs-rd"
    ]
   },
   "MacroPolo — The Global AI Talent Tracker #, Paulson Institute (d’après NeurIPS #)": {
    "fr": "MacroPolo — The Global AI Talent Tracker 2.0, Paulson Institute (d’après NeurIPS 2022)",
-   "en": "",
+   "en": "MacroPolo — The Global AI Talent Tracker #, Paulson Institute (based on NeurIPS #)",
    "_pages": [
     "obs-rd"
    ]

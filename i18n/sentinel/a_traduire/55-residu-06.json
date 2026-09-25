@@ -5,476 +5,476 @@
  "texte": {
   "Fluidité": {
    "fr": "Fluidité",
-   "en": "",
+   "en": "Flow",
    "_pages": [
     "gouvernance"
    ]
   },
   "Indicateurs de performance et de dérive, incidents, revue périodique dont la fréquence dépend de la classe.": {
    "fr": "Indicateurs de performance et de dérive, incidents, revue périodique dont la fréquence dépend de la classe.",
-   "en": "",
+   "en": "Performance and drift indicators, incidents, periodic review whose frequency depends on the class.",
    "_pages": [
     "gouvernance"
    ]
   },
   "Instruction technique & sécurité": {
    "fr": "Instruction technique & sécurité",
-   "en": "",
+   "en": "Technical & security review",
    "_pages": [
     "gouvernance"
    ]
   },
   "Interagit-il directement avec des personnes, ou génère-t-il du contenu diffusé ?": {
    "fr": "Interagit-il directement avec des personnes, ou génère-t-il du contenu diffusé ?",
-   "en": "",
+   "en": "Does it interact directly with people, or generate content that is disseminated?",
    "_pages": [
     "gouvernance"
    ]
   },
   "L'usage est-il opéré par un tiers, ou repose-t-il sur un modèle fourni par un tiers ?": {
    "fr": "L'usage est-il opéré par un tiers, ou repose-t-il sur un modèle fourni par un tiers ?",
-   "en": "",
+   "en": "Is the use operated by a third party, or does it rely on a model supplied by a third party?",
    "_pages": [
     "gouvernance"
    ]
   },
   "L'usage relève-t-il d'une pratique interdite (notation sociale, manipulation, reconnaissance des émotions au travail, police prédictive) ?": {
    "fr": "L'usage relève-t-il d'une pratique interdite (notation sociale, manipulation, reconnaissance des émotions au travail, police prédictive) ?",
-   "en": "",
+   "en": "Does the use fall under a prohibited practice (social scoring, manipulation, emotion recognition in the workplace, predictive policing)?",
    "_pages": [
     "gouvernance"
    ]
   },
   "L'usage touche-t-il un domaine de l'annexe III (emploi, éducation, crédit, services essentiels, migration, justice, biométrie, infrastructures critiques) ?": {
    "fr": "L'usage touche-t-il un domaine de l'annexe III (emploi, éducation, crédit, services essentiels, migration, justice, biométrie, infrastructures critiques) ?",
-   "en": "",
+   "en": "Does the use touch an Annex III area (employment, education, credit, essential services, migration, justice, biometrics, critical infrastructure)?",
    "_pages": [
     "gouvernance"
    ]
   },
   "La matrice RACI détaillée — # rôles, # processus, variantes sectorielles — est portée par le module « Parties prenantes ». Ce module ne la duplique pas : il en applique les rôles au comité et au circuit.": {
    "fr": "La matrice RACI détaillée — 18 rôles, 16 processus, variantes sectorielles — est portée par le module « Parties prenantes ». Ce module ne la duplique pas : il en applique les rôles au comité et au circuit.",
-   "en": "",
+   "en": "The detailed RACI matrix — # roles, # processes, sector variants — is held by the “Stakeholders” module. This module does not duplicate it: it applies its roles to the committee and the workflow.",
    "_pages": [
     "gouvernance"
    ]
   },
   "La politique d'usage ne produit d'effet que si elle est connue.": {
    "fr": "La politique d'usage ne produit d'effet que si elle est connue.",
-   "en": "",
+   "en": "The use policy only has an effect if it is known.",
    "_pages": [
     "gouvernance"
    ]
   },
   "Le comité de gouvernance IA arbitre les usages de l'intelligence artificielle dans l'organisation : il autorise ou refuse un nouvel usage, tranche les arbitrages entre valeur métier et exposition, et suspend un système dont le suivi révèle une dérive.": {
    "fr": "Le comité de gouvernance IA arbitre les usages de l'intelligence artificielle dans l'organisation : il autorise ou refuse un nouvel usage, tranche les arbitrages entre valeur métier et exposition, et suspend un système dont le suivi révèle une dérive.",
-   "en": "",
+   "en": "The AI governance committee decides on the uses of artificial intelligence in the organisation: it authorises or refuses a new use, settles trade-offs between business value and exposure, and suspends a system whose monitoring reveals a drift.",
    "_pages": [
     "gouvernance"
    ]
   },
   "Le nombre importe moins que la certitude de les avoir tous identifiés.": {
    "fr": "Le nombre importe moins que la certitude de les avoir tous identifiés.",
-   "en": "",
+   "en": "The number matters less than the certainty of having identified them all.",
    "_pages": [
     "gouvernance"
    ]
   },
   "Le système produit-il une décision ou une évaluation concernant une personne ?": {
    "fr": "Le système produit-il une décision ou une évaluation concernant une personne ?",
-   "en": "",
+   "en": "Does the system produce a decision or an assessment concerning a person?",
    "_pages": [
     "gouvernance"
    ]
   },
   "Les indicateurs sans valeur ne sont pas à zéro : ils ne sont pas encore mesurés. Les revues et la sensibilisation se renseignent hors de ce module.": {
    "fr": "Les indicateurs sans valeur ne sont pas à zéro : ils ne sont pas encore mesurés. Les revues et la sensibilisation se renseignent hors de ce module.",
-   "en": "",
+   "en": "Indicators without a value are not at zero: they are not yet measured. Reviews and awareness are entered outside this module.",
    "_pages": [
     "gouvernance"
    ]
   },
   "Mise en production encadrée": {
    "fr": "Mise en production encadrée",
-   "en": "",
+   "en": "Controlled go-live",
    "_pages": [
     "gouvernance"
    ]
   },
   "Métiers": {
    "fr": "Métiers",
-   "en": "",
+   "en": "Business lines",
    "_pages": [
     "gouvernance"
    ]
   },
   "Orientation stratégique IA, arbitrage final": {
    "fr": "Orientation stratégique IA, arbitrage final",
-   "en": "",
+   "en": "Strategic AI direction, final decision",
    "_pages": [
     "gouvernance"
    ]
   },
   "Ouvrir Parties prenantes →": {
    "fr": "Ouvrir Parties prenantes →",
-   "en": "",
+   "en": "Open Stakeholders →",
    "_pages": [
     "gouvernance"
    ]
   },
   "Part des usages qualifiés AI Act": {
    "fr": "Part des usages qualifiés AI Act",
-   "en": "",
+   "en": "Share of uses qualified under the AI Act",
    "_pages": [
     "gouvernance"
    ]
   },
   "Pourquoi il compte": {
    "fr": "Pourquoi il compte",
-   "en": "",
+   "en": "Why it matters",
    "_pages": [
     "gouvernance"
    ]
   },
   "Protection des données, nécessité d'une AIPD": {
    "fr": "Protection des données, nécessité d'une AIPD",
-   "en": "",
+   "en": "Data protection, need for a DPIA",
    "_pages": [
     "gouvernance"
    ]
   },
   "Qualification réglementaire": {
    "fr": "Qualification réglementaire",
-   "en": "",
+   "en": "Regulatory qualification",
    "_pages": [
     "gouvernance"
    ]
   },
   "Qualification réglementaire, contrats, responsabilité": {
    "fr": "Qualification réglementaire, contrats, responsabilité",
-   "en": "",
+   "en": "Regulatory qualification, contracts, liability",
    "_pages": [
     "gouvernance"
    ]
   },
   "Représentation des utilisateurs": {
    "fr": "Représentation des utilisateurs",
-   "en": "",
+   "en": "User representation",
    "_pages": [
     "gouvernance"
    ]
   },
   "Responsable IA, enregistrement au registre · # étape(s)": {
    "fr": "Responsable IA, enregistrement au registre · 2 étape(s)",
-   "en": "",
+   "en": "AI owner, recording in the register · # step(s)",
    "_pages": [
     "gouvernance"
    ]
   },
   "Responsable de l'usage": {
    "fr": "Responsable de l'usage",
-   "en": "",
+   "en": "Owner of the use",
    "_pages": [
     "gouvernance"
    ]
   },
   "Revues périodiques à jour": {
    "fr": "Revues périodiques à jour",
-   "en": "",
+   "en": "Periodic reviews up to date",
    "_pages": [
     "gouvernance"
    ]
   },
   "Simple déclaration": {
    "fr": "Simple déclaration",
-   "en": "",
+   "en": "Simple declaration",
    "_pages": [
     "gouvernance"
    ]
   },
   "Suivi des systèmes": {
    "fr": "Suivi des systèmes",
-   "en": "",
+   "en": "System monitoring",
    "_pages": [
     "gouvernance"
    ]
   },
   "Systèmes à haut risque en exploitation": {
    "fr": "Systèmes à haut risque en exploitation",
-   "en": "",
+   "en": "High-risk systems in operation",
    "_pages": [
     "gouvernance"
    ]
   },
   "Traite-t-il des données personnelles (même non sensibles) ?": {
    "fr": "Traite-t-il des données personnelles (même non sensibles) ?",
-   "en": "",
+   "en": "Does it process personal data (even non-sensitive)?",
    "_pages": [
     "gouvernance"
    ]
   },
   "Traite-t-il des données personnelles sensibles (santé, biométrie, opinions, appartenance syndicale) ?": {
    "fr": "Traite-t-il des données personnelles sensibles (santé, biométrie, opinions, appartenance syndicale) ?",
-   "en": "",
+   "en": "Does it process sensitive personal data (health, biometrics, opinions, trade union membership)?",
    "_pages": [
     "gouvernance"
    ]
   },
   "Un circuit lent se contourne. Ce chiffre mesure le risque de shadow AI autant que l'efficacité du comité.": {
    "fr": "Un circuit lent se contourne. Ce chiffre mesure le risque de shadow AI autant que l'efficacité du comité.",
-   "en": "",
+   "en": "A slow workflow gets bypassed. This figure measures the risk of shadow AI as much as the committee’s efficiency.",
    "_pages": [
     "gouvernance"
    ]
   },
   "Un comité qui n'a jamais rien refusé ne décide pas : il enregistre.": {
    "fr": "Un comité qui n'a jamais rien refusé ne décide pas : il enregistre.",
-   "en": "",
+   "en": "A committee that has never refused anything does not decide: it records.",
    "_pages": [
     "gouvernance"
    ]
   },
   "Un registre incomplet rend toutes les autres mesures fausses.": {
    "fr": "Un registre incomplet rend toutes les autres mesures fausses.",
-   "en": "",
+   "en": "An incomplete register makes every other measurement wrong.",
    "_pages": [
     "gouvernance"
    ]
   },
   "Un usage non qualifié est un usage dont on ignore les obligations.": {
    "fr": "Un usage non qualifié est un usage dont on ignore les obligations.",
-   "en": "",
+   "en": "An unqualified use is a use whose obligations are unknown.",
    "_pages": [
     "gouvernance"
    ]
   },
   "Une file qui s'allonge annonce des mises en production hors circuit.": {
    "fr": "Une file qui s'allonge annonce des mises en production hors circuit.",
-   "en": "",
+   "en": "A growing queue heralds go-lives outside the workflow.",
    "_pages": [
     "gouvernance"
    ]
   },
   "Une revue en retard sur un système à haut risque est un écart de conformité.": {
    "fr": "Une revue en retard sur un système à haut risque est un écart de conformité.",
-   "en": "",
+   "en": "An overdue review on a high-risk system is a compliance gap.",
    "_pages": [
     "gouvernance"
    ]
   },
   "Usages déclarés au registre": {
    "fr": "Usages déclarés au registre",
-   "en": "",
+   "en": "Uses declared in the register",
    "_pages": [
     "gouvernance"
    ]
   },
   "Validation de la valeur d'usage et de l'appropriation": {
    "fr": "Validation de la valeur d'usage et de l'appropriation",
-   "en": "",
+   "en": "Validation of the use value and of adoption",
    "_pages": [
     "gouvernance"
    ]
   },
   "Voie allégée": {
    "fr": "Voie allégée",
-   "en": "",
+   "en": "Fast track",
    "_pages": [
     "gouvernance"
    ]
   },
   "accepter formellement un risque résiduel, avec sa justification écrite": {
    "fr": "accepter formellement un risque résiduel, avec sa justification écrite",
-   "en": "",
+   "en": "formally accept a residual risk, with its written justification",
    "_pages": [
     "gouvernance"
    ]
   },
   "arbitrer un désaccord entre valeur métier et exposition réglementaire": {
    "fr": "arbitrer un désaccord entre valeur métier et exposition réglementaire",
-   "en": "",
+   "en": "settle a disagreement between business value and regulatory exposure",
    "_pages": [
     "gouvernance"
    ]
   },
   "aucune au-delà d'un trimestre": {
    "fr": "aucune au-delà d'un trimestre",
-   "en": "",
+   "en": "none older than a quarter",
    "_pages": [
     "gouvernance"
    ]
   },
   "autoriser la mise en production d'un système d'IA à haut risque": {
    "fr": "autoriser la mise en production d'un système d'IA à haut risque",
-   "en": "",
+   "en": "authorise the go-live of a high-risk AI system",
    "_pages": [
     "gouvernance"
    ]
   },
   "autoriser un usage porté par un tiers sur les données de l'organisation": {
    "fr": "autoriser un usage porté par un tiers sur les données de l'organisation",
-   "en": "",
+   "en": "authorise a use run by a third party on the organisation’s data",
    "_pages": [
     "gouvernance"
    ]
   },
   "autoriser un usage traitant des données personnelles sensibles": {
    "fr": "autoriser un usage traitant des données personnelles sensibles",
-   "en": "",
+   "en": "authorise a use processing sensitive personal data",
    "_pages": [
     "gouvernance"
    ]
   },
   "avis technique motivé": {
    "fr": "avis technique motivé",
-   "en": "",
+   "en": "reasoned technical opinion",
    "_pages": [
     "gouvernance"
    ]
   },
   "classe présumée & obligations": {
    "fr": "classe présumée & obligations",
-   "en": "",
+   "en": "presumed class & obligations",
    "_pages": [
     "gouvernance"
    ]
   },
   "connu et documenté": {
    "fr": "connu et documenté",
-   "en": "",
+   "en": "known and documented",
    "_pages": [
     "gouvernance"
    ]
   },
   "décision tracée": {
    "fr": "décision tracée",
-   "en": "",
+   "en": "traced decision",
    "_pages": [
     "gouvernance"
    ]
   },
   "décisionnaire": {
    "fr": "décisionnaire",
-   "en": "",
+   "en": "decision-maker",
    "_pages": [
     "gouvernance"
    ]
   },
   "fiche d'usage": {
    "fr": "fiche d'usage",
-   "en": "",
+   "en": "use record",
    "_pages": [
     "gouvernance"
    ]
   },
   "haut risque présumé, données sensibles, ou usage porté par un tiers": {
    "fr": "haut risque présumé, données sensibles, ou usage porté par un tiers",
-   "en": "",
+   "en": "presumed high-risk, sensitive data, or use run by a third party",
    "_pages": [
     "gouvernance"
    ]
   },
   "inscription au registre": {
    "fr": "inscription au registre",
-   "en": "",
+   "en": "recording in the register",
    "_pages": [
     "gouvernance"
    ]
   },
   "l'opportunité métier d'un cas d'usage (métiers, avant saisine)": {
    "fr": "l'opportunité métier d'un cas d'usage (métiers, avant saisine)",
-   "en": "",
+   "en": "the business case for a use case (business lines, before referral)",
    "_pages": [
     "gouvernance"
    ]
   },
   "le choix technique d'un modèle ou d'un fournisseur (IT, sur cahier des charges)": {
    "fr": "le choix technique d'un modèle ou d'un fournisseur (IT, sur cahier des charges)",
-   "en": "",
+   "en": "the technical choice of a model or a provider (IT, against specifications)",
    "_pages": [
     "gouvernance"
    ]
   },
   "les décisions de sûreté ou de sécurité des personnes (instances dédiées)": {
    "fr": "les décisions de sûreté ou de sécurité des personnes (instances dédiées)",
-   "en": "",
+   "en": "decisions on the safety or security of people (dedicated bodies)",
    "_pages": [
     "gouvernance"
    ]
   },
   "non nul": {
    "fr": "non nul",
-   "en": "",
+   "en": "non-zero",
    "_pages": [
     "gouvernance"
    ]
   },
   "revue périodique": {
    "fr": "revue périodique",
-   "en": "",
+   "en": "periodic review",
    "_pages": [
     "gouvernance"
    ]
   },
   "risque limité, données non sensibles, périmètre restreint": {
    "fr": "risque limité, données non sensibles, périmètre restreint",
-   "en": "",
+   "en": "limited risk, non-sensitive data, restricted scope",
    "_pages": [
     "gouvernance"
    ]
   },
   "suspendre ou retirer un système en exploitation": {
    "fr": "suspendre ou retirer un système en exploitation",
-   "en": "",
+   "en": "suspend or withdraw a system in operation",
    "_pages": [
     "gouvernance"
    ]
   },
   "trimestrielle, avec séance extraordinaire sur demande motivée": {
    "fr": "trimestrielle, avec séance extraordinaire sur demande motivée",
-   "en": "",
+   "en": "quarterly, with an extraordinary session on reasoned request",
    "_pages": [
     "gouvernance"
    ]
   },
   "usage bureautique d'un outil déjà autorisé, sans donnée sensible": {
    "fr": "usage bureautique d'un outil déjà autorisé, sans donnée sensible",
-   "en": "",
+   "en": "office use of an already authorised tool, without sensitive data",
    "_pages": [
     "gouvernance"
    ]
   },
   "valider la politique interne d'usage de l'IA et ses révisions": {
    "fr": "valider la politique interne d'usage de l'IA et ses révisions",
-   "en": "",
+   "en": "validate the internal AI use policy and its revisions",
    "_pages": [
     "gouvernance"
    ]
   },
   "— Conservation # ans (delai de prescription contractuelle usuel) — Art. #(#)(e) RGPD. Suppression manuelle possible a tout moment. Accessible à vous et à CONSEILPREV (support/audit).": {
    "fr": "— Conservation 3 ans (delai de prescription contractuelle usuel) — Art. 5(1)(e) RGPD. Suppression manuelle possible a tout moment. Accessible à vous et à CONSEILPREV (support/audit).",
-   "en": "",
+   "en": "— Retention # years (usual contractual limitation period) — Art. #(#)(e) GDPR. Manual deletion possible at any time. Accessible to you and to CONSEILPREV (support/audit).",
    "_pages": [
     "historique"
    ]
   },
   "— Toutes les pages —": {
    "fr": "— Toutes les pages —",
-   "en": "",
+   "en": "— All pages —",
    "_pages": [
     "historique"
    ]
   },
   "Bloc # sur # · Vue d’ensemble IA Act — À remplir maintenant": {
    "fr": "Bloc 1 sur 2 · Vue d’ensemble IA Act — À remplir maintenant",
-   "en": "",
+   "en": "Block # of # · AI Act overview — To be filled in now",
    "_pages": [
     "ia-act-hub"
    ]
   },
   "Rien à saisir : l'écran explique. Il se marque « lu », et « lu » n'est pas vert.": {
    "fr": "Rien à saisir : l'écran explique. Il se marque « lu », et « lu » n'est pas vert.",
-   "en": "",
+   "en": "Nothing to enter: the screen explains. It is marked “read”, and “read” is not green.",
    "_pages": [
     "ia-act-hub",
     "iso27001-millesime",
@@ -485,343 +485,343 @@
   },
   "+ # (modalités)": {
    "fr": "+ 50.5 (modalités)",
-   "en": "",
+   "en": "+ # (arrangements)",
    "_pages": [
     "ia50"
    ]
   },
   "Actualites du site (redaction assistee par IA)": {
    "fr": "Actualites du site (redaction assistee par IA)",
-   "en": "",
+   "en": "Site news (AI-assisted writing)",
    "_pages": [
     "ia50"
    ]
   },
   "Analyses generees par IA dans les modules Sentinel": {
    "fr": "Analyses generees par IA dans les modules Sentinel",
-   "en": "",
+   "en": "AI-generated analyses in the Sentinel modules",
    "_pages": [
     "ia50"
    ]
   },
   "Applique : aucun hypertrucage produit ; les actualites du site invoquent l'exception de controle editorial, publiee et nominative.": {
    "fr": "Applique : aucun hypertrucage produit ; les actualites du site invoquent l'exception de controle editorial, publiee et nominative.",
-   "en": "",
+   "en": "Applied: no deepfake produced; the site news invokes the editorial control exception, published and named.",
    "_pages": [
     "ia50"
    ]
   },
   "Applique : les assistants du site public et le Copilote Sentinel affichent la mention des la premiere interaction.": {
    "fr": "Applique : les assistants du site public et le Copilote Sentinel affichent la mention des la premiere interaction.",
-   "en": "",
+   "en": "Applied: the public site assistants and the Sentinel Copilot display the notice from the first interaction.",
    "_pages": [
     "ia50"
    ]
   },
   "Applique : mentions affichees des l'ouverture de l'assistant, et non reportees dans une page de conditions.": {
    "fr": "Applique : mentions affichees des l'ouverture de l'assistant, et non reportees dans une page de conditions.",
-   "en": "",
+   "en": "Applied: notices displayed as soon as the assistant opens, and not relegated to a terms page.",
    "_pages": [
     "ia50"
    ]
   },
   "Applique : proprietes de fichier (ai-generated, reference au #) inserees dans chaque document exporte, et relues a chaque verification.": {
    "fr": "Applique : proprietes de fichier (ai-generated, reference au 50.2) inserees dans chaque document exporte, et relues a chaque verification.",
-   "en": "",
+   "en": "Applied: file properties (ai-generated, reference to #) inserted in every exported document, and re-read at each check.",
    "_pages": [
     "ia50"
    ]
   },
   "Assistants conversationnels du site public (#)": {
    "fr": "Assistants conversationnels du site public (2)",
-   "en": "",
+   "en": "Public site conversational assistants (#)",
    "_pages": [
     "ia50"
    ]
   },
   "Aucune": {
    "fr": "Aucune",
-   "en": "",
+   "en": "None",
    "_pages": [
     "ia50"
    ]
   },
   "Aucune mention visible : le §# est un marquage technique, pas un etiquetage a l'ecran.": {
    "fr": "Aucune mention visible : le §2 est un marquage technique, pas un etiquetage a l'ecran.",
-   "en": "",
+   "en": "No visible notice: § # is a technical marking, not an on-screen label.",
    "_pages": [
     "ia50"
    ]
   },
   "Aucune.": {
    "fr": "Aucune.",
-   "en": "",
+   "en": "None.",
    "_pages": [
     "ia50"
    ]
   },
   "Bandeau \"AI GENERATED\" sur la reponse — EN PLACE": {
    "fr": "Bandeau \"AI GENERATED\" sur la reponse — EN PLACE",
-   "en": "",
+   "en": "“AI GENERATED” banner on the response — IN PLACE",
    "_pages": [
     "ia50"
    ]
   },
   "Bandeau \"AI GENERATED\" sur la sortie — EN PLACE": {
    "fr": "Bandeau \"AI GENERATED\" sur la sortie — EN PLACE",
-   "en": "",
+   "en": "“AI GENERATED” banner on the output — IN PLACE",
    "_pages": [
     "ia50"
    ]
   },
   "Bandeau « AI GENERATED » sur la synthese de l'explorateur": {
    "fr": "Bandeau « AI GENERATED » sur la synthese de l'explorateur",
-   "en": "",
+   "en": "“AI GENERATED” banner on the explorer summary",
    "_pages": [
     "ia50"
    ]
   },
   "Chaque ligne n'invoque que les paragraphes qui obligent son role": {
    "fr": "Chaque ligne n'invoque que les paragraphes qui obligent son role",
-   "en": "",
+   "en": "Each row invokes only the paragraphs that bind its role",
    "_pages": [
     "ia50"
    ]
   },
   "Controle editorial humain (art. # par. #) : examen humain systematique avant publication ; responsabilite editoriale assumee nommement": {
    "fr": "Controle editorial humain (art. 50 par. 4) : examen humain systematique avant publication ; responsabilite editoriale assumee nommement",
-   "en": "",
+   "en": "Human editorial control (art. # para. #): systematic human review before publication; editorial responsibility assumed by name",
    "_pages": [
     "ia50"
    ]
   },
   "Copilote Sentinel (assistant de la plateforme)": {
    "fr": "Copilote Sentinel (assistant de la plateforme)",
-   "en": "",
+   "en": "Sentinel Copilot (platform assistant)",
    "_pages": [
     "ia50"
    ]
   },
   "Documents (texte et indicateurs)": {
    "fr": "Documents (texte et indicateurs)",
-   "en": "",
+   "en": "Documents (text and indicators)",
    "_pages": [
     "ia50"
    ]
   },
   "Dû": {
    "fr": "Dû",
-   "en": "",
+   "en": "Due",
    "_pages": [
     "ia50"
    ]
   },
   "Fonction d'assistance a l'edition standard, ou absence de modification substantielle des donnees d'entree.": {
    "fr": "Fonction d'assistance a l'edition standard, ou absence de modification substantielle des donnees d'entree.",
-   "en": "",
+   "en": "Assistive function for standard editing, or no substantial modification of the input data.",
    "_pages": [
     "ia50"
    ]
   },
   "L'article # cree une transparence ciblee. Il n'impose pas d'etiqueter tous les contenus « generes par IA » : chaque paragraphe vise une situation precise et un destinataire precis. Ce que la maison fait au-dela est un engagement, pas une obligation — et le dire est ce qui donne sa valeur au marquage la ou il est du.": {
    "fr": "L'article 50 cree une transparence ciblee. Il n'impose pas d'etiqueter tous les contenus « generes par IA » : chaque paragraphe vise une situation precise et un destinataire precis. Ce que la maison fait au-dela est un engagement, pas une obligation — et le dire est ce qui donne sa valeur au marquage la ou il est du.",
-   "en": "",
+   "en": "Article # creates targeted transparency. It does not require labelling all “AI-generated” content: each paragraph targets a specific situation and a specific recipient. What the firm does beyond that is a commitment, not an obligation — and saying so is what gives the marking its value where it is due.",
    "_pages": [
     "ia50"
    ]
   },
   "L'information doit etre claire, distincte et fournie au plus tard lors de la premiere interaction ou exposition.": {
    "fr": "L'information doit etre claire, distincte et fournie au plus tard lors de la premiere interaction ou exposition.",
-   "en": "",
+   "en": "The information must be clear, distinguishable and provided at the latest at the time of the first interaction or exposure.",
    "_pages": [
     "ia50"
    ]
   },
   "Le cadre de l'article # est complet et coherent (# §, # cas, # niveaux)": {
    "fr": "Le cadre de l'article 50 est complet et coherent (5 §, 7 cas, 3 niveaux)",
-   "en": "",
+   "en": "The Article # framework is complete and consistent (# §, # cases, # levels)",
    "_pages": [
     "ia50"
    ]
   },
   "Les hypertrucages (deepfakes) doivent etre signales comme artificiellement generes ou manipules. Les textes publies pour informer le public sur des questions d'interet public doivent l'etre aussi lorsqu'ils sont generes ou manipules par IA.": {
    "fr": "Les hypertrucages (deepfakes) doivent etre signales comme artificiellement generes ou manipules. Les textes publies pour informer le public sur des questions d'interet public doivent l'etre aussi lorsqu'ils sont generes ou manipules par IA.",
-   "en": "",
+   "en": "Deepfakes must be disclosed as artificially generated or manipulated. Texts published to inform the public on matters of public interest must also be disclosed when they are generated or manipulated by AI.",
    "_pages": [
     "ia50"
    ]
   },
   "Les personnes doivent etre informees qu'elles interagissent avec un systeme d'IA.": {
    "fr": "Les personnes doivent etre informees qu'elles interagissent avec un systeme d'IA.",
-   "en": "",
+   "en": "People must be informed that they are interacting with an AI system.",
    "_pages": [
     "ia50"
    ]
   },
   "Les personnes exposees a un systeme de reconnaissance des emotions ou de categorisation biometrique doivent en etre informees.": {
    "fr": "Les personnes exposees a un systeme de reconnaissance des emotions ou de categorisation biometrique doivent en etre informees.",
-   "en": "",
+   "en": "People exposed to an emotion recognition or biometric categorisation system must be informed of it.",
    "_pages": [
     "ia50"
    ]
   },
   "Les systemes generant du texte, de l'image, de l'audio ou de la video synthetiques doivent permettre un marquage DETECTABLE PAR UNE MACHINE du contenu genere ou manipule.": {
    "fr": "Les systemes generant du texte, de l'image, de l'audio ou de la video synthetiques doivent permettre un marquage DETECTABLE PAR UNE MACHINE du contenu genere ou manipule.",
-   "en": "",
+   "en": "Systems generating synthetic text, image, audio or video must enable MACHINE-DETECTABLE marking of the generated or manipulated content.",
    "_pages": [
     "ia50"
    ]
   },
   "Marquage lisible par machine dans les documents exportes": {
    "fr": "Marquage lisible par machine dans les documents exportes",
-   "en": "",
+   "en": "Machine-readable marking in exported documents",
    "_pages": [
     "ia50"
    ]
   },
   "Mention \"AI GENERATED\" / \"AI ASSISTED\" apposee sur le document — EN PLACE": {
    "fr": "Mention \"AI GENERATED\" / \"AI ASSISTED\" apposee sur le document — EN PLACE",
-   "en": "",
+   "en": "“AI GENERATED” / “AI ASSISTED” notice affixed to the document — IN PLACE",
    "_pages": [
     "ia50"
    ]
   },
   "Mention d'IA affichee des la premiere interaction (art. #) — EN PLACE": {
    "fr": "Mention d'IA affichee des la premiere interaction (art. 50.1) — EN PLACE",
-   "en": "",
+   "en": "AI notice displayed from the first interaction (art. #) — IN PLACE",
    "_pages": [
     "ia50"
    ]
   },
   "Mention d'IA des la premiere interaction — assistant Sentinel": {
    "fr": "Mention d'IA des la premiere interaction — assistant Sentinel",
-   "en": "",
+   "en": "AI notice from the first interaction — Sentinel assistant",
    "_pages": [
     "ia50"
    ]
   },
   "Mention d'IA des la premiere interaction — chat du site public": {
    "fr": "Mention d'IA des la premiere interaction — chat du site public",
-   "en": "",
+   "en": "AI notice from the first interaction — public site chat",
    "_pages": [
     "ia50"
    ]
   },
   "Mention visible ; metadonnees lisibles par machine a l'export": {
    "fr": "Mention visible ; metadonnees lisibles par machine a l'export",
-   "en": "",
+   "en": "Visible notice; machine-readable metadata on export",
    "_pages": [
     "ia50"
    ]
   },
   "Mention visible apposee sur la sortie ; metadonnees dans les documents exportes": {
    "fr": "Mention visible apposee sur la sortie ; metadonnees dans les documents exportes",
-   "en": "",
+   "en": "Visible notice affixed to the output; metadata in exported documents",
    "_pages": [
     "ia50"
    ]
   },
   "Mesuré": {
    "fr": "Mesuré",
-   "en": "",
+   "en": "Measured",
    "_pages": [
     "ia50"
    ]
   },
   "Mesuré le #-#-# #:#:# UTC — les fichiers servis sont relus à chaque mesure ; la case « Conforme » reste une attestation humaine.": {
    "fr": "Mesuré le 2026-09-25 07:59:37 UTC — les fichiers servis sont relus à chaque mesure ; la case « Conforme » reste une attestation humaine.",
-   "en": "",
+   "en": "Measured on #-#-# #:#:# UTC — the files served are re-read at each measurement; the “Compliant” box remains a human attestation.",
    "_pages": [
     "ia50"
    ]
   },
   "Metadonnees lisibles par machine (ai-generated, ai-disclosure) inserees dans le document — EN PLACE": {
    "fr": "Metadonnees lisibles par machine (ai-generated, ai-disclosure) inserees dans le document — EN PLACE",
-   "en": "",
+   "en": "Machine-readable metadata (ai-generated, ai-disclosure) inserted in the document — IN PLACE",
    "_pages": [
     "ia50"
    ]
   },
   "Modalités": {
    "fr": "Modalités",
-   "en": "",
+   "en": "Arrangements",
    "_pages": [
     "ia50"
    ]
   },
   "Ne concerne aucun contenu genere : c'est l'exposition au systeme qui declenche l'information.": {
    "fr": "Ne concerne aucun contenu genere : c'est l'exposition au systeme qui declenche l'information.",
-   "en": "",
+   "en": "Does not concern any generated content: it is exposure to the system that triggers the information.",
    "_pages": [
     "ia50"
    ]
   },
   "Ne cree aucune obligation nouvelle : il regit la forme de celles des §# a §# qui jouent deja.": {
    "fr": "Ne cree aucune obligation nouvelle : il regit la forme de celles des §1 a §4 qui jouent deja.",
-   "en": "",
+   "en": "Creates no new obligation: it governs the form of those in § # to § # that already apply.",
    "_pages": [
     "ia50"
    ]
   },
   "Ni les contenus internes, ni les livrables remis a un client : la publication au public, et son objet, sont la condition.": {
    "fr": "Ni les contenus internes, ni les livrables remis a un client : la publication au public, et son objet, sont la condition.",
-   "en": "",
+   "en": "Neither internal content nor deliverables handed to a client: publication to the public, and its subject, are the condition.",
    "_pages": [
     "ia50"
    ]
   },
   "Non requis : contenu NON genere par IA (reprise sans reformulation ; la selection par mots-cles ne constitue pas une generation)": {
    "fr": "Non requis : contenu NON genere par IA (reprise sans reformulation ; la selection par mots-cles ne constitue pas une generation)",
-   "en": "",
+   "en": "Not required: content NOT generated by AI (taken over without rewording; selection by keywords does not constitute generation)",
    "_pages": [
     "ia50"
    ]
   },
   "Non requis : exception invoquee — mention de transparence et de responsabilite editoriale publiee sur la page Actualites — EN PLACE": {
    "fr": "Non requis : exception invoquee — mention de transparence et de responsabilite editoriale publiee sur la page Actualites — EN PLACE",
-   "en": "",
+   "en": "Not required: exception invoked — transparency and editorial responsibility notice published on the News page — IN PLACE",
    "_pages": [
     "ia50"
    ]
   },
   "Obligation du deployeur": {
    "fr": "Obligation du deployeur",
-   "en": "",
+   "en": "Deployer obligation",
    "_pages": [
     "ia50"
    ]
   },
   "Obligation du fournisseur": {
    "fr": "Obligation du fournisseur",
-   "en": "",
+   "en": "Provider obligation",
    "_pages": [
     "ia50"
    ]
   },
   "Oeuvre manifestement artistique, creative, satirique ou de fiction : transparence allegee, sans nuire a l'oeuvre. Pour les textes : examen humain ou controle editorial avec une responsabilite editoriale assumee.": {
    "fr": "Oeuvre manifestement artistique, creative, satirique ou de fiction : transparence allegee, sans nuire a l'oeuvre. Pour les textes : examen humain ou controle editorial avec une responsabilite editoriale assumee.",
-   "en": "",
+   "en": "Evidently artistic, creative, satirical or fictional work: lighter transparency, without hampering the work. For texts: human review or editorial control with editorial responsibility assumed.",
    "_pages": [
     "ia50"
    ]
   },
   "Rapports generes par Sentinel (IA Act annuel, audit RGPD, attestation art. #)": {
    "fr": "Rapports generes par Sentinel (IA Act annuel, audit RGPD, attestation art. 50)",
-   "en": "",
+   "en": "Reports generated by Sentinel (annual AI Act, GDPR audit, art. # attestation)",
    "_pages": [
     "ia50"
    ]
   },
   "Rien sur le contenu produit : c'est l'interaction qui est signalee, pas ce qui en sort.": {
    "fr": "Rien sur le contenu produit : c'est l'interaction qui est signalee, pas ce qui en sort.",
-   "en": "",
+   "en": "Nothing on the content produced: it is the interaction that is flagged, not what comes out of it.",
    "_pages": [
     "ia50"
    ]
   },
   "Rôle": {
    "fr": "Rôle",
-   "en": "",
+   "en": "Role",
    "_pages": [
     "ia50",
     "rgpd-site"
@@ -829,203 +829,203 @@
   },
   "SANS OBJET, et c'est examine, pas oublie : la plateforme n'exploite aucun systeme de reconnaissance des emotions ni de categorisation biometrique, et ne traite aucune donnee biometrique.": {
    "fr": "SANS OBJET, et c'est examine, pas oublie : la plateforme n'exploite aucun systeme de reconnaissance des emotions ni de categorisation biometrique, et ne traite aucune donnee biometrique.",
-   "en": "",
+   "en": "NOT APPLICABLE, and this has been examined, not forgotten: the platform operates no emotion recognition or biometric categorisation system, and processes no biometric data.",
    "_pages": [
     "ia50"
    ]
   },
   "Sans objet (echange interactif)": {
    "fr": "Sans objet (echange interactif)",
-   "en": "",
+   "en": "Not applicable (interactive exchange)",
    "_pages": [
     "ia50"
    ]
   },
   "Sans objet (echange interactif, non diffuse comme publication)": {
    "fr": "Sans objet (echange interactif, non diffuse comme publication)",
-   "en": "",
+   "en": "Not applicable (interactive exchange, not disseminated as a publication)",
    "_pages": [
     "ia50"
    ]
   },
   "Sans objet (redaction assistee, publication sous responsabilite editoriale)": {
    "fr": "Sans objet (redaction assistee, publication sous responsabilite editoriale)",
-   "en": "",
+   "en": "Not applicable (assisted writing, published under editorial responsibility)",
    "_pages": [
     "ia50"
    ]
   },
   "Sauf si cela est evident au regard du contexte d'usage.": {
    "fr": "Sauf si cela est evident au regard du contexte d'usage.",
-   "en": "",
+   "en": "Unless this is obvious from the context of use.",
    "_pages": [
     "ia50"
    ]
   },
   "Synthese de la base de connaissance (explorateur RAG)": {
    "fr": "Synthese de la base de connaissance (explorateur RAG)",
-   "en": "",
+   "en": "Knowledge base summary (RAG explorer)",
    "_pages": [
     "ia50"
    ]
   },
   "Texte (reponses aux clients, moteurs Claude et Mistral)": {
    "fr": "Texte (reponses aux clients, moteurs Claude et Mistral)",
-   "en": "",
+   "en": "Text (responses to clients, Claude and Mistral engines)",
    "_pages": [
     "ia50"
    ]
   },
   "Texte (reponses aux visiteurs)": {
    "fr": "Texte (reponses aux visiteurs)",
-   "en": "",
+   "en": "Text (responses to visitors)",
    "_pages": [
     "ia50"
    ]
   },
   "Texte d'analyse produit par IA": {
    "fr": "Texte d'analyse produit par IA",
-   "en": "",
+   "en": "Analysis text produced by AI",
    "_pages": [
     "ia50"
    ]
   },
   "Texte d'interet public elabore avec l'assistance d'une IA": {
    "fr": "Texte d'interet public elabore avec l'assistance d'une IA",
-   "en": "",
+   "en": "Text of public interest prepared with the assistance of an AI",
    "_pages": [
     "ia50"
    ]
   },
   "Texte de synthese genere par IA, avec citations": {
    "fr": "Texte de synthese genere par IA, avec citations",
-   "en": "",
+   "en": "Summary text generated by AI, with citations",
    "_pages": [
     "ia50"
    ]
   },
   "Titres et resumes repris des sources externes": {
    "fr": "Titres et resumes repris des sources externes",
-   "en": "",
+   "en": "Titles and summaries taken from external sources",
    "_pages": [
     "ia50"
    ]
   },
   "Usages autorises a des fins de detection ou de prevention d'infractions, dans les conditions prevues par le reglement.": {
    "fr": "Usages autorises a des fins de detection ou de prevention d'infractions, dans les conditions prevues par le reglement.",
-   "en": "",
+   "en": "Uses authorised for the purpose of detecting or preventing criminal offences, under the conditions laid down by the Regulation.",
    "_pages": [
     "ia50"
    ]
   },
   "Veille reglementaire (flux RSS du site)": {
    "fr": "Veille reglementaire (flux RSS du site)",
-   "en": "",
+   "en": "Regulatory watch (site RSS feed)",
    "_pages": [
     "ia50"
    ]
   },
   "a arbitrer (qualification ou reference, pas les deux) — « Assistants conversationnels du site publ » declare « deployeur » mais invoque l'art. #, qui oblige le fournisseur ; « Copilote Sentinel (assistant de la plate » declare « deployeur » mais invoque l'art. #, qui oblige le fournisseur": {
    "fr": "a arbitrer (qualification ou reference, pas les deux) — « Assistants conversationnels du site publ » declare « deployeur » mais invoque l'art. 50.1, qui oblige le fournisseur ; « Copilote Sentinel (assistant de la plate » declare « deployeur » mais invoque l'art. 50.1, qui oblige le fournisseur",
-   "en": "",
+   "en": "a arbitrer (qualification ou reference, pas les deux) — « Assistants conversationnels du site publ » declare « deployeur » mais invoque l'art. #, qui oblige le fournisseur ; « Copilote Sentinel (assistant de la plate » declare « deployeur » mais invoque l'art. #, qui oblige le fournisseur",
    "_pages": [
     "ia50"
    ]
   },
   "bandeau « AI GENERATED » present dans le rendu de la synthese (sentinel.html)": {
    "fr": "bandeau « AI GENERATED » present dans le rendu de la synthese (sentinel.html)",
-   "en": "",
+   "en": "“AI GENERATED” banner present in the rendering of the summary (sentinel.html)",
    "_pages": [
     "ia50"
    ]
   },
   "cadre relu a l'instant : # paragraphes avec destinataire, §# motive sans objet, # cas a verdict ferme, # obligations au-dela de l'AI Act": {
    "fr": "cadre relu a l'instant : 5 paragraphes avec destinataire, §3 motive sans objet, 7 cas a verdict ferme, 3 obligations au-dela de l'AI Act",
-   "en": "",
+   "en": "framework re-read just now: # paragraphs with a recipient, § # reasoned as not applicable, # cases with a firm verdict, # obligations beyond the AI Act",
    "_pages": [
     "ia50"
    ]
   },
   "deployeur": {
    "fr": "deployeur",
-   "en": "",
+   "en": "deployer",
    "_pages": [
     "ia50"
    ]
   },
   "document genere a l'instant : proprietes du fichier portant « AI-generated », le paragraphe #, le fournisseur qui le doit, et la mention visible donnee pour un engagement (docProps/core.xml lu, pas suppose)": {
    "fr": "document genere a l'instant : proprietes du fichier portant « AI-generated », le paragraphe 50.2, le fournisseur qui le doit, et la mention visible donnee pour un engagement (docProps/core.xml lu, pas suppose)",
-   "en": "",
+   "en": "document generated just now: file properties carrying “AI-generated”, paragraph #, the provider who owes it, and the visible notice given as a commitment (docProps/core.xml read, not assumed)",
    "_pages": [
     "ia50"
    ]
   },
   "fournisseur": {
    "fr": "fournisseur",
-   "en": "",
+   "en": "provider",
    "_pages": [
     "ia50"
    ]
   },
   "la mention de responsabilite editoriale est publiee sur la page Actualites — la realite de l'examen humain reste une attestation, qu'aucune machine ne peut mesurer (art. #)": {
    "fr": "la mention de responsabilite editoriale est publiee sur la page Actualites — la realite de l'examen humain reste une attestation, qu'aucune machine ne peut mesurer (art. 50.4)",
-   "en": "",
+   "en": "the editorial responsibility notice is published on the News page — the reality of the human review remains an attestation that no machine can measure (art. #)",
    "_pages": [
     "ia50"
    ]
   },
   "mention « Vous interagissez avec une IA » presente dans index.html, avec la reference au Regl. (UE) #/#": {
    "fr": "mention « Vous interagissez avec une IA » presente dans index.html, avec la reference au Regl. (UE) 2024/1689",
-   "en": "",
+   "en": "notice “You are interacting with an AI” present in index.html, with the reference to Reg. (EU) #/#",
    "_pages": [
     "ia50"
    ]
   },
   "mention « Vous interagissez avec une IA » presente dans sentinel.html, avec la reference au Regl. (UE) #/#": {
    "fr": "mention « Vous interagissez avec une IA » presente dans sentinel.html, avec la reference au Regl. (UE) 2024/1689",
-   "en": "",
+   "en": "notice “You are interacting with an AI” present in sentinel.html, with the reference to Reg. (EU) #/#",
    "_pages": [
     "ia50"
    ]
   },
   "mesuré ✓": {
    "fr": "mesuré ✓",
-   "en": "",
+   "en": "measured ✓",
    "_pages": [
     "ia50"
    ]
   },
   "— Entree en application des obligations de transparence (art. #) : marquage (fournisseurs) et etiquetage (deployeurs).": {
    "fr": "— Entree en application des obligations de transparence (art. 50) : marquage (fournisseurs) et etiquetage (deployeurs).",
-   "en": "",
+   "en": "— Date of application of the transparency obligations (art. #): marking (providers) and labelling (deployers).",
    "_pages": [
     "ia50"
    ]
   },
   "— Fin de la periode transitoire pour les systemes deja sur le marche.": {
    "fr": "— Fin de la periode transitoire pour les systemes deja sur le marche.",
-   "en": "",
+   "en": "— End of the transitional period for systems already on the market.",
    "_pages": [
     "ia50"
    ]
   },
   "— Solution d'interoperabilite du marquage et acces a la detection (fournisseurs).": {
    "fr": "— Solution d'interoperabilite du marquage et acces a la detection (fournisseurs).",
-   "en": "",
+   "en": "— Interoperability solution for marking and access to detection (providers).",
    "_pages": [
     "ia50"
    ]
   },
   "# Compréhension de l'organisation et de son contexte": {
    "fr": "4.1 Compréhension de l'organisation et de son contexte",
-   "en": "",
+   "en": "# Understanding the organization and its context",
    "_pages": [
     "iso27001"
    ]
   },
   "# Compréhension des besoins et des attentes des parties intéressées": {
    "fr": "4.2 Compréhension des besoins et des attentes des parties intéressées",
-   "en": "",
+   "en": "# Understanding the needs and expectations of interested parties",
    "_pages": [
     "iso27001",
     "iso42001"
@@ -1033,28 +1033,28 @@
   },
   "# Détermination du domaine d'application du système de management de la sécurité de l'information": {
    "fr": "4.3 Détermination du domaine d'application du système de management de la sécurité de l'information",
-   "en": "",
+   "en": "# Determining the scope of the information security management system",
    "_pages": [
     "iso27001"
    ]
   },
   "# Politique": {
    "fr": "5.2 Politique",
-   "en": "",
+   "en": "# Policy",
    "_pages": [
     "iso27001"
    ]
   },
   "# Système de management de la sécurité de l'information": {
    "fr": "4.4 Système de management de la sécurité de l'information",
-   "en": "",
+   "en": "# Information security management system",
    "_pages": [
     "iso27001"
    ]
   },
   "#. Amélioration": {
    "fr": "10. Amélioration",
-   "en": "",
+   "en": "#. Improvement",
    "_pages": [
     "iso27001",
     "iso42001"
@@ -1062,14 +1062,14 @@
   },
   "#. Contexte de l'organisation": {
    "fr": "4. Contexte de l'organisation",
-   "en": "",
+   "en": "#. Context of the organization",
    "_pages": [
     "iso27001"
    ]
   },
   "#. Évaluation des performances": {
    "fr": "9. Évaluation des performances",
-   "en": "",
+   "en": "#. Performance evaluation",
    "_pages": [
     "iso27001",
     "iso42001"
@@ -1077,14 +1077,14 @@
   },
   ": cet article ne se reprend pas d’un autre système de management ·": {
    "fr": ": cet article ne se reprend pas d’un autre système de management ·",
-   "en": "",
+   "en": ": this clause does not carry over from another management system ·",
    "_pages": [
     "iso27001"
    ]
   },
   ": se greffe sur un système de management déjà en place (ISO #, #…).": {
    "fr": ": se greffe sur un système de management déjà en place (ISO 42001, 9001…).",
-   "en": "",
+   "en": ": grafts onto a management system already in place (ISO #, #…).",
    "_pages": [
     "iso27001",
     "iso42001"
@@ -1092,7 +1092,7 @@
   },
   "Actions à mettre en œuvre face aux risques et opportunités — Généralités": {
    "fr": "Actions à mettre en œuvre face aux risques et opportunités — Généralités",
-   "en": "",
+   "en": "Actions to address risks and opportunities — General",
    "_pages": [
     "iso27001",
     "iso42001"
@@ -1100,7 +1100,7 @@
   },
   "Amélioration continue": {
    "fr": "Amélioration continue",
-   "en": "",
+   "en": "Continual improvement",
    "_pages": [
     "iso27001",
     "iso42001"
@@ -1108,14 +1108,14 @@
   },
   "Appréciation des risques de sécurité de l'information": {
    "fr": "Appréciation des risques de sécurité de l'information",
-   "en": "",
+   "en": "Information security risk assessment",
    "_pages": [
     "iso27001"
    ]
   },
   "Audit interne — Généralités": {
    "fr": "Audit interne — Généralités",
-   "en": "",
+   "en": "Internal audit — General",
    "_pages": [
     "iso27001",
     "iso42001"
@@ -1123,28 +1123,28 @@
   },
   "Bloc # sur # · Articles # à # — Pas encore atteint": {
    "fr": "Bloc 3 sur 4 · Articles 4 à 10 — Pas encore atteint",
-   "en": "",
+   "en": "Block # of # · Clauses # to # — Not yet reached",
    "_pages": [
     "iso27001"
    ]
   },
   "Ce qu'on mesure, comment, quand, par qui — et quand les résultats sont évalués.": {
    "fr": "Ce qu'on mesure, comment, quand, par qui — et quand les résultats sont évalués.",
-   "en": "",
+   "en": "What is measured, how, when, by whom — and when the results are evaluated.",
    "_pages": [
     "iso27001"
    ]
   },
   "Ce que la direction doit avoir sous les yeux : suites des revues précédentes, changements, performance, non-conformités, retours des parties intéressées, résultats de l'appréciation des risques.": {
    "fr": "Ce que la direction doit avoir sous les yeux : suites des revues précédentes, changements, performance, non-conformités, retours des parties intéressées, résultats de l'appréciation des risques.",
-   "en": "",
+   "en": "What senior management must have in front of it: follow-up of previous reviews, changes, performance, nonconformities, feedback from interested parties, results of the risk assessment.",
    "_pages": [
     "iso27001"
    ]
   },
   "Ce que le système doit consigner, et ce que l'organisme juge nécessaire d'y ajouter.": {
    "fr": "Ce que le système doit consigner, et ce que l'organisme juge nécessaire d'y ajouter.",
-   "en": "",
+   "en": "What the system must record, and what the organisation deems necessary to add to it.",
    "_pages": [
     "iso27001",
     "iso42001"
@@ -1152,21 +1152,21 @@
   },
   "Choisir les options, déterminer les mesures nécessaires, les comparer à l'annexe A pour vérifier qu'aucune n'a été omise, produire la déclaration d'applicabilité, formuler le plan de traitement — et faire APPROUVER ce plan et ACCEPTER les risques résiduels par les propriétaires des risques.": {
    "fr": "Choisir les options, déterminer les mesures nécessaires, les comparer à l'annexe A pour vérifier qu'aucune n'a été omise, produire la déclaration d'applicabilité, formuler le plan de traitement — et faire APPROUVER ce plan et ACCEPTER les risques résiduels par les propriétaires des risques.",
-   "en": "",
+   "en": "Choose the options, determine the necessary controls, compare them with Annex A to check that none has been omitted, produce the Statement of Applicability, formulate the treatment plan — and have the risk owners APPROVE this plan and ACCEPT the residual risks.",
    "_pages": [
     "iso27001"
    ]
   },
   "Compréhension de l'organisation et de son contexte": {
    "fr": "Compréhension de l'organisation et de son contexte",
-   "en": "",
+   "en": "Understanding the organization and its context",
    "_pages": [
     "iso27001"
    ]
   },
   "Compréhension des besoins et des attentes des parties intéressées": {
    "fr": "Compréhension des besoins et des attentes des parties intéressées",
-   "en": "",
+   "en": "Understanding the needs and expectations of interested parties",
    "_pages": [
     "iso27001",
     "iso42001"
@@ -1174,7 +1174,7 @@
   },
   "Compétences": {
    "fr": "Compétences",
-   "en": "",
+   "en": "Competence",
    "_pages": [
     "iso27001",
     "iso42001"
@@ -1182,7 +1182,7 @@
   },
   "Création et mise à jour des informations documentées": {
    "fr": "Création et mise à jour des informations documentées",
-   "en": "",
+   "en": "Creating and updating",
    "_pages": [
     "iso27001",
     "iso42001"
@@ -1190,7 +1190,7 @@
   },
   "C’est le": {
    "fr": "C’est le",
-   "en": "",
+   "en": "It is the",
    "_pages": [
     "iso27001",
     "iso42001"
@@ -1198,7 +1198,7 @@
   },
   "Des objectifs mesurables, datés, avec un responsable — et le plan qui dit comment on y arrive.": {
    "fr": "Des objectifs mesurables, datés, avec un responsable — et le plan qui dit comment on y arrive.",
-   "en": "",
+   "en": "Measurable, dated objectives with an owner — and the plan that says how they will be achieved.",
    "_pages": [
     "iso27001",
     "iso42001"
@@ -1206,42 +1206,42 @@
   },
   "Disponibilité, protection, distribution, conservation, suppression — y compris pour les documents d'origine externe.": {
    "fr": "Disponibilité, protection, distribution, conservation, suppression — y compris pour les documents d'origine externe.",
-   "en": "",
+   "en": "Availability, protection, distribution, retention, deletion — including for documents of external origin.",
    "_pages": [
     "iso27001"
    ]
   },
   "Définir les CRITÈRES — dont les critères d'acceptation — AVANT d'apprécier ; puis identifier, analyser et évaluer les risques pesant sur la confidentialité, l'intégrité et la disponibilité, en désignant un propriétaire pour chacun.": {
    "fr": "Définir les CRITÈRES — dont les critères d'acceptation — AVANT d'apprécier ; puis identifier, analyser et évaluer les risques pesant sur la confidentialité, l'intégrité et la disponibilité, en désignant un propriétaire pour chacun.",
-   "en": "",
+   "en": "Define the CRITERIA — including the acceptance criteria — BEFORE assessing; then identify, analyse and evaluate the risks to confidentiality, integrity and availability, designating an owner for each.",
    "_pages": [
     "iso27001"
    ]
   },
   "Détermination du domaine d'application du système de management de la sécurité de l'information": {
    "fr": "Détermination du domaine d'application du système de management de la sécurité de l'information",
-   "en": "",
+   "en": "Determining the scope of the information security management system",
    "_pages": [
     "iso27001"
    ]
   },
   "Faire tourner ce qui a été planifié, maîtriser les changements, et tenir les processus externalisés — la sous-traitance ne sort pas du périmètre.": {
    "fr": "Faire tourner ce qui a été planifié, maîtriser les changements, et tenir les processus externalisés — la sous-traitance ne sort pas du périmètre.",
-   "en": "",
+   "en": "Run what has been planned, control changes, and keep hold of outsourced processes — subcontracting does not leave the scope.",
    "_pages": [
     "iso27001"
    ]
   },
   "Fréquence, méthodes, responsabilités, comptes rendus — et des auditeurs qui n'auditent pas leur propre travail.": {
    "fr": "Fréquence, méthodes, responsabilités, comptes rendus — et des auditeurs qui n'auditent pas leur propre travail.",
-   "en": "",
+   "en": "Frequency, methods, responsibilities, reports — and auditors who do not audit their own work.",
    "_pages": [
     "iso27001"
    ]
   },
   "Identification, format, revue et approbation : la discipline documentaire ordinaire des systèmes de management.": {
    "fr": "Identification, format, revue et approbation : la discipline documentaire ordinaire des systèmes de management.",
-   "en": "",
+   "en": "Identification, format, review and approval: the ordinary documentation discipline of management systems.",
    "_pages": [
     "iso27001",
     "iso42001"
@@ -1249,7 +1249,7 @@
   },
   "Informations documentées — Généralités": {
    "fr": "Informations documentées — Généralités",
-   "en": "",
+   "en": "Documented information — General",
    "_pages": [
     "iso27001",
     "iso42001"
@@ -1257,14 +1257,14 @@
   },
   "L'appréciation, exécutée à intervalles planifiés ET quand quelque chose change de façon notable, avec ses résultats conservés.": {
    "fr": "L'appréciation, exécutée à intervalles planifiés ET quand quelque chose change de façon notable, avec ses résultats conservés.",
-   "en": "",
+   "en": "The assessment, performed at planned intervals AND when something changes significantly, with its results retained.",
    "_pages": [
     "iso27001"
    ]
   },
   "La direction revoit le système à intervalles planifiés.": {
    "fr": "La direction revoit le système à intervalles planifiés.",
-   "en": "",
+   "en": "Senior management reviews the system at planned intervals.",
    "_pages": [
     "iso27001",
     "iso42001"
@@ -1272,7 +1272,7 @@
   },
   "La direction s'engage, et ça se prouve : ressources allouées, arbitrages rendus, sujet porté au plus haut niveau.": {
    "fr": "La direction s'engage, et ça se prouve : ressources allouées, arbitrages rendus, sujet porté au plus haut niveau.",
-   "en": "",
+   "en": "Senior management commits, and it can be proven: resources allocated, decisions made, the subject carried to the highest level.",
    "_pages": [
     "iso27001",
     "iso42001"
@@ -1280,7 +1280,7 @@
   },
   "Le cadre : ce que la planification doit produire, et sur quoi elle s'appuie.": {
    "fr": "Le cadre : ce que la planification doit produire, et sur quoi elle s'appuie.",
-   "en": "",
+   "en": "The framework: what planning must produce, and what it relies on.",
    "_pages": [
     "iso27001",
     "iso42001"
@@ -1288,14 +1288,14 @@
   },
   "Le document court qui fixe le cap de la sécurité de l'information et engage la direction qui le signe.": {
    "fr": "Le document court qui fixe le cap de la sécurité de l'information et engage la direction qui le signe.",
-   "en": "",
+   "en": "The short document that sets the course for information security and commits the senior management that signs it.",
    "_pages": [
     "iso27001"
    ]
   },
   "Le plan de traitement, mis en œuvre, et la preuve qu'il l'a été.": {
    "fr": "Le plan de traitement, mis en œuvre, et la preuve qu'il l'a été.",
-   "en": "",
+   "en": "The treatment plan, implemented, and the evidence that it has been.",
    "_pages": [
     "iso27001",
     "iso42001"
@@ -1303,7 +1303,7 @@
   },
   "Le système s'audite lui-même, à intervalles planifiés.": {
    "fr": "Le système s'audite lui-même, à intervalles planifiés.",
-   "en": "",
+   "en": "The system audits itself, at planned intervals.",
    "_pages": [
     "iso27001",
     "iso42001"
@@ -1311,7 +1311,7 @@
   },
   "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : seul un organisme de certification accrédité la prononce, au terme d'un audit en deux étapes.": {
    "fr": "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : seul un organisme de certification accrédité la prononce, au terme d'un audit en deux étapes.",
-   "en": "",
+   "en": "Green on this path means that what a block expects has been filled in. It does not mean that you are compliant: only an accredited certification body can declare that, at the end of a two-stage audit.",
    "_pages": [
     "iso27001-risques",
     "iso27001-soa",
@@ -1322,14 +1322,14 @@
   },
   "Les changements du système se planifient ; ils ne se constatent pas après coup. Article ajouté par la version #.": {
    "fr": "Les changements du système se planifient ; ils ne se constatent pas après coup. Article ajouté par la version 2022.",
-   "en": "",
+   "en": "Changes to the system are planned; they are not discovered after the fact. Clause added by the # edition.",
    "_pages": [
     "iso27001"
    ]
   },
   "Les décisions prises — et les ressources engagées pour les tenir.": {
    "fr": "Les décisions prises — et les ressources engagées pour les tenir.",
-   "en": "",
+   "en": "The decisions taken — and the resources committed to deliver them.",
    "_pages": [
     "iso27001",
     "iso42001"
@@ -1337,7 +1337,7 @@
   },
   "Les moyens humains, techniques et financiers, déterminés et fournis — pas espérés.": {
    "fr": "Les moyens humains, techniques et financiers, déterminés et fournis — pas espérés.",
-   "en": "",
+   "en": "Human, technical and financial resources, determined and provided — not hoped for.",
    "_pages": [
     "iso27001",
     "iso42001"
@@ -1345,7 +1345,7 @@
   },
   "Maîtrise des informations documentées": {
    "fr": "Maîtrise des informations documentées",
-   "en": "",
+   "en": "Control of documented information",
    "_pages": [
     "iso27001",
     "iso42001"
@@ -1353,14 +1353,14 @@
   },
   "Nommer ce qui, dehors et dedans, pèse sur la sécurité de l'information : marché, droit applicable, dépendances techniques, maturité interne.": {
    "fr": "Nommer ce qui, dehors et dedans, pèse sur la sécurité de l'information : marché, droit applicable, dépendances techniques, maturité interne.",
-   "en": "",
+   "en": "Name what, outside and inside, weighs on information security: market, applicable law, technical dependencies, internal maturity.",
    "_pages": [
     "iso27001"
    ]
   },
   "Non-conformité et action corrective": {
    "fr": "Non-conformité et action corrective",
-   "en": "",
+   "en": "Nonconformity and corrective action",
    "_pages": [
     "iso27001",
     "iso42001"
@@ -1368,14 +1368,14 @@
   },
   "Objectifs de sécurité de l'information et plans pour les atteindre": {
    "fr": "Objectifs de sécurité de l'information et plans pour les atteindre",
-   "en": "",
+   "en": "Information security objectives and planning to achieve them",
    "_pages": [
     "iso27001"
    ]
   },
   "Pertinence, adéquation et efficacité du système, améliorées en continu.": {
    "fr": "Pertinence, adéquation et efficacité du système, améliorées en continu.",
-   "en": "",
+   "en": "Suitability, adequacy and effectiveness of the system, continually improved.",
    "_pages": [
     "iso27001",
     "iso42001"
@@ -1383,14 +1383,14 @@
   },
   "Planification des modifications": {
    "fr": "Planification des modifications",
-   "en": "",
+   "en": "Planning of changes",
    "_pages": [
     "iso27001"
    ]
   },
   "Planification et maîtrise opérationnelles": {
    "fr": "Planification et maîtrise opérationnelles",
-   "en": "",
+   "en": "Operational planning and control",
    "_pages": [
     "iso27001",
     "iso42001"
@@ -1398,7 +1398,7 @@
   },
   "Programme d'audit interne": {
    "fr": "Programme d'audit interne",
-   "en": "",
+   "en": "Internal audit programme",
    "_pages": [
     "iso27001",
     "iso42001"
@@ -1406,14 +1406,14 @@
   },
   "Propre à la sécurité — # / #": {
    "fr": "Propre à la sécurité — 0 / 7",
-   "en": "",
+   "en": "Specific to security — # / #",
    "_pages": [
     "iso27001"
    ]
   },
   "Que les personnes concernées sachent ce qu'on attend d'elles et ce qu'un manquement produit.": {
    "fr": "Que les personnes concernées sachent ce qu'on attend d'elles et ce qu'un manquement produit.",
-   "en": "",
+   "en": "That the people concerned know what is expected of them and what a failure produces.",
    "_pages": [
     "iso27001",
     "iso42001"
@@ -1421,7 +1421,7 @@
   },
   "Qui communique quoi, à qui, quand et par quel canal — en interne comme au dehors.": {
    "fr": "Qui communique quoi, à qui, quand et par quel canal — en interne comme au dehors.",
-   "en": "",
+   "en": "Who communicates what, to whom, when and through which channel — internally as well as externally.",
    "_pages": [
     "iso27001",
     "iso42001"
@@ -1429,21 +1429,21 @@
   },
   "Qui décide, qui met en œuvre, qui contrôle — et qui rend compte à la direction de la performance du système.": {
    "fr": "Qui décide, qui met en œuvre, qui contrôle — et qui rend compte à la direction de la performance du système.",
-   "en": "",
+   "en": "Who decides, who implements, who checks — and who reports to senior management on the performance of the system.",
    "_pages": [
     "iso27001"
    ]
   },
   "Recenser qui exige quoi — clients, régulateurs, assureurs, salariés — et lesquelles de ces exigences seront traitées par le système de management.": {
    "fr": "Recenser qui exige quoi — clients, régulateurs, assureurs, salariés — et lesquelles de ces exigences seront traitées par le système de management.",
-   "en": "",
+   "en": "List who requires what — clients, regulators, insurers, employees — and which of these requirements will be addressed by the management system.",
    "_pages": [
     "iso27001"
    ]
   },
   "Revue de direction — Généralités": {
    "fr": "Revue de direction — Généralités",
-   "en": "",
+   "en": "Management review — General",
    "_pages": [
     "iso27001",
     "iso42001"
@@ -1451,7 +1451,7 @@
   },
   "Réagir, en corriger les conséquences, chercher la cause, agir sur la cause, et vérifier que ça a marché.": {
    "fr": "Réagir, en corriger les conséquences, chercher la cause, agir sur la cause, et vérifier que ça a marché.",
-   "en": "",
+   "en": "React, correct the consequences, look for the cause, act on the cause, and check that it worked.",
    "_pages": [
     "iso27001",
     "iso42001"
@@ -1459,7 +1459,7 @@
   },
   "Résultats de la revue de direction": {
    "fr": "Résultats de la revue de direction",
-   "en": "",
+   "en": "Management review results",
    "_pages": [
     "iso27001",
     "iso42001"
@@ -1467,14 +1467,14 @@
   },
   "Rôles, responsabilités et autorités au sein de l'organisation": {
    "fr": "Rôles, responsabilités et autorités au sein de l'organisation",
-   "en": "",
+   "en": "Organizational roles, responsibilities and authorities",
    "_pages": [
     "iso27001"
    ]
   },
   "Savoir quelles compétences le système exige, vérifier qu'on les a, et combler l'écart.": {
    "fr": "Savoir quelles compétences le système exige, vérifier qu'on les a, et combler l'écart.",
-   "en": "",
+   "en": "Know which competences the system requires, check that you have them, and close the gap.",
    "_pages": [
     "iso27001",
     "iso42001"
@@ -1482,7 +1482,7 @@
   },
   "Surveillance, mesure, analyse et évaluation": {
    "fr": "Surveillance, mesure, analyse et évaluation",
-   "en": "",
+   "en": "Monitoring, measurement, analysis and evaluation",
    "_pages": [
     "iso27001",
     "iso42001"
@@ -1490,35 +1490,35 @@
   },
   "Système de management de la sécurité de l'information": {
    "fr": "Système de management de la sécurité de l'information",
-   "en": "",
+   "en": "Information security management system",
    "_pages": [
     "iso27001"
    ]
   },
   "Traitement des risques de sécurité de l'information": {
    "fr": "Traitement des risques de sécurité de l'information",
-   "en": "",
+   "en": "Information security risk treatment",
    "_pages": [
     "iso27001"
    ]
   },
   "taux qui dit l’effort réel. Les articles « mutualisables » se greffent sur un système de management déjà en place — ISO # partage exactement la même structure — et ceux marqués « propre à la sécurité » sont les # qui ne se reprennent de nulle part.": {
    "fr": "taux qui dit l’effort réel. Les articles « mutualisables » se greffent sur un système de management déjà en place — ISO 42001 partage exactement la même structure — et ceux marqués « propre à la sécurité » sont les 7 qui ne se reprennent de nulle part.",
-   "en": "",
+   "en": "rate that shows the real effort. The “shareable” clauses graft onto a management system already in place — ISO # shares exactly the same structure — and those marked “specific to security” are the # that carry over from nowhere.",
    "_pages": [
     "iso27001"
    ]
   },
   "Écrire ce qui est dedans et ce qui est dehors. C'est la décision la plus structurante de la certification : tout ce qui n'est pas exclu par écrit sera audité.": {
    "fr": "Écrire ce qui est dedans et ce qui est dehors. C'est la décision la plus structurante de la certification : tout ce qui n'est pas exclu par écrit sera audité.",
-   "en": "",
+   "en": "Write down what is in and what is out. It is the most structuring decision of the certification: everything that is not excluded in writing will be audited.",
    "_pages": [
     "iso27001"
    ]
   },
   "Éléments d'entrée de la revue de direction": {
    "fr": "Éléments d'entrée de la revue de direction",
-   "en": "",
+   "en": "Management review inputs",
    "_pages": [
     "iso27001",
     "iso42001"
@@ -1526,14 +1526,14 @@
   },
   "Établir, mettre en œuvre, tenir à jour et améliorer le système — l'article qui exige que le reste existe pour de bon.": {
    "fr": "Établir, mettre en œuvre, tenir à jour et améliorer le système — l'article qui exige que le reste existe pour de bon.",
-   "en": "",
+   "en": "Establish, implement, maintain and improve the system — the clause that requires the rest to exist for real.",
    "_pages": [
     "iso27001"
    ]
   },
   "↓ Analyse de risque": {
    "fr": "↓ Analyse de risque",
-   "en": "",
+   "en": "↓ Risk assessment",
    "_pages": [
     "iso27001-soa",
     "iso27001",
@@ -1542,21 +1542,21 @@
   },
   "# mesures · chapitres A.# à A.# · retirée": {
    "fr": "114 mesures · chapitres A.5 à A.18 · retirée",
-   "en": "",
+   "en": "# controls · chapters A.# to A.# · withdrawn",
    "_pages": [
     "iso27001-millesime"
    ]
   },
   "# mesures · thèmes A.# à A.# · en vigueur": {
    "fr": "93 mesures · thèmes A.5 à A.8 · en vigueur",
-   "en": "",
+   "en": "# controls · themes A.# to A.# · in force",
    "_pages": [
     "iso27001-millesime"
    ]
   },
   "Activités de surveillance": {
    "fr": "Activités de surveillance",
-   "en": "",
+   "en": "Monitoring activities",
    "_pages": [
     "iso27001-soa",
     "iso27001-millesime"
@@ -1564,28 +1564,28 @@
   },
   "BSI Group, réf. BSI/UK/#/SC/#/EN/BLD, #. Ce questionnaire porte sur ISO/IEC #:#, à laquelle ISO/IEC #:# a succédé. Le remplir aujourd'hui prépare contre une version retirée — et surtout contre une annexe A qui n'existe plus sous cette forme.": {
    "fr": "BSI Group, réf. BSI/UK/820/SC/0316/EN/BLD, 2016. Ce questionnaire porte sur ISO/IEC 27001:2013, à laquelle ISO/IEC 27001:2022 a succédé. Le remplir aujourd'hui prépare contre une version retirée — et surtout contre une annexe A qui n'existe plus sous cette forme.",
-   "en": "",
+   "en": "BSI Group, ref. BSI/UK/#/SC/#/EN/BLD, #. This questionnaire covers ISO/IEC #:#, which has been superseded by ISO/IEC #:#. Filling it in today prepares you against a withdrawn edition — and above all against an Annex A that no longer exists in this form.",
    "_pages": [
     "iso27001-millesime"
    ]
   },
   "Bloc # sur # · # → # : ce qui a changé — Pas encore atteint": {
    "fr": "Bloc 4 sur 4 · 2013 → 2022 : ce qui a changé — Pas encore atteint",
-   "en": "",
+   "en": "Block # of # · # → #: what changed — Not yet reached",
    "_pages": [
     "iso27001-millesime"
    ]
   },
   "Ce que ce module n’a PAS pu vérifier": {
    "fr": "Ce que ce module n’a PAS pu vérifier",
-   "en": "",
+   "en": "What this module could NOT verify",
    "_pages": [
     "iso27001-millesime"
    ]
   },
   "Codage sécurisé": {
    "fr": "Codage sécurisé",
-   "en": "",
+   "en": "Secure coding",
    "_pages": [
     "iso27001-soa",
     "iso27001-millesime"
@@ -1593,7 +1593,7 @@
   },
   "Gestion des configurations": {
    "fr": "Gestion des configurations",
-   "en": "",
+   "en": "Configuration management",
    "_pages": [
     "iso27001-soa",
     "iso27001-millesime"
@@ -1601,28 +1601,28 @@
   },
   "IAF MD # et ses amendements, relayés par l'organisme d'accréditation national (COFRAC en France) et par l'organisme certificateur de l'organisme": {
    "fr": "IAF MD 26 et ses amendements, relayés par l'organisme d'accréditation national (COFRAC en France) et par l'organisme certificateur de l'organisme",
-   "en": "",
+   "en": "IAF MD # and its amendments, relayed by the national accreditation body (COFRAC in France) and by the organisation’s certification body",
    "_pages": [
     "iso27001-millesime"
    ]
   },
   "ISO/IEC # (management de l'IA)": {
    "fr": "ISO/IEC 42001 (management de l'IA)",
-   "en": "",
+   "en": "ISO/IEC # (AI management)",
    "_pages": [
     "iso27001-millesime"
    ]
   },
   "Il ajoute une considération aux articles # et # sans toucher à l'annexe A : l'ignorer est un écart d'audit mineur, mais un écart.": {
    "fr": "Il ajoute une considération aux articles 4.1 et 4.2 sans toucher à l'annexe A : l'ignorer est un écart d'audit mineur, mais un écart.",
-   "en": "",
+   "en": "It adds a consideration to clauses # and # without touching Annex A: ignoring it is a minor audit gap, but a gap.",
    "_pages": [
     "iso27001-millesime"
    ]
   },
   "L'état de l'amendement ISO/IEC #:#/Amd # relatif au changement climatique (articles # et #)": {
    "fr": "L'état de l'amendement ISO/IEC 27001:2022/Amd 1 relatif au changement climatique (articles 4.1 et 4.2)",
-   "en": "",
+   "en": "The status of amendment ISO/IEC #:#/Amd # on climate change (clauses # and #)",
    "_pages": [
     "iso27001-millesime"
    ]
