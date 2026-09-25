@@ -16791,10 +16791,26 @@ def rgpd_effacement():
         else:
             bilan['abonnement'] = 'aucun'
         anonyme = 'efface-' + _rgpd_hash(email) + '@anonyme.invalid'
-        cur.execute(registre_sql(
-            "UPDATE clients SET email=%s, nom_entreprise='COMPTE EFFACE', mot_de_passe_hash='', actif=FALSE, stripe_customer_id=NULL, stripe_subscription_id=NULL WHERE id=%s",
-            "UPDATE clients SET email=?, nom_entreprise='COMPTE EFFACE', mot_de_passe_hash='', actif=0, stripe_customer_id=NULL, stripe_subscription_id=NULL WHERE id=?"),
-            (anonyme, cid))
+        # QUAND STRIPE A REFUSE, ON N'OUBLIE PAS CE QU'IL FAUT ENCORE ARRETER.
+        # Mesure : l'abonnement restait « active » chez Stripe et continuait de
+        # prelever une personne qui avait demande l'effacement, pendant que les
+        # identifiants passaient a NULL — plus rien en base ne permettait de le
+        # retrouver ni de le resilier. Ces identifiants techniques relevent de
+        # l'art. 17.3.b (obligations legales et defense d'un droit) le temps
+        # que la resiliation aboutisse ; le bilan les nomme pour que
+        # l'administrateur agisse au lieu de decouvrir le prelevement plus tard.
+        _garder = bilan['abonnement'] == 'non_resilie'
+        if _garder:
+            bilan['abonnement_a_resilier'] = dict(row).get('stripe_subscription_id')
+            cur.execute(registre_sql(
+                "UPDATE clients SET email=%s, nom_entreprise='COMPTE EFFACE', mot_de_passe_hash='', actif=FALSE WHERE id=%s",
+                "UPDATE clients SET email=?, nom_entreprise='COMPTE EFFACE', mot_de_passe_hash='', actif=0 WHERE id=?"),
+                (anonyme, cid))
+        else:
+            cur.execute(registre_sql(
+                "UPDATE clients SET email=%s, nom_entreprise='COMPTE EFFACE', mot_de_passe_hash='', actif=FALSE, stripe_customer_id=NULL, stripe_subscription_id=NULL WHERE id=%s",
+                "UPDATE clients SET email=?, nom_entreprise='COMPTE EFFACE', mot_de_passe_hash='', actif=0, stripe_customer_id=NULL, stripe_subscription_id=NULL WHERE id=?"),
+                (anonyme, cid))
         bilan['compte'] = 'anonymise'
         for table in ('client_entites', 'client_connecteurs', 'client_formations'):
             try:

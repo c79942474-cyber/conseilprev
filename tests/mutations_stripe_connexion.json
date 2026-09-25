@@ -444,6 +444,13 @@
    "avant": "                expires_at=max(depart_retenue + formations_ia.RETENUE_MINUTES * 60,",
    "apres": "                expires_at=max(int(time.time()) + formations_ia.RETENUE_MINUTES * 60,",
    "regle": "test_la_caisse_ferme_quand_la_retenue_du_creneau_expire"
+  },
+  {
+   "nom": "14. l'effacement RGPD oublie l'abonnement que Stripe a refusé de résilier",
+   "fichier": "app.py",
+   "avant": "        _garder = bilan['abonnement'] == 'non_resilie'",
+   "apres": "        _garder = False",
+   "regle": "test_l_effacement_rgpd_garde_le_lien_quand_stripe_refuse_la_resiliation"
   }
  ]
 }

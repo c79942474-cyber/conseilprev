@@ -1555,3 +1555,28 @@ def test_un_paiement_sans_seance_a_confirmer_est_signale_a_conseilprev(
     assert jx["commande"] in " ".join(x["htmlContent"] for x in envois), envois
 
 
+# ══════════════════════════════════════════════════════════════════════════
+#  14. EFFACEMENT RGPD : ne pas perdre le seul moyen d'arrêter un prélèvement
+# ══════════════════════════════════════════════════════════════════════════
+def test_l_effacement_rgpd_garde_le_lien_quand_stripe_refuse_la_resiliation(client, faux_stripe):
+    """Stripe refuse le DELETE : l'abonnement reste « active » et continue de
+    prélever une personne qui a demandé l'effacement. Effacer quand même son
+    identifiant, c'est perdre le seul moyen de l'arrêter — l'art. 17.3.b couvre
+    la conservation de ces identifiants techniques, le temps de résilier."""
+    cid = creer_client("rgpd2@recette.test", plan="pro", sub="sub_rgpd2", cust="cus_rgpd2")
+    for t in ("client_entites", "client_connecteurs", "client_formations"):
+        _exec("CREATE TABLE IF NOT EXISTS %s (id INTEGER PRIMARY KEY, client_id INTEGER)" % t)
+    faux_stripe.pannes["DELETE /v1/subscriptions/sub_rgpd2"] = (
+        500, {"error": {"type": "api_error", "message": "panne simulée"}})
+    admin(client)
+    j = client.post("/api/rgpd/effacement", json={"email": "rgpd2@recette.test"},
+                    headers=NAVIGATEUR).get_json()
+    row = client_row(cid)
+    bilan = j.get("bilan") or {}
+    assert bilan.get("abonnement") == "non_resilie", j
+    assert row["email"] != "rgpd2@recette.test", "l'effacement doit avoir lieu malgré tout : %s" % j
+    assert row["stripe_subscription_id"] == "sub_rgpd2", (
+        "identifiant d'abonnement effacé alors que Stripe a refusé la résiliation : "
+        "le compte anonymisé continue d'être prélevé et plus rien ne permet de l'arrêter")
+    assert bilan.get("abonnement_a_resilier") == "sub_rgpd2", (
+        "le bilan rendu à l'administrateur ne nomme pas l'abonnement à résilier : %s" % bilan)
