@@ -39,6 +39,7 @@ import secrets
 import socket
 import stat
 import sys
+import threading
 from datetime import datetime, timedelta
 
 import pytest
@@ -51,6 +52,7 @@ os.environ.setdefault('FLASK_SECRET_KEY', 'recette-brevo-connexion')
 os.environ.setdefault('ADMIN_PASSWORD', 'mot-de-passe-de-recette-uniquement')
 
 import app as A  # noqa: E402
+import formations_ia  # noqa: E402
 
 SOURCE = io.open(os.path.join(ICI, 'app.py'), encoding='utf-8').read()
 PIEGE = '<a href="https://piege.test/z">Cliquez pour valider</a>'
@@ -274,6 +276,34 @@ def test_api_health_administrateur_interroge_le_compte_brevo_par_la_base_redirig
     assert (r.get_json() or {}).get('brevo', {}).get('api_ready') is True, r.get_json().get('brevo')
 
 
+def test_api_health_ne_livre_rien_a_un_client_connecte_qui_n_est_pas_admin(brevo, monkeypatch):
+    """LE TROU QUE LES DEUX RÈGLES VOISINES LAISSAIENT. Elles mesurent
+    l'anonyme et l'administrateur ; entre les deux vit le compte Sentinel
+    ordinaire, gratuit et ouvert à l'inscription. Avec la garde réduite à
+    `if not admin:`, il obtenait MAIL_TO, MAIL_CC, l'hôte SMTP, l'adresse et
+    l'offre du compte Brevo — et chaque appel déclenchait un GET /v3/account
+    plus un appel au fournisseur du modèle."""
+    monkeypatch.setattr(A, 'ANTHROPIC_API_KEY', 'sk-ant-recette-locale')
+    monkeypatch.setattr(A, 'sentauth_current_client',
+                        lambda: {'id': 999042, 'email': 'client@exemple.test',
+                                 'is_conseilprev': False})
+    tentatives = []
+    vrai = socket.socket.connect
+
+    def connect(self, adresse):
+        tentatives.append(adresse)
+        return vrai(self, adresse)
+    monkeypatch.setattr(socket.socket, 'connect', connect)
+    r = _anonyme().get('/api/health?format=json', headers=_entetes())
+    assert r.status_code == 200, r.status_code
+    assert 'brevo' not in (r.get_json() or {}), r.get_json()
+    assert tentatives == [], 'appels sortants pour un client ordinaire : %r' % tentatives
+    corps = _anonyme().get('/api/health', headers=_entetes(Accept='text/html')).get_data(as_text=True)
+    for donnee in (A.MAIL_TO, A.MAIL_CC, A.SMTP_HOST, A.CONSEILPREV_NOTIFY_EMAIL):
+        assert donnee not in corps, 'un client ordinaire lit %r' % donnee
+    assert brevo.recues('GET', '/v3/account', exact=True) == []
+
+
 def test_api_health_reste_atteignable_sans_en_tetes_de_navigateur(brevo):
     """Liste blanche du security_middleware : une sonde n'a pas d'Accept-Language."""
     r = _anonyme().get('/api/health', headers={'User-Agent': 'curl/8.4.0'})
@@ -325,6 +355,65 @@ def test_la_selection_est_plafonnee_globalement_par_jour(brevo, monkeypatch):
                                headers=_entetes()).status_code for i in range(3)]
     assert statuts == [200, 200, 429], statuts
     assert len(_posts(brevo)) == 4, 'observé %d POST pour 2 sélections' % len(_posts(brevo))
+
+
+def test_les_plafonds_tiennent_sous_des_appels_simultanes(brevo):
+    """LE DÉFAUT MESURÉ. `_notify_selection_autorise` lisait un COUNT, puis la
+    route appelait Brevo (jusqu'à 20 s × 3 essais) et la ligne email_log
+    n'était écrite qu'APRÈS. Avec 2 workers × 8 fils, toutes les requêtes
+    simultanées vers la même adresse lisaient 0 et passaient. Mesure : faux
+    Brevo ralenti, 12 fils avec 12 X-Forwarded-For distincts vers la même
+    cible → 12 réponses 200, 12 envois, 24 POST, pour un plafond de 3."""
+    brevo.lenteurs['POST ' + SMTP_EMAIL] = 0.3
+    codes, verrou = [], threading.Lock()
+
+    def tirer(i):
+        r = _anonyme().post('/api/notify-selection', json=_charge(),
+                            headers=_entetes(**{'X-Forwarded-For': '198.51.100.%d' % (20 + i)}))
+        with verrou:
+            codes.append(r.status_code)
+
+    fils = [threading.Thread(target=tirer, args=(i,)) for i in range(12)]
+    for f in fils:
+        f.start()
+    for f in fils:
+        f.join()
+    plafond = A.NOTIFY_SELECTION_PLAFOND_DESTINATAIRE_JOUR
+    vers_cible = [d for d in _destinataires(brevo) if d == 'cible@exemple.test']
+    assert len(vers_cible) <= plafond, (
+        '%d envois vers la cible pour un plafond de %d' % (len(vers_cible), plafond))
+    assert codes.count(200) <= plafond, codes
+    assert codes.count(429) == 12 - codes.count(200), codes
+
+
+def test_un_refus_ne_consomme_pas_le_quota_du_jour(brevo):
+    """La place réservée est RENDUE quand on refuse : sinon un attaquant
+    fermerait le relais pour les vrais clients en se faisant refuser vingt
+    fois."""
+    reserves = "SELECT COUNT(*) AS n FROM email_log WHERE methode=%r" % (
+        A.NOTIFY_SELECTION_METHODE_RESERVE,)
+    plafond = A.NOTIFY_SELECTION_PLAFOND_DESTINATAIRE_JOUR
+    for _ in range(plafond):
+        assert _anonyme().post('/api/notify-selection', json=_charge(),
+                               headers=_entetes()).status_code == 200
+    for _ in range(4):
+        assert _anonyme().post('/api/notify-selection', json=_charge(),
+                               headers=_entetes()).status_code == 429
+    assert _sql(reserves)[0]['n'] == plafond, (
+        'les refus ont consommé des places : %s' % _sql(reserves))
+
+
+def test_une_base_illisible_refuse_le_relais_sans_aucun_envoi(brevo, monkeypatch):
+    """« L'incertitude ne l'ouvre pas », dit la docstring — rien ne le
+    mesurait. Avec un `return True, None` à la place du refus, le relais
+    public enverrait à n'importe quelle adresse, borné seulement par un
+    compteur en mémoire que X-Forwarded-For contourne."""
+    def casse():
+        raise RuntimeError('base injoignable (simulé)')
+    monkeypatch.setattr(A, 'registre_get_db', casse)
+    r = _anonyme().post('/api/notify-selection', json=_charge(), headers=_entetes())
+    assert r.status_code == 429, (r.status_code, r.get_json())
+    assert _posts(brevo) == [], 'envoyé malgré une base illisible : %s' % _destinataires(brevo)
 
 
 def test_une_adresse_de_destinataire_invalide_est_refusee_sans_envoi(brevo):
@@ -555,8 +644,12 @@ def test_un_refus_4xx_n_est_jamais_reessaye(brevo, statut):
     assert brevo.pauses == [], brevo.pauses
 
 
-def test_un_delai_depasse_est_reessaye_deux_fois(brevo, monkeypatch, reseau_ferme):
-    """Un serveur qui accepte la connexion et ne répond jamais."""
+def test_un_delai_de_lecture_n_est_jamais_reessaye(brevo, monkeypatch, reseau_ferme):
+    """Un serveur qui accepte la connexion et ne répond jamais : la requête EST
+    PARTIE. L'ancienne règle attendait ici deux réessais — c'était l'erreur.
+    L'API transactionnelle de Brevo n'a pas de clé d'idempotence : chaque
+    tentative est un nouvel envoi, et un Brevo lent faisait recevoir trois fois
+    la confirmation, puis une quatrième par le repli SMTP."""
     sourd = socket.socket()
     sourd.bind(('127.0.0.1', 0)); sourd.listen(1)
     port = sourd.getsockname()[1]
@@ -567,8 +660,42 @@ def test_un_delai_depasse_est_reessaye_deux_fois(brevo, monkeypatch, reseau_ferm
         ok, motif = A.send_via_brevo_api('r@exemple.test', 'R', 'S', '<p/>')
     finally:
         sourd.close()
-    assert ok is False and motif.startswith('reseau'), (ok, motif)
-    assert brevo.pauses == [0.5, 1.0], 'attentes observées : %r' % brevo.pauses
+    assert (ok, motif) == (False, 'delai_reponse'), (ok, motif)
+    assert brevo.pauses == [], 'réessai après un délai de lecture : %r' % brevo.pauses
+    lignes = _sql("SELECT methode, raison_echec FROM email_log "
+                  "WHERE destinataire='r@exemple.test'")
+    assert lignes and lignes[-1]['raison_echec'] == 'delai_reponse', lignes
+
+
+def test_un_brevo_lent_ne_fait_pas_partir_le_courriel_trois_fois(brevo, monkeypatch):
+    """LA MESURE DU DÉFAUT, du côté de Brevo : combien de POST il a REÇUS.
+    Le faux serveur lit la requête puis répond au-delà du délai ; l'ancien code
+    en envoyait trois, donc trois exemplaires dans la boîte du client."""
+    brevo.lenteurs['POST ' + SMTP_EMAIL] = 0.6
+    monkeypatch.setattr(A, 'BREVO_DELAI', 0.2, raising=False)
+    ok, motif = A.send_email_smart('lent@exemple.test', 'L', 'Votre réservation', '<p/>')
+    assert (ok, motif) == (False, 'delai_reponse'), (ok, motif)
+    assert len(_posts(brevo)) == 1, '%d envois reçus par Brevo' % len(_posts(brevo))
+
+
+def test_un_delai_de_lecture_n_enchaine_pas_sur_le_repli(brevo, monkeypatch, tmp_path):
+    """L'issue est INCERTAINE, pas négative : un exemplaire certain de plus
+    (SMTP, ou le fichier de repli) est pire qu'un envoi douteux."""
+    brevo.lenteurs['POST ' + SMTP_EMAIL] = 0.6
+    monkeypatch.setattr(A, 'BREVO_DELAI', 0.2, raising=False)
+    monkeypatch.setattr(A, 'SMTP_USER', 'recette@exemple.test')
+    monkeypatch.setattr(A, 'SMTP_PASSWORD', 'motdepasse-de-recette')
+    repli = tmp_path / 'repli2'
+    monkeypatch.setattr(A, 'REPLI_COURRIELS_DOSSIER', str(repli), raising=False)
+    smtp = []
+    monkeypatch.setattr(A.smtplib, 'SMTP', lambda *a, **k: smtp.append(a) or _boum())
+    assert A.send_email_smart('lent2@exemple.test', 'L', 'S', '<p/>') == (False, 'delai_reponse')
+    assert smtp == [], 'le repli SMTP a été tenté : un quatrième exemplaire'
+    assert not repli.exists() or os.listdir(str(repli)) == [], 'courriel déposé en repli'
+
+
+def _boum():
+    raise AssertionError('le repli SMTP ne doit pas être atteint')
 
 
 def test_une_connexion_refusee_est_reessayee_deux_fois(brevo, monkeypatch, reseau_ferme):

@@ -1009,7 +1009,31 @@ def send_via_brevo_api(to_email, to_name, subject, html_content,
         try:
             resp = _brevo_session().post(BREVO_API_URL, headers=_brevo_entetes(),
                                          json=payload, timeout=BREVO_DELAI)
+        except requests.exceptions.ReadTimeout as e:
+            # LA REQUETE EST PARTIE, ET BREVO A PU L'ACCEPTER. Un delai de
+            # LECTURE depasse ne dit rien du sort du courriel : le POST a ete
+            # emis, seule la reponse manque. L'API transactionnelle de Brevo
+            # n'a pas de cle d'idempotence — chaque tentative est UN NOUVEL
+            # ENVOI. Mesure avec un faux Brevo qui lit le POST puis repond 201
+            # apres 1,5 s, BREVO_DELAI a 1,0 s : trois POST recus, donc trois
+            # exemplaires de la confirmation de reservation (ou du lien de
+            # reinitialisation) dans la boite du client — puis un quatrieme
+            # par le repli SMTP, puisque la fonction rendait False.
+            #
+            # ON NE REESSAIE DONC PAS, ET ON N'ENCHAINE PAS SUR LE REPLI : le
+            # motif `delai_reponse` dit a send_email_smart que l'issue est
+            # INCERTAINE, et un doublon certain est pire qu'un envoi douteux
+            # sur un quota de 300 par jour. La ligne email_log porte ce motif :
+            # c'est la seule trace qui permette de decider apres coup.
+            logger.error('BREVO_API_DELAI_REPONSE (tentative %d) vers %s : %s',
+                         tentative + 1, _masquer_courriel(to_email), str(e)[:120])
+            email_log_record(to_email, subject, 'brevo_api', False, 'delai_reponse')
+            return False, 'delai_reponse'
         except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as e:
+            # CE QUI N'A PAS PU PARTIR SE REESSAIE : un delai de CONNEXION ou
+            # une connexion refusee signifient qu'aucun octet n'a atteint
+            # Brevo. Le doublon est impossible, la perte du courriel est
+            # certaine sans reessai.
             dernier = 'reseau: %s' % str(e)[:120]
             logger.error('BREVO_API_RESEAU (tentative %d): %s', tentative + 1, dernier)
             continue
@@ -1078,6 +1102,13 @@ def send_email_smart(to_email, to_name, subject, html_content,
             email_log_record(to_email, subject, 'brevo_api', True)
             return True, 'brevo_api'
         logger.warning(f'BREVO_API_FAILED: {result}')
+        if result == 'delai_reponse':
+            # L'ISSUE EST INCERTAINE, PAS NEGATIVE. Brevo a recu le POST et a
+            # pu l'accepter ; seule sa reponse manque. Enchainer sur SMTP puis
+            # sur le fichier de repli ajouterait un exemplaire CERTAIN a un
+            # envoi PROBABLE. On s'arrete, et la ligne email_log deja ecrite
+            # par send_via_brevo_api porte le motif.
+            return False, 'delai_reponse'
     if SMTP_USER and SMTP_PASSWORD:
         try:
             from email.mime.multipart import MIMEMultipart as _MM
@@ -5387,31 +5418,96 @@ NOTIFY_SELECTION_PLAFOND_DESTINATAIRE_JOUR = 3
 NOTIFY_SELECTION_PLAFOND_GLOBAL_JOUR = 20
 
 
+#: La methode inscrite dans email_log par la RESERVATION, avant tout envoi.
+#: Elle ne dit pas « envoye » : elle dit « une place est prise ». Le nom
+#: figure dans les comptes, et le diagnostic email la distingue d'un envoi.
+NOTIFY_SELECTION_METHODE_RESERVE = 'reserve'
+
+
 def _notify_selection_autorise(destinataire):
-    """(True, None) ou (False, motif) selon ce qu'email_log compte aujourd'hui.
-    Une base injoignable REFUSE : c'est un relais, l'incertitude ne l'ouvre pas."""
+    """(True, None) ou (False, motif). RESERVE LA PLACE AVANT DE COMPTER.
+
+    COMPTER PUIS ENVOYER N'EST PAS ATOMIQUE, ET C'EST MESURABLE. La ligne
+    email_log n'etait ecrite qu'APRES l'appel a Brevo, qui dure jusqu'a 20 s
+    par tentative. Avec 2 workers de 8 fils, toutes les requetes simultanees
+    vers la meme adresse lisaient 0 et passaient toutes. Mesure : faux Brevo
+    ralenti a 0,4 s, 12 fils vers cible@exemple.test → 12 reponses 200, 12
+    envois vers la cible, 24 POST /v3/smtp/email, pour un plafond annonce de
+    3. Le `check_soft` par adresse n'y changeait rien : il vit en memoire DANS
+    CHAQUE worker, et l'en-tete X-Forwarded-For le contournait deja.
+
+    CE QU'ON FAIT A LA PLACE. On ECRIT d'abord (une ligne `reserve`), on
+    valide, puis on compte — reservation comprise. Deux fils qui arrivent
+    ensemble ecrivent chacun la leur et comptent donc chacun l'autre : le
+    quatrieme voit 4, se retire, et supprime sa ligne. L'ordre ecrire-puis-
+    compter est ce qui rend la borne vraie sans verrou ni transaction longue,
+    et il vaut pour tous les workers puisque la base est partagee.
+
+    CE QUE ÇA COÛTE, ET C'EST LE BON SENS DU COMPROMIS : un fil tue entre la
+    reservation et sa suppression laisse une place consommee pour la journee.
+    Une place perdue est moins grave qu'un relais ouvert a la marque du site.
+
+    UNE BASE INJOIGNABLE REFUSE : c'est un relais, l'incertitude ne l'ouvre
+    pas. La reservation elle-meme passe par la base, donc une base muette est
+    attrapee ici et rend `compteur_illisible`.
+    """
     try:
         jour = datetime.utcnow().strftime('%Y-%m-%d')
         conn = registre_get_db(); cur = conn.cursor()
         cur.execute(registre_sql(
-            "SELECT COUNT(*) AS n FROM email_log WHERE sujet LIKE %s AND date_envoi >= %s",
-            "SELECT COUNT(*) AS n FROM email_log WHERE sujet LIKE ? AND date_envoi >= ?"),
-            (NOTIFY_SELECTION_SUJET + '%', jour))
+            'INSERT INTO email_log (destinataire, sujet, methode, succes, raison_echec, date_envoi) '
+            'VALUES (%s,%s,%s,%s,%s,%s)',
+            'INSERT INTO email_log (destinataire, sujet, methode, succes, raison_echec, date_envoi) '
+            'VALUES (?,?,?,?,?,?)'),
+            (destinataire, NOTIFY_SELECTION_SUJET + ' — reservation',
+             NOTIFY_SELECTION_METHODE_RESERVE, False, 'reservation', datetime.utcnow().isoformat()))
+        conn.commit()
+        # ON NE COMPTE QUE LES RESERVATIONS, pas les lignes d'envoi. Un relais
+        # accepte ecrit ensuite DEUX lignes de plus (client et CONSEILPREV) au
+        # meme sujet : les compter ferait tomber le plafond de trois a un, et
+        # le rendrait dependant du succes de Brevo. La reservation, elle, vaut
+        # exactement une place, posee avant l'appel et rendue si on refuse.
+        cur.execute(registre_sql(
+            "SELECT COUNT(*) AS n FROM email_log WHERE methode=%s AND sujet LIKE %s AND date_envoi >= %s",
+            "SELECT COUNT(*) AS n FROM email_log WHERE methode=? AND sujet LIKE ? AND date_envoi >= ?"),
+            (NOTIFY_SELECTION_METHODE_RESERVE, NOTIFY_SELECTION_SUJET + '%', jour))
         total = dict(cur.fetchone())['n']
         cur.execute(registre_sql(
-            "SELECT COUNT(*) AS n FROM email_log WHERE sujet LIKE %s AND date_envoi >= %s AND LOWER(destinataire)=%s",
-            "SELECT COUNT(*) AS n FROM email_log WHERE sujet LIKE ? AND date_envoi >= ? AND LOWER(destinataire)=?"),
-            (NOTIFY_SELECTION_SUJET + '%', jour, destinataire.lower()))
+            "SELECT COUNT(*) AS n FROM email_log WHERE methode=%s AND sujet LIKE %s AND date_envoi >= %s AND LOWER(destinataire)=%s",
+            "SELECT COUNT(*) AS n FROM email_log WHERE methode=? AND sujet LIKE ? AND date_envoi >= ? AND LOWER(destinataire)=?"),
+            (NOTIFY_SELECTION_METHODE_RESERVE, NOTIFY_SELECTION_SUJET + '%', jour, destinataire.lower()))
         pour_lui = dict(cur.fetchone())['n']
-        conn.commit(); conn.close()
     except Exception as e:                                     # noqa: BLE001
         logger.error('NOTIFY_SELECTION_COMPTEUR_ERR: %s', e)
+        try:
+            conn.close()
+        except Exception:
+            pass
         return False, 'compteur_illisible'
-    if pour_lui >= NOTIFY_SELECTION_PLAFOND_DESTINATAIRE_JOUR:
-        return False, 'plafond_destinataire'
-    if total >= NOTIFY_SELECTION_PLAFOND_GLOBAL_JOUR:
-        return False, 'plafond_global'
-    return True, None
+    motif = None
+    if pour_lui > NOTIFY_SELECTION_PLAFOND_DESTINATAIRE_JOUR:
+        motif = 'plafond_destinataire'
+    elif total > NOTIFY_SELECTION_PLAFOND_GLOBAL_JOUR:
+        motif = 'plafond_global'
+    if motif:
+        # LA PLACE EST RENDUE : ce refus-ci ne doit pas consommer le quota du
+        # jour, sinon un attaquant fermerait le relais pour les vrais clients
+        # en se faisant refuser vingt fois.
+        try:
+            cur.execute(registre_sql(
+                'DELETE FROM email_log WHERE id IN (SELECT id FROM email_log '
+                'WHERE LOWER(destinataire)=%s AND methode=%s ORDER BY id DESC LIMIT 1)',
+                'DELETE FROM email_log WHERE id IN (SELECT id FROM email_log '
+                'WHERE LOWER(destinataire)=? AND methode=? ORDER BY id DESC LIMIT 1)'),
+                (destinataire.lower(), NOTIFY_SELECTION_METHODE_RESERVE))
+            conn.commit()
+        except Exception as e:                                 # noqa: BLE001
+            logger.error('NOTIFY_SELECTION_RESERVE_ORPHELINE: %s', e)
+    try:
+        conn.close()
+    except Exception:
+        pass
+    return (motif is None), motif
 
 
 @app.route('/api/notify-selection', methods=['POST'])
