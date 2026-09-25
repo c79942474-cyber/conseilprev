@@ -487,10 +487,18 @@ def test_une_caisse_sans_paiement_libere_le_creneau(client, faux_stripe, faux_br
     libre pour un autre client, sans attendre la fin de la retenue."""
     cr = creneaux()
     jx = panier(client, n=2, dates=cr)
+    offerte = _q("SELECT id, statut FROM formation_ia_resa WHERE commande=? AND gratuit=1",
+                 (jx["commande"],))
     r, _ = poster(client, session_payee(jx["commande"], payment_status="unpaid", status="expired"), type_)
     assert r.status_code == 200, r.get_json()
     st = statuts(jx["commande"])
-    assert st != ["en_attente_paiement"], "la séance payante reste %s après %s" % (st, type_)
+    assert st == ["annulee"], "la séance payante est %s après %s" % (st, type_)
+    # LA SÉANCE OFFERTE DU MÊME PANIER N'EST PAS TOUCHÉE. Elle est confirmée
+    # d'emblée et n'a rien coûté : la libération d'une caisse abandonnée ne
+    # doit pas la faire perdre au client, c'est ce que la docstring promet.
+    apres = _q("SELECT id, statut FROM formation_ia_resa WHERE commande=? AND gratuit=1",
+               (jx["commande"],))
+    assert apres == offerte, "la séance offerte est passée de %s à %s après %s" % (offerte, apres, type_)
     # Le créneau payant de X (cr[1]) est repris par Y : accepté, pas 409.
     ry = client.post("/api/formation/inscription", json={
         "seances": [{"sujet": F.SUJETS[2]["cle"], "creneau": cr[1]}],
@@ -789,13 +797,29 @@ def test_la_page_sentinel_n_annonce_l_offre_activee_qu_apres_confirmation(statut
 # ══════════════════════════════════════════════════════════════════════════
 def test_la_caisse_ferme_quand_la_retenue_du_creneau_expire(client, faux_stripe, faux_brevo):
     """La place n'est tenue que RETENUE_MINUTES ; une caisse Stripe vit 24 h
-    par défaut. Payer à H+2 règle une place peut-être déjà reprise."""
+    par défaut. Payer à H+2 règle une place peut-être déjà reprise.
+
+    LA RETENUE COURT DEPUIS L'ÉCRITURE DE LA LIGNE, pas depuis l'ouverture de
+    la caisse : entre les deux, deux courriels synchrones et la lecture du taux
+    de TVA. Avec un Brevo lent, la caisse survivait à la retenue d'autant — X
+    pouvait encore payer un créneau déjà rendu à Y. Brevo est donc ralenti ici,
+    sans quoi la mesure ne verrait rien."""
+    faux_brevo.lenteurs["POST /v3/smtp/email"] = 1.5
     avant = time.time()
-    panier(client, n=2)
+    j = panier(client, n=2)
     f = faux_stripe.recues("POST", "/v1/checkout/sessions")[0].form
     assert "expires_at" in f, "aucun expires_at : la caisse reste ouverte 24 h"
     borne = max(30, F.RETENUE_MINUTES) * 60
-    assert avant + borne - 5 <= int(f["expires_at"]) <= avant + borne + 120, (int(f["expires_at"]) - avant, borne)
+    cree = _q("SELECT created_at FROM formation_ia_resa WHERE commande=? AND gratuit=0",
+              (j["commande"],))[0]["created_at"]
+    cree = (datetime.datetime.fromisoformat(cree)
+            - datetime.datetime(1970, 1, 1)).total_seconds()
+    fin_retenue = cree + F.RETENUE_MINUTES * 60
+    # Stripe refuse une caisse qui fermerait à moins de 30 minutes : c'est ce
+    # plancher, et non la retenue, qui s'applique si la retenue est plus courte.
+    assert avant + borne - 5 <= int(f["expires_at"]) <= max(fin_retenue, avant + 31 * 60 + 5), (
+        "la caisse ferme %d s après la fin de la retenue du créneau"
+        % (int(f["expires_at"]) - fin_retenue))
 
 
 def test_le_montant_encaisse_est_celui_de_l_evenement(client, faux_stripe, faux_brevo):
@@ -903,10 +927,16 @@ def test_une_session_passee_est_refusee(client, faux_stripe, faux_brevo):
 
 
 def test_une_session_complete_est_refusee(client, faux_stripe, faux_brevo):
+    """LA DATE EST CALCULÉE, JAMAIS ÉCRITE EN DUR. Le refus « session passée »
+    est testé AVANT le refus « session complète » : une date fixe finit par
+    passer, et la règle tombe alors sur du code juste en annonçant un défaut
+    qui n'existe pas. Mesuré : la même règle datée d'hier échoue en disant
+    « cette session est passee », sans un mot sur le remplissage."""
     cid = creer_client("complet@recette.test")
     connecter(client, cid)
+    futur = (datetime.datetime.utcnow().date() + datetime.timedelta(days=60)).isoformat()
     _exec("INSERT INTO form_sessions (formation_id, date_session, date_fin, lieu, prix_cents, places, actif) "
-          "VALUES (?,?,?,?,?,?,1)", (15, "2027-11-04", "2027-11-04", "RECETTE complete", 95000, 2))
+          "VALUES (?,?,?,?,?,?,1)", (15, futur, futur, "RECETTE complete", 95000, 2))
     sid = _q("SELECT id FROM form_sessions WHERE lieu='RECETTE complete'")[0]["id"]
     _exec("INSERT INTO form_inscriptions (session_id, client_id, nom, prenom, email, participants, "
           "montant_cents, statut, created_at) VALUES (?,?,?,?,?,?,?,?,?)",
@@ -1426,5 +1456,102 @@ def test_un_abonnement_inconnu_ici_ne_retrograde_aucun_client(client, faux_strip
     assert client_row(cid)["plan"] == "pro", (
         "un abonnement d'un autre site du compte a rétrogradé ce client en %r"
         % client_row(cid)["plan"])
+
+
+# ══════════════════════════════════════════════════════════════════════════
+#  13. UNE SÉANCE ANNULÉE NE REVIENT PAS À LA VIE
+# ══════════════════════════════════════════════════════════════════════════
+def test_une_seance_annulee_et_remboursee_ne_repasse_pas_payee(client, faux_stripe, faux_brevo):
+    """MESURÉ AVANT CORRECTION : le confirmateur retenait toute ligne « != payee »,
+    donc AUSSI les annulées. Une séance annulée et remboursée redevenait
+    « payée » — avec le montant de TOUTE la commande, puisque le prorata ne se
+    répartissait plus que sur elle. Le second remboursement, calculé sur ce
+    montant gonflé, vidait le paiement."""
+    j = panier(client, n=3)                    # 1 offerte + 2 payantes
+    faux_stripe.payer(list(faux_stripe.sessions)[0], amount_total=192000)
+    A._formation_ia_confirmer_paiement(commande=j["commande"], montant_ttc_cents=192000)
+    av = _q("SELECT id, jeton, statut, paye_ttc_cents FROM formation_ia_resa "
+            "WHERE commande=? AND gratuit=0 ORDER BY id", (j["commande"],))
+    assert [x["statut"] for x in av] == ["payee", "payee"], av
+    assert [x["paye_ttc_cents"] for x in av] == [96000, 96000], av
+    ra = client.post("/api/formation/annulation", json={"jeton": av[0]["jeton"]}, headers=NAVIGATEUR)
+    assert ra.status_code == 200 and ra.get_json().get("ok"), ra.get_json()
+    # LA PAGE DE RETOUR EST ROUVERTE (historique, F5) : le confirmateur repasse.
+    A._formation_ia_confirmer_paiement(commande=j["commande"], montant_ttc_cents=192000)
+    ap = _q("SELECT id, statut, paye_ttc_cents FROM formation_ia_resa "
+            "WHERE commande=? AND gratuit=0 ORDER BY id", (j["commande"],))
+    montants = [int(x.form["amount"]) for x in faux_stripe.recues("POST", "/v1/refunds")]
+    assert ap[0]["statut"] == "annulee", (
+        "la séance annulée et remboursée est repassée %r ; remboursements : %s"
+        % (ap[0]["statut"], montants))
+    assert ap[0]["paye_ttc_cents"] == 96000, (
+        "le montant réglé sur la séance annulée est passé à %s c : le remboursement "
+        "suivant serait calculé dessus" % ap[0]["paye_ttc_cents"])
+    assert montants == [48000], "remboursements envoyés : %s" % montants
+
+
+def test_le_montant_encaisse_se_repartit_sur_toute_la_commande_pas_sur_le_reliquat(
+        client, faux_stripe, faux_brevo):
+    """La caisse a été ouverte pour DEUX séances payantes, soit 1 920 € TTC. Le
+    client en annule une avant de payer, puis règle. La séance qui reste ne
+    porte que SA part : lui attribuer tout `amount_total` ferait rembourser
+    960 € pour une séance qui en a coûté 480."""
+    j = panier(client, n=3)
+    lig = _q("SELECT id, jeton FROM formation_ia_resa WHERE commande=? AND gratuit=0 ORDER BY id",
+             (j["commande"],))
+    assert client.post("/api/formation/annulation", json={"jeton": lig[0]["jeton"]},
+                       headers=NAVIGATEUR).status_code == 200
+    A._formation_ia_confirmer_paiement(commande=j["commande"], montant_ttc_cents=192000)
+    ap = _q("SELECT id, statut, paye_ttc_cents FROM formation_ia_resa "
+            "WHERE commande=? AND gratuit=0 ORDER BY id", (j["commande"],))
+    assert [x["statut"] for x in ap] == ["annulee", "payee"], ap
+    assert ap[1]["paye_ttc_cents"] == 96000, (
+        "la séance réglée porte %s c au lieu de 96 000 : c'est là-dessus que se "
+        "calculera son remboursement" % ap[1]["paye_ttc_cents"])
+
+
+def test_une_seance_annulee_avant_paiement_puis_reprise_n_est_pas_confirmee(
+        client, faux_stripe, faux_brevo):
+    """X réserve, annule AVANT de payer (le créneau est libéré), Y le reprend,
+    puis X termine son paiement — sa session Stripe reste ouverte une heure.
+
+    MESURÉ AVANT CORRECTION : la ligne annulée de X repassait « payée ». Deux
+    séances actives sur une date qui n'en porte qu'une, alors que le formateur
+    ne se dédouble pas."""
+    cr = creneaux()
+    jx = panier(client, n=2, dates=cr)
+    lig = _q("SELECT id, jeton FROM formation_ia_resa WHERE commande=? AND gratuit=0",
+             (jx["commande"],))[0]
+    assert client.post("/api/formation/annulation", json={"jeton": lig["jeton"]},
+                       headers=NAVIGATEUR).status_code == 200
+    ry = client.post("/api/formation/inscription", json={
+        "seances": [{"sujet": F.SUJETS[2]["cle"], "creneau": cr[1]}],
+        "nom": "Repreneur", "prenom": "Yann", "email": "repreneur2@recette.test",
+        "entreprise": "AUTRE SAS", "siret": "900000999",
+        "telephone": "+33 6 98 76 54 32", "lieu": "1 rue du Test, 75000 Paris"})
+    assert ry.status_code == 200, (ry.status_code, ry.get_json())
+    A._formation_ia_confirmer_paiement(commande=jx["commande"], montant_ttc_cents=96000)
+    st = _q("SELECT statut FROM formation_ia_resa WHERE id=?", (lig["id"],))[0]["statut"]
+    assert st == "annulee", (
+        "la séance annulée de X est repassée %r : deux clients tiennent le %s" % (st, cr[1]))
+
+
+def test_un_paiement_sans_seance_a_confirmer_est_signale_a_conseilprev(
+        client, faux_stripe, faux_brevo):
+    """L'argent est encaissé et plus aucune séance n'est confirmable : ni
+    silence, ni remboursement automatique — CONSEILPREV décide, donc CONSEILPREV
+    est prévenu."""
+    cr = creneaux()
+    jx = panier(client, n=2, dates=cr)
+    lig = _q("SELECT jeton FROM formation_ia_resa WHERE commande=? AND gratuit=0",
+             (jx["commande"],))[0]
+    client.post("/api/formation/annulation", json={"jeton": lig["jeton"]}, headers=NAVIGATEUR)
+    avant = len(faux_brevo.recues("POST", "/v3/smtp/email"))
+    A._formation_ia_confirmer_paiement(commande=jx["commande"], montant_ttc_cents=96000)
+    envois = [x.json for x in faux_brevo.recues("POST", "/v3/smtp/email")][avant:]
+    dest = [x["to"][0]["email"] for x in envois]
+    assert A.CONSEILPREV_NOTIFY_EMAIL in dest, (
+        "encaissement sans séance à confirmer : personne n'est prévenu (%s)" % dest)
+    assert jx["commande"] in " ".join(x["htmlContent"] for x in envois), envois
 
 

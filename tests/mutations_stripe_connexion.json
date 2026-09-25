@@ -161,7 +161,7 @@
   {
    "nom": "4. la caisse formation IA vit de nouveau 24 h",
    "fichier": "app.py",
-   "avant": "                expires_at=int(time.time()) + max(30, formations_ia.RETENUE_MINUTES) * 60,\n",
+   "avant": "                expires_at=max(depart_retenue + formations_ia.RETENUE_MINUTES * 60,\n                               int(time.time()) + 31 * 60),\n",
    "apres": "",
    "regle": "test_la_caisse_ferme_quand_la_retenue_du_creneau_expire"
   },
@@ -409,6 +409,41 @@
    "avant": "'planifiee', str(sub_id), datetime.utcnow().isoformat()))\n        conn.commit()",
    "apres": "'planifiee', str(sub_id), datetime.utcnow().isoformat()))\n        conn.rollback()",
    "regle": "test_une_facture_d_abonnement_impayee_previent_le_client_et_conseilprev[dahlia]"
+  },
+  {
+   "nom": "13. le confirmateur d'origine revient : une séance annulée repasse « payée »",
+   "fichier": "app.py",
+   "avant": "    a_payer = [r for r in payantes\n               if (r.get('statut') or '') == 'en_attente_paiement']\n    if not a_payer:\n        try: conn.close()\n        except Exception: pass\n        # RIEN A CONFIRMER, MAIS DE L'ARGENT EST ARRIVE. Le remboursement n'est\n        # pas automatique : il depend de ce qui s'est passe (creneau repris,\n        # seance deja remboursee, geste commercial). CONSEILPREV tranche, donc\n        # CONSEILPREV est prevenu — le silence laissait l'encaissement sans\n        # trace et sans contrepartie.\n        if any((r.get('statut') or '') == 'annulee' for r in payantes):\n            _formation_ia_encaissement_sans_seance(commande, resa_id, payantes,\n                                                   montant_ttc_cents)\n        return\n    horo = datetime.utcnow().isoformat()\n    tva = formations_ia.TVA_PCT\n    # LE PRORATA PORTE SUR TOUTES LES SEANCES PAYANTES DE LA COMMANDE, pas sur\n    # celles qui restent a confirmer : `amount_total` est ce que Stripe a\n    # encaisse pour la commande ENTIERE. Le repartir sur le seul reliquat\n    # attribuait a une seance le montant de quatre.\n    hts = [int(r.get('montant_cents') or 0) for r in payantes]\n    try:\n        total = int(montant_ttc_cents) if montant_ttc_cents is not None else 0\n    except (TypeError, ValueError):\n        total = 0\n    if total > 0 and sum(hts) > 0:\n        ttcs = [total * ht // sum(hts) for ht in hts]\n        ttcs[0] += total - sum(ttcs)\n    else:\n        ttcs = [int(round(ht * (100 + tva) / 100.0)) for ht in hts]\n    part = dict(zip([r.get('id') for r in payantes], ttcs))\n    # LA BASE DEPARTAGE, ET C'EST ELLE QUI DECIDE DU COURRIEL. La notification\n    # Stripe et le retour de caisse arrivent ensemble : les deux lisaient les\n    # memes seances a confirmer, le second UPDATE ne changeait rien, mais les\n    # deux envoyaient leurs courriels — doublons chez le client, chez\n    # CONSEILPREV, et deux credits pris sur les 300 envois quotidiens.\n    changees = 0\n    for r in a_payer:\n        cur.execute(registre_sql(\n            \"UPDATE formation_ia_resa SET statut='payee', paye_le=%s, paye_ttc_cents=%s \"\n            \"WHERE id=%s AND statut='en_attente_paiement'\",\n            \"UPDATE formation_ia_resa SET statut='payee', paye_le=?, paye_ttc_cents=? \"\n            \"WHERE id=? AND statut='en_attente_paiement'\"),\n            (horo, part.get(r.get('id'), 0), r.get('id')))\n        changees += max(int(getattr(cur, 'rowcount', 1) or 0), 0)\n",
+   "apres": "    a_payer = [r for r in payantes if r.get('statut') != 'payee']\n    if not a_payer:\n        try: conn.close()\n        except Exception: pass\n        return\n    horo = datetime.utcnow().isoformat()\n    tva = formations_ia.TVA_PCT\n    hts = [int(r.get('montant_cents') or 0) for r in a_payer]\n    try:\n        total = int(montant_ttc_cents) if montant_ttc_cents is not None else 0\n    except (TypeError, ValueError):\n        total = 0\n    if total > 0 and sum(hts) > 0:\n        ttcs = [total * ht // sum(hts) for ht in hts]\n        ttcs[0] += total - sum(ttcs)\n    else:\n        ttcs = [int(round(ht * (100 + tva) / 100.0)) for ht in hts]\n    part = dict(zip([r.get('id') for r in a_payer], ttcs))\n    changees = 1\n    for r in a_payer:\n        cur.execute(registre_sql(\n            \"UPDATE formation_ia_resa SET statut='payee', paye_le=%s, paye_ttc_cents=%s \"\n            \"WHERE id=%s AND statut != 'payee'\",\n            \"UPDATE formation_ia_resa SET statut='payee', paye_le=?, paye_ttc_cents=? \"\n            \"WHERE id=? AND statut != 'payee'\"),\n            (horo, part.get(r.get('id'), 0), r.get('id')))\n",
+   "regle": "test_une_seance_annulee_et_remboursee_ne_repasse_pas_payee"
+  },
+  {
+   "nom": "13. le prorata ne porte que sur le reliquat à confirmer",
+   "fichier": "app.py",
+   "avant": "    hts = [int(r.get('montant_cents') or 0) for r in payantes]",
+   "apres": "    hts = [int(r.get('montant_cents') or 0) for r in a_payer]",
+   "regle": "test_le_montant_encaisse_se_repartit_sur_toute_la_commande_pas_sur_le_reliquat"
+  },
+  {
+   "nom": "13. un encaissement sans séance à confirmer passe sous silence",
+   "fichier": "app.py",
+   "avant": "        if any((r.get('statut') or '') == 'annulee' for r in payantes):",
+   "apres": "        if False:",
+   "regle": "test_un_paiement_sans_seance_a_confirmer_est_signale_a_conseilprev"
+  },
+  {
+   "nom": "13. la caisse abandonnée annule aussi la séance offerte du panier",
+   "fichier": "app.py",
+   "avant": "        \"UPDATE formation_ia_resa SET statut='annulee', annule_le=?, annule_motif=? \"\n        \"WHERE commande=? AND gratuit=0 AND statut='en_attente_paiement'\"),",
+   "apres": "        \"UPDATE formation_ia_resa SET statut='annulee', annule_le=?, annule_motif=? \"\n        \"WHERE commande=?\"),",
+   "regle": "test_une_caisse_sans_paiement_libere_le_creneau[checkout.session.expired]"
+  },
+  {
+   "nom": "4. la caisse survit à la retenue du créneau (heure lue après les courriels)",
+   "fichier": "app.py",
+   "avant": "                expires_at=max(depart_retenue + formations_ia.RETENUE_MINUTES * 60,",
+   "apres": "                expires_at=max(int(time.time()) + formations_ia.RETENUE_MINUTES * 60,",
+   "regle": "test_la_caisse_ferme_quand_la_retenue_du_creneau_expire"
   }
  ]
 }

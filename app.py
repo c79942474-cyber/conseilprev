@@ -18631,13 +18631,19 @@ def _form_confirmer_paiement(insc_id):
         except Exception: pass
         return
     ins = dict(row)
-    if ins.get('statut') == 'payee':
+    # C'EST L'ECRITURE QUI DECIDE DU COURRIEL, PAS LA LECTURE QUI LA PRECEDE.
+    # La notification Stripe et le retour de caisse arrivent ensemble : les
+    # deux lisaient « pas encore payee », les deux ecrivaient, et les deux
+    # envoyaient leurs courriels — le participant et CONSEILPREV recevaient
+    # tout en double, pour deux credits pris sur les 300 envois quotidiens.
+    cur.execute(registre_sql("UPDATE form_inscriptions SET statut='payee' WHERE id=%s AND statut != 'payee'",
+                             "UPDATE form_inscriptions SET statut='payee' WHERE id=? AND statut != 'payee'"), (insc_id,))
+    change = max(int(getattr(cur, 'rowcount', 1) or 0), 0)
+    conn.commit()
+    if not change:
         try: conn.close()
         except Exception: pass
         return
-    cur.execute(registre_sql("UPDATE form_inscriptions SET statut='payee' WHERE id=%s",
-                             "UPDATE form_inscriptions SET statut='payee' WHERE id=?"), (insc_id,))
-    conn.commit()
     cur.execute(registre_sql('SELECT * FROM form_sessions WHERE id=%s', 'SELECT * FROM form_sessions WHERE id=?'),
                 (ins.get('session_id'),))
     srow = cur.fetchone()
@@ -18885,6 +18891,34 @@ def _formation_ia_liberer_commande(commande, motif):
     return liberees
 
 
+def _formation_ia_encaissement_sans_seance(commande, resa_id, payantes, montant_ttc_cents):
+    """De l'argent est arrive, plus aucune seance n'est confirmable.
+
+    POURQUOI ON NE REMBOURSE PAS TOUT SEUL. Le cas naît d'une annulation
+    survenue entre l'ouverture de la caisse et le paiement : le creneau a pu
+    etre repris par un autre client, la seance a pu deja etre remboursee au
+    titre du bareme, ou l'annulation etre une erreur du client. Rendre l'argent
+    sans regarder rembourserait parfois deux fois. Rien n'est ecrit ici :
+    CONSEILPREV est prevenu et tranche."""
+    ref = commande or ('resa ' + str(resa_id))
+    etats = ', '.join('%s=%s' % (r.get('id'), r.get('statut')) for r in payantes)
+    logger.error('FORMATION_IA_ENCAISSEMENT_SANS_SEANCE commande=%s montant=%s seances=%s',
+                 ref, montant_ttc_cents, etats)
+    try:
+        send_email_smart(CONSEILPREV_NOTIFY_EMAIL, 'CONSEILPREV',
+                         'Formation IA : paiement reçu sans séance à confirmer',
+                         '<p>La commande <strong>%s</strong> a été encaissée '
+                         '(%s c TTC) alors qu’aucune de ses séances n’attend '
+                         'plus son paiement.</p><p>État des séances payantes : '
+                         '%s.</p><p>À arbitrer : remboursement, report, ou '
+                         'nouvelle date. Rien n’a été modifié en base.</p>'
+                         % (_pour_courriel(str(ref)), _pour_courriel(str(montant_ttc_cents)),
+                            _pour_courriel(etats)),
+                         tags=['formation-ia-arbitrage'])
+    except Exception as _e:
+        logger.error('FORMATION_IA_ENCAISSEMENT_SANS_SEANCE_COURRIEL commande=%s : %s', ref, _e)
+
+
 def _formation_ia_confirmer_paiement(commande=None, resa_id=None, montant_ttc_cents=None):
     """Une commande encaissee : passer TOUTES ses seances en « payee », noter
     ce qui a ete regle, et notifier une seule fois.
@@ -18924,15 +18958,35 @@ def _formation_ia_confirmer_paiement(commande=None, resa_id=None, montant_ttc_ce
     lignes = [dict(r) for r in cur.fetchall()]
     # LES SEANCES OFFERTES NE SONT PAS « PAYEES » : elles n'ont rien coute, et
     # les marquer ainsi ferait croire a un remboursement possible.
-    a_payer = [r for r in lignes
-               if not int(r.get('gratuit') or 0) and r.get('statut') != 'payee']
+    payantes = [r for r in lignes if not int(r.get('gratuit') or 0)]
+    # SEULE UNE SEANCE QUI ATTEND SON PAIEMENT SE CONFIRME. Le filtre retenait
+    # toute ligne « != payee », donc AUSSI les annulees. Deux degats mesures :
+    # une seance annulee et remboursee redevenait « payee » — avec le montant
+    # de TOUTE la commande, puisque le prorata ne se repartissait plus que sur
+    # elle, et le remboursement suivant, calcule dessus, vidait le paiement ;
+    # et une seance annulee avant paiement, dont le creneau avait ete repris
+    # par un autre client, remettait deux clients sur la meme date.
+    a_payer = [r for r in payantes
+               if (r.get('statut') or '') == 'en_attente_paiement']
     if not a_payer:
         try: conn.close()
         except Exception: pass
+        # RIEN A CONFIRMER, MAIS DE L'ARGENT EST ARRIVE. Le remboursement n'est
+        # pas automatique : il depend de ce qui s'est passe (creneau repris,
+        # seance deja remboursee, geste commercial). CONSEILPREV tranche, donc
+        # CONSEILPREV est prevenu — le silence laissait l'encaissement sans
+        # trace et sans contrepartie.
+        if any((r.get('statut') or '') == 'annulee' for r in payantes):
+            _formation_ia_encaissement_sans_seance(commande, resa_id, payantes,
+                                                   montant_ttc_cents)
         return
     horo = datetime.utcnow().isoformat()
     tva = formations_ia.TVA_PCT
-    hts = [int(r.get('montant_cents') or 0) for r in a_payer]
+    # LE PRORATA PORTE SUR TOUTES LES SEANCES PAYANTES DE LA COMMANDE, pas sur
+    # celles qui restent a confirmer : `amount_total` est ce que Stripe a
+    # encaisse pour la commande ENTIERE. Le repartir sur le seul reliquat
+    # attribuait a une seance le montant de quatre.
+    hts = [int(r.get('montant_cents') or 0) for r in payantes]
     try:
         total = int(montant_ttc_cents) if montant_ttc_cents is not None else 0
     except (TypeError, ValueError):
@@ -18942,21 +18996,35 @@ def _formation_ia_confirmer_paiement(commande=None, resa_id=None, montant_ttc_ce
         ttcs[0] += total - sum(ttcs)
     else:
         ttcs = [int(round(ht * (100 + tva) / 100.0)) for ht in hts]
-    for r, ttc in zip(a_payer, ttcs):
+    part = dict(zip([r.get('id') for r in payantes], ttcs))
+    # LA BASE DEPARTAGE, ET C'EST ELLE QUI DECIDE DU COURRIEL. La notification
+    # Stripe et le retour de caisse arrivent ensemble : les deux lisaient les
+    # memes seances a confirmer, le second UPDATE ne changeait rien, mais les
+    # deux envoyaient leurs courriels — doublons chez le client, chez
+    # CONSEILPREV, et deux credits pris sur les 300 envois quotidiens.
+    changees = 0
+    for r in a_payer:
         cur.execute(registre_sql(
             "UPDATE formation_ia_resa SET statut='payee', paye_le=%s, paye_ttc_cents=%s "
-            "WHERE id=%s AND statut != 'payee'",
+            "WHERE id=%s AND statut='en_attente_paiement'",
             "UPDATE formation_ia_resa SET statut='payee', paye_le=?, paye_ttc_cents=? "
-            "WHERE id=? AND statut != 'payee'"), (horo, ttc, r.get('id')))
+            "WHERE id=? AND statut='en_attente_paiement'"),
+            (horo, part.get(r.get('id'), 0), r.get('id')))
+        changees += max(int(getattr(cur, 'rowcount', 1) or 0), 0)
     conn.commit()
     try: conn.close()
     except Exception: pass
+    if not changees:
+        return
 
     prem = a_payer[0]
     cal = {c['date']: c['libelle']
            for c in formations_ia.creneaux(datetime.utcnow().date()
                                            - timedelta(days=400))}
-    total_ttc = sum(ttcs)
+    # CE QUE LE COURRIEL ANNONCE EST CE QUI VIENT D'ETRE CONFIRME, pas le
+    # montant de la commande : une seance deja reglee plus tot ne se
+    # re-annonce pas au client.
+    total_ttc = sum(part.get(r.get('id'), 0) for r in a_payer)
     lignes_html = ''.join(
         '<li><strong>%s</strong> — %s</li>'
         % ((formations_ia.sujet(r.get('sujet')) or {}).get('titre') or r.get('sujet'),
@@ -19402,6 +19470,13 @@ def formation_ia_inscription():
     commande = _secrets.token_urlsafe(12)
     par_cle = {l['cle']: l for l in dev['lignes']}
     horo = datetime.utcnow().isoformat()
+    # L'INSTANT OU LA RETENUE DU CRENEAU COMMENCE, RETENU ICI. La caisse ne
+    # s'ouvre que plus bas, apres DEUX envois de courriels synchrones et la
+    # lecture du taux de TVA chez Stripe. Lire l'heure la-bas faisait vivre la
+    # caisse d'autant plus longtemps que ces appels trainaient (mesure : 5,67 s
+    # avec un Brevo lent de 3 s) : le creneau etait rendu, Y le reprenait, et X
+    # pouvait encore payer le sien.
+    depart_retenue = int(time.time())
     for i, x in enumerate(seances):
         li = par_cle[x['sujet']]
         statut = ('confirmee' if li['gratuit']
@@ -19528,7 +19603,8 @@ def formation_ia_inscription():
                 # RETENUE_MINUTES : X ne payait pas, Y prenait le creneau a
                 # H+61, puis X et Y payaient tous deux la meme date (mesure).
                 # Stripe exige au moins 30 minutes.
-                expires_at=int(time.time()) + max(30, formations_ia.RETENUE_MINUTES) * 60,
+                expires_at=max(depart_retenue + formations_ia.RETENUE_MINUTES * 60,
+                               int(time.time()) + 31 * 60),
                 metadata={'type': 'formation-ia', 'commande': commande,
                           'resa_id': str(recap[0]['id'] if recap else 0)},
                 success_url=base + '/formation?paiement=ok&session_id={CHECKOUT_SESSION_ID}',
