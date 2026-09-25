@@ -182,7 +182,7 @@
   {
    "nom": "4. un accusé qui échoue est de nouveau avalé",
    "fichier": "app.py",
-   "avant": "        logger.error('FORMATION_IA_ACCUSE_ECHEC commande=%s destinataire=%s : %s', commande, email, _e)",
+   "avant": "        logger.error('FORMATION_IA_ACCUSE_ECHEC commande=%s destinataire=%s : %s',\n                     commande, _masquer_courriel(email), _e)",
    "apres": "        pass",
    "regle": "test_un_accuse_qui_echoue_est_journalise"
   },

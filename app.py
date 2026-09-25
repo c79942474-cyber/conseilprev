@@ -11,6 +11,7 @@ from werkzeug.utils import secure_filename
 from functools import wraps
 from collections import defaultdict
 from urllib.parse import quote
+import posixpath as _posixpath
 from flask import Flask, send_from_directory, jsonify, request, abort, make_response, after_this_request, Response, session, redirect, g, has_request_context
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import timedelta as _timedelta_auth
@@ -24,6 +25,50 @@ from flask_cors import CORS
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
 logger = logging.getLogger('conseilprev')
+
+
+class _JournalSurUneLigne(logging.Filter):
+    """UNE ENTREE DE JOURNAL, UNE LIGNE — quoi qu'un anonyme ait saisi.
+
+    LE DEFAUT MESURE. Un GET anonyme sur /api/stripe/retour avec
+    `?session_id=cs_x%0A2026-09-24 12:00:00,000 INFO STRIPE_OFFRE_ACTIVEE
+    client=7 plan=entreprise` faisait apparaitre, dans le journal Render, une
+    fausse activation d'offre SUR SA PROPRE LIGNE, avec l'horodatage et le
+    niveau d'un vrai evenement. Quiconque lit ce journal — nous, un auditeur,
+    un outil d'alerte — n'a aucun moyen de la distinguer d'une vraie.
+
+    POURQUOI ICI ET PAS AU POINT D'ECRITURE. Le saut de ligne n'est pas le
+    probleme d'UNE route : toute valeur choisie par un inconnu qui atteint un
+    `logger.*` porte le meme risque, et il y en a des centaines. Assainir au
+    point d'ecriture demanderait de les retrouver tous, aujourd'hui et a
+    chaque ligne ajoutee demain. Le filtre est le SEUL endroit par lequel
+    elles passent toutes.
+
+    CE QU'ON REMPLACE, ET CE QU'ON REFUSE DE FAIRE. Les fins de ligne
+    deviennent « ⏎ » : la trace reste lisible et rien n'est perdu — tronquer
+    effacerait justement ce qu'on veut voir. Le message est formate ICI, une
+    fois, et remis dans `record.msg` avec des `args` vides : un filtre qui
+    laisserait le formatage a plus tard ne verrait pas les valeurs.
+    """
+
+    _FINS = ('\r\n', '\n', '\r', ' ', ' ')
+
+    def filter(self, record):
+        try:
+            texte = record.getMessage()
+        except Exception:                                      # pragma: no cover
+            return True
+        if any(f in texte for f in self._FINS):
+            for f in self._FINS:
+                texte = texte.replace(f, ' ⏎ ')
+            record.msg = texte
+            record.args = ()
+        return True
+
+
+for _h in logging.getLogger().handlers:
+    _h.addFilter(_JournalSurUneLigne())
+logger.addFilter(_JournalSurUneLigne())
 
 app = Flask(__name__, static_folder='.', static_url_path='')
 
@@ -126,10 +171,37 @@ class RateLimiter:
         self.chat_req   = defaultdict(list)    # ip → chat timestamps
 
     def get_ip(self, req):
-        # Support proxies (Render, Cloudflare)
-        xff = req.headers.get('X-Forwarded-For','')
-        if xff:
-            return xff.split(',')[0].strip()
+        """L'adresse du client, telle que LE MANDATAIRE l'a constatee.
+
+        LE PREMIER ELEMENT D'X-FORWARDED-FOR EST ECRIT PAR LE CLIENT, et c'est
+        celui qui etait lu. Un anonyme envoyait donc « X-Forwarded-For:
+        3.18.12.63 » (une adresse publique des livraisons Stripe) sur un
+        chemin piege : le honeypot bloquait 3.18.12.63 une heure, et la
+        notification Stripe suivante recevait 429 avant meme d'atteindre la
+        route. Mesure : GET /wp-admin avec cet en-tete, puis POST
+        /api/stripe/webhook depuis 3.18.12.63 → 429. Quelques requetes par
+        heure suffisaient a couper toutes les confirmations de paiement, et
+        Stripe desactive un point de reception apres plusieurs jours d'echec.
+        Le meme en-tete, change a chaque appel, annulait aussi toutes les
+        bornes par adresse (mesure : 40 appels sur /api/stripe/retour, 10
+        refus depuis une adresse fixe, 0 refus en faisant tourner l'en-tete).
+
+        CE QU'ON LIT DESORMAIS, ET POURQUOI. Chaque mandataire AJOUTE a la fin
+        l'adresse dont il a recu la connexion. Le DERNIER element est donc le
+        seul que le client ne choisit pas : c'est celui que le mandataire de
+        Render vient d'ecrire. Tout ce qui precede est recopie tel quel depuis
+        la requete entrante, donc forgeable.
+
+        CE QUE CE CHOIX COÛTE, ET C'EST ASSUME : derriere DEUX mandataires de
+        confiance, le dernier element serait l'adresse du premier mandataire,
+        et tous les clients partageraient une seule cle. Render n'en pose
+        qu'un devant le service. Un mandataire de plus se traduirait ici par
+        un saut de plus a remonter — jamais par un retour au premier element.
+        """
+        xff = req.headers.get('X-Forwarded-For', '')
+        sauts = [p.strip() for p in xff.split(',') if p.strip()]
+        if sauts:
+            return sauts[-1]
         return req.remote_addr or '0.0.0.0'
 
     def is_blocked(self, ip):
@@ -143,13 +215,23 @@ class RateLimiter:
         self.blocked[ip] = time.time() + duration
         logger.warning(f"BLOCKED {ip} for {duration}s — {reason}")
 
-    def check(self, ip, limit=60, window=60, endpoint=''):
+    def check(self, ip, limit=60, window=60, endpoint='', tenir_compte_du_blocage=True):
         """Retourne True si la requête est autorisée.
         Clé par (ip, endpoint) pour ne pas pénaliser globalement
         une IP active sur plusieurs routes différentes.
         3 dépassements successifs avant le 1er blocage (30s).
+
+        `tenir_compte_du_blocage=False` COMPTE SANS REFUSER SUR LE BLOCAGE, et
+        c'est le seul moyen d'exempter vraiment un chemin. Un blocage ferme le
+        site par DEUX portes independantes : le `is_blocked` du middleware, et
+        cette methode qui commence par le meme test. Neutraliser la premiere
+        seule ne rouvrait rien — mesure : la livraison Stripe recevait encore
+        429, par la limite globale. Les points de reception machine passent
+        donc ici avec ce reglage : leur debit reste borne (et un depassement
+        peut toujours bloquer l'adresse pour le RESTE du site), mais une
+        adresse bloquee ailleurs continue d'etre servie sur eux.
         """
-        if self.is_blocked(ip):
+        if tenir_compte_du_blocage and self.is_blocked(ip):
             return False
         now = time.time()
         # Clé par route pour isoler les compteurs par endpoint
@@ -589,6 +671,40 @@ def security_middleware():
                        '/invitation/')
     is_auth_link = path.startswith(CHEMINS_A_JETON)
 
+    # ── LES TROIS POINTS D'ENTREE MACHINE, PROTEGES PAR UNE PREUVE ────────
+    # Aucun des filtres anti-anonyme d'en dessous n'a de sens sur eux, et
+    # CHACUN LES A DEJA COUPES EN PRODUCTION :
+    #
+    #  · /api/cron/* — un Render Cron Job execute une commande, donc `curl`,
+    #    `wget` ou `python-requests`, tous trois dans BLOCKED_BOTS. Mesure
+    #    avec le bon X-Cron-Secret : curl/8.5.0 → 404, Wget/1.21 → 404,
+    #    python-requests/2.32.3 → 404, Mozilla/5.0 → 200, et le journal dit
+    #    « BOT_BLOCKED … → /api/cron/rgpd-purge ». La purge RGPD automatique
+    #    et les relances d'essai n'ont donc JAMAIS tourne, et le 404 faisait
+    #    croire a une route absente. La recette ne le voyait pas : le client
+    #    de test envoie l'agent « Werkzeug/… ».
+    #
+    #  · /api/stripe/webhook et /api/brevo/webhook — leur adresse d'origine
+    #    est celle de Stripe ou de Brevo, et un anonyme pouvait la faire
+    #    bloquer une heure (voir RateLimiter.get_ip). Une adresse bloquee
+    #    recevait 429 AVANT la route : plus aucune confirmation de paiement,
+    #    plus aucune desinscription enregistree. Le filtre anti-injection les
+    #    coupait aussi : le jeton Brevo en `?token=` est tire par
+    #    `secrets.token_urlsafe`, dont l'alphabet contient le tiret — environ
+    #    un jeton sur cent porte « -- », lu comme un debut de commentaire SQL
+    #    (mesure : 403, puis l'adresse de Brevo bloquee 3 600 s, et meme les
+    #    livraisons en en-tete recevant ensuite 429).
+    #
+    # CE QUI RESTE APPLIQUE, ET C'EST LA CONTREPARTIE : la limite de debit
+    # globale (120/min par adresse), plus la preuve propre a chaque point —
+    # signature Stripe, jeton Brevo, X-Cron-Secret en temps constant. On
+    # n'echange pas un refus pour un acces libre : on echange un refus fonde
+    # sur l'apparence contre un refus fonde sur une preuve.
+    POINTS_MACHINE = ('/api/stripe/webhook', '/api/brevo/webhook')
+    est_point_machine = (path in POINTS_MACHINE
+                         or (path.startswith('/api/cron/')
+                             and request.method == 'POST'))
+
     # ── Dossiers JAMAIS servis en direct, avant toute autre regle ──────────
     # `static_folder='.'` sert tout fichier du depot. uploads_cv/ contient les
     # CV deposes par les candidats — servis a l'anonyme alors que
@@ -596,8 +712,28 @@ def security_middleware():
     # 200, /api/admin/cv/<cv>.pdf → 403). courriels_repli/ contient les
     # courriels non partis, jetons compris. 404, pas 403 : ne pas confirmer
     # qu'un nom de fichier existe.
-    DOSSIERS_PRIVES = ('uploads_cv/', 'courriels_repli/')
-    if path.lstrip('/').lower().startswith(DOSSIERS_PRIVES):
+    #
+    # LA GARDE COMPARAIT LE CHEMIN BRUT, ET LA ROUTE STATIQUE LE NORMALISE
+    # ENSUITE : les deux ne regardaient donc pas le meme fichier. Mesure sur le
+    # client de test Flask, un CV de candidat servi en 200 (1 199 octets,
+    # %PDF-1.4) par « /./uploads_cv/<cv>.pdf », « /%2e/uploads_cv/… » (werkzeug
+    # decode %2e en « . » avant la vue), « /.//uploads_cv/… » et
+    # « /././/uploads_cv/… », quand « /uploads_cv/<cv>.pdf » rendait bien 404.
+    # Le filtre anti-injection plus bas ne cherche que « ../ » et laisse passer
+    # « ./ ». ON COMPARE DESORMAIS CE QUE LA ROUTE STATIQUE OUVRIRA : le
+    # chemin normalise, puis mis en minuscules. `request.path` est DEJA
+    # decode par werkzeug — mesure : « /%2e/… » et « /.%2fuploads_cv/… »
+    # arrivent ici en « /./uploads_cv/… ». Un `unquote` de plus a donc ete
+    # retire : il ne changeait la decision d'AUCUNE requete mesurable, et du
+    # code de securite qu'aucune regle ne peut faire tomber est une dette.
+    #
+    # LE PREMIER SEGMENT SUFFIT ET C'EST VOULU : « uploads_cv » seul, sans
+    # barre finale, designe le dossier lui-meme — son listage est un refus tout
+    # autant que celui d'un fichier. 404, pas 403 : ne pas confirmer qu'un nom
+    # de fichier existe.
+    DOSSIERS_PRIVES = ('uploads_cv', 'courriels_repli')
+    _norme = _posixpath.normpath('/' + path.replace('\\', '/')).lstrip('/').lower()
+    if _norme.split('/')[0] in DOSSIERS_PRIVES:
         logger.warning(f"DOSSIER_PRIVE {ip} → {path}")
         abort(404)
 
@@ -617,18 +753,18 @@ def security_middleware():
         return  # Health check légitime — pas de vérif UA ni blocage
 
     # ── Vérifier si IP bloquée ──
-    if limiter.is_blocked(ip):
+    if limiter.is_blocked(ip) and not est_point_machine:
         logger.warning(f"BLOCKED_IP {ip} → {path}")
         abort(429)
 
     # ── Anti-scraping UA ──
-    if is_bot_blocked(ua):
+    if is_bot_blocked(ua) and not est_point_machine:
         logger.warning(f"BOT_BLOCKED {ip} UA={ua[:60]} → {path}")
         # Retourner 404 pour ne pas révéler le blocage
         abort(404)
 
     # ── Anti-scraping comportemental (check_scraping etait definie mais jamais appelee) ──
-    if path.startswith('/api/') and check_scraping(request):
+    if path.startswith('/api/') and not est_point_machine and check_scraping(request):
         logger.warning(f"SCRAPING_PATTERN {ip} UA={ua[:60]} → {path}")
         abort(404)
 
@@ -668,7 +804,8 @@ def security_middleware():
             abort(404)
 
     # ── Rate limit global : 120 req/min par IP ──
-    if not limiter.check(ip, limit=120, window=60, endpoint='global'):
+    if not limiter.check(ip, limit=120, window=60, endpoint='global',
+                         tenir_compte_du_blocage=not est_point_machine):
         abort(429)
 
     # ── Honeypot paths (pièges pour scanners) ──
@@ -679,7 +816,9 @@ def security_middleware():
         '/etc/passwd', '/proc/self', '/../', '/xmlrpc.php',
         '/wp-content', '/wp-includes', '/.htaccess',
     ]
-    if any(path.lower().startswith(hp) or path.lower() == hp for hp in honeypot_paths):
+    if (not est_point_machine
+            and any(path.lower().startswith(hp) or path.lower() == hp
+                    for hp in honeypot_paths)):
         limiter.block(ip, 3600, f'honeypot:{path}')
         logger.warning(f"HONEYPOT {ip} → {path}")
         abort(404)
@@ -693,7 +832,7 @@ def security_middleware():
         r"(etc/passwd|/proc/self)",            # LFI
     ]
     full_url = request.url
-    if not is_auth_link:
+    if not is_auth_link and not est_point_machine:
         for pat in suspicious_patterns:
             if _re.search(pat, full_url, _re.IGNORECASE):
                 limiter.block(ip, 3600, f'injection_attempt:{pat}')
@@ -825,6 +964,27 @@ def _deposer_courriel_repli(to_email, subject, contenu, extension='html'):
 # ══════════════════════════════════════════════════════════════
 # BREVO — Fonctions d'envoi email (API + SMTP + fallback local)
 # ══════════════════════════════════════════════════════════════
+def _nom_affiche(valeur):
+    """Le NOM porte a cote d'une adresse, dans l'en-tete « To: ».
+
+    CE QUI Y ARRIVAIT. `prenom + ' ' + nom` d'un formulaire public y entre tel
+    quel : mesure sur /api/formation/inscription, le POST vers l'adresse du
+    demandeur portait `name = 'Paul <a href="https://piege.test/z">Cliquez
+    pour valider</a>'`. Ce n'est pas du HTML ici mais un en-tete de courrier,
+    ou les chevrons DELIMITENT l'adresse (RFC 5322) : un nom qui en contient
+    fabrique une seconde adresse aux yeux d'un client de messagerie.
+
+    ON RETIRE LES CHEVRONS, LES GUILLEMETS ET LES FINS DE LIGNE, et rien de
+    plus : un nom legitime n'en porte aucun, et tronquer ou echapper
+    abimerait des noms reels (accents, apostrophes, traits d'union). Un seul
+    point de passage, donc valable pour tous les appelants d'un coup.
+    """
+    texte = str(valeur if valeur is not None else '')
+    for c in ('<', '>', '"', '\r', '\n', ' ', ' '):
+        texte = texte.replace(c, ' ')
+    return ' '.join(texte.split())[:120]
+
+
 def send_via_brevo_api(to_email, to_name, subject, html_content,
                        reply_to=None, attachments=None, tags=None):
     """Un courriel par l'API transactionnelle. Rend (ok, motif ou messageId).
@@ -856,7 +1016,7 @@ def send_via_brevo_api(to_email, to_name, subject, html_content,
         return False, 'supprime'
     payload = {
         'sender':      {'name': 'CONSEILPREV', 'email': MAIL_FROM},
-        'to':          [{'email': to_email, 'name': to_name or to_email}],
+        'to':          [{'email': to_email, 'name': _nom_affiche(to_name) or to_email}],
         'subject':     subject,
         'htmlContent': html_content,
     }
@@ -870,7 +1030,31 @@ def send_via_brevo_api(to_email, to_name, subject, html_content,
         try:
             resp = _brevo_session().post(BREVO_API_URL, headers=_brevo_entetes(),
                                          json=payload, timeout=BREVO_DELAI)
+        except requests.exceptions.ReadTimeout as e:
+            # LA REQUETE EST PARTIE, ET BREVO A PU L'ACCEPTER. Un delai de
+            # LECTURE depasse ne dit rien du sort du courriel : le POST a ete
+            # emis, seule la reponse manque. L'API transactionnelle de Brevo
+            # n'a pas de cle d'idempotence — chaque tentative est UN NOUVEL
+            # ENVOI. Mesure avec un faux Brevo qui lit le POST puis repond 201
+            # apres 1,5 s, BREVO_DELAI a 1,0 s : trois POST recus, donc trois
+            # exemplaires de la confirmation de reservation (ou du lien de
+            # reinitialisation) dans la boite du client — puis un quatrieme
+            # par le repli SMTP, puisque la fonction rendait False.
+            #
+            # ON NE REESSAIE DONC PAS, ET ON N'ENCHAINE PAS SUR LE REPLI : le
+            # motif `delai_reponse` dit a send_email_smart que l'issue est
+            # INCERTAINE, et un doublon certain est pire qu'un envoi douteux
+            # sur un quota de 300 par jour. La ligne email_log porte ce motif :
+            # c'est la seule trace qui permette de decider apres coup.
+            logger.error('BREVO_API_DELAI_REPONSE (tentative %d) vers %s : %s',
+                         tentative + 1, _masquer_courriel(to_email), str(e)[:120])
+            email_log_record(to_email, subject, 'brevo_api', False, 'delai_reponse')
+            return False, 'delai_reponse'
         except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as e:
+            # CE QUI N'A PAS PU PARTIR SE REESSAIE : un delai de CONNEXION ou
+            # une connexion refusee signifient qu'aucun octet n'a atteint
+            # Brevo. Le doublon est impossible, la perte du courriel est
+            # certaine sans reessai.
             dernier = 'reseau: %s' % str(e)[:120]
             logger.error('BREVO_API_RESEAU (tentative %d): %s', tentative + 1, dernier)
             continue
@@ -939,6 +1123,13 @@ def send_email_smart(to_email, to_name, subject, html_content,
             email_log_record(to_email, subject, 'brevo_api', True)
             return True, 'brevo_api'
         logger.warning(f'BREVO_API_FAILED: {result}')
+        if result == 'delai_reponse':
+            # L'ISSUE EST INCERTAINE, PAS NEGATIVE. Brevo a recu le POST et a
+            # pu l'accepter ; seule sa reponse manque. Enchainer sur SMTP puis
+            # sur le fichier de repli ajouterait un exemplaire CERTAIN a un
+            # envoi PROBABLE. On s'arrete, et la ligne email_log deja ecrite
+            # par send_via_brevo_api porte le motif.
+            return False, 'delai_reponse'
     if SMTP_USER and SMTP_PASSWORD:
         try:
             from email.mime.multipart import MIMEMultipart as _MM
@@ -959,7 +1150,7 @@ def send_email_smart(to_email, to_name, subject, html_content,
                 with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=20) as srv:
                     srv.ehlo(); srv.starttls(context=ctx); srv.login(SMTP_USER, SMTP_PASSWORD)
                     srv.sendmail(MAIL_FROM, [to_email], msg.as_string())
-            logger.info(f'BREVO_SMTP_OK: {to_email}')
+            logger.info('BREVO_SMTP_OK: %s', _masquer_courriel(to_email))
             email_log_record(to_email, subject, 'brevo_smtp', True)
             return True, 'brevo_smtp'
         except Exception as e:
@@ -5248,31 +5439,96 @@ NOTIFY_SELECTION_PLAFOND_DESTINATAIRE_JOUR = 3
 NOTIFY_SELECTION_PLAFOND_GLOBAL_JOUR = 20
 
 
+#: La methode inscrite dans email_log par la RESERVATION, avant tout envoi.
+#: Elle ne dit pas « envoye » : elle dit « une place est prise ». Le nom
+#: figure dans les comptes, et le diagnostic email la distingue d'un envoi.
+NOTIFY_SELECTION_METHODE_RESERVE = 'reserve'
+
+
 def _notify_selection_autorise(destinataire):
-    """(True, None) ou (False, motif) selon ce qu'email_log compte aujourd'hui.
-    Une base injoignable REFUSE : c'est un relais, l'incertitude ne l'ouvre pas."""
+    """(True, None) ou (False, motif). RESERVE LA PLACE AVANT DE COMPTER.
+
+    COMPTER PUIS ENVOYER N'EST PAS ATOMIQUE, ET C'EST MESURABLE. La ligne
+    email_log n'etait ecrite qu'APRES l'appel a Brevo, qui dure jusqu'a 20 s
+    par tentative. Avec 2 workers de 8 fils, toutes les requetes simultanees
+    vers la meme adresse lisaient 0 et passaient toutes. Mesure : faux Brevo
+    ralenti a 0,4 s, 12 fils vers cible@exemple.test → 12 reponses 200, 12
+    envois vers la cible, 24 POST /v3/smtp/email, pour un plafond annonce de
+    3. Le `check_soft` par adresse n'y changeait rien : il vit en memoire DANS
+    CHAQUE worker, et l'en-tete X-Forwarded-For le contournait deja.
+
+    CE QU'ON FAIT A LA PLACE. On ECRIT d'abord (une ligne `reserve`), on
+    valide, puis on compte — reservation comprise. Deux fils qui arrivent
+    ensemble ecrivent chacun la leur et comptent donc chacun l'autre : le
+    quatrieme voit 4, se retire, et supprime sa ligne. L'ordre ecrire-puis-
+    compter est ce qui rend la borne vraie sans verrou ni transaction longue,
+    et il vaut pour tous les workers puisque la base est partagee.
+
+    CE QUE ÇA COÛTE, ET C'EST LE BON SENS DU COMPROMIS : un fil tue entre la
+    reservation et sa suppression laisse une place consommee pour la journee.
+    Une place perdue est moins grave qu'un relais ouvert a la marque du site.
+
+    UNE BASE INJOIGNABLE REFUSE : c'est un relais, l'incertitude ne l'ouvre
+    pas. La reservation elle-meme passe par la base, donc une base muette est
+    attrapee ici et rend `compteur_illisible`.
+    """
     try:
         jour = datetime.utcnow().strftime('%Y-%m-%d')
         conn = registre_get_db(); cur = conn.cursor()
         cur.execute(registre_sql(
-            "SELECT COUNT(*) AS n FROM email_log WHERE sujet LIKE %s AND date_envoi >= %s",
-            "SELECT COUNT(*) AS n FROM email_log WHERE sujet LIKE ? AND date_envoi >= ?"),
-            (NOTIFY_SELECTION_SUJET + '%', jour))
+            'INSERT INTO email_log (destinataire, sujet, methode, succes, raison_echec, date_envoi) '
+            'VALUES (%s,%s,%s,%s,%s,%s)',
+            'INSERT INTO email_log (destinataire, sujet, methode, succes, raison_echec, date_envoi) '
+            'VALUES (?,?,?,?,?,?)'),
+            (destinataire, NOTIFY_SELECTION_SUJET + ' — reservation',
+             NOTIFY_SELECTION_METHODE_RESERVE, False, 'reservation', datetime.utcnow().isoformat()))
+        conn.commit()
+        # ON NE COMPTE QUE LES RESERVATIONS, pas les lignes d'envoi. Un relais
+        # accepte ecrit ensuite DEUX lignes de plus (client et CONSEILPREV) au
+        # meme sujet : les compter ferait tomber le plafond de trois a un, et
+        # le rendrait dependant du succes de Brevo. La reservation, elle, vaut
+        # exactement une place, posee avant l'appel et rendue si on refuse.
+        cur.execute(registre_sql(
+            "SELECT COUNT(*) AS n FROM email_log WHERE methode=%s AND sujet LIKE %s AND date_envoi >= %s",
+            "SELECT COUNT(*) AS n FROM email_log WHERE methode=? AND sujet LIKE ? AND date_envoi >= ?"),
+            (NOTIFY_SELECTION_METHODE_RESERVE, NOTIFY_SELECTION_SUJET + '%', jour))
         total = dict(cur.fetchone())['n']
         cur.execute(registre_sql(
-            "SELECT COUNT(*) AS n FROM email_log WHERE sujet LIKE %s AND date_envoi >= %s AND LOWER(destinataire)=%s",
-            "SELECT COUNT(*) AS n FROM email_log WHERE sujet LIKE ? AND date_envoi >= ? AND LOWER(destinataire)=?"),
-            (NOTIFY_SELECTION_SUJET + '%', jour, destinataire.lower()))
+            "SELECT COUNT(*) AS n FROM email_log WHERE methode=%s AND sujet LIKE %s AND date_envoi >= %s AND LOWER(destinataire)=%s",
+            "SELECT COUNT(*) AS n FROM email_log WHERE methode=? AND sujet LIKE ? AND date_envoi >= ? AND LOWER(destinataire)=?"),
+            (NOTIFY_SELECTION_METHODE_RESERVE, NOTIFY_SELECTION_SUJET + '%', jour, destinataire.lower()))
         pour_lui = dict(cur.fetchone())['n']
-        conn.commit(); conn.close()
     except Exception as e:                                     # noqa: BLE001
         logger.error('NOTIFY_SELECTION_COMPTEUR_ERR: %s', e)
+        try:
+            conn.close()
+        except Exception:
+            pass
         return False, 'compteur_illisible'
-    if pour_lui >= NOTIFY_SELECTION_PLAFOND_DESTINATAIRE_JOUR:
-        return False, 'plafond_destinataire'
-    if total >= NOTIFY_SELECTION_PLAFOND_GLOBAL_JOUR:
-        return False, 'plafond_global'
-    return True, None
+    motif = None
+    if pour_lui > NOTIFY_SELECTION_PLAFOND_DESTINATAIRE_JOUR:
+        motif = 'plafond_destinataire'
+    elif total > NOTIFY_SELECTION_PLAFOND_GLOBAL_JOUR:
+        motif = 'plafond_global'
+    if motif:
+        # LA PLACE EST RENDUE : ce refus-ci ne doit pas consommer le quota du
+        # jour, sinon un attaquant fermerait le relais pour les vrais clients
+        # en se faisant refuser vingt fois.
+        try:
+            cur.execute(registre_sql(
+                'DELETE FROM email_log WHERE id IN (SELECT id FROM email_log '
+                'WHERE LOWER(destinataire)=%s AND methode=%s ORDER BY id DESC LIMIT 1)',
+                'DELETE FROM email_log WHERE id IN (SELECT id FROM email_log '
+                'WHERE LOWER(destinataire)=? AND methode=? ORDER BY id DESC LIMIT 1)'),
+                (destinataire.lower(), NOTIFY_SELECTION_METHODE_RESERVE))
+            conn.commit()
+        except Exception as e:                                 # noqa: BLE001
+            logger.error('NOTIFY_SELECTION_RESERVE_ORPHELINE: %s', e)
+    try:
+        conn.close()
+    except Exception:
+        pass
+    return (motif is None), motif
 
 
 @app.route('/api/notify-selection', methods=['POST'])
@@ -18878,6 +19134,85 @@ def _formation_ia_tient_le_creneau():
             "AND COALESCE(created_at, '') < " + ph + ")", limite)
 
 
+# CE QU'UN INCONNU PEUT PRENDRE EN UNE JOURNÉE — trois bornes, et la raison
+# de chaque chiffre.
+#
+# LE DEFAUT MESURE. /api/formation/inscription est PUBLIQUE, et la premiere
+# seance de chaque cle client (SIRET, a defaut le courriel) est OFFERTE et
+# confirmee d'emblee, sans paiement et sans qu'on ait verifie que l'adresse
+# existe. Une date ne se reserve qu'une fois. Avec 26 POST a des courriels
+# inventes, un anonyme occupait donc TOUTE la campagne (2026-10-06 →
+# 2027-03-30) : plus un seul creneau pour un vrai client. Mesure : trois POST
+# sur la meme date → [(200, 'confirmee'), (409, …), (409, …)], et
+# formations_ia.creneaux() rend 26 creneaux. Chaque POST fait partir DEUX
+# courriels (l'accuse au demandeur, la notification a CONSEILPREV), soit 52
+# des 300 envois du jour du plan gratuit, vers des adresses choisies par
+# l'attaquant — sans aucun plafond, contrairement a /api/notify-selection.
+#
+# CE QU'ON POSE, ET CE QUE ÇA NE FAIT PAS. Ces bornes ne rendent pas la
+# gratuite verifiee : elles ramenent l'attaque de « 26 creneaux en une minute,
+# definitivement » a « au plus trois par jour », et elles bornent la depense
+# de courriels. La verification de l'adresse par un lien clique reste la vraie
+# reponse ; elle demande un parcours de confirmation qui n'existe pas encore.
+#
+#   · 3 seances OFFERTES par jour pour tout le site. La campagne compte 26
+#     creneaux sur six mois : un rythme legitime est tres en dessous de trois
+#     par jour. C'est la borne qui mord sur l'attaque, puisque l'attaquant
+#     change d'adresse a chaque coup.
+#   · 3 COMMANDES par adresse et par jour : une commande, sa correction, et
+#     une de marge.
+#   · 12 COMMANDES par jour pour tout le site : 24 courriels, soit 8 % du
+#     quota quotidien de Brevo laisses a cette seule route.
+#
+# ON COMPTE DES COMMANDES, PAS DES LIGNES. Une commande porte jusqu'a quatre
+# seances (MAX_SEANCES) : compter les lignes ferait refuser un panier normal
+# des le deuxieme envoi, alors que ce qu'on borne est le NOMBRE DE GESTES —
+# c'est lui qui prend des creneaux et fait partir des courriels, deux par
+# commande quel que soit le nombre de seances.
+#
+# ON COMPTE DANS formation_ia_resa, PAS EN MEMOIRE. Un compteur de processus
+# ne vaudrait que pour un worker sur deux et disparaitrait au redemarrage ;
+# celui-ci est partage et survit. Les lignes annulees comptent : sinon
+# reserver puis annuler rendrait la borne gratuite.
+FORMATION_IA_OFFERTES_JOUR = 3
+FORMATION_IA_PLAFOND_ADRESSE_JOUR = 3
+FORMATION_IA_PLAFOND_GLOBAL_JOUR = 12
+
+
+def _formation_ia_borne_du_jour(cur, email, avec_offerte):
+    """None si la reservation peut se faire, sinon le motif du refus.
+
+    Le curseur est celui de la route : on compte dans la meme connexion que
+    les ecritures qui suivent, sans en ouvrir une seconde. UNE BASE MUETTE NE
+    REFUSE PAS ICI — la route retomberait de toute facon sur son propre
+    traitement d'erreur a l'ecriture, et fermer la reservation sur une lecture
+    ratee couterait des clients pour un defaut qui n'est pas le leur."""
+    jour = datetime.utcnow().strftime('%Y-%m-%d')
+    try:
+        if avec_offerte:
+            cur.execute(registre_sql(
+                "SELECT COUNT(*) AS n FROM formation_ia_resa WHERE gratuit=1 AND created_at >= %s",
+                "SELECT COUNT(*) AS n FROM formation_ia_resa WHERE gratuit=1 AND created_at >= ?"),
+                (jour,))
+            if int(dict(cur.fetchone()).get('n', 0) or 0) >= FORMATION_IA_OFFERTES_JOUR:
+                return 'offertes_du_jour'
+        cur.execute(registre_sql(
+            "SELECT COUNT(DISTINCT commande) AS n FROM formation_ia_resa WHERE LOWER(email)=%s AND created_at >= %s",
+            "SELECT COUNT(DISTINCT commande) AS n FROM formation_ia_resa WHERE LOWER(email)=? AND created_at >= ?"),
+            ((email or '').lower(), jour))
+        if int(dict(cur.fetchone()).get('n', 0) or 0) >= FORMATION_IA_PLAFOND_ADRESSE_JOUR:
+            return 'plafond_adresse'
+        cur.execute(registre_sql(
+            "SELECT COUNT(DISTINCT commande) AS n FROM formation_ia_resa WHERE created_at >= %s",
+            "SELECT COUNT(DISTINCT commande) AS n FROM formation_ia_resa WHERE created_at >= ?"),
+            (jour,))
+        if int(dict(cur.fetchone()).get('n', 0) or 0) >= FORMATION_IA_PLAFOND_GLOBAL_JOUR:
+            return 'plafond_global'
+    except Exception as e:                                     # noqa: BLE001
+        logger.error('FORMATION_IA_BORNE_ERR: %s', e)
+    return None
+
+
 def _formation_ia_liberer_commande(commande, motif):
     """Une caisse SANS paiement (expiree, prelevement refuse) : les seances
     payantes encore « en attente de paiement » rendent leur creneau.
@@ -19454,6 +19789,15 @@ def formation_ia_inscription():
         _ferme()
         return jsonify({'ok': False, 'error': dev['message']}), 400
 
+    refus = _formation_ia_borne_du_jour(
+        cur, email, any(l['gratuit'] for l in dev['lignes']))
+    if refus:
+        _ferme()
+        logger.warning('FORMATION_IA_BORNE %s: %s vers %s', limiter.get_ip(request),
+                       refus, _masquer_courriel(email))
+        return jsonify({'ok': False, 'error': 'Trop de réservations aujourd’hui. '
+                        'Écrivez à CONSEILPREV pour être placé.'}), 429
+
     # UNE SEANCE PAR CRENEAU (le formateur ne se dedouble pas), et UN SUJET UNE
     # SEULE FOIS PAR CLIENT. Les deux sont verifies AVANT la premiere ecriture :
     # ecrire deux seances puis refuser la troisieme laisserait un panier a
@@ -19547,16 +19891,29 @@ def formation_ia_inscription():
                  else '%d EUR HT (%d EUR TTC)'
                       % (dev['ht_cents'] // 100, dev['ttc_cents'] // 100))
 
+    # CE QU'UN INCONNU A TAPE N'ENTRE PAS BRUT DANS CE HTML. Cette route est
+    # PUBLIQUE, et `sanitize_input` n'echappe plus rien — c'est volontaire et
+    # mesure ailleurs : elle assainit ce qu'on STOCKE, pas ce qu'on affiche.
+    # Huit champs viennent donc du formulaire, et cette notification part
+    # desormais dans la VRAIE boite de CONSEILPREV (elle visait auparavant une
+    # adresse @internal.system, qui ne recevait rien). Mesure : nom =
+    # `<a href="https://piege.test/z">Cliquez pour valider</a>` → le lien
+    # arrivait cliquable dans la boite de l'administrateur, sous l'expediteur
+    # du site et avec sa mise en page. `_pour_courriel` est la fonction ecrite
+    # pour exactement ce cas ; elle n'etait pas appliquee ici.
     try:
         send_email_smart(CONSEILPREV_NOTIFY_EMAIL, 'CONSEILPREV',
                          'Réservation formation : %d séance(s)' % len(recap),
                          '<p>Nouvelle réservation « Formations conformité IA ».</p>'
                          '<p>%s %s — %s<br>%s / %s<br>SIRET : %s<br>Lieu : %s<br>'
                          'Profil : %s</p><ul>%s</ul><p>Total : %s</p><p>%s</p>'
-                         % (prenom, nom, entreprise, email, telephone,
-                            siret or '(non fourni)', lieu,
-                            cas.get('titre') or '(non précisé)', lignes_html,
-                            total_txt, message or ''),
+                         % (_pour_courriel(prenom), _pour_courriel(nom),
+                            _pour_courriel(entreprise), _pour_courriel(email),
+                            _pour_courriel(telephone),
+                            _pour_courriel(siret or '(non fourni)'),
+                            _pour_courriel(lieu),
+                            _pour_courriel(cas.get('titre') or '(non précisé)'),
+                            lignes_html, total_txt, _pour_courriel(message or '')),
                          tags=['formation-ia'])
     except Exception:
         pass
@@ -19586,7 +19943,8 @@ def formation_ia_inscription():
                             ann['apres'], formations_ia.SUPPORT['participants']),
                          tags=['formation-ia-accuse'])
     except Exception as _e:
-        logger.error('FORMATION_IA_ACCUSE_ECHEC commande=%s destinataire=%s : %s', commande, email, _e)
+        logger.error('FORMATION_IA_ACCUSE_ECHEC commande=%s destinataire=%s : %s',
+                     commande, _masquer_courriel(email), _e)
 
     # ── PAIEMENT EN LIGNE (flux B : price_data en ligne, mode paiement) ──
     # LE PRIX N'EST JAMAIS RECOPIE : il vient du devis, la meme source que

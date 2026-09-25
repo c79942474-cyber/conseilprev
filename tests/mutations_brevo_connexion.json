@@ -42,15 +42,15 @@
   {
    "nom": "le plafond par destinataire ne s'applique plus",
    "fichier": "app.py",
-   "avant": "    if pour_lui >= NOTIFY_SELECTION_PLAFOND_DESTINATAIRE_JOUR:",
+   "avant": "    if pour_lui > NOTIFY_SELECTION_PLAFOND_DESTINATAIRE_JOUR:",
    "apres": "    if False:",
    "regle": "test_la_selection_est_plafonnee_par_destinataire_et_par_jour"
   },
   {
    "nom": "le plafond global ne s'applique plus",
    "fichier": "app.py",
-   "avant": "    if total >= NOTIFY_SELECTION_PLAFOND_GLOBAL_JOUR:",
-   "apres": "    if False:",
+   "avant": "    elif total > NOTIFY_SELECTION_PLAFOND_GLOBAL_JOUR:",
+   "apres": "    elif False:",
    "regle": "test_la_selection_est_plafonnee_globalement_par_jour"
   },
   {
@@ -119,9 +119,9 @@
   {
    "nom": "les dossiers privés sont à nouveau servis",
    "fichier": "app.py",
-   "avant": "    if path.lstrip('/').lower().startswith(DOSSIERS_PRIVES):",
+   "avant": "    if _norme.split('/')[0] in DOSSIERS_PRIVES:",
    "apres": "    if False:",
-   "regle": "test_un_fichier_des_dossiers_prives_n_est_pas_servi[uploads_cv]"
+   "regle": "test_un_fichier_des_dossiers_prives_n_est_pas_servi[canonique-uploads_cv]"
   },
   {
    "nom": "le dossier de repli n'est plus ignoré par git",
@@ -262,6 +262,153 @@
    "avant": "    client = sentauth_current_client()\n    if not client:\n        return jsonify({'authenticated': False}), 401\n    check_pending_reports()  # verifie",
    "apres": "    check_pending_reports()\n    client = sentauth_current_client()\n    if not client:\n        return jsonify({'authenticated': False}), 401\n    pass  # verifie",
    "regle": "test_un_visiteur_anonyme_sur_me_ne_declenche_aucune_relance"
+  },
+  {
+   "nom": "le chemin prive n'est plus normalise avant la comparaison",
+   "fichier": "app.py",
+   "avant": "    _norme = _posixpath.normpath('/' + path.replace('\\\\', '/')).lstrip('/').lower()",
+   "apres": "    _norme = path.lstrip('/').lower()",
+   "regle": "test_un_fichier_des_dossiers_prives_n_est_pas_servi[point-barre-uploads_cv]"
+  },
+  {
+   "nom": "le dossier prive lui-meme redevient listable",
+   "fichier": "app.py",
+   "avant": "    if _norme.split('/')[0] in DOSSIERS_PRIVES:",
+   "apres": "    if _norme.startswith(tuple(d + '/' for d in DOSSIERS_PRIVES)):",
+   "regle": "test_le_dossier_prive_lui_meme_n_est_pas_listable[uploads_cv]"
+  },
+  {
+   "nom": "le webhook Brevo retombe sous le filtre anti-injection",
+   "fichier": "app.py",
+   "avant": "    POINTS_MACHINE = ('/api/stripe/webhook', '/api/brevo/webhook')",
+   "apres": "    POINTS_MACHINE = ('/api/stripe/webhook',)",
+   "regle": "test_un_jeton_a_caracteres_suspects_passe_en_parametre_sans_bloquer_brevo[Ab3--xY7zKlmNop]"
+  },
+  {
+   "nom": "le filtre anti-injection est desarme partout",
+   "fichier": "app.py",
+   "avant": "    if not is_auth_link and not est_point_machine:\n        for pat in suspicious_patterns:",
+   "apres": "    if False:\n        for pat in suspicious_patterns:",
+   "regle": "test_le_filtre_anti_injection_reste_arme_ailleurs"
+  },
+  {
+   "nom": "un client connecte quelconque obtient le diagnostic complet",
+   "fichier": "app.py",
+   "avant": "    admin = sentauth_current_client()\n    if not (admin and admin.get('is_conseilprev')):",
+   "apres": "    admin = sentauth_current_client()\n    if not admin:",
+   "regle": "test_api_health_ne_livre_rien_a_un_client_connecte_qui_n_est_pas_admin"
+  },
+  {
+   "nom": "la forme « unsubscribed » de Brevo n'est plus reconnue",
+   "fichier": "app.py",
+   "avant": "    'unsubscribe': 'desinscription', 'unsubscribed': 'desinscription',",
+   "apres": "    'unsubscribe': 'desinscription',",
+   "regle": "test_un_evenement_de_suppression_bloque_les_envois_suivants_sans_POST[unsubscribed]"
+  },
+  {
+   "nom": "« invalid_email » n'est plus une suppression",
+   "fichier": "app.py",
+   "avant": "    'invalid_email': 'adresse_invalide',\n}",
+   "apres": "}",
+   "regle": "test_un_evenement_de_suppression_bloque_les_envois_suivants_sans_POST[invalid_email]"
+  },
+  {
+   "nom": "le plafond compte de nouveau APRES l'envoi (reservation annulee)",
+   "fichier": "app.py",
+   "avant": "             NOTIFY_SELECTION_METHODE_RESERVE, False, 'reservation', datetime.utcnow().isoformat()))\n        conn.commit()",
+   "apres": "             NOTIFY_SELECTION_METHODE_RESERVE, False, 'reservation', datetime.utcnow().isoformat()))\n        conn.rollback()",
+   "regle": "test_les_plafonds_tiennent_sous_des_appels_simultanes"
+  },
+  {
+   "nom": "un refus consomme quand meme une place",
+   "fichier": "app.py",
+   "avant": "                (destinataire.lower(), NOTIFY_SELECTION_METHODE_RESERVE))\n            conn.commit()",
+   "apres": "                (destinataire.lower(), NOTIFY_SELECTION_METHODE_RESERVE))\n            conn.rollback()",
+   "regle": "test_un_refus_ne_consomme_pas_le_quota_du_jour"
+  },
+  {
+   "nom": "une base illisible ouvre le relais au lieu de le fermer",
+   "fichier": "app.py",
+   "avant": "        logger.error('NOTIFY_SELECTION_COMPTEUR_ERR: %s', e)\n        try:\n            conn.close()\n        except Exception:\n            pass\n        return False, 'compteur_illisible'",
+   "apres": "        logger.error('NOTIFY_SELECTION_COMPTEUR_ERR: %s', e)\n        return True, None",
+   "regle": "test_une_base_illisible_refuse_le_relais_sans_aucun_envoi"
+  },
+  {
+   "nom": "un delai de lecture est de nouveau reessaye",
+   "fichier": "app.py",
+   "avant": "        except requests.exceptions.ReadTimeout as e:",
+   "apres": "        except requests.exceptions.TooManyRedirects as e:",
+   "regle": "test_un_brevo_lent_ne_fait_pas_partir_le_courriel_trois_fois"
+  },
+  {
+   "nom": "un delai de lecture enchaine de nouveau sur le repli",
+   "fichier": "app.py",
+   "avant": "        if result == 'delai_reponse':",
+   "apres": "        if False:",
+   "regle": "test_un_delai_de_lecture_n_enchaine_pas_sur_le_repli"
+  },
+  {
+   "nom": "la liste de suppression redevient sensible a la casse",
+   "fichier": "app.py",
+   "avant": "    em = str(email or '').strip().lower()\n    if not em:\n        return None",
+   "apres": "    em = str(email or '').strip()\n    if not em:\n        return None",
+   "regle": "test_un_evenement_de_suppression_bloque_les_envois_suivants_sans_POST[unsubscribe]"
+  },
+  {
+   "nom": "le journal se laisse de nouveau ecrire sur deux lignes",
+   "fichier": "app.py",
+   "avant": "        if any(f in texte for f in self._FINS):",
+   "apres": "        if False:",
+   "regle": "test_aucune_entree_de_journal_ne_tient_sur_deux_lignes[\\n]"
+  },
+  {
+   "nom": "les champs libres repartent bruts dans la notification de formation",
+   "fichier": "app.py",
+   "avant": "                         % (_pour_courriel(prenom), _pour_courriel(nom),\n                            _pour_courriel(entreprise), _pour_courriel(email),",
+   "apres": "                         % (prenom, nom,\n                            entreprise, email,",
+   "regle": "test_la_notification_de_formation_echappe_chaque_champ_libre"
+  },
+  {
+   "nom": "le nom affiche reprend les chevrons",
+   "fichier": "app.py",
+   "avant": "        'to':          [{'email': to_email, 'name': _nom_affiche(to_name) or to_email}],",
+   "apres": "        'to':          [{'email': to_email, 'name': to_name or to_email}],",
+   "regle": "test_le_nom_affiche_ne_fabrique_pas_une_seconde_adresse"
+  },
+  {
+   "nom": "les seances offertes ne sont plus bornees",
+   "fichier": "app.py",
+   "avant": "            if int(dict(cur.fetchone()).get('n', 0) or 0) >= FORMATION_IA_OFFERTES_JOUR:\n                return 'offertes_du_jour'",
+   "apres": "            if False:\n                return 'offertes_du_jour'",
+   "regle": "test_un_anonyme_ne_peut_pas_prendre_toute_la_campagne"
+  },
+  {
+   "nom": "une meme adresse reserve de nouveau sans fin",
+   "fichier": "app.py",
+   "avant": "        if int(dict(cur.fetchone()).get('n', 0) or 0) >= FORMATION_IA_PLAFOND_ADRESSE_JOUR:\n            return 'plafond_adresse'",
+   "apres": "        if False:\n            return 'plafond_adresse'",
+   "regle": "test_une_meme_adresse_ne_reserve_pas_sans_fin"
+  },
+  {
+   "nom": "le plafond global du jour ne borne plus la depense",
+   "fichier": "app.py",
+   "avant": "        if int(dict(cur.fetchone()).get('n', 0) or 0) >= FORMATION_IA_PLAFOND_GLOBAL_JOUR:\n            return 'plafond_global'",
+   "apres": "        if False:\n            return 'plafond_global'",
+   "regle": "test_le_plafond_global_du_jour_borne_la_depense_de_courriels"
+  },
+  {
+   "nom": "la borne de formation journalise de nouveau l'adresse en clair",
+   "fichier": "app.py",
+   "avant": "                       refus, _masquer_courriel(email))",
+   "apres": "                       refus, email)",
+   "regle": "test_un_refus_de_borne_ne_journalise_pas_l_adresse_en_clair"
+  },
+  {
+   "nom": "le repli SMTP rejournalise l'adresse en clair",
+   "fichier": "app.py",
+   "avant": "            logger.info('BREVO_SMTP_OK: %s', _masquer_courriel(to_email))",
+   "apres": "            logger.info('BREVO_SMTP_OK: %s', to_email)",
+   "regle": "test_le_repli_smtp_ne_journalise_pas_l_adresse_en_clair"
   }
  ]
 }
