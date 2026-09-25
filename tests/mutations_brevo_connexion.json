@@ -262,6 +262,55 @@
    "avant": "    client = sentauth_current_client()\n    if not client:\n        return jsonify({'authenticated': False}), 401\n    check_pending_reports()  # verifie",
    "apres": "    check_pending_reports()\n    client = sentauth_current_client()\n    if not client:\n        return jsonify({'authenticated': False}), 401\n    pass  # verifie",
    "regle": "test_un_visiteur_anonyme_sur_me_ne_declenche_aucune_relance"
+  },
+  {
+   "nom": "la forme « unsubscribed » de la désinscription n'est plus reconnue",
+   "fichier": "app.py",
+   "avant": "    'unsubscribe': 'desinscription', 'unsubscribed': 'desinscription',",
+   "apres": "    'unsubscribe': 'desinscription',",
+   "regle": "test_un_evenement_de_suppression_bloque_les_envois_suivants_sans_POST[unsubscribed]"
+  },
+  {
+   "nom": "une adresse déclarée invalide par Brevo n'est plus supprimée",
+   "fichier": "app.py",
+   "avant": "    'invalid_email': 'adresse_invalide',\n}",
+   "apres": "}",
+   "regle": "test_un_evenement_de_suppression_bloque_les_envois_suivants_sans_POST[invalid_email]"
+  },
+  {
+   "nom": "la liste de suppression est lue sensible à la casse",
+   "fichier": "app.py",
+   "avant": "    em = str(email or '').strip().lower()\n    if not em:\n        return None",
+   "apres": "    em = str(email or '').strip()\n    if not em:\n        return None",
+   "regle": "test_un_evenement_de_suppression_bloque_les_envois_suivants_sans_POST[unsubscribe]"
+  },
+  {
+   "nom": "une base illisible OUVRE le relais notify-selection au lieu de le fermer",
+   "fichier": "app.py",
+   "avant": "        logger.error('NOTIFY_SELECTION_COMPTEUR_ERR: %s', e)\n        return False, 'compteur_illisible'",
+   "apres": "        logger.error('NOTIFY_SELECTION_COMPTEUR_ERR: %s', e)\n        return True, None",
+   "regle": "test_une_base_illisible_ferme_le_relais_au_lieu_de_l_ouvrir"
+  },
+  {
+   "nom": "/api/health livre le diagnostic complet à tout compte connecté",
+   "fichier": "app.py",
+   "avant": "    admin = sentauth_current_client()\n    if not (admin and admin.get('is_conseilprev')):\n        if request.args.get('format') == 'json':",
+   "apres": "    admin = sentauth_current_client()\n    if not admin:\n        if request.args.get('format') == 'json':",
+   "regle": "test_api_health_pour_un_compte_connecte_ordinaire_repond_court_sans_appel_sortant"
+  },
+  {
+   "nom": "la garde MAIL_FROM devient muette quand personne ne lui passe de journal",
+   "fichier": "app.py",
+   "avant": "        (journal or logger).error('CONFIGURATION INVALIDE : ' + motif)",
+   "apres": "        if journal: journal.error('CONFIGURATION INVALIDE : ' + motif)",
+   "regle": "test_la_garde_crie_dans_le_journal_de_l_application_quand_personne_ne_lui_en_passe"
+  },
+  {
+   "nom": "l'annulation de formation repart vers l'adresse fictive, écrite autrement",
+   "fichier": "app.py",
+   "avant": "        send_email_smart(CONSEILPREV_NOTIFY_EMAIL, 'CONSEILPREV',\n                         'Annulation formation — ' + su['titre'],",
+   "apres": "        send_email_smart(\n            CONSEILPREV_INTERNAL_EMAIL, 'CONSEILPREV',\n                         'Annulation formation — ' + su['titre'],",
+   "regle": "test_les_notifications_internes_visent_l_adresse_de_notification"
   }
  ]
 }
