@@ -25,7 +25,12 @@
  *     l'est aussi, par l'observateur ;
  *   · le retour en FR restitue l'innerHTML OCTET POUR OCTET ;
  *   · un dictionnaire injoignable (route en 500 simulée) laisse la coquille
- *     traduite, sans erreur de page.
+ *     traduite, sans erreur de page ;
+ *   · un LIBELLÉ COMPOSÉ (« Supprimer <nom> du registre ») est traduit par
+ *     la section « motif » du dictionnaire, le nom intact — sur les vrais
+ *     boutons du registre IA et sur un bouton inséré après coup ;
+ *   · un CADRE (le panorama, la carte) passe en anglais avec Sentinel, se
+ *     traduit par son propre observateur, et revient en français avec lui.
  *
  * Usage :
  *   (cd <dossier> && PORT=9917 AUTH_MASTER_TOKEN=recette_locale_idf_0123456789abcdef nohup python app.py > log 2>&1 &)
@@ -51,6 +56,10 @@ const EN_ESPACE = T['Votre activité récente et les actions à traiter en prior
 const EN_TITLE = T['Un expert CONSEILPREV vous accompagne à chaque étape.'];
 const EN_PROGRAMME = T['Programme détaillé'];
 const EN_CADRE = Object.values(B)[0];
+/* LES MOTIFS, lus dans leur fichier comme le reste. */
+const MOT = JSON.parse(fs.readFileSync(
+  path.join(__dirname, 'i18n', 'sentinel', 'motifs.json'), 'utf8')).motif;
+const EN_SUPPR = MOT['Supprimer {} du registre'];
 
 const RELEVE = () => {
   const q = (s) => document.querySelector(s);
@@ -73,7 +82,7 @@ const RELEVE = () => {
     cartes: [...document.querySelectorAll('#form-cat-grid summary')].map(s => s.textContent),
     numeros: [...document.querySelectorAll('#form-cat-grid .t-card > div > span:last-child')].map(s => s.textContent).slice(0, 2),
     insere: (q('#recette-insere') || {}).textContent || null,
-    observateur: typeof SENT_CORPS_OBS !== 'undefined' && !!SENT_CORPS_OBS,
+    observateur: typeof SENT_CORPS_BRANCHE !== 'undefined' && !!SENT_CORPS_BRANCHE && !!SENT_CORPS_BRANCHE.obs,
   };
 };
 
@@ -184,7 +193,7 @@ const RELEVE = () => {
      est redemandé — c'est aussi le chemin du RÉESSAI après un échec. */
   const avantPanne = err.length + con.length;
   await pg.route('**/sentinel.en.json*', r => r.fulfill({ status: 500, body: 'panne simulée' }));
-  await pg.evaluate(() => { SENT_CORPS = null; SENT_CORPS_ATTENTE = null; sentSetLang('en'); });
+  await pg.evaluate(() => { sentCorpsBranche().oublier(); sentSetLang('en'); });
   await pg.waitForTimeout(1200);
   const panne = await pg.evaluate(RELEVE);
   ok('dictionnaire en 500 : la coquille est traduite quand même',
@@ -194,6 +203,89 @@ const RELEVE = () => {
   ok('dictionnaire en 500 : aucune erreur de page, aucune erreur console hors la ressource elle-même',
      err.length + con.length === avantPanne, (err.concat(con).slice(-2).join(' | ') || 'rien'));
   await pg.evaluate(() => sentSetLang('fr'));
+  await pg.unroute('**/sentinel.en.json*');
+
+  /* ── LES LIBELLÉS COMPOSÉS : la section « motif » ─────────────────────
+     « Supprimer <nom> du registre » : une phrase d'interface qui encadre
+     une donnée. Avant les motifs, mesuré sur cette recette : le title et
+     l'aria-label des « × » du registre restaient en français en EN. */
+  const routeMotifs = await pg.evaluate(async () => {
+    const r = await fetch('/sentinel.en.json', { cache: 'no-store' }); const d = await r.json();
+    return Object.keys(d.motif || {}).length; });
+  ok('la route sert la section « motif »', routeMotifs === Object.keys(MOT).length,
+     routeMotifs + ' motifs servis / ' + Object.keys(MOT).length + ' dans motifs.json');
+  await pg.evaluate(() => { sentCorpsBranche().oublier(); sentSetLang('en'); go('registre'); });
+  await pg.waitForTimeout(2500);
+  const reg = await pg.evaluate(() => [...document.querySelectorAll('#p-registre .rs-del')]
+    .map(b => ({ t: b.getAttribute('title'), a: b.getAttribute('aria-label') })));
+  const motifRe = new RegExp('^' + EN_SUPPR.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace('\\{\\}', '(.+)') + '$');
+  ok('les « × » du registre : title ET aria-label traduits par le motif',
+     reg.length > 0 && reg.every(r => motifRe.test(r.t || '') && r.a === r.t),
+     reg.length + ' bouton(s) · ' + ((reg[0] || {}).t || '∅'));
+  await pg.evaluate(() => {
+    const b = document.createElement('button'); b.id = 'recette-suppr'; b.textContent = '×';
+    b.setAttribute('title', 'Supprimer Recette moteur du registre');
+    b.setAttribute('aria-label', 'Supprimer Recette moteur du registre');
+    document.getElementById('p-registre').appendChild(b);
+  });
+  await pg.waitForTimeout(300);
+  const ins2 = await pg.evaluate(() => document.getElementById('recette-suppr').getAttribute('title'));
+  ok('un libellé composé inséré après coup est traduit, le nom intact',
+     ins2 === EN_SUPPR.replace('{}', 'Recette moteur'), ins2);
+
+  /* ── LES CADRES ───────────────────────────────────────────────────────
+     Le panorama et la carte sont d'AUTRES documents. Avant ce lot, mesuré
+     (MESURE_APRES.json) : 98,5 % de leur texte restait en français en EN,
+     le moteur n'y était pas chargé. */
+  const OUVRIR_CADRE = async (page, sel) => {
+    await pg.evaluate((p) => go(p), page);
+    await pg.waitForTimeout(600);
+    return pg.evaluate((sel) => new Promise(r => {
+      const f = document.querySelector(sel);
+      if (!f) return r('absent');
+      if (!f.getAttribute('src') && f.getAttribute('data-src')) f.setAttribute('src', f.getAttribute('data-src'));
+      const t0 = Date.now();
+      (function attendre() {
+        let w = null; try { w = f.contentWindow; } catch (e) { w = null; }
+        const b = w && w.SENT_CADRE;
+        if (b && b.dico && b.obs) return r('traduit');
+        if (Date.now() - t0 > 15000) return r(b ? 'branché sans dictionnaire' : 'non branché');
+        setTimeout(attendre, 100);
+      })();
+    }), sel);
+  };
+  const CADRE = (sel) => pg.evaluate((sel) => {
+    const f = document.querySelector(sel); const d = f && f.contentDocument; const w = f && f.contentWindow;
+    const p = d && d.getElementById('recette-cadre');
+    return d ? { lang: d.documentElement.lang, obs: !!(w.SENT_CADRE && w.SENT_CADRE.obs),
+                 insere: p ? p.textContent : null } : null;
+  }, sel);
+  const etatPan = await OUVRIR_CADRE('pan-sia', '#pan-sia-iframe');
+  ok('le panorama, ouvert en anglais, se branche et reçoit le dictionnaire', etatPan === 'traduit', etatPan);
+  await pg.evaluate(() => {
+    const d = document.getElementById('pan-sia-iframe').contentDocument;
+    const p = d.createElement('p'); p.id = 'recette-cadre'; p.textContent = 'Programme détaillé'; d.body.appendChild(p);
+  });
+  await pg.waitForTimeout(400);
+  let c = await CADRE('#pan-sia-iframe');
+  ok('le cadre est en anglais et SON observateur traduit ce qui y naît après coup',
+     c && c.lang === 'en' && c.obs && c.insere === EN_PROGRAMME, JSON.stringify(c));
+  await pg.evaluate(() => sentSetLang('fr'));
+  await pg.waitForTimeout(500);
+  c = await CADRE('#pan-sia-iframe');
+  ok('Sentinel revient en français : le cadre suit, restitue, arrête son observateur',
+     c && c.lang === 'fr' && !c.obs && c.insere === 'Programme détaillé', JSON.stringify(c));
+  await pg.evaluate(() => sentSetLang('en'));
+  await pg.waitForTimeout(800);
+  c = await CADRE('#pan-sia-iframe');
+  ok('et repasse en anglais sur un nouveau changement', c && c.lang === 'en' && c.insere === EN_PROGRAMME,
+     JSON.stringify(c));
+  const etatCarte = await OUVRIR_CADRE('carto', '#map-iframe');
+  const carte = await CADRE('#map-iframe');
+  ok('la carte (/map) se branche aussi', etatCarte === 'traduit' && carte && carte.lang === 'en',
+     etatCarte + ' · ' + JSON.stringify(carte));
+  await pg.evaluate(() => sentSetLang('fr'));
+  await pg.waitForTimeout(400);
 
   await nav.close();
   console.log('\n' + (n - ko) + ' / ' + n + ' contrôles verts');

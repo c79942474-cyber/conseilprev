@@ -1514,104 +1514,31 @@ function sentAppliquer() {
  * message d'état. Une passe par image (requestAnimationFrame), sur les seuls
  * sous-arbres touchés ; nos propres écritures sont retirées de la file
  * (takeRecords) et un nœud déjà traduit est sauté — pas de boucle. */
-var SENT_CORPS = null;          /* le dictionnaire {texte, bloc}, une fois reçu */
-var SENT_CORPS_ATTENTE = null;  /* le téléchargement en cours, pour ne pas le doubler */
-var SENT_CORPS_OBS = null;      /* l'observateur, non nul en anglais seulement */
-var SENT_CORPS_PREVU = false;   /* une passe différée est déjà programmée */
-var SENT_CORPS_CIBLES = [];     /* les sous-arbres touchés depuis la dernière passe */
+/* LA MÉCANIQUE EST DANS sentinel.i18n.js (sentBrancher) : ce document et
+   les pages que Sentinel embarque en cadre la partagent. Ici, on la branche
+   sur le document de Sentinel, avec SENT_LANG pour langue. */
+var SENT_CORPS_BRANCHE = null;  /* le branchement, créé à la première demande */
 
-function sentCorpsCharger() {
-  if (SENT_CORPS) return Promise.resolve(SENT_CORPS);
-  if (SENT_CORPS_ATTENTE) return SENT_CORPS_ATTENTE;
-  if (typeof fetch !== 'function') return Promise.resolve(null);
-  SENT_CORPS_ATTENTE = fetch('/sentinel.en.json', { credentials: 'same-origin' })
-    .then(function (r) {
-      if (!r.ok) throw new Error('sentinel.en.json : HTTP ' + r.status);
-      return r.json();
-    })
-    .then(function (d) {
-      SENT_CORPS = { texte: (d && d.texte) || {}, bloc: (d && d.bloc) || {} };
-      return SENT_CORPS;
-    })
-    ['catch'](function () {
-      /* UN ÉCHEC N'EST PAS DÉFINITIF : la prochaine demande d'anglais
-         réessaiera. D'ici là, la coquille est traduite et le corps reste
-         en français — l'état d'avant ce module, pas une page cassée. */
-      SENT_CORPS_ATTENTE = null;
-      return null;
-    });
-  return SENT_CORPS_ATTENTE;
+function sentCorpsBranche() {
+  if (!SENT_CORPS_BRANCHE && typeof sentBrancher === 'function') {
+    SENT_CORPS_BRANCHE = sentBrancher(document, { langue: function () { return SENT_LANG; } });
+  }
+  return SENT_CORPS_BRANCHE;
 }
 
 function sentCorpsAppliquer() {
-  if (typeof sentTraduireCorps !== 'function' || !document.body) return;
-  if (SENT_LANG === 'en') {
-    if (!SENT_CORPS) {
-      /* UN TÉLÉCHARGEMENT DÉJÀ EN COURS SUFFIT : il appliquera le corps en
-         arrivant. Lui accrocher une seconde suite ferait parcourir le
-         document deux fois pour le même résultat. */
-      if (SENT_CORPS_ATTENTE) return;
-      sentCorpsCharger().then(function (d) {
-        /* LA LANGUE A PU CHANGER PENDANT LE TÉLÉCHARGEMENT : on n'écrit de
-           l'anglais que si l'anglais est encore demandé. */
-        if (d && SENT_LANG === 'en') sentCorpsAppliquer();
-      });
-      return;
-    }
-    sentTraduireCorps(document.body, SENT_CORPS, 'en');
-    sentCorpsObserver(true);
-    return;
-  }
-  sentCorpsObserver(false);
-  sentTraduireCorps(document.body, null, 'fr');
-}
-
-function sentCorpsPasse() {
-  SENT_CORPS_PREVU = false;
-  var lot = SENT_CORPS_CIBLES;
-  SENT_CORPS_CIBLES = [];
-  if (SENT_LANG !== 'en' || !SENT_CORPS || !SENT_CORPS_OBS) return;
-  for (var k = 0; k < lot.length; k++) {
-    var cible = lot[k];
-    if (!document.body.contains(cible)) continue;
-    /* UN SOUS-ARBRE CONTENU DANS UN AUTRE DU MÊME LOT est parcouru avec
-       lui : une passe, pas deux. */
-    var couvert = false;
-    for (var j = 0; j < lot.length; j++) {
-      if (j !== k && lot[j] !== cible && lot[j].contains(cible)) { couvert = true; break; }
-    }
-    if (!couvert) sentTraduireCorps(cible, SENT_CORPS, 'en');
-  }
-  /* NOS PROPRES ÉCRITURES NE SONT PAS DES MUTATIONS À TRADUIRE. */
-  SENT_CORPS_OBS.takeRecords();
-}
-
-function sentCorpsObserver(actif) {
-  if (typeof MutationObserver !== 'function') return;
-  if (!actif) {
-    if (SENT_CORPS_OBS) { SENT_CORPS_OBS.disconnect(); SENT_CORPS_OBS = null; }
-    SENT_CORPS_CIBLES = [];
-    return;
-  }
-  if (SENT_CORPS_OBS) return;
-  SENT_CORPS_OBS = new MutationObserver(function (records) {
-    for (var i = 0; i < records.length; i++) {
-      var t = records[i].target;
-      if (t && t.nodeType === 3) t = t.parentNode;
-      if (t && SENT_CORPS_CIBLES.indexOf(t) < 0) SENT_CORPS_CIBLES.push(t);
-    }
-    if (SENT_CORPS_PREVU) return;
-    SENT_CORPS_PREVU = true;
-    if (typeof requestAnimationFrame === 'function') requestAnimationFrame(sentCorpsPasse);
-    else setTimeout(sentCorpsPasse, 16);
-  });
-  SENT_CORPS_OBS.observe(document.body, { childList: true, subtree: true, characterData: true });
+  var b = sentCorpsBranche();
+  if (b) b.appliquer();
 }
 
 window.sentSetLang = function (lg) {
   SENT_LANG = (lg === 'en') ? 'en' : 'fr';
   try { localStorage.setItem(SENT_LANG_CLE, SENT_LANG); } catch (e) {}
   sentAppliquer();
+  /* LES CADRES SUIVENT : la carte, le panorama, l'enveloppe, l'empreinte du
+     parc et l'observatoire sont d'autres documents, qui se traduisent
+     eux-mêmes (sentinel.i18n.js, data-sent-cadre) quand on les prévient. */
+  if (typeof sentPrevenirCadres === 'function') sentPrevenirCadres(document, SENT_LANG);
 };
 
 /* LE FIL D'ARIANE, DANS LA LANGUE COURANTE. `go()` reçoit une section et un

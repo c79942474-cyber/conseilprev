@@ -147,6 +147,16 @@ for (const op of prog.ops) {
       case 'memorise': r = M.SENT_ORIG.get(noeud(op)) !== undefined; break;
       case 'normaliser': r = M.sentNormaliser(op.valeur); break;
       case 'digits': r = M.sentDigits(op.en, op.fr); break;
+      /* LES MOTIFS COMPILÉS : l'ordre d'essai, et la même liste rendue pour
+         le même dictionnaire — compilés une fois, pas à chaque nœud. */
+      case 'motifs': {
+        /* `paires` garde l'ordre d'insertion voulu, que le JSON trié du
+           programme perdrait : c'est lui qui départage un tri sans règle. */
+        const src = op.paires ? Object.fromEntries(op.paires) : op.motif;
+        const a = M.sentMotifsCompiler(src), b = M.sentMotifsCompiler(src);
+        r = { meme: a === b, cles: a.map(m => m.cle) };
+        break;
+      }
       default: throw new Error('opération inconnue : ' + op.op);
     }
   } catch (e) { r = { erreur: String(e && e.stack || e) }; }

@@ -76,29 +76,29 @@
   },
   {
    "nom": "l'observateur n'écoute plus characterData : un compteur réécrit sur place reste en français",
-   "fichier": "sentinel.page.js",
-   "avant": "  SENT_CORPS_OBS.observe(document.body, { childList: true, subtree: true, characterData: true });\n",
-   "apres": "  SENT_CORPS_OBS.observe(document.body, { childList: true, subtree: true });\n",
+   "fichier": "sentinel.i18n.js",
+   "avant": "    b.obs.observe(b.doc.body, { childList: true, subtree: true, characterData: true });\n",
+   "apres": "    b.obs.observe(b.doc.body, { childList: true, subtree: true });\n",
    "regle": "test_l_observateur_est_demarre_en_anglais_avec_les_trois_types_de_mutation"
   },
   {
    "nom": "l'observateur n'est plus déconnecté au retour en français",
-   "fichier": "sentinel.page.js",
-   "avant": "    if (SENT_CORPS_OBS) { SENT_CORPS_OBS.disconnect(); SENT_CORPS_OBS = null; }\n",
-   "apres": "    SENT_CORPS_OBS = null;\n",
+   "fichier": "sentinel.i18n.js",
+   "avant": "      if (b.obs) { b.obs.disconnect(); b.obs = null; }\n",
+   "apres": "      b.obs = null;\n",
    "regle": "test_l_observateur_est_ARRETE_au_retour_en_francais_et_le_corps_restitue"
   },
   {
    "nom": "nos propres écritures restent dans la file de l'observateur : une passe en appelle une autre",
-   "fichier": "sentinel.page.js",
-   "avant": "  /* NOS PROPRES ÉCRITURES NE SONT PAS DES MUTATIONS À TRADUIRE. */\n  SENT_CORPS_OBS.takeRecords();\n",
+   "fichier": "sentinel.i18n.js",
+   "avant": "    /* NOS PROPRES ÉCRITURES NE SONT PAS DES MUTATIONS À TRADUIRE. */\n    b.obs.takeRecords();\n",
    "apres": "",
    "regle": "test_une_mutation_est_traduite_a_l_image_suivante_sur_sa_cible_et_les_records_sont_repris"
   },
   {
    "nom": "deux demandes d'anglais pendant le téléchargement appliquent le corps deux fois",
-   "fichier": "sentinel.page.js",
-   "avant": "      if (SENT_CORPS_ATTENTE) return;\n",
+   "fichier": "sentinel.i18n.js",
+   "avant": "        if (b.attente) return;\n",
    "apres": "",
    "regle": "test_le_dictionnaire_est_telecharge_UNE_fois_puis_applique"
   },

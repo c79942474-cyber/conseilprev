@@ -246,7 +246,8 @@ function resumer(mesure, seuil) {
   l.push('SENTINEL EN ANGLAIS — ce qui reste en français à l\'écran');
   if (mesure.dictionnaire) {
     l.push('dictionnaire : ' + (mesure.dictionnaire.charge ? 'chargé' : 'NON CHARGÉ') + ' · '
-      + (mesure.dictionnaire.texte || 0) + ' clés texte · ' + (mesure.dictionnaire.bloc || 0) + ' clés bloc');
+      + (mesure.dictionnaire.texte || 0) + ' clés texte · ' + (mesure.dictionnaire.bloc || 0) + ' clés bloc'
+      + (mesure.dictionnaire.motif ? ' · ' + mesure.dictionnaire.motif + ' motifs' : ''));
   }
   l.push('pages : ' + g.pages + ' · textes visibles : ' + g.textes);
   l.push('mots français : ' + g.mots_fr + ' · anglais : ' + g.mots_en + ' · neutres : ' + g.mots_neutres);

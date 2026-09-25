@@ -242,6 +242,97 @@ function sentMemoire(n) {
   return rec;
 }
 
+/* ── LES MOTIFS : les libellés composés ────────────────────────────────
+   CE QU'UNE CLÉ EXACTE NE PEUT PAS COUVRIR. « Supprimer Chatbot service
+   client du registre » est une phrase d'interface qui ENCADRE une donnée :
+   il y a autant de clés que de systèmes au registre. La section « motif »
+   du dictionnaire écrit la phrase une fois, la donnée en « {} » :
+     "Supprimer {} du registre": "Delete {} from the register"
+   « {} » capture un morceau quelconque, NON VIDE, recopié dans la
+   traduction à la place du « {} » de même rang ; les « # » restent les
+   chiffres et reviennent par sentDigits, dans l'ordre.
+
+   LE MORCEAU CAPTURÉ EST RECOPIÉ TEL QUEL — SAUF s'il est lui-même une clé
+   exacte du régime texte : « Bloc 1 sur 2 · Vue d'ensemble IA Act — … »
+   encadre le NOM d'un bloc, qui est une phrase d'interface déjà traduite,
+   et le recopier en français laisserait la moitié du libellé dans l'autre
+   langue. Le nom d'un système saisi par l'utilisateur n'est pas une clé :
+   il passe intact.
+
+   UN MOTIF N'EST ESSAYÉ QUE SI LA CLÉ EXACTE MANQUE, et seulement dans le
+   régime TEXTE et sur les attributs : un bloc est du HTML, et y recopier
+   un morceau de texte brut le rendrait comme balisage.
+
+   COMPILÉS UNE FOIS par dictionnaire reçu, essayés du PLUS LONG au plus
+   court (à longueur égale, par ordre des clés) : l'ordre est déterministe,
+   et le motif le plus précis gagne — « Étape # — {} · vous y êtes » passe
+   avant « Étape # — {} · {} ». Un motif sans aucun caractère hors de ses
+   « {} » attraperait tout : il est écarté (sentinel_i18n.py le refuse
+   aussi, et le nomme). */
+var SENT_TROU = '{}';
+var SENT_MOTIFS_VUS = { source: null, liste: [] };
+
+function sentEchapperRe(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function sentMotifsCompiler(motifs) {
+  if (!motifs || typeof motifs !== 'object') return [];
+  if (SENT_MOTIFS_VUS.source === motifs) return SENT_MOTIFS_VUS.liste;
+  var cles = [];
+  for (var k in motifs) {
+    if (Object.prototype.hasOwnProperty.call(motifs, k) && typeof motifs[k] === 'string') cles.push(k);
+  }
+  cles.sort(function (a, b) {
+    if (a.length !== b.length) return b.length - a.length;
+    return a < b ? -1 : (a > b ? 1 : 0);
+  });
+  var liste = [];
+  for (var i = 0; i < cles.length; i++) {
+    var morceaux = cles[i].split(SENT_TROU);
+    if (!/\S/.test(morceaux.join(''))) continue;
+    if (motifs[cles[i]].split(SENT_TROU).length !== morceaux.length) continue;
+    /* L'INDICE : le plus long morceau fixe, cherché par indexOf avant
+       toute expression — un texte qui ne le contient pas ne coûte rien. */
+    var indice = '';
+    for (var j = 0; j < morceaux.length; j++) if (morceaux[j].length > indice.length) indice = morceaux[j];
+    var re = [];
+    for (var m = 0; m < morceaux.length; m++) re.push(sentEchapperRe(morceaux[m]));
+    liste.push({ cle: cles[i], en: motifs[cles[i]], indice: indice,
+                 re: new RegExp('^' + re.join('(.+?)') + '$') });
+  }
+  SENT_MOTIFS_VUS = { source: motifs, liste: liste };
+  return liste;
+}
+
+/* LA VALEUR ANGLAISE D'UNE CLÉ PAR LES MOTIFS — encore avec ses « # » —,
+   ou null si aucun ne s'applique. */
+function sentMotifTraduire(cle, d) {
+  var liste = d.motifs || [];
+  for (var i = 0; i < liste.length; i++) {
+    var m = liste[i];
+    if (cle.indexOf(m.indice) < 0) continue;
+    var r = m.re.exec(cle);
+    if (!r) continue;
+    var morceaux = m.en.split(SENT_TROU), sortie = morceaux[0];
+    for (var k = 1; k < morceaux.length; k++) {
+      var capte = r[k];
+      var t = Object.prototype.hasOwnProperty.call(d.texte, capte) ? d.texte[capte] : null;
+      sortie += (typeof t === 'string' ? t : capte) + morceaux[k];
+    }
+    return sortie;
+  }
+  return null;
+}
+
+/* LA TRADUCTION D'UNE CLÉ DU RÉGIME TEXTE : l'entrée exacte d'abord, les
+   motifs ensuite. */
+function sentChercherTexte(cle, d) {
+  var t = d.texte[cle];
+  if (t !== undefined && t !== null) return t;
+  return sentMotifTraduire(cle, d);
+}
+
 function sentAttrsAppliquer(el, dico) {
   var liste = sentAttributsDe(el), compte = 0;
   for (var i = 0; i < liste.length; i++) {
@@ -249,7 +340,7 @@ function sentAttrsAppliquer(el, dico) {
     if (!v || !SENT_LETTRE.test(v)) continue;
     var rec = SENT_ORIG.get(el);
     if (rec && rec.a && rec.a[nom] && rec.a[nom].en === v) continue;  /* déjà traduit */
-    var t = dico.texte[sentNormaliser(v)];
+    var t = sentChercherTexte(sentNormaliser(v), dico);
     if (t === undefined || t === null) continue;
     var val = sentDigits(t, v);
     if (val === null || val === v) continue;
@@ -288,7 +379,7 @@ function sentTexteAppliquer(n, dico) {
   if (!v || !SENT_LETTRE.test(v)) return 0;
   var rec = SENT_ORIG.get(n);
   if (rec && rec.t && rec.t.en === v) return 0;  /* déjà traduit */
-  var t = dico.texte[sentNormaliser(v)];
+  var t = sentChercherTexte(sentNormaliser(v), dico);
   if (t === undefined || t === null) return 0;
   var val = sentDigits(t, v);
   if (val === null) return 0;
@@ -341,7 +432,7 @@ function sentRestituer(n) {
   return compte;
 }
 
-/* APPLIQUE (langue 'en', avec `dico` = {texte, bloc}) OU RESTITUE (toute
+/* APPLIQUE (langue 'en', avec `dico` = {texte, bloc, motif}) OU RESTITUE (toute
    autre langue) sous `racine` — un élément, un document, ou un nœud texte
    (on remonte alors à son parent, parce que le régime est celui du parent).
    Rend le nombre de nœuds et d'attributs écrits. */
@@ -352,7 +443,8 @@ function sentTraduireCorps(racine, dico, langue) {
   if (!racine || racine.nodeType !== 1) return 0;
   if (langue !== 'en') return sentRestituer(racine);
   if (!dico) return 0;
-  var d = { texte: dico.texte || {}, bloc: dico.bloc || {} };
+  var d = { texte: dico.texte || {}, bloc: dico.bloc || {},
+            motifs: sentMotifsCompiler(dico.motif) };
   if (sentAncetreExclu(racine)) return 0;
   var compte = 0;
   sentMarcher(racine, {
@@ -363,11 +455,226 @@ function sentTraduireCorps(racine, dico, langue) {
   return compte;
 }
 
+/* ══ LE BRANCHEMENT D'UN DOCUMENT ═════════════════════════════════════════
+ *
+ * CE QUI VIVAIT DANS sentinel.page.js, ET POURQUOI IL EST ICI. Le
+ * téléchargement paresseux du dictionnaire, l'application au corps et
+ * l'observateur des rendus différés étaient écrits pour LE document de
+ * Sentinel. Mesuré au navigateur (i18n/sentinel/MESURE_APRES.json) : les
+ * cinq pages que Sentinel embarque en cadre — la carte, le panorama,
+ * l'enveloppe, l'empreinte du parc, l'observatoire — restaient à 98 % en
+ * français en anglais, parce que ce sont d'AUTRES documents et que rien de
+ * tout cela n'y était chargé. Recopier le bloc dans chacun aurait fait six
+ * exemplaires de la même mécanique, dont un finit toujours par diverger ;
+ * il est donc ici, une fois, et Sentinel comme ses cadres le branchent.
+ *
+ * sentBrancher(doc, { langue: function () → 'fr' | 'en', url }) rend un
+ * branchement : appliquer() suit la langue que `langue()` dit AU MOMENT DE
+ * L'APPEL — et encore à l'arrivée du dictionnaire, qui peut avoir changé
+ * entre-temps. Le reste est l'ancienne mécanique de sentinel.page.js, à
+ * l'identique :
+ *   · PARESSEUX — le dictionnaire n'est téléchargé qu'à la première
+ *     demande d'anglais ; un lecteur français ne paie rien ; un échec n'est
+ *     pas définitif, la demande suivante réessaie ;
+ *   · VIVANT — un MutationObserver, actif en anglais SEULEMENT, traduit ce
+ *     que le JavaScript rend après coup : une passe par image, sur les seuls
+ *     sous-arbres touchés, nos propres écritures retirées de la file
+ *     (takeRecords) — pas de boucle. */
+var SENT_DICO_URL = '/sentinel.en.json';
+var SENT_LANGUE_CLE = 'cp-sentinel-langue-v1';
+var SENT_MESSAGE = 'cp-sentinel-langue';
+
+function sentBrancher(doc, options) {
+  options = options || {};
+  var b = {
+    doc: doc,
+    url: options.url || SENT_DICO_URL,
+    langue: (typeof options.langue === 'function') ? options.langue : function () { return 'fr'; },
+    dico: null,       /* le dictionnaire {texte, bloc, motif}, une fois reçu */
+    attente: null,    /* le téléchargement en cours, pour ne pas le doubler */
+    obs: null,        /* l'observateur, non nul en anglais seulement */
+    prevu: false,     /* une passe différée est déjà programmée */
+    cibles: []        /* les sous-arbres touchés depuis la dernière passe */
+  };
+
+  b.charger = function () {
+    if (b.dico) return Promise.resolve(b.dico);
+    if (b.attente) return b.attente;
+    if (typeof fetch !== 'function') return Promise.resolve(null);
+    b.attente = fetch(b.url, { credentials: 'same-origin' })
+      .then(function (r) {
+        if (!r.ok) throw new Error('sentinel.en.json : HTTP ' + r.status);
+        return r.json();
+      })
+      .then(function (d) {
+        b.dico = { texte: (d && d.texte) || {}, bloc: (d && d.bloc) || {},
+                   motif: (d && d.motif) || {} };
+        return b.dico;
+      })
+      ['catch'](function () {
+        /* UN ÉCHEC N'EST PAS DÉFINITIF : la prochaine demande d'anglais
+           réessaiera. D'ici là, le corps reste en français — l'état d'avant
+           ce module, pas une page cassée. */
+        b.attente = null;
+        return null;
+      });
+    return b.attente;
+  };
+
+  /* OUBLIER le dictionnaire reçu : la prochaine demande d'anglais le
+     retélécharge. C'est le chemin du réessai, et celui de la recette. */
+  b.oublier = function () { b.dico = null; b.attente = null; };
+
+  b.appliquer = function () {
+    if (!b.doc || !b.doc.body) return;
+    if (b.langue() === 'en') {
+      if (!b.dico) {
+        /* UN TÉLÉCHARGEMENT DÉJÀ EN COURS SUFFIT : il appliquera le corps en
+           arrivant. Lui accrocher une seconde suite ferait parcourir le
+           document deux fois pour le même résultat. */
+        if (b.attente) return;
+        b.charger().then(function (d) {
+          /* LA LANGUE A PU CHANGER PENDANT LE TÉLÉCHARGEMENT : on n'écrit de
+             l'anglais que si l'anglais est encore demandé. */
+          if (d && b.langue() === 'en') b.appliquer();
+        });
+        return;
+      }
+      sentTraduireCorps(b.doc.body, b.dico, 'en');
+      b.observer(true);
+      return;
+    }
+    b.observer(false);
+    sentTraduireCorps(b.doc.body, null, 'fr');
+  };
+
+  b.passe = function () {
+    b.prevu = false;
+    var lot = b.cibles;
+    b.cibles = [];
+    if (b.langue() !== 'en' || !b.dico || !b.obs) return;
+    for (var k = 0; k < lot.length; k++) {
+      var cible = lot[k];
+      if (!b.doc.body.contains(cible)) continue;
+      /* UN SOUS-ARBRE CONTENU DANS UN AUTRE DU MÊME LOT est parcouru avec
+         lui : une passe, pas deux. */
+      var couvert = false;
+      for (var j = 0; j < lot.length; j++) {
+        if (j !== k && lot[j] !== cible && lot[j].contains(cible)) { couvert = true; break; }
+      }
+      if (!couvert) sentTraduireCorps(cible, b.dico, 'en');
+    }
+    /* NOS PROPRES ÉCRITURES NE SONT PAS DES MUTATIONS À TRADUIRE. */
+    b.obs.takeRecords();
+  };
+
+  b.observer = function (actif) {
+    if (typeof MutationObserver !== 'function') return;
+    if (!actif) {
+      if (b.obs) { b.obs.disconnect(); b.obs = null; }
+      b.cibles = [];
+      return;
+    }
+    if (b.obs) return;
+    b.obs = new MutationObserver(function (records) {
+      for (var i = 0; i < records.length; i++) {
+        var t = records[i].target;
+        if (t && t.nodeType === 3) t = t.parentNode;
+        if (t && b.cibles.indexOf(t) < 0) b.cibles.push(t);
+      }
+      if (b.prevu) return;
+      b.prevu = true;
+      if (typeof requestAnimationFrame === 'function') requestAnimationFrame(b.passe);
+      else setTimeout(b.passe, 16);
+    });
+    b.obs.observe(b.doc.body, { childList: true, subtree: true, characterData: true });
+  };
+
+  return b;
+}
+
+/* ── LES CADRES ───────────────────────────────────────────────────────────
+ * SENTINEL PRÉVIENT SES CADRES quand la langue change : un message à chaque
+ * <iframe> du document, adressé à SA PROPRE origine — un cadre d'une autre
+ * origine ne le reçoit pas. Le cadre écoute aussi l'événement `storage`
+ * (la langue est mémorisée sous la même clé) : l'un suffit, l'autre couvre
+ * un stockage bloqué ou une page ouverte seule dans un autre onglet. */
+function sentPrevenirCadres(doc, langue) {
+  var cadres = doc.getElementsByTagName('iframe'), n = 0;
+  var origine = doc.location && doc.location.origin;
+  for (var i = 0; i < cadres.length; i++) {
+    try {
+      cadres[i].contentWindow.postMessage({ type: SENT_MESSAGE, langue: langue }, origine);
+      n++;
+    } catch (e) { /* un cadre pas encore né, ou d'une autre origine */ }
+  }
+  return n;
+}
+
+/* UN DOCUMENT EMBARQUÉ SE BRANCHE LUI-MÊME. Chargé par
+ *   <script src="/sentinel.i18n.js" data-sent-cadre defer></script>
+ * il lit la langue — celle de Sentinel s'il est dans son cadre, sinon la
+ * langue mémorisée — et traduit son corps si c'est l'anglais. EN FRANÇAIS,
+ * RIEN NE CHANGE : pas de téléchargement, pas d'observateur, pas une
+ * écriture dans le document ; seuls deux écouteurs attendent qu'on leur
+ * dise autre chose. */
+function sentCadreLangue(win) {
+  /* LE PARENT FAIT FOI QUAND IL EST SENTINEL ET QU'IL A DÉJÀ DÉCIDÉ :
+     sa variable SENT_LANG est la langue affichée. Avant l'exécution de son
+     script (le cadre peut charger plus tôt), elle n'existe pas encore, et
+     la langue mémorisée — que Sentinel lit aussi — prend le relais. */
+  try {
+    if (win.parent && win.parent !== win) {
+      var l = win.parent.SENT_LANG;
+      if (l === 'en' || l === 'fr') return l;
+    }
+  } catch (e) { /* parent d'une autre origine : il ne dit rien */ }
+  try {
+    return win.localStorage.getItem(SENT_LANGUE_CLE) === 'en' ? 'en' : 'fr';
+  } catch (e2) {
+    return 'fr';
+  }
+}
+
+function sentCadreDemarrer(win) {
+  var doc = win.document, courante = 'fr';
+  var langOrigine = doc.documentElement.getAttribute('lang');
+  var b = sentBrancher(doc, { langue: function () { return courante; } });
+  var poser = function (l) {
+    l = (l === 'en') ? 'en' : 'fr';
+    if (l === courante) return;
+    courante = l;
+    if (l === 'en') doc.documentElement.setAttribute('lang', 'en');
+    else if (langOrigine === null) doc.documentElement.removeAttribute('lang');
+    else doc.documentElement.setAttribute('lang', langOrigine);
+    b.appliquer();
+  };
+  win.addEventListener('storage', function (e) {
+    if (e.key === SENT_LANGUE_CLE || e.key === null) poser(sentCadreLangue(win));
+  });
+  win.addEventListener('message', function (e) {
+    if (e.source !== win.parent || e.origin !== win.location.origin) return;
+    var d = e.data;
+    if (d && d.type === SENT_MESSAGE) poser(d.langue);
+  });
+  poser(sentCadreLangue(win));
+  win.SENT_CADRE = b;
+  return b;
+}
+
+if (typeof document !== 'undefined' && document.currentScript
+    && document.currentScript.hasAttribute('data-sent-cadre')) {
+  sentCadreDemarrer(window);
+}
+
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
     SENT_INLINE: SENT_INLINE, SENT_EXCLUS: SENT_EXCLUS, SENT_ATTRIBUTS: SENT_ATTRIBUTS,
     sentAplanir: sentAplanir, sentNormaliser: sentNormaliser, sentDigits: sentDigits,
     sentClasser: sentClasser, sentInventaire: sentInventaire,
-    sentTraduireCorps: sentTraduireCorps, SENT_ORIG: SENT_ORIG
+    sentTraduireCorps: sentTraduireCorps, SENT_ORIG: SENT_ORIG,
+    sentMotifsCompiler: sentMotifsCompiler, sentBrancher: sentBrancher,
+    sentPrevenirCadres: sentPrevenirCadres, sentCadreLangue: sentCadreLangue,
+    sentCadreDemarrer: sentCadreDemarrer, SENT_LANGUE_CLE: SENT_LANGUE_CLE
   };
 }

@@ -468,8 +468,12 @@ def _bloc_corps():
     return PAGE_JS[i:PAGE_JS.index("window.sentSetLang = function", i)]
 
 
+#  LE VRAI MODULE PASSE DEVANT : la mécanique (téléchargement, observateur,
+#  passe différée) vit dans sentinel.i18n.js (sentBrancher), partagée avec les
+#  pages embarquées en cadre ; sentinel.page.js la branche sur SON document.
+#  Le prélude redéclare sentTraduireCorps APRÈS le module : dans un même
+#  script, la dernière déclaration gagne, et sentBrancher appelle le témoin.
 _PRELUDE = r"""
-'use strict';
 var opts = JSON.parse(process.argv[2]);
 var SENT_LANG = opts.lang;
 var appels = [], observateurs = [], images = [], fetchs = 0;
@@ -495,7 +499,7 @@ _EPILOGUE = r"""
 (async function () {
   var faits = {};
   if (opts.scenario === 'observateur') {
-    SENT_CORPS = opts.dico;
+    sentCorpsBranche().dico = opts.dico;
     sentCorpsAppliquer();
     faits.premierAppel = appels[0];
     faits.options = observateurs.length === 1 ? observateurs[0].options : null;
@@ -511,7 +515,7 @@ _EPILOGUE = r"""
     SENT_LANG = 'fr';
     sentCorpsAppliquer();
     faits.deconnecte = observateurs[0].deconnecte;
-    faits.obsNul = SENT_CORPS_OBS === null;
+    faits.obsNul = sentCorpsBranche().obs === null;
     faits.dernierAppel = appels[appels.length - 1];
     var avant = appels.length;
     observateurs[0].cb([{ target: { id: 'tard', nodeType: 1, contains: function () { return false; } } }]);
@@ -525,8 +529,8 @@ _EPILOGUE = r"""
     if (opts.basculeAvantReponse) SENT_LANG = 'fr';
     await new Promise(function (r) { setTimeout(r, 5); });
     faits.appels = appels.slice();
-    faits.corps = SENT_CORPS;
-    faits.attenteNulle = SENT_CORPS_ATTENTE === null;
+    faits.corps = sentCorpsBranche().dico;
+    faits.attenteNulle = sentCorpsBranche().attente === null;
     faits.observateurs = observateurs.length;
     sentCorpsAppliquer();
     await new Promise(function (r) { setTimeout(r, 5); });
@@ -544,7 +548,7 @@ def _page(opts_json):
         pytest.skip("node absent")
     with tempfile.TemporaryDirectory() as d:
         h = os.path.join(d, "h.js")
-        io.open(h, "w", encoding="utf-8").write(_PRELUDE + _bloc_corps() + _EPILOGUE)
+        io.open(h, "w", encoding="utf-8").write(SRC_MODULE + _PRELUDE + _bloc_corps() + _EPILOGUE)
         r = subprocess.run([NODE, h, opts_json], capture_output=True, text=True, timeout=60)
     if r.returncode != 0:
         pytest.fail("le bloc de sentinel.page.js n'a pas tourné :\n%s" % (r.stderr or "")[-2500:])
@@ -606,7 +610,7 @@ def test_le_dictionnaire_est_telecharge_UNE_fois_puis_applique():
     #  téléchargement : parcourir 4 300 éléments deux fois pour le même
     #  résultat est du travail perdu.
     assert f["appels"] == [["body", True, "en"]], f["appels"]
-    assert f["corps"] == {"texte": {"a": "b"}, "bloc": {}}
+    assert f["corps"] == {"texte": {"a": "b"}, "bloc": {}, "motif": {}}, f["corps"]
     assert f["observateurs"] == 1
     assert f["fetchsApresRelance"] == 1, "le dictionnaire a été retéléchargé"
     assert f["appelsApresRelance"] == [["body", True, "en"]], "une demande explicite n'applique plus"
@@ -630,9 +634,15 @@ def test_un_retour_en_francais_pendant_le_telechargement_n_ecrit_pas_d_anglais()
 
 
 def test_le_code_de_page_ne_telecharge_le_dictionnaire_qu_a_un_seul_endroit():
+    """UN SEUL TÉLÉCHARGEMENT, DANS LE MODULE : sentinel.page.js et les
+    cadres passent par sentBrancher ; une seconde copie du fetch dans la page
+    serait une seconde mécanique à tenir d'accord avec la première."""
     code = _code(PAGE_JS)
-    assert code.count("fetch('/sentinel.en.json'") == 1, code.count("fetch('/sentinel.en.json'")
-    assert "credentials: 'same-origin'" in _bloc_corps()
+    assert "sentinel.en.json'" not in code, "sentinel.page.js télécharge encore le dictionnaire lui-même"
+    assert "sentBrancher(document" in _bloc_corps()
+    assert CODE_MODULE.count("fetch(") == 1, CODE_MODULE.count("fetch(")
+    assert "var SENT_DICO_URL = '/sentinel.en.json';" in CODE_MODULE
+    assert "credentials: 'same-origin'" in CODE_MODULE
 
 
 # ══════════════════════════════════════════════════════════════════════════
@@ -779,7 +789,12 @@ def _texte_de_sentinel():
     ferait : balises retirées, entités décodées, blancs réduits."""
     corps = re.sub(r"<(script|style)\b.*?</\1>", " ", SENTINEL, flags=re.S | re.I)
     corps = re.sub(r"<!--.*?-->", " ", corps, flags=re.S)
-    return sentinel_i18n.normaliser(_html.unescape(re.sub(r"<[^>]+>", " ", corps)))
+    #  LES ATTRIBUTS LUS SONT DU TEXTE AUSSI : un `title` ou un `placeholder`
+    #  est traduit (SENT_ATTRIBUTS) et les lots en portent. Retirer les balises
+    #  les effaçait, et une clé prise d'un `title` passait pour inventée.
+    attrs = " \n ".join(m.group(2) for m in re.finditer(
+        r'\s(title|aria-label|placeholder|alt)="([^"]*)"', corps))
+    return sentinel_i18n.normaliser(_html.unescape(re.sub(r"<[^>]+>", " \n ", corps) + " \n " + attrs))
 
 
 def test_le_dossier_reel_se_fusionne_sans_faute_et_chaque_cle_est_sa_propre_normalisation():
@@ -799,8 +814,17 @@ def test_le_dossier_reel_se_fusionne_sans_faute_et_chaque_cle_est_sa_propre_norm
 
 def test_les_entrees_de_l_exemple_prises_dans_le_HTML_s_y_trouvent_bien():
     """Le dictionnaire d'exemple ne vaut que s'il vise du VRAI texte de
-    Sentinel : une clé que la page ne contient pas ne prouve rien."""
-    dico, _ = sentinel_i18n.fusionner()
+    Sentinel : une clé que la page ne contient pas ne prouve rien.
+
+    L'EXEMPLE SEUL, PAS LE DOSSIER ENTIER. Les lots de traduction venus
+    depuis relèvent aussi des textes RECOMPOSÉS à l'écran par une
+    concaténation (« Aucune actualite » + « a analyser pour le moment. ») :
+    ils sont vrais à l'écran et introuvables d'un seul tenant dans le code.
+    Leur justesse se mesure au navigateur (recette_sentinel_langue.js), pas
+    par une recherche de sous-chaîne — c'est l'exemple que cette règle garde."""
+    with io.open(os.path.join(sentinel_i18n.DOSSIER, "_exemple.json"), encoding="utf-8") as f:
+        ex = json.load(f)
+    dico = {"texte": ex.get("texte") or {}, "bloc": ex.get("bloc") or {}}
     texte = _texte_de_sentinel()
     cles = list(dico["texte"]) + list(dico["bloc"])
     dans_html = [k for k in cles if k in texte]

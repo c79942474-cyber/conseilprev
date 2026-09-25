@@ -129,6 +129,22 @@ const RELEVER = ([selecteurs, ATTRIBUTS]) => {
   return out;
 };
 
+/* UN CADRE CHARGÉ N'EST PAS ENCORE TRADUIT : il se branche lui-même
+   (sentinel.i18n.js, data-sent-cadre), puis télécharge le dictionnaire —
+   après son événement `load`. On attend que chaque cadre branché en anglais
+   l'ait reçu (huit secondes au plus), puis une passe. Un cadre qui ne se
+   branche pas (ancien code) n'est pas attendu : il est mesuré tel quel. */
+const ATTENDRE_CADRES_TRADUITS = (id) => new Promise(r => {
+  const t0 = Date.now();
+  (function attendre() {
+    const pret = [...document.querySelectorAll('#p-' + id + ' iframe')].every(f => {
+      let b = null; try { b = f.contentWindow && f.contentWindow.SENT_CADRE; } catch (e) { b = null; }
+      return !b || b.langue() !== 'en' || !!b.dico;
+    });
+    if (pret || Date.now() - t0 > 8000) setTimeout(r, 150); else setTimeout(attendre, 50);
+  })();
+});
+
 /* LES CADRES D'UNE PAGE SE CHARGENT : leur src n'est posé qu'au premier
    temps mort du navigateur (sentinel.page.js) ; on le pose si ce n'est pas
    fait, et on attend que chacun ait fini de charger. */
@@ -191,20 +207,30 @@ async function mesurer(options) {
 
   /* ON CHOISIT EN, ET ON ATTEND LE DICTIONNAIRE — sans exiger qu'il vienne :
      un dictionnaire injoignable est un résultat, pas une panne de recette. */
-  const lireDico = () => pg.evaluate(() => (typeof SENT_CORPS !== 'undefined' && SENT_CORPS)
-    ? { charge: true, texte: Object.keys(SENT_CORPS.texte || {}).length, bloc: Object.keys(SENT_CORPS.bloc || {}).length }
-    : { charge: false, texte: 0, bloc: 0 });
+  /* LE DICTIONNAIRE REÇU — tenu par le branchement de sentinel.i18n.js
+     (SENT_CORPS_BRANCHE.dico) ; SENT_CORPS est son nom d'avant, lu encore
+     pour mesurer un serveur qui sert l'ancien code (la colonne « avant »).
+     Écrit en clair dans chaque évaluation : la CSP de Sentinel refuse eval. */
+  const lireDico = () => pg.evaluate(() => {
+    const d = (typeof SENT_CORPS_BRANCHE !== 'undefined' && SENT_CORPS_BRANCHE)
+      ? SENT_CORPS_BRANCHE.dico : (typeof SENT_CORPS !== 'undefined' ? SENT_CORPS : null);
+    return d ? { charge: true, texte: Object.keys(d.texte || {}).length, bloc: Object.keys(d.bloc || {}).length,
+                 motif: Object.keys(d.motif || {}).length }
+             : { charge: false, texte: 0, bloc: 0, motif: 0 };
+  });
   const demanderEN = async () => {
     await respirer();
     await pg.evaluate(() => sentSetLang('en'));
-    await pg.waitForFunction(() => typeof SENT_CORPS !== 'undefined' && SENT_CORPS !== null, null, { timeout: 20000 }).catch(() => null);
+    await pg.waitForFunction(() => !!((typeof SENT_CORPS_BRANCHE !== 'undefined' && SENT_CORPS_BRANCHE)
+      ? SENT_CORPS_BRANCHE.dico : (typeof SENT_CORPS !== 'undefined' ? SENT_CORPS : null)),
+      null, { timeout: 20000 }).catch(() => null);
     return lireDico();
   };
   let dictionnaire = await demanderEN();
   if (!dictionnaire.charge) {
     /* UN SEUL RÉESSAI, après la minute du limiteur : sentSetLang('en') une
        seconde fois relance le téléchargement, puisqu'un échec ne le laisse
-       pas en attente (sentinel.page.js, sentCorpsCharger). */
+       pas en attente (sentinel.i18n.js, sentBrancher → charger). */
     await silence('dictionnaire non reçu');
     dictionnaire = await demanderEN();
   }
@@ -221,6 +247,7 @@ async function mesurer(options) {
        que la page tire, les cadres, puis la passe de l'observateur (rAF). */
     await pg.waitForTimeout(ATTENTE_PAGE);
     await pg.evaluate(CHARGER_CADRES, id);
+    await pg.evaluate(ATTENDRE_CADRES_TRADUITS, id);
     await pg.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))));
     const courante = await pg.evaluate(() => (document.querySelector('.page.on') || {}).id || null);
     if (courante !== 'p-' + id) throw new Error('go(' + id + ') n\'a pas ouvert la page : .page.on = ' + courante);

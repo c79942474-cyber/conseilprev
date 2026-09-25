@@ -88,7 +88,8 @@ def signature(dossier=None):
 
 
 def fusionner(dossier=None):
-    """Tous les fichiers du dossier en un dictionnaire {'texte', 'bloc'}.
+    """Tous les fichiers du dossier en un dictionnaire {'texte', 'bloc'}
+    — et 'motif', s'il y en a (voir `motif_faute`).
 
     Rend (dico, fautes). UNE MÊME CLÉ AVEC DEUX VALEURS DIFFÉRENTES est une
     faute nommée — fichier, régime, clé — et la PREMIÈRE valeur (ordre
@@ -97,8 +98,8 @@ def fusionner(dossier=None):
     illisible est nommé aussi, et les autres sont servis quand même : un
     dictionnaire amputé vaut mieux qu'une page qui ne se traduit plus."""
     dossier = DOSSIER if dossier is None else dossier
-    dico = {'texte': {}, 'bloc': {}}
-    origine = {'texte': {}, 'bloc': {}}
+    dico = {'texte': {}, 'bloc': {}, 'motif': {}}
+    origine = {'texte': {}, 'bloc': {}, 'motif': {}}
     fautes = []
     for p in _fichiers(dossier):
         nom = os.path.basename(p)
@@ -111,7 +112,7 @@ def fusionner(dossier=None):
         if not isinstance(lot, dict):
             fautes.append(u'%s : la racine n\'est pas un objet' % nom)
             continue
-        for regime in ('texte', 'bloc'):
+        for regime in ('texte', 'bloc', 'motif'):
             entrees = lot.get(regime) or {}
             if not isinstance(entrees, dict):
                 fautes.append(u'%s : « %s » n\'est pas un objet' % (nom, regime))
@@ -121,6 +122,12 @@ def fusionner(dossier=None):
                     fautes.append(u'%s : %s « %s » n\'est pas une chaîne'
                                   % (nom, regime, cle[:60]))
                     continue
+                if regime == 'motif':
+                    faute = motif_faute(cle, val)
+                    if faute:
+                        fautes.append(u'%s : motif « %s » %s — écarté'
+                                      % (nom, cle[:60], faute))
+                        continue
                 deja = dico[regime].get(cle)
                 if deja is None:
                     dico[regime][cle] = val
@@ -130,7 +137,36 @@ def fusionner(dossier=None):
                         u'%s : %s « %s » déjà défini dans %s avec une autre '
                         u'valeur — la première gagne'
                         % (nom, regime, cle[:60], origine[regime][cle]))
+    #  PAS DE MOTIF, PAS DE SECTION : le dictionnaire servi reste celui d'avant
+    #  les motifs, octet pour octet, tant qu'aucun fichier n'en déclare.
+    if not dico['motif']:
+        del dico['motif']
     return dico, fautes
+
+
+#: LE TROU D'UN MOTIF : il capture un morceau quelconque, non vide, recopié
+#: dans la traduction (sentinel.i18n.js, sentMotifTraduire).
+TROU = u'{}'
+
+
+def motif_faute(cle, val):
+    """Ce qui interdit de servir un motif, ou None.
+
+    UN MOTIF SANS RIEN DE FIXE (« {} », « {} {} ») attraperait n'importe quel
+    texte ; UN MOTIF QUI N'EST PAS SA PROPRE NORMALISATION ne serait jamais
+    trouvé, le navigateur cherchant la forme normalisée ; UNE TRADUCTION QUI
+    N'A PAS AUTANT DE « {} » perdrait ou inventerait une donnée ; ET PAS
+    AUTANT DE « # », elle déplacerait des chiffres — le navigateur la
+    refuserait à l'affichage, autant la nommer ici."""
+    if not u''.join(cle.split(TROU)).strip():
+        return u'ne contient rien de fixe hors de ses « {} »'
+    if normaliser(cle) != cle:
+        return u'n\'est pas normalisé (attendu « %s »)' % normaliser(cle)[:60]
+    if val.count(TROU) != cle.count(TROU):
+        return u'a %d « {} » et sa traduction %d' % (cle.count(TROU), val.count(TROU))
+    if val.count(u'#') != cle.count(u'#'):
+        return u'a %d « # » et sa traduction %d' % (cle.count(u'#'), val.count(u'#'))
+    return None
 
 
 #: dossier → (signature, corps JSON, etag). Un seul dossier en pratique ; le
