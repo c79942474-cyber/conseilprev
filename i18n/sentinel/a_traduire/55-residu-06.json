@@ -1,0 +1,1632 @@
+{
+ "_lot": "55-residu-06",
+ "_mots": 2602,
+ "_rubrique": "residu mesure navigateur",
+ "texte": {
+  "Fluidité": {
+   "fr": "Fluidité",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "Indicateurs de performance et de dérive, incidents, revue périodique dont la fréquence dépend de la classe.": {
+   "fr": "Indicateurs de performance et de dérive, incidents, revue périodique dont la fréquence dépend de la classe.",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "Instruction technique & sécurité": {
+   "fr": "Instruction technique & sécurité",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "Interagit-il directement avec des personnes, ou génère-t-il du contenu diffusé ?": {
+   "fr": "Interagit-il directement avec des personnes, ou génère-t-il du contenu diffusé ?",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "L'usage est-il opéré par un tiers, ou repose-t-il sur un modèle fourni par un tiers ?": {
+   "fr": "L'usage est-il opéré par un tiers, ou repose-t-il sur un modèle fourni par un tiers ?",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "L'usage relève-t-il d'une pratique interdite (notation sociale, manipulation, reconnaissance des émotions au travail, police prédictive) ?": {
+   "fr": "L'usage relève-t-il d'une pratique interdite (notation sociale, manipulation, reconnaissance des émotions au travail, police prédictive) ?",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "L'usage touche-t-il un domaine de l'annexe III (emploi, éducation, crédit, services essentiels, migration, justice, biométrie, infrastructures critiques) ?": {
+   "fr": "L'usage touche-t-il un domaine de l'annexe III (emploi, éducation, crédit, services essentiels, migration, justice, biométrie, infrastructures critiques) ?",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "La matrice RACI détaillée — # rôles, # processus, variantes sectorielles — est portée par le module « Parties prenantes ». Ce module ne la duplique pas : il en applique les rôles au comité et au circuit.": {
+   "fr": "La matrice RACI détaillée — 18 rôles, 16 processus, variantes sectorielles — est portée par le module « Parties prenantes ». Ce module ne la duplique pas : il en applique les rôles au comité et au circuit.",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "La politique d'usage ne produit d'effet que si elle est connue.": {
+   "fr": "La politique d'usage ne produit d'effet que si elle est connue.",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "Le comité de gouvernance IA arbitre les usages de l'intelligence artificielle dans l'organisation : il autorise ou refuse un nouvel usage, tranche les arbitrages entre valeur métier et exposition, et suspend un système dont le suivi révèle une dérive.": {
+   "fr": "Le comité de gouvernance IA arbitre les usages de l'intelligence artificielle dans l'organisation : il autorise ou refuse un nouvel usage, tranche les arbitrages entre valeur métier et exposition, et suspend un système dont le suivi révèle une dérive.",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "Le nombre importe moins que la certitude de les avoir tous identifiés.": {
+   "fr": "Le nombre importe moins que la certitude de les avoir tous identifiés.",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "Le système produit-il une décision ou une évaluation concernant une personne ?": {
+   "fr": "Le système produit-il une décision ou une évaluation concernant une personne ?",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "Les indicateurs sans valeur ne sont pas à zéro : ils ne sont pas encore mesurés. Les revues et la sensibilisation se renseignent hors de ce module.": {
+   "fr": "Les indicateurs sans valeur ne sont pas à zéro : ils ne sont pas encore mesurés. Les revues et la sensibilisation se renseignent hors de ce module.",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "Mise en production encadrée": {
+   "fr": "Mise en production encadrée",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "Métiers": {
+   "fr": "Métiers",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "Orientation stratégique IA, arbitrage final": {
+   "fr": "Orientation stratégique IA, arbitrage final",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "Ouvrir Parties prenantes →": {
+   "fr": "Ouvrir Parties prenantes →",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "Part des usages qualifiés AI Act": {
+   "fr": "Part des usages qualifiés AI Act",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "Pourquoi il compte": {
+   "fr": "Pourquoi il compte",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "Protection des données, nécessité d'une AIPD": {
+   "fr": "Protection des données, nécessité d'une AIPD",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "Qualification réglementaire": {
+   "fr": "Qualification réglementaire",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "Qualification réglementaire, contrats, responsabilité": {
+   "fr": "Qualification réglementaire, contrats, responsabilité",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "Représentation des utilisateurs": {
+   "fr": "Représentation des utilisateurs",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "Responsable IA, enregistrement au registre · # étape(s)": {
+   "fr": "Responsable IA, enregistrement au registre · 2 étape(s)",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "Responsable de l'usage": {
+   "fr": "Responsable de l'usage",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "Revues périodiques à jour": {
+   "fr": "Revues périodiques à jour",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "Simple déclaration": {
+   "fr": "Simple déclaration",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "Suivi des systèmes": {
+   "fr": "Suivi des systèmes",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "Systèmes à haut risque en exploitation": {
+   "fr": "Systèmes à haut risque en exploitation",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "Traite-t-il des données personnelles (même non sensibles) ?": {
+   "fr": "Traite-t-il des données personnelles (même non sensibles) ?",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "Traite-t-il des données personnelles sensibles (santé, biométrie, opinions, appartenance syndicale) ?": {
+   "fr": "Traite-t-il des données personnelles sensibles (santé, biométrie, opinions, appartenance syndicale) ?",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "Un circuit lent se contourne. Ce chiffre mesure le risque de shadow AI autant que l'efficacité du comité.": {
+   "fr": "Un circuit lent se contourne. Ce chiffre mesure le risque de shadow AI autant que l'efficacité du comité.",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "Un comité qui n'a jamais rien refusé ne décide pas : il enregistre.": {
+   "fr": "Un comité qui n'a jamais rien refusé ne décide pas : il enregistre.",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "Un registre incomplet rend toutes les autres mesures fausses.": {
+   "fr": "Un registre incomplet rend toutes les autres mesures fausses.",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "Un usage non qualifié est un usage dont on ignore les obligations.": {
+   "fr": "Un usage non qualifié est un usage dont on ignore les obligations.",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "Une file qui s'allonge annonce des mises en production hors circuit.": {
+   "fr": "Une file qui s'allonge annonce des mises en production hors circuit.",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "Une revue en retard sur un système à haut risque est un écart de conformité.": {
+   "fr": "Une revue en retard sur un système à haut risque est un écart de conformité.",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "Usages déclarés au registre": {
+   "fr": "Usages déclarés au registre",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "Validation de la valeur d'usage et de l'appropriation": {
+   "fr": "Validation de la valeur d'usage et de l'appropriation",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "Voie allégée": {
+   "fr": "Voie allégée",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "accepter formellement un risque résiduel, avec sa justification écrite": {
+   "fr": "accepter formellement un risque résiduel, avec sa justification écrite",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "arbitrer un désaccord entre valeur métier et exposition réglementaire": {
+   "fr": "arbitrer un désaccord entre valeur métier et exposition réglementaire",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "aucune au-delà d'un trimestre": {
+   "fr": "aucune au-delà d'un trimestre",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "autoriser la mise en production d'un système d'IA à haut risque": {
+   "fr": "autoriser la mise en production d'un système d'IA à haut risque",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "autoriser un usage porté par un tiers sur les données de l'organisation": {
+   "fr": "autoriser un usage porté par un tiers sur les données de l'organisation",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "autoriser un usage traitant des données personnelles sensibles": {
+   "fr": "autoriser un usage traitant des données personnelles sensibles",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "avis technique motivé": {
+   "fr": "avis technique motivé",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "classe présumée & obligations": {
+   "fr": "classe présumée & obligations",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "connu et documenté": {
+   "fr": "connu et documenté",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "décision tracée": {
+   "fr": "décision tracée",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "décisionnaire": {
+   "fr": "décisionnaire",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "fiche d'usage": {
+   "fr": "fiche d'usage",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "haut risque présumé, données sensibles, ou usage porté par un tiers": {
+   "fr": "haut risque présumé, données sensibles, ou usage porté par un tiers",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "inscription au registre": {
+   "fr": "inscription au registre",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "l'opportunité métier d'un cas d'usage (métiers, avant saisine)": {
+   "fr": "l'opportunité métier d'un cas d'usage (métiers, avant saisine)",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "le choix technique d'un modèle ou d'un fournisseur (IT, sur cahier des charges)": {
+   "fr": "le choix technique d'un modèle ou d'un fournisseur (IT, sur cahier des charges)",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "les décisions de sûreté ou de sécurité des personnes (instances dédiées)": {
+   "fr": "les décisions de sûreté ou de sécurité des personnes (instances dédiées)",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "non nul": {
+   "fr": "non nul",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "revue périodique": {
+   "fr": "revue périodique",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "risque limité, données non sensibles, périmètre restreint": {
+   "fr": "risque limité, données non sensibles, périmètre restreint",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "suspendre ou retirer un système en exploitation": {
+   "fr": "suspendre ou retirer un système en exploitation",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "trimestrielle, avec séance extraordinaire sur demande motivée": {
+   "fr": "trimestrielle, avec séance extraordinaire sur demande motivée",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "usage bureautique d'un outil déjà autorisé, sans donnée sensible": {
+   "fr": "usage bureautique d'un outil déjà autorisé, sans donnée sensible",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "valider la politique interne d'usage de l'IA et ses révisions": {
+   "fr": "valider la politique interne d'usage de l'IA et ses révisions",
+   "en": "",
+   "_pages": [
+    "gouvernance"
+   ]
+  },
+  "— Conservation # ans (delai de prescription contractuelle usuel) — Art. #(#)(e) RGPD. Suppression manuelle possible a tout moment. Accessible à vous et à CONSEILPREV (support/audit).": {
+   "fr": "— Conservation 3 ans (delai de prescription contractuelle usuel) — Art. 5(1)(e) RGPD. Suppression manuelle possible a tout moment. Accessible à vous et à CONSEILPREV (support/audit).",
+   "en": "",
+   "_pages": [
+    "historique"
+   ]
+  },
+  "— Toutes les pages —": {
+   "fr": "— Toutes les pages —",
+   "en": "",
+   "_pages": [
+    "historique"
+   ]
+  },
+  "Bloc # sur # · Vue d’ensemble IA Act — À remplir maintenant": {
+   "fr": "Bloc 1 sur 2 · Vue d’ensemble IA Act — À remplir maintenant",
+   "en": "",
+   "_pages": [
+    "ia-act-hub"
+   ]
+  },
+  "Rien à saisir : l'écran explique. Il se marque « lu », et « lu » n'est pas vert.": {
+   "fr": "Rien à saisir : l'écran explique. Il se marque « lu », et « lu » n'est pas vert.",
+   "en": "",
+   "_pages": [
+    "ia-act-hub",
+    "iso27001-millesime",
+    "nist-cadre",
+    "nist-genai",
+    "owasp-pont"
+   ]
+  },
+  "+ # (modalités)": {
+   "fr": "+ 50.5 (modalités)",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Actualites du site (redaction assistee par IA)": {
+   "fr": "Actualites du site (redaction assistee par IA)",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Analyses generees par IA dans les modules Sentinel": {
+   "fr": "Analyses generees par IA dans les modules Sentinel",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Applique : aucun hypertrucage produit ; les actualites du site invoquent l'exception de controle editorial, publiee et nominative.": {
+   "fr": "Applique : aucun hypertrucage produit ; les actualites du site invoquent l'exception de controle editorial, publiee et nominative.",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Applique : les assistants du site public et le Copilote Sentinel affichent la mention des la premiere interaction.": {
+   "fr": "Applique : les assistants du site public et le Copilote Sentinel affichent la mention des la premiere interaction.",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Applique : mentions affichees des l'ouverture de l'assistant, et non reportees dans une page de conditions.": {
+   "fr": "Applique : mentions affichees des l'ouverture de l'assistant, et non reportees dans une page de conditions.",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Applique : proprietes de fichier (ai-generated, reference au #) inserees dans chaque document exporte, et relues a chaque verification.": {
+   "fr": "Applique : proprietes de fichier (ai-generated, reference au 50.2) inserees dans chaque document exporte, et relues a chaque verification.",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Assistants conversationnels du site public (#)": {
+   "fr": "Assistants conversationnels du site public (2)",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Aucune": {
+   "fr": "Aucune",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Aucune mention visible : le §# est un marquage technique, pas un etiquetage a l'ecran.": {
+   "fr": "Aucune mention visible : le §2 est un marquage technique, pas un etiquetage a l'ecran.",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Aucune.": {
+   "fr": "Aucune.",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Bandeau \"AI GENERATED\" sur la reponse — EN PLACE": {
+   "fr": "Bandeau \"AI GENERATED\" sur la reponse — EN PLACE",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Bandeau \"AI GENERATED\" sur la sortie — EN PLACE": {
+   "fr": "Bandeau \"AI GENERATED\" sur la sortie — EN PLACE",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Bandeau « AI GENERATED » sur la synthese de l'explorateur": {
+   "fr": "Bandeau « AI GENERATED » sur la synthese de l'explorateur",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Chaque ligne n'invoque que les paragraphes qui obligent son role": {
+   "fr": "Chaque ligne n'invoque que les paragraphes qui obligent son role",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Controle editorial humain (art. # par. #) : examen humain systematique avant publication ; responsabilite editoriale assumee nommement": {
+   "fr": "Controle editorial humain (art. 50 par. 4) : examen humain systematique avant publication ; responsabilite editoriale assumee nommement",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Copilote Sentinel (assistant de la plateforme)": {
+   "fr": "Copilote Sentinel (assistant de la plateforme)",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Documents (texte et indicateurs)": {
+   "fr": "Documents (texte et indicateurs)",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Dû": {
+   "fr": "Dû",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Fonction d'assistance a l'edition standard, ou absence de modification substantielle des donnees d'entree.": {
+   "fr": "Fonction d'assistance a l'edition standard, ou absence de modification substantielle des donnees d'entree.",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "L'article # cree une transparence ciblee. Il n'impose pas d'etiqueter tous les contenus « generes par IA » : chaque paragraphe vise une situation precise et un destinataire precis. Ce que la maison fait au-dela est un engagement, pas une obligation — et le dire est ce qui donne sa valeur au marquage la ou il est du.": {
+   "fr": "L'article 50 cree une transparence ciblee. Il n'impose pas d'etiqueter tous les contenus « generes par IA » : chaque paragraphe vise une situation precise et un destinataire precis. Ce que la maison fait au-dela est un engagement, pas une obligation — et le dire est ce qui donne sa valeur au marquage la ou il est du.",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "L'information doit etre claire, distincte et fournie au plus tard lors de la premiere interaction ou exposition.": {
+   "fr": "L'information doit etre claire, distincte et fournie au plus tard lors de la premiere interaction ou exposition.",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Le cadre de l'article # est complet et coherent (# §, # cas, # niveaux)": {
+   "fr": "Le cadre de l'article 50 est complet et coherent (5 §, 7 cas, 3 niveaux)",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Les hypertrucages (deepfakes) doivent etre signales comme artificiellement generes ou manipules. Les textes publies pour informer le public sur des questions d'interet public doivent l'etre aussi lorsqu'ils sont generes ou manipules par IA.": {
+   "fr": "Les hypertrucages (deepfakes) doivent etre signales comme artificiellement generes ou manipules. Les textes publies pour informer le public sur des questions d'interet public doivent l'etre aussi lorsqu'ils sont generes ou manipules par IA.",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Les personnes doivent etre informees qu'elles interagissent avec un systeme d'IA.": {
+   "fr": "Les personnes doivent etre informees qu'elles interagissent avec un systeme d'IA.",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Les personnes exposees a un systeme de reconnaissance des emotions ou de categorisation biometrique doivent en etre informees.": {
+   "fr": "Les personnes exposees a un systeme de reconnaissance des emotions ou de categorisation biometrique doivent en etre informees.",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Les systemes generant du texte, de l'image, de l'audio ou de la video synthetiques doivent permettre un marquage DETECTABLE PAR UNE MACHINE du contenu genere ou manipule.": {
+   "fr": "Les systemes generant du texte, de l'image, de l'audio ou de la video synthetiques doivent permettre un marquage DETECTABLE PAR UNE MACHINE du contenu genere ou manipule.",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Marquage lisible par machine dans les documents exportes": {
+   "fr": "Marquage lisible par machine dans les documents exportes",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Mention \"AI GENERATED\" / \"AI ASSISTED\" apposee sur le document — EN PLACE": {
+   "fr": "Mention \"AI GENERATED\" / \"AI ASSISTED\" apposee sur le document — EN PLACE",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Mention d'IA affichee des la premiere interaction (art. #) — EN PLACE": {
+   "fr": "Mention d'IA affichee des la premiere interaction (art. 50.1) — EN PLACE",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Mention d'IA des la premiere interaction — assistant Sentinel": {
+   "fr": "Mention d'IA des la premiere interaction — assistant Sentinel",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Mention d'IA des la premiere interaction — chat du site public": {
+   "fr": "Mention d'IA des la premiere interaction — chat du site public",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Mention visible ; metadonnees lisibles par machine a l'export": {
+   "fr": "Mention visible ; metadonnees lisibles par machine a l'export",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Mention visible apposee sur la sortie ; metadonnees dans les documents exportes": {
+   "fr": "Mention visible apposee sur la sortie ; metadonnees dans les documents exportes",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Mesuré": {
+   "fr": "Mesuré",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Mesuré le #-#-# #:#:# UTC — les fichiers servis sont relus à chaque mesure ; la case « Conforme » reste une attestation humaine.": {
+   "fr": "Mesuré le 2026-09-25 07:59:37 UTC — les fichiers servis sont relus à chaque mesure ; la case « Conforme » reste une attestation humaine.",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Metadonnees lisibles par machine (ai-generated, ai-disclosure) inserees dans le document — EN PLACE": {
+   "fr": "Metadonnees lisibles par machine (ai-generated, ai-disclosure) inserees dans le document — EN PLACE",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Modalités": {
+   "fr": "Modalités",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Ne concerne aucun contenu genere : c'est l'exposition au systeme qui declenche l'information.": {
+   "fr": "Ne concerne aucun contenu genere : c'est l'exposition au systeme qui declenche l'information.",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Ne cree aucune obligation nouvelle : il regit la forme de celles des §# a §# qui jouent deja.": {
+   "fr": "Ne cree aucune obligation nouvelle : il regit la forme de celles des §1 a §4 qui jouent deja.",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Ni les contenus internes, ni les livrables remis a un client : la publication au public, et son objet, sont la condition.": {
+   "fr": "Ni les contenus internes, ni les livrables remis a un client : la publication au public, et son objet, sont la condition.",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Non requis : contenu NON genere par IA (reprise sans reformulation ; la selection par mots-cles ne constitue pas une generation)": {
+   "fr": "Non requis : contenu NON genere par IA (reprise sans reformulation ; la selection par mots-cles ne constitue pas une generation)",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Non requis : exception invoquee — mention de transparence et de responsabilite editoriale publiee sur la page Actualites — EN PLACE": {
+   "fr": "Non requis : exception invoquee — mention de transparence et de responsabilite editoriale publiee sur la page Actualites — EN PLACE",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Obligation du deployeur": {
+   "fr": "Obligation du deployeur",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Obligation du fournisseur": {
+   "fr": "Obligation du fournisseur",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Oeuvre manifestement artistique, creative, satirique ou de fiction : transparence allegee, sans nuire a l'oeuvre. Pour les textes : examen humain ou controle editorial avec une responsabilite editoriale assumee.": {
+   "fr": "Oeuvre manifestement artistique, creative, satirique ou de fiction : transparence allegee, sans nuire a l'oeuvre. Pour les textes : examen humain ou controle editorial avec une responsabilite editoriale assumee.",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Rapports generes par Sentinel (IA Act annuel, audit RGPD, attestation art. #)": {
+   "fr": "Rapports generes par Sentinel (IA Act annuel, audit RGPD, attestation art. 50)",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Rien sur le contenu produit : c'est l'interaction qui est signalee, pas ce qui en sort.": {
+   "fr": "Rien sur le contenu produit : c'est l'interaction qui est signalee, pas ce qui en sort.",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Rôle": {
+   "fr": "Rôle",
+   "en": "",
+   "_pages": [
+    "ia50",
+    "rgpd-site"
+   ]
+  },
+  "SANS OBJET, et c'est examine, pas oublie : la plateforme n'exploite aucun systeme de reconnaissance des emotions ni de categorisation biometrique, et ne traite aucune donnee biometrique.": {
+   "fr": "SANS OBJET, et c'est examine, pas oublie : la plateforme n'exploite aucun systeme de reconnaissance des emotions ni de categorisation biometrique, et ne traite aucune donnee biometrique.",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Sans objet (echange interactif)": {
+   "fr": "Sans objet (echange interactif)",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Sans objet (echange interactif, non diffuse comme publication)": {
+   "fr": "Sans objet (echange interactif, non diffuse comme publication)",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Sans objet (redaction assistee, publication sous responsabilite editoriale)": {
+   "fr": "Sans objet (redaction assistee, publication sous responsabilite editoriale)",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Sauf si cela est evident au regard du contexte d'usage.": {
+   "fr": "Sauf si cela est evident au regard du contexte d'usage.",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Synthese de la base de connaissance (explorateur RAG)": {
+   "fr": "Synthese de la base de connaissance (explorateur RAG)",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Texte (reponses aux clients, moteurs Claude et Mistral)": {
+   "fr": "Texte (reponses aux clients, moteurs Claude et Mistral)",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Texte (reponses aux visiteurs)": {
+   "fr": "Texte (reponses aux visiteurs)",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Texte d'analyse produit par IA": {
+   "fr": "Texte d'analyse produit par IA",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Texte d'interet public elabore avec l'assistance d'une IA": {
+   "fr": "Texte d'interet public elabore avec l'assistance d'une IA",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Texte de synthese genere par IA, avec citations": {
+   "fr": "Texte de synthese genere par IA, avec citations",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Titres et resumes repris des sources externes": {
+   "fr": "Titres et resumes repris des sources externes",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Usages autorises a des fins de detection ou de prevention d'infractions, dans les conditions prevues par le reglement.": {
+   "fr": "Usages autorises a des fins de detection ou de prevention d'infractions, dans les conditions prevues par le reglement.",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "Veille reglementaire (flux RSS du site)": {
+   "fr": "Veille reglementaire (flux RSS du site)",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "a arbitrer (qualification ou reference, pas les deux) — « Assistants conversationnels du site publ » declare « deployeur » mais invoque l'art. #, qui oblige le fournisseur ; « Copilote Sentinel (assistant de la plate » declare « deployeur » mais invoque l'art. #, qui oblige le fournisseur": {
+   "fr": "a arbitrer (qualification ou reference, pas les deux) — « Assistants conversationnels du site publ » declare « deployeur » mais invoque l'art. 50.1, qui oblige le fournisseur ; « Copilote Sentinel (assistant de la plate » declare « deployeur » mais invoque l'art. 50.1, qui oblige le fournisseur",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "bandeau « AI GENERATED » present dans le rendu de la synthese (sentinel.html)": {
+   "fr": "bandeau « AI GENERATED » present dans le rendu de la synthese (sentinel.html)",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "cadre relu a l'instant : # paragraphes avec destinataire, §# motive sans objet, # cas a verdict ferme, # obligations au-dela de l'AI Act": {
+   "fr": "cadre relu a l'instant : 5 paragraphes avec destinataire, §3 motive sans objet, 7 cas a verdict ferme, 3 obligations au-dela de l'AI Act",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "deployeur": {
+   "fr": "deployeur",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "document genere a l'instant : proprietes du fichier portant « AI-generated », le paragraphe #, le fournisseur qui le doit, et la mention visible donnee pour un engagement (docProps/core.xml lu, pas suppose)": {
+   "fr": "document genere a l'instant : proprietes du fichier portant « AI-generated », le paragraphe 50.2, le fournisseur qui le doit, et la mention visible donnee pour un engagement (docProps/core.xml lu, pas suppose)",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "fournisseur": {
+   "fr": "fournisseur",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "la mention de responsabilite editoriale est publiee sur la page Actualites — la realite de l'examen humain reste une attestation, qu'aucune machine ne peut mesurer (art. #)": {
+   "fr": "la mention de responsabilite editoriale est publiee sur la page Actualites — la realite de l'examen humain reste une attestation, qu'aucune machine ne peut mesurer (art. 50.4)",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "mention « Vous interagissez avec une IA » presente dans index.html, avec la reference au Regl. (UE) #/#": {
+   "fr": "mention « Vous interagissez avec une IA » presente dans index.html, avec la reference au Regl. (UE) 2024/1689",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "mention « Vous interagissez avec une IA » presente dans sentinel.html, avec la reference au Regl. (UE) #/#": {
+   "fr": "mention « Vous interagissez avec une IA » presente dans sentinel.html, avec la reference au Regl. (UE) 2024/1689",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "mesuré ✓": {
+   "fr": "mesuré ✓",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "— Entree en application des obligations de transparence (art. #) : marquage (fournisseurs) et etiquetage (deployeurs).": {
+   "fr": "— Entree en application des obligations de transparence (art. 50) : marquage (fournisseurs) et etiquetage (deployeurs).",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "— Fin de la periode transitoire pour les systemes deja sur le marche.": {
+   "fr": "— Fin de la periode transitoire pour les systemes deja sur le marche.",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "— Solution d'interoperabilite du marquage et acces a la detection (fournisseurs).": {
+   "fr": "— Solution d'interoperabilite du marquage et acces a la detection (fournisseurs).",
+   "en": "",
+   "_pages": [
+    "ia50"
+   ]
+  },
+  "# Compréhension de l'organisation et de son contexte": {
+   "fr": "4.1 Compréhension de l'organisation et de son contexte",
+   "en": "",
+   "_pages": [
+    "iso27001"
+   ]
+  },
+  "# Compréhension des besoins et des attentes des parties intéressées": {
+   "fr": "4.2 Compréhension des besoins et des attentes des parties intéressées",
+   "en": "",
+   "_pages": [
+    "iso27001",
+    "iso42001"
+   ]
+  },
+  "# Détermination du domaine d'application du système de management de la sécurité de l'information": {
+   "fr": "4.3 Détermination du domaine d'application du système de management de la sécurité de l'information",
+   "en": "",
+   "_pages": [
+    "iso27001"
+   ]
+  },
+  "# Politique": {
+   "fr": "5.2 Politique",
+   "en": "",
+   "_pages": [
+    "iso27001"
+   ]
+  },
+  "# Système de management de la sécurité de l'information": {
+   "fr": "4.4 Système de management de la sécurité de l'information",
+   "en": "",
+   "_pages": [
+    "iso27001"
+   ]
+  },
+  "#. Amélioration": {
+   "fr": "10. Amélioration",
+   "en": "",
+   "_pages": [
+    "iso27001",
+    "iso42001"
+   ]
+  },
+  "#. Contexte de l'organisation": {
+   "fr": "4. Contexte de l'organisation",
+   "en": "",
+   "_pages": [
+    "iso27001"
+   ]
+  },
+  "#. Évaluation des performances": {
+   "fr": "9. Évaluation des performances",
+   "en": "",
+   "_pages": [
+    "iso27001",
+    "iso42001"
+   ]
+  },
+  ": cet article ne se reprend pas d’un autre système de management ·": {
+   "fr": ": cet article ne se reprend pas d’un autre système de management ·",
+   "en": "",
+   "_pages": [
+    "iso27001"
+   ]
+  },
+  ": se greffe sur un système de management déjà en place (ISO #, #…).": {
+   "fr": ": se greffe sur un système de management déjà en place (ISO 42001, 9001…).",
+   "en": "",
+   "_pages": [
+    "iso27001",
+    "iso42001"
+   ]
+  },
+  "Actions à mettre en œuvre face aux risques et opportunités — Généralités": {
+   "fr": "Actions à mettre en œuvre face aux risques et opportunités — Généralités",
+   "en": "",
+   "_pages": [
+    "iso27001",
+    "iso42001"
+   ]
+  },
+  "Amélioration continue": {
+   "fr": "Amélioration continue",
+   "en": "",
+   "_pages": [
+    "iso27001",
+    "iso42001"
+   ]
+  },
+  "Appréciation des risques de sécurité de l'information": {
+   "fr": "Appréciation des risques de sécurité de l'information",
+   "en": "",
+   "_pages": [
+    "iso27001"
+   ]
+  },
+  "Audit interne — Généralités": {
+   "fr": "Audit interne — Généralités",
+   "en": "",
+   "_pages": [
+    "iso27001",
+    "iso42001"
+   ]
+  },
+  "Bloc # sur # · Articles # à # — Pas encore atteint": {
+   "fr": "Bloc 3 sur 4 · Articles 4 à 10 — Pas encore atteint",
+   "en": "",
+   "_pages": [
+    "iso27001"
+   ]
+  },
+  "Ce qu'on mesure, comment, quand, par qui — et quand les résultats sont évalués.": {
+   "fr": "Ce qu'on mesure, comment, quand, par qui — et quand les résultats sont évalués.",
+   "en": "",
+   "_pages": [
+    "iso27001"
+   ]
+  },
+  "Ce que la direction doit avoir sous les yeux : suites des revues précédentes, changements, performance, non-conformités, retours des parties intéressées, résultats de l'appréciation des risques.": {
+   "fr": "Ce que la direction doit avoir sous les yeux : suites des revues précédentes, changements, performance, non-conformités, retours des parties intéressées, résultats de l'appréciation des risques.",
+   "en": "",
+   "_pages": [
+    "iso27001"
+   ]
+  },
+  "Ce que le système doit consigner, et ce que l'organisme juge nécessaire d'y ajouter.": {
+   "fr": "Ce que le système doit consigner, et ce que l'organisme juge nécessaire d'y ajouter.",
+   "en": "",
+   "_pages": [
+    "iso27001",
+    "iso42001"
+   ]
+  },
+  "Choisir les options, déterminer les mesures nécessaires, les comparer à l'annexe A pour vérifier qu'aucune n'a été omise, produire la déclaration d'applicabilité, formuler le plan de traitement — et faire APPROUVER ce plan et ACCEPTER les risques résiduels par les propriétaires des risques.": {
+   "fr": "Choisir les options, déterminer les mesures nécessaires, les comparer à l'annexe A pour vérifier qu'aucune n'a été omise, produire la déclaration d'applicabilité, formuler le plan de traitement — et faire APPROUVER ce plan et ACCEPTER les risques résiduels par les propriétaires des risques.",
+   "en": "",
+   "_pages": [
+    "iso27001"
+   ]
+  },
+  "Compréhension de l'organisation et de son contexte": {
+   "fr": "Compréhension de l'organisation et de son contexte",
+   "en": "",
+   "_pages": [
+    "iso27001"
+   ]
+  },
+  "Compréhension des besoins et des attentes des parties intéressées": {
+   "fr": "Compréhension des besoins et des attentes des parties intéressées",
+   "en": "",
+   "_pages": [
+    "iso27001",
+    "iso42001"
+   ]
+  },
+  "Compétences": {
+   "fr": "Compétences",
+   "en": "",
+   "_pages": [
+    "iso27001",
+    "iso42001"
+   ]
+  },
+  "Création et mise à jour des informations documentées": {
+   "fr": "Création et mise à jour des informations documentées",
+   "en": "",
+   "_pages": [
+    "iso27001",
+    "iso42001"
+   ]
+  },
+  "C’est le": {
+   "fr": "C’est le",
+   "en": "",
+   "_pages": [
+    "iso27001",
+    "iso42001"
+   ]
+  },
+  "Des objectifs mesurables, datés, avec un responsable — et le plan qui dit comment on y arrive.": {
+   "fr": "Des objectifs mesurables, datés, avec un responsable — et le plan qui dit comment on y arrive.",
+   "en": "",
+   "_pages": [
+    "iso27001",
+    "iso42001"
+   ]
+  },
+  "Disponibilité, protection, distribution, conservation, suppression — y compris pour les documents d'origine externe.": {
+   "fr": "Disponibilité, protection, distribution, conservation, suppression — y compris pour les documents d'origine externe.",
+   "en": "",
+   "_pages": [
+    "iso27001"
+   ]
+  },
+  "Définir les CRITÈRES — dont les critères d'acceptation — AVANT d'apprécier ; puis identifier, analyser et évaluer les risques pesant sur la confidentialité, l'intégrité et la disponibilité, en désignant un propriétaire pour chacun.": {
+   "fr": "Définir les CRITÈRES — dont les critères d'acceptation — AVANT d'apprécier ; puis identifier, analyser et évaluer les risques pesant sur la confidentialité, l'intégrité et la disponibilité, en désignant un propriétaire pour chacun.",
+   "en": "",
+   "_pages": [
+    "iso27001"
+   ]
+  },
+  "Détermination du domaine d'application du système de management de la sécurité de l'information": {
+   "fr": "Détermination du domaine d'application du système de management de la sécurité de l'information",
+   "en": "",
+   "_pages": [
+    "iso27001"
+   ]
+  },
+  "Faire tourner ce qui a été planifié, maîtriser les changements, et tenir les processus externalisés — la sous-traitance ne sort pas du périmètre.": {
+   "fr": "Faire tourner ce qui a été planifié, maîtriser les changements, et tenir les processus externalisés — la sous-traitance ne sort pas du périmètre.",
+   "en": "",
+   "_pages": [
+    "iso27001"
+   ]
+  },
+  "Fréquence, méthodes, responsabilités, comptes rendus — et des auditeurs qui n'auditent pas leur propre travail.": {
+   "fr": "Fréquence, méthodes, responsabilités, comptes rendus — et des auditeurs qui n'auditent pas leur propre travail.",
+   "en": "",
+   "_pages": [
+    "iso27001"
+   ]
+  },
+  "Identification, format, revue et approbation : la discipline documentaire ordinaire des systèmes de management.": {
+   "fr": "Identification, format, revue et approbation : la discipline documentaire ordinaire des systèmes de management.",
+   "en": "",
+   "_pages": [
+    "iso27001",
+    "iso42001"
+   ]
+  },
+  "Informations documentées — Généralités": {
+   "fr": "Informations documentées — Généralités",
+   "en": "",
+   "_pages": [
+    "iso27001",
+    "iso42001"
+   ]
+  },
+  "L'appréciation, exécutée à intervalles planifiés ET quand quelque chose change de façon notable, avec ses résultats conservés.": {
+   "fr": "L'appréciation, exécutée à intervalles planifiés ET quand quelque chose change de façon notable, avec ses résultats conservés.",
+   "en": "",
+   "_pages": [
+    "iso27001"
+   ]
+  },
+  "La direction revoit le système à intervalles planifiés.": {
+   "fr": "La direction revoit le système à intervalles planifiés.",
+   "en": "",
+   "_pages": [
+    "iso27001",
+    "iso42001"
+   ]
+  },
+  "La direction s'engage, et ça se prouve : ressources allouées, arbitrages rendus, sujet porté au plus haut niveau.": {
+   "fr": "La direction s'engage, et ça se prouve : ressources allouées, arbitrages rendus, sujet porté au plus haut niveau.",
+   "en": "",
+   "_pages": [
+    "iso27001",
+    "iso42001"
+   ]
+  },
+  "Le cadre : ce que la planification doit produire, et sur quoi elle s'appuie.": {
+   "fr": "Le cadre : ce que la planification doit produire, et sur quoi elle s'appuie.",
+   "en": "",
+   "_pages": [
+    "iso27001",
+    "iso42001"
+   ]
+  },
+  "Le document court qui fixe le cap de la sécurité de l'information et engage la direction qui le signe.": {
+   "fr": "Le document court qui fixe le cap de la sécurité de l'information et engage la direction qui le signe.",
+   "en": "",
+   "_pages": [
+    "iso27001"
+   ]
+  },
+  "Le plan de traitement, mis en œuvre, et la preuve qu'il l'a été.": {
+   "fr": "Le plan de traitement, mis en œuvre, et la preuve qu'il l'a été.",
+   "en": "",
+   "_pages": [
+    "iso27001",
+    "iso42001"
+   ]
+  },
+  "Le système s'audite lui-même, à intervalles planifiés.": {
+   "fr": "Le système s'audite lui-même, à intervalles planifiés.",
+   "en": "",
+   "_pages": [
+    "iso27001",
+    "iso42001"
+   ]
+  },
+  "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : seul un organisme de certification accrédité la prononce, au terme d'un audit en deux étapes.": {
+   "fr": "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : seul un organisme de certification accrédité la prononce, au terme d'un audit en deux étapes.",
+   "en": "",
+   "_pages": [
+    "iso27001-risques",
+    "iso27001-soa",
+    "iso27001",
+    "iso27001-millesime",
+    "iso42001"
+   ]
+  },
+  "Les changements du système se planifient ; ils ne se constatent pas après coup. Article ajouté par la version #.": {
+   "fr": "Les changements du système se planifient ; ils ne se constatent pas après coup. Article ajouté par la version 2022.",
+   "en": "",
+   "_pages": [
+    "iso27001"
+   ]
+  },
+  "Les décisions prises — et les ressources engagées pour les tenir.": {
+   "fr": "Les décisions prises — et les ressources engagées pour les tenir.",
+   "en": "",
+   "_pages": [
+    "iso27001",
+    "iso42001"
+   ]
+  },
+  "Les moyens humains, techniques et financiers, déterminés et fournis — pas espérés.": {
+   "fr": "Les moyens humains, techniques et financiers, déterminés et fournis — pas espérés.",
+   "en": "",
+   "_pages": [
+    "iso27001",
+    "iso42001"
+   ]
+  },
+  "Maîtrise des informations documentées": {
+   "fr": "Maîtrise des informations documentées",
+   "en": "",
+   "_pages": [
+    "iso27001",
+    "iso42001"
+   ]
+  },
+  "Nommer ce qui, dehors et dedans, pèse sur la sécurité de l'information : marché, droit applicable, dépendances techniques, maturité interne.": {
+   "fr": "Nommer ce qui, dehors et dedans, pèse sur la sécurité de l'information : marché, droit applicable, dépendances techniques, maturité interne.",
+   "en": "",
+   "_pages": [
+    "iso27001"
+   ]
+  },
+  "Non-conformité et action corrective": {
+   "fr": "Non-conformité et action corrective",
+   "en": "",
+   "_pages": [
+    "iso27001",
+    "iso42001"
+   ]
+  },
+  "Objectifs de sécurité de l'information et plans pour les atteindre": {
+   "fr": "Objectifs de sécurité de l'information et plans pour les atteindre",
+   "en": "",
+   "_pages": [
+    "iso27001"
+   ]
+  },
+  "Pertinence, adéquation et efficacité du système, améliorées en continu.": {
+   "fr": "Pertinence, adéquation et efficacité du système, améliorées en continu.",
+   "en": "",
+   "_pages": [
+    "iso27001",
+    "iso42001"
+   ]
+  },
+  "Planification des modifications": {
+   "fr": "Planification des modifications",
+   "en": "",
+   "_pages": [
+    "iso27001"
+   ]
+  },
+  "Planification et maîtrise opérationnelles": {
+   "fr": "Planification et maîtrise opérationnelles",
+   "en": "",
+   "_pages": [
+    "iso27001",
+    "iso42001"
+   ]
+  },
+  "Programme d'audit interne": {
+   "fr": "Programme d'audit interne",
+   "en": "",
+   "_pages": [
+    "iso27001",
+    "iso42001"
+   ]
+  },
+  "Propre à la sécurité — # / #": {
+   "fr": "Propre à la sécurité — 0 / 7",
+   "en": "",
+   "_pages": [
+    "iso27001"
+   ]
+  },
+  "Que les personnes concernées sachent ce qu'on attend d'elles et ce qu'un manquement produit.": {
+   "fr": "Que les personnes concernées sachent ce qu'on attend d'elles et ce qu'un manquement produit.",
+   "en": "",
+   "_pages": [
+    "iso27001",
+    "iso42001"
+   ]
+  },
+  "Qui communique quoi, à qui, quand et par quel canal — en interne comme au dehors.": {
+   "fr": "Qui communique quoi, à qui, quand et par quel canal — en interne comme au dehors.",
+   "en": "",
+   "_pages": [
+    "iso27001",
+    "iso42001"
+   ]
+  },
+  "Qui décide, qui met en œuvre, qui contrôle — et qui rend compte à la direction de la performance du système.": {
+   "fr": "Qui décide, qui met en œuvre, qui contrôle — et qui rend compte à la direction de la performance du système.",
+   "en": "",
+   "_pages": [
+    "iso27001"
+   ]
+  },
+  "Recenser qui exige quoi — clients, régulateurs, assureurs, salariés — et lesquelles de ces exigences seront traitées par le système de management.": {
+   "fr": "Recenser qui exige quoi — clients, régulateurs, assureurs, salariés — et lesquelles de ces exigences seront traitées par le système de management.",
+   "en": "",
+   "_pages": [
+    "iso27001"
+   ]
+  },
+  "Revue de direction — Généralités": {
+   "fr": "Revue de direction — Généralités",
+   "en": "",
+   "_pages": [
+    "iso27001",
+    "iso42001"
+   ]
+  },
+  "Réagir, en corriger les conséquences, chercher la cause, agir sur la cause, et vérifier que ça a marché.": {
+   "fr": "Réagir, en corriger les conséquences, chercher la cause, agir sur la cause, et vérifier que ça a marché.",
+   "en": "",
+   "_pages": [
+    "iso27001",
+    "iso42001"
+   ]
+  },
+  "Résultats de la revue de direction": {
+   "fr": "Résultats de la revue de direction",
+   "en": "",
+   "_pages": [
+    "iso27001",
+    "iso42001"
+   ]
+  },
+  "Rôles, responsabilités et autorités au sein de l'organisation": {
+   "fr": "Rôles, responsabilités et autorités au sein de l'organisation",
+   "en": "",
+   "_pages": [
+    "iso27001"
+   ]
+  },
+  "Savoir quelles compétences le système exige, vérifier qu'on les a, et combler l'écart.": {
+   "fr": "Savoir quelles compétences le système exige, vérifier qu'on les a, et combler l'écart.",
+   "en": "",
+   "_pages": [
+    "iso27001",
+    "iso42001"
+   ]
+  },
+  "Surveillance, mesure, analyse et évaluation": {
+   "fr": "Surveillance, mesure, analyse et évaluation",
+   "en": "",
+   "_pages": [
+    "iso27001",
+    "iso42001"
+   ]
+  },
+  "Système de management de la sécurité de l'information": {
+   "fr": "Système de management de la sécurité de l'information",
+   "en": "",
+   "_pages": [
+    "iso27001"
+   ]
+  },
+  "Traitement des risques de sécurité de l'information": {
+   "fr": "Traitement des risques de sécurité de l'information",
+   "en": "",
+   "_pages": [
+    "iso27001"
+   ]
+  },
+  "taux qui dit l’effort réel. Les articles « mutualisables » se greffent sur un système de management déjà en place — ISO # partage exactement la même structure — et ceux marqués « propre à la sécurité » sont les # qui ne se reprennent de nulle part.": {
+   "fr": "taux qui dit l’effort réel. Les articles « mutualisables » se greffent sur un système de management déjà en place — ISO 42001 partage exactement la même structure — et ceux marqués « propre à la sécurité » sont les 7 qui ne se reprennent de nulle part.",
+   "en": "",
+   "_pages": [
+    "iso27001"
+   ]
+  },
+  "Écrire ce qui est dedans et ce qui est dehors. C'est la décision la plus structurante de la certification : tout ce qui n'est pas exclu par écrit sera audité.": {
+   "fr": "Écrire ce qui est dedans et ce qui est dehors. C'est la décision la plus structurante de la certification : tout ce qui n'est pas exclu par écrit sera audité.",
+   "en": "",
+   "_pages": [
+    "iso27001"
+   ]
+  },
+  "Éléments d'entrée de la revue de direction": {
+   "fr": "Éléments d'entrée de la revue de direction",
+   "en": "",
+   "_pages": [
+    "iso27001",
+    "iso42001"
+   ]
+  },
+  "Établir, mettre en œuvre, tenir à jour et améliorer le système — l'article qui exige que le reste existe pour de bon.": {
+   "fr": "Établir, mettre en œuvre, tenir à jour et améliorer le système — l'article qui exige que le reste existe pour de bon.",
+   "en": "",
+   "_pages": [
+    "iso27001"
+   ]
+  },
+  "↓ Analyse de risque": {
+   "fr": "↓ Analyse de risque",
+   "en": "",
+   "_pages": [
+    "iso27001-soa",
+    "iso27001",
+    "iso27001-millesime"
+   ]
+  },
+  "# mesures · chapitres A.# à A.# · retirée": {
+   "fr": "114 mesures · chapitres A.5 à A.18 · retirée",
+   "en": "",
+   "_pages": [
+    "iso27001-millesime"
+   ]
+  },
+  "# mesures · thèmes A.# à A.# · en vigueur": {
+   "fr": "93 mesures · thèmes A.5 à A.8 · en vigueur",
+   "en": "",
+   "_pages": [
+    "iso27001-millesime"
+   ]
+  },
+  "Activités de surveillance": {
+   "fr": "Activités de surveillance",
+   "en": "",
+   "_pages": [
+    "iso27001-soa",
+    "iso27001-millesime"
+   ]
+  },
+  "BSI Group, réf. BSI/UK/#/SC/#/EN/BLD, #. Ce questionnaire porte sur ISO/IEC #:#, à laquelle ISO/IEC #:# a succédé. Le remplir aujourd'hui prépare contre une version retirée — et surtout contre une annexe A qui n'existe plus sous cette forme.": {
+   "fr": "BSI Group, réf. BSI/UK/820/SC/0316/EN/BLD, 2016. Ce questionnaire porte sur ISO/IEC 27001:2013, à laquelle ISO/IEC 27001:2022 a succédé. Le remplir aujourd'hui prépare contre une version retirée — et surtout contre une annexe A qui n'existe plus sous cette forme.",
+   "en": "",
+   "_pages": [
+    "iso27001-millesime"
+   ]
+  },
+  "Bloc # sur # · # → # : ce qui a changé — Pas encore atteint": {
+   "fr": "Bloc 4 sur 4 · 2013 → 2022 : ce qui a changé — Pas encore atteint",
+   "en": "",
+   "_pages": [
+    "iso27001-millesime"
+   ]
+  },
+  "Ce que ce module n’a PAS pu vérifier": {
+   "fr": "Ce que ce module n’a PAS pu vérifier",
+   "en": "",
+   "_pages": [
+    "iso27001-millesime"
+   ]
+  },
+  "Codage sécurisé": {
+   "fr": "Codage sécurisé",
+   "en": "",
+   "_pages": [
+    "iso27001-soa",
+    "iso27001-millesime"
+   ]
+  },
+  "Gestion des configurations": {
+   "fr": "Gestion des configurations",
+   "en": "",
+   "_pages": [
+    "iso27001-soa",
+    "iso27001-millesime"
+   ]
+  },
+  "IAF MD # et ses amendements, relayés par l'organisme d'accréditation national (COFRAC en France) et par l'organisme certificateur de l'organisme": {
+   "fr": "IAF MD 26 et ses amendements, relayés par l'organisme d'accréditation national (COFRAC en France) et par l'organisme certificateur de l'organisme",
+   "en": "",
+   "_pages": [
+    "iso27001-millesime"
+   ]
+  },
+  "ISO/IEC # (management de l'IA)": {
+   "fr": "ISO/IEC 42001 (management de l'IA)",
+   "en": "",
+   "_pages": [
+    "iso27001-millesime"
+   ]
+  },
+  "Il ajoute une considération aux articles # et # sans toucher à l'annexe A : l'ignorer est un écart d'audit mineur, mais un écart.": {
+   "fr": "Il ajoute une considération aux articles 4.1 et 4.2 sans toucher à l'annexe A : l'ignorer est un écart d'audit mineur, mais un écart.",
+   "en": "",
+   "_pages": [
+    "iso27001-millesime"
+   ]
+  },
+  "L'état de l'amendement ISO/IEC #:#/Amd # relatif au changement climatique (articles # et #)": {
+   "fr": "L'état de l'amendement ISO/IEC 27001:2022/Amd 1 relatif au changement climatique (articles 4.1 et 4.2)",
+   "en": "",
+   "_pages": [
+    "iso27001-millesime"
+   ]
+  }
+ },
+ "bloc": {}
+}

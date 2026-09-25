@@ -1,0 +1,1799 @@
+{
+ "_lot": "52-residu-03",
+ "_mots": 2615,
+ "_rubrique": "residu mesure navigateur",
+ "texte": {
+  "Coefficient de passage électricité finale → énergie primaire": {
+   "fr": "Coefficient de passage électricité finale → énergie primaire",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "Efficacité des centres de données": {
+   "fr": "Efficacité des centres de données",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "En kg CO₂ éq. par an. Base # kg — inférence ET ajustement fin annualisés, jamais l’inférence seule.": {
+   "fr": "En kg CO₂ éq. par an. Base 0,0 kg — inférence ET ajustement fin annualisés, jamais l’inférence seule.",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "Expansion maîtrisée": {
+   "fr": "Expansion maîtrisée",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "Génération d'accélérateurs, durée de vie, taux de charge.": {
+   "fr": "Génération d'accélérateurs, durée de vie, taux de charge.",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "HYPOTHÈSE DU CABINET, PAS UNE MESURE. Ordre de grandeur calé sur l'approche Boavizta, simplifié en pourcentage ajouté à l'usage. À REMPLACER par une analyse de cycle de vie du matériel réel — `equipements_it` porte déjà les empreintes produit par poste. ·": {
+   "fr": "HYPOTHÈSE DU CABINET, PAS UNE MESURE. Ordre de grandeur calé sur l'approche Boavizta, simplifié en pourcentage ajouté à l'usage. À REMPLACER par une analyse de cycle de vie du matériel réel — `equipements_it` porte déjà les empreintes produit par poste. ·",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "HYPOTHÈSE DU CABINET, calée sur la consommation observée d'une instance de la plateforme rapportée au nombre de requêtes servies. ·": {
+   "fr": "HYPOTHÈSE DU CABINET, calée sur la consommation observée d'une instance de la plateforme rapportée au nombre de requêtes servies. ·",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "HYPOTHÈSE DU CABINET. Ordre de grandeur usuel de la littérature sur l'intensité énergétique des réseaux fixes, dont les valeurs publiées s'étalent sur plus d'un ordre de grandeur selon le périmètre retenu (cœur seul, ou cœur + accès + terminal). ·": {
+   "fr": "HYPOTHÈSE DU CABINET. Ordre de grandeur usuel de la littérature sur l'intensité énergétique des réseaux fixes, dont les valeurs publiées s'étalent sur plus d'un ordre de grandeur selon le périmètre retenu (cœur seul, ou cœur + accès + terminal). ·",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "Inférence": {
+   "fr": "Inférence",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "Intensité énergétique du transport de données": {
+   "fr": "Intensité énergétique du transport de données",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "Le seul levier que le client actionne seul, sans rien changer d'autre.": {
+   "fr": "Le seul levier que le client actionne seul, sans rien changer d'autre.",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "Localisation des centres, contrats d'origine, décarbonation du réseau.": {
+   "fr": "Localisation des centres, contrats d'origine, décarbonation du réseau.",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "MJ par mois": {
+   "fr": "MJ par mois",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "Majoration forfaitaire des impacts incorporés (méthode C)": {
+   "fr": "Majoration forfaitaire des impacts incorporés (méthode C)",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "Matériel": {
+   "fr": "Matériel",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "Modèles": {
+   "fr": "Modèles",
+   "en": "",
+   "_pages": [
+    "obs-rd",
+    "empreinte-ia"
+   ]
+  },
+  "Ne change RIEN à l'électricité consommée ni à l'énergie primaire : il ne déplace que les émissions. Le confondre avec un gain d'efficacité est l'erreur la plus commune.": {
+   "fr": "Ne change RIEN à l'électricité consommée ni à l'énergie primaire : il ne déplace que les émissions. Le confondre avec un gain d'efficacité est l'erreur la plus commune.",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "PUE, famille de refroidissement, récupération de chaleur.": {
+   "fr": "PUE, famille de refroidissement, récupération de chaleur.",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "Percée technologique": {
+   "fr": "Percée technologique",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "Point ouvert : La directive #/#/UE amendée a été refondue par la directive (UE) #/# ; la reprise du # dans la refonte n'a pas été vérifiée.": {
+   "fr": "Point ouvert : La directive 2012/27/UE amendée a été refondue par la directive (UE) 2023/1791 ; la reprise du 1,9 dans la refonte n'a pas été vérifiée.",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "Progression régulière": {
+   "fr": "Progression régulière",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "REPÈRES DU CABINET, PAS UN RÉFÉRENTIEL. Les intitulés reprennent une lecture courante du sujet ; les taux sont des choix de milieu de plage posés ici. Le plan d'adoption du client les remplace.": {
+   "fr": "REPÈRES DU CABINET, PAS UN RÉFÉRENTIEL. Les intitulés reprennent une lecture courante du sujet ; les taux sont des choix de milieu de plage posés ici. Le plan d'adoption du client les remplace.",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "Recette — deux fois": {
+   "fr": "Recette — deux fois",
+   "en": "",
+   "_pages": [
+    "finops",
+    "empreinte-ia",
+    "registre",
+    "matrice"
+   ]
+  },
+  "Recette — la décision écrit": {
+   "fr": "Recette — la décision écrit",
+   "en": "",
+   "_pages": [
+    "finops",
+    "empreinte-ia",
+    "registre",
+    "matrice"
+   ]
+  },
+  "Recette — proposition sans écriture": {
+   "fr": "Recette — proposition sans écriture",
+   "en": "",
+   "_pages": [
+    "finops",
+    "empreinte-ia",
+    "registre",
+    "qualif-assistee",
+    "matrice"
+   ]
+  },
+  "Recette — sans nom saisi": {
+   "fr": "Recette — sans nom saisi",
+   "en": "",
+   "_pages": [
+    "finops",
+    "empreinte-ia",
+    "registre",
+    "matrice"
+   ]
+  },
+  "Recette — écartée": {
+   "fr": "Recette — écartée",
+   "en": "",
+   "_pages": [
+    "finops",
+    "empreinte-ia",
+    "registre",
+    "matrice"
+   ]
+  },
+  "Rien n’est mesuré : Sentinel ne tourne pas dans vos applications. Les volumes viennent de votre registre, et un système que personne n’y a inscrit ne pèse rien ici — ce qui ne veut pas dire qu’il ne consomme pas.": {
+   "fr": "Rien n’est mesuré : Sentinel ne tourne pas dans vos applications. Les volumes viennent de votre registre, et un système que personne n’y a inscrit ne pèse rien ici — ce qui ne veut pas dire qu’il ne consomme pas.",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "Règlement délégué (UE) #/# de la Commission du # décembre # révisant le coefficient d'énergie primaire pour l'électricité, annexe — remplace la note # de l'annexe IV de la directive #/#/UE. CELEX #R#. ·": {
+   "fr": "Règlement délégué (UE) 2023/807 de la Commission du 15 décembre 2022 révisant le coefficient d'énergie primaire pour l'électricité, annexe — remplace la note 3 de l'annexe IV de la directive 2012/27/UE. CELEX 32023R0807. ·",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "Réserves : Le texte vise le calcul d'ÉCONOMIES d'énergie en primaire par approche ascendante. L'employer sur une consommation est une transposition assumée. C'est en outre un coefficient PAR DÉFAUT, qu'un État membre peut remplacer en le justifiant.": {
+   "fr": "Réserves : Le texte vise le calcul d'ÉCONOMIES d'énergie en primaire par approche ascendante. L'employer sur une consommation est une transposition assumée. C'est en outre un coefficient PAR DÉFAUT, qu'un État membre peut remplacer en le justifiant.",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "Réserves : Une majoration en pourcentage ne distingue ni le calcul, ni le stockage, ni le réseau : elle rend un ordre de grandeur, pas un cycle de vie.": {
+   "fr": "Réserves : Une majoration en pourcentage ne distingue ni le calcul, ni le stockage, ni le réseau : elle rend un ordre de grandeur, pas un cycle de vie.",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "Scénario": {
+   "fr": "Scénario",
+   "en": "",
+   "_pages": [
+    "enveloppe",
+    "empreinte-ia"
+   ]
+  },
+  "Sobriété et efficacité": {
+   "fr": "Sobriété et efficacité",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "Taille du modèle appelé, mise en cache, requête bornée, modèle par étape.": {
+   "fr": "Taille du modèle appelé, mise en cache, requête bornée, modèle par étape.",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "Version du moteur #-#-a. Mix retenu : FR, # g CO₂/kWh (Facteur par defaut (ADEME, repli)) ; hébergement # g CO₂/kWh (Facteur moyen pays (repli)).": {
+   "fr": "Version du moteur 2026-09-a. Mix retenu : FR, 60,0 g CO₂/kWh (Facteur par defaut (ADEME, repli)) ; hébergement 380,0 g CO₂/kWh (Facteur moyen pays (repli)).",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "Wh/requête servie": {
+   "fr": "Wh/requête servie",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "agit sur efficacite": {
+   "fr": "agit sur efficacite",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "agit sur ges": {
+   "fr": "agit sur ges",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "aucun volume de sortie déclaré · ajustement fin — à déclarer : amorti_mois, heures_accelerateur, nombre_accelerateurs, pue, puissance_w": {
+   "fr": "aucun volume de sortie déclaré · ajustement fin — à déclarer : amorti_mois, heures_accelerateur, nombre_accelerateurs, pue, puissance_w",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "du parc porte un volume déclaré. Les totaux ci-dessous ne comptent QUE ces systèmes.": {
+   "fr": "du parc porte un volume déclaré. Les totaux ci-dessous ne comptent QUE ces systèmes.",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "heures_accelerateur": {
+   "fr": "heures_accelerateur",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "kWh par mois": {
+   "fr": "kWh par mois",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "kg CO₂ éq. par mois": {
+   "fr": "kg CO₂ éq. par mois",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "m³ éq. par mois": {
+   "fr": "m³ éq. par mois",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "nombre_accelerateurs": {
+   "fr": "nombre_accelerateurs",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "sans": {
+   "fr": "sans",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "texte_reglementaire": {
+   "fr": "texte_reglementaire",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "Électricité": {
+   "fr": "Électricité",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "Émissions de GES": {
+   "fr": "Émissions de GES",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "Énergie d'hébergement d'une requête HTTP (instance + PUE)": {
+   "fr": "Énergie d'hébergement d'une requête HTTP (instance + PUE)",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "Énergie primaire": {
+   "fr": "Énergie primaire",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "— Combien d'accélérateurs ont tourné en parallèle.": {
+   "fr": "— Combien d'accélérateurs ont tourné en parallèle.",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "— Durée de la campagne, en heures d'accélérateur cumulées.": {
+   "fr": "— Durée de la campagne, en heures d'accélérateur cumulées.",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "— Puissance unitaire déclarée, en watts (fiche technique du parc, ou l'un des repères de PUISSANCE_ACCELERATEUR).": {
+   "fr": "— Puissance unitaire déclarée, en watts (fiche technique du parc, ou l'un des repères de PUISSANCE_ACCELERATEUR).",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "— Rendement du centre de données où la campagne a tourné.": {
+   "fr": "— Rendement du centre de données où la campagne a tourné.",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "— Sur combien de mois de service le modèle affiné est amorti.": {
+   "fr": "— Sur combien de mois de service le modèle affiné est amorti.",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "# des # régions à": {
+   "fr": "4 des 9 régions à",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "# faits datés, avec leur éditeur": {
+   "fr": "5 faits datés, avec leur éditeur",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "# familles · dont # où CE modèle est en défaut": {
+   "fr": "3 familles · dont 1 où CE modèle est en défaut",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "# grandeurs à déclarer chaque année · le WUE exigé est celui du SITE, l’eau de la source n’y est pas": {
+   "fr": "8 grandeurs à déclarer chaque année · le WUE exigé est celui du SITE, l’eau de la source n’y est pas",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "# kt à # kt": {
+   "fr": "2206,3 kt à 22142,8 kt",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "# origines · l’Arcep mesure que le parc français prélève en quasi-totalité de l’eau POTABLE": {
+   "fr": "6 origines · l’Arcep mesure que le parc français prélève en quasi-totalité de l’eau POTABLE",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "# pays · # sur # disposent d’un facteur national": {
+   "fr": "12 pays · 11 sur 28 disposent d’un facteur national",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "# t à # kt": {
+   "fr": "615 t à 18,2 kt",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "# t à # t": {
+   "fr": "1 t à 20 t",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "# à # # milliers de m³": {
+   "fr": "464 à 129 827 milliers de m³",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "# à # Mm³": {
+   "fr": "0,46 à 130 Mm³",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "(classe de risque, stade, données, signaux publics) ; il n'est": {
+   "fr": "(classe de risque, stade, données, signaux publics) ; il n'est",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  ", catégories # et # — la troisième composante, sans laquelle les scopes # et # ne font pas un bilan. Le module est partagé": {
+   "fr": ", catégories 1 et 2 — la troisième composante, sans laquelle les scopes 1 et 2 ne font pas un bilan. Le module est partagé",
+   "en": "",
+   "_pages": [
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  ", déduite du": {
+   "fr": ", déduite du",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  ", et quand le même maître d'ouvrage porte les deux, elles pèsent le tiers de l'investissement total. Raisonner sur la seule enveloppe travaux fait arbitrer des économies de génie civil pendant que le poste le plus lourd passe sans discussion.": {
+   "fr": ", et quand le même maître d'ouvrage porte les deux, elles pèsent le tiers de l'investissement total. Raisonner sur la seule enveloppe travaux fait arbitrer des économies de génie civil pendant que le poste le plus lourd passe sans discussion.",
+   "en": "",
+   "_pages": [
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  ", pas un recensement — les déploiements non communiqués n'y figurent pas. Le score mesure l'": {
+   "fr": ", pas un recensement — les déploiements non communiqués n'y figurent pas. Le score mesure l'",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  ", puis la comparaison": {
+   "fr": ", puis la comparaison",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  ". C’est le chiffre que publient les exploitants et qu’exige le règlement délégué (UE) #/#. Mais produire un kilowattheure consomme aussi de l’eau — les centrales thermiques et nucléaires en évaporent dans leurs tours.": {
+   "fr": ". C’est le chiffre que publient les exploitants et qu’exige le règlement délégué (UE) 2024/1364. Mais produire un kilowattheure consomme aussi de l’eau — les centrales thermiques et nucléaires en évaporent dans leurs tours.",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  ". L’amont vaut": {
+   "fr": ". L’amont vaut",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  ": celle des tours et des systèmes": {
+   "fr": ": celle des tours et des systèmes",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  ": statut, mise en service, capacité et investissement annoncés, électricité, eau, refroidissement, CO₂e — et, pour chaque valeur, si elle est": {
+   "fr": ": statut, mise en service, capacité et investissement annoncés, électricité, eau, refroidissement, CO₂e — et, pour chaque valeur, si elle est",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Aller à l’étape # : Régler le projet, plus haut dans la page": {
+   "fr": "Aller à l’étape 1 : Régler le projet, plus haut dans la page",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "empreinte-parc"
+   ]
+  },
+  "Aménagement des salles informatiques": {
+   "fr": "Aménagement des salles informatiques",
+   "en": "",
+   "_pages": [
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Aucune de ces valeurs n’est mesurée. Elles sont calculées à partir d’ordres de grandeur de catégorie, avec la formule affichée, et servent à situer un parc — jamais à comparer deux sites nommément, ni à établir un bilan réglementaire. Le bilan réglementaire viendra de la base européenne créée par la directive (UE) #/#, qui recueillera des valeurs DÉCLARÉES.": {
+   "fr": "Aucune de ces valeurs n’est mesurée. Elles sont calculées à partir d’ordres de grandeur de catégorie, avec la formule affichée, et servent à situer un parc — jamais à comparer deux sites nommément, ni à établir un bilan réglementaire. Le bilan réglementaire viendra de la base européenne créée par la directive (UE) 2023/1791, qui recueillera des valeurs DÉCLARÉES.",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Baisse quand le réseau se décarbone, ou quand le calcul se déplace vers un pays ou une heure moins carbonés. Aucun achat n’est nécessaire.": {
+   "fr": "Baisse quand le réseau se décarbone, ou quand le calcul se déplace vers un pays ou une heure moins carbonés. Aucun achat n’est nécessaire.",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Bas de page (Alt + Fin)": {
+   "fr": "Bas de page (Alt + Fin)",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc",
+    "obs-rd"
+   ]
+  },
+  "Belgique": {
+   "fr": "Belgique",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "empreinte-parc"
+   ]
+  },
+  "CO₂e par an, cycle de vie complet": {
+   "fr": "CO₂e par an, cycle de vie complet",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Ce bloc en déduit les quantités, le prix indicatif et le carbone de fabrication — puis il rend le montant qui": {
+   "fr": "Ce bloc en déduit les quantités, le prix indicatif et le carbone de fabrication — puis il rend le montant qui",
+   "en": "",
+   "_pages": [
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Ce que la réglementation demande — et ce qu’elle ne demande pas": {
+   "fr": "Ce que la réglementation demande — et ce qu’elle ne demande pas",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Ce que le calcul vaut, confronté à ce qui a été publié": {
+   "fr": "Ce que le calcul vaut, confronté à ce qui a été publié",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Ce que le total tranche": {
+   "fr": "Ce que le total tranche",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Ce que montre cette section.": {
+   "fr": "Ce que montre cette section.",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Centres de données : > # % du total · systèmes d’IA : < # %": {
+   "fr": "Centres de données : > 99 % du total · systèmes d’IA : < 1 %",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Cliquez sur un pays": {
+   "fr": "Cliquez sur un pays",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Comment ces chiffres sont obtenus.": {
+   "fr": "Comment ces chiffres sont obtenus.",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Comparateur pondéré d’implantation": {
+   "fr": "Comparateur pondéré d’implantation",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Consommation annuelle estimée × intensité carbone du pays pour l’usage ; énergie informatique × # kgCO₂e/MWh pour la fabrication amortie. Moyennes annuelles #, approche cycle de vie, d’après les séries Ember (facteurs GIEC AR#), recoupées avec l’Agence européenne pour l’environnement. Approche production : pour un pays fortement importateur, l’intensité vue au point de raccordement est plus élevée.": {
+   "fr": "Consommation annuelle estimée × intensité carbone du pays pour l’usage ; énergie informatique × 22 kgCO₂e/MWh pour la fabrication amortie. Moyennes annuelles 2024, approche cycle de vie, d’après les séries Ember (facteurs GIEC AR5), recoupées avec l’Agence européenne pour l’environnement. Approche production : pour un pays fortement importateur, l’intensité vue au point de raccordement est plus élevée.",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Côté investissement : combien d'équipements la puissance informatique impose, à quel prix indicatif, et quelle part du total. Côté empreinte : leur carbone de fabrication au": {
+   "fr": "Côté investissement : combien d'équipements la puissance informatique impose, à quel prix indicatif, et quelle part du total. Côté empreinte : leur carbone de fabrication au",
+   "en": "",
+   "_pages": [
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Dense (calcul et virtualisation) — # kW/baie": {
+   "fr": "Dense (calcul et virtualisation) — 12 kW/baie",
+   "en": "",
+   "_pages": [
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Densité par baie": {
+   "fr": "Densité par baie",
+   "en": "",
+   "_pages": [
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Deux choix, et la page vous conduit section par section, en disant à chaque fois ce que le chiffre vaut.": {
+   "fr": "Deux choix, et la page vous conduit section par section, en disant à chaque fois ce que le chiffre vaut.",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Deux inventaires sur la même carte. Les": {
+   "fr": "Deux inventaires sur la même carte. Les",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Dimensionner les équipements": {
+   "fr": "Dimensionner les équipements",
+   "en": "",
+   "_pages": [
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Détente directe (DX) sur air": {
+   "fr": "Détente directe (DX) sur air",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Eau & biodiversité": {
+   "fr": "Eau & biodiversité",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "empreinte-parc"
+   ]
+  },
+  "Eau de la source": {
+   "fr": "Eau de la source",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Eau du site": {
+   "fr": "Eau du site",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Empreinte annuelle du parc cartographié, un pays par tuile": {
+   "fr": "Empreinte annuelle du parc cartographié, un pays par tuile",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Enveloppe et DPGF": {
+   "fr": "Enveloppe et DPGF",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "empreinte-parc"
+   ]
+  },
+  "Enveloppe non calculée : lancez-la plus haut pour que la part se calcule.": {
+   "fr": "Enveloppe non calculée : lancez-la plus haut pour que la part se calcule.",
+   "en": "",
+   "_pages": [
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Explication : Classes de risque AI Act": {
+   "fr": "Explication : Classes de risque AI Act",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Explication : EWIF — l’eau qu’il faut pour produire un kilowattheure": {
+   "fr": "Explication : EWIF — l’eau qu’il faut pour produire un kilowattheure",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Explication : Eau consommée, eau prélevée : l’écart va jusqu’à un facteur dix": {
+   "fr": "Explication : Eau consommée, eau prélevée : l’écart va jusqu’à un facteur dix",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Explication : Eau de refroidissement": {
+   "fr": "Explication : Eau de refroidissement",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Explication : Empreinte cycle de vie": {
+   "fr": "Explication : Empreinte cycle de vie",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Explication : Foncier identifié pour les centres de données": {
+   "fr": "Explication : Foncier identifié pour les centres de données",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Explication : Nappe phréatique, et niveau piézométrique": {
+   "fr": "Explication : Nappe phréatique, et niveau piézométrique",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Explication : Refroidissement adiabatique": {
+   "fr": "Explication : Refroidissement adiabatique",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Explication : Usage et fabrication": {
+   "fr": "Explication : Usage et fabrication",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Fabrication amortie sur la durée de vie · # %": {
+   "fr": "Fabrication amortie sur la durée de vie · 8 %",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Faisabilité": {
+   "fr": "Faisabilité",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Free cooling indirect à assistance adiabatique": {
+   "fr": "Free cooling indirect à assistance adiabatique",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Grille — # à # pays par ligne": {
+   "fr": "Grille — 4 à 6 pays par ligne",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "empreinte-parc"
+   ]
+  },
+  "Grèce": {
+   "fr": "Grèce",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "empreinte-parc"
+   ]
+  },
+  "Haut de page (Alt + Origine)": {
+   "fr": "Haut de page (Alt + Origine)",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc",
+    "obs-rd"
+   ]
+  },
+  "Indicateurs du panel": {
+   "fr": "Indicateurs du panel",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Ingénierie de projet": {
+   "fr": "Ingénierie de projet",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Intensité du réseau": {
+   "fr": "Intensité du réseau",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Investisseur": {
+   "fr": "Investisseur",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "LE BLOC QUI TRANCHE — # modes de refroidissement comparés": {
+   "fr": "LE BLOC QUI TRANCHE — 5 modes de refroidissement comparés",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "La fabrication est amortie linéairement, sans tenir compte du taux de renouvellement réel des serveurs, plus rapide sur les charges d’IA.": {
+   "fr": "La fabrication est amortie linéairement, sans tenir compte du taux de renouvellement réel des serveurs, plus rapide sur les charges d’IA.",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "La puissance informatique et l’enveloppe travaux sont reprises de l’étude ci-dessus.": {
+   "fr": "La puissance informatique et l’enveloppe travaux sont reprises de l’étude ci-dessus.",
+   "en": "",
+   "_pages": [
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Le cycle de vie complet des systèmes cartographiés : l’électricité qu’ils consomment, le CO₂ que cette électricité représente dans leur pays, la fabrication des équipements amortie sur leur durée de vie, et l’eau de refroidissement. La même chaîne de calcul que la page": {
+   "fr": "Le cycle de vie complet des systèmes cartographiés : l’électricité qu’ils consomment, le CO₂ que cette électricité représente dans leur pays, la fabrication des équipements amortie sur leur durée de vie, et l’eau de refroidissement. La même chaîne de calcul que la page",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Le liseré donne l’intensité du réseau —": {
+   "fr": "Le liseré donne l’intensité du réseau —",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Le même calcul répond à deux questions, c'est pourquoi ce bloc figure dans les deux vues.": {
+   "fr": "Le même calcul répond à deux questions, c'est pourquoi ce bloc figure dans les deux vues.",
+   "en": "",
+   "_pages": [
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Le poste qu’on oublie.": {
+   "fr": "Le poste qu’on oublie.",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Le site vaut son": {
+   "fr": "Le site vaut son",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Le tableau ci-dessus donne l’eau": {
+   "fr": "Le tableau ci-dessus donne l’eau",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Le tableau qui suit se lit par pays.": {
+   "fr": "Le tableau qui suit se lit par pays.",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Les deux blocs ouverts ci-dessous suffisent à trancher : les": {
+   "fr": "Les deux blocs ouverts ci-dessous suffisent à trancher : les",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Les deux fourchettes SE RECOUVRENT : au bas des hypothèses de WUE, l’eau amont domine largement ; au haut, c’est l’eau de site. Le total du parc ne tranche donc pas l’arbitrage — c’est le rapport EWIF × PUE ÷ WUE, mode de refroidissement par mode, qui le tranche.": {
+   "fr": "Les deux fourchettes SE RECOUVRENT : au bas des hypothèses de WUE, l’eau amont domine largement ; au haut, c’est l’eau de site. Le total du parc ne tranche donc pas l’arbitrage — c’est le rapport EWIF × PUE ÷ WUE, mode de refroidissement par mode, qui le tranche.",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Les familles que le parc ne code pas encore": {
+   "fr": "Les familles que le parc ne code pas encore",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Les intensités carbone sont des moyennes annuelles. L’intensité réelle varie d’un facteur trois dans la journée : un calcul déplacé de la nuit au midi solaire change son empreinte sans changer sa consommation.": {
+   "fr": "Les intensités carbone sont des moyennes annuelles. L’intensité réelle varie d’un facteur trois dans la journée : un calcul déplacé de la nuit au midi solaire change son empreinte sans changer sa consommation.",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Les quatorze lots ci-dessus s'arrêtent aux murs, aux fluides et à l'électricité. Le lot": {
+   "fr": "Les quatorze lots ci-dessus s'arrêtent aux murs, aux fluides et à l'électricité. Le lot",
+   "en": "",
+   "_pages": [
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Lire avant d'exploiter :": {
+   "fr": "Lire avant d'exploiter :",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "L’eau de FABRICATION du matériel n’est comptée nulle part — ni ici, ni dans le bilan amont. Une usine de semi-conducteurs consomme de l’ordre de # millions de litres d’eau ultrapure par jour ; la part imputable à un serveur ne se reconstitue pas sans données constructeur, et les fabricants ne les publient pas. Le poste fabrication ci-dessus porte donc le CARBONE incorporé, jamais l’eau incorporée.": {
+   "fr": "L’eau de FABRICATION du matériel n’est comptée nulle part — ni ici, ni dans le bilan amont. Une usine de semi-conducteurs consomme de l’ordre de 38 millions de litres d’eau ultrapure par jour ; la part imputable à un serveur ne se reconstitue pas sans données constructeur, et les fabricants ne les publient pas. Le poste fabrication ci-dessus porte donc le CARBONE incorporé, jamais l’eau incorporée.",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "L’eau de la colonne ci-contre est celle du REFROIDISSEMENT, et elle seule. L’eau consommée en amont pour produire l’électricité — considérable pour le thermique et le nucléaire — n’y est pas ajoutée, pour ne pas mélanger deux responsabilités : elle est calculée et publiée À PART, dans le bilan « l’eau que le WUE ne compte pas » de cette même section. Sur les parcs nationaux où les deux termes sont publiés, l’amont pèse de huit à douze fois le site.": {
+   "fr": "L’eau de la colonne ci-contre est celle du REFROIDISSEMENT, et elle seule. L’eau consommée en amont pour produire l’électricité — considérable pour le thermique et le nucléaire — n’y est pas ajoutée, pour ne pas mélanger deux responsabilités : elle est calculée et publiée À PART, dans le bilan « l’eau que le WUE ne compte pas » de cette même section. Sur les parcs nationaux où les deux termes sont publiés, l’amont pèse de huit à douze fois le site.",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "L’eau de la source, pays par pays": {
+   "fr": "L’eau de la source, pays par pays",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "L’eau française, bassin par bassin — l’état des": {
+   "fr": "L’eau française, bassin par bassin — l’état des",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "L’eau que le WUE ne compte pas": {
+   "fr": "L’eau que le WUE ne compte pas",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Masquer ce guide": {
+   "fr": "Masquer ce guide",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "empreinte-parc"
+   ]
+  },
+  "Nature, sources et limites": {
+   "fr": "Nature, sources et limites",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Navigation dans la page": {
+   "fr": "Navigation dans la page",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc",
+    "obs-rd"
+   ]
+  },
+  "Ne baisse que si l’on achète moins de matériel, ou si on le garde plus longtemps. Un réseau propre n’y change rien.": {
+   "fr": "Ne baisse que si l’on achète moins de matériel, ou si on le garde plus longtemps. Un réseau propre n’y change rien.",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Norvège (hors UE)": {
+   "fr": "Norvège (hors UE)",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "empreinte-parc"
+   ]
+  },
+  "Où cela se décide.": {
+   "fr": "Où cela se décide.",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "PARC ≠ TOTAL — # centres de données et # systèmes d’IA sont cartographiés ; le parc européen réel en compte plusieurs milliers. Les cumuls par pays ne sont donc pas des inventaires nationaux.": {
+   "fr": "PARC ≠ TOTAL — 254 centres de données et 72 systèmes d’IA sont cartographiés ; le parc européen réel en compte plusieurs milliers. Les cumuls par pays ne sont donc pas des inventaires nationaux.",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Panorama de l’IA déployée dans l’Union — systèmes en entreprise et centres de données": {
+   "fr": "Panorama de l’IA déployée dans l’Union — systèmes en entreprise et centres de données",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Par où commencer.": {
+   "fr": "Par où commencer.",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Parcours guidé": {
+   "fr": "Parcours guidé",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Parcours guidé — # parcours par métier": {
+   "fr": "Parcours guidé — 10 parcours par métier",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Prélevée pour le refroidissement. Déclaration obligatoire au-delà de # kW informatiques (directive #/#, règlement délégué #/#).": {
+   "fr": "Prélevée pour le refroidissement. Déclaration obligatoire au-delà de 500 kW informatiques (directive 2023/1791, règlement délégué 2024/1364).",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Puissance informatique (kW)": {
+   "fr": "Puissance informatique (kW)",
+   "en": "",
+   "_pages": [
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Périmètre du projet": {
+   "fr": "Périmètre du projet",
+   "en": "",
+   "_pages": [
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Quelques ordres de grandeur pour situer": {
+   "fr": "Quelques ordres de grandeur pour situer",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Ramenées au kilowattheure informatique, les deux eaux se comparent": {
+   "fr": "Ramenées au kilowattheure informatique, les deux eaux se comparent",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Récupération de chaleur fatale": {
+   "fr": "Récupération de chaleur fatale",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Régler le projet": {
+   "fr": "Régler le projet",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Répartition de l’empreinte carbone : # % d’usage, # % de fabrication": {
+   "fr": "Répartition de l’empreinte carbone : 92 % d’usage, 8 % de fabrication",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "SCOPE # HORS PÉRIMÈTRE. Ces chiffres couvrent l’électricité consommée (scope # du GHG Protocol) et le matériel amorti (scope #). Ils n’incluent NI les fuites de fluide frigorigène, NI le carburant des groupes électrogènes — les deux postes directs d’un centre de données, et sur un site à détente directe la fuite de fluide dépasse régulièrement le carburant. Ces valeurs ne s’obtiennent que sur le site lui-même : charge en fluide, taux de fuite, volume de gazole. Pour un site tiers observé de l’extérieur, elles ne sont pas accessibles et ne sont donc pas estimées. Un bilan d’entreprise complet les exige : cette carte ne remplace pas un BEGES.": {
+   "fr": "SCOPE 1 HORS PÉRIMÈTRE. Ces chiffres couvrent l’électricité consommée (scope 2 du GHG Protocol) et le matériel amorti (scope 3). Ils n’incluent NI les fuites de fluide frigorigène, NI le carburant des groupes électrogènes — les deux postes directs d’un centre de données, et sur un site à détente directe la fuite de fluide dépasse régulièrement le carburant. Ces valeurs ne s’obtiennent que sur le site lui-même : charge en fluide, taux de fuite, volume de gazole. Pour un site tiers observé de l’extérieur, elles ne sont pas accessibles et ne sont donc pas estimées. Un bilan d’entreprise complet les exige : cette carte ne remplace pas un BEGES.",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Sections de la page": {
+   "fr": "Sections de la page",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Slovénie": {
+   "fr": "Slovénie",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "empreinte-parc"
+   ]
+  },
+  "Suivre le parcours guidé « Eau et biodiversité » →": {
+   "fr": "Suivre le parcours guidé « Eau et biodiversité » →",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Suivre le parcours « Analyse financière et reporting extra-financier » à partir d’ici": {
+   "fr": "Suivre le parcours « Analyse financière et reporting extra-financier » à partir d’ici",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "empreinte-parc"
+   ]
+  },
+  "Suivre le parcours « Assurance — souscription et sinistres » à partir d’ici": {
+   "fr": "Suivre le parcours « Assurance — souscription et sinistres » à partir d’ici",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "empreinte-parc"
+   ]
+  },
+  "Suivre le parcours « Banque — financement de projet » à partir d’ici": {
+   "fr": "Suivre le parcours « Banque — financement de projet » à partir d’ici",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "empreinte-parc"
+   ]
+  },
+  "Suivre le parcours « Climat et gaz à effet de serre » à partir d’ici": {
+   "fr": "Suivre le parcours « Climat et gaz à effet de serre » à partir d’ici",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "empreinte-parc"
+   ]
+  },
+  "Suivre le parcours « Eau et biodiversité » à partir d’ici": {
+   "fr": "Suivre le parcours « Eau et biodiversité » à partir d’ici",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "empreinte-parc"
+   ]
+  },
+  "Suivre le parcours « Investissement & implantation — centres de données » à partir d’ici": {
+   "fr": "Suivre le parcours « Investissement & implantation — centres de données » à partir d’ici",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Suivre le parcours « Étude de faisabilité chiffrée » à partir d’ici": {
+   "fr": "Suivre le parcours « Étude de faisabilité chiffrée » à partir d’ici",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Sur les parcours": {
+   "fr": "Sur les parcours",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Sur un site alimenté en électricité peu carbonée — Suède à # g, France à # g — la fabrication des serveurs pèse plus lourd que leur usage. Une carte qui n’afficherait que l’usage classerait ces pays quasiment à zéro, ce qui serait faux.": {
+   "fr": "Sur un site alimenté en électricité peu carbonée — Suède à 45 g, France à 60 g — la fabrication des serveurs pèse plus lourd que leur usage. Une carte qui n’afficherait que l’usage classerait ces pays quasiment à zéro, ce qui serait faux.",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Suède": {
+   "fr": "Suède",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "empreinte-parc"
+   ]
+  },
+  "Tableau détaillé": {
+   "fr": "Tableau détaillé",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Tchéquie": {
+   "fr": "Tchéquie",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "empreinte-parc"
+   ]
+  },
+  "Tour évaporative / circuit d’eau": {
+   "fr": "Tour évaporative / circuit d’eau",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Tous les pays": {
+   "fr": "Tous les pays",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "empreinte-parc"
+   ]
+  },
+  "Toutes intensités": {
+   "fr": "Toutes intensités",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "empreinte-parc"
+   ]
+  },
+  "Trier par": {
+   "fr": "Trier par",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "empreinte-parc"
+   ]
+  },
+  "Un centre qui passe au refroidissement sec affiche alors un WUE nul tout en consommant davantage d’eau à la source.": {
+   "fr": "Un centre qui passe au refroidissement sec affiche alors un WUE nul tout en consommant davantage d’eau à la source.",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Un mètre cube n’est pas un mètre cube — d’où vient l’eau": {
+   "fr": "Un mètre cube n’est pas un mètre cube — d’où vient l’eau",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Un projet annoncé qui ne se réalise pas figure au cumul de son pays tant qu’il n’est pas retiré du référentiel. Le curseur d’horizon permet de l’écarter de la lecture.": {
+   "fr": "Un projet annoncé qui ne se réalise pas figure au cumul de son pays tant qu’il n’est pas retiré du référentiel. Le curseur d’horizon permet de l’écarter de la lecture.",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Usage — électricité × intensité du réseau · # %": {
+   "fr": "Usage — électricité × intensité du réseau · 92 %",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Voici le second terme du bilan, pour les mêmes # centres.": {
+   "fr": "Voici le second terme du bilan, pour les mêmes 254 centres.",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "Votre rôle": {
+   "fr": "Votre rôle",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "WUE #–# · PUE #–# · amont #–# L/kWh informatique": {
+   "fr": "WUE 0–0,2 · PUE 1,3–1,6 · amont 1,3–1,6 L/kWh informatique",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "WUE #–# · PUE #–# · amont #–# L/kWh informatique · aucune eau sur le site — tout le bilan eau est en amont": {
+   "fr": "WUE 0–0,1 · PUE 1,1–1,25 · amont 1,1–1,25 L/kWh informatique · aucune eau sur le site — tout le bilan eau est en amont",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "WUE #–# · PUE #–# · amont #–# L/kWh informatique · la chaleur exportée n’est plus à évacuer : elle sort du bilan eau du site": {
+   "fr": "WUE 0–0,2 · PUE 1,1–1,3 · amont 1,1–1,3 L/kWh informatique · la chaleur exportée n’est plus à évacuer : elle sort du bilan eau du site",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "WUE #–# · PUE #–# · amont #–# L/kWh informatique · l’eau n’est consommée qu’aux heures chaudes : la moyenne annuelle masque les pointes estivales, quand la ressource est tendue": {
+   "fr": "WUE 0,8–2,2 · PUE 1,2–1,45 · amont 1,2–1,45 L/kWh informatique · l’eau n’est consommée qu’aux heures chaudes : la moyenne annuelle masque les pointes estivales, quand la ressource est tendue",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "adiabatiques": {
+   "fr": "adiabatiques",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "amont ÷ site : ×# à sans borne": {
+   "fr": "amont ÷ site : ×6,5 à sans borne",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "amont ÷ site : ×# à ×#": {
+   "fr": "amont ÷ site : ×0,5 à ×1,8",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "au-delà. L’eau prélevée et la part des centres de données figurent dans le": {
+   "fr": "au-delà. L’eau prélevée et la part des centres de données figurent dans le",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "avec la page d'ingénierie de conseilprevcyber : les quantités y sont les mêmes, à la ligne près.": {
+   "fr": "avec la page d'ingénierie de conseilprevcyber : les quantités y sont les mêmes, à la ligne près.",
+   "en": "",
+   "_pages": [
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "cas documentés au panel": {
+   "fr": "cas documentés au panel",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "cas d’IA": {
+   "fr": "cas d’IA",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "ce panorama est un": {
+   "fr": "ce panorama est un",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "centres de données au calcul": {
+   "fr": "centres de données au calcul",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "consommée": {
+   "fr": "consommée",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "consommée en amont pour produire l’électricité achetée": {
+   "fr": "consommée en amont pour produire l’électricité achetée",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "couvre les planchers techniques, les chemins de câbles et la distribution en salle — il porte lui-même la mention « hors serveurs ». Les machines sont un investissement": {
+   "fr": "couvre les planchers techniques, les chemins de câbles et la distribution en salle — il porte lui-même la mention « hors serveurs ». Les machines sont un investissement",
+   "en": "",
+   "_pages": [
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "de la création de valeur, deux blocs plus bas. Le lire après l’EVA donnerait un ROCE surestimé d’un tiers.": {
+   "fr": "de la création de valeur, deux blocs plus bas. Le lire après l’EVA donnerait un ROCE surestimé d’un tiers.",
+   "en": "",
+   "_pages": [
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "des entreprises citées. Seuls les faits sourcés (sanctions, décisions, engagements publics) sont imputés nominativement.": {
+   "fr": "des entreprises citées. Seuls les faits sourcés (sanctions, décisions, engagements publics) sont imputés nominativement.",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "deux volumes": {
+   "fr": "deux volumes",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "documentés (POC, pilotes, production, abandons) mi-# → mi-#, classés selon le Règlement (UE) #/#, avec profil de vulnérabilités cyber, couche réglementaire des # États membres et score d'exposition calculé. Et le": {
+   "fr": "documentés (POC, pilotes, production, abandons) mi-2023 → mi-2026, classés selon le Règlement (UE) 2024/1689, avec profil de vulnérabilités cyber, couche réglementaire des 27 États membres et score d'exposition calculé. Et le",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "du site, appliquée au parc au lieu d’une requête.": {
+   "fr": "du site, appliquée au parc au lieu d’une requête.",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "eau de refroidissement, millions de m³ par an": {
+   "fr": "eau de refroidissement, millions de m³ par an",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "empreinte non dérivable · # centre(s) · # SIA": {
+   "fr": "empreinte non dérivable · 1 centre(s) · 0 SIA",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "en production ou à l’échelle": {
+   "fr": "en production ou à l’échelle",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "et lire le paradoxe de l’évaporation ·": {
+   "fr": "et lire le paradoxe de l’évaporation ·",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "exposition réglementaire du cas d'usage": {
+   "fr": "exposition réglementaire du cas d'usage",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "foncier identifié": {
+   "fr": "foncier identifié",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "incertitude ±# % sur le terme amont · # limites assumées": {
+   "fr": "incertitude ±40 % sur le terme amont · 7 limites assumées",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "intervalle trop large pour conclure — et c’est dit": {
+   "fr": "intervalle trop large pour conclure — et c’est dit",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "jusqu’à #,": {
+   "fr": "jusqu’à 250,",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "lancez l’enveloppe ci-dessus": {
+   "fr": "lancez l’enveloppe ci-dessus",
+   "en": "",
+   "_pages": [
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "l’amont domine toujours": {
+   "fr": "l’amont domine toujours",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "mise à jour #-#-# #:# · # sur la moyenne annuelle #": {
+   "fr": "mise à jour 2026-09-25 07:56 · 29 sur la moyenne annuelle 2024",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "mode par mode": {
+   "fr": "mode par mode",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "non estimée": {
+   "fr": "non estimée",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "octet pour octet": {
+   "fr": "octet pour octet",
+   "en": "",
+   "_pages": [
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "ou seulement de sa": {
+   "fr": "ou seulement de sa",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "panel représentatif de cas publiquement documentés": {
+   "fr": "panel représentatif de cas publiquement documentés",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "par an, sur le parc cartographié": {
+   "fr": "par an, sur le parc cartographié",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "parc de centres de données": {
+   "fr": "parc de centres de données",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "pas un audit de conformité": {
+   "fr": "pas un audit de conformité",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "portent des nappes basses · # sur # en BAISSE": {
+   "fr": "portent des nappes basses · 9 sur 9 en BAISSE",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "pour ouvrir le détail de": {
+   "fr": "pour ouvrir le détail de",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "pratiques interdites (art. #) documentées": {
+   "fr": "pratiques interdites (art. 5) documentées",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "publiée": {
+   "fr": "publiée",
+   "en": "",
+   "_pages": [
+    "empreinte-parc"
+   ]
+  },
+  "qui les fait tourner : électricité, CO₂e sur cycle de vie, eau de refroidissement et critères d’implantation, pays par pays. Base de travail pour décideurs.": {
+   "fr": "qui les fait tourner : électricité, CO₂e sur cycle de vie, eau de refroidissement et critères d’implantation, pays par pays. Base de travail pour décideurs.",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  }
+ },
+ "bloc": {}
+}

@@ -1,0 +1,1784 @@
+{
+ "_lot": "58-residu-09",
+ "_mots": 2603,
+ "_rubrique": "residu mesure navigateur",
+ "texte": {
+  "Modèles d’IA remarquables créés par pays (# – été #)": {
+   "fr": "Modèles d’IA remarquables créés par pays (2003 – été 2024)",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "Modèles remarquables (carte)": {
+   "fr": "Modèles remarquables (carte)",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "Modèles remarquables créés # – été # (nombre par pays)": {
+   "fr": "Modèles remarquables créés 2003 – été 2024 (nombre par pays)",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "Observatoire R&D IA — modèles, talents, brevets": {
+   "fr": "Observatoire R&D IA — modèles, talents, brevets",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "Où se crée l’intelligence artificielle : modèles remarquables, chercheurs d’élite, brevets et adoption en entreprise. Vues recomposées depuis les sources primaires publiques (Epoch AI, MacroPolo/NeurIPS, AI Index/CSET, Eurostat).": {
+   "fr": "Où se crée l’intelligence artificielle : modèles remarquables, chercheurs d’élite, brevets et adoption en entreprise. Vues recomposées depuis les sources primaires publiques (Epoch AI, MacroPolo/NeurIPS, AI Index/CSET, Eurostat).",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "Part du monde (%)": {
+   "fr": "Part du monde (%)",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "Plan coordonné IA": {
+   "fr": "Plan coordonné IA",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "Plan coordonné dans le domaine de l’IA": {
+   "fr": "Plan coordonné dans le domaine de l’IA",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "Points # publiés (exacts) ; séries #–# : lecture graphique, la bande colorée figure l’incertitude de ± # points. « Reste du monde » est déduit (# − Chine − États-Unis − Europe), d’où son trait discontinu. Barres grises : volume mondial de brevets d’IA accordés, en milliers (axe de droite, lecture graphique).": {
+   "fr": "Points 2023 publiés (exacts) ; séries 2010–2022 : lecture graphique, la bande colorée figure l’incertitude de ± 3 points. « Reste du monde » est déduit (100 − Chine − États-Unis − Europe), d’où son trait discontinu. Barres grises : volume mondial de brevets d’IA accordés, en milliers (axe de droite, lecture graphique).",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "Rafraîchissement": {
+   "fr": "Rafraîchissement",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "Recomposition depuis les sources primaires publiques citées ci-dessus — inspiration : Carto n°#, # © Areion/Capri ; la carte originale n’est pas reproduite. Chaque série porte sa précision : « exact », « classe » ou « lecture graphique (±) ». Fond de carte © OpenStreetMap © CARTO.": {
+   "fr": "Recomposition depuis les sources primaires publiques citées ci-dessus — inspiration : Carto n°89, 2025 © Areion/Capri ; la carte originale n’est pas reproduite. Chaque série porte sa précision : « exact », « classe » ou « lecture graphique (±) ». Fond de carte © OpenStreetMap © CARTO.",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "Reste du monde": {
+   "fr": "Reste du monde",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "Revenir à la vue entière": {
+   "fr": "Revenir à la vue entière",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "obs-rd"
+   ]
+  },
+  "Règlement (UE) #/# — AI Act — et Bureau de l’IA (AI Office)": {
+   "fr": "Règlement (UE) 2024/1689 — AI Act — et Bureau de l’IA (AI Office)",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "Réduire la carte": {
+   "fr": "Réduire la carte",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "obs-rd"
+   ]
+  },
+  "Réduire — touche −, ou molette vers le bas": {
+   "fr": "Réduire — touche −, ou molette vers le bas",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "obs-rd"
+   ]
+  },
+  "Section précédente (Alt + flèche haut)": {
+   "fr": "Section précédente (Alt + flèche haut)",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "Section suivante (Alt + flèche bas)": {
+   "fr": "Section suivante (Alt + flèche bas)",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "Socle de données ouvertes.": {
+   "fr": "Socle de données ouvertes.",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "Source : Epoch AI, « Data on Notable AI Models » (CC BY #). Le seed affiche les classes d’effectifs (précision « classe » ; hors États-Unis, Chine, Canada, Royaume-Uni, Allemagne et France : « classe, lecture de carte ») ; en mode live, les comptes exacts Epoch AI les remplacent. Cliquez un pays pour le détail (modèles, chercheurs d’élite, adoption UE si disponible).": {
+   "fr": "Source : Epoch AI, « Data on Notable AI Models » (CC BY 4.0). Le seed affiche les classes d’effectifs (précision « classe » ; hors États-Unis, Chine, Canada, Royaume-Uni, Allemagne et France : « classe, lecture de carte ») ; en mode live, les comptes exacts Epoch AI les remplacent. Cliquez un pays pour le détail (modèles, chercheurs d’élite, adoption UE si disponible).",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "Sources, licences & fraîcheur": {
+   "fr": "Sources, licences & fraîcheur",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "Texte sur EUR-Lex": {
+   "fr": "Texte sur EUR-Lex",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "Télécharger en PDF": {
+   "fr": "Télécharger en PDF",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "Télécharger en Word": {
+   "fr": "Télécharger en Word",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "Valeur approchée (seed — précision : « ≈, à confirmer par le flux »). Détail par pays au prochain rafraîchissement (Eurostat, isoc_eb_ai, CC BY #).": {
+   "fr": "Valeur approchée (seed — précision : « ≈, à confirmer par le flux »). Détail par pays au prochain rafraîchissement (Eurostat, isoc_eb_ai, CC BY 4.0).",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "Volume accordé": {
+   "fr": "Volume accordé",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "Volume accordé (échelle log)": {
+   "fr": "Volume accordé (échelle log)",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "Vue entière — touche #": {
+   "fr": "Vue entière — touche 0",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "obs-rd"
+   ]
+  },
+  "au point": {
+   "fr": "au point",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "aucun modèle recensé": {
+   "fr": "aucun modèle recensé",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "calcul déterministe · aucune rédaction par IA": {
+   "fr": "calcul déterministe · aucune rédaction par IA",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "cartes et graphiques affichés à l’écran": {
+   "fr": "cartes et graphiques affichés à l’écran",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "chaque ligne va du point": {
+   "fr": "chaque ligne va du point",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "contour pointillé — bloc, pas un pays": {
+   "fr": "contour pointillé — bloc, pas un pays",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "contour pointillé — valeur non publiée": {
+   "fr": "contour pointillé — valeur non publiée",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "crédits obligatoires": {
+   "fr": "crédits obligatoires",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "depuis #": {
+   "fr": "depuis 2018",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "des brevets d’IA accordés, les États-Unis reculent de": {
+   "fr": "des brevets d’IA accordés, les États-Unis reculent de",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "des données de brevets.": {
+   "fr": "des données de brevets.",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "des entreprises de l’UE-# utilisaient au moins une technologie d’IA en #.": {
+   "fr": "des entreprises de l’UE-27 utilisaient au moins une technologie d’IA en 2024.",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "formés dans le pays": {
+   "fr": "formés dans le pays",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "indisponible · aucun flux joignable — Commission européenne — Stratégie numérique : ProxyError: HTTPSConn": {
+   "fr": "indisponible · aucun flux joignable — Commission européenne — Stratégie numérique : ProxyError: HTTPSConn",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "inspiration éditoriale": {
+   "fr": "inspiration éditoriale",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "la carte originale n’est pas reproduite": {
+   "fr": "la carte originale n’est pas reproduite",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "la taille du gâteau. Le volume mondial a été multiplié par # sur la période — une part qui baisse peut recouvrir un nombre qui monte. Basculez sur": {
+   "fr": "la taille du gâteau. Le volume mondial a été multiplié par 60 sur la période — une part qui baisse peut recouvrir un nombre qui monte. Basculez sur",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "le classement des écarts d’un coup d’œil — la vue": {
+   "fr": "le classement des écarts d’un coup d’œil — la vue",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "le range sur un seul axe.": {
+   "fr": "le range sur un seul axe.",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "licence sans dérivée": {
+   "fr": "licence sans dérivée",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "pour le voir.": {
+   "fr": "pour le voir.",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "présentation orale": {
+   "fr": "présentation orale",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "référentiel fermé · vérifié": {
+   "fr": "référentiel fermé · vérifié",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "statique — annuel (avril), catalogage manuel": {
+   "fr": "statique — annuel (avril), catalogage manuel",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "statique — édition ~triennale, catalogage manuel": {
+   "fr": "statique — édition ~triennale, catalogage manuel",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "tout ce que cette page calcule": {
+   "fr": "tout ce que cette page calcule",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "valeur non publiée": {
+   "fr": "valeur non publiée",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "y sont joints en image, dans la vue que vous avez choisie. Chaque chapitre porte sa source, sa licence, son millésime et sa précision — et le dossier rappelle les crédits à reproduire, dont la": {
+   "fr": "y sont joints en image, dans la vue que vous avez choisie. Chaque chapitre porte sa source, sa licence, son millésime et sa précision — et le dossier rappelle les crédits à reproduire, dont la",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "« Autres » — # % de l’origine et # % du lieu de travail — n’est rattaché à aucun pays et ne figure pas sur la carte.": {
+   "fr": "« Autres » — 28 % de l’origine et 31 % du lieu de travail — n’est rattaché à aucun pays et ne figure pas sur la carte.",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "« formés »": {
+   "fr": "« formés »",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "Évolution #–# de la part des brevets d’IA accordés : la Chine passe d’environ # % à # %, les États-Unis reculent d’environ # % à # %, l’Europe d’environ # % à # %, le reste du monde d’environ # % à # %. En volume absolu, les trois acteurs progressent : l’Europe est multipliée par #, les États-Unis par #, la Chine par #.": {
+   "fr": "Évolution 2010–2023 de la part des brevets d’IA accordés : la Chine passe d’environ 13 % à 69,7 %, les États-Unis reculent d’environ 40 % à 14,2 %, l’Europe d’environ 8 % à 2,8 %, le reste du monde d’environ 39 % à 13,3 %. En volume absolu, les trois acteurs progressent : l’Europe est multipliée par 21, les États-Unis par 22, la Chine par 327.",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "à": {
+   "fr": "à",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "à NeurIPS (~top # % des publications). * Royaume-Uni, Allemagne, France et Canada : entre # et # % chacun des lieux de travail selon la carte source (lecture graphique — valeur précise non publiée). Inde : lieu de travail non disponible.": {
+   "fr": "à NeurIPS (~top 2 % des publications). * Royaume-Uni, Allemagne, France et Canada : entre 2 et 4 % chacun des lieux de travail selon la carte source (lecture graphique — valeur précise non publiée). Inde : lieu de travail non disponible.",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "— qui recense aussi les systèmes européens bâtis sur ces données : contrôles agricoles par imagerie Sentinel, surveillance des frontières, cartographie de crise.": {
+   "fr": "— qui recense aussi les systèmes européens bâtis sur ces données : contrôles agricoles par imagerie Sentinel, surveillance des frontières, cartographie de crise.",
+   "en": "",
+   "_pages": [
+    "obs-rd"
+   ]
+  },
+  "Bloc # sur # · Les dix risques — À remplir maintenant": {
+   "fr": "Bloc 1 sur 2 · Les dix risques — À remplir maintenant",
+   "en": "",
+   "_pages": [
+    "owasp-dix"
+   ]
+  },
+  "LLM# — Chaîne d'approvisionnement": {
+   "fr": "LLM03 — Chaîne d'approvisionnement",
+   "en": "",
+   "_pages": [
+    "owasp-dix"
+   ]
+  },
+  "LLM# — Divulgation d'informations sensibles": {
+   "fr": "LLM02 — Divulgation d'informations sensibles",
+   "en": "",
+   "_pages": [
+    "owasp-dix"
+   ]
+  },
+  "LLM# — Empoisonnement des données et du modèle": {
+   "fr": "LLM04 — Empoisonnement des données et du modèle",
+   "en": "",
+   "_pages": [
+    "owasp-dix"
+   ]
+  },
+  "LLM# — Injection d'invite": {
+   "fr": "LLM01 — Injection d'invite",
+   "en": "",
+   "_pages": [
+    "owasp-dix"
+   ]
+  },
+  "LLM# — Traitement incorrect des sorties": {
+   "fr": "LLM05 — Traitement incorrect des sorties",
+   "en": "",
+   "_pages": [
+    "owasp-dix"
+   ]
+  },
+  "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : cette liste est un classement de risques, pas une norme : il n'y a pas de conformité à prononcer.": {
+   "fr": "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : cette liste est un classement de risques, pas une norme : il n'y a pas de conformité à prononcer.",
+   "en": "",
+   "_pages": [
+    "owasp-dix",
+    "owasp-pont"
+   ]
+  },
+  "Bloc # sur # · Ce qu’ISO # ne couvre pas — Pas encore atteint": {
+   "fr": "Bloc 2 sur 2 · Ce qu’ISO 42001 ne couvre pas — Pas encore atteint",
+   "en": "",
+   "_pages": [
+    "owasp-pont"
+   ]
+  },
+  "↓ Les dix risques": {
+   "fr": "↓ Les dix risques",
+   "en": "",
+   "_pages": [
+    "owasp-pont"
+   ]
+  },
+  "# août #": {
+   "fr": "2 août 2025",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "# cas du panel": {
+   "fr": "7 cas du panel",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "# contrôle(s)": {
+   "fr": "43 contrôle(s)",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "# décembre #": {
+   "fr": "2 décembre 2027",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "# entrées": {
+   "fr": "6 entrées",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "# et plus": {
+   "fr": "60 et plus",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "# kgCO₂e par MWh d’électricité informatique": {
+   "fr": "22 kgCO₂e par MWh d’électricité informatique",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "# mois · périmé": {
+   "fr": "51 mois · périmé",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "# mois · à vérifier": {
+   "fr": "21 mois · à vérifier",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "# pays · référentiel #-#-e": {
+   "fr": "28 pays · référentiel 2026-08-e",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "# secteurs · fenêtre juin # → juillet #": {
+   "fr": "38 secteurs · fenêtre juin 2023 → juillet 2026",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "# source sur # interrogées ont répondu · sans clé d'API": {
+   "fr": "0 source sur 3 interrogées ont répondu · sans clé d'API",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "# sources sur # s'ouvrent d'un clic ; # sont des synthèses du cabinet, qui ne renvoient à aucune publication ; # citent un éditeur dont l'adresse n'est pas encore enregistrée.": {
+   "fr": "32 sources sur 53 s'ouvrent d'un clic ; 4 sont des synthèses du cabinet, qui ne renvoient à aucune publication ; 17 citent un éditeur dont l'adresse n'est pas encore enregistrée.",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "# sources · # ouvrables d’un clic": {
+   "fr": "53 sources · 32 ouvrables d’un clic",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "# tendances · # jalons · # réserves": {
+   "fr": "10 tendances · 11 jalons · 5 réserves",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "# à #": {
+   "fr": "40 à 59",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "# à # L/kWh selon le mode de refroidissement": {
+   "fr": "0,00 à 2,20 L/kWh selon le mode de refroidissement",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "# à # gCO₂e/kWh selon le pays, approche cycle de vie": {
+   "fr": "30 à 660 gCO₂e/kWh selon le pays, approche cycle de vie",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "# à # selon le mode de refroidissement": {
+   "fr": "1,10 à 1,60 selon le mode de refroidissement",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "#. Norvège (hors UE)": {
+   "fr": "3. Norvège (hors UE)",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "#. Suède": {
+   "fr": "1. Suède",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "(indice WEI+ de l’AEE et compétition avec l’irrigation agricole), le": {
+   "fr": "(indice WEI+ de l’AEE et compétition avec l’irrigation agricole), le",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "(nucléaire, renouvelables, centrales fossiles), la": {
+   "fr": "(nucléaire, renouvelables, centrales fossiles), la",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "(surveillance AI Act, cybersécurité, protection des données), sa": {
+   "fr": "(surveillance AI Act, cybersécurité, protection des données), sa",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  ", en": {
+   "fr": ", en",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  ", jamais substitué en silence : vous devez pouvoir retrouver ce que vous avez cité la semaine dernière.": {
+   "fr": ", jamais substitué en silence : vous devez pouvoir retrouver ce que vous avez cité la semaine dernière.",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  ", le": {
+   "fr": ", le",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  ", le score selon vos poids, puis les classes carbone, eau et prix ; la dernière ligne donne le free cooling, le parc en service et la file de raccordement #. Cliquez une tuile pour ouvrir la fiche du pays. Pour comparer colonne par colonne, avec la source de chaque critère, choisissez « Tableau détaillé » dans": {
+   "fr": ", le score selon vos poids, puis les classes carbone, eau et prix ; la dernière ligne donne le free cooling, le parc en service et la file de raccordement 2030. Cliquez une tuile pour ouvrir la fiche du pays. Pour comparer colonne par colonne, avec la source de chaque critère, choisissez « Tableau détaillé » dans",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  ", pour qu’on y retrouve le sien d’un coup d’œil sans dérouler vingt-trois lignes : le": {
+   "fr": ", pour qu’on y retrouve le sien d’un coup d’œil sans dérouler vingt-trois lignes : le",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  ", puis électricité et eau —": {
+   "fr": ", puis électricité et eau —",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  ", qui est signalé comme tel.": {
+   "fr": ", qui est signalé comme tel.",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  ", sa": {
+   "fr": ", sa",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  ". C'est la seule couche de cette page qu'un lecteur vérifie de bout en bout, sans nous.": {
+   "fr": ". C'est la seule couche de cette page qu'un lecteur vérifie de bout en bout, sans nous.",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  ". Chaque tuile porte le": {
+   "fr": ". Chaque tuile porte le",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  ". Réglez le poids de chaque critère selon votre projet — construction neuve, extension ou rachat — et lisez le classement.": {
+   "fr": ". Réglez le poids de chaque critère selon votre projet — construction neuve, extension ou rachat — et lisez le classement.",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  ": +# m · valeur CALCULÉE par interpolation — le GIEC ne publie pas cet horizon · À cet horizon, la trajectoire d'émissions ne change que # cm : l'élévation est déjà engagée.": {
+   "fr": ": +0,116 m · valeur CALCULÉE par interpolation — le GIEC ne publie pas cet horizon · À cet horizon, la trajectoire d'émissions ne change que 4 cm : l'élévation est déjà engagée.",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  ": un registre qui n’afficherait que ses succès ne serait pas vérifiable, il serait promotionnel. Quand un contrôle a conduit à corriger une valeur, la valeur d’origine reste écrite — sans elle, un lecteur qui aurait cité l’ancienne ne saurait pas qu’il doit se corriger.": {
+   "fr": ": un registre qui n’afficherait que ses succès ne serait pas vérifiable, il serait promotionnel. Quand un contrôle a conduit à corriger une valeur, la valeur d’origine reste écrite — sans elle, un lecteur qui aurait cité l’ancienne ne saurait pas qu’il doit se corriger.",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  ": un score pondéré additionne, une conjonction ne s’additionne pas. Il se lit à côté du classement, jamais dedans. Chaque fiche concernée porte son motif propre.": {
+   "fr": ": un score pondéré additionne, une conjonction ne s’additionne pas. Il se lit à côté du classement, jamais dedans. Chaque fiche concernée porte son motif propre.",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "; annexe I au": {
+   "fr": "; annexe I au",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "; haut risque annexe III au": {
+   "fr": "; haut risque annexe III au",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "; les notes n’ont aucun sens hors de ce classement. Les pays s’affichent": {
+   "fr": "; les notes n’ont aucun sens hors de ce classement. Les pays s’affichent",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "; obligations GPAI depuis le": {
+   "fr": "; obligations GPAI depuis le",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "; pour comparer critère par critère, « Tableau détaillé » dans": {
+   "fr": "; pour comparer critère par critère, « Tableau détaillé » dans",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "AEE WEI+ # + parts d'irrigation — classe faible=#, modéré=#, élevé=# ⚠ à contre-courant de l'optimum thermique : l'évaporatif rend MIEUX en air sec, donc là où ce critère note mal": {
+   "fr": "AEE WEI+ 2022 + parts d'irrigation — classe faible=90, modéré=55, élevé=20 ⚠ à contre-courant de l'optimum thermique : l'évaporatif rend MIEUX en air sec, donc là où ce critère note mal",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "AI-Rad Companion : aide à la lecture radiologique multi-organes": {
+   "fr": "AI-Rad Companion : aide à la lecture radiologique multi-organes",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "AIFS : modèle de prévision météorologique appris sur la réanalyse ERA# du service Copernicus climat, passé en exploitation": {
+   "fr": "AIFS : modèle de prévision météorologique appris sur la réanalyse ERA5 du service Copernicus climat, passé en exploitation",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "AR#, Groupe de travail I — élévation du niveau moyen mondial de la mer": {
+   "fr": "AR6, Groupe de travail I — élévation du niveau moyen mondial de la mer",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "AR#, Groupe de travail III — Résumé à l'intention des décideurs, § B.#, C.# et C.# ; catégories de scénarios, encadré SPM.#": {
+   "fr": "AR6, Groupe de travail III — Résumé à l'intention des décideurs, § B.6, C.1.1 et C.1.3 ; catégories de scénarios, encadré SPM.1",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "ASML — ML de métrologie et de contrôle de procédé lithographique": {
+   "fr": "ASML — ML de métrologie et de contrôle de procédé lithographique",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "ASP — Agence de services et de paiement": {
+   "fr": "ASP — Agence de services et de paiement",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "ASP — Agence de services et de paiement — Contrôles PAC par surveillance : séries Sentinel-# et Sentinel-# classées automatiquement pour vérifier les cultures déclarées sur chaque parcelle": {
+   "fr": "ASP — Agence de services et de paiement — Contrôles PAC par surveillance : séries Sentinel-1 et Sentinel-2 classées automatiquement pour vérifier les cultures déclarées sur chaque parcelle",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "AXA Secure GPT déployé à l'échelle du groupe (~# # collaborateurs)": {
+   "fr": "AXA Secure GPT déployé à l'échelle du groupe (~140 000 collaborateurs)",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "AXA — AXA Secure GPT déployé à l'échelle du groupe (~# # collaborateurs)": {
+   "fr": "AXA — AXA Secure GPT déployé à l'échelle du groupe (~140 000 collaborateurs)",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "AXA — Tarification et sélection des risques santé/prévoyance assistées par ML": {
+   "fr": "AXA — Tarification et sélection des risques santé/prévoyance assistées par ML",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Abandonné": {
+   "fr": "Abandonné",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Accroître la capacité de refroidissement de # % en moyenne, et jusqu’à # % pour les sites les plus exposés aux contraintes.": {
+   "fr": "Accroître la capacité de refroidissement de 11 % en moyenne, et jusqu’à 48 % pour les sites les plus exposés aux contraintes.",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Affectation algorithmique des courses et détection de fraude conducteurs": {
+   "fr": "Affectation algorithmique des courses et détection de fraude conducteurs",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Affichage des cas": {
+   "fr": "Affichage des cas",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Agence européenne pour l'environnement": {
+   "fr": "Agence européenne pour l'environnement",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Agence européenne pour l'environnement (AEE)": {
+   "fr": "Agence européenne pour l'environnement (AEE)",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Agence internationale de l'énergie": {
+   "fr": "Agence internationale de l'énergie",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Aide au tri de candidatures et mobilité interne assistée": {
+   "fr": "Aide au tri de candidatures et mobilité interne assistée",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Airbus — Vision qualité en ligne d'assemblage et génAI d'ingénierie interne": {
+   "fr": "Airbus — Vision qualité en ligne d'assemblage et génAI d'ingénierie interne",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Allemagne · Dispositifs médicaux · À l'échelle": {
+   "fr": "Allemagne · Dispositifs médicaux · À l'échelle",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Allemagne · Fournisseur biométrie · À l'échelle": {
+   "fr": "Allemagne · Fournisseur biométrie · À l'échelle",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Allemagne · Logistique · À l'échelle": {
+   "fr": "Allemagne · Logistique · À l'échelle",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Allemagne · Transport aérien · Pilote": {
+   "fr": "Allemagne · Transport aérien · Pilote",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Allemagne · Télécoms · Production": {
+   "fr": "Allemagne · Télécoms · Production",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Allemagne · Éditeur logiciel · À l'échelle": {
+   "fr": "Allemagne · Éditeur logiciel · À l'échelle",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Allemagne · Équipementier · À l'échelle": {
+   "fr": "Allemagne · Équipementier · À l'échelle",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Aller à un pays, une organisation ou un centre de données": {
+   "fr": "Aller à un pays, une organisation ou un centre de données",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Aller à — pays, organisation, centre de données": {
+   "fr": "Aller à — pays, organisation, centre de données",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Allianz — Assistance génératives à la gestion des sinistres et à la souscription": {
+   "fr": "Allianz — Assistance génératives à la gestion des sinistres et à la souscription",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Aléas climatiques": {
+   "fr": "Aléas climatiques",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Aléas climatiques — à l’horizon retenu": {
+   "fr": "Aléas climatiques — à l’horizon retenu",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Amazon France Logistique": {
+   "fr": "Amazon France Logistique",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Amazon France Logistique — Suivi algorithmique de la productivité des salariés en entrepôt (scanners)": {
+   "fr": "Amazon France Logistique — Suivi algorithmique de la productivité des salariés en entrepôt (scanners)",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Annonces d'investissement et contraintes réglementaires, horizon #": {
+   "fr": "Annonces d'investissement et contraintes réglementaires, horizon 2030",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Appariement algorithmique candidats-missions à l'échelle européenne": {
+   "fr": "Appariement algorithmique candidats-missions à l'échelle européenne",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Approche production, et non consommation": {
+   "fr": "Approche production, et non consommation",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Arrêt annoncé des opérations d’un site": {
+   "fr": "Arrêt annoncé des opérations d’un site",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Assistance génératives à la gestion des sinistres et à la souscription": {
+   "fr": "Assistance génératives à la gestion des sinistres et à la souscription",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Assistant client OpenAI traitant l'équivalent de ~# agents (#/# des conversations)": {
+   "fr": "Assistant client OpenAI traitant l'équivalent de ~700 agents (2/3 des conversations)",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Assistant de consultation (transcription et synthèse) pour les praticiens": {
+   "fr": "Assistant de consultation (transcription et synthèse) pour les praticiens",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Assistant génAI de conception et service client (Billie) ; requalification des salariés du centre d'appel": {
+   "fr": "Assistant génAI de conception et service client (Billie) ; requalification des salariés du centre d'appel",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Assistant mode fondé sur ChatGPT et recommandation de taille": {
+   "fr": "Assistant mode fondé sur ChatGPT et recommandation de taille",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Assistante numérique « Kate » : parcours client et actes bancaires automatisés": {
+   "fr": "Assistante numérique « Kate » : parcours client et actes bancaires automatisés",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Assistants génAI internes (askT) et service client augmenté": {
+   "fr": "Assistants génAI internes (askT) et service client augmenté",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Assistants génAI internes et optimisation d'actifs industriels": {
+   "fr": "Assistants génAI internes et optimisation d'actifs industriels",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Assistants génératifs internes (conseillers, conformité) fondés sur les modèles Mistral AI": {
+   "fr": "Assistants génératifs internes (conseillers, conformité) fondés sur les modèles Mistral AI",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Aucun n'entre dans les scores": {
+   "fr": "Aucun n'entre dans les scores",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Aucune capacité informatique attestée sur les # sites": {
+   "fr": "Aucune capacité informatique attestée sur les 97 sites",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Aucune mesure satellitaire ne démontre l'usage d'une IA. Ces couches sont la matière première d'une partie des systèmes recensés — jamais l'indice de leur existence.": {
+   "fr": "Aucune mesure satellitaire ne démontre l'usage d'une IA. Ces couches sont la matière première d'une partie des systèmes recensés — jamais l'indice de leur existence.",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Avantages, inconvénients et commentaire par pays — la lecture du cabinet, datée, à discuter. Cliquez un pays pour ouvrir le détail de son parc.": {
+   "fr": "Avantages, inconvénients et commentaire par pays — la lecture du cabinet, datée, à discuter. Cliquez un pays pour ouvrir le détail de son parc.",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "BBVA — Déploiement ChatGPT Enterprise (milliers de licences) pour les fonctions internes": {
+   "fr": "BBVA — Déploiement ChatGPT Enterprise (milliers de licences) pour les fonctions internes",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "BMW — Vision qualité en production (Regensburg) et IA d'usine": {
+   "fr": "BMW — Vision qualité en production (Regensburg) et IA d'usine",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "BNP Paribas — Assistants génératifs internes (conseillers, conformité) fondés sur les modèles Mistral AI": {
+   "fr": "BNP Paribas — Assistants génératifs internes (conseillers, conformité) fondés sur les modèles Mistral AI",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "BRGM — Bureau de recherches géologiques et minières": {
+   "fr": "BRGM — Bureau de recherches géologiques et minières",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Base Empreinte ADEME · référentiel NegaOctet · ACV d’exploitants": {
+   "fr": "Base Empreinte ADEME · référentiel NegaOctet · ACV d’exploitants",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Base Empreinte — facteurs d'émission": {
+   "fr": "Base Empreinte — facteurs d'émission",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Base de données ouverte d'impacts environnementaux du numérique": {
+   "fr": "Base de données ouverte d'impacts environnementaux du numérique",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Base de reconnaissance faciale constituée par moissonnage d'images en ligne": {
+   "fr": "Base de reconnaissance faciale constituée par moissonnage d'images en ligne",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Belgique · Banque · À l'échelle": {
+   "fr": "Belgique · Banque · À l'échelle",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Belgique · Sécurité civile · Production": {
+   "fr": "Belgique · Sécurité civile · Production",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Bolt — Affectation algorithmique des courses et détection de fraude conducteurs": {
+   "fr": "Bolt — Affectation algorithmique des courses et détection de fraude conducteurs",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Bosch — Inspection optique IA et offre AIShield (sécurité des modèles) — fournisseur et utilisateur": {
+   "fr": "Bosch — Inspection optique IA et offre AIShield (sécurité des modèles) — fournisseur et utilisateur",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Carbone incorporé d'un serveur : # # kgCO#e contre # à l'ADEME": {
+   "fr": "Carbone incorporé d'un serveur : 1 200 kgCO2e contre 600 à l'ADEME",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Carrefour — Chatbot d'achat « Hopla » (OpenAI) et génAI pour fiches produits et achats": {
+   "fr": "Carrefour — Chatbot d'achat « Hopla » (OpenAI) et génAI pour fiches produits et achats",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Carrés = centres de données": {
+   "fr": "Carrés = centres de données",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Carte de l'Union européenne : nombre de cas de systèmes d'IA documentés par pays dans le panel.": {
+   "fr": "Carte de l'Union européenne : nombre de cas de systèmes d'IA documentés par pays dans le panel.",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Cartographie rapide de crise : délimitation assistée des zones inondées et brûlées à partir de Sentinel-# et Sentinel-#": {
+   "fr": "Cartographie rapide de crise : délimitation assistée des zones inondées et brûlées à partir de Sentinel-1 et Sentinel-2",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Cas documentés": {
+   "fr": "Cas documentés",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Cas d’IA documentés, une entreprise par tuile": {
+   "fr": "Cas d’IA documentés, une entreprise par tuile",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Cas d’IA en entreprise": {
+   "fr": "Cas d’IA en entreprise",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Ce qu'elle établit — et ce qu'elle n'établit pas": {
+   "fr": "Ce qu'elle établit — et ce qu'elle n'établit pas",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Ce que fait ce comparateur.": {
+   "fr": "Ce que fait ce comparateur.",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Ce qui a dépassé son cycle de publication.": {
+   "fr": "Ce qui a dépassé son cycle de publication.",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Ce qui est tombé, et par quel mécanisme": {
+   "fr": "Ce qui est tombé, et par quel mécanisme",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Ce qu’il faut rattraper :": {
+   "fr": "Ce qu’il faut rattraper :",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Ce registre récolte ce que les modules DÉCLARENT. Il ne vérifie pas que les adresses répondent : un lien devenu mort y figurerait encore.": {
+   "fr": "Ce registre récolte ce que les modules DÉCLARENT. Il ne vérifie pas que les adresses répondent : un lien devenu mort y figurerait encore.",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Ce référentiel COMPARE des pays en ordres de grandeur sourcés ; il ne chiffre aucun site. Les notes servent le classement pondéré et n'ont aucun sens hors de lui. Toute décision exige la vérification des sources primaires citées et une due diligence locale — réseau, bassin versant, permis, prix contractuel.": {
+   "fr": "Ce référentiel COMPARE des pays en ordres de grandeur sourcés ; il ne chiffre aucun site. Les notes servent le classement pondéré et n'ont aucun sens hors de lui. Toute décision exige la vérification des sources primaires citées et une due diligence locale — réseau, bassin versant, permis, prix contractuel.",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Ce signalement": {
+   "fr": "Ce signalement",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Ces répartitions décrivent LE PANEL (cas publiquement documentés), pas le parc européen réel — le biais de publication favorise les grands groupes et les cas génératifs. Elles suffisent en revanche à situer un portefeuille de SIA : si vos systèmes RH ou de scoring n'apparaissent pas dans votre registre interne alors qu'ils dominent les classes hautes du panel, c'est l'angle mort à traiter en premier.": {
+   "fr": "Ces répartitions décrivent LE PANEL (cas publiquement documentés), pas le parc européen réel — le biais de publication favorise les grands groupes et les cas génératifs. Elles suffisent en revanche à situer un portefeuille de SIA : si vos systèmes RH ou de scoring n'apparaissent pas dans votre registre interne alors qu'ils dominent les classes hautes du panel, c'est l'angle mort à traiter en premier.",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Cette période de retour est en décalage complet avec les projections climatiques. Le dimensionnement du parc existant repose donc sur un climat qui n’est plus celui dans lequel il fonctionne.": {
+   "fr": "Cette période de retour est en décalage complet avec les projections climatiques. Le dimensionnement du parc existant repose donc sur un climat qui n’est plus celui dans lequel il fonctionne.",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Chaque affirmation vérifiable de cette page a été confrontée une par une à des sources primaires ou institutionnelles.": {
+   "fr": "Chaque affirmation vérifiable de cette page a été confrontée une par une à des sources primaires ou institutionnelles.",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Chaque cas d’IA": {
+   "fr": "Chaque cas d’IA",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Chaque centre de données": {
+   "fr": "Chaque centre de données",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Chaque colonne porte sa nature et sa source": {
+   "fr": "Chaque colonne porte sa nature et sa source",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "ChatGPT : traitement des données des utilisateurs européens": {
+   "fr": "ChatGPT : traitement des données des utilisateurs européens",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "ChatGPT intégré à l'assistant vocal IDA (via Cerence) sur véhicules européens": {
+   "fr": "ChatGPT intégré à l'assistant vocal IDA (via Cerence) sur véhicules européens",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Chatbot client et scoring interne (déploiement régional CEE)": {
+   "fr": "Chatbot client et scoring interne (déploiement régional CEE)",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Chatbot d'achat « Hopla » (OpenAI) et génAI pour fiches produits et achats": {
+   "fr": "Chatbot d'achat « Hopla » (OpenAI) et génAI pour fiches produits et achats",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Chatbot génératif de service client (premier grand déploiement bancaire génAI face client en Europe)": {
+   "fr": "Chatbot génératif de service client (premier grand déploiement bancaire génAI face client en Europe)",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Choisir un pays d’implantation — comparateur pondéré": {
+   "fr": "Choisir un pays d’implantation — comparateur pondéré",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Choix d'implantation": {
+   "fr": "Choix d'implantation",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Choix d’implantation": {
+   "fr": "Choix d’implantation",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Classement d’implantation, un pays par tuile": {
+   "fr": "Classement d’implantation, un pays par tuile",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Classes d'exposition aux aléas climatiques, horizons # et #": {
+   "fr": "Classes d'exposition aux aléas climatiques, horizons 2030 et 2050",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "CleanSeaNet : détection automatisée des nappes d'hydrocarbures sur imagerie radar Sentinel-#, alertes transmises aux États membres": {
+   "fr": "CleanSeaNet : détection automatisée des nappes d'hydrocarbures sur imagerie radar Sentinel-1, alertes transmises aux États membres",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Clearview AI (fournisseur, effets UE)": {
+   "fr": "Clearview AI (fournisseur, effets UE)",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Clearview AI (fournisseur, effets UE) — Base de reconnaissance faciale constituée par moissonnage d'images en ligne": {
+   "fr": "Clearview AI (fournisseur, effets UE) — Base de reconnaissance faciale constituée par moissonnage d'images en ligne",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Cliquer pour ne garder que ces cas dans la grille": {
+   "fr": "Cliquer pour ne garder que ces cas dans la grille",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Cliquez un pays coloré — ou sa pastille de rang — pour ouvrir sa fiche détaillée": {
+   "fr": "Cliquez un pays coloré — ou sa pastille de rang — pour ouvrir sa fiche détaillée",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Cliquez une barre pour ne garder que ces cas dans la grille.": {
+   "fr": "Cliquez une barre pour ne garder que ces cas dans la grille.",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Code de bonnes pratiques sur le marquage et l'étiquetage des contenus générés par l'IA": {
+   "fr": "Code de bonnes pratiques sur le marquage et l'étiquetage des contenus générés par l'IA",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Collecte d'iris contre jetons (orbs) auprès du grand public européen": {
+   "fr": "Collecte d'iris contre jetons (orbs) auprès du grand public européen",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Commission européenne": {
+   "fr": "Commission européenne",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Commission européenne · ESA · EUMETSAT · ECMWF": {
+   "fr": "Commission européenne · ESA · EUMETSAT · ECMWF",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Commission européenne — Bureau de l'IA": {
+   "fr": "Commission européenne — Bureau de l'IA",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Commission européenne — service Copernicus de gestion des urgences (CEMS)": {
+   "fr": "Commission européenne — service Copernicus de gestion des urgences (CEMS)",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Commission européenne — service Copernicus de gestion des urgences (CEMS) — Cartographie rapide de crise : délimitation assistée des zones inondées et brûlées à partir de Sentinel-# et Sentinel-#": {
+   "fr": "Commission européenne — service Copernicus de gestion des urgences (CEMS) — Cartographie rapide de crise : délimitation assistée des zones inondées et brûlées à partir de Sentinel-1 et Sentinel-2",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Communiqués": {
+   "fr": "Communiqués",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Compagnon conversationnel affectif accessible aux mineurs": {
+   "fr": "Compagnon conversationnel affectif accessible aux mineurs",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Compilation datée — communiqués et décisions d'autorités": {
+   "fr": "Compilation datée — communiqués et décisions d'autorités",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Confirmé": {
+   "fr": "Confirmé",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Conseil de l'Union européenne et Parlement européen": {
+   "fr": "Conseil de l'Union européenne et Parlement européen",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Conseiller numérique George : recommandations financières personnalisées et génAI": {
+   "fr": "Conseiller numérique George : recommandations financières personnalisées et génAI",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Consommation d’eau réelle d’un centre de données QUATRE FOIS supérieure à la prévision déposée.": {
+   "fr": "Consommation d’eau réelle d’un centre de données QUATRE FOIS supérieure à la prévision déposée.",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Consommation typique d’un système d’IA par type et par stade": {
+   "fr": "Consommation typique d’un système d’IA par type et par stade",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Constantes employées par le modèle, avec leur source": {
+   "fr": "Constantes employées par le modèle, avec leur source",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Construits par nos soins depuis la littérature d’inférence et les ordres de grandeur publiés": {
+   "fr": "Construits par nos soins depuis la littérature d’inférence et les ordres de grandeur publiés",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Construits par nos soins depuis les capacités publiées par tranche et les dossiers de raccordement publics": {
+   "fr": "Construits par nos soins depuis les capacités publiées par tranche et les dossiers de raccordement publics",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Contexte, pas preuve.": {
+   "fr": "Contexte, pas preuve.",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Contrôle qualité par vision en ligne de production (Magic Eye)": {
+   "fr": "Contrôle qualité par vision en ligne de production (Magic Eye)",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Contrôles PAC par surveillance : séries Sentinel-# et Sentinel-# classées automatiquement pour vérifier les cultures déclarées sur chaque parcelle": {
+   "fr": "Contrôles PAC par surveillance : séries Sentinel-1 et Sentinel-2 classées automatiquement pour vérifier les cultures déclarées sur chaque parcelle",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Convertir une consommation électrique en émissions, pays par pays.": {
+   "fr": "Convertir une consommation électrique en émissions, pays par pays.",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Copernicus · Union européenne": {
+   "fr": "Copernicus · Union européenne",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Copernicus — programme d'observation de la Terre de l'Union": {
+   "fr": "Copernicus — programme d'observation de la Terre de l'Union",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Copilote Joule intégré aux suites (fournisseur de SIA à des milliers d'entreprises UE) ; signataire du Pacte IA": {
+   "fr": "Copilote Joule intégré aux suites (fournisseur de SIA à des milliers d'entreprises UE) ; signataire du Pacte IA",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Copilotes génAI (Resource Advisor) et optimisation énergétique client": {
+   "fr": "Copilotes génAI (Resource Advisor) et optimisation énergétique client",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Corrigé": {
+   "fr": "Corrigé",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Coût d'investissement au mégawatt IT": {
+   "fr": "Coût d'investissement au mégawatt IT",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Critères d’inclusion": {
+   "fr": "Critères d’inclusion",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Crédits : Décisions citées : CNIL, Garante, AEPD, BayLDA, Autoriteit Persoonsgegevens (sources primaires publiques) · Communiqués et rapports des entreprises citées (sources officielles) · Commission européenne : Pacte sur l'IA, code de bonnes pratiques GPAI, lignes directrices art. # · Référentiels sécurité : OWASP, MITRE ATLAS, ANSSI, ENISA, BSI.": {
+   "fr": "Crédits : Décisions citées : CNIL, Garante, AEPD, BayLDA, Autoriteit Persoonsgegevens (sources primaires publiques) · Communiqués et rapports des entreprises citées (sources officielles) · Commission européenne : Pacte sur l'IA, code de bonnes pratiques GPAI, lignes directrices art. 5 · Référentiels sécurité : OWASP, MITRE ATLAS, ANSSI, ENISA, BSI.",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "DHL Group — Optimisation de tournées et vision de tri colis à l'échelle du réseau": {
+   "fr": "DHL Group — Optimisation de tournées et vision de tri colis à l'échelle du réseau",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Danemark · Logistique maritime · Production": {
+   "fr": "Danemark · Logistique maritime · Production",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Danemark · Pharmaceutique · Pilote": {
+   "fr": "Danemark · Pharmaceutique · Pilote",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Dans ce comparateur, une bonne note d’eau va souvent à l’encontre de l’optimum thermique. Ce n’est pas une incohérence du classement : c’est l’arbitrage lui-même, et c’est au poids que vous donnez au critère « eau » de le trancher.": {
+   "fr": "Dans ce comparateur, une bonne note d’eau va souvent à l’encontre de l’optimum thermique. Ce n’est pas une incohérence du classement : c’est l’arbitrage lui-même, et c’est au poids que vous donnez au critère « eau » de le trancher.",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Decathlon — Prévision de demande et chatbot d'assistance client": {
+   "fr": "Decathlon — Prévision de demande et chatbot d'assistance client",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Deutsche Telekom — Assistants génAI internes (askT) et service client augmenté": {
+   "fr": "Deutsche Telekom — Assistants génAI internes (askT) et service client augmenté",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Diagnostics et biomarqueurs IA en oncologie (produits marqués CE)": {
+   "fr": "Diagnostics et biomarqueurs IA en oncologie (produits marqués CE)",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  },
+  "Digital Omnibus on AI — modification du règlement (UE) #/#": {
+   "fr": "Digital Omnibus on AI — modification du règlement (UE) 2024/1689",
+   "en": "",
+   "_pages": [
+    "pan-sia"
+   ]
+  }
+ },
+ "bloc": {}
+}

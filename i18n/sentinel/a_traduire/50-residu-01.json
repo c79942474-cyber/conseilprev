@@ -1,0 +1,1875 @@
+{
+ "_lot": "50-residu-01",
+ "_mots": 2617,
+ "_rubrique": "residu mesure navigateur",
+ "texte": {
+  "FR — afficher Sentinel en français": {
+   "fr": "FR — afficher Sentinel en français",
+   "en": "",
+   "_pages": [
+    "_coquille"
+   ]
+  },
+  "— Pas encore atteint": {
+   "fr": "— Pas encore atteint",
+   "en": "",
+   "_pages": [
+    "_coquille"
+   ]
+  },
+  "— Verrouillé": {
+   "fr": "— Verrouillé",
+   "en": "",
+   "_pages": [
+    "_coquille"
+   ]
+  },
+  "— À remplir maintenant": {
+   "fr": "— À remplir maintenant",
+   "en": "",
+   "_pages": [
+    "_coquille"
+   ]
+  },
+  "# blocs faits sur #": {
+   "fr": "0 blocs faits sur 2",
+   "en": "",
+   "_pages": [
+    "ia-act-hub",
+    "cra",
+    "cra-ecarts",
+    "cra-role",
+    "cra-chiffre"
+   ]
+  },
+  "Bloc # sur # · Audit IA Act — Pas encore atteint": {
+   "fr": "Bloc 2 sur 2 · Audit IA Act — Pas encore atteint",
+   "en": "",
+   "_pages": [
+    "audit-ia-act"
+   ]
+  },
+  "Il manque # réponses :": {
+   "fr": "Il manque 21 réponses :",
+   "en": "",
+   "_pages": [
+    "cra-ecarts",
+    "iso27001-risques",
+    "iso27001-soa",
+    "iso27001",
+    "iso42001"
+   ]
+  },
+  "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : l'autorité de surveillance du marché l'apprécie, et les systèmes à haut risque passent par une évaluation de la conformité.": {
+   "fr": "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : l'autorité de surveillance du marché l'apprécie, et les systèmes à haut risque passent par une évaluation de la conformité.",
+   "en": "",
+   "_pages": [
+    "ia-act-hub",
+    "audit-ia-act"
+   ]
+  },
+  "… et # autre(s), sur cet écran.": {
+   "fr": "… et 15 autre(s), sur cet écran.",
+   "en": "",
+   "_pages": [
+    "cra-ecarts",
+    "iso27001-soa",
+    "iso27001",
+    "iso42001",
+    "iso42001-soa"
+   ]
+  },
+  "↓ Vue d’ensemble IA Act": {
+   "fr": "↓ Vue d’ensemble IA Act",
+   "en": "",
+   "_pages": [
+    "audit-ia-act"
+   ]
+  },
+  "# secteur(s) avec données réelles": {
+   "fr": "1 secteur(s) avec données réelles",
+   "en": "",
+   "_pages": [
+    "benchmark"
+   ]
+  },
+  "vous #%": {
+   "fr": "vous 0%",
+   "en": "",
+   "_pages": [
+    "benchmark"
+   ]
+  },
+  "↓ -# pts vs. meilleur secteur (Finance / Banque / Assurance)": {
+   "fr": "↓ -50 pts vs. meilleur secteur (Finance / Banque / Assurance)",
+   "en": "",
+   "_pages": [
+    "benchmark"
+   ]
+  },
+  "● VOUS (# syst.)": {
+   "fr": "● VOUS (1942 syst.)",
+   "en": "",
+   "_pages": [
+    "benchmark"
+   ]
+  },
+  "Dites-nous votre besoin et votre implantation : nous répondons sous # h ouvrées.": {
+   "fr": "Dites-nous votre besoin et votre implantation : nous répondons sous 24 h ouvrées.",
+   "en": "",
+   "_pages": [
+    "carto"
+   ]
+  },
+  "Décrire mon projet →": {
+   "fr": "Décrire mon projet →",
+   "en": "",
+   "_pages": [
+    "carto"
+   ]
+  },
+  "Guide de la page": {
+   "fr": "Guide de la page",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc",
+    "obs-rd",
+    "carto"
+   ]
+  },
+  "Kuwait": {
+   "fr": "Kuwait",
+   "en": "",
+   "_pages": [
+    "carto"
+   ]
+  },
+  "La carte n’a pas pu se charger": {
+   "fr": "La carte n’a pas pu se charger",
+   "en": "",
+   "_pages": [
+    "carto"
+   ]
+  },
+  "Ouvrir le guide de cette page": {
+   "fr": "Ouvrir le guide de cette page",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc",
+    "obs-rd",
+    "carto"
+   ]
+  },
+  "Réponse sous # h ouvrées · sans engagement": {
+   "fr": "Réponse sous 24 h ouvrées · sans engagement",
+   "en": "",
+   "_pages": [
+    "carto"
+   ]
+  },
+  "Sa bibliothèque cartographique est servie par un domaine tiers (unpkg.com) que votre réseau ou votre navigateur n’a pas pu joindre. Les données, elles, sont intactes.": {
+   "fr": "Sa bibliothèque cartographique est servie par un domaine tiers (unpkg.com) que votre réseau ou votre navigateur n’a pas pu joindre. Les données, elles, sont intactes.",
+   "en": "",
+   "_pages": [
+    "carto"
+   ]
+  },
+  "Voir les mêmes juridictions dans le Panorama →": {
+   "fr": "Voir les mêmes juridictions dans le Panorama →",
+   "en": "",
+   "_pages": [
+    "carto"
+   ]
+  },
+  "Vous cherchez un partenaire dans votre région ?": {
+   "fr": "Vous cherchez un partenaire dans votre région ?",
+   "en": "",
+   "_pages": [
+    "carto"
+   ]
+  },
+  "Créé le #/#/#": {
+   "fr": "Créé le 21/09/2026",
+   "en": "",
+   "_pages": [
+    "clients"
+   ]
+  },
+  "Dernier événement Stripe reçu : jamais · vérifié le #-#-#T#:#:#+#:#": {
+   "fr": "Dernier événement Stripe reçu : jamais · vérifié le 2026-09-25T08:00:50+00:00",
+   "en": "",
+   "_pages": [
+    "clients"
+   ]
+  },
+  "brevo_non_configure": {
+   "fr": "brevo_non_configure",
+   "en": "",
+   "_pages": [
+    "clients"
+   ]
+  },
+  "stripe_non_configure": {
+   "fr": "stripe_non_configure",
+   "en": "",
+   "_pages": [
+    "clients"
+   ]
+  },
+  "— BREVO_API_KEY absente : aucun courriel ne part par l'API, et le compte ne peut pas être vérifié.": {
+   "fr": "— BREVO_API_KEY absente : aucun courriel ne part par l'API, et le compte ne peut pas être vérifié.",
+   "en": "",
+   "_pages": [
+    "clients"
+   ]
+  },
+  "— STRIPE_SECRET_KEY absente : aucune caisse ne peut ouvrir et le compte ne peut pas être vérifié.": {
+   "fr": "— STRIPE_SECRET_KEY absente : aucune caisse ne peut ouvrir et le compte ne peut pas être vérifié.",
+   "en": "",
+   "_pages": [
+    "clients"
+   ]
+  },
+  "— STRIPE_WEBHOOK_SECRET absente : le point de réception répond # à toute notification, aucun paiement ne peut être confirmé.": {
+   "fr": "— STRIPE_WEBHOOK_SECRET absente : le point de réception répond 501 à toute notification, aucun paiement ne peut être confirmé.",
+   "en": "",
+   "_pages": [
+    "clients"
+   ]
+  },
+  "— Sélectionner un client —": {
+   "fr": "— Sélectionner un client —",
+   "en": "",
+   "_pages": [
+    "clients"
+   ]
+  },
+  "✅ payeur@recette.test": {
+   "fr": "✅ payeur@recette.test",
+   "en": "",
+   "_pages": [
+    "clients"
+   ]
+  },
+  "🔌 Connexions Stripe et Brevo": {
+   "fr": "🔌 Connexions Stripe et Brevo",
+   "en": "",
+   "_pages": [
+    "clients"
+   ]
+  },
+  "AU Australia": {
+   "fr": "AU Australia",
+   "en": "",
+   "_pages": [
+    "comp"
+   ]
+  },
+  "DE Germany": {
+   "fr": "DE Germany",
+   "en": "",
+   "_pages": [
+    "comp"
+   ]
+  },
+  "Au moins un produit comportant des éléments numériques, avec son nom et sa classe": {
+   "fr": "Au moins un produit comportant des éléments numériques, avec son nom et sa classe",
+   "en": "",
+   "_pages": [
+    "cra"
+   ]
+  },
+  "Bloc # sur # · Produits & classification — Verrouillé": {
+   "fr": "Bloc 2 sur 5 · Produits & classification — Verrouillé",
+   "en": "",
+   "_pages": [
+    "cra"
+   ]
+  },
+  "C'est le tuyau : un produit important de classe II ne peut être évalué que par un organisme notifié, et ces organismes ne sont désignés que depuis cette date.": {
+   "fr": "C'est le tuyau : un produit important de classe II ne peut être évalué que par un organisme notifié, et ces organismes ne sont désignés que depuis cette date.",
+   "en": "",
+   "_pages": [
+    "cra"
+   ]
+  },
+  "Ce bloc dépend de : Qualifier mon rôle. Complétez-le d'abord.": {
+   "fr": "Ce bloc dépend de : Qualifier mon rôle. Complétez-le d'abord.",
+   "en": "",
+   "_pages": [
+    "cra",
+    "cra-ecarts",
+    "cra-chiffre",
+    "cra-signalement"
+   ]
+  },
+  "Distributeur": {
+   "fr": "Distributeur",
+   "en": "",
+   "_pages": [
+    "cra",
+    "cra-role"
+   ]
+  },
+  "Il manque # réponse :": {
+   "fr": "Il manque 1 réponse :",
+   "en": "",
+   "_pages": [
+    "ia-act-hub",
+    "cra",
+    "cra-role",
+    "cra-chiffre",
+    "cra-signalement"
+   ]
+  },
+  "La seule obligation dont le retard se compte DÉJÀ : # h pour l'alerte précoce, # h pour la notification.": {
+   "fr": "La seule obligation dont le retard se compte DÉJÀ : 24 h pour l'alerte précoce, 72 h pour la notification.",
+   "en": "",
+   "_pages": [
+    "cra"
+   ]
+  },
+  "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : elle se démontre par la procédure d'évaluation de la conformité que la classe du produit impose, avant le marquage CE.": {
+   "fr": "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : elle se démontre par la procédure d'évaluation de la conformité que la classe du produit impose, avant le marquage CE.",
+   "en": "",
+   "_pages": [
+    "cra",
+    "cra-ecarts",
+    "cra-role",
+    "cra-chiffre",
+    "cra-signalement"
+   ]
+  },
+  "Marquage CE, déclaration UE de conformité, documentation technique, exigences essentielles de l'annexe I.": {
+   "fr": "Marquage CE, déclaration UE de conformité, documentation technique, exigences essentielles de l'annexe I.",
+   "en": "",
+   "_pages": [
+    "cra"
+   ]
+  },
+  "Produit comportant des éléments numériques": {
+   "fr": "Produit comportant des éléments numériques",
+   "en": "",
+   "_pages": [
+    "cra"
+   ]
+  },
+  "Produits critiques — # catégories": {
+   "fr": "Produits critiques — 3 catégories",
+   "en": "",
+   "_pages": [
+    "cra"
+   ]
+  },
+  "Produits importants — classe I — # catégories": {
+   "fr": "Produits importants — classe I — 19 catégories",
+   "en": "",
+   "_pages": [
+    "cra"
+   ]
+  },
+  "Produits importants — classe II — # catégories": {
+   "fr": "Produits importants — classe II — 4 catégories",
+   "en": "",
+   "_pages": [
+    "cra"
+   ]
+  },
+  "depuis le #-#-# (# j) — Article # — signalement des vulnérabilités activement exploitées et des incidents graves": {
+   "fr": "depuis le 2026-09-11 (14 j) — Article 14 — signalement des vulnérabilités activement exploitées et des incidents graves",
+   "en": "",
+   "_pages": [
+    "cra"
+   ]
+  },
+  "depuis le #-#-# (# j) — Chapitre IV (art. # à #) — notification des organismes d'évaluation de la conformité": {
+   "fr": "depuis le 2026-06-11 (106 j) — Chapitre IV (art. 35 à 51) — notification des organismes d'évaluation de la conformité",
+   "en": "",
+   "_pages": [
+    "cra"
+   ]
+  },
+  "le #-#-# (dans # j) — Application générale du règlement": {
+   "fr": "le 2027-12-11 (dans 442 j) — Application générale du règlement",
+   "en": "",
+   "_pages": [
+    "cra"
+   ]
+  },
+  "↓ Qualifier mon rôle": {
+   "fr": "↓ Qualifier mon rôle",
+   "en": "",
+   "_pages": [
+    "cra",
+    "cra-ecarts",
+    "cra-chiffre",
+    "cra-signalement"
+   ]
+  },
+  "Aucun chiffre d’affaires déclaré : seuls les montants fixes sont affichés. Ils constituent le": {
+   "fr": "Aucun chiffre d’affaires déclaré : seuls les montants fixes sont affichés. Ils constituent le",
+   "en": "",
+   "_pages": [
+    "cra-chiffre"
+   ]
+  },
+  "Bloc # sur # · Exposition chiffrée — Verrouillé": {
+   "fr": "Bloc 4 sur 5 · Exposition chiffrée — Verrouillé",
+   "en": "",
+   "_pages": [
+    "cra-chiffre",
+    "nis2-chiffre"
+   ]
+  },
+  "Exigences essentielles et obligations du fabricant": {
+   "fr": "Exigences essentielles et obligations du fabricant",
+   "en": "",
+   "_pages": [
+    "cra-chiffre"
+   ]
+  },
+  "Informations inexactes aux organismes notifiés et aux autorités": {
+   "fr": "Informations inexactes aux organismes notifiés et aux autorités",
+   "en": "",
+   "_pages": [
+    "cra-chiffre"
+   ]
+  },
+  "La fourniture d'informations inexactes, incomplètes ou trompeuses aux organismes notifiés et aux autorités de surveillance du marché, en réponse à une demande.": {
+   "fr": "La fourniture d'informations inexactes, incomplètes ou trompeuses aux organismes notifiés et aux autorités de surveillance du marché, en réponse à une demande.",
+   "en": "",
+   "_pages": [
+    "cra-chiffre"
+   ]
+  },
+  "Le chiffre d'affaires annuel mondial de l'exercice précédent": {
+   "fr": "Le chiffre d'affaires annuel mondial de l'exercice précédent",
+   "en": "",
+   "_pages": [
+    "cra-chiffre",
+    "nis2-chiffre"
+   ]
+  },
+  "Le non-respect des exigences essentielles de cybersécurité de l'annexe I et des obligations des articles # et #.": {
+   "fr": "Le non-respect des exigences essentielles de cybersécurité de l'annexe I et des obligations des articles 13 et 14.",
+   "en": "",
+   "_pages": [
+    "cra-chiffre"
+   ]
+  },
+  "Le non-respect des obligations des articles # à #, #, # §#-#, # §#-#, # §#-#-#, # §#, #, #, #, # et #.": {
+   "fr": "Le non-respect des obligations des articles 18 à 23, 28, 30 §1-4, 31 §1-4, 32 §1-2-3, 33 §5, 39, 41, 47, 49 et 53.",
+   "en": "",
+   "_pages": [
+    "cra-chiffre"
+   ]
+  },
+  "Obligations des autres opérateurs et de la procédure": {
+   "fr": "Obligations des autres opérateurs et de la procédure",
+   "en": "",
+   "_pages": [
+    "cra-chiffre"
+   ]
+  },
+  "bascule à # M€ de chiffre d’affaires": {
+   "fr": "bascule à 600 M€ de chiffre d’affaires",
+   "en": "",
+   "_pages": [
+    "cra-chiffre"
+   ]
+  },
+  "de l’exposition, pas son plafond — au-delà d’un certain chiffre d’affaires, c’est le pourcentage qui commande.": {
+   "fr": "de l’exposition, pas son plafond — au-delà d’un certain chiffre d’affaires, c’est le pourcentage qui commande.",
+   "en": "",
+   "_pages": [
+    "cra-chiffre"
+   ]
+  },
+  "l'existence d'amendes déjà infligées au même opérateur pour une infraction similaire": {
+   "fr": "l'existence d'amendes déjà infligées au même opérateur pour une infraction similaire",
+   "en": "",
+   "_pages": [
+    "cra-chiffre"
+   ]
+  },
+  "la nature, la gravité et la durée de l'infraction et de ses conséquences": {
+   "fr": "la nature, la gravité et la durée de l'infraction et de ses conséquences",
+   "en": "",
+   "_pages": [
+    "cra-chiffre"
+   ]
+  },
+  "la taille de l'entreprise, en particulier s'il s'agit d'une micro, petite ou moyenne entreprise, y compris une jeune entreprise": {
+   "fr": "la taille de l'entreprise, en particulier s'il s'agit d'une micro, petite ou moyenne entreprise, y compris une jeune entreprise",
+   "en": "",
+   "_pages": [
+    "cra-chiffre"
+   ]
+  },
+  "# % de conformité déclarée": {
+   "fr": "0 % de conformité déclarée",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "# non renseignée(s)": {
+   "fr": "21 non renseignée(s)",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Adresse de contact pour le signalement": {
+   "fr": "Adresse de contact pour le signalement",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Annexe I, partie I — Propriétés du produit": {
+   "fr": "Annexe I, partie I — Propriétés du produit",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Annexe I, partie II — Gestion des vulnérabilités": {
+   "fr": "Annexe I, partie II — Gestion des vulnérabilités",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Aucune vulnérabilité exploitable connue à la mise sur le marché": {
+   "fr": "Aucune vulnérabilité exploitable connue à la mise sur le marché",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Bloc # sur # · Analyse d’écart — Verrouillé": {
+   "fr": "Bloc 3 sur 5 · Analyse d’écart — Verrouillé",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Ce qu’elle demande": {
+   "fr": "Ce qu’elle demande",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Communication sur les vulnérabilités corrigées": {
+   "fr": "Communication sur les vulnérabilités corrigées",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Conception, développement et fabrication garantissant un niveau approprié en fonction des risques.": {
+   "fr": "Conception, développement et fabrication garantissant un niveau approprié en fonction des risques.",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Confidentialité des données": {
+   "fr": "Confidentialité des données",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Configuration de sécurité par défaut": {
+   "fr": "Configuration de sécurité par défaut",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Correction par mises à jour de sécurité": {
+   "fr": "Correction par mises à jour de sécurité",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Correction sans retard": {
+   "fr": "Correction sans retard",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Diffusion gratuite et sans délai des correctifs": {
+   "fr": "Diffusion gratuite et sans délai des correctifs",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Disponibilité des fonctions essentielles": {
+   "fr": "Disponibilité des fonctions essentielles",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Distribution sécurisée des mises à jour": {
+   "fr": "Distribution sécurisée des mises à jour",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Enregistrement et surveillance de l'activité": {
+   "fr": "Enregistrement et surveillance de l'activité",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Gestion et correction des vulnérabilités sans retard, par mises à jour de sécurité fournies séparément des mises à jour de fonctionnalité quand c'est techniquement possible.": {
+   "fr": "Gestion et correction des vulnérabilités sans retard, par mises à jour de sécurité fournies séparément des mises à jour de fonctionnalité quand c'est techniquement possible.",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Intégrité des données, commandes et configuration": {
+   "fr": "Intégrité des données, commandes et configuration",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Journalisation des accès et modifications pertinents pour la sécurité, avec possibilité de désactivation.": {
+   "fr": "Journalisation des accès et modifications pertinents pour la sécurité, avec possibilité de désactivation.",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Le produit est mis à disposition sans vulnérabilité exploitable connue.": {
+   "fr": "Le produit est mis à disposition sans vulnérabilité exploitable connue.",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Le produit est soumis régulièrement à des tests et examens efficaces.": {
+   "fr": "Le produit est soumis régulièrement à des tests et examens efficaces.",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Les mises à jour correctives sont diffusées sans délai et à titre gratuit, accompagnées d'un avis informant les utilisateurs.": {
+   "fr": "Les mises à jour correctives sont diffusées sans délai et à titre gratuit, accompagnées d'un avis informant les utilisateurs.",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Limitation des surfaces d'attaque": {
+   "fr": "Limitation des surfaces d'attaque",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Minimisation des données": {
+   "fr": "Minimisation des données",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Mécanismes de contrôle d'accès et d'authentification appropriés.": {
+   "fr": "Mécanismes de contrôle d'accès et d'authentification appropriés.",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Mécanismes garantissant que les correctifs parviennent aux produits de façon sûre et rapide.": {
+   "fr": "Mécanismes garantissant que les correctifs parviennent aux produits de façon sûre et rapide.",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Niveau de cybersécurité approprié aux risques": {
+   "fr": "Niveau de cybersécurité approprié aux risques",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Nomenclature des logiciels (SBOM)": {
+   "fr": "Nomenclature des logiciels (SBOM)",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Point de contact permettant à un tiers de signaler une vulnérabilité découverte, et partage d'informations sur les composants tiers.": {
+   "fr": "Point de contact permettant à un tiers de signaler une vulnérabilité découverte, et partage d'informations sur les composants tiers.",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Politique de divulgation coordonnée": {
+   "fr": "Politique de divulgation coordonnée",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Possibilité pour l'utilisateur d'effacer données et configuration de façon sûre et facile, et de les transférer.": {
+   "fr": "Possibilité pour l'utilisateur d'effacer données et configuration de façon sûre et facile, et de les transférer.",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Protection contre l'accès non autorisé": {
+   "fr": "Protection contre l'accès non autorisé",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Protection contre la manipulation ou la modification non autorisée.": {
+   "fr": "Protection contre la manipulation ou la modification non autorisée.",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Protection des données au repos, en transit et en traitement, par chiffrement ou autre moyen adapté.": {
+   "fr": "Protection des données au repos, en transit et en traitement, par chiffrement ou autre moyen adapté.",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Recensement et documentation des vulnérabilités et des composants, par une nomenclature lisible par machine couvrant au moins les dépendances de niveau supérieur.": {
+   "fr": "Recensement et documentation des vulnérabilités et des composants, par une nomenclature lisible par machine couvrant au moins les dépendances de niveau supérieur.",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Réduction de l'impact d'un incident": {
+   "fr": "Réduction de l'impact d'un incident",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Réduction des interfaces exposées, y compris externes.": {
+   "fr": "Réduction des interfaces exposées, y compris externes.",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Résilience et atténuation des effets des attaques par déni de service.": {
+   "fr": "Résilience et atténuation des effets des attaques par déni de service.",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Suppression sécurisée des données et paramètres": {
+   "fr": "Suppression sécurisée des données et paramètres",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Techniques et mesures d'atténuation limitant la portée d'une compromission.": {
+   "fr": "Techniques et mesures d'atténuation limitant la portée d'une compromission.",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Tests et examens de sécurité réguliers": {
+   "fr": "Tests et examens de sécurité réguliers",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Traitement limité aux données adéquates, pertinentes et nécessaires à l'utilisation prévue.": {
+   "fr": "Traitement limité aux données adéquates, pertinentes et nécessaires à l'utilisation prévue.",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Une exigence non renseignée n’est pas une exigence conforme : elle n’entre pas au numérateur.": {
+   "fr": "Une exigence non renseignée n’est pas une exigence conforme : elle n’entre pas au numérateur.",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Une politique de divulgation coordonnée des vulnérabilités est établie et appliquée.": {
+   "fr": "Une politique de divulgation coordonnée des vulnérabilités est établie et appliquée.",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Vulnérabilités corrigeables par mise à jour, y compris automatique et activée par défaut mais désactivable.": {
+   "fr": "Vulnérabilités corrigeables par mise à jour, y compris automatique et activée par défaut mais désactivable.",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "ei-# — Aucune vulnérabilité exploitable connue à la mise sur le marché": {
+   "fr": "ei-02 — Aucune vulnérabilité exploitable connue à la mise sur le marché",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "ei-# — Confidentialité des données": {
+   "fr": "ei-06 — Confidentialité des données",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "ei-# — Configuration de sécurité par défaut": {
+   "fr": "ei-03 — Configuration de sécurité par défaut",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "ei-# — Correction par mises à jour de sécurité": {
+   "fr": "ei-04 — Correction par mises à jour de sécurité",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "ei-# — Niveau de cybersécurité approprié aux risques": {
+   "fr": "ei-01 — Niveau de cybersécurité approprié aux risques",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "ei-# — Protection contre l'accès non autorisé": {
+   "fr": "ei-05 — Protection contre l'accès non autorisé",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "sur # exigence(s) retenue(s),": {
+   "fr": "sur 21 exigence(s) retenue(s),",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "sur #.": {
+   "fr": "sur 21.",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "À la publication d'une mise à jour : description, identification du produit, conséquences, gravité, et aide à la remédiation.": {
+   "fr": "À la publication d'une mise à jour : description, identification du produit, conséquences, gravité, et aide à la remédiation.",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "État sûr à la livraison, avec possibilité de réinitialisation à l'état d'origine ; dérogation possible pour un produit sur mesure.": {
+   "fr": "État sûr à la livraison, avec possibilité de réinitialisation à l'état d'origine ; dérogation possible pour un produit sur mesure.",
+   "en": "",
+   "_pages": [
+    "cra-ecarts"
+   ]
+  },
+  "Apportez-vous une MODIFICATION SUBSTANTIELLE à un produit déjà mis sur le marché ?": {
+   "fr": "Apportez-vous une MODIFICATION SUBSTANTIELLE à un produit déjà mis sur le marché ?",
+   "en": "",
+   "_pages": [
+    "cra-role"
+   ]
+  },
+  "Au moins une réponse sur ce que vous faites du produit": {
+   "fr": "Au moins une réponse sur ce que vous faites du produit",
+   "en": "",
+   "_pages": [
+    "cra-role"
+   ]
+  },
+  "Bloc # sur # · Qualifier mon rôle — À remplir maintenant": {
+   "fr": "Bloc 1 sur 5 · Qualifier mon rôle — À remplir maintenant",
+   "en": "",
+   "_pages": [
+    "cra-role"
+   ]
+  },
+  "Concevez-vous ou faites-vous concevoir ce produit ?": {
+   "fr": "Concevez-vous ou faites-vous concevoir ce produit ?",
+   "en": "",
+   "_pages": [
+    "cra-role"
+   ]
+  },
+  "Le fabricant est-il établi HORS de l'Union, et mettez-vous vous-même le produit sur le marché de l'Union ?": {
+   "fr": "Le fabricant est-il établi HORS de l'Union, et mettez-vous vous-même le produit sur le marché de l'Union ?",
+   "en": "",
+   "_pages": [
+    "cra-role"
+   ]
+  },
+  "Mettez-vous le produit sur le marché sous VOTRE nom ou VOTRE marque ?": {
+   "fr": "Mettez-vous le produit sur le marché sous VOTRE nom ou VOTRE marque ?",
+   "en": "",
+   "_pages": [
+    "cra-role"
+   ]
+  },
+  "Réponse": {
+   "fr": "Réponse",
+   "en": "",
+   "_pages": [
+    "cra-role"
+   ]
+  },
+  "Sur demande des autorités de surveillance : le nom et l'adresse de qui vous a fourni le produit, et de qui vous l'avez fourni. Cela suppose de le savoir — donc de l'avoir consigné au moment de la transaction, pas au moment de la demande.": {
+   "fr": "Sur demande des autorités de surveillance : le nom et l'adresse de qui vous a fourni le produit, et de qui vous l'avez fourni. Cela suppose de le savoir — donc de l'avoir consigné au moment de la transaction, pas au moment de la demande.",
+   "en": "",
+   "_pages": [
+    "cra-role"
+   ]
+  },
+  "agir avec la diligence requise": {
+   "fr": "agir avec la diligence requise",
+   "en": "",
+   "_pages": [
+    "cra-role"
+   ]
+  },
+  "art. # ou # — vous êtes fabricant pour ce que vous modifiez": {
+   "fr": "art. 21 ou 22 — vous êtes fabricant pour ce que vous modifiez",
+   "en": "",
+   "_pages": [
+    "cra-role"
+   ]
+  },
+  "art. # — vous êtes fabricant": {
+   "fr": "art. 21 — vous êtes fabricant",
+   "en": "",
+   "_pages": [
+    "cra-role"
+   ]
+  },
+  "art. # — vous êtes fabricant d'origine": {
+   "fr": "art. 3 — vous êtes fabricant d'origine",
+   "en": "",
+   "_pages": [
+    "cra-role"
+   ]
+  },
+  "art. # — vous êtes importateur": {
+   "fr": "art. 19 — vous êtes importateur",
+   "en": "",
+   "_pages": [
+    "cra-role"
+   ]
+  },
+  "faire prendre les mesures correctives, ou faire retirer": {
+   "fr": "faire prendre les mesures correctives, ou faire retirer",
+   "en": "",
+   "_pages": [
+    "cra-role"
+   ]
+  },
+  "informer sans retard injustifié en cas de risque important": {
+   "fr": "informer sans retard injustifié en cas de risque important",
+   "en": "",
+   "_pages": [
+    "cra-role"
+   ]
+  },
+  "ne pas mettre à disposition tant qu'un produit qu'il croit non conforme n'a pas été mis en conformité": {
+   "fr": "ne pas mettre à disposition tant qu'un produit qu'il croit non conforme n'a pas été mis en conformité",
+   "en": "",
+   "_pages": [
+    "cra-role"
+   ]
+  },
+  "non": {
+   "fr": "non",
+   "en": "",
+   "_pages": [
+    "rgpd-site",
+    "cra-role"
+   ]
+  },
+  "vérifier que le fabricant ET l'importateur se sont conformés à leurs obligations, et que tous les documents nécessaires lui ont été COMMUNIQUÉS": {
+   "fr": "vérifier que le fabricant ET l'importateur se sont conformés à leurs obligations, et que tous les documents nécessaires lui ont été COMMUNIQUÉS",
+   "en": "",
+   "_pages": [
+    "cra-role"
+   ]
+  },
+  "vérifier que le marquage CE est apposé": {
+   "fr": "vérifier que le marquage CE est apposé",
+   "en": "",
+   "_pages": [
+    "cra-role"
+   ]
+  },
+  "— Vous mettez le produit à disposition sans le concevoir, l'importer, le marquer ni le modifier.": {
+   "fr": "— Vous mettez le produit à disposition sans le concevoir, l'importer, le marquer ni le modifier.",
+   "en": "",
+   "_pages": [
+    "cra-role"
+   ]
+  },
+  "Alerte précoce": {
+   "fr": "Alerte précoce",
+   "en": "",
+   "_pages": [
+    "cra-signalement"
+   ]
+  },
+  "Bloc # sur # · Signalement art. # — Verrouillé": {
+   "fr": "Bloc 5 sur 5 · Signalement art. 14 — Verrouillé",
+   "en": "",
+   "_pages": [
+    "cra-signalement",
+    "nis2-signalement"
+   ]
+  },
+  "Description de la vulnérabilité, gravité et répercussions, acteur malveillant le cas échéant, précisions sur le correctif.": {
+   "fr": "Description de la vulnérabilité, gravité et répercussions, acteur malveillant le cas échéant, précisions sur le correctif.",
+   "en": "",
+   "_pages": [
+    "cra-signalement"
+   ]
+  },
+  "Description détaillée, gravité et répercussions, type de menace ou cause profonde, mesures d'atténuation appliquées et en cours.": {
+   "fr": "Description détaillée, gravité et répercussions, type de menace ou cause profonde, mesures d'atténuation appliquées et en cours.",
+   "en": "",
+   "_pages": [
+    "cra-signalement"
+   ]
+  },
+  "Délai": {
+   "fr": "Délai",
+   "en": "",
+   "_pages": [
+    "cra-signalement"
+   ]
+  },
+  "Incident grave ayant des répercussions sur la sécurité du produit": {
+   "fr": "Incident grave ayant des répercussions sur la sécurité du produit",
+   "en": "",
+   "_pages": [
+    "cra-signalement"
+   ]
+  },
+  "Indiquant au minimum si l'incident pourrait avoir été causé par des actes illicites ou malveillants.": {
+   "fr": "Indiquant au minimum si l'incident pourrait avoir été causé par des actes illicites ou malveillants.",
+   "en": "",
+   "_pages": [
+    "cra-signalement"
+   ]
+  },
+  "Informations générales sur le produit, nature de l'exploitation et de la vulnérabilité, mesures correctives prises et celles que les utilisateurs peuvent prendre.": {
+   "fr": "Informations générales sur le produit, nature de l'exploitation et de la vulnérabilité, mesures correctives prises et celles que les utilisateurs peuvent prendre.",
+   "en": "",
+   "_pages": [
+    "cra-signalement"
+   ]
+  },
+  "Le fabricant prend connaissance d'un incident grave affectant la sécurité du produit.": {
+   "fr": "Le fabricant prend connaissance d'un incident grave affectant la sécurité du produit.",
+   "en": "",
+   "_pages": [
+    "cra-signalement"
+   ]
+  },
+  "Le fabricant prend connaissance d'une vulnérabilité de son produit qui est activement exploitée.": {
+   "fr": "Le fabricant prend connaissance d'une vulnérabilité de son produit qui est activement exploitée.",
+   "en": "",
+   "_pages": [
+    "cra-signalement"
+   ]
+  },
+  "Lisez l'écran, puis marquez-le lu — le bouton est au bas de l'écran": {
+   "fr": "Lisez l'écran, puis marquez-le lu — le bouton est au bas de l'écran",
+   "en": "",
+   "_pages": [
+    "ia-act-hub",
+    "cra-signalement",
+    "iso27001-millesime",
+    "nist-cadre",
+    "nist-genai"
+   ]
+  },
+  "Nature de l'incident, évaluation initiale, mesures correctives prises et celles que les utilisateurs peuvent prendre.": {
+   "fr": "Nature de l'incident, évaluation initiale, mesures correctives prises et celles que les utilisateurs peuvent prendre.",
+   "en": "",
+   "_pages": [
+    "cra-signalement"
+   ]
+  },
+  "Notification d'incident": {
+   "fr": "Notification d'incident",
+   "en": "",
+   "_pages": [
+    "cra-signalement"
+   ]
+  },
+  "Notification de vulnérabilité": {
+   "fr": "Notification de vulnérabilité",
+   "en": "",
+   "_pages": [
+    "cra-signalement"
+   ]
+  },
+  "Signalement sans retard injustifié, en indiquant le cas échéant les États membres où le produit a été mis à disposition.": {
+   "fr": "Signalement sans retard injustifié, en indiquant le cas échéant les États membres où le produit a été mis à disposition.",
+   "en": "",
+   "_pages": [
+    "cra-signalement"
+   ]
+  },
+  "Vulnérabilité activement exploitée": {
+   "fr": "Vulnérabilité activement exploitée",
+   "en": "",
+   "_pages": [
+    "cra-signalement"
+   ]
+  },
+  "art. #, §# et §#": {
+   "fr": "art. 14, §3 et §4",
+   "en": "",
+   "_pages": [
+    "cra-signalement"
+   ]
+  },
+  "art. #, §# et §# · art. #": {
+   "fr": "art. 14, §1 et §3 · art. 16",
+   "en": "",
+   "_pages": [
+    "cra-signalement"
+   ]
+  },
+  "À lire — Rien à saisir : l'écran explique. Il se marque « lu », et « lu » n'est pas vert.": {
+   "fr": "À lire — Rien à saisir : l'écran explique. Il se marque « lu », et « lu » n'est pas vert.",
+   "en": "",
+   "_pages": [
+    "ia-act-hub",
+    "cra-signalement",
+    "iso27001-millesime",
+    "nist-cadre",
+    "nist-genai"
+   ]
+  },
+  "Étape": {
+   "fr": "Étape",
+   "en": "",
+   "_pages": [
+    "finops",
+    "cra-signalement"
+   ]
+  },
+  "à compter de la mise à disposition d'une mesure de correction ou d'atténuation": {
+   "fr": "à compter de la mise à disposition d'une mesure de correction ou d'atténuation",
+   "en": "",
+   "_pages": [
+    "cra-signalement"
+   ]
+  },
+  "à compter de la notification d'incident": {
+   "fr": "à compter de la notification d'incident",
+   "en": "",
+   "_pages": [
+    "cra-signalement"
+   ]
+  },
+  "— Le CSIRT désigné comme coordinateur ET l'ENISA, SIMULTANÉMENT, par la plateforme unique de signalement.": {
+   "fr": "— Le CSIRT désigné comme coordinateur ET l'ENISA, SIMULTANÉMENT, par la plateforme unique de signalement.",
+   "en": "",
+   "_pages": [
+    "cra-signalement"
+   ]
+  },
+  "# des # blocs validés": {
+   "fr": "0 des 6 blocs validés",
+   "en": "",
+   "_pages": [
+    "dora-qualifier",
+    "dora-risque",
+    "dora-tiers",
+    "dora-incident",
+    "dora-iso"
+   ]
+  },
+  "Atteinte à la réputation": {
+   "fr": "Atteinte à la réputation",
+   "en": "",
+   "_pages": [
+    "dora-incident"
+   ]
+  },
+  "Ce qu'un SMSI apporte déjà": {
+   "fr": "Ce qu'un SMSI apporte déjà",
+   "en": "",
+   "_pages": [
+    "dora-qualifier",
+    "dora-risque",
+    "dora-tiers",
+    "dora-incident",
+    "dora-iso"
+   ]
+  },
+  "Clients, contreparties financières et transactions": {
+   "fr": "Clients, contreparties financières et transactions",
+   "en": "",
+   "_pages": [
+    "dora-incident"
+   ]
+  },
+  "Conséquences économiques": {
+   "fr": "Conséquences économiques",
+   "en": "",
+   "_pages": [
+    "dora-incident"
+   ]
+  },
+  "Durée et interruption de service": {
+   "fr": "Durée et interruption de service",
+   "en": "",
+   "_pages": [
+    "dora-incident"
+   ]
+  },
+  "Indéterminé": {
+   "fr": "Indéterminé",
+   "en": "",
+   "_pages": [
+    "dora-incident"
+   ]
+  },
+  "L'identification comme entité essentielle ou importante au titre de NIS #. Sans elle, l'articulation de l'article # de la directive ne se calcule pas — et elle ne se présume pas.": {
+   "fr": "L'identification comme entité essentielle ou importante au titre de NIS 2. Sans elle, l'articulation de l'article 4 de la directive ne se calcule pas — et elle ne se présume pas.",
+   "en": "",
+   "_pages": [
+    "dora-qualifier",
+    "dora-risque",
+    "dora-tiers",
+    "dora-incident",
+    "dora-iso"
+   ]
+  },
+  "La criticité des services touchés n'est pas déclarée. C'est la condition de l'article #, paragraphe # : sans elle, aucun verdict ne peut être rendu, quel que soit le nombre de seuils franchis.": {
+   "fr": "La criticité des services touchés n'est pas déclarée. C'est la condition de l'article 8, paragraphe 1 : sans elle, aucun verdict ne peut être rendu, quel que soit le nombre de seuils franchis.",
+   "en": "",
+   "_pages": [
+    "dora-incident"
+   ]
+  },
+  "Le type d'entité de l'article #, paragraphe #.": {
+   "fr": "Le type d'entité de l'article 2, paragraphe 1.",
+   "en": "",
+   "_pages": [
+    "dora-qualifier",
+    "dora-risque",
+    "dora-tiers",
+    "dora-incident",
+    "dora-iso"
+   ]
+  },
+  "Les six seuils du règlement délégué (UE) #/#": {
+   "fr": "Les six seuils du règlement délégué (UE) 2024/1772",
+   "en": "",
+   "_pages": [
+    "dora-incident"
+   ]
+  },
+  "Pertes de données": {
+   "fr": "Pertes de données",
+   "en": "",
+   "_pages": [
+    "dora-incident"
+   ]
+  },
+  "Répartition géographique": {
+   "fr": "Répartition géographique",
+   "en": "",
+   "_pages": [
+    "dora-incident"
+   ]
+  },
+  "attend # réponse(s) :": {
+   "fr": "attend 2 réponse(s) :",
+   "en": "",
+   "_pages": [
+    "dora-qualifier",
+    "dora-risque",
+    "dora-tiers",
+    "dora-incident",
+    "dora-iso"
+   ]
+  },
+  "— non déclaré —": {
+   "fr": "— non déclaré —",
+   "en": "",
+   "_pages": [
+    "dora-qualifier",
+    "dora-tiers",
+    "dora-incident",
+    "dora-iso"
+   ]
+  },
+  "Le régime n’est pas déterminé. La correspondance n’a de sens que dans un régime déclaré.": {
+   "fr": "Le régime n’est pas déterminé. La correspondance n’a de sens que dans un régime déclaré.",
+   "en": "",
+   "_pages": [
+    "dora-iso"
+   ]
+  },
+  "Qualifier l’entité →": {
+   "fr": "Qualifier l’entité →",
+   "en": "",
+   "_pages": [
+    "dora-risque",
+    "dora-iso"
+   ]
+  },
+  "Identifiée essentielle ou importante au titre de NIS #": {
+   "fr": "Identifiée essentielle ou importante au titre de NIS 2",
+   "en": "",
+   "_pages": [
+    "dora-qualifier"
+   ]
+  },
+  "Les cinq catégories du cadre simplifié — article #, §#": {
+   "fr": "Les cinq catégories du cadre simplifié — article 16, §1",
+   "en": "",
+   "_pages": [
+    "dora-qualifier"
+   ]
+  },
+  "Les six exclusions — article #, §#": {
+   "fr": "Les six exclusions — article 2, §3",
+   "en": "",
+   "_pages": [
+    "dora-qualifier"
+   ]
+  },
+  "Renseignez le type d’entité ci-dessus.": {
+   "fr": "Renseignez le type d’entité ci-dessus.",
+   "en": "",
+   "_pages": [
+    "dora-qualifier"
+   ]
+  },
+  "— choisir le type d’entité —": {
+   "fr": "— choisir le type d’entité —",
+   "en": "",
+   "_pages": [
+    "dora-qualifier"
+   ]
+  },
+  "Le régime n’est pas déterminé. Le titre II porte vingt-six articles et le titre III quatorze ; ils ne se recouvrent pas, et il n’y a pas de défaut raisonnable.": {
+   "fr": "Le régime n’est pas déterminé. Le titre II porte vingt-six articles et le titre III quatorze ; ils ne se recouvrent pas, et il n’y a pas de défaut raisonnable.",
+   "en": "",
+   "_pages": [
+    "dora-risque"
+   ]
+  },
+  "Aucun prestataire critique ne paie moins de # # EUR par an, quel que soit son chiffre d’affaires (acte délégué C(#) #, article #, §#).": {
+   "fr": "Aucun prestataire critique ne paie moins de 50 000 EUR par an, quel que soit son chiffre d’affaires (acte délégué C(2024) 902, article 3, §3).",
+   "en": "",
+   "_pages": [
+    "dora-supervision"
+   ]
+  },
+  "Aucune catégorie d'entités financières servies n'est renseignée.": {
+   "fr": "Aucune catégorie d'entités financières servies n'est renseignée.",
+   "en": "",
+   "_pages": [
+    "dora-supervision"
+   ]
+  },
+  "Aucune catégorie n'est renseignée pour la substituabilité.": {
+   "fr": "Aucune catégorie n'est renseignée pour la substituabilité.",
+   "en": "",
+   "_pages": [
+    "dora-supervision"
+   ]
+  },
+  "Autres entités financières identifiées comme systémiques par les autorités compétentes. Rempli si au moins une entité des points g), h), i) ou j) de l'article #, paragraphe #, OU au moins trois autres entités systémiques.": {
+   "fr": "Autres entités financières identifiées comme systémiques par les autorités compétentes. Rempli si au moins une entité des points g), h), i) ou j) de l'article 2, paragraphe 1, OU au moins trois autres entités systémiques.",
+   "en": "",
+   "_pages": [
+    "dora-supervision"
+   ]
+  },
+  "Déclaration incomplète": {
+   "fr": "Déclaration incomplète",
+   "en": "",
+   "_pages": [
+    "dora-supervision"
+   ]
+  },
+  "Elle est déjà dans le champ du règlement à son propre titre, et supervisée comme entité financière.": {
+   "fr": "Elle est déjà dans le champ du règlement à son propre titre, et supervisée comme entité financière.",
+   "en": "",
+   "_pages": [
+    "dora-supervision"
+   ]
+  },
+  "Entité financière qui fournit des services TIC à d'autres entités financières.": {
+   "fr": "Entité financière qui fournit des services TIC à d'autres entités financières.",
+   "en": "",
+   "_pages": [
+    "dora-supervision"
+   ]
+  },
+  "Le nombre d'EISm et d'autres EIS servis n'est pas renseigné.": {
+   "fr": "Le nombre d'EISm et d'autres EIS servis n'est pas renseigné.",
+   "en": "",
+   "_pages": [
+    "dora-supervision"
+   ]
+  },
+  "Le nombre d'entités identifiées systémiques n'est pas renseigné.": {
+   "fr": "Le nombre d'entités identifiées systémiques n'est pas renseigné.",
+   "en": "",
+   "_pages": [
+    "dora-supervision"
+   ]
+  },
+  "Le risque reste à l'intérieur du groupe, où il est déjà saisi par les obligations de l'entité financière elle-même.": {
+   "fr": "Le risque reste à l'intérieur du groupe, où il est déjà saisi par les obligations de l'entité financière elle-même.",
+   "en": "",
+   "_pages": [
+    "dora-supervision"
+   ]
+  },
+  "Les missions du Système européen de banques centrales ont leur propre cadre de surveillance.": {
+   "fr": "Les missions du Système européen de banques centrales ont leur propre cadre de surveillance.",
+   "en": "",
+   "_pages": [
+    "dora-supervision"
+   ]
+  },
+  "Les quatre exclusions n'ont pas toutes reçu de réponse. Une exclusion non déclarée n'est pas une exclusion écartée.": {
+   "fr": "Les quatre exclusions n'ont pas toutes reçu de réponse. Une exclusion non déclarée n'est pas une exclusion écartée.",
+   "en": "",
+   "_pages": [
+    "dora-supervision"
+   ]
+  },
+  "Les quatre exclusions — article #, §#": {
+   "fr": "Les quatre exclusions — article 31, §8",
+   "en": "",
+   "_pages": [
+    "dora-supervision"
+   ]
+  },
+  "Les sous-critères « étape # » — intensité de l'incidence d'une interruption, dépendance aux mêmes sous-traitants, interdépendance des établissements systémiques, criticité réelle du service, absence de substitut — sont des appréciations. Aucun seuil ne les décide, et franchir l'étape # ne vaut pas désignation.": {
+   "fr": "Les sous-critères « étape 2 » — intensité de l'incidence d'une interruption, dépendance aux mêmes sous-traitants, interdépendance des établissements systémiques, criticité réelle du service, absence de substitut — sont des appréciations. Aucun seuil ne les décide, et franchir l'étape 1 ne vaut pas désignation.",
+   "en": "",
+   "_pages": [
+    "dora-supervision"
+   ]
+  },
+  "Part du nombre d’entités servies, dans la catégorie la plus exposée (%)": {
+   "fr": "Part du nombre d’entités servies, dans la catégorie la plus exposée (%)",
+   "en": "",
+   "_pages": [
+    "dora-supervision"
+   ]
+  },
+  "Part, sur la valeur totale des actifs des entités financières de cette même catégorie dans l'Union, de la valeur des actifs de celles servies pour des fonctions critiques ou importantes.": {
+   "fr": "Part, sur la valeur totale des actifs des entités financières de cette même catégorie dans l'Union, de la valeur des actifs de celles servies pour des fonctions critiques ou importantes.",
+   "en": "",
+   "_pages": [
+    "dora-supervision"
+   ]
+  },
+  "Part, sur le nombre d'entités financières d'une catégorie de l'article #, paragraphe #, de celles à qui le prestataire fournit des services TIC soutenant des fonctions critiques ou importantes.": {
+   "fr": "Part, sur le nombre d'entités financières d'une catégorie de l'article 2, paragraphe 1, de celles à qui le prestataire fournit des services TIC soutenant des fonctions critiques ou importantes.",
+   "en": "",
+   "_pages": [
+    "dora-supervision"
+   ]
+  },
+  "Part, sur le nombre total d'entités financières d'une catégorie, de celles pour lesquelles il est extrêmement difficile de se tourner vers un autre prestataire.": {
+   "fr": "Part, sur le nombre total d'entités financières d'une catégorie, de celles pour lesquelles il est extrêmement difficile de se tourner vers un autre prestataire.",
+   "en": "",
+   "_pages": [
+    "dora-supervision"
+   ]
+  },
+  "Part, sur le nombre total d'entités financières d'une catégorie, de celles pour lesquelles il n'existe AUCUN autre prestataire capable de fournir le même service à l'appui de leurs fonctions critiques ou importantes.": {
+   "fr": "Part, sur le nombre total d'entités financières d'une catégorie, de celles pour lesquelles il n'existe AUCUN autre prestataire capable de fournir le même service à l'appui de leurs fonctions critiques ou importantes.",
+   "en": "",
+   "_pages": [
+    "dora-supervision"
+   ]
+  },
+  "Prestataire qui fournit des services TIC dans un seul État membre, à des entités financières qui ne sont actives que dans cet État membre.": {
+   "fr": "Prestataire qui fournit des services TIC dans un seul État membre, à des entités financières qui ne sont actives que dans cet État membre.",
+   "en": "",
+   "_pages": [
+    "dora-supervision"
+   ]
+  },
+  "Prestataire soumis à des cadres de supervision établis pour soutenir les missions de l'article #, paragraphe #, du traité sur le fonctionnement de l'Union européenne.": {
+   "fr": "Prestataire soumis à des cadres de supervision établis pour soutenir les missions de l'article 127, paragraphe 2, du traité sur le fonctionnement de l'Union européenne.",
+   "en": "",
+   "_pages": [
+    "dora-supervision"
+   ]
+  },
+  "Prestataire tiers de services TIC intragroupe.": {
+   "fr": "Prestataire tiers de services TIC intragroupe.",
+   "en": "",
+   "_pages": [
+    "dora-supervision"
+   ]
+  },
+  "Sans dimension transfrontalière, la supervision relève de l'autorité nationale, pas du cadre de l'Union.": {
+   "fr": "Sans dimension transfrontalière, la supervision relève de l'autorité nationale, pas du cadre de l'Union.",
+   "en": "",
+   "_pages": [
+    "dora-supervision"
+   ]
+  },
+  "non_declare": {
+   "fr": "non_declare",
+   "en": "",
+   "_pages": [
+    "dora-supervision"
+   ]
+  },
+  "Établissements de crédit d'importance systémique servis pour des fonctions critiques ou importantes. Rempli si au moins un EISm, OU au moins trois autres EIS, OU au moins un autre EIS dont le score d'importance systémique calculé selon l'article #, paragraphe #, de la directive #/#/UE dépasse # #.": {
+   "fr": "Établissements de crédit d'importance systémique servis pour des fonctions critiques ou importantes. Rempli si au moins un EISm, OU au moins trois autres EIS, OU au moins un autre EIS dont le score d'importance systémique calculé selon l'article 131, paragraphe 3, de la directive 2013/36/UE dépasse 3 000.",
+   "en": "",
+   "_pages": [
+    "dora-supervision"
+   ]
+  },
+  "Étape # — les sous-critères de seuil": {
+   "fr": "Étape 1 — les sous-critères de seuil",
+   "en": "",
+   "_pages": [
+    "dora-supervision"
+   ]
+  },
+  "La fonction soutenue est-elle critique ou importante ?": {
+   "fr": "La fonction soutenue est-elle critique ou importante ?",
+   "en": "",
+   "_pages": [
+    "dora-tiers"
+   ]
+  },
+  "Rien n’est compté tant que la criticité n’est pas déclarée.": {
+   "fr": "Rien n’est compté tant que la criticité n’est pas déclarée.",
+   "en": "",
+   "_pages": [
+    "dora-tiers"
+   ]
+  },
+  "Un taux sur neuf clauses alors que quinze sont dues serait rassurant à tort — et il ne se découvrirait qu’au contrôle, contrat déjà signé.": {
+   "fr": "Un taux sur neuf clauses alors que quinze sont dues serait rassurant à tort — et il ne se découvrirait qu’au contrôle, contrat déjà signé.",
+   "en": "",
+   "_pages": [
+    "dora-tiers"
+   ]
+  },
+  "# requête(s) journalisée(s) au total, dont # aujourd’hui · # page(s) comptabilisée(s) · clé Anthropic :": {
+   "fr": "0 requête(s) journalisée(s) au total, dont 0 aujourd’hui · 14920 page(s) comptabilisée(s) · clé Anthropic :",
+   "en": "",
+   "_pages": [
+    "empreinte"
+   ]
+  },
+  "# requête(s) · # g/requête · # g/# jetons": {
+   "fr": "0 requête(s) · 0 g/requête · 0 g/1000 jetons",
+   "en": "",
+   "_pages": [
+    "empreinte"
+   ]
+  },
+  "A — Facteurs statiques (socle)": {
+   "fr": "A — Facteurs statiques (socle)",
+   "en": "",
+   "_pages": [
+    "empreinte"
+   ]
+  },
+  "Allemagne — facteur moyen pays (repli)": {
+   "fr": "Allemagne — facteur moyen pays (repli)",
+   "en": "",
+   "_pages": [
+    "empreinte"
+   ]
+  },
+  "Applicable aux appels Anthropic": {
+   "fr": "Applicable aux appels Anthropic",
+   "en": "",
+   "_pages": [
+    "empreinte"
+   ]
+  },
+  "B + Boavizta (fabrication) + hebergement Render (DE)": {
+   "fr": "B + Boavizta (fabrication) + hebergement Render (DE)",
+   "en": "",
+   "_pages": [
+    "empreinte"
+   ]
+  },
+  "B + impacts incorpores (fabrication, +# %) + hebergement de la requete": {
+   "fr": "B + impacts incorpores (fabrication, +30 %) + hebergement de la requete",
+   "en": "",
+   "_pages": [
+    "empreinte"
+   ]
+  },
+  "B — Parametrique (EcoLogits / Boavizta / ADEME)": {
+   "fr": "B — Parametrique (EcoLogits / Boavizta / ADEME)",
+   "en": "",
+   "_pages": [
+    "empreinte"
+   ]
+  },
+  "C — Cycle de vie etendu (retenue)": {
+   "fr": "C — Cycle de vie etendu (retenue)",
+   "en": "",
+   "_pages": [
+    "empreinte"
+   ]
+  },
+  "Cle ANTHROPIC_API_KEY absente : les appels a Claude echouent avant tout comptage.": {
+   "fr": "Cle ANTHROPIC_API_KEY absente : les appels a Claude echouent avant tout comptage.",
+   "en": "",
+   "_pages": [
+    "empreinte"
+   ]
+  },
+  "Cle MISTRAL_API_KEY absente : les appels a Mistral echouent avant tout comptage.": {
+   "fr": "Cle MISTRAL_API_KEY absente : les appels a Mistral echouent avant tout comptage.",
+   "en": "",
+   "_pages": [
+    "empreinte"
+   ]
+  },
+  "Erreur frequente : ne correspond pas a votre hebergement": {
+   "fr": "Erreur frequente : ne correspond pas a votre hebergement",
+   "en": "",
+   "_pages": [
+    "empreinte"
+   ]
+  },
+  "Etats-Unis — centre de donnees du fournisseur": {
+   "fr": "Etats-Unis — centre de donnees du fournisseur",
+   "en": "",
+   "_pages": [
+    "empreinte"
+   ]
+  },
+  "Facteur par defaut (ADEME, repli)": {
+   "fr": "Facteur par defaut (ADEME, repli)",
+   "en": "",
+   "_pages": [
+    "empreinte"
+   ]
+  },
+  "Facteur retenu pour l hebergement (Render Francfort)": {
+   "fr": "Facteur retenu pour l hebergement (Render Francfort)",
+   "en": "",
+   "_pages": [
+    "empreinte"
+   ]
+  },
+  "Facteurs internes documentes": {
+   "fr": "Facteurs internes documentes",
+   "en": "",
+   "_pages": [
+    "empreinte"
+   ]
+  },
+  "Fournisseur / module": {
+   "fr": "Fournisseur / module",
+   "en": "",
+   "_pages": [
+    "empreinte"
+   ]
+  },
+  "France — facteur ADEME (ACV)": {
+   "fr": "France — facteur ADEME (ACV)",
+   "en": "",
+   "_pages": [
+    "empreinte"
+   ]
+  },
+  "Incertitude de la méthode retenue :": {
+   "fr": "Incertitude de la méthode retenue :",
+   "en": "",
+   "_pages": [
+    "empreinte"
+   ]
+  },
+  "Méthode": {
+   "fr": "Méthode",
+   "en": "",
+   "_pages": [
+    "empreinte",
+    "rgpd-site"
+   ]
+  },
+  "Rappel : la simple navigation ne declenche aucun appel de modele. Seuls le copilote, l explorateur de connaissance et les analyses generees par IA sont comptabilises.": {
+   "fr": "Rappel : la simple navigation ne declenche aucun appel de modele. Seuls le copilote, l explorateur de connaissance et les analyses generees par IA sont comptabilises.",
+   "en": "",
+   "_pages": [
+    "empreinte"
+   ]
+  },
+  "Requêtes": {
+   "fr": "Requêtes",
+   "en": "",
+   "_pages": [
+    "empreinte"
+   ]
+  },
+  "Usage + rendement du centre de donnees (PUE) ; intensite temps reel ; fourchette": {
+   "fr": "Usage + rendement du centre de donnees (PUE) ; intensite temps reel ; fourchette",
+   "en": "",
+   "_pages": [
+    "empreinte"
+   ]
+  },
+  "Usage des modeles seulement ; intensite fixe ; sans PUE ni fabrication": {
+   "fr": "Usage des modeles seulement ; intensite fixe ; sans PUE ni fabrication",
+   "en": "",
+   "_pages": [
+    "empreinte"
+   ]
+  },
+  "Utilise si le mix temps reel est indisponible": {
+   "fr": "Utilise si le mix temps reel est indisponible",
+   "en": "",
+   "_pages": [
+    "empreinte"
+   ]
+  },
+  "± # % (amplitude de la fourchette rapportée à la valeur centrale) · Version de méthodologie : # · # requête(s) analysée(s).": {
+   "fr": "± 0 % (amplitude de la fourchette rapportée à la valeur centrale) · Version de méthodologie : 1.0 · 0 requête(s) analysée(s).",
+   "en": "",
+   "_pages": [
+    "empreinte"
+   ]
+  },
+  "Émissions": {
+   "fr": "Émissions",
+   "en": "",
+   "_pages": [
+    "empreinte"
+   ]
+  },
+  "Énergie": {
+   "fr": "Énergie",
+   "en": "",
+   "_pages": [
+    "pan-sia",
+    "empreinte"
+   ]
+  },
+  "% des émissions d'usage": {
+   "fr": "% des émissions d'usage",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  ", ce qui n’est pas la même chose que zéro.": {
+   "fr": ", ce qui n’est pas la même chose que zéro.",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "Adoption forte · efficacité limitée": {
+   "fr": "Adoption forte · efficacité limitée",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "Adoption forte · efficacité élevée": {
+   "fr": "Adoption forte · efficacité élevée",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "Adoption modérée · efficacité limitée": {
+   "fr": "Adoption modérée · efficacité limitée",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "Adoption modérée · efficacité élevée": {
+   "fr": "Adoption modérée · efficacité élevée",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "Adoption sans limites": {
+   "fr": "Adoption sans limites",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "Adoption soutenue · efficacité moyenne": {
+   "fr": "Adoption soutenue · efficacité moyenne",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  },
+  "Agit sur l'usage ET sur l'incorporé — allonger la durée de vie déplace la fabrication sur davantage d'années de service.": {
+   "fr": "Agit sur l'usage ET sur l'incorporé — allonger la durée de vie déplace la fabrication sur davantage d'années de service.",
+   "en": "",
+   "_pages": [
+    "empreinte-ia"
+   ]
+  }
+ },
+ "bloc": {}
+}
