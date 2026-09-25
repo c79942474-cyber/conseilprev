@@ -8,326 +8,326 @@
  "_rubrique": "ADMINISTRATION",
  "bloc": {
   "# août # : entrée en application des obligations de transparence de l'article # — marquage pour les fournisseurs, étiquetage pour les déployeurs.# décembre # : fin de la période transitoire pour les systèmes déjà sur le marché.# février # : date limite, pour les fournisseurs, du déploiement d'une solution d'interopérabilité du marquage.Le code de bonnes pratiques, publié dans sa version finale le # juin #, est d'adhésion volontaire. Les obligations de l'article #, elles, sont légales et s'imposent, que le code soit signé ou non.": {
-   "en": "",
+   "en": "<strong># August #:</strong> the transparency obligations of Article # apply — marking for providers, labelling for deployers.<br><strong># December #:</strong> end of the transitional period for systems already on the market.<br><strong># February #:</strong> deadline for providers to deploy an interoperable marking solution.<br><br>The code of practice, published in its final version on # June #, is <strong>voluntary</strong>. The obligations of Article #, by contrast, are <strong>legal</strong> and binding, whether or not the code is signed.",
    "fr": "2 août 2026 : entrée en application des obligations de transparence de l'article 50 — marquage pour les fournisseurs, étiquetage pour les déployeurs.2 décembre 2026 : fin de la période transitoire pour les systèmes déjà sur le marché.2 février 2027 : date limite, pour les fournisseurs, du déploiement d'une solution d'interopérabilité du marquage.Le code de bonnes pratiques, publié dans sa version finale le 10 juin 2026, est d'adhésion volontaire. Les obligations de l'article 50, elles, sont légales et s'imposent, que le code soit signé ou non.",
    "html": "<strong>2 août 2026 :</strong> entrée en application des obligations de transparence de l'article 50 — marquage pour les fournisseurs, étiquetage pour les déployeurs.<br><strong>2 décembre 2026 :</strong> fin de la période transitoire pour les systèmes déjà sur le marché.<br><strong>2 février 2027 :</strong> date limite, pour les fournisseurs, du déploiement d'une solution d'interopérabilité du marquage.<br><br>Le code de bonnes pratiques, publié dans sa version finale le 10 juin 2026, est d'adhésion <strong>volontaire</strong>. Les obligations de l'article 50, elles, sont <strong>légales</strong> et s'imposent, que le code soit signé ou non."
   },
   "Agent Sentinel Pricing Orchestrator Initialisez l’échéancier de # jalons AI Act d’un client, vérifiez chaque jalon (double déclencheur : score Sentinel atteint + évidence documentaire), puis lancez le cycle de facturation. Un jalon vérifié est irrévocable ; montants figés à la vérification ; paiement étalé sur # mensualités.": {
-   "en": "",
+   "en": "<strong>Agent Sentinel Pricing Orchestrator</strong><br> Initialise a client’s schedule of # AI Act milestones, verify each milestone (dual trigger: Sentinel score reached + documentary evidence), then run the billing cycle.<br> A verified milestone is <strong>irrevocable</strong>; amounts are frozen at verification; payment is spread over # monthly instalments.",
    "fr": "Agent Sentinel Pricing Orchestrator Initialisez l’échéancier de 7 jalons AI Act d’un client, vérifiez chaque jalon (double déclencheur : score Sentinel atteint + évidence documentaire), puis lancez le cycle de facturation. Un jalon vérifié est irrévocable ; montants figés à la vérification ; paiement étalé sur 2 mensualités.",
    "html": "<strong>Agent Sentinel Pricing Orchestrator</strong><br> Initialisez l’échéancier de 7 jalons AI Act d’un client, vérifiez chaque jalon (double déclencheur&nbsp;: score Sentinel atteint + évidence documentaire), puis lancez le cycle de facturation.<br> Un jalon vérifié est <strong>irrévocable</strong>&nbsp;; montants figés à la vérification&nbsp;; paiement étalé sur 2 mensualités."
   },
   "Chaque usage d'IA est recensé avec son rôle, la nature du contenu, le marquage, l'étiquetage, l'exception invoquée et le responsable éditorial.Procédure. Ne cochez « Conforme » qu'après vérification effective de la mesure. Ajoutez tout nouvel usage dès sa mise en service. Le taux de préparation et le compte à rebours vers le # août # figurent en tête de page.": {
-   "en": "",
+   "en": "Each use of AI is recorded with its role, the nature of the content, the marking, the labelling, the exception invoked and the editorial owner.<br><br><strong>Procedure.</strong> Tick “Compliant” only after actually verifying the measure. Add any new use as soon as it goes into service. The readiness rate and the countdown to # August # appear at the top of the page.",
    "fr": "Chaque usage d'IA est recensé avec son rôle, la nature du contenu, le marquage, l'étiquetage, l'exception invoquée et le responsable éditorial.Procédure. Ne cochez « Conforme » qu'après vérification effective de la mesure. Ajoutez tout nouvel usage dès sa mise en service. Le taux de préparation et le compte à rebours vers le 2 août 2026 figurent en tête de page.",
    "html": "Chaque usage d'IA est recensé avec son rôle, la nature du contenu, le marquage, l'étiquetage, l'exception invoquée et le responsable éditorial.<br><br><strong>Procédure.</strong> Ne cochez « Conforme » qu'après vérification effective de la mesure. Ajoutez tout nouvel usage dès sa mise en service. Le taux de préparation et le compte à rebours vers le 2 août 2026 figurent en tête de page."
   },
   "Cochez « Conforme » lorsque la mesure est effectivement en place et vérifiée. La colonne Dû est calculée depuis le cadre ci-dessus à partir du rôle déclaré : le fournisseur doit l'information d'interaction (#) et le marquage lisible par machine (#) ; le déployeur doit l'information sur la reconnaissance des émotions (#) et le signalement des hypertrucages et textes d'intérêt public (#). Ce que la ligne porte au-delà est un engagement, pas une obligation — et le dire est ce qui donne sa valeur au marquage là où il est dû. Rôle inconnu : rôle inconnu du cadre, aucun paragraphe ne peut lui être rattaché.": {
-   "en": "",
+   "en": "Tick “Compliant” when the measure is actually in place and verified. The <strong>Due</strong> column is computed from the framework above on the basis of the declared role: the provider owes the interaction notice (#) and machine-readable marking (#); the deployer owes the information on emotion recognition (#) and the disclosure of deep fakes and texts of public interest (#). Anything the row carries beyond that is a commitment, not an obligation — and saying so is what gives the marking its value where it is due. <strong>Unknown role</strong>: a role unknown to the framework; no paragraph can be attached to it.",
    "fr": "Cochez « Conforme » lorsque la mesure est effectivement en place et vérifiée. La colonne Dû est calculée depuis le cadre ci-dessus à partir du rôle déclaré : le fournisseur doit l'information d'interaction (50.1) et le marquage lisible par machine (50.2) ; le déployeur doit l'information sur la reconnaissance des émotions (50.3) et le signalement des hypertrucages et textes d'intérêt public (50.4). Ce que la ligne porte au-delà est un engagement, pas une obligation — et le dire est ce qui donne sa valeur au marquage là où il est dû. Rôle inconnu : rôle inconnu du cadre, aucun paragraphe ne peut lui être rattaché.",
    "html": "Cochez « Conforme » lorsque la mesure est effectivement en place et vérifiée. La colonne <strong>Dû</strong> est calculée depuis le cadre ci-dessus à partir du rôle déclaré : le fournisseur doit l'information d'interaction (50.1) et le marquage lisible par machine (50.2) ; le déployeur doit l'information sur la reconnaissance des émotions (50.3) et le signalement des hypertrucages et textes d'intérêt public (50.4). Ce que la ligne porte au-delà est un engagement, pas une obligation — et le dire est ce qui donne sa valeur au marquage là où il est dû. <strong>Rôle inconnu</strong> : rôle inconnu du cadre, aucun paragraphe ne peut lui être rattaché."
   },
   "Efficacité : le public peut-il réellement identifier le contenu généré par IA ?Fiabilité : quel est le taux d'erreur de la détection en conditions normales ?Robustesse : le marquage résiste-t-il aux altérations — compression, recadrage — et aux attaques ?Interopérabilité : fonctionne-t-il avec les autres systèmes du marché ?Échéance applicable aux fournisseurs : le # février #.": {
-   "en": "",
+   "en": "<strong>Effectiveness:</strong> can the public really identify AI-generated content?<br><strong>Reliability:</strong> what is the detection error rate under normal conditions?<br><strong>Robustness:</strong> does the marking withstand alterations — compression, cropping — and attacks?<br><strong>Interoperability:</strong> does it work with the other systems on the market?<br><br>Deadline applicable to providers: # February #.",
    "fr": "Efficacité : le public peut-il réellement identifier le contenu généré par IA ?Fiabilité : quel est le taux d'erreur de la détection en conditions normales ?Robustesse : le marquage résiste-t-il aux altérations — compression, recadrage — et aux attaques ?Interopérabilité : fonctionne-t-il avec les autres systèmes du marché ?Échéance applicable aux fournisseurs : le 2 février 2027.",
    "html": "<strong>Efficacité :</strong> le public peut-il réellement identifier le contenu généré par IA ?<br><strong>Fiabilité :</strong> quel est le taux d'erreur de la détection en conditions normales ?<br><strong>Robustesse :</strong> le marquage résiste-t-il aux altérations — compression, recadrage — et aux attaques ?<br><strong>Interopérabilité :</strong> fonctionne-t-il avec les autres systèmes du marché ?<br><br>Échéance applicable aux fournisseurs : le 2 février 2027."
   },
   "Gestion des clients": {
-   "en": "",
+   "en": "<em>Client</em> management",
    "fr": "Gestion des clients",
    "html": "Gestion des <em>clients</em>"
   },
   "L'attestation de transparence, imprimable, à jour.Le registre des usages d'IA, avec les rôles et les mesures.La documentation des techniques de marquage employées.La justification écrite de toute exception invoquée, avec le nom du responsable éditorial.Les analyses d'impact relatives aux traitements fondés sur l'IA.": {
-   "en": "",
+   "en": "The transparency attestation, printable and up to date.<br>The register of AI uses, with roles and measures.<br>Documentation of the marking techniques used.<br>The written justification of any exception invoked, with the name of the editorial owner.<br>The impact assessments for AI-based processing.",
    "fr": "L'attestation de transparence, imprimable, à jour.Le registre des usages d'IA, avec les rôles et les mesures.La documentation des techniques de marquage employées.La justification écrite de toute exception invoquée, avec le nom du responsable éditorial.Les analyses d'impact relatives aux traitements fondés sur l'IA.",
    "html": "L'attestation de transparence, imprimable, à jour.<br>Le registre des usages d'IA, avec les rôles et les mesures.<br>La documentation des techniques de marquage employées.<br>La justification écrite de toute exception invoquée, avec le nom du responsable éditorial.<br>Les analyses d'impact relatives aux traitements fondés sur l'IA."
   },
   "Le fournisseur doit deux choses, et deux seulement : informer que l'on interagit avec une IA (§ #), et rendre les contenus synthétiques détectables par une machine — métadonnées, filigrane résistant aux altérations (§ #). Le § # n'impose aucune mention visible.Le déployeur doit informer les personnes exposées à une reconnaissance des émotions ou à une catégorisation biométrique (§ #), et signaler les hypertrucages ainsi que les textes publiés pour informer le public sur des questions d'intérêt public (§ #). Il ne doit pas un étiquetage général de tout contenu produit avec une IA : ni les supports internes, ni les livrables remis à un client n'entrent dans le § #.Ce que la maison appose au-delà — la mention visible portée sur chaque livrable — est un engagement, non une obligation. Le dire est ce qui donne sa valeur au marquage là où il est dû.CONSEILPREV cumule les deux rôles : déployeur pour ses assistants conversationnels, et vraisemblablement fournisseur pour les documents produits par Sentinel. Cette qualification doit être confirmée par votre conseil — et elle a des conséquences : la colonne « Dû » du registre change avec elle.": {
-   "en": "",
+   "en": "The <strong>provider</strong> owes two things, and two only: informing people that they are interacting with an AI (paragraph #), and making synthetic content detectable <em>by a machine</em> — metadata, a watermark that withstands alterations (paragraph #). Paragraph # requires <strong>no</strong> visible notice.<br><br>The <strong>deployer</strong> must inform people exposed to emotion recognition or biometric categorisation (paragraph #), and disclose deep fakes as well as texts published to inform the public on matters of public interest (paragraph #). It does <strong>not</strong> owe a general labelling of all content produced with AI: neither internal materials nor deliverables handed to a client fall under paragraph #.<br><br>What the firm affixes beyond that — the visible notice carried on each deliverable — is a <strong>commitment</strong>, not an obligation. Saying so is what gives the marking its value where it is due.<br><br>CONSEILPREV holds both roles: deployer for its conversational assistants, and probably provider for the documents produced by Sentinel. <strong>This qualification must be confirmed by your counsel</strong> — and it has consequences: the “Due” column of the register changes with it.",
    "fr": "Le fournisseur doit deux choses, et deux seulement : informer que l'on interagit avec une IA (§ 1), et rendre les contenus synthétiques détectables par une machine — métadonnées, filigrane résistant aux altérations (§ 2). Le § 2 n'impose aucune mention visible.Le déployeur doit informer les personnes exposées à une reconnaissance des émotions ou à une catégorisation biométrique (§ 3), et signaler les hypertrucages ainsi que les textes publiés pour informer le public sur des questions d'intérêt public (§ 4). Il ne doit pas un étiquetage général de tout contenu produit avec une IA : ni les supports internes, ni les livrables remis à un client n'entrent dans le § 4.Ce que la maison appose au-delà — la mention visible portée sur chaque livrable — est un engagement, non une obligation. Le dire est ce qui donne sa valeur au marquage là où il est dû.CONSEILPREV cumule les deux rôles : déployeur pour ses assistants conversationnels, et vraisemblablement fournisseur pour les documents produits par Sentinel. Cette qualification doit être confirmée par votre conseil — et elle a des conséquences : la colonne « Dû » du registre change avec elle.",
    "html": "Le <strong>fournisseur</strong> doit deux choses, et deux seulement : informer que l'on interagit avec une IA (§ 1), et rendre les contenus synthétiques détectables <em>par une machine</em> — métadonnées, filigrane résistant aux altérations (§ 2). Le § 2 n'impose <strong>aucune</strong> mention visible.<br><br>Le <strong>déployeur</strong> doit informer les personnes exposées à une reconnaissance des émotions ou à une catégorisation biométrique (§ 3), et signaler les hypertrucages ainsi que les textes publiés pour informer le public sur des questions d'intérêt public (§ 4). Il ne doit <strong>pas</strong> un étiquetage général de tout contenu produit avec une IA : ni les supports internes, ni les livrables remis à un client n'entrent dans le § 4.<br><br>Ce que la maison appose au-delà — la mention visible portée sur chaque livrable — est un <strong>engagement</strong>, non une obligation. Le dire est ce qui donne sa valeur au marquage là où il est dû.<br><br>CONSEILPREV cumule les deux rôles : déployeur pour ses assistants conversationnels, et vraisemblablement fournisseur pour les documents produits par Sentinel. <strong>Cette qualification doit être confirmée par votre conseil</strong> — et elle a des conséquences : la colonne « Dû » du registre change avec elle."
   },
   "Les assistants du site affichent, avant tout échange, une mention explicite indiquant que l'interlocuteur est un système d'intelligence artificielle, avec une réserve sur les erreurs possibles et le caractère non juridique des réponses.La mention doit rester claire, reconnaissable et non dissimulée. Si une information visuelle est impossible, un avertissement sonore doit intervenir dès la première seconde du contenu.": {
-   "en": "",
+   "en": "The site’s assistants display, before any exchange, an explicit notice stating that the other party is an artificial intelligence system, with a caveat on possible errors and the non-legal nature of the answers.<br><br>The notice must remain clear, recognisable and not concealed. If visual information is impossible, an audio warning must be given from the first second of the content.",
    "fr": "Les assistants du site affichent, avant tout échange, une mention explicite indiquant que l'interlocuteur est un système d'intelligence artificielle, avec une réserve sur les erreurs possibles et le caractère non juridique des réponses.La mention doit rester claire, reconnaissable et non dissimulée. Si une information visuelle est impossible, un avertissement sonore doit intervenir dès la première seconde du contenu.",
    "html": "Les assistants du site affichent, avant tout échange, une mention explicite indiquant que l'interlocuteur est un système d'intelligence artificielle, avec une réserve sur les erreurs possibles et le caractère non juridique des réponses.<br><br>La mention doit rester claire, reconnaissable et non dissimulée. Si une information visuelle est impossible, un avertissement sonore doit intervenir dès la première seconde du contenu."
   },
   "Les documents générés par Sentinel portent des métadonnées lisibles par machine — c'est le § #, dû par le fournisseur — et la mention visible « AI GENERATED » ou « AI ASSISTED », qui relève de l'engagement de la maison et non du § #. Les synthèses du moteur d'exploration portent le même marquage.Le code recommande un marquage à deux niveaux : marqueurs techniques intégrés — métadonnées et filigrane sécurisé — attestant la nature synthétique du contenu, et mention visible pour le public.Conservez la trace des techniques employées : c'est la preuve attendue en contrôle.": {
-   "en": "",
+   "en": "Documents generated by Sentinel carry machine-readable metadata — that is paragraph #, owed by the provider — <em>and</em> the visible notice “AI GENERATED” or “AI ASSISTED”, which is a commitment of the firm and not a matter of paragraph #. The summaries from the exploration engine carry the same marking.<br><br>The code recommends two-level marking: embedded technical markers — metadata and a secure watermark — attesting to the synthetic nature of the content, and a visible notice for the public.<br><br><strong>Keep a record of the techniques used:</strong> it is the evidence expected in an inspection.",
    "fr": "Les documents générés par Sentinel portent des métadonnées lisibles par machine — c'est le § 2, dû par le fournisseur — et la mention visible « AI GENERATED » ou « AI ASSISTED », qui relève de l'engagement de la maison et non du § 4. Les synthèses du moteur d'exploration portent le même marquage.Le code recommande un marquage à deux niveaux : marqueurs techniques intégrés — métadonnées et filigrane sécurisé — attestant la nature synthétique du contenu, et mention visible pour le public.Conservez la trace des techniques employées : c'est la preuve attendue en contrôle.",
    "html": "Les documents générés par Sentinel portent des métadonnées lisibles par machine — c'est le § 2, dû par le fournisseur — <em>et</em> la mention visible « AI GENERATED » ou « AI ASSISTED », qui relève de l'engagement de la maison et non du § 4. Les synthèses du moteur d'exploration portent le même marquage.<br><br>Le code recommande un marquage à deux niveaux : marqueurs techniques intégrés — métadonnées et filigrane sécurisé — attestant la nature synthétique du contenu, et mention visible pour le public.<br><br><strong>Conservez la trace des techniques employées :</strong> c'est la preuve attendue en contrôle."
   },
   "Marquage lisible par machine. Les documents Word et PDF exportés par Sentinel portent dans leurs propriétés de fichier la mention « AI-generated », l'outil producteur, le modèle utilisé, la référence à l'article # — le paragraphe qui impose ce marquage, et à qui — et le statut de brouillon. La note dit aussi que la mention visible est un engagement : une propriété de fichier qui se réclamerait de l'article # pour la mention visible ferait passer un engagement pour une obligation. Un marquage placé dans les propriétés survit à la copie du fichier ; une mention de bas de page, non.Minimisation avant transmission au modèle (RGPD, art. #.c). Avant tout envoi à un fournisseur de modèle — chat public comme module juridique — le texte saisi est contrôlé et les données directement identifiantes signalées : adresse électronique, téléphone, IBAN, carte de paiement, numéro de sécurité sociale. L'utilisateur corrige, demande le caviardage automatique, ou confirme l'envoi. Le contrôle est fait côté serveur — un avertissement contournable depuis le navigateur ne serait pas une mesure — par expressions régulières et clés de contrôle, sans modèle et sans conserver le texte analysé.Limite assumée. La détection porte sur des formats stables, non sur les noms, adresses postales ou données de santé : les repérer supposerait de soumettre le texte à un modèle, c'est-à-dire de faire ce que la mesure vise à éviter.": {
-   "en": "",
+   "en": "<strong>Machine-readable marking.</strong> The Word and PDF documents exported by Sentinel carry in their <strong>file properties</strong> the notice “AI-generated”, the producing tool, the model used, the reference to Article <strong>#</strong> — the paragraph that imposes this marking, and on whom — and the draft status. The note also says that the visible notice is a commitment: a file property that invoked Article # for the visible notice would pass off a commitment as an obligation. Marking placed in the properties survives copying the file; a footer notice does not.<br><br><strong>Minimisation before transmission to the model (GDPR, art. #.c).</strong> Before anything is sent to a model provider — the public chat as well as the legal module — the text entered is checked and directly identifying data are flagged: email address, telephone, IBAN, payment card, social security number. The user corrects the text, requests automatic redaction, or confirms sending. The check is done <strong>server-side</strong> — a warning that could be bypassed from the browser would not be a measure — using regular expressions and check digits, with no model and without keeping the analysed text.<br><br><strong>Accepted limitation.</strong> Detection covers stable formats, not names, postal addresses or health data: spotting them would mean submitting the text to a model, that is, doing what the measure aims to avoid.",
    "fr": "Marquage lisible par machine. Les documents Word et PDF exportés par Sentinel portent dans leurs propriétés de fichier la mention « AI-generated », l'outil producteur, le modèle utilisé, la référence à l'article 50.2 — le paragraphe qui impose ce marquage, et à qui — et le statut de brouillon. La note dit aussi que la mention visible est un engagement : une propriété de fichier qui se réclamerait de l'article 50 pour la mention visible ferait passer un engagement pour une obligation. Un marquage placé dans les propriétés survit à la copie du fichier ; une mention de bas de page, non.Minimisation avant transmission au modèle (RGPD, art. 5.1.c). Avant tout envoi à un fournisseur de modèle — chat public comme module juridique — le texte saisi est contrôlé et les données directement identifiantes signalées : adresse électronique, téléphone, IBAN, carte de paiement, numéro de sécurité sociale. L'utilisateur corrige, demande le caviardage automatique, ou confirme l'envoi. Le contrôle est fait côté serveur — un avertissement contournable depuis le navigateur ne serait pas une mesure — par expressions régulières et clés de contrôle, sans modèle et sans conserver le texte analysé.Limite assumée. La détection porte sur des formats stables, non sur les noms, adresses postales ou données de santé : les repérer supposerait de soumettre le texte à un modèle, c'est-à-dire de faire ce que la mesure vise à éviter.",
    "html": "<strong>Marquage lisible par machine.</strong> Les documents Word et PDF exportés par Sentinel portent dans leurs <strong>propriétés de fichier</strong> la mention « AI-generated », l'outil producteur, le modèle utilisé, la référence à l'article <strong>50.2</strong> — le paragraphe qui impose ce marquage, et à qui — et le statut de brouillon. La note dit aussi que la mention visible est un engagement : une propriété de fichier qui se réclamerait de l'article 50 pour la mention visible ferait passer un engagement pour une obligation. Un marquage placé dans les propriétés survit à la copie du fichier ; une mention de bas de page, non.<br><br><strong>Minimisation avant transmission au modèle (RGPD, art. 5.1.c).</strong> Avant tout envoi à un fournisseur de modèle — chat public comme module juridique — le texte saisi est contrôlé et les données directement identifiantes signalées : adresse électronique, téléphone, IBAN, carte de paiement, numéro de sécurité sociale. L'utilisateur corrige, demande le caviardage automatique, ou confirme l'envoi. Le contrôle est fait <strong>côté serveur</strong> — un avertissement contournable depuis le navigateur ne serait pas une mesure — par expressions régulières et clés de contrôle, sans modèle et sans conserver le texte analysé.<br><br><strong>Limite assumée.</strong> La détection porte sur des formats stables, non sur les noms, adresses postales ou données de santé : les repérer supposerait de soumettre le texte à un modèle, c'est-à-dire de faire ce que la mesure vise à éviter."
   },
   "Transparence IA Act (art. #)": {
-   "en": "",
+   "en": "<em>AI Act (art. #)</em> transparency",
    "fr": "Transparence IA Act (art. 50)",
    "html": "Transparence <em>IA Act (art. 50)</em>"
   },
   "Œuvres artistiques, créatives ou satiriques. La divulgation ne doit pas entraver la jouissance de l'œuvre : une mention en générique ou en note d'accompagnement suffit.Textes d'intérêt public sous contrôle éditorial. L'étiquetage n'est pas requis si le contenu a fait l'objet d'un examen humain et si une personne assume la responsabilité éditoriale de sa publication.Point d'attention. Si vous invoquez cette seconde exception pour votre veille réglementaire, vous devez démontrer la réalité de la relecture humaine et désigner nommément le responsable éditorial. À défaut, l'étiquetage s'impose.": {
-   "en": "",
+   "en": "<strong>Artistic, creative or satirical works.</strong> Disclosure must not hamper the enjoyment of the work: a notice in the credits or in an accompanying note is sufficient.<br><br><strong>Texts of public interest under editorial control.</strong> Labelling is not required if the content has undergone human review and a person holds editorial responsibility for its publication.<br><br><strong>Point of attention.</strong> If you invoke this second exception for your regulatory watch, you must demonstrate that the human re-read actually takes place and name the editorial owner. Otherwise, labelling is mandatory.",
    "fr": "Œuvres artistiques, créatives ou satiriques. La divulgation ne doit pas entraver la jouissance de l'œuvre : une mention en générique ou en note d'accompagnement suffit.Textes d'intérêt public sous contrôle éditorial. L'étiquetage n'est pas requis si le contenu a fait l'objet d'un examen humain et si une personne assume la responsabilité éditoriale de sa publication.Point d'attention. Si vous invoquez cette seconde exception pour votre veille réglementaire, vous devez démontrer la réalité de la relecture humaine et désigner nommément le responsable éditorial. À défaut, l'étiquetage s'impose.",
    "html": "<strong>Œuvres artistiques, créatives ou satiriques.</strong> La divulgation ne doit pas entraver la jouissance de l'œuvre : une mention en générique ou en note d'accompagnement suffit.<br><br><strong>Textes d'intérêt public sous contrôle éditorial.</strong> L'étiquetage n'est pas requis si le contenu a fait l'objet d'un examen humain et si une personne assume la responsabilité éditoriale de sa publication.<br><br><strong>Point d'attention.</strong> Si vous invoquez cette seconde exception pour votre veille réglementaire, vous devez démontrer la réalité de la relecture humaine et désigner nommément le responsable éditorial. À défaut, l'étiquetage s'impose."
   }
  },
  "texte": {
   "# bis · Ce que fait la plateforme elle-même": {
-   "en": "",
+   "en": "# bis · What the platform itself does",
    "fr": "4 bis · Ce que fait la plateforme elle-même"
   },
   "# · Distinguer fournisseur et déployeur": {
-   "en": "",
+   "en": "# · Distinguishing provider and deployer",
    "fr": "2 · Distinguer fournisseur et déployeur"
   },
   "# · Exceptions de l'article #, § #": {
-   "en": "",
+   "en": "# · Exceptions under Article #(#)",
    "fr": "5 · Exceptions de l'article 50, § 4"
   },
   "# · Exploiter le registre des usages": {
-   "en": "",
+   "en": "# · Using the register of uses",
    "fr": "7 · Exploiter le registre des usages"
   },
   "# · Informer dès la première interaction": {
-   "en": "",
+   "en": "# · Informing from the first interaction",
    "fr": "3 · Informer dès la première interaction"
   },
   "# · Marquer et étiqueter les contenus produits": {
-   "en": "",
+   "en": "# · Marking and labelling the content produced",
    "fr": "4 · Marquer et étiqueter les contenus produits"
   },
   "# · Quatre critères de la détection": {
-   "en": "",
+   "en": "# · Four detection criteria",
    "fr": "6 · Quatre critères de la détection"
   },
   "# · Que produire en cas de contrôle": {
-   "en": "",
+   "en": "# · What to produce in an inspection",
    "fr": "8 · Que produire en cas de contrôle"
   },
   "# · Échéances à retenir": {
-   "en": "",
+   "en": "# · Key deadlines",
    "fr": "1 · Échéances à retenir"
   },
   "+ Envoyer l invitation": {
-   "en": "",
+   "en": "+ Send the invitation",
    "fr": "+ Envoyer l invitation"
   },
   "Administration · IA Act": {
-   "en": "",
+   "en": "Administration · AI Act",
    "fr": "Administration · IA Act"
   },
   "Ajouter": {
-   "en": "",
+   "en": "Add",
    "fr": "Ajouter"
   },
   "Attestation de transparence": {
-   "en": "",
+   "en": "Transparency attestation",
    "fr": "Attestation de transparence"
   },
   "Avant le # août #": {
-   "en": "",
+   "en": "Before # August #",
    "fr": "Avant le 2 août 2026"
   },
   "Ce que l'article # impose — et à qui": {
-   "en": "",
+   "en": "What Article # requires — and of whom",
    "fr": "Ce que l'article 50 impose — et à qui"
   },
   "Client": {
-   "en": "",
+   "en": "Client account",
    "fr": "Client"
   },
   "Clients existants": {
-   "en": "",
+   "en": "Existing clients",
    "fr": "Clients existants"
   },
   "Cree le compte et envoie un email d invitation securise au client": {
-   "en": "",
+   "en": "Creates the account and sends a secure invitation email to the client",
    "fr": "Cree le compte et envoie un email d invitation securise au client"
   },
   "Cree les # jalons ISO/IEC # pour ce client (idempotent). Verification adossee a la couverture du systeme de management.": {
-   "en": "",
+   "en": "Creates the # ISO/IEC # milestones for this client (idempotent). Verification based on the coverage of the management system.",
    "fr": "Cree les 7 jalons ISO/IEC 42001 pour ce client (idempotent). Verification adossee a la couverture du systeme de management."
   },
   "Cree les # jalons RGPD pour ce client (idempotent). Verification adossee a l indice de conformite RGPD.": {
-   "en": "",
+   "en": "Creates the # GDPR milestones for this client (idempotent). Verification based on the GDPR compliance index.",
    "fr": "Cree les 7 jalons RGPD pour ce client (idempotent). Verification adossee a l indice de conformite RGPD."
   },
   "Cree les # jalons pour ce client (idempotent, n ecrase jamais un jalon existant)": {
-   "en": "",
+   "en": "Creates the # milestones for this client (idempotent, never overwrites an existing milestone)",
    "fr": "Cree les 7 jalons pour ce client (idempotent, n ecrase jamais un jalon existant)"
   },
   "Créer un nouvel accès client": {
-   "en": "",
+   "en": "Create new client access",
    "fr": "Créer un nouvel accès client"
   },
   "Créez des accès pour vos clients externes — chacun ne verra que ses propres données une fois l isolation activée.": {
-   "en": "",
+   "en": "Create access for your external clients — each will see only their own data once isolation is enabled.",
    "fr": "Créez des accès pour vos clients externes — chacun ne verra que ses propres données une fois l isolation activée."
   },
   "Cycle de facturation — prélèvements Stripe": {
-   "en": "",
+   "en": "Billing cycle — Stripe direct debits",
    "fr": "Cycle de facturation — prélèvements Stripe"
   },
   "Déclencher les prélèvements": {
-   "en": "",
+   "en": "Trigger the direct debits",
    "fr": "Déclencher les prélèvements"
   },
   "Email": {
-   "en": "",
+   "en": "Email address",
    "fr": "Email"
   },
   "Espace · CONSEILPREV uniquement": {
-   "en": "",
+   "en": "Workspace · CONSEILPREV only",
    "fr": "Espace · CONSEILPREV uniquement"
   },
   "Ex: Acme Corp": {
-   "en": "",
+   "en": "e.g. Acme Corp",
    "fr": "Ex: Acme Corp"
   },
   "Exception (art. #)": {
-   "en": "",
+   "en": "Exception (Art. #)",
    "fr": "Exception (art. 50.4)"
   },
   "Facture les jalons verifies et genere l echeancier en # mensualites": {
-   "en": "",
+   "en": "Invoices the verified milestones and generates the payment schedule in # monthly instalments",
    "fr": "Facture les jalons verifies et genere l echeancier en 2 mensualites"
   },
   "Guide d'exploitation — article #": {
-   "en": "",
+   "en": "Operating guide — Article #",
    "fr": "Guide d'exploitation — article 50"
   },
   "Guide opérationnel complet. Rappel : outillage technique ; la qualification de fournisseur ou de déployeur et les exceptions invoquées doivent être validées par un conseil compétent.": {
-   "en": "",
+   "en": "Complete operational guide. Reminder: technical tooling; the qualification as provider or deployer and the exceptions invoked must be validated by competent counsel.",
    "fr": "Guide opérationnel complet. Rappel : outillage technique ; la qualification de fournisseur ou de déployeur et les exceptions invoquées doivent être validées par un conseil compétent."
   },
   "Générer l'attestation de transparence, imprimable / PDF, pour une demande externe": {
-   "en": "",
+   "en": "Generate the transparency attestation, printable / PDF, for an external request",
    "fr": "Générer l'attestation de transparence, imprimable / PDF, pour une demande externe"
   },
   "Initialiser l’échéancier": {
-   "en": "",
+   "en": "Initialise the payment schedule",
    "fr": "Initialiser l’échéancier"
   },
   "Initialiser l’échéancier ISO #": {
-   "en": "",
+   "en": "Initialise the ISO # payment schedule",
    "fr": "Initialiser l’échéancier ISO 42001"
   },
   "Initialiser l’échéancier RGPD": {
-   "en": "",
+   "en": "Initialise the GDPR payment schedule",
    "fr": "Initialiser l’échéancier RGPD"
   },
   "Lancer le cycle de facturation": {
-   "en": "",
+   "en": "Run the billing cycle",
    "fr": "Lancer le cycle de facturation"
   },
   "Les mentions d'IA, le bandeau « AI GENERATED » et le marquage des documents sont mesurés sur les fichiers servis et sur un document généré à l'instant — jamais déclarés. Ce qui n'est pas mesurable par une machine (l'examen humain de l'art. #) est rendu comme attestation, pas converti en vert.": {
-   "en": "",
+   "en": "AI notices, the “AI GENERATED” banner and document marking are measured on the files served and on a document generated on the spot — never declared. What a machine cannot measure (the human review of art. #) is shown as an attestation, not turned green.",
    "fr": "Les mentions d'IA, le bandeau « AI GENERATED » et le marquage des documents sont mesurés sur les fichiers servis et sur un document généré à l'instant — jamais déclarés. Ce qui n'est pas mesurable par une machine (l'examen humain de l'art. 50.4) est rendu comme attestation, pas converti en vert."
   },
   "Liste les échéances dues, sans prélèvement": {
-   "en": "",
+   "en": "Lists the instalments due, without debiting",
    "fr": "Liste les échéances dues, sans prélèvement"
   },
   "Marquage": {
-   "en": "",
+   "en": "Marking",
    "fr": "Marquage"
   },
   "Mesure en cours…": {
-   "en": "",
+   "en": "Measurement in progress…",
    "fr": "Mesure en cours…"
   },
   "Même si l'AI Act ne s'applique pas, d'autres obligations peuvent jouer": {
-   "en": "",
+   "en": "Even if the AI Act does not apply, other obligations may come into play",
    "fr": "Même si l'AI Act ne s'applique pas, d'autres obligations peuvent jouer"
   },
   "Nature du contenu": {
-   "en": "",
+   "en": "Nature of the content",
    "fr": "Nature du contenu"
   },
   "Nom de l entreprise": {
-   "en": "",
+   "en": "Company name",
    "fr": "Nom de l entreprise"
   },
   "Pilotage des jalons RaaS par client": {
-   "en": "",
+   "en": "RaaS milestone steering by client",
    "fr": "Pilotage des jalons RaaS par client"
   },
   "Prélève les échéances arrivées à terme via Stripe. L’aperçu ne prélève rien ; le déclenchement exige une confirmation et reste sans effet tant que Stripe n’est pas configuré.": {
-   "en": "",
+   "en": "Debits the instalments that have fallen due via Stripe. The preview debits nothing; triggering requires confirmation and has no effect as long as Stripe is not configured.",
    "fr": "Prélève les échéances arrivées à terme via Stripe. L’aperçu ne prélève rien ; le déclenchement exige une confirmation et reste sans effet tant que Stripe n’est pas configuré."
   },
   "Préparation": {
-   "en": "",
+   "en": "Readiness",
    "fr": "Préparation"
   },
   "Prévisualiser les échéances dues": {
-   "en": "",
+   "en": "Preview the instalments due",
    "fr": "Prévisualiser les échéances dues"
   },
   "Quand l'obligation s'applique-t-elle ? — sept situations": {
-   "en": "",
+   "en": "When does the obligation apply? — seven situations",
    "fr": "Quand l'obligation s'applique-t-elle ? — sept situations"
   },
   "Re-mesure automatiquement toutes les # secondes tant que cette page est ouverte": {
-   "en": "",
+   "en": "Automatically re-measures every # seconds while this page is open",
    "fr": "Re-mesure automatiquement toutes les 30 secondes tant que cette page est ouverte"
   },
   "Relire immédiatement les pages servies et re-générer un document de contrôle": {
-   "en": "",
+   "en": "Re-read the served pages immediately and regenerate a check document",
    "fr": "Relire immédiatement les pages servies et re-générer un document de contrôle"
   },
   "Responsable éditorial": {
-   "en": "",
+   "en": "Editorial owner",
    "fr": "Responsable éditorial"
   },
   "Réinitialiser le registre aux valeurs de référence, alignées sur l'état réel de la plateforme": {
-   "en": "",
+   "en": "Reset the register to the reference values, aligned with the actual state of the platform",
    "fr": "Réinitialiser le registre aux valeurs de référence, alignées sur l'état réel de la plateforme"
   },
   "SaaS mensuel de référence (€)": {
-   "en": "",
+   "en": "Reference monthly SaaS price (€)",
    "fr": "SaaS mensuel de référence (€)"
   },
   "Système ou usage": {
-   "en": "",
+   "en": "System or use",
    "fr": "Système ou usage"
   },
   "Vue d ensemble de tous les clients": {
-   "en": "",
+   "en": "Overview of all clients",
    "fr": "Vue d ensemble de tous les clients"
   },
   "\\ud#d\\udcc# Vue portefeuille": {
-   "en": "",
+   "en": "\\ud#d\\udcc# Portfolio view",
    "fr": "\\ud83d\\udcc8 Vue portefeuille"
   },
   "contact@client.com": {
-   "en": "",
+   "en": "contact@clientcompany.com",
    "fr": "contact@client.com"
   },
   "Émet une facture Stripe par échéance due (prélèvement réel)": {
-   "en": "",
+   "en": "Issues one Stripe invoice per instalment due (real debit)",
    "fr": "Émet une facture Stripe par échéance due (prélèvement réel)"
   },
   "Étiquetage": {
-   "en": "",
+   "en": "Labelling",
    "fr": "Étiquetage"
   },
   "⚙️ Statut technique de l'infrastructure": {
-   "en": "",
+   "en": "⚙️ Technical status of the infrastructure",
    "fr": "⚙️ Statut technique de l'infrastructure"
   },
   "📧 Santé des envois d'email": {
-   "en": "",
+   "en": "📧 Email delivery health",
    "fr": "📧 Santé des envois d'email"
   },
   "🔒 Cette page est réservée à CONSEILPREV.": {
-   "en": "",
+   "en": "🔒 This page is reserved for CONSEILPREV.",
    "fr": "🔒 Cette page est réservée à CONSEILPREV."
   },
   "🔒 Le client recevra un email avec un lien sécurisé pour définir lui-même son mot de passe — CONSEILPREV ne le connaîtra jamais (conforme RGPD).": {
-   "en": "",
+   "en": "🔒 The client will receive an email with a secure link to set their own password — CONSEILPREV will never know it (GDPR-compliant).",
    "fr": "🔒 Le client recevra un email avec un lien sécurisé pour définir lui-même son mot de passe — CONSEILPREV ne le connaîtra jamais (conforme RGPD)."
   }
  }

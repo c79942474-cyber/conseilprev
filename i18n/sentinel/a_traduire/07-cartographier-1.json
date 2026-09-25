@@ -9,746 +9,746 @@
  "_rubrique": "CARTOGRAPHIER",
  "bloc": {
   "Audit de maturité IA": {
-   "en": "",
+   "en": "AI <em>maturity audit</em>",
    "fr": "Audit de maturité IA",
    "html": "Audit de <em>maturité IA</em>"
   },
   "Ce que coûte le parc que vous avez déjà déclaré. Cette page ne tient aucun inventaire à elle : elle lit le registre des systèmes d’IA — le même que celui de la conformité. L’attribution que le FinOps réclame (propriétaire, service, finalité) y est déjà, et c’est la moitié la plus coûteuse de la démarche.": {
-   "en": "",
+   "en": "What the estate you have already declared costs. This page keeps no inventory of its own: it reads the <strong>AI systems register</strong> — the same one compliance uses. The attribution FinOps demands (owner, department, purpose) is already there, and it is the costliest half of the exercise.",
    "fr": "Ce que coûte le parc que vous avez déjà déclaré. Cette page ne tient aucun inventaire à elle : elle lit le registre des systèmes d’IA — le même que celui de la conformité. L’attribution que le FinOps réclame (propriétaire, service, finalité) y est déjà, et c’est la moitié la plus coûteuse de la démarche.",
    "html": "Ce que coûte le parc que vous avez déjà déclaré. Cette page ne tient aucun inventaire à elle : elle lit le <strong>registre des systèmes d’IA</strong> — le même que celui de la conformité. L’attribution que le FinOps réclame (propriétaire, service, finalité) y est déjà, et c’est la moitié la plus coûteuse de la démarche."
   },
   "Ce que pèse le parc de systèmes d’IA que vous avez déjà déclaré au Registre. Cette page ne tient aucun inventaire à elle : le même volume déclaré donne le coût quand on le divise par un tarif, et l’énergie quand on le multiplie par des wattheures par millier de jetons. Un second inventaire, tenu à côté, divergerait du premier dans le mois.": {
-   "en": "",
+   "en": "What the estate of AI systems you have already declared in the <strong>Register</strong> weighs. This page keeps no inventory of its own: the same declared volume gives the cost when divided by a rate, and the energy when multiplied by watt-hours per thousand tokens. A second inventory, kept alongside, would diverge from the first within a month.",
    "fr": "Ce que pèse le parc de systèmes d’IA que vous avez déjà déclaré au Registre. Cette page ne tient aucun inventaire à elle : le même volume déclaré donne le coût quand on le divise par un tarif, et l’énergie quand on le multiplie par des wattheures par millier de jetons. Un second inventaire, tenu à côté, divergerait du premier dans le mois.",
    "html": "Ce que pèse le parc de systèmes d’IA que vous avez déjà déclaré au <strong>Registre</strong>. Cette page ne tient aucun inventaire à elle&nbsp;: le même volume déclaré donne le coût quand on le divise par un tarif, et l’énergie quand on le multiplie par des wattheures par millier de jetons. Un second inventaire, tenu à côté, divergerait du premier dans le mois."
   },
   "Ces champs se saisissent sur la fiche du système, au Registre. Aucun n’est deviné : une campagne d’ajustement ne s’estime pas depuis un volume d’usage.": {
-   "en": "",
+   "en": "These fields are entered on the system record, in the <strong>Register</strong>. None is guessed: a fine-tuning campaign cannot be estimated from a usage volume.",
    "fr": "Ces champs se saisissent sur la fiche du système, au Registre. Aucun n’est deviné : une campagne d’ajustement ne s’estime pas depuis un volume d’usage.",
    "html": "Ces champs se saisissent sur la fiche du système, au <strong>Registre</strong>. Aucun n’est deviné&nbsp;: une campagne d’ajustement ne s’estime pas depuis un volume d’usage."
   },
   "Chaque montant porte sa formule chiffrée et la provenance du volume. Un montant dont on ne peut pas dire d’où vient le volume n’est pas opposable en comité.": {
-   "en": "",
+   "en": "Each amount carries <strong>its costed formula</strong> and <strong>the provenance of the volume</strong>. An amount whose volume cannot be traced to its source is not defensible in a steering committee.",
    "fr": "Chaque montant porte sa formule chiffrée et la provenance du volume. Un montant dont on ne peut pas dire d’où vient le volume n’est pas opposable en comité.",
    "html": "Chaque montant porte <strong>sa formule chiffrée</strong> et <strong>la provenance du volume</strong>. Un montant dont on ne peut pas dire d’où vient le volume n’est pas opposable en comité."
   },
   "Déclarés, jamais mesurés : cette page ne peut pas savoir si un cache est réellement branché. Ce qu’elle apporte est la question posée à chaque ligne — une case jamais cochée sur vingt lignes se voit, l’absence de la question ne se voit pas.": {
-   "en": "",
+   "en": "<strong>Declared, never measured</strong>: this page cannot know whether a cache is actually connected. What it contributes is the question asked on every line — a box never ticked across twenty lines shows, the absence of the question does not.",
    "fr": "Déclarés, jamais mesurés : cette page ne peut pas savoir si un cache est réellement branché. Ce qu’elle apporte est la question posée à chaque ligne — une case jamais cochée sur vingt lignes se voit, l’absence de la question ne se voit pas.",
    "html": "<strong>Déclarés, jamais mesurés</strong>&nbsp;: cette page ne peut pas savoir si un cache est réellement branché. Ce qu’elle apporte est la question posée à chaque ligne — une case jamais cochée sur vingt lignes se voit, l’absence de la question ne se voit pas."
   },
   "Empreinte IA du parc déclaré": {
-   "en": "",
+   "en": "AI footprint <em>of the declared estate</em>",
    "fr": "Empreinte IA du parc déclaré",
    "html": "Empreinte IA <em>du parc déclaré</em>"
   },
   "FinOps de l’IA": {
-   "en": "",
+   "en": "AI <em>FinOps</em>",
    "fr": "FinOps de l’IA",
    "html": "FinOps <em>de l’IA</em>"
   },
   "La classification vient du Simulateur IA Act et du Registre IA : elle n’est pas redemandée ici. L’ordre suit le règlement, jamais les effectifs — un seul système haut risque se lit avant quinze systèmes à risque minimal.": {
-   "en": "",
+   "en": "The classification comes from the <strong>AI&nbsp;Act simulator</strong> and the <strong>AI register</strong>: it is not asked for again here. The order follows the Regulation, never the headcounts — a single high-risk system is read before fifteen minimal-risk systems.",
    "fr": "La classification vient du Simulateur IA Act et du Registre IA : elle n’est pas redemandée ici. L’ordre suit le règlement, jamais les effectifs — un seul système haut risque se lit avant quinze systèmes à risque minimal.",
    "html": "La classification vient du <strong>Simulateur IA&nbsp;Act</strong> et du <strong>Registre IA</strong>&nbsp;: elle n’est pas redemandée ici. L’ordre suit le règlement, jamais les effectifs — un seul système haut risque se lit avant quinze systèmes à risque minimal."
   },
   "L’inférence et l’ajustement fin sont rendus séparément. Les mêler ferait disparaître le terme qui, sur un parc qui affine ses modèles, est souvent le plus lourd.": {
-   "en": "",
+   "en": "<strong>Inference</strong> and <strong>fine-tuning</strong> are reported separately. Mixing them would make the term disappear that, on an estate that fine-tunes its models, is often the heaviest.",
    "fr": "L’inférence et l’ajustement fin sont rendus séparément. Les mêler ferait disparaître le terme qui, sur un parc qui affine ses modèles, est souvent le plus lourd.",
    "html": "L’<strong>inférence</strong> et l’<strong>ajustement fin</strong> sont rendus séparément. Les mêler ferait disparaître le terme qui, sur un parc qui affine ses modèles, est souvent le plus lourd."
   },
   "Servis par le moteur, jamais recopiés ici — sans quoi l’écran et le code dériveraient, et c’est l’écran qu’on croirait. Chacun porte sa nature : texte réglementaire, relevé, ou hypothèse du cabinet.": {
-   "en": "",
+   "en": "Served by the engine, never copied here — otherwise the screen and the code would drift apart, and it is the screen you would believe. Each carries its <strong>nature</strong>: regulatory text, reading, or the firm’s assumption.",
    "fr": "Servis par le moteur, jamais recopiés ici — sans quoi l’écran et le code dériveraient, et c’est l’écran qu’on croirait. Chacun porte sa nature : texte réglementaire, relevé, ou hypothèse du cabinet.",
    "html": "Servis par le moteur, jamais recopiés ici — sans quoi l’écran et le code dériveraient, et c’est l’écran qu’on croirait. Chacun porte sa <strong>nature</strong>&nbsp;: texte réglementaire, relevé, ou hypothèse du cabinet."
   },
   "Un indicateur absent est déclaré absent, avec ce qu’il faudrait pour l’établir. Le remplir d’un nombre sans auteur serait pire que de ne rien afficher.": {
-   "en": "",
+   "en": "A missing indicator is <strong>declared missing</strong>, with what it would take to establish it. Filling it with a number that has no author would be worse than showing nothing.",
    "fr": "Un indicateur absent est déclaré absent, avec ce qu’il faudrait pour l’établir. Le remplir d’un nombre sans auteur serait pire que de ne rien afficher.",
    "html": "Un indicateur absent est <strong>déclaré absent</strong>, avec ce qu’il faudrait pour l’établir. Le remplir d’un nombre sans auteur serait pire que de ne rien afficher."
   },
   "Une heuristique, jamais un verdict : « ce modèle est trop gros » suppose de connaître la qualité attendue, le taux d’erreur toléré et ce qu’une erreur coûte. L’écart de rang dit où regarder.": {
-   "en": "",
+   "en": "A <strong>heuristic</strong>, never a verdict: “this model is too big” assumes you know the expected quality, the tolerated error rate and what an error costs. The rank gap says where to look.",
    "fr": "Une heuristique, jamais un verdict : « ce modèle est trop gros » suppose de connaître la qualité attendue, le taux d’erreur toléré et ce qu’une erreur coûte. L’écart de rang dit où regarder.",
    "html": "Une <strong>heuristique</strong>, jamais un verdict&nbsp;: « ce modèle est trop gros » suppose de connaître la qualité attendue, le taux d’erreur toléré et ce qu’une erreur coûte. L’écart de rang dit où regarder."
   }
  },
  "texte": {
   "# indicateurs de pilotage + KPIs spécifiques Télécom — cibles, fréquences, outils, responsables. Téléchargeable et partageable.": {
-   "en": "",
+   "en": "# steering indicators + Telecom-specific KPIs — targets, frequencies, tools, owners. Downloadable and shareable.",
    "fr": "7 indicateurs de pilotage + KPIs spécifiques Télécom — cibles, fréquences, outils, responsables. Téléchargeable et partageable."
   },
   "# livrables professionnels generes par IA (Mistral ou Claude) a partir des resultats reels de votre audit. Telechargeables en PDF et Word.": {
-   "en": "",
+   "en": "# professional deliverables generated by AI (Mistral or Claude) from the actual results of your audit. Downloadable as PDF and Word.",
    "fr": "6 livrables professionnels generes par IA (Mistral ou Claude) a partir des resultats reels de votre audit. Telechargeables en PDF et Word."
   },
   "# questions (# par pilier) basees sur les exigences exactes des articles de l'AI Act. Vos reponses (Non / Partiel / Oui) recalculent en temps reel tous les scores et le radar.": {
-   "en": "",
+   "en": "# questions (# per pillar) based on the exact requirements of the AI Act articles. Your answers (No / Partial / Yes) recalculate all scores and the radar in real time.",
    "fr": "16 questions (2 par pilier) basees sur les exigences exactes des articles de l'AI Act. Vos reponses (Non / Partiel / Oui) recalculent en temps reel tous les scores et le radar."
   },
   "# questions fondées sur les exigences du Règlement (UE) #/#. Vos réponses recalculent les scores de maturité en temps réel.": {
-   "en": "",
+   "en": "# questions based on the requirements of Regulation (EU) #/#. Your answers recalculate the maturity scores in real time.",
    "fr": "16 questions fondées sur les exigences du Règlement (UE) 2024/1689. Vos réponses recalculent les scores de maturité en temps réel."
   },
   "# étapes méthodologiques CONSEILPREV. Cliquez sur une étape pour générer son guide sectoriel par IA (planning + budget), avec analyse optionnelle de vos données.": {
-   "en": "",
+   "en": "# CONSEILPREV methodology steps. Click a step to generate its sector guide by AI (schedule + budget), with optional analysis of your data.",
    "fr": "4 étapes méthodologiques CONSEILPREV. Cliquez sur une étape pour générer son guide sectoriel par IA (planning + budget), avec analyse optionnelle de vos données."
   },
   "#GPP": {
-   "en": "",
+   "en": "#GPP",
    "fr": "3GPP"
   },
   "#–# semaines · #/# – #/#": {
-   "en": "",
+   "en": "#–# weeks · #/# – #/#",
    "fr": "3–4 semaines · 01/07 – 28/07"
   },
   "Agriculture, agroalimentaire, forêt et pêche": {
-   "en": "",
+   "en": "Agriculture, agri-food, forestry and fishing",
    "fr": "Agriculture, agroalimentaire, forêt et pêche"
   },
   "Alignement avec les normes locales (ex. lois chinoises sur la cybersécurité pour les filiales asiatiques).": {
-   "en": "",
+   "en": "Alignment with local standards (e.g. Chinese cybersecurity laws for Asian subsidiaries).",
    "fr": "Alignement avec les normes locales (ex. lois chinoises sur la cybersécurité pour les filiales asiatiques)."
   },
   "Analyse automatisée des processus et de la documentation.": {
-   "en": "",
+   "en": "Automated analysis of processes and documentation.",
    "fr": "Analyse automatisée des processus et de la documentation."
   },
   "Analyse de données réseau (QoS)": {
-   "en": "",
+   "en": "Network data analysis (QoS)",
    "fr": "Analyse de données réseau (QoS)"
   },
   "Analyse des processus et de la documentation : politiques IA, registres de données, contrats fournisseurs, gap analysis vis-à-vis des # piliers, des articles de l'AI Act et des exigences d'information documentée de l'ISO/IEC # (Art. #, Annexe A et B).": {
-   "en": "",
+   "en": "Analysis of processes and documentation: AI policies, data registers, supplier contracts, gap analysis against the # pillars, the articles of the AI Act and the documented information requirements of ISO/IEC # (clause #, Annexes A and B).",
    "fr": "Analyse des processus et de la documentation : politiques IA, registres de données, contrats fournisseurs, gap analysis vis-à-vis des 8 piliers, des articles de l'AI Act et des exigences d'information documentée de l'ISO/IEC 42001 (Art. 7.5, Annexe A et B)."
   },
   "Art. # / Art. #": {
-   "en": "",
+   "en": "Art. # / Art. #",
    "fr": "Art. 13 / Art. 86"
   },
   "Art. # · Art. #": {
-   "en": "",
+   "en": "Art. # · Art. #",
    "fr": "Art. 13 · Art. 86"
   },
   "Art. # · Art. # · Art. #": {
-   "en": "",
+   "en": "Art. # · Art. # · Art. #",
    "fr": "Art. 17 · Art. 16 · Art. 26"
   },
   "Art. #(#)": {
-   "en": "",
+   "en": "Art. #(#)",
    "fr": "Art. 13(3)"
   },
   "Art. #(#)(f)": {
-   "en": "",
+   "en": "Art. #(#)(f)",
    "fr": "Art. 10(2)(f)"
   },
   "Art. #(#)-(#)": {
-   "en": "",
+   "en": "Art. #(#)-(#)",
    "fr": "Art. 9(6)-(8)"
   },
   "Arts, sport, médias et loisirs": {
-   "en": "",
+   "en": "Arts, sport, media and leisure",
    "fr": "Arts, sport, médias et loisirs"
   },
   "Assurer la conformité dans la durée. Audits trimestriels, mises à jour réglementaires, amélioration continue (KPIs), veille technologique, reporting exécutif au Comex, gestion des incidents IA.": {
-   "en": "",
+   "en": "Ensure compliance over time. Quarterly audits, regulatory updates, continual improvement (KPIs), technology watch, executive reporting to the executive committee, AI incident management.",
    "fr": "Assurer la conformité dans la durée. Audits trimestriels, mises à jour réglementaires, amélioration continue (KPIs), veille technologique, reporting exécutif au Comex, gestion des incidents IA."
   },
   "Attribution": {
-   "en": "",
+   "en": "Cost attribution",
    "fr": "Attribution"
   },
   "Aucun fournisseur ne publie la consommation réelle d’une requête. Les volumes viennent de votre registre, les facteurs portent leur source et leur nature, et rien n’est estimé à votre place. N’en tirez ni allégation de neutralité ni émissions évitées.": {
-   "en": "",
+   "en": "No provider publishes the actual consumption of a request. The volumes come from your register, the factors carry their source and their nature, and nothing is estimated on your behalf. Draw from it neither a neutrality claim nor avoided emissions.",
    "fr": "Aucun fournisseur ne publie la consommation réelle d’une requête. Les volumes viennent de votre registre, les facteurs portent leur source et leur nature, et rien n’est estimé à votre place. N’en tirez ni allégation de neutralité ni émissions évitées."
   },
   "Audit de maturité IA · CONSEILPREV": {
-   "en": "",
+   "en": "AI maturity audit · CONSEILPREV",
    "fr": "Audit de maturité IA · CONSEILPREV"
   },
   "Audit documentaire": {
-   "en": "",
+   "en": "Documentary audit",
    "fr": "Audit documentaire"
   },
   "Audit terrain": {
-   "en": "",
+   "en": "On-site audit",
    "fr": "Audit terrain"
   },
   "Autres services et vie associative": {
-   "en": "",
+   "en": "Other services and voluntary sector",
    "fr": "Autres services et vie associative"
   },
   "Budget detaille : couts structurels (RH au TJM, outils), operationnels, mensuels et annuels, couts caches et extra, duree moyenne du projet.": {
-   "en": "",
+   "en": "Detailed budget: structural costs (HR at the daily rate, tools), operational, monthly and annual costs, hidden and extra costs, average project duration.",
    "fr": "Budget detaille : couts structurels (RH au TJM, outils), operationnels, mensuels et annuels, couts caches et extra, duree moyenne du projet."
   },
   "Budget professionnel détaillé adapté au secteur Télécom.": {
-   "en": "",
+   "en": "Detailed professional budget adapted to the Telecom sector.",
    "fr": "Budget professionnel détaillé adapté au secteur Télécom."
   },
   "Budget prévisionnel sectoriel": {
-   "en": "",
+   "en": "Sector budget forecast",
    "fr": "Budget prévisionnel sectoriel"
   },
   "CONFIDENTIALITE & SECURITE (Art. #, #). Protection des donnees et des modeles. On evalue : les mesures de cybersecurite contre les attaques adversariales, la protection RGPD et la minimisation des donnees personnelles.": {
-   "en": "",
+   "en": "CONFIDENTIALITY & SECURITY (Art. #, #). Protection of data and models. We assess: cybersecurity measures against adversarial attacks, GDPR protection and minimisation of personal data.",
    "fr": "CONFIDENTIALITE & SECURITE (Art. 15, 10). Protection des donnees et des modeles. On evalue : les mesures de cybersecurite contre les attaques adversariales, la protection RGPD et la minimisation des donnees personnelles."
   },
   "CONTROLABILITE (Art. #). Mecanismes de supervision humaine permettant de surveiller, interrompre ou corriger le systeme. On evalue : les interfaces de controle, la capacite d arret, la formation des operateurs habilites.": {
-   "en": "",
+   "en": "CONTROLLABILITY (Art. #). Human oversight mechanisms for monitoring, stopping or correcting the system. We assess: the control interfaces, the ability to stop the system, the training of authorised operators.",
    "fr": "CONTROLABILITE (Art. 14). Mecanismes de supervision humaine permettant de surveiller, interrompre ou corriger le systeme. On evalue : les interfaces de controle, la capacite d arret, la formation des operateurs habilites."
   },
   "Calendrier des audits trimestriels, processus de veille réglementaire et technologique, gestion des incidents IA, reporting exécutif. Assure la conformité dans la durée (Art. # EU AI Act - surveillance post-commercialisation) et l'amélioration continue exigée par l'ISO/IEC # (Art. #).": {
-   "en": "",
+   "en": "Schedule of quarterly audits, regulatory and technology watch process, AI incident management, executive reporting. Ensures compliance over time (Art. # EU AI Act - post-market monitoring) and the continual improvement required by ISO/IEC # (clause #).",
    "fr": "Calendrier des audits trimestriels, processus de veille réglementaire et technologique, gestion des incidents IA, reporting exécutif. Assure la conformité dans la durée (Art. 72 EU AI Act - surveillance post-commercialisation) et l'amélioration continue exigée par l'ISO/IEC 42001 (Art. 10)."
   },
   "Calendrier des audits trimestriels, processus de veille réglementaire et technologique, ge…": {
-   "en": "",
+   "en": "Schedule of quarterly audits, regulatory and technology watch process, AI incident man…",
    "fr": "Calendrier des audits trimestriels, processus de veille réglementaire et technologique, ge…"
   },
   "Cartographier l'existant et identifier les écarts de conformité (EU AI Act, # piliers). Kick-off, audit documentaire, cartographie RACI, recensement des systèmes IA, évaluation des risques (outil AIRI), benchmark réglementaire, pré-audit technique.": {
-   "en": "",
+   "en": "Map the existing situation and identify compliance gaps (EU AI Act, # pillars). Kick-off, documentary audit, RACI mapping, inventory of AI systems, risk assessment (AIRI tool), regulatory benchmark, technical pre-audit.",
    "fr": "Cartographier l'existant et identifier les écarts de conformité (EU AI Act, 8 piliers). Kick-off, audit documentaire, cartographie RACI, recensement des systèmes IA, évaluation des risques (outil AIRI), benchmark réglementaire, pré-audit technique."
   },
   "Cartographier · Coûts": {
-   "en": "",
+   "en": "Map · Costs",
    "fr": "Cartographier · Coûts"
   },
   "Cartographier · Empreinte": {
-   "en": "",
+   "en": "Map · Footprint",
    "fr": "Cartographier · Empreinte"
   },
   "Cas d'usage IA frequents dans ce secteur. Chacun doit etre inscrit au registre des systemes IA (Art. #, #) et classe par niveau de risque selon l'Annexe III de l'AI Act.": {
-   "en": "",
+   "en": "Frequent AI use cases in this sector. Each must be recorded in the AI systems register (Art. #, #) and classified by risk level under Annex III of the AI Act.",
    "fr": "Cas d'usage IA frequents dans ce secteur. Chacun doit etre inscrit au registre des systemes IA (Art. 49, 71) et classe par niveau de risque selon l'Annexe III de l'AI Act."
   },
   "Cas d'usage couramment rencontrés et à inscrire au registre des systèmes IA.": {
-   "en": "",
+   "en": "Commonly encountered use cases to record in the AI systems register.",
    "fr": "Cas d'usage couramment rencontrés et à inscrire au registre des systèmes IA."
   },
   "Ce que cette page ne sait pas": {
-   "en": "",
+   "en": "What this page does not know",
    "fr": "Ce que cette page ne sait pas"
   },
   "Ce qui n’est pas chiffré, et pourquoi": {
-   "en": "",
+   "en": "What is not costed, and why",
    "fr": "Ce qui n’est pas chiffré, et pourquoi"
   },
   "Ce qui se déclare, et où": {
-   "en": "",
+   "en": "What is declared, and where",
    "fr": "Ce qui se déclare, et où"
   },
   "Ce qu’il faut déclarer pour compter un ajustement fin": {
-   "en": "",
+   "en": "What must be declared to count a fine-tuning",
    "fr": "Ce qu’il faut déclarer pour compter un ajustement fin"
   },
   "Chatbots service client": {
-   "en": "",
+   "en": "Customer service chatbots",
    "fr": "Chatbots service client"
   },
   "Chiffrage indisponible pour le moment.": {
-   "en": "",
+   "en": "Costing unavailable for now.",
    "fr": "Chiffrage indisponible pour le moment."
   },
   "Choisissez le modele qui redige les livrables. Mistral Large (api.mistral.ai) ou Claude Sonnet (Anthropic via le proxy serveur). En cas d indisponibilite de Claude, bascule automatique sur Mistral.": {
-   "en": "",
+   "en": "Choose the model that drafts the deliverables. Mistral Large (api.mistral.ai) or Claude Sonnet (Anthropic via the server proxy). If Claude is unavailable, it switches automatically to Mistral.",
    "fr": "Choisissez le modele qui redige les livrables. Mistral Large (api.mistral.ai) ou Claude Sonnet (Anthropic via le proxy serveur). En cas d indisponibilite de Claude, bascule automatique sur Mistral."
   },
   "Claude Sonnet": {
-   "en": "",
+   "en": "Claude Sonnet",
    "fr": "Claude Sonnet"
   },
   "Cliquez pour repondre — recalcule le score de maturite en temps reel.": {
-   "en": "",
+   "en": "Click to answer — recalculates the maturity score in real time.",
    "fr": "Cliquez pour repondre — recalcule le score de maturite en temps reel."
   },
   "Cliquez sur un livrable pour le générer avec l'IA à partir des résultats de votre audit, puis téléchargez-le en PDF ou Word.": {
-   "en": "",
+   "en": "Click a deliverable to generate it with AI from the results of your audit, then download it as PDF or Word.",
    "fr": "Cliquez sur un livrable pour le générer avec l'IA à partir des résultats de votre audit, puis téléchargez-le en PDF ou Word."
   },
   "Commerce de gros et de détail": {
-   "en": "",
+   "en": "Wholesale and retail trade",
    "fr": "Commerce de gros et de détail"
   },
   "Comprendre et évaluer les réponses du système.": {
-   "en": "",
+   "en": "Understand and assess the system’s responses.",
    "fr": "Comprendre et évaluer les réponses du système."
   },
   "Confidentialité & Sécurité": {
-   "en": "",
+   "en": "Confidentiality & Security",
    "fr": "Confidentialité & Sécurité"
   },
   "Conformité client": {
-   "en": "",
+   "en": "Client compliance",
    "fr": "Conformité client"
   },
   "Construction et BTP": {
-   "en": "",
+   "en": "Construction and civil engineering",
    "fr": "Construction et BTP"
   },
   "Construire un cadre de gouvernance aligné EU AI Act. Définition des rôles (Responsable IA, DPO, Comité), élaboration des politiques IA, registre centralisé, processus de contrôle, intégration des # piliers, veille réglementaire.": {
-   "en": "",
+   "en": "Build a governance framework aligned with the EU AI Act. Definition of roles (AI lead, DPO, Committee), drafting of AI policies, centralised register, control processes, integration of the # pillars, regulatory watch.",
    "fr": "Construire un cadre de gouvernance aligné EU AI Act. Définition des rôles (Responsable IA, DPO, Comité), élaboration des politiques IA, registre centralisé, processus de contrôle, intégration des 8 piliers, veille réglementaire."
   },
   "Consulter le budget prévisionnel détaillé": {
-   "en": "",
+   "en": "View the detailed budget forecast",
    "fr": "Consulter le budget prévisionnel détaillé"
   },
   "Consulter les KPIs sectoriels détaillés": {
-   "en": "",
+   "en": "View the detailed sector KPIs",
    "fr": "Consulter les KPIs sectoriels détaillés"
   },
   "Continu · À partir du #/#": {
-   "en": "",
+   "en": "Continuous · From #/#",
    "fr": "Continu · À partir du 02/12"
   },
   "Contrôlabilité": {
-   "en": "",
+   "en": "Controllability",
    "fr": "Contrôlabilité"
   },
   "Contrôle des réponses (éviter désinformation, biais). Transparence sur les données utilisées (historique des conversations).": {
-   "en": "",
+   "en": "Checking of responses (avoiding disinformation, bias). Transparency on the data used (conversation history).",
    "fr": "Contrôle des réponses (éviter désinformation, biais). Transparence sur les données utilisées (historique des conversations)."
   },
   "Couverture de l’étude": {
-   "en": "",
+   "en": "Coverage of the study",
    "fr": "Couverture de l’étude"
   },
   "Couverture du chiffrage": {
-   "en": "",
+   "en": "Coverage of the costing",
    "fr": "Couverture du chiffrage"
   },
   "Coûts structurels (RH au TJM, outils), opérationnels, mensuels & annuels, coûts cachés et extra, durée moyenne. Téléchargeable (PDF/Word) et partageable par email.": {
-   "en": "",
+   "en": "Structural costs (HR at the daily rate, tools), operational, monthly & annual costs, hidden and extra costs, average duration. Downloadable (PDF/Word) and shareable by email.",
    "fr": "Coûts structurels (RH au TJM, outils), opérationnels, mensuels & annuels, coûts cachés et extra, durée moyenne. Téléchargeable (PDF/Word) et partageable par email."
   },
   "Des mesures de cybersécurité protègent-elles le système contre les attaques adversariales ?": {
-   "en": "",
+   "en": "Do cybersecurity measures protect the system against adversarial attacks?",
    "fr": "Des mesures de cybersécurité protègent-elles le système contre les attaques adversariales ?"
   },
   "Des tests sont-ils réalisés avant déploiement pour identifier et atténuer les risques ?": {
-   "en": "",
+   "en": "Are tests carried out before deployment to identify and mitigate risks?",
    "fr": "Des tests sont-ils réalisés avant déploiement pour identifier et atténuer les risques ?"
   },
   "Dimensionnement des modèles": {
-   "en": "",
+   "en": "Model sizing",
    "fr": "Dimensionnement des modèles"
   },
   "Disposer de mécanismes pour surveiller et orienter le comportement des systèmes d'IA.": {
-   "en": "",
+   "en": "Have mechanisms to monitor and steer the behaviour of AI systems.",
    "fr": "Disposer de mécanismes pour surveiller et orienter le comportement des systèmes d'IA."
   },
   "Données sensibles": {
-   "en": "",
+   "en": "Sensitive data",
    "fr": "Données sensibles"
   },
   "Déclaré, jamais mesuré.": {
-   "en": "",
+   "en": "Declared, never measured.",
    "fr": "Déclaré, jamais mesuré."
   },
   "Défini": {
-   "en": "",
+   "en": "Defined",
    "fr": "Défini"
   },
   "Déployer le cadre et former les équipes. Formation (EU AI Act, # piliers), déploiement des outils, audit terrain complémentaire, mise en œuvre des processus, tests de conformité, intégration aux systèmes existants (CRM, ERP, SIEM).": {
-   "en": "",
+   "en": "Deploy the framework and train the teams. Training (EU AI Act, # pillars), deployment of tools, complementary on-site audit, implementation of processes, compliance tests, integration with existing systems (CRM, ERP, SIEM).",
    "fr": "Déployer le cadre et former les équipes. Formation (EU AI Act, 8 piliers), déploiement des outils, audit terrain complémentaire, mise en œuvre des processus, tests de conformité, intégration aux systèmes existants (CRM, ERP, SIEM)."
   },
   "Détection de fraude": {
-   "en": "",
+   "en": "Fraud detection",
    "fr": "Détection de fraude"
   },
   "EQUITE (Art. #). Prise en compte des impacts sur les differents groupes. On evalue : l examen des biais dans les donnees d entrainement, la representativite et la qualite des jeux de donnees, la non-discrimination.": {
-   "en": "",
+   "en": "FAIRNESS (Art. #). Taking account of the impacts on different groups. We assess: the examination of bias in the training data, the representativeness and quality of the datasets, non-discrimination.",
    "fr": "EQUITE (Art. 10). Prise en compte des impacts sur les differents groupes. On evalue : l examen des biais dans les donnees d entrainement, la representativite et la qualite des jeux de donnees, la non-discrimination."
   },
   "ETSI": {
-   "en": "",
+   "en": "ETSI",
    "fr": "ETSI"
   },
   "EXPLICABILITE (Art. #, #). Capacite a comprendre et expliquer les decisions du systeme IA aux utilisateurs et personnes concernees. On evalue : la notice d utilisation, la clarte des sorties, le droit a l explication des decisions individuelles.": {
-   "en": "",
+   "en": "EXPLAINABILITY (Art. #, #). Ability to understand and explain the AI system’s decisions to users and data subjects. We assess: the instructions for use, the clarity of the outputs, the right to an explanation of individual decisions.",
    "fr": "EXPLICABILITE (Art. 13, 86). Capacite a comprendre et expliquer les decisions du systeme IA aux utilisateurs et personnes concernees. On evalue : la notice d utilisation, la clarte des sorties, le droit a l explication des decisions individuelles."
   },
   "Enjeux propres pris en compte dans le plan d'action (données sensibles, résilience, IA générative).": {
-   "en": "",
+   "en": "Specific issues taken into account in the action plan (sensitive data, resilience, generative AI).",
    "fr": "Enjeux propres pris en compte dans le plan d'action (données sensibles, résilience, IA générative)."
   },
   "Enjeux reglementaires propres a ce secteur : donnees sensibles, resilience des infrastructures, IA generative, conformite client. Pris en compte dans le plan d action et les livrables.": {
-   "en": "",
+   "en": "Regulatory issues specific to this sector: sensitive data, infrastructure resilience, generative AI, client compliance. Taken into account in the action plan and the deliverables.",
    "fr": "Enjeux reglementaires propres a ce secteur : donnees sensibles, resilience des infrastructures, IA generative, conformite client. Pris en compte dans le plan d action et les livrables."
   },
   "Enregistrer cet audit de maturite dans l historique persistant et tracable (RGPD).": {
-   "en": "",
+   "en": "Save this maturity audit to the persistent and traceable history (GDPR).",
    "fr": "Enregistrer cet audit de maturite dans l historique persistant et tracable (RGPD)."
   },
   "Enseignement et formation": {
-   "en": "",
+   "en": "Education and training",
    "fr": "Enseignement et formation"
   },
   "Existe-t-il des mécanismes de supervision humaine permettant d'interrompre ou corriger le système ?": {
-   "en": "",
+   "en": "Are there human oversight mechanisms for stopping or correcting the system?",
    "fr": "Existe-t-il des mécanismes de supervision humaine permettant d'interrompre ou corriger le système ?"
   },
   "Explicabilité": {
-   "en": "",
+   "en": "Explainability",
    "fr": "Explicabilité"
   },
   "Export synthetique de toute la page (hors livrables IA) au format imprimable PDF ou editable Word. Reprend le score, les # piliers, KPIs, phases, budget et procedure pour le secteur selectionne.": {
-   "en": "",
+   "en": "Summary export of the whole page (excluding AI deliverables) as a printable PDF or an editable Word file. Includes the score, the # pillars, KPIs, phases, budget and procedure for the selected sector.",
    "fr": "Export synthetique de toute la page (hors livrables IA) au format imprimable PDF ou editable Word. Reprend le score, les 8 piliers, KPIs, phases, budget et procedure pour le secteur selectionne."
   },
   "Finance / Banque / Assurance": {
-   "en": "",
+   "en": "Finance / Banking / Insurance",
    "fr": "Finance / Banque / Assurance"
   },
   "GOUVERNANCE (Art. #, #, #). Integration des bonnes pratiques dans toute la chaine IA, y compris fournisseurs. On evalue : le systeme de gestion de la qualite (SGQ), la definition des roles (Responsable IA, DPO, Comite), les obligations fournisseurs/deployeurs.": {
-   "en": "",
+   "en": "GOVERNANCE (Art. #, #, #). Integration of good practices throughout the AI chain, suppliers included. We assess: the quality management system (QMS), the definition of roles (AI lead, DPO, Committee), provider/deployer obligations.",
    "fr": "GOUVERNANCE (Art. 17, 16, 26). Integration des bonnes pratiques dans toute la chaine IA, y compris fournisseurs. On evalue : le systeme de gestion de la qualite (SGQ), la definition des roles (Responsable IA, DPO, Comite), les obligations fournisseurs/deployeurs."
   },
   "Gouvernance": {
-   "en": "",
+   "en": "Governance",
    "fr": "Gouvernance"
   },
   "Générer avec IA →": {
-   "en": "",
+   "en": "Generate with AI →",
    "fr": "Générer avec IA →"
   },
   "Horizon": {
-   "en": "",
+   "en": "Time horizon",
    "fr": "Horizon"
   },
   "Hôtellerie, restauration et tourisme": {
-   "en": "",
+   "en": "Hotels, restaurants and tourism",
    "fr": "Hôtellerie, restauration et tourisme"
   },
   "IA générative et chatbots": {
-   "en": "",
+   "en": "Generative AI and chatbots",
    "fr": "IA générative et chatbots"
   },
   "IT / Tech / SaaS": {
-   "en": "",
+   "en": "IT / Technology / SaaS",
    "fr": "IT / Tech / SaaS"
   },
   "Immobilier et gestion d'actifs bâtis": {
-   "en": "",
+   "en": "Real estate and built asset management",
    "fr": "Immobilier et gestion d'actifs bâtis"
   },
   "Indicateurs cles de suivi de la conformite et de la gouvernance IA, avec cibles, frequences, outils et responsables. KPIs generiques + specifiques au secteur.": {
-   "en": "",
+   "en": "Key indicators for monitoring compliance and AI governance, with targets, frequencies, tools and owners. Generic KPIs + sector-specific KPIs.",
    "fr": "Indicateurs cles de suivi de la conformite et de la gouvernance IA, avec cibles, frequences, outils et responsables. KPIs generiques + specifiques au secteur."
   },
   "Indicateurs de pilotage de la conformité IA, incluant des KPIs spécifiques au secteur Télécom.": {
-   "en": "",
+   "en": "Steering indicators for AI compliance, including KPIs specific to the Telecom sector.",
    "fr": "Indicateurs de pilotage de la conformité IA, incluant des KPIs spécifiques au secteur Télécom."
   },
   "Industrie / Manufacturing": {
-   "en": "",
+   "en": "Industry / Manufacturing",
    "fr": "Industrie / Manufacturing"
   },
   "Industries extractives et matières premières": {
-   "en": "",
+   "en": "Extractive industries and raw materials",
    "fr": "Industries extractives et matières premières"
   },
   "Intégrer les meilleures pratiques dans la chaîne d'approvisionnement de l'IA, y compris fournisseurs et sous-traitants.": {
-   "en": "",
+   "en": "Integrate best practices into the AI supply chain, including suppliers and subcontractors.",
    "fr": "Intégrer les meilleures pratiques dans la chaîne d'approvisionnement de l'IA, y compris fournisseurs et sous-traitants."
   },
   "Invocation directe des systèmes IA pour tester les propriétés critiques : explicabilité, robustesse, sécurité, équité (biais). Tests adversariaux et cas limites, en cohérence avec l'évaluation des performances et le traitement des risques exigés par l'ISO/IEC # (Art. #, #).": {
-   "en": "",
+   "en": "Direct invocation of the AI systems to test critical properties: explainability, robustness, security, fairness (bias). Adversarial tests and edge cases, consistent with the performance evaluation and risk treatment required by ISO/IEC # (clauses #, #).",
    "fr": "Invocation directe des systèmes IA pour tester les propriétés critiques : explicabilité, robustesse, sécurité, équité (biais). Tests adversariaux et cas limites, en cohérence avec l'évaluation des performances et le traitement des risques exigés par l'ISO/IEC 42001 (Art. 6.1, 9.1)."
   },
   "Invocation directe du système d'IA pour tester les propriétés critiques.": {
-   "en": "",
+   "en": "Direct invocation of the AI system to test critical properties.",
    "fr": "Invocation directe du système d'IA pour tester les propriétés critiques."
   },
   "Le coût par niveau de risque": {
-   "en": "",
+   "en": "Cost by risk level",
    "fr": "Le coût par niveau de risque"
   },
   "Le détail, ligne à ligne": {
-   "en": "",
+   "en": "The detail, line by line",
    "fr": "Le détail, ligne à ligne"
   },
   "Le détail, système par système": {
-   "en": "",
+   "en": "The detail, system by system",
    "fr": "Le détail, système par système"
   },
   "Le système est-il résilient face aux erreurs, entrées erronées ou conditions dégradées ?": {
-   "en": "",
+   "en": "Is the system resilient to errors, erroneous inputs or degraded conditions?",
    "fr": "Le système est-il résilient face aux erreurs, entrées erronées ou conditions dégradées ?"
   },
   "Le système maintient-il un niveau d'exactitude approprié, mesuré et documenté ?": {
-   "en": "",
+   "en": "Does the system maintain an appropriate level of accuracy, measured and documented?",
    "fr": "Le système maintient-il un niveau d'exactitude approprié, mesuré et documenté ?"
   },
   "Les # piliers issus de l'EU AI Act : Explicabilite, Controlabilite, Transparence, Surete, Equite, Gouvernance, Confidentialite & Securite, Robustesse. Chaque pilier est mappe aux articles concernes du Reglement #/#.": {
-   "en": "",
+   "en": "The # pillars derived from the EU AI Act: Explainability, Controllability, Transparency, Safety, Fairness, Governance, Confidentiality & Security, Robustness. Each pillar is mapped to the relevant articles of Regulation #/#.",
    "fr": "Les 8 piliers issus de l'EU AI Act : Explicabilite, Controlabilite, Transparence, Surete, Equite, Gouvernance, Confidentialite & Securite, Robustesse. Chaque pilier est mappe aux articles concernes du Reglement 2024/1689."
   },
   "Les contenus générés par IA sont-ils marqués (watermarking) de façon lisible par machine ?": {
-   "en": "",
+   "en": "Is AI-generated content marked (watermarking) in a machine-readable way?",
    "fr": "Les contenus générés par IA sont-ils marqués (watermarking) de façon lisible par machine ?"
   },
   "Les données personnelles sont-elles protégées conformément au RGPD et minimisées ?": {
-   "en": "",
+   "en": "Is personal data protected in accordance with the GDPR and minimised?",
    "fr": "Les données personnelles sont-elles protégées conformément au RGPD et minimisées ?"
   },
   "Les données sont-elles pertinentes, représentatives et de qualité pour la finalité visée ?": {
-   "en": "",
+   "en": "Is the data relevant, representative and of good quality for the intended purpose?",
    "fr": "Les données sont-elles pertinentes, représentatives et de qualité pour la finalité visée ?"
   },
   "Les décisions du système IA peuvent-elles être expliquées aux utilisateurs et personnes concernées ?": {
-   "en": "",
+   "en": "Can the AI system’s decisions be explained to users and data subjects?",
    "fr": "Les décisions du système IA peuvent-elles être expliquées aux utilisateurs et personnes concernées ?"
   },
   "Les facteurs, et d’où ils viennent": {
-   "en": "",
+   "en": "The factors, and where they come from",
    "fr": "Les facteurs, et d’où ils viennent"
   },
   "Les indicateurs servis, et celui qui ne l’est pas": {
-   "en": "",
+   "en": "The indicators served, and the one that is not",
    "fr": "Les indicateurs servis, et celui qui ne l’est pas"
   },
   "Les jeux de données d'entraînement sont-ils examinés pour détecter et corriger les biais ?": {
-   "en": "",
+   "en": "Are the training datasets examined to detect and correct bias?",
    "fr": "Les jeux de données d'entraînement sont-ils examinés pour détecter et corriger les biais ?"
   },
   "Les opérateurs sont-ils formés et habilités à superviser le système IA ?": {
-   "en": "",
+   "en": "Are operators trained and authorised to oversee the AI system?",
    "fr": "Les opérateurs sont-ils formés et habilités à superviser le système IA ?"
   },
   "Les rôles et responsabilités (Responsable IA, DPO, Comité) sont-ils définis et documentés ?": {
-   "en": "",
+   "en": "Are the roles and responsibilities (AI lead, DPO, Committee) defined and documented?",
    "fr": "Les rôles et responsabilités (Responsable IA, DPO, Comité) sont-ils définis et documentés ?"
   },
   "Les utilisateurs sont-ils informés qu'ils interagissent avec un système d'IA ?": {
-   "en": "",
+   "en": "Are users informed that they are interacting with an AI system?",
    "fr": "Les utilisateurs sont-ils informés qu'ils interagissent avec un système d'IA ?"
   },
   "Les valeurs acceptées, servies par le moteur et non recopiées ici — sans quoi l’écran et le code dériveraient, et c’est l’écran qu’on croirait.": {
-   "en": "",
+   "en": "The accepted values, served by the engine and not copied here — otherwise the screen and the code would drift apart, and it is the screen you would believe.",
    "fr": "Les valeurs acceptées, servies par le moteur et non recopiées ici — sans quoi l’écran et le code dériveraient, et c’est l’écran qu’on croirait."
   },
   "Leviers d’optimisation": {
-   "en": "",
+   "en": "Optimisation levers",
    "fr": "Leviers d’optimisation"
   },
   "Liste exhaustive des systèmes IA classés par niveau de risque (Annexe III EU AI Act), avec fiches techniques : données utilisées, modèles, finalité et conformité. Obligatoire pour les systèmes à haut risque (Art. #, #). Structure alignée sur l'inventaire des ressources IA exigé par ISO/IEC # (Annexe A.#, A.#).": {
-   "en": "",
+   "en": "Exhaustive list of AI systems classified by risk level (Annex III EU AI Act), with technical records: data used, models, purpose and compliance. Mandatory for high-risk systems (Art. #, #). Structure aligned with the inventory of AI resources required by ISO/IEC # (Annex A.#, A.#).",
    "fr": "Liste exhaustive des systèmes IA classés par niveau de risque (Annexe III EU AI Act), avec fiches techniques : données utilisées, modèles, finalité et conformité. Obligatoire pour les systèmes à haut risque (Art. 49, 71). Structure alignée sur l'inventaire des ressources IA exigé par ISO/IEC 42001 (Annexe A.4, A.7)."
   },
   "Liste exhaustive des systèmes IA classés par niveau de risque (Annexe III EU AI Act), avec…": {
-   "en": "",
+   "en": "Exhaustive list of AI systems classified by risk level (Annex III EU AI Act), with…",
    "fr": "Liste exhaustive des systèmes IA classés par niveau de risque (Annexe III EU AI Act), avec…"
   },
   "Livrables finaux générés par IA": {
-   "en": "",
+   "en": "Final deliverables generated by AI",
    "fr": "Livrables finaux générés par IA"
   },
   "Livrables produits a l issue de cette phase. Duree : #–# semaines (#/# – #/#).": {
-   "en": "",
+   "en": "Deliverables produced at the end of this phase. Duration: #–# weeks (#/# – #/#).",
    "fr": "Livrables produits a l issue de cette phase. Duree : 3–4 semaines (01/07 – 28/07)."
   },
   "Livrables produits a l issue de cette phase. Duree : Continu (À partir du #/#).": {
-   "en": "",
+   "en": "Deliverables produced at the end of this phase. Duration: Continuous (From #/#).",
    "fr": "Livrables produits a l issue de cette phase. Duree : Continu (À partir du 02/12)."
   },
   "Maintenance prédictive réseau": {
-   "en": "",
+   "en": "Predictive network maintenance",
    "fr": "Maintenance prédictive réseau"
   },
   "Manuel de gouvernance IA": {
-   "en": "",
+   "en": "AI governance manual",
    "fr": "Manuel de gouvernance IA"
   },
   "Maturité / #": {
-   "en": "",
+   "en": "Maturity / #",
    "fr": "Maturité / 5"
   },
   "Methodologie d'audit en # etapes : Pre-audit (applicabilite), Audit documentaire automatise, Audit terrain, Tests directs sur les systemes IA.": {
-   "en": "",
+   "en": "Audit methodology in # steps: Pre-audit (applicability), Automated documentary audit, On-site audit, Direct tests on the AI systems.",
    "fr": "Methodologie d'audit en 4 etapes : Pre-audit (applicabilite), Audit documentaire automatise, Audit terrain, Tests directs sur les systemes IA."
   },
   "Mistral Large": {
-   "en": "",
+   "en": "Mistral Large",
    "fr": "Mistral Large"
   },
   "Mix électrique": {
-   "en": "",
+   "en": "Electricity mix",
    "fr": "Mix électrique"
   },
   "Moteur IA :": {
-   "en": "",
+   "en": "AI engine:",
    "fr": "Moteur IA :"
   },
   "Obtenir des réponses correctes du système, même en cas d'entrées erronées ou contradictoires.": {
-   "en": "",
+   "en": "Obtain correct responses from the system, even with erroneous or contradictory inputs.",
    "fr": "Obtenir des réponses correctes du système, même en cas d'entrées erronées ou contradictoires."
   },
   "Obtenir, utiliser et protéger correctement les données et les modèles.": {
-   "en": "",
+   "en": "Obtain, use and protect data and models correctly.",
    "fr": "Obtenir, utiliser et protéger correctement les données et les modèles."
   },
   "Optimisation allocation spectre": {
-   "en": "",
+   "en": "Spectrum allocation optimisation",
    "fr": "Optimisation allocation spectre"
   },
   "Opérateurs, équipementiers réseau, fournisseurs de services de communication.": {
-   "en": "",
+   "en": "Operators, network equipment manufacturers, communication service providers.",
    "fr": "Opérateurs, équipementiers réseau, fournisseurs de services de communication."
   },
   "Organisations internationales et extraterritoriales": {
-   "en": "",
+   "en": "International and extraterritorial organisations",
    "fr": "Organisations internationales et extraterritoriales"
   },
   "Ou choisir directement parmi les huit profils relevés": {
-   "en": "",
+   "en": "Or choose directly from the eight profiles identified",
    "fr": "Ou choisir directement parmi les huit profils relevés"
   },
   "Outils de gouvernance IA": {
-   "en": "",
+   "en": "AI governance tools",
    "fr": "Outils de gouvernance IA"
   },
   "Ouvrir →": {
-   "en": "",
+   "en": "Open →",
    "fr": "Ouvrir →"
   },
   "Par centre de coût, par service et par modèle. Un groupe dont aucune ligne n’est instruite reste affiché avec un montant vide : le faire disparaître le ferait lire « ce service ne consomme rien ».": {
-   "en": "",
+   "en": "By cost centre, by department and by model. A group with no line filled in stays displayed with an empty amount: making it disappear would make it read as “this department consumes nothing”.",
    "fr": "Par centre de coût, par service et par modèle. Un groupe dont aucune ligne n’est instruite reste affiché avec un montant vide : le faire disparaître le ferait lire « ce service ne consomme rien »."
   },
   "Partiel": {
-   "en": "",
+   "en": "Partial",
    "fr": "Partiel"
   },
   "Permettre aux parties prenantes de faire des choix éclairés concernant leur engagement dans un système d'IA.": {
-   "en": "",
+   "en": "Enable stakeholders to make informed choices about their engagement with an AI system.",
    "fr": "Permettre aux parties prenantes de faire des choix éclairés concernant leur engagement dans un système d'IA."
   },
   "Phase # — Conception du cadre de gouvernance": {
-   "en": "",
+   "en": "Phase # — Design of the governance framework",
    "fr": "Phase 2 — Conception du cadre de gouvernance"
   },
   "Phase # — Diagnostic initial": {
-   "en": "",
+   "en": "Phase # — Initial diagnostic",
    "fr": "Phase 1 — Diagnostic initial"
   },
   "Phase # — Déploiement opérationnel": {
-   "en": "",
+   "en": "Phase # — Operational deployment",
    "fr": "Phase 3 — Déploiement opérationnel"
   },
   "Phase # — Maintenance et amélioration continue": {
-   "en": "",
+   "en": "Phase # — Maintenance and continual improvement",
    "fr": "Phase 4 — Maintenance et amélioration continue"
   },
   "Plafonds": {
-   "en": "",
+   "en": "Caps",
    "fr": "Plafonds"
   },
   "Plan d'action — # phases": {
-   "en": "",
+   "en": "Action plan — # phases",
    "fr": "Plan d'action — 4 phases"
   },
   "Plan de maintenance & amélioration continue": {
-   "en": "",
+   "en": "Maintenance & continual improvement plan",
    "fr": "Plan de maintenance & amélioration continue"
   },
   "Politiques et procédures conformes à l'EU AI Act (gestion des données, développement responsable, contrôle des modèles, transparence) et au système de management de l'IA ISO/IEC # (Art. # Leadership, Art. # Planification). Inclut les rôles (Responsable IA, DPO, Comité de Gouvernance) — Art. # EU AI Act / Annexe A.# ISO #.": {
-   "en": "",
+   "en": "Policies and procedures compliant with the EU AI Act (data management, responsible development, model control, transparency) and with the ISO/IEC # AI management system (clause # Leadership, clause # Planning). Includes the roles (AI lead, DPO, Governance Committee) — Art. # EU AI Act / Annex A.# ISO #.",
    "fr": "Politiques et procédures conformes à l'EU AI Act (gestion des données, développement responsable, contrôle des modèles, transparence) et au système de management de l'IA ISO/IEC 42001 (Art. 5 Leadership, Art. 6 Planification). Inclut les rôles (Responsable IA, DPO, Comité de Gouvernance) — Art. 17 EU AI Act / Annexe A.3 ISO 42001."
   },
   "Politiques et procédures conformes à l'EU AI Act (gestion des données, développement respo…": {
-   "en": "",
+   "en": "Policies and procedures compliant with the EU AI Act (data management, responsible develo…",
    "fr": "Politiques et procédures conformes à l'EU AI Act (gestion des données, développement respo…"
   },
   "Prise en compte des impacts sur les différents groupes de parties prenantes.": {
-   "en": "",
+   "en": "Taking account of the impacts on the different groups of stakeholders.",
    "fr": "Prise en compte des impacts sur les différents groupes de parties prenantes."
   },
   "Processus documentés mais déploiement partiel.": {
-   "en": "",
+   "en": "Processes documented but only partially deployed.",
    "fr": "Processus documentés mais déploiement partiel."
   },
   "Procédure d'audit de maturité": {
-   "en": "",
+   "en": "Maturity audit procedure",
    "fr": "Procédure d'audit de maturité"
   },
   "Programme de formation": {
-   "en": "",
+   "en": "Training programme",
    "fr": "Programme de formation"
   },
   "Programme de mise en conformite en # phases : Diagnostic, Conception du cadre de gouvernance, Deploiement operationnel, Maintenance continue. Methodologie CONSEILPREV.": {
-   "en": "",
+   "en": "Compliance programme in # phases: Diagnostic, Design of the governance framework, Operational deployment, Continuous maintenance. CONSEILPREV methodology.",
    "fr": "Programme de mise en conformite en 4 phases : Diagnostic, Conception du cadre de gouvernance, Deploiement operationnel, Maintenance continue. Methodologie CONSEILPREV."
   },
   "Programme de mise en conformité sur # semaines environ.": {
-   "en": "",
+   "en": "Compliance programme over about # weeks.",
    "fr": "Programme de mise en conformité sur 24 semaines environ."
   },
   "Protection renforcée des données clients (RGPD, ePrivacy). Chiffrement des communications et des métadonnées de connexion.": {
-   "en": "",
+   "en": "Enhanced protection of client data (GDPR, ePrivacy). Encryption of communications and connection metadata.",
    "fr": "Protection renforcée des données clients (RGPD, ePrivacy). Chiffrement des communications et des métadonnées de connexion."
   },
   "Pré-audit": {
-   "en": "",
+   "en": "Pre-audit",
    "fr": "Pré-audit"
   },
   "Prévention des réponses nuisibles et des utilisations abusives du système.": {
-   "en": "",
+   "en": "Prevention of harmful responses and misuse of the system.",
    "fr": "Prévention des réponses nuisibles et des utilisations abusives du système."
   },
   "Questionnaire d'auto-évaluation": {
-   "en": "",
+   "en": "Self-assessment questionnaire",
    "fr": "Questionnaire d'auto-évaluation"
   },
   "ROBUSTESSE & VERACITE (Art. #, #). Exactitude des reponses meme face a des entrees erronees. On evalue : le niveau d exactitude mesure et documente, la resilience aux erreurs et conditions degradees, les tests adversariaux.": {
-   "en": "",
+   "en": "ROBUSTNESS & ACCURACY (Art. #, #). Accuracy of responses even with erroneous inputs. We assess: the level of accuracy measured and documented, resilience to errors and degraded conditions, adversarial tests.",
    "fr": "ROBUSTESSE & VERACITE (Art. 15, 9). Exactitude des reponses meme face a des entrees erronees. On evalue : le niveau d exactitude mesure et documente, la resilience aux erreurs et conditions degradees, les tests adversariaux."
   },
   "Rapport complet : tableau de bord KPIs, budget, calendrier, spécificités sectorielles, # piliers, procédure d'audit et livrables.": {
-   "en": "",
+   "en": "Full report: KPI dashboard, budget, schedule, sector specifics, # pillars, audit procedure and deliverables.",
    "fr": "Rapport complet : tableau de bord KPIs, budget, calendrier, spécificités sectorielles, 8 piliers, procédure d'audit et livrables."
   },
   "Rapport d'audit de maturité": {
-   "en": "",
+   "en": "Maturity audit report",
    "fr": "Rapport d'audit de maturité"
   },
   "Recommandations d'outils : registre IA (OneTrust/ServiceNow), tableau de bord de conformité (Power BI/Tableau), outil AIRI (CONSEILPREV) pour l'analyse automatisée des risques. Spécifications de mise en œuvre alignées sur les exigences de support et d'information documentée de l'ISO/IEC # (Art. #).": {
-   "en": "",
+   "en": "Tool recommendations: AI register (OneTrust/ServiceNow), compliance dashboard (Power BI/Tableau), AIRI tool (CONSEILPREV) for automated risk analysis. Implementation specifications aligned with the support and documented information requirements of ISO/IEC # (clause #).",
    "fr": "Recommandations d'outils : registre IA (OneTrust/ServiceNow), tableau de bord de conformité (Power BI/Tableau), outil AIRI (CONSEILPREV) pour l'analyse automatisée des risques. Spécifications de mise en œuvre alignées sur les exigences de support et d'information documentée de l'ISO/IEC 42001 (Art. 7)."
   },
   "Selectionner ce secteur pour recalculer l audit de maturite.": {
-   "en": "",
+   "en": "Select this sector to recalculate the maturity audit.",
    "fr": "Selectionner ce secteur pour recalculer l audit de maturite."
   },
   "Telecharger la synthese de l audit de maturite au format PDF.": {
-   "en": "",
+   "en": "Download the maturity audit summary as a PDF.",
    "fr": "Telecharger la synthese de l audit de maturite au format PDF."
   },
   "Telecharger la synthese de l audit de maturite au format Word.": {
-   "en": "",
+   "en": "Download the maturity audit summary in Word format.",
    "fr": "Telecharger la synthese de l audit de maturite au format Word."
   },
   "Trajectoires à l’horizon": {
-   "en": "",
+   "en": "Trajectories to the horizon",
    "fr": "Trajectoires à l’horizon"
   },
   "Un système sans volume déclaré ne coûte pas zéro : personne n’a encore dit ce qu’il consomme. La distinction décide de la lecture du total.": {
-   "en": "",
+   "en": "A system with no declared volume does not cost zero: nobody has yet said what it consumes. The distinction decides how the total is read.",
    "fr": "Un système sans volume déclaré ne coûte pas zéro : personne n’a encore dit ce qu’il consomme. La distinction décide de la lecture du total."
   },
   "Utiliser Claude Sonnet pour generer ce livrable.": {
-   "en": "",
+   "en": "Use Claude Sonnet to generate this deliverable.",
    "fr": "Utiliser Claude Sonnet pour generer ce livrable."
   },
   "Utiliser Mistral Large pour generer ce livrable.": {
-   "en": "",
+   "en": "Use Mistral Large to generate this deliverable.",
    "fr": "Utiliser Mistral Large pour generer ce livrable."
   },
   "Étude indisponible pour le moment.": {
-   "en": "",
+   "en": "Study unavailable for now.",
    "fr": "Étude indisponible pour le moment."
   }
  }

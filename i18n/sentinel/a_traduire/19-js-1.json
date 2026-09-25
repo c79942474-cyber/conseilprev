@@ -7,1104 +7,1104 @@
  "_rubrique": "_js",
  "bloc": {
   "# % du SaaS annuel — payée si vérifiée": {
-   "en": "",
+   "en": "</b># % of the annual SaaS — paid if verified",
    "fr": "60 % du SaaS annuel — payée si vérifiée",
    "html": "</b><small>60 % du SaaS annuel — payée si vérifiée</small>"
   },
   "# % ne veut pas dire :": {
-   "en": "",
+   "en": "<b># % does not mean:</b>",
    "fr": "100 % ne veut pas dire :",
    "html": "<b>100 % ne veut pas dire :</b>"
   },
   "# : cette mesure n’existait pas dans ISO/IEC #:#.": {
-   "en": "",
+   "en": "#</b>: this control did not exist in ISO/IEC #:#.",
    "fr": "2022 : cette mesure n’existait pas dans ISO/IEC 27001:2013.",
    "html": "2022</b> : cette mesure n’existait pas dans ISO/IEC 27001:2013."
   },
   "#. Aucune facturation sans double vérification : score Sentinel du domaine atteint et validation documentaire par CONSEILPREV.": {
-   "en": "",
+   "en": "#. No billing without double verification: Sentinel score for the domain reached <em>and</em> documentary validation by CONSEILPREV.<br>",
    "fr": "3. Aucune facturation sans double vérification : score Sentinel du domaine atteint et validation documentaire par CONSEILPREV.",
    "html": "3. Aucune facturation sans double vérification : score Sentinel du domaine atteint <em>et</em> validation documentaire par CONSEILPREV.<br>"
   },
   "#. Confidentialité : les parties s’engagent réciproquement à préserver la confidentialité des informations échangées dans le cadre du présent échéancier — données de conformité, scores Sentinel, conditions tarifaires — pendant toute la durée du contrat et cinq (#) ans après son terme, sous réserve des obligations légales de divulgation.": {
-   "en": "",
+   "en": "#. <strong>Confidentiality</strong>: the parties mutually undertake to preserve the confidentiality of the information exchanged under this payment schedule — compliance data, Sentinel scores, pricing terms — for the entire term of the contract and five (#) years after its end, subject to legal disclosure obligations.",
    "fr": "9. Confidentialité : les parties s’engagent réciproquement à préserver la confidentialité des informations échangées dans le cadre du présent échéancier — données de conformité, scores Sentinel, conditions tarifaires — pendant toute la durée du contrat et cinq (5) ans après son terme, sous réserve des obligations légales de divulgation.",
    "html": "9. <strong>Confidentialité</strong> : les parties s’engagent réciproquement à préserver la confidentialité des informations échangées dans le cadre du présent échéancier — données de conformité, scores Sentinel, conditions tarifaires — pendant toute la durée du contrat et cinq (5) ans après son terme, sous réserve des obligations légales de divulgation."
   },
   "#. Contestation d’une vérification : le client peut contester le refus ou le résultat d’une vérification de jalon dans les quinze (#) jours de sa notification, par demande motivée auprès de son interlocuteur CONSEILPREV ; la contestation est instruite sous dix (#) jours ouvrés par un expert n’ayant pas participé à la vérification initiale, dont la décision motivée est notifiée par écrit.": {
-   "en": "",
+   "en": "#. <strong>Challenging a verification</strong>: the client may challenge the refusal or the result of a milestone verification within fifteen (#) days of its notification, by a reasoned request to its CONSEILPREV contact; the challenge is examined within ten (#) working days by an expert who did not take part in the initial verification, whose reasoned decision is notified in writing.<br>",
    "fr": "8. Contestation d’une vérification : le client peut contester le refus ou le résultat d’une vérification de jalon dans les quinze (15) jours de sa notification, par demande motivée auprès de son interlocuteur CONSEILPREV ; la contestation est instruite sous dix (10) jours ouvrés par un expert n’ayant pas participé à la vérification initiale, dont la décision motivée est notifiée par écrit.",
    "html": "8. <strong>Contestation d’une vérification</strong> : le client peut contester le refus ou le résultat d’une vérification de jalon dans les quinze (15) jours de sa notification, par demande motivée auprès de son interlocuteur CONSEILPREV ; la contestation est instruite sous dix (10) jours ouvrés par un expert n’ayant pas participé à la vérification initiale, dont la décision motivée est notifiée par écrit.<br>"
   },
   "#. Jalon vérifié = acquis définitivement, jamais refacturé ni réévalué.": {
-   "en": "",
+   "en": "#. Verified milestone = definitively acquired, never re-invoiced or reassessed.<br>",
    "fr": "2. Jalon vérifié = acquis définitivement, jamais refacturé ni réévalué.",
    "html": "2. Jalon vérifié = acquis définitivement, jamais refacturé ni réévalué.<br>"
   },
   "#. Révision annuelle : le SaaS mensuel de référence est révisé à chaque date anniversaire du contrat, dans la limite de la variation de l’indice Syntec ; les jalons déjà vérifiés ou facturés conservent leur montant d’origine.": {
-   "en": "",
+   "en": "#. <strong>Annual revision</strong>: the reference monthly SaaS price is revised on each anniversary date of the contract, within the limit of the change in the Syntec index; milestones already verified or invoiced keep their original amount.<br>",
    "fr": "7. Révision annuelle : le SaaS mensuel de référence est révisé à chaque date anniversaire du contrat, dans la limite de la variation de l’indice Syntec ; les jalons déjà vérifiés ou facturés conservent leur montant d’origine.",
    "html": "7. <strong>Révision annuelle</strong> : le SaaS mensuel de référence est révisé à chaque date anniversaire du contrat, dans la limite de la variation de l’indice Syntec ; les jalons déjà vérifiés ou facturés conservent leur montant d’origine.<br>"
   },
   "#. Validité de la proposition : le présent échéancier est valable trente (#) jours calendaires à compter de sa date d’établissement ; au-delà, les montants sont réévalués sur la base des paramètres Sentinel actualisés.": {
-   "en": "",
+   "en": "#. <strong>Validity of the proposal</strong>: this payment schedule is valid for thirty (#) calendar days from its date of issue; beyond that, the amounts are reassessed on the basis of updated Sentinel parameters.<br>",
    "fr": "6. Validité de la proposition : le présent échéancier est valable trente (30) jours calendaires à compter de sa date d’établissement ; au-delà, les montants sont réévalués sur la base des paramètres Sentinel actualisés.",
    "html": "6. <strong>Validité de la proposition</strong> : le présent échéancier est valable trente (30) jours calendaires à compter de sa date d’établissement ; au-delà, les montants sont réévalués sur la base des paramètres Sentinel actualisés.<br>"
   },
   "% du SaaS": {
-   "en": "",
+   "en": "% of the SaaS",
    "fr": "% du SaaS",
    "html": "% du SaaS</span>"
   },
   "% du SaaS équivalent.": {
-   "en": "",
+   "en": "% of the equivalent SaaS.<br>",
    "fr": "% du SaaS équivalent.",
    "html": "% du SaaS équivalent.<br>"
   },
   "% du SaaS — toujours inférieur": {
-   "en": "",
+   "en": "% of the SaaS — always lower",
    "fr": "% du SaaS — toujours inférieur",
    "html": "% du SaaS — toujours inférieur</small>"
   },
   "% du SaaS, toujours inférieurJalon acquis = irrévocable ; paiement étalé sur # mensualités.": {
-   "en": "",
+   "en": "% of the SaaS, always lower</strong><br>Acquired milestone = irrevocable; payment spread over # monthly instalments.",
    "fr": "% du SaaS, toujours inférieurJalon acquis = irrévocable ; paiement étalé sur 2 mensualités.",
    "html": "% du SaaS, toujours inférieur</strong><br>Jalon acquis = irrévocable ; paiement étalé sur 2 mensualités."
   },
   "% du parc": {
-   "en": "",
+   "en": "%</b> of the estate",
    "fr": "% du parc",
    "html": "%</b> du parc"
   },
   ") uniquement pour cette génération et ne sont pas stockées sur nos serveurs.": {
-   "en": "",
+   "en": ") only for this generation and are not stored on our servers.</strong>",
    "fr": ") uniquement pour cette génération et ne sont pas stockées sur nos serveurs.",
    "html": ") uniquement pour cette génération et ne sont pas stockées sur nos serveurs.</strong>"
   },
   "). Part variable plafonnée à #× le socle. Systèmes pondérés par classification. Outil d’aide à la décision commerciale — pas un engagement contractuel.": {
-   "en": "",
+   "en": "</strong>). Variable share capped at #× the fixed base. Systems weighted by classification. <strong>A commercial decision-support tool — not a contractual commitment.</strong>",
    "fr": "). Part variable plafonnée à 3× le socle. Systèmes pondérés par classification. Outil d’aide à la décision commerciale — pas un engagement contractuel.",
    "html": "</strong>). Part variable plafonnée à 3× le socle. Systèmes pondérés par classification. <strong>Outil d’aide à la décision commerciale — pas un engagement contractuel.</strong>"
   },
   ", qui ne relève pas de la": {
-   "en": "",
+   "en": "</b>, which does not fall under the",
    "fr": ", qui ne relève pas de la",
    "html": "</b>, qui ne relève pas de la"
   },
   ". Complétez et ajustez si nécessaire.": {
-   "en": "",
+   "en": "</strong>. Complete and adjust if necessary.",
    "fr": ". Complétez et ajustez si nécessaire.",
    "html": "</strong>. Complétez et ajustez si nécessaire."
   },
   ". Vous êtes donc le fournisseur de ce système au sens du règlement, et vous en portez toutes les obligations — celles listées ci-dessous.": {
-   "en": "",
+   "en": ". You are therefore the <strong>provider</strong> of this system within the meaning of the Regulation, and you bear all of its obligations — those listed below.",
    "fr": ". Vous êtes donc le fournisseur de ce système au sens du règlement, et vous en portez toutes les obligations — celles listées ci-dessous.",
    "html": ". Vous êtes donc le <strong>fournisseur</strong> de ce système au sens du règlement, et vous en portez toutes les obligations — celles listées ci-dessous."
   },
   ". ↓ Passage à": {
-   "en": "",
+   "en": ". ↓ Moving on to <b>",
    "fr": ". ↓ Passage à",
    "html": ". ↓ Passage à <b>"
   },
   "/api/finops par le paramètre seuils, par centre de coût —": {
-   "en": "",
+   "en": "/api/finops through the <code>seuils</code> parameter, per cost centre —",
    "fr": "/api/finops par le paramètre seuils, par centre de coût —",
    "html": "/api/finops par le paramètre <code>seuils</code>, par centre de coût —"
   },
   "/mois (∵# % du SaaS)Enveloppe résultats :": {
-   "en": "",
+   "en": "/month</em> (∵# % of the SaaS)<br>Results envelope: <em>",
    "fr": "/mois (∵35 % du SaaS)Enveloppe résultats :",
    "html": "/mois</em> (∵35 % du SaaS)<br>Enveloppe résultats : <em>"
   },
   "Antériorité — Art. #(#) :": {
-   "en": "",
+   "en": "<strong>Grandfathering — Art. #(#)</strong>:",
    "fr": "Antériorité — Art. 111(2) :",
    "html": "<strong>Antériorité — Art. 111(2)</strong> :"
   },
   "Article par article": {
-   "en": "",
+   "en": "Article by article",
    "fr": "Article par article",
    "html": "Article par article</span>"
   },
   "Aucun appel de modèle aujourd’hui. Le compteur ne mesure que les appels de modèles (copilote, explorateur, analyses générées) : la simple navigation n’en déclenche aucun.": {
-   "en": "",
+   "en": "No model calls today. The counter only measures <strong>model calls</strong> (copilot, explorer, generated analyses): simple browsing does not trigger any.",
    "fr": "Aucun appel de modèle aujourd’hui. Le compteur ne mesure que les appels de modèles (copilote, explorateur, analyses générées) : la simple navigation n’en déclenche aucun.",
    "html": "Aucun appel de modèle aujourd’hui. Le compteur ne mesure que les <strong>appels de modèles</strong> (copilote, explorateur, analyses générées) : la simple navigation n’en déclenche aucun."
   },
   "Aucune demande enregistrée à ce jour.": {
-   "en": "",
+   "en": "<i>No request recorded to date.</i>",
    "fr": "Aucune demande enregistrée à ce jour.",
    "html": "<i>Aucune demande enregistrée à ce jour.</i>"
   },
   "Aucune evaluation enregistree pour le moment.": {
-   "en": "",
+   "en": "No assessment recorded yet.<br>",
    "fr": "Aucune evaluation enregistree pour le moment.",
    "html": "Aucune evaluation enregistree pour le moment.<br>"
   },
   "Aucune méthode écrite.": {
-   "en": "",
+   "en": "<i>No method written.</i>",
    "fr": "Aucune méthode écrite.",
    "html": "<i>Aucune méthode écrite.</i>"
   },
   "Aucune proposition —": {
-   "en": "",
+   "en": "<b>No proposal</b> —",
    "fr": "Aucune proposition —",
    "html": "<b>Aucune proposition</b> —"
   },
   "Base de connaissance Sentinel — vos documents versés, découpés puis indexés (PDF, DOCX, XLSX ; index vectoriel mistral-embed, # # dimensions). Les passages sont RETROUVÉS à chaque question, le modèle n’est pas ré-entraîné.": {
-   "en": "",
+   "en": "Sentinel knowledge base — your uploaded documents, split then indexed (PDF, DOCX, XLSX; <em>mistral-embed</em> vector index, # # dimensions). Passages are RETRIEVED for each question; the model is not retrained.",
    "fr": "Base de connaissance Sentinel — vos documents versés, découpés puis indexés (PDF, DOCX, XLSX ; index vectoriel mistral-embed, 1 024 dimensions). Les passages sont RETROUVÉS à chaque question, le modèle n’est pas ré-entraîné.",
    "html": "Base de connaissance Sentinel — vos documents versés, découpés puis indexés (PDF, DOCX, XLSX ; index vectoriel <em>mistral-embed</em>, 1 024 dimensions). Les passages sont RETROUVÉS à chaque question, le modèle n’est pas ré-entraîné."
   },
   "Base légale : exécution du contrat (art. #.b RGPD) et respect d’obligations légales comptables et fiscales (art. #.c RGPD).": {
-   "en": "",
+   "en": "<strong>Legal basis:</strong> performance of the contract (art. #.b GDPR) and compliance with legal accounting and tax obligations (art. #.c GDPR).<br>",
    "fr": "Base légale : exécution du contrat (art. 6.1.b RGPD) et respect d’obligations légales comptables et fiscales (art. 6.1.c RGPD).",
    "html": "<strong>Base légale :</strong> exécution du contrat (art. 6.1.b RGPD) et respect d’obligations légales comptables et fiscales (art. 6.1.c RGPD).<br>"
   },
   "Bilan consolidé": {
-   "en": "",
+   "en": "<strong>Consolidated summary</strong>",
    "fr": "Bilan consolidé",
    "html": "<strong>Bilan consolidé</strong>"
   },
   "Bonjour, je suis Sentinel, votre assistant reglementaire propulse par CONSEILPREV.": {
-   "en": "",
+   "en": "Hello, I am <strong>Sentinel</strong>, your regulatory assistant powered by CONSEILPREV.<br><br>",
    "fr": "Bonjour, je suis Sentinel, votre assistant reglementaire propulse par CONSEILPREV.",
    "html": "Bonjour, je suis <strong>Sentinel</strong>, votre assistant reglementaire propulse par CONSEILPREV.<br><br>"
   },
   "CONSEILPREV (SARL) · SIREN # # # · # rue Auguste Chabrières, # Paris · Responsable : Christophe CERF": {
-   "en": "",
+   "en": "CONSEILPREV (SARL) · SIREN # # # · # rue Auguste Chabrières, # Paris · Controller: Christophe CERF<br>",
    "fr": "CONSEILPREV (SARL) · SIREN 494 530 157 · 19 rue Auguste Chabrières, 75015 Paris · Responsable : Christophe CERF",
    "html": "CONSEILPREV (SARL) · SIREN 494 530 157 · 19 rue Auguste Chabrières, 75015 Paris · Responsable : Christophe CERF<br>"
   },
   "CONSEILPREV, SARL au capital de # # €, SIREN # # #, agit en qualité de responsable de traitement au sens du Règlement (UE) #/# (RGPD) pour les données collectées dans le cadre du présent contrat. Finalité : gestion contractuelle, facturation et suivi de la relation client. Base légale : exécution du contrat (art. #.b) et obligations légales comptables et fiscales (art. #.c). Conservation : pendant la relation contractuelle, puis # ans à des fins de prospection ; les pièces comptables sont conservées # ans (art. L.#-# du Code de commerce). Droits : le Client dispose des droits d’accès, de rectification, d’effacement, de limitation et d’opposition (art. # à # RGPD), exerçables auprès du délégué à la protection des données (DPO) de CONSEILPREV : christophe.cerf@outlook.com. Une réclamation peut être introduite auprès de la CNIL.": {
-   "en": "",
+   "en": "CONSEILPREV, SARL with share capital of €# #, SIREN # # #, acts as <strong>controller</strong> within the meaning of Regulation (EU) #/# (GDPR) for the data collected under this contract. <strong>Purpose:</strong> contract management, invoicing and follow-up of the client relationship. <strong>Legal basis:</strong> performance of the contract (art. #.b) and legal accounting and tax obligations (art. #.c). <strong>Retention:</strong> for the duration of the contractual relationship, then # years for prospecting purposes; accounting documents are kept for # years (art. L.#-# of the French Commercial Code). <strong>Rights:</strong> the Client has the rights of access, rectification, erasure, restriction and objection (art. # to # GDPR), exercisable with CONSEILPREV’s data protection officer (DPO): christophe.cerf@outlook.com. A complaint may be lodged with the CNIL.",
    "fr": "CONSEILPREV, SARL au capital de 8 000 €, SIREN 494 530 157, agit en qualité de responsable de traitement au sens du Règlement (UE) 2016/679 (RGPD) pour les données collectées dans le cadre du présent contrat. Finalité : gestion contractuelle, facturation et suivi de la relation client. Base légale : exécution du contrat (art. 6.1.b) et obligations légales comptables et fiscales (art. 6.1.c). Conservation : pendant la relation contractuelle, puis 3 ans à des fins de prospection ; les pièces comptables sont conservées 10 ans (art. L.123-22 du Code de commerce). Droits : le Client dispose des droits d’accès, de rectification, d’effacement, de limitation et d’opposition (art. 15 à 21 RGPD), exerçables auprès du délégué à la protection des données (DPO) de CONSEILPREV : christophe.cerf@outlook.com. Une réclamation peut être introduite auprès de la CNIL.",
    "html": "CONSEILPREV, SARL au capital de 8 000 €, SIREN 494 530 157, agit en qualité de <strong>responsable de traitement</strong> au sens du Règlement (UE) 2016/679 (RGPD) pour les données collectées dans le cadre du présent contrat. <strong>Finalité :</strong> gestion contractuelle, facturation et suivi de la relation client. <strong>Base légale :</strong> exécution du contrat (art. 6.1.b) et obligations légales comptables et fiscales (art. 6.1.c). <strong>Conservation :</strong> pendant la relation contractuelle, puis 3 ans à des fins de prospection ; les pièces comptables sont conservées 10 ans (art. L.123-22 du Code de commerce). <strong>Droits :</strong> le Client dispose des droits d’accès, de rectification, d’effacement, de limitation et d’opposition (art. 15 à 21 RGPD), exerçables auprès du délégué à la protection des données (DPO) de CONSEILPREV : christophe.cerf@outlook.com. Une réclamation peut être introduite auprès de la CNIL."
   },
   "Ce document décrit une intention de conception, pas un constat.": {
-   "en": "",
+   "en": "<strong>This document describes a design intention, not a finding.</strong>",
    "fr": "Ce document décrit une intention de conception, pas un constat.",
    "html": "<strong>Ce document décrit une intention de conception, pas un constat.</strong>"
   },
   "Ce fichier est bien du JSON, mais il ne porte nulle part la marque d’une": {
-   "en": "",
+   "en": "<b>This file is indeed JSON, but nowhere does it carry the mark of a",
    "fr": "Ce fichier est bien du JSON, mais il ne porte nulle part la marque d’une",
    "html": "<b>Ce fichier est bien du JSON, mais il ne porte nulle part la marque d’une"
   },
   "Ce fichier est une liste JSON, pas une sauvegarde. Une sauvegarde": {
-   "en": "",
+   "en": "<b>This file is a JSON list, not a backup.</b> A backup",
    "fr": "Ce fichier est une liste JSON, pas une sauvegarde. Une sauvegarde",
    "html": "<b>Ce fichier est une liste JSON, pas une sauvegarde.</b> Une sauvegarde"
   },
   "Ce fichier est une sauvegarde conseilprevcyber (": {
-   "en": "",
+   "en": "<b>This file is a conseilprevcyber backup</b> (",
    "fr": "Ce fichier est une sauvegarde conseilprevcyber (",
    "html": "<b>Ce fichier est une sauvegarde conseilprevcyber</b> ("
   },
   "Ce fichier ne commence pas par un objet JSON. Une sauvegarde": {
-   "en": "",
+   "en": "<b>This file does not start with a JSON object.</b> A backup",
    "fr": "Ce fichier ne commence pas par un objet JSON. Une sauvegarde",
    "html": "<b>Ce fichier ne commence pas par un objet JSON.</b> Une sauvegarde"
   },
   "Ce guide méthodologique sera généré pour le secteur": {
-   "en": "",
+   "en": "This methodology guide will be generated for the sector <strong>",
    "fr": "Ce guide méthodologique sera généré pour le secteur",
    "html": "Ce guide méthodologique sera généré pour le secteur <strong>"
   },
   "Ce n'est probablement pas un système d'IA — Art. #(#)": {
-   "en": "",
+   "en": "<strong>This is probably not an AI system — Art. #(#)</strong><br>",
    "fr": "Ce n'est probablement pas un système d'IA — Art. 3(1)",
    "html": "<strong>Ce n'est probablement pas un système d'IA — Art. 3(1)</strong><br>"
   },
   "Ce que cela implique.": {
-   "en": "",
+   "en": "<b>What this implies.</b>",
    "fr": "Ce que cela implique.",
    "html": "<b>Ce que cela implique.</b>"
   },
   "Ce que cela ne veut": {
-   "en": "",
+   "en": "<b>What this does not",
    "fr": "Ce que cela ne veut",
    "html": "<b>Ce que cela ne veut"
   },
   "Ce que la supervision coûte.": {
-   "en": "",
+   "en": "<b>What oversight costs.</b>",
    "fr": "Ce que la supervision coûte.",
    "html": "<b>Ce que la supervision coûte.</b>"
   },
   "Ce que l’article # écarte": {
-   "en": "",
+   "en": "<b>What Article # excludes</b>",
    "fr": "Ce que l’article 4 écarte",
    "html": "<b>Ce que l’article 4 écarte</b>"
   },
   "Ce que son absence bloque.": {
-   "en": "",
+   "en": "<b>What its absence blocks.</b>",
    "fr": "Ce que son absence bloque.",
    "html": "<b>Ce que son absence bloque.</b>"
   },
   "Ce que vous y gagnez :": {
-   "en": "",
+   "en": "<strong>What you gain from it:</strong>",
    "fr": "Ce que vous y gagnez :",
    "html": "<strong>Ce que vous y gagnez :</strong>"
   },
   "Ce qui commande votre calendrier — «": {
-   "en": "",
+   "en": "<b>What drives your timetable</b> — “",
    "fr": "Ce qui commande votre calendrier — «",
    "html": "<b>Ce qui commande votre calendrier</b> — «&nbsp;"
   },
   "Ce qui fait basculer —": {
-   "en": "",
+   "en": "<b>What tips the balance</b> —",
    "fr": "Ce qui fait basculer —",
    "html": "<b>Ce qui fait basculer</b> —"
   },
   "Ce qui la fait tomber": {
-   "en": "",
+   "en": "What makes it fail",
    "fr": "Ce qui la fait tomber",
    "html": "<span>Ce qui la fait tomber</span>"
   },
   "Ce qui manque :": {
-   "en": "",
+   "en": "<b>What is missing:</b>",
    "fr": "Ce qui manque :",
    "html": "<b>Ce qui manque :</b>"
   },
   "Ce qui reste debout, écarté ou non": {
-   "en": "",
+   "en": "<b>What remains standing, excluded or not</b>",
    "fr": "Ce qui reste debout, écarté ou non",
    "html": "<b>Ce qui reste debout, écarté ou non</b>"
   },
   "Ce qui vous oblige aujourd’hui :": {
-   "en": "",
+   "en": "<b>What binds you today:</b>",
    "fr": "Ce qui vous oblige aujourd’hui :",
    "html": "<b>Ce qui vous oblige aujourd’hui :</b>"
   },
   "Ce qu’aucun certificat ne couvre": {
-   "en": "",
+   "en": "<b>What no certificate covers</b>",
    "fr": "Ce qu’aucun certificat ne couvre",
    "html": "<b>Ce qu’aucun certificat ne couvre</b>"
   },
   "Ce qu’elle produit.": {
-   "en": "",
+   "en": "<b>What it produces.</b>",
    "fr": "Ce qu’elle produit.",
    "html": "<b>Ce qu’elle produit.</b>"
   },
   "Ce qu’il faut en retenir": {
-   "en": "",
+   "en": "What to remember",
    "fr": "Ce qu’il faut en retenir",
    "html": "<span>Ce qu’il faut en retenir</span>"
   },
   "Ce sur quoi ce module repose.": {
-   "en": "",
+   "en": "<strong>What this module relies on.</strong>",
    "fr": "Ce sur quoi ce module repose.",
    "html": "<strong>Ce sur quoi ce module repose.</strong>"
   },
   "Ceci est un projet, pas une politique.": {
-   "en": "",
+   "en": "<strong>This is a draft, not a policy.</strong>",
    "fr": "Ceci est un projet, pas une politique.",
    "html": "<strong>Ceci est un projet, pas une politique.</strong>"
   },
   "Chaque jalon n’est facturé qu’après double vérification : atteinte du score Sentinel du domaine et validation documentaire par CONSEILPREV. Un jalon vérifié est acquis définitivement et irrévocable. Le paiement de chaque jalon est échelonné sur deux mensualités égales.": {
-   "en": "",
+   "en": "Each milestone is invoiced only after double verification: the Sentinel score for the domain is reached <em>and</em> documentary validation is given by CONSEILPREV. A verified milestone is definitively acquired and irrevocable. Payment for each milestone is spread over two equal monthly instalments.",
    "fr": "Chaque jalon n’est facturé qu’après double vérification : atteinte du score Sentinel du domaine et validation documentaire par CONSEILPREV. Un jalon vérifié est acquis définitivement et irrévocable. Le paiement de chaque jalon est échelonné sur deux mensualités égales.",
    "html": "Chaque jalon n’est facturé qu’après double vérification : atteinte du score Sentinel du domaine <em>et</em> validation documentaire par CONSEILPREV. Un jalon vérifié est acquis définitivement et irrévocable. Le paiement de chaque jalon est échelonné sur deux mensualités égales."
   },
   "Chargement terminé.": {
-   "en": "",
+   "en": "<b>Loading complete.</b>",
    "fr": "Chargement terminé.",
    "html": "<b>Chargement terminé.</b>"
   },
   "Chez nous :": {
-   "en": "",
+   "en": "<strong>At our firm:</strong>",
    "fr": "Chez nous :",
    "html": "<strong>Chez nous :</strong>"
   },
   "Clauses complémentaires": {
-   "en": "",
+   "en": "<strong>Additional clauses</strong><br>",
    "fr": "Clauses complémentaires",
    "html": "<strong>Clauses complémentaires</strong><br>"
   },
   "Comment on sait qu’elle est finie.": {
-   "en": "",
+   "en": "<b>How you know it is finished.</b>",
    "fr": "Comment on sait qu’elle est finie.",
    "html": "<b>Comment on sait qu’elle est finie.</b>"
   },
   "Conditions de règlement. Paiement à réception de la facture, selon l’échéancier contractuel échelonné sur deux mensualités égales. Aucun escompte pour paiement anticipé.Retard de paiement. Conformément aux articles L.#-# et D.#-# du Code de commerce, tout retard entraîne l’application de pénalités au taux de trois fois le taux d’intérêt légal, ainsi qu’une indemnité forfaitaire pour frais de recouvrement de # €.TVA. TVA au taux de # % — numéro de TVA intracommunautaire FR # # # #.Chaque jalon facturé a fait l’objet d’une double vérification (score Sentinel atteint et validation documentaire) et constitue un résultat de conformité acquis. Mentions établies au titre des articles L.#-# du Code de commerce et # nonies A de l’annexe II au CGI.": {
-   "en": "",
+   "en": "<strong>Payment terms.</strong> Payment on receipt of the invoice, according to the contractual payment schedule spread over two equal monthly instalments. No discount for early payment.<br><strong>Late payment.</strong> In accordance with Articles L.#-# and D.#-# of the French Commercial Code, any late payment incurs penalties at three times the legal interest rate, as well as a flat-rate indemnity for recovery costs of €#.<br><strong>VAT.</strong> VAT at # % — intra-Community VAT number FR # # # #.<br>Each invoiced milestone has undergone double verification (Sentinel score reached and documentary validation) and constitutes an acquired compliance result. Statements made under Article L.#-# of the French Commercial Code and Article # nonies A of Annex II to the CGI.",
    "fr": "Conditions de règlement. Paiement à réception de la facture, selon l’échéancier contractuel échelonné sur deux mensualités égales. Aucun escompte pour paiement anticipé.Retard de paiement. Conformément aux articles L.441-10 et D.441-5 du Code de commerce, tout retard entraîne l’application de pénalités au taux de trois fois le taux d’intérêt légal, ainsi qu’une indemnité forfaitaire pour frais de recouvrement de 40 €.TVA. TVA au taux de 20 % — numéro de TVA intracommunautaire FR 24 494 530 157.Chaque jalon facturé a fait l’objet d’une double vérification (score Sentinel atteint et validation documentaire) et constitue un résultat de conformité acquis. Mentions établies au titre des articles L.441-9 du Code de commerce et 242 nonies A de l’annexe II au CGI.",
    "html": "<strong>Conditions de règlement.</strong> Paiement à réception de la facture, selon l’échéancier contractuel échelonné sur deux mensualités égales. Aucun escompte pour paiement anticipé.<br><strong>Retard de paiement.</strong> Conformément aux articles L.441-10 et D.441-5 du Code de commerce, tout retard entraîne l’application de pénalités au taux de trois fois le taux d’intérêt légal, ainsi qu’une indemnité forfaitaire pour frais de recouvrement de 40 €.<br><strong>TVA.</strong> TVA au taux de 20 % — numéro de TVA intracommunautaire FR 24 494 530 157.<br>Chaque jalon facturé a fait l’objet d’une double vérification (score Sentinel atteint et validation documentaire) et constitue un résultat de conformité acquis. Mentions établies au titre des articles L.441-9 du Code de commerce et 242 nonies A de l’annexe II au CGI."
   },
   "Conditions de règlement. Paiement à réception, selon l’échéancier contractuel échelonné sur deux mensualités égales. Aucun escompte pour paiement anticipé.": {
-   "en": "",
+   "en": "<strong>Payment terms.</strong> Payment on receipt, according to the contractual payment schedule spread over two equal monthly instalments. No discount for early payment.<br>",
    "fr": "Conditions de règlement. Paiement à réception, selon l’échéancier contractuel échelonné sur deux mensualités égales. Aucun escompte pour paiement anticipé.",
    "html": "<strong>Conditions de règlement.</strong> Paiement à réception, selon l’échéancier contractuel échelonné sur deux mensualités égales. Aucun escompte pour paiement anticipé.<br>"
   },
   "Coût mois # —": {
-   "en": "",
+   "en": "<strong>Cost, month # —",
    "fr": "Coût mois 6 —",
    "html": "<strong>Coût mois 6 —"
   },
   "C’est le second taux qui dit l’effort réel.": {
-   "en": "",
+   "en": "It is the <b>second</b> rate that shows the real effort.",
    "fr": "C’est le second taux qui dit l’effort réel.",
    "html": "C’est le <b>second</b> taux qui dit l’effort réel."
   },
   "Date d’émission :": {
-   "en": "",
+   "en": "<br>Date of issue:",
    "fr": "Date d’émission :",
    "html": "<br>Date d’émission :"
   },
   "Données d’activité": {
-   "en": "",
+   "en": "<strong>Activity data</strong>",
    "fr": "Données d’activité",
    "html": "<strong>Données d’activité</strong>"
   },
   "Droits : le client dispose d’un droit d’accès, de rectification et d’effacement (art. # à # RGPD).": {
-   "en": "",
+   "en": "<strong>Rights:</strong> the client has a right of access, rectification and erasure (art. # to # GDPR).",
    "fr": "Droits : le client dispose d’un droit d’accès, de rectification et d’effacement (art. 15 à 17 RGPD).",
    "html": "<strong>Droits :</strong> le client dispose d’un droit d’accès, de rectification et d’effacement (art. 15 à 17 RGPD)."
   },
   "Durée de conservation : données de suivi conservées pendant la relation contractuelle puis # ans à des fins de prospection ; pièces comptables (factures, contrats) conservées # ans au titre de l’article L.#-# du Code de commerce.": {
-   "en": "",
+   "en": "<strong>Retention period:</strong> follow-up data kept for the duration of the contractual relationship, then # years for prospecting purposes; accounting documents (invoices, contracts) kept for # years under Article L.#-# of the French Commercial Code.<br>",
    "fr": "Durée de conservation : données de suivi conservées pendant la relation contractuelle puis 3 ans à des fins de prospection ; pièces comptables (factures, contrats) conservées 10 ans au titre de l’article L.123-22 du Code de commerce.",
    "html": "<strong>Durée de conservation :</strong> données de suivi conservées pendant la relation contractuelle puis 3 ans à des fins de prospection ; pièces comptables (factures, contrats) conservées 10 ans au titre de l’article L.123-22 du Code de commerce.<br>"
   },
   "Décompressez-le, ou retéléchargez-le par le bouton 💾 Sauvegarder": {
-   "en": "",
+   "en": "Decompress it, or download it again with the <b>💾 Save</b> button",
    "fr": "Décompressez-le, ou retéléchargez-le par le bouton 💾 Sauvegarder",
    "html": "Décompressez-le, ou retéléchargez-le par le bouton <b>💾 Sauvegarder</b>"
   },
   "Définition incomplète — Art. #(#) :": {
-   "en": "",
+   "en": "<strong>Incomplete definition — Art. #(#)</strong>:",
    "fr": "Définition incomplète — Art. 3(1) :",
    "html": "<strong>Définition incomplète — Art. 3(1)</strong> :"
   },
   "Détail par critère non encore disponible pour cette juridiction. Score global basé sur une évaluation synthétique. Utilisez le bouton \"Actualiser via IA\" pour générer une analyse détaillée.": {
-   "en": "",
+   "en": "Criterion-by-criterion detail not yet available for this jurisdiction. Overall score based on a summary assessment. <br><br>Use the “Refresh via AI” button to generate a detailed analysis.",
    "fr": "Détail par critère non encore disponible pour cette juridiction. Score global basé sur une évaluation synthétique. Utilisez le bouton \"Actualiser via IA\" pour générer une analyse détaillée.",
    "html": "Détail par critère non encore disponible pour cette juridiction. Score global basé sur une évaluation synthétique. <br><br>Utilisez le bouton \"Actualiser via IA\" pour générer une analyse détaillée."
   },
   "EN VIGUEUR depuis le": {
-   "en": "",
+   "en": "<b>IN FORCE</b> since",
    "fr": "EN VIGUEUR depuis le",
    "html": "<b>EN VIGUEUR</b> depuis le"
   },
   "Enveloppe résultats (# jalons)": {
-   "en": "",
+   "en": "Results envelope (# milestones)<b>",
    "fr": "Enveloppe résultats (7 jalons)",
    "html": "<span>Enveloppe résultats (7 jalons)</span><b>"
   },
   "Estimations par modélisation, non des mesures. Aucun fournisseur ne publie la consommation réelle par requête ; les impacts de fabrication souffrent d’un manque de transparence de la filière. Incertitude retenue : ±": {
-   "en": "",
+   "en": "<strong>Modelled estimates, not measurements.</strong> No provider publishes the actual consumption per request; manufacturing impacts suffer from a lack of transparency in the supply chain. Uncertainty applied: ±",
    "fr": "Estimations par modélisation, non des mesures. Aucun fournisseur ne publie la consommation réelle par requête ; les impacts de fabrication souffrent d’un manque de transparence de la filière. Incertitude retenue : ±",
    "html": "<strong>Estimations par modélisation, non des mesures.</strong> Aucun fournisseur ne publie la consommation réelle par requête ; les impacts de fabrication souffrent d’un manque de transparence de la filière. Incertitude retenue : ±"
   },
   "Et le vert dit que chaque étape a été ouverte, pas que son travail a été fait : Sentinel ne peut pas mesurer le second, et un vert qui le laisserait croire vaudrait moins que pas de vert du tout.": {
-   "en": "",
+   "en": "And the green says that each stage has been <em>opened</em>, not that its work has been <em>done</em>: Sentinel cannot measure the latter, and a green that suggested otherwise would be worth less than no green at all.",
    "fr": "Et le vert dit que chaque étape a été ouverte, pas que son travail a été fait : Sentinel ne peut pas mesurer le second, et un vert qui le laisserait croire vaudrait moins que pas de vert du tout.",
    "html": "Et le vert dit que chaque étape a été <em>ouverte</em>, pas que son travail a été <em>fait</em> : Sentinel ne peut pas mesurer le second, et un vert qui le laisserait croire vaudrait moins que pas de vert du tout."
   },
   "Et une SECONDE notification, que tout": {
-   "en": "",
+   "en": "<b>And a SECOND notification, which every",
    "fr": "Et une SECONDE notification, que tout",
    "html": "<b>Et une SECONDE notification, que tout"
   },
   "Extraterritorialite (Art. #) : Organisation hors UE visant le marche EU. Mandataire UE obligatoire avant mise sur le marche (Art. #).": {
-   "en": "",
+   "en": "<strong>Extraterritoriality (Art. #)</strong>: Organisation outside the EU targeting the EU market. EU authorised representative mandatory before placing on the market (Art. #).",
    "fr": "Extraterritorialite (Art. 2) : Organisation hors UE visant le marche EU. Mandataire UE obligatoire avant mise sur le marche (Art. 22).",
    "html": "<strong>Extraterritorialite (Art. 2)</strong> : Organisation hors UE visant le marche EU. Mandataire UE obligatoire avant mise sur le marche (Art. 22)."
   },
   "Facturé à": {
-   "en": "",
+   "en": "<strong>Invoiced to</strong><br>",
    "fr": "Facturé à",
    "html": "<strong>Facturé à</strong><br>"
   },
   "Feuille de route priorisée avec délais réglementaires et plan d'action CONSEILPREV.": {
-   "en": "",
+   "en": "Prioritised roadmap with regulatory deadlines and CONSEILPREV action plan. <strong>",
    "fr": "Feuille de route priorisée avec délais réglementaires et plan d'action CONSEILPREV.",
    "html": "Feuille de route priorisée avec délais réglementaires et plan d'action CONSEILPREV. <strong>"
   },
   "Finalité : les données KYC sont collectées aux fins de gestion contractuelle, de facturation et de suivi de la relation client.": {
-   "en": "",
+   "en": "<strong>Purpose:</strong> KYC data are collected for contract management, invoicing and follow-up of the client relationship.<br>",
    "fr": "Finalité : les données KYC sont collectées aux fins de gestion contractuelle, de facturation et de suivi de la relation client.",
    "html": "<strong>Finalité :</strong> les données KYC sont collectées aux fins de gestion contractuelle, de facturation et de suivi de la relation client.<br>"
   },
   "Fourchette marché (tous segments) :": {
-   "en": "",
+   "en": "Market range (all segments): <em>",
    "fr": "Fourchette marché (tous segments) :",
    "html": "Fourchette marché (tous segments) : <em>"
   },
   "Fournisseurs de modèles": {
-   "en": "",
+   "en": "<strong>Model providers</strong>",
    "fr": "Fournisseurs de modèles",
    "html": "<strong>Fournisseurs de modèles</strong>"
   },
   "Gain annuel cumulé": {
-   "en": "",
+   "en": "Cumulative annual gain<b>",
    "fr": "Gain annuel cumulé",
    "html": "<span>Gain annuel cumulé</span><b>"
   },
   "Gain annuel estimé :": {
-   "en": "",
+   "en": "Estimated annual gain: <strong>",
    "fr": "Gain annuel estimé :",
    "html": "Gain annuel estimé : <strong>"
   },
   "Garanties contractuelles du modèle RaaS par jalons": {
-   "en": "",
+   "en": "<strong>Contractual guarantees of the RaaS milestone model</strong><br>",
    "fr": "Garanties contractuelles du modèle RaaS par jalons",
    "html": "<strong>Garanties contractuelles du modèle RaaS par jalons</strong><br>"
   },
   "Génération du": {
-   "en": "",
+   "en": "Generating the <strong>",
    "fr": "Génération du",
    "html": "Génération du <strong>"
   },
   "Hors champ pour une entité": {
-   "en": "",
+   "en": "<b>Out of scope for an entity",
    "fr": "Hors champ pour une entité",
    "html": "<b>Hors champ pour une entité"
   },
   "Hors de son périmètre :": {
-   "en": "",
+   "en": "<b>Outside its scope:</b>",
    "fr": "Hors de son périmètre :",
    "html": "<b>Hors de son périmètre :</b>"
   },
   "Importez un fichier (CSV, TXT, JSON, ou texte de documentation) décrivant vos systèmes IA, processus ou données. L IA l analysera pour personnaliser le document. Vos données sont transmises au moteur IA sélectionné (": {
-   "en": "",
+   "en": "Import a file (CSV, TXT, JSON, or documentation text) describing your AI systems, processes or data. The AI will analyse it to personalise the document. <strong>Your data is sent to the selected AI engine (",
    "fr": "Importez un fichier (CSV, TXT, JSON, ou texte de documentation) décrivant vos systèmes IA, processus ou données. L IA l analysera pour personnaliser le document. Vos données sont transmises au moteur IA sélectionné (",
    "html": "Importez un fichier (CSV, TXT, JSON, ou texte de documentation) décrivant vos systèmes IA, processus ou données. L IA l analysera pour personnaliser le document. <strong>Vos données sont transmises au moteur IA sélectionné ("
   },
   "Incertitude de la méthode retenue : ±": {
-   "en": "",
+   "en": "<strong>Uncertainty of the method applied:</strong> ±",
    "fr": "Incertitude de la méthode retenue : ±",
    "html": "<strong>Incertitude de la méthode retenue :</strong> ±"
   },
   "Indice de maturité global :": {
-   "en": "",
+   "en": "Global maturity index: <strong>",
    "fr": "Indice de maturité global :",
    "html": "Indice de maturité global : <strong>"
   },
   "Intervalle de confiance mois #": {
-   "en": "",
+   "en": "<strong>Confidence interval, month #</strong><br>",
    "fr": "Intervalle de confiance mois 6",
    "html": "<strong>Intervalle de confiance mois 6</strong><br>"
   },
   "Inventaire et classification selon l'Annexe III de l'AI Act.": {
-   "en": "",
+   "en": "Inventory and classification under Annex III of the AI Act. <strong>",
    "fr": "Inventaire et classification selon l'Annexe III de l'AI Act.",
    "html": "Inventaire et classification selon l'Annexe III de l'AI Act. <strong>"
   },
   "Investissement année #": {
-   "en": "",
+   "en": "Investment, year #<b>",
    "fr": "Investissement année 1",
    "html": "<span>Investissement année 1</span><b>"
   },
   "Je connais le contenu de chaque page de Sentinel AI et adapte mes reponses en consequence.": {
-   "en": "",
+   "en": "<br><br>I know the content of every page of Sentinel AI and adapt my answers accordingly.",
    "fr": "Je connais le contenu de chaque page de Sentinel AI et adapte mes reponses en consequence.",
    "html": "<br><br>Je connais le contenu de chaque page de Sentinel AI et adapte mes reponses en consequence."
   },
   "Je suis connecte a Mistral Large et Claude Sonnet — choisissez votre moteur IA en haut.": {
-   "en": "",
+   "en": "I am connected to <strong>Mistral Large</strong> and <strong>Claude Sonnet</strong> — choose your AI engine at the top.",
    "fr": "Je suis connecte a Mistral Large et Claude Sonnet — choisissez votre moteur IA en haut.",
    "html": "Je suis connecte a <strong>Mistral Large</strong> et <strong>Claude Sonnet</strong> — choisissez votre moteur IA en haut."
   },
   "L'audit reste entier : les huit piliers, le questionnaire, les": {
-   "en": "",
+   "en": "<b>The audit remains complete</b>: the eight pillars, the questionnaire, the",
    "fr": "L'audit reste entier : les huit piliers, le questionnaire, les",
    "html": "<b>L'audit reste entier</b> : les huit piliers, le questionnaire, les"
   },
   "L'exemption « libre et ouverte » ne s'applique pas : elle suppose une mise à disposition à titre gratuit, et": {
-   "en": "",
+   "en": "<strong>The “free and open-source” exemption does not apply</strong>: it presupposes making the product available free of charge, and",
    "fr": "L'exemption « libre et ouverte » ne s'applique pas : elle suppose une mise à disposition à titre gratuit, et",
    "html": "<strong>L'exemption « libre et ouverte » ne s'applique pas</strong> : elle suppose une mise à disposition à titre gratuit, et"
   },
   "L'exemption « libre et ouverte » paraît applicable : aucune contrepartie déclarée.": {
-   "en": "",
+   "en": "<strong>The “free and open-source” exemption appears applicable</strong>: no consideration declared.",
    "fr": "L'exemption « libre et ouverte » paraît applicable : aucune contrepartie déclarée.",
    "html": "<strong>L'exemption « libre et ouverte » paraît applicable</strong> : aucune contrepartie déclarée."
   },
   "La borne :": {
-   "en": "",
+   "en": "<b>The limit:</b>",
    "fr": "La borne :",
    "html": "<b>La borne :</b>"
   },
   "La charge de la preuve bascule (": {
-   "en": "",
+   "en": "<b>The burden of proof shifts (",
    "fr": "La charge de la preuve bascule (",
    "html": "<b>La charge de la preuve bascule ("
   },
   "La colonne Dû est calculée depuis le cadre ci-dessus à partir du rôle déclaré. Ce qu’une ligne porte au-delà est un engagement de CONSEILPREV, non une obligation de l’article #.": {
-   "en": "",
+   "en": "The <strong>Due</strong> column is calculated from the framework above on the basis of the declared role. Anything a row carries beyond that is a CONSEILPREV commitment, not an obligation under Article #.",
    "fr": "La colonne Dû est calculée depuis le cadre ci-dessus à partir du rôle déclaré. Ce qu’une ligne porte au-delà est un engagement de CONSEILPREV, non une obligation de l’article 50.",
    "html": "La colonne <strong>Dû</strong> est calculée depuis le cadre ci-dessus à partir du rôle déclaré. Ce qu’une ligne porte au-delà est un engagement de CONSEILPREV, non une obligation de l’article 50."
   },
   "La recherche porte sur toute la base. Le périmètre choisi ne restreint rien :": {
-   "en": "",
+   "en": "The search covers <b>the entire base</b>. The chosen scope restricts nothing:",
    "fr": "La recherche porte sur toute la base. Le périmètre choisi ne restreint rien :",
    "html": "La recherche porte sur <b>toute la base</b>. Le périmètre choisi ne restreint rien :"
   },
   "La sauvegarde attendue est un .json non compressé.": {
-   "en": "",
+   "en": "The expected backup is an uncompressed <code>.json</code>.",
    "fr": "La sauvegarde attendue est un .json non compressé.",
    "html": "La sauvegarde attendue est un <code>.json</code> non compressé."
   },
   "La sauvegarde attendue est un .json.": {
-   "en": "",
+   "en": "The expected backup is a <code>.json</code>.",
    "fr": "La sauvegarde attendue est un .json.",
    "html": "La sauvegarde attendue est un <code>.json</code>."
   },
   "La transition des certificats.": {
-   "en": "",
+   "en": "<b>The transition of certificates.</b>",
    "fr": "La transition des certificats.",
    "html": "<b>La transition des certificats.</b>"
   },
   "Le bloc se valide sans.": {
-   "en": "",
+   "en": "The block can be validated without it.",
    "fr": "Le bloc se valide sans.",
    "html": "Le bloc se valide sans.</span>"
   },
   "Le chapitre le plus bas :": {
-   "en": "",
+   "en": "<b>The lowest chapter:</b>",
    "fr": "Le chapitre le plus bas :",
    "html": "<b>Le chapitre le plus bas :</b>"
   },
   "Le fichier est incomplet. Il commence bien comme une sauvegarde": {
-   "en": "",
+   "en": "<b>The file is incomplete.</b> It does start like a backup",
    "fr": "Le fichier est incomplet. Il commence bien comme une sauvegarde",
    "html": "<b>Le fichier est incomplet.</b> Il commence bien comme une sauvegarde"
   },
   "Le fichier n’a produit aucun texte à la lecture. Il occupe pourtant": {
-   "en": "",
+   "en": "<b>The file produced no text when read.</b> Yet it takes up",
    "fr": "Le fichier n’a produit aucun texte à la lecture. Il occupe pourtant",
    "html": "<b>Le fichier n’a produit aucun texte à la lecture.</b> Il occupe pourtant"
   },
   "Le module refuse de chiffrer": {
-   "en": "",
+   "en": "<b>The module refuses to quantify",
    "fr": "Le module refuse de chiffrer",
    "html": "<b>Le module refuse de chiffrer"
   },
   "Le motif que le référentiel refuse.": {
-   "en": "",
+   "en": "<b>The ground the framework rejects.</b>",
    "fr": "Le motif que le référentiel refuse.",
    "html": "<b>Le motif que le référentiel refuse.</b>"
   },
   "Le piège :": {
-   "en": "",
+   "en": "<b>The trap:</b>",
    "fr": "Le piège :",
    "html": "<b>Le piège :</b>"
   },
   "Le point de départ —": {
-   "en": "",
+   "en": "<b>The starting point — </b>",
    "fr": "Le point de départ —",
    "html": "<b>Le point de départ — </b>"
   },
   "Le questionnaire fourni —": {
-   "en": "",
+   "en": "<b>The questionnaire provided —",
    "fr": "Le questionnaire fourni —",
    "html": "<b>Le questionnaire fourni —"
   },
   "Le recrutement technique. Nous ne sourçons pas de développeurs, n’évaluons pas": {
-   "en": "",
+   "en": "<b>Technical recruitment.</b> We do not source developers, do not assess",
    "fr": "Le recrutement technique. Nous ne sourçons pas de développeurs, n’évaluons pas",
    "html": "<b>Le recrutement technique.</b> Nous ne sourçons pas de développeurs, n’évaluons pas"
   },
   "Le scoring multicritère combine : droits fondamentaux (évaluation FRIA par système), sécurité et gouvernance des données (Radar des risques, # dimensions pondérées), et performance réglementaire (Audit de conformité, # points). Consultez chaque module pour le détail complet.": {
-   "en": "",
+   "en": "Multi-criteria scoring combines: <strong>fundamental rights</strong> (FRIA per system), <strong>security</strong> and <strong>data governance</strong> (Risk radar, # weighted dimensions), and <strong>regulatory performance</strong> (Compliance audit, # points). Consult each module for the full detail.",
    "fr": "Le scoring multicritère combine : droits fondamentaux (évaluation FRIA par système), sécurité et gouvernance des données (Radar des risques, 6 dimensions pondérées), et performance réglementaire (Audit de conformité, 34 points). Consultez chaque module pour le détail complet.",
    "html": "Le scoring multicritère combine : <strong>droits fondamentaux</strong> (évaluation FRIA par système), <strong>sécurité</strong> et <strong>gouvernance des données</strong> (Radar des risques, 6 dimensions pondérées), et <strong>performance réglementaire</strong> (Audit de conformité, 34 points). Consultez chaque module pour le détail complet."
   },
   "Le taux ci-dessus ne compte que les": {
-   "en": "",
+   "en": "The rate above only counts the <b>",
    "fr": "Le taux ci-dessus ne compte que les",
    "html": "Le taux ci-dessus ne compte que les <b>"
   },
   "Les trois échéances": {
-   "en": "",
+   "en": "The three deadlines",
    "fr": "Les trois échéances",
    "html": "Les trois échéances</span>"
   },
   "L’audit tourne actuellement sur le profil": {
-   "en": "",
+   "en": "The audit is currently running on the profile <b>",
    "fr": "L’audit tourne actuellement sur le profil",
    "html": "L’audit tourne actuellement sur le profil <b>"
   },
   "L’inventaire préalable n’est pas possible dans ce mode : les thèmes s’affichent au fur": {
-   "en": "",
+   "en": "<br>The prior inventory is not possible in this mode: the themes are displayed as",
    "fr": "L’inventaire préalable n’est pas possible dans ce mode : les thèmes s’affichent au fur",
    "html": "<br>L’inventaire préalable n’est pas possible dans ce mode : les thèmes s’affichent au fur"
   },
   "Modalités : à distance en visioconférence, ou en présentiel à Paris uniquement. Les sessions sur site, dans vos locaux, sont réservées à l’offre Entreprise. Tarifs indiqués hors taxes, par participant. Votre place est confirmée dès réception du paiement. Un accusé de réception vous est adressé immédiatement.": {
-   "en": "",
+   "en": "<strong>Format: remotely by videoconference, or in person in Paris only.</strong> On-site sessions, at your premises, are reserved for the Enterprise plan. Prices shown exclude tax, per participant. Your place is confirmed on receipt of payment. An acknowledgement of receipt is sent to you immediately.",
    "fr": "Modalités : à distance en visioconférence, ou en présentiel à Paris uniquement. Les sessions sur site, dans vos locaux, sont réservées à l’offre Entreprise. Tarifs indiqués hors taxes, par participant. Votre place est confirmée dès réception du paiement. Un accusé de réception vous est adressé immédiatement.",
    "html": "<strong>Modalités : à distance en visioconférence, ou en présentiel à Paris uniquement.</strong> Les sessions sur site, dans vos locaux, sont réservées à l’offre Entreprise. Tarifs indiqués hors taxes, par participant. Votre place est confirmée dès réception du paiement. Un accusé de réception vous est adressé immédiatement."
   },
   "Moyenne du portefeuille :": {
-   "en": "",
+   "en": "Portfolio average: <strong>",
    "fr": "Moyenne du portefeuille :",
    "html": "Moyenne du portefeuille : <strong>"
   },
   "Méthode attendue.": {
-   "en": "",
+   "en": "<strong>Expected method.</strong>",
    "fr": "Méthode attendue.",
    "html": "<strong>Méthode attendue.</strong>"
   },
   "Non tranché. Ce point reste ouvert ; tant qu’il l’est,": {
-   "en": "",
+   "en": "<b>Not decided.</b> This point remains open; as long as it does,",
    "fr": "Non tranché. Ce point reste ouvert ; tant qu’il l’est,",
    "html": "<b>Non tranché.</b> Ce point reste ouvert ; tant qu’il l’est,"
   },
   "N’impose pas :": {
-   "en": "",
+   "en": "<strong>Does not impose:</strong>",
    "fr": "N’impose pas :",
    "html": "<strong>N’impose pas :</strong>"
   },
   "Ouvrir le module →": {
-   "en": "",
+   "en": "Open the module →",
    "fr": "Ouvrir le module →",
    "html": "Ouvrir le module →</span>"
   },
   "Où le vérifier —": {
-   "en": "",
+   "en": "<b>Where to check it — </b>",
    "fr": "Où le vérifier —",
    "html": "<b>Où le vérifier — </b>"
   },
   "Où vous en êtes. Chaque parcours porte son avancement, et la liste ci-dessous le rappelle :": {
-   "en": "",
+   "en": "<b>Where you stand.</b> Each path carries its progress, and the list below recalls it:",
    "fr": "Où vous en êtes. Chaque parcours porte son avancement, et la liste ci-dessous le rappelle :",
    "html": "<b>Où vous en êtes.</b> Chaque parcours porte son avancement, et la liste ci-dessous le rappelle :"
   },
   "Parcours guidé «": {
-   "en": "",
+   "en": "<strong>Guided path “",
    "fr": "Parcours guidé «",
    "html": "<strong>Parcours guidé «"
   },
   "Portée de ce service.": {
-   "en": "",
+   "en": "<b>Scope of this service.</b>",
    "fr": "Portée de ce service.",
    "html": "<b>Portée de ce service.</b>"
   },
   "Portée. Ce catalogue ne se certifie pas : le taux dit": {
-   "en": "",
+   "en": "<strong>Scope.</strong> This catalogue cannot be certified: the rate says",
    "fr": "Portée. Ce catalogue ne se certifie pas : le taux dit",
    "html": "<strong>Portée.</strong> Ce catalogue ne se certifie pas : le taux dit"
   },
   "Pour CONSEILPREVChristophe CERF": {
-   "en": "",
+   "en": "For CONSEILPREV<br><br><br>Christophe CERF",
    "fr": "Pour CONSEILPREVChristophe CERF",
    "html": "Pour CONSEILPREV<br><br><br>Christophe CERF"
   },
   "Pour le ClientNom, fonction, signature": {
-   "en": "",
+   "en": "For the Client<br><br><br>Name, position, signature",
    "fr": "Pour le ClientNom, fonction, signature",
    "html": "Pour le Client<br><br><br>Nom, fonction, signature"
   },
   "Pourquoi ce point n’existe pas sur du code écrit.": {
-   "en": "",
+   "en": "<b>Why this point does not exist for written code.</b>",
    "fr": "Pourquoi ce point n’existe pas sur du code écrit.",
    "html": "<b>Pourquoi ce point n’existe pas sur du code écrit.</b>"
   },
   "Pourquoi ces jalons pour le rôle «": {
-   "en": "",
+   "en": "<strong>Why these milestones for the role “",
    "fr": "Pourquoi ces jalons pour le rôle «",
    "html": "<strong>Pourquoi ces jalons pour le rôle «"
   },
   "Pourquoi s’y préparer quand même :": {
-   "en": "",
+   "en": "<b>Why prepare for it anyway:</b>",
    "fr": "Pourquoi s’y préparer quand même :",
    "html": "<b>Pourquoi s’y préparer quand même :</b>"
   },
   "Pourquoi ça compte —": {
-   "en": "",
+   "en": "<b>Why it matters — </b>",
    "fr": "Pourquoi ça compte —",
    "html": "<b>Pourquoi ça compte — </b>"
   },
   "Pourquoi ça dure": {
-   "en": "",
+   "en": "Why it takes time",
    "fr": "Pourquoi ça dure",
    "html": "<span>Pourquoi ça dure</span>"
   },
   "Pratique interdite — Art. #Ce type de système est formellement interdit par l'EU AI Act. La mise sur le marché, la mise en service ou l'utilisation est prohibée dans toute l'UE. Amendes pouvant atteindre # M€ ou #% du CA mondial. Une refonte complète du système est nécessaire avant tout déploiement.": {
-   "en": "",
+   "en": "<strong>Prohibited practice — Art. #</strong><br>This type of system is expressly prohibited by the EU AI Act. Placing on the market, putting into service or use is prohibited throughout the EU. Fines of up to €# million or #% of worldwide turnover. A complete redesign of the system is required before any deployment.",
    "fr": "Pratique interdite — Art. 5Ce type de système est formellement interdit par l'EU AI Act. La mise sur le marché, la mise en service ou l'utilisation est prohibée dans toute l'UE. Amendes pouvant atteindre 35 M€ ou 7% du CA mondial. Une refonte complète du système est nécessaire avant tout déploiement.",
    "html": "<strong>Pratique interdite — Art. 5</strong><br>Ce type de système est formellement interdit par l'EU AI Act. La mise sur le marché, la mise en service ou l'utilisation est prohibée dans toute l'UE. Amendes pouvant atteindre 35 M€ ou 7% du CA mondial. Une refonte complète du système est nécessaire avant tout déploiement."
   },
   "PrestataireCONSEILPREV — SARL au capital de # # €Christophe CERF, gérant# rue Auguste Chabrières, # ParisSIREN # # # — RCS ParisTVA : FR # # # #christophe.cerf@outlook.com": {
-   "en": "",
+   "en": "<strong>Service provider</strong><br>CONSEILPREV — SARL with share capital of €# #<br>Christophe CERF, manager<br># rue Auguste Chabrières, # Paris<br>SIREN # # # — RCS Paris<br>VAT: FR # # # #<br>christophe.cerf@outlook.com",
    "fr": "PrestataireCONSEILPREV — SARL au capital de 8 000 €Christophe CERF, gérant19 rue Auguste Chabrières, 75015 ParisSIREN 494 530 157 — RCS ParisTVA : FR 24 494 530 157christophe.cerf@outlook.com",
    "html": "<strong>Prestataire</strong><br>CONSEILPREV — SARL au capital de 8 000 €<br>Christophe CERF, gérant<br>19 rue Auguste Chabrières, 75015 Paris<br>SIREN 494 530 157 — RCS Paris<br>TVA : FR 24 494 530 157<br>christophe.cerf@outlook.com"
   },
   "Prestation : jalon de conformité vérifiéRéf. client :": {
-   "en": "",
+   "en": "<br>Service: verified compliance milestone<br>Client ref.:",
    "fr": "Prestation : jalon de conformité vérifiéRéf. client :",
    "html": "<br>Prestation : jalon de conformité vérifié<br>Réf. client :"
   },
   "Prestation : vérification des jalons listésRéf. client :": {
-   "en": "",
+   "en": "<br>Service: verification of the listed milestones<br>Client ref.:",
    "fr": "Prestation : vérification des jalons listésRéf. client :",
    "html": "<br>Prestation : vérification des jalons listés<br>Réf. client :"
   },
   "Périmètre incomplet sur": {
-   "en": "",
+   "en": "<strong>Incomplete scope on",
    "fr": "Périmètre incomplet sur",
    "html": "<strong>Périmètre incomplet sur"
   },
   "Périmètre opérationnel": {
-   "en": "",
+   "en": "<strong>Operational scope</strong>",
    "fr": "Périmètre opérationnel",
    "html": "<strong>Périmètre opérationnel</strong>"
   },
   "Périmètre organisationnel": {
-   "en": "",
+   "en": "<strong>Organisational scope</strong>",
    "fr": "Périmètre organisationnel",
    "html": "<strong>Périmètre organisationnel</strong>"
   },
   "Qualification non renseignée : les sept éléments de la définition de l'article #(#) n'ont pas été examinés. Tout ce qui suit suppose que le système en est un.": {
-   "en": "",
+   "en": "<strong>Qualification not provided</strong>: the seven elements of the definition in Article #(#) have not been examined. Everything that follows assumes that the system is one.",
    "fr": "Qualification non renseignée : les sept éléments de la définition de l'article 3(1) n'ont pas été examinés. Tout ce qui suit suppose que le système en est un.",
    "html": "<strong>Qualification non renseignée</strong> : les sept éléments de la définition de l'article 3(1) n'ont pas été examinés. Tout ce qui suit suppose que le système en est un."
   },
   "Qui décide :": {
-   "en": "",
+   "en": "<b>Who decides:</b>",
    "fr": "Qui décide :",
    "html": "<b>Qui décide :</b>"
   },
   "ROI année #": {
-   "en": "",
+   "en": "ROI, year #<b>",
    "fr": "ROI année 1",
    "html": "<span>ROI année 1</span><b>"
   },
   "RaaS par jalons — paiement sur résultats vérifiésSocle :": {
-   "en": "",
+   "en": "<strong>RaaS by milestones — payment on verified results</strong><br>Fixed base: <em>",
    "fr": "RaaS par jalons — paiement sur résultats vérifiésSocle :",
    "html": "<strong>RaaS par jalons — paiement sur résultats vérifiés</strong><br>Socle : <em>"
   },
   "Redéployez conseilprevcyber (le correctif de mémoire y est poussé)": {
-   "en": "",
+   "en": "<b>Redeploy conseilprevcyber</b> (the memory fix has been pushed there)",
    "fr": "Redéployez conseilprevcyber (le correctif de mémoire y est poussé)",
    "html": "<b>Redéployez conseilprevcyber</b> (le correctif de mémoire y est poussé)"
   },
   "Report du dossier de valeur — cartographie": {
-   "en": "",
+   "en": "<strong>Carry-over of the business case — mapping</strong><br>",
    "fr": "Report du dossier de valeur — cartographie",
    "html": "<strong>Report du dossier de valeur — cartographie</strong><br>"
   },
   "Requalification — Art. #(#) : vous vous êtes déclaré": {
-   "en": "",
+   "en": "<strong>Reclassification — Art. #(#)</strong>: you declared yourself <em>",
    "fr": "Requalification — Art. 25(1) : vous vous êtes déclaré",
    "html": "<strong>Requalification — Art. 25(1)</strong> : vous vous êtes déclaré <em>"
   },
   "Retard de paiement. Articles L.#-# et D.#-# du Code de commerce : pénalités au taux de trois fois le taux d’intérêt légal et indemnité forfaitaire de recouvrement de # €.": {
-   "en": "",
+   "en": "<strong>Late payment.</strong> Articles L.#-# and D.#-# of the French Commercial Code: penalties at three times the legal interest rate and a flat-rate recovery indemnity of €#.<br>",
    "fr": "Retard de paiement. Articles L.441-10 et D.441-5 du Code de commerce : pénalités au taux de trois fois le taux d’intérêt légal et indemnité forfaitaire de recouvrement de 40 €.",
    "html": "<strong>Retard de paiement.</strong> Articles L.441-10 et D.441-5 du Code de commerce : pénalités au taux de trois fois le taux d’intérêt légal et indemnité forfaitaire de recouvrement de 40 €.<br>"
   },
   "Retour net année #": {
-   "en": "",
+   "en": "Net return, year #<b>",
    "fr": "Retour net année 1",
    "html": "<span>Retour net année 1</span><b>"
   },
   "Rien n’est compté tant que": {
-   "en": "",
+   "en": "<b>Nothing is counted until",
    "fr": "Rien n’est compté tant que",
    "html": "<b>Rien n’est compté tant que"
   },
   "Rien n’est compté.": {
-   "en": "",
+   "en": "<b>Nothing is counted.</b>",
    "fr": "Rien n’est compté.",
    "html": "<b>Rien n’est compté.</b>"
   },
   "Rien n’est mesuré : Sentinel ne tourne pas dans vos applications. Les volumes viennent": {
-   "en": "",
+   "en": "<br>Nothing is measured: Sentinel does not run in your applications. The volumes come",
    "fr": "Rien n’est mesuré : Sentinel ne tourne pas dans vos applications. Les volumes viennent",
    "html": "<br>Rien n’est mesuré : Sentinel ne tourne pas dans vos applications. Les volumes viennent"
   },
   "Rouvrez /admin/base-connaissance, vérifiez que la liste des documents": {
-   "en": "",
+   "en": "Reopen <b>/admin/base-connaissance</b>, check that the list of documents",
    "fr": "Rouvrez /admin/base-connaissance, vérifiez que la liste des documents",
    "html": "Rouvrez <b>/admin/base-connaissance</b>, vérifiez que la liste des documents"
   },
   "Réf. client :": {
-   "en": "",
+   "en": "<br>Client ref.:",
    "fr": "Réf. client :",
    "html": "<br>Réf. client :"
   },
   "Référence marché": {
-   "en": "",
+   "en": "<strong>Market reference",
    "fr": "Référence marché",
    "html": "<strong>Référence marché"
   },
   "Régime relevé, socle non calibré.": {
-   "en": "",
+   "en": "<b>Regime identified, baseline not calibrated.</b>",
    "fr": "Régime relevé, socle non calibré.",
    "html": "<b>Régime relevé, socle non calibré.</b>"
   },
   "Réglage QUALIF_MOTEUR =": {
-   "en": "",
+   "en": "<br>Setting QUALIF_MOTEUR =",
    "fr": "Réglage QUALIF_MOTEUR =",
    "html": "<br>Réglage QUALIF_MOTEUR ="
   },
   "Rôle non déterminé : les obligations de chaque rôle sont rendues ci-dessous, sans arbitrage. Pour trancher, une seule question suffit le plus souvent — mettez-vous ce système sur le marché sous votre nom (fournisseur), ou l'employez-vous sous votre autorité (déployeur) ?": {
-   "en": "",
+   "en": "<strong>Role not determined</strong>: the obligations of <em>each</em> role are shown below, without arbitration. To decide, a single question is usually enough — do you place this system on the market under your name (provider), or do you use it under your authority (deployer)?",
    "fr": "Rôle non déterminé : les obligations de chaque rôle sont rendues ci-dessous, sans arbitrage. Pour trancher, une seule question suffit le plus souvent — mettez-vous ce système sur le marché sous votre nom (fournisseur), ou l'employez-vous sous votre autorité (déployeur) ?",
    "html": "<strong>Rôle non déterminé</strong> : les obligations de <em>chaque</em> rôle sont rendues ci-dessous, sans arbitrage. Pour trancher, une seule question suffit le plus souvent — mettez-vous ce système sur le marché sous votre nom (fournisseur), ou l'employez-vous sous votre autorité (déployeur) ?"
   },
   "Rôle retenu :": {
-   "en": "",
+   "en": "<strong>Role selected:",
    "fr": "Rôle retenu :",
    "html": "<strong>Rôle retenu :"
   },
   "SaaS de référence": {
-   "en": "",
+   "en": "Reference SaaS",
    "fr": "SaaS de référence",
    "html": "<span>SaaS de référence</span>"
   },
   "Sans aucun répondant dans la norme": {
-   "en": "",
+   "en": "<b>With no counterpart in the standard</b>",
    "fr": "Sans aucun répondant dans la norme",
    "html": "<b>Sans aucun répondant dans la norme</b>"
   },
   "Sans engagement :": {
-   "en": "",
+   "en": "<br>No commitment: <em>",
    "fr": "Sans engagement :",
    "html": "<br>Sans engagement : <em>"
   },
   "Scoring multicritère : droits fondamentaux (FRIA), sécurité, performance, gouvernance des données.": {
-   "en": "",
+   "en": "Multi-criteria scoring: fundamental rights (FRIA), security, performance, data governance. <strong>",
    "fr": "Scoring multicritère : droits fondamentaux (FRIA), sécurité, performance, gouvernance des données.",
    "html": "Scoring multicritère : droits fondamentaux (FRIA), sécurité, performance, gouvernance des données. <strong>"
   },
   "Service momentanément indisponible. Réessayez dans un instant.": {
-   "en": "",
+   "en": "<b>Service temporarily unavailable.</b> Try again in a moment.",
    "fr": "Service momentanément indisponible. Réessayez dans un instant.",
    "html": "<b>Service momentanément indisponible.</b> Réessayez dans un instant."
   },
   "Si la clause manque :": {
-   "en": "",
+   "en": "<b>If the clause is missing:</b>",
    "fr": "Si la clause manque :",
    "html": "<b>Si la clause manque :</b>"
   },
   "Socle — il DÉCOULE de la catégorisation du système, il ne se choisit pas.": {
-   "en": "",
+   "en": "<strong>Baseline</strong> — it FOLLOWS from the system categorisation; it is not chosen.",
    "fr": "Socle — il DÉCOULE de la catégorisation du système, il ne se choisit pas.",
    "html": "<strong>Socle</strong> — il DÉCOULE de la catégorisation du système, il ne se choisit pas."
   },
   "Surcharge. Ce taux mesure ce que": {
-   "en": "",
+   "en": "<strong>Overlay.</strong> This rate measures what",
    "fr": "Surcharge. Ce taux mesure ce que",
    "html": "<strong>Surcharge.</strong> Ce taux mesure ce que"
   },
   "Systèmes IA": {
-   "en": "",
+   "en": "AI systems",
    "fr": "Systèmes IA",
    "html": "<span>Systèmes IA</span>"
   },
   "TVA. TVA au taux de # % — numéro FR # # # #.": {
-   "en": "",
+   "en": "<strong>VAT.</strong> VAT at # % — number FR # # # #.<br>",
    "fr": "TVA. TVA au taux de 20 % — numéro FR 24 494 530 157.",
    "html": "<strong>TVA.</strong> TVA au taux de 20 % — numéro FR 24 494 530 157.<br>"
   },
   "Tarif SaaS de référenceSegment :": {
-   "en": "",
+   "en": "<strong>Reference SaaS price</strong><br>Segment: <em>",
    "fr": "Tarif SaaS de référenceSegment :",
    "html": "<strong>Tarif SaaS de référence</strong><br>Segment : <em>"
   },
   "Taux de": {
-   "en": "",
+   "en": "<b>Rate of",
    "fr": "Taux de",
    "html": "<b>Taux de"
   },
   "Transfert terminé.": {
-   "en": "",
+   "en": "<b>Transfer complete.</b>",
    "fr": "Transfert terminé.",
    "html": "<b>Transfert terminé.</b>"
   },
   "Tu es un expert en gouvernance IA et conformite reglementaire de CONSEILPREV (Paris). Tu rediges des livrables professionnels structures, precis et actionnables, en francais. REGLES DE MISE EN FORME STRICTES A RESPECTER IMPERATIVEMENT : (#) Utilise des titres markdown (## pour les sections, ### pour les sous-sections). (#) Pour les listes hors tableau, utilise des puces avec des tirets. (#) TABLEAUX : chaque tableau DOIT commencer par une ligne d en-tete, suivie IMMEDIATEMENT d une ligne de separation au format |---|---|---| (un groupe de tirets par colonne), puis les rangees de donnees, une par ligne. Chaque rangee tient sur UNE SEULE ligne physique. (#) INTERDICTION ABSOLUE dans les cellules de tableau : jamais de balise , jamais de saut de ligne, jamais de liste a puces, jamais de tirets en debut de cellule. Si une cellule doit contenir plusieurs elements, separe-les par des points-virgules sur la meme ligne (exemple : Audit des donnees ; Reequilibrage ; Tests adversariaux). (#) Garde les cellules concises : une phrase courte, sans retour a la ligne. (#) Le nombre de colonnes de chaque rangee doit etre EXACTEMENT identique a celui de l en-tete. (#) N ajoute pas de lignes de tirets decoratives en dehors des tableaux. Sois exhaustif mais clair, en respectant scrupuleusement ces regles de formatage pour garantir un rendu correct.": {
-   "en": "",
+   "en": "You are an expert in AI governance and regulatory compliance at CONSEILPREV (Paris). You write structured, precise and actionable professional deliverables, in French. STRICT FORMATTING RULES THAT MUST BE FOLLOWED WITHOUT EXCEPTION: (#) Use markdown headings (## for sections, ### for sub-sections). (#) For lists outside tables, use hyphen bullets. (#) TABLES: each table MUST start with a header row, followed IMMEDIATELY by a separator row in the format |---|---|---| (one group of hyphens per column), then the data rows, one per line. Each row fits on ONE SINGLE physical line. (#) ABSOLUTELY FORBIDDEN in table cells: never a <br> tag, never a line break, never a bulleted list, never hyphens at the start of a cell. If a cell must contain several items, separate them with semicolons on the same line (example: Data audit ; Rebalancing ; Adversarial testing). (#) Keep cells concise: one short sentence, with no line break. (#) The number of columns in each row must be EXACTLY the same as in the header. (#) Do not add decorative lines of hyphens outside tables. Be exhaustive but clear, following these formatting rules scrupulously to ensure correct rendering.",
    "fr": "Tu es un expert en gouvernance IA et conformite reglementaire de CONSEILPREV (Paris). Tu rediges des livrables professionnels structures, precis et actionnables, en francais. REGLES DE MISE EN FORME STRICTES A RESPECTER IMPERATIVEMENT : (1) Utilise des titres markdown (## pour les sections, ### pour les sous-sections). (2) Pour les listes hors tableau, utilise des puces avec des tirets. (3) TABLEAUX : chaque tableau DOIT commencer par une ligne d en-tete, suivie IMMEDIATEMENT d une ligne de separation au format |---|---|---| (un groupe de tirets par colonne), puis les rangees de donnees, une par ligne. Chaque rangee tient sur UNE SEULE ligne physique. (4) INTERDICTION ABSOLUE dans les cellules de tableau : jamais de balise , jamais de saut de ligne, jamais de liste a puces, jamais de tirets en debut de cellule. Si une cellule doit contenir plusieurs elements, separe-les par des points-virgules sur la meme ligne (exemple : Audit des donnees ; Reequilibrage ; Tests adversariaux). (5) Garde les cellules concises : une phrase courte, sans retour a la ligne. (6) Le nombre de colonnes de chaque rangee doit etre EXACTEMENT identique a celui de l en-tete. (7) N ajoute pas de lignes de tirets decoratives en dehors des tableaux. Sois exhaustif mais clair, en respectant scrupuleusement ces regles de formatage pour garantir un rendu correct.",
    "html": "Tu es un expert en gouvernance IA et conformite reglementaire de CONSEILPREV (Paris). Tu rediges des livrables professionnels structures, precis et actionnables, en francais. REGLES DE MISE EN FORME STRICTES A RESPECTER IMPERATIVEMENT : (1) Utilise des titres markdown (## pour les sections, ### pour les sous-sections). (2) Pour les listes hors tableau, utilise des puces avec des tirets. (3) TABLEAUX : chaque tableau DOIT commencer par une ligne d en-tete, suivie IMMEDIATEMENT d une ligne de separation au format |---|---|---| (un groupe de tirets par colonne), puis les rangees de donnees, une par ligne. Chaque rangee tient sur UNE SEULE ligne physique. (4) INTERDICTION ABSOLUE dans les cellules de tableau : jamais de balise <br>, jamais de saut de ligne, jamais de liste a puces, jamais de tirets en debut de cellule. Si une cellule doit contenir plusieurs elements, separe-les par des points-virgules sur la meme ligne (exemple : Audit des donnees ; Reequilibrage ; Tests adversariaux). (5) Garde les cellules concises : une phrase courte, sans retour a la ligne. (6) Le nombre de colonnes de chaque rangee doit etre EXACTEMENT identique a celui de l en-tete. (7) N ajoute pas de lignes de tirets decoratives en dehors des tableaux. Sois exhaustif mais clair, en respectant scrupuleusement ces regles de formatage pour garantir un rendu correct."
   }
  },
  "texte": {
   "Ajouter une note explicative (contexte, échanges, décisions…)": {
-   "en": "",
+   "en": "Add an explanatory note (context, exchanges, decisions…)",
    "fr": "Ajouter une note explicative (contexte, échanges, décisions…)"
   },
   "Ce que ce rôle doit au titre de l’article #. Ce que la ligne porte au-delà est un engagement, pas une obligation.": {
-   "en": "",
+   "en": "What this role owes under Article #. Anything the row carries beyond that is a commitment, not an obligation.",
    "fr": "Ce que ce rôle doit au titre de l’article 50. Ce que la ligne porte au-delà est un engagement, pas une obligation."
   },
   "Ce qui fonde la décision. Une décision non motivée n’est pas traçable, et le serveur la refuse.": {
-   "en": "",
+   "en": "What grounds the decision. A decision without stated reasons is not traceable, and the server rejects it.",
    "fr": "Ce qui fonde la décision. Une décision non motivée n’est pas traçable, et le serveur la refuse."
   },
   "Cet article ne se reprend pas d’un autre système de management": {
-   "en": "",
+   "en": "This clause does not carry over from another management system",
    "fr": "Cet article ne se reprend pas d’un autre système de management"
   },
   "Cet article ne se reprend pas d’un système de management existant": {
-   "en": "",
+   "en": "This clause does not carry over from an existing management system",
    "fr": "Cet article ne se reprend pas d’un système de management existant"
   },
   "Cette mesure n’existait pas dans ISO/IEC #:#": {
-   "en": "",
+   "en": "This control did not exist in ISO/IEC #:#",
    "fr": "Cette mesure n’existait pas dans ISO/IEC 27001:2013"
   },
   "Emet, genere le PDF juridique et notifie, en un clic": {
-   "en": "",
+   "en": "Issues, generates the legal PDF and notifies, in one click",
    "fr": "Emet, genere le PDF juridique et notifie, en un clic"
   },
   "Enregistrer ce systeme dans le registre.": {
-   "en": "",
+   "en": "Record this system in the register.",
    "fr": "Enregistrer ce systeme dans le registre."
   },
   "Envoyer la synthese du budget par email a un collegue.": {
-   "en": "",
+   "en": "Send the budget summary by email to a colleague.",
    "fr": "Envoyer la synthese du budget par email a un collegue."
   },
   "Envoyer le tableau des KPIs par email a un collegue.": {
-   "en": "",
+   "en": "Send the KPI table by email to a colleague.",
    "fr": "Envoyer le tableau des KPIs par email a un collegue."
   },
   "Exporter le portefeuille en PDF imprimable": {
-   "en": "",
+   "en": "Export the portfolio as a printable PDF",
    "fr": "Exporter le portefeuille en PDF imprimable"
   },
   "Fermer cette fenêtre": {
-   "en": "",
+   "en": "Close this window",
    "fr": "Fermer cette fenêtre"
   },
   "Genere le contrat RaaS PDF recapitulant l echeancier de ce client": {
-   "en": "",
+   "en": "Generates the RaaS contract PDF summarising this client’s payment schedule",
    "fr": "Genere le contrat RaaS PDF recapitulant l echeancier de ce client"
   },
   "Importer un fichier de donnees client (CSV, TXT, JSON - #KB max).": {
-   "en": "",
+   "en": "Import a client data file (CSV, TXT, JSON - #kB max).",
    "fr": "Importer un fichier de donnees client (CSV, TXT, JSON - 200KB max)."
   },
   "La date à laquelle les critères d’acceptation ont été ARRÊTÉS": {
-   "en": "",
+   "en": "The date on which the acceptance criteria were SET",
    "fr": "La date à laquelle les critères d’acceptation ont été ARRÊTÉS"
   },
   "La date à laquelle les risques ont été cotés": {
-   "en": "",
+   "en": "The date on which the risks were rated",
    "fr": "La date à laquelle les risques ont été cotés"
   },
   "Lancer la generation du guide methodologique par IA.": {
-   "en": "",
+   "en": "Run the AI generation of the methodology guide.",
    "fr": "Lancer la generation du guide methodologique par IA."
   },
   "Le parcours reprend ici": {
-   "en": "",
+   "en": "The path resumes here",
    "fr": "Le parcours reprend ici"
   },
   "L’article # f) exige une justification de l’inclusion COMME de l’exclusion": {
-   "en": "",
+   "en": "Clause # f) requires a justification for inclusion AS WELL AS for exclusion",
    "fr": "L’article 6.1.3 f) exige une justification de l’inclusion COMME de l’exclusion"
   },
   "Objectif et usage du système": {
-   "en": "",
+   "en": "Purpose and use of the system",
    "fr": "Objectif et usage du système"
   },
   "Objet de la relance": {
-   "en": "",
+   "en": "Subject of the reminder",
    "fr": "Objet de la relance"
   },
   "Obligation : « sont tenus de »": {
-   "en": "",
+   "en": "Obligation: “are required to”",
    "fr": "Obligation : « sont tenus de »"
   },
   "Ou collez directement ici vos données / notes / description de systèmes IA à analyser…": {
-   "en": "",
+   "en": "Or paste your data / notes / description of the AI systems to analyse directly here…",
    "fr": "Ou collez directement ici vos données / notes / description de systèmes IA à analyser…"
   },
   "Radar de maturité — détail par pilier dans la liste ci-dessous": {
-   "en": "",
+   "en": "Maturity radar — detail per pillar in the list below",
    "fr": "Radar de maturité — détail par pilier dans la liste ci-dessous"
   },
   "Regenerer ce guide methodologique avec le moteur IA selectionne.": {
-   "en": "",
+   "en": "Regenerate this methodology guide with the selected AI engine.",
    "fr": "Regenerer ce guide methodologique avec le moteur IA selectionne."
   },
   "Regenerer ce livrable avec le moteur IA selectionne.": {
-   "en": "",
+   "en": "Regenerate this deliverable with the selected AI engine.",
    "fr": "Regenerer ce livrable avec le moteur IA selectionne."
   },
   "Reprendre le dossier d un systeme deja documente de cette famille": {
-   "en": "",
+   "en": "Reuse the file of an already documented system in this family",
    "fr": "Reprendre le dossier d un systeme deja documente de cette famille"
   },
   "Référence à l'article ou point de l'Annexe III": {
-   "en": "",
+   "en": "Reference to the Article or point of Annex III",
    "fr": "Référence à l'article ou point de l'Annexe III"
   },
   "Rôle inconnu du cadre : aucun paragraphe ne peut lui être rattaché.": {
-   "en": "",
+   "en": "Role unknown to the framework: no paragraph can be attached to it.",
    "fr": "Rôle inconnu du cadre : aucun paragraphe ne peut lui être rattaché."
   },
   "Se greffe sur un système de management déjà en place (ISO #, #…)": {
-   "en": "",
+   "en": "Grafts onto a management system already in place (ISO #, #…)",
    "fr": "Se greffe sur un système de management déjà en place (ISO 27001, 9001…)"
   },
   "Tant que ce n’est pas coché, le niveau résiduel reste une prévision et le module retient le niveau initial": {
-   "en": "",
+   "en": "Until this is ticked, the residual level remains a forecast and the module keeps the initial level",
    "fr": "Tant que ce n’est pas coché, le niveau résiduel reste une prévision et le module retient le niveau initial"
   },
   "Telecharger ce guide methodologique au format PDF.": {
-   "en": "",
+   "en": "Download this methodology guide as a PDF.",
    "fr": "Telecharger ce guide methodologique au format PDF."
   },
   "Telecharger ce guide methodologique au format Word.": {
-   "en": "",
+   "en": "Download this methodology guide as a Word file.",
    "fr": "Telecharger ce guide methodologique au format Word."
   },
   "Telecharger ce livrable au format PDF.": {
-   "en": "",
+   "en": "Download this deliverable as a PDF.",
    "fr": "Telecharger ce livrable au format PDF."
   },
   "Telecharger ce livrable au format Word.": {
-   "en": "",
+   "en": "Download this deliverable as a Word file.",
    "fr": "Telecharger ce livrable au format Word."
   },
   "Telecharger le budget previsionnel detaille au format PDF.": {
-   "en": "",
+   "en": "Download the detailed budget forecast as a PDF.",
    "fr": "Telecharger le budget previsionnel detaille au format PDF."
   },
   "Telecharger le budget previsionnel detaille au format Word.": {
-   "en": "",
+   "en": "Download the detailed budget forecast as a Word file.",
    "fr": "Telecharger le budget previsionnel detaille au format Word."
   },
   "Telecharger le document de cartographie genere par IA au format PDF.": {
-   "en": "",
+   "en": "Download the AI-generated mapping document as a PDF.",
    "fr": "Telecharger le document de cartographie genere par IA au format PDF."
   },
   "Telecharger le document de cartographie genere par IA au format Word.": {
-   "en": "",
+   "en": "Download the AI-generated mapping document as a Word file.",
    "fr": "Telecharger le document de cartographie genere par IA au format Word."
   },
   "Telecharger le tableau des KPIs au format PDF.": {
-   "en": "",
+   "en": "Download the KPI table as a PDF.",
    "fr": "Telecharger le tableau des KPIs au format PDF."
   },
   "Telecharger le tableau des KPIs au format Word.": {
-   "en": "",
+   "en": "Download the KPI table as a Word file.",
    "fr": "Telecharger le tableau des KPIs au format Word."
   },
   "Types de données traitées": {
-   "en": "",
+   "en": "Types of data processed",
    "fr": "Types de données traitées"
   },
   "Une demande sans finalité écrite n’est pas instruite.": {
-   "en": "",
+   "en": "A request without a written purpose is not examined.",
    "fr": "Une demande sans finalité écrite n’est pas instruite."
   },
   "ex. Direction des ressources humaines": {
-   "en": "",
+   "en": "e.g. Human resources department",
    "fr": "ex. Direction des ressources humaines"
   },
   "ex. Tri automatique des candidatures": {
-   "en": "",
+   "en": "e.g. Automatic screening of applications",
    "fr": "ex. Tri automatique des candidatures"
   },
   "ex. supervision humaine sur # % des décisions défavorables pendant # mois": {
-   "en": "",
+   "en": "e.g. human oversight of # % of adverse decisions for # months",
    "fr": "ex. supervision humaine sur 100 % des décisions défavorables pendant 6 mois"
   }
  }

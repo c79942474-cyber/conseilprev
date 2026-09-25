@@ -8,979 +8,979 @@
  "bloc": {},
  "texte": {
   "Reponds UNIQUEMENT en JSON valide avec exactement ces champs :": {
-   "en": "",
+   "en": "Reply ONLY in valid JSON with exactly these fields:",
    "fr": "Reponds UNIQUEMENT en JSON valide avec exactement ces champs :"
   },
   "Reponse automatisee aux demandes clients de premier niveau.": {
-   "en": "",
+   "en": "Automated response to first-level client requests.",
    "fr": "Reponse automatisee aux demandes clients de premier niveau."
   },
   "Reponse automatisee aux incidents de securite (SOAR augmente)": {
-   "en": "",
+   "en": "Automated response to security incidents (augmented SOAR)",
    "fr": "Reponse automatisee aux incidents de securite (SOAR augmente)"
   },
   "Reponses automatisees aux questions courantes des collaborateurs.": {
-   "en": "",
+   "en": "Automated answers to employees’ common questions.",
    "fr": "Reponses automatisees aux questions courantes des collaborateurs."
   },
   "Reportez les risques identifiés sur les axes gravité × probabilité.": {
-   "en": "",
+   "en": "Plot the identified risks on the severity × likelihood axes.",
    "fr": "Reportez les risques identifiés sur les axes gravité × probabilité."
   },
   "Reprendre la base de conseilprevcyber": {
-   "en": "",
+   "en": "Restore the conseilprevcyber database",
    "fr": "Reprendre la base de conseilprevcyber"
   },
   "Reprendre la référence exacte de la décision au registre de l'autorité néerlandaise avant de la citer dans un document opposable.": {
-   "en": "",
+   "en": "Take the exact reference of the decision from the Dutch authority’s register before citing it in an enforceable document.",
    "fr": "Reprendre la référence exacte de la décision au registre de l'autorité néerlandaise avant de la citer dans un document opposable."
   },
   "Reprendre le dossier d’un système de cette famille": {
-   "en": "",
+   "en": "Resume the file of a system in this family",
    "fr": "Reprendre le dossier d’un système de cette famille"
   },
   "Reprenez le même module par le chemin « Eau & biodiversité » : indice WEI+ de l’Agence européenne, part de l’irrigation agricole, mode de refroidissement retenu.": {
-   "en": "",
+   "en": "Take the same module again via the “Water & biodiversity” path: the European Environment Agency’s WEI+ index, the share of agricultural irrigation, the cooling method chosen.",
    "fr": "Reprenez le même module par le chemin « Eau & biodiversité » : indice WEI+ de l’Agence européenne, part de l’irrigation agricole, mode de refroidissement retenu."
   },
   "Reprenez les mesures citées en face des risques, et vérifiez leur statut chez vous.": {
-   "en": "",
+   "en": "Go back over the measures cited against the risks, and check their status in your organisation.",
    "fr": "Reprenez les mesures citées en face des risques, et vérifiez leur statut chez vous."
   },
   "Reprenez vos contrats de services TIC, un par un, en déclarant d’abord la criticité de la fonction soutenue.": {
-   "en": "",
+   "en": "Go back over your ICT service contracts, one by one, first declaring the criticality of the function supported.",
    "fr": "Reprenez vos contrats de services TIC, un par un, en déclarant d’abord la criticité de la fonction soutenue."
   },
   "Repris de votre audit IA Act — c'est la seule source, pour que les deux ne puissent plus se contredire. Modifiez-y un point et cet écran suit.": {
-   "en": "",
+   "en": "Taken from your AI Act audit — it is the only source, so that the two can no longer contradict each other. Change a checkpoint there and this screen follows.",
    "fr": "Repris de votre audit IA Act — c'est la seule source, pour que les deux ne puissent plus se contredire. Modifiez-y un point et cet écran suit."
   },
   "Représentant légal": {
-   "en": "",
+   "en": "Legal representative",
    "fr": "Représentant légal"
   },
   "Repérez d’abord OÙ s’arrête votre responsabilité : un déployeur et un fournisseur ne doivent pas les mêmes maillons, et lire ceux des autres fait perdre du temps.": {
-   "en": "",
+   "en": "First identify WHERE your responsibility stops: a deployer and a provider do not owe the same links, and reading other people’s wastes time.",
    "fr": "Repérez d’abord OÙ s’arrête votre responsabilité : un déployeur et un fournisseur ne doivent pas les mêmes maillons, et lire ceux des autres fait perdre du temps."
   },
   "Requise avant déploiement de systèmes à haut risque.": {
-   "en": "",
+   "en": "Required before deploying high-risk systems.",
    "fr": "Requise avant déploiement de systèmes à haut risque."
   },
   "Resilience aux erreurs et aux pannes evaluee (MTTF/MTTR)": {
-   "en": "",
+   "en": "Resilience to errors and failures assessed (MTTF/MTTR)",
    "fr": "Resilience aux erreurs et aux pannes evaluee (MTTF/MTTR)"
   },
   "Resilience operationnelle numerique du secteur financier.": {
-   "en": "",
+   "en": "Digital operational resilience of the financial sector.",
    "fr": "Resilience operationnelle numerique du secteur financier."
   },
   "Respect de la vie privée": {
-   "en": "",
+   "en": "Respect for privacy",
    "fr": "Respect de la vie privée"
   },
   "Respect des délais +# pts ; coûts logistiques −# %.": {
-   "en": "",
+   "en": "On-time delivery +# pts; logistics costs −# %.",
    "fr": "Respect des délais +10 pts ; coûts logistiques −10 %."
   },
   "Responsabilités le long de la chaîne de valeur": {
-   "en": "",
+   "en": "Responsibilities along the value chain",
    "fr": "Responsabilités le long de la chaîne de valeur"
   },
   "Responsable IA, Direction, Comité de Gouvernance": {
-   "en": "",
+   "en": "AI officer, senior management, governance committee",
    "fr": "Responsable IA, Direction, Comité de Gouvernance"
   },
   "Responsable de traitement": {
-   "en": "",
+   "en": "Controller",
    "fr": "Responsable de traitement"
   },
   "Responsable de traitement — registre": {
-   "en": "",
+   "en": "Controller — records",
    "fr": "Responsable de traitement — registre"
   },
   "Responsable d’exploitation de site": {
-   "en": "",
+   "en": "Site operations manager",
    "fr": "Responsable d’exploitation de site"
   },
   "Responsable interne du système — interlocuteur pour les autorités.": {
-   "en": "",
+   "en": "Internal owner of the system — contact person for the authorities.",
    "fr": "Responsable interne du système — interlocuteur pour les autorités."
   },
   "Responsables de processus, équipes métier, chefs de projet": {
-   "en": "",
+   "en": "Process owners, business teams, project managers",
    "fr": "Responsables de processus, équipes métier, chefs de projet"
   },
   "Ressources humaines, formation & développement des compétences": {
-   "en": "",
+   "en": "Human resources, training & skills development",
    "fr": "Ressources humaines, formation & développement des compétences"
   },
   "Rester ici": {
-   "en": "",
+   "en": "Stay here",
    "fr": "Rester ici"
   },
   "Restituer à la direction": {
-   "en": "",
+   "en": "Report back to senior management",
    "fr": "Restituer à la direction"
   },
   "Resume factuel des donnees d’entrainement publie (Art. #(#)(b))": {
-   "en": "",
+   "en": "Factual summary of the training data published (Art. #(#)(b))",
    "fr": "Resume factuel des donnees d’entrainement publie (Art. 53(1)(b))"
   },
   "Retenir les ordres de grandeur, et leur nature": {
-   "en": "",
+   "en": "Remember the orders of magnitude, and their nature",
    "fr": "Retenir les ordres de grandeur, et leur nature"
   },
   "Retenues sans statut": {
-   "en": "",
+   "en": "Included without a status",
    "fr": "Retenues sans statut"
   },
   "Retirer ce traitement du registre ?": {
-   "en": "",
+   "en": "Remove this processing activity from the records?",
    "fr": "Retirer ce traitement du registre ?"
   },
   "Retirer cet usage du registre ?": {
-   "en": "",
+   "en": "Remove this use from the register?",
    "fr": "Retirer cet usage du registre ?"
   },
   "Retirer cette AIPD ?": {
-   "en": "",
+   "en": "Remove this DPIA?",
    "fr": "Retirer cette AIPD ?"
   },
   "Retirer cette demande de la file ? La trace de la décision disparaît avec elle.": {
-   "en": "",
+   "en": "Remove this request from the queue? The record of the decision disappears with it.",
    "fr": "Retirer cette demande de la file ? La trace de la décision disparaît avec elle."
   },
   "Retirer et envoyer": {
-   "en": "",
+   "en": "Remove and send",
    "fr": "Retirer et envoyer"
   },
   "Retour net année #": {
-   "en": "",
+   "en": "Net return, year #",
    "fr": "Retour net année 1"
   },
   "Retour net année # = gain annuel − coût projet − coût récurrent.": {
-   "en": "",
+   "en": "Net return, year # = annual gain − project cost − recurring cost.",
    "fr": "Retour net année 1 = gain annuel − coût projet − coût récurrent."
   },
   "Retour sur investissement année # = retour net ÷ (coût projet + coût récurrent).": {
-   "en": "",
+   "en": "Return on investment, year # = net return ÷ (project cost + recurring cost).",
    "fr": "Retour sur investissement année 1 = retour net ÷ (coût projet + coût récurrent)."
   },
   "Retrouvés mot pour mot dans votre déclaration :": {
-   "en": "",
+   "en": "Found word for word in your declaration:",
    "fr": "Retrouvés mot pour mot dans votre déclaration :"
   },
   "Revenez-y à tout moment pour suivre votre progression.": {
-   "en": "",
+   "en": "Come back at any time to track your progress.",
    "fr": "Revenez-y à tout moment pour suivre votre progression."
   },
   "Revenir à cette page →": {
-   "en": "",
+   "en": "Return to this page →",
    "fr": "Revenir à cette page →"
   },
   "Revision annuelle des evaluations de risque systemique obligatoire": {
-   "en": "",
+   "en": "Mandatory annual review of systemic risk assessments",
    "fr": "Revision annuelle des evaluations de risque systemique obligatoire"
   },
   "Revision continue tout au long du cycle de vie (Art. #(#))": {
-   "en": "",
+   "en": "Continuous review throughout the lifecycle (Art. #(#))",
    "fr": "Revision continue tout au long du cycle de vie (Art. 9(9))"
   },
   "Revue de contrat": {
-   "en": "",
+   "en": "Contract review",
    "fr": "Revue de contrat"
   },
   "Revue de contrat —": {
-   "en": "",
+   "en": "Contract review —",
    "fr": "Revue de contrat —"
   },
   "Revue en cours — la grille complète demande généralement # à # secondes.": {
-   "en": "",
+   "en": "Review in progress — the full grid generally takes # to # seconds.",
    "fr": "Revue en cours — la grille complète demande généralement 30 à 90 secondes."
   },
   "Revue interrompue (délai dépassé ou service indisponible). Réessayez.": {
-   "en": "",
+   "en": "Review interrupted (timed out or service unavailable). Try again.",
    "fr": "Revue interrompue (délai dépassé ou service indisponible). Réessayez."
   },
   "Revue superficielle, sans examen du dossier": {
-   "en": "",
+   "en": "Superficial review, without examining the file",
    "fr": "Revue superficielle, sans examen du dossier"
   },
   "Revues annuelles outillées ; critères homogènes entre équipes.": {
-   "en": "",
+   "en": "Tool-supported annual reviews; consistent criteria across teams.",
    "fr": "Revues annuelles outillées ; critères homogènes entre équipes."
   },
   "Reçue le": {
-   "en": "",
+   "en": "Received on",
    "fr": "Reçue le"
   },
   "Rien de ce qui suit n’a été observé : ce sont les choix que l’organisation se propose de faire.": {
-   "en": "",
+   "en": "None of what follows has been observed: these are the choices the organisation proposes to make.",
    "fr": "Rien de ce qui suit n’a été observé : ce sont les choix que l’organisation se propose de faire."
   },
   "Rien ici n’est opposable. C’est une aide à la décision d’implantation et de sourcing, à ne jamais citer comme fondement d’une obligation.": {
-   "en": "",
+   "en": "Nothing here is enforceable. It is a decision aid for siting and sourcing, never to be cited as the basis of an obligation.",
    "fr": "Rien ici n’est opposable. C’est une aide à la décision d’implantation et de sourcing, à ne jamais citer comme fondement d’une obligation."
   },
   "Rien n’a été envoyé : le contrôle a lieu avant le transfert, pour ne pas": {
-   "en": "",
+   "en": "Nothing has been sent: the check takes place before the transfer, so as not to",
    "fr": "Rien n’a été envoyé : le contrôle a lieu avant le transfert, pour ne pas"
   },
   "Rien n’est déclaré. Ce module ne": {
-   "en": "",
+   "en": "Nothing is declared. This module does not",
    "fr": "Rien n’est déclaré. Ce module ne"
   },
   "Rien n’est mesuré : Sentinel ne tourne pas dans vos applications. L’indicateur « ressources » (épuisement abiotique) n’est pas servi, et la page le déclare avec ce qu’il faudrait pour l’établir. L’eau est un ordre de grandeur à ±# %. Le coefficient d’énergie primaire porte trois réserves, lisibles au bloc des facteurs.": {
-   "en": "",
+   "en": "Nothing is measured: Sentinel does not run in your applications. The “resources” indicator (abiotic depletion) is not served, and the page declares it along with what would be needed to establish it. Water is an order of magnitude to ±# %. The primary energy coefficient carries three caveats, readable in the factors block.",
    "fr": "Rien n’est mesuré : Sentinel ne tourne pas dans vos applications. L’indicateur « ressources » (épuisement abiotique) n’est pas servi, et la page le déclare avec ce qu’il faudrait pour l’établir. L’eau est un ordre de grandeur à ±40 %. Le coefficient d’énergie primaire porte trois réserves, lisibles au bloc des facteurs."
   },
   "Rien n’est renseigné. Le cadre ne": {
-   "en": "",
+   "en": "Nothing is filled in. The framework does not",
    "fr": "Rien n’est renseigné. Le cadre ne"
   },
   "Risk manager — je monte l’analyse de risque": {
-   "en": "",
+   "en": "Risk manager — I set up the risk analysis",
    "fr": "Risk manager — je monte l’analyse de risque"
   },
   "Risque indirect. Clore le sujet contractuellement plutôt que via le Simulateur.": {
-   "en": "",
+   "en": "Indirect risk. Close the matter contractually rather than via the simulator.",
    "fr": "Risque indirect. Clore le sujet contractuellement plutôt que via le Simulateur."
   },
   "Risque limité (Art. #) et risque minimal": {
-   "en": "",
+   "en": "Limited risk (Art. #) and minimal risk",
    "fr": "Risque limité (Art. 50) et risque minimal"
   },
   "Risque limité à minimal en général. Vérifier si le module SaaS traite des décisions sur des personnes.": {
-   "en": "",
+   "en": "Generally limited to minimal risk. Check whether the SaaS module handles decisions about people.",
    "fr": "Risque limité à minimal en général. Vérifier si le module SaaS traite des décisions sur des personnes."
   },
   "Risque limité à minimal selon l'usage. Vérifier les pratiques Art. # avant tout.": {
-   "en": "",
+   "en": "Limited to minimal risk depending on the use. Check the Art. # practices first.",
    "fr": "Risque limité à minimal selon l'usage. Vérifier les pratiques Art. 5 avant tout."
   },
   "Risque limité. Obligation principale : transparence Art. #§#.": {
-   "en": "",
+   "en": "Limited risk. Main obligation: transparency, Art. #(#).",
    "fr": "Risque limité. Obligation principale : transparence Art. 50§1."
   },
   "Risque majeur de biais dans le scoring (origine, genre, code postal). Surveillance ACPR. Documentation des variables et de leur justification.": {
-   "en": "",
+   "en": "Major risk of bias in scoring (origin, gender, postcode). ACPR supervision. Documentation of the variables and their justification.",
    "fr": "Risque majeur de biais dans le scoring (origine, genre, code postal). Surveillance ACPR. Documentation des variables et de leur justification."
   },
   "Risque majeur de discrimination dans l'accès aux droits. Documentation exhaustive des critères. Contrôle CNIL et Défenseur des droits.": {
-   "en": "",
+   "en": "Major risk of discrimination in access to rights. Exhaustive documentation of the criteria. Oversight by the CNIL and the Défenseur des droits.",
    "fr": "Risque majeur de discrimination dans l'accès aux droits. Documentation exhaustive des critères. Contrôle CNIL et Défenseur des droits."
   },
   "Risque maîtrisé : maîtrise des risques réglementaire, éthique et sécurité. # = risque élevé, # = bien maîtrisé.": {
-   "en": "",
+   "en": "Controlled risk: control of regulatory, ethical and security risks. # = high risk, # = well controlled.",
    "fr": "Risque maîtrisé : maîtrise des risques réglementaire, éthique et sécurité. 1 = risque élevé, 5 = bien maîtrisé."
   },
   "Risque minimal à limité. Obligation principale : marquage Art. #§#.": {
-   "en": "",
+   "en": "Minimal to limited risk. Main obligation: marking, Art. #(#).",
    "fr": "Risque minimal à limité. Obligation principale : marquage Art. 50§2."
   },
   "Risque résiduel": {
-   "en": "",
+   "en": "Residual risk",
    "fr": "Risque résiduel"
   },
   "Risque variable selon le contexte. Usage médical ou juridique → réévaluer la classification.": {
-   "en": "",
+   "en": "Risk varies with the context. Medical or legal use → reassess the classification.",
    "fr": "Risque variable selon le contexte. Usage médical ou juridique → réévaluer la classification."
   },
   "Risque élevé": {
-   "en": "",
+   "en": "High risk",
    "fr": "Risque élevé"
   },
   "Risques cotés": {
-   "en": "",
+   "en": "Rated risks",
    "fr": "Risques cotés"
   },
   "Risques residuels pour les droits fondamentaux identifies (Art. #(#)(e))": {
-   "en": "",
+   "en": "Residual risks to fundamental rights identified (Art. #(#)(e))",
    "fr": "Risques residuels pour les droits fondamentaux identifies (Art. 13(3)(e))"
   },
   "Risques systémiques (TGPL/TGMRL)": {
-   "en": "",
+   "en": "Systemic risks (TGPL/TGMRL)",
    "fr": "Risques systémiques (TGPL/TGMRL)"
   },
   "Roadmap conformité": {
-   "en": "",
+   "en": "Compliance roadmap",
    "fr": "Roadmap conformité"
   },
   "Robotique collaborative et systèmes de vision : prévention des accidents. Supervision humaine et arrêt d'urgence (Art. #).": {
-   "en": "",
+   "en": "Collaborative robotics and vision systems: accident prevention. Human oversight and emergency stop (Art. #).",
    "fr": "Robotique collaborative et systèmes de vision : prévention des accidents. Supervision humaine et arrêt d'urgence (Art. 14)."
   },
   "Robustesse face aux donnees adversariales testee (Art. #(#))": {
-   "en": "",
+   "en": "Robustness against adversarial data tested (Art. #(#))",
    "fr": "Robustesse face aux donnees adversariales testee (Art. 15(4))"
   },
   "Robustesse opérationnelle": {
-   "en": "",
+   "en": "Operational robustness",
    "fr": "Robustesse opérationnelle"
   },
   "Robustesse, exactitude et résilience": {
-   "en": "",
+   "en": "Robustness, accuracy and resilience",
    "fr": "Robustesse, exactitude et résilience"
   },
   "Routage intelligent des demandes": {
-   "en": "",
+   "en": "Smart routing of requests",
    "fr": "Routage intelligent des demandes"
   },
   "Rouvrez le registre : les mesures neuves ne se retiennent que si un risque les appelle.": {
-   "en": "",
+   "en": "Reopen the register: new controls are only included if a risk calls for them.",
    "fr": "Rouvrez le registre : les mesures neuves ne se retiennent que si un risque les appelle."
   },
   "Rouvrir cette page. Ce que vous y aviez fait n’est pas effacé.": {
-   "en": "",
+   "en": "Reopen this page. What you had done there has not been erased.",
    "fr": "Rouvrir cette page. Ce que vous y aviez fait n’est pas effacé."
   },
   "Rouvrir dans": {
-   "en": "",
+   "en": "Reopen in",
    "fr": "Rouvrir dans"
   },
   "Règlement #/# (machines)": {
-   "en": "",
+   "en": "Regulation #/# (machinery)",
    "fr": "Règlement 2023/1230 (machines)"
   },
   "Règlement #/# (produits de construction)": {
-   "en": "",
+   "en": "Regulation #/# (construction products)",
    "fr": "Règlement 305/2011 (produits de construction)"
   },
   "Règlement (UE) #/#": {
-   "en": "",
+   "en": "Regulation (EU) #/#",
    "fr": "Règlement (UE) 2018/1725"
   },
   "Règlement (UE) #/# · Généré le": {
-   "en": "",
+   "en": "Regulation (EU) #/# · Generated on",
    "fr": "Règlement (UE) 2024/1689 · Généré le"
   },
   "Règlement (UE) #/# — art. #, annexes I et III, art. #": {
-   "en": "",
+   "en": "Regulation (EU) #/# — art. #, Annexes I and III, art. #",
    "fr": "Règlement (UE) 2024/1689 — art. 5, annexes I et III, art. 50"
   },
   "Règlement (UE) #/# — classes de risque": {
-   "en": "",
+   "en": "Regulation (EU) #/# — risk classes",
    "fr": "Règlement (UE) 2024/1689 — classes de risque"
   },
   "Règlement (UE) #/# — points de contrôle, chacun avec sa référence d’article": {
-   "en": "",
+   "en": "Regulation (EU) #/# — checkpoints, each with its article reference",
    "fr": "Règlement (UE) 2024/1689 — points de contrôle, chacun avec sa référence d’article"
   },
   "Règlement DORA applicable depuis janvier #. Tests de résilience, gestion des risques liés aux prestataires TIC tiers, signalement d'incidents.": {
-   "en": "",
+   "en": "DORA Regulation applicable since January #. Resilience testing, management of risks related to ICT third-party service providers, incident reporting.",
    "fr": "Règlement DORA applicable depuis janvier 2025. Tests de résilience, gestion des risques liés aux prestataires TIC tiers, signalement d'incidents."
   },
   "Règlement P#B #/#": {
-   "en": "",
+   "en": "P#B Regulation #/#",
    "fr": "Règlement P2B 2019/1150"
   },
   "Règlement dispositifs médicaux": {
-   "en": "",
+   "en": "Medical Devices Regulation",
    "fr": "Règlement dispositifs médicaux"
   },
   "Règlement véhicules": {
-   "en": "",
+   "en": "Vehicles Regulation",
    "fr": "Règlement véhicules"
   },
   "Réaliser des évaluations adversariales (red-teaming) avant déploiement": {
-   "en": "",
+   "en": "Carry out adversarial evaluations (red-teaming) before deployment",
    "fr": "Réaliser des évaluations adversariales (red-teaming) avant déploiement"
   },
   "Réaliser la FRIA avant tout déploiement d'un système haut risque concerné": {
-   "en": "",
+   "en": "Carry out the FRIA before any deployment of a relevant high-risk system",
    "fr": "Réaliser la FRIA avant tout déploiement d'un système haut risque concerné"
   },
   "Réaliser le test de seuil, conduire l'analyse et formaliser un document opposable.": {
-   "en": "",
+   "en": "Carry out the threshold test, conduct the analysis and formalise an enforceable document.",
    "fr": "Réaliser le test de seuil, conduire l'analyse et formaliser un document opposable."
   },
   "Réaliser une AIPD pour tout système IA à risque élevé pour les droits des personnes": {
-   "en": "",
+   "en": "Carry out a DPIA for any AI system posing a high risk to the rights of individuals",
    "fr": "Réaliser une AIPD pour tout système IA à risque élevé pour les droits des personnes"
   },
   "Réaliser une FRIA si impact significatif sur les droits fondamentaux": {
-   "en": "",
+   "en": "Carry out a FRIA if there is a significant impact on fundamental rights",
    "fr": "Réaliser une FRIA si impact significatif sur les droits fondamentaux"
   },
   "Réaliser une appréciation des risques liés à l IA (clause #)": {
-   "en": "",
+   "en": "Carry out an AI risk assessment (clause #)",
    "fr": "Réaliser une appréciation des risques liés à l IA (clause 6.1)"
   },
   "Réaliser une mise en balance des intérêts si la base légale retenue est l'intérêt légitime": {
-   "en": "",
+   "en": "Carry out a balancing of interests if the legal basis chosen is legitimate interest",
    "fr": "Réaliser une mise en balance des intérêts si la base légale retenue est l'intérêt légitime"
   },
   "Réaliser une évaluation annuelle des risques systémiques": {
-   "en": "",
+   "en": "Carry out an annual assessment of systemic risks",
    "fr": "Réaliser une évaluation annuelle des risques systémiques"
   },
   "Réaliser une évaluation des risques pour chaque système IA": {
-   "en": "",
+   "en": "Carry out a risk assessment for each AI system",
    "fr": "Réaliser une évaluation des risques pour chaque système IA"
   },
   "Récapitulatif final": {
-   "en": "",
+   "en": "Final summary",
    "fr": "Récapitulatif final"
   },
   "Réclamations, enquêtes, verbatims.": {
-   "en": "",
+   "en": "Complaints, surveys, verbatims.",
    "fr": "Réclamations, enquêtes, verbatims."
   },
   "Rédaction et harmonisation des offres d’emploi": {
-   "en": "",
+   "en": "Drafting and harmonisation of job advertisements",
    "fr": "Rédaction et harmonisation des offres d’emploi"
   },
   "Rédaction et synthèse assistées": {
-   "en": "",
+   "en": "Assisted drafting and summarisation",
    "fr": "Rédaction et synthèse assistées"
   },
   "Rédaction structurée selon les articles AI Act applicables.": {
-   "en": "",
+   "en": "Structured drafting according to the applicable AI Act articles.",
    "fr": "Rédaction structurée selon les articles AI Act applicables."
   },
   "Rédige un document professionnel de conformité AI Act intitulé : \"": {
-   "en": "",
+   "en": "Draft a professional AI Act compliance document entitled: \"",
    "fr": "Rédige un document professionnel de conformité AI Act intitulé : \""
   },
   "Rédiger la notice d'utilisation conforme Art. #(#)": {
-   "en": "",
+   "en": "Draft the instructions for use in accordance with Art. #(#)",
    "fr": "Rédiger la notice d'utilisation conforme Art. 13(3)"
   },
   "Rédigez le volet environnemental en portant la couverture à côté de chaque total.": {
-   "en": "",
+   "en": "Draft the environmental section, stating the coverage next to each total.",
    "fr": "Rédigez le volet environnemental en portant la couverture à côté de chaque total."
   },
   "Réduction PME/TPE": {
-   "en": "",
+   "en": "SME/micro-enterprise reduction",
    "fr": "Réduction PME/TPE"
   },
   "Référence AI Act": {
-   "en": "",
+   "en": "AI Act reference",
    "fr": "Référence AI Act"
   },
   "Référence structurée des # articles du Règlement (UE) #/#. Elle sert à vérifier un texte exact quand une obligation est contestée, en réunion ou face à un prestataire.": {
-   "en": "",
+   "en": "Structured reference of the # articles of Regulation (EU) #/#. It is used to check an exact text when an obligation is disputed, in a meeting or with a service provider.",
    "fr": "Référence structurée des 113 articles du Règlement (UE) 2024/1689. Elle sert à vérifier un texte exact quand une obligation est contestée, en réunion ou face à un prestataire."
   },
   "Références réglementaires couvertes": {
-   "en": "",
+   "en": "Regulatory references covered",
    "fr": "Références réglementaires couvertes"
   },
   "Référentiel CNIL": {
-   "en": "",
+   "en": "CNIL framework",
    "fr": "Référentiel CNIL"
   },
   "Référentiel de gouvernance CONSEILPREV, version #-#-a — RACI, décisions réservées, circuit de validation": {
-   "en": "",
+   "en": "CONSEILPREV governance framework, version #-#-a — RACI, reserved decisions, approval workflow",
    "fr": "Référentiel de gouvernance CONSEILPREV, version 2026-07-a — RACI, décisions réservées, circuit de validation"
   },
   "Référentiel de la documentation de conformité — le principe d’accountability de l’article # : il ne suffit pas d’être conforme, il faut pouvoir le démontrer. Suivi de l’état, du responsable et de la dernière revue de chaque document.": {
-   "en": "",
+   "en": "Compliance documentation framework — the accountability principle of Article #: being compliant is not enough, you must be able to demonstrate it. Tracks the status, the owner and the last review of each document.",
    "fr": "Référentiel de la documentation de conformité — le principe d’accountability de l’article 5.2 : il ne suffit pas d’être conforme, il faut pouvoir le démontrer. Suivi de l’état, du responsable et de la dernière revue de chaque document."
   },
   "Référentiel de la documentation de conformité, accountability art. #.": {
-   "en": "",
+   "en": "Compliance documentation framework, accountability art. #.",
    "fr": "Référentiel de la documentation de conformité, accountability art. 5.2."
   },
   "Référentiel de postes, offres passées, grille de rémunération.": {
-   "en": "",
+   "en": "Job framework, past job advertisements, pay scale.",
    "fr": "Référentiel de postes, offres passées, grille de rémunération."
   },
   "Référentiel des # centres de données CONSEILPREV, version": {
-   "en": "",
+   "en": "CONSEILPREV reference list of # data centres, version",
    "fr": "Référentiel des 249 centres de données CONSEILPREV, version"
   },
   "Référentiel des # centres de données — statut, exploitant, mise en service annoncée": {
-   "en": "",
+   "en": "Reference list of # data centres — status, operator, announced commissioning",
    "fr": "Référentiel des 249 centres de données — statut, exploitant, mise en service annoncée"
   },
   "Référentiel des # centres de données, version": {
-   "en": "",
+   "en": "Reference list of # data centres, version",
    "fr": "Référentiel des 249 centres de données, version"
   },
   "Référentiel des # centres et des # systèmes d’IA, version": {
-   "en": "",
+   "en": "Reference list of # centres and # AI systems, version",
    "fr": "Référentiel des 249 centres et des 72 systèmes d’IA, version"
   },
   "Référentiel des # centres et des # systèmes d’IA, versions": {
-   "en": "",
+   "en": "Reference list of # centres and # AI systems, versions",
    "fr": "Référentiel des 249 centres et des 72 systèmes d’IA, versions"
   },
   "Référentiel d’implantation CONSEILPREV, version #-#-a": {
-   "en": "",
+   "en": "CONSEILPREV siting reference framework, version #-#-a",
    "fr": "Référentiel d’implantation CONSEILPREV, version 2026-07-a"
   },
   "Référentiel d’implantation, version #-#-a": {
-   "en": "",
+   "en": "Siting reference framework, version #-#-a",
    "fr": "Référentiel d’implantation, version 2026-07-a"
   },
   "Référentiel juridique CONSEILPREV — textes UE et nationaux, chacun avec sa date d’application (règlement (UE) #/#, RGPD, NIS #)": {
-   "en": "",
+   "en": "CONSEILPREV legal framework — EU and national texts, each with its date of application (Regulation (EU) #/#, GDPR, NIS #)",
    "fr": "Référentiel juridique CONSEILPREV — textes UE et nationaux, chacun avec sa date d’application (règlement (UE) 2024/1689, RGPD, NIS 2)"
   },
   "Référentiel juridique CONSEILPREV — textes datés (règlement (UE) #/#, RGPD, NIS #) et clausier par domaine et criticité": {
-   "en": "",
+   "en": "CONSEILPREV legal framework — dated texts (Regulation (EU) #/#, GDPR, NIS #) and clause library by area and criticality",
    "fr": "Référentiel juridique CONSEILPREV — textes datés (règlement (UE) 2024/1689, RGPD, NIS 2) et clausier par domaine et criticité"
   },
   "Référentiel juridique CONSEILPREV, avec dates d’application": {
-   "en": "",
+   "en": "CONSEILPREV legal framework, with dates of application",
    "fr": "Référentiel juridique CONSEILPREV, avec dates d’application"
   },
   "Référentiel version": {
-   "en": "",
+   "en": "Framework version",
    "fr": "Référentiel version"
   },
   "Référents IA, responsables de la transformation, formateurs internes": {
-   "en": "",
+   "en": "AI leads, transformation managers, internal trainers",
    "fr": "Référents IA, responsables de la transformation, formateurs internes"
   },
   "Régime relevé dans les textes ; socle, budget et durée non calibrés": {
-   "en": "",
+   "en": "Regime identified in the texts; baseline, budget and duration not calibrated",
    "fr": "Régime relevé dans les textes ; socle, budget et durée non calibrés"
   },
   "Réglementations & Audit IA": {
-   "en": "",
+   "en": "Regulations & AI audit",
    "fr": "Réglementations & Audit IA"
   },
   "Régulation sectorielle en place": {
-   "en": "",
+   "en": "Sectoral regulation in place",
    "fr": "Régulation sectorielle en place"
   },
   "Réinitialiser le registre aux valeurs de référence ? Les saisies manuelles seront perdues.": {
-   "en": "",
+   "en": "Reset the register to the reference values? Manual entries will be lost.",
    "fr": "Réinitialiser le registre aux valeurs de référence ? Les saisies manuelles seront perdues."
   },
   "Répartissez les douze risques AVANT de les évaluer : la page dit qui tient chacun.": {
-   "en": "",
+   "en": "Allocate the twelve risks BEFORE assessing them: the page says who holds each one.",
    "fr": "Répartissez les douze risques AVANT de les évaluer : la page dit qui tient chacun."
   },
   "Répartition de vos": {
-   "en": "",
+   "en": "Breakdown of your",
    "fr": "Répartition de vos"
   },
   "Répartition des juridictions par niveau de risque": {
-   "en": "",
+   "en": "Breakdown of jurisdictions by risk level",
    "fr": "Répartition des juridictions par niveau de risque"
   },
   "Répartition par base légale (art. #)": {
-   "en": "",
+   "en": "Breakdown by legal basis (art. #)",
    "fr": "Répartition par base légale (art. 6)"
   },
   "Répartition par service": {
-   "en": "",
+   "en": "Breakdown by department",
    "fr": "Répartition par service"
   },
   "Répondez au questionnaire avant d enregistrer cette évaluation.": {
-   "en": "",
+   "en": "Answer the questionnaire before saving this assessment.",
    "fr": "Répondez au questionnaire avant d enregistrer cette évaluation."
   },
   "Répondez aux": {
-   "en": "",
+   "en": "Answer the",
    "fr": "Répondez aux"
   },
   "Répondez aux # étapes de classification pour chaque système IA identifié (interne, fournisseur, ou en projet).": {
-   "en": "",
+   "en": "Answer the # classification steps for each AI system identified (internal, supplier, or planned).",
    "fr": "Répondez aux 5 étapes de classification pour chaque système IA identifié (interne, fournisseur, ou en projet)."
   },
   "Répondez aux questions ci-dessus : la qualification présumée et la voie applicable s’affichent ici, avant tout enregistrement.": {
-   "en": "",
+   "en": "Answer the questions above: the presumed qualification and the applicable route are displayed here, before anything is saved.",
    "fr": "Répondez aux questions ci-dessus : la qualification présumée et la voie applicable s’affichent ici, avant tout enregistrement."
   },
   "Répondez d’abord à la question de l’étendue : votre modification touche-t-elle la cybersécurité de l’ENSEMBLE du produit ?": {
-   "en": "",
+   "en": "First answer the question of extent: does your modification affect the cybersecurity of the WHOLE product?",
    "fr": "Répondez d’abord à la question de l’étendue : votre modification touche-t-elle la cybersécurité de l’ENSEMBLE du produit ?"
   },
   "Répondez d’abord à la question du rôle — déployeur — puis aux trois questions de l’article # : avez-vous apposé votre nom, modifié substantiellement, ou changé la destination ?": {
-   "en": "",
+   "en": "First answer the question of role — deployer — then the three questions of Article #: have you put your name on it, modified it substantially, or changed its intended purpose?",
    "fr": "Répondez d’abord à la question du rôle — déployeur — puis aux trois questions de l’article 25 : avez-vous apposé votre nom, modifié substantiellement, ou changé la destination ?"
   },
   "Répondre au droit à l'explication": {
-   "en": "",
+   "en": "Respond to the right to an explanation",
    "fr": "Répondre au droit à l'explication"
   },
   "Réponse de synthèse": {
-   "en": "",
+   "en": "Summary answer",
    "fr": "Réponse de synthèse"
   },
   "Réponse reçue : «": {
-   "en": "",
+   "en": "Response received: “",
    "fr": "Réponse reçue : «"
   },
   "Répétez à blanc sur un incident passé, avec ses vrais horodatages.": {
-   "en": "",
+   "en": "Do a dry run on a past incident, with its real timestamps.",
    "fr": "Répétez à blanc sur un incident passé, avec ses vrais horodatages."
   },
   "Réseau indisponible : la demande n’a pas été enregistrée.": {
-   "en": "",
+   "en": "Network unavailable: the request has not been saved.",
    "fr": "Réseau indisponible : la demande n’a pas été enregistrée."
   },
   "Réseau indisponible : la décision n’a pas été enregistrée.": {
-   "en": "",
+   "en": "Network unavailable: the decision has not been saved.",
    "fr": "Réseau indisponible : la décision n’a pas été enregistrée."
   },
   "Réserver et payer": {
-   "en": "",
+   "en": "Book and pay",
    "fr": "Réserver et payer"
   },
   "Réservée à CONSEILPREV : création d accès clients externes, suivi du statut technique de l infrastructure (Postgres, pgvector) et de la santé des envois d email.": {
-   "en": "",
+   "en": "Reserved for CONSEILPREV: creation of external client access, monitoring of the technical status of the infrastructure (Postgres, pgvector) and of the health of email sending.",
    "fr": "Réservée à CONSEILPREV : création d accès clients externes, suivi du statut technique de l infrastructure (Postgres, pgvector) et de la santé des envois d email."
   },
   "Réservée à l’exploitant du site. Actualisez pour relancer les vérifications ; chaque point en écart indique la mesure attendue.": {
-   "en": "",
+   "en": "Reserved for the site operator. Refresh to rerun the checks; each point with a gap indicates the expected measure.",
    "fr": "Réservée à l’exploitant du site. Actualisez pour relancer les vérifications ; chaque point en écart indique la mesure attendue."
   },
   "Résiliation programmée en fin de période.": {
-   "en": "",
+   "en": "Cancellation scheduled at the end of the period.",
    "fr": "Résiliation programmée en fin de période."
   },
   "Résilience opérationnelle (DORA)": {
-   "en": "",
+   "en": "Operational resilience (DORA)",
    "fr": "Résilience opérationnelle (DORA)"
   },
   "Résultat obtenu": {
-   "en": "",
+   "en": "Result obtained",
    "fr": "Résultat obtenu"
   },
   "Résultats des étapes précédentes, horodatés": {
-   "en": "",
+   "en": "Results of the previous steps, timestamped",
    "fr": "Résultats des étapes précédentes, horodatés"
   },
   "Résultats mesurables attendus": {
-   "en": "",
+   "en": "Expected measurable results",
    "fr": "Résultats mesurables attendus"
   },
   "Résumé du contenu d'entraînement, politique de droits d'auteur, résumé des évaluations de performance.": {
-   "en": "",
+   "en": "Summary of the training content, copyright policy, summary of the performance evaluations.",
    "fr": "Résumé du contenu d'entraînement, politique de droits d'auteur, résumé des évaluations de performance."
   },
   "Réviser la politique de supervision humaine (Art. #)": {
-   "en": "",
+   "en": "Review the human oversight policy (Art. #)",
    "fr": "Réviser la politique de supervision humaine (Art. 14)"
   },
   "Révision périodique du système de gestion des risques": {
-   "en": "",
+   "en": "Periodic review of the risk management system",
    "fr": "Révision périodique du système de gestion des risques"
   },
   "Rôle de gouvernance IA — secteur": {
-   "en": "",
+   "en": "AI governance role — sector",
    "fr": "Rôle de gouvernance IA — secteur"
   },
   "Rôle de l'entreprise": {
-   "en": "",
+   "en": "Role of the company",
    "fr": "Rôle de l'entreprise"
   },
   "Rôle de l'entreprise (Art. #(#-#) — cumulable)": {
-   "en": "",
+   "en": "Role of the company (Art. #(#-#) — cumulative)",
    "fr": "Rôle de l'entreprise (Art. 3(3-7) — cumulable)"
   },
   "Rôle du management dans la privacy by design": {
-   "en": "",
+   "en": "Management’s role in privacy by design",
    "fr": "Rôle du management dans la privacy by design"
   },
   "Rôle non déterminé": {
-   "en": "",
+   "en": "Role not determined",
    "fr": "Rôle non déterminé"
   },
   "Rôle réel de l'analyste : que peut-il changer, et l'a-t-il déjà fait ?": {
-   "en": "",
+   "en": "The analyst’s actual role: what can they change, and have they already done so?",
    "fr": "Rôle réel de l'analyste : que peut-il changer, et l'a-t-il déjà fait ?"
   },
   "S'abstenir en cas de non-conformité": {
-   "en": "",
+   "en": "Refrain in the event of non-compliance",
    "fr": "S'abstenir en cas de non-conformité"
   },
   "S'abstenir et faire corriger": {
-   "en": "",
+   "en": "Refrain and have it corrected",
    "fr": "S'abstenir et faire corriger"
   },
   "S'applique aux fournisseurs mettant sur le marché de l'UE, aux déployeurs établis dans l'UE, aux fournisseurs/déployeurs établis dans un pays tiers quand les sorties du système sont utilisées dans l'UE.": {
-   "en": "",
+   "en": "Applies to providers placing on the EU market, to deployers established in the EU, and to providers/deployers established in a third country where the output of the system is used in the EU.",
    "fr": "S'applique aux fournisseurs mettant sur le marché de l'UE, aux déployeurs établis dans l'UE, aux fournisseurs/déployeurs établis dans un pays tiers quand les sorties du système sont utilisées dans l'UE."
   },
   "S'assurer de la pertinence des données d'entrée": {
-   "en": "",
+   "en": "Ensure that the input data is relevant",
    "fr": "S'assurer de la pertinence des données d'entrée"
   },
   "SE TENIR INFORMÉ": {
-   "en": "",
+   "en": "STAY INFORMED",
    "fr": "SE TENIR INFORMÉ"
   },
   "SGQ documenté couvrant : stratégie réglementaire, conception et contrôle, validation, gestion des risques et données, surveillance post-commercialisation, gestion des incidents et rappels.": {
-   "en": "",
+   "en": "Documented QMS covering: regulatory strategy, design and control, validation, risk and data management, post-market monitoring, incident and recall management.",
    "fr": "SGQ documenté couvrant : stratégie réglementaire, conception et contrôle, validation, gestion des risques et données, surveillance post-commercialisation, gestion des incidents et rappels."
   },
   "SaaS classique avec remise volume": {
-   "en": "",
+   "en": "Conventional SaaS with volume discount",
    "fr": "SaaS classique avec remise volume"
   },
   "SaaS moins coûteux de": {
-   "en": "",
+   "en": "SaaS cheaper by",
    "fr": "SaaS moins coûteux de"
   },
   "Sachez qui, chez vous, peut déclencher une alerte précoce un vendredi soir.": {
-   "en": "",
+   "en": "Know who, in your organisation, can trigger an early warning on a Friday evening.",
    "fr": "Sachez qui, chez vous, peut déclencher une alerte précoce un vendredi soir."
   },
   "Saisissez d’abord un nom de famille.": {
-   "en": "",
+   "en": "First enter a last name.",
    "fr": "Saisissez d’abord un nom de famille."
   },
   "Saisissez le chiffre d’affaires annuel mondial en millions d’euros. La colonne « ce qui commande » dit, pour votre taille, si c’est le montant fixe ou le pourcentage — et à partir de quel seuil cela bascule : # M€ pour le palier lourd, # M€ pour les deux autres. Une PME qui lit « # % de mon chiffre d’affaires » entend un chiffre dix fois trop bas : c’est # millions qui s’appliquent à elle.": {
-   "en": "",
+   "en": "Enter the annual worldwide turnover in millions of euros. The “what governs” column says, for your size, whether it is the fixed amount or the percentage — and from what threshold it switches: €# million for the heavy tier, €# million for the other two. An SME that reads “# % of my turnover” hears a figure ten times too low: it is # million that applies to it.",
    "fr": "Saisissez le chiffre d’affaires annuel mondial en millions d’euros. La colonne « ce qui commande » dit, pour votre taille, si c’est le montant fixe ou le pourcentage — et à partir de quel seuil cela bascule : 600 M€ pour le palier lourd, 500 M€ pour les deux autres. Une PME qui lit « 2,5 % de mon chiffre d’affaires » entend un chiffre dix fois trop bas : c’est 15 millions qui s’appliquent à elle."
   },
   "Saisissez le chiffre d’affaires annuel mondial et lisez les trois paliers.": {
-   "en": "",
+   "en": "Enter the annual worldwide turnover and read the three tiers.",
    "fr": "Saisissez le chiffre d’affaires annuel mondial et lisez les trois paliers."
   },
   "Saisissez le chiffre d’affaires mondial du GROUPE, pas celui de la filiale concernée : l’assiette est celle de l’entreprise à laquelle l’entité appartient, et lire le chiffre de la filiale divise l’exposition par l’écart entre les deux. Un repère utile : les deux paliers pivotent au même chiffre d’affaires, # M€. En dessous, ce sont les planchers forfaitaires qui commandent ; au-dessus, les pourcentages. L’écart entre les deux qualifications reste de # % de part et d’autre.": {
-   "en": "",
+   "en": "Enter the worldwide turnover of the GROUP, not that of the subsidiary concerned: the base is that of the undertaking to which the entity belongs, and reading the subsidiary’s figure divides the exposure by the gap between the two. A useful benchmark: the two tiers pivot at the same turnover, €# million. Below it, the flat-rate floors govern; above it, the percentages. The gap between the two qualifications remains # % on either side.",
    "fr": "Saisissez le chiffre d’affaires mondial du GROUPE, pas celui de la filiale concernée : l’assiette est celle de l’entreprise à laquelle l’entité appartient, et lire le chiffre de la filiale divise l’exposition par l’écart entre les deux. Un repère utile : les deux paliers pivotent au même chiffre d’affaires, 500 M€. En dessous, ce sont les planchers forfaitaires qui commandent ; au-dessus, les pourcentages. L’écart entre les deux qualifications reste de 43 % de part et d’autre."
   },
   "Sanctions : jusqu à #M€ ou #% du CA mondial (Art. #)": {
-   "en": "",
+   "en": "Penalties: up to €#M or #% of worldwide turnover (Art. #)",
    "fr": "Sanctions : jusqu à 35M€ ou 7% du CA mondial (Art. 99)"
   },
   "Sanctions par États membres : jusqu'à # M€ ou #% CA mondial (Art. #), # M€ ou #% (systèmes haut risque), # M€ ou #% (autres infractions). PME : proportionnalité garantie. Le montant le plus élevé des deux seuils s'applique.": {
-   "en": "",
+   "en": "Penalties by Member State: up to €# million or #% of worldwide turnover (Art. #), €# million or #% (high-risk systems), €# million or #% (other infringements). SMEs: proportionality guaranteed. The higher of the two thresholds applies.",
    "fr": "Sanctions par États membres : jusqu'à 35 M€ ou 7% CA mondial (Art. 5), 15 M€ ou 3% (systèmes haut risque), 7,5 M€ ou 1% (autres infractions). PME : proportionnalité garantie. Le montant le plus élevé des deux seuils s'applique."
   },
   "Sans ce dossier, aucune évaluation de conformité n’est possible — c’est la pièce dont tout le reste dépend.": {
-   "en": "",
+   "en": "Without this file, no conformity assessment is possible — it is the document on which everything else depends.",
    "fr": "Sans ce dossier, aucune évaluation de conformité n’est possible — c’est la pièce dont tout le reste dépend."
   },
   "Sans justification": {
-   "en": "",
+   "en": "Without justification",
    "fr": "Sans justification"
   },
   "Sans liste nominative, la vague # n’aura pas de dénominateur : « part d’équipe qui s’en sert » suppose qu’on sache de quelle équipe on parle.": {
-   "en": "",
+   "en": "Without a list of names, wave # will have no denominator: “share of the team using it” assumes you know which team you are talking about.",
    "fr": "Sans liste nominative, la vague 3 n’aura pas de dénominateur : « part d’équipe qui s’en sert » suppose qu’on sache de quelle équipe on parle."
   },
   "Sans session, Sentinel affiche ses référentiels publics mais rien de ce qui vous appartient.": {
-   "en": "",
+   "en": "Without a session, Sentinel displays its public frameworks but nothing that belongs to you.",
    "fr": "Sans session, Sentinel affiche ses référentiels publics mais rien de ce qui vous appartient."
   },
   "Sans suppression nommée, le nouveau processus s’ajoute à l’ancien : le temps rendu mesuré en vague # sera nul, et il aura raison de l’être.": {
-   "en": "",
+   "en": "Without a named removal, the new process is added to the old one: the time given back measured in wave # will be zero, and rightly so.",
    "fr": "Sans suppression nommée, le nouveau processus s’ajoute à l’ancien : le temps rendu mesuré en vague 3 sera nul, et il aura raison de l’être."
   },
   "Sans systèmes enregistrés, tout se vaut et rien ne ressort. C’est le registre qui transforme un flux d’actualités en liste de choses à faire.": {
-   "en": "",
+   "en": "Without recorded systems, everything is equal and nothing stands out. It is the register that turns a news feed into a to-do list.",
    "fr": "Sans systèmes enregistrés, tout se vaut et rien ne ressort. C’est le registre qui transforme un flux d’actualités en liste de choses à faire."
   },
   "Sans volume déclaré :": {
-   "en": "",
+   "en": "No declared volume:",
    "fr": "Sans volume déclaré :"
   },
   "Santé relation": {
-   "en": "",
+   "en": "Patient relations",
    "fr": "Santé relation"
   },
   "Santé, biométrie… ou « Non »": {
-   "en": "",
+   "en": "Health, biometrics… or “No”",
    "fr": "Santé, biométrie… ou « Non »"
   },
   "Savoir ce qu'un système génératif fait, ce qu'il ne fait pas, et à quel moment il faut le contredire. Aucun prérequis technique.": {
-   "en": "",
+   "en": "Know what a generative system does, what it does not do, and when you need to contradict it. No technical prerequisites.",
    "fr": "Savoir ce qu'un système génératif fait, ce qu'il ne fait pas, et à quel moment il faut le contredire. Aucun prérequis technique."
   },
   "Savoir classifier un système IA selon les # niveaux de risque (Art. #, #, Annexe III)": {
-   "en": "",
+   "en": "Know how to classify an AI system according to the # risk levels (Art. #, #, Annex III)",
    "fr": "Savoir classifier un système IA selon les 4 niveaux de risque (Art. 5, 6, Annexe III)"
   },
   "Savoir conduire soi-même l'atelier de redécoupage dans son organisation, y compris quand la salle est hostile.": {
-   "en": "",
+   "en": "Know how to run the redesign workshop yourself in your organisation, including when the room is hostile.",
    "fr": "Savoir conduire soi-même l'atelier de redécoupage dans son organisation, y compris quand la salle est hostile."
   },
   "Scope # — autres émissions indirectes": {
-   "en": "",
+   "en": "Scope # — other indirect emissions",
    "fr": "Scope 3 — autres émissions indirectes"
   },
   "Scope # — émissions directes": {
-   "en": "",
+   "en": "Scope # — direct emissions",
    "fr": "Scope 1 — émissions directes"
   },
   "Scope # — émissions indirectes liées à l’énergie achetée": {
-   "en": "",
+   "en": "Scope # — indirect emissions from purchased energy",
    "fr": "Scope 2 — émissions indirectes liées à l’énergie achetée"
   },
   "Score Audit : automatique ou estimé": {
-   "en": "",
+   "en": "Audit score: automatic or estimated",
    "fr": "Score Audit : automatique ou estimé"
   },
   "Score Sentinel constaté pour ce jalon (seuil requis :": {
-   "en": "",
+   "en": "Sentinel score recorded for this milestone (required threshold:",
    "fr": "Score Sentinel constaté pour ce jalon (seuil requis :"
   },
   "Score de maturité (#–#) pour chacun des # piliers + recommandations prioritaires.": {
-   "en": "",
+   "en": "Maturity score (#–#) for each of the # pillars + priority recommendations.",
    "fr": "Score de maturité (1–5) pour chacun des 8 piliers + recommandations prioritaires."
   },
   "Score de risque": {
-   "en": "",
+   "en": "Risk score",
    "fr": "Score de risque"
   },
   "Score de risque (#-#)": {
-   "en": "",
+   "en": "Risk score (#-#)",
    "fr": "Score de risque (0-10)"
   },
   "Score de risque de depart d un collaborateur a partir de signaux RH.": {
-   "en": "",
+   "en": "Risk score of an employee leaving, based on HR signals.",
    "fr": "Score de risque de depart d un collaborateur a partir de signaux RH."
   },
   "Score de severite :": {
-   "en": "",
+   "en": "Severity score:",
    "fr": "Score de severite :"
   },
   "Score global actualisé": {
-   "en": "",
+   "en": "Updated overall score",
    "fr": "Score global actualisé"
   },
   "Scores de severite (# juridictions)": {
-   "en": "",
+   "en": "Severity scores (# jurisdictions)",
    "fr": "Scores de severite (24 juridictions)"
   },
   "Scoring crédit / Évaluation financière": {
-   "en": "",
+   "en": "Credit scoring / Financial assessment",
    "fr": "Scoring crédit / Évaluation financière"
   },
   "Scoring crédit automatisé": {
-   "en": "",
+   "en": "Automated credit scoring",
    "fr": "Scoring crédit automatisé"
   },
   "Scoring crédit et tarification = haut risque. Droit d'opposition aux décisions automatisées (RGPD Art. #). Obligation d'explication des refus.": {
-   "en": "",
+   "en": "Credit scoring and pricing = high-risk. Right to object to automated decisions (GDPR Art. #). Obligation to explain refusals.",
    "fr": "Scoring crédit et tarification = haut risque. Droit d'opposition aux décisions automatisées (RGPD Art. 22). Obligation d'explication des refus."
   },
   "Scoring de crédit et évaluation financière": {
-   "en": "",
+   "en": "Credit scoring and financial assessment",
    "fr": "Scoring de crédit et évaluation financière"
   },
   "Scoring de leads": {
-   "en": "",
+   "en": "Lead scoring",
    "fr": "Scoring de leads"
   },
   "Scoring des risques fournisseurs": {
-   "en": "",
+   "en": "Supplier risk scoring",
    "fr": "Scoring des risques fournisseurs"
   },
   "Scoring multicritère": {
-   "en": "",
+   "en": "Multi-criteria scoring",
    "fr": "Scoring multicritère"
   },
   "Scénario d'intensité": {
-   "en": "",
+   "en": "Intensity scenario",
    "fr": "Scénario d'intensité"
   },
   "Se déconnecter": {
-   "en": "",
+   "en": "Sign out",
    "fr": "Se déconnecter"
   },
   "Se déplacer entre les sections": {
-   "en": "",
+   "en": "Move between sections",
    "fr": "Se déplacer entre les sections"
   },
   "Se situer dans sa filière": {
-   "en": "",
+   "en": "See where you stand in your industry",
    "fr": "Se situer dans sa filière"
   },
   "Secret professionnel et confidentialité contractuelle ne s'arrêtent pas à l'API. La question n'est pas si le modèle est bon, mais où va la pièce.": {
-   "en": "",
+   "en": "Professional secrecy and contractual confidentiality do not stop at the API. The question is not whether the model is good, but where the document goes.",
    "fr": "Secret professionnel et confidentialité contractuelle ne s'arrêtent pas à l'API. La question n'est pas si le modèle est bon, mais où va la pièce."
   },
   "Secteur d activité, nombre de systèmes, score Audit de départ, et chiffre d affaires annuel (pour le calcul de l exposition aux sanctions Art. #). Le secteur influence directement la vitesse de progression réaliste.": {
-   "en": "",
+   "en": "Sector, number of systems, starting audit score, and annual turnover (to calculate the exposure to penalties under Art. #). The sector directly influences the realistic pace of progress.",
    "fr": "Secteur d activité, nombre de systèmes, score Audit de départ, et chiffre d affaires annuel (pour le calcul de l exposition aux sanctions Art. 99). Le secteur influence directement la vitesse de progression réaliste."
   },
   "Secteur non precise": {
-   "en": "",
+   "en": "Sector not specified",
    "fr": "Secteur non precise"
   },
   "Securite de la robotique collaborative et arret d urgence": {
-   "en": "",
+   "en": "Safety of collaborative robotics and emergency stop",
    "fr": "Securite de la robotique collaborative et arret d urgence"
   },
   "Segmentation et ciblage": {
-   "en": "",
+   "en": "Segmentation and targeting",
    "fr": "Segmentation et ciblage"
   },
   "Sens de lecture": {
-   "en": "",
+   "en": "Reading direction",
    "fr": "Sens de lecture"
   },
   "Sensibilisation au risque cyber (phishing, ingénierie sociale)": {
-   "en": "",
+   "en": "Cyber risk awareness (phishing, social engineering)",
    "fr": "Sensibilisation au risque cyber (phishing, ingénierie sociale)"
   },
   "Sensibilisation générale RGPD à l'embauche": {
-   "en": "",
+   "en": "General GDPR awareness on hiring",
    "fr": "Sensibilisation générale RGPD à l'embauche"
   },
   "Sensibilité au facteur d’intensité carbone": {
-   "en": "",
+   "en": "Sensitivity to the carbon intensity factor",
    "fr": "Sensibilité au facteur d’intensité carbone"
   },
   "Sentinel SITUE et COMPARE des pays. Le calcul d’ingénierie de VOTRE site — PUE et WUE mesurés, carbone incorporé, dimensionnement — n’est pas en libre-service : c’est une étude, et elle se commande.": {
-   "en": "",
+   "en": "Sentinel LOCATES and COMPARES countries. The engineering calculation for YOUR site — measured PUE and WUE, embodied carbon, sizing — is not self-service: it is a study, and it has to be commissioned.",
    "fr": "Sentinel SITUE et COMPARE des pays. Le calcul d’ingénierie de VOTRE site — PUE et WUE mesurés, carbone incorporé, dimensionnement — n’est pas en libre-service : c’est une étude, et elle se commande."
   },
   "Sentinel — compte rendu de transfert": {
-   "en": "",
+   "en": "Sentinel — transfer report",
    "fr": "Sentinel — compte rendu de transfert"
   },
   "Sentinel — diagnostic de sauvegarde": {
-   "en": "",
+   "en": "Sentinel — backup diagnostic",
    "fr": "Sentinel — diagnostic de sauvegarde"
   },
   "Servez-vous en pour répartir avant d’évaluer. Confier « les risques IA selon le NIST » au RSSI revient à lui faire répondre de sujets qu’il ne tient pas et sur lesquels il n’a aucun moyen d’action — ce qui produit un registre de risques que personne n’arbitre.": {
-   "en": "",
+   "en": "Use it to allocate before assessing. Handing “AI risks according to NIST” to the CISO amounts to making them answer for subjects they do not hold and over which they have no means of action — which produces a risk register that nobody arbitrates.",
    "fr": "Servez-vous en pour répartir avant d’évaluer. Confier « les risques IA selon le NIST » au RSSI revient à lui faire répondre de sujets qu’il ne tient pas et sur lesquels il n’a aucun moyen d’action — ce qui produit un registre de risques que personne n’arbitre."
   },
   "Service / entité": {
-   "en": "",
+   "en": "Department / entity",
    "fr": "Service / entité"
   },
   "Service en cours de chargement…": {
-   "en": "",
+   "en": "Service loading…",
    "fr": "Service en cours de chargement…"
   },
   "Service indisponible pour le moment.": {
-   "en": "",
+   "en": "Service unavailable at the moment.",
    "fr": "Service indisponible pour le moment."
   },
   "Session expirée": {
-   "en": "",
+   "en": "Session expired",
    "fr": "Session expirée"
   },
   "Sessions de formation (# personnes)": {
-   "en": "",
+   "en": "Training sessions (# people)",
    "fr": "Sessions de formation (50 personnes)"
   },
   "Seule la facturation au jeton est chiffrable par une table de prix au jeton. Les autres sont RECONNUES et NON CHIFFRÉES : c’est une lacune déclarée, pas un zéro.": {
-   "en": "",
+   "en": "Only per-token billing can be costed by a per-token price table. The others are RECOGNISED and NOT COSTED: it is a declared gap, not a zero.",
    "fr": "Seule la facturation au jeton est chiffrable par une table de prix au jeton. Les autres sont RECONNUES et NON CHIFFRÉES : c’est une lacune déclarée, pas un zéro."
   },
   "Seules les données strictement nécessaires sont collectées": {
-   "en": "",
+   "en": "Only strictly necessary data is collected",
    "fr": "Seules les données strictement nécessaires sont collectées"
   },
   "Si décisionnel sur des personnes : potentiellement haut risque. Sinon, bonne pratique ISO/IEC #.": {
-   "en": "",
+   "en": "If making decisions about people: potentially high-risk. Otherwise, ISO/IEC # good practice.",
    "fr": "Si décisionnel sur des personnes : potentiellement haut risque. Sinon, bonne pratique ISO/IEC 42001."
   },
   "Si l'infrastructure est critique (eau, énergie, finance, numérique) : haut risque (Annexe III point #). Sinon : risque limité mais NIS# s'applique en parallèle.": {
-   "en": "",
+   "en": "If the infrastructure is critical (water, energy, finance, digital): high-risk (Annex III, point #). Otherwise: limited risk, but NIS # applies in parallel.",
    "fr": "Si l'infrastructure est critique (eau, énergie, finance, numérique) : haut risque (Annexe III point 2). Sinon : risque limité mais NIS2 s'applique en parallèle."
   },
   "Si la modification n’affecte pas l’ensemble, vous ne cotez que la partie modifiée — et vous devez pouvoir le justifier.": {
-   "en": "",
+   "en": "If the modification does not affect the whole, you only rate the modified part — and you must be able to justify it.",
    "fr": "Si la modification n’affecte pas l’ensemble, vous ne cotez que la partie modifiée — et vous devez pouvoir le justifier."
   },
   "Si la traduction produit du contenu publié : marquage Art. #§#. Si le modèle est GPAI : vérifier que le fournisseur respecte Art. # (documentation, politique d'utilisation acceptable).": {
-   "en": "",
+   "en": "If the translation produces published content: marking, Art. #(#). If the model is GPAI: check that the provider complies with Art. # (documentation, acceptable use policy).",
    "fr": "Si la traduction produit du contenu publié : marquage Art. 50§2. Si le modèle est GPAI : vérifier que le fournisseur respecte Art. 53 (documentation, politique d'utilisation acceptable)."
   }
  }

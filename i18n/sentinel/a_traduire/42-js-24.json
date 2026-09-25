@@ -8,819 +8,819 @@
  "bloc": {},
  "texte": {
   "Systèmes évalués": {
-   "en": "",
+   "en": "Systems assessed",
    "fr": "Systèmes évalués"
   },
   "Sécuriser la chaîne d'approvisionnement IA (fournisseurs de modèles, API tierces, données)": {
-   "en": "",
+   "en": "Secure the AI supply chain (model providers, third-party APIs, data)",
    "fr": "Sécuriser la chaîne d'approvisionnement IA (fournisseurs de modèles, API tierces, données)"
   },
   "Sécuriser les contrats": {
-   "en": "",
+   "en": "Secure the contracts",
    "fr": "Sécuriser les contrats"
   },
   "Sécurité (art. #)": {
-   "en": "",
+   "en": "Security (art. #)",
    "fr": "Sécurité (art. 32)"
   },
   "Sécurité au travail": {
-   "en": "",
+   "en": "Workplace safety",
    "fr": "Sécurité au travail"
   },
   "Sécurité by design": {
-   "en": "",
+   "en": "Security by design",
    "fr": "Sécurité by design"
   },
   "Sécurité de l’information — ISO/IEC #": {
-   "en": "",
+   "en": "Information security — ISO/IEC #",
    "fr": "Sécurité de l’information — ISO/IEC 27001"
   },
   "Sécurité de site par vision": {
-   "en": "",
+   "en": "Vision-based site security",
    "fr": "Sécurité de site par vision"
   },
   "Sécurité des personnes en milieu confiné": {
-   "en": "",
+   "en": "Safety of people in confined spaces",
    "fr": "Sécurité des personnes en milieu confiné"
   },
   "Sécurité des systèmes de contrôle industriel. Tests de robustesse face aux cyberattaques et défaillances. IEC #.": {
-   "en": "",
+   "en": "Security of industrial control systems. Robustness testing against cyberattacks and failures. IEC #.",
    "fr": "Sécurité des systèmes de contrôle industriel. Tests de robustesse face aux cyberattaques et défaillances. IEC 62443."
   },
   "Sécurité du développement et minimisation par défaut": {
-   "en": "",
+   "en": "Secure development and minimisation by default",
    "fr": "Sécurité du développement et minimisation par défaut"
   },
   "Sécurité dès la conception, gestion documentée des vulnérabilités, mises à jour de sécurité pendant toute la période de support (# ans minimum).": {
-   "en": "",
+   "en": "Security by design, documented vulnerability handling, security updates throughout the support period (# years minimum).",
    "fr": "Sécurité dès la conception, gestion documentée des vulnérabilités, mises à jour de sécurité pendant toute la période de support (5 ans minimum)."
   },
   "Sécurité et incidents": {
-   "en": "",
+   "en": "Security and incidents",
    "fr": "Sécurité et incidents"
   },
   "Sélection de dossiers locataires": {
-   "en": "",
+   "en": "Screening of tenant applications",
    "fr": "Sélection de dossiers locataires"
   },
   "Sélectionner et mettre en œuvre les contrôles de l'Annexe A pertinents pour chaque système": {
-   "en": "",
+   "en": "Select and implement the relevant Annex A controls for each system",
    "fr": "Sélectionner et mettre en œuvre les contrôles de l'Annexe A pertinents pour chaque système"
   },
   "Sélectionnez au moins un cas d’usage à l’étape #.": {
-   "en": "",
+   "en": "Select at least one use case in step #.",
    "fr": "Sélectionnez au moins un cas d’usage à l’étape 2."
   },
   "Sélectionnez au moins un cas d’usage.": {
-   "en": "",
+   "en": "Select at least one use case.",
    "fr": "Sélectionnez au moins un cas d’usage."
   },
   "Sélectionnez au moins un module.": {
-   "en": "",
+   "en": "Select at least one module.",
    "fr": "Sélectionnez au moins un module."
   },
   "Sélectionnez des cas d’usage (étape #) pour l’analyse d’écart.": {
-   "en": "",
+   "en": "Select use cases (step #) for the gap analysis.",
    "fr": "Sélectionnez des cas d’usage (étape 2) pour l’analyse d’écart."
   },
   "Sélectionnez d’abord un client.": {
-   "en": "",
+   "en": "First select a client.",
    "fr": "Sélectionnez d’abord un client."
   },
   "Sélectionnez un client et chargez son échéancier.": {
-   "en": "",
+   "en": "Select a client and load their payment schedule.",
    "fr": "Sélectionnez un client et chargez son échéancier."
   },
   "Sélectionnez vos cas d’usage (étape #), notez-les sur les # axes (étape #), puis chiffrez le retour attendu (étape #).": {
-   "en": "",
+   "en": "Select your use cases (step #), score them on the # axes (step #), then quantify the expected return (step #).",
    "fr": "Sélectionnez vos cas d’usage (étape 2), notez-les sur les 4 axes (étape 3), puis chiffrez le retour attendu (étape 4)."
   },
   "Sélectionnez votre rôle pour un enchaînement recommandé des pages — pertinent aussi bien pour une TPE qu’un grand compte, le niveau de détail s’adapte à votre contexte.": {
-   "en": "",
+   "en": "Select your role for a recommended sequence of pages — relevant for a micro-enterprise as much as for a large account; the level of detail adapts to your context.",
    "fr": "Sélectionnez votre rôle pour un enchaînement recommandé des pages — pertinent aussi bien pour une TPE qu’un grand compte, le niveau de détail s’adapte à votre contexte."
   },
   "Sélectionnez, notez et chiffrez vos cas d’usage IA (étapes # à #).": {
-   "en": "",
+   "en": "Select, score and cost your AI use cases (steps # to #).",
    "fr": "Sélectionnez, notez et chiffrez vos cas d’usage IA (étapes 2 à 4)."
   },
   "Sépare ce qui bloque le cas d’usage de ce qui bloque l’organisation : deux plans d’action distincts.": {
-   "en": "",
+   "en": "Separates what blocks the use case from what blocks the organisation: two distinct action plans.",
    "fr": "Sépare ce qui bloque le cas d’usage de ce qui bloque l’organisation : deux plans d’action distincts."
   },
   "Sépare ce qui se corrige dans le produit de ce qui se corrige dans l’organisation.": {
-   "en": "",
+   "en": "Separates what is fixed in the product from what is fixed in the organisation.",
    "fr": "Sépare ce qui se corrige dans le produit de ce qui se corrige dans l’organisation."
   },
   "Séquencez PoC, MVP puis industrialisation, avec les jalons de conformité aux mêmes dates.": {
-   "en": "",
+   "en": "Sequence PoC, MVP then industrialisation, with the compliance milestones on the same dates.",
    "fr": "Séquencez PoC, MVP puis industrialisation, avec les jalons de conformité aux mêmes dates."
   },
   "Séquencez les actions restantes sur un calendrier avec échéances.": {
-   "en": "",
+   "en": "Sequence the remaining actions on a calendar with deadlines.",
    "fr": "Séquencez les actions restantes sur un calendrier avec échéances."
   },
   "Sûreté industrielle (OT/SCADA)": {
-   "en": "",
+   "en": "Industrial safety (OT/SCADA)",
    "fr": "Sûreté industrielle (OT/SCADA)"
   },
   "TPE : # page suffit pour piloter visuellement vos priorités en comité de direction.": {
-   "en": "",
+   "en": "Micro-enterprise: # page is enough to steer your priorities visually in the executive committee.",
    "fr": "TPE : 1 page suffit pour piloter visuellement vos priorités en comité de direction."
   },
   "TPE : # à # documents bien organisés valent mieux que # dispersés.": {
-   "en": "",
+   "en": "Micro-enterprise: # to # well-organised documents are worth more than # scattered ones.",
    "fr": "TPE : 5 à 10 documents bien organisés valent mieux que 50 dispersés."
   },
   "TPE : # à # systèmes suffisent souvent à démarrer. Grand compte : structurez par filiale ou direction métier dès le départ pour éviter une reprise fastidieuse.": {
-   "en": "",
+   "en": "Micro-enterprise: # to # systems are often enough to get started. Large account: structure by subsidiary or business division from the outset to avoid tedious rework.",
    "fr": "TPE : 3 à 5 systèmes suffisent souvent à démarrer. Grand compte : structurez par filiale ou direction métier dès le départ pour éviter une reprise fastidieuse."
   },
   "TPE : commencez par les moyens de paiement et les connexions par compte professionnel. Grand compte : croisez avec les journaux du proxy et le catalogue SaaS avant d’interroger les équipes.": {
-   "en": "",
+   "en": "Micro-enterprise: start with the means of payment and sign-ins with a work account. Large account: cross-check with the proxy logs and the SaaS catalogue before questioning the teams.",
    "fr": "TPE : commencez par les moyens de paiement et les connexions par compte professionnel. Grand compte : croisez avec les journaux du proxy et le catalogue SaaS avant d’interroger les équipes."
   },
   "TPE : commencez par vos #-# systèmes les plus critiques en volume de données traitées.": {
-   "en": "",
+   "en": "Micro-enterprise: start with your #-# most critical systems by volume of data processed.",
    "fr": "TPE : commencez par vos 2-3 systèmes les plus critiques en volume de données traitées."
   },
   "TPE : concentrez-vous sur # à # cas transverses à ROI rapide. Grand compte : croisez cette cartographie avec les jalons de conformité AI Act du module RaaS pour lier valeur et conformité.": {
-   "en": "",
+   "en": "Micro-enterprise: focus on # to # cross-functional cases with a fast ROI. Large account: cross-reference this mapping with the AI Act compliance milestones of the RaaS module to link value and compliance.",
    "fr": "TPE : concentrez-vous sur 2 à 3 cas transverses à ROI rapide. Grand compte : croisez cette cartographie avec les jalons de conformité AI Act du module RaaS pour lier valeur et conformité."
   },
   "TPE : concentrez-vous sur #-# piliers les plus critiques pour votre activité. Grand compte : répétez l’évaluation par direction pour cartographier les écarts internes.": {
-   "en": "",
+   "en": "Micro-enterprise: focus on the #-# pillars most critical to your business. Large account: repeat the assessment by division to map the internal gaps.",
    "fr": "TPE : concentrez-vous sur 2-3 piliers les plus critiques pour votre activité. Grand compte : répétez l’évaluation par direction pour cartographier les écarts internes."
   },
   "TPE : suffit à sécuriser une décision GO/NO-GO rapide avant tout investissement. Grand compte : imposez cette étape comme jalon obligatoire avant tout comité d’engagement IA.": {
-   "en": "",
+   "en": "Micro-enterprise: enough to secure a quick GO/NO-GO decision before any investment. Large account: make this step a mandatory milestone before any AI commitment committee.",
    "fr": "TPE : suffit à sécuriser une décision GO/NO-GO rapide avant tout investissement. Grand compte : imposez cette étape comme jalon obligatoire avant tout comité d’engagement IA."
   },
   "TPE : traitez d’abord les points P# (sanctions directes). Grand compte : déléguez des sections entières à des référents métier identifiés.": {
-   "en": "",
+   "en": "Micro-enterprise: address the P# items first (direct penalties). Large account: delegate entire sections to identified business leads.",
    "fr": "TPE : traitez d’abord les points P1 (sanctions directes). Grand compte : déléguez des sections entières à des référents métier identifiés."
   },
   "TPE : un seul référent polyvalent peut suffire au démarrage, formalisez son rôle clairement.": {
-   "en": "",
+   "en": "Micro-enterprise: a single all-round lead may be enough to start with; formalise their role clearly.",
    "fr": "TPE : un seul référent polyvalent peut suffire au démarrage, formalisez son rôle clairement."
   },
   "Tableau de bord conformite (Power BI)": {
-   "en": "",
+   "en": "Compliance dashboard (Power BI)",
    "fr": "Tableau de bord conformite (Power BI)"
   },
   "Tableau de bord consolidant l'ensemble du dispositif.": {
-   "en": "",
+   "en": "Dashboard consolidating the whole framework.",
    "fr": "Tableau de bord consolidant l'ensemble du dispositif."
   },
   "Tableau de bord de la conformité du site CONSEILPREV et de la plateforme Sentinel eux-mêmes : vérification au regard des articles #, #, #, # et #, registre des preuves de consentement, transferts, droits des personnes.": {
-   "en": "",
+   "en": "Dashboard of the compliance of the CONSEILPREV site and of the Sentinel platform themselves: verification against Articles #, #, #, # and #, consent records, transfers, data subject rights.",
    "fr": "Tableau de bord de la conformité du site CONSEILPREV et de la plateforme Sentinel eux-mêmes : vérification au regard des articles 5, 7, 17, 25 et 30, registre des preuves de consentement, transferts, droits des personnes."
   },
   "Tableau de bord de veille": {
-   "en": "",
+   "en": "Watch dashboard",
    "fr": "Tableau de bord de veille"
   },
   "Tableau de bord d’adoption": {
-   "en": "",
+   "en": "Adoption dashboard",
    "fr": "Tableau de bord d’adoption"
   },
   "Tableau de bord d’adoption — à lire à côté de l’indice de conformité, jamais à sa place.": {
-   "en": "",
+   "en": "Adoption dashboard — to be read alongside the compliance index, never instead of it.",
    "fr": "Tableau de bord d’adoption — à lire à côté de l’indice de conformité, jamais à sa place."
   },
   "Tableau de bord exécutif consolidé : KPIs stratégiques, répartition du registre par classification, dernières évaluations — pensé pour la présentation à votre direction ou client.": {
-   "en": "",
+   "en": "Consolidated executive dashboard: strategic KPIs, breakdown of the register by classification, latest assessments — designed for presentation to your senior management or client.",
    "fr": "Tableau de bord exécutif consolidé : KPIs stratégiques, répartition du registre par classification, dernières évaluations — pensé pour la présentation à votre direction ou client."
   },
   "Tableau de bord global : juridictions couvertes, sévérité réglementaire moyenne, classements innovation/sévérité. Point de départ pour explorer la conformité IA mondiale.": {
-   "en": "",
+   "en": "Global dashboard: jurisdictions covered, average regulatory severity, innovation/severity rankings. Starting point for exploring AI compliance worldwide.",
    "fr": "Tableau de bord global : juridictions couvertes, sévérité réglementaire moyenne, classements innovation/sévérité. Point de départ pour explorer la conformité IA mondiale."
   },
   "Tableau de bord predictif de pilotage (KPIs)": {
-   "en": "",
+   "en": "Predictive steering dashboard (KPIs)",
    "fr": "Tableau de bord predictif de pilotage (KPIs)"
   },
   "Tableau de bord ·": {
-   "en": "",
+   "en": "Dashboard ·",
    "fr": "Tableau de bord ·"
   },
   "Tableau de bord — KPIs sectoriels": {
-   "en": "",
+   "en": "Dashboard — sector KPIs",
    "fr": "Tableau de bord — KPIs sectoriels"
   },
   "Tableau d’empreinte par pays et fiches pays, à l’écran et à l’impression.": {
-   "en": "",
+   "en": "Footprint table by country and country profiles, on screen and in print.",
    "fr": "Tableau d’empreinte par pays et fiches pays, à l’écran et à l’impression."
   },
   "Tableau d’empreinte par pays et fond de carte « intensité carbone ».": {
-   "en": "",
+   "en": "Footprint table by country and “carbon intensity” base map.",
    "fr": "Tableau d’empreinte par pays et fond de carte « intensité carbone »."
   },
   "Tant qu’elle ne l’est pas, un accès créé ne garantit pas qu’un client ne voie que ses données. Vérifiez-le avant d’ouvrir le premier accès.": {
-   "en": "",
+   "en": "Until it is, an access created does not guarantee that a client sees only their own data. Check this before opening the first access.",
    "fr": "Tant qu’elle ne l’est pas, un accès créé ne garantit pas qu’un client ne voie que ses données. Vérifiez-le avant d’ouvrir le premier accès."
   },
   "Tarification RaaS par jalons — Sentinel AI": {
-   "en": "",
+   "en": "RaaS milestone pricing — Sentinel AI",
    "fr": "Tarification RaaS par jalons — Sentinel AI"
   },
   "Tarification dynamique des contrats d assurance": {
-   "en": "",
+   "en": "Dynamic pricing of insurance contracts",
    "fr": "Tarification dynamique des contrats d assurance"
   },
   "Tarification par résultats": {
-   "en": "",
+   "en": "Outcome-based pricing",
    "fr": "Tarification par résultats"
   },
   "Tarification par résultats vérifiés · Règlement (UE) #/# (AI Act) · Établi le": {
-   "en": "",
+   "en": "Pricing on verified outcomes · Regulation (EU) #/# (AI Act) · Prepared on",
    "fr": "Tarification par résultats vérifiés · Règlement (UE) 2024/1689 (AI Act) · Établi le"
   },
   "Tarification résultats": {
-   "en": "",
+   "en": "Outcome pricing",
    "fr": "Tarification résultats"
   },
   "Tarifs employés": {
-   "en": "",
+   "en": "Employee rates",
    "fr": "Tarifs employés"
   },
   "Taux de conformité": {
-   "en": "",
+   "en": "Compliance rate",
    "fr": "Taux de conformité"
   },
   "Taux de conformité — ce que le plan ne peut pas faire": {
-   "en": "",
+   "en": "Compliance rate — what the plan cannot do",
    "fr": "Taux de conformité — ce que le plan ne peut pas faire"
   },
   "Taux de conformité — les neuf normes": {
-   "en": "",
+   "en": "Compliance rate — the nine standards",
    "fr": "Taux de conformité — les neuf normes"
   },
   "Taux de conformité — plan de mise en conformité": {
-   "en": "",
+   "en": "Compliance rate — compliance plan",
    "fr": "Taux de conformité — plan de mise en conformité"
   },
   "Taux de conversion +# à +# % ; coût par acquisition −# %.": {
-   "en": "",
+   "en": "Conversion rate +# to +# %; cost per acquisition −# %.",
    "fr": "Taux de conversion +10 à +25 % ; coût par acquisition −15 %."
   },
   "Taux de gain": {
-   "en": "",
+   "en": "Gain rate",
    "fr": "Taux de gain"
   },
   "Taux de gain estimé : productivité, qualité ou délais gagnés, en % de l’assiette. Prérempli par famille technologique.": {
-   "en": "",
+   "en": "Estimated gain rate: productivity, quality or time saved, as a % of the base. Pre-filled by technology family.",
    "fr": "Taux de gain estimé : productivité, qualité ou délais gagnés, en % de l’assiette. Prérempli par famille technologique."
   },
   "Taux de succès (#h)": {
-   "en": "",
+   "en": "Success rate (#h)",
    "fr": "Taux de succès (24h)"
   },
   "Techniques et organisationnelles": {
-   "en": "",
+   "en": "Technical and organisational",
    "fr": "Techniques et organisationnelles"
   },
   "Temps de recherche −# % ; sources citées et vérifiables.": {
-   "en": "",
+   "en": "Search time −# %; sources cited and verifiable.",
    "fr": "Temps de recherche −50 % ; sources citées et vérifiables."
   },
   "Temps de revue −# % ; clauses à risque détectées +# %.": {
-   "en": "",
+   "en": "Review time −# %; risky clauses detected +# %.",
    "fr": "Temps de revue −50 % ; clauses à risque détectées +35 %."
   },
   "Temps de réponse −# % ; résolution au #er contact +# pts.": {
-   "en": "",
+   "en": "Response time −# %; resolution on #st contact +# pts.",
    "fr": "Temps de réponse −50 % ; résolution au 1er contact +20 pts."
   },
   "Temps moyen de validation d'un projet IA": {
-   "en": "",
+   "en": "Average time to approve an AI project",
    "fr": "Temps moyen de validation d'un projet IA"
   },
   "Tenir le dispositif dans la durée": {
-   "en": "",
+   "en": "Keep the framework running over time",
    "fr": "Tenir le dispositif dans la durée"
   },
   "Tenir le dossier à jour lors de toute modification substantielle": {
-   "en": "",
+   "en": "Keep the file up to date upon any substantial modification",
    "fr": "Tenir le dossier à jour lors de toute modification substantielle"
   },
   "Tenir à jour les informations d'enregistrement en cas de modification": {
-   "en": "",
+   "en": "Keep the registration information up to date in the event of changes",
    "fr": "Tenir à jour les informations d'enregistrement en cas de modification"
   },
   "Tenir à jour un registre des systèmes haut risque": {
-   "en": "",
+   "en": "Keep a register of high-risk systems up to date",
    "fr": "Tenir à jour un registre des systèmes haut risque"
   },
   "Tensions géopolitiques majeures": {
-   "en": "",
+   "en": "Major geopolitical tensions",
    "fr": "Tensions géopolitiques majeures"
   },
   "Tester la robustesse face aux données hors-distribution": {
-   "en": "",
+   "en": "Test robustness against out-of-distribution data",
    "fr": "Tester la robustesse face aux données hors-distribution"
   },
   "Tests de residualite confirmes sur le systeme final (Art. #(#))": {
-   "en": "",
+   "en": "Residual risk tests confirmed on the final system (Art. #(#))",
    "fr": "Tests de residualite confirmes sur le systeme final (Art. 9(5))"
   },
   "Tests de resilience operationnelle (DORA)": {
-   "en": "",
+   "en": "Operational resilience testing (DORA)",
    "fr": "Tests de resilience operationnelle (DORA)"
   },
   "Tests de robustesse et red teaming": {
-   "en": "",
+   "en": "Robustness testing and red teaming",
    "fr": "Tests de robustesse et red teaming"
   },
   "Texte consolide du Journal officiel de l Union europeenne.": {
-   "en": "",
+   "en": "Consolidated text from the Official Journal of the European Union.",
    "fr": "Texte consolide du Journal officiel de l Union europeenne."
   },
   "Texte de l Executive Order #.": {
-   "en": "",
+   "en": "Text of Executive Order #.",
    "fr": "Texte de l Executive Order 14179."
   },
   "Texte redige par CONSEILPREV a partir de sources publiques generalistes par pays. Sanctions et cadre principal a verifier individuellement avant usage client (texte de loi nationale non audite systematiquement).": {
-   "en": "",
+   "en": "Text written by CONSEILPREV from general public sources by country. Penalties and main framework to be checked individually before client use (national legislation not systematically audited).",
    "fr": "Texte redige par CONSEILPREV a partir de sources publiques generalistes par pays. Sanctions et cadre principal a verifier individuellement avant usage client (texte de loi nationale non audite systematiquement)."
   },
   "Textes applicables repérés dès publication ; échéances tenues.": {
-   "en": "",
+   "en": "Applicable texts identified on publication; deadlines met.",
    "fr": "Textes applicables repérés dès publication ; échéances tenues."
   },
   "Textes réglementaires (sources officielles, actualités) et Obligations article par article (# articles du Règlement, filtrables par rôle : fournisseur, déployeur, GPAI).": {
-   "en": "",
+   "en": "Regulatory texts (official sources, news) and Obligations article by article (# articles of the Regulation, filterable by role: provider, deployer, GPAI).",
    "fr": "Textes réglementaires (sources officielles, actualités) et Obligations article par article (113 articles du Règlement, filtrables par rôle : fournisseur, déployeur, GPAI)."
   },
   "Thèmes déduits des dossiers (": {
-   "en": "",
+   "en": "Themes inferred from the files (",
    "fr": "Thèmes déduits des dossiers ("
   },
   "Tiré des données de cette plateforme.": {
-   "en": "",
+   "en": "Taken from this platform’s data.",
    "fr": "Tiré des données de cette plateforme."
   },
   "Tolérance aux entrées erronées, dérives capteurs, conditions dégradées. Tests en conditions réelles avant déploiement (Art. #).": {
-   "en": "",
+   "en": "Tolerance to erroneous inputs, sensor drift, degraded conditions. Real-world testing before deployment (Art. #).",
    "fr": "Tolérance aux entrées erronées, dérives capteurs, conditions dégradées. Tests en conditions réelles avant déploiement (Art. 9)."
   },
   "Tolérance zéro aux interruptions. Supervision humaine effective (Art. #) sur les décisions automatisées de délestage ou répartition.": {
-   "en": "",
+   "en": "Zero tolerance for interruptions. Effective human oversight (Art. #) of automated load-shedding or dispatch decisions.",
    "fr": "Tolérance zéro aux interruptions. Supervision humaine effective (Art. 14) sur les décisions automatisées de délestage ou répartition."
   },
   "Total TTC à régler": {
-   "en": "",
+   "en": "Total incl. VAT to pay",
    "fr": "Total TTC à régler"
   },
   "Total des jalons applicables à votre rôle et profil (socle # mois inclus)": {
-   "en": "",
+   "en": "Total of the milestones applicable to your role and profile (#-month base included)",
    "fr": "Total des jalons applicables à votre rôle et profil (socle 12 mois inclus)"
   },
   "Total du bilan (M€)": {
-   "en": "",
+   "en": "Balance sheet total (€M)",
    "fr": "Total du bilan (M€)"
   },
   "Total du parc": {
-   "en": "",
+   "en": "Total for the estate",
    "fr": "Total du parc"
   },
   "Tous les leviers sont déclarés sur toutes les lignes.": {
-   "en": "",
+   "en": "All levers are declared on all rows.",
    "fr": "Tous les leviers sont déclarés sur toutes les lignes."
   },
   "Tous les points sont traités. 👍": {
-   "en": "",
+   "en": "All items have been addressed. 👍",
    "fr": "Tous les points sont traités. 👍"
   },
   "Tous secteurs": {
-   "en": "",
+   "en": "All sectors",
    "fr": "Tous secteurs"
   },
   "Tout code qui décide d’un droit d’une personne": {
-   "en": "",
+   "en": "Any code that decides on a person’s right",
    "fr": "Tout code qui décide d’un droit d’une personne"
   },
   "Tout ne mérite pas le circuit complet : prétendre le contraire fait naître le contournement, c’est-à-dire le shadow AI.": {
-   "en": "",
+   "en": "Not everything deserves the full workflow: claiming otherwise breeds workarounds, that is, shadow AI.",
    "fr": "Tout ne mérite pas le circuit complet : prétendre le contraire fait naître le contournement, c’est-à-dire le shadow AI."
   },
   "Tout part de là, et deux défauts suffisent à défaire l’exercice entier : des critères d’acceptation écrits APRÈS la cotation, et un risque résiduel que personne n’a accepté par écrit. Aucun des deux ne se voit dans le document final.": {
-   "en": "",
+   "en": "Everything starts here, and two defects are enough to undo the whole exercise: acceptance criteria written AFTER the rating, and a residual risk that nobody has accepted in writing. Neither shows in the final document.",
    "fr": "Tout part de là, et deux défauts suffisent à défaire l’exercice entier : des critères d’acceptation écrits APRÈS la cotation, et un risque résiduel que personne n’a accepté par écrit. Aucun des deux ne se voit dans le document final."
   },
   "Tout système identifié doit être enregistré — même si le risque est minimal (traçabilité + revue périodique).": {
-   "en": "",
+   "en": "Every system identified must be recorded — even if the risk is minimal (traceability + periodic review).",
    "fr": "Tout système identifié doit être enregistré — même si le risque est minimal (traçabilité + revue périodique)."
   },
   "Tout traitement de données personnelles (y compris l'entraînement d'un modèle IA) doit reposer sur une base légale valide. L'intérêt légitime est souvent retenu pour la phase d'entraînement, sous réserve d'une mise en balance documentée.": {
-   "en": "",
+   "en": "Any processing of personal data (including the training of an AI model) must rest on a valid legal basis. Legitimate interest is often chosen for the training phase, subject to a documented balancing test.",
    "fr": "Tout traitement de données personnelles (y compris l'entraînement d'un modèle IA) doit reposer sur une base légale valide. L'intérêt légitime est souvent retenu pour la phase d'entraînement, sous réserve d'une mise en balance documentée."
   },
   "Toute décision se motive, y compris un refus.": {
-   "en": "",
+   "en": "Every decision is reasoned, including a refusal.",
    "fr": "Toute décision se motive, y compris un refus."
   },
   "Toute la base": {
-   "en": "",
+   "en": "The whole base",
    "fr": "Toute la base"
   },
   "Toute personne physique faisant l'objet d'une décision prise ou assistée par le système est informée de cet usage.": {
-   "en": "",
+   "en": "Every natural person subject to a decision taken or assisted by the system is informed of this use.",
    "fr": "Toute personne physique faisant l'objet d'une décision prise ou assistée par le système est informée de cet usage."
   },
   "Toute restriction imposée à un contenu doit être motivée clairement auprès de l'utilisateur concerné.": {
-   "en": "",
+   "en": "Any restriction imposed on content must be clearly explained to the user concerned.",
    "fr": "Toute restriction imposée à un contenu doit être motivée clairement auprès de l'utilisateur concerné."
   },
   "Toute équipe métier — marketing, RH, juridique, finance, opérations": {
-   "en": "",
+   "en": "Any business team — marketing, HR, legal, finance, operations",
    "fr": "Toute équipe métier — marketing, RH, juridique, finance, opérations"
   },
   "Toutes charges incluses": {
-   "en": "",
+   "en": "All charges included",
    "fr": "Toutes charges incluses"
   },
   "Toutes les lignes portent un volume et sa source.": {
-   "en": "",
+   "en": "All rows carry a volume and its source.",
    "fr": "Toutes les lignes portent un volume et sa source."
   },
   "Toutes les obligations ne sont pas encore applicables. Les pratiques interdites (art. #) le sont depuis le # février #, les modèles à usage général depuis le # août #, le haut risque de l’annexe III au # décembre # et l’annexe I au # août #.": {
-   "en": "",
+   "en": "Not all obligations are applicable yet. The prohibited practices (art. #) have applied since # February #, general-purpose models since # August #, Annex III high-risk from # December # and Annex I from # August #.",
    "fr": "Toutes les obligations ne sont pas encore applicables. Les pratiques interdites (art. 5) le sont depuis le 2 février 2025, les modèles à usage général depuis le 2 août 2025, le haut risque de l’annexe III au 2 décembre 2027 et l’annexe I au 2 août 2028."
   },
   "Toutes équipes (Métiers, IT, Data, Juridique, Direction)": {
-   "en": "",
+   "en": "All teams (Business, IT, Data, Legal, Senior management)",
    "fr": "Toutes équipes (Métiers, IT, Data, Juridique, Direction)"
   },
   "Tracabilite des revisions, incidents et decisions qualite": {
-   "en": "",
+   "en": "Traceability of revisions, incidents and quality decisions",
    "fr": "Tracabilite des revisions, incidents et decisions qualite"
   },
   "Trading algorithmique et detection d opportunites": {
-   "en": "",
+   "en": "Algorithmic trading and opportunity detection",
    "fr": "Trading algorithmique et detection d opportunites"
   },
   "Trading et marchés": {
-   "en": "",
+   "en": "Trading and markets",
    "fr": "Trading et marchés"
   },
   "Trading énergétique algorithmique": {
-   "en": "",
+   "en": "Algorithmic energy trading",
    "fr": "Trading énergétique algorithmique"
   },
   "Traduction automatique et assistance multilingue": {
-   "en": "",
+   "en": "Machine translation and multilingual assistance",
    "fr": "Traduction automatique et assistance multilingue"
   },
   "Traduction et assistance multilingue IA": {
-   "en": "",
+   "en": "AI translation and multilingual assistance",
    "fr": "Traduction et assistance multilingue IA"
   },
   "Traduction juridique ou médicale automatisée, sous-titrage automatique, localisation de contenu par IA": {
-   "en": "",
+   "en": "Automated legal or medical translation, automatic subtitling, AI-driven content localisation",
    "fr": "Traduction juridique ou médicale automatisée, sous-titrage automatique, localisation de contenu par IA"
   },
   "Traduction non officielle des Generative AI Measures chinoises (CAC).": {
-   "en": "",
+   "en": "Unofficial translation of the Chinese Generative AI Measures (CAC).",
    "fr": "Traduction non officielle des Generative AI Measures chinoises (CAC)."
   },
   "Traitement automatisé de documents": {
-   "en": "",
+   "en": "Automated document processing",
    "fr": "Traitement automatisé de documents"
   },
   "Traitement de demandes citoyennes": {
-   "en": "",
+   "en": "Handling of citizens’ requests",
    "fr": "Traitement de demandes citoyennes"
   },
   "Traitement données d'entraînement — Base légale requis": {
-   "en": "",
+   "en": "Processing of training data — legal basis required",
    "fr": "Traitement données d'entraînement — Base légale requis"
   },
   "Traitement à grande échelle": {
-   "en": "",
+   "en": "Large-scale processing",
    "fr": "Traitement à grande échelle"
   },
   "Traitements impliquant un transfert hors UE ; vérifiez les garanties appropriées (clauses contractuelles types, décision d'adéquation).": {
-   "en": "",
+   "en": "Processing involving a transfer outside the EU; check the appropriate safeguards (standard contractual clauses, adequacy decision).",
    "fr": "Traitements impliquant un transfert hors UE ; vérifiez les garanties appropriées (clauses contractuelles types, décision d'adéquation)."
   },
   "Traitements portant sur des données particulières (santé, biométrie, opinions, orientation…), soumis à des garanties renforcées.": {
-   "en": "",
+   "en": "Processing of special categories of data (health, biometrics, opinions, orientation…), subject to enhanced safeguards.",
    "fr": "Traitements portant sur des données particulières (santé, biométrie, opinions, orientation…), soumis à des garanties renforcées."
   },
   "Traitez d’abord les points P# : ce sont ceux qui bloquent une mise sur le marché, pas seulement ceux qui exposent à une sanction.": {
-   "en": "",
+   "en": "Address the P# items first: they are the ones that block placing on the market, not only those that expose you to a penalty.",
    "fr": "Traitez d’abord les points P1 : ce sont ceux qui bloquent une mise sur le marché, pas seulement ceux qui exposent à une sanction."
   },
   "Traitez d’abord les points qui exposent à une sanction directe : tout ne peut pas être mené de front.": {
-   "en": "",
+   "en": "First address the items that expose you to a direct penalty: not everything can be tackled at once.",
    "fr": "Traitez d’abord les points qui exposent à une sanction directe : tout ne peut pas être mené de front."
   },
   "Traitez les exigences COMMUNES avant les spécifiques : elles portent le socle, et les traiter une fois épargne trois fois le travail.": {
-   "en": "",
+   "en": "Address the COMMON requirements before the specific ones: they carry the foundation, and dealing with them once saves three times the work.",
    "fr": "Traitez les exigences COMMUNES avant les spécifiques : elles portent le socle, et les traiter une fois épargne trois fois le travail."
   },
   "Trajectoire de mise en conformité.": {
-   "en": "",
+   "en": "Compliance trajectory.",
    "fr": "Trajectoire de mise en conformité."
   },
   "Tranchez les trente-huit mesures. Écrivez le motif AU MOMENT où vous tranchez.": {
-   "en": "",
+   "en": "Decide on the thirty-eight controls. Write the reason AT THE MOMENT you decide.",
    "fr": "Tranchez les trente-huit mesures. Écrivez le motif AU MOMENT où vous tranchez."
   },
   "Transferts de données (chapitre V)": {
-   "en": "",
+   "en": "Data transfers (Chapter V)",
    "fr": "Transferts de données (chapitre V)"
   },
   "Transferts hors Union européenne": {
-   "en": "",
+   "en": "Transfers outside the European Union",
    "fr": "Transferts hors Union européenne"
   },
   "Transforme la maturité générale en plan d’action concret, point par point, avec référence légale exacte.": {
-   "en": "",
+   "en": "Turns general maturity into a concrete action plan, item by item, with the exact legal reference.",
    "fr": "Transforme la maturité générale en plan d’action concret, point par point, avec référence légale exacte."
   },
   "Transforme une déclaration d’intention en dispositif de contrôle opposable en cas d’inspection.": {
-   "en": "",
+   "en": "Turns a statement of intent into an enforceable control framework in the event of an inspection.",
    "fr": "Transforme une déclaration d’intention en dispositif de contrôle opposable en cas d’inspection."
   },
   "Transforme une intention IA en une liste courte de cas d’usage priorisés, chiffrés et jugés déployables — la base d’un programme orienté valeur métier.": {
-   "en": "",
+   "en": "Turns an AI intention into a shortlist of prioritised use cases, costed and judged deployable — the basis of a programme geared to business value.",
    "fr": "Transforme une intention IA en une liste courte de cas d’usage priorisés, chiffrés et jugés déployables — la base d’un programme orienté valeur métier."
   },
   "Transférer au fil de l’eau": {
-   "en": "",
+   "en": "Transfer as you go",
    "fr": "Transférer au fil de l’eau"
   },
   "Transférer les": {
-   "en": "",
+   "en": "Transfer the",
    "fr": "Transférer les"
   },
   "Transparence & explication aux déployeurs et personnes concernées": {
-   "en": "",
+   "en": "Transparency & explanation to deployers and data subjects",
    "fr": "Transparence & explication aux déployeurs et personnes concernées"
   },
   "Transparence (art. #) et information des personnes": {
-   "en": "",
+   "en": "Transparency (art. #) and informing individuals",
    "fr": "Transparence (art. 50) et information des personnes"
   },
   "Transparence des systèmes de recommandation pour les plateformes ; l'articulation avec l'IA Act se joue sur la même interface.": {
-   "en": "",
+   "en": "Transparency of recommender systems for platforms; the interplay with the AI Act plays out on the same interface.",
    "fr": "Transparence des systèmes de recommandation pour les plateformes ; l'articulation avec l'IA Act se joue sur la même interface."
   },
   "Transparence démocratique": {
-   "en": "",
+   "en": "Democratic transparency",
    "fr": "Transparence démocratique"
   },
   "Transparence et fourniture d'informations": {
-   "en": "",
+   "en": "Transparency and provision of information",
    "fr": "Transparence et fourniture d'informations"
   },
   "Transparence et information (art. # à #)": {
-   "en": "",
+   "en": "Transparency and information (art. # to #)",
    "fr": "Transparence et information (art. 12 à 14)"
   },
   "Transparence et information aux déployeurs": {
-   "en": "",
+   "en": "Transparency and information to deployers",
    "fr": "Transparence et information aux déployeurs"
   },
   "Transparence — systèmes interagissant avec des personnes": {
-   "en": "",
+   "en": "Transparency — systems interacting with people",
    "fr": "Transparence — systèmes interagissant avec des personnes"
   },
   "Transport & mobilité": {
-   "en": "",
+   "en": "Transport & mobility",
    "fr": "Transport & mobilité"
   },
   "Transport ferroviaire, aérien, routier, logistique et constructeurs automobiles.": {
-   "en": "",
+   "en": "Rail, air and road transport, logistics and car manufacturers.",
    "fr": "Transport ferroviaire, aérien, routier, logistique et constructeurs automobiles."
   },
   "Travail temporaire et agences d'emploi, centres de relation client, sécurité privée, propreté, services aux entreprises.": {
-   "en": "",
+   "en": "Temporary work and employment agencies, customer contact centres, private security, cleaning, business services.",
    "fr": "Travail temporaire et agences d'emploi, centres de relation client, sécurité privée, propreté, services aux entreprises."
   },
   "Traçabilité (règlement #/#)": {
-   "en": "",
+   "en": "Traceability (Regulation #/#)",
    "fr": "Traçabilité (règlement 178/2002)"
   },
   "Traçabilité de la revue humaine": {
-   "en": "",
+   "en": "Traceability of human review",
    "fr": "Traçabilité de la revue humaine"
   },
   "Traçabilité de lots": {
-   "en": "",
+   "en": "Batch traceability",
    "fr": "Traçabilité de lots"
   },
   "Traçable et peu coûteux. Le lien se perd au premier écrasement d’historique ou au premier portage de fichier, mais il tient dans l’usage ordinaire.": {
-   "en": "",
+   "en": "Traceable and inexpensive. The link is lost at the first history overwrite or the first file port, but it holds in ordinary use.",
    "fr": "Traçable et peu coûteux. Le lien se perd au premier écrasement d’historique ou au premier portage de fichier, mais il tient dans l’usage ordinaire."
   },
   "Trente-deux sous-articles, trente-huit mesures. L’ordre dans lequel on les prend décide du délai : la déclaration d’applicabilité dépend de l’appréciation des risques, qui dépend du périmètre. Commencer par les mesures parce qu’elles sont concrètes fait refaire la déclaration trois fois.": {
-   "en": "",
+   "en": "Thirty-two sub-clauses, thirty-eight controls. The order in which you take them decides the timeline: the statement of applicability depends on the risk assessment, which depends on the scope. Starting with the controls because they are concrete means redoing the statement three times.",
    "fr": "Trente-deux sous-articles, trente-huit mesures. L’ordre dans lequel on les prend décide du délai : la déclaration d’applicabilité dépend de l’appréciation des risques, qui dépend du périmètre. Commencer par les mesures parce qu’elles sont concrètes fait refaire la déclaration trois fois."
   },
   "Trente-huit mesures sur les données, le cycle de vie des modèles et l’impact sur les personnes : aucune n’a d’équivalent en #.": {
-   "en": "",
+   "en": "Thirty-eight controls on data, the model lifecycle and the impact on people: none has an equivalent in #.",
    "fr": "Trente-huit mesures sur les données, le cycle de vie des modèles et l’impact sur les personnes : aucune n’a d’équivalent en 27001."
   },
   "Trente-six mesures mises en œuvre et deux cases vides : l’audit s’arrête. Dix-huit retenues et vingt écartées, toutes motivées : il passe.": {
-   "en": "",
+   "en": "Thirty-six controls implemented and two empty boxes: the audit stops. Eighteen included and twenty excluded, all justified: it passes.",
    "fr": "Trente-six mesures mises en œuvre et deux cases vides : l’audit s’arrête. Dix-huit retenues et vingt écartées, toutes motivées : il passe."
   },
   "Tri croissant/decroissant sur le meme jeu de donnees JURS (tableau JS), pas de source distincte.": {
-   "en": "",
+   "en": "Ascending/descending sort on the same JURS dataset (JS table), no separate source.",
    "fr": "Tri croissant/decroissant sur le meme jeu de donnees JURS (tableau JS), pas de source distincte."
   },
   "Tri de CV, scoring candidats, matching poste/profil": {
-   "en": "",
+   "en": "CV screening, candidate scoring, job/profile matching",
    "fr": "Tri de CV, scoring candidats, matching poste/profil"
   },
   "Tri et calibrage automatisés": {
-   "en": "",
+   "en": "Automated sorting and grading",
    "fr": "Tri et calibrage automatisés"
   },
   "Tri et classement de candidatures": {
-   "en": "",
+   "en": "Sorting and ranking of applications",
    "fr": "Tri et classement de candidatures"
   },
   "Tri et orientation automatique des reclamations clients.": {
-   "en": "",
+   "en": "Automatic sorting and routing of customer complaints.",
    "fr": "Tri et orientation automatique des reclamations clients."
   },
   "Tri et pré-qualification des candidatures": {
-   "en": "",
+   "en": "Sorting and pre-qualification of applications",
    "fr": "Tri et pré-qualification des candidatures"
   },
   "Tri et scoring automatique des candidatures sur criteres definis.": {
-   "en": "",
+   "en": "Automatic sorting and scoring of applications against defined criteria.",
    "fr": "Tri et scoring automatique des candidatures sur criteres definis."
   },
   "Triage automatique des tickets support": {
-   "en": "",
+   "en": "Automatic triage of support tickets",
    "fr": "Triage automatique des tickets support"
   },
   "Triage automatisé": {
-   "en": "",
+   "en": "Automated triage",
    "fr": "Triage automatisé"
   },
   "Triage des urgences par IA, aide au diagnostic, systèmes de priorisation des patients, IA de prescription": {
-   "en": "",
+   "en": "AI-driven emergency triage, diagnostic aid, patient prioritisation systems, prescribing AI",
    "fr": "Triage des urgences par IA, aide au diagnostic, systèmes de priorisation des patients, IA de prescription"
   },
   "Triage et orientation des patients": {
-   "en": "",
+   "en": "Patient triage and referral",
    "fr": "Triage et orientation des patients"
   },
   "Trier par sujet": {
-   "en": "",
+   "en": "Sort by subject",
    "fr": "Trier par sujet"
   },
   "Trois colonnes, pas deux : décision, justification, ET statut de mise en œuvre. La troisième est celle que l’auditeur recoupe avec le terrain.": {
-   "en": "",
+   "en": "Three columns, not two: decision, justification, AND implementation status. The third is the one the auditor cross-checks on the ground.",
    "fr": "Trois colonnes, pas deux : décision, justification, ET statut de mise en œuvre. La troisième est celle que l’auditeur recoupe avec le terrain."
   },
   "Trois décisions qui, prises tard, se paient en reprise de code et en incertitude sur la propriété.": {
-   "en": "",
+   "en": "Three decisions which, if taken late, are paid for in code rework and uncertainty over ownership.",
    "fr": "Trois décisions qui, prises tard, se paient en reprise de code et en incertitude sur la propriété."
   },
   "Trois méthodes sur les mêmes volumes déclarés ; l’ajustement fin est amorti et totalisé SÉPARÉMENT de l’inférence.": {
-   "en": "",
+   "en": "Three methods on the same declared volumes; fine-tuning is amortised and totalled SEPARATELY from inference.",
    "fr": "Trois méthodes sur les mêmes volumes déclarés ; l’ajustement fin est amorti et totalisé SÉPARÉMENT de l’inférence."
   },
   "Trois natures, jamais mélangées, toujours écrites dans l’infobulle. « publié » : l’exploitant a publié le chiffre. « site » : calculé depuis la capacité annoncée DE CE SITE. « classe » : calculé depuis l’ordre de grandeur typique de sa catégorie — cela répond à « de quel ordre est un campus de ce type ? », jamais à « combien consomme ce site ? ». Aucun des # sites ne publiant capacité, PUE ni consommation, presque tout est de nature « classe » — et la page vous le dit plutôt que de l’habiller.": {
-   "en": "",
+   "en": "Three natures, never mixed, always written in the tooltip. “published”: the operator has published the figure. “site”: calculated from the announced capacity OF THIS SITE. “class”: calculated from the typical order of magnitude of its category — this answers “what order of magnitude is a campus of this type?”, never “how much does this site consume?”. As none of the # sites publishes capacity, PUE or consumption, almost everything is of the “class” nature — and the page tells you so rather than dressing it up.",
    "fr": "Trois natures, jamais mélangées, toujours écrites dans l’infobulle. « publié » : l’exploitant a publié le chiffre. « site » : calculé depuis la capacité annoncée DE CE SITE. « classe » : calculé depuis l’ordre de grandeur typique de sa catégorie — cela répond à « de quel ordre est un campus de ce type ? », jamais à « combien consomme ce site ? ». Aucun des 249 sites ne publiant capacité, PUE ni consommation, presque tout est de nature « classe » — et la page vous le dit plutôt que de l’habiller."
   },
   "Trois risques ne rencontrent aucune mesure de l’annexe A : aucun référentiel ne les rattrapera.": {
-   "en": "",
+   "en": "Three risks meet no Annex A control: no framework will catch them.",
    "fr": "Trois risques ne rencontrent aucune mesure de l’annexe A : aucun référentiel ne les rattrapera."
   },
   "Trois scénarios affichés": {
-   "en": "",
+   "en": "Three scenarios displayed",
    "fr": "Trois scénarios affichés"
   },
   "Trois usages distincts : qualifier une situation au regard des textes applicables, passer un projet de contrat au clausier fournisseurs, et préparer une position d’arbitrage. La qualification est déterministe — elle applique des règles écrites, pas une interprétation.": {
-   "en": "",
+   "en": "Three distinct uses: qualify a situation against the applicable texts, run a draft contract through the supplier clause library, and prepare an arbitration position. The qualification is deterministic — it applies written rules, not an interpretation.",
    "fr": "Trois usages distincts : qualifier une situation au regard des textes applicables, passer un projet de contrat au clausier fournisseurs, et préparer une position d’arbitrage. La qualification est déterministe — elle applique des règles écrites, pas une interprétation."
   },
   "Trois voies, selon ce qui est en jeu": {
-   "en": "",
+   "en": "Three routes, depending on what is at stake",
    "fr": "Trois voies, selon ce qui est en jeu"
   },
   "Très strict": {
-   "en": "",
+   "en": "Very strict",
    "fr": "Très strict"
   },
   "Tu es Sentinel, expert reglementaire IA de CONSEILPREV (Paris, France). Reponds en francais avec precision et concision (max # mots). Domaines : EU AI Act (Regl. #/#), NIS#, RGPD, DORA, ISO #, ISO #, gouvernance IA, cybersecurite. Pour tout audit ou projet : christophe.cerf@outlook.com. Pas d'avis juridique — orientations expertes. Contexte page actuelle :": {
-   "en": "",
+   "en": "You are Sentinel, CONSEILPREV’s AI regulatory expert (Paris, France). Reply in French with precision and concision (max # words). Areas: EU AI Act (Reg. #/#), NIS #, GDPR, DORA, ISO #, ISO #, AI governance, cybersecurity. For any audit or project: christophe.cerf@outlook.com. No legal advice — expert guidance. Current page context:",
    "fr": "Tu es Sentinel, expert reglementaire IA de CONSEILPREV (Paris, France). Reponds en francais avec precision et concision (max 320 mots). Domaines : EU AI Act (Regl. 2024/1689), NIS2, RGPD, DORA, ISO 42001, ISO 27001, gouvernance IA, cybersecurite. Pour tout audit ou projet : christophe.cerf@outlook.com. Pas d'avis juridique — orientations expertes. Contexte page actuelle :"
   },
   "Tu es consultant senior CONSEILPREV specialise en gouvernance IA. Redige un livrable operationnel detaille pour la phase suivante d'un plan de mise en conformite EU AI Act.": {
-   "en": "",
+   "en": "You are a senior CONSEILPREV consultant specialising in AI governance. Draft a detailed operational deliverable for the next phase of an EU AI Act compliance plan.",
    "fr": "Tu es consultant senior CONSEILPREV specialise en gouvernance IA. Redige un livrable operationnel detaille pour la phase suivante d'un plan de mise en conformite EU AI Act."
   },
   "Tu es un analyste juridique specialise en regulation internationale de l IA. Reponds uniquement en JSON strict.": {
-   "en": "",
+   "en": "You are a legal analyst specialising in international AI regulation. Reply only in strict JSON.",
    "fr": "Tu es un analyste juridique specialise en regulation internationale de l IA. Reponds uniquement en JSON strict."
   },
   "Type : \"Agent / RAG\". Données utilisées : base documentaire concernée. Rôle : Déployeur.": {
-   "en": "",
+   "en": "Type: \"Agent / RAG\". Data used: relevant document base. Role: Deployer.",
    "fr": "Type : \"Agent / RAG\". Données utilisées : base documentaire concernée. Rôle : Déployeur."
   },
   "Type : \"Chatbot / LLM\". Transparence Art. # : Oui — mention explicite requise.": {
-   "en": "",
+   "en": "Type: \"Chatbot / LLM\". Transparency Art. #: Yes — explicit mention required.",
    "fr": "Type : \"Chatbot / LLM\". Transparence Art. 50 : Oui — mention explicite requise."
   },
   "Type : \"GPAI / Traduction\". Fournisseur : modèle utilisé + éditeur. Preuves : CGU du modèle conservées.": {
-   "en": "",
+   "en": "Type: \"GPAI / Translation\". Provider: model used + vendor. Evidence: model terms of use kept.",
    "fr": "Type : \"GPAI / Traduction\". Fournisseur : modèle utilisé + éditeur. Preuves : CGU du modèle conservées."
   },
   "Type : \"Générateur IA\". Preuves : politique de marquage interne à conserver.": {
-   "en": "",
+   "en": "Type: \"AI generator\". Evidence: internal marking policy to be kept.",
    "fr": "Type : \"Générateur IA\". Preuves : politique de marquage interne à conserver."
   },
   "Type : \"IA de détection/réponse\". Classification : Haut risque si infrastructure critique. Rôle : Déployeur.": {
-   "en": "",
+   "en": "Type: \"Detection/response AI\". Classification: High risk if critical infrastructure. Role: Deployer.",
    "fr": "Type : \"IA de détection/réponse\". Classification : Haut risque si infrastructure critique. Rôle : Déployeur."
   },
   "Type : \"Modèle open source auto-hébergé\". Rôle : Fournisseur. Product Owner : équipe IT responsable.": {
-   "en": "",
+   "en": "Type: \"Self-hosted open-source model\". Role: Provider. Product Owner: responsible IT team.",
    "fr": "Type : \"Modèle open source auto-hébergé\". Rôle : Fournisseur. Product Owner : équipe IT responsable."
   },
   "Type : \"Moteur de recommandation\". Transparence Art. # : oui si personnalisation explicite. Rôle : Déployeur.": {
-   "en": "",
+   "en": "Type: \"Recommendation engine\". Transparency Art. #: yes if explicit personalisation. Role: Deployer.",
    "fr": "Type : \"Moteur de recommandation\". Transparence Art. 50 : oui si personnalisation explicite. Rôle : Déployeur."
   },
   "Type : \"SaaS tiers\". Service utilisateur : département concerné. Rôle : Déployeur.": {
-   "en": "",
+   "en": "Type: \"Third-party SaaS\". User department: department concerned. Role: Deployer.",
    "fr": "Type : \"SaaS tiers\". Service utilisateur : département concerné. Rôle : Déployeur."
   },
   "Type de système": {
-   "en": "",
+   "en": "System type",
    "fr": "Type de système"
   },
   "Type d’entité": {
-   "en": "",
+   "en": "Entity type",
    "fr": "Type d’entité"
   },
   "Types de données traitées par le système — données personnelles, biométriques, professionnelles…": {
-   "en": "",
+   "en": "Types of data processed by the system — personal, biometric, professional data…",
    "fr": "Types de données traitées par le système — données personnelles, biométriques, professionnelles…"
   },
   "Téléassistance et détection de chute": {
-   "en": "",
+   "en": "Remote assistance and fall detection",
    "fr": "Téléassistance et détection de chute"
   },
   "Téléchargement impossible : vérifiez votre connexion.": {
-   "en": "",
+   "en": "Download not possible: check your connection.",
    "fr": "Téléchargement impossible : vérifiez votre connexion."
   },
   "US EO # — Révision imminente": {
-   "en": "",
+   "en": "US EO # — Imminent revision",
    "fr": "US EO 14110 — Révision imminente"
   },
   "UTC — les fichiers servis sont relus à chaque mesure ; la case « Conforme » reste une attestation humaine.": {
-   "en": "",
+   "en": "UTC — the files served are re-read at each measurement; the “Compliant” box remains a human attestation.",
    "fr": "UTC — les fichiers servis sont relus à chaque mesure ; la case « Conforme » reste une attestation humaine."
   },
   "Un PoC inscrit au registre se transforme en MVP sans reprise documentaire — un PoC non inscrit la paie deux fois.": {
-   "en": "",
+   "en": "A PoC recorded in the register becomes an MVP without documentation rework — a PoC not recorded pays for it twice.",
    "fr": "Un PoC inscrit au registre se transforme en MVP sans reprise documentaire — un PoC non inscrit la paie deux fois."
   },
   "Un argumentaire d’implantation opposable, au lieu d’une préférence justifiée après coup.": {
-   "en": "",
+   "en": "An enforceable siting rationale, instead of a preference justified after the fact.",
    "fr": "Un argumentaire d’implantation opposable, au lieu d’une préférence justifiée après coup."
   },
   "Un article de # à # ne se déclare pas « sans objet » : ce sont des exigences. Seules les mesures de l’annexe A s’écartent.": {
-   "en": "",
+   "en": "A clause from # to # cannot be declared “Not applicable”: they are requirements. Only Annex A controls can be excluded.",
    "fr": "Un article de 4 à 10 ne se déclare pas « sans objet » : ce sont des exigences. Seules les mesures de l’annexe A s’écartent."
   },
   "Un article non déclaré compte pour zéro et reste au dénominateur. Le silence n’allège pas l’exigence.": {
-   "en": "",
+   "en": "An undeclared article counts as zero and stays in the denominator. Silence does not lighten the requirement.",
    "fr": "Un article non déclaré compte pour zéro et reste au dénominateur. Le silence n’allège pas l’exigence."
   },
   "Un assistant bâti sur un modèle tiers et mis en service sous votre nom peut faire de vous un fournisseur en aval. La qualification se tranche au cadrage, pas à la mise en production.": {
-   "en": "",
+   "en": "An assistant built on a third-party model and put into service under your name can make you a downstream provider. The qualification is decided at scoping, not at go-live.",
    "fr": "Un assistant bâti sur un modèle tiers et mis en service sous votre nom peut faire de vous un fournisseur en aval. La qualification se tranche au cadrage, pas à la mise en production."
   },
   "Un audit bâclé désigne les mauvaises formations. Si l’ordre proposé vous surprend, c’est l’audit qu’il faut reprendre, pas la liste.": {
-   "en": "",
+   "en": "A botched audit points to the wrong courses. If the proposed order surprises you, it is the audit that needs redoing, not the list.",
    "fr": "Un audit bâclé désigne les mauvaises formations. Si l’ordre proposé vous surprend, c’est l’audit qu’il faut reprendre, pas la liste."
   },
   "Un audit interne conduit par celui qui a écrit le système n’en est pas un. L’indépendance se vérifie sur l’organigramme.": {
-   "en": "",
+   "en": "An internal audit conducted by the person who wrote the system is not one. Independence is checked on the organisation chart.",
    "fr": "Un audit interne conduit par celui qui a écrit le système n’en est pas un. L’indépendance se vérifie sur l’organigramme."
   },
   "Un avis de valeur produit par un modèle et remis à un client reste l'avis du professionnel. La loi Hoguet ne connaît pas d'exonération algorithmique.": {
-   "en": "",
+   "en": "A valuation opinion produced by a model and given to a client remains the professional’s opinion. The Hoguet Act knows no algorithmic exemption.",
    "fr": "Un avis de valeur produit par un modèle et remis à un client reste l'avis du professionnel. La loi Hoguet ne connaît pas d'exonération algorithmique."
   },
   "Un axe déclaré au-dessus de sa famille #-# est ramené à elle, et le dépassement est SIGNALÉ : c'est là que se voit l'écart entre ce qu'on croit avoir adapté et ce qu'on a réellement en dessous.": {
-   "en": "",
+   "en": "An axis declared above its #-# family is brought back down to it, and the excess is FLAGGED: that is where the gap shows between what you believe you have tailored and what you actually have underneath.",
    "fr": "Un axe déclaré au-dessus de sa famille 800-53 est ramené à elle, et le dépassement est SIGNALÉ : c'est là que se voit l'écart entre ce qu'on croit avoir adapté et ce qu'on a réellement en dessous."
   },
   "Un aéroréfrigérant sec affiche zéro eau SUR SITE tout en consommant davantage à la source sur un réseau thermique : WUE_source = WUE_site + EWIF × PUE.": {
-   "en": "",
+   "en": "A dry cooler shows zero ON-SITE water while consuming more at the source on a thermal grid: WUE_source = WUE_site + EWIF × PUE.",
    "fr": "Un aéroréfrigérant sec affiche zéro eau SUR SITE tout en consommant davantage à la source sur un réseau thermique : WUE_source = WUE_site + EWIF × PUE."
   }
  }

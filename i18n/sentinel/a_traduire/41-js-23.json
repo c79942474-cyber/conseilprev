@@ -8,635 +8,635 @@
  "bloc": {},
  "texte": {
   "Si l’incident est encore en cours à un mois, un rapport d’avancement remplace le rapport final, qui vient un mois après le traitement.": {
-   "en": "",
+   "en": "If the incident is still ongoing after one month, a progress report replaces the final report, which comes one month after it has been handled.",
    "fr": "Si l’incident est encore en cours à un mois, un rapport d’avancement remplace le rapport final, qui vient un mois après le traitement."
   },
   "Si l’inférence n’est pas là, arrêtez-vous et documentez-le : c’est la sortie du champ la moins souvent vérifiée et la plus économique.": {
-   "en": "",
+   "en": "If inference is not there, stop and document it: it is the least often checked and cheapest way out of scope.",
    "fr": "Si l’inférence n’est pas là, arrêtez-vous et documentez-le : c’est la sortie du champ la moins souvent vérifiée et la plus économique."
   },
   "Si un audit a déjà été engagé sur Sentinel, le score se pré-remplit avec la vraie donnée mesurée. Sinon, la page bascule en mode estimation manuelle assistée avec # raccourcis (Aucune démarche ~#%, Démarche initiale ~#%, Démarche avancée ~#%) pour estimer collaborativement avec les parties prenantes du prospect.": {
-   "en": "",
+   "en": "If an audit has already been started on Sentinel, the score is pre-filled with the actual measured data. Otherwise, the page switches to assisted manual estimation mode with # shortcuts (No action taken ~#%, Initial steps ~#%, Advanced ~#%) to estimate collaboratively with the prospect’s stakeholders.",
    "fr": "Si un audit a déjà été engagé sur Sentinel, le score se pré-remplit avec la vraie donnée mesurée. Sinon, la page bascule en mode estimation manuelle assistée avec 3 raccourcis (Aucune démarche ~10%, Démarche initiale ~30%, Démarche avancée ~55%) pour estimer collaborativement avec les parties prenantes du prospect."
   },
   "Si un import échoue": {
-   "en": "",
+   "en": "If an import fails",
    "fr": "Si un import échoue"
   },
   "Si vous exploitez de l’IA, ses systèmes sont des actifs d’information comme les autres.": {
-   "en": "",
+   "en": "If you operate AI, its systems are information assets like any other.",
    "fr": "Si vous exploitez de l’IA, ses systèmes sont des actifs d’information comme les autres."
   },
   "Si vous fabriquez aussi un produit, la mesure e) et l’annexe I du CRA se recouvrent largement.": {
-   "en": "",
+   "en": "If you also manufacture a product, measure e) and Annex I of the CRA largely overlap.",
    "fr": "Si vous fabriquez aussi un produit, la mesure e) et l’annexe I du CRA se recouvrent largement."
   },
   "Si vous êtes certifié ISO/IEC #, passez par ici AVANT de coter le cadre.": {
-   "en": "",
+   "en": "If you are ISO/IEC # certified, come here BEFORE rating the framework.",
    "fr": "Si vous êtes certifié ISO/IEC 27001, passez par ici AVANT de coter le cadre."
   },
   "Si vous êtes déjà certifié, votre reste à faire est nommé ici, et il est court : onze mesures. C’est une demi-journée de décisions, pas un projet. La page porte aussi le rapprochement mesure par mesure entre l’article #, §#, de NIS # et l’annexe A — quarante-deux mesures répondent aux dix exigences de la directive.": {
-   "en": "",
+   "en": "If you are already certified, what you still have to do is named here, and it is short: eleven controls. It is half a day of decisions, not a project. The page also carries the measure-by-measure mapping between Article #(#) of NIS # and Annex A — forty-two controls answer the ten requirements of the Directive.",
    "fr": "Si vous êtes déjà certifié, votre reste à faire est nommé ici, et il est court : onze mesures. C’est une demi-journée de décisions, pas un projet. La page porte aussi le rapprochement mesure par mesure entre l’article 21, §2, de NIS 2 et l’annexe A — quarante-deux mesures répondent aux dix exigences de la directive."
   },
   "Si vous êtes entité essentielle, lisez les quatre exigences de l’objectif # : c’est vous qu’il nomme, pas la DSI.": {
-   "en": "",
+   "en": "If you are an essential entity, read the four requirements of objective #: it names you, not the IT department.",
    "fr": "Si vous êtes entité essentielle, lisez les quatre exigences de l’objectif 16 : c’est vous qu’il nomme, pas la DSI."
   },
   "Signalement des incidents graves": {
-   "en": "",
+   "en": "Reporting of serious incidents",
    "fr": "Signalement des incidents graves"
   },
   "Signaler tout incident grave à la Commission sans délai": {
-   "en": "",
+   "en": "Report any serious incident to the Commission without delay",
    "fr": "Signaler tout incident grave à la Commission sans délai"
   },
   "Signature du representant legal autorise du fournisseur": {
-   "en": "",
+   "en": "Signature of the provider’s authorised legal representative",
    "fr": "Signature du representant legal autorise du fournisseur"
   },
   "Simulateur IA Act — Sources et methodologie": {
-   "en": "",
+   "en": "AI Act simulator — Sources and methodology",
    "fr": "Simulateur IA Act — Sources et methodologie"
   },
   "Simulateur de conformite AI Act": {
-   "en": "",
+   "en": "AI Act compliance simulator",
    "fr": "Simulateur de conformite AI Act"
   },
   "Simulation de scenarios de transition energetique": {
-   "en": "",
+   "en": "Simulation of energy transition scenarios",
    "fr": "Simulation de scenarios de transition energetique"
   },
   "Simulation indicative établie depuis les paramètres renseignés dans Sentinel AI — les mois de déclenchement sont prévisionnels, la facturation réelle n’intervenant qu’après vérification. Ce document constitue une aide à la décision commerciale et ne vaut pas engagement contractuel tant qu’il n’est pas annexé à un contrat signé. CONSEILPREV — Christophe CERF — +# # # # # # — christophe.cerf@outlook.com": {
-   "en": "",
+   "en": "Indicative simulation based on the parameters entered in Sentinel AI — the trigger months are projected, actual billing only occurring after verification. This document is a commercial decision aid and does not constitute a contractual commitment until it is annexed to a signed contract. CONSEILPREV — Christophe CERF — +# # # # # # — christophe.cerf@outlook.com",
    "fr": "Simulation indicative établie depuis les paramètres renseignés dans Sentinel AI — les mois de déclenchement sont prévisionnels, la facturation réelle n’intervenant qu’après vérification. Ce document constitue une aide à la décision commerciale et ne vaut pas engagement contractuel tant qu’il n’est pas annexé à un contrat signé. CONSEILPREV — Christophe CERF — +33 6 60 69 21 45 — christophe.cerf@outlook.com"
   },
   "Simulation predictive d impact des projets d amenagement": {
-   "en": "",
+   "en": "Predictive simulation of the impact of development projects",
    "fr": "Simulation predictive d impact des projets d amenagement"
   },
   "Simulation tarification par résultats": {
-   "en": "",
+   "en": "Outcome-based pricing simulation",
    "fr": "Simulation tarification par résultats"
   },
   "Simulation — aucune donnée modifiée.": {
-   "en": "",
+   "en": "Simulation — no data modified.",
    "fr": "Simulation — aucune donnée modifiée."
   },
   "Simulez l’exposition financière selon le type de manquement et la taille de l’entreprise.": {
-   "en": "",
+   "en": "Simulate the financial exposure according to the type of failing and the size of the company.",
    "fr": "Simulez l’exposition financière selon le type de manquement et la taille de l’entreprise."
   },
   "Site de reference non officiel mais largement utilise pour la vulgarisation par article. A distinguer d EUR-Lex qui reste la seule source juridique faisant foi.": {
-   "en": "",
+   "en": "Unofficial reference site but widely used for article-by-article explanations. To be distinguished from EUR-Lex, which remains the only authentic legal source.",
    "fr": "Site de reference non officiel mais largement utilise pour la vulgarisation par article. A distinguer d EUR-Lex qui reste la seule source juridique faisant foi."
   },
   "Site public (hébergement, réseau, terminal)": {
-   "en": "",
+   "en": "Public site (hosting, network, device)",
    "fr": "Site public (hébergement, réseau, terminal)"
   },
   "Situe objectivement votre exposition par rapport à vos pairs — utile pour argumenter un budget de mise en conformité.": {
-   "en": "",
+   "en": "Objectively situates your exposure relative to your peers — useful for arguing a compliance budget.",
    "fr": "Situe objectivement votre exposition par rapport à vos pairs — utile pour argumenter un budget de mise en conformité."
   },
   "Situez # à côté des autres cadres que vous portez déjà.": {
-   "en": "",
+   "en": "Place # alongside the other frameworks you already carry.",
    "fr": "Situez 42001 à côté des autres cadres que vous portez déjà."
   },
   "Situez la maturité du secteur de votre prospect par rapport à ses pairs.": {
-   "en": "",
+   "en": "Situate the maturity of your prospect’s sector relative to its peers.",
    "fr": "Situez la maturité du secteur de votre prospect par rapport à ses pairs."
   },
   "Situez la maturité et les priorités du client par rapport à son secteur.": {
-   "en": "",
+   "en": "Situate the client’s maturity and priorities relative to its sector.",
    "fr": "Situez la maturité et les priorités du client par rapport à son secteur."
   },
   "Situez le palier, et lisez l’assiette avant le montant.": {
-   "en": "",
+   "en": "Identify the tier, and read the base before the amount.",
    "fr": "Situez le palier, et lisez l’assiette avant le montant."
   },
   "Situez les approches retenues par rapport à l’état de la recherche.": {
-   "en": "",
+   "en": "Situate the approaches adopted relative to the state of research.",
    "fr": "Situez les approches retenues par rapport à l’état de la recherche."
   },
   "Situez les tensions normatives : ce qui converge, ce qui diverge, et où un projet se heurte à une exigence locale.": {
-   "en": "",
+   "en": "Situate the regulatory tensions: what converges, what diverges, and where a project runs up against a local requirement.",
    "fr": "Situez les tensions normatives : ce qui converge, ce qui diverge, et où un projet se heurte à une exigence locale."
   },
   "Situez les trois textes les uns par rapport aux autres : ce que chacun exige, ce qu’ils partagent, ce que l’un demande et pas les autres.": {
-   "en": "",
+   "en": "Situate the three texts relative to one another: what each requires, what they share, what one asks for and the others do not.",
    "fr": "Situez les trois textes les uns par rapport aux autres : ce que chacun exige, ce qu’ils partagent, ce que l’un demande et pas les autres."
   },
   "Situez lesquels de ces risques deviennent des obligations quand le système est à haut risque.": {
-   "en": "",
+   "en": "Identify which of these risks become obligations when the system is high-risk.",
    "fr": "Situez lesquels de ces risques deviennent des obligations quand le système est à haut risque."
   },
   "Situez votre palier.": {
-   "en": "",
+   "en": "Identify your tier.",
    "fr": "Situez votre palier."
   },
   "Six des douze ne relèvent pas de la cyber — les confier au RSSI produit un registre que personne n’arbitre.": {
-   "en": "",
+   "en": "Six of the twelve are not cyber matters — handing them to the CISO produces a register nobody arbitrates.",
    "fr": "Six des douze ne relèvent pas de la cyber — les confier au RSSI produit un registre que personne n’arbitre."
   },
   "Six mois au moins, sauf disposition contraire — les journaux sont ce qui rendra l'usage démontrable en cas de contrôle.": {
-   "en": "",
+   "en": "At least six months, unless otherwise provided — the logs are what will make the use demonstrable in the event of an inspection.",
    "fr": "Six mois au moins, sauf disposition contraire — les journaux sont ce qui rendra l'usage démontrable en cas de contrôle."
   },
   "Socle et dix-huit familles": {
-   "en": "",
+   "en": "Baseline and eighteen families",
    "fr": "Socle et dix-huit familles"
   },
   "Sollicitations de niveau # −# % ; réponse immédiate.": {
-   "en": "",
+   "en": "Level # requests −# %; immediate response.",
    "fr": "Sollicitations de niveau 1 −50 % ; réponse immédiate."
   },
   "Somme pondérée sur SEPT critères, exécutée CÔTÉ SERVEUR (implantation.py) : score = Σ(poids × note) / Σ(poids), les poids # à # étant les vôtres. La formule affichée est la formule exécutée.": {
-   "en": "",
+   "en": "Weighted sum over SEVEN criteria, executed SERVER-SIDE (implantation.py): score = Σ(weight × rating) / Σ(weight), the weights # to # being yours. The formula displayed is the formula executed.",
    "fr": "Somme pondérée sur SEPT critères, exécutée CÔTÉ SERVEUR (implantation.py) : score = Σ(poids × note) / Σ(poids), les poids 0 à 4 étant les vôtres. La formule affichée est la formule exécutée."
   },
   "Sort de cette décision :": {
-   "en": "",
+   "en": "Outcome of this decision:",
    "fr": "Sort de cette décision :"
   },
   "Sortez la liste des DESTINATAIRES de vos services — celle-là, pas celle de vos fournisseurs.": {
-   "en": "",
+   "en": "Pull out the list of the RECIPIENTS of your services — that one, not the list of your suppliers.",
    "fr": "Sortez la liste des DESTINATAIRES de vos services — celle-là, pas celle de vos fournisseurs."
   },
   "Sources : EcoLogits (GenAI Impact) · Boavizta · ADEME Base Empreinte · RTE éCO#mix / ODRÉ · ML.ENERGY.": {
-   "en": "",
+   "en": "Sources: EcoLogits (GenAI Impact) · Boavizta · ADEME Base Empreinte · RTE éCO#mix / ODRÉ · ML.ENERGY.",
    "fr": "Sources : EcoLogits (GenAI Impact) · Boavizta · ADEME Base Empreinte · RTE éCO2mix / ODRÉ · ML.ENERGY."
   },
   "Sources de référence :": {
-   "en": "",
+   "en": "Reference sources:",
    "fr": "Sources de référence :"
   },
   "Sources primaires citées par le référentiel — éditeur, millésime et lien, contrôlées au registre de vérification": {
-   "en": "",
+   "en": "Primary sources cited by the framework — publisher, edition and link, checked in the verification register",
    "fr": "Sources primaires citées par le référentiel — éditeur, millésime et lien, contrôlées au registre de vérification"
   },
   "Sous # M€ de chiffre d’affaires, c’est le montant fixe qui commande. Une PME qui lit « # % » se rassure à tort.": {
-   "en": "",
+   "en": "Below €# million in turnover, it is the fixed amount that governs. An SME that reads “# %” is wrongly reassured.",
    "fr": "Sous 600 M€ de chiffre d’affaires, c’est le montant fixe qui commande. Une PME qui lit « 2,5 % » se rassure à tort."
   },
   "Sous ce seuil, une PME est exposée à # M€ quel que soit son chiffre d’affaires. C’est le contraire de ce que « # % » laisse entendre, et c’est le premier chiffre à corriger en comité.": {
-   "en": "",
+   "en": "Below this threshold, an SME is exposed to €# million whatever its turnover. It is the opposite of what “# %” suggests, and it is the first figure to correct in committee.",
    "fr": "Sous ce seuil, une PME est exposée à 15 M€ quel que soit son chiffre d’affaires. C’est le contraire de ce que « 2,5 % » laisse entendre, et c’est le premier chiffre à corriger en comité."
   },
   "Sous le classement, chaque pays a sa fiche dépliable : AVANTAGES et INCONVÉNIENTS en deux colonnes, un COMMENTAIRE d’arbitrage, puis les perspectives à # — annonces d’investissement datées et sourcées (InvestAI, Sommet de Paris, AWS Aragon, Stargate Norway…) distinguées des CONTRAINTES constatées : moratoire de raccordement de Dublin, encadrement néerlandais des hyperscale, PUE réglementaire allemand. Une contrainte constatée vaut souvent plus qu’une promesse chiffrée. Cette analyse est de nature « analyse » : la lecture du cabinet, datée, à discuter — c’est écrit dessus.": {
-   "en": "",
+   "en": "Below the ranking, each country has its expandable record: ADVANTAGES and DISADVANTAGES in two columns, an arbitration COMMENT, then the outlook to # — dated and sourced investment announcements (InvestAI, Paris Summit, AWS Aragon, Stargate Norway…) distinguished from observed CONSTRAINTS: Dublin’s grid connection moratorium, Dutch restrictions on hyperscale, the German regulatory PUE. An observed constraint is often worth more than a costed promise. This analysis is of the “analysis” type: the firm’s reading, dated, open to discussion — it says so on it.",
    "fr": "Sous le classement, chaque pays a sa fiche dépliable : AVANTAGES et INCONVÉNIENTS en deux colonnes, un COMMENTAIRE d’arbitrage, puis les perspectives à 2030 — annonces d’investissement datées et sourcées (InvestAI, Sommet de Paris, AWS Aragon, Stargate Norway…) distinguées des CONTRAINTES constatées : moratoire de raccordement de Dublin, encadrement néerlandais des hyperscale, PUE réglementaire allemand. Une contrainte constatée vaut souvent plus qu’une promesse chiffrée. Cette analyse est de nature « analyse » : la lecture du cabinet, datée, à discuter — c’est écrit dessus."
   },
   "Sous les onglets, deux listes : VOTRE RÔLE puis LE PARCOURS. Sept chemins de lecture — investisseur, banque, assurance, climatologue, spécialiste de l’eau, analyste ESG, et l’enveloppe d’investissement. Chacun conduit dans l’ordre qui concerne le métier et nomme, à chaque étape, LE PIÈGE propre à ce métier. La seconde liste ne propose que ce qui a un sens pour le rôle choisi, avec le nombre d’étapes ; un rôle qui n’a qu’un chemin démarre sans second clic. Le bouton « Parcours guidé » reste là pour lire les sept descriptions en entier. La section visée est soulignée, jamais masquée : on lit la consigne et la donnée ensemble.": {
-   "en": "",
+   "en": "Under the tabs, two lists: YOUR ROLE then THE PATH. Seven reading paths — investor, bank, insurance, climatologist, water specialist, ESG analyst, and the investment envelope. Each one leads in the order that matters to the profession and names, at each step, THE TRAP specific to that profession. The second list offers only what makes sense for the chosen role, with the number of steps; a role with only one path starts without a second click. The “Guided path” button remains there to read the seven descriptions in full. The targeted section is highlighted, never hidden: you read the instruction and the data together.",
    "fr": "Sous les onglets, deux listes : VOTRE RÔLE puis LE PARCOURS. Sept chemins de lecture — investisseur, banque, assurance, climatologue, spécialiste de l’eau, analyste ESG, et l’enveloppe d’investissement. Chacun conduit dans l’ordre qui concerne le métier et nomme, à chaque étape, LE PIÈGE propre à ce métier. La seconde liste ne propose que ce qui a un sens pour le rôle choisi, avec le nombre d’étapes ; un rôle qui n’a qu’un chemin démarre sans second clic. Le bouton « Parcours guidé » reste là pour lire les sept descriptions en entier. La section visée est soulignée, jamais masquée : on lit la consigne et la donnée ensemble."
   },
   "Sous les paramètres de programme, un dépliant « CRITÈRES DE CONCEPTION » ouvre sept réglages, tous facultatifs. Ils viennent du référentiel d’ingénierie CONSEILPREV — le module centres de données de conseilprevcyber — qui cite ASHRAE TC #, la directive (UE) #/# et son règlement délégué (UE) #/#, le Climate Neutral Data Centre Pact et ISO/IEC #. Vous pouvez IMPOSER la famille de refroidissement au lieu de la laisser déduire du climat et de l’eau du pays ; choisir la CLASSE D’AIR ADMISE, de A# à A#, qui est le levier le moins cher qui existe puisqu’il ne coûte aucun matériel — mais qui engage la garantie constructeur ; imposer un PUE contractuel, qui prime alors sur toute déduction ; régler le TAUX DE CHARGE, sachant que sous # la pénalité de charge partielle devient le premier poste de perte, ce que le module vous dit alors en toutes lettres ; saisir le PRIX de votre contrat d’électricité, ce qui fait sortir ce poste de la liste des non-chiffrables ; saisir l’INTENSITÉ CARBONE de votre fourniture, en approche « market-based » du GHG Protocol, plutôt que la moyenne nationale ; et déclarer la PART D’ÉNERGIE SANS CARBONE contractualisée, l’indicateur REF d’EN #-#-#. Chaque valeur que vous saisissez fait basculer la nature du poste concerné sur SAISI : le dossier exporté dira que c’est vous qui l’engagez, pas ce référentiel. Ces critères ne changent PAS le coût au mégawatt — rien dans ce référentiel ne le permettrait. Ils changent ce qui se passe après : le PUE, donc l’électricité, donc le coût total sur dix ans, c’est-à-dire le seul chiffre qui départage deux pays. Deux blocs nouveaux apparaissent enfin dans le résultat : le CARBONE INCORPORÉ de la construction, amorti par lot sur sa propre durée de vie — sans lui la comparaison entre une construction neuve et une reprise est biaisée, et un dossier CSRD est incomplet dès sa première page — et les REPÈRES DE MARCHÉ du Climate Neutral Data Centre Pact, dont le verdict n’est pas « conforme » mais « dans la cible » ou « à justifier », parce qu’il s’agit d’un engagement volontaire et non d’une obligation. Un huitième critère manque volontairement : la REDONDANCE, qui est pourtant le premier multiplicateur de coût des lots # et #. Aucune source de ce référentiel ne la chiffre ; elle rejoint donc la liste des postes affichés vides, avec la question à poser — un coefficient plausible mais inventé serait plus dangereux qu’une case blanche, parce qu’il serait cru.": {
-   "en": "",
+   "en": "Below the programme parameters, a “DESIGN CRITERIA” drop-down opens seven settings, all optional. They come from the CONSEILPREV engineering framework — the data centre module of conseilprevcyber — which cites ASHRAE TC #, Directive (EU) #/# and its Delegated Regulation (EU) #/#, the Climate Neutral Data Centre Pact and ISO/IEC #. You can IMPOSE the cooling family instead of letting it be inferred from the country’s climate and water; choose the ALLOWABLE AIR CLASS, from A# to A#, which is the cheapest lever there is since it costs no equipment — but which engages the manufacturer’s warranty; impose a contractual PUE, which then takes precedence over any inference; set the LOAD RATE, bearing in mind that below # the partial-load penalty becomes the largest loss item, which the module then tells you in so many words; enter the PRICE of your electricity contract, which takes that item off the list of items that cannot be costed; enter the CARBON INTENSITY of your supply, using the GHG Protocol “market-based” approach, rather than the national average; and declare the contracted SHARE OF CARBON-FREE ENERGY, the REF indicator of EN #-#-#. Each value you enter switches the nature of the item concerned to ENTERED: the exported file will say that you are the one committing to it, not this framework. These criteria do NOT change the cost per megawatt — nothing in this framework would allow it. They change what happens afterwards: the PUE, hence the electricity, hence the total cost over ten years, that is, the only figure that separates two countries. Finally, two new blocks appear in the result: the EMBODIED CARBON of the construction, amortised per lot over its own lifetime — without it the comparison between a new build and a refurbishment is biased, and a CSRD file is incomplete from its first page — and the MARKET BENCHMARKS of the Climate Neutral Data Centre Pact, whose verdict is not “compliant” but “on target” or “to be justified”, because it is a voluntary commitment and not an obligation. An eighth criterion is deliberately missing: REDUNDANCY, which is nevertheless the largest cost multiplier of lots # and #. No source in this framework costs it; it therefore joins the list of items displayed empty, with the question to ask — a plausible but invented coefficient would be more dangerous than a blank box, because it would be believed.",
    "fr": "Sous les paramètres de programme, un dépliant « CRITÈRES DE CONCEPTION » ouvre sept réglages, tous facultatifs. Ils viennent du référentiel d’ingénierie CONSEILPREV — le module centres de données de conseilprevcyber — qui cite ASHRAE TC 9.9, la directive (UE) 2023/1791 et son règlement délégué (UE) 2024/1364, le Climate Neutral Data Centre Pact et ISO/IEC 30134. Vous pouvez IMPOSER la famille de refroidissement au lieu de la laisser déduire du climat et de l’eau du pays ; choisir la CLASSE D’AIR ADMISE, de A1 à A4, qui est le levier le moins cher qui existe puisqu’il ne coûte aucun matériel — mais qui engage la garantie constructeur ; imposer un PUE contractuel, qui prime alors sur toute déduction ; régler le TAUX DE CHARGE, sachant que sous 0,55 la pénalité de charge partielle devient le premier poste de perte, ce que le module vous dit alors en toutes lettres ; saisir le PRIX de votre contrat d’électricité, ce qui fait sortir ce poste de la liste des non-chiffrables ; saisir l’INTENSITÉ CARBONE de votre fourniture, en approche « market-based » du GHG Protocol, plutôt que la moyenne nationale ; et déclarer la PART D’ÉNERGIE SANS CARBONE contractualisée, l’indicateur REF d’EN 50600-4-3. Chaque valeur que vous saisissez fait basculer la nature du poste concerné sur SAISI : le dossier exporté dira que c’est vous qui l’engagez, pas ce référentiel. Ces critères ne changent PAS le coût au mégawatt — rien dans ce référentiel ne le permettrait. Ils changent ce qui se passe après : le PUE, donc l’électricité, donc le coût total sur dix ans, c’est-à-dire le seul chiffre qui départage deux pays. Deux blocs nouveaux apparaissent enfin dans le résultat : le CARBONE INCORPORÉ de la construction, amorti par lot sur sa propre durée de vie — sans lui la comparaison entre une construction neuve et une reprise est biaisée, et un dossier CSRD est incomplet dès sa première page — et les REPÈRES DE MARCHÉ du Climate Neutral Data Centre Pact, dont le verdict n’est pas « conforme » mais « dans la cible » ou « à justifier », parce qu’il s’agit d’un engagement volontaire et non d’une obligation. Un huitième critère manque volontairement : la REDONDANCE, qui est pourtant le premier multiplicateur de coût des lots 04 et 05. Aucune source de ce référentiel ne la chiffre ; elle rejoint donc la liste des postes affichés vides, avec la question à poser — un coefficient plausible mais inventé serait plus dangereux qu’une case blanche, parce qu’il serait cru."
   },
   "Sous sanctions / isolement": {
-   "en": "",
+   "en": "Under sanctions / isolation",
    "fr": "Sous sanctions / isolement"
   },
   "Sous-total RH": {
-   "en": "",
+   "en": "HR subtotal",
    "fr": "Sous-total RH"
   },
   "Sous-total couts caches": {
-   "en": "",
+   "en": "Hidden costs subtotal",
    "fr": "Sous-total couts caches"
   },
   "Sous-total operationnel": {
-   "en": "",
+   "en": "Operational subtotal",
    "fr": "Sous-total operationnel"
   },
   "Sous-total outils": {
-   "en": "",
+   "en": "Tools subtotal",
    "fr": "Sous-total outils"
   },
   "Sous-traitance et transferts": {
-   "en": "",
+   "en": "Subcontracting and transfers",
    "fr": "Sous-traitance et transferts"
   },
   "Sous-traitant(s)": {
-   "en": "",
+   "en": "Processor(s)",
    "fr": "Sous-traitant(s)"
   },
   "Souvent oui — l'entreprise est déployeur (Art. #§#), même sans avoir développé l'outil": {
-   "en": "",
+   "en": "Often yes — the company is a deployer (Art. #(#)), even without having developed the tool",
    "fr": "Souvent oui — l'entreprise est déployeur (Art. 3§4), même sans avoir développé l'outil"
   },
   "Specificites du secteur": {
-   "en": "",
+   "en": "Sector specifics",
    "fr": "Specificites du secteur"
   },
   "Spend analysis automatisé": {
-   "en": "",
+   "en": "Automated spend analysis",
    "fr": "Spend analysis automatisé"
   },
   "Sponsorship et conduite du changement": {
-   "en": "",
+   "en": "Sponsorship and change management",
    "fr": "Sponsorship et conduite du changement"
   },
   "Spécificités du secteur": {
-   "en": "",
+   "en": "Sector specifics",
    "fr": "Spécificités du secteur"
   },
   "Statut de conformité": {
-   "en": "",
+   "en": "Compliance status",
    "fr": "Statut de conformité"
   },
   "Statut enregistré": {
-   "en": "",
+   "en": "Status saved",
    "fr": "Statut enregistré"
   },
   "Stock immobilisé −# à −# % ; ruptures −# %.": {
-   "en": "",
+   "en": "Tied-up stock −# to −# %; stock-outs −# %.",
    "fr": "Stock immobilisé −15 à −25 % ; ruptures −30 %."
   },
   "Stocks, délais, coûts de possession, demande.": {
-   "en": "",
+   "en": "Stock, lead times, holding costs, demand.",
    "fr": "Stocks, délais, coûts de possession, demande."
   },
   "Strategie IA # ambitieuse. Approche pro-innovation avec peu de contraintes. Investissements massifs via Mubadala. Ministere d'Etat a l'IA.": {
-   "en": "",
+   "en": "Ambitious AI Strategy #. Pro-innovation approach with few constraints. Massive investment via Mubadala. Minister of State for AI.",
    "fr": "Strategie IA 2031 ambitieuse. Approche pro-innovation avec peu de contraintes. Investissements massifs via Mubadala. Ministere d'Etat a l'IA."
   },
   "Stripe n’est pas encore configuré : aucun prélèvement effectué.": {
-   "en": "",
+   "en": "Stripe is not yet configured: no direct debit has been made.",
    "fr": "Stripe n’est pas encore configuré : aucun prélèvement effectué."
   },
   "Structure attendue : #) Introduction et objectifs de la cartographie des parties prenantes (interne et externe : metiers, IT, data, juridique, conformite, fournisseurs IA, clients),": {
-   "en": "",
+   "en": "Expected structure: #) Introduction and objectives of the stakeholder mapping (internal and external: business lines, IT, data, legal, compliance, AI suppliers, clients),",
    "fr": "Structure attendue : 1) Introduction et objectifs de la cartographie des parties prenantes (interne et externe : metiers, IT, data, juridique, conformite, fournisseurs IA, clients),"
   },
   "Structure ta reponse en sections markdown : (#) Objectifs detailles de la phase, (#) Plan d'action semaine par semaine, (#) Roles et responsabilites (RACI), (#) Livrables avec criteres d'acceptation, (#) Risques et points d'attention, (#) Indicateurs de succes. Sois concret et actionnable, adapte au secteur et a la situation reelle du client.": {
-   "en": "",
+   "en": "Structure your answer in markdown sections: (#) Detailed objectives of the phase, (#) Week-by-week action plan, (#) Roles and responsibilities (RACI), (#) Deliverables with acceptance criteria, (#) Risks and points of attention, (#) Success indicators. Be concrete and actionable, adapted to the client’s sector and actual situation.",
    "fr": "Structure ta reponse en sections markdown : (1) Objectifs detailles de la phase, (2) Plan d'action semaine par semaine, (3) Roles et responsabilites (RACI), (4) Livrables avec criteres d'acceptation, (5) Risques et points d'attention, (6) Indicateurs de succes. Sois concret et actionnable, adapte au secteur et a la situation reelle du client."
   },
   "Structurez le déploiement de vos initiatives IA sur un calendrier partagé.": {
-   "en": "",
+   "en": "Structure the deployment of your AI initiatives on a shared calendar.",
    "fr": "Structurez le déploiement de vos initiatives IA sur un calendrier partagé."
   },
   "Structurez par domaine plutôt que par système : l’organisation survit aux systèmes.": {
-   "en": "",
+   "en": "Structure by domain rather than by system: the organisation outlives the systems.",
    "fr": "Structurez par domaine plutôt que par système : l’organisation survit aux systèmes."
   },
   "Structurez par site ou par entité dès le départ : une reprise d’inventaire après coup coûte plus cher que la saisie initiale.": {
-   "en": "",
+   "en": "Structure by site or by entity from the outset: redoing the inventory after the fact costs more than the initial entry.",
    "fr": "Structurez par site ou par entité dès le départ : une reprise d’inventaire après coup coûte plus cher que la saisie initiale."
   },
   "Suggestion et generation de code pour accelerer le developpement.": {
-   "en": "",
+   "en": "Code suggestion and generation to speed up development.",
    "fr": "Suggestion et generation de code pour accelerer le developpement."
   },
   "Suggestions en temps reel aux conseillers pour accelerer le traitement.": {
-   "en": "",
+   "en": "Real-time suggestions to advisers to speed up processing.",
    "fr": "Suggestions en temps reel aux conseillers pour accelerer le traitement."
   },
   "Suis-je concerné par NIS # ?": {
-   "en": "",
+   "en": "Am I in scope of NIS #?",
    "fr": "Suis-je concerné par NIS 2 ?"
   },
   "Suis-je concerné par NIS #, et à quel titre ?": {
-   "en": "",
+   "en": "Am I in scope of NIS #, and on what basis?",
    "fr": "Suis-je concerné par NIS 2, et à quel titre ?"
   },
   "Suivez la lecture bancaire : statut du site comme échelle de certitude, trajectoire du parc, file de raccordement.": {
-   "en": "",
+   "en": "Follow the banking reading: site status as a scale of certainty, trajectory of the estate, connection queue.",
    "fr": "Suivez la lecture bancaire : statut du site comme échelle de certitude, trajectoire du parc, file de raccordement."
   },
   "Suivez le fil des étapes : chacune reprend les résultats de la précédente, et sauter une étape laisse un chiffre non fondé.": {
-   "en": "",
+   "en": "Follow the thread of the steps: each one takes up the results of the previous one, and skipping a step leaves an unfounded figure.",
    "fr": "Suivez le fil des étapes : chacune reprend les résultats de la précédente, et sauter une étape laisse un chiffre non fondé."
   },
   "Suivez le portefeuille complet de systèmes IA déployés, en cours et en projet.": {
-   "en": "",
+   "en": "Track the full portfolio of AI systems deployed, in progress and planned.",
    "fr": "Suivez le portefeuille complet de systèmes IA déployés, en cours et en projet."
   },
   "Suivez les évolutions réglementaires touchant spécifiquement la gouvernance des données d’entraînement.": {
-   "en": "",
+   "en": "Follow the regulatory developments specifically affecting the governance of training data.",
    "fr": "Suivez les évolutions réglementaires touchant spécifiquement la gouvernance des données d’entraînement."
   },
   "Suivez l’analyse d’impact des actualités réglementaires sur les systèmes du registre.": {
-   "en": "",
+   "en": "Follow the impact analysis of regulatory news on the systems in the register.",
    "fr": "Suivez l’analyse d’impact des actualités réglementaires sur les systèmes du registre."
   },
   "Suivez l’analyse d’impact des évolutions réglementaires sur les obligations qui vous concernent.": {
-   "en": "",
+   "en": "Follow the impact analysis of regulatory developments on the obligations that concern you.",
    "fr": "Suivez l’analyse d’impact des évolutions réglementaires sur les obligations qui vous concernent."
   },
   "Suivez l’état, le responsable et la revue de votre documentation de conformité.": {
-   "en": "",
+   "en": "Track the status, the owner and the review of your compliance documentation.",
    "fr": "Suivez l’état, le responsable et la revue de votre documentation de conformité."
   },
   "Suivi automatise des patients apres sortie pour detecter les complications.": {
-   "en": "",
+   "en": "Automated post-discharge patient follow-up to detect complications.",
    "fr": "Suivi automatise des patients apres sortie pour detecter les complications."
   },
   "Suivi de conformité IA Act": {
-   "en": "",
+   "en": "AI Act compliance tracking",
    "fr": "Suivi de conformité IA Act"
   },
   "Suivi de productivité et pointage automatisés : RGPD, et annexe III point # dès qu'il y a évaluation des performances.": {
-   "en": "",
+   "en": "Automated productivity monitoring and time tracking: GDPR, and Annex III, point # as soon as there is performance evaluation.",
    "fr": "Suivi de productivité et pointage automatisés : RGPD, et annexe III point 4 dès qu'il y a évaluation des performances."
   },
   "Superviseurs qualifies designes, habilites et formes (Art. #(#))": {
-   "en": "",
+   "en": "Qualified supervisors designated, authorised and trained (Art. #(#))",
    "fr": "Superviseurs qualifies designes, habilites et formes (Art. 14(5))"
   },
   "Supervision humaine et plans de continuité": {
-   "en": "",
+   "en": "Human oversight and continuity plans",
    "fr": "Supervision humaine et plans de continuité"
   },
   "Support (ressources et compétences)": {
-   "en": "",
+   "en": "Support (resources and competence)",
    "fr": "Support (ressources et compétences)"
   },
   "Supports pédagogiques (vidéos, PDF, quiz) + certificats de formation.": {
-   "en": "",
+   "en": "Learning materials (videos, PDFs, quizzes) + training certificates.",
    "fr": "Supports pédagogiques (vidéos, PDF, quiz) + certificats de formation."
   },
   "Suppression impossible : réseau indisponible.": {
-   "en": "",
+   "en": "Deletion not possible: network unavailable.",
    "fr": "Suppression impossible : réseau indisponible."
   },
   "Supprime KYC, notes, relances et suivi ; anonymise les coordonnées du compte. Factures et contrats conservés et pseudonymisés (obligation légale # ans).": {
-   "en": "",
+   "en": "Deletes KYC, notes, reminders and follow-up; anonymises the account’s contact details. Invoices and contracts kept and pseudonymised (legal obligation, # years).",
    "fr": "Supprime KYC, notes, relances et suivi ; anonymise les coordonnées du compte. Factures et contrats conservés et pseudonymisés (obligation légale 10 ans)."
   },
   "Supprimer DÉFINITIVEMENT tout votre historique de calculs ? Cette action est irréversible.": {
-   "en": "",
+   "en": "PERMANENTLY delete your entire calculation history? This action cannot be undone.",
    "fr": "Supprimer DÉFINITIVEMENT tout votre historique de calculs ? Cette action est irréversible."
   },
   "Supprimer ce traitement du registre ? Cette action est définitive.": {
-   "en": "",
+   "en": "Delete this processing activity from the records? This action is permanent.",
    "fr": "Supprimer ce traitement du registre ? Cette action est définitive."
   },
   "Supprimer définitivement \"": {
-   "en": "",
+   "en": "Permanently delete \"",
    "fr": "Supprimer définitivement \""
   },
   "Supprimer définitivement ce calcul de l historique ? (Droit à l effacement — Art. # RGPD)": {
-   "en": "",
+   "en": "Permanently delete this calculation from the history? (Right to erasure — Art. # GDPR)",
    "fr": "Supprimer définitivement ce calcul de l historique ? (Droit à l effacement — Art. 17 RGPD)"
   },
   "Supprimer définitivement ce système du registre ?": {
-   "en": "",
+   "en": "Permanently delete this system from the register?",
    "fr": "Supprimer définitivement ce système du registre ?"
   },
   "Supprimer définitivement l’évaluation": {
-   "en": "",
+   "en": "Permanently delete the assessment",
    "fr": "Supprimer définitivement l’évaluation"
   },
   "Supprimer ou refondre tout système relevant d'une pratique interdite": {
-   "en": "",
+   "en": "Remove or overhaul any system falling under a prohibited practice",
    "fr": "Supprimer ou refondre tout système relevant d'une pratique interdite"
   },
   "Sur conseilprevcyber, ouvrez /admin/base-connaissance et cliquez « 💾 Sauvegarder » : un fichier JSON se télécharge. Déposez-le dans le bloc « Reprendre la base documentaire ». Un INVENTAIRE s’affiche AVANT tout transfert — nombre de documents, poids, thèmes, familles, entreprises — puis le transfert se fait par lots avec une progression réelle. Chaque document garde son THÈME D’ORIGINE mot pour mot (« IEC # », « EDF »…) : c’est sous ce nom que vous le chercherez. Les pages Sentinel sont ajoutées en plus, jamais à la place. Le transfert est rejouable : un document déjà présent est sauté, jamais dupliqué, donc une interruption se reprend sans rien nettoyer.": {
-   "en": "",
+   "en": "On conseilprevcyber, open /admin/base-connaissance and click “💾 Sauvegarder”: a JSON file is downloaded. Drop it into the “Restore the document base” block. An INVENTORY is displayed BEFORE any transfer — number of documents, size, themes, families, companies — then the transfer is done in batches with real progress. Each document keeps its ORIGINAL THEME word for word (“IEC #”, “EDF”…): that is the name you will look for it under. Sentinel pages are added on top, never instead. The transfer can be replayed: a document already present is skipped, never duplicated, so an interruption can be resumed without cleaning anything up.",
    "fr": "Sur conseilprevcyber, ouvrez /admin/base-connaissance et cliquez « 💾 Sauvegarder » : un fichier JSON se télécharge. Déposez-le dans le bloc « Reprendre la base documentaire ». Un INVENTAIRE s’affiche AVANT tout transfert — nombre de documents, poids, thèmes, familles, entreprises — puis le transfert se fait par lots avec une progression réelle. Chaque document garde son THÈME D’ORIGINE mot pour mot (« IEC 62443 », « EDF »…) : c’est sous ce nom que vous le chercherez. Les pages Sentinel sont ajoutées en plus, jamais à la place. Le transfert est rejouable : un document déjà présent est sauté, jamais dupliqué, donc une interruption se reprend sans rien nettoyer."
   },
   "Sur un parc qui affine ses modèles, l’entraînement d’ajustement est souvent le poste le plus lourd — et il ne s’estime pas depuis un volume d’usage. Cinq champs sont à déclarer sur la fiche du système ; tant qu’il en manque un, la ligne reste incomplète et le dit, au lieu d’être complétée par défaut.": {
-   "en": "",
+   "en": "On an estate that fine-tunes its models, fine-tuning training is often the heaviest item — and it cannot be estimated from a usage volume. Five fields are to be declared on the system record; as long as one is missing, the row stays incomplete and says so, instead of being completed by default.",
    "fr": "Sur un parc qui affine ses modèles, l’entraînement d’ajustement est souvent le poste le plus lourd — et il ne s’estime pas depuis un volume d’usage. Cinq champs sont à déclarer sur la fiche du système ; tant qu’il en manque un, la ligne reste incomplète et le dit, au lieu d’être complétée par défaut."
   },
   "Surveillance après commercialisation": {
-   "en": "",
+   "en": "Post-market monitoring",
    "fr": "Surveillance après commercialisation"
   },
   "Surveillance après commercialisation et incidents": {
-   "en": "",
+   "en": "Post-market monitoring and incidents",
    "fr": "Surveillance après commercialisation et incidents"
   },
   "Surveillance automatisee des installations sensibles (gaz, raffineries).": {
-   "en": "",
+   "en": "Automated monitoring of sensitive facilities (gas, refineries).",
    "fr": "Surveillance automatisee des installations sensibles (gaz, raffineries)."
   },
   "Surveillance automatisee des zones sensibles pour la securite des infrastructures.": {
-   "en": "",
+   "en": "Automated monitoring of sensitive areas for infrastructure security.",
    "fr": "Surveillance automatisee des zones sensibles pour la securite des infrastructures."
   },
   "Surveillance comportementale des employés": {
-   "en": "",
+   "en": "Behavioural monitoring of employees",
    "fr": "Surveillance comportementale des employés"
   },
   "Surveillance comportementale salariés": {
-   "en": "",
+   "en": "Employee behavioural monitoring",
    "fr": "Surveillance comportementale salariés"
   },
   "Surveillance d'examens à distance": {
-   "en": "",
+   "en": "Remote exam proctoring",
    "fr": "Surveillance d'examens à distance"
   },
   "Surveillance de sites": {
-   "en": "",
+   "en": "Site monitoring",
    "fr": "Surveillance de sites"
   },
   "Surveillance des mentions publiques pour anticiper une crise d image.": {
-   "en": "",
+   "en": "Monitoring of public mentions to anticipate an image crisis.",
    "fr": "Surveillance des mentions publiques pour anticiper une crise d image."
   },
   "Surveillance du marché": {
-   "en": "",
+   "en": "Market surveillance",
    "fr": "Surveillance du marché"
   },
   "Surveillance en temps reel de l etat de vigilance du conducteur.": {
-   "en": "",
+   "en": "Real-time monitoring of the driver’s alertness.",
    "fr": "Surveillance en temps reel de l etat de vigilance du conducteur."
   },
   "Surveillance et journaux": {
-   "en": "",
+   "en": "Monitoring and logs",
    "fr": "Surveillance et journaux"
   },
   "Surveillance et synthese automatisee de l actualite concurrentielle et sectorielle.": {
-   "en": "",
+   "en": "Automated monitoring and summarisation of competitive and sector news.",
    "fr": "Surveillance et synthese automatisee de l actualite concurrentielle et sectorielle."
   },
   "Surveillance et synthese automatisee des evolutions legales pertinentes.": {
-   "en": "",
+   "en": "Automated monitoring and summarisation of relevant legal developments.",
    "fr": "Surveillance et synthese automatisee des evolutions legales pertinentes."
   },
   "Surveillance sur la base de la notice ; suspension de l'usage et information du fournisseur et de l'autorité en cas de risque identifié.": {
-   "en": "",
+   "en": "Monitoring on the basis of the instructions for use; suspension of use and informing the provider and the authority if a risk is identified.",
    "fr": "Surveillance sur la base de la notice ; suspension de l'usage et information du fournisseur et de l'autorité en cas de risque identifié."
   },
   "Surveillance systématique": {
-   "en": "",
+   "en": "Systematic monitoring",
    "fr": "Surveillance systématique"
   },
   "Surveillance video pour detecter le non-port d equipements de protection.": {
-   "en": "",
+   "en": "Video surveillance to detect failure to wear protective equipment.",
    "fr": "Surveillance video pour detecter le non-port d equipements de protection."
   },
   "Surveillance, mesure, audit interne et revue de direction du SMIA. Traitement des non-conformités et amélioration continue du système.": {
-   "en": "",
+   "en": "Monitoring, measurement, internal audit and management review of the AIMS. Handling of nonconformities and continual improvement of the system.",
    "fr": "Surveillance, mesure, audit interne et revue de direction du SMIA. Traitement des non-conformités et amélioration continue du système."
   },
   "Surveiller le fonctionnement et savoir suspendre": {
-   "en": "",
+   "en": "Monitor operation and know how to suspend",
    "fr": "Surveiller le fonctionnement et savoir suspendre"
   },
   "Surécoût sur": {
-   "en": "",
+   "en": "Extra cost over",
    "fr": "Surécoût sur"
   },
   "Synchronise les équipes techniques et conformité — éviter qu’un système soit déployé avant d’être audité.": {
-   "en": "",
+   "en": "Synchronises the technical and compliance teams — preventing a system from being deployed before it is audited.",
    "fr": "Synchronise les équipes techniques et conformité — éviter qu’un système soit déployé avant d’être audité."
   },
   "Synthese automatisee de donnees en rapports destines au Comex/Conseil.": {
-   "en": "",
+   "en": "Automated summarisation of data into reports for the executive committee/board.",
    "fr": "Synthese automatisee de donnees en rapports destines au Comex/Conseil."
   },
   "Synthese cartographie des cas d'usage IA -": {
-   "en": "",
+   "en": "AI use-case mapping summary -",
    "fr": "Synthese cartographie des cas d'usage IA -"
   },
   "Synthese des indicateurs": {
-   "en": "",
+   "en": "Indicator summary",
    "fr": "Synthese des indicateurs"
   },
   "Synthèse coût & valeur": {
-   "en": "",
+   "en": "Cost & value summary",
    "fr": "Synthèse coût & valeur"
   },
   "Synthèse envoyée à": {
-   "en": "",
+   "en": "Summary sent to",
    "fr": "Synthèse envoyée à"
   },
   "Synthèse fondée uniquement sur les sources ci-dessous. Ne constitue pas un conseil juridique.": {
-   "en": "",
+   "en": "Summary based solely on the sources below. Does not constitute legal advice.",
    "fr": "Synthèse fondée uniquement sur les sources ci-dessous. Ne constitue pas un conseil juridique."
   },
   "Synthèse rattachée à la fiche client (onglet Notes).": {
-   "en": "",
+   "en": "Summary linked to the client record (Notes tab).",
    "fr": "Synthèse rattachée à la fiche client (onglet Notes)."
   },
   "Synthétisez l’avancement global en quelques indicateurs clés.": {
-   "en": "",
+   "en": "Summarise overall progress in a few key indicators.",
    "fr": "Synthétisez l’avancement global en quelques indicateurs clés."
   },
   "Systeme QMS couvrant les # elements Art. #(#)(a)-(k)": {
-   "en": "",
+   "en": "QMS covering the # elements of Art. #(#)(a)-(k)",
    "fr": "Systeme QMS couvrant les 12 elements Art. 17(1)(a)-(k)"
   },
   "Systeme de gestion des risques documente et maintenu (Art. #(#))": {
-   "en": "",
+   "en": "Risk management system documented and maintained (Art. #(#))",
    "fr": "Systeme de gestion des risques documente et maintenu (Art. 9(1))"
   },
   "Systeme de management de l intelligence artificielle.": {
-   "en": "",
+   "en": "Artificial intelligence management system.",
    "fr": "Systeme de management de l intelligence artificielle."
   },
   "Systemes IA avec documentation complete": {
-   "en": "",
+   "en": "AI systems with complete documentation",
    "fr": "Systemes IA avec documentation complete"
   },
   "Systemes IA enregistres au registre": {
-   "en": "",
+   "en": "AI systems recorded in the register",
    "fr": "Systemes IA enregistres au registre"
   },
   "Systemes IA machines marques CE": {
-   "en": "",
+   "en": "CE-marked AI machinery systems",
    "fr": "Systemes IA machines marques CE"
   },
   "Système IA ajouté/modifié dans le Registre": {
-   "en": "",
+   "en": "AI system added/modified in the register",
    "fr": "Système IA ajouté/modifié dans le Registre"
   },
   "Système ajouté au Registre IA. Voulez-vous l ouvrir maintenant pour completer les informations (donnees utilisees, responsable) ?": {
-   "en": "",
+   "en": "System added to the AI register. Do you want to open it now to complete the information (data used, owner)?",
    "fr": "Système ajouté au Registre IA. Voulez-vous l ouvrir maintenant pour completer les informations (donnees utilisees, responsable) ?"
   },
   "Système de gestion de la qualité": {
-   "en": "",
+   "en": "Quality management system",
    "fr": "Système de gestion de la qualité"
   },
   "Système de gestion de la qualité et obligations": {
-   "en": "",
+   "en": "Quality management system and obligations",
    "fr": "Système de gestion de la qualité et obligations"
   },
   "Système de gestion des risques (Art. #)": {
-   "en": "",
+   "en": "Risk management system (Art. #)",
    "fr": "Système de gestion des risques (Art. 9)"
   },
   "Système de prédiction énergétique": {
-   "en": "",
+   "en": "Energy prediction system",
    "fr": "Système de prédiction énergétique"
   },
   "Système en production sans revue de conformité privacy enregistrée — une revue périodique est recommandée.": {
-   "en": "",
+   "en": "System in production with no recorded privacy compliance review — a periodic review is recommended.",
    "fr": "Système en production sans revue de conformité privacy enregistrée — une revue périodique est recommandée."
   },
   "Système haut risque non conforme — Art. # §# (renvoie à l'Art. #)": {
-   "en": "",
+   "en": "Non-compliant high-risk system — Art. #(#) (refers to Art. #)",
    "fr": "Système haut risque non conforme — Art. 99 §4 (renvoie à l'Art. 16)"
   },
   "Système non classé haut risque — FRIA non requise (Art. # ne vise que les systèmes Annexe III à haut risque).": {
-   "en": "",
+   "en": "System not classified as high-risk — FRIA not required (Art. # only covers Annex III high-risk systems).",
    "fr": "Système non classé haut risque — FRIA non requise (Art. 27 ne vise que les systèmes Annexe III à haut risque)."
   },
   "Système non encore mis sur le marché : c'est le moment où la conformité coûte le moins cher à construire, et le seul où l'évaluation de conformité peut être menée sans reprise.": {
-   "en": "",
+   "en": "System not yet placed on the market: this is when compliance is cheapest to build, and the only time the conformity assessment can be carried out without rework.",
    "fr": "Système non encore mis sur le marché : c'est le moment où la conformité coûte le moins cher à construire, et le seul où l'évaluation de conformité peut être menée sans reprise."
   },
   "Système requis.": {
-   "en": "",
+   "en": "System required.",
    "fr": "Système requis."
   },
   "Système simulé ajouté au Registre IA": {
-   "en": "",
+   "en": "Simulated system added to the AI register",
    "fr": "Système simulé ajouté au Registre IA"
   },
   "Systèmes IA": {
-   "en": "",
+   "en": "AI systems",
    "fr": "Systèmes IA"
   },
   "Systèmes IA avec documentation complète": {
-   "en": "",
+   "en": "AI systems with complete documentation",
    "fr": "Systèmes IA avec documentation complète"
   },
   "Systèmes IA classés haut risque (Annexe III) — gestion du trafic, distribution d'eau/gaz/électricité. Conformité NIS# et directive CER (résilience des entités critiques).": {
-   "en": "",
+   "en": "AI systems classified as high-risk (Annex III) — traffic management, water/gas/electricity supply. NIS # compliance and CER Directive (resilience of critical entities).",
    "fr": "Systèmes IA classés haut risque (Annexe III) — gestion du trafic, distribution d'eau/gaz/électricité. Conformité NIS2 et directive CER (résilience des entités critiques)."
   },
   "Systèmes IA conformes à l'EU AI Act": {
-   "en": "",
+   "en": "AI systems compliant with the EU AI Act",
    "fr": "Systèmes IA conformes à l'EU AI Act"
   },
   "Systèmes IA enregistrés": {
-   "en": "",
+   "en": "AI systems recorded",
    "fr": "Systèmes IA enregistrés"
   },
   "Systèmes conçus pour interagir directement avec des personnes : obligation d'information claire que l'utilisateur interagit avec une IA. Contenus synthétiques (deepfakes, voix clonées) : marquage machine-readable obligatoire.": {
-   "en": "",
+   "en": "Systems designed to interact directly with people: obligation to inform users clearly that they are interacting with an AI. Synthetic content (deepfakes, cloned voices): mandatory machine-readable marking.",
    "fr": "Systèmes conçus pour interagir directement avec des personnes : obligation d'information claire que l'utilisateur interagit avec une IA. Contenus synthétiques (deepfakes, voix clonées) : marquage machine-readable obligatoire."
   },
   "Systèmes critiques de sécurité": {
-   "en": "",
+   "en": "Safety-critical systems",
    "fr": "Systèmes critiques de sécurité"
   },
   "Systèmes d'admission automatisée, évaluation des apprenants, orientation scolaire par IA, anti-triche pendant les examens": {
-   "en": "",
+   "en": "Automated admission systems, learner assessment, AI-driven educational guidance, anti-cheating during exams",
    "fr": "Systèmes d'admission automatisée, évaluation des apprenants, orientation scolaire par IA, anti-triche pendant les examens"
   },
   "Systèmes haut risque (Annexe III + MDR)": {
-   "en": "",
+   "en": "High-risk systems (Annex III + MDR)",
    "fr": "Systèmes haut risque (Annexe III + MDR)"
   },
   "Systèmes industriels — je dois sécuriser un procédé, pas un parc bureautique": {
-   "en": "",
+   "en": "Industrial systems — I must secure a process, not an office estate",
    "fr": "Systèmes industriels — je dois sécuriser un procédé, pas un parc bureautique"
   },
   "Systèmes à haut risque / inacceptable": {
-   "en": "",
+   "en": "High-risk / unacceptable systems",
    "fr": "Systèmes à haut risque / inacceptable"
   },
   "Systèmes à haut risque et Annexe III (# domaines)": {
-   "en": "",
+   "en": "High-risk systems and Annex III (# areas)",
    "fr": "Systèmes à haut risque et Annexe III (8 domaines)"
   }
  }

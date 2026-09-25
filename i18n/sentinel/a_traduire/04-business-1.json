@@ -10,786 +10,786 @@
  "_rubrique": "BUSINESS",
  "bloc": {
   "Benchmark sectoriel": {
-   "en": "",
+   "en": "<em>Sector</em> benchmark",
    "fr": "Benchmark sectoriel",
    "html": "Benchmark <em>sectoriel</em>"
   },
   "Ce que cela implique. Ce n’est pas une option, c’est l’état par défaut quand on ne décide pas. Devant un auditeur, un client ou un tribunal, « l’IA l’a écrit » n’a jamais constitué une réponse.": {
-   "en": "",
+   "en": "<b>What this implies.</b> It is not an option; it is the default state when nobody decides. Before an auditor, a client or a court, “the AI wrote it” has never been an answer.",
    "fr": "Ce que cela implique. Ce n’est pas une option, c’est l’état par défaut quand on ne décide pas. Devant un auditeur, un client ou un tribunal, « l’IA l’a écrit » n’a jamais constitué une réponse.",
    "html": "<b>Ce que cela implique.</b> Ce n’est pas une option, c’est l’état par défaut quand on ne décide pas. Devant un auditeur, un client ou un tribunal, « l’IA l’a écrit » n’a jamais constitué une réponse."
   },
   "Ce que son absence bloque. Généraliser sans point de départ rend toute variation ultérieure ininterprétable : il n’y aura plus rien à comparer, et personne ne pourra dire si le programme a servi.": {
-   "en": "",
+   "en": "<b>What its absence blocks.</b> Scaling up without a starting point makes any later variation uninterpretable: there will be nothing left to compare, and nobody will be able to say whether the programme was of any use.",
    "fr": "Ce que son absence bloque. Généraliser sans point de départ rend toute variation ultérieure ininterprétable : il n’y aura plus rien à comparer, et personne ne pourra dire si le programme a servi.",
    "html": "<b>Ce que son absence bloque.</b> Généraliser sans point de départ rend toute variation ultérieure ininterprétable : il n’y aura plus rien à comparer, et personne ne pourra dire si le programme a servi."
   },
   "Ce que son absence bloque. Sans liste nominative, la vague # n’aura pas de dénominateur : « part d’équipe qui s’en sert » suppose qu’on sache de quelle équipe on parle.": {
-   "en": "",
+   "en": "<b>What its absence blocks.</b> Without a named list, wave # will have no denominator: “share of the team using it” assumes you know which team you are talking about.",
    "fr": "Ce que son absence bloque. Sans liste nominative, la vague 3 n’aura pas de dénominateur : « part d’équipe qui s’en sert » suppose qu’on sache de quelle équipe on parle.",
    "html": "<b>Ce que son absence bloque.</b> Sans liste nominative, la vague 3 n’aura pas de dénominateur : « part d’équipe qui s’en sert » suppose qu’on sache de quelle équipe on parle."
   },
   "Ce que son absence bloque. Sans suppression nommée, le nouveau processus s’ajoute à l’ancien : le temps rendu mesuré en vague # sera nul, et il aura raison de l’être.": {
-   "en": "",
+   "en": "<b>What its absence blocks.</b> Without a named removal, the new process is added on top of the old one: the time given back measured in wave # will be zero, and rightly so.",
    "fr": "Ce que son absence bloque. Sans suppression nommée, le nouveau processus s’ajoute à l’ancien : le temps rendu mesuré en vague 3 sera nul, et il aura raison de l’être.",
    "html": "<b>Ce que son absence bloque.</b> Sans suppression nommée, le nouveau processus s’ajoute à l’ancien : le temps rendu mesuré en vague 3 sera nul, et il aura raison de l’être."
   },
   "Ce que son absence bloque. Une vague # déclarée finie au jour du déploiement laisse l’abandon se produire sans témoin, et le programme se conclut sur son meilleur jour.": {
-   "en": "",
+   "en": "<b>What its absence blocks.</b> A wave # declared finished on deployment day lets drop-off happen with no witness, and the programme ends on its best day.",
    "fr": "Ce que son absence bloque. Une vague 4 déclarée finie au jour du déploiement laisse l’abandon se produire sans témoin, et le programme se conclut sur son meilleur jour.",
    "html": "<b>Ce que son absence bloque.</b> Une vague 4 déclarée finie au jour du déploiement laisse l’abandon se produire sans témoin, et le programme se conclut sur son meilleur jour."
   },
   "Ce qu’elle produit. La mesure d’usage posée AVANT la généralisation : point de départ daté, méthode écrite, cohorte nominative.": {
-   "en": "",
+   "en": "<b>What it produces.</b> The usage measurement set up BEFORE scaling up: a dated starting point, a written method, a named cohort.",
    "fr": "Ce qu’elle produit. La mesure d’usage posée AVANT la généralisation : point de départ daté, méthode écrite, cohorte nominative.",
    "html": "<b>Ce qu’elle produit.</b> La mesure d’usage posée AVANT la généralisation : point de départ daté, méthode écrite, cohorte nominative."
   },
   "Ce qu’elle produit. Les accès ouverts aux personnes visées, une littératie IA suffisante pour ne pas croire la machine sur parole, et un cas pilote sur un périmètre où l’erreur se rattrape.": {
-   "en": "",
+   "en": "<b>What it produces.</b> Access opened to the intended people, enough AI literacy not to take the machine at its word, and a pilot case on a scope where mistakes can be caught.",
    "fr": "Ce qu’elle produit. Les accès ouverts aux personnes visées, une littératie IA suffisante pour ne pas croire la machine sur parole, et un cas pilote sur un périmètre où l’erreur se rattrape.",
    "html": "<b>Ce qu’elle produit.</b> Les accès ouverts aux personnes visées, une littératie IA suffisante pour ne pas croire la machine sur parole, et un cas pilote sur un périmètre où l’erreur se rattrape."
   },
   "Ce qu’elle produit. L’extension au reste du périmètre, un réseau d’ambassadeurs qui porte l’usage au quotidien, et une revue à quatre-vingt-dix jours inscrite au calendrier.": {
-   "en": "",
+   "en": "<b>What it produces.</b> Extension to the rest of the scope, a network of ambassadors who carry the use day to day, and a ninety-day review in the calendar.",
    "fr": "Ce qu’elle produit. L’extension au reste du périmètre, un réseau d’ambassadeurs qui porte l’usage au quotidien, et une revue à quatre-vingt-dix jours inscrite au calendrier.",
    "html": "<b>Ce qu’elle produit.</b> L’extension au reste du périmètre, un réseau d’ambassadeurs qui porte l’usage au quotidien, et une revue à quatre-vingt-dix jours inscrite au calendrier."
   },
   "Ce qu’elle produit. Pour chaque cas prioritaire, l’artefact avant / après de l’étape # : ce que fait la machine, ce que garde l’humain, ce qui disparaît, qui arbitre.": {
-   "en": "",
+   "en": "<b>What it produces.</b> For each priority case, the before / after artefact of step #: what the machine does, what the human keeps, what disappears, who decides.",
    "fr": "Ce qu’elle produit. Pour chaque cas prioritaire, l’artefact avant / après de l’étape 6 : ce que fait la machine, ce que garde l’humain, ce qui disparaît, qui arbitre.",
    "html": "<b>Ce qu’elle produit.</b> Pour chaque cas prioritaire, l’artefact avant / après de l’étape 6 : ce que fait la machine, ce que garde l’humain, ce qui disparaît, qui arbitre."
   },
   "Comment on sait qu’elle est finie. La liste nominative des destinataires existe, et chacun a ouvert l’outil au moins une fois.": {
-   "en": "",
+   "en": "<b>How you know it is finished.</b> The named list of recipients exists, and each of them has opened the tool at least once.",
    "fr": "Comment on sait qu’elle est finie. La liste nominative des destinataires existe, et chacun a ouvert l’outil au moins une fois.",
    "html": "<b>Comment on sait qu’elle est finie.</b> La liste nominative des destinataires existe, et chacun a ouvert l’outil au moins une fois."
   },
   "Comment on sait qu’elle est finie. La revue à quatre-vingt-dix jours a eu lieu et son taux d’abandon est relevé — la vague ne se termine pas au déploiement.": {
-   "en": "",
+   "en": "<b>How you know it is finished.</b> The ninety-day review has taken place and its drop-off rate is recorded — the wave does not end at deployment.",
    "fr": "Comment on sait qu’elle est finie. La revue à quatre-vingt-dix jours a eu lieu et son taux d’abandon est relevé — la vague ne se termine pas au déploiement.",
    "html": "<b>Comment on sait qu’elle est finie.</b> La revue à quatre-vingt-dix jours a eu lieu et son taux d’abandon est relevé — la vague ne se termine pas au déploiement."
   },
   "Comment on sait qu’elle est finie. Les trois indicateurs de cette page sont OBSERVÉS — c’est-à-dire qu’une méthode est écrite pour chacun, et qu’on saurait refaire le relevé.": {
-   "en": "",
+   "en": "<b>How you know it is finished.</b> The three indicators on this page are OBSERVED — that is, a method is written for each, and the reading could be repeated.",
    "fr": "Comment on sait qu’elle est finie. Les trois indicateurs de cette page sont OBSERVÉS — c’est-à-dire qu’une méthode est écrite pour chacun, et qu’on saurait refaire le relevé.",
    "html": "<b>Comment on sait qu’elle est finie.</b> Les trois indicateurs de cette page sont OBSERVÉS — c’est-à-dire qu’une méthode est écrite pour chacun, et qu’on saurait refaire le relevé."
   },
   "Comment on sait qu’elle est finie. L’indicateur « processus effectivement redessinés » est au complet, et chaque ligne nomme une suppression.": {
-   "en": "",
+   "en": "<b>How you know it is finished.</b> The “processes actually redesigned” indicator is complete, and each row names a removal.",
    "fr": "Comment on sait qu’elle est finie. L’indicateur « processus effectivement redessinés » est au complet, et chaque ligne nomme une suppression.",
    "html": "<b>Comment on sait qu’elle est finie.</b> L’indicateur « processus effectivement redessinés » est au complet, et chaque ligne nomme une suppression."
   },
   "Créer mon parcours chiffréGénérez un parcours guidé à partir de vos cas d’usage et allez jusqu’au coût et à l’enveloppe RaaS.": {
-   "en": "",
+   "en": "<strong>Build my costed path</strong><span>Generate a guided path from your use cases and go all the way to the cost and the RaaS envelope.</span>",
    "fr": "Créer mon parcours chiffréGénérez un parcours guidé à partir de vos cas d’usage et allez jusqu’au coût et à l’enveloppe RaaS.",
    "html": "<strong>Créer mon parcours chiffré</strong><span>Générez un parcours guidé à partir de vos cas d’usage et allez jusqu’au coût et à l’enveloppe RaaS.</span>"
   },
   "Identifier, qualifier et prioriser les cas d’usage IA à fort impact métier — pour les organisations industrielles comme pour leurs fonctions transverses (marketing, ressources humaines, juridique, finance). Un parcours guidé en six temps : cibler le secteur et les processus, explorer les cas d’usage pertinents, les qualifier, chiffrer le retour attendu, évaluer la maturité de déploiement, puis redessiner le processus — la seule étape qui transforme un outil installé en travail réellement changé.": {
-   "en": "",
+   "en": "Identify, qualify and prioritise AI use cases with high business impact — for industrial organisations and for their cross-functional departments (marketing, human resources, legal, finance). A guided path in six stages: target the sector and processes, explore the relevant use cases, qualify them, quantify the expected return, assess deployment maturity, then <strong>redesign the process</strong> — the only step that turns an installed tool into work that has actually changed.",
    "fr": "Identifier, qualifier et prioriser les cas d’usage IA à fort impact métier — pour les organisations industrielles comme pour leurs fonctions transverses (marketing, ressources humaines, juridique, finance). Un parcours guidé en six temps : cibler le secteur et les processus, explorer les cas d’usage pertinents, les qualifier, chiffrer le retour attendu, évaluer la maturité de déploiement, puis redessiner le processus — la seule étape qui transforme un outil installé en travail réellement changé.",
    "html": "Identifier, qualifier et prioriser les cas d’usage IA à fort impact métier — pour les organisations industrielles comme pour leurs fonctions transverses (marketing, ressources humaines, juridique, finance). Un parcours guidé en six temps : cibler le secteur et les processus, explorer les cas d’usage pertinents, les qualifier, chiffrer le retour attendu, évaluer la maturité de déploiement, puis <strong>redessiner le processus</strong> — la seule étape qui transforme un outil installé en travail réellement changé."
   },
   "L’indice de conformité dit si vous êtes en règle. Celui-ci dit si l’organisation s’en sert. Les deux échouent séparément : on peut être parfaitement conforme sur un outil que personne n’ouvre.": {
-   "en": "",
+   "en": "The compliance index says whether you are compliant. This one says whether the organisation <strong>actually uses it</strong>. The two fail separately: you can be perfectly compliant on a tool nobody opens.",
    "fr": "L’indice de conformité dit si vous êtes en règle. Celui-ci dit si l’organisation s’en sert. Les deux échouent séparément : on peut être parfaitement conforme sur un outil que personne n’ouvre.",
    "html": "L’indice de conformité dit si vous êtes en règle. Celui-ci dit si l’organisation <strong>s’en sert</strong>. Les deux échouent séparément : on peut être parfaitement conforme sur un outil que personne n’ouvre."
   },
   "Méthode attendue. Deux extractions des mêmes journaux, à trente et à quatre-vingt-dix jours, sur la même cohorte nominative. Sans la date de départ écrite quelque part, le chiffre ne veut rien dire.": {
-   "en": "",
+   "en": "<strong>Expected method.</strong> Two extractions of the same logs, at thirty and ninety days, on the same named cohort. Without the start date written down somewhere, the figure means nothing.",
    "fr": "Méthode attendue. Deux extractions des mêmes journaux, à trente et à quatre-vingt-dix jours, sur la même cohorte nominative. Sans la date de départ écrite quelque part, le chiffre ne veut rien dire.",
    "html": "<strong>Méthode attendue.</strong> Deux extractions des mêmes journaux, à trente et à quatre-vingt-dix jours, sur la même cohorte nominative. Sans la date de départ écrite quelque part, le chiffre ne veut rien dire."
   },
   "Méthode attendue. Journaux de connexion de l’outil, sur quatre semaines glissantes, rapportés à la liste nominative des destinataires. Une extraction ponctuelle un lendemain de formation ne mesure rien.": {
-   "en": "",
+   "en": "<strong>Expected method.</strong> The tool’s connection logs, over four rolling weeks, against the named list of recipients. A one-off extraction the day after a training session measures nothing.",
    "fr": "Méthode attendue. Journaux de connexion de l’outil, sur quatre semaines glissantes, rapportés à la liste nominative des destinataires. Une extraction ponctuelle un lendemain de formation ne mesure rien.",
    "html": "<strong>Méthode attendue.</strong> Journaux de connexion de l’outil, sur quatre semaines glissantes, rapportés à la liste nominative des destinataires. Une extraction ponctuelle un lendemain de formation ne mesure rien."
   },
   "Méthode attendue. Un relevé du même processus avant et après, sur les mêmes personnes et le même volume. Le taux de gain saisi à l’étape # de la cartographie est une hypothèse de cadrage : la reprendre ici transformerait une hypothèse en constat.": {
-   "en": "",
+   "en": "<strong>Expected method.</strong> A reading of the same process before and after, on the same people and the same volume. The gain rate entered at step # of the mapping is a scoping assumption: carrying it over here would turn an assumption into a finding.",
    "fr": "Méthode attendue. Un relevé du même processus avant et après, sur les mêmes personnes et le même volume. Le taux de gain saisi à l’étape 4 de la cartographie est une hypothèse de cadrage : la reprendre ici transformerait une hypothèse en constat.",
    "html": "<strong>Méthode attendue.</strong> Un relevé du même processus avant et après, sur les mêmes personnes et le même volume. Le taux de gain saisi à l’étape 4 de la cartographie est une hypothèse de cadrage : la reprendre ici transformerait une hypothèse en constat."
   },
   "Tableau de bord d’adoption": {
-   "en": "",
+   "en": "<em>Adoption</em> dashboard",
    "fr": "Tableau de bord d’adoption",
    "html": "Tableau de bord <em>d’adoption</em>"
   },
   "Tant que la méthode n’est pas écrite assez précisément pour qu’on sache la refaire, ce chiffre reste déclaré. Ce n’est pas une punition : une mesure qu’on ne sait pas reproduire n’est pas une mesure.": {
-   "en": "",
+   "en": "As long as the method is not written precisely enough for it to be repeated, this figure remains <strong>declared</strong>. It is not a penalty: a measurement that cannot be reproduced is not a measurement.",
    "fr": "Tant que la méthode n’est pas écrite assez précisément pour qu’on sache la refaire, ce chiffre reste déclaré. Ce n’est pas une punition : une mesure qu’on ne sait pas reproduire n’est pas une mesure.",
    "html": "Tant que la méthode n’est pas écrite assez précisément pour qu’on sache la refaire, ce chiffre reste <strong>déclaré</strong>. Ce n’est pas une punition : une mesure qu’on ne sait pas reproduire n’est pas une mesure."
   },
   "Un cas d’usage installé sur un processus inchangé produit un double travail, puis l’abandon. Pour chaque cas retenu, décrivez le déroulé d’aujourd’hui, celui d’après, ce qui disparaît — et nommez qui arbitre. Le gain chiffré à l’étape # suppose ce redécoupage : sans lui, il n’est pas prudent, il est faux.": {
-   "en": "",
+   "en": "A use case installed on an unchanged process produces double work, then abandonment. For each selected case, describe <strong>today’s</strong> workflow, the one <strong>afterwards</strong>, what <strong>disappears</strong> — and name who decides. The gain costed at step # assumes this redivision of work: without it, the figure is not cautious, it is wrong.",
    "fr": "Un cas d’usage installé sur un processus inchangé produit un double travail, puis l’abandon. Pour chaque cas retenu, décrivez le déroulé d’aujourd’hui, celui d’après, ce qui disparaît — et nommez qui arbitre. Le gain chiffré à l’étape 4 suppose ce redécoupage : sans lui, il n’est pas prudent, il est faux.",
    "html": "Un cas d’usage installé sur un processus inchangé produit un double travail, puis l’abandon. Pour chaque cas retenu, décrivez le déroulé <strong>d’aujourd’hui</strong>, celui <strong>d’après</strong>, ce qui <strong>disparaît</strong> — et nommez qui arbitre. Le gain chiffré à l’étape 4 suppose ce redécoupage : sans lui, il n’est pas prudent, il est faux."
   },
   "Un usage déclaré n’est pas un usage observé. « Les équipes ont bien adopté l’outil » est la phrase la plus répétée et la moins vérifiée des comités de pilotage. Chaque indicateur ci-dessous porte la nature de sa source. Un indicateur qui ne nomme pas sa méthode de mesure reste déclaré — il ne devient pas observé parce qu’on y croit.": {
-   "en": "",
+   "en": "<strong>A declared use is not an observed use.</strong> “The teams have really adopted the tool” is the most repeated and least verified sentence in steering committees. Each indicator below carries the nature of its source. An indicator that does not name its measurement method remains <em>declared</em> — it does not become <em>observed</em> because people believe in it.",
    "fr": "Un usage déclaré n’est pas un usage observé. « Les équipes ont bien adopté l’outil » est la phrase la plus répétée et la moins vérifiée des comités de pilotage. Chaque indicateur ci-dessous porte la nature de sa source. Un indicateur qui ne nomme pas sa méthode de mesure reste déclaré — il ne devient pas observé parce qu’on y croit.",
    "html": "<strong>Un usage déclaré n’est pas un usage observé.</strong> « Les équipes ont bien adopté l’outil » est la phrase la plus répétée et la moins vérifiée des comités de pilotage. Chaque indicateur ci-dessous porte la nature de sa source. Un indicateur qui ne nomme pas sa méthode de mesure reste <em>déclaré</em> — il ne devient pas <em>observé</em> parce qu’on y croit."
   },
   "— : socle non relevé pour ce secteur, aucune référence à comparer.": {
-   "en": "",
+   "en": "<b>—</b>: no baseline recorded for this sector, no reference to compare against.",
    "fr": "— : socle non relevé pour ce secteur, aucune référence à comparer.",
    "html": "<b>—</b> : socle non relevé pour ce secteur, aucune référence à comparer."
   }
  },
  "texte": {
   "# indicateur(s) sur # réellement observé(s).": {
-   "en": "",
+   "en": "# indicator(s) out of # actually observed.",
    "fr": "0 indicateur(s) sur 3 réellement observé(s)."
   },
   ", qui seul détermine le niveau de risque et les obligations exactes.": {
-   "en": "",
+   "en": ", which alone determines the risk level and the exact obligations.",
    "fr": ", qui seul détermine le niveau de risque et les obligations exactes."
   },
   ", sans quoi on ne saura jamais ce que la généralisation a changé.": {
-   "en": "",
+   "en": ", without which you will never know what the scale-up changed.",
    "fr": ", sans quoi on ne saura jamais ce que la généralisation a changé."
   },
   ". C’est l’étape #. Les cas prioritaires, chiffrés et jugés déployables peuvent aussi être rattachés à des jalons de conformité AI Act dans le module RaaS, reliant valeur métier, faisabilité et trajectoire de conformité.": {
-   "en": "",
+   "en": ". This is step #. Priority cases that are costed and judged deployable can also be linked to AI Act compliance milestones in the RaaS module, connecting business value, feasibility and compliance trajectory.",
    "fr": ". C’est l’étape 6. Les cas prioritaires, chiffrés et jugés déployables peuvent aussi être rattachés à des jalons de conformité AI Act dans le module RaaS, reliant valeur métier, faisabilité et trajectoire de conformité."
   },
   "Abandon à quatre-vingt-dix jours": {
-   "en": "",
+   "en": "Drop-off at ninety days",
    "fr": "Abandon à quatre-vingt-dix jours"
   },
   "Achats": {
-   "en": "",
+   "en": "Procurement",
    "fr": "Achats"
   },
   "Analyse": {
-   "en": "",
+   "en": "Analysis",
    "fr": "Analyse"
   },
   "Aucun cas retenu : commencez par l’étape # de la cartographie.": {
-   "en": "",
+   "en": "No case selected: start with step # of the mapping.",
    "fr": "Aucun cas retenu : commencez par l’étape 2 de la cartographie."
   },
   "Aucun cas retenu dans la cartographie. Un déploiement sans processus redessiné n’a rien à mesurer ici.": {
-   "en": "",
+   "en": "No case selected in the mapping. A deployment without a redesigned process has nothing to measure here.",
    "fr": "Aucun cas retenu dans la cartographie. Un déploiement sans processus redessiné n’a rien à mesurer ici."
   },
   "Aucun cas retenu.": {
-   "en": "",
+   "en": "No case selected.",
    "fr": "Aucun cas retenu."
   },
   "Aucun système au Registre IA": {
-   "en": "",
+   "en": "No system in the AI register",
    "fr": "Aucun système au Registre IA"
   },
   "Aucun système enregistré": {
-   "en": "",
+   "en": "No system recorded",
    "fr": "Aucun système enregistré"
   },
   "Auto-évaluez vos données et vos compétences techniques. Le diagnostic signale les écarts à combler avant de déployer les cas retenus.": {
-   "en": "",
+   "en": "Self-assess your data and your technical skills. The diagnostic flags the gaps to close before deploying the selected cases.",
    "fr": "Auto-évaluez vos données et vos compétences techniques. Le diagnostic signale les écarts à combler avant de déployer les cas retenus."
   },
   "Besoin d’accompagnement ? CONSEILPREV peut animer ce parcours avec vos équipes et approfondir chaque cas retenu.": {
-   "en": "",
+   "en": "Need support? CONSEILPREV can run this path with your teams and look more deeply into each selected case.",
    "fr": "Besoin d’accompagnement ? CONSEILPREV peut animer ce parcours avec vos équipes et approfondir chaque cas retenu."
   },
   "Bon à savoir": {
-   "en": "",
+   "en": "Good to know",
    "fr": "Bon à savoir"
   },
   "Business · Adoption": {
-   "en": "",
+   "en": "Business · AI adoption",
    "fr": "Business · Adoption"
   },
   "Business — Valeur métier": {
-   "en": "",
+   "en": "Business — Business value",
    "fr": "Business — Valeur métier"
   },
   "CALCULÉ": {
-   "en": "",
+   "en": "CALCULATED",
    "fr": "CALCULÉ"
   },
   "Cartographie des cas d’usage IA": {
-   "en": "",
+   "en": "AI use-case mapping",
    "fr": "Cartographie des cas d’usage IA"
   },
   "Ce diagnostic clôt la phase d’identification et de préparation : vous savez quoi faire, ce que ça vaut et si vous saurez le déployer. Il reste la question qui décide du résultat —": {
-   "en": "",
+   "en": "This diagnostic closes the identification and preparation phase: you know what to do, what it is worth and whether you will be able to deploy it. What remains is the question that decides the outcome —",
    "fr": "Ce diagnostic clôt la phase d’identification et de préparation : vous savez quoi faire, ce que ça vaut et si vous saurez le déployer. Il reste la question qui décide du résultat —"
   },
   "Ce document est celui qu’on emmène devant les équipes concernées. Il ne dit pas « nous allons déployer un outil » ; il dit ce que chacun ne fera plus, et ce qu’il fera à la place. C’est la seule version de l’annonce à laquelle on puisse répondre.": {
-   "en": "",
+   "en": "This document is the one you take to the teams concerned. It does not say “we are going to deploy a tool”; it says what each person will no longer do, and what they will do instead. It is the only version of the announcement that anyone can respond to.",
    "fr": "Ce document est celui qu’on emmène devant les équipes concernées. Il ne dit pas « nous allons déployer un outil » ; il dit ce que chacun ne fera plus, et ce qu’il fera à la place. C’est la seule version de l’annonce à laquelle on puisse répondre."
   },
   "Ce que vous écrivez ici n’est vérifié par personne — c’est une intention de conception. Ce qui se mesure ensuite, c’est l’usage réel : part d’équipe qui s’en sert chaque semaine, processus effectivement redessinés, temps rendu.": {
-   "en": "",
+   "en": "What you write here is checked by nobody — it is a design intention. What is measured afterwards is actual use: share of the team using it every week, processes actually redesigned, time given back.",
    "fr": "Ce que vous écrivez ici n’est vérifié par personne — c’est une intention de conception. Ce qui se mesure ensuite, c’est l’usage réel : part d’équipe qui s’en sert chaque semaine, processus effectivement redessinés, temps rendu."
   },
   "Ces relevés restent dans ce navigateur : rien n’est envoyé ni conservé sur nos serveurs. Ils décrivent le fonctionnement interne d’une organisation, et ce n’est pas à nous de le détenir.": {
-   "en": "",
+   "en": "These readings stay in this browser: nothing is sent to or kept on our servers. They describe the inner workings of an organisation, and it is not for us to hold them.",
    "fr": "Ces relevés restent dans ce navigateur : rien n’est envoyé ni conservé sur nos serveurs. Ils décrivent le fonctionnement interne d’une organisation, et ce n’est pas à nous de le détenir."
   },
   "Cette cartographie vous accompagne, en six étapes, pour passer d’une intention d’adopter l’IA à un plan d’action concret, chiffré et réaliste. Chaque étape produit un résultat qui alimente la suivante ; vous pouvez revenir en arrière à tout moment.": {
-   "en": "",
+   "en": "This mapping takes you, in six steps, from an intention to adopt AI to a concrete, costed and realistic action plan. Each step produces a result that feeds the next; you can go back at any time.",
    "fr": "Cette cartographie vous accompagne, en six étapes, pour passer d’une intention d’adopter l’IA à un plan d’action concret, chiffré et réaliste. Chaque étape produit un résultat qui alimente la suivante ; vous pouvez revenir en arrière à tout moment."
   },
   "Cette maturité mesure votre capacité à déployer les cas retenus.": {
-   "en": "",
+   "en": "This maturity measures your capacity to deploy the selected cases.",
    "fr": "Cette maturité mesure votre capacité à déployer les cas retenus."
   },
   "Chiffrer le retour": {
-   "en": "",
+   "en": "Quantify the return",
    "fr": "Chiffrer le retour"
   },
   "Chiffrer le retour →": {
-   "en": "",
+   "en": "Quantify the return →",
    "fr": "Chiffrer le retour →"
   },
   "Choisissez votre secteur industriel et, si vous le souhaitez, les processus métiers prioritaires (achats, finance, supply chain, opérations, relation client). La cartographie s’adapte à votre contexte.": {
-   "en": "",
+   "en": "Choose your industrial sector and, if you wish, the priority business processes (procurement, finance, supply chain, operations, client relations). The mapping adapts to your context.",
    "fr": "Choisissez votre secteur industriel et, si vous le souhaitez, les processus métiers prioritaires (achats, finance, supply chain, opérations, relation client). La cartographie s’adapte à votre contexte."
   },
   "Cibler": {
-   "en": "",
+   "en": "Target",
    "fr": "Cibler"
   },
   "Comment ce chiffre a été obtenu": {
-   "en": "",
+   "en": "How this figure was obtained",
    "fr": "Comment ce chiffre a été obtenu"
   },
   "Comparez le taux de conformité réel de vos systèmes (Registre IA) avec le score de maturité moyen calculé pour chaque secteur.": {
-   "en": "",
+   "en": "Compare the actual compliance rate of your systems (AI register) with the average maturity score calculated for each sector.",
    "fr": "Comparez le taux de conformité réel de vos systèmes (Registre IA) avec le score de maturité moyen calculé pour chaque secteur."
   },
   "Composer": {
-   "en": "",
+   "en": "Compose",
    "fr": "Composer"
   },
   "Constituer la liste courte →": {
-   "en": "",
+   "en": "Build the shortlist →",
    "fr": "Constituer la liste courte →"
   },
   "Date du relevé": {
-   "en": "",
+   "en": "Reading date",
    "fr": "Date du relevé"
   },
   "Déploiement prévu dans plusieurs pays ?": {
-   "en": "",
+   "en": "Deployment planned in several countries?",
    "fr": "Déploiement prévu dans plusieurs pays ?"
   },
   "Effacer mes relevés": {
-   "en": "",
+   "en": "Clear my readings",
    "fr": "Effacer mes relevés"
   },
   "Elle complète, sans la remplacer, l’évaluation de gouvernance de l’Audit de maturité IA (# piliers).": {
-   "en": "",
+   "en": "It complements, without replacing, the governance assessment of the AI maturity audit (# pillars).",
    "fr": "Elle complète, sans la remplacer, l’évaluation de gouvernance de l’Audit de maturité IA (8 piliers)."
   },
   "Explorer et sélectionner": {
-   "en": "",
+   "en": "Explore and select",
    "fr": "Explorer et sélectionner"
   },
   "Explorer les cas d’usage →": {
-   "en": "",
+   "en": "Explore the use cases →",
    "fr": "Explorer les cas d’usage →"
   },
   "Exporter la liste priorisée (PDF)": {
-   "en": "",
+   "en": "Export the prioritised list (PDF)",
    "fr": "Exporter la liste priorisée (PDF)"
   },
   "Exporter le diagnostic (PDF)": {
-   "en": "",
+   "en": "Export the diagnostic (PDF)",
    "fr": "Exporter le diagnostic (PDF)"
   },
   "Exporter le dossier de valeur (PDF)": {
-   "en": "",
+   "en": "Export the business case (PDF)",
    "fr": "Exporter le dossier de valeur (PDF)"
   },
   "Exporter le tableau de bord (PDF)": {
-   "en": "",
+   "en": "Export the dashboard (PDF)",
    "fr": "Exporter le tableau de bord (PDF)"
   },
   "Exporter l’avant / après (PDF)": {
-   "en": "",
+   "en": "Export the before / after (PDF)",
    "fr": "Exporter l’avant / après (PDF)"
   },
   "Finance": {
-   "en": "",
+   "en": "Finance function",
    "fr": "Finance"
   },
   "Guide d’utilisation — comment utiliser cette cartographie": {
-   "en": "",
+   "en": "User guide — how to use this mapping",
    "fr": "Guide d’utilisation — comment utiliser cette cartographie"
   },
   "Généraliser et tenir": {
-   "en": "",
+   "en": "Scale up and sustain",
    "fr": "Généraliser et tenir"
   },
   "Interactions de la cartographie des cas d’usage": {
-   "en": "",
+   "en": "Use-case mapping interactions",
    "fr": "Interactions de la cartographie des cas d’usage"
   },
   "Juridique": {
-   "en": "",
+   "en": "Legal",
    "fr": "Juridique"
   },
   "Lancer (auto) →": {
-   "en": "",
+   "en": "Run (auto) →",
    "fr": "Lancer (auto) →"
   },
   "Le redécoupage se décide, il ne se déduit pas.": {
-   "en": "",
+   "en": "The new division of work is decided, not deduced.",
    "fr": "Le redécoupage se décide, il ne se déduit pas."
   },
   "Le seul indicateur que cette plateforme calcule elle-même": {
-   "en": "",
+   "en": "The only indicator this platform calculates itself",
    "fr": "Le seul indicateur que cette plateforme calcule elle-même"
   },
   "Le temps que les personnes ne passent plus à faire ce qu’elles faisaient. Mesuré, pas estimé à partir d’un taux de gain théorique.": {
-   "en": "",
+   "en": "The time people no longer spend doing what they used to do. Measured, not estimated from a theoretical gain rate.",
    "fr": "Le temps que les personnes ne passent plus à faire ce qu’elles faisaient. Mesuré, pas estimé à partir d’un taux de gain théorique."
   },
   "Les cas prioritaires peuvent être rattachés à des jalons de conformité AI Act dans le module RaaS, pour relier valeur métier et trajectoire de conformité.": {
-   "en": "",
+   "en": "Priority cases can be linked to AI Act compliance milestones in the RaaS module, to connect business value and compliance trajectory.",
    "fr": "Les cas prioritaires peuvent être rattachés à des jalons de conformité AI Act dans le module RaaS, pour relier valeur métier et trajectoire de conformité."
   },
   "Les estimations de retour et de risque sont des repères de cadrage, à valider avec vos équipes métiers et votre direction financière.": {
-   "en": "",
+   "en": "The return and risk estimates are scoping benchmarks, to be validated with your business teams and your finance department.",
    "fr": "Les estimations de retour et de risque sont des repères de cadrage, à valider avec vos équipes métiers et votre direction financière."
   },
   "Les obligations varient selon la juridiction. Vérifiez le cadre applicable avant d’industrialiser un cas hors de France.": {
-   "en": "",
+   "en": "Obligations vary by jurisdiction. Check the applicable framework before industrialising a case outside France.",
    "fr": "Les obligations varient selon la juridiction. Vérifiez le cadre applicable avant d’industrialiser un cas hors de France."
   },
   "Les pastilles réglementaires signalent, elles ne qualifient pas.": {
-   "en": "",
+   "en": "The regulatory dots signal; they do not qualify.",
    "fr": "Les pastilles réglementaires signalent, elles ne qualifient pas."
   },
   "L’axe « risque maîtrisé » reste une appréciation rapide.": {
-   "en": "",
+   "en": "The “risk under control” axis remains a quick judgement.",
    "fr": "L’axe « risque maîtrisé » reste une appréciation rapide."
   },
   "Marketing": {
-   "en": "",
+   "en": "Marketing function",
    "fr": "Marketing"
   },
   "Mesurer": {
-   "en": "",
+   "en": "Measure",
    "fr": "Mesurer"
   },
   "Moyenne secteur": {
-   "en": "",
+   "en": "Sector average",
    "fr": "Moyenne secteur"
   },
   "NON RELEVÉ": {
-   "en": "",
+   "en": "NO READING",
    "fr": "NON RELEVÉ"
   },
   "Notez chaque cas retenu de # à # sur quatre axes : impact, faisabilité, données et maîtrise du risque. Le score, la priorité (P# à P#) et le positionnement se calculent automatiquement.": {
-   "en": "",
+   "en": "Score each selected case from # to # on four axes: impact, feasibility, data and risk control. The score, the priority (P# to P#) and the positioning are calculated automatically.",
    "fr": "Notez chaque cas retenu de 1 à 5 sur quatre axes : impact, faisabilité, données et maîtrise du risque. Le score, la priorité (P1 à P3) et le positionnement se calculent automatiquement."
   },
   "Notez chaque cas retenu sur quatre axes. Le score pondéré, la priorité (P# à P#) et le positionnement dans la matrice impact-faisabilité se calculent en temps réel. Exportez ensuite la liste priorisée.": {
-   "en": "",
+   "en": "Score each selected case on four axes. The weighted score, the priority (P# to P#) and the position in the impact-feasibility matrix are calculated in real time. Then export the prioritised list.",
    "fr": "Notez chaque cas retenu sur quatre axes. Le score pondéré, la priorité (P1 à P3) et le positionnement dans la matrice impact-faisabilité se calculent en temps réel. Exportez ensuite la liste priorisée."
   },
   "Opérations": {
-   "en": "",
+   "en": "Operations",
    "fr": "Opérations"
   },
   "Ouvrir la Carte mondiale des juridictions →": {
-   "en": "",
+   "en": "Open the World map of jurisdictions →",
    "fr": "Ouvrir la Carte mondiale des juridictions →"
   },
   "Ouvrir la Matrice risques →": {
-   "en": "",
+   "en": "Open the Risk matrix →",
    "fr": "Ouvrir la Matrice risques →"
   },
   "Ouvrir le Benchmark sectoriel →": {
-   "en": "",
+   "en": "Open the Sector benchmark →",
    "fr": "Ouvrir le Benchmark sectoriel →"
   },
   "Ouvrir le tableau de bord d’adoption →": {
-   "en": "",
+   "en": "Open the adoption dashboard →",
    "fr": "Ouvrir le tableau de bord d’adoption →"
   },
   "Ouvrir l’Audit de maturité IA →": {
-   "en": "",
+   "en": "Open the AI maturity audit →",
    "fr": "Ouvrir l’Audit de maturité IA →"
   },
   "Ouvrir l’étape # — Redessiner le processus →": {
-   "en": "",
+   "en": "Open step # — Redesign the process →",
    "fr": "Ouvrir l’étape 6 — Redessiner le processus →"
   },
   "Parcourez les cas d’usage proposés. Chaque carte indique la famille technologique (IA générative, apprentissage automatique ou automatisation), les résultats mesurables attendus et les données requises. Cliquez pour retenir les cas pertinents.": {
-   "en": "",
+   "en": "Browse the proposed use cases. Each card shows the technology family (generative AI, machine learning or automation), the expected measurable results and the data required. Click to select the relevant cases.",
    "fr": "Parcourez les cas d’usage proposés. Chaque carte indique la famille technologique (IA générative, apprentissage automatique ou automatisation), les résultats mesurables attendus et les données requises. Cliquez pour retenir les cas pertinents."
   },
   "Part d’équipe qui s’en sert chaque semaine": {
-   "en": "",
+   "en": "Share of the team using it every week",
    "fr": "Part d’équipe qui s’en sert chaque semaine"
   },
   "Pour chaque cas retenu, renseignez l’assiette annuelle du processus concerné, le taux de gain estimé, le coût de mise en œuvre et le coût récurrent annuel. Le gain annuel, le retour net la première année, le retour sur investissement et le délai de récupération se calculent en temps réel. Les valeurs sont des estimations de cadrage, à valider avec les métiers et la direction financière.": {
-   "en": "",
+   "en": "For each selected case, enter the annual base of the process concerned, the estimated gain rate, the implementation cost and the annual recurring cost. The annual gain, the net return in the first year, the return on investment and the payback period are calculated in real time. The values are scoping estimates, to be validated with the business lines and the finance department.",
    "fr": "Pour chaque cas retenu, renseignez l’assiette annuelle du processus concerné, le taux de gain estimé, le coût de mise en œuvre et le coût récurrent annuel. Le gain annuel, le retour net la première année, le retour sur investissement et le délai de récupération se calculent en temps réel. Les valeurs sont des estimations de cadrage, à valider avec les métiers et la direction financière."
   },
   "Pour chaque cas retenu, écrivez le déroulé d’aujourd’hui, celui d’après, ce qui disparaît, et nommez qui arbitre. C’est l’étape que les projets d’IA sautent le plus souvent, et celle dont l’absence explique la plupart des abandons : un outil posé sur un processus inchangé ajoute du travail au lieu d’en retirer.": {
-   "en": "",
+   "en": "For each selected case, write down today’s workflow, the one afterwards, what disappears, and name who decides. This is the step AI projects skip most often, and the one whose absence explains most abandonments: a tool placed on an unchanged process adds work instead of removing it.",
    "fr": "Pour chaque cas retenu, écrivez le déroulé d’aujourd’hui, celui d’après, ce qui disparaît, et nommez qui arbitre. C’est l’étape que les projets d’IA sautent le plus souvent, et celle dont l’absence explique la plupart des abandons : un outil posé sur un processus inchangé ajoute du travail au lieu d’en retirer."
   },
   "Pour situer votre secteur,": {
-   "en": "",
+   "en": "To place your sector,",
    "fr": "Pour situer votre secteur,"
   },
   "Pour une évaluation approfondie d’un cas sensible, ouvrez la matrice dédiée plutôt que de dupliquer l’analyse ici.": {
-   "en": "",
+   "en": "For an in-depth assessment of a sensitive case, open the dedicated matrix rather than duplicating the analysis here.",
    "fr": "Pour une évaluation approfondie d’un cas sensible, ouvrez la matrice dédiée plutôt que de dupliquer l’analyse ici."
   },
   "Processus effectivement redessinés": {
-   "en": "",
+   "en": "Processes actually redesigned",
    "fr": "Processus effectivement redessinés"
   },
   "Processus métiers (facultatif)": {
-   "en": "",
+   "en": "Business processes (optional)",
    "fr": "Processus métiers (facultatif)"
   },
   "Prochaine étape du parcours : qualifier chaque cas retenu (scoring pondéré) puis estimer les résultats mesurables. Chaque cas prioritaire pourra être rattaché à un jalon de conformité AI Act dans le module RaaS, reliant la valeur métier à la trajectoire de conformité.": {
-   "en": "",
+   "en": "Next step of the path: qualify each selected case (weighted scoring), then estimate the measurable results. Each priority case can be linked to an AI Act compliance milestone in the RaaS module, connecting business value to the compliance trajectory.",
    "fr": "Prochaine étape du parcours : qualifier chaque cas retenu (scoring pondéré) puis estimer les résultats mesurables. Chaque cas prioritaire pourra être rattaché à un jalon de conformité AI Act dans le module RaaS, reliant la valeur métier à la trajectoire de conformité."
   },
   "Qualifier & prioriser": {
-   "en": "",
+   "en": "Qualify & prioritise",
    "fr": "Qualifier & prioriser"
   },
   "Qualifier et prioriser": {
-   "en": "",
+   "en": "Qualify and prioritise",
    "fr": "Qualifier et prioriser"
   },
   "Quatre vagues, à côté des quatre phases de la": {
-   "en": "",
+   "en": "Four waves, alongside the four phases of the",
    "fr": "Quatre vagues, à côté des quatre phases de la"
   },
   "Rattacher la synthese de la cartographie a la fiche d un client (Gestion des clients)": {
-   "en": "",
+   "en": "Link the mapping summary to a client record (Client management)",
    "fr": "Rattacher la synthese de la cartographie a la fiche d un client (Gestion des clients)"
   },
   "Redessiner": {
-   "en": "",
+   "en": "Redesign",
    "fr": "Redessiner"
   },
   "Redessiner le processus": {
-   "en": "",
+   "en": "Redesign the process",
    "fr": "Redessiner le processus"
   },
   "Redessiner le processus →": {
-   "en": "",
+   "en": "Redesign the process →",
    "fr": "Redessiner le processus →"
   },
   "Relation client": {
-   "en": "",
+   "en": "Client relations",
    "fr": "Relation client"
   },
   "Rendre l’usage possible": {
-   "en": "",
+   "en": "Make use possible",
    "fr": "Rendre l’usage possible"
   },
   "Renseignez l’assiette annuelle du processus, le taux de gain estimé et les coûts. Le gain annuel, le retour net, le retour sur investissement et le délai de récupération s’affichent en temps réel.": {
-   "en": "",
+   "en": "Enter the annual base of the process, the estimated gain rate and the costs. The annual gain, net return, return on investment and payback period are shown in real time.",
    "fr": "Renseignez l’assiette annuelle du processus, le taux de gain estimé et les coûts. Le gain annuel, le retour net, le retour sur investissement et le délai de récupération s’affichent en temps réel."
   },
   "Reporter le perimetre et la valeur vers la Tarification et l enveloppe RaaS": {
-   "en": "",
+   "en": "Carry the scope and value over to Pricing and the RaaS envelope",
    "fr": "Reporter le perimetre et la valeur vers la Tarification et l enveloppe RaaS"
   },
   "Ressources humaines": {
-   "en": "",
+   "en": "Human resources",
    "fr": "Ressources humaines"
   },
   "Rien n’a été mesuré ni déclaré.": {
-   "en": "",
+   "en": "Nothing has been measured or declared.",
    "fr": "Rien n’a été mesuré ni déclaré."
   },
   "Roadmap d’adoption": {
-   "en": "",
+   "en": "Adoption roadmap",
    "fr": "Roadmap d’adoption"
   },
   "Répartition": {
-   "en": "",
+   "en": "Breakdown",
    "fr": "Répartition"
   },
   "Scores par secteur": {
-   "en": "",
+   "en": "Scores by sector",
    "fr": "Scores par secteur"
   },
   "Secteur industriel": {
-   "en": "",
+   "en": "Industrial sector",
    "fr": "Secteur industriel"
   },
   "Socle non relevé pour ce secteur : aucune référence à comparer.": {
-   "en": "",
+   "en": "No baseline recorded for this sector: no reference to compare against.",
    "fr": "Socle non relevé pour ce secteur : aucune référence à comparer."
   },
   "Supply chain": {
-   "en": "",
+   "en": "Supply chain function",
    "fr": "Supply chain"
   },
   "Sur les personnes qui s’en servaient au premier mois, combien ont cessé au troisième. C’est l’indicateur que les tableaux de bord d’adoption omettent le plus souvent, et le seul qui distingue un lancement réussi d’un changement tenu.": {
-   "en": "",
+   "en": "Of the people who used it in the first month, how many had stopped by the third. It is the indicator adoption dashboards most often leave out, and the only one that distinguishes a successful launch from a change that holds.",
    "fr": "Sur les personnes qui s’en servaient au premier mois, combien ont cessé au troisième. C’est l’indicateur que les tableaux de bord d’adoption omettent le plus souvent, et le seul qui distingue un lancement réussi d’un changement tenu."
   },
   "Sur les personnes à qui l’usage est destiné, combien l’ouvrent au moins une fois par semaine. Pas « ont un accès » : « s’en servent ».": {
-   "en": "",
+   "en": "Of the people the use is intended for, how many open it at least once a week. Not “have access”: “use it”.",
    "fr": "Sur les personnes à qui l’usage est destiné, combien l’ouvrent au moins une fois par semaine. Pas « ont un accès » : « s’en servent »."
   },
   "Sélectionnez le secteur et, si vous le souhaitez, les processus métiers prioritaires. La cartographie s’adapte à votre choix.": {
-   "en": "",
+   "en": "Select the sector and, if you wish, the priority business processes. The mapping adapts to your choice.",
    "fr": "Sélectionnez le secteur et, si vous le souhaitez, les processus métiers prioritaires. La cartographie s’adapte à votre choix."
   },
   "Tant que l’abandon à quatre-vingt-dix jours n’est pas relevé, le programme se conclut sur son meilleur jour.": {
-   "en": "",
+   "en": "As long as the ninety-day drop-off is not recorded, the programme ends on its best day.",
    "fr": "Tant que l’abandon à quatre-vingt-dix jours n’est pas relevé, le programme se conclut sur son meilleur jour."
   },
   "Temps rendu, par personne et par semaine": {
-   "en": "",
+   "en": "Time given back, per person per week",
    "fr": "Temps rendu, par personne et par semaine"
   },
   "Une carte sans mention n’est": {
-   "en": "",
+   "en": "A card with no mention is",
    "fr": "Une carte sans mention n’est"
   },
   "Vague #": {
-   "en": "",
+   "en": "Wave #",
    "fr": "Vague 1"
   },
   "Valeur relevée (%)": {
-   "en": "",
+   "en": "Recorded value (%)",
    "fr": "Valeur relevée (%)"
   },
   "Valeur relevée (h)": {
-   "en": "",
+   "en": "Recorded value (h)",
    "fr": "Valeur relevée (h)"
   },
   "Votre score moyen": {
-   "en": "",
+   "en": "Your average score",
    "fr": "Votre score moyen"
   },
   "cas d’usage ·": {
-   "en": "",
+   "en": "use cases ·",
    "fr": "cas d’usage ·"
   },
   "cohérence": {
-   "en": "",
+   "en": "consistency",
    "fr": "cohérence"
   },
   "comment le travail sera fait après": {
-   "en": "",
+   "en": "how the work will be done afterwards",
    "fr": "comment le travail sera fait après"
   },
   "consultez les repères de maturité, d’investissement et de risque IA propres à votre filière.": {
-   "en": "",
+   "en": "see the AI maturity, investment and risk benchmarks specific to your industry.",
    "fr": "consultez les repères de maturité, d’investissement et de risque IA propres à votre filière."
   },
   "en cours": {
-   "en": "",
+   "en": "in progress",
    "fr": "en cours"
   },
   "est le nombre de processus redessinés, lu à l’étape # de la cartographie. Les trois autres se mesurent chez vous, avec vos outils.": {
-   "en": "",
+   "en": "is the number of redesigned processes, read at step # of the mapping. The other three are measured on your side, with your tools.",
    "fr": "est le nombre de processus redessinés, lu à l’étape 6 de la cartographie. Les trois autres se mesurent chez vous, avec vos outils."
   },
   "et non à leur place. Une vague ne s’ouvre pas parce que la précédente est « lancée » : elle s’ouvre quand la précédente a produit ce qu’elle devait produire, et l’ordre porte une contrainte réelle —": {
-   "en": "",
+   "en": "and not in their place. A wave does not open because the previous one has “started”: it opens when the previous one has produced what it was meant to produce, and the order carries a real constraint —",
    "fr": "et non à leur place. Une vague ne s’ouvre pas parce que la précédente est « lancée » : elle s’ouvre quand la précédente a produit ce qu’elle devait produire, et l’ordre porte une contrainte réelle —"
   },
   "logique": {
-   "en": "",
+   "en": "logic",
    "fr": "logique"
   },
   "mesurer avant de généraliser": {
-   "en": "",
+   "en": "measure before scaling up",
    "fr": "mesurer avant de généraliser"
   },
   "pas": {
-   "en": "",
+   "en": "not",
    "fr": "pas"
   },
   "prioritaire": {
-   "en": "",
+   "en": "priority",
    "fr": "prioritaire"
   },
   "roadmap de conformité": {
-   "en": "",
+   "en": "compliance roadmap",
    "fr": "roadmap de conformité"
   },
   "sélectionné(s)": {
-   "en": "",
+   "en": "selected",
    "fr": "sélectionné(s)"
   },
   "une carte sans obligation : la qualification dépend de l’usage réel, du rôle tenu dans la chaîne de valeur et des données mobilisées. Passez chaque cas retenu au": {
-   "en": "",
+   "en": "a card with no obligation: the qualification depends on actual use, the role held in the value chain and the data involved. Put each selected case through the",
    "fr": "une carte sans obligation : la qualification dépend de l’usage réel, du rôle tenu dans la chaîne de valeur et des données mobilisées. Passez chaque cas retenu au"
   },
   "vs. vous": {
-   "en": "",
+   "en": "vs. you",
    "fr": "vs. vous"
   },
   "À chaque étape, un bouton d’export produit un document PDF : liste prioritée, dossier de valeur, diagnostic de maturité.": {
-   "en": "",
+   "en": "At each step, an export button produces a PDF document: prioritised list, business case, maturity diagnostic.",
    "fr": "À chaque étape, un bouton d’export produit un document PDF : liste prioritée, dossier de valeur, diagnostic de maturité."
   },
   "Étape # — Chiffrer le retour attendu": {
-   "en": "",
+   "en": "Step # — Quantify the expected return",
    "fr": "Étape 4 — Chiffrer le retour attendu"
   },
   "Étape # — Cibler le contexte industriel": {
-   "en": "",
+   "en": "Step # — Target the industrial context",
    "fr": "Étape 1 — Cibler le contexte industriel"
   },
   "Étape # — Explorer et sélectionner": {
-   "en": "",
+   "en": "Step # — Explore and select",
    "fr": "Étape 2 — Explorer et sélectionner"
   },
   "Étape # — Maturité data et compétences techniques": {
-   "en": "",
+   "en": "Step # — Data maturity and technical skills",
    "fr": "Étape 5 — Maturité data et compétences techniques"
   },
   "Étape # — Qualifier et prioriser": {
-   "en": "",
+   "en": "Step # — Qualify and prioritise",
    "fr": "Étape 3 — Qualifier et prioriser"
   },
   "Étape # — Redessiner le processus": {
-   "en": "",
+   "en": "Step # — Redesign the process",
    "fr": "Étape 6 — Redessiner le processus"
   },
   "Évaluer la maturité": {
-   "en": "",
+   "en": "Assess maturity",
    "fr": "Évaluer la maturité"
   },
   "Évaluer la maturité →": {
-   "en": "",
+   "en": "Assess maturity →",
    "fr": "Évaluer la maturité →"
   },
   "Évaluez la capacité de l’organisation à déployer les cas d’usage retenus. Notez chaque critère de # (absent) à # (maîtrisé). Le diagnostic croise votre maturité technique avec les familles technologiques de votre liste courte, et signale les écarts à combler avant le déploiement.": {
-   "en": "",
+   "en": "Assess the organisation’s capacity to deploy the selected use cases. Score each criterion from # (absent) to # (mastered). The diagnostic cross-references your technical maturity with the technology families on your shortlist, and flags the gaps to close before deployment.",
    "fr": "Évaluez la capacité de l’organisation à déployer les cas d’usage retenus. Notez chaque critère de 1 (absent) à 5 (maîtrisé). Le diagnostic croise votre maturité technique avec les familles technologiques de votre liste courte, et signale les écarts à combler avant le déploiement."
   },
   "établi": {
-   "en": "",
+   "en": "established",
    "fr": "établi"
   },
   "← Modifier la sélection": {
-   "en": "",
+   "en": "← Edit the selection",
    "fr": "← Modifier la sélection"
   },
   "← Revenir": {
-   "en": "",
+   "en": "← Back",
    "fr": "← Revenir"
   },
   "← Revenir au chiffrage": {
-   "en": "",
+   "en": "← Back to the costing",
    "fr": "← Revenir au chiffrage"
   },
   "← Revenir à la maturité": {
-   "en": "",
+   "en": "← Back to maturity",
    "fr": "← Revenir à la maturité"
   },
   "← Revenir à la qualification": {
-   "en": "",
+   "en": "← Back to qualification",
    "fr": "← Revenir à la qualification"
   },
   "→ Tarification & enveloppe RaaS": {
-   "en": "",
+   "en": "→ Pricing & RaaS envelope",
    "fr": "→ Tarification & enveloppe RaaS"
   },
   "↓ Rapport complet": {
-   "en": "",
+   "en": "↓ Full report",
    "fr": "↓ Rapport complet"
   },
   "↗ Rattacher à un client": {
-   "en": "",
+   "en": "↗ Link to a client",
    "fr": "↗ Rattacher à un client"
   },
   "⚡ Énergie / Utilities": {
-   "en": "",
+   "en": "⚡ Energy / Utilities",
    "fr": "⚡ Énergie / Utilities"
   },
   "⛏ Industries extractives et matières premières": {
-   "en": "",
+   "en": "⛏ Extractive industries and raw materials",
    "fr": "⛏ Industries extractives et matières premières"
   },
   "🌐 Organisations internationales et extraterritoriales": {
-   "en": "",
+   "en": "🌐 International and extraterritorial organisations",
    "fr": "🌐 Organisations internationales et extraterritoriales"
   },
   "🌾 Agriculture, agroalimentaire, forêt et pêche": {
-   "en": "",
+   "en": "🌾 Agriculture, agri-food, forestry and fishing",
    "fr": "🌾 Agriculture, agroalimentaire, forêt et pêche"
   },
   "🎓 Enseignement et formation": {
-   "en": "",
+   "en": "🎓 Education and training",
    "fr": "🎓 Enseignement et formation"
   },
   "🎭 Arts, sport, médias et loisirs": {
-   "en": "",
+   "en": "🎭 Arts, sport, media and leisure",
    "fr": "🎭 Arts, sport, médias et loisirs"
   },
   "🏗 Construction et BTP": {
-   "en": "",
+   "en": "🏗 Construction and civil engineering",
    "fr": "🏗 Construction et BTP"
   },
   "🏛 Secteur public / Administration": {
-   "en": "",
+   "en": "🏛 Public sector / Administration",
    "fr": "🏛 Secteur public / Administration"
   },
   "🏡 Services à la personne et particuliers employeurs": {
-   "en": "",
+   "en": "🏡 Personal services and households as employers",
    "fr": "🏡 Services à la personne et particuliers employeurs"
   },
   "🏢 Immobilier et gestion d'actifs bâtis": {
-   "en": "",
+   "en": "🏢 Real estate and building asset management",
    "fr": "🏢 Immobilier et gestion d'actifs bâtis"
   },
   "🏦 Finance / Banque / Assurance": {
-   "en": "",
+   "en": "🏦 Finance / Banking / Insurance",
    "fr": "🏦 Finance / Banque / Assurance"
   },
   "🏨 Hôtellerie, restauration et tourisme": {
-   "en": "",
+   "en": "🏨 Hospitality, catering and tourism",
    "fr": "🏨 Hôtellerie, restauration et tourisme"
   },
   "🏭 Industrie / Manufacturing": {
-   "en": "",
+   "en": "🏭 Industry / Manufacturing",
    "fr": "🏭 Industrie / Manufacturing"
   },
   "💻 IT / Tech / SaaS": {
-   "en": "",
+   "en": "💻 IT / Technology / SaaS",
    "fr": "💻 IT / Tech / SaaS"
   },
   "📐 Services professionnels, scientifiques et techniques": {
-   "en": "",
+   "en": "📐 Professional, scientific and technical services",
    "fr": "📐 Services professionnels, scientifiques et techniques"
   },
   "📶 Télécom": {
-   "en": "",
+   "en": "📶 Telecoms",
    "fr": "📶 Télécom"
   },
   "🚇 Transport / Mobilité": {
-   "en": "",
+   "en": "🚇 Transport / Mobility",
    "fr": "🚇 Transport / Mobilité"
   },
   "🛒 Commerce de gros et de détail": {
-   "en": "",
+   "en": "🛒 Wholesale and retail trade",
    "fr": "🛒 Commerce de gros et de détail"
   },
   "🤝 Autres services et vie associative": {
-   "en": "",
+   "en": "🤝 Other services and non-profit organisations",
    "fr": "🤝 Autres services et vie associative"
   },
   "🧾 Services administratifs et de soutien": {
-   "en": "",
+   "en": "🧾 Administrative and support services",
    "fr": "🧾 Services administratifs et de soutien"
   },
   "🩺 Santé / Médical": {
-   "en": "",
+   "en": "🩺 Health / Medical",
    "fr": "🩺 Santé / Médical"
   }
  }

@@ -8,382 +8,382 @@
  "_rubrique": "ADMINISTRATION",
  "bloc": {
   "Chaque acceptation, personnalisation, refus ou retrait est horodaté côté serveur : bannière cookies, formulaire de contact, inscription. L'adresse IP est hachée et l'agent utilisateur tronqué (minimisation, art. #).Procédure. Recherchez par adresse pour retrouver l'historique d'une personne. Exportez le registre en CSV pour l'annexer à une réponse à l'autorité de contrôle.Rappel. En vertu de l'article #, la charge de la preuve du consentement vous incombe : ce registre est votre moyen de preuve.": {
-   "en": "",
+   "en": "Every acceptance, customisation, refusal or withdrawal is timestamped server-side: cookie banner, contact form, sign-up. The IP address is hashed and the user agent truncated (minimisation, art. #).<br><br><strong>Procedure.</strong> Search by address to retrieve a person’s history. Export the register as CSV to attach it to a reply to the supervisory authority.<br><br><strong>Reminder.</strong> Under Article #, the burden of proving consent lies with you: this register is your means of evidence.",
    "fr": "Chaque acceptation, personnalisation, refus ou retrait est horodaté côté serveur : bannière cookies, formulaire de contact, inscription. L'adresse IP est hachée et l'agent utilisateur tronqué (minimisation, art. 5).Procédure. Recherchez par adresse pour retrouver l'historique d'une personne. Exportez le registre en CSV pour l'annexer à une réponse à l'autorité de contrôle.Rappel. En vertu de l'article 7, la charge de la preuve du consentement vous incombe : ce registre est votre moyen de preuve.",
    "html": "Chaque acceptation, personnalisation, refus ou retrait est horodaté côté serveur : bannière cookies, formulaire de contact, inscription. L'adresse IP est hachée et l'agent utilisateur tronqué (minimisation, art. 5).<br><br><strong>Procédure.</strong> Recherchez par adresse pour retrouver l'historique d'une personne. Exportez le registre en CSV pour l'annexer à une réponse à l'autorité de contrôle.<br><br><strong>Rappel.</strong> En vertu de l'article 7, la charge de la preuve du consentement vous incombe : ce registre est votre moyen de preuve."
   },
   "Chaque semaine : consulter l'indice et traiter les anomalies ; traiter les demandes reçues.Chaque mois : vérifier le registre des traitements au regard des évolutions du site ; contrôler le bon déroulement de la purge automatique.Chaque trimestre : archiver un rapport d'audit ; exporter le registre des preuves ; revoir les durées de conservation.Chaque année : revoir les analyses d'impact ; revoir les transferts et leurs garanties ; mettre à jour la politique de confidentialité et sa version.": {
-   "en": "",
+   "en": "<strong>Every week:</strong> check the index and deal with anomalies; handle the requests received.<br><strong>Every month:</strong> check the records of processing against changes to the site; check that the automatic purge is running properly.<br><strong>Every quarter:</strong> archive an audit report; export the consent records; review retention periods.<br><strong>Every year:</strong> review the impact assessments; review transfers and their safeguards; update the privacy policy and its version.",
    "fr": "Chaque semaine : consulter l'indice et traiter les anomalies ; traiter les demandes reçues.Chaque mois : vérifier le registre des traitements au regard des évolutions du site ; contrôler le bon déroulement de la purge automatique.Chaque trimestre : archiver un rapport d'audit ; exporter le registre des preuves ; revoir les durées de conservation.Chaque année : revoir les analyses d'impact ; revoir les transferts et leurs garanties ; mettre à jour la politique de confidentialité et sa version.",
    "html": "<strong>Chaque semaine :</strong> consulter l'indice et traiter les anomalies ; traiter les demandes reçues.<br><strong>Chaque mois :</strong> vérifier le registre des traitements au regard des évolutions du site ; contrôler le bon déroulement de la purge automatique.<br><strong>Chaque trimestre :</strong> archiver un rapport d'audit ; exporter le registre des preuves ; revoir les durées de conservation.<br><strong>Chaque année :</strong> revoir les analyses d'impact ; revoir les transferts et leurs garanties ; mettre à jour la politique de confidentialité et sa version."
   },
   "Deux ensembles coexistent. Les modules « Conformité RGPD » et « Registre des traitements » portent sur l'organisation du client. Les modules « RGPD — CONSEILPREV » et « Transparence IA Act » portent sur notre propre conformité : site public et plateforme Sentinel. Ils sont réservés à CONSEILPREV et masqués pour les clients. En cas de contrôle, seuls ces derniers constituent votre dossier.": {
-   "en": "",
+   "en": "Two sets coexist. The “GDPR compliance” and “Records of processing” modules concern the <strong>client’s</strong> organisation. The “GDPR — CONSEILPREV” and “AI Act transparency” modules concern <strong>our own compliance</strong>: public site and Sentinel platform. They are reserved for CONSEILPREV and hidden from clients. In the event of an inspection, only the latter make up your file.",
    "fr": "Deux ensembles coexistent. Les modules « Conformité RGPD » et « Registre des traitements » portent sur l'organisation du client. Les modules « RGPD — CONSEILPREV » et « Transparence IA Act » portent sur notre propre conformité : site public et plateforme Sentinel. Ils sont réservés à CONSEILPREV et masqués pour les clients. En cas de contrôle, seuls ces derniers constituent votre dossier.",
    "html": "Deux ensembles coexistent. Les modules « Conformité RGPD » et « Registre des traitements » portent sur l'organisation du <strong>client</strong>. Les modules « RGPD — CONSEILPREV » et « Transparence IA Act » portent sur <strong>notre propre conformité</strong> : site public et plateforme Sentinel. Ils sont réservés à CONSEILPREV et masqués pour les clients. En cas de contrôle, seuls ces derniers constituent votre dossier."
   },
   "Effacement. Le compte est anonymisé, les données du périmètre Entreprise supprimées, les preuves de consentement anonymisées mais conservées à titre de preuve. Les pièces comptables demeurent (art. #.b). Vérifiez l'identité, saisissez l'adresse, confirmez ; l'opération est tracée.Portabilité. L'export produit un fichier structuré, lisible par machine : compte, périmètre, consentements. Vérifiez l'identité, exportez, remettez par un canal sûr. Ce mécanisme répond aussi à l'exigence de portabilité et de changement de fournisseur portée par le Data Act.": {
-   "en": "",
+   "en": "<strong>Erasure.</strong> The account is anonymised, the Enterprise-scope data deleted, and consent records anonymised but kept as evidence. Accounting documents remain (art. #.b). Verify the identity, enter the address, confirm; the operation is logged.<br><br><strong>Portability.</strong> The export produces a structured, machine-readable file: account, scope, consents. Verify the identity, export, hand over through a secure channel. This mechanism also meets the portability and provider-switching requirement set by the Data Act.",
    "fr": "Effacement. Le compte est anonymisé, les données du périmètre Entreprise supprimées, les preuves de consentement anonymisées mais conservées à titre de preuve. Les pièces comptables demeurent (art. 17.3.b). Vérifiez l'identité, saisissez l'adresse, confirmez ; l'opération est tracée.Portabilité. L'export produit un fichier structuré, lisible par machine : compte, périmètre, consentements. Vérifiez l'identité, exportez, remettez par un canal sûr. Ce mécanisme répond aussi à l'exigence de portabilité et de changement de fournisseur portée par le Data Act.",
    "html": "<strong>Effacement.</strong> Le compte est anonymisé, les données du périmètre Entreprise supprimées, les preuves de consentement anonymisées mais conservées à titre de preuve. Les pièces comptables demeurent (art. 17.3.b). Vérifiez l'identité, saisissez l'adresse, confirmez ; l'opération est tracée.<br><br><strong>Portabilité.</strong> L'export produit un fichier structuré, lisible par machine : compte, périmètre, consentements. Vérifiez l'identité, exportez, remettez par un canal sûr. Ce mécanisme répond aussi à l'exigence de portabilité et de changement de fournisseur portée par le Data Act."
   },
   "L'archivage fige l'état de conformité à une date : contenu complet, indice et empreinte chaînée sur le rapport précédent.Procédure. Archivez au minimum chaque trimestre, ainsi qu'avant et après toute évolution significative du site. En contrôle, produisez le rapport d'audit complet accompagné de l'historique scellé : c'est la démonstration de votre responsabilité au sens de l'article #.": {
-   "en": "",
+   "en": "Archiving freezes the compliance status at a given date: full content, index and a hash chained to the previous report.<br><br><strong>Procedure.</strong> Archive at least every quarter, as well as before and after any significant change to the site. In an inspection, produce the full audit report together with the sealed history: it demonstrates your accountability within the meaning of Article #.",
    "fr": "L'archivage fige l'état de conformité à une date : contenu complet, indice et empreinte chaînée sur le rapport précédent.Procédure. Archivez au minimum chaque trimestre, ainsi qu'avant et après toute évolution significative du site. En contrôle, produisez le rapport d'audit complet accompagné de l'historique scellé : c'est la démonstration de votre responsabilité au sens de l'article 5.2.",
    "html": "L'archivage fige l'état de conformité à une date : contenu complet, indice et empreinte chaînée sur le rapport précédent.<br><br><strong>Procédure.</strong> Archivez au minimum chaque trimestre, ainsi qu'avant et après toute évolution significative du site. En contrôle, produisez le rapport d'audit complet accompagné de l'historique scellé : c'est la démonstration de votre responsabilité au sens de l'article 5.2."
   },
   "L'indice agrège les contrôles conformes, hors éléments non applicables. « Actualiser la conformité » recalcule le taux à partir de l'état réel de la base : preuves, retraits, données échues, AIPD, demandes en cours. La case « Temps réel » relance le calcul toutes les trente secondes tant que la page est affichée. La ligne d'anomalies indique le nombre de non-conformités détectées et les articles concernés. Ne laissez jamais une anomalie persister sans traitement ni justification écrite.": {
-   "en": "",
+   "en": "The index aggregates the compliant checks, excluding items that are not applicable. “Refresh compliance” recalculates the rate from the actual state of the database: evidence, withdrawals, expired data, DPIAs, pending requests. The “Real time” box reruns the calculation every thirty seconds while the page is displayed. The anomalies line shows the number of non-compliances detected and the articles concerned. <strong>Never let an anomaly persist</strong> without treatment or written justification.",
    "fr": "L'indice agrège les contrôles conformes, hors éléments non applicables. « Actualiser la conformité » recalcule le taux à partir de l'état réel de la base : preuves, retraits, données échues, AIPD, demandes en cours. La case « Temps réel » relance le calcul toutes les trente secondes tant que la page est affichée. La ligne d'anomalies indique le nombre de non-conformités détectées et les articles concernés. Ne laissez jamais une anomalie persister sans traitement ni justification écrite.",
    "html": "L'indice agrège les contrôles conformes, hors éléments non applicables. « Actualiser la conformité » recalcule le taux à partir de l'état réel de la base : preuves, retraits, données échues, AIPD, demandes en cours. La case « Temps réel » relance le calcul toutes les trente secondes tant que la page est affichée. La ligne d'anomalies indique le nombre de non-conformités détectées et les articles concernés. <strong>Ne laissez jamais une anomalie persister</strong> sans traitement ni justification écrite."
   },
   "Le rapport d'audit complet, à jour et imprimable.L'historique des rapports archivés et scellés.Le registre des activités de traitement, exporté.Le registre des preuves de consentement, exporté.Le journal des purges, prouvant l'application effective des durées.Les analyses d'impact validées.Le registre des demandes de droits, avec les délais respectés.L'attestation de transparence de l'article #, avec le registre des usages d'IA.": {
-   "en": "",
+   "en": "The full audit report, up to date and printable.<br>The history of archived and sealed reports.<br>The records of processing activities, exported.<br>The consent records, exported.<br>The purge log, proving that retention periods are actually applied.<br>The validated impact assessments.<br>The register of rights requests, with the deadlines met.<br>The Article # transparency attestation, with the register of AI uses.",
    "fr": "Le rapport d'audit complet, à jour et imprimable.L'historique des rapports archivés et scellés.Le registre des activités de traitement, exporté.Le registre des preuves de consentement, exporté.Le journal des purges, prouvant l'application effective des durées.Les analyses d'impact validées.Le registre des demandes de droits, avec les délais respectés.L'attestation de transparence de l'article 50, avec le registre des usages d'IA.",
    "html": "Le rapport d'audit complet, à jour et imprimable.<br>L'historique des rapports archivés et scellés.<br>Le registre des activités de traitement, exporté.<br>Le registre des preuves de consentement, exporté.<br>Le journal des purges, prouvant l'application effective des durées.<br>Les analyses d'impact validées.<br>Le registre des demandes de droits, avec les délais respectés.<br>L'attestation de transparence de l'article 50, avec le registre des usages d'IA."
   },
   "Le tableau recense destinataires, pays et garantie applicable. Les prestataires hors Union relèvent des clauses contractuelles types ou du cadre de protection applicable.Procédure. Avant d'ajouter un prestataire, vérifiez sa localisation et la garantie invoquée, puis inscrivez-la ici et dans le registre.": {
-   "en": "",
+   "en": "The table lists recipients, countries and the applicable safeguard. Providers outside the Union rely on standard contractual clauses or the applicable protection framework.<br><br><strong>Procedure.</strong> Before adding a provider, check its location and the safeguard invoked, then record it here and in the records.",
    "fr": "Le tableau recense destinataires, pays et garantie applicable. Les prestataires hors Union relèvent des clauses contractuelles types ou du cadre de protection applicable.Procédure. Avant d'ajouter un prestataire, vérifiez sa localisation et la garantie invoquée, puis inscrivez-la ici et dans le registre.",
    "html": "Le tableau recense destinataires, pays et garantie applicable. Les prestataires hors Union relèvent des clauses contractuelles types ou du cadre de protection applicable.<br><br><strong>Procédure.</strong> Avant d'ajouter un prestataire, vérifiez sa localisation et la garantie invoquée, puis inscrivez-la ici et dans le registre."
   },
   "Les durées sont désormais appliquées, et non plus seulement déclarées.Procédure. Lancez d'abord « Simuler la purge » : les enregistrements échus s'affichent sans aucune modification ; vérifiez la cohérence des volumes. Lancez ensuite « Exécuter la purge » : les données échues sont anonymisées, l'opération est journalisée et scellée par chaînage d'empreintes.Le journal des purges est votre preuve de suppression : chaque entrée porte l'empreinte de la précédente, rendant toute altération détectable.Automatisation. Une tâche planifiée quotidienne appelle le point d'entrée de purge avec le secret partagé. Sans elle, exécutez la purge manuellement au moins chaque trimestre, avec trace.": {
-   "en": "",
+   "en": "Retention periods are now <strong>applied</strong>, no longer merely declared.<br><br><strong>Procedure.</strong> First run “Simulate the purge”: the expired records are shown without any change; check that the volumes are consistent. Then run “Run the purge”: expired data are anonymised, and the operation is logged and sealed by hash chaining.<br><br>The purge log is your <strong>evidence of deletion</strong>: each entry carries the hash of the previous one, making any alteration detectable.<br><br><strong>Automation.</strong> A daily scheduled task calls the purge endpoint with the shared secret. Without it, run the purge manually at least every quarter, keeping a record.",
    "fr": "Les durées sont désormais appliquées, et non plus seulement déclarées.Procédure. Lancez d'abord « Simuler la purge » : les enregistrements échus s'affichent sans aucune modification ; vérifiez la cohérence des volumes. Lancez ensuite « Exécuter la purge » : les données échues sont anonymisées, l'opération est journalisée et scellée par chaînage d'empreintes.Le journal des purges est votre preuve de suppression : chaque entrée porte l'empreinte de la précédente, rendant toute altération détectable.Automatisation. Une tâche planifiée quotidienne appelle le point d'entrée de purge avec le secret partagé. Sans elle, exécutez la purge manuellement au moins chaque trimestre, avec trace.",
    "html": "Les durées sont désormais <strong>appliquées</strong>, et non plus seulement déclarées.<br><br><strong>Procédure.</strong> Lancez d'abord « Simuler la purge » : les enregistrements échus s'affichent sans aucune modification ; vérifiez la cohérence des volumes. Lancez ensuite « Exécuter la purge » : les données échues sont anonymisées, l'opération est journalisée et scellée par chaînage d'empreintes.<br><br>Le journal des purges est votre <strong>preuve de suppression</strong> : chaque entrée porte l'empreinte de la précédente, rendant toute altération détectable.<br><br><strong>Automatisation.</strong> Une tâche planifiée quotidienne appelle le point d'entrée de purge avec le secret partagé. Sans elle, exécutez la purge manuellement au moins chaque trimestre, avec trace."
   },
   "RGPD — CONSEILPREV": {
-   "en": "",
+   "en": "GDPR — <em>CONSEILPREV</em>",
    "fr": "RGPD — CONSEILPREV",
    "html": "RGPD — <em>CONSEILPREV</em>"
   },
   "Source unique de CONSEILPREV, stockée en base et éditable ici. Chaque traitement documente finalité, base légale, données, durée et destinataires.Procédure. À chaque évolution du site — nouveau formulaire, nouveau sous-traitant, nouvelle fonctionnalité — ajoutez ou modifiez la ligne le jour même. Exportez en JSON pour vos archives. Un registre non tenu à jour est la première faiblesse relevée en contrôle.": {
-   "en": "",
+   "en": "CONSEILPREV’s single source, stored in the database and editable here. Each processing activity documents purpose, legal basis, data, retention period and recipients.<br><br><strong>Procedure.</strong> With every change to the site — new form, new processor, new feature — add or edit the row the same day. Export as JSON for your archives. <strong>Records that are not kept up to date are the first weakness found in an inspection.</strong>",
    "fr": "Source unique de CONSEILPREV, stockée en base et éditable ici. Chaque traitement documente finalité, base légale, données, durée et destinataires.Procédure. À chaque évolution du site — nouveau formulaire, nouveau sous-traitant, nouvelle fonctionnalité — ajoutez ou modifiez la ligne le jour même. Exportez en JSON pour vos archives. Un registre non tenu à jour est la première faiblesse relevée en contrôle.",
    "html": "Source unique de CONSEILPREV, stockée en base et éditable ici. Chaque traitement documente finalité, base légale, données, durée et destinataires.<br><br><strong>Procédure.</strong> À chaque évolution du site — nouveau formulaire, nouveau sous-traitant, nouvelle fonctionnalité — ajoutez ou modifiez la ligne le jour même. Exportez en JSON pour vos archives. <strong>Un registre non tenu à jour est la première faiblesse relevée en contrôle.</strong>"
   },
   "Test de seuil sur neuf critères : à partir de deux critères, l'AIPD est requise.Procédure. Cochez les critères. Si le seuil est atteint, renseignez la description systématique, la nécessité et la proportionnalité, les risques pour les droits et libertés, les mesures prévues, le risque résiduel et l'avis du délégué. Enregistrez en brouillon, puis en version validée une fois l'analyse arrêtée.Point d'attention. Un risque résiduel élevé impose la consultation préalable de l'autorité de contrôle. Vos usages d'IA relèvent du critère d'usage innovant : ils appellent une AIPD.": {
-   "en": "",
+   "en": "Threshold test on nine criteria: from <strong>two criteria</strong> upwards, a DPIA is required.<br><br><strong>Procedure.</strong> Tick the criteria. If the threshold is reached, fill in the systematic description, necessity and proportionality, the risks to the rights and freedoms, the measures envisaged, the residual risk and the DPO’s opinion. Save as a draft, then as a validated version once the assessment is finalised.<br><br><strong>Point of attention.</strong> A high residual risk requires prior consultation of the supervisory authority. Your uses of AI fall under the innovative-use criterion: they call for a DPIA.",
    "fr": "Test de seuil sur neuf critères : à partir de deux critères, l'AIPD est requise.Procédure. Cochez les critères. Si le seuil est atteint, renseignez la description systématique, la nécessité et la proportionnalité, les risques pour les droits et libertés, les mesures prévues, le risque résiduel et l'avis du délégué. Enregistrez en brouillon, puis en version validée une fois l'analyse arrêtée.Point d'attention. Un risque résiduel élevé impose la consultation préalable de l'autorité de contrôle. Vos usages d'IA relèvent du critère d'usage innovant : ils appellent une AIPD.",
    "html": "Test de seuil sur neuf critères : à partir de <strong>deux critères</strong>, l'AIPD est requise.<br><br><strong>Procédure.</strong> Cochez les critères. Si le seuil est atteint, renseignez la description systématique, la nécessité et la proportionnalité, les risques pour les droits et libertés, les mesures prévues, le risque résiduel et l'avis du délégué. Enregistrez en brouillon, puis en version validée une fois l'analyse arrêtée.<br><br><strong>Point d'attention.</strong> Un risque résiduel élevé impose la consultation préalable de l'autorité de contrôle. Vos usages d'IA relèvent du critère d'usage innovant : ils appellent une AIPD."
   },
   "Toute demande est enregistrée avec son échéance d'un mois.Procédure. Enregistrez dès réception, en précisant le type. Vérifiez l'identité du demandeur avant toute exécution. Utilisez l'outil adapté : effacement (art. #) ou export structuré (art. #). Marquez enfin la demande comme traitée. Les demandes hors délai sont signalées et pèsent sur l'indice.": {
-   "en": "",
+   "en": "Every request is recorded with its one-month deadline.<br><br><strong>Procedure.</strong> Record it on receipt, specifying the type. Verify the requester’s identity before any action. Use the appropriate tool: erasure (art. #) or structured export (art. #). Finally, mark the request as handled. Overdue requests are flagged and weigh on the index.",
    "fr": "Toute demande est enregistrée avec son échéance d'un mois.Procédure. Enregistrez dès réception, en précisant le type. Vérifiez l'identité du demandeur avant toute exécution. Utilisez l'outil adapté : effacement (art. 17) ou export structuré (art. 20). Marquez enfin la demande comme traitée. Les demandes hors délai sont signalées et pèsent sur l'indice.",
    "html": "Toute demande est enregistrée avec son échéance d'un mois.<br><br><strong>Procédure.</strong> Enregistrez dès réception, en précisant le type. Vérifiez l'identité du demandeur avant toute exécution. Utilisez l'outil adapté : effacement (art. 17) ou export structuré (art. 20). Marquez enfin la demande comme traitée. Les demandes hors délai sont signalées et pèsent sur l'indice."
   }
  },
  "texte": {
   "# · Analyse d'impact (art. #)": {
-   "en": "",
+   "en": "# · Impact assessment (art. #)",
    "fr": "7 · Analyse d'impact (art. 35)"
   },
   "# · Demandes d'exercice de droits (art. #)": {
-   "en": "",
+   "en": "# · Data subject requests (art. #)",
    "fr": "8 · Demandes d'exercice de droits (art. 12)"
   },
   "# · Effacement (art. #) et portabilité (art. # · Data Act)": {
-   "en": "",
+   "en": "# · Erasure (art. #) and portability (art. # · Data Act)",
    "fr": "9 · Effacement (art. 17) et portabilité (art. 20 · Data Act)"
   },
   "# · Historique d'audit (art. #)": {
-   "en": "",
+   "en": "# · Audit history (art. #)",
    "fr": "10 · Historique d'audit (art. 5.2)"
   },
   "# · Indice de conformité et actualisation": {
-   "en": "",
+   "en": "# · Compliance index and refresh",
    "fr": "2 · Indice de conformité et actualisation"
   },
   "# · Preuves de consentement (art. #)": {
-   "en": "",
+   "en": "# · Consent records (art. #)",
    "fr": "3 · Preuves de consentement (art. 7)"
   },
   "# · Périmètres : ne pas confondre": {
-   "en": "",
+   "en": "# · Scopes: do not confuse them",
    "fr": "1 · Périmètres : ne pas confondre"
   },
   "# · Registre des traitements (art. #)": {
-   "en": "",
+   "en": "# · Records of processing (art. #)",
    "fr": "4 · Registre des traitements (art. 30)"
   },
   "# · Rythme d'exploitation recommandé": {
-   "en": "",
+   "en": "# · Recommended operating rhythm",
    "fr": "11 · Rythme d'exploitation recommandé"
   },
   "# · Rétention et purge (art. #.e)": {
-   "en": "",
+   "en": "# · Retention and purge (art. #.e)",
    "fr": "6 · Rétention et purge (art. 5.1.e)"
   },
   "# · Transferts hors UE (chapitre V)": {
-   "en": "",
+   "en": "# · Transfers outside the EU (Chapter V)",
    "fr": "5 · Transferts hors UE (chapitre V)"
   },
   "Administration · Conformité": {
-   "en": "",
+   "en": "Administration · Compliance",
    "fr": "Administration · Conformité"
   },
   "Ajouter un traitement au registre (art. #)": {
-   "en": "",
+   "en": "Add a processing activity to the records (art. #)",
    "fr": "Ajouter un traitement au registre (art. 30)"
   },
   "Analyse d'impact relative à la protection des données (art. #)": {
-   "en": "",
+   "en": "Data protection impact assessment (art. #)",
    "fr": "Analyse d'impact relative à la protection des données (art. 35)"
   },
   "Anonymise le compte, supprime les données liées ; les preuves de consentement sont anonymisées et conservées à titre de preuve ; les pièces comptables demeurent (art. #.b).": {
-   "en": "",
+   "en": "Anonymises the account and deletes the linked data; consent records are anonymised and kept as evidence; accounting documents remain (art. #.b).",
    "fr": "Anonymise le compte, supprime les données liées ; les preuves de consentement sont anonymisées et conservées à titre de preuve ; les pièces comptables demeurent (art. 17.3.b)."
   },
   "Archiver fige l'état de conformité à une date : contenu complet, indice et empreinte chaînée sur le rapport précédent. Toute altération devient détectable, ce qui confère au dossier sa valeur probante.": {
-   "en": "",
+   "en": "Archiving freezes the compliance status at a given date: full content, index and a hash chained to the previous report. Any alteration becomes detectable, which gives the file its evidential value.",
    "fr": "Archiver fige l'état de conformité à une date : contenu complet, indice et empreinte chaînée sur le rapport précédent. Toute altération devient détectable, ce qui confère au dossier sa valeur probante."
   },
   "Archiver le rapport actuel": {
-   "en": "",
+   "en": "Archive the current report",
    "fr": "Archiver le rapport actuel"
   },
   "Automatisation : tâche planifiée quotidienne appelant /api/cron/rgpd-purge avec le secret CRON_SECRET.": {
-   "en": "",
+   "en": "Automation: a daily scheduled task calling /api/cron/rgpd-purge with the CRON_SECRET secret.",
    "fr": "Automatisation : tâche planifiée quotidienne appelant /api/cron/rgpd-purge avec le secret CRON_SECRET."
   },
   "Avis du délégué à la protection des données": {
-   "en": "",
+   "en": "Data protection officer’s opinion",
    "fr": "Avis du délégué à la protection des données"
   },
   "Chaque acceptation, personnalisation, refus ou retrait est horodaté (bannière, formulaires, inscriptions). Adresse IP hachée et agent utilisateur tronqué (minimisation, art. #).": {
-   "en": "",
+   "en": "Every acceptance, customisation, refusal or withdrawal is timestamped (banner, forms, sign-ups). IP address hashed and user agent truncated (minimisation, art. #).",
    "fr": "Chaque acceptation, personnalisation, refus ou retrait est horodaté (bannière, formulaires, inscriptions). Adresse IP hachée et agent utilisateur tronqué (minimisation, art. 5)."
   },
   "Contrôles automatiques et déclaratifs, hors éléments non applicables.": {
-   "en": "",
+   "en": "Automatic and declarative checks, excluding items that are not applicable.",
    "fr": "Contrôles automatiques et déclaratifs, hors éléments non applicables."
   },
   "Critères du traitement": {
-   "en": "",
+   "en": "Processing criteria",
    "fr": "Critères du traitement"
   },
   "Demandes d'exercice de droits (art. #)": {
-   "en": "",
+   "en": "Data subject requests (art. #)",
    "fr": "Demandes d'exercice de droits (art. 12)"
   },
   "Description systématique du traitement": {
-   "en": "",
+   "en": "Systematic description of the processing",
    "fr": "Description systématique du traitement"
   },
   "Destinataires": {
-   "en": "",
+   "en": "Recipients",
    "fr": "Destinataires"
   },
   "Droit à l'effacement (art. #)": {
-   "en": "",
+   "en": "Right to erasure (art. #)",
    "fr": "Droit à l'effacement (art. 17)"
   },
   "Durée": {
-   "en": "",
+   "en": "Retention",
    "fr": "Durée"
   },
   "Durées de conservation appliquées, non plus seulement déclarées. La purge anonymise les données échues et journalise l'opération, scellée par chaînage d'empreintes : c'est votre preuve de suppression en cas de contrôle.": {
-   "en": "",
+   "en": "Retention periods applied, no longer merely declared. The purge anonymises expired data and logs the operation, sealed by hash chaining: this is your evidence of deletion in the event of an inspection.",
    "fr": "Durées de conservation appliquées, non plus seulement déclarées. La purge anonymise les données échues et journalise l'opération, scellée par chaînage d'empreintes : c'est votre preuve de suppression en cas de contrôle."
   },
   "Effacer": {
-   "en": "",
+   "en": "Erase",
    "fr": "Effacer"
   },
   "Enregistrer": {
-   "en": "",
+   "en": "Save",
    "fr": "Enregistrer"
   },
   "Enregistrer l'AIPD": {
-   "en": "",
+   "en": "Save the DPIA",
    "fr": "Enregistrer l'AIPD"
   },
   "Erreur.": {
-   "en": "",
+   "en": "Error.",
    "fr": "Erreur."
   },
   "Export structuré des données d'une personne (compte, périmètre Entreprise, consentements), à lui remettre sur demande dans un format lisible par machine.": {
-   "en": "",
+   "en": "Structured export of a person’s data (account, Enterprise scope, consents), to be handed to them on request in a machine-readable format.",
    "fr": "Export structuré des données d'une personne (compte, périmètre Entreprise, consentements), à lui remettre sur demande dans un format lisible par machine."
   },
   "Exporter": {
-   "en": "",
+   "en": "Export",
    "fr": "Exporter"
   },
   "Exporter JSON": {
-   "en": "",
+   "en": "Export JSON",
    "fr": "Exporter JSON"
   },
   "Exporter le registre affiché au format CSV": {
-   "en": "",
+   "en": "Export the displayed records as CSV",
    "fr": "Exporter le registre affiché au format CSV"
   },
   "Exécuter la purge": {
-   "en": "",
+   "en": "Run the purge",
    "fr": "Exécuter la purge"
   },
   "Exécuter la purge : anonymisation des données échues, journalisée et scellée": {
-   "en": "",
+   "en": "Run the purge: anonymisation of expired data, logged and sealed",
    "fr": "Exécuter la purge : anonymisation des données échues, journalisée et scellée"
   },
   "Figer et sceller l'état de conformité actuel": {
-   "en": "",
+   "en": "Freeze and seal the current compliance status",
    "fr": "Figer et sceller l'état de conformité actuel"
   },
   "Finalité": {
-   "en": "",
+   "en": "Purpose",
    "fr": "Finalité"
   },
   "Finalité, base légale, données, durée de conservation et destinataires, pour chaque traitement du site et de la plateforme.": {
-   "en": "",
+   "en": "Purpose, legal basis, data, retention period and recipients, for each processing activity of the site and the platform.",
    "fr": "Finalité, base légale, données, durée de conservation et destinataires, pour chaque traitement du site et de la plateforme."
   },
   "Guide d'exploitation": {
-   "en": "",
+   "en": "Operating guide",
    "fr": "Guide d'exploitation"
   },
   "Guide opérationnel complet. Rappel : outillage technique et documentaire ; les qualifications juridiques, durées, bases légales et exceptions doivent être validées par un conseil compétent.": {
-   "en": "",
+   "en": "Complete operational guide. Reminder: technical and documentary tooling; legal qualifications, retention periods, legal bases and exceptions must be validated by competent counsel.",
    "fr": "Guide opérationnel complet. Rappel : outillage technique et documentaire ; les qualifications juridiques, durées, bases légales et exceptions doivent être validées par un conseil compétent."
   },
   "Générer le rapport d'audit complet, imprimable / PDF, pour une demande externe": {
-   "en": "",
+   "en": "Generate the full audit report, printable / PDF, for an external request",
    "fr": "Générer le rapport d'audit complet, imprimable / PDF, pour une demande externe"
   },
   "Historique des rapports d'audit (art. # · responsabilité)": {
-   "en": "",
+   "en": "Audit report history (art. # · accountability)",
    "fr": "Historique des rapports d'audit (art. 5.2 · responsabilité)"
   },
   "Indice de conformité": {
-   "en": "",
+   "en": "Compliance index",
    "fr": "Indice de conformité"
   },
   "Journal des purges (preuve scellée)": {
-   "en": "",
+   "en": "Purge log (sealed evidence)",
    "fr": "Journal des purges (preuve scellée)"
   },
   "Mesures prévues pour traiter les risques": {
-   "en": "",
+   "en": "Measures envisaged to address the risks",
    "fr": "Mesures prévues pour traiter les risques"
   },
   "Mécanismes de transfert des données (chapitre V)": {
-   "en": "",
+   "en": "Data transfer mechanisms (Chapter V)",
    "fr": "Mécanismes de transfert des données (chapitre V)"
   },
   "Note (facultatif)": {
-   "en": "",
+   "en": "Note (optional)",
    "fr": "Note (facultatif)"
   },
   "Portabilité (art. # · Data Act)": {
-   "en": "",
+   "en": "Portability (art. # · Data Act)",
    "fr": "Portabilité (art. 20 · Data Act)"
   },
   "Périmètre : notre propre conformité": {
-   "en": "",
+   "en": "Scope: our own compliance",
    "fr": "Périmètre : notre propre conformité"
   },
   "Rapport d'audit complet": {
-   "en": "",
+   "en": "Full audit report",
    "fr": "Rapport d'audit complet"
   },
   "Recalcule automatiquement le taux toutes les # secondes tant que cette page est ouverte": {
-   "en": "",
+   "en": "Automatically recalculates the rate every # seconds while this page is open",
    "fr": "Recalcule automatiquement le taux toutes les 30 secondes tant que cette page est ouverte"
   },
   "Recalculer immédiatement le taux de conformité RGPD à partir de l'état réel du site (preuves, registre, contrôles)": {
-   "en": "",
+   "en": "Recalculate the GDPR compliance rate immediately from the actual state of the site (evidence, records, checks)",
    "fr": "Recalculer immédiatement le taux de conformité RGPD à partir de l'état réel du site (preuves, registre, contrôles)"
   },
   "Rechercher": {
-   "en": "",
+   "en": "Search",
    "fr": "Rechercher"
   },
   "Rechercher une adresse…": {
-   "en": "",
+   "en": "Search for an address…",
    "fr": "Rechercher une adresse…"
   },
   "Registre des activités de traitement (art. #)": {
-   "en": "",
+   "en": "Records of processing activities (art. #)",
    "fr": "Registre des activités de traitement (art. 30)"
   },
   "Registre des preuves de consentement (art. #)": {
-   "en": "",
+   "en": "Consent records register (art. #)",
    "fr": "Registre des preuves de consentement (art. 7)"
   },
   "Registre des usages d'IA (art. #)": {
-   "en": "",
+   "en": "Register of AI uses (art. #)",
    "fr": "Registre des usages d'IA (art. 50)"
   },
   "Registre probant des usages d'intelligence artificielle de CONSEILPREV : rôle, nature des contenus, marquage lisible par machine, étiquetage visible, exceptions invoquées et responsable éditorial. Les obligations de transparence de l'article # entrent en application le # août #. Outillage technique, à valider par votre conseil juridique.": {
-   "en": "",
+   "en": "Evidential register of CONSEILPREV’s uses of artificial intelligence: role, nature of the content, machine-readable marking, visible labelling, exceptions invoked and editorial owner. The transparency obligations of Article # apply from # August #. Technical tooling, to be validated by your legal counsel.",
    "fr": "Registre probant des usages d'intelligence artificielle de CONSEILPREV : rôle, nature des contenus, marquage lisible par machine, étiquetage visible, exceptions invoquées et responsable éditorial. Les obligations de transparence de l'article 50 entrent en application le 2 août 2026. Outillage technique, à valider par votre conseil juridique."
   },
   "Rétention et suppression automatique (art. #.e · Data Act)": {
-   "en": "",
+   "en": "Automatic retention and deletion (art. #.e · Data Act)",
    "fr": "Rétention et suppression automatique (art. 5.1.e · Data Act)"
   },
   "Simuler la purge": {
-   "en": "",
+   "en": "Simulate the purge",
    "fr": "Simuler la purge"
   },
   "Simuler sans rien modifier : affiche les données au-delà de leur durée": {
-   "en": "",
+   "en": "Simulate without changing anything: shows the data past their retention period",
    "fr": "Simuler sans rien modifier : affiche les données au-delà de leur durée"
   },
   "Tableau de bord de conformité du site CONSEILPREV et de la plateforme Sentinel : vérification selon les articles #, #, #, # et # du RGPD, registre des preuves de consentement, registre des traitements, transferts, droits des personnes et rapport d'audit pour toute demande externe. Outillage technique, à valider par votre conseil juridique.": {
-   "en": "",
+   "en": "Compliance dashboard for the CONSEILPREV site and the Sentinel platform: verification against Articles #, #, #, # and # of the GDPR, consent records, records of processing, transfers, data subject rights and audit report for any external request. Technical tooling, to be validated by your legal counsel.",
    "fr": "Tableau de bord de conformité du site CONSEILPREV et de la plateforme Sentinel : vérification selon les articles 5, 7, 17, 25 et 30 du RGPD, registre des preuves de consentement, registre des traitements, transferts, droits des personnes et rapport d'audit pour toute demande externe. Outillage technique, à valider par votre conseil juridique."
   },
   "Temps réel": {
-   "en": "",
+   "en": "Real time",
    "fr": "Temps réel"
   },
   "Test de seuil sur les neuf critères de référence : à partir de deux critères, l'AIPD est requise. L'analyse est conservée côté serveur, versionnée, et opposable en audit.": {
-   "en": "",
+   "en": "Threshold test on the nine reference criteria: from two criteria upwards, a DPIA is required. The assessment is kept server-side, versioned, and defensible in an audit.",
    "fr": "Test de seuil sur les neuf critères de référence : à partir de deux critères, l'AIPD est requise. L'analyse est conservée côté serveur, versionnée, et opposable en audit."
   },
   "Titre de l'AIPD": {
-   "en": "",
+   "en": "DPIA title",
    "fr": "Titre de l'AIPD"
   },
   "Toute demande est enregistrée avec son échéance d'un mois. Les demandes hors délai sont signalées et pèsent sur l'indice de conformité.": {
-   "en": "",
+   "en": "Every request is recorded with its one-month deadline. Overdue requests are flagged and weigh on the compliance index.",
    "fr": "Toute demande est enregistrée avec son échéance d'un mois. Les demandes hors délai sont signalées et pèsent sur l'indice de conformité."
   },
   "Traitement": {
-   "en": "",
+   "en": "Processing activity",
    "fr": "Traitement"
   },
   "Traitement concerné (ex. assistants conversationnels)": {
-   "en": "",
+   "en": "Processing activity concerned (e.g. conversational assistants)",
    "fr": "Traitement concerné (ex. assistants conversationnels)"
   },
   "Vérification de conformité — articles #, #, #, #, # · DSA · DMA · Data Act": {
-   "en": "",
+   "en": "Compliance check — Articles #, #, #, #, # · DSA · DMA · Data Act",
    "fr": "Vérification de conformité — articles 5, 7, 17, 25, 30 · DSA · DMA · Data Act"
   },
   "Vérification mesurée — sur les artefacts réellement servis": {
-   "en": "",
+   "en": "Measured verification — on the artefacts actually served",
    "fr": "Vérification mesurée — sur les artefacts réellement servis"
   },
   "Vérification non encore effectuée.": {
-   "en": "",
+   "en": "Verification not yet carried out.",
    "fr": "Vérification non encore effectuée."
   },
   "adresse@exemple.fr": {
-   "en": "",
+   "en": "name@example.com",
    "fr": "adresse@exemple.fr"
   },
   "— site public et plateforme Sentinel. À ne pas confondre avec les modules « Conformité RGPD » et « Registre des traitements », qui portent sur l'organisation du client.": {
-   "en": "",
+   "en": "— public site and Sentinel platform. Not to be confused with the “GDPR compliance” and “Records of processing” modules, which concern the client’s organisation.",
    "fr": "— site public et plateforme Sentinel. À ne pas confondre avec les modules « Conformité RGPD » et « Registre des traitements », qui portent sur l'organisation du client."
   },
   "↻ Actualiser la conformité": {
-   "en": "",
+   "en": "↻ Refresh compliance",
    "fr": "↻ Actualiser la conformité"
   },
   "↻ Mesurer maintenant": {
-   "en": "",
+   "en": "↻ Measure now",
    "fr": "↻ Mesurer maintenant"
   }
  }
