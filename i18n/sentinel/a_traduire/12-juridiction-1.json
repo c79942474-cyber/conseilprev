@@ -18,776 +18,776 @@
  "_rubrique": "JURIDICTION",
  "bloc": {
   "Sanction max : # # CAD par violation": {
-   "en": "",
+   "en": "Maximum penalty: <strong>CAD # # per infringement</strong>",
    "fr": "Sanction max : 100 000 CAD par violation",
    "html": "Sanction max : <strong>100 000 CAD par violation</strong>"
   },
   "Sanction max : # # CHF": {
-   "en": "",
+   "en": "Maximum penalty: <strong>CHF # #</strong>",
    "fr": "Sanction max : 250 000 CHF",
    "html": "Sanction max : <strong>250 000 CHF</strong>"
   },
   "Sanction max : # M€ ou #% du CA": {
-   "en": "",
+   "en": "Maximum penalty: <strong>€# M or #% of turnover</strong>",
    "fr": "Sanction max : 35 M€ ou 7% du CA",
    "html": "Sanction max : <strong>35 M€ ou 7% du CA</strong>"
   },
   "Sanction max : # M€ ou #% du CA mondial": {
-   "en": "",
+   "en": "Maximum penalty: <strong>€# M or #% of worldwide turnover</strong>",
    "fr": "Sanction max : 35 M€ ou 7% du CA mondial",
    "html": "Sanction max : <strong>35 M€ ou 7% du CA mondial</strong>"
   },
   "Sanction max : #% du CA brésilien, max #M BRL": {
-   "en": "",
+   "en": "Maximum penalty: <strong>#% of Brazilian turnover, max. BRL #M</strong>",
    "fr": "Sanction max : 2% du CA brésilien, max 50M BRL",
    "html": "Sanction max : <strong>2% du CA brésilien, max 50M BRL</strong>"
   },
   "Sanction max : #% du CA ou #M CNY": {
-   "en": "",
+   "en": "Maximum penalty: <strong>#% of turnover or CNY #M</strong>",
    "fr": "Sanction max : 4% du CA ou 50M CNY",
    "html": "Sanction max : <strong>4% du CA ou 50M CNY</strong>"
   },
   "Sanction max : #M GBP ou #% du CA mondial": {
-   "en": "",
+   "en": "Maximum penalty: <strong>GBP #M or #% of worldwide turnover</strong>",
    "fr": "Sanction max : 17,5M GBP ou 4% du CA mondial",
    "html": "Sanction max : <strong>17,5M GBP ou 4% du CA mondial</strong>"
   },
   "Sanction max : Droit souple": {
-   "en": "",
+   "en": "Maximum penalty: <strong>Soft law</strong>",
    "fr": "Sanction max : Droit souple",
    "html": "Sanction max : <strong>Droit souple</strong>"
   },
   "Sanction max : Jusqu'à # # ARS": {
-   "en": "",
+   "en": "Maximum penalty: <strong>Up to ARS # #</strong>",
    "fr": "Sanction max : Jusqu'à 100 000 ARS",
    "html": "Sanction max : <strong>Jusqu'à 100 000 ARS</strong>"
   },
   "Sanction max : Jusqu'à # # CNY + suspension": {
-   "en": "",
+   "en": "Maximum penalty: <strong>Up to CNY # # + suspension</strong>",
    "fr": "Sanction max : Jusqu'à 100 000 CNY + suspension",
    "html": "Sanction max : <strong>Jusqu'à 100 000 CNY + suspension</strong>"
   },
   "Sanction max : Jusqu'à #M BRL ou #% du CA": {
-   "en": "",
+   "en": "Maximum penalty: <strong>Up to BRL #M or #% of turnover</strong>",
    "fr": "Sanction max : Jusqu'à 50M BRL ou 2% du CA",
    "html": "Sanction max : <strong>Jusqu'à 50M BRL ou 2% du CA</strong>"
   },
   "Sanction max : Jusqu'à #M CAD ou #% du CA": {
-   "en": "",
+   "en": "Maximum penalty: <strong>Up to CAD #M or #% of turnover</strong>",
    "fr": "Sanction max : Jusqu'à 25M CAD ou 3% du CA",
    "html": "Sanction max : <strong>Jusqu'à 25M CAD ou 3% du CA</strong>"
   },
   "Sanction max : Non contraignant": {
-   "en": "",
+   "en": "Maximum penalty: <strong>Not binding</strong>",
    "fr": "Sanction max : Non contraignant",
    "html": "Sanction max : <strong>Non contraignant</strong>"
   },
   "Sanction max : Variable par secteur": {
-   "en": "",
+   "en": "Maximum penalty: <strong>Varies by sector</strong>",
    "fr": "Sanction max : Variable par secteur",
    "html": "Sanction max : <strong>Variable par secteur</strong>"
   },
   "Sanction max : À définir": {
-   "en": "",
+   "en": "Maximum penalty: <strong>To be defined</strong>",
    "fr": "Sanction max : À définir",
    "html": "Sanction max : <strong>À définir</strong>"
   }
  },
  "texte": {
   "# principes volontaires : bénéfice humain, équité, confidentialité, fiabilité, sécurité, transparence, contestabilité, responsabilité.": {
-   "en": "",
+   "en": "# voluntary principles: human benefit, fairness, privacy, reliability, security, transparency, contestability, accountability.",
    "fr": "8 principes volontaires : bénéfice humain, équité, confidentialité, fiabilité, sécurité, transparence, contestabilité, responsabilité."
   },
   "# principes éthiques IA volontaires": {
-   "en": "",
+   "en": "# voluntary AI ethics principles",
    "fr": "8 principes éthiques IA volontaires"
   },
   "AI Ethics Charter": {
-   "en": "",
+   "en": "AI Ethics Charter",
    "fr": "AI Ethics Charter"
   },
   "AI Ethics Framework": {
-   "en": "",
+   "en": "AI Ethics Framework",
    "fr": "AI Ethics Framework"
   },
   "AI Ethics Framework + Mandatory Guardrails (proposed)": {
-   "en": "",
+   "en": "AI Ethics Framework + Mandatory Guardrails (proposed)",
    "fr": "AI Ethics Framework + Mandatory Guardrails (proposed)"
   },
   "AI Regulation White Paper #": {
-   "en": "",
+   "en": "AI Regulation White Paper #",
    "fr": "AI Regulation White Paper 2023"
   },
   "AI Strategy Update #": {
-   "en": "",
+   "en": "AI Strategy Update #",
    "fr": "AI Strategy Update 2023"
   },
   "AIDA — AI & Data Act (en cours)": {
-   "en": "",
+   "en": "AIDA — AI & Data Act (in progress)",
    "fr": "AIDA — AI & Data Act (en cours)"
   },
   "AIDA — Artificial Intelligence and Data Act": {
-   "en": "",
+   "en": "AIDA — Artificial Intelligence and Data Act",
    "fr": "AIDA — Artificial Intelligence and Data Act"
   },
   "ASIA-PACIFIC": {
-   "en": "",
+   "en": "ASIA-PACIFIC",
    "fr": "ASIA-PACIFIC"
   },
   "Acteur clé de la rédaction de l'EU AI Act. La CNIL publie des recommandations spécifiques pour les systèmes IA. Stratégie nationale IA dotée de # Mds€.": {
-   "en": "",
+   "en": "A key player in drafting the EU AI Act. The CNIL publishes specific recommendations for AI systems. National AI strategy endowed with €# billion.",
    "fr": "Acteur clé de la rédaction de l'EU AI Act. La CNIL publie des recommandations spécifiques pour les systèmes IA. Stratégie nationale IA dotée de 1,5 Mds€."
   },
   "Adoption volontaire de l'AI Charter": {
-   "en": "",
+   "en": "Voluntary adoption of the AI Charter",
    "fr": "Adoption volontaire de l'AI Charter"
   },
   "Alignement avec les Five Eyes (USA, UK, Canada, NZ). Cadre réglementaire influencé par le Parlement européen mais adapté à une économie plus libérale.": {
-   "en": "",
+   "en": "Aligned with the Five Eyes (USA, UK, Canada, NZ). Regulatory framework influenced by the European Parliament but adapted to a more liberal economy.",
    "fr": "Alignement avec les Five Eyes (USA, UK, Canada, NZ). Cadre réglementaire influencé par le Parlement européen mais adapté à une économie plus libérale."
   },
   "Alignement fort avec les États-Unis (CUSMA) mais inspiration européenne pour la régulation IA. Fort investissement fédéral dans la recherche IA (Montréal, Toronto, Edmonton).": {
-   "en": "",
+   "en": "Strong alignment with the United States (CUSMA) but European inspiration for AI regulation. Heavy federal investment in AI research (Montreal, Toronto, Edmonton).",
    "fr": "Alignement fort avec les États-Unis (CUSMA) mais inspiration européenne pour la régulation IA. Fort investissement fédéral dans la recherche IA (Montréal, Toronto, Edmonton)."
   },
   "Application de l'EU AI Act via la CNIL et l'ANSSI": {
-   "en": "",
+   "en": "Enforcement of the EU AI Act through the CNIL and ANSSI",
    "fr": "Application de l'EU AI Act via la CNIL et l'ANSSI"
   },
   "Application de la LPD révisée aux systèmes IA": {
-   "en": "",
+   "en": "Application of the revised LPD to AI systems",
    "fr": "Application de la LPD révisée aux systèmes IA"
   },
   "Application de la Loi # aux décisions automatisées": {
-   "en": "",
+   "en": "Application of Law # to automated decisions",
    "fr": "Application de la Loi 25.326 aux décisions automatisées"
   },
   "Application des principes IA par les régulateurs sectoriels existants": {
-   "en": "",
+   "en": "Application of AI principles by the existing sector regulators",
    "fr": "Application des principes IA par les régulateurs sectoriels existants"
   },
   "Application stricte de l'EU AI Act via les autorités nationales": {
-   "en": "",
+   "en": "Strict enforcement of the EU AI Act through the national authorities",
    "fr": "Application stricte de l'EU AI Act via les autorités nationales"
   },
   "Applique l'EU AI Act avec une rigueur nationale supplémentaire via le BfDI (protection des données) et des initiatives sectorielles dans l'industrie et la santé.": {
-   "en": "",
+   "en": "Applies the EU AI Act with additional national rigour through the BfDI (data protection) and sector initiatives in industry and health.",
    "fr": "Applique l'EU AI Act avec une rigueur nationale supplémentaire via le BfDI (protection des données) et des initiatives sectorielles dans l'industrie et la santé."
   },
   "Approche pragmatique combinant la nouvelle LPD révisée (#) et l'adhésion à la Convention-cadre du Conseil de l'Europe sur l'IA. Position de hub neutre entre l'UE et les États-Unis.": {
-   "en": "",
+   "en": "A pragmatic approach combining the new revised LPD (#) and accession to the Council of Europe Framework Convention on AI. Positioned as a neutral hub between the EU and the United States.",
    "fr": "Approche pragmatique combinant la nouvelle LPD révisée (2023) et l'adhésion à la Convention-cadre du Conseil de l'Europe sur l'IA. Position de hub neutre entre l'UE et les États-Unis."
   },
   "Approche pro-innovation post-Brexit. Pas de législation IA horizontale mais des principes directeurs sectoriels. L'AI Safety Institute surveille les risques des modèles de fondation.": {
-   "en": "",
+   "en": "A pro-innovation approach after Brexit. No horizontal AI legislation but sector-specific guiding principles. The AI Safety Institute monitors the risks of foundation models.",
    "fr": "Approche pro-innovation post-Brexit. Pas de législation IA horizontale mais des principes directeurs sectoriels. L'AI Safety Institute surveille les risques des modèles de fondation."
   },
   "Audit de sécurité pour les algorithmes de recommandation": {
-   "en": "",
+   "en": "Security audit for recommendation algorithms",
    "fr": "Audit de sécurité pour les algorithmes de recommandation"
   },
   "Cadre de responsabilité civile en développement": {
-   "en": "",
+   "en": "Civil liability framework under development",
    "fr": "Cadre de responsabilité civile en développement"
   },
   "Cadre de responsabilité en développement": {
-   "en": "",
+   "en": "Liability framework under development",
    "fr": "Cadre de responsabilité en développement"
   },
   "Cadre fondé sur les risques inspiré de l'EU AI Act. En cours d'adoption au Sénat brésilien. Exigences pour les systèmes IA à haut risque.": {
-   "en": "",
+   "en": "A risk-based framework inspired by the EU AI Act. Being adopted by the Brazilian Senate. Requirements for high-risk AI systems.",
    "fr": "Cadre fondé sur les risques inspiré de l'EU AI Act. En cours d'adoption au Sénat brésilien. Exigences pour les systèmes IA à haut risque."
   },
   "Cadre principal": {
-   "en": "",
+   "en": "Main framework",
    "fr": "Cadre principal"
   },
   "Cadre pro-innovation reposant sur les régulateurs sectoriels existants (FCA, ICO, CMA). Pas de loi horizontale — approche pragmatique et flexible.": {
-   "en": "",
+   "en": "A pro-innovation framework relying on the existing sector regulators (FCA, ICO, CMA). No horizontal law — a pragmatic and flexible approach.",
    "fr": "Cadre pro-innovation reposant sur les régulateurs sectoriels existants (FCA, ICO, CMA). Pas de loi horizontale — approche pragmatique et flexible."
   },
   "Cadre réglementaire fragmenté mais dense, ciblant spécifiquement l'IA générative et les algorithmes de recommandation. Contrôle d'État fort sur les contenus et les données.": {
-   "en": "",
+   "en": "A fragmented but dense regulatory framework, specifically targeting generative AI and recommendation algorithms. Strong state control over content and data.",
    "fr": "Cadre réglementaire fragmenté mais dense, ciblant spécifiquement l'IA générative et les algorithmes de recommandation. Contrôle d'État fort sur les contenus et les données."
   },
   "Cadre stratégique définissant les priorités nationales en matière d'IA : innovation, éthique, inclusion et souveraineté numérique.": {
-   "en": "",
+   "en": "A strategic framework setting out national priorities for AI: innovation, ethics, inclusion and digital sovereignty.",
    "fr": "Cadre stratégique définissant les priorités nationales en matière d'IA : innovation, éthique, inclusion et souveraineté numérique."
   },
   "Cadre volontaire avec des gardes-fous obligatoires en cours d'introduction pour les systèmes IA à haut risque. L'Australie s'aligne progressivement sur les standards internationaux.": {
-   "en": "",
+   "en": "A voluntary framework with mandatory guardrails being introduced for high-risk AI systems. Australia is gradually aligning with international standards.",
    "fr": "Cadre volontaire avec des gardes-fous obligatoires en cours d'introduction pour les systèmes IA à haut risque. L'Australie s'aligne progressivement sur les standards internationaux."
   },
   "Certification optionnelle des produits IA": {
-   "en": "",
+   "en": "Optional certification of AI products",
    "fr": "Certification optionnelle des produits IA"
   },
   "Classification des systèmes IA selon le niveau de risque": {
-   "en": "",
+   "en": "Classification of AI systems by risk level",
    "fr": "Classification des systèmes IA selon le niveau de risque"
   },
   "Classification des systèmes IA à impact élevé": {
-   "en": "",
+   "en": "Classification of high-impact AI systems",
    "fr": "Classification des systèmes IA à impact élevé"
   },
   "Co-architecte de la régulation IA européenne. Ambition de souveraineté numérique avec Mistral AI comme champion national. Tension entre innovation et régulation stricte.": {
-   "en": "",
+   "en": "Co-architect of European AI regulation. An ambition of digital sovereignty with Mistral AI as the national champion. Tension between innovation and strict regulation.",
    "fr": "Co-architecte de la régulation IA européenne. Ambition de souveraineté numérique avec Mistral AI comme champion national. Tension entre innovation et régulation stricte."
   },
   "Compétition directe avec les États-Unis et l'UE pour la domination IA mondiale. Stratégie de substitution des technologies étrangères. Exportation du modèle réglementaire vers les pays BRI.": {
-   "en": "",
+   "en": "Direct competition with the United States and the EU for global AI dominance. A strategy of substituting foreign technologies. Export of the regulatory model to BRI countries.",
    "fr": "Compétition directe avec les États-Unis et l'UE pour la domination IA mondiale. Stratégie de substitution des technologies étrangères. Exportation du modèle réglementaire vers les pays BRI."
   },
   "Conformité NIS# pour les infrastructures critiques": {
-   "en": "",
+   "en": "NIS # compliance for critical infrastructure",
    "fr": "Conformité NIS2 pour les infrastructures critiques"
   },
   "Conformité volontaire aux principes du Conseil de l'Europe": {
-   "en": "",
+   "en": "Voluntary compliance with the Council of Europe principles",
    "fr": "Conformité volontaire aux principes du Conseil de l'Europe"
   },
   "Contexte géopolitique": {
-   "en": "",
+   "en": "Geopolitical context",
    "fr": "Contexte géopolitique"
   },
   "Convention-cadre IA Conseil Europe + LPD révisée": {
-   "en": "",
+   "en": "Council of Europe AI Framework Convention + revised LPD",
    "fr": "Convention-cadre IA Conseil Europe + LPD révisée"
   },
   "Convention-cadre IA — Conseil de l'Europe": {
-   "en": "",
+   "en": "AI Framework Convention — Council of Europe",
    "fr": "Convention-cadre IA — Conseil de l'Europe"
   },
   "Coopération avec le régulateur ISED": {
-   "en": "",
+   "en": "Cooperation with the ISED regulator",
    "fr": "Coopération avec le régulateur ISED"
   },
   "Deuxième économie d'Amérique du Sud. Écosystème tech en croissance malgré l'instabilité macroéconomique. Influence sur le cadre réglementaire des pays voisins.": {
-   "en": "",
+   "en": "Second-largest economy in South America. A growing tech ecosystem despite macroeconomic instability. Influence on the regulatory framework of neighbouring countries.",
    "fr": "Deuxième économie d'Amérique du Sud. Écosystème tech en croissance malgré l'instabilité macroéconomique. Influence sur le cadre réglementaire des pays voisins."
   },
   "Document gouvernemental non contraignant définissant des principes pour un développement responsable de l'IA en Argentine.": {
-   "en": "",
+   "en": "A non-binding government document setting out principles for responsible AI development in Argentina.",
    "fr": "Document gouvernemental non contraignant définissant des principes pour un développement responsable de l'IA en Argentine."
   },
   "Documentation technique et traçabilité complète": {
-   "en": "",
+   "en": "Technical documentation and full traceability",
    "fr": "Documentation technique et traçabilité complète"
   },
   "Droits d'information sur les décisions automatisées": {
-   "en": "",
+   "en": "Rights to information on automated decisions",
    "fr": "Droits d'information sur les décisions automatisées"
   },
   "Droits des personnes face aux décisions IA": {
-   "en": "",
+   "en": "Rights of individuals in the face of AI decisions",
    "fr": "Droits des personnes face aux décisions IA"
   },
   "Décret IA dans la fonction publique": {
-   "en": "",
+   "en": "Decree on AI in the civil service",
    "fr": "Décret IA dans la fonction publique"
   },
   "Désignation d'un responsable IA": {
-   "en": "",
+   "en": "Appointment of an AI officer",
    "fr": "Désignation d'un responsable IA"
   },
   "EN COURS": {
-   "en": "",
+   "en": "IN PROGRESS",
    "fr": "EN COURS"
   },
   "EU AI Act (CNIL superviseur)": {
-   "en": "",
+   "en": "EU AI Act (CNIL as supervisor)",
    "fr": "EU AI Act (CNIL superviseur)"
   },
   "EU AI Act (Règlement #/#)": {
-   "en": "",
+   "en": "EU AI Act (Regulation #/#)",
    "fr": "EU AI Act (Règlement 2024/1689)"
   },
   "EU AI Act (transposition DE)": {
-   "en": "",
+   "en": "EU AI Act (German implementation)",
    "fr": "EU AI Act (transposition DE)"
   },
   "EU AI Act + AI Strategy Update #": {
-   "en": "",
+   "en": "EU AI Act + AI Strategy Update #",
    "fr": "EU AI Act + AI Strategy Update 2023"
   },
   "EU Artificial Intelligence Act": {
-   "en": "",
+   "en": "EU Artificial Intelligence Act",
    "fr": "EU Artificial Intelligence Act"
   },
   "Enregistrement obligatoire des modèles génératifs auprès du CAC": {
-   "en": "",
+   "en": "Mandatory registration of generative models with the CAC",
    "fr": "Enregistrement obligatoire des modèles génératifs auprès du CAC"
   },
   "Exigences NIS# pour les OES utilisant l'IA": {
-   "en": "",
+   "en": "NIS # requirements for OES using AI",
    "fr": "Exigences NIS2 pour les OES utilisant l'IA"
   },
   "Exigences clés": {
-   "en": "",
+   "en": "Key requirements",
    "fr": "Exigences clés"
   },
   "Exigences de transparence pour les décisions automatisées": {
-   "en": "",
+   "en": "Transparency requirements for automated decisions",
    "fr": "Exigences de transparence pour les décisions automatisées"
   },
   "Exigences sectorielles dans l'industrie #": {
-   "en": "",
+   "en": "Sector requirements in Industry #",
    "fr": "Exigences sectorielles dans l'industrie 4.0"
   },
   "Exigences sectorielles dans la finance (DFSA, ADGM)": {
-   "en": "",
+   "en": "Sector requirements in finance (DFSA, ADGM)",
    "fr": "Exigences sectorielles dans la finance (DFSA, ADGM)"
   },
   "Filigrane sur les contenus générés par IA": {
-   "en": "",
+   "en": "Watermarking of AI-generated content",
    "fr": "Filigrane sur les contenus générés par IA"
   },
   "Gardes-fous obligatoires proposés pour l'IA à haut risque": {
-   "en": "",
+   "en": "Proposed mandatory guardrails for high-risk AI",
    "fr": "Gardes-fous obligatoires proposés pour l'IA à haut risque"
   },
   "Generative AI Measures (#)": {
-   "en": "",
+   "en": "Generative AI Measures (#)",
    "fr": "Generative AI Measures (2023)"
   },
   "Generative AI Measures + Algorithm Regulations + PIPL": {
-   "en": "",
+   "en": "Generative AI Measures + Algorithm Regulations + PIPL",
    "fr": "Generative AI Measures + Algorithm Regulations + PIPL"
   },
   "Gouvernance IA dans les services gouvernementaux": {
-   "en": "",
+   "en": "AI governance in government services",
    "fr": "Gouvernance IA dans les services gouvernementaux"
   },
   "Gouvernance et transparence algorithmique": {
-   "en": "",
+   "en": "Governance and algorithmic transparency",
    "fr": "Gouvernance et transparence algorithmique"
   },
   "Hub financier et technologique mondial. Accès au marché européen sans appartenir à l'UE. Cadre réglementaire attractif pour les entreprises souhaitant une conformité allégée.": {
-   "en": "",
+   "en": "A global financial and technology hub. Access to the European market without belonging to the EU. An attractive regulatory framework for companies seeking lighter compliance.",
    "fr": "Hub financier et technologique mondial. Accès au marché européen sans appartenir à l'UE. Cadre réglementaire attractif pour les entreprises souhaitant une conformité allégée."
   },
   "Hub régional pour l'IA au Moyen-Orient. Attraction de talents et d'entreprises via des régimes fiscaux avantageux. Investissements massifs dans l'IA via le fonds Mubadala.": {
-   "en": "",
+   "en": "Regional AI hub for the Middle East. Attracts talent and companies through advantageous tax regimes. Massive investment in AI through the Mubadala fund.",
    "fr": "Hub régional pour l'IA au Moyen-Orient. Attraction de talents et d'entreprises via des régimes fiscaux avantageux. Investissements massifs dans l'IA via le fonds Mubadala."
   },
   "IN FORCE": {
-   "en": "",
+   "en": "IN FORCE",
    "fr": "IN FORCE"
   },
   "Interdiction des contenus contraires aux valeurs socialistes": {
-   "en": "",
+   "en": "Ban on content contrary to socialist values",
    "fr": "Interdiction des contenus contraires aux valeurs socialistes"
   },
   "Interdiction des systèmes à risque inacceptable (scoring social, manipulation subliminale)": {
-   "en": "",
+   "en": "Ban on unacceptable-risk systems (social scoring, subliminal manipulation)",
    "fr": "Interdiction des systèmes à risque inacceptable (scoring social, manipulation subliminale)"
   },
   "L'AIDA (projet de loi C-#) est en cours d'adoption. Approche fondée sur les risques, avec un régulateur dédié. En parallèle, la loi sur la protection des données CPPA modernise le cadre existant.": {
-   "en": "",
+   "en": "AIDA (Bill C-#) is being adopted. A risk-based approach, with a dedicated regulator. In parallel, the CPPA data protection law is modernising the existing framework.",
    "fr": "L'AIDA (projet de loi C-27) est en cours d'adoption. Approche fondée sur les risques, avec un régulateur dédié. En parallèle, la loi sur la protection des données CPPA modernise le cadre existant."
   },
   "L'Allemagne applique directement le règlement européen. Le BfDI supervise les aspects données personnelles dans les systèmes IA.": {
-   "en": "",
+   "en": "Germany applies the European Regulation directly. The BfDI supervises the personal data aspects of AI systems.",
    "fr": "L'Allemagne applique directement le règlement européen. Le BfDI supervise les aspects données personnelles dans les systèmes IA."
   },
   "L'Argentine dispose d'une recommandation éthique IA et la loi # sur les données personnelles s'applique aux systèmes IA. Un projet de loi IA plus complet est en discussion.": {
-   "en": "",
+   "en": "Argentina has an AI ethics recommendation, and Law # on personal data applies to AI systems. A more comprehensive AI bill is under discussion.",
    "fr": "L'Argentine dispose d'une recommandation éthique IA et la loi 25.326 sur les données personnelles s'applique aux systèmes IA. Un projet de loi IA plus complet est en discussion."
   },
   "LGPD — Lei Geral de Proteção de Dados": {
-   "en": "",
+   "en": "LGPD — Lei Geral de Proteção de Dados [General Data Protection Law]",
    "fr": "LGPD — Lei Geral de Proteção de Dados"
   },
   "LPD — Loi fédérale sur la protection des données": {
-   "en": "",
+   "en": "LPD — Loi fédérale sur la protection des données [Federal Act on Data Protection]",
    "fr": "LPD — Loi fédérale sur la protection des données"
   },
   "LPRPDE / CPPA": {
-   "en": "",
+   "en": "PIPEDA / CPPA",
    "fr": "LPRPDE / CPPA"
   },
   "La CNIL est désignée comme autorité de surveillance pour les aspects protection des données dans les systèmes IA français.": {
-   "en": "",
+   "en": "The CNIL is designated as the supervisory authority for the data protection aspects of French AI systems.",
    "fr": "La CNIL est désignée comme autorité de surveillance pour les aspects protection des données dans les systèmes IA français."
   },
   "Le Chili est précurseur en Amérique latine avec une politique IA nationale et un projet de loi avancé. Premier pays de la région à consacrer constitutionnellement le droit aux données.": {
-   "en": "",
+   "en": "Chile is a pioneer in Latin America with a national AI policy and an advanced bill. The first country in the region to enshrine the right to data in its constitution.",
    "fr": "Le Chili est précurseur en Amérique latine avec une politique IA nationale et un projet de loi avancé. Premier pays de la région à consacrer constitutionnellement le droit aux données."
   },
   "Le projet de loi PL #/# est le cadre IA le plus avancé d'Amérique latine, inspiré de l'EU AI Act. La LGPD (protection des données) est déjà en vigueur.": {
-   "en": "",
+   "en": "Bill PL #/# is the most advanced AI framework in Latin America, inspired by the EU AI Act. The LGPD (data protection) is already in force.",
    "fr": "Le projet de loi PL 2338/2023 est le cadre IA le plus avancé d'Amérique latine, inspiré de l'EU AI Act. La LGPD (protection des données) est déjà en vigueur."
   },
   "Leader industriel européen. Fort lobbying pour des standards IA favorables à l'industrie manufacturière. Tensions entre innovation tech et protection stricte des données héritée du RGPD.": {
-   "en": "",
+   "en": "European industrial leader. Strong lobbying for AI standards favourable to manufacturing. Tensions between tech innovation and strict data protection inherited from the GDPR.",
    "fr": "Leader industriel européen. Fort lobbying pour des standards IA favorables à l'industrie manufacturière. Tensions entre innovation tech et protection stricte des données héritée du RGPD."
   },
   "Leader réglementaire en Amérique du Sud avec le Brésil. Économie ouverte et stable attirant les investissements tech. Influence chilienne sur les pays andins.": {
-   "en": "",
+   "en": "Regulatory leader in South America alongside Brazil. An open and stable economy attracting tech investment. Chilean influence on the Andean countries.",
    "fr": "Leader réglementaire en Amérique du Sud avec le Brésil. Économie ouverte et stable attirant les investissements tech. Influence chilienne sur les pays andins."
   },
   "Leader réglementaire en Amérique latine. Influence sur les pays voisins (Chili, Argentine). Marché numérique de #M d'habitants attractif pour les grandes plateformes.": {
-   "en": "",
+   "en": "Regulatory leader in Latin America. Influence on neighbouring countries (Chile, Argentina). A digital market of #M inhabitants that is attractive to the major platforms.",
    "fr": "Leader réglementaire en Amérique latine. Influence sur les pays voisins (Chili, Argentine). Marché numérique de 215M d'habitants attractif pour les grandes plateformes."
   },
   "Loi # sur la protection des données": {
-   "en": "",
+   "en": "Data Protection Law #",
    "fr": "Loi 25.326 sur la protection des données"
   },
   "Loi de # applicable aux traitements automatisés, incluant le droit d'opposition aux décisions entièrement automatisées.": {
-   "en": "",
+   "en": "Law of # applicable to automated processing, including the right to object to fully automated decisions.",
    "fr": "Loi de 2000 applicable aux traitements automatisés, incluant le droit d'opposition aux décisions entièrement automatisées."
   },
   "Loi sur la protection des données en cours de modernisation pour couvrir les systèmes IA traitant des données personnelles.": {
-   "en": "",
+   "en": "Data protection law being modernised to cover AI systems processing personal data.",
    "fr": "Loi sur la protection des données en cours de modernisation pour couvrir les systèmes IA traitant des données personnelles."
   },
   "Mandatory Guardrails for High-Risk AI": {
-   "en": "",
+   "en": "Mandatory Guardrails for High-Risk AI",
    "fr": "Mandatory Guardrails for High-Risk AI"
   },
   "NORTH AMERICA": {
-   "en": "",
+   "en": "NORTH AMERICA",
    "fr": "NORTH AMERICA"
   },
   "National AI Policy + projet de loi IA #": {
-   "en": "",
+   "en": "National AI Policy + AI bill #",
    "fr": "National AI Policy + projet de loi IA 2024"
   },
   "Obligations RGPD renforcées pour les LLM": {
-   "en": "",
+   "en": "Enhanced GDPR obligations for LLMs",
    "fr": "Obligations RGPD renforcées pour les LLM"
   },
   "Obligations de transparence algorithmique": {
-   "en": "",
+   "en": "Algorithmic transparency obligations",
    "fr": "Obligations de transparence algorithmique"
   },
   "Obligations de transparence envers les utilisateurs": {
-   "en": "",
+   "en": "Transparency obligations towards users",
    "fr": "Obligations de transparence envers les utilisateurs"
   },
   "Obligations pour les systèmes à haut risque": {
-   "en": "",
+   "en": "Obligations for high-risk systems",
    "fr": "Obligations pour les systèmes à haut risque"
   },
   "Ouverture à l'innovation": {
-   "en": "",
+   "en": "Openness to innovation",
    "fr": "Ouverture à l'innovation"
   },
   "PIPL — Personal Information Protection Law": {
-   "en": "",
+   "en": "PIPL — Personal Information Protection Law",
    "fr": "PIPL — Personal Information Protection Law"
   },
   "PL #/# (AI Bill) + LGPD": {
-   "en": "",
+   "en": "PL #/# (AI Bill) + LGPD",
    "fr": "PL 2338/2023 (AI Bill) + LGPD"
   },
   "PL #/# — Projeto de Lei IA": {
-   "en": "",
+   "en": "PL #/# — Projeto de Lei IA [AI Bill]",
    "fr": "PL 2338/2023 — Projeto de Lei IA"
   },
   "Plan d'investissement de # Mds€ dans la recherche IA, incluant des exigences de conformité pour les projets financés.": {
-   "en": "",
+   "en": "An investment plan of €# billion in AI research, including compliance requirements for funded projects.",
    "fr": "Plan d'investissement de 1,5 Mds€ dans la recherche IA, incluant des exigences de conformité pour les projets financés."
   },
   "Politique nationale IA adoptée en #": {
-   "en": "",
+   "en": "National AI policy adopted in #",
    "fr": "Politique nationale IA adoptée en 2021"
   },
   "Política Nacional de IA (#)": {
-   "en": "",
+   "en": "Política Nacional de IA (#) [National AI Policy]",
    "fr": "Política Nacional de IA (2021)"
   },
   "Premier cadre horizontal au monde, classifiant les IA par niveau de risque (inacceptable, élevé, limité, minimal). Entré en vigueur en août # avec application progressive jusqu'en #.": {
-   "en": "",
+   "en": "The world’s first horizontal framework, classifying AI by risk level (unacceptable, high, limited, minimal). Entered into force in August # with phased application until #.",
    "fr": "Premier cadre horizontal au monde, classifiant les IA par niveau de risque (inacceptable, élevé, limité, minimal). Entré en vigueur en août 2024 avec application progressive jusqu'en 2027."
   },
   "Premier cadre réglementaire horizontal au monde pour l'IA. Classifie les systèmes par niveau de risque : inacceptable (interdit), élevé (conformité stricte), limité (transparence), minimal. Applicable progressivement entre # et #.": {
-   "en": "",
+   "en": "The world’s first horizontal regulatory framework for AI. Classifies systems by risk level: unacceptable (prohibited), high (strict compliance), limited (transparency), minimal. Applicable progressively between # and #.",
    "fr": "Premier cadre réglementaire horizontal au monde pour l'IA. Classifie les systèmes par niveau de risque : inacceptable (interdit), élevé (conformité stricte), limité (transparence), minimal. Applicable progressivement entre 2024 et 2027."
   },
   "Premier traité international contraignant sur l'IA. La Suisse parmi les premiers signataires en #.": {
-   "en": "",
+   "en": "The first binding international treaty on AI. Switzerland among the first signatories in #.",
    "fr": "Premier traité international contraignant sur l'IA. La Suisse parmi les premiers signataires en 2024."
   },
   "Principes éthiques volontaires pour le développement et le déploiement de l'IA aux Émirats. Focus sur la transparence et la sécurité.": {
-   "en": "",
+   "en": "Voluntary ethical principles for the development and deployment of AI in the Emirates. Focus on transparency and security.",
    "fr": "Principes éthiques volontaires pour le développement et le déploiement de l'IA aux Émirats. Focus sur la transparence et la sécurité."
   },
   "Projet de loi C-# créant un régime de responsabilité pour les systèmes IA à impact élevé. Création d'un poste de commissaire IA.": {
-   "en": "",
+   "en": "Bill C-# creating a liability regime for high-impact AI systems. Creation of an AI commissioner post.",
    "fr": "Projet de loi C-27 créant un régime de responsabilité pour les systèmes IA à impact élevé. Création d'un poste de commissaire IA."
   },
   "Projet de loi IA #": {
-   "en": "",
+   "en": "AI bill #",
    "fr": "Projet de loi IA 2024"
   },
   "Projet de loi IA inspiré de l'EU AI Act": {
-   "en": "",
+   "en": "AI bill inspired by the EU AI Act",
    "fr": "Projet de loi IA inspiré de l'EU AI Act"
   },
   "Proposition de gardes-fous obligatoires pour les entreprises déployant des systèmes IA à haut risque, notamment dans les secteurs critiques.": {
-   "en": "",
+   "en": "Proposal for mandatory guardrails for companies deploying high-risk AI systems, particularly in critical sectors.",
    "fr": "Proposition de gardes-fous obligatoires pour les entreprises déployant des systèmes IA à haut risque, notamment dans les secteurs critiques."
   },
   "Proposition législative fondée sur les risques, alignée sur l'EU AI Act. En débat au Parlement chilien.": {
-   "en": "",
+   "en": "A risk-based legislative proposal, aligned with the EU AI Act. Under debate in the Chilean Parliament.",
    "fr": "Proposition législative fondée sur les risques, alignée sur l'EU AI Act. En débat au Parlement chilien."
   },
   "Protection des données (LGPD)": {
-   "en": "",
+   "en": "Data protection (LGPD)",
    "fr": "Protection des données (LGPD)"
   },
   "Protection des données (Loi # en révision)": {
-   "en": "",
+   "en": "Data protection (Law # under revision)",
    "fr": "Protection des données (Loi 19.628 en révision)"
   },
   "Protection des données dès la conception": {
-   "en": "",
+   "en": "Data protection by design",
    "fr": "Protection des données dès la conception"
   },
   "Protection des données personnelles (PIPL)": {
-   "en": "",
+   "en": "Personal data protection (PIPL)",
    "fr": "Protection des données personnelles (PIPL)"
   },
   "Puissance normative mondiale. Tensions récurrentes avec les États-Unis sur les transferts de données (post-Schrems II) et avec la Chine sur la souveraineté technologique.": {
-   "en": "",
+   "en": "A global standard-setting power. Recurring tensions with the United States over data transfers (post-Schrems II) and with China over technological sovereignty.",
    "fr": "Puissance normative mondiale. Tensions récurrentes avec les États-Unis sur les transferts de données (post-Schrems II) et avec la Chine sur la souveraineté technologique."
   },
   "Recommandation éthique IA": {
-   "en": "",
+   "en": "AI ethics recommendation",
    "fr": "Recommandation éthique IA"
   },
   "Recommandation éthique IA du gouvernement (non contraignante)": {
-   "en": "",
+   "en": "Government AI ethics recommendation (non-binding)",
    "fr": "Recommandation éthique IA du gouvernement (non contraignante)"
   },
   "Recommandations CNIL sur l'IA et la vie privée": {
-   "en": "",
+   "en": "CNIL recommendations on AI and privacy",
    "fr": "Recommandations CNIL sur l'IA et la vie privée"
   },
   "Règlement européen sur la protection des données personnelles. Transversal à toute IA traitant des données personnelles — bases légales, droits des personnes, décisions automatisées (Art. #).": {
-   "en": "",
+   "en": "The European regulation on the protection of personal data. Cuts across all AI processing personal data — legal bases, data subject rights, automated decisions (Art. #).",
    "fr": "Règlement européen sur la protection des données personnelles. Transversal à toute IA traitant des données personnelles — bases légales, droits des personnes, décisions automatisées (Art. 22)."
   },
   "Règles spécifiques aux IA génératives : enregistrement, filigrane, interdiction de contenus illicites, responsabilité des fournisseurs.": {
-   "en": "",
+   "en": "Rules specific to generative AI: registration, watermarking, ban on illegal content, provider liability.",
    "fr": "Règles spécifiques aux IA génératives : enregistrement, filigrane, interdiction de contenus illicites, responsabilité des fournisseurs."
   },
   "Révisée en #, elle renforce les droits des personnes face aux décisions automatisées et impose des analyses d'impact pour les traitements à risque élevé.": {
-   "en": "",
+   "en": "Revised in #, it strengthens the rights of individuals in the face of automated decisions and requires impact assessments for high-risk processing.",
    "fr": "Révisée en 2023, elle renforce les droits des personnes face aux décisions automatisées et impose des analyses d'impact pour les traitements à risque élevé."
   },
   "SIGNÉ": {
-   "en": "",
+   "en": "SIGNED",
    "fr": "SIGNÉ"
   },
   "SOUTH AMERICA": {
-   "en": "",
+   "en": "SOUTH AMERICA",
    "fr": "SOUTH AMERICA"
   },
   "Sanctions financières": {
-   "en": "",
+   "en": "Financial penalties",
    "fr": "Sanctions financières"
   },
   "Scores de risque": {
-   "en": "",
+   "en": "Risk scores",
    "fr": "Scores de risque"
   },
   "Secteurs régulés": {
-   "en": "",
+   "en": "Regulated sectors",
    "fr": "Secteurs régulés"
   },
   "Souveraineté des données": {
-   "en": "",
+   "en": "Data sovereignty",
    "fr": "Souveraineté des données"
   },
   "Standards techniques DIN/ISO pour les systèmes IA": {
-   "en": "",
+   "en": "DIN/ISO technical standards for AI systems",
    "fr": "Standards techniques DIN/ISO pour les systèmes IA"
   },
   "Stratégie IA # visant à faire des ÉAU une puissance IA mondiale. Approche pro-innovation avec peu de contraintes réglementaires. Ministère d'État à l'IA unique au monde.": {
-   "en": "",
+   "en": "AI Strategy # aiming to make the UAE a global AI power. A pro-innovation approach with few regulatory constraints. A Minister of State for AI, unique in the world.",
    "fr": "Stratégie IA 2031 visant à faire des ÉAU une puissance IA mondiale. Approche pro-innovation avec peu de contraintes réglementaires. Ministère d'État à l'IA unique au monde."
   },
   "Stratégie nationale IA #-#": {
-   "en": "",
+   "en": "National AI strategy #-#",
    "fr": "Stratégie nationale IA 2022-2025"
   },
   "Stratégie nationale visant # Mds€ d'investissements IA d'ici #, avec focus sur l'IA industrielle et la recherche fondamentale.": {
-   "en": "",
+   "en": "A national strategy targeting €# billion of AI investment by #, with a focus on industrial AI and fundamental research.",
    "fr": "Stratégie nationale visant 3 Mds€ d'investissements IA d'ici 2025, avec focus sur l'IA industrielle et la recherche fondamentale."
   },
   "Stratégie nationale visant à contribuer # Mds USD au PIB grâce à l'IA d'ici #. Feuille de route pour tous les secteurs gouvernementaux.": {
-   "en": "",
+   "en": "A national strategy aiming to contribute USD # billion to GDP through AI by #. A roadmap for all government sectors.",
    "fr": "Stratégie nationale visant à contribuer 96 Mds USD au PIB grâce à l'IA d'ici 2031. Feuille de route pour tous les secteurs gouvernementaux."
   },
   "Supervision renforcée du BfDI sur les données IA": {
-   "en": "",
+   "en": "Enhanced BfDI supervision of AI data",
    "fr": "Supervision renforcée du BfDI sur les données IA"
   },
   "Supervision sectorielle par la BCRA (finance)": {
-   "en": "",
+   "en": "Sector supervision by the BCRA (finance)",
    "fr": "Supervision sectorielle par la BCRA (finance)"
   },
   "Surveillance humaine effective": {
-   "en": "",
+   "en": "Effective human oversight",
    "fr": "Surveillance humaine effective"
   },
   "Sévérité globale": {
-   "en": "",
+   "en": "Overall severity",
    "fr": "Sévérité globale"
   },
   "Transparence exigée": {
-   "en": "",
+   "en": "Transparency required",
    "fr": "Transparence exigée"
   },
   "Transparence pour les systèmes d'aide à la décision publics": {
-   "en": "",
+   "en": "Transparency for public decision-support systems",
    "fr": "Transparence pour les systèmes d'aide à la décision publics"
   },
   "Transparence pour les systèmes génératifs (watermarking)": {
-   "en": "",
+   "en": "Transparency for generative systems (watermarking)",
    "fr": "Transparence pour les systèmes génératifs (watermarking)"
   },
   "Transparence sur l'utilisation de l'IA dans les services gouvernementaux": {
-   "en": "",
+   "en": "Transparency on the use of AI in government services",
    "fr": "Transparence sur l'utilisation de l'IA dans les services gouvernementaux"
   },
   "UAE AI Strategy #": {
-   "en": "",
+   "en": "UAE AI Strategy #",
    "fr": "UAE AI Strategy 2031"
   },
   "administration": {
-   "en": "",
+   "en": "public administration",
    "fr": "administration"
   },
   "agritech": {
-   "en": "",
+   "en": "agritech",
    "fr": "agritech"
   },
   "assurance": {
-   "en": "",
+   "en": "insurance",
    "fr": "assurance"
   },
   "automobile": {
-   "en": "",
+   "en": "automotive",
    "fr": "automobile"
   },
   "biométrie": {
-   "en": "",
+   "en": "biometrics",
    "fr": "biométrie"
   },
   "données": {
-   "en": "",
+   "en": "data",
    "fr": "données"
   },
   "défense": {
-   "en": "",
+   "en": "defence",
    "fr": "défense"
   },
   "e-commerce": {
-   "en": "",
+   "en": "e-commerce",
    "fr": "e-commerce"
   },
   "emploi": {
-   "en": "",
+   "en": "employment",
    "fr": "emploi"
   },
   "finance": {
-   "en": "",
+   "en": "finance",
    "fr": "finance"
   },
   "gouvernement": {
-   "en": "",
+   "en": "government",
    "fr": "gouvernement"
   },
   "horlogerie": {
-   "en": "",
+   "en": "watchmaking",
    "fr": "horlogerie"
   },
   "industrie": {
-   "en": "",
+   "en": "industry",
    "fr": "industrie"
   },
   "mines": {
-   "en": "",
+   "en": "mining",
    "fr": "mines"
   },
   "média": {
-   "en": "",
+   "en": "media",
    "fr": "média"
   },
   "pharma": {
-   "en": "",
+   "en": "pharmaceuticals",
    "fr": "pharma"
   },
   "pétrole": {
-   "en": "",
+   "en": "oil",
    "fr": "pétrole"
   },
   "ressources naturelles": {
-   "en": "",
+   "en": "natural resources",
    "fr": "ressources naturelles"
   },
   "santé": {
-   "en": "",
+   "en": "health",
    "fr": "santé"
   },
   "surveillance": {
-   "en": "",
+   "en": "surveillance",
    "fr": "surveillance"
   },
   "tourisme": {
-   "en": "",
+   "en": "tourism",
    "fr": "tourisme"
   },
   "transport": {
-   "en": "",
+   "en": "transport",
    "fr": "transport"
   },
   "Équivalent brésilien du RGPD. S'applique à tout traitement de données personnelles par des systèmes IA.": {
-   "en": "",
+   "en": "Brazilian equivalent of the GDPR. Applies to any processing of personal data by AI systems.",
    "fr": "Équivalent brésilien du RGPD. S'applique à tout traitement de données personnelles par des systèmes IA."
   },
   "Équivalent chinois du RGPD. Contrôle strict des données traitées par les systèmes IA, avec exigences de localisation.": {
-   "en": "",
+   "en": "Chinese equivalent of the GDPR. Strict control of the data processed by AI systems, with localisation requirements.",
    "fr": "Équivalent chinois du RGPD. Contrôle strict des données traitées par les systèmes IA, avec exigences de localisation."
   },
   "Éthique IA pour les systèmes déployés par l'État": {
-   "en": "",
+   "en": "AI ethics for systems deployed by the State",
    "fr": "Éthique IA pour les systèmes déployés par l'État"
   },
   "Étude d'impact pour les systèmes à haut risque": {
-   "en": "",
+   "en": "Impact study for high-risk systems",
    "fr": "Étude d'impact pour les systèmes à haut risque"
   },
   "Évaluation d'impact obligatoire": {
-   "en": "",
+   "en": "Mandatory impact assessment",
    "fr": "Évaluation d'impact obligatoire"
   },
   "Évaluation d'impact pour les applications critiques": {
-   "en": "",
+   "en": "Impact assessment for critical applications",
    "fr": "Évaluation d'impact pour les applications critiques"
   },
   "Évaluation d'impact pour les traitements à risque élevé": {
-   "en": "",
+   "en": "Impact assessment for high-risk processing",
    "fr": "Évaluation d'impact pour les traitements à risque élevé"
   },
   "Évaluation de conformité obligatoire pour les IA à haut risque": {
-   "en": "",
+   "en": "Mandatory conformity assessment for high-risk AI",
    "fr": "Évaluation de conformité obligatoire pour les IA à haut risque"
   },
   "éducation": {
-   "en": "",
+   "en": "education",
    "fr": "éducation"
   },
   "énergie": {
-   "en": "",
+   "en": "energy",
    "fr": "énergie"
   },
   "← Retour Cartographie": {
-   "en": "",
+   "en": "← Back to Mapping",
    "fr": "← Retour Cartographie"
   }
  }
