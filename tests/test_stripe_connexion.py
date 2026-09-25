@@ -1096,3 +1096,48 @@ def test_la_tva_est_lue_en_nombre_a_un_seul_endroit(brut, attendu):
     lu = F._lire_tva(brut)
     assert lu == attendu and type(lu) is type(attendu), "%r lu comme %r (%s)" % (brut, lu, type(lu).__name__)
     assert A.FORM_TVA_PCT == F.TVA_PCT, (A.FORM_TVA_PCT, F.TVA_PCT)
+
+
+# ══════════════════════════════════════════════════════════════════════════
+#  9. UNE RÉCLAMATION INTERROMPUE N'EST PAS UN PAIEMENT PERDU
+# ══════════════════════════════════════════════════════════════════════════
+def test_une_reclamation_interrompue_est_reprise_au_reessai_de_stripe(
+        client, faux_stripe, faux_brevo, monkeypatch):
+    """Le fil peut mourir ENTRE la réclamation et la fin du traitement : délai
+    gunicorn de 120 s sur un envoi qui traîne, SIGKILL d'un déploiement, OOM.
+    Ni `_faire` ni l'except extérieur n'attrapent SystemExit.
+
+    MESURÉ AVANT CORRECTION : l'événement restait « vu » pour toujours, Stripe
+    le relivrait et recevait 200 « duplicate », puis cessait de réessayer. Les
+    séances restaient « en_attente_paiement » et leur créneau était libéré au
+    bout de la retenue — alors que l'argent était encaissé."""
+    j = panier(client, n=2)
+    vrai = A._formation_ia_confirmer_paiement
+
+    def tue(**kw):
+        raise SystemExit(1)
+    monkeypatch.setattr(A, "_formation_ia_confirmer_paiement", tue)
+    _, charge = evenement_stripe(session_payee(j["commande"]))
+    try:
+        poster(A.app.test_client(), None, charge=charge)
+    except SystemExit:
+        pass                       # le worker gthread meurt exactement ainsi
+    monkeypatch.setattr(A, "_formation_ia_confirmer_paiement", vrai)
+    # LE RÉESSAI IMMÉDIAT : la réclamation date de quelques millisecondes.
+    # Stripe doit repartir avec un non-2xx, jamais avec un acquittement.
+    r1, _ = poster(A.app.test_client(), None, charge=charge)
+    assert r1.status_code >= 400 and not (r1.get_json() or {}).get("duplicate"), (
+        "réessai immédiat : HTTP %s %s — Stripe s'arrête sur un 2xx et le "
+        "paiement est perdu" % (r1.status_code, r1.get_json()))
+    assert statuts(j["commande"]) == ["en_attente_paiement"], statuts(j["commande"])
+    # LES RÉCLAMATIONS VIEILLISSENT — celle de l'événement comme celle de la
+    # caisse, toutes deux abandonnées par le même fil mort. Le réessai suivant
+    # de Stripe les reprend.
+    _exec("UPDATE stripe_events SET processed_at=?",
+          ((datetime.datetime.utcnow() - datetime.timedelta(minutes=30)).isoformat(),))
+    r2, _ = poster(A.app.test_client(), None, charge=charge)
+    assert r2.status_code == 200 and statuts(j["commande"]) == ["payee"], (
+        "réclamation abandonnée depuis 30 min, réessai : HTTP %s %s, séances %s"
+        % (r2.status_code, r2.get_json(), statuts(j["commande"])))
+
+

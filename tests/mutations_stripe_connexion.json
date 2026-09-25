@@ -290,6 +290,20 @@
    "avant": "FORM_TVA_PCT = formations_ia.TVA_PCT",
    "apres": "FORM_TVA_PCT = float(os.environ.get('FORMATION_TVA_PCT', '20'))",
    "regle": "test_une_tva_ecrite_en_decimal_ne_bloque_plus_le_demarrage"
+  },
+  {
+   "nom": "9. la réclamation est définitive dès qu'elle est prise",
+   "fichier": "app.py",
+   "avant": "            \"INSERT INTO stripe_events (event_id, processed_at, etat) VALUES (?, ?, 'en_cours') \"",
+   "apres": "            \"INSERT INTO stripe_events (event_id, processed_at, etat) VALUES (?, ?, 'fait') \"",
+   "regle": "test_une_reclamation_interrompue_est_reprise_au_reessai_de_stripe"
+  },
+  {
+   "nom": "9. une réclamation en cours est acquittée comme un doublon",
+   "fichier": "app.py",
+   "avant": "        return jsonify({'received': False, 'en_cours': True}), 409",
+   "apres": "        return jsonify({'received': True, 'duplicate': True}), 200",
+   "regle": "test_une_reclamation_interrompue_est_reprise_au_reessai_de_stripe"
   }
  ]
 }

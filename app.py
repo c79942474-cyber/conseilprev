@@ -8849,6 +8849,12 @@ def stripe_webhook():
     reclame = _stripe_event_claim(eid)
     if reclame is None:
         return jsonify({'received': False}), 503          # base muette : Stripe reessaiera
+    if reclame == 'en_cours':
+        # UN AUTRE FIL LE TRAITE EN CE MOMENT. Repondre « duplicate » ici
+        # serait un acquittement : si ce fil-la meurt, Stripe ne reviendrait
+        # plus. Un non-2xx le fait reessayer, et la reclamation abandonnee
+        # sera reprise au bout de STRIPE_RECLAMATION_ABANDON_MIN.
+        return jsonify({'received': False, 'en_cours': True}), 409
     if not reclame:
         return jsonify({'received': True, 'duplicate': True}), 200
     echecs = []
@@ -8894,6 +8900,7 @@ def stripe_webhook():
     if echecs:
         _stripe_event_release(eid)
         return jsonify({'received': False, 'echecs': echecs}), 500
+    _stripe_event_fini(eid)
     return jsonify({'received': True}), 200
 
 
@@ -14869,39 +14876,112 @@ def _stripe_pret(secret):
     return stripe
 
 
+#: AU-DELA DE CE DELAI, UNE RECLAMATION ABANDONNEE EST REPRISE. Un traitement
+#: dure quelques centaines de millisecondes ; cinq minutes laissent finir un
+#: envoi de courriel qui traine (jusqu'a 60 s par message, deux par
+#: confirmation) sans jamais confondre « en cours » et « perdu ».
+STRIPE_RECLAMATION_ABANDON_MIN = 5
+
+#: LA COLONNE D'ETAT A-T-ELLE DEJA ETE AJOUTEE DANS CE PROCESSUS ? La table
+#: existe en production et porte des lignes : la colonne s'ajoute par
+#: migration. Une commande de schema refusee annule la transaction en cours
+#: sur PostgreSQL — la tenter a chaque notification couterait un aller-retour
+#: pour rien. Remise a False des qu'une reclamation echoue, pour qu'une base
+#: recreee sous le processus soit remigree au lieu d'echouer indefiniment.
+_STRIPE_EVENTS_MIGRE = [False]
+
+
+def _stripe_events_table(cur, conn):
+    """La table des evenements reclames, et sa colonne d'ETAT."""
+    cur.execute("CREATE TABLE IF NOT EXISTS stripe_events (event_id TEXT PRIMARY KEY, processed_at TEXT)")
+    conn.commit()
+    if _STRIPE_EVENTS_MIGRE[0]:
+        return
+    try:
+        cur.execute('ALTER TABLE stripe_events ADD COLUMN etat TEXT')
+        conn.commit()
+    except Exception:
+        try: conn.rollback()             # la colonne existe deja
+        except Exception: pass
+    _STRIPE_EVENTS_MIGRE[0] = True
+
+
 def _stripe_event_claim(event_id):
     """RECLAME l'evenement AVANT de le traiter, atomiquement.
 
-    True : a traiter ; False : deja reclame (doublon) ; None : base injoignable.
+    True : a traiter ; False : deja FAIT (doublon) ; 'en_cours' : un autre fil
+    le traite en ce moment ; None : base injoignable.
 
     UNE SEULE INSTRUCTION, SUR LA CLE PRIMAIRE. L'ancienne version lisait
     (SELECT) avant de traiter et ecrivait (INSERT) apres : deux livraisons
     simultanees passaient toutes deux le SELECT, et la commande etait
-    confirmee deux fois — quatre courriels (mesure). Ici, `ON CONFLICT DO
-    NOTHING` laisse la base departager : une ligne inseree, un traitement.
-    L'echec du traitement REND la reclamation (_stripe_event_release), pour
-    que le prochain envoi de Stripe soit retraite."""
+    confirmee deux fois — quatre courriels (mesure). Ici, la base departage :
+    une ligne inseree, un traitement.
+
+    « RECLAME » N'EST PAS « FAIT », ET LES CONFONDRE PERDAIT DES PAIEMENTS.
+    L'etat definitif etait pose des la reclamation. Si le fil mourait ensuite
+    — delai gunicorn de 120 s sur un envoi qui traine, SIGKILL d'un
+    deploiement, OOM : ni `_faire` ni l'except exterieur n'attrapent
+    SystemExit —, la reclamation restait posee pour toujours. Stripe relivrait
+    et recevait 200 « duplicate », puis s'arretait : les seances restaient
+    « en_attente_paiement », leur creneau etait libere, et l'argent etait
+    encaisse (mesure, avec un worker tue en plein traitement). Une reclamation
+    « en_cours » abandonnee depuis plus de STRIPE_RECLAMATION_ABANDON_MIN est
+    donc REPRISE par la livraison suivante ; plus recente, elle rend
+    'en_cours' et l'appelant repond un non-2xx pour que Stripe reessaie.
+
+    Les lignes anterieures a cette colonne portent etat NULL : elles avaient
+    ete traitees sous l'ancien code, et restent des doublons."""
     if not event_id:
         return True             # Stripe met toujours un identifiant ; sans lui, rien a dedoublonner
     conn = None
     try:
         conn = registre_get_db(); cur = conn.cursor()
-        cur.execute("CREATE TABLE IF NOT EXISTS stripe_events (event_id TEXT PRIMARY KEY, processed_at TEXT)")
+        _stripe_events_table(cur, conn)
+        limite = (datetime.utcnow()
+                  - timedelta(minutes=STRIPE_RECLAMATION_ABANDON_MIN)).isoformat()
         cur.execute(registre_sql(
-            'INSERT INTO stripe_events (event_id, processed_at) VALUES (%s, %s) ON CONFLICT (event_id) DO NOTHING',
-            'INSERT INTO stripe_events (event_id, processed_at) VALUES (?, ?) ON CONFLICT (event_id) DO NOTHING'),
-            (str(event_id), datetime.utcnow().isoformat()))
+            "INSERT INTO stripe_events (event_id, processed_at, etat) VALUES (%s, %s, 'en_cours') "
+            "ON CONFLICT (event_id) DO UPDATE SET processed_at=EXCLUDED.processed_at "
+            "WHERE stripe_events.etat='en_cours' AND stripe_events.processed_at < %s",
+            "INSERT INTO stripe_events (event_id, processed_at, etat) VALUES (?, ?, 'en_cours') "
+            "ON CONFLICT (event_id) DO UPDATE SET processed_at=excluded.processed_at "
+            "WHERE stripe_events.etat='en_cours' AND stripe_events.processed_at < ?"),
+            (str(event_id), datetime.utcnow().isoformat(), limite))
         pris = cur.rowcount == 1
         conn.commit()
-        return pris
+        if pris:
+            return True
+        cur.execute(registre_sql('SELECT etat FROM stripe_events WHERE event_id=%s',
+                                 'SELECT etat FROM stripe_events WHERE event_id=?'), (str(event_id),))
+        ligne = cur.fetchone()
+        etat = (dict(ligne).get('etat') if ligne else None) or 'fait'
+        return 'en_cours' if etat == 'en_cours' else False
     except Exception as _e:
         logger.error('STRIPE_EVENEMENT_RECLAMATION_ECHEC evenement=%s : %s', event_id, _e)
+        _STRIPE_EVENTS_MIGRE[0] = False
         try: conn.rollback()
         except Exception: pass
         return None
     finally:
         try: conn.close()
         except Exception: pass
+
+
+def _stripe_event_fini(event_id):
+    """Le traitement a REUSSI : la reclamation devient definitive. Tant qu'elle
+    ne l'est pas, une livraison ulterieure peut la reprendre."""
+    if not event_id:
+        return
+    try:
+        conn = registre_get_db(); cur = conn.cursor()
+        cur.execute(registre_sql("UPDATE stripe_events SET etat='fait' WHERE event_id=%s",
+                                 "UPDATE stripe_events SET etat='fait' WHERE event_id=?"), (str(event_id),))
+        conn.commit(); conn.close()
+    except Exception as _e:
+        # La reclamation reste « en cours » : elle sera reprise au prochain
+        # envoi de Stripe, donc retraitee. Les confirmateurs sont idempotents.
+        logger.error('STRIPE_EVENEMENT_CLOTURE_ECHEC evenement=%s : %s', event_id, _e)
 
 
 def _stripe_event_release(event_id):
