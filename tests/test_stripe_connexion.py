@@ -79,6 +79,7 @@ def purger():
                 "DELETE FROM stripe_events",
                 "DELETE FROM raas_invoices WHERE numero LIKE 'F-RECETTE-%'",
                 "DELETE FROM client_relances WHERE related_ref LIKE 'F-RECETTE-%'",
+                "DELETE FROM client_relances WHERE related_ref='sub_impaye'",
                 "DELETE FROM form_sessions WHERE lieu LIKE 'RECETTE %'",
                 "DELETE FROM clients WHERE email LIKE '%@recette.test'",
                 "DELETE FROM clients WHERE email LIKE 'efface-%@anonyme.invalid'"):
@@ -569,6 +570,14 @@ def test_une_facture_d_abonnement_impayee_previent_le_client_et_conseilprev(
     assert r.status_code == 200
     assert "impaye2@recette.test" in dest and A.CONSEILPREV_NOTIFY_EMAIL in dest, (
         "impayé d'abonnement : courriels partis vers %s" % dest)
+    # LA RELANCE EST EN BASE, PAS SEULEMENT DANS LES COURRIELS. C'est elle que
+    # CONSEILPREV voit dans la gestion des clients, et le courriel interne
+    # l'annonce (« une relance est planifiée »). Sans cette mesure, l'écriture
+    # pouvait être annulée sans que rien ne tombe : la promesse restait dans le
+    # texte du message, et nulle part ailleurs.
+    rel = _q("SELECT type, status, related_ref FROM client_relances WHERE client_id=?", (cid,))
+    assert rel == [{"type": "paiement", "status": "planifiee", "related_ref": "sub_impaye"}], (
+        "relance écrite en base : %s" % rel)
 
 
 # ══════════════════════════════════════════════════════════════════════════
@@ -1358,5 +1367,64 @@ def test_l_activation_memorise_l_abonnement_meme_quand_l_offre_est_deja_posee(
     assert r.status_code == 200, r.get_json()
     assert (row["plan"], row["stripe_subscription_id"], row["stripe_customer_id"]) \
         == ("pro", "sub_deja", "cus_deja"), row
+
+
+# ══════════════════════════════════════════════════════════════════════════
+#  12. LA RÉSILIATION QUE LE SITE A DEMANDÉE NE RÉTROGRADE PERSONNE
+# ══════════════════════════════════════════════════════════════════════════
+def test_la_resiliation_demandee_par_le_site_est_marquee_chez_stripe(base, faux_stripe):
+    """Sans marque, le `customer.subscription.deleted` qui revient est
+    indiscernable d'une résiliation subie."""
+    cid = creer_client("marque@recette.test", plan="entreprise", sub="sub_marque", cust="cus_marque")
+    assert A._billing_cancel_subscription(cid) is True
+    envois = faux_stripe.recues("DELETE", "/v1/subscriptions/sub_marque")
+    assert len(envois) == 1, "%d résiliation(s) envoyée(s)" % len(envois)
+    # Les paramètres d'un DELETE voyagent dans l'URL, pas dans un corps.
+    marque = (envois[0].requete.get("cancellation_details[comment]") or [""])[0]
+    assert marque.startswith(A.STRIPE_RESILIATION_MARQUE), (
+        "la résiliation demandée par le site n'est pas marquée : %s" % envois[0].requete)
+
+
+def test_le_client_passe_en_facturation_par_resultats_ne_retombe_pas_en_gratuit(
+        client, faux_stripe, faux_brevo):
+    """billing-run résilie l'abonnement, puis Stripe notifie la résiliation que
+    le site vient lui-même de demander.
+
+    MESURÉ AVANT CORRECTION : ce retour rétrogradait en « gratuit » un client
+    désormais facturé au résultat — il perdait tous ses modules. Les deux ordres
+    d'arrivée sont mesurés : la notification AVANT et APRÈS l'oubli du lien."""
+    marque = A.STRIPE_RESILIATION_MARQUE + "raas"
+    # (a) La notification arrive AVANT que le lien local soit oublié.
+    ca = creer_client("raas_a@recette.test", plan="entreprise", sub="sub_raas_a", cust="cus_raas_a")
+    poster(client, {"id": "sub_raas_a", "object": "subscription", "status": "canceled",
+                    "cancellation_details": {"comment": marque}, "metadata": {}},
+           "customer.subscription.deleted")
+    ra = client_row(ca)
+    assert (ra["plan"], ra["stripe_subscription_id"]) == ("entreprise", "sub_raas_a"), (
+        "notification reçue avant l'oubli du lien : %s" % ra)
+    # (b) Et APRÈS : le lien est déjà NULL, seul metadata.client_id reste.
+    cb = creer_client("raas_b@recette.test", plan="entreprise", sub="sub_raas_b", cust="cus_raas_b")
+    assert A._billing_cancel_subscription(cb) is True
+    poster(client, {"id": "sub_raas_b", "object": "subscription", "status": "canceled",
+                    "cancellation_details": {"comment": marque},
+                    "metadata": {"client_id": str(cb), "site": "conseilprev"}},
+           "customer.subscription.deleted")
+    assert client_row(cb)["plan"] == "entreprise", (
+        "notification reçue après l'oubli du lien : offre %r" % client_row(cb)["plan"])
+
+
+def test_un_abonnement_inconnu_ici_ne_retrograde_aucun_client(client, faux_stripe, faux_brevo):
+    """Le compte Stripe est PARTAGÉ avec conseilprevcyber. Un
+    customer.subscription.deleted d'un abonnement inconnu de ce site, portant un
+    metadata.client_id, faisait passer en « gratuit » le client de CE site qui
+    porte ce numéro — une offre posée à la main disparaissait sans raison."""
+    cid = creer_client("autresite@recette.test", plan="pro")        # offre posée par set-plan
+    r, _ = poster(client, {"id": "sub_de_conseilprevcyber", "object": "subscription",
+                           "status": "canceled", "metadata": {"client_id": str(cid)}},
+                  "customer.subscription.deleted")
+    assert r.status_code == 200, r.get_json()
+    assert client_row(cid)["plan"] == "pro", (
+        "un abonnement d'un autre site du compte a rétrogradé ce client en %r"
+        % client_row(cid)["plan"])
 
 

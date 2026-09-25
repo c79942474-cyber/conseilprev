@@ -8967,7 +8967,9 @@ def stripe_webhook():
                 if sub_id:
                     _faire('abonnement-impaye', lambda: _abonnement_impaye(sub_id))
         elif etype == 'customer.subscription.deleted':
-            _faire('abonnement-resilie', lambda: _abonnement_resilie(obj.get('id'), meta.get('client_id')))
+            _faire('abonnement-resilie', lambda: _abonnement_resilie(
+                obj.get('id'), meta.get('client_id'),
+                (obj.get('cancellation_details') or {}).get('comment')))
     except Exception as _we:
         echecs.append('webhook')
         logger.error('STRIPE_WEBHOOK_ECHEC etape=webhook evenement=%s : %s', eid, _we)
@@ -9566,7 +9568,7 @@ def clients_invoices_issue():
             email_error = 'Aucun email KYC valide'
     conn.close()
     try:
-        _billing_cancel_subscription(client_id)
+        _billing_cancel_subscription(client_id, 'raas-facture')
     except Exception:
         pass
     return jsonify({'ok': True, 'issued_count': len(issued), 'invoices': issued,
@@ -15091,27 +15093,46 @@ def _stripe_event_release(event_id):
         logger.error('STRIPE_EVENEMENT_LIBERATION_ECHEC evenement=%s : %s', event_id, _e)
 
 
-def _abonnement_resilie(sub_id, client_id=None):
+#: LA MARQUE D'UNE RESILIATION QUE LE SITE A LUI-MEME DEMANDEE. Elle part dans
+#: `cancellation_details.comment` de l'appel de resiliation et revient telle
+#: quelle dans `customer.subscription.deleted`. Mesure : un client passe a la
+#: facturation par resultats voyait billing-run resilier son abonnement, puis
+#: le retour de SA PROPRE demande le faisait retomber en « gratuit » — il
+#: perdait tous ses modules alors qu'il paie desormais au resultat.
+STRIPE_RESILIATION_MARQUE = 'conseilprev:'
+
+def _abonnement_resilie(sub_id, client_id=None, commentaire=None):
     """customer.subscription.deleted : l'offre est retiree, l'identifiant oublie.
 
     Mesure : un abonnement resilie chez Stripe laissait le client en « pro »
     pour toujours — l'offre n'etait jamais retiree. On ne touche QUE le compte
     qui porte cet abonnement : un evenement tardif sur un ancien abonnement
-    ne doit pas retrograder un client qui en a souscrit un nouveau."""
+    ne doit pas retrograder un client qui en a souscrit un nouveau.
+
+    DEUX REPLIS ONT ETE RETIRES, PARCE QU'ILS COUTAIENT DE L'ARGENT.
+      · La resiliation que le SITE demande revenait ici et rétrogradait le
+        client que billing-run venait de faire passer a la facturation par
+        resultats : il perdait tous ses modules (mesure, dans les deux ordres
+        d'arrivee). Elle porte desormais sa marque et n'est plus subie.
+      · Le repli « id = metadata.client_id AND stripe_subscription_id IS NULL »
+        visait une notification d'activation perdue. Le compte Stripe est
+        PARTAGE avec conseilprevcyber : un evenement de l'autre site, portant
+        un client_id, faisait passer en « gratuit » le client de CE site qui
+        porte ce numero (mesure : une offre posee a la main disparaissait).
+        Et l'activation memorise toujours l'abonnement en meme temps que
+        l'offre — le repli ne rattrapait rien qui ne soit deja rattrape par le
+        retour de caisse."""
     if not sub_id:
+        return
+    if commentaire and str(commentaire).startswith(STRIPE_RESILIATION_MARQUE):
+        logger.info('STRIPE_RESILIATION_DEMANDEE_PAR_LE_SITE abonnement=%s motif=%s : offre inchangee',
+                    sub_id, commentaire)
         return
     conn = registre_get_db(); cur = conn.cursor()
     cur.execute(registre_sql("UPDATE clients SET plan='gratuit', stripe_subscription_id=NULL WHERE stripe_subscription_id=%s",
                              "UPDATE clients SET plan='gratuit', stripe_subscription_id=NULL WHERE stripe_subscription_id=?"),
                 (str(sub_id),))
     touches = cur.rowcount
-    if not touches and client_id:
-        # L'identifiant n'a jamais ete memorise (notification d'activation
-        # perdue) : les metadonnees de l'abonnement nomment le client.
-        cur.execute(registre_sql("UPDATE clients SET plan='gratuit' WHERE id=%s AND stripe_subscription_id IS NULL",
-                                 "UPDATE clients SET plan='gratuit' WHERE id=? AND stripe_subscription_id IS NULL"),
-                    (int(client_id),))
-        touches = cur.rowcount
     conn.commit()
     try: conn.close()
     except Exception: pass
@@ -15177,7 +15198,7 @@ def _billing_set_subscription(client_id, sub_id):
         pass
 
 
-def _billing_cancel_subscription(client_id):
+def _billing_cancel_subscription(client_id, motif='site'):
     """Resilie l'abonnement Stripe d'un client. Exclusion du cumul : un client
     est facture soit par abonnement recurrent, soit par resultats (echeances RaAS),
     jamais les deux. Des qu'une facture RaAS est emise, l'abonnement est resilie.
@@ -15192,7 +15213,15 @@ def _billing_cancel_subscription(client_id):
     demarrait, et plus rien ne permettait de voir le cumul. Seuls
     `status == 'canceled'` ou « resource_missing » (deja resilie) valent
     preuve. En 15.x, `Subscription.cancel` est l'appel de resiliation
-    (DELETE /v1/subscriptions/{id}) ; `delete` n'en est qu'un alias ancien."""
+    (DELETE /v1/subscriptions/{id}) ; `delete` n'en est qu'un alias ancien.
+
+    LA RESILIATION EST SIGNEE, PARCE QU'ELLE NOUS REVIENT. Stripe emet ensuite
+    `customer.subscription.deleted`, que ce site traite. Indiscernable d'une
+    resiliation subie, ce retour de notre propre demande retrogradait en
+    « gratuit » le client que billing-run venait de passer a la facturation
+    par resultats : il perdait tous ses modules (mesure, dans les deux ordres
+    d'arrivee). `cancellation_details.comment` porte donc
+    STRIPE_RESILIATION_MARQUE et son motif, que `_abonnement_resilie` relit."""
     secret = os.environ.get('STRIPE_SECRET_KEY')
     conn = registre_get_db(); cur = conn.cursor()
     cur.execute(registre_sql('SELECT stripe_subscription_id FROM clients WHERE id=%s',
@@ -15212,7 +15241,10 @@ def _billing_cancel_subscription(client_id):
     try:
         stripe = _stripe_pret(secret)
         try:
-            resilie = stripe.Subscription.cancel(sub)['status'] == 'canceled'
+            resilie = stripe.Subscription.cancel(
+                sub, cancellation_details={
+                    'comment': STRIPE_RESILIATION_MARQUE + str(motif or 'site')}
+            )['status'] == 'canceled'
         except stripe.InvalidRequestError as _ie:
             resilie = getattr(_ie, 'code', '') == 'resource_missing'
             if not resilie:
@@ -15440,7 +15472,7 @@ def clients_billing_run():
         # PAS DE CUMUL : tant que l'abonnement n'est pas resilie chez Stripe,
         # aucune echeance par resultats n'est emise pour ce client.
         if item['client_id'] not in _cancelled:
-            _cancelled[item['client_id']] = _billing_cancel_subscription(item['client_id'])
+            _cancelled[item['client_id']] = _billing_cancel_subscription(item['client_id'], 'raas')
         if not _cancelled[item['client_id']]:
             results.append({'numero': item['numero'], 'echeance': item['echeance'], 'ok': False,
                             'error': 'Abonnement Stripe non resilie : echeance non emise (pas de cumul)'})
@@ -15616,7 +15648,7 @@ def clients_set_plan():
     # l'offre retiree ici, le prelevement continuant la-bas. Une resiliation
     # refusee est desormais REPONDUE, et rien n'est change.
     if plan == 'gratuit' and secret and sub_id:
-        if not _billing_cancel_subscription(client_id):
+        if not _billing_cancel_subscription(client_id, 'set-plan'):
             return jsonify({'ok': False, 'stripe_sync': 'resiliation_echouee',
                             'error': "Stripe a refuse la resiliation de l'abonnement : offre inchangee."}), 502
         stripe_sync = 'abonnement_resilie'
@@ -16752,7 +16784,7 @@ def rgpd_effacement():
         # et plus rien ne permettait de l'arreter. Au mieux : resilie ; sinon,
         # journalise et dit dans le bilan — l'effacement, lui, a lieu.
         if dict(row).get('stripe_subscription_id'):
-            bilan['abonnement'] = 'resilie' if _billing_cancel_subscription(cid) else 'non_resilie'
+            bilan['abonnement'] = 'resilie' if _billing_cancel_subscription(cid, 'rgpd') else 'non_resilie'
             if bilan['abonnement'] == 'non_resilie':
                 logger.error('RGPD_EFFACEMENT_ABONNEMENT_NON_RESILIE client=%s abonnement=%s',
                              cid, dict(row).get('stripe_subscription_id'))

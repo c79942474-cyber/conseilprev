@@ -231,7 +231,7 @@
   {
    "nom": "6. une résiliation refusée par Stripe efface quand même le lien local",
    "fichier": "app.py",
-   "avant": "            resilie = stripe.Subscription.cancel(sub)['status'] == 'canceled'\n        except stripe.InvalidRequestError as _ie:\n            resilie = getattr(_ie, 'code', '') == 'resource_missing'\n            if not resilie:\n                raise",
+   "avant": "            resilie = stripe.Subscription.cancel(\n                sub, cancellation_details={\n                    'comment': STRIPE_RESILIATION_MARQUE + str(motif or 'site')}\n            )['status'] == 'canceled'\n        except stripe.InvalidRequestError as _ie:\n            resilie = getattr(_ie, 'code', '') == 'resource_missing'\n            if not resilie:\n                raise",
    "apres": "            resilie = True\n            stripe.Subscription.cancel(sub)\n        except Exception:\n            pass",
    "regle": "test_une_resiliation_refusee_par_stripe_garde_le_lien_local"
   },
@@ -245,8 +245,8 @@
   {
    "nom": "6. set-plan annonce la résiliation même refusée",
    "fichier": "app.py",
-   "avant": "        if not _billing_cancel_subscription(client_id):\n            return jsonify({'ok': False, 'stripe_sync': 'resiliation_echouee',",
-   "apres": "        if not _billing_cancel_subscription(client_id) and False:\n            return jsonify({'ok': False, 'stripe_sync': 'resiliation_echouee',",
+   "avant": "        if not _billing_cancel_subscription(client_id, 'set-plan'):\n            return jsonify({'ok': False, 'stripe_sync': 'resiliation_echouee',",
+   "apres": "        if not _billing_cancel_subscription(client_id, 'set-plan') and False:\n            return jsonify({'ok': False, 'stripe_sync': 'resiliation_echouee',",
    "regle": "test_passer_en_gratuit_n_annonce_pas_une_resiliation_refusee"
   },
   {
@@ -273,7 +273,7 @@
   {
    "nom": "7. l'effacement RGPD oublie l'abonnement sans le résilier",
    "fichier": "app.py",
-   "avant": "            bilan['abonnement'] = 'resilie' if _billing_cancel_subscription(cid) else 'non_resilie'",
+   "avant": "            bilan['abonnement'] = 'resilie' if _billing_cancel_subscription(cid, 'rgpd') else 'non_resilie'",
    "apres": "            bilan['abonnement'] = 'non_resilie'",
    "regle": "test_l_effacement_rgpd_resilie_l_abonnement_avant_de_l_oublier"
   },
@@ -381,6 +381,34 @@
    "avant": "    deja = (row.get('plan') == plan\n            and (not subscription or row.get('stripe_subscription_id') == str(subscription)))",
    "apres": "    deja = (row.get('plan') == plan)",
    "regle": "test_l_activation_memorise_l_abonnement_meme_quand_l_offre_est_deja_posee"
+  },
+  {
+   "nom": "12. la résiliation demandée par le site n'est plus marquée",
+   "fichier": "app.py",
+   "avant": "                    'comment': STRIPE_RESILIATION_MARQUE + str(motif or 'site')}",
+   "apres": "                    'comment': str(motif or 'site')}",
+   "regle": "test_la_resiliation_demandee_par_le_site_est_marquee_chez_stripe"
+  },
+  {
+   "nom": "12. le retour d'une résiliation demandée par le site rétrograde le client",
+   "fichier": "app.py",
+   "avant": "    if commentaire and str(commentaire).startswith(STRIPE_RESILIATION_MARQUE):",
+   "apres": "    if False:",
+   "regle": "test_le_client_passe_en_facturation_par_resultats_ne_retombe_pas_en_gratuit"
+  },
+  {
+   "nom": "12. le repli par metadata.client_id revient (compte Stripe partagé)",
+   "fichier": "app.py",
+   "avant": "    touches = cur.rowcount\n    conn.commit()\n    try: conn.close()\n    except Exception: pass\n    logger.info('STRIPE_ABONNEMENT_RESILIE abonnement=%s",
+   "apres": "    touches = cur.rowcount\n    if not touches and client_id:\n        cur.execute(registre_sql(\"UPDATE clients SET plan='gratuit' WHERE id=%s AND stripe_subscription_id IS NULL\",\n                                 \"UPDATE clients SET plan='gratuit' WHERE id=? AND stripe_subscription_id IS NULL\"),\n                    (int(client_id),))\n        touches = cur.rowcount\n    conn.commit()\n    try: conn.close()\n    except Exception: pass\n    logger.info('STRIPE_ABONNEMENT_RESILIE abonnement=%s",
+   "regle": "test_un_abonnement_inconnu_ici_ne_retrograde_aucun_client"
+  },
+  {
+   "nom": "1e. la relance « paiement » d'un impayé d'abonnement n'est pas écrite",
+   "fichier": "app.py",
+   "avant": "'planifiee', str(sub_id), datetime.utcnow().isoformat()))\n        conn.commit()",
+   "apres": "'planifiee', str(sub_id), datetime.utcnow().isoformat()))\n        conn.rollback()",
+   "regle": "test_une_facture_d_abonnement_impayee_previent_le_client_et_conseilprev[dahlia]"
   }
  ]
 }
