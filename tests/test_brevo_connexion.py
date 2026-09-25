@@ -107,6 +107,10 @@ def _nettoyer():
                     "DELETE FROM email_log WHERE sujet LIKE '[CONSEILPREV] Votre s%lection%'",
                     "DELETE FROM email_suppression WHERE email LIKE '%@exemple.test'",
                     "DELETE FROM consent_records WHERE email LIKE '%@exemple.test'",
+                    # Les réservations de formation du jour comptent pour les
+                    # bornes de /api/formation/inscription : une ligne laissée
+                    # fausserait la mesure suivante.
+                    "DELETE FROM formation_ia_resa WHERE email LIKE '%@exemple.test'",
                     "DELETE FROM pending_reports WHERE client_id >= 999000"):
         try:
             _sql(requete)
@@ -857,6 +861,133 @@ def test_le_webhook_ne_journalise_pas_l_adresse_en_clair(brevo, monkeypatch, cap
     assert 'BREVO_' in caplog.text, caplog.text
     assert 'desinscrit@exemple.test' not in caplog.text, 'adresse en clair dans le journal'
     assert 'd***@exemple.test' in caplog.text, caplog.text
+
+
+# ══════════════════════════════════════════════════════════════════════════
+#  6 bis. LA RÉSERVATION DE FORMATION, QUI EST PUBLIQUE
+# ══════════════════════════════════════════════════════════════════════════
+#
+# /api/formation/inscription est ouverte à l'anonyme, la première séance de
+# chaque clé client est OFFERTE et confirmée d'emblée, et chaque envoi fait
+# partir deux courriels — l'accusé vers l'adresse fournie, la notification
+# vers la boîte réelle de CONSEILPREV. Deux défauts mesurés s'y rejoignent :
+# les champs libres arrivaient bruts dans le HTML de la notification, et rien
+# ne bornait le nombre de réservations ni de courriels.
+
+def _creneau(n=0):
+    import datetime as _dt
+    return [x['date'] for x in formations_ia.creneaux(_dt.datetime.utcnow().date())][n]
+
+
+def _inscrire(creneau, email='inconnu@exemple.test', sujet=0, **extra):
+    charge = {'seances': [{'sujet': formations_ia.SUJETS[sujet]['cle'], 'creneau': creneau}],
+              'nom': 'Dupont', 'prenom': 'Paul', 'email': email, 'entreprise': 'ACME',
+              'telephone': '+33 6 12 34 56 78', 'lieu': '9 av. du Test, 75000 Paris'}
+    charge.update(extra)
+    return _anonyme().post('/api/formation/inscription', json=charge, headers=_entetes())
+
+
+def test_la_notification_de_formation_echappe_chaque_champ_libre(brevo, monkeypatch):
+    """LE DÉFAUT MESURÉ. `sanitize_input` n'échappe plus rien — c'est voulu, et
+    mesuré ailleurs : elle assainit ce qu'on STOCKE. Huit champs de ce
+    formulaire public entraient donc bruts dans le HTML d'une notification qui
+    part désormais dans la VRAIE boîte de l'administrateur : s'inscrire sous le
+    nom `<a href="…">Cliquez pour valider</a>` y faisait arriver un lien
+    choisi par un inconnu, sous l'expéditeur du site et avec sa mise en page."""
+    monkeypatch.delenv('STRIPE_SECRET_KEY', raising=False)
+    r = _inscrire(_creneau(), nom=PIEGE, entreprise=PIEGE, message=PIEGE, lieu=PIEGE,
+                  fonction=PIEGE)
+    assert r.status_code == 200, r.get_json()
+    envois = _posts(brevo)
+    assert envois, 'aucun courriel envoyé'
+    for e in envois:
+        html = e.json['htmlContent']
+        assert PIEGE not in html, 'lien brut dans le courriel vers %s' % e.json['to'][0]['email']
+    interne = [e for e in envois if e.json['to'][0]['email'] == A.CONSEILPREV_NOTIFY_EMAIL]
+    assert interne, _destinataires(brevo)
+    assert '&lt;a href=' in interne[0].json['htmlContent'], \
+        'la valeur a disparu au lieu d être échappée'
+
+
+def test_le_nom_affiche_ne_fabrique_pas_une_seconde_adresse(brevo, monkeypatch):
+    """`prenom + ' ' + nom` d'un formulaire public entrait tel quel dans le
+    champ `to.name`, c'est-à-dire dans l'en-tête « To: » où les chevrons
+    DÉLIMITENT l'adresse (RFC 5322)."""
+    monkeypatch.delenv('STRIPE_SECRET_KEY', raising=False)
+    assert _inscrire(_creneau(), nom=PIEGE).status_code == 200
+    noms = [e.json['to'][0].get('name', '') for e in _posts(brevo)]
+    assert noms, 'aucun courriel envoyé'
+    for n in noms:
+        assert '<' not in n and '>' not in n, 'chevrons dans le nom affiché : %r' % n
+
+
+def test_un_anonyme_ne_peut_pas_prendre_toute_la_campagne(brevo, monkeypatch):
+    """LE DÉFAUT MESURÉ. La campagne compte 26 créneaux (2026-10-06 →
+    2027-03-30), une date ne se réserve qu'une fois, et la première séance de
+    chaque clé client est offerte sans paiement ni vérification de l'adresse.
+    26 POST à des courriels inventés suffisaient donc à occuper TOUTE la
+    campagne — et à dépenser 52 des 300 envois du jour."""
+    monkeypatch.delenv('STRIPE_SECRET_KEY', raising=False)
+    codes = [_inscrire(_creneau(i), email='offert%d@exemple.test' % i).status_code
+             for i in range(A.FORMATION_IA_OFFERTES_JOUR + 1)]
+    assert codes[:-1] == [200] * A.FORMATION_IA_OFFERTES_JOUR, codes
+    assert codes[-1] == 429, (
+        'la %de séance offerte du jour passe encore (%s)' % (len(codes), codes[-1]))
+    poses = _sql("SELECT COUNT(*) AS n FROM formation_ia_resa "
+                 "WHERE email LIKE 'offert%@exemple.test'")
+    assert poses[0]['n'] == A.FORMATION_IA_OFFERTES_JOUR, poses
+
+
+def test_une_meme_adresse_ne_reserve_pas_sans_fin(brevo, monkeypatch):
+    monkeypatch.delenv('STRIPE_SECRET_KEY', raising=False)
+    # Un sujet différent à chaque fois : sinon c'est « déjà inscrit à ce
+    # sujet » (409) qui répondrait, et la borne ne serait pas mesurée.
+    codes = [_inscrire(_creneau(i), email='repete@exemple.test', sujet=i).status_code
+             for i in range(A.FORMATION_IA_PLAFOND_ADRESSE_JOUR + 1)]
+    assert codes[:-1] == [200] * A.FORMATION_IA_PLAFOND_ADRESSE_JOUR, codes
+    assert codes[-1] == 429, codes
+
+
+def test_le_plafond_global_du_jour_borne_la_depense_de_courriels(brevo, monkeypatch):
+    monkeypatch.delenv('STRIPE_SECRET_KEY', raising=False)
+    monkeypatch.setattr(A, 'FORMATION_IA_PLAFOND_GLOBAL_JOUR', 2, raising=False)
+    monkeypatch.setattr(A, 'FORMATION_IA_OFFERTES_JOUR', 99, raising=False)
+    codes = [_inscrire(_creneau(i), email='glob%d@exemple.test' % i).status_code
+             for i in range(3)]
+    assert codes == [200, 200, 429], codes
+    assert len(_posts(brevo)) == 4, '%d courriels pour 2 réservations' % len(_posts(brevo))
+
+
+def test_un_refus_de_borne_ne_journalise_pas_l_adresse_en_clair(brevo, monkeypatch, caplog):
+    monkeypatch.delenv('STRIPE_SECRET_KEY', raising=False)
+    monkeypatch.setattr(A, 'FORMATION_IA_PLAFOND_GLOBAL_JOUR', 1, raising=False)
+    _inscrire(_creneau(0), email='premier@exemple.test')
+    with caplog.at_level(logging.WARNING, logger='conseilprev'):
+        assert _inscrire(_creneau(1), email='refuse@exemple.test').status_code == 429
+    assert 'FORMATION_IA_BORNE' in caplog.text, caplog.text
+    assert 'refuse@exemple.test' not in caplog.text, 'adresse en clair dans le journal'
+
+
+# ══════════════════════════════════════════════════════════════════════════
+#  6 ter. LE JOURNAL NE SE LAISSE PAS ÉCRIRE PAR UN ANONYME
+# ══════════════════════════════════════════════════════════════════════════
+
+@pytest.mark.parametrize('saut', ['\n', '\r\n', '\r', ' '])
+def test_aucune_entree_de_journal_ne_tient_sur_deux_lignes(caplog, saut):
+    """LE DÉFAUT MESURÉ, sur /api/stripe/retour : `?session_id=cs_x%0A2026-09-24
+    12:00:00,000 INFO STRIPE_OFFRE_ACTIVEE client=7 plan=entreprise` faisait
+    apparaître dans le journal Render une FAUSSE activation d'offre, sur sa
+    propre ligne, avec l'horodatage et le niveau d'un vrai événement.
+    Assainir au point d'écriture demanderait de retrouver les centaines de
+    `logger.*` du fichier ; le filtre est le seul endroit par lequel ils
+    passent tous."""
+    forge = 'cs_x%s2026-09-24 12:00:00,000 INFO STRIPE_OFFRE_ACTIVEE client=7' % saut
+    with caplog.at_level(logging.WARNING, logger='conseilprev'):
+        A.logger.warning('RECETTE_JOURNAL session=%s', forge)
+    ligne = caplog.records[-1].getMessage()
+    for f in ('\n', '\r', ' ', ' '):
+        assert f not in ligne, 'fin de ligne conservée : %r' % ligne
+    assert 'STRIPE_OFFRE_ACTIVEE' in ligne, 'la valeur a été perdue : %r' % ligne
 
 
 # ══════════════════════════════════════════════════════════════════════════

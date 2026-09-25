@@ -964,6 +964,27 @@ def _deposer_courriel_repli(to_email, subject, contenu, extension='html'):
 # ══════════════════════════════════════════════════════════════
 # BREVO — Fonctions d'envoi email (API + SMTP + fallback local)
 # ══════════════════════════════════════════════════════════════
+def _nom_affiche(valeur):
+    """Le NOM porte a cote d'une adresse, dans l'en-tete « To: ».
+
+    CE QUI Y ARRIVAIT. `prenom + ' ' + nom` d'un formulaire public y entre tel
+    quel : mesure sur /api/formation/inscription, le POST vers l'adresse du
+    demandeur portait `name = 'Paul <a href="https://piege.test/z">Cliquez
+    pour valider</a>'`. Ce n'est pas du HTML ici mais un en-tete de courrier,
+    ou les chevrons DELIMITENT l'adresse (RFC 5322) : un nom qui en contient
+    fabrique une seconde adresse aux yeux d'un client de messagerie.
+
+    ON RETIRE LES CHEVRONS, LES GUILLEMETS ET LES FINS DE LIGNE, et rien de
+    plus : un nom legitime n'en porte aucun, et tronquer ou echapper
+    abimerait des noms reels (accents, apostrophes, traits d'union). Un seul
+    point de passage, donc valable pour tous les appelants d'un coup.
+    """
+    texte = str(valeur if valeur is not None else '')
+    for c in ('<', '>', '"', '\r', '\n', ' ', ' '):
+        texte = texte.replace(c, ' ')
+    return ' '.join(texte.split())[:120]
+
+
 def send_via_brevo_api(to_email, to_name, subject, html_content,
                        reply_to=None, attachments=None, tags=None):
     """Un courriel par l'API transactionnelle. Rend (ok, motif ou messageId).
@@ -995,7 +1016,7 @@ def send_via_brevo_api(to_email, to_name, subject, html_content,
         return False, 'supprime'
     payload = {
         'sender':      {'name': 'CONSEILPREV', 'email': MAIL_FROM},
-        'to':          [{'email': to_email, 'name': to_name or to_email}],
+        'to':          [{'email': to_email, 'name': _nom_affiche(to_name) or to_email}],
         'subject':     subject,
         'htmlContent': html_content,
     }
@@ -18886,6 +18907,85 @@ def _formation_ia_tient_le_creneau():
             "AND COALESCE(created_at, '') < " + ph + ")", limite)
 
 
+# CE QU'UN INCONNU PEUT PRENDRE EN UNE JOURNÉE — trois bornes, et la raison
+# de chaque chiffre.
+#
+# LE DEFAUT MESURE. /api/formation/inscription est PUBLIQUE, et la premiere
+# seance de chaque cle client (SIRET, a defaut le courriel) est OFFERTE et
+# confirmee d'emblee, sans paiement et sans qu'on ait verifie que l'adresse
+# existe. Une date ne se reserve qu'une fois. Avec 26 POST a des courriels
+# inventes, un anonyme occupait donc TOUTE la campagne (2026-10-06 →
+# 2027-03-30) : plus un seul creneau pour un vrai client. Mesure : trois POST
+# sur la meme date → [(200, 'confirmee'), (409, …), (409, …)], et
+# formations_ia.creneaux() rend 26 creneaux. Chaque POST fait partir DEUX
+# courriels (l'accuse au demandeur, la notification a CONSEILPREV), soit 52
+# des 300 envois du jour du plan gratuit, vers des adresses choisies par
+# l'attaquant — sans aucun plafond, contrairement a /api/notify-selection.
+#
+# CE QU'ON POSE, ET CE QUE ÇA NE FAIT PAS. Ces bornes ne rendent pas la
+# gratuite verifiee : elles ramenent l'attaque de « 26 creneaux en une minute,
+# definitivement » a « au plus trois par jour », et elles bornent la depense
+# de courriels. La verification de l'adresse par un lien clique reste la vraie
+# reponse ; elle demande un parcours de confirmation qui n'existe pas encore.
+#
+#   · 3 seances OFFERTES par jour pour tout le site. La campagne compte 26
+#     creneaux sur six mois : un rythme legitime est tres en dessous de trois
+#     par jour. C'est la borne qui mord sur l'attaque, puisque l'attaquant
+#     change d'adresse a chaque coup.
+#   · 3 COMMANDES par adresse et par jour : une commande, sa correction, et
+#     une de marge.
+#   · 12 COMMANDES par jour pour tout le site : 24 courriels, soit 8 % du
+#     quota quotidien de Brevo laisses a cette seule route.
+#
+# ON COMPTE DES COMMANDES, PAS DES LIGNES. Une commande porte jusqu'a quatre
+# seances (MAX_SEANCES) : compter les lignes ferait refuser un panier normal
+# des le deuxieme envoi, alors que ce qu'on borne est le NOMBRE DE GESTES —
+# c'est lui qui prend des creneaux et fait partir des courriels, deux par
+# commande quel que soit le nombre de seances.
+#
+# ON COMPTE DANS formation_ia_resa, PAS EN MEMOIRE. Un compteur de processus
+# ne vaudrait que pour un worker sur deux et disparaitrait au redemarrage ;
+# celui-ci est partage et survit. Les lignes annulees comptent : sinon
+# reserver puis annuler rendrait la borne gratuite.
+FORMATION_IA_OFFERTES_JOUR = 3
+FORMATION_IA_PLAFOND_ADRESSE_JOUR = 3
+FORMATION_IA_PLAFOND_GLOBAL_JOUR = 12
+
+
+def _formation_ia_borne_du_jour(cur, email, avec_offerte):
+    """None si la reservation peut se faire, sinon le motif du refus.
+
+    Le curseur est celui de la route : on compte dans la meme connexion que
+    les ecritures qui suivent, sans en ouvrir une seconde. UNE BASE MUETTE NE
+    REFUSE PAS ICI — la route retomberait de toute facon sur son propre
+    traitement d'erreur a l'ecriture, et fermer la reservation sur une lecture
+    ratee couterait des clients pour un defaut qui n'est pas le leur."""
+    jour = datetime.utcnow().strftime('%Y-%m-%d')
+    try:
+        if avec_offerte:
+            cur.execute(registre_sql(
+                "SELECT COUNT(*) AS n FROM formation_ia_resa WHERE gratuit=1 AND created_at >= %s",
+                "SELECT COUNT(*) AS n FROM formation_ia_resa WHERE gratuit=1 AND created_at >= ?"),
+                (jour,))
+            if int(dict(cur.fetchone()).get('n', 0) or 0) >= FORMATION_IA_OFFERTES_JOUR:
+                return 'offertes_du_jour'
+        cur.execute(registre_sql(
+            "SELECT COUNT(DISTINCT commande) AS n FROM formation_ia_resa WHERE LOWER(email)=%s AND created_at >= %s",
+            "SELECT COUNT(DISTINCT commande) AS n FROM formation_ia_resa WHERE LOWER(email)=? AND created_at >= ?"),
+            ((email or '').lower(), jour))
+        if int(dict(cur.fetchone()).get('n', 0) or 0) >= FORMATION_IA_PLAFOND_ADRESSE_JOUR:
+            return 'plafond_adresse'
+        cur.execute(registre_sql(
+            "SELECT COUNT(DISTINCT commande) AS n FROM formation_ia_resa WHERE created_at >= %s",
+            "SELECT COUNT(DISTINCT commande) AS n FROM formation_ia_resa WHERE created_at >= ?"),
+            (jour,))
+        if int(dict(cur.fetchone()).get('n', 0) or 0) >= FORMATION_IA_PLAFOND_GLOBAL_JOUR:
+            return 'plafond_global'
+    except Exception as e:                                     # noqa: BLE001
+        logger.error('FORMATION_IA_BORNE_ERR: %s', e)
+    return None
+
+
 def _formation_ia_liberer_commande(commande, motif):
     """Une caisse SANS paiement (expiree, prelevement refuse) : les seances
     payantes encore « en attente de paiement » rendent leur creneau.
@@ -19400,6 +19500,15 @@ def formation_ia_inscription():
         _ferme()
         return jsonify({'ok': False, 'error': dev['message']}), 400
 
+    refus = _formation_ia_borne_du_jour(
+        cur, email, any(l['gratuit'] for l in dev['lignes']))
+    if refus:
+        _ferme()
+        logger.warning('FORMATION_IA_BORNE %s: %s vers %s', limiter.get_ip(request),
+                       refus, _masquer_courriel(email))
+        return jsonify({'ok': False, 'error': 'Trop de réservations aujourd’hui. '
+                        'Écrivez à CONSEILPREV pour être placé.'}), 429
+
     # UNE SEANCE PAR CRENEAU (le formateur ne se dedouble pas), et UN SUJET UNE
     # SEULE FOIS PAR CLIENT. Les deux sont verifies AVANT la premiere ecriture :
     # ecrire deux seances puis refuser la troisieme laisserait un panier a
@@ -19486,16 +19595,29 @@ def formation_ia_inscription():
                  else '%d EUR HT (%d EUR TTC)'
                       % (dev['ht_cents'] // 100, dev['ttc_cents'] // 100))
 
+    # CE QU'UN INCONNU A TAPE N'ENTRE PAS BRUT DANS CE HTML. Cette route est
+    # PUBLIQUE, et `sanitize_input` n'echappe plus rien — c'est volontaire et
+    # mesure ailleurs : elle assainit ce qu'on STOCKE, pas ce qu'on affiche.
+    # Huit champs viennent donc du formulaire, et cette notification part
+    # desormais dans la VRAIE boite de CONSEILPREV (elle visait auparavant une
+    # adresse @internal.system, qui ne recevait rien). Mesure : nom =
+    # `<a href="https://piege.test/z">Cliquez pour valider</a>` → le lien
+    # arrivait cliquable dans la boite de l'administrateur, sous l'expediteur
+    # du site et avec sa mise en page. `_pour_courriel` est la fonction ecrite
+    # pour exactement ce cas ; elle n'etait pas appliquee ici.
     try:
         send_email_smart(CONSEILPREV_NOTIFY_EMAIL, 'CONSEILPREV',
                          'Réservation formation : %d séance(s)' % len(recap),
                          '<p>Nouvelle réservation « Formations conformité IA ».</p>'
                          '<p>%s %s — %s<br>%s / %s<br>SIRET : %s<br>Lieu : %s<br>'
                          'Profil : %s</p><ul>%s</ul><p>Total : %s</p><p>%s</p>'
-                         % (prenom, nom, entreprise, email, telephone,
-                            siret or '(non fourni)', lieu,
-                            cas.get('titre') or '(non précisé)', lignes_html,
-                            total_txt, message or ''),
+                         % (_pour_courriel(prenom), _pour_courriel(nom),
+                            _pour_courriel(entreprise), _pour_courriel(email),
+                            _pour_courriel(telephone),
+                            _pour_courriel(siret or '(non fourni)'),
+                            _pour_courriel(lieu),
+                            _pour_courriel(cas.get('titre') or '(non précisé)'),
+                            lignes_html, total_txt, _pour_courriel(message or '')),
                          tags=['formation-ia'])
     except Exception:
         pass
