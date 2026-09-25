@@ -5,49 +5,49 @@
  "texte": {
   "La date de fin de la période de transition des certificats ISO/IEC #:# vers la version #": {
    "fr": "La date de fin de la période de transition des certificats ISO/IEC 27001:2013 vers la version 2022",
-   "en": "",
+   "en": "The end date of the transition period for ISO/IEC #:# certificates to the # edition",
    "_pages": [
     "iso27001-millesime"
    ]
   },
   "La date exacte de fin de cette période n'a PAS pu être vérifiée depuis cet environnement (iso.org, iaf.nu et cofrac.fr y sont injoignables). Elle se confirme auprès de l'organisme certificateur, qui la connaît pour chaque certificat qu'il a émis.": {
    "fr": "La date exacte de fin de cette période n'a PAS pu être vérifiée depuis cet environnement (iso.org, iaf.nu et cofrac.fr y sont injoignables). Elle se confirme auprès de l'organisme certificateur, qui la connaît pour chaque certificat qu'il a émis.",
-   "en": "",
+   "en": "The exact end date of this period could NOT be verified from this environment (iso.org, iaf.nu and cofrac.fr are unreachable from it). It is confirmed with the certification body, which knows it for each certificate it has issued.",
    "_pages": [
     "iso27001-millesime"
    ]
   },
   "Le questionnaire fourni — ISO/IEC #:# — Questionnaire d'auto-évaluation": {
    "fr": "Le questionnaire fourni — ISO/IEC 27001:2013 — Questionnaire d'auto-évaluation",
-   "en": "",
+   "en": "The questionnaire supplied — ISO/IEC #:# — Self-assessment questionnaire",
    "_pages": [
     "iso27001-millesime"
    ]
   },
   "Le texte acheté, ou le catalogue de l'organisme national de normalisation": {
    "fr": "Le texte acheté, ou le catalogue de l'organisme national de normalisation",
-   "en": "",
+   "en": "The purchased text, or the catalogue of the national standards body",
    "_pages": [
     "iso27001-millesime"
    ]
   },
   "Les # mesures apparues en #": {
    "fr": "Les 11 mesures apparues en 2022",
-   "en": "",
+   "en": "The # controls introduced in #",
    "_pages": [
     "iso27001-millesime"
    ]
   },
   "Les certificats émis contre ISO/IEC #:# ont dû être migrés vers la version # à l'issue d'une période de transition fixée par l'IAF.": {
    "fr": "Les certificats émis contre ISO/IEC 27001:2013 ont dû être migrés vers la version 2022 à l'issue d'une période de transition fixée par l'IAF.",
-   "en": "",
+   "en": "Certificates issued against ISO/IEC #:# had to be migrated to the # edition at the end of a transition period set by the IAF.",
    "_pages": [
     "iso27001-millesime"
    ]
   },
   "Masquage des données": {
    "fr": "Masquage des données",
-   "en": "",
+   "en": "Data masking",
    "_pages": [
     "iso27001-soa",
     "iso27001-millesime"
@@ -55,7 +55,7 @@
   },
   "Préparation des TIC pour la continuité d'activité": {
    "fr": "Préparation des TIC pour la continuité d'activité",
-   "en": "",
+   "en": "ICT readiness for business continuity",
    "_pages": [
     "iso27001-soa",
     "iso27001-millesime"
@@ -63,7 +63,7 @@
   },
   "Prévention de la fuite de données": {
    "fr": "Prévention de la fuite de données",
-   "en": "",
+   "en": "Data leakage prevention",
    "_pages": [
     "iso27001-soa",
     "iso27001-millesime"
@@ -71,7 +71,7 @@
   },
   "Renseignement sur les menaces": {
    "fr": "Renseignement sur les menaces",
-   "en": "",
+   "en": "Threat intelligence",
    "_pages": [
     "iso27001-soa",
     "iso27001-millesime"
@@ -79,14 +79,14 @@
   },
   "Règlement (UE) #/# (CRA)": {
    "fr": "Règlement (UE) 2024/2847 (CRA)",
-   "en": "",
+   "en": "Regulation (EU) #/# (CRA)",
    "_pages": [
     "iso27001-millesime"
    ]
   },
   "Règlement (UE) #/# (RGPD)": {
    "fr": "Règlement (UE) 2016/679 (RGPD)",
-   "en": "",
+   "en": "Regulation (EU) #/# (GDPR)",
    "_pages": [
     "iso27001-millesime",
     "iso42001-ponts"
@@ -94,7 +94,7 @@
   },
   "Suppression d'informations": {
    "fr": "Suppression d'informations",
-   "en": "",
+   "en": "Information deletion",
    "_pages": [
     "iso27001-soa",
     "iso27001-millesime"
@@ -102,7 +102,7 @@
   },
   "Surveillance de la sécurité physique": {
    "fr": "Surveillance de la sécurité physique",
-   "en": "",
+   "en": "Physical security monitoring",
    "_pages": [
     "iso27001-soa",
     "iso27001-millesime"
@@ -110,7 +110,7 @@
   },
   "Sécurité de l'information dans l'utilisation de services en nuage": {
    "fr": "Sécurité de l'information dans l'utilisation de services en nuage",
-   "en": "",
+   "en": "Information security for use of cloud services",
    "_pages": [
     "iso27001-soa",
     "iso27001-millesime"
@@ -118,21 +118,21 @@
   },
   "Un certificat non migré cesse d'être valide à l'issue de la transition, quelle que soit la date d'expiration imprimée dessus.": {
    "fr": "Un certificat non migré cesse d'être valide à l'issue de la transition, quelle que soit la date d'expiration imprimée dessus.",
-   "en": "",
+   "en": "A certificate that has not been migrated ceases to be valid at the end of the transition, whatever the expiry date printed on it.",
    "_pages": [
     "iso27001-millesime"
    ]
   },
   "Un certificat émis contre la version # cesse d'être valide à l'issue de cette période, quelle que soit sa date d'expiration imprimée.": {
    "fr": "Un certificat émis contre la version 2013 cesse d'être valide à l'issue de cette période, quelle que soit sa date d'expiration imprimée.",
-   "en": "",
+   "en": "A certificate issued against the # edition ceases to be valid at the end of this period, whatever its printed expiry date.",
    "_pages": [
     "iso27001-millesime"
    ]
   },
   "norme volontaire": {
    "fr": "norme volontaire",
-   "en": "",
+   "en": "voluntary standard",
    "_pages": [
     "iso27001-millesime",
     "iso42001-ponts"
@@ -140,7 +140,7 @@
   },
   "obligation légale": {
    "fr": "obligation légale",
-   "en": "",
+   "en": "legal obligation",
    "_pages": [
     "iso27001-millesime",
     "iso42001-ponts"
@@ -148,245 +148,245 @@
   },
   "© BSI Group. Document commercial d'un organisme de certification. Aucune de ses questions n'est reprise ici : les questions de ce module sont rédigées par le cabinet.": {
    "fr": "© BSI Group. Document commercial d'un organisme de certification. Aucune de ses questions n'est reprise ici : les questions de ce module sont rédigées par le cabinet.",
-   "en": "",
+   "en": "© BSI Group. Commercial document of a certification body. None of its questions is reproduced here: the questions in this module are written by the firm.",
    "_pages": [
     "iso27001-millesime"
    ]
   },
   "Appréciation faite le": {
    "fr": "Appréciation faite le",
-   "en": "",
+   "en": "Assessment carried out on",
    "_pages": [
     "iso27001-risques"
    ]
   },
   "Au moins un risque porté au registre": {
    "fr": "Au moins un risque porté au registre",
-   "en": "",
+   "en": "At least one risk entered in the register",
    "_pages": [
     "iso27001-risques"
    ]
   },
   "Au-delà de ce niveau (vraisemblance × conséquence), un risque ne peut pas être simplement maintenu": {
    "fr": "Au-delà de ce niveau (vraisemblance × conséquence), un risque ne peut pas être simplement maintenu",
-   "en": "",
+   "en": "Above this level (likelihood × consequence), a risk cannot simply be retained",
    "_pages": [
     "iso27001-risques"
    ]
   },
   "Au-dessus du seuil, après traitement": {
    "fr": "Au-dessus du seuil, après traitement",
-   "en": "",
+   "en": "Above the threshold, after treatment",
    "_pages": [
     "iso27001-risques"
    ]
   },
   "Aucun risque déclaré. Ajoutez-en un : tout le reste de la norme en découle.": {
    "fr": "Aucun risque déclaré. Ajoutez-en un : tout le reste de la norme en découle.",
-   "en": "",
+   "en": "No risk declared. Add one: the whole rest of the standard follows from it.",
    "_pages": [
     "iso27001-risques"
    ]
   },
   "Bloc # sur # · Analyse de risque — À remplir maintenant": {
    "fr": "Bloc 1 sur 4 · Analyse de risque — À remplir maintenant",
-   "en": "",
+   "en": "Block # of # · Risk assessment — To be filled in now",
    "_pages": [
     "iso27001-risques"
    ]
   },
   "Ce que le SMSI couvre — tout ce qui n’en est pas exclu par écrit sera audité": {
    "fr": "Ce que le SMSI couvre — tout ce qui n’en est pas exclu par écrit sera audité",
-   "en": "",
+   "en": "What the ISMS covers — everything not excluded from it in writing will be audited",
    "_pages": [
     "iso27001-risques"
    ]
   },
   "Critères établis le": {
    "fr": "Critères établis le",
-   "en": "",
+   "en": "Criteria established on",
    "_pages": [
     "iso27001-risques"
    ]
   },
   "Domaine d’application du SMSI (art. #)": {
    "fr": "Domaine d’application du SMSI (art. 4.3)",
-   "en": "",
+   "en": "Scope of the ISMS (clause #)",
    "_pages": [
     "iso27001-risques"
    ]
   },
   "La date de l'appréciation des risques": {
    "fr": "La date de l'appréciation des risques",
-   "en": "",
+   "en": "The date of the risk assessment",
    "_pages": [
     "iso27001-risques"
    ]
   },
   "La date à laquelle les critères d'acceptation ont été établis": {
    "fr": "La date à laquelle les critères d'acceptation ont été établis",
-   "en": "",
+   "en": "The date on which the acceptance criteria were established",
    "_pages": [
     "iso27001-risques"
    ]
   },
   "Le domaine d'application du SMSI (art. #)": {
    "fr": "Le domaine d'application du SMSI (art. 4.3)",
-   "en": "",
+   "en": "The scope of the ISMS (clause #)",
    "_pages": [
     "iso27001-risques"
    ]
   },
   "Le plan de traitement ne tient pas en l'état. Ce ne sont pas des défauts techniques : ce sont des défauts de DÉCISION, et ils se corrigent par des signatures, pas par des outils.": {
    "fr": "Le plan de traitement ne tient pas en l'état. Ce ne sont pas des défauts techniques : ce sont des défauts de DÉCISION, et ils se corrigent par des signatures, pas par des outils.",
-   "en": "",
+   "en": "The treatment plan does not hold as it stands. These are not technical defects: they are defects of DECISION, and they are corrected by signatures, not by tools.",
    "_pages": [
     "iso27001-risques"
    ]
   },
   "Les critères d'acceptation ne portent aucune date. Rien ne permet de montrer qu'ils précèdent l'appréciation, et c'est ce que l'auditeur demandera.": {
    "fr": "Les critères d'acceptation ne portent aucune date. Rien ne permet de montrer qu'ils précèdent l'appréciation, et c'est ce que l'auditeur demandera.",
-   "en": "",
+   "en": "The acceptance criteria carry no date. Nothing shows that they precede the assessment, and that is what the auditor will ask for.",
    "_pages": [
     "iso27001-risques"
    ]
   },
   "Sans acceptation du propriétaire": {
    "fr": "Sans acceptation du propriétaire",
-   "en": "",
+   "en": "Without the owner’s acceptance",
    "_pages": [
     "iso27001-risques"
    ]
   },
   "Seuil d’acceptation": {
    "fr": "Seuil d’acceptation",
-   "en": "",
+   "en": "Acceptance threshold",
    "_pages": [
     "iso27001-risques"
    ]
   },
   "ex. le SI de production du siège, hors filiales": {
    "fr": "ex. le SI de production du siège, hors filiales",
-   "en": "",
+   "en": "e.g. the head office production IS, excluding subsidiaries",
    "_pages": [
     "iso27001-risques"
    ]
   },
   "Échelles du cabinet : la norme n’en impose aucune. Le niveau est le produit de la vraisemblance et de la conséquence — il se refait de tête, et laisse la discussion là où elle est utile, sur les cotations elles-mêmes.": {
    "fr": "Échelles du cabinet : la norme n’en impose aucune. Le niveau est le produit de la vraisemblance et de la conséquence — il se refait de tête, et laisse la discussion là où elle est utile, sur les cotations elles-mêmes.",
-   "en": "",
+   "en": "The firm’s scales: the standard imposes none. The level is the product of likelihood and consequence — it can be redone mentally, and keeps the discussion where it is useful, on the ratings themselves.",
    "_pages": [
     "iso27001-risques"
    ]
   },
   "# mesure(s) ne sont ni retenues ni écartées : A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#…": {
    "fr": "93 mesure(s) ne sont ni retenues ni écartées : A.5.1, A.5.2, A.5.3, A.5.4, A.5.5, A.5.6, A.5.7, A.5.8…",
-   "en": "",
+   "en": "# control(s) are neither included nor excluded: A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#…",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "# mesures · # retenues · # écartées · # à trancher · # nouvelles en #": {
    "fr": "37 mesures · 0 retenues · 0 écartées · 37 à trancher · 3 nouvelles en 2022",
-   "en": "",
+   "en": "# controls · # included · # excluded · # to decide · # new in #",
    "_pages": [
     "iso27001-soa"
    ]
   },
   ": cette mesure n’existait pas dans ISO/IEC #:#.": {
    "fr": ": cette mesure n’existait pas dans ISO/IEC 27001:2013.",
-   "en": "",
+   "en": ": this control did not exist in ISO/IEC #:#.",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "A.# Fonctions et responsabilités liées à la sécurité de l'information — retenue ou écartée": {
    "fr": "A.5.2 Fonctions et responsabilités liées à la sécurité de l'information — retenue ou écartée",
-   "en": "",
+   "en": "A.# Information security roles and responsibilities — included or excluded",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "A.# Mesures liées aux personnes": {
    "fr": "A.6 Mesures liées aux personnes",
-   "en": "",
+   "en": "A.# People controls",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "A.# Mesures organisationnelles": {
    "fr": "A.5 Mesures organisationnelles",
-   "en": "",
+   "en": "A.# Organizational controls",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "A.# Mesures physiques": {
    "fr": "A.7 Mesures physiques",
-   "en": "",
+   "en": "A.# Physical controls",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "A.# Mesures technologiques": {
    "fr": "A.8 Mesures technologiques",
-   "en": "",
+   "en": "A.# Technological controls",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "A.# Politiques de sécurité de l'information — retenue ou écartée": {
    "fr": "A.5.1 Politiques de sécurité de l'information — retenue ou écartée",
-   "en": "",
+   "en": "A.# Policies for information security — included or excluded",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "A.# Relations avec des groupes d'intérêt spécifiques — retenue ou écartée": {
    "fr": "A.5.6 Relations avec des groupes d'intérêt spécifiques — retenue ou écartée",
-   "en": "",
+   "en": "A.# Contact with special interest groups — included or excluded",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "A.# Relations avec les autorités — retenue ou écartée": {
    "fr": "A.5.5 Relations avec les autorités — retenue ou écartée",
-   "en": "",
+   "en": "A.# Contact with authorities — included or excluded",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "A.# Responsabilités de la direction — retenue ou écartée": {
    "fr": "A.5.4 Responsabilités de la direction — retenue ou écartée",
-   "en": "",
+   "en": "A.# Management responsibilities — included or excluded",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "A.# Séparation des tâches — retenue ou écartée": {
    "fr": "A.5.3 Séparation des tâches — retenue ou écartée",
-   "en": "",
+   "en": "A.# Segregation of duties — included or excluded",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Accès au code source": {
    "fr": "Accès au code source",
-   "en": "",
+   "en": "Access to source code",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Authentification sécurisée": {
    "fr": "Authentification sécurisée",
-   "en": "",
+   "en": "Secure authentication",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Bloc # sur # · Déclaration d’applicabilité — Pas encore atteint": {
    "fr": "Bloc 2 sur 4 · Déclaration d’applicabilité — Pas encore atteint",
-   "en": "",
+   "en": "Block # of # · Statement of Applicability — Not yet reached",
    "_pages": [
     "iso27001-soa",
     "iso42001-soa"
@@ -394,791 +394,791 @@
   },
   "Bureau propre et écran vide": {
    "fr": "Bureau propre et écran vide",
-   "en": "",
+   "en": "Clear desk and clear screen",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Ce que la DSI met en œuvre : accès, journaux, réseaux, cryptographie, développement. Le thème le plus fourni, et le seul qu'on croit connaître.": {
    "fr": "Ce que la DSI met en œuvre : accès, journaux, réseaux, cryptographie, développement. Le thème le plus fourni, et le seul qu'on croit connaître.",
-   "en": "",
+   "en": "What the IT department implements: access, logs, networks, cryptography, development. The richest theme, and the only one people think they know.",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Ce qui se décide et s'écrit : politiques, rôles, inventaires, classification, fournisseurs, incidents, conformité.": {
    "fr": "Ce qui se décide et s'écrit : politiques, rôles, inventaires, classification, fournisseurs, incidents, conformité.",
-   "en": "",
+   "en": "What is decided and written down: policies, roles, inventories, classification, suppliers, incidents, compliance.",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Ce qui se joue avant, pendant et après le contrat de travail — et qui ne se répare par aucun outil.": {
    "fr": "Ce qui se joue avant, pendant et après le contrat de travail — et qui ne se répare par aucun outil.",
-   "en": "",
+   "en": "What happens before, during and after the employment contract — and cannot be fixed by any tool.",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Ces # mesures n'existaient pas dans ISO/IEC #:#. Un organisme certifié contre l'ancienne version a celles-là devant lui, et elles seules — pas les #.": {
    "fr": "Ces 11 mesures n'existaient pas dans ISO/IEC 27001:2013. Un organisme certifié contre l'ancienne version a celles-là devant lui, et elles seules — pas les 93.",
-   "en": "",
+   "en": "These # controls did not exist in ISO/IEC #:#. An organisation certified against the old edition has these in front of it, and these alone — not the #.",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Classification des informations": {
    "fr": "Classification des informations",
-   "en": "",
+   "en": "Classification of information",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Cloisonnement des réseaux": {
    "fr": "Cloisonnement des réseaux",
-   "en": "",
+   "en": "Segregation of networks",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Conditions générales d'embauche": {
    "fr": "Conditions générales d'embauche",
-   "en": "",
+   "en": "Terms and conditions of employment",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Conformité aux politiques, règles et normes de sécurité de l'information": {
    "fr": "Conformité aux politiques, règles et normes de sécurité de l'information",
-   "en": "",
+   "en": "Compliance with policies, rules and standards for information security",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Contrôle d'accès": {
    "fr": "Contrôle d'accès",
-   "en": "",
+   "en": "Access control",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Contrôles d'accès physique": {
    "fr": "Contrôles d'accès physique",
-   "en": "",
+   "en": "Physical entry",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Cycle de vie de développement sécurisé": {
    "fr": "Cycle de vie de développement sécurisé",
-   "en": "",
+   "en": "Secure development life cycle",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Droits d'accès": {
    "fr": "Droits d'accès",
-   "en": "",
+   "en": "Access rights",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Droits de propriété intellectuelle": {
    "fr": "Droits de propriété intellectuelle",
-   "en": "",
+   "en": "Intellectual property rights",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Déclaration des événements de sécurité de l'information": {
    "fr": "Déclaration des événements de sécurité de l'information",
-   "en": "",
+   "en": "Information security event reporting",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Développement externalisé": {
    "fr": "Développement externalisé",
-   "en": "",
+   "en": "Outsourced development",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Emplacement et protection du matériel": {
    "fr": "Emplacement et protection du matériel",
-   "en": "",
+   "en": "Equipment siting and protection",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Engagements de confidentialité ou de non-divulgation": {
    "fr": "Engagements de confidentialité ou de non-divulgation",
-   "en": "",
+   "en": "Confidentiality or non-disclosure agreements",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Exigences de sécurité des applications": {
    "fr": "Exigences de sécurité des applications",
-   "en": "",
+   "en": "Application security requirements",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Exigences légales, statutaires, réglementaires et contractuelles": {
    "fr": "Exigences légales, statutaires, réglementaires et contractuelles",
-   "en": "",
+   "en": "Legal, statutory, regulatory and contractual requirements",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Fonctions et responsabilités liées à la sécurité de l'information": {
    "fr": "Fonctions et responsabilités liées à la sécurité de l'information",
-   "en": "",
+   "en": "Information security roles and responsibilities",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Gestion de la sécurité de l'information dans la chaîne d'approvisionnement des produits et services TIC": {
    "fr": "Gestion de la sécurité de l'information dans la chaîne d'approvisionnement des produits et services TIC",
-   "en": "",
+   "en": "Managing information security in the ICT supply chain",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Gestion des changements": {
    "fr": "Gestion des changements",
-   "en": "",
+   "en": "Change management",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Gestion des identités": {
    "fr": "Gestion des identités",
-   "en": "",
+   "en": "Identity management",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Gestion des vulnérabilités techniques": {
    "fr": "Gestion des vulnérabilités techniques",
-   "en": "",
+   "en": "Management of technical vulnerabilities",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Informations d'authentification": {
    "fr": "Informations d'authentification",
-   "en": "",
+   "en": "Authentication information",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Informations de test": {
    "fr": "Informations de test",
-   "en": "",
+   "en": "Test information",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Installation de logiciels sur des systèmes en exploitation": {
    "fr": "Installation de logiciels sur des systèmes en exploitation",
-   "en": "",
+   "en": "Installation of software on operational systems",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Inventaire des informations et autres actifs associés": {
    "fr": "Inventaire des informations et autres actifs associés",
-   "en": "",
+   "en": "Inventory of information and other associated assets",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Justification — obligatoire dans les deux sens": {
    "fr": "Justification — obligatoire dans les deux sens",
-   "en": "",
+   "en": "Justification — mandatory both ways",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "La déclaration n'est PAS recevable. Le défaut est documentaire, et il se corrige en écrivant, pas en développant.": {
    "fr": "La déclaration n'est PAS recevable. Le défaut est documentaire, et il se corrige en écrivant, pas en développant.",
-   "en": "",
+   "en": "The statement is NOT admissible. The defect is documentary, and it is corrected by writing, not by developing.",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Les # mesures apparues en # — dont # non décidées.": {
    "fr": "Les 11 mesures apparues en 2022 — dont 11 non décidées.",
-   "en": "",
+   "en": "The # controls introduced in # — of which # undecided.",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Les murs, les portes, les câbles et le matériel — le thème qu'un organisme entièrement infogéré croit pouvoir écarter, et qui le rattrape par ses propres bureaux.": {
    "fr": "Les murs, les portes, les câbles et le matériel — le thème qu'un organisme entièrement infogéré croit pouvoir écarter, et qui le rattrape par ses propres bureaux.",
-   "en": "",
+   "en": "Walls, doors, cables and equipment — the theme that a fully outsourced organisation thinks it can exclude, and that catches up with it through its own offices.",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Maintenance du matériel": {
    "fr": "Maintenance du matériel",
-   "en": "",
+   "en": "Equipment maintenance",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Marquage des informations": {
    "fr": "Marquage des informations",
-   "en": "",
+   "en": "Labelling of information",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Mise au rebut ou recyclage sécurisé du matériel": {
    "fr": "Mise au rebut ou recyclage sécurisé du matériel",
-   "en": "",
+   "en": "Secure disposal or re-use of equipment",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Planification et préparation de la gestion des incidents de sécurité de l'information": {
    "fr": "Planification et préparation de la gestion des incidents de sécurité de l'information",
-   "en": "",
+   "en": "Information security incident management planning and preparation",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Politiques de sécurité de l'information": {
    "fr": "Politiques de sécurité de l'information",
-   "en": "",
+   "en": "Policies for information security",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Principes d'ingénierie et d'architecture des systèmes sécurisés": {
    "fr": "Principes d'ingénierie et d'architecture des systèmes sécurisés",
-   "en": "",
+   "en": "Secure system architecture and engineering principles",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Prise en compte de la sécurité de l'information dans les accords conclus avec les fournisseurs": {
    "fr": "Prise en compte de la sécurité de l'information dans les accords conclus avec les fournisseurs",
-   "en": "",
+   "en": "Addressing information security within supplier agreements",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Privilèges d'accès": {
    "fr": "Privilèges d'accès",
-   "en": "",
+   "en": "Privileged access rights",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Processus disciplinaire": {
    "fr": "Processus disciplinaire",
-   "en": "",
+   "en": "Disciplinary process",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Procédures d'exploitation documentées": {
    "fr": "Procédures d'exploitation documentées",
-   "en": "",
+   "en": "Documented operating procedures",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Protection contre les menaces physiques et environnementales": {
    "fr": "Protection contre les menaces physiques et environnementales",
-   "en": "",
+   "en": "Protecting against physical and environmental threats",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Protection contre les programmes malveillants": {
    "fr": "Protection contre les programmes malveillants",
-   "en": "",
+   "en": "Protection against malware",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Protection de la vie privée et des données à caractère personnel": {
    "fr": "Protection de la vie privée et des données à caractère personnel",
-   "en": "",
+   "en": "Privacy and protection of PII",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Protection des enregistrements": {
    "fr": "Protection des enregistrements",
-   "en": "",
+   "en": "Protection of records",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Protection des systèmes d'information pendant les tests d'audit": {
    "fr": "Protection des systèmes d'information pendant les tests d'audit",
-   "en": "",
+   "en": "Protection of information systems during audit testing",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Périmètres de sécurité physique": {
    "fr": "Périmètres de sécurité physique",
-   "en": "",
+   "en": "Physical security perimeters",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Recueil de preuves": {
    "fr": "Recueil de preuves",
-   "en": "",
+   "en": "Collection of evidence",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Redondance des moyens de traitement de l'information": {
    "fr": "Redondance des moyens de traitement de l'information",
-   "en": "",
+   "en": "Redundancy of information processing facilities",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Relations avec des groupes d'intérêt spécifiques": {
    "fr": "Relations avec des groupes d'intérêt spécifiques",
-   "en": "",
+   "en": "Contact with special interest groups",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Relations avec les autorités": {
    "fr": "Relations avec les autorités",
-   "en": "",
+   "en": "Contact with authorities",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Responsabilités après la fin ou le changement d'un contrat de travail": {
    "fr": "Responsabilités après la fin ou le changement d'un contrat de travail",
-   "en": "",
+   "en": "Responsibilities after termination or change of employment",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Responsabilités de la direction": {
    "fr": "Responsabilités de la direction",
-   "en": "",
+   "en": "Management responsibilities",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Restitution des actifs": {
    "fr": "Restitution des actifs",
-   "en": "",
+   "en": "Return of assets",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Restriction d'accès à l'information": {
    "fr": "Restriction d'accès à l'information",
-   "en": "",
+   "en": "Information access restriction",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Revue indépendante de la sécurité de l'information": {
    "fr": "Revue indépendante de la sécurité de l'information",
-   "en": "",
+   "en": "Independent review of information security",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Réponse aux incidents de sécurité de l'information": {
    "fr": "Réponse aux incidents de sécurité de l'information",
-   "en": "",
+   "en": "Response to information security incidents",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Sauvegarde des informations": {
    "fr": "Sauvegarde des informations",
-   "en": "",
+   "en": "Information backup",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Sensibilisation, apprentissage et formation à la sécurité de l'information": {
    "fr": "Sensibilisation, apprentissage et formation à la sécurité de l'information",
-   "en": "",
+   "en": "Information security awareness, education and training",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Services généraux": {
    "fr": "Services généraux",
-   "en": "",
+   "en": "Supporting utilities",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Supports de stockage": {
    "fr": "Supports de stockage",
-   "en": "",
+   "en": "Storage media",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Surveillance, revue et gestion des changements des services fournisseurs": {
    "fr": "Surveillance, revue et gestion des changements des services fournisseurs",
-   "en": "",
+   "en": "Monitoring, review and change management of supplier services",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Synchronisation des horloges": {
    "fr": "Synchronisation des horloges",
-   "en": "",
+   "en": "Clock synchronization",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Sécurisation des bureaux, des salles et des équipements": {
    "fr": "Sécurisation des bureaux, des salles et des équipements",
-   "en": "",
+   "en": "Securing offices, rooms and facilities",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Sécurité de l'information dans la gestion de projet": {
    "fr": "Sécurité de l'information dans la gestion de projet",
-   "en": "",
+   "en": "Information security in project management",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Sécurité de l'information dans les relations avec les fournisseurs": {
    "fr": "Sécurité de l'information dans les relations avec les fournisseurs",
-   "en": "",
+   "en": "Information security in supplier relationships",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Sécurité de l'information durant une perturbation": {
    "fr": "Sécurité de l'information durant une perturbation",
-   "en": "",
+   "en": "Information security during disruption",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Sécurité des actifs hors des locaux": {
    "fr": "Sécurité des actifs hors des locaux",
-   "en": "",
+   "en": "Security of assets off-premises",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Sécurité des réseaux": {
    "fr": "Sécurité des réseaux",
-   "en": "",
+   "en": "Networks security",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Sécurité des services réseau": {
    "fr": "Sécurité des services réseau",
-   "en": "",
+   "en": "Security of network services",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Sécurité du câblage": {
    "fr": "Sécurité du câblage",
-   "en": "",
+   "en": "Cabling security",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Sélection des candidats": {
    "fr": "Sélection des candidats",
-   "en": "",
+   "en": "Screening",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Séparation des environnements de développement, de test et de production": {
    "fr": "Séparation des environnements de développement, de test et de production",
-   "en": "",
+   "en": "Separation of development, test and production environments",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Séparation des tâches": {
    "fr": "Séparation des tâches",
-   "en": "",
+   "en": "Segregation of duties",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Terminaux finaux des utilisateurs": {
    "fr": "Terminaux finaux des utilisateurs",
-   "en": "",
+   "en": "User end point devices",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Tests de sécurité dans le développement et l'acceptation": {
    "fr": "Tests de sécurité dans le développement et l'acceptation",
-   "en": "",
+   "en": "Security testing in development and acceptance",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Tirer des enseignements des incidents de sécurité de l'information": {
    "fr": "Tirer des enseignements des incidents de sécurité de l'information",
-   "en": "",
+   "en": "Learning from information security incidents",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Transfert de l'information": {
    "fr": "Transfert de l'information",
-   "en": "",
+   "en": "Information transfer",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Travail dans les zones sécurisées": {
    "fr": "Travail dans les zones sécurisées",
-   "en": "",
+   "en": "Working in secure areas",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Travail à distance": {
    "fr": "Travail à distance",
-   "en": "",
+   "en": "Remote working",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Utilisation correcte des informations et autres actifs associés": {
    "fr": "Utilisation correcte des informations et autres actifs associés",
-   "en": "",
+   "en": "Acceptable use of information and other associated assets",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Utilisation de la cryptographie": {
    "fr": "Utilisation de la cryptographie",
-   "en": "",
+   "en": "Use of cryptography",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Utilisation de programmes utilitaires à privilèges": {
    "fr": "Utilisation de programmes utilitaires à privilèges",
-   "en": "",
+   "en": "Use of privileged utility programs",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "nouvelle en #": {
    "fr": "nouvelle en 2022",
-   "en": "",
+   "en": "new in #",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "Évaluation des événements de sécurité de l'information et prise de décision": {
    "fr": "Évaluation des événements de sécurité de l'information et prise de décision",
-   "en": "",
+   "en": "Assessment and decision on information security events",
    "_pages": [
     "iso27001-soa"
    ]
   },
   "# Compréhension de l'organisme et de son contexte": {
    "fr": "4.1 Compréhension de l'organisme et de son contexte",
-   "en": "",
+   "en": "# Understanding the organization and its context",
    "_pages": [
     "iso42001"
    ]
   },
   "# Détermination du périmètre du système de management de l'IA": {
    "fr": "4.3 Détermination du périmètre du système de management de l'IA",
-   "en": "",
+   "en": "# Determining the scope of the AI management system",
    "_pages": [
     "iso42001"
    ]
   },
   "# Politique d'IA": {
    "fr": "5.2 Politique d'IA",
-   "en": "",
+   "en": "# AI policy",
    "_pages": [
     "iso42001"
    ]
   },
   "# Système de management de l'IA": {
    "fr": "4.4 Système de management de l'IA",
-   "en": "",
+   "en": "# AI management system",
    "_pages": [
     "iso42001"
    ]
   },
   "#. Contexte de l'organisme": {
    "fr": "4. Contexte de l'organisme",
-   "en": "",
+   "en": "#. Context of the organization",
    "_pages": [
     "iso42001"
    ]
   },
   ": cet article ne se reprend pas d’un système de management existant ·": {
    "fr": ": cet article ne se reprend pas d’un système de management existant ·",
-   "en": "",
+   "en": ": this clause does not carry over from an existing management system ·",
    "_pages": [
     "iso42001"
    ]
   },
   "Appréciation des risques liés à l'IA": {
    "fr": "Appréciation des risques liés à l'IA",
-   "en": "",
+   "en": "AI risk assessment",
    "_pages": [
     "iso42001"
    ]
   },
   "Bloc # sur # · Articles # à # — À remplir maintenant": {
    "fr": "Bloc 1 sur 4 · Articles 4 à 10 — À remplir maintenant",
-   "en": "",
+   "en": "Block # of # · Clauses # to # — To be filled in now",
    "_pages": [
     "iso42001"
    ]
   },
   "Ce qu'on mesure, comment, à quelle fréquence, et ce qu'on conclut des mesures.": {
    "fr": "Ce qu'on mesure, comment, à quelle fréquence, et ce qu'on conclut des mesures.",
-   "en": "",
+   "en": "What is measured, how, how often, and what is concluded from the measurements.",
    "_pages": [
     "iso42001"
    ]
   },
   "Ce que la direction doit avoir sous les yeux : suites des revues précédentes, changements, performance, non-conformités, retours des parties intéressées.": {
    "fr": "Ce que la direction doit avoir sous les yeux : suites des revues précédentes, changements, performance, non-conformités, retours des parties intéressées.",
-   "en": "",
+   "en": "What senior management must have in front of it: follow-up of previous reviews, changes, performance, nonconformities, feedback from interested parties.",
    "_pages": [
     "iso42001"
    ]
   },
   "Choisir les mesures, vérifier qu'elles couvrent les options de traitement retenues, et PRODUIRE LA DÉCLARATION D'APPLICABILITÉ avec la justification de chaque inclusion et de chaque exclusion.": {
    "fr": "Choisir les mesures, vérifier qu'elles couvrent les options de traitement retenues, et PRODUIRE LA DÉCLARATION D'APPLICABILITÉ avec la justification de chaque inclusion et de chaque exclusion.",
-   "en": "",
+   "en": "Choose the controls, check that they cover the treatment options selected, and PRODUCE THE STATEMENT OF APPLICABILITY with the justification for each inclusion and each exclusion.",
    "_pages": [
     "iso42001"
    ]
   },
   "Compréhension de l'organisme et de son contexte": {
    "fr": "Compréhension de l'organisme et de son contexte",
-   "en": "",
+   "en": "Understanding the organization and its context",
    "_pages": [
     "iso42001"
    ]
   },
   "Disponibilité, protection, conservation, suppression — y compris pour les documents d'origine externe.": {
    "fr": "Disponibilité, protection, conservation, suppression — y compris pour les documents d'origine externe.",
-   "en": "",
+   "en": "Availability, protection, retention, deletion — including for documents of external origin.",
    "_pages": [
     "iso42001"
    ]
   },
   "Détermination du périmètre du système de management de l'IA": {
    "fr": "Détermination du périmètre du système de management de l'IA",
-   "en": "",
+   "en": "Determining the scope of the AI management system",
    "_pages": [
     "iso42001"
    ]
   },
   "Faire tourner ce qui a été planifié, maîtriser les changements, et tenir les processus externalisés.": {
    "fr": "Faire tourner ce qui a été planifié, maîtriser les changements, et tenir les processus externalisés.",
-   "en": "",
+   "en": "Run what has been planned, control changes, and keep hold of outsourced processes.",
    "_pages": [
     "iso42001"
    ]
   },
   "Fréquence, méthodes, responsabilités, exigences de compte rendu — et des auditeurs qui n'auditent pas leur propre travail.": {
    "fr": "Fréquence, méthodes, responsabilités, exigences de compte rendu — et des auditeurs qui n'auditent pas leur propre travail.",
-   "en": "",
+   "en": "Frequency, methods, responsibilities, reporting requirements — and auditors who do not audit their own work.",
    "_pages": [
     "iso42001"
    ]
   },
   "Identifier, analyser et évaluer les risques que l'IA fait courir — à l'organisme ET aux personnes. La double lecture est ce qui distingue cette appréciation d'une analyse de risque classique.": {
    "fr": "Identifier, analyser et évaluer les risques que l'IA fait courir — à l'organisme ET aux personnes. La double lecture est ce qui distingue cette appréciation d'une analyse de risque classique.",
-   "en": "",
+   "en": "Identify, analyse and evaluate the risks that AI creates — for the organisation AND for individuals. This dual reading is what distinguishes this assessment from a conventional risk analysis.",
    "_pages": [
     "iso42001"
    ]
   },
   "L'appréciation des risques, exécutée et tenue à jour — à intervalles planifiés et quand quelque chose change.": {
    "fr": "L'appréciation des risques, exécutée et tenue à jour — à intervalles planifiés et quand quelque chose change.",
-   "en": "",
+   "en": "The risk assessment, performed and kept up to date — at planned intervals and when something changes.",
    "_pages": [
     "iso42001"
    ]
   },
   "L'évaluation d'impact, exécutée. C'est ici que le travail fait pour l'AIDF du RGPD et pour l'AIDF de l'IA Act se réutilise — et ici qu'il ne suffit pas.": {
    "fr": "L'évaluation d'impact, exécutée. C'est ici que le travail fait pour l'AIDF du RGPD et pour l'AIDF de l'IA Act se réutilise — et ici qu'il ne suffit pas.",
-   "en": "",
+   "en": "The impact assessment, performed. This is where the work done for the GDPR DPIA and for the AI Act FRIA carries over — and where it is not enough.",
    "_pages": [
     "iso42001"
    ]
   },
   "L'évaluation d'impact, vue depuis la planification : elle doit être prévue, cadrée et reliée à l'appréciation des risques.": {
    "fr": "L'évaluation d'impact, vue depuis la planification : elle doit être prévue, cadrée et reliée à l'appréciation des risques.",
-   "en": "",
+   "en": "The impact assessment, seen from planning: it must be planned, scoped and linked to the risk assessment.",
    "_pages": [
     "iso42001"
    ]
   },
   "Le document court qui dit ce que l'organisme s'autorise et s'interdit en matière d'IA, et qui engage sa direction.": {
    "fr": "Le document court qui dit ce que l'organisme s'autorise et s'interdit en matière d'IA, et qui engage sa direction.",
-   "en": "",
+   "en": "The short document that says what the organisation allows and forbids itself in matters of AI, and that commits its senior management.",
    "_pages": [
     "iso42001"
    ]
   },
   "Les changements du système de management se planifient ; ils ne se constatent pas après coup.": {
    "fr": "Les changements du système de management se planifient ; ils ne se constatent pas après coup.",
-   "en": "",
+   "en": "Changes to the management system are planned; they are not discovered after the fact.",
    "_pages": [
     "iso42001"
    ]
   },
   "Nommer ce qui, dehors et dedans, pèse sur la façon dont l'organisme conçoit ou utilise l'IA : marché, droit applicable, attentes sociétales, maturité interne.": {
    "fr": "Nommer ce qui, dehors et dedans, pèse sur la façon dont l'organisme conçoit ou utilise l'IA : marché, droit applicable, attentes sociétales, maturité interne.",
-   "en": "",
+   "en": "Name what, outside and inside, weighs on the way the organisation designs or uses AI: market, applicable law, societal expectations, internal maturity.",
    "_pages": [
     "iso42001"
    ]
   },
   "Objectifs d'IA et planification pour les atteindre": {
    "fr": "Objectifs d'IA et planification pour les atteindre",
-   "en": "",
+   "en": "AI objectives and planning to achieve them",
    "_pages": [
     "iso42001"
    ]
   },
   "Planification des changements": {
    "fr": "Planification des changements",
-   "en": "",
+   "en": "Planning of changes",
    "_pages": [
     "iso42001"
    ]
   },
   "Politique d'IA": {
    "fr": "Politique d'IA",
-   "en": "",
+   "en": "AI policy",
    "_pages": [
     "iso42001",
     "iso42001-soa"
@@ -1186,168 +1186,168 @@
   },
   "Propre à l’IA — # / #": {
    "fr": "Propre à l’IA — 0 / 9",
-   "en": "",
+   "en": "Specific to AI — # / #",
    "_pages": [
     "iso42001"
    ]
   },
   "Qui décide, qui met en œuvre, qui contrôle — et qui répond quand un système se comporte mal.": {
    "fr": "Qui décide, qui met en œuvre, qui contrôle — et qui répond quand un système se comporte mal.",
-   "en": "",
+   "en": "Who decides, who implements, who checks — and who answers when a system misbehaves.",
    "_pages": [
     "iso42001"
    ]
   },
   "Recenser qui a quelque chose à perdre ou à dire — clients, salariés, personnes soumises aux décisions du système, régulateurs — et ce que chacun attend.": {
    "fr": "Recenser qui a quelque chose à perdre ou à dire — clients, salariés, personnes soumises aux décisions du système, régulateurs — et ce que chacun attend.",
-   "en": "",
+   "en": "List who has something to lose or to say — clients, employees, people subject to the system’s decisions, regulators — and what each expects.",
    "_pages": [
     "iso42001"
    ]
   },
   "Rôles, responsabilités et autorités au sein de l'organisme": {
    "fr": "Rôles, responsabilités et autorités au sein de l'organisme",
-   "en": "",
+   "en": "Roles, responsibilities and authorities",
    "_pages": [
     "iso42001"
    ]
   },
   "Système de management de l'IA": {
    "fr": "Système de management de l'IA",
-   "en": "",
+   "en": "AI management system",
    "_pages": [
     "iso42001"
    ]
   },
   "Traitement des risques liés à l'IA": {
    "fr": "Traitement des risques liés à l'IA",
-   "en": "",
+   "en": "AI risk treatment",
    "_pages": [
     "iso42001"
    ]
   },
   "taux qui dit l’effort réel. Les articles « mutualisables » se greffent sur un système de management déjà en place ; ceux marqués « propre à l’IA » sont ce que # ajoute, et il n’y en a que #.": {
    "fr": "taux qui dit l’effort réel. Les articles « mutualisables » se greffent sur un système de management déjà en place ; ceux marqués « propre à l’IA » sont ce que 42001 ajoute, et il n’y en a que 9.",
-   "en": "",
+   "en": "rate that shows the real effort. The “shareable” clauses graft onto a management system already in place; those marked “specific to AI” are what # adds, and there are only #.",
    "_pages": [
     "iso42001"
    ]
   },
   "Écrire ce qui est dedans et ce qui est dehors. Un périmètre flou est la première cause de dérive de coût d'un audit : tout ce qui n'est pas exclu par écrit est audité.": {
    "fr": "Écrire ce qui est dedans et ce qui est dehors. Un périmètre flou est la première cause de dérive de coût d'un audit : tout ce qui n'est pas exclu par écrit est audité.",
-   "en": "",
+   "en": "Write down what is in and what is out. A vague scope is the first cause of cost overrun in an audit: everything that is not excluded in writing is audited.",
    "_pages": [
     "iso42001"
    ]
   },
   "Établir, mettre en œuvre, tenir à jour et améliorer le système lui-même — l'article qui dit que le reste doit exister pour de bon, pas seulement sur le papier.": {
    "fr": "Établir, mettre en œuvre, tenir à jour et améliorer le système lui-même — l'article qui dit que le reste doit exister pour de bon, pas seulement sur le papier.",
-   "en": "",
+   "en": "Establish, implement, maintain and improve the system itself — the clause that says the rest must exist for real, not just on paper.",
    "_pages": [
     "iso42001"
    ]
   },
   "Évaluation de l'impact du système d'IA": {
    "fr": "Évaluation de l'impact du système d'IA",
-   "en": "",
+   "en": "AI system impact assessment",
    "_pages": [
     "iso42001"
    ]
   },
   "#. Audit d'étape # — mise en œuvre": {
    "fr": "2. Audit d'étape 2 — mise en œuvre",
-   "en": "",
+   "en": "#. Stage # audit — implementation",
    "_pages": [
     "iso42001-certif"
    ]
   },
   "#. Audit d'étape # — revue documentaire": {
    "fr": "1. Audit d'étape 1 — revue documentaire",
-   "en": "",
+   "en": "#. Stage # audit — documentation review",
    "_pages": [
     "iso42001-certif"
    ]
   },
   "#. Audits de surveillance": {
    "fr": "3. Audits de surveillance",
-   "en": "",
+   "en": "#. Surveillance audits",
    "_pages": [
     "iso42001-certif"
    ]
   },
   "Bloc # sur # · Chemin de certification — Pas encore atteint": {
    "fr": "Bloc 3 sur 4 · Chemin de certification — Pas encore atteint",
-   "en": "",
+   "en": "Block # of # · Certification path — Not yet reached",
    "_pages": [
     "iso42001-certif"
    ]
   },
   "Ce qui la fait tomber — Un système monté pour l'audit et abandonné ensuite — visible au premier audit de surveillance.": {
    "fr": "Ce qui la fait tomber — Un système monté pour l'audit et abandonné ensuite — visible au premier audit de surveillance.",
-   "en": "",
+   "en": "What makes it fail — A system set up for the audit and abandoned afterwards — visible at the first surveillance audit.",
    "_pages": [
     "iso42001-certif"
    ]
   },
   "Ce qui la fait tomber — Un écart entre la déclaration d'applicabilité et la réalité — une mesure retenue dont rien n'atteste la mise en œuvre.": {
    "fr": "Ce qui la fait tomber — Un écart entre la déclaration d'applicabilité et la réalité — une mesure retenue dont rien n'atteste la mise en œuvre.",
-   "en": "",
+   "en": "What makes it fail — A gap between the Statement of Applicability and reality — an included control whose implementation nothing evidences.",
    "_pages": [
     "iso42001-certif"
    ]
   },
   "Ce qui la fait tomber — Une déclaration d'applicabilité incomplète — une mesure ni retenue ni écartée, ou une décision sans justification. Le défaut est documentaire, et il arrête tout avant l'étape #.": {
    "fr": "Ce qui la fait tomber — Une déclaration d'applicabilité incomplète — une mesure ni retenue ni écartée, ou une décision sans justification. Le défaut est documentaire, et il arrête tout avant l'étape 2.",
-   "en": "",
+   "en": "What makes it fail — An incomplete Statement of Applicability — a control neither included nor excluded, or a decision without justification. The defect is documentary, and it stops everything before stage #.",
    "_pages": [
     "iso42001-certif"
    ]
   },
   "Certification par un organisme tiers accrédité — la seule des quatre références de Sentinel qui délivre un certificat opposable.": {
    "fr": "Certification par un organisme tiers accrédité — la seule des quatre références de Sentinel qui délivre un certificat opposable.",
-   "en": "",
+   "en": "Certification by an accredited third-party body — the only one of Sentinel’s four references that issues a certificate you can show.",
    "_pages": [
     "iso42001-certif"
    ]
   },
   "L'auditeur vérifie que ce qui est écrit est fait : preuves d'exécution, enregistrements, entretiens.": {
    "fr": "L'auditeur vérifie que ce qui est écrit est fait : preuves d'exécution, enregistrements, entretiens.",
-   "en": "",
+   "en": "The auditor checks that what is written is done: evidence of execution, records, interviews.",
    "_pages": [
     "iso42001-certif"
    ]
   },
   "L'auditeur vérifie que le système EXISTE sur le papier : périmètre, politique, appréciation des risques, déclaration d'applicabilité, plan d'audit interne.": {
    "fr": "L'auditeur vérifie que le système EXISTE sur le papier : périmètre, politique, appréciation des risques, déclaration d'applicabilité, plan d'audit interne.",
-   "en": "",
+   "en": "The auditor checks that the system EXISTS on paper: scope, policy, risk assessment, Statement of Applicability, internal audit plan.",
    "_pages": [
     "iso42001-certif"
    ]
   },
   "Le certificat vit : des audits périodiques vérifient que le système tient.": {
    "fr": "Le certificat vit : des audits périodiques vérifient que le système tient.",
-   "en": "",
+   "en": "The certificate lives on: periodic audits check that the system holds.",
    "_pages": [
     "iso42001-certif"
    ]
   },
   "Un cycle d'audit interne (art. #) et une revue de direction (art. #) doivent avoir eu lieu AVANT l'étape # — ce sont des exigences, et l'organisme ne peut pas les produire le jour de l'audit.": {
    "fr": "Un cycle d'audit interne (art. 9.2) et une revue de direction (art. 9.3) doivent avoir eu lieu AVANT l'étape 2 — ce sont des exigences, et l'organisme ne peut pas les produire le jour de l'audit.",
-   "en": "",
+   "en": "An internal audit cycle (clause #) and a management review (clause #) must have taken place BEFORE stage # — these are requirements, and the organisation cannot produce them on the day of the audit.",
    "_pages": [
     "iso42001-certif"
    ]
   },
   "— ISO/IEC #:# — Technologies de l'information — Intelligence artificielle — Système de management. La mise en œuvre suppose de détenir le texte de la norme, qui s'achète auprès de l'ISO ou d'un organisme national de normalisation (AFNOR en France).": {
    "fr": "— ISO/IEC 42001:2023 — Technologies de l'information — Intelligence artificielle — Système de management. La mise en œuvre suppose de détenir le texte de la norme, qui s'achète auprès de l'ISO ou d'un organisme national de normalisation (AFNOR en France).",
-   "en": "",
+   "en": "— ISO/IEC #:# — Information technology — Artificial intelligence — Management system. Implementation requires holding the text of the standard, which can be purchased from ISO or from a national standards body (AFNOR in France).",
    "_pages": [
     "iso42001-certif"
    ]
   },
   "↓ Articles # à #": {
    "fr": "↓ Articles 4 à 10",
-   "en": "",
+   "en": "↓ Clauses # to #",
    "_pages": [
     "iso42001-soa",
     "iso42001-certif",
@@ -1356,371 +1356,371 @@
   },
   "# protège l'information ; # gouverne l'IA. Les objets diffèrent, et aucune des deux certifications n'emporte l'autre.": {
    "fr": "27001 protège l'information ; 42001 gouverne l'IA. Les objets diffèrent, et aucune des deux certifications n'emporte l'autre.",
-   "en": "",
+   "en": "# protects information; # governs AI. The objects differ, and neither certification carries the other.",
    "_pages": [
     "iso42001-ponts"
    ]
   },
   "Articles ISO concernés : #, #": {
    "fr": "Articles ISO concernés : 6.1.4, 8.4",
-   "en": "",
+   "en": "ISO clauses concerned: #, #",
    "_pages": [
     "iso42001-ponts"
    ]
   },
   "Articles ISO concernés : #, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #": {
    "fr": "Articles ISO concernés : 10.1, 10.2, 4.1, 4.2, 5.1, 5.3, 6.1.1, 6.2, 6.3, 7.1, 7.2, 7.3, 7.4, 7.5.1, 7.5.2, 7.5.3, 8.1, 9.1, 9.2.1, 9.2.2, 9.3.1, 9.3.2, 9.3.3",
-   "en": "",
+   "en": "ISO clauses concerned: #, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #",
    "_pages": [
     "iso42001-ponts"
    ]
   },
   "Bloc # sur # · Ponts IA Act / RGPD / NIS # — Pas encore atteint": {
    "fr": "Bloc 4 sur 4 · Ponts IA Act / RGPD / NIS 2 — Pas encore atteint",
-   "en": "",
+   "en": "Block # of # · Bridges to the AI Act / GDPR / NIS # — Not yet reached",
    "_pages": [
     "iso42001-ponts"
    ]
   },
   "Ce que cela ne remplace pas": {
    "fr": "Ce que cela ne remplace pas",
-   "en": "",
+   "en": "What it does not replace",
    "_pages": [
     "iso42001-ponts"
    ]
   },
   "ISO/IEC # (sécurité de l'information)": {
    "fr": "ISO/IEC 27001 (sécurité de l'information)",
-   "en": "",
+   "en": "ISO/IEC # (information security)",
    "_pages": [
     "iso42001-ponts"
    ]
   },
   "L'AIDF de l'article # est due par certains DÉPLOYEURS de systèmes à haut risque et suit une liste de points imposée par le règlement. Une évaluation #, même excellente, ne la constitue pas.": {
    "fr": "L'AIDF de l'article 27 est due par certains DÉPLOYEURS de systèmes à haut risque et suit une liste de points imposée par le règlement. Une évaluation 42001, même excellente, ne la constitue pas.",
-   "en": "",
+   "en": "The FRIA under Article # is owed by certain DEPLOYERS of high-risk systems and follows a list of points imposed by the Regulation. A # assessment, however excellent, does not constitute one.",
    "_pages": [
     "iso42001-ponts"
    ]
   },
   "L'AIPD de l'article # porte sur les seules données à caractère personnel, et sur les droits des personnes concernées. Un système d'IA sans données personnelles n'en relève pas ; un traitement sans IA en relève quand même.": {
    "fr": "L'AIPD de l'article 35 porte sur les seules données à caractère personnel, et sur les droits des personnes concernées. Un système d'IA sans données personnelles n'en relève pas ; un traitement sans IA en relève quand même.",
-   "en": "",
+   "en": "The DPIA under Article # covers personal data only, and the rights of data subjects. An AI system without personal data does not fall under it; processing without AI falls under it all the same.",
    "_pages": [
     "iso42001-ponts"
    ]
   },
   "L'inventaire des systèmes, la cartographie des personnes affectées et la méthode d'évaluation d'impact servent aussi à l'analyse d'impact sur les droits fondamentaux (AIDF, art. #).": {
    "fr": "L'inventaire des systèmes, la cartographie des personnes affectées et la méthode d'évaluation d'impact servent aussi à l'analyse d'impact sur les droits fondamentaux (AIDF, art. 27).",
-   "en": "",
+   "en": "The inventory of systems, the mapping of affected persons and the impact assessment method also serve the fundamental rights impact assessment (FRIA, art. #).",
    "_pages": [
     "iso42001-ponts"
    ]
   },
   "La communication des incidents (A.#) et la maîtrise des fournisseurs (A.#) recouvrent en partie les mesures b) et d) de l'article #, §#.": {
    "fr": "La communication des incidents (A.8.4) et la maîtrise des fournisseurs (A.10.3) recouvrent en partie les mesures b) et d) de l'article 21, §2.",
-   "en": "",
+   "en": "Communication of incidents (A.#) and supplier control (A.#) partly overlap measures (b) and (d) of Article #(#).",
    "_pages": [
     "iso42001-ponts"
    ]
   },
   "La provenance et la préparation des données alimentent directement le registre des traitements et l'analyse d'impact relative à la protection des données (AIPD, art. #).": {
    "fr": "La provenance et la préparation des données alimentent directement le registre des traitements et l'analyse d'impact relative à la protection des données (AIPD, art. 35).",
-   "en": "",
+   "en": "Data provenance and preparation feed directly into the records of processing activities and the data protection impact assessment (DPIA, art. #).",
    "_pages": [
     "iso42001-ponts"
    ]
   },
   "La structure harmonisée est la même : revue de direction, audit interne, non-conformités, informations documentées se greffent sur le système existant.": {
    "fr": "La structure harmonisée est la même : revue de direction, audit interne, non-conformités, informations documentées se greffent sur le système existant.",
-   "en": "",
+   "en": "The harmonised structure is the same: management review, internal audit, nonconformities and documented information graft onto the existing system.",
    "_pages": [
     "iso42001-ponts"
    ]
   },
   "Mesures de l’annexe A : A.#, A.#": {
    "fr": "Mesures de l’annexe A : A.8.4, A.10.3",
-   "en": "",
+   "en": "Annex A controls: A.#, A.#",
    "_pages": [
     "iso42001-ponts"
    ]
   },
   "Mesures de l’annexe A : A.#, A.#, A.#, A.#": {
    "fr": "Mesures de l’annexe A : A.5.2, A.5.3, A.5.4, A.5.5",
-   "en": "",
+   "en": "Annex A controls: A.#, A.#, A.#, A.#",
    "_pages": [
     "iso42001-ponts"
    ]
   },
   "NIS # impose des DÉLAIS — # h, # h, un mois — que la norme ne fixe pas. Un processus # conforme peut manquer entièrement l'horloge de l'article #.": {
    "fr": "NIS 2 impose des DÉLAIS — 24 h, 72 h, un mois — que la norme ne fixe pas. Un processus 42001 conforme peut manquer entièrement l'horloge de l'article 23.",
-   "en": "",
+   "en": "NIS # imposes DEADLINES — # h, # h, one month — that the standard does not set. A compliant # process can entirely miss the Article # clock.",
    "_pages": [
     "iso42001-ponts"
    ]
   },
   "Règlement (UE) #/# (IA Act)": {
    "fr": "Règlement (UE) 2024/1689 (IA Act)",
-   "en": "",
+   "en": "Regulation (EU) #/# (AI Act)",
    "_pages": [
     "iso42001-ponts"
    ]
   },
   "# mesure(s) ne sont ni retenues ni écartées : A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#": {
    "fr": "38 mesure(s) ne sont ni retenues ni écartées : A.2.2, A.2.3, A.2.4, A.3.2, A.3.3, A.4.2, A.4.3, A.4.4, A.4.5, A.4.6, A.5.2, A.5.3, A.5.4, A.5.5, A.6.1.2, A.6.1.3, A.6.2.2, A.6.2.3, A.6.2.4, A.6.2.5, A.6.2.6, A.6.2.7, A.6.2.8, A.7.2, A.7.3, A.7.4, A.7.5, A.7.6, A.8.2, A.8.3, A.8.4, A.8.5, A.9.2, A.9.3, A.9.4, A.10.2, A.10.3, A.10.4",
-   "en": "",
+   "en": "# control(s) are neither included nor excluded: A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "# retenues · # écartées · # à trancher": {
    "fr": "0 retenues · 0 écartées · 3 à trancher",
-   "en": "",
+   "en": "# included · # excluded · # to decide",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "A.# Alignement sur les autres politiques organisationnelles — retenue ou écartée": {
    "fr": "A.2.3 Alignement sur les autres politiques organisationnelles — retenue ou écartée",
-   "en": "",
+   "en": "A.# Alignment with other organizational policies — included or excluded",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "A.# Cycle de vie de système d'IA": {
    "fr": "A.6 Cycle de vie de système d'IA",
-   "en": "",
+   "en": "A.# AI system life cycle",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "A.# Documentation des ressources — retenue ou écartée": {
    "fr": "A.4.2 Documentation des ressources — retenue ou écartée",
-   "en": "",
+   "en": "A.# Resource documentation — included or excluded",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "A.# Données pour les systèmes d'IA": {
    "fr": "A.7 Données pour les systèmes d'IA",
-   "en": "",
+   "en": "A.# Data for AI systems",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "A.# Examen de la politique d'IA — retenue ou écartée": {
    "fr": "A.2.4 Examen de la politique d'IA — retenue ou écartée",
-   "en": "",
+   "en": "A.# Review of the AI policy — included or excluded",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "A.# Informations à l'attention des parties intéressées des systèmes d'IA": {
    "fr": "A.8 Informations à l'attention des parties intéressées des systèmes d'IA",
-   "en": "",
+   "en": "A.# Information for interested parties of AI systems",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "A.# Politique d'IA — retenue ou écartée": {
    "fr": "A.2.2 Politique d'IA — retenue ou écartée",
-   "en": "",
+   "en": "A.# AI policy — included or excluded",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "A.# Politiques relatives à l'IA": {
    "fr": "A.2 Politiques relatives à l'IA",
-   "en": "",
+   "en": "A.# Policies related to AI",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "A.# Relations avec les tiers et avec les clients": {
    "fr": "A.10 Relations avec les tiers et avec les clients",
-   "en": "",
+   "en": "A.# Third-party and customer relationships",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "A.# Ressources pour les systèmes d'IA": {
    "fr": "A.4 Ressources pour les systèmes d'IA",
-   "en": "",
+   "en": "A.# Resources for AI systems",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "A.# Rôles et responsabilités en matière d'IA — retenue ou écartée": {
    "fr": "A.3.2 Rôles et responsabilités en matière d'IA — retenue ou écartée",
-   "en": "",
+   "en": "A.# AI roles and responsibilities — included or excluded",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "A.# Signalement des préoccupations — retenue ou écartée": {
    "fr": "A.3.3 Signalement des préoccupations — retenue ou écartée",
-   "en": "",
+   "en": "A.# Reporting of concerns — included or excluded",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "A.# Utilisation des systèmes d'IA": {
    "fr": "A.9 Utilisation des systèmes d'IA",
-   "en": "",
+   "en": "A.# Use of AI systems",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "A.# Évaluation des impacts des systèmes d'IA": {
    "fr": "A.5 Évaluation des impacts des systèmes d'IA",
-   "en": "",
+   "en": "A.# Assessing impacts of AI systems",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Acquisition de données": {
    "fr": "Acquisition de données",
-   "en": "",
+   "en": "Acquisition of data",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Alignement sur les autres politiques organisationnelles": {
    "fr": "Alignement sur les autres politiques organisationnelles",
-   "en": "",
+   "en": "Alignment with other organizational policies",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Communication des incidents": {
    "fr": "Communication des incidents",
-   "en": "",
+   "en": "Communication of incidents",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Dire aux utilisateurs, aux clients et au public ce qu'ils doivent savoir — y compris quand ça se passe mal.": {
    "fr": "Dire aux utilisateurs, aux clients et au public ce qu'ils doivent savoir — y compris quand ça se passe mal.",
-   "en": "",
+   "en": "Tell users, clients and the public what they need to know — including when things go wrong.",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Documentation de la conception et du développement du système d'IA": {
    "fr": "Documentation de la conception et du développement du système d'IA",
-   "en": "",
+   "en": "Documentation of AI system design and development",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Documentation des ressources": {
    "fr": "Documentation des ressources",
-   "en": "",
+   "en": "Resource documentation",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Documentation des évaluations de l'impact du système d'IA": {
    "fr": "Documentation des évaluations de l'impact du système d'IA",
-   "en": "",
+   "en": "Documentation of AI system impact assessments",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Documentation et informations du système à l'attention des utilisateurs": {
    "fr": "Documentation et informations du système à l'attention des utilisateurs",
-   "en": "",
+   "en": "System documentation and information for users",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Documentation technique du système d'IA": {
    "fr": "Documentation technique du système d'IA",
-   "en": "",
+   "en": "AI system technical documentation",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Donner à la direction une orientation écrite et un soutien pour les systèmes d'IA.": {
    "fr": "Donner à la direction une orientation écrite et un soutien pour les systèmes d'IA.",
-   "en": "",
+   "en": "Give senior management written direction and support for AI systems.",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Données pour le développement et l'amélioration du système d'IA": {
    "fr": "Données pour le développement et l'amélioration du système d'IA",
-   "en": "",
+   "en": "Data for development and enhancement of AI system",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Déploiement du système d'IA": {
    "fr": "Déploiement du système d'IA",
-   "en": "",
+   "en": "AI system deployment",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Encadrer l'usage : pour quoi le système est prévu, et ce qu'on s'interdit d'en faire.": {
    "fr": "Encadrer l'usage : pour quoi le système est prévu, et ce qu'on s'interdit d'en faire.",
-   "en": "",
+   "en": "Frame the use: what the system is intended for, and what you forbid yourself to do with it.",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Enregistrement des journaux d'événements du système d'IA": {
    "fr": "Enregistrement des journaux d'événements du système d'IA",
-   "en": "",
+   "en": "AI system recording of event logs",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Examen de la politique d'IA": {
    "fr": "Examen de la politique d'IA",
-   "en": "",
+   "en": "Review of the AI policy",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Exigences et spécification du système d'IA": {
    "fr": "Exigences et spécification du système d'IA",
-   "en": "",
+   "en": "AI system requirements and specification",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Exploitation et surveillance du système d'IA": {
    "fr": "Exploitation et surveillance du système d'IA",
-   "en": "",
+   "en": "AI system operation and monitoring",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Informations à l'attention des parties intéressées": {
    "fr": "Informations à l'attention des parties intéressées",
-   "en": "",
+   "en": "Information for interested parties",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Installer la redevabilité : que quelqu'un réponde de chaque système, et qu'une préoccupation puisse remonter.": {
    "fr": "Installer la redevabilité : que quelqu'un réponde de chaque système, et qu'une préoccupation puisse remonter.",
-   "en": "",
+   "en": "Establish accountability: someone answers for each system, and a concern can be escalated.",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "Justification — obligatoire dans les deux cas": {
    "fr": "Justification — obligatoire dans les deux cas",
-   "en": "",
+   "en": "Justification — mandatory in both cases",
    "_pages": [
     "iso42001-soa"
    ]
   },
   "La déclaration n'est PAS recevable pour un audit d'étape #. Ce n'est pas un défaut de sécurité, c'est un défaut de document — et il se corrige en écrivant, pas en développant.": {
    "fr": "La déclaration n'est PAS recevable pour un audit d'étape 1. Ce n'est pas un défaut de sécurité, c'est un défaut de document — et il se corrige en écrivant, pas en développant.",
-   "en": "",
+   "en": "The statement is NOT admissible for a stage # audit. It is not a security defect, it is a document defect — and it is corrected by writing, not by developing.",
    "_pages": [
     "iso42001-soa"
    ]
