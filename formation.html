@@ -1081,6 +1081,11 @@ label.fl span{color:var(--pf)}
     if(q.indexOf('paiement=ok') > -1){
       var attente = '<strong>Paiement en cours de confirmation.</strong> Vos places seront confirmées dès que Stripe nous aura notifié l’encaissement — vous recevrez alors un accusé par courriel.';
       var m = /[?&]session_id=([^&]+)/.exec(q);
+      // L'ADRESSE DE RETOUR EST EFFACÉE DÈS QU'ELLE EST LUE. Elle restait dans
+      // la barre : chaque F5 redemandait la confirmation de la MÊME caisse, et
+      // la session relue chez Stripe reste « payée » pour toujours — l'offre
+      // ou la séance revenait sans le moindre prélèvement (mesuré).
+      try{ history.replaceState(null, '', location.pathname); }catch(e){}
       if(!m){ montrer('annule', attente); return; }
       montrer('annule', 'Vérification du paiement…');
       fetch('/api/stripe/retour?session_id=' + encodeURIComponent(decodeURIComponent(m[1])), {credentials:'same-origin'})

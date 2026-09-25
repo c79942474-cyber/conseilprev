@@ -1141,3 +1141,158 @@ def test_une_reclamation_interrompue_est_reprise_au_reessai_de_stripe(
         % (r2.status_code, r2.get_json(), statuts(j["commande"])))
 
 
+# ══════════════════════════════════════════════════════════════════════════
+#  10. LE RETOUR DE CAISSE NE REJOUE PAS — une session ne se confirme qu'une fois
+# ══════════════════════════════════════════════════════════════════════════
+def test_le_retour_ne_rejoue_pas_une_session_de_caisse_ancienne(client, faux_stripe, faux_brevo, monkeypatch):
+    """La page /sentinel?activation=ok&session_id=cs_… rappelle le retour à
+    CHAQUE chargement, et la route est publique.
+
+    MESURÉ AVANT CORRECTION : après une résiliation, un simple rechargement
+    remettait plan='entreprise' ET l'identifiant d'un abonnement mort — l'offre
+    payante était acquise pour toujours sans le moindre prélèvement, et
+    billing-run résiliait ensuite un abonnement qui n'existait plus."""
+    monkeypatch.setenv("STRIPE_PRICE_ENTREPRISE", "price_ent_recette")
+    cid = creer_client("rejeu@recette.test")
+    connecter(client, cid)
+    client.post("/api/sentinel/checkout", json={"plan": "entreprise"}, headers=NAVIGATEUR)
+    sid = list(faux_stripe.sessions)[0]
+    faux_stripe.payer(sid, customer="cus_rejeu", subscription="sub_rejeu")
+    assert client.get("/api/stripe/retour?session_id=" + sid,
+                      headers=NAVIGATEUR).get_json() == {"statut": "paye"}
+    assert client_row(cid)["plan"] == "entreprise", client_row(cid)
+    # L'abonnement est résilié chez Stripe : le compte repasse en gratuit.
+    poster(client, {"id": "sub_rejeu", "object": "subscription", "status": "canceled",
+                    "metadata": {"client_id": str(cid), "site": "conseilprev"}},
+           "customer.subscription.deleted")
+    assert client_row(cid)["plan"] == "gratuit", client_row(cid)
+    # LA VIEILLE PAGE EST RECHARGÉE : la session est toujours « paid » chez Stripe.
+    r = A.app.test_client().get("/api/stripe/retour?session_id=" + sid, headers=NAVIGATEUR)
+    row = client_row(cid)
+    assert (row["plan"], row["stripe_subscription_id"]) == ("gratuit", None), (
+        "rechargement de /sentinel?activation=ok&session_id=%s : offre %r et abonnement %r rendus "
+        "sans aucun prélèvement (réponse %s)" % (sid, row["plan"], row["stripe_subscription_id"], r.get_json()))
+
+
+@pytest.mark.parametrize("statut", ["canceled", "unpaid", "incomplete_expired"])
+def test_aucune_offre_n_est_activee_si_l_abonnement_n_est_plus_actif_chez_stripe(
+        client, faux_stripe, faux_brevo, statut):
+    """L'ARGENT EST-IL ENCORE LÀ ? Une session de caisse reste « paid » pour
+    toujours ; l'abonnement qu'elle a ouvert, non. L'offre se lit sur
+    l'abonnement, pas sur une caisse fermée il y a six mois."""
+    cid = creer_client("mortvivant@recette.test")
+    faux_stripe._abonnement("sub_mortvivant")["status"] = statut
+    r, _ = poster(client, {"id": "cs_mv", "object": "checkout.session", "mode": "subscription",
+                           "payment_status": "paid", "customer": "cus_mv",
+                           "subscription": "sub_mortvivant",
+                           "metadata": {"client_id": str(cid), "plan": "entreprise"}})
+    row = client_row(cid)
+    assert r.status_code == 200, r.get_json()
+    assert (row["plan"], row["stripe_subscription_id"]) == ("gratuit", None), (
+        "abonnement %s chez Stripe : offre %r activée et abonnement %r mémorisé"
+        % (statut, row["plan"], row["stripe_subscription_id"]))
+
+
+def test_le_retour_et_la_notification_simultanes_ne_confirment_qu_une_fois(
+        client, faux_stripe, faux_brevo, monkeypatch):
+    """Stripe livre checkout.session.completed AU MOMENT où il renvoie le
+    navigateur : les deux requêtes arrivent ensemble sur 2 workers × 8 fils.
+
+    MESURÉ AVANT CORRECTION : deux confirmations de la même caisse, donc deux
+    « Réservation confirmée » au client et deux notifications internes — quatre
+    crédits pris sur les 300 envois quotidiens du compte Brevo."""
+    j = panier(client, n=2)
+    sid = _q("SELECT stripe_session_id FROM formation_ia_resa WHERE commande=? AND gratuit=0",
+             (j["commande"],))[0]["stripe_session_id"]
+    faux_stripe.payer(sid, amount_total=96000)
+    vrai = A._formation_ia_confirmer_paiement
+    appels = []
+
+    def lent(**kw):
+        appels.append(kw)
+        time.sleep(0.4)
+        return vrai(**kw)
+    monkeypatch.setattr(A, "_formation_ia_confirmer_paiement", lent)
+    obj = dict(faux_stripe.sessions[sid])
+    fils = [threading.Thread(target=poster, args=(A.app.test_client(), obj)),
+            threading.Thread(target=A.app.test_client().get,
+                             args=("/api/stripe/retour?session_id=" + sid,),
+                             kwargs={"headers": NAVIGATEUR})]
+    [f.start() for f in fils]; [f.join() for f in fils]
+    assert len(appels) == 1, "%d confirmations pour un seul paiement ; sujets : %s" % (
+        len(appels), sujets(faux_brevo))
+    assert sujets(faux_brevo).count("Réservation confirmée — 1 séance(s)") == 1, sujets(faux_brevo)
+
+
+def test_un_retour_encaisse_dont_la_confirmation_echoue_dit_en_attente_et_rend_la_main(
+        client, faux_stripe, faux_brevo, monkeypatch, caplog):
+    """Encaissé chez Stripe, mais la base est momentanément injoignable : la
+    page ne doit pas annoncer « Paiement reçu » pour des séances restées en
+    attente — et la réclamation prise par le retour doit être RENDUE, sinon la
+    notification que Stripe réessaie trouverait la caisse « déjà traitée » et
+    le paiement serait perdu pour de bon."""
+    j = panier(client, n=2)
+    sid = _q("SELECT stripe_session_id FROM formation_ia_resa WHERE commande=? AND gratuit=0",
+             (j["commande"],))[0]["stripe_session_id"]
+    faux_stripe.payer(sid, amount_total=96000)
+    vrai = A._formation_ia_confirmer_paiement
+
+    def panne(**kw):
+        raise RuntimeError("base momentanément injoignable")
+    monkeypatch.setattr(A, "_formation_ia_confirmer_paiement", panne)
+    with caplog.at_level(logging.ERROR, logger="conseilprev"):
+        r = client.get("/api/stripe/retour?session_id=" + sid, headers=NAVIGATEUR)
+    assert r.get_json() == {"statut": "en_attente"}, (r.status_code, r.get_json())
+    assert statuts(j["commande"]) == ["en_attente_paiement"], statuts(j["commande"])
+    assert any("STRIPE_RETOUR_ECHEC" in m.getMessage() for m in caplog.records), (
+        [m.getMessage() for m in caplog.records])
+    monkeypatch.setattr(A, "_formation_ia_confirmer_paiement", vrai)
+    r2, _ = poster(client, dict(faux_stripe.sessions[sid]))
+    assert r2.status_code == 200 and statuts(j["commande"]) == ["payee"], (
+        "la notification qui suit un retour en échec ne confirme plus rien : %s %s"
+        % (r2.get_json(), statuts(j["commande"])))
+
+
+@pytest.mark.parametrize("page", ["formation", "sentinel"])
+def test_la_page_de_retour_efface_l_identifiant_de_session_de_la_barre_d_adresse(page):
+    """EXÉCUTÉ : sans cela, l'adresse de retour reste dans la barre et chaque
+    F5 — ou le rechargement que `sentinelCheckout` fait après un changement
+    d'offre — redemande la confirmation de la MÊME caisse."""
+    if page == "formation":
+        src = io.open(os.path.join(_RACINE, "formation.html"), encoding="utf-8").read()
+        code = _tranche(src, "(function retourPaiement(){", "\n  })();")
+        depart = "?paiement=ok&session_id=cs_test_page"
+        amorce = """
+          const el = { hidden: true, className: '', innerHTML: '', textContent: '' };
+          global.document = { getElementById: (id) => id === 'retour-paiement' ? el : null };
+        """
+        lancer = ""
+    else:
+        src = io.open(os.path.join(_RACINE, "sentinel.page.js"), encoding="utf-8").read()
+        code = _tranche(src, "window.sentinelActivationToast = function(){", "\n};")
+        depart = "?activation=ok&session_id=cs_test_page"
+        amorce = """
+          global.document = { createElement: () => ({ style: {}, textContent: '', innerHTML: '', parentNode: null }),
+                              body: { appendChild: (t) => { t.parentNode = global.document.body; },
+                                      removeChild: () => {} } };
+          global.setTimeout = (f, ms) => (ms >= 1000 ? 0 : require('timers').setTimeout(f, ms));
+        """
+        lancer = "window.sentinelActivationToast();"
+    o = _node("""
+      const etat = { search: '%s', remplacements: [], appels: [] };
+      global.window = global;
+      global.location = { pathname: '/page', get search(){ return etat.search; } };
+      global.history = { replaceState: (a, b, u) => { etat.remplacements.push(String(u));
+                          etat.search = String(u).indexOf('?') > -1 ? String(u).slice(String(u).indexOf('?')) : ''; } };
+      global.fetch = (u) => { etat.appels.push(String(u));
+        return Promise.resolve({ ok: true, json: () => Promise.resolve({ statut: 'paye' }) }); };
+    """ % depart + amorce + code + lancer + """
+      require('timers').setTimeout(() => process.stdout.write(JSON.stringify(etat)), 40);
+    """)
+    assert any("cs_test_page" in a for a in o["appels"]), (
+        "la page n'a rien demandé au serveur : %s" % o["appels"])
+    assert o["remplacements"], (
+        "l'adresse de retour reste dans la barre : un rechargement rejouerait la caisse")
+    assert all("session_id" not in u and "=ok" not in u for u in o["remplacements"]), o["remplacements"]
+
+

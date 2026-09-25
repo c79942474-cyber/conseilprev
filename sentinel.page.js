@@ -15915,6 +15915,17 @@ window.sentinelActivationToast = function(){
       ? 'votre offre s’ouvrira dès réception de l’encaissement.'
       : 'votre inscription sera confirmée dès réception de l’encaissement.');
     var sid = q.get('session_id');
+    // L'ADRESSE DE RETOUR EST EFFACÉE DÈS QU'ELLE EST LUE, et elle seule : les
+    // autres paramètres de la page sont conservés. Elle restait dans la barre,
+    // si bien que chaque F5 — et le rechargement que sentinelCheckout fait
+    // après un changement d'offre — redemandait la confirmation de la MÊME
+    // caisse. La session relue chez Stripe reste « payée » pour toujours :
+    // l'offre revenait, ou montait, sans le moindre prélèvement (mesuré).
+    try{
+      q.delete('activation'); q.delete('formation'); q.delete('session_id');
+      var reste = q.toString();
+      history.replaceState(null, '', location.pathname + (reste ? '?' + reste : '') + (location.hash || ''));
+    }catch(e){}
     if(!sid){ montrer(attente, '#7a5c00'); return; }
     t.textContent = 'Vérification du paiement…';
     fetch('/api/stripe/retour?session_id=' + encodeURIComponent(sid), {credentials:'same-origin'})

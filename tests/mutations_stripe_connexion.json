@@ -304,6 +304,55 @@
    "avant": "        return jsonify({'received': False, 'en_cours': True}), 409",
    "apres": "        return jsonify({'received': True, 'duplicate': True}), 200",
    "regle": "test_une_reclamation_interrompue_est_reprise_au_reessai_de_stripe"
+  },
+  {
+   "nom": "10. le retour de caisse rejoue une session déjà confirmée",
+   "fichier": "app.py",
+   "avant": "    cle = _stripe_cle_session(obj.get('id') or sid)\n    pris = _stripe_event_claim(cle)\n",
+   "apres": "    cle = _stripe_cle_session(obj.get('id') or sid)\n    pris = True\n",
+   "regle": "test_le_retour_ne_rejoue_pas_une_session_de_caisse_ancienne"
+  },
+  {
+   "nom": "10. l'offre est activée sans vérifier que l'abonnement vit encore",
+   "fichier": "app.py",
+   "avant": "    if subscription and not _stripe_abonnement_actif(subscription):",
+   "apres": "    if False:",
+   "regle": "test_aucune_offre_n_est_activee_si_l_abonnement_n_est_plus_actif_chez_stripe[canceled]"
+  },
+  {
+   "nom": "10. la notification ne prend pas la réclamation de la caisse",
+   "fichier": "app.py",
+   "avant": "                pris = _stripe_event_claim(cle_session) if cle_session else True",
+   "apres": "                pris = True",
+   "regle": "test_le_retour_et_la_notification_simultanes_ne_confirment_qu_une_fois"
+  },
+  {
+   "nom": "10. un retour en échec garde la réclamation de la caisse",
+   "fichier": "app.py",
+   "avant": "        _stripe_event_release(cle)\n    else:\n        _stripe_event_fini(cle)",
+   "apres": "        _stripe_event_fini(cle)\n    else:\n        _stripe_event_fini(cle)",
+   "regle": "test_un_retour_encaisse_dont_la_confirmation_echoue_dit_en_attente_et_rend_la_main"
+  },
+  {
+   "nom": "10. le retour de caisse annonce « payé » alors que rien n'est confirmé",
+   "fichier": "app.py",
+   "avant": "            echecs.append(nom)\n            logger.error('STRIPE_RETOUR_ECHEC etape=%s session=%s : %s', nom, sid, _e)",
+   "apres": "            logger.error('STRIPE_RETOUR_ECHEC etape=%s session=%s : %s', nom, sid, _e)",
+   "regle": "test_un_retour_encaisse_dont_la_confirmation_echoue_dit_en_attente_et_rend_la_main"
+  },
+  {
+   "nom": "10. formation.html laisse l'identifiant de session dans la barre d'adresse",
+   "fichier": "formation.html",
+   "avant": "      try{ history.replaceState(null, '', location.pathname); }catch(e){}\n      if(!m){ montrer('annule', attente); return; }",
+   "apres": "      if(!m){ montrer('annule', attente); return; }",
+   "regle": "test_la_page_de_retour_efface_l_identifiant_de_session_de_la_barre_d_adresse[formation]"
+  },
+  {
+   "nom": "10. sentinel laisse l'identifiant de session dans la barre d'adresse",
+   "fichier": "sentinel.page.js",
+   "avant": "      history.replaceState(null, '', location.pathname + (reste ? '?' + reste : '') + (location.hash || ''));",
+   "apres": "      void reste;",
+   "regle": "test_la_page_de_retour_efface_l_identifiant_de_session_de_la_barre_d_adresse[sentinel]"
   }
  ]
 }

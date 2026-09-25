@@ -8718,6 +8718,31 @@ def _stripe_session_encaissee(obj):
     return (obj.get('payment_status') or '') in ('paid', 'no_payment_required')
 
 
+#: LES SEULS ETATS D'ABONNEMENT QUI OUVRENT UNE OFFRE. `trialing` est un essai
+#: que Stripe facturera ; tout le reste — past_due, unpaid, incomplete, paused,
+#: canceled — est un abonnement qui NE PAIE PAS.
+STRIPE_ABONNEMENT_ACTIF = ('active', 'trialing')
+
+
+def _stripe_abonnement_actif(subscription):
+    """L'abonnement de cette caisse est-il encore vivant chez Stripe ?
+
+    L'OFFRE SE LIT SUR L'ABONNEMENT, PAS SUR UNE CAISSE FERMEE. Une session de
+    paiement reste `payment_status='paid'` pour toujours ; l'abonnement
+    qu'elle a ouvert, non. Sans cette relecture, rejouer une vieille session
+    rendait une offre payante a un compte resilie (mesure).
+
+    UNE LECTURE IMPOSSIBLE N'EST PAS UN REFUS : elle LEVE. L'appelant echoue,
+    Stripe reessaie sa notification et le retour de caisse dit « en cours ».
+    Repondre « non » sur une panne reseau priverait de son offre un client qui
+    vient de payer."""
+    secret = os.environ.get('STRIPE_SECRET_KEY')
+    if not secret:
+        raise RuntimeError('STRIPE_SECRET_KEY absente : abonnement %s invérifiable' % subscription)
+    sub = _stripe_pret(secret).Subscription.retrieve(str(subscription))
+    return (sub['status'] or '') in STRIPE_ABONNEMENT_ACTIF
+
+
 def _sentinel_activer_offre(cid, plan, customer=None, subscription=None):
     """Active l'offre d'un compte Sentinel, retient ses identifiants Stripe et
     previent le client — UNE seule fois.
@@ -8742,6 +8767,10 @@ def _sentinel_activer_offre(cid, plan, customer=None, subscription=None):
             and (not subscription or row.get('stripe_subscription_id') == str(subscription)))
     if deja:
         return True
+    if subscription and not _stripe_abonnement_actif(subscription):
+        logger.warning('STRIPE_OFFRE_REFUSEE client=%s plan=%s abonnement=%s : pas actif chez Stripe',
+                       cid, plan, subscription)
+        return False
     activate_client_plan(int(cid), plan)
     if customer:
         _billing_set_customer(int(cid), customer)
@@ -8801,6 +8830,22 @@ def _stripe_liberer_session(obj, etype, faire):
               lambda: _formation_ia_liberer_commande(meta.get('commande'), motif))
     else:
         logger.info('STRIPE_CAISSE_SANS_PAIEMENT type=%s metadata=%s : rien a liberer', etype, dict(meta))
+
+
+def _stripe_cle_session(session_id):
+    """La cle de reclamation d'une CAISSE. Elle vit dans la meme table que
+    celle des evenements, prefixee pour ne jamais rencontrer un `evt_…`.
+
+    POURQUOI UNE CLE PAR SESSION, ET PAS PAR EVENEMENT. Deux chemins
+    confirment la meme caisse : la notification signee et le retour de caisse
+    (le filet, quand la notification n'arrive pas). Une cle par evenement ne
+    departage que deux notifications entre elles. Mesure : le retour rejouait
+    une caisse ancienne a CHAQUE rechargement de la page — l'offre payante
+    revenait, ou montait, sans le moindre prelevement, meme apres une
+    resiliation ; et quand les deux chemins arrivaient ensemble, le client et
+    CONSEILPREV recevaient chaque courriel en double."""
+    sid = str(session_id or '').strip()
+    return ('cs:' + sid) if sid else None
 
 
 def _stripe_abonnement_de_facture(obj):
@@ -8872,7 +8917,21 @@ def stripe_webhook():
         meta = obj.get('metadata') or {}
         if etype in ('checkout.session.completed', 'checkout.session.async_payment_succeeded'):
             if _stripe_session_encaissee(obj):
-                _stripe_confirmer_session(obj, _faire)
+                # LA MEME RECLAMATION QUE LE RETOUR DE CAISSE, PORTEE PAR LA
+                # SESSION. Les deux chemins menent aux memes confirmateurs et
+                # arrivent ENSEMBLE : Stripe livre l'evenement au moment ou il
+                # renvoie le navigateur. La reclamation par evenement ne
+                # departageait que deux notifications entre elles.
+                cle_session = _stripe_cle_session(obj.get('id'))
+                pris = _stripe_event_claim(cle_session) if cle_session else True
+                if pris == 'en_cours':
+                    echecs.append('session-en-cours')
+                elif pris is not False:
+                    _stripe_confirmer_session(obj, _faire)
+                    if echecs:
+                        _stripe_event_release(cle_session)
+                    else:
+                        _stripe_event_fini(cle_session)
             else:
                 logger.info('STRIPE_WEBHOOK_NON_ENCAISSE evenement=%s type=%s payment_status=%s : rien confirme',
                             eid, etype, obj.get('payment_status'))
@@ -8935,6 +8994,18 @@ def stripe_retour():
         return jsonify({'statut': 'inconnu'}), 200
     if not _stripe_session_encaissee(obj):
         return jsonify({'statut': 'en_attente'}), 200
+    # UNE CAISSE NE SE CONFIRME QU'UNE FOIS, MEME RECHARGEE CENT FOIS. La
+    # session relue reste « paid » pour toujours et cette route est publique :
+    # sans cette reclamation, un rechargement de /sentinel?activation=ok&…
+    # remettait l'offre payante et l'identifiant d'un abonnement resilie
+    # (mesure). Deja confirmee : on le redit, sans rien rappeler.
+    cle = _stripe_cle_session(obj.get('id') or sid)
+    pris = _stripe_event_claim(cle)
+    if pris is False:
+        return jsonify({'statut': 'paye'}), 200
+    if pris == 'en_cours':
+        # La notification la traite en ce moment : la page dira « en cours ».
+        return jsonify({'statut': 'en_attente'}), 200
     echecs = []
 
     def _faire(nom, fonction):
@@ -8945,6 +9016,13 @@ def stripe_retour():
             logger.error('STRIPE_RETOUR_ECHEC etape=%s session=%s : %s', nom, sid, _e)
 
     _stripe_confirmer_session(obj, _faire)
+    if echecs:
+        # LA RECLAMATION EST RENDUE : sans cela, la notification que Stripe
+        # reessaie trouverait la caisse « deja traitee » et le paiement serait
+        # perdu pour de bon.
+        _stripe_event_release(cle)
+    else:
+        _stripe_event_fini(cle)
     # Encaisse chez Stripe mais non confirme ici : la page dira « en cours »,
     # la notification (reessayee par Stripe) finira le travail.
     return jsonify({'statut': 'paye' if not echecs else 'en_attente'}), 200
