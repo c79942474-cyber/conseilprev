@@ -161,7 +161,7 @@
   {
    "nom": "4. la caisse formation IA vit de nouveau 24 h",
    "fichier": "app.py",
-   "avant": "                expires_at=int(time.time()) + max(30, formations_ia.RETENUE_MINUTES) * 60,\n",
+   "avant": "                expires_at=max(depart_retenue + formations_ia.RETENUE_MINUTES * 60,\n                               int(time.time()) + 31 * 60),\n",
    "apres": "",
    "regle": "test_la_caisse_ferme_quand_la_retenue_du_creneau_expire"
   },
@@ -231,7 +231,7 @@
   {
    "nom": "6. une résiliation refusée par Stripe efface quand même le lien local",
    "fichier": "app.py",
-   "avant": "            resilie = stripe.Subscription.cancel(sub)['status'] == 'canceled'\n        except stripe.InvalidRequestError as _ie:\n            resilie = getattr(_ie, 'code', '') == 'resource_missing'\n            if not resilie:\n                raise",
+   "avant": "            resilie = stripe.Subscription.cancel(\n                sub, cancellation_details={\n                    'comment': STRIPE_RESILIATION_MARQUE + str(motif or 'site')}\n            )['status'] == 'canceled'\n        except stripe.InvalidRequestError as _ie:\n            resilie = getattr(_ie, 'code', '') == 'resource_missing'\n            if not resilie:\n                raise",
    "apres": "            resilie = True\n            stripe.Subscription.cancel(sub)\n        except Exception:\n            pass",
    "regle": "test_une_resiliation_refusee_par_stripe_garde_le_lien_local"
   },
@@ -245,8 +245,8 @@
   {
    "nom": "6. set-plan annonce la résiliation même refusée",
    "fichier": "app.py",
-   "avant": "        if not _billing_cancel_subscription(client_id):\n            return jsonify({'ok': False, 'stripe_sync': 'resiliation_echouee',",
-   "apres": "        if not _billing_cancel_subscription(client_id) and False:\n            return jsonify({'ok': False, 'stripe_sync': 'resiliation_echouee',",
+   "avant": "        if not _billing_cancel_subscription(client_id, 'set-plan'):\n            return jsonify({'ok': False, 'stripe_sync': 'resiliation_echouee',",
+   "apres": "        if not _billing_cancel_subscription(client_id, 'set-plan') and False:\n            return jsonify({'ok': False, 'stripe_sync': 'resiliation_echouee',",
    "regle": "test_passer_en_gratuit_n_annonce_pas_une_resiliation_refusee"
   },
   {
@@ -273,7 +273,7 @@
   {
    "nom": "7. l'effacement RGPD oublie l'abonnement sans le résilier",
    "fichier": "app.py",
-   "avant": "            bilan['abonnement'] = 'resilie' if _billing_cancel_subscription(cid) else 'non_resilie'",
+   "avant": "            bilan['abonnement'] = 'resilie' if _billing_cancel_subscription(cid, 'rgpd') else 'non_resilie'",
    "apres": "            bilan['abonnement'] = 'non_resilie'",
    "regle": "test_l_effacement_rgpd_resilie_l_abonnement_avant_de_l_oublier"
   },
@@ -290,6 +290,167 @@
    "avant": "FORM_TVA_PCT = formations_ia.TVA_PCT",
    "apres": "FORM_TVA_PCT = float(os.environ.get('FORMATION_TVA_PCT', '20'))",
    "regle": "test_une_tva_ecrite_en_decimal_ne_bloque_plus_le_demarrage"
+  },
+  {
+   "nom": "9. la réclamation est définitive dès qu'elle est prise",
+   "fichier": "app.py",
+   "avant": "            \"INSERT INTO stripe_events (event_id, processed_at, etat) VALUES (?, ?, 'en_cours') \"",
+   "apres": "            \"INSERT INTO stripe_events (event_id, processed_at, etat) VALUES (?, ?, 'fait') \"",
+   "regle": "test_une_reclamation_interrompue_est_reprise_au_reessai_de_stripe"
+  },
+  {
+   "nom": "9. une réclamation en cours est acquittée comme un doublon",
+   "fichier": "app.py",
+   "avant": "        return jsonify({'received': False, 'en_cours': True}), 409",
+   "apres": "        return jsonify({'received': True, 'duplicate': True}), 200",
+   "regle": "test_une_reclamation_interrompue_est_reprise_au_reessai_de_stripe"
+  },
+  {
+   "nom": "10. le retour de caisse rejoue une session déjà confirmée",
+   "fichier": "app.py",
+   "avant": "    cle = _stripe_cle_session(obj.get('id') or sid)\n    pris = _stripe_event_claim(cle)\n",
+   "apres": "    cle = _stripe_cle_session(obj.get('id') or sid)\n    pris = True\n",
+   "regle": "test_le_retour_ne_rejoue_pas_une_session_de_caisse_ancienne"
+  },
+  {
+   "nom": "10. l'offre est activée sans vérifier que l'abonnement vit encore",
+   "fichier": "app.py",
+   "avant": "    if subscription and not _stripe_abonnement_actif(subscription):",
+   "apres": "    if False:",
+   "regle": "test_aucune_offre_n_est_activee_si_l_abonnement_n_est_plus_actif_chez_stripe[canceled]"
+  },
+  {
+   "nom": "10. la notification ne prend pas la réclamation de la caisse",
+   "fichier": "app.py",
+   "avant": "                pris = _stripe_event_claim(cle_session) if cle_session else True",
+   "apres": "                pris = True",
+   "regle": "test_le_retour_et_la_notification_simultanes_ne_confirment_qu_une_fois"
+  },
+  {
+   "nom": "10. un retour en échec garde la réclamation de la caisse",
+   "fichier": "app.py",
+   "avant": "        _stripe_event_release(cle)\n    else:\n        _stripe_event_fini(cle)",
+   "apres": "        _stripe_event_fini(cle)\n    else:\n        _stripe_event_fini(cle)",
+   "regle": "test_un_retour_encaisse_dont_la_confirmation_echoue_dit_en_attente_et_rend_la_main"
+  },
+  {
+   "nom": "10. le retour de caisse annonce « payé » alors que rien n'est confirmé",
+   "fichier": "app.py",
+   "avant": "            echecs.append(nom)\n            logger.error('STRIPE_RETOUR_ECHEC etape=%s session=%s : %s', nom, sid, _e)",
+   "apres": "            logger.error('STRIPE_RETOUR_ECHEC etape=%s session=%s : %s', nom, sid, _e)",
+   "regle": "test_un_retour_encaisse_dont_la_confirmation_echoue_dit_en_attente_et_rend_la_main"
+  },
+  {
+   "nom": "10. formation.html laisse l'identifiant de session dans la barre d'adresse",
+   "fichier": "formation.html",
+   "avant": "      try{ history.replaceState(null, '', location.pathname); }catch(e){}\n      if(!m){ montrer('annule', attente); return; }",
+   "apres": "      if(!m){ montrer('annule', attente); return; }",
+   "regle": "test_la_page_de_retour_efface_l_identifiant_de_session_de_la_barre_d_adresse[formation]"
+  },
+  {
+   "nom": "10. sentinel laisse l'identifiant de session dans la barre d'adresse",
+   "fichier": "sentinel.page.js",
+   "avant": "      history.replaceState(null, '', location.pathname + (reste ? '?' + reste : '') + (location.hash || ''));",
+   "apres": "      void reste;",
+   "regle": "test_la_page_de_retour_efface_l_identifiant_de_session_de_la_barre_d_adresse[sentinel]"
+  },
+  {
+   "nom": "11. l'offre supérieure est accordée sur un abonnement qui ne paie pas",
+   "fichier": "app.py",
+   "avant": "                if _statut in STRIPE_ABONNEMENT_ACTIF and articles:",
+   "apres": "                if _statut not in ('canceled', 'incomplete_expired') and articles:",
+   "regle": "test_un_abonnement_impaye_n_obtient_pas_l_offre_superieure[past_due]"
+  },
+  {
+   "nom": "11. un abonnement mort chez Stripe reçoit un refus au lieu d'une caisse",
+   "fichier": "app.py",
+   "avant": "                if _statut not in ('canceled', 'incomplete_expired') and _statut:",
+   "apres": "                if _statut:",
+   "regle": "test_un_abonnement_mort_chez_stripe_rouvre_une_caisse[canceled]"
+  },
+  {
+   "nom": "11. un abonnement disparu de Stripe fait échouer la caisse",
+   "fichier": "app.py",
+   "avant": "                if getattr(_ie, 'code', '') != 'resource_missing':\n                    raise",
+   "apres": "                raise",
+   "regle": "test_un_abonnement_mort_chez_stripe_rouvre_une_caisse[resource_missing]"
+  },
+  {
+   "nom": "11. l'activation se croit faite dès que l'offre porte le bon nom",
+   "fichier": "app.py",
+   "avant": "    deja = (row.get('plan') == plan\n            and (not subscription or row.get('stripe_subscription_id') == str(subscription)))",
+   "apres": "    deja = (row.get('plan') == plan)",
+   "regle": "test_l_activation_memorise_l_abonnement_meme_quand_l_offre_est_deja_posee"
+  },
+  {
+   "nom": "12. la résiliation demandée par le site n'est plus marquée",
+   "fichier": "app.py",
+   "avant": "                    'comment': STRIPE_RESILIATION_MARQUE + str(motif or 'site')}",
+   "apres": "                    'comment': str(motif or 'site')}",
+   "regle": "test_la_resiliation_demandee_par_le_site_est_marquee_chez_stripe"
+  },
+  {
+   "nom": "12. le retour d'une résiliation demandée par le site rétrograde le client",
+   "fichier": "app.py",
+   "avant": "    if commentaire and str(commentaire).startswith(STRIPE_RESILIATION_MARQUE):",
+   "apres": "    if False:",
+   "regle": "test_le_client_passe_en_facturation_par_resultats_ne_retombe_pas_en_gratuit"
+  },
+  {
+   "nom": "12. le repli par metadata.client_id revient (compte Stripe partagé)",
+   "fichier": "app.py",
+   "avant": "    touches = cur.rowcount\n    conn.commit()\n    try: conn.close()\n    except Exception: pass\n    logger.info('STRIPE_ABONNEMENT_RESILIE abonnement=%s",
+   "apres": "    touches = cur.rowcount\n    if not touches and client_id:\n        cur.execute(registre_sql(\"UPDATE clients SET plan='gratuit' WHERE id=%s AND stripe_subscription_id IS NULL\",\n                                 \"UPDATE clients SET plan='gratuit' WHERE id=? AND stripe_subscription_id IS NULL\"),\n                    (int(client_id),))\n        touches = cur.rowcount\n    conn.commit()\n    try: conn.close()\n    except Exception: pass\n    logger.info('STRIPE_ABONNEMENT_RESILIE abonnement=%s",
+   "regle": "test_un_abonnement_inconnu_ici_ne_retrograde_aucun_client"
+  },
+  {
+   "nom": "1e. la relance « paiement » d'un impayé d'abonnement n'est pas écrite",
+   "fichier": "app.py",
+   "avant": "'planifiee', str(sub_id), datetime.utcnow().isoformat()))\n        conn.commit()",
+   "apres": "'planifiee', str(sub_id), datetime.utcnow().isoformat()))\n        conn.rollback()",
+   "regle": "test_une_facture_d_abonnement_impayee_previent_le_client_et_conseilprev[dahlia]"
+  },
+  {
+   "nom": "13. le confirmateur d'origine revient : une séance annulée repasse « payée »",
+   "fichier": "app.py",
+   "avant": "    a_payer = [r for r in payantes\n               if (r.get('statut') or '') == 'en_attente_paiement']\n    if not a_payer:\n        try: conn.close()\n        except Exception: pass\n        # RIEN A CONFIRMER, MAIS DE L'ARGENT EST ARRIVE. Le remboursement n'est\n        # pas automatique : il depend de ce qui s'est passe (creneau repris,\n        # seance deja remboursee, geste commercial). CONSEILPREV tranche, donc\n        # CONSEILPREV est prevenu — le silence laissait l'encaissement sans\n        # trace et sans contrepartie.\n        if any((r.get('statut') or '') == 'annulee' for r in payantes):\n            _formation_ia_encaissement_sans_seance(commande, resa_id, payantes,\n                                                   montant_ttc_cents)\n        return\n    horo = datetime.utcnow().isoformat()\n    tva = formations_ia.TVA_PCT\n    # LE PRORATA PORTE SUR TOUTES LES SEANCES PAYANTES DE LA COMMANDE, pas sur\n    # celles qui restent a confirmer : `amount_total` est ce que Stripe a\n    # encaisse pour la commande ENTIERE. Le repartir sur le seul reliquat\n    # attribuait a une seance le montant de quatre.\n    hts = [int(r.get('montant_cents') or 0) for r in payantes]\n    try:\n        total = int(montant_ttc_cents) if montant_ttc_cents is not None else 0\n    except (TypeError, ValueError):\n        total = 0\n    if total > 0 and sum(hts) > 0:\n        ttcs = [total * ht // sum(hts) for ht in hts]\n        ttcs[0] += total - sum(ttcs)\n    else:\n        ttcs = [int(round(ht * (100 + tva) / 100.0)) for ht in hts]\n    part = dict(zip([r.get('id') for r in payantes], ttcs))\n    # LA BASE DEPARTAGE, ET C'EST ELLE QUI DECIDE DU COURRIEL. La notification\n    # Stripe et le retour de caisse arrivent ensemble : les deux lisaient les\n    # memes seances a confirmer, le second UPDATE ne changeait rien, mais les\n    # deux envoyaient leurs courriels — doublons chez le client, chez\n    # CONSEILPREV, et deux credits pris sur les 300 envois quotidiens.\n    changees = 0\n    for r in a_payer:\n        cur.execute(registre_sql(\n            \"UPDATE formation_ia_resa SET statut='payee', paye_le=%s, paye_ttc_cents=%s \"\n            \"WHERE id=%s AND statut='en_attente_paiement'\",\n            \"UPDATE formation_ia_resa SET statut='payee', paye_le=?, paye_ttc_cents=? \"\n            \"WHERE id=? AND statut='en_attente_paiement'\"),\n            (horo, part.get(r.get('id'), 0), r.get('id')))\n        changees += max(int(getattr(cur, 'rowcount', 1) or 0), 0)\n",
+   "apres": "    a_payer = [r for r in payantes if r.get('statut') != 'payee']\n    if not a_payer:\n        try: conn.close()\n        except Exception: pass\n        return\n    horo = datetime.utcnow().isoformat()\n    tva = formations_ia.TVA_PCT\n    hts = [int(r.get('montant_cents') or 0) for r in a_payer]\n    try:\n        total = int(montant_ttc_cents) if montant_ttc_cents is not None else 0\n    except (TypeError, ValueError):\n        total = 0\n    if total > 0 and sum(hts) > 0:\n        ttcs = [total * ht // sum(hts) for ht in hts]\n        ttcs[0] += total - sum(ttcs)\n    else:\n        ttcs = [int(round(ht * (100 + tva) / 100.0)) for ht in hts]\n    part = dict(zip([r.get('id') for r in a_payer], ttcs))\n    changees = 1\n    for r in a_payer:\n        cur.execute(registre_sql(\n            \"UPDATE formation_ia_resa SET statut='payee', paye_le=%s, paye_ttc_cents=%s \"\n            \"WHERE id=%s AND statut != 'payee'\",\n            \"UPDATE formation_ia_resa SET statut='payee', paye_le=?, paye_ttc_cents=? \"\n            \"WHERE id=? AND statut != 'payee'\"),\n            (horo, part.get(r.get('id'), 0), r.get('id')))\n",
+   "regle": "test_une_seance_annulee_et_remboursee_ne_repasse_pas_payee"
+  },
+  {
+   "nom": "13. le prorata ne porte que sur le reliquat à confirmer",
+   "fichier": "app.py",
+   "avant": "    hts = [int(r.get('montant_cents') or 0) for r in payantes]",
+   "apres": "    hts = [int(r.get('montant_cents') or 0) for r in a_payer]",
+   "regle": "test_le_montant_encaisse_se_repartit_sur_toute_la_commande_pas_sur_le_reliquat"
+  },
+  {
+   "nom": "13. un encaissement sans séance à confirmer passe sous silence",
+   "fichier": "app.py",
+   "avant": "        if any((r.get('statut') or '') == 'annulee' for r in payantes):",
+   "apres": "        if False:",
+   "regle": "test_un_paiement_sans_seance_a_confirmer_est_signale_a_conseilprev"
+  },
+  {
+   "nom": "13. la caisse abandonnée annule aussi la séance offerte du panier",
+   "fichier": "app.py",
+   "avant": "        \"UPDATE formation_ia_resa SET statut='annulee', annule_le=?, annule_motif=? \"\n        \"WHERE commande=? AND gratuit=0 AND statut='en_attente_paiement'\"),",
+   "apres": "        \"UPDATE formation_ia_resa SET statut='annulee', annule_le=?, annule_motif=? \"\n        \"WHERE commande=?\"),",
+   "regle": "test_une_caisse_sans_paiement_libere_le_creneau[checkout.session.expired]"
+  },
+  {
+   "nom": "4. la caisse survit à la retenue du créneau (heure lue après les courriels)",
+   "fichier": "app.py",
+   "avant": "                expires_at=max(depart_retenue + formations_ia.RETENUE_MINUTES * 60,",
+   "apres": "                expires_at=max(int(time.time()) + formations_ia.RETENUE_MINUTES * 60,",
+   "regle": "test_la_caisse_ferme_quand_la_retenue_du_creneau_expire"
+  },
+  {
+   "nom": "14. l'effacement RGPD oublie l'abonnement que Stripe a refusé de résilier",
+   "fichier": "app.py",
+   "avant": "        _garder = bilan['abonnement'] == 'non_resilie'",
+   "apres": "        _garder = False",
+   "regle": "test_l_effacement_rgpd_garde_le_lien_quand_stripe_refuse_la_resiliation"
   }
  ]
 }

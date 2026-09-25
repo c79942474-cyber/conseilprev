@@ -79,6 +79,7 @@ def purger():
                 "DELETE FROM stripe_events",
                 "DELETE FROM raas_invoices WHERE numero LIKE 'F-RECETTE-%'",
                 "DELETE FROM client_relances WHERE related_ref LIKE 'F-RECETTE-%'",
+                "DELETE FROM client_relances WHERE related_ref='sub_impaye'",
                 "DELETE FROM form_sessions WHERE lieu LIKE 'RECETTE %'",
                 "DELETE FROM clients WHERE email LIKE '%@recette.test'",
                 "DELETE FROM clients WHERE email LIKE 'efface-%@anonyme.invalid'"):
@@ -486,10 +487,18 @@ def test_une_caisse_sans_paiement_libere_le_creneau(client, faux_stripe, faux_br
     libre pour un autre client, sans attendre la fin de la retenue."""
     cr = creneaux()
     jx = panier(client, n=2, dates=cr)
+    offerte = _q("SELECT id, statut FROM formation_ia_resa WHERE commande=? AND gratuit=1",
+                 (jx["commande"],))
     r, _ = poster(client, session_payee(jx["commande"], payment_status="unpaid", status="expired"), type_)
     assert r.status_code == 200, r.get_json()
     st = statuts(jx["commande"])
-    assert st != ["en_attente_paiement"], "la séance payante reste %s après %s" % (st, type_)
+    assert st == ["annulee"], "la séance payante est %s après %s" % (st, type_)
+    # LA SÉANCE OFFERTE DU MÊME PANIER N'EST PAS TOUCHÉE. Elle est confirmée
+    # d'emblée et n'a rien coûté : la libération d'une caisse abandonnée ne
+    # doit pas la faire perdre au client, c'est ce que la docstring promet.
+    apres = _q("SELECT id, statut FROM formation_ia_resa WHERE commande=? AND gratuit=1",
+               (jx["commande"],))
+    assert apres == offerte, "la séance offerte est passée de %s à %s après %s" % (offerte, apres, type_)
     # Le créneau payant de X (cr[1]) est repris par Y : accepté, pas 409.
     ry = client.post("/api/formation/inscription", json={
         "seances": [{"sujet": F.SUJETS[2]["cle"], "creneau": cr[1]}],
@@ -569,6 +578,14 @@ def test_une_facture_d_abonnement_impayee_previent_le_client_et_conseilprev(
     assert r.status_code == 200
     assert "impaye2@recette.test" in dest and A.CONSEILPREV_NOTIFY_EMAIL in dest, (
         "impayé d'abonnement : courriels partis vers %s" % dest)
+    # LA RELANCE EST EN BASE, PAS SEULEMENT DANS LES COURRIELS. C'est elle que
+    # CONSEILPREV voit dans la gestion des clients, et le courriel interne
+    # l'annonce (« une relance est planifiée »). Sans cette mesure, l'écriture
+    # pouvait être annulée sans que rien ne tombe : la promesse restait dans le
+    # texte du message, et nulle part ailleurs.
+    rel = _q("SELECT type, status, related_ref FROM client_relances WHERE client_id=?", (cid,))
+    assert rel == [{"type": "paiement", "status": "planifiee", "related_ref": "sub_impaye"}], (
+        "relance écrite en base : %s" % rel)
 
 
 # ══════════════════════════════════════════════════════════════════════════
@@ -780,13 +797,29 @@ def test_la_page_sentinel_n_annonce_l_offre_activee_qu_apres_confirmation(statut
 # ══════════════════════════════════════════════════════════════════════════
 def test_la_caisse_ferme_quand_la_retenue_du_creneau_expire(client, faux_stripe, faux_brevo):
     """La place n'est tenue que RETENUE_MINUTES ; une caisse Stripe vit 24 h
-    par défaut. Payer à H+2 règle une place peut-être déjà reprise."""
+    par défaut. Payer à H+2 règle une place peut-être déjà reprise.
+
+    LA RETENUE COURT DEPUIS L'ÉCRITURE DE LA LIGNE, pas depuis l'ouverture de
+    la caisse : entre les deux, deux courriels synchrones et la lecture du taux
+    de TVA. Avec un Brevo lent, la caisse survivait à la retenue d'autant — X
+    pouvait encore payer un créneau déjà rendu à Y. Brevo est donc ralenti ici,
+    sans quoi la mesure ne verrait rien."""
+    faux_brevo.lenteurs["POST /v3/smtp/email"] = 1.5
     avant = time.time()
-    panier(client, n=2)
+    j = panier(client, n=2)
     f = faux_stripe.recues("POST", "/v1/checkout/sessions")[0].form
     assert "expires_at" in f, "aucun expires_at : la caisse reste ouverte 24 h"
     borne = max(30, F.RETENUE_MINUTES) * 60
-    assert avant + borne - 5 <= int(f["expires_at"]) <= avant + borne + 120, (int(f["expires_at"]) - avant, borne)
+    cree = _q("SELECT created_at FROM formation_ia_resa WHERE commande=? AND gratuit=0",
+              (j["commande"],))[0]["created_at"]
+    cree = (datetime.datetime.fromisoformat(cree)
+            - datetime.datetime(1970, 1, 1)).total_seconds()
+    fin_retenue = cree + F.RETENUE_MINUTES * 60
+    # Stripe refuse une caisse qui fermerait à moins de 30 minutes : c'est ce
+    # plancher, et non la retenue, qui s'applique si la retenue est plus courte.
+    assert avant + borne - 5 <= int(f["expires_at"]) <= max(fin_retenue, avant + 31 * 60 + 5), (
+        "la caisse ferme %d s après la fin de la retenue du créneau"
+        % (int(f["expires_at"]) - fin_retenue))
 
 
 def test_le_montant_encaisse_est_celui_de_l_evenement(client, faux_stripe, faux_brevo):
@@ -894,10 +927,16 @@ def test_une_session_passee_est_refusee(client, faux_stripe, faux_brevo):
 
 
 def test_une_session_complete_est_refusee(client, faux_stripe, faux_brevo):
+    """LA DATE EST CALCULÉE, JAMAIS ÉCRITE EN DUR. Le refus « session passée »
+    est testé AVANT le refus « session complète » : une date fixe finit par
+    passer, et la règle tombe alors sur du code juste en annonçant un défaut
+    qui n'existe pas. Mesuré : la même règle datée d'hier échoue en disant
+    « cette session est passee », sans un mot sur le remplissage."""
     cid = creer_client("complet@recette.test")
     connecter(client, cid)
+    futur = (datetime.datetime.utcnow().date() + datetime.timedelta(days=60)).isoformat()
     _exec("INSERT INTO form_sessions (formation_id, date_session, date_fin, lieu, prix_cents, places, actif) "
-          "VALUES (?,?,?,?,?,?,1)", (15, "2027-11-04", "2027-11-04", "RECETTE complete", 95000, 2))
+          "VALUES (?,?,?,?,?,?,1)", (15, futur, futur, "RECETTE complete", 95000, 2))
     sid = _q("SELECT id FROM form_sessions WHERE lieu='RECETTE complete'")[0]["id"]
     _exec("INSERT INTO form_inscriptions (session_id, client_id, nom, prenom, email, participants, "
           "montant_cents, statut, created_at) VALUES (?,?,?,?,?,?,?,?,?)",
@@ -1096,3 +1135,448 @@ def test_la_tva_est_lue_en_nombre_a_un_seul_endroit(brut, attendu):
     lu = F._lire_tva(brut)
     assert lu == attendu and type(lu) is type(attendu), "%r lu comme %r (%s)" % (brut, lu, type(lu).__name__)
     assert A.FORM_TVA_PCT == F.TVA_PCT, (A.FORM_TVA_PCT, F.TVA_PCT)
+
+
+# ══════════════════════════════════════════════════════════════════════════
+#  9. UNE RÉCLAMATION INTERROMPUE N'EST PAS UN PAIEMENT PERDU
+# ══════════════════════════════════════════════════════════════════════════
+def test_une_reclamation_interrompue_est_reprise_au_reessai_de_stripe(
+        client, faux_stripe, faux_brevo, monkeypatch):
+    """Le fil peut mourir ENTRE la réclamation et la fin du traitement : délai
+    gunicorn de 120 s sur un envoi qui traîne, SIGKILL d'un déploiement, OOM.
+    Ni `_faire` ni l'except extérieur n'attrapent SystemExit.
+
+    MESURÉ AVANT CORRECTION : l'événement restait « vu » pour toujours, Stripe
+    le relivrait et recevait 200 « duplicate », puis cessait de réessayer. Les
+    séances restaient « en_attente_paiement » et leur créneau était libéré au
+    bout de la retenue — alors que l'argent était encaissé."""
+    j = panier(client, n=2)
+    vrai = A._formation_ia_confirmer_paiement
+
+    def tue(**kw):
+        raise SystemExit(1)
+    monkeypatch.setattr(A, "_formation_ia_confirmer_paiement", tue)
+    _, charge = evenement_stripe(session_payee(j["commande"]))
+    try:
+        poster(A.app.test_client(), None, charge=charge)
+    except SystemExit:
+        pass                       # le worker gthread meurt exactement ainsi
+    monkeypatch.setattr(A, "_formation_ia_confirmer_paiement", vrai)
+    # LE RÉESSAI IMMÉDIAT : la réclamation date de quelques millisecondes.
+    # Stripe doit repartir avec un non-2xx, jamais avec un acquittement.
+    r1, _ = poster(A.app.test_client(), None, charge=charge)
+    assert r1.status_code >= 400 and not (r1.get_json() or {}).get("duplicate"), (
+        "réessai immédiat : HTTP %s %s — Stripe s'arrête sur un 2xx et le "
+        "paiement est perdu" % (r1.status_code, r1.get_json()))
+    assert statuts(j["commande"]) == ["en_attente_paiement"], statuts(j["commande"])
+    # LES RÉCLAMATIONS VIEILLISSENT — celle de l'événement comme celle de la
+    # caisse, toutes deux abandonnées par le même fil mort. Le réessai suivant
+    # de Stripe les reprend.
+    _exec("UPDATE stripe_events SET processed_at=?",
+          ((datetime.datetime.utcnow() - datetime.timedelta(minutes=30)).isoformat(),))
+    r2, _ = poster(A.app.test_client(), None, charge=charge)
+    assert r2.status_code == 200 and statuts(j["commande"]) == ["payee"], (
+        "réclamation abandonnée depuis 30 min, réessai : HTTP %s %s, séances %s"
+        % (r2.status_code, r2.get_json(), statuts(j["commande"])))
+
+
+# ══════════════════════════════════════════════════════════════════════════
+#  10. LE RETOUR DE CAISSE NE REJOUE PAS — une session ne se confirme qu'une fois
+# ══════════════════════════════════════════════════════════════════════════
+def test_le_retour_ne_rejoue_pas_une_session_de_caisse_ancienne(client, faux_stripe, faux_brevo, monkeypatch):
+    """La page /sentinel?activation=ok&session_id=cs_… rappelle le retour à
+    CHAQUE chargement, et la route est publique.
+
+    MESURÉ AVANT CORRECTION : après une résiliation, un simple rechargement
+    remettait plan='entreprise' ET l'identifiant d'un abonnement mort — l'offre
+    payante était acquise pour toujours sans le moindre prélèvement, et
+    billing-run résiliait ensuite un abonnement qui n'existait plus."""
+    monkeypatch.setenv("STRIPE_PRICE_ENTREPRISE", "price_ent_recette")
+    cid = creer_client("rejeu@recette.test")
+    connecter(client, cid)
+    client.post("/api/sentinel/checkout", json={"plan": "entreprise"}, headers=NAVIGATEUR)
+    sid = list(faux_stripe.sessions)[0]
+    faux_stripe.payer(sid, customer="cus_rejeu", subscription="sub_rejeu")
+    assert client.get("/api/stripe/retour?session_id=" + sid,
+                      headers=NAVIGATEUR).get_json() == {"statut": "paye"}
+    assert client_row(cid)["plan"] == "entreprise", client_row(cid)
+    # L'abonnement est résilié chez Stripe : le compte repasse en gratuit.
+    poster(client, {"id": "sub_rejeu", "object": "subscription", "status": "canceled",
+                    "metadata": {"client_id": str(cid), "site": "conseilprev"}},
+           "customer.subscription.deleted")
+    assert client_row(cid)["plan"] == "gratuit", client_row(cid)
+    # LA VIEILLE PAGE EST RECHARGÉE : la session est toujours « paid » chez Stripe.
+    r = A.app.test_client().get("/api/stripe/retour?session_id=" + sid, headers=NAVIGATEUR)
+    row = client_row(cid)
+    assert (row["plan"], row["stripe_subscription_id"]) == ("gratuit", None), (
+        "rechargement de /sentinel?activation=ok&session_id=%s : offre %r et abonnement %r rendus "
+        "sans aucun prélèvement (réponse %s)" % (sid, row["plan"], row["stripe_subscription_id"], r.get_json()))
+
+
+@pytest.mark.parametrize("statut", ["canceled", "unpaid", "incomplete_expired"])
+def test_aucune_offre_n_est_activee_si_l_abonnement_n_est_plus_actif_chez_stripe(
+        client, faux_stripe, faux_brevo, statut):
+    """L'ARGENT EST-IL ENCORE LÀ ? Une session de caisse reste « paid » pour
+    toujours ; l'abonnement qu'elle a ouvert, non. L'offre se lit sur
+    l'abonnement, pas sur une caisse fermée il y a six mois."""
+    cid = creer_client("mortvivant@recette.test")
+    faux_stripe._abonnement("sub_mortvivant")["status"] = statut
+    r, _ = poster(client, {"id": "cs_mv", "object": "checkout.session", "mode": "subscription",
+                           "payment_status": "paid", "customer": "cus_mv",
+                           "subscription": "sub_mortvivant",
+                           "metadata": {"client_id": str(cid), "plan": "entreprise"}})
+    row = client_row(cid)
+    assert r.status_code == 200, r.get_json()
+    assert (row["plan"], row["stripe_subscription_id"]) == ("gratuit", None), (
+        "abonnement %s chez Stripe : offre %r activée et abonnement %r mémorisé"
+        % (statut, row["plan"], row["stripe_subscription_id"]))
+
+
+def test_le_retour_et_la_notification_simultanes_ne_confirment_qu_une_fois(
+        client, faux_stripe, faux_brevo, monkeypatch):
+    """Stripe livre checkout.session.completed AU MOMENT où il renvoie le
+    navigateur : les deux requêtes arrivent ensemble sur 2 workers × 8 fils.
+
+    MESURÉ AVANT CORRECTION : deux confirmations de la même caisse, donc deux
+    « Réservation confirmée » au client et deux notifications internes — quatre
+    crédits pris sur les 300 envois quotidiens du compte Brevo."""
+    j = panier(client, n=2)
+    sid = _q("SELECT stripe_session_id FROM formation_ia_resa WHERE commande=? AND gratuit=0",
+             (j["commande"],))[0]["stripe_session_id"]
+    faux_stripe.payer(sid, amount_total=96000)
+    vrai = A._formation_ia_confirmer_paiement
+    appels = []
+
+    def lent(**kw):
+        appels.append(kw)
+        time.sleep(0.4)
+        return vrai(**kw)
+    monkeypatch.setattr(A, "_formation_ia_confirmer_paiement", lent)
+    obj = dict(faux_stripe.sessions[sid])
+    fils = [threading.Thread(target=poster, args=(A.app.test_client(), obj)),
+            threading.Thread(target=A.app.test_client().get,
+                             args=("/api/stripe/retour?session_id=" + sid,),
+                             kwargs={"headers": NAVIGATEUR})]
+    [f.start() for f in fils]; [f.join() for f in fils]
+    assert len(appels) == 1, "%d confirmations pour un seul paiement ; sujets : %s" % (
+        len(appels), sujets(faux_brevo))
+    assert sujets(faux_brevo).count("Réservation confirmée — 1 séance(s)") == 1, sujets(faux_brevo)
+
+
+def test_un_retour_encaisse_dont_la_confirmation_echoue_dit_en_attente_et_rend_la_main(
+        client, faux_stripe, faux_brevo, monkeypatch, caplog):
+    """Encaissé chez Stripe, mais la base est momentanément injoignable : la
+    page ne doit pas annoncer « Paiement reçu » pour des séances restées en
+    attente — et la réclamation prise par le retour doit être RENDUE, sinon la
+    notification que Stripe réessaie trouverait la caisse « déjà traitée » et
+    le paiement serait perdu pour de bon."""
+    j = panier(client, n=2)
+    sid = _q("SELECT stripe_session_id FROM formation_ia_resa WHERE commande=? AND gratuit=0",
+             (j["commande"],))[0]["stripe_session_id"]
+    faux_stripe.payer(sid, amount_total=96000)
+    vrai = A._formation_ia_confirmer_paiement
+
+    def panne(**kw):
+        raise RuntimeError("base momentanément injoignable")
+    monkeypatch.setattr(A, "_formation_ia_confirmer_paiement", panne)
+    with caplog.at_level(logging.ERROR, logger="conseilprev"):
+        r = client.get("/api/stripe/retour?session_id=" + sid, headers=NAVIGATEUR)
+    assert r.get_json() == {"statut": "en_attente"}, (r.status_code, r.get_json())
+    assert statuts(j["commande"]) == ["en_attente_paiement"], statuts(j["commande"])
+    assert any("STRIPE_RETOUR_ECHEC" in m.getMessage() for m in caplog.records), (
+        [m.getMessage() for m in caplog.records])
+    monkeypatch.setattr(A, "_formation_ia_confirmer_paiement", vrai)
+    r2, _ = poster(client, dict(faux_stripe.sessions[sid]))
+    assert r2.status_code == 200 and statuts(j["commande"]) == ["payee"], (
+        "la notification qui suit un retour en échec ne confirme plus rien : %s %s"
+        % (r2.get_json(), statuts(j["commande"])))
+
+
+@pytest.mark.parametrize("page", ["formation", "sentinel"])
+def test_la_page_de_retour_efface_l_identifiant_de_session_de_la_barre_d_adresse(page):
+    """EXÉCUTÉ : sans cela, l'adresse de retour reste dans la barre et chaque
+    F5 — ou le rechargement que `sentinelCheckout` fait après un changement
+    d'offre — redemande la confirmation de la MÊME caisse."""
+    if page == "formation":
+        src = io.open(os.path.join(_RACINE, "formation.html"), encoding="utf-8").read()
+        code = _tranche(src, "(function retourPaiement(){", "\n  })();")
+        depart = "?paiement=ok&session_id=cs_test_page"
+        amorce = """
+          const el = { hidden: true, className: '', innerHTML: '', textContent: '' };
+          global.document = { getElementById: (id) => id === 'retour-paiement' ? el : null };
+        """
+        lancer = ""
+    else:
+        src = io.open(os.path.join(_RACINE, "sentinel.page.js"), encoding="utf-8").read()
+        code = _tranche(src, "window.sentinelActivationToast = function(){", "\n};")
+        depart = "?activation=ok&session_id=cs_test_page"
+        amorce = """
+          global.document = { createElement: () => ({ style: {}, textContent: '', innerHTML: '', parentNode: null }),
+                              body: { appendChild: (t) => { t.parentNode = global.document.body; },
+                                      removeChild: () => {} } };
+          global.setTimeout = (f, ms) => (ms >= 1000 ? 0 : require('timers').setTimeout(f, ms));
+        """
+        lancer = "window.sentinelActivationToast();"
+    o = _node("""
+      const etat = { search: '%s', remplacements: [], appels: [] };
+      global.window = global;
+      global.location = { pathname: '/page', get search(){ return etat.search; } };
+      global.history = { replaceState: (a, b, u) => { etat.remplacements.push(String(u));
+                          etat.search = String(u).indexOf('?') > -1 ? String(u).slice(String(u).indexOf('?')) : ''; } };
+      global.fetch = (u) => { etat.appels.push(String(u));
+        return Promise.resolve({ ok: true, json: () => Promise.resolve({ statut: 'paye' }) }); };
+    """ % depart + amorce + code + lancer + """
+      require('timers').setTimeout(() => process.stdout.write(JSON.stringify(etat)), 40);
+    """)
+    assert any("cs_test_page" in a for a in o["appels"]), (
+        "la page n'a rien demandé au serveur : %s" % o["appels"])
+    assert o["remplacements"], (
+        "l'adresse de retour reste dans la barre : un rechargement rejouerait la caisse")
+    assert all("session_id" not in u and "=ok" not in u for u in o["remplacements"]), o["remplacements"]
+
+
+# ══════════════════════════════════════════════════════════════════════════
+#  11. UNE OFFRE SUPÉRIEURE NE S'ACCORDE PAS SUR UN ABONNEMENT QUI NE PAIE PAS
+# ══════════════════════════════════════════════════════════════════════════
+@pytest.mark.parametrize("statut", ["past_due", "unpaid", "incomplete", "paused"])
+def test_un_abonnement_impaye_n_obtient_pas_l_offre_superieure(client, faux_stripe, monkeypatch, statut):
+    """MESURÉ AVANT CORRECTION : `Subscription.modify` avec
+    `create_prorations` ne facture RIEN tout de suite — il ajoute la
+    différence à une facture que ce client ne paie déjà pas — et l'offre la
+    plus chère était posée dans la foulée. CGV 3.4 : un impayé suspend."""
+    monkeypatch.setenv("STRIPE_PRICE_ENTREPRISE", "price_ent_recette")
+    cid = creer_client("impaye3@recette.test", plan="pro", sub="sub_impaye3", cust="cus_impaye3")
+    faux_stripe._abonnement("sub_impaye3")["status"] = statut
+    connecter(client, cid)
+    r = client.post("/api/sentinel/checkout", json={"plan": "entreprise"}, headers=NAVIGATEUR)
+    modifs = [x.form for x in faux_stripe.recues("POST", "/v1/subscriptions/sub_impaye3")]
+    etat = {"http": r.status_code, "reponse": r.get_json(),
+            "plan": client_row(cid)["plan"], "modifications": modifs}
+    assert client_row(cid)["plan"] == "pro", (
+        "abonnement %s : l'offre %r est accordée sans encaissement — %s" % (statut, etat["plan"], etat))
+    assert r.status_code == 402 and not modifs, etat
+    assert not faux_stripe.recues("POST", "/v1/checkout/sessions"), (
+        "une seconde caisse est ouverte alors que la première n'est pas réglée")
+
+
+@pytest.mark.parametrize("cas", ["canceled", "resource_missing"])
+def test_un_abonnement_mort_chez_stripe_rouvre_une_caisse(client, faux_stripe, monkeypatch, cas):
+    """C'est l'état de la production : un abonnement résilié chez Stripe laisse
+    son identifiant en base. Le client qui revient à la caisse doit pouvoir se
+    réabonner — pas recevoir un 502 parce qu'on a tenté de modifier un mort."""
+    monkeypatch.setenv("STRIPE_PRICE_ENTREPRISE", "price_ent_recette")
+    cid = creer_client("mort@recette.test", plan="pro", sub="sub_mort")
+    if cas == "canceled":
+        faux_stripe._abonnement("sub_mort")["status"] = "canceled"
+    else:
+        faux_stripe.pannes["GET /v1/subscriptions/sub_mort"] = (
+            404, {"error": {"type": "invalid_request_error", "code": "resource_missing",
+                            "message": "No such subscription"}})
+    connecter(client, cid)
+    r = client.post("/api/sentinel/checkout", json={"plan": "entreprise"}, headers=NAVIGATEUR)
+    j = r.get_json()
+    caisses = faux_stripe.recues("POST", "/v1/checkout/sessions")
+    assert r.status_code == 200 and j.get("ok") is True and j.get("url"), (cas, r.status_code, j)
+    assert len(caisses) == 1, "%s : %d caisse(s) ouverte(s)" % (cas, len(caisses))
+    assert not faux_stripe.recues("POST", "/v1/subscriptions/sub_mort"), (
+        "%s : l'abonnement mort a été modifié" % cas)
+
+
+def test_l_activation_memorise_l_abonnement_meme_quand_l_offre_est_deja_posee(
+        client, faux_stripe, faux_brevo):
+    """Un client passé « pro » à la main par CONSEILPREV, sans abonnement, paie
+    ensuite l'offre Pro. Si l'activation se croit déjà faite, l'abonnement et le
+    client Stripe ne sont jamais mémorisés : un passage en « gratuit » ne
+    résilierait rien, et Stripe continuerait de prélever."""
+    cid = creer_client("deja@recette.test", plan="pro")
+    r, _ = poster(client, {"id": "cs_deja", "object": "checkout.session", "mode": "subscription",
+                           "payment_status": "paid", "customer": "cus_deja",
+                           "subscription": "sub_deja",
+                           "metadata": {"client_id": str(cid), "plan": "pro"}})
+    row = client_row(cid)
+    assert r.status_code == 200, r.get_json()
+    assert (row["plan"], row["stripe_subscription_id"], row["stripe_customer_id"]) \
+        == ("pro", "sub_deja", "cus_deja"), row
+
+
+# ══════════════════════════════════════════════════════════════════════════
+#  12. LA RÉSILIATION QUE LE SITE A DEMANDÉE NE RÉTROGRADE PERSONNE
+# ══════════════════════════════════════════════════════════════════════════
+def test_la_resiliation_demandee_par_le_site_est_marquee_chez_stripe(base, faux_stripe):
+    """Sans marque, le `customer.subscription.deleted` qui revient est
+    indiscernable d'une résiliation subie."""
+    cid = creer_client("marque@recette.test", plan="entreprise", sub="sub_marque", cust="cus_marque")
+    assert A._billing_cancel_subscription(cid) is True
+    envois = faux_stripe.recues("DELETE", "/v1/subscriptions/sub_marque")
+    assert len(envois) == 1, "%d résiliation(s) envoyée(s)" % len(envois)
+    # Les paramètres d'un DELETE voyagent dans l'URL, pas dans un corps.
+    marque = (envois[0].requete.get("cancellation_details[comment]") or [""])[0]
+    assert marque.startswith(A.STRIPE_RESILIATION_MARQUE), (
+        "la résiliation demandée par le site n'est pas marquée : %s" % envois[0].requete)
+
+
+def test_le_client_passe_en_facturation_par_resultats_ne_retombe_pas_en_gratuit(
+        client, faux_stripe, faux_brevo):
+    """billing-run résilie l'abonnement, puis Stripe notifie la résiliation que
+    le site vient lui-même de demander.
+
+    MESURÉ AVANT CORRECTION : ce retour rétrogradait en « gratuit » un client
+    désormais facturé au résultat — il perdait tous ses modules. Les deux ordres
+    d'arrivée sont mesurés : la notification AVANT et APRÈS l'oubli du lien."""
+    marque = A.STRIPE_RESILIATION_MARQUE + "raas"
+    # (a) La notification arrive AVANT que le lien local soit oublié.
+    ca = creer_client("raas_a@recette.test", plan="entreprise", sub="sub_raas_a", cust="cus_raas_a")
+    poster(client, {"id": "sub_raas_a", "object": "subscription", "status": "canceled",
+                    "cancellation_details": {"comment": marque}, "metadata": {}},
+           "customer.subscription.deleted")
+    ra = client_row(ca)
+    assert (ra["plan"], ra["stripe_subscription_id"]) == ("entreprise", "sub_raas_a"), (
+        "notification reçue avant l'oubli du lien : %s" % ra)
+    # (b) Et APRÈS : le lien est déjà NULL, seul metadata.client_id reste.
+    cb = creer_client("raas_b@recette.test", plan="entreprise", sub="sub_raas_b", cust="cus_raas_b")
+    assert A._billing_cancel_subscription(cb) is True
+    poster(client, {"id": "sub_raas_b", "object": "subscription", "status": "canceled",
+                    "cancellation_details": {"comment": marque},
+                    "metadata": {"client_id": str(cb), "site": "conseilprev"}},
+           "customer.subscription.deleted")
+    assert client_row(cb)["plan"] == "entreprise", (
+        "notification reçue après l'oubli du lien : offre %r" % client_row(cb)["plan"])
+
+
+def test_un_abonnement_inconnu_ici_ne_retrograde_aucun_client(client, faux_stripe, faux_brevo):
+    """Le compte Stripe est PARTAGÉ avec conseilprevcyber. Un
+    customer.subscription.deleted d'un abonnement inconnu de ce site, portant un
+    metadata.client_id, faisait passer en « gratuit » le client de CE site qui
+    porte ce numéro — une offre posée à la main disparaissait sans raison."""
+    cid = creer_client("autresite@recette.test", plan="pro")        # offre posée par set-plan
+    r, _ = poster(client, {"id": "sub_de_conseilprevcyber", "object": "subscription",
+                           "status": "canceled", "metadata": {"client_id": str(cid)}},
+                  "customer.subscription.deleted")
+    assert r.status_code == 200, r.get_json()
+    assert client_row(cid)["plan"] == "pro", (
+        "un abonnement d'un autre site du compte a rétrogradé ce client en %r"
+        % client_row(cid)["plan"])
+
+
+# ══════════════════════════════════════════════════════════════════════════
+#  13. UNE SÉANCE ANNULÉE NE REVIENT PAS À LA VIE
+# ══════════════════════════════════════════════════════════════════════════
+def test_une_seance_annulee_et_remboursee_ne_repasse_pas_payee(client, faux_stripe, faux_brevo):
+    """MESURÉ AVANT CORRECTION : le confirmateur retenait toute ligne « != payee »,
+    donc AUSSI les annulées. Une séance annulée et remboursée redevenait
+    « payée » — avec le montant de TOUTE la commande, puisque le prorata ne se
+    répartissait plus que sur elle. Le second remboursement, calculé sur ce
+    montant gonflé, vidait le paiement."""
+    j = panier(client, n=3)                    # 1 offerte + 2 payantes
+    faux_stripe.payer(list(faux_stripe.sessions)[0], amount_total=192000)
+    A._formation_ia_confirmer_paiement(commande=j["commande"], montant_ttc_cents=192000)
+    av = _q("SELECT id, jeton, statut, paye_ttc_cents FROM formation_ia_resa "
+            "WHERE commande=? AND gratuit=0 ORDER BY id", (j["commande"],))
+    assert [x["statut"] for x in av] == ["payee", "payee"], av
+    assert [x["paye_ttc_cents"] for x in av] == [96000, 96000], av
+    ra = client.post("/api/formation/annulation", json={"jeton": av[0]["jeton"]}, headers=NAVIGATEUR)
+    assert ra.status_code == 200 and ra.get_json().get("ok"), ra.get_json()
+    # LA PAGE DE RETOUR EST ROUVERTE (historique, F5) : le confirmateur repasse.
+    A._formation_ia_confirmer_paiement(commande=j["commande"], montant_ttc_cents=192000)
+    ap = _q("SELECT id, statut, paye_ttc_cents FROM formation_ia_resa "
+            "WHERE commande=? AND gratuit=0 ORDER BY id", (j["commande"],))
+    montants = [int(x.form["amount"]) for x in faux_stripe.recues("POST", "/v1/refunds")]
+    assert ap[0]["statut"] == "annulee", (
+        "la séance annulée et remboursée est repassée %r ; remboursements : %s"
+        % (ap[0]["statut"], montants))
+    assert ap[0]["paye_ttc_cents"] == 96000, (
+        "le montant réglé sur la séance annulée est passé à %s c : le remboursement "
+        "suivant serait calculé dessus" % ap[0]["paye_ttc_cents"])
+    assert montants == [48000], "remboursements envoyés : %s" % montants
+
+
+def test_le_montant_encaisse_se_repartit_sur_toute_la_commande_pas_sur_le_reliquat(
+        client, faux_stripe, faux_brevo):
+    """La caisse a été ouverte pour DEUX séances payantes, soit 1 920 € TTC. Le
+    client en annule une avant de payer, puis règle. La séance qui reste ne
+    porte que SA part : lui attribuer tout `amount_total` ferait rembourser
+    960 € pour une séance qui en a coûté 480."""
+    j = panier(client, n=3)
+    lig = _q("SELECT id, jeton FROM formation_ia_resa WHERE commande=? AND gratuit=0 ORDER BY id",
+             (j["commande"],))
+    assert client.post("/api/formation/annulation", json={"jeton": lig[0]["jeton"]},
+                       headers=NAVIGATEUR).status_code == 200
+    A._formation_ia_confirmer_paiement(commande=j["commande"], montant_ttc_cents=192000)
+    ap = _q("SELECT id, statut, paye_ttc_cents FROM formation_ia_resa "
+            "WHERE commande=? AND gratuit=0 ORDER BY id", (j["commande"],))
+    assert [x["statut"] for x in ap] == ["annulee", "payee"], ap
+    assert ap[1]["paye_ttc_cents"] == 96000, (
+        "la séance réglée porte %s c au lieu de 96 000 : c'est là-dessus que se "
+        "calculera son remboursement" % ap[1]["paye_ttc_cents"])
+
+
+def test_une_seance_annulee_avant_paiement_puis_reprise_n_est_pas_confirmee(
+        client, faux_stripe, faux_brevo):
+    """X réserve, annule AVANT de payer (le créneau est libéré), Y le reprend,
+    puis X termine son paiement — sa session Stripe reste ouverte une heure.
+
+    MESURÉ AVANT CORRECTION : la ligne annulée de X repassait « payée ». Deux
+    séances actives sur une date qui n'en porte qu'une, alors que le formateur
+    ne se dédouble pas."""
+    cr = creneaux()
+    jx = panier(client, n=2, dates=cr)
+    lig = _q("SELECT id, jeton FROM formation_ia_resa WHERE commande=? AND gratuit=0",
+             (jx["commande"],))[0]
+    assert client.post("/api/formation/annulation", json={"jeton": lig["jeton"]},
+                       headers=NAVIGATEUR).status_code == 200
+    ry = client.post("/api/formation/inscription", json={
+        "seances": [{"sujet": F.SUJETS[2]["cle"], "creneau": cr[1]}],
+        "nom": "Repreneur", "prenom": "Yann", "email": "repreneur2@recette.test",
+        "entreprise": "AUTRE SAS", "siret": "900000999",
+        "telephone": "+33 6 98 76 54 32", "lieu": "1 rue du Test, 75000 Paris"})
+    assert ry.status_code == 200, (ry.status_code, ry.get_json())
+    A._formation_ia_confirmer_paiement(commande=jx["commande"], montant_ttc_cents=96000)
+    st = _q("SELECT statut FROM formation_ia_resa WHERE id=?", (lig["id"],))[0]["statut"]
+    assert st == "annulee", (
+        "la séance annulée de X est repassée %r : deux clients tiennent le %s" % (st, cr[1]))
+
+
+def test_un_paiement_sans_seance_a_confirmer_est_signale_a_conseilprev(
+        client, faux_stripe, faux_brevo):
+    """L'argent est encaissé et plus aucune séance n'est confirmable : ni
+    silence, ni remboursement automatique — CONSEILPREV décide, donc CONSEILPREV
+    est prévenu."""
+    cr = creneaux()
+    jx = panier(client, n=2, dates=cr)
+    lig = _q("SELECT jeton FROM formation_ia_resa WHERE commande=? AND gratuit=0",
+             (jx["commande"],))[0]
+    client.post("/api/formation/annulation", json={"jeton": lig["jeton"]}, headers=NAVIGATEUR)
+    avant = len(faux_brevo.recues("POST", "/v3/smtp/email"))
+    A._formation_ia_confirmer_paiement(commande=jx["commande"], montant_ttc_cents=96000)
+    envois = [x.json for x in faux_brevo.recues("POST", "/v3/smtp/email")][avant:]
+    dest = [x["to"][0]["email"] for x in envois]
+    assert A.CONSEILPREV_NOTIFY_EMAIL in dest, (
+        "encaissement sans séance à confirmer : personne n'est prévenu (%s)" % dest)
+    assert jx["commande"] in " ".join(x["htmlContent"] for x in envois), envois
+
+
+# ══════════════════════════════════════════════════════════════════════════
+#  14. EFFACEMENT RGPD : ne pas perdre le seul moyen d'arrêter un prélèvement
+# ══════════════════════════════════════════════════════════════════════════
+def test_l_effacement_rgpd_garde_le_lien_quand_stripe_refuse_la_resiliation(client, faux_stripe):
+    """Stripe refuse le DELETE : l'abonnement reste « active » et continue de
+    prélever une personne qui a demandé l'effacement. Effacer quand même son
+    identifiant, c'est perdre le seul moyen de l'arrêter — l'art. 17.3.b couvre
+    la conservation de ces identifiants techniques, le temps de résilier."""
+    cid = creer_client("rgpd2@recette.test", plan="pro", sub="sub_rgpd2", cust="cus_rgpd2")
+    for t in ("client_entites", "client_connecteurs", "client_formations"):
+        _exec("CREATE TABLE IF NOT EXISTS %s (id INTEGER PRIMARY KEY, client_id INTEGER)" % t)
+    faux_stripe.pannes["DELETE /v1/subscriptions/sub_rgpd2"] = (
+        500, {"error": {"type": "api_error", "message": "panne simulée"}})
+    admin(client)
+    j = client.post("/api/rgpd/effacement", json={"email": "rgpd2@recette.test"},
+                    headers=NAVIGATEUR).get_json()
+    row = client_row(cid)
+    bilan = j.get("bilan") or {}
+    assert bilan.get("abonnement") == "non_resilie", j
+    assert row["email"] != "rgpd2@recette.test", "l'effacement doit avoir lieu malgré tout : %s" % j
+    assert row["stripe_subscription_id"] == "sub_rgpd2", (
+        "identifiant d'abonnement effacé alors que Stripe a refusé la résiliation : "
+        "le compte anonymisé continue d'être prélevé et plus rien ne permet de l'arrêter")
+    assert bilan.get("abonnement_a_resilier") == "sub_rgpd2", (
+        "le bilan rendu à l'administrateur ne nomme pas l'abonnement à résilier : %s" % bilan)

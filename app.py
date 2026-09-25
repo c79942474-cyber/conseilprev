@@ -8662,7 +8662,8 @@ def sentinel_checkout():
             try:
                 sub = stripe.Subscription.retrieve(_sub_id)
                 articles = list(sub['items'].data) if 'items' in sub else []
-                if sub['status'] not in ('canceled', 'incomplete_expired') and articles:
+                _statut = sub['status'] or ''
+                if _statut in STRIPE_ABONNEMENT_ACTIF and articles:
                     stripe.Subscription.modify(
                         _sub_id, items=[{'id': articles[0]['id'], 'price': price_id}],
                         proration_behavior='create_prorations',
@@ -8670,6 +8671,20 @@ def sentinel_checkout():
                     activate_client_plan(cid, plan)
                     logger.info('STRIPE_ABONNEMENT_MODIFIE client=%s plan=%s abonnement=%s', cid, plan, _sub_id)
                     return jsonify({'ok': True, 'modifie': True, 'plan': plan})
+                if _statut not in ('canceled', 'incomplete_expired') and _statut:
+                    # IMPAYE, INCOMPLET OU EN PAUSE : ON NE DONNE PAS PLUS.
+                    # `create_prorations` ne facture RIEN tout de suite — il
+                    # ajoute la difference a une facture que ce client ne paie
+                    # deja pas — et l'offre la plus chere etait posee dans la
+                    # foulee (mesure, sur past_due, unpaid, incomplete et
+                    # paused). CGV 3.4 : un impaye suspend, il n'ouvre pas.
+                    # Ouvrir une SECONDE caisse serait pire : deux abonnements,
+                    # deux prelevements, dont un que personne ne suit.
+                    logger.warning('STRIPE_MONTEE_REFUSEE client=%s plan=%s abonnement=%s statut=%s',
+                                   cid, plan, _sub_id, _statut)
+                    return jsonify({'error': "Votre abonnement en cours n est pas a jour de paiement. "
+                                             "Regularisez-le avant de changer d offre, ou ecrivez-nous.",
+                                    'regulariser': True, 'statut': _statut}), 402
             except stripe.InvalidRequestError as _ie:
                 # L'abonnement n'existe plus chez Stripe : une nouvelle caisse.
                 if getattr(_ie, 'code', '') != 'resource_missing':
@@ -8718,6 +8733,31 @@ def _stripe_session_encaissee(obj):
     return (obj.get('payment_status') or '') in ('paid', 'no_payment_required')
 
 
+#: LES SEULS ETATS D'ABONNEMENT QUI OUVRENT UNE OFFRE. `trialing` est un essai
+#: que Stripe facturera ; tout le reste — past_due, unpaid, incomplete, paused,
+#: canceled — est un abonnement qui NE PAIE PAS.
+STRIPE_ABONNEMENT_ACTIF = ('active', 'trialing')
+
+
+def _stripe_abonnement_actif(subscription):
+    """L'abonnement de cette caisse est-il encore vivant chez Stripe ?
+
+    L'OFFRE SE LIT SUR L'ABONNEMENT, PAS SUR UNE CAISSE FERMEE. Une session de
+    paiement reste `payment_status='paid'` pour toujours ; l'abonnement
+    qu'elle a ouvert, non. Sans cette relecture, rejouer une vieille session
+    rendait une offre payante a un compte resilie (mesure).
+
+    UNE LECTURE IMPOSSIBLE N'EST PAS UN REFUS : elle LEVE. L'appelant echoue,
+    Stripe reessaie sa notification et le retour de caisse dit « en cours ».
+    Repondre « non » sur une panne reseau priverait de son offre un client qui
+    vient de payer."""
+    secret = os.environ.get('STRIPE_SECRET_KEY')
+    if not secret:
+        raise RuntimeError('STRIPE_SECRET_KEY absente : abonnement %s invérifiable' % subscription)
+    sub = _stripe_pret(secret).Subscription.retrieve(str(subscription))
+    return (sub['status'] or '') in STRIPE_ABONNEMENT_ACTIF
+
+
 def _sentinel_activer_offre(cid, plan, customer=None, subscription=None):
     """Active l'offre d'un compte Sentinel, retient ses identifiants Stripe et
     previent le client — UNE seule fois.
@@ -8742,6 +8782,10 @@ def _sentinel_activer_offre(cid, plan, customer=None, subscription=None):
             and (not subscription or row.get('stripe_subscription_id') == str(subscription)))
     if deja:
         return True
+    if subscription and not _stripe_abonnement_actif(subscription):
+        logger.warning('STRIPE_OFFRE_REFUSEE client=%s plan=%s abonnement=%s : pas actif chez Stripe',
+                       cid, plan, subscription)
+        return False
     activate_client_plan(int(cid), plan)
     if customer:
         _billing_set_customer(int(cid), customer)
@@ -8803,6 +8847,22 @@ def _stripe_liberer_session(obj, etype, faire):
         logger.info('STRIPE_CAISSE_SANS_PAIEMENT type=%s metadata=%s : rien a liberer', etype, dict(meta))
 
 
+def _stripe_cle_session(session_id):
+    """La cle de reclamation d'une CAISSE. Elle vit dans la meme table que
+    celle des evenements, prefixee pour ne jamais rencontrer un `evt_…`.
+
+    POURQUOI UNE CLE PAR SESSION, ET PAS PAR EVENEMENT. Deux chemins
+    confirment la meme caisse : la notification signee et le retour de caisse
+    (le filet, quand la notification n'arrive pas). Une cle par evenement ne
+    departage que deux notifications entre elles. Mesure : le retour rejouait
+    une caisse ancienne a CHAQUE rechargement de la page — l'offre payante
+    revenait, ou montait, sans le moindre prelevement, meme apres une
+    resiliation ; et quand les deux chemins arrivaient ensemble, le client et
+    CONSEILPREV recevaient chaque courriel en double."""
+    sid = str(session_id or '').strip()
+    return ('cs:' + sid) if sid else None
+
+
 def _stripe_abonnement_de_facture(obj):
     """L'abonnement d'une facture : `parent.subscription_details.subscription`
     en version d'API dahlia, `subscription` avant."""
@@ -8849,6 +8909,12 @@ def stripe_webhook():
     reclame = _stripe_event_claim(eid)
     if reclame is None:
         return jsonify({'received': False}), 503          # base muette : Stripe reessaiera
+    if reclame == 'en_cours':
+        # UN AUTRE FIL LE TRAITE EN CE MOMENT. Repondre « duplicate » ici
+        # serait un acquittement : si ce fil-la meurt, Stripe ne reviendrait
+        # plus. Un non-2xx le fait reessayer, et la reclamation abandonnee
+        # sera reprise au bout de STRIPE_RECLAMATION_ABANDON_MIN.
+        return jsonify({'received': False, 'en_cours': True}), 409
     if not reclame:
         return jsonify({'received': True, 'duplicate': True}), 200
     echecs = []
@@ -8866,7 +8932,21 @@ def stripe_webhook():
         meta = obj.get('metadata') or {}
         if etype in ('checkout.session.completed', 'checkout.session.async_payment_succeeded'):
             if _stripe_session_encaissee(obj):
-                _stripe_confirmer_session(obj, _faire)
+                # LA MEME RECLAMATION QUE LE RETOUR DE CAISSE, PORTEE PAR LA
+                # SESSION. Les deux chemins menent aux memes confirmateurs et
+                # arrivent ENSEMBLE : Stripe livre l'evenement au moment ou il
+                # renvoie le navigateur. La reclamation par evenement ne
+                # departageait que deux notifications entre elles.
+                cle_session = _stripe_cle_session(obj.get('id'))
+                pris = _stripe_event_claim(cle_session) if cle_session else True
+                if pris == 'en_cours':
+                    echecs.append('session-en-cours')
+                elif pris is not False:
+                    _stripe_confirmer_session(obj, _faire)
+                    if echecs:
+                        _stripe_event_release(cle_session)
+                    else:
+                        _stripe_event_fini(cle_session)
             else:
                 logger.info('STRIPE_WEBHOOK_NON_ENCAISSE evenement=%s type=%s payment_status=%s : rien confirme',
                             eid, etype, obj.get('payment_status'))
@@ -8887,13 +8967,16 @@ def stripe_webhook():
                 if sub_id:
                     _faire('abonnement-impaye', lambda: _abonnement_impaye(sub_id))
         elif etype == 'customer.subscription.deleted':
-            _faire('abonnement-resilie', lambda: _abonnement_resilie(obj.get('id'), meta.get('client_id')))
+            _faire('abonnement-resilie', lambda: _abonnement_resilie(
+                obj.get('id'), meta.get('client_id'),
+                (obj.get('cancellation_details') or {}).get('comment')))
     except Exception as _we:
         echecs.append('webhook')
         logger.error('STRIPE_WEBHOOK_ECHEC etape=webhook evenement=%s : %s', eid, _we)
     if echecs:
         _stripe_event_release(eid)
         return jsonify({'received': False, 'echecs': echecs}), 500
+    _stripe_event_fini(eid)
     return jsonify({'received': True}), 200
 
 
@@ -8928,6 +9011,18 @@ def stripe_retour():
         return jsonify({'statut': 'inconnu'}), 200
     if not _stripe_session_encaissee(obj):
         return jsonify({'statut': 'en_attente'}), 200
+    # UNE CAISSE NE SE CONFIRME QU'UNE FOIS, MEME RECHARGEE CENT FOIS. La
+    # session relue reste « paid » pour toujours et cette route est publique :
+    # sans cette reclamation, un rechargement de /sentinel?activation=ok&…
+    # remettait l'offre payante et l'identifiant d'un abonnement resilie
+    # (mesure). Deja confirmee : on le redit, sans rien rappeler.
+    cle = _stripe_cle_session(obj.get('id') or sid)
+    pris = _stripe_event_claim(cle)
+    if pris is False:
+        return jsonify({'statut': 'paye'}), 200
+    if pris == 'en_cours':
+        # La notification la traite en ce moment : la page dira « en cours ».
+        return jsonify({'statut': 'en_attente'}), 200
     echecs = []
 
     def _faire(nom, fonction):
@@ -8938,6 +9033,13 @@ def stripe_retour():
             logger.error('STRIPE_RETOUR_ECHEC etape=%s session=%s : %s', nom, sid, _e)
 
     _stripe_confirmer_session(obj, _faire)
+    if echecs:
+        # LA RECLAMATION EST RENDUE : sans cela, la notification que Stripe
+        # reessaie trouverait la caisse « deja traitee » et le paiement serait
+        # perdu pour de bon.
+        _stripe_event_release(cle)
+    else:
+        _stripe_event_fini(cle)
     # Encaisse chez Stripe mais non confirme ici : la page dira « en cours »,
     # la notification (reessayee par Stripe) finira le travail.
     return jsonify({'statut': 'paye' if not echecs else 'en_attente'}), 200
@@ -9466,7 +9568,7 @@ def clients_invoices_issue():
             email_error = 'Aucun email KYC valide'
     conn.close()
     try:
-        _billing_cancel_subscription(client_id)
+        _billing_cancel_subscription(client_id, 'raas-facture')
     except Exception:
         pass
     return jsonify({'ok': True, 'issued_count': len(issued), 'invoices': issued,
@@ -14869,39 +14971,112 @@ def _stripe_pret(secret):
     return stripe
 
 
+#: AU-DELA DE CE DELAI, UNE RECLAMATION ABANDONNEE EST REPRISE. Un traitement
+#: dure quelques centaines de millisecondes ; cinq minutes laissent finir un
+#: envoi de courriel qui traine (jusqu'a 60 s par message, deux par
+#: confirmation) sans jamais confondre « en cours » et « perdu ».
+STRIPE_RECLAMATION_ABANDON_MIN = 5
+
+#: LA COLONNE D'ETAT A-T-ELLE DEJA ETE AJOUTEE DANS CE PROCESSUS ? La table
+#: existe en production et porte des lignes : la colonne s'ajoute par
+#: migration. Une commande de schema refusee annule la transaction en cours
+#: sur PostgreSQL — la tenter a chaque notification couterait un aller-retour
+#: pour rien. Remise a False des qu'une reclamation echoue, pour qu'une base
+#: recreee sous le processus soit remigree au lieu d'echouer indefiniment.
+_STRIPE_EVENTS_MIGRE = [False]
+
+
+def _stripe_events_table(cur, conn):
+    """La table des evenements reclames, et sa colonne d'ETAT."""
+    cur.execute("CREATE TABLE IF NOT EXISTS stripe_events (event_id TEXT PRIMARY KEY, processed_at TEXT)")
+    conn.commit()
+    if _STRIPE_EVENTS_MIGRE[0]:
+        return
+    try:
+        cur.execute('ALTER TABLE stripe_events ADD COLUMN etat TEXT')
+        conn.commit()
+    except Exception:
+        try: conn.rollback()             # la colonne existe deja
+        except Exception: pass
+    _STRIPE_EVENTS_MIGRE[0] = True
+
+
 def _stripe_event_claim(event_id):
     """RECLAME l'evenement AVANT de le traiter, atomiquement.
 
-    True : a traiter ; False : deja reclame (doublon) ; None : base injoignable.
+    True : a traiter ; False : deja FAIT (doublon) ; 'en_cours' : un autre fil
+    le traite en ce moment ; None : base injoignable.
 
     UNE SEULE INSTRUCTION, SUR LA CLE PRIMAIRE. L'ancienne version lisait
     (SELECT) avant de traiter et ecrivait (INSERT) apres : deux livraisons
     simultanees passaient toutes deux le SELECT, et la commande etait
-    confirmee deux fois — quatre courriels (mesure). Ici, `ON CONFLICT DO
-    NOTHING` laisse la base departager : une ligne inseree, un traitement.
-    L'echec du traitement REND la reclamation (_stripe_event_release), pour
-    que le prochain envoi de Stripe soit retraite."""
+    confirmee deux fois — quatre courriels (mesure). Ici, la base departage :
+    une ligne inseree, un traitement.
+
+    « RECLAME » N'EST PAS « FAIT », ET LES CONFONDRE PERDAIT DES PAIEMENTS.
+    L'etat definitif etait pose des la reclamation. Si le fil mourait ensuite
+    — delai gunicorn de 120 s sur un envoi qui traine, SIGKILL d'un
+    deploiement, OOM : ni `_faire` ni l'except exterieur n'attrapent
+    SystemExit —, la reclamation restait posee pour toujours. Stripe relivrait
+    et recevait 200 « duplicate », puis s'arretait : les seances restaient
+    « en_attente_paiement », leur creneau etait libere, et l'argent etait
+    encaisse (mesure, avec un worker tue en plein traitement). Une reclamation
+    « en_cours » abandonnee depuis plus de STRIPE_RECLAMATION_ABANDON_MIN est
+    donc REPRISE par la livraison suivante ; plus recente, elle rend
+    'en_cours' et l'appelant repond un non-2xx pour que Stripe reessaie.
+
+    Les lignes anterieures a cette colonne portent etat NULL : elles avaient
+    ete traitees sous l'ancien code, et restent des doublons."""
     if not event_id:
         return True             # Stripe met toujours un identifiant ; sans lui, rien a dedoublonner
     conn = None
     try:
         conn = registre_get_db(); cur = conn.cursor()
-        cur.execute("CREATE TABLE IF NOT EXISTS stripe_events (event_id TEXT PRIMARY KEY, processed_at TEXT)")
+        _stripe_events_table(cur, conn)
+        limite = (datetime.utcnow()
+                  - timedelta(minutes=STRIPE_RECLAMATION_ABANDON_MIN)).isoformat()
         cur.execute(registre_sql(
-            'INSERT INTO stripe_events (event_id, processed_at) VALUES (%s, %s) ON CONFLICT (event_id) DO NOTHING',
-            'INSERT INTO stripe_events (event_id, processed_at) VALUES (?, ?) ON CONFLICT (event_id) DO NOTHING'),
-            (str(event_id), datetime.utcnow().isoformat()))
+            "INSERT INTO stripe_events (event_id, processed_at, etat) VALUES (%s, %s, 'en_cours') "
+            "ON CONFLICT (event_id) DO UPDATE SET processed_at=EXCLUDED.processed_at "
+            "WHERE stripe_events.etat='en_cours' AND stripe_events.processed_at < %s",
+            "INSERT INTO stripe_events (event_id, processed_at, etat) VALUES (?, ?, 'en_cours') "
+            "ON CONFLICT (event_id) DO UPDATE SET processed_at=excluded.processed_at "
+            "WHERE stripe_events.etat='en_cours' AND stripe_events.processed_at < ?"),
+            (str(event_id), datetime.utcnow().isoformat(), limite))
         pris = cur.rowcount == 1
         conn.commit()
-        return pris
+        if pris:
+            return True
+        cur.execute(registre_sql('SELECT etat FROM stripe_events WHERE event_id=%s',
+                                 'SELECT etat FROM stripe_events WHERE event_id=?'), (str(event_id),))
+        ligne = cur.fetchone()
+        etat = (dict(ligne).get('etat') if ligne else None) or 'fait'
+        return 'en_cours' if etat == 'en_cours' else False
     except Exception as _e:
         logger.error('STRIPE_EVENEMENT_RECLAMATION_ECHEC evenement=%s : %s', event_id, _e)
+        _STRIPE_EVENTS_MIGRE[0] = False
         try: conn.rollback()
         except Exception: pass
         return None
     finally:
         try: conn.close()
         except Exception: pass
+
+
+def _stripe_event_fini(event_id):
+    """Le traitement a REUSSI : la reclamation devient definitive. Tant qu'elle
+    ne l'est pas, une livraison ulterieure peut la reprendre."""
+    if not event_id:
+        return
+    try:
+        conn = registre_get_db(); cur = conn.cursor()
+        cur.execute(registre_sql("UPDATE stripe_events SET etat='fait' WHERE event_id=%s",
+                                 "UPDATE stripe_events SET etat='fait' WHERE event_id=?"), (str(event_id),))
+        conn.commit(); conn.close()
+    except Exception as _e:
+        # La reclamation reste « en cours » : elle sera reprise au prochain
+        # envoi de Stripe, donc retraitee. Les confirmateurs sont idempotents.
+        logger.error('STRIPE_EVENEMENT_CLOTURE_ECHEC evenement=%s : %s', event_id, _e)
 
 
 def _stripe_event_release(event_id):
@@ -14918,27 +15093,46 @@ def _stripe_event_release(event_id):
         logger.error('STRIPE_EVENEMENT_LIBERATION_ECHEC evenement=%s : %s', event_id, _e)
 
 
-def _abonnement_resilie(sub_id, client_id=None):
+#: LA MARQUE D'UNE RESILIATION QUE LE SITE A LUI-MEME DEMANDEE. Elle part dans
+#: `cancellation_details.comment` de l'appel de resiliation et revient telle
+#: quelle dans `customer.subscription.deleted`. Mesure : un client passe a la
+#: facturation par resultats voyait billing-run resilier son abonnement, puis
+#: le retour de SA PROPRE demande le faisait retomber en « gratuit » — il
+#: perdait tous ses modules alors qu'il paie desormais au resultat.
+STRIPE_RESILIATION_MARQUE = 'conseilprev:'
+
+def _abonnement_resilie(sub_id, client_id=None, commentaire=None):
     """customer.subscription.deleted : l'offre est retiree, l'identifiant oublie.
 
     Mesure : un abonnement resilie chez Stripe laissait le client en « pro »
     pour toujours — l'offre n'etait jamais retiree. On ne touche QUE le compte
     qui porte cet abonnement : un evenement tardif sur un ancien abonnement
-    ne doit pas retrograder un client qui en a souscrit un nouveau."""
+    ne doit pas retrograder un client qui en a souscrit un nouveau.
+
+    DEUX REPLIS ONT ETE RETIRES, PARCE QU'ILS COUTAIENT DE L'ARGENT.
+      · La resiliation que le SITE demande revenait ici et rétrogradait le
+        client que billing-run venait de faire passer a la facturation par
+        resultats : il perdait tous ses modules (mesure, dans les deux ordres
+        d'arrivee). Elle porte desormais sa marque et n'est plus subie.
+      · Le repli « id = metadata.client_id AND stripe_subscription_id IS NULL »
+        visait une notification d'activation perdue. Le compte Stripe est
+        PARTAGE avec conseilprevcyber : un evenement de l'autre site, portant
+        un client_id, faisait passer en « gratuit » le client de CE site qui
+        porte ce numero (mesure : une offre posee a la main disparaissait).
+        Et l'activation memorise toujours l'abonnement en meme temps que
+        l'offre — le repli ne rattrapait rien qui ne soit deja rattrape par le
+        retour de caisse."""
     if not sub_id:
+        return
+    if commentaire and str(commentaire).startswith(STRIPE_RESILIATION_MARQUE):
+        logger.info('STRIPE_RESILIATION_DEMANDEE_PAR_LE_SITE abonnement=%s motif=%s : offre inchangee',
+                    sub_id, commentaire)
         return
     conn = registre_get_db(); cur = conn.cursor()
     cur.execute(registre_sql("UPDATE clients SET plan='gratuit', stripe_subscription_id=NULL WHERE stripe_subscription_id=%s",
                              "UPDATE clients SET plan='gratuit', stripe_subscription_id=NULL WHERE stripe_subscription_id=?"),
                 (str(sub_id),))
     touches = cur.rowcount
-    if not touches and client_id:
-        # L'identifiant n'a jamais ete memorise (notification d'activation
-        # perdue) : les metadonnees de l'abonnement nomment le client.
-        cur.execute(registre_sql("UPDATE clients SET plan='gratuit' WHERE id=%s AND stripe_subscription_id IS NULL",
-                                 "UPDATE clients SET plan='gratuit' WHERE id=? AND stripe_subscription_id IS NULL"),
-                    (int(client_id),))
-        touches = cur.rowcount
     conn.commit()
     try: conn.close()
     except Exception: pass
@@ -15004,7 +15198,7 @@ def _billing_set_subscription(client_id, sub_id):
         pass
 
 
-def _billing_cancel_subscription(client_id):
+def _billing_cancel_subscription(client_id, motif='site'):
     """Resilie l'abonnement Stripe d'un client. Exclusion du cumul : un client
     est facture soit par abonnement recurrent, soit par resultats (echeances RaAS),
     jamais les deux. Des qu'une facture RaAS est emise, l'abonnement est resilie.
@@ -15019,7 +15213,15 @@ def _billing_cancel_subscription(client_id):
     demarrait, et plus rien ne permettait de voir le cumul. Seuls
     `status == 'canceled'` ou « resource_missing » (deja resilie) valent
     preuve. En 15.x, `Subscription.cancel` est l'appel de resiliation
-    (DELETE /v1/subscriptions/{id}) ; `delete` n'en est qu'un alias ancien."""
+    (DELETE /v1/subscriptions/{id}) ; `delete` n'en est qu'un alias ancien.
+
+    LA RESILIATION EST SIGNEE, PARCE QU'ELLE NOUS REVIENT. Stripe emet ensuite
+    `customer.subscription.deleted`, que ce site traite. Indiscernable d'une
+    resiliation subie, ce retour de notre propre demande retrogradait en
+    « gratuit » le client que billing-run venait de passer a la facturation
+    par resultats : il perdait tous ses modules (mesure, dans les deux ordres
+    d'arrivee). `cancellation_details.comment` porte donc
+    STRIPE_RESILIATION_MARQUE et son motif, que `_abonnement_resilie` relit."""
     secret = os.environ.get('STRIPE_SECRET_KEY')
     conn = registre_get_db(); cur = conn.cursor()
     cur.execute(registre_sql('SELECT stripe_subscription_id FROM clients WHERE id=%s',
@@ -15039,7 +15241,10 @@ def _billing_cancel_subscription(client_id):
     try:
         stripe = _stripe_pret(secret)
         try:
-            resilie = stripe.Subscription.cancel(sub)['status'] == 'canceled'
+            resilie = stripe.Subscription.cancel(
+                sub, cancellation_details={
+                    'comment': STRIPE_RESILIATION_MARQUE + str(motif or 'site')}
+            )['status'] == 'canceled'
         except stripe.InvalidRequestError as _ie:
             resilie = getattr(_ie, 'code', '') == 'resource_missing'
             if not resilie:
@@ -15267,7 +15472,7 @@ def clients_billing_run():
         # PAS DE CUMUL : tant que l'abonnement n'est pas resilie chez Stripe,
         # aucune echeance par resultats n'est emise pour ce client.
         if item['client_id'] not in _cancelled:
-            _cancelled[item['client_id']] = _billing_cancel_subscription(item['client_id'])
+            _cancelled[item['client_id']] = _billing_cancel_subscription(item['client_id'], 'raas')
         if not _cancelled[item['client_id']]:
             results.append({'numero': item['numero'], 'echeance': item['echeance'], 'ok': False,
                             'error': 'Abonnement Stripe non resilie : echeance non emise (pas de cumul)'})
@@ -15443,7 +15648,7 @@ def clients_set_plan():
     # l'offre retiree ici, le prelevement continuant la-bas. Une resiliation
     # refusee est desormais REPONDUE, et rien n'est change.
     if plan == 'gratuit' and secret and sub_id:
-        if not _billing_cancel_subscription(client_id):
+        if not _billing_cancel_subscription(client_id, 'set-plan'):
             return jsonify({'ok': False, 'stripe_sync': 'resiliation_echouee',
                             'error': "Stripe a refuse la resiliation de l'abonnement : offre inchangee."}), 502
         stripe_sync = 'abonnement_resilie'
@@ -16579,17 +16784,33 @@ def rgpd_effacement():
         # et plus rien ne permettait de l'arreter. Au mieux : resilie ; sinon,
         # journalise et dit dans le bilan — l'effacement, lui, a lieu.
         if dict(row).get('stripe_subscription_id'):
-            bilan['abonnement'] = 'resilie' if _billing_cancel_subscription(cid) else 'non_resilie'
+            bilan['abonnement'] = 'resilie' if _billing_cancel_subscription(cid, 'rgpd') else 'non_resilie'
             if bilan['abonnement'] == 'non_resilie':
                 logger.error('RGPD_EFFACEMENT_ABONNEMENT_NON_RESILIE client=%s abonnement=%s',
                              cid, dict(row).get('stripe_subscription_id'))
         else:
             bilan['abonnement'] = 'aucun'
         anonyme = 'efface-' + _rgpd_hash(email) + '@anonyme.invalid'
-        cur.execute(registre_sql(
-            "UPDATE clients SET email=%s, nom_entreprise='COMPTE EFFACE', mot_de_passe_hash='', actif=FALSE, stripe_customer_id=NULL, stripe_subscription_id=NULL WHERE id=%s",
-            "UPDATE clients SET email=?, nom_entreprise='COMPTE EFFACE', mot_de_passe_hash='', actif=0, stripe_customer_id=NULL, stripe_subscription_id=NULL WHERE id=?"),
-            (anonyme, cid))
+        # QUAND STRIPE A REFUSE, ON N'OUBLIE PAS CE QU'IL FAUT ENCORE ARRETER.
+        # Mesure : l'abonnement restait « active » chez Stripe et continuait de
+        # prelever une personne qui avait demande l'effacement, pendant que les
+        # identifiants passaient a NULL — plus rien en base ne permettait de le
+        # retrouver ni de le resilier. Ces identifiants techniques relevent de
+        # l'art. 17.3.b (obligations legales et defense d'un droit) le temps
+        # que la resiliation aboutisse ; le bilan les nomme pour que
+        # l'administrateur agisse au lieu de decouvrir le prelevement plus tard.
+        _garder = bilan['abonnement'] == 'non_resilie'
+        if _garder:
+            bilan['abonnement_a_resilier'] = dict(row).get('stripe_subscription_id')
+            cur.execute(registre_sql(
+                "UPDATE clients SET email=%s, nom_entreprise='COMPTE EFFACE', mot_de_passe_hash='', actif=FALSE WHERE id=%s",
+                "UPDATE clients SET email=?, nom_entreprise='COMPTE EFFACE', mot_de_passe_hash='', actif=0 WHERE id=?"),
+                (anonyme, cid))
+        else:
+            cur.execute(registre_sql(
+                "UPDATE clients SET email=%s, nom_entreprise='COMPTE EFFACE', mot_de_passe_hash='', actif=FALSE, stripe_customer_id=NULL, stripe_subscription_id=NULL WHERE id=%s",
+                "UPDATE clients SET email=?, nom_entreprise='COMPTE EFFACE', mot_de_passe_hash='', actif=0, stripe_customer_id=NULL, stripe_subscription_id=NULL WHERE id=?"),
+                (anonyme, cid))
         bilan['compte'] = 'anonymise'
         for table in ('client_entites', 'client_connecteurs', 'client_formations'):
             try:
@@ -18426,13 +18647,19 @@ def _form_confirmer_paiement(insc_id):
         except Exception: pass
         return
     ins = dict(row)
-    if ins.get('statut') == 'payee':
+    # C'EST L'ECRITURE QUI DECIDE DU COURRIEL, PAS LA LECTURE QUI LA PRECEDE.
+    # La notification Stripe et le retour de caisse arrivent ensemble : les
+    # deux lisaient « pas encore payee », les deux ecrivaient, et les deux
+    # envoyaient leurs courriels — le participant et CONSEILPREV recevaient
+    # tout en double, pour deux credits pris sur les 300 envois quotidiens.
+    cur.execute(registre_sql("UPDATE form_inscriptions SET statut='payee' WHERE id=%s AND statut != 'payee'",
+                             "UPDATE form_inscriptions SET statut='payee' WHERE id=? AND statut != 'payee'"), (insc_id,))
+    change = max(int(getattr(cur, 'rowcount', 1) or 0), 0)
+    conn.commit()
+    if not change:
         try: conn.close()
         except Exception: pass
         return
-    cur.execute(registre_sql("UPDATE form_inscriptions SET statut='payee' WHERE id=%s",
-                             "UPDATE form_inscriptions SET statut='payee' WHERE id=?"), (insc_id,))
-    conn.commit()
     cur.execute(registre_sql('SELECT * FROM form_sessions WHERE id=%s', 'SELECT * FROM form_sessions WHERE id=?'),
                 (ins.get('session_id'),))
     srow = cur.fetchone()
@@ -18680,6 +18907,34 @@ def _formation_ia_liberer_commande(commande, motif):
     return liberees
 
 
+def _formation_ia_encaissement_sans_seance(commande, resa_id, payantes, montant_ttc_cents):
+    """De l'argent est arrive, plus aucune seance n'est confirmable.
+
+    POURQUOI ON NE REMBOURSE PAS TOUT SEUL. Le cas naît d'une annulation
+    survenue entre l'ouverture de la caisse et le paiement : le creneau a pu
+    etre repris par un autre client, la seance a pu deja etre remboursee au
+    titre du bareme, ou l'annulation etre une erreur du client. Rendre l'argent
+    sans regarder rembourserait parfois deux fois. Rien n'est ecrit ici :
+    CONSEILPREV est prevenu et tranche."""
+    ref = commande or ('resa ' + str(resa_id))
+    etats = ', '.join('%s=%s' % (r.get('id'), r.get('statut')) for r in payantes)
+    logger.error('FORMATION_IA_ENCAISSEMENT_SANS_SEANCE commande=%s montant=%s seances=%s',
+                 ref, montant_ttc_cents, etats)
+    try:
+        send_email_smart(CONSEILPREV_NOTIFY_EMAIL, 'CONSEILPREV',
+                         'Formation IA : paiement reçu sans séance à confirmer',
+                         '<p>La commande <strong>%s</strong> a été encaissée '
+                         '(%s c TTC) alors qu’aucune de ses séances n’attend '
+                         'plus son paiement.</p><p>État des séances payantes : '
+                         '%s.</p><p>À arbitrer : remboursement, report, ou '
+                         'nouvelle date. Rien n’a été modifié en base.</p>'
+                         % (_pour_courriel(str(ref)), _pour_courriel(str(montant_ttc_cents)),
+                            _pour_courriel(etats)),
+                         tags=['formation-ia-arbitrage'])
+    except Exception as _e:
+        logger.error('FORMATION_IA_ENCAISSEMENT_SANS_SEANCE_COURRIEL commande=%s : %s', ref, _e)
+
+
 def _formation_ia_confirmer_paiement(commande=None, resa_id=None, montant_ttc_cents=None):
     """Une commande encaissee : passer TOUTES ses seances en « payee », noter
     ce qui a ete regle, et notifier une seule fois.
@@ -18719,15 +18974,35 @@ def _formation_ia_confirmer_paiement(commande=None, resa_id=None, montant_ttc_ce
     lignes = [dict(r) for r in cur.fetchall()]
     # LES SEANCES OFFERTES NE SONT PAS « PAYEES » : elles n'ont rien coute, et
     # les marquer ainsi ferait croire a un remboursement possible.
-    a_payer = [r for r in lignes
-               if not int(r.get('gratuit') or 0) and r.get('statut') != 'payee']
+    payantes = [r for r in lignes if not int(r.get('gratuit') or 0)]
+    # SEULE UNE SEANCE QUI ATTEND SON PAIEMENT SE CONFIRME. Le filtre retenait
+    # toute ligne « != payee », donc AUSSI les annulees. Deux degats mesures :
+    # une seance annulee et remboursee redevenait « payee » — avec le montant
+    # de TOUTE la commande, puisque le prorata ne se repartissait plus que sur
+    # elle, et le remboursement suivant, calcule dessus, vidait le paiement ;
+    # et une seance annulee avant paiement, dont le creneau avait ete repris
+    # par un autre client, remettait deux clients sur la meme date.
+    a_payer = [r for r in payantes
+               if (r.get('statut') or '') == 'en_attente_paiement']
     if not a_payer:
         try: conn.close()
         except Exception: pass
+        # RIEN A CONFIRMER, MAIS DE L'ARGENT EST ARRIVE. Le remboursement n'est
+        # pas automatique : il depend de ce qui s'est passe (creneau repris,
+        # seance deja remboursee, geste commercial). CONSEILPREV tranche, donc
+        # CONSEILPREV est prevenu — le silence laissait l'encaissement sans
+        # trace et sans contrepartie.
+        if any((r.get('statut') or '') == 'annulee' for r in payantes):
+            _formation_ia_encaissement_sans_seance(commande, resa_id, payantes,
+                                                   montant_ttc_cents)
         return
     horo = datetime.utcnow().isoformat()
     tva = formations_ia.TVA_PCT
-    hts = [int(r.get('montant_cents') or 0) for r in a_payer]
+    # LE PRORATA PORTE SUR TOUTES LES SEANCES PAYANTES DE LA COMMANDE, pas sur
+    # celles qui restent a confirmer : `amount_total` est ce que Stripe a
+    # encaisse pour la commande ENTIERE. Le repartir sur le seul reliquat
+    # attribuait a une seance le montant de quatre.
+    hts = [int(r.get('montant_cents') or 0) for r in payantes]
     try:
         total = int(montant_ttc_cents) if montant_ttc_cents is not None else 0
     except (TypeError, ValueError):
@@ -18737,21 +19012,35 @@ def _formation_ia_confirmer_paiement(commande=None, resa_id=None, montant_ttc_ce
         ttcs[0] += total - sum(ttcs)
     else:
         ttcs = [int(round(ht * (100 + tva) / 100.0)) for ht in hts]
-    for r, ttc in zip(a_payer, ttcs):
+    part = dict(zip([r.get('id') for r in payantes], ttcs))
+    # LA BASE DEPARTAGE, ET C'EST ELLE QUI DECIDE DU COURRIEL. La notification
+    # Stripe et le retour de caisse arrivent ensemble : les deux lisaient les
+    # memes seances a confirmer, le second UPDATE ne changeait rien, mais les
+    # deux envoyaient leurs courriels — doublons chez le client, chez
+    # CONSEILPREV, et deux credits pris sur les 300 envois quotidiens.
+    changees = 0
+    for r in a_payer:
         cur.execute(registre_sql(
             "UPDATE formation_ia_resa SET statut='payee', paye_le=%s, paye_ttc_cents=%s "
-            "WHERE id=%s AND statut != 'payee'",
+            "WHERE id=%s AND statut='en_attente_paiement'",
             "UPDATE formation_ia_resa SET statut='payee', paye_le=?, paye_ttc_cents=? "
-            "WHERE id=? AND statut != 'payee'"), (horo, ttc, r.get('id')))
+            "WHERE id=? AND statut='en_attente_paiement'"),
+            (horo, part.get(r.get('id'), 0), r.get('id')))
+        changees += max(int(getattr(cur, 'rowcount', 1) or 0), 0)
     conn.commit()
     try: conn.close()
     except Exception: pass
+    if not changees:
+        return
 
     prem = a_payer[0]
     cal = {c['date']: c['libelle']
            for c in formations_ia.creneaux(datetime.utcnow().date()
                                            - timedelta(days=400))}
-    total_ttc = sum(ttcs)
+    # CE QUE LE COURRIEL ANNONCE EST CE QUI VIENT D'ETRE CONFIRME, pas le
+    # montant de la commande : une seance deja reglee plus tot ne se
+    # re-annonce pas au client.
+    total_ttc = sum(part.get(r.get('id'), 0) for r in a_payer)
     lignes_html = ''.join(
         '<li><strong>%s</strong> — %s</li>'
         % ((formations_ia.sujet(r.get('sujet')) or {}).get('titre') or r.get('sujet'),
@@ -19197,6 +19486,13 @@ def formation_ia_inscription():
     commande = _secrets.token_urlsafe(12)
     par_cle = {l['cle']: l for l in dev['lignes']}
     horo = datetime.utcnow().isoformat()
+    # L'INSTANT OU LA RETENUE DU CRENEAU COMMENCE, RETENU ICI. La caisse ne
+    # s'ouvre que plus bas, apres DEUX envois de courriels synchrones et la
+    # lecture du taux de TVA chez Stripe. Lire l'heure la-bas faisait vivre la
+    # caisse d'autant plus longtemps que ces appels trainaient (mesure : 5,67 s
+    # avec un Brevo lent de 3 s) : le creneau etait rendu, Y le reprenait, et X
+    # pouvait encore payer le sien.
+    depart_retenue = int(time.time())
     for i, x in enumerate(seances):
         li = par_cle[x['sujet']]
         statut = ('confirmee' if li['gratuit']
@@ -19323,7 +19619,8 @@ def formation_ia_inscription():
                 # RETENUE_MINUTES : X ne payait pas, Y prenait le creneau a
                 # H+61, puis X et Y payaient tous deux la meme date (mesure).
                 # Stripe exige au moins 30 minutes.
-                expires_at=int(time.time()) + max(30, formations_ia.RETENUE_MINUTES) * 60,
+                expires_at=max(depart_retenue + formations_ia.RETENUE_MINUTES * 60,
+                               int(time.time()) + 31 * 60),
                 metadata={'type': 'formation-ia', 'commande': commande,
                           'resa_id': str(recap[0]['id'] if recap else 0)},
                 success_url=base + '/formation?paiement=ok&session_id={CHECKOUT_SESSION_ID}',
