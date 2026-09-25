@@ -190,6 +190,32 @@ def test_le_repli_smtp_suit_le_protocole(brevo, monkeypatch, port, classe):
     assert journal == attendu, journal
 
 
+def test_le_repli_smtp_ne_journalise_pas_l_adresse_en_clair(brevo, monkeypatch, caplog):
+    """Le chemin API masque déjà l'adresse ; le chemin SMTP l'écrivait en
+    clair. Les journaux Render sont conservés et lus par des outils : une
+    adresse de plus y est une donnée personnelle de plus, pour rien."""
+    brevo.pannes['POST ' + SMTP_EMAIL] = (500, {'code': 'internal_error'})
+
+    class _Smtp(object):
+        def __init__(self, *a, **kw): pass
+        def __enter__(self): return self
+        def __exit__(self, *a): pass
+        def ehlo(self): pass
+        def starttls(self, context=None): pass
+        def login(self, u, p): pass
+        def sendmail(self, de, a, msg): pass
+
+    monkeypatch.setattr(A.smtplib, 'SMTP', _Smtp)
+    monkeypatch.setattr(A, 'SMTP_USER', 'relais@exemple.test')
+    monkeypatch.setattr(A, 'SMTP_PASSWORD', 'cle-smtp')
+    monkeypatch.setattr(A, 'SMTP_PORT', 2525)
+    with caplog.at_level(logging.INFO, logger='conseilprev'):
+        assert A.send_email_smart('journal@exemple.test', 'J', 'S', '<p/>') == (True, 'brevo_smtp')
+    assert 'BREVO_SMTP_OK' in caplog.text, caplog.text
+    assert 'journal@exemple.test' not in caplog.text, 'adresse en clair dans le journal'
+    assert 'j***@exemple.test' in caplog.text, caplog.text
+
+
 # ══════════════════════════════════════════════════════════════════════════
 #  2. LES ROUTES DE DIAGNOSTIC (G1 / E3 / M1)
 # ══════════════════════════════════════════════════════════════════════════

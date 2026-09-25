@@ -26,6 +26,50 @@ from flask_cors import CORS
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
 logger = logging.getLogger('conseilprev')
 
+
+class _JournalSurUneLigne(logging.Filter):
+    """UNE ENTREE DE JOURNAL, UNE LIGNE — quoi qu'un anonyme ait saisi.
+
+    LE DEFAUT MESURE. Un GET anonyme sur /api/stripe/retour avec
+    `?session_id=cs_x%0A2026-09-24 12:00:00,000 INFO STRIPE_OFFRE_ACTIVEE
+    client=7 plan=entreprise` faisait apparaitre, dans le journal Render, une
+    fausse activation d'offre SUR SA PROPRE LIGNE, avec l'horodatage et le
+    niveau d'un vrai evenement. Quiconque lit ce journal — nous, un auditeur,
+    un outil d'alerte — n'a aucun moyen de la distinguer d'une vraie.
+
+    POURQUOI ICI ET PAS AU POINT D'ECRITURE. Le saut de ligne n'est pas le
+    probleme d'UNE route : toute valeur choisie par un inconnu qui atteint un
+    `logger.*` porte le meme risque, et il y en a des centaines. Assainir au
+    point d'ecriture demanderait de les retrouver tous, aujourd'hui et a
+    chaque ligne ajoutee demain. Le filtre est le SEUL endroit par lequel
+    elles passent toutes.
+
+    CE QU'ON REMPLACE, ET CE QU'ON REFUSE DE FAIRE. Les fins de ligne
+    deviennent « ⏎ » : la trace reste lisible et rien n'est perdu — tronquer
+    effacerait justement ce qu'on veut voir. Le message est formate ICI, une
+    fois, et remis dans `record.msg` avec des `args` vides : un filtre qui
+    laisserait le formatage a plus tard ne verrait pas les valeurs.
+    """
+
+    _FINS = ('\r\n', '\n', '\r', ' ', ' ')
+
+    def filter(self, record):
+        try:
+            texte = record.getMessage()
+        except Exception:                                      # pragma: no cover
+            return True
+        if any(f in texte for f in self._FINS):
+            for f in self._FINS:
+                texte = texte.replace(f, ' ⏎ ')
+            record.msg = texte
+            record.args = ()
+        return True
+
+
+for _h in logging.getLogger().handlers:
+    _h.addFilter(_JournalSurUneLigne())
+logger.addFilter(_JournalSurUneLigne())
+
 app = Flask(__name__, static_folder='.', static_url_path='')
 
 
@@ -1054,7 +1098,7 @@ def send_email_smart(to_email, to_name, subject, html_content,
                 with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=20) as srv:
                     srv.ehlo(); srv.starttls(context=ctx); srv.login(SMTP_USER, SMTP_PASSWORD)
                     srv.sendmail(MAIL_FROM, [to_email], msg.as_string())
-            logger.info(f'BREVO_SMTP_OK: {to_email}')
+            logger.info('BREVO_SMTP_OK: %s', _masquer_courriel(to_email))
             email_log_record(to_email, subject, 'brevo_smtp', True)
             return True, 'brevo_smtp'
         except Exception as e:
@@ -19385,7 +19429,8 @@ def formation_ia_inscription():
                             ann['apres'], formations_ia.SUPPORT['participants']),
                          tags=['formation-ia-accuse'])
     except Exception as _e:
-        logger.error('FORMATION_IA_ACCUSE_ECHEC commande=%s destinataire=%s : %s', commande, email, _e)
+        logger.error('FORMATION_IA_ACCUSE_ECHEC commande=%s destinataire=%s : %s',
+                     commande, _masquer_courriel(email), _e)
 
     # ── PAIEMENT EN LIGNE (flux B : price_data en ligne, mode paiement) ──
     # LE PRIX N'EST JAMAIS RECOPIE : il vient du devis, la meme source que

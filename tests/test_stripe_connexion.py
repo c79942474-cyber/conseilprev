@@ -829,8 +829,14 @@ def test_un_accuse_qui_echoue_est_journalise(client, faux_stripe, faux_brevo, mo
     monkeypatch.setattr(A, "send_email_smart", casse)
     with caplog.at_level(logging.ERROR, logger="conseilprev"):
         panier(client, n=2, email="journal@recette.test")
-    lignes = [m.getMessage() for m in caplog.records if "journal@recette.test" in m.getMessage()]
-    assert lignes, "l'accusé n'est pas parti et rien ne le dit : %s" % [m.getMessage() for m in caplog.records]
+    # LA LIGNE DIT QUI, SANS ÉCRIRE L'ADRESSE. Les journaux Render sont lus
+    # par des outils et conservés ; une adresse en clair y est une donnée
+    # personnelle de plus, pour rien. Le masque suffit à retrouver la ligne.
+    messages = [m.getMessage() for m in caplog.records]
+    lignes = [m for m in messages if "FORMATION_IA_ACCUSE_ECHEC" in m]
+    assert lignes, "l'accusé n'est pas parti et rien ne le dit : %s" % messages
+    assert "j***@recette.test" in lignes[0], lignes[0]
+    assert "journal@recette.test" not in lignes[0], "adresse en clair dans le journal"
 
 
 # ══════════════════════════════════════════════════════════════════════════
