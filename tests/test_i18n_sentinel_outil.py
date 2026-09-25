@@ -759,9 +759,11 @@ def test_la_route_ne_sert_pas_le_catalogue_et_le_dossier_reel_se_fusionne_sans_f
     assert all(isinstance(v, str) for r in dico for v in dico[r].values())
 
 
-def test_les_fichiers_de_travail_du_depot_couvrent_le_catalogue_sans_doublon_et_sont_vides():
+def test_les_fichiers_de_travail_du_depot_couvrent_le_catalogue_sans_doublon_et_sont_remplis():
     """CE SONT LES ENTRÉES DES TRADUCTEURS : chaque clé du catalogue est
-    dans exactement un fichier, avec sa case « en » vide."""
+    dans exactement un fichier. La traduction est faite : chaque case « en »
+    est REMPLIE — une case vide est un texte qui resterait en français à
+    l'écran sans que rien ne le dise."""
     cat = _catalogue_reel()
     fichiers = sorted(glob.glob(os.path.join(A_TRADUIRE, "*.json")))
     assert len(fichiers) >= 20, len(fichiers)
@@ -782,7 +784,9 @@ def test_les_fichiers_de_travail_du_depot_couvrent_le_catalogue_sans_doublon_et_
     attendues = set([("bloc", k) for k in cat["bloc"]] + [("texte", k) for k in cat["texte"]] + [("texte", k) for k in cat["attr"]])
     assert len(vues) == len(set(vues)), "doublons entre fichiers de travail : %s" % [v for v in vues if vues.count(v) > 1][:3]
     assert set(vues) == attendues, "écart catalogue / lots : %s" % sorted(attendues ^ set(vues))[:5]
-    assert remplies == 0, "%d entrée(s) déjà remplies dans les fichiers de travail" % remplies
+    assert remplies == len(vues), (
+        "%d entrée(s) sans traduction dans les fichiers de travail"
+        % (len(vues) - remplies))
 
 
 def test_le_catalogue_a_l_inventaire_annonce_par_regime():

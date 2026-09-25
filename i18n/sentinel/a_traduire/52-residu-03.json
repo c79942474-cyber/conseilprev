@@ -1,7 +1,19 @@
 {
  "_lot": "52-residu-03",
  "_mots": 2615,
+ "_pages": [
+  "empreinte-ia",
+  "empreinte-parc",
+  "enveloppe",
+  "finops",
+  "matrice",
+  "obs-rd",
+  "pan-sia",
+  "qualif-assistee",
+  "registre"
+ ],
  "_rubrique": "residu mesure navigateur",
+ "bloc": {},
  "texte": {
   "Coefficient de passage électricité finale → énergie primaire": {
    "fr": "Coefficient de passage électricité finale → énergie primaire",
@@ -1794,6 +1806,5 @@
     "empreinte-parc"
    ]
   }
- },
- "bloc": {}
+ }
 }

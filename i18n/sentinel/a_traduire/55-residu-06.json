@@ -1,7 +1,23 @@
 {
  "_lot": "55-residu-06",
  "_mots": 2602,
+ "_pages": [
+  "gouvernance",
+  "historique",
+  "ia-act-hub",
+  "ia50",
+  "iso27001",
+  "iso27001-millesime",
+  "iso27001-risques",
+  "iso27001-soa",
+  "iso42001",
+  "nist-cadre",
+  "nist-genai",
+  "owasp-pont",
+  "rgpd-site"
+ ],
  "_rubrique": "residu mesure navigateur",
+ "bloc": {},
  "texte": {
   "Fluidité": {
    "fr": "Fluidité",
@@ -1627,6 +1643,5 @@
     "iso27001-millesime"
    ]
   }
- },
- "bloc": {}
+ }
 }

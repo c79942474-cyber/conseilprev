@@ -1,7 +1,11 @@
 {
  "_lot": "60-residu-11",
  "_mots": 2610,
+ "_pages": [
+  "pan-sia"
+ ],
  "_rubrique": "residu mesure navigateur",
+ "bloc": {},
  "texte": {
   "Rapports de développement durable des exploitants · The Green Grid · LBNL": {
    "fr": "Rapports de développement durable des exploitants · The Green Grid · LBNL",
@@ -1571,6 +1575,5 @@
     "pan-sia"
    ]
   }
- },
- "bloc": {}
+ }
 }

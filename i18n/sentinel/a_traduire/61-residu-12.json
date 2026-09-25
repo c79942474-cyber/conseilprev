@@ -1,7 +1,32 @@
 {
  "_lot": "61-residu-12",
  "_mots": 2019,
+ "_pages": [
+  "pan-sia",
+  "pricing",
+  "qualif-assistee",
+  "rag",
+  "recyf-analyse",
+  "recyf-objectifs",
+  "registre",
+  "regs",
+  "rgpd-aipd",
+  "rgpd-cartographie",
+  "rgpd-conformite",
+  "rgpd-doc",
+  "rgpd-hub",
+  "rgpd-pbd",
+  "rgpd-sensibilisation",
+  "rgpd-site",
+  "rgpd-traitements",
+  "sanctions",
+  "shadow-ai",
+  "simulateur",
+  "templates",
+  "veille"
+ ],
  "_rubrique": "residu mesure navigateur",
+ "bloc": {},
  "texte": {
   "sont des mesures publiées, plus précises, mais limitées aux vingt-sept États membres et à une seule date. Les": {
    "fr": "sont des mesures publiées, plus précises, mais limitées aux vingt-sept États membres et à une seule date. Les",
@@ -1650,6 +1675,5 @@
     "veille"
    ]
   }
- },
- "bloc": {}
+ }
 }

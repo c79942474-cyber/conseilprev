@@ -1,7 +1,26 @@
 {
  "_lot": "57-residu-08",
  "_mots": 2610,
+ "_pages": [
+  "iso42001-soa",
+  "matrice",
+  "maturite",
+  "nis2",
+  "nis2-chiffre",
+  "nis2-gouvernance",
+  "nis2-qualifier",
+  "nis2-signalement",
+  "nist-cadre",
+  "nist-genai",
+  "nist-profil",
+  "nist53-socle",
+  "nist82-ot",
+  "obs-rd",
+  "pan-sia",
+  "recyf-objectifs"
+ ],
  "_rubrique": "residu mesure navigateur",
+ "bloc": {},
  "texte": {
   "Les mesures de l'annexe A ne sont pas exhaustives : un organisme peut en concevoir d'autres, ou s'inspirer de sources existantes, si le traitement des risques l'exige. Une déclaration d'applicabilité qui couvre les trente-huit mesures de l'annexe A n'est pas pour autant complète : elle l'est si elle couvre les options de traitement retenues, ce qui peut demander davantage.": {
    "fr": "Les mesures de l'annexe A ne sont pas exhaustives : un organisme peut en concevoir d'autres, ou s'inspirer de sources existantes, si le traitement des risques l'exige. Une déclaration d'applicabilité qui couvre les trente-huit mesures de l'annexe A n'est pas pour autant complète : elle l'est si elle couvre les options de traitement retenues, ce qui peut demander davantage.",
@@ -1500,6 +1519,5 @@
     "obs-rd"
    ]
   }
- },
- "bloc": {}
+ }
 }

@@ -1,7 +1,14 @@
 {
  "_lot": "53-residu-04",
  "_mots": 2605,
+ "_pages": [
+  "empreinte-parc",
+  "enveloppe",
+  "gouvernance",
+  "pan-sia"
+ ],
  "_rubrique": "residu mesure navigateur",
+ "bloc": {},
  "texte": {
   "scope # du GHG Protocol": {
    "fr": "scope 3 du GHG Protocol",
@@ -1401,6 +1408,5 @@
     "enveloppe"
    ]
   }
- },
- "bloc": {}
+ }
 }

@@ -1,1961 +1,1964 @@
 {
  "_lot": "59-residu-10",
  "_mots": 2613,
+ "_pages": [
+  "pan-sia"
+ ],
  "_rubrique": "residu mesure navigateur",
+ "bloc": {},
  "texte": {
   "Disponibilité en eau (WEI+, compétition d'usages)": {
    "fr": "Disponibilité en eau (WEI+, compétition d'usages)",
-   "en": "",
+   "en": "Water availability (WEI+, competing uses)",
    "_pages": [
     "pan-sia"
    ]
   },
   "Doctolib — Assistant de consultation (transcription et synthèse) pour les praticiens": {
    "fr": "Doctolib — Assistant de consultation (transcription et synthèse) pour les praticiens",
-   "en": "",
+   "en": "Doctolib — Consultation assistant (transcription and summary) for practitioners",
    "_pages": [
     "pan-sia"
    ]
   },
   "Domaine public — politique de données ouvertes de la NASA": {
    "fr": "Domaine public — politique de données ouvertes de la NASA",
-   "en": "",
+   "en": "Public domain — NASA open data policy",
    "_pages": [
     "pan-sia"
    ]
   },
   "Donner un ordre de grandeur quand AUCUNE capacité n’est publiée — c’est le cas des # sites.": {
    "fr": "Donner un ordre de grandeur quand AUCUNE capacité n’est publiée — c’est le cas des 97 sites.",
-   "en": "",
+   "en": "Give an order of magnitude when NO capacity is published — which is the case for the # sites.",
    "_pages": [
     "pan-sia"
    ]
   },
   "Données Sentinel libres, entières et ouvertes — règlement délégué (UE) #/#": {
    "fr": "Données Sentinel libres, entières et ouvertes — règlement délégué (UE) 1159/2013",
-   "en": "",
+   "en": "Free, full and open Sentinel data — Delegated Regulation (EU) #/#",
    "_pages": [
     "pan-sia"
    ]
   },
   "Données ouvertes": {
    "fr": "Données ouvertes",
-   "en": "",
+   "en": "Open data",
    "_pages": [
     "pan-sia"
    ]
   },
   "Décomposition du prix global et forfaitaire — centre de données": {
    "fr": "Décomposition du prix global et forfaitaire — centre de données",
-   "en": "",
+   "en": "Itemised lump-sum price breakdown — data centre",
    "_pages": [
     "pan-sia"
    ]
   },
   "Découverte de molécules assistée par IA (partenariats calcul intensif)": {
    "fr": "Découverte de molécules assistée par IA (partenariats calcul intensif)",
-   "en": "",
+   "en": "AI-assisted molecule discovery (high-performance computing partnerships)",
    "_pages": [
     "pan-sia"
    ]
   },
   "Déduire un volume d’eau de refroidissement annuel.": {
    "fr": "Déduire un volume d’eau de refroidissement annuel.",
-   "en": "",
+   "en": "Derive an annual cooling water volume.",
    "_pages": [
     "pan-sia"
    ]
   },
   "Défaillance du refroidissement de deux grands centres de données hospitaliers ; systèmes d’information de plusieurs hôpitaux paralysés. Perturbations signalées par plusieurs grands fournisseurs de services dans la même zone.": {
    "fr": "Défaillance du refroidissement de deux grands centres de données hospitaliers ; systèmes d’information de plusieurs hôpitaux paralysés. Perturbations signalées par plusieurs grands fournisseurs de services dans la même zone.",
-   "en": "",
+   "en": "Cooling failure at two large hospital data centres; information systems of several hospitals paralysed. Disruptions reported by several large service providers in the same area.",
    "_pages": [
     "pan-sia"
    ]
   },
   "Dépendance chaîne d'approvisionnement modèle/API": {
    "fr": "Dépendance chaîne d'approvisionnement modèle/API",
-   "en": "",
+   "en": "Model/API supply chain dependency",
    "_pages": [
     "pan-sia"
    ]
   },
   "Déploiement ChatGPT Enterprise (milliers de licences) pour les fonctions internes": {
    "fr": "Déploiement ChatGPT Enterprise (milliers de licences) pour les fonctions internes",
-   "en": "",
+   "en": "ChatGPT Enterprise deployment (thousands of licences) for internal functions",
    "_pages": [
     "pan-sia"
    ]
   },
   "Détection de fraude paiement en temps réel par ML": {
    "fr": "Détection de fraude paiement en temps réel par ML",
-   "en": "",
+   "en": "Real-time ML payment fraud detection",
    "_pages": [
     "pan-sia"
    ]
   },
   "Détection des super-émetteurs de méthane par analyse des colonnes Sentinel-#P, exploitée par des acteurs publics et privés": {
    "fr": "Détection des super-émetteurs de méthane par analyse des colonnes Sentinel-5P, exploitée par des acteurs publics et privés",
-   "en": "",
+   "en": "Detection of methane super-emitters by analysis of Sentinel-#P columns, used by public and private players",
    "_pages": [
     "pan-sia"
    ]
   },
   "ECMWF (organisation intergouvernementale, calcul à Bologne)": {
    "fr": "ECMWF (organisation intergouvernementale, calcul à Bologne)",
-   "en": "",
+   "en": "ECMWF (intergovernmental organisation, computing in Bologna)",
    "_pages": [
     "pan-sia"
    ]
   },
   "ECMWF (organisation intergouvernementale, calcul à Bologne) — AIFS : modèle de prévision météorologique appris sur la réanalyse ERA# du service Copernicus climat, passé en exploitation": {
    "fr": "ECMWF (organisation intergouvernementale, calcul à Bologne) — AIFS : modèle de prévision météorologique appris sur la réanalyse ERA5 du service Copernicus climat, passé en exploitation",
-   "en": "",
+   "en": "ECMWF (intergovernmental organisation, computing in Bologna) — AIFS: weather forecasting model trained on the ERA# reanalysis of the Copernicus Climate Change Service, put into operation",
    "_pages": [
     "pan-sia"
    ]
   },
   "EDP — Maintenance prédictive des parcs éoliens et solaires": {
    "fr": "EDP — Maintenance prédictive des parcs éoliens et solaires",
-   "en": "",
+   "en": "EDP — Predictive maintenance of wind and solar farms",
    "_pages": [
     "pan-sia"
    ]
   },
   "EMSA — Agence européenne pour la sécurité maritime": {
    "fr": "EMSA — Agence européenne pour la sécurité maritime",
-   "en": "",
+   "en": "EMSA — European Maritime Safety Agency",
    "_pages": [
     "pan-sia"
    ]
   },
   "EMSA — Agence européenne pour la sécurité maritime — CleanSeaNet : détection automatisée des nappes d'hydrocarbures sur imagerie radar Sentinel-#, alertes transmises aux États membres": {
    "fr": "EMSA — Agence européenne pour la sécurité maritime — CleanSeaNet : détection automatisée des nappes d'hydrocarbures sur imagerie radar Sentinel-1, alertes transmises aux États membres",
-   "en": "",
+   "en": "EMSA — European Maritime Safety Agency — CleanSeaNet: automated detection of oil slicks on Sentinel-# radar imagery, alerts sent to Member States",
    "_pages": [
     "pan-sia"
    ]
   },
   "Ember # (cycle de vie) — empreinte_sites.py — note = # × (# − intensité) ÷ (# − #), bornée #-#": {
    "fr": "Ember 2024 (cycle de vie) — empreinte_sites.py — note = 100 × (660 − intensité) ÷ (660 − 30), bornée 0-100",
-   "en": "",
+   "en": "Ember # (life cycle) — empreinte_sites.py — score = # × (# − intensity) ÷ (# − #), bounded #-#",
    "_pages": [
     "pan-sia"
    ]
   },
   "Ember #, parts arrondies à # points — note = part non fossile, +# si nucléaire ≥ # % (pilotable), bornée #-#": {
    "fr": "Ember 2024, parts arrondies à 5 points — note = part non fossile, +10 si nucléaire ≥ 30 % (pilotable), bornée 0-100",
-   "en": "",
+   "en": "Ember #, shares rounded to # points — score = non-fossil share, +# if nuclear ≥ # % (dispatchable), bounded #-#",
    "_pages": [
     "pan-sia"
    ]
   },
   "Ember · Agence européenne pour l’environnement · AIE": {
    "fr": "Ember · Agence européenne pour l’environnement · AIE",
-   "en": "",
+   "en": "Ember · European Environment Agency · IEA",
    "_pages": [
     "pan-sia"
    ]
   },
   "Empoisonnement du corpus documentaire interne": {
    "fr": "Empoisonnement du corpus documentaire interne",
-   "en": "",
+   "en": "Poisoning of the internal document corpus",
    "_pages": [
     "pan-sia"
    ]
   },
   "Enel — Maintenance prédictive du réseau de distribution et inspection par drones+vision": {
    "fr": "Enel — Maintenance prédictive du réseau de distribution et inspection par drones+vision",
-   "en": "",
+   "en": "Enel — Predictive maintenance of the distribution grid and drone+vision inspection",
    "_pages": [
     "pan-sia"
    ]
   },
   "Enquête annuelle sur l'empreinte environnementale du numérique": {
    "fr": "Enquête annuelle sur l'empreinte environnementale du numérique",
-   "en": "",
+   "en": "Annual survey on the environmental footprint of digital technology",
    "_pages": [
     "pan-sia"
    ]
   },
   "Erste Group — Conseiller numérique George : recommandations financières personnalisées et génAI": {
    "fr": "Erste Group — Conseiller numérique George : recommandations financières personnalisées et génAI",
-   "en": "",
+   "en": "Erste Group — Digital adviser George: personalised financial recommendations and genAI",
    "_pages": [
     "pan-sia"
    ]
   },
   "Espagne · Télécoms · Production": {
    "fr": "Espagne · Télécoms · Production",
-   "en": "",
+   "en": "Spain · Telecoms · Production",
    "_pages": [
     "pan-sia"
    ]
   },
   "Espagne · Énergie · À l'échelle": {
    "fr": "Espagne · Énergie · À l'échelle",
-   "en": "",
+   "en": "Spain · Energy · At scale",
    "_pages": [
     "pan-sia"
    ]
   },
   "Estonie · Plateformes · À l'échelle": {
    "fr": "Estonie · Plateformes · À l'échelle",
-   "en": "",
+   "en": "Estonia · Platforms · At scale",
    "_pages": [
     "pan-sia"
    ]
   },
   "Eurostat nrg_pc_#, #, classes — bas=#, moyen=#, élevé=#": {
    "fr": "Eurostat nrg_pc_205, 2024, classes — bas=85, moyen=55, élevé=25",
-   "en": "",
+   "en": "Eurostat nrg_pc_#, #, classes — low=#, medium=#, high=#",
    "_pages": [
     "pan-sia"
    ]
   },
   "Eurostat — statistiques européennes": {
    "fr": "Eurostat — statistiques européennes",
-   "en": "",
+   "en": "Eurostat — European statistics",
    "_pages": [
     "pan-sia"
    ]
   },
   "Exfiltration de données clients par détournement": {
    "fr": "Exfiltration de données clients par détournement",
-   "en": "",
+   "en": "Exfiltration of client data by hijacking",
    "_pages": [
     "pan-sia"
    ]
   },
   "Explication : Ce que nous ne garantissons pas": {
    "fr": "Explication : Ce que nous ne garantissons pas",
-   "en": "",
+   "en": "Explanation: What we do not guarantee",
    "_pages": [
     "pan-sia"
    ]
   },
   "Explication : Centres de données": {
    "fr": "Explication : Centres de données",
-   "en": "",
+   "en": "Explanation: Data centres",
    "_pages": [
     "pan-sia"
    ]
   },
   "Explication : Comparateur d’implantation": {
    "fr": "Explication : Comparateur d’implantation",
-   "en": "",
+   "en": "Explanation: Siting comparator",
    "_pages": [
     "pan-sia"
    ]
   },
   "Explication : La carte": {
    "fr": "Explication : La carte",
-   "en": "",
+   "en": "Explanation: The map",
    "_pages": [
     "pan-sia"
    ]
   },
   "Explication : Les constantes du modèle": {
    "fr": "Explication : Les constantes du modèle",
-   "en": "",
+   "en": "Explanation: The model constants",
    "_pages": [
     "pan-sia"
    ]
   },
   "Explication : Les contrôles factuels": {
    "fr": "Explication : Les contrôles factuels",
-   "en": "",
+   "en": "Explanation: The fact checks",
    "_pages": [
     "pan-sia"
    ]
   },
   "Explication : Panel de cas documentés": {
    "fr": "Explication : Panel de cas documentés",
-   "en": "",
+   "en": "Explanation: Panel of documented cases",
    "_pages": [
     "pan-sia"
    ]
   },
   "Explication : Signaux en continu": {
    "fr": "Explication : Signaux en continu",
-   "en": "",
+   "en": "Explanation: Continuous signals",
    "_pages": [
     "pan-sia"
    ]
   },
   "Explication : Socle de données ouvertes": {
    "fr": "Explication : Socle de données ouvertes",
-   "en": "",
+   "en": "Explanation: Open data foundation",
    "_pages": [
     "pan-sia"
    ]
   },
   "Explication : Sources, méthode et vérification": {
    "fr": "Explication : Sources, méthode et vérification",
-   "en": "",
+   "en": "Explanation: Sources, method and verification",
    "_pages": [
     "pan-sia"
    ]
   },
   "Explorateur des cas — classement AI Act et exposition": {
    "fr": "Explorateur des cas — classement AI Act et exposition",
-   "en": "",
+   "en": "Case explorer — AI Act classification and exposure",
    "_pages": [
     "pan-sia"
    ]
   },
   "Exporter les cas filtrés": {
    "fr": "Exporter les cas filtrés",
-   "en": "",
+   "en": "Export the filtered cases",
    "_pages": [
     "pan-sia"
    ]
   },
   "FEGA — Fondo Español de Garantía Agraria": {
    "fr": "FEGA — Fondo Español de Garantía Agraria",
-   "en": "",
+   "en": "FEGA — Fondo Español de Garantía Agraria",
    "_pages": [
     "pan-sia"
    ]
   },
   "FEGA — Fondo Español de Garantía Agraria — Même dispositif de suivi des surfaces agricoles par imagerie Sentinel, appliqué aux aides espagnoles": {
    "fr": "FEGA — Fondo Español de Garantía Agraria — Même dispositif de suivi des surfaces agricoles par imagerie Sentinel, appliqué aux aides espagnoles",
-   "en": "",
+   "en": "FEGA — Fondo Español de Garantía Agraria — Same agricultural area monitoring arrangements using Sentinel imagery, applied to Spanish aid",
    "_pages": [
     "pan-sia"
    ]
   },
   "Facteur de charge d’un site en exploitation": {
    "fr": "Facteur de charge d’un site en exploitation",
-   "en": "",
+   "en": "Load factor of an operating site",
    "_pages": [
     "pan-sia"
    ]
   },
   "Facteur d’émissions de fabrication amortie": {
    "fr": "Facteur d’émissions de fabrication amortie",
-   "en": "",
+   "en": "Amortised manufacturing emission factor",
    "_pages": [
     "pan-sia"
    ]
   },
   "Facteurs d'électricité : Base Carbone ADEME contre moyennes annuelles": {
    "fr": "Facteurs d'électricité : Base Carbone ADEME contre moyennes annuelles",
-   "en": "",
+   "en": "Electricity factors: ADEME Base Carbone versus annual averages",
    "_pages": [
     "pan-sia"
    ]
   },
   "Feu de forêt — horizon retenu": {
    "fr": "Feu de forêt — horizon retenu",
-   "en": "",
+   "en": "Wildfire — selected horizon",
    "_pages": [
     "pan-sia"
    ]
   },
   "Feux de forêt.": {
    "fr": "Feux de forêt.",
-   "en": "",
+   "en": "Wildfires.",
    "_pages": [
     "pan-sia"
    ]
   },
   "File de raccordement #-# (concurrence)": {
    "fr": "File de raccordement 2026-2030 (concurrence)",
-   "en": "",
+   "en": "Connection queue #-# (competition)",
    "_pages": [
     "pan-sia"
    ]
   },
   "File « à qualifier » :": {
    "fr": "File « à qualifier » :",
-   "en": "",
+   "en": "“To be qualified” queue:",
    "_pages": [
     "pan-sia"
    ]
   },
   "Filtrer par classe de risque": {
    "fr": "Filtrer par classe de risque",
-   "en": "",
+   "en": "Filter by risk class",
    "_pages": [
     "pan-sia"
    ]
   },
   "Filtrer par pays": {
    "fr": "Filtrer par pays",
-   "en": "",
+   "en": "Filter by country",
    "_pages": [
     "pan-sia"
    ]
   },
   "Filtrer par secteur": {
    "fr": "Filtrer par secteur",
-   "en": "",
+   "en": "Filter by sector",
    "_pages": [
     "pan-sia"
    ]
   },
   "Filtrer par stade": {
    "fr": "Filtrer par stade",
-   "en": "",
+   "en": "Filter by stage",
    "_pages": [
     "pan-sia"
    ]
   },
   "Finlande · Équipementier télécom · À l'échelle": {
    "fr": "Finlande · Équipementier télécom · À l'échelle",
-   "en": "",
+   "en": "Finland · Telecom equipment supplier · At scale",
    "_pages": [
     "pan-sia"
    ]
   },
   "France · Assurance · À l'échelle": {
    "fr": "France · Assurance · À l'échelle",
-   "en": "",
+   "en": "France · Insurance · At scale",
    "_pages": [
     "pan-sia"
    ]
   },
   "France · Automobile · À l'échelle": {
    "fr": "France · Automobile · À l'échelle",
-   "en": "",
+   "en": "France · Automotive · At scale",
    "_pages": [
     "pan-sia"
    ]
   },
   "France · Aéronautique · Production": {
    "fr": "France · Aéronautique · Production",
-   "en": "",
+   "en": "France · Aeronautics · Production",
    "_pages": [
     "pan-sia"
    ]
   },
   "France · Défense & sécurité · Pilote": {
    "fr": "France · Défense & sécurité · Pilote",
-   "en": "",
+   "en": "France · Defence & security · Pilot",
    "_pages": [
     "pan-sia"
    ]
   },
   "France · Environnement / Analytique · Production": {
    "fr": "France · Environnement / Analytique · Production",
-   "en": "",
+   "en": "France · Environment / Analytics · Production",
    "_pages": [
     "pan-sia"
    ]
   },
   "France · Fournisseur GPAI · À l'échelle": {
    "fr": "France · Fournisseur GPAI · À l'échelle",
-   "en": "",
+   "en": "France · GPAI provider · At scale",
    "_pages": [
     "pan-sia"
    ]
   },
   "France · Fournisseur biométrie · À l'échelle": {
    "fr": "France · Fournisseur biométrie · À l'échelle",
-   "en": "",
+   "en": "France · Biometrics provider · At scale",
    "_pages": [
     "pan-sia"
    ]
   },
   "France · Logistique · Production": {
    "fr": "France · Logistique · Production",
-   "en": "",
+   "en": "France · Logistics · Production",
    "_pages": [
     "pan-sia"
    ]
   },
   "France · Santé numérique · Production": {
    "fr": "France · Santé numérique · Production",
-   "en": "",
+   "en": "France · Digital health · Production",
    "_pages": [
     "pan-sia"
    ]
   },
   "France · Transport ferroviaire · À l'échelle": {
    "fr": "France · Transport ferroviaire · À l'échelle",
-   "en": "",
+   "en": "France · Rail transport · At scale",
    "_pages": [
     "pan-sia"
    ]
   },
   "France · Télécoms · Pilote": {
    "fr": "France · Télécoms · Pilote",
-   "en": "",
+   "en": "France · Telecoms · Pilot",
    "_pages": [
     "pan-sia"
    ]
   },
   "France · Énergie · Production": {
    "fr": "France · Énergie · Production",
-   "en": "",
+   "en": "France · Energy · Production",
    "_pages": [
     "pan-sia"
    ]
   },
   "France · Équipements électriques · Production": {
    "fr": "France · Équipements électriques · Production",
-   "en": "",
+   "en": "France · Electrical equipment · Production",
    "_pages": [
     "pan-sia"
    ]
   },
   "France — écart entre le référentiel européen et l'ADEME": {
    "fr": "France — écart entre le référentiel européen et l'ADEME",
-   "en": "",
+   "en": "France — gap between the European reference framework and ADEME",
    "_pages": [
     "pan-sia"
    ]
   },
   "Frontex — Services de fusion EUROSUR : détection d'embarcations et suivi d'activité par imagerie satellitaire aux frontières extérieures": {
    "fr": "Frontex — Services de fusion EUROSUR : détection d'embarcations et suivi d'activité par imagerie satellitaire aux frontières extérieures",
-   "en": "",
+   "en": "Frontex — EUROSUR Fusion Services: vessel detection and activity monitoring by satellite imagery at the external borders",
    "_pages": [
     "pan-sia"
    ]
   },
   "Fuite d'informations sensibles via le contexte RAG": {
    "fr": "Fuite d'informations sensibles via le contexte RAG",
-   "en": "",
+   "en": "Sensitive information leakage via the RAG context",
    "_pages": [
     "pan-sia"
    ]
   },
   "Gabarits de capacité informatique": {
    "fr": "Gabarits de capacité informatique",
-   "en": "",
+   "en": "IT capacity templates",
    "_pages": [
     "pan-sia"
    ]
   },
   "Gestion algorithmique des chauffeurs/livreurs (affectation, suspension de comptes)": {
    "fr": "Gestion algorithmique des chauffeurs/livreurs (affectation, suspension de comptes)",
-   "en": "",
+   "en": "Algorithmic management of drivers/couriers (allocation, account suspension)",
    "_pages": [
     "pan-sia"
    ]
   },
   "Glissement de terrain — horizon retenu": {
    "fr": "Glissement de terrain — horizon retenu",
-   "en": "",
+   "en": "Landslide — selected horizon",
    "_pages": [
     "pan-sia"
    ]
   },
   "Grandeur": {
    "fr": "Grandeur",
-   "en": "",
+   "en": "Quantity",
    "_pages": [
     "pan-sia"
    ]
   },
   "Grille — # à # entreprises par ligne": {
    "fr": "Grille — 4 à 6 entreprises par ligne",
-   "en": "",
+   "en": "Grid — # to # companies per row",
    "_pages": [
     "pan-sia"
    ]
   },
   "GénAI relation client et réseau ; accords avec fournisseurs de modèles européens": {
    "fr": "GénAI relation client et réseau ; accords avec fournisseurs de modèles européens",
-   "en": "",
+   "en": "GenAI for customer relations and the network; agreements with European model providers",
    "_pages": [
     "pan-sia"
    ]
   },
   "GénAI service client et optimisation des opérations (retards, affectations)": {
    "fr": "GénAI service client et optimisation des opérations (retards, affectations)",
-   "en": "",
+   "en": "GenAI customer service and operations optimisation (delays, assignments)",
    "_pages": [
     "pan-sia"
    ]
   },
   "Génération de descriptions produits et traduction à l'échelle du catalogue": {
    "fr": "Génération de descriptions produits et traduction à l'échelle du catalogue",
-   "en": "",
+   "en": "Generation of product descriptions and translation at catalogue scale",
    "_pages": [
     "pan-sia"
    ]
   },
   "Horizon des aléas climatiques": {
    "fr": "Horizon des aléas climatiques",
-   "en": "",
+   "en": "Climate hazard horizon",
    "_pages": [
     "pan-sia"
    ]
   },
   "IKEA (Ingka) — Assistant génAI de conception et service client (Billie) ; requalification des salariés du centre d'appel": {
    "fr": "IKEA (Ingka) — Assistant génAI de conception et service client (Billie) ; requalification des salariés du centre d'appel",
-   "en": "",
+   "en": "IKEA (Ingka) — GenAI assistant for design and customer service (Billie); reskilling of call centre employees",
    "_pages": [
     "pan-sia"
    ]
   },
   "ING — Chatbot génératif de service client (premier grand déploiement bancaire génAI face client en Europe)": {
    "fr": "ING — Chatbot génératif de service client (premier grand déploiement bancaire génAI face client en Europe)",
-   "en": "",
+   "en": "ING — Generative customer service chatbot (first large customer-facing genAI deployment by a bank in Europe)",
    "_pages": [
     "pan-sia"
    ]
   },
   "Iberdrola — Prévision de production renouvelable et maintenance prédictive éolienne": {
    "fr": "Iberdrola — Prévision de production renouvelable et maintenance prédictive éolienne",
-   "en": "",
+   "en": "Iberdrola — Renewable generation forecasting and wind predictive maintenance",
    "_pages": [
     "pan-sia"
    ]
   },
   "Il croise, pays par pays, l’": {
    "fr": "Il croise, pays par pays, l’",
-   "en": "",
+   "en": "Country by country, it cross-references the",
    "_pages": [
     "pan-sia"
    ]
   },
   "Incident de refroidissement sur un centre de données en exploitation": {
    "fr": "Incident de refroidissement sur un centre de données en exploitation",
-   "en": "",
+   "en": "Cooling incident at an operating data centre",
    "_pages": [
     "pan-sia"
    ]
   },
   "Industrial Copilot (avec Microsoft) : génAI pour l'ingénierie d'automatisation": {
    "fr": "Industrial Copilot (avec Microsoft) : génAI pour l'ingénierie d'automatisation",
-   "en": "",
+   "en": "Industrial Copilot (with Microsoft): genAI for automation engineering",
    "_pages": [
     "pan-sia"
    ]
   },
   "Injection de prompt directe et indirecte": {
    "fr": "Injection de prompt directe et indirecte",
-   "en": "",
+   "en": "Direct and indirect prompt injection",
    "_pages": [
     "pan-sia"
    ]
   },
   "Injection de prompt par l'utilisateur final": {
    "fr": "Injection de prompt par l'utilisateur final",
-   "en": "",
+   "en": "Prompt injection by the end user",
    "_pages": [
     "pan-sia"
    ]
   },
   "Inondations, à l’échelle de l’Union.": {
    "fr": "Inondations, à l’échelle de l’Union.",
-   "en": "",
+   "en": "Floods, at Union scale.",
    "_pages": [
     "pan-sia"
    ]
   },
   "Inspection optique IA et offre AIShield (sécurité des modèles) — fournisseur et utilisateur": {
    "fr": "Inspection optique IA et offre AIShield (sécurité des modèles) — fournisseur et utilisateur",
-   "en": "",
+   "en": "AI optical inspection and AIShield offering (model security) — provider and user",
    "_pages": [
     "pan-sia"
    ]
   },
   "Inspection qualité par vision et optimisation d'usine (plateforme avec Google Cloud)": {
    "fr": "Inspection qualité par vision et optimisation d'usine (plateforme avec Google Cloud)",
-   "en": "",
+   "en": "Vision-based quality inspection and factory optimisation (platform with Google Cloud)",
    "_pages": [
     "pan-sia"
    ]
   },
   "Intensité carbone des réseaux électriques": {
    "fr": "Intensité carbone des réseaux électriques",
-   "en": "",
+   "en": "Carbon intensity of electricity grids",
    "_pages": [
     "pan-sia"
    ]
   },
   "Intensité carbone du réseau": {
    "fr": "Intensité carbone du réseau",
-   "en": "",
+   "en": "Grid carbon intensity",
    "_pages": [
     "pan-sia"
    ]
   },
   "Intensité carbone du réseau — Allemagne": {
    "fr": "Intensité carbone du réseau — Allemagne",
-   "en": "",
+   "en": "Grid carbon intensity — Germany",
    "_pages": [
     "pan-sia"
    ]
   },
   "Intensité carbone du réseau — Autriche": {
    "fr": "Intensité carbone du réseau — Autriche",
-   "en": "",
+   "en": "Grid carbon intensity — Austria",
    "_pages": [
     "pan-sia"
    ]
   },
   "Intensité carbone du réseau — Belgique": {
    "fr": "Intensité carbone du réseau — Belgique",
-   "en": "",
+   "en": "Grid carbon intensity — Belgium",
    "_pages": [
     "pan-sia"
    ]
   },
   "Intensité carbone du réseau — Bulgarie": {
    "fr": "Intensité carbone du réseau — Bulgarie",
-   "en": "",
+   "en": "Grid carbon intensity — Bulgaria",
    "_pages": [
     "pan-sia"
    ]
   },
   "Intensité carbone du réseau — Chypre": {
    "fr": "Intensité carbone du réseau — Chypre",
-   "en": "",
+   "en": "Grid carbon intensity — Cyprus",
    "_pages": [
     "pan-sia"
    ]
   },
   "Intensité carbone du réseau — Croatie": {
    "fr": "Intensité carbone du réseau — Croatie",
-   "en": "",
+   "en": "Grid carbon intensity — Croatia",
    "_pages": [
     "pan-sia"
    ]
   },
   "Intensité carbone du réseau — Danemark": {
    "fr": "Intensité carbone du réseau — Danemark",
-   "en": "",
+   "en": "Grid carbon intensity — Denmark",
    "_pages": [
     "pan-sia"
    ]
   },
   "Intensité carbone du réseau — Espagne": {
    "fr": "Intensité carbone du réseau — Espagne",
-   "en": "",
+   "en": "Grid carbon intensity — Spain",
    "_pages": [
     "pan-sia"
    ]
   },
   "Intensité carbone du réseau — Estonie": {
    "fr": "Intensité carbone du réseau — Estonie",
-   "en": "",
+   "en": "Grid carbon intensity — Estonia",
    "_pages": [
     "pan-sia"
    ]
   },
   "Intensité carbone du réseau — Finlande": {
    "fr": "Intensité carbone du réseau — Finlande",
-   "en": "",
+   "en": "Grid carbon intensity — Finland",
    "_pages": [
     "pan-sia"
    ]
   },
   "Intensité carbone du réseau — France": {
    "fr": "Intensité carbone du réseau — France",
-   "en": "",
+   "en": "Grid carbon intensity — France",
    "_pages": [
     "pan-sia"
    ]
   },
   "Intensité carbone du réseau — Grèce": {
    "fr": "Intensité carbone du réseau — Grèce",
-   "en": "",
+   "en": "Grid carbon intensity — Greece",
    "_pages": [
     "pan-sia"
    ]
   },
   "Intensité carbone du réseau — Hongrie": {
    "fr": "Intensité carbone du réseau — Hongrie",
-   "en": "",
+   "en": "Grid carbon intensity — Hungary",
    "_pages": [
     "pan-sia"
    ]
   },
   "Intensité carbone du réseau — Irlande": {
    "fr": "Intensité carbone du réseau — Irlande",
-   "en": "",
+   "en": "Grid carbon intensity — Ireland",
    "_pages": [
     "pan-sia"
    ]
   },
   "Intensité carbone du réseau — Islande": {
    "fr": "Intensité carbone du réseau — Islande",
-   "en": "",
+   "en": "Grid carbon intensity — Iceland",
    "_pages": [
     "pan-sia"
    ]
   },
   "Intensité carbone du réseau — Italie": {
    "fr": "Intensité carbone du réseau — Italie",
-   "en": "",
+   "en": "Grid carbon intensity — Italy",
    "_pages": [
     "pan-sia"
    ]
   },
   "Intensité carbone du réseau — Lettonie": {
    "fr": "Intensité carbone du réseau — Lettonie",
-   "en": "",
+   "en": "Grid carbon intensity — Latvia",
    "_pages": [
     "pan-sia"
    ]
   },
   "Intensité carbone du réseau — Lituanie": {
    "fr": "Intensité carbone du réseau — Lituanie",
-   "en": "",
+   "en": "Grid carbon intensity — Lithuania",
    "_pages": [
     "pan-sia"
    ]
   },
   "Intensité carbone du réseau — Luxembourg": {
    "fr": "Intensité carbone du réseau — Luxembourg",
-   "en": "",
+   "en": "Grid carbon intensity — Luxembourg",
    "_pages": [
     "pan-sia"
    ]
   },
   "Intensité carbone du réseau — Malte": {
    "fr": "Intensité carbone du réseau — Malte",
-   "en": "",
+   "en": "Grid carbon intensity — Malta",
    "_pages": [
     "pan-sia"
    ]
   },
   "Intensité carbone du réseau — Norvège": {
    "fr": "Intensité carbone du réseau — Norvège",
-   "en": "",
+   "en": "Grid carbon intensity — Norway",
    "_pages": [
     "pan-sia"
    ]
   },
   "Intensité carbone du réseau — Pays-Bas": {
    "fr": "Intensité carbone du réseau — Pays-Bas",
-   "en": "",
+   "en": "Grid carbon intensity — Netherlands",
    "_pages": [
     "pan-sia"
    ]
   },
   "Intensité carbone du réseau — Pologne": {
    "fr": "Intensité carbone du réseau — Pologne",
-   "en": "",
+   "en": "Grid carbon intensity — Poland",
    "_pages": [
     "pan-sia"
    ]
   },
   "Intensité carbone du réseau — Portugal": {
    "fr": "Intensité carbone du réseau — Portugal",
-   "en": "",
+   "en": "Grid carbon intensity — Portugal",
    "_pages": [
     "pan-sia"
    ]
   },
   "Intensité carbone du réseau — Roumanie": {
    "fr": "Intensité carbone du réseau — Roumanie",
-   "en": "",
+   "en": "Grid carbon intensity — Romania",
    "_pages": [
     "pan-sia"
    ]
   },
   "Intensité carbone du réseau — Royaume-Uni": {
    "fr": "Intensité carbone du réseau — Royaume-Uni",
-   "en": "",
+   "en": "Grid carbon intensity — United Kingdom",
    "_pages": [
     "pan-sia"
    ]
   },
   "Intensité carbone du réseau — Slovaquie": {
    "fr": "Intensité carbone du réseau — Slovaquie",
-   "en": "",
+   "en": "Grid carbon intensity — Slovakia",
    "_pages": [
     "pan-sia"
    ]
   },
   "Intensité carbone du réseau — Slovénie": {
    "fr": "Intensité carbone du réseau — Slovénie",
-   "en": "",
+   "en": "Grid carbon intensity — Slovenia",
    "_pages": [
     "pan-sia"
    ]
   },
   "Intensité carbone du réseau — Suisse": {
    "fr": "Intensité carbone du réseau — Suisse",
-   "en": "",
+   "en": "Grid carbon intensity — Switzerland",
    "_pages": [
     "pan-sia"
    ]
   },
   "Intensité carbone du réseau — Suède": {
    "fr": "Intensité carbone du réseau — Suède",
-   "en": "",
+   "en": "Grid carbon intensity — Sweden",
    "_pages": [
     "pan-sia"
    ]
   },
   "Intensité carbone du réseau — Tchéquie": {
    "fr": "Intensité carbone du réseau — Tchéquie",
-   "en": "",
+   "en": "Grid carbon intensity — Czechia",
    "_pages": [
     "pan-sia"
    ]
   },
   "Intensité carbone du réseau — Union européenne": {
    "fr": "Intensité carbone du réseau — Union européenne",
-   "en": "",
+   "en": "Grid carbon intensity — European Union",
    "_pages": [
     "pan-sia"
    ]
   },
   "Intensité carbone — écart entre les deux sites du cabinet": {
    "fr": "Intensité carbone — écart entre les deux sites du cabinet",
-   "en": "",
+   "en": "Carbon intensity — gap between the firm’s two sites",
    "_pages": [
     "pan-sia"
    ]
   },
   "Intensité du moment plutôt que moyenne annuelle": {
    "fr": "Intensité du moment plutôt que moyenne annuelle",
-   "en": "",
+   "en": "Current intensity rather than annual average",
    "_pages": [
     "pan-sia"
    ]
   },
   "Intesa Sanpaolo — Programme d'assistants génératifs internes (déploiement progressif)": {
    "fr": "Intesa Sanpaolo — Programme d'assistants génératifs internes (déploiement progressif)",
-   "en": "",
+   "en": "Intesa Sanpaolo — Internal generative assistants programme (phased deployment)",
    "_pages": [
     "pan-sia"
    ]
   },
   "Invérifiable": {
    "fr": "Invérifiable",
-   "en": "",
+   "en": "Unverifiable",
    "_pages": [
     "pan-sia"
    ]
   },
   "Irlande · Transport aérien · Production": {
    "fr": "Irlande · Transport aérien · Production",
-   "en": "",
+   "en": "Ireland · Air transport · Production",
    "_pages": [
     "pan-sia"
    ]
   },
   "Italie · Fournisseur GPAI · À l'échelle": {
    "fr": "Italie · Fournisseur GPAI · À l'échelle",
-   "en": "",
+   "en": "Italy · GPAI provider · At scale",
    "_pages": [
     "pan-sia"
    ]
   },
   "Italie · Fournisseur IA affective · À l'échelle": {
    "fr": "Italie · Fournisseur IA affective · À l'échelle",
-   "en": "",
+   "en": "Italy · Affective AI provider · At scale",
    "_pages": [
     "pan-sia"
    ]
   },
   "Italie · Météorologie · Production": {
    "fr": "Italie · Météorologie · Production",
-   "en": "",
+   "en": "Italy · Meteorology · Production",
    "_pages": [
     "pan-sia"
    ]
   },
   "Italie · Énergie · À l'échelle": {
    "fr": "Italie · Énergie · À l'échelle",
-   "en": "",
+   "en": "Italy · Energy · At scale",
    "_pages": [
     "pan-sia"
    ]
   },
   "Jalons réglementaires datés — # échéances qui structurent un calendrier de projet": {
    "fr": "Jalons réglementaires datés — 11 échéances qui structurent un calendrier de projet",
-   "en": "",
+   "en": "Dated regulatory milestones — # deadlines that structure a project timetable",
    "_pages": [
     "pan-sia"
    ]
   },
   "Jeux de données publics français": {
    "fr": "Jeux de données publics français",
-   "en": "",
+   "en": "French public datasets",
    "_pages": [
     "pan-sia"
    ]
   },
   "KBC — Assistante numérique « Kate » : parcours client et actes bancaires automatisés": {
    "fr": "KBC — Assistante numérique « Kate » : parcours client et actes bancaires automatisés",
-   "en": "",
+   "en": "KBC — Digital assistant “Kate”: automated customer paths and banking transactions",
    "_pages": [
     "pan-sia"
    ]
   },
   "Kayrros — Détection des super-émetteurs de méthane par analyse des colonnes Sentinel-#P, exploitée par des acteurs publics et privés": {
    "fr": "Kayrros — Détection des super-émetteurs de méthane par analyse des colonnes Sentinel-5P, exploitée par des acteurs publics et privés",
-   "en": "",
+   "en": "Kayrros — Detection of methane super-emitters by analysis of Sentinel-#P columns, used by public and private players",
    "_pages": [
     "pan-sia"
    ]
   },
   "Klarna — Assistant client OpenAI traitant l'équivalent de ~# agents (#/# des conversations)": {
    "fr": "Klarna — Assistant client OpenAI traitant l'équivalent de ~700 agents (2/3 des conversations)",
-   "en": "",
+   "en": "Klarna — OpenAI customer assistant handling the equivalent of ~# agents (#/# of conversations)",
    "_pages": [
     "pan-sia"
    ]
   },
   "Kry / Livi — Pré-tri des symptômes et orientation des patients en télémédecine": {
    "fr": "Kry / Livi — Pré-tri des symptômes et orientation des patients en télémédecine",
-   "en": "",
+   "en": "Kry / Livi — Symptom pre-triage and patient referral in telemedicine",
    "_pages": [
     "pan-sia"
    ]
   },
   "L'IA et l'environnement : ce que je retiens (fiche n°#)": {
    "fr": "L'IA et l'environnement : ce que je retiens (fiche n°1)",
-   "en": "",
+   "en": "AI and the environment: my key takeaways (fact sheet No #)",
    "_pages": [
     "pan-sia"
    ]
   },
   "L'horizon ne déplace que les six critères d'aléas climatiques. Le prix, le mix, le parc et la file de raccordement gardent la valeur de leur millésime : personne ne connaît le prix de l'électricité de #, et le projeter serait l'inventer.": {
    "fr": "L'horizon ne déplace que les six critères d'aléas climatiques. Le prix, le mix, le parc et la file de raccordement gardent la valeur de leur millésime : personne ne connaît le prix de l'électricité de 2050, et le projeter serait l'inventer.",
-   "en": "",
+   "en": "The horizon moves only the six climate hazard criteria. Price, mix, estate and connection queue keep the value of their edition: nobody knows the electricity price of #, and projecting it would be inventing it.",
    "_pages": [
     "pan-sia"
    ]
   },
   "La Cour des comptes européenne estime à environ # milliards d'euros par an les pertes économiques déjà causées par les feux de forêt dans l'Union. Depuis #, le risque de dommage a plus que doublé en France, en Italie, en Grèce, en Roumanie et en Bulgarie. Seuls les # premiers États membres sont publiés sur les # : les autres ne sont pas réputés sûrs, ils sont hors classement.": {
    "fr": "La Cour des comptes européenne estime à environ 2 milliards d'euros par an les pertes économiques déjà causées par les feux de forêt dans l'Union. Depuis 1990, le risque de dommage a plus que doublé en France, en Italie, en Grèce, en Roumanie et en Bulgarie. Seuls les 10 premiers États membres sont publiés sur les 27 : les autres ne sont pas réputés sûrs, ils sont hors classement.",
-   "en": "",
+   "en": "The European Court of Auditors estimates the economic losses already caused by wildfires in the Union at about €# billion a year. Since #, the risk of damage has more than doubled in France, Italy, Greece, Romania and Bulgaria. Only the top # Member States out of the # are published: the others are not deemed safe, they are outside the ranking.",
    "_pages": [
     "pan-sia"
    ]
   },
   "La bascule POC → production est le moment où les obligations deviennent réelles : c’est là que le panel situe l’enjeu.": {
    "fr": "La bascule POC → production est le moment où les obligations deviennent réelles : c’est là que le panel situe l’enjeu.",
-   "en": "",
+   "en": "The switch from POC to production is the moment when obligations become real: that is where the panel places the stake.",
    "_pages": [
     "pan-sia"
    ]
   },
   "La canicule atteint le centre de données par un SECOND chemin, l’alimentation. Le secours est assuré par groupes électrogènes, le plus souvent au fioul : la réponse à la défaillance climatique est carbonée.": {
    "fr": "La canicule atteint le centre de données par un SECOND chemin, l’alimentation. Le secours est assuré par groupes électrogènes, le plus souvent au fioul : la réponse à la défaillance climatique est carbonée.",
-   "en": "",
+   "en": "The heatwave reaches the data centre by a SECOND route, the power supply. Backup is provided by generators, most often running on fuel oil: the response to climate failure is carbon-intensive.",
    "_pages": [
     "pan-sia"
    ]
   },
   "La capacité a-t-elle été majorée depuis, et de combien ? Un ouvrage conçu avant cette question ne l’a pas été.": {
    "fr": "La capacité a-t-elle été majorée depuis, et de combien ? Un ouvrage conçu avant cette question ne l’a pas été.",
-   "en": "",
+   "en": "Has the capacity been increased since, and by how much? A facility designed before this question was asked has not been.",
    "_pages": [
     "pan-sia"
    ]
   },
   "La chaîne de calcul est publiée mais n’est pas auditée par un tiers": {
    "fr": "La chaîne de calcul est publiée mais n’est pas auditée par un tiers",
-   "en": "",
+   "en": "The calculation chain is published but not audited by a third party",
    "_pages": [
     "pan-sia"
    ]
   },
   "La longueur compte les cas ; la": {
    "fr": "La longueur compte les cas ; la",
-   "en": "",
+   "en": "The length counts the cases; the",
    "_pages": [
     "pan-sia"
    ]
   },
   "La sortie du paradoxe n’est pas géographique, elle est technique : un refroidissement sec ou une boucle fermée à haute température rend le site indifférent à l’hygrométrie — au prix d’une électricité plus élevée, donc d’une eau amont plus élevée. L’arbitrage complet se fait dans le module « eau de la source ».": {
    "fr": "La sortie du paradoxe n’est pas géographique, elle est technique : un refroidissement sec ou une boucle fermée à haute température rend le site indifférent à l’hygrométrie — au prix d’une électricité plus élevée, donc d’une eau amont plus élevée. L’arbitrage complet se fait dans le module « eau de la source ».",
-   "en": "",
+   "en": "The way out of the paradox is not geographical, it is technical: dry cooling or a high-temperature closed loop makes the site indifferent to humidity — at the price of higher electricity use, and therefore higher upstream water. The full trade-off is made in the “source water” module.",
    "_pages": [
     "pan-sia"
    ]
   },
   "Le changement climatique a déjà porté de # % le risque de dommage par inondation depuis # dans l'Union, et les projections le voient doubler encore d'ici # sous scénario d'émissions élevées. Les tempêtes et inondations ont coûté environ # milliards d'euros à l'Union pour la seule année #. Les vingt régions les plus exposées de l'Union se concentrent dans CINQ pays : Italie, Allemagne, France, Pologne et Belgique. Les plus exposées en # sont aussi des poumons économiques — Milan (# % du PIB italien), Paris et l'Île-de-France (# % du PIB français), Francfort et la Hesse (# % du PIB allemand), Anvers et la Flandre (# % du PIB belge), Barcelone et la Catalogne (# % du PIB espagnol) : le risque y est systémique, pas local. L’Île-de-France voit son risque de dommage croître de # % d’ici #.": {
    "fr": "Le changement climatique a déjà porté de 30 % le risque de dommage par inondation depuis 1990 dans l'Union, et les projections le voient doubler encore d'ici 2100 sous scénario d'émissions élevées. Les tempêtes et inondations ont coûté environ 18 milliards d'euros à l'Union pour la seule année 2024. Les vingt régions les plus exposées de l'Union se concentrent dans CINQ pays : Italie, Allemagne, France, Pologne et Belgique. Les plus exposées en 2050 sont aussi des poumons économiques — Milan (22 % du PIB italien), Paris et l'Île-de-France (31 % du PIB français), Francfort et la Hesse (9 % du PIB allemand), Anvers et la Flandre (58 % du PIB belge), Barcelone et la Catalogne (20 % du PIB espagnol) : le risque y est systémique, pas local. L’Île-de-France voit son risque de dommage croître de 110 % d’ici 2100.",
-   "en": "",
+   "en": "Climate change has already raised the risk of flood damage by # % since # in the Union, and projections see it doubling again by # under a high-emissions scenario. Storms and floods cost the Union about €# billion in # alone. The twenty most exposed regions of the Union are concentrated in FIVE countries: Italy, Germany, France, Poland and Belgium. The most exposed in # are also economic powerhouses — Milan (# % of Italian GDP), Paris and Île-de-France (# % of French GDP), Frankfurt and Hesse (# % of German GDP), Antwerp and Flanders (# % of Belgian GDP), Barcelona and Catalonia (# % of Spanish GDP): the risk there is systemic, not local. Île-de-France sees its risk of damage grow by # % by #.",
    "_pages": [
     "pan-sia"
    ]
   },
   "Le classement, posé sur la carte": {
    "fr": "Le classement, posé sur la carte",
-   "en": "",
+   "en": "The ranking, laid on the map",
    "_pages": [
     "pan-sia"
    ]
   },
   "Le panel n’est pas un recensement": {
    "fr": "Le panel n’est pas un recensement",
-   "en": "",
+   "en": "The panel is not a census",
    "_pages": [
     "pan-sia"
    ]
   },
   "Le point de conception du refroidissement, et son écart au climat qui vient": {
    "fr": "Le point de conception du refroidissement, et son écart au climat qui vient",
-   "en": "",
+   "en": "The cooling design point, and its gap to the climate to come",
    "_pages": [
     "pan-sia"
    ]
   },
   "Le risque n’est donc PAS maximal là où il fait le plus chaud. Il est maximal là où l’on ne s’y attendait pas — Rennes, Pantin, Londres, et non Séville.": {
    "fr": "Le risque n’est donc PAS maximal là où il fait le plus chaud. Il est maximal là où l’on ne s’y attendait pas — Rennes, Pantin, Londres, et non Séville.",
-   "en": "",
+   "en": "The risk is therefore NOT highest where it is hottest. It is highest where it was not expected — Rennes, Pantin, London, not Seville.",
    "_pages": [
     "pan-sia"
    ]
   },
   "Le tableau qui suit est une analyse, pas une donnée.": {
    "fr": "Le tableau qui suit est une analyse, pas une donnée.",
-   "en": "",
+   "en": "The table that follows is an analysis, not data.",
    "_pages": [
     "pan-sia"
    ]
   },
   "Lectures d'ensemble du panel": {
    "fr": "Lectures d'ensemble du panel",
-   "en": "",
+   "en": "Overall readings of the panel",
    "_pages": [
     "pan-sia"
    ]
   },
   "Lectures d’ensemble": {
    "fr": "Lectures d’ensemble",
-   "en": "",
+   "en": "Overall readings",
    "_pages": [
     "pan-sia"
    ]
   },
   "Les # choses que nous ne pouvons pas garantir": {
    "fr": "Les 5 choses que nous ne pouvons pas garantir",
-   "en": "",
+   "en": "The # things we cannot guarantee",
    "_pages": [
     "pan-sia"
    ]
   },
   "Les # rapports dépouillés": {
    "fr": "Les 4 rapports dépouillés",
-   "en": "",
+   "en": "The # reports analysed",
    "_pages": [
     "pan-sia"
    ]
   },
   "Les # sources de données publiques": {
    "fr": "Les 6 sources de données publiques",
-   "en": "",
+   "en": "The # public data sources",
    "_pages": [
     "pan-sia"
    ]
   },
   "Les # tendances #, et le critère du comparateur que chacune touche": {
    "fr": "Les 10 tendances 2026, et le critère du comparateur que chacune touche",
-   "en": "",
+   "en": "The # trends for #, and the comparator criterion each one affects",
    "_pages": [
     "pan-sia"
    ]
   },
   "Les # textes appliqués": {
    "fr": "Les 4 textes appliqués",
-   "en": "",
+   "en": "The # texts applied",
    "_pages": [
     "pan-sia"
    ]
   },
   "Les constantes du modèle": {
    "fr": "Les constantes du modèle",
-   "en": "",
+   "en": "The model constants",
    "_pages": [
     "pan-sia"
    ]
   },
   "Les contrôles factuels": {
    "fr": "Les contrôles factuels",
-   "en": "",
+   "en": "The fact checks",
    "_pages": [
     "pan-sia"
    ]
   },
   "Les couleurs dépendent des poids que vous venez de régler": {
    "fr": "Les couleurs dépendent des poids que vous venez de régler",
-   "en": "",
+   "en": "The colours depend on the weights you have just set",
    "_pages": [
     "pan-sia"
    ]
   },
   "Les deux lignes « construit par nos soins »": {
    "fr": "Les deux lignes « construit par nos soins »",
-   "en": "",
+   "en": "The two “built by us” rows",
    "_pages": [
     "pan-sia"
    ]
   },
   "Les faits ci-dessous proviennent de quatre rapports d’éditeurs nommés, lus intégralement : chaque entrée porte sa": {
    "fr": "Les faits ci-dessous proviennent de quatre rapports d’éditeurs nommés, lus intégralement : chaque entrée porte sa",
-   "en": "",
+   "en": "The facts below come from four reports by named publishers, read in full: each entry carries its",
    "_pages": [
     "pan-sia"
    ]
   },
   "Les intensités carbone sont des moyennes annuelles": {
    "fr": "Les intensités carbone sont des moyennes annuelles",
-   "en": "",
+   "en": "Carbon intensities are annual averages",
    "_pages": [
     "pan-sia"
    ]
   },
   "Les quatre régimes de l’AI Act. Le haut risque porte les obligations les plus lourdes : c’est par là qu’un registre interne se compare.": {
    "fr": "Les quatre régimes de l’AI Act. Le haut risque porte les obligations les plus lourdes : c’est par là qu’un registre interne se compare.",
-   "en": "",
+   "en": "The four regimes of the AI Act. High-risk carries the heaviest obligations: that is what an internal register compares itself against.",
    "_pages": [
     "pan-sia"
    ]
   },
   "Les sources ne sont pas seulement globales.": {
    "fr": "Les sources ne sont pas seulement globales.",
-   "en": "",
+   "en": "The sources are not only global.",
    "_pages": [
     "pan-sia"
    ]
   },
   "Les sources, leur licence et leurs limites": {
    "fr": "Les sources, leur licence et leurs limites",
-   "en": "",
+   "en": "The sources, their licence and their limits",
    "_pages": [
     "pan-sia"
    ]
   },
   "Licence Ouverte # (Etalab) ou ODbL selon le jeu — reportée par jeu": {
    "fr": "Licence Ouverte 2.0 (Etalab) ou ODbL selon le jeu — reportée par jeu",
-   "en": "",
+   "en": "Licence Ouverte # (Etalab) or ODbL depending on the dataset — reported per dataset",
    "_pages": [
     "pan-sia"
    ]
   },
   "Limites — à lire avant toute décision": {
    "fr": "Limites — à lire avant toute décision",
-   "en": "",
+   "en": "Limits — to read before any decision",
    "_pages": [
     "pan-sia"
    ]
   },
   "Littérature d’exploitation (LBNL, Uptime Institute)": {
    "fr": "Littérature d’exploitation (LBNL, Uptime Institute)",
-   "en": "",
+   "en": "Operations literature (LBNL, Uptime Institute)",
    "_pages": [
     "pan-sia"
    ]
   },
   "Lituanie · Fintech · À l'échelle": {
    "fr": "Lituanie · Fintech · À l'échelle",
-   "en": "",
+   "en": "Lithuania · Fintech · At scale",
    "_pages": [
     "pan-sia"
    ]
   },
   "Low-Carbon Power (facteurs cycle de vie GIEC)": {
    "fr": "Low-Carbon Power (facteurs cycle de vie GIEC)",
-   "en": "",
+   "en": "Low-Carbon Power (IPCC life-cycle factors)",
    "_pages": [
     "pan-sia"
    ]
   },
   "Lufthansa Group — GénAI service client et optimisation des opérations (retards, affectations)": {
    "fr": "Lufthansa Group — GénAI service client et optimisation des opérations (retards, affectations)",
-   "en": "",
+   "en": "Lufthansa Group — GenAI customer service and operations optimisation (delays, assignments)",
    "_pages": [
     "pan-sia"
    ]
   },
   "L’adiabatique consomme de l’eau précisément aux heures les plus chaudes. La sécheresse, elle, restreint le prélèvement aux mêmes heures. Chacun des deux critères peut être bon : c’est leur RENCONTRE qui arrête l’installation, et c’est ce qui s’est produit à Pantin le # juin.": {
    "fr": "L’adiabatique consomme de l’eau précisément aux heures les plus chaudes. La sécheresse, elle, restreint le prélèvement aux mêmes heures. Chacun des deux critères peut être bon : c’est leur RENCONTRE qui arrête l’installation, et c’est ce qui s’est produit à Pantin le 24 juin.",
-   "en": "",
+   "en": "Adiabatic cooling consumes water precisely at the hottest hours. Drought, for its part, restricts abstraction at the same hours. Each of the two criteria can be good: it is their COINCIDENCE that stops the installation, and that is what happened in Pantin on # June.",
    "_pages": [
     "pan-sia"
    ]
   },
   "L’air sec absorbe davantage de vapeur : à charge égale, une tour évapore mieux en climat aride qu’en climat humide. Le rendement du refroidissement pousse donc vers les bassins tendus. Aux États-Unis, environ deux tiers des projets annoncés visent les régions les plus sèches — foncier abordable, fiscalité avantageuse et rendement évaporatif y convergent. Les prélèvements en zone de stress hydrique atteignent le tiers chez un grand exploitant, près de la moitié chez un autre.": {
    "fr": "L’air sec absorbe davantage de vapeur : à charge égale, une tour évapore mieux en climat aride qu’en climat humide. Le rendement du refroidissement pousse donc vers les bassins tendus. Aux États-Unis, environ deux tiers des projets annoncés visent les régions les plus sèches — foncier abordable, fiscalité avantageuse et rendement évaporatif y convergent. Les prélèvements en zone de stress hydrique atteignent le tiers chez un grand exploitant, près de la moitié chez un autre.",
-   "en": "",
+   "en": "Dry air absorbs more vapour: at equal load, a tower evaporates better in an arid climate than in a humid one. Cooling efficiency therefore pushes towards water-stressed basins. In the United States, about two thirds of announced projects target the driest regions — affordable land, favourable taxation and evaporative efficiency converge there. Abstraction in water-stressed areas reaches a third at one large operator, nearly half at another.",
    "_pages": [
     "pan-sia"
    ]
   },
   "L’écart ne vient pas d’un dérapage d’exploitation mais de l’HYPOTHÈSE : une prévision d’eau bâtie sur un climat moyen ne décrit pas la consommation d’un été réel.": {
    "fr": "L’écart ne vient pas d’un dérapage d’exploitation mais de l’HYPOTHÈSE : une prévision d’eau bâtie sur un climat moyen ne décrit pas la consommation d’un été réel.",
-   "en": "",
+   "en": "The gap does not come from an operational drift but from the ASSUMPTION: a water forecast built on an average climate does not describe consumption in a real summer.",
    "_pages": [
     "pan-sia"
    ]
   },
   "ML de métrologie et de contrôle de procédé lithographique": {
    "fr": "ML de métrologie et de contrôle de procédé lithographique",
-   "en": "",
+   "en": "ML for metrology and lithography process control",
    "_pages": [
     "pan-sia"
    ]
   },
   "Maersk — Optimisation du positionnement conteneurs et de la consommation": {
    "fr": "Maersk — Optimisation du positionnement conteneurs et de la consommation",
-   "en": "",
+   "en": "Maersk — Optimisation of container positioning and consumption",
    "_pages": [
     "pan-sia"
    ]
   },
   "Magasins autonomes Nano : vision par ordinateur pour l'encaissement sans caisse": {
    "fr": "Magasins autonomes Nano : vision par ordinateur pour l'encaissement sans caisse",
-   "en": "",
+   "en": "Nano autonomous stores: computer vision for checkout-free payment",
    "_pages": [
     "pan-sia"
    ]
   },
   "Maintenance prédictive des parcs éoliens et solaires": {
    "fr": "Maintenance prédictive des parcs éoliens et solaires",
-   "en": "",
+   "en": "Predictive maintenance of wind and solar farms",
    "_pages": [
     "pan-sia"
    ]
   },
   "Maintenance prédictive du matériel roulant et surveillance d'infrastructures": {
    "fr": "Maintenance prédictive du matériel roulant et surveillance d'infrastructures",
-   "en": "",
+   "en": "Predictive maintenance of rolling stock and infrastructure monitoring",
    "_pages": [
     "pan-sia"
    ]
   },
   "Maintenance prédictive du réseau de distribution et inspection par drones+vision": {
    "fr": "Maintenance prédictive du réseau de distribution et inspection par drones+vision",
-   "en": "",
+   "en": "Predictive maintenance of the distribution grid and drone+vision inspection",
    "_pages": [
     "pan-sia"
    ]
   },
   "Maturité : du POC à l’échelle": {
    "fr": "Maturité : du POC à l’échelle",
-   "en": "",
+   "en": "Maturity: from POC to scale",
    "_pages": [
     "pan-sia"
    ]
   },
   "Millésime unique du tableau d'intensités": {
    "fr": "Millésime unique du tableau d'intensités",
-   "en": "",
+   "en": "Single edition of the intensity table",
    "_pages": [
     "pan-sia"
    ]
   },
   "Mistral AI (fournisseur UE)": {
    "fr": "Mistral AI (fournisseur UE)",
-   "en": "",
+   "en": "Mistral AI (EU provider)",
    "_pages": [
     "pan-sia"
    ]
   },
   "Mistral AI (fournisseur UE) — Modèles à usage général fournis aux entreprises européennes (Le Chat Enterprise, API)": {
    "fr": "Mistral AI (fournisseur UE) — Modèles à usage général fournis aux entreprises européennes (Le Chat Enterprise, API)",
-   "en": "",
+   "en": "Mistral AI (EU provider) — General-purpose models provided to European companies (Le Chat Enterprise, API)",
    "_pages": [
     "pan-sia"
    ]
   },
   "Mix de production électrique # par pays": {
    "fr": "Mix de production électrique 2024 par pays",
-   "en": "",
+   "en": "# electricity generation mix by country",
    "_pages": [
     "pan-sia"
    ]
   },
   "Modèles à usage général fournis aux entreprises européennes (Le Chat Enterprise, API)": {
    "fr": "Modèles à usage général fournis aux entreprises européennes (Le Chat Enterprise, API)",
-   "en": "",
+   "en": "General-purpose models provided to European companies (Le Chat Enterprise, API)",
    "_pages": [
     "pan-sia"
    ]
   },
   "Mouvements verticaux du sol — rebond post-glaciaire et subsidence": {
    "fr": "Mouvements verticaux du sol — rebond post-glaciaire et subsidence",
-   "en": "",
+   "en": "Vertical land movements — post-glacial rebound and subsidence",
    "_pages": [
     "pan-sia"
    ]
   },
   "Munich Re — Souscription augmentée et couverture des risques de modèles IA (aiSure)": {
    "fr": "Munich Re — Souscription augmentée et couverture des risques de modèles IA (aiSure)",
-   "en": "",
+   "en": "Munich Re — Augmented underwriting and cover for AI model risks (aiSure)",
    "_pages": [
     "pan-sia"
    ]
   },
   "Méridional · parc # · file #": {
    "fr": "Méridional · parc 2 · file 0",
-   "en": "",
+   "en": "Southern · estate # · queue #",
    "_pages": [
     "pan-sia"
    ]
   },
   "Méthodologie": {
    "fr": "Méthodologie",
-   "en": "",
+   "en": "Methodology",
    "_pages": [
     "pan-sia"
    ]
   },
   "Méthodologie, limites, référentiels": {
    "fr": "Méthodologie, limites, référentiels",
-   "en": "",
+   "en": "Methodology, limits, reference frameworks",
    "_pages": [
     "pan-sia"
    ]
   },
   "Même dispositif de suivi des surfaces agricoles par imagerie Sentinel, appliqué aux aides espagnoles": {
    "fr": "Même dispositif de suivi des surfaces agricoles par imagerie Sentinel, appliqué aux aides espagnoles",
-   "en": "",
+   "en": "Same agricultural area monitoring arrangements using Sentinel imagery, applied to Spanish aid",
    "_pages": [
     "pan-sia"
    ]
   },
   "NASA EONET — suivi ouvert des événements naturels": {
    "fr": "NASA EONET — suivi ouvert des événements naturels",
-   "en": "",
+   "en": "NASA EONET — open tracking of natural events",
    "_pages": [
     "pan-sia"
    ]
   },
   "NIS #, DORA, MDR, règlement Machines : sur-couches sectorielles citées par cas": {
    "fr": "NIS 2, DORA, MDR, règlement Machines : sur-couches sectorielles citées par cas",
-   "en": "",
+   "en": "NIS #, DORA, MDR, Machinery Regulation: sector-specific overlays cited per case",
    "_pages": [
     "pan-sia"
    ]
   },
   "Nappes et foncier": {
    "fr": "Nappes et foncier",
-   "en": "",
+   "en": "Groundwater and land",
    "_pages": [
     "pan-sia"
    ]
   },
   "Ne montre pas :": {
    "fr": "Ne montre pas :",
-   "en": "",
+   "en": "Does not show:",
    "_pages": [
     "pan-sia"
    ]
   },
   "Ne montrer que ces cas": {
    "fr": "Ne montrer que ces cas",
-   "en": "",
+   "en": "Show only these cases",
    "_pages": [
     "pan-sia"
    ]
   },
   "NetZeroLab, Universite de Sofia (d'apres Ember)": {
    "fr": "NetZeroLab, Universite de Sofia (d'apres Ember)",
-   "en": "",
+   "en": "NetZeroLab, Sofia University (based on Ember)",
    "_pages": [
     "pan-sia"
    ]
   },
   "Niveau de la mer à #": {
    "fr": "Niveau de la mer à 2030",
-   "en": "",
+   "en": "Sea level in #",
    "_pages": [
     "pan-sia"
    ]
   },
   "Nokia — Réseaux autonomes : détection d'anomalies et optimisation par ML (offre et usage interne)": {
    "fr": "Nokia — Réseaux autonomes : détection d'anomalies et optimisation par ML (offre et usage interne)",
-   "en": "",
+   "en": "Nokia — Autonomous networks: anomaly detection and ML optimisation (offering and internal use)",
    "_pages": [
     "pan-sia"
    ]
   },
   "Nordique · parc # · file #": {
    "fr": "Nordique · parc 9 · file 0",
-   "en": "",
+   "en": "Nordic · estate # · queue #",
    "_pages": [
     "pan-sia"
    ]
   },
   "Novo Nordisk — Découverte de molécules assistée par IA (partenariats calcul intensif)": {
    "fr": "Novo Nordisk — Découverte de molécules assistée par IA (partenariats calcul intensif)",
-   "en": "",
+   "en": "Novo Nordisk — AI-assisted molecule discovery (high-performance computing partnerships)",
    "_pages": [
     "pan-sia"
    ]
   },
   "Nowtricity (donnees ENTSO-E, facteurs cycle de vie)": {
    "fr": "Nowtricity (donnees ENTSO-E, facteurs cycle de vie)",
-   "en": "",
+   "en": "Nowtricity (ENTSO-E data, life-cycle factors)",
    "_pages": [
     "pan-sia"
    ]
   },
   "OTP Bank — Chatbot client et scoring interne (déploiement régional CEE)": {
    "fr": "OTP Bank — Chatbot client et scoring interne (déploiement régional CEE)",
-   "en": "",
+   "en": "OTP Bank — Customer chatbot and internal scoring (regional CEE deployment)",
    "_pages": [
     "pan-sia"
    ]
   },
   "OWASP LLM Top # (#) · MITRE ATLAS · ANSSI (recommandations génAI, #) · ENISA · BSI": {
    "fr": "OWASP LLM Top 10 (2025) · MITRE ATLAS · ANSSI (recommandations génAI, 2024) · ENISA · BSI",
-   "en": "",
+   "en": "OWASP LLM Top # (#) · MITRE ATLAS · ANSSI (genAI recommendations, #) · ENISA · BSI",
    "_pages": [
     "pan-sia"
    ]
   },
   "Occupation du sol à grande échelle (OCS GE)": {
    "fr": "Occupation du sol à grande échelle (OCS GE)",
-   "en": "",
+   "en": "Large-scale land cover (OCS GE)",
    "_pages": [
     "pan-sia"
    ]
   },
   "OpenAI (fournisseur, effets UE)": {
    "fr": "OpenAI (fournisseur, effets UE)",
-   "en": "",
+   "en": "OpenAI (provider, EU effects)",
    "_pages": [
     "pan-sia"
    ]
   },
   "OpenAI (fournisseur, effets UE) — ChatGPT : traitement des données des utilisateurs européens": {
    "fr": "OpenAI (fournisseur, effets UE) — ChatGPT : traitement des données des utilisateurs européens",
-   "en": "",
+   "en": "OpenAI (provider, EU effects) — ChatGPT: processing of European users’ data",
    "_pages": [
     "pan-sia"
    ]
   },
   "Optimisation de tournées et vision de tri colis à l'échelle du réseau": {
    "fr": "Optimisation de tournées et vision de tri colis à l'échelle du réseau",
-   "en": "",
+   "en": "Route optimisation and parcel sorting vision across the network",
    "_pages": [
     "pan-sia"
    ]
   },
   "Optimisation du positionnement conteneurs et de la consommation": {
    "fr": "Optimisation du positionnement conteneurs et de la consommation",
-   "en": "",
+   "en": "Optimisation of container positioning and consumption",
    "_pages": [
     "pan-sia"
    ]
   },
   "Orange — GénAI relation client et réseau ; accords avec fournisseurs de modèles européens": {
    "fr": "Orange — GénAI relation client et réseau ; accords avec fournisseurs de modèles européens",
-   "en": "",
+   "en": "Orange — GenAI for customer relations and the network; agreements with European model providers",
    "_pages": [
     "pan-sia"
    ]
   },
   "Otto Group — Génération de descriptions produits et traduction à l'échelle du catalogue": {
    "fr": "Otto Group — Génération de descriptions produits et traduction à l'échelle du catalogue",
-   "en": "",
+   "en": "Otto Group — Generation of product descriptions and translation at catalogue scale",
    "_pages": [
     "pan-sia"
    ]
   },
   "Owkin — Diagnostics et biomarqueurs IA en oncologie (produits marqués CE)": {
    "fr": "Owkin — Diagnostics et biomarqueurs IA en oncologie (produits marqués CE)",
-   "en": "",
+   "en": "Owkin — AI diagnostics and biomarkers in oncology (CE-marked products)",
    "_pages": [
     "pan-sia"
    ]
   },
   "Où le panel observe des SIA — et ce que dit le droit national": {
    "fr": "Où le panel observe des SIA — et ce que dit le droit national",
-   "en": "",
+   "en": "Where the panel observes AI systems — and what national law says",
    "_pages": [
     "pan-sia"
    ]
   },
   "PANEL, PAS RECENSEMENT : les déploiements non communiqués (majoritaires) n'y figurent pas — biais de publication assumé et signalé": {
    "fr": "PANEL, PAS RECENSEMENT : les déploiements non communiqués (majoritaires) n'y figurent pas — biais de publication assumé et signalé",
-   "en": "",
+   "en": "PANEL, NOT CENSUS: undisclosed deployments (the majority) do not appear — publication bias acknowledged and flagged",
    "_pages": [
     "pan-sia"
    ]
   },
   "PERTE D’ALIMENTATION EN EAU du système de refroidissement adiabatique. Ce n’est pas la chaleur qui a mis l’installation en défaut : c’est l’eau qui a manqué, le jour où l’adiabatique en avait le plus besoin.": {
    "fr": "PERTE D’ALIMENTATION EN EAU du système de refroidissement adiabatique. Ce n’est pas la chaleur qui a mis l’installation en défaut : c’est l’eau qui a manqué, le jour où l’adiabatique en avait le plus besoin.",
-   "en": "",
+   "en": "LOSS OF WATER SUPPLY to the adiabatic cooling system. It was not the heat that put the installation into failure: it was the water that ran out, on the day the adiabatic system needed it most.",
    "_pages": [
     "pan-sia"
    ]
   },
   "PUE — efficacité énergétique du site": {
    "fr": "PUE — efficacité énergétique du site",
-   "en": "",
+   "en": "PUE — site energy efficiency",
    "_pages": [
     "pan-sia"
    ]
   },
   "Parc en service (filière constituée)": {
    "fr": "Parc en service (filière constituée)",
-   "en": "",
+   "en": "Estate in service (established industry)",
    "_pages": [
     "pan-sia"
    ]
   },
   "Part de marché des fournisseurs européens de services en nuage": {
    "fr": "Part de marché des fournisseurs européens de services en nuage",
-   "en": "",
+   "en": "Market share of European cloud service providers",
    "_pages": [
     "pan-sia"
    ]
   },
   "Partenariat Mistral AI : assistant d'ingénierie et IA embarquée conversationnelle": {
    "fr": "Partenariat Mistral AI : assistant d'ingénierie et IA embarquée conversationnelle",
-   "en": "",
+   "en": "Mistral AI partnership: engineering assistant and embedded conversational AI",
    "_pages": [
     "pan-sia"
    ]
   },
   "Passer de l’énergie informatique à l’énergie totale du site.": {
    "fr": "Passer de l’énergie informatique à l’énergie totale du site.",
-   "en": "",
+   "en": "Go from IT energy to total site energy.",
    "_pages": [
     "pan-sia"
    ]
   },
   "Patterson et al.": {
    "fr": "Patterson et al.",
-   "en": "",
+   "en": "Patterson et al.",
    "_pages": [
     "pan-sia"
    ]
   },
   "Pays-Bas · Dispositifs médicaux · À l'échelle": {
    "fr": "Pays-Bas · Dispositifs médicaux · À l'échelle",
-   "en": "",
+   "en": "Netherlands · Medical devices · At scale",
    "_pages": [
     "pan-sia"
    ]
   },
   "Pays-Bas · Plateformes · À l'échelle": {
    "fr": "Pays-Bas · Plateformes · À l'échelle",
-   "en": "",
+   "en": "Netherlands · Platforms · At scale",
    "_pages": [
     "pan-sia"
    ]
   },
   "Pays-Bas · Semi-conducteurs · À l'échelle": {
    "fr": "Pays-Bas · Semi-conducteurs · À l'échelle",
-   "en": "",
+   "en": "Netherlands · Semiconductors · At scale",
    "_pages": [
     "pan-sia"
    ]
   },
   "Perspectives d'investissement et contraintes à l'horizon #": {
    "fr": "Perspectives d'investissement et contraintes à l'horizon 2030",
-   "en": "",
+   "en": "Investment outlook and constraints to the # horizon",
    "_pages": [
     "pan-sia"
    ]
   },
   "Philips — Reconstruction et lecture d'imagerie accélérées par IA (gamme SmartSpeed)": {
    "fr": "Philips — Reconstruction et lecture d'imagerie accélérées par IA (gamme SmartSpeed)",
-   "en": "",
+   "en": "Philips — AI-accelerated imaging reconstruction and reading (SmartSpeed range)",
    "_pages": [
     "pan-sia"
    ]
   },
   "Pilotabilité du mix (nucléaire + hydro-dominant)": {
    "fr": "Pilotabilité du mix (nucléaire + hydro-dominant)",
-   "en": "",
+   "en": "Dispatchability of the mix (nuclear + hydro-dominant)",
    "_pages": [
     "pan-sia"
    ]
   },
   "Pilotes d'analyse des émotions des téléconseillers en temps réel — abandonnés à l'entrée en vigueur de l'art. #": {
    "fr": "Pilotes d'analyse des émotions des téléconseillers en temps réel — abandonnés à l'entrée en vigueur de l'art. 5",
-   "en": "",
+   "en": "Real-time emotion analysis pilots for call centre agents — abandoned on the entry into force of art. #",
    "_pages": [
     "pan-sia"
    ]
   },
   "Plateforme interne « Kernel » et génAI multi-métiers ; signataire du Pacte IA": {
    "fr": "Plateforme interne « Kernel » et génAI multi-métiers ; signataire du Pacte IA",
-   "en": "",
+   "en": "Internal “Kernel” platform and multi-business genAI; signatory of the AI Pact",
    "_pages": [
     "pan-sia"
    ]
   },
   "Plateformes VTC / livraison (Uber, Bolt, Glovo…) — Gestion algorithmique des chauffeurs/livreurs (affectation, suspension de comptes)": {
    "fr": "Plateformes VTC / livraison (Uber, Bolt, Glovo…) — Gestion algorithmique des chauffeurs/livreurs (affectation, suspension de comptes)",
-   "en": "",
+   "en": "Ride-hailing / delivery platforms (Uber, Bolt, Glovo…) — Algorithmic management of drivers/couriers (allocation, account suspension)",
    "_pages": [
     "pan-sia"
    ]
   },
   "Poids : Disponibilité en eau (WEI+, compétition d'usages)": {
    "fr": "Poids : Disponibilité en eau (WEI+, compétition d'usages)",
-   "en": "",
+   "en": "Weight: Water availability (WEI+, competing uses)",
    "_pages": [
     "pan-sia"
    ]
   },
   "Poids : Feu de forêt — horizon retenu": {
    "fr": "Poids : Feu de forêt — horizon retenu",
-   "en": "",
+   "en": "Weight: Wildfire — selected horizon",
    "_pages": [
     "pan-sia"
    ]
   },
   "Poids : File de raccordement #-# (concurrence)": {
    "fr": "Poids : File de raccordement 2026-2030 (concurrence)",
-   "en": "",
+   "en": "Weight: Connection queue #-# (competition)",
    "_pages": [
     "pan-sia"
    ]
   },
   "Poids : Glissement de terrain — horizon retenu": {
    "fr": "Poids : Glissement de terrain — horizon retenu",
-   "en": "",
+   "en": "Weight: Landslide — selected horizon",
    "_pages": [
     "pan-sia"
    ]
   },
   "Poids : Intensité carbone du réseau": {
    "fr": "Poids : Intensité carbone du réseau",
-   "en": "",
+   "en": "Weight: Grid carbon intensity",
    "_pages": [
     "pan-sia"
    ]
   },
   "Poids : Parc en service (filière constituée)": {
    "fr": "Poids : Parc en service (filière constituée)",
-   "en": "",
+   "en": "Weight: Estate in service (established industry)",
    "_pages": [
     "pan-sia"
    ]
   },
   "Poids : Pilotabilité du mix (nucléaire + hydro-dominant)": {
    "fr": "Poids : Pilotabilité du mix (nucléaire + hydro-dominant)",
-   "en": "",
+   "en": "Weight: Dispatchability of the mix (nuclear + hydro-dominant)",
    "_pages": [
     "pan-sia"
    ]
   },
   "Poids : Prix de l'électricité industrielle": {
    "fr": "Poids : Prix de l'électricité industrielle",
-   "en": "",
+   "en": "Weight: Industrial electricity price",
    "_pages": [
     "pan-sia"
    ]
   },
   "Poids : Précipitations extrêmes et ruissellement — horizon retenu": {
    "fr": "Poids : Précipitations extrêmes et ruissellement — horizon retenu",
-   "en": "",
+   "en": "Weight: Extreme precipitation and runoff — selected horizon",
    "_pages": [
     "pan-sia"
    ]
   },
   "Poids : Risque climatique physique du bâti (XDI)": {
    "fr": "Poids : Risque climatique physique du bâti (XDI)",
-   "en": "",
+   "en": "Weight: Physical climate risk to buildings (XDI)",
    "_pages": [
     "pan-sia"
    ]
   },
   "Poids : Risque d'inondation à l'horizon # (XDI)": {
    "fr": "Poids : Risque d'inondation à l'horizon 2050 (XDI)",
-   "en": "",
+   "en": "Weight: Flood risk at the # horizon (XDI)",
    "_pages": [
     "pan-sia"
    ]
   },
   "Poids : Risque de feu de forêt à l'horizon # (XDI)": {
    "fr": "Poids : Risque de feu de forêt à l'horizon 2050 (XDI)",
-   "en": "",
+   "en": "Weight: Wildfire risk at the # horizon (XDI)",
    "_pages": [
     "pan-sia"
    ]
   },
   "Poids : Submersion côtière — horizon retenu": {
    "fr": "Poids : Submersion côtière — horizon retenu",
-   "en": "",
+   "en": "Weight: Coastal flooding — selected horizon",
    "_pages": [
     "pan-sia"
    ]
   },
   "Poids : Sécheresse — horizon retenu": {
    "fr": "Poids : Sécheresse — horizon retenu",
-   "en": "",
+   "en": "Weight: Drought — selected horizon",
    "_pages": [
     "pan-sia"
    ]
   },
   "Poids : Étiage et régime des cours d'eau — horizon retenu": {
    "fr": "Poids : Étiage et régime des cours d'eau — horizon retenu",
-   "en": "",
+   "en": "Weight: Low flow and river regime — selected horizon",
    "_pages": [
     "pan-sia"
    ]
   },
   "Pologne · Distribution · À l'échelle": {
    "fr": "Pologne · Distribution · À l'échelle",
-   "en": "",
+   "en": "Poland · Retail · At scale",
    "_pages": [
     "pan-sia"
    ]
   },
   "Pologne · Services · Abandonné": {
    "fr": "Pologne · Services · Abandonné",
-   "en": "",
+   "en": "Poland · Services · Abandoned",
    "_pages": [
     "pan-sia"
    ]
   },
   "Pologne · Sécurité / Frontières · Production": {
    "fr": "Pologne · Sécurité / Frontières · Production",
-   "en": "",
+   "en": "Poland · Security / Borders · Production",
    "_pages": [
     "pan-sia"
    ]
   },
   "Portugal · Énergie · Production": {
    "fr": "Portugal · Énergie · Production",
-   "en": "",
+   "en": "Portugal · Energy · Production",
    "_pages": [
     "pan-sia"
    ]
   },
   "Pourquoi cette section.": {
    "fr": "Pourquoi cette section.",
-   "en": "",
+   "en": "Why this section.",
    "_pages": [
     "pan-sia"
    ]
   },
   "Pratique interdite": {
    "fr": "Pratique interdite",
-   "en": "",
+   "en": "Prohibited practice",
    "_pages": [
     "pan-sia"
    ]
   },
   "Pratique interdite (art. #)": {
    "fr": "Pratique interdite (art. 5)",
-   "en": "",
+   "en": "Prohibited practice (art. #)",
    "_pages": [
     "pan-sia"
    ]
   },
   "Prix de l'électricité industrielle": {
    "fr": "Prix de l'électricité industrielle",
-   "en": "",
+   "en": "Industrial electricity price",
    "_pages": [
     "pan-sia"
    ]
   },
   "Prix de l'électricité industrielle par pays (classes)": {
    "fr": "Prix de l'électricité industrielle par pays (classes)",
-   "en": "",
+   "en": "Industrial electricity price by country (classes)",
    "_pages": [
     "pan-sia"
    ]
   },
   "Prix de l’électricité": {
    "fr": "Prix de l’électricité",
-   "en": "",
+   "en": "Electricity price",
    "_pages": [
     "pan-sia"
    ]
   },
   "Produits Sentinel mis à disposition": {
    "fr": "Produits Sentinel mis à disposition",
-   "en": "",
+   "en": "Sentinel products made available",
    "_pages": [
     "pan-sia"
    ]
   },
   "Programme d'assistants génératifs internes (déploiement progressif)": {
    "fr": "Programme d'assistants génératifs internes (déploiement progressif)",
-   "en": "",
+   "en": "Internal generative assistants programme (phased deployment)",
    "_pages": [
     "pan-sia"
    ]
   },
   "Prospectives #-# — ce qui change, et ce que ça périme": {
    "fr": "Prospectives 2026-2030 — ce qui change, et ce que ça périme",
-   "en": "",
+   "en": "Foresight #-# — what changes, and what it makes obsolete",
    "_pages": [
     "pan-sia"
    ]
   },
   "Pré-tri des symptômes et orientation des patients en télémédecine": {
    "fr": "Pré-tri des symptômes et orientation des patients en télémédecine",
-   "en": "",
+   "en": "Symptom pre-triage and patient referral in telemedicine",
    "_pages": [
     "pan-sia"
    ]
   },
   "Précipitations extrêmes et ruissellement — horizon retenu": {
    "fr": "Précipitations extrêmes et ruissellement — horizon retenu",
-   "en": "",
+   "en": "Extreme precipitation and runoff — selected horizon",
    "_pages": [
     "pan-sia"
    ]
   },
   "Prévision de demande et chatbot d'assistance client": {
    "fr": "Prévision de demande et chatbot d'assistance client",
-   "en": "",
+   "en": "Demand forecasting and customer assistance chatbot",
    "_pages": [
     "pan-sia"
    ]
   },
   "Prévision de demande et d'équilibrage par apprentissage automatique": {
    "fr": "Prévision de demande et d'équilibrage par apprentissage automatique",
-   "en": "",
+   "en": "Demand and balancing forecasting by machine learning",
    "_pages": [
     "pan-sia"
    ]
   },
   "Prévision de production renouvelable et maintenance prédictive éolienne": {
    "fr": "Prévision de production renouvelable et maintenance prédictive éolienne",
-   "en": "",
+   "en": "Renewable generation forecasting and wind predictive maintenance",
    "_pages": [
     "pan-sia"
    ]
   },
   "Publiques, sous licence explicite, interrogeables sans inscription :": {
    "fr": "Publiques, sous licence explicite, interrogeables sans inscription :",
-   "en": "",
+   "en": "Public, under an explicit licence, queryable without registration:",
    "_pages": [
     "pan-sia"
    ]
   },
   "Que se passe-t-il AU-DELÀ du point de projet : dégradation progressive, délestage de charge, ou arrêt ?": {
    "fr": "Que se passe-t-il AU-DELÀ du point de projet : dégradation progressive, délestage de charge, ou arrêt ?",
-   "en": "",
+   "en": "What happens BEYOND the design point: gradual degradation, load shedding, or shutdown?",
    "_pages": [
     "pan-sia"
    ]
   },
   "Quelle température extérieure de projet, et quelle période de retour retenue pour son dépassement ?": {
    "fr": "Quelle température extérieure de projet, et quelle période de retour retenue pour son dépassement ?",
-   "en": "",
+   "en": "What outdoor design temperature, and what return period selected for exceeding it?",
    "_pages": [
     "pan-sia"
    ]
   },
   "Randstad — Appariement algorithmique candidats-missions à l'échelle européenne": {
    "fr": "Randstad — Appariement algorithmique candidats-missions à l'échelle européenne",
-   "en": "",
+   "en": "Randstad — Algorithmic candidate–assignment matching at European scale",
    "_pages": [
     "pan-sia"
    ]
   },
   "Rappel d'échéances : pratiques interdites": {
    "fr": "Rappel d'échéances : pratiques interdites",
-   "en": "",
+   "en": "Deadline reminder: prohibited practices",
    "_pages": [
     "pan-sia"
    ]
   },
   "Rapporter l’empreinte de FABRICATION des équipements à leur usage annuel, pour qu’elle apparaisse dans le même total que l’électricité.": {
    "fr": "Rapporter l’empreinte de FABRICATION des équipements à leur usage annuel, pour qu’elle apparaisse dans le même total que l’électricité.",
-   "en": "",
+   "en": "Relate the MANUFACTURING footprint of the equipment to its annual use, so that it appears in the same total as electricity.",
    "_pages": [
     "pan-sia"
    ]
   }
- },
- "bloc": {}
+ }
 }

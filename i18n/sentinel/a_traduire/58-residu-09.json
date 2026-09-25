@@ -1,7 +1,14 @@
 {
  "_lot": "58-residu-09",
  "_mots": 2603,
+ "_pages": [
+  "obs-rd",
+  "owasp-dix",
+  "owasp-pont",
+  "pan-sia"
+ ],
  "_rubrique": "residu mesure navigateur",
+ "bloc": {},
  "texte": {
   "Modèles d’IA remarquables créés par pays (# – été #)": {
    "fr": "Modèles d’IA remarquables créés par pays (2003 – été 2024)",
@@ -1779,6 +1786,5 @@
     "pan-sia"
    ]
   }
- },
- "bloc": {}
+ }
 }

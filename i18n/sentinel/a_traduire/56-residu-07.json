@@ -1,7 +1,17 @@
 {
  "_lot": "56-residu-07",
  "_mots": 2607,
+ "_pages": [
+  "iso27001-millesime",
+  "iso27001-risques",
+  "iso27001-soa",
+  "iso42001",
+  "iso42001-certif",
+  "iso42001-ponts",
+  "iso42001-soa"
+ ],
  "_rubrique": "residu mesure navigateur",
+ "bloc": {},
  "texte": {
   "La date de fin de la période de transition des certificats ISO/IEC #:# vers la version #": {
    "fr": "La date de fin de la période de transition des certificats ISO/IEC 27001:2013 vers la version 2022",
@@ -1725,6 +1735,5 @@
     "iso42001-soa"
    ]
   }
- },
- "bloc": {}
+ }
 }

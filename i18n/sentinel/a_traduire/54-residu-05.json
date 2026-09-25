@@ -1,7 +1,20 @@
 {
  "_lot": "54-residu-05",
  "_mots": 2605,
+ "_pages": [
+  "enveloppe",
+  "espace",
+  "fiche-br",
+  "fiche-ch",
+  "fiche-cl",
+  "finops",
+  "fria",
+  "geo",
+  "gouvernance",
+  "pan-sia"
+ ],
  "_rubrique": "residu mesure navigateur",
+ "bloc": {},
  "texte": {
   "Preuve attendue : Le document qui les porte, daté et diffusé.": {
    "fr": "Preuve attendue : Le document qui les porte, daté et diffusé.",
@@ -1591,6 +1604,5 @@
     "gouvernance"
    ]
   }
- },
- "bloc": {}
+ }
 }

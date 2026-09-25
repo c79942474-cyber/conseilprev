@@ -1,15 +1,47 @@
 {
  "_lot": "50-residu-01",
  "_mots": 2617,
+ "_pages": [
+  "_coquille",
+  "audit-ia-act",
+  "benchmark",
+  "carto",
+  "clients",
+  "comp",
+  "cra",
+  "cra-chiffre",
+  "cra-ecarts",
+  "cra-role",
+  "cra-signalement",
+  "dora-incident",
+  "dora-iso",
+  "dora-qualifier",
+  "dora-risque",
+  "dora-supervision",
+  "dora-tiers",
+  "empreinte",
+  "empreinte-ia",
+  "empreinte-parc",
+  "enveloppe",
+  "finops",
+  "ia-act-hub",
+  "iso27001",
+  "iso27001-millesime",
+  "iso27001-risques",
+  "iso27001-soa",
+  "iso42001",
+  "iso42001-soa",
+  "nis2-chiffre",
+  "nis2-signalement",
+  "nist-cadre",
+  "nist-genai",
+  "obs-rd",
+  "pan-sia",
+  "rgpd-site"
+ ],
  "_rubrique": "residu mesure navigateur",
+ "bloc": {},
  "texte": {
-  "FR — afficher Sentinel en français": {
-   "fr": "FR — afficher Sentinel en français",
-   "en": "FR — view Sentinel in French",
-   "_pages": [
-    "_coquille"
-   ]
-  },
   "— Pas encore atteint": {
    "fr": "— Pas encore atteint",
    "en": "— Not yet reached",
@@ -1870,6 +1902,5 @@
     "empreinte-ia"
    ]
   }
- },
- "bloc": {}
+ }
 }
