@@ -1,0 +1,323 @@
+{
+ "_lot": "03-audit-compte-conformite-cra-produits",
+ "_mots": 780,
+ "_pages": [
+  "audit",
+  "compte",
+  "veille",
+  "cra",
+  "cra-chiffre",
+  "cra-ecarts",
+  "cra-role",
+  "cra-signalement"
+ ],
+ "_rubrique": "AUDIT + COMPTE + CONFORMITÉ + CRA — PRODUITS",
+ "bloc": {
+  "Ce module constate ce qui est déclaré ; il ne qualifie pas votre produit à votre place. La classe commande la procédure, donc le budget et le calendrier : elle est choisie par vous, les annexes sont affichées à côté pour que ce choix se fasse en connaissance de cause. Les exclusions sectorielles et la clause générale de l'article # relèvent d'une analyse juridique, pas d'une case cochée. Seul le texte publié au Journal officiel fait foi.": {
+   "en": "",
+   "fr": "Ce module constate ce qui est déclaré ; il ne qualifie pas votre produit à votre place. La classe commande la procédure, donc le budget et le calendrier : elle est choisie par vous, les annexes sont affichées à côté pour que ce choix se fasse en connaissance de cause. Les exclusions sectorielles et la clause générale de l'article 2 relèvent d'une analyse juridique, pas d'une case cochée. Seul le texte publié au Journal officiel fait foi.",
+   "html": "Ce module <b>constate ce qui est déclaré</b> ; il ne qualifie pas votre produit à votre place. La classe commande la procédure, donc le budget et le calendrier : elle est choisie par vous, les annexes sont affichées à côté pour que ce choix se fasse en connaissance de cause. Les exclusions sectorielles et la clause générale de l'article&nbsp;2 relèvent d'une analyse juridique, pas d'une case cochée. Seul le texte publié au Journal officiel fait foi."
+  },
+  "Ce module ne chiffre que ce que le texte chiffre. Il n'estime aucun coût de mise en conformité — ni jours-homme, ni honoraires d'organisme notifié : ces chiffres ne sont ni dans le règlement ni publics de façon fiable, et les inventer donnerait un document qui a l'air d'un devis sans en être un. Les montants ci-dessus sont des plafonds, pas des prévisions : l'article #, §# impose de tenir compte de la nature, de la gravité et de la durée de l'infraction, des antécédents et de la taille de l'entreprise. Le régime de sanctions lui-même est fixé par chaque État membre.": {
+   "en": "",
+   "fr": "Ce module ne chiffre que ce que le texte chiffre. Il n'estime aucun coût de mise en conformité — ni jours-homme, ni honoraires d'organisme notifié : ces chiffres ne sont ni dans le règlement ni publics de façon fiable, et les inventer donnerait un document qui a l'air d'un devis sans en être un. Les montants ci-dessus sont des plafonds, pas des prévisions : l'article 64, §5 impose de tenir compte de la nature, de la gravité et de la durée de l'infraction, des antécédents et de la taille de l'entreprise. Le régime de sanctions lui-même est fixé par chaque État membre.",
+   "html": "<b>Ce module ne chiffre que ce que le texte chiffre.</b> Il n'estime aucun coût de mise en conformité — ni jours-homme, ni honoraires d'organisme notifié : ces chiffres ne sont ni dans le règlement ni publics de façon fiable, et les inventer donnerait un document qui a l'air d'un devis sans en être un. Les montants ci-dessus sont des <b>plafonds</b>, pas des prévisions : l'article 64, §5 impose de tenir compte de la nature, de la gravité et de la durée de l'infraction, des antécédents et de la taille de l'entreprise. Le régime de sanctions lui-même est fixé par chaque État membre."
+  },
+  "Cette qualification suit ce que vous déclarez. Elle s'établit en droit sur les faits réels — et notamment la notion de modification substantielle, qui s'apprécie au regard de la cybersécurité du produit, non de l'ampleur technique du changement. Un correctif mineur qui rouvre une surface d'attaque peut être substantiel ; une refonte qui n'y touche pas peut ne pas l'être.": {
+   "en": "",
+   "fr": "Cette qualification suit ce que vous déclarez. Elle s'établit en droit sur les faits réels — et notamment la notion de modification substantielle, qui s'apprécie au regard de la cybersécurité du produit, non de l'ampleur technique du changement. Un correctif mineur qui rouvre une surface d'attaque peut être substantiel ; une refonte qui n'y touche pas peut ne pas l'être.",
+   "html": "Cette qualification suit ce que vous déclarez. Elle s'établit en droit sur les faits réels — et notamment la notion de <b>modification substantielle</b>, qui s'apprécie au regard de la cybersécurité du produit, non de l'ampleur technique du changement. Un correctif mineur qui rouvre une surface d'attaque peut être substantiel ; une refonte qui n'y touche pas peut ne pas l'être."
+  },
+  "Connexion et session": {
+   "en": "",
+   "fr": "Connexion et session",
+   "html": "Connexion et <em>session</em>"
+  },
+  "La notification part simultanément au CSIRT désigné coordinateur et à l'ENISA, par la plateforme unique de signalement de l'article #. Prévenir l'un puis l'autre, ou l'un seulement, n'est pas ce que le texte demande.": {
+   "en": "",
+   "fr": "La notification part simultanément au CSIRT désigné coordinateur et à l'ENISA, par la plateforme unique de signalement de l'article 16. Prévenir l'un puis l'autre, ou l'un seulement, n'est pas ce que le texte demande.",
+   "html": "La notification part <b>simultanément</b> au CSIRT désigné coordinateur <b>et</b> à l'ENISA, par la plateforme unique de signalement de l'article&nbsp;16. Prévenir l'un puis l'autre, ou l'un seulement, n'est pas ce que le texte demande."
+  },
+  "Lancer un audit IA Act": {
+   "en": "",
+   "fr": "Lancer un audit IA Act",
+   "html": "Lancer un <em>audit IA Act</em>"
+  },
+  "Une exigence non renseignée n'est pas une exigence conforme. Le taux affiché est toujours accompagné du nombre de lignes vides : un taux calculé sur trois exigences renseignées ne dit rien des dix-huit autres.": {
+   "en": "",
+   "fr": "Une exigence non renseignée n'est pas une exigence conforme. Le taux affiché est toujours accompagné du nombre de lignes vides : un taux calculé sur trois exigences renseignées ne dit rien des dix-huit autres.",
+   "html": "Une exigence <b>non renseignée n'est pas une exigence conforme</b>. Le taux affiché est toujours accompagné du nombre de lignes vides : un taux calculé sur trois exigences renseignées ne dit rien des dix-huit autres."
+  },
+  "Veille qualifiée par IA": {
+   "en": "",
+   "fr": "Veille qualifiée par IA",
+   "html": "Veille <em>qualifiée par IA</em>"
+  }
+ },
+ "texte": {
+  "+ Ajouter au registre": {
+   "en": "",
+   "fr": "+ Ajouter au registre"
+  },
+  ": elles survivent à un rechargement de la page, et ne sont pas enregistrées sur votre compte. Sur un poste partagé, ou avant de répondre pour une autre entité, effacez-les.": {
+   "en": "",
+   "fr": ": elles survivent à un rechargement de la page, et ne sont pas enregistrées sur votre compte. Sur un poste partagé, ou avant de répondre pour une autre entité, effacez-les."
+  },
+  "ALL": {
+   "en": "",
+   "fr": "ALL"
+  },
+  "Afficher le flux RSS brut sans analyse IA, toutes sources confondues.": {
+   "en": "",
+   "fr": "Afficher le flux RSS brut sans analyse IA, toutes sources confondues."
+  },
+  "Afficher les actualites analysees par IA selon leur impact sur vos systemes.": {
+   "en": "",
+   "fr": "Afficher les actualites analysees par IA selon leur impact sur vos systemes."
+  },
+  "Afficher les actualites dans toutes les langues.": {
+   "en": "",
+   "fr": "Afficher les actualites dans toutes les langues."
+  },
+  "Ajouter des systemes →": {
+   "en": "",
+   "fr": "Ajouter des systemes →"
+  },
+  "Aucun produit déclaré. Ajoutez-en un pour obtenir sa procédure.": {
+   "en": "",
+   "fr": "Aucun produit déclaré. Ajoutez-en un pour obtenir sa procédure."
+  },
+  "Aucune actualite a analyser pour le moment.": {
+   "en": "",
+   "fr": "Aucune actualite a analyser pour le moment."
+  },
+  "Audit de conformité": {
+   "en": "",
+   "fr": "Audit de conformité"
+  },
+  "Audit structuré en # étapes — méthodologie CONSEILPREV, conforme EU AI Act + NIS# + RGPD.": {
+   "en": "",
+   "fr": "Audit structuré en 5 étapes — méthodologie CONSEILPREV, conforme EU AI Act + NIS2 + RGPD."
+  },
+  "Calculer l'exposition": {
+   "en": "",
+   "fr": "Calculer l'exposition"
+  },
+  "Chaque actualité est analysée par IA et croisée avec votre Registre IA réel pour évaluer son impact potentiel sur vos systèmes effectivement déployés.": {
+   "en": "",
+   "fr": "Chaque actualité est analysée par IA et croisée avec votre Registre IA réel pour évaluer son impact potentiel sur vos systèmes effectivement déployés."
+  },
+  "Chargement des exigences…": {
+   "en": "",
+   "fr": "Chargement des exigences…"
+  },
+  "Chargement des échéances…": {
+   "en": "",
+   "fr": "Chargement des échéances…"
+  },
+  "Chiffre d'affaires annuel mondial (M€)": {
+   "en": "",
+   "fr": "Chiffre d'affaires annuel mondial (M€)"
+  },
+  "Compte": {
+   "en": "",
+   "fr": "Compte"
+  },
+  "Décrivez vos systèmes IA à auditer…": {
+   "en": "",
+   "fr": "Décrivez vos systèmes IA à auditer…"
+  },
+  "Démarrer un audit assisté": {
+   "en": "",
+   "fr": "Démarrer un audit assisté"
+  },
+  "EN — filtrer les actualités en anglais": {
+   "en": "",
+   "fr": "EN — filtrer les actualités en anglais"
+  },
+  "Effacer les réponses CRA": {
+   "en": "",
+   "fr": "Effacer les réponses CRA"
+  },
+  "Email professionnel": {
+   "en": "",
+   "fr": "Email professionnel"
+  },
+  "Entreprise": {
+   "en": "",
+   "fr": "Entreprise"
+  },
+  "Envoyer un email pre-rempli avec les alertes a impact haut detectees.": {
+   "en": "",
+   "fr": "Envoyer un email pre-rempli avec les alertes a impact haut detectees."
+  },
+  "FR — filtrer les actualités en français": {
+   "en": "",
+   "fr": "FR — filtrer les actualités en français"
+  },
+  "Feuille de route priorisée avec délais réglementaires.": {
+   "en": "",
+   "fr": "Feuille de route priorisée avec délais réglementaires."
+  },
+  "Inventaire et classification selon l'annexe III de l'AI Act.": {
+   "en": "",
+   "fr": "Inventaire et classification selon l'annexe III de l'AI Act."
+  },
+  "LANGUE :": {
+   "en": "",
+   "fr": "LANGUE :"
+  },
+  "Le Registre, l’audit, les analyses et les documents sont rattachés à un compte. Sans session, Sentinel affiche ses référentiels publics mais rien de ce qui vous appartient.": {
+   "en": "",
+   "fr": "Le Registre, l’audit, les analyses et les documents sont rattachés à un compte. Sans session, Sentinel affiche ses référentiels publics mais rien de ce qui vous appartient."
+  },
+  "Le référentiel du règlement est momentanément indisponible. Rien n’est affiché plutôt qu’un tableau partiel : sur un texte réglementaire, une liste tronquée qui ne dit pas qu’elle l’est vaut moins que pas de liste du tout.": {
+   "en": "",
+   "fr": "Le référentiel du règlement est momentanément indisponible. Rien n’est affiché plutôt qu’un tableau partiel : sur un texte réglementaire, une liste tronquée qui ne dit pas qu’elle l’est vaut moins que pas de liste du tout."
+  },
+  "Les modules qui lisent vos données resteront vides": {
+   "en": "",
+   "fr": "Les modules qui lisent vos données resteront vides"
+  },
+  "Mis à disposition sur le marché de l'Union": {
+   "en": "",
+   "fr": "Mis à disposition sur le marché de l'Union"
+  },
+  "Nom du produit — ex. « Passerelle VPN industrielle »": {
+   "en": "",
+   "fr": "Nom du produit — ex. « Passerelle VPN industrielle »"
+  },
+  "Non connecté": {
+   "en": "",
+   "fr": "Non connecté"
+  },
+  "Normes harmonisées appliquées": {
+   "en": "",
+   "fr": "Normes harmonisées appliquées"
+  },
+  "Prénom Nom": {
+   "en": "",
+   "fr": "Prénom Nom"
+  },
+  "Périmètre": {
+   "en": "",
+   "fr": "Périmètre"
+  },
+  "Qui est connecté, sous quelle offre, et par où passer pour se connecter ou se déconnecter. Cette page ne conserve rien : elle lit la session en cours et la donne à voir.": {
+   "en": "",
+   "fr": "Qui est connecté, sous quelle offre, et par où passer pour se connecter ou se déconnecter. Cette page ne conserve rien : elle lit la session en cours et la donne à voir."
+  },
+  "Raison sociale": {
+   "en": "",
+   "fr": "Raison sociale"
+  },
+  "Répondez aux questions ci-dessus.": {
+   "en": "",
+   "fr": "Répondez aux questions ci-dessus."
+  },
+  "Saisissez un chiffre d'affaires, ou calculez sans pour voir les montants fixes.": {
+   "en": "",
+   "fr": "Saisissez un chiffre d'affaires, ou calculez sans pour voir les montants fixes."
+  },
+  "Scoring multicritère : droits fondamentaux, sécurité, performance.": {
+   "en": "",
+   "fr": "Scoring multicritère : droits fondamentaux, sécurité, performance."
+  },
+  "Se connecter": {
+   "en": "",
+   "fr": "Se connecter"
+  },
+  "Se déconnecter ferme la session sur ce navigateur uniquement. Les données du Registre, de l’audit et des analyses restent enregistrées sur le compte.": {
+   "en": "",
+   "fr": "Se déconnecter ferme la session sur ce navigateur uniquement. Les données du Registre, de l’audit et des analyses restent enregistrées sur le compte."
+  },
+  "Soumettre la demande →": {
+   "en": "",
+   "fr": "Soumettre la demande →"
+  },
+  "Un expert CONSEILPREV vous accompagne à chaque étape.": {
+   "en": "",
+   "fr": "Un expert CONSEILPREV vous accompagne à chaque étape."
+  },
+  "Veille réglementaire": {
+   "en": "",
+   "fr": "Veille réglementaire"
+  },
+  "Vider": {
+   "en": "",
+   "fr": "Vider"
+  },
+  "Vos réponses restent dans ce navigateur": {
+   "en": "",
+   "fr": "Vos réponses restent dans ce navigateur"
+  },
+  "Votre nom": {
+   "en": "",
+   "fr": "Votre nom"
+  },
+  "actualité(s) à impact haut détectée(s)": {
+   "en": "",
+   "fr": "actualité(s) à impact haut détectée(s)"
+  },
+  "aucune session": {
+   "en": "",
+   "fr": "aucune session"
+  },
+  "ex. #": {
+   "en": "",
+   "fr": "ex. 45"
+  },
+  "intégralement": {
+   "en": "",
+   "fr": "intégralement"
+  },
+  "vous@entreprise.com": {
+   "en": "",
+   "fr": "vous@entreprise.com"
+  },
+  "État": {
+   "en": "",
+   "fr": "État"
+  },
+  "État de la session": {
+   "en": "",
+   "fr": "État de la session"
+  },
+  "① Cartographier": {
+   "en": "",
+   "fr": "① Cartographier"
+  },
+  "② Évaluer": {
+   "en": "",
+   "fr": "② Évaluer"
+  },
+  "③ Planifier": {
+   "en": "",
+   "fr": "③ Planifier"
+  },
+  "⚠️ Aucun systeme dans votre Registre IA — scoring generique non personnalise.": {
+   "en": "",
+   "fr": "⚠️ Aucun systeme dans votre Registre IA — scoring generique non personnalise."
+  },
+  "✉ Notifier les parties prenantes": {
+   "en": "",
+   "fr": "✉ Notifier les parties prenantes"
+  },
+  "🇫🇷 FR": {
+   "en": "",
+   "fr": "🇫🇷 FR"
+  },
+  "🇬🇧 EN": {
+   "en": "",
+   "fr": "🇬🇧 EN"
+  },
+  "🎯 Veille qualifiée": {
+   "en": "",
+   "fr": "🎯 Veille qualifiée"
+  },
+  "📡 Flux brut (# sources)": {
+   "en": "",
+   "fr": "📡 Flux brut (12 sources)"
+  }
+ }
+}

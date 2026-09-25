@@ -1,0 +1,967 @@
+{
+ "_lot": "37-js-19",
+ "_mots": 2452,
+ "_pages": [
+  "_js"
+ ],
+ "_rubrique": "_js",
+ "bloc": {},
+ "texte": {
+  "Nommer précisément le système et son usage réel — pas le produit éditeur, mais l'usage métier concret.": {
+   "en": "",
+   "fr": "Nommer précisément le système et son usage réel — pas le produit éditeur, mais l'usage métier concret."
+  },
+  "Nommez un responsable pour chaque document et datez sa dernière revue. Exportez le suivi en PDF avant un audit ou un contrôle.": {
+   "en": "",
+   "fr": "Nommez un responsable pour chaque document et datez sa dernière revue. Exportez le suivi en PDF avant un audit ou un contrôle."
+  },
+  "Non affecté": {
+   "en": "",
+   "fr": "Non affecté"
+  },
+  "Non applicable": {
+   "en": "",
+   "fr": "Non applicable"
+  },
+  "Non applicable au secteur": {
+   "en": "",
+   "fr": "Non applicable au secteur"
+  },
+  "Non atteint sur": {
+   "en": "",
+   "fr": "Non atteint sur"
+  },
+  "Non concerné": {
+   "en": "",
+   "fr": "Non concerné"
+  },
+  "Non conforme": {
+   "en": "",
+   "fr": "Non conforme"
+  },
+  "Non décidées": {
+   "en": "",
+   "fr": "Non décidées"
+  },
+  "Non mise en œuvre": {
+   "en": "",
+   "fr": "Non mise en œuvre"
+  },
+  "Non pas une relecture : une signature — quelqu’un de nommé, qu’on pourra interroger dans deux ans.": {
+   "en": "",
+   "fr": "Non pas une relecture : une signature — quelqu’un de nommé, qu’on pourra interroger dans deux ans."
+  },
+  "Non précisée": {
+   "en": "",
+   "fr": "Non précisée"
+  },
+  "Non renseigne": {
+   "en": "",
+   "fr": "Non renseigne"
+  },
+  "Non renseignes": {
+   "en": "",
+   "fr": "Non renseignes"
+  },
+  "Non renseigné": {
+   "en": "",
+   "fr": "Non renseigné"
+  },
+  "Non renseigné — à trancher avant tout déploiement.": {
+   "en": "",
+   "fr": "Non renseigné — à trancher avant tout déploiement."
+  },
+  "Non renseignée": {
+   "en": "",
+   "fr": "Non renseignée"
+  },
+  "Non renseignées": {
+   "en": "",
+   "fr": "Non renseignées"
+  },
+  "Non requise": {
+   "en": "",
+   "fr": "Non requise"
+  },
+  "Non requise a priori": {
+   "en": "",
+   "fr": "Non requise a priori"
+  },
+  "Non réalisé": {
+   "en": "",
+   "fr": "Non réalisé"
+  },
+  "Non servi": {
+   "en": "",
+   "fr": "Non servi"
+  },
+  "Non tenu": {
+   "en": "",
+   "fr": "Non tenu"
+  },
+  "Non évalué": {
+   "en": "",
+   "fr": "Non évalué"
+  },
+  "Non-conformités et actions correctives (clause #)": {
+   "en": "",
+   "fr": "Non-conformités et actions correctives (clause 10.2)"
+  },
+  "Non-discrimination": {
+   "en": "",
+   "fr": "Non-discrimination"
+  },
+  "Normales — pas encore en service": {
+   "en": "",
+   "fr": "Normales — pas encore en service"
+  },
+  "Notation automatisee des collaborateurs influant promotion ou licenciement.": {
+   "en": "",
+   "fr": "Notation automatisee des collaborateurs influant promotion ou licenciement."
+  },
+  "Note d'arbitrage · modèle": {
+   "en": "",
+   "fr": "Note d'arbitrage · modèle"
+  },
+  "Notez aussi ce que vous avez REFUSÉ de mettre sur le marché : c’est la preuve la plus convaincante que la diligence est réelle.": {
+   "en": "",
+   "fr": "Notez aussi ce que vous avez REFUSÉ de mettre sur le marché : c’est la preuve la plus convaincante que la diligence est réelle."
+  },
+  "Notez chaque axe de # (très faible) à # (très fort). Le score global pondéré, la priorité et le positionnement se calculent en temps réel. Pondérations : impact # %, faisabilité # %, données # %, risque maîtrisé # %.": {
+   "en": "",
+   "fr": "Notez chaque axe de 1 (très faible) à 5 (très fort). Le score global pondéré, la priorité et le positionnement se calculent en temps réel. Pondérations : impact 35 %, faisabilité 25 %, données 20 %, risque maîtrisé 20 %."
+  },
+  "Notez chaque pilier de gouvernance et documentez les justifications de score.": {
+   "en": "",
+   "fr": "Notez chaque pilier de gouvernance et documentez les justifications de score."
+  },
+  "Notez dès maintenant s’il existe une solution de repli identifiée : cette information ne se reconstitue pas dans l’urgence.": {
+   "en": "",
+   "fr": "Notez dès maintenant s’il existe une solution de repli identifiée : cette information ne se reconstitue pas dans l’urgence."
+  },
+  "Notez le stade atteint : POC, pilote, production, abandon. C’est le seul indicateur de faisabilité qui ne vienne pas d’un fournisseur.": {
+   "en": "",
+   "fr": "Notez le stade atteint : POC, pilote, production, abandon. C’est le seul indicateur de faisabilité qui ne vienne pas d’un fournisseur."
+  },
+  "Notice d'utilisation accompagnant le système : identité du fournisseur, capacités et limites, niveau de performance, données d'entrée requises, risques résiduels, mesures de supervision humaine recommandées.": {
+   "en": "",
+   "fr": "Notice d'utilisation accompagnant le système : identité du fournisseur, capacités et limites, niveau de performance, données d'entrée requises, risques résiduels, mesures de supervision humaine recommandées."
+  },
+  "Notice d'utilisation pour déployeurs": {
+   "en": "",
+   "fr": "Notice d'utilisation pour déployeurs"
+  },
+  "Notice d’utilisation complete fournie au deployeur (Art. #(#))": {
+   "en": "",
+   "fr": "Notice d’utilisation complete fournie au deployeur (Art. 13(2))"
+  },
+  "Notification a la Commission europeenne si risque systemique (Art. #(#)(b))": {
+   "en": "",
+   "fr": "Notification a la Commission europeenne si risque systemique (Art. 55(1)(b))"
+  },
+  "Notification des incidents": {
+   "en": "",
+   "fr": "Notification des incidents"
+  },
+  "Notification des incidents TIC majeurs": {
+   "en": "",
+   "fr": "Notification des incidents TIC majeurs"
+  },
+  "Notification des vulnérabilités": {
+   "en": "",
+   "fr": "Notification des vulnérabilités"
+  },
+  "Notification et action": {
+   "en": "",
+   "fr": "Notification et action"
+  },
+  "Notification initiale sous #h après détection d'un incident significatif, rapport intermédiaire sous #h, rapport final sous # mois.": {
+   "en": "",
+   "fr": "Notification initiale sous 24h après détection d'un incident significatif, rapport intermédiaire sous 72h, rapport final sous 1 mois."
+  },
+  "Notification initiale à l'autorité compétente sous #h après classification d'un incident TIC majeur, rapport intermédiaire sous #h, rapport final sous # mois — incluant les incidents touchant des systèmes IA dans l'infrastructure TIC.": {
+   "en": "",
+   "fr": "Notification initiale à l'autorité compétente sous 4h après classification d'un incident TIC majeur, rapport intermédiaire sous 72h, rapport final sous 1 mois — incluant les incidents touchant des systèmes IA dans l'infrastructure TIC."
+  },
+  "Notification à l'ENISA des vulnérabilités activement exploitées sous #h, rapport complet sous #h, rapport final sous # jours. Applicable dès le # septembre #.": {
+   "en": "",
+   "fr": "Notification à l'ENISA des vulnérabilités activement exploitées sous 24h, rapport complet sous 72h, rapport final sous 14 jours. Applicable dès le 11 septembre 2026."
+  },
+  "Notification à l'autorité de surveillance : quinze jours, ramenés à dix en cas de décès et à deux en cas d'incident généralisé.": {
+   "en": "",
+   "fr": "Notification à l'autorité de surveillance : quinze jours, ramenés à dix en cas de décès et à deux en cas d'incident généralisé."
+  },
+  "Notifier l'autorité de surveillance du marché du résultat de l'analyse": {
+   "en": "",
+   "fr": "Notifier l'autorité de surveillance du marché du résultat de l'analyse"
+  },
+  "Notifier la Commission dans les # semaines si le seuil est atteint": {
+   "en": "",
+   "fr": "Notifier la Commission dans les 2 semaines si le seuil est atteint"
+  },
+  "Notifier le client par email": {
+   "en": "",
+   "fr": "Notifier le client par email"
+  },
+  "Notifier sous # jours (défaut), # jours (infraction généralisée) ou # jours (décès) selon le cas": {
+   "en": "",
+   "fr": "Notifier sous 15 jours (défaut), 2 jours (infraction généralisée) ou 10 jours (décès) selon le cas"
+  },
+  "Nouveau système IA": {
+   "en": "",
+   "fr": "Nouveau système IA"
+  },
+  "Nécessaire à la conclusion ou à l'exécution d'un contrat": {
+   "en": "",
+   "fr": "Nécessaire à la conclusion ou à l'exécution d'un contrat"
+  },
+  "N’impose pas": {
+   "en": "",
+   "fr": "N’impose pas"
+  },
+  "N’écrivez ni neutralité ni émissions évitées : la réglementation européenne sur les allégations environnementales s’y intéresse de près.": {
+   "en": "",
+   "fr": "N’écrivez ni neutralité ni émissions évitées : la réglementation européenne sur les allégations environnementales s’y intéresse de près."
+  },
+  "OUI, mais allégé": {
+   "en": "",
+   "fr": "OUI, mais allégé"
+  },
+  "OWASP LLM Top # et MITRE ATLAS pour le profil de vulnérabilités": {
+   "en": "",
+   "fr": "OWASP LLM Top 10 et MITRE ATLAS pour le profil de vulnérabilités"
+  },
+  "OWASP LLM — je vérifie qu’aucune défaillance évidente n’a été oubliée": {
+   "en": "",
+   "fr": "OWASP LLM — je vérifie qu’aucune défaillance évidente n’a été oubliée"
+  },
+  "OWASP LLM ↔ ISO/IEC # — ce que la certification ne donne pas": {
+   "en": "",
+   "fr": "OWASP LLM ↔ ISO/IEC 42001 — ce que la certification ne donne pas"
+  },
+  "OWASP Top # pour les LLM": {
+   "en": "",
+   "fr": "OWASP Top 10 pour les LLM"
+  },
+  "OWASP Top # pour les applications LLM — millésime #": {
+   "en": "",
+   "fr": "OWASP Top 10 pour les applications LLM — millésime 2025"
+  },
+  "OWASP dit ce qui casse ; le règlement dit ce qui est exigible. Les deux ne se déduisent pas l’un de l’autre.": {
+   "en": "",
+   "fr": "OWASP dit ce qui casse ; le règlement dit ce qui est exigible. Les deux ne se déduisent pas l’un de l’autre."
+  },
+  "Objectif du traitement": {
+   "en": "",
+   "fr": "Objectif du traitement"
+  },
+  "Objectifs pédagogiques": {
+   "en": "",
+   "fr": "Objectifs pédagogiques"
+  },
+  "Objectifs, résultats, évaluations passées.": {
+   "en": "",
+   "fr": "Objectifs, résultats, évaluations passées."
+  },
+  "Objective un sujet souvent évalué de façon optimiste en interne sans grille de lecture externe.": {
+   "en": "",
+   "fr": "Objective un sujet souvent évalué de façon optimiste en interne sans grille de lecture externe."
+  },
+  "Objet et champ d application (Art. #, #)": {
+   "en": "",
+   "fr": "Objet et champ d application (Art. 1, 2)"
+  },
+  "Obligation d'information des citoyens sur l'usage de l'IA. Publication des analyses d'impact. Explicabilité des décisions administratives.": {
+   "en": "",
+   "fr": "Obligation d'information des citoyens sur l'usage de l'IA. Publication des analyses d'impact. Explicabilité des décisions administratives."
+  },
+  "Obligation d'informer les personnes de l'existence d'un traitement automatisé, de sa logique sous-jacente et de ses conséquences prévisibles.": {
+   "en": "",
+   "fr": "Obligation d'informer les personnes de l'existence d'un traitement automatisé, de sa logique sous-jacente et de ses conséquences prévisibles."
+  },
+  "Obligation d'informer les personnes qu'elles interagissent avec une IA, marquage des contenus générés.": {
+   "en": "",
+   "fr": "Obligation d'informer les personnes qu'elles interagissent avec une IA, marquage des contenus générés."
+  },
+  "Obligation de maintenir un contrôle humain effectif sur les décisions ou actions du système IA.": {
+   "en": "",
+   "fr": "Obligation de maintenir un contrôle humain effectif sur les décisions ou actions du système IA."
+  },
+  "Obligation de produire et conserver une documentation technique détaillée du système.": {
+   "en": "",
+   "fr": "Obligation de produire et conserver une documentation technique détaillée du système."
+  },
+  "Obligation de transparence (Art. #)": {
+   "en": "",
+   "fr": "Obligation de transparence (Art. 50)"
+  },
+  "Obligation de transparence — Art. # §# (renvoie à l'Art. #)": {
+   "en": "",
+   "fr": "Obligation de transparence — Art. 99 §4 (renvoie à l'Art. 50)"
+  },
+  "Obligation du": {
+   "en": "",
+   "fr": "Obligation du"
+  },
+  "Obligation légale (#.c)": {
+   "en": "",
+   "fr": "Obligation légale (6.1.c)"
+  },
+  "Obligations GPAI à risque systémique": {
+   "en": "",
+   "fr": "Obligations GPAI à risque systémique"
+  },
+  "Obligations RGPD pour l'IA ?": {
+   "en": "",
+   "fr": "Obligations RGPD pour l'IA ?"
+  },
+  "Obligations applicables depuis le # aout #": {
+   "en": "",
+   "fr": "Obligations applicables depuis le 2 aout 2025"
+  },
+  "Obligations article par article — Sources": {
+   "en": "",
+   "fr": "Obligations article par article — Sources"
+  },
+  "Obligations de transparence Art. #": {
+   "en": "",
+   "fr": "Obligations de transparence Art. 50"
+  },
+  "Obligations des contrôleurs d'accès": {
+   "en": "",
+   "fr": "Obligations des contrôleurs d'accès"
+  },
+  "Obligations des déployeurs": {
+   "en": "",
+   "fr": "Obligations des déployeurs"
+  },
+  "Obligations des fabricants": {
+   "en": "",
+   "fr": "Obligations des fabricants"
+  },
+  "Obligations des fournisseurs": {
+   "en": "",
+   "fr": "Obligations des fournisseurs"
+  },
+  "Obligations des fournisseurs GPAI": {
+   "en": "",
+   "fr": "Obligations des fournisseurs GPAI"
+  },
+  "Obligations déclenchées": {
+   "en": "",
+   "fr": "Obligations déclenchées"
+  },
+  "Obligations identifiées et gaps de conformité —": {
+   "en": "",
+   "fr": "Obligations identifiées et gaps de conformité —"
+  },
+  "Obligations réglementaires à couvrir :": {
+   "en": "",
+   "fr": "Obligations réglementaires à couvrir :"
+  },
+  "Obligations systèmes à haut risque": {
+   "en": "",
+   "fr": "Obligations systèmes à haut risque"
+  },
+  "Obstacle à un droit, à un service ou à un contrat": {
+   "en": "",
+   "fr": "Obstacle à un droit, à un service ou à un contrat"
+  },
+  "On ne peut pas être déployeur conforme d’un système qu’on ignore. C’est la première étape, et celle qu’on saute presque toujours.": {
+   "en": "",
+   "fr": "On ne peut pas être déployeur conforme d’un système qu’on ignore. C’est la première étape, et celle qu’on saute presque toujours."
+  },
+  "On peut être parfaitement conforme sur un outil que personne n’ouvre — et très utilisé sans être en règle. Une seule des deux mesures ne dit rien de l’autre.": {
+   "en": "",
+   "fr": "On peut être parfaitement conforme sur un outil que personne n’ouvre — et très utilisé sans être en règle. Une seule des deux mesures ne dit rien de l’autre."
+  },
+  "Onze décisions à prendre, chacune motivée, chacune avec son statut. C’est une demi-journée, pas un projet.": {
+   "en": "",
+   "fr": "Onze décisions à prendre, chacune motivée, chacune avec son statut. C’est une demi-journée, pas un projet."
+  },
+  "OpenAI, Anthropic, Mistral via API intégrée dans un produit ou service": {
+   "en": "",
+   "fr": "OpenAI, Anthropic, Mistral via API intégrée dans un produit ou service"
+  },
+  "Optimisation automatique de la couverture #G/fibre": {
+   "en": "",
+   "fr": "Optimisation automatique de la couverture 5G/fibre"
+  },
+  "Optimisation automatique des couts cloud (FinOps IA)": {
+   "en": "",
+   "fr": "Optimisation automatique des couts cloud (FinOps IA)"
+  },
+  "Optimisation de l autoconsommation renouvelable": {
+   "en": "",
+   "fr": "Optimisation de l autoconsommation renouvelable"
+  },
+  "Optimisation de l empreinte carbone des trajets": {
+   "en": "",
+   "fr": "Optimisation de l empreinte carbone des trajets"
+  },
+  "Optimisation de la consommation energetique des sites": {
+   "en": "",
+   "fr": "Optimisation de la consommation energetique des sites"
+  },
+  "Optimisation de la planification des lits/blocs": {
+   "en": "",
+   "fr": "Optimisation de la planification des lits/blocs"
+  },
+  "Optimisation de production": {
+   "en": "",
+   "fr": "Optimisation de production"
+  },
+  "Optimisation des achats et selection fournisseurs": {
+   "en": "",
+   "fr": "Optimisation des achats et selection fournisseurs"
+  },
+  "Optimisation des flux logistiques d usine": {
+   "en": "",
+   "fr": "Optimisation des flux logistiques d usine"
+  },
+  "Optimisation des itineraires et flottes": {
+   "en": "",
+   "fr": "Optimisation des itineraires et flottes"
+  },
+  "Optimisation des offres telecom": {
+   "en": "",
+   "fr": "Optimisation des offres telecom"
+  },
+  "Optimisation des stocks": {
+   "en": "",
+   "fr": "Optimisation des stocks"
+  },
+  "Optimisation des stocks et previsions de demande": {
+   "en": "",
+   "fr": "Optimisation des stocks et previsions de demande"
+  },
+  "Optimisation du chargement et du remplissage": {
+   "en": "",
+   "fr": "Optimisation du chargement et du remplissage"
+  },
+  "Optimisation du trading sur les marches de l energie": {
+   "en": "",
+   "fr": "Optimisation du trading sur les marches de l energie"
+  },
+  "Optimisation parcours de soins": {
+   "en": "",
+   "fr": "Optimisation parcours de soins"
+  },
+  "Ordonnez les chantiers issus de la priorisation.": {
+   "en": "",
+   "fr": "Ordonnez les chantiers issus de la priorisation."
+  },
+  "Ordre recommandé": {
+   "en": "",
+   "fr": "Ordre recommandé"
+  },
+  "Organisez la surveillance du fonctionnement au regard de la notice (article #(#)) et la conservation des journaux générés automatiquement, six mois au moins (article #(#)).": {
+   "en": "",
+   "fr": "Organisez la surveillance du fonctionnement au regard de la notice (article 26(5)) et la conservation des journaux générés automatiquement, six mois au moins (article 26(6))."
+  },
+  "Organisme notifié": {
+   "en": "",
+   "fr": "Organisme notifié"
+  },
+  "Orientation automatique des tickets vers le bon service ou agent.": {
+   "en": "",
+   "fr": "Orientation automatique des tickets vers le bon service ou agent."
+  },
+  "Orientation et recommandation de parcours": {
+   "en": "",
+   "fr": "Orientation et recommandation de parcours"
+  },
+  "Orientation immédiate ; charge de tri du service divisée.": {
+   "en": "",
+   "fr": "Orientation immédiate ; charge de tri du service divisée."
+  },
+  "Ou deployer avec moins de contraintes ?": {
+   "en": "",
+   "fr": "Ou deployer avec moins de contraintes ?"
+  },
+  "Oui si basé sur un modèle GPAI (GPT-#, Claude, Gemini…) — obligations Art. # s'appliquent au fournisseur": {
+   "en": "",
+   "fr": "Oui si basé sur un modèle GPAI (GPT-4, Claude, Gemini…) — obligations Art. 53 s'appliquent au fournisseur"
+  },
+  "Oui systématiquement — Annexe III, point #(a)": {
+   "en": "",
+   "fr": "Oui systématiquement — Annexe III, point 4(a)"
+  },
+  "Oui — Annexe III point #(a-d) : accès à l'éducation, évaluation des résultats, surveillance des examens": {
+   "en": "",
+   "fr": "Oui — Annexe III point 3(a-d) : accès à l'éducation, évaluation des résultats, surveillance des examens"
+  },
+  "Oui — Annexe III point #(b) : systèmes d'allocation de tâches ou d'évaluation du comportement des travailleurs": {
+   "en": "",
+   "fr": "Oui — Annexe III point 4(b) : systèmes d'allocation de tâches ou d'évaluation du comportement des travailleurs"
+  },
+  "Oui — Annexe III point #(b) et #(c) : évaluation de la solvabilité et tarification assurance santé": {
+   "en": "",
+   "fr": "Oui — Annexe III point 5(b) et 5(c) : évaluation de la solvabilité et tarification assurance santé"
+  },
+  "Oui — Annexe III point #(d) : systèmes d'évaluation et de classification des appels d'urgence et de triage": {
+   "en": "",
+   "fr": "Oui — Annexe III point 5(d) : systèmes d'évaluation et de classification des appels d'urgence et de triage"
+  },
+  "Oui — dès qu'il y a interaction directe avec une personne physique": {
+   "en": "",
+   "fr": "Oui — dès qu'il y a interaction directe avec une personne physique"
+  },
+  "Oui — déployeur du modèle, potentiellement fournisseur du produit final": {
+   "en": "",
+   "fr": "Oui — déployeur du modèle, potentiellement fournisseur du produit final"
+  },
+  "Oui — information explicite requise": {
+   "en": "",
+   "fr": "Oui — information explicite requise"
+  },
+  "Oui — l'entreprise devient fournisseur de fait dès qu'elle héberge sous son nom": {
+   "en": "",
+   "fr": "Oui — l'entreprise devient fournisseur de fait dès qu'elle héberge sous son nom"
+  },
+  "Oui — obligation de marquage, distincte de l'obligation d'information": {
+   "en": "",
+   "fr": "Oui — obligation de marquage, distincte de l'obligation d'information"
+  },
+  "Oui — présumé (registre)": {
+   "en": "",
+   "fr": "Oui — présumé (registre)"
+  },
+  "Oui, largement, et ce n’est pas suffisant. Les dix mesures de l’article #, §#, trouvent presque toutes un répondant dans l’annexe A : un système certifié est le socle de preuves le plus direct qu’une entité puisse présenter. Mais trois choses échappent complètement à la norme.": {
+   "en": "",
+   "fr": "Oui, largement, et ce n’est pas suffisant. Les dix mesures de l’article 21, §2, trouvent presque toutes un répondant dans l’annexe A : un système certifié est le socle de preuves le plus direct qu’une entité puisse présenter. Mais trois choses échappent complètement à la norme."
+  },
+  "Oui, voire interdit selon l'usage — Annexe III point # + Art. # pour certaines utilisations": {
+   "en": "",
+   "fr": "Oui, voire interdit selon l'usage — Annexe III point 1 + Art. 5 pour certaines utilisations"
+  },
+  "Outillage technique de conformité ; ne constitue pas un avis juridique.": {
+   "en": "",
+   "fr": "Outillage technique de conformité ; ne constitue pas un avis juridique."
+  },
+  "Outils RH — tri, évaluation, matching": {
+   "en": "",
+   "fr": "Outils RH — tri, évaluation, matching"
+  },
+  "Outils de gouvernance": {
+   "en": "",
+   "fr": "Outils de gouvernance"
+  },
+  "Outils de veille (Feedly, Meltwater)": {
+   "en": "",
+   "fr": "Outils de veille (Feedly, Meltwater)"
+  },
+  "Ouverture du paiement sécurisé…": {
+   "en": "",
+   "fr": "Ouverture du paiement sécurisé…"
+  },
+  "Ouvrez d’abord la vue portefeuille.": {
+   "en": "",
+   "fr": "Ouvrez d’abord la vue portefeuille."
+  },
+  "Ouvrez la carte NIST AI RMF : elle porte maintenant votre profil.": {
+   "en": "",
+   "fr": "Ouvrez la carte NIST AI RMF : elle porte maintenant votre profil."
+  },
+  "Ouvrez la carte OWASP LLM : elle porte maintenant ce que vous venez de déclarer.": {
+   "en": "",
+   "fr": "Ouvrez la carte OWASP LLM : elle porte maintenant ce que vous venez de déclarer."
+  },
+  "Ouvrez la carte des quarante-six juridictions analysées sur douze critères, triées par sévérité.": {
+   "en": "",
+   "fr": "Ouvrez la carte des quarante-six juridictions analysées sur douze critères, triées par sévérité."
+  },
+  "Ouvrez la déclaration et traitez les mesures que le rang # du plan a nommées.": {
+   "en": "",
+   "fr": "Ouvrez la déclaration et traitez les mesures que le rang 2 du plan a nommées."
+  },
+  "Ouvrez les deux cartes NIST #-# et #-# : elles portent maintenant vos déclarations.": {
+   "en": "",
+   "fr": "Ouvrez les deux cartes NIST 800-53 et 800-82 : elles portent maintenant vos déclarations."
+  },
+  "Ouvrez les formations : leur progression se calcule à partir de vos scores d’audit par pilier, et non d’un catalogue générique.": {
+   "en": "",
+   "fr": "Ouvrez les formations : leur progression se calcule à partir de vos scores d’audit par pilier, et non d’un catalogue générique."
+  },
+  "Ouvrez l’audit structuré en cinq étapes et faites-le porter sur le périmètre que vous venez de classer.": {
+   "en": "",
+   "fr": "Ouvrez l’audit structuré en cinq étapes et faites-le porter sur le périmètre que vous venez de classer."
+  },
+  "Ouvrez-la en début de séance : « Actions prioritaires » dit ce qui attend une décision de votre part, « Activité récente » ce qui a bougé depuis votre dernier passage. Refermez-la quand la liste des actions est vide.": {
+   "en": "",
+   "fr": "Ouvrez-la en début de séance : « Actions prioritaires » dit ce qui attend une décision de votre part, « Activité récente » ce qui a bougé depuis votre dernier passage. Refermez-la quand la liste des actions est vide."
+  },
+  "Ouvrez-la quand un module se vide sans raison : Registre sans systèmes, audit sans points, analyses sans historique. Neuf fois sur dix la session a expiré, et cette page vous le dira au lieu de vous laisser conclure que vos données ont disparu.": {
+   "en": "",
+   "fr": "Ouvrez-la quand un module se vide sans raison : Registre sans systèmes, audit sans points, analyses sans historique. Neuf fois sur dix la session a expiré, et cette page vous le dira au lieu de vous laisser conclure que vos données ont disparu."
+  },
+  "Ouvrir cette page et avancer le parcours d’une étape.": {
+   "en": "",
+   "fr": "Ouvrir cette page et avancer le parcours d’une étape."
+  },
+  "Ouvrir dans Sentinel": {
+   "en": "",
+   "fr": "Ouvrir dans Sentinel"
+  },
+  "Ouvrir la FRIA": {
+   "en": "",
+   "fr": "Ouvrir la FRIA"
+  },
+  "Ouvrir la Roadmap complète →": {
+   "en": "",
+   "fr": "Ouvrir la Roadmap complète →"
+  },
+  "Ouvrir la fiche d’un centre": {
+   "en": "",
+   "fr": "Ouvrir la fiche d’un centre"
+  },
+  "Ouvrir la page de connexion": {
+   "en": "",
+   "fr": "Ouvrir la page de connexion"
+  },
+  "Ouvrir la page de connexion pour entrer avec un autre compte": {
+   "en": "",
+   "fr": "Ouvrir la page de connexion pour entrer avec un autre compte"
+  },
+  "Ouvrir la source": {
+   "en": "",
+   "fr": "Ouvrir la source"
+  },
+  "Ouvrir la source ↗": {
+   "en": "",
+   "fr": "Ouvrir la source ↗"
+  },
+  "Ouvrir le Radar →": {
+   "en": "",
+   "fr": "Ouvrir le Radar →"
+  },
+  "Ouvrir le Simulateur": {
+   "en": "",
+   "fr": "Ouvrir le Simulateur"
+  },
+  "Ouvrir le comparatif": {
+   "en": "",
+   "fr": "Ouvrir le comparatif"
+  },
+  "Ouvrir le détail d’un pays": {
+   "en": "",
+   "fr": "Ouvrir le détail d’un pays"
+  },
+  "Ouvrir le guide d’utilisation de cette page": {
+   "en": "",
+   "fr": "Ouvrir le guide d’utilisation de cette page"
+  },
+  "Où chaque champ se saisit, et lesquels Sentinel a déjà obtenus": {
+   "en": "",
+   "fr": "Où chaque champ se saisit, et lesquels Sentinel a déjà obtenus"
+  },
+  "Où en est réellement le socle": {
+   "en": "",
+   "fr": "Où en est réellement le socle"
+  },
+  "Où en sont ceux à qui vous vendez": {
+   "en": "",
+   "fr": "Où en sont ceux à qui vous vendez"
+  },
+  "Où le matériel de formation se range": {
+   "en": "",
+   "fr": "Où le matériel de formation se range"
+  },
+  "Où le saisir": {
+   "en": "",
+   "fr": "Où le saisir"
+  },
+  "Où vous en êtes sur chacune des neuf, et lesquelles sont ARRÊTÉES par un verrou plutôt que simplement en retard.": {
+   "en": "",
+   "fr": "Où vous en êtes sur chacune des neuf, et lesquelles sont ARRÊTÉES par un verrou plutôt que simplement en retard."
+  },
+  "PDF officiel fourni par le client (EU_IA_ACT.pdf). Articles retranscrits et vulgarises par CONSEILPREV.": {
+   "en": "",
+   "fr": "PDF officiel fourni par le client (EU_IA_ACT.pdf). Articles retranscrits et vulgarises par CONSEILPREV."
+  },
+  "PDF officiel fourni par le client, extrait via pdftotext. Articles couverts par le moteur : #, #, #, #, #, #, # a #, #, #, #, #, #, #.": {
+   "en": "",
+   "fr": "PDF officiel fourni par le client, extrait via pdftotext. Articles couverts par le moteur : 1, 2, 3, 4, 5, 6, 9 a 17, 22, 50, 51, 53, 55, 99."
+  },
+  "PME (< # salariés)": {
+   "en": "",
+   "fr": "PME (< 250 salariés)"
+  },
+  "Panel de # cas d’IA documentés, version #-#-b — communiqués d’entreprises, décisions d’autorités, presse spécialisée": {
+   "en": "",
+   "fr": "Panel de 72 cas d’IA documentés, version 2026-07-b — communiqués d’entreprises, décisions d’autorités, presse spécialisée"
+  },
+  "Panorama IA & centres de données — UE": {
+   "en": "",
+   "fr": "Panorama IA & centres de données — UE"
+  },
+  "Panorama des systèmes déployés dans l’UE": {
+   "en": "",
+   "fr": "Panorama des systèmes déployés dans l’UE"
+  },
+  "Papier, verre & matériaux": {
+   "en": "",
+   "fr": "Papier, verre & matériaux"
+  },
+  "Par le haut. L'ordre n'est pas un classement de difficulté, c'est celui dans lequel les actions se rendent payantes les unes les autres.": {
+   "en": "",
+   "fr": "Par le haut. L'ordre n'est pas un classement de difficulté, c'est celui dans lequel les actions se rendent payantes les unes les autres."
+  },
+  "Par où commencer": {
+   "en": "",
+   "fr": "Par où commencer"
+  },
+  "Par où commencer : la couverture": {
+   "en": "",
+   "fr": "Par où commencer : la couverture"
+  },
+  "Par où commencer : les angles morts": {
+   "en": "",
+   "fr": "Par où commencer : les angles morts"
+  },
+  "Par requête": {
+   "en": "",
+   "fr": "Par requête"
+  },
+  "Par rôle au sens du règlement": {
+   "en": "",
+   "fr": "Par rôle au sens du règlement"
+  },
+  "Paramètres saisis": {
+   "en": "",
+   "fr": "Paramètres saisis"
+  },
+  "Parce que c’est celle que la surcharge industrielle SP #-# Rev. # adapte — son annexe G le dit. La révision # est la version courante : elle ajoute les familles PT et SR et renomme CA. Un système déjà aligné sur la révision # lit donc ce taux contre un millésime antérieur au sien, et l’écran le rappelle avant le premier chiffre.": {
+   "en": "",
+   "fr": "Parce que c’est celle que la surcharge industrielle SP 800-82 Rev. 2 adapte — son annexe G le dit. La révision 5 est la version courante : elle ajoute les familles PT et SR et renomme CA. Un système déjà aligné sur la révision 5 lit donc ce taux contre un millésime antérieur au sien, et l’écran le rappelle avant le premier chiffre."
+  },
+  "Parcourez le fond de carte « intensité carbone du réseau » et le tableau d’empreinte par pays, poste par poste.": {
+   "en": "",
+   "fr": "Parcourez le fond de carte « intensité carbone du réseau » et le tableau d’empreinte par pays, poste par poste."
+  },
+  "Parcourez le panel des cas documentés — POC, pilotes, production, abandons — et leurs classes de risque AI Act.": {
+   "en": "",
+   "fr": "Parcourez le panel des cas documentés — POC, pilotes, production, abandons — et leurs classes de risque AI Act."
+  },
+  "Parcourez le référentiel avec la question du reporting : quelle donnée est opposable, laquelle est un ordre de grandeur.": {
+   "en": "",
+   "fr": "Parcourez le référentiel avec la question du reporting : quelle donnée est opposable, laquelle est un ordre de grandeur."
+  },
+  "Parcourez les # étapes : ciblez votre secteur et vos processus, sélectionnez les cas d’usage à potentiel, qualifiez-les, chiffrez le retour attendu et évaluez votre maturité.": {
+   "en": "",
+   "fr": "Parcourez les 5 étapes : ciblez votre secteur et vos processus, sélectionnez les cas d’usage à potentiel, qualifiez-les, chiffrez le retour attendu et évaluez votre maturité."
+  },
+  "Parcourez les # étapes : secteur et processus, cas d’usage à potentiel, qualification, retour attendu, maturité. Partez des goulots d’étranglement déclarés par le métier, pas des technologies disponibles.": {
+   "en": "",
+   "fr": "Parcourez les 5 étapes : secteur et processus, cas d’usage à potentiel, qualification, retour attendu, maturité. Partez des goulots d’étranglement déclarés par le métier, pas des technologies disponibles."
+  },
+  "Parcourez les centres de données et les systèmes d’IA effectivement recensés : pays, gabarits, stades atteints.": {
+   "en": "",
+   "fr": "Parcourez les centres de données et les systèmes d’IA effectivement recensés : pays, gabarits, stades atteints."
+  },
+  "Parcourez les points de contrôle en marquant chacun conforme, en cours ou à traiter.": {
+   "en": "",
+   "fr": "Parcourez les points de contrôle en marquant chacun conforme, en cours ou à traiter."
+  },
+  "Parcours chiffré — ce que le règlement chiffre lui-même": {
+   "en": "",
+   "fr": "Parcours chiffré — ce que le règlement chiffre lui-même"
+  },
+  "Parcours composé sur mesure :": {
+   "en": "",
+   "fr": "Parcours composé sur mesure :"
+  },
+  "Parcours guidé en six temps pour identifier, qualifier, prioriser puis redessiner les processus autour des cas d’usage IA à fort impact métier, orienté organisations industrielles. C’est l’étape amont : la valeur métier avant la conformité.": {
+   "en": "",
+   "fr": "Parcours guidé en six temps pour identifier, qualifier, prioriser puis redessiner les processus autour des cas d’usage IA à fort impact métier, orienté organisations industrielles. C’est l’étape amont : la valeur métier avant la conformité."
+  },
+  "Parcours guidés par profil": {
+   "en": "",
+   "fr": "Parcours guidés par profil"
+  },
+  "Parcours personnalisé généré depuis": {
+   "en": "",
+   "fr": "Parcours personnalisé généré depuis"
+  },
+  "Parcours terminé": {
+   "en": "",
+   "fr": "Parcours terminé"
+  },
+  "Part de leurs actifs (%)": {
+   "en": "",
+   "fr": "Part de leurs actifs (%)"
+  },
+  "Part du CA mondial": {
+   "en": "",
+   "fr": "Part du CA mondial"
+  },
+  "Part du nombre d’entités servies, dans": {
+   "en": "",
+   "fr": "Part du nombre d’entités servies, dans"
+  },
+  "Partez d’une exigence à justifier (un article, un chapitre de norme) et remontez au module qui produit la preuve. En sens inverse, partez d’un module pour savoir ce qu’il vous permet d’opposer.": {
+   "en": "",
+   "fr": "Partez d’une exigence à justifier (un article, un chapitre de norme) et remontez au module qui produit la preuve. En sens inverse, partez d’un module pour savoir ce qu’il vous permet d’opposer."
+  },
+  "Particulièrement critique si vous entraînez ou fine-tunez des modèles en interne.": {
+   "en": "",
+   "fr": "Particulièrement critique si vous entraînez ou fine-tunez des modèles en interne."
+  },
+  "Partiellement — obligation de transparence sur la personnalisation (Art. #§#). Pratiques de manipulation : interdites (Art. #§#(a-b)).": {
+   "en": "",
+   "fr": "Partiellement — obligation de transparence sur la personnalisation (Art. 50§2). Pratiques de manipulation : interdites (Art. 5§1(a-b))."
+  },
+  "Parties prenantes et information des travailleurs": {
+   "en": "",
+   "fr": "Parties prenantes et information des travailleurs"
+  },
+  "Pas commencé": {
+   "en": "",
+   "fr": "Pas commencé"
+  },
+  "Pas d'obligation directe AI Act, mais risque non-conformité par ricochet (contenu non marqué, biais non documenté).": {
+   "en": "",
+   "fr": "Pas d'obligation directe AI Act, mais risque non-conformité par ricochet (contenu non marqué, biais non documenté)."
+  },
+  "Pas encore atteinte": {
+   "en": "",
+   "fr": "Pas encore atteinte"
+  },
+  "Pas un incident majeur": {
+   "en": "",
+   "fr": "Pas un incident majeur"
+  },
+  "Passer les points de contrôle": {
+   "en": "",
+   "fr": "Passer les points de contrôle"
+  },
+  "Passer à": {
+   "en": "",
+   "fr": "Passer à"
+  },
+  "Passer à Entreprise →": {
+   "en": "",
+   "fr": "Passer à Entreprise →"
+  },
+  "Passez du référentiel à VOTRE périmètre : saisissez vos équipements et vos usages pour obtenir votre propre empreinte.": {
+   "en": "",
+   "fr": "Passez du référentiel à VOTRE périmètre : saisissez vos équipements et vos usages pour obtenir votre propre empreinte."
+  },
+  "Passez d’abord l’Audit IA Act en autonomie (# points) : il fait remonter vos écarts évidents. L’audit accompagné a d’autant plus de valeur qu’il part d’un constat déjà établi.": {
+   "en": "",
+   "fr": "Passez d’abord l’Audit IA Act en autonomie (34 points) : il fait remonter vos écarts évidents. L’audit accompagné a d’autant plus de valeur qu’il part d’un constat déjà établi."
+  },
+  "Passez en revue les # points de contrôle, en marquant chacun conforme / en cours / à traiter.": {
+   "en": "",
+   "fr": "Passez en revue les 34 points de contrôle, en marquant chacun conforme / en cours / à traiter."
+  },
+  "Passez la check-list sur un projet en cours de conception, pas sur un système déjà livré. Exportez-la en PDF pour la joindre au dossier de projet : c’est une preuve d’accountability.": {
+   "en": "",
+   "fr": "Passez la check-list sur un projet en cours de conception, pas sur un système déjà livré. Exportez-la en PDF pour la joindre au dossier de projet : c’est une preuve d’accountability."
+  },
+  "Passez les # points de contrôle : gestion des risques, gouvernance des données, documentation technique, journalisation, transparence, supervision humaine, exactitude et robustesse, système de qualité.": {
+   "en": "",
+   "fr": "Passez les 34 points de contrôle : gestion des risques, gouvernance des données, documentation technique, journalisation, transparence, supervision humaine, exactitude et robustesse, système de qualité."
+  },
+  "Passez l’audit de maturité et retenez les piliers les plus bas — données, sécurité, industrialisation.": {
+   "en": "",
+   "fr": "Passez l’audit de maturité et retenez les piliers les plus bas — données, sécurité, industrialisation."
+  },
+  "Passez l’audit de maturité sur les piliers compétences, gouvernance et organisation, pour le périmètre concerné et non pour l’entreprise entière.": {
+   "en": "",
+   "fr": "Passez l’audit de maturité sur les piliers compétences, gouvernance et organisation, pour le périmètre concerné et non pour l’entreprise entière."
+  },
+  "Passez l’audit sur les piliers données, compétences, infrastructure et organisation, en retenant votre section d’activité.": {
+   "en": "",
+   "fr": "Passez l’audit sur les piliers données, compétences, infrastructure et organisation, en retenant votre section d’activité."
+  },
+  "Pays et garanties, ou « Non »": {
+   "en": "",
+   "fr": "Pays et garanties, ou « Non »"
+  },
+  "Pays le plus regulateur ?": {
+   "en": "",
+   "fr": "Pays le plus regulateur ?"
+  },
+  "Personnalisation de contenu client": {
+   "en": "",
+   "fr": "Personnalisation de contenu client"
+  },
+  "Personnalisation de l interface utilisateur par IA": {
+   "en": "",
+   "fr": "Personnalisation de l interface utilisateur par IA"
+  },
+  "Personnalisation des parcours pedagogiques": {
+   "en": "",
+   "fr": "Personnalisation des parcours pedagogiques"
+  },
+  "Personnes concernées": {
+   "en": "",
+   "fr": "Personnes concernées"
+  },
+  "Personnes formées, disposant du temps, de l'autorité et du soutien nécessaires pour interrompre ou écarter une sortie du système.": {
+   "en": "",
+   "fr": "Personnes formées, disposant du temps, de l'autorité et du soutien nécessaires pour interrompre ou écarter une sortie du système."
+  },
+  "Personnes habilitées aux traitements": {
+   "en": "",
+   "fr": "Personnes habilitées aux traitements"
+  },
+  "Personnes vulnérables (mineurs, patients, salariés…)": {
+   "en": "",
+   "fr": "Personnes vulnérables (mineurs, patients, salariés…)"
+  },
+  "Pertinence et representativite verifiees des datasets (Art. #(#))": {
+   "en": "",
+   "fr": "Pertinence et representativite verifiees des datasets (Art. 10(3))"
+  },
+  "Pertinent surtout si votre entreprise opère ou projette de s’étendre hors UE.": {
+   "en": "",
+   "fr": "Pertinent surtout si votre entreprise opère ou projette de s’étendre hors UE."
+  },
+  "Peser le parc de systèmes d’IA que vous avez déjà déclaré au Registre : électricité, émissions, énergie primaire et eau, puis les trajectoires à l’horizon. Le même volume déclaré sert au FinOps et à l’empreinte — divisé par un tarif d’un côté, multiplié par des wattheures de l’autre. C’est pourquoi il n’y a qu’un inventaire.": {
+   "en": "",
+   "fr": "Peser le parc de systèmes d’IA que vous avez déjà déclaré au Registre : électricité, émissions, énergie primaire et eau, puis les trajectoires à l’horizon. Le même volume déclaré sert au FinOps et à l’empreinte — divisé par un tarif d’un côté, multiplié par des wattheures de l’autre. C’est pourquoi il n’y a qu’un inventaire."
+  },
+  "Pharmaceutique & cosmétique": {
+   "en": "",
+   "fr": "Pharmaceutique & cosmétique"
+  },
+  "Pilotage automatique de la production solaire/eolienne selon meteo et demande.": {
+   "en": "",
+   "fr": "Pilotage automatique de la production solaire/eolienne selon meteo et demande."
+  },
+  "Pilotage d'irrigation et d'intrants": {
+   "en": "",
+   "fr": "Pilotage d'irrigation et d'intrants"
+  },
+  "Pilotage de robots collaboratifs (cobots)": {
+   "en": "",
+   "fr": "Pilotage de robots collaboratifs (cobots)"
+  },
+  "Pilote du SMIA — je monte le système de management de l’IA": {
+   "en": "",
+   "fr": "Pilote du SMIA — je monte le système de management de l’IA"
+  },
+  "Piloter l’empreinte réelle d’un parc de centres de données : électricité, CO₂e, fabrication amortie et eau de refroidissement, sans confondre ce qui est publié et ce qui est calculé.": {
+   "en": "",
+   "fr": "Piloter l’empreinte réelle d’un parc de centres de données : électricité, CO₂e, fabrication amortie et eau de refroidissement, sans confondre ce qui est publié et ce qui est calculé."
+  },
+  "Pièces de conformité (art. #, #).": {
+   "en": "",
+   "fr": "Pièces de conformité (art. 11, 18)."
+  },
+  "Pièces à communiquer, référentiel des données à masquer.": {
+   "en": "",
+   "fr": "Pièces à communiquer, référentiel des données à masquer."
+  },
+  "Plan d action en # phases (même méthodologie que l Audit de maturité), avec progression calculée à partir de votre Registre IA et de l Audit IA Act réels — pas des chiffres figés.": {
+   "en": "",
+   "fr": "Plan d action en 4 phases (même méthodologie que l Audit de maturité), avec progression calculée à partir de votre Registre IA et de l Audit IA Act réels — pas des chiffres figés."
+  },
+  "Plan de maintenance": {
+   "en": "",
+   "fr": "Plan de maintenance"
+  }
+ }
+}

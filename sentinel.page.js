@@ -1482,6 +1482,130 @@ function sentAppliquer() {
   if (courant && typeof sentFilAriane === 'function') {
     sentFilAriane(courant.id.replace(/^p-/, ''));
   }
+  /* LE CORPS SUIT LA COQUILLE. Ce qui précède ne traduit que les 213 clés
+     marquées ; le reste des pages passe par le module de traduction par
+     contenu (sentinel.i18n.js), APRÈS, pour que les éléments data-i18n
+     soient déjà écrits quand il les rencontre — il les saute. */
+  if (typeof sentCorpsAppliquer === 'function') sentCorpsAppliquer();
+}
+
+/* ══ LE CORPS DES PAGES, TRADUIT PAR CONTENU ══════════════════════════════
+ *
+ * CE QUE LA COQUILLE NE COUVRAIT PAS. Les 213 clés ci-dessus traduisent le
+ * menu, le fil d'Ariane et l'identité des pages. Le CORPS — 25 900 mots dans
+ * le HTML, 4 000 chaînes que le JavaScript rend après coup — restait en
+ * français, et c'était documenté comme un choix. La demande est désormais :
+ * TOUT Sentinel en anglais quand EN est choisi.
+ *
+ * ON NE MARQUE PAS LE HTML. Le corps se traduit PAR CONTENU : la clé est le
+ * texte français normalisé, le dictionnaire est servi par /sentinel.en.json
+ * (fusion des fichiers i18n/sentinel/*.json), et sentTraduireCorps
+ * (sentinel.i18n.js) parcourt le document. Deux régimes, décidés par la
+ * forme de l'élément ; un lien au milieu d'un paragraphe survit ; l'original
+ * est gardé et restitué au retour en français.
+ *
+ * PARESSEUX. Le dictionnaire n'est téléchargé qu'à la PREMIÈRE demande
+ * d'anglais (ou au démarrage si la langue mémorisée est en) : un lecteur
+ * français ne paie rien. S'il est injoignable, la coquille reste traduite et
+ * rien ne casse — le corps reste en français, comme avant ce module.
+ *
+ * VIVANT. Un MutationObserver, actif en anglais SEULEMENT, traduit ce que le
+ * JavaScript rend après coup : une carte de formation, un compteur, un
+ * message d'état. Une passe par image (requestAnimationFrame), sur les seuls
+ * sous-arbres touchés ; nos propres écritures sont retirées de la file
+ * (takeRecords) et un nœud déjà traduit est sauté — pas de boucle. */
+var SENT_CORPS = null;          /* le dictionnaire {texte, bloc}, une fois reçu */
+var SENT_CORPS_ATTENTE = null;  /* le téléchargement en cours, pour ne pas le doubler */
+var SENT_CORPS_OBS = null;      /* l'observateur, non nul en anglais seulement */
+var SENT_CORPS_PREVU = false;   /* une passe différée est déjà programmée */
+var SENT_CORPS_CIBLES = [];     /* les sous-arbres touchés depuis la dernière passe */
+
+function sentCorpsCharger() {
+  if (SENT_CORPS) return Promise.resolve(SENT_CORPS);
+  if (SENT_CORPS_ATTENTE) return SENT_CORPS_ATTENTE;
+  if (typeof fetch !== 'function') return Promise.resolve(null);
+  SENT_CORPS_ATTENTE = fetch('/sentinel.en.json', { credentials: 'same-origin' })
+    .then(function (r) {
+      if (!r.ok) throw new Error('sentinel.en.json : HTTP ' + r.status);
+      return r.json();
+    })
+    .then(function (d) {
+      SENT_CORPS = { texte: (d && d.texte) || {}, bloc: (d && d.bloc) || {} };
+      return SENT_CORPS;
+    })
+    ['catch'](function () {
+      /* UN ÉCHEC N'EST PAS DÉFINITIF : la prochaine demande d'anglais
+         réessaiera. D'ici là, la coquille est traduite et le corps reste
+         en français — l'état d'avant ce module, pas une page cassée. */
+      SENT_CORPS_ATTENTE = null;
+      return null;
+    });
+  return SENT_CORPS_ATTENTE;
+}
+
+function sentCorpsAppliquer() {
+  if (typeof sentTraduireCorps !== 'function' || !document.body) return;
+  if (SENT_LANG === 'en') {
+    if (!SENT_CORPS) {
+      /* UN TÉLÉCHARGEMENT DÉJÀ EN COURS SUFFIT : il appliquera le corps en
+         arrivant. Lui accrocher une seconde suite ferait parcourir le
+         document deux fois pour le même résultat. */
+      if (SENT_CORPS_ATTENTE) return;
+      sentCorpsCharger().then(function (d) {
+        /* LA LANGUE A PU CHANGER PENDANT LE TÉLÉCHARGEMENT : on n'écrit de
+           l'anglais que si l'anglais est encore demandé. */
+        if (d && SENT_LANG === 'en') sentCorpsAppliquer();
+      });
+      return;
+    }
+    sentTraduireCorps(document.body, SENT_CORPS, 'en');
+    sentCorpsObserver(true);
+    return;
+  }
+  sentCorpsObserver(false);
+  sentTraduireCorps(document.body, null, 'fr');
+}
+
+function sentCorpsPasse() {
+  SENT_CORPS_PREVU = false;
+  var lot = SENT_CORPS_CIBLES;
+  SENT_CORPS_CIBLES = [];
+  if (SENT_LANG !== 'en' || !SENT_CORPS || !SENT_CORPS_OBS) return;
+  for (var k = 0; k < lot.length; k++) {
+    var cible = lot[k];
+    if (!document.body.contains(cible)) continue;
+    /* UN SOUS-ARBRE CONTENU DANS UN AUTRE DU MÊME LOT est parcouru avec
+       lui : une passe, pas deux. */
+    var couvert = false;
+    for (var j = 0; j < lot.length; j++) {
+      if (j !== k && lot[j] !== cible && lot[j].contains(cible)) { couvert = true; break; }
+    }
+    if (!couvert) sentTraduireCorps(cible, SENT_CORPS, 'en');
+  }
+  /* NOS PROPRES ÉCRITURES NE SONT PAS DES MUTATIONS À TRADUIRE. */
+  SENT_CORPS_OBS.takeRecords();
+}
+
+function sentCorpsObserver(actif) {
+  if (typeof MutationObserver !== 'function') return;
+  if (!actif) {
+    if (SENT_CORPS_OBS) { SENT_CORPS_OBS.disconnect(); SENT_CORPS_OBS = null; }
+    SENT_CORPS_CIBLES = [];
+    return;
+  }
+  if (SENT_CORPS_OBS) return;
+  SENT_CORPS_OBS = new MutationObserver(function (records) {
+    for (var i = 0; i < records.length; i++) {
+      var t = records[i].target;
+      if (t && t.nodeType === 3) t = t.parentNode;
+      if (t && SENT_CORPS_CIBLES.indexOf(t) < 0) SENT_CORPS_CIBLES.push(t);
+    }
+    if (SENT_CORPS_PREVU) return;
+    SENT_CORPS_PREVU = true;
+    if (typeof requestAnimationFrame === 'function') requestAnimationFrame(sentCorpsPasse);
+    else setTimeout(sentCorpsPasse, 16);
+  });
+  SENT_CORPS_OBS.observe(document.body, { childList: true, subtree: true, characterData: true });
 }
 
 window.sentSetLang = function (lg) {

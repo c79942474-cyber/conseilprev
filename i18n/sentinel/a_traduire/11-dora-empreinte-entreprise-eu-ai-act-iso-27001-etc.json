@@ -1,0 +1,661 @@
+{
+ "_lot": "11-dora-empreinte-entreprise-eu-ai-act-iso-27001-etc",
+ "_mots": 2749,
+ "_pages": [
+  "dora-incident",
+  "dora-iso",
+  "dora-qualifier",
+  "dora-risque",
+  "dora-supervision",
+  "dora-tiers",
+  "empreinte",
+  "entreprise",
+  "articles",
+  "iso27001",
+  "iso27001-millesime",
+  "iso27001-risques",
+  "iso27001-soa",
+  "iso42001",
+  "iso42001-certif",
+  "iso42001-ponts",
+  "iso42001-soa"
+ ],
+ "_rubrique": "DORA + EMPREINTE + ENTREPRISE + EU AI ACT + ISO 27001 + ISO 42001",
+ "bloc": {
+  "A — Facteurs statiques. Énergie par millier de jetons, intensité fixe. Simple, mais sous-estime : ni rendement du centre de données, ni fabrication.B — Paramétrique. Inspirée d'EcoLogits, de Boavizta et de la Base Empreinte de l'ADEME : rendement du centre de données (PUE), intensité carbone temps réel (RTE éCO#mix), fourchette basse et haute.C — Cycle de vie étendu (retenue). B, augmentée des impacts incorporés (fabrication du matériel, amortie) et de l'hébergement de la requête. C'est la méthode affichée par défaut.": {
+   "en": "",
+   "fr": "A — Facteurs statiques. Énergie par millier de jetons, intensité fixe. Simple, mais sous-estime : ni rendement du centre de données, ni fabrication.B — Paramétrique. Inspirée d'EcoLogits, de Boavizta et de la Base Empreinte de l'ADEME : rendement du centre de données (PUE), intensité carbone temps réel (RTE éCO2mix), fourchette basse et haute.C — Cycle de vie étendu (retenue). B, augmentée des impacts incorporés (fabrication du matériel, amortie) et de l'hébergement de la requête. C'est la méthode affichée par défaut.",
+   "html": "<strong>A — Facteurs statiques.</strong> Énergie par millier de jetons, intensité fixe. Simple, mais sous-estime : ni rendement du centre de données, ni fabrication.<br><br><strong>B — Paramétrique.</strong> Inspirée d'EcoLogits, de Boavizta et de la Base Empreinte de l'ADEME : rendement du centre de données (PUE), intensité carbone <strong>temps réel</strong> (RTE éCO2mix), fourchette basse et haute.<br><br><strong>C — Cycle de vie étendu (retenue).</strong> B, augmentée des <strong>impacts incorporés</strong> (fabrication du matériel, amortie) et de l'hébergement de la requête. C'est la méthode affichée par défaut."
+  },
+  "Ce que ce module n'a pas pu vérifier, et le dit. La date de fin de la période de transition des certificats # n'est pas joignable depuis cet environnement. Elle se confirme auprès de l'organisme certificateur, qui la connaît pour chaque certificat qu'il a émis — et un certificat non migré cesse d'être valide à l'issue de la transition, quelle que soit la date d'expiration imprimée dessus.": {
+   "en": "",
+   "fr": "Ce que ce module n'a pas pu vérifier, et le dit. La date de fin de la période de transition des certificats 2013 n'est pas joignable depuis cet environnement. Elle se confirme auprès de l'organisme certificateur, qui la connaît pour chaque certificat qu'il a émis — et un certificat non migré cesse d'être valide à l'issue de la transition, quelle que soit la date d'expiration imprimée dessus.",
+   "html": "<b>Ce que ce module n'a pas pu vérifier, et le dit.</b> La date de fin de la période de transition des certificats 2013 n'est pas joignable depuis cet environnement. Elle se confirme auprès de l'organisme certificateur, qui la connaît pour chaque certificat qu'il a émis — et un certificat non migré cesse d'être valide à l'issue de la transition, quelle que soit la date d'expiration imprimée dessus."
+  },
+  "Ce que ça change pour un organisme déjà certifié. Son reste à faire n'est ni #, ni #, ni « tout » : ce sont les onze mesures qui n'existaient pas — renseignement sur les menaces, services en nuage, préparation des TIC pour la continuité, surveillance physique, gestion des configurations, suppression d'informations, masquage des données, prévention de la fuite de données, activités de surveillance, filtrage web, codage sécurisé.": {
+   "en": "",
+   "fr": "Ce que ça change pour un organisme déjà certifié. Son reste à faire n'est ni 93, ni 114, ni « tout » : ce sont les onze mesures qui n'existaient pas — renseignement sur les menaces, services en nuage, préparation des TIC pour la continuité, surveillance physique, gestion des configurations, suppression d'informations, masquage des données, prévention de la fuite de données, activités de surveillance, filtrage web, codage sécurisé.",
+   "html": "<b>Ce que ça change pour un organisme déjà certifié.</b> Son reste à faire n'est ni 93, ni 114, ni « tout » : ce sont les <b>onze</b> mesures qui n'existaient pas — renseignement sur les menaces, services en nuage, préparation des TIC pour la continuité, surveillance physique, gestion des configurations, suppression d'informations, masquage des données, prévention de la fuite de données, activités de surveillance, filtrage web, codage sécurisé."
+  },
+  "Chaque appel de modèle est journalisé avec le décompte réel des jetons renvoyé par l'API, la latence, le client, le module et le fournisseur. Les pages servies sont agrégées par jour. Tous les appels passant par le serveur, le comptage est exhaustif.": {
+   "en": "",
+   "fr": "Chaque appel de modèle est journalisé avec le décompte réel des jetons renvoyé par l'API, la latence, le client, le module et le fournisseur. Les pages servies sont agrégées par jour. Tous les appels passant par le serveur, le comptage est exhaustif.",
+   "html": "Chaque appel de modèle est journalisé avec le <strong>décompte réel des jetons</strong> renvoyé par l'API, la latence, le client, le module et le fournisseur. Les pages servies sont agrégées par jour. Tous les appels passant par le serveur, le comptage est <strong>exhaustif</strong>."
+  },
+  "Deux sessions sur site, dans vos locaux, par an — incluses dans l'offre Entreprise. Les autres formations du catalogue se tiennent à distance ou en présentiel à Paris.": {
+   "en": "",
+   "fr": "Deux sessions sur site, dans vos locaux, par an — incluses dans l'offre Entreprise. Les autres formations du catalogue se tiennent à distance ou en présentiel à Paris.",
+   "html": "Deux sessions <strong>sur site, dans vos locaux</strong>, par an — incluses dans l'offre Entreprise. Les autres formations du catalogue se tiennent à distance ou en présentiel à Paris."
+  },
+  "EcoLogits (GenAI Impact) — méthodologie d'estimation des impacts des modèles via API, prenant en charge Anthropic et Mistral.Boavizta — données ouvertes sur les impacts incorporés du matériel.ADEME — Base Empreinte — facteurs d'émission des mix électriques.RTE — éCO#mix / ODRÉ — intensité carbone du réseau français au pas de quinze minutes, en données ouvertes.": {
+   "en": "",
+   "fr": "EcoLogits (GenAI Impact) — méthodologie d'estimation des impacts des modèles via API, prenant en charge Anthropic et Mistral.Boavizta — données ouvertes sur les impacts incorporés du matériel.ADEME — Base Empreinte — facteurs d'émission des mix électriques.RTE — éCO2mix / ODRÉ — intensité carbone du réseau français au pas de quinze minutes, en données ouvertes.",
+   "html": "<strong>EcoLogits</strong> (GenAI Impact) — méthodologie d'estimation des impacts des modèles via API, prenant en charge Anthropic et Mistral.<br><strong>Boavizta</strong> — données ouvertes sur les impacts incorporés du matériel.<br><strong>ADEME — Base Empreinte</strong> — facteurs d'émission des mix électriques.<br><strong>RTE — éCO2mix / ODRÉ</strong> — intensité carbone du réseau français au pas de quinze minutes, en données ouvertes."
+  },
+  "ISO/IEC #:# est protégée par le droit d'auteur (© ISO/IEC #). Cet écran cite des numéros et des titres d'articles et de mesures ; tout ce qui les décrit est rédigé par le cabinet. Aucune phrase du texte normatif n'y est reproduite. La mise en œuvre suppose de détenir la norme, qui s'achète auprès de l'ISO ou de l'AFNOR.": {
+   "en": "",
+   "fr": "ISO/IEC 42001:2023 est protégée par le droit d'auteur (© ISO/IEC 2023). Cet écran cite des numéros et des titres d'articles et de mesures ; tout ce qui les décrit est rédigé par le cabinet. Aucune phrase du texte normatif n'y est reproduite. La mise en œuvre suppose de détenir la norme, qui s'achète auprès de l'ISO ou de l'AFNOR.",
+   "html": "<b>ISO/IEC 42001:2023 est protégée par le droit d'auteur (© ISO/IEC 2023).</b> Cet écran cite des <b>numéros</b> et des <b>titres</b> d'articles et de mesures ; tout ce qui les décrit est rédigé par le cabinet. Aucune phrase du texte normatif n'y est reproduite. La mise en œuvre suppose de détenir la norme, qui s'achète auprès de l'ISO ou de l'AFNOR."
+  },
+  "ISO/IEC #:# est protégée par le droit d'auteur (© ISO/IEC). Cet écran cite des numéros et des titres d'articles et de mesures ; tout ce qui les décrit est rédigé par le cabinet. Aucune phrase du texte normatif n'y est reproduite, et aucune question du questionnaire d'auto-évaluation BSI qui a servi de point de départ — il est la propriété de son éditeur. La mise en œuvre suppose de détenir la norme.": {
+   "en": "",
+   "fr": "ISO/IEC 27001:2022 est protégée par le droit d'auteur (© ISO/IEC). Cet écran cite des numéros et des titres d'articles et de mesures ; tout ce qui les décrit est rédigé par le cabinet. Aucune phrase du texte normatif n'y est reproduite, et aucune question du questionnaire d'auto-évaluation BSI qui a servi de point de départ — il est la propriété de son éditeur. La mise en œuvre suppose de détenir la norme.",
+   "html": "<b>ISO/IEC 27001:2022 est protégée par le droit d'auteur (© ISO/IEC).</b> Cet écran cite des <b>numéros</b> et des <b>titres</b> d'articles et de mesures ; tout ce qui les décrit est rédigé par le cabinet. Aucune phrase du texte normatif n'y est reproduite, et aucune question du questionnaire d'auto-évaluation BSI qui a servi de point de départ — il est la propriété de son éditeur. La mise en œuvre suppose de détenir la norme."
+  },
+  "L'horloge a deux bornes, et le calcul naïf se trompe sur la seconde. Quatre heures depuis la classification, vingt-quatre heures depuis la connaissance : la première échue commande. Mais si la classification intervient APRÈS ces vingt-quatre heures, l'article #, §#, du règlement délégué (UE) #/# traite le cas à part — un simple minimum rendrait une échéance déjà passée.": {
+   "en": "",
+   "fr": "L'horloge a deux bornes, et le calcul naïf se trompe sur la seconde. Quatre heures depuis la classification, vingt-quatre heures depuis la connaissance : la première échue commande. Mais si la classification intervient APRÈS ces vingt-quatre heures, l'article 5, §2, du règlement délégué (UE) 2025/301 traite le cas à part — un simple minimum rendrait une échéance déjà passée.",
+   "html": "<b>L'horloge a deux bornes, et le calcul naïf se trompe sur la seconde.</b> Quatre heures depuis la classification, vingt-quatre heures depuis la connaissance&nbsp;: la première échue commande. Mais si la classification intervient APRÈS ces vingt-quatre heures, l'article&nbsp;5,&nbsp;§2, du règlement délégué (UE) 2025/301 traite le cas à part — un simple minimum rendrait une échéance déjà passée."
+  },
+  "La dérogation microentreprise du dernier alinéa du §# ne vise QUE le point e), et seulement pour une microentreprise. L'accepter ailleurs ferait passer une absence pour un aménagement prévu par le texte.": {
+   "en": "",
+   "fr": "La dérogation microentreprise du dernier alinéa du §3 ne vise QUE le point e), et seulement pour une microentreprise. L'accepter ailleurs ferait passer une absence pour un aménagement prévu par le texte.",
+   "html": "La <b>dérogation microentreprise</b> du dernier alinéa du §3 ne vise QUE le point&nbsp;e), et seulement pour une microentreprise. L'accepter ailleurs ferait passer une absence pour un aménagement prévu par le texte."
+  },
+  "La taille ne décide pas du régime, et les confondre coûte cher. L'article # définit microentreprise, petite et moyenne entreprise ; ces définitions servent ailleurs — notamment pour écarter la règle des incidents récurrents. Le cadre simplifié repose sur des catégories nommées à l'article #, §#, pas sur des seuils d'effectif. Une microentreprise qui n'est dans aucune des cinq relève du cadre complet.": {
+   "en": "",
+   "fr": "La taille ne décide pas du régime, et les confondre coûte cher. L'article 3 définit microentreprise, petite et moyenne entreprise ; ces définitions servent ailleurs — notamment pour écarter la règle des incidents récurrents. Le cadre simplifié repose sur des catégories nommées à l'article 16, §1, pas sur des seuils d'effectif. Une microentreprise qui n'est dans aucune des cinq relève du cadre complet.",
+   "html": "<b>La taille ne décide pas du régime, et les confondre coûte cher.</b> L'article&nbsp;3 définit microentreprise, petite et moyenne entreprise&nbsp;; ces définitions servent ailleurs — notamment pour écarter la règle des incidents récurrents. Le cadre simplifié repose sur des <b>catégories nommées</b> à l'article&nbsp;16,&nbsp;§1, pas sur des seuils d'effectif. Une microentreprise qui n'est dans aucune des cinq relève du cadre complet."
+  },
+  "Le fait qui coûte le plus cher, et qu'aucun taux ne montre. Un organisme qui a mis en œuvre trente-six mesures sur trente-huit et laissé deux cases vides échoue à l'étape #. Un organisme qui en retient dix-huit et en écarte vingt, chacune motivée, passe. La conformité ne se compte pas en cases cochées : elle se compte en cases décidées.": {
+   "en": "",
+   "fr": "Le fait qui coûte le plus cher, et qu'aucun taux ne montre. Un organisme qui a mis en œuvre trente-six mesures sur trente-huit et laissé deux cases vides échoue à l'étape 1. Un organisme qui en retient dix-huit et en écarte vingt, chacune motivée, passe. La conformité ne se compte pas en cases cochées : elle se compte en cases décidées.",
+   "html": "<b>Le fait qui coûte le plus cher, et qu'aucun taux ne montre.</b> Un organisme qui a mis en œuvre trente-six mesures sur trente-huit et laissé deux cases vides <b>échoue à l'étape&nbsp;1</b>. Un organisme qui en retient dix-huit et en écarte vingt, chacune motivée, <b>passe</b>. La conformité ne se compte pas en cases cochées : elle se compte en cases <b>décidées</b>."
+  },
+  "Le piège de cette greffe est le périmètre. Celui du SMSI est choisi par l'organisme ; celui du règlement ne l'est pas — il couvre tout ce qui soutient les fonctions critiques ou importantes. Reprendre le premier pour le second est l'erreur la plus courante, et elle ne se voit qu'en inspection.": {
+   "en": "",
+   "fr": "Le piège de cette greffe est le périmètre. Celui du SMSI est choisi par l'organisme ; celui du règlement ne l'est pas — il couvre tout ce qui soutient les fonctions critiques ou importantes. Reprendre le premier pour le second est l'erreur la plus courante, et elle ne se voit qu'en inspection.",
+   "html": "<b>Le piège de cette greffe est le périmètre.</b> Celui du SMSI est choisi par l'organisme&nbsp;; celui du règlement ne l'est pas — il couvre tout ce qui soutient les fonctions critiques ou importantes. Reprendre le premier pour le second est l'erreur la plus courante, et elle ne se voit qu'en inspection."
+  },
+  "Le pourcentage affiché mesure une reprise de preuves, pas une conformité. Il dit quelle part des articles trouve un répondant dans un SMSI certifié ; il ne dit pas que ces articles sont tenus, et encore moins que l'autorité l'admettra.": {
+   "en": "",
+   "fr": "Le pourcentage affiché mesure une reprise de preuves, pas une conformité. Il dit quelle part des articles trouve un répondant dans un SMSI certifié ; il ne dit pas que ces articles sont tenus, et encore moins que l'autorité l'admettra.",
+   "html": "Le pourcentage affiché mesure une <b>reprise de preuves</b>, pas une conformité. Il dit quelle part des articles trouve un répondant dans un SMSI certifié&nbsp;; il ne dit pas que ces articles sont tenus, et encore moins que l'autorité l'admettra."
+  },
+  "Le report au midi du jour ouvrable suivant (§#) ne s'applique pas à la notification initiale ni au rapport intermédiaire des établissements de crédit, des contreparties centrales, des opérateurs de plates-formes de négociation, ni des entités essentielles ou importantes au titre de NIS #. Pour eux, l'horloge tourne le week-end.": {
+   "en": "",
+   "fr": "Le report au midi du jour ouvrable suivant (§4) ne s'applique pas à la notification initiale ni au rapport intermédiaire des établissements de crédit, des contreparties centrales, des opérateurs de plates-formes de négociation, ni des entités essentielles ou importantes au titre de NIS 2. Pour eux, l'horloge tourne le week-end.",
+   "html": "Le report au midi du jour ouvrable suivant (§4) <b>ne s'applique pas</b> à la notification initiale ni au rapport intermédiaire des établissements de crédit, des contreparties centrales, des opérateurs de plates-formes de négociation, ni des entités essentielles ou importantes au titre de NIS&nbsp;2. Pour eux, l'horloge tourne le week-end."
+  },
+  "Le risque résiduel s'accepte par le PROPRIÉTAIRE DU RISQUE (art. # e), pas par le RSSI ni par le consultant. C'est la clause qui transforme un exercice technique en acte de direction, et celle qui manque le plus souvent : une colonne « propriétaire » remplie, et aucune trace datée d'une acceptation. L'auditeur demande la signature, pas le nom.": {
+   "en": "",
+   "fr": "Le risque résiduel s'accepte par le PROPRIÉTAIRE DU RISQUE (art. 6.1.3 e), pas par le RSSI ni par le consultant. C'est la clause qui transforme un exercice technique en acte de direction, et celle qui manque le plus souvent : une colonne « propriétaire » remplie, et aucune trace datée d'une acceptation. L'auditeur demande la signature, pas le nom.",
+   "html": "<b>Le risque résiduel s'accepte par le PROPRIÉTAIRE DU RISQUE</b> (art.&nbsp;6.1.3&nbsp;e), pas par le RSSI ni par le consultant. C'est la clause qui transforme un exercice technique en acte de direction, et celle qui manque le plus souvent : une colonne « propriétaire » remplie, et aucune trace datée d'une acceptation. L'auditeur demande la signature, pas le nom."
+  },
+  "Le taux est donné par chapitre, et le plus bas est nommé. Un global de # % obtenu avec un chapitre à # % décrit mal la situation : le chapitre faible est précisément celui qui se verra en inspection.": {
+   "en": "",
+   "fr": "Le taux est donné par chapitre, et le plus bas est nommé. Un global de 80 % obtenu avec un chapitre à 20 % décrit mal la situation : le chapitre faible est précisément celui qui se verra en inspection.",
+   "html": "Le taux est donné <b>par chapitre</b>, et le plus bas est nommé. Un global de 80&nbsp;% obtenu avec un chapitre à 20&nbsp;% décrit mal la situation&nbsp;: le chapitre faible est précisément celui qui se verra en inspection."
+  },
+  "Les AES évaluent ces seuils à partir des registres d'informations de l'article #, §#, que les entités financières tiennent. Le registre qu'une banque remplit sert à désigner son fournisseur : ce n'est pas une formalité déclarative.": {
+   "en": "",
+   "fr": "Les AES évaluent ces seuils à partir des registres d'informations de l'article 28, §3, que les entités financières tiennent. Le registre qu'une banque remplit sert à désigner son fournisseur : ce n'est pas une formalité déclarative.",
+   "html": "Les AES évaluent ces seuils à partir des <b>registres d'informations</b> de l'article&nbsp;28,&nbsp;§3, que les entités financières tiennent. Le registre qu'une banque remplit sert à désigner son fournisseur&nbsp;: ce n'est pas une formalité déclarative."
+  },
+  "Les critères d'acceptation se fixent AVANT d'apprécier (art. # a). Les écrire après avoir vu les résultats donne un registre où tout est acceptable — et c'est invisible à la lecture, puisque seul l'ordre de rédaction distingue les deux. Cet écran compare les deux dates.": {
+   "en": "",
+   "fr": "Les critères d'acceptation se fixent AVANT d'apprécier (art. 6.1.2 a). Les écrire après avoir vu les résultats donne un registre où tout est acceptable — et c'est invisible à la lecture, puisque seul l'ordre de rédaction distingue les deux. Cet écran compare les deux dates.",
+   "html": "<b>Les critères d'acceptation se fixent AVANT d'apprécier</b> (art.&nbsp;6.1.2&nbsp;a). Les écrire après avoir vu les résultats donne un registre où tout est acceptable — et c'est invisible à la lecture, puisque seul l'ordre de rédaction distingue les deux. Cet écran compare les deux dates."
+  },
+  "Les mesures de l'annexe A ne sont pas exhaustives : la norme prévoit qu'un organisme en conçoive d'autres si le traitement des risques l'exige. Couvrir les trente-huit ne suffit donc pas à rendre la déclaration complète — elle l'est si elle couvre les options de traitement retenues.": {
+   "en": "",
+   "fr": "Les mesures de l'annexe A ne sont pas exhaustives : la norme prévoit qu'un organisme en conçoive d'autres si le traitement des risques l'exige. Couvrir les trente-huit ne suffit donc pas à rendre la déclaration complète — elle l'est si elle couvre les options de traitement retenues.",
+   "html": "Les mesures de l'annexe&nbsp;A <b>ne sont pas exhaustives</b> : la norme prévoit qu'un organisme en conçoive d'autres si le traitement des risques l'exige. Couvrir les trente-huit ne suffit donc pas à rendre la déclaration complète — elle l'est si elle couvre les options de traitement retenues."
+  },
+  "Les trois méthodes sont appliquées aux mêmes données d'usage réelles. L'écart mesure la sensibilité du résultat au choix méthodologique — c'est l'information la plus utile d'un point de vue d'audit.": {
+   "en": "",
+   "fr": "Les trois méthodes sont appliquées aux mêmes données d'usage réelles. L'écart mesure la sensibilité du résultat au choix méthodologique — c'est l'information la plus utile d'un point de vue d'audit.",
+   "html": "Les trois méthodes sont appliquées aux <strong>mêmes données d'usage réelles</strong>. L'écart mesure la sensibilité du résultat au choix méthodologique — c'est l'information la plus utile d'un point de vue d'audit."
+  },
+  "Même énergie consommée, facteurs d'intensité différents. Point de vigilance : l'hébergement Render est situé à Francfort ; retenir le facteur français serait une erreur méthodologique.": {
+   "en": "",
+   "fr": "Même énergie consommée, facteurs d'intensité différents. Point de vigilance : l'hébergement Render est situé à Francfort ; retenir le facteur français serait une erreur méthodologique.",
+   "html": "Même énergie consommée, facteurs d'intensité différents. <strong>Point de vigilance :</strong> l'hébergement Render est situé à Francfort ; retenir le facteur français serait une erreur méthodologique."
+  },
+  "Obligations article par article": {
+   "en": "",
+   "fr": "Obligations article par article",
+   "html": "Obligations <em>article par article</em>"
+  },
+  "Offre Entreprise": {
+   "en": "",
+   "fr": "Offre Entreprise",
+   "html": "Offre <em>Entreprise</em>"
+  },
+  "Quatre situations ferment la désignation d'avance (article #, §#) : être soi-même une entité financière fournissant des services TIC, relever d'un cadre de supervision au titre de l'article #, §#, du traité, être un prestataire intragroupe, ou ne servir que des entités actives dans un seul État membre. Elles ne s'apprécient pas : elles se constatent.": {
+   "en": "",
+   "fr": "Quatre situations ferment la désignation d'avance (article 31, §8) : être soi-même une entité financière fournissant des services TIC, relever d'un cadre de supervision au titre de l'article 127, §2, du traité, être un prestataire intragroupe, ou ne servir que des entités actives dans un seul État membre. Elles ne s'apprécient pas : elles se constatent.",
+   "html": "<b>Quatre situations ferment la désignation d'avance</b> (article&nbsp;31,&nbsp;§8)&nbsp;: être soi-même une entité financière fournissant des services TIC, relever d'un cadre de supervision au titre de l'article&nbsp;127,&nbsp;§2, du traité, être un prestataire <b>intragroupe</b>, ou ne servir que des entités actives dans un seul État membre. Elles ne s'apprécient pas&nbsp;: elles se constatent."
+  },
+  "Un article de # à # ne se déclare pas « sans objet » : ce sont des exigences, et elles ne s'écartent pas. Seules les mesures de l'annexe A peuvent l'être, et seulement avec justification. Le domaine d'application (art. #) est la décision la plus structurante : tout ce qui n'en est pas exclu par écrit sera audité.": {
+   "en": "",
+   "fr": "Un article de 4 à 10 ne se déclare pas « sans objet » : ce sont des exigences, et elles ne s'écartent pas. Seules les mesures de l'annexe A peuvent l'être, et seulement avec justification. Le domaine d'application (art. 4.3) est la décision la plus structurante : tout ce qui n'en est pas exclu par écrit sera audité.",
+   "html": "Un article de 4 à 10 ne se déclare pas « sans objet » : ce sont des <b>exigences</b>, et elles ne s'écartent pas. Seules les mesures de l'annexe&nbsp;A peuvent l'être, et seulement avec justification. Le <b>domaine d'application</b> (art.&nbsp;4.3) est la décision la plus structurante : tout ce qui n'en est pas exclu par écrit sera audité."
+  },
+  "Un article de # à # ne se déclare pas « sans objet » : ce sont des exigences, et elles ne s'écartent pas. Seules les mesures de l'annexe A peuvent être écartées, et seulement avec justification (art. # f). Une déclaration « sans objet » posée sur un article est ignorée par le moteur, qui le dit.": {
+   "en": "",
+   "fr": "Un article de 4 à 10 ne se déclare pas « sans objet » : ce sont des exigences, et elles ne s'écartent pas. Seules les mesures de l'annexe A peuvent être écartées, et seulement avec justification (art. 6.1.3 f). Une déclaration « sans objet » posée sur un article est ignorée par le moteur, qui le dit.",
+   "html": "Un article de 4 à 10 ne se déclare pas « sans objet » : ce sont des <b>exigences</b>, et elles ne s'écartent pas. Seules les mesures de l'annexe&nbsp;A peuvent être écartées, et seulement avec justification (art.&nbsp;6.1.3&nbsp;f). Une déclaration « sans objet » posée sur un article est ignorée par le moteur, qui le dit."
+  },
+  "Un cycle d'audit interne (art. #) et une revue de direction (art. #) doivent avoir eu lieu avant l'étape #. Ce sont des exigences, et elles ne se fabriquent pas la veille : elles laissent des traces datées, ou elles n'ont pas eu lieu.": {
+   "en": "",
+   "fr": "Un cycle d'audit interne (art. 9.2) et une revue de direction (art. 9.3) doivent avoir eu lieu avant l'étape 2. Ce sont des exigences, et elles ne se fabriquent pas la veille : elles laissent des traces datées, ou elles n'ont pas eu lieu.",
+   "html": "Un cycle d'audit interne (art.&nbsp;9.2) et une revue de direction (art.&nbsp;9.3) doivent avoir <b>eu lieu</b> avant l'étape&nbsp;2. Ce sont des exigences, et elles ne se fabriquent pas la veille : elles laissent des traces datées, ou elles n'ont pas eu lieu."
+  },
+  "Un plan n'est pas une mesure. Tant qu'une mesure n'est pas déclarée mise en œuvre, le niveau résiduel saisi reste une prévision : le module retient le niveau initial. Servir un résiduel prévu comme un acquis est la façon la plus courante de rendre un registre vert sans avoir rien fait.": {
+   "en": "",
+   "fr": "Un plan n'est pas une mesure. Tant qu'une mesure n'est pas déclarée mise en œuvre, le niveau résiduel saisi reste une prévision : le module retient le niveau initial. Servir un résiduel prévu comme un acquis est la façon la plus courante de rendre un registre vert sans avoir rien fait.",
+   "html": "<b>Un plan n'est pas une mesure.</b> Tant qu'une mesure n'est pas déclarée mise en œuvre, le niveau résiduel saisi reste une prévision : le module retient le niveau initial. Servir un résiduel prévu comme un acquis est la façon la plus courante de rendre un registre vert sans avoir rien fait."
+  },
+  "Un écart important entre les méthodes ne signifie pas qu'une valeur est fausse : il signifie que le périmètre diffère. C'est précisément ce qu'un auditeur vérifie. Documentez la méthode retenue, sa version et sa date, et conservez l'export.": {
+   "en": "",
+   "fr": "Un écart important entre les méthodes ne signifie pas qu'une valeur est fausse : il signifie que le périmètre diffère. C'est précisément ce qu'un auditeur vérifie. Documentez la méthode retenue, sa version et sa date, et conservez l'export.",
+   "html": "Un écart important entre les méthodes ne signifie pas qu'une valeur est fausse : il signifie que le <strong>périmètre</strong> diffère. C'est précisément ce qu'un auditeur vérifie. Documentez la méthode retenue, sa version et sa date, et conservez l'export."
+  },
+  "Une clause absente ne se rattrape pas après la signature. Il faut rouvrir le contrat, et le prestataire n'y a aucun intérêt. Les deux que l'autorité regarde en premier sont le droit d'audit illimité (§#, e) et la stratégie de sortie (§#, f) : sans la seconde, la dépendance est irréversible et le contrat n'a plus de terme réel.": {
+   "en": "",
+   "fr": "Une clause absente ne se rattrape pas après la signature. Il faut rouvrir le contrat, et le prestataire n'y a aucun intérêt. Les deux que l'autorité regarde en premier sont le droit d'audit illimité (§3, e) et la stratégie de sortie (§3, f) : sans la seconde, la dépendance est irréversible et le contrat n'a plus de terme réel.",
+   "html": "<b>Une clause absente ne se rattrape pas après la signature.</b> Il faut rouvrir le contrat, et le prestataire n'y a aucun intérêt. Les deux que l'autorité regarde en premier sont le <b>droit d'audit illimité</b> (§3,&nbsp;e) et la <b>stratégie de sortie</b> (§3,&nbsp;f)&nbsp;: sans la seconde, la dépendance est irréversible et le contrat n'a plus de terme réel."
+  },
+  "Une mesure écartée n'a pas de statut de mise en œuvre, et ne doit pas en avoir : lui en demander un ferait compter comme un manque ce qui est une décision. Le taux de mise en œuvre ne porte donc que sur les mesures retenues.": {
+   "en": "",
+   "fr": "Une mesure écartée n'a pas de statut de mise en œuvre, et ne doit pas en avoir : lui en demander un ferait compter comme un manque ce qui est une décision. Le taux de mise en œuvre ne porte donc que sur les mesures retenues.",
+   "html": "Une mesure <b>écartée</b> n'a pas de statut de mise en œuvre, et ne doit pas en avoir : lui en demander un ferait compter comme un manque ce qui est une décision. Le taux de mise en œuvre ne porte donc que sur les mesures <b>retenues</b>."
+  },
+  "Évaluer une entité du cadre simplifié contre le titre II serait la faute la plus coûteuse possible : le client paierait un programme dont la moitié ne le vise pas, et le découvrirait au premier contrôle. Cet écran refuse donc de travailler sans régime déclaré — il ne choisit pas « par défaut ».": {
+   "en": "",
+   "fr": "Évaluer une entité du cadre simplifié contre le titre II serait la faute la plus coûteuse possible : le client paierait un programme dont la moitié ne le vise pas, et le découvrirait au premier contrôle. Cet écran refuse donc de travailler sans régime déclaré — il ne choisit pas « par défaut ».",
+   "html": "<b>Évaluer une entité du cadre simplifié contre le titre&nbsp;II serait la faute la plus coûteuse possible&nbsp;:</b> le client paierait un programme dont la moitié ne le vise pas, et le découvrirait au premier contrôle. Cet écran refuse donc de travailler sans régime déclaré — il ne choisit pas «&nbsp;par défaut&nbsp;»."
+  }
+ },
+ "texte": {
+  "# h ouvrées": {
+   "en": "",
+   "fr": "2 h ouvrées"
+  },
+  "# jour ouvré": {
+   "en": "",
+   "fr": "1 jour ouvré"
+  },
+  "# jours ouvrés": {
+   "en": "",
+   "fr": "3 jours ouvrés"
+  },
+  "# · API d'intégration d'outils internes": {
+   "en": "",
+   "fr": "2 · API d'intégration d'outils internes"
+  },
+  "# · Ce qui est compté": {
+   "en": "",
+   "fr": "1 · Ce qui est compté"
+  },
+  "# · Déploiement multi-entités et multi-périmètres": {
+   "en": "",
+   "fr": "1 · Déploiement multi-entités et multi-périmètres"
+  },
+  "# · Formation sur site": {
+   "en": "",
+   "fr": "4 · Formation sur site"
+  },
+  "# · Jalons RaaS sur trois cadres": {
+   "en": "",
+   "fr": "6 · Jalons RaaS sur trois cadres"
+  },
+  "# · Les trois méthodes": {
+   "en": "",
+   "fr": "2 · Les trois méthodes"
+  },
+  "# · Lire l'analyse d'écarts": {
+   "en": "",
+   "fr": "4 · Lire l'analyse d'écarts"
+  },
+  "# · Précautions à respecter": {
+   "en": "",
+   "fr": "5 · Précautions à respecter"
+  },
+  "# · Rapport IA Act annuel personnalisé": {
+   "en": "",
+   "fr": "5 · Rapport IA Act annuel personnalisé"
+  },
+  "# · SLA contractuel dédié et interlocuteur CONSEILPREV": {
+   "en": "",
+   "fr": "3 · SLA contractuel dédié et interlocuteur CONSEILPREV"
+  },
+  "# · SLA contractuel et accompagnement": {
+   "en": "",
+   "fr": "3 · SLA contractuel et accompagnement"
+  },
+  "# · Sources": {
+   "en": "",
+   "fr": "3 · Sources"
+  },
+  "+ Ajouter un risque": {
+   "en": "",
+   "fr": "+ Ajouter un risque"
+  },
+  ", non des mesures. Aucun fournisseur ne publie la consommation réelle par requête. Les fourchettes d'incertitude sont affichées et la méthodologie est versionnée. Ne pas en tirer d'allégation de neutralité ni d'émissions évitées.": {
+   "en": "",
+   "fr": ", non des mesures. Aucun fournisseur ne publie la consommation réelle par requête. Les fourchettes d'incertitude sont affichées et la méthodologie est versionnée. Ne pas en tirer d'allégation de neutralité ni d'émissions évitées."
+  },
+  "Analyse d'écarts — comparaison des méthodes": {
+   "en": "",
+   "fr": "Analyse d'écarts — comparaison des méthodes"
+  },
+  "Analyse d'écarts — scénarios d'intensité carbone": {
+   "en": "",
+   "fr": "Analyse d'écarts — scénarios d'intensité carbone"
+  },
+  "Analyse de risque →": {
+   "en": "",
+   "fr": "Analyse de risque →"
+  },
+  "Annexe III : # domaines. Annexe II : produits soumis à législation harmonisée UE.": {
+   "en": "",
+   "fr": "Annexe III : 8 domaines. Annexe II : produits soumis à législation harmonisée UE."
+  },
+  "Aujourd'hui": {
+   "en": "",
+   "fr": "Aujourd'hui"
+  },
+  "Avertissement méthodologique.": {
+   "en": "",
+   "fr": "Avertissement méthodologique."
+  },
+  "Bilan GES (GHG Protocol · ADEME)": {
+   "en": "",
+   "fr": "Bilan GES (GHG Protocol · ADEME)"
+  },
+  "Capacité de journalisation automatique.": {
+   "en": "",
+   "fr": "Capacité de journalisation automatique."
+  },
+  "Ces valeurs sont des": {
+   "en": "",
+   "fr": "Ces valeurs sont des"
+  },
+  "Cette qualification suit ce que vous déclarez ; elle est prononcée par l'autorité compétente — ACPR ou AMF en France, autorités européennes de surveillance au niveau de l'Union. Elle ne ferme pas la discussion, elle la prépare.": {
+   "en": "",
+   "fr": "Cette qualification suit ce que vous déclarez ; elle est prononcée par l'autorité compétente — ACPR ou AMF en France, autorités européennes de surveillance au niveau de l'Union. Elle ne ferme pas la discussion, elle la prépare."
+  },
+  "Classification des systèmes IA à haut risque": {
+   "en": "",
+   "fr": "Classification des systèmes IA à haut risque"
+  },
+  "Connexion de Sentinel à vos outils internes de gouvernance, gestion et exploitation.": {
+   "en": "",
+   "fr": "Connexion de Sentinel à vos outils internes de gouvernance, gestion et exploitation."
+  },
+  "Critique": {
+   "en": "",
+   "fr": "Critique"
+  },
+  "Date prévue de la session": {
+   "en": "",
+   "fr": "Date prévue de la session"
+  },
+  "Deux sessions de formation par an, dispensées sur votre site.": {
+   "en": "",
+   "fr": "Deux sessions de formation par an, dispensées sur votre site."
+  },
+  "Documentation technique": {
+   "en": "",
+   "fr": "Documentation technique"
+  },
+  "Documentation, tests, évaluation continue — obligatoire pour les systèmes haut risque.": {
+   "en": "",
+   "fr": "Documentation, tests, évaluation continue — obligatoire pour les systèmes haut risque."
+  },
+  "Données et gouvernance": {
+   "en": "",
+   "fr": "Données et gouvernance"
+  },
+  "Dossier technique complet avant mise sur le marché.": {
+   "en": "",
+   "fr": "Dossier technique complet avant mise sur le marché."
+  },
+  "Déclaration d'applicabilité →": {
+   "en": "",
+   "fr": "Déclaration d'applicabilité →"
+  },
+  "Déclarer ce connecteur": {
+   "en": "",
+   "fr": "Déclarer ce connecteur"
+  },
+  "Déclarez un connecteur vers un outil interne en choisissant sa catégorie (GRC, ERP ou ITSM), en lui donnant un nom, et en indiquant l'URL HTTPS de son API et, si nécessaire, un jeton d'authentification. « Tester » vérifie l'accès réel à l'API. « Synchroniser » transmet à cette API un contenu adapté à la catégorie : un instantané de conformité pour un GRC, un ticket pour un ITSM, un contexte de gouvernance pour un ERP. Seules les URL HTTPS sont acceptées, et le jeton n'est jamais affiché après enregistrement.": {
+   "en": "",
+   "fr": "Déclarez un connecteur vers un outil interne en choisissant sa catégorie (GRC, ERP ou ITSM), en lui donnant un nom, et en indiquant l'URL HTTPS de son API et, si nécessaire, un jeton d'authentification. « Tester » vérifie l'accès réel à l'API. « Synchroniser » transmet à cette API un contenu adapté à la catégorie : un instantané de conformité pour un GRC, un ticket pour un ITSM, un contexte de gouvernance pour un ERP. Seules les URL HTTPS sont acceptées, et le jeton n'est jamais affiché après enregistrement."
+  },
+  "EU AI Act — Article par article": {
+   "en": "",
+   "fr": "EU AI Act — Article par article"
+  },
+  "Effacer les réponses DORA": {
+   "en": "",
+   "fr": "Effacer les réponses DORA"
+  },
+  "Effacer les réponses ISO #": {
+   "en": "",
+   "fr": "Effacer les réponses ISO 27001"
+  },
+  "Enregistrement obligatoire avant déploiement pour les systèmes haut risque.": {
+   "en": "",
+   "fr": "Enregistrement obligatoire avant déploiement pour les systèmes haut risque."
+  },
+  "Enregistrer cette entité (côté serveur)": {
+   "en": "",
+   "fr": "Enregistrer cette entité (côté serveur)"
+  },
+  "Enregistrez chaque entité couverte par votre déploiement en précisant son type : filiale, groupe, périmètre ou site. Ces entités structurent le pilotage à l'échelle de votre organisation et sont conservées côté serveur, rattachées à votre compte. Saisissez un nom, choisissez le type, puis « Ajouter » ; « Retirer » supprime une entité.": {
+   "en": "",
+   "fr": "Enregistrez chaque entité couverte par votre déploiement en précisant son type : filiale, groupe, périmètre ou site. Ces entités structurent le pilotage à l'échelle de votre organisation et sont conservées côté serveur, rattachées à votre compte. Saisissez un nom, choisissez le type, puis « Ajouter » ; « Retirer » supprime une entité."
+  },
+  "Exporter CSV": {
+   "en": "",
+   "fr": "Exporter CSV"
+  },
+  "Facturation par résultats indexée sur l'atteinte de jalons vérifiés, sur trois référentiels : IA Act, RGPD et ISO/IEC #.": {
+   "en": "",
+   "fr": "Facturation par résultats indexée sur l'atteinte de jalons vérifiés, sur trois référentiels : IA Act, RGPD et ISO/IEC 42001."
+  },
+  "Filiales, entités et périmètres d'un groupe, pilotés depuis un espace unique. Enregistrez ici les entités couvertes par votre déploiement.": {
+   "en": "",
+   "fr": "Filiales, entités et périmètres d'un groupe, pilotés depuis un espace unique. Enregistrez ici les entités couvertes par votre déploiement."
+  },
+  "Guide d'utilisation": {
+   "en": "",
+   "fr": "Guide d'utilisation"
+  },
+  "Générer le rapport annuel": {
+   "en": "",
+   "fr": "Générer le rapport annuel"
+  },
+  "Intensité carbone — France (temps réel)": {
+   "en": "",
+   "fr": "Intensité carbone — France (temps réel)"
+  },
+  "Interdit": {
+   "en": "",
+   "fr": "Interdit"
+  },
+  "Interlocuteur CONSEILPREV dédié, référent de votre déploiement — contact : christophe.cerf@outlook.com.": {
+   "en": "",
+   "fr": "Interlocuteur CONSEILPREV dédié, référent de votre déploiement — contact : christophe.cerf@outlook.com."
+  },
+  "Jeton (optionnel)": {
+   "en": "",
+   "fr": "Jeton (optionnel)"
+  },
+  "Jeton Bearer (optionnel)": {
+   "en": "",
+   "fr": "Jeton Bearer (optionnel)"
+  },
+  "Jeton Bearer, transmis mais jamais réaffiché.": {
+   "en": "",
+   "fr": "Jeton Bearer, transmis mais jamais réaffiché."
+  },
+  "L'offre Entreprise inclut l'intégralité de l'offre Pro et y ajoute le déploiement à l'échelle d'un groupe, l'intégration à votre système d'information et un accompagnement contractuel dédié.": {
+   "en": "",
+   "fr": "L'offre Entreprise inclut l'intégralité de l'offre Pro et y ajoute le déploiement à l'échelle d'un groupe, l'intégration à votre système d'information et un accompagnement contractuel dédié."
+  },
+  "La facturation par résultats indexe une partie de votre engagement sur l'atteinte de jalons vérifiés, sur trois référentiels : IA Act, RGPD et ISO/IEC #. Le bouton ouvre l'indice de conformité consolidé des trois cadres, où ces jalons sont suivis, sans duplication avec le module existant.": {
+   "en": "",
+   "fr": "La facturation par résultats indexe une partie de votre engagement sur l'atteinte de jalons vérifiés, sur trois référentiels : IA Act, RGPD et ISO/IEC 42001. Le bouton ouvre l'indice de conformité consolidé des trois cadres, où ces jalons sont suivis, sans duplication avec le module existant."
+  },
+  "Le référentiel de la norme est momentanément indisponible. Rien n’est affiché plutôt qu’une liste partielle : préparer un audit sur un périmètre tronqué coûte plus cher que l’attendre.": {
+   "en": "",
+   "fr": "Le référentiel de la norme est momentanément indisponible. Rien n’est affiché plutôt qu’une liste partielle : préparer un audit sur un périmètre tronqué coûte plus cher que l’attendre."
+  },
+  "Le référentiel de la norme est momentanément indisponible. Rien n’est affiché plutôt qu’une liste partielle : préparer un audit sur une annexe A tronquée coûte plus cher que l’attendre.": {
+   "en": "",
+   "fr": "Le référentiel de la norme est momentanément indisponible. Rien n’est affiché plutôt qu’une liste partielle : préparer un audit sur une annexe A tronquée coûte plus cher que l’attendre."
+  },
+  "Le référentiel du règlement est momentanément indisponible. Rien n’est affiché plutôt qu’une liste partielle : sur un texte réglementaire, une liste tronquée qui ne dit pas qu’elle l’est vaut moins que pas de liste du tout.": {
+   "en": "",
+   "fr": "Le référentiel du règlement est momentanément indisponible. Rien n’est affiché plutôt qu’une liste partielle : sur un texte réglementaire, une liste tronquée qui ne dit pas qu’elle l’est vaut moins que pas de liste du tout."
+  },
+  "Le tableau présente les engagements de service par niveau de criticité : délai de prise en charge et délai de résolution visé. Ces valeurs sont indicatives et sont précisées dans votre contrat. Un interlocuteur CONSEILPREV dédié est votre référent tout au long du déploiement.": {
+   "en": "",
+   "fr": "Le tableau présente les engagements de service par niveau de criticité : délai de prise en charge et délai de résolution visé. Ces valeurs sont indicatives et sont précisées dans votre contrat. Un interlocuteur CONSEILPREV dédié est votre référent tout au long du déploiement."
+  },
+  "Le test de connexion vérifie l'accès réel à l'API configurée (HTTPS).": {
+   "en": "",
+   "fr": "Le test de connexion vérifie l'accès réel à l'API configurée (HTTPS)."
+  },
+  "Majeur": {
+   "en": "",
+   "fr": "Majeur"
+  },
+  "Manipulation comportementale, systemes de notation sociale, identification biometrique en temps reel.": {
+   "en": "",
+   "fr": "Manipulation comportementale, systemes de notation sociale, identification biometrique en temps reel."
+  },
+  "Mesures permettant à une personne physique de surveiller et intervenir.": {
+   "en": "",
+   "fr": "Mesures permettant à une personne physique de surveiller et intervenir."
+  },
+  "Mineur": {
+   "en": "",
+   "fr": "Mineur"
+  },
+  "Méthodologie et guide d'exploitation": {
+   "en": "",
+   "fr": "Méthodologie et guide d'exploitation"
+  },
+  "N'affichez jamais d'« émissions évitées » ni de « neutralité » sans base solide : la réglementation européenne sur les allégations environnementales et le contrôle de la DGCCRF s'y intéressent. Distinguez toujours votre empreinte propre de celle imputable aux clients. Revoyez les paramètres au moins une fois par an.": {
+   "en": "",
+   "fr": "N'affichez jamais d'« émissions évitées » ni de « neutralité » sans base solide : la réglementation européenne sur les allégations environnementales et le contrôle de la DGCCRF s'y intéressent. Distinguez toujours votre empreinte propre de celle imputable aux clients. Revoyez les paramètres au moins une fois par an."
+  },
+  "Ne montrer que les # nouvelles": {
+   "en": "",
+   "fr": "Ne montrer que les 11 nouvelles"
+  },
+  "Niveaux de service par criticité, engagés contractuellement (valeurs indicatives, précisées au contrat).": {
+   "en": "",
+   "fr": "Niveaux de service par criticité, engagés contractuellement (valeurs indicatives, précisées au contrat)."
+  },
+  "Nom (ex. ServiceNow)": {
+   "en": "",
+   "fr": "Nom (ex. ServiceNow)"
+  },
+  "Nom de l'entité": {
+   "en": "",
+   "fr": "Nom de l'entité"
+  },
+  "Nom de la filiale, du site ou du périmètre": {
+   "en": "",
+   "fr": "Nom de la filiale, du site ou du périmètre"
+  },
+  "Notice claire pour les deployeurs. Capacites, limites, conditions.": {
+   "en": "",
+   "fr": "Notice claire pour les deployeurs. Capacites, limites, conditions."
+  },
+  "Obligatoire": {
+   "en": "",
+   "fr": "Obligatoire"
+  },
+  "Observatoire, simulateur IA Act, registre, matrice de risques, audits, module RGPD, documentation, équipe et formation : toutes les capacités de l'offre Pro sont comprises, sans redondance. L'offre Entreprise les étend aux six dimensions ci-dessous.": {
+   "en": "",
+   "fr": "Observatoire, simulateur IA Act, registre, matrice de risques, audits, module RGPD, documentation, équipe et formation : toutes les capacités de l'offre Pro sont comprises, sans redondance. L'offre Entreprise les étend aux six dimensions ci-dessous."
+  },
+  "Offre · Entreprise": {
+   "en": "",
+   "fr": "Offre · Entreprise"
+  },
+  "Ouvrir ISO # →": {
+   "en": "",
+   "fr": "Ouvrir ISO 27001 →"
+  },
+  "Ouvrir l'indice de conformité des trois cadres": {
+   "en": "",
+   "fr": "Ouvrir l'indice de conformité des trois cadres"
+  },
+  "Par client": {
+   "en": "",
+   "fr": "Par client"
+  },
+  "Par fournisseur et par module": {
+   "en": "",
+   "fr": "Par fournisseur et par module"
+  },
+  "Parcours DORA — six blocs": {
+   "en": "",
+   "fr": "Parcours DORA — six blocs"
+  },
+  "Planifier": {
+   "en": "",
+   "fr": "Planifier"
+  },
+  "Planifier cette session (côté serveur)": {
+   "en": "",
+   "fr": "Planifier cette session (côté serveur)"
+  },
+  "Planifiez les sessions de formation sur site en indiquant une date et un thème, puis « Planifier ». Les sessions sont conservées côté serveur et peuvent être retirées. L'offre comprend deux sessions par an.": {
+   "en": "",
+   "fr": "Planifiez les sessions de formation sur site en indiquant une date et un thème, puis « Planifier ». Les sessions sont conservées côté serveur et peuvent être retirées. L'offre comprend deux sessions par an."
+  },
+  "Pratiques IA interdites": {
+   "en": "",
+   "fr": "Pratiques IA interdites"
+  },
+  "Prise en charge": {
+   "en": "",
+   "fr": "Prise en charge"
+  },
+  "Produire un rapport imprimable / PDF": {
+   "en": "",
+   "fr": "Produire un rapport imprimable / PDF"
+  },
+  "Qualite des donnees utilisees en entrainement, validation, test.": {
+   "en": "",
+   "fr": "Qualite des donnees utilisees en entrainement, validation, test."
+  },
+  "RTE éCO#mix": {
+   "en": "",
+   "fr": "RTE éCO2mix"
+  },
+  "Risque limite": {
+   "en": "",
+   "fr": "Risque limite"
+  },
+  "Référence structurée des # articles de l'EU AI Act.": {
+   "en": "",
+   "fr": "Référence structurée des 113 articles de l'EU AI Act."
+  },
+  "Répartition par module": {
+   "en": "",
+   "fr": "Répartition par module"
+  },
+  "Résolution visée": {
+   "en": "",
+   "fr": "Résolution visée"
+  },
+  "Socle inclus : Sentinel Pro dans son intégralité": {
+   "en": "",
+   "fr": "Socle inclus : Sentinel Pro dans son intégralité"
+  },
+  "Suivi consolidé IA Act, RGPD, ISO/IEC #": {
+   "en": "",
+   "fr": "Suivi consolidé IA Act, RGPD, ISO/IEC 42001"
+  },
+  "Supervision humaine": {
+   "en": "",
+   "fr": "Supervision humaine"
+  },
+  "Sur # jours": {
+   "en": "",
+   "fr": "Sur 30 jours"
+  },
+  "Système de gestion des risques": {
+   "en": "",
+   "fr": "Système de gestion des risques"
+  },
+  "Tenue de registres (journalisation)": {
+   "en": "",
+   "fr": "Tenue de registres (journalisation)"
+  },
+  "Thème de la session": {
+   "en": "",
+   "fr": "Thème de la session"
+  },
+  "Tout retenir": {
+   "en": "",
+   "fr": "Tout retenir"
+  },
+  "Tout écarter": {
+   "en": "",
+   "fr": "Tout écarter"
+  },
+  "Transparence et information": {
+   "en": "",
+   "fr": "Transparence et information"
+  },
+  "URL HTTPS de l'API de l'outil à connecter": {
+   "en": "",
+   "fr": "URL HTTPS de l'API de l'outil à connecter"
+  },
+  "URL de l'API (https://...)": {
+   "en": "",
+   "fr": "URL de l'API (https://...)"
+  },
+  "Une synthèse annuelle de votre conformité à l'IA Act, adaptée à votre organisation et à vos périmètres.": {
+   "en": "",
+   "fr": "Une synthèse annuelle de votre conformité à l'IA Act, adaptée à votre organisation et à vos périmètres."
+  },
+  "Vue globale — CONSEILPREV": {
+   "en": "",
+   "fr": "Vue globale — CONSEILPREV"
+  },
+  "estimations par modélisation": {
+   "en": "",
+   "fr": "estimations par modélisation"
+  },
+  "i": {
+   "en": "",
+   "fr": "i"
+  },
+  "« Générer le rapport annuel » produit un document imprimable, exportable en PDF, consolidant l'indice global de conformité et le détail des trois référentiels (IA Act, RGPD, ISO/IEC #). Les indices reflètent l'état de vos évaluations à la date d'édition.": {
+   "en": "",
+   "fr": "« Générer le rapport annuel » produit un document imprimable, exportable en PDF, consolidant l'indice global de conformité et le détail des trois référentiels (IA Act, RGPD, ISO/IEC 42001). Les indices reflètent l'état de vos évaluations à la date d'édition."
+  },
+  "État de conformité, écarts, plan d'action et recommandations, remis chaque année.": {
+   "en": "",
+   "fr": "État de conformité, écarts, plan d'action et recommandations, remis chaque année."
+  },
+  "Êtes-vous certifié ISO/IEC # ?": {
+   "en": "",
+   "fr": "Êtes-vous certifié ISO/IEC 27001 ?"
+  },
+  "Être certifié # ne rend conforme à aucune obligation légale et n'en dispense d'aucune ; inversement, un système parfaitement conforme à l'IA Act ne vaut pas un système de management certifié. Les deux se nourrissent, aucun n'emporte l'autre.": {
+   "en": "",
+   "fr": "Être certifié 42001 ne rend conforme à aucune obligation légale et n'en dispense d'aucune ; inversement, un système parfaitement conforme à l'IA Act ne vaut pas un système de management certifié. Les deux se nourrissent, aucun n'emporte l'autre."
+  },
+  "← Qualifier d'abord": {
+   "en": "",
+   "fr": "← Qualifier d'abord"
+  },
+  "● ACTIF": {
+   "en": "",
+   "fr": "● ACTIF"
+  }
+ }
+}

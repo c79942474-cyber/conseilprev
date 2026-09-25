@@ -1,0 +1,619 @@
+{
+ "_lot": "30-js-12",
+ "_mots": 2475,
+ "_pages": [
+  "_js"
+ ],
+ "_rubrique": "_js",
+ "bloc": {},
+ "texte": {
+  "Indexation sémantique de": {
+   "en": "",
+   "fr": "Indexation sémantique de"
+  },
+  "Indicateurs de pilotage de la conformite IA, incluant": {
+   "en": "",
+   "fr": "Indicateurs de pilotage de la conformite IA, incluant"
+  },
+  "Indicateurs de pilotage de la conformité IA, incluant des KPIs spécifiques au secteur": {
+   "en": "",
+   "fr": "Indicateurs de pilotage de la conformité IA, incluant des KPIs spécifiques au secteur"
+  },
+  "Indice consolidé (aide au pilotage)": {
+   "en": "",
+   "fr": "Indice consolidé (aide au pilotage)"
+  },
+  "Indice de conformité RGPD constaté pour ce client (#–#, seuil requis :": {
+   "en": "",
+   "fr": "Indice de conformité RGPD constaté pour ce client (0–100, seuil requis :"
+  },
+  "Indice de conformité consolidé": {
+   "en": "",
+   "fr": "Indice de conformité consolidé"
+  },
+  "Indice de conformité global": {
+   "en": "",
+   "fr": "Indice de conformité global"
+  },
+  "Indice de maturite :": {
+   "en": "",
+   "fr": "Indice de maturite :"
+  },
+  "Indice de maturité global :": {
+   "en": "",
+   "fr": "Indice de maturité global :"
+  },
+  "Indice global de conformité": {
+   "en": "",
+   "fr": "Indice global de conformité"
+  },
+  "Indiquer ses coordonnées et conserver les documents": {
+   "en": "",
+   "fr": "Indiquer ses coordonnées et conserver les documents"
+  },
+  "Indiquez la décision à préparer.": {
+   "en": "",
+   "fr": "Indiquez la décision à préparer."
+  },
+  "Indirectement — responsabilité de vérification incombe au donneur d'ordre": {
+   "en": "",
+   "fr": "Indirectement — responsabilité de vérification incombe au donneur d'ordre"
+  },
+  "Indispensable pour un déploiement hors de France.": {
+   "en": "",
+   "fr": "Indispensable pour un déploiement hors de France."
+  },
+  "Industrie manufacturière, automobile, aéronautique, chimie et biens d'équipement.": {
+   "en": "",
+   "fr": "Industrie manufacturière, automobile, aéronautique, chimie et biens d'équipement."
+  },
+  "Indéterminées — étape du cycle de vie non déclarée": {
+   "en": "",
+   "fr": "Indéterminées — étape du cycle de vie non déclarée"
+  },
+  "Information claire aux utilisateurs interagissant avec une IA (Art. #(#))": {
+   "en": "",
+   "fr": "Information claire aux utilisateurs interagissant avec une IA (Art. 50(1))"
+  },
+  "Information claire que l'utilisateur interagit avec une IA (Art. #§#). Applicable au # août #.": {
+   "en": "",
+   "fr": "Information claire que l'utilisateur interagit avec une IA (Art. 50§1). Applicable au 2 août 2026."
+  },
+  "Information de la personne : sait-elle qu'un score la concerne ?": {
+   "en": "",
+   "fr": "Information de la personne : sait-elle qu'un score la concerne ?"
+  },
+  "Information des parties intéressées (Annexe A.#)": {
+   "en": "",
+   "fr": "Information des parties intéressées (Annexe A.8)"
+  },
+  "Information des personnes concernées": {
+   "en": "",
+   "fr": "Information des personnes concernées"
+  },
+  "Information et droits": {
+   "en": "",
+   "fr": "Information et droits"
+  },
+  "Information, droit à l'explication, contrôle humain effectif : un filtrage automatisé qui ne laisse aucune trace du motif est indéfendable, et le sera devant le juge avant de l'être devant le régulateur.": {
+   "en": "",
+   "fr": "Information, droit à l'explication, contrôle humain effectif : un filtrage automatisé qui ne laisse aucune trace du motif est indéfendable, et le sera devant le juge avant de l'être devant le régulateur."
+  },
+  "Informations incorrectes, incomplètes ou trompeuses — Art. # §#": {
+   "en": "",
+   "fr": "Informations incorrectes, incomplètes ou trompeuses — Art. 99 §5"
+  },
+  "Informe (tenu au courant)": {
+   "en": "",
+   "fr": "Informe (tenu au courant)"
+  },
+  "Informer explicitement les salariés avant tout déploiement — le double régime AI Act + RGPD + droit du travail rend ce cas particulièrement exposé aux recours.": {
+   "en": "",
+   "fr": "Informer explicitement les salariés avant tout déploiement — le double régime AI Act + RGPD + droit du travail rend ce cas particulièrement exposé aux recours."
+  },
+  "Informer l'utilisateur des voies de recours disponibles": {
+   "en": "",
+   "fr": "Informer l'utilisateur des voies de recours disponibles"
+  },
+  "Informer le notifiant de la décision prise": {
+   "en": "",
+   "fr": "Informer le notifiant de la décision prise"
+  },
+  "Informer les personnes soumises à une décision": {
+   "en": "",
+   "fr": "Informer les personnes soumises à une décision"
+  },
+  "Informer les travailleurs et leurs représentants": {
+   "en": "",
+   "fr": "Informer les travailleurs et leurs représentants"
+  },
+  "Informer les utilisateurs qu'ils interagissent avec un système IA, sauf si cela ressort clairement du contexte.": {
+   "en": "",
+   "fr": "Informer les utilisateurs qu'ils interagissent avec un système IA, sauf si cela ressort clairement du contexte."
+  },
+  "Informer les utilisateurs que le contenu est personnalisé par IA (Art. #§#). Manipulations exploitant les vulnérabilités psychologiques : interdites Art. #§#(a). Systèmes de notation sociale : interdits Art. #§#(c).": {
+   "en": "",
+   "fr": "Informer les utilisateurs que le contenu est personnalisé par IA (Art. 50§2). Manipulations exploitant les vulnérabilités psychologiques : interdites Art. 5§1(a). Systèmes de notation sociale : interdits Art. 5§1(c)."
+  },
+  "Informer sans délai toute la chaîne (distributeurs, déployeurs, mandataire, importateurs)": {
+   "en": "",
+   "fr": "Informer sans délai toute la chaîne (distributeurs, déployeurs, mandataire, importateurs)"
+  },
+  "Infrastructure et industrialisation (MLOps)": {
+   "en": "",
+   "fr": "Infrastructure et industrialisation (MLOps)"
+  },
+  "Infrastructures critiques (Annexe III point #) — exemptées de FRIA par l'Art. #(#)(a), sauf si le déployeur est un organisme public assurant un service public au sens large.": {
+   "en": "",
+   "fr": "Infrastructures critiques (Annexe III point 2) — exemptées de FRIA par l'Art. 27(1)(a), sauf si le déployeur est un organisme public assurant un service public au sens large."
+  },
+  "Inférence — kWh/mois": {
+   "en": "",
+   "fr": "Inférence — kWh/mois"
+  },
+  "Inférence — kg CO₂e/mois": {
+   "en": "",
+   "fr": "Inférence — kg CO₂e/mois"
+  },
+  "Ingénieur ou technicien d’exploitation de site": {
+   "en": "",
+   "fr": "Ingénieur ou technicien d’exploitation de site"
+  },
+  "Inscrire ce qui tourne déjà": {
+   "en": "",
+   "fr": "Inscrire ce qui tourne déjà"
+  },
+  "Inscrire les systèmes d’IA avant d’en peser un seul": {
+   "en": "",
+   "fr": "Inscrire les systèmes d’IA avant d’en peser un seul"
+  },
+  "Inscrire à l’inventaire": {
+   "en": "",
+   "fr": "Inscrire à l’inventaire"
+  },
+  "Inscrivez le système avec son fournisseur, sa finalité, ses données d’entrée et la région d’hébergement effective.": {
+   "en": "",
+   "fr": "Inscrivez le système avec son fournisseur, sa finalité, ses données d’entrée et la région d’hébergement effective."
+  },
+  "Inscrivez le système dès le PoC, avec sa finalité, son fournisseur de modèle et ses données.": {
+   "en": "",
+   "fr": "Inscrivez le système dès le PoC, avec sa finalité, son fournisseur de modèle et ses données."
+  },
+  "Inscrivez le système et rattachez-lui, dès ce stade, la famille à laquelle il appartient si vous en produisez plusieurs voisins.": {
+   "en": "",
+   "fr": "Inscrivez le système et rattachez-lui, dès ce stade, la famille à laquelle il appartient si vous en produisez plusieurs voisins."
+  },
+  "Inscrivez les systèmes d’IA à inclure, avec leur modèle, leurs volumes, et l’ajustement fin lorsqu’une campagne d’entraînement a eu lieu.": {
+   "en": "",
+   "fr": "Inscrivez les systèmes d’IA à inclure, avec leur modèle, leurs volumes, et l’ajustement fin lorsqu’une campagne d’entraînement a eu lieu."
+  },
+  "Installer le relais qui fait tenir l'usage entre deux formations — et savoir à quoi on reconnaît qu'il ne tient pas.": {
+   "en": "",
+   "fr": "Installer le relais qui fait tenir l'usage entre deux formations — et savoir à quoi on reconnaît qu'il ne tient pas."
+  },
+  "Institutions et organes de l'Union, organisations intergouvernementales, représentations diplomatiques et consulaires.": {
+   "en": "",
+   "fr": "Institutions et organes de l'Union, organisations intergouvernementales, représentations diplomatiques et consulaires."
+  },
+  "Instruction automatisee de dossiers administratifs": {
+   "en": "",
+   "fr": "Instruction automatisee de dossiers administratifs"
+  },
+  "Instruire un dossier de financement de projet ou une souscription : ce que le référentiel atteste, ce qu’il estime, et ce qui devra être mesuré en data room.": {
+   "en": "",
+   "fr": "Instruire un dossier de financement de projet ou une souscription : ce que le référentiel atteste, ce qu’il estime, et ce qui devra être mesuré en data room."
+  },
+  "Instruire une aide sociale — APA, PCH — pour le compte d'une collectivité fait entrer à l'annexe III, point # a). Le point vise expressément l'évaluation d'éligibilité et l'octroi, la réduction ou le retrait des prestations.": {
+   "en": "",
+   "fr": "Instruire une aide sociale — APA, PCH — pour le compte d'une collectivité fait entrer à l'annexe III, point 5 a). Le point vise expressément l'évaluation d'éligibilité et l'octroi, la réduction ou le retrait des prestations."
+  },
+  "Intensité carbone appliquée à la consommation estimée. Chaque valeur porte sa NATURE : publié, site (capacité annoncée) ou classe (ordre de grandeur de la catégorie).": {
+   "en": "",
+   "fr": "Intensité carbone appliquée à la consommation estimée. Chaque valeur porte sa NATURE : publié, site (capacité annoncée) ou classe (ordre de grandeur de la catégorie)."
+  },
+  "Interdiction de concevoir des interfaces visant à tromper ou manipuler les utilisateurs dans leurs décisions.": {
+   "en": "",
+   "fr": "Interdiction de concevoir des interfaces visant à tromper ou manipuler les utilisateurs dans leurs décisions."
+  },
+  "Interdiction de l'auto-préférence, obligation d'interopérabilité, interdiction de combiner les données personnelles entre services sans consentement.": {
+   "en": "",
+   "fr": "Interdiction de l'auto-préférence, obligation d'interopérabilité, interdiction de combiner les données personnelles entre services sans consentement."
+  },
+  "Interdiction des dark patterns": {
+   "en": "",
+   "fr": "Interdiction des dark patterns"
+  },
+  "Interdire un outil déplace l’usage hors de votre vue. Ce qui se pilote est ce qui est permis, et la façon dont on le vérifie.": {
+   "en": "",
+   "fr": "Interdire un outil déplace l’usage hors de votre vue. Ce qui se pilote est ce qui est permis, et la façon dont on le vérifie."
+  },
+  "Interdit # catégories de pratiques : (a) manipulation subliminale, (b) exploitation des vulnérabilités, (c) notation sociale par autorités publiques, (d) police prédictive par profilage individuel, (e) base de données faciales par scraping, (f) inférence émotionnelle au travail/éducation, (g) catégorisation biométrique données sensibles, (h) identification biométrique à distance en temps réel dans espaces publics (sauf exceptions strictes).": {
+   "en": "",
+   "fr": "Interdit 8 catégories de pratiques : (a) manipulation subliminale, (b) exploitation des vulnérabilités, (c) notation sociale par autorités publiques, (d) police prédictive par profilage individuel, (e) base de données faciales par scraping, (f) inférence émotionnelle au travail/éducation, (g) catégorisation biométrique données sensibles, (h) identification biométrique à distance en temps réel dans espaces publics (sauf exceptions strictes)."
+  },
+  "Interfaces homme-machine permettant la surveillance effective. Opérateurs capables de comprendre les capacités et limites du système, détecter les anomalies, ignorer ou interrompre le système.": {
+   "en": "",
+   "fr": "Interfaces homme-machine permettant la surveillance effective. Opérateurs capables de comprendre les capacités et limites du système, détecter les anomalies, ignorer ou interrompre le système."
+  },
+  "Interfaces permettant la compréhension des sorties, l'interruption ou la correction du système par des opérateurs compétents.": {
+   "en": "",
+   "fr": "Interfaces permettant la compréhension des sorties, l'interruption ou la correction du système par des opérateurs compétents."
+  },
+  "Interopérabilité des services de messagerie": {
+   "en": "",
+   "fr": "Interopérabilité des services de messagerie"
+  },
+  "Interroger les achats et l'IT sur les options IA déjà activées dans les contrats SaaS.": {
+   "en": "",
+   "fr": "Interroger les achats et l'IT sur les options IA déjà activées dans les contrats SaaS."
+  },
+  "Intragroupe, ou ne servant que des entités d’un seul État membre : la désignation est impossible, quelle que soit la part de marché.": {
+   "en": "",
+   "fr": "Intragroupe, ou ne servant que des entités d’un seul État membre : la désignation est impossible, quelle que soit la part de marché."
+  },
+  "Intégrateur — je modifie substantiellement un produit déjà sur le marché": {
+   "en": "",
+   "fr": "Intégrateur — je modifie substantiellement un produit déjà sur le marché"
+  },
+  "Intégrer la cybersécurité dès la phase de conception": {
+   "en": "",
+   "fr": "Intégrer la cybersécurité dès la phase de conception"
+  },
+  "Intégrer les fournisseurs IA (cloud, modèles tiers, API) dans le registre des prestataires TIC": {
+   "en": "",
+   "fr": "Intégrer les fournisseurs IA (cloud, modèles tiers, API) dans le registre des prestataires TIC"
+  },
+  "Intégrer les risques spécifiques à l'IA dans l'AIPD (biais, opacité, qualité des données)": {
+   "en": "",
+   "fr": "Intégrer les risques spécifiques à l'IA dans l'AIPD (biais, opacité, qualité des données)"
+  },
+  "Intégrer les signalements de la surveillance post-commercialisation": {
+   "en": "",
+   "fr": "Intégrer les signalements de la surveillance post-commercialisation"
+  },
+  "Intégrer les systèmes IA dans la cartographie des risques cyber de l'entité": {
+   "en": "",
+   "fr": "Intégrer les systèmes IA dans la cartographie des risques cyber de l'entité"
+  },
+  "Intégrez un jalon de conformité obligatoire avant chaque mise en production.": {
+   "en": "",
+   "fr": "Intégrez un jalon de conformité obligatoire avant chaque mise en production."
+  },
+  "Intérêt légitime (#.f)": {
+   "en": "",
+   "fr": "Intérêt légitime (6.1.f)"
+  },
+  "Intérêts vitaux (#.d)": {
+   "en": "",
+   "fr": "Intérêts vitaux (6.1.d)"
+  },
+  "Inventaire des traitements au sens de l'article #.": {
+   "en": "",
+   "fr": "Inventaire des traitements au sens de l'article 30."
+  },
+  "Inventaire et documentation technique (art. #, annexe IV).": {
+   "en": "",
+   "fr": "Inventaire et documentation technique (art. 11, annexe IV)."
+  },
+  "Inventaire exigé par le règlement, conservé en base et isolé par client. Le module ne propose PAS de bouton d’export : la pièce imprimable vient du rapport d’audit, à l’étape suivante.": {
+   "en": "",
+   "fr": "Inventaire exigé par le règlement, conservé en base et isolé par client. Le module ne propose PAS de bouton d’export : la pièce imprimable vient du rapport d’audit, à l’étape suivante."
+  },
+  "Inventaire obligatoire (Art. #, #) de vos systèmes IA, connecté à une vraie base de données persistante (pas une démo).": {
+   "en": "",
+   "fr": "Inventaire obligatoire (Art. 49, 71) de vos systèmes IA, connecté à une vraie base de données persistante (pas une démo)."
+  },
+  "Inventoriez ce que vous assemblez, composant par composant, avec ses versions.": {
+   "en": "",
+   "fr": "Inventoriez ce que vous assemblez, composant par composant, avec ses versions."
+  },
+  "Irritants prioritaires identifiés ; satisfaction mesurable.": {
+   "en": "",
+   "fr": "Irritants prioritaires identifiés ; satisfaction mesurable."
+  },
+  "JOUE L du #.": {
+   "en": "",
+   "fr": "JOUE L du 12.7.2024."
+  },
+  "Jalon ayant fait l’objet d’une double vérification (score Sentinel atteint et validation documentaire). Mentions établies au titre des articles L.#-# du Code de commerce et # nonies A de l’annexe II au CGI.": {
+   "en": "",
+   "fr": "Jalon ayant fait l’objet d’une double vérification (score Sentinel atteint et validation documentaire). Mentions établies au titre des articles L.441-9 du Code de commerce et 242 nonies A de l’annexe II au CGI."
+  },
+  "Jalon de conformité facturé": {
+   "en": "",
+   "fr": "Jalon de conformité facturé"
+  },
+  "Jalon vérifié —": {
+   "en": "",
+   "fr": "Jalon vérifié —"
+  },
+  "Jalons de conformité et déclencheurs": {
+   "en": "",
+   "fr": "Jalons de conformité et déclencheurs"
+  },
+  "Jamais connecté": {
+   "en": "",
+   "fr": "Jamais connecté"
+  },
+  "Je conçois ou fais concevoir ce produit": {
+   "en": "",
+   "fr": "Je conçois ou fais concevoir ce produit"
+  },
+  "Je le mets sur le marché sous MON nom ou MA marque": {
+   "en": "",
+   "fr": "Je le mets sur le marché sous MON nom ou MA marque"
+  },
+  "Je le mets à disposition sans l’avoir conçu ni importé": {
+   "en": "",
+   "fr": "Je le mets à disposition sans l’avoir conçu ni importé"
+  },
+  "Je suis soumis à NIS # — # me sert-elle ?": {
+   "en": "",
+   "fr": "Je suis soumis à NIS 2 — 27001 me sert-elle ?"
+  },
+  "Jeux de données d'entraînement, validation et test soumis à des pratiques de gouvernance appropriées : choix de conception, collecte et origine des données, procédures de préparation, examen des biais possibles.": {
+   "en": "",
+   "fr": "Jeux de données d'entraînement, validation et test soumis à des pratiques de gouvernance appropriées : choix de conception, collecte et origine des données, procédures de préparation, examen des biais possibles."
+  },
+  "Joignez toujours la couverture au montant. Un total sans son périmètre se retourne contre celui qui le présente.": {
+   "en": "",
+   "fr": "Joignez toujours la couverture au montant. Un total sans son périmètre se retourne contre celui qui le présente."
+  },
+  "Journalisation automatique de chaque utilisation du systeme (Art. #(#))": {
+   "en": "",
+   "fr": "Journalisation automatique de chaque utilisation du systeme (Art. 12(2))"
+  },
+  "Journalisation et boite noire des decisions automatisees": {
+   "en": "",
+   "fr": "Journalisation et boite noire des decisions automatisees"
+  },
+  "Journaux de connexion de l’outil, sur quatre semaines glissantes, rapportés à la liste nominative des destinataires. Une extraction ponctuelle un lendemain de formation ne mesure rien.": {
+   "en": "",
+   "fr": "Journaux de connexion de l’outil, sur quatre semaines glissantes, rapportés à la liste nominative des destinataires. Une extraction ponctuelle un lendemain de formation ne mesure rien."
+  },
+  "Journaux officiels, sources sectorielles, périmètre réglementaire.": {
+   "en": "",
+   "fr": "Journaux officiels, sources sectorielles, périmètre réglementaire."
+  },
+  "Juin–Août #": {
+   "en": "",
+   "fr": "Juin–Août 2026"
+  },
+  "Jumeau numerique pour simulation de process": {
+   "en": "",
+   "fr": "Jumeau numerique pour simulation de process"
+  },
+  "Jumeaux numériques": {
+   "en": "",
+   "fr": "Jumeaux numériques"
+  },
+  "Juridiction la plus favorable ?": {
+   "en": "",
+   "fr": "Juridiction la plus favorable ?"
+  },
+  "Juridictions a risque critique : # - Juridictions stables : # - Sous surveillance active :": {
+   "en": "",
+   "fr": "Juridictions a risque critique : 1 - Juridictions stables : 10 - Sous surveillance active :"
+  },
+  "Juridictions sous surveillance": {
+   "en": "",
+   "fr": "Juridictions sous surveillance"
+  },
+  "Juridique / Conformité": {
+   "en": "",
+   "fr": "Juridique / Conformité"
+  },
+  "Jurisprudence rapportée du": {
+   "en": "",
+   "fr": "Jurisprudence rapportée du"
+  },
+  "Jusqu'à #% CA mondial/jour (astreinte)": {
+   "en": "",
+   "fr": "Jusqu'à 1% CA mondial/jour (astreinte)"
+  },
+  "Justification Annexe III non renseignée": {
+   "en": "",
+   "fr": "Justification Annexe III non renseignée"
+  },
+  "Justifiez par écrit le périmètre retenu. Un périmètre restreint sans justification est le premier point qu’une autorité attaquera.": {
+   "en": "",
+   "fr": "Justifiez par écrit le périmètre retenu. Un périmètre restreint sans justification est le premier point qu’une autorité attaquera."
+  },
+  "J’ai lu cet écran — bloc suivant ↓": {
+   "en": "",
+   "fr": "J’ai lu cet écran — bloc suivant ↓"
+  },
+  "J’y apporte une modification substantielle": {
+   "en": "",
+   "fr": "J’y apporte une modification substantielle"
+  },
+  "KPIs des # blocs (EU / US / CN)": {
+   "en": "",
+   "fr": "KPIs des 3 blocs (EU / US / CN)"
+  },
+  "KPIs specifiques au secteur": {
+   "en": "",
+   "fr": "KPIs specifiques au secteur"
+  },
+  "L IA Act et le RGPD se chevauchent sans se confondre — ce pa": {
+   "en": "",
+   "fr": "L IA Act et le RGPD se chevauchent sans se confondre — ce pa"
+  },
+  "L applicabilité est calculée automatiquement par système selon votre secteur. Si applicable, répondez au questionnaire sur les # droits fondamentaux — le score se met à jour en temps réel.": {
+   "en": "",
+   "fr": "L applicabilité est calculée automatiquement par système selon votre secteur. Si applicable, répondez au questionnaire sur les 8 droits fondamentaux — le score se met à jour en temps réel."
+  },
+  "L import a échoué.": {
+   "en": "",
+   "fr": "L import a échoué."
+  },
+  "L import prend plus de temps que prévu. Le document est peut-être volumineux — vérifiez la liste dans quelques instants, il devrait apparaître une fois traité.": {
+   "en": "",
+   "fr": "L import prend plus de temps que prévu. Le document est peut-être volumineux — vérifiez la liste dans quelques instants, il devrait apparaître une fois traité."
+  },
+  "L onglet Veille qualifiée affiche un score d impact (haut/moyen/faible) personnalisé. Le filtre FR/EN limite les sources par langue. Le bouton Notifier alerte par email sur les impacts hauts.": {
+   "en": "",
+   "fr": "L onglet Veille qualifiée affiche un score d impact (haut/moyen/faible) personnalisé. Le filtre FR/EN limite les sources par langue. Le bouton Notifier alerte par email sur les impacts hauts."
+  },
+  "L utilisateur coche lui-meme son niveau de conformite. Aucune verification documentaire ni preuve n est demandee dans cette version.": {
+   "en": "",
+   "fr": "L utilisateur coche lui-meme son niveau de conformite. Aucune verification documentaire ni preuve n est demandee dans cette version."
+  },
+  "L'IA Act nomme expressément les organes de l'Union": {
+   "en": "",
+   "fr": "L'IA Act nomme expressément les organes de l'Union"
+  },
+  "L'accès aux données est restreint aux personnes habilitées par défaut": {
+   "en": "",
+   "fr": "L'accès aux données est restreint aux personnes habilitées par défaut"
+  },
+  "L'analyse juridique assistée": {
+   "en": "",
+   "fr": "L'analyse juridique assistée"
+  },
+  "L'annexe I, point # nomme l'administration publique des États membres, centrale et régionale. Une organisation intergouvernementale n'y est pas.": {
+   "en": "",
+   "fr": "L'annexe I, point 10 nomme l'administration publique des États membres, centrale et régionale. Une organisation intergouvernementale n'y est pas."
+  },
+  "L'annexe II, point # nomme les fournisseurs de plateformes de services de réseaux sociaux. Un théâtre, un club ou un éditeur n'y sont pas.": {
+   "en": "",
+   "fr": "L'annexe II, point 6 nomme les fournisseurs de plateformes de services de réseaux sociaux. Un théâtre, un club ou un éditeur n'y sont pas."
+  },
+  "L'annexe II, point # nomme les prestataires de services postaux, y compris d'expédition. Une activité logistique de la section bascule par là.": {
+   "en": "",
+   "fr": "L'annexe II, point 1 nomme les prestataires de services postaux, y compris d'expédition. Une activité logistique de la section bascule par là."
+  },
+  "L'annexe II, point # nomme les « organismes de recherche ». Un bureau d'études qui n'en est pas un n'est pas atteint par cette voie ; un centre de R&D l'est.": {
+   "en": "",
+   "fr": "L'annexe II, point 7 nomme les « organismes de recherche ». Un bureau d'études qui n'en est pas un n'est pas atteint par cette voie ; un centre de R&D l'est."
+  },
+  "L'annexe II, point # pour la distribution en gros de denrées alimentaires ; l'annexe II, point # pour les fournisseurs de places de marché en ligne. Un détaillant hors alimentaire et sans place de marché n'est atteint par aucune des deux.": {
+   "en": "",
+   "fr": "L'annexe II, point 4 pour la distribution en gros de denrées alimentaires ; l'annexe II, point 6 pour les fournisseurs de places de marché en ligne. Un détaillant hors alimentaire et sans place de marché n'est atteint par aucune des deux."
+  },
+  "L'annexe II, point # vise la distribution EN GROS et la production ou transformation INDUSTRIELLES de denrées alimentaires. Une exploitation n'y est pas ; une usine de transformation ou un négoce de gros y est. La frontière se lit dans le texte, elle ne se devine pas.": {
+   "en": "",
+   "fr": "L'annexe II, point 4 vise la distribution EN GROS et la production ou transformation INDUSTRIELLES de denrées alimentaires. Une exploitation n'y est pas ; une usine de transformation ou un négoce de gros y est. La frontière se lit dans le texte, elle ne se devine pas."
+  },
+  "L'annexe II, point # vise le gros et la transformation industrielle : un restaurant ou une cuisine centrale de collectivité qui sert directement n'y entre pas.": {
+   "en": "",
+   "fr": "L'annexe II, point 4 vise le gros et la transformation industrielle : un restaurant ou une cuisine centrale de collectivité qui sert directement n'y entre pas."
+  },
+  "L'annexe III les cite aux points # et # — « les institutions, organes et organismes de l'Union, ou en leur nom ». Ils ne sont pas hors champ : ils y sont désignés.": {
+   "en": "",
+   "fr": "L'annexe III les cite aux points 6 et 7 — « les institutions, organes et organismes de l'Union, ou en leur nom ». Ils ne sont pas hors champ : ils y sont désignés."
+  },
+  "L'annexe III, point # a) vise les systèmes utilisés PAR les autorités judiciaires. Le conseil au client n'y est pas — mais la même sortie, versée au débat, engage le professionnel.": {
+   "en": "",
+   "fr": "L'annexe III, point 8 a) vise les systèmes utilisés PAR les autorités judiciaires. Le conseil au client n'y est pas — mais la même sortie, versée au débat, engage le professionnel."
+  },
+  "L'annexe III, point # b) vise l'évaluation de solvabilité et la note de crédit — sauf détection de fraude, expressément exclue. Un enseigne qui accorde un paiement en plusieurs fois y entre.": {
+   "en": "",
+   "fr": "L'annexe III, point 5 b) vise l'évaluation de solvabilité et la note de crédit — sauf détection de fraude, expressément exclue. Un enseigne qui accorde un paiement en plusieurs fois y entre."
+  },
+  "L'annexe III, point # vise cette section de plein fouet": {
+   "en": "",
+   "fr": "L'annexe III, point 4 vise cette section de plein fouet"
+  },
+  "L'appariement et la planification touchent l'annexe III, point #": {
+   "en": "",
+   "fr": "L'appariement et la planification touchent l'annexe III, point 4"
+  },
+  "L'article # de la directive #/# admet la fouille sauf réserve expresse du titulaire. Entraîner ou affiner sur un catalogue suppose de vérifier cette réserve, œuvre par œuvre s'il le faut.": {
+   "en": "",
+   "fr": "L'article 4 de la directive 2019/790 admet la fouille sauf réserve expresse du titulaire. Entraîner ou affiner sur un catalogue suppose de vérifier cette réserve, œuvre par œuvre s'il le faut."
+  },
+  "L'article # est le régime principal du secteur": {
+   "en": "",
+   "fr": "L'article 50 est le régime principal du secteur"
+  },
+  "L'article # transfère les obligations du fournisseur à qui met un système à haut risque sur le marché sous son propre nom, ou le modifie substantiellement. Un intégrateur devient fournisseur sans l'avoir voulu.": {
+   "en": "",
+   "fr": "L'article 25 transfère les obligations du fournisseur à qui met un système à haut risque sur le marché sous son propre nom, ou le modifie substantiellement. Un intégrateur devient fournisseur sans l'avoir voulu."
+  },
+  "L'article ne joue que si les trois sont réunies. Il suffit donc qu'une seule manque pour qu'il soit écarté — et c'est exactement là que se joue le contentieux.": {
+   "en": "",
+   "fr": "L'article ne joue que si les trois sont réunies. Il suffit donc qu'une seule manque pour qu'il soit écarté — et c'est exactement là que se joue le contentieux."
+  },
+  "L'avis client généré": {
+   "en": "",
+   "fr": "L'avis client généré"
+  },
+  "L'engin devient le point d'entrée": {
+   "en": "",
+   "fr": "L'engin devient le point d'entrée"
+  },
+  "L'enjeu n'est pas seulement d'avoir un humain « dans la boucle ». Il faut pouvoir démontrer qu'il comprend, réexamine et peut modifier la décision.": {
+   "en": "",
+   "fr": "L'enjeu n'est pas seulement d'avoir un humain « dans la boucle ». Il faut pouvoir démontrer qu'il comprend, réexamine et peut modifier la décision."
+  },
+  "L'entreprise est-elle fournisseur, déployeur, ou les deux ? → Impact direct sur le niveau d'obligation.": {
+   "en": "",
+   "fr": "L'entreprise est-elle fournisseur, déployeur, ou les deux ? → Impact direct sur le niveau d'obligation."
+  },
+  "L'estimation engage la responsabilité professionnelle": {
+   "en": "",
+   "fr": "L'estimation engage la responsabilité professionnelle"
+  },
+  "L'export a échoué. Réessayez dans un instant.": {
+   "en": "",
+   "fr": "L'export a échoué. Réessayez dans un instant."
+  },
+  "L'extraction n'est pas nommée ; le pétrole et le gaz le sont": {
+   "en": "",
+   "fr": "L'extraction n'est pas nommée ; le pétrole et le gaz le sont"
+  },
+  "L'immunité ne remonte pas la chaîne": {
+   "en": "",
+   "fr": "L'immunité ne remonte pas la chaîne"
+  },
+  "L'inférence n'est pas cochée : le système ne déduit pas de ses entrées la manière de produire ses sorties. Un logiciel qui déroule des règles écrites par une personne n'entre pas dans la définition, et le règlement ne s'y applique pas — ni haut risque, ni transparence, ni sanctions. La classification ci-dessous est donnée à titre indicatif ; c'est cette question qu'il faut trancher d'abord, et la documenter.": {
+   "en": "",
+   "fr": "L'inférence n'est pas cochée : le système ne déduit pas de ses entrées la manière de produire ses sorties. Un logiciel qui déroule des règles écrites par une personne n'entre pas dans la définition, et le règlement ne s'y applique pas — ni haut risque, ni transparence, ni sanctions. La classification ci-dessous est donnée à titre indicatif ; c'est cette question qu'il faut trancher d'abord, et la documenter."
+  },
+  "L'intervention humaine est-elle réelle, compétente et documentée ?": {
+   "en": "",
+   "fr": "L'intervention humaine est-elle réelle, compétente et documentée ?"
+  },
+  "L'obligation de retracer un lot en amont et en aval s'impose quel que soit l'outil. Un système d'IA qui décide d'un déclassement doit laisser une trace reconstituable.": {
+   "en": "",
+   "fr": "L'obligation de retracer un lot en amont et en aval s'impose quel que soit l'outil. Un système d'IA qui décide d'un déclassement doit laisser une trace reconstituable."
+  },
+  "L'utilisateur consulte l'Analyse geopolitique Sentinel AI. # blocs : Bloc europeen (EU AI Act standard d'exportation, extraterritorialite, #+ pays influences), Modele americain (EO # jan # pro-innovation, fragmentation etats, NIST RMF), Doctrine chinoise (controle souverain, PIPL, Generative AI Measures, BRI # pays). Chronologie : Art. # applicables fev #, GPAI aout #, haut risque aout #. EO # revoque # jan # par EO #, remplace EO # # jan #.": {
+   "en": "",
+   "fr": "L'utilisateur consulte l'Analyse geopolitique Sentinel AI. 3 blocs : Bloc europeen (EU AI Act standard d'exportation, extraterritorialite, 40+ pays influences), Modele americain (EO 14179 jan 2025 pro-innovation, fragmentation etats, NIST RMF), Doctrine chinoise (controle souverain, PIPL, Generative AI Measures, BRI 147 pays). Chronologie : Art. 5 applicables fev 2025, GPAI aout 2025, haut risque aout 2026. EO 14110 revoque 20 jan 2025 par EO 14148, remplace EO 14179 23 jan 2025."
+  },
+  "L'utilisateur consulte les Obligations article par article du Regl. #/#. Articles couverts : Art. # (objet), Art. # (champ application extraterritorial), Art. # (litteratie IA), Art. # (# pratiques interdites, sanctions #M ou #%), Art. # (classification haut risque + Annexe III), Art. #-# (obligations fournisseurs : gestion risques, donnees, documentation, logs, transparence, supervision, robustesse, qualite), Art. # (mandataire UE hors-EU), Art. # (obligations deployeurs), Art. # (transparence interactions IA, watermarking), Art. #-# (GPAI, seuil #^# FLOPs, risque systemique), Art. # (surveillance post-commercialisation), Art. # (sanctions progressives).": {
+   "en": "",
+   "fr": "L'utilisateur consulte les Obligations article par article du Regl. 2024/1689. Articles couverts : Art. 1 (objet), Art. 2 (champ application extraterritorial), Art. 4 (litteratie IA), Art. 5 (8 pratiques interdites, sanctions 35M ou 7%), Art. 6 (classification haut risque + Annexe III), Art. 9-17 (obligations fournisseurs : gestion risques, donnees, documentation, logs, transparence, supervision, robustesse, qualite), Art. 22 (mandataire UE hors-EU), Art. 26 (obligations deployeurs), Art. 50 (transparence interactions IA, watermarking), Art. 51-55 (GPAI, seuil 10^25 FLOPs, risque systemique), Art. 72 (surveillance post-commercialisation), Art. 99 (sanctions progressives)."
+  },
+  "L'utilisateur consulte les Textes reglementaires de Sentinel AI. Textes couverts : EU AI Act (Regl. #/#, JO L #, sanctions #M EUR ou #% CA), RGPD (Regl. #/#, Art. # decisions automatisees, #M EUR ou #%), NIS# (Dir. #/#, entites essentielles, #M EUR ou #%), DORA (Regl. #/#, secteur financier), Lignes directrices Art. # (Commission, # fev #), ISO # (management IA).": {
+   "en": "",
+   "fr": "L'utilisateur consulte les Textes reglementaires de Sentinel AI. Textes couverts : EU AI Act (Regl. 2024/1689, JO L 12.7.2024, sanctions 35M EUR ou 7% CA), RGPD (Regl. 2016/679, Art. 22 decisions automatisees, 20M EUR ou 4%), NIS2 (Dir. 2022/2555, entites essentielles, 10M EUR ou 2%), DORA (Regl. 2022/2554, secteur financier), Lignes directrices Art. 5 (Commission, 4 fev 2025), ISO 42001 (management IA)."
+  },
+  "L'utilisateur est sur la page Decouverte Shadow AI de Sentinel AI (CONSEILPREV). Cette page recense # cas d usage frequemment invisibles : SaaS avec IA activee, outils RH, chatbots, generateurs de contenus, agents connectes aux donnees, API de modeles, prestataires utilisant l IA, modeles open source heberges en interne. Echeance # aout # pour les obligations de transparence Art. #.": {
+   "en": "",
+   "fr": "L'utilisateur est sur la page Decouverte Shadow AI de Sentinel AI (CONSEILPREV). Cette page recense 7 cas d usage frequemment invisibles : SaaS avec IA activee, outils RH, chatbots, generateurs de contenus, agents connectes aux donnees, API de modeles, prestataires utilisant l IA, modeles open source heberges en interne. Echeance 2 aout 2026 pour les obligations de transparence Art. 50."
+  },
+  "L'utilisateur est sur la page Observatoire IA de Sentinel AI (CONSEILPREV). Cette page presente : # juridictions analysees, scores de risque par pays, distribution mondiale des cadres reglementaires IA, classement par innovation et severite. Contexte technique : EU AI Act Regl. #/#, # niveaux de risque (inacceptable, haut, limite, minimal), # domaines Annexe III.": {
+   "en": "",
+   "fr": "L'utilisateur est sur la page Observatoire IA de Sentinel AI (CONSEILPREV). Cette page presente : 24 juridictions analysees, scores de risque par pays, distribution mondiale des cadres reglementaires IA, classement par innovation et severite. Contexte technique : EU AI Act Regl. 2024/1689, 4 niveaux de risque (inacceptable, haut, limite, minimal), 8 domaines Annexe III."
+  },
+  "L'utilisateur navigue sur Sentinel AI, la plateforme de cartographie des risques reglementaires IA de CONSEILPREV (Paris). Fonctionnalites : cartographie # juridictions, simulateur conformite AI Act # etapes, audit # points, comparateur juridictions, analyse geopolitique, textes officiels, obligations article par article.": {
+   "en": "",
+   "fr": "L'utilisateur navigue sur Sentinel AI, la plateforme de cartographie des risques reglementaires IA de CONSEILPREV (Paris). Fonctionnalites : cartographie 24 juridictions, simulateur conformite AI Act 5 etapes, audit 34 points, comparateur juridictions, analyse geopolitique, textes officiels, obligations article par article."
+  },
+  "L'utilisateur realise l'Audit de conformite AI Act (# points de controle, # sections). Sections : Art. # pratiques interdites (# pts), Art. # classification haut risque (# pts), Art. #-# gestion risques et donnees (# pts), Art. #-#-# documentation et logs (# pts), Art. #-# transparence et supervision (# pts), Art. #-# robustesse et qualite (# pts), Art. #-# evaluation et enregistrement (# pts), GPAI Art. #-# (# pts). # etats : Conforme (vert), En cours (orange), A realiser (rouge). Score en % et export PDF.": {
+   "en": "",
+   "fr": "L'utilisateur realise l'Audit de conformite AI Act (34 points de controle, 8 sections). Sections : Art. 5 pratiques interdites (4 pts), Art. 6 classification haut risque (4 pts), Art. 9-10 gestion risques et donnees (5 pts), Art. 11-12-18 documentation et logs (5 pts), Art. 13-14 transparence et supervision (4 pts), Art. 15-17 robustesse et qualite (4 pts), Art. 43-49 evaluation et enregistrement (4 pts), GPAI Art. 51-55 (4 pts). 3 etats : Conforme (vert), En cours (orange), A realiser (rouge). Score en % et export PDF."
+  },
+  "L'utilisateur utilise le Comparateur interactif de juridictions (jusqu'a # pays). Radar # dimensions : Severite, Transparence, Responsabilite, Souverainete donnees, Sanctions, Innovation. Tableau comparatif avec barres et badge risque geopolitique. Donnees : EU (severite #, innovation #), US (severite #, innovation #), SG (severite #, innovation #), CH (severite #, innovation #).": {
+   "en": "",
+   "fr": "L'utilisateur utilise le Comparateur interactif de juridictions (jusqu'a 4 pays). Radar 6 dimensions : Severite, Transparence, Responsabilite, Souverainete donnees, Sanctions, Innovation. Tableau comparatif avec barres et badge risque geopolitique. Donnees : EU (severite 9.2, innovation 5.0), US (severite 4.5, innovation 9.0), SG (severite 5.0, innovation 9.0), CH (severite 6.5, innovation 7.5)."
+  },
+  "L'utilisateur utilise le Simulateur de conformite AI Act # etapes : (#) Identification systeme — secteur (Annexe III), type IA, description ; (#) Classification risque — Art. # pratiques interdites, biometrie temps reel, Annexe III # domaines ; (#) Obligations — Art. # gestion risques, Art. # donnees, Art. # documentation, Art. # logs, Art. # transparence, Art. # supervision, Art. # qualite ; (#) GPAI — Art. #-#, seuil #^# FLOPs, RGPD ; (#) Resultats — score, classification, checklist, sanctions calculees.": {
+   "en": "",
+   "fr": "L'utilisateur utilise le Simulateur de conformite AI Act 5 etapes : (1) Identification systeme — secteur (Annexe III), type IA, description ; (2) Classification risque — Art. 5 pratiques interdites, biometrie temps reel, Annexe III 8 domaines ; (3) Obligations — Art. 9 gestion risques, Art. 10 donnees, Art. 11 documentation, Art. 12 logs, Art. 13 transparence, Art. 14 supervision, Art. 17 qualite ; (4) GPAI — Art. 51-55, seuil 10^25 FLOPs, RGPD ; (5) Resultats — score, classification, checklist, sanctions calculees."
+  }
+ }
+}

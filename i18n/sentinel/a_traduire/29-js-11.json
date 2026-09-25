@@ -1,0 +1,943 @@
+{
+ "_lot": "29-js-11",
+ "_mots": 2471,
+ "_pages": [
+  "_js"
+ ],
+ "_rubrique": "_js",
+ "bloc": {},
+ "texte": {
+  "Finalité(s) *": {
+   "en": "",
+   "fr": "Finalité(s) *"
+  },
+  "Finance / Comptabilité": {
+   "en": "",
+   "fr": "Finance / Comptabilité"
+  },
+  "Financer ou assurer un centre de données": {
+   "en": "",
+   "fr": "Financer ou assurer un centre de données"
+  },
+  "Fixez le circuit de validation des nouveaux usages et la composition du comité.": {
+   "en": "",
+   "fr": "Fixez le circuit de validation des nouveaux usages et la composition du comité."
+  },
+  "Fixez le périmètre du code assisté, les données qui peuvent sortir, et le marquage de ce qui est généré.": {
+   "en": "",
+   "fr": "Fixez le périmètre du code assisté, les données qui peuvent sortir, et le marquage de ce qui est généré."
+  },
+  "Fonctionnalite IA conversationnelle integree au produit logiciel.": {
+   "en": "",
+   "fr": "Fonctionnalite IA conversationnelle integree au produit logiciel."
+  },
+  "Fonctionnalités IA SaaS": {
+   "en": "",
+   "fr": "Fonctionnalités IA SaaS"
+  },
+  "Fonctionnalités IA dans des SaaS": {
+   "en": "",
+   "fr": "Fonctionnalités IA dans des SaaS"
+  },
+  "Fonctionnement fiable en conditions variables (météo, luminosité, signalisation dégradée). Tests adversariaux obligatoires.": {
+   "en": "",
+   "fr": "Fonctionnement fiable en conditions variables (météo, luminosité, signalisation dégradée). Tests adversariaux obligatoires."
+  },
+  "Fond de carte (map.html)": {
+   "en": "",
+   "fr": "Fond de carte (map.html)"
+  },
+  "Fondée sur le consentement explicite de la personne": {
+   "en": "",
+   "fr": "Fondée sur le consentement explicite de la personne"
+  },
+  "Formaliser le SGQ en politiques et procédures écrites": {
+   "en": "",
+   "fr": "Formaliser le SGQ en politiques et procédures écrites"
+  },
+  "Formalisez qui valide, qui exécute et qui est informé pour chaque processus de contrôle.": {
+   "en": "",
+   "fr": "Formalisez qui valide, qui exécute et qui est informé pour chaque processus de contrôle."
+  },
+  "Format non accepté. Formats acceptés : PDF, Word (.docx), Excel (.xlsx, .xlsm), texte, Markdown, CSV, journal, JSON, YAML.": {
+   "en": "",
+   "fr": "Format non accepté. Formats acceptés : PDF, Word (.docx), Excel (.xlsx, .xlsm), texte, Markdown, CSV, journal, JSON, YAML."
+  },
+  "Formation approfondie des relais RGPD / référents": {
+   "en": "",
+   "fr": "Formation approfondie des relais RGPD / référents"
+  },
+  "Formation aux procédures de traitement et de conservation": {
+   "en": "",
+   "fr": "Formation aux procédures de traitement et de conservation"
+  },
+  "Formation, audits, tests et documentation.": {
+   "en": "",
+   "fr": "Formation, audits, tests et documentation."
+  },
+  "Former les dirigeants à évaluer les risques cyber liés aux systèmes IA": {
+   "en": "",
+   "fr": "Former les dirigeants à évaluer les risques cyber liés aux systèmes IA"
+  },
+  "Former les opérateurs et déployeurs aux mécanismes de contrôle": {
+   "en": "",
+   "fr": "Former les opérateurs et déployeurs aux mécanismes de contrôle"
+  },
+  "Formulaire de demande d’un audit accompagné, conduit selon la méthodologie CONSEILPREV (AI Act, NIS # et RGPD croisés). Il s’agit d’une prestation humaine, à distinguer de l’Audit IA Act en autonomie disponible dans le même menu.": {
+   "en": "",
+   "fr": "Formulaire de demande d’un audit accompagné, conduit selon la méthodologie CONSEILPREV (AI Act, NIS 2 et RGPD croisés). Il s’agit d’une prestation humaine, à distinguer de l’Audit IA Act en autonomie disponible dans le même menu."
+  },
+  "Formé n’est pas adopté": {
+   "en": "",
+   "fr": "Formé n’est pas adopté"
+  },
+  "Fouille de textes et de données": {
+   "en": "",
+   "fr": "Fouille de textes et de données"
+  },
+  "Fournis un etat des lieux factuel et a jour (debut #) de la regulation de l intelligence artificielle pour la juridiction suivante :": {
+   "en": "",
+   "fr": "Fournis un etat des lieux factuel et a jour (debut 2026) de la regulation de l intelligence artificielle pour la juridiction suivante :"
+  },
+  "Fournisseur (développe ou met sur le marché)": {
+   "en": "",
+   "fr": "Fournisseur (développe ou met sur le marché)"
+  },
+  "Fournisseur / Éditeur": {
+   "en": "",
+   "fr": "Fournisseur / Éditeur"
+  },
+  "Fournisseur : nom du modèle + éditeur API. Rôle : Déployeur (+ Fournisseur si intégration dans produit).": {
+   "en": "",
+   "fr": "Fournisseur : nom du modèle + éditeur API. Rôle : Déployeur (+ Fournisseur si intégration dans produit)."
+  },
+  "Fournisseur : nom du prestataire. Preuves : clause contractuelle IA à joindre au registre.": {
+   "en": "",
+   "fr": "Fournisseur : nom du prestataire. Preuves : clause contractuelle IA à joindre au registre."
+  },
+  "Fournisseur nommé, modèle non déclaré": {
+   "en": "",
+   "fr": "Fournisseur nommé, modèle non déclaré"
+  },
+  "Fournisseur — je mets un système sur le marché": {
+   "en": "",
+   "fr": "Fournisseur — je mets un système sur le marché"
+  },
+  "Fournisseur, déployeur, importateur ou distributeur — cumulable (Art. #§#-#).": {
+   "en": "",
+   "fr": "Fournisseur, déployeur, importateur ou distributeur — cumulable (Art. 3§3-7)."
+  },
+  "Fournisseur, déployeur, importateur, distributeur : le même article n’impose pas la même chose. Identifiez votre rôle avant de lire, sinon vous appliquerez le devoir d’un autre.": {
+   "en": "",
+   "fr": "Fournisseur, déployeur, importateur, distributeur : le même article n’impose pas la même chose. Identifiez votre rôle avant de lire, sinon vous appliquerez le devoir d’un autre."
+  },
+  "Fournisseurs : gestion des risques, documentation, qualité (Art. #-#)": {
+   "en": "",
+   "fr": "Fournisseurs : gestion des risques, documentation, qualité (Art. 9-17)"
+  },
+  "Fournisseurs de modèles de fondation : documentation technique, résumé d'entraînement, politique de droits d'auteur. Seuil #^# FLOPs pour risque systémique.": {
+   "en": "",
+   "fr": "Fournisseurs de modèles de fondation : documentation technique, résumé d'entraînement, politique de droits d'auteur. Seuil 10^25 FLOPs pour risque systémique."
+  },
+  "Fournisseurs et déployeurs doivent veiller à la littératie IA de leur personnel et de toute autre personne les représentant qui opère ou utilise des systèmes d'IA.": {
+   "en": "",
+   "fr": "Fournisseurs et déployeurs doivent veiller à la littératie IA de leur personnel et de toute autre personne les représentant qui opère ou utilise des systèmes d'IA."
+  },
+  "Fournisseurs établis hors UE doivent désigner un mandataire établi dans l'UE par mandat écrit avant mise sur le marché européen.": {
+   "en": "",
+   "fr": "Fournisseurs établis hors UE doivent désigner un mandataire établi dans l'UE par mandat écrit avant mise sur le marché européen."
+  },
+  "Gain / coût": {
+   "en": "",
+   "fr": "Gain / coût"
+  },
+  "Gain annuel = assiette annuelle × taux de gain.": {
+   "en": "",
+   "fr": "Gain annuel = assiette annuelle × taux de gain."
+  },
+  "Gain annuel estimé": {
+   "en": "",
+   "fr": "Gain annuel estimé"
+  },
+  "Garantie d egalite de traitement et droit au recours citoyen": {
+   "en": "",
+   "fr": "Garantie d egalite de traitement et droit au recours citoyen"
+  },
+  "Garantie de transfert": {
+   "en": "",
+   "fr": "Garantie de transfert"
+  },
+  "Garanties dues même sous exception": {
+   "en": "",
+   "fr": "Garanties dues même sous exception"
+  },
+  "Garantir des choix par défaut neutres": {
+   "en": "",
+   "fr": "Garantir des choix par défaut neutres"
+  },
+  "Garantir l'intégrité et l'accessibilité des journaux aux autorités": {
+   "en": "",
+   "fr": "Garantir l'intégrité et l'accessibilité des journaux aux autorités"
+  },
+  "Garantir les droits des personnes concernées face aux décisions automatisées (Art. # RGPD)": {
+   "en": "",
+   "fr": "Garantir les droits des personnes concernées face aux décisions automatisées (Art. 22 RGPD)"
+  },
+  "Garantir une intervention humaine significative et un droit de contestation": {
+   "en": "",
+   "fr": "Garantir une intervention humaine significative et un droit de contestation"
+  },
+  "Garde-fou : plafond contractuel appliqué": {
+   "en": "",
+   "fr": "Garde-fou : plafond contractuel appliqué"
+  },
+  "Generation assistee de plans et prototypes (IA generative)": {
+   "en": "",
+   "fr": "Generation assistee de plans et prototypes (IA generative)"
+  },
+  "Generation automatisee de scenarios de demo adaptes au prospect.": {
+   "en": "",
+   "fr": "Generation automatisee de scenarios de demo adaptes au prospect."
+  },
+  "Generation de contenu marketing (visuels, textes)": {
+   "en": "",
+   "fr": "Generation de contenu marketing (visuels, textes)"
+  },
+  "Generation de premiers projets de contrats": {
+   "en": "",
+   "fr": "Generation de premiers projets de contrats"
+  },
+  "Generation en cours par": {
+   "en": "",
+   "fr": "Generation en cours par"
+  },
+  "Generation et execution automatisee de scenarios de test.": {
+   "en": "",
+   "fr": "Generation et execution automatisee de scenarios de test."
+  },
+  "Genere cote client via window.print(). Aucune donnee n est stockee cote serveur ni transmise a CONSEILPREV automatiquement.": {
+   "en": "",
+   "fr": "Genere cote client via window.print(). Aucune donnee n est stockee cote serveur ni transmise a CONSEILPREV automatiquement."
+  },
+  "Genere via Sentinel AI - CONSEILPREV. Pour le detail complet, voir le document joint (a exporter en PDF depuis l outil). Cordialement,": {
+   "en": "",
+   "fr": "Genere via Sentinel AI - CONSEILPREV. Pour le detail complet, voir le document joint (a exporter en PDF depuis l outil). Cordialement,"
+  },
+  "Geometrie calculee localement en JavaScript (pas de librairie graphique externe). Limite a # pays simultanes.": {
+   "en": "",
+   "fr": "Geometrie calculee localement en JavaScript (pas de librairie graphique externe). Limite a 4 pays simultanes."
+  },
+  "Gestion automatisee des acces (IAM augmente)": {
+   "en": "",
+   "fr": "Gestion automatisee des acces (IAM augmente)"
+  },
+  "Gestion de la paie mandataire": {
+   "en": "",
+   "fr": "Gestion de la paie mandataire"
+  },
+  "Gestion de stock et de réapprovisionnement": {
+   "en": "",
+   "fr": "Gestion de stock et de réapprovisionnement"
+  },
+  "Gestion des Sinistres": {
+   "en": "",
+   "fr": "Gestion des Sinistres"
+  },
+  "Gestion des clients": {
+   "en": "",
+   "fr": "Gestion des clients"
+  },
+  "Gestion des demandes d'exercice des droits": {
+   "en": "",
+   "fr": "Gestion des demandes d'exercice des droits"
+  },
+  "Gestion des données et des tiers (Annexe A.#, A.#)": {
+   "en": "",
+   "fr": "Gestion des données et des tiers (Annexe A.7, A.10)"
+  },
+  "Gestion des habilitations et journalisation": {
+   "en": "",
+   "fr": "Gestion des habilitations et journalisation"
+  },
+  "Gestion des non-conformites et des ecarts (Art. #(#)(h))": {
+   "en": "",
+   "fr": "Gestion des non-conformites et des ecarts (Art. 17(1)(h))"
+  },
+  "Gestion des prestataires tiers TIC": {
+   "en": "",
+   "fr": "Gestion des prestataires tiers TIC"
+  },
+  "Gestion des risques": {
+   "en": "",
+   "fr": "Gestion des risques"
+  },
+  "Gestion des risques (art. #)": {
+   "en": "",
+   "fr": "Gestion des risques (art. 9)"
+  },
+  "Gestion des risques, exactitude et sécurité": {
+   "en": "",
+   "fr": "Gestion des risques, exactitude et sécurité"
+  },
+  "Gestion des vulnérabilités": {
+   "en": "",
+   "fr": "Gestion des vulnérabilités"
+  },
+  "Gestion du Trafic": {
+   "en": "",
+   "fr": "Gestion du Trafic"
+  },
+  "Gestion du changement et adoption": {
+   "en": "",
+   "fr": "Gestion du changement et adoption"
+  },
+  "Gestion du trafic": {
+   "en": "",
+   "fr": "Gestion du trafic"
+  },
+  "Glissez-déposez un document dans la zone d import. L indexation se fait par lots. Une fois indexé, le document est automatiquement consulté par les modules concernés (boutons 🔍 Rechercher dans la base de connaissance, présents sur plusieurs pages).": {
+   "en": "",
+   "fr": "Glissez-déposez un document dans la zone d import. L indexation se fait par lots. Une fois indexé, le document est automatiquement consulté par les modules concernés (boutons 🔍 Rechercher dans la base de connaissance, présents sur plusieurs pages)."
+  },
+  "Gouvernance IA — Alignement EU AI Act confirmé": {
+   "en": "",
+   "fr": "Gouvernance IA — Alignement EU AI Act confirmé"
+  },
+  "Gouvernance de conformité (AI Act, RGPD)": {
+   "en": "",
+   "fr": "Gouvernance de conformité (AI Act, RGPD)"
+  },
+  "Gouvernance des donnees d’entrainement, validation et test (Art. #(#))": {
+   "en": "",
+   "fr": "Gouvernance des donnees d’entrainement, validation et test (Art. 10(1))"
+  },
+  "Gouvernance des données": {
+   "en": "",
+   "fr": "Gouvernance des données"
+  },
+  "Gouvernance des données et prévention des biais": {
+   "en": "",
+   "fr": "Gouvernance des données et prévention des biais"
+  },
+  "Gouvernance et accessibilité des données": {
+   "en": "",
+   "fr": "Gouvernance et accessibilité des données"
+  },
+  "Gouvernance et responsabilité des dirigeants": {
+   "en": "",
+   "fr": "Gouvernance et responsabilité des dirigeants"
+  },
+  "Gouvernance opérationnelle de l’IA": {
+   "en": "",
+   "fr": "Gouvernance opérationnelle de l’IA"
+  },
+  "Grand compte : alignez ce RACI sur votre cadre GRC existant (ISO #, NIS#) plutôt que d’en créer un nouveau parallèle.": {
+   "en": "",
+   "fr": "Grand compte : alignez ce RACI sur votre cadre GRC existant (ISO 27001, NIS2) plutôt que d’en créer un nouveau parallèle."
+  },
+  "Grand compte : formalisez avec les directions juridique, IT et métier dès cette étape, pas après.": {
+   "en": "",
+   "fr": "Grand compte : formalisez avec les directions juridique, IT et métier dès cette étape, pas après."
+  },
+  "Grand compte : organisez par business unit pour garder une vue both globale et locale.": {
+   "en": "",
+   "fr": "Grand compte : organisez par business unit pour garder une vue both globale et locale."
+  },
+  "Grand compte : structurez par domaine de données plutôt que par système IA pour rester cohérent avec votre organisation data existante.": {
+   "en": "",
+   "fr": "Grand compte : structurez par domaine de données plutôt que par système IA pour rester cohérent avec votre organisation data existante."
+  },
+  "Guide d'audit documentaire automatisé": {
+   "en": "",
+   "fr": "Guide d'audit documentaire automatisé"
+  },
+  "Guide d'audit terrain complémentaire": {
+   "en": "",
+   "fr": "Guide d'audit terrain complémentaire"
+  },
+  "Guide de pré-audit sectoriel": {
+   "en": "",
+   "fr": "Guide de pré-audit sectoriel"
+  },
+  "Guide non encore disponible pour cette page. Contactez christophe.cerf@outlook.com pour toute question.": {
+   "en": "",
+   "fr": "Guide non encore disponible pour cette page. Contactez christophe.cerf@outlook.com pour toute question."
+  },
+  "Génère un livrable détaillé et actionnable pour cette phase, basé sur vos données réelles (Registre IA, Audit) et votre secteur d activité.": {
+   "en": "",
+   "fr": "Génère un livrable détaillé et actionnable pour cette phase, basé sur vos données réelles (Registre IA, Audit) et votre secteur d activité."
+  },
+  "Généraliser sans point de départ rend toute variation ultérieure ininterprétable : il n’y aura plus rien à comparer, et personne ne pourra dire si le programme a servi.": {
+   "en": "",
+   "fr": "Généraliser sans point de départ rend toute variation ultérieure ininterprétable : il n’y aura plus rien à comparer, et personne ne pourra dire si le programme a servi."
+  },
+  "Générateur de contenus IA": {
+   "en": "",
+   "fr": "Générateur de contenus IA"
+  },
+  "Générateurs de textes, images, vidéos, voix": {
+   "en": "",
+   "fr": "Générateurs de textes, images, vidéos, voix"
+  },
+  "Génération automatique : émettre les factures des jalons vérifiés selon la numérotation officielle, produire le document juridique complet": {
+   "en": "",
+   "fr": "Génération automatique : émettre les factures des jalons vérifiés selon la numérotation officielle, produire le document juridique complet"
+  },
+  "Génération de visuels et de textes": {
+   "en": "",
+   "fr": "Génération de visuels et de textes"
+  },
+  "Génération du document par": {
+   "en": "",
+   "fr": "Génération du document par"
+  },
+  "Génération du livrable en cours…": {
+   "en": "",
+   "fr": "Génération du livrable en cours…"
+  },
+  "Génération du livrable par": {
+   "en": "",
+   "fr": "Génération du livrable par"
+  },
+  "Génération en cours…": {
+   "en": "",
+   "fr": "Génération en cours…"
+  },
+  "Générer la facture (": {
+   "en": "",
+   "fr": "Générer la facture ("
+  },
+  "Générer le contrat RaaS (PDF)": {
+   "en": "",
+   "fr": "Générer le contrat RaaS (PDF)"
+  },
+  "Générer le document méthodologique →": {
+   "en": "",
+   "fr": "Générer le document méthodologique →"
+  },
+  "Générer le guide →": {
+   "en": "",
+   "fr": "Générer le guide →"
+  },
+  "Générez d abord le livrable.": {
+   "en": "",
+   "fr": "Générez d abord le livrable."
+  },
+  "Généré par Sentinel AI.": {
+   "en": "",
+   "fr": "Généré par Sentinel AI."
+  },
+  "Géopolitique réglementaire": {
+   "en": "",
+   "fr": "Géopolitique réglementaire"
+  },
+  "Haut de page": {
+   "en": "",
+   "fr": "Haut de page"
+  },
+  "Haut de page (Alt+↑)": {
+   "en": "",
+   "fr": "Haut de page (Alt+↑)"
+  },
+  "Haut risque (Annexe III point #(b)). Documentation technique, supervision humaine obligatoire, information des salariés. Compatibilité RGPD Art. # à vérifier.": {
+   "en": "",
+   "fr": "Haut risque (Annexe III point 4(b)). Documentation technique, supervision humaine obligatoire, information des salariés. Compatibilité RGPD Art. 88 à vérifier."
+  },
+  "Haut risque (Annexe III point #(b-c)). Documentation technique, droit d'explication de la décision, supervision humaine. Art. # RGPD si décision automatisée.": {
+   "en": "",
+   "fr": "Haut risque (Annexe III point 5(b-c)). Documentation technique, droit d'explication de la décision, supervision humaine. Art. 22 RGPD si décision automatisée."
+  },
+  "Haut risque (Annexe III point #(d)). Documentation technique renforcée, traçabilité des décisions, supervision médicale humaine impérative.": {
+   "en": "",
+   "fr": "Haut risque (Annexe III point 5(d)). Documentation technique renforcée, traçabilité des décisions, supervision médicale humaine impérative."
+  },
+  "Haut risque (Annexe III point #). Information des personnes concernées obligatoire. Supervision humaine des décisions d'admission ou d'évaluation.": {
+   "en": "",
+   "fr": "Haut risque (Annexe III point 3). Information des personnes concernées obligatoire. Supervision humaine des décisions d'admission ou d'évaluation."
+  },
+  "Haut risque (Art. #§# + Annexe III). FRIA obligatoire pour les organismes publics (Art. #). Documentation technique et supervision humaine requises.": {
+   "en": "",
+   "fr": "Haut risque (Art. 6§2 + Annexe III). FRIA obligatoire pour les organismes publics (Art. 27). Documentation technique et supervision humaine requises."
+  },
+  "Haut risque Annexe III #(b-c). FRIA si organisme public ou parapublic.": {
+   "en": "",
+   "fr": "Haut risque Annexe III 5(b-c). FRIA si organisme public ou parapublic."
+  },
+  "Haut risque Annexe III #(d). Cumul possible avec réglementation dispositifs médicaux (MDR/IVDR).": {
+   "en": "",
+   "fr": "Haut risque Annexe III 5(d). Cumul possible avec réglementation dispositifs médicaux (MDR/IVDR)."
+  },
+  "Haut risque Annexe III point # si infrastructure critique. Documenter le périmètre NIS# simultanément.": {
+   "en": "",
+   "fr": "Haut risque Annexe III point 2 si infrastructure critique. Documenter le périmètre NIS2 simultanément."
+  },
+  "Haut risque Annexe III point #(b). FRIA recommandée même hors obligation légale.": {
+   "en": "",
+   "fr": "Haut risque Annexe III point 4(b). FRIA recommandée même hors obligation légale."
+  },
+  "Haut risque Annexe III point #. Documentation technique requise + information des apprenants.": {
+   "en": "",
+   "fr": "Haut risque Annexe III point 3. Documentation technique requise + information des apprenants."
+  },
+  "Haut risque par le point # d), et biométrie par le point # si elle identifie ou infère un état. Le cumul appelle une analyse d'impact, pas une case cochée.": {
+   "en": "",
+   "fr": "Haut risque par le point 3 d), et biométrie par le point 1 si elle identifie ou infère un état. Le cumul appelle une analyse d'impact, pas une case cochée."
+  },
+  "Haut risque systématique (Annexe III point #). Identification biométrique à distance en espace public : interdite sauf exceptions Art. #§#. Reconnaissance émotionnelle sur le lieu de travail : interdite (Art. #§#(f)).": {
+   "en": "",
+   "fr": "Haut risque systématique (Annexe III point 1). Identification biométrique à distance en espace public : interdite sauf exceptions Art. 5§2. Reconnaissance émotionnelle sur le lieu de travail : interdite (Art. 5§1(f))."
+  },
+  "Haut risque, et coût inconnu": {
+   "en": "",
+   "fr": "Haut risque, et coût inconnu"
+  },
+  "Hebergement et code source": {
+   "en": "",
+   "fr": "Hebergement et code source"
+  },
+  "Historique de toutes vos simulations et audits enregistrés, avec leur score et la date.": {
+   "en": "",
+   "fr": "Historique de toutes vos simulations et audits enregistrés, avec leur score et la date."
+  },
+  "Historique des calculs": {
+   "en": "",
+   "fr": "Historique des calculs"
+  },
+  "Historique des saisines, arbre de compétences du service.": {
+   "en": "",
+   "fr": "Historique des saisines, arbre de compétences du service."
+  },
+  "Historique factures/commandes, référentiel fournisseurs.": {
+   "en": "",
+   "fr": "Historique factures/commandes, référentiel fournisseurs."
+  },
+  "Historique flux, carnet de commandes, saisonnalité.": {
+   "en": "",
+   "fr": "Historique flux, carnet de commandes, saisonnalité."
+  },
+  "Homologation sectorielle des systemes critiques (EASA/UNECE)": {
+   "en": "",
+   "fr": "Homologation sectorielle des systemes critiques (EASA/UNECE)"
+  },
+  "Honnêteté de la mesure": {
+   "en": "",
+   "fr": "Honnêteté de la mesure"
+  },
+  "Hors de son périmètre": {
+   "en": "",
+   "fr": "Hors de son périmètre"
+  },
+  "Hub mondial de la cybersecurite et de l'IA defense. Exportation de technologies sensibles. Tension entre innovation rapide et encadrement ethique.": {
+   "en": "",
+   "fr": "Hub mondial de la cybersecurite et de l'IA defense. Exportation de technologies sensibles. Tension entre innovation rapide et encadrement ethique."
+  },
+  "Huit portes d’entrée ignorent totalement": {
+   "en": "",
+   "fr": "Huit portes d’entrée ignorent totalement"
+  },
+  "Huit portes ignorent totalement la taille, et deux mènent directement au statut d’entité essentielle.": {
+   "en": "",
+   "fr": "Huit portes ignorent totalement la taille, et deux mènent directement au statut d’entité essentielle."
+  },
+  "Hôpitaux, cliniques, laboratoires, éditeurs de dispositifs médicaux et de logiciels de santé.": {
+   "en": "",
+   "fr": "Hôpitaux, cliniques, laboratoires, éditeurs de dispositifs médicaux et de logiciels de santé."
+  },
+  "Hôtels, restauration commerciale et collective, agences de voyage, exploitants de sites touristiques.": {
+   "en": "",
+   "fr": "Hôtels, restauration commerciale et collective, agences de voyage, exploitants de sites touristiques."
+  },
+  "IA aide décision médicale": {
+   "en": "",
+   "fr": "IA aide décision médicale"
+  },
+  "IA cybersécurité automatisée": {
+   "en": "",
+   "fr": "IA cybersécurité automatisée"
+  },
+  "IA d'aide à la décision médicale": {
+   "en": "",
+   "fr": "IA d'aide à la décision médicale"
+  },
+  "IA dans l'éducation et la formation": {
+   "en": "",
+   "fr": "IA dans l'éducation et la formation"
+  },
+  "IA de cybersécurité automatisée": {
+   "en": "",
+   "fr": "IA de cybersécurité automatisée"
+  },
+  "IA générative": {
+   "en": "",
+   "fr": "IA générative"
+  },
+  "IA intégrée à des machines = haut risque sous Directive Machines. Évaluation de conformité avant mise sur le marché. Marquage CE.": {
+   "en": "",
+   "fr": "IA intégrée à des machines = haut risque sous Directive Machines. Évaluation de conformité avant mise sur le marché. Marquage CE."
+  },
+  "IA éducation / formation": {
+   "en": "",
+   "fr": "IA éducation / formation"
+  },
+  "ISO # est la SEULE des quatre références de cet espace qui délivre un certificat. RGPD, NIS # et CRA sont du droit : on s’y conforme, et personne ne remet d’attestation. Ce parcours répond à la seule question qui vous concerne avant d’engager un budget : ce certificat, à qui le montrerez-vous, et qu’est-ce qui peut vous empêcher de l’obtenir ?": {
+   "en": "",
+   "fr": "ISO 42001 est la SEULE des quatre références de cet espace qui délivre un certificat. RGPD, NIS 2 et CRA sont du droit : on s’y conforme, et personne ne remet d’attestation. Ce parcours répond à la seule question qui vous concerne avant d’engager un budget : ce certificat, à qui le montrerez-vous, et qu’est-ce qui peut vous empêcher de l’obtenir ?"
+  },
+  "ISO # — Nouvelle version publiée": {
+   "en": "",
+   "fr": "ISO 42001 — Nouvelle version publiée"
+  },
+  "ISO # — articles # à #": {
+   "en": "",
+   "fr": "ISO 42001 — articles 4 à 10"
+  },
+  "ISO/IEC # — Système de management de l'IA (SMIA)": {
+   "en": "",
+   "fr": "ISO/IEC 42001 — Système de management de l'IA (SMIA)"
+  },
+  "ISO/IEC # — analyse de risque": {
+   "en": "",
+   "fr": "ISO/IEC 27001 — analyse de risque"
+  },
+  "ISO/IEC # — articles # à #": {
+   "en": "",
+   "fr": "ISO/IEC 27001 — articles 4 à 10"
+  },
+  "ISO/IEC # — chemin de certification": {
+   "en": "",
+   "fr": "ISO/IEC 42001 — chemin de certification"
+  },
+  "ISO/IEC #:# (clause # Risques, clause # Evaluation des performances)": {
+   "en": "",
+   "fr": "ISO/IEC 42001:2023 (clause 6.1 Risques, clause 9.1 Evaluation des performances)"
+  },
+  "IT, Cybersécurité, DPO, Responsable IA": {
+   "en": "",
+   "fr": "IT, Cybersécurité, DPO, Responsable IA"
+  },
+  "Identifiant clair et unique — ex: \"Copilot RH\", \"Chatbot client v#\".": {
+   "en": "",
+   "fr": "Identifiant clair et unique — ex: \"Copilot RH\", \"Chatbot client v2\"."
+  },
+  "Identification automatique de clauses contractuelles non conformes.": {
+   "en": "",
+   "fr": "Identification automatique de clauses contractuelles non conformes."
+  },
+  "Identification automatique de depenses atypiques ou non conformes.": {
+   "en": "",
+   "fr": "Identification automatique de depenses atypiques ou non conformes."
+  },
+  "Identification automatisee d ecritures comptables a risque pour l audit.": {
+   "en": "",
+   "fr": "Identification automatisee d ecritures comptables a risque pour l audit."
+  },
+  "Identification automatisee de campagnes de spam vocal ou SMS.": {
+   "en": "",
+   "fr": "Identification automatisee de campagnes de spam vocal ou SMS."
+  },
+  "Identification automatisee de failles de securite dans le code.": {
+   "en": "",
+   "fr": "Identification automatisee de failles de securite dans le code."
+  },
+  "Identification automatisee de jurisprudence et precedents pertinents.": {
+   "en": "",
+   "fr": "Identification automatisee de jurisprudence et precedents pertinents."
+  },
+  "Identification automatisee de signaux de securite dans les rapports.": {
+   "en": "",
+   "fr": "Identification automatisee de signaux de securite dans les rapports."
+  },
+  "Identification automatisee de signaux faibles d intrusion ou de menace.": {
+   "en": "",
+   "fr": "Identification automatisee de signaux faibles d intrusion ou de menace."
+  },
+  "Identification biométrique à distance : annexe III, point #, et l'article # en interdit plusieurs usages. La commodité d'un enregistrement sans clé ne justifie pas ce régime.": {
+   "en": "",
+   "fr": "Identification biométrique à distance : annexe III, point 1, et l'article 5 en interdit plusieurs usages. La commodité d'un enregistrement sans clé ne justifie pas ce régime."
+  },
+  "Identification de candidats medicaments par modelisation moleculaire.": {
+   "en": "",
+   "fr": "Identification de candidats medicaments par modelisation moleculaire."
+  },
+  "Identification de declarations fiscales ou douanieres suspectes.": {
+   "en": "",
+   "fr": "Identification de declarations fiscales ou douanieres suspectes."
+  },
+  "Identification de factures atypiques avant envoi au client.": {
+   "en": "",
+   "fr": "Identification de factures atypiques avant envoi au client."
+  },
+  "Identification de profils de consommation anormaux signalant une fraude.": {
+   "en": "",
+   "fr": "Identification de profils de consommation anormaux signalant une fraude."
+  },
+  "Identification de schemas de facturation anormaux ou frauduleux.": {
+   "en": "",
+   "fr": "Identification de schemas de facturation anormaux ou frauduleux."
+  },
+  "Identification de schemas de fraude a l abonnement ou de SIM swap.": {
+   "en": "",
+   "fr": "Identification de schemas de fraude a l abonnement ou de SIM swap."
+  },
+  "Identification de transactions suspectes en temps reel.": {
+   "en": "",
+   "fr": "Identification de transactions suspectes en temps reel."
+  },
+  "Identification de zones necessitant un renforcement preventif, sous strict encadrement.": {
+   "en": "",
+   "fr": "Identification de zones necessitant un renforcement preventif, sous strict encadrement."
+  },
+  "Identification des abonnes a risque de desabonnement pour action de retention.": {
+   "en": "",
+   "fr": "Identification des abonnes a risque de desabonnement pour action de retention."
+  },
+  "Identification des changements de code susceptibles de provoquer des bugs.": {
+   "en": "",
+   "fr": "Identification des changements de code susceptibles de provoquer des bugs."
+  },
+  "Identification des comptes a risque de desabonnement (SaaS).": {
+   "en": "",
+   "fr": "Identification des comptes a risque de desabonnement (SaaS)."
+  },
+  "Identification des cyberattaques sur infrastructures critiques.": {
+   "en": "",
+   "fr": "Identification des cyberattaques sur infrastructures critiques."
+  },
+  "Identification des droits fondamentaux susceptibles d’etre affectes (Charte UE)": {
+   "en": "",
+   "fr": "Identification des droits fondamentaux susceptibles d’etre affectes (Charte UE)"
+  },
+  "Identification des groupes vulnerables (mineurs, personnes agees, handicapees)": {
+   "en": "",
+   "fr": "Identification des groupes vulnerables (mineurs, personnes agees, handicapees)"
+  },
+  "Identification des organismes notifies ayant intervenu (Art. #)": {
+   "en": "",
+   "fr": "Identification des organismes notifies ayant intervenu (Art. 43)"
+  },
+  "Identification des risques connus et raisonnablement previsibles (Art. #(#)(a))": {
+   "en": "",
+   "fr": "Identification des risques connus et raisonnablement previsibles (Art. 9(2)(a))"
+  },
+  "Identification des zones de risque juridique a partir de la documentation interne.": {
+   "en": "",
+   "fr": "Identification des zones de risque juridique a partir de la documentation interne."
+  },
+  "Identification et évaluation des risques IA": {
+   "en": "",
+   "fr": "Identification et évaluation des risques IA"
+  },
+  "Identification proactive des incidents techniques avant impact utilisateur.": {
+   "en": "",
+   "fr": "Identification proactive des incidents techniques avant impact utilisateur."
+  },
+  "Identification systématique des risques et opportunités liés à l'IA. Pour les systèmes à fort impact potentiel, une AIIA (AI Impact Assessment) documentée est requise, couvrant les impacts sociétaux, éthiques et juridiques.": {
+   "en": "",
+   "fr": "Identification systématique des risques et opportunités liés à l'IA. Pour les systèmes à fort impact potentiel, une AIIA (AI Impact Assessment) documentée est requise, couvrant les impacts sociétaux, éthiques et juridiques."
+  },
+  "Identifie les angles morts organisationnels avant même de plonger dans le détail réglementaire — où sont les vraies failles ?": {
+   "en": "",
+   "fr": "Identifie les angles morts organisationnels avant même de plonger dans le détail réglementaire — où sont les vraies failles ?"
+  },
+  "Identifie les manques de compétences avant qu’ils ne deviennent un goulot d’étranglement de croissance.": {
+   "en": "",
+   "fr": "Identifie les manques de compétences avant qu’ils ne deviennent un goulot d’étranglement de croissance."
+  },
+  "Identifier et documenter la base légale pour chaque phase (entraînement, inférence)": {
+   "en": "",
+   "fr": "Identifier et documenter la base légale pour chaque phase (entraînement, inférence)"
+  },
+  "Identifier l'autorité nationale de surveillance compétente dans chaque État membre de déploiement": {
+   "en": "",
+   "fr": "Identifier l'autorité nationale de surveillance compétente dans chaque État membre de déploiement"
+  },
+  "Identifier la base légale appropriée pour le traitement de données dans un système IA": {
+   "en": "",
+   "fr": "Identifier la base légale appropriée pour le traitement de données dans un système IA"
+  },
+  "Identifier le système": {
+   "en": "",
+   "fr": "Identifier le système"
+  },
+  "Identifier les obligations NIS# pour les entités essentielles utilisant de l IA": {
+   "en": "",
+   "fr": "Identifier les obligations NIS2 pour les entités essentielles utilisant de l IA"
+  },
+  "Identifier les obligations applicables selon le rôle (fournisseur, déployeur, importateur)": {
+   "en": "",
+   "fr": "Identifier les obligations applicables selon le rôle (fournisseur, déployeur, importateur)"
+  },
+  "Identifier les parties intéressées (clients, régulateurs, employés) et leurs attentes": {
+   "en": "",
+   "fr": "Identifier les parties intéressées (clients, régulateurs, employés) et leurs attentes"
+  },
+  "Identifier si un changement de finalité fait basculer le système vers le haut risque": {
+   "en": "",
+   "fr": "Identifier si un changement de finalité fait basculer le système vers le haut risque"
+  },
+  "Identifier tout système IA prenant des décisions à effet juridique ou significatif (crédit, recrutement, assurance, fraude, notation client, accès à un service)": {
+   "en": "",
+   "fr": "Identifier tout système IA prenant des décisions à effet juridique ou significatif (crédit, recrutement, assurance, fraude, notation client, accès à un service)"
+  },
+  "Identifier, qualifier et chiffrer": {
+   "en": "",
+   "fr": "Identifier, qualifier et chiffrer"
+  },
+  "Identifiez les articles qui interagissent explicitement avec le RGPD (transparence, droits des personnes).": {
+   "en": "",
+   "fr": "Identifiez les articles qui interagissent explicitement avec le RGPD (transparence, droits des personnes)."
+  },
+  "Identifiée essentielle ou importante au titre": {
+   "en": "",
+   "fr": "Identifiée essentielle ou importante au titre"
+  },
+  "Identite et coordonnees du fournisseur documentees (Art. #(#)(a))": {
+   "en": "",
+   "fr": "Identite et coordonnees du fournisseur documentees (Art. 13(3)(a))"
+  },
+  "Il DÉCOULE de la catégorisation du système : l’impact d’une perte de confidentialité, d’intégrité ou de disponibilité. L’annoncer « High » sans avoir conduit l’appréciation du risque (famille RA), c’est donner un résultat sans son calcul — le module le signale comme un verrou, pas comme une réserve.": {
+   "en": "",
+   "fr": "Il DÉCOULE de la catégorisation du système : l’impact d’une perte de confidentialité, d’intégrité ou de disponibilité. L’annoncer « High » sans avoir conduit l’appréciation du risque (famille RA), c’est donner un résultat sans son calcul — le module le signale comme un verrou, pas comme une réserve."
+  },
+  "Il est bâti sur des quantités et des prix unitaires déclarés. Il sert à décider d’engager, pas à contracter.": {
+   "en": "",
+   "fr": "Il est bâti sur des quantités et des prix unitaires déclarés. Il sert à décider d’engager, pas à contracter."
+  },
+  "Il est daté. Gardez-le, et datez ce que vous présentez : c’est la comparaison qui prouve le travail, pas le dernier chiffre seul.": {
+   "en": "",
+   "fr": "Il est daté. Gardez-le, et datez ce que vous présentez : c’est la comparaison qui prouve le travail, pas le dernier chiffre seul."
+  },
+  "Il est le seul à donner une grammaire de RISQUE là où l’IA Act donne une grammaire d’OBLIGATION.": {
+   "en": "",
+   "fr": "Il est le seul à donner une grammaire de RISQUE là où l’IA Act donne une grammaire d’OBLIGATION."
+  },
+  "Il faut alors que « code de sécurité » soit défini quelque part, fichier par fichier ou module par module. Une frontière que chacun interprète n’est pas une frontière : elle se déplace au premier délai serré.": {
+   "en": "",
+   "fr": "Il faut alors que « code de sécurité » soit défini quelque part, fichier par fichier ou module par module. Une frontière que chacun interprète n’est pas une frontière : elle se déplace au premier délai serré."
+  },
+  "Il le devient le jour où quelqu’un le signe et le date. Une politique qu’aucune personne": {
+   "en": "",
+   "fr": "Il le devient le jour où quelqu’un le signe et le date. Une politique qu’aucune personne"
+  },
+  "Il ne commence ni par une accolade ni par un crochet.": {
+   "en": "",
+   "fr": "Il ne commence ni par une accolade ni par un crochet."
+  },
+  "Il ne dit pas « nous allons déployer un outil » : il dit ce que chacun ne fera plus, et ce qu’il fera à la place.": {
+   "en": "",
+   "fr": "Il ne dit pas « nous allons déployer un outil » : il dit ce que chacun ne fera plus, et ce qu’il fera à la place."
+  },
+  "Il se déduit de vos données. On ne peut donc pas le faire progresser en cochant : il faut compléter le Registre ou l’Audit.": {
+   "en": "",
+   "fr": "Il se déduit de vos données. On ne peut donc pas le faire progresser en cochant : il faut compléter le Registre ou l’Audit."
+  },
+  "Il se réutilise, il ne se substitue pas. L’AIDF de l’IA Act suit une liste de points imposée par le règlement.": {
+   "en": "",
+   "fr": "Il se réutilise, il ne se substitue pas. L’AIDF de l’IA Act suit une liste de points imposée par le règlement."
+  },
+  "Il suffit de": {
+   "en": "",
+   "fr": "Il suffit de"
+  },
+  "Il vient de la part des champs réellement déclarés et du nombre d’indices retrouvés. La confiance annoncée par le moteur est conservée mais n’entre pas dans le calcul : un modèle sûr de lui se trompe comme un modèle hésitant.": {
+   "en": "",
+   "fr": "Il vient de la part des champs réellement déclarés et du nombre d’indices retrouvés. La confiance annoncée par le moteur est conservée mais n’entre pas dans le calcul : un modèle sûr de lui se trompe comme un modèle hésitant."
+  },
+  "Ils consomment, et personne n’a encore dit combien. C’est le seul lot sur lequel il y a du travail.": {
+   "en": "",
+   "fr": "Ils consomment, et personne n’a encore dit combien. C’est le seul lot sur lequel il y a du travail."
+  },
+  "Ils sont calculés À LA SUITE, sur l'état laissé par les actions précédentes, et se cumulent donc exactement jusqu'au plafond. Un gain nul se lit de deux façons : « sens », quand l'action fixe ce que les points veulent dire sans en ajouter ; « confisqué par le verrou », quand le travail serait réel mais que le plafond l'interdit.": {
+   "en": "",
+   "fr": "Ils sont calculés À LA SUITE, sur l'état laissé par les actions précédentes, et se cumulent donc exactement jusqu'au plafond. Un gain nul se lit de deux façons : « sens », quand l'action fixe ce que les points veulent dire sans en ajouter ; « confisqué par le verrou », quand le travail serait réel mais que le plafond l'interdit."
+  },
+  "Immunités et privilèges": {
+   "en": "",
+   "fr": "Immunités et privilèges"
+  },
+  "Impact modéré": {
+   "en": "",
+   "fr": "Impact modéré"
+  },
+  "Impact métier attendu : ampleur des gains (productivité, qualité, revenus, réduction de risque). # = faible, # = fort.": {
+   "en": "",
+   "fr": "Impact métier attendu : ampleur des gains (productivité, qualité, revenus, réduction de risque). 1 = faible, 5 = fort."
+  },
+  "Impact sur accords bilatéraux UE-US IA": {
+   "en": "",
+   "fr": "Impact sur accords bilatéraux UE-US IA"
+  },
+  "Impact élevé": {
+   "en": "",
+   "fr": "Impact élevé"
+  },
+  "Implantation d’un centre de données": {
+   "en": "",
+   "fr": "Implantation d’un centre de données"
+  },
+  "Impliquez systématiquement un représentant métier — un risk manager seul manque le contexte d’usage réel.": {
+   "en": "",
+   "fr": "Impliquez systématiquement un représentant métier — un risk manager seul manque le contexte d’usage réel."
+  },
+  "Implémenter des protections contre les attaques adversariales": {
+   "en": "",
+   "fr": "Implémenter des protections contre les attaques adversariales"
+  },
+  "Implémenter la journalisation automatique conforme Art. #": {
+   "en": "",
+   "fr": "Implémenter la journalisation automatique conforme Art. 12"
+  },
+  "Implémenter le watermarking machine-readable pour les contenus synthétiques": {
+   "en": "",
+   "fr": "Implémenter le watermarking machine-readable pour les contenus synthétiques"
+  },
+  "Implémenter une politique de droits d'auteur avec mécanisme d'opt-out": {
+   "en": "",
+   "fr": "Implémenter une politique de droits d'auteur avec mécanisme d'opt-out"
+  },
+  "Importateur (depuis un pays tiers)": {
+   "en": "",
+   "fr": "Importateur (depuis un pays tiers)"
+  },
+  "Importateur — je mets sur le marché un produit venu d’ailleurs": {
+   "en": "",
+   "fr": "Importateur — je mets sur le marché un produit venu d’ailleurs"
+  },
+  "Importer un document →": {
+   "en": "",
+   "fr": "Importer un document →"
+  },
+  "Imposer votre conception plutôt que la laisser déduire": {
+   "en": "",
+   "fr": "Imposer votre conception plutôt que la laisser déduire"
+  },
+  "Impossibilité de modifier la décision": {
+   "en": "",
+   "fr": "Impossibilité de modifier la décision"
+  },
+  "Impossible de charger le statut email.": {
+   "en": "",
+   "fr": "Impossible de charger le statut email."
+  },
+  "Imprevus, depassements, ajustements de perimetre": {
+   "en": "",
+   "fr": "Imprevus, depassements, ajustements de perimetre"
+  },
+  "Inclure les incidents de sécurité touchant des systèmes IA dans le dispositif de notification existant": {
+   "en": "",
+   "fr": "Inclure les incidents de sécurité touchant des systèmes IA dans le dispositif de notification existant"
+  },
+  "Inclure les métriques de performance vérifiées": {
+   "en": "",
+   "fr": "Inclure les métriques de performance vérifiées"
+  },
+  "Inclure les systèmes IA critiques dans le périmètre de classification des incidents TIC": {
+   "en": "",
+   "fr": "Inclure les systèmes IA critiques dans le périmètre de classification des incidents TIC"
+  },
+  "Indexation partielle — le document reste utilisable, réessayez plus tard pour terminer.": {
+   "en": "",
+   "fr": "Indexation partielle — le document reste utilisable, réessayez plus tard pour terminer."
+  }
+ }
+}

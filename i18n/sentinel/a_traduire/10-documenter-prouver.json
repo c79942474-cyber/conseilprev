@@ -1,0 +1,1068 @@
+{
+ "_lot": "10-documenter-prouver",
+ "_mots": 2401,
+ "_pages": [
+  "evals",
+  "historique",
+  "rag",
+  "templates"
+ ],
+ "_rubrique": "DOCUMENTER & PROUVER",
+ "bloc": {
+  "Base de connaissance": {
+   "en": "",
+   "fr": "Base de connaissance",
+   "html": "Base de <em>connaissance</em>"
+  },
+  "Documentation & modèles": {
+   "en": "",
+   "fr": "Documentation & modèles",
+   "html": "Documentation &amp; <em>modèles</em>"
+  },
+  "Historique des calculs": {
+   "en": "",
+   "fr": "Historique des calculs",
+   "html": "Historique des <em>calculs</em>"
+  },
+  "Pour charger beaucoup de documents sans passer par une sauvegarde. Choisissez un dossier — ses sous-dossiers sont parcourus — ou une sélection de fichiers. Les formats non reconnus et les fichiers trop lourds sont écartés et listés, ils n’interrompent pas le reste. Le nom du sous-dossier devient le thème du document : un dossier EDF/ ou IEC #/ reproduit votre classement sans que vous ayez à le ressaisir.": {
+   "en": "",
+   "fr": "Pour charger beaucoup de documents sans passer par une sauvegarde. Choisissez un dossier — ses sous-dossiers sont parcourus — ou une sélection de fichiers. Les formats non reconnus et les fichiers trop lourds sont écartés et listés, ils n’interrompent pas le reste. Le nom du sous-dossier devient le thème du document : un dossier EDF/ ou IEC 62443/ reproduit votre classement sans que vous ayez à le ressaisir.",
+   "html": "Pour charger beaucoup de documents sans passer par une sauvegarde. Choisissez un <b>dossier</b> — ses sous-dossiers sont parcourus — ou une <b>sélection de fichiers</b>. Les formats non reconnus et les fichiers trop lourds sont <b>écartés et listés</b>, ils n’interrompent pas le reste. <br><b>Le nom du sous-dossier devient le thème</b> du document : un dossier <code>EDF/</code> ou <code>IEC 62443/</code> reproduit votre classement sans que vous ayez à le ressaisir."
+  },
+  "Sur conseilprevcyber, ouvrez /admin/base-connaissance et cliquez 💾 Sauvegarder : un fichier conseilprevcyber-rag-backup-#-#-#.json se télécharge — la date change chaque jour, et le nom n’a aucune importance ici : seul le contenu du fichier est examiné. Attendez la fin du téléchargement avant de le déposer — un fichier encore en cours d’écriture est incomplet, et c’est la cause n°# des transferts qui échouent. Tous les documents sont repris avec leur thème d’origine — domaines normatifs, familles techniques et noms d’entreprises — et rattachés en plus aux pages Sentinel correspondantes. Le transfert est rejouable : un document déjà présent est sauté, jamais dupliqué. Vous pouvez l’interrompre et le reprendre.": {
+   "en": "",
+   "fr": "Sur conseilprevcyber, ouvrez /admin/base-connaissance et cliquez 💾 Sauvegarder : un fichier conseilprevcyber-rag-backup-2026-07-31.json se télécharge — la date change chaque jour, et le nom n’a aucune importance ici : seul le contenu du fichier est examiné. Attendez la fin du téléchargement avant de le déposer — un fichier encore en cours d’écriture est incomplet, et c’est la cause n°1 des transferts qui échouent. Tous les documents sont repris avec leur thème d’origine — domaines normatifs, familles techniques et noms d’entreprises — et rattachés en plus aux pages Sentinel correspondantes. Le transfert est rejouable : un document déjà présent est sauté, jamais dupliqué. Vous pouvez l’interrompre et le reprendre.",
+   "html": "Sur <b>conseilprevcyber</b>, ouvrez <b>/admin/base-connaissance</b> et cliquez <b>💾 Sauvegarder</b> : un fichier <code>conseilprevcyber-rag-backup-2026-07-31.json</code> se télécharge — la date change chaque jour, et <b>le nom n’a aucune importance ici</b> : seul le contenu du fichier est examiné. <b>Attendez la fin du téléchargement</b> avant de le déposer — un fichier encore en cours d’écriture est incomplet, et c’est la cause n°1 des transferts qui échouent. Tous les documents sont repris <b>avec leur thème d’origine</b> — domaines normatifs, familles techniques et noms d’entreprises — et rattachés en plus aux pages Sentinel correspondantes. <br><b>Le transfert est rejouable</b> : un document déjà présent est sauté, jamais dupliqué. Vous pouvez l’interrompre et le reprendre."
+  }
+ },
+ "texte": {
+  "# documents": {
+   "en": "",
+   "fr": "63 documents"
+  },
+  "# éléments obligatoires du QMS, liens ISO #/ISO #, rôle du responsable désigné, fréquence des revues.": {
+   "en": "",
+   "fr": "12 éléments obligatoires du QMS, liens ISO 42001/ISO 9001, rôle du responsable désigné, fréquence des revues."
+  },
+  "Analyse des # droits fondamentaux pour chaque système à haut risque enregistré, avec mesures d’atténuation.": {
+   "en": "",
+   "fr": "Analyse des 8 droits fondamentaux pour chaque système à haut risque enregistré, avec mesures d’atténuation."
+  },
+  "Analyse d’Impact Droits Fondamentaux — FRIA (Art. #)": {
+   "en": "",
+   "fr": "Analyse d’Impact Droits Fondamentaux — FRIA (Art. 27)"
+  },
+  "Analyses de la plateforme": {
+   "en": "",
+   "fr": "Analyses de la plateforme"
+  },
+  "Arbre décisionnel en # étapes pour déterminer la catégorie de risque applicable, avec exemples par secteur.": {
+   "en": "",
+   "fr": "Arbre décisionnel en 7 étapes pour déterminer la catégorie de risque applicable, avec exemples par secteur."
+  },
+  "Architecture de logging conforme — événements à capturer, format, stockage sécurisé, intégration SIEM, accès audits.": {
+   "en": "",
+   "fr": "Architecture de logging conforme — événements à capturer, format, stockage sécurisé, intégration SIEM, accès audits."
+  },
+  "Art. # — Classification haut risque : systèmes Annexe III soumis aux obligations Art. #–# avant mise sur le marché.": {
+   "en": "",
+   "fr": "Art. 6 — Classification haut risque : systèmes Annexe III soumis aux obligations Art. 9–15 avant mise sur le marché."
+  },
+  "Art. # — Documentation technique : dossier complet (Annexe IV) conservé # ans — obligatoire avant mise sur le marché pour tout système haut risque.": {
+   "en": "",
+   "fr": "Art. 11 — Documentation technique : dossier complet (Annexe IV) conservé 10 ans — obligatoire avant mise sur le marché pour tout système haut risque."
+  },
+  "Art. # — Données d’entraînement : gouvernance, qualité, absence de biais, conformité RGPD et documentation des jeux de données.": {
+   "en": "",
+   "fr": "Art. 10 — Données d’entraînement : gouvernance, qualité, absence de biais, conformité RGPD et documentation des jeux de données."
+  },
+  "Art. # — Déclaration UE de conformité : document signé par le fournisseur attestant la conformité à l’ensemble des exigences applicables.": {
+   "en": "",
+   "fr": "Art. 47 — Déclaration UE de conformité : document signé par le fournisseur attestant la conformité à l’ensemble des exigences applicables."
+  },
+  "Art. # — Exactitude, robustesse, cybersécurité : niveaux appropriés attestés par des métriques mesurées, résistance aux attaques adversariales.": {
+   "en": "",
+   "fr": "Art. 15 — Exactitude, robustesse, cybersécurité : niveaux appropriés attestés par des métriques mesurées, résistance aux attaques adversariales."
+  },
+  "Art. # — FRIA : analyse d’impact sur les droits fondamentaux, obligatoire pour déployeurs secteur public et certains secteurs privés critiques.": {
+   "en": "",
+   "fr": "Art. 27 — FRIA : analyse d’impact sur les droits fondamentaux, obligatoire pour déployeurs secteur public et certains secteurs privés critiques."
+  },
+  "Art. # — Gestion des risques : identification, analyse, estimation et contrôle des risques tout au long du cycle de vie.": {
+   "en": "",
+   "fr": "Art. 9 — Gestion des risques : identification, analyse, estimation et contrôle des risques tout au long du cycle de vie."
+  },
+  "Art. # — Journalisation : traçabilité automatique de chaque utilisation, conservation des logs, accès autorités compétentes.": {
+   "en": "",
+   "fr": "Art. 12 — Journalisation : traçabilité automatique de chaque utilisation, conservation des logs, accès autorités compétentes."
+  },
+  "Art. # — Pratiques interdites : manipulation subliminale, exploitation des vulnérabilités, notation sociale, biométrie temps réel espaces publics.": {
+   "en": "",
+   "fr": "Art. 5 — Pratiques interdites : manipulation subliminale, exploitation des vulnérabilités, notation sociale, biométrie temps réel espaces publics."
+  },
+  "Art. # — Surveillance humaine : mécanismes permettant la compréhension, la correction et l’arrêt d’urgence par des personnes physiques qualifiées.": {
+   "en": "",
+   "fr": "Art. 14 — Surveillance humaine : mécanismes permettant la compréhension, la correction et l’arrêt d’urgence par des personnes physiques qualifiées."
+  },
+  "Art. # — Système QMS : management de la qualité couvrant conception, tests, gestion des risques, non-conformités et cybersécurité.": {
+   "en": "",
+   "fr": "Art. 17 — Système QMS : management de la qualité couvrant conception, tests, gestion des risques, non-conformités et cybersécurité."
+  },
+  "Art. # — Systèmes GPAI : modèles d’IA à usage général soumis à obligations de transparence et, pour les modèles à risque systémique, d’évaluation adversariale.": {
+   "en": "",
+   "fr": "Art. 51 — Systèmes GPAI : modèles d’IA à usage général soumis à obligations de transparence et, pour les modèles à risque systémique, d’évaluation adversariale."
+  },
+  "Art. # — Transparence : notice d’utilisation, capacités/limites, métriques de précision, risques résiduels communiqués au déployeur.": {
+   "en": "",
+   "fr": "Art. 13 — Transparence : notice d’utilisation, capacités/limites, métriques de précision, risques résiduels communiqués au déployeur."
+  },
+  "Art. # — Transparence risque limité : obligation d’informer les utilisateurs qu’ils interagissent avec un système d’IA (chatbots, deepfakes).": {
+   "en": "",
+   "fr": "Art. 50 — Transparence risque limité : obligation d’informer les utilisateurs qu’ils interagissent avec un système d’IA (chatbots, deepfakes)."
+  },
+  "Aucun calcul enregistré pour le moment. Les calculs effectués sur le Simulateur, le Calculateur de sanctions, la Tarification par résultats, l Audit de maturité et FRIA s enregistrent automatiquement ici.": {
+   "en": "",
+   "fr": "Aucun calcul enregistré pour le moment. Les calculs effectués sur le Simulateur, le Calculateur de sanctions, la Tarification par résultats, l Audit de maturité et FRIA s enregistrent automatiquement ici."
+  },
+  "Aucun document dans la base de connaissance. Importez un fichier ci-dessus pour commencer.": {
+   "en": "",
+   "fr": "Aucun document dans la base de connaissance. Importez un fichier ci-dessus pour commencer."
+  },
+  "Aucune evaluation enregistree pour le moment.": {
+   "en": "",
+   "fr": "Aucune evaluation enregistree pour le moment."
+  },
+  "Audit périodique de la conformité des mentions IA dans toutes les interfaces — checklist, responsable, fréquence.": {
+   "en": "",
+   "fr": "Audit périodique de la conformité des mentions IA dans toutes les interfaces — checklist, responsable, fréquence."
+  },
+  "Base documentaire": {
+   "en": "",
+   "fr": "Base documentaire"
+  },
+  "Bilan gouvernance data — sources, qualité, biais détectés, mesures appliquées, conformité Art. # et RGPD.": {
+   "en": "",
+   "fr": "Bilan gouvernance data — sources, qualité, biais détectés, mesures appliquées, conformité Art. 10 et RGPD."
+  },
+  "Charger": {
+   "en": "",
+   "fr": "Charger"
+  },
+  "Checklist auto-évaluation — Pratiques interdites (Art. #)": {
+   "en": "",
+   "fr": "Checklist auto-évaluation — Pratiques interdites (Art. 5)"
+  },
+  "Choisir des fichiers…": {
+   "en": "",
+   "fr": "Choisir des fichiers…"
+  },
+  "Choisir la sauvegarde…": {
+   "en": "",
+   "fr": "Choisir la sauvegarde…"
+  },
+  "Choisir un dossier…": {
+   "en": "",
+   "fr": "Choisir un dossier…"
+  },
+  "Cliquez pour selectionner un fichier (PDF, Word, Excel, texte, Markdown, CSV, JSON, YAML, journal)": {
+   "en": "",
+   "fr": "Cliquez pour selectionner un fichier (PDF, Word, Excel, texte, Markdown, CSV, JSON, YAML, journal)"
+  },
+  "Comment concevoir les interfaces de contrôle, former les superviseurs et documenter le bouton d’arrêt d’urgence.": {
+   "en": "",
+   "fr": "Comment concevoir les interfaces de contrôle, former les superviseurs et documenter le bouton d’arrêt d’urgence."
+  },
+  "Completez une": {
+   "en": "",
+   "fr": "Completez une"
+  },
+  "Contenu obligatoire Art. #(#), moment de signature, normes harmonisables, conservation, mise à disposition autorités.": {
+   "en": "",
+   "fr": "Contenu obligatoire Art. 47(2), moment de signature, normes harmonisables, conservation, mise à disposition autorités."
+  },
+  "Contenu obligatoire de la notice d’utilisation, obligations envers les déployeurs et les utilisateurs finaux.": {
+   "en": "",
+   "fr": "Contenu obligatoire de la notice d’utilisation, obligations envers les déployeurs et les utilisateurs finaux."
+  },
+  "Contenu obligatoire du dossier (# rubriques Annexe IV), responsabilités fournisseur, conservation # ans, lien Art. #.": {
+   "en": "",
+   "fr": "Contenu obligatoire du dossier (9 rubriques Annexe IV), responsabilités fournisseur, conservation 10 ans, lien Art. 18."
+  },
+  "Critères de classification, liste Annexe III, procédure d’auto-évaluation et obligations déclenchées.": {
+   "en": "",
+   "fr": "Critères de classification, liste Annexe III, procédure d’auto-évaluation et obligations déclenchées."
+  },
+  "Documents vierges à compléter — utilisables directement pour votre démarche de conformité AI Act.": {
+   "en": "",
+   "fr": "Documents vierges à compléter — utilisables directement pour votre démarche de conformité AI Act."
+  },
+  "Dossier technique modèles à usage général — paramètres, capacités, données, politique droit d’auteur, évaluation systémique si >#²⁵ FLOPS.": {
+   "en": "",
+   "fr": "Dossier technique modèles à usage général — paramètres, capacités, données, politique droit d’auteur, évaluation systémique si >10²⁵ FLOPS."
+  },
+  "Déclaration UE de Conformité (Art. #)": {
+   "en": "",
+   "fr": "Déclaration UE de Conformité (Art. 47)"
+  },
+  "Déposer un dossier entier": {
+   "en": "",
+   "fr": "Déposer un dossier entier"
+  },
+  "Effacer l'historique": {
+   "en": "",
+   "fr": "Effacer l'historique"
+  },
+  "Espace · Automatisation": {
+   "en": "",
+   "fr": "Espace · Automatisation"
+  },
+  "Exigences de gouvernance des données, détection des biais, conformité RGPD, documentation obligatoire.": {
+   "en": "",
+   "fr": "Exigences de gouvernance des données, détection des biais, conformité RGPD, documentation obligatoire."
+  },
+  "Explorer": {
+   "en": "",
+   "fr": "Explorer"
+  },
+  "Explorer la connaissance Sentinel": {
+   "en": "",
+   "fr": "Explorer la connaissance Sentinel"
+  },
+  "Export PDF de votre audit EU AI Act avec statut réel de chaque contrôle, score global et plan d’action priorisé.": {
+   "en": "",
+   "fr": "Export PDF de votre audit EU AI Act avec statut réel de chaque contrôle, score global et plan d’action priorisé."
+  },
+  "Export PDF du registre de vos systèmes IA avec classification, statut de conformité, responsable et historique.": {
+   "en": "",
+   "fr": "Export PDF du registre de vos systèmes IA avec classification, statut de conformité, responsable et historique."
+  },
+  "Export PDF/Word de votre matrice RACI actuelle avec rôles, responsabilités et interfaces de gouvernance IA.": {
+   "en": "",
+   "fr": "Export PDF/Word de votre matrice RACI actuelle avec rôles, responsabilités et interfaces de gouvernance IA."
+  },
+  "Export structuré du journal d’utilisation — horodatage, entrées, décisions, anomalies détectées par système.": {
+   "en": "",
+   "fr": "Export structuré du journal d’utilisation — horodatage, entrées, décisions, anomalies détectées par système."
+  },
+  "FRIA": {
+   "en": "",
+   "fr": "FRIA"
+  },
+  "Fiche Technique du Système d’IA (Art. #)": {
+   "en": "",
+   "fr": "Fiche Technique du Système d’IA (Art. 11)"
+  },
+  "Fiche synthétique — Art. # : Classification haut risque": {
+   "en": "",
+   "fr": "Fiche synthétique — Art. 6 : Classification haut risque"
+  },
+  "Fiche synthétique — Art. # : Documentation technique (Annexe IV)": {
+   "en": "",
+   "fr": "Fiche synthétique — Art. 11 : Documentation technique (Annexe IV)"
+  },
+  "Fiche synthétique — Art. # : Données d’entraînement": {
+   "en": "",
+   "fr": "Fiche synthétique — Art. 10 : Données d’entraînement"
+  },
+  "Fiche synthétique — Art. # : Déclaration UE de conformité": {
+   "en": "",
+   "fr": "Fiche synthétique — Art. 47 : Déclaration UE de conformité"
+  },
+  "Fiche synthétique — Art. # : Exactitude, robustesse, cybersécurité": {
+   "en": "",
+   "fr": "Fiche synthétique — Art. 15 : Exactitude, robustesse, cybersécurité"
+  },
+  "Fiche synthétique — Art. # : FRIA": {
+   "en": "",
+   "fr": "Fiche synthétique — Art. 27 : FRIA"
+  },
+  "Fiche synthétique — Art. # : Gestion des risques": {
+   "en": "",
+   "fr": "Fiche synthétique — Art. 9 : Gestion des risques"
+  },
+  "Fiche synthétique — Art. # : Journalisation automatique": {
+   "en": "",
+   "fr": "Fiche synthétique — Art. 12 : Journalisation automatique"
+  },
+  "Fiche synthétique — Art. # : Modèles GPAI": {
+   "en": "",
+   "fr": "Fiche synthétique — Art. 51 : Modèles GPAI"
+  },
+  "Fiche synthétique — Art. # : Pratiques interdites": {
+   "en": "",
+   "fr": "Fiche synthétique — Art. 5 : Pratiques interdites"
+  },
+  "Fiche synthétique — Art. # : Surveillance humaine": {
+   "en": "",
+   "fr": "Fiche synthétique — Art. 14 : Surveillance humaine"
+  },
+  "Fiche synthétique — Art. # : Système de management qualité": {
+   "en": "",
+   "fr": "Fiche synthétique — Art. 17 : Système de management qualité"
+  },
+  "Fiche synthétique — Art. # : Transparence": {
+   "en": "",
+   "fr": "Fiche synthétique — Art. 13 : Transparence"
+  },
+  "Fiche synthétique — Art. # : Transparence risque limité": {
+   "en": "",
+   "fr": "Fiche synthétique — Art. 50 : Transparence risque limité"
+  },
+  "Fiche synthétique — Calendrier des échéances AI Act": {
+   "en": "",
+   "fr": "Fiche synthétique — Calendrier des échéances AI Act"
+  },
+  "Fiches méthodologiques étape par étape pour implémenter les obligations AI Act.": {
+   "en": "",
+   "fr": "Fiches méthodologiques étape par étape pour implémenter les obligations AI Act."
+  },
+  "Filtrer les documents par page enrichie": {
+   "en": "",
+   "fr": "Filtrer les documents par page enrichie"
+  },
+  "Filtrer l’historique par outil d’origine": {
+   "en": "",
+   "fr": "Filtrer l’historique par outil d’origine"
+  },
+  "Filtrer par": {
+   "en": "",
+   "fr": "Filtrer par"
+  },
+  "Glissez-déposez un fichier ici, ou cliquez pour parcourir": {
+   "en": "",
+   "fr": "Glissez-déposez un fichier ici, ou cliquez pour parcourir"
+  },
+  "Guide — Audit de conformité AI Act (# points)": {
+   "en": "",
+   "fr": "Guide — Audit de conformité AI Act (34 points)"
+  },
+  "Guide — Classifier votre système IA selon l’AI Act": {
+   "en": "",
+   "fr": "Guide — Classifier votre système IA selon l’AI Act"
+  },
+  "Guide — Conduire une FRIA (Art. #)": {
+   "en": "",
+   "fr": "Guide — Conduire une FRIA (Art. 27)"
+  },
+  "Guide — Constituer la documentation technique (Art. #)": {
+   "en": "",
+   "fr": "Guide — Constituer la documentation technique (Art. 11)"
+  },
+  "Guide — Gouvernance des données d’entraînement (Art. #)": {
+   "en": "",
+   "fr": "Guide — Gouvernance des données d’entraînement (Art. 10)"
+  },
+  "Guide — Implémenter la journalisation IA (Art. #)": {
+   "en": "",
+   "fr": "Guide — Implémenter la journalisation IA (Art. 12)"
+  },
+  "Guide — Obligations GPAI et modèles systémiques (Art. #)": {
+   "en": "",
+   "fr": "Guide — Obligations GPAI et modèles systémiques (Art. 51)"
+  },
+  "Guide — Obligations de transparence Art. #": {
+   "en": "",
+   "fr": "Guide — Obligations de transparence Art. 50"
+  },
+  "Guide — Surveillance humaine (Art. #)": {
+   "en": "",
+   "fr": "Guide — Surveillance humaine (Art. 14)"
+  },
+  "Guide — Établir la déclaration UE de conformité (Art. #)": {
+   "en": "",
+   "fr": "Guide — Établir la déclaration UE de conformité (Art. 47)"
+  },
+  "Guides, fiches synthétiques, templates et documents de conformité — classés par catégorie et liés aux articles applicables du Règl. (UE) #/#.": {
+   "en": "",
+   "fr": "Guides, fiches synthétiques, templates et documents de conformité — classés par catégorie et liés aux articles applicables du Règl. (UE) 2024/1689."
+  },
+  "Historique des analyses": {
+   "en": "",
+   "fr": "Historique des analyses"
+  },
+  "Historique des évaluations Art. # par système — décision, justification, visa juridique, date de révision.": {
+   "en": "",
+   "fr": "Historique des évaluations Art. 5 par système — décision, justification, visa juridique, date de révision."
+  },
+  "Import du fichier…": {
+   "en": "",
+   "fr": "Import du fichier…"
+  },
+  "Importer un document": {
+   "en": "",
+   "fr": "Importer un document"
+  },
+  "Interroge en temps réel vos documents, la veille réglementaire et les analyses produites par la plateforme. Les résultats sont classés par pertinence et cités.": {
+   "en": "",
+   "fr": "Interroge en temps réel vos documents, la veille réglementaire et les analyses produites par la plateforme. Les résultats sont classés par pertinence et cités."
+  },
+  "Interrompre": {
+   "en": "",
+   "fr": "Interrompre"
+  },
+  "Inventaire des mentions de transparence (Art. #)": {
+   "en": "",
+   "fr": "Inventaire des mentions de transparence (Art. 50)"
+  },
+  "Inventaire des systèmes IA découverts hors registre, évaluation du risque et plan de régularisation.": {
+   "en": "",
+   "fr": "Inventaire des systèmes IA découverts hors registre, évaluation du risque et plan de régularisation."
+  },
+  "Journal des événements IA — Export (Art. #)": {
+   "en": "",
+   "fr": "Journal des événements IA — Export (Art. 12)"
+  },
+  "Livrables complets générés par Sentinel AI ou téléchargeables depuis la plateforme.": {
+   "en": "",
+   "fr": "Livrables complets générés par Sentinel AI ou téléchargeables depuis la plateforme."
+  },
+  "Matrice RACI — Parties prenantes": {
+   "en": "",
+   "fr": "Matrice RACI — Parties prenantes"
+  },
+  "Matrice d’Évaluation des Risques (Art. #)": {
+   "en": "",
+   "fr": "Matrice d’Évaluation des Risques (Art. 9)"
+  },
+  "Mes évaluations": {
+   "en": "",
+   "fr": "Mes évaluations"
+  },
+  "Mise en correspondance des exigences AI Act avec ISO #:# et le NIST AI Risk Management Framework.": {
+   "en": "",
+   "fr": "Mise en correspondance des exigences AI Act avec ISO 42001:2023 et le NIST AI Risk Management Framework."
+  },
+  "Modèles de divulgation pour chatbots, assistants, générateurs de contenu — formulations conformes Art. #(#)(#)(#)(#).": {
+   "en": "",
+   "fr": "Modèles de divulgation pour chatbots, assistants, générateurs de contenu — formulations conformes Art. 50(1)(2)(3)(4)."
+  },
+  "Modèles de processus internes, procédures d'audit et workflows de conformité.": {
+   "en": "",
+   "fr": "Modèles de processus internes, procédures d'audit et workflows de conformité."
+  },
+  "Mécanismes obligatoires, profil des superviseurs qualifiés, bouton d’arrêt d’urgence, chaîne de responsabilité.": {
+   "en": "",
+   "fr": "Mécanismes obligatoires, profil des superviseurs qualifiés, bouton d’arrêt d’urgence, chaîne de responsabilité."
+  },
+  "Méthode étape par étape pour constituer le dossier technique Annexe IV — qui produit quoi, dans quel ordre.": {
+   "en": "",
+   "fr": "Méthode étape par étape pour constituer le dossier technique Annexe IV — qui produit quoi, dans quel ordre."
+  },
+  "Méthodologie complète : périmètre, parties prenantes, droits Charte UE, groupes vulnérables, documentation.": {
+   "en": "",
+   "fr": "Méthodologie complète : périmètre, parties prenantes, droits Charte UE, groupes vulnérables, documentation."
+  },
+  "Niveaux d’exactitude requis, métriques acceptées (F#, AUC-ROC), robustesse adversariale, exigences cybersécurité.": {
+   "en": "",
+   "fr": "Niveaux d’exactitude requis, métriques acceptées (F1, AUC-ROC), robustesse adversariale, exigences cybersécurité."
+  },
+  "Notice d’Utilisation pour Déployeurs (Art. #)": {
+   "en": "",
+   "fr": "Notice d’Utilisation pour Déployeurs (Art. 13)"
+  },
+  "Obligations des fournisseurs de modèles GPAI — transparence, droit d’auteur, évaluation adversariale.": {
+   "en": "",
+   "fr": "Obligations des fournisseurs de modèles GPAI — transparence, droit d’auteur, évaluation adversariale."
+  },
+  "Obligations du système de gestion des risques, méthodes acceptées, fréquence de révision, lien avec ISO #.": {
+   "en": "",
+   "fr": "Obligations du système de gestion des risques, méthodes acceptées, fréquence de révision, lien avec ISO 31000."
+  },
+  "Obligations pour chatbots, systèmes de génération de contenu synthétique et deepfakes — marquage obligatoire.": {
+   "en": "",
+   "fr": "Obligations pour chatbots, systèmes de génération de contenu synthétique et deepfakes — marquage obligatoire."
+  },
+  "Obligations spécifiques aux modèles d’IA à usage général — transparence, documentation, évaluation systémique.": {
+   "en": "",
+   "fr": "Obligations spécifiques aux modèles d’IA à usage général — transparence, documentation, évaluation systémique."
+  },
+  "PDF + Word · Vierge · Universel": {
+   "en": "",
+   "fr": "PDF + Word · Vierge · Universel"
+  },
+  "PDF · # page · Applicable depuis août #": {
+   "en": "",
+   "fr": "PDF · 1 page · Applicable depuis août 2025"
+  },
+  "PDF · # page · Avec checklist": {
+   "en": "",
+   "fr": "PDF · 1 page · Avec checklist"
+  },
+  "PDF · # page · Mis à jour trimestriellement": {
+   "en": "",
+   "fr": "PDF · 1 page · Mis à jour trimestriellement"
+  },
+  "PDF · # page · Modèle signature inclus": {
+   "en": "",
+   "fr": "PDF · 1 page · Modèle signature inclus"
+  },
+  "PDF · # page · Tableau événements obligatoires": {
+   "en": "",
+   "fr": "PDF · 1 page · Tableau événements obligatoires"
+  },
+  "PDF · # pages · Annexe IV intégrée": {
+   "en": "",
+   "fr": "PDF · 2 pages · Annexe IV intégrée"
+  },
+  "PDF · # pages · Applicable depuis août #": {
+   "en": "",
+   "fr": "PDF · 3 pages · Applicable depuis août 2025"
+  },
+  "PDF · # pages · Art. # + Art. # RGPD": {
+   "en": "",
+   "fr": "PDF · 2 pages · Art. 10 + Art. 35 RGPD"
+  },
+  "PDF · # pages · Art. # + RGPD Art. #": {
+   "en": "",
+   "fr": "PDF · 3 pages · Art. 10 + RGPD Art. 5"
+  },
+  "PDF · # pages · Avec tableau décisionnel": {
+   "en": "",
+   "fr": "PDF · 2 pages · Avec tableau décisionnel"
+  },
+  "PDF · # pages · DevSecOps & RSSI": {
+   "en": "",
+   "fr": "PDF · 3 pages · DevSecOps & RSSI"
+  },
+  "PDF · # pages · Déployeurs secteur public": {
+   "en": "",
+   "fr": "PDF · 2 pages · Déployeurs secteur public"
+  },
+  "PDF · # pages · Fournisseurs & déployeurs": {
+   "en": "",
+   "fr": "PDF · 2 pages · Fournisseurs & déployeurs"
+  },
+  "PDF · # pages · Fournisseurs LLM & fondation": {
+   "en": "",
+   "fr": "PDF · 3 pages · Fournisseurs LLM & fondation"
+  },
+  "PDF · # pages · Fournisseurs haut risque": {
+   "en": "",
+   "fr": "PDF · 4 pages · Fournisseurs haut risque"
+  },
+  "PDF · # pages · Haut risque obligatoire": {
+   "en": "",
+   "fr": "PDF · 2 pages · Haut risque obligatoire"
+  },
+  "PDF · # pages · ISO # compatible": {
+   "en": "",
+   "fr": "PDF · 2 pages · ISO 42001 compatible"
+  },
+  "PDF · # pages · Modèles fondation & LLMs": {
+   "en": "",
+   "fr": "PDF · 2 pages · Modèles fondation & LLMs"
+  },
+  "PDF · # pages · Tableau métriques inclus": {
+   "en": "",
+   "fr": "PDF · 2 pages · Tableau métriques inclus"
+  },
+  "PDF · # pages · À jour au #/#/#": {
+   "en": "",
+   "fr": "PDF · 2 pages · À jour au 01/08/2025"
+  },
+  "PDF · Art. #(#) · Annuel": {
+   "en": "",
+   "fr": "PDF · Art. 51(3) · Annuel"
+  },
+  "PDF · Généré par IA · Audit haut risque": {
+   "en": "",
+   "fr": "PDF · Généré par IA · Audit haut risque"
+  },
+  "PDF · Méthodologique · Tous systèmes IA": {
+   "en": "",
+   "fr": "PDF · Méthodologique · Tous systèmes IA"
+  },
+  "PDF · Référence · Mise à jour semestrielle": {
+   "en": "",
+   "fr": "PDF · Référence · Mise à jour semestrielle"
+  },
+  "PDF, Word, Excel, texte, Markdown, CSV, JSON, YAML, journal — # Mo maximum": {
+   "en": "",
+   "fr": "PDF, Word, Excel, texte, Markdown, CSV, JSON, YAML, journal — 30 Mo maximum"
+  },
+  "Pages à enrichir avec ce document": {
+   "en": "",
+   "fr": "Pages à enrichir avec ce document"
+  },
+  "Parties prenantes (RACI)": {
+   "en": "",
+   "fr": "Parties prenantes (RACI)"
+  },
+  "Plan de Gestion des Risques IA (Art. #)": {
+   "en": "",
+   "fr": "Plan de Gestion des Risques IA (Art. 9)"
+  },
+  "Plan de formation — Acteurs de la chaîne IA (Art. #)": {
+   "en": "",
+   "fr": "Plan de formation — Acteurs de la chaîne IA (Art. 4)"
+  },
+  "Plan de surveillance continue — KPIs, fréquence des tests, seuils d’alerte, procédure de retrait du marché.": {
+   "en": "",
+   "fr": "Plan de surveillance continue — KPIs, fréquence des tests, seuils d’alerte, procédure de retrait du marché."
+  },
+  "Pour chaque système : statut des mentions — présente/absente/à mettre à jour, canal, date de contrôle.": {
+   "en": "",
+   "fr": "Pour chaque système : statut des mentions — présente/absente/à mettre à jour, canal, date de contrôle."
+  },
+  "Processus de qualification, détection des biais, documentation et vérifications de qualité recommandées.": {
+   "en": "",
+   "fr": "Processus de qualification, détection des biais, documentation et vérifications de qualité recommandées."
+  },
+  "Processus de qualification, évaluation de conformité et contractualisation des fournisseurs de systèmes IA.": {
+   "en": "",
+   "fr": "Processus de qualification, évaluation de conformité et contractualisation des fournisseurs de systèmes IA."
+  },
+  "Processus de réévaluation obligatoire avant tout changement majeur affectant la conformité du système.": {
+   "en": "",
+   "fr": "Processus de réévaluation obligatoire avant tout changement majeur affectant la conformité du système."
+  },
+  "Processus de signature — qui signe, quand, normes harmonisées, mise à jour en cas de modification substantielle (Art. #).": {
+   "en": "",
+   "fr": "Processus de signature — qui signe, quand, normes harmonisées, mise à jour en cas de modification substantielle (Art. 83)."
+  },
+  "Processus de surveillance post-déploiement (Art. #)": {
+   "en": "",
+   "fr": "Processus de surveillance post-déploiement (Art. 9)"
+  },
+  "Procédure de classification des systèmes IA (Art. #)": {
+   "en": "",
+   "fr": "Procédure de classification des systèmes IA (Art. 6)"
+  },
+  "Procédure de conduite de la FRIA (Art. #)": {
+   "en": "",
+   "fr": "Procédure de conduite de la FRIA (Art. 27)"
+  },
+  "Procédure de contrôle des mentions de transparence (Art. #)": {
+   "en": "",
+   "fr": "Procédure de contrôle des mentions de transparence (Art. 50)"
+  },
+  "Procédure de contrôle pré-déploiement — Art. #": {
+   "en": "",
+   "fr": "Procédure de contrôle pré-déploiement — Art. 5"
+  },
+  "Procédure de gestion des incidents IA (Art. #)": {
+   "en": "",
+   "fr": "Procédure de gestion des incidents IA (Art. 73)"
+  },
+  "Procédure de qualification des données (Art. #)": {
+   "en": "",
+   "fr": "Procédure de qualification des données (Art. 10)"
+  },
+  "Procédure d’approbation des modifications substantielles (Art. #)": {
+   "en": "",
+   "fr": "Procédure d’approbation des modifications substantielles (Art. 83)"
+  },
+  "Procédure d’audit interne AI Act": {
+   "en": "",
+   "fr": "Procédure d’audit interne AI Act"
+  },
+  "Procédure d’établissement et mise à jour de la déclaration (Art. #)": {
+   "en": "",
+   "fr": "Procédure d’établissement et mise à jour de la déclaration (Art. 47)"
+  },
+  "Procédure d’évaluation adversariale GPAI (Art. #)": {
+   "en": "",
+   "fr": "Procédure d’évaluation adversariale GPAI (Art. 51)"
+  },
+  "Programme de sensibilisation et formation des équipes impliquées dans le cycle de vie des systèmes IA.": {
+   "en": "",
+   "fr": "Programme de sensibilisation et formation des équipes impliquées dans le cycle de vie des systèmes IA."
+  },
+  "Programme d’audit interne annuel — périmètre, méthode de sampling, grille d’évaluation, rapport et suivi.": {
+   "en": "",
+   "fr": "Programme d’audit interne annuel — périmètre, méthode de sampling, grille d’évaluation, rapport et suivi."
+  },
+  "Protocole d’audit en # points de contrôle — méthode, collecte de preuves, scoring, rapport d’écarts.": {
+   "en": "",
+   "fr": "Protocole d’audit en 34 points de contrôle — méthode, collecte de preuves, scoring, rapport d’écarts."
+  },
+  "Protocole red teaming — tests capacités émergentes, rapport résultats, notification Commission européenne, fréquence annuelle.": {
+   "en": "",
+   "fr": "Protocole red teaming — tests capacités émergentes, rapport résultats, notification Commission européenne, fréquence annuelle."
+  },
+  "Préparation, revûte juridique, signature, archivage, mise à jour lors de modifications substantielles (Art. #).": {
+   "en": "",
+   "fr": "Préparation, revûte juridique, signature, archivage, mise à jour lors de modifications substantielles (Art. 83)."
+  },
+  "Quand informer, comment, quelle formulation, watermarking deepfakes — cas pratiques par type de système.": {
+   "en": "",
+   "fr": "Quand informer, comment, quelle formulation, watermarking deepfakes — cas pratiques par type de système."
+  },
+  "Qui réalise la FRIA, quand, comment, droits Charte UE concernés, différence DPIA vs FRIA, notification autorité.": {
+   "en": "",
+   "fr": "Qui réalise la FRIA, quand, comment, droits Charte UE concernés, différence DPIA vs FRIA, notification autorité."
+  },
+  "Rapport Shadow AI — Cartographie usages non déclarés": {
+   "en": "",
+   "fr": "Rapport Shadow AI — Cartographie usages non déclarés"
+  },
+  "Rapport de maturité IA — # livrables": {
+   "en": "",
+   "fr": "Rapport de maturité IA — 6 livrables"
+  },
+  "Rapport d’analyse de risque systémique GPAI (Art. #)": {
+   "en": "",
+   "fr": "Rapport d’analyse de risque systémique GPAI (Art. 51)"
+  },
+  "Rapport d’audit de conformité (# points)": {
+   "en": "",
+   "fr": "Rapport d’audit de conformité (34 points)"
+  },
+  "Rapport d’évaluation adversariale — capacités émergentes, vecteurs d’attaque, mesures d’atténuation, notification Commission.": {
+   "en": "",
+   "fr": "Rapport d’évaluation adversariale — capacités émergentes, vecteurs d’attaque, mesures d’atténuation, notification Commission."
+  },
+  "Rapport gouvernance des données (Art. #)": {
+   "en": "",
+   "fr": "Rapport gouvernance des données (Art. 10)"
+  },
+  "Registre IA — Export complet des systèmes déclarés": {
+   "en": "",
+   "fr": "Registre IA — Export complet des systèmes déclarés"
+  },
+  "Registre de Journalisation (Art. #)": {
+   "en": "",
+   "fr": "Registre de Journalisation (Art. 12)"
+  },
+  "Registre des décisions — Pratiques Art. #": {
+   "en": "",
+   "fr": "Registre des décisions — Pratiques Art. 5"
+  },
+  "Registre des déclarations UE de conformité (Art. #)": {
+   "en": "",
+   "fr": "Registre des déclarations UE de conformité (Art. 47)"
+  },
+  "Reprendre la base documentaire de conseilprevcyber": {
+   "en": "",
+   "fr": "Reprendre la base documentaire de conseilprevcyber"
+  },
+  "Ressources": {
+   "en": "",
+   "fr": "Ressources"
+  },
+  "Résumés opérationnels des obligations réglementaires — # à # pages par article clé.": {
+   "en": "",
+   "fr": "Résumés opérationnels des obligations réglementaires — 1 à 2 pages par article clé."
+  },
+  "Selectionnez les pages dont les analyses pourront utiliser ce document via recherche semantique": {
+   "en": "",
+   "fr": "Selectionnez les pages dont les analyses pourront utiliser ce document via recherche semantique"
+  },
+  "Sentinel · Contrôle continu": {
+   "en": "",
+   "fr": "Sentinel · Contrôle continu"
+  },
+  "Sentinel · Disponible · FRIA interactive": {
+   "en": "",
+   "fr": "Sentinel · Disponible · FRIA interactive"
+  },
+  "Sentinel · Disponible · Module Shadow AI": {
+   "en": "",
+   "fr": "Sentinel · Disponible · Module Shadow AI"
+  },
+  "Sentinel · Disponible · Parties prenantes": {
+   "en": "",
+   "fr": "Sentinel · Disponible · Parties prenantes"
+  },
+  "Sentinel · Disponible · Registre IA": {
+   "en": "",
+   "fr": "Sentinel · Disponible · Registre IA"
+  },
+  "Sentinel · Export CSV/PDF · Par période": {
+   "en": "",
+   "fr": "Sentinel · Export CSV/PDF · Par période"
+  },
+  "Sentinel · Généré par IA · Audit de maturité": {
+   "en": "",
+   "fr": "Sentinel · Généré par IA · Audit de maturité"
+  },
+  "Sentinel · Généré par IA · Par système": {
+   "en": "",
+   "fr": "Sentinel · Généré par IA · Par système"
+  },
+  "Sentinel · Généré par IA · Votre périmètre": {
+   "en": "",
+   "fr": "Sentinel · Généré par IA · Votre périmètre"
+  },
+  "Sentinel · Par système déclaré": {
+   "en": "",
+   "fr": "Sentinel · Par système déclaré"
+  },
+  "Sentinel · Traçabilité des décisions": {
+   "en": "",
+   "fr": "Sentinel · Traçabilité des décisions"
+  },
+  "Suivi de toutes les déclarations signées — système, version, date, signataire, normes, lien vers document.": {
+   "en": "",
+   "fr": "Suivi de toutes les déclarations signées — système, version, date, signataire, normes, lien vers document."
+  },
+  "Supprime definitivement TOUS vos calculs enregistres, action irreversible": {
+   "en": "",
+   "fr": "Supprime definitivement TOUS vos calculs enregistres, action irreversible"
+  },
+  "Supprimer tout mon historique →": {
+   "en": "",
+   "fr": "Supprimer tout mon historique →"
+  },
+  "Synthèse de votre niveau de maturité IA sur # dimensions : gouvernance, données, modèles, risques, conformité, opérations.": {
+   "en": "",
+   "fr": "Synthèse de votre niveau de maturité IA sur 6 dimensions : gouvernance, données, modèles, risques, conformité, opérations."
+  },
+  "Synthèse des # catégories de pratiques interdites, conditions d’exception et sanctions applicables (Art. #).": {
+   "en": "",
+   "fr": "Synthèse des 8 catégories de pratiques interdites, conditions d’exception et sanctions applicables (Art. 99)."
+  },
+  "Système de Management Qualité IA (Art. #)": {
+   "en": "",
+   "fr": "Système de Management Qualité IA (Art. 17)"
+  },
+  "Tableau comparatif — AI Act vs ISO # vs NIST AI RMF": {
+   "en": "",
+   "fr": "Tableau comparatif — AI Act vs ISO 42001 vs NIST AI RMF"
+  },
+  "Tableau croisé probabilité x impact — # niveaux de criticité, mesures correctives, responsable désigné.": {
+   "en": "",
+   "fr": "Tableau croisé probabilité x impact — 5 niveaux de criticité, mesures correctives, responsable désigné."
+  },
+  "Template FRIA en # sections : périmètre, droits Charte UE affectés, groupes vulnérables, mesures d’atténuation, conclusion.": {
+   "en": "",
+   "fr": "Template FRIA en 5 sections : périmètre, droits Charte UE affectés, groupes vulnérables, mesures d’atténuation, conclusion."
+  },
+  "Template QMS adapté AI Act — # éléments obligatoires : stratégie, contrôle processus, non-conformités, cybersécurité.": {
+   "en": "",
+   "fr": "Template QMS adapté AI Act — 12 éléments obligatoires : stratégie, contrôle processus, non-conformités, cybersécurité."
+  },
+  "Template de documentation GPAI (Art. #)": {
+   "en": "",
+   "fr": "Template de documentation GPAI (Art. 51)"
+  },
+  "Template de mention de transparence IA (Art. #)": {
+   "en": "",
+   "fr": "Template de mention de transparence IA (Art. 50)"
+  },
+  "Template de notice d’utilisation conforme Art. #(#) — capacités, limites, métriques, risques résiduels, surveillance.": {
+   "en": "",
+   "fr": "Template de notice d’utilisation conforme Art. 13(2) — capacités, limites, métriques, risques résiduels, surveillance."
+  },
+  "Template de registre des événements journalisés — format d’entrée, durée de rétention, procédure d’accès autorités.": {
+   "en": "",
+   "fr": "Template de registre des événements journalisés — format d’entrée, durée de rétention, procédure d’accès autorités."
+  },
+  "Template des # catégories de pratiques interdites — grille d’analyse, justification et exception légale (Art. #(#)–#).": {
+   "en": "",
+   "fr": "Template des 8 catégories de pratiques interdites — grille d’analyse, justification et exception légale (Art. 5(2)–7)."
+  },
+  "Template officiel de déclaration de conformité — normes harmonisées, organismes notifiés, signature du représentant légal.": {
+   "en": "",
+   "fr": "Template officiel de déclaration de conformité — normes harmonisées, organismes notifiés, signature du représentant légal."
+  },
+  "Template structuré pour identifier, analyser et traiter les risques tout au long du cycle de vie du système d’IA.": {
+   "en": "",
+   "fr": "Template structuré pour identifier, analyser et traiter les risques tout au long du cycle de vie du système d’IA."
+  },
+  "Template vierge en # sections : identification, classification, architecture, mesures de conformité, FRIA, QMS, déclaration, historique.": {
+   "en": "",
+   "fr": "Template vierge en 8 sections : identification, classification, architecture, mesures de conformité, FRIA, QMS, déclaration, historique."
+  },
+  "Tous vos calculs effectués sur Sentinel AI (simulations, audits, tarification, sanctions...), stockés de façon persistante, modifiables et traçables.": {
+   "en": "",
+   "fr": "Tous vos calculs effectués sur Sentinel AI (simulations, audits, tarification, sanctions...), stockés de façon persistante, modifiables et traçables."
+  },
+  "Toutes les dates d’application par catégorie d’obligation — de février # (Art. #) à août # (systèmes existants).": {
+   "en": "",
+   "fr": "Toutes les dates d’application par catégorie d’obligation — de février 2025 (Art. 5) à août 2027 (systèmes existants)."
+  },
+  "Transférer": {
+   "en": "",
+   "fr": "Transférer"
+  },
+  "Traçabilité RGPD": {
+   "en": "",
+   "fr": "Traçabilité RGPD"
+  },
+  "Uploadez vos documents (politiques internes, contrats, procédures) pour enrichir automatiquement les analyses d'Audit, Registre IA, FRIA et Maturité avec votre contexte réel.": {
+   "en": "",
+   "fr": "Uploadez vos documents (politiques internes, contrats, procédures) pour enrichir automatiquement les analyses d'Audit, Registre IA, FRIA et Maturité avec votre contexte réel."
+  },
+  "Validation qualité des datasets — grille d’évaluation, détection de biais, approbation responsable data, archivage.": {
+   "en": "",
+   "fr": "Validation qualité des datasets — grille d’évaluation, détection de biais, approbation responsable data, archivage."
+  },
+  "Veille qualifiée": {
+   "en": "",
+   "fr": "Veille qualifiée"
+  },
+  "Vos évaluations de conformité sauvegardées avec score et recommandations.": {
+   "en": "",
+   "fr": "Vos évaluations de conformité sauvegardées avec score et recommandations."
+  },
+  "Votre question (ex. : obligations IA Act pour un système à haut risque)": {
+   "en": "",
+   "fr": "Votre question (ex. : obligations IA Act pour un système à haut risque)"
+  },
+  "Word + PDF · Vierge · Avant tout déploiement": {
+   "en": "",
+   "fr": "Word + PDF · Vierge · Avant tout déploiement"
+  },
+  "Word + PDF · Vierge · Déployeurs secteur public obligatoire": {
+   "en": "",
+   "fr": "Word + PDF · Vierge · Déployeurs secteur public obligatoire"
+  },
+  "Word + PDF · Vierge · Fournisseurs LLM/fondation": {
+   "en": "",
+   "fr": "Word + PDF · Vierge · Fournisseurs LLM/fondation"
+  },
+  "Word + PDF · Vierge · Signature obligatoire": {
+   "en": "",
+   "fr": "Word + PDF · Vierge · Signature obligatoire"
+  },
+  "Word · Avec checklist fournisseur": {
+   "en": "",
+   "fr": "Word · Avec checklist fournisseur"
+  },
+  "Word · Généré par IA · Audit annuel": {
+   "en": "",
+   "fr": "Word · Généré par IA · Audit annuel"
+  },
+  "Word · Vierge · Art. # littératie IA": {
+   "en": "",
+   "fr": "Word · Vierge · Art. 4 littératie IA"
+  },
+  "Word · Vierge · Art. # modifications": {
+   "en": "",
+   "fr": "Word · Vierge · Art. 83 modifications"
+  },
+  "Word · Vierge · Art. #(#) obligatoire": {
+   "en": "",
+   "fr": "Word · Vierge · Art. 9(9) obligatoire"
+  },
+  "Word · Vierge · Audit semestriel recommandé": {
+   "en": "",
+   "fr": "Word · Vierge · Audit semestriel recommandé"
+  },
+  "Word · Vierge · Avant mise sur le marché": {
+   "en": "",
+   "fr": "Word · Vierge · Avant mise sur le marché"
+  },
+  "Word · Vierge · Avant tout cycle d’entraînement": {
+   "en": "",
+   "fr": "Word · Vierge · Avant tout cycle d’entraînement"
+  },
+  "Word · Vierge · Avant tout déploiement Annexe III secteur public": {
+   "en": "",
+   "fr": "Word · Vierge · Avant tout déploiement Annexe III secteur public"
+  },
+  "Word · Vierge · Déclencher pour tout nouveau système": {
+   "en": "",
+   "fr": "Word · Vierge · Déclencher pour tout nouveau système"
+  },
+  "Word · Vierge · Fourni par le fournisseur au déployeur": {
+   "en": "",
+   "fr": "Word · Vierge · Fourni par le fournisseur au déployeur"
+  },
+  "Word · Vierge · Go/No-go signé": {
+   "en": "",
+   "fr": "Word · Vierge · Go/No-go signé"
+  },
+  "Word · Vierge · Haut risque obligatoire": {
+   "en": "",
+   "fr": "Word · Vierge · Haut risque obligatoire"
+  },
+  "Word · Vierge · ISO # / ISO # compatible": {
+   "en": "",
+   "fr": "Word · Vierge · ISO 9001 / ISO 42001 compatible"
+  },
+  "Word · Vierge · ISO # compatible": {
+   "en": "",
+   "fr": "Word · Vierge · ISO 31000 compatible"
+  },
+  "Word · Vierge · Journalisation obligatoire haut risque": {
+   "en": "",
+   "fr": "Word · Vierge · Journalisation obligatoire haut risque"
+  },
+  "Word · Vierge · Modèles >#²⁵ FLOPS obligatoire": {
+   "en": "",
+   "fr": "Word · Vierge · Modèles >10²⁵ FLOPS obligatoire"
+  },
+  "Word · Vierge · Obligatoire haut risque": {
+   "en": "",
+   "fr": "Word · Vierge · Obligatoire haut risque"
+  },
+  "Word · Vierge · À intégrer dans chaque interface": {
+   "en": "",
+   "fr": "Word · Vierge · À intégrer dans chaque interface"
+  },
+  "Workflow complet — déclencheur, composition du groupe, consultation parties prenantes, rédaction, validation.": {
+   "en": "",
+   "fr": "Workflow complet — déclencheur, composition du groupe, consultation parties prenantes, rédaction, validation."
+  },
+  "Workflow de classification — arbre décisionnel Annexe III, revûte DPO+RSSI, horodatage, enregistrement au registre.": {
+   "en": "",
+   "fr": "Workflow de classification — arbre décisionnel Annexe III, revûte DPO+RSSI, horodatage, enregistrement au registre."
+  },
+  "Workflow de détection, qualification, signalement et clôture des incidents graves — délai # jours ouvrables autorités.": {
+   "en": "",
+   "fr": "Workflow de détection, qualification, signalement et clôture des incidents graves — délai 15 jours ouvrables autorités."
+  },
+  "Workflow d’approbation avant mise en production — vérification des # catégories, visa DSI/DPO/Juriste, escalade direction.": {
+   "en": "",
+   "fr": "Workflow d’approbation avant mise en production — vérification des 8 catégories, visa DSI/DPO/Juriste, escalade direction."
+  },
+  "Workflow d’intégration des fournisseurs IA tiers": {
+   "en": "",
+   "fr": "Workflow d’intégration des fournisseurs IA tiers"
+  },
+  "audit de conformite": {
+   "en": "",
+   "fr": "audit de conformite"
+  },
+  "ou un": {
+   "en": "",
+   "fr": "ou un"
+  },
+  "pour commencer.": {
+   "en": "",
+   "fr": "pour commencer."
+  },
+  "simulation IA Act": {
+   "en": "",
+   "fr": "simulation IA Act"
+  },
+  "Évaluation FRIA par système": {
+   "en": "",
+   "fr": "Évaluation FRIA par système"
+  },
+  "Événements minimaux à enregistrer, durée de conservation des logs, accès autorités compétentes.": {
+   "en": "",
+   "fr": "Événements minimaux à enregistrer, durée de conservation des logs, accès autorités compétentes."
+  },
+  "— Conservation # ans (Art. #(#)(e) RGPD). Accessible à vous et à CONSEILPREV (support/audit).": {
+   "en": "",
+   "fr": "— Conservation 3 ans (Art. 5(1)(e) RGPD). Accessible à vous et à CONSEILPREV (support/audit)."
+  },
+  "⚙️ Procédures & processus": {
+   "en": "",
+   "fr": "⚙️ Procédures & processus"
+  },
+  "⬇ Téléchargeable": {
+   "en": "",
+   "fr": "⬇ Téléchargeable"
+  },
+  "📁 Documents de référence": {
+   "en": "",
+   "fr": "📁 Documents de référence"
+  },
+  "📄 Fiches synthétiques": {
+   "en": "",
+   "fr": "📄 Fiches synthétiques"
+  },
+  "📋 Templates": {
+   "en": "",
+   "fr": "📋 Templates"
+  },
+  "📖 Guides pratiques": {
+   "en": "",
+   "fr": "📖 Guides pratiques"
+  }
+ }
+}
