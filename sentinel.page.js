@@ -8402,7 +8402,16 @@ function matriceRender(systemes){
   c.innerHTML = critiques.map(function(s){
     return '<div class="eval-row" style="cursor:pointer" onclick="matriceOpenSys('+s.id+')">'
       + '<div class="eval-ico">'+matriceIco(s.secteur)+'</div>'
-      + '<div class="eval-body"><div class="eval-n">'+sentDonnee(s.nom)+'</div><div class="eval-d">'+(CLASSIF_LABELS[s.classification]||s.classification)+' · '+(STATUT_LABELS[s.statut_conformite]||s.statut_conformite)+' · '+sentDonnee(s.secteur||"")+'</div></div>'
+      /* CHAQUE LIBELLÉ DANS SON PROPRE ÉLÉMENT. Mesuré : « Haut risque · À
+         évaluer · » partait en UN SEUL nœud texte, donc en UNE clé composée
+         qu'aucun dictionnaire ne porte — vingt combinaisons possibles, zéro
+         traduite, et 7 828 des 21 536 mots français restés à l'écran en
+         anglais venaient de cette seule ligne. Séparés, ce sont les clés
+         « Haut risque » et « À évaluer », déjà traduites ailleurs. */
+      + '<div class="eval-body"><div class="eval-n">'+sentDonnee(s.nom)+'</div><div class="eval-d">'
+      + '<span class="eval-q">'+(CLASSIF_LABELS[s.classification]||s.classification)+'</span> · '
+      + '<span class="eval-q">'+(STATUT_LABELS[s.statut_conformite]||s.statut_conformite)+'</span> · '
+      + sentDonnee(s.secteur||"")+'</div></div>'
       + '<div class="eval-sc">'+(s.score_risque||0)+'/10</div>'
       + '</div>';
   }).join('');

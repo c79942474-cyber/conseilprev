@@ -465,26 +465,17 @@ def test_un_refus_ne_consomme_pas_le_quota_du_jour(brevo):
         'les refus ont consommé des places : %s' % _sql(reserves))
 
 
-def test_une_base_illisible_refuse_le_relais_sans_aucun_envoi(brevo, monkeypatch):
-    """« L'incertitude ne l'ouvre pas », dit la docstring — rien ne le
-    mesurait. Avec un `return True, None` à la place du refus, le relais
-    public enverrait à n'importe quelle adresse, borné seulement par un
-    compteur en mémoire que X-Forwarded-For contourne."""
-    def casse():
-        raise RuntimeError('base injoignable (simulé)')
-    monkeypatch.setattr(A, 'registre_get_db', casse)
-    r = _anonyme().post('/api/notify-selection', json=_charge(), headers=_entetes())
-    assert r.status_code == 429, (r.status_code, r.get_json())
-    assert _posts(brevo) == [], 'envoyé malgré une base illisible : %s' % _destinataires(brevo)
-def test_une_base_illisible_ferme_le_relais_au_lieu_de_l_ouvrir(brevo, monkeypatch, caplog):
-    """L'INCERTITUDE NE L'OUVRE PAS — la docstring le dit, rien ne le mesurait.
+def test_une_base_illisible_refuse_le_relais_sans_aucun_envoi(brevo, monkeypatch, caplog):
+    """L'INCERTITUDE NE L'OUVRE PAS — la docstring le disait, rien ne le
+    mesurait. Avec un `return True, None` à la place du refus, les plafonds
+    de 3 par adresse et de 20 par jour disparaissent ENSEMBLE, et le relais
+    public envoie des courriels signés CONSEILPREV vers n'importe quelle
+    adresse : il ne reste que le `check_soft` par IP, que l'en-tête
+    X-Forwarded-For contourne.
 
-    Mutation jouée sur le code corrigé : `_notify_selection_autorise` rendant
-    (True, None) au lieu de (False, 'compteur_illisible') quand la base est
-    injoignable. Elle survivait aux 227 règles. Les plafonds de 3 par adresse
-    et de 20 par jour disparaissent alors ensemble, et le relais public envoie
-    des courriels signés CONSEILPREV vers n'importe quelle adresse — le seul
-    reste étant le `check_soft` par IP, que l'en-tête X-Forwarded-For contourne."""
+    ET LE JOURNAL DIT LE REFUS SANS DIRE À QUI : un refus muet ne se voit
+    pas dans Render, une adresse en clair y reste lisible pour tout lecteur
+    des journaux."""
     def muette():
         raise RuntimeError('PostgreSQL injoignable (simulé)')
     monkeypatch.setattr(A, 'registre_get_db', muette)

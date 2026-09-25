@@ -1,0 +1,49 @@
+{
+ "_lot": "derniers",
+ "_mots": 95,
+ "_pages": [
+  "_derniers"
+ ],
+ "_rubrique": "derniers textes releves au navigateur, une fois les donnees ecartees. LES DERNIERS TEXTES DE SITE ENCORE EN FRANÇAIS À L'ÉCRAN, relevés au navigateur une fois les DONNÉES SAISIES écartées (translate=\"no\"). Deux familles s'y trouvent. (1) Des textes qu'aucun dictionnaire ne portait : la réserve sur l'épuisement abiotique, le levier PUE, l'état des flux du panorama, le bandeau de la veille, le chargement du moteur de qualification, le libellé « fournisseur » du FinOps. (2) Des textes que les dictionnaires portaient EN RÉGIME TEXTE alors que le navigateur les cherche EN RÉGIME BLOC : quand un élément ne contient que de la mise en forme nue (un <b>, un <br>), le moteur le traduit d'un seul tenant et la clé est le texte ENTIER de l'élément, pas celui d'un de ses nœuds. Les lots de reliquat 50 à 61 ont été écrits depuis les « restes » de la mesure, qui sont des NŒUDS : les clés bloc manquaient, et ces phrases restaient en français bien qu'elles fussent traduites. NE SONT PAS TRADUITS, ET C'EST VOULU : les titres officiels étrangers (LPD, LGPD, PL 2338/2023, Política Nacional de IA, FEGA, BRGM, ASP, Telefónica, Amazon France Logistique, Patterson et al.), les identifiants techniques (stripe_non_configure, brevo_non_configure, non_declare, heures_accelerateur, nombre_accelerateurs, texte_reglementaire), les noms de systèmes du registre (déclarés translate=\"no\" à la source) et le bouton « FR — afficher Sentinel en français », qui s'écrit dans la langue qu'il propose.",
+ "bloc": {
+  "🎯 Analyse personnalisee sur # systeme(s) de votre Registre IA. Moteur : IA.": {
+   "en": "🎯 Personalised analysis on # system(s) from your AI register. Engine: AI.",
+   "fr": "🎯 Analyse personnalisee sur # systeme(s) de votre Registre IA. Moteur : IA.",
+   "html": "🎯 Analyse personnalisee sur # systeme(s) de votre Registre IA. Moteur : IA."
+  }
+ },
+ "texte": {
+  "# systeme(s)": {
+   "en": "# system(s)",
+   "fr": "# systeme(s)"
+  },
+  "Agit sur le petit facteur : un PUE de # ramené à # retire # % de l'énergie d'infrastructure, pas # % du total.": {
+   "en": "Acts on the small factor: a PUE of # brought down to # removes # % of the infrastructure energy, not # % of the total.",
+   "fr": "Agit sur le petit facteur : un PUE de # ramené à # retire # % de l'énergie d'infrastructure, pas # % du total."
+  },
+  "Aucun facteur d'épuisement abiotique sourçable n'a été retenu. Le calculer demande soit une base ACV donnant l'ADP par équipement, soit la fiche d'empreinte produit du constructeur. Sans elle, l'indicateur serait un nombre sans auteur.": {
+   "en": "No sourceable abiotic depletion factor has been retained. Computing one requires either an LCA database giving the ADP per item of equipment, or the manufacturer's product footprint sheet. Without it, the indicator would be a number with no author.",
+   "fr": "Aucun facteur d'épuisement abiotique sourçable n'a été retenu. Le calculer demande soit une base ACV donnant l'ADP par équipement, soit la fiche d'empreinte produit du constructeur. Sans elle, l'indicateur serait un nombre sans auteur."
+  },
+  "CNIL · ANSSI · EU AI Act · Commission — rafraîchi côté serveur (# min)": {
+   "en": "CNIL · ANSSI · EU AI Act · Commission — refreshed server-side (# min)",
+   "fr": "CNIL · ANSSI · EU AI Act · Commission — rafraîchi côté serveur (# min)"
+  },
+  "Chargement du moteur…": {
+   "en": "Loading the engine…",
+   "fr": "Chargement du moteur…"
+  },
+  "de votre Registre IA. Moteur :": {
+   "en": "from your AI register. Engine:",
+   "fr": "de votre Registre IA. Moteur :"
+  },
+  "source non jointe : source muette": {
+   "en": "source not attached: silent source",
+   "fr": "source non jointe : source muette"
+  },
+  "— fournisseur «": {
+   "en": "— provider «",
+   "fr": "— fournisseur «"
+  }
+ }
+}

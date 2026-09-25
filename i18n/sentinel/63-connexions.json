@@ -1,0 +1,16 @@
+{
+ "_lot": "63-connexions",
+ "bloc": {},
+ "texte": {
+  "Dernier événement Stripe reçu :": "Last Stripe event received:",
+  "Impossible de vérifier les connexions.": "Unable to check the connections.",
+  "Paiement en cours de confirmation…": "Payment being confirmed…",
+  "Vérification des comptes Stripe et Brevo…": "Checking the Stripe and Brevo accounts…",
+  "Vérification du paiement…": "Checking the payment…",
+  "journal non lu": "log not read",
+  "votre inscription sera confirmée dès réception de l’encaissement.": "your registration will be confirmed as soon as the payment clears.",
+  "votre offre s’ouvrira dès réception de l’encaissement.": "your plan will open as soon as the payment clears.",
+  "✅ Tout est branché — Stripe et Brevo répondent avec la configuration de ce service.": "✅ Everything is connected — Stripe and Brevo answer with this service's configuration.",
+  "✓ Paiement reçu : votre inscription est confirmée.": "✓ Payment received: your registration is confirmed."
+ }
+}

@@ -455,35 +455,35 @@
   {
    "nom": "4. la caisse formation IA vit de nouveau 24 h",
    "fichier": "app.py",
-   "avant": "                expires_at=int(time.time()) + max(30, formations_ia.RETENUE_MINUTES) * 60,\n",
+   "avant": "                expires_at=max(depart_retenue + formations_ia.RETENUE_MINUTES * 60,\n                               int(time.time()) + 31 * 60),\n",
    "apres": "",
    "regle": "test_la_caisse_ferme_quand_la_retenue_du_creneau_expire"
   },
   {
    "nom": "4. un accusé qui échoue est de nouveau avalé",
    "fichier": "app.py",
-   "avant": "        logger.error('FORMATION_IA_ACCUSE_ECHEC commande=%s destinataire=%s : %s', commande, email, _e)",
+   "avant": "        logger.error('FORMATION_IA_ACCUSE_ECHEC commande=%s destinataire=%s : %s',\n                     commande, _masquer_courriel(email), _e)",
    "apres": "        pass",
    "regle": "test_un_accuse_qui_echoue_est_journalise"
   },
   {
    "nom": "6. une résiliation refusée par Stripe efface quand même le lien local",
    "fichier": "app.py",
-   "avant": "            resilie = stripe.Subscription.cancel(sub)['status'] == 'canceled'\n        except stripe.InvalidRequestError as _ie:\n            resilie = getattr(_ie, 'code', '') == 'resource_missing'\n            if not resilie:\n                raise",
-   "apres": "            resilie = True\n            stripe.Subscription.cancel(sub)\n        except Exception:\n            pass",
+   "avant": "            resilie = stripe.Subscription.cancel(\n                sub, cancellation_details={\n                    'comment': STRIPE_RESILIATION_MARQUE + str(motif or 'site')}\n            )['status'] == 'canceled'\n        except stripe.InvalidRequestError as _ie:\n            resilie = getattr(_ie, 'code', '') == 'resource_missing'\n            if not resilie:\n                raise",
+   "apres": "            stripe.Subscription.cancel(\n                sub, cancellation_details={\n                    'comment': STRIPE_RESILIATION_MARQUE + str(motif or 'site')})\n            resilie = True\n        except Exception:\n            resilie = True",
    "regle": "test_une_resiliation_refusee_par_stripe_garde_le_lien_local"
   },
   {
    "nom": "6. set-plan annonce la résiliation même refusée",
    "fichier": "app.py",
-   "avant": "        if not _billing_cancel_subscription(client_id):\n            return jsonify({'ok': False, 'stripe_sync': 'resiliation_echouee',",
-   "apres": "        if not _billing_cancel_subscription(client_id) and False:\n            return jsonify({'ok': False, 'stripe_sync': 'resiliation_echouee',",
+   "avant": "        if not _billing_cancel_subscription(client_id, 'set-plan'):\n            return jsonify({'ok': False, 'stripe_sync': 'resiliation_echouee',",
+   "apres": "        if not _billing_cancel_subscription(client_id, 'set-plan') and False:\n            return jsonify({'ok': False, 'stripe_sync': 'resiliation_echouee',",
    "regle": "test_passer_en_gratuit_n_annonce_pas_une_resiliation_refusee"
   },
   {
    "nom": "7. l'effacement RGPD oublie l'abonnement sans le résilier",
    "fichier": "app.py",
-   "avant": "            bilan['abonnement'] = 'resilie' if _billing_cancel_subscription(cid) else 'non_resilie'",
+   "avant": "            bilan['abonnement'] = 'resilie' if _billing_cancel_subscription(cid, 'rgpd') else 'non_resilie'",
    "apres": "            bilan['abonnement'] = 'non_resilie'",
    "regle": "test_l_effacement_rgpd_resilie_l_abonnement_avant_de_l_oublier"
   },
@@ -504,8 +504,8 @@
   {
    "nom": "2. la caisse modifie un abonnement résilié au lieu d'en ouvrir un neuf",
    "fichier": "app.py",
-   "avant": "                if sub['status'] not in ('canceled', 'incomplete_expired') and articles:",
-   "apres": "                if articles:",
+   "avant": "                if _statut not in ('canceled', 'incomplete_expired') and _statut:",
+   "apres": "                if _statut:",
    "regle": "test_un_abonnement_mort_chez_stripe_rouvre_une_caisse[canceled]"
   },
   {
@@ -532,8 +532,8 @@
   {
    "nom": "1e. le repli par client_id rétrograde un client qui porte un AUTRE abonnement",
    "fichier": "app.py",
-   "avant": "                                 \"UPDATE clients SET plan='gratuit' WHERE id=? AND stripe_subscription_id IS NULL\"),",
-   "apres": "                                 \"UPDATE clients SET plan='gratuit' WHERE id=?\"),",
+   "avant": "    touches = cur.rowcount\n    conn.commit()",
+   "apres": "    touches = cur.rowcount\n    if not touches and client_id:\n        cur.execute(registre_sql(\"UPDATE clients SET plan='gratuit' WHERE id=%s\",\n                                 \"UPDATE clients SET plan='gratuit' WHERE id=?\"), (int(client_id),))\n    conn.commit()",
    "regle": "test_un_evenement_de_resiliation_tardif_ne_retrograde_pas_un_client_reabonne"
   },
   {

@@ -413,30 +413,23 @@
   {
    "nom": "le plafond par destinataire ne s'applique plus",
    "fichier": "app.py",
-   "avant": "    if pour_lui >= NOTIFY_SELECTION_PLAFOND_DESTINATAIRE_JOUR:",
+   "avant": "    if pour_lui > NOTIFY_SELECTION_PLAFOND_DESTINATAIRE_JOUR:",
    "apres": "    if False:",
    "regle": "test_la_selection_est_plafonnee_par_destinataire_et_par_jour"
   },
   {
    "nom": "le plafond global ne s'applique plus",
    "fichier": "app.py",
-   "avant": "    if total >= NOTIFY_SELECTION_PLAFOND_GLOBAL_JOUR:",
-   "apres": "    if False:",
+   "avant": "    elif total > NOTIFY_SELECTION_PLAFOND_GLOBAL_JOUR:",
+   "apres": "    elif False:",
    "regle": "test_la_selection_est_plafonnee_globalement_par_jour"
   },
   {
    "nom": "les dossiers privés sont à nouveau servis",
    "fichier": "app.py",
-   "avant": "    if path.lstrip('/').lower().startswith(DOSSIERS_PRIVES):",
+   "avant": "    if _norme.split('/')[0] in DOSSIERS_PRIVES:",
    "apres": "    if False:",
    "regle": "test_un_fichier_des_dossiers_prives_n_est_pas_servi[uploads_cv]"
-  },
-  {
-   "nom": "une base illisible OUVRE le relais notify-selection au lieu de le fermer",
-   "fichier": "app.py",
-   "avant": "        logger.error('NOTIFY_SELECTION_COMPTEUR_ERR: %s', e)\n        return False, 'compteur_illisible'",
-   "apres": "        logger.error('NOTIFY_SELECTION_COMPTEUR_ERR: %s', e)\n        return True, None",
-   "regle": "test_une_base_illisible_ferme_le_relais_au_lieu_de_l_ouvrir"
   },
   {
    "nom": "/api/health livre le diagnostic complet à tout compte connecté",
