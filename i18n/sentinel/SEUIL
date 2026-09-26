@@ -5,24 +5,43 @@
 #
 # CE QUI N'Y ENTRE PAS : les DONNEES SAISIES (noms de systemes, fournisseurs,
 # finalites, clients), declarees translate="no" et comptees a part — elles
-# sont ecrites dans la langue du client, personne ne les traduit.
+# sont ecrites dans la langue du client, personne ne les traduit (53 156 mots
+# au dernier passage).
 # CE QUI Y ENTRE : les cadres (iframes), qui se traduisent eux-memes.
 #
 # NE PAS CONFONDRE avec i18n/sentinel/SEUIL_COUVERTURE, qui est un PLANCHER.
 #
 # LA VALEUR EST CELLE QUI EST TENUE AUJOURD'HUI, PAS CELLE QU'ON VISE. Mesure
-# du 25 septembre 2026 : 9,8 % (21 536 mots francais / 198 282 anglais), contre
-# 23,5 % avant que les donnees saisies soient declarees, et 88,1 % avant la
-# traduction du corps. Un seuil plus bas que la mesure serait une promesse que
-# le depot ne tient pas : la regle tomberait a chaque passage et l'on
-# apprendrait a ne plus la lire.
+# du 26 septembre 2026 : 5,1 % (11 236 mots francais / 210 972 anglais),
+# contre 9,8 % la veille, 23,5 % avant que les donnees saisies soient
+# declarees, et 88,1 % avant la traduction du corps. Un seuil plus bas que la
+# mesure serait une promesse que le depot ne tient pas : la regle tomberait a
+# chaque passage et l'on apprendrait a ne plus la lire.
+#
+# CE QUI A FAIT BAISSER LE CHIFFRE DEPUIS LA MESURE PRECEDENTE :
+#   - la matrice : les cellules concatenaient un libelle d'interface et une
+#     donnee (« Haut risque · A evaluer · <secteur> ») en UN SEUL noeud texte,
+#     donc en une cle composee qu'aucun dictionnaire ne porte. Chaque
+#     etiquette part desormais dans son propre element : 7 828 mots en moins,
+#     et la page passe de 99,7 % a zero.
+#   - les documents embarques : leur texte PROPRE n'avait jamais ete
+#     inventorie. 165 cles sont entrees au catalogue et sont traduites (lots
+#     64-cadre-carte-ue et 65-cadre-observatoire) : les cadres passent de
+#     31,8 % a 15,2 %, enveloppe de 44 % a 14,1 %, empreinte-parc de 30,8 % a
+#     12,2 %, obs-rd de 21,2 % a moins de 1 %.
 #
 # CE QUI RESTE, ET QUI FERA BAISSER CE CHIFFRE (mesure, page par page) :
-#   - matrice 99,7 % : les cellules concatenent un libelle d'interface et une
-#     donnee (« Haut risque - A evaluer - <secteur> ») ; ni traduites ni
-#     declarees donnees.
-#   - enveloppe 44 %, empreinte-parc 31 %, pan-sia 26 % : le texte PROPRE de
-#     ces documents embarques, qui n'etait pas dans l'inventaire.
-#   - registre 27 %, finops et empreinte-ia : les listes deroulantes et les
-#     etiquettes qui reprennent un nom de systeme sans le declarer.
-0.10
+#   - registre 27,4 % — 6 336 mots, soit 56 % de tout ce qui reste. Le cadre
+#     de l'infobulle du bouton « x » EST traduit (« Delete … from the
+#     register ») ; c'est le NOM DU SYSTEME, ecrit par le client, qui est
+#     francais au milieu de l'attribut. Un attribut ne peut pas porter de
+#     span translate="no" : il faudra que le moteur declare ce qu'un motif a
+#     recopie tel quel, pour que la mesure le compte comme une donnee.
+#   - pan-sia 17,0 % (1 287 mots) et enveloppe 14,1 % (633) — le reste est
+#     dans les LISTES DEROULANTES : le moteur ne parcourt pas <option>
+#     (SENT_EXCLUS), parce qu'une option peut porter une donnee saisie.
+#     44 libelles, 124 mots dedoublonnes, repetes d'une vue a l'autre.
+#   - ia50 20,3 %, iso27001-soa 22,4 %, cra-ecarts 22,9 %, nis2-gouvernance
+#     27,2 % — des libelles composes par le serveur, de la meme famille que
+#     celui de la matrice.
+0.06

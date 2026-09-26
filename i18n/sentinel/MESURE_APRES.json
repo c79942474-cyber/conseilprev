@@ -1,21 +1,21 @@
 {
  "_quoi": "Ce qui reste en français, à l'écran, quand EN est choisi — mesuré par recette_sentinel_langue.js. part_fr = mots français / (mots français + mots anglais) ; les mots neutres (sans lettre, nom propre, indécis) sont comptés à part. Les DONNÉES SAISIES (éléments translate=\"no\" : noms de systèmes, fournisseurs, finalités, clients) sont relevées à part, dans « donnees », et n'entrent PAS dans le verdict : elles sont écrites dans la langue du client et personne ne les traduit. Les cadres (iframes) sont comptés à part ET compris dans le verdict, depuis qu'ils se traduisent eux-mêmes.",
- "date": "2026-09-25T17:02:45.086Z",
- "base": "http://127.0.0.1:9931",
+ "date": "2026-09-26T08:19:38.888Z",
+ "base": "http://127.0.0.1:9941",
  "seuil": 0.05,
  "dictionnaire": {
   "charge": true,
-  "texte": 10906,
-  "bloc": 671,
+  "texte": 11031,
+  "bloc": 711,
   "motif": 41
  },
  "global": {
-  "mots_fr": 21536,
-  "mots_en": 198282,
-  "mots_neutres": 40325,
-  "textes": 42570,
+  "mots_fr": 11236,
+  "mots_en": 210972,
+  "mots_neutres": 42971,
+  "textes": 44927,
   "pages": 118,
-  "part_fr": 0.098
+  "part_fr": 0.0506
  },
  "coquille": {
   "mots_fr": 11,
@@ -48,11 +48,11 @@
  },
  "pages": {
   "pan-sia": {
-   "mots_fr": 1954,
-   "mots_en": 5688,
-   "mots_neutres": 1758,
+   "mots_fr": 1287,
+   "mots_en": 6271,
+   "mots_neutres": 1801,
    "textes": 1580,
-   "part_fr": 0.2557,
+   "part_fr": 0.1703,
    "restes": [
     {
      "texte": "eau (publiée il y a 51 mois ; l'éditeur publie tous les 12 mois — 39 mois de retard sur le cycle) · prix (publiée il y a 21 mois ; l'éditeur publie tous les 6 mois — 15 mois de retard sur le cycle) · mix (publiée il y a 21 mois ; l'éditeur publie tous les 12 mois — 9 mois de retard sur le cycle) · feux (publiée il y a 13 mois ; l'éditeur publie tous les 12 mois — 1 mois de retard sur le cycle) · inondations (publiée il y a 12 mois ; l'éditeur publie tous les 12 mois — 0 mois de retard sur le cycle) Une tâche hebdomadaire rafraîchit les familles VIVANTES — celles qui viennent d'une source interrogée. Les autres reposent sur des rapports : un rapport ne se met pas à jour, il est remplacé par son édition suivante, à une date que son éditeur choisit. Pour celles-là, la tâche ne rafraîchit rien : elle dit ce qui aurait dû l'être.",
@@ -100,23 +100,8 @@
      "ou": "cadre:texte"
     },
     {
-     "texte": "— pays et puissance — pour ne pas le ressaisir. Il vous montre ce qu’il contient avant que vous n’en fassiez quoi que ce soit : rien n’est envoyé tant que vous ne suivez pas le lien.",
-     "mots": 34,
-     "ou": "cadre:texte"
-    },
-    {
-     "texte": "engagent leur auteur, pas la réalité. Et lorsqu’un fait postérieur rend optimiste une valeur affichée ailleurs sur cette page — la classe de prix finlandaise en est l’exemple —, il est inscrit en",
-     "mots": 31,
-     "ou": "cadre:texte"
-    },
-    {
      "texte": "Le risque n’est donc PAS maximal là où il fait le plus chaud. Il est maximal là où l’on ne s’y attendait pas — Rennes, Pantin, Londres, et non Séville.",
      "mots": 29,
-     "ou": "cadre:texte"
-    },
-    {
-     "texte": "documentés (POC, pilotes, production, abandons) mi-2023 → mi-2026, classés selon le Règlement (UE) 2024/1689, avec profil de vulnérabilités cyber, couche réglementaire des 27 États membres et score d'exposition calculé. Et le",
-     "mots": 28,
      "ou": "cadre:texte"
     },
     {
@@ -128,14 +113,29 @@
      "texte": ": +0,116 m · valeur CALCULÉE par interpolation — le GIEC ne publie pas cet horizon · À cet horizon, la trajectoire d'émissions ne change que 4 cm : l'élévation est déjà engagée.",
      "mots": 26,
      "ou": "cadre:texte"
+    },
+    {
+     "texte": "— ce n’est pas une propriété du référentiel, c’est le résultat de votre arbitrage. Les trois premiers portent leur rang ; le classement complet est juste en dessous.",
+     "mots": 26,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": ": un score pondéré additionne, une conjonction ne s’additionne pas. Il se lit à côté du classement, jamais dedans. Chaque fiche concernée porte son motif propre.",
+     "mots": 25,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "porte de même son niveau de preuve. Ouvrez une fiche : la provenance y est plus précise que tout ce qu’un tableau agrégé pourrait rendre.",
+     "mots": 24,
+     "ou": "cadre:texte"
     }
    ],
    "cadres": {
-    "mots_fr": 1954,
-    "mots_en": 5618,
-    "mots_neutres": 1755,
+    "mots_fr": 1287,
+    "mots_en": 6201,
+    "mots_neutres": 1798,
     "textes": 1571,
-    "part_fr": 0.2581,
+    "part_fr": 0.1719,
     "restes": [
      {
       "texte": "eau (publiée il y a 51 mois ; l'éditeur publie tous les 12 mois — 39 mois de retard sur le cycle) · prix (publiée il y a 21 mois ; l'éditeur publie tous les 6 mois — 15 mois de retard sur le cycle) · mix (publiée il y a 21 mois ; l'éditeur publie tous les 12 mois — 9 mois de retard sur le cycle) · feux (publiée il y a 13 mois ; l'éditeur publie tous les 12 mois — 1 mois de retard sur le cycle) · inondations (publiée il y a 12 mois ; l'éditeur publie tous les 12 mois — 0 mois de retard sur le cycle) Une tâche hebdomadaire rafraîchit les familles VIVANTES — celles qui viennent d'une source interrogée. Les autres reposent sur des rapports : un rapport ne se met pas à jour, il est remplacé par son édition suivante, à une date que son éditeur choisit. Pour celles-là, la tâche ne rafraîchit rien : elle dit ce qui aurait dû l'être.",
@@ -183,23 +183,8 @@
       "ou": "cadre:texte"
      },
      {
-      "texte": "— pays et puissance — pour ne pas le ressaisir. Il vous montre ce qu’il contient avant que vous n’en fassiez quoi que ce soit : rien n’est envoyé tant que vous ne suivez pas le lien.",
-      "mots": 34,
-      "ou": "cadre:texte"
-     },
-     {
-      "texte": "engagent leur auteur, pas la réalité. Et lorsqu’un fait postérieur rend optimiste une valeur affichée ailleurs sur cette page — la classe de prix finlandaise en est l’exemple —, il est inscrit en",
-      "mots": 31,
-      "ou": "cadre:texte"
-     },
-     {
       "texte": "Le risque n’est donc PAS maximal là où il fait le plus chaud. Il est maximal là où l’on ne s’y attendait pas — Rennes, Pantin, Londres, et non Séville.",
       "mots": 29,
-      "ou": "cadre:texte"
-     },
-     {
-      "texte": "documentés (POC, pilotes, production, abandons) mi-2023 → mi-2026, classés selon le Règlement (UE) 2024/1689, avec profil de vulnérabilités cyber, couche réglementaire des 27 États membres et score d'exposition calculé. Et le",
-      "mots": 28,
       "ou": "cadre:texte"
      },
      {
@@ -211,40 +196,35 @@
       "texte": ": +0,116 m · valeur CALCULÉE par interpolation — le GIEC ne publie pas cet horizon · À cet horizon, la trajectoire d'émissions ne change que 4 cm : l'élévation est déjà engagée.",
       "mots": 26,
       "ou": "cadre:texte"
+     },
+     {
+      "texte": "— ce n’est pas une propriété du référentiel, c’est le résultat de votre arbitrage. Les trois premiers portent leur rang ; le classement complet est juste en dessous.",
+      "mots": 26,
+      "ou": "cadre:texte"
+     },
+     {
+      "texte": ": un score pondéré additionne, une conjonction ne s’additionne pas. Il se lit à côté du classement, jamais dedans. Chaque fiche concernée porte son motif propre.",
+      "mots": 25,
+      "ou": "cadre:texte"
+     },
+     {
+      "texte": "porte de même son niveau de preuve. Ouvrez une fiche : la provenance y est plus précise que tout ce qu’un tableau agrégé pourrait rendre.",
+      "mots": 24,
+      "ou": "cadre:texte"
      }
     ]
    }
   },
   "enveloppe": {
-   "mots_fr": 1996,
-   "mots_en": 2537,
-   "mots_neutres": 288,
+   "mots_fr": 633,
+   "mots_en": 3866,
+   "mots_neutres": 303,
    "textes": 535,
-   "part_fr": 0.4403,
+   "part_fr": 0.1407,
    "restes": [
-    {
-     "texte": "C'est ce que ce moteur tient et qu'un tableur ne tient pas : il connaît l'incertitude de ses grandeurs. Une enveloppe à ±30 % qui dépasse sa cible de 12 % n'a rien franchi — l'écart est dans le bruit. Le rouge exige un dépassement supérieur à la fois à la tolérance et à l'incertitude ; entre les deux, l'état affiché est « écart non démontré ». Sans cette règle, le troisième faux positif éteint la vigilance sur tous les autres.",
-     "mots": 72,
-     "ou": "cadre:texte"
-    },
     {
      "texte": "La demande existe-t-elle, le calendrier tient-il face à l’accès à l’électricité, à partir de quel remplissage le site couvre-t-il ses coûts. Huit tests qui entrent dans le MÊME verdict que le chiffrage. Les huit constats s’affichent dans le dossier du pays que vous ouvrez sur la carte, sous l’enveloppe.",
      "mots": 54,
-     "ou": "cadre:texte"
-    },
-    {
-     "texte": "la colocation ni le site régional, dont la nature reste marquée en conséquence. Et elle reste un ordre de grandeur de marché : ce module ne fabrique pas VOTRE prix — aucun des 97 centres du référentiel ne publiant sa capacité, rien ici ne remplace vos devis. Ce que le module apporte est ailleurs : la",
-     "mots": 52,
-     "ou": "cadre:texte"
-    },
-    {
-     "texte": "elle en est une, « le modèle l'a détectée » n'étant pas une raison qu'on oppose à un exploitant ; et un commentaire annexé à un dossier ne doit rien pouvoir inventer. Composé depuis les grandeurs déjà calculées, celui-ci n'affirme que ce qui a été mesuré et pose les causes en question.",
-     "mots": 50,
-     "ou": "cadre:texte"
-    },
-    {
-     "texte": "Recalibrer une ambition en ouverture coûte une réunion ; expliquer six mois plus tard pourquoi le tableau de bord n'est pas utilisé coûte le projet — et la confiance qui allait avec. La note de restitution ci-dessous porte le verdict en tête, jamais en annexe.",
-     "mots": 44,
      "ou": "cadre:texte"
     },
     {
@@ -258,16 +238,6 @@
      "ou": "cadre:texte"
     },
     {
-     "texte": ", et quand le même maître d'ouvrage porte les deux, elles pèsent le tiers de l'investissement total. Raisonner sur la seule enveloppe travaux fait arbitrer des économies de génie civil pendant que le poste le plus lourd passe sans discussion.",
-     "mots": 39,
-     "ou": "cadre:texte"
-    },
-    {
-     "texte": ", sans que le lecteur ait à comparer mentalement chaque valeur à sa cible. Trois mécanismes s'en chargent ici — la forme choisie pour la donnée, le seuil coloré, et la tendance mesurée. S'y ajoutent les trois apports de l'analyse augmentée :",
-     "mots": 39,
-     "ou": "cadre:texte"
-    },
-    {
      "texte": "— Puissance, gabarit, scénario, calendrier — les critères d’ingénierie sous « Aller plus loin », et le BUSINESS CASE sous son propre dépliant : prix d’hébergement, puissance contractée, année de puissance ferme. Sans eux, le verdict ne parlera que de construction.",
      "mots": 36,
      "ou": "cadre:texte"
@@ -278,56 +248,66 @@
      "ou": "cadre:texte"
     },
     {
-     "texte": "qui les qualifient. Aucun modèle de langage n’intervient dans leur rédaction : ils sont composés par calcul déterministe, et le disent en toutes lettres. Ils ne portent donc pas le marquage de l’article 50, qui ne s’appliquerait pas.",
-     "mots": 36,
+     "texte": "— honoraires, phases, pièces à produire ? Prenez le second. Les deux se prennent l’un après l’autre : ils ne s’excluent pas, et aucun ne referme l’étude en cours.",
+     "mots": 26,
      "ou": "cadre:texte"
     },
     {
-     "texte": "— et ils ne peuvent pas se calculer sans vous : revenu attendu, coût du capital et taux d’impôt sont des décisions d’investisseur, pas des données de référentiel. Tant qu’elles ne sont pas saisies, les trois sont",
-     "mots": 35,
+     "texte": "L’organisation a-t-elle de quoi instruire cette décision, puis en suivre l’exécution ? À poser avant de promettre un tableau de bord.",
+     "mots": 22,
      "ou": "cadre:texte"
     },
     {
-     "texte": "— pays et puissance — pour ne pas le ressaisir. Il vous montre ce qu’il contient avant que vous n’en fassiez quoi que ce soit : rien n’est envoyé tant que vous ne suivez pas le lien.",
-     "mots": 34,
+     "texte": "— Montée en charge commerciale, Besoin en fonds de roulement, Investissement de maintien, Durée d'amortissement. Chacune porte sa provenance et reste modifiable.",
+     "mots": 21,
      "ou": "cadre:texte"
     },
     {
-     "texte": "Un comité qui reçoit une enveloppe à ±30 % sans série datée ni grille de lecture ne décide pas mieux avec un graphique de plus — il décide à l'intuition, avec un chiffre pour se rassurer.",
-     "mots": 33,
+     "texte": "Seuils, tendances et alertes : où une action est attendue — sans crier au loup sur un écart qui tient dans l’incertitude.",
+     "mots": 20,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "Le poste que les quatorze lots ne contiennent pas — et qui pèse le tiers de l’investissement quand vous le portez.",
+     "mots": 20,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "du pays retenu partent vers la section 6 de la page d’ingénierie de projet, où ils pré-remplissent le calcul —",
+     "mots": 19,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "EVA, ROCE, free cash flow : le projet le moins cher n’est pas toujours celui qui crée de la valeur.",
+     "mots": 19,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "Les honoraires, phase par phase et mission par mission, sur le montant des travaux du pays retenu.",
+     "mots": 17,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "De deux à six pays comparés. En dessous de deux, il n’y a rien à comparer.",
+     "mots": 16,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "Ni enveloppe, ni coût unitaire, ni prix d’électricité : une adresse se copie et se journalise.",
+     "mots": 15,
      "ou": "cadre:texte"
     }
    ],
    "cadres": {
-    "mots_fr": 1996,
-    "mots_en": 2441,
-    "mots_neutres": 285,
+    "mots_fr": 633,
+    "mots_en": 3770,
+    "mots_neutres": 300,
     "textes": 525,
-    "part_fr": 0.4499,
+    "part_fr": 0.1438,
     "restes": [
-     {
-      "texte": "C'est ce que ce moteur tient et qu'un tableur ne tient pas : il connaît l'incertitude de ses grandeurs. Une enveloppe à ±30 % qui dépasse sa cible de 12 % n'a rien franchi — l'écart est dans le bruit. Le rouge exige un dépassement supérieur à la fois à la tolérance et à l'incertitude ; entre les deux, l'état affiché est « écart non démontré ». Sans cette règle, le troisième faux positif éteint la vigilance sur tous les autres.",
-      "mots": 72,
-      "ou": "cadre:texte"
-     },
      {
       "texte": "La demande existe-t-elle, le calendrier tient-il face à l’accès à l’électricité, à partir de quel remplissage le site couvre-t-il ses coûts. Huit tests qui entrent dans le MÊME verdict que le chiffrage. Les huit constats s’affichent dans le dossier du pays que vous ouvrez sur la carte, sous l’enveloppe.",
       "mots": 54,
-      "ou": "cadre:texte"
-     },
-     {
-      "texte": "la colocation ni le site régional, dont la nature reste marquée en conséquence. Et elle reste un ordre de grandeur de marché : ce module ne fabrique pas VOTRE prix — aucun des 97 centres du référentiel ne publiant sa capacité, rien ici ne remplace vos devis. Ce que le module apporte est ailleurs : la",
-      "mots": 52,
-      "ou": "cadre:texte"
-     },
-     {
-      "texte": "elle en est une, « le modèle l'a détectée » n'étant pas une raison qu'on oppose à un exploitant ; et un commentaire annexé à un dossier ne doit rien pouvoir inventer. Composé depuis les grandeurs déjà calculées, celui-ci n'affirme que ce qui a été mesuré et pose les causes en question.",
-      "mots": 50,
-      "ou": "cadre:texte"
-     },
-     {
-      "texte": "Recalibrer une ambition en ouverture coûte une réunion ; expliquer six mois plus tard pourquoi le tableau de bord n'est pas utilisé coûte le projet — et la confiance qui allait avec. La note de restitution ci-dessous porte le verdict en tête, jamais en annexe.",
-      "mots": 44,
       "ou": "cadre:texte"
      },
      {
@@ -341,16 +321,6 @@
       "ou": "cadre:texte"
      },
      {
-      "texte": ", et quand le même maître d'ouvrage porte les deux, elles pèsent le tiers de l'investissement total. Raisonner sur la seule enveloppe travaux fait arbitrer des économies de génie civil pendant que le poste le plus lourd passe sans discussion.",
-      "mots": 39,
-      "ou": "cadre:texte"
-     },
-     {
-      "texte": ", sans que le lecteur ait à comparer mentalement chaque valeur à sa cible. Trois mécanismes s'en chargent ici — la forme choisie pour la donnée, le seuil coloré, et la tendance mesurée. S'y ajoutent les trois apports de l'analyse augmentée :",
-      "mots": 39,
-      "ou": "cadre:texte"
-     },
-     {
       "texte": "— Puissance, gabarit, scénario, calendrier — les critères d’ingénierie sous « Aller plus loin », et le BUSINESS CASE sous son propre dépliant : prix d’hébergement, puissance contractée, année de puissance ferme. Sans eux, le verdict ne parlera que de construction.",
       "mots": 36,
       "ou": "cadre:texte"
@@ -361,34 +331,64 @@
       "ou": "cadre:texte"
      },
      {
-      "texte": "qui les qualifient. Aucun modèle de langage n’intervient dans leur rédaction : ils sont composés par calcul déterministe, et le disent en toutes lettres. Ils ne portent donc pas le marquage de l’article 50, qui ne s’appliquerait pas.",
-      "mots": 36,
+      "texte": "— honoraires, phases, pièces à produire ? Prenez le second. Les deux se prennent l’un après l’autre : ils ne s’excluent pas, et aucun ne referme l’étude en cours.",
+      "mots": 26,
       "ou": "cadre:texte"
      },
      {
-      "texte": "— et ils ne peuvent pas se calculer sans vous : revenu attendu, coût du capital et taux d’impôt sont des décisions d’investisseur, pas des données de référentiel. Tant qu’elles ne sont pas saisies, les trois sont",
-      "mots": 35,
+      "texte": "L’organisation a-t-elle de quoi instruire cette décision, puis en suivre l’exécution ? À poser avant de promettre un tableau de bord.",
+      "mots": 22,
       "ou": "cadre:texte"
      },
      {
-      "texte": "— pays et puissance — pour ne pas le ressaisir. Il vous montre ce qu’il contient avant que vous n’en fassiez quoi que ce soit : rien n’est envoyé tant que vous ne suivez pas le lien.",
-      "mots": 34,
+      "texte": "— Montée en charge commerciale, Besoin en fonds de roulement, Investissement de maintien, Durée d'amortissement. Chacune porte sa provenance et reste modifiable.",
+      "mots": 21,
       "ou": "cadre:texte"
      },
      {
-      "texte": "Un comité qui reçoit une enveloppe à ±30 % sans série datée ni grille de lecture ne décide pas mieux avec un graphique de plus — il décide à l'intuition, avec un chiffre pour se rassurer.",
-      "mots": 33,
+      "texte": "Seuils, tendances et alertes : où une action est attendue — sans crier au loup sur un écart qui tient dans l’incertitude.",
+      "mots": 20,
+      "ou": "cadre:texte"
+     },
+     {
+      "texte": "Le poste que les quatorze lots ne contiennent pas — et qui pèse le tiers de l’investissement quand vous le portez.",
+      "mots": 20,
+      "ou": "cadre:texte"
+     },
+     {
+      "texte": "du pays retenu partent vers la section 6 de la page d’ingénierie de projet, où ils pré-remplissent le calcul —",
+      "mots": 19,
+      "ou": "cadre:texte"
+     },
+     {
+      "texte": "EVA, ROCE, free cash flow : le projet le moins cher n’est pas toujours celui qui crée de la valeur.",
+      "mots": 19,
+      "ou": "cadre:texte"
+     },
+     {
+      "texte": "Les honoraires, phase par phase et mission par mission, sur le montant des travaux du pays retenu.",
+      "mots": 17,
+      "ou": "cadre:texte"
+     },
+     {
+      "texte": "De deux à six pays comparés. En dessous de deux, il n’y a rien à comparer.",
+      "mots": 16,
+      "ou": "cadre:texte"
+     },
+     {
+      "texte": "Ni enveloppe, ni coût unitaire, ni prix d’électricité : une adresse se copie et se journalise.",
+      "mots": 15,
       "ou": "cadre:texte"
      }
     ]
    }
   },
   "empreinte-parc": {
-   "mots_fr": 656,
-   "mots_en": 1473,
-   "mots_neutres": 398,
+   "mots_fr": 258,
+   "mots_en": 1851,
+   "mots_neutres": 411,
    "textes": 398,
-   "part_fr": 0.3081,
+   "part_fr": 0.1223,
    "restes": [
     {
      "texte": "Aucune de ces valeurs n’est mesurée. Elles sont calculées à partir d’ordres de grandeur de catégorie, avec la formule affichée, et servent à situer un parc — jamais à comparer deux sites nommément, ni à établir un bilan réglementaire. Le bilan réglementaire viendra de la base européenne créée par la directive (UE) 2023/1791, qui recueillera des valeurs DÉCLARÉES.",
@@ -411,67 +411,67 @@
      "ou": "cadre:texte"
     },
     {
-     "texte": ", et quand le même maître d'ouvrage porte les deux, elles pèsent le tiers de l'investissement total. Raisonner sur la seule enveloppe travaux fait arbitrer des économies de génie civil pendant que le poste le plus lourd passe sans discussion.",
-     "mots": 39,
+     "texte": "consommée en amont pour produire l’électricité achetée",
+     "mots": 7,
      "ou": "cadre:texte"
     },
     {
-     "texte": "documentés (POC, pilotes, production, abandons) mi-2023 → mi-2026, classés selon le Règlement (UE) 2024/1689, avec profil de vulnérabilités cyber, couche réglementaire des 27 États membres et score d'exposition calculé. Et le",
-     "mots": 28,
+     "texte": "Dense (calcul et virtualisation) — 12 kW/baie",
+     "mots": 6,
+     "ou": "cadre:option"
+    },
+    {
+     "texte": "par an, sur le parc cartographié",
+     "mots": 6,
      "ou": "cadre:texte"
     },
     {
-     "texte": "couvre les planchers techniques, les chemins de câbles et la distribution en salle — il porte lui-même la mention « hors serveurs ». Les machines sont un investissement",
-     "mots": 26,
+     "texte": "Comment ces chiffres sont obtenus.",
+     "mots": 5,
      "ou": "cadre:texte"
     },
     {
-     "texte": "qui les fait tourner : électricité, CO₂e sur cycle de vie, eau de refroidissement et critères d’implantation, pays par pays. Base de travail pour décideurs.",
-     "mots": 25,
+     "texte": "Grille — 4 à 6 pays par ligne",
+     "mots": 5,
+     "ou": "cadre:option"
+    },
+    {
+     "texte": "Ce que le total tranche",
+     "mots": 5,
      "ou": "cadre:texte"
     },
     {
-     "texte": "Côté investissement : combien d'équipements la puissance informatique impose, à quel prix indicatif, et quelle part du total. Côté empreinte : leur carbone de fabrication au",
-     "mots": 24,
+     "texte": "Le poste qu’on oublie.",
+     "mots": 4,
      "ou": "cadre:texte"
     },
     {
-     "texte": ": statut, mise en service, capacité et investissement annoncés, électricité, eau, refroidissement, CO₂e — et, pour chaque valeur, si elle est",
-     "mots": 20,
+     "texte": "Eau de la source",
+     "mots": 4,
      "ou": "cadre:texte"
     },
     {
-     "texte": "Ce bloc en déduit les quantités, le prix indicatif et le carbone de fabrication — puis il rend le montant qui",
-     "mots": 20,
+     "texte": "— Choisissez un rôle —",
+     "mots": 3,
+     "ou": "cadre:option"
+    },
+    {
+     "texte": "Régler le projet",
+     "mots": 3,
      "ou": "cadre:texte"
     },
     {
-     "texte": ", catégories 1 et 2 — la troisième composante, sans laquelle les scopes 1 et 2 ne font pas un bilan. Le module est partagé",
-     "mots": 19,
-     "ou": "cadre:texte"
-    },
-    {
-     "texte": "de la création de valeur, deux blocs plus bas. Le lire après l’EVA donnerait un ROCE surestimé d’un tiers.",
-     "mots": 19,
-     "ou": "cadre:texte"
-    },
-    {
-     "texte": "avec la page d'ingénierie de conseilprevcyber : les quantités y sont les mêmes, à la ligne près.",
-     "mots": 16,
-     "ou": "cadre:texte"
-    },
-    {
-     "texte": "Le même calcul répond à deux questions, c'est pourquoi ce bloc figure dans les deux vues.",
-     "mots": 16,
-     "ou": "cadre:texte"
+     "texte": "Tous les pays",
+     "mots": 3,
+     "ou": "cadre:option"
     }
    ],
    "cadres": {
-    "mots_fr": 656,
-    "mots_en": 1406,
-    "mots_neutres": 390,
+    "mots_fr": 258,
+    "mots_en": 1784,
+    "mots_neutres": 403,
     "textes": 386,
-    "part_fr": 0.3181,
+    "part_fr": 0.1263,
     "restes": [
      {
       "texte": "Aucune de ces valeurs n’est mesurée. Elles sont calculées à partir d’ordres de grandeur de catégorie, avec la formule affichée, et servent à situer un parc — jamais à comparer deux sites nommément, ni à établir un bilan réglementaire. Le bilan réglementaire viendra de la base européenne créée par la directive (UE) 2023/1791, qui recueillera des valeurs DÉCLARÉES.",
@@ -494,88 +494,73 @@
       "ou": "cadre:texte"
      },
      {
-      "texte": ", et quand le même maître d'ouvrage porte les deux, elles pèsent le tiers de l'investissement total. Raisonner sur la seule enveloppe travaux fait arbitrer des économies de génie civil pendant que le poste le plus lourd passe sans discussion.",
-      "mots": 39,
+      "texte": "consommée en amont pour produire l’électricité achetée",
+      "mots": 7,
       "ou": "cadre:texte"
      },
      {
-      "texte": "documentés (POC, pilotes, production, abandons) mi-2023 → mi-2026, classés selon le Règlement (UE) 2024/1689, avec profil de vulnérabilités cyber, couche réglementaire des 27 États membres et score d'exposition calculé. Et le",
-      "mots": 28,
+      "texte": "Dense (calcul et virtualisation) — 12 kW/baie",
+      "mots": 6,
+      "ou": "cadre:option"
+     },
+     {
+      "texte": "par an, sur le parc cartographié",
+      "mots": 6,
       "ou": "cadre:texte"
      },
      {
-      "texte": "couvre les planchers techniques, les chemins de câbles et la distribution en salle — il porte lui-même la mention « hors serveurs ». Les machines sont un investissement",
-      "mots": 26,
+      "texte": "Comment ces chiffres sont obtenus.",
+      "mots": 5,
       "ou": "cadre:texte"
      },
      {
-      "texte": "qui les fait tourner : électricité, CO₂e sur cycle de vie, eau de refroidissement et critères d’implantation, pays par pays. Base de travail pour décideurs.",
-      "mots": 25,
+      "texte": "Grille — 4 à 6 pays par ligne",
+      "mots": 5,
+      "ou": "cadre:option"
+     },
+     {
+      "texte": "Ce que le total tranche",
+      "mots": 5,
       "ou": "cadre:texte"
      },
      {
-      "texte": "Côté investissement : combien d'équipements la puissance informatique impose, à quel prix indicatif, et quelle part du total. Côté empreinte : leur carbone de fabrication au",
-      "mots": 24,
+      "texte": "Le poste qu’on oublie.",
+      "mots": 4,
       "ou": "cadre:texte"
      },
      {
-      "texte": ": statut, mise en service, capacité et investissement annoncés, électricité, eau, refroidissement, CO₂e — et, pour chaque valeur, si elle est",
-      "mots": 20,
+      "texte": "Eau de la source",
+      "mots": 4,
       "ou": "cadre:texte"
      },
      {
-      "texte": "Ce bloc en déduit les quantités, le prix indicatif et le carbone de fabrication — puis il rend le montant qui",
-      "mots": 20,
+      "texte": "— Choisissez un rôle —",
+      "mots": 3,
+      "ou": "cadre:option"
+     },
+     {
+      "texte": "Régler le projet",
+      "mots": 3,
       "ou": "cadre:texte"
      },
      {
-      "texte": ", catégories 1 et 2 — la troisième composante, sans laquelle les scopes 1 et 2 ne font pas un bilan. Le module est partagé",
-      "mots": 19,
-      "ou": "cadre:texte"
-     },
-     {
-      "texte": "de la création de valeur, deux blocs plus bas. Le lire après l’EVA donnerait un ROCE surestimé d’un tiers.",
-      "mots": 19,
-      "ou": "cadre:texte"
-     },
-     {
-      "texte": "avec la page d'ingénierie de conseilprevcyber : les quantités y sont les mêmes, à la ligne près.",
-      "mots": 16,
-      "ou": "cadre:texte"
-     },
-     {
-      "texte": "Le même calcul répond à deux questions, c'est pourquoi ce bloc figure dans les deux vues.",
-      "mots": 16,
-      "ou": "cadre:texte"
+      "texte": "Tous les pays",
+      "mots": 3,
+      "ou": "cadre:option"
      }
     ]
    }
   },
   "obs-rd": {
-   "mots_fr": 250,
-   "mots_en": 930,
-   "mots_neutres": 171,
+   "mots_fr": 120,
+   "mots_en": 1063,
+   "mots_neutres": 166,
    "textes": 185,
-   "part_fr": 0.2119,
+   "part_fr": 0.1014,
    "restes": [
-    {
-     "texte": "à NeurIPS (~top 2 % des publications). * Royaume-Uni, Allemagne, France et Canada : entre 2 et 4 % chacun des lieux de travail selon la carte source (lecture graphique — valeur précise non publiée). Inde : lieu de travail non disponible.",
-     "mots": 34,
-     "ou": "cadre:texte"
-    },
-    {
-     "texte": "y sont joints en image, dans la vue que vous avez choisie. Chaque chapitre porte sa source, sa licence, son millésime et sa précision — et le dossier rappelle les crédits à reproduire, dont la",
-     "mots": 34,
-     "ou": "cadre:texte"
-    },
     {
      "texte": ". Survoler une ligne pour le détail. « Autres » — le reste du monde — y figure aussi : sur une carte il n’avait pas de territoire, dans une figure de flux il a sa ligne comme les autres.",
      "mots": 34,
-     "ou": "cadre:texte"
-    },
-    {
-     "texte": ": modèles remarquables par pays, brevets accordés (parts, volumes et facteurs de croissance), chercheurs d’élite et soldes nets, adoption par les entreprises de l’Union, cadre et gouvernance. Les",
-     "mots": 27,
      "ou": "cadre:texte"
     },
     {
@@ -594,23 +579,8 @@
      "ou": "cadre:texte"
     },
     {
-     "texte": "Définition (N.B. de la carte source) : auteurs d’articles retenus pour",
-     "mots": 11,
-     "ou": "cadre:texte"
-    },
-    {
      "texte": "le classement des écarts d’un coup d’œil — la vue",
      "mots": 9,
-     "ou": "cadre:texte"
-    },
-    {
-     "texte": "cartes et graphiques affichés à l’écran",
-     "mots": 6,
-     "ou": "cadre:texte"
-    },
-    {
-     "texte": "tout ce que cette page calcule",
-     "mots": 6,
      "ou": "cadre:texte"
     },
     {
@@ -629,36 +599,26 @@
      "ou": "cadre:texte"
     },
     {
-     "texte": "des données de brevets.",
-     "mots": 4,
+     "texte": "au point",
+     "mots": 2,
+     "ou": "cadre:texte"
+    },
+    {
+     "texte": "« formés »",
+     "mots": 1,
      "ou": "cadre:texte"
     }
    ],
    "cadres": {
-    "mots_fr": 250,
-    "mots_en": 878,
-    "mots_neutres": 165,
+    "mots_fr": 120,
+    "mots_en": 1011,
+    "mots_neutres": 160,
     "textes": 174,
-    "part_fr": 0.2216,
+    "part_fr": 0.1061,
     "restes": [
-     {
-      "texte": "à NeurIPS (~top 2 % des publications). * Royaume-Uni, Allemagne, France et Canada : entre 2 et 4 % chacun des lieux de travail selon la carte source (lecture graphique — valeur précise non publiée). Inde : lieu de travail non disponible.",
-      "mots": 34,
-      "ou": "cadre:texte"
-     },
-     {
-      "texte": "y sont joints en image, dans la vue que vous avez choisie. Chaque chapitre porte sa source, sa licence, son millésime et sa précision — et le dossier rappelle les crédits à reproduire, dont la",
-      "mots": 34,
-      "ou": "cadre:texte"
-     },
      {
       "texte": ". Survoler une ligne pour le détail. « Autres » — le reste du monde — y figure aussi : sur une carte il n’avait pas de territoire, dans une figure de flux il a sa ligne comme les autres.",
       "mots": 34,
-      "ou": "cadre:texte"
-     },
-     {
-      "texte": ": modèles remarquables par pays, brevets accordés (parts, volumes et facteurs de croissance), chercheurs d’élite et soldes nets, adoption par les entreprises de l’Union, cadre et gouvernance. Les",
-      "mots": 27,
       "ou": "cadre:texte"
      },
      {
@@ -677,23 +637,8 @@
       "ou": "cadre:texte"
      },
      {
-      "texte": "Définition (N.B. de la carte source) : auteurs d’articles retenus pour",
-      "mots": 11,
-      "ou": "cadre:texte"
-     },
-     {
       "texte": "le classement des écarts d’un coup d’œil — la vue",
       "mots": 9,
-      "ou": "cadre:texte"
-     },
-     {
-      "texte": "cartes et graphiques affichés à l’écran",
-      "mots": 6,
-      "ou": "cadre:texte"
-     },
-     {
-      "texte": "tout ce que cette page calcule",
-      "mots": 6,
       "ou": "cadre:texte"
      },
      {
@@ -712,8 +657,13 @@
       "ou": "cadre:texte"
      },
      {
-      "texte": "des données de brevets.",
-      "mots": 4,
+      "texte": "au point",
+      "mots": 2,
+      "ou": "cadre:texte"
+     },
+     {
+      "texte": "« formés »",
+      "mots": 1,
       "ou": "cadre:texte"
      }
     ]
@@ -748,10 +698,10 @@
   },
   "finops": {
    "mots_fr": 259,
-   "mots_en": 96799,
-   "mots_neutres": 2051,
-   "textes": 11922,
-   "part_fr": 0.0027,
+   "mots_en": 98024,
+   "mots_neutres": 2076,
+   "textes": 12072,
+   "part_fr": 0.0026,
    "restes": [
     {
      "texte": "— Les tarifs d'OpenAI, Google, Mistral, Meta et des hébergeurs de modèles ouverts ne figurent pas dans la table : ils ne sont pas relevés ici. Les ajouter demande de reporter le prix publié, sa devise, sa date de relevé et son adresse — pas de l'estimer.",
@@ -779,7 +729,7 @@
      "ou": "texte"
     },
     {
-     "texte": "du parc déclaré est chiffrable. Les 1959 autres ligne(s) ne coûtent pas zéro : personne n’a encore dit ce qu’elles consomment.",
+     "texte": "du parc déclaré est chiffrable. Les 1984 autres ligne(s) ne coûtent pas zéro : personne n’a encore dit ce qu’elles consomment.",
      "mots": 20,
      "ou": "texte"
     },
@@ -830,11 +780,11 @@
     }
    ],
    "donnees": {
-    "mots_fr": 19967,
+    "mots_fr": 20222,
     "mots_en": 15,
     "mots_neutres": 29,
-    "textes": 5890,
-    "part_fr": 0.9992,
+    "textes": 5965,
+    "part_fr": 0.9993,
     "restes": [
      {
       "texte": "Detection de fraude transactionnelle",
@@ -876,10 +826,10 @@
   },
   "empreinte-ia": {
    "mots_fr": 190,
-   "mots_en": 33956,
+   "mots_en": 34381,
    "mots_neutres": 126,
-   "textes": 2078,
-   "part_fr": 0.0056,
+   "textes": 2103,
+   "part_fr": 0.0055,
    "restes": [
     {
      "texte": "HYPOTHÈSE DU CABINET, PAS UNE MESURE. Ordre de grandeur calé sur l'approche Boavizta, simplifié en pourcentage ajouté à l'usage. À REMPLACER par une analyse de cycle de vie du matériel réel — `equipements_it` porte déjà les empreintes produit par poste. ·",
@@ -928,11 +878,11 @@
     }
    ],
    "donnees": {
-    "mots_fr": 13302,
+    "mots_fr": 13472,
     "mots_en": 6,
     "mots_neutres": 12,
-    "textes": 3918,
-    "part_fr": 0.9995,
+    "textes": 3968,
+    "part_fr": 0.9996,
     "restes": [
      {
       "texte": "Detection de fraude transactionnelle",
@@ -1054,7 +1004,7 @@
   "rgpd-site": {
    "mots_fr": 5,
    "mots_en": 1397,
-   "mots_neutres": 3995,
+   "mots_neutres": 3928,
    "textes": 1522,
    "part_fr": 0.0036,
    "restes": [
@@ -2417,10 +2367,10 @@
    ]
   },
   "registre": {
-   "mots_fr": 6256,
-   "mots_en": 16549,
-   "mots_neutres": 23899,
-   "textes": 13732,
+   "mots_fr": 6336,
+   "mots_en": 16759,
+   "mots_neutres": 24204,
+   "textes": 13907,
    "part_fr": 0.2743,
    "restes": [
     {
@@ -2435,10 +2385,10 @@
     }
    ],
    "donnees": {
-    "mots_fr": 12524,
+    "mots_fr": 12684,
     "mots_en": 6,
-    "mots_neutres": 1967,
-    "textes": 5877,
+    "mots_neutres": 1992,
+    "textes": 5952,
     "part_fr": 0.9995,
     "restes": [
      {
@@ -2557,38 +2507,17 @@
    ]
   },
   "matrice": {
-   "mots_fr": 7828,
-   "mots_en": 23,
-   "mots_neutres": 26,
-   "textes": 1978,
-   "part_fr": 0.9971,
-   "restes": [
-    {
-     "texte": "Risque minimal · À évaluer ·",
-     "mots": 4,
-     "ou": "texte"
-    },
-    {
-     "texte": "Haut risque · À évaluer ·",
-     "mots": 4,
-     "ou": "texte"
-    },
-    {
-     "texte": "Haut risque · En cours ·",
-     "mots": 4,
-     "ou": "texte"
-    },
-    {
-     "texte": "À évaluer · À évaluer ·",
-     "mots": 4,
-     "ou": "texte"
-    }
-   ],
+   "mots_fr": 0,
+   "mots_en": 8430,
+   "mots_neutres": 2348,
+   "textes": 3985,
+   "part_fr": 0,
+   "restes": [],
    "donnees": {
-    "mots_fr": 6693,
+    "mots_fr": 6778,
     "mots_en": 7,
-    "mots_neutres": 1965,
-    "textes": 3927,
+    "mots_neutres": 1990,
+    "textes": 3977,
     "part_fr": 0.999,
     "restes": [
      {
@@ -2758,7 +2687,7 @@
      "ou": "option"
     },
     {
-     "texte": "1959 système(s)",
+     "texte": "1984 système(s)",
      "mots": 2,
      "ou": "texte"
     },
@@ -2813,11 +2742,11 @@
    ]
   },
   "clients": {
-   "mots_fr": 65,
+   "mots_fr": 71,
    "mots_en": 254,
-   "mots_neutres": 102,
+   "mots_neutres": 97,
    "textes": 73,
-   "part_fr": 0.2038,
+   "part_fr": 0.2185,
    "restes": [
     {
      "texte": "— STRIPE_WEBHOOK_SECRET absente : le point de réception répond 501 à toute notification, aucun paiement ne peut être confirmé.",
@@ -2838,6 +2767,11 @@
      "texte": "— Sélectionner un client —",
      "mots": 3,
      "ou": "option"
+    },
+    {
+     "texte": "✅ repreneur2@recette.test",
+     "mots": 3,
+     "ou": "texte"
     },
     {
      "texte": "✅ payeur@recette.test",
@@ -3113,23 +3047,23 @@
   }
  },
  "cadres": {
-  "mots_fr": 4856,
-  "mots_en": 10418,
-  "mots_neutres": 2602,
+  "mots_fr": 2298,
+  "mots_en": 12841,
+  "mots_neutres": 2668,
   "textes": 2667,
   "pages": 5,
-  "part_fr": 0.3179
+  "part_fr": 0.1518
  },
  "donnees": {
-  "mots_fr": 52486,
+  "mots_fr": 53156,
   "mots_en": 34,
-  "mots_neutres": 3976,
-  "textes": 19614,
+  "mots_neutres": 4026,
+  "textes": 19864,
   "pages": 5,
   "part_fr": 0.9994
  },
  "erreurs": [],
- "attentes_limiteur": 78,
+ "attentes_limiteur": 77,
  "reponses_429": 0,
  "pages_429": []
 }
