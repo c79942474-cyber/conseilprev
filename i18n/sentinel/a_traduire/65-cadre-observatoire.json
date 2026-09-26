@@ -1,0 +1,110 @@
+{
+ "_lot": "65-cadre-observatoire",
+ "_mots": 201,
+ "_pages": [
+  "obs-rd"
+ ],
+ "_rubrique": "l'observatoire de la recherche et du developpement en IA (document embarque observatoire.html)",
+ "bloc": {
+  "Définition (N.B. de la carte source) : auteurs d’articles retenus pour présentation orale à NeurIPS (~top # % des publications). * Royaume-Uni, Allemagne, France et Canada : entre # et # % chacun des lieux de travail selon la carte source (lecture graphique — valeur précise non publiée). Inde : lieu de travail non disponible.": {
+   "en": "Definition (note from the source map): authors of papers accepted for <em>oral presentation</em> at NeurIPS (~top # % of publications). * United Kingdom, Germany, France and Canada: between # and # % each of the places of work according to the source map (read off the chart — exact value not published). India: place of work not available.",
+   "fr": "Définition (N.B. de la carte source) : auteurs d’articles retenus pour présentation orale à NeurIPS (~top 2 % des publications). * Royaume-Uni, Allemagne, France et Canada : entre 2 et 4 % chacun des lieux de travail selon la carte source (lecture graphique — valeur précise non publiée). Inde : lieu de travail non disponible.",
+   "html": "Définition (N.B. de la carte source) : auteurs d’articles retenus pour <em>présentation orale</em> à NeurIPS (~top 2 % des publications). * Royaume-Uni, Allemagne, France et Canada : entre 2 et 4 % chacun des lieux de travail selon la carte source (lecture graphique — valeur précise non publiée). Inde : lieu de travail non disponible."
+  },
+  "Le document reprend tout ce que cette page calcule : modèles remarquables par pays, brevets accordés (parts, volumes et facteurs de croissance), chercheurs d’élite et soldes nets, adoption par les entreprises de l’Union, cadre et gouvernance. Les cartes et graphiques affichés à l’écran y sont joints en image, dans la vue que vous avez choisie. Chaque chapitre porte sa source, sa licence, son millésime et sa précision — et le dossier rappelle les crédits à reproduire, dont la licence sans dérivée des données de brevets.": {
+   "en": "The document carries <b>everything this page computes</b>: notable models by country, patents granted (shares, volumes and growth factors), elite researchers and net balances, adoption by companies in the Union, framework and governance. The <b>maps and charts shown on screen</b> are attached as images, in the view you have chosen. Each chapter carries its source, its licence, its vintage and its precision — and the report recalls the credits to reproduce, including the <b>no-derivatives licence</b> of the patent data.",
+   "fr": "Le document reprend tout ce que cette page calcule : modèles remarquables par pays, brevets accordés (parts, volumes et facteurs de croissance), chercheurs d’élite et soldes nets, adoption par les entreprises de l’Union, cadre et gouvernance. Les cartes et graphiques affichés à l’écran y sont joints en image, dans la vue que vous avez choisie. Chaque chapitre porte sa source, sa licence, son millésime et sa précision — et le dossier rappelle les crédits à reproduire, dont la licence sans dérivée des données de brevets.",
+   "html": "Le document reprend <b>tout ce que cette page calcule</b> : modèles remarquables par pays, brevets accordés (parts, volumes et facteurs de croissance), chercheurs d’élite et soldes nets, adoption par les entreprises de l’Union, cadre et gouvernance. Les <b>cartes et graphiques affichés à l’écran</b> y sont joints en image, dans la vue que vous avez choisie. Chaque chapitre porte sa source, sa licence, son millésime et sa précision — et le dossier rappelle les crédits à reproduire, dont la <b>licence sans dérivée</b> des données de brevets."
+  }
+ },
+ "texte": {
+  "AI Watch (JRC)": {
+   "en": "AI Watch (JRC)",
+   "fr": "AI Watch (JRC)"
+  },
+  "ALTAI (#)": {
+   "en": "ALTAI (#)",
+   "fr": "ALTAI (2020)"
+  },
+  "Adoption entreprises UE": {
+   "en": "EU enterprise adoption",
+   "fr": "Adoption entreprises UE"
+  },
+  "CC BY-ND # · citation": {
+   "en": "CC BY-ND # · citation",
+   "fr": "CC BY-ND 4.0 · citation"
+  },
+  "Cadre & gouvernance UE": {
+   "en": "EU framework & governance",
+   "fr": "Cadre & gouvernance UE"
+  },
+  "Classement # (barres)": {
+   "en": "# ranking (bars)",
+   "fr": "Classement 2023 (barres)"
+  },
+  "Epoch AI — « Data on Notable AI Models », epoch.ai": {
+   "en": "Epoch AI — “Data on Notable AI Models”, epoch.ai",
+   "fr": "Epoch AI — « Data on Notable AI Models », epoch.ai"
+  },
+  "Eurostat · isoc_eb_ai · CC BY #": {
+   "en": "Eurostat · isoc_eb_ai · CC BY #",
+   "fr": "Eurostat · isoc_eb_ai · CC BY 4.0"
+  },
+  "Flux origine → travail": {
+   "en": "Origin → work flows",
+   "fr": "Flux origine → travail"
+  },
+  "Licence": {
+   "en": "Licence",
+   "fr": "Licence"
+  },
+  "Lignes directrices (#)": {
+   "en": "Guidelines (#)",
+   "fr": "Lignes directrices (2019)"
+  },
+  "Origine vs travail (barres)": {
+   "en": "Origin vs work (bars)",
+   "fr": "Origine vs travail (barres)"
+  },
+  "Solde net (barres divergentes)": {
+   "en": "Net balance (diverging bars)",
+   "fr": "Solde net (barres divergentes)"
+  },
+  "Source": {
+   "en": "Source",
+   "fr": "Source"
+  },
+  "Volet": {
+   "en": "Section",
+   "fr": "Volet"
+  },
+  "données : seed · #/#/#": {
+   "en": "data: seed · #/#/#",
+   "fr": "données : seed · 29/07/2026"
+  },
+  "seed": {
+   "en": "seed",
+   "fr": "seed"
+  },
+  "seed · classes (recomposition)": {
+   "en": "seed · classes (recomposed)",
+   "fr": "seed · classes (recomposition)"
+  },
+  "seed — en attente du premier rafraîchissement serveur": {
+   "en": "seed — awaiting the first server refresh",
+   "fr": "seed — en attente du premier rafraîchissement serveur"
+  },
+  "© MacroPolo · citation": {
+   "en": "© MacroPolo · citation",
+   "fr": "© MacroPolo · citation"
+  },
+  "© UE #/#/UE · citation + lien": {
+   "en": "© EU #/#/EU · citation + link",
+   "fr": "© UE 2011/833/UE · citation + lien"
+  },
+  "— pays": {
+   "en": "— countries",
+   "fr": "— pays"
+  }
+ }
+}

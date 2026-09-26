@@ -1,0 +1,36 @@
+{
+ "_pourquoi": "Chaque mutation FABRIQUE un défaut réel dans la traduction des documents embarqués et doit faire TOMBER la règle nommée de tests/test_sentinel_cadres_traduits.py. Les dictionnaires sont produits par « outils/i18n_sentinel.py assembler » depuis i18n/sentinel/a_traduire/ : une mutation qui les touche imite exactement une traduction absente, fausse ou mal chiffrée.",
+ "cibles": [
+  "tests/test_sentinel_cadres_traduits.py"
+ ],
+ "mutations": [
+  {
+   "nom": "la traduction d'un bloc du panorama redevient le français",
+   "fichier": "i18n/sentinel/64-cadre-carte-ue.json",
+   "avant": "\"Public, under an explicit licence, queryable without registration: <b>you can run the query again</b>. It is the only layer of this page that a reader checks end to end, without us.\"",
+   "apres": "\"Publiques, sous licence explicite, interrogeables sans inscription : <b>vous pouvez refaire la requête</b>. C'est la seule couche de cette page qu'un lecteur vérifie de bout en bout, sans nous.\"",
+   "regle": "test_le_document_embarque_ne_garde_aucun_texte_francais[panorama]"
+  },
+  {
+   "nom": "la traduction d'un bloc de l'observatoire redevient le français",
+   "fichier": "i18n/sentinel/65-cadre-observatoire.json",
+   "avant": "\"The document carries <b>everything this page computes</b>",
+   "apres": "\"Le document reprend <b>tout ce que cette page calcule</b>",
+   "regle": "test_le_document_embarque_ne_garde_aucun_texte_francais[observatoire]"
+  },
+  {
+   "nom": "un bloc de méthode du panorama disparaît du dictionnaire",
+   "fichier": "i18n/sentinel/64-cadre-carte-ue.json",
+   "avant": "\"Contexte, pas preuve. Aucune mesure satellitaire ne démontre l'usage d'une IA. Ces couches sont la matière première d'une partie des systèmes recensés — jamais l'indice de leur existence.\":",
+   "apres": "\"CE BLOC N'EST PLUS AU DICTIONNAIRE\":",
+   "regle": "test_les_blocs_de_methode_des_cadres_sont_tous_au_dictionnaire"
+  },
+  {
+   "nom": "un « # » manque à la traduction : les chiffres ne se réinjectent plus",
+   "fichier": "i18n/sentinel/64-cadre-carte-ue.json",
+   "avant": "Deadline reminder: prohibited practices <b>in force since # February #</b>",
+   "apres": "Deadline reminder: prohibited practices <b>in force since February #</b>",
+   "regle": "test_le_document_embarque_ne_garde_aucun_texte_francais[panorama]"
+  }
+ ]
+}

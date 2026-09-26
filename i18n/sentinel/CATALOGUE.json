@@ -14,6 +14,15 @@
     "_coquille"
    ]
   },
+  "# à # · défaut #": {
+   "fr": "0 à 1 · défaut 0",
+   "mots": 2,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "AI Act Art. # — Données et gouvernance (EUR-Lex)": {
    "fr": "AI Act Art. 10 — Données et gouvernance (EUR-Lex)",
    "mots": 8,
@@ -729,6 +738,15 @@
     "juridique"
    ]
   },
+  "Ce qui change d’ici # : jalons réglementaires datés, tendances #, et ce qu’ils périment dans le référentiel": {
+   "fr": "Ce qui change d’ici 2030 : jalons réglementaires datés, tendances 2026, et ce qu’ils périment dans le référentiel",
+   "mots": 17,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Ce qui fonde la décision. Une décision non motivée n’est pas traçable, et le serveur la refuse.": {
    "fr": "Ce qui fonde la décision. Une décision non motivée n’est pas traçable, et le serveur la refuse.",
    "mots": 18,
@@ -771,11 +789,29 @@
     "_js"
    ]
   },
+  "Chaque source, son millésime, son lien — et le registre de vérification": {
+   "fr": "Chaque source, son millésime, son lien — et le registre de vérification",
+   "mots": 11,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Choisir les propositions affichées": {
    "fr": "Choisir les propositions affichées",
    "mots": 4,
    "pages": [
     "qualif-assistee"
+   ]
+  },
+  "Choisir un parcours guidé": {
+   "fr": "Choisir un parcours guidé",
+   "mots": 4,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Classifier ce systeme dans le Simulateur — champs pré-remplis automatiquement": {
@@ -853,6 +889,24 @@
    "mots": 13,
    "pages": [
     "_coquille"
+   ]
+  },
+  "Comment les chiffres sont construits, hypothèse par hypothèse": {
+   "fr": "Comment les chiffres sont construits, hypothèse par hypothèse",
+   "mots": 8,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Comparer les pays selon vos critères : carbone, eau, mix, prix, #": {
+   "fr": "Comparer les pays selon vos critères : carbone, eau, mix, prix, 2030",
+   "mots": 10,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Comparez jusqu a # juridictions sur # dimensions reglementaires (radar et tableau).": {
@@ -1190,6 +1244,15 @@
     "_coquille"
    ]
   },
+  "Enveloppe d’investissement, DPGF par lot, écart entre pays et échéancier #": {
+   "fr": "Enveloppe d’investissement, DPGF par lot, écart entre pays et échéancier 2030",
+   "mots": 11,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Envoyer la matrice RACI par email a un collegue.": {
    "fr": "Envoyer la matrice RACI par email a un collegue.",
    "mots": 9,
@@ -1409,6 +1472,15 @@
     "historique"
    ]
   },
+  "Filtres actifs": {
+   "fr": "Filtres actifs",
+   "mots": 2,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Finalité": {
    "fr": "Finalité",
    "mots": 1,
@@ -1566,6 +1638,15 @@
     "_coquille"
    ]
   },
+  "La carte de l’UE : systèmes d’IA, centres de données, droit national": {
+   "fr": "La carte de l’UE : systèmes d’IA, centres de données, droit national",
+   "mots": 13,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "La date à laquelle les critères d’acceptation ont été ARRÊTÉS": {
    "fr": "La date à laquelle les critères d’acceptation ont été ARRÊTÉS",
    "mots": 11,
@@ -1627,6 +1708,15 @@
    "mots": 18,
    "pages": [
     "_coquille"
+   ]
+  },
+  "Le panel de cas réels, filtrable par risque, secteur et pays": {
+   "fr": "Le panel de cas réels, filtrable par risque, secteur et pays",
+   "mots": 11,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Le parcours reprend ici": {
@@ -1732,6 +1822,33 @@
    "mots": 15,
    "pages": [
     "_coquille"
+   ]
+  },
+  "Les jeux de données ouverts qui alimentent la page": {
+   "fr": "Les jeux de données ouverts qui alimentent la page",
+   "mots": 9,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Les lectures d’ensemble : classes de risque, secteurs, stades": {
+   "fr": "Les lectures d’ensemble : classes de risque, secteurs, stades",
+   "mots": 9,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Les mouvements récents du panel": {
+   "fr": "Les mouvements récents du panel",
+   "mots": 5,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Les quatre fonctions notees separement — et l avertissement quand l aval devance la gouvernance": {
@@ -1970,6 +2087,24 @@
    "mots": 12,
    "pages": [
     "_coquille"
+   ]
+  },
+  "Onglets precedents": {
+   "fr": "Onglets precedents",
+   "mots": 2,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Onglets suivants": {
+   "fr": "Onglets suivants",
+   "mots": 2,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Ou collez directement ici vos données / notes / description de systèmes IA à analyser…": {
@@ -2360,6 +2495,24 @@
    "mots": 14,
    "pages": [
     "_coquille"
+   ]
+  },
+  "Recherche libre": {
+   "fr": "Recherche libre",
+   "mots": 2,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Rechercher (entreprise, cas…)": {
+   "fr": "Rechercher (entreprise, cas…)",
+   "mots": 3,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Rechercher par nom, finalité, service, responsable…": {
@@ -3325,11 +3478,47 @@
     "rgpd-site"
    ]
   },
+  "annonces et permis": {
+   "fr": "annonces et permis",
+   "mots": 3,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "cahier des charges client": {
+   "fr": "cahier des charges client",
+   "mots": 4,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "contact@client.com": {
    "fr": "contact@client.com",
    "mots": 3,
    "pages": [
     "clients"
+   ]
+  },
+  "contrats signés et LOI fermes": {
+   "fr": "contrats signés et LOI fermes",
+   "mots": 5,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "convention de raccordement": {
+   "fr": "convention de raccordement",
+   "mots": 3,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "deux lettres suffisent…": {
@@ -3369,6 +3558,51 @@
     "_js"
    ]
   },
+  "grille ou contrats signés": {
+   "fr": "grille ou contrats signés",
+   "mots": 4,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "planning d’opération": {
+   "fr": "planning d’opération",
+   "mots": 3,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "vide = bande du pays": {
+   "fr": "vide = bande du pays",
+   "mots": 4,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "vide = déduit de la conception": {
+   "fr": "vide = déduit de la conception",
+   "mots": 5,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "vide = moyenne nationale": {
+   "fr": "vide = moyenne nationale",
+   "mots": 3,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "votre@entreprise.fr": {
    "fr": "votre@entreprise.fr",
    "mots": 3,
@@ -3381,6 +3615,15 @@
    "mots": 3,
    "pages": [
     "audit"
+   ]
+  },
+  "Électricité, CO₂e, eau et fabrication du parc cartographié": {
+   "fr": "Électricité, CO₂e, eau et fabrication du parc cartographié",
+   "mots": 9,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Élevé : # juridictions — Cadre contraignant, sanctions actives": {
@@ -3409,6 +3652,15 @@
    "mots": 15,
    "pages": [
     "_coquille"
+   ]
+  },
+  "étude de marché": {
+   "fr": "étude de marché",
+   "mots": 3,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   }
  },
@@ -3981,6 +4233,16 @@
     "geo"
    ]
   },
+  "Carrés = centres de données — l'infrastructure sous les systèmes. Au survol : statut, date, capacité et investissement annoncés, puis électricité et eau — publiées quand elles le sont, sinon calculées en fourchette à partir de la capacité (formule affichée). La directive (UE) #/#, art. #, oblige désormais les centres de plus de # kW à déclarer énergie et eau dans une base européenne : ces fourchettes seront remplacées par des déclarations à mesure qu'elles paraissent.": {
+   "fr": "Carrés = centres de données — l'infrastructure sous les systèmes. Au survol : statut, date, capacité et investissement annoncés, puis électricité et eau — publiées quand elles le sont, sinon calculées en fourchette à partir de la capacité (formule affichée). La directive (UE) 2023/1791, art. 12, oblige désormais les centres de plus de 500 kW à déclarer énergie et eau dans une base européenne : ces fourchettes seront remplacées par des déclarations à mesure qu'elles paraissent.",
+   "html": "<b>Carrés = centres de données</b> — l'infrastructure sous les systèmes. Au survol : statut, date, capacité et investissement <b>annoncés</b>, puis électricité et eau — <b>publiées quand elles le sont, sinon calculées en fourchette</b> à partir de la capacité (formule affichée). La directive (UE) 2023/1791, art. 12, oblige désormais les centres de plus de 500 kW à déclarer énergie <b>et eau</b> dans une base européenne : ces fourchettes seront remplacées par des déclarations à mesure qu'elles paraissent.",
+   "mots": 70,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Carte mondiale desrégulations IA": {
    "fr": "Carte mondiale desrégulations IA",
    "html": "Carte mondiale des<br><em>régulations IA</em>",
@@ -4253,6 +4515,16 @@
     "finops"
    ]
   },
+  "Ce que fait ce comparateur. Il croise, pays par pays, l’intensité carbone et la pilotabilité du mix (nucléaire, renouvelables, centrales fossiles), la disponibilité en eau (indice WEI+ de l’AEE et compétition avec l’irrigation agricole), le potentiel de free cooling, le prix industriel de l’électricité, le parc en service et la file de raccordement #-#. Réglez le poids de chaque critère selon votre projet — construction neuve, extension ou rachat — et lisez le classement. Chaque colonne porte sa nature et sa source ; les notes n’ont aucun sens hors de ce classement. Les pays s’affichent par ordre alphabétique, en grille de # à # par ligne, pour qu’on y retrouve le sien d’un coup d’œil sans dérouler vingt-trois lignes : le rang porté par chaque tuile reste celui du classement par score. Pour lire le podium, choisissez « Score décroissant » dans Trier par ; pour comparer critère par critère, « Tableau détaillé » dans Affichage.": {
+   "fr": "Ce que fait ce comparateur. Il croise, pays par pays, l’intensité carbone et la pilotabilité du mix (nucléaire, renouvelables, centrales fossiles), la disponibilité en eau (indice WEI+ de l’AEE et compétition avec l’irrigation agricole), le potentiel de free cooling, le prix industriel de l’électricité, le parc en service et la file de raccordement 2026-2030. Réglez le poids de chaque critère selon votre projet — construction neuve, extension ou rachat — et lisez le classement. Chaque colonne porte sa nature et sa source ; les notes n’ont aucun sens hors de ce classement. Les pays s’affichent par ordre alphabétique, en grille de 4 à 6 par ligne, pour qu’on y retrouve le sien d’un coup d’œil sans dérouler vingt-trois lignes : le rang porté par chaque tuile reste celui du classement par score. Pour lire le podium, choisissez « Score décroissant » dans Trier par ; pour comparer critère par critère, « Tableau détaillé » dans Affichage.",
+   "html": "<b>Ce que fait ce comparateur.</b> Il croise, pays par pays, l’<b>intensité carbone</b> et la <b>pilotabilité du mix</b> (nucléaire, renouvelables, centrales fossiles), la <b>disponibilité en eau</b> (indice WEI+ de l’AEE et compétition avec l’irrigation agricole), le <b>potentiel de free cooling</b>, le <b>prix industriel de l’électricité</b>, le <b>parc en service</b> et la <b>file de raccordement 2026-2030</b>. Réglez le poids de chaque critère selon votre projet — construction neuve, extension ou rachat — et lisez le classement. <b>Chaque colonne porte sa nature et sa source</b> ; les notes n’ont aucun sens hors de ce classement. Les pays s’affichent <b>par ordre alphabétique</b>, en <b>grille de 4 à 6 par ligne</b>, pour qu’on y retrouve le sien d’un coup d’œil sans dérouler vingt-trois lignes : le <b>rang</b> porté par chaque tuile reste celui du classement par score. Pour lire le podium, choisissez « Score décroissant » dans <b>Trier par</b> ; pour comparer critère par critère, « Tableau détaillé » dans <b>Affichage</b>.",
+   "mots": 154,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Ce que la supervision coûte.": {
    "fr": "Ce que la supervision coûte.",
    "html": "<b>Ce que la supervision coûte.</b>",
@@ -4485,6 +4757,46 @@
     "empreinte-ia"
    ]
   },
+  "Ces critères viennent du référentiel d’ingénierie CONSEILPREV (module centres de données de conseilprevcyber), qui cite ASHRAE TC #, la directive (UE) #/# et son règlement délégué (UE) #/#, le Climate Neutral Data Centre Pact et ISO/IEC #. Ils ne changent pas le coût au mégawatt — rien ici ne le permet. Ils changent ce qui se passe après : le PUE, donc l’électricité, donc le coût total sur dix ans, c’est-à-dire le seul chiffre qui départage deux pays. Une valeur que vous saisissez est marquée saisi : le dossier dira que c’est vous qui l’engagez.": {
+   "fr": "Ces critères viennent du référentiel d’ingénierie CONSEILPREV (module centres de données de conseilprevcyber), qui cite ASHRAE TC 9.9, la directive (UE) 2023/1791 et son règlement délégué (UE) 2024/1364, le Climate Neutral Data Centre Pact et ISO/IEC 30134. Ils ne changent pas le coût au mégawatt — rien ici ne le permet. Ils changent ce qui se passe après : le PUE, donc l’électricité, donc le coût total sur dix ans, c’est-à-dire le seul chiffre qui départage deux pays. Une valeur que vous saisissez est marquée saisi : le dossier dira que c’est vous qui l’engagez.",
+   "html": "Ces critères viennent du référentiel d’ingénierie CONSEILPREV (module centres de données de conseilprevcyber), qui cite ASHRAE TC 9.9, la directive (UE) 2023/1791 et son règlement délégué (UE) 2024/1364, le Climate Neutral Data Centre Pact et ISO/IEC 30134. Ils ne changent pas le coût au mégawatt — rien ici ne le permet. Ils changent ce qui se passe <b>après</b> : le PUE, donc l’électricité, donc le coût total sur dix ans, c’est-à-dire le seul chiffre qui départage deux pays. Une valeur que vous saisissez est marquée <b>saisi</b> : le dossier dira que c’est vous qui l’engagez.",
+   "mots": 96,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Ces deux grandeurs sont lues sur la DPGF du pays retenu — elles ne se saisissent pas ici : le tableau ci-dessus et le barème doivent dire la même assiette.": {
+   "fr": "Ces deux grandeurs sont lues sur la DPGF du pays retenu — elles ne se saisissent pas ici : le tableau ci-dessus et le barème doivent dire la même assiette.",
+   "html": "Ces deux grandeurs sont <b>lues sur la DPGF</b> du pays retenu — elles ne se saisissent pas ici : le tableau ci-dessus et le barème doivent dire la même assiette.",
+   "mots": 29,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Ces huit tests répondent à ce qu’un investisseur demande avant l’enveloppe : la demande existe-t-elle, le calendrier est-il compatible avec l’accès à l’électricité, les besoins des clients finaux sont-ils anticipés. Ils entrent dans l’avis affiché plus bas, avec les constats du chiffrage — un dossier n’a qu’un verdict. Aucun prix n’est embarqué : sans prix d’hébergement déclaré, le point mort n’est pas calculé, il est dit indéterminé.": {
+   "fr": "Ces huit tests répondent à ce qu’un investisseur demande avant l’enveloppe : la demande existe-t-elle, le calendrier est-il compatible avec l’accès à l’électricité, les besoins des clients finaux sont-ils anticipés. Ils entrent dans l’avis affiché plus bas, avec les constats du chiffrage — un dossier n’a qu’un verdict. Aucun prix n’est embarqué : sans prix d’hébergement déclaré, le point mort n’est pas calculé, il est dit indéterminé.",
+   "html": "Ces huit tests répondent à ce qu’un investisseur demande avant l’enveloppe&nbsp;: <b>la demande existe-t-elle</b>, <b>le calendrier est-il compatible avec l’accès à l’électricité</b>, <b>les besoins des clients finaux sont-ils anticipés</b>. Ils entrent dans l’avis affiché plus bas, avec les constats du chiffrage — un dossier n’a qu’un verdict. Aucun prix n’est embarqué&nbsp;: sans prix d’hébergement déclaré, le point mort n’est pas calculé, il est dit <b>indéterminé</b>.",
+   "mots": 78,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Ces trois-là sont déterministes, sans modèle de langage — et c'est un choix. Une projection doit pouvoir être refaite à la main par celui qui la conteste ; une anomalie doit dire pourquoi elle en est une, « le modèle l'a détectée » n'étant pas une raison qu'on oppose à un exploitant ; et un commentaire annexé à un dossier ne doit rien pouvoir inventer. Composé depuis les grandeurs déjà calculées, celui-ci n'affirme que ce qui a été mesuré et pose les causes en question.": {
+   "fr": "Ces trois-là sont déterministes, sans modèle de langage — et c'est un choix. Une projection doit pouvoir être refaite à la main par celui qui la conteste ; une anomalie doit dire pourquoi elle en est une, « le modèle l'a détectée » n'étant pas une raison qu'on oppose à un exploitant ; et un commentaire annexé à un dossier ne doit rien pouvoir inventer. Composé depuis les grandeurs déjà calculées, celui-ci n'affirme que ce qui a été mesuré et pose les causes en question.",
+   "html": "<b>Ces trois-là sont déterministes, sans modèle de langage — et c'est un choix.</b> Une projection doit pouvoir être refaite à la main par celui qui la conteste&nbsp;; une anomalie doit dire <i>pourquoi</i> elle en est une, «&nbsp;le modèle l'a détectée&nbsp;» n'étant pas une raison qu'on oppose à un exploitant&nbsp;; et un commentaire annexé à un dossier ne doit rien pouvoir inventer. Composé depuis les grandeurs déjà calculées, celui-ci n'affirme que ce qui a été mesuré et pose les causes en question.",
+   "mots": 87,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Cette qualification suit ce que vous déclarez. Elle est prononcée en droit par l'autorité nationale compétente, sur l'entité réelle. Et elle ne se demande pas : l'État dresse la liste (art. #, §#) et l'entité s'y déclare elle-même (art. #, §#) — au plus tard le # avril #.": {
    "fr": "Cette qualification suit ce que vous déclarez. Elle est prononcée en droit par l'autorité nationale compétente, sur l'entité réelle. Et elle ne se demande pas : l'État dresse la liste (art. 3, §3) et l'entité s'y déclare elle-même (art. 3, §4) — au plus tard le 17 avril 2025.",
    "html": "Cette qualification suit ce que vous déclarez. Elle est prononcée en droit par l'autorité nationale compétente, sur l'entité réelle. Et elle <b>ne se demande pas</b> : l'État dresse la liste (art.&nbsp;3,&nbsp;§3) et l'entité s'y déclare elle-même (art.&nbsp;3,&nbsp;§4) — au plus tard le 17&nbsp;avril&nbsp;2025.",
@@ -4523,6 +4835,16 @@
    "mots": 43,
    "pages": [
     "empreinte"
+   ]
+  },
+  "Chaque document porte la version de tous les référentiels mobilisés, la nature de chaque valeur, ses sources et les réserves qui les qualifient. Aucun modèle de langage n’intervient dans leur rédaction : ils sont composés par calcul déterministe, et le disent en toutes lettres. Ils ne portent donc pas le marquage de l’article #, qui ne s’appliquerait pas.": {
+   "fr": "Chaque document porte la version de tous les référentiels mobilisés, la nature de chaque valeur, ses sources et les réserves qui les qualifient. Aucun modèle de langage n’intervient dans leur rédaction : ils sont composés par calcul déterministe, et le disent en toutes lettres. Ils ne portent donc pas le marquage de l’article 50, qui ne s’appliquerait pas.",
+   "html": "Chaque document porte la <b>version</b> de tous les référentiels mobilisés, la <b>nature</b> de chaque valeur, ses <b>sources</b> et les <b>réserves</b> qui les qualifient. Aucun modèle de langage n’intervient dans leur rédaction : ils sont composés par calcul déterministe, et le disent en toutes lettres. Ils ne portent donc pas le marquage de l’article 50, qui ne s’appliquerait pas.",
+   "mots": 59,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Chaque exigence porte son fondement : c'est ce qui permet de la défendre en négociation — et de l'abandonner en connaissance de cause quand elle n'en a pas. Les crochets marquent les valeurs à arbitrer.": {
@@ -4579,6 +4901,16 @@
    "mots": 2,
    "pages": [
     "_js"
+   ]
+  },
+  "Choisissez les phases que vous confiez et les missions que vous retenez : le chiffrage suit. Les honoraires portent sur le montant des travaux — la ligne de maîtrise d’œuvre et la provision pour aléas en sont retirées —, et le barème distingue le clos-couvert du lot technique, dont les taux diffèrent d’un facteur huit sur certaines missions.": {
+   "fr": "Choisissez les phases que vous confiez et les missions que vous retenez : le chiffrage suit. Les honoraires portent sur le montant des travaux — la ligne de maîtrise d’œuvre et la provision pour aléas en sont retirées —, et le barème distingue le clos-couvert du lot technique, dont les taux diffèrent d’un facteur huit sur certaines missions.",
+   "html": "Choisissez les <b>phases</b> que vous confiez et les <b>missions</b> que vous retenez : le chiffrage suit. Les honoraires portent sur le montant des <b>travaux</b> — la ligne de maîtrise d’œuvre et la provision pour aléas en sont retirées —, et le barème distingue le <b>clos-couvert</b> du <b>lot technique</b>, dont les taux diffèrent d’un facteur huit sur certaines missions.",
+   "mots": 58,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Classes annexes III / IV — art. # · #": {
@@ -4661,6 +4993,16 @@
     "comp"
    ]
   },
+  "Comprendre": {
+   "fr": "Comprendre",
+   "html": "<span>Comprendre</span>",
+   "mots": 1,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Conditions de règlement. Paiement à réception de la facture, selon l’échéancier contractuel échelonné sur deux mensualités égales. Aucun escompte pour paiement anticipé.Retard de paiement. Conformément aux articles L.#-# et D.#-# du Code de commerce, tout retard entraîne l’application de pénalités au taux de trois fois le taux d’intérêt légal, ainsi qu’une indemnité forfaitaire pour frais de recouvrement de # €.TVA. TVA au taux de # % — numéro de TVA intracommunautaire FR # # # #.Chaque jalon facturé a fait l’objet d’une double vérification (score Sentinel atteint et validation documentaire) et constitue un résultat de conformité acquis. Mentions établies au titre des articles L.#-# du Code de commerce et # nonies A de l’annexe II au CGI.": {
    "fr": "Conditions de règlement. Paiement à réception de la facture, selon l’échéancier contractuel échelonné sur deux mensualités égales. Aucun escompte pour paiement anticipé.Retard de paiement. Conformément aux articles L.441-10 et D.441-5 du Code de commerce, tout retard entraîne l’application de pénalités au taux de trois fois le taux d’intérêt légal, ainsi qu’une indemnité forfaitaire pour frais de recouvrement de 40 €.TVA. TVA au taux de 20 % — numéro de TVA intracommunautaire FR 24 494 530 157.Chaque jalon facturé a fait l’objet d’une double vérification (score Sentinel atteint et validation documentaire) et constitue un résultat de conformité acquis. Mentions établies au titre des articles L.441-9 du Code de commerce et 242 nonies A de l’annexe II au CGI.",
    "html": "<strong>Conditions de règlement.</strong> Paiement à réception de la facture, selon l’échéancier contractuel échelonné sur deux mensualités égales. Aucun escompte pour paiement anticipé.<br><strong>Retard de paiement.</strong> Conformément aux articles L.441-10 et D.441-5 du Code de commerce, tout retard entraîne l’application de pénalités au taux de trois fois le taux d’intérêt légal, ainsi qu’une indemnité forfaitaire pour frais de recouvrement de 40 €.<br><strong>TVA.</strong> TVA au taux de 20 % — numéro de TVA intracommunautaire FR 24 494 530 157.<br>Chaque jalon facturé a fait l’objet d’une double vérification (score Sentinel atteint et validation documentaire) et constitue un résultat de conformité acquis. Mentions établies au titre des articles L.441-9 du Code de commerce et 242 nonies A de l’annexe II au CGI.",
@@ -4693,6 +5035,16 @@
     "juridique"
    ]
   },
+  "Contexte, pas preuve. Aucune mesure satellitaire ne démontre l'usage d'une IA. Ces couches sont la matière première d'une partie des systèmes recensés — jamais l'indice de leur existence.": {
+   "fr": "Contexte, pas preuve. Aucune mesure satellitaire ne démontre l'usage d'une IA. Ces couches sont la matière première d'une partie des systèmes recensés — jamais l'indice de leur existence.",
+   "html": "<b>Contexte, pas preuve.</b> Aucune mesure satellitaire ne démontre l'usage d'une IA. Ces couches sont la matière première d'une partie des systèmes recensés — jamais l'indice de leur existence.",
+   "mots": 31,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Contrat RaaS — signature du contrat précisant le socle mensuel réduit, l’enveloppe résultats répartie sur les jalons, le plafond annuel garanti et les modalités de double vérification": {
    "fr": "Contrat RaaS — signature du contrat précisant le socle mensuel réduit, l’enveloppe résultats répartie sur les jalons, le plafond annuel garanti et les modalités de double vérification",
    "html": "<strong>Contrat RaaS</strong> — signature du contrat précisant le socle mensuel réduit, l’enveloppe résultats répartie sur les jalons, le plafond annuel garanti et les modalités de double vérification",
@@ -4715,6 +5067,16 @@
    "mots": 14,
    "pages": [
     "pricing"
+   ]
+  },
+  "Critères de conception — refroidissement imposé, classe d’air ASHRAE, PUE contractuel, taux de charge, prix et intensité carbone de votre contrat. Chacun remplace une déduction par VOTRE donnée.": {
+   "fr": "Critères de conception — refroidissement imposé, classe d’air ASHRAE, PUE contractuel, taux de charge, prix et intensité carbone de votre contrat. Chacun remplace une déduction par VOTRE donnée.",
+   "html": "Critères de conception <span>— refroidissement imposé, classe d’air ASHRAE, PUE contractuel, taux de charge, prix et intensité carbone de votre contrat. Chacun remplace une déduction par VOTRE donnée.</span>",
+   "mots": 28,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Créer mon parcours chiffréGénérez un parcours guidé à partir de vos cas d’usage et allez jusqu’au coût et à l’enveloppe RaaS.": {
@@ -4747,6 +5109,16 @@
    "mots": 55,
    "pages": [
     "rgpd-site"
+   ]
+  },
+  "Deux inventaires sur la même carte. Les cas d’IA documentés (POC, pilotes, production, abandons) mi-# → mi-#, classés selon le Règlement (UE) #/#, avec profil de vulnérabilités cyber, couche réglementaire des # États membres et score d'exposition calculé. Et le parc de centres de données qui les fait tourner : électricité, CO₂e sur cycle de vie, eau de refroidissement et critères d’implantation, pays par pays. Base de travail pour décideurs.": {
+   "fr": "Deux inventaires sur la même carte. Les cas d’IA documentés (POC, pilotes, production, abandons) mi-2023 → mi-2026, classés selon le Règlement (UE) 2024/1689, avec profil de vulnérabilités cyber, couche réglementaire des 27 États membres et score d'exposition calculé. Et le parc de centres de données qui les fait tourner : électricité, CO₂e sur cycle de vie, eau de refroidissement et critères d’implantation, pays par pays. Base de travail pour décideurs.",
+   "html": "Deux inventaires sur la même carte. Les <b>cas d’IA</b> documentés (POC, pilotes, production, abandons) mi-2023 → mi-2026, classés selon le Règlement (UE) 2024/1689, avec profil de vulnérabilités cyber, couche réglementaire des 27 États membres et score d'exposition calculé. Et le <b>parc de centres de données</b> qui les fait tourner : électricité, CO₂e sur cycle de vie, eau de refroidissement et critères d’implantation, pays par pays. Base de travail pour décideurs.",
+   "mots": 70,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Deux sessions sur site, dans vos locaux, par an — incluses dans l'offre Entreprise. Les autres formations du catalogue se tiennent à distance ou en présentiel à Paris.": {
@@ -4821,6 +5193,14 @@
     "shadow-ai"
    ]
   },
+  "Définition (N.B. de la carte source) : auteurs d’articles retenus pour présentation orale à NeurIPS (~top # % des publications). * Royaume-Uni, Allemagne, France et Canada : entre # et # % chacun des lieux de travail selon la carte source (lecture graphique — valeur précise non publiée). Inde : lieu de travail non disponible.": {
+   "fr": "Définition (N.B. de la carte source) : auteurs d’articles retenus pour présentation orale à NeurIPS (~top 2 % des publications). * Royaume-Uni, Allemagne, France et Canada : entre 2 et 4 % chacun des lieux de travail selon la carte source (lecture graphique — valeur précise non publiée). Inde : lieu de travail non disponible.",
+   "html": "Définition (N.B. de la carte source) : auteurs d’articles retenus pour <em>présentation orale</em> à NeurIPS (~top 2 % des publications). * Royaume-Uni, Allemagne, France et Canada : entre 2 et 4 % chacun des lieux de travail selon la carte source (lecture graphique — valeur précise non publiée). Inde : lieu de travail non disponible.",
+   "mots": 48,
+   "pages": [
+    "obs-rd"
+   ]
+  },
   "Définition incomplète — Art. #(#) :": {
    "fr": "Définition incomplète — Art. 3(1) :",
    "html": "<strong>Définition incomplète — Art. 3(1)</strong> :",
@@ -4843,6 +5223,16 @@
    "mots": 4,
    "pages": [
     "ingenierie"
+   ]
+  },
+  "D’où vient le coût au mégawatt, et ce qu’il ne dit pas. Il provient d’un relevé publié — Soben, part of Accenture, Data Centre Trends Report # : « cloud data centres currently cost between $# million and $# million per MW, GW+ AI data centres are costing as much as $# million per MW ». La source est en dollars : la conversion passe par un taux affiché et modifiable, un taux du jour n’étant pas une donnée de référentiel. Elle couvre le cloud et les campus d’IA, pas la colocation ni le site régional, dont la nature reste marquée en conséquence. Et elle reste un ordre de grandeur de marché : ce module ne fabrique pas VOTRE prix — aucun des # centres du référentiel ne publiant sa capacité, rien ici ne remplace vos devis. Ce que le module apporte est ailleurs : la structure complète de la DPGF, la modulation par les seuls critères sourcés de cette page, la liste explicite de ce qu’il ne peut pas trancher, et la comparaison entre pays sur le coût total de possession — car sur le seul investissement, elle afficherait zéro.": {
+   "fr": "D’où vient le coût au mégawatt, et ce qu’il ne dit pas. Il provient d’un relevé publié — Soben, part of Accenture, Data Centre Trends Report 2026 : « cloud data centres currently cost between $8 million and $10 million per MW, GW+ AI data centres are costing as much as $17 million per MW ». La source est en dollars : la conversion passe par un taux affiché et modifiable, un taux du jour n’étant pas une donnée de référentiel. Elle couvre le cloud et les campus d’IA, pas la colocation ni le site régional, dont la nature reste marquée en conséquence. Et elle reste un ordre de grandeur de marché : ce module ne fabrique pas VOTRE prix — aucun des 97 centres du référentiel ne publiant sa capacité, rien ici ne remplace vos devis. Ce que le module apporte est ailleurs : la structure complète de la DPGF, la modulation par les seuls critères sourcés de cette page, la liste explicite de ce qu’il ne peut pas trancher, et la comparaison entre pays sur le coût total de possession — car sur le seul investissement, elle afficherait zéro.",
+   "html": "<b>D’où vient le coût au mégawatt, et ce qu’il ne dit pas.</b> Il provient d’un relevé publié — <b>Soben, part of Accenture, Data Centre Trends Report 2026</b> : « cloud data centres currently cost between $8 million and $10 million per MW, GW+ AI data centres are costing as much as $17 million per MW ». La source est en <b>dollars</b> : la conversion passe par un taux affiché et modifiable, un taux du jour n’étant pas une donnée de référentiel. Elle couvre le cloud et les campus d’IA, <b>pas</b> la colocation ni le site régional, dont la nature reste marquée en conséquence. Et elle reste un ordre de grandeur de marché : ce module ne fabrique pas VOTRE prix — aucun des 97 centres du référentiel ne publiant sa capacité, rien ici ne remplace vos devis. Ce que le module apporte est ailleurs : la <b>structure complète de la DPGF</b>, la modulation par les <b>seuls critères sourcés</b> de cette page, la <b>liste explicite de ce qu’il ne peut pas trancher</b>, et la comparaison entre pays sur le <b>coût total de possession</b> — car sur le seul investissement, elle afficherait zéro.",
+   "mots": 183,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "EN VIGUEUR depuis le": {
@@ -5139,6 +5529,16 @@
    "mots": 14,
    "pages": [
     "audit-ia-act"
+   ]
+  },
+  "File « à qualifier » : ces titres proviennent des flux officiels et sont rapprochés du panel par correspondance stricte de noms. Aucun n'entre dans les scores tant qu'il n'a pas été vérifié et versé au référentiel (versionné). L'automatisation détecte ; l'expert tranche.": {
+   "fr": "File « à qualifier » : ces titres proviennent des flux officiels et sont rapprochés du panel par correspondance stricte de noms. Aucun n'entre dans les scores tant qu'il n'a pas été vérifié et versé au référentiel (versionné). L'automatisation détecte ; l'expert tranche.",
+   "html": "<b>File « à qualifier » :</b> ces titres proviennent des flux officiels et sont rapprochés du panel par correspondance stricte de noms. <b>Aucun n'entre dans les scores</b> tant qu'il n'a pas été vérifié et versé au référentiel (versionné). L'automatisation détecte ; l'expert tranche.",
+   "mots": 44,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "FinOps de l’IA": {
@@ -5546,6 +5946,16 @@
     "_js"
    ]
   },
+  "La décision est chiffrée ; elle n’est pas instruite. Ce qui suit part sur le site d’ingénierie : le bilan énergie-eau-carbone d’un côté, la séquence des pièces et le prix de la maîtrise d’œuvre de l’autre. Deux chemins, deux contenus — ils sont nommés ci-dessous.": {
+   "fr": "La décision est chiffrée ; elle n’est pas instruite. Ce qui suit part sur le site d’ingénierie : le bilan énergie-eau-carbone d’un côté, la séquence des pièces et le prix de la maîtrise d’œuvre de l’autre. Deux chemins, deux contenus — ils sont nommés ci-dessous.",
+   "html": "<b>La décision est chiffrée ; elle n’est pas instruite.</b> Ce qui suit part sur le <b>site d’ingénierie</b> : le bilan énergie-eau-carbone d’un côté, la séquence des pièces et le prix de la maîtrise d’œuvre de l’autre. Deux chemins, deux contenus — ils sont nommés ci-dessous.",
+   "mots": 50,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "La définition compte sept éléments, et ils sont cumulatifs. Cochez ceux qui décrivent votre système. Un logiciel qui applique des règles écrites à la main, sans rien inférer, n'est pas un système d'IA — et le règlement ne s'y applique pas du tout. C'est la première sortie possible du champ, et la moins souvent vérifiée.": {
    "fr": "La définition compte sept éléments, et ils sont cumulatifs. Cochez ceux qui décrivent votre système. Un logiciel qui applique des règles écrites à la main, sans rien inférer, n'est pas un système d'IA — et le règlement ne s'y applique pas du tout. C'est la première sortie possible du champ, et la moins souvent vérifiée.",
    "html": "La définition compte <strong>sept éléments</strong>, et ils sont cumulatifs. Cochez ceux qui décrivent votre système. Un logiciel qui applique des règles écrites à la main, sans rien inférer, <em>n'est pas</em> un système d'IA — et le règlement ne s'y applique pas du tout. C'est la première sortie possible du champ, et la moins souvent vérifiée.",
@@ -5584,6 +5994,16 @@
    "mots": 39,
    "pages": [
     "nis2-gouvernance"
+   ]
+  },
+  "La puissance informatique et l’enveloppe travaux sont reprises de l’étude ci-dessus. Ce bloc en déduit les quantités, le prix indicatif et le carbone de fabrication — puis il rend le montant qui s’ajoutera au capital employé de la création de valeur, deux blocs plus bas. Le lire après l’EVA donnerait un ROCE surestimé d’un tiers.": {
+   "fr": "La puissance informatique et l’enveloppe travaux sont reprises de l’étude ci-dessus. Ce bloc en déduit les quantités, le prix indicatif et le carbone de fabrication — puis il rend le montant qui s’ajoutera au capital employé de la création de valeur, deux blocs plus bas. Le lire après l’EVA donnerait un ROCE surestimé d’un tiers.",
+   "html": "<b>La puissance informatique et l’enveloppe travaux sont reprises de l’étude ci-dessus.</b> Ce bloc en déduit les quantités, le prix indicatif et le carbone de fabrication — puis il rend le montant qui <b>s’ajoutera au capital employé</b> de la création de valeur, deux blocs plus bas. Le lire après l’EVA donnerait un ROCE surestimé d’un tiers.",
+   "mots": 60,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "La qualification d’un système au sens de l’IA ActElle engage l’organisation sur des obligations dont le coût se compte en mois.": {
@@ -5658,6 +6078,16 @@
     "audit"
    ]
   },
+  "Le bilan énergie, eau et carbone et la trajectoire de décarbonation se mènent sur l’autre site du cabinet. Ce bouton fabrique un lien qui y porte le profil technique — pays et puissance — pour ne pas le ressaisir. Il vous montre ce qu’il contient avant que vous n’en fassiez quoi que ce soit : rien n’est envoyé tant que vous ne suivez pas le lien.": {
+   "fr": "Le bilan énergie, eau et carbone et la trajectoire de décarbonation se mènent sur l’autre site du cabinet. Ce bouton fabrique un lien qui y porte le profil technique — pays et puissance — pour ne pas le ressaisir. Il vous montre ce qu’il contient avant que vous n’en fassiez quoi que ce soit : rien n’est envoyé tant que vous ne suivez pas le lien.",
+   "html": "Le bilan énergie, eau et carbone et la trajectoire de décarbonation se mènent sur l’autre site du cabinet. Ce bouton fabrique un lien qui y porte <b>le profil technique</b> — pays et puissance — pour ne pas le ressaisir. Il vous montre ce qu’il contient avant que vous n’en fassiez quoi que ce soit&nbsp;: rien n’est envoyé tant que vous ne suivez pas le lien.",
+   "mots": 67,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Le bloc se valide sans.": {
    "fr": "Le bloc se valide sans.",
    "html": "Le bloc se valide sans.</span>",
@@ -5680,6 +6110,14 @@
    "mots": 40,
    "pages": [
     "juridique"
+   ]
+  },
+  "Le document reprend tout ce que cette page calcule : modèles remarquables par pays, brevets accordés (parts, volumes et facteurs de croissance), chercheurs d’élite et soldes nets, adoption par les entreprises de l’Union, cadre et gouvernance. Les cartes et graphiques affichés à l’écran y sont joints en image, dans la vue que vous avez choisie. Chaque chapitre porte sa source, sa licence, son millésime et sa précision — et le dossier rappelle les crédits à reproduire, dont la licence sans dérivée des données de brevets.": {
+   "fr": "Le document reprend tout ce que cette page calcule : modèles remarquables par pays, brevets accordés (parts, volumes et facteurs de croissance), chercheurs d’élite et soldes nets, adoption par les entreprises de l’Union, cadre et gouvernance. Les cartes et graphiques affichés à l’écran y sont joints en image, dans la vue que vous avez choisie. Chaque chapitre porte sa source, sa licence, son millésime et sa précision — et le dossier rappelle les crédits à reproduire, dont la licence sans dérivée des données de brevets.",
+   "html": "Le document reprend <b>tout ce que cette page calcule</b> : modèles remarquables par pays, brevets accordés (parts, volumes et facteurs de croissance), chercheurs d’élite et soldes nets, adoption par les entreprises de l’Union, cadre et gouvernance. Les <b>cartes et graphiques affichés à l’écran</b> y sont joints en image, dans la vue que vous avez choisie. Chaque chapitre porte sa source, sa licence, son millésime et sa précision — et le dossier rappelle les crédits à reproduire, dont la <b>licence sans dérivée</b> des données de brevets.",
+   "mots": 86,
+   "pages": [
+    "obs-rd"
    ]
   },
   "Le fait qui coûte le plus cher, et qu'aucun taux ne montre. Un organisme qui a mis en œuvre trente-six mesures sur trente-huit et laissé deux cases vides échoue à l'étape #. Un organisme qui en retient dix-huit et en écarte vingt, chacune motivée, passe. La conformité ne se compte pas en cases cochées : elle se compte en cases décidées.": {
@@ -5736,6 +6174,16 @@
    "mots": 6,
    "pages": [
     "_js"
+   ]
+  },
+  "Le même calcul répond à deux questions, c'est pourquoi ce bloc figure dans les deux vues. Côté investissement : combien d'équipements la puissance informatique impose, à quel prix indicatif, et quelle part du total. Côté empreinte : leur carbone de fabrication au scope # du GHG Protocol, catégories # et # — la troisième composante, sans laquelle les scopes # et # ne font pas un bilan. Le module est partagé octet pour octet avec la page d'ingénierie de conseilprevcyber : les quantités y sont les mêmes, à la ligne près.": {
+   "fr": "Le même calcul répond à deux questions, c'est pourquoi ce bloc figure dans les deux vues. Côté investissement : combien d'équipements la puissance informatique impose, à quel prix indicatif, et quelle part du total. Côté empreinte : leur carbone de fabrication au scope 3 du GHG Protocol, catégories 1 et 2 — la troisième composante, sans laquelle les scopes 1 et 2 ne font pas un bilan. Le module est partagé octet pour octet avec la page d'ingénierie de conseilprevcyber : les quantités y sont les mêmes, à la ligne près.",
+   "html": "<b>Le même calcul répond à deux questions, c'est pourquoi ce bloc figure dans les deux vues.</b> Côté investissement&nbsp;: combien d'équipements la puissance informatique impose, à quel prix indicatif, et quelle part du total. Côté empreinte&nbsp;: leur carbone de fabrication au <b>scope&nbsp;3 du GHG Protocol</b>, catégories 1 et 2 — la troisième composante, sans laquelle les scopes 1 et 2 ne font pas un bilan. Le module est partagé <b>octet pour octet</b> avec la page d'ingénierie de conseilprevcyber&nbsp;: les quantités y sont les mêmes, à la ligne près.",
+   "mots": 85,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Le piège :": {
@@ -5842,6 +6290,26 @@
     "_js"
    ]
   },
+  "Le tableau qui suit est une analyse, pas une donnée. Avantages, inconvénients et commentaire par pays — la lecture du cabinet, datée, à discuter. Cliquez un pays pour ouvrir le détail de son parc.": {
+   "fr": "Le tableau qui suit est une analyse, pas une donnée. Avantages, inconvénients et commentaire par pays — la lecture du cabinet, datée, à discuter. Cliquez un pays pour ouvrir le détail de son parc.",
+   "html": "<b>Le tableau qui suit est une analyse, pas une donnée.</b> Avantages, inconvénients et commentaire par pays — la lecture du cabinet, datée, à discuter. Cliquez un pays pour ouvrir le détail de son parc.",
+   "mots": 33,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Le tableau qui suit se lit par pays. Cliquez sur un pays pour ouvrir le détail de tous ses centres de données : statut, mise en service, capacité et investissement annoncés, électricité, eau, refroidissement, CO₂e — et, pour chaque valeur, si elle est publiée, déduite du site ou seulement de sa classe.": {
+   "fr": "Le tableau qui suit se lit par pays. Cliquez sur un pays pour ouvrir le détail de tous ses centres de données : statut, mise en service, capacité et investissement annoncés, électricité, eau, refroidissement, CO₂e — et, pour chaque valeur, si elle est publiée, déduite du site ou seulement de sa classe.",
+   "html": "<b>Le tableau qui suit se lit par pays.</b> <b>Cliquez sur un pays</b> pour ouvrir le détail de <b>tous ses centres de données</b> : statut, mise en service, capacité et investissement annoncés, électricité, eau, refroidissement, CO₂e — et, pour chaque valeur, si elle est <b>publiée</b>, déduite du <b>site</b> ou seulement de sa <b>classe</b>.",
+   "mots": 51,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Le tableau recense destinataires, pays et garantie applicable. Les prestataires hors Union relèvent des clauses contractuelles types ou du cadre de protection applicable.Procédure. Avant d'ajouter un prestataire, vérifiez sa localisation et la garantie invoquée, puis inscrivez-la ici et dans le registre.": {
    "fr": "Le tableau recense destinataires, pays et garantie applicable. Les prestataires hors Union relèvent des clauses contractuelles types ou du cadre de protection applicable.Procédure. Avant d'ajouter un prestataire, vérifiez sa localisation et la garantie invoquée, puis inscrivez-la ici et dans le registre.",
    "html": "Le tableau recense destinataires, pays et garantie applicable. Les prestataires hors Union relèvent des clauses contractuelles types ou du cadre de protection applicable.<br><br><strong>Procédure.</strong> Avant d'ajouter un prestataire, vérifiez sa localisation et la garantie invoquée, puis inscrivez-la ici et dans le registre.",
@@ -5896,6 +6364,16 @@
    "mots": 61,
    "pages": [
     "ia50"
+   ]
+  },
+  "Les chiffres ci-dessus préparent une décision d'investissement. Ce diagnostic répond à l'autre question, celle qu'on pose rarement avant de commander un tableau de bord : l'organisation a-t-elle de quoi l'instruire, et ensuite suivre son exécution ? Un comité qui reçoit une enveloppe à ±# % sans série datée ni grille de lecture ne décide pas mieux avec un graphique de plus — il décide à l'intuition, avec un chiffre pour se rassurer.": {
+   "fr": "Les chiffres ci-dessus préparent une décision d'investissement. Ce diagnostic répond à l'autre question, celle qu'on pose rarement avant de commander un tableau de bord : l'organisation a-t-elle de quoi l'instruire, et ensuite suivre son exécution ? Un comité qui reçoit une enveloppe à ±30 % sans série datée ni grille de lecture ne décide pas mieux avec un graphique de plus — il décide à l'intuition, avec un chiffre pour se rassurer.",
+   "html": "Les chiffres ci-dessus préparent une décision d'investissement. Ce diagnostic répond à l'autre question, celle qu'on pose rarement avant de commander un tableau de bord&nbsp;: <b>l'organisation a-t-elle de quoi l'instruire, et ensuite suivre son exécution&nbsp;?</b> Un comité qui reçoit une enveloppe à ±30&nbsp;% sans série datée ni grille de lecture ne décide pas mieux avec un graphique de plus — il décide à l'intuition, avec un chiffre pour se rassurer.",
+   "mots": 76,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Les cinq lignes ne pèsent pas pareil. Quatre sont des obligations ; la formation du personnel est un encouragement. Une entreprise qui forme toutes ses équipes sauf son conseil d'administration a manqué la seule des deux formations qui soit obligatoire — et c'est celle qui expose personnellement quelqu'un.": {
@@ -5954,6 +6432,16 @@
     "juridique"
    ]
   },
+  "Les quatorze lots ci-dessus s'arrêtent aux murs, aux fluides et à l'électricité. Le lot Aménagement des salles informatiques couvre les planchers techniques, les chemins de câbles et la distribution en salle — il porte lui-même la mention « hors serveurs ». Les machines sont un investissement séparé, et quand le même maître d'ouvrage porte les deux, elles pèsent le tiers de l'investissement total. Raisonner sur la seule enveloppe travaux fait arbitrer des économies de génie civil pendant que le poste le plus lourd passe sans discussion.": {
+   "fr": "Les quatorze lots ci-dessus s'arrêtent aux murs, aux fluides et à l'électricité. Le lot Aménagement des salles informatiques couvre les planchers techniques, les chemins de câbles et la distribution en salle — il porte lui-même la mention « hors serveurs ». Les machines sont un investissement séparé, et quand le même maître d'ouvrage porte les deux, elles pèsent le tiers de l'investissement total. Raisonner sur la seule enveloppe travaux fait arbitrer des économies de génie civil pendant que le poste le plus lourd passe sans discussion.",
+   "html": "Les quatorze lots ci-dessus s'arrêtent aux murs, aux fluides et à l'électricité. Le lot <b>Aménagement des salles informatiques</b> couvre les planchers techniques, les chemins de câbles et la distribution en salle — il porte lui-même la mention «&nbsp;hors serveurs&nbsp;». Les machines sont un investissement <b>séparé</b>, et quand le même maître d'ouvrage porte les deux, elles pèsent le tiers de l'investissement total. Raisonner sur la seule enveloppe travaux fait arbitrer des économies de génie civil pendant que le poste le plus lourd passe sans discussion.",
+   "mots": 89,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Les systèmes d’IA et les centres de données réellement déployés dans l’UE": {
    "fr": "Les systèmes d’IA et les centres de données réellement déployés dans l’UE",
    "html": "Les systèmes d’IA et les centres de données <em>réellement déployés</em> dans l’UE",
@@ -5984,6 +6472,16 @@
    "mots": 3,
    "pages": [
     "_js"
+   ]
+  },
+  "Lire avant d'exploiter : ce panorama est un panel représentatif de cas publiquement documentés, pas un recensement — les déploiements non communiqués n'y figurent pas. Le score mesure l'exposition réglementaire du cas d'usage (classe de risque, stade, données, signaux publics) ; il n'est pas un audit de conformité des entreprises citées. Seuls les faits sourcés (sanctions, décisions, engagements publics) sont imputés nominativement.": {
+   "fr": "Lire avant d'exploiter : ce panorama est un panel représentatif de cas publiquement documentés, pas un recensement — les déploiements non communiqués n'y figurent pas. Le score mesure l'exposition réglementaire du cas d'usage (classe de risque, stade, données, signaux publics) ; il n'est pas un audit de conformité des entreprises citées. Seuls les faits sourcés (sanctions, décisions, engagements publics) sont imputés nominativement.",
+   "html": "<b>Lire avant d'exploiter :</b> ce panorama est un <b>panel représentatif de cas publiquement documentés</b>, pas un recensement — les déploiements non communiqués n'y figurent pas. Le score mesure l'<b>exposition réglementaire du cas d'usage</b> (classe de risque, stade, données, signaux publics) ; il n'est <b>pas un audit de conformité</b> des entreprises citées. Seuls les faits sourcés (sanctions, décisions, engagements publics) sont imputés nominativement.",
+   "mots": 64,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "L’acceptation d’une dépendance nouvelleC’est l’entrée d’un tiers dans votre chaîne de construction ; elle se décide, elle ne se subit pas.": {
@@ -6023,6 +6521,16 @@
    "html": "L’eau compte à deux titres, et c’est le cœur du module&nbsp;: celle du <b>refroidissement</b>, que les exploitants publient et que le règlement exige — et celle de la <b>source</b>, consommée en amont pour produire l’électricité achetée, que le WUE ne compte pas et qui pèse, sur les parcs nationaux où les deux termes sont publiés, <b>huit à douze fois</b> davantage. Rien n’y est mesuré&nbsp;: tout est calculé, formule affichée, avec la nature de chaque estimation — et le calcul est <b>confronté aux repères publiés</b>, y compris quand la confrontation ne l’avantage pas.",
    "mots": 95,
    "pages": [
+    "empreinte-parc"
+   ]
+  },
+  "L’enveloppe dit ce que le projet coûte. Ces trois indicateurs disent ce qu’il rapporte au regard du capital immobilisé — et ils ne peuvent pas se calculer sans vous : revenu attendu, coût du capital et taux d’impôt sont des décisions d’investisseur, pas des données de référentiel. Tant qu’elles ne sont pas saisies, les trois sont non instruits, et non pas nuls.": {
+   "fr": "L’enveloppe dit ce que le projet coûte. Ces trois indicateurs disent ce qu’il rapporte au regard du capital immobilisé — et ils ne peuvent pas se calculer sans vous : revenu attendu, coût du capital et taux d’impôt sont des décisions d’investisseur, pas des données de référentiel. Tant qu’elles ne sont pas saisies, les trois sont non instruits, et non pas nuls.",
+   "html": "L’enveloppe dit ce que le projet <b>coûte</b>. Ces trois indicateurs disent ce qu’il <b>rapporte au regard du capital immobilisé</b> — et ils ne peuvent pas se calculer sans vous&nbsp;: revenu attendu, coût du capital et taux d’impôt sont des décisions d’investisseur, pas des données de référentiel. Tant qu’elles ne sont pas saisies, les trois sont <b>non instruits</b>, et non pas nuls.",
+   "mots": 65,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
     "empreinte-parc"
    ]
   },
@@ -6442,6 +6950,16 @@
     "articles"
    ]
   },
+  "Observer": {
+   "fr": "Observer",
+   "html": "<span>Observer</span>",
+   "mots": 1,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Offre Entreprise": {
    "fr": "Offre Entreprise",
    "html": "Offre <em>Entreprise</em>",
@@ -6714,12 +7232,32 @@
     "juridique"
    ]
   },
+  "Prolonger la durée de vie : le gain, et son point de bascule. Allonger la vie d'un serveur étale son carbone de fabrication sur plus d'années et repousse la fabrication d'un remplaçant. Le gain est réel. Mais un parc dont l'âge moyen augmente consomme davantage à service rendu égal. La question n'est donc pas si l'allongement paie : c'est jusqu'où, et cela dépend du mix électrique qui alimente le site.": {
+   "fr": "Prolonger la durée de vie : le gain, et son point de bascule. Allonger la vie d'un serveur étale son carbone de fabrication sur plus d'années et repousse la fabrication d'un remplaçant. Le gain est réel. Mais un parc dont l'âge moyen augmente consomme davantage à service rendu égal. La question n'est donc pas si l'allongement paie : c'est jusqu'où, et cela dépend du mix électrique qui alimente le site.",
+   "html": "<b>Prolonger la durée de vie&nbsp;: le gain, et son point de bascule.</b> Allonger la vie d'un serveur étale son carbone de fabrication sur plus d'années et repousse la fabrication d'un remplaçant. Le gain est réel. Mais un parc dont l'âge moyen augmente consomme davantage à service rendu égal. La question n'est donc pas <i>si</i> l'allongement paie&nbsp;: c'est <b>jusqu'où</b>, et cela dépend du mix électrique qui alimente le site.",
+   "mots": 76,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Protection contractuelleLe contrat RaaS doit impérativement définir :• Périmètre de responsabilité : distinction entre les obligations de moyens (CONSEILPREV) et les obligations de résultat dépendant du client• Plafond mensuel (recommandé : #× socle)• Plancher : le socle est toujours dû, même si aucun progrès n'est réalisé": {
    "fr": "Protection contractuelleLe contrat RaaS doit impérativement définir :• Périmètre de responsabilité : distinction entre les obligations de moyens (CONSEILPREV) et les obligations de résultat dépendant du client• Plafond mensuel (recommandé : 4× socle)• Plancher : le socle est toujours dû, même si aucun progrès n'est réalisé",
    "html": "<strong>Protection contractuelle</strong><br>Le contrat RaaS doit impérativement définir :<br>• <em>Périmètre de responsabilité</em> : distinction entre les obligations de moyens (CONSEILPREV) et les obligations de résultat dépendant du client<br>• <em>Plafond mensuel</em> (recommandé : 4× socle)<br>• <em>Plancher</em> : le socle est toujours dû, même si aucun progrès n'est réalisé",
    "mots": 43,
    "pages": [
     "pricing"
+   ]
+  },
+  "Publiques, sous licence explicite, interrogeables sans inscription : vous pouvez refaire la requête. C'est la seule couche de cette page qu'un lecteur vérifie de bout en bout, sans nous.": {
+   "fr": "Publiques, sous licence explicite, interrogeables sans inscription : vous pouvez refaire la requête. C'est la seule couche de cette page qu'un lecteur vérifie de bout en bout, sans nous.",
+   "html": "Publiques, sous licence explicite, interrogeables sans inscription : <b>vous pouvez refaire la requête</b>. C'est la seule couche de cette page qu'un lecteur vérifie de bout en bout, sans nous.",
+   "mots": 30,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Périmètre IAEstimation du nombre de systèmes utilisant de l'IA dans votre organisation. Un système IA = tout outil prenant des décisions assistées par des algorithmes d'apprentissage automatique, de NLP ou de vision artificielle.": {
@@ -6832,6 +7370,16 @@
    "mots": 4,
    "pages": [
     "radar"
+   ]
+  },
+  "Rappel d'échéances : pratiques interdites en vigueur depuis le # février # ; obligations GPAI depuis le # août # ; haut risque annexe III au # décembre # ; annexe I au # août #.": {
+   "fr": "Rappel d'échéances : pratiques interdites en vigueur depuis le 2 février 2025 ; obligations GPAI depuis le 2 août 2025 ; haut risque annexe III au 2 décembre 2027 ; annexe I au 2 août 2028.",
+   "html": "Rappel d'échéances : pratiques interdites <b>en vigueur depuis le 2 février 2025</b> ; obligations GPAI depuis le <b>2 août 2025</b> ; haut risque annexe III au <b>2 décembre 2027</b> ; annexe I au <b>2 août 2028</b>.",
+   "mots": 25,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Redéployez conseilprevcyber (le correctif de mémoire y est poussé)": {
@@ -7379,6 +7927,16 @@
     "pricing"
    ]
   },
+  "Sélectionnez un pays sur la carte pour afficher ses autorités (surveillance AI Act, cybersécurité, protection des données), sa stratégie IA et les cas du panel qui s'y rattachent.": {
+   "fr": "Sélectionnez un pays sur la carte pour afficher ses autorités (surveillance AI Act, cybersécurité, protection des données), sa stratégie IA et les cas du panel qui s'y rattachent.",
+   "html": "Sélectionnez un pays sur la carte pour afficher ses <b>autorités</b> (surveillance AI Act, cybersécurité, protection des données), sa <b>stratégie IA</b> et les <b>cas du panel</b> qui s'y rattachent.",
+   "mots": 29,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Sévérité : #/#": {
    "fr": "Sévérité : 9.2/10",
    "html": "Sévérité : <strong>9.2/10</strong>",
@@ -7580,6 +8138,16 @@
     "nis2-signalement"
    ]
   },
+  "Un tableau de bord ne doit pas seulement afficher des données : il doit signaler où une décision est attendue, sans que le lecteur ait à comparer mentalement chaque valeur à sa cible. Trois mécanismes s'en chargent ici — la forme choisie pour la donnée, le seuil coloré, et la tendance mesurée. S'y ajoutent les trois apports de l'analyse augmentée : projection de l'indicateur, détection d'anomalies et commentaire en langage naturel.": {
+   "fr": "Un tableau de bord ne doit pas seulement afficher des données : il doit signaler où une décision est attendue, sans que le lecteur ait à comparer mentalement chaque valeur à sa cible. Trois mécanismes s'en chargent ici — la forme choisie pour la donnée, le seuil coloré, et la tendance mesurée. S'y ajoutent les trois apports de l'analyse augmentée : projection de l'indicateur, détection d'anomalies et commentaire en langage naturel.",
+   "html": "Un tableau de bord ne doit pas seulement afficher des données&nbsp;: il doit signaler <b>où une décision est attendue</b>, sans que le lecteur ait à comparer mentalement chaque valeur à sa cible. Trois mécanismes s'en chargent ici — la forme choisie pour la donnée, le seuil coloré, et la tendance mesurée. S'y ajoutent les trois apports de l'analyse augmentée&nbsp;: <b>projection</b> de l'indicateur, <b>détection d'anomalies</b> et <b>commentaire en langage naturel</b>.",
+   "mots": 73,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Un usage déclaré n’est pas un usage observé.": {
    "fr": "Un usage déclaré n’est pas un usage observé.",
    "html": "<strong>Un usage déclaré n’est pas un usage observé.</strong>",
@@ -7602,6 +8170,16 @@
    "mots": 41,
    "pages": [
     "empreinte"
+   ]
+  },
+  "Une alerte ne se déclenche pas sur du bruit. C'est ce que ce moteur tient et qu'un tableur ne tient pas : il connaît l'incertitude de ses grandeurs. Une enveloppe à ±# % qui dépasse sa cible de # % n'a rien franchi — l'écart est dans le bruit. Le rouge exige un dépassement supérieur à la fois à la tolérance et à l'incertitude ; entre les deux, l'état affiché est « écart non démontré ». Sans cette règle, le troisième faux positif éteint la vigilance sur tous les autres.": {
+   "fr": "Une alerte ne se déclenche pas sur du bruit. C'est ce que ce moteur tient et qu'un tableur ne tient pas : il connaît l'incertitude de ses grandeurs. Une enveloppe à ±30 % qui dépasse sa cible de 12 % n'a rien franchi — l'écart est dans le bruit. Le rouge exige un dépassement supérieur à la fois à la tolérance et à l'incertitude ; entre les deux, l'état affiché est « écart non démontré ». Sans cette règle, le troisième faux positif éteint la vigilance sur tous les autres.",
+   "html": "<b>Une alerte ne se déclenche pas sur du bruit.</b> C'est ce que ce moteur tient et qu'un tableur ne tient pas&nbsp;: il connaît l'incertitude de ses grandeurs. Une enveloppe à ±30&nbsp;% qui dépasse sa cible de 12&nbsp;% n'a rien franchi — l'écart est dans le bruit. Le rouge exige un dépassement supérieur à la fois à la tolérance et à l'incertitude&nbsp;; entre les deux, l'état affiché est «&nbsp;écart non démontré&nbsp;». Sans cette règle, le troisième faux positif éteint la vigilance sur tous les autres.",
+   "mots": 88,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Une case cochée dit qu’un levier est déclaré, jamais qu’il est branché : cette page ne peut pas le vérifier.": {
@@ -7652,6 +8230,16 @@
     "_js"
    ]
   },
+  "Une prévision n’est pas une donnée. Les faits ci-dessous proviennent de quatre rapports d’éditeurs nommés, lus intégralement : chaque entrée porte sa citation verbatim, sa page et son éditeur, pour que vous puissiez la vérifier plutôt que nous croire. Les entrées marquées prévision engagent leur auteur, pas la réalité. Et lorsqu’un fait postérieur rend optimiste une valeur affichée ailleurs sur cette page — la classe de prix finlandaise en est l’exemple —, il est inscrit en réserve datée à côté d’elle, jamais substitué en silence : vous devez pouvoir retrouver ce que vous avez cité la semaine dernière.": {
+   "fr": "Une prévision n’est pas une donnée. Les faits ci-dessous proviennent de quatre rapports d’éditeurs nommés, lus intégralement : chaque entrée porte sa citation verbatim, sa page et son éditeur, pour que vous puissiez la vérifier plutôt que nous croire. Les entrées marquées prévision engagent leur auteur, pas la réalité. Et lorsqu’un fait postérieur rend optimiste une valeur affichée ailleurs sur cette page — la classe de prix finlandaise en est l’exemple —, il est inscrit en réserve datée à côté d’elle, jamais substitué en silence : vous devez pouvoir retrouver ce que vous avez cité la semaine dernière.",
+   "html": "<b>Une prévision n’est pas une donnée.</b> Les faits ci-dessous proviennent de quatre rapports d’éditeurs nommés, lus intégralement : chaque entrée porte sa <b>citation verbatim</b>, sa <b>page</b> et son éditeur, pour que vous puissiez la vérifier plutôt que nous croire. Les entrées marquées <b>prévision</b> engagent leur auteur, pas la réalité. Et lorsqu’un fait postérieur rend optimiste une valeur affichée ailleurs sur cette page — la classe de prix finlandaise en est l’exemple —, il est inscrit en <b>réserve datée à côté d’elle</b>, jamais substitué en silence : vous devez pouvoir retrouver ce que vous avez cité la semaine dernière.",
+   "mots": 100,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Une sauvegarde est un objet portant une liste documents.": {
    "fr": "Une sauvegarde est un objet portant une liste documents.",
    "html": "Une sauvegarde est un objet portant une liste <code>documents</code>.",
@@ -7692,6 +8280,46 @@
     "_js"
    ]
   },
+  "Vous avez un investissement et un coût d’exploitation. Le bloc suivant les confronte au capital employé : un projet peut être le moins cher et rester destructeur de valeur, et c’est là que cela se voit.": {
+   "fr": "Vous avez un investissement et un coût d’exploitation. Le bloc suivant les confronte au capital employé : un projet peut être le moins cher et rester destructeur de valeur, et c’est là que cela se voit.",
+   "html": "<b>Vous avez un investissement et un coût d’exploitation.</b> Le bloc suivant les confronte au <b>capital employé</b> : un projet peut être le moins cher et rester destructeur de valeur, et c’est là que cela se voit.",
+   "mots": 37,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Vous avez une enveloppe et un pays retenu. Le bloc suivant en tire le montant des travaux et la part du lot technique — les deux seules grandeurs dont dépendent les honoraires de maîtrise d’œuvre.": {
+   "fr": "Vous avez une enveloppe et un pays retenu. Le bloc suivant en tire le montant des travaux et la part du lot technique — les deux seules grandeurs dont dépendent les honoraires de maîtrise d’œuvre.",
+   "html": "<b>Vous avez une enveloppe et un pays retenu.</b> Le bloc suivant en tire le <b>montant des travaux</b> et la <b>part du lot technique</b> — les deux seules grandeurs dont dépendent les honoraires de maîtrise d’œuvre.",
+   "mots": 35,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Vous avez une enveloppe. Personne n’a encore demandé si quelqu’un louera. Le business case, sous « Régler le projet », éprouve la demande, le calendrier électrique et le remplissage au point mort — et ses huit constats entrent dans le même verdict GO / NO GO.": {
+   "fr": "Vous avez une enveloppe. Personne n’a encore demandé si quelqu’un louera. Le business case, sous « Régler le projet », éprouve la demande, le calendrier électrique et le remplissage au point mort — et ses huit constats entrent dans le même verdict GO / NO GO.",
+   "html": "<b>Vous avez une enveloppe. Personne n’a encore demandé si quelqu’un louera.</b> Le business case, sous « Régler le projet », éprouve la demande, le calendrier électrique et le <b>remplissage au point mort</b> — et ses huit constats entrent dans le même verdict GO / NO GO.",
+   "mots": 44,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Vous n’avez pas encore de plan d’affaires ? Le calcul répond quand même à la question qui décide : combien ce projet doit-il rapporter pour ne pas détruire de valeur ? Ce seuil sort de l’enveloppe déjà calculée et de deux chiffres seulement — coût du capital et taux d’impôt, qui sont des décisions, pas des prévisions. Il s’affiche en tête du résultat ; les trois indicateurs viennent ensuite, pour qui a le plan.": {
+   "fr": "Vous n’avez pas encore de plan d’affaires ? Le calcul répond quand même à la question qui décide : combien ce projet doit-il rapporter pour ne pas détruire de valeur ? Ce seuil sort de l’enveloppe déjà calculée et de deux chiffres seulement — coût du capital et taux d’impôt, qui sont des décisions, pas des prévisions. Il s’affiche en tête du résultat ; les trois indicateurs viennent ensuite, pour qui a le plan.",
+   "html": "<b>Vous n’avez pas encore de plan d’affaires&nbsp;?</b> Le calcul répond quand même à la question qui décide&nbsp;: <b>combien ce projet doit-il rapporter pour ne pas détruire de valeur&nbsp;?</b> Ce seuil sort de l’enveloppe déjà calculée et de <b>deux chiffres seulement</b> — coût du capital et taux d’impôt, qui sont des décisions, pas des prévisions. Il s’affiche en tête du résultat&nbsp;; les trois indicateurs viennent ensuite, pour qui a le plan.",
+   "mots": 75,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Vous échangez avec un assistant fondé sur l’intelligence artificielle, et non avec une personne. Ses réponses peuvent comporter des erreurs et ne constituent pas un conseil juridique.": {
    "fr": "Vous échangez avec un assistant fondé sur l’intelligence artificielle, et non avec une personne. Ses réponses peuvent comporter des erreurs et ne constituent pas un conseil juridique.",
    "html": "<span>Vous échangez avec un <strong>assistant fondé sur l’intelligence artificielle</strong>, et non avec une personne. Ses réponses peuvent comporter des erreurs et ne constituent pas un conseil juridique.</span>",
@@ -7722,6 +8350,16 @@
    "mots": 17,
    "pages": [
     "pricing"
+   ]
+  },
+  "Vérifier": {
+   "fr": "Vérifier",
+   "html": "<span>Vérifier</span>",
+   "mots": 1,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Vérifiez que c’est bien le fichier produit par le bouton 💾 Sauvegarder": {
@@ -8338,6 +8976,16 @@
    "mots": 2,
    "pages": [
     "_js"
+   ]
+  },
+  "À présenter aux sponsors dès le départ, y compris si la conclusion déçoit. Recalibrer une ambition en ouverture coûte une réunion ; expliquer six mois plus tard pourquoi le tableau de bord n'est pas utilisé coûte le projet — et la confiance qui allait avec. La note de restitution ci-dessous porte le verdict en tête, jamais en annexe.": {
+   "fr": "À présenter aux sponsors dès le départ, y compris si la conclusion déçoit. Recalibrer une ambition en ouverture coûte une réunion ; expliquer six mois plus tard pourquoi le tableau de bord n'est pas utilisé coûte le projet — et la confiance qui allait avec. La note de restitution ci-dessous porte le verdict en tête, jamais en annexe.",
+   "html": "<b>À présenter aux sponsors dès le départ, y compris si la conclusion déçoit.</b> Recalibrer une ambition en ouverture coûte une réunion&nbsp;; expliquer six mois plus tard pourquoi le tableau de bord n'est pas utilisé coûte le projet — et la confiance qui allait avec. La note de restitution ci-dessous porte le verdict en tête, jamais en annexe.",
+   "mots": 58,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "À revérifier avant présentation.": {
@@ -12448,6 +13096,13 @@
     "fiche-sg"
    ]
   },
+  "AI Watch (JRC)": {
+   "fr": "AI Watch (JRC)",
+   "mots": 3,
+   "pages": [
+    "obs-rd"
+   ]
+  },
   "AI Watch — suivi de l’IA par la Commission (Centre commun de recherche, JRC)": {
    "fr": "AI Watch — suivi de l’IA par la Commission (Centre commun de recherche, JRC)",
    "mots": 14,
@@ -12530,6 +13185,13 @@
    "mots": 1,
    "pages": [
     "veille"
+   ]
+  },
+  "ALTAI (#)": {
+   "fr": "ALTAI (2020)",
+   "mots": 1,
+   "pages": [
+    "obs-rd"
    ]
   },
   "ANSSI : recommandations de securite pour les systemes d'IA": {
@@ -13113,6 +13775,13 @@
   "Adoption de l’IA par les entreprises (UE)": {
    "fr": "Adoption de l’IA par les entreprises (UE)",
    "mots": 8,
+   "pages": [
+    "obs-rd"
+   ]
+  },
+  "Adoption entreprises UE": {
+   "fr": "Adoption entreprises UE",
+   "mots": 3,
    "pages": [
     "obs-rd"
    ]
@@ -14542,6 +15211,15 @@
     "pan-sia"
    ]
   },
+  "Annonces publiques, permis délivrés, files d’attente de raccordement. Aucun acteur n’est nommé ni noté : on compare une capacité annoncée à une demande déclarée.": {
+   "fr": "Annonces publiques, permis délivrés, files d’attente de raccordement. Aucun acteur n’est nommé ni noté : on compare une capacité annoncée à une demande déclarée.",
+   "mots": 25,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Annoncez le socle, puis descendez les cinq groupes. Commencez par le pilotage — RA, PL, CA, PM — avant les familles techniques.": {
    "fr": "Annoncez le socle, puis descendez les cinq groupes. Commencez par le pilotage — RA, PL, CA, PM — avant les familles techniques.",
    "mots": 20,
@@ -15012,6 +15690,15 @@
    "mots": 23,
    "pages": [
     "fiche-ru"
+   ]
+  },
+  "Approche « market-based », GHG Protocol Scope #.": {
+   "fr": "Approche « market-based », GHG Protocol Scope 2.",
+   "mots": 6,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Approche « tous risques » — protéger les réseaux et les systèmes d'information ET leur environnement physique. La proportionnalité tient compte du degré d'exposition, de la taille de l'entité, et de la probabilité et de la gravité des incidents.": {
@@ -16652,6 +17339,15 @@
     "enveloppe"
    ]
   },
+  "Au-delà d’une trentaine, l’air ne suffit plus : ce n’est pas un supplément de coût, c’est un autre bâtiment.": {
+   "fr": "Au-delà d’une trentaine, l’air ne suffit plus : ce n’est pas un supplément de coût, c’est un autre bâtiment.",
+   "mots": 23,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Au-dessus du seuil,": {
    "fr": "Au-dessus du seuil,",
    "mots": 4,
@@ -17053,6 +17749,24 @@
     "_js"
    ]
   },
+  "Aucun pays ne correspond à ces filtres.": {
+   "fr": "Aucun pays ne correspond à ces filtres.",
+   "mots": 7,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Aucun pays ne correspond à ces filtres. Le classement se lit sur un ensemble : trop restreindre le vide de son sens comparatif.": {
+   "fr": "Aucun pays ne correspond à ces filtres. Le classement se lit sur un ensemble : trop restreindre le vide de son sens comparatif.",
+   "mots": 22,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Aucun plafond n’est posé. Les plafonds se passent à": {
    "fr": "Aucun plafond n’est posé. Les plafonds se passent à",
    "mots": 10,
@@ -17149,6 +17863,15 @@
    "mots": 3,
    "pages": [
     "nis2-qualifier"
+   ]
+  },
+  "Aucun signal ne correspond à ces filtres. Élargissez la sélection, ou cliquez « Tout afficher ».": {
+   "fr": "Aucun signal ne correspond à ces filtres. Élargissez la sélection, ou cliquez « Tout afficher ».",
+   "mots": 14,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Aucun socle sectoriel n’est choisi à votre place : c’est un arbitrage qui vous appartient, et la page le dit quand il manque.": {
@@ -19361,6 +20084,15 @@
     "iso27001-soa"
    ]
   },
+  "Business case": {
+   "fr": "Business case",
+   "mots": 2,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Business · Adoption": {
    "fr": "Business · Adoption",
    "mots": 2,
@@ -19493,6 +20225,13 @@
    "mots": 1,
    "pages": [
     "_coquille"
+   ]
+  },
+  "CC BY-ND # · citation": {
+   "fr": "CC BY-ND 4.0 · citation",
+   "mots": 4,
+   "pages": [
+    "obs-rd"
    ]
   },
   "CDIO (Chief Digital & Information Officer)": {
@@ -19783,6 +20522,13 @@
    "mots": 6,
    "pages": [
     "_js"
+   ]
+  },
+  "Cadre & gouvernance UE": {
+   "fr": "Cadre & gouvernance UE",
+   "mots": 3,
+   "pages": [
+    "obs-rd"
    ]
   },
   "Cadre NIST — je veux savoir où nous en sommes, sans me raconter d’histoire": {
@@ -20094,6 +20840,15 @@
     "sanctions"
    ]
   },
+  "Calculer le point de bascule": {
+   "fr": "Calculer le point de bascule",
+   "mots": 5,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Calculer l’enveloppe": {
    "fr": "Calculer l’enveloppe",
    "mots": 3,
@@ -20120,6 +20875,15 @@
    "mots": 17,
    "pages": [
     "enveloppe"
+   ]
+  },
+  "Calendrier": {
+   "fr": "Calendrier",
+   "mots": 1,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Calendrier AI Act consolidé": {
@@ -20210,6 +20974,15 @@
     "_js"
    ]
   },
+  "Capacité concurrente annoncée (MW)": {
+   "fr": "Capacité concurrente annoncée (MW)",
+   "mots": 4,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Capacité d'enregistrement automatique des événements : horodatage, identifiants, données d'entrée, décisions de sortie, identité des opérateurs ayant validé.": {
    "fr": "Capacité d'enregistrement automatique des événements : horodatage, identifiants, données d'entrée, décisions de sortie, identité des opérateurs ayant validé.",
    "mots": 19,
@@ -20288,6 +21061,15 @@
    "mots": 4,
    "pages": [
     "pan-sia"
+   ]
+  },
+  "Carte UE & droit national": {
+   "fr": "Carte UE & droit national",
+   "mots": 4,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Carte de l'Union européenne : nombre de cas de systèmes d'IA documentés par pays dans le panel.": {
@@ -20520,6 +21302,15 @@
     "_js"
    ]
   },
+  "Cas d'usage": {
+   "fr": "Cas d'usage",
+   "mots": 3,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Cas d'usage IA frequents dans ce secteur. Chacun doit etre inscrit au registre des systemes IA (Art. #, #) et classe par niveau de risque selon l'Annexe III de l'AI Act.": {
    "fr": "Cas d'usage IA frequents dans ce secteur. Chacun doit etre inscrit au registre des systemes IA (Art. 49, 71) et classe par niveau de risque selon l'Annexe III de l'AI Act.",
    "mots": 32,
@@ -20534,6 +21325,15 @@
    "pages": [
     "maturite",
     "_js"
+   ]
+  },
+  "Cas de systèmes d'IA documentés, filtrables, avec classe de risque AI Act et score d'exposition": {
+   "fr": "Cas de systèmes d'IA documentés, filtrables, avec classe de risque AI Act et score d'exposition",
+   "mots": 17,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Cas documentés": {
@@ -21803,6 +22603,15 @@
     "_js"
    ]
   },
+  "Centre de données": {
+   "fr": "Centre de données",
+   "mots": 3,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Centres de données": {
    "fr": "Centres de données",
    "mots": 3,
@@ -22371,6 +23180,15 @@
    "mots": 4,
    "pages": [
     "_js"
+   ]
+  },
+  "Chargement des prospectives…": {
+   "fr": "Chargement des prospectives…",
+   "mots": 3,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Chargement des traitements…": {
@@ -23134,6 +23952,15 @@
     "_js"
    ]
   },
+  "Classe AI Act": {
+   "fr": "Classe AI Act",
+   "mots": 3,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Classe AI Act présumée, nécessité d'une AIPD ou d'une FRIA, obligations de transparence (art. #). C'est ICI que se décide la lourdeur de tout le reste — jamais à la fin.": {
    "fr": "Classe AI Act présumée, nécessité d'une AIPD ou d'une FRIA, obligations de transparence (art. 50). C'est ICI que se décide la lourdeur de tout le reste — jamais à la fin.",
    "mots": 32,
@@ -23148,11 +23975,27 @@
     "_js"
    ]
   },
+  "Classe d’air admise (ASHRAE)": {
+   "fr": "Classe d’air admise (ASHRAE)",
+   "mots": 5,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Classe présumée": {
    "fr": "Classe présumée",
    "mots": 2,
    "pages": [
     "_js"
+   ]
+  },
+  "Classement # (barres)": {
+   "fr": "Classement 2023 (barres)",
+   "mots": 2,
+   "pages": [
+    "obs-rd"
    ]
   },
   "Classement des pays et fiche par pays — avantages, inconvénients, commentaire d’arbitrage, perspectives # — à l’écran et à l’impression.": {
@@ -25076,6 +25919,15 @@
     "_js"
    ]
   },
+  "Confrontée ci-dessous à la date ferme de la puissance.": {
+   "fr": "Confrontée ci-dessous à la date ferme de la puissance.",
+   "mots": 10,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Connaissance de l’incident": {
    "fr": "Connaissance de l’incident",
    "mots": 4,
@@ -26174,6 +27026,15 @@
     "enveloppe"
    ]
   },
+  "Copernicus · NASA · DINUM · Eurostat — sans clé d'API": {
+   "fr": "Copernicus · NASA · DINUM · Eurostat — sans clé d'API",
+   "mots": 8,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Copernicus · Union européenne": {
    "fr": "Copernicus · Union européenne",
    "mots": 3,
@@ -26888,6 +27749,15 @@
     "_js"
    ]
   },
+  "C’est le dénominateur du test de concurrence. Une étude sans émetteur ni date n’est pas une demande : c’est une opinion.": {
+   "fr": "C’est le dénominateur du test de concurrence. Une étude sans émetteur ni date n’est pas une demande : c’est une opinion.",
+   "mots": 23,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "C’est le point de départ, pas l’arrivée": {
    "fr": "C’est le point de départ, pas l’arrivée",
    "mots": 9,
@@ -27492,6 +28362,15 @@
     "gouvernance"
    ]
   },
+  "Demande attendue sur la zone (MW)": {
+   "fr": "Demande attendue sur la zone (MW)",
+   "mots": 6,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Demande de tarification par résultats": {
    "fr": "Demande de tarification par résultats",
    "mots": 5,
@@ -27612,6 +28491,15 @@
    "mots": 2,
    "pages": [
     "enveloppe"
+   ]
+  },
+  "Densité demandée (kW/baie)": {
+   "fr": "Densité demandée (kW/baie)",
+   "mots": 4,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Densité par baie": {
@@ -30949,6 +31837,15 @@
     "_js"
    ]
   },
+  "Détail par pays": {
+   "fr": "Détail par pays",
+   "mots": 3,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Détailler votre échéancier": {
    "fr": "Détailler votre échéancier",
    "mots": 3,
@@ -32187,6 +33084,24 @@
     "obs-rd"
    ]
   },
+  "Empreinte": {
+   "fr": "Empreinte",
+   "mots": 1,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Empreinte & data centres": {
+   "fr": "Empreinte & data centres",
+   "mots": 3,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Empreinte (chaîne)": {
    "fr": "Empreinte (chaîne)",
    "mots": 2,
@@ -32740,6 +33655,15 @@
     "_js"
    ]
   },
+  "Enveloppe & DPGF": {
+   "fr": "Enveloppe & DPGF",
+   "mots": 2,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Enveloppe d'investissement — décision GO / NO GO": {
    "fr": "Enveloppe d'investissement — décision GO / NO GO",
    "mots": 7,
@@ -32752,6 +33676,15 @@
    "mots": 5,
    "pages": [
     "_js"
+   ]
+  },
+  "Enveloppe d’investissement et DPGF — décision GO / NO GO": {
+   "fr": "Enveloppe d’investissement et DPGF — décision GO / NO GO",
+   "mots": 9,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Enveloppe et DPGF": {
@@ -32859,6 +33792,13 @@
    "mots": 12,
    "pages": [
     "_js"
+   ]
+  },
+  "Epoch AI — « Data on Notable AI Models », epoch.ai": {
+   "fr": "Epoch AI — « Data on Notable AI Models », epoch.ai",
+   "mots": 9,
+   "pages": [
+    "obs-rd"
    ]
   },
   "Equilibrage automatique du reseau (smart grid)": {
@@ -33287,6 +34227,13 @@
    "mots": 7,
    "pages": [
     "pan-sia"
+   ]
+  },
+  "Eurostat · isoc_eb_ai · CC BY #": {
+   "fr": "Eurostat · isoc_eb_ai · CC BY 4.0",
+   "mots": 6,
+   "pages": [
+    "obs-rd"
    ]
   },
   "Eurostat — enquête TIC entreprises (isoc_eb_ai)": {
@@ -34231,6 +35178,15 @@
     "pricing"
    ]
   },
+  "Exposition": {
+   "fr": "Exposition",
+   "mots": 1,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Exposition aux amendes (art. #).": {
    "fr": "Exposition aux amendes (art. 99).",
    "mots": 4,
@@ -35166,6 +36122,13 @@
     "gouvernance"
    ]
   },
+  "Flux origine → travail": {
+   "fr": "Flux origine → travail",
+   "mots": 3,
+   "pages": [
+    "obs-rd"
+   ]
+  },
   "Flux publics agrégés · mise à jour automatique. Estimations et actualités à vérifier aux sources officielles.": {
    "fr": "Flux publics agrégés · mise à jour automatique. Estimations et actualités à vérifier aux sources officielles.",
    "mots": 15,
@@ -35836,6 +36799,15 @@
    "mots": 1,
    "pages": [
     "regs"
+   ]
+  },
+  "Gabarit": {
+   "fr": "Gabarit",
+   "mots": 1,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Gabarits de capacité informatique": {
@@ -38536,6 +39508,15 @@
     "gouvernance"
    ]
   },
+  "Indicateur REF au sens d’EN #-#-# et ISO #-#.": {
+   "fr": "Indicateur REF au sens d’EN 50600-4-3 et ISO 30134-3.",
+   "mots": 8,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Indicateurs": {
    "fr": "Indicateurs",
    "mots": 1,
@@ -39255,6 +40236,15 @@
     "pan-sia"
    ]
   },
+  "Intensité carbone du contrat (gCO₂e/kWh)": {
+   "fr": "Intensité carbone du contrat (gCO₂e/kWh)",
+   "mots": 7,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Intensité carbone du réseau": {
    "fr": "Intensité carbone du réseau",
    "mots": 4,
@@ -39648,6 +40638,15 @@
    "pages": [
     "regs",
     "_js"
+   ]
+  },
+  "Interrogation des sources ouvertes en cours…": {
+   "fr": "Interrogation des sources ouvertes en cours…",
+   "mots": 6,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Interroge en temps réel vos documents, la veille réglementaire et les analyses produites par la plateforme. Les résultats sont classés par pertinence et cités.": {
@@ -41621,6 +42620,15 @@
     "enveloppe"
    ]
   },
+  "La donnée la plus structurante : elle débloque revenu, point mort et marge d’un seul coup.": {
+   "fr": "La donnée la plus structurante : elle débloque revenu, point mort et marge d’un seul coup.",
+   "mots": 16,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "La décision est chiffrée ; elle n’est pas instruite.": {
    "fr": "La décision est chiffrée ; elle n’est pas instruite.",
    "mots": 9,
@@ -43306,6 +44314,15 @@
    "pages": [
     "simulateur",
     "_js"
+   ]
+  },
+  "Le levier le moins cher qui existe — il ne coûte aucun matériel, mais engage la garantie constructeur.": {
+   "fr": "Le levier le moins cher qui existe — il ne coûte aucun matériel, mais engage la garantie constructeur.",
+   "mots": 17,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Le lien Voir les # critères d évaluation → explique la méthodologie complète de scoring.": {
@@ -45264,6 +46281,15 @@
     "pan-sia"
    ]
   },
+  "Les deux n’échouent pas aux mêmes endroits.": {
+   "fr": "Les deux n’échouent pas aux mêmes endroits.",
+   "mots": 8,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Les deux ou trois sites qui font le résultat — un parc se pilote par ses queues de distribution, pas par sa moyenne.": {
    "fr": "Les deux ou trois sites qui font le résultat — un parc se pilote par ses queues de distribution, pas par sa moyenne.",
    "mots": 22,
@@ -46415,6 +47441,13 @@
     "_js"
    ]
   },
+  "Licence": {
+   "fr": "Licence",
+   "mots": 1,
+   "pages": [
+    "obs-rd"
+   ]
+  },
   "Licence Ouverte # (Etalab) ou ODbL selon le jeu — reportée par jeu": {
    "fr": "Licence Ouverte 2.0 (Etalab) ou ODbL selon le jeu — reportée par jeu",
    "mots": 11,
@@ -46448,6 +47481,13 @@
    "mots": 11,
    "pages": [
     "geo"
+   ]
+  },
+  "Lignes directrices (#)": {
+   "fr": "Lignes directrices (2019)",
+   "mots": 2,
+   "pages": [
+    "obs-rd"
    ]
   },
   "Lignes directrices Art. #": {
@@ -49276,6 +50316,15 @@
     "gouvernance"
    ]
   },
+  "Mise en service visée (année)": {
+   "fr": "Mise en service visée (année)",
+   "mots": 5,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Mise en œuvre": {
    "fr": "Mise en œuvre",
    "mots": 3,
@@ -49918,6 +50967,15 @@
    "mots": 14,
    "pages": [
     "_js"
+   ]
+  },
+  "Montée en charge (MW cumulés par année, séparés par des virgules)": {
+   "fr": "Montée en charge (MW cumulés par année, séparés par des virgules)",
+   "mots": 11,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Montée en charge commerciale (ans)": {
@@ -50719,6 +51777,15 @@
    "mots": 16,
    "pages": [
     "cra-signalement"
+   ]
+  },
+  "Nature de l’opération": {
+   "fr": "Nature de l’opération",
+   "mots": 4,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Nature du dossier": {
@@ -52837,6 +53904,13 @@
     "gouvernance"
    ]
   },
+  "Origine vs travail (barres)": {
+   "fr": "Origine vs travail (barres)",
+   "mots": 4,
+   "pages": [
+    "obs-rd"
+   ]
+  },
   "Otto Group — Génération de descriptions produits et traduction à l'échelle du catalogue": {
    "fr": "Otto Group — Génération de descriptions produits et traduction à l'échelle du catalogue",
    "mots": 13,
@@ -53811,6 +54885,15 @@
     "enveloppe"
    ]
   },
+  "PUE imposé par le cahier des charges": {
+   "fr": "PUE imposé par le cahier des charges",
+   "mots": 7,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "PUE — efficacité énergétique du site": {
    "fr": "PUE — efficacité énergétique du site",
    "mots": 5,
@@ -54093,6 +55176,15 @@
     "_js"
    ]
   },
+  "Parcours": {
+   "fr": "Parcours",
+   "mots": 1,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Parcours chiffré — ce que le règlement chiffre lui-même": {
    "fr": "Parcours chiffré — ce que le règlement chiffre lui-même",
    "mots": 9,
@@ -54228,6 +55320,15 @@
    "mots": 12,
    "pages": [
     "dora-supervision"
+   ]
+  },
+  "Part d’énergie sans carbone contractualisée": {
+   "fr": "Part d’énergie sans carbone contractualisée",
+   "mots": 6,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Part d’équipe qui s’en sert chaque semaine": {
@@ -54544,6 +55645,15 @@
    "mots": 3,
    "pages": [
     "pan-sia"
+   ]
+  },
+  "Pays": {
+   "fr": "Pays",
+   "mots": 1,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Pays BRI": {
@@ -56880,6 +57990,15 @@
     "_js"
    ]
   },
+  "Prix contractuel de l’électricité (€/MWh)": {
+   "fr": "Prix contractuel de l’électricité (€/MWh)",
+   "mots": 6,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Prix de l'électricité industrielle": {
    "fr": "Prix de l'électricité industrielle",
    "mots": 5,
@@ -56906,6 +58025,15 @@
    "mots": 4,
    "pages": [
     "pan-sia"
+   ]
+  },
+  "Prix d’hébergement (€/kW/mois)": {
+   "fr": "Prix d’hébergement (€/kW/mois)",
+   "mots": 5,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Pro-innovation AI Regulation White Paper #": {
@@ -57656,6 +58784,15 @@
     "_js"
    ]
   },
+  "Prospectives #-#": {
+   "fr": "Prospectives 2026-2030",
+   "mots": 1,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Prospectives #-# — ce qui change, et ce que ça périme": {
    "fr": "Prospectives 2026-2030 — ce qui change, et ce que ça périme",
    "mots": 9,
@@ -58294,6 +59431,33 @@
    "mots": 7,
    "pages": [
     "pan-sia"
+   ]
+  },
+  "Puissance FERME en (année)": {
+   "fr": "Puissance FERME en (année)",
+   "mots": 4,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Puissance IT (MW)": {
+   "fr": "Puissance IT (MW)",
+   "mots": 3,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Puissance déjà contractée (MW)": {
+   "fr": "Puissance déjà contractée (MW)",
+   "mots": 4,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Puissance informatique (kW)": {
@@ -60265,6 +61429,15 @@
     "fiche-in"
    ]
   },
+  "Refroidissement imposé": {
+   "fr": "Refroidissement imposé",
+   "mots": 2,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Refus, tarif, score, orientation, sanction. La personne concernée a le droit de savoir qui en répond.": {
    "fr": "Refus, tarif, score, orientation, sanction. La personne concernée a le droit de savoir qui en répond.",
    "mots": 16,
@@ -61036,6 +62209,15 @@
    "mots": 25,
    "pages": [
     "recyf-analyse"
+   ]
+  },
+  "Renseigné, ce poste cesse d’être « à renseigner ».": {
+   "fr": "Renseigné, ce poste cesse d’être « à renseigner ».",
+   "mots": 8,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Repartir avec : modèles de politiques IA, RACI et charte d'instance, registre d'inventaire, grille d'analyse d'impact et de risque, trame de model card — prêts à déployer": {
@@ -62070,6 +63252,15 @@
    "pages": [
     "training",
     "_js"
+   ]
+  },
+  "Risques financiers couverts": {
+   "fr": "Risques financiers couverts",
+   "mots": 3,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Risques pour les droits et libertés": {
@@ -63890,6 +65081,15 @@
     "dora-supervision"
    ]
   },
+  "Sans découpage, l’engagement est réputé d’un seul tenant. Le phasage ne supprime pas le risque : il le rend refusable.": {
+   "fr": "Sans découpage, l’engagement est réputé d’un seul tenant. Le phasage ne supprime pas le risque : il le rend refusable.",
+   "mots": 21,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Sans engagement — toujours gratuit": {
    "fr": "Sans engagement — toujours gratuit",
    "mots": 4,
@@ -65106,6 +66306,24 @@
     "_js"
    ]
   },
+  "Signaux": {
+   "fr": "Signaux",
+   "mots": 1,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "Signaux en attente du premier rafraîchissement serveur.": {
+   "fr": "Signaux en attente du premier rafraîchissement serveur.",
+   "mots": 7,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Signaux en continu — autorités & institutions": {
    "fr": "Signaux en continu — autorités & institutions",
    "mots": 5,
@@ -65454,6 +66672,13 @@
     "pan-sia"
    ]
   },
+  "Solde net (barres divergentes)": {
+   "fr": "Solde net (barres divergentes)",
+   "mots": 4,
+   "pages": [
+    "obs-rd"
+   ]
+  },
   "Sollicitations de niveau # −# % ; réponse immédiate.": {
    "fr": "Sollicitations de niveau 1 −50 % ; réponse immédiate.",
    "mots": 5,
@@ -65503,6 +66728,13 @@
     "carto"
    ]
   },
+  "Source": {
+   "fr": "Source",
+   "mots": 1,
+   "pages": [
+    "obs-rd"
+   ]
+  },
   "Source : Epoch AI, « Data on Notable AI Models » (CC BY #). Le seed affiche les classes d’effectifs (précision « classe » ; hors États-Unis, Chine, Canada, Royaume-Uni, Allemagne et France : « classe, lecture de carte ») ; en mode live, les comptes exacts Epoch AI les remplacent. Cliquez un pays pour le détail (modèles, chercheurs d’élite, adoption UE si disponible).": {
    "fr": "Source : Epoch AI, « Data on Notable AI Models » (CC BY 4.0). Le seed affiche les classes d’effectifs (précision « classe » ; hors États-Unis, Chine, Canada, Royaume-Uni, Allemagne et France : « classe, lecture de carte ») ; en mode live, les comptes exacts Epoch AI les remplacent. Cliquez un pays pour le détail (modèles, chercheurs d’élite, adoption UE si disponible).",
    "mots": 57,
@@ -65514,7 +66746,10 @@
    "fr": "Sources",
    "mots": 1,
    "pages": [
-    "_coquille"
+    "_coquille",
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Sources : EcoLogits (GenAI Impact) · Boavizta · ADEME Base Empreinte · RTE éCO#mix / ODRÉ · ML.ENERGY.": {
@@ -65599,6 +66834,15 @@
    "mots": 21,
    "pages": [
     "_js"
+   ]
+  },
+  "Sous #, la pénalité de charge partielle devient le premier poste de perte.": {
+   "fr": "Sous 0,55, la pénalité de charge partielle devient le premier poste de perte.",
+   "mots": 12,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Sous ce seuil, une PME est exposée à # M€ quel que soit son chiffre d’affaires. C’est le contraire de ce que « # % » laisse entendre, et c’est le premier chiffre à corriger en comité.": {
@@ -65792,6 +67036,15 @@
    "mots": 2,
    "pages": [
     "carto"
+   ]
+  },
+  "Stade": {
+   "fr": "Stade",
+   "mots": 1,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Standard international pour les systèmes de management de l'IA. Aligné sur l'AI Act (Art. #). Outil clé pour démontrer la conformité aux exigences de gouvernance.": {
@@ -68250,6 +69503,15 @@
     "enveloppe"
    ]
   },
+  "Taux de charge moyen": {
+   "fr": "Taux de charge moyen",
+   "mots": 4,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Taux de conformité": {
    "fr": "Taux de conformité",
    "mots": 3,
@@ -69428,6 +70690,15 @@
    "mots": 4,
    "pages": [
     "empreinte-ia"
+   ]
+  },
+  "Tranches d’investissement (MW, séparés par des virgules)": {
+   "fr": "Tranches d’investissement (MW, séparés par des virgules)",
+   "mots": 8,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Tranchez les trente-huit mesures. Écrivez le motif AU MOMENT où vous tranchez.": {
@@ -70918,6 +72189,15 @@
     "_js"
    ]
   },
+  "Un risque assumé et écrit n’est pas un risque oublié — c’est cette distinction que cherche un investisseur.": {
+   "fr": "Un risque assumé et écrit n’est pas un risque oublié — c’est cette distinction que cherche un investisseur.",
+   "mots": 19,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Un risque non chiffrable n’est pas un risque nul : inscrivez-le avec la mention « à mesurer », il disparaîtra sinon du dossier.": {
    "fr": "Un risque non chiffrable n’est pas un risque nul : inscrivez-le avec la mention « à mesurer », il disparaîtra sinon du dossier.",
    "mots": 22,
@@ -71310,6 +72590,15 @@
    "mots": 7,
    "pages": [
     "_js"
+   ]
+  },
+  "Une contrainte contractuelle prime sur toute déduction.": {
+   "fr": "Une contrainte contractuelle prime sur toute déduction.",
+   "mots": 7,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Une culture de conformité entretenue et traçable.": {
@@ -72352,6 +73641,15 @@
     "_js"
    ]
   },
+  "Vide = déduit du climat et du stress hydrique du pays.": {
+   "fr": "Vide = déduit du climat et du stress hydrique du pays.",
+   "mots": 10,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "Vider": {
    "fr": "Vider",
    "mots": 1,
@@ -72651,6 +73949,13 @@
     "nis2"
    ]
   },
+  "Volet": {
+   "fr": "Volet",
+   "mots": 1,
+   "pages": [
+    "obs-rd"
+   ]
+  },
   "Volkswagen — ChatGPT intégré à l'assistant vocal IDA (via Cerence) sur véhicules européens": {
    "fr": "Volkswagen — ChatGPT intégré à l'assistant vocal IDA (via Cerence) sur véhicules européens",
    "mots": 13,
@@ -72807,6 +74112,15 @@
    "mots": 5,
    "pages": [
     "_js"
+   ]
+  },
+  "Votre hypothèse de commercialisation : le module la prend telle quelle et en tire l’année de marge positive. Il ne la devine pas.": {
+   "fr": "Votre hypothèse de commercialisation : le module la prend telle quelle et en tire l’année de marge positive. Il ne la devine pas.",
+   "mots": 23,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "Votre inventaire d’actifs # ne contient pas vos systèmes d’IA en tant que tels. Montez celui-ci.": {
@@ -74670,6 +75984,15 @@
     "obs-rd"
    ]
   },
+  "calcul en cours…": {
+   "fr": "calcul en cours…",
+   "mots": 3,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "calculé": {
    "fr": "calculé",
    "mots": 1,
@@ -74940,6 +76263,33 @@
    "mots": 5,
    "pages": [
     "obs-rd"
+   ]
+  },
+  "chargement du cadre…": {
+   "fr": "chargement du cadre…",
+   "mots": 3,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "chargement du référentiel…": {
+   "fr": "chargement du référentiel…",
+   "mots": 3,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
+  "chargement…": {
+   "fr": "chargement…",
+   "mots": 1,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "chiffre d’affaires, c’est le pourcentage qui commande.": {
@@ -75702,6 +77052,13 @@
    "mots": 1,
    "pages": [
     "fiche-ch"
+   ]
+  },
+  "données : seed · #/#/#": {
+   "fr": "données : seed · 29/07/2026",
+   "mots": 2,
+   "pages": [
+    "obs-rd"
    ]
   },
   "du": {
@@ -77671,6 +79028,15 @@
     "_js"
    ]
   },
+  "neuf postes, scope #": {
+   "fr": "neuf postes, scope 3",
+   "mots": 3,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "ni la qualité des images (couverture nuageuse), ni ce qui en est fait, ni la moindre activité en intelligence artificielle": {
    "fr": "ni la qualité des images (couverture nuageuse), ni ce qui en est fait, ni la moindre activité en intelligence artificielle",
    "mots": 20,
@@ -78590,6 +79956,15 @@
     "_js"
    ]
   },
+  "quatre axes, treize constats": {
+   "fr": "quatre axes, treize constats",
+   "mots": 4,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "quatre phases et les livrables ne dépendent pas du secteur — ce sont vos": {
    "fr": "quatre phases et les livrables ne dépendent pas du secteur — ce sont vos",
    "mots": 13,
@@ -78949,6 +80324,15 @@
     "_js"
    ]
   },
+  "récolté sur les moteurs — chargement…": {
+   "fr": "récolté sur les moteurs — chargement…",
+   "mots": 5,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "réellement observé(s) ·": {
    "fr": "réellement observé(s) ·",
    "mots": 3,
@@ -79006,11 +80390,29 @@
     "enveloppe"
    ]
   },
+  "référentiel …": {
+   "fr": "référentiel …",
+   "mots": 1,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
+   ]
+  },
   "réglementaire, une liste tronquée qui ne dit pas qu’elle": {
    "fr": "réglementaire, une liste tronquée qui ne dit pas qu’elle",
    "mots": 10,
    "pages": [
     "_js"
+   ]
+  },
+  "réglez, puis calculez": {
+   "fr": "réglez, puis calculez",
+   "mots": 3,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "réponse(s) :": {
@@ -79272,6 +80674,27 @@
    "mots": 13,
    "pages": [
     "_js"
+   ]
+  },
+  "seed": {
+   "fr": "seed",
+   "mots": 1,
+   "pages": [
+    "obs-rd"
+   ]
+  },
+  "seed · classes (recomposition)": {
+   "fr": "seed · classes (recomposition)",
+   "mots": 3,
+   "pages": [
+    "obs-rd"
+   ]
+  },
+  "seed — en attente du premier rafraîchissement serveur": {
+   "fr": "seed — en attente du premier rafraîchissement serveur",
+   "mots": 7,
+   "pages": [
+    "obs-rd"
    ]
   },
   "segment(s) indexé(s)": {
@@ -80311,6 +81734,20 @@
     "iso27001-millesime"
    ]
   },
+  "© MacroPolo · citation": {
+   "fr": "© MacroPolo · citation",
+   "mots": 2,
+   "pages": [
+    "obs-rd"
+   ]
+  },
+  "© UE #/#/UE · citation + lien": {
+   "fr": "© UE 2011/833/UE · citation + lien",
+   "mots": 4,
+   "pages": [
+    "obs-rd"
+   ]
+  },
   "« # M€ OU # % » n’est pas un choix de l’autorité : c’est le plus élevé des deux. Il existe donc un seuil, et il est à # M€.": {
    "fr": "« 15 M€ OU 2,5 % » n’est pas un choix de l’autorité : c’est le plus élevé des deux. Il existe donc un seuil, et il est à 600 M€.",
    "mots": 27,
@@ -80365,6 +81802,15 @@
    "mots": 8,
    "pages": [
     "qualif-assistee"
+   ]
+  },
+  "« Ferme » = écrit par le gestionnaire de réseau. Une estimation d’agence ne vaut pas engagement, et l’écart se compte en années.": {
+   "fr": "« Ferme » = écrit par le gestionnaire de réseau. Une estimation d’agence ne vaut pas engagement, et l’écart se compte en années.",
+   "mots": 22,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "« Feu de forêt — horizon retenu » recouvre « Risque de feu de forêt à l'horizon # (XDI) » · « Étiage et régime des cours d'eau — horizon retenu » recouvre « Disponibilité en eau (WEI+, compétition d'usages) » · « Précipitations extrêmes et ruissellement — horizon retenu » recouvre « Risque d'inondation à l'horizon # (XDI) » · « Précipitations extrêmes et ruissellement — horizon retenu » recouvre « Risque climatique physique du bâti (XDI) » · « Sécheresse — horizon retenu » recouvre « Disponibilité en eau (WEI+, compétition d'usages) » · « Submersion côtière — horizon retenu » recouvre « Risque climatique physique du bâti (XDI) ». Ce n’est pas une erreur, c’est un arbitrage : les critères": {
@@ -80862,6 +82308,15 @@
     "iso27001-millesime",
     "nist-cadre",
     "nist-genai"
+   ]
+  },
+  "À l’exclusion des marques d’intérêt : ce sont deux choses différentes, et la confusion se paie au premier comité.": {
+   "fr": "À l’exclusion des marques d’intérêt : ce sont deux choses différentes, et la confusion se paie au premier comité.",
+   "mots": 20,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "À montrer ce que la France va demander, et qui n'a pas la forme de la directive. Le projet de loi remplace à son article # les dix mesures de l'article # §# par quatre familles — pilotage, protection, défense, résilience — et renvoie au ReCyF : vingt objectifs de sécurité et # moyens acceptables de conformité. Un contrôle de l'ANSSI portera sur ceux-là.": {
@@ -83657,6 +85112,13 @@
     "_js"
    ]
   },
+  "— pays": {
+   "fr": "— pays",
+   "mots": 1,
+   "pages": [
+    "obs-rd"
+   ]
+  },
   "— pays et puissance — pour ne pas le ressaisir. Il vous montre ce qu’il contient avant que vous n’en fassiez quoi que ce soit : rien n’est envoyé tant que vous ne suivez pas le lien.": {
    "fr": "— pays et puissance — pour ne pas le ressaisir. Il vous montre ce qu’il contient avant que vous n’en fassiez quoi que ce soit : rien n’est envoyé tant que vous ne suivez pas le lien.",
    "mots": 37,
@@ -83835,6 +85297,15 @@
    "mots": 3,
    "pages": [
     "_js"
+   ]
+  },
+  "← Empreinte du parc": {
+   "fr": "← Empreinte du parc",
+   "mots": 3,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "← Les vingt objectifs": {
@@ -84924,6 +86395,15 @@
    "mots": 12,
    "pages": [
     "enveloppe"
+   ]
+  },
+  "⬇ CSV": {
+   "fr": "⬇ CSV",
+   "mots": 1,
+   "pages": [
+    "pan-sia",
+    "enveloppe",
+    "empreinte-parc"
    ]
   },
   "⬇ Données CSV": {
