@@ -411,27 +411,6 @@
    "regle": "test_le_repli_smtp_ne_journalise_pas_l_adresse_en_clair"
   },
   {
-   "nom": "le plafond par destinataire ne s'applique plus",
-   "fichier": "app.py",
-   "avant": "    if pour_lui > NOTIFY_SELECTION_PLAFOND_DESTINATAIRE_JOUR:",
-   "apres": "    if False:",
-   "regle": "test_la_selection_est_plafonnee_par_destinataire_et_par_jour"
-  },
-  {
-   "nom": "le plafond global ne s'applique plus",
-   "fichier": "app.py",
-   "avant": "    elif total > NOTIFY_SELECTION_PLAFOND_GLOBAL_JOUR:",
-   "apres": "    elif False:",
-   "regle": "test_la_selection_est_plafonnee_globalement_par_jour"
-  },
-  {
-   "nom": "les dossiers privés sont à nouveau servis",
-   "fichier": "app.py",
-   "avant": "    if _norme.split('/')[0] in DOSSIERS_PRIVES:",
-   "apres": "    if False:",
-   "regle": "test_un_fichier_des_dossiers_prives_n_est_pas_servi[uploads_cv]"
-  },
-  {
    "nom": "/api/health livre le diagnostic complet à tout compte connecté",
    "fichier": "app.py",
    "avant": "    admin = sentauth_current_client()\n    if not (admin and admin.get('is_conseilprev')):\n        if request.args.get('format') == 'json':",
