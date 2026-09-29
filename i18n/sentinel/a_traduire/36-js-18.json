@@ -1,6 +1,6 @@
 {
  "_lot": "36-js-18",
- "_mots": 2464,
+ "_mots": 2353,
  "_pages": [
   "_js"
  ],
@@ -99,10 +99,6 @@
    "en": "But the day you are reclassified as a manufacturer, you move into the heavy tier — €# million or # %. Reclassification also costs in exposure.",
    "fr": "Mais le jour où vous êtes requalifié fabricant, vous basculez au palier lourd — 15 M€ ou 2,5 %. La requalification coûte, aussi, en exposition."
   },
-  "Majoration récidive": {
-   "en": "Repeat-offence uplift",
-   "fr": "Majoration récidive"
-  },
   "Management de l’IA — ISO/IEC #": {
    "en": "AI management — ISO/IEC #",
    "fr": "Management de l’IA — ISO/IEC 42001"
@@ -143,10 +139,6 @@
    "en": "Marking of generated or manipulated content, informing users who are interacting with an AI, disclosure of deepfakes. It is a transparency obligation, not a high-risk one — and it is the one that most often applies here.",
    "fr": "Marquage des contenus générés ou manipulés, information de l'utilisateur qui dialogue avec une IA, signalement des hypertrucages. C'est une obligation de transparence, pas de haut risque — et c'est elle qui s'applique le plus souvent ici."
   },
-  "Marquage des contenus synthétiques": {
-   "en": "Marking of synthetic content",
-   "fr": "Marquage des contenus synthétiques"
-  },
   "Marquage des deepfakes de maniere detectable (Art. #(#))": {
    "en": "Marking deepfakes in a detectable way (Art. #(#))",
    "fr": "Marquage des deepfakes de maniere detectable (Art. 50(4))"
@@ -154,10 +146,6 @@
   "Marquage machine-readable des contenus générés (Art. #§#). Deepfakes et textes d'intérêt public : signalement obligatoire (Art. #§#). Délai Digital Omnibus : # décembre #.": {
    "en": "Machine-readable marking of generated content (Art. #(#)). Deepfakes and texts of public interest: mandatory disclosure (Art. #(#)). Digital Omnibus deadline: # December #.",
    "fr": "Marquage machine-readable des contenus générés (Art. 50§2). Deepfakes et textes d'intérêt public : signalement obligatoire (Art. 50§4). Délai Digital Omnibus : 2 décembre 2026."
-  },
-  "Marquage machine-readable des contenus générés artificiellement (texte, image, audio, vidéo). Watermarking obligatoire.": {
-   "en": "Machine-readable marking of artificially generated content (text, image, audio, video). Mandatory watermarking.",
-   "fr": "Marquage machine-readable des contenus générés artificiellement (texte, image, audio, vidéo). Watermarking obligatoire."
   },
   "Marquer la facture": {
    "en": "Mark the invoice",
@@ -222,10 +210,6 @@
   "Maximisation automatisee du taux de remplissage des vehicules de fret.": {
    "en": "Automated maximisation of the load factor of freight vehicles.",
    "fr": "Maximisation automatisee du taux de remplissage des vehicules de fret."
-  },
-  "Maîtrise de l'IA du personnel": {
-   "en": "AI literacy of staff",
-   "fr": "Maîtrise de l'IA du personnel"
   },
   "Maîtrise de l’IA générative (LLM)": {
    "en": "Mastering generative AI (LLM)",
@@ -351,10 +335,6 @@
    "en": "Update at every significant system change, not just once a year.",
    "fr": "Mettez à jour à chaque changement significatif de système, pas seulement une fois par an."
   },
-  "Mettre en place des formations adaptées aux rôles (développeurs, gestionnaires de risques, opérateurs)": {
-   "en": "Put in place role-specific training (developers, risk managers, operators)",
-   "fr": "Mettre en place des formations adaptées aux rôles (développeurs, gestionnaires de risques, opérateurs)"
-  },
   "Mettre en place des mesures d'atténuation proportionnées": {
    "en": "Put in place proportionate mitigation measures",
    "fr": "Mettre en place des mesures d'atténuation proportionnées"
@@ -378,10 +358,6 @@
   "Mettre en place un mécanisme de notification accessible": {
    "en": "Put in place an accessible notification mechanism",
    "fr": "Mettre en place un mécanisme de notification accessible"
-  },
-  "Mettre en place un mécanisme de signalement des incidents au fournisseur": {
-   "en": "Put in place a mechanism for reporting incidents to the provider",
-   "fr": "Mettre en place un mécanisme de signalement des incidents au fournisseur"
   },
   "Mettre en place une checklist de suivi": {
    "en": "Put in place a follow-up checklist",
@@ -438,18 +414,6 @@
   "Mise a disposition des autorites de surveillance sur demande": {
    "en": "Made available to the surveillance authorities on request",
    "fr": "Mise a disposition des autorites de surveillance sur demande"
-  },
-  "Mise a jour du registre lors de toute modification substantielle (Art. #)": {
-   "en": "Register updated upon any substantial modification (Art. #)",
-   "fr": "Mise a jour du registre lors de toute modification substantielle (Art. 83)"
-  },
-  "Mise a jour obligatoire a chaque modification substantielle (Art. #)": {
-   "en": "Mandatory update at each substantial modification (Art. #)",
-   "fr": "Mise a jour obligatoire a chaque modification substantielle (Art. 83)"
-  },
-  "Mise a jour obligatoire en cas de modification substantielle (Art. #)": {
-   "en": "Mandatory update in the event of a substantial modification (Art. #)",
-   "fr": "Mise a jour obligatoire en cas de modification substantielle (Art. 83)"
   },
   "Mise en œuvre": {
    "en": "Implementation",
@@ -930,10 +894,6 @@
   "Niveau de risque et obligations (art. #, annexe III).": {
    "en": "Risk level and obligations (Art. #, Annex III).",
    "fr": "Niveau de risque et obligations (art. 6, annexe III)."
-  },
-  "Niveau suffisant de maîtrise de l'IA chez les personnes chargées du fonctionnement et de l'usage des systèmes, au regard de leurs connaissances, de leur formation et du contexte d'emploi.": {
-   "en": "A sufficient level of AI literacy among the people in charge of operating and using the systems, taking into account their knowledge, training and the context of use.",
-   "fr": "Niveau suffisant de maîtrise de l'IA chez les personnes chargées du fonctionnement et de l'usage des systèmes, au regard de leurs connaissances, de leur formation et du contexte d'emploi."
   },
   "Niveaux d'exactitude déclarés, résilience aux erreurs et aux incohérences, résistance aux tentatives d'altération du système ou de ses données.": {
    "en": "Declared levels of accuracy, resilience to errors and inconsistencies, resistance to attempts to alter the system or its data.",

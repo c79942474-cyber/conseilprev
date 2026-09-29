@@ -1,6 +1,6 @@
 {
  "_lot": "20-js-2",
- "_mots": 2309,
+ "_mots": 2256,
  "_pages": [
   "_js"
  ],
@@ -702,10 +702,6 @@
    "en": "#% of worldwide turnover (#% repeat offence)",
    "fr": "10% CA mondial (20% récidive)"
   },
-  "#% du CA mondial": {
-   "en": "#% of worldwide turnover",
-   "fr": "7% du CA mondial"
-  },
   "#) Analyse des points de vigilance (processus sans Approbateur clair, processus avec plusieurs R, charge excessive sur un role),": {
    "en": "#) Analysis of points of attention (processes without a clear Accountable, processes with several Rs, excessive load on one role),",
    "fr": "3) Analyse des points de vigilance (processus sans Approbateur clair, processus avec plusieurs R, charge excessive sur un role),"
@@ -858,10 +854,6 @@
    "en": "% of the SaaS)",
    "fr": "% du SaaS)"
   },
-  "% — échéance # décembre # (Digital Omnibus, haut risque annexe III)": {
-   "en": "% — deadline # December # (Digital Omnibus, Annex III high-risk)",
-   "fr": "% — échéance 2 décembre 2027 (Digital Omnibus, haut risque annexe III)"
-  },
   "%). Méthode retenue : cycle de vie étendu (usage + fabrication amont + hébergement).": {
    "en": "%). Method applied: extended life cycle (use + upstream manufacturing + hosting).",
    "fr": "%). Méthode retenue : cycle de vie étendu (usage + fabrication amont + hébergement)."
@@ -945,10 +937,6 @@
   ") — toujours inférieur": {
    "en": ") — always lower",
    "fr": ") — toujours inférieur"
-  },
-  "). Les obligations ci-dessous sont celles de ce rôle, et de lui seul. Un même système peut être à haut risque pour tous les opérateurs sans que chacun doive la même chose.": {
-   "en": "). The obligations below are those of this role, and of this role alone. The same system can be high-risk for all operators without each of them owing the same thing.",
-   "fr": "). Les obligations ci-dessous sont celles de ce rôle, et de lui seul. Un même système peut être à haut risque pour tous les opérateurs sans que chacun doive la même chose."
   },
   "). Rechargez la page ou réessayez dans quelques secondes.": {
    "en": "). Reload the page or try again in a few seconds.",
@@ -1057,10 +1045,6 @@
   ". Il n’a pas été changé pour vous&nbsp;:": {
    "en": ". It has not been changed for you:",
    "fr": ". Il n’a pas été changé pour vous&nbsp;:"
-  },
-  ". La licence est peut-être libre, le régime reste entier.": {
-   "en": ". The licence may well be free; the regime remains in full.",
-   "fr": ". La licence est peut-être libre, le régime reste entier."
   },
   ". La relance a été enregistrée.": {
    "en": ". The reminder has been recorded.",

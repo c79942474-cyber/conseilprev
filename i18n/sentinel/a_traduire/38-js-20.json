@@ -1,6 +1,6 @@
 {
  "_lot": "38-js-20",
- "_mots": 2473,
+ "_mots": 2431,
  "_pages": [
   "_js"
  ],
@@ -142,10 +142,6 @@
   "Politique de sécurité des systèmes d'information": {
    "en": "Information systems security policy",
    "fr": "Politique de sécurité des systèmes d'information"
-  },
-  "Politiques et procédures : stratégie réglementaire, conception, tests, incidents, surveillance post-commercialisation.": {
-   "en": "Policies and procedures: regulatory strategy, design, testing, incidents, post-market monitoring.",
-   "fr": "Politiques et procédures : stratégie réglementaire, conception, tests, incidents, surveillance post-commercialisation."
   },
   "Politiques et procédures conformes à l'EU AI Act + guides pratiques par équipe.": {
    "en": "Policies and procedures compliant with the EU AI Act + practical guides per team.",
@@ -326,10 +322,6 @@
   "Pouvoir réel de réexamen": {
    "en": "Real power of review",
    "fr": "Pouvoir réel de réexamen"
-  },
-  "Pratique interdite — Art. # §# (renvoie à l'Art. #)": {
-   "en": "Prohibited practice — Art. #(#) (refers to Art. #)",
-   "fr": "Pratique interdite — Art. 99 §3 (renvoie à l'Art. 5)"
   },
   "Pratiques absentes ou ad hoc. Risque de non-conformité élevé.": {
    "en": "Practices absent or ad hoc. High risk of non-compliance.",
@@ -863,10 +855,6 @@
    "en": "Qualify and cost my cases",
    "fr": "Qualifier et chiffrer mes cas"
   },
-  "Qualifier formellement votre système selon la définition Art. #(#) avant classification": {
-   "en": "Formally qualify your system against the definition in Art. #(#) before classification",
-   "fr": "Qualifier formellement votre système selon la définition Art. 3(1) avant classification"
-  },
   "Qualifier l’entité": {
    "en": "Qualify the entity",
    "fr": "Qualifier l’entité"
@@ -906,10 +894,6 @@
   "Qualité, représentativité et traçabilité des données d entraînement": {
    "en": "Quality, representativeness and traceability of training data",
    "fr": "Qualité, représentativité et traçabilité des données d entraînement"
-  },
-  "Qualité, représentativité, traçabilité des données d'entraînement, validation et test. Absence de biais vérifiée.": {
-   "en": "Quality, representativeness, traceability of training data, validation and testing. Absence of bias verified.",
-   "fr": "Qualité, représentativité, traçabilité des données d'entraînement, validation et test. Absence de biais vérifiée."
   },
   "Quarante-deux mesures de l’annexe A répondent aux dix exigences de NIS # : le travail déjà fait se présente tel quel.": {
    "en": "Forty-two Annex A controls answer the ten requirements of NIS #: the work already done can be presented as it stands.",

@@ -1,6 +1,6 @@
 {
  "_lot": "47-js-29",
- "_mots": 2432,
+ "_mots": 2412,
  "_pages": [
   "_js"
  ],
@@ -431,10 +431,6 @@
    "en": "Assesses your compliance against the # pillars of the EU AI Act (Explainability, Controllability, Transparency, Safety, Fairness, Governance, Confidentiality, Robustness), by sector.",
    "fr": "Évalue votre conformité sur les 8 piliers de l EU AI Act (Explicabilité, Contrôlabilité, Transparence, Sûreté, Équité, Gouvernance, Confidentialité, Robustesse), par secteur."
   },
-  "Évaluer chaque système contre l'Annexe III (# domaines)": {
-   "en": "Assess each system against Annex III (# areas)",
-   "fr": "Évaluer chaque système contre l'Annexe III (8 domaines)"
-  },
   "Évaluer et combler les écarts de compétences IA au sein des équipes": {
    "en": "Assess and close AI skills gaps within the teams",
    "fr": "Évaluer et combler les écarts de compétences IA au sein des équipes"
@@ -450,10 +446,6 @@
   "Évaluer la capacité de déploiement": {
    "en": "Assess deployment capacity",
    "fr": "Évaluer la capacité de déploiement"
-  },
-  "Évaluer le niveau de littératie IA des équipes": {
-   "en": "Assess the AI literacy level of the teams",
-   "fr": "Évaluer le niveau de littératie IA des équipes"
   },
   "Évaluer le risque de concentration si plusieurs systèmes dépendent du même fournisseur IA": {
    "en": "Assess the concentration risk if several systems depend on the same AI provider",
@@ -522,10 +514,6 @@
   "Événement redouté": {
    "en": "Feared event",
    "fr": "Événement redouté"
-  },
-  "× # (plafonné)": {
-   "en": "× # (capped)",
-   "fr": "× 1,5 (plafonné)"
   },
   "à compter de": {
    "en": "from",
@@ -602,10 +590,6 @@
   "— CONSEILPREV (SARL) · SIREN # # # · # rue Auguste Chabrières, # Paris · Responsable : Christophe CERF": {
    "en": "— CONSEILPREV (SARL) · SIREN # # # · # rue Auguste Chabrières, # Paris · Owner: Christophe CERF",
    "fr": "— CONSEILPREV (SARL) · SIREN 494 530 157 · 19 rue Auguste Chabrières, 75015 Paris · Responsable : Christophe CERF"
-  },
-  "— Règlement (UE) #/#": {
-   "en": "— Regulation (EU) #/#",
-   "fr": "— Règlement (UE) 2024/1689"
   },
   "— Sans objet": {
    "en": "— Not applicable",

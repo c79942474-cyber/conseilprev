@@ -1,6 +1,6 @@
 {
  "_lot": "29-js-11",
- "_mots": 2471,
+ "_mots": 2435,
  "_pages": [
   "_js"
  ],
@@ -138,10 +138,6 @@
   "Fournisseurs de modèles de fondation : documentation technique, résumé d'entraînement, politique de droits d'auteur. Seuil #^# FLOPs pour risque systémique.": {
    "en": "Foundation model providers: technical documentation, training summary, copyright policy. Threshold of #^# FLOPs for systemic risk.",
    "fr": "Fournisseurs de modèles de fondation : documentation technique, résumé d'entraînement, politique de droits d'auteur. Seuil 10^25 FLOPs pour risque systémique."
-  },
-  "Fournisseurs et déployeurs doivent veiller à la littératie IA de leur personnel et de toute autre personne les représentant qui opère ou utilise des systèmes d'IA.": {
-   "en": "Providers and deployers must ensure the AI literacy of their staff and of any other person acting on their behalf who operates or uses AI systems.",
-   "fr": "Fournisseurs et déployeurs doivent veiller à la littératie IA de leur personnel et de toute autre personne les représentant qui opère ou utilise des systèmes d'IA."
   },
   "Fournisseurs établis hors UE doivent désigner un mandataire établi dans l'UE par mandat écrit avant mise sur le marché européen.": {
    "en": "Providers established outside the EU must appoint an authorised representative established in the EU by written mandate before placing on the European market.",
@@ -886,10 +882,6 @@
   "Implémenter la journalisation automatique conforme Art. #": {
    "en": "Implement automatic logging compliant with Art. #",
    "fr": "Implémenter la journalisation automatique conforme Art. 12"
-  },
-  "Implémenter le watermarking machine-readable pour les contenus synthétiques": {
-   "en": "Implement machine-readable watermarking for synthetic content",
-   "fr": "Implémenter le watermarking machine-readable pour les contenus synthétiques"
   },
   "Implémenter une politique de droits d'auteur avec mécanisme d'opt-out": {
    "en": "Implement a copyright policy with an opt-out mechanism",

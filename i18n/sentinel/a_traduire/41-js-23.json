@@ -1,6 +1,6 @@
 {
  "_lot": "41-js-23",
- "_mots": 2460,
+ "_mots": 2392,
  "_pages": [
   "_js"
  ],
@@ -459,10 +459,6 @@
    "en": "Automated monitoring and summarisation of relevant legal developments.",
    "fr": "Surveillance et synthese automatisee des evolutions legales pertinentes."
   },
-  "Surveillance sur la base de la notice ; suspension de l'usage et information du fournisseur et de l'autorité en cas de risque identifié.": {
-   "en": "Monitoring on the basis of the instructions for use; suspension of use and informing the provider and the authority if a risk is identified.",
-   "fr": "Surveillance sur la base de la notice ; suspension de l'usage et information du fournisseur et de l'autorité en cas de risque identifié."
-  },
   "Surveillance systématique": {
    "en": "Systematic monitoring",
    "fr": "Surveillance systématique"
@@ -474,10 +470,6 @@
   "Surveillance, mesure, audit interne et revue de direction du SMIA. Traitement des non-conformités et amélioration continue du système.": {
    "en": "Monitoring, measurement, internal audit and management review of the AIMS. Handling of nonconformities and continual improvement of the system.",
    "fr": "Surveillance, mesure, audit interne et revue de direction du SMIA. Traitement des non-conformités et amélioration continue du système."
-  },
-  "Surveiller le fonctionnement et savoir suspendre": {
-   "en": "Monitor operation and know how to suspend",
-   "fr": "Surveiller le fonctionnement et savoir suspendre"
   },
   "Surécoût sur": {
    "en": "Extra cost over",
@@ -571,10 +563,6 @@
    "en": "System in production with no recorded privacy compliance review — a periodic review is recommended.",
    "fr": "Système en production sans revue de conformité privacy enregistrée — une revue périodique est recommandée."
   },
-  "Système haut risque non conforme — Art. # §# (renvoie à l'Art. #)": {
-   "en": "Not compliant high-risk system — Art. #(#) (refers to Art. #)",
-   "fr": "Système haut risque non conforme — Art. 99 §4 (renvoie à l'Art. 16)"
-  },
   "Système non classé haut risque — FRIA non requise (Art. # ne vise que les systèmes Annexe III à haut risque).": {
    "en": "System not classified as high-risk — FRIA not required (Art. # only covers Annex III high-risk systems).",
    "fr": "Système non classé haut risque — FRIA non requise (Art. 27 ne vise que les systèmes Annexe III à haut risque)."
@@ -610,10 +598,6 @@
   "Systèmes IA enregistrés": {
    "en": "AI systems recorded",
    "fr": "Systèmes IA enregistrés"
-  },
-  "Systèmes conçus pour interagir directement avec des personnes : obligation d'information claire que l'utilisateur interagit avec une IA. Contenus synthétiques (deepfakes, voix clonées) : marquage machine-readable obligatoire.": {
-   "en": "Systems designed to interact directly with people: obligation to inform users clearly that they are interacting with an AI. Synthetic content (deepfakes, cloned voices): mandatory machine-readable marking.",
-   "fr": "Systèmes conçus pour interagir directement avec des personnes : obligation d'information claire que l'utilisateur interagit avec une IA. Contenus synthétiques (deepfakes, voix clonées) : marquage machine-readable obligatoire."
   },
   "Systèmes critiques de sécurité": {
    "en": "Safety-critical systems",

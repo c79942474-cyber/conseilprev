@@ -1,6 +1,6 @@
 {
  "_lot": "22-js-4",
- "_mots": 2469,
+ "_mots": 2397,
  "_pages": [
   "_js"
  ],
@@ -207,10 +207,6 @@
    "en": "Field audit on multiple sites",
    "fr": "Audit terrain sur sites multiples"
   },
-  "Auditer l'ensemble du portefeuille IA contre les # interdictions": {
-   "en": "Audit the entire AI portfolio against the # prohibitions",
-   "fr": "Auditer l'ensemble du portefeuille IA contre les 8 interdictions"
-  },
   "Auditer les interfaces utilisateur pour détecter des designs manipulateurs": {
    "en": "Audit user interfaces to detect manipulative designs",
    "fr": "Auditer les interfaces utilisateur pour détecter des designs manipulateurs"
@@ -343,10 +339,6 @@
    "en": "Before a high-risk system is put into service in the workplace, the persons concerned are informed that they will be subject to it.",
    "fr": "Avant la mise en service d'un système à haut risque sur le lieu de travail, les personnes concernées sont informées qu'elles y seront soumises."
   },
-  "Avant le déploiement d'un système haut risque (Art. #(#)), les déployeurs publics, les entités privées fournissant des services publics, et les déployeurs des cas d'usage Annexe III points #(b) et (c) réalisent une analyse d'impact sur les droits fondamentaux.": {
-   "en": "Before deploying a high-risk system (Art. #(#)), public deployers, private entities providing public services, and deployers of the use cases in Annex III, points #(b) and (c) carry out a fundamental rights impact assessment.",
-   "fr": "Avant le déploiement d'un système haut risque (Art. 6(2)), les déployeurs publics, les entités privées fournissant des services publics, et les déployeurs des cas d'usage Annexe III points 5(b) et (c) réalisent une analyse d'impact sur les droits fondamentaux."
-  },
   "Avant mise sur le marché d'un système haut risque (Annexe III, hors point #), le fournisseur ou son mandataire s'enregistre lui-même et enregistre son système dans la base de données EU (Art. #). Pour un système jugé non haut risque (Art. #(#)), l'enregistrement reste obligatoire sous une forme allégée.": {
    "en": "Before placing a high-risk system on the market (Annex III, except point #), the provider or its authorised representative registers itself and its system in the EU database (Art. #). For a system considered not high-risk (Art. #(#)), registration remains mandatory in a lighter form.",
    "fr": "Avant mise sur le marché d'un système haut risque (Annexe III, hors point 2), le fournisseur ou son mandataire s'enregistre lui-même et enregistre son système dans la base de données EU (Art. 71). Pour un système jugé non haut risque (Art. 6(3)), l'enregistrement reste obligatoire sous une forme allégée."
@@ -374,10 +366,6 @@
   "Banques, assureurs, sociétés de gestion, fintechs et établissements de paiement.": {
    "en": "Banks, insurers, asset management companies, fintechs and payment institutions.",
    "fr": "Banques, assureurs, sociétés de gestion, fintechs et établissements de paiement."
-  },
-  "Bareme Art. # (#M EUR / #%, #M EUR / #%, #M EUR / #%) applique a la tranche de CA declaree par l utilisateur (tranches simplifiees, non verifiees).": {
-   "en": "Art. # scale (EUR #M / #%, EUR #M / #%, EUR #M / #%) applied to the turnover bracket declared by the user (simplified brackets, not verified).",
-   "fr": "Bareme Art. 99 (35M EUR / 7%, 15M EUR / 3%, 7,5M EUR / 1%) applique a la tranche de CA declaree par l utilisateur (tranches simplifiees, non verifiees)."
   },
   "Bas de page": {
    "en": "Bottom of page",

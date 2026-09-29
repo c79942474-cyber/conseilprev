@@ -1,6 +1,6 @@
 {
  "_lot": "37-js-19",
- "_mots": 2452,
+ "_mots": 2439,
  "_pages": [
   "_js"
  ],
@@ -295,10 +295,6 @@
    "en": "Transparency obligation (Art. #)",
    "fr": "Obligation de transparence (Art. 50)"
   },
-  "Obligation de transparence — Art. # §# (renvoie à l'Art. #)": {
-   "en": "Transparency obligation — Art. #(#) (refers to Art. #)",
-   "fr": "Obligation de transparence — Art. 99 §4 (renvoie à l'Art. 50)"
-  },
   "Obligation du": {
    "en": "Obligation of the",
    "fr": "Obligation du"
@@ -314,10 +310,6 @@
   "Obligations RGPD pour l'IA ?": {
    "en": "GDPR obligations for AI?",
    "fr": "Obligations RGPD pour l'IA ?"
-  },
-  "Obligations applicables depuis le # aout #": {
-   "en": "Obligations applicable since # August #",
-   "fr": "Obligations applicables depuis le 2 aout 2025"
   },
   "Obligations article par article — Sources": {
    "en": "Obligations article by article — Sources",

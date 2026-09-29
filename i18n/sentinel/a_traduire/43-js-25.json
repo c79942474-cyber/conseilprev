@@ -1,6 +1,6 @@
 {
  "_lot": "43-js-25",
- "_mots": 2455,
+ "_mots": 2362,
  "_pages": [
   "_js"
  ],
@@ -106,10 +106,6 @@
   "Un distributeur qui revend sous sa marque, ou qui modifie substantiellement, devient fabricant — article #, sans transition et sans avertissement.": {
    "en": "A distributor who resells under its own brand, or who makes a substantial modification, becomes a manufacturer — Article #, without transition and without warning.",
    "fr": "Un distributeur qui revend sous sa marque, ou qui modifie substantiellement, devient fabricant — article 21, sans transition et sans avertissement."
-  },
-  "Un distributeur, importateur, déployeur ou tiers devient lui-même fournisseur (avec les obligations de l'Art. #) s'il : (a) appose son nom/marque sur un système déjà mis sur le marché ; (b) effectue une modification substantielle d'un système haut risque déjà déployé ; (c) modifie la finalité d'un système non classé haut risque de sorte qu'il le devienne.": {
-   "en": "A distributor, importer, deployer or third party itself becomes a provider (with the obligations of Art. #) if it: (a) puts its name/trademark on a system already placed on the market; (b) makes a substantial modification to a high-risk system already deployed; (c) modifies the purpose of a system not classified as high-risk in such a way that it becomes high-risk.",
-   "fr": "Un distributeur, importateur, déployeur ou tiers devient lui-même fournisseur (avec les obligations de l'Art. 16) s'il : (a) appose son nom/marque sur un système déjà mis sur le marché ; (b) effectue une modification substantielle d'un système haut risque déjà déployé ; (c) modifie la finalité d'un système non classé haut risque de sorte qu'il le devienne."
   },
   "Un document qui porte ses propres réserves — c’est ce qui le rend défendable, pas ce qui l’affaiblit.": {
    "en": "A document that carries its own reservations — that is what makes it defensible, not what weakens it.",
@@ -334,10 +330,6 @@
   "Un système en conception n’a pas de volume parce qu’il ne consomme rien. Rien à relancer ici.": {
    "en": "A system in design has no volume because it consumes nothing. Nothing to follow up here.",
    "fr": "Un système en conception n’a pas de volume parce qu’il ne consomme rien. Rien à relancer ici."
-  },
-  "Un système est haut risque si : (#) composant de sécurité d'un produit soumis à évaluation de conformité tierce (Annexe I), ou (#) système autonome utilisé dans l'un des # domaines de l'Annexe III.": {
-   "en": "A system is high-risk if: (#) it is a safety component of a product subject to third-party conformity assessment (Annex I), or (#) it is a stand-alone system used in one of the # areas of Annex III.",
-   "fr": "Un système est haut risque si : (1) composant de sécurité d'un produit soumis à évaluation de conformité tierce (Annexe I), ou (2) système autonome utilisé dans l'un des 8 domaines de l'Annexe III."
   },
   "Un système présumé non conforme ne peut être mis sur le marché ; en cas de risque, information du fournisseur et des autorités de surveillance.": {
    "en": "A system presumed non-compliant cannot be placed on the market; where there is a risk, the provider and the market surveillance authorities are informed.",

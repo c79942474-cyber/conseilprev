@@ -1,6 +1,6 @@
 {
  "_lot": "45-js-27",
- "_mots": 2465,
+ "_mots": 2446,
  "_pages": [
   "_js"
  ],
@@ -127,10 +127,6 @@
    "en": "Check that the minimum DORA contractual clauses are present in AI contracts",
    "fr": "Vérifier la présence des clauses contractuelles minimales DORA dans les contrats IA"
   },
-  "Vérifier les dérogations légales applicables pour l'identification biométrique": {
-   "en": "Check the legal derogations applicable to biometric identification",
-   "fr": "Vérifier les dérogations légales applicables pour l'identification biométrique"
-  },
   "Vérifier l’eau avant de s’engager": {
    "en": "Check the water before committing",
    "fr": "Vérifier l’eau avant de s’engager"
@@ -142,10 +138,6 @@
   "Vérifier que la mention apparaît dès le premier message, pas seulement dans les mentions légales.": {
    "en": "Check that the notice appears from the first message, not only in the legal notice.",
    "fr": "Vérifier que la mention apparaît dès le premier message, pas seulement dans les mentions légales."
-  },
-  "Vérifier que les utilisateurs peuvent distinguer contenus réels et générés": {
-   "en": "Check that users can distinguish real and generated content",
-   "fr": "Vérifier que les utilisateurs peuvent distinguer contenus réels et générés"
   },
   "Vérifier si votre organisation est désignée contrôleur d'accès": {
    "en": "Check whether your organisation is designated as a gatekeeper",

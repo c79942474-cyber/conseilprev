@@ -74,7 +74,11 @@ BALISES_PERMISES = frozenset(['b', 'strong', 'i', 'em', 'u', 's', 'sup', 'sub',
 #: puisque c'est celle des clés.
 NOMS_PROPRES = ['EU AI Act', 'NIS 2', 'DORA', 'CRA', 'ReCyF', 'ISO 27001',
                 'ISO 42001', 'NIST AI RMF', 'NIST SP 800-53', 'NIST SP 800-82',
-                'OWASP LLM', 'EBIOS RM', 'ANSSI', 'CNIL', 'Sentinel', 'CONSEILPREV']
+                'OWASP LLM', 'EBIOS RM', 'ANSSI', 'CNIL', 'Sentinel', 'CONSEILPREV',
+                # « Digital Omnibus » est le nom usuel du règlement (UE) 2026/1744 :
+                # il ne se traduit pas, et la règle « identique au français » doit
+                # l'accepter comme elle accepte « DORA » ou « EU AI Act ».
+                'Digital Omnibus']
 
 #: CE QUI DIT QU'UNE CHAÎNE EST DU FRANÇAIS : un accent, ou un mot-outil que
 #: l'anglais n'emploie pas. « plus », « en », « on » sont exclus : ils sont

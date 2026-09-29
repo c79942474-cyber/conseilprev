@@ -1,0 +1,937 @@
+{
+ "_lot": "66-ia-act-omnibus",
+ "_mots": 6022,
+ "_pages": [
+  "roadmap",
+  "_js",
+  "simulateur",
+  "articles",
+  "audit-ia-act",
+  "maturite",
+  "ia50",
+  "templates",
+  "sanctions"
+ ],
+ "_rubrique": "l'analyse de risque d'un système d'IA après le règlement (UE) 2026/1744 : dix pratiques interdites, périmètre, annexes I et III, articles 4, 4a, 25, 26 et 50, plafonds de l'article 99, calendrier consolidé",
+ "bloc": {
+  "# août # : entrée en application des obligations de transparence de l'article # — marquage pour les fournisseurs, étiquetage pour les déployeurs.# décembre # : fin du délai accordé pour le marquage lisible par machine (§ #) aux systèmes générant du contenu synthétique déjà sur le marché avant le # août # (art. #, § #, ajouté par le règlement (UE) #/#).# février # : date du code de bonnes pratiques pour ses signataires (interopérabilité du marquage, accès à la détection) — un engagement volontaire, pas une échéance du règlement.Le code de bonnes pratiques, publié dans sa version finale le # juin #, est d'adhésion volontaire. Les obligations de l'article #, elles, sont légales et s'imposent, que le code soit signé ou non.": {
+   "en": "<strong># August #:</strong> the transparency obligations of Article # come into application — marking for providers, labelling for deployers.<br><strong># December #:</strong> end of the period granted for machine-readable marking (§ #) to systems generating synthetic content that were already on the market before # August # (Art. #, § #, added by Regulation (EU) #/#).<br><strong># February #:</strong> date of the code of practice for its signatories (interoperability of marking, access to detection) — a voluntary commitment, <strong>not a deadline set by the Regulation</strong>.<br><br>The code of practice, published in its final version on # June #, is <strong>voluntary</strong> to sign up to. The obligations of Article #, by contrast, are <strong>legal</strong> and apply whether or not the code is signed.",
+   "fr": "2 août 2026 : entrée en application des obligations de transparence de l'article 50 — marquage pour les fournisseurs, étiquetage pour les déployeurs.2 décembre 2026 : fin du délai accordé pour le marquage lisible par machine (§ 2) aux systèmes générant du contenu synthétique déjà sur le marché avant le 2 août 2026 (art. 111, § 4, ajouté par le règlement (UE) 2026/1744).2 février 2027 : date du code de bonnes pratiques pour ses signataires (interopérabilité du marquage, accès à la détection) — un engagement volontaire, pas une échéance du règlement.Le code de bonnes pratiques, publié dans sa version finale le 10 juin 2026, est d'adhésion volontaire. Les obligations de l'article 50, elles, sont légales et s'imposent, que le code soit signé ou non.",
+   "html": "<strong>2 août 2026 :</strong> entrée en application des obligations de transparence de l'article 50 — marquage pour les fournisseurs, étiquetage pour les déployeurs.<br><strong>2 décembre 2026 :</strong> fin du délai accordé pour le marquage lisible par machine (§ 2) aux systèmes générant du contenu synthétique déjà sur le marché avant le 2 août 2026 (art. 111, § 4, ajouté par le règlement (UE) 2026/1744).<br><strong>2 février 2027 :</strong> date du code de bonnes pratiques pour ses signataires (interopérabilité du marquage, accès à la détection) — un engagement volontaire, <strong>pas une échéance du règlement</strong>.<br><br>Le code de bonnes pratiques, publié dans sa version finale le 10 juin 2026, est d'adhésion <strong>volontaire</strong>. Les obligations de l'article 50, elles, sont <strong>légales</strong> et s'imposent, que le code soit signé ou non."
+  },
+  "Annexe I — produits réglementés :": {
+   "en": "<strong>Annex I — regulated products</strong>:",
+   "fr": "Annexe I — produits réglementés :",
+   "html": "<strong>Annexe I — produits réglementés</strong> :"
+  },
+  "Ce sont des exceptions : n'en cochez aucune si aucune ne s'applique — le système est alors dans le champ. Le règlement ne s'applique pas aux systèmes utilisés exclusivement à des fins militaires, de défense ou de sécurité nationale, à ceux développés dans le seul but de la recherche scientifique, à la recherche et aux essais avant mise sur le marché (les essais en conditions réelles ne sont pas exclus), ni aux obligations des déployeurs personnes physiques pour un usage strictement personnel.": {
+   "en": "These are <strong>exceptions</strong>: tick none if none applies — the system is then within scope. The Regulation does not apply to systems used exclusively for military, defence or national security purposes, to those developed for the sole purpose of scientific research, to research and testing before placing on the market (testing in real-world conditions is not excluded), or to the obligations of deployers who are natural persons using the system for a strictly personal purpose.",
+   "fr": "Ce sont des exceptions : n'en cochez aucune si aucune ne s'applique — le système est alors dans le champ. Le règlement ne s'applique pas aux systèmes utilisés exclusivement à des fins militaires, de défense ou de sécurité nationale, à ceux développés dans le seul but de la recherche scientifique, à la recherche et aux essais avant mise sur le marché (les essais en conditions réelles ne sont pas exclus), ni aux obligations des déployeurs personnes physiques pour un usage strictement personnel.",
+   "html": "Ce sont des <strong>exceptions</strong> : n'en cochez aucune si aucune ne s'applique — le système est alors dans le champ. Le règlement ne s'applique pas aux systèmes utilisés exclusivement à des fins militaires, de défense ou de sécurité nationale, à ceux développés dans le seul but de la recherche scientifique, à la recherche et aux essais avant mise sur le marché (les essais en conditions réelles ne sont pas exclus), ni aux obligations des déployeurs personnes physiques pour un usage strictement personnel."
+  },
+  "Cochez tout ce qui s'applique. Une pratique reconnue rend le système interdit : il ne peut être ni mis sur le marché, ni mis en service, ni utilisé. Les points (ba) et (bb) s'appliquent à compter du # décembre # (règlement (UE) #/#).": {
+   "en": "Tick everything that applies. A recognised practice makes the system <strong>prohibited</strong>: it can be neither placed on the market, nor put into service, nor used. Points (ba) and (bb) apply from # December # (Regulation (EU) #/#).",
+   "fr": "Cochez tout ce qui s'applique. Une pratique reconnue rend le système interdit : il ne peut être ni mis sur le marché, ni mis en service, ni utilisé. Les points (ba) et (bb) s'appliquent à compter du 2 décembre 2026 (règlement (UE) 2026/1744).",
+   "html": "Cochez tout ce qui s'applique. Une pratique reconnue rend le système <strong>interdit</strong> : il ne peut être ni mis sur le marché, ni mis en service, ni utilisé. Les points (ba) et (bb) s'appliquent à compter du 2 décembre 2026 (règlement (UE) 2026/1744)."
+  },
+  "Dispositifs médicaux, jouets, ascenseurs, équipements radioélectriques, équipements sous pression, engins de plaisance, appareils à gaz… Le haut risque suppose deux conditions cumulatives : un composant de sécurité (ou le produit lui-même) et une évaluation de conformité par un tiers.": {
+   "en": "Medical devices, toys, lifts, radio equipment, pressure equipment, recreational craft, gas appliances… High risk requires two <strong>cumulative</strong> conditions: a safety component (or the product itself) <em>and</em> a third-party conformity assessment.",
+   "fr": "Dispositifs médicaux, jouets, ascenseurs, équipements radioélectriques, équipements sous pression, engins de plaisance, appareils à gaz… Le haut risque suppose deux conditions cumulatives : un composant de sécurité (ou le produit lui-même) et une évaluation de conformité par un tiers.",
+   "html": "Dispositifs médicaux, jouets, ascenseurs, équipements radioélectriques, équipements sous pression, engins de plaisance, appareils à gaz… Le haut risque suppose deux conditions <strong>cumulatives</strong> : un composant de sécurité (ou le produit lui-même) <em>et</em> une évaluation de conformité par un tiers."
+  },
+  "Exclusion écartée —": {
+   "en": "<strong>Exclusion ruled out —",
+   "fr": "Exclusion écartée —",
+   "html": "<strong>Exclusion écartée —"
+  },
+  "Hors du champ du règlement —": {
+   "en": "<strong>Outside the scope of the Regulation —",
+   "fr": "Hors du champ du règlement —",
+   "html": "<strong>Hors du champ du règlement —"
+  },
+  "Le résultat est le plafond légal, pas le montant qui serait prononcé : l'autorité fixe l'amende en dessous de ce plafond d'après la nature, la gravité et la durée de l'infraction, la taille et le chiffre d'affaires de l'opérateur, sa coopération, les mesures prises et le caractère intentionnel ou négligent (Art. #(#)). Pour une entreprise, c'est le plus élevé des deux plafonds ; pour une PME ou une start-up, le plus bas (Art. #(#)) — et, depuis le règlement (UE) #/#, pour une petite capitalisation intermédiaire sur les seuls manquements des §# et §# (Art. #(#a)). Le règlement ne prévoit ni majoration automatique en cas de récidive ni réduction forfaitaire pour les PME.": {
+   "en": "The result is the legal <strong>ceiling</strong>, not the amount that would actually be imposed: the authority sets the fine below that ceiling according to the nature, gravity and duration of the infringement, the size and turnover of the operator, its cooperation, the measures taken and whether the infringement was intentional or negligent (Art. #(#)). For an undertaking, it is the <strong>higher</strong> of the two ceilings; for an SME or a start-up, the <strong>lower</strong> (Art. #(#)) — and, since Regulation (EU) #/#, for a small mid-cap enterprise on infringements under §# and §# only (Art. #(#a)). The Regulation provides neither for an automatic increase in case of repeat offence nor for a flat reduction for SMEs.",
+   "fr": "Le résultat est le plafond légal, pas le montant qui serait prononcé : l'autorité fixe l'amende en dessous de ce plafond d'après la nature, la gravité et la durée de l'infraction, la taille et le chiffre d'affaires de l'opérateur, sa coopération, les mesures prises et le caractère intentionnel ou négligent (Art. 99(7)). Pour une entreprise, c'est le plus élevé des deux plafonds ; pour une PME ou une start-up, le plus bas (Art. 99(6)) — et, depuis le règlement (UE) 2026/1744, pour une petite capitalisation intermédiaire sur les seuls manquements des §4 et §5 (Art. 99(6a)). Le règlement ne prévoit ni majoration automatique en cas de récidive ni réduction forfaitaire pour les PME.",
+   "html": "Le résultat est le <strong>plafond</strong> légal, pas le montant qui serait prononcé : l'autorité fixe l'amende en dessous de ce plafond d'après la nature, la gravité et la durée de l'infraction, la taille et le chiffre d'affaires de l'opérateur, sa coopération, les mesures prises et le caractère intentionnel ou négligent (Art. 99(7)). Pour une entreprise, c'est le <strong>plus élevé</strong> des deux plafonds ; pour une PME ou une start-up, le <strong>plus bas</strong> (Art. 99(6)) — et, depuis le règlement (UE) 2026/1744, pour une petite capitalisation intermédiaire sur les seuls manquements des §4 et §5 (Art. 99(6a)). Le règlement ne prévoit ni majoration automatique en cas de récidive ni réduction forfaitaire pour les PME."
+  },
+  "À confirmer :": {
+   "en": "<strong>To be confirmed</strong>:",
+   "fr": "À confirmer :",
+   "html": "<strong>À confirmer</strong> :"
+  }
+ },
+ "texte": {
+  "# DÉCEMBRE #": {
+   "en": "# DECEMBER #",
+   "fr": "2 DÉCEMBRE 2026"
+  },
+  "# M€ ou #% CA mondial (Art. #(#)(g))": {
+   "en": "€# million or #% of worldwide turnover (Art. #(#)(g))",
+   "fr": "15 M€ ou 3% CA mondial (Art. 99(4)(g))"
+  },
+  "# M€ ou #% CA mondial (Art. #(#), point da, pour l'Art. #(#) et (#))": {
+   "en": "€# million or #% of worldwide turnover (Art. #(#), point da, for Art. #(#) and (#))",
+   "fr": "15 M€ ou 3% CA mondial (Art. 99(4), point da, pour l'Art. 25(2) et (4))"
+  },
+  "#% — haut risque annexe III : échéance # décembre # (Art. #(c)(i) — règlement (UE) #/#)": {
+   "en": "#% — Annex III high risk: deadline # December # (Art. #(c)(i) — Regulation (EU) #/#)",
+   "fr": "0% — haut risque annexe III : échéance 2 décembre 2027 (Art. 113(c)(i) — règlement (UE) 2026/1744)"
+  },
+  "% — haut risque annexe III : échéance": {
+   "en": "% — Annex III high risk: deadline",
+   "fr": "% — haut risque annexe III : échéance"
+  },
+  "(b) Âge, handicap, situation sociale ou économique spécifique — altération substantielle du comportement causant un préjudice important.": {
+   "en": "(b) Age, disability, specific social or economic situation — material distortion of behaviour causing significant harm.",
+   "fr": "(b) Âge, handicap, situation sociale ou économique spécifique — altération substantielle du comportement causant un préjudice important."
+  },
+  "(ba) À compter du # décembre #. Vaut aussi pour un système dont la conception rend ce résultat prévisible et reproductible sans garde-fous techniques fiables (Art. #(#a)).": {
+   "en": "(ba) From # December #. Also applies to a system whose design makes this outcome foreseeable and reproducible without reliable technical safeguards (Art. #(#a)).",
+   "fr": "(ba) À compter du 2 décembre 2026. Vaut aussi pour un système dont la conception rend ce résultat prévisible et reproductible sans garde-fous techniques fiables (Art. 5(1a))."
+  },
+  "(bb) À compter du # décembre #, sauf moyen de défense « sans droit » prévu par le droit national.": {
+   "en": "(bb) From # December #, except for the “without right” defence provided for by national law.",
+   "fr": "(bb) À compter du 2 décembre 2026, sauf moyen de défense « sans droit » prévu par le droit national."
+  },
+  "(c) Évaluation de personnes sur la durée d'après leur comportement social ou leurs caractéristiques, avec un traitement défavorable hors contexte ou disproportionné — par toute entité, publique ou privée.": {
+   "en": "(c) Evaluation of persons over time based on their social behaviour or characteristics, with detrimental treatment that is out of context or disproportionate — by any entity, public or private.",
+   "fr": "(c) Évaluation de personnes sur la durée d'après leur comportement social ou leurs caractéristiques, avec un traitement défavorable hors contexte ou disproportionné — par toute entité, publique ou privée."
+  },
+  "(d) Fondé uniquement sur le profilage ou les traits de personnalité. Exception : soutien à l'évaluation humaine fondée sur des faits objectifs et vérifiables.": {
+   "en": "(d) Based solely on profiling or personality traits. Exception: support for human assessment based on objective and verifiable facts.",
+   "fr": "(d) Fondé uniquement sur le profilage ou les traits de personnalité. Exception : soutien à l'évaluation humaine fondée sur des faits objectifs et vérifiables."
+  },
+  "(e) Images faciales collectées sur Internet ou par vidéosurveillance.": {
+   "en": "(e) Facial images collected from the internet or from CCTV footage.",
+   "fr": "(e) Images faciales collectées sur Internet ou par vidéosurveillance."
+  },
+  "(f) Interdit sauf raison médicale ou de sécurité.": {
+   "en": "(f) Prohibited except for medical or safety reasons.",
+   "fr": "(f) Interdit sauf raison médicale ou de sécurité."
+  },
+  "(g) Origine raciale, opinions politiques, appartenance syndicale, convictions religieuses ou philosophiques, vie ou orientation sexuelle.": {
+   "en": "(g) Racial origin, political opinions, trade union membership, religious or philosophical beliefs, sex life or sexual orientation.",
+   "fr": "(g) Origine raciale, opinions politiques, appartenance syndicale, convictions religieuses ou philosophiques, vie ou orientation sexuelle."
+  },
+  "(petite capitalisation intermédiaire)": {
+   "en": "(small mid-cap enterprise)",
+   "fr": "(petite capitalisation intermédiaire)"
+  },
+  ": ce que ce système fait sera alors interdit.": {
+   "en": ": what this system does will then be prohibited.",
+   "fr": ": ce que ce système fait sera alors interdit."
+  },
+  "Amende de la Commission (Art. #) : jusqu'a # M€ ou # % du CA mondial, le plus eleve des deux.": {
+   "en": "Commission fine (Art. #): up to €# million or # % of worldwide turnover, whichever is higher.",
+   "fr": "Amende de la Commission (Art. 101) : jusqu'a 15 M€ ou 3 % du CA mondial, le plus eleve des deux."
+  },
+  "Amendes fixées par les États membres, jusqu'à : # M€ ou #% du CA mondial pour une pratique interdite (Art. # — §#) ; # M€ ou #% pour les manquements des fournisseurs, mandataires, importateurs, distributeurs, déployeurs et organismes notifiés, et pour la transparence de l'Art. # (§#) ; # M€ ou #% pour des informations inexactes, incomplètes ou trompeuses fournies aux autorités (§#). Pour une entreprise, le plus ÉLEVÉ des deux plafonds s'applique ; pour une PME ou une start-up, le plus BAS (§#) — et, depuis le règlement (UE) #/#, pour une petite capitalisation intermédiaire sur les §# et §# (§# bis). Les fournisseurs de modèles GPAI relèvent de l'Art. # (Commission) : # M€ ou #%, le plus élevé.": {
+   "en": "Fines set by the Member States, up to: €# million or #% of worldwide turnover for a prohibited practice (Art. # — §#); €# million or #% for infringements by providers, authorised representatives, importers, distributors, deployers and notified bodies, and for the transparency of Art. # (§#); €# million or #% for incorrect, incomplete or misleading information supplied to the authorities (§#). For an undertaking, the HIGHER of the two ceilings applies; for an SME or a start-up, the LOWER (§#) — and, since Regulation (EU) #/#, for a small mid-cap enterprise on §# and §# (§# bis). Providers of GPAI models fall under Art. # (Commission): €# million or #%, whichever is higher.",
+   "fr": "Amendes fixées par les États membres, jusqu'à : 35 M€ ou 7% du CA mondial pour une pratique interdite (Art. 5 — §3) ; 15 M€ ou 3% pour les manquements des fournisseurs, mandataires, importateurs, distributeurs, déployeurs et organismes notifiés, et pour la transparence de l'Art. 50 (§4) ; 7,5 M€ ou 1% pour des informations inexactes, incomplètes ou trompeuses fournies aux autorités (§5). Pour une entreprise, le plus ÉLEVÉ des deux plafonds s'applique ; pour une PME ou une start-up, le plus BAS (§6) — et, depuis le règlement (UE) 2026/1744, pour une petite capitalisation intermédiaire sur les §4 et §5 (§6 bis). Les fournisseurs de modèles GPAI relèvent de l'Art. 101 (Commission) : 15 M€ ou 3%, le plus élevé."
+  },
+  "Amendes pouvant atteindre # M€ ou #% du CA mondial (le plus bas des deux pour une PME). Une refonte complète du système est nécessaire avant tout déploiement.": {
+   "en": "Fines of up to €# million or #% of worldwide turnover (the lower of the two for an SME). A complete redesign of the system is needed before any deployment.",
+   "fr": "Amendes pouvant atteindre 35 M€ ou 7% du CA mondial (le plus bas des deux pour une PME). Une refonte complète du système est nécessaire avant tout déploiement."
+  },
+  "Annexe III : # domaines. Annexe I : produits soumis à la législation d'harmonisation de l'UE.": {
+   "en": "Annex III: # areas. Annex I: products subject to EU harmonisation legislation.",
+   "fr": "Annexe III : 8 domaines. Annexe I : produits soumis à la législation d'harmonisation de l'UE."
+  },
+  "Applicable # décembre #": {
+   "en": "Applicable # December #",
+   "fr": "Applicable 11 décembre 2027"
+  },
+  "Art. # — Art. #(#) ajouté par le règlement (UE) #/#": {
+   "en": "Art. # — Art. #(#) added by Regulation (EU) #/#",
+   "fr": "Art. 113 — Art. 111(4) ajouté par le règlement (UE) 2026/1744"
+  },
+  "Art. # — Champ d'application (EUR-Lex)": {
+   "en": "Art. # — Scope (EUR-Lex)",
+   "fr": "Art. 2 — Champ d'application (EUR-Lex)"
+  },
+  "Art. #(#) + Annexe I": {
+   "en": "Art. #(#) + Annex I",
+   "fr": "Art. 6(1) + Annexe I"
+  },
+  "Art. #(#) + Annexe I (EUR-Lex)": {
+   "en": "Art. #(#) + Annex I (EUR-Lex)",
+   "fr": "Art. 6(1) + Annexe I (EUR-Lex)"
+  },
+  "Art. #(#) à (#)": {
+   "en": "Art. #(#) to (#)",
+   "fr": "Art. 50(1) à (4)"
+  },
+  "Art. #(#) — Coopération du fournisseur initial (EUR-Lex)": {
+   "en": "Art. #(#) — Cooperation by the initial provider (EUR-Lex)",
+   "fr": "Art. 25(2) — Coopération du fournisseur initial (EUR-Lex)"
+  },
+  "Art. #(#) — Pratiques interdites (EUR-Lex)": {
+   "en": "Art. #(#) — Prohibited practices (EUR-Lex)",
+   "fr": "Art. 5(1) — Pratiques interdites (EUR-Lex)"
+  },
+  "Art. #(#)(#), Annexe I et III": {
+   "en": "Art. #(#)(#), Annexes I and III",
+   "fr": "Art. 6(1)(2), Annexe I et III"
+  },
+  "Art. #(#)(a) à (e), (ba), (bb)": {
+   "en": "Art. #(#)(a) to (e), (ba), (bb)",
+   "fr": "Art. 5(1)(a) à (e), (ba), (bb)"
+  },
+  "Art. #(#)(b) à (g), (ba), (bb)": {
+   "en": "Art. #(#)(b) to (g), (ba), (bb)",
+   "fr": "Art. 5(1)(b) à (g), (ba), (bb)"
+  },
+  "Art. #(#)(b). Haut risque à compter du # août #.": {
+   "en": "Art. #(#)(b). High risk from # August #.",
+   "fr": "Art. 6(1)(b). Haut risque à compter du 2 août 2028."
+  },
+  "Art. #(#), précisé par le règlement (UE) #/# : le devoir de coopération est rendu dans les obligations.": {
+   "en": "Art. #(#), as specified by Regulation (EU) #/#: the duty of cooperation is reflected in the obligations.",
+   "fr": "Art. 25(2), précisé par le règlement (UE) 2026/1744 : le devoir de coopération est rendu dans les obligations."
+  },
+  "Art. #(#). Le système et ses sorties.": {
+   "en": "Art. #(#). The system and its outputs.",
+   "fr": "Art. 2(6). Le système et ses sorties."
+  },
+  "Art. #(#). Les essais en conditions réelles restent couverts par le règlement.": {
+   "en": "Art. #(#). Testing in real-world conditions remains covered by the Regulation.",
+   "fr": "Art. 2(8). Les essais en conditions réelles restent couverts par le règlement."
+  },
+  "Art. #(#). Ne libère que les obligations du déployeur : un fournisseur ne s'en prévaut pas.": {
+   "en": "Art. #(#). Releases only the deployer's obligations: a provider cannot rely on it.",
+   "fr": "Art. 2(10). Ne libère que les obligations du déployeur : un fournisseur ne s'en prévaut pas."
+  },
+  "Art. #(#). Un usage mixte — civil et militaire — n'est pas exclu.": {
+   "en": "Art. #(#). A mixed use — civilian and military — is not excluded.",
+   "fr": "Art. 2(3). Un usage mixte — civil et militaire — n'est pas exclu."
+  },
+  "Art. #(#a) : ce n'est pas un composant de sécurité — sauf si sa défaillance mettrait en danger la santé ou la sécurité (Art. #(#b)).": {
+   "en": "Art. #(#a): it is not a safety component — unless its failure would endanger health or safety (Art. #(#b)).",
+   "fr": "Art. 6(1a) : ce n'est pas un composant de sécurité — sauf si sa défaillance mettrait en danger la santé ou la sécurité (Art. 6(1b))."
+  },
+  "Art. #(#a) : un système utilisé uniquement pour des aspects sans lien avec la sécurité — assistance à l'utilisateur, optimisation des performances, efficacité du service, automatisation, confort, contrôle qualité — n'est pas un composant de sécurité. Sauf si sa défaillance ou son dysfonctionnement mettrait en danger la santé ou la sécurité des personnes ou des biens (Art. #(#b)).": {
+   "en": "Art. #(#a): a system used only for aspects unrelated to safety — user assistance, performance optimisation, service efficiency, automation, comfort, quality control — is not a safety component. Unless its failure or malfunction would endanger the health or safety of persons or property (Art. #(#b)).",
+   "fr": "Art. 6(1a) : un système utilisé uniquement pour des aspects sans lien avec la sécurité — assistance à l'utilisateur, optimisation des performances, efficacité du service, automatisation, confort, contrôle qualité — n'est pas un composant de sécurité. Sauf si sa défaillance ou son dysfonctionnement mettrait en danger la santé ou la sécurité des personnes ou des biens (Art. 6(1b))."
+  },
+  "Art. #(a) et Art. #(#) — règlement (UE) #/#": {
+   "en": "Art. #(a) and Art. #(#) — Regulation (EU) #/#",
+   "fr": "Art. 113(a) et Art. 111(4) — règlement (UE) 2026/1744"
+  },
+  "Art. #(a) — Art. # modifié par le règlement (UE) #/#": {
+   "en": "Art. #(a) — Art. # amended by Regulation (EU) #/#",
+   "fr": "Art. 113(a) — Art. 4 modifié par le règlement (UE) 2026/1744"
+  },
+  "Art. #(c)(i) — règlement (UE) #/#": {
+   "en": "Art. #(c)(i) — Regulation (EU) #/#",
+   "fr": "Art. 113(c)(i) — règlement (UE) 2026/1744"
+  },
+  "Art. #(c)(ii) — règlement (UE) #/#": {
+   "en": "Art. #(c)(ii) — Regulation (EU) #/#",
+   "fr": "Art. 113(c)(ii) — règlement (UE) 2026/1744"
+  },
+  "Art. #, Art. #a": {
+   "en": "Art. #, Art. #a",
+   "fr": "Art. 10, Art. 4a"
+  },
+  "Art. #, Art. #a, RGPD": {
+   "en": "Art. #, Art. #a, GDPR",
+   "fr": "Art. 10, Art. 4a, RGPD"
+  },
+  "Aucune echeance legale a venir": {
+   "en": "No upcoming legal deadline",
+   "fr": "Aucune echeance legale a venir"
+  },
+  "Auditer l'ensemble du portefeuille IA contre les # interdictions en vigueur et les # applicables au # décembre #": {
+   "en": "Audit the whole AI portfolio against the # prohibitions in force and the # applicable on # December #",
+   "fr": "Auditer l'ensemble du portefeuille IA contre les 8 interdictions en vigueur et les 2 applicables au 2 décembre 2026"
+  },
+  "Avant la prochaine échéance légale": {
+   "en": "Before the next legal deadline",
+   "fr": "Avant la prochaine échéance légale"
+  },
+  "Avant le": {
+   "en": "Before",
+   "fr": "Avant le"
+  },
+  "Avant le déploiement d'un système haut risque (Art. #(#)), les déployeurs publics, les entités privées fournissant des services publics, et les déployeurs des cas d'usage Annexe III points #(b) et (c) réalisent une analyse d'impact sur les droits fondamentaux. Si une obligation de l'article est déjà remplie par l'analyse d'impact relative à la protection des données (RGPD, art. #), la FRIA peut y renvoyer ou en reprendre des parties (#(#), remplacé par le règlement (UE) #/#) ; le Bureau de l'IA élabore un modèle de questionnaire (#(#)).": {
+   "en": "Before deploying a high-risk system (Art. #(#)), public-sector deployers, private entities providing public services, and deployers of the Annex III use cases in points #(b) and (c) carry out a fundamental rights impact assessment. If an obligation of the article is already met by the data protection impact assessment (GDPR, Art. #), the FRIA may refer to it or reuse parts of it (#(#), replaced by Regulation (EU) #/#); the AI Office draws up a questionnaire template (#(#)).",
+   "fr": "Avant le déploiement d'un système haut risque (Art. 6(2)), les déployeurs publics, les entités privées fournissant des services publics, et les déployeurs des cas d'usage Annexe III points 5(b) et (c) réalisent une analyse d'impact sur les droits fondamentaux. Si une obligation de l'article est déjà remplie par l'analyse d'impact relative à la protection des données (RGPD, art. 35), la FRIA peut y renvoyer ou en reprendre des parties (27(4), remplacé par le règlement (UE) 2026/1744) ; le Bureau de l'IA élabore un modèle de questionnaire (27(5))."
+  },
+  "Bareme Art. # (#M EUR / #%, #M EUR / #%, #M EUR / #%) applique a la tranche de CA declaree par l utilisateur (tranches simplifiees, non verifiees) : le plus eleve des deux plafonds, le plus bas pour les PME (Art. #(#)).": {
+   "en": "Scale of Art. # (€#M / #%, €#M / #%, €#M / #%) applied to the turnover band declared by the user (simplified bands, not verified): the higher of the two ceilings, the lower for SMEs (Art. #(#)).",
+   "fr": "Bareme Art. 99 (35M EUR / 7%, 15M EUR / 3%, 7,5M EUR / 1%) applique a la tranche de CA declaree par l utilisateur (tranches simplifiees, non verifiees) : le plus eleve des deux plafonds, le plus bas pour les PME (Art. 99(6))."
+  },
+  "Base légale pour l'utilisation de données personnelles en entraînement. Mesures de protection des données dès la conception. Le traitement de catégories particulières de données pour détecter et corriger les biais n'est possible que dans les conditions cumulatives de l'Art. #a (qui remplace l'ancien Art. #(#)).": {
+   "en": "Legal basis for the use of personal data in training. Data protection by design measures. The processing of special categories of data to detect and correct biases is possible only under the cumulative conditions of Art. #a (which replaces the former Art. #(#)).",
+   "fr": "Base légale pour l'utilisation de données personnelles en entraînement. Mesures de protection des données dès la conception. Le traitement de catégories particulières de données pour détecter et corriger les biais n'est possible que dans les conditions cumulatives de l'Art. 4a (qui remplace l'ancien Art. 10(5))."
+  },
+  "CHAPITRE IV — Obligations de transparence": {
+   "en": "CHAPTER IV — Transparency obligations",
+   "fr": "CHAPITRE IV — Obligations de transparence"
+  },
+  "Cartographier les besoins de culture IA selon les rôles (développeurs, gestionnaires de risques, opérateurs) et les personnes visées par l'usage": {
+   "en": "Map AI literacy needs by role (developers, risk managers, operators) and by the persons affected by the use",
+   "fr": "Cartographier les besoins de culture IA selon les rôles (développeurs, gestionnaires de risques, opérateurs) et les personnes visées par l'usage"
+  },
+  "Catégorise des personnes d'après leurs données biométriques pour en déduire des données sensibles": {
+   "en": "Categorises persons on the basis of their biometric data to infer sensitive data",
+   "fr": "Catégorise des personnes d'après leurs données biométriques pour en déduire des données sensibles"
+  },
+  "Ce niveau n'appelle aucune obligation propre : seule l'amende de l'Art. #(#) reste encourue, pour des informations inexactes fournies à une autorité.": {
+   "en": "This level entails no obligation of its own: only the fine under Art. #(#) remains incurred, for incorrect information supplied to an authority.",
+   "fr": "Ce niveau n'appelle aucune obligation propre : seule l'amende de l'Art. 99(5) reste encourue, pour des informations inexactes fournies à une autorité."
+  },
+  "Ce système était sur le marché avant la date d'application et sa conception n'a pas changé de façon importante depuis : l'article #(#) diffère le régime complet des systèmes à haut risque de l'annexe III tant que cette conception ne change pas. Cet aménagement ne couvre PAS les obligations indépendantes de l'annexe III — pratiques interdites de l'article #, transparence de l'article # (le marquage des contenus synthétiques des systèmes déjà sur le marché avant le # août # étant dû au plus tard le # décembre #, article #(#)), culture de l'IA de l'article # — qui restent dues. Les fournisseurs et déployeurs de systèmes destinés à des autorités publiques doivent, en tout état de cause, avoir pris les mesures nécessaires à leur conformité au plus tard le # août # (article #(#)). La moindre modification importante de conception fait tomber l'antériorité et rend le régime complet applicable.": {
+   "en": "This system was on the market before the date of application and its design has not changed significantly since: Article #(#) defers the full regime for Annex III high-risk systems as long as that design does not change. This arrangement does NOT cover the obligations that are independent of Annex III — prohibited practices under Article #, transparency under Article # (the marking of synthetic content from systems already on the market before # August # being due by # December # at the latest, Article #(#)), AI literacy under Article # — which remain due. Providers and deployers of systems intended for public authorities must, in any event, have taken the measures needed for their compliance by # August # at the latest (Article #(#)). The slightest significant change in design removes the grandfathering and makes the full regime applicable.",
+   "fr": "Ce système était sur le marché avant la date d'application et sa conception n'a pas changé de façon importante depuis : l'article 111(2) diffère le régime complet des systèmes à haut risque de l'annexe III tant que cette conception ne change pas. Cet aménagement ne couvre PAS les obligations indépendantes de l'annexe III — pratiques interdites de l'article 5, transparence de l'article 50 (le marquage des contenus synthétiques des systèmes déjà sur le marché avant le 2 août 2026 étant dû au plus tard le 2 décembre 2026, article 111(4)), culture de l'IA de l'article 4 — qui restent dues. Les fournisseurs et déployeurs de systèmes destinés à des autorités publiques doivent, en tout état de cause, avoir pris les mesures nécessaires à leur conformité au plus tard le 2 août 2030 (article 111(2)). La moindre modification importante de conception fait tomber l'antériorité et rend le régime complet applicable."
+  },
+  "Ces montants sont des plafonds : l'autorité fixe l'amende en dessous, d'après l'Art. #(#).": {
+   "en": "These amounts are ceilings: the authority sets the fine below them, according to Art. #(#).",
+   "fr": "Ces montants sont des plafonds : l'autorité fixe l'amende en dessous, d'après l'Art. 99(7)."
+  },
+  "Chatbots, contenus synthétiques, hypertrucages, reconnaissance des émotions : les obligations de transparence de l'article # s'appliquent. Les fournisseurs de systèmes générant du contenu synthétique déjà sur le marché avant cette date ont jusqu'au # décembre # pour le marquage (Art. #(#)).": {
+   "en": "Chatbots, synthetic content, deepfakes, emotion recognition: the transparency obligations of Article # apply. Providers of systems generating synthetic content that were already on the market before that date have until # December # for marking (Art. #(#)).",
+   "fr": "Chatbots, contenus synthétiques, hypertrucages, reconnaissance des émotions : les obligations de transparence de l'article 50 s'appliquent. Les fournisseurs de systèmes générant du contenu synthétique déjà sur le marché avant cette date ont jusqu'au 2 décembre 2026 pour le marquage (Art. 111(4))."
+  },
+  "Classification selon l'Annexe III (# domaines) et l'Annexe I": {
+   "en": "Classification under Annex III (# areas) and Annex I",
+   "fr": "Classification selon l'Annexe III (8 domaines) et l'Annexe I"
+  },
+  "Concevoir le système pour informer de son caractère d'IA": {
+   "en": "Design the system to disclose its AI nature",
+   "fr": "Concevoir le système pour informer de son caractère d'IA"
+  },
+  "Conformite RGPD pour les donnees personnelles utilisees ; categories particulieres de donnees pour detecter et corriger les biais : conditions strictes de l’Art. #a (qui remplace l’ancien Art. #(#))": {
+   "en": "GDPR compliance for the personal data used; special categories of data to detect and correct biases: strict conditions of Art. #a (which replaces the former Art. #(#))",
+   "fr": "Conformite RGPD pour les donnees personnelles utilisees ; categories particulieres de donnees pour detecter et corriger les biais : conditions strictes de l’Art. 4a (qui remplace l’ancien Art. 10(5))"
+  },
+  "Conserver les journaux au moins six mois et informer les représentants des travailleurs avant un usage au travail": {
+   "en": "Keep the logs for at least six months and inform workers' representatives before use in the workplace",
+   "fr": "Conserver les journaux au moins six mois et informer les représentants des travailleurs avant un usage au travail"
+  },
+  "Constitue des bases de reconnaissance faciale par moissonnage non ciblé": {
+   "en": "Builds facial recognition databases through untargeted scraping",
+   "fr": "Constitue des bases de reconnaissance faciale par moissonnage non ciblé"
+  },
+  "Contrat écrit avec les fournisseurs de composants, modèles, outils ou services": {
+   "en": "Written contract with the suppliers of components, models, tools or services",
+   "fr": "Contrat écrit avec les fournisseurs de composants, modèles, outils ou services"
+  },
+  "Coopérer avec le nouveau fournisseur de votre système": {
+   "en": "Cooperate with the new provider of your system",
+   "fr": "Coopérer avec le nouveau fournisseur de votre système"
+  },
+  "Culture de l'IA des équipes (Art. #)": {
+   "en": "AI literacy of the teams (Art. #)",
+   "fr": "Culture de l'IA des équipes (Art. 4)"
+  },
+  "Culture de l'IA du personnel": {
+   "en": "AI literacy of staff",
+   "fr": "Culture de l'IA du personnel"
+  },
+  "Dans ce cas vous cessez d'en être le fournisseur, mais vous devez coopérer étroitement avec le nouveau : documentation technique suffisante, limites et modes de défaillance connus, accès technique ciblé pour les tests et la validation. Sauf si vous avez clairement précisé que votre système ne doit pas devenir un système à haut risque.": {
+   "en": "In that case you cease to be its provider, but you must cooperate closely with the new one: sufficient technical documentation, known limitations and failure modes, targeted technical access for testing and validation. Unless you have clearly specified that your system is not to become a high-risk system.",
+   "fr": "Dans ce cas vous cessez d'en être le fournisseur, mais vous devez coopérer étroitement avec le nouveau : documentation technique suffisante, limites et modes de défaillance connus, accès technique ciblé pour les tests et la validation. Sauf si vous avez clairement précisé que votre système ne doit pas devenir un système à haut risque."
+  },
+  "Description des processus concernés, période et fréquence d'usage, catégories de personnes affectées, risques de préjudice identifiés, mesures de supervision humaine et de recours. À notifier à l'autorité de surveillance. Ce qui est déjà couvert par l'analyse d'impact RGPD peut être repris par renvoi (Art. #(#)).": {
+   "en": "Description of the processes concerned, period and frequency of use, categories of persons affected, identified risks of harm, human oversight and redress measures. To be notified to the supervisory authority. What is already covered by the GDPR impact assessment can be taken over by cross-reference (Art. #(#)).",
+   "fr": "Description des processus concernés, période et fréquence d'usage, catégories de personnes affectées, risques de préjudice identifiés, mesures de supervision humaine et de recours. À notifier à l'autorité de surveillance. Ce qui est déjà couvert par l'analyse d'impact RGPD peut être repris par renvoi (Art. 27(4))."
+  },
+  "Deux nouvelles pratiques interdites (Art. #(#), points ba et bb) — marquage des contenus synthétiques (Art. #(#)) pour les systèmes déjà sur le marché": {
+   "en": "Two new prohibited practices (Art. #(#), points ba and bb) — marking of synthetic content (Art. #(#)) for systems already on the market",
+   "fr": "Deux nouvelles pratiques interdites (Art. 5(1), points ba et bb) — marquage des contenus synthétiques (Art. 50(2)) pour les systèmes déjà sur le marché"
+  },
+  "Documentation élaborée avant mise sur le marché : description générale, architecture, données utilisées, performances, méthode d'entraînement, fiches tests. PME, start-up et petites capitalisations intermédiaires : formulaire simplifié établi par la Commission (Art. #(#)).": {
+   "en": "Documentation drawn up before placing on the market: general description, architecture, data used, performance, training method, test records. SMEs, start-ups and small mid-cap enterprises: simplified form established by the Commission (Art. #(#)).",
+   "fr": "Documentation élaborée avant mise sur le marché : description générale, architecture, données utilisées, performances, méthode d'entraînement, fiches tests. PME, start-up et petites capitalisations intermédiaires : formulaire simplifié établi par la Commission (Art. 11(1))."
+  },
+  "Documenter la décision de classification avant mise sur le marché — y compris lorsque l'exception de l'Art. #(#) est invoquée (Art. #(#)) — et enregistrer le système (Art. #(#))": {
+   "en": "Document the classification decision before placing on the market — including where the exception of Art. #(#) is invoked (Art. #(#)) — and register the system (Art. #(#))",
+   "fr": "Documenter la décision de classification avant mise sur le marché — y compris lorsque l'exception de l'Art. 6(3) est invoquée (Art. 6(4)) — et enregistrer le système (Art. 49(2))"
+  },
+  "Documenter les actions menées — sans prétendre garantir un niveau donné à chaque personne": {
+   "en": "Document the actions carried out — without claiming to guarantee a given level for each person",
+   "fr": "Documenter les actions menées — sans prétendre garantir un niveau donné à chaque personne"
+  },
+  "Dossier technique complet avant mise sur le marché : architecture, données, performances, limitations, évaluation de conformité. PME, start-up et petites capitalisations intermédiaires : formulaire simplifié établi par la Commission (Art. #(#)).": {
+   "en": "Complete technical file before placing on the market: architecture, data, performance, limitations, conformity assessment. SMEs, start-ups and small mid-cap enterprises: simplified form established by the Commission (Art. #(#)).",
+   "fr": "Dossier technique complet avant mise sur le marché : architecture, données, performances, limitations, évaluation de conformité. PME, start-up et petites capitalisations intermédiaires : formulaire simplifié établi par la Commission (Art. 11(1))."
+  },
+  "Définit les termes clés (# points, auxquels le règlement (UE) #/# ajoute les PME — #(#a) — et les petites capitalisations intermédiaires — #(#b)). Système d'IA : système basé sur une machine, conçu pour fonctionner à différents niveaux d'autonomie et pouvant faire preuve d'adaptabilité après son déploiement, qui, pour des objectifs explicites ou implicites, déduit à partir des entrées reçues comment générer des sorties — prédictions, contenus, recommandations ou décisions — pouvant influencer des environnements physiques ou virtuels (#(#)). Composant de sécurité (#(#)) : redéfini par le même règlement autour de la fonction de sécurité et de la santé ou de la sécurité des personnes et des biens.": {
+   "en": "Defines the key terms (# points, to which Regulation (EU) #/# adds SMEs — #(#a) — and small mid-cap enterprises — #(#b)). AI system: a machine-based system designed to operate with varying levels of autonomy and that may exhibit adaptiveness after deployment and that, for explicit or implicit objectives, infers, from the input it receives, how to generate outputs such as predictions, content, recommendations or decisions that can influence physical or virtual environments (#(#)). Safety component (#(#)): redefined by the same Regulation around the safety function and the health or safety of persons and property.",
+   "fr": "Définit les termes clés (68 points, auxquels le règlement (UE) 2026/1744 ajoute les PME — 3(14a) — et les petites capitalisations intermédiaires — 3(14b)). Système d'IA : système basé sur une machine, conçu pour fonctionner à différents niveaux d'autonomie et pouvant faire preuve d'adaptabilité après son déploiement, qui, pour des objectifs explicites ou implicites, déduit à partir des entrées reçues comment générer des sorties — prédictions, contenus, recommandations ou décisions — pouvant influencer des environnements physiques ou virtuels (3(1)). Composant de sécurité (3(14)) : redéfini par le même règlement autour de la fonction de sécurité et de la santé ou de la sécurité des personnes et des biens."
+  },
+  "Déployeur : informer les personnes exposées à la reconnaissance des émotions ou à la catégorisation biométrique (Art. #(#))": {
+   "en": "Deployer: inform the persons exposed to emotion recognition or biometric categorisation (Art. #(#))",
+   "fr": "Déployeur : informer les personnes exposées à la reconnaissance des émotions ou à la catégorisation biométrique (Art. 50(3))"
+  },
+  "Déployeur : signaler les hypertrucages et les textes publiés d'intérêt public, sauf relecture humaine ou contrôle éditorial (Art. #(#))": {
+   "en": "Deployer: disclose deepfakes and published texts of public interest, unless there has been human review or editorial control (Art. #(#))",
+   "fr": "Déployeur : signaler les hypertrucages et les textes publiés d'intérêt public, sauf relecture humaine ou contrôle éditorial (Art. 50(4))"
+  },
+  "Déployeurs de systèmes à haut risque : prendre des mesures pour utiliser le système conformément à la notice (#(#)), confier la supervision humaine à des personnes compétentes, formées et habilitées (#(#)), veiller à la pertinence et à la représentativité des données d'entrée qu'ils maîtrisent (#(#)), surveiller le fonctionnement et informer le fournisseur (#(#)). En cas de risque : informer sans retard fournisseur ou distributeur et autorité de surveillance du marché, et suspendre l'usage ; en cas d'incident grave : informer immédiatement d'abord le fournisseur, puis l'importateur ou le distributeur et les autorités. Conserver les journaux au moins six mois (#(#)), informer les représentants des travailleurs et les travailleurs concernés avant tout usage au travail (#(#)), informer les personnes faisant l'objet d'une décision de l'annexe III (#(#)), coopérer avec les autorités (#(#)).": {
+   "en": "Deployers of high-risk systems: take measures to use the system in accordance with the instructions for use (#(#)), assign human oversight to persons who are competent, trained and authorised (#(#)), ensure the relevance and representativeness of the input data they control (#(#)), monitor the operation and inform the provider (#(#)). In case of risk: inform the provider or distributor and the market surveillance authority without undue delay, and suspend use; in case of a serious incident: first inform the provider immediately, then the importer or distributor and the authorities. Keep the logs for at least six months (#(#)), inform workers' representatives and the workers concerned before any use in the workplace (#(#)), inform the persons who are subject to an Annex III decision (#(#)), cooperate with the authorities (#(#)).",
+   "fr": "Déployeurs de systèmes à haut risque : prendre des mesures pour utiliser le système conformément à la notice (26(1)), confier la supervision humaine à des personnes compétentes, formées et habilitées (26(2)), veiller à la pertinence et à la représentativité des données d'entrée qu'ils maîtrisent (26(4)), surveiller le fonctionnement et informer le fournisseur (26(5)). En cas de risque : informer sans retard fournisseur ou distributeur et autorité de surveillance du marché, et suspendre l'usage ; en cas d'incident grave : informer immédiatement d'abord le fournisseur, puis l'importateur ou le distributeur et les autorités. Conserver les journaux au moins six mois (26(6)), informer les représentants des travailleurs et les travailleurs concernés avant tout usage au travail (26(7)), informer les personnes faisant l'objet d'une décision de l'annexe III (26(11)), coopérer avec les autorités (26(12))."
+  },
+  "Déterminer votre rôle (fournisseur, déployeur, importateur, distributeur — Art. #(#) à #(#)) avant de lister les obligations": {
+   "en": "Determine your role (provider, deployer, importer, distributor — Art. #(#) to #(#)) before listing the obligations",
+   "fr": "Déterminer votre rôle (fournisseur, déployeur, importateur, distributeur — Art. 3(3) à 3(7)) avant de lister les obligations"
+  },
+  "Développé et mis en service dans le seul but de la recherche et du développement scientifiques": {
+   "en": "Developed and put into service for the sole purpose of scientific research and development",
+   "fr": "Développé et mis en service dans le seul but de la recherche et du développement scientifiques"
+  },
+  "Enregistrement dans la base de donnees EU (Art. # ; base de donnees : Art. #) pour systemes Annexe III": {
+   "en": "Registration in the EU database (Art. #; database: Art. #) for Annex III systems",
+   "fr": "Enregistrement dans la base de donnees EU (Art. 49 ; base de donnees : Art. 71) pour systemes Annexe III"
+  },
+  "Evaluation des categories de pratiques interdites (Art. #(#)(a)-(h), et (ba)-(bb) a partir du # decembre #)": {
+   "en": "Assessment of the categories of prohibited practices (Art. #(#)(a)-(h), and (ba)-(bb) from # December #)",
+   "fr": "Evaluation des categories de pratiques interdites (Art. 5(1)(a)-(h), et (ba)-(bb) a partir du 2 decembre 2026)"
+  },
+  "Exception du point (f) : seul cet usage échappe à l'interdiction de l'inférence des émotions.": {
+   "en": "Exception under point (f): only this use escapes the prohibition of emotion inference.",
+   "fr": "Exception du point (f) : seul cet usage échappe à l'interdiction de l'inférence des émotions."
+  },
+  "Exclusion de l’identification biometrique a distance en temps reel dans les espaces accessibles au public a des fins repressives, sauf les trois exceptions strictes de l’Art. #(#)(h) et les garanties de l’Art. #(#)-(#)": {
+   "en": "Exclusion of real-time remote biometric identification in publicly accessible spaces for law-enforcement purposes, except for the three strict exceptions of Art. #(#)(h) and the safeguards of Art. #(#)-(#)",
+   "fr": "Exclusion de l’identification biometrique a distance en temps reel dans les espaces accessibles au public a des fins repressives, sauf les trois exceptions strictes de l’Art. 5(1)(h) et les garanties de l’Art. 5(2)-(7)"
+  },
+  "Exclusion des systemes de notation sociale, par toute entite publique ou privee (Art. #(#)(c))": {
+   "en": "Exclusion of social scoring systems, by any public or private entity (Art. #(#)(c))",
+   "fr": "Exclusion des systemes de notation sociale, par toute entite publique ou privee (Art. 5(1)(c))"
+  },
+  "Exploite les vulnérabilités d'une personne ou d'un groupe": {
+   "en": "Exploits the vulnerabilities of a person or a group",
+   "fr": "Exploite les vulnérabilités d'une personne ou d'un groupe"
+  },
+  "Fixé sous ce plafond — Art. #(#)": {
+   "en": "Set below this ceiling — Art. #(#)",
+   "fr": "Fixé sous ce plafond — Art. 99(7)"
+  },
+  "Fournisseur : concevoir le système pour informer que l'on interagit avec une IA, sauf si c'est évident (Art. #(#))": {
+   "en": "Provider: design the system to inform people that they are interacting with an AI, unless this is obvious (Art. #(#))",
+   "fr": "Fournisseur : concevoir le système pour informer que l'on interagit avec une IA, sauf si c'est évident (Art. 50(1))"
+  },
+  "Fournisseur : les systèmes destinés à interagir directement avec des personnes les informent qu'elles interagissent avec une IA, sauf si cela est évident (§#) ; les sorties audio, image, vidéo ou texte générées ou manipulées sont marquées dans un format lisible par machine et détectables comme artificielles (§# — pour un système déjà sur le marché avant le # août # : au plus tard le # décembre #, Art. #(#), ajouté par le règlement (UE) #/#). Déployeur : information des personnes exposées à un système de reconnaissance des émotions ou de catégorisation biométrique (§#) ; mention que le contenu est artificiel pour un hypertrucage et pour un texte publié afin d'informer le public sur des questions d'intérêt public, sauf relecture humaine ou contrôle éditorial (§#). Le code de bonnes pratiques est un engagement volontaire : il ne remplace pas ces obligations.": {
+   "en": "Provider: systems intended to interact directly with people inform them that they are interacting with an AI, unless this is obvious (§#); generated or manipulated audio, image, video or text outputs are marked in a machine-readable format and detectable as artificially generated or manipulated (§# — for a system already on the market before # August #: by # December # at the latest, Art. #(#), added by Regulation (EU) #/#). Deployer: informing the persons exposed to an emotion recognition or biometric categorisation system (§#); disclosure that the content is artificially generated for a deepfake and for a text published to inform the public on matters of public interest, unless there has been human review or editorial control (§#). The code of practice is a voluntary commitment: it does not replace these obligations.",
+   "fr": "Fournisseur : les systèmes destinés à interagir directement avec des personnes les informent qu'elles interagissent avec une IA, sauf si cela est évident (§1) ; les sorties audio, image, vidéo ou texte générées ou manipulées sont marquées dans un format lisible par machine et détectables comme artificielles (§2 — pour un système déjà sur le marché avant le 2 août 2026 : au plus tard le 2 décembre 2026, Art. 111(4), ajouté par le règlement (UE) 2026/1744). Déployeur : information des personnes exposées à un système de reconnaissance des émotions ou de catégorisation biométrique (§3) ; mention que le contenu est artificiel pour un hypertrucage et pour un texte publié afin d'informer le public sur des questions d'intérêt public, sauf relecture humaine ou contrôle éditorial (§4). Le code de bonnes pratiques est un engagement volontaire : il ne remplace pas ces obligations."
+  },
+  "Fournisseur : marquer les contenus synthétiques dans un format lisible par machine, détectable comme artificiel (Art. #(#)) — au plus tard le # décembre # pour un système déjà sur le marché avant le # août # (Art. #(#))": {
+   "en": "Provider: mark synthetic content in a machine-readable format, detectable as artificial (Art. #(#)) — by # December # at the latest for a system already on the market before # August # (Art. #(#))",
+   "fr": "Fournisseur : marquer les contenus synthétiques dans un format lisible par machine, détectable comme artificiel (Art. 50(2)) — au plus tard le 2 décembre 2026 pour un système déjà sur le marché avant le 2 août 2026 (Art. 111(4))"
+  },
+  "Fournisseur : système conçu pour informer que l'on interagit avec une IA (§#) et marquage lisible par machine des contenus synthétiques (§# ; systèmes déjà sur le marché : au plus tard le # décembre #). Déployeur : information des personnes exposées à la reconnaissance des émotions ou à la catégorisation biométrique (§#) ; signalement des hypertrucages et des textes d'intérêt public (§#).": {
+   "en": "Provider: system designed to inform people that they are interacting with an AI (§#) and machine-readable marking of synthetic content (§#; systems already on the market: by # December # at the latest). Deployer: informing the persons exposed to emotion recognition or biometric categorisation (§#); disclosure of deepfakes and of texts of public interest (§#).",
+   "fr": "Fournisseur : système conçu pour informer que l'on interagit avec une IA (§1) et marquage lisible par machine des contenus synthétiques (§2 ; systèmes déjà sur le marché : au plus tard le 2 décembre 2026). Déployeur : information des personnes exposées à la reconnaissance des émotions ou à la catégorisation biométrique (§3) ; signalement des hypertrucages et des textes d'intérêt public (§4)."
+  },
+  "Fournisseur d'un système à haut risque : formaliser par écrit avec chaque fournisseur de composant, modèle ou outil les informations et l'assistance nécessaires (Art. #(#))": {
+   "en": "Provider of a high-risk system: formalise in writing, with each supplier of a component, model or tool, the information and assistance needed (Art. #(#))",
+   "fr": "Fournisseur d'un système à haut risque : formaliser par écrit avec chaque fournisseur de composant, modèle ou outil les informations et l'assistance nécessaires (Art. 25(4))"
+  },
+  "Fournisseur initial : préparer la documentation et l'accès technique dus au nouveau fournisseur (Art. #(#))": {
+   "en": "Initial provider: prepare the documentation and technical access owed to the new provider (Art. #(#))",
+   "fr": "Fournisseur initial : préparer la documentation et l'accès technique dus au nouveau fournisseur (Art. 25(2))"
+  },
+  "Fournisseurs et déployeurs prennent des mesures pour soutenir le développement de la culture (littératie) de l'IA de leur personnel et des autres personnes qui exploitent ou utilisent des systèmes d'IA pour leur compte, compte tenu de leurs connaissances techniques, de leur expérience, de leur formation, du contexte d'utilisation et des personnes visées. Cette obligation n'impose pas de garantir un niveau précis de culture de l'IA à chaque personne (Art. #(#), remplacé par le règlement (UE) #/#). La Commission et les États membres soutiennent ces efforts, en particulier ceux des PME (#(#)).": {
+   "en": "Providers and deployers take measures to support the development of AI literacy among their staff and other persons who operate or use AI systems on their behalf, taking into account their technical knowledge, experience, education and training, the context of use and the persons concerned. This obligation does not require guaranteeing a specific level of AI literacy for each person (Art. #(#), replaced by Regulation (EU) #/#). The Commission and the Member States support these efforts, in particular those of SMEs (#(#)).",
+   "fr": "Fournisseurs et déployeurs prennent des mesures pour soutenir le développement de la culture (littératie) de l'IA de leur personnel et des autres personnes qui exploitent ou utilisent des systèmes d'IA pour leur compte, compte tenu de leurs connaissances techniques, de leur expérience, de leur formation, du contexte d'utilisation et des personnes visées. Cette obligation n'impose pas de garantir un niveau précis de culture de l'IA à chaque personne (Art. 4(1), remplacé par le règlement (UE) 2026/1744). La Commission et les États membres soutiennent ces efforts, en particulier ceux des PME (4(2))."
+  },
+  "Gouvernance (Chap. VII) — Modèles GPAI (Chap. V) — Autorités nationales désignées — Sanctions des États membres (Chap. XII, hors Art. #)": {
+   "en": "Governance (Chap. VII) — GPAI models (Chap. V) — Designated national authorities — Member State penalties (Chap. XII, excluding Art. #)",
+   "fr": "Gouvernance (Chap. VII) — Modèles GPAI (Chap. V) — Autorités nationales désignées — Sanctions des États membres (Chap. XII, hors Art. 101)"
+  },
+  "Génère ou manipule des images, vidéos ou sons sexuellement explicites — ou montrant les parties intimes — d'une personne identifiable, sans son consentement": {
+   "en": "Generates or manipulates sexually explicit images, videos or audio — or images showing the intimate parts — of an identifiable person, without their consent",
+   "fr": "Génère ou manipule des images, vidéos ou sons sexuellement explicites — ou montrant les parties intimes — d'une personne identifiable, sans son consentement"
+  },
+  "Génère ou manipule du matériel d'abus sexuel d'enfants": {
+   "en": "Generates or manipulates child sexual abuse material",
+   "fr": "Génère ou manipule du matériel d'abus sexuel d'enfants"
+  },
+  "Haut risque PRÉSUMÉ, à confirmer : aucun usage précis de l'annexe III n'a été coché. Seul un usage listé fait basculer un système (Art. #(#)) ; le secteur ou le type de système seuls ne suffisent pas. Cochez l'usage visé — ou constatez qu'il n'y en a pas : le système n'est alors pas à haut risque de ce chef.": {
+   "en": "PRESUMED high risk, to be confirmed: no specific Annex III use has been ticked. Only a listed use makes a system high-risk (Art. #(#)); the sector or the type of system alone is not enough. Tick the intended use — or find that there is none: the system is then not high-risk on that ground.",
+   "fr": "Haut risque PRÉSUMÉ, à confirmer : aucun usage précis de l'annexe III n'a été coché. Seul un usage listé fait basculer un système (Art. 6(2)) ; le secteur ou le type de système seuls ne suffisent pas. Cochez l'usage visé — ou constatez qu'il n'y en a pas : le système n'est alors pas à haut risque de ce chef."
+  },
+  "Identification biométrique à distance : INTERDITE si elle est utilisée en temps réel dans l'espace accessible au public à des fins répressives (Art. #(#)(h), trois exceptions strictes) ; sinon à haut risque (annexe III, point #(a)). Répondez à la question sur la finalité pour trancher.": {
+   "en": "Remote biometric identification: PROHIBITED if used in real time in publicly accessible spaces for law-enforcement purposes (Art. #(#)(h), three strict exceptions); otherwise high-risk (Annex III, point #(a)). Answer the question on the purpose to decide.",
+   "fr": "Identification biométrique à distance : INTERDITE si elle est utilisée en temps réel dans l'espace accessible au public à des fins répressives (Art. 5(1)(h), trois exceptions strictes) ; sinon à haut risque (annexe III, point 1(a)). Répondez à la question sur la finalité pour trancher."
+  },
+  "Informer les personnes concernées par une décision de l'annexe III ; réaliser une FRIA si le déployeur est visé par l'Art. #": {
+   "en": "Inform the persons subject to an Annex III decision; carry out a FRIA if the deployer is covered by Art. #",
+   "fr": "Informer les personnes concernées par une décision de l'annexe III ; réaliser une FRIA si le déployeur est visé par l'Art. 27"
+  },
+  "Informer les personnes exposées à la reconnaissance des émotions ou à la catégorisation biométrique": {
+   "en": "Inform the persons exposed to emotion recognition or biometric categorisation",
+   "fr": "Informer les personnes exposées à la reconnaissance des émotions ou à la catégorisation biométrique"
+  },
+  "Infère les émotions de personnes au travail ou dans un établissement d'enseignement": {
+   "en": "Infers the emotions of persons in the workplace or in an educational institution",
+   "fr": "Infère les émotions de personnes au travail ou dans un établissement d'enseignement"
+  },
+  "Interdit # pratiques depuis le # février # : (a) manipulation subliminale ou trompeuse, (b) exploitation des vulnérabilités (âge, handicap, situation sociale ou économique), (c) notation sociale, par toute entité publique ou privée, (d) évaluation du risque de commettre une infraction fondée uniquement sur le profilage, (e) constitution de bases de reconnaissance faciale par moissonnage non ciblé, (f) inférence des émotions au travail et dans l'enseignement (hors raison médicale ou de sécurité), (g) catégorisation biométrique déduisant des données sensibles, (h) identification biométrique à distance en temps réel dans l'espace public à des fins répressives (trois exceptions strictes). À compter du # décembre #, deux pratiques s'y ajoutent (règlement (UE) #/#) : (ba) génération ou manipulation d'images, vidéos ou sons sexuellement explicites, ou montrant les parties intimes, d'une personne identifiable sans son consentement ; (bb) génération de matériel d'abus sexuel d'enfants.": {
+   "en": "Prohibits # practices since # February #: (a) subliminal or deceptive manipulation, (b) exploitation of vulnerabilities (age, disability, social or economic situation), (c) social scoring, by any public or private entity, (d) assessing the risk of committing an offence based solely on profiling, (e) building facial recognition databases through untargeted scraping, (f) inferring emotions in the workplace and in education (except for medical or safety reasons), (g) biometric categorisation inferring sensitive data, (h) real-time remote biometric identification in publicly accessible spaces for law-enforcement purposes (three strict exceptions). From # December #, two practices are added (Regulation (EU) #/#): (ba) generating or manipulating sexually explicit images, videos or audio, or images showing the intimate parts, of an identifiable person without their consent; (bb) generating child sexual abuse material.",
+   "fr": "Interdit 8 pratiques depuis le 2 février 2025 : (a) manipulation subliminale ou trompeuse, (b) exploitation des vulnérabilités (âge, handicap, situation sociale ou économique), (c) notation sociale, par toute entité publique ou privée, (d) évaluation du risque de commettre une infraction fondée uniquement sur le profilage, (e) constitution de bases de reconnaissance faciale par moissonnage non ciblé, (f) inférence des émotions au travail et dans l'enseignement (hors raison médicale ou de sécurité), (g) catégorisation biométrique déduisant des données sensibles, (h) identification biométrique à distance en temps réel dans l'espace public à des fins répressives (trois exceptions strictes). À compter du 2 décembre 2026, deux pratiques s'y ajoutent (règlement (UE) 2026/1744) : (ba) génération ou manipulation d'images, vidéos ou sons sexuellement explicites, ou montrant les parties intimes, d'une personne identifiable sans son consentement ; (bb) génération de matériel d'abus sexuel d'enfants."
+  },
+  "Interdit, sauf trois exceptions strictes — victimes et personnes disparues, menace imminente, infraction grave — avec autorisation préalable d'une autorité judiciaire ou administrative indépendante (Art. #(#) à #(#)).": {
+   "en": "Prohibited, except for three strict exceptions — victims and missing persons, imminent threat, serious offence — with prior authorisation from an independent judicial or administrative authority (Art. #(#) to #(#)).",
+   "fr": "Interdit, sauf trois exceptions strictes — victimes et personnes disparues, menace imminente, infraction grave — avec autorisation préalable d'une autorité judiciaire ou administrative indépendante (Art. 5(2) à 5(7))."
+  },
+  "Je suis une personne physique et je l'utilise à titre strictement personnel et non professionnel": {
+   "en": "I am a natural person and I use it strictly for personal, non-professional purposes",
+   "fr": "Je suis une personne physique et je l'utilise à titre strictement personnel et non professionnel"
+  },
+  "Jeux de données d'entraînement, validation et test soumis à des pratiques de gouvernance appropriées : choix de conception, collecte et origine des données, procédures de préparation, examen des biais possibles. L'ancien Art. #(#) est remplacé par l'Art. #a (règlement (UE) #/#) : traitement exceptionnel de catégories particulières de données pour détecter et corriger les biais, strictement nécessaire et sous six garanties cumulatives — données de substitution insuffisantes, limites de réutilisation et sécurité renforcée, accès contrôlé et documenté, aucun transfert à des tiers, suppression dès le biais corrigé, motifs consignés au registre des traitements.": {
+   "en": "Training, validation and testing datasets are subject to appropriate data governance practices: design choices, data collection and origin, preparation procedures, examination of possible biases. The former Art. #(#) is replaced by Art. #a (Regulation (EU) #/#): exceptional processing of special categories of data to detect and correct biases, strictly necessary and subject to six cumulative safeguards — substitute data insufficient, limits on reuse and enhanced security, controlled and documented access, no transfer to third parties, deletion as soon as the bias is corrected, reasons recorded in the record of processing activities.",
+   "fr": "Jeux de données d'entraînement, validation et test soumis à des pratiques de gouvernance appropriées : choix de conception, collecte et origine des données, procédures de préparation, examen des biais possibles. L'ancien Art. 10(5) est remplacé par l'Art. 4a (règlement (UE) 2026/1744) : traitement exceptionnel de catégories particulières de données pour détecter et corriger les biais, strictement nécessaire et sous six garanties cumulatives — données de substitution insuffisantes, limites de réutilisation et sécurité renforcée, accès contrôlé et documenté, aucun transfert à des tiers, suppression dès le biais corrigé, motifs consignés au registre des traitements."
+  },
+  "L'utilisateur consulte l'Analyse geopolitique Sentinel AI. # blocs : Bloc europeen (EU AI Act standard d'exportation, extraterritorialite, #+ pays influences), Modele americain (EO # jan # pro-innovation, fragmentation etats, NIST RMF), Doctrine chinoise (controle souverain, PIPL, Generative AI Measures, BRI # pays). Chronologie : Art. # applicables fev # (deux pratiques ajoutees au # dec #) ; GPAI aout # ; transparence (article #) au # aout # ; haut risque annexe III au # dec # ; annexe I au # aout # (reglement (UE) #/#). EO # revoque # jan # par EO #, remplace EO # # jan #.": {
+   "en": "The user is viewing the Sentinel AI Geopolitical Analysis. # blocks: European bloc (EU AI Act as an export standard, extraterritoriality, #+ countries influenced), American model (EO # Jan # pro-innovation, state fragmentation, NIST RMF), Chinese doctrine (sovereign control, PIPL, Generative AI Measures, BRI # countries). Timeline: Art. # applicable Feb # (two practices added on # Dec #); GPAI Aug #; transparency (Article #) on # Aug #; high-risk Annex III on # Dec #; Annex I on # Aug # (Regulation (EU) #/#). EO # revoked # Jan # by EO #, replacing EO # # Jan #.",
+   "fr": "L'utilisateur consulte l'Analyse geopolitique Sentinel AI. 3 blocs : Bloc europeen (EU AI Act standard d'exportation, extraterritorialite, 40+ pays influences), Modele americain (EO 14179 jan 2025 pro-innovation, fragmentation etats, NIST RMF), Doctrine chinoise (controle souverain, PIPL, Generative AI Measures, BRI 147 pays). Chronologie : Art. 5 applicables fev 2025 (deux pratiques ajoutees au 2 dec 2026) ; GPAI aout 2025 ; transparence (article 50) au 2 aout 2026 ; haut risque annexe III au 2 dec 2027 ; annexe I au 2 aout 2028 (reglement (UE) 2026/1744). EO 14110 revoque 20 jan 2025 par EO 14148, remplace EO 14179 23 jan 2025."
+  },
+  "L'utilisateur consulte les Obligations article par article du Regl. #/#. Articles couverts : Art. # (objet), Art. # (champ application extraterritorial), Art. # (mesures de culture IA, sans niveau garanti — texte remplace par le reglement (UE) #/#), Art. # (# pratiques interdites, plus # au # dec # ; sanctions #M ou #%), Art. # (classification haut risque + Annexe III), Art. #-# (obligations fournisseurs : gestion risques, donnees, documentation, logs, transparence, supervision, robustesse, qualite), Art. # (mandataire UE hors-EU), Art. # (obligations deployeurs), Art. # (transparence interactions IA, watermarking), Art. #-# (GPAI, seuil #^# FLOPs, risque systemique), Art. # (surveillance post-commercialisation), Art. # (plafonds #M/#% pour Art. #, #M/#% pour les operateurs et l'Art. #, #M/#% pour les informations inexactes ; le plus eleve pour une entreprise, le plus bas pour les PME et, sur les §#-§#, les petites capitalisations intermediaires) ; Art. # (GPAI, #% ou #M).": {
+   "en": "The user is viewing the article-by-article Obligations of Reg. #/#. Articles covered: Art. # (subject matter), Art. # (extraterritorial scope), Art. # (AI literacy measures, no guaranteed level — text replaced by Regulation (EU) #/#), Art. # (# prohibited practices, plus # from # Dec #; fines #M or #%), Art. # (high-risk classification + Annex III), Art. #-# (provider obligations: risk management, data, documentation, logs, transparency, oversight, robustness, quality), Art. # (EU authorised representative for non-EU providers), Art. # (deployer obligations), Art. # (transparency of AI interactions, watermarking), Art. #-# (GPAI, #^# FLOPs threshold, systemic risk), Art. # (post-market monitoring), Art. # (caps of #M/#% for Art. #, #M/#% for operators and Art. #, #M/#% for inaccurate information; the higher for an undertaking, the lower for SMEs and, on §#-§#, small mid-cap enterprises); Art. # (GPAI, #% or #M).",
+   "fr": "L'utilisateur consulte les Obligations article par article du Regl. 2024/1689. Articles couverts : Art. 1 (objet), Art. 2 (champ application extraterritorial), Art. 4 (mesures de culture IA, sans niveau garanti — texte remplace par le reglement (UE) 2026/1744), Art. 5 (8 pratiques interdites, plus 2 au 2 dec 2026 ; sanctions 35M ou 7%), Art. 6 (classification haut risque + Annexe III), Art. 9-17 (obligations fournisseurs : gestion risques, donnees, documentation, logs, transparence, supervision, robustesse, qualite), Art. 22 (mandataire UE hors-EU), Art. 26 (obligations deployeurs), Art. 50 (transparence interactions IA, watermarking), Art. 51-55 (GPAI, seuil 10^25 FLOPs, risque systemique), Art. 72 (surveillance post-commercialisation), Art. 99 (plafonds 35M/7% pour Art. 5, 15M/3% pour les operateurs et l'Art. 50, 7,5M/1% pour les informations inexactes ; le plus eleve pour une entreprise, le plus bas pour les PME et, sur les §4-§5, les petites capitalisations intermediaires) ; Art. 101 (GPAI, 3% ou 15M)."
+  },
+  "La condition de l'article #(#)(b) n'est pas remplie : pas de haut risque à ce titre.": {
+   "en": "The condition of Article #(#)(b) is not met: not high-risk on that basis.",
+   "fr": "La condition de l'article 6(1)(b) n'est pas remplie : pas de haut risque à ce titre."
+  },
+  "La fonction IA est une aide, une optimisation, une automatisation, un confort ou un contrôle qualité sans lien avec la sécurité": {
+   "en": "The AI function is an aid, an optimisation, an automation, a comfort feature or a quality check unrelated to safety",
+   "fr": "La fonction IA est une aide, une optimisation, une automatisation, un confort ou un contrôle qualité sans lien avec la sécurité"
+  },
+  "La mise sur le marché, la mise en service ou l'utilisation est prohibée dans toute l'UE.": {
+   "en": "Placing on the market, putting into service or use is prohibited throughout the EU.",
+   "fr": "La mise sur le marché, la mise en service ou l'utilisation est prohibée dans toute l'UE."
+  },
+  "Le déployeur d'un système de reconnaissance des émotions ou de catégorisation biométrique informe les personnes exposées de son fonctionnement et traite les données conformément au RGPD. Sans objet pour les usages autorisés par la loi en matière pénale.": {
+   "en": "The deployer of an emotion recognition or biometric categorisation system informs the exposed persons about its operation and processes the data in accordance with the GDPR. Not applicable to uses permitted by law in criminal matters.",
+   "fr": "Le déployeur d'un système de reconnaissance des émotions ou de catégorisation biométrique informe les personnes exposées de son fonctionnement et traite les données conformément au RGPD. Sans objet pour les usages autorisés par la loi en matière pénale."
+  },
+  "Le déployeur d'un système qui génère ou manipule une image, un son ou une vidéo constituant un hypertrucage indique que le contenu est artificiel ; de même pour le texte publié afin d'informer le public sur des questions d'intérêt public, sauf relecture humaine ou contrôle éditorial avec responsabilité éditoriale. Œuvre manifestement artistique, satirique ou fictionnelle : mention limitée, sans entraver l'œuvre.": {
+   "en": "The deployer of a system that generates or manipulates an image, audio or video constituting a deepfake discloses that the content is artificially generated or manipulated; likewise for text published to inform the public on matters of public interest, unless it has undergone human review or editorial control with editorial responsibility. Manifestly artistic, satirical or fictional work: limited disclosure, without hampering the work.",
+   "fr": "Le déployeur d'un système qui génère ou manipule une image, un son ou une vidéo constituant un hypertrucage indique que le contenu est artificiel ; de même pour le texte publié afin d'informer le public sur des questions d'intérêt public, sauf relecture humaine ou contrôle éditorial avec responsabilité éditoriale. Œuvre manifestement artistique, satirique ou fictionnelle : mention limitée, sans entraver l'œuvre."
+  },
+  "Le fournisseur d'un système à haut risque et le tiers qui lui fournit un système, un modèle, un outil, un service ou un composant précisent par écrit les informations, capacités, accès techniques et assistance nécessaires à sa pleine conformité. Ne joue pas pour les outils publiés sous licence libre et ouverte, modèles d'IA à usage général exceptés.": {
+   "en": "The provider of a high-risk system and the third party that supplies it with a system, model, tool, service or component specify in writing the information, capabilities, technical access and assistance needed for its full compliance. Does not apply to tools published under a free and open licence, general-purpose AI models being excepted.",
+   "fr": "Le fournisseur d'un système à haut risque et le tiers qui lui fournit un système, un modèle, un outil, un service ou un composant précisent par écrit les informations, capacités, accès techniques et assistance nécessaires à sa pleine conformité. Ne joue pas pour les outils publiés sous licence libre et ouverte, modèles d'IA à usage général exceptés."
+  },
+  "Le haut risque ne disparaît pas : son calendrier est repoussé à une date désormais fixe. Préparer la documentation technique, la FRIA et le système de gestion de la qualité. Système déjà sur le marché : seule une modification importante de sa conception rend le régime applicable (Art. #(#)) ; systèmes destinés aux autorités publiques : mise en conformité au plus tard le # août #.": {
+   "en": "High risk does not go away: its timetable is pushed back to a date that is now fixed. Prepare the technical documentation, the FRIA and the quality management system. System already on the market: only a significant change in its design makes the regime applicable (Art. #(#)); systems intended for public authorities: compliance by # August # at the latest.",
+   "fr": "Le haut risque ne disparaît pas : son calendrier est repoussé à une date désormais fixe. Préparer la documentation technique, la FRIA et le système de gestion de la qualité. Système déjà sur le marché : seule une modification importante de sa conception rend le régime applicable (Art. 111(2)) ; systèmes destinés aux autorités publiques : mise en conformité au plus tard le 2 août 2030."
+  },
+  "Le haut risque, s'il existe, vient de l'annexe III.": {
+   "en": "High risk, if any, comes from Annex III.",
+   "fr": "Le haut risque, s'il existe, vient de l'annexe III."
+  },
+  "Le plus bas des deux plafonds s'applique (PME, Art. #(#))": {
+   "en": "The lower of the two ceilings applies (SME, Art. #(#))",
+   "fr": "Le plus bas des deux plafonds s'applique (PME, Art. 99(6))"
+  },
+  "Le plus bas des deux plafonds —": {
+   "en": "The lower of the two ceilings —",
+   "fr": "Le plus bas des deux plafonds —"
+  },
+  "Le plus élevé des deux plafonds —": {
+   "en": "The higher of the two ceilings —",
+   "fr": "Le plus élevé des deux plafonds —"
+  },
+  "Le produit relève de l'annexe I mais n'exige pas d'évaluation de conformité par un tiers : la condition de l'article #(#)(b) n'est pas remplie, le système n'est pas à haut risque à ce titre. Un produit soumis à évaluation par un tiers pour des risques autres que la santé et la sécurité (spectre radioélectrique, interférences électromagnétiques sans effet sur la santé ou la sécurité) ne remplit pas non plus cette condition (Art. #(#c)).": {
+   "en": "The product falls under Annex I but does not require third-party conformity assessment: the condition of Article #(#)(b) is not met, so the system is not high-risk on that basis. A product subject to third-party assessment for risks other than health and safety (radio spectrum, electromagnetic interference with no effect on health or safety) does not meet that condition either (Art. #(#c)).",
+   "fr": "Le produit relève de l'annexe I mais n'exige pas d'évaluation de conformité par un tiers : la condition de l'article 6(1)(b) n'est pas remplie, le système n'est pas à haut risque à ce titre. Un produit soumis à évaluation par un tiers pour des risques autres que la santé et la sécurité (spectre radioélectrique, interférences électromagnétiques sans effet sur la santé ou la sécurité) ne remplit pas non plus cette condition (Art. 6(1c))."
+  },
+  "Le produit relève du règlement Machines (UE) #/#": {
+   "en": "The product falls under the Machinery Regulation (EU) #/#",
+   "fr": "Le produit relève du règlement Machines (UE) 2023/1230"
+  },
+  "Le règlement Machines (UE) #/# est passé de la section A à la section B de l'annexe I (règlement (UE) #/#) : pour ces produits, seuls l'article #(#), l'article #a et les articles # à # s'appliquent (Art. #(#)). Les exigences applicables à l'IA y sont ajoutées par acte délégué, applicable au plus tard le # août #.": {
+   "en": "The Machinery Regulation (EU) #/# has moved from Section A to Section B of Annex I (Regulation (EU) #/#): for these products, only Article #(#), Article #a and Articles # to # apply (Art. #(#)). The requirements applicable to AI are added there by delegated act, applicable by # August # at the latest.",
+   "fr": "Le règlement Machines (UE) 2023/1230 est passé de la section A à la section B de l'annexe I (règlement (UE) 2026/1744) : pour ces produits, seuls l'article 6(1), l'article 60a et les articles 102 à 112 s'appliquent (Art. 2(2)). Les exigences applicables à l'IA y sont ajoutées par acte délégué, applicable au plus tard le 2 août 2028."
+  },
+  "Le règlement ne s'applique pas :": {
+   "en": "The Regulation does not apply:",
+   "fr": "Le règlement ne s'applique pas :"
+  },
+  "Le système est-il un composant de sécurité d'un produit — ou un produit — relevant de la législation d'harmonisation de l'annexe I ?": {
+   "en": "Is the system a safety component of a product — or a product — covered by the Annex I harmonisation legislation?",
+   "fr": "Le système est-il un composant de sécurité d'un produit — ou un produit — relevant de la législation d'harmonisation de l'annexe I ?"
+  },
+  "Le système sort-il du champ du règlement ?": {
+   "en": "Does the system fall outside the scope of the Regulation?",
+   "fr": "Le système sort-il du champ du règlement ?"
+  },
+  "Les amendes de l'article # sont applicables depuis le # août # (Art. #(b)).": {
+   "en": "The fines of Article # have been applicable since # August # (Art. #(b)).",
+   "fr": "Les amendes de l'article 99 sont applicables depuis le 2 août 2025 (Art. 113(b))."
+  },
+  "Les fournisseurs de modèles déjà sur le marché avant le # août # doivent avoir pris les mesures nécessaires à leur conformité au plus tard à cette date.": {
+   "en": "Providers of models already on the market before # August # must have taken the measures needed for their compliance by that date at the latest.",
+   "fr": "Les fournisseurs de modèles déjà sur le marché avant le 2 août 2025 doivent avoir pris les mesures nécessaires à leur conformité au plus tard à cette date."
+  },
+  "Les huit pratiques d'IA interdites de l'article #(#), points a à h, s'appliquent depuis cette date. L'article # oblige fournisseurs et déployeurs à prendre des mesures pour développer la culture IA de leur personnel — sans garantir un niveau donné à chaque personne (texte remplacé par le règlement (UE) #/#).": {
+   "en": "The eight prohibited AI practices of Article #(#), points a to h, have applied since that date. Article # requires providers and deployers to take measures to develop the AI literacy of their staff — without guaranteeing a given level for each person (text replaced by Regulation (EU) #/#).",
+   "fr": "Les huit pratiques d'IA interdites de l'article 5(1), points a à h, s'appliquent depuis cette date. L'article 4 oblige fournisseurs et déployeurs à prendre des mesures pour développer la culture IA de leur personnel — sans garantir un niveau donné à chaque personne (texte remplacé par le règlement (UE) 2026/1744)."
+  },
+  "Les industriels et fabricants de produits réglementés doivent raisonner cycle de vie, conformité produit et documentation technique. Les machines (règlement (UE) #/#) passent en section B de l'annexe I : elles relèvent de leur propre législation, où les exigences IA sont ajoutées par acte délégué applicable au plus tard le # août #.": {
+   "en": "Manufacturers of regulated products must think in terms of life cycle, product compliance and technical documentation. Machinery (Regulation (EU) #/#) moves to Section B of Annex I: it falls under its own legislation, where the AI requirements are added by delegated act applicable by # August # at the latest.",
+   "fr": "Les industriels et fabricants de produits réglementés doivent raisonner cycle de vie, conformité produit et documentation technique. Les machines (règlement (UE) 2023/1230) passent en section B de l'annexe I : elles relèvent de leur propre législation, où les exigences IA sont ajoutées par acte délégué applicable au plus tard le 2 août 2028."
+  },
+  "Les points ba et bb s'appliqueront à compter du": {
+   "en": "Points ba and bb will apply from",
+   "fr": "Les points ba et bb s'appliqueront à compter du"
+  },
+  "Les points ba et bb sont interdits depuis le": {
+   "en": "Points ba and bb have been prohibited since",
+   "fr": "Les points ba et bb sont interdits depuis le"
+  },
+  "Les sorties audio, image, vidéo ou texte générées ou manipulées sont marquées dans un format lisible par machine et détectables comme artificielles — solutions efficaces, interopérables, robustes et fiables dans la limite du possible technique. Le §# n'impose aucune mention visible. Système déjà sur le marché avant le # août # : jusqu'au # décembre #.": {
+   "en": "Generated or manipulated audio, image, video or text outputs are marked in a machine-readable format and detectable as artificially generated or manipulated — effective, interoperable, robust and reliable solutions as far as technically feasible. §# imposes no visible label. System already on the market before # August #: until # December #.",
+   "fr": "Les sorties audio, image, vidéo ou texte générées ou manipulées sont marquées dans un format lisible par machine et détectables comme artificielles — solutions efficaces, interopérables, robustes et fiables dans la limite du possible technique. Le §2 n'impose aucune mention visible. Système déjà sur le marché avant le 2 août 2026 : jusqu'au 2 décembre 2026."
+  },
+  "Les systèmes destinés à interagir directement avec des personnes sont conçus de façon que celles-ci sachent qu'elles interagissent avec une IA, sauf si cela est évident pour une personne raisonnablement informée et attentive au vu du contexte.": {
+   "en": "Systems intended to interact directly with people are designed so that those people know they are interacting with an AI, unless this is obvious to a reasonably well-informed, observant and circumspect person given the context.",
+   "fr": "Les systèmes destinés à interagir directement avec des personnes sont conçus de façon que celles-ci sachent qu'elles interagissent avec une IA, sauf si cela est évident pour une personne raisonnablement informée et attentive au vu du contexte."
+  },
+  "Liste des # obligations (points a à l) des fournisseurs : conformité aux exigences de la section #, indication du nom et de l'adresse, système de gestion de la qualité, conservation de la documentation, conservation des journaux, évaluation de conformité avant mise sur le marché, déclaration UE de conformité, marquage CE, enregistrement dans la base de données EU, actions correctives et information, démonstration de la conformité sur demande motivée d'une autorité, exigences d'accessibilité.": {
+   "en": "List of the # obligations (points a to l) of providers: compliance with the requirements of Section #, indication of name and address, quality management system, documentation keeping, log keeping, conformity assessment before placing on the market, EU declaration of conformity, CE marking, registration in the EU database, corrective actions and information, demonstration of conformity upon a reasoned request from an authority, accessibility requirements.",
+   "fr": "Liste des 12 obligations (points a à l) des fournisseurs : conformité aux exigences de la section 2, indication du nom et de l'adresse, système de gestion de la qualité, conservation de la documentation, conservation des journaux, évaluation de conformité avant mise sur le marché, déclaration UE de conformité, marquage CE, enregistrement dans la base de données EU, actions correctives et information, démonstration de la conformité sur demande motivée d'une autorité, exigences d'accessibilité."
+  },
+  "Marquage lisible par machine à la charge du fournisseur (Art. #(#)) ; signalement des hypertrucages et des textes d'intérêt public à la charge du déployeur (Art. #(#)).": {
+   "en": "Machine-readable marking is the provider's responsibility (Art. #(#)); disclosure of deepfakes and of texts of public interest is the deployer's responsibility (Art. #(#)).",
+   "fr": "Marquage lisible par machine à la charge du fournisseur (Art. 50(2)) ; signalement des hypertrucages et des textes d'intérêt public à la charge du déployeur (Art. 50(4))."
+  },
+  "Marquer les contenus synthétiques, lisiblement par machine": {
+   "en": "Mark synthetic content in a machine-readable way",
+   "fr": "Marquer les contenus synthétiques, lisiblement par machine"
+  },
+  "Mesures prises pour soutenir la culture de l'IA des personnes qui manipulent ou supervisent des systèmes IA, adaptées à leur rôle, à leur formation et au contexte d'usage. L'obligation est de moyens : elle ne garantit pas un niveau précis à chaque personne (texte remplacé par le règlement (UE) #/#). Documenté et régulièrement mis à jour.": {
+   "en": "Measures taken to support the AI literacy of the persons who handle or supervise AI systems, adapted to their role, their training and the context of use. This is an obligation of means: it does not guarantee a specific level for each person (text replaced by Regulation (EU) #/#). Documented and regularly updated.",
+   "fr": "Mesures prises pour soutenir la culture de l'IA des personnes qui manipulent ou supervisent des systèmes IA, adaptées à leur rôle, à leur formation et au contexte d'usage. L'obligation est de moyens : elle ne garantit pas un niveau précis à chaque personne (texte remplacé par le règlement (UE) 2026/1744). Documenté et régulièrement mis à jour."
+  },
+  "Mettre en place la surveillance et le signalement : fournisseur, puis importateur ou distributeur et autorités en cas d'incident grave ; suspension en cas de risque": {
+   "en": "Put monitoring and reporting in place: provider, then importer or distributor and the authorities in case of a serious incident; suspension in case of risk",
+   "fr": "Mettre en place la surveillance et le signalement : fournisseur, puis importateur ou distributeur et autorités en cas d'incident grave ; suspension en cas de risque"
+  },
+  "Mise a jour du registre lors de toute modification substantielle (Art. #(#), Art. #(#))": {
+   "en": "Update of the register upon any substantial modification (Art. #(#), Art. #(#))",
+   "fr": "Mise a jour du registre lors de toute modification substantielle (Art. 3(23), Art. 43(4))"
+  },
+  "Mise a jour obligatoire a chaque modification substantielle (Art. #(#), Art. #(#))": {
+   "en": "Mandatory update on each substantial modification (Art. #(#), Art. #(#))",
+   "fr": "Mise a jour obligatoire a chaque modification substantielle (Art. 3(23), Art. 43(4))"
+  },
+  "Mise a jour obligatoire en cas de modification substantielle (Art. #(#), Art. #(#))": {
+   "en": "Mandatory update in case of substantial modification (Art. #(#), Art. #(#))",
+   "fr": "Mise a jour obligatoire en cas de modification substantielle (Art. 3(23), Art. 43(4))"
+  },
+  "Modèles d'IA à usage général mis sur le marché avant le # août # — mise en conformité (Art. #(#))": {
+   "en": "General-purpose AI models placed on the market before # August # — compliance (Art. #(#))",
+   "fr": "Modèles d'IA à usage général mis sur le marché avant le 2 août 2025 — mise en conformité (Art. 111(3))"
+  },
+  "Non interdit par le point (h), mais à haut risque (annexe III, point #(a)) et soumis à l'article # du RGPD.": {
+   "en": "Not prohibited under point (h), but high-risk (Annex III, point #(a)) and subject to Article # of the GDPR.",
+   "fr": "Non interdit par le point (h), mais à haut risque (annexe III, point 1(a)) et soumis à l'article 9 du RGPD."
+  },
+  "Non — ce n'est pas un produit de l'annexe I": {
+   "en": "No — it is not an Annex I product",
+   "fr": "Non — ce n'est pas un produit de l'annexe I"
+  },
+  "Notation sociale": {
+   "en": "Social scoring",
+   "fr": "Notation sociale"
+  },
+  "Obligations de transparence applicables depuis le # aout # (marquage des contenus synthetiques deja sur le marche : # decembre #, Art. #(#))": {
+   "en": "Transparency obligations applicable since # August # (marking of synthetic content already on the market: # December #, Art. #(#))",
+   "fr": "Obligations de transparence applicables depuis le 2 aout 2026 (marquage des contenus synthetiques deja sur le marche : 2 decembre 2026, Art. 111(4))"
+  },
+  "Oui — et le produit exige une évaluation de conformité par un tiers": {
+   "en": "Yes — and the product requires third-party conformity assessment",
+   "fr": "Oui — et le produit exige une évaluation de conformité par un tiers"
+  },
+  "Oui — mais le produit n'exige pas d'évaluation par un tiers": {
+   "en": "Yes — but the product does not require third-party assessment",
+   "fr": "Oui — mais le produit n'exige pas d'évaluation par un tiers"
+  },
+  "Oui — sans finalité répressive": {
+   "en": "Yes — without a law-enforcement purpose",
+   "fr": "Oui — sans finalité répressive"
+  },
+  "Oui — un tiers en a fait son système": {
+   "en": "Yes — a third party has made it its own system",
+   "fr": "Oui — un tiers en a fait son système"
+  },
+  "Oui — à des fins répressives (police, poursuites pénales)": {
+   "en": "Yes — for law-enforcement purposes (police, criminal prosecution)",
+   "fr": "Oui — à des fins répressives (police, poursuites pénales)"
+  },
+  "PME et start-up : le plus bas des deux plafonds s'applique (Art. #(#)).": {
+   "en": "SMEs and start-ups: the lower of the two ceilings applies (Art. #(#)).",
+   "fr": "PME et start-up : le plus bas des deux plafonds s'applique (Art. 99(6))."
+  },
+  "Passé en section B de l'annexe I : seuls l'article #(#), l'article #a et les articles # à # s'appliquent (Art. #(#)).": {
+   "en": "Moved to Section B of Annex I: only Article #(#), Article #a and Articles # to # apply (Art. #(#)).",
+   "fr": "Passé en section B de l'annexe I : seuls l'article 6(1), l'article 60a et les articles 102 à 112 s'appliquent (Art. 2(2))."
+  },
+  "Personne n'a repris, modifié ou réorienté ce système.": {
+   "en": "Nobody has taken over, modified or repurposed this system.",
+   "fr": "Personne n'a repris, modifié ou réorienté ce système."
+  },
+  "Politiques et procédures : stratégie réglementaire, conception, tests, incidents, surveillance post-commercialisation. Mise en œuvre proportionnée à la taille du fournisseur, PME, start-up et petites capitalisations intermédiaires notamment, sans jamais rabattre le niveau de rigueur exigé (Art. #(#), Art. #).": {
+   "en": "Policies and procedures: regulatory strategy, design, testing, incidents, post-market monitoring. Implementation proportionate to the size of the provider, SMEs, start-ups and small mid-cap enterprises in particular, without ever lowering the level of rigour required (Art. #(#), Art. #).",
+   "fr": "Politiques et procédures : stratégie réglementaire, conception, tests, incidents, surveillance post-commercialisation. Mise en œuvre proportionnée à la taille du fournisseur, PME, start-up et petites capitalisations intermédiaires notamment, sans jamais rabattre le niveau de rigueur exigé (Art. 17(2), Art. 63)."
+  },
+  "Pour un produit de la section B de l'annexe I : n'appliquer que l'Art. #(#), l'Art. #a et les Art. # à #": {
+   "en": "For a product in Section B of Annex I: apply only Art. #(#), Art. #a and Arts. # to #",
+   "fr": "Pour un produit de la section B de l'annexe I : n'appliquer que l'Art. 6(1), l'Art. 60a et les Art. 102 à 112"
+  },
+  "Pour un système génératif : démontrer les garanties techniques qui empêchent la génération des contenus des points (ba) et (bb) (Art. #(#a))": {
+   "en": "For a generative system: demonstrate the technical safeguards that prevent the generation of the content in points (ba) and (bb) (Art. #(#a))",
+   "fr": "Pour un système génératif : démontrer les garanties techniques qui empêchent la génération des contenus des points (ba) et (bb) (Art. 5(1a))"
+  },
+  "Prendre des mesures pour soutenir le développement de la culture de l'IA des personnes qui exploitent ou utilisent les systèmes pour votre compte, compte tenu de leurs connaissances, de leur formation, du contexte d'emploi et des personnes visées. L'obligation est de moyens : elle ne garantit pas un niveau précis à chaque personne (texte remplacé par le règlement (UE) #/#).": {
+   "en": "Take measures to support the development of AI literacy among the persons who operate or use the systems on your behalf, taking into account their knowledge, their training, the context of use and the persons concerned. This is an obligation of means: it does not guarantee a specific level for each person (text replaced by Regulation (EU) #/#).",
+   "fr": "Prendre des mesures pour soutenir le développement de la culture de l'IA des personnes qui exploitent ou utilisent les systèmes pour votre compte, compte tenu de leurs connaissances, de leur formation, du contexte d'emploi et des personnes visées. L'obligation est de moyens : elle ne garantit pas un niveau précis à chaque personne (texte remplacé par le règlement (UE) 2026/1744)."
+  },
+  "Prendre des mesures proportionnées : formation, ressources, consignes d'usage": {
+   "en": "Take proportionate measures: training, resources, usage guidelines",
+   "fr": "Prendre des mesures proportionnées : formation, ressources, consignes d'usage"
+  },
+  "Qualifier formellement votre système selon la définition Art. #(#) avant classification : l'inférence est l'élément décisif": {
+   "en": "Formally qualify your system under the definition in Art. #(#) before classification: inference is the decisive element",
+   "fr": "Qualifier formellement votre système selon la définition Art. 3(1) avant classification : l'inférence est l'élément décisif"
+  },
+  "Qualité, représentativité, traçabilité des données d'entraînement, validation et test. Absence de biais vérifiée. Catégories particulières de données pour détecter et corriger les biais : conditions cumulatives de l'article #a, qui remplace l'ancien article #(#).": {
+   "en": "Quality, representativeness and traceability of training, validation and testing data. Absence of bias verified. Special categories of data to detect and correct biases: cumulative conditions of Article #a, which replaces the former Article #(#).",
+   "fr": "Qualité, représentativité, traçabilité des données d'entraînement, validation et test. Absence de biais vérifiée. Catégories particulières de données pour détecter et corriger les biais : conditions cumulatives de l'article 4a, qui remplace l'ancien article 10(5)."
+  },
+  "Quand un tiers rebaptise, modifie substantiellement ou réoriente votre système, vous n'en êtes plus le fournisseur, mais vous coopérez étroitement avec lui : documentation technique suffisante pour évaluer la conformité, information sur les limites et modes de défaillance connus, accès technique ciblé pour les tests et la validation. Ne joue pas si vous avez clairement précisé que votre système ne doit pas devenir un système à haut risque.": {
+   "en": "When a third party rebrands, substantially modifies or repurposes your system, you are no longer its provider, but you cooperate closely with it: technical documentation sufficient to assess compliance, information on known limitations and failure modes, targeted technical access for testing and validation. Does not apply if you have clearly specified that your system is not to become a high-risk system.",
+   "fr": "Quand un tiers rebaptise, modifie substantiellement ou réoriente votre système, vous n'en êtes plus le fournisseur, mais vous coopérez étroitement avec lui : documentation technique suffisante pour évaluer la conformité, information sur les limites et modes de défaillance connus, accès technique ciblé pour les tests et la validation. Ne joue pas si vous avez clairement précisé que votre système ne doit pas devenir un système à haut risque."
+  },
+  "Recherche, essai ou développement avant toute mise sur le marché ou en service": {
+   "en": "Research, testing or development before any placing on the market or putting into service",
+   "fr": "Recherche, essai ou développement avant toute mise sur le marché ou en service"
+  },
+  "Règle de plafonnement": {
+   "en": "Capping rule",
+   "fr": "Règle de plafonnement"
+  },
+  "Réponse — Classification selon l'Annexe III (# domaines) et l'Annexe I": {
+   "en": "Answer — Classification under Annex III (# areas) and Annex I",
+   "fr": "Réponse — Classification selon l'Annexe III (8 domaines) et l'Annexe I"
+  },
+  "Réponse — Culture de l'IA des équipes (Art. #)": {
+   "en": "Answer — AI literacy of the teams (Art. #)",
+   "fr": "Réponse — Culture de l'IA des équipes (Art. 4)"
+  },
+  "Réutiliser, par renvoi, l'analyse d'impact RGPD déjà conduite (Art. #(#)) plutôt que de la refaire": {
+   "en": "Reuse, by cross-reference, the GDPR impact assessment already carried out (Art. #(#)) rather than redoing it",
+   "fr": "Réutiliser, par renvoi, l'analyse d'impact RGPD déjà conduite (Art. 27(4)) plutôt que de la refaire"
+  },
+  "S'applique aux fournisseurs mettant sur le marché de l'UE, aux déployeurs établis dans l'UE, aux fournisseurs et déployeurs établis dans un pays tiers quand les sorties du système sont utilisées dans l'UE. Sont hors champ : les systèmes utilisés exclusivement à des fins militaires, de défense ou de sécurité nationale (Art. #(#)) ; les systèmes développés et mis en service dans le seul but de la recherche scientifique (#(#)) ; la recherche, les essais et le développement avant mise sur le marché, hors essais en conditions réelles (#(#)) ; les déployeurs personnes physiques pour un usage strictement personnel et non professionnel (#(#)). Pour un système à haut risque lié à un produit de la section B de l'annexe I, seuls l'Art. #(#), l'Art. #a et les Art. # à # s'appliquent (#(#), modifié par le règlement (UE) #/#).": {
+   "en": "Applies to providers placing systems on the EU market, to deployers established in the EU, and to providers and deployers established in a third country where the system's output is used in the EU. Out of scope: systems used exclusively for military, defence or national security purposes (Art. #(#)); systems developed and put into service for the sole purpose of scientific research (#(#)); research, testing and development before placing on the market, other than testing in real-world conditions (#(#)); deployers who are natural persons using the system for a strictly personal, non-professional purpose (#(#)). For a high-risk system related to a product in Section B of Annex I, only Art. #(#), Art. #a and Arts. # to # apply (#(#), as amended by Regulation (EU) #/#).",
+   "fr": "S'applique aux fournisseurs mettant sur le marché de l'UE, aux déployeurs établis dans l'UE, aux fournisseurs et déployeurs établis dans un pays tiers quand les sorties du système sont utilisées dans l'UE. Sont hors champ : les systèmes utilisés exclusivement à des fins militaires, de défense ou de sécurité nationale (Art. 2(3)) ; les systèmes développés et mis en service dans le seul but de la recherche scientifique (2(6)) ; la recherche, les essais et le développement avant mise sur le marché, hors essais en conditions réelles (2(8)) ; les déployeurs personnes physiques pour un usage strictement personnel et non professionnel (2(10)). Pour un système à haut risque lié à un produit de la section B de l'annexe I, seuls l'Art. 6(1), l'Art. 60a et les Art. 102 à 112 s'appliquent (2(2), modifié par le règlement (UE) 2026/1744)."
+  },
+  "Si des catégories particulières de données sont traitées pour corriger les biais : réunir les six conditions de l'Art. #a et consigner les motifs au registre des traitements": {
+   "en": "If special categories of data are processed to correct biases: meet the six conditions of Art. #a and record the reasons in the record of processing activities",
+   "fr": "Si des catégories particulières de données sont traitées pour corriger les biais : réunir les six conditions de l'Art. 4a et consigner les motifs au registre des traitements"
+  },
+  "Si l'organisation est une petite capitalisation intermédiaire (moins de # personnes, CA ≤ # M€ ou bilan ≤ # M€), le plafond est le plus bas des deux :": {
+   "en": "If the organisation is a small mid-cap enterprise (fewer than # persons, turnover ≤ €# million or balance sheet ≤ €# million), the ceiling is the lower of the two:",
+   "fr": "Si l'organisation est une petite capitalisation intermédiaire (moins de 750 personnes, CA ≤ 150 M€ ou bilan ≤ 129 M€), le plafond est le plus bas des deux :"
+  },
+  "Signaler les hypertrucages et les textes publiés d'intérêt public": {
+   "en": "Disclose deepfakes and published texts of public interest",
+   "fr": "Signaler les hypertrucages et les textes publiés d'intérêt public"
+  },
+  "Sont interdits : générer ou manipuler des images, vidéos ou sons d'une personne identifiable, sexuellement explicites ou montrant ses parties intimes, sans son consentement (hypertrucages sexuels), et produire du matériel d'abus sexuel d'enfants. Le marquage lisible par machine des contenus synthétiques devient exigible, y compris pour les systèmes déjà commercialisés.": {
+   "en": "Prohibited: generating or manipulating images, videos or audio of an identifiable person, sexually explicit or showing their intimate parts, without their consent (sexual deepfakes), and producing child sexual abuse material. Machine-readable marking of synthetic content becomes due, including for systems already marketed.",
+   "fr": "Sont interdits : générer ou manipuler des images, vidéos ou sons d'une personne identifiable, sexuellement explicites ou montrant ses parties intimes, sans son consentement (hypertrucages sexuels), et produire du matériel d'abus sexuel d'enfants. Le marquage lisible par machine des contenus synthétiques devient exigible, y compris pour les systèmes déjà commercialisés."
+  },
+  "Surveillance sur la base de la notice. Risque identifié : information sans retard du fournisseur ou du distributeur et de l'autorité de surveillance du marché, et suspension de l'usage. Incident grave : information immédiate du fournisseur d'abord, puis de l'importateur ou du distributeur et des autorités ; si le fournisseur est injoignable, l'article # s'applique par analogie.": {
+   "en": "Monitoring on the basis of the instructions for use. Risk identified: inform the provider or distributor and the market surveillance authority without undue delay, and suspend use. Serious incident: inform the provider immediately first, then the importer or distributor and the authorities; if the provider cannot be reached, Article # applies by analogy.",
+   "fr": "Surveillance sur la base de la notice. Risque identifié : information sans retard du fournisseur ou du distributeur et de l'autorité de surveillance du marché, et suspension de l'usage. Incident grave : information immédiate du fournisseur d'abord, puis de l'importateur ou du distributeur et des autorités ; si le fournisseur est injoignable, l'article 73 s'applique par analogie."
+  },
+  "Surveiller le fonctionnement, savoir suspendre et signaler dans l'ordre": {
+   "en": "Monitor operation, know how to suspend and report in the right order",
+   "fr": "Surveiller le fonctionnement, savoir suspendre et signaler dans l'ordre"
+  },
+  "Synthèse des pratiques interdites (# catégories, plus # applicables à compter du # décembre #), conditions d’exception et sanctions applicables (Art. #(#)).": {
+   "en": "Summary of the prohibited practices (# categories, plus # applicable from # December #), conditions for exceptions and applicable penalties (Art. #(#)).",
+   "fr": "Synthèse des pratiques interdites (8 catégories, plus 2 applicables à compter du 2 décembre 2026), conditions d’exception et sanctions applicables (Art. 99(3))."
+  },
+  "Système relevant de l'article #(#) : régime complet à compter de la date de l'annexe I. Certaines exigences des articles # à # et # à # pourront être limitées lorsque la législation sectorielle de la section A offre une protection équivalente ou supérieure — des actes délégués de la Commission sont attendus d'ici le # août # (Art. #(#)).": {
+   "en": "System covered by Article #(#): full regime from the Annex I date. Some requirements of Articles # to # and # to # may be limited where the sectoral legislation of Section A offers equivalent or higher protection — delegated acts of the Commission are expected by # August # (Art. #(#)).",
+   "fr": "Système relevant de l'article 6(1) : régime complet à compter de la date de l'annexe I. Certaines exigences des articles 9 à 15 et 17 à 25 pourront être limitées lorsque la législation sectorielle de la section A offre une protection équivalente ou supérieure — des actes délégués de la Commission sont attendus d'ici le 2 août 2027 (Art. 2(13))."
+  },
+  "Systèmes haut risque intégrés à des produits réglementés (Annexe I, section A : dispositifs médicaux, jouets, ascenseurs, équipements radioélectriques…)": {
+   "en": "High-risk systems embedded in regulated products (Annex I, Section A: medical devices, toys, lifts, radio equipment…)",
+   "fr": "Systèmes haut risque intégrés à des produits réglementés (Annexe I, section A : dispositifs médicaux, jouets, ascenseurs, équipements radioélectriques…)"
+  },
+  "Toutes les dates d’application par catégorie d’obligation — de février # (Art. #) à août # (annexe I), avec les échéances du règlement (UE) #/# : # décembre #, # août # et # décembre #.": {
+   "en": "All application dates by category of obligation — from February # (Art. #) to August # (Annex I), with the deadlines of Regulation (EU) #/#: # December #, # August # and # December #.",
+   "fr": "Toutes les dates d’application par catégorie d’obligation — de février 2025 (Art. 5) à août 2028 (annexe I), avec les échéances du règlement (UE) 2026/1744 : 2 décembre 2026, 2 août 2027 et 2 décembre 2027."
+  },
+  "Transparence — fournisseurs et déployeurs de certains systèmes": {
+   "en": "Transparency — providers and deployers of certain systems",
+   "fr": "Transparence — fournisseurs et déployeurs de certains systèmes"
+  },
+  "Un distributeur, importateur, déployeur ou tiers devient lui-même fournisseur (avec les obligations de l'Art. #) s'il : (a) appose son nom ou sa marque sur un système à haut risque déjà mis sur le marché ; (b) effectue une modification substantielle d'un système à haut risque ; (c) modifie la finalité d'un système, y compris à usage général, de sorte qu'il devienne à haut risque. Le fournisseur initial n'est alors plus considéré comme fournisseur de ce système, mais coopère étroitement avec le nouveau : documentation technique suffisante, limites et modes de défaillance connus, accès technique ciblé pour les tests et la validation (#(#), précisé par le règlement (UE) #/#). Le fournisseur d'un système à haut risque et le tiers qui lui fournit systèmes, modèles, outils, services ou composants précisent par écrit les informations, capacités et accès nécessaires à sa conformité (#(#)) — sauf outils publiés sous licence libre et ouverte, modèles d'IA à usage général exceptés.": {
+   "en": "A distributor, importer, deployer or third party becomes a provider itself (with the obligations of Art. #) if it: (a) puts its name or trademark on a high-risk AI system already placed on the market; (b) makes a substantial modification to a high-risk AI system; (c) modifies the intended purpose of an AI system, including a general-purpose one, so that it becomes high-risk. The initial provider is then no longer considered the provider of that system, but cooperates closely with the new one: sufficient technical documentation, known limitations and failure modes, targeted technical access for testing and validation (#(#), as specified by Regulation (EU) #/#). The provider of a high-risk AI system and the third party supplying it with systems, models, tools, services or components specify in writing the information, capabilities and access needed for its compliance (#(#)) — except for tools published under a free and open licence, general-purpose AI models being excepted.",
+   "fr": "Un distributeur, importateur, déployeur ou tiers devient lui-même fournisseur (avec les obligations de l'Art. 16) s'il : (a) appose son nom ou sa marque sur un système à haut risque déjà mis sur le marché ; (b) effectue une modification substantielle d'un système à haut risque ; (c) modifie la finalité d'un système, y compris à usage général, de sorte qu'il devienne à haut risque. Le fournisseur initial n'est alors plus considéré comme fournisseur de ce système, mais coopère étroitement avec le nouveau : documentation technique suffisante, limites et modes de défaillance connus, accès technique ciblé pour les tests et la validation (25(2), précisé par le règlement (UE) 2026/1744). Le fournisseur d'un système à haut risque et le tiers qui lui fournit systèmes, modèles, outils, services ou composants précisent par écrit les informations, capacités et accès nécessaires à sa conformité (25(4)) — sauf outils publiés sous licence libre et ouverte, modèles d'IA à usage général exceptés."
+  },
+  "Un système est à haut risque si : (#) il est un composant de sécurité d'un produit — ou un produit — relevant de la législation d'harmonisation de l'annexe I et soumis à une évaluation de conformité par un tiers (Art. #(#) ; les fonctions d'assistance, d'optimisation, d'automatisation, de confort ou de contrôle qualité sans lien avec la sécurité ne sont pas des composants de sécurité, sauf si leur défaillance met en danger la santé ou la sécurité — #(#a) et #(#b)) ; ou (#) il relève de l'un des # domaines de l'annexe III. Exception (#(#)) : un système de l'annexe III n'est pas à haut risque s'il ne présente pas de risque significatif — tâche procédurale étroite, amélioration d'une activité humaine, détection d'écarts, tâche préparatoire — sauf s'il effectue du profilage de personnes physiques, toujours à haut risque.": {
+   "en": "A system is high-risk if: (#) it is a safety component of a product — or is itself a product — covered by the Annex I harmonisation legislation and subject to third-party conformity assessment (Art. #(#); assistance, optimisation, automation, comfort or quality-control functions unrelated to safety are not safety components, unless their failure endangers health or safety — #(#a) and #(#b)); or (#) it falls under one of the # areas of Annex III. Exception (#(#)): an Annex III system is not high-risk if it does not pose a significant risk — narrow procedural task, improvement of a human activity, detection of deviations, preparatory task — unless it performs profiling of natural persons, which is always high-risk.",
+   "fr": "Un système est à haut risque si : (1) il est un composant de sécurité d'un produit — ou un produit — relevant de la législation d'harmonisation de l'annexe I et soumis à une évaluation de conformité par un tiers (Art. 6(1) ; les fonctions d'assistance, d'optimisation, d'automatisation, de confort ou de contrôle qualité sans lien avec la sécurité ne sont pas des composants de sécurité, sauf si leur défaillance met en danger la santé ou la sécurité — 6(1a) et 6(1b)) ; ou (2) il relève de l'un des 8 domaines de l'annexe III. Exception (6(3)) : un système de l'annexe III n'est pas à haut risque s'il ne présente pas de risque significatif — tâche procédurale étroite, amélioration d'une activité humaine, détection d'écarts, tâche préparatoire — sauf s'il effectue du profilage de personnes physiques, toujours à haut risque."
+  },
+  "Un tiers a-t-il rebaptisé, modifié substantiellement ou réorienté un système que VOUS avez mis sur le marché ?": {
+   "en": "Has a third party rebranded, substantially modified or repurposed a system that YOU placed on the market?",
+   "fr": "Un tiers a-t-il rebaptisé, modifié substantiellement ou réorienté un système que VOUS avez mis sur le marché ?"
+  },
+  "Une autorité publique ou une institution de l'Union qui déploie un système à haut risque respecte les obligations d'enregistrement de l'article # ; si le système envisagé n'y est pas enregistré, elle ne l'utilise pas et en informe le fournisseur ou le distributeur.": {
+   "en": "A public authority or Union institution deploying a high-risk system complies with the registration obligations of Article #; if the envisaged system is not registered there, it does not use it and informs the provider or the distributor.",
+   "fr": "Une autorité publique ou une institution de l'Union qui déploie un système à haut risque respecte les obligations d'enregistrement de l'article 49 ; si le système envisagé n'y est pas enregistré, elle ne l'utilise pas et en informe le fournisseur ou le distributeur."
+  },
+  "Usage exclusivement militaire, de défense ou de sécurité nationale": {
+   "en": "Exclusively military, defence or national security use",
+   "fr": "Usage exclusivement militaire, de défense ou de sécurité nationale"
+  },
+  "Votre système effectue-t-il une identification biométrique à distance en temps réel dans un espace accessible au public ?": {
+   "en": "Does your system perform real-time remote biometric identification in a publicly accessible space?",
+   "fr": "Votre système effectue-t-il une identification biométrique à distance en temps réel dans un espace accessible au public ?"
+  },
+  "Votre système relève d'un domaine Annexe III mais remplit l'exception de l'Art. #(#) — il n'est donc pas automatiquement classé haut risque. Documentez cette évaluation avant mise sur le marché (Art. #(#)) : vous restez soumis à l'obligation d'enregistrement (Art. #(#)), dont le contenu est allégé par le règlement (UE) #/# (annexe VIII, section B : points # et # supprimés).": {
+   "en": "Your system falls under an Annex III area but meets the exception in Art. #(#) — it is therefore not automatically classified as high-risk. Document this assessment before placing on the market (Art. #(#)): you remain subject to the registration obligation (Art. #(#)), the content of which is streamlined by Regulation (EU) #/# (Annex VIII, Section B: points # and # deleted).",
+   "fr": "Votre système relève d'un domaine Annexe III mais remplit l'exception de l'Art. 6(3) — il n'est donc pas automatiquement classé haut risque. Documentez cette évaluation avant mise sur le marché (Art. 6(4)) : vous restez soumis à l'obligation d'enregistrement (Art. 49(2)), dont le contenu est allégé par le règlement (UE) 2026/1744 (annexe VIII, section B : points 7 et 9 supprimés)."
+  },
+  "Votre système relève-t-il de l'une de ces autres pratiques interdites ?": {
+   "en": "Does your system fall under one of these other prohibited practices?",
+   "fr": "Votre système relève-t-il de l'une de ces autres pratiques interdites ?"
+  },
+  "Vérifier l'enregistrement du système dans la base de données de l'Union": {
+   "en": "Check the registration of the system in the Union database",
+   "fr": "Vérifier l'enregistrement du système dans la base de données de l'Union"
+  },
+  "Vérifier les dérogations légales applicables pour l'identification biométrique (finalités répressives, autorisation préalable — Art. #(#) à #(#))": {
+   "en": "Check the legal exemptions applicable to biometric identification (law-enforcement purposes, prior authorisation — Art. #(#) to #(#))",
+   "fr": "Vérifier les dérogations légales applicables pour l'identification biométrique (finalités répressives, autorisation préalable — Art. 5(2) à 5(7))"
+  },
+  "Vérifier qu'aucun système n'a recours à des techniques subliminales ou trompeuses, n'exploite les vulnérabilités, ne génère du scoring social (par toute entité, publique ou privée), ne fonde une évaluation du risque d'infraction sur le seul profilage, ni ne constitue des bases de reconnaissance faciale par moissonnage non ciblé. À compter du # décembre # : aucun hypertrucage sexuel sans consentement (ba) ni matériel d'abus sexuel d'enfants généré (bb).": {
+   "en": "Check that no system uses subliminal or deceptive techniques, exploits vulnerabilities, generates social scoring (by any entity, public or private), bases a criminal-offence risk assessment solely on profiling, or builds facial recognition databases by untargeted scraping. From # December #: no sexual deepfake without consent (ba) and no generated child sexual abuse material (bb).",
+   "fr": "Vérifier qu'aucun système n'a recours à des techniques subliminales ou trompeuses, n'exploite les vulnérabilités, ne génère du scoring social (par toute entité, publique ou privée), ne fonde une évaluation du risque d'infraction sur le seul profilage, ni ne constitue des bases de reconnaissance faciale par moissonnage non ciblé. À compter du 2 décembre 2026 : aucun hypertrucage sexuel sans consentement (ba) ni matériel d'abus sexuel d'enfants généré (bb)."
+  },
+  "Vérifier, et documenter, si une exclusion de l'Art. # s'applique (militaire, défense, sécurité nationale ; recherche ; usage personnel non professionnel)": {
+   "en": "Check, and document, whether an exclusion under Art. # applies (military, defence, national security; research; non-professional personal use)",
+   "fr": "Vérifier, et documenter, si une exclusion de l'Art. 2 s'applique (militaire, défense, sécurité nationale ; recherche ; usage personnel non professionnel)"
+  },
+  "catégorisation biométrique déduisant des données sensibles": {
+   "en": "biometric categorisation inferring sensitive data",
+   "fr": "catégorisation biométrique déduisant des données sensibles"
+  },
+  "constitution de bases de reconnaissance faciale par moissonnage non ciblé": {
+   "en": "building of facial recognition databases through untargeted scraping",
+   "fr": "constitution de bases de reconnaissance faciale par moissonnage non ciblé"
+  },
+  "exploitation des vulnérabilités (âge, handicap, situation sociale ou économique)": {
+   "en": "exploitation of vulnerabilities (age, disability, social or economic situation)",
+   "fr": "exploitation des vulnérabilités (âge, handicap, situation sociale ou économique)"
+  },
+  "fournisseur de modèle d'IA à usage général (amende de la Commission)": {
+   "en": "provider of a general-purpose AI model (Commission fine)",
+   "fr": "fournisseur de modèle d'IA à usage général (amende de la Commission)"
+  },
+  "hypertrucage sexuel sans consentement d'une personne identifiable": {
+   "en": "sexual deepfake of an identifiable person without consent",
+   "fr": "hypertrucage sexuel sans consentement d'une personne identifiable"
+  },
+  "identification biométrique à distance en temps réel, dans l'espace accessible au public, à des fins répressives": {
+   "en": "real-time remote biometric identification, in publicly accessible spaces, for law-enforcement purposes",
+   "fr": "identification biométrique à distance en temps réel, dans l'espace accessible au public, à des fins répressives"
+  },
+  "il est développé et mis en service dans le seul but de la recherche et du développement scientifiques": {
+   "en": "it is developed and put into service for the sole purpose of scientific research and development",
+   "fr": "il est développé et mis en service dans le seul but de la recherche et du développement scientifiques"
+  },
+  "il n'est encore qu'en recherche, essai ou développement, avant toute mise sur le marché ou en service (les essais en conditions réelles ne sont pas couverts par cette exclusion)": {
+   "en": "it is still only in research, testing or development, before any placing on the market or putting into service (testing in real-world conditions is not covered by this exclusion)",
+   "fr": "il n'est encore qu'en recherche, essai ou développement, avant toute mise sur le marché ou en service (les essais en conditions réelles ne sont pas couverts par cette exclusion)"
+  },
+  "informations inexactes, incomplètes ou trompeuses fournies aux autorités": {
+   "en": "incorrect, incomplete or misleading information supplied to the authorities",
+   "fr": "informations inexactes, incomplètes ou trompeuses fournies aux autorités"
+  },
+  "inférence des émotions au travail ou dans un établissement d'enseignement": {
+   "en": "inference of emotions in the workplace or in an educational institution",
+   "fr": "inférence des émotions au travail ou dans un établissement d'enseignement"
+  },
+  "l'exclusion de l'article #(#) ne libère que les obligations des DÉPLOYEURS : un": {
+   "en": "the exclusion in Article #(#) releases only the obligations of DEPLOYERS: a",
+   "fr": "l'exclusion de l'article 2(10) ne libère que les obligations des DÉPLOYEURS : un"
+  },
+  "le système est utilisé exclusivement à des fins militaires, de défense ou de sécurité nationale": {
+   "en": "the system is used exclusively for military, defence or national security purposes",
+   "fr": "le système est utilisé exclusivement à des fins militaires, de défense ou de sécurité nationale"
+  },
+  "manipulation subliminale ou trompeuse": {
+   "en": "subliminal or deceptive manipulation",
+   "fr": "manipulation subliminale ou trompeuse"
+  },
+  "manquement d'un fournisseur, mandataire, importateur, distributeur, déployeur ou organisme notifié (Art. #, # à #, #, #, # ; Art. #(#) et (#))": {
+   "en": "infringement by a provider, authorised representative, importer, distributor, deployer or notified body (Art. #, # to #, #, #, #; Art. #(#) and (#))",
+   "fr": "manquement d'un fournisseur, mandataire, importateur, distributeur, déployeur ou organisme notifié (Art. 16, 22 à 26, 31, 33, 34 ; Art. 25(2) et (4))"
+  },
+  "matériel d'abus sexuel d'enfants généré par IA": {
+   "en": "AI-generated child sexual abuse material",
+   "fr": "matériel d'abus sexuel d'enfants généré par IA"
+  },
+  "ne s'en prévaut pas": {
+   "en": "cannot rely on it",
+   "fr": "ne s'en prévaut pas"
+  },
+  "notation sociale, par toute entité publique ou privée": {
+   "en": "social scoring, by any public or private entity",
+   "fr": "notation sociale, par toute entité publique ou privée"
+  },
+  "obligation de transparence (Art. #)": {
+   "en": "transparency obligation (Art. #)",
+   "fr": "obligation de transparence (Art. 50)"
+  },
+  "vous êtes une personne physique et vous l'utilisez à titre strictement personnel et non professionnel": {
+   "en": "you are a natural person and you use it strictly for personal, non-professional purposes",
+   "fr": "vous êtes une personne physique et vous l'utilisez à titre strictement personnel et non professionnel"
+  },
+  "À venir": {
+   "en": "Upcoming",
+   "fr": "À venir"
+  },
+  "Établir si l'organisation est une PME ou une petite capitalisation intermédiaire (Art. #(#a) et (#b)) : cela commande les allègements et le plafond des sanctions": {
+   "en": "Establish whether the organisation is an SME or a small mid-cap enterprise (Art. #(#a) and (#b)): this determines the relief measures and the ceiling on penalties",
+   "fr": "Établir si l'organisation est une PME ou une petite capitalisation intermédiaire (Art. 3(14a) et (14b)) : cela commande les allègements et le plafond des sanctions"
+  },
+  "Évaluation formelle de chaque système contre les usages listés dans les # domaines à haut risque de l'Annexe III — biométrie, infrastructures critiques, éducation, emploi, services essentiels, application de la loi, migration, démocratie — le secteur seul ne suffisant pas ; et, pour un composant de sécurité d'un produit de l'Annexe I, contre les deux conditions cumulatives de l'Art. #(#) : composant de sécurité et évaluation de conformité par un tiers.": {
+   "en": "Formal assessment of each system against the uses listed in the # high-risk areas of Annex III — biometrics, critical infrastructure, education, employment, essential services, law enforcement, migration, democracy — the sector alone not being enough; and, for a safety component of an Annex I product, against the two cumulative conditions of Art. #(#): safety component and third-party conformity assessment.",
+   "fr": "Évaluation formelle de chaque système contre les usages listés dans les 8 domaines à haut risque de l'Annexe III — biométrie, infrastructures critiques, éducation, emploi, services essentiels, application de la loi, migration, démocratie — le secteur seul ne suffisant pas ; et, pour un composant de sécurité d'un produit de l'Annexe I, contre les deux conditions cumulatives de l'Art. 6(1) : composant de sécurité et évaluation de conformité par un tiers."
+  },
+  "Évalue le risque qu'une personne commette une infraction, sur le seul profilage": {
+   "en": "Assesses the risk that a person will commit an offence, based solely on profiling",
+   "fr": "Évalue le risque qu'une personne commette une infraction, sur le seul profilage"
+  },
+  "Évaluer chaque système contre l'annexe I (produits) et l'annexe III (# domaines, usages listés)": {
+   "en": "Assess each system against Annex I (products) and Annex III (# areas, listed uses)",
+   "fr": "Évaluer chaque système contre l'annexe I (produits) et l'annexe III (8 domaines, usages listés)"
+  },
+  "évaluation du risque de commettre une infraction fondée uniquement sur le profilage": {
+   "en": "assessment of the risk of committing an offence based solely on profiling",
+   "fr": "évaluation du risque de commettre une infraction fondée uniquement sur le profilage"
+  },
+  "… mais son usage est destiné à des raisons médicales ou de sécurité": {
+   "en": "… but its use is intended for medical or safety reasons",
+   "fr": "… mais son usage est destiné à des raisons médicales ou de sécurité"
+  },
+  "⚡ # décembre #": {
+   "en": "⚡ # December #",
+   "fr": "⚡ 2 décembre 2026"
+  }
+ }
+}

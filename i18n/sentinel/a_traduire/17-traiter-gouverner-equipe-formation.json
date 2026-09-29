@@ -1,6 +1,6 @@
 {
  "_lot": "17-traiter-gouverner-equipe-formation",
- "_mots": 2585,
+ "_mots": 2568,
  "_pages": [
   "gouvernance",
   "parties",
@@ -112,10 +112,6 @@
   }
  },
  "texte": {
-  "# AOÛT #": {
-   "en": "# AUGUST #",
-   "fr": "02 AOÛT 2026"
-  },
   "# jour (# h) · Conformité, juristes, métiers": {
    "en": "# day (# h) · Compliance, lawyers, business lines",
    "fr": "1 jour (7 h) · Conformité, juristes, métiers"
@@ -188,10 +184,6 @@
    "en": "€# excl. VAT",
    "fr": "800 € HT"
   },
-  "#% — échéance # décembre # (Digital Omnibus, haut risque annexe III)": {
-   "en": "#% — deadline # December # (Digital Omnibus, Annex III high-risk)",
-   "fr": "0% — échéance 2 décembre 2027 (Digital Omnibus, haut risque annexe III)"
-  },
   "#/# contrôles conformes": {
    "en": "#/# compliant controls",
    "fr": "0/34 contrôles conformes"
@@ -227,10 +219,6 @@
   "A — Approbateur (valide)": {
    "en": "A — Accountable (approves)",
    "fr": "A — Approbateur (valide)"
-  },
-  "AI Act — Systèmes haut risque (Art. #)": {
-   "en": "AI Act — High-risk systems (Art. #)",
-   "fr": "AI Act — Systèmes haut risque (Art. 113)"
   },
   "AI Business Partners": {
    "en": "AI business partners",
@@ -323,10 +311,6 @@
   "Articles #, #, # et # : traiter une demande": {
    "en": "Articles #, #, # and #: handling a request",
    "fr": "Articles 12, 15, 17 et 20 : traiter une demande"
-  },
-  "Articles #, #, #, #, #, #, #, # obligatoires": {
-   "en": "Articles #, #, #, #, #, #, #, # mandatory",
-   "fr": "Articles 6, 9, 10, 11, 12, 13, 14, 15 obligatoires"
   },
   "Articulation avec l'AIPD du RGPD": {
    "en": "Articulation with the GDPR DPIA",

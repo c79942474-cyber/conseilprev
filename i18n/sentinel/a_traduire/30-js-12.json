@@ -1,6 +1,6 @@
 {
  "_lot": "30-js-12",
- "_mots": 2475,
+ "_mots": 2239,
  "_pages": [
   "_js"
  ],
@@ -99,10 +99,6 @@
    "en": "Information, right to an explanation, effective human oversight: automated filtering that leaves no trace of the reason is indefensible, and will be so before a judge before it is before the regulator.",
    "fr": "Information, droit à l'explication, contrôle humain effectif : un filtrage automatisé qui ne laisse aucune trace du motif est indéfendable, et le sera devant le juge avant de l'être devant le régulateur."
   },
-  "Informations incorrectes, incomplètes ou trompeuses — Art. # §#": {
-   "en": "Incorrect, incomplete or misleading information — Art. #(#)",
-   "fr": "Informations incorrectes, incomplètes ou trompeuses — Art. 99 §5"
-  },
   "Informe (tenu au courant)": {
    "en": "Informed (kept up to date)",
    "fr": "Informe (tenu au courant)"
@@ -126,10 +122,6 @@
   "Informer les travailleurs et leurs représentants": {
    "en": "Inform workers and their representatives",
    "fr": "Informer les travailleurs et leurs représentants"
-  },
-  "Informer les utilisateurs qu'ils interagissent avec un système IA, sauf si cela ressort clairement du contexte.": {
-   "en": "Inform users that they are interacting with an AI system, unless this is obvious from the context.",
-   "fr": "Informer les utilisateurs qu'ils interagissent avec un système IA, sauf si cela ressort clairement du contexte."
   },
   "Informer les utilisateurs que le contenu est personnalisé par IA (Art. #§#). Manipulations exploitant les vulnérabilités psychologiques : interdites Art. #§#(a). Systèmes de notation sociale : interdits Art. #§#(c).": {
    "en": "Inform users that the content is personalised by AI (Art. #(#)). Manipulation exploiting psychological vulnerabilities: prohibited, Art. #(#)(a). Social scoring systems: prohibited, Art. #(#)(c).",
@@ -226,10 +218,6 @@
   "Interdire un outil déplace l’usage hors de votre vue. Ce qui se pilote est ce qui est permis, et la façon dont on le vérifie.": {
    "en": "Prohibiting a tool moves its use out of your sight. What can be steered is what is allowed, and the way it is checked.",
    "fr": "Interdire un outil déplace l’usage hors de votre vue. Ce qui se pilote est ce qui est permis, et la façon dont on le vérifie."
-  },
-  "Interdit # catégories de pratiques : (a) manipulation subliminale, (b) exploitation des vulnérabilités, (c) notation sociale par autorités publiques, (d) police prédictive par profilage individuel, (e) base de données faciales par scraping, (f) inférence émotionnelle au travail/éducation, (g) catégorisation biométrique données sensibles, (h) identification biométrique à distance en temps réel dans espaces publics (sauf exceptions strictes).": {
-   "en": "Prohibits # categories of practices: (a) subliminal manipulation, (b) exploitation of vulnerabilities, (c) social scoring by public authorities, (d) predictive policing through individual profiling, (e) facial databases built by scraping, (f) emotion inference in the workplace/education, (g) biometric categorisation using sensitive data, (h) real-time remote biometric identification in publicly accessible spaces (except for strict exceptions).",
-   "fr": "Interdit 8 catégories de pratiques : (a) manipulation subliminale, (b) exploitation des vulnérabilités, (c) notation sociale par autorités publiques, (d) police prédictive par profilage individuel, (e) base de données faciales par scraping, (f) inférence émotionnelle au travail/éducation, (g) catégorisation biométrique données sensibles, (h) identification biométrique à distance en temps réel dans espaces publics (sauf exceptions strictes)."
   },
   "Interfaces homme-machine permettant la surveillance effective. Opérateurs capables de comprendre les capacités et limites du système, détecter les anomalies, ignorer ou interrompre le système.": {
    "en": "Human-machine interfaces enabling effective oversight. Operators able to understand the capabilities and limitations of the system, detect anomalies, and disregard or interrupt the system.",
@@ -350,10 +338,6 @@
   "Je suis soumis à NIS # — # me sert-elle ?": {
    "en": "I am subject to NIS # — is # of use to me?",
    "fr": "Je suis soumis à NIS 2 — 27001 me sert-elle ?"
-  },
-  "Jeux de données d'entraînement, validation et test soumis à des pratiques de gouvernance appropriées : choix de conception, collecte et origine des données, procédures de préparation, examen des biais possibles.": {
-   "en": "Training, validation and testing datasets subject to appropriate governance practices: design choices, data collection and origin, preparation procedures, examination of possible biases.",
-   "fr": "Jeux de données d'entraînement, validation et test soumis à des pratiques de gouvernance appropriées : choix de conception, collecte et origine des données, procédures de préparation, examen des biais possibles."
   },
   "Joignez toujours la couverture au montant. Un total sans son périmètre se retourne contre celui qui le présente.": {
    "en": "Always attach the coverage to the amount. A total without its scope turns against whoever presents it.",
@@ -578,14 +562,6 @@
   "L'obligation de retracer un lot en amont et en aval s'impose quel que soit l'outil. Un système d'IA qui décide d'un déclassement doit laisser une trace reconstituable.": {
    "en": "The obligation to trace a batch upstream and downstream applies whatever the tool. An AI system that decides on a downgrade must leave a trace that can be reconstructed.",
    "fr": "L'obligation de retracer un lot en amont et en aval s'impose quel que soit l'outil. Un système d'IA qui décide d'un déclassement doit laisser une trace reconstituable."
-  },
-  "L'utilisateur consulte l'Analyse geopolitique Sentinel AI. # blocs : Bloc europeen (EU AI Act standard d'exportation, extraterritorialite, #+ pays influences), Modele americain (EO # jan # pro-innovation, fragmentation etats, NIST RMF), Doctrine chinoise (controle souverain, PIPL, Generative AI Measures, BRI # pays). Chronologie : Art. # applicables fev #, GPAI aout #, haut risque aout #. EO # revoque # jan # par EO #, remplace EO # # jan #.": {
-   "en": "The user is consulting the Sentinel AI geopolitical analysis. # blocs: European bloc (EU AI Act as an export standard, extraterritoriality, #+ countries influenced), American model (EO # Jan # pro-innovation, fragmentation across states, NIST RMF), Chinese doctrine (sovereign control, PIPL, Generative AI Measures, BRI # countries). Timeline: Art. # applicable Feb #, GPAI Aug #, high-risk Aug #. EO # revoked # Jan # by EO #, replaced EO # # Jan #.",
-   "fr": "L'utilisateur consulte l'Analyse geopolitique Sentinel AI. 3 blocs : Bloc europeen (EU AI Act standard d'exportation, extraterritorialite, 40+ pays influences), Modele americain (EO 14179 jan 2025 pro-innovation, fragmentation etats, NIST RMF), Doctrine chinoise (controle souverain, PIPL, Generative AI Measures, BRI 147 pays). Chronologie : Art. 5 applicables fev 2025, GPAI aout 2025, haut risque aout 2026. EO 14110 revoque 20 jan 2025 par EO 14148, remplace EO 14179 23 jan 2025."
-  },
-  "L'utilisateur consulte les Obligations article par article du Regl. #/#. Articles couverts : Art. # (objet), Art. # (champ application extraterritorial), Art. # (litteratie IA), Art. # (# pratiques interdites, sanctions #M ou #%), Art. # (classification haut risque + Annexe III), Art. #-# (obligations fournisseurs : gestion risques, donnees, documentation, logs, transparence, supervision, robustesse, qualite), Art. # (mandataire UE hors-EU), Art. # (obligations deployeurs), Art. # (transparence interactions IA, watermarking), Art. #-# (GPAI, seuil #^# FLOPs, risque systemique), Art. # (surveillance post-commercialisation), Art. # (sanctions progressives).": {
-   "en": "The user is consulting the Article-by-Article Obligations of Reg. #/#. Articles covered: Art. # (subject matter), Art. # (extraterritorial scope), Art. # (AI literacy), Art. # (# prohibited practices, penalties #M or #%), Art. # (high-risk classification + Annex III), Art. #-# (provider obligations: risk management, data, documentation, logs, transparency, oversight, robustness, quality), Art. # (EU authorised representative for non-EU providers), Art. # (deployer obligations), Art. # (transparency of AI interactions, watermarking), Art. #-# (GPAI, threshold #^# FLOPs, systemic risk), Art. # (post-market monitoring), Art. # (progressive penalties).",
-   "fr": "L'utilisateur consulte les Obligations article par article du Regl. 2024/1689. Articles couverts : Art. 1 (objet), Art. 2 (champ application extraterritorial), Art. 4 (litteratie IA), Art. 5 (8 pratiques interdites, sanctions 35M ou 7%), Art. 6 (classification haut risque + Annexe III), Art. 9-17 (obligations fournisseurs : gestion risques, donnees, documentation, logs, transparence, supervision, robustesse, qualite), Art. 22 (mandataire UE hors-EU), Art. 26 (obligations deployeurs), Art. 50 (transparence interactions IA, watermarking), Art. 51-55 (GPAI, seuil 10^25 FLOPs, risque systemique), Art. 72 (surveillance post-commercialisation), Art. 99 (sanctions progressives)."
   },
   "L'utilisateur consulte les Textes reglementaires de Sentinel AI. Textes couverts : EU AI Act (Regl. #/#, JO L #, sanctions #M EUR ou #% CA), RGPD (Regl. #/#, Art. # decisions automatisees, #M EUR ou #%), NIS# (Dir. #/#, entites essentielles, #M EUR ou #%), DORA (Regl. #/#, secteur financier), Lignes directrices Art. # (Commission, # fev #), ISO # (management IA).": {
    "en": "The user is consulting the Sentinel AI Regulatory texts. Texts covered: EU AI Act (Reg. #/#, OJ L #, penalties EUR #M or #% of turnover), GDPR (Reg. #/#, Art. # automated decisions, EUR #M or #%), NIS # (Dir. #/#, essential entities, EUR #M or #%), DORA (Reg. #/#, financial sector), Art. # guidelines (Commission, # Feb #), ISO # (AI management).",

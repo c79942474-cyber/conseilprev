@@ -1,6 +1,6 @@
 {
  "_lot": "27-js-9",
- "_mots": 2496,
+ "_mots": 2472,
  "_pages": [
   "_js"
  ],
@@ -22,10 +22,6 @@
   "Déployeurs : supervision, FRIA, surveillance (Art. #, #)": {
    "en": "Deployers: oversight, FRIA, monitoring (Art. #, #)",
    "fr": "Déployeurs : supervision, FRIA, surveillance (Art. 26, 27)"
-  },
-  "Déployeurs : utiliser les systèmes conformément aux instructions fournisseur, assigner superviseurs compétents, surveiller le fonctionnement, suspendre en cas de risque, informer le fournisseur des incidents.": {
-   "en": "Deployers: use systems in accordance with the provider’s instructions, assign competent overseers, monitor operation, suspend in the event of risk, inform the provider of incidents.",
-   "fr": "Déployeurs : utiliser les systèmes conformément aux instructions fournisseur, assigner superviseurs compétents, surveiller le fonctionnement, suspendre en cas de risque, informer le fournisseur des incidents."
   },
   "Déployez des modules de formation ciblés selon le rôle (développeur, métier, dirigeant).": {
    "en": "Roll out training modules targeted by role (developer, business, executive).",

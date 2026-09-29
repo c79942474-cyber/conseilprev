@@ -1,6 +1,6 @@
 {
  "_lot": "19-js-1",
- "_mots": 2623,
+ "_mots": 2504,
  "_pages": [
   "_js"
  ],
@@ -95,11 +95,6 @@
    "en": "</strong>. Complete and adjust if necessary.",
    "fr": ". Complétez et ajustez si nécessaire.",
    "html": "</strong>. Complétez et ajustez si nécessaire."
-  },
-  ". Vous êtes donc le fournisseur de ce système au sens du règlement, et vous en portez toutes les obligations — celles listées ci-dessous.": {
-   "en": ". You are therefore the <strong>provider</strong> of this system within the meaning of the Regulation, and you bear all of its obligations — those listed below.",
-   "fr": ". Vous êtes donc le fournisseur de ce système au sens du règlement, et vous en portez toutes les obligations — celles listées ci-dessous.",
-   "html": ". Vous êtes donc le <strong>fournisseur</strong> de ce système au sens du règlement, et vous en portez toutes les obligations — celles listées ci-dessous."
   },
   ". ↓ Passage à": {
    "en": ". ↓ Moving on to <b>",
@@ -210,11 +205,6 @@
    "en": "This methodology guide will be generated for the sector <strong>",
    "fr": "Ce guide méthodologique sera généré pour le secteur",
    "html": "Ce guide méthodologique sera généré pour le secteur <strong>"
-  },
-  "Ce n'est probablement pas un système d'IA — Art. #(#)": {
-   "en": "<strong>This is probably not an AI system — Art. #(#)</strong><br>",
-   "fr": "Ce n'est probablement pas un système d'IA — Art. 3(1)",
-   "html": "<strong>Ce n'est probablement pas un système d'IA — Art. 3(1)</strong><br>"
   },
   "Ce que cela implique.": {
    "en": "<b>What this implies.</b>",
@@ -511,16 +501,6 @@
    "fr": "L'audit reste entier : les huit piliers, le questionnaire, les",
    "html": "<b>L'audit reste entier</b> : les huit piliers, le questionnaire, les"
   },
-  "L'exemption « libre et ouverte » ne s'applique pas : elle suppose une mise à disposition à titre gratuit, et": {
-   "en": "<strong>The “free and open-source” exemption does not apply</strong>: it presupposes making the product available free of charge, and",
-   "fr": "L'exemption « libre et ouverte » ne s'applique pas : elle suppose une mise à disposition à titre gratuit, et",
-   "html": "<strong>L'exemption « libre et ouverte » ne s'applique pas</strong> : elle suppose une mise à disposition à titre gratuit, et"
-  },
-  "L'exemption « libre et ouverte » paraît applicable : aucune contrepartie déclarée.": {
-   "en": "<strong>The “free and open-source” exemption appears applicable</strong>: no consideration declared.",
-   "fr": "L'exemption « libre et ouverte » paraît applicable : aucune contrepartie déclarée.",
-   "html": "<strong>L'exemption « libre et ouverte » paraît applicable</strong> : aucune contrepartie déclarée."
-  },
   "La borne :": {
    "en": "<b>The limit:</b>",
    "fr": "La borne :",
@@ -721,11 +701,6 @@
    "fr": "Pourquoi ça dure",
    "html": "<span>Pourquoi ça dure</span>"
   },
-  "Pratique interdite — Art. #Ce type de système est formellement interdit par l'EU AI Act. La mise sur le marché, la mise en service ou l'utilisation est prohibée dans toute l'UE. Amendes pouvant atteindre # M€ ou #% du CA mondial. Une refonte complète du système est nécessaire avant tout déploiement.": {
-   "en": "<strong>Prohibited practice — Art. #</strong><br>This type of system is expressly prohibited by the EU AI Act. Placing on the market, putting into service or use is prohibited throughout the EU. Fines of up to €# million or #% of worldwide turnover. A complete redesign of the system is required before any deployment.",
-   "fr": "Pratique interdite — Art. 5Ce type de système est formellement interdit par l'EU AI Act. La mise sur le marché, la mise en service ou l'utilisation est prohibée dans toute l'UE. Amendes pouvant atteindre 35 M€ ou 7% du CA mondial. Une refonte complète du système est nécessaire avant tout déploiement.",
-   "html": "<strong>Pratique interdite — Art. 5</strong><br>Ce type de système est formellement interdit par l'EU AI Act. La mise sur le marché, la mise en service ou l'utilisation est prohibée dans toute l'UE. Amendes pouvant atteindre 35 M€ ou 7% du CA mondial. Une refonte complète du système est nécessaire avant tout déploiement."
-  },
   "PrestataireCONSEILPREV — SARL au capital de # # €Christophe CERF, gérant# rue Auguste Chabrières, # ParisSIREN # # # — RCS ParisTVA : FR # # # #christophe.cerf@outlook.com": {
    "en": "<strong>Service provider</strong><br>CONSEILPREV — SARL with share capital of €# #<br>Christophe CERF, manager<br># rue Auguste Chabrières, # Paris<br>SIREN # # # — RCS Paris<br>VAT: FR # # # #<br>christophe.cerf@outlook.com",
    "fr": "PrestataireCONSEILPREV — SARL au capital de 8 000 €Christophe CERF, gérant19 rue Auguste Chabrières, 75015 ParisSIREN 494 530 157 — RCS ParisTVA : FR 24 494 530 157christophe.cerf@outlook.com",
@@ -785,11 +760,6 @@
    "en": "<strong>Carry-over of the business case — mapping</strong><br>",
    "fr": "Report du dossier de valeur — cartographie",
    "html": "<strong>Report du dossier de valeur — cartographie</strong><br>"
-  },
-  "Requalification — Art. #(#) : vous vous êtes déclaré": {
-   "en": "<strong>Reclassification — Art. #(#)</strong>: you declared yourself <em>",
-   "fr": "Requalification — Art. 25(1) : vous vous êtes déclaré",
-   "html": "<strong>Requalification — Art. 25(1)</strong> : vous vous êtes déclaré <em>"
   },
   "Retard de paiement. Articles L.#-# et D.#-# du Code de commerce : pénalités au taux de trois fois le taux d’intérêt légal et indemnité forfaitaire de recouvrement de # €.": {
    "en": "<strong>Late payment.</strong> Articles L.#-# and D.#-# of the French Commercial Code: penalties at three times the legal interest rate and a flat-rate recovery indemnity of €#.<br>",

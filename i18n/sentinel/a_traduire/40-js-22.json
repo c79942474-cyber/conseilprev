@@ -1,6 +1,6 @@
 {
  "_lot": "40-js-22",
- "_mots": 2469,
+ "_mots": 2388,
  "_pages": [
   "_js"
  ],
@@ -399,10 +399,6 @@
    "en": "Carry out a DPIA for any AI system posing a high risk to the rights of individuals",
    "fr": "Réaliser une AIPD pour tout système IA à risque élevé pour les droits des personnes"
   },
-  "Réaliser une FRIA si impact significatif sur les droits fondamentaux": {
-   "en": "Carry out a FRIA if there is a significant impact on fundamental rights",
-   "fr": "Réaliser une FRIA si impact significatif sur les droits fondamentaux"
-  },
   "Réaliser une appréciation des risques liés à l IA (clause #)": {
    "en": "Carry out an AI risk assessment (clause #)",
    "fr": "Réaliser une appréciation des risques liés à l IA (clause 6.1)"
@@ -450,10 +446,6 @@
   "Rédigez le volet environnemental en portant la couverture à côté de chaque total.": {
    "en": "Draft the environmental section, stating the coverage next to each total.",
    "fr": "Rédigez le volet environnemental en portant la couverture à côté de chaque total."
-  },
-  "Réduction PME/TPE": {
-   "en": "SME/micro-enterprise reduction",
-   "fr": "Réduction PME/TPE"
   },
   "Référence AI Act": {
    "en": "AI Act reference",
@@ -695,10 +687,6 @@
    "en": "Refrain and have it corrected",
    "fr": "S'abstenir et faire corriger"
   },
-  "S'applique aux fournisseurs mettant sur le marché de l'UE, aux déployeurs établis dans l'UE, aux fournisseurs/déployeurs établis dans un pays tiers quand les sorties du système sont utilisées dans l'UE.": {
-   "en": "Applies to providers placing on the EU market, to deployers established in the EU, and to providers/deployers established in a third country where the output of the system is used in the EU.",
-   "fr": "S'applique aux fournisseurs mettant sur le marché de l'UE, aux déployeurs établis dans l'UE, aux fournisseurs/déployeurs établis dans un pays tiers quand les sorties du système sont utilisées dans l'UE."
-  },
   "S'assurer de la pertinence des données d'entrée": {
    "en": "Ensure that the input data is relevant",
    "fr": "S'assurer de la pertinence des données d'entrée"
@@ -742,10 +730,6 @@
   "Sanctions : jusqu à #M€ ou #% du CA mondial (Art. #)": {
    "en": "Penalties: up to €#M or #% of worldwide turnover (Art. #)",
    "fr": "Sanctions : jusqu à 35M€ ou 7% du CA mondial (Art. 99)"
-  },
-  "Sanctions par États membres : jusqu'à # M€ ou #% CA mondial (Art. #), # M€ ou #% (systèmes haut risque), # M€ ou #% (autres infractions). PME : proportionnalité garantie. Le montant le plus élevé des deux seuils s'applique.": {
-   "en": "Penalties by Member State: up to €# million or #% of worldwide turnover (Art. #), €# million or #% (high-risk systems), €# million or #% (other infringements). SMEs: proportionality guaranteed. The higher of the two thresholds applies.",
-   "fr": "Sanctions par États membres : jusqu'à 35 M€ ou 7% CA mondial (Art. 5), 15 M€ ou 3% (systèmes haut risque), 7,5 M€ ou 1% (autres infractions). PME : proportionnalité garantie. Le montant le plus élevé des deux seuils s'applique."
   },
   "Sans ce dossier, aucune évaluation de conformité n’est possible — c’est la pièce dont tout le reste dépend.": {
    "en": "Without this file, no conformity assessment is possible — it is the document on which everything else depends.",

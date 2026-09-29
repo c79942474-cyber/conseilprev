@@ -1,6 +1,6 @@
 {
  "_lot": "09-cartographier-3",
- "_mots": 2324,
+ "_mots": 2177,
  "_pages": [
   "simulateur"
  ],
@@ -196,17 +196,9 @@
    "en": "Art. #(#). Verification and abstention obligations: Article #.",
    "fr": "Art. 3(7). Obligations de vérification et d'abstention : article 24."
   },
-  "Art. #(a)": {
-   "en": "Article #(a)",
-   "fr": "Art. 113(a)"
-  },
   "Art. #(b)": {
    "en": "Article #(b)",
    "fr": "Art. 113(b)"
-  },
-  "Art. #(c)": {
-   "en": "Article #(c)",
-   "fr": "Art. 113(c)"
   },
   "Art. #-#": {
    "en": "Articles #-#",
@@ -252,10 +244,6 @@
    "en": "It is an automated system",
    "fr": "C'est un système automatisé"
   },
-  "Caméras de surveillance avec reconnaissance faciale en direct": {
-   "en": "Surveillance cameras with live facial recognition",
-   "fr": "Caméras de surveillance avec reconnaissance faciale en direct"
-  },
   "Cartographier · EU AI Act": {
    "en": "Map · EU AI Act",
    "fr": "Cartographier · EU AI Act"
@@ -283,10 +271,6 @@
   "Chargement de l'audit…": {
    "en": "Loading the audit…",
    "fr": "Chargement de l'audit…"
-  },
-  "Chatbots, deepfakes, contenus générés ou manipulés, interactions IA : les entreprises doivent être prêtes. C'est l'échéance centrale.": {
-   "en": "Chatbots, deepfakes, generated or manipulated content, AI interactions: companies must be ready. This is the central deadline.",
-   "fr": "Chatbots, deepfakes, contenus générés ou manipulés, interactions IA : les entreprises doivent être prêtes. C'est l'échéance centrale."
   },
   "Chiffre d'affaires annuel mondial de votre organisation": {
    "en": "Your organisation’s worldwide annual turnover",
@@ -323,10 +307,6 @@
   "Description du cas d'usage": {
    "en": "Description of the use case",
    "fr": "Description du cas d'usage"
-  },
-  "Digital Omnibus": {
-   "en": "Digital Omnibus package",
-   "fr": "Digital Omnibus"
   },
   "Distributeur — nous le mettons à disposition sans être ni fournisseur ni importateur": {
    "en": "Distributor — we make it available without being either the provider or the importer",
@@ -399,10 +379,6 @@
   "GPAI / Données": {
    "en": "GPAI / Data",
    "fr": "GPAI / Données"
-  },
-  "Gouvernance (Chap. VII) — Modèles GPAI (Chap. V) — Autorités nationales désignées": {
-   "en": "Governance (Chapter VII) — GPAI models (Chapter V) — Designated national authorities",
-   "fr": "Gouvernance (Chap. VII) — Modèles GPAI (Chap. V) — Autorités nationales désignées"
   },
   "Génère des contenus synthétiques (texte, image, voix, vidéo)": {
    "en": "Generates synthetic content (text, image, voice, video)",
@@ -508,10 +484,6 @@
    "en": "Do you distribute it under a free and open-source licence?",
    "fr": "Le diffusez-vous sous licence libre et ouverte ?"
   },
-  "Le haut risque ne disparaît pas : son calendrier est repoussé à une date désormais fixe. Préparer la documentation technique et les FRIA.": {
-   "en": "High risk does not disappear: its timetable is pushed back to a date that is now fixed. Prepare the technical documentation and the FRIAs.",
-   "fr": "Le haut risque ne disparaît pas : son calendrier est repoussé à une date désormais fixe. Préparer la documentation technique et les FRIA."
-  },
   "Le moment où la conformité coûte le moins cher à construire.": {
    "en": "The moment when compliance is cheapest to build.",
    "fr": "Le moment où la conformité coûte le moins cher à construire."
@@ -539,14 +511,6 @@
   "Les fournisseurs de modèles généralistes sont directement concernés. Les entreprises utilisatrices doivent suivre ce que leurs fournisseurs documentent.": {
    "en": "Providers of general-purpose models are directly concerned. User companies must follow what their providers document.",
    "fr": "Les fournisseurs de modèles généralistes sont directement concernés. Les entreprises utilisatrices doivent suivre ce que leurs fournisseurs documentent."
-  },
-  "Les industriels et fabricants de produits réglementés doivent raisonner cycle de vie, conformité produit et documentation technique.": {
-   "en": "Manufacturers and makers of regulated products must think in terms of life cycle, product compliance and technical documentation.",
-   "fr": "Les industriels et fabricants de produits réglementés doivent raisonner cycle de vie, conformité produit et documentation technique."
-  },
-  "Les organisations doivent déjà former les personnes qui utilisent ou supervisent des systèmes d'IA et bannir les pratiques interdites.": {
-   "en": "Organisations must already train the people who use or oversee AI systems and ban the prohibited practices.",
-   "fr": "Les organisations doivent déjà former les personnes qui utilisent ou supervisent des systèmes d'IA et bannir les pratiques interdites."
   },
   "Les quatre types de sorties visés par la définition.": {
    "en": "The four types of output covered by the definition.",
@@ -632,10 +596,6 @@
    "en": "Obligation to inform users that they are interacting with an AI (Art. #)",
    "fr": "Obligation d'information que l'utilisateur interagit avec une IA (Art. 50.1)"
   },
-  "Obligation de marquage et de watermarking (Art. #-#)": {
-   "en": "Marking and watermarking obligation (Art. #-#)",
-   "fr": "Obligation de marquage et de watermarking (Art. 50.2-4)"
-  },
   "Obligations": {
    "en": "Obligations",
    "fr": "Obligations"
@@ -679,10 +639,6 @@
   "Oui — données sensibles (santé, biométrie, opinions politiques, origine ethnique…)": {
    "en": "Yes — sensitive data (health, biometrics, political opinions, ethnic origin…)",
    "fr": "Oui — données sensibles (santé, biométrie, opinions politiques, origine ethnique…)"
-  },
-  "Oui — identification temps réel en espace public": {
-   "en": "Yes — real-time identification in publicly accessible spaces",
-   "fr": "Oui — identification temps réel en espace public"
   },
   "Oui — je développe/fournis un modèle GPAI": {
    "en": "Yes — I develop/provide a GPAI model",
@@ -788,10 +744,6 @@
    "en": "System",
    "fr": "Système"
   },
-  "Systèmes haut risque intégrés à des produits réglementés (Annexe I : machines, jouets, dispositifs médicaux…)": {
-   "en": "High-risk systems embedded in regulated products (Annex I: machinery, toys, medical devices…)",
-   "fr": "Systèmes haut risque intégrés à des produits réglementés (Annexe I : machines, jouets, dispositifs médicaux…)"
-  },
   "Systèmes à haut risque Annexe III (biométrie, emploi, crédit, justice, migration…)": {
    "en": "Annex III high-risk systems (biometrics, employment, credit, justice, migration…)",
    "fr": "Systèmes à haut risque Annexe III (biométrie, emploi, crédit, justice, migration…)"
@@ -847,10 +799,6 @@
   "Votre système effectue-t-il un profilage de personnes physiques ?": {
    "en": "Does your system carry out profiling of natural persons?",
    "fr": "Votre système effectue-t-il un profilage de personnes physiques ?"
-  },
-  "Votre système effectue-t-il une identification biométrique à distance en temps réel dans des espaces publics ?": {
-   "en": "Does your system carry out real-time remote biometric identification in publicly accessible spaces?",
-   "fr": "Votre système effectue-t-il une identification biométrique à distance en temps réel dans des espaces publics ?"
   },
   "Votre système est-il destiné à interagir directement avec des utilisateurs finaux ?": {
    "en": "Is your system intended to interact directly with end users?",
@@ -935,10 +883,6 @@
   "⏳ # décembre #": {
    "en": "⏳ # December #",
    "fr": "⏳ 2 décembre 2027"
-  },
-  "⚡ # août #": {
-   "en": "⚡ # August #",
-   "fr": "⚡ 2 août 2026"
   },
   "✅ # août #": {
    "en": "✅ # August #",

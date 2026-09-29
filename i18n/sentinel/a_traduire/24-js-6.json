@@ -1,6 +1,6 @@
 {
  "_lot": "24-js-6",
- "_mots": 2459,
+ "_mots": 2451,
  "_pages": [
   "_js"
  ],
@@ -410,10 +410,6 @@
   "Confirmez-vous définitivement cet effacement ?": {
    "en": "Do you confirm this erasure permanently?",
    "fr": "Confirmez-vous définitivement cet effacement ?"
-  },
-  "Conformite RGPD pour les donnees personnelles utilisees (Art. #(#))": {
-   "en": "GDPR compliance for the personal data used (Art. #(#))",
-   "fr": "Conformite RGPD pour les donnees personnelles utilisees (Art. 10(5))"
   },
   "Conformité Audit": {
    "en": "Audit compliance",

@@ -1,6 +1,6 @@
 {
  "_lot": "21-js-3",
- "_mots": 2460,
+ "_mots": 2445,
  "_pages": [
   "_js"
  ],
@@ -54,10 +54,6 @@
   "Affiche les rôles de gouvernance IA définis dans votre matrice RACI, avec leur statut d assignation réel.": {
    "en": "Shows the AI governance roles defined in your RACI matrix, with their actual assignment status.",
    "fr": "Affiche les rôles de gouvernance IA définis dans votre matrice RACI, avec leur statut d assignation réel."
-  },
-  "Afficher clairement la nature IA du système lors de toute interaction": {
-   "en": "Clearly display the AI nature of the system in every interaction",
-   "fr": "Afficher clairement la nature IA du système lors de toute interaction"
   },
   "Affirmé sans méthode de mesure écrite. C’est une information, pas une mesure.": {
    "en": "Asserted without a written measurement method. It is information, not a measurement.",
@@ -238,10 +234,6 @@
   "Allocation automatique de bande passante selon la demande prevue.": {
    "en": "Automatic bandwidth allocation according to forecast demand.",
    "fr": "Allocation automatique de bande passante selon la demande prevue."
-  },
-  "Amende estimée": {
-   "en": "Estimated fine",
-   "fr": "Amende estimée"
   },
   "Analyse argumentée — qualification, lectures possibles, risque, actions, réserves — exportable en DOCX et en PDF, marquage IA porté dans les métadonnées du fichier (art. # du règlement (UE) #/#), avec le nom exact du modèle employé.": {
    "en": "Reasoned analysis — qualification, possible readings, risk, actions, reservations — exportable as DOCX and PDF, with AI marking carried in the file metadata (Article # of Regulation (EU) #/#), and the exact name of the model used.",
@@ -486,10 +478,6 @@
   "Appartenance syndicale, convictions religieuses ou philosophiques : catégories particulières de l'article # du RGPD. Un ciblage de campagne construit dessus demande une base spécifique.": {
    "en": "Trade union membership, religious or philosophical beliefs: special categories under Article # of the GDPR. Campaign targeting built on them requires a specific basis.",
    "fr": "Appartenance syndicale, convictions religieuses ou philosophiques : catégories particulières de l'article 9 du RGPD. Un ciblage de campagne construit dessus demande une base spécifique."
-  },
-  "Applicable août #": {
-   "en": "Applicable August #",
-   "fr": "Applicable août 2026"
   },
   "Application Flask/Python, hebergee sur Render (plan gratuit). Depot GitHub prive c#-cyber/conseilprev.": {
    "en": "Flask/Python application, hosted on Render (free plan). Private GitHub repository c#-cyber/conseilprev.",
