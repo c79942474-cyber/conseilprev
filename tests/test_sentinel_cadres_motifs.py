@@ -605,6 +605,7 @@ var window = {}, document = { id: 'doc' };
 var localStorage = { setItem: function (k, v) { stock[k] = v; } };
 var SENT_LANG = 'fr', SENT_LANG_CLE = 'cp-sentinel-langue-v1';
 function sentAppliquer() { ordre.push('appliquer:' + SENT_LANG); }
+function sentDateBarre() {}  /* la date de la barre du haut : peinte à part, sans rapport avec l'ordre mesuré ici */
 function sentPrevenirCadres(d, l) { ordre.push('cadres:' + (d && d.id) + ':' + l); return 0; }
 """
 

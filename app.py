@@ -17650,16 +17650,32 @@ def rgpd_audit_detail(aid):
 # Registre probant des usages d'IA : role (fournisseur / deployeur), nature du
 # contenu, marquage lisible par machine, etiquetage visible, exception invoquee
 # (oeuvre creative ; controle editorial humain) et responsable editorial.
-# Echeances : 2 aout 2026 (art. 50), 2 decembre 2026 (fin de periode
-# transitoire), 2 fevrier 2027 (interoperabilite de la detection).
+# Echeances : 2 aout 2026 (art. 50) et 2 decembre 2026 (art. 111 par. 4, ajoute
+# par le reglement (UE) 2026/1744 : marquage des systemes deja sur le marche).
+# Le 2 fevrier 2027 est la date du CODE DE BONNES PRATIQUES pour ses signataires
+# (interoperabilite du marquage, acces a la detection) : un engagement volontaire,
+# pas une echeance du reglement — le champ `cadre` les distingue, et seul le
+# cadre `reglement` alimente le compte a rebours.
 # Outillage technique ; ne constitue pas un avis juridique.
 # ══════════════════════════════════════════════════════════
 
 IA50_ECHEANCES = [
-    {'date': '2026-08-02', 'objet': 'Entree en application des obligations de transparence (art. 50) : marquage (fournisseurs) et etiquetage (deployeurs).'},
-    {'date': '2026-12-02', 'objet': 'Fin de la periode transitoire pour les systemes deja sur le marche.'},
-    {'date': '2027-02-02', 'objet': 'Solution d\'interoperabilite du marquage et acces a la detection (fournisseurs).'},
+    {'date': '2026-08-02', 'cadre': 'reglement', 'objet': 'Entree en application des obligations de transparence (art. 50) : marquage (fournisseurs) et etiquetage (deployeurs).'},
+    {'date': '2026-12-02', 'cadre': 'reglement', 'objet': 'Marquage lisible par machine (art. 50 par. 2) : fin du delai accorde aux systemes generant du contenu synthetique deja sur le marche avant le 2 aout 2026 (art. 111 par. 4).'},
+    {'date': '2027-02-02', 'cadre': 'code', 'objet': 'Date du code de bonnes pratiques pour ses signataires (interoperabilite du marquage, acces a la detection) : engagement volontaire, non une echeance du reglement.'},
 ]
+
+
+def ia50_prochaine_echeance(aujourdhui=None):
+    """La prochaine echeance DU REGLEMENT (pas celle du code volontaire), ou None.
+
+    Le compte a rebours visait le 2 aout 2026 en dur : deux mois apres, la page
+    affichait « Echeance depassee » alors qu'une echeance legale restait a venir."""
+    auj = (aujourdhui or datetime.utcnow()).date().isoformat()
+    for e in IA50_ECHEANCES:
+        if e.get('cadre') == 'reglement' and e['date'] >= auj:
+            return e
+    return None
 
 IA50_USAGES_DEFAUT = [
     {'systeme': 'Assistants conversationnels du site public (2)', 'role': 'deployeur',
@@ -18455,15 +18471,19 @@ def ia50_usages():
     total = len(rows)
     ok = sum(1 for r in rows if r.get('conforme'))
     jours = None
+    prochaine = None
     try:
-        jours = (datetime(2026, 8, 2) - datetime.utcnow()).days
+        prochaine = ia50_prochaine_echeance()
+        if prochaine:
+            jours = (datetime.strptime(prochaine['date'], '%Y-%m-%d').date() - datetime.utcnow().date()).days
     except Exception:
         jours = None
     try: conn.close()
     except Exception: pass
     return jsonify({'ok': True, 'usages': rows, 'total': total, 'conformes': ok,
                     'taux': round(100.0 * ok / max(1, total)),
-                    'jours_avant_echeance': jours, 'echeances': IA50_ECHEANCES,
+                    'jours_avant_echeance': jours, 'prochaine_echeance': prochaine,
+                    'echeances': IA50_ECHEANCES,
                     'point_cle': IA50_POINT_CLE})
 
 

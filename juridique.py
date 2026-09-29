@@ -91,8 +91,13 @@ REFERENTIEL = [
             "2 février 2025 — pratiques interdites (art. 5) et littératie en IA (art. 4)",
             "2 août 2025 — modèles à usage général (chap. V), gouvernance, sanctions",
             "2 août 2026 — application générale, dont l'art. 50 (transparence)",
+            "2 décembre 2026 — deux nouvelles pratiques interdites (art. 5(1), "
+            "points ba et bb) ; marquage des contenus synthétiques des systèmes "
+            "déjà commercialisés (art. 111(4))",
+            "2 août 2027 — modèles à usage général déjà sur le marché avant le "
+            "2 août 2025 (art. 111(3))",
             "2 décembre 2027 — systèmes à haut risque de l'annexe III "
-            "(date fixée par le Digital Omnibus)",
+            "(date fixée par le règlement (UE) 2026/1744, dit Digital Omnibus)",
             "2 août 2028 — systèmes à haut risque relevant de l'art. 6(1) "
             "(IA composant de sécurité d'un produit réglementé, annexe I)",
         ],
@@ -2377,7 +2382,7 @@ SUGGESTIONS_ARBITRAGE = [
                                    "d'infogérance, ou bloquer la signature sur les "
                                    "clauses d'audit et de réversibilité ?"},
     {"groupe": "IA", "q": "Pouvons-nous mettre en service notre outil de scoring "
-                          "avant le 2 août 2026, et à quelles conditions ?"},
+                          "avant le 2 décembre 2027, et à quelles conditions ?"},
     {"groupe": "Sortie", "q": "Sortir du contrat maintenant en payant l'indemnité, "
                               "ou aller au terme en sécurisant la réversibilité ?"},
     {"groupe": "Écart", "q": "Pouvons-nous accepter de reporter d'un an la "
