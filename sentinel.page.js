@@ -3371,7 +3371,7 @@ var ARTICLES = [
       texte:'Avant mise sur le marché d\'un système haut risque (Annexe III, hors point 2), le fournisseur ou son mandataire s\'enregistre lui-même et enregistre son système dans la base de données EU (Art. 71). Pour un système jugé non haut risque (Art. 6(3)), l\'enregistrement reste obligatoire sous une forme allégée.',
       obligations:['Enregistrer le système dans la base de données EU avant mise sur le marché','Tenir à jour les informations d\'enregistrement en cas de modification','Conserver la preuve d\'enregistrement dans le dossier de conformité'],
       url:'https://artificialintelligenceact.eu/article/49/' },
-    { num:'Art. 50', title:'Transparence — systèmes interagissant avec des personnes', status:'actif', who:['fournisseur','deployeur'], sanction:'7,5 M€ ou 1% CA mondial',
+    { num:'Art. 50', title:'Transparence — systèmes interagissant avec des personnes', status:'actif', who:['fournisseur','deployeur'], sanction:'15 M€ ou 3% CA mondial (Art. 99(4)(g))',
       texte:'Systèmes conçus pour interagir directement avec des personnes : obligation d\'information claire que l\'utilisateur interagit avec une IA. Contenus synthétiques (deepfakes, voix clonées) : marquage machine-readable obligatoire.',
       obligations:['Afficher clairement la nature IA du système lors de toute interaction','Implémenter le watermarking machine-readable pour les contenus synthétiques','Vérifier que les utilisateurs peuvent distinguer contenus réels et générés'],
       url:'https://artificialintelligenceact.eu/article/50/' },
@@ -3400,7 +3400,7 @@ var ARTICLES = [
   ]},
   { chapter:'CHAPITRE XII — Sanctions', arts:[
     { num:'Art. 99', title:'Sanctions', status:'actif', who:['fournisseur','deployeur','gpai'], sanction:'35 M€ ou 7% CA mondial (max)',
-      texte:'Sanctions par États membres : jusqu\'à 35 M€ ou 7% CA mondial (Art. 5), 15 M€ ou 3% (systèmes haut risque), 7,5 M€ ou 1% (autres infractions). PME : proportionnalité garantie. Le montant le plus élevé des deux seuils s\'applique.',
+      texte:'Amendes fixées par les États membres, jusqu\'à : 35 M€ ou 7% du CA mondial pour une pratique interdite (Art. 5 — §3) ; 15 M€ ou 3% pour les manquements des fournisseurs, mandataires, importateurs, distributeurs, déployeurs et organismes notifiés, et pour la transparence de l\'Art. 50 (§4) ; 7,5 M€ ou 1% pour des informations inexactes, incomplètes ou trompeuses fournies aux autorités (§5). Pour une entreprise, le plus ÉLEVÉ des deux plafonds s\'applique ; pour une PME ou une start-up, le plus BAS (§6) — et, depuis le règlement (UE) 2026/1744, pour une petite capitalisation intermédiaire sur les §4 et §5 (§6 bis). Les fournisseurs de modèles GPAI relèvent de l\'Art. 101 (Commission) : 15 M€ ou 3%, le plus élevé.',
       obligations:['Mettre en place une veille des délibérations des autorités nationales','Identifier l\'autorité nationale de surveillance compétente dans chaque État membre de déploiement','Budgéter le risque de conformité dans l\'analyse financière'],
       url:'https://artificialintelligenceact.eu/article/99/' },
   ]},
@@ -3869,6 +3869,63 @@ window.go = function(id){
 function addMsg(role,html){ var m=document.getElementById('chat-msgs'); if(!m) return; var init=role==='bot'?'S':'CC'; m.innerHTML+='<div class="c-msg '+role+'"><div class="c-av '+role+'">'+init+'</div><div class="c-bubble">'+html+'</div></div>'; m.scrollTop=m.scrollHeight; }
 /* doChat() moteur factice supprime avec la page Chat dediee */
 
+/* ══ SANCTIONS — SOURCE UNIQUE : l'article 99 du règlement (UE) 2024/1689 ═════
+   CE QUI A ÉTÉ TROUVÉ, LE 29 SEPTEMBRE 2026, EN CONFRONTANT SENTINEL À
+   L'INFOGRAPHIE « AI ACT » PUIS AU TEXTE. Deux calculs de sanction, deux
+   défauts, et aucun test :
+   — le calculateur écrivait `Math.min(ca * pct, plafond_fixe)` : il rendait le
+     plus BAS des deux plafonds à toute entreprise. Or l'article 99 dit, pour
+     une entreprise, « le plus ÉLEVÉ » des deux (§3, §4, §5) ; le plus bas ne
+     vaut que pour les PME et les start-up (§6) et, depuis le règlement (UE)
+     2026/1744, pour les petites capitalisations intermédiaires — sur les seuls
+     §4 et §5 (§6 bis). Pour une pratique interdite et 50 M€ de chiffre
+     d'affaires, il affichait 3,5 M€ là où le plafond légal est 35 M€ ;
+   — il ajoutait une « majoration récidive × 1,5 » et des plafonds PME/TPE à 50 %
+     et 25 % que le règlement ne contient pas ;
+   — le simulateur, lui, rangeait la transparence de l'article 50 à 7,5 M€ / 1,5 %
+     (l'article 99(4)(g) la range à 15 M€ / 3 %), accordait le plus élevé des
+     deux plafonds à une PME, et affichait « 8 M€ » pour 7,5 M€.
+   Deux consommateurs, deux arithmétiques : la même dérive qu'entre les deux
+   calendriers. Il n'y a donc plus qu'UNE table et UNE fonction, lues par le
+   simulateur et par le calculateur.
+
+   ICI, LE RÈGLEMENT ET RIEN D'AUTRE. Ni majoration, ni réduction forfaitaire :
+   ce que l'autorité prononce se fixe SOUS le plafond, d'après l'article 99(7).
+   L'article 101 (fournisseurs de modèles GPAI, amende de la Commission) a son
+   propre plafond — 3 % ou 15 M€, le plus élevé — et ne connaît pas la règle
+   des PME de l'article 99(6). */
+var AI_ACT_SANCTIONS = {
+  interdit:     { art:'Art. 99(3)',    fixe:35000000, pct:0.07, pme:true,  smc:false,
+                  objet:'pratique interdite (Art. 5)' },
+  obligations:  { art:'Art. 99(4)',    fixe:15000000, pct:0.03, pme:true,  smc:true,
+                  objet:'manquement d\'un fournisseur, mandataire, importateur, distributeur, déployeur ou organisme notifié (Art. 16, 22 à 26, 31, 33, 34 ; Art. 25(2) et (4))' },
+  transparence: { art:'Art. 99(4)(g)', fixe:15000000, pct:0.03, pme:true,  smc:true,
+                  objet:'obligation de transparence (Art. 50)' },
+  info:         { art:'Art. 99(5)',    fixe:7500000,  pct:0.01, pme:true,  smc:true,
+                  objet:'informations inexactes, incomplètes ou trompeuses fournies aux autorités' },
+  gpai:         { art:'Art. 101',      fixe:15000000, pct:0.03, pme:false, smc:false,
+                  objet:'fournisseur de modèle d\'IA à usage général (amende de la Commission)' }
+};
+/* `taille` : 'tpe' ou 'pme' (PME au sens de la recommandation 2003/361/CE, start-up
+   comprises), 'smc' (petite capitalisation intermédiaire, recommandation (UE)
+   2025/1099 : moins de 750 personnes et CA ≤ 150 M€ ou bilan ≤ 129 M€), toute
+   autre valeur : entreprise sans allègement. */
+function aiActSanctionMax(palier, ca, taille){
+  var p = AI_ACT_SANCTIONS[palier];
+  if(!p) return null;
+  var surCa = Math.round(ca * p.pct);
+  var pme = p.pme && (taille === 'tpe' || taille === 'pme');
+  var smc = !pme && p.smc && taille === 'smc';
+  var bas = pme || smc;
+  return { palier:palier, art:p.art, objet:p.objet, fixe:p.fixe, pct:p.pct, sur_ca:surCa,
+           regle: bas ? 'plus_bas' : 'plus_haut',
+           regle_art: pme ? 'Art. 99(6)' : smc ? 'Art. 99(6a)' : p.art,
+           max: bas ? Math.min(p.fixe, surCa) : Math.max(p.fixe, surCa) };
+}
+window.AI_ACT_SANCTIONS = AI_ACT_SANCTIONS;
+window.aiActSanctionMax = aiActSanctionMax;
+/* ══ FIN SANCTIONS — SOURCE UNIQUE ══ */
+
 /* ══════════════════════════════════════════════════════
    SIMULATEUR AI ACT — Logique complète
    Règlement (UE) 2024/1689 du 13 juin 2024
@@ -4061,10 +4118,19 @@ function simGetCheckboxes(groupId){
   return checked;
 }
 
+/* La référence de sanction d'un niveau, LUE dans la source unique : plus aucun
+   montant ni numéro de paragraphe écrit à la main dans la classification. */
+function simSanctionsRef(palier){
+  var p = AI_ACT_SANCTIONS[palier];
+  return { max_pct: Math.round(p.pct*100) + '% du CA mondial',
+           max_flat: String(p.fixe).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' €',
+           art: p.art };
+}
+
 /* ══ MOTEUR DE CLASSIFICATION ══ */
 function simClassify(){
   var d = SIM_DATA;
-  var result = { level: 'minimal', score: 2.0, art5: false, article: 'Aucune classification à risque particulière', color: 'var(--green)', badge: 'RISQUE MINIMAL', obligations: [], gaps: [], sanctions: {}, timeline: [] };
+  var result = { level: 'minimal', score: 2.0, art5: false, article: 'Aucune classification à risque particulière', color: 'var(--green)', badge: 'RISQUE MINIMAL', obligations: [], gaps: [], sanctions: simSanctionsRef('info'), timeline: [] };
 
   /* Art. 5 — Pratiques interdites */
   var isInterdit = false;
@@ -4079,7 +4145,7 @@ function simClassify(){
     result.article = 'Art. 5 — Pratiques interdites';
     result.color = '#8B0000';
     result.badge = 'PRATIQUE INTERDITE';
-    result.sanctions = { max_pct: '7% du CA mondial', max_flat: '35 000 000 €', art: 'Art. 99(3)' };
+    result.sanctions = simSanctionsRef('interdit');
     return result;
   }
 
@@ -4109,7 +4175,7 @@ function simClassify(){
     result.article = 'Art. 6(2) + Annexe III';
     result.color = 'var(--accent)';
     result.badge = 'HAUT RISQUE';
-    result.sanctions = { max_pct: '3% du CA mondial', max_flat: '15 000 000 €', art: 'Art. 99(2)' };
+    result.sanctions = simSanctionsRef('obligations');
     if(['bio','infra','law','migration'].includes(d.secteur)){
       result.score = Math.min(9.5, result.score + 0.5);
     }
@@ -4119,7 +4185,7 @@ function simClassify(){
     result.article = 'Art. 50 — Transparence';
     result.color = 'var(--orange)';
     result.badge = 'RISQUE LIMITE';
-    result.sanctions = { max_pct: '1% du CA mondial', max_flat: '7 500 000 €', art: 'Art. 99(4)' };
+    result.sanctions = simSanctionsRef('transparence');
   } else {
     result.score = d.impact === 'groupe' ? 3.2 : 2.0;
   }
@@ -4420,17 +4486,41 @@ function simTimeline(classif){
   });
 }
 
-/* Calcul des sanctions */
+/* Calcul des sanctions — LIT LA SOURCE UNIQUE (AI_ACT_SANCTIONS, plus haut).
+   Le niveau du simulateur désigne le palier de l'article 99 : une pratique
+   interdite relève du §3, un système à haut risque du §4 (manquements des
+   opérateurs), la transparence de l'article 50 du §4(g) — 15 M€ / 3 %, pas
+   7,5 M€ / 1 % —, et un système à risque minimal n'encourt que le §5
+   (informations inexactes fournies aux autorités), faute d'obligation propre.
+   La taille ne se lit pas seulement dans le chiffre d'affaires : le seuil des
+   PME tient aussi à l'effectif et au bilan. Les deux tranches basses sont
+   traitées en PME ; la tranche « ETI » reçoit le plafond sans allègement et,
+   quand un allègement est POSSIBLE (petite capitalisation intermédiaire), le
+   dit — sans l'appliquer d'office, puisque l'effectif n'est pas connu ici. */
 function simSanctions(classif){
   var ca_map = { startup:5000000, sme:30000000, mid:150000000, large:500000000, xlarge:2000000000 };
   var ca = ca_map[SIM_DATA.ca] || 50000000;
-  var pct_map = { interdit:0.07, haut:0.03, limite:0.015, minimal:0.01 };
-  var pct = pct_map[classif.level] || 0.01;
-  var flat_map = { interdit:35000000, haut:15000000, limite:7500000, minimal:7500000 };
-  var flat = flat_map[classif.level] || 7500000;
-  var maxSanc = Math.max(ca * pct, flat);
-  function fmt(n){ if(n>=1000000000) return (n/1000000000).toFixed(1)+' Mds€'; if(n>=1000000) return (n/1000000).toFixed(0)+' M€'; return (n/1000).toFixed(0)+' K€'; }
-  return { sanction_ca: fmt(ca * pct), sanction_flat: fmt(flat), sanction_max: fmt(maxSanc), pct: Math.round(pct*100)+'%' };
+  var palier = { interdit:'interdit', haut:'obligations', limite:'transparence' }[classif.level] || 'info';
+  var taille = (SIM_DATA.ca === 'startup' || SIM_DATA.ca === 'sme') ? 'pme' : 'eti';
+  var s = aiActSanctionMax(palier, ca, taille);
+  function fmt(n){
+    if(n>=1000000000) return String(Math.round(n/100000000)/10).replace('.',',')+' Mds€';
+    if(n>=1000000) return String(Math.round(n/100000)/10).replace('.',',')+' M€';
+    return Math.round(n/1000)+' K€';
+  }
+  var notes = ['Ces montants sont des plafonds : l\'autorité fixe l\'amende en dessous, d\'après l\'Art. 99(7).'];
+  if(s.regle === 'plus_bas') notes.push('PME et start-up : le plus bas des deux plafonds s\'applique (Art. 99(6)).');
+  if(taille === 'eti' && SIM_DATA.ca === 'mid' && AI_ACT_SANCTIONS[palier].smc){
+    notes.push('Si l\'organisation est une petite capitalisation intermédiaire (moins de 750 personnes, CA ≤ 150 M€ ou bilan ≤ 129 M€), le plafond est le plus bas des deux : '
+      + fmt(aiActSanctionMax(palier, ca, 'smc').max) + ' (Art. 99(6a)).');
+  }
+  if(palier === 'info') notes.push('Ce niveau n\'appelle aucune obligation propre : seule l\'amende de l\'Art. 99(5) reste encourue, pour des informations inexactes fournies à une autorité.');
+  notes.push('Les amendes de l\'article 99 sont applicables depuis le 2 août 2025 (Art. 113(b)).');
+  return { sanction_ca: fmt(s.sur_ca), sanction_flat: fmt(s.fixe), sanction_max: fmt(s.max),
+           pct: Math.round(s.pct*100)+'%', max_eur: s.max, art: s.art, objet: s.objet, palier: palier,
+           regle: s.regle, regle_art: s.regle_art,
+           regle_txt: s.regle === 'plus_bas' ? 'Le plus bas des deux plafonds s\'applique (PME, Art. 99(6))' : 'Le plus élevé des deux plafonds s\'applique',
+           note: notes.join(' ') };
 }
 
 /* ══ RENDU ══ */
@@ -4573,9 +4663,9 @@ function simRender(){
     +'<div class="sim-obl-title">Sanctions applicables — Art. 99</div>'
     +'<div class="sim-sanctions-box">'
     +'<div class="sim-sanc-item"><div class="sim-sanc-lbl">Sanction max (% CA)</div><div class="sim-sanc-val">'+sanc.sanction_ca+'</div><div style="font-size:9px;font-family:var(--mono);color:var(--muted2)">'+sanc.pct+' du CA mondial</div></div>'
-    +'<div class="sim-sanc-item"><div class="sim-sanc-lbl">Sanction fixe max</div><div class="sim-sanc-val">'+sanc.sanction_flat+'</div><div style="font-size:9px;font-family:var(--mono);color:var(--muted2)">'+classif.sanctions.art+'</div></div>'
-    +'<div class="sim-sanc-item"><div class="sim-sanc-lbl">Exposition maximale estimée</div><div class="sim-sanc-val" style="font-size:24px">'+sanc.sanction_max+'</div><div style="font-size:9px;font-family:var(--mono);color:var(--muted2)">Le plus élevé des deux plafonds s\'applique</div></div>'
-    +'<div class="sim-sanc-item"><div class="sim-sanc-lbl">Note</div><div style="font-size:10px;color:var(--muted);line-height:1.5;margin-top:4px">Les PME bénéficient d\'une proportionnalité (Art. 99.1). Les sanctions sont effectives depuis août 2025.</div></div>'
+    +'<div class="sim-sanc-item"><div class="sim-sanc-lbl">Sanction fixe max</div><div class="sim-sanc-val">'+sanc.sanction_flat+'</div><div style="font-size:9px;font-family:var(--mono);color:var(--muted2)">'+sanc.art+'</div></div>'
+    +'<div class="sim-sanc-item"><div class="sim-sanc-lbl">Exposition maximale estimée</div><div class="sim-sanc-val" style="font-size:24px">'+sanc.sanction_max+'</div><div style="font-size:9px;font-family:var(--mono);color:var(--muted2)">'+sanc.regle_txt+'</div></div>'
+    +'<div class="sim-sanc-item"><div class="sim-sanc-lbl">Note</div><div style="font-size:10px;color:var(--muted);line-height:1.5;margin-top:4px">'+sanc.note+'</div></div>'
     +'</div>'
 
     + (typeof window.simBuildIntlComparison === 'function' ? window.simBuildIntlComparison(classif) : '')
@@ -4619,21 +4709,24 @@ var SYSTEMS=[{ico:'⚡',name:'Système de prédiction énergétique',type:'Préd
 
 function calcSanctions(){
   var type=document.getElementById('s-type').value; var ca=parseFloat(document.getElementById('s-ca').value)||50000000;
-  var size=document.getElementById('s-size').value; var rec=document.getElementById('s-recid').value;
-  // Montants verifies mot pour mot contre le texte officiel du Reglement (UE) 2024/1689, Art. 99 :
-  // §3 = pratiques interdites Art.5 (35M€/7%) ; §4 = la plupart des autres manquements,
-  // dont obligations fournisseurs Art.16, deployeurs Art.26, transparence Art.50 (15M€/3%) ;
-  // §5 = informations incorrectes/incompletes/trompeuses aux autorites (7,5M€/1%).
-  var pct={interdit:0.07,haut:0.03,transparence:0.03,info:0.01}[type];
-  var flat={interdit:35000000,haut:15000000,transparence:15000000,info:7500000}[type];
-  var label={interdit:'Pratique interdite — Art. 99 §3 (renvoie à l\'Art. 5)',haut:'Système haut risque non conforme — Art. 99 §4 (renvoie à l\'Art. 16)',transparence:'Obligation de transparence — Art. 99 §4 (renvoie à l\'Art. 50)',info:'Informations incorrectes, incomplètes ou trompeuses — Art. 99 §5'}[type];
-  var max=Math.min(ca*pct,flat);
-  if(size==='pme') max=Math.min(max,flat*0.5); if(size==='tpe') max=Math.min(max,flat*0.25);
-  if(rec==='oui') max=Math.min(max*1.5,flat);
+  var size=document.getElementById('s-size').value;
+  // Tout le calcul vient de la source unique (AI_ACT_SANCTIONS / aiActSanctionMax, plus haut) :
+  // §3 = pratiques interdites Art.5 (35M€/7%) ; §4 = obligations des fournisseurs, mandataires,
+  // importateurs, distributeurs, déployeurs, organismes notifiés, et transparence Art.50 (15M€/3%) ;
+  // §5 = informations incorrectes/incomplètes/trompeuses aux autorités (7,5M€/1%) ; Art.101 = GPAI (15M€/3%).
+  // « Le plus élevé des deux » pour une entreprise ; « le plus bas » pour PME/start-up (§6) et,
+  // sur les §4 et §5 seulement, pour les petites capitalisations intermédiaires (§6 bis).
+  // Ni majoration de récidive ni plafond PME forfaitaire : le règlement n'en contient pas.
+  var palier={interdit:'interdit',haut:'obligations',transparence:'transparence',info:'info',gpai:'gpai'}[type];
+  var s=aiActSanctionMax(palier,ca,size);
+  var eur=function(n){ return new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(n); };
+  var regle=s.regle==='plus_bas'
+    ? 'Le plus bas des deux plafonds — '+s.regle_art+(s.regle_art==='Art. 99(6)'?' (PME, start-up)':' (petite capitalisation intermédiaire)')
+    : 'Le plus élevé des deux plafonds — '+s.art;
   var r=document.getElementById('sanc-result');
-  document.getElementById('sanc-amount').textContent=new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(max);
-  document.getElementById('sanc-basis-txt').textContent=label;
-  document.getElementById('sanc-details').innerHTML=[['Plafond % CA',new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(ca*pct)],['Plafond fixe',new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(flat)],['Réduction PME/TPE',size==='ge'?'—':'Applicable'],['Majoration récidive',rec==='oui'?'× 1,5 (plafonné)':'—'],['Amende estimée',new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(max)]].map(function(r){ return '<div class="sanc-detail-row"><div>'+r[0]+'</div><div>'+r[1]+'</div></div>'; }).join('');
+  document.getElementById('sanc-amount').textContent=eur(s.max);
+  document.getElementById('sanc-basis-txt').textContent=s.art+' — '+s.objet;
+  document.getElementById('sanc-details').innerHTML=[['Plafond % CA ('+Math.round(s.pct*100)+' %)',eur(s.sur_ca)],['Plafond fixe',eur(s.fixe)],['Règle de plafonnement',regle],['Plafond applicable',eur(s.max)],['Montant effectif','Fixé sous ce plafond — Art. 99(7)']].map(function(r){ return '<div class="sanc-detail-row"><div>'+r[0]+'</div><div>'+r[1]+'</div></div>'; }).join('');
   r.classList.add('on'); r.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
@@ -5245,7 +5338,7 @@ var SOURCES_DATA = {
     items: [
       { type:"Texte source", label:"Reglement (UE) 2024/1689 — texte integral", detail:"PDF officiel fourni par le client, extrait via pdftotext. Articles couverts par le moteur : 1, 2, 3, 4, 5, 6, 9 a 17, 22, 50, 51, 53, 55, 99." },
       { type:"Calcul", label:"Moteur de classification (simClassify)", detail:"Regles deduites du texte officiel par CONSEILPREV. Outil de pre-diagnostic, ne remplace pas un audit juridique formel." },
-      { type:"Calcul", label:"Calcul des sanctions (simSanctions)", detail:"Bareme Art. 99 (35M EUR / 7%, 15M EUR / 3%, 7,5M EUR / 1%) applique a la tranche de CA declaree par l utilisateur (tranches simplifiees, non verifiees)." }
+      { type:"Calcul", label:"Calcul des sanctions (simSanctions)", detail:"Bareme Art. 99 (35M EUR / 7%, 15M EUR / 3%, 7,5M EUR / 1%) applique a la tranche de CA declaree par l utilisateur (tranches simplifiees, non verifiees) : le plus eleve des deux plafonds, le plus bas pour les PME (Art. 99(6))." }
     ]
   },
   "audit": {
@@ -13658,12 +13751,11 @@ window.histoSaveSanctions = function(){
   var type = document.getElementById('s-type').value;
   var ca = document.getElementById('s-ca').value;
   var size = document.getElementById('s-size').value;
-  var rec = document.getElementById('s-recid').value;
   var amount = document.getElementById('sanc-amount').textContent;
   var basis = document.getElementById('sanc-basis-txt').textContent;
 
   window.histoSave('sanctions', 'Calcul d exposition aux sanctions',
-    {type_infraction: type, ca: ca+'€', taille_entreprise: size, recidive: rec},
+    {type_infraction: type, ca: ca+'€', taille_entreprise: size},
     {amende_estimee: amount, base_legale: basis},
     'Sanctions — ' + basis + ' (' + amount + ')'
   ).then(function(r){
