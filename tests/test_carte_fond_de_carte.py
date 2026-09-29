@@ -103,6 +103,45 @@ def test_le_serveur_sert_reellement_la_bibliotheque(chemin, type_attendu):
 
 # ── 2. LE FOND DE CARTE A UN SUPPLÉANT ───────────────────────────────────────
 
+#: LES SERVICES DE TUILES QUI EXIGENT UNE CLÉ. CARTO a fermé son service
+#: libre : ses serveurs répondent 200, et l'image porte « API KEY REQUIRED »
+#: en filigrane. Une panne qui répond 200 n'est pas une panne pour le
+#: navigateur — aucun « tileerror » ne se déclenche, donc AUCUN suppléant ne
+#: peut la rattraper. La seule parade est de ne pas en dépendre, et c'est
+#: cette liste qui le fait tenir.
+SERVICES_A_CLE = ['cartocdn.com', 'basemaps.carto', 'api.mapbox.com',
+                  'tiles.stadiamaps.com', 'maptiler.com', 'thunderforest.com',
+                  'api.os.uk', 'here.com']
+MARQUEURS_DE_CLE = ['{apikey}', 'apikey=', 'api_key=', 'access_token=', 'key=']
+
+
+def _fonds_declares():
+    return re.findall(r"url:'(https://[^']+)'", MAP_JS)
+
+
+def test_aucun_fond_de_carte_n_exige_de_cle_d_api():
+    """Le défaut vu à l'écran : 46 pastilles posées sur un damier de filigranes
+    « API KEY REQUIRED », sans aucune géographie."""
+    fautifs = [u for u in _fonds_declares()
+               if any(h in u.lower() for h in SERVICES_A_CLE)
+               or any(m in u.lower() for m in MARQUEURS_DE_CLE)]
+    assert not fautifs, (
+        'fond(s) de carte servis par un service qui exige une clé : %s — les '
+        'tuiles reviendront en 200 avec un filigrane, et aucun suppléant ne '
+        'se déclenchera' % fautifs)
+
+
+def test_le_calque_des_tuiles_est_desature_pour_laisser_la_couleur_aux_pastilles():
+    """Les tuiles libres sont en couleurs, et la carte se LIT par la couleur
+    des pastilles. Le filtre porte sur le calque des tuiles seul."""
+    import re as _re
+    m = _re.search(r'\.leaflet-tile-pane\s*\{([^}]*)\}', MAP_HTML)
+    assert m, 'aucun filtre sur le calque des tuiles : le fond concurrence les pastilles'
+    regle = m.group(1)
+    assert 'grayscale' in regle, regle
+    assert 'filter' in regle, regle
+
+
 def test_le_fond_de_carte_declare_au_moins_deux_fournisseurs():
     urls = re.findall(r"url:'(https://[^']+)'", MAP_JS)
     assert len(urls) >= 2, 'un seul fond déclaré : une panne du fournisseur vide la carte'
@@ -157,14 +196,15 @@ console.log(JSON.stringify({ poses: poses, notes: notes }));
 def test_le_premier_fond_est_pose_sans_rien_attendre():
     r = _fond([''])
     assert len(r['poses']) == 1, 'aucun fond posé au démarrage : %s' % r
-    assert 'cartocdn' in r['poses'][0]
+    assert r['poses'][0] == _fonds_declares()[0]
     assert r['notes'] == [], 'une note de repli s’affiche alors que rien n’a échoué'
 
 
 def test_quatre_tuiles_refusees_sans_une_seule_arrivee_font_passer_au_suppleant():
     r = _fond(['kkkk'])
     assert len(r['poses']) == 2, 'le suppléant n’a pas pris le relais : %s' % r['poses']
-    assert 'openstreetmap.org' in r['poses'][1]
+    assert r['poses'][1] == _fonds_declares()[1]
+    assert r['poses'][1] != r['poses'][0]
 
 
 def test_trois_refus_ne_suffisent_pas_a_quitter_un_fournisseur():

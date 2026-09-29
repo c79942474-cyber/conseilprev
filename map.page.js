@@ -24,7 +24,21 @@ if (typeof L === 'undefined') {
 } else {
 var map = L.map('map',{center:[38,15],zoom:2.4,minZoom:2,maxZoom:7,scrollWheelZoom:false});
 
-/* ── LE FOND DE CARTE A UN SUPPLEANT ─────────────────────────────────────────
+/* ── AUCUN FOND NE DOIT EXIGER DE CLE ────────────────────────────────────────
+   CARTO a ferme son service de tuiles libre : ses serveurs repondent toujours
+   200, mais l'image rendue porte « API KEY REQUIRED / carto.com/basemaps/apikey »
+   en filigrane. Vu a l'ecran : les 46 juridictions posees sur un damier de
+   filigranes, sans aucune geographie. Et comme la tuile ARRIVE, aucun
+   « tileerror » ne se declenche : un suppleant arme sur l'echec ne pouvait
+   pas rattraper ce cas — une panne qui repond 200 n'est pas une panne pour le
+   navigateur. La seule parade est de ne plus dependre d'un service qui exige
+   une cle : les deux fonds declares sont ceux d'OpenStreetMap, libres et sans
+   inscription, cites comme leur licence l'exige.
+   Le style d'OSM est en couleurs la ou CARTO servait un gris clair ; la
+   feuille de style de la page le desature (voir « .leaflet-tile-pane ») pour
+   que les pastilles de score restent le seul element colore de la carte.
+
+   ── LE FOND DE CARTE A UN SUPPLEANT ─────────────────────────────────────────
    Un seul fournisseur de tuiles etait cable en dur. Quand il ne repond pas —
    panne, changement de politique, blocage reseau chez le visiteur — les
    marqueurs restent affiches sur du vide : la carte du monde disparait sans
@@ -39,12 +53,12 @@ var map = L.map('map',{center:[38,15],zoom:2.4,minZoom:2,maxZoom:7,scrollWheelZo
    zoom — et une mention discrete dit pourquoi le fond manque, au lieu de
    laisser croire a un bug. */
 var FONDS = [
-  { url:'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-    opts:{ attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
-           subdomains:'abcd', maxZoom:19 } },
   { url:'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
     opts:{ attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-           maxZoom:19 } }
+           maxZoom:19 } },
+  { url:'https://tile.openstreetmap.de/{z}/{x}/{y}.png',
+    opts:{ attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+           maxZoom:18 } }
 ];
 var fondCouche = null;
 function fondPoser(i){

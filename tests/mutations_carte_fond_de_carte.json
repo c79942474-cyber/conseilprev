@@ -35,15 +35,15 @@
   {
    "nom": "le suppléant du fond de carte disparaît",
    "fichier": "map.page.js",
-   "avant": "  { url:'https://tile.openstreetmap.org/{z}/{x}/{y}.png',\n    opts:{ attribution:'&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a>',\n           maxZoom:19 } }\n",
+   "avant": "  { url:'https://tile.openstreetmap.de/{z}/{x}/{y}.png',\n    opts:{ attribution:'&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a>',\n           maxZoom:18 } }\n",
    "apres": "",
    "regle": "test_le_fond_de_carte_declare_au_moins_deux_fournisseurs"
   },
   {
    "nom": "les deux fonds déclarés viennent du même hôte",
    "fichier": "map.page.js",
-   "avant": "  { url:'https://tile.openstreetmap.org/{z}/{x}/{y}.png',",
-   "apres": "  { url:'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',",
+   "avant": "  { url:'https://tile.openstreetmap.de/{z}/{x}/{y}.png',",
+   "apres": "  { url:'https://tile.openstreetmap.org/{z}/{x}/{y}.png',",
    "regle": "test_le_fond_de_carte_declare_au_moins_deux_fournisseurs"
   },
   {
@@ -122,6 +122,34 @@
    "avant": "+ '<a href=\"/panorama#s-carte\" style=\"display:inline-block;font-size:13px;font-weight:600;'",
    "apres": "+ '<a href=\"#\" style=\"display:inline-block;font-size:13px;font-weight:600;'",
    "regle": "test_le_repli_sans_bibliotheque_n_accuse_plus_un_domaine_qui_n_est_plus_utilise"
+  },
+  {
+   "nom": "le fond principal repart chez un service qui exige une clé",
+   "fichier": "map.page.js",
+   "avant": "  { url:'https://tile.openstreetmap.org/{z}/{x}/{y}.png',\n    opts:{ attribution:'&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a>',\n           maxZoom:19 } },",
+   "apres": "  { url:'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',\n    opts:{ attribution:'&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a>',\n           subdomains:'abcd', maxZoom:19 } },",
+   "regle": "test_aucun_fond_de_carte_n_exige_de_cle_d_api"
+  },
+  {
+   "nom": "le suppléant réclame une clé dans son adresse",
+   "fichier": "map.page.js",
+   "avant": "  { url:'https://tile.openstreetmap.de/{z}/{x}/{y}.png',",
+   "apres": "  { url:'https://tile.openstreetmap.de/{z}/{x}/{y}.png?apikey=abc',",
+   "regle": "test_aucun_fond_de_carte_n_exige_de_cle_d_api"
+  },
+  {
+   "nom": "le calque des tuiles cesse d'être désaturé",
+   "fichier": "map.html",
+   "avant": ".leaflet-tile-pane{filter:grayscale(1) contrast(.9) brightness(1.08) opacity(.62)}",
+   "apres": ".leaflet-tile-pane{opacity:.62}",
+   "regle": "test_le_calque_des_tuiles_est_desature_pour_laisser_la_couleur_aux_pastilles"
+  },
+  {
+   "nom": "le filtre quitte le calque des tuiles pour toute la carte",
+   "fichier": "map.html",
+   "avant": ".leaflet-tile-pane{filter:grayscale(1)",
+   "apres": ".leaflet-container{filter:grayscale(1)",
+   "regle": "test_le_calque_des_tuiles_est_desature_pour_laisser_la_couleur_aux_pastilles"
   }
  ]
 }
