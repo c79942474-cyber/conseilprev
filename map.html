@@ -9,13 +9,21 @@
      qu'une URL nue. -->
 <title>Carte des acteurs IA, Data et Cyber en France — CONSEILPREV</title>
 <meta name="description" content="Carte interactive des acteurs de l'IA, de la donnee et de la cybersecurite en France : implantations, ecosystemes et donnees publiques ouvertes, par CONSEILPREV.">
-<!-- Preconnexion : la bibliotheque vient d'unpkg, les tuiles de CARTO.
-     Etablir DNS + TLS des maintenant evite deux allers-retours au moment
-     ou le navigateur rencontre enfin les balises qui en ont besoin. -->
-<link rel="preconnect" href="https://unpkg.com" crossorigin>
+<!-- LA BIBLIOTHEQUE EST SERVIE PAR CE SITE, PLUS PAR UN TIERS.
+     Elle venait d'unpkg.com. Mesure au navigateur : unpkg injoignable, et
+     `map.page.js` affiche son repli « la carte n'a pas pu se charger » —
+     le fond de carte disparait entierement pour une panne, un blocage
+     reseau ou un bloqueur de publicite chez le visiteur, alors qu'aucune
+     donnee ne manquait. Leaflet 1.9.4 (licence BSD 2-Clause, LICENSE
+     conserve dans vendor/leaflet/) est donc copie dans le depot et servi
+     depuis la meme origine que la page. Il ne reste qu'une dependance
+     tierce, les TUILES, et `map.page.js` sait desormais en changer.
+     Les images des marqueurs sont resolues par la feuille de style,
+     relativement a elle : vendor/leaflet/images/. -->
 <link rel="preconnect" href="https://a.basemaps.cartocdn.com" crossorigin>
 <link rel="dns-prefetch" href="https://b.basemaps.cartocdn.com">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="dns-prefetch" href="https://tile.openstreetmap.org">
+<link rel="stylesheet" href="/vendor/leaflet/leaflet.css"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html,body,#map{width:100%;height:100vh}
@@ -148,7 +156,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 <body>
 <div id="map"></div>
 <div class="map-count-badge" id="map-count">— juridictions</div>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="/vendor/leaflet/leaflet.js"></script>
 <script src="/map.page.js" defer></script>
 <script src="/fleches.js" defer></script>
   <script src="/guide.js" defer></script>

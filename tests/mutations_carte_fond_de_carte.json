@@ -1,0 +1,127 @@
+{
+ "_pourquoi": "Chaque mutation FABRIQUE un défaut réel de la carte mondiale des régulations IA — la bibliothèque qui repart chez un tiers, le fond de carte sans suppléant, une bascule qui se décide mal, un échec total qui ne se dit pas — et doit faire TOMBER la règle nommée de tests/test_carte_fond_de_carte.py. Une mutation qui survit dit que la règle ne mesure pas ce qu'elle prétend ; une mutation qui fait tomber une AUTRE règle dit que la règle nommée vise à côté.",
+ "cibles": [
+  "tests/test_carte_fond_de_carte.py"
+ ],
+ "mutations": [
+  {
+   "nom": "la bibliothèque repart chez unpkg",
+   "fichier": "map.html",
+   "avant": "<script src=\"/vendor/leaflet/leaflet.js\"></script>",
+   "apres": "<script src=\"https://unpkg.com/leaflet@1.9.4/dist/leaflet.js\"></script>",
+   "regle": "test_la_page_de_la_carte_ne_va_plus_chercher_sa_bibliotheque_chez_un_tiers"
+  },
+  {
+   "nom": "la feuille de style de la bibliothèque n'est plus chargée",
+   "fichier": "map.html",
+   "avant": "<link rel=\"stylesheet\" href=\"/vendor/leaflet/leaflet.css\"/>",
+   "apres": "<link rel=\"stylesheet\" href=\"/vendor/leaflet/absente.css\"/>",
+   "regle": "test_la_page_de_la_carte_charge_la_bibliotheque_de_la_meme_origine[/vendor/leaflet/leaflet.css]"
+  },
+  {
+   "nom": "le script de la bibliothèque n'est plus chargé",
+   "fichier": "map.html",
+   "avant": "<script src=\"/vendor/leaflet/leaflet.js\"></script>",
+   "apres": "<script src=\"/vendor/leaflet/absent.js\"></script>",
+   "regle": "test_la_page_de_la_carte_charge_la_bibliotheque_de_la_meme_origine[/vendor/leaflet/leaflet.js]"
+  },
+  {
+   "nom": "la bibliothèque copiée perd l'en-tête qui dit sa version",
+   "fichier": "vendor/leaflet/leaflet.js",
+   "avant": " * Leaflet 1.9.4, a JS library for interactive maps. https://leafletjs.com",
+   "apres": " * Leaflet, a JS library for interactive maps. https://leafletjs.com",
+   "regle": "test_la_bibliotheque_copiee_porte_sa_version_et_sa_licence"
+  },
+  {
+   "nom": "le suppléant du fond de carte disparaît",
+   "fichier": "map.page.js",
+   "avant": "  { url:'https://tile.openstreetmap.org/{z}/{x}/{y}.png',\n    opts:{ attribution:'&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a>',\n           maxZoom:19 } }\n",
+   "apres": "",
+   "regle": "test_le_fond_de_carte_declare_au_moins_deux_fournisseurs"
+  },
+  {
+   "nom": "les deux fonds déclarés viennent du même hôte",
+   "fichier": "map.page.js",
+   "avant": "  { url:'https://tile.openstreetmap.org/{z}/{x}/{y}.png',",
+   "apres": "  { url:'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',",
+   "regle": "test_le_fond_de_carte_declare_au_moins_deux_fournisseurs"
+  },
+  {
+   "nom": "le premier fond n'est jamais posé",
+   "fichier": "map.page.js",
+   "avant": "fondPoser(0);\n",
+   "apres": "",
+   "regle": "test_le_premier_fond_est_pose_sans_rien_attendre"
+  },
+  {
+   "nom": "la note de repli s'affiche dès le premier fond",
+   "fichier": "map.page.js",
+   "avant": "  if (i >= FONDS.length) { fondAbsent(); return; }",
+   "apres": "  fondAbsent();\n  if (i >= FONDS.length) { return; }",
+   "regle": "test_le_premier_fond_est_pose_sans_rien_attendre"
+  },
+  {
+   "nom": "les tuiles refusées ne font jamais changer de fond",
+   "fichier": "map.page.js",
+   "avant": "    if (echecs >= 4) { c.off(); fondPoser(i + 1); }",
+   "apres": "    if (echecs >= 40000) { c.off(); fondPoser(i + 1); }",
+   "regle": "test_quatre_tuiles_refusees_sans_une_seule_arrivee_font_passer_au_suppleant"
+  },
+  {
+   "nom": "on change de fond au premier refus venu",
+   "fichier": "map.page.js",
+   "avant": "    if (echecs >= 4) { c.off(); fondPoser(i + 1); }",
+   "apres": "    if (echecs >= 1) { c.off(); fondPoser(i + 1); }",
+   "regle": "test_trois_refus_ne_suffisent_pas_a_quitter_un_fournisseur"
+  },
+  {
+   "nom": "un fond qui a déjà servi une tuile est quand même quitté",
+   "fichier": "map.page.js",
+   "avant": "    if (unSucces) return;\n",
+   "apres": "",
+   "regle": "test_un_fournisseur_qui_a_deja_servi_une_tuile_n_est_plus_quitte"
+  },
+  {
+   "nom": "la tuile arrivée n'est plus retenue",
+   "fichier": "map.page.js",
+   "avant": "  c.on('tileload',  function(){ unSucces = true; });",
+   "apres": "  c.on('tileload',  function(){ });",
+   "regle": "test_un_fournisseur_qui_a_deja_servi_une_tuile_n_est_plus_quitte"
+  },
+  {
+   "nom": "l'échec de tous les fonds se passe en silence",
+   "fichier": "map.page.js",
+   "avant": "  if (i >= FONDS.length) { fondAbsent(); return; }",
+   "apres": "  if (i >= FONDS.length) { return; }",
+   "regle": "test_quand_aucun_fond_ne_repond_la_carte_le_dit_au_lieu_de_se_taire"
+  },
+  {
+   "nom": "la note ne dit plus que les données restent là",
+   "fichier": "map.page.js",
+   "avant": "  d.textContent = 'Fond de carte indisponible \\u2014 les juridictions et leurs '\n    + 'donn\\u00e9es restent affich\\u00e9es et cliquables.';",
+   "apres": "  d.textContent = 'Fond de carte indisponible.';",
+   "regle": "test_quand_aucun_fond_ne_repond_la_carte_le_dit_au_lieu_de_se_taire"
+  },
+  {
+   "nom": "la note de repli s'empile à chaque échec",
+   "fichier": "map.page.js",
+   "avant": "  if (!h || document.getElementById('fond-absent')) return;",
+   "apres": "  if (!h) return;",
+   "regle": "test_la_note_de_repli_n_est_ecrite_qu_une_fois_meme_si_on_la_redemande"
+  },
+  {
+   "nom": "le repli sans bibliothèque accuse de nouveau unpkg",
+   "fichier": "map.page.js",
+   "avant": "  + 'Sa biblioth\\u00e8que cartographique n\\u2019a pas pu s\\u2019ex\\u00e9cuter dans ce '",
+   "apres": "  + 'Sa biblioth\\u00e8que cartographique (unpkg.com) n\\u2019a pas pu s\\u2019ex\\u00e9cuter dans ce '",
+   "regle": "test_le_repli_sans_bibliotheque_n_accuse_plus_un_domaine_qui_n_est_plus_utilise"
+  },
+  {
+   "nom": "le repli sans bibliothèque perd sa porte de sortie",
+   "fichier": "map.page.js",
+   "avant": "+ '<a href=\"/panorama#s-carte\" style=\"display:inline-block;font-size:13px;font-weight:600;'",
+   "apres": "+ '<a href=\"#\" style=\"display:inline-block;font-size:13px;font-weight:600;'",
+   "regle": "test_le_repli_sans_bibliotheque_n_accuse_plus_un_domaine_qui_n_est_plus_utilise"
+  }
+ ]
+}
