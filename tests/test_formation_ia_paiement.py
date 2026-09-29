@@ -187,7 +187,8 @@ def test_le_webhook_confirme_la_seance_payee(client, monkeypatch):
     except Exception: pass
 
     evt = {"id": ev, "type": "checkout.session.completed",
-           "data": {"object": {"metadata": {"type": "formation-ia", "resa_id": str(rid)}}}}
+           "data": {"object": {"payment_status": "paid",
+                               "metadata": {"type": "formation-ia", "resa_id": str(rid)}}}}
     r = client.post("/api/stripe/webhook", data=json.dumps(evt),
                     headers={"Stripe-Signature": "t=1,v1=x", "Content-Type": "application/json"})
     assert r.status_code == 200

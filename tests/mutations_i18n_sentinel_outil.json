@@ -1,0 +1,218 @@
+{
+ "_pourquoi": "Chaque mutation FABRIQUE un défaut réel de l'outillage de traduction et doit faire TOMBER la règle nommée. Une mutation qui survit dit que la règle ne mesure pas ce qu'elle prétend ; une mutation qui fait tomber une AUTRE règle dit que la règle nommée vise à côté.",
+ "cibles": [
+  "tests/test_i18n_sentinel_outil.py"
+ ],
+ "mutations": [
+  {
+   "nom": "la normalisation Python ne réduit plus la marque d'ordre des octets — une clé relevée ici n'est plus celle que le navigateur cherche",
+   "fichier": "sentinel_i18n.py",
+   "avant": "\\u205f\\u3000\\ufeff]+')",
+   "apres": "\\u205f\\u3000]+')",
+   "regle": "test_les_trente_chaines_pieges_se_normalisent_pareil_en_Python_et_en_JavaScript"
+  },
+  {
+   "nom": "un mot Python s'arrête à U+00FF — la couverture se mesure avec deux règles",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "MOT = re.compile(u'[A-Za-z\\u00c0-\\u024f]+')",
+   "apres": "MOT = re.compile(u'[A-Za-z\\u00c0-\\u00ff]+')",
+   "regle": "test_les_mots_se_comptent_pareil_en_Python_et_en_JavaScript"
+  },
+  {
+   "nom": "verifier laisse passer une balise hors liste blanche dans un bloc anglais",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "            if nom not in BALISES_PERMISES:",
+   "apres": "            if False and nom not in BALISES_PERMISES:",
+   "regle": "test_verifier_refuse_chaque_defaut_et_le_nomme[balise-hors-liste]"
+  },
+  {
+   "nom": "verifier laisse passer une balise à attribut dans un bloc anglais",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "            if attrs:",
+   "apres": "            if False:",
+   "regle": "test_verifier_refuse_chaque_defaut_et_le_nomme[balise-avec-attribut]"
+  },
+  {
+   "nom": "verifier ne voit plus un « # » manquant dans la valeur",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "if _dieses(cle) != _dieses(en):",
+   "apres": "if _dieses(cle) < _dieses(en):",
+   "regle": "test_verifier_refuse_chaque_defaut_et_le_nomme[diese-manquant]"
+  },
+  {
+   "nom": "verifier ne tient plus aux noms propres",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "if rx.search(cle) and not rx.search(en):",
+   "apres": "if False:",
+   "regle": "test_verifier_refuse_chaque_defaut_et_le_nomme[nom-propre-traduit]"
+  },
+  {
+   "nom": "verifier accepte une clé absente du catalogue",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "    if not connue:",
+   "apres": "    if False:",
+   "regle": "test_verifier_refuse_chaque_defaut_et_le_nomme[cle-perimee]"
+  },
+  {
+   "nom": "verifier ne voit plus un conflit entre deux fichiers",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "elif autre[1] != en:",
+   "apres": "elif False:",
+   "regle": "test_verifier_nomme_un_conflit_entre_deux_fichiers_et_pas_une_valeur_identique"
+  },
+  {
+   "nom": "couverture compte une valeur vide comme couverte",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "ok = bool((d.get(cle) or '').strip()) if isinstance(d.get(cle), str) else False",
+   "apres": "ok = cle in d",
+   "regle": "test_couverture_calcule_juste_par_page_et_en_global"
+  },
+  {
+   "nom": "lots remplit à la taille pleine et laisse un fond de tiroir",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "cumul >= cible * (k + 1)",
+   "apres": "cumul >= taille * (k + 1)",
+   "regle": "test_lots_sont_equilibres_autour_de_la_taille_demandee"
+  },
+  {
+   "nom": "lots donne deux cases à une clé qui est à la fois texte et attribut",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "if regime == 'attr' and cle in cat['texte']:",
+   "apres": "if False:",
+   "regle": "test_lots_couvrent_tout_le_catalogue_sans_doublon_et_par_rubrique"
+  },
+  {
+   "nom": "assembler écrit aussi ce que verifier refuse",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "                if motifs:",
+   "apres": "                if False:",
+   "regle": "test_assembler_produit_le_format_de_la_route_sans_les_entrees_vides_ni_refusees"
+  },
+  {
+   "nom": "litteraux relève le contenu des commentaires de ligne",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "if c == '/' and src.startswith('//', i):",
+   "apres": "if False:",
+   "regle": "test_litteraux_lit_les_chaines_et_saute_commentaires_et_expressions_regulieres"
+  },
+  {
+   "nom": "litteraux garde les chaînes d'un seul mot",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "    if len(mots) < 2:",
+   "apres": "    if len(mots) < 1:",
+   "regle": "test_litteraux_ne_garde_que_le_francais_d_au_moins_deux_mots"
+  },
+  {
+   "nom": "litteraux classe bloc un morceau qui ne remplit pas son élément",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "if inline and complet and ouvert:",
+   "apres": "if inline:",
+   "regle": "test_litteraux_classe_un_fragment_HTML_comme_le_module_classerait_le_DOM"
+  },
+  {
+   "nom": "lots écrase un fichier de travail déjà rempli",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "and not args.forcer and _a_du_travail_rempli(chemin):",
+   "apres": "and False:",
+   "regle": "test_lots_ne_recouvrent_pas_un_fichier_de_travail_deja_rempli_sans_forcer"
+  },
+  {
+   "nom": "la coquille réétiquette des clés déjà vues dans une page",
+   "fichier": "outils/i18n_sentinel.js",
+   "avant": "if (!cat[regime][cle]) reste[regime][cle]",
+   "apres": "if (true) reste[regime][cle]",
+   "regle": "test_ce_qui_est_dans_le_document_mais_dans_aucune_page_est_la_coquille"
+  },
+  {
+   "nom": "les statistiques par page comptent des entrées à la place des mots",
+   "fichier": "outils/i18n_sentinel.js",
+   "avant": "pages[p].entrees++; pages[p].mots += e.mots;",
+   "apres": "pages[p].entrees++; pages[p].mots += 1;",
+   "regle": "test_les_statistiques_comptent_entrees_et_mots_par_regime_et_par_page"
+  },
+  {
+   "nom": "l'option --attente est ignorée",
+   "fichier": "outils/i18n_sentinel.js",
+   "avant": "opts.attente = parseInt(v, 10) || 0;",
+   "apres": "opts.attente = 0;",
+   "regle": "test_la_ligne_de_commande_de_l_outil_node_lit_base_token_port_sortie_attente_et_pages"
+  },
+  {
+   "nom": "la route sert le catalogue comme un dictionnaire",
+   "fichier": "sentinel_i18n.py",
+   "avant": "if os.path.basename(p) != CATALOGUE)",
+   "apres": "if True)",
+   "regle": "test_la_route_ne_sert_pas_le_catalogue_et_le_dossier_reel_se_fusionne_sans_faute"
+  },
+  {
+   "nom": "litteraux relève les identifiants (routes, valeurs de liste, clés) comme du texte à traduire",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "    return u' ' not in s and bool(_IDENTIFIANT.search(s))",
+   "apres": "    return False",
+   "regle": "test_litteraux_ecarte_les_identifiants_et_garde_les_libelles_sans_espace"
+  },
+  {
+   "nom": "litteraux écarte aussi les libellés sans espace",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "    return u' ' not in s and bool(_IDENTIFIANT.search(s))",
+   "apres": "    return u' ' not in s",
+   "regle": "test_litteraux_ecarte_les_identifiants_et_garde_les_libelles_sans_espace"
+  },
+  {
+   "nom": "litteraux rejoué garde les chaînes disparues du JavaScript",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "    effacees = retirer_litteraux(cat)\n",
+   "apres": "    effacees = 0\n",
+   "regle": "test_litteraux_en_ligne_de_commande_ajoute_la_page_js_au_catalogue"
+  },
+  {
+   "nom": "litteraux rejoué efface les entrées vues à l'écran avec leurs pages",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "            if pages == ['_js']:",
+   "apres": "            if True:",
+   "regle": "test_litteraux_en_ligne_de_commande_ajoute_la_page_js_au_catalogue"
+  },
+  {
+   "nom": "lots laisse en place un fichier de travail périmé et vide",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "            os.remove(chemin)\n",
+   "apres": "            pass\n",
+   "regle": "test_lots_retirent_un_fichier_de_travail_perime_vide_et_gardent_un_rempli"
+  },
+  {
+   "nom": "lots efface un fichier de travail périmé mais rempli",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "        if _a_du_travail_rempli(chemin):\n            print(u'  %s : hors de la découpe",
+   "apres": "        if False:\n            print(u'  %s : hors de la découpe",
+   "regle": "test_lots_retirent_un_fichier_de_travail_perime_vide_et_gardent_un_rempli"
+  },
+  {
+   "nom": "lots ne regroupe plus les petites rubriques : un fichier par rubrique de 80 mots",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "        if total < taille and rub not in ('_coquille', '_js'):",
+   "apres": "        if False:",
+   "regle": "test_lots_regroupent_les_petites_rubriques_entieres_sans_depasser_la_taille"
+  },
+  {
+   "nom": "lots regroupe sans limite de taille",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "            if groupe and mots_groupe[0] + total > taille * 1.1:",
+   "apres": "            if False:",
+   "regle": "test_lots_regroupent_les_petites_rubriques_entieres_sans_depasser_la_taille"
+  },
+  {
+   "nom": "lots regroupe la coquille avec les rubriques du menu",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "        if total < taille and rub not in ('_coquille', '_js'):",
+   "apres": "        if total < taille:",
+   "regle": "test_lots_regroupent_les_petites_rubriques_entieres_sans_depasser_la_taille"
+  },
+  {
+   "nom": "lots rangés dans l'ordre de clôture et non dans celui du menu",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "    lots.sort(key=lambda l: (l['rubriques'][0], l['part']))\n",
+   "apres": "",
+   "regle": "test_lots_regroupent_les_petites_rubriques_entieres_sans_depasser_la_taille"
+  }
+ ]
+}

@@ -1,0 +1,1658 @@
+{
+ "_lot": "61-residu-12",
+ "_mots": 2001,
+ "_pages": [
+  "pan-sia",
+  "pricing",
+  "qualif-assistee",
+  "rag",
+  "recyf-analyse",
+  "recyf-objectifs",
+  "registre",
+  "regs",
+  "rgpd-aipd",
+  "rgpd-cartographie",
+  "rgpd-conformite",
+  "rgpd-doc",
+  "rgpd-hub",
+  "rgpd-pbd",
+  "rgpd-sensibilisation",
+  "rgpd-site",
+  "rgpd-traitements",
+  "sanctions",
+  "shadow-ai",
+  "simulateur",
+  "templates",
+  "veille"
+ ],
+ "_rubrique": "residu mesure navigateur",
+ "bloc": {},
+ "texte": {
+  "# déploiements": {
+   "_pages": [
+    "registre"
+   ],
+   "en": "# deployments",
+   "fr": "1944 déploiements"
+  },
+  "# mois apres la derniere seance": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "# months after the last session",
+   "fr": "24 mois apres la derniere seance"
+  },
+  "# mois apres le dernier contact": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "# months after the last contact",
+   "fr": "24 mois apres le dernier contact"
+  },
+  "# non-conformité(s) détectée(s)": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "# case(s) of non-compliance detected",
+   "fr": "3 non-conformité(s) détectée(s)"
+  },
+  "# preuve(s) au total — # affichée(s)": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "# piece(s) of evidence in total — # shown",
+   "fr": "788 preuve(s) au total — 300 affichée(s)"
+  },
+  "# preuve(s) horodatee(s) enregistrees ; # retrait(s) trace(s).": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "# time-stamped piece(s) of evidence saved; # withdrawal(s) traced.",
+   "fr": "788 preuve(s) horodatee(s) enregistrees ; 2 retrait(s) trace(s)."
+  },
+  "# système(s)": {
+   "_pages": [
+    "pricing"
+   ],
+   "en": "# system(s)",
+   "fr": "1944 système(s)"
+  },
+  "# traitements documentes (finalite, base, duree, destinataires), exportables.": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "# processing activities documented (purpose, basis, retention, recipients), exportable.",
+   "fr": "9 traitements documentes (finalite, base, duree, destinataires), exportables."
+  },
+  "# · Non-cumulation rule": {
+   "_pages": [
+    "pricing"
+   ],
+   "en": "# · Non-cumulation rule",
+   "fr": "5 · Non-cumulation rule"
+  },
+  ": claude-agent-sdk (Claude Code en sous-processus, sans aucun outil) · modèle": {
+   "_pages": [
+    "qualif-assistee"
+   ],
+   "en": ": claude-agent-sdk (Claude Code as a subprocess, with no tools at all) · model",
+   "fr": ": claude-agent-sdk (Claude Code en sous-processus, sans aucun outil) · modèle"
+  },
+  "ANSSI : recommandations de securite pour les systemes d'IA": {
+   "_pages": [
+    "veille"
+   ],
+   "en": "ANSSI: security recommendations for AI systems",
+   "fr": "ANSSI : recommandations de securite pour les systemes d'IA"
+  },
+  "Abonnements et facturation": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Subscriptions and billing",
+   "fr": "Abonnements et facturation"
+  },
+  "Acces a un service financier essentiel.": {
+   "_pages": [
+    "qualif-assistee"
+   ],
+   "en": "Access to an essential financial service.",
+   "fr": "Acces a un service financier essentiel."
+  },
+  "Accès (art. #)": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Access (art. #)",
+   "fr": "Accès (art. 15)"
+  },
+  "Adresses IP (hachees dans les preuves), horodatages": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "IP addresses (hashed in the evidence), timestamps",
+   "fr": "Adresses IP (hachees dans les preuves), horodatages"
+  },
+  "Analyse d'impact (AIPD) formalisee": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Formalised impact assessment (DPIA)",
+   "fr": "Analyse d'impact (AIPD) formalisee"
+  },
+  "Analyse documentaire de conformite pour le client": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Documentary compliance analysis for the client",
+   "fr": "Analyse documentaire de conformite pour le client"
+  },
+  "Analyse non disponible — pertinence generale non personnalisee.": {
+   "_pages": [
+    "veille"
+   ],
+   "en": "Analysis not available — general relevance, not personalised.",
+   "fr": "Analyse non disponible — pertinence generale non personnalisee."
+  },
+  "Anonymisation automatique": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Automatic anonymisation",
+   "fr": "Anonymisation automatique"
+  },
+  "Assistant (moteur)": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Assistant (engine)",
+   "fr": "Assistant (moteur)"
+  },
+  "Assistant et vectorisation": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Assistant and vectorisation",
+   "fr": "Assistant et vectorisation"
+  },
+  "Au moins un traitement au registre": {
+   "_pages": [
+    "rgpd-traitements"
+   ],
+   "en": "At least one processing activity in the records",
+   "fr": "Au moins un traitement au registre"
+  },
+  "Aucun rapport archive : archiver un rapport pour constituer l'historique.": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "No archived report: archive a report to build up the history.",
+   "fr": "Aucun rapport archive : archiver un rapport pour constituer l'historique."
+  },
+  "Aucune AIPD enregistree : realiser le test de seuil pour les traitements a risque (IA, profilage, grande echelle).": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "No DPIA recorded: carry out the threshold test for high-risk processing (AI, profiling, large scale).",
+   "fr": "Aucune AIPD enregistree : realiser le test de seuil pour les traitements a risque (IA, profilage, grande echelle)."
+  },
+  "Aucune demande hors delai.": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "No request past its deadline.",
+   "fr": "Aucune demande hors delai."
+  },
+  "Aucune donnee au-dela de sa duree de conservation.": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "No data beyond its retention period.",
+   "fr": "Aucune donnee au-dela de sa duree de conservation."
+  },
+  "Aucune purge executee a ce jour : lancer la purge ou attendre la tache planifiee.": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "No purge run to date: run the purge or wait for the scheduled task.",
+   "fr": "Aucune purge executee a ce jour : lancer la purge ou attendre la tache planifiee."
+  },
+  "Banniere rouvrable a tout moment ; le refus et le retrait sont enregistres comme preuves.": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Banner can be reopened at any time; refusal and withdrawal are recorded as evidence.",
+   "fr": "Banniere rouvrable a tout moment ; le refus et le retrait sont enregistres comme preuves."
+  },
+  "Base de connaissance (RAG)": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Knowledge base (RAG)",
+   "fr": "Base de connaissance (RAG)"
+  },
+  "Bloc # sur # · AIPD (art. #) — Verrouillé": {
+   "_pages": [
+    "rgpd-aipd"
+   ],
+   "en": "Block # of # · DPIA (art. #) — Locked",
+   "fr": "Bloc 4 sur 8 · AIPD (art. 35) — Verrouillé"
+  },
+  "Bloc # sur # · Cartographie des traitements — Verrouillé": {
+   "_pages": [
+    "rgpd-cartographie"
+   ],
+   "en": "Block # of # · Processing map — Locked",
+   "fr": "Bloc 3 sur 8 · Cartographie des traitements — Verrouillé"
+  },
+  "Bloc # sur # · Conformité RGPD — Pas encore atteint": {
+   "_pages": [
+    "rgpd-conformite"
+   ],
+   "en": "Block # of # · GDPR compliance — Not yet reached",
+   "fr": "Bloc 8 sur 8 · Conformité RGPD — Pas encore atteint"
+  },
+  "Bloc # sur # · Politique documentaire — Pas encore atteint": {
+   "_pages": [
+    "rgpd-doc"
+   ],
+   "en": "Block # of # · Documentation policy — Not yet reached",
+   "fr": "Bloc 6 sur 8 · Politique documentaire — Pas encore atteint"
+  },
+  "Bloc # sur # · Privacy by design — Pas encore atteint": {
+   "_pages": [
+    "rgpd-pbd"
+   ],
+   "en": "Block # of # · Privacy by design — Not yet reached",
+   "fr": "Bloc 5 sur 8 · Privacy by design — Pas encore atteint"
+  },
+  "Bloc # sur # · ReCyF · # objectifs — Verrouillé": {
+   "_pages": [
+    "recyf-objectifs"
+   ],
+   "en": "Block # of # · ReCyF · # objectives — Locked",
+   "fr": "Bloc 5 sur 7 · ReCyF · 20 objectifs — Verrouillé"
+  },
+  "Bloc # sur # · ReCyF · Analyse de risque — Verrouillé": {
+   "_pages": [
+    "recyf-analyse"
+   ],
+   "en": "Block # of # · ReCyF · Risk analysis — Locked",
+   "fr": "Bloc 6 sur 7 · ReCyF · Analyse de risque — Verrouillé"
+  },
+  "Bloc # sur # · Registre des traitements — Pas encore atteint": {
+   "_pages": [
+    "rgpd-traitements"
+   ],
+   "en": "Block # of # · Records of processing — Not yet reached",
+   "fr": "Bloc 2 sur 8 · Registre des traitements — Pas encore atteint"
+  },
+  "Bloc # sur # · Sensibilisation — Pas encore atteint": {
+   "_pages": [
+    "rgpd-sensibilisation"
+   ],
+   "en": "Block # of # · Awareness — Not yet reached",
+   "fr": "Bloc 7 sur 8 · Sensibilisation — Pas encore atteint"
+  },
+  "Bloc # sur # · Vue d’ensemble — À remplir maintenant": {
+   "_pages": [
+    "rgpd-hub"
+   ],
+   "en": "Block # of # · Overview — To fill in now",
+   "fr": "Bloc 1 sur 8 · Vue d’ensemble — À remplir maintenant"
+  },
+  "CNIL : fiches pratiques sur l'IA et le RGPD": {
+   "_pages": [
+    "veille"
+   ],
+   "en": "CNIL: practical fact sheets on AI and the GDPR",
+   "fr": "CNIL : fiches pratiques sur l'IA et le RGPD"
+  },
+  "CONSEILPREV (preuve serveur)": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "CONSEILPREV (server-side evidence)",
+   "fr": "CONSEILPREV (preuve serveur)"
+  },
+  "CONSEILPREV ; Brevo (courriels, UE) ; Render/PostgreSQL (Francfort, UE) ; Stripe (paiement des seances payantes)": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "CONSEILPREV; Brevo (emails, EU); Render/PostgreSQL (Frankfurt, EU); Stripe (payment for paid sessions)",
+   "fr": "CONSEILPREV ; Brevo (courriels, UE) ; Render/PostgreSQL (Francfort, UE) ; Stripe (paiement des seances payantes)"
+  },
+  "Ce bloc dépend de : Registre des traitements. Complétez-le d'abord.": {
+   "_pages": [
+    "rgpd-aipd",
+    "rgpd-cartographie"
+   ],
+   "en": "This block depends on: Records of processing. Complete it first.",
+   "fr": "Ce bloc dépend de : Registre des traitements. Complétez-le d'abord."
+  },
+  "Cette proposition est un pré-diagnostic. Elle ne vaut pas avis juridique et ne prononce aucune qualification : la classification inscrite au registre est celle qu'une personne identifiée a décidée, et la trace de cette décision est conservée.": {
+   "_pages": [
+    "qualif-assistee"
+   ],
+   "en": "This proposal is a pre-diagnosis. It is not legal advice and makes no qualification: the classification recorded in the register is the one an identified person has decided, and the trace of that decision is kept.",
+   "fr": "Cette proposition est un pré-diagnostic. Elle ne vaut pas avis juridique et ne prononce aucune qualification : la classification inscrite au registre est celle qu'une personne identifiée a décidée, et la trace de cette décision est conservée."
+  },
+  "Clauses contractuelles types / DPF": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Standard contractual clauses / DPF",
+   "fr": "Clauses contractuelles types / DPF"
+  },
+  "Clauses contractuelles types / Data Privacy Framework": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Standard contractual clauses / Data Privacy Framework",
+   "fr": "Clauses contractuelles types / Data Privacy Framework"
+  },
+  "Cles d'API cote serveur uniquement ; acces administrateur restreint ; HTTPS via Render ; cookie de session Secure + HttpOnly + SameSite.": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "API keys server-side only; restricted administrator access; HTTPS via Render; session cookie Secure + HttpOnly + SameSite.",
+   "fr": "Cles d'API cote serveur uniquement ; acces administrateur restreint ; HTTPS via Render ; cookie de session Secure + HttpOnly + SameSite."
+  },
+  "Comptes anciens sans souscription : signales pour decision (aucune suppression automatique).": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Old accounts without a subscription: flagged for decision (no automatic deletion).",
+   "fr": "Comptes anciens sans souscription : signales pour decision (aucune suppression automatique)."
+  },
+  "Comptes d'essai expires et jamais convertis": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Expired trial accounts never converted",
+   "fr": "Comptes d'essai expires et jamais convertis"
+  },
+  "Concernés": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Data subjects",
+   "fr": "Concernés"
+  },
+  "Consentement / interet legitime (art. #.a et #.f)": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Consent / legitimate interest (art. #.a and #.f)",
+   "fr": "Consentement / interet legitime (art. 6.1.a et 6.1.f)"
+  },
+  "Contenu des messages": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Content of messages",
+   "fr": "Contenu des messages"
+  },
+  "Contrat / consentement (art. #.b et #.a)": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Contract / consent (art. #.b and #.a)",
+   "fr": "Contrat / consentement (art. 6.1.b et 6.1.a)"
+  },
+  "Contrat et obligation legale (art. #.b et #.c)": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Contract and legal obligation (art. #.b and #.c)",
+   "fr": "Contrat et obligation legale (art. 6.1.b et 6.1.c)"
+  },
+  "Contrôle": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Check",
+   "fr": "Contrôle"
+  },
+  "Cookies et traceurs": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Cookies and trackers",
+   "fr": "Cookies et traceurs"
+  },
+  "Courriels transactionnels et lettre d'information": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Transactional emails and newsletter",
+   "fr": "Courriels transactionnels et lettre d'information"
+  },
+  "Croisement ou combinaison d'ensembles de donnees": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Matching or combining datasets",
+   "fr": "Croisement ou combinaison d'ensembles de donnees"
+  },
+  "De facto provider": {
+   "_pages": [
+    "shadow-ai"
+   ],
+   "en": "De facto provider",
+   "fr": "De facto provider"
+  },
+  "Decision automatisee avec effet juridique ou significatif": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Automated decision-making with legal or similarly significant effect",
+   "fr": "Decision automatisee avec effet juridique ou significatif"
+  },
+  "Delai de reponse aux demandes (un mois)": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Response time for requests (one month)",
+   "fr": "Delai de reponse aux demandes (un mois)"
+  },
+  "Demandes d'exercice de droits traitees": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Data subject rights requests handled",
+   "fr": "Demandes d'exercice de droits traitees"
+  },
+  "Demandes traitees au-dela de # mois : adresse retiree.": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Requests handled more than # months ago: address removed.",
+   "fr": "Demandes traitees au-dela de 36 mois : adresse retiree."
+  },
+  "Dernière vérification : #:#:# · # preuve(s) de consentement · # retrait(s)": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Last check: #:#:# · # consent record(s) · # withdrawal(s)",
+   "fr": "Dernière vérification : 07:59:38 · 788 preuve(s) de consentement · 2 retrait(s)"
+  },
+  "Destinataire": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Recipient",
+   "fr": "Destinataire"
+  },
+  "Directeur de programme IA Act (# modules)": {
+   "_pages": [
+    "pricing"
+   ],
+   "en": "AI Act programme director (# modules)",
+   "fr": "Directeur de programme IA Act (8 modules)"
+  },
+  "Documents deposes par le client": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Documents uploaded by the client",
+   "fr": "Documents deposes par le client"
+  },
+  "Donnees sensibles ou a caractere hautement personnel": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Sensitive data or data of a highly personal nature",
+   "fr": "Donnees sensibles ou a caractere hautement personnel"
+  },
+  "Droit a l'effacement": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Right to erasure",
+   "fr": "Droit a l'effacement"
+  },
+  "Duree du compte + # ans (prescription)": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Account lifetime + # years (limitation period)",
+   "fr": "Duree du compte + 5 ans (prescription)"
+  },
+  "Duree du compte ; suppression a la demande": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Account lifetime; deletion on request",
+   "fr": "Duree du compte ; suppression a la demande"
+  },
+  "Durees documentees par traitement dans le registre (art. #).": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Retention periods documented per processing activity in the records (art. #).",
+   "fr": "Durees documentees par traitement dans le registre (art. 30)."
+  },
+  "Déployeur (utilise un système IA sous sa propre autorité)": {
+   "_pages": [
+    "pricing"
+   ],
+   "en": "Deployer (uses an AI system under its own authority)",
+   "fr": "Déployeur (utilise un système IA sous sa propre autorité)"
+  },
+  "EU AI Act : les obligations GPAI applicables depuis aout #": {
+   "_pages": [
+    "veille"
+   ],
+   "en": "EU AI Act: the GPAI obligations applicable since August #",
+   "fr": "EU AI Act : les obligations GPAI applicables depuis aout 2025"
+  },
+  "En attente de décision": {
+   "_pages": [
+    "qualif-assistee"
+   ],
+   "en": "Awaiting decision",
+   "fr": "En attente de décision"
+  },
+  "Essais expires depuis plus de # mois, sans souscription : comptes anonymises.": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Trials expired for more than # months, without a subscription: accounts anonymised.",
+   "fr": "Essais expires depuis plus de 12 mois, sans souscription : comptes anonymises."
+  },
+  "Export structure des donnees client disponible ; telechargement des documents de la base de connaissance.": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Structured export of client data available; download of the knowledge base documents.",
+   "fr": "Export structure des donnees client disponible ; telechargement des documents de la base de connaissance."
+  },
+  "Fiche #% complète (# questions essentielles IA Act)": {
+   "_pages": [
+    "registre"
+   ],
+   "en": "Fiche #% complète (# questions essentielles IA Act)",
+   "fr": "Fiche 40% complète (10 questions essentielles IA Act)"
+  },
+  "Finalités": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Purposes",
+   "fr": "Finalités"
+  },
+  "Fonctionnement, mesure et personnalisation selon le choix": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Operation, measurement and personalisation according to your choice",
+   "fr": "Fonctionnement, mesure et personnalisation selon le choix"
+  },
+  "Formulaire de contact et candidatures": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Contact form and applications",
+   "fr": "Formulaire de contact et candidatures"
+  },
+  "Fourniture de la plateforme (execution du contrat)": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Provision of the platform (performance of the contract)",
+   "fr": "Fourniture de la plateforme (execution du contrat)"
+  },
+  "Hebergement et base de donnees": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Hosting and database",
+   "fr": "Hebergement et base de donnees"
+  },
+  "IP hachees et agent utilisateur tronque dans les preuves ; donnees limitees aux finalites declarees.": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Hashed IPs and truncated user agent in the evidence; data limited to the declared purposes.",
+   "fr": "IP hachees et agent utilisateur tronque dans les preuves ; donnees limitees aux finalites declarees."
+  },
+  "Identite, coordonnees (dont telephone), entreprise, SIRET, lieu de la formation, sujet et creneau choisis": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Identity, contact details (including telephone), company, SIRET, training location, chosen topic and time slot",
+   "fr": "Identite, coordonnees (dont telephone), entreprise, SIRET, lieu de la formation, sujet et creneau choisis"
+  },
+  "Identite, e-mail, donnees de facturation": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Identity, email, billing data",
+   "fr": "Identite, e-mail, donnees de facturation"
+  },
+  "Identite, e-mail, mot de passe hache, offre, essai": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Identity, email, hashed password, plan, trial",
+   "fr": "Identite, e-mail, mot de passe hache, offre, essai"
+  },
+  "Inscription et organisation des seances de formation sur site": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Registration and organisation of on-site training sessions",
+   "fr": "Inscription et organisation des seances de formation sur site"
+  },
+  "Journaux techniques et securite": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Technical and security logs",
+   "fr": "Journaux techniques et securite"
+  },
+  "Jusqu'au retrait du consentement": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Until consent is withdrawn",
+   "fr": "Jusqu'au retrait du consentement"
+  },
+  "La directive (UE) #/#, telle que transposée — et à ce jour la France n'a pas achevé sa transposition.": {
+   "_pages": [
+    "recyf-objectifs"
+   ],
+   "en": "Directive (EU) #/#, as transposed — and to date France has not completed its transposition.",
+   "fr": "La directive (UE) 2022/2555, telle que transposée — et à ce jour la France n'a pas achevé sa transposition."
+  },
+  "Le DMA vise les controleurs d'acces designes ; CONSEILPREV n'entre pas dans son champ.": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "The DMA targets designated gatekeepers; CONSEILPREV does not fall within its scope.",
+   "fr": "Le DMA vise les controleurs d'acces designes ; CONSEILPREV n'entre pas dans son champ."
+  },
+  "Le module NIS # la calcule à partir du secteur et de la taille.": {
+   "_pages": [
+    "recyf-objectifs"
+   ],
+   "en": "The NIS # module calculates it from the sector and size.",
+   "fr": "Le module NIS 2 la calcule à partir du secteur et de la taille."
+  },
+  "Le module refuse de chiffrer sans qualification, et ce refus est le premier service rendu.": {
+   "_pages": [
+    "recyf-objectifs"
+   ],
+   "en": "The module refuses to cost without a qualification, and that refusal is the first service it renders.",
+   "fr": "Le module refuse de chiffrer sans qualification, et ce refus est le premier service rendu."
+  },
+  "Le référentiel gradue ses exigences : # objectifs sur # sont réservés aux entités essentielles, et le nombre de moyens attendus change pour les autres — # pour une entité essentielle, # pour une importante. Sans la qualification, tout chiffre serait une moyenne entre deux régimes qui ne se moyennent pas.": {
+   "_pages": [
+    "recyf-objectifs"
+   ],
+   "en": "The reference framework grades its requirements: # of # objectives are reserved for essential entities, and the number of means of compliance expected changes for the others — # for an essential entity, # for an important entity. Without the qualification, any figure would be an average between two regimes that cannot be averaged.",
+   "fr": "Le référentiel gradue ses exigences : 5 objectifs sur 20 sont réservés aux entités essentielles, et le nombre de moyens attendus change pour les autres — 152 pour une entité essentielle, 76 pour une importante. Sans la qualification, tout chiffre serait une moyenne entre deux régimes qui ne se moyennent pas."
+  },
+  "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : la CNIL apprécie, et l'article #, paragraphe #, met la preuve de la conformité à la charge du responsable de traitement.": {
+   "_pages": [
+    "rgpd-hub",
+    "rgpd-conformite",
+    "rgpd-sensibilisation",
+    "rgpd-doc",
+    "rgpd-pbd"
+   ],
+   "en": "The green of this path says that what a block expects is filled in. It does not say that you are compliant: the CNIL assesses, and Article #, paragraph #, places the burden of proving compliance on the controller.",
+   "fr": "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : la CNIL apprécie, et l'article 5, paragraphe 2, met la preuve de la conformité à la charge du responsable de traitement."
+  },
+  "Limitation de conservation": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Storage limitation",
+   "fr": "Limitation de conservation"
+  },
+  "Limitation de conservation (art. #.e) : absence de relation contractuelle.": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Storage limitation (art. #.e): no contractual relationship.",
+   "fr": "Limitation de conservation (art. 5.1.e) : absence de relation contractuelle."
+  },
+  "Limitation de conservation (art. #.e) ; prescription commerciale.": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Storage limitation (art. #.e); commercial limitation period.",
+   "fr": "Limitation de conservation (art. 5.1.e) ; prescription commerciale."
+  },
+  "Limitation de la conservation (mesure)": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Storage limitation (measure)",
+   "fr": "Limitation de la conservation (mesure)"
+  },
+  "Mentions legales, politique de confidentialite et point de contact publies ; pas de place de marche ni de contenu tiers heberge.": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Legal notice, privacy policy and contact point published; no marketplace and no third-party content hosted.",
+   "fr": "Mentions legales, politique de confidentialite et point de contact publies ; pas de place de marche ni de contenu tiers heberge."
+  },
+  "Mesures precontractuelles / consentement (art. #.b et #.a)": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Pre-contractual measures / consent (art. #.b and #.a)",
+   "fr": "Mesures precontractuelles / consentement (art. 6.1.b et 6.1.a)"
+  },
+  "Mesures precontractuelles / contrat (art. #.b)": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Pre-contractual measures / contract (art. #.b)",
+   "fr": "Mesures precontractuelles / contrat (art. 6.1.b)"
+  },
+  "Minimisation et exactitude": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Minimisation and accuracy",
+   "fr": "Minimisation et exactitude"
+  },
+  "Modele de regression / ML supervise ·": {
+   "_pages": [
+    "registre"
+   ],
+   "en": "Modele de regression / ML supervise ·",
+   "fr": "Modele de regression / ML supervise ·"
+  },
+  "Motif de votre décision (facultatif)": {
+   "_pages": [
+    "qualif-assistee"
+   ],
+   "en": "Reason for your decision (optional)",
+   "fr": "Motif de votre décision (facultatif)"
+  },
+  "Ni le projet de loi ni le ReCyF ne sont en vigueur. Aucune entité ne peut être sanctionnée aujourd'hui sur le fondement de ces objectifs.": {
+   "_pages": [
+    "recyf-objectifs"
+   ],
+   "en": "Neither the bill nor the ReCyF is in force. No entity can be penalised today on the basis of these objectives.",
+   "fr": "Ni le projet de loi ni le ReCyF ne sont en vigueur. Aucune entité ne peut être sanctionnée aujourd'hui sur le fondement de ces objectifs."
+  },
+  "Non — première infraction": {
+   "_pages": [
+    "sanctions"
+   ],
+   "en": "No — first infringement",
+   "fr": "Non — première infraction"
+  },
+  "Notifications de service et information": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Service notifications and information",
+   "fr": "Notifications de service et information"
+  },
+  "Paiement des offres et facturation par resultats": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Payment for plans and outcome-based billing",
+   "fr": "Paiement des offres et facturation par resultats"
+  },
+  "Parce que c'est contre eux que le contrôle se fera. Une entité qui attend la publication du décret pour commencer découvrira alors qu'il lui manque vingt objectifs, pas dix mesures.": {
+   "_pages": [
+    "recyf-objectifs"
+   ],
+   "en": "Because it is against them that inspections will take place. An entity that waits for the decree to be published before starting will then find that it is missing twenty objectives, not ten measures.",
+   "fr": "Parce que c'est contre eux que le contrôle se fera. Une entité qui attend la publication du décret pour commencer découvrira alors qu'il lui manque vingt objectifs, pas dix mesures."
+  },
+  "Portabilite et changement de fournisseur": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Portability and switching provider",
+   "fr": "Portabilite et changement de fournisseur"
+  },
+  "Preferences, identifiants techniques": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Preferences, technical identifiers",
+   "fr": "Preferences, identifiants techniques"
+  },
+  "Preuve de suppression (journal scelle)": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Evidence of deletion (sealed log)",
+   "fr": "Preuve de suppression (journal scelle)"
+  },
+  "Preuve du consentement": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Evidence of consent",
+   "fr": "Preuve du consentement"
+  },
+  "Preuve du consentement (art. #) : conservation limitee a la duree utile a la preuve.": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Evidence of consent (art. #): retention limited to the period needed for evidence.",
+   "fr": "Preuve du consentement (art. 7) : conservation limitee a la duree utile a la preuve."
+  },
+  "Preuve du traitement de la demande (art. #).": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Evidence that the request was handled (art. #).",
+   "fr": "Preuve du traitement de la demande (art. 12)."
+  },
+  "Preuves au-dela de # mois : adresse retiree, preuve conservee anonymisee.": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Evidence older than # months: address removed, evidence kept in anonymised form.",
+   "fr": "Preuves au-dela de 36 mois : adresse retiree, preuve conservee anonymisee."
+  },
+  "Preuves de consentement": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Consent records",
+   "fr": "Preuves de consentement"
+  },
+  "Procedure d'effacement operationnelle : anonymisation du compte, suppression des donnees liees, preuves anonymisees.": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Operational erasure procedure: anonymisation of the account, deletion of linked data, anonymised evidence.",
+   "fr": "Procedure d'effacement operationnelle : anonymisation du compte, suppression des donnees liees, preuves anonymisees."
+  },
+  "Protection des la conception": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Data protection by design",
+   "fr": "Protection des la conception"
+  },
+  "Refusés nommément : Read, Write, Edit, NotebookEdit, Bash, BashOutput, Glob, Grep, WebFetch, WebSearch, Task, TodoWrite. Les lignes du registre voyagent en données dans la demande ; le moteur n’ouvre aucun fichier et n’écrit nulle part.": {
+   "_pages": [
+    "qualif-assistee"
+   ],
+   "en": "Explicitly refused: Read, Write, Edit, NotebookEdit, Bash, BashOutput, Glob, Grep, WebFetch, WebSearch, Task, TodoWrite. The register rows travel as data in the request; the engine opens no file and writes nowhere.",
+   "fr": "Refusés nommément : Read, Write, Edit, NotebookEdit, Bash, BashOutput, Glob, Grep, WebFetch, WebSearch, Task, TodoWrite. Les lignes du registre voyagent en données dans la demande ; le moteur n’ouvre aucun fichier et n’écrit nulle part."
+  },
+  "Registre des activites de traitement": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Records of processing activities",
+   "fr": "Registre des activites de traitement"
+  },
+  "Regression logistique / XGBoost ·": {
+   "_pages": [
+    "registre"
+   ],
+   "en": "Regression logistique / XGBoost ·",
+   "fr": "Regression logistique / XGBoost ·"
+  },
+  "Renseignez votre qualification sur le panneau des vingt objectifs : l’objectif # est réservé aux entités essentielles, et le dire suppose de savoir laquelle vous êtes.": {
+   "_pages": [
+    "recyf-analyse"
+   ],
+   "en": "Enter your qualification on the twenty objectives panel: objective # is reserved for essential entities, and saying so requires knowing which one you are.",
+   "fr": "Renseignez votre qualification sur le panneau des vingt objectifs : l’objectif 16 est réservé aux entités essentielles, et le dire suppose de savoir laquelle vous êtes."
+  },
+  "Reponse aux demandes entrantes": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Response to incoming requests",
+   "fr": "Reponse aux demandes entrantes"
+  },
+  "Reponse aux questions des visiteurs et clients": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Answering questions from visitors and clients",
+   "fr": "Reponse aux questions des visiteurs et clients"
+  },
+  "Reservations aux formations conformite IA": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Bookings for AI compliance training",
+   "fr": "Reservations aux formations conformite IA"
+  },
+  "Responsabilite : historique d'audit archive": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Accountability: archived audit history",
+   "fr": "Responsabilite : historique d'audit archive"
+  },
+  "Retrait": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Withdrawal",
+   "fr": "Retrait"
+  },
+  "Retrait aussi simple que l'octroi": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Withdrawal as easy as giving consent",
+   "fr": "Retrait aussi simple que l'octroi"
+  },
+  "Risque résiduel négligeable": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Negligible residual risk",
+   "fr": "Risque résiduel négligeable"
+  },
+  "Securite, detection d'abus, diagnostic": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Security, abuse detection, diagnostics",
+   "fr": "Securite, detection d'abus, diagnostic"
+  },
+  "Session ; pas de conservation dediee cote site": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Session; no dedicated retention on the site side",
+   "fr": "Session ; pas de conservation dediee cote site"
+  },
+  "Stripe (Etats-Unis — clauses contractuelles types / DPF)": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Stripe (United States — standard contractual clauses / DPF)",
+   "fr": "Stripe (Etats-Unis — clauses contractuelles types / DPF)"
+  },
+  "Stripe et Anthropic (Etats-Unis) sous clauses contractuelles types / DPF ; autres sous-traitants dans l'UE.": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Stripe and Anthropic (United States) under standard contractual clauses / DPF; other processors in the EU.",
+   "fr": "Stripe et Anthropic (Etats-Unis) sous clauses contractuelles types / DPF ; autres sous-traitants dans l'UE."
+  },
+  "Supprimer Chatbot service client du registre": {
+   "_pages": [
+    "registre"
+   ],
+   "en": "Supprimer Chatbot service client du registre",
+   "fr": "Supprimer Chatbot service client du registre"
+  },
+  "Supprimer Detection de fraude transactionnelle du registre": {
+   "_pages": [
+    "registre"
+   ],
+   "en": "Supprimer Detection de fraude transactionnelle du registre",
+   "fr": "Supprimer Detection de fraude transactionnelle du registre"
+  },
+  "Supprimer Maintenance predictive reseau du registre": {
+   "_pages": [
+    "registre"
+   ],
+   "en": "Supprimer Maintenance predictive reseau du registre",
+   "fr": "Supprimer Maintenance predictive reseau du registre"
+  },
+  "Supprimer Recette — deux fois du registre": {
+   "_pages": [
+    "registre"
+   ],
+   "en": "Supprimer Recette — deux fois du registre",
+   "fr": "Supprimer Recette — deux fois du registre"
+  },
+  "Supprimer Recette — la décision écrit du registre": {
+   "_pages": [
+    "registre"
+   ],
+   "en": "Supprimer Recette — la décision écrit du registre",
+   "fr": "Supprimer Recette — la décision écrit du registre"
+  },
+  "Supprimer Recette — proposition sans écriture du registre": {
+   "_pages": [
+    "registre"
+   ],
+   "en": "Supprimer Recette — proposition sans écriture du registre",
+   "fr": "Supprimer Recette — proposition sans écriture du registre"
+  },
+  "Supprimer Recette — sans nom saisi du registre": {
+   "_pages": [
+    "registre"
+   ],
+   "en": "Supprimer Recette — sans nom saisi du registre",
+   "fr": "Supprimer Recette — sans nom saisi du registre"
+  },
+  "Supprimer Recette — écartée du registre": {
+   "_pages": [
+    "registre"
+   ],
+   "en": "Supprimer Recette — écartée du registre",
+   "fr": "Supprimer Recette — écartée du registre"
+  },
+  "Surveillance systematique": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Systematic monitoring",
+   "fr": "Surveillance systematique"
+  },
+  "Système haut risque non conforme — Art. # §# (# M€ / #%)": {
+   "_pages": [
+    "sanctions"
+   ],
+   "en": "Not compliant high-risk system — Art. #(#) (€# M / #%)",
+   "fr": "Système haut risque non conforme — Art. 99 §4 (15 M€ / 3%)"
+  },
+  "Sélectionner…": {
+   "_pages": [
+    "pricing"
+   ],
+   "en": "Select…",
+   "fr": "Sélectionner…"
+  },
+  "Sélectionnez le type de système…": {
+   "_pages": [
+    "simulateur"
+   ],
+   "en": "Select the type of system…",
+   "fr": "Sélectionnez le type de système…"
+  },
+  "Sélectionnez votre secteur…": {
+   "_pages": [
+    "simulateur"
+   ],
+   "en": "Select your sector…",
+   "fr": "Sélectionnez votre secteur…"
+  },
+  "Tous les articles AI Act": {
+   "_pages": [
+    "templates"
+   ],
+   "en": "All AI Act articles",
+   "fr": "Tous les articles AI Act"
+  },
+  "Tous les formats": {
+   "_pages": [
+    "templates"
+   ],
+   "en": "All formats",
+   "fr": "Tous les formats"
+  },
+  "Tous les textes (#)": {
+   "_pages": [
+    "regs"
+   ],
+   "en": "All texts (#)",
+   "fr": "Tous les textes (10)"
+  },
+  "Toutes les catégories": {
+   "_pages": [
+    "templates"
+   ],
+   "en": "All categories",
+   "fr": "Toutes les catégories"
+  },
+  "Traitement a grande echelle": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Large-scale processing",
+   "fr": "Traitement a grande echelle"
+  },
+  "Traitement dans l'UE": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Processing in the EU",
+   "fr": "Traitement dans l'UE"
+  },
+  "Traitement faisant obstacle a un droit ou a un contrat": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Processing that prevents the exercise of a right or the performance of a contract",
+   "fr": "Traitement faisant obstacle a un droit ou a un contrat"
+  },
+  "Transparence et point de contact": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Transparency and contact point",
+   "fr": "Transparence et point de contact"
+  },
+  "Usage innovant ou application de nouvelles technologies (dont IA)": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "Innovative use or application of new technologies (including AI)",
+   "fr": "Usage innovant ou application de nouvelles technologies (dont IA)"
+  },
+  "Votre statut au sens du référentiel : entité essentielle ou importante": {
+   "_pages": [
+    "recyf-objectifs"
+   ],
+   "en": "Your status within the meaning of the reference framework: essential or important entity",
+   "fr": "Votre statut au sens du référentiel : entité essentielle ou importante"
+  },
+  "Votre statut, choisi sur l'écran des vingt objectifs": {
+   "_pages": [
+    "recyf-analyse"
+   ],
+   "en": "Your status, chosen on the twenty objectives screen",
+   "fr": "Votre statut, choisi sur l'écran des vingt objectifs"
+  },
+  "au Registre IA, mais aucun Audit IA Act réalisé — score de départ à estimer manuellement ci-dessous.": {
+   "_pages": [
+    "pricing"
+   ],
+   "en": "in the AI register, but no AI Act audit carried out — starting score to be estimated manually below.",
+   "fr": "au Registre IA, mais aucun Audit IA Act réalisé — score de départ à estimer manuellement ci-dessous."
+  },
+  "automatique": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "automatic",
+   "fr": "automatique"
+  },
+  "le vote de la loi · le décret en Conseil d'État qui fixe les objectifs · la publication du référentiel dans sa version finale": {
+   "_pages": [
+    "recyf-objectifs"
+   ],
+   "en": "the vote on the law · the decree in the Conseil d'État setting the objectives · the publication of the reference framework in its final version",
+   "fr": "le vote de la loi · le décret en Conseil d'État qui fixe les objectifs · la publication du référentiel dans sa version finale"
+  },
+  "oui": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "yes",
+   "fr": "oui"
+  },
+  "sont des mesures publiées, plus précises, mais limitées aux vingt-sept États membres et à une seule date. Les": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "are published measurements, more precise, but limited to the twenty-seven Member States and a single date. The",
+   "fr": "sont des mesures publiées, plus précises, mais limitées aux vingt-sept États membres et à une seule date. Les"
+  },
+  "sont les seules qui ne renvoient à aucune publication : les gabarits de capacité et les consommations typiques de systèmes d’IA n’existent nulle part sous cette forme. Elles sont construites depuis des capacités publiées par tranche et des dossiers de raccordement publics, et c’est précisément pour cela que toute valeur qui en dérive porte l’étiquette « classe ».": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "are the only ones that refer to no publication: capacity templates and typical consumption figures of AI systems exist nowhere in this form. They are built from capacities published by size band and from public grid connection files, and that is precisely why any value derived from them carries the “class” label.",
+   "fr": "sont les seules qui ne renvoient à aucune publication : les gabarits de capacité et les consommations typiques de systèmes d’IA n’existent nulle part sous cette forme. Elles sont construites depuis des capacités publiées par tranche et des dossiers de raccordement publics, et c’est précisément pour cela que toute valeur qui en dérive porte l’étiquette « classe »."
+  },
+  "source non jointe : EONET injoignable (URLError)": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "source not reached: EONET unreachable (URLError)",
+   "fr": "source non jointe : EONET injoignable (URLError)"
+  },
+  "source non jointe : catalogue Copernicus injoignable (SENTINEL-# : URLError; SENTINEL-# : URLError; SENTINEL-# : URLError; SENTINEL-#P : URLError)": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "source not reached: Copernicus catalogue unreachable (SENTINEL-# : URLError; SENTINEL-# : URLError; SENTINEL-# : URLError; SENTINEL-#P : URLError)",
+   "fr": "source non jointe : catalogue Copernicus injoignable (SENTINEL-2 : URLError; SENTINEL-1 : URLError; SENTINEL-3 : URLError; SENTINEL-5P : URLError)"
+  },
+  "source non jointe : data.gouv.fr injoignable (ia : URLError; spatial : URLError)": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "source not reached: data.gouv.fr unreachable (ia : URLError; spatial : URLError)",
+   "fr": "source non jointe : data.gouv.fr injoignable (ia : URLError; spatial : URLError)"
+  },
+  "sous #": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "under #",
+   "fr": "sous 45"
+  },
+  "sous obligation": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "under obligation",
+   "fr": "sous obligation"
+  },
+  "statuts annoncé + en construction + autorisé des # sites — note = # − # × pipeline du pays ÷ maximum du panel (moins il y a de file, mieux c'est pour un NOUVEL entrant)": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "announced + under construction + authorised statuses of the # sites — score = # − # × country pipeline ÷ panel maximum (the shorter the queue, the better for a NEW entrant)",
+   "fr": "statuts annoncé + en construction + autorisé des 254 sites — note = 100 − 100 × pipeline du pays ÷ maximum du panel (moins il y a de file, mieux c'est pour un NOUVEL entrant)"
+  },
+  "stratégie IA": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "AI strategy",
+   "fr": "stratégie IA"
+  },
+  "structure de cadrage CONSEILPREV": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "CONSEILPREV scoping structure",
+   "fr": "structure de cadrage CONSEILPREV"
+  },
+  "supposée dépassée": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "assumed exceeded",
+   "fr": "supposée dépassée"
+  },
+  "sur # heures glissantes, toutes constellations": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "over a rolling # hours, all constellations",
+   "fr": "sur 24 heures glissantes, toutes constellations"
+  },
+  "sur les deux thèmes interrogés": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "on the two topics queried",
+   "fr": "sur les deux thèmes interrogés"
+  },
+  "synthèse du cabinet — aucune publication à citer": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "the firm’s synthesis — no publication to cite",
+   "fr": "synthèse du cabinet — aucune publication à citer"
+  },
+  "systèmes d’IA documentés": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "AI systems documented",
+   "fr": "systèmes d’IA documentés"
+  },
+  "tant qu'il n'a pas été vérifié et versé au référentiel (versionné). L'automatisation détecte ; l'expert tranche.": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "until it has been checked and added to the (versioned) reference framework. Automation detects; the expert decides.",
+   "fr": "tant qu'il n'a pas été vérifié et versé au référentiel (versionné). L'automatisation détecte ; l'expert tranche."
+  },
+  "température extérieure de projet": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "outdoor design temperature",
+   "fr": "température extérieure de projet"
+  },
+  "tous à #": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "all at #",
+   "fr": "tous à 0"
+  },
+  "travaux de recherche Google sur la conception des centres de données face au climat projeté": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "Google research on designing data centres for the projected climate",
+   "fr": "travaux de recherche Google sur la conception des centres de données face au climat projeté"
+  },
+  "un recensement des données publiques : une recherche par mots-clés sur un catalogue rate ce qui est nommé autrement": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "a census of public data: a keyword search of a catalogue misses what is named differently",
+   "fr": "un recensement des données publiques : une recherche par mots-clés sur un catalogue rate ce qui est nommé autrement"
+  },
+  "un registre exhaustif des aléas : EONET retient les événements NOTABLES, la sélection est éditoriale": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "an exhaustive register of hazards: EONET keeps NOTABLE events, the selection is editorial",
+   "fr": "un registre exhaustif des aléas : EONET retient les événements NOTABLES, la sélection est éditoriale"
+  },
+  "une fois tous les # ans": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "once every # years",
+   "fr": "une fois tous les 200 ans"
+  },
+  "vecteurs : ces parts ne totalisent pas # %. Fréquence dans le panel = surface d’attaque du parc réel probable. Les # premiers sur # vecteurs recensés.": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "vectors: these shares do not add up to # %. Frequency in the panel = likely attack surface of the actual estate. The top # of # vectors recorded.",
+   "fr": "vecteurs : ces parts ne totalisent pas 100 %. Fréquence dans le panel = surface d’attaque du parc réel probable. Les 7 premiers sur 37 vecteurs recensés."
+  },
+  "visiteur": {
+   "_pages": [
+    "rgpd-site"
+   ],
+   "en": "visitor",
+   "fr": "visiteur"
+  },
+  "vous pouvez refaire la requête": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "you can rerun the query",
+   "fr": "vous pouvez refaire la requête"
+  },
+  "y compris ce que nous avons construit nous-mêmes": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "including what we built ourselves",
+   "fr": "y compris ce que nous avons construit nous-mêmes"
+  },
+  "« Evaluer la solvabilite pour l'octroi de credit »": {
+   "_pages": [
+    "qualif-assistee"
+   ],
+   "en": "« Evaluer la solvabilite pour l'octroi de credit »",
+   "fr": "« Evaluer la solvabilite pour l'octroi de credit »"
+  },
+  "« Feu de forêt — horizon retenu » recouvre « Risque de feu de forêt à l'horizon # (XDI) » · « Étiage et régime des cours d'eau — horizon retenu » recouvre « Disponibilité en eau (WEI+, compétition d'usages) » · « Précipitations extrêmes et ruissellement — horizon retenu » recouvre « Risque d'inondation à l'horizon # (XDI) » · « Précipitations extrêmes et ruissellement — horizon retenu » recouvre « Risque climatique physique du bâti (XDI) » · « Sécheresse — horizon retenu » recouvre « Disponibilité en eau (WEI+, compétition d'usages) » · « Submersion côtière — horizon retenu » recouvre « Risque climatique physique du bâti (XDI) ». Ce n’est pas une erreur, c’est un arbitrage : les critères": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "“Forest fire — chosen horizon” overlaps “Forest fire risk at the # horizon (XDI)” · “Low water and river flow regime — chosen horizon” overlaps “Water availability (WEI+, competition between uses)” · “Extreme precipitation and runoff — chosen horizon” overlaps “Flood risk at the # horizon (XDI)” · “Extreme precipitation and runoff — chosen horizon” overlaps “Physical climate risk to buildings (XDI)” · “Drought — chosen horizon” overlaps “Water availability (WEI+, competition between uses)” · “Coastal flooding — chosen horizon” overlaps “Physical climate risk to buildings (XDI)”. This is not an error, it is a trade-off: the criteria",
+   "fr": "« Feu de forêt — horizon retenu » recouvre « Risque de feu de forêt à l'horizon 2050 (XDI) » · « Étiage et régime des cours d'eau — horizon retenu » recouvre « Disponibilité en eau (WEI+, compétition d'usages) » · « Précipitations extrêmes et ruissellement — horizon retenu » recouvre « Risque d'inondation à l'horizon 2050 (XDI) » · « Précipitations extrêmes et ruissellement — horizon retenu » recouvre « Risque climatique physique du bâti (XDI) » · « Sécheresse — horizon retenu » recouvre « Disponibilité en eau (WEI+, compétition d'usages) » · « Submersion côtière — horizon retenu » recouvre « Risque climatique physique du bâti (XDI) ». Ce n’est pas une erreur, c’est un arbitrage : les critères"
+  },
+  "« Températures historiques » rendant « impossible de maintenir les conditions environnementales requises pour réaliser ses opérations de façon sûre ». La décision d’arrêt précède la panne : on s’arrête pour ne pas casser.": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "“Historical temperatures” making it “impossible to maintain the environmental conditions required to carry out its operations safely”. The shutdown decision precedes the failure: you stop so as not to break.",
+   "fr": "« Températures historiques » rendant « impossible de maintenir les conditions environnementales requises pour réaliser ses opérations de façon sûre ». La décision d’arrêt précède la panne : on s’arrête pour ne pas casser."
+  },
+  "« historique credit »": {
+   "_pages": [
+    "qualif-assistee"
+   ],
+   "en": "« historique credit »",
+   "fr": "« historique credit »"
+  },
+  "« intelligence artificielle » — #": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "“artificial intelligence” — #",
+   "fr": "« intelligence artificielle » — 240"
+  },
+  "· Annonces d'investissement et contraintes réglementaires, horizon # — compilation datée du cabinet (communiqués, autorités)": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "· Investment announcements and regulatory constraints, # horizon — dated compilation by the firm (press releases, authorities)",
+   "fr": "· Annonces d'investissement et contraintes réglementaires, horizon 2030 — compilation datée du cabinet (communiqués, autorités)"
+  },
+  "· Art. # §# et annexe III — domaines à haut risque": {
+   "_pages": [
+    "qualif-assistee"
+   ],
+   "en": "· Art. #(#) and Annex III — high-risk areas",
+   "fr": "· Art. 6 §2 et annexe III — domaines à haut risque"
+  },
+  "· Flooded Future : Europe's Rising Economic Risk — # États et provinces de l'Union analysés — XDI (Cross Dependency Initiative), septembre #": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "· Flooded Future: Europe's Rising Economic Risk — # states and provinces of the Union analysed — XDI (Cross Dependency Initiative), September #",
+   "fr": "· Flooded Future : Europe's Rising Economic Risk — 292 États et provinces de l'Union analysés — XDI (Cross Dependency Initiative), septembre 2025"
+  },
+  "· Yearly electricity generation — parts de production #, arrondies à # points — Ember": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "· Yearly electricity generation — # generation shares, rounded to # points — Ember",
+   "fr": "· Yearly electricity generation — parts de production 2024, arrondies à 5 points — Ember"
+  },
+  "À demander au concepteur": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "To be requested from the designer",
+   "fr": "À demander au concepteur"
+  },
+  "À l'échelle": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "At scale",
+   "fr": "À l'échelle"
+  },
+  "À quoi elle sert": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "What it is for",
+   "fr": "À quoi elle sert"
+  },
+  "À surface égale, les charges d’IA dissipent bien davantage : le besoin de refroidissement monte pendant que la marge de conception descend.": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "For the same floor area, AI loads dissipate far more: the cooling requirement rises while the design margin falls.",
+   "fr": "À surface égale, les charges d’IA dissipent bien davantage : le besoin de refroidissement monte pendant que la marge de conception descend."
+  },
+  "À évaluer →": {
+   "_pages": [
+    "qualif-assistee"
+   ],
+   "en": "To be assessed →",
+   "fr": "À évaluer →"
+  },
+  "Éditeur de la source": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "Source publisher",
+   "fr": "Éditeur de la source"
+  },
+  "Éditeur et millésime": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "Publisher and edition",
+   "fr": "Éditeur et millésime"
+  },
+  "État membre, parfois région NUTS #": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "Member State, sometimes NUTS # region",
+   "fr": "État membre, parfois région NUTS 2"
+  },
+  "Étiage et régime des cours d'eau — horizon retenu": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "Low water and river flow regime — chosen horizon",
+   "fr": "Étiage et régime des cours d'eau — horizon retenu"
+  },
+  "Éviter de compter un site à pleine charge en permanence, ce qui gonfle mécaniquement tous les résultats.": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "Avoid counting a site at full load all the time, which mechanically inflates every result.",
+   "fr": "Éviter de compter un site à pleine charge en permanence, ce qui gonfle mécaniquement tous les résultats."
+  },
+  "Évolutions prévues": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "Planned developments",
+   "fr": "Évolutions prévues"
+  },
+  "Événements naturels ouverts": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "Open natural events",
+   "fr": "Événements naturels ouverts"
+  },
+  "à partir de la capacité (formule affichée). La directive (UE) #/#, art. #, oblige désormais les centres de plus de # kW à déclarer énergie": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "from capacity (formula shown). Directive (EU) #/#, art. #, now requires centres of more than # kW to report energy",
+   "fr": "à partir de la capacité (formule affichée). La directive (UE) 2023/1791, art. 12, oblige désormais les centres de plus de 500 kW à déclarer énergie"
+  },
+  "élevé": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "high",
+   "fr": "élevé"
+  },
+  "état annoncé au": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "status announced as at",
+   "fr": "état annoncé au"
+  },
+  "été # · France (réseau électrique)": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "summer # · France (electricity grid)",
+   "fr": "été 2026 · France (réseau électrique)"
+  },
+  "été # · Rennes, France": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "summer # · Rennes, France",
+   "fr": "été 2026 · Rennes, France"
+  },
+  "événement géolocalisé, pas de maillage": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "geolocated event, no grid",
+   "fr": "événement géolocalisé, pas de maillage"
+  },
+  "événements notables en cours dans le monde": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "notable events under way worldwide",
+   "fr": "événements notables en cours dans le monde"
+  },
+  "Škoda Auto — Contrôle qualité par vision en ligne de production (Magic Eye)": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "Škoda Auto — Vision-based quality control on the production line (Magic Eye)",
+   "fr": "Škoda Auto — Contrôle qualité par vision en ligne de production (Magic Eye)"
+  },
+  "Żabka — Magasins autonomes Nano : vision par ordinateur pour l'encaissement sans caisse": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "Żabka — Nano autonomous stores: computer vision for checkout-free payment",
+   "fr": "Żabka — Magasins autonomes Nano : vision par ordinateur pour l'encaissement sans caisse"
+  },
+  "— Tous les documents —": {
+   "_pages": [
+    "rag"
+   ],
+   "en": "— All documents —",
+   "fr": "— Tous les documents —"
+  },
+  "— ce n’est pas une propriété du référentiel, c’est le résultat de votre arbitrage. Les trois premiers portent leur rang ; le classement complet est juste en dessous.": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "— this is not a property of the reference framework, it is the result of your trade-off. The top three carry their rank; the full ranking is just below.",
+   "fr": "— ce n’est pas une propriété du référentiel, c’est le résultat de votre arbitrage. Les trois premiers portent leur rang ; le classement complet est juste en dessous."
+  },
+  "— hypothèse tirée de moyennes historiques": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "— assumption drawn from historical averages",
+   "fr": "— hypothèse tirée de moyennes historiques"
+  },
+  "— l'infrastructure sous les systèmes. Au survol : statut, date, capacité et investissement": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "— the infrastructure beneath the systems. On hover: status, date, capacity and investment",
+   "fr": "— l'infrastructure sous les systèmes. Au survol : statut, date, capacité et investissement"
+  },
+  "— non renseignée": {
+   "_pages": [
+    "recyf-objectifs"
+   ],
+   "en": "— not provided",
+   "fr": "— non renseignée"
+  },
+  "↓ Vue d’ensemble": {
+   "_pages": [
+    "rgpd-conformite",
+    "rgpd-sensibilisation",
+    "rgpd-doc",
+    "rgpd-pbd",
+    "rgpd-aipd"
+   ],
+   "en": "↓ Overview",
+   "fr": "↓ Vue d’ensemble"
+  },
+  "⚠ L’évaporatif est plus efficace là où l’eau manque": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "⚠ Evaporative cooling is most efficient where water is scarce",
+   "fr": "⚠ L’évaporatif est plus efficace là où l’eau manque"
+  },
+  "⚠ Refroidissement adiabatique privé d’eau pendant la canicule — # pays signalés": {
+   "_pages": [
+    "pan-sia"
+   ],
+   "en": "⚠ Adiabatic cooling deprived of water during the heatwave — # countries flagged",
+   "fr": "⚠ Refroidissement adiabatique privé d’eau pendant la canicule — 3 pays signalés"
+  },
+  "✕ Écarter": {
+   "_pages": [
+    "qualif-assistee"
+   ],
+   "en": "✕ Reject",
+   "fr": "✕ Écarter"
+  },
+  "🏢 PME (< # salariés)": {
+   "_pages": [
+    "pricing"
+   ],
+   "en": "🏢 SME (< # employees)",
+   "fr": "🏢 PME (< 250 salariés)"
+  },
+  "🔍 Tous les niveaux de risque (#)": {
+   "_pages": [
+    "shadow-ai"
+   ],
+   "en": "🔍 All risk levels (#)",
+   "fr": "🔍 Tous les niveaux de risque (16)"
+  }
+ }
+}

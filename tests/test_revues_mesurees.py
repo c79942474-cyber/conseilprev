@@ -662,7 +662,7 @@ def test_de_l_ECRAN_au_MOTEUR_les_six_blocs_se_mesurent(vide):
         assert ana == [], ana
         return
     assert ia["etat"] != "validee" and [m["quoi"] for m in ia["manque"]] == [
-        "Classification selon l'Annexe III (8 domaines)"], ia["manque"]
+        "Classification selon l'Annexe III (8 domaines) et l'Annexe I"], ia["manque"]
     attendus = {"aipd": "« Gestion des ressources humaines » : Obstacle à un droit, "
                         "à un service ou à un contrat",
                 "pbd": "Aucune réutilisation incompatible sans nouvelle base légale",

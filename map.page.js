@@ -14,9 +14,8 @@ if (typeof L === 'undefined') {
   + '<div style="font-size:15px;font-weight:600;color:#1C1C1C;margin-bottom:8px">'
   + 'La carte n\u2019a pas pu se charger</div>'
   + '<p style="font-size:13px;color:#5B6472;line-height:1.6;margin-bottom:16px">'
-  + 'Sa biblioth\u00e8que cartographique est servie par un domaine tiers '
-  + '(unpkg.com) que votre r\u00e9seau ou votre navigateur n\u2019a pas pu joindre. '
-  + 'Les donn\u00e9es, elles, sont intactes.</p>'
+  + 'Sa biblioth\u00e8que cartographique n\u2019a pas pu s\u2019ex\u00e9cuter dans ce '
+  + 'navigateur. Les donn\u00e9es, elles, sont intactes.</p>'
   + '<a href="/panorama#s-carte" style="display:inline-block;font-size:13px;font-weight:600;'
   + 'color:#fff;background:#0F3D6E;padding:9px 18px;border-radius:5px;text-decoration:none">'
   + 'Voir les m\u00eames juridictions dans le Panorama \u2192</a></div></div>';
@@ -24,10 +23,71 @@ if (typeof L === 'undefined') {
   if (b) b.textContent = 'carte indisponible';
 } else {
 var map = L.map('map',{center:[38,15],zoom:2.4,minZoom:2,maxZoom:7,scrollWheelZoom:false});
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
-  attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
-  subdomains:'abcd',maxZoom:19
-}).addTo(map);
+
+/* ── AUCUN FOND NE DOIT EXIGER DE CLE ────────────────────────────────────────
+   CARTO a ferme son service de tuiles libre : ses serveurs repondent toujours
+   200, mais l'image rendue porte « API KEY REQUIRED / carto.com/basemaps/apikey »
+   en filigrane. Vu a l'ecran : les 46 juridictions posees sur un damier de
+   filigranes, sans aucune geographie. Et comme la tuile ARRIVE, aucun
+   « tileerror » ne se declenche : un suppleant arme sur l'echec ne pouvait
+   pas rattraper ce cas — une panne qui repond 200 n'est pas une panne pour le
+   navigateur. La seule parade est de ne plus dependre d'un service qui exige
+   une cle : les deux fonds declares sont ceux d'OpenStreetMap, libres et sans
+   inscription, cites comme leur licence l'exige.
+   Le style d'OSM est en couleurs la ou CARTO servait un gris clair ; la
+   feuille de style de la page le desature (voir « .leaflet-tile-pane ») pour
+   que les pastilles de score restent le seul element colore de la carte.
+
+   ── LE FOND DE CARTE A UN SUPPLEANT ─────────────────────────────────────────
+   Un seul fournisseur de tuiles etait cable en dur. Quand il ne repond pas —
+   panne, changement de politique, blocage reseau chez le visiteur — les
+   marqueurs restent affiches sur du vide : la carte du monde disparait sans
+   que rien ne le dise. On declare donc DEUX fonds, et on bascule sur le
+   suivant des que le premier echoue.
+   La bascule se decide sur des faits, pas sur un delai : on compte les
+   tuiles refusees, et on ne bascule QUE si aucune tuile n'est encore arrivee.
+   Quatre echecs sans un seul succes, c'est le fournisseur, pas le reseau du
+   visiteur qui hoquette sur une tuile. Une fois qu'une tuile est arrivee, le
+   fournisseur a fait ses preuves et on ne le quitte plus.
+   Si aucun fond ne repond, la carte reste utilisable — marqueurs, popups,
+   zoom — et une mention discrete dit pourquoi le fond manque, au lieu de
+   laisser croire a un bug. */
+var FONDS = [
+  { url:'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+    opts:{ attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+           maxZoom:19 } },
+  { url:'https://tile.openstreetmap.de/{z}/{x}/{y}.png',
+    opts:{ attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+           maxZoom:18 } }
+];
+var fondCouche = null;
+function fondPoser(i){
+  if (fondCouche) { map.removeLayer(fondCouche); fondCouche = null; }
+  if (i >= FONDS.length) { fondAbsent(); return; }
+  var echecs = 0, unSucces = false;
+  var c = L.tileLayer(FONDS[i].url, FONDS[i].opts);
+  c.on('tileload',  function(){ unSucces = true; });
+  c.on('tileerror', function(){
+    if (unSucces) return;
+    echecs++;
+    if (echecs >= 4) { c.off(); fondPoser(i + 1); }
+  });
+  fondCouche = c;
+  c.addTo(map);
+}
+function fondAbsent(){
+  var h = document.getElementById('map');
+  if (!h || document.getElementById('fond-absent')) return;
+  var d = document.createElement('div');
+  d.id = 'fond-absent';
+  d.setAttribute('style', 'position:absolute;bottom:10px;left:10px;z-index:1000;background:#fff;'
+    + 'border:1px solid #E3E0D8;border-radius:4px;padding:6px 10px;font-family:Inter,system-ui,sans-serif;'
+    + 'font-size:10px;color:#5B6472;max-width:300px;line-height:1.4');
+  d.textContent = 'Fond de carte indisponible \u2014 les juridictions et leurs '
+    + 'donn\u00e9es restent affich\u00e9es et cliquables.';
+  h.appendChild(d);
+}
+fondPoser(0);
 
 /* ── Jeu de donnees complet (fallback si charge hors iframe / sans message du parent) ──
    Synchronise avec JURS dans sentinel.html (46 juridictions). */

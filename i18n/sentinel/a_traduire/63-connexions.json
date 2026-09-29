@@ -1,0 +1,51 @@
+{
+ "_lot": "63-connexions",
+ "_mots": 63,
+ "_pages": [
+  "_js"
+ ],
+ "_rubrique": "diagnostic des connexions et retour de caisse (lot Stripe/Brevo)",
+ "bloc": {},
+ "texte": {
+  "Dernier événement Stripe reçu :": {
+   "en": "Last Stripe event received:",
+   "fr": "Dernier événement Stripe reçu :"
+  },
+  "Impossible de vérifier les connexions.": {
+   "en": "Unable to check the connections.",
+   "fr": "Impossible de vérifier les connexions."
+  },
+  "Paiement en cours de confirmation…": {
+   "en": "Payment being confirmed…",
+   "fr": "Paiement en cours de confirmation…"
+  },
+  "Vérification des comptes Stripe et Brevo…": {
+   "en": "Checking the Stripe and Brevo accounts…",
+   "fr": "Vérification des comptes Stripe et Brevo…"
+  },
+  "Vérification du paiement…": {
+   "en": "Checking the payment…",
+   "fr": "Vérification du paiement…"
+  },
+  "journal non lu": {
+   "en": "log not read",
+   "fr": "journal non lu"
+  },
+  "votre inscription sera confirmée dès réception de l’encaissement.": {
+   "en": "your registration will be confirmed as soon as the payment clears.",
+   "fr": "votre inscription sera confirmée dès réception de l’encaissement."
+  },
+  "votre offre s’ouvrira dès réception de l’encaissement.": {
+   "en": "your plan will open as soon as the payment clears.",
+   "fr": "votre offre s’ouvrira dès réception de l’encaissement."
+  },
+  "✅ Tout est branché — Stripe et Brevo répondent avec la configuration de ce service.": {
+   "en": "✅ Everything is connected — Stripe and Brevo answer with this service's configuration.",
+   "fr": "✅ Tout est branché — Stripe et Brevo répondent avec la configuration de ce service."
+  },
+  "✓ Paiement reçu : votre inscription est confirmée.": {
+   "en": "✓ Payment received: your registration is confirmed.",
+   "fr": "✓ Paiement reçu : votre inscription est confirmée."
+  }
+ }
+}

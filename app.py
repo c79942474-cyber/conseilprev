@@ -11,6 +11,7 @@ from werkzeug.utils import secure_filename
 from functools import wraps
 from collections import defaultdict
 from urllib.parse import quote
+import posixpath as _posixpath
 from flask import Flask, send_from_directory, jsonify, request, abort, make_response, after_this_request, Response, session, redirect, g, has_request_context
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import timedelta as _timedelta_auth
@@ -24,6 +25,50 @@ from flask_cors import CORS
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
 logger = logging.getLogger('conseilprev')
+
+
+class _JournalSurUneLigne(logging.Filter):
+    """UNE ENTREE DE JOURNAL, UNE LIGNE — quoi qu'un anonyme ait saisi.
+
+    LE DEFAUT MESURE. Un GET anonyme sur /api/stripe/retour avec
+    `?session_id=cs_x%0A2026-09-24 12:00:00,000 INFO STRIPE_OFFRE_ACTIVEE
+    client=7 plan=entreprise` faisait apparaitre, dans le journal Render, une
+    fausse activation d'offre SUR SA PROPRE LIGNE, avec l'horodatage et le
+    niveau d'un vrai evenement. Quiconque lit ce journal — nous, un auditeur,
+    un outil d'alerte — n'a aucun moyen de la distinguer d'une vraie.
+
+    POURQUOI ICI ET PAS AU POINT D'ECRITURE. Le saut de ligne n'est pas le
+    probleme d'UNE route : toute valeur choisie par un inconnu qui atteint un
+    `logger.*` porte le meme risque, et il y en a des centaines. Assainir au
+    point d'ecriture demanderait de les retrouver tous, aujourd'hui et a
+    chaque ligne ajoutee demain. Le filtre est le SEUL endroit par lequel
+    elles passent toutes.
+
+    CE QU'ON REMPLACE, ET CE QU'ON REFUSE DE FAIRE. Les fins de ligne
+    deviennent « ⏎ » : la trace reste lisible et rien n'est perdu — tronquer
+    effacerait justement ce qu'on veut voir. Le message est formate ICI, une
+    fois, et remis dans `record.msg` avec des `args` vides : un filtre qui
+    laisserait le formatage a plus tard ne verrait pas les valeurs.
+    """
+
+    _FINS = ('\r\n', '\n', '\r', ' ', ' ')
+
+    def filter(self, record):
+        try:
+            texte = record.getMessage()
+        except Exception:                                      # pragma: no cover
+            return True
+        if any(f in texte for f in self._FINS):
+            for f in self._FINS:
+                texte = texte.replace(f, ' ⏎ ')
+            record.msg = texte
+            record.args = ()
+        return True
+
+
+for _h in logging.getLogger().handlers:
+    _h.addFilter(_JournalSurUneLigne())
+logger.addFilter(_JournalSurUneLigne())
 
 app = Flask(__name__, static_folder='.', static_url_path='')
 
@@ -126,10 +171,37 @@ class RateLimiter:
         self.chat_req   = defaultdict(list)    # ip → chat timestamps
 
     def get_ip(self, req):
-        # Support proxies (Render, Cloudflare)
-        xff = req.headers.get('X-Forwarded-For','')
-        if xff:
-            return xff.split(',')[0].strip()
+        """L'adresse du client, telle que LE MANDATAIRE l'a constatee.
+
+        LE PREMIER ELEMENT D'X-FORWARDED-FOR EST ECRIT PAR LE CLIENT, et c'est
+        celui qui etait lu. Un anonyme envoyait donc « X-Forwarded-For:
+        3.18.12.63 » (une adresse publique des livraisons Stripe) sur un
+        chemin piege : le honeypot bloquait 3.18.12.63 une heure, et la
+        notification Stripe suivante recevait 429 avant meme d'atteindre la
+        route. Mesure : GET /wp-admin avec cet en-tete, puis POST
+        /api/stripe/webhook depuis 3.18.12.63 → 429. Quelques requetes par
+        heure suffisaient a couper toutes les confirmations de paiement, et
+        Stripe desactive un point de reception apres plusieurs jours d'echec.
+        Le meme en-tete, change a chaque appel, annulait aussi toutes les
+        bornes par adresse (mesure : 40 appels sur /api/stripe/retour, 10
+        refus depuis une adresse fixe, 0 refus en faisant tourner l'en-tete).
+
+        CE QU'ON LIT DESORMAIS, ET POURQUOI. Chaque mandataire AJOUTE a la fin
+        l'adresse dont il a recu la connexion. Le DERNIER element est donc le
+        seul que le client ne choisit pas : c'est celui que le mandataire de
+        Render vient d'ecrire. Tout ce qui precede est recopie tel quel depuis
+        la requete entrante, donc forgeable.
+
+        CE QUE CE CHOIX COÛTE, ET C'EST ASSUME : derriere DEUX mandataires de
+        confiance, le dernier element serait l'adresse du premier mandataire,
+        et tous les clients partageraient une seule cle. Render n'en pose
+        qu'un devant le service. Un mandataire de plus se traduirait ici par
+        un saut de plus a remonter — jamais par un retour au premier element.
+        """
+        xff = req.headers.get('X-Forwarded-For', '')
+        sauts = [p.strip() for p in xff.split(',') if p.strip()]
+        if sauts:
+            return sauts[-1]
         return req.remote_addr or '0.0.0.0'
 
     def is_blocked(self, ip):
@@ -143,13 +215,23 @@ class RateLimiter:
         self.blocked[ip] = time.time() + duration
         logger.warning(f"BLOCKED {ip} for {duration}s — {reason}")
 
-    def check(self, ip, limit=60, window=60, endpoint=''):
+    def check(self, ip, limit=60, window=60, endpoint='', tenir_compte_du_blocage=True):
         """Retourne True si la requête est autorisée.
         Clé par (ip, endpoint) pour ne pas pénaliser globalement
         une IP active sur plusieurs routes différentes.
         3 dépassements successifs avant le 1er blocage (30s).
+
+        `tenir_compte_du_blocage=False` COMPTE SANS REFUSER SUR LE BLOCAGE, et
+        c'est le seul moyen d'exempter vraiment un chemin. Un blocage ferme le
+        site par DEUX portes independantes : le `is_blocked` du middleware, et
+        cette methode qui commence par le meme test. Neutraliser la premiere
+        seule ne rouvrait rien — mesure : la livraison Stripe recevait encore
+        429, par la limite globale. Les points de reception machine passent
+        donc ici avec ce reglage : leur debit reste borne (et un depassement
+        peut toujours bloquer l'adresse pour le RESTE du site), mais une
+        adresse bloquee ailleurs continue d'etre servie sur eux.
         """
-        if self.is_blocked(ip):
+        if tenir_compte_du_blocage and self.is_blocked(ip):
             return False
         now = time.time()
         # Clé par route pour isoler les compteurs par endpoint
@@ -589,6 +671,72 @@ def security_middleware():
                        '/invitation/')
     is_auth_link = path.startswith(CHEMINS_A_JETON)
 
+    # ── LES TROIS POINTS D'ENTREE MACHINE, PROTEGES PAR UNE PREUVE ────────
+    # Aucun des filtres anti-anonyme d'en dessous n'a de sens sur eux, et
+    # CHACUN LES A DEJA COUPES EN PRODUCTION :
+    #
+    #  · /api/cron/* — un Render Cron Job execute une commande, donc `curl`,
+    #    `wget` ou `python-requests`, tous trois dans BLOCKED_BOTS. Mesure
+    #    avec le bon X-Cron-Secret : curl/8.5.0 → 404, Wget/1.21 → 404,
+    #    python-requests/2.32.3 → 404, Mozilla/5.0 → 200, et le journal dit
+    #    « BOT_BLOCKED … → /api/cron/rgpd-purge ». La purge RGPD automatique
+    #    et les relances d'essai n'ont donc JAMAIS tourne, et le 404 faisait
+    #    croire a une route absente. La recette ne le voyait pas : le client
+    #    de test envoie l'agent « Werkzeug/… ».
+    #
+    #  · /api/stripe/webhook et /api/brevo/webhook — leur adresse d'origine
+    #    est celle de Stripe ou de Brevo, et un anonyme pouvait la faire
+    #    bloquer une heure (voir RateLimiter.get_ip). Une adresse bloquee
+    #    recevait 429 AVANT la route : plus aucune confirmation de paiement,
+    #    plus aucune desinscription enregistree. Le filtre anti-injection les
+    #    coupait aussi : le jeton Brevo en `?token=` est tire par
+    #    `secrets.token_urlsafe`, dont l'alphabet contient le tiret — environ
+    #    un jeton sur cent porte « -- », lu comme un debut de commentaire SQL
+    #    (mesure : 403, puis l'adresse de Brevo bloquee 3 600 s, et meme les
+    #    livraisons en en-tete recevant ensuite 429).
+    #
+    # CE QUI RESTE APPLIQUE, ET C'EST LA CONTREPARTIE : la limite de debit
+    # globale (120/min par adresse), plus la preuve propre a chaque point —
+    # signature Stripe, jeton Brevo, X-Cron-Secret en temps constant. On
+    # n'echange pas un refus pour un acces libre : on echange un refus fonde
+    # sur l'apparence contre un refus fonde sur une preuve.
+    POINTS_MACHINE = ('/api/stripe/webhook', '/api/brevo/webhook')
+    est_point_machine = (path in POINTS_MACHINE
+                         or (path.startswith('/api/cron/')
+                             and request.method == 'POST'))
+
+    # ── Dossiers JAMAIS servis en direct, avant toute autre regle ──────────
+    # `static_folder='.'` sert tout fichier du depot. uploads_cv/ contient les
+    # CV deposes par les candidats — servis a l'anonyme alors que
+    # /api/admin/cv/… exige une session (mesure : GET /uploads_cv/<cv>.pdf →
+    # 200, /api/admin/cv/<cv>.pdf → 403). courriels_repli/ contient les
+    # courriels non partis, jetons compris. 404, pas 403 : ne pas confirmer
+    # qu'un nom de fichier existe.
+    #
+    # LA GARDE COMPARAIT LE CHEMIN BRUT, ET LA ROUTE STATIQUE LE NORMALISE
+    # ENSUITE : les deux ne regardaient donc pas le meme fichier. Mesure sur le
+    # client de test Flask, un CV de candidat servi en 200 (1 199 octets,
+    # %PDF-1.4) par « /./uploads_cv/<cv>.pdf », « /%2e/uploads_cv/… » (werkzeug
+    # decode %2e en « . » avant la vue), « /.//uploads_cv/… » et
+    # « /././/uploads_cv/… », quand « /uploads_cv/<cv>.pdf » rendait bien 404.
+    # Le filtre anti-injection plus bas ne cherche que « ../ » et laisse passer
+    # « ./ ». ON COMPARE DESORMAIS CE QUE LA ROUTE STATIQUE OUVRIRA : le
+    # chemin normalise, puis mis en minuscules. `request.path` est DEJA
+    # decode par werkzeug — mesure : « /%2e/… » et « /.%2fuploads_cv/… »
+    # arrivent ici en « /./uploads_cv/… ». Un `unquote` de plus a donc ete
+    # retire : il ne changeait la decision d'AUCUNE requete mesurable, et du
+    # code de securite qu'aucune regle ne peut faire tomber est une dette.
+    #
+    # LE PREMIER SEGMENT SUFFIT ET C'EST VOULU : « uploads_cv » seul, sans
+    # barre finale, designe le dossier lui-meme — son listage est un refus tout
+    # autant que celui d'un fichier. 404, pas 403 : ne pas confirmer qu'un nom
+    # de fichier existe.
+    DOSSIERS_PRIVES = ('uploads_cv', 'courriels_repli')
+    _norme = _posixpath.normpath('/' + path.replace('\\', '/')).lstrip('/').lower()
+    if _norme.split('/')[0] in DOSSIERS_PRIVES:
+        logger.warning(f"DOSSIER_PRIVE {ip} → {path}")
+        abort(404)
+
     # ── Whitelist assets statiques (pas de check UA) ──
     static_exts = ('.jpg','.jpeg','.png','.gif','.svg','.ico',
                    '.css','.js','.woff','.woff2','.mp4','.json')
@@ -605,18 +753,18 @@ def security_middleware():
         return  # Health check légitime — pas de vérif UA ni blocage
 
     # ── Vérifier si IP bloquée ──
-    if limiter.is_blocked(ip):
+    if limiter.is_blocked(ip) and not est_point_machine:
         logger.warning(f"BLOCKED_IP {ip} → {path}")
         abort(429)
 
     # ── Anti-scraping UA ──
-    if is_bot_blocked(ua):
+    if is_bot_blocked(ua) and not est_point_machine:
         logger.warning(f"BOT_BLOCKED {ip} UA={ua[:60]} → {path}")
         # Retourner 404 pour ne pas révéler le blocage
         abort(404)
 
     # ── Anti-scraping comportemental (check_scraping etait definie mais jamais appelee) ──
-    if path.startswith('/api/') and check_scraping(request):
+    if path.startswith('/api/') and not est_point_machine and check_scraping(request):
         logger.warning(f"SCRAPING_PATTERN {ip} UA={ua[:60]} → {path}")
         abort(404)
 
@@ -641,7 +789,10 @@ def security_middleware():
     #     donnees structurees ne sont JAMAIS lus par un navigateur. Leur
     #     appliquer un test de « ressemblance a un navigateur » revient a
     #     fermer la porte a leurs seuls lecteurs.
-    _machines = ('/robots.txt', '/sitemap.xml', '/donnees-structurees.json')
+    #     `llms.txt` est du meme cote : un resume POUR les assistants, que
+    #     leurs lecteurs vont chercher sans Accept-Language (mesure : 404).
+    _machines = ('/robots.txt', '/sitemap.xml', '/donnees-structurees.json',
+                 '/llms.txt')
     _moteur_declare = bool(ua) and any(b in ua.lower() for b in ALLOWED_BOTS)
     if (not is_auth_link and not path.startswith('/api/')
             and path not in _machines and not _moteur_declare
@@ -653,7 +804,8 @@ def security_middleware():
             abort(404)
 
     # ── Rate limit global : 120 req/min par IP ──
-    if not limiter.check(ip, limit=120, window=60, endpoint='global'):
+    if not limiter.check(ip, limit=120, window=60, endpoint='global',
+                         tenir_compte_du_blocage=not est_point_machine):
         abort(429)
 
     # ── Honeypot paths (pièges pour scanners) ──
@@ -664,7 +816,9 @@ def security_middleware():
         '/etc/passwd', '/proc/self', '/../', '/xmlrpc.php',
         '/wp-content', '/wp-includes', '/.htaccess',
     ]
-    if any(path.lower().startswith(hp) or path.lower() == hp for hp in honeypot_paths):
+    if (not est_point_machine
+            and any(path.lower().startswith(hp) or path.lower() == hp
+                    for hp in honeypot_paths)):
         limiter.block(ip, 3600, f'honeypot:{path}')
         logger.warning(f"HONEYPOT {ip} → {path}")
         abort(404)
@@ -678,7 +832,7 @@ def security_middleware():
         r"(etc/passwd|/proc/self)",            # LFI
     ]
     full_url = request.url
-    if not is_auth_link:
+    if not is_auth_link and not est_point_machine:
         for pat in suspicious_patterns:
             if _re.search(pat, full_url, _re.IGNORECASE):
                 limiter.block(ip, 3600, f'injection_attempt:{pat}')
@@ -695,38 +849,228 @@ SMTP_PORT     = int(os.environ.get('SMTP_PORT', '2525'))  # Brevo : 2525 (STARTT
 SMTP_USER     = os.environ.get('SMTP_USER', '')      # Votre email Brevo (login)
 SMTP_PASSWORD = os.environ.get('SMTP_PASSWORD', '')  # Clé SMTP Brevo (pas votre mdp)
 BREVO_API_KEY = os.environ.get('BREVO_API_KEY', '')  # Clé API Brevo (v3)
-BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email'
+# UNE SEULE BASE D'URL pour tous les appels Brevo. L'envoi transactionnel, les
+# contacts et le compte partaient vers trois adresses codees en dur : la recette
+# ne pouvait rediriger que la premiere, et les deux autres restaient invisibles
+# (mesure : `add_contact_to_brevo` et `/api/health` injoignables sans reseau).
+BREVO_API_BASE = 'https://api.brevo.com'
+BREVO_API_URL = BREVO_API_BASE + '/v3/smtp/email'
+# Delai d'un appel, et attentes entre deux tentatives (voir send_via_brevo_api).
+BREVO_DELAI = 20
+BREVO_REESSAIS_ATTENTES = (0.5, 1.0)
+# Le jeton que Brevo doit presenter au webhook (voir brevo_webhook).
+BREVO_WEBHOOK_TOKEN = os.environ.get('BREVO_WEBHOOK_TOKEN', '').strip()
+
+# LE DOSSIER DU COURRIEL DE REPLI, ET POURQUOI CE N'EST PLUS uploads_cv/.
+# Quand ni Brevo ni SMTP ne repondent, le courriel est ecrit sur disque pour ne
+# pas etre perdu. Il l'etait dans uploads_cv/ — un dossier que Flask SERT
+# (static_folder='.'), sous un nom previsible (horodatage a la seconde + partie
+# locale de l'adresse). Mesure : `GET /uploads_cv/email_<date>_<nom>.html`
+# repondait 200, jeton de reinitialisation compris. Le dossier dedie n'est ni
+# suivi par git ni servi (security_middleware), le nom porte un alea, le
+# fichier est cree en 0600.
+REPLI_COURRIELS_DOSSIER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'courriels_repli')
+
+_BREVO_SESSION = None
+_BREVO_SESSION_VERROU = threading.Lock()
+
+
+def _brevo_session():
+    """La Session HTTP partagee par tous les appels Brevo du processus.
+
+    `requests.post` cree une Session — donc un pool, donc une poignee de main
+    TLS — a chaque appel. Mesure : 10 envois → 10 Session et 20 HTTPAdapter.
+    Une rafale de relances payait une negociation TLS par courriel. Ici la
+    connexion vers api.brevo.com est gardee et reutilisee. Les reessais ne sont
+    PAS confies a l'adaptateur : ils sont decides dans send_via_brevo_api, ou
+    l'on sait quel statut merite une seconde chance.
+    """
+    global _BREVO_SESSION
+    if _BREVO_SESSION is None:
+        with _BREVO_SESSION_VERROU:
+            if _BREVO_SESSION is None:
+                s = requests.Session()
+                adaptateur = requests.adapters.HTTPAdapter(
+                    pool_connections=2, pool_maxsize=8, max_retries=0)
+                s.mount('https://', adaptateur)
+                s.mount('http://', adaptateur)
+                _BREVO_SESSION = s
+    return _BREVO_SESSION
+
+
+def _brevo_entetes(cle=None):
+    return {'api-key': cle or BREVO_API_KEY, 'Content-Type': 'application/json',
+            'Accept': 'application/json'}
+
+
+def _masquer_courriel(adresse):
+    """`a***@domaine` : de quoi reconnaitre un incident dans le journal sans y
+    recopier l'adresse (art. 5.1.c)."""
+    a = str(adresse or '')
+    if '@' not in a:
+        return '***'
+    local, domaine = a.rsplit('@', 1)
+    return (local[:1] or '*') + '***@' + domaine
+
+
+def _adresse_non_routable(adresse):
+    """`conseilprev@internal.system` n'existe pas : Brevo accepte l'envoi (201),
+    decompte le credit, puis le message rebondit. Sur le compte reel, 6 des 13
+    derniers envois visaient cette adresse — pres de la moitie du quota
+    quotidien pour des messages qui n'arrivent jamais, et autant de rebonds qui
+    degradent la reputation de l'expediteur. On refuse AVANT l'appel."""
+    return str(adresse or '').strip().lower().endswith('@internal.system')
+
+
+def _brevo_pause(secondes):
+    """L'attente entre deux tentatives — isolee pour que la recette la mesure
+    sans la subir."""
+    time.sleep(secondes)
+
+
+def _brevo_reessayable(statut):
+    """Un 429 (quota ou rafale) et un 5xx sont passagers : on retente. Un
+    autre 4xx (400 expediteur non verifie, 401 cle invalide) ne changera pas
+    en le rejouant — et le rejouer consommerait un credit de plus par essai."""
+    return statut == 429 or 500 <= statut <= 599
+
+
+def _deposer_courriel_repli(to_email, subject, contenu, extension='html'):
+    """Ecrit le courriel qui n'a pas pu partir. Rend le chemin, ou None.
+
+    Nom imprevisible (alea de 8 octets), fichier cree en 0600 dans un dossier
+    en 0700 que Flask ne sert pas. Le destinataire et le sujet vont en tete du
+    fichier, pas dans son nom.
+    """
+    import datetime as _dt
+    import secrets as _sec
+    try:
+        os.makedirs(REPLI_COURRIELS_DOSSIER, mode=0o700, exist_ok=True)
+        ts = _dt.datetime.now().strftime('%Y%m%d_%H%M%S')
+        chemin = os.path.join(REPLI_COURRIELS_DOSSIER,
+                              'courriel_%s_%s.%s' % (ts, _sec.token_hex(8), extension))
+        fd = os.open(chemin, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+        with os.fdopen(fd, 'w', encoding='utf-8') as f:
+            f.write('<!-- To: %s | Subject: %s -->\n' % (to_email, subject) if extension == 'html'
+                    else 'TO: %s\nSUBJECT: %s\n\n' % (to_email, subject))
+            f.write(contenu)
+        logger.warning('EMAIL_SAVED_LOCAL: %s', os.path.basename(chemin))
+        return chemin
+    except Exception as e:                                     # noqa: BLE001
+        logger.error('EMAIL_SAVE_ERR: %s', e)
+        return None
 
 
 # ══════════════════════════════════════════════════════════════
 # BREVO — Fonctions d'envoi email (API + SMTP + fallback local)
 # ══════════════════════════════════════════════════════════════
+def _nom_affiche(valeur):
+    """Le NOM porte a cote d'une adresse, dans l'en-tete « To: ».
+
+    CE QUI Y ARRIVAIT. `prenom + ' ' + nom` d'un formulaire public y entre tel
+    quel : mesure sur /api/formation/inscription, le POST vers l'adresse du
+    demandeur portait `name = 'Paul <a href="https://piege.test/z">Cliquez
+    pour valider</a>'`. Ce n'est pas du HTML ici mais un en-tete de courrier,
+    ou les chevrons DELIMITENT l'adresse (RFC 5322) : un nom qui en contient
+    fabrique une seconde adresse aux yeux d'un client de messagerie.
+
+    ON RETIRE LES CHEVRONS, LES GUILLEMETS ET LES FINS DE LIGNE, et rien de
+    plus : un nom legitime n'en porte aucun, et tronquer ou echapper
+    abimerait des noms reels (accents, apostrophes, traits d'union). Un seul
+    point de passage, donc valable pour tous les appelants d'un coup.
+    """
+    texte = str(valeur if valeur is not None else '')
+    for c in ('<', '>', '"', '\r', '\n', ' ', ' '):
+        texte = texte.replace(c, ' ')
+    return ' '.join(texte.split())[:120]
+
+
 def send_via_brevo_api(to_email, to_name, subject, html_content,
                        reply_to=None, attachments=None, tags=None):
+    """Un courriel par l'API transactionnelle. Rend (ok, motif ou messageId).
+
+    DEUX REFUS AVANT TOUT APPEL, parce que l'appel coute un credit sur 300 :
+    une adresse non routable (voir _adresse_non_routable) et une adresse que
+    Brevo nous a signalee (desinscription, rebond dur, plainte : voir
+    brevo_webhook). Chaque refus est journalise et inscrit dans email_log.
+
+    REESSAI BORNE, ICI SEULEMENT. Sur 429, 5xx, delai depasse ou connexion
+    refusee, l'envoi est retente deux fois (attentes de 0,5 s puis 1 s).
+    Mesure avant : un 429 passager perdait definitivement un courriel de
+    confirmation ou de reinitialisation. Les boucles de relance, elles, ne
+    reessaient PAS : leur idempotence est en base (colonne datee), et un
+    reessai a ce niveau-la renverrait des doublons.
+    """
     if not BREVO_API_KEY:
         return False, 'no_brevo_api_key'
-    try:
-        payload = {
-            'sender':      {'name': 'CONSEILPREV', 'email': MAIL_FROM},
-            'to':          [{'email': to_email, 'name': to_name or to_email}],
-            'subject':     subject,
-            'htmlContent': html_content,
-        }
-        if reply_to:    payload['replyTo']    = {'email': reply_to}
-        if tags:        payload['tags']       = tags[:10]
-        if attachments: payload['attachment'] = attachments
-        resp = requests.post(BREVO_API_URL,
-            headers={'api-key': BREVO_API_KEY, 'Content-Type': 'application/json', 'Accept': 'application/json'},
-            json=payload, timeout=20)
+    if _adresse_non_routable(to_email):
+        logger.error('BREVO_API_NON_ROUTABLE: envoi refuse vers %s (%s)',
+                     _masquer_courriel(to_email), subject)
+        email_log_record(to_email, subject, 'refuse', False, 'adresse_non_routable')
+        return False, 'adresse_non_routable'
+    motif_suppression = email_supprime(to_email)
+    if motif_suppression:
+        logger.warning('BREVO_API_SUPPRIME: envoi refuse vers %s (%s)',
+                       _masquer_courriel(to_email), motif_suppression)
+        email_log_record(to_email, subject, 'refuse', False, 'supprime:' + motif_suppression)
+        return False, 'supprime'
+    payload = {
+        'sender':      {'name': 'CONSEILPREV', 'email': MAIL_FROM},
+        'to':          [{'email': to_email, 'name': _nom_affiche(to_name) or to_email}],
+        'subject':     subject,
+        'htmlContent': html_content,
+    }
+    if reply_to:    payload['replyTo']    = {'email': reply_to}
+    if tags:        payload['tags']       = tags[:10]
+    if attachments: payload['attachment'] = attachments
+    dernier = 'aucune_tentative'
+    for tentative in range(1 + len(BREVO_REESSAIS_ATTENTES)):
+        if tentative:
+            _brevo_pause(BREVO_REESSAIS_ATTENTES[tentative - 1])
+        try:
+            resp = _brevo_session().post(BREVO_API_URL, headers=_brevo_entetes(),
+                                         json=payload, timeout=BREVO_DELAI)
+        except requests.exceptions.ReadTimeout as e:
+            # LA REQUETE EST PARTIE, ET BREVO A PU L'ACCEPTER. Un delai de
+            # LECTURE depasse ne dit rien du sort du courriel : le POST a ete
+            # emis, seule la reponse manque. L'API transactionnelle de Brevo
+            # n'a pas de cle d'idempotence — chaque tentative est UN NOUVEL
+            # ENVOI. Mesure avec un faux Brevo qui lit le POST puis repond 201
+            # apres 1,5 s, BREVO_DELAI a 1,0 s : trois POST recus, donc trois
+            # exemplaires de la confirmation de reservation (ou du lien de
+            # reinitialisation) dans la boite du client — puis un quatrieme
+            # par le repli SMTP, puisque la fonction rendait False.
+            #
+            # ON NE REESSAIE DONC PAS, ET ON N'ENCHAINE PAS SUR LE REPLI : le
+            # motif `delai_reponse` dit a send_email_smart que l'issue est
+            # INCERTAINE, et un doublon certain est pire qu'un envoi douteux
+            # sur un quota de 300 par jour. La ligne email_log porte ce motif :
+            # c'est la seule trace qui permette de decider apres coup.
+            logger.error('BREVO_API_DELAI_REPONSE (tentative %d) vers %s : %s',
+                         tentative + 1, _masquer_courriel(to_email), str(e)[:120])
+            email_log_record(to_email, subject, 'brevo_api', False, 'delai_reponse')
+            return False, 'delai_reponse'
+        except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as e:
+            # CE QUI N'A PAS PU PARTIR SE REESSAIE : un delai de CONNEXION ou
+            # une connexion refusee signifient qu'aucun octet n'a atteint
+            # Brevo. Le doublon est impossible, la perte du courriel est
+            # certaine sans reessai.
+            dernier = 'reseau: %s' % str(e)[:120]
+            logger.error('BREVO_API_RESEAU (tentative %d): %s', tentative + 1, dernier)
+            continue
+        except Exception as e:                                 # noqa: BLE001
+            logger.error(f'BREVO_API_EXCEPTION: {e}')
+            return False, str(e)
         if resp.status_code in (201, 200):
             mid = resp.json().get('messageId', 'ok')
-            logger.info(f'BREVO_API_OK: {to_email} — {mid}')
+            logger.info('BREVO_API_OK: %s — %s', _masquer_courriel(to_email), mid)
             return True, mid
-        logger.error(f'BREVO_API_ERR {resp.status_code}: {resp.text[:200]}')
-        return False, f'http_{resp.status_code}'
-    except Exception as e:
-        logger.error(f'BREVO_API_EXCEPTION: {e}')
-        return False, str(e)
+        logger.error('BREVO_API_ERR %d (tentative %d): %s',
+                     resp.status_code, tentative + 1, resp.text[:200])
+        dernier = 'http_%d' % resp.status_code
+        if not _brevo_reessayable(resp.status_code):
+            return False, dernier
+    return False, dernier
 
 
 def _pour_courriel(valeur):
@@ -756,7 +1100,22 @@ def send_email_smart(to_email, to_name, subject, html_content,
                      reply_to=None, tags=None):
     """Brevo API → SMTP Brevo → sauvegarde locale. Chaque tentative est journalisee
     dans la table email_log pour permettre un diagnostic immediat (page Gestion des
-    clients) sans avoir a chercher dans les logs Render a chaque incident."""
+    clients) sans avoir a chercher dans les logs Render a chaque incident.
+
+    LES DEUX REFUS SONT PRIS ICI AUSSI, ET AVANT L'API : sinon un refus de
+    send_via_brevo_api serait suivi du repli SMTP puis du fichier local, et
+    l'adresse desinscrite recevrait le courriel par une autre porte."""
+    if _adresse_non_routable(to_email):
+        logger.error('EMAIL_NON_ROUTABLE: envoi refuse vers %s (%s)',
+                     _masquer_courriel(to_email), subject)
+        email_log_record(to_email, subject, 'refuse', False, 'adresse_non_routable')
+        return False, 'adresse_non_routable'
+    motif_suppression = email_supprime(to_email)
+    if motif_suppression:
+        logger.warning('EMAIL_SUPPRIME: envoi refuse vers %s (%s)',
+                       _masquer_courriel(to_email), motif_suppression)
+        email_log_record(to_email, subject, 'refuse', False, 'supprime:' + motif_suppression)
+        return False, 'supprime'
     if BREVO_API_KEY:
         ok, result = send_via_brevo_api(to_email, to_name, subject, html_content,
                                         reply_to=reply_to, tags=tags)
@@ -764,6 +1123,13 @@ def send_email_smart(to_email, to_name, subject, html_content,
             email_log_record(to_email, subject, 'brevo_api', True)
             return True, 'brevo_api'
         logger.warning(f'BREVO_API_FAILED: {result}')
+        if result == 'delai_reponse':
+            # L'ISSUE EST INCERTAINE, PAS NEGATIVE. Brevo a recu le POST et a
+            # pu l'accepter ; seule sa reponse manque. Enchainer sur SMTP puis
+            # sur le fichier de repli ajouterait un exemplaire CERTAIN a un
+            # envoi PROBABLE. On s'arrete, et la ligne email_log deja ecrite
+            # par send_via_brevo_api porte le motif.
+            return False, 'delai_reponse'
     if SMTP_USER and SMTP_PASSWORD:
         try:
             from email.mime.multipart import MIMEMultipart as _MM
@@ -784,20 +1150,13 @@ def send_email_smart(to_email, to_name, subject, html_content,
                 with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=20) as srv:
                     srv.ehlo(); srv.starttls(context=ctx); srv.login(SMTP_USER, SMTP_PASSWORD)
                     srv.sendmail(MAIL_FROM, [to_email], msg.as_string())
-            logger.info(f'BREVO_SMTP_OK: {to_email}')
+            logger.info('BREVO_SMTP_OK: %s', _masquer_courriel(to_email))
             email_log_record(to_email, subject, 'brevo_smtp', True)
             return True, 'brevo_smtp'
         except Exception as e:
             logger.error(f'BREVO_SMTP_FAILED: {e}')
             email_log_record(to_email, subject, 'brevo_smtp', False, str(e)[:200])
-    import datetime as _dt
-    ts   = _dt.datetime.now().strftime('%Y%m%d_%H%M%S')
-    path = os.path.join(UPLOAD_FOLDER, f'email_{ts}_{to_email.split("@")[0]}.html')
-    try:
-        with open(path, 'w', encoding='utf-8') as f:
-            f.write(f'<!-- To: {to_email} | Subject: {subject} -->\n' + html_content)
-        logger.warning(f'EMAIL_SAVED_LOCAL: {path}')
-    except Exception: pass
+    _deposer_courriel_repli(to_email, subject, html_content)
     email_log_record(to_email, subject, 'saved_locally', False, 'Brevo API et SMTP indisponibles ou non configures')
     return False, 'saved_locally'
 
@@ -891,9 +1250,9 @@ def add_contact_to_brevo(email, prenom, nom, entreprise='', liste_id=None):
             'updateEnabled': True,
         }
         if liste_id: payload['listIds'] = [int(liste_id)]
-        resp = requests.post('https://api.brevo.com/v3/contacts',
-            headers={'api-key': BREVO_API_KEY, 'Content-Type': 'application/json'},
-            json=payload, timeout=15)
+        # api.brevo.com, mais par la base commune : la recette la redirige.
+        resp = _brevo_session().post(BREVO_API_BASE + '/v3/contacts',
+            headers=_brevo_entetes(), json=payload, timeout=15)
         if resp.status_code in (201, 204):
             # Pas l adresse dans le journal : voir la docstring (art. 5.1.c).
             logger.info('BREVO_CONTACT_OK')
@@ -906,14 +1265,47 @@ def add_contact_to_brevo(email, prenom, nom, entreprise='', liste_id=None):
 
 MAIL_FROM     = os.environ.get('MAIL_FROM', 'noreply@conseilprev.onrender.com')
 _FREE_EMAIL_DOMAINS = ('outlook.com', 'hotmail.com', 'live.com', 'gmail.com', 'yahoo.com', 'icloud.com', 'aol.com', 'protonmail.com')
-if MAIL_FROM.split('@')[-1].lower() in _FREE_EMAIL_DOMAINS:
-    logger.error(
-        f"CONFIGURATION INVALIDE : MAIL_FROM='{MAIL_FROM}' utilise un domaine grand public "
-        f"({MAIL_FROM.split('@')[-1]}), qui ne peut JAMAIS etre authentifie sur Brevo. "
-        f"Tous les envois d'email seront rejetes par les fournisseurs (Outlook, Gmail...). "
-        f"Definissez MAIL_FROM sur Render avec une adresse de votre propre domaine, deja "
-        f"verifie dans Brevo (Senders & IP -> Domains)."
-    )
+# Des domaines dont PERSONNE ne peut prouver la propriete a Brevo : l'hebergeur
+# (onrender.com), l'adresse interne fictive, la machine locale. Un expediteur
+# qui y finit est rejete en « 400 sender not valid » a chaque envoi.
+_DOMAINES_NON_VERIFIABLES = ('onrender.com', 'internal.system', 'localhost', 'localdomain',
+                             'example.com', 'exemple.fr', 'invalid', 'test')
+
+
+def verifier_mail_from(adresse, journal=None):
+    """Le motif pour lequel cet expediteur ne passera pas chez Brevo, ou None.
+
+    LA GARDE PRECEDENTE NE VOYAIT PAS LA VALEUR PAR DEFAUT. Elle n'alertait que
+    sur les domaines grand public ; or le defaut du code est
+    `noreply@conseilprev.onrender.com`, un domaine de l'hebergeur qu'aucun compte
+    Brevo ne peut verifier — et le seul expediteur verifie du compte reel est
+    ailleurs. Si MAIL_FROM manque sur Render, TOUT envoi est refuse, et rien ne
+    le disait au demarrage. La valeur par defaut n'est pas changee : c'est le
+    journal qui doit crier, pas le code qui doit deviner une adresse.
+    """
+    a = str(adresse or '').strip()
+    motif = None
+    if not a or '@' not in a:
+        motif = "MAIL_FROM est vide ou n'est pas une adresse : Brevo refusera chaque envoi (sender not valid)."
+    else:
+        domaine = a.split('@')[-1].lower()
+        if domaine in _FREE_EMAIL_DOMAINS:
+            motif = (f"MAIL_FROM='{a}' utilise un domaine grand public ({domaine}), qui ne peut "
+                     f"JAMAIS etre authentifie sur Brevo. Tous les envois seront rejetes par les "
+                     f"fournisseurs (Outlook, Gmail...).")
+        elif domaine in _DOMAINES_NON_VERIFIABLES or any(
+                domaine.endswith('.' + d) for d in _DOMAINES_NON_VERIFIABLES):
+            motif = (f"MAIL_FROM='{a}' finit par un domaine non verifiable ({domaine}) : c'est "
+                     f"la valeur par defaut du code ou une adresse fictive, et Brevo la refusera "
+                     f"(400 sender not valid).")
+    if motif:
+        motif += (" Definissez MAIL_FROM sur Render avec l'expediteur verifie dans Brevo "
+                  "(Senders & IP -> Senders).")
+        (journal or logger).error('CONFIGURATION INVALIDE : ' + motif)
+    return motif
+
+
+_MAIL_FROM_MOTIF_REFUS = verifier_mail_from(MAIL_FROM)
 MAIL_TO       = os.environ.get('MAIL_TO', 'christophe.cerf@outlook.com')
 MAIL_CC       = os.environ.get('MAIL_CC', 'c79942474@gmail.com')
 
@@ -1014,7 +1406,12 @@ def save_cv_local(data, filename, context=''):
 
 
 def build_html_email(data, cv_filename=None):
-    """Construit le corps HTML de l'email."""
+    """Construit le corps HTML de l'email.
+
+    CHAQUE VALEUR SAISIE PASSE PAR _pour_courriel. `sanitize_input` ne retire
+    que les caracteres de controle : un nom `<a href="https://piege.test/…">
+    Dossier urgent</a>` arrivait tel quel, rendu et cliquable, dans la boite de
+    CONSEILPREV — sous l'expediteur du site. Mesure sur /api/apply."""
     rows = ''
     fields = [
         ('Prénom',     data.get('prenom','')),
@@ -1032,14 +1429,14 @@ def build_html_email(data, cv_filename=None):
         if not val: continue
         bg = '#f8f5ff' if alt else '#ffffff'
         color = '#6d28d9' if label == 'Email' else '#1a1a2e'
-        rows += f'<tr style="background:{bg}"><td style="padding:9px 12px;color:#666;font-size:13px;width:130px">{label}</td><td style="padding:9px 12px;color:{color};font-size:13px;font-weight:500">{val}</td></tr>'
+        rows += f'<tr style="background:{bg}"><td style="padding:9px 12px;color:#666;font-size:13px;width:130px">{label}</td><td style="padding:9px 12px;color:{color};font-size:13px;font-weight:500">{_pour_courriel(val)}</td></tr>'
         alt = not alt
 
-    msg_html = data.get('message','').replace('\n','<br>') or '—'
-    cv_html  = f'<span style="color:#22c55e;font-weight:700">📎 {cv_filename}</span>' if cv_filename else '<span style="color:#ef4444">⚠ Aucun CV joint</span>'
-    source   = data.get('source_url','/')
-    form_type = data.get('form_type','candidature')
-    consent_date = data.get('consent_date','N/A')
+    msg_html = _pour_courriel(data.get('message','')).replace('\n','<br>') or '—'
+    cv_html  = f'<span style="color:#22c55e;font-weight:700">📎 {_pour_courriel(cv_filename)}</span>' if cv_filename else '<span style="color:#ef4444">⚠ Aucun CV joint</span>'
+    source   = _pour_courriel(data.get('source_url','/'))
+    form_type = _pour_courriel(data.get('form_type','candidature'))
+    consent_date = _pour_courriel(data.get('consent_date','N/A'))
 
     return f"""<!DOCTYPE html>
 <html><head><meta charset="UTF-8"></head>
@@ -1074,7 +1471,7 @@ def send_email_with_attachment(data, cv_data=None, cv_filename=None):
     Envoie email candidature + CV en pièce jointe.
     Flux: 1) Brevo API (HTTP, pas de port SMTP) → 2) SMTP Brevo → 3) local.
     """
-    import base64 as _b64, datetime as _dt
+    import base64 as _b64
 
     prenom  = data.get('prenom','')
     nom     = data.get('nom','')
@@ -1109,13 +1506,9 @@ def send_email_with_attachment(data, cv_data=None, cv_filename=None):
                     'content': _b64.b64encode(cv_data).decode('ascii'),
                 }]
                 logger.info(f'BREVO_CV_ATTACH: {safe_fn} ({len(cv_data)} bytes)')
-            resp = requests.post(
+            resp = _brevo_session().post(
                 BREVO_API_URL,
-                headers={
-                    'api-key':      _brevo_key,
-                    'Content-Type': 'application/json',
-                    'Accept':       'application/json',
-                },
+                headers=_brevo_entetes(_brevo_key),
                 json=payload,
                 timeout=25,
             )
@@ -1162,19 +1555,11 @@ def send_email_with_attachment(data, cv_data=None, cv_filename=None):
         except Exception as e:
             logger.error(f'APPLY_SMTP_ERR: {e}')
 
-    # ── 3. Sauvegarde locale ──
-    try:
-        ts   = _dt.datetime.now().strftime('%Y%m%d_%H%M%S')
-        path = os.path.join(UPLOAD_FOLDER, f'email_{ts}.txt')
-        with open(path, 'w', encoding='utf-8') as _f:
-            _f.write(f"TO: {MAIL_TO}\nCC: {MAIL_CC}\nSUBJECT: {subject}\n\n")
-            for k, v in data.items():
-                _f.write(f"{k}: {v}\n")
-            if cv_filename:
-                _f.write(f"\nCV: {cv_filename} ({len(cv_data or b'')} bytes)\n")
-        logger.warning(f'APPLY_SAVED_LOCAL: {path}')
-    except Exception as _e:
-        logger.error(f'APPLY_SAVE_ERR: {_e}')
+    # ── 3. Sauvegarde locale (dossier dedie, non servi : voir _deposer_courriel_repli) ──
+    contenu = ''.join(f"{k}: {v}\n" for k, v in data.items())
+    if cv_filename:
+        contenu += f"\nCV: {cv_filename} ({len(cv_data or b'')} bytes)\n"
+    _deposer_courriel_repli(MAIL_TO, subject, contenu, extension='txt')
     return False, 'smtp_not_configured'
 
 def fetch_jobboard_signals(domaine='', skills=None):
@@ -4393,9 +4778,19 @@ def api_apply():
 
 @app.route('/api/test-brevo-cv', methods=['GET'])
 def test_brevo_cv():
-    """Test direct API Brevo avec pièce jointe — diagnostic CV."""
+    """Test direct API Brevo avec pièce jointe — diagnostic CV.
+
+    ADMINISTRATEUR CONNECTE UNIQUEMENT. Cette route etait publique et envoyait
+    DEUX vrais courriels par visite : mesure, 160 GET anonymes depuis une seule
+    adresse → 120 servis, 240 envois — le quota du compte (300 par jour) en
+    une minute. Elle affichait aussi la longueur et les douze premiers
+    caracteres de la cle : un fragment de secret n'a rien a faire dans une
+    reponse HTTP, meme pour l'administrateur."""
     import base64 as _b64
     ip = limiter.get_ip(request)
+    refus = admin_session_conseilprev()
+    if refus:
+        return refus
 
     # Mini PDF valide (1 page)
     mini_pdf = (
@@ -4408,8 +4803,6 @@ def test_brevo_cv():
 
     result = {
         'brevo_api_key_set':  bool(BREVO_API_KEY),
-        'brevo_api_key_len':  len(BREVO_API_KEY) if BREVO_API_KEY else 0,
-        'brevo_api_key_start': BREVO_API_KEY[:12] + '...' if BREVO_API_KEY else '',
         'mail_from':  MAIL_FROM,
         'mail_to':    MAIL_TO,
     }
@@ -4420,9 +4813,9 @@ def test_brevo_cv():
 
     # Test 1 : Appel API sans pièce jointe
     try:
-        resp1 = requests.post(
+        resp1 = _brevo_session().post(
             BREVO_API_URL,
-            headers={'api-key': BREVO_API_KEY, 'Content-Type': 'application/json'},
+            headers=_brevo_entetes(),
             json={
                 'sender':      {'name': 'CONSEILPREV TEST', 'email': MAIL_FROM},
                 'to':          [{'email': MAIL_TO}],
@@ -4442,9 +4835,9 @@ def test_brevo_cv():
 
     # Test 2 : Appel API avec CV en pièce jointe
     try:
-        resp2 = requests.post(
+        resp2 = _brevo_session().post(
             BREVO_API_URL,
-            headers={'api-key': BREVO_API_KEY, 'Content-Type': 'application/json'},
+            headers=_brevo_entetes(),
             json={
                 'sender':      {'name': 'CONSEILPREV TEST', 'email': MAIL_FROM},
                 'to':          [{'email': MAIL_TO}],
@@ -4479,10 +4872,16 @@ def test_brevo_cv():
 
 @app.route('/api/test-email', methods=['GET'])
 def test_email():
-    """Route de diagnostic email — reservee au domaine du service lui-meme."""
+    """Route de diagnostic email — ADMINISTRATEUR CONNECTE UNIQUEMENT.
+
+    La docstring disait « reservee au domaine du service » ; le controle
+    d'origine etait calcule puis jamais lu, et la route livrait a tout visiteur
+    les adresses de notification, l'hote SMTP, le dossier des CV — et, si SMTP
+    est configure, ouvrait une connexion et envoyait un courriel par visite."""
     ip = limiter.get_ip(request)
-    # Vérifier que la requête vient du même domaine
-    origin = request.headers.get('Origin','') + request.headers.get('Referer','')
+    refus = admin_session_conseilprev()
+    if refus:
+        return refus
     result = {
         # L'ADRESSE QUE PORTERONT LES LIENS DES COURRIERS. C'est le
         # renseignement qui manquait ici : trois courriers portent un jeton, et
@@ -4612,19 +5011,21 @@ def check_csrf(req):
 
 
 # ══════════════════════════════════════════════════════════════
-# INPUT SANITIZATION — Protection XSS + injection
+# INPUT SANITIZATION — caracteres de controle et longueur
 # ══════════════════════════════════════════════════════════════
-_HTML_ESCAPE = {
-    '&': '&amp;', '<': '&lt;', '>': '&gt;',
-    '"': '&quot;', "'": '&#x27;', '/': '&#x2F;',
-}
 def sanitize_input(text, max_len=3000, allow_newlines=True):
     """
     Nettoie un input utilisateur :
     - Supprime les caractères de contrôle dangereux
-    - Échappe les entités HTML
     - Limite la longueur
     - Normalise les espaces
+
+    ELLE N'ECHAPPE PAS LE HTML, ET C'EST VOULU. Sa docstring le promettait, un
+    dictionnaire d'echappement etait defini a cote — et jamais employe. La
+    promesse a fait croire trois courriers proteges qui ne l'etaient pas.
+    Echapper ICI abimerait ce qui est STOCKE (« O'Brien » deviendrait
+    « O&#x27;Brien » en base et dans chaque reponse JSON) : l'echappement se
+    fait a l'endroit ou la valeur entre dans du HTML, par _pour_courriel.
     """
     if not isinstance(text, str):
         return ''
@@ -4785,37 +5186,53 @@ def auth_admin_login():
 # NOTIFICATIONS SÉLECTION CANDIDAT(S)
 # Double envoi : client (confirmation + pré-contrat) + CONSEILPREV
 # ══════════════════════════════════════════════════════════════
+def _nombre(valeur):
+    """Un montant venu du JSON d'un navigateur : nombre, ou 0."""
+    try:
+        n = float(valeur or 0)
+    except (TypeError, ValueError):
+        return 0
+    return int(n) if n == int(n) else n
+
+
 def build_precontract_html(client, candidates):
-    """Génère le HTML du pré-contrat client."""
+    """Génère le HTML du pré-contrat client.
+
+    TOUT CE QUE LE NAVIGATEUR ENVOIE PASSE PAR _pour_courriel (`e`, `ec`) :
+    la route qui appelle ce gabarit est publique, et un nom de client
+    `<a href="https://piege.test/…">` arrivait rendu et cliquable dans un
+    courriel signe CONSEILPREV — mesure sur /api/notify-selection."""
     import datetime
     today = datetime.datetime.now().strftime("%d/%m/%Y")
     cands_html = ""
+    ec = lambda k, d="": _pour_courriel(client.get(k) or d)  # noqa: E731
     for i, c in enumerate(candidates):
-        tjm_client     = c.get("tjm", 0)
+        e = lambda k, d="": _pour_courriel(c.get(k) or d)  # noqa: E731
+        tjm_client     = _nombre(c.get("tjm", 0))
         tjm_consultant = round(tjm_client * 0.85)
         mission_days   = 20  # moyenne mensuelle
         est_mois       = round(tjm_client * mission_days)
         cands_html += f"""
         <div style="background:#f8f5ff;border-radius:10px;padding:18px 20px;margin-bottom:16px;border-left:4px solid #6d28d9">
           <div style="font-size:15px;font-weight:700;color:#1a1a2e;margin-bottom:10px">
-            Candidat {i+1} — {c.get("label","Consultant")}
-            <span style="font-size:11px;background:#6d28d9;color:#fff;padding:2px 10px;border-radius:100px;margin-left:8px">Match {c.get("score",0)}%</span>
+            Candidat {i+1} — {e("label", "Consultant")}
+            <span style="font-size:11px;background:#6d28d9;color:#fff;padding:2px 10px;border-radius:100px;margin-left:8px">Match {_pour_courriel(c.get("score",0))}%</span>
           </div>
           <table style="width:100%;border-collapse:collapse;font-size:13px">
-            <tr><td style="padding:5px 0;color:#666;width:180px">Poste</td><td style="font-weight:600;color:#1a1a2e">{c.get("titre","")}</td></tr>
-            <tr style="background:#f0ebff"><td style="padding:5px 6px;color:#666">Domaine</td><td style="padding:5px 6px;font-weight:600;color:#1a1a2e">{c.get("domaine","")}</td></tr>
-            <tr><td style="padding:5px 0;color:#666">Séniorité</td><td style="font-weight:600;color:#1a1a2e">{c.get("seniority","")}</td></tr>
-            <tr style="background:#f0ebff"><td style="padding:5px 6px;color:#666">Localisation</td><td style="padding:5px 6px;font-weight:600;color:#1a1a2e">{c.get("ville","")} ({c.get("lieu","")})</td></tr>
-            <tr><td style="padding:5px 0;color:#666">Disponibilité</td><td style="font-weight:600;color:#22c55e">{c.get("dispo","")}</td></tr>
-            <tr style="background:#f0ebff"><td style="padding:5px 6px;color:#666">Démarrage</td><td style="padding:5px 6px;font-weight:600;color:#1a1a2e">{c.get("start","ASAP")}</td></tr>
-            <tr><td style="padding:5px 0;color:#666">Durée mission</td><td style="font-weight:600;color:#1a1a2e">{c.get("duree","6 mois")}</td></tr>
-            <tr style="background:#f0ebff"><td style="padding:5px 6px;color:#666">Type contrat</td><td style="padding:5px 6px;font-weight:600;color:#1a1a2e">{c.get("contrat","").upper()}</td></tr>
+            <tr><td style="padding:5px 0;color:#666;width:180px">Poste</td><td style="font-weight:600;color:#1a1a2e">{e("titre", "")}</td></tr>
+            <tr style="background:#f0ebff"><td style="padding:5px 6px;color:#666">Domaine</td><td style="padding:5px 6px;font-weight:600;color:#1a1a2e">{e("domaine", "")}</td></tr>
+            <tr><td style="padding:5px 0;color:#666">Séniorité</td><td style="font-weight:600;color:#1a1a2e">{e("seniority", "")}</td></tr>
+            <tr style="background:#f0ebff"><td style="padding:5px 6px;color:#666">Localisation</td><td style="padding:5px 6px;font-weight:600;color:#1a1a2e">{e("ville", "")} ({e("lieu", "")})</td></tr>
+            <tr><td style="padding:5px 0;color:#666">Disponibilité</td><td style="font-weight:600;color:#22c55e">{e("dispo", "")}</td></tr>
+            <tr style="background:#f0ebff"><td style="padding:5px 6px;color:#666">Démarrage</td><td style="padding:5px 6px;font-weight:600;color:#1a1a2e">{e("start", "ASAP")}</td></tr>
+            <tr><td style="padding:5px 0;color:#666">Durée mission</td><td style="font-weight:600;color:#1a1a2e">{e("duree", "6 mois")}</td></tr>
+            <tr style="background:#f0ebff"><td style="padding:5px 6px;color:#666">Type contrat</td><td style="padding:5px 6px;font-weight:600;color:#1a1a2e">{e("contrat", "").upper()}</td></tr>
             <tr><td style="padding:5px 0;color:#666;font-weight:700">TJM consultant</td><td style="font-weight:700;color:#6d28d9;font-size:15px">{tjm_consultant} € HT <span style="font-size:11px;color:#888">(TJM −15%)</span></td></tr>
             <tr style="background:#f0ebff"><td style="padding:5px 6px;color:#666;font-weight:700">TJM facturé client</td><td style="padding:5px 6px;font-weight:700;color:#d946ef;font-size:15px">{tjm_client} € HT</td></tr>
             <tr><td style="padding:5px 0;color:#666">Estimation mensuelle</td><td style="font-weight:600;color:#1a1a2e">~{est_mois:,} € HT ({mission_days}j)</td></tr>
           </table>
           <div style="margin-top:12px;font-size:11px;color:#888">
-            Hard skills : {", ".join(c.get("skills",[])[:6]) or "—"}
+            Hard skills : {", ".join(_pour_courriel(x) for x in c.get("skills",[])[:6]) or "—"}
           </div>
         </div>"""
 
@@ -4833,7 +5250,7 @@ def build_precontract_html(client, candidates):
   <!-- Corps -->
   <div style="background:#fff;padding:28px 32px;border:1px solid #e8e0ff;border-top:none">
     <p style="font-size:15px;color:#1a1a2e;line-height:1.7">
-      Bonjour <strong>{client.get("prenom","")} {client.get("nom","")}</strong>,<br><br>
+      Bonjour <strong>{ec("prenom", "")} {ec("nom", "")}</strong>,<br><br>
       Nous avons bien reçu votre sélection de <strong>{len(candidates)} candidat(s)</strong>.
       Notre équipe CONSEILPREV vous contactera sous <strong>48h ouvrées</strong> pour organiser
       la mise en relation et confirmer les modalités définitives.
@@ -4852,9 +5269,9 @@ def build_precontract_html(client, candidates):
     <div style="background:#f8f5ff;border-radius:10px;padding:14px 18px;margin-bottom:20px;font-size:13px">
       <div style="font-weight:700;color:#6d28d9;margin-bottom:8px">📋 Vos coordonnées</div>
       <div style="color:#444;line-height:1.8">
-        {client.get("prenom","")} {client.get("nom","")} · {client.get("email","")}
-        {" · " + client.get("tel","") if client.get("tel") else ""}
-        {" · " + client.get("entreprise","") if client.get("entreprise") else ""}
+        {ec("prenom", "")} {ec("nom", "")} · {ec("email", "")}
+        {" · " + ec("tel") if client.get("tel") else ""}
+        {" · " + ec("entreprise") if client.get("entreprise") else ""}
       </div>
     </div>
 
@@ -4903,27 +5320,34 @@ def build_precontract_html(client, candidates):
 
 
 def build_conseilprev_notif_html(client, candidates):
-    """Email interne CONSEILPREV — identités complètes + sources."""
+    """Email interne CONSEILPREV — identités complètes + sources.
+
+    Meme regle que build_precontract_html : ce courrier arrive dans la boite
+    de l'administrateur, c'est la cible la plus interessante pour un lien
+    forge. `e`, `ei`, `ec` echappent candidat, identite et client."""
     import datetime
     today = datetime.datetime.now().strftime("%d/%m/%Y %H:%M")
     cands_rows = ""
+    ec = lambda k, d="": _pour_courriel(client.get(k) or d)  # noqa: E731
     for i, c in enumerate(candidates):
-        ident = c.get("ident", {})
-        tjm_client = c.get("tjm", 0)
+        ident = c.get("ident") or {}
+        e = lambda k, d="": _pour_courriel(c.get(k) or d)  # noqa: E731
+        ei = lambda k, d="": _pour_courriel(ident.get(k) or d)  # noqa: E731
+        tjm_client = _nombre(c.get("tjm", 0))
         tjm_cons   = round(tjm_client * 0.85)
         marge      = tjm_client - tjm_cons
         cands_rows += f"""
         <tr style="background:{'#f8f5ff' if i%2==0 else '#fff'}">
           <td style="padding:10px;border:1px solid #e0d8f8;font-weight:700;color:#6d28d9">{i+1}</td>
           <td style="padding:10px;border:1px solid #e0d8f8">
-            <div style="font-weight:700">{c.get("label","")}</div>
-            <div style="font-size:11px;color:#666">{c.get("titre","")} · {c.get("domaine","")}</div>
+            <div style="font-weight:700">{e("label", "")}</div>
+            <div style="font-size:11px;color:#666">{e("titre", "")} · {e("domaine", "")}</div>
           </td>
           <td style="padding:10px;border:1px solid #e0d8f8">
-            <div style="font-weight:700;color:#22c55e">{ident.get("prenom","")} {ident.get("nom","")}</div>
-            <div style="font-size:11px"><a href="mailto:{ident.get("email","")}" style="color:#6d28d9">{ident.get("email","")}</a></div>
-            <div style="font-size:11px;color:#666">{ident.get("tel","")}</div>
-            <div style="font-size:10px;color:#888;margin-top:3px">CV : {ident.get("cv","—")}</div>
+            <div style="font-weight:700;color:#22c55e">{ei("prenom", "")} {ei("nom", "")}</div>
+            <div style="font-size:11px"><a href="mailto:{ei("email", "")}" style="color:#6d28d9">{ei("email", "")}</a></div>
+            <div style="font-size:11px;color:#666">{ei("tel", "")}</div>
+            <div style="font-size:10px;color:#888;margin-top:3px">CV : {ei("cv", "—")}</div>
           </td>
           <td style="padding:10px;border:1px solid #e0d8f8;text-align:center">
             <div style="font-weight:700;color:#d946ef">{tjm_client} €</div>
@@ -4934,12 +5358,12 @@ def build_conseilprev_notif_html(client, candidates):
             <div style="font-size:10px;color:#666">marge</div>
           </td>
           <td style="padding:10px;border:1px solid #e0d8f8">
-            <div style="font-size:11px;color:#9333ea">{ident.get("source","—")}</div>
-            <div style="font-size:10px;color:#888">{ident.get("date_source","")}</div>
-            <div style="font-size:11px;margin-top:4px;color:#22c55e">Dispo : {c.get("dispo","")}</div>
-            <div style="font-size:11px;color:#444">{c.get("ville","")}</div>
+            <div style="font-size:11px;color:#9333ea">{ei("source", "—")}</div>
+            <div style="font-size:10px;color:#888">{ei("date_source", "")}</div>
+            <div style="font-size:11px;margin-top:4px;color:#22c55e">Dispo : {e("dispo", "")}</div>
+            <div style="font-size:11px;color:#444">{e("ville", "")}</div>
           </td>
-          <td style="padding:10px;border:1px solid #e0d8f8;font-size:11px;color:#666;font-weight:700;color:#e67e22">{c.get("score",0)}%</td>
+          <td style="padding:10px;border:1px solid #e0d8f8;font-size:11px;color:#666;font-weight:700;color:#e67e22">{_pour_courriel(c.get("score",0))}%</td>
         </tr>"""
 
     return f"""<!DOCTYPE html>
@@ -4956,10 +5380,10 @@ def build_conseilprev_notif_html(client, candidates):
     <div style="background:#f0ebff;border-radius:10px;padding:14px 18px;margin-bottom:20px">
       <div style="font-weight:700;color:#6d28d9;font-size:13px;margin-bottom:8px">👤 Client demandeur</div>
       <table style="font-size:13px;border-collapse:collapse;width:100%">
-        <tr><td style="color:#666;width:120px;padding:3px 0">Nom</td><td style="font-weight:600">{client.get("prenom","")} {client.get("nom","")}</td>
-            <td style="color:#666;width:120px;padding:3px 0">Entreprise</td><td style="font-weight:600">{client.get("entreprise","—")}</td></tr>
-        <tr><td style="color:#666;padding:3px 0">Email</td><td><a href="mailto:{client.get("email","")}" style="color:#6d28d9">{client.get("email","")}</a></td>
-            <td style="color:#666;padding:3px 0">Téléphone</td><td>{client.get("tel","—")}</td></tr>
+        <tr><td style="color:#666;width:120px;padding:3px 0">Nom</td><td style="font-weight:600">{ec("prenom", "")} {ec("nom", "")}</td>
+            <td style="color:#666;width:120px;padding:3px 0">Entreprise</td><td style="font-weight:600">{ec("entreprise", "—")}</td></tr>
+        <tr><td style="color:#666;padding:3px 0">Email</td><td><a href="mailto:{ec("email", "")}" style="color:#6d28d9">{ec("email", "")}</a></td>
+            <td style="color:#666;padding:3px 0">Téléphone</td><td>{ec("tel", "—")}</td></tr>
       </table>
     </div>
 
@@ -4999,12 +5423,123 @@ def build_conseilprev_notif_html(client, candidates):
 </body></html>"""
 
 
+# LE RELAIS DE /api/notify-selection, BORNE. La page /platform est publique et
+# son navigateur choisit le destinataire du courriel « Votre sélection » :
+# mesure, un POST anonyme faisait partir un courriel a la marque du site vers
+# n'importe quelle adresse, et la rotation d'X-Forwarded-For contournait la
+# borne par IP (30 appels → 60 envois, 0 refus). Aucune table ne connait les
+# clients de cette page (les candidats sont des donnees de demonstration cote
+# navigateur) : on ne peut pas exiger une adresse « deja connue ». On borne
+# donc par destinataire et par jour, puis globalement par jour, en comptant
+# dans email_log — un compteur qui survit aux redemarrages et vaut pour tous
+# les workers. Trois envois par adresse et par jour couvrent l'usage legitime
+# (une selection, une correction) ; vingt par jour couvrent dix clients.
+NOTIFY_SELECTION_SUJET = '[CONSEILPREV] Votre sélection'
+NOTIFY_SELECTION_PLAFOND_DESTINATAIRE_JOUR = 3
+NOTIFY_SELECTION_PLAFOND_GLOBAL_JOUR = 20
+
+
+#: La methode inscrite dans email_log par la RESERVATION, avant tout envoi.
+#: Elle ne dit pas « envoye » : elle dit « une place est prise ». Le nom
+#: figure dans les comptes, et le diagnostic email la distingue d'un envoi.
+NOTIFY_SELECTION_METHODE_RESERVE = 'reserve'
+
+
+def _notify_selection_autorise(destinataire):
+    """(True, None) ou (False, motif). RESERVE LA PLACE AVANT DE COMPTER.
+
+    COMPTER PUIS ENVOYER N'EST PAS ATOMIQUE, ET C'EST MESURABLE. La ligne
+    email_log n'etait ecrite qu'APRES l'appel a Brevo, qui dure jusqu'a 20 s
+    par tentative. Avec 2 workers de 8 fils, toutes les requetes simultanees
+    vers la meme adresse lisaient 0 et passaient toutes. Mesure : faux Brevo
+    ralenti a 0,4 s, 12 fils vers cible@exemple.test → 12 reponses 200, 12
+    envois vers la cible, 24 POST /v3/smtp/email, pour un plafond annonce de
+    3. Le `check_soft` par adresse n'y changeait rien : il vit en memoire DANS
+    CHAQUE worker, et l'en-tete X-Forwarded-For le contournait deja.
+
+    CE QU'ON FAIT A LA PLACE. On ECRIT d'abord (une ligne `reserve`), on
+    valide, puis on compte — reservation comprise. Deux fils qui arrivent
+    ensemble ecrivent chacun la leur et comptent donc chacun l'autre : le
+    quatrieme voit 4, se retire, et supprime sa ligne. L'ordre ecrire-puis-
+    compter est ce qui rend la borne vraie sans verrou ni transaction longue,
+    et il vaut pour tous les workers puisque la base est partagee.
+
+    CE QUE ÇA COÛTE, ET C'EST LE BON SENS DU COMPROMIS : un fil tue entre la
+    reservation et sa suppression laisse une place consommee pour la journee.
+    Une place perdue est moins grave qu'un relais ouvert a la marque du site.
+
+    UNE BASE INJOIGNABLE REFUSE : c'est un relais, l'incertitude ne l'ouvre
+    pas. La reservation elle-meme passe par la base, donc une base muette est
+    attrapee ici et rend `compteur_illisible`.
+    """
+    try:
+        jour = datetime.utcnow().strftime('%Y-%m-%d')
+        conn = registre_get_db(); cur = conn.cursor()
+        cur.execute(registre_sql(
+            'INSERT INTO email_log (destinataire, sujet, methode, succes, raison_echec, date_envoi) '
+            'VALUES (%s,%s,%s,%s,%s,%s)',
+            'INSERT INTO email_log (destinataire, sujet, methode, succes, raison_echec, date_envoi) '
+            'VALUES (?,?,?,?,?,?)'),
+            (destinataire, NOTIFY_SELECTION_SUJET + ' — reservation',
+             NOTIFY_SELECTION_METHODE_RESERVE, False, 'reservation', datetime.utcnow().isoformat()))
+        conn.commit()
+        # ON NE COMPTE QUE LES RESERVATIONS, pas les lignes d'envoi. Un relais
+        # accepte ecrit ensuite DEUX lignes de plus (client et CONSEILPREV) au
+        # meme sujet : les compter ferait tomber le plafond de trois a un, et
+        # le rendrait dependant du succes de Brevo. La reservation, elle, vaut
+        # exactement une place, posee avant l'appel et rendue si on refuse.
+        cur.execute(registre_sql(
+            "SELECT COUNT(*) AS n FROM email_log WHERE methode=%s AND sujet LIKE %s AND date_envoi >= %s",
+            "SELECT COUNT(*) AS n FROM email_log WHERE methode=? AND sujet LIKE ? AND date_envoi >= ?"),
+            (NOTIFY_SELECTION_METHODE_RESERVE, NOTIFY_SELECTION_SUJET + '%', jour))
+        total = dict(cur.fetchone())['n']
+        cur.execute(registre_sql(
+            "SELECT COUNT(*) AS n FROM email_log WHERE methode=%s AND sujet LIKE %s AND date_envoi >= %s AND LOWER(destinataire)=%s",
+            "SELECT COUNT(*) AS n FROM email_log WHERE methode=? AND sujet LIKE ? AND date_envoi >= ? AND LOWER(destinataire)=?"),
+            (NOTIFY_SELECTION_METHODE_RESERVE, NOTIFY_SELECTION_SUJET + '%', jour, destinataire.lower()))
+        pour_lui = dict(cur.fetchone())['n']
+    except Exception as e:                                     # noqa: BLE001
+        logger.error('NOTIFY_SELECTION_COMPTEUR_ERR: %s', e)
+        try:
+            conn.close()
+        except Exception:
+            pass
+        return False, 'compteur_illisible'
+    motif = None
+    if pour_lui > NOTIFY_SELECTION_PLAFOND_DESTINATAIRE_JOUR:
+        motif = 'plafond_destinataire'
+    elif total > NOTIFY_SELECTION_PLAFOND_GLOBAL_JOUR:
+        motif = 'plafond_global'
+    if motif:
+        # LA PLACE EST RENDUE : ce refus-ci ne doit pas consommer le quota du
+        # jour, sinon un attaquant fermerait le relais pour les vrais clients
+        # en se faisant refuser vingt fois.
+        try:
+            cur.execute(registre_sql(
+                'DELETE FROM email_log WHERE id IN (SELECT id FROM email_log '
+                'WHERE LOWER(destinataire)=%s AND methode=%s ORDER BY id DESC LIMIT 1)',
+                'DELETE FROM email_log WHERE id IN (SELECT id FROM email_log '
+                'WHERE LOWER(destinataire)=? AND methode=? ORDER BY id DESC LIMIT 1)'),
+                (destinataire.lower(), NOTIFY_SELECTION_METHODE_RESERVE))
+            conn.commit()
+        except Exception as e:                                 # noqa: BLE001
+            logger.error('NOTIFY_SELECTION_RESERVE_ORPHELINE: %s', e)
+    try:
+        conn.close()
+    except Exception:
+        pass
+    return (motif is None), motif
+
+
 @app.route('/api/notify-selection', methods=['POST'])
 def notify_selection():
     """
     Déclenche 2 emails simultanés lors de la sélection d'un ou plusieurs candidats :
     1. Email CLIENT  → confirmation + récapitulatif + pré-contrat (sans identités candidats)
     2. Email CONSEILPREV → dossier complet confidentiel (identités, sources, marges)
+
+    Le destinataire du premier est choisi par le navigateur : voir la borne
+    _notify_selection_autorise et l'echappement dans les deux gabarits.
     """
     ip = limiter.get_ip(request)
     if not limiter.check_soft(ip, limit=10, window=300):
@@ -5013,82 +5548,60 @@ def notify_selection():
     try:
         d = request.get_json(force=True, silent=True) or {}
 
-        client = d.get('client', {})
-        candidates = d.get('candidates', [])
+        client = d.get('client') if isinstance(d.get('client'), dict) else {}
+        candidates = d.get('candidates') if isinstance(d.get('candidates'), list) else []
 
-        if not client.get('email'):
-            return jsonify({'ok': False, 'error': 'Email client manquant'}), 400
-        if not candidates:
+        destinataire = sanitize_email(client.get('email') or '')
+        if not destinataire:
+            return jsonify({'ok': False, 'error': 'Email client manquant ou invalide'}), 400
+        if not candidates or not all(isinstance(c, dict) for c in candidates):
             return jsonify({'ok': False, 'error': 'Aucun candidat sélectionné'}), 400
+        autorise, motif = _notify_selection_autorise(destinataire)
+        if not autorise:
+            logger.warning('NOTIFY_SELECTION_REFUSE %s: %s vers %s', ip, motif,
+                           _masquer_courriel(destinataire))
+            return jsonify({'ok': False, 'error': 'Plafond journalier atteint pour cette adresse'}), 429
 
-        import datetime
-        now_str = datetime.datetime.now().strftime('%d/%m/%Y %H:%M:%S')
         results = {'client_email': False, 'conseilprev_email': False}
+        nb = len(candidates)
+        nom_client = f'{client.get("prenom","")} {client.get("nom","")}'
 
         # ── EMAIL 1 : CLIENT (confirmation + pré-contrat, anonyme) ──
         try:
-            msg1 = MIMEMultipart('mixed')
-            nb = len(candidates)
-            msg1['Subject'] = f"[CONSEILPREV] Votre sélection — {nb} candidat(s) | Pré-accord"
-            msg1['From']    = MAIL_FROM
-            msg1['To']      = client['email']
-            if MAIL_CC:
-                msg1['Cc'] = MAIL_CC
-            msg1['Reply-To'] = MAIL_TO  # répondre à CONSEILPREV
-
-            msg1.attach(MIMEText(
-                build_precontract_html(client, candidates),
-                'html', 'utf-8'
-            ))
-
             ok_c, method_c = send_email_smart(
-                client['email'], f'{client.get("prenom","")} {client.get("nom","")}',
-                f'[CONSEILPREV] Votre sélection — {nb} candidat(s) | Pré-accord',
+                destinataire, nom_client,
+                f'{NOTIFY_SELECTION_SUJET} — {nb} candidat(s) | Pré-accord',
                 build_precontract_html(client, candidates),
                 reply_to=MAIL_TO,
                 tags=['selection', 'precontrat']
             )
             if ok_c:
                 results['client_email'] = True
-                logger.info(f'NOTIFY_CLIENT_OK via {method_c} {ip}: {client["email"]}')
+                logger.info('NOTIFY_CLIENT_OK via %s %s: %s', method_c, ip, _masquer_courriel(destinataire))
             else:
-                logger.warning(f'NOTIFY_CLIENT_FAIL: {client["email"]}')
+                logger.warning('NOTIFY_CLIENT_FAIL: %s', _masquer_courriel(destinataire))
 
         except Exception as e:
             logger.error(f'NOTIFY_CLIENT_ERR {ip}: {e}')
 
         # ── EMAIL 2 : CONSEILPREV (confidentiel, identités + sources + marges) ──
         try:
-            msg2 = MIMEMultipart('mixed')
-            msg2['Subject'] = f"[CONSEILPREV] 🔐 Sélection — {client.get('prenom','')} {client.get('nom','')} — {len(candidates)} candidat(s)"
-            msg2['From']    = MAIL_FROM
-            msg2['To']      = MAIL_TO
-            msg2['Reply-To'] = client.get('email', MAIL_TO)
-
-            msg2.attach(MIMEText(
-                build_conseilprev_notif_html(client, candidates),
-                'html', 'utf-8'
-            ))
-
+            sujet_cp = f'[CONSEILPREV] 🔐 Sélection — {nom_client} — {nb} candidat(s)'
             ok_cp, method_cp = send_email_smart(
-                MAIL_TO, 'CONSEILPREV',
-                f'[CONSEILPREV] 🔐 Sélection — {client.get("prenom","")} {client.get("nom","")} — {len(candidates)} candidat(s)',
+                MAIL_TO, 'CONSEILPREV', sujet_cp,
                 build_conseilprev_notif_html(client, candidates),
-                reply_to=client.get('email', MAIL_TO),
+                reply_to=destinataire,
                 tags=['selection', 'confidentiel', 'interne']
             )
             if ok_cp:
                 results['conseilprev_email'] = True
                 logger.info(f'NOTIFY_CP_OK via {method_cp} {ip}: → {MAIL_TO}')
             else:
-                logger.warning(f'NOTIFY_CP_FAIL')
-                # Sauvegarder localement
-                import os, datetime as _dt
-                ts = _dt.datetime.now().strftime('%Y%m%d_%H%M%S')
-                path = os.path.join(UPLOAD_FOLDER, f'selection_{ts}_{client.get("nom","")}.html')
-                with open(path, 'w', encoding='utf-8') as f:
-                    f.write(build_conseilprev_notif_html(client, candidates))
-                logger.info(f'NOTIFY_CP_SAVED: {path}')
+                logger.warning('NOTIFY_CP_FAIL')
+                # Le dossier confidentiel n'est pas perdu : meme dossier de
+                # repli que les autres courriels, nom imprevisible, non servi.
+                _deposer_courriel_repli(MAIL_TO, sujet_cp,
+                                        build_conseilprev_notif_html(client, candidates))
 
         except Exception as e:
             logger.error(f'NOTIFY_CP_ERR {ip}: {e}')
@@ -5108,6 +5621,29 @@ def notify_selection():
 
 
 
+# Les evenements Brevo qui INTERDISENT tout envoi ulterieur a l'adresse, et le
+# motif inscrit dans email_suppression. Brevo nomme l'evenement transactionnel
+# de desinscription `unsubscribed` dans ses charges et `unsubscribe` dans la
+# liste des evenements d'un webhook : les deux formes sont acceptees.
+BREVO_EVENEMENTS_SUPPRESSION = {
+    'unsubscribe': 'desinscription', 'unsubscribed': 'desinscription',
+    'hard_bounce': 'rebond_dur', 'spam': 'plainte', 'blocked': 'bloque',
+    'invalid_email': 'adresse_invalide',
+}
+
+
+def _brevo_webhook_jeton_fourni():
+    """Le jeton tel que Brevo peut le presenter : en-tete `X-Brevo-Token`,
+    en-tete `Authorization: Bearer …`, ou parametre d'URL `?token=`."""
+    entete = request.headers.get('X-Brevo-Token', '').strip()
+    if entete:
+        return entete
+    auth = request.headers.get('Authorization', '').strip()
+    if auth.lower().startswith('bearer '):
+        return auth[7:].strip()
+    return (request.args.get('token') or '').strip()
+
+
 @app.route('/api/brevo/webhook', methods=['POST'])
 def brevo_webhook():
     """
@@ -5118,7 +5654,36 @@ def brevo_webhook():
     ici a suivi le service d'un nom à l'autre sans être corrigée, et une
     consigne de configuration périmée envoie régler un webhook au mauvais
     endroit. `GET /api/test-email` affiche l'adresse courante.
+
+    UN JETON EST EXIGE. Le webhook acceptait tout POST : un evenement forge
+    « desinscription » ou « rebond » etait accepte sans preuve — et, une fois
+    la table de suppression en place, aurait suffi a couper les courriels a
+    n'importe quel client. Le jeton vient de BREVO_WEBHOOK_TOKEN (Render), et
+    Brevo le presente selon ce que sa configuration permet :
+      · en en-tete, `X-Brevo-Token: <jeton>` ou `Authorization: Bearer <jeton>`
+        — la forme a preferer : l'API de Brevo (POST /v3/webhooks, champs
+        `headers` et `auth`) sait poser un en-tete sur chaque livraison ;
+      · a defaut, en parametre d'URL, `…/api/brevo/webhook?token=<jeton>` — la
+        seule forme que l'ecran « Webhooks » de Brevo accepte quand il ne
+        propose qu'une adresse. Un jeton dans une URL finit dans les journaux
+        de l'hebergeur : preferer la premiere forme des qu'elle est possible.
+    La comparaison est a temps constant. Sans jeton configure, la route repond
+    503 et le journal le dit : un webhook ouvert n'est pas un repli acceptable.
+
+    CE QUE LES EVENEMENTS FONT DESORMAIS : une desinscription, un rebond dur,
+    une plainte ou un blocage inscrivent l'adresse dans email_suppression, que
+    send_email_smart et send_via_brevo_api consultent avant tout envoi. Le
+    journal ne porte plus l'adresse en clair (masque a***@domaine).
     """
+    if not BREVO_WEBHOOK_TOKEN:
+        logger.error('BREVO_WEBHOOK_SANS_JETON: BREVO_WEBHOOK_TOKEN absent, evenement ignore')
+        return jsonify({'ok': False, 'error': 'webhook non configure'}), 503
+    import hmac as _hm
+    fourni = _brevo_webhook_jeton_fourni()
+    if not fourni or not _hm.compare_digest(fourni.encode('utf-8'),
+                                            BREVO_WEBHOOK_TOKEN.encode('utf-8')):
+        logger.warning('BREVO_WEBHOOK_REFUSE %s: jeton absent ou faux', limiter.get_ip(request))
+        return jsonify({'ok': False, 'error': 'jeton invalide'}), 401
     try:
         events = request.get_json(force=True, silent=True)
         if not events:
@@ -5135,18 +5700,22 @@ def brevo_webhook():
 
 
 def _process_brevo_event(evt):
-    """Traite un événement Brevo."""
-    event_type = evt.get('event', '')
-    email      = evt.get('email', '')
-    msg_id     = evt.get('message-id', '')
-    ts         = evt.get('ts_epoch', 0)
+    """Traite un événement Brevo : journal masque, suppression si l'evenement
+    l'exige (voir BREVO_EVENEMENTS_SUPPRESSION)."""
+    if not isinstance(evt, dict):
+        return
+    event_type = str(evt.get('event', ''))
+    email      = str(evt.get('email', ''))
+    msg_id     = str(evt.get('message-id', ''))
     tags       = evt.get('tags', [])
-    logger.info(f'BREVO_EVT: {event_type} | {email} | tags={tags} | msg={msg_id[:20]}')
-    if event_type in ('hard_bounce', 'soft_bounce', 'blocked'):
-        logger.warning(f'BREVO_BOUNCE: {email} ({event_type})')
-    elif event_type == 'unsubscribe':
-        logger.warning(f'BREVO_UNSUB: {email}')
-        # TODO: marquer comme désabonné dans users_db.json
+    masque     = _masquer_courriel(email)
+    logger.info(f'BREVO_EVT: {event_type} | {masque} | tags={tags} | msg={msg_id[:20]}')
+    motif = BREVO_EVENEMENTS_SUPPRESSION.get(event_type)
+    if motif:
+        email_supprimer(email, motif)
+        logger.warning(f'BREVO_SUPPRESSION: {masque} ({motif})')
+    elif event_type == 'soft_bounce':
+        logger.warning(f'BREVO_BOUNCE: {masque} (soft_bounce)')
 
 
 @app.route('/api/admin/candidate', methods=['POST'])
@@ -5313,8 +5882,27 @@ def admin_cv_list():
 
 @app.route('/api/health', methods=['GET'])
 def health_check():
-    """Diagnostic complet : SMTP, clés API, système. Format HTML lisible ou JSON."""
+    """Diagnostic complet : SMTP, clés API, système. Format HTML lisible ou JSON.
+
+    POUR UN VISITEUR ANONYME, UNE REPONSE COURTE ET RIEN D'AUTRE. Cette route
+    est en liste blanche du security_middleware (une sonde doit pouvoir
+    l'atteindre sans en-tetes de navigateur), et elle faisait, a chaque appel,
+    un GET /v3/account chez Brevo et un appel au fournisseur du modele de
+    conversation pour eprouver sa cle, puis affichait
+    l'adresse et l'offre du compte Brevo, MAIL_TO, MAIL_CC, l'hote SMTP et un
+    prefixe de cle. Mesure : 200 appels anonymes en une minute depuis une
+    adresse → 200 GET /v3/account. Render, lui, sonde /health (render.yaml),
+    pas cette route. Les controles complets — appels sortants compris — ne
+    sont faits que pour l'administrateur connecte."""
     import datetime
+    admin = sentauth_current_client()
+    if not (admin and admin.get('is_conseilprev')):
+        if request.args.get('format') == 'json':
+            return jsonify({'status': 'ok', 'diagnostic': 'reserve a l administrateur connecte'})
+        return ('<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">'
+                '<title>CONSEILPREV</title></head><body>'
+                '<p>Service en ligne. Le diagnostic complet est r&eacute;serv&eacute; '
+                '&agrave; l&#39;administrateur connect&eacute;.</p></body></html>')
 
     # ── SMTP ──
     smtp_ready = bool(SMTP_USER and SMTP_PASSWORD)
@@ -5325,8 +5913,8 @@ def health_check():
     brevo_api_msg = 'BREVO_API_KEY non configurée'
     if BREVO_API_KEY:
         try:
-            r_brevo = requests.get(
-                'https://api.brevo.com/v3/account',
+            r_brevo = _brevo_session().get(
+                BREVO_API_BASE + '/v3/account',
                 headers={'api-key': BREVO_API_KEY, 'Accept': 'application/json'},
                 timeout=8
             )
@@ -5425,12 +6013,13 @@ def health_check():
             'mode':       '✅ API HTTP (recommandé)' if brevo_api_ok else ('⚠ SMTP' if smtp_conn=='OK' else '❌ non configuré'),
             'conseil':    '✅ Opérationnel' if brevo_api_ok else '→ Ajouter BREVO_API_KEY dans Render → Environment',
         },
+        # Aucun fragment de cle dans une reponse HTTP, meme pour l'administrateur.
         'anthropic': {
-            'key': (ANTHROPIC_API_KEY[:12] + '***') if ANTHROPIC_API_KEY else 'NON CONFIGURÉ',
+            'key': 'configurée' if ANTHROPIC_API_KEY else 'NON CONFIGURÉ',
             'ready': anthropic_ready, 'valid': anthropic_valid, 'status': anthropic_msg,
         },
         'mistral': {
-            'key': (MISTRAL_API_KEY[:6] + '***') if MISTRAL_API_KEY else 'NON CONFIGURÉ',
+            'key': 'configurée' if MISTRAL_API_KEY else 'NON CONFIGURÉ',
             'ready': mistral_ready,
         },
         'uploads_folder': os.path.isdir(UPLOAD_FOLDER),
@@ -6214,6 +6803,42 @@ def donnees_structurees():
     return resp
 
 
+import sentinel_i18n  # noqa: E402  — le dictionnaire anglais du corps de Sentinel
+
+
+@app.route('/sentinel.en.json')
+@rate_limit(limit=60, window=60)
+def sentinel_en_json():
+    """Le dictionnaire anglais du CORPS de Sentinel, en un seul JSON.
+
+    Le corps des pages ne porte aucune marque de traduction : le navigateur
+    retrouve chaque texte francais dans ce dictionnaire, par son contenu
+    normalise (sentinel.i18n.js). Les fichiers i18n/sentinel/*.json sont
+    fusionnes ici, relus quand l'un d'eux change ; une meme cle avec deux
+    valeurs est journalisee, la premiere gagne.
+
+    PUBLIC, UNE HEURE, AVEC ETAG : rien de personnel dedans, et le meme corps
+    pour tout le monde — un 304 sans octet a la revisite, plutot qu'un
+    re-telechargement a chaque bascule. Un dossier vide rend un dictionnaire
+    vide, pas une erreur : la coquille reste traduite et le corps en francais,
+    exactement l'etat d'avant."""
+    try:
+        corps, etag = sentinel_i18n.servir(journal=logger)
+    except Exception as e:  # noqa: BLE001
+        logger.error(f'SENTINEL_I18N_ERR: {e}')
+        corps, etag = '{"bloc":{},"texte":{}}', None
+    if etag and etag in (request.headers.get('If-None-Match') or ''):
+        r304 = Response(status=304)
+        r304.headers['ETag'] = etag
+        r304.headers['Cache-Control'] = 'public, max-age=3600'
+        return r304
+    resp = Response(corps, mimetype='application/json')
+    if etag:
+        resp.headers['ETag'] = etag
+    resp.headers['Cache-Control'] = 'public, max-age=3600'
+    return resp
+
+
 @app.route('/sitemap.xml')
 @rate_limit(limit=60, window=60)
 def sitemap_xml():
@@ -6287,9 +6912,11 @@ def robots_txt():
          '# Moteurs generatifs (GEO) : memes regles que le web classique —',
          '# tout le public est citable, rien du prive n\'est offert.', '']
         + [groupe(bot) + '\n' for bot in ROBOTS_IA]
-        + ['Sitemap: https://conseilprev.onrender.com/sitemap.xml',
-           '# Resume du site pour les assistants : '
-           'https://conseilprev.onrender.com/llms.txt', ''])
+        # L'ADRESSE VIENT DE LA CONFIGURATION, comme la canonique et le plan
+        # du site : ecrite en dur, elle designait encore l'ancien service
+        # apres la bascule (mesure avec SITE_BASE_URL sur conseilprevia).
+        + ['Sitemap: %s/sitemap.xml' % seo.BASE,
+           '# Resume du site pour les assistants : %s/llms.txt' % seo.BASE, ''])
     return Response(corps, mimetype='text/plain')
 
 
@@ -6300,7 +6927,7 @@ def llms_txt():
     nous sommes, ce que chaque page publique contient, et ce que les etudes
     reservees CALCULENT — pour qu'un moteur qui ne peut pas les lire puisse
     quand meme les decrire exactement. Aucune adresse reservee n'y figure."""
-    b = 'https://conseilprev.onrender.com'
+    b = seo.BASE                      # la meme source que robots.txt et le plan
     corps = """# ConseilPrev — Sentinel
 
 > Cabinet de conseil français : gouvernance de l'intelligence artificielle et
@@ -7593,6 +8220,25 @@ try:
 except Exception as _e:
     logger.error(f"EMAIL_LOG — erreur init DB : {_e}")
 
+# RETENTION DU JOURNAL : 90 JOURS. `destinataire` est une adresse en clair, et
+# rien ne purgeait la table (mesure : aucun DELETE FROM email_log). Un journal
+# d'exploitation qui grossit sans fin avec des donnees personnelles est une
+# conservation sans duree — ce que l'art. 5.1.e interdit. La purge est faite
+# a l'ecriture, par paquets bornes : un DELETE de 200 lignes par insertion
+# suffit a rattraper n'importe quel retard sans jamais peser sur une requete.
+EMAIL_LOG_RETENTION_JOURS = 90
+EMAIL_LOG_PURGE_PAQUET = 200
+
+
+def email_log_purger(cur):
+    """Efface, par paquet borne, les lignes plus vieilles que la retention."""
+    limite = (datetime.utcnow() - timedelta(days=EMAIL_LOG_RETENTION_JOURS)).isoformat()
+    cur.execute(registre_sql(
+        'DELETE FROM email_log WHERE id IN (SELECT id FROM email_log WHERE date_envoi < %s LIMIT %s)',
+        'DELETE FROM email_log WHERE id IN (SELECT id FROM email_log WHERE date_envoi < ? LIMIT ?)'
+    ), (limite, EMAIL_LOG_PURGE_PAQUET))
+
+
 def email_log_record(destinataire, sujet, methode, succes, raison_echec=None):
     try:
         conn = registre_get_db()
@@ -7602,10 +8248,78 @@ def email_log_record(destinataire, sujet, methode, succes, raison_echec=None):
             'INSERT INTO email_log (destinataire, sujet, methode, succes, raison_echec, date_envoi) VALUES (%s,%s,%s,%s,%s,%s)',
             'INSERT INTO email_log (destinataire, sujet, methode, succes, raison_echec, date_envoi) VALUES (?,?,?,?,?,?)'
         ), (destinataire, sujet, methode, succes, raison_echec, now))
+        email_log_purger(cur)
         conn.commit()
         conn.close()
     except Exception as _e:
         logger.error(f"EMAIL_LOG_RECORD_FAILED : {_e}")
+
+
+# ══════════════════════════════════════════════════════════
+# LISTE DE SUPPRESSION — ce que Brevo nous a dit de ne plus ecrire
+# ══════════════════════════════════════════════════════════
+# Une desinscription, un rebond dur, une plainte ou un blocage recus par le
+# webhook n'avaient AUCUN effet : mesure, apres les deux evenements,
+# send_email_smart renvoyait vers ces adresses. C'est un manquement au droit
+# d'opposition (art. 21) et une degradation de la reputation d'envoi a chaque
+# rebond. La table est consultee avant tout envoi, par les deux chemins.
+def email_suppression_init_db():
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute('''CREATE TABLE IF NOT EXISTS email_suppression (
+        email TEXT PRIMARY KEY, motif TEXT, date TEXT NOT NULL
+    )''')
+    conn.commit()
+    conn.close()
+
+
+try:
+    email_suppression_init_db()
+except Exception as _e:
+    logger.error(f"EMAIL_SUPPRESSION — erreur init DB : {_e}")
+
+
+def email_supprimer(email, motif):
+    """Inscrit l'adresse (en minuscules) ; une inscription repetee garde la
+    premiere date et prend le dernier motif."""
+    em = str(email or '').strip().lower()
+    if not em or '@' not in em:
+        return False
+    try:
+        conn = registre_get_db(); cur = conn.cursor()
+        now = datetime.utcnow().isoformat()
+        if REGISTRE_USE_PG:
+            cur.execute('INSERT INTO email_suppression (email, motif, date) VALUES (%s,%s,%s) '
+                        'ON CONFLICT (email) DO UPDATE SET motif=EXCLUDED.motif', (em, motif, now))
+        else:
+            cur.execute('INSERT INTO email_suppression (email, motif, date) VALUES (?,?,?) '
+                        'ON CONFLICT (email) DO UPDATE SET motif=excluded.motif', (em, motif, now))
+        conn.commit(); conn.close()
+        return True
+    except Exception as _e:                                    # noqa: BLE001
+        logger.error(f"EMAIL_SUPPRESSION_ECRITURE_FAILED : {_e}")
+        return False
+
+
+def email_supprime(email):
+    """Le motif de suppression de l'adresse, ou None si l'on peut lui ecrire.
+    Une table illisible rend None : un incident de base ne doit pas couper
+    les courriels de reinitialisation — l'erreur est journalisee."""
+    em = str(email or '').strip().lower()
+    if not em:
+        return None
+    try:
+        conn = registre_get_db(); cur = conn.cursor()
+        cur.execute(registre_sql('SELECT motif FROM email_suppression WHERE email=%s',
+                                 'SELECT motif FROM email_suppression WHERE email=?'), (em,))
+        row = cur.fetchone()
+        conn.commit(); conn.close()
+    except Exception as _e:                                    # noqa: BLE001
+        logger.error(f"EMAIL_SUPPRESSION_LECTURE_FAILED : {_e}")
+        return None
+    if not row:
+        return None
+    return dict(row).get('motif') or 'supprime'
 
 # ══════════════════════════════════════════════════════════
 # RAPPORT DE CARTOGRAPHIE AUTOMATIQUE — genere cote serveur
@@ -7737,8 +8451,14 @@ def schedule_cartographie_report(client_id, client_email, client_nom):
     """Repousse la date d'envoi prevue de 5 minutes (upsert). Remplace l'ancien
     threading.Timer : la date est persistante en base, donc survit a un
     redemarrage ou une mise en veille du processus — seule une requete
-    ulterieure (check_pending_reports) declenche l'envoi reel."""
+    ulterieure (check_pending_reports) declenche l'envoi reel.
+
+    LE COMPTE CONSEILPREV PORTE L'ADRESSE INTERNE FICTIVE (c'est son identite
+    en base, pas une boite) : son rapport est route vers la boite de
+    notification, sinon il partait vers @internal.system et rebondissait."""
     try:
+        if _adresse_non_routable(client_email) or not client_email:
+            client_email = CONSEILPREV_NOTIFY_EMAIL
         next_send = (datetime.utcnow() + timedelta(seconds=REPORT_DEBOUNCE_SECONDS)).isoformat()
         conn = registre_get_db()
         cur = conn.cursor()
@@ -7842,6 +8562,63 @@ def email_health():
         'derniers_envois': recent,
         'alerte': echec_24h > 0 and (taux_succes is None or taux_succes < 80)
     })
+
+@app.route('/api/admin/connexions', methods=['GET'])
+def admin_connexions():
+    """Stripe et Brevo sont-ils VRAIMENT branches sur CE service ?
+
+    CE QUE PERSONNE N'A VU PENDANT UN MOIS. Le seul point de reception Stripe
+    du compte visait `conseilprev.onrender.com`, un hote sans service, alors
+    que le site vit sur `conseilprevia.onrender.com`. Les paiements partaient,
+    les confirmations n'arrivaient nulle part, et aucune page ne cessait de
+    s'afficher. Cote Brevo, l'expediteur par defaut n'est pas verifie et des
+    envois visent une adresse non routable. Rien dans le code ne le mesurait :
+    ces defauts sont dans l'ecart entre la configuration et les comptes.
+
+    CE QUE FAIT CETTE ROUTE. Elle reunit ce que le service a reellement en
+    configuration — l'adresse du site (la meme source que les liens des
+    courriers), l'expediteur, les prix, la presence des secrets — et la confie
+    a `connexions.diagnostic()`, qui interroge les deux comptes en LECTURE
+    SEULE. Toujours 200 pour l'administrateur : les alertes sont DANS la
+    reponse, un compte en panne est une alerte et non un 500. Aucune cle ni
+    fragment de cle n'y figure, seulement des booleens.
+    """
+    refus = admin_session_conseilprev()
+    if refus is not None:
+        return refus
+    import connexions
+
+    def _lire(sql, params=()):
+        # Une lecture, une connexion, fermee quoi qu'il arrive : `connexions`
+        # tolere une table absente, il ne doit pas heriter d'une connexion
+        # laissee ouverte par une requete qui a echoue.
+        conn = registre_get_db()
+        try:
+            cur = conn.cursor()
+            cur.execute(registre_sql(sql.replace('?', '%s'), sql), tuple(params))
+            return [dict(r) if not isinstance(r, dict) else r for r in cur.fetchall()]
+        finally:
+            try: conn.close()
+            except Exception: pass
+
+    secret = os.environ.get('STRIPE_SECRET_KEY', '').strip()
+    config = {
+        'site_base_url': seo.BASE,
+        'stripe_webhook_secret_present': bool(os.environ.get('STRIPE_WEBHOOK_SECRET', '').strip()),
+        # Les evenements que le point de reception DOIT recevoir : ceux que
+        # l'application publie si elle le fait, sinon ceux qu'elle traite.
+        'stripe_evenements_requis': globals().get('STRIPE_EVENEMENTS_REQUIS') or connexions.EVENEMENTS_TRAITES,
+        'stripe_prix': {'pro': os.environ.get('STRIPE_PRICE_PRO', ''),
+                        'entreprise': os.environ.get('STRIPE_PRICE_ENTREPRISE', '')},
+        'brevo_api_key': BREVO_API_KEY,
+        # Derivee de l'adresse d'envoi, jamais recopiee : en recette, l'envoi
+        # est redirige vers un faux serveur et la lecture du compte le suit.
+        'brevo_api_base': globals().get('BREVO_API_BASE') or connexions.base_brevo(BREVO_API_URL),
+        'mail_from': MAIL_FROM,
+    }
+    return jsonify(connexions.diagnostic(
+        stripe=_stripe_pret(secret) if secret else None,
+        session=requests.Session(), config=config, base=_lire))
 
 @app.route('/auth/<token>')
 @rate_limit_strict(limit=10, window=300)
@@ -8055,14 +8832,18 @@ def _essai_relances():
 @app.route('/api/sentinel-auth/me', methods=['GET'])
 @rate_limit(limit=120, window=60)
 def sentauth_me():
+    # LE TRAVAIL DE FOND VIENT APRES L'AUTHENTIFICATION. Il la precedait :
+    # mesure, un GET anonyme (repondu 401) declenchait 5 relances d'essai et
+    # prenait 2,5 s. Les envois sont idempotents en base, donc pas de rafale,
+    # mais un chemin non authentifie ne doit porter ni envoi ni latence.
+    client = sentauth_current_client()
+    if not client:
+        return jsonify({'authenticated': False}), 401
     check_pending_reports()  # verifie les rapports en attente a chaque chargement de page
     try:
         _essai_relances()  # rappels d'essai (3 jours avant, puis a l'expiration)
     except Exception:
         pass
-    client = sentauth_current_client()
-    if not client:
-        return jsonify({'authenticated': False}), 401
     return jsonify({'authenticated': True, **client})
 
 
@@ -8112,40 +8893,256 @@ def sentinel_checkout():
     price_id = os.environ.get('STRIPE_PRICE_PRO' if plan == 'pro' else 'STRIPE_PRICE_ENTREPRISE')
     if not secret or not price_id:
         return jsonify({'error': "Paiement non configure.", 'configured': False}), 501
-    try:
-        import stripe
-    except Exception:
-        return jsonify({'error': "Module de paiement indisponible.", 'configured': False}), 501
-    stripe.api_key = secret
+    cid = int(client['id'])
     base = request.host_url.rstrip('/')
     try:
-        _existing_customer = None
+        stripe = _stripe_pret(secret)
+        _row = {}
         try:
             _cc = registre_get_db(); _ccur = _cc.cursor()
-            _ccur.execute(registre_sql('SELECT stripe_customer_id FROM clients WHERE id=%s', 'SELECT stripe_customer_id FROM clients WHERE id=?'), (int(client['id']),))
+            _ccur.execute(registre_sql('SELECT stripe_customer_id, stripe_subscription_id FROM clients WHERE id=%s',
+                                       'SELECT stripe_customer_id, stripe_subscription_id FROM clients WHERE id=?'), (cid,))
             _crow = _ccur.fetchone()
-            if _crow: _existing_customer = dict(_crow).get('stripe_customer_id')
+            _row = dict(_crow) if _crow else {}
             _cc.close()
-        except Exception:
-            _existing_customer = None
+        except Exception as _le:
+            logger.warning('STRIPE_CHECKOUT_LECTURE_CLIENT client=%s : %s', cid, _le)
+        _existing_customer = _row.get('stripe_customer_id')
+        _sub_id = _row.get('stripe_subscription_id')
+        # UN ABONNEMENT EXISTE DEJA : ON CHANGE SON PRIX, ON N'EN OUVRE PAS UN
+        # SECOND. Mesure : la fenetre de verrou propose « Entreprise » a un
+        # client Pro ; la caisse ouvrait un nouvel abonnement, le webhook
+        # ecrasait l'identifiant, et le premier continuait d'etre preleve —
+        # deux prelevements mensuels, dont un orphelin.
+        if _sub_id:
+            try:
+                sub = stripe.Subscription.retrieve(_sub_id)
+                articles = list(sub['items'].data) if 'items' in sub else []
+                _statut = sub['status'] or ''
+                if _statut in STRIPE_ABONNEMENT_ACTIF and articles:
+                    stripe.Subscription.modify(
+                        _sub_id, items=[{'id': articles[0]['id'], 'price': price_id}],
+                        proration_behavior='create_prorations',
+                        metadata={'client_id': str(cid), 'plan': plan, 'site': 'conseilprev'})
+                    activate_client_plan(cid, plan)
+                    logger.info('STRIPE_ABONNEMENT_MODIFIE client=%s plan=%s abonnement=%s', cid, plan, _sub_id)
+                    return jsonify({'ok': True, 'modifie': True, 'plan': plan})
+                if _statut not in ('canceled', 'incomplete_expired') and _statut:
+                    # IMPAYE, INCOMPLET OU EN PAUSE : ON NE DONNE PAS PLUS.
+                    # `create_prorations` ne facture RIEN tout de suite — il
+                    # ajoute la difference a une facture que ce client ne paie
+                    # deja pas — et l'offre la plus chere etait posee dans la
+                    # foulee (mesure, sur past_due, unpaid, incomplete et
+                    # paused). CGV 3.4 : un impaye suspend, il n'ouvre pas.
+                    # Ouvrir une SECONDE caisse serait pire : deux abonnements,
+                    # deux prelevements, dont un que personne ne suit.
+                    logger.warning('STRIPE_MONTEE_REFUSEE client=%s plan=%s abonnement=%s statut=%s',
+                                   cid, plan, _sub_id, _statut)
+                    return jsonify({'error': "Votre abonnement en cours n est pas a jour de paiement. "
+                                             "Regularisez-le avant de changer d offre, ou ecrivez-nous.",
+                                    'regulariser': True, 'statut': _statut}), 402
+            except stripe.InvalidRequestError as _ie:
+                # L'abonnement n'existe plus chez Stripe : une nouvelle caisse.
+                if getattr(_ie, 'code', '') != 'resource_missing':
+                    raise
+        # LES METADONNEES SONT POSEES SUR L'ABONNEMENT AUSSI : les evenements
+        # customer.subscription.* et invoice.* portent celles de l'abonnement,
+        # pas celles de la session de caisse — sans elles, ils ne diraient
+        # pas quel client. `site` distingue ce site de l'autre du meme compte.
+        _meta = {'client_id': str(cid), 'plan': plan, 'site': 'conseilprev'}
         _sk = dict(mode='subscription', line_items=[{'price': price_id, 'quantity': 1}],
-                   client_reference_id=str(client['id']),
-                   metadata={'client_id': str(client['id']), 'plan': plan},
-                   success_url=base + '/sentinel?activation=ok', cancel_url=base + '/tarifications')
+                   client_reference_id=str(cid),
+                   metadata=_meta, subscription_data={'metadata': _meta},
+                   success_url=base + '/sentinel?activation=ok&session_id={CHECKOUT_SESSION_ID}',
+                   cancel_url=base + '/tarifications')
         if _existing_customer:
             _sk['customer'] = _existing_customer
         else:
             _sk['customer_email'] = client.get('email')
         sess = stripe.checkout.Session.create(**_sk)
-        return jsonify({'url': sess.url})
-    except Exception:
+        return jsonify({'ok': True, 'url': sess.url})
+    except Exception as _e:
+        logger.error('STRIPE_CHECKOUT_ECHEC client=%s plan=%s : %s', cid, plan, _e)
         return jsonify({'error': "Echec de creation de la session de paiement."}), 502
+
+
+# LES EVENEMENTS QUE CE SITE TRAITE. Le point de reception chez Stripe doit
+# y etre abonne, et le diagnostic (lot D) lit ce tuple pour le verifier :
+# un evenement absent de l'abonnement n'arrive jamais, et rien ne le dit.
+STRIPE_EVENEMENTS_REQUIS = (
+    'checkout.session.completed',
+    'checkout.session.async_payment_succeeded',
+    'checkout.session.async_payment_failed',
+    'checkout.session.expired',
+    'invoice.paid',
+    'invoice.payment_failed',
+    'customer.subscription.deleted',
+)
+
+
+def _stripe_session_encaissee(obj):
+    """L'ARGENT EST-IL LA ? `checkout.session.completed` arrive AUSSI pour un
+    paiement differe (prelevement SEPA…) avec payment_status='unpaid' : la
+    caisse est fermee, rien n'est encaisse. Mesure : une offre Entreprise
+    etait activee et une seance passait « payee » sur un tel evenement.
+    `no_payment_required` couvre une caisse a zero (bon d'achat, essai)."""
+    return (obj.get('payment_status') or '') in ('paid', 'no_payment_required')
+
+
+#: LES SEULS ETATS D'ABONNEMENT QUI OUVRENT UNE OFFRE. `trialing` est un essai
+#: que Stripe facturera ; tout le reste — past_due, unpaid, incomplete, paused,
+#: canceled — est un abonnement qui NE PAIE PAS.
+STRIPE_ABONNEMENT_ACTIF = ('active', 'trialing')
+
+
+def _stripe_abonnement_actif(subscription):
+    """L'abonnement de cette caisse est-il encore vivant chez Stripe ?
+
+    L'OFFRE SE LIT SUR L'ABONNEMENT, PAS SUR UNE CAISSE FERMEE. Une session de
+    paiement reste `payment_status='paid'` pour toujours ; l'abonnement
+    qu'elle a ouvert, non. Sans cette relecture, rejouer une vieille session
+    rendait une offre payante a un compte resilie (mesure).
+
+    UNE LECTURE IMPOSSIBLE N'EST PAS UN REFUS : elle LEVE. L'appelant echoue,
+    Stripe reessaie sa notification et le retour de caisse dit « en cours ».
+    Repondre « non » sur une panne reseau priverait de son offre un client qui
+    vient de payer."""
+    secret = os.environ.get('STRIPE_SECRET_KEY')
+    if not secret:
+        raise RuntimeError('STRIPE_SECRET_KEY absente : abonnement %s invérifiable' % subscription)
+    sub = _stripe_pret(secret).Subscription.retrieve(str(subscription))
+    return (sub['status'] or '') in STRIPE_ABONNEMENT_ACTIF
+
+
+def _sentinel_activer_offre(cid, plan, customer=None, subscription=None):
+    """Active l'offre d'un compte Sentinel, retient ses identifiants Stripe et
+    previent le client — UNE seule fois.
+
+    IDEMPOTENT PARCE QUE DEUX CHEMINS Y MENENT : la notification Stripe et le
+    retour de caisse (/api/stripe/retour), qui peuvent arriver dans n'importe
+    quel ordre. Le second trouve l'offre deja posee et ne renvoie pas le
+    courriel d'activation. Le courriel qui echoue est journalise, pas
+    remonte : le remonter ferait rejouer l'evenement, qui trouverait l'offre
+    activee et n'enverrait plus rien — le client n'aurait jamais le courriel."""
+    conn = registre_get_db(); cur = conn.cursor()
+    cur.execute(registre_sql('SELECT email, nom_entreprise, plan, stripe_subscription_id FROM clients WHERE id=%s',
+                             'SELECT email, nom_entreprise, plan, stripe_subscription_id FROM clients WHERE id=?'), (int(cid),))
+    row = cur.fetchone()
+    try: conn.close()
+    except Exception: pass
+    if not row:
+        logger.error('STRIPE_ACTIVATION_CLIENT_INCONNU client=%s plan=%s', cid, plan)
+        return False
+    row = dict(row)
+    deja = (row.get('plan') == plan
+            and (not subscription or row.get('stripe_subscription_id') == str(subscription)))
+    if deja:
+        return True
+    if subscription and not _stripe_abonnement_actif(subscription):
+        logger.warning('STRIPE_OFFRE_REFUSEE client=%s plan=%s abonnement=%s : pas actif chez Stripe',
+                       cid, plan, subscription)
+        return False
+    activate_client_plan(int(cid), plan)
+    if customer:
+        _billing_set_customer(int(cid), customer)
+    if subscription:
+        _billing_set_subscription(int(cid), subscription)
+    logger.info('STRIPE_OFFRE_ACTIVEE client=%s plan=%s', cid, plan)
+    if row.get('email'):
+        _plabel = 'Entreprise' if plan == 'entreprise' else 'Pro'
+        try:
+            send_email_smart(row['email'], row.get('nom_entreprise') or 'Client',
+                'Votre offre Sentinel ' + _plabel + ' est activee',
+                '<p>Bonjour,</p><p>Votre paiement a bien ete recu et votre offre <strong>Sentinel ' + _plabel + '</strong> est desormais active. Vous avez acces a l ensemble des modules correspondants.</p><p>L equipe CONSEILPREV</p>',
+                tags=['activation'])
+        except Exception as _e:
+            logger.error('STRIPE_ACTIVATION_COURRIEL_ECHEC client=%s : %s', cid, _e)
+    return True
+
+
+def _stripe_confirmer_session(obj, faire):
+    """Les confirmateurs d'une caisse ENCAISSEE, choisis par metadata.type
+    ou metadata.plan. Appeles par la notification ET par le retour de caisse ;
+    chacun est idempotent. `faire(nom, fonction)` execute et journalise.
+
+    LE COMPTE SENTINEL VIENT DES METADONNEES, JAMAIS DE client_reference_id.
+    Ce champ porte un numero de compte pour l'abonnement, mais un NUMERO
+    D'INSCRIPTION pour une formation du catalogue et une COMMANDE pour la
+    formation IA. Lu comme un numero de compte, il faisait ecrire le client
+    Stripe d'un acheteur de formation sur le compte Sentinel de meme numero
+    — qui aurait ensuite ete preleve dessus (mesure)."""
+    meta = obj.get('metadata') or {}
+    if meta.get('type') == 'formation':
+        faire('formation', lambda: _form_confirmer_paiement(int(meta.get('inscription_id'))))
+    elif meta.get('type') == 'formation-ia':
+        # LA COMMANDE, PAS LA LIGNE : une session regle jusqu'a quatre seances.
+        # Le montant note est celui que Stripe a ENCAISSE, pas un recalcul.
+        faire('formation-ia', lambda: _formation_ia_confirmer_paiement(
+            commande=meta.get('commande'), resa_id=meta.get('resa_id'),
+            montant_ttc_cents=obj.get('amount_total')))
+    cid = meta.get('client_id')
+    plan = meta.get('plan')
+    if cid and plan in ('pro', 'entreprise'):
+        faire('offre', lambda: _sentinel_activer_offre(
+            int(cid), plan, obj.get('customer'), obj.get('subscription')))
+
+
+def _stripe_liberer_session(obj, etype, faire):
+    """Une caisse SANS paiement : expiree, ou prelevement differe refuse.
+    La formation IA rend son creneau (c'est le paiement qui retient la
+    place). L'inscription du catalogue reste en attente : elle se facture
+    hors ligne, CONSEILPREV rappelle. L'abonnement n'a rien a defaire :
+    aucune offre n'a ete activee."""
+    meta = obj.get('metadata') or {}
+    if meta.get('type') == 'formation-ia' and meta.get('commande'):
+        motif = ('caisse expiree sans paiement' if etype == 'checkout.session.expired'
+                 else 'paiement differe refuse')
+        faire('formation-ia-liberation',
+              lambda: _formation_ia_liberer_commande(meta.get('commande'), motif))
+    else:
+        logger.info('STRIPE_CAISSE_SANS_PAIEMENT type=%s metadata=%s : rien a liberer', etype, dict(meta))
+
+
+def _stripe_cle_session(session_id):
+    """La cle de reclamation d'une CAISSE. Elle vit dans la meme table que
+    celle des evenements, prefixee pour ne jamais rencontrer un `evt_…`.
+
+    POURQUOI UNE CLE PAR SESSION, ET PAS PAR EVENEMENT. Deux chemins
+    confirment la meme caisse : la notification signee et le retour de caisse
+    (le filet, quand la notification n'arrive pas). Une cle par evenement ne
+    departage que deux notifications entre elles. Mesure : le retour rejouait
+    une caisse ancienne a CHAQUE rechargement de la page — l'offre payante
+    revenait, ou montait, sans le moindre prelevement, meme apres une
+    resiliation ; et quand les deux chemins arrivaient ensemble, le client et
+    CONSEILPREV recevaient chaque courriel en double."""
+    sid = str(session_id or '').strip()
+    return ('cs:' + sid) if sid else None
+
+
+def _stripe_abonnement_de_facture(obj):
+    """L'abonnement d'une facture : `parent.subscription_details.subscription`
+    en version d'API dahlia, `subscription` avant."""
+    parent = obj.get('parent') or {}
+    details = parent.get('subscription_details') or {}
+    return details.get('subscription') or obj.get('subscription')
 
 
 @app.route('/api/stripe/webhook', methods=['POST'])
 def stripe_webhook():
-    """Notification Stripe. Verifie la signature puis active l'offre du client
-    sur 'checkout.session.completed'. Desactive si le secret n'est pas defini."""
+    """Notification Stripe : signature verifiee, evenement RECLAME puis traite.
+
+    CE QUI ETAIT FAIT, ET CE QUE CA COUTAIT. Chaque branche avalait ses
+    exceptions (« except Exception: pass ») et l'evenement etait marque vu
+    quoi qu'il arrive, avec une reponse 200. Une base indisponible dix
+    secondes suffisait : le paiement etait perdu pour toujours, Stripe ne
+    reessayant jamais un 200. Mesure : activation en panne, 200, rejeu
+    « duplicate », offre restee gratuite.
+
+    CE QUI EST FAIT. L'evenement est reclame AVANT traitement, atomiquement
+    (INSERT sur la cle primaire) : deux livraisons simultanees n'en traitent
+    qu'une. Un echec libere la reclamation et repond 500 : Stripe reessaie
+    pendant trois jours. Une base muette repond 503, pour la meme raison.
+    Chaque echec est journalise avec l'etape et l'identifiant."""
     secret = os.environ.get('STRIPE_WEBHOOK_SECRET')
     if not secret:
         return jsonify({'error': "Webhook non configure."}), 501
@@ -8156,7 +9153,7 @@ def stripe_webhook():
     payload = request.get_data()
     sig = request.headers.get('Stripe-Signature', '')
     try:
-        event = stripe.Webhook.construct_event(payload, sig, secret)
+        stripe.Webhook.construct_event(payload, sig, secret)
     except Exception:
         return jsonify({'error': "Signature invalide."}), 400
     try:
@@ -8164,98 +9161,154 @@ def stripe_webhook():
         evt = _jwh.loads(payload.decode('utf-8') if isinstance(payload, (bytes, bytearray)) else payload)
     except Exception:
         evt = {}
+    eid = evt.get('id')
+    reclame = _stripe_event_claim(eid)
+    if reclame is None:
+        return jsonify({'received': False}), 503          # base muette : Stripe reessaiera
+    if reclame == 'en_cours':
+        # UN AUTRE FIL LE TRAITE EN CE MOMENT. Repondre « duplicate » ici
+        # serait un acquittement : si ce fil-la meurt, Stripe ne reviendrait
+        # plus. Un non-2xx le fait reessayer, et la reclamation abandonnee
+        # sera reprise au bout de STRIPE_RECLAMATION_ABANDON_MIN.
+        return jsonify({'received': False, 'en_cours': True}), 409
+    if not reclame:
+        return jsonify({'received': True, 'duplicate': True}), 200
+    echecs = []
+
+    def _faire(nom, fonction):
+        try:
+            fonction()
+        except Exception as _e:
+            echecs.append(nom)
+            logger.error('STRIPE_WEBHOOK_ECHEC etape=%s evenement=%s : %s', nom, eid, _e)
+
     try:
-        if _stripe_event_seen(evt.get('id')):
-            return jsonify({'received': True, 'duplicate': True}), 200
         etype = evt.get('type')
         obj = (evt.get('data') or {}).get('object') or {}
         meta = obj.get('metadata') or {}
-        if etype == 'checkout.session.completed':
-            # Reservation d'une formation du catalogue : confirmer et notifier.
-            if meta.get('type') == 'formation':
-                try:
-                    _form_confirmer_paiement(int(meta.get('inscription_id')))
-                except Exception:
-                    pass
-            # Reservation « Formations conformite IA » (offre a quatre sujets).
-            if meta.get('type') == 'formation-ia':
-                try:
-                    # LA COMMANDE, PAS LA LIGNE. Une session Stripe regle
-                    # JUSQU'A QUATRE seances ; ne confirmer que la premiere
-                    # laisserait les trois autres « en attente de paiement »
-                    # alors qu'elles sont reglees — et, a l'annulation, sans
-                    # remboursement parce qu'on les croirait impayees.
-                    _formation_ia_confirmer_paiement(
-                        commande=meta.get('commande'),
-                        resa_id=meta.get('resa_id'))
-                except Exception:
-                    pass
-            cid = meta.get('client_id') or obj.get('client_reference_id')
-            plan = meta.get('plan')
-            if cid and plan in ('pro', 'entreprise'):
-                try:
-                    activate_client_plan(int(cid), plan)
-                except Exception:
-                    pass
-                try:
-                    _conn_e = registre_get_db(); _cur_e = _conn_e.cursor()
-                    _cur_e.execute(registre_sql('SELECT email, nom_entreprise FROM clients WHERE id=%s', 'SELECT email, nom_entreprise FROM clients WHERE id=?'), (int(cid),))
-                    _ce = _cur_e.fetchone()
-                    try: _conn_e.close()
-                    except Exception: pass
-                    _ce = dict(_ce) if _ce else {}
-                    if _ce.get('email'):
-                        _plabel = 'Entreprise' if plan == 'entreprise' else 'Pro'
-                        send_email_smart(_ce['email'], _ce.get('nom_entreprise') or 'Client',
-                            'Votre offre Sentinel ' + _plabel + ' est activee',
-                            '<p>Bonjour,</p><p>Votre paiement a bien ete recu et votre offre <strong>Sentinel ' + _plabel + '</strong> est desormais active. Vous avez acces a l ensemble des modules correspondants.</p><p>L equipe CONSEILPREV</p>',
-                            tags=['activation'])
-                except Exception:
-                    pass
-            cust = obj.get('customer')
-            if cid and cust:
-                try:
-                    _billing_set_customer(int(cid), cust)
-                except Exception:
-                    pass
-            sub = obj.get('subscription')
-            if cid and sub:
-                try:
-                    _billing_set_subscription(int(cid), sub)
-                except Exception:
-                    pass
+        if etype in ('checkout.session.completed', 'checkout.session.async_payment_succeeded'):
+            if _stripe_session_encaissee(obj):
+                # LA MEME RECLAMATION QUE LE RETOUR DE CAISSE, PORTEE PAR LA
+                # SESSION. Les deux chemins menent aux memes confirmateurs et
+                # arrivent ENSEMBLE : Stripe livre l'evenement au moment ou il
+                # renvoie le navigateur. La reclamation par evenement ne
+                # departageait que deux notifications entre elles.
+                cle_session = _stripe_cle_session(obj.get('id'))
+                pris = _stripe_event_claim(cle_session) if cle_session else True
+                if pris == 'en_cours':
+                    echecs.append('session-en-cours')
+                elif pris is not False:
+                    _stripe_confirmer_session(obj, _faire)
+                    if echecs:
+                        _stripe_event_release(cle_session)
+                    else:
+                        _stripe_event_fini(cle_session)
+            else:
+                logger.info('STRIPE_WEBHOOK_NON_ENCAISSE evenement=%s type=%s payment_status=%s : rien confirme',
+                            eid, etype, obj.get('payment_status'))
+        elif etype in ('checkout.session.async_payment_failed', 'checkout.session.expired'):
+            _stripe_liberer_session(obj, etype, _faire)
         elif etype == 'invoice.paid':
             numero = meta.get('numero'); ech = meta.get('echeance')
             if numero and ech:
-                try:
-                    _billing_on_invoice_paid(numero, int(ech))
-                except Exception:
-                    pass
+                _faire('facture', lambda: _billing_on_invoice_paid(numero, int(ech), obj.get('amount_paid')))
         elif etype == 'invoice.payment_failed':
             numero = meta.get('numero'); ech = meta.get('echeance'); cid = meta.get('client_id')
             if numero and ech:
-                try:
-                    _billing_on_invoice_failed(numero, int(ech), int(cid) if cid else None)
-                except Exception:
-                    pass
-        try: _stripe_event_mark(evt.get('id'))
-        except Exception: pass
-        return jsonify({'received': True}), 200
-
-
-
-    # ══════════════════════════════════════════════════════════
-    # AGENT SENTINEL PRICING ORCHESTRATOR — TARIFICATION RAAS PAR JALONS
-    # Modules : Observateur (lecture des scores), Verificateur (double
-    # declencheur), Facturier (echeancier, gel des acquis), Mediateur
-    # (validation humaine CONSEILPREV requise pour verifier un jalon).
-    # Regles inviolables : jalon verified = irrevocable ; aucun jalon
-    # facture sans verification ; enveloppe bornee a 60 % du SaaS annuel.
-    # ══════════════════════════════════════════════════════════
+                _faire('impaye', lambda: _billing_on_invoice_failed(numero, int(ech), int(cid) if cid else None))
+            else:
+                # UNE FACTURE D'ABONNEMENT (pas une echeance RaaS) : le client
+                # et CONSEILPREV doivent le savoir, CGV 3.4.
+                sub_id = _stripe_abonnement_de_facture(obj)
+                if sub_id:
+                    _faire('abonnement-impaye', lambda: _abonnement_impaye(sub_id))
+        elif etype == 'customer.subscription.deleted':
+            _faire('abonnement-resilie', lambda: _abonnement_resilie(
+                obj.get('id'), meta.get('client_id'),
+                (obj.get('cancellation_details') or {}).get('comment')))
     except Exception as _we:
-        try: logger.error('STRIPE_WEBHOOK_ERROR: ' + str(_we))
-        except Exception: pass
+        echecs.append('webhook')
+        logger.error('STRIPE_WEBHOOK_ECHEC etape=webhook evenement=%s : %s', eid, _we)
+    if echecs:
+        _stripe_event_release(eid)
+        return jsonify({'received': False, 'echecs': echecs}), 500
+    _stripe_event_fini(eid)
     return jsonify({'received': True}), 200
+
+
+@app.route('/api/stripe/retour', methods=['GET'])
+@rate_limit(limit=30, window=60)
+def stripe_retour():
+    """Le retour de caisse : le filet quand la notification n'arrive pas.
+
+    UN MOIS SANS NOTIFICATION VIENT D'ETRE CONSTATE : le point de reception
+    visait un hote sans service. Pendant ce temps, les pages annoncaient
+    « offre activee » et « Paiement recu » sans rien verifier. Ici, la
+    session est RELUE chez Stripe avec la vraie bibliotheque ; si elle est
+    encaissee, les MEMES confirmateurs idempotents que la notification sont
+    appeles. La page n'affiche « confirme » qu'apres la reponse « paye ».
+
+    LA ROUTE EST PUBLIQUE (la caisse formation IA l'est), donc elle ne rend
+    que le statut — jamais un montant, une adresse, un nom. Un identifiant
+    de session devine ne permet que de confirmer un paiement deja encaisse
+    par Stripe, ce que la notification aurait fait de toute facon."""
+    sid = (request.args.get('session_id') or '').strip()
+    if not sid or not sid.startswith('cs_') or len(sid) > 200:
+        return jsonify({'statut': 'inconnu'}), 400
+    secret = os.environ.get('STRIPE_SECRET_KEY')
+    if not secret:
+        return jsonify({'statut': 'inconnu'}), 501
+    try:
+        import json as _jr
+        stripe = _stripe_pret(secret)
+        obj = _jr.loads(str(stripe.checkout.Session.retrieve(sid)))
+    except Exception as _e:
+        logger.warning('STRIPE_RETOUR_RELECTURE session=%s : %s', sid, _e)
+        return jsonify({'statut': 'inconnu'}), 200
+    if not _stripe_session_encaissee(obj):
+        return jsonify({'statut': 'en_attente'}), 200
+    # UNE CAISSE NE SE CONFIRME QU'UNE FOIS, MEME RECHARGEE CENT FOIS. La
+    # session relue reste « paid » pour toujours et cette route est publique :
+    # sans cette reclamation, un rechargement de /sentinel?activation=ok&…
+    # remettait l'offre payante et l'identifiant d'un abonnement resilie
+    # (mesure). Deja confirmee : on le redit, sans rien rappeler.
+    cle = _stripe_cle_session(obj.get('id') or sid)
+    pris = _stripe_event_claim(cle)
+    if pris is False:
+        return jsonify({'statut': 'paye'}), 200
+    if pris == 'en_cours':
+        # La notification la traite en ce moment : la page dira « en cours ».
+        return jsonify({'statut': 'en_attente'}), 200
+    echecs = []
+
+    def _faire(nom, fonction):
+        try:
+            fonction()
+        except Exception as _e:
+            echecs.append(nom)
+            logger.error('STRIPE_RETOUR_ECHEC etape=%s session=%s : %s', nom, sid, _e)
+
+    _stripe_confirmer_session(obj, _faire)
+    if echecs:
+        # LA RECLAMATION EST RENDUE : sans cela, la notification que Stripe
+        # reessaie trouverait la caisse « deja traitee » et le paiement serait
+        # perdu pour de bon.
+        _stripe_event_release(cle)
+    else:
+        _stripe_event_fini(cle)
+    # Encaisse chez Stripe mais non confirme ici : la page dira « en cours »,
+    # la notification (reessayee par Stripe) finira le travail.
+    return jsonify({'statut': 'paye' if not echecs else 'en_attente'}), 200
+
+
+# ══════════════════════════════════════════════════════════
+# AGENT SENTINEL PRICING ORCHESTRATOR — TARIFICATION RAAS PAR JALONS
+# Modules : Observateur (lecture des scores), Verificateur (double
+# declencheur), Facturier (echeancier, gel des acquis), Mediateur
+# (validation humaine CONSEILPREV requise pour verifier un jalon).
+# Regles inviolables : jalon verified = irrevocable ; aucun jalon
+# facture sans verification ; enveloppe bornee a 60 % du SaaS annuel.
+# ══════════════════════════════════════════════════════════
 
 def raas_require_conseilprev():
     """Retourne le client CONSEILPREV ou None. Les operations de
@@ -8771,7 +9824,7 @@ def clients_invoices_issue():
             email_error = 'Aucun email KYC valide'
     conn.close()
     try:
-        _billing_cancel_subscription(client_id)
+        _billing_cancel_subscription(client_id, 'raas-facture')
     except Exception:
         pass
     return jsonify({'ok': True, 'issued_count': len(issued), 'invoices': issued,
@@ -9639,6 +10692,14 @@ def pricing_request():
     plan_label = 'Sentinel Pro' if plan == 'pro' else 'Sentinel Entreprise'
     now_str = datetime.utcnow().strftime('%d/%m/%Y à %H:%M UTC')
 
+    # Ce courriel arrive dans la boite de CONSEILPREV avec `reply_to` sur le
+    # prospect : un nom `<a href="https://piege.test/…">Facture</a>` y etait
+    # rendu et cliquable. Mesure. Les valeurs saisies sont echappees ici, au
+    # point ou elles entrent dans du HTML ; `email` reste brut pour reply_to.
+    nom_h, email_h, secteur_h, systemes_h, message_h = (
+        _pour_courriel(nom), _pour_courriel(email), _pour_courriel(secteur),
+        _pour_courriel(systemes), _pour_courriel(message))
+
     html = f"""<div style="font-family:Arial,sans-serif;max-width:560px;padding:24px">
   <div style="background:#1C1C1C;color:#fff;border-radius:8px 8px 0 0;padding:16px 20px;margin-bottom:0">
     <span style="font-size:16px;font-weight:700">Sentinel <span style="background:#B83222;font-size:10px;padding:2px 6px;border-radius:3px;vertical-align:middle">AI</span></span>
@@ -9648,15 +10709,15 @@ def pricing_request():
     <tr style="background:#F6F4FC"><td style="padding:10px 16px;color:#767676;width:180px;border-bottom:1px solid #E0DDD8">Plan demandé</td>
         <td style="padding:10px 16px;font-weight:700;color:#B83222;border-bottom:1px solid #E0DDD8">{plan_label}</td></tr>
     <tr><td style="padding:10px 16px;color:#767676;border-bottom:1px solid #E0DDD8">Entreprise</td>
-        <td style="padding:10px 16px;font-weight:600;border-bottom:1px solid #E0DDD8">{nom}</td></tr>
+        <td style="padding:10px 16px;font-weight:600;border-bottom:1px solid #E0DDD8">{nom_h}</td></tr>
     <tr style="background:#F6F4FC"><td style="padding:10px 16px;color:#767676;border-bottom:1px solid #E0DDD8">Email</td>
-        <td style="padding:10px 16px;border-bottom:1px solid #E0DDD8"><a href="mailto:{email}">{email}</a></td></tr>
+        <td style="padding:10px 16px;border-bottom:1px solid #E0DDD8"><a href="mailto:{email_h}">{email_h}</a></td></tr>
     <tr><td style="padding:10px 16px;color:#767676;border-bottom:1px solid #E0DDD8">Secteur</td>
-        <td style="padding:10px 16px;border-bottom:1px solid #E0DDD8">{secteur or 'Non précisé'}</td></tr>
+        <td style="padding:10px 16px;border-bottom:1px solid #E0DDD8">{secteur_h or 'Non précisé'}</td></tr>
     <tr style="background:#F6F4FC"><td style="padding:10px 16px;color:#767676;border-bottom:1px solid #E0DDD8">Systèmes IA</td>
-        <td style="padding:10px 16px;border-bottom:1px solid #E0DDD8">{systemes or 'Non précisé'}</td></tr>
+        <td style="padding:10px 16px;border-bottom:1px solid #E0DDD8">{systemes_h or 'Non précisé'}</td></tr>
     <tr><td style="padding:10px 16px;color:#767676;border-bottom:1px solid #E0DDD8">Message</td>
-        <td style="padding:10px 16px;border-bottom:1px solid #E0DDD8;white-space:pre-wrap">{message or '—'}</td></tr>
+        <td style="padding:10px 16px;border-bottom:1px solid #E0DDD8;white-space:pre-wrap">{message_h or '—'}</td></tr>
     <tr style="background:#F6F4FC"><td style="padding:10px 16px;color:#767676">Origine</td>
         <td style="padding:10px 16px;font-size:11px;color:#767676">IP {ip} — {now_str}</td></tr>
   </table>
@@ -10436,7 +11497,7 @@ def registre_create():
         row = cur.fetchone()
     conn.commit()
     conn.close()
-    schedule_cartographie_report(client['id'], client.get('email') or CONSEILPREV_INTERNAL_EMAIL, client.get('nom_entreprise') or 'CONSEILPREV')
+    schedule_cartographie_report(client['id'], client.get('email') or CONSEILPREV_NOTIFY_EMAIL, client.get('nom_entreprise') or 'CONSEILPREV')
     return jsonify({'systeme': registre_row_to_dict(row)}), 201
 
 def _registre_ajustement_fin(brut):
@@ -10528,7 +11589,7 @@ def registre_update(sys_id):
         conn.close()
         if not row:
             return jsonify({'error': 'Systeme introuvable'}), 404
-        schedule_cartographie_report(client['id'], client.get('email') or CONSEILPREV_INTERNAL_EMAIL, client.get('nom_entreprise') or 'CONSEILPREV')
+        schedule_cartographie_report(client['id'], client.get('email') or CONSEILPREV_NOTIFY_EMAIL, client.get('nom_entreprise') or 'CONSEILPREV')
         return jsonify({'systeme': registre_row_to_dict(row)})
     else:
         cur.execute('SELECT * FROM systemes_ia WHERE id=? AND client_id=?', (sys_id, client['id']))
@@ -10564,7 +11625,7 @@ def registre_update(sys_id):
         cur.execute('SELECT * FROM systemes_ia WHERE id=?', (sys_id,))
         row = cur.fetchone()
         conn.close()
-        schedule_cartographie_report(client['id'], client.get('email') or CONSEILPREV_INTERNAL_EMAIL, client.get('nom_entreprise') or 'CONSEILPREV')
+        schedule_cartographie_report(client['id'], client.get('email') or CONSEILPREV_NOTIFY_EMAIL, client.get('nom_entreprise') or 'CONSEILPREV')
         return jsonify({'systeme': registre_row_to_dict(row)})
 
 @app.route('/api/registre/<int:sys_id>', methods=['DELETE'])
@@ -10586,7 +11647,7 @@ def registre_delete(sys_id):
     conn.close()
     if deleted_count == 0:
         return jsonify({'error': 'Systeme introuvable'}), 404
-    schedule_cartographie_report(client['id'], client.get('email') or CONSEILPREV_INTERNAL_EMAIL, client.get('nom_entreprise') or 'CONSEILPREV')
+    schedule_cartographie_report(client['id'], client.get('email') or CONSEILPREV_NOTIFY_EMAIL, client.get('nom_entreprise') or 'CONSEILPREV')
     return jsonify({'deleted': sys_id})
 
 @app.route('/api/finops', methods=['GET'])
@@ -11195,7 +12256,7 @@ def notifications_summary():
         cur.execute(registre_sql(
             "SELECT * FROM email_log WHERE destinataire=%s AND sujet LIKE %s AND succes=TRUE AND date_envoi > %s ORDER BY date_envoi DESC",
             "SELECT * FROM email_log WHERE destinataire=? AND sujet LIKE ? AND succes=1 AND date_envoi > ? ORDER BY date_envoi DESC"
-        ), (client.get('email') or CONSEILPREV_INTERNAL_EMAIL, 'Cartographie IA%', cutoff))
+        ), (client.get('email') or CONSEILPREV_NOTIFY_EMAIL, 'Cartographie IA%', cutoff))
         rows = [dict(r) if not isinstance(r, dict) else r for r in cur.fetchall()]
         conn.commit()
         conn.close()
@@ -14135,50 +15196,249 @@ def _fils_du_processus():
 # A valider en mode TEST Stripe avant production. CONSEILPREV/Sentinel.
 # ══════════════════════════════════════════════════════════
 
-def _stripe_event_seen(event_id):
-    """Verifie seulement si un evenement Stripe a deja ete traite.
-    L'enregistrement n'a lieu qu'apres traitement reussi (_stripe_event_mark),
-    afin qu'un evenement en echec puisse etre rejoue et retraite."""
+def _stripe_pret(secret):
+    """La bibliotheque `stripe`, prete a appeler — le SEUL endroit qui regle
+    son transport.
+
+    CE QUI ETAIT FAIT AVANT, CINQ FOIS, ET POURQUOI C'ETAIT FAUX. Chaque route
+    posait `stripe.max_network_retries = 0` : un reglage de MODULE, donc de
+    tout le processus. Une seule reservation de formation coupait ainsi les
+    reessais de toutes les requetes Stripe qui suivaient, y compris la caisse
+    d'abonnement : une erreur 500 passagere, absorbee avant, devenait un 502
+    (mesure). Et `stripe.http_client.RequestsClient(timeout=8)` n'existe plus
+    en 15.x : l'AttributeError etait avalee, le delai restait a 80 s.
+
+    CE QUI EST FAIT. Deux reessais : la bibliotheque pose une cle
+    d'idempotence sur CHAQUE POST, un reessai ne cree donc jamais un second
+    objet. Quinze secondes de delai : une requete de navigateur ne reste pas
+    suspendue 80 s. Le client HTTP n'est remplace que s'il n'est pas deja le
+    notre — on garde ses connexions ouvertes d'un appel a l'autre.
+    """
+    import stripe
+    stripe.api_key = secret
+    stripe.max_network_retries = 2
+    try:
+        if not getattr(stripe.default_http_client, '_conseilprev', False):
+            client = stripe.RequestsClient(timeout=15)
+            client._conseilprev = True
+            stripe.default_http_client = client
+    except Exception:
+        pass            # doublure d'essai sans client HTTP : rien a regler
+    return stripe
+
+
+#: AU-DELA DE CE DELAI, UNE RECLAMATION ABANDONNEE EST REPRISE. Un traitement
+#: dure quelques centaines de millisecondes ; cinq minutes laissent finir un
+#: envoi de courriel qui traine (jusqu'a 60 s par message, deux par
+#: confirmation) sans jamais confondre « en cours » et « perdu ».
+STRIPE_RECLAMATION_ABANDON_MIN = 5
+
+#: LA COLONNE D'ETAT A-T-ELLE DEJA ETE AJOUTEE DANS CE PROCESSUS ? La table
+#: existe en production et porte des lignes : la colonne s'ajoute par
+#: migration. Une commande de schema refusee annule la transaction en cours
+#: sur PostgreSQL — la tenter a chaque notification couterait un aller-retour
+#: pour rien. Remise a False des qu'une reclamation echoue, pour qu'une base
+#: recreee sous le processus soit remigree au lieu d'echouer indefiniment.
+_STRIPE_EVENTS_MIGRE = [False]
+
+
+def _stripe_events_table(cur, conn):
+    """La table des evenements reclames, et sa colonne d'ETAT."""
+    cur.execute("CREATE TABLE IF NOT EXISTS stripe_events (event_id TEXT PRIMARY KEY, processed_at TEXT)")
+    conn.commit()
+    if _STRIPE_EVENTS_MIGRE[0]:
+        return
+    try:
+        cur.execute('ALTER TABLE stripe_events ADD COLUMN etat TEXT')
+        conn.commit()
+    except Exception:
+        try: conn.rollback()             # la colonne existe deja
+        except Exception: pass
+    _STRIPE_EVENTS_MIGRE[0] = True
+
+
+def _stripe_event_claim(event_id):
+    """RECLAME l'evenement AVANT de le traiter, atomiquement.
+
+    True : a traiter ; False : deja FAIT (doublon) ; 'en_cours' : un autre fil
+    le traite en ce moment ; None : base injoignable.
+
+    UNE SEULE INSTRUCTION, SUR LA CLE PRIMAIRE. L'ancienne version lisait
+    (SELECT) avant de traiter et ecrivait (INSERT) apres : deux livraisons
+    simultanees passaient toutes deux le SELECT, et la commande etait
+    confirmee deux fois — quatre courriels (mesure). Ici, la base departage :
+    une ligne inseree, un traitement.
+
+    « RECLAME » N'EST PAS « FAIT », ET LES CONFONDRE PERDAIT DES PAIEMENTS.
+    L'etat definitif etait pose des la reclamation. Si le fil mourait ensuite
+    — delai gunicorn de 120 s sur un envoi qui traine, SIGKILL d'un
+    deploiement, OOM : ni `_faire` ni l'except exterieur n'attrapent
+    SystemExit —, la reclamation restait posee pour toujours. Stripe relivrait
+    et recevait 200 « duplicate », puis s'arretait : les seances restaient
+    « en_attente_paiement », leur creneau etait libere, et l'argent etait
+    encaisse (mesure, avec un worker tue en plein traitement). Une reclamation
+    « en_cours » abandonnee depuis plus de STRIPE_RECLAMATION_ABANDON_MIN est
+    donc REPRISE par la livraison suivante ; plus recente, elle rend
+    'en_cours' et l'appelant repond un non-2xx pour que Stripe reessaie.
+
+    Les lignes anterieures a cette colonne portent etat NULL : elles avaient
+    ete traitees sous l'ancien code, et restent des doublons."""
     if not event_id:
-        return False
+        return True             # Stripe met toujours un identifiant ; sans lui, rien a dedoublonner
     conn = None
     try:
         conn = registre_get_db(); cur = conn.cursor()
-        cur.execute("CREATE TABLE IF NOT EXISTS stripe_events (event_id TEXT PRIMARY KEY, processed_at TEXT)")
+        _stripe_events_table(cur, conn)
+        limite = (datetime.utcnow()
+                  - timedelta(minutes=STRIPE_RECLAMATION_ABANDON_MIN)).isoformat()
+        cur.execute(registre_sql(
+            "INSERT INTO stripe_events (event_id, processed_at, etat) VALUES (%s, %s, 'en_cours') "
+            "ON CONFLICT (event_id) DO UPDATE SET processed_at=EXCLUDED.processed_at "
+            "WHERE stripe_events.etat='en_cours' AND stripe_events.processed_at < %s",
+            "INSERT INTO stripe_events (event_id, processed_at, etat) VALUES (?, ?, 'en_cours') "
+            "ON CONFLICT (event_id) DO UPDATE SET processed_at=excluded.processed_at "
+            "WHERE stripe_events.etat='en_cours' AND stripe_events.processed_at < ?"),
+            (str(event_id), datetime.utcnow().isoformat(), limite))
+        pris = cur.rowcount == 1
         conn.commit()
-        cur.execute(registre_sql('SELECT 1 FROM stripe_events WHERE event_id=%s',
-                                 'SELECT 1 FROM stripe_events WHERE event_id=?'), (event_id,))
-        seen = cur.fetchone() is not None
+        if pris:
+            return True
+        cur.execute(registre_sql('SELECT etat FROM stripe_events WHERE event_id=%s',
+                                 'SELECT etat FROM stripe_events WHERE event_id=?'), (str(event_id),))
+        ligne = cur.fetchone()
+        etat = (dict(ligne).get('etat') if ligne else None) or 'fait'
+        return 'en_cours' if etat == 'en_cours' else False
+    except Exception as _e:
+        logger.error('STRIPE_EVENEMENT_RECLAMATION_ECHEC evenement=%s : %s', event_id, _e)
+        _STRIPE_EVENTS_MIGRE[0] = False
+        try: conn.rollback()
+        except Exception: pass
+        return None
+    finally:
         try: conn.close()
         except Exception: pass
-        return seen
-    except Exception:
-        try: conn.close()
-        except Exception: pass
-        return False
 
 
-def _stripe_event_mark(event_id):
-    """Enregistre un evenement Stripe comme traite, apres un traitement reussi."""
+def _stripe_event_fini(event_id):
+    """Le traitement a REUSSI : la reclamation devient definitive. Tant qu'elle
+    ne l'est pas, une livraison ulterieure peut la reprendre."""
     if not event_id:
         return
-    conn = None
     try:
         conn = registre_get_db(); cur = conn.cursor()
-        cur.execute("CREATE TABLE IF NOT EXISTS stripe_events (event_id TEXT PRIMARY KEY, processed_at TEXT)")
-        try:
-            cur.execute(registre_sql('INSERT INTO stripe_events (event_id, processed_at) VALUES (%s, %s)',
-                                     'INSERT INTO stripe_events (event_id, processed_at) VALUES (?, ?)'),
-                        (str(event_id), datetime.utcnow().isoformat()))
-            conn.commit()
-        except Exception:
-            try: conn.rollback()
-            except Exception: pass
+        cur.execute(registre_sql("UPDATE stripe_events SET etat='fait' WHERE event_id=%s",
+                                 "UPDATE stripe_events SET etat='fait' WHERE event_id=?"), (str(event_id),))
+        conn.commit(); conn.close()
+    except Exception as _e:
+        # La reclamation reste « en cours » : elle sera reprise au prochain
+        # envoi de Stripe, donc retraitee. Les confirmateurs sont idempotents.
+        logger.error('STRIPE_EVENEMENT_CLOTURE_ECHEC evenement=%s : %s', event_id, _e)
+
+
+def _stripe_event_release(event_id):
+    """Rend l'evenement a Stripe : son prochain envoi sera retraite."""
+    if not event_id:
+        return
+    try:
+        conn = registre_get_db(); cur = conn.cursor()
+        cur.execute(registre_sql('DELETE FROM stripe_events WHERE event_id=%s',
+                                 'DELETE FROM stripe_events WHERE event_id=?'), (str(event_id),))
+        conn.commit(); conn.close()
+    except Exception as _e:
+        # La reclamation reste posee : ce doublon-la serait perdu. Il faut le dire.
+        logger.error('STRIPE_EVENEMENT_LIBERATION_ECHEC evenement=%s : %s', event_id, _e)
+
+
+#: LA MARQUE D'UNE RESILIATION QUE LE SITE A LUI-MEME DEMANDEE. Elle part dans
+#: `cancellation_details.comment` de l'appel de resiliation et revient telle
+#: quelle dans `customer.subscription.deleted`. Mesure : un client passe a la
+#: facturation par resultats voyait billing-run resilier son abonnement, puis
+#: le retour de SA PROPRE demande le faisait retomber en « gratuit » — il
+#: perdait tous ses modules alors qu'il paie desormais au resultat.
+STRIPE_RESILIATION_MARQUE = 'conseilprev:'
+
+def _abonnement_resilie(sub_id, client_id=None, commentaire=None):
+    """customer.subscription.deleted : l'offre est retiree, l'identifiant oublie.
+
+    Mesure : un abonnement resilie chez Stripe laissait le client en « pro »
+    pour toujours — l'offre n'etait jamais retiree. On ne touche QUE le compte
+    qui porte cet abonnement : un evenement tardif sur un ancien abonnement
+    ne doit pas retrograder un client qui en a souscrit un nouveau.
+
+    DEUX REPLIS ONT ETE RETIRES, PARCE QU'ILS COUTAIENT DE L'ARGENT.
+      · La resiliation que le SITE demande revenait ici et rétrogradait le
+        client que billing-run venait de faire passer a la facturation par
+        resultats : il perdait tous ses modules (mesure, dans les deux ordres
+        d'arrivee). Elle porte desormais sa marque et n'est plus subie.
+      · Le repli « id = metadata.client_id AND stripe_subscription_id IS NULL »
+        visait une notification d'activation perdue. Le compte Stripe est
+        PARTAGE avec conseilprevcyber : un evenement de l'autre site, portant
+        un client_id, faisait passer en « gratuit » le client de CE site qui
+        porte ce numero (mesure : une offre posee a la main disparaissait).
+        Et l'activation memorise toujours l'abonnement en meme temps que
+        l'offre — le repli ne rattrapait rien qui ne soit deja rattrape par le
+        retour de caisse."""
+    if not sub_id:
+        return
+    if commentaire and str(commentaire).startswith(STRIPE_RESILIATION_MARQUE):
+        logger.info('STRIPE_RESILIATION_DEMANDEE_PAR_LE_SITE abonnement=%s motif=%s : offre inchangee',
+                    sub_id, commentaire)
+        return
+    conn = registre_get_db(); cur = conn.cursor()
+    cur.execute(registre_sql("UPDATE clients SET plan='gratuit', stripe_subscription_id=NULL WHERE stripe_subscription_id=%s",
+                             "UPDATE clients SET plan='gratuit', stripe_subscription_id=NULL WHERE stripe_subscription_id=?"),
+                (str(sub_id),))
+    touches = cur.rowcount
+    conn.commit()
+    try: conn.close()
+    except Exception: pass
+    logger.info('STRIPE_ABONNEMENT_RESILIE abonnement=%s client=%s comptes_retrogrades=%s', sub_id, client_id, touches)
+
+
+def _abonnement_impaye(sub_id):
+    """invoice.payment_failed d'un ABONNEMENT : relance, courriel au client,
+    notification interne. Mesure : un impaye d'abonnement ne produisait ni
+    trace ni courriel, alors que les CGV (3.4) annoncent une suspension."""
+    conn = registre_get_db(); cur = conn.cursor()
+    cur.execute(registre_sql('SELECT id, email, nom_entreprise, plan FROM clients WHERE stripe_subscription_id=%s',
+                             'SELECT id, email, nom_entreprise, plan FROM clients WHERE stripe_subscription_id=?'),
+                (str(sub_id),))
+    row = cur.fetchone()
+    row = dict(row) if row else None
+    if not row:
         try: conn.close()
         except Exception: pass
-    except Exception:
-        try: conn.close()
+        logger.warning('STRIPE_ABONNEMENT_IMPAYE_CLIENT_INCONNU abonnement=%s', sub_id)
+        return
+    try:
+        cur.execute(registre_sql(
+            "INSERT INTO client_relances (client_id, type, objet, canal, priorite, due_date, status, related_ref, created_at) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+            "INSERT INTO client_relances (client_id, type, objet, canal, priorite, due_date, status, related_ref, created_at) VALUES (?,?,?,?,?,?,?,?,?)"),
+            (int(row['id']), 'paiement', 'Echec de prelevement - abonnement Sentinel %s' % (row.get('plan') or ''),
+             'email', 'haute', datetime.utcnow().date().isoformat(), 'planifiee', str(sub_id), datetime.utcnow().isoformat()))
+        conn.commit()
+    except Exception as _e:
+        try: conn.rollback()
         except Exception: pass
+        logger.error('STRIPE_ABONNEMENT_IMPAYE_RELANCE_ECHEC client=%s : %s', row['id'], _e)
+    try: conn.close()
+    except Exception: pass
+    logger.warning('STRIPE_ABONNEMENT_IMPAYE abonnement=%s client=%s', sub_id, row['id'])
+    if row.get('email'):
+        send_email_smart(row['email'], row.get('nom_entreprise') or 'Client',
+                         'Echec de prelevement - abonnement Sentinel',
+                         '<p>Bonjour,</p><p>Le prelevement de votre abonnement Sentinel n a pas abouti. '
+                         'Merci de verifier votre moyen de paiement ; sans regularisation, l acces a l offre '
+                         'sera suspendu.</p><p>L equipe CONSEILPREV</p>',
+                         tags=['paiement-echec'])
+    send_email_smart(CONSEILPREV_NOTIFY_EMAIL, 'CONSEILPREV',
+                     'Impaye abonnement Sentinel : %s' % (row.get('nom_entreprise') or row.get('email')),
+                     '<p>Le prelevement de l abonnement <strong>%s</strong> du client n°%s (%s) a echoue.</p>'
+                     '<p>Une relance « paiement » est planifiee dans la gestion des clients.</p>'
+                     % (sub_id, row['id'], row.get('email')),
+                     tags=['paiement-echec'])
+
+
 def _billing_set_subscription(client_id, sub_id):
     """Memorise l'identifiant d'abonnement Stripe du client (pour pouvoir le
     resilier lors du passage a la facturation par resultats)."""
@@ -14194,42 +15454,70 @@ def _billing_set_subscription(client_id, sub_id):
         pass
 
 
-def _billing_cancel_subscription(client_id):
+def _billing_cancel_subscription(client_id, motif='site'):
     """Resilie l'abonnement Stripe d'un client. Exclusion du cumul : un client
     est facture soit par abonnement recurrent, soit par resultats (echeances RaAS),
     jamais les deux. Des qu'une facture RaAS est emise, l'abonnement est resilie.
-    Idempotent (ne fait rien si aucun abonnement)."""
+    Idempotent (ne fait rien si aucun abonnement).
+
+    Rend True quand plus aucun abonnement ne preleve ce client (resilie, ou
+    deja disparu chez Stripe), False sinon.
+
+    LE LIEN LOCAL N'EST EFFACE QU'APRES LA RESILIATION. Mesure : six DELETE
+    refuses par Stripe, et pourtant stripe_subscription_id passait a NULL —
+    l'abonnement continuait de prelever, la facturation par resultats
+    demarrait, et plus rien ne permettait de voir le cumul. Seuls
+    `status == 'canceled'` ou « resource_missing » (deja resilie) valent
+    preuve. En 15.x, `Subscription.cancel` est l'appel de resiliation
+    (DELETE /v1/subscriptions/{id}) ; `delete` n'en est qu'un alias ancien.
+
+    LA RESILIATION EST SIGNEE, PARCE QU'ELLE NOUS REVIENT. Stripe emet ensuite
+    `customer.subscription.deleted`, que ce site traite. Indiscernable d'une
+    resiliation subie, ce retour de notre propre demande retrogradait en
+    « gratuit » le client que billing-run venait de passer a la facturation
+    par resultats : il perdait tous ses modules (mesure, dans les deux ordres
+    d'arrivee). `cancellation_details.comment` porte donc
+    STRIPE_RESILIATION_MARQUE et son motif, que `_abonnement_resilie` relit."""
     secret = os.environ.get('STRIPE_SECRET_KEY')
-    try:
-        conn = registre_get_db(); cur = conn.cursor()
-        cur.execute(registre_sql('SELECT stripe_subscription_id FROM clients WHERE id=%s',
-                                 'SELECT stripe_subscription_id FROM clients WHERE id=?'), (int(client_id),))
-        row = cur.fetchone()
-        sub = (dict(row).get('stripe_subscription_id') if row else None)
-        if not sub:
-            try: conn.close()
-            except Exception: pass
-            return
-        if secret:
-            try:
-                import stripe
-                stripe.api_key = secret
-                try:
-                    stripe.Subscription.delete(sub)
-                except Exception:
-                    try:
-                        stripe.Subscription.cancel(sub)
-                    except Exception:
-                        pass
-            except Exception:
-                pass
-        cur.execute(registre_sql('UPDATE clients SET stripe_subscription_id=NULL WHERE id=%s',
-                                 'UPDATE clients SET stripe_subscription_id=NULL WHERE id=?'), (int(client_id),))
-        conn.commit()
+    conn = registre_get_db(); cur = conn.cursor()
+    cur.execute(registre_sql('SELECT stripe_subscription_id FROM clients WHERE id=%s',
+                             'SELECT stripe_subscription_id FROM clients WHERE id=?'), (int(client_id),))
+    row = cur.fetchone()
+    sub = (dict(row).get('stripe_subscription_id') if row else None)
+    if not sub:
         try: conn.close()
         except Exception: pass
-    except Exception:
-        pass
+        return True
+    if not secret:
+        try: conn.close()
+        except Exception: pass
+        logger.error('STRIPE_RESILIATION_IMPOSSIBLE client=%s abonnement=%s : STRIPE_SECRET_KEY absente', client_id, sub)
+        return False
+    resilie = False
+    try:
+        stripe = _stripe_pret(secret)
+        try:
+            resilie = stripe.Subscription.cancel(
+                sub, cancellation_details={
+                    'comment': STRIPE_RESILIATION_MARQUE + str(motif or 'site')}
+            )['status'] == 'canceled'
+        except stripe.InvalidRequestError as _ie:
+            resilie = getattr(_ie, 'code', '') == 'resource_missing'
+            if not resilie:
+                raise
+    except Exception as _e:
+        logger.error('STRIPE_RESILIATION_ECHEC client=%s abonnement=%s : %s', client_id, sub, _e)
+    if not resilie:
+        try: conn.close()
+        except Exception: pass
+        return False
+    cur.execute(registre_sql('UPDATE clients SET stripe_subscription_id=NULL WHERE id=%s',
+                             'UPDATE clients SET stripe_subscription_id=NULL WHERE id=?'), (int(client_id),))
+    conn.commit()
+    try: conn.close()
+    except Exception: pass
+    logger.info('STRIPE_ABONNEMENT_RESILIE client=%s abonnement=%s', client_id, sub)
+    return True
 
 
 def _billing_set_customer(client_id, customer_id):
@@ -14304,8 +15592,51 @@ def _billing_update_echeance(numero, echeance, status, stripe_invoice_id=None):
     return True
 
 
-def _billing_on_invoice_paid(numero, echeance):
+def _billing_montant_echeance_cents(numero, echeance):
+    """Le montant HT attendu d'une echeance, en centimes — None si inconnue."""
+    import json as _json
+    conn = registre_get_db(); cur = conn.cursor()
+    cur.execute(registre_sql('SELECT due_json FROM raas_invoices WHERE numero=%s',
+                             'SELECT due_json FROM raas_invoices WHERE numero=?'), (numero,))
+    row = cur.fetchone()
+    try: conn.close()
+    except Exception: pass
+    if not row:
+        return None
+    try:
+        for e in _json.loads(dict(row).get('due_json') or '[]'):
+            if e.get('echeance') == echeance:
+                return int(e.get('montant') or 0) * 100
+    except Exception:
+        return None
+    return None
+
+
+def _billing_on_invoice_paid(numero, echeance, amount_paid=None):
+    """invoice.paid : l'echeance n'est soldee que si de l'argent est ENTRE.
+
+    Mesure : une facture a 0 EUR (ligne restee en attente, ou avoir) soldait
+    une echeance de 1 000 EUR. `amount_paid` est ce que Stripe a encaisse ;
+    absent des anciens evenements, il n'est pas exige. Un ecart avec le
+    montant attendu — HT si le taux de TVA Stripe n'a pas ete applique, TTC
+    sinon — est journalise, pas corrige : c'est a un humain de regarder."""
+    if amount_paid is not None:
+        try:
+            paye = int(amount_paid)
+        except (TypeError, ValueError):
+            paye = 0
+        if paye <= 0:
+            logger.error('STRIPE_FACTURE_NON_ENCAISSEE numero=%s echeance=%s amount_paid=%s : echeance non soldee',
+                         numero, echeance, amount_paid)
+            return False
+        attendu_ht = _billing_montant_echeance_cents(numero, echeance)
+        if attendu_ht is not None:
+            attendu_ttc = int(round(attendu_ht * (100 + max(0.0, FORM_TVA_PCT)) / 100.0))
+            if paye not in (attendu_ht, attendu_ttc):
+                logger.warning('STRIPE_FACTURE_ECART numero=%s echeance=%s paye=%s attendu=%s HT / %s TTC',
+                               numero, echeance, paye, attendu_ht, attendu_ttc)
     _billing_update_echeance(numero, echeance, 'payee')
+    return True
 
 
 def _billing_on_invoice_failed(numero, echeance, client_id=None):
@@ -14373,7 +15704,7 @@ def clients_billing_run():
         try: conn.close()
         except Exception: pass
         return jsonify({'ok': False, 'error': "Module Stripe indisponible.", 'configured': False}), 501
-    stripe.api_key = secret
+    stripe = _stripe_pret(secret)
     try:
         _lim = int(d.get('limit', 200))
     except (TypeError, ValueError):
@@ -14388,18 +15719,20 @@ def clients_billing_run():
         for _r in cur.fetchall():
             _r = dict(_r); _cust_map[_r['id']] = _r.get('stripe_customer_id')
     results = []
-    _cancelled = set()
+    _cancelled = {}
     for item in _batch:
         cust = _cust_map.get(item['client_id'])
         if not cust:
             results.append({'numero': item['numero'], 'echeance': item['echeance'], 'ok': False, 'error': 'Aucun moyen de paiement Stripe enregistre'})
             continue
+        # PAS DE CUMUL : tant que l'abonnement n'est pas resilie chez Stripe,
+        # aucune echeance par resultats n'est emise pour ce client.
         if item['client_id'] not in _cancelled:
-            try:
-                _billing_cancel_subscription(item['client_id'])
-            except Exception:
-                pass
-            _cancelled.add(item['client_id'])
+            _cancelled[item['client_id']] = _billing_cancel_subscription(item['client_id'], 'raas')
+        if not _cancelled[item['client_id']]:
+            results.append({'numero': item['numero'], 'echeance': item['echeance'], 'ok': False,
+                            'error': 'Abonnement Stripe non resilie : echeance non emise (pas de cumul)'})
+            continue
         try:
             _ikey = 'raas-' + str(item['numero']) + '-e' + str(item['echeance'])
             # TVA : le montant du jalon est HT ; le taux Stripe ajoute la TVA en ligne
@@ -14410,19 +15743,28 @@ def clients_billing_run():
             except Exception:
                 _taux = None
             _kw = {'tax_rates': [_taux]} if _taux else {}
-            stripe.InvoiceItem.create(customer=cust, amount=int(item['montant']) * 100, currency='eur',
-                                      description='%s - echeance %s' % (item['numero'], item['echeance']),
-                                      idempotency_key=_ikey + '-item', **_kw)
+            # LA FACTURE D'ABORD, LA LIGNE RATTACHEE ENSUITE. Avant : la ligne
+            # etait creee « en attente » et la facture sans elle — Stripe
+            # exclut par defaut les lignes en attente (pending_invoice_items_
+            # behavior = exclude), la facture sortait a 0 EUR. Puis
+            # `inv.get('id')` levait AttributeError (StripeObject n'est plus
+            # un dict en 15.x) : « Echec de creation », facture pourtant
+            # creee et finalisee, echeance restee a_venir, et le passage
+            # suivant recommencait. Cles d'idempotence NEUVES (-inv2/-item2) :
+            # les parametres ont change, une cle de 24 h rejouerait l'ancien.
             inv = stripe.Invoice.create(customer=cust, auto_advance=True, collection_method='charge_automatically',
+                                        pending_invoice_items_behavior='exclude',
                                         metadata={'numero': item['numero'], 'echeance': str(item['echeance']), 'client_id': str(item['client_id'])},
-                                        idempotency_key=_ikey + '-inv')
-            try:
-                stripe.Invoice.finalize_invoice(inv['id'])
-            except Exception:
-                pass
-            _billing_update_echeance(item['numero'], item['echeance'], 'envoyee', inv.get('id'))
-            results.append({'numero': item['numero'], 'echeance': item['echeance'], 'ok': True, 'stripe_invoice': inv.get('id')})
-        except Exception:
+                                        idempotency_key=_ikey + '-inv2')
+            stripe.InvoiceItem.create(customer=cust, invoice=inv['id'], amount=int(item['montant']) * 100, currency='eur',
+                                      description='%s - echeance %s' % (item['numero'], item['echeance']),
+                                      idempotency_key=_ikey + '-item2', **_kw)
+            stripe.Invoice.finalize_invoice(inv['id'])
+            # « envoyee » SEULEMENT apres finalisation : un brouillon ne preleve rien.
+            _billing_update_echeance(item['numero'], item['echeance'], 'envoyee', inv['id'])
+            results.append({'numero': item['numero'], 'echeance': item['echeance'], 'ok': True, 'stripe_invoice': inv['id']})
+        except Exception as _e:
+            logger.error('STRIPE_FACTURE_RAAS_ECHEC numero=%s echeance=%s : %s', item['numero'], item['echeance'], _e)
             results.append({'numero': item['numero'], 'echeance': item['echeance'], 'ok': False, 'error': 'Echec de creation de la facture Stripe'})
     conn.commit()
     try: conn.close()
@@ -14477,36 +15819,40 @@ def clients_subscription():
             except Exception:
                 return None
 
+    def _prix_de(sub_obj):
+        data = _g(_g(sub_obj, 'items'), 'data') or []
+        return _g(_g(data[0], 'price'), 'id') if data else None
+
+    # SEULS LES PRIX DE CE SITE SE RATTACHENT. Le compte Stripe est partage
+    # avec un autre site : un abonnement d'un autre produit porte le meme
+    # e-mail. Rattache ici, il serait RESILIE par set-plan ou billing-run
+    # (mesure). Sans prix configure, on ne rattache rien.
+    prix_du_site = {p for p in (os.environ.get('STRIPE_PRICE_PRO'),
+                                os.environ.get('STRIPE_PRICE_ENTREPRISE')) if p}
     try:
-        import stripe
-        stripe.api_key = secret
-        stripe.max_network_retries = 0
-        try:
-            stripe.default_http_client = stripe.http_client.RequestsClient(timeout=8)
-        except Exception:
-            pass
+        stripe = _stripe_pret(secret)
         sub = None
         if sub_id:
             sub = stripe.Subscription.retrieve(sub_id)
-        elif email:
+        elif email and prix_du_site:
             custs = stripe.Customer.list(email=email, limit=10)
             for c in (_g(custs, 'data') or []):
-                subs = stripe.Subscription.list(customer=_g(c, 'id'), status='active', limit=1)
-                dl = _g(subs, 'data') or []
-                if dl:
-                    sub = dl[0]
-                    try:
+                subs = stripe.Subscription.list(customer=_g(c, 'id'), status='active', limit=10)
+                for s in (_g(subs, 'data') or []):
+                    if _prix_de(s) in prix_du_site:
+                        sub = s
                         _billing_set_customer(client_id, _g(c, 'id'))
                         _billing_set_subscription(client_id, _g(sub, 'id'))
-                    except Exception:
-                        pass
+                        break
+                if sub is not None:
                     break
         if sub is None:
             return jsonify({'ok': True, 'has_sub': False, 'plan': plan})
-    except Exception:
+    except Exception as _e:
+        logger.error('STRIPE_ABONNEMENT_LECTURE_ECHEC client=%s : %s', client_id, _e)
         return jsonify({'ok': True, 'has_sub': bool(sub_id), 'plan': plan, 'configured': True, 'error_stripe': True})
 
-    amount = None; currency = 'eur'; interval = None
+    amount = None; currency = 'eur'; interval = None; fin_periode = None
     try:
         items_obj = _g(sub, 'items')
         data = _g(items_obj, 'data') or []
@@ -14516,13 +15862,16 @@ def clients_subscription():
             currency = _g(price, 'currency') or 'eur'
             rec = _g(price, 'recurring')
             interval = _g(rec, 'interval') if rec else None
+            # En version d'API dahlia, la fin de periode est portee par
+            # l'ARTICLE d'abonnement, plus par l'abonnement (toujours null ici).
+            fin_periode = _g(data[0], 'current_period_end')
     except Exception:
         pass
     return jsonify({'ok': True, 'has_sub': True, 'plan': plan,
                     'status': _g(sub, 'status'),
                     'amount_eur': (amount / 100.0 if amount is not None else None),
                     'currency': currency, 'interval': interval,
-                    'current_period_end': _g(sub, 'current_period_end'),
+                    'current_period_end': fin_periode if fin_periode is not None else _g(sub, 'current_period_end'),
                     'cancel_at_period_end': _g(sub, 'cancel_at_period_end')})
 
 
@@ -14542,12 +15891,6 @@ def clients_set_plan():
     plan = d.get('plan')
     if plan not in ('gratuit', 'pro', 'entreprise'):
         return jsonify({'ok': False, 'error': 'Offre invalide'}), 400
-    conn = registre_get_db(); cur = conn.cursor()
-    cur.execute(registre_sql('UPDATE clients SET plan=%s WHERE id=%s',
-                             'UPDATE clients SET plan=? WHERE id=?'), (plan, client_id))
-    conn.commit()
-    try: conn.close()
-    except Exception: pass
     stripe_sync = None
     secret = os.environ.get('STRIPE_SECRET_KEY')
     _c2 = registre_get_db(); _cur2 = _c2.cursor()
@@ -14556,38 +15899,40 @@ def clients_set_plan():
     try: _c2.close()
     except Exception: pass
     sub_id = (dict(_r2).get('stripe_subscription_id') if _r2 else None)
-    if secret and sub_id:
+    # STRIPE D'ABORD POUR UN PASSAGE EN GRATUIT. L'ancien code ecrivait le plan
+    # puis annoncait « abonnement_resilie » meme quand Stripe refusait :
+    # l'offre retiree ici, le prelevement continuant la-bas. Une resiliation
+    # refusee est desormais REPONDUE, et rien n'est change.
+    if plan == 'gratuit' and secret and sub_id:
+        if not _billing_cancel_subscription(client_id, 'set-plan'):
+            return jsonify({'ok': False, 'stripe_sync': 'resiliation_echouee',
+                            'error': "Stripe a refuse la resiliation de l'abonnement : offre inchangee."}), 502
+        stripe_sync = 'abonnement_resilie'
+    conn = registre_get_db(); cur = conn.cursor()
+    cur.execute(registre_sql('UPDATE clients SET plan=%s WHERE id=%s',
+                             'UPDATE clients SET plan=? WHERE id=?'), (plan, client_id))
+    conn.commit()
+    try: conn.close()
+    except Exception: pass
+    if plan != 'gratuit' and secret and sub_id:
         try:
-            import stripe
-            stripe.api_key = secret
-            stripe.max_network_retries = 0
-            try: stripe.default_http_client = stripe.http_client.RequestsClient(timeout=8)
-            except Exception: pass
-            if plan == 'gratuit':
-                try:
-                    stripe.Subscription.delete(sub_id)
-                except Exception:
-                    try: stripe.Subscription.cancel(sub_id)
-                    except Exception: pass
-                _c3 = registre_get_db(); _cur3 = _c3.cursor()
-                _cur3.execute(registre_sql('UPDATE clients SET stripe_subscription_id=NULL WHERE id=%s', 'UPDATE clients SET stripe_subscription_id=NULL WHERE id=?'), (client_id,))
-                _c3.commit()
-                try: _c3.close()
-                except Exception: pass
-                stripe_sync = 'abonnement_resilie'
+            stripe = _stripe_pret(secret)
+            price_id = os.environ.get('STRIPE_PRICE_PRO') if plan == 'pro' else os.environ.get('STRIPE_PRICE_ENTREPRISE')
+            if not price_id:
+                stripe_sync = 'tarif_non_configure'
             else:
-                price_id = os.environ.get('STRIPE_PRICE_PRO') if plan == 'pro' else os.environ.get('STRIPE_PRICE_ENTREPRISE')
-                if not price_id:
-                    stripe_sync = 'tarif_non_configure'
+                sub = stripe.Subscription.retrieve(sub_id)
+                # StripeObject n'est pas un dict en 15.x : `sub.get('items')`
+                # levait AttributeError, et « erreur_stripe » etait repondu
+                # sans que le tarif change (mesure).
+                items = list(sub['items'].data) if 'items' in sub else []
+                if items:
+                    stripe.Subscription.modify(sub_id, items=[{'id': items[0]['id'], 'price': price_id}], proration_behavior='create_prorations')
+                    stripe_sync = 'tarif_mis_a_jour'
                 else:
-                    sub = stripe.Subscription.retrieve(sub_id)
-                    items = (sub.get('items') or {}).get('data') or []
-                    if items:
-                        stripe.Subscription.modify(sub_id, items=[{'id': items[0].get('id'), 'price': price_id}], proration_behavior='create_prorations')
-                        stripe_sync = 'tarif_mis_a_jour'
-                    else:
-                        stripe_sync = 'aucun_article'
-        except Exception:
+                    stripe_sync = 'aucun_article'
+        except Exception as _e:
+            logger.error('STRIPE_SET_PLAN_ECHEC client=%s plan=%s : %s', client_id, plan, _e)
             stripe_sync = 'erreur_stripe'
     return jsonify({'ok': True, 'plan': plan, 'stripe_sync': stripe_sync})
 
@@ -15115,18 +16460,37 @@ def clients_entreprise_apercu():
 
 
 
-@app.route('/api/cron/essai-relances', methods=['POST', 'GET'])
-def cron_essai_relances():
-    """Point d'entree pour une tache planifiee (Render Cron Job) : declenche les
-    rappels d'essai a heure fixe. Protege par un secret partage (CRON_SECRET),
-    transmis en en-tete 'X-Cron-Secret' ou en parametre 'secret'.
-    Sans CRON_SECRET configure, l'acces est refuse."""
+def _cron_refus():
+    """La garde commune des taches planifiees : None si l'appel est legitime,
+    sinon la reponse a rendre. Le secret vient de l'en-tete X-Cron-Secret,
+    compare en temps constant avec `_hmac` (le seul nom sous lequel le module
+    est importe dans ce fichier)."""
     secret = os.environ.get('CRON_SECRET')
     if not secret:
         return jsonify({'ok': False, 'error': 'Tache planifiee non configuree.'}), 501
-    fourni = request.headers.get('X-Cron-Secret') or request.args.get('secret')
-    if not fourni or not hmac.compare_digest(str(fourni), str(secret)):
+    fourni = request.headers.get('X-Cron-Secret')
+    if not fourni or not _hmac.compare_digest(str(fourni), str(secret)):
         return jsonify({'ok': False, 'error': 'Non autorise.'}), 403
+    return None
+
+
+@app.route('/api/cron/essai-relances', methods=['POST'])
+def cron_essai_relances():
+    """Point d'entree pour une tache planifiee (Render Cron Job) : declenche les
+    rappels d'essai a heure fixe. Protege par un secret partage (CRON_SECRET),
+    transmis en en-tete 'X-Cron-Secret' SEULEMENT. Sans CRON_SECRET configure,
+    l'acces est refuse.
+
+    CETTE ROUTE N'A JAMAIS PU ABOUTIR. Elle comparait le secret avec
+    `hmac.compare_digest`, or ce module n'est importe ici que sous le nom
+    `_hmac` : avec le BON secret, la reponse etait 500 (NameError) — mesure.
+    Un mauvais secret, lui, etait bien refuse : le defaut ne se voyait que
+    du cote de celui qui avait raison. Le secret n'est plus accepte dans
+    l'adresse (`?secret=`) : une adresse finit dans les journaux d'acces du
+    mandataire, un en-tete non."""
+    refus = _cron_refus()
+    if refus:
+        return refus
     try:
         _essai_relances()
     except Exception:
@@ -15666,15 +17030,43 @@ def rgpd_effacement():
     conn = registre_get_db(); cur = conn.cursor()
     _rgpd_table(cur); conn.commit()
     bilan = {}
-    cur.execute(registre_sql('SELECT id FROM clients WHERE LOWER(email)=%s', 'SELECT id FROM clients WHERE LOWER(email)=?'), (email,))
+    cur.execute(registre_sql('SELECT id, stripe_subscription_id FROM clients WHERE LOWER(email)=%s',
+                             'SELECT id, stripe_subscription_id FROM clients WHERE LOWER(email)=?'), (email,))
     row = cur.fetchone()
     cid = dict(row).get('id') if row else None
     if cid:
+        # RESILIER AVANT D'OUBLIER. L'identifiant d'abonnement etait mis a
+        # NULL sans resiliation : le compte efface continuait d'etre preleve,
+        # et plus rien ne permettait de l'arreter. Au mieux : resilie ; sinon,
+        # journalise et dit dans le bilan — l'effacement, lui, a lieu.
+        if dict(row).get('stripe_subscription_id'):
+            bilan['abonnement'] = 'resilie' if _billing_cancel_subscription(cid, 'rgpd') else 'non_resilie'
+            if bilan['abonnement'] == 'non_resilie':
+                logger.error('RGPD_EFFACEMENT_ABONNEMENT_NON_RESILIE client=%s abonnement=%s',
+                             cid, dict(row).get('stripe_subscription_id'))
+        else:
+            bilan['abonnement'] = 'aucun'
         anonyme = 'efface-' + _rgpd_hash(email) + '@anonyme.invalid'
-        cur.execute(registre_sql(
-            "UPDATE clients SET email=%s, nom_entreprise='COMPTE EFFACE', mot_de_passe_hash='', actif=FALSE, stripe_customer_id=NULL, stripe_subscription_id=NULL WHERE id=%s",
-            "UPDATE clients SET email=?, nom_entreprise='COMPTE EFFACE', mot_de_passe_hash='', actif=0, stripe_customer_id=NULL, stripe_subscription_id=NULL WHERE id=?"),
-            (anonyme, cid))
+        # QUAND STRIPE A REFUSE, ON N'OUBLIE PAS CE QU'IL FAUT ENCORE ARRETER.
+        # Mesure : l'abonnement restait « active » chez Stripe et continuait de
+        # prelever une personne qui avait demande l'effacement, pendant que les
+        # identifiants passaient a NULL — plus rien en base ne permettait de le
+        # retrouver ni de le resilier. Ces identifiants techniques relevent de
+        # l'art. 17.3.b (obligations legales et defense d'un droit) le temps
+        # que la resiliation aboutisse ; le bilan les nomme pour que
+        # l'administrateur agisse au lieu de decouvrir le prelevement plus tard.
+        _garder = bilan['abonnement'] == 'non_resilie'
+        if _garder:
+            bilan['abonnement_a_resilier'] = dict(row).get('stripe_subscription_id')
+            cur.execute(registre_sql(
+                "UPDATE clients SET email=%s, nom_entreprise='COMPTE EFFACE', mot_de_passe_hash='', actif=FALSE WHERE id=%s",
+                "UPDATE clients SET email=?, nom_entreprise='COMPTE EFFACE', mot_de_passe_hash='', actif=0 WHERE id=?"),
+                (anonyme, cid))
+        else:
+            cur.execute(registre_sql(
+                "UPDATE clients SET email=%s, nom_entreprise='COMPTE EFFACE', mot_de_passe_hash='', actif=FALSE, stripe_customer_id=NULL, stripe_subscription_id=NULL WHERE id=%s",
+                "UPDATE clients SET email=?, nom_entreprise='COMPTE EFFACE', mot_de_passe_hash='', actif=0, stripe_customer_id=NULL, stripe_subscription_id=NULL WHERE id=?"),
+                (anonyme, cid))
         bilan['compte'] = 'anonymise'
         for table in ('client_entites', 'client_connecteurs', 'client_formations'):
             try:
@@ -16029,15 +17421,13 @@ def rgpd_purge_journal():
     return jsonify({'ok': True, 'journal': rows})
 
 
-@app.route('/api/cron/rgpd-purge', methods=['POST', 'GET'])
+@app.route('/api/cron/rgpd-purge', methods=['POST'])
 def cron_rgpd_purge():
-    """Tache planifiee : application automatique de la politique de retention."""
-    secret = os.environ.get('CRON_SECRET')
-    if not secret:
-        return jsonify({'ok': False, 'error': 'Tache planifiee non configuree.'}), 501
-    fourni = request.headers.get('X-Cron-Secret') or request.args.get('secret')
-    if not fourni or not hmac.compare_digest(str(fourni), str(secret)):
-        return jsonify({'ok': False, 'error': 'Non autorise.'}), 403
+    """Tache planifiee : application automatique de la politique de retention.
+    Meme garde que /api/cron/essai-relances (et meme NameError corrige)."""
+    refus = _cron_refus()
+    if refus:
+        return refus
     try:
         res = rgpd_purge_run(simulation=False)
     except Exception:
@@ -16260,16 +17650,32 @@ def rgpd_audit_detail(aid):
 # Registre probant des usages d'IA : role (fournisseur / deployeur), nature du
 # contenu, marquage lisible par machine, etiquetage visible, exception invoquee
 # (oeuvre creative ; controle editorial humain) et responsable editorial.
-# Echeances : 2 aout 2026 (art. 50), 2 decembre 2026 (fin de periode
-# transitoire), 2 fevrier 2027 (interoperabilite de la detection).
+# Echeances : 2 aout 2026 (art. 50) et 2 decembre 2026 (art. 111 par. 4, ajoute
+# par le reglement (UE) 2026/1744 : marquage des systemes deja sur le marche).
+# Le 2 fevrier 2027 est la date du CODE DE BONNES PRATIQUES pour ses signataires
+# (interoperabilite du marquage, acces a la detection) : un engagement volontaire,
+# pas une echeance du reglement — le champ `cadre` les distingue, et seul le
+# cadre `reglement` alimente le compte a rebours.
 # Outillage technique ; ne constitue pas un avis juridique.
 # ══════════════════════════════════════════════════════════
 
 IA50_ECHEANCES = [
-    {'date': '2026-08-02', 'objet': 'Entree en application des obligations de transparence (art. 50) : marquage (fournisseurs) et etiquetage (deployeurs).'},
-    {'date': '2026-12-02', 'objet': 'Fin de la periode transitoire pour les systemes deja sur le marche.'},
-    {'date': '2027-02-02', 'objet': 'Solution d\'interoperabilite du marquage et acces a la detection (fournisseurs).'},
+    {'date': '2026-08-02', 'cadre': 'reglement', 'objet': 'Entree en application des obligations de transparence (art. 50) : marquage (fournisseurs) et etiquetage (deployeurs).'},
+    {'date': '2026-12-02', 'cadre': 'reglement', 'objet': 'Marquage lisible par machine (art. 50 par. 2) : fin du delai accorde aux systemes generant du contenu synthetique deja sur le marche avant le 2 aout 2026 (art. 111 par. 4).'},
+    {'date': '2027-02-02', 'cadre': 'code', 'objet': 'Date du code de bonnes pratiques pour ses signataires (interoperabilite du marquage, acces a la detection) : engagement volontaire, non une echeance du reglement.'},
 ]
+
+
+def ia50_prochaine_echeance(aujourdhui=None):
+    """La prochaine echeance DU REGLEMENT (pas celle du code volontaire), ou None.
+
+    Le compte a rebours visait le 2 aout 2026 en dur : deux mois apres, la page
+    affichait « Echeance depassee » alors qu'une echeance legale restait a venir."""
+    auj = (aujourdhui or datetime.utcnow()).date().isoformat()
+    for e in IA50_ECHEANCES:
+        if e.get('cadre') == 'reglement' and e['date'] >= auj:
+            return e
+    return None
 
 IA50_USAGES_DEFAUT = [
     {'systeme': 'Assistants conversationnels du site public (2)', 'role': 'deployeur',
@@ -17065,15 +18471,19 @@ def ia50_usages():
     total = len(rows)
     ok = sum(1 for r in rows if r.get('conforme'))
     jours = None
+    prochaine = None
     try:
-        jours = (datetime(2026, 8, 2) - datetime.utcnow()).days
+        prochaine = ia50_prochaine_echeance()
+        if prochaine:
+            jours = (datetime.strptime(prochaine['date'], '%Y-%m-%d').date() - datetime.utcnow().date()).days
     except Exception:
         jours = None
     try: conn.close()
     except Exception: pass
     return jsonify({'ok': True, 'usages': rows, 'total': total, 'conformes': ok,
                     'taux': round(100.0 * ok / max(1, total)),
-                    'jours_avant_echeance': jours, 'echeances': IA50_ECHEANCES,
+                    'jours_avant_echeance': jours, 'prochaine_echeance': prochaine,
+                    'echeances': IA50_ECHEANCES,
                     'point_cle': IA50_POINT_CLE})
 
 
@@ -17182,10 +18592,13 @@ def form_prix_cents(cat):
 # Taux de TVA applique au paiement (en pourcentage). Mettre 0 en cas d'exoneration
 # de la formation professionnelle continue (art. 261-4-4 a du CGI, sur attestation).
 # A valider avec l'expert-comptable avant toute mise en paiement reel.
-try:
-    FORM_TVA_PCT = float(os.environ.get('FORMATION_TVA_PCT', '20'))
-except (TypeError, ValueError):
-    FORM_TVA_PCT = 20.0
+#
+# UNE SEULE LECTURE, DANS formations_ia. La variable etait lue DEUX fois :
+# ici en float, la-bas en int — et « 5.5 » y levait ValueError a l'import,
+# l'application ne demarrait plus (mesure). Le taux est lu une fois, en
+# nombre, et repris ici pour qu'il n'y ait qu'un format.
+import formations_ia
+FORM_TVA_PCT = formations_ia.TVA_PCT
 
 
 _FORM_TAX_RATE_CACHE = {'id': None}
@@ -17385,31 +18798,55 @@ def formations_inscription():
         except Exception: pass
         return jsonify({'ok': False, 'error': 'Session introuvable.'}), 404
     sess = dict(row)
+    # UNE SESSION PASSEE OU COMPLETE N'ENCAISSE PAS. Mesure : la session du
+    # 2026-09-07 ouvrait une caisse le 24 ; une session pleine aussi. Les
+    # places prises sont les inscriptions PAYEES, comme dans le calendrier.
+    if (sess.get('date_session') or '') and str(sess['date_session'])[:10] < datetime.utcnow().date().isoformat():
+        try: conn.close()
+        except Exception: pass
+        return jsonify({'ok': False, 'error': 'Cette session est passee (%s) : elle ne peut plus etre reservee.'
+                        % sess['date_session']}), 400
+    try:
+        cur.execute(registre_sql(
+            "SELECT COALESCE(SUM(participants),0) AS n FROM form_inscriptions WHERE session_id=%s AND statut='payee'",
+            "SELECT COALESCE(SUM(participants),0) AS n FROM form_inscriptions WHERE session_id=? AND statut='payee'"),
+            (session_id,))
+        pris = int(dict(cur.fetchone()).get('n', 0) or 0)
+    except Exception:
+        pris = 0
+    places = int(sess.get('places') or 12)
+    if pris + participants > places:
+        try: conn.close()
+        except Exception: pass
+        return jsonify({'ok': False, 'error': 'Session complete : %d place(s) restante(s) pour %d participant(s) demande(s).'
+                        % (max(0, places - pris), participants)}), 400
     cat = next((c for c in FORM_CATALOGUE if c['id'] == sess['formation_id']), None)
     titre = cat['titre'] if cat else 'Formation CONSEILPREV'
     montant = int(sess.get('prix_cents') or 95000) * participants          # HT
     montant_ttc = _form_ttc(sess.get('prix_cents') or 95000) * participants   # TTC preleve
 
-    cur.execute(registre_sql(
-        'INSERT INTO form_inscriptions (session_id, client_id, nom, prenom, email, entreprise, fonction, telephone, '
-        'participants, message, montant_cents, statut, created_at) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',
-        'INSERT INTO form_inscriptions (session_id, client_id, nom, prenom, email, entreprise, fonction, telephone, '
-        'participants, message, montant_cents, statut, created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)'),
-        (session_id, int(client.get('id') or 0) if client else 0, nom, prenom, email, entreprise, fonction,
-         telephone, participants, message, montant, 'en_attente_paiement', datetime.utcnow().isoformat()))
+    # L'IDENTIFIANT EST CELUI DE LA LIGNE ECRITE — lastrowid sous SQLite,
+    # RETURNING id sous PostgreSQL. Un SELECT MAX(id) rendait celui d'une
+    # autre inscription ecrite entre notre COMMIT et la relecture (mesure par
+    # entrelacement) : la caisse portait l'inscription d'un autre.
+    _ins_sql = ('INSERT INTO form_inscriptions (session_id, client_id, nom, prenom, email, entreprise, fonction, telephone, '
+                'participants, message, montant_cents, statut, created_at) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)')
+    _ins_args = (session_id, int(client.get('id') or 0) if client else 0, nom, prenom, email, entreprise, fonction,
+                 telephone, participants, message, montant, 'en_attente_paiement', datetime.utcnow().isoformat())
+    if REGISTRE_USE_PG:
+        cur.execute(_ins_sql + ' RETURNING id', _ins_args)
+        insc_id = int(dict(cur.fetchone())['id'])
+    else:
+        cur.execute(_ins_sql.replace('%s', '?'), _ins_args)
+        insc_id = int(cur.lastrowid)
     conn.commit()
-    try:
-        cur.execute('SELECT MAX(id) AS id FROM form_inscriptions')
-        insc_id = int(dict(cur.fetchone()).get('id') or 0)
-    except Exception:
-        insc_id = 0
     try: conn.close()
     except Exception: pass
 
     # Notification interne (CONSEILPREV) et accuse de reception (participant)
     libelle = '%s — %s (%s)' % (titre, sess.get('date_session'), sess.get('lieu'))
     try:
-        send_email_smart(CONSEILPREV_INTERNAL_EMAIL, 'CONSEILPREV',
+        send_email_smart(CONSEILPREV_NOTIFY_EMAIL, 'CONSEILPREV',
                          'Nouvelle demande d inscription : ' + titre,
                          '<p>Demande d inscription recue.</p><p><strong>%s</strong><br>%s %s — %s<br>%s / %s<br>'
                          'Participants : %d — Montant : %.2f EUR HT</p><p>%s</p>'
@@ -17438,9 +18875,7 @@ def formations_inscription():
                         'message': 'Demande enregistree. Le paiement en ligne n est pas encore configure : '
                                    'CONSEILPREV vous contactera pour finaliser la reservation.'})
     try:
-        import stripe
-        stripe.api_key = secret
-        stripe.max_network_retries = 0
+        stripe = _stripe_pret(secret)
         base = request.url_root.rstrip('/')
         taux = _form_tax_rate(stripe)
         ligne = {'price_data': {'currency': 'eur',
@@ -17459,7 +18894,7 @@ def formations_inscription():
             customer_email=email,
             client_reference_id=str(insc_id),
             metadata={'type': 'formation', 'inscription_id': str(insc_id), 'session_id': str(session_id)},
-            success_url=base + '/sentinel?formation=ok',
+            success_url=base + '/sentinel?formation=ok&session_id={CHECKOUT_SESSION_ID}',
             cancel_url=base + '/sentinel?formation=annule')
         conn2 = registre_get_db(); cur2 = conn2.cursor()
         cur2.execute(registre_sql('UPDATE form_inscriptions SET stripe_session_id=%s WHERE id=%s',
@@ -17470,8 +18905,9 @@ def formations_inscription():
         except Exception: pass
         url = sk.get('url') if isinstance(sk, dict) else getattr(sk, 'url', None)
         return jsonify({'ok': True, 'paiement': True, 'url': url, 'inscription_id': insc_id})
-    except Exception:
-        return jsonify({'ok': True, 'paiement': False,
+    except Exception as _e:
+        logger.error('STRIPE_CAISSE_CATALOGUE_ECHEC inscription=%s : %s', insc_id, _e)
+        return jsonify({'ok': True, 'paiement': False, 'inscription_id': insc_id,
                         'message': 'Demande enregistree. La session de paiement n a pas pu etre ouverte ; '
                                    'CONSEILPREV vous contactera pour finaliser la reservation.'})
 
@@ -17487,13 +18923,19 @@ def _form_confirmer_paiement(insc_id):
         except Exception: pass
         return
     ins = dict(row)
-    if ins.get('statut') == 'payee':
+    # C'EST L'ECRITURE QUI DECIDE DU COURRIEL, PAS LA LECTURE QUI LA PRECEDE.
+    # La notification Stripe et le retour de caisse arrivent ensemble : les
+    # deux lisaient « pas encore payee », les deux ecrivaient, et les deux
+    # envoyaient leurs courriels — le participant et CONSEILPREV recevaient
+    # tout en double, pour deux credits pris sur les 300 envois quotidiens.
+    cur.execute(registre_sql("UPDATE form_inscriptions SET statut='payee' WHERE id=%s AND statut != 'payee'",
+                             "UPDATE form_inscriptions SET statut='payee' WHERE id=? AND statut != 'payee'"), (insc_id,))
+    change = max(int(getattr(cur, 'rowcount', 1) or 0), 0)
+    conn.commit()
+    if not change:
         try: conn.close()
         except Exception: pass
         return
-    cur.execute(registre_sql("UPDATE form_inscriptions SET statut='payee' WHERE id=%s",
-                             "UPDATE form_inscriptions SET statut='payee' WHERE id=?"), (insc_id,))
-    conn.commit()
     cur.execute(registre_sql('SELECT * FROM form_sessions WHERE id=%s', 'SELECT * FROM form_sessions WHERE id=?'),
                 (ins.get('session_id'),))
     srow = cur.fetchone()
@@ -17514,7 +18956,7 @@ def _form_confirmer_paiement(insc_id):
     except Exception:
         pass
     try:
-        send_email_smart(CONSEILPREV_INTERNAL_EMAIL, 'CONSEILPREV',
+        send_email_smart(CONSEILPREV_NOTIFY_EMAIL, 'CONSEILPREV',
                          'Inscription payee : ' + titre,
                          '<p>Inscription confirmee et payee.</p><p>%s %s (%s) — %s participant(s) — %.2f EUR HT<br>'
                          'Session du %s — %s</p>'
@@ -17712,7 +19154,143 @@ def _formation_ia_tient_le_creneau():
             "AND COALESCE(created_at, '') < " + ph + ")", limite)
 
 
-def _formation_ia_confirmer_paiement(commande=None, resa_id=None):
+# CE QU'UN INCONNU PEUT PRENDRE EN UNE JOURNÉE — trois bornes, et la raison
+# de chaque chiffre.
+#
+# LE DEFAUT MESURE. /api/formation/inscription est PUBLIQUE, et la premiere
+# seance de chaque cle client (SIRET, a defaut le courriel) est OFFERTE et
+# confirmee d'emblee, sans paiement et sans qu'on ait verifie que l'adresse
+# existe. Une date ne se reserve qu'une fois. Avec 26 POST a des courriels
+# inventes, un anonyme occupait donc TOUTE la campagne (2026-10-06 →
+# 2027-03-30) : plus un seul creneau pour un vrai client. Mesure : trois POST
+# sur la meme date → [(200, 'confirmee'), (409, …), (409, …)], et
+# formations_ia.creneaux() rend 26 creneaux. Chaque POST fait partir DEUX
+# courriels (l'accuse au demandeur, la notification a CONSEILPREV), soit 52
+# des 300 envois du jour du plan gratuit, vers des adresses choisies par
+# l'attaquant — sans aucun plafond, contrairement a /api/notify-selection.
+#
+# CE QU'ON POSE, ET CE QUE ÇA NE FAIT PAS. Ces bornes ne rendent pas la
+# gratuite verifiee : elles ramenent l'attaque de « 26 creneaux en une minute,
+# definitivement » a « au plus trois par jour », et elles bornent la depense
+# de courriels. La verification de l'adresse par un lien clique reste la vraie
+# reponse ; elle demande un parcours de confirmation qui n'existe pas encore.
+#
+#   · 3 seances OFFERTES par jour pour tout le site. La campagne compte 26
+#     creneaux sur six mois : un rythme legitime est tres en dessous de trois
+#     par jour. C'est la borne qui mord sur l'attaque, puisque l'attaquant
+#     change d'adresse a chaque coup.
+#   · 3 COMMANDES par adresse et par jour : une commande, sa correction, et
+#     une de marge.
+#   · 12 COMMANDES par jour pour tout le site : 24 courriels, soit 8 % du
+#     quota quotidien de Brevo laisses a cette seule route.
+#
+# ON COMPTE DES COMMANDES, PAS DES LIGNES. Une commande porte jusqu'a quatre
+# seances (MAX_SEANCES) : compter les lignes ferait refuser un panier normal
+# des le deuxieme envoi, alors que ce qu'on borne est le NOMBRE DE GESTES —
+# c'est lui qui prend des creneaux et fait partir des courriels, deux par
+# commande quel que soit le nombre de seances.
+#
+# ON COMPTE DANS formation_ia_resa, PAS EN MEMOIRE. Un compteur de processus
+# ne vaudrait que pour un worker sur deux et disparaitrait au redemarrage ;
+# celui-ci est partage et survit. Les lignes annulees comptent : sinon
+# reserver puis annuler rendrait la borne gratuite.
+FORMATION_IA_OFFERTES_JOUR = 3
+FORMATION_IA_PLAFOND_ADRESSE_JOUR = 3
+FORMATION_IA_PLAFOND_GLOBAL_JOUR = 12
+
+
+def _formation_ia_borne_du_jour(cur, email, avec_offerte):
+    """None si la reservation peut se faire, sinon le motif du refus.
+
+    Le curseur est celui de la route : on compte dans la meme connexion que
+    les ecritures qui suivent, sans en ouvrir une seconde. UNE BASE MUETTE NE
+    REFUSE PAS ICI — la route retomberait de toute facon sur son propre
+    traitement d'erreur a l'ecriture, et fermer la reservation sur une lecture
+    ratee couterait des clients pour un defaut qui n'est pas le leur."""
+    jour = datetime.utcnow().strftime('%Y-%m-%d')
+    try:
+        if avec_offerte:
+            cur.execute(registre_sql(
+                "SELECT COUNT(*) AS n FROM formation_ia_resa WHERE gratuit=1 AND created_at >= %s",
+                "SELECT COUNT(*) AS n FROM formation_ia_resa WHERE gratuit=1 AND created_at >= ?"),
+                (jour,))
+            if int(dict(cur.fetchone()).get('n', 0) or 0) >= FORMATION_IA_OFFERTES_JOUR:
+                return 'offertes_du_jour'
+        cur.execute(registre_sql(
+            "SELECT COUNT(DISTINCT commande) AS n FROM formation_ia_resa WHERE LOWER(email)=%s AND created_at >= %s",
+            "SELECT COUNT(DISTINCT commande) AS n FROM formation_ia_resa WHERE LOWER(email)=? AND created_at >= ?"),
+            ((email or '').lower(), jour))
+        if int(dict(cur.fetchone()).get('n', 0) or 0) >= FORMATION_IA_PLAFOND_ADRESSE_JOUR:
+            return 'plafond_adresse'
+        cur.execute(registre_sql(
+            "SELECT COUNT(DISTINCT commande) AS n FROM formation_ia_resa WHERE created_at >= %s",
+            "SELECT COUNT(DISTINCT commande) AS n FROM formation_ia_resa WHERE created_at >= ?"),
+            (jour,))
+        if int(dict(cur.fetchone()).get('n', 0) or 0) >= FORMATION_IA_PLAFOND_GLOBAL_JOUR:
+            return 'plafond_global'
+    except Exception as e:                                     # noqa: BLE001
+        logger.error('FORMATION_IA_BORNE_ERR: %s', e)
+    return None
+
+
+def _formation_ia_liberer_commande(commande, motif):
+    """Une caisse SANS paiement (expiree, prelevement refuse) : les seances
+    payantes encore « en attente de paiement » rendent leur creneau.
+
+    L'ETAT CHOISI EST « annulee », PAS « devis ». Mesure de la retenue de
+    RETENUE_MINUTES : elle laisse la ligne en attente et cesse simplement de
+    la compter pour le creneau. Un « devis », lui, TIENT le creneau (c'est
+    une facture hors ligne a venir, comme apres une panne Stripe) : y
+    remettre un panier abandonne bloquerait la date jusqu'a la fin de la
+    campagne. « annulee » avec son motif libere le creneau ET le sujet pour
+    ce client, comme la retenue le fait, et le dit dans le registre.
+    Les seances offertes (confirmees d'emblee) et les seances deja payees ne
+    sont pas touchees : un evenement tardif ne defait pas un encaissement."""
+    conn = registre_get_db(); cur = conn.cursor()
+    _formation_ia_table(cur, conn)
+    cur.execute(registre_sql(
+        "UPDATE formation_ia_resa SET statut='annulee', annule_le=%s, annule_motif=%s "
+        "WHERE commande=%s AND gratuit=0 AND statut='en_attente_paiement'",
+        "UPDATE formation_ia_resa SET statut='annulee', annule_le=?, annule_motif=? "
+        "WHERE commande=? AND gratuit=0 AND statut='en_attente_paiement'"),
+        (datetime.utcnow().isoformat(), motif, commande))
+    liberees = cur.rowcount
+    conn.commit()
+    try: conn.close()
+    except Exception: pass
+    logger.info('FORMATION_IA_CAISSE_SANS_PAIEMENT commande=%s motif=%s seances_liberees=%s', commande, motif, liberees)
+    return liberees
+
+
+def _formation_ia_encaissement_sans_seance(commande, resa_id, payantes, montant_ttc_cents):
+    """De l'argent est arrive, plus aucune seance n'est confirmable.
+
+    POURQUOI ON NE REMBOURSE PAS TOUT SEUL. Le cas naît d'une annulation
+    survenue entre l'ouverture de la caisse et le paiement : le creneau a pu
+    etre repris par un autre client, la seance a pu deja etre remboursee au
+    titre du bareme, ou l'annulation etre une erreur du client. Rendre l'argent
+    sans regarder rembourserait parfois deux fois. Rien n'est ecrit ici :
+    CONSEILPREV est prevenu et tranche."""
+    ref = commande or ('resa ' + str(resa_id))
+    etats = ', '.join('%s=%s' % (r.get('id'), r.get('statut')) for r in payantes)
+    logger.error('FORMATION_IA_ENCAISSEMENT_SANS_SEANCE commande=%s montant=%s seances=%s',
+                 ref, montant_ttc_cents, etats)
+    try:
+        send_email_smart(CONSEILPREV_NOTIFY_EMAIL, 'CONSEILPREV',
+                         'Formation IA : paiement reçu sans séance à confirmer',
+                         '<p>La commande <strong>%s</strong> a été encaissée '
+                         '(%s c TTC) alors qu’aucune de ses séances n’attend '
+                         'plus son paiement.</p><p>État des séances payantes : '
+                         '%s.</p><p>À arbitrer : remboursement, report, ou '
+                         'nouvelle date. Rien n’a été modifié en base.</p>'
+                         % (_pour_courriel(str(ref)), _pour_courriel(str(montant_ttc_cents)),
+                            _pour_courriel(etats)),
+                         tags=['formation-ia-arbitrage'])
+    except Exception as _e:
+        logger.error('FORMATION_IA_ENCAISSEMENT_SANS_SEANCE_COURRIEL commande=%s : %s', ref, _e)
+
+
+def _formation_ia_confirmer_paiement(commande=None, resa_id=None, montant_ttc_cents=None):
     """Une commande encaissee : passer TOUTES ses seances en « payee », noter
     ce qui a ete regle, et notifier une seule fois.
 
@@ -17727,6 +19305,13 @@ def _formation_ia_confirmer_paiement(commande=None, resa_id=None):
     REELLEMENT regle sur cette seance. Le remboursement s'en deduira : le
     recalculer plus tard a partir du tarif du jour rendrait un autre montant
     que celui encaisse le jour ou le tarif aura change.
+
+    LE MONTANT VIENT DE L'EVENEMENT (`amount_total`), pas d'un recalcul.
+    Mesure : le taux de TVA porte par STRIPE_TAX_RATE_ID faisait encaisser
+    84 400 c, et la base notait 96 000 c — base du remboursement fausse. Il
+    est reparti au prorata du HT de chaque seance payante, l'arrondi sur la
+    premiere. Sans montant (ancien evenement, appel direct), le recalcul
+    reste le repli.
 
     IDEMPOTENT — une notification Stripe peut arriver deux fois, et une seance
     deja payee ne se reconfirme pas.
@@ -17744,32 +19329,73 @@ def _formation_ia_confirmer_paiement(commande=None, resa_id=None):
     lignes = [dict(r) for r in cur.fetchall()]
     # LES SEANCES OFFERTES NE SONT PAS « PAYEES » : elles n'ont rien coute, et
     # les marquer ainsi ferait croire a un remboursement possible.
-    a_payer = [r for r in lignes
-               if not int(r.get('gratuit') or 0) and r.get('statut') != 'payee']
+    payantes = [r for r in lignes if not int(r.get('gratuit') or 0)]
+    # SEULE UNE SEANCE QUI ATTEND SON PAIEMENT SE CONFIRME. Le filtre retenait
+    # toute ligne « != payee », donc AUSSI les annulees. Deux degats mesures :
+    # une seance annulee et remboursee redevenait « payee » — avec le montant
+    # de TOUTE la commande, puisque le prorata ne se repartissait plus que sur
+    # elle, et le remboursement suivant, calcule dessus, vidait le paiement ;
+    # et une seance annulee avant paiement, dont le creneau avait ete repris
+    # par un autre client, remettait deux clients sur la meme date.
+    a_payer = [r for r in payantes
+               if (r.get('statut') or '') == 'en_attente_paiement']
     if not a_payer:
         try: conn.close()
         except Exception: pass
+        # RIEN A CONFIRMER, MAIS DE L'ARGENT EST ARRIVE. Le remboursement n'est
+        # pas automatique : il depend de ce qui s'est passe (creneau repris,
+        # seance deja remboursee, geste commercial). CONSEILPREV tranche, donc
+        # CONSEILPREV est prevenu — le silence laissait l'encaissement sans
+        # trace et sans contrepartie.
+        if any((r.get('statut') or '') == 'annulee' for r in payantes):
+            _formation_ia_encaissement_sans_seance(commande, resa_id, payantes,
+                                                   montant_ttc_cents)
         return
     horo = datetime.utcnow().isoformat()
     tva = formations_ia.TVA_PCT
+    # LE PRORATA PORTE SUR TOUTES LES SEANCES PAYANTES DE LA COMMANDE, pas sur
+    # celles qui restent a confirmer : `amount_total` est ce que Stripe a
+    # encaisse pour la commande ENTIERE. Le repartir sur le seul reliquat
+    # attribuait a une seance le montant de quatre.
+    hts = [int(r.get('montant_cents') or 0) for r in payantes]
+    try:
+        total = int(montant_ttc_cents) if montant_ttc_cents is not None else 0
+    except (TypeError, ValueError):
+        total = 0
+    if total > 0 and sum(hts) > 0:
+        ttcs = [total * ht // sum(hts) for ht in hts]
+        ttcs[0] += total - sum(ttcs)
+    else:
+        ttcs = [int(round(ht * (100 + tva) / 100.0)) for ht in hts]
+    part = dict(zip([r.get('id') for r in payantes], ttcs))
+    # LA BASE DEPARTAGE, ET C'EST ELLE QUI DECIDE DU COURRIEL. La notification
+    # Stripe et le retour de caisse arrivent ensemble : les deux lisaient les
+    # memes seances a confirmer, le second UPDATE ne changeait rien, mais les
+    # deux envoyaient leurs courriels — doublons chez le client, chez
+    # CONSEILPREV, et deux credits pris sur les 300 envois quotidiens.
+    changees = 0
     for r in a_payer:
-        ht = int(r.get('montant_cents') or 0)
-        ttc = int(round(ht * (100 + tva) / 100.0))
         cur.execute(registre_sql(
             "UPDATE formation_ia_resa SET statut='payee', paye_le=%s, paye_ttc_cents=%s "
-            "WHERE id=%s AND statut != 'payee'",
+            "WHERE id=%s AND statut='en_attente_paiement'",
             "UPDATE formation_ia_resa SET statut='payee', paye_le=?, paye_ttc_cents=? "
-            "WHERE id=? AND statut != 'payee'"), (horo, ttc, r.get('id')))
+            "WHERE id=? AND statut='en_attente_paiement'"),
+            (horo, part.get(r.get('id'), 0), r.get('id')))
+        changees += max(int(getattr(cur, 'rowcount', 1) or 0), 0)
     conn.commit()
     try: conn.close()
     except Exception: pass
+    if not changees:
+        return
 
     prem = a_payer[0]
     cal = {c['date']: c['libelle']
            for c in formations_ia.creneaux(datetime.utcnow().date()
                                            - timedelta(days=400))}
-    total_ttc = sum(int(round(int(r.get('montant_cents') or 0)
-                             * (100 + tva) / 100.0)) for r in a_payer)
+    # CE QUE LE COURRIEL ANNONCE EST CE QUI VIENT D'ETRE CONFIRME, pas le
+    # montant de la commande : une seance deja reglee plus tot ne se
+    # re-annonce pas au client.
+    total_ttc = sum(part.get(r.get('id'), 0) for r in a_payer)
     lignes_html = ''.join(
         '<li><strong>%s</strong> — %s</li>'
         % ((formations_ia.sujet(r.get('sujet')) or {}).get('titre') or r.get('sujet'),
@@ -17789,7 +19415,7 @@ def _formation_ia_confirmer_paiement(commande=None, resa_id=None):
     except Exception:
         pass
     try:
-        send_email_smart(CONSEILPREV_INTERNAL_EMAIL, 'CONSEILPREV',
+        send_email_smart(CONSEILPREV_NOTIFY_EMAIL, 'CONSEILPREV',
                          'Formation IA payée : %d séance(s)' % len(a_payer),
                          '<p>Commande réglée.</p><p>%s %s (%s) — %s</p><ul>%s</ul>'
                          '<p>Total : %.2f € TTC</p>'
@@ -17917,7 +19543,7 @@ def _formation_ia_envoyer_relance(x):
     except Exception:
         pass
     try:
-        send_email_smart(CONSEILPREV_INTERNAL_EMAIL, 'CONSEILPREV',
+        send_email_smart(CONSEILPREV_NOTIFY_EMAIL, 'CONSEILPREV',
                          'Relance %s : %s' % (quand, titre),
                          '<p>Relance <strong>%s</strong> envoyée au client.</p>'
                          '<p>%s %s (%s) — %s<br>Séance : %s<br>Lieu : %s</p>'
@@ -18183,6 +19809,15 @@ def formation_ia_inscription():
         _ferme()
         return jsonify({'ok': False, 'error': dev['message']}), 400
 
+    refus = _formation_ia_borne_du_jour(
+        cur, email, any(l['gratuit'] for l in dev['lignes']))
+    if refus:
+        _ferme()
+        logger.warning('FORMATION_IA_BORNE %s: %s vers %s', limiter.get_ip(request),
+                       refus, _masquer_courriel(email))
+        return jsonify({'ok': False, 'error': 'Trop de réservations aujourd’hui. '
+                        'Écrivez à CONSEILPREV pour être placé.'}), 429
+
     # UNE SEANCE PAR CRENEAU (le formateur ne se dedouble pas), et UN SUJET UNE
     # SEULE FOIS PAR CLIENT. Les deux sont verifies AVANT la premiere ecriture :
     # ecrire deux seances puis refuser la troisieme laisserait un panier a
@@ -18215,6 +19850,13 @@ def formation_ia_inscription():
     commande = _secrets.token_urlsafe(12)
     par_cle = {l['cle']: l for l in dev['lignes']}
     horo = datetime.utcnow().isoformat()
+    # L'INSTANT OU LA RETENUE DU CRENEAU COMMENCE, RETENU ICI. La caisse ne
+    # s'ouvre que plus bas, apres DEUX envois de courriels synchrones et la
+    # lecture du taux de TVA chez Stripe. Lire l'heure la-bas faisait vivre la
+    # caisse d'autant plus longtemps que ces appels trainaient (mesure : 5,67 s
+    # avec un Brevo lent de 3 s) : le creneau etait rendu, Y le reprenait, et X
+    # pouvait encore payer le sien.
+    depart_retenue = int(time.time())
     for i, x in enumerate(seances):
         li = par_cle[x['sujet']]
         statut = ('confirmee' if li['gratuit']
@@ -18269,16 +19911,29 @@ def formation_ia_inscription():
                  else '%d EUR HT (%d EUR TTC)'
                       % (dev['ht_cents'] // 100, dev['ttc_cents'] // 100))
 
+    # CE QU'UN INCONNU A TAPE N'ENTRE PAS BRUT DANS CE HTML. Cette route est
+    # PUBLIQUE, et `sanitize_input` n'echappe plus rien — c'est volontaire et
+    # mesure ailleurs : elle assainit ce qu'on STOCKE, pas ce qu'on affiche.
+    # Huit champs viennent donc du formulaire, et cette notification part
+    # desormais dans la VRAIE boite de CONSEILPREV (elle visait auparavant une
+    # adresse @internal.system, qui ne recevait rien). Mesure : nom =
+    # `<a href="https://piege.test/z">Cliquez pour valider</a>` → le lien
+    # arrivait cliquable dans la boite de l'administrateur, sous l'expediteur
+    # du site et avec sa mise en page. `_pour_courriel` est la fonction ecrite
+    # pour exactement ce cas ; elle n'etait pas appliquee ici.
     try:
-        send_email_smart(CONSEILPREV_INTERNAL_EMAIL, 'CONSEILPREV',
+        send_email_smart(CONSEILPREV_NOTIFY_EMAIL, 'CONSEILPREV',
                          'Réservation formation : %d séance(s)' % len(recap),
                          '<p>Nouvelle réservation « Formations conformité IA ».</p>'
                          '<p>%s %s — %s<br>%s / %s<br>SIRET : %s<br>Lieu : %s<br>'
                          'Profil : %s</p><ul>%s</ul><p>Total : %s</p><p>%s</p>'
-                         % (prenom, nom, entreprise, email, telephone,
-                            siret or '(non fourni)', lieu,
-                            cas.get('titre') or '(non précisé)', lignes_html,
-                            total_txt, message or ''),
+                         % (_pour_courriel(prenom), _pour_courriel(nom),
+                            _pour_courriel(entreprise), _pour_courriel(email),
+                            _pour_courriel(telephone),
+                            _pour_courriel(siret or '(non fourni)'),
+                            _pour_courriel(lieu),
+                            _pour_courriel(cas.get('titre') or '(non précisé)'),
+                            lignes_html, total_txt, _pour_courriel(message or '')),
                          tags=['formation-ia'])
     except Exception:
         pass
@@ -18299,11 +19954,17 @@ def formation_ia_inscription():
                          '<p><strong>%s</strong> %s %s</p>'
                          '<p>Support de workshop remis à chaque participant. %s</p>'
                          '<p>L’équipe CONSEILPREV</p>'
-                         % (lignes_html, accuse, ann['titre'], ann['payante'],
-                            ann['libre'], formations_ia.SUPPORT['participants']),
+                         # `avant` et `apres` sont les deux phrases de la regle
+                         # d'annulation. Les cles `payante` et `libre` n'ont
+                         # jamais existe : la KeyError etait avalee et le client
+                         # ne recevait AUCUN accuse — donc aucun lien
+                         # d'annulation (mesure, une et deux seances).
+                         % (lignes_html, accuse, ann['titre'], ann['avant'],
+                            ann['apres'], formations_ia.SUPPORT['participants']),
                          tags=['formation-ia-accuse'])
-    except Exception:
-        pass
+    except Exception as _e:
+        logger.error('FORMATION_IA_ACCUSE_ECHEC commande=%s destinataire=%s : %s',
+                     commande, _masquer_courriel(email), _e)
 
     # ── PAIEMENT EN LIGNE (flux B : price_data en ligne, mode paiement) ──
     # LE PRIX N'EST JAMAIS RECOPIE : il vient du devis, la meme source que
@@ -18311,9 +19972,7 @@ def formation_ia_inscription():
     # redirections successives feraient abandonner au deuxieme paiement.
     if veut_stripe:
         try:
-            import stripe
-            stripe.api_key = secret
-            stripe.max_network_retries = 0
+            stripe = _stripe_pret(secret)
             taux = _form_tax_rate(stripe)
             items = []
             for x in recap:
@@ -18333,9 +19992,16 @@ def formation_ia_inscription():
                 line_items=items,
                 customer_email=email,
                 client_reference_id=str(commande),
+                # LA CAISSE FERME AVEC LA RETENUE DU CRENEAU. Par defaut une
+                # session Stripe vit 24 h alors que la place n'est tenue que
+                # RETENUE_MINUTES : X ne payait pas, Y prenait le creneau a
+                # H+61, puis X et Y payaient tous deux la meme date (mesure).
+                # Stripe exige au moins 30 minutes.
+                expires_at=max(depart_retenue + formations_ia.RETENUE_MINUTES * 60,
+                               int(time.time()) + 31 * 60),
                 metadata={'type': 'formation-ia', 'commande': commande,
                           'resa_id': str(recap[0]['id'] if recap else 0)},
-                success_url=base + '/formation?paiement=ok',
+                success_url=base + '/formation?paiement=ok&session_id={CHECKOUT_SESSION_ID}',
                 cancel_url=base + '/formation?paiement=annule')
             sid = sk.get('id') if isinstance(sk, dict) else getattr(sk, 'id', None)
             conn2 = registre_get_db(); cur2 = conn2.cursor()
@@ -18414,9 +20080,7 @@ def _formation_ia_rembourser(r, cents, jeton):
     rembourse, refund_id, du = 0, None, int(cents)
     if secret and sid:
         try:
-            import stripe
-            stripe.api_key = secret
-            stripe.max_network_retries = 0
+            stripe = _stripe_pret(secret)
             sess = stripe.checkout.Session.retrieve(sid)
             pi = (sess.get('payment_intent') if isinstance(sess, dict)
                   else getattr(sess, 'payment_intent', None))
@@ -18578,7 +20242,7 @@ def formation_ia_annulation():
     except Exception:
         pass
     try:
-        send_email_smart(CONSEILPREV_INTERNAL_EMAIL, 'CONSEILPREV',
+        send_email_smart(CONSEILPREV_NOTIFY_EMAIL, 'CONSEILPREV',
                          'Annulation formation — ' + su['titre'],
                          '<p>%s %s (%s) annule la séance <strong>%s</strong> du %s.</p>'
                          '<p>%s</p><p>Statut avant annulation : %s. %s</p>'

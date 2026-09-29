@@ -1,0 +1,1072 @@
+{
+ "_pourquoi": "Chaque mutation FABRIQUE un défaut réel dans l'analyse de risque d'un système d'IA (classification, obligations, périmètre, calendrier, fiches, pages) et doit faire TOMBER la règle nommée de tests/test_sentinel_ia_act_omnibus.py. Une mutation qui survit dit que la règle ne mesure pas ce qu'elle prétend ; une mutation qui fait tomber une AUTRE règle dit que la règle nommée vise à côté.",
+ "cibles": [
+  "tests/test_sentinel_ia_act_omnibus.py"
+ ],
+ "mutations": [
+  {
+   "nom": "le point (a) ne se reconnaît plus",
+   "fichier": "sentinel.page.js",
+   "avant": "  if(d.subliminal === 'oui') pts.a = true;\n",
+   "apres": "",
+   "regle": "test_chacune_des_dix_pratiques_de_l_article_5_rend_un_systeme_interdit"
+  },
+  {
+   "nom": "le point (e) sort de la liste des cases lues",
+   "fichier": "sentinel.page.js",
+   "avant": "['b','c','d','e','g','ba','bb'].forEach(",
+   "apres": "['b','c','d','g','ba','bb'].forEach(",
+   "regle": "test_chacune_des_dix_pratiques_de_l_article_5_rend_un_systeme_interdit"
+  },
+  {
+   "nom": "les points (ba) et (bb) sortent de la liste des cases lues",
+   "fichier": "sentinel.page.js",
+   "avant": "['b','c','d','e','g','ba','bb'].forEach(",
+   "apres": "['b','c','d','e','g'].forEach(",
+   "regle": "test_chacune_des_dix_pratiques_de_l_article_5_rend_un_systeme_interdit"
+  },
+  {
+   "nom": "l'identification sans finalité répressive devient interdite",
+   "fichier": "sentinel.page.js",
+   "avant": "  if(d.biometrie === 'oui') pts.h = true;",
+   "apres": "  if(d.biometrie === 'oui' || d.biometrie === 'oui_autre') pts.h = true;",
+   "regle": "test_l_identification_biometrique_en_temps_reel_n_est_interdite_que_si_elle_est_repressive"
+  },
+  {
+   "nom": "le type émotion au travail ne suffit plus",
+   "fichier": "sentinel.page.js",
+   "avant": "var f = coches.indexOf('art5-f') >= 0 || (d.type === 'emotion' && (d.secteur === 'emploi' || d.secteur === 'education'));",
+   "apres": "var f = coches.indexOf('art5-f') >= 0;",
+   "regle": "test_la_reconnaissance_des_emotions_au_travail_ou_a_l_ecole_est_interdite_sauf_raison_medicale_ou_de_securite"
+  },
+  {
+   "nom": "l'exception médicale ou de sécurité ne lève plus le point (f)",
+   "fichier": "sentinel.page.js",
+   "avant": "if(f && coches.indexOf('art5-f-exception') < 0) pts.f = true;",
+   "apres": "if(f) pts.f = true;",
+   "regle": "test_la_reconnaissance_des_emotions_au_travail_ou_a_l_ecole_est_interdite_sauf_raison_medicale_ou_de_securite"
+  },
+  {
+   "nom": "l'émotion hors travail devient interdite",
+   "fichier": "sentinel.page.js",
+   "avant": "(d.type === 'emotion' && (d.secteur === 'emploi' || d.secteur === 'education'))",
+   "apres": "(d.type === 'emotion')",
+   "regle": "test_la_reconnaissance_des_emotions_au_travail_ou_a_l_ecole_est_interdite_sauf_raison_medicale_ou_de_securite"
+  },
+  {
+   "nom": "les points sont rendus dans le désordre",
+   "fichier": "sentinel.page.js",
+   "avant": "var SIM_ART5_ORDRE = ['a','b','c','d','e','f','g','h','ba','bb'];",
+   "apres": "var SIM_ART5_ORDRE = ['ba','a','b','c','d','e','f','g','h','bb'];",
+   "regle": "test_plusieurs_pratiques_sont_rendues_dans_l_ordre_du_texte_et_le_sanction_est_celle_du_paragraphe_3"
+  },
+  {
+   "nom": "la sanction d'une pratique interdite change de paragraphe",
+   "fichier": "sentinel.page.js",
+   "avant": "    result.art5_points = points;\n    result.article = 'Art. 5(1) — ' + (points.length > 1 ? 'points ' : 'point ') + points.join(', ');\n    result.color = '#8B0000';\n    result.badge = 'PRATIQUE INTERDITE';\n    result.sanctions = simSanctionsRef('interdit');",
+   "apres": "    result.art5_points = points;\n    result.article = 'Art. 5(1) — ' + (points.length > 1 ? 'points ' : 'point ') + points.join(', ');\n    result.color = '#8B0000';\n    result.badge = 'PRATIQUE INTERDITE';\n    result.sanctions = simSanctionsRef('obligations');",
+   "regle": "test_plusieurs_pratiques_sont_rendues_dans_l_ordre_du_texte_et_le_sanction_est_celle_du_paragraphe_3"
+  },
+  {
+   "nom": "les points reconnus ne sont plus rendus",
+   "fichier": "sentinel.page.js",
+   "avant": "    result.art5_points = points;\n",
+   "apres": "",
+   "regle": "test_chacune_des_dix_pratiques_de_l_article_5_rend_un_systeme_interdit"
+  },
+  {
+   "nom": "l'article rendu ne liste plus les points",
+   "fichier": "sentinel.page.js",
+   "avant": "(points.length > 1 ? 'points ' : 'point ') + points.join(', ');",
+   "apres": "(points.length > 1 ? 'points ' : 'point ') + points[0];",
+   "regle": "test_plusieurs_pratiques_sont_rendues_dans_l_ordre_du_texte_et_le_sanction_est_celle_du_paragraphe_3"
+  },
+  {
+   "nom": "le type identification à distance ne rend plus haut risque",
+   "fichier": "sentinel.page.js",
+   "avant": "var parType    = typesHaut.includes(d.type) || d.type === 'bio_remote' || d.biometrie === 'oui_autre';",
+   "apres": "var parType    = typesHaut.includes(d.type) || d.biometrie === 'oui_autre';",
+   "regle": "test_l_identification_biometrique_en_temps_reel_n_est_interdite_que_si_elle_est_repressive"
+  },
+  {
+   "nom": "la présomption n'est plus dite à confirmer",
+   "fichier": "sentinel.page.js",
+   "avant": "    if(!parAnnexe1 && !parUsage && !usageParReponse){\n      result.a_confirmer = (d.type === 'bio_remote') ? 'bio_remote' : 'usage';\n    }",
+   "apres": "",
+   "regle": "test_un_usage_coche_de_l_annexe_iii_est_un_constat_le_secteur_seul_est_une_presomption"
+  },
+  {
+   "nom": "l'identification hors finalité répressive n'établit plus l'usage",
+   "fichier": "sentinel.page.js",
+   "avant": "var usageParReponse = d.biometrie === 'oui_autre' || d.biometrie === 'aposteriori' || ['bio_post','emotion'].includes(d.type);",
+   "apres": "var usageParReponse = d.biometrie === 'aposteriori' || ['bio_post','emotion'].includes(d.type);",
+   "regle": "test_l_identification_biometrique_en_temps_reel_n_est_interdite_que_si_elle_est_repressive"
+  },
+  {
+   "nom": "le secteur seul ne présume plus le haut risque",
+   "fichier": "sentinel.page.js",
+   "avant": "var parSecteur = annexe3Secteurs.includes(d.secteur);",
+   "apres": "var parSecteur = false;",
+   "regle": "test_un_usage_coche_de_l_annexe_iii_est_un_constat_le_secteur_seul_est_une_presomption"
+  },
+  {
+   "nom": "le type bio_remote confirme l'usage à tort",
+   "fichier": "sentinel.page.js",
+   "avant": "result.a_confirmer = (d.type === 'bio_remote') ? 'bio_remote' : 'usage';",
+   "apres": "result.a_confirmer = 'usage';",
+   "regle": "test_l_identification_biometrique_en_temps_reel_n_est_interdite_que_si_elle_est_repressive"
+  },
+  {
+   "nom": "le profilage n'annule plus l'exception de l'article 6(3)",
+   "fichier": "sentinel.page.js",
+   "avant": "var exceptionApplicable = d.exception6_3 && d.exception6_3 !== 'aucune' && d.profilage !== 'oui';",
+   "apres": "var exceptionApplicable = d.exception6_3 && d.exception6_3 !== 'aucune';",
+   "regle": "test_l_exception_de_l_article_6_3_leve_le_haut_risque_sauf_profilage"
+  },
+  {
+   "nom": "l'exception n'est plus dite à documenter",
+   "fichier": "sentinel.page.js",
+   "avant": "Documentez cette évaluation avant mise sur le marché (Art. 6(4))",
+   "apres": "Documentez cette évaluation",
+   "regle": "test_l_exception_de_l_article_6_3_leve_le_haut_risque_sauf_profilage"
+  },
+  {
+   "nom": "l'annexe I n'est plus une voie du haut risque",
+   "fichier": "sentinel.page.js",
+   "avant": "  if(parAnnexe1) isHautRisque = true;\n",
+   "apres": "",
+   "regle": "test_un_produit_de_l_annexe_i_a_evaluation_par_un_tiers_est_a_haut_risque_au_titre_de_l_article_6_1"
+  },
+  {
+   "nom": "la voie de l'annexe I n'est plus nommée",
+   "fichier": "sentinel.page.js",
+   "avant": "    if(parAnnexe1) result.haut_via.push('annexe1');",
+   "apres": "",
+   "regle": "test_la_voie_du_haut_risque_est_nommee_pour_souligner_la_bonne_ligne_du_calendrier"
+  },
+  {
+   "nom": "la voie de l'annexe III n'est plus nommée",
+   "fichier": "sentinel.page.js",
+   "avant": "    if(parAnnexe3) result.haut_via.push('annexe3');",
+   "apres": "",
+   "regle": "test_la_voie_du_haut_risque_est_nommee_pour_souligner_la_bonne_ligne_du_calendrier"
+  },
+  {
+   "nom": "l'article du haut risque par l'annexe I redevient l'annexe III",
+   "fichier": "sentinel.page.js",
+   "avant": "result.article = parAnnexe1 && !parAnnexe3 ? 'Art. 6(1) + Annexe I'",
+   "apres": "result.article = parAnnexe1 && !parAnnexe3 ? 'Art. 6(2) + Annexe III'",
+   "regle": "test_un_produit_de_l_annexe_i_a_evaluation_par_un_tiers_est_a_haut_risque_au_titre_de_l_article_6_1"
+  },
+  {
+   "nom": "la note de l'annexe I oublie la limitation de l'article 2(13)",
+   "fichier": "sentinel.page.js",
+   "avant": "(Art. 2(13)).';",
+   "apres": "';",
+   "regle": "test_un_produit_de_l_annexe_i_a_evaluation_par_un_tiers_est_a_haut_risque_au_titre_de_l_article_6_1"
+  },
+  {
+   "nom": "la note sans évaluation par un tiers oublie l'article 6(1c)",
+   "fichier": "sentinel.page.js",
+   "avant": "ne remplit pas non plus cette condition (Art. 6(1c)).",
+   "apres": "ne remplit pas non plus cette condition.",
+   "regle": "test_les_quatre_autres_reponses_sur_l_annexe_i_ne_rendent_pas_le_systeme_haut_risque_et_disent_pourquoi"
+  },
+  {
+   "nom": "la note de la fonction sans lien avec la sécurité oublie l'article 6(1b)",
+   "fichier": "sentinel.page.js",
+   "avant": "la santé ou la sécurité des personnes ou des biens (Art. 6(1b)).",
+   "apres": "la santé ou la sécurité des personnes ou des biens.",
+   "regle": "test_les_quatre_autres_reponses_sur_l_annexe_i_ne_rendent_pas_le_systeme_haut_risque_et_disent_pourquoi"
+  },
+  {
+   "nom": "la note des machines oublie la section B",
+   "fichier": "sentinel.page.js",
+   "avant": "est passé de la section A à la section B de l\\'annexe I",
+   "apres": "est passé dans l\\'annexe I",
+   "regle": "test_les_quatre_autres_reponses_sur_l_annexe_i_ne_rendent_pas_le_systeme_haut_risque_et_disent_pourquoi"
+  },
+  {
+   "nom": "les machines redeviennent à haut risque par l'annexe I",
+   "fichier": "sentinel.page.js",
+   "avant": "  } else if(d.annexe1 === 'machines'){",
+   "apres": "  } else if(false){",
+   "regle": "test_les_quatre_autres_reponses_sur_l_annexe_i_ne_rendent_pas_le_systeme_haut_risque_et_disent_pourquoi"
+  },
+  {
+   "nom": "l'exclusion personnelle vaut pour un fournisseur",
+   "fichier": "sentinel.page.js",
+   "avant": "    if(c === 'per-personnel' && d.role && d.role !== 'deployeur' && d.role !== 'indetermine'){",
+   "apres": "    if(false){",
+   "regle": "test_l_usage_personnel_ne_libere_que_les_deployeurs"
+  },
+  {
+   "nom": "aucune case cochée sort du champ",
+   "fichier": "sentinel.page.js",
+   "avant": "  if(!motifs.length) return { statut:'dans_le_champ', ecartes:ecartes };",
+   "apres": "  if(!motifs.length) return { statut:'hors_champ', motifs:[{art:'Art. 2', motif:''}], ecartes:ecartes };",
+   "regle": "test_aucune_case_cochee_c_est_dans_le_champ"
+  },
+  {
+   "nom": "l'exclusion de la recherche cite le mauvais paragraphe",
+   "fichier": "sentinel.page.js",
+   "avant": "'per-recherche':   { art:'Art. 2(6)',",
+   "apres": "'per-recherche':   { art:'Art. 2(5)',",
+   "regle": "test_chaque_exclusion_de_l_article_2_sort_du_champ_avec_son_article"
+  },
+  {
+   "nom": "l'exclusion militaire n'est plus reconnue",
+   "fichier": "sentinel.page.js",
+   "avant": "    motifs.push(m);\n  });",
+   "apres": "    if(c !== 'per-militaire') motifs.push(m);\n  });",
+   "regle": "test_chaque_exclusion_de_l_article_2_sort_du_champ_avec_son_article"
+  },
+  {
+   "nom": "le calcul d'écart de l'article 4 redit un niveau suffisant",
+   "fichier": "sentinel.page.js",
+   "avant": "L\\'obligation est de moyens : elle ne garantit pas un niveau précis à chaque personne (texte remplacé par le règlement (UE) 2026/1744).', refs:['Art. 4']",
+   "apres": "Niveau suffisant de maîtrise de l\\'IA à garantir pour chaque personne', refs:['Art. 4']",
+   "regle": "test_l_article_4_est_une_obligation_de_moyens_sans_niveau_garanti"
+  },
+  {
+   "nom": "l'article 4 ne dit plus qu'il a été remplacé",
+   "fichier": "sentinel.page.js",
+   "avant": "(texte remplacé par le règlement (UE) 2026/1744).', refs:['Art. 4'], prio:'p2', level:'tous'",
+   "apres": "', refs:['Art. 4'], prio:'p2', level:'tous'",
+   "regle": "test_l_article_4_est_une_obligation_de_moyens_sans_niveau_garanti"
+  },
+  {
+   "nom": "l'article 4 retrouve son ancien intitulé",
+   "fichier": "sentinel.page.js",
+   "avant": "name:'Culture de l\\'IA du personnel'",
+   "apres": "name:'Maîtrise de l\\'IA du personnel'",
+   "regle": "test_l_article_4_est_une_obligation_de_moyens_sans_niveau_garanti"
+  },
+  {
+   "nom": "l'article 10 oublie l'article 4a dans ses références",
+   "fichier": "sentinel.page.js",
+   "avant": "refs:['Art. 10','Art. 4a']",
+   "apres": "refs:['Art. 10']",
+   "regle": "test_l_article_10_renvoie_a_l_article_4a_qui_remplace_l_ancien_10_5"
+  },
+  {
+   "nom": "l'article 10 ne dit plus que l'article 4a remplace le 10(5)",
+   "fichier": "sentinel.page.js",
+   "avant": "conditions cumulatives de l\\'article 4a, qui remplace l\\'ancien article 10(5).",
+   "apres": "conditions cumulatives.",
+   "regle": "test_l_article_10_renvoie_a_l_article_4a_qui_remplace_l_ancien_10_5"
+  },
+  {
+   "nom": "le calcul d'écart de l'article 11 perd l'allègement de la documentation technique",
+   "fichier": "sentinel.page.js",
+   "avant": "PME, start-up et petites capitalisations intermédiaires : formulaire simplifié établi par la Commission (Art. 11(1)).', refs:['Art. 11','Annexe IV']",
+   "apres": "', refs:['Art. 11','Annexe IV']",
+   "regle": "test_les_allegements_pme_et_petites_capitalisations_sont_dits_a_l_endroit_ou_ils_jouent"
+  },
+  {
+   "nom": "l'allègement du SGQ disparaît",
+   "fichier": "sentinel.page.js",
+   "avant": " Mise en œuvre proportionnée à la taille du fournisseur, PME, start-up et petites capitalisations intermédiaires notamment, sans jamais rabattre le niveau de rigueur exigé (Art. 17(2), Art. 63).",
+   "apres": "",
+   "regle": "test_les_allegements_pme_et_petites_capitalisations_sont_dits_a_l_endroit_ou_ils_jouent"
+  },
+  {
+   "nom": "le fournisseur porte le §3 et le §4 de l'article 50",
+   "fichier": "sentinel.page.js",
+   "avant": "    if(estDeployeur){\n      if(emotion) activeObls.push({ obl:TRANSPARENCE_DEPLOYEUR[0]",
+   "apres": "    if(estFournisseur){\n      if(emotion) activeObls.push({ obl:TRANSPARENCE_DEPLOYEUR[0]",
+   "regle": "test_l_article_50_se_partage_entre_le_fournisseur_et_le_deployeur_paragraphe_par_paragraphe"
+  },
+  {
+   "nom": "le déployeur porte le §1 et le §2 de l'article 50",
+   "fichier": "sentinel.page.js",
+   "avant": "    if(estFournisseur){\n      if(chat)   activeObls.push({ obl:TRANSPARENCE_FOURNISSEUR[0]",
+   "apres": "    if(estDeployeur){\n      if(chat)   activeObls.push({ obl:TRANSPARENCE_FOURNISSEUR[0]",
+   "regle": "test_l_article_50_se_partage_entre_le_fournisseur_et_le_deployeur_paragraphe_par_paragraphe"
+  },
+  {
+   "nom": "le type chatbot ne suffit plus pour l'article 50(1)",
+   "fichier": "sentinel.page.js",
+   "avant": "var chat    = d.interaction === 'oui' || d.type === 'chatbot' || d.type === 'copilot';",
+   "apres": "var chat    = d.interaction === 'oui' || d.type === 'copilot';",
+   "regle": "test_l_article_50_se_partage_entre_le_fournisseur_et_le_deployeur_paragraphe_par_paragraphe"
+  },
+  {
+   "nom": "le type copilote ne suffit plus pour l'article 50(1)",
+   "fichier": "sentinel.page.js",
+   "avant": "var chat    = d.interaction === 'oui' || d.type === 'chatbot' || d.type === 'copilot';",
+   "apres": "var chat    = d.interaction === 'oui' || d.type === 'chatbot';",
+   "regle": "test_l_article_50_se_partage_entre_le_fournisseur_et_le_deployeur_paragraphe_par_paragraphe"
+  },
+  {
+   "nom": "le type deepfake ne déclenche plus l'article 50(4)",
+   "fichier": "sentinel.page.js",
+   "avant": "var genere  = d.interaction === 'genere' || d.type === 'llm_gen' || d.type === 'deepfake';",
+   "apres": "var genere  = d.interaction === 'genere' || d.type === 'llm_gen';",
+   "regle": "test_l_article_50_se_partage_entre_le_fournisseur_et_le_deployeur_paragraphe_par_paragraphe"
+  },
+  {
+   "nom": "la reconnaissance faciale ne déclenche plus l'article 50(3)",
+   "fichier": "sentinel.page.js",
+   "avant": "var emotion = d.type === 'emotion' || d.type === 'face_reco';",
+   "apres": "var emotion = d.type === 'emotion';",
+   "regle": "test_l_article_50_se_partage_entre_le_fournisseur_et_le_deployeur_paragraphe_par_paragraphe"
+  },
+  {
+   "nom": "un système interdit garde ses obligations de transparence",
+   "fichier": "sentinel.page.js",
+   "avant": "  if(classif.level !== 'interdit'){\n    var chat",
+   "apres": "  if(true){\n    var chat",
+   "regle": "test_l_article_50_se_partage_entre_le_fournisseur_et_le_deployeur_paragraphe_par_paragraphe"
+  },
+  {
+   "nom": "le marquage ne dit plus le délai de l'article 111(4)",
+   "fichier": "sentinel.page.js",
+   "avant": "refs:['Art. 50(2)','Art. 111(4)']",
+   "apres": "refs:['Art. 50(2)']",
+   "regle": "test_le_marquage_dit_le_delai_du_2_decembre_2026_pour_les_systemes_deja_commercialises"
+  },
+  {
+   "nom": "le marquage ne dit plus qu'aucune mention visible n'est imposée",
+   "fichier": "sentinel.page.js",
+   "avant": "Le §2 n\\'impose aucune mention visible. ",
+   "apres": "",
+   "regle": "test_le_marquage_dit_le_delai_du_2_decembre_2026_pour_les_systemes_deja_commercialises"
+  },
+  {
+   "nom": "le marquage ne dit plus le 2 décembre 2026",
+   "fichier": "sentinel.page.js",
+   "avant": "jusqu\\'au 2 décembre 2026.', refs:['Art. 50(2)','Art. 111(4)']",
+   "apres": "sans délai.', refs:['Art. 50(2)','Art. 111(4)']",
+   "regle": "test_le_marquage_dit_le_delai_du_2_decembre_2026_pour_les_systemes_deja_commercialises"
+  },
+  {
+   "nom": "l'article 25(2) est dû aussi au déployeur",
+   "fichier": "sentinel.page.js",
+   "avant": "  if(d.art25_amont === 'oui' && estFournisseur && classif.level !== 'interdit'){",
+   "apres": "  if(d.art25_amont === 'oui' && classif.level !== 'interdit'){",
+   "regle": "test_l_article_25_2_est_du_par_le_fournisseur_initial_et_par_lui_seul"
+  },
+  {
+   "nom": "l'article 25(2) est dû sans réponse",
+   "fichier": "sentinel.page.js",
+   "avant": "  if(d.art25_amont === 'oui' && estFournisseur",
+   "apres": "  if(d.art25_amont !== 'non' && estFournisseur",
+   "regle": "test_l_article_25_2_est_du_par_le_fournisseur_initial_et_par_lui_seul"
+  },
+  {
+   "nom": "l'article 25(2) est dû à un système interdit",
+   "fichier": "sentinel.page.js",
+   "avant": "  if(d.art25_amont === 'oui' && estFournisseur && classif.level !== 'interdit'){",
+   "apres": "  if(d.art25_amont === 'oui' && estFournisseur){",
+   "regle": "test_l_article_25_2_est_du_par_le_fournisseur_initial_et_par_lui_seul"
+  },
+  {
+   "nom": "l'article 25(2) oublie l'accès technique",
+   "fichier": "sentinel.page.js",
+   "avant": "accès technique ciblé pour les tests et la validation. Ne joue pas si",
+   "apres": "accès à la documentation. Ne joue pas si",
+   "regle": "test_l_article_25_2_est_du_par_le_fournisseur_initial_et_par_lui_seul"
+  },
+  {
+   "nom": "le contrat de l'article 25(4) disparaît",
+   "fichier": "sentinel.page.js",
+   "avant": "    { id:'art25_4', name:'Contrat écrit avec les fournisseurs de composants, modèles, outils ou services',",
+   "apres": "    { id:'art25_4x', name:'Contrat écrit avec les fournisseurs de composants, modèles, outils ou services',",
+   "regle": "test_l_article_25_4_le_contrat_ecrit_est_du_par_le_fournisseur_d_un_systeme_a_haut_risque"
+  },
+  {
+   "nom": "l'article 25(4) oublie l'exception des licences libres",
+   "fichier": "sentinel.page.js",
+   "avant": "Ne joue pas pour les outils publiés sous licence libre et ouverte, modèles d\\'IA à usage général exceptés.",
+   "apres": "",
+   "regle": "test_l_article_25_4_le_contrat_ecrit_est_du_par_le_fournisseur_d_un_systeme_a_haut_risque"
+  },
+  {
+   "nom": "l'enregistrement de l'article 26(8) vaut pour tout déployeur",
+   "fichier": "sentinel.page.js",
+   "avant": "    if(d.fria === 'public') activeObls.push({ obl:ART26_8_OBL",
+   "apres": "    if(d.fria !== 'non') activeObls.push({ obl:ART26_8_OBL",
+   "regle": "test_l_article_26_8_ne_vise_que_les_autorites_publiques_deployeuses"
+  },
+  {
+   "nom": "l'ordre du signalement de l'incident grave est perdu",
+   "fichier": "sentinel.page.js",
+   "avant": "Incident grave : information immédiate du fournisseur d\\'abord, puis de l\\'importateur ou du distributeur et des autorités",
+   "apres": "Incident grave : information immédiate des autorités",
+   "regle": "test_l_incident_grave_se_signale_dans_l_ordre_du_26_5"
+  },
+  {
+   "nom": "l'article 73 n'est plus cité pour l'incident grave",
+   "fichier": "sentinel.page.js",
+   "avant": "refs:['Art. 26(5)','Art. 73']",
+   "apres": "refs:['Art. 26(5)']",
+   "regle": "test_l_incident_grave_se_signale_dans_l_ordre_du_26_5"
+  },
+  {
+   "nom": "l'AIDF ne peut plus renvoyer à l'analyse d'impact RGPD",
+   "fichier": "sentinel.page.js",
+   "avant": " Ce qui est déjà couvert par l\\'analyse d\\'impact RGPD peut être repris par renvoi (Art. 27(4)).",
+   "apres": "",
+   "regle": "test_l_aidf_peut_renvoyer_a_l_analyse_d_impact_rgpd_et_l_aipd_cite_le_bon_article"
+  },
+  {
+   "nom": "l'AIPD cite de nouveau l'article 9.7",
+   "fichier": "sentinel.page.js",
+   "avant": "refs:['RGPD Art. 35','AI Act Art. 26(9)']",
+   "apres": "refs:['RGPD Art. 35','AI Act Art. 9.7']",
+   "regle": "test_l_aidf_peut_renvoyer_a_l_analyse_d_impact_rgpd_et_l_aipd_cite_le_bon_article"
+  },
+  {
+   "nom": "le statut du jour même est encore à venir",
+   "fichier": "sentinel.page.js",
+   "avant": "    if(r.iso <= aujourdhui) r.statut = 'passe';",
+   "apres": "    if(r.iso < aujourdhui) r.statut = 'passe';",
+   "regle": "test_le_statut_se_lit_dans_la_date_et_jamais_dans_une_etiquette"
+  },
+  {
+   "nom": "plusieurs lignes deviennent « prochaines »",
+   "fichier": "sentinel.page.js",
+   "avant": "    else if(!prochain){ r.statut = 'prochain'; prochain = true; }",
+   "apres": "    else if(true){ r.statut = 'prochain'; prochain = true; }",
+   "regle": "test_le_statut_se_lit_dans_la_date_et_jamais_dans_une_etiquette"
+  },
+  {
+   "nom": "les statuts ne sont plus calculés au chargement",
+   "fichier": "sentinel.page.js",
+   "avant": "aiActStatuts(AI_ACT_TIMELINE, new Date().toISOString().slice(0, 10));\n",
+   "apres": "",
+   "regle": "test_le_statut_est_calcule_au_chargement_d_apres_la_date_du_jour_et_non_ecrit_a_la_main"
+  },
+  {
+   "nom": "l'échéance d'une clé se trompe de ligne",
+   "fichier": "sentinel.page.js",
+   "avant": "if(AI_ACT_TIMELINE[i].cle === cle) return AI_ACT_TIMELINE[i]; }",
+   "apres": "if(AI_ACT_TIMELINE[i].cle !== cle) return AI_ACT_TIMELINE[i]; }",
+   "regle": "test_la_prochaine_echeance_et_l_echeance_d_une_cle_se_lisent_dans_le_calendrier"
+  },
+  {
+   "nom": "la prochaine échéance lit le mauvais statut",
+   "fichier": "sentinel.page.js",
+   "avant": "if(AI_ACT_TIMELINE[i].statut === 'prochain') return AI_ACT_TIMELINE[i]; }",
+   "apres": "if(AI_ACT_TIMELINE[i].statut === 'futur') return AI_ACT_TIMELINE[i]; }",
+   "regle": "test_la_prochaine_echeance_et_l_echeance_d_une_cle_se_lisent_dans_le_calendrier"
+  },
+  {
+   "nom": "la fiche ignore sa propre date",
+   "fichier": "sentinel.page.js",
+   "avant": "  if(a.statut_txt) return a.statut_txt;\n",
+   "apres": "",
+   "regle": "test_l_etiquette_d_une_fiche_derive_du_calendrier_ou_de_la_fiche_elle_meme"
+  },
+  {
+   "nom": "les fiches du haut risque ne lisent plus le calendrier",
+   "fichier": "sentinel.page.js",
+   "avant": "  if(reg === 'ai_act' && a.status === 'applicable'){",
+   "apres": "  if(reg !== 'ai_act' && a.status === 'applicable'){",
+   "regle": "test_l_etiquette_d_une_fiche_derive_du_calendrier_ou_de_la_fiche_elle_meme"
+  },
+  {
+   "nom": "la fiche redit « Applicable août 2026 »",
+   "fichier": "sentinel.page.js",
+   "avant": "return 'Applicable ' + (e3 ? e3.date : '') + ' (annexe III) · ' + (e1 ? e1.date : '') + ' (annexe I)';",
+   "apres": "return 'Applicable août 2026';",
+   "regle": "test_l_etiquette_d_une_fiche_derive_du_calendrier_ou_de_la_fiche_elle_meme"
+  },
+  {
+   "nom": "la ligne du 2 décembre 2026 perd sa date ISO",
+   "fichier": "sentinel.page.js",
+   "avant": "    iso: \"2026-12-02\", cle: \"interdictions_2026\",\n    date: \"2 décembre 2026\",",
+   "apres": "    iso: \"2026-12-03\", cle: \"interdictions_2026\",\n    date: \"2 décembre 2026\",",
+   "regle": "test_la_date_affichee_de_chaque_ligne_est_celle_de_sa_date_iso"
+  },
+  {
+   "nom": "la date affichée du 2 août 2027 dérive de son ISO",
+   "fichier": "sentinel.page.js",
+   "avant": "    iso: \"2027-08-02\", cle: \"gpai_herites\",\n    date: \"2 août 2027\",",
+   "apres": "    iso: \"2027-08-02\", cle: \"gpai_herites\",\n    date: \"2 août 2028\",",
+   "regle": "test_la_date_affichee_de_chaque_ligne_est_celle_de_sa_date_iso"
+  },
+  {
+   "nom": "deux lignes portent la même clé",
+   "fichier": "sentinel.page.js",
+   "avant": "iso: \"2027-12-02\", cle: \"annexe3\",",
+   "apres": "iso: \"2027-12-02\", cle: \"annexe1\",",
+   "regle": "test_le_calendrier_est_ordonne_a_des_dates_iso_uniques_et_chaque_ligne_porte_une_cle"
+  },
+  {
+   "nom": "la ligne de l'annexe I redit machines",
+   "fichier": "sentinel.page.js",
+   "avant": "(Annexe I, section A : dispositifs médicaux, jouets, ascenseurs, équipements radioélectriques…)",
+   "apres": "(Annexe I : machines, jouets, dispositifs médicaux…)",
+   "regle": "test_l_exemple_des_machines_a_quitte_la_ligne_de_l_annexe_i"
+  },
+  {
+   "nom": "la ligne de l'annexe I ne dit plus la section B",
+   "fichier": "sentinel.page.js",
+   "avant": "Les machines (règlement (UE) 2023/1230) passent en section B de l'annexe I : elles relèvent de leur propre législation, où les exigences IA sont ajoutées par acte délégué applicable au plus tard le 2 août 2028.",
+   "apres": "Les fabricants raisonnent cycle de vie.",
+   "regle": "test_l_exemple_des_machines_a_quitte_la_ligne_de_l_annexe_i"
+  },
+  {
+   "nom": "la ligne du haut risque ne cite plus l'acte modificatif",
+   "fichier": "sentinel.page.js",
+   "avant": "ref: \"Art. 113(c)(i) — règlement (UE) 2026/1744\"",
+   "apres": "ref: \"Digital Omnibus\"",
+   "regle": "test_les_lignes_modifiees_par_l_omnibus_le_disent"
+  },
+  {
+   "nom": "les nouvelles interdictions ne citent plus l'acte modificatif",
+   "fichier": "sentinel.page.js",
+   "avant": "ref: \"Art. 113(a) et Art. 111(4) — règlement (UE) 2026/1744\"",
+   "apres": "ref: \"Art. 113(a)\"",
+   "regle": "test_les_lignes_modifiees_par_l_omnibus_le_disent"
+  },
+  {
+   "nom": "la ligne des modèles hérités perd son article",
+   "fichier": "sentinel.page.js",
+   "avant": "ref: \"Art. 111(3)\"\n",
+   "apres": "ref: \"Art. 113\"\n",
+   "regle": "test_les_lignes_modifiees_par_l_omnibus_le_disent"
+  },
+  {
+   "nom": "la frise souligne aussi la ligne 2026 pour un ancien point",
+   "fichier": "sentinel.page.js",
+   "avant": "    var anciennes = !points.length || points.some(function(p){ return p !== 'ba' && p !== 'bb'; });",
+   "apres": "    var anciennes = true;\n",
+   "regle": "test_la_frise_souligne_la_ligne_du_systeme_analyse_et_elle_seule"
+  },
+  {
+   "nom": "la frise oublie le repli sans point nommé",
+   "fichier": "sentinel.page.js",
+   "avant": "    var anciennes = !points.length || points.some(",
+   "apres": "    var anciennes = points.some(",
+   "regle": "test_la_frise_souligne_la_ligne_du_systeme_analyse_et_elle_seule"
+  },
+  {
+   "nom": "la frise souligne la ligne 2026 sans point ba ou bb",
+   "fichier": "sentinel.page.js",
+   "avant": "    if(classif.art5 && nouvelles && r.cle === 'interdictions_2026') ligne.urgent = true;",
+   "apres": "    if(classif.art5 && r.cle === 'interdictions_2026') ligne.urgent = true;",
+   "regle": "test_la_frise_souligne_la_ligne_du_systeme_analyse_et_elle_seule"
+  },
+  {
+   "nom": "la frise ne souligne plus la transparence du risque limité",
+   "fichier": "sentinel.page.js",
+   "avant": "    if(classif.level === 'limite' && r.cle === 'transparence') ligne.urgent = true;\n",
+   "apres": "",
+   "regle": "test_la_frise_souligne_la_ligne_du_systeme_analyse_et_elle_seule"
+  },
+  {
+   "nom": "la frise sans voie nommée ne souligne plus l'annexe III",
+   "fichier": "sentinel.page.js",
+   "avant": "    var voies = classif.haut_via || ['annexe3'];",
+   "apres": "    var voies = classif.haut_via || [];",
+   "regle": "test_la_frise_souligne_la_ligne_du_systeme_analyse_et_elle_seule"
+  },
+  {
+   "nom": "la frise ne souligne plus la ligne de l'annexe I",
+   "fichier": "sentinel.page.js",
+   "avant": "    if(classif.level === 'haut' && voies.indexOf('annexe1') >= 0 && r.cle === 'annexe1') ligne.urgent = true;\n",
+   "apres": "",
+   "regle": "test_la_frise_souligne_la_ligne_du_systeme_analyse_et_elle_seule"
+  },
+  {
+   "nom": "la carte de la feuille de route ne met plus la date en capitales",
+   "fichier": "sentinel.page.js",
+   "avant": "      if(dEl) dEl.textContent = prochaine.date.toUpperCase();",
+   "apres": "      if(dEl) dEl.textContent = prochaine.date;",
+   "regle": "test_la_carte_de_la_feuille_de_route_lit_le_calendrier_au_lieu_de_porter_sa_propre_date"
+  },
+  {
+   "nom": "la carte oublie l'échéance de l'annexe III dans son libellé",
+   "fichier": "sentinel.page.js",
+   "avant": "(e3 ? e3.date : \"\") + \" (\" + (e3 ? e3.ref : \"\") + \")\";",
+   "apres": "\"2 décembre 2027\";",
+   "regle": "test_la_carte_de_la_feuille_de_route_lit_le_calendrier_au_lieu_de_porter_sa_propre_date"
+  },
+  {
+   "nom": "la carte ne lit plus la prochaine échéance",
+   "fichier": "sentinel.page.js",
+   "avant": "      if(tEl) tEl.textContent = prochaine.quoi;",
+   "apres": "      if(tEl) tEl.textContent = 'AI Act — Systèmes haut risque (Art. 113)';",
+   "regle": "test_la_carte_de_la_feuille_de_route_lit_le_calendrier_au_lieu_de_porter_sa_propre_date"
+  },
+  {
+   "nom": "la carte statique redit « 02 AOÛT 2026 »",
+   "fichier": "sentinel.html",
+   "avant": "letter-spacing:.1em;margin-bottom:6px\" id=\"road-next-deadline-date\">2 DÉCEMBRE 2026</div>",
+   "apres": "letter-spacing:.1em;margin-bottom:6px\" id=\"road-next-deadline-date\">02 AOÛT 2026</div>",
+   "regle": "test_la_carte_statique_ne_dit_plus_haut_risque_au_2_aout_2026"
+  },
+  {
+   "nom": "la fiche de l'article 4 redit « doivent veiller »",
+   "fichier": "sentinel.page.js",
+   "avant": "Fournisseurs et déployeurs prennent des mesures pour soutenir le développement de la culture (littératie) de l\\'IA",
+   "apres": "Fournisseurs et déployeurs doivent veiller à la culture (littératie) de l\\'IA",
+   "regle": "test_la_fiche_de_l_article_dit_le_texte_en_vigueur[Art.44]"
+  },
+  {
+   "nom": "la fiche de l'article 5 redit « autorités publiques »",
+   "fichier": "sentinel.page.js",
+   "avant": "(c) notation sociale, par toute entité publique ou privée, (d)",
+   "apres": "(c) notation sociale par autorités publiques, (d)",
+   "regle": "test_la_fiche_de_l_article_dit_le_texte_en_vigueur[Art.55]"
+  },
+  {
+   "nom": "la fiche de l'article 5 oublie les deux nouvelles pratiques",
+   "fichier": "sentinel.page.js",
+   "avant": "À compter du 2 décembre 2026, deux pratiques s\\'y ajoutent (règlement (UE) 2026/1744) : (ba)",
+   "apres": "Pratiques complémentaires possibles : (xa)",
+   "regle": "test_le_texte_de_la_fiche_porte_lui_meme_la_regle[Art.55]"
+  },
+  {
+   "nom": "la fiche de l'article 16 redit dix obligations",
+   "fichier": "sentinel.page.js",
+   "avant": "Liste des 12 obligations (points a à l) des fournisseurs",
+   "apres": "Liste des 10 obligations principales des fournisseurs",
+   "regle": "test_la_fiche_de_l_article_dit_le_texte_en_vigueur[Art.1616]"
+  },
+  {
+   "nom": "la fiche de l'article 3 redit 65 termes",
+   "fichier": "sentinel.page.js",
+   "avant": "Définit les termes clés (68 points,",
+   "apres": "Définit 65 termes clés (68 points,",
+   "regle": "test_la_fiche_de_l_article_dit_le_texte_en_vigueur[Art.33]"
+  },
+  {
+   "nom": "la fiche de l'article 25 oublie le contrat écrit",
+   "fichier": "sentinel.page.js",
+   "avant": "Le fournisseur d\\'un système à haut risque et le tiers qui lui fournit systèmes, modèles, outils, services ou composants précisent par écrit",
+   "apres": "Le fournisseur d\\'un système à haut risque précise",
+   "regle": "test_le_texte_de_la_fiche_porte_lui_meme_la_regle[Art.2525]"
+  },
+  {
+   "nom": "la fiche de l'article 26 oublie l'ordre du signalement",
+   "fichier": "sentinel.page.js",
+   "avant": "en cas d\\'incident grave : informer immédiatement d\\'abord le fournisseur, puis",
+   "apres": "en cas d\\'incident grave : informer immédiatement",
+   "regle": "test_la_fiche_de_l_article_dit_le_texte_en_vigueur[Art.2626]"
+  },
+  {
+   "nom": "la fiche de l'article 27 oublie le renvoi à l'AIPD",
+   "fichier": "sentinel.page.js",
+   "avant": "la FRIA peut y renvoyer ou en reprendre des parties (27(4), remplacé par le règlement (UE) 2026/1744)",
+   "apres": "la FRIA est indépendante (27(4))",
+   "regle": "test_la_fiche_de_l_article_dit_le_texte_en_vigueur[Art.2727]"
+  },
+  {
+   "nom": "la fiche de l'article 10 oublie l'article 4a",
+   "fichier": "sentinel.page.js",
+   "avant": "L\\'ancien Art. 10(5) est remplacé par l\\'Art. 4a (règlement (UE) 2026/1744) : traitement exceptionnel",
+   "apres": "L\\'Art. 10(5) autorise : traitement exceptionnel",
+   "regle": "test_le_texte_de_la_fiche_porte_lui_meme_la_regle[Art.1010]"
+  },
+  {
+   "nom": "la fiche de l'article 6 oublie les composants de sécurité",
+   "fichier": "sentinel.page.js",
+   "avant": "(Art. 6(1) ; les fonctions d\\'assistance, d\\'optimisation, d\\'automatisation, de confort ou de contrôle qualité sans lien avec la sécurité ne sont pas des composants de sécurité, sauf si leur défaillance met en danger la santé ou la sécurité — 6(1a) et 6(1b))",
+   "apres": "(Art. 6(1))",
+   "regle": "test_la_fiche_de_l_article_dit_le_texte_en_vigueur[Art.66]"
+  },
+  {
+   "nom": "la fiche de l'article 2 oublie les exclusions",
+   "fichier": "sentinel.page.js",
+   "avant": "Sont hors champ : les systèmes utilisés exclusivement à des fins militaires, de défense ou de sécurité nationale (Art. 2(3)) ;",
+   "apres": "Sont hors champ : (à préciser) ;",
+   "regle": "test_la_fiche_de_l_article_dit_le_texte_en_vigueur[Art.22]"
+  },
+  {
+   "nom": "les fiches du CRA redisent « Applicable 2027 »",
+   "fichier": "sentinel.page.js",
+   "avant": "statut_txt:'Applicable 11 septembre 2026', ",
+   "apres": "",
+   "regle": "test_les_fiches_du_haut_risque_portent_les_dates_du_calendrier_et_celles_du_cra_les_leurs"
+  },
+  {
+   "nom": "la fiche de la notification CRA perd sa date",
+   "fichier": "sentinel.page.js",
+   "avant": "status:'applicable', statut_txt:'Applicable 11 décembre 2027', who:['fournisseur'], sanction:'15M€ ou 2,5% CA mondial',\n      texte:'Sécurité dès la conception",
+   "apres": "status:'applicable', statut_txt:'Applicable août 2026', who:['fournisseur'], sanction:'15M€ ou 2,5% CA mondial',\n      texte:'Sécurité dès la conception",
+   "regle": "test_les_fiches_du_haut_risque_portent_les_dates_du_calendrier_et_celles_du_cra_les_leurs"
+  },
+  {
+   "nom": "un modèle redit l'article 83 pour la modification substantielle",
+   "fichier": "sentinel.page.js",
+   "avant": "\"ctaAction\":\"tmplGenerate(0)\",\"oblig\":[\"Constitution du dossier technique complet (9 rubriques, Annexe IV)\",\"Conservation 10 ans apres la derniere mise sur le marche (Art. 18)\",\"Mise a jour obligatoire a chaque modification substantielle (Art. 3(23), Art. 43(4))",
+   "apres": "\"ctaAction\":\"tmplGenerate(0)\",\"oblig\":[\"Constitution du dossier technique complet (9 rubriques, Annexe IV)\",\"Conservation 10 ans apres la derniere mise sur le marche (Art. 18)\",\"Mise a jour obligatoire a chaque modification substantielle (Art. 83)",
+   "regle": "test_les_modeles_de_documents_ne_citent_plus_les_references_fausses_ou_supprimees"
+  },
+  {
+   "nom": "un modèle redit l'article 10(5)",
+   "fichier": "sentinel.page.js",
+   "avant": "\"ctaAction\":\"tmplGenerate(0)\",\"oblig\":[\"Constitution du dossier technique complet (9 rubriques, Annexe IV)\",\"Conservation 10 ans apres la derniere mise sur le marche (Art. 18)\",\"Mise a jour obligatoire a chaque modification substantielle (Art. 3(23), Art. 43(4))\",\"Mise a disposition des autorites de surveillance sur demande\",\"Couverture : description, architecture, donnees, metriques, risques, conformite\",\"Systeme de gestion des risques documente et maintenu (Art. 9(1))\",\"Identification des risques connus et raisonnablement previsibles (Art. 9(2)(a))\",\"Estimation et evaluation des risques lors de l’usage prevu et impropre (Art. 9(2)(b)(c))\",\"Mesures de gestion mises en oeuvre et verifiees avant deploiement (Art. 9(3))\",\"Tests de residualite confirmes sur le systeme final (Art. 9(5))\",\"Revision continue tout au long du cycle de vie (Art. 9(9))\",\"Gouvernance des donnees d’entrainement, validation et test (Art. 10(1))\",\"Pertinence et representativite verifiees des datasets (Art. 10(3))\",\"Detection et correction des biais identifies dans les donnees (Art. 10(2))\",\"Conformite RGPD pour les donnees personnelles utilisees ; categories particulieres de donnees pour detecter et corriger les biais : conditions strictes de l’Art. 4a (qui remplace l’ancien Art. 10(5))",
+   "apres": "\"ctaAction\":\"tmplGenerate(0)\",\"oblig\":[\"Constitution du dossier technique complet (9 rubriques, Annexe IV)\",\"Conservation 10 ans apres la derniere mise sur le marche (Art. 18)\",\"Mise a jour obligatoire a chaque modification substantielle (Art. 3(23), Art. 43(4))\",\"Mise a disposition des autorites de surveillance sur demande\",\"Couverture : description, architecture, donnees, metriques, risques, conformite\",\"Systeme de gestion des risques documente et maintenu (Art. 9(1))\",\"Identification des risques connus et raisonnablement previsibles (Art. 9(2)(a))\",\"Estimation et evaluation des risques lors de l’usage prevu et impropre (Art. 9(2)(b)(c))\",\"Mesures de gestion mises en oeuvre et verifiees avant deploiement (Art. 9(3))\",\"Tests de residualite confirmes sur le systeme final (Art. 9(5))\",\"Revision continue tout au long du cycle de vie (Art. 9(9))\",\"Gouvernance des donnees d’entrainement, validation et test (Art. 10(1))\",\"Pertinence et representativite verifiees des datasets (Art. 10(3))\",\"Detection et correction des biais identifies dans les donnees (Art. 10(2))\",\"Conformite RGPD pour les donnees personnelles utilisees (Art. 10(5))",
+   "regle": "test_les_modeles_de_documents_ne_citent_plus_les_references_fausses_ou_supprimees"
+  },
+  {
+   "nom": "le guide de l'article 50 redit août 2025",
+   "fichier": "sentinel.page.js",
+   "avant": "meta:\"PDF · 3 pages · Applicable depuis août 2026\"",
+   "apres": "meta:\"PDF · 3 pages · Applicable depuis août 2025\"",
+   "regle": "test_les_modeles_de_documents_ne_citent_plus_les_references_fausses_ou_supprimees"
+  },
+  {
+   "nom": "le calendrier redit août 2027 pour les systèmes existants",
+   "fichier": "sentinel.page.js",
+   "avant": "de février 2025 (Art. 5) à août 2028 (annexe I), avec les échéances du règlement (UE) 2026/1744 : 2 décembre 2026, 2 août 2027 et 2 décembre 2027.",
+   "apres": "de février 2025 (Art. 5) à août 2027 (systèmes existants).",
+   "regle": "test_les_modeles_de_documents_ne_citent_plus_les_references_fausses_ou_supprimees"
+  },
+  {
+   "nom": "la FAQ redonne les plafonds du projet",
+   "fichier": "faq.html",
+   "avant": "Non-conformité : amendes jusqu'à 15 M€ ou 3 % du CA mondial (le plus élevé des deux ; le plus bas pour les PME), et jusqu'à 35 M€ ou 7 % pour une pratique interdite.</div>\n      </div>\n    </div>\n    <div class=\"faq-item\" id=\"s0q3\"",
+   "apres": "Non-conformité : amendes jusqu'à 30M€ ou 6% du CA mondial.</div>\n      </div>\n    </div>\n    <div class=\"faq-item\" id=\"s0q3\"",
+   "regle": "test_la_faq_donne_les_bons_plafonds_le_calendrier_d_aujourd_hui_et_les_dix_pratiques"
+  },
+  {
+   "nom": "la FAQ redonne le haut risque au 2026",
+   "fichier": "faq.html",
+   "avant": "• 2 décembre 2027 : Systèmes à haut risque de l'Annexe III<br>",
+   "apres": "• Août 2026 : Obligations pour les systèmes à haut risque (Annexe III)<br>",
+   "regle": "test_la_faq_donne_les_bons_plafonds_le_calendrier_d_aujourd_hui_et_les_dix_pratiques"
+  },
+  {
+   "nom": "la FAQ redit que la notation sociale est publique",
+   "fichier": "faq.html",
+   "avant": "<strong>notation sociale</strong> (par toute entité, publique ou privée)",
+   "apres": "<strong>scoring social</strong> par les gouvernements",
+   "regle": "test_la_faq_donne_les_bons_plafonds_le_calendrier_d_aujourd_hui_et_les_dix_pratiques"
+  },
+  {
+   "nom": "le balisage FAQ n'est plus dérivé de la page",
+   "fichier": "faq.html",
+   "avant": "\"name\": \"Quand l'AI Act entre-t-il en vigueur ?\"",
+   "apres": "\"name\": \"Quand l'AI Act entre-t-il en application ?\"",
+   "regle": "test_le_balisage_faq_dit_ce_que_la_page_montre"
+  },
+  {
+   "nom": "le jalon du 2 décembre 2026 disparaît",
+   "fichier": "juridique.py",
+   "avant": "            \"2 décembre 2026 — deux nouvelles pratiques interdites (art. 5(1), \"\n            \"points ba et bb) ; marquage des contenus synthétiques des systèmes \"\n            \"déjà commercialisés (art. 111(4))\",\n",
+   "apres": "",
+   "regle": "test_les_jalons_du_referentiel_juridique_portent_les_deux_dates_manquantes"
+  },
+  {
+   "nom": "le jalon des modèles hérités disparaît",
+   "fichier": "juridique.py",
+   "avant": "            \"2 août 2027 — modèles à usage général déjà sur le marché avant le \"\n            \"2 août 2025 (art. 111(3))\",\n",
+   "apres": "",
+   "regle": "test_les_jalons_du_referentiel_juridique_portent_les_deux_dates_manquantes"
+  },
+  {
+   "nom": "la question type vise de nouveau le 2 août 2026",
+   "fichier": "juridique.py",
+   "avant": "\"avant le 2 décembre 2027, et à quelles conditions ?\"",
+   "apres": "\"avant le 2 août 2026, et à quelles conditions ?\"",
+   "regle": "test_la_question_type_sur_le_scoring_ne_vise_plus_une_date_passee"
+  },
+  {
+   "nom": "le compte à rebours ne distingue plus le code du règlement",
+   "fichier": "app.py",
+   "avant": "        if e.get('cadre') == 'reglement' and e['date'] >= auj:",
+   "apres": "        if e['date'] >= auj:",
+   "regle": "test_le_compte_a_rebours_de_l_article_50_vise_la_prochaine_echeance_legale"
+  },
+  {
+   "nom": "le jour de l'échéance elle est déjà passée",
+   "fichier": "app.py",
+   "avant": "        if e.get('cadre') == 'reglement' and e['date'] >= auj:",
+   "apres": "        if e.get('cadre') == 'reglement' and e['date'] > auj:",
+   "regle": "test_le_compte_a_rebours_de_l_article_50_vise_la_prochaine_echeance_legale"
+  },
+  {
+   "nom": "la date du code redevient une échéance du règlement",
+   "fichier": "app.py",
+   "avant": "{'date': '2027-02-02', 'cadre': 'code',",
+   "apres": "{'date': '2027-02-02', 'cadre': 'reglement',",
+   "regle": "test_le_compte_a_rebours_de_l_article_50_vise_la_prochaine_echeance_legale"
+  },
+  {
+   "nom": "la note de source redit les trois échéances",
+   "fichier": "actualites_sources.py",
+   "avant": "\"note\": \"Les deux échéances légales citées — 2 août 2026 et \"",
+   "apres": "\"note\": \"Les trois échéances citées — 2 août 2026 et \"",
+   "regle": "test_la_note_de_source_ne_pretend_plus_que_le_reglement_porte_la_date_du_code"
+  },
+  {
+   "nom": "la note de source oublie que la date n'est pas dans le règlement",
+   "fichier": "actualites_sources.py",
+   "avant": "modifié. La date du 2 février 2027 est celle du code de \"\n                 \"bonnes pratiques, pour ses signataires : elle ne figure pas \"\n                 \"dans le règlement.\"},",
+   "apres": "modifié.\"},",
+   "regle": "test_la_note_de_source_ne_pretend_plus_que_le_reglement_porte_la_date_du_code"
+  },
+  {
+   "nom": "la note de la page redit les trois échéances",
+   "fichier": "actualites.html",
+   "avant": "Les deux échéances légales citées — 2 août 2026 et 2 décembre 2026 (art. 111, § 4, ajouté par le règlement (UE) 2026/1744)",
+   "apres": "Les trois échéances citées — 2 août 2026, 2 décembre 2026, 2 février 2027",
+   "regle": "test_la_note_de_source_ne_pretend_plus_que_le_reglement_porte_la_date_du_code"
+  },
+  {
+   "nom": "le bloc des échéances de Sentinel redit une date limite du règlement",
+   "fichier": "sentinel.html",
+   "avant": "un engagement volontaire, <strong>pas une échéance du règlement</strong>.",
+   "apres": "date limite, pour les fournisseurs, du déploiement d'une solution d'interopérabilité du marquage.",
+   "regle": "test_le_bloc_des_echeances_de_l_article_50_dans_sentinel_distingue_le_reglement_du_code"
+  },
+  {
+   "nom": "le libellé du compte à rebours redevient fixe",
+   "fichier": "sentinel.html",
+   "avant": "<div id=\"ia50-jours-lbl\" style=\"font-size:11px",
+   "apres": "<div id=\"ia50-jours-x\" style=\"font-size:11px",
+   "regle": "test_le_libelle_du_compte_a_rebours_n_est_plus_ecrit_en_dur"
+  },
+  {
+   "nom": "le moteur n'écrit plus le libellé du compte à rebours",
+   "fichier": "sentinel.page.js",
+   "avant": "if(jl && d.prochaine_echeance) jl.textContent",
+   "apres": "if(jl && d.prochaine_echeance_x) jl.textContent",
+   "regle": "test_le_libelle_du_compte_a_rebours_n_est_plus_ecrit_en_dur"
+  },
+  {
+   "nom": "le copilote redonne le haut risque à août 2026",
+   "fichier": "sentinel.page.js",
+   "avant": "haut risque annexe III au 2 dec 2027 ; annexe I au 2 aout 2028 (reglement (UE) 2026/1744).",
+   "apres": "haut risque aout 2026.",
+   "regle": "test_les_invites_du_copilote_ne_donnent_plus_le_haut_risque_au_2_aout_2026"
+  },
+  {
+   "nom": "le copilote oublie les deux pratiques de plus",
+   "fichier": "sentinel.page.js",
+   "avant": "Art. 5 (8 pratiques interdites, plus 2 au 2 dec 2026 ; sanctions 35M ou 7%)",
+   "apres": "Art. 5 (8 pratiques interdites, sanctions 35M ou 7%)",
+   "regle": "test_les_invites_du_copilote_ne_donnent_plus_le_haut_risque_au_2_aout_2026"
+  },
+  {
+   "nom": "la liste historique confond de nouveau les annexes I et II",
+   "fichier": "sentinel.page.js",
+   "avant": "Annexe I : produits soumis à la législation d\\'harmonisation de l\\'UE.'",
+   "apres": "Annexe II : produits soumis à législation harmonisée UE.'",
+   "regle": "test_la_liste_historique_des_articles_ne_confond_plus_l_annexe_i_et_l_annexe_ii"
+  },
+  {
+   "nom": "la liste historique confond l'article 49 et l'article 51",
+   "fichier": "sentinel.page.js",
+   "avant": "{num:'Art. 49',title:'Enregistrement dans la base de données EU',",
+   "apres": "{num:'Art. 51',title:'Enregistrement dans la base de données EU',",
+   "regle": "test_la_liste_historique_des_articles_ne_confond_plus_l_annexe_i_et_l_annexe_ii"
+  },
+  {
+   "nom": "le groupe des exclusions de l'article 2 disparaît",
+   "fichier": "sentinel.html",
+   "avant": "id=\"cb-perimetre\"",
+   "apres": "id=\"cb-perimetre-x\"",
+   "regle": "test_les_nouvelles_questions_sont_dans_la_page_avec_les_identifiants_que_le_moteur_lit"
+  },
+  {
+   "nom": "la question sur l'annexe I disparaît",
+   "fichier": "sentinel.html",
+   "avant": "id=\"r-annexe1\"",
+   "apres": "id=\"r-annexe1-x\"",
+   "regle": "test_les_nouvelles_questions_sont_dans_la_page_avec_les_identifiants_que_le_moteur_lit"
+  },
+  {
+   "nom": "la case (ba) n'a plus son identifiant",
+   "fichier": "sentinel.html",
+   "avant": "simCheckbox(this,'art5-ba')",
+   "apres": "simCheckbox(this,'art5-ba2')",
+   "regle": "test_les_nouvelles_questions_sont_dans_la_page_avec_les_identifiants_que_le_moteur_lit"
+  },
+  {
+   "nom": "la case d'exception du point (f) n'a plus son identifiant",
+   "fichier": "sentinel.html",
+   "avant": "simCheckbox(this,'art5-f-exception')",
+   "apres": "simCheckbox(this,'art5-fx')",
+   "regle": "test_les_nouvelles_questions_sont_dans_la_page_avec_les_identifiants_que_le_moteur_lit"
+  },
+  {
+   "nom": "la réponse « machines » n'a plus sa valeur",
+   "fichier": "sentinel.html",
+   "avant": "simRadio('r-annexe1','machines')",
+   "apres": "simRadio('r-annexe1','machine')",
+   "regle": "test_les_nouvelles_questions_sont_dans_la_page_avec_les_identifiants_que_le_moteur_lit"
+  },
+  {
+   "nom": "la question sur le fournisseur initial disparaît",
+   "fichier": "sentinel.html",
+   "avant": "id=\"r-art25-amont\"",
+   "apres": "id=\"r-art25-amont-x\"",
+   "regle": "test_les_nouvelles_questions_sont_dans_la_page_avec_les_identifiants_que_le_moteur_lit"
+  },
+  {
+   "nom": "la réponse biométrique hors finalité répressive disparaît",
+   "fichier": "sentinel.html",
+   "avant": "simRadio('r-biometrie','oui_autre')",
+   "apres": "simRadio('r-biometrie','oui')",
+   "regle": "test_les_nouvelles_questions_sont_dans_la_page_avec_les_identifiants_que_le_moteur_lit"
+  },
+  {
+   "nom": "l'étape 1 ne lit plus les exclusions",
+   "fichier": "sentinel.page.js",
+   "avant": "    SIM_DATA.perimetre = simGetCheckboxes('cb-perimetre');\n",
+   "apres": "",
+   "regle": "test_le_moteur_lit_les_nouvelles_reponses_a_chaque_etape"
+  },
+  {
+   "nom": "l'étape 1 ne lit plus le fournisseur initial",
+   "fichier": "sentinel.page.js",
+   "avant": "    SIM_DATA.art25_amont = simGetRadio('r-art25-amont');\n",
+   "apres": "",
+   "regle": "test_le_moteur_lit_les_nouvelles_reponses_a_chaque_etape"
+  },
+  {
+   "nom": "l'étape 2 ne lit plus les pratiques interdites",
+   "fichier": "sentinel.page.js",
+   "avant": "    SIM_DATA.art5 = simGetCheckboxes('cb-art5');\n",
+   "apres": "",
+   "regle": "test_le_moteur_lit_les_nouvelles_reponses_a_chaque_etape"
+  },
+  {
+   "nom": "l'étape 2 ne lit plus l'annexe I",
+   "fichier": "sentinel.page.js",
+   "avant": "    SIM_DATA.annexe1 = simGetRadio('r-annexe1');\n",
+   "apres": "",
+   "regle": "test_le_moteur_lit_les_nouvelles_reponses_a_chaque_etape"
+  },
+  {
+   "nom": "l'audit dit encore « niveau suffisant » pour la culture de l'IA",
+   "fichier": "sentinel.page.js",
+   "avant": "adaptées à leur rôle, à leur formation et au contexte d\\'usage. L\\'obligation est de moyens : elle ne garantit pas un niveau précis à chaque personne (texte remplacé par le règlement (UE) 2026/1744). Documenté",
+   "apres": "adaptées à leur rôle, à leur formation et au contexte d\\'usage. Niveau suffisant de maîtrise de l\\'IA à garantir pour chaque personne. Documenté",
+   "regle": "test_le_point_d_audit_dit_le_texte_en_vigueur[a5_4]"
+  },
+  {
+   "nom": "le point d'audit de la documentation technique perd l'allègement",
+   "fichier": "sentinel.page.js",
+   "avant": "PME, start-up et petites capitalisations intermédiaires : formulaire simplifié établi par la Commission (Art. 11(1)).', art:'Art. 11, Annexe IV'",
+   "apres": "', art:'Art. 11, Annexe IV'",
+   "regle": "test_le_point_d_audit_dit_le_texte_en_vigueur[a11_1]"
+  },
+  {
+   "nom": "le point d'audit sur les pratiques interdites oublie (ba) et (bb)",
+   "fichier": "sentinel.page.js",
+   "avant": "À compter du 2 décembre 2026 : aucun hypertrucage sexuel sans consentement (ba) ni matériel d\\'abus sexuel d\\'enfants généré (bb).",
+   "apres": "",
+   "regle": "test_le_point_d_audit_dit_le_texte_en_vigueur[a5_1]"
+  },
+  {
+   "nom": "le point d'audit sur les pratiques interdites redit « depuis » une date à venir",
+   "fichier": "sentinel.page.js",
+   "avant": "non ciblé. À compter du 2 décembre 2026 : aucun hypertrucage",
+   "apres": "non ciblé. Depuis le 2 décembre 2026 : aucun hypertrucage",
+   "regle": "test_une_date_a_venir_ne_se_dit_pas_avec_depuis"
+  },
+  {
+   "nom": "la fiche de l'article 5 redit « depuis » une date à venir",
+   "fichier": "sentinel.page.js",
+   "avant": "À compter du 2 décembre 2026, deux pratiques s\\'y ajoutent",
+   "apres": "Depuis le 2 décembre 2026, deux pratiques s\\'y ajoutent",
+   "regle": "test_une_date_a_venir_ne_se_dit_pas_avec_depuis"
+  },
+  {
+   "nom": "le point d'audit de la transparence oublie le paragraphe 4",
+   "fichier": "sentinel.page.js",
+   "avant": "signalement des hypertrucages et des textes d\\'intérêt public (§4)",
+   "apres": "signalement des hypertrucages et des textes d\\'intérêt public",
+   "regle": "test_le_point_d_audit_dit_le_texte_en_vigueur[a13_2]"
+  },
+  {
+   "nom": "le point d'audit des données oublie les conditions cumulatives de l'article 4a",
+   "fichier": "sentinel.page.js",
+   "avant": "dans les conditions cumulatives de l\\'Art. 4a (qui remplace l\\'ancien Art. 10(5))",
+   "apres": "dans les conditions de l\\'Art. 10(5)",
+   "regle": "test_le_point_d_audit_dit_le_texte_en_vigueur[a9_5]"
+  },
+  {
+   "nom": "le point d'audit de la classification oublie les deux conditions de l'article 6(1)",
+   "fichier": "sentinel.page.js",
+   "avant": "contre les deux conditions cumulatives de l\\'Art. 6(1) : composant de sécurité et évaluation de conformité par un tiers",
+   "apres": "contre l\\'Art. 6(1)",
+   "regle": "test_le_point_d_audit_dit_le_texte_en_vigueur[a6_2]"
+  },
+  {
+   "nom": "la fiche de l'article 50 oublie le paragraphe 3 du déployeur",
+   "fichier": "sentinel.page.js",
+   "avant": "Déployeur : information des personnes exposées à un système de reconnaissance des émotions ou de catégorisation biométrique (§3) ; mention que",
+   "apres": "Déployeur : mention que",
+   "regle": "test_le_texte_de_la_fiche_porte_lui_meme_la_regle[Art.5050]"
+  },
+  {
+   "nom": "la fiche de l'article 50 oublie le délai de l'article 111(4)",
+   "fichier": "sentinel.page.js",
+   "avant": "au plus tard le 2 décembre 2026, Art. 111(4), ajouté par le règlement (UE) 2026/1744)",
+   "apres": "au plus tard le 2 décembre 2026)",
+   "regle": "test_le_texte_de_la_fiche_porte_lui_meme_la_regle[Art.5050]"
+  },
+  {
+   "nom": "la fiche de l'article 50 redit le watermarking",
+   "fichier": "sentinel.page.js",
+   "avant": "Fournisseur : marquer les contenus synthétiques dans un format lisible par machine, détectable comme artificiel (Art. 50(2))",
+   "apres": "Implémenter le watermarking machine-readable pour les contenus synthétiques (Art. 50(2))",
+   "regle": "test_la_fiche_de_l_article_dit_le_texte_en_vigueur[Art.5050]"
+  },
+  {
+   "nom": "l'article 50 perd son chapitre IV",
+   "fichier": "sentinel.page.js",
+   "avant": "{ chapter:'CHAPITRE IV — Obligations de transparence', arts:[",
+   "apres": "{ chapter:'CHAPITRE V — Obligations de transparence', arts:[",
+   "regle": "test_l_enregistrement_est_au_chapitre_iii_et_la_transparence_a_son_chapitre_iv"
+  },
+  {
+   "nom": "la note de l'exception 6(3) oublie l'allègement de l'enregistrement",
+   "fichier": "sentinel.page.js",
+   "avant": ", dont le contenu est allégé par le règlement (UE) 2026/1744 (annexe VIII, section B : points 7 et 9 supprimés)",
+   "apres": "",
+   "regle": "test_l_exception_de_l_article_6_3_leve_le_haut_risque_sauf_profilage"
+  },
+  {
+   "nom": "la note de l'exception 6(3) ne dit plus qu'on documente avant la mise sur le marché",
+   "fichier": "sentinel.page.js",
+   "avant": "Documentez cette évaluation avant mise sur le marché (Art. 6(4))",
+   "apres": "Documentez cette évaluation (Art. 6(4))",
+   "regle": "test_l_exception_de_l_article_6_3_leve_le_haut_risque_sauf_profilage"
+  },
+  {
+   "nom": "la fiche synthétique de l'article 50 affichée redit août 2025",
+   "fichier": "sentinel.page.js",
+   "avant": "meta:\"PDF \\u00b7 1 page \\u00b7 Applicable depuis ao\\u00fbt 2026\"",
+   "apres": "meta:\"PDF \\u00b7 1 page \\u00b7 Applicable depuis ao\\u00fbt 2025\"",
+   "regle": "test_les_modeles_de_documents_ne_citent_plus_les_references_fausses_ou_supprimees"
+  },
+  {
+   "nom": "la fiche du calendrier affichée s'arrête à août 2027",
+   "fichier": "sentinel.page.js",
+   "avant": "ao\\u00fbt 2028 (annexe I), avec les \\u00e9ch\\u00e9ances du r\\u00e8glement (UE) 2026/1744",
+   "apres": "ao\\u00fbt 2027 (syst\\u00e8mes existants), avec les \\u00e9ch\\u00e9ances du r\\u00e8glement (UE) 2026/1744",
+   "regle": "test_les_modeles_de_documents_ne_citent_plus_les_references_fausses_ou_supprimees"
+  },
+  {
+   "nom": "la date de la barre du haut ne suit plus la langue",
+   "fichier": "sentinel.page.js",
+   "avant": "toLocaleDateString(SENT_LANG === 'en' ? 'en-GB' : 'fr-FR',",
+   "apres": "toLocaleDateString('fr-FR',",
+   "regle": "test_la_date_de_la_barre_du_haut_suit_la_langue_sans_passer_par_le_dictionnaire"
+  },
+  {
+   "nom": "la bascule de langue ne repeint plus la date",
+   "fichier": "sentinel.page.js",
+   "avant": "  sentAppliquer();\n  sentDateBarre();\n",
+   "apres": "  sentAppliquer();\n",
+   "regle": "test_la_date_de_la_barre_du_haut_suit_la_langue_sans_passer_par_le_dictionnaire"
+  },
+  {
+   "nom": "la date de la barre du haut retourne au dictionnaire",
+   "fichier": "sentinel.html",
+   "avant": "id=\"tb-date\" translate=\"no\"",
+   "apres": "id=\"tb-date\"",
+   "regle": "test_la_date_de_la_barre_du_haut_suit_la_langue_sans_passer_par_le_dictionnaire"
+  }
+ ]
+}

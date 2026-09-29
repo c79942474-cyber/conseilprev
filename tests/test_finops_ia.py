@@ -776,6 +776,13 @@ const src = fs.readFileSync(process.argv[2], 'utf8');
 const fin = src.indexOf('window.finopsLoad = function()');
 const deb = src.lastIndexOf('(function(){', fin);
 const iife = src.slice(deb, src.indexOf('\n})();', fin) + 6);
+/*  LES AIDES DU FICHIER, PAS DES POSTICHES. Le panneau écrit les valeurs
+    saisies par `sentDonnee()`, définie HORS de la tranche évaluée ici : sans
+    elle, chaque zone lève et reste vide — mesuré, dix zones blanches. On
+    prend donc la VRAIE fonction dans le même fichier, pour que la règle
+    mesure l'échappement réel et non une imitation. */
+const aidesDeb = src.indexOf('function sentDonneeEch(');
+const aides = src.slice(aidesDeb, src.indexOf('window.sentDonnee = sentDonnee;', aidesDeb));
 const ids = JSON.parse(process.argv[4]);
 const zones = {};
 ids.forEach(function(id){ zones[id] = {id:id, innerHTML:'', textContent:''}; });
@@ -785,6 +792,7 @@ const reponse = JSON.parse(fs.readFileSync(process.argv[3], 'utf8'));
 global.fetch = function(){
   return Promise.resolve({ ok:true, json: function(){ return Promise.resolve(reponse); } });
 };
+eval(aides);
 eval(iife);
 window.finopsLoad();
 setTimeout(function(){

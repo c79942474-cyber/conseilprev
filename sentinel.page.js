@@ -1432,6 +1432,54 @@ function sentTr(cle) {
   return (d && d[cle]) || null;
 }
 
+/* ══ UNE DONNÉE SAISIE N'EST PAS DU FRANÇAIS À TRADUIRE ═══════════════════
+ *
+ * CE QUE LA MESURE NAVIGATEUR A MONTRÉ. Sur les 61 275 mots français relevés
+ * à l'écran alors que EN était choisi, l'immense majorité n'était pas du
+ * texte de site : c'étaient les ENTRÉES DU REGISTRE — nom d'un système,
+ * fournisseur, modèle, finalité, secteur, nom d'un client — que le registre,
+ * la matrice, l'empreinte, le FinOps et la FRIA réaffichent des milliers de
+ * fois. En production ce sont les systèmes d'IA du client, écrits dans SA
+ * langue : les compter comme « du français qui reste à traduire » est faux
+ * par construction, et rendait tout seuil inatteignable.
+ *
+ * LA DÉCLARATION JUSTE EXISTE DÉJÀ EN HTML : translate="no" — « ceci est une
+ * donnée, personne ne la traduit ». Le moteur de traduction par contenu
+ * (sentinel.i18n.js, sentClasser / sentMarcher) écarte depuis toujours
+ * l'élément qui la porte ET tout ce qu'il contient, ses attributs compris ;
+ * la mesure (outils/sentinel_langue.js) relève désormais ces textes À PART,
+ * hors du verdict, mais en disant leur volume.
+ *
+ * LA VALEUR EST MARQUÉE, PAS SON CONTENEUR. La phrase d'interface autour de
+ * la donnée doit rester traduite : on enveloppe la seule valeur, jamais la
+ * cellule, la carte ou la ligne qui la présente.
+ *
+ * ET LES ATTRIBUTS ? Un title ou un aria-label ne porte pas de balise : on ne
+ * peut pas y marquer la seule partie variable. Deux cas, donc :
+ *   · l'attribut est ENTIÈREMENT une donnée (« <nom> — <secteur> ») :
+ *     translate="no" va sur l'ÉLÉMENT qui le porte (SENT_ATTR_DONNEE) ;
+ *   · l'attribut MÊLE une phrase et une donnée (« Supprimer <nom> du
+ *     registre ») : on ne touche à rien. Les motifs du dictionnaire
+ *     (section « motif ») traduisent la phrase et recopient la donnée — les
+ *     exclure casserait ce mécanisme et laisserait la phrase en français. */
+function sentDonneeEch(v) {
+  return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+  });
+}
+
+/* LA VALEUR SAISIE, ÉCHAPPÉE ET MARQUÉE — à écrire à la place de la valeur
+   nue dans le HTML que le JavaScript peint. */
+function sentDonnee(v) {
+  return '<span translate="no">' + sentDonneeEch(v) + '</span>';
+}
+
+/* L'ÉLÉMENT DONT UN ATTRIBUT EST ENTIÈREMENT UNE DONNÉE — à coller dans la
+   balise ouvrante, avant le « > ». */
+var SENT_ATTR_DONNEE = ' translate="no"';
+
+window.sentDonnee = sentDonnee;
+
 /* LA TRADUCTION ÉCRIT `textContent`, JAMAIS `innerHTML`.
    C'est la différence qui sépare ce moteur de celui de l'accueil, et elle
    est délibérée : un lien, un bouton ou un identifiant placé dans un élément
@@ -1482,12 +1530,64 @@ function sentAppliquer() {
   if (courant && typeof sentFilAriane === 'function') {
     sentFilAriane(courant.id.replace(/^p-/, ''));
   }
+  /* LE CORPS SUIT LA COQUILLE. Ce qui précède ne traduit que les 213 clés
+     marquées ; le reste des pages passe par le module de traduction par
+     contenu (sentinel.i18n.js), APRÈS, pour que les éléments data-i18n
+     soient déjà écrits quand il les rencontre — il les saute. */
+  if (typeof sentCorpsAppliquer === 'function') sentCorpsAppliquer();
+}
+
+/* ══ LE CORPS DES PAGES, TRADUIT PAR CONTENU ══════════════════════════════
+ *
+ * CE QUE LA COQUILLE NE COUVRAIT PAS. Les 213 clés ci-dessus traduisent le
+ * menu, le fil d'Ariane et l'identité des pages. Le CORPS — 25 900 mots dans
+ * le HTML, 4 000 chaînes que le JavaScript rend après coup — restait en
+ * français, et c'était documenté comme un choix. La demande est désormais :
+ * TOUT Sentinel en anglais quand EN est choisi.
+ *
+ * ON NE MARQUE PAS LE HTML. Le corps se traduit PAR CONTENU : la clé est le
+ * texte français normalisé, le dictionnaire est servi par /sentinel.en.json
+ * (fusion des fichiers i18n/sentinel/*.json), et sentTraduireCorps
+ * (sentinel.i18n.js) parcourt le document. Deux régimes, décidés par la
+ * forme de l'élément ; un lien au milieu d'un paragraphe survit ; l'original
+ * est gardé et restitué au retour en français.
+ *
+ * PARESSEUX. Le dictionnaire n'est téléchargé qu'à la PREMIÈRE demande
+ * d'anglais (ou au démarrage si la langue mémorisée est en) : un lecteur
+ * français ne paie rien. S'il est injoignable, la coquille reste traduite et
+ * rien ne casse — le corps reste en français, comme avant ce module.
+ *
+ * VIVANT. Un MutationObserver, actif en anglais SEULEMENT, traduit ce que le
+ * JavaScript rend après coup : une carte de formation, un compteur, un
+ * message d'état. Une passe par image (requestAnimationFrame), sur les seuls
+ * sous-arbres touchés ; nos propres écritures sont retirées de la file
+ * (takeRecords) et un nœud déjà traduit est sauté — pas de boucle. */
+/* LA MÉCANIQUE EST DANS sentinel.i18n.js (sentBrancher) : ce document et
+   les pages que Sentinel embarque en cadre la partagent. Ici, on la branche
+   sur le document de Sentinel, avec SENT_LANG pour langue. */
+var SENT_CORPS_BRANCHE = null;  /* le branchement, créé à la première demande */
+
+function sentCorpsBranche() {
+  if (!SENT_CORPS_BRANCHE && typeof sentBrancher === 'function') {
+    SENT_CORPS_BRANCHE = sentBrancher(document, { langue: function () { return SENT_LANG; } });
+  }
+  return SENT_CORPS_BRANCHE;
+}
+
+function sentCorpsAppliquer() {
+  var b = sentCorpsBranche();
+  if (b) b.appliquer();
 }
 
 window.sentSetLang = function (lg) {
   SENT_LANG = (lg === 'en') ? 'en' : 'fr';
   try { localStorage.setItem(SENT_LANG_CLE, SENT_LANG); } catch (e) {}
   sentAppliquer();
+  sentDateBarre();
+  /* LES CADRES SUIVENT : la carte, le panorama, l'enveloppe, l'empreinte du
+     parc et l'observatoire sont d'autres documents, qui se traduisent
+     eux-mêmes (sentinel.i18n.js, data-sent-cadre) quand on les prévient. */
+  if (typeof sentPrevenirCadres === 'function') sentPrevenirCadres(document, SENT_LANG);
 };
 
 /* LE FIL D'ARIANE, DANS LA LANGUE COURANTE. `go()` reçoit une section et un
@@ -1608,7 +1708,17 @@ function go(id, el, sec, pg) {
   window.scrollTo(0,0);
 }
 
-document.getElementById('tb-date').textContent = new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).toUpperCase();
+/* LA DATE DE LA BARRE DU HAUT SUIT LA LANGUE, et ne passe pas par le dictionnaire : le
+   jour de la semaine change chaque matin, et une clé « MARDI # SEPTEMBRE # » ne
+   couvre que les mardis de septembre. L'élément porte translate="no" ; c'est ici qu'on
+   le peint, en français ou en anglais, à l'ouverture et à chaque bascule de langue. */
+function sentDateBarre() {
+  var el = document.getElementById('tb-date');
+  if (!el) return;
+  el.textContent = new Date().toLocaleDateString(SENT_LANG === 'en' ? 'en-GB' : 'fr-FR',
+    {weekday:'long',day:'numeric',month:'long',year:'numeric'}).toUpperCase();
+}
+sentDateBarre();
 
 [['c1',65],['c2',16],['c3',38]].forEach(function(pair){
   var el = document.getElementById(pair[0]), target = pair[1]; if (!el) return;
@@ -2905,17 +3015,17 @@ var AUDIT_SECTIONS = [
   {
     id:'art5', title:'Pratiques interdites', art:'Art. 5', color:'var(--accent)',
     items:[
-      {id:'a5_1', title:'Inventaire des pratiques potentiellement interdites', desc:'Vérifier qu\'aucun système n\'a recours à des techniques subliminales, ne manipule les vulnérabilités ou ne génère du scoring social.', art:'Art. 5(1)(a)(b)(c)', prio:'p1'},
+      {id:'a5_1', title:'Inventaire des pratiques potentiellement interdites', desc:'Vérifier qu\'aucun système n\'a recours à des techniques subliminales ou trompeuses, n\'exploite les vulnérabilités, ne génère du scoring social (par toute entité, publique ou privée), ne fonde une évaluation du risque d\'infraction sur le seul profilage, ni ne constitue des bases de reconnaissance faciale par moissonnage non ciblé. À compter du 2 décembre 2026 : aucun hypertrucage sexuel sans consentement (ba) ni matériel d\'abus sexuel d\'enfants généré (bb).', art:'Art. 5(1)(a) à (e), (ba), (bb)', prio:'p1'},
       {id:'a5_2', title:'Absence d\'identification biométrique à distance non autorisée', desc:'S\'assurer que toute identification biométrique en temps réel dans des espaces publics dispose d\'une autorisation légale explicite (forces de l\'ordre, Art. 5(1)(h)).', art:'Art. 5(1)(h)', prio:'p1'},
       {id:'a5_3', title:'Vérification du périmètre émotionnel et de catégorisation', desc:'Confirmer l\'absence de systèmes de reconnaissance émotionnelle au travail/éducation ou de catégorisation biométrique de données sensibles non autorisés.', art:'Art. 5(1)(f)(g)', prio:'p1'},
-      {id:'a5_4', title:'Formation littératie IA (Art. 4)', desc:'Formation adéquate des équipes manipulant ou supervisant des systèmes IA. Documenté et régulièrement mis à jour.', art:'Art. 4', prio:'p2'},
+      {id:'a5_4', title:'Culture de l\'IA des équipes (Art. 4)', desc:'Mesures prises pour soutenir la culture de l\'IA des personnes qui manipulent ou supervisent des systèmes IA, adaptées à leur rôle, à leur formation et au contexte d\'usage. L\'obligation est de moyens : elle ne garantit pas un niveau précis à chaque personne (texte remplacé par le règlement (UE) 2026/1744). Documenté et régulièrement mis à jour.', art:'Art. 4', prio:'p2'},
     ]
   },
   {
     id:'art6', title:'Classification haut risque', art:'Art. 6 + Annexe III', color:'var(--accent)',
     items:[
       {id:'a6_1', title:'Cartographie complète des systèmes IA', desc:'Inventaire de tous les systèmes IA déployés ou en développement, avec identification de leur type, finalité et secteur d\'application.', art:'Art. 6, Art. 51', prio:'p1'},
-      {id:'a6_2', title:'Classification selon l\'Annexe III (8 domaines)', desc:'Évaluation formelle de chaque système contre les 8 domaines à haut risque de l\'Annexe III : biométrie, infrastructures critiques, éducation, emploi, services essentiels, application de la loi, migration, démocratie.', art:'Art. 6(2), Annexe III', prio:'p1'},
+      {id:'a6_2', title:'Classification selon l\'Annexe III (8 domaines) et l\'Annexe I', desc:'Évaluation formelle de chaque système contre les usages listés dans les 8 domaines à haut risque de l\'Annexe III — biométrie, infrastructures critiques, éducation, emploi, services essentiels, application de la loi, migration, démocratie — le secteur seul ne suffisant pas ; et, pour un composant de sécurité d\'un produit de l\'Annexe I, contre les deux conditions cumulatives de l\'Art. 6(1) : composant de sécurité et évaluation de conformité par un tiers.', art:'Art. 6(1)(2), Annexe I et III', prio:'p1'},
       {id:'a6_3', title:'Documentation de la décision de classification', desc:'Pour les systèmes non classés haut risque issus de domaines Annexe III (en application de l\'exception de l\'Art. 6(3)), documenter formellement l\'évaluation avant mise sur le marché — le fournisseur reste soumis à l\'obligation d\'enregistrement (Art. 49(2)).', art:'Art. 6(4)', prio:'p2'},
       {id:'a6_4', title:'Procédure de reclassification continue', desc:'Mécanisme de surveillance permettant de reclassifier un système si son usage ou ses capacités évoluent.', art:'Art. 6, Art. 9', prio:'p2'},
     ]
@@ -2927,13 +3037,13 @@ var AUDIT_SECTIONS = [
       {id:'a9_2', title:'Tests avant mise sur le marché', desc:'Tests des systèmes haut risque dans des conditions réelles avant déploiement pour identifier et corriger les risques.', art:'Art. 9(5)(6)', prio:'p1'},
       {id:'a9_3', title:'Gouvernance des données d\'entraînement', desc:'Pratiques de gestion des données : choix de conception, collecte, origine, objectifs, nature, pertinence, exactitude, complétude, biais potentiels.', art:'Art. 10(2)', prio:'p1'},
       {id:'a9_4', title:'Qualité des données de validation et de test', desc:'Jeux de validation et test satisfaisant aux critères de qualité : représentativité, absence de biais connus, adéquation à la finalité.', art:'Art. 10(3)(4)', prio:'p1'},
-      {id:'a9_5', title:'Données personnelles dans l\'entraînement', desc:'Base légale pour l\'utilisation de données personnelles en entraînement. Mesures de protection des données dès la conception.', art:'Art. 10(5), RGPD', prio:'p2'},
+      {id:'a9_5', title:'Données personnelles dans l\'entraînement', desc:'Base légale pour l\'utilisation de données personnelles en entraînement. Mesures de protection des données dès la conception. Le traitement de catégories particulières de données pour détecter et corriger les biais n\'est possible que dans les conditions cumulatives de l\'Art. 4a (qui remplace l\'ancien Art. 10(5)).', art:'Art. 10, Art. 4a, RGPD', prio:'p2'},
     ]
   },
   {
     id:'art11_12', title:'Documentation technique & Journalisation', art:'Art. 11-12', color:'var(--orange)',
     items:[
-      {id:'a11_1', title:'Dossier technique complet (Annexe IV)', desc:'Documentation élaborée avant mise sur le marché : description générale, architecture, données utilisées, performances, méthode d\'entraînement, fiches tests.', art:'Art. 11, Annexe IV', prio:'p1'},
+      {id:'a11_1', title:'Dossier technique complet (Annexe IV)', desc:'Documentation élaborée avant mise sur le marché : description générale, architecture, données utilisées, performances, méthode d\'entraînement, fiches tests. PME, start-up et petites capitalisations intermédiaires : formulaire simplifié établi par la Commission (Art. 11(1)).', art:'Art. 11, Annexe IV', prio:'p1'},
       {id:'a11_2', title:'Mise à jour continue du dossier technique', desc:'Procédure de mise à jour du dossier lors de toute modification substantielle du système. Identification des versions.', art:'Art. 11(2)', prio:'p2'},
       {id:'a12_1', title:'Journalisation automatique des décisions', desc:'Capacité d\'enregistrement automatique des événements : horodatage, identifiants, données d\'entrée, décisions de sortie, identité des opérateurs ayant validé.', art:'Art. 12(1)(2)', prio:'p1'},
       {id:'a12_2', title:'Conservation des journaux', desc:'Journaux conservés au minimum pour la durée prescrite et accessibles aux autorités compétentes sur demande.', art:'Art. 12(3)', prio:'p2'},
@@ -2944,7 +3054,7 @@ var AUDIT_SECTIONS = [
     id:'art13_14', title:'Transparence & Supervision humaine', art:'Art. 13-14', color:'var(--orange)',
     items:[
       {id:'a13_1', title:'Notice d\'utilisation conforme Art. 13', desc:'Documentation claire pour les déployeurs : identité du fournisseur, capacités et limites, performances attendues, données d\'entrée requises, risques résiduels connus.', art:'Art. 13(3)', prio:'p1'},
-      {id:'a13_2', title:'Transparence envers les utilisateurs finaux (Art. 50)', desc:'Information claire que l\'utilisateur interagit avec un système IA (chatbot, agent). Marquage des contenus synthétiques (watermarking machine-readable).', art:'Art. 50(1)(2)', prio:'p1'},
+      {id:'a13_2', title:'Transparence envers les utilisateurs finaux (Art. 50)', desc:'Fournisseur : système conçu pour informer que l\'on interagit avec une IA (§1) et marquage lisible par machine des contenus synthétiques (§2 ; systèmes déjà sur le marché : au plus tard le 2 décembre 2026). Déployeur : information des personnes exposées à la reconnaissance des émotions ou à la catégorisation biométrique (§3) ; signalement des hypertrucages et des textes d\'intérêt public (§4).', art:'Art. 50(1) à (4)', prio:'p1'},
       {id:'a14_1', title:'Mécanismes de supervision humaine fonctionnels', desc:'Interfaces homme-machine permettant la compréhension des sorties, l\'interruption ou la correction du système par des opérateurs qualifiés.', art:'Art. 14(1)(3)', prio:'p1'},
       {id:'a14_2', title:'Désignation et formation des superviseurs', desc:'Personnes responsables de la supervision formellement désignées, formées aux capacités et limites du système, aptes à détecter les anomalies.', art:'Art. 14(4)', prio:'p2'},
     ]
@@ -3187,36 +3297,36 @@ var ARTICLES = [
       texte:'Le présent règlement établit des règles harmonisées concernant la mise sur le marché, la mise en service et l\'utilisation de systèmes d\'IA dans l\'Union, dans le respect des droits fondamentaux, de la démocratie, de l\'état de droit et de la durabilité environnementale.',
       obligations:[], url:'https://artificialintelligenceact.eu/article/1/' },
     { num:'Art. 2', title:'Champ d\'application', status:'actif', who:['fournisseur','deployeur'], sanction:null,
-      texte:'S\'applique aux fournisseurs mettant sur le marché de l\'UE, aux déployeurs établis dans l\'UE, aux fournisseurs/déployeurs établis dans un pays tiers quand les sorties du système sont utilisées dans l\'UE.',
-      obligations:['Vérifier si votre système est dans le champ territorial de l\'AI Act','Pour les organisations hors UE : désigner un mandataire UE (Art. 22) si le système est utilisé dans l\'UE'],
+      texte:'S\'applique aux fournisseurs mettant sur le marché de l\'UE, aux déployeurs établis dans l\'UE, aux fournisseurs et déployeurs établis dans un pays tiers quand les sorties du système sont utilisées dans l\'UE. Sont hors champ : les systèmes utilisés exclusivement à des fins militaires, de défense ou de sécurité nationale (Art. 2(3)) ; les systèmes développés et mis en service dans le seul but de la recherche scientifique (2(6)) ; la recherche, les essais et le développement avant mise sur le marché, hors essais en conditions réelles (2(8)) ; les déployeurs personnes physiques pour un usage strictement personnel et non professionnel (2(10)). Pour un système à haut risque lié à un produit de la section B de l\'annexe I, seuls l\'Art. 6(1), l\'Art. 60a et les Art. 102 à 112 s\'appliquent (2(2), modifié par le règlement (UE) 2026/1744).',
+      obligations:['Vérifier si votre système est dans le champ territorial de l\'AI Act','Vérifier, et documenter, si une exclusion de l\'Art. 2 s\'applique (militaire, défense, sécurité nationale ; recherche ; usage personnel non professionnel)','Pour les organisations hors UE : désigner un mandataire UE (Art. 22) si le système est utilisé dans l\'UE','Pour un produit de la section B de l\'annexe I : n\'appliquer que l\'Art. 6(1), l\'Art. 60a et les Art. 102 à 112'],
       url:'https://artificialintelligenceact.eu/article/2/' },
     { num:'Art. 3', title:'Définitions', status:'actif', who:[], sanction:null,
-      texte:'Définit 65 termes clés. Système d\'IA : machine utilisant des techniques d\'apprentissage automatique, de raisonnement ou d\'apprentissage profond, produisant des sorties influençant des environnements réels.',
-      obligations:['Qualifier formellement votre système selon la définition Art. 3(1) avant classification'],
+      texte:'Définit les termes clés (68 points, auxquels le règlement (UE) 2026/1744 ajoute les PME — 3(14a) — et les petites capitalisations intermédiaires — 3(14b)). Système d\'IA : système basé sur une machine, conçu pour fonctionner à différents niveaux d\'autonomie et pouvant faire preuve d\'adaptabilité après son déploiement, qui, pour des objectifs explicites ou implicites, déduit à partir des entrées reçues comment générer des sorties — prédictions, contenus, recommandations ou décisions — pouvant influencer des environnements physiques ou virtuels (3(1)). Composant de sécurité (3(14)) : redéfini par le même règlement autour de la fonction de sécurité et de la santé ou de la sécurité des personnes et des biens.',
+      obligations:['Qualifier formellement votre système selon la définition Art. 3(1) avant classification : l\'inférence est l\'élément décisif','Déterminer votre rôle (fournisseur, déployeur, importateur, distributeur — Art. 3(3) à 3(7)) avant de lister les obligations','Établir si l\'organisation est une PME ou une petite capitalisation intermédiaire (Art. 3(14a) et (14b)) : cela commande les allègements et le plafond des sanctions'],
       url:'https://artificialintelligenceact.eu/article/3/' },
     { num:'Art. 4', title:'Littératie IA', status:'actif', who:['fournisseur','deployeur'], sanction:null,
-      texte:'Fournisseurs et déployeurs doivent veiller à la littératie IA de leur personnel et de toute autre personne les représentant qui opère ou utilise des systèmes d\'IA.',
-      obligations:['Évaluer le niveau de littératie IA des équipes','Mettre en place des formations adaptées aux rôles (développeurs, gestionnaires de risques, opérateurs)','Documenter les actions de formation'],
+      texte:'Fournisseurs et déployeurs prennent des mesures pour soutenir le développement de la culture (littératie) de l\'IA de leur personnel et des autres personnes qui exploitent ou utilisent des systèmes d\'IA pour leur compte, compte tenu de leurs connaissances techniques, de leur expérience, de leur formation, du contexte d\'utilisation et des personnes visées. Cette obligation n\'impose pas de garantir un niveau précis de culture de l\'IA à chaque personne (Art. 4(1), remplacé par le règlement (UE) 2026/1744). La Commission et les États membres soutiennent ces efforts, en particulier ceux des PME (4(2)).',
+      obligations:['Cartographier les besoins de culture IA selon les rôles (développeurs, gestionnaires de risques, opérateurs) et les personnes visées par l\'usage','Prendre des mesures proportionnées : formation, ressources, consignes d\'usage','Documenter les actions menées — sans prétendre garantir un niveau donné à chaque personne'],
       url:'https://artificialintelligenceact.eu/article/4/' },
   ]},
   { chapter:'CHAPITRE II — Pratiques interdites', arts:[
     { num:'Art. 5', title:'Pratiques interdites en matière d\'IA', status:'actif', who:['fournisseur','deployeur'], sanction:'35 M€ ou 7% CA mondial',
-      texte:'Interdit 8 catégories de pratiques : (a) manipulation subliminale, (b) exploitation des vulnérabilités, (c) notation sociale par autorités publiques, (d) police prédictive par profilage individuel, (e) base de données faciales par scraping, (f) inférence émotionnelle au travail/éducation, (g) catégorisation biométrique données sensibles, (h) identification biométrique à distance en temps réel dans espaces publics (sauf exceptions strictes).',
-      obligations:['Auditer l\'ensemble du portefeuille IA contre les 8 interdictions','Supprimer ou refondre tout système relevant d\'une pratique interdite','Vérifier les dérogations légales applicables pour l\'identification biométrique'],
+      texte:'Interdit 8 pratiques depuis le 2 février 2025 : (a) manipulation subliminale ou trompeuse, (b) exploitation des vulnérabilités (âge, handicap, situation sociale ou économique), (c) notation sociale, par toute entité publique ou privée, (d) évaluation du risque de commettre une infraction fondée uniquement sur le profilage, (e) constitution de bases de reconnaissance faciale par moissonnage non ciblé, (f) inférence des émotions au travail et dans l\'enseignement (hors raison médicale ou de sécurité), (g) catégorisation biométrique déduisant des données sensibles, (h) identification biométrique à distance en temps réel dans l\'espace public à des fins répressives (trois exceptions strictes). À compter du 2 décembre 2026, deux pratiques s\'y ajoutent (règlement (UE) 2026/1744) : (ba) génération ou manipulation d\'images, vidéos ou sons sexuellement explicites, ou montrant les parties intimes, d\'une personne identifiable sans son consentement ; (bb) génération de matériel d\'abus sexuel d\'enfants.',
+      obligations:['Auditer l\'ensemble du portefeuille IA contre les 8 interdictions en vigueur et les 2 applicables au 2 décembre 2026','Supprimer ou refondre tout système relevant d\'une pratique interdite','Vérifier les dérogations légales applicables pour l\'identification biométrique (finalités répressives, autorisation préalable — Art. 5(2) à 5(7))','Pour un système génératif : démontrer les garanties techniques qui empêchent la génération des contenus des points (ba) et (bb) (Art. 5(1a))'],
       url:'https://artificialintelligenceact.eu/article/5/' },
   ]},
   { chapter:'CHAPITRE III — Systèmes IA à haut risque', arts:[
     { num:'Art. 6', title:'Classification des systèmes à haut risque', status:'actif', who:['fournisseur'], sanction:'15 M€ ou 3% CA mondial',
-      texte:'Un système est haut risque si : (1) composant de sécurité d\'un produit soumis à évaluation de conformité tierce (Annexe I), ou (2) système autonome utilisé dans l\'un des 8 domaines de l\'Annexe III.',
-      obligations:['Évaluer chaque système contre l\'Annexe III (8 domaines)','Documenter la décision de classification avant mise sur le marché','Tenir à jour un registre des systèmes haut risque'],
+      texte:'Un système est à haut risque si : (1) il est un composant de sécurité d\'un produit — ou un produit — relevant de la législation d\'harmonisation de l\'annexe I et soumis à une évaluation de conformité par un tiers (Art. 6(1) ; les fonctions d\'assistance, d\'optimisation, d\'automatisation, de confort ou de contrôle qualité sans lien avec la sécurité ne sont pas des composants de sécurité, sauf si leur défaillance met en danger la santé ou la sécurité — 6(1a) et 6(1b)) ; ou (2) il relève de l\'un des 8 domaines de l\'annexe III. Exception (6(3)) : un système de l\'annexe III n\'est pas à haut risque s\'il ne présente pas de risque significatif — tâche procédurale étroite, amélioration d\'une activité humaine, détection d\'écarts, tâche préparatoire — sauf s\'il effectue du profilage de personnes physiques, toujours à haut risque.',
+      obligations:['Évaluer chaque système contre l\'annexe I (produits) et l\'annexe III (8 domaines, usages listés)','Documenter la décision de classification avant mise sur le marché — y compris lorsque l\'exception de l\'Art. 6(3) est invoquée (Art. 6(4)) — et enregistrer le système (Art. 49(2))','Tenir à jour un registre des systèmes haut risque'],
       url:'https://artificialintelligenceact.eu/article/6/' },
     { num:'Art. 9', title:'Système de gestion des risques', status:'applicable', who:['fournisseur'], sanction:'15 M€ ou 3% CA mondial',
       texte:'Processus itératif continu sur tout le cycle de vie : identification et analyse des risques connus et prévisibles, estimation et évaluation, mesures de gestion appropriées, tests résidus.',
       obligations:['Établir et documenter un système de gestion des risques','Mettre en place des tests systématiques avant et après déploiement','Révision périodique du système de gestion des risques','Intégrer les signalements de la surveillance post-commercialisation'],
       url:'https://artificialintelligenceact.eu/article/9/' },
     { num:'Art. 10', title:'Données et gouvernance des données', status:'applicable', who:['fournisseur'], sanction:'15 M€ ou 3% CA mondial',
-      texte:'Jeux de données d\'entraînement, validation et test soumis à des pratiques de gouvernance appropriées : choix de conception, collecte et origine des données, procédures de préparation, examen des biais possibles.',
-      obligations:['Documenter l\'origine et les caractéristiques des données d\'entraînement','Évaluer et corriger les biais dans les données','Maintenir des jeux de validation et test représentatifs','Documenter les procédures de préparation des données'],
+      texte:'Jeux de données d\'entraînement, validation et test soumis à des pratiques de gouvernance appropriées : choix de conception, collecte et origine des données, procédures de préparation, examen des biais possibles. L\'ancien Art. 10(5) est remplacé par l\'Art. 4a (règlement (UE) 2026/1744) : traitement exceptionnel de catégories particulières de données pour détecter et corriger les biais, strictement nécessaire et sous six garanties cumulatives — données de substitution insuffisantes, limites de réutilisation et sécurité renforcée, accès contrôlé et documenté, aucun transfert à des tiers, suppression dès le biais corrigé, motifs consignés au registre des traitements.',
+      obligations:['Documenter l\'origine et les caractéristiques des données d\'entraînement','Évaluer et corriger les biais dans les données','Maintenir des jeux de validation et test représentatifs','Documenter les procédures de préparation des données','Si des catégories particulières de données sont traitées pour corriger les biais : réunir les six conditions de l\'Art. 4a et consigner les motifs au registre des traitements'],
       url:'https://artificialintelligenceact.eu/article/10/' },
     { num:'Art. 11', title:'Documentation technique', status:'applicable', who:['fournisseur'], sanction:'15 M€ ou 3% CA mondial',
       texte:'Dossier technique complet établi avant mise sur le marché, conforme à l\'Annexe IV. Contient : description générale, architecture, données utilisées, évaluation de conformité, performances et limites.',
@@ -3239,7 +3349,7 @@ var ARTICLES = [
       obligations:['Définir et mesurer les niveaux d\'exactitude cibles','Tester la robustesse face aux données hors-distribution','Implémenter des protections contre les attaques adversariales','Documenter les métriques de performance dans le dossier technique'],
       url:'https://artificialintelligenceact.eu/article/15/' },
     { num:'Art. 16', title:'Obligations des fournisseurs', status:'applicable', who:['fournisseur'], sanction:'15 M€ ou 3% CA mondial',
-      texte:'Liste des 10 obligations principales des fournisseurs : conformité aux exigences, identification sur le système, système de gestion de la qualité, documentation technique, journalisation, évaluation de conformité, enregistrement EU, signalement des incidents.',
+      texte:'Liste des 12 obligations (points a à l) des fournisseurs : conformité aux exigences de la section 2, indication du nom et de l\'adresse, système de gestion de la qualité, conservation de la documentation, conservation des journaux, évaluation de conformité avant mise sur le marché, déclaration UE de conformité, marquage CE, enregistrement dans la base de données EU, actions correctives et information, démonstration de la conformité sur demande motivée d\'une autorité, exigences d\'accessibilité.',
       obligations:['Vérifier la complétude des obligations listées à l\'Art. 16','Mettre en place une checklist de suivi','Désigner un responsable conformité AI Act interne'],
       url:'https://artificialintelligenceact.eu/article/16/' },
     { num:'Art. 17', title:'Système de gestion de la qualité', status:'applicable', who:['fournisseur'], sanction:'15 M€ ou 3% CA mondial',
@@ -3251,31 +3361,33 @@ var ARTICLES = [
       obligations:['Pour les fournisseurs hors UE : désigner un mandataire UE par mandat écrit','Définir le périmètre du mandat (vérification déclaration conformité, coopération autorités)','Enregistrer le mandataire dans la base de données EU'],
       url:'https://artificialintelligenceact.eu/article/22/' },
     { num:'Art. 26', title:'Obligations des déployeurs', status:'applicable', who:['deployeur'], sanction:'15 M€ ou 3% CA mondial',
-      texte:'Déployeurs : utiliser les systèmes conformément aux instructions fournisseur, assigner superviseurs compétents, surveiller le fonctionnement, suspendre en cas de risque, informer le fournisseur des incidents.',
-      obligations:['Lire et appliquer la notice d\'utilisation du fournisseur','Désigner et former des superviseurs humains compétents','Mettre en place un mécanisme de signalement des incidents au fournisseur','Réaliser une FRIA si impact significatif sur les droits fondamentaux'],
+      texte:'Déployeurs de systèmes à haut risque : prendre des mesures pour utiliser le système conformément à la notice (26(1)), confier la supervision humaine à des personnes compétentes, formées et habilitées (26(2)), veiller à la pertinence et à la représentativité des données d\'entrée qu\'ils maîtrisent (26(4)), surveiller le fonctionnement et informer le fournisseur (26(5)). En cas de risque : informer sans retard fournisseur ou distributeur et autorité de surveillance du marché, et suspendre l\'usage ; en cas d\'incident grave : informer immédiatement d\'abord le fournisseur, puis l\'importateur ou le distributeur et les autorités. Conserver les journaux au moins six mois (26(6)), informer les représentants des travailleurs et les travailleurs concernés avant tout usage au travail (26(7)), informer les personnes faisant l\'objet d\'une décision de l\'annexe III (26(11)), coopérer avec les autorités (26(12)).',
+      obligations:['Lire et appliquer la notice d\'utilisation du fournisseur','Désigner et former des superviseurs humains compétents','Mettre en place la surveillance et le signalement : fournisseur, puis importateur ou distributeur et autorités en cas d\'incident grave ; suspension en cas de risque','Conserver les journaux au moins six mois et informer les représentants des travailleurs avant un usage au travail','Informer les personnes concernées par une décision de l\'annexe III ; réaliser une FRIA si le déployeur est visé par l\'Art. 27'],
       url:'https://artificialintelligenceact.eu/article/26/' },
     { num:'Art. 20', title:'Actions correctives et devoir d\'information', status:'applicable', who:['fournisseur'], sanction:'15 M€ ou 3% CA mondial',
       texte:'Le fournisseur qui considère ou a des raisons de considérer qu\'un système haut risque déjà mis sur le marché n\'est pas conforme prend immédiatement les actions correctives nécessaires : mise en conformité, retrait, désactivation ou rappel. Il informe distributeurs, déployeurs, mandataire et importateurs.',
       obligations:['Mettre en place une procédure de détection de non-conformité post-déploiement','Définir un plan d\'action correctif (mise en conformité, retrait, désactivation, rappel)','Informer sans délai toute la chaîne (distributeurs, déployeurs, mandataire, importateurs)'],
       url:'https://artificialintelligenceact.eu/article/20/' },
-    { num:'Art. 25', title:'Responsabilités le long de la chaîne de valeur', status:'actif', who:['fournisseur','deployeur'], sanction:'15 M€ ou 3% CA mondial',
-      texte:'Un distributeur, importateur, déployeur ou tiers devient lui-même fournisseur (avec les obligations de l\'Art. 16) s\'il : (a) appose son nom/marque sur un système déjà mis sur le marché ; (b) effectue une modification substantielle d\'un système haut risque déjà déployé ; (c) modifie la finalité d\'un système non classé haut risque de sorte qu\'il le devienne.',
-      obligations:['Évaluer si une modification effectuée constitue une "modification substantielle" au sens de l\'Art. 25','Identifier si un changement de finalité fait basculer le système vers le haut risque','En cas de basculement : assumer les obligations complètes de fournisseur (Art. 16)'],
+    { num:'Art. 25', title:'Responsabilités le long de la chaîne de valeur', status:'actif', who:['fournisseur','deployeur'], sanction:'15 M€ ou 3% CA mondial (Art. 99(4), point da, pour l\'Art. 25(2) et (4))',
+      texte:'Un distributeur, importateur, déployeur ou tiers devient lui-même fournisseur (avec les obligations de l\'Art. 16) s\'il : (a) appose son nom ou sa marque sur un système à haut risque déjà mis sur le marché ; (b) effectue une modification substantielle d\'un système à haut risque ; (c) modifie la finalité d\'un système, y compris à usage général, de sorte qu\'il devienne à haut risque. Le fournisseur initial n\'est alors plus considéré comme fournisseur de ce système, mais coopère étroitement avec le nouveau : documentation technique suffisante, limites et modes de défaillance connus, accès technique ciblé pour les tests et la validation (25(2), précisé par le règlement (UE) 2026/1744). Le fournisseur d\'un système à haut risque et le tiers qui lui fournit systèmes, modèles, outils, services ou composants précisent par écrit les informations, capacités et accès nécessaires à sa conformité (25(4)) — sauf outils publiés sous licence libre et ouverte, modèles d\'IA à usage général exceptés.',
+      obligations:['Évaluer si une modification effectuée constitue une "modification substantielle" au sens de l\'Art. 25','Identifier si un changement de finalité fait basculer le système vers le haut risque','En cas de basculement : assumer les obligations complètes de fournisseur (Art. 16)','Fournisseur initial : préparer la documentation et l\'accès technique dus au nouveau fournisseur (Art. 25(2))','Fournisseur d\'un système à haut risque : formaliser par écrit avec chaque fournisseur de composant, modèle ou outil les informations et l\'assistance nécessaires (Art. 25(4))'],
       url:'https://artificialintelligenceact.eu/article/25/' },
     { num:'Art. 27', title:'Analyse d\'impact sur les droits fondamentaux (FRIA)', status:'actif', who:['deployeur'], sanction:'15 M€ ou 3% CA mondial',
-      texte:'Avant le déploiement d\'un système haut risque (Art. 6(2)), les déployeurs publics, les entités privées fournissant des services publics, et les déployeurs des cas d\'usage Annexe III points 5(b) et (c) réalisent une analyse d\'impact sur les droits fondamentaux.',
-      obligations:['Réaliser la FRIA avant tout déploiement d\'un système haut risque concerné','Documenter l\'analyse via l\'outil dédié (module FRIA de Sentinel)','Notifier l\'autorité de surveillance du marché du résultat de l\'analyse'],
+      texte:'Avant le déploiement d\'un système haut risque (Art. 6(2)), les déployeurs publics, les entités privées fournissant des services publics, et les déployeurs des cas d\'usage Annexe III points 5(b) et (c) réalisent une analyse d\'impact sur les droits fondamentaux. Si une obligation de l\'article est déjà remplie par l\'analyse d\'impact relative à la protection des données (RGPD, art. 35), la FRIA peut y renvoyer ou en reprendre des parties (27(4), remplacé par le règlement (UE) 2026/1744) ; le Bureau de l\'IA élabore un modèle de questionnaire (27(5)).',
+      obligations:['Réaliser la FRIA avant tout déploiement d\'un système haut risque concerné','Réutiliser, par renvoi, l\'analyse d\'impact RGPD déjà conduite (Art. 27(4)) plutôt que de la refaire','Documenter l\'analyse via l\'outil dédié (module FRIA de Sentinel)','Notifier l\'autorité de surveillance du marché du résultat de l\'analyse'],
       url:'https://artificialintelligenceact.eu/article/27/' },
-  ]},
-  { chapter:'CHAPITRE V — Modèles d\'IA à usage général (GPAI)', arts:[
     { num:'Art. 49', title:'Enregistrement', status:'applicable', who:['fournisseur'], sanction:'15 M€ ou 3% CA mondial',
       texte:'Avant mise sur le marché d\'un système haut risque (Annexe III, hors point 2), le fournisseur ou son mandataire s\'enregistre lui-même et enregistre son système dans la base de données EU (Art. 71). Pour un système jugé non haut risque (Art. 6(3)), l\'enregistrement reste obligatoire sous une forme allégée.',
       obligations:['Enregistrer le système dans la base de données EU avant mise sur le marché','Tenir à jour les informations d\'enregistrement en cas de modification','Conserver la preuve d\'enregistrement dans le dossier de conformité'],
       url:'https://artificialintelligenceact.eu/article/49/' },
-    { num:'Art. 50', title:'Transparence — systèmes interagissant avec des personnes', status:'actif', who:['fournisseur','deployeur'], sanction:'7,5 M€ ou 1% CA mondial',
-      texte:'Systèmes conçus pour interagir directement avec des personnes : obligation d\'information claire que l\'utilisateur interagit avec une IA. Contenus synthétiques (deepfakes, voix clonées) : marquage machine-readable obligatoire.',
-      obligations:['Afficher clairement la nature IA du système lors de toute interaction','Implémenter le watermarking machine-readable pour les contenus synthétiques','Vérifier que les utilisateurs peuvent distinguer contenus réels et générés'],
+  ]},
+  { chapter:'CHAPITRE IV — Obligations de transparence', arts:[
+    { num:'Art. 50', title:'Transparence — fournisseurs et déployeurs de certains systèmes', status:'actif', who:['fournisseur','deployeur'], sanction:'15 M€ ou 3% CA mondial (Art. 99(4)(g))',
+      texte:'Fournisseur : les systèmes destinés à interagir directement avec des personnes les informent qu\'elles interagissent avec une IA, sauf si cela est évident (§1) ; les sorties audio, image, vidéo ou texte générées ou manipulées sont marquées dans un format lisible par machine et détectables comme artificielles (§2 — pour un système déjà sur le marché avant le 2 août 2026 : au plus tard le 2 décembre 2026, Art. 111(4), ajouté par le règlement (UE) 2026/1744). Déployeur : information des personnes exposées à un système de reconnaissance des émotions ou de catégorisation biométrique (§3) ; mention que le contenu est artificiel pour un hypertrucage et pour un texte publié afin d\'informer le public sur des questions d\'intérêt public, sauf relecture humaine ou contrôle éditorial (§4). Le code de bonnes pratiques est un engagement volontaire : il ne remplace pas ces obligations.',
+      obligations:['Fournisseur : concevoir le système pour informer que l\'on interagit avec une IA, sauf si c\'est évident (Art. 50(1))','Fournisseur : marquer les contenus synthétiques dans un format lisible par machine, détectable comme artificiel (Art. 50(2)) — au plus tard le 2 décembre 2026 pour un système déjà sur le marché avant le 2 août 2026 (Art. 111(4))','Déployeur : informer les personnes exposées à la reconnaissance des émotions ou à la catégorisation biométrique (Art. 50(3))','Déployeur : signaler les hypertrucages et les textes publiés d\'intérêt public, sauf relecture humaine ou contrôle éditorial (Art. 50(4))'],
       url:'https://artificialintelligenceact.eu/article/50/' },
+  ]},
+  { chapter:'CHAPITRE V — Modèles d\'IA à usage général (GPAI)', arts:[
     { num:'Art. 51', title:'Classification GPAI à risque systémique', status:'actif', who:['gpai'], sanction:'15 M€ ou 3% CA mondial',
       texte:'GPAI classé à risque systémique si : capacités à fort impact (présumé si entraînement >10^25 FLOPs) ou si la Commission le désigne sur la base de capacités équivalentes.',
       obligations:['Évaluer si votre modèle dépasse le seuil de 10^25 FLOPs','Notifier la Commission dans les 2 semaines si le seuil est atteint','Demander une dérogation si le modèle ne présente pas de risque systémique malgré le seuil'],
@@ -3301,7 +3413,7 @@ var ARTICLES = [
   ]},
   { chapter:'CHAPITRE XII — Sanctions', arts:[
     { num:'Art. 99', title:'Sanctions', status:'actif', who:['fournisseur','deployeur','gpai'], sanction:'35 M€ ou 7% CA mondial (max)',
-      texte:'Sanctions par États membres : jusqu\'à 35 M€ ou 7% CA mondial (Art. 5), 15 M€ ou 3% (systèmes haut risque), 7,5 M€ ou 1% (autres infractions). PME : proportionnalité garantie. Le montant le plus élevé des deux seuils s\'applique.',
+      texte:'Amendes fixées par les États membres, jusqu\'à : 35 M€ ou 7% du CA mondial pour une pratique interdite (Art. 5 — §3) ; 15 M€ ou 3% pour les manquements des fournisseurs, mandataires, importateurs, distributeurs, déployeurs et organismes notifiés, et pour la transparence de l\'Art. 50 (§4) ; 7,5 M€ ou 1% pour des informations inexactes, incomplètes ou trompeuses fournies aux autorités (§5). Pour une entreprise, le plus ÉLEVÉ des deux plafonds s\'applique ; pour une PME ou une start-up, le plus BAS (§6) — et, depuis le règlement (UE) 2026/1744, pour une petite capitalisation intermédiaire sur les §4 et §5 (§6 bis). Les fournisseurs de modèles GPAI relèvent de l\'Art. 101 (Commission) : 15 M€ ou 3%, le plus élevé.',
       obligations:['Mettre en place une veille des délibérations des autorités nationales','Identifier l\'autorité nationale de surveillance compétente dans chaque État membre de déploiement','Budgéter le risque de conformité dans l\'analyse financière'],
       url:'https://artificialintelligenceact.eu/article/99/' },
   ]},
@@ -3334,15 +3446,15 @@ var ARTICLES = [
       url:'https://eur-lex.europa.eu/eli/reg/2022/1925/oj?locale=fr' }
   ]},
   { chapter:'CRA — Cybersécurité des produits numériques', reglement:'cra', arts:[
-    { num:'Art. 13', title:'Obligations des fabricants', status:'applicable', who:['fournisseur'], sanction:'15M€ ou 2,5% CA mondial',
+    { num:'Art. 13', title:'Obligations des fabricants', status:'applicable', statut_txt:'Applicable 11 décembre 2027', who:['fournisseur'], sanction:'15M€ ou 2,5% CA mondial',
       texte:'Sécurité dès la conception, gestion documentée des vulnérabilités, mises à jour de sécurité pendant toute la période de support (5 ans minimum).',
       obligations:['Intégrer la cybersécurité dès la phase de conception','Établir une documentation technique complète (SBOM, analyse de risques)','Définir une période de support et la communiquer'],
       url:'https://eur-lex.europa.eu/eli/reg/2024/2847/oj?locale=fr' },
-    { num:'Art. 14', title:'Notification des vulnérabilités', status:'futur', who:['fournisseur'], sanction:'15M€ ou 2,5% CA mondial',
+    { num:'Art. 14', title:'Notification des vulnérabilités', status:'futur', statut_txt:'Applicable 11 septembre 2026', who:['fournisseur'], sanction:'15M€ ou 2,5% CA mondial',
       texte:'Notification à l\'ENISA des vulnérabilités activement exploitées sous 24h, rapport complet sous 72h, rapport final sous 14 jours. Applicable dès le 11 septembre 2026.',
       obligations:['Mettre en place un dispositif de détection et notification rapide','Désigner un point de contact pour les autorités (CERT-FR en France)'],
       url:'https://eur-lex.europa.eu/eli/reg/2024/2847/oj?locale=fr' },
-    { num:'Art. 64', title:'Surveillance du marché', status:'futur', who:['fournisseur'], sanction:'15M€ ou 2,5% CA mondial',
+    { num:'Art. 64', title:'Surveillance du marché', status:'futur', statut_txt:'Applicable 11 décembre 2027', who:['fournisseur'], sanction:'15M€ ou 2,5% CA mondial',
       texte:'Les autorités nationales (ANFR en France, avec appui ANSSI) contrôlent la conformité des produits mis sur le marché.',
       obligations:['Conserver la documentation technique 10 ans','Préparer une procédure de réponse aux demandes des autorités de surveillance'],
       url:'https://eur-lex.europa.eu/eli/reg/2024/2847/oj?locale=fr' }
@@ -3633,7 +3745,7 @@ function artRender(){
     if(!filtered.length) return '';
 
     var artsHtml = filtered.map(function(a){
-      var statusTxt = {actif:'Applicable',applicable:'Applicable août 2026',futur:'Applicable 2027'}[a.status] || a.status;
+      var statusTxt = aiActStatutArticle(a, ch);
       var oblHtml = a.obligations.length ? '<ul class="art-body-list">'+a.obligations.map(function(o){
         return '<li class="art-body-li"><span class="art-body-li-dot"></span><span>'+o+'</span></li>';
       }).join('')+'</ul>' : '<p style="font-size:12px;color:var(--muted)">Article de référence sans obligation directe spécifique.</p>';
@@ -3770,6 +3882,63 @@ window.go = function(id){
 function addMsg(role,html){ var m=document.getElementById('chat-msgs'); if(!m) return; var init=role==='bot'?'S':'CC'; m.innerHTML+='<div class="c-msg '+role+'"><div class="c-av '+role+'">'+init+'</div><div class="c-bubble">'+html+'</div></div>'; m.scrollTop=m.scrollHeight; }
 /* doChat() moteur factice supprime avec la page Chat dediee */
 
+/* ══ SANCTIONS — SOURCE UNIQUE : l'article 99 du règlement (UE) 2024/1689 ═════
+   CE QUI A ÉTÉ TROUVÉ, LE 29 SEPTEMBRE 2026, EN CONFRONTANT SENTINEL À
+   L'INFOGRAPHIE « AI ACT » PUIS AU TEXTE. Deux calculs de sanction, deux
+   défauts, et aucun test :
+   — le calculateur écrivait `Math.min(ca * pct, plafond_fixe)` : il rendait le
+     plus BAS des deux plafonds à toute entreprise. Or l'article 99 dit, pour
+     une entreprise, « le plus ÉLEVÉ » des deux (§3, §4, §5) ; le plus bas ne
+     vaut que pour les PME et les start-up (§6) et, depuis le règlement (UE)
+     2026/1744, pour les petites capitalisations intermédiaires — sur les seuls
+     §4 et §5 (§6 bis). Pour une pratique interdite et 50 M€ de chiffre
+     d'affaires, il affichait 3,5 M€ là où le plafond légal est 35 M€ ;
+   — il ajoutait une « majoration récidive × 1,5 » et des plafonds PME/TPE à 50 %
+     et 25 % que le règlement ne contient pas ;
+   — le simulateur, lui, rangeait la transparence de l'article 50 à 7,5 M€ / 1,5 %
+     (l'article 99(4)(g) la range à 15 M€ / 3 %), accordait le plus élevé des
+     deux plafonds à une PME, et affichait « 8 M€ » pour 7,5 M€.
+   Deux consommateurs, deux arithmétiques : la même dérive qu'entre les deux
+   calendriers. Il n'y a donc plus qu'UNE table et UNE fonction, lues par le
+   simulateur et par le calculateur.
+
+   ICI, LE RÈGLEMENT ET RIEN D'AUTRE. Ni majoration, ni réduction forfaitaire :
+   ce que l'autorité prononce se fixe SOUS le plafond, d'après l'article 99(7).
+   L'article 101 (fournisseurs de modèles GPAI, amende de la Commission) a son
+   propre plafond — 3 % ou 15 M€, le plus élevé — et ne connaît pas la règle
+   des PME de l'article 99(6). */
+var AI_ACT_SANCTIONS = {
+  interdit:     { art:'Art. 99(3)',    fixe:35000000, pct:0.07, pme:true,  smc:false,
+                  objet:'pratique interdite (Art. 5)' },
+  obligations:  { art:'Art. 99(4)',    fixe:15000000, pct:0.03, pme:true,  smc:true,
+                  objet:'manquement d\'un fournisseur, mandataire, importateur, distributeur, déployeur ou organisme notifié (Art. 16, 22 à 26, 31, 33, 34 ; Art. 25(2) et (4))' },
+  transparence: { art:'Art. 99(4)(g)', fixe:15000000, pct:0.03, pme:true,  smc:true,
+                  objet:'obligation de transparence (Art. 50)' },
+  info:         { art:'Art. 99(5)',    fixe:7500000,  pct:0.01, pme:true,  smc:true,
+                  objet:'informations inexactes, incomplètes ou trompeuses fournies aux autorités' },
+  gpai:         { art:'Art. 101',      fixe:15000000, pct:0.03, pme:false, smc:false,
+                  objet:'fournisseur de modèle d\'IA à usage général (amende de la Commission)' }
+};
+/* `taille` : 'tpe' ou 'pme' (PME au sens de la recommandation 2003/361/CE, start-up
+   comprises), 'smc' (petite capitalisation intermédiaire, recommandation (UE)
+   2025/1099 : moins de 750 personnes et CA ≤ 150 M€ ou bilan ≤ 129 M€), toute
+   autre valeur : entreprise sans allègement. */
+function aiActSanctionMax(palier, ca, taille){
+  var p = AI_ACT_SANCTIONS[palier];
+  if(!p) return null;
+  var surCa = Math.round(ca * p.pct);
+  var pme = p.pme && (taille === 'tpe' || taille === 'pme');
+  var smc = !pme && p.smc && taille === 'smc';
+  var bas = pme || smc;
+  return { palier:palier, art:p.art, objet:p.objet, fixe:p.fixe, pct:p.pct, sur_ca:surCa,
+           regle: bas ? 'plus_bas' : 'plus_haut',
+           regle_art: pme ? 'Art. 99(6)' : smc ? 'Art. 99(6a)' : p.art,
+           max: bas ? Math.min(p.fixe, surCa) : Math.max(p.fixe, surCa) };
+}
+window.AI_ACT_SANCTIONS = AI_ACT_SANCTIONS;
+window.aiActSanctionMax = aiActSanctionMax;
+/* ══ FIN SANCTIONS — SOURCE UNIQUE ══ */
+
 /* ══════════════════════════════════════════════════════
    SIMULATEUR AI ACT — Logique complète
    Règlement (UE) 2024/1689 du 13 juin 2024
@@ -3798,6 +3967,9 @@ window.simNext = function(from){
     SIM_DATA.fria = simGetRadio('r-fria');
     SIM_DATA.definition = simGetCheckboxes('cb-definition');
     SIM_DATA.anteriorite = simGetRadio('r-anteriorite');
+    /* L'article 2 : ce qui sort du champ, et le devoir du fournisseur initial (25(2)). */
+    SIM_DATA.perimetre = simGetCheckboxes('cb-perimetre');
+    SIM_DATA.art25_amont = simGetRadio('r-art25-amont');
     if(!SIM_DATA.secteur || !SIM_DATA.type){ alert('Veuillez sélectionner un secteur et un type de système.'); return; }
   }
   if(from === 2){
@@ -3808,6 +3980,9 @@ window.simNext = function(from){
     SIM_DATA.profilage = simGetRadio('r-profilage');
     SIM_DATA.impact = simGetRadio('r-impact');
     SIM_DATA.interaction = simGetRadio('r-interaction');
+    /* Les autres pratiques de l'article 5(1), et le produit de l'annexe I. */
+    SIM_DATA.art5 = simGetCheckboxes('cb-art5');
+    SIM_DATA.annexe1 = simGetRadio('r-annexe1');
   }
   /* L'ÉTAPE 3 NE RELÈVE PLUS RIEN, ET C'EST LE BUT. Elle posait sept questions
      que l'audit IA Act pose déjà en trente-quatre points, avec la référence
@@ -3962,29 +4137,109 @@ function simGetCheckboxes(groupId){
   return checked;
 }
 
+/* La référence de sanction d'un niveau, LUE dans la source unique : plus aucun
+   montant ni numéro de paragraphe écrit à la main dans la classification. */
+function simSanctionsRef(palier){
+  var p = AI_ACT_SANCTIONS[palier];
+  return { max_pct: Math.round(p.pct*100) + '% du CA mondial',
+           max_flat: String(p.fixe).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' €',
+           art: p.art };
+}
+
+/* ══ LES PRATIQUES INTERDITES DE L'ARTICLE 5(1) — LES DIX, ET PAS DEUX ═══════
+   CE QUE LE SIMULATEUR NE VOYAIT PAS. Il posait deux questions — la
+   manipulation (point a) et l'identification biométrique en temps réel
+   (point h) — et laissait passer les six autres pratiques de l'article 5(1),
+   plus les deux que le règlement (UE) 2026/1744 ajoute (ba, bb). Un système de
+   notation sociale ou de reconnaissance des émotions au travail sortait
+   « haut risque » ou « minimal » : jamais « interdit ». Et l'identification
+   biométrique à distance en temps réel était interdite d'office, alors que le
+   point h ne vise que l'usage RÉPRESSIF dans l'espace accessible au public —
+   un usage privé est à haut risque, pas interdit.
+
+   LES POINTS BA ET BB S'APPLIQUENT À COMPTER DU 2 DÉCEMBRE 2026 : le verdict est
+   « interdit » — c'est ce qu'il deviendra — et la date d'effet est dite à côté,
+   lue dans le calendrier consolidé. Les points de l'ancien régime (a à h) sont
+   interdits depuis le 2 février 2025. */
+var SIM_ART5 = {
+  a:  'manipulation subliminale ou trompeuse',
+  b:  'exploitation des vulnérabilités (âge, handicap, situation sociale ou économique)',
+  c:  'notation sociale, par toute entité publique ou privée',
+  d:  'évaluation du risque de commettre une infraction fondée uniquement sur le profilage',
+  e:  'constitution de bases de reconnaissance faciale par moissonnage non ciblé',
+  f:  'inférence des émotions au travail ou dans un établissement d\'enseignement',
+  g:  'catégorisation biométrique déduisant des données sensibles',
+  h:  'identification biométrique à distance en temps réel, dans l\'espace accessible au public, à des fins répressives',
+  ba: 'hypertrucage sexuel sans consentement d\'une personne identifiable',
+  bb: 'matériel d\'abus sexuel d\'enfants généré par IA'
+};
+var SIM_ART5_ORDRE = ['a','b','c','d','e','f','g','h','ba','bb'];
+function simArt5(){
+  var d = SIM_DATA, coches = d.art5 || [], pts = {};
+  if(d.subliminal === 'oui') pts.a = true;
+  ['b','c','d','e','g','ba','bb'].forEach(function(p){ if(coches.indexOf('art5-' + p) >= 0) pts[p] = true; });
+  /* (f) : cochée, ou type « reconnaissance émotionnelle » au travail ou à l'école — sauf finalité médicale ou de sécurité */
+  var f = coches.indexOf('art5-f') >= 0 || (d.type === 'emotion' && (d.secteur === 'emploi' || d.secteur === 'education'));
+  if(f && coches.indexOf('art5-f-exception') < 0) pts.f = true;
+  if(d.biometrie === 'oui') pts.h = true;
+  return SIM_ART5_ORDRE.filter(function(p){ return pts[p]; });
+}
+
+/* ── Hors du champ du règlement : l'article 2 ──
+   Un système peut échapper au règlement AVANT toute classification : usage
+   exclusivement militaire, de défense ou de sécurité nationale (2(3)),
+   recherche scientifique pure (2(6)), recherche et essais avant mise sur le
+   marché (2(8)), usage personnel non professionnel d'une personne physique
+   (2(10)). AUCUNE CASE COCHÉE, C'EST « DANS LE CHAMP » — ce sont des exceptions,
+   pas des questions auxquelles il faudrait répondre. Exception : l'article 2(10)
+   ne libère que les OBLIGATIONS DES DÉPLOYEURS ; un fournisseur ne s'en prévaut
+   pas. */
+var SIM_PERIMETRE = {
+  'per-militaire':   { art:'Art. 2(3)',  motif:'le système est utilisé exclusivement à des fins militaires, de défense ou de sécurité nationale' },
+  'per-recherche':   { art:'Art. 2(6)',  motif:'il est développé et mis en service dans le seul but de la recherche et du développement scientifiques' },
+  'per-avantmarche': { art:'Art. 2(8)',  motif:'il n\'est encore qu\'en recherche, essai ou développement, avant toute mise sur le marché ou en service (les essais en conditions réelles ne sont pas couverts par cette exclusion)' },
+  'per-personnel':   { art:'Art. 2(10)', motif:'vous êtes une personne physique et vous l\'utilisez à titre strictement personnel et non professionnel' }
+};
+function simPerimetre(){
+  var d = SIM_DATA, coches = d.perimetre || [], motifs = [], ecartes = [];
+  coches.forEach(function(c){
+    var m = SIM_PERIMETRE[c];
+    if(!m) return;
+    if(c === 'per-personnel' && d.role && d.role !== 'deployeur' && d.role !== 'indetermine'){
+      /* Guillemets DOUBLES, et c'est mesuré : le motif du dictionnaire doit se
+         retrouver TEL QUEL dans le code qui le construit. Écrit entre
+         apostrophes, « l\'exclusion » portait des barres obliques que la règle
+         ne pouvait pas reconnaître — le libellé paraissait n'être construit
+         nulle part. */
+      ecartes.push({ art:m.art, motif:"l'exclusion de l'article 2(10) ne libère que les obligations des DÉPLOYEURS : un " + (['fournisseur','importateur','distributeur'].indexOf(d.role) >= 0 ? d.role : 'opérateur') + " ne s'en prévaut pas" });
+      return;
+    }
+    motifs.push(m);
+  });
+  if(!motifs.length) return { statut:'dans_le_champ', ecartes:ecartes };
+  return { statut:'hors_champ', motifs:motifs, ecartes:ecartes };
+}
+
 /* ══ MOTEUR DE CLASSIFICATION ══ */
 function simClassify(){
   var d = SIM_DATA;
-  var result = { level: 'minimal', score: 2.0, art5: false, article: 'Aucune classification à risque particulière', color: 'var(--green)', badge: 'RISQUE MINIMAL', obligations: [], gaps: [], sanctions: {}, timeline: [] };
+  var result = { level: 'minimal', score: 2.0, art5: false, article: 'Aucune classification à risque particulière', color: 'var(--green)', badge: 'RISQUE MINIMAL', obligations: [], gaps: [], sanctions: simSanctionsRef('info'), timeline: [] };
 
   /* Art. 5 — Pratiques interdites */
-  var isInterdit = false;
-  if(d.subliminal === 'oui') isInterdit = true;
-  if(d.biometrie === 'oui') isInterdit = true;
-  if(['bio_remote'].includes(d.type)) isInterdit = true;
-
-  if(isInterdit){
+  var points = simArt5();
+  if(points.length){
     result.level = 'interdit';
     result.score = 10.0;
     result.art5 = true;
-    result.article = 'Art. 5 — Pratiques interdites';
+    result.art5_points = points;
+    result.article = 'Art. 5(1) — ' + (points.length > 1 ? 'points ' : 'point ') + points.join(', ');
     result.color = '#8B0000';
     result.badge = 'PRATIQUE INTERDITE';
-    result.sanctions = { max_pct: '7% du CA mondial', max_flat: '35 000 000 €', art: 'Art. 99(3)' };
+    result.sanctions = simSanctionsRef('interdit');
     return result;
   }
 
-  /* Art. 6(2) + Annexe III — Haut risque */
+  /* Art. 6 — Haut risque : annexe III (usage listé) ou annexe I (produit) */
   var isHautRisque = false;
   var hautRisqueFactor = 1.0;
 
@@ -3993,24 +4248,61 @@ function simClassify(){
      (qui annule systematiquement l'exception, dernier alinea de l'Art. 6(3)). */
   var exceptionApplicable = d.exception6_3 && d.exception6_3 !== 'aucune' && d.profilage !== 'oui';
 
+  /* LE SECTEUR NE SUFFIT PAS. L'annexe III liste des USAGES à l'intérieur de huit
+     domaines : un système de paie n'est pas à haut risque parce qu'il sert dans
+     l'emploi. Le secteur seul reste une PRÉSOMPTION — conservatrice, donc
+     gardée — mais elle est dite « à confirmer » au lieu d'être présentée comme
+     un constat. Seul un usage coché fait un constat. */
   var annexe3Secteurs = ['bio','infra','education','emploi','essentiels','law','migration'];
-  if(annexe3Secteurs.includes(d.secteur) && !exceptionApplicable) isHautRisque = true;
-  if(d.annexe3 && d.annexe3.length > 0 && !exceptionApplicable) isHautRisque = true;
+  var parUsage   = !!(d.annexe3 && d.annexe3.length > 0);
+  var parSecteur = annexe3Secteurs.includes(d.secteur);
+  var typesHaut  = ['scoring','decision_auto','triage','bio_post','emotion','face_reco','surveillance'];
+  /* L'identification biométrique à distance en temps réel n'est interdite que
+     si elle est répressive (voir simArt5) ; sinon elle est à haut risque. */
+  var parType    = typesHaut.includes(d.type) || d.type === 'bio_remote' || d.biometrie === 'oui_autre';
+  var parAnnexe1 = d.annexe1 === 'oui_tiers';
+  /* Un usage ÉTABLI par les réponses, sans case de l'annexe III cochée : l'identification
+     biométrique à distance hors finalité répressive ou a posteriori (annexe III, point 1(a)),
+     la reconnaissance des émotions hors travail et enseignement (point 1(c)). Le type
+     « reconnaissance faciale » reste une présomption : la vérification 1:1 est exclue. */
+  var usageParReponse = d.biometrie === 'oui_autre' || d.biometrie === 'aposteriori' || ['bio_post','emotion'].includes(d.type);
+  var parAnnexe3 = ((parUsage || parSecteur) && !exceptionApplicable) || parType || d.biometrie === 'aposteriori';
 
-  if(d.annexe3 && d.annexe3.length > 0 && exceptionApplicable){
-    result.exception_note = 'Votre système relève d\'un domaine Annexe III mais remplit l\'exception de l\'Art. 6(3) — il n\'est donc pas automatiquement classé haut risque. Documentez cette évaluation avant mise sur le marché (Art. 6(4)) : vous restez soumis à l\'obligation d\'enregistrement (Art. 49(2)).';
+  if(parAnnexe3) isHautRisque = true;
+  if(parAnnexe1) isHautRisque = true;
+
+  if(parUsage && exceptionApplicable){
+    result.exception_note = 'Votre système relève d\'un domaine Annexe III mais remplit l\'exception de l\'Art. 6(3) — il n\'est donc pas automatiquement classé haut risque. Documentez cette évaluation avant mise sur le marché (Art. 6(4)) : vous restez soumis à l\'obligation d\'enregistrement (Art. 49(2)), dont le contenu est allégé par le règlement (UE) 2026/1744 (annexe VIII, section B : points 7 et 9 supprimés).';
   }
-  if(['scoring','decision_auto','triage','bio_post','emotion','face_reco','surveillance'].includes(d.type)) isHautRisque = true;
   if(d.impact === 'individuel') hautRisqueFactor = 1.3;
   if(['sante','finance','public','law','infra','migration'].includes(d.secteur)) hautRisqueFactor = Math.max(hautRisqueFactor, 1.2);
+
+  /* Annexe I : ce qui ne rend PAS le système à haut risque, dit à côté du verdict. */
+  if(d.annexe1 === 'oui_sans_tiers'){
+    result.annexe1_note = 'Le produit relève de l\'annexe I mais n\'exige pas d\'évaluation de conformité par un tiers : la condition de l\'article 6(1)(b) n\'est pas remplie, le système n\'est pas à haut risque à ce titre. Un produit soumis à évaluation par un tiers pour des risques autres que la santé et la sécurité (spectre radioélectrique, interférences électromagnétiques sans effet sur la santé ou la sécurité) ne remplit pas non plus cette condition (Art. 6(1c)).';
+  } else if(d.annexe1 === 'fonction_non_securite'){
+    result.annexe1_note = 'Art. 6(1a) : un système utilisé uniquement pour des aspects sans lien avec la sécurité — assistance à l\'utilisateur, optimisation des performances, efficacité du service, automatisation, confort, contrôle qualité — n\'est pas un composant de sécurité. Sauf si sa défaillance ou son dysfonctionnement mettrait en danger la santé ou la sécurité des personnes ou des biens (Art. 6(1b)).';
+  } else if(d.annexe1 === 'machines'){
+    result.annexe1_note = 'Le règlement Machines (UE) 2023/1230 est passé de la section A à la section B de l\'annexe I (règlement (UE) 2026/1744) : pour ces produits, seuls l\'article 6(1), l\'article 60a et les articles 102 à 112 s\'appliquent (Art. 2(2)). Les exigences applicables à l\'IA y sont ajoutées par acte délégué, applicable au plus tard le 2 août 2028.';
+  } else if(parAnnexe1){
+    result.annexe1_note = 'Système relevant de l\'article 6(1) : régime complet à compter de la date de l\'annexe I. Certaines exigences des articles 9 à 15 et 17 à 25 pourront être limitées lorsque la législation sectorielle de la section A offre une protection équivalente ou supérieure — des actes délégués de la Commission sont attendus d\'ici le 2 août 2027 (Art. 2(13)).';
+  }
 
   if(isHautRisque){
     result.level = 'haut';
     result.score = Math.min(9.5, 6.5 * hautRisqueFactor);
-    result.article = 'Art. 6(2) + Annexe III';
+    result.article = parAnnexe1 && !parAnnexe3 ? 'Art. 6(1) + Annexe I' : (parAnnexe1 ? 'Art. 6(1) + Annexe I · Art. 6(2) + Annexe III' : 'Art. 6(2) + Annexe III');
     result.color = 'var(--accent)';
     result.badge = 'HAUT RISQUE';
-    result.sanctions = { max_pct: '3% du CA mondial', max_flat: '15 000 000 €', art: 'Art. 99(2)' };
+    result.sanctions = simSanctionsRef('obligations');
+    result.haut_via = [];
+    if(parAnnexe3) result.haut_via.push('annexe3');
+    if(parAnnexe1) result.haut_via.push('annexe1');
+    /* PRÉSOMPTION À CONFIRMER : aucun usage de l'annexe III n'a été coché, et le
+       produit de l'annexe I n'est pas établi. */
+    if(!parAnnexe1 && !parUsage && !usageParReponse){
+      result.a_confirmer = (d.type === 'bio_remote') ? 'bio_remote' : 'usage';
+    }
     if(['bio','infra','law','migration'].includes(d.secteur)){
       result.score = Math.min(9.5, result.score + 0.5);
     }
@@ -4020,7 +4312,7 @@ function simClassify(){
     result.article = 'Art. 50 — Transparence';
     result.color = 'var(--orange)';
     result.badge = 'RISQUE LIMITE';
-    result.sanctions = { max_pct: '1% du CA mondial', max_flat: '7 500 000 €', art: 'Art. 99(4)' };
+    result.sanctions = simSanctionsRef('transparence');
   } else {
     result.score = d.impact === 'groupe' ? 3.2 : 2.0;
   }
@@ -4134,7 +4426,7 @@ function simAnteriorite(classif){
   var a = SIM_DATA.anteriorite;
   if(!a) return null;
   if(a === 'avant_inchange' && classif.level === 'haut'){
-    return { statut:'differe', texte:'Ce système était sur le marché avant la date d\'application et sa conception n\'a pas changé de façon importante depuis : l\'article 111(2) diffère le régime complet des systèmes à haut risque de l\'annexe III tant que cette conception ne change pas. Cet aménagement ne couvre PAS les obligations indépendantes de l\'annexe III — pratiques interdites de l\'article 5, transparence de l\'article 50, maîtrise de l\'IA de l\'article 4 — qui restent dues aujourd\'hui. La moindre modification importante de conception fait tomber l\'antériorité et rend le régime complet applicable.' };
+    return { statut:'differe', texte:'Ce système était sur le marché avant la date d\'application et sa conception n\'a pas changé de façon importante depuis : l\'article 111(2) diffère le régime complet des systèmes à haut risque de l\'annexe III tant que cette conception ne change pas. Cet aménagement ne couvre PAS les obligations indépendantes de l\'annexe III — pratiques interdites de l\'article 5, transparence de l\'article 50 (le marquage des contenus synthétiques des systèmes déjà sur le marché avant le 2 août 2026 étant dû au plus tard le 2 décembre 2026, article 111(4)), culture de l\'IA de l\'article 4 — qui restent dues. Les fournisseurs et déployeurs de systèmes destinés à des autorités publiques doivent, en tout état de cause, avoir pris les mesures nécessaires à leur conformité au plus tard le 2 août 2030 (article 111(2)). La moindre modification importante de conception fait tomber l\'antériorité et rend le régime complet applicable.' };
   }
   if(a === 'avant_modifie'){
     return { statut:'perdue', texte:'Ce système était sur le marché avant la date d\'application, mais sa conception a changé de façon importante depuis : l\'aménagement de l\'article 111(2) ne s\'applique plus. Il est traité comme un système neuf.' };
@@ -4151,17 +4443,26 @@ function simGap(classif){
   var gaps = [];
   var ALL_OBL = [
     { id:'art9', name:'Système de gestion des risques', desc:'Processus itératif documenté : identification, estimation, évaluation et gestion des risques tout au long du cycle de vie.', refs:['Art. 9'], prio:'p1', level:'haut' },
-    { id:'art10', name:'Gouvernance des données', desc:'Qualité, représentativité, traçabilité des données d\'entraînement, validation et test. Absence de biais vérifiée.', refs:['Art. 10'], prio:'p1', level:'haut' },
-    { id:'art11', name:'Documentation technique (Annexe IV)', desc:'Dossier technique complet avant mise sur le marché : architecture, données, performances, limitations, évaluation de conformité.', refs:['Art. 11','Annexe IV'], prio:'p1', level:'haut' },
+    { id:'art10', name:'Gouvernance des données', desc:'Qualité, représentativité, traçabilité des données d\'entraînement, validation et test. Absence de biais vérifiée. Catégories particulières de données pour détecter et corriger les biais : conditions cumulatives de l\'article 4a, qui remplace l\'ancien article 10(5).', refs:['Art. 10','Art. 4a'], prio:'p1', level:'haut' },
+    { id:'art11', name:'Documentation technique (Annexe IV)', desc:'Dossier technique complet avant mise sur le marché : architecture, données, performances, limitations, évaluation de conformité. PME, start-up et petites capitalisations intermédiaires : formulaire simplifié établi par la Commission (Art. 11(1)).', refs:['Art. 11','Annexe IV'], prio:'p1', level:'haut' },
     { id:'art12', name:'Journalisation automatique des décisions', desc:'Capacité de journalisation : horodatage, identifiants, entrées/sorties, événements. Conservation minimale 6 mois.', refs:['Art. 12'], prio:'p1', level:'haut' },
     { id:'art13', name:'Notice d\'utilisation pour déployeurs', desc:'Documentation claire sur les capacités, limites, performances, conditions d\'utilisation prévue et restrictions.', refs:['Art. 13'], prio:'p2', level:'haut' },
     { id:'art14', name:'Mécanismes de supervision humaine', desc:'Interfaces permettant la compréhension des sorties, l\'interruption ou la correction du système par des opérateurs compétents.', refs:['Art. 14'], prio:'p1', level:'haut' },
-    { id:'art17', name:'Système de gestion de la qualité', desc:'Politiques et procédures : stratégie réglementaire, conception, tests, incidents, surveillance post-commercialisation.', refs:['Art. 17'], prio:'p2', level:'haut' },
+    { id:'art17', name:'Système de gestion de la qualité', desc:'Politiques et procédures : stratégie réglementaire, conception, tests, incidents, surveillance post-commercialisation. Mise en œuvre proportionnée à la taille du fournisseur, PME, start-up et petites capitalisations intermédiaires notamment, sans jamais rabattre le niveau de rigueur exigé (Art. 17(2), Art. 63).', refs:['Art. 17'], prio:'p2', level:'haut' },
   ];
 
-  var TRANSPARENCY_OBL = [
-    { id:'art50_chat', name:'Information obligatoire — interaction IA', desc:'Informer les utilisateurs qu\'ils interagissent avec un système IA, sauf si cela ressort clairement du contexte.', refs:['Art. 50(1)'], prio:'p1', level:'limite' },
-    { id:'art50_content', name:'Marquage des contenus synthétiques', desc:'Marquage machine-readable des contenus générés artificiellement (texte, image, audio, vidéo). Watermarking obligatoire.', refs:['Art. 50(2)','Art. 50(4)'], prio:'p1', level:'limite' },
+  /* L'ARTICLE 50 SE PARTAGE ENTRE LE FOURNISSEUR ET LE DÉPLOYEUR, PARAGRAPHE PAR
+     PARAGRAPHE. Le simulateur rendait deux lignes pour tout le monde — « information »
+     et « marquage » — et omettait le §3 (reconnaissance des émotions, catégorisation
+     biométrique), tout en attribuant au marquage le §4, qui est un devoir du
+     DÉPLOYEUR. Le fournisseur doit le §1 et le §2 ; le déployeur le §3 et le §4. */
+  var TRANSPARENCE_FOURNISSEUR = [
+    { id:'art50_chat', name:'Concevoir le système pour informer de son caractère d\'IA', desc:'Les systèmes destinés à interagir directement avec des personnes sont conçus de façon que celles-ci sachent qu\'elles interagissent avec une IA, sauf si cela est évident pour une personne raisonnablement informée et attentive au vu du contexte.', refs:['Art. 50(1)'], prio:'p1', level:'limite' },
+    { id:'art50_marquage', name:'Marquer les contenus synthétiques, lisiblement par machine', desc:'Les sorties audio, image, vidéo ou texte générées ou manipulées sont marquées dans un format lisible par machine et détectables comme artificielles — solutions efficaces, interopérables, robustes et fiables dans la limite du possible technique. Le §2 n\'impose aucune mention visible. Système déjà sur le marché avant le 2 août 2026 : jusqu\'au 2 décembre 2026.', refs:['Art. 50(2)','Art. 111(4)'], prio:'p1', level:'limite' },
+  ];
+  var TRANSPARENCE_DEPLOYEUR = [
+    { id:'art50_emotion', name:'Informer les personnes exposées à la reconnaissance des émotions ou à la catégorisation biométrique', desc:'Le déployeur d\'un système de reconnaissance des émotions ou de catégorisation biométrique informe les personnes exposées de son fonctionnement et traite les données conformément au RGPD. Sans objet pour les usages autorisés par la loi en matière pénale.', refs:['Art. 50(3)'], prio:'p1', level:'limite' },
+    { id:'art50_hypertrucage', name:'Signaler les hypertrucages et les textes publiés d\'intérêt public', desc:'Le déployeur d\'un système qui génère ou manipule une image, un son ou une vidéo constituant un hypertrucage indique que le contenu est artificiel ; de même pour le texte publié afin d\'informer le public sur des questions d\'intérêt public, sauf relecture humaine ou contrôle éditorial avec responsabilité éditoriale. Œuvre manifestement artistique, satirique ou fictionnelle : mention limitée, sans entraver l\'œuvre.', refs:['Art. 50(4)'], prio:'p1', level:'limite' },
   ];
 
   var GPAI_OBL = [
@@ -4170,7 +4471,7 @@ function simGap(classif){
   ];
 
   var RGPD_OBL = [
-    { id:'aipd', name:'Analyse d\'impact (AIPD/DPIA) RGPD', desc:'Analyse d\'impact obligatoire si traitement à risque élevé, incluant les systèmes IA de profilage ou décision automatisée.', refs:['RGPD Art. 35','AI Act Art. 9.7'], prio:'p1', level:'rgpd' },
+    { id:'aipd', name:'Analyse d\'impact (AIPD/DPIA) RGPD', desc:'Analyse d\'impact obligatoire si traitement à risque élevé, incluant les systèmes IA de profilage ou décision automatisée.', refs:['RGPD Art. 35','AI Act Art. 26(9)'], prio:'p1', level:'rgpd' },
     { id:'art22', name:'Droit d\'opposition aux décisions automatisées', desc:'Les personnes ont le droit de ne pas faire l\'objet d\'une décision exclusivement automatisée ayant des effets juridiques.', refs:['RGPD Art. 22'], prio:'p1', level:'rgpd' },
   ];
 
@@ -4189,6 +4490,7 @@ function simGap(classif){
     { id:'art47_48', name:'Déclaration UE de conformité et marquage CE', desc:'Déclaration écrite tenue à disposition des autorités pendant dix ans, et apposition du marquage CE avant mise sur le marché.', refs:['Art. 47','Art. 48'], prio:'p1', level:'haut' },
     { id:'art49', name:'Enregistrement dans la base de données de l\'Union', desc:'Enregistrement du système avant sa mise sur le marché ou en service.', refs:['Art. 49'], prio:'p1', level:'haut' },
     { id:'art72', name:'Surveillance après commercialisation', desc:'Plan documenté de collecte et d\'analyse des données d\'usage sur toute la durée de vie du système.', refs:['Art. 72'], prio:'p2', level:'haut' },
+    { id:'art25_4', name:'Contrat écrit avec les fournisseurs de composants, modèles, outils ou services', desc:'Le fournisseur d\'un système à haut risque et le tiers qui lui fournit un système, un modèle, un outil, un service ou un composant précisent par écrit les informations, capacités, accès techniques et assistance nécessaires à sa pleine conformité. Ne joue pas pour les outils publiés sous licence libre et ouverte, modèles d\'IA à usage général exceptés.', refs:['Art. 25(4)'], prio:'p2', level:'haut' },
     { id:'art73', name:'Signalement des incidents graves', desc:'Notification à l\'autorité de surveillance : quinze jours, ramenés à dix en cas de décès et à deux en cas d\'incident généralisé.', refs:['Art. 73'], prio:'p1', level:'haut' },
   ];
 
@@ -4199,14 +4501,17 @@ function simGap(classif){
     { id:'art26_notice', name:'Employer le système conformément à sa notice', desc:'Mesures techniques et organisationnelles garantissant un usage conforme aux instructions du fournisseur. Sortir de la destination prévue fait basculer sous l\'article 25.', refs:['Art. 26(1)'], prio:'p1', level:'deployeur' },
     { id:'art26_supervision', name:'Confier la supervision humaine à des personnes compétentes', desc:'Personnes formées, disposant du temps, de l\'autorité et du soutien nécessaires pour interrompre ou écarter une sortie du système.', refs:['Art. 26(2)'], prio:'p1', level:'deployeur' },
     { id:'art26_donnees', name:'S\'assurer de la pertinence des données d\'entrée', desc:'Dans la mesure du contrôle exercé sur elles : données pertinentes et suffisamment représentatives au regard de la destination du système.', refs:['Art. 26(4)'], prio:'p1', level:'deployeur' },
-    { id:'art26_surveillance', name:'Surveiller le fonctionnement et savoir suspendre', desc:'Surveillance sur la base de la notice ; suspension de l\'usage et information du fournisseur et de l\'autorité en cas de risque identifié.', refs:['Art. 26(5)'], prio:'p1', level:'deployeur' },
+    { id:'art26_surveillance', name:'Surveiller le fonctionnement, savoir suspendre et signaler dans l\'ordre', desc:'Surveillance sur la base de la notice. Risque identifié : information sans retard du fournisseur ou du distributeur et de l\'autorité de surveillance du marché, et suspension de l\'usage. Incident grave : information immédiate du fournisseur d\'abord, puis de l\'importateur ou du distributeur et des autorités ; si le fournisseur est injoignable, l\'article 73 s\'applique par analogie.', refs:['Art. 26(5)','Art. 73'], prio:'p1', level:'deployeur' },
     { id:'art26_journaux', name:'Conserver les journaux générés automatiquement', desc:'Six mois au moins, sauf disposition contraire — les journaux sont ce qui rendra l\'usage démontrable en cas de contrôle.', refs:['Art. 26(6)'], prio:'p1', level:'deployeur' },
     { id:'art26_travailleurs', name:'Informer les travailleurs et leurs représentants', desc:'Avant la mise en service d\'un système à haut risque sur le lieu de travail, les personnes concernées sont informées qu\'elles y seront soumises.', refs:['Art. 26(7)'], prio:'p2', level:'deployeur' },
     { id:'art26_personnes', name:'Informer les personnes soumises à une décision', desc:'Toute personne physique faisant l\'objet d\'une décision prise ou assistée par le système est informée de cet usage.', refs:['Art. 26(11)'], prio:'p1', level:'deployeur' },
     { id:'art86', name:'Répondre au droit à l\'explication', desc:'La personne concernée par une décision produisant des effets juridiques ou l\'affectant significativement peut obtenir des explications claires sur le rôle du système dans cette décision.', refs:['Art. 86'], prio:'p2', level:'deployeur' },
   ];
 
-  var FRIA_OBL = { id:'art27', name:'Analyse d\'impact sur les droits fondamentaux (AIDF)', desc:'Description des processus concernés, période et fréquence d\'usage, catégories de personnes affectées, risques de préjudice identifiés, mesures de supervision humaine et de recours. À notifier à l\'autorité de surveillance.', refs:['Art. 27'], prio:'p1', level:'deployeur' };
+  var ART25_2_OBL = { id:'art25_2', name:'Coopérer avec le nouveau fournisseur de votre système', desc:'Quand un tiers rebaptise, modifie substantiellement ou réoriente votre système, vous n\'en êtes plus le fournisseur, mais vous coopérez étroitement avec lui : documentation technique suffisante pour évaluer la conformité, information sur les limites et modes de défaillance connus, accès technique ciblé pour les tests et la validation. Ne joue pas si vous avez clairement précisé que votre système ne doit pas devenir un système à haut risque.', refs:['Art. 25(2)'], prio:'p1', level:'haut' };
+  var ART26_8_OBL = { id:'art26_registre', name:'Vérifier l\'enregistrement du système dans la base de données de l\'Union', desc:'Une autorité publique ou une institution de l\'Union qui déploie un système à haut risque respecte les obligations d\'enregistrement de l\'article 49 ; si le système envisagé n\'y est pas enregistré, elle ne l\'utilise pas et en informe le fournisseur ou le distributeur.', refs:['Art. 26(8)','Art. 49'], prio:'p1', level:'deployeur' };
+
+  var FRIA_OBL = { id:'art27', name:'Analyse d\'impact sur les droits fondamentaux (AIDF)', desc:'Description des processus concernés, période et fréquence d\'usage, catégories de personnes affectées, risques de préjudice identifiés, mesures de supervision humaine et de recours. À notifier à l\'autorité de surveillance. Ce qui est déjà couvert par l\'analyse d\'impact RGPD peut être repris par renvoi (Art. 27(4)).', refs:['Art. 27'], prio:'p1', level:'deployeur' };
 
   var IMPORTATEUR_OBL = [
     { id:'art23_verif', name:'Vérifier la conformité avant mise sur le marché', desc:'Évaluation de conformité conduite, documentation technique établie, marquage CE apposé, déclaration UE et notice disponibles, mandataire désigné le cas échéant.', refs:['Art. 23(1)'], prio:'p1', level:'importateur' },
@@ -4220,7 +4525,7 @@ function simGap(classif){
   ];
 
   /* Due par TOUS les opérateurs, quel que soit le niveau de risque. */
-  var LITTERATIE_OBL = { id:'art4', name:'Maîtrise de l\'IA du personnel', desc:'Niveau suffisant de maîtrise de l\'IA chez les personnes chargées du fonctionnement et de l\'usage des systèmes, au regard de leurs connaissances, de leur formation et du contexte d\'emploi.', refs:['Art. 4'], prio:'p2', level:'tous' };
+  var LITTERATIE_OBL = { id:'art4', name:'Culture de l\'IA du personnel', desc:'Prendre des mesures pour soutenir le développement de la culture de l\'IA des personnes qui exploitent ou utilisent les systèmes pour votre compte, compte tenu de leurs connaissances, de leur formation, du contexte d\'emploi et des personnes visées. L\'obligation est de moyens : elle ne garantit pas un niveau précis à chaque personne (texte remplacé par le règlement (UE) 2026/1744).', refs:['Art. 4'], prio:'p2', level:'tous' };
 
   var role = simRole();
   /* Un rôle indéterminé rend les obligations de chaque rôle plutôt que de
@@ -4247,6 +4552,7 @@ function simGap(classif){
   }
   if(classif.level === 'haut' && estDeployeur){
     DEPLOYEUR_OBL.forEach(function(o){ activeObls.push({ obl:o, severity:'warning', status:'' }); });
+    if(d.fria === 'public') activeObls.push({ obl:ART26_8_OBL, severity:'warning', status:'' });
     /* L'AIDF n'est pas due par tous les déployeurs : seulement organismes
        publics, organismes privés chargés d'un service public, et — pour tout
        acteur — solvabilité et tarification en assurance vie ou santé. */
@@ -4263,8 +4569,26 @@ function simGap(classif){
   if(classif.level !== 'interdit'){
     activeObls.push({ obl:LITTERATIE_OBL, severity:'warning', status:'' });
   }
-  if(d.interaction === 'oui' || d.interaction === 'genere'){
-    TRANSPARENCY_OBL.forEach(function(o){ activeObls.push({ obl:o, severity:'warning', status:'partial' }); });
+  /* Article 50 : ce qui déclenche chaque paragraphe, et à qui il incombe. Le type
+     de système compte autant que la réponse à la question d'interaction — un
+     « chatbot » sans réponse à cette question restait sans aucune obligation. */
+  if(classif.level !== 'interdit'){
+    var chat    = d.interaction === 'oui' || d.type === 'chatbot' || d.type === 'copilot';
+    var genere  = d.interaction === 'genere' || d.type === 'llm_gen' || d.type === 'deepfake';
+    var emotion = d.type === 'emotion' || d.type === 'face_reco';
+    if(estFournisseur){
+      if(chat)   activeObls.push({ obl:TRANSPARENCE_FOURNISSEUR[0], severity:'warning', status:'' });
+      if(genere) activeObls.push({ obl:TRANSPARENCE_FOURNISSEUR[1], severity:'warning', status:'' });
+    }
+    if(estDeployeur){
+      if(emotion) activeObls.push({ obl:TRANSPARENCE_DEPLOYEUR[0], severity:'warning', status:'' });
+      if(genere)  activeObls.push({ obl:TRANSPARENCE_DEPLOYEUR[1], severity:'warning', status:'' });
+    }
+  }
+  /* Article 25(2) : le fournisseur INITIAL, dont un tiers a rebaptisé, modifié ou
+     réorienté le système, ne cesse pas d'avoir un devoir — il coopère. */
+  if(d.art25_amont === 'oui' && estFournisseur && classif.level !== 'interdit'){
+    activeObls.push({ obl:ART25_2_OBL, severity:'warning', status:'' });
   }
   if(d.gpai === 'oui_sys' || d.gpai === 'oui_flop' || d.gpai === 'deploie'){
     activeObls.push({ obl:GPAI_OBL[0], severity:'warning', status:'partial' });
@@ -4307,34 +4631,72 @@ function simTimeline(classif){
   return source.map(function(r){
     var e = etiquettes[r.statut] || ['A VENIR','chip-o'];
     var ligne = { date:r.date, tag:e[0], tagCls:e[1],
-                  text:(r.quoi || '') + (r.ref ? ' — ' + r.ref : '') };
+                  text:(r.quoi || '') + (r.ref ? ' — ' + r.ref : ''),
+                  quoi:(r.quoi || ''), ref:(r.ref || '') };
     /* Ce qui est SOULIGNÉ dépend du système analysé : la ligne qui le concerne,
-       et elle seule. Repéré sur le contenu de la ligne, pas sur son rang : un
-       rang change dès qu'une échéance s'ajoute au calendrier. */
-    /* LA SENTINELLE `(?![0-9])` N'EST PAS UN ORNEMENT : « Art. 5 » est un
-       préfixe d'« Art. 50 ». Sans elle, un système relevant d'une pratique
-       interdite soulignait DEUX lignes — la sienne et celle de la
-       transparence — et le lecteur ne savait plus laquelle le concernait. */
-    if(classif.art5 && /Interdictions|Art\. 5(?![0-9])/.test(r.quoi || '')) ligne.urgent = true;
-    if(classif.level === 'haut' && /Annexe III/i.test(r.quoi || '')) ligne.urgent = true;
+       et elle seule. Désignée par sa CLÉ, écrite dans le calendrier — ni par son
+       rang, qui change dès qu'une échéance s'ajoute, ni par un mot reconnu dans
+       sa phrase : « Art. 5 » est un préfixe d'« Art. 50 », et un système relevant
+       d'une pratique interdite soulignait DEUX lignes — la sienne et celle de la
+       transparence — avant que la reconnaissance se fasse sur une clé. */
+    var points = classif.art5_points || [];
+    var nouvelles = points.indexOf('ba') >= 0 || points.indexOf('bb') >= 0;
+    var anciennes = !points.length || points.some(function(p){ return p !== 'ba' && p !== 'bb'; });
+    if(classif.art5 && anciennes && r.cle === 'interdictions') ligne.urgent = true;
+    if(classif.art5 && nouvelles && r.cle === 'interdictions_2026') ligne.urgent = true;
+    var voies = classif.haut_via || ['annexe3'];
+    if(classif.level === 'haut' && voies.indexOf('annexe3') >= 0 && r.cle === 'annexe3') ligne.urgent = true;
+    if(classif.level === 'haut' && voies.indexOf('annexe1') >= 0 && r.cle === 'annexe1') ligne.urgent = true;
+    if(classif.level === 'limite' && r.cle === 'transparence') ligne.urgent = true;
     return ligne;
   });
 }
 
-/* Calcul des sanctions */
+/* Calcul des sanctions — LIT LA SOURCE UNIQUE (AI_ACT_SANCTIONS, plus haut).
+   Le niveau du simulateur désigne le palier de l'article 99 : une pratique
+   interdite relève du §3, un système à haut risque du §4 (manquements des
+   opérateurs), la transparence de l'article 50 du §4(g) — 15 M€ / 3 %, pas
+   7,5 M€ / 1 % —, et un système à risque minimal n'encourt que le §5
+   (informations inexactes fournies aux autorités), faute d'obligation propre.
+   La taille ne se lit pas seulement dans le chiffre d'affaires : le seuil des
+   PME tient aussi à l'effectif et au bilan. Les deux tranches basses sont
+   traitées en PME ; la tranche « ETI » reçoit le plafond sans allègement et,
+   quand un allègement est POSSIBLE (petite capitalisation intermédiaire), le
+   dit — sans l'appliquer d'office, puisque l'effectif n'est pas connu ici. */
 function simSanctions(classif){
   var ca_map = { startup:5000000, sme:30000000, mid:150000000, large:500000000, xlarge:2000000000 };
   var ca = ca_map[SIM_DATA.ca] || 50000000;
-  var pct_map = { interdit:0.07, haut:0.03, limite:0.015, minimal:0.01 };
-  var pct = pct_map[classif.level] || 0.01;
-  var flat_map = { interdit:35000000, haut:15000000, limite:7500000, minimal:7500000 };
-  var flat = flat_map[classif.level] || 7500000;
-  var maxSanc = Math.max(ca * pct, flat);
-  function fmt(n){ if(n>=1000000000) return (n/1000000000).toFixed(1)+' Mds€'; if(n>=1000000) return (n/1000000).toFixed(0)+' M€'; return (n/1000).toFixed(0)+' K€'; }
-  return { sanction_ca: fmt(ca * pct), sanction_flat: fmt(flat), sanction_max: fmt(maxSanc), pct: Math.round(pct*100)+'%' };
+  var palier = { interdit:'interdit', haut:'obligations', limite:'transparence' }[classif.level] || 'info';
+  var taille = (SIM_DATA.ca === 'startup' || SIM_DATA.ca === 'sme') ? 'pme' : 'eti';
+  var s = aiActSanctionMax(palier, ca, taille);
+  function fmt(n){
+    if(n>=1000000000) return String(Math.round(n/100000000)/10).replace('.',',')+' Mds€';
+    if(n>=1000000) return String(Math.round(n/100000)/10).replace('.',',')+' M€';
+    return Math.round(n/1000)+' K€';
+  }
+  var notes = ['Ces montants sont des plafonds : l\'autorité fixe l\'amende en dessous, d\'après l\'Art. 99(7).'];
+  if(s.regle === 'plus_bas') notes.push('PME et start-up : le plus bas des deux plafonds s\'applique (Art. 99(6)).');
+  if(taille === 'eti' && SIM_DATA.ca === 'mid' && AI_ACT_SANCTIONS[palier].smc){
+    notes.push('Si l\'organisation est une petite capitalisation intermédiaire (moins de 750 personnes, CA ≤ 150 M€ ou bilan ≤ 129 M€), le plafond est le plus bas des deux : '
+      + fmt(aiActSanctionMax(palier, ca, 'smc').max) + ' (Art. 99(6a)).');
+  }
+  if(palier === 'info') notes.push('Ce niveau n\'appelle aucune obligation propre : seule l\'amende de l\'Art. 99(5) reste encourue, pour des informations inexactes fournies à une autorité.');
+  notes.push('Les amendes de l\'article 99 sont applicables depuis le 2 août 2025 (Art. 113(b)).');
+  return { sanction_ca: fmt(s.sur_ca), sanction_flat: fmt(s.fixe), sanction_max: fmt(s.max),
+           pct: Math.round(s.pct*100)+'%', max_eur: s.max, art: s.art, objet: s.objet, palier: palier,
+           regle: s.regle, regle_art: s.regle_art,
+           regle_txt: s.regle === 'plus_bas' ? 'Le plus bas des deux plafonds s\'applique (PME, Art. 99(6))' : 'Le plus élevé des deux plafonds s\'applique',
+           note: notes.join(' '), notes: notes };
 }
 
 /* ══ RENDU ══ */
+/* UN FRAGMENT DE PHRASE DANS SON PROPRE ÉLÉMENT. Le moteur de traduction cherche chaque nœud texte,
+   ou l'élément tout entier quand il ne porte que de la mise en forme nue : « Label : phrase » dans un
+   même <div> devient un nœud « : phrase », « quoi — ref » un nœud que rien ne porte au dictionnaire.
+   Un <span class="…"> n'est pas de la mise en forme nue : il sépare, et chaque fragment se retrouve
+   sous SA clé — celle du littéral qui l'a écrit. Mesuré en anglais, dans un vrai navigateur : 330 mots
+   restaient en français dans le résultat du simulateur, tous des phrases composées en un seul nœud. */
+function simT(x){ return '<span class="sim-t">' + x + '</span>'; }
 function simRender(){
   var classif = simClassify();
   var obligations = simGap(classif);
@@ -4365,7 +4727,7 @@ function simRender(){
       +'<div class="sim-tl-date">'+t.date
       +'<span class="sim-tl-tag '+t.tagCls+'">'+t.tag+'</span>'
       +'</div>'
-      +'<div class="sim-tl-text">'+t.text+'</div>'
+      +'<div class="sim-tl-text">'+(t.quoi === undefined ? t.text : simT(t.quoi)+(t.ref ? ' — '+simT(t.ref) : ''))+'</div>'
       +'</div>';
   }).join('');
 
@@ -4376,12 +4738,13 @@ function simRender(){
     extra = "<div style=\"background:rgba(28,90,138,.08);border:1px solid rgba(28,90,138,.2);border-radius:3px;padding:10px 14px;font-size:11px;color:var(--blue);margin-bottom:16px\"><strong>Extraterritorialite (Art. 2)</strong> : Organisation hors UE visant le marche EU. Mandataire UE obligatoire avant mise sur le marche (Art. 22).</div>";
   }
   if(classif.exception_note){
-    extra += "<div style=\"background:rgba(45,122,71,.08);border:1px solid rgba(45,122,71,.25);border-radius:3px;padding:10px 14px;font-size:11px;color:var(--green);margin-bottom:16px\"><strong>Exception Art. 6(3) appliquee</strong> : " + classif.exception_note + "</div>";
+    extra += "<div style=\"background:rgba(45,122,71,.08);border:1px solid rgba(45,122,71,.25);border-radius:3px;padding:10px 14px;font-size:11px;color:var(--green);margin-bottom:16px\"><strong>Exception Art. 6(3) appliquee</strong> : " + simT(classif.exception_note) + "</div>";
   }
   var gpaiInfo = "";
   if(d.gpai && d.gpai !== 'non'){
     var gpaiMsg = d.gpai==='oui_flop' ? "Modele a risque systemique (seuil 10^25 FLOPs) - Art. 55 applicables." : d.gpai==='oui_sys' ? "Fournisseur GPAI - Art. 53 applicables (documentation, policy droits auteur, evaluations)." : "Deployeur GPAI tiers - verifiez les politiques fournisseur et obligations Art. 50.";
-    gpaiInfo = "<div style=\"background:rgba(196,124,26,.06);border:1px solid rgba(196,124,26,.2);border-radius:3px;padding:10px 14px;font-size:11px;color:var(--orange);margin-bottom:16px\"><strong>GPAI :</strong> " + gpaiMsg + "</div>";
+    var gpaiAmende = "Amende de la Commission (Art. 101) : jusqu'a 15 M€ ou 3 % du CA mondial, le plus eleve des deux.";
+    gpaiInfo = "<div style=\"background:rgba(196,124,26,.06);border:1px solid rgba(196,124,26,.2);border-radius:3px;padding:10px 14px;font-size:11px;color:var(--orange);margin-bottom:16px\"><strong>GPAI :</strong> " + simT(gpaiMsg) + " " + simT(gpaiAmende) + "</div>";
   }
 
   /* ── LE RÔLE, DIT AVANT LES OBLIGATIONS ──────────────────────────────────
@@ -4394,15 +4757,15 @@ function simRender(){
   var roleInfo = '';
   if(role.requalifie){
     roleInfo = '<div style="background:rgba(184,50,34,.07);border:1px solid rgba(184,50,34,.3);border-radius:3px;padding:10px 14px;font-size:11px;color:var(--accent);margin-bottom:16px">'
-      + '<strong>Requalification — Art. 25(1)</strong> : vous vous êtes déclaré <em>'
+      + '<strong>Requalification — Art. 25(1)</strong> : ' + simT('vous vous êtes déclaré') + ' <em>'
       + ((SIM_ROLES[role.declare] || SIM_ROLES.indetermine).nom).toLowerCase()
-      + '</em>, mais ' + role.motif + '. Vous êtes donc le <strong>fournisseur</strong> de ce système au sens du règlement, et vous en portez toutes les obligations — celles listées ci-dessous.</div>';
+      + '</em>, mais ' + simT(role.motif) + '. ' + simT('Vous êtes donc le') + ' <strong>fournisseur</strong> ' + simT('de ce système au sens du règlement, et vous en portez toutes les obligations — celles listées ci-dessous.') + '</div>';
   } else if(role.role === 'indetermine'){
     roleInfo = '<div style="background:rgba(196,124,26,.06);border:1px solid rgba(196,124,26,.2);border-radius:3px;padding:10px 14px;font-size:11px;color:var(--orange);margin-bottom:16px">'
       + '<strong>Rôle non déterminé</strong> : les obligations de <em>chaque</em> rôle sont rendues ci-dessous, sans arbitrage. Pour trancher, une seule question suffit le plus souvent — mettez-vous ce système sur le marché sous votre nom (fournisseur), ou l\'employez-vous sous votre autorité (déployeur) ?</div>';
   } else {
     roleInfo = '<div style="background:rgba(28,90,138,.06);border:1px solid rgba(28,90,138,.2);border-radius:3px;padding:10px 14px;font-size:11px;color:var(--blue);margin-bottom:16px">'
-      + '<strong>Rôle retenu : ' + roleNom + '</strong> (' + roleArt + '). Les obligations ci-dessous sont celles de ce rôle, et de lui seul. Un même système peut être à haut risque pour tous les opérateurs sans que chacun doive la même chose.</div>';
+      + '<strong>Rôle retenu : ' + roleNom + '</strong> (' + roleArt + '). ' + simT('Les obligations ci-dessous sont celles de ce rôle, et de lui seul. Un même système peut être à haut risque pour tous les opérateurs sans que chacun doive la même chose.') + '</div>';
   }
 
   /* ── LA DÉFINITION : LA PREMIÈRE SORTIE POSSIBLE DU CHAMP ─────────────── */
@@ -4411,14 +4774,61 @@ function simRender(){
   if(def.statut === 'hors_champ'){
     defInfo = '<div style="background:rgba(45,122,71,.08);border:2px solid rgba(45,122,71,.35);border-radius:4px;padding:14px 16px;font-size:12px;color:var(--green);margin-bottom:16px">'
       + '<strong>Ce n\'est probablement pas un système d\'IA — Art. 3(1)</strong><br>'
-      + 'L\'inférence n\'est pas cochée : le système ne déduit pas de ses entrées la manière de produire ses sorties. Un logiciel qui déroule des règles écrites par une personne n\'entre pas dans la définition, et le règlement ne s\'y applique pas — ni haut risque, ni transparence, ni sanctions. La classification ci-dessous est donnée à titre indicatif ; c\'est cette question qu\'il faut trancher d\'abord, et la documenter.</div>';
+      + simT('L\'inférence n\'est pas cochée : le système ne déduit pas de ses entrées la manière de produire ses sorties. Un logiciel qui déroule des règles écrites par une personne n\'entre pas dans la définition, et le règlement ne s\'y applique pas — ni haut risque, ni transparence, ni sanctions. La classification ci-dessous est donnée à titre indicatif ; c\'est cette question qu\'il faut trancher d\'abord, et la documenter.') + '</div>';
   } else if(def.statut === 'a_verifier'){
     defInfo = '<div style="background:rgba(196,124,26,.06);border:1px solid rgba(196,124,26,.2);border-radius:3px;padding:10px 14px;font-size:11px;color:var(--orange);margin-bottom:16px">'
-      + '<strong>Définition incomplète — Art. 3(1)</strong> : ' + def.manquantes.length
-      + ' des six éléments cumulatifs ne sont pas cochés. L\'inférence l\'est, donc la qualification reste probable, mais elle doit être établie et écrite avant de s\'appuyer sur la suite.</div>';
+      + '<strong>Définition incomplète — Art. 3(1)</strong> : ' + simT(String(def.manquantes.length))
+      + ' ' + simT('des six éléments cumulatifs ne sont pas cochés. L\'inférence l\'est, donc la qualification reste probable, mais elle doit être établie et écrite avant de s\'appuyer sur la suite.') + '</div>';
   } else if(def.statut === 'non_renseigne'){
     defInfo = '<div style="background:rgba(120,120,120,.06);border:1px solid var(--rule);border-radius:3px;padding:10px 14px;font-size:11px;color:var(--muted);margin-bottom:16px">'
       + '<strong>Qualification non renseignée</strong> : les sept éléments de la définition de l\'article 3(1) n\'ont pas été examinés. Tout ce qui suit suppose que le système en est un.</div>';
+  }
+
+  /* ── HORS CHAMP : L'ARTICLE 2 ─────────────────────────────────────────────
+     Un système peut échapper au règlement avant toute classification. */
+  var per = simPerimetre();
+  var perInfo = '';
+  if(per.statut === 'hors_champ'){
+    perInfo = '<div style="background:rgba(45,122,71,.08);border:2px solid rgba(45,122,71,.35);border-radius:4px;padding:14px 16px;font-size:12px;color:var(--green);margin-bottom:16px">'
+      + '<strong>Hors du champ du règlement — ' + per.motifs.map(function(m){ return m.art; }).join(', ') + '</strong><br>'
+      + simT('Le règlement ne s\'applique pas :') + ' ' + per.motifs.map(function(m){ return simT(m.motif); }).join(' ; ')
+      + '. ' + simT('La classification ci-dessous est donnée à titre indicatif : elle ne vaut que si l\'exclusion cesse de jouer — mise sur le marché, usage à double fin, essais en conditions réelles.') + '</div>';
+  }
+  (per.ecartes || []).forEach(function(e){
+    perInfo += '<div style="background:rgba(196,124,26,.06);border:1px solid rgba(196,124,26,.2);border-radius:3px;padding:10px 14px;font-size:11px;color:var(--orange);margin-bottom:16px">'
+      + '<strong>Exclusion écartée — ' + e.art + '</strong> : ' + simT(e.motif) + '.</div>';
+  });
+
+  /* ── UNE PRÉSOMPTION N'EST PAS UN CONSTAT ────────────────────────────────── */
+  var SIM_A_CONFIRMER = {
+    usage: 'Haut risque PRÉSUMÉ, à confirmer : aucun usage précis de l\'annexe III n\'a été coché. Seul un usage listé fait basculer un système (Art. 6(2)) ; le secteur ou le type de système seuls ne suffisent pas. Cochez l\'usage visé — ou constatez qu\'il n\'y en a pas : le système n\'est alors pas à haut risque de ce chef.',
+    bio_remote: 'Identification biométrique à distance : INTERDITE si elle est utilisée en temps réel dans l\'espace accessible au public à des fins répressives (Art. 5(1)(h), trois exceptions strictes) ; sinon à haut risque (annexe III, point 1(a)). Répondez à la question sur la finalité pour trancher.'
+  };
+  var confInfo = classif.a_confirmer && SIM_A_CONFIRMER[classif.a_confirmer]
+    ? '<div style="background:rgba(196,124,26,.06);border:1px solid rgba(196,124,26,.2);border-radius:3px;padding:10px 14px;font-size:11px;color:var(--orange);margin-bottom:16px"><strong>À confirmer</strong> : ' + simT(SIM_A_CONFIRMER[classif.a_confirmer]) + '</div>'
+    : '';
+  var a1Info = classif.annexe1_note
+    ? '<div style="background:rgba(28,90,138,.06);border:1px solid rgba(28,90,138,.2);border-radius:3px;padding:10px 14px;font-size:11px;color:var(--blue);margin-bottom:16px"><strong>Annexe I — produits réglementés</strong> : ' + simT(classif.annexe1_note) + '</div>'
+    : '';
+
+  /* ── LA PRATIQUE INTERDITE, NOMMÉE : point par point, avec sa date d'effet ── */
+  var art5Info = '';
+  if(classif.art5){
+    var pts = classif.art5_points || [];
+    var liste = pts.map(function(p){ return '<span class="sim-pt">(' + p + ')</span> ' + simT(SIM_ART5[p]); }).join(' ; ');
+    var nouvelles = pts.filter(function(p){ return p === 'ba' || p === 'bb'; });
+    var e26 = window.aiActEcheance && window.aiActEcheance('interdictions_2026');
+    var effet = '';
+    if(nouvelles.length && e26){
+      effet = e26.statut === 'passe'
+        ? 'Les points ba et bb sont interdits depuis le ' + e26.date + '.'
+        : 'Les points ba et bb s\'appliqueront à compter du ' + e26.date + ' : ce que ce système fait sera alors interdit.';
+    }
+    art5Info = '<div style="background:rgba(139,0,0,.08);border:2px solid rgba(139,0,0,.4);border-radius:4px;padding:16px;margin-bottom:20px;font-size:12px;color:#8B0000"><strong>Pratique interdite — Art. 5(1)</strong><br>'
+      + (liste ? '<div>' + simT('Pratique(s) reconnue(s) :') + ' ' + liste + '.</div>' : '')
+      + '<div>La mise sur le marché, la mise en service ou l\'utilisation est prohibée dans toute l\'UE.</div>'
+      + (effet ? '<div>' + effet + '</div>' : '')
+      + '<div>Amendes pouvant atteindre 35 M€ ou 7% du CA mondial (le plus bas des deux pour une PME). Une refonte complète du système est nécessaire avant tout déploiement.</div></div>';
   }
 
   /* ── L'ANTÉRIORITÉ DE L'ARTICLE 111(2) ────────────────────────────────── */
@@ -4428,7 +4838,7 @@ function simRender(){
     var antCouleur = ant.statut === 'differe' ? 'var(--green)' : ant.statut === 'perdue' ? 'var(--orange)' : 'var(--blue)';
     var antFond = ant.statut === 'differe' ? 'rgba(45,122,71,.07)' : ant.statut === 'perdue' ? 'rgba(196,124,26,.06)' : 'rgba(28,90,138,.06)';
     antInfo = '<div style="background:' + antFond + ';border:1px solid ' + antCouleur + ';border-radius:3px;padding:10px 14px;font-size:11px;color:' + antCouleur + ';margin-bottom:16px">'
-      + '<strong>Antériorité — Art. 111(2)</strong> : ' + ant.texte + '</div>';
+      + '<strong>Antériorité — Art. 111(2)</strong> : ' + simT(ant.texte) + '</div>';
   }
 
   /* ── L'EXEMPTION LIBRE ET OUVERTE, ET LE TEST QUI LA DÉCIDE ───────────── */
@@ -4436,13 +4846,13 @@ function simRender(){
   var ossInfo = '';
   if(oss.statut === 'tombe'){
     ossInfo = '<div style="background:rgba(184,50,34,.07);border:1px solid rgba(184,50,34,.3);border-radius:3px;padding:10px 14px;font-size:11px;color:var(--accent);margin-bottom:16px">'
-      + '<strong>L\'exemption « libre et ouverte » ne s\'applique pas</strong> : elle suppose une mise à disposition à titre gratuit, et '
-      + oss.declencheurs.join(' ; ') + '. La licence est peut-être libre, le régime reste entier.</div>';
+      + '<strong>L\'exemption « libre et ouverte » ne s\'applique pas</strong> : ' + simT('elle suppose une mise à disposition à titre gratuit, et') + ' '
+      + oss.declencheurs.map(simT).join(' ; ') + '. ' + simT('La licence est peut-être libre, le régime reste entier.') + '</div>';
   } else if(oss.statut === 'tient'){
     ossInfo = '<div style="background:rgba(45,122,71,.07);border:1px solid rgba(45,122,71,.25);border-radius:3px;padding:10px 14px;font-size:11px;color:var(--green);margin-bottom:16px">'
-      + '<strong>L\'exemption « libre et ouverte » paraît applicable</strong> : aucune contrepartie déclarée.'
-      + (oss.exclusions.length ? ' Elle ne couvre cependant pas tout — ' + oss.exclusions.join(' ; ') + '.' : '')
-      + ' À réexaminer à chaque changement de modèle économique : c\'est la contrepartie, et non la licence, qui la fait tomber.</div>';
+      + '<strong>L\'exemption « libre et ouverte » paraît applicable</strong> : ' + simT('aucune contrepartie déclarée.')
+      + (oss.exclusions.length ? ' ' + simT('Elle ne couvre cependant pas tout —') + ' ' + oss.exclusions.map(simT).join(' ; ') + '.' : '')
+      + ' ' + simT('À réexaminer à chaque changement de modèle économique : c\'est la contrepartie, et non la licence, qui la fait tomber.') + '</div>';
   }
 
   var scoreColor = classif.level === 'interdit' ? '#8B0000' : classif.level === 'haut' ? 'var(--accent)' : classif.level === 'limite' ? 'var(--orange)' : 'var(--green)';
@@ -4457,13 +4867,13 @@ function simRender(){
     +'<div>'
     +'<span class="sim-result-badge chip" style="background:'+badgeColor+';color:#fff;border-color:'+badgeColor+';font-size:11px;padding:5px 14px">'+classif.badge+'</span>'
     +'<div class="sim-result-classif" style="margin-top:10px">'+d.name+'</div>'
-    +'<div class="sim-result-art">'+classif.article+' — Règlement (UE) 2024/1689</div>'
+    +'<div class="sim-result-art">'+simT(classif.article)+' — '+simT('Règlement (UE) 2024/1689')+'</div>'
     +'</div>'
     +'</div>'
 
-    + (classif.art5 ? '<div style="background:rgba(139,0,0,.08);border:2px solid rgba(139,0,0,.4);border-radius:4px;padding:16px;margin-bottom:20px;font-size:12px;color:#8B0000"><strong>Pratique interdite — Art. 5</strong><br>Ce type de système est formellement interdit par l\'EU AI Act. La mise sur le marché, la mise en service ou l\'utilisation est prohibée dans toute l\'UE. Amendes pouvant atteindre 35 M€ ou 7% du CA mondial. Une refonte complète du système est nécessaire avant tout déploiement.</div>' : '')
+    + art5Info
 
-    + defInfo + roleInfo + antInfo + extra + gpaiInfo + ossInfo
+    + perInfo + defInfo + confInfo + a1Info + roleInfo + antInfo + extra + gpaiInfo + ossInfo
 
     +'<div class="sim-obligations">'
     +'<div class="sim-obl-title">Obligations identifiées et gaps de conformité — '
@@ -4474,9 +4884,9 @@ function simRender(){
     +'<div class="sim-obl-title">Sanctions applicables — Art. 99</div>'
     +'<div class="sim-sanctions-box">'
     +'<div class="sim-sanc-item"><div class="sim-sanc-lbl">Sanction max (% CA)</div><div class="sim-sanc-val">'+sanc.sanction_ca+'</div><div style="font-size:9px;font-family:var(--mono);color:var(--muted2)">'+sanc.pct+' du CA mondial</div></div>'
-    +'<div class="sim-sanc-item"><div class="sim-sanc-lbl">Sanction fixe max</div><div class="sim-sanc-val">'+sanc.sanction_flat+'</div><div style="font-size:9px;font-family:var(--mono);color:var(--muted2)">'+classif.sanctions.art+'</div></div>'
-    +'<div class="sim-sanc-item"><div class="sim-sanc-lbl">Exposition maximale estimée</div><div class="sim-sanc-val" style="font-size:24px">'+sanc.sanction_max+'</div><div style="font-size:9px;font-family:var(--mono);color:var(--muted2)">Le plus élevé des deux plafonds s\'applique</div></div>'
-    +'<div class="sim-sanc-item"><div class="sim-sanc-lbl">Note</div><div style="font-size:10px;color:var(--muted);line-height:1.5;margin-top:4px">Les PME bénéficient d\'une proportionnalité (Art. 99.1). Les sanctions sont effectives depuis août 2025.</div></div>'
+    +'<div class="sim-sanc-item"><div class="sim-sanc-lbl">Sanction fixe max</div><div class="sim-sanc-val">'+sanc.sanction_flat+'</div><div style="font-size:9px;font-family:var(--mono);color:var(--muted2)">'+sanc.art+'</div></div>'
+    +'<div class="sim-sanc-item"><div class="sim-sanc-lbl">Exposition maximale estimée</div><div class="sim-sanc-val" style="font-size:24px">'+sanc.sanction_max+'</div><div style="font-size:9px;font-family:var(--mono);color:var(--muted2)">'+sanc.regle_txt+'</div></div>'
+    +'<div class="sim-sanc-item"><div class="sim-sanc-lbl">Note</div><div style="font-size:10px;color:var(--muted);line-height:1.5;margin-top:4px">'+(sanc.notes || [sanc.note]).map(function(n){ return '<div style="margin-bottom:3px">'+n+'</div>'; }).join('')+'</div></div>'
     +'</div>'
 
     + (typeof window.simBuildIntlComparison === 'function' ? window.simBuildIntlComparison(classif) : '')
@@ -4504,7 +4914,7 @@ var SYSTEMS=[{ico:'⚡',name:'Système de prédiction énergétique',type:'Préd
 
 (function(){
   var b=document.getElementById('art-list'); if(!b) return;
-  var ARTS=[{num:'Art. 5',title:'Pratiques IA interdites',scope:'Manipulation comportementale, systemes de notation sociale, identification biometrique en temps reel.',tags:['chip-r Interdit'],actif:true},{num:'Art. 6',title:'Classification des systèmes IA à haut risque',scope:'Annexe III : 8 domaines. Annexe II : produits soumis à législation harmonisée UE.',tags:['chip-r Haut risque'],actif:true},{num:'Art. 9',title:'Système de gestion des risques',scope:'Documentation, tests, évaluation continue — obligatoire pour les systèmes haut risque.',tags:['chip-r Haut risque','chip-o Obligatoire'],actif:true},{num:'Art. 10',title:'Données et gouvernance',scope:'Qualite des donnees utilisees en entrainement, validation, test.',tags:['chip-r Haut risque'],actif:true},{num:'Art. 11',title:'Documentation technique',scope:'Dossier technique complet avant mise sur le marché.',tags:['chip-r Haut risque','chip-o Art. 11'],actif:true},{num:'Art. 12',title:'Tenue de registres (journalisation)',scope:'Capacité de journalisation automatique.',tags:['chip-r Haut risque'],actif:true},{num:'Art. 13',title:'Transparence et information',scope:'Notice claire pour les deployeurs. Capacites, limites, conditions.',tags:['chip-o Risque limite'],actif:true},{num:'Art. 14',title:'Supervision humaine',scope:'Mesures permettant à une personne physique de surveiller et intervenir.',tags:['chip-r Haut risque'],actif:true},{num:'Art. 51',title:'Enregistrement dans la base de données EU',scope:'Enregistrement obligatoire avant déploiement pour les systèmes haut risque.',tags:['chip-r Haut risque','chip-o Déployeurs'],actif:false}];
+  var ARTS=[{num:'Art. 5',title:'Pratiques IA interdites',scope:'Manipulation comportementale, systemes de notation sociale, identification biometrique en temps reel.',tags:['chip-r Interdit'],actif:true},{num:'Art. 6',title:'Classification des systèmes IA à haut risque',scope:'Annexe III : 8 domaines. Annexe I : produits soumis à la législation d\'harmonisation de l\'UE.',tags:['chip-r Haut risque'],actif:true},{num:'Art. 9',title:'Système de gestion des risques',scope:'Documentation, tests, évaluation continue — obligatoire pour les systèmes haut risque.',tags:['chip-r Haut risque','chip-o Obligatoire'],actif:true},{num:'Art. 10',title:'Données et gouvernance',scope:'Qualite des donnees utilisees en entrainement, validation, test.',tags:['chip-r Haut risque'],actif:true},{num:'Art. 11',title:'Documentation technique',scope:'Dossier technique complet avant mise sur le marché.',tags:['chip-r Haut risque','chip-o Art. 11'],actif:true},{num:'Art. 12',title:'Tenue de registres (journalisation)',scope:'Capacité de journalisation automatique.',tags:['chip-r Haut risque'],actif:true},{num:'Art. 13',title:'Transparence et information',scope:'Notice claire pour les deployeurs. Capacites, limites, conditions.',tags:['chip-o Risque limite'],actif:true},{num:'Art. 14',title:'Supervision humaine',scope:'Mesures permettant à une personne physique de surveiller et intervenir.',tags:['chip-r Haut risque'],actif:true},{num:'Art. 49',title:'Enregistrement dans la base de données EU',scope:'Enregistrement obligatoire avant déploiement pour les systèmes haut risque.',tags:['chip-r Haut risque','chip-o Déployeurs'],actif:false}];
   b.innerHTML=ARTS.map(function(a){ var tags=a.tags.map(function(t){ var p=t.split(' '); return '<span class="chip '+p[0]+'">'+p.slice(1).join(' ')+'</span>'; }).join(''); return '<div class="art-item"><div class="art-num">'+a.num+(a.actif?' <span style="color:var(--green);font-size:9px">● ACTIF</span>':' <span style="color:var(--muted2);font-size:9px">○ 2027</span>')+'</div><div class="art-title">'+a.title+'</div><div class="art-scope">'+a.scope+'</div><div class="art-chips">'+tags+'</div></div>'; }).join('');
 })();
 
@@ -4520,21 +4930,24 @@ var SYSTEMS=[{ico:'⚡',name:'Système de prédiction énergétique',type:'Préd
 
 function calcSanctions(){
   var type=document.getElementById('s-type').value; var ca=parseFloat(document.getElementById('s-ca').value)||50000000;
-  var size=document.getElementById('s-size').value; var rec=document.getElementById('s-recid').value;
-  // Montants verifies mot pour mot contre le texte officiel du Reglement (UE) 2024/1689, Art. 99 :
-  // §3 = pratiques interdites Art.5 (35M€/7%) ; §4 = la plupart des autres manquements,
-  // dont obligations fournisseurs Art.16, deployeurs Art.26, transparence Art.50 (15M€/3%) ;
-  // §5 = informations incorrectes/incompletes/trompeuses aux autorites (7,5M€/1%).
-  var pct={interdit:0.07,haut:0.03,transparence:0.03,info:0.01}[type];
-  var flat={interdit:35000000,haut:15000000,transparence:15000000,info:7500000}[type];
-  var label={interdit:'Pratique interdite — Art. 99 §3 (renvoie à l\'Art. 5)',haut:'Système haut risque non conforme — Art. 99 §4 (renvoie à l\'Art. 16)',transparence:'Obligation de transparence — Art. 99 §4 (renvoie à l\'Art. 50)',info:'Informations incorrectes, incomplètes ou trompeuses — Art. 99 §5'}[type];
-  var max=Math.min(ca*pct,flat);
-  if(size==='pme') max=Math.min(max,flat*0.5); if(size==='tpe') max=Math.min(max,flat*0.25);
-  if(rec==='oui') max=Math.min(max*1.5,flat);
+  var size=document.getElementById('s-size').value;
+  // Tout le calcul vient de la source unique (AI_ACT_SANCTIONS / aiActSanctionMax, plus haut) :
+  // §3 = pratiques interdites Art.5 (35M€/7%) ; §4 = obligations des fournisseurs, mandataires,
+  // importateurs, distributeurs, déployeurs, organismes notifiés, et transparence Art.50 (15M€/3%) ;
+  // §5 = informations incorrectes/incomplètes/trompeuses aux autorités (7,5M€/1%) ; Art.101 = GPAI (15M€/3%).
+  // « Le plus élevé des deux » pour une entreprise ; « le plus bas » pour PME/start-up (§6) et,
+  // sur les §4 et §5 seulement, pour les petites capitalisations intermédiaires (§6 bis).
+  // Ni majoration de récidive ni plafond PME forfaitaire : le règlement n'en contient pas.
+  var palier={interdit:'interdit',haut:'obligations',transparence:'transparence',info:'info',gpai:'gpai'}[type];
+  var s=aiActSanctionMax(palier,ca,size);
+  var eur=function(n){ return new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(n); };
+  var regle=s.regle==='plus_bas'
+    ? 'Le plus bas des deux plafonds — '+s.regle_art+(s.regle_art==='Art. 99(6)'?' (PME, start-up)':' (petite capitalisation intermédiaire)')
+    : 'Le plus élevé des deux plafonds — '+s.art;
   var r=document.getElementById('sanc-result');
-  document.getElementById('sanc-amount').textContent=new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(max);
-  document.getElementById('sanc-basis-txt').textContent=label;
-  document.getElementById('sanc-details').innerHTML=[['Plafond % CA',new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(ca*pct)],['Plafond fixe',new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(flat)],['Réduction PME/TPE',size==='ge'?'—':'Applicable'],['Majoration récidive',rec==='oui'?'× 1,5 (plafonné)':'—'],['Amende estimée',new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(max)]].map(function(r){ return '<div class="sanc-detail-row"><div>'+r[0]+'</div><div>'+r[1]+'</div></div>'; }).join('');
+  document.getElementById('sanc-amount').textContent=eur(s.max);
+  document.getElementById('sanc-basis-txt').textContent=s.art+' — '+s.objet;
+  document.getElementById('sanc-details').innerHTML=[['Plafond % CA ('+Math.round(s.pct*100)+' %)',eur(s.sur_ca)],['Plafond fixe',eur(s.fixe)],['Règle de plafonnement',regle],['Plafond applicable',eur(s.max)],['Montant effectif','Fixé sous ce plafond — Art. 99(7)']].map(function(r){ return '<div class="sanc-detail-row"><div>'+r[0]+'</div><div>'+r[1]+'</div></div>'; }).join('');
   r.classList.add('on'); r.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
@@ -4819,7 +5232,7 @@ var PAGE_CTX = {
     label: 'Analyse geopolitique IA',
     apiLabel: { mistral:'Mistral Large', claude:'Claude Sonnet' },
     tags: ['Impact EO 14179 Trump ?','Risque reglementaire Chine ?','EU AI Act vs regulation US ?','DeepSeek et les sanctions US ?','Chronologie AI Act 2025-2027 ?'],
-    sys: 'L\'utilisateur consulte l\'Analyse geopolitique Sentinel AI. 3 blocs : Bloc europeen (EU AI Act standard d\'exportation, extraterritorialite, 40+ pays influences), Modele americain (EO 14179 jan 2025 pro-innovation, fragmentation etats, NIST RMF), Doctrine chinoise (controle souverain, PIPL, Generative AI Measures, BRI 147 pays). Chronologie : Art. 5 applicables fev 2025, GPAI aout 2025, haut risque aout 2026. EO 14110 revoque 20 jan 2025 par EO 14148, remplace EO 14179 23 jan 2025.'
+    sys: 'L\'utilisateur consulte l\'Analyse geopolitique Sentinel AI. 3 blocs : Bloc europeen (EU AI Act standard d\'exportation, extraterritorialite, 40+ pays influences), Modele americain (EO 14179 jan 2025 pro-innovation, fragmentation etats, NIST RMF), Doctrine chinoise (controle souverain, PIPL, Generative AI Measures, BRI 147 pays). Chronologie : Art. 5 applicables fev 2025 (deux pratiques ajoutees au 2 dec 2026) ; GPAI aout 2025 ; transparence (article 50) au 2 aout 2026 ; haut risque annexe III au 2 dec 2027 ; annexe I au 2 aout 2028 (reglement (UE) 2026/1744). EO 14110 revoque 20 jan 2025 par EO 14148, remplace EO 14179 23 jan 2025.'
   },
   'regs': {
     label: 'Reglementations & Textes officiels',
@@ -4843,7 +5256,7 @@ var PAGE_CTX = {
     label: 'Obligations article par article',
     apiLabel: { mistral:'Mistral Large', claude:'Claude Sonnet' },
     tags: ['Art. 5 — pratiques interdites ?','Art. 9 — gestion des risques ?','Art. 14 — supervision humaine ?','Art. 50 — transparence chatbots ?','Art. 99 — calcul sanctions ?'],
-    sys: 'L\'utilisateur consulte les Obligations article par article du Regl. 2024/1689. Articles couverts : Art. 1 (objet), Art. 2 (champ application extraterritorial), Art. 4 (litteratie IA), Art. 5 (8 pratiques interdites, sanctions 35M ou 7%), Art. 6 (classification haut risque + Annexe III), Art. 9-17 (obligations fournisseurs : gestion risques, donnees, documentation, logs, transparence, supervision, robustesse, qualite), Art. 22 (mandataire UE hors-EU), Art. 26 (obligations deployeurs), Art. 50 (transparence interactions IA, watermarking), Art. 51-55 (GPAI, seuil 10^25 FLOPs, risque systemique), Art. 72 (surveillance post-commercialisation), Art. 99 (sanctions progressives).'
+    sys: 'L\'utilisateur consulte les Obligations article par article du Regl. 2024/1689. Articles couverts : Art. 1 (objet), Art. 2 (champ application extraterritorial), Art. 4 (mesures de culture IA, sans niveau garanti — texte remplace par le reglement (UE) 2026/1744), Art. 5 (8 pratiques interdites, plus 2 au 2 dec 2026 ; sanctions 35M ou 7%), Art. 6 (classification haut risque + Annexe III), Art. 9-17 (obligations fournisseurs : gestion risques, donnees, documentation, logs, transparence, supervision, robustesse, qualite), Art. 22 (mandataire UE hors-EU), Art. 26 (obligations deployeurs), Art. 50 (transparence interactions IA, watermarking), Art. 51-55 (GPAI, seuil 10^25 FLOPs, risque systemique), Art. 72 (surveillance post-commercialisation), Art. 99 (plafonds 35M/7% pour Art. 5, 15M/3% pour les operateurs et l\'Art. 50, 7,5M/1% pour les informations inexactes ; le plus eleve pour une entreprise, le plus bas pour les PME et, sur les §4-§5, les petites capitalisations intermediaires) ; Art. 101 (GPAI, 3% ou 15M).'
   },
   'decision': {
     label: 'Simulateur deploiement IA',
@@ -5146,7 +5559,7 @@ var SOURCES_DATA = {
     items: [
       { type:"Texte source", label:"Reglement (UE) 2024/1689 — texte integral", detail:"PDF officiel fourni par le client, extrait via pdftotext. Articles couverts par le moteur : 1, 2, 3, 4, 5, 6, 9 a 17, 22, 50, 51, 53, 55, 99." },
       { type:"Calcul", label:"Moteur de classification (simClassify)", detail:"Regles deduites du texte officiel par CONSEILPREV. Outil de pre-diagnostic, ne remplace pas un audit juridique formel." },
-      { type:"Calcul", label:"Calcul des sanctions (simSanctions)", detail:"Bareme Art. 99 (35M EUR / 7%, 15M EUR / 3%, 7,5M EUR / 1%) applique a la tranche de CA declaree par l utilisateur (tranches simplifiees, non verifiees)." }
+      { type:"Calcul", label:"Calcul des sanctions (simSanctions)", detail:"Bareme Art. 99 (35M EUR / 7%, 15M EUR / 3%, 7,5M EUR / 1%) applique a la tranche de CA declaree par l utilisateur (tranches simplifiees, non verifiees) : le plus eleve des deux plafonds, le plus bas pour les PME (Art. 99(6))." }
     ]
   },
   "audit": {
@@ -6162,7 +6575,7 @@ var MAT_QUESTIONS = {
   ],
   confidentialite: [
     {q:"Des mesures de cybersécurité protègent-elles le système contre les attaques adversariales ?", art:"Art. 15(5)"},
-    {q:"Les données personnelles sont-elles protégées conformément au RGPD et minimisées ?", art:"Art. 10(5)"}
+    {q:"Les données personnelles sont-elles protégées conformément au RGPD et minimisées ?", art:"Art. 10, Art. 4a"}
   ],
   robustesse: [
     {q:"Le système maintient-il un niveau d'exactitude approprié, mesuré et documenté ?", art:"Art. 15(1)-(3)"},
@@ -7797,9 +8210,9 @@ function regRender(){
     var pctBadge = '<span title="Fiche '+pct+'% complète (10 questions essentielles IA Act)" style="font-size:9px;font-family:var(--mono);color:'+pctColor+';border:1px solid '+pctColor+';border-radius:8px;padding:1px 6px;margin-left:6px">'+pct+'%</span>';
     return '<div class="reg-sys-row" onclick="regOpenModal('+s.id+')">'
       + '<div class="rs-ico">🤖</div>'
-      + '<div><div class="rs-name">'+s.nom+pctBadge+'</div><div class="rs-type">'+(s.type_systeme||"—")+' · <span style="color:'+cy.color+'">'+cy.label+'</span></div></div>'
+      + '<div><div class="rs-name">'+sentDonnee(s.nom)+pctBadge+'</div><div class="rs-type">'+(s.type_systeme?sentDonnee(s.type_systeme):"—")+' · <span style="color:'+cy.color+'">'+cy.label+'</span></div></div>'
       + '<div><span class="chip '+cl.cls+'">'+cl.label+'</span></div>'
-      + '<div><span class="chip chip-b">'+(s.secteur||"—")+'</span></div>'
+      + '<div><span class="chip chip-b">'+(s.secteur?sentDonnee(s.secteur):"—")+'</span></div>'
       + '<div><span class="chip '+st.cls+'">'+st.label+'</span></div>'
       + '<div class="rs-risk" style="font-family:var(--serif);font-size:16px;color:'+scoreColor+'">'+s.score_risque+'/10</div>'
       /* UN VRAI BOUTON, plus un <div> cliquable : mesuré avant, quatre
@@ -7828,7 +8241,7 @@ window.regOpenModal = function(id){
 
   modal.innerHTML = '<div class="mat-modal-box">'
     + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">'+(sys?"Modifier le système":"Nouveau système IA")+'</div>'
-    + '<div class="mat-modal-title">'+(sys?sys.nom:"Ajouter au registre")+'</div></div>'
+    + '<div class="mat-modal-title">'+(sys?sentDonnee(sys.nom):"Ajouter au registre")+'</div></div>'
     + '<button type="button" class="mat-modal-close" aria-label="Fermer cette fenêtre" onclick="regCloseModal()" title="Fermer cette fenêtre">×</button></div>'
     + '<div class="mat-modal-body">'
     + '<div class="reg-form">'
@@ -8108,7 +8521,11 @@ function veilleRenderQualifiee(d){
 
   if(banner){
     if(d.personnalise){
-      banner.innerHTML = '🎯 Analyse personnalisee sur <strong>'+d.registre_count+' systeme(s)</strong> de votre Registre IA. Moteur : '+(d.model||"IA")+'.';
+      /* LE NOM DU MOTEUR EST UNE DONNÉE D'EXÉCUTION, pas un mot de
+         l'interface : le marquer évite qu'il entre dans une clé de
+         traduction — et qu'on traduise un identifiant. Le repli « IA », lui,
+         est bien un mot, et se traduit. */
+      banner.innerHTML = '🎯 Analyse personnalisee sur <strong>'+d.registre_count+' systeme(s)</strong> de votre Registre IA. Moteur : '+(d.model?sentDonnee(d.model):"IA")+'.';
       banner.className = "veille-qual-banner veille-qual-ok";
     } else {
       banner.innerHTML = "\u26A0\uFE0F Aucun systeme dans votre Registre IA \u2014 scoring generique non personnalise. <a href=\"#\" onclick=\"go(\'registre\',null,\'REGISTRE\',\'Syst\u00e8mes IA\');return false;\">Ajouter des systemes \u2192</a>";
@@ -8263,7 +8680,10 @@ function matriceRender(systemes){
       var key = pi + '-' + ci;
       var inCell = cellSystems[key] || [];
       var dots = inCell.slice(0,3).map(function(s){
-        return '<div class="matrix-dot" title="'+s.nom+' — '+(s.secteur||'')+'" onclick="matriceOpenSys('+s.id+')">'+matriceIco(s.secteur)+'</div>';
+        /* LE title EST ENTIÈREMENT UNE DONNÉE (« <nom> — <secteur> ») : rien
+           à traduire dedans, et rien qu'on puisse y marquer — c'est donc
+           l'élément qui se déclare donnée. */
+        return '<div class="matrix-dot"' + SENT_ATTR_DONNEE + ' title="'+sentDonneeEch(s.nom)+' — '+sentDonneeEch(s.secteur||'')+'" onclick="matriceOpenSys('+s.id+')">'+matriceIco(s.secteur)+'</div>';
       }).join('');
       var more = inCell.length > 3 ? '<div class="matrix-dot-more">+'+(inCell.length-3)+'</div>' : '';
       return '<div class="matrix-cell '+cls+'">'+dots+more+'</div>';
@@ -8296,7 +8716,16 @@ function matriceRender(systemes){
   c.innerHTML = critiques.map(function(s){
     return '<div class="eval-row" style="cursor:pointer" onclick="matriceOpenSys('+s.id+')">'
       + '<div class="eval-ico">'+matriceIco(s.secteur)+'</div>'
-      + '<div class="eval-body"><div class="eval-n">'+s.nom+'</div><div class="eval-d">'+(CLASSIF_LABELS[s.classification]||s.classification)+' · '+(STATUT_LABELS[s.statut_conformite]||s.statut_conformite)+' · '+(s.secteur||"")+'</div></div>'
+      /* CHAQUE LIBELLÉ DANS SON PROPRE ÉLÉMENT. Mesuré : « Haut risque · À
+         évaluer · » partait en UN SEUL nœud texte, donc en UNE clé composée
+         qu'aucun dictionnaire ne porte — vingt combinaisons possibles, zéro
+         traduite, et 7 828 des 21 536 mots français restés à l'écran en
+         anglais venaient de cette seule ligne. Séparés, ce sont les clés
+         « Haut risque » et « À évaluer », déjà traduites ailleurs. */
+      + '<div class="eval-body"><div class="eval-n">'+sentDonnee(s.nom)+'</div><div class="eval-d">'
+      + '<span class="eval-q">'+(CLASSIF_LABELS[s.classification]||s.classification)+'</span> · '
+      + '<span class="eval-q">'+(STATUT_LABELS[s.statut_conformite]||s.statut_conformite)+'</span> · '
+      + sentDonnee(s.secteur||"")+'</div></div>'
       + '<div class="eval-sc">'+(s.score_risque||0)+'/10</div>'
       + '</div>';
   }).join('');
@@ -9062,7 +9491,7 @@ function friaRenderSysCard(systeme){
 
   var head = '<div class="fria-sys-card'+(app.applicable?'':' fria-sys-na')+'">'
     + '<div class="fria-sys-head">'
-    + '<div><div class="fria-sys-name">'+systeme.nom+'</div><div class="fria-sys-meta">'+(systeme.secteur||'')+' · '+(systeme.type_systeme||'')+' · <span style="color:'+cy.color+'">'+cy.label+'</span></div></div>'
+    + '<div><div class="fria-sys-name">'+sentDonnee(systeme.nom)+'</div><div class="fria-sys-meta">'+sentDonnee(systeme.secteur||'')+' · '+sentDonnee(systeme.type_systeme||'')+' · <span style="color:'+cy.color+'">'+cy.label+'</span></div></div>'
     + (app.applicable
         ? '<div class="fria-score-ring" id="fria-score-'+systeme.id+'"><div class="fria-ring-val">'+(result?result.score.toFixed(1):'—')+'</div><div class="fria-ring-lbl">/ 10</div></div>'
         : '<span class="fria-na-badge">FRIA non requise</span>')
@@ -9382,11 +9811,25 @@ window.roadmapRenderPage = function(){
     }
 
     /* Prochaine echeance critique : utilise la progression Audit reelle */
+    /* La carte lit le calendrier consolidé : la prochaine échéance, et celle du haut
+       risque de l'annexe III pour la barre. Aucune date n'est écrite ici — la carte
+       annonçait « 2 AOÛT 2026 — haut risque » pendant que son propre libellé disait
+       « 2 décembre 2027 ». */
+    var prochaine = window.aiActProchaine && window.aiActProchaine();
+    if(prochaine){
+      var dEl = document.getElementById("road-next-deadline-date");
+      var tEl = document.getElementById("road-next-deadline-title");
+      var sEl = document.getElementById("road-next-deadline-sub");
+      if(dEl) dEl.textContent = prochaine.date.toUpperCase();
+      if(tEl) tEl.textContent = prochaine.quoi;
+      if(sEl) sEl.textContent = prochaine.ref;
+    }
     var eta = document.getElementById("road-next-deadline-bar");
     if(eta){
       eta.style.width = d.auditPct + "%";
       var lbl = document.getElementById("road-next-deadline-lbl");
-      if(lbl) lbl.textContent = d.auditPct + "% — échéance 2 décembre 2027 (Digital Omnibus, haut risque annexe III)";
+      var e3 = window.aiActEcheance && window.aiActEcheance("annexe3");
+      if(lbl) lbl.textContent = d.auditPct + "% — haut risque annexe III : échéance " + (e3 ? e3.date : "") + " (" + (e3 ? e3.ref : "") + ")";
     }
   });
 };
@@ -9624,9 +10067,9 @@ var TMPL_DATA = [
   {cat:"fiche",type:"fiche",ico:"\uD83D\uDCC4",format:"pdf",name:"Fiche synth\u00e9tique \u2014 Art.\u00a09\u00a0: Gestion des risques",desc:"Obligations du syst\u00e8me de gestion des risques, m\u00e9thodes accept\u00e9es, fr\u00e9quence de r\u00e9vision, lien avec ISO 31000.",meta:"PDF \u00b7 2 pages \u00b7 Haut risque obligatoire",arts:["art9"],action:"tmplOpen(10)"},
   {cat:"fiche",type:"fiche",ico:"\uD83D\uDCC4",format:"pdf",name:"Fiche synth\u00e9tique \u2014 Art.\u00a010\u00a0: Donn\u00e9es d\u2019entra\u00eenement",desc:"Exigences de gouvernance des donn\u00e9es, d\u00e9tection des biais, conformit\u00e9 RGPD, documentation obligatoire.",meta:"PDF \u00b7 2 pages \u00b7 Art.\u00a010 + Art.\u00a035 RGPD",arts:["art10","art6"],action:"tmplOpen(11)"},
   {cat:"fiche",type:"fiche",ico:"\uD83D\uDCC4",format:"pdf",name:"Fiche synth\u00e9tique \u2014 Art.\u00a013\u00a0: Transparence",desc:"Contenu obligatoire de la notice d\u2019utilisation, obligations envers les d\u00e9ployeurs et les utilisateurs finaux.",meta:"PDF \u00b7 1 page \u00b7 Avec checklist",arts:["art13","art50"],action:"tmplOpen(12)"},
-  {cat:"fiche",type:"fiche",ico:"\uD83D\uDCC4",format:"pdf",name:"Fiche synth\u00e9tique \u2014 Art.\u00a050\u00a0: Transparence risque limit\u00e9",desc:"Obligations pour chatbots, syst\u00e8mes de g\u00e9n\u00e9ration de contenu synth\u00e9tique et deepfakes \u2014 marquage obligatoire.",meta:"PDF \u00b7 1 page \u00b7 Applicable depuis ao\u00fbt 2025",arts:["art50","art51"],action:"tmplOpen(13)"},
+  {cat:"fiche",type:"fiche",ico:"\uD83D\uDCC4",format:"pdf",name:"Fiche synth\u00e9tique \u2014 Art.\u00a050\u00a0: Transparence risque limit\u00e9",desc:"Obligations pour chatbots, syst\u00e8mes de g\u00e9n\u00e9ration de contenu synth\u00e9tique et deepfakes \u2014 marquage obligatoire.",meta:"PDF \u00b7 1 page \u00b7 Applicable depuis ao\u00fbt 2026",arts:["art50","art51"],action:"tmplOpen(13)"},
   {cat:"fiche",type:"fiche",ico:"\uD83D\uDCC4",format:"pdf",name:"Fiche synth\u00e9tique \u2014 Art.\u00a051\u00a0: Mod\u00e8les GPAI",desc:"Obligations sp\u00e9cifiques aux mod\u00e8les d\u2019IA \u00e0 usage g\u00e9n\u00e9ral \u2014 transparence, documentation, \u00e9valuation syst\u00e9mique.",meta:"PDF \u00b7 2 pages \u00b7 Mod\u00e8les fondation & LLMs",arts:["art51"],action:"tmplOpen(14)"},
-  {cat:"fiche",type:"fiche",ico:"\uD83D\uDCC5",format:"pdf",name:"Fiche synth\u00e9tique \u2014 Calendrier des \u00e9ch\u00e9ances AI Act",desc:"Toutes les dates d\u2019application par cat\u00e9gorie d\u2019obligation \u2014 de f\u00e9vrier 2025 (Art.\u00a05) \u00e0 ao\u00fbt 2027 (syst\u00e8mes existants).",meta:"PDF \u00b7 1 page \u00b7 Mis \u00e0 jour trimestriellement",arts:["art6","art5","art50","art51"],action:"go('historique',null,'CONFORMIT\u00c9','Historique')"},
+  {cat:"fiche",type:"fiche",ico:"\uD83D\uDCC5",format:"pdf",name:"Fiche synth\u00e9tique \u2014 Calendrier des \u00e9ch\u00e9ances AI Act",desc:"Toutes les dates d\u2019application par cat\u00e9gorie d\u2019obligation \u2014 de f\u00e9vrier 2025 (Art.\u00a05) \u00e0 ao\u00fbt 2028 (annexe I), avec les \u00e9ch\u00e9ances du r\u00e8glement (UE) 2026/1744\u00a0: 2 d\u00e9cembre 2026, 2 ao\u00fbt 2027 et 2 d\u00e9cembre 2027.",meta:"PDF \u00b7 1 page \u00b7 Mis \u00e0 jour trimestriellement",arts:["art6","art5","art50","art51"],action:"go('historique',null,'CONFORMIT\u00c9','Historique')"},
 
   {cat:"guide",type:"guide",ico:"\uD83D\uDCD6",format:"pdf",name:"Guide \u2014 Classifier votre syst\u00e8me IA selon l\u2019AI Act",desc:"Arbre d\u00e9cisionnel en 7 \u00e9tapes pour d\u00e9terminer la cat\u00e9gorie de risque applicable, avec exemples par secteur.",meta:"PDF \u00b7 M\u00e9thodologique \u00b7 Tous syst\u00e8mes IA",arts:["art5","art6"],action:"go('simulateur',null,'OUTILS','Simulateur')"},
   {cat:"guide",type:"guide",ico:"\uD83D\uDCD6",format:"pdf ia",name:"Guide \u2014 Audit de conformit\u00e9 AI Act (34 points)",desc:"Protocole d\u2019audit en 34 points de contr\u00f4le \u2014 m\u00e9thode, collecte de preuves, scoring, rapport d\u2019\u00e9carts.",meta:"PDF \u00b7 G\u00e9n\u00e9r\u00e9 par IA \u00b7 Audit haut risque",arts:["art9","art11","art13","art14","art15","art17"],action:"openAuditTab()"},
@@ -9672,7 +10115,7 @@ var TMPL_DATA = [
   {cat:"doc",type:"doc",ico:"&#x2705;",format:"sentinel ia",name:"Registre des déclarations UE de conformité (Art. 47)",desc:"Suivi de toutes les déclarations signées — système, version, date, signataire, normes, lien vers document.",meta:"Sentinel · Par système déclaré",arts:["art47","art6"],action:"go(\u0027registre\u0027,null,\u0027REGISTRE\u0027,\u0027Registre IA\u0027)"},
   {cat:"process",type:"process",ico:"&#x2699;&#xFE0F;",format:"word",name:"Procédure d’établissement et mise à jour de la déclaration (Art. 47)",desc:"Préparation, revûte juridique, signature, archivage, mise à jour lors de modifications substantielles (Art. 83).",meta:"Word · Vierge · Avant mise sur le marché",arts:["art47","art11"],action:"tmplOpen(54)"},
   {cat:"template",type:"template",ico:"&#x1F4AC;",format:"word",name:"Template de mention de transparence IA (Art. 50)",desc:"Modèles de divulgation pour chatbots, assistants, générateurs de contenu — formulations conformes Art. 50(1)(2)(3)(4).",meta:"Word · Vierge · À intégrer dans chaque interface",arts:["art50"],dl:true,action:"tmplOpen(55)"},
-  {cat:"guide",type:"guide",ico:"&#x1F4D6;",format:"pdf",name:"Guide — Obligations de transparence Art. 50",desc:"Quand informer, comment, quelle formulation, watermarking deepfakes — cas pratiques par type de système.",meta:"PDF · 3 pages · Applicable depuis août 2025",arts:["art50","art51"],action:"tmplOpen(56)"},
+  {cat:"guide",type:"guide",ico:"&#x1F4D6;",format:"pdf",name:"Guide — Obligations de transparence Art. 50",desc:"Quand informer, comment, quelle formulation, watermarking deepfakes — cas pratiques par type de système.",meta:"PDF · 3 pages · Applicable depuis août 2026",arts:["art50","art51"],action:"tmplOpen(56)"},
   {cat:"doc",type:"doc",ico:"&#x1F4CB;",format:"sentinel ia",name:"Inventaire des mentions de transparence (Art. 50)",desc:"Pour chaque système : statut des mentions — présente/absente/à mettre à jour, canal, date de contrôle.",meta:"Sentinel · Contrôle continu",arts:["art50"],action:"go(\u0027registre\u0027,null,\u0027REGISTRE\u0027,\u0027Registre IA\u0027)"},
   {cat:"process",type:"process",ico:"&#x2699;&#xFE0F;",format:"word",name:"Procédure de contrôle des mentions de transparence (Art. 50)",desc:"Audit périodique de la conformité des mentions IA dans toutes les interfaces — checklist, responsable, fréquence.",meta:"Word · Vierge · Audit semestriel recommandé",arts:["art50"],action:"tmplOpen(58)"},
   {cat:"template",type:"template",ico:"&#x1F9E0;",format:"word pdf",name:"Template de documentation GPAI (Art. 51)",desc:"Dossier technique modèles à usage général — paramètres, capacités, données, politique droit d’auteur, évaluation systémique si >10²⁵ FLOPS.",meta:"Word + PDF · Vierge · Fournisseurs LLM/fondation",arts:["art51"],dl:true,action:"tmplOpen(59)"},
@@ -9755,49 +10198,49 @@ window.templatesRenderPage = function(){
 
 // ── Catalogue & Modal ────────────────────────────────────────────
 var TMPL_CATALOG=[
-  {"ico":"\uD83D\uDCCB","name":"Fiche Technique du Système d’IA (Art. 11)","desc":"Template vierge en 8 sections : identification, classification, architecture, mesures de conformité, FRIA, QMS, déclaration, historique.","meta":"PDF + Word · Vierge · Universel","arts":["art11","art9","art10","art12","art13","art14","art15","art27","art47"],"fmt":"pdf word","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(0)","oblig":["Constitution du dossier technique complet (9 rubriques, Annexe IV)","Conservation 10 ans apres la derniere mise sur le marche (Art. 18)","Mise a jour obligatoire a chaque modification substantielle (Art. 83)","Mise a disposition des autorites de surveillance sur demande","Couverture : description, architecture, donnees, metriques, risques, conformite","Systeme de gestion des risques documente et maintenu (Art. 9(1))","Identification des risques connus et raisonnablement previsibles (Art. 9(2)(a))","Estimation et evaluation des risques lors de l’usage prevu et impropre (Art. 9(2)(b)(c))","Mesures de gestion mises en oeuvre et verifiees avant deploiement (Art. 9(3))","Tests de residualite confirmes sur le systeme final (Art. 9(5))","Revision continue tout au long du cycle de vie (Art. 9(9))","Gouvernance des donnees d’entrainement, validation et test (Art. 10(1))","Pertinence et representativite verifiees des datasets (Art. 10(3))","Detection et correction des biais identifies dans les donnees (Art. 10(2))","Conformite RGPD pour les donnees personnelles utilisees (Art. 10(5))","Documentation des sources, methodes de collecte et traitements appliques","Journalisation automatique de chaque utilisation du systeme (Art. 12(2))","Enregistrement : donnees d’entree, decisions, anomalies, horodatage","Conservation des logs pendant toute la duree de vie (Art. 12(1))","Detection automatique des risques et incidents (Art. 12(2)(c))","Acces aux journaux garanti pour les autorites competentes (Art. 12(3))","Notice d’utilisation complete fournie au deployeur (Art. 13(2))","Identite et coordonnees du fournisseur documentees (Art. 13(3)(a))","Capacites, limites, finalites et contraintes decrites (Art. 13(3)(b))","Metriques de precision et de robustesse communiquees (Art. 13(3)(b)(iii))","Risques residuels pour les droits fondamentaux identifies (Art. 13(3)(e))","Mesures de surveillance humaine recommandees au deployeur (Art. 13(3)(d))","Mecanismes de supervision integres dans l’interface (Art. 14(4)(a))","Comprehension des sorties du systeme par les superviseurs (Art. 14(4)(b))","Possibilite d’ignorer, corriger ou annuler les decisions IA (Art. 14(4)(c))","Bouton d’arret d’urgence operationnel et documente (Art. 14(4)(d))","Superviseurs qualifies designes, habilites et formes (Art. 14(5))","Niveaux d’exactitude appropries atteints et documentes (Art. 15(1))","Robustesse face aux donnees adversariales testee (Art. 15(4))","Metriques mesurees : Accuracy, Precision, Rappel, F1-Score, AUC-ROC","Resilience aux erreurs et aux pannes evaluee (MTTF/MTTR)","Conformite cybersecurite : ISO 27001 / NIS2 (Art. 15(5))","Identification des droits fondamentaux susceptibles d’etre affectes (Charte UE)","Consultation des representants des groupes potentiellement impactes","Evaluation des impacts sur les droits pertinents de la Charte UE","Identification des groupes vulnerables (mineurs, personnes agees, handicapees)","Documentation des mesures d’attenuation et de leur efficacite","Realisation avant deploiement et mise a jour periodique obligatoire","Declaration etablie avant mise sur le marche ou en service (Art. 47(1))","Contenu obligatoire Art. 47(2) : systeme, normes appliquees, organismes notifies","Normes harmonisees mentionnees : ISO 42001, EN 301 549, etc.","Identification des organismes notifies ayant intervenu (Art. 43)","Signature du representant legal autorise du fournisseur","Mise a jour obligatoire en cas de modification substantielle (Art. 83)"]},
-  {"ico":"\uD83D\uDCDD","name":"Plan de Gestion des Risques IA (Art. 9)","desc":"Template structuré pour identifier, analyser et traiter les risques tout au long du cycle de vie du système d’IA.","meta":"Word · Vierge · Haut risque obligatoire","arts":["art9","art6"],"fmt":"word ia","ctaLabel":"Ouvrir la FRIA","ctaAction":"go(\\'fria\\',null,\\'CONFORMITE\\',\\'FRIA\\')","oblig":["Systeme de gestion des risques documente et maintenu (Art. 9(1))","Identification des risques connus et raisonnablement previsibles (Art. 9(2)(a))","Estimation et evaluation des risques lors de l’usage prevu et impropre (Art. 9(2)(b)(c))","Mesures de gestion mises en oeuvre et verifiees avant deploiement (Art. 9(3))","Tests de residualite confirmes sur le systeme final (Art. 9(5))","Revision continue tout au long du cycle de vie (Art. 9(9))","Classification selon l’Annexe I (secteurs harmonises) ou l’Annexe III","Auto-evaluation documentee avant mise sur le marche (Art. 6(2))","Declenchement des obligations Art. 9 a 15 si systeme classe haut risque","Enregistrement dans la base de donnees EU (Art. 71) pour systemes Annexe III","Mise a jour du registre lors de toute modification substantielle (Art. 83)"]},
+  {"ico":"\uD83D\uDCCB","name":"Fiche Technique du Système d’IA (Art. 11)","desc":"Template vierge en 8 sections : identification, classification, architecture, mesures de conformité, FRIA, QMS, déclaration, historique.","meta":"PDF + Word · Vierge · Universel","arts":["art11","art9","art10","art12","art13","art14","art15","art27","art47"],"fmt":"pdf word","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(0)","oblig":["Constitution du dossier technique complet (9 rubriques, Annexe IV)","Conservation 10 ans apres la derniere mise sur le marche (Art. 18)","Mise a jour obligatoire a chaque modification substantielle (Art. 3(23), Art. 43(4))","Mise a disposition des autorites de surveillance sur demande","Couverture : description, architecture, donnees, metriques, risques, conformite","Systeme de gestion des risques documente et maintenu (Art. 9(1))","Identification des risques connus et raisonnablement previsibles (Art. 9(2)(a))","Estimation et evaluation des risques lors de l’usage prevu et impropre (Art. 9(2)(b)(c))","Mesures de gestion mises en oeuvre et verifiees avant deploiement (Art. 9(3))","Tests de residualite confirmes sur le systeme final (Art. 9(5))","Revision continue tout au long du cycle de vie (Art. 9(9))","Gouvernance des donnees d’entrainement, validation et test (Art. 10(1))","Pertinence et representativite verifiees des datasets (Art. 10(3))","Detection et correction des biais identifies dans les donnees (Art. 10(2))","Conformite RGPD pour les donnees personnelles utilisees ; categories particulieres de donnees pour detecter et corriger les biais : conditions strictes de l’Art. 4a (qui remplace l’ancien Art. 10(5))","Documentation des sources, methodes de collecte et traitements appliques","Journalisation automatique de chaque utilisation du systeme (Art. 12(2))","Enregistrement : donnees d’entree, decisions, anomalies, horodatage","Conservation des logs pendant toute la duree de vie (Art. 12(1))","Detection automatique des risques et incidents (Art. 12(2)(c))","Acces aux journaux garanti pour les autorites competentes (Art. 12(3))","Notice d’utilisation complete fournie au deployeur (Art. 13(2))","Identite et coordonnees du fournisseur documentees (Art. 13(3)(a))","Capacites, limites, finalites et contraintes decrites (Art. 13(3)(b))","Metriques de precision et de robustesse communiquees (Art. 13(3)(b)(iii))","Risques residuels pour les droits fondamentaux identifies (Art. 13(3)(e))","Mesures de surveillance humaine recommandees au deployeur (Art. 13(3)(d))","Mecanismes de supervision integres dans l’interface (Art. 14(4)(a))","Comprehension des sorties du systeme par les superviseurs (Art. 14(4)(b))","Possibilite d’ignorer, corriger ou annuler les decisions IA (Art. 14(4)(c))","Bouton d’arret d’urgence operationnel et documente (Art. 14(4)(d))","Superviseurs qualifies designes, habilites et formes (Art. 14(5))","Niveaux d’exactitude appropries atteints et documentes (Art. 15(1))","Robustesse face aux donnees adversariales testee (Art. 15(4))","Metriques mesurees : Accuracy, Precision, Rappel, F1-Score, AUC-ROC","Resilience aux erreurs et aux pannes evaluee (MTTF/MTTR)","Conformite cybersecurite : ISO 27001 / NIS2 (Art. 15(5))","Identification des droits fondamentaux susceptibles d’etre affectes (Charte UE)","Consultation des representants des groupes potentiellement impactes","Evaluation des impacts sur les droits pertinents de la Charte UE","Identification des groupes vulnerables (mineurs, personnes agees, handicapees)","Documentation des mesures d’attenuation et de leur efficacite","Realisation avant deploiement et mise a jour periodique obligatoire","Declaration etablie avant mise sur le marche ou en service (Art. 47(1))","Contenu obligatoire Art. 47(2) : systeme, normes appliquees, organismes notifies","Normes harmonisees mentionnees : ISO 42001, EN 301 549, etc.","Identification des organismes notifies ayant intervenu (Art. 43)","Signature du representant legal autorise du fournisseur","Mise a jour obligatoire en cas de modification substantielle (Art. 3(23), Art. 43(4))"]},
+  {"ico":"\uD83D\uDCDD","name":"Plan de Gestion des Risques IA (Art. 9)","desc":"Template structuré pour identifier, analyser et traiter les risques tout au long du cycle de vie du système d’IA.","meta":"Word · Vierge · Haut risque obligatoire","arts":["art9","art6"],"fmt":"word ia","ctaLabel":"Ouvrir la FRIA","ctaAction":"go(\\'fria\\',null,\\'CONFORMITE\\',\\'FRIA\\')","oblig":["Systeme de gestion des risques documente et maintenu (Art. 9(1))","Identification des risques connus et raisonnablement previsibles (Art. 9(2)(a))","Estimation et evaluation des risques lors de l’usage prevu et impropre (Art. 9(2)(b)(c))","Mesures de gestion mises en oeuvre et verifiees avant deploiement (Art. 9(3))","Tests de residualite confirmes sur le systeme final (Art. 9(5))","Revision continue tout au long du cycle de vie (Art. 9(9))","Classification selon l’Annexe I (secteurs harmonises) ou l’Annexe III","Auto-evaluation documentee avant mise sur le marche (Art. 6(2))","Declenchement des obligations Art. 9 a 15 si systeme classe haut risque","Enregistrement dans la base de donnees EU (Art. 49 ; base de donnees : Art. 71) pour systemes Annexe III","Mise a jour du registre lors de toute modification substantielle (Art. 3(23), Art. 43(4))"]},
   {"ico":"\uD83D\uDD0F","name":"Notice d’Utilisation pour Déployeurs (Art. 13)","desc":"Template de notice d’utilisation conforme Art. 13(2) — capacités, limites, métriques, risques résiduels, surveillance.","meta":"Word · Vierge · Fourni par le fournisseur au déployeur","arts":["art13","art14"],"fmt":"word","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(2)","oblig":["Notice d’utilisation complete fournie au deployeur (Art. 13(2))","Identite et coordonnees du fournisseur documentees (Art. 13(3)(a))","Capacites, limites, finalites et contraintes decrites (Art. 13(3)(b))","Metriques de precision et de robustesse communiquees (Art. 13(3)(b)(iii))","Risques residuels pour les droits fondamentaux identifies (Art. 13(3)(e))","Mesures de surveillance humaine recommandees au deployeur (Art. 13(3)(d))","Mecanismes de supervision integres dans l’interface (Art. 14(4)(a))","Comprehension des sorties du systeme par les superviseurs (Art. 14(4)(b))","Possibilite d’ignorer, corriger ou annuler les decisions IA (Art. 14(4)(c))","Bouton d’arret d’urgence operationnel et documente (Art. 14(4)(d))","Superviseurs qualifies designes, habilites et formes (Art. 14(5))"]},
-  {"ico":"\u2705","name":"Déclaration UE de Conformité (Art. 47)","desc":"Template officiel de déclaration de conformité — normes harmonisées, organismes notifiés, signature du représentant légal.","meta":"Word + PDF · Vierge · Signature obligatoire","arts":["art47","art6"],"fmt":"word pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(3)","oblig":["Declaration etablie avant mise sur le marche ou en service (Art. 47(1))","Contenu obligatoire Art. 47(2) : systeme, normes appliquees, organismes notifies","Normes harmonisees mentionnees : ISO 42001, EN 301 549, etc.","Identification des organismes notifies ayant intervenu (Art. 43)","Signature du representant legal autorise du fournisseur","Mise a jour obligatoire en cas de modification substantielle (Art. 83)","Classification selon l’Annexe I (secteurs harmonises) ou l’Annexe III","Auto-evaluation documentee avant mise sur le marche (Art. 6(2))","Declenchement des obligations Art. 9 a 15 si systeme classe haut risque","Enregistrement dans la base de donnees EU (Art. 71) pour systemes Annexe III","Mise a jour du registre lors de toute modification substantielle (Art. 83)"]},
+  {"ico":"\u2705","name":"Déclaration UE de Conformité (Art. 47)","desc":"Template officiel de déclaration de conformité — normes harmonisées, organismes notifiés, signature du représentant légal.","meta":"Word + PDF · Vierge · Signature obligatoire","arts":["art47","art6"],"fmt":"word pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(3)","oblig":["Declaration etablie avant mise sur le marche ou en service (Art. 47(1))","Contenu obligatoire Art. 47(2) : systeme, normes appliquees, organismes notifies","Normes harmonisees mentionnees : ISO 42001, EN 301 549, etc.","Identification des organismes notifies ayant intervenu (Art. 43)","Signature du representant legal autorise du fournisseur","Mise a jour obligatoire en cas de modification substantielle (Art. 3(23), Art. 43(4))","Classification selon l’Annexe I (secteurs harmonises) ou l’Annexe III","Auto-evaluation documentee avant mise sur le marche (Art. 6(2))","Declenchement des obligations Art. 9 a 15 si systeme classe haut risque","Enregistrement dans la base de donnees EU (Art. 49 ; base de donnees : Art. 71) pour systemes Annexe III","Mise a jour du registre lors de toute modification substantielle (Art. 3(23), Art. 43(4))"]},
   {"ico":"\uD83D\uDCCA","name":"Matrice d’Évaluation des Risques (Art. 9)","desc":"Tableau croisé probabilité x impact — 5 niveaux de criticité, mesures correctives, responsable désigné.","meta":"Word · Vierge · ISO 31000 compatible","arts":["art9","art15"],"fmt":"word ia","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(4)","oblig":["Systeme de gestion des risques documente et maintenu (Art. 9(1))","Identification des risques connus et raisonnablement previsibles (Art. 9(2)(a))","Estimation et evaluation des risques lors de l’usage prevu et impropre (Art. 9(2)(b)(c))","Mesures de gestion mises en oeuvre et verifiees avant deploiement (Art. 9(3))","Tests de residualite confirmes sur le systeme final (Art. 9(5))","Revision continue tout au long du cycle de vie (Art. 9(9))","Niveaux d’exactitude appropries atteints et documentes (Art. 15(1))","Robustesse face aux donnees adversariales testee (Art. 15(4))","Metriques mesurees : Accuracy, Precision, Rappel, F1-Score, AUC-ROC","Resilience aux erreurs et aux pannes evaluee (MTTF/MTTR)","Conformite cybersecurite : ISO 27001 / NIS2 (Art. 15(5))"]},
   {"ico":"\uD83D\uDD12","name":"Registre de Journalisation (Art. 12)","desc":"Template de registre des événements journalisés — format d’entrée, durée de rétention, procédure d’accès autorités.","meta":"Word · Vierge · Journalisation obligatoire haut risque","arts":["art12"],"fmt":"word","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(5)","oblig":["Journalisation automatique de chaque utilisation du systeme (Art. 12(2))","Enregistrement : donnees d’entree, decisions, anomalies, horodatage","Conservation des logs pendant toute la duree de vie (Art. 12(1))","Detection automatique des risques et incidents (Art. 12(2)(c))","Acces aux journaux garanti pour les autorites competentes (Art. 12(3))"]},
-  {"ico":"\u2696\uFE0F","name":"Analyse d’Impact Droits Fondamentaux — FRIA (Art. 27)","desc":"Template FRIA en 5 sections : périmètre, droits Charte UE affectés, groupes vulnérables, mesures d’atténuation, conclusion.","meta":"Word + PDF · Vierge · Déployeurs secteur public obligatoire","arts":["art27","art6"],"fmt":"word pdf","ctaLabel":"Ouvrir la FRIA","ctaAction":"go(\\'fria\\',null,\\'CONFORMITE\\',\\'FRIA\\')","oblig":["Identification des droits fondamentaux susceptibles d’etre affectes (Charte UE)","Consultation des representants des groupes potentiellement impactes","Evaluation des impacts sur les droits pertinents de la Charte UE","Identification des groupes vulnerables (mineurs, personnes agees, handicapees)","Documentation des mesures d’attenuation et de leur efficacite","Realisation avant deploiement et mise a jour periodique obligatoire","Classification selon l’Annexe I (secteurs harmonises) ou l’Annexe III","Auto-evaluation documentee avant mise sur le marche (Art. 6(2))","Declenchement des obligations Art. 9 a 15 si systeme classe haut risque","Enregistrement dans la base de donnees EU (Art. 71) pour systemes Annexe III","Mise a jour du registre lors de toute modification substantielle (Art. 83)"]},
+  {"ico":"\u2696\uFE0F","name":"Analyse d’Impact Droits Fondamentaux — FRIA (Art. 27)","desc":"Template FRIA en 5 sections : périmètre, droits Charte UE affectés, groupes vulnérables, mesures d’atténuation, conclusion.","meta":"Word + PDF · Vierge · Déployeurs secteur public obligatoire","arts":["art27","art6"],"fmt":"word pdf","ctaLabel":"Ouvrir la FRIA","ctaAction":"go(\\'fria\\',null,\\'CONFORMITE\\',\\'FRIA\\')","oblig":["Identification des droits fondamentaux susceptibles d’etre affectes (Charte UE)","Consultation des representants des groupes potentiellement impactes","Evaluation des impacts sur les droits pertinents de la Charte UE","Identification des groupes vulnerables (mineurs, personnes agees, handicapees)","Documentation des mesures d’attenuation et de leur efficacite","Realisation avant deploiement et mise a jour periodique obligatoire","Classification selon l’Annexe I (secteurs harmonises) ou l’Annexe III","Auto-evaluation documentee avant mise sur le marche (Art. 6(2))","Declenchement des obligations Art. 9 a 15 si systeme classe haut risque","Enregistrement dans la base de donnees EU (Art. 49 ; base de donnees : Art. 71) pour systemes Annexe III","Mise a jour du registre lors de toute modification substantielle (Art. 3(23), Art. 43(4))"]},
   {"ico":"\uD83C\uDFED","name":"Système de Management Qualité IA (Art. 17)","desc":"Template QMS adapté AI Act — 12 éléments obligatoires : stratégie, contrôle processus, non-conformités, cybersécurité.","meta":"Word · Vierge · ISO 9001 / ISO 42001 compatible","arts":["art17","art9"],"fmt":"word","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(7)","oblig":["Systeme QMS couvrant les 12 elements Art. 17(1)(a)-(k)","Politiques, procedures et instructions ecrites documentees","Gestion des non-conformites et des ecarts (Art. 17(1)(h))","Tracabilite des revisions, incidents et decisions qualite","Archivage de la documentation technique pendant 10 ans (Art. 18)","Procedure de signalement des incidents graves -- delai 15 jours (Art. 73)","Systeme de gestion des risques documente et maintenu (Art. 9(1))","Identification des risques connus et raisonnablement previsibles (Art. 9(2)(a))","Estimation et evaluation des risques lors de l’usage prevu et impropre (Art. 9(2)(b)(c))","Mesures de gestion mises en oeuvre et verifiees avant deploiement (Art. 9(3))","Tests de residualite confirmes sur le systeme final (Art. 9(5))","Revision continue tout au long du cycle de vie (Art. 9(9))"]},
-  {"ico":"\uD83D\uDCC4","name":"Fiche synthétique — Art. 5 : Pratiques interdites","desc":"Synthèse des 8 catégories de pratiques interdites, conditions d’exception et sanctions applicables (Art. 99).","meta":"PDF · 2 pages · À jour au 01/08/2025","arts":["art5"],"fmt":"pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(8)","oblig":["Evaluation des 8 categories de pratiques interdites (Art. 5(1)(a)-(h))","Absence de manipulation subliminale ou de techniques inconscientes (Art. 5(1)(a))","Absence d’exploitation des vulnerabilites de groupes specifiques (Art. 5(1)(b))","Exclusion des systemes de notation sociale par autorites publiques (Art. 5(1)(c))","Exclusion de la biometrie en temps reel dans les espaces publics (hors Art. 5(2)-(7))","Verification des exceptions legales applicables avant tout deploiement"]},
-  {"ico":"\uD83D\uDCC4","name":"Fiche synthétique — Art. 6 : Classification haut risque","desc":"Critères de classification, liste Annexe III, procédure d’auto-évaluation et obligations déclenchées.","meta":"PDF · 2 pages · Avec tableau décisionnel","arts":["art6"],"fmt":"pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(9)","oblig":["Classification selon l’Annexe I (secteurs harmonises) ou l’Annexe III","Auto-evaluation documentee avant mise sur le marche (Art. 6(2))","Declenchement des obligations Art. 9 a 15 si systeme classe haut risque","Enregistrement dans la base de donnees EU (Art. 71) pour systemes Annexe III","Mise a jour du registre lors de toute modification substantielle (Art. 83)"]},
+  {"ico":"\uD83D\uDCC4","name":"Fiche synthétique — Art. 5 : Pratiques interdites","desc":"Synthèse des pratiques interdites (8 catégories, plus 2 applicables à compter du 2 décembre 2026), conditions d’exception et sanctions applicables (Art. 99(3)).","meta":"PDF · 2 pages · À jour au 29/09/2026","arts":["art5"],"fmt":"pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(8)","oblig":["Evaluation des categories de pratiques interdites (Art. 5(1)(a)-(h), et (ba)-(bb) a partir du 2 decembre 2026)","Absence de manipulation subliminale ou de techniques inconscientes (Art. 5(1)(a))","Absence d’exploitation des vulnerabilites de groupes specifiques (Art. 5(1)(b))","Exclusion des systemes de notation sociale, par toute entite publique ou privee (Art. 5(1)(c))","Exclusion de l’identification biometrique a distance en temps reel dans les espaces accessibles au public a des fins repressives, sauf les trois exceptions strictes de l’Art. 5(1)(h) et les garanties de l’Art. 5(2)-(7)","Verification des exceptions legales applicables avant tout deploiement"]},
+  {"ico":"\uD83D\uDCC4","name":"Fiche synthétique — Art. 6 : Classification haut risque","desc":"Critères de classification, liste Annexe III, procédure d’auto-évaluation et obligations déclenchées.","meta":"PDF · 2 pages · Avec tableau décisionnel","arts":["art6"],"fmt":"pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(9)","oblig":["Classification selon l’Annexe I (secteurs harmonises) ou l’Annexe III","Auto-evaluation documentee avant mise sur le marche (Art. 6(2))","Declenchement des obligations Art. 9 a 15 si systeme classe haut risque","Enregistrement dans la base de donnees EU (Art. 49 ; base de donnees : Art. 71) pour systemes Annexe III","Mise a jour du registre lors de toute modification substantielle (Art. 3(23), Art. 43(4))"]},
   {"ico":"\uD83D\uDCC4","name":"Fiche synthétique — Art. 9 : Gestion des risques","desc":"Obligations du système de gestion des risques, méthodes acceptées, fréquence de révision, lien avec ISO 31000.","meta":"PDF · 2 pages · Haut risque obligatoire","arts":["art9"],"fmt":"pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(10)","oblig":["Systeme de gestion des risques documente et maintenu (Art. 9(1))","Identification des risques connus et raisonnablement previsibles (Art. 9(2)(a))","Estimation et evaluation des risques lors de l’usage prevu et impropre (Art. 9(2)(b)(c))","Mesures de gestion mises en oeuvre et verifiees avant deploiement (Art. 9(3))","Tests de residualite confirmes sur le systeme final (Art. 9(5))","Revision continue tout au long du cycle de vie (Art. 9(9))"]},
-  {"ico":"\uD83D\uDCC4","name":"Fiche synthétique — Art. 10 : Données d’entraînement","desc":"Exigences de gouvernance des données, détection des biais, conformité RGPD, documentation obligatoire.","meta":"PDF · 2 pages · Art. 10 + Art. 35 RGPD","arts":["art10","art6"],"fmt":"pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(11)","oblig":["Gouvernance des donnees d’entrainement, validation et test (Art. 10(1))","Pertinence et representativite verifiees des datasets (Art. 10(3))","Detection et correction des biais identifies dans les donnees (Art. 10(2))","Conformite RGPD pour les donnees personnelles utilisees (Art. 10(5))","Documentation des sources, methodes de collecte et traitements appliques","Classification selon l’Annexe I (secteurs harmonises) ou l’Annexe III","Auto-evaluation documentee avant mise sur le marche (Art. 6(2))","Declenchement des obligations Art. 9 a 15 si systeme classe haut risque","Enregistrement dans la base de donnees EU (Art. 71) pour systemes Annexe III","Mise a jour du registre lors de toute modification substantielle (Art. 83)"]},
-  {"ico":"\uD83D\uDCC4","name":"Fiche synthétique — Art. 13 : Transparence","desc":"Contenu obligatoire de la notice d’utilisation, obligations envers les déployeurs et les utilisateurs finaux.","meta":"PDF · 1 page · Avec checklist","arts":["art13","art50"],"fmt":"pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(12)","oblig":["Notice d’utilisation complete fournie au deployeur (Art. 13(2))","Identite et coordonnees du fournisseur documentees (Art. 13(3)(a))","Capacites, limites, finalites et contraintes decrites (Art. 13(3)(b))","Metriques de precision et de robustesse communiquees (Art. 13(3)(b)(iii))","Risques residuels pour les droits fondamentaux identifies (Art. 13(3)(e))","Mesures de surveillance humaine recommandees au deployeur (Art. 13(3)(d))","Information claire aux utilisateurs interagissant avec une IA (Art. 50(1))","Mention visible et comprehensible par les personnes concernees","Watermarking technique des contenus synthetiques generes (Art. 50(2))","Marquage des deepfakes de maniere detectable (Art. 50(4))","Registre des divulgations effectuees et de leur format","Obligations applicables depuis le 2 aout 2025"]},
-  {"ico":"\uD83D\uDCC4","name":"Fiche synthétique — Art. 50 : Transparence risque limité","desc":"Obligations pour chatbots, systèmes de génération de contenu synthétique et deepfakes — marquage obligatoire.","meta":"PDF · 1 page · Applicable depuis août 2025","arts":["art50","art51"],"fmt":"pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(13)","oblig":["Information claire aux utilisateurs interagissant avec une IA (Art. 50(1))","Mention visible et comprehensible par les personnes concernees","Watermarking technique des contenus synthetiques generes (Art. 50(2))","Marquage des deepfakes de maniere detectable (Art. 50(4))","Registre des divulgations effectuees et de leur format","Obligations applicables depuis le 2 aout 2025","Documentation technique des modeles GPAI etablie (Art. 53(1)(a))","Resume factuel des donnees d’entrainement publie (Art. 53(1)(b))","Politique de droit d’auteur respectee et documentee (Art. 53(1)(c))","Evaluation adversariale pour modeles a risque systemique (plus de 10e25 FLOPS)","Notification a la Commission europeenne si risque systemique (Art. 55(1)(b))","Revision annuelle des evaluations de risque systemique obligatoire"]},
+  {"ico":"\uD83D\uDCC4","name":"Fiche synthétique — Art. 10 : Données d’entraînement","desc":"Exigences de gouvernance des données, détection des biais, conformité RGPD, documentation obligatoire.","meta":"PDF · 2 pages · Art. 10 + Art. 35 RGPD","arts":["art10","art6"],"fmt":"pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(11)","oblig":["Gouvernance des donnees d’entrainement, validation et test (Art. 10(1))","Pertinence et representativite verifiees des datasets (Art. 10(3))","Detection et correction des biais identifies dans les donnees (Art. 10(2))","Conformite RGPD pour les donnees personnelles utilisees ; categories particulieres de donnees pour detecter et corriger les biais : conditions strictes de l’Art. 4a (qui remplace l’ancien Art. 10(5))","Documentation des sources, methodes de collecte et traitements appliques","Classification selon l’Annexe I (secteurs harmonises) ou l’Annexe III","Auto-evaluation documentee avant mise sur le marche (Art. 6(2))","Declenchement des obligations Art. 9 a 15 si systeme classe haut risque","Enregistrement dans la base de donnees EU (Art. 49 ; base de donnees : Art. 71) pour systemes Annexe III","Mise a jour du registre lors de toute modification substantielle (Art. 3(23), Art. 43(4))"]},
+  {"ico":"\uD83D\uDCC4","name":"Fiche synthétique — Art. 13 : Transparence","desc":"Contenu obligatoire de la notice d’utilisation, obligations envers les déployeurs et les utilisateurs finaux.","meta":"PDF · 1 page · Avec checklist","arts":["art13","art50"],"fmt":"pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(12)","oblig":["Notice d’utilisation complete fournie au deployeur (Art. 13(2))","Identite et coordonnees du fournisseur documentees (Art. 13(3)(a))","Capacites, limites, finalites et contraintes decrites (Art. 13(3)(b))","Metriques de precision et de robustesse communiquees (Art. 13(3)(b)(iii))","Risques residuels pour les droits fondamentaux identifies (Art. 13(3)(e))","Mesures de surveillance humaine recommandees au deployeur (Art. 13(3)(d))","Information claire aux utilisateurs interagissant avec une IA (Art. 50(1))","Mention visible et comprehensible par les personnes concernees","Watermarking technique des contenus synthetiques generes (Art. 50(2))","Marquage des deepfakes de maniere detectable (Art. 50(4))","Registre des divulgations effectuees et de leur format","Obligations de transparence applicables depuis le 2 aout 2026 (marquage des contenus synthetiques deja sur le marche : 2 decembre 2026, Art. 111(4))"]},
+  {"ico":"\uD83D\uDCC4","name":"Fiche synthétique — Art. 50 : Transparence risque limité","desc":"Obligations pour chatbots, systèmes de génération de contenu synthétique et deepfakes — marquage obligatoire.","meta":"PDF · 1 page · Applicable depuis août 2026","arts":["art50","art51"],"fmt":"pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(13)","oblig":["Information claire aux utilisateurs interagissant avec une IA (Art. 50(1))","Mention visible et comprehensible par les personnes concernees","Watermarking technique des contenus synthetiques generes (Art. 50(2))","Marquage des deepfakes de maniere detectable (Art. 50(4))","Registre des divulgations effectuees et de leur format","Obligations de transparence applicables depuis le 2 aout 2026 (marquage des contenus synthetiques deja sur le marche : 2 decembre 2026, Art. 111(4))","Documentation technique des modeles GPAI etablie (Art. 53(1)(a))","Resume factuel des donnees d’entrainement publie (Art. 53(1)(b))","Politique de droit d’auteur respectee et documentee (Art. 53(1)(c))","Evaluation adversariale pour modeles a risque systemique (plus de 10e25 FLOPS)","Notification a la Commission europeenne si risque systemique (Art. 55(1)(b))","Revision annuelle des evaluations de risque systemique obligatoire"]},
   {"ico":"\uD83D\uDCC4","name":"Fiche synthétique — Art. 51 : Modèles GPAI","desc":"Obligations spécifiques aux modèles d’IA à usage général — transparence, documentation, évaluation systémique.","meta":"PDF · 2 pages · Modèles fondation & LLMs","arts":["art51"],"fmt":"pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(14)","oblig":["Documentation technique des modeles GPAI etablie (Art. 53(1)(a))","Resume factuel des donnees d’entrainement publie (Art. 53(1)(b))","Politique de droit d’auteur respectee et documentee (Art. 53(1)(c))","Evaluation adversariale pour modeles a risque systemique (plus de 10e25 FLOPS)","Notification a la Commission europeenne si risque systemique (Art. 55(1)(b))","Revision annuelle des evaluations de risque systemique obligatoire"]},
-  {"ico":"\uD83D\uDCC5","name":"Fiche synthétique — Calendrier des échéances AI Act","desc":"Toutes les dates d’application par catégorie d’obligation — de février 2025 (Art. 5) à août 2027 (systèmes existants).","meta":"PDF · 1 page · Mis à jour trimestriellement","arts":["art6","art5","art50","art51"],"fmt":"pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(15)","oblig":["Classification selon l’Annexe I (secteurs harmonises) ou l’Annexe III","Auto-evaluation documentee avant mise sur le marche (Art. 6(2))","Declenchement des obligations Art. 9 a 15 si systeme classe haut risque","Enregistrement dans la base de donnees EU (Art. 71) pour systemes Annexe III","Mise a jour du registre lors de toute modification substantielle (Art. 83)","Evaluation des 8 categories de pratiques interdites (Art. 5(1)(a)-(h))","Absence de manipulation subliminale ou de techniques inconscientes (Art. 5(1)(a))","Absence d’exploitation des vulnerabilites de groupes specifiques (Art. 5(1)(b))","Exclusion des systemes de notation sociale par autorites publiques (Art. 5(1)(c))","Exclusion de la biometrie en temps reel dans les espaces publics (hors Art. 5(2)-(7))","Verification des exceptions legales applicables avant tout deploiement","Information claire aux utilisateurs interagissant avec une IA (Art. 50(1))","Mention visible et comprehensible par les personnes concernees","Watermarking technique des contenus synthetiques generes (Art. 50(2))","Marquage des deepfakes de maniere detectable (Art. 50(4))","Registre des divulgations effectuees et de leur format","Obligations applicables depuis le 2 aout 2025","Documentation technique des modeles GPAI etablie (Art. 53(1)(a))","Resume factuel des donnees d’entrainement publie (Art. 53(1)(b))","Politique de droit d’auteur respectee et documentee (Art. 53(1)(c))","Evaluation adversariale pour modeles a risque systemique (plus de 10e25 FLOPS)","Notification a la Commission europeenne si risque systemique (Art. 55(1)(b))","Revision annuelle des evaluations de risque systemique obligatoire"]},
-  {"ico":"\uD83D\uDCD6","name":"Guide — Classifier votre système IA selon l’AI Act","desc":"Arbre décisionnel en 7 étapes pour déterminer la catégorie de risque applicable, avec exemples par secteur.","meta":"PDF · Méthodologique · Tous systèmes IA","arts":["art5","art6"],"fmt":"pdf","ctaLabel":"Ouvrir le Simulateur","ctaAction":"go(\\'simulateur\\',null,\\'OUTILS\\',\\'Simulateur AI Act\\')","oblig":["Evaluation des 8 categories de pratiques interdites (Art. 5(1)(a)-(h))","Absence de manipulation subliminale ou de techniques inconscientes (Art. 5(1)(a))","Absence d’exploitation des vulnerabilites de groupes specifiques (Art. 5(1)(b))","Exclusion des systemes de notation sociale par autorites publiques (Art. 5(1)(c))","Exclusion de la biometrie en temps reel dans les espaces publics (hors Art. 5(2)-(7))","Verification des exceptions legales applicables avant tout deploiement","Classification selon l’Annexe I (secteurs harmonises) ou l’Annexe III","Auto-evaluation documentee avant mise sur le marche (Art. 6(2))","Declenchement des obligations Art. 9 a 15 si systeme classe haut risque","Enregistrement dans la base de donnees EU (Art. 71) pour systemes Annexe III","Mise a jour du registre lors de toute modification substantielle (Art. 83)"]},
-  {"ico":"\uD83D\uDCD6","name":"Guide — Audit de conformité AI Act (34 points)","desc":"Protocole d’audit en 34 points de contrôle — méthode, collecte de preuves, scoring, rapport d’écarts.","meta":"PDF · Généré par IA · Audit haut risque","arts":["art9","art11","art13","art14","art15","art17"],"fmt":"pdf ia","ctaLabel":"Lancer l’audit","ctaAction":"openAuditTab()","oblig":["Systeme de gestion des risques documente et maintenu (Art. 9(1))","Identification des risques connus et raisonnablement previsibles (Art. 9(2)(a))","Estimation et evaluation des risques lors de l’usage prevu et impropre (Art. 9(2)(b)(c))","Mesures de gestion mises en oeuvre et verifiees avant deploiement (Art. 9(3))","Tests de residualite confirmes sur le systeme final (Art. 9(5))","Revision continue tout au long du cycle de vie (Art. 9(9))","Constitution du dossier technique complet (9 rubriques, Annexe IV)","Conservation 10 ans apres la derniere mise sur le marche (Art. 18)","Mise a jour obligatoire a chaque modification substantielle (Art. 83)","Mise a disposition des autorites de surveillance sur demande","Couverture : description, architecture, donnees, metriques, risques, conformite","Notice d’utilisation complete fournie au deployeur (Art. 13(2))","Identite et coordonnees du fournisseur documentees (Art. 13(3)(a))","Capacites, limites, finalites et contraintes decrites (Art. 13(3)(b))","Metriques de precision et de robustesse communiquees (Art. 13(3)(b)(iii))","Risques residuels pour les droits fondamentaux identifies (Art. 13(3)(e))","Mesures de surveillance humaine recommandees au deployeur (Art. 13(3)(d))","Mecanismes de supervision integres dans l’interface (Art. 14(4)(a))","Comprehension des sorties du systeme par les superviseurs (Art. 14(4)(b))","Possibilite d’ignorer, corriger ou annuler les decisions IA (Art. 14(4)(c))","Bouton d’arret d’urgence operationnel et documente (Art. 14(4)(d))","Superviseurs qualifies designes, habilites et formes (Art. 14(5))","Niveaux d’exactitude appropries atteints et documentes (Art. 15(1))","Robustesse face aux donnees adversariales testee (Art. 15(4))","Metriques mesurees : Accuracy, Precision, Rappel, F1-Score, AUC-ROC","Resilience aux erreurs et aux pannes evaluee (MTTF/MTTR)","Conformite cybersecurite : ISO 27001 / NIS2 (Art. 15(5))","Systeme QMS couvrant les 12 elements Art. 17(1)(a)-(k)","Politiques, procedures et instructions ecrites documentees","Gestion des non-conformites et des ecarts (Art. 17(1)(h))","Tracabilite des revisions, incidents et decisions qualite","Archivage de la documentation technique pendant 10 ans (Art. 18)","Procedure de signalement des incidents graves -- delai 15 jours (Art. 73)"]},
-  {"ico":"\uD83D\uDCD6","name":"Guide — Constituer la documentation technique (Art. 11)","desc":"Méthode étape par étape pour constituer le dossier technique Annexe IV — qui produit quoi, dans quel ordre.","meta":"PDF · 4 pages · Fournisseurs haut risque","arts":["art11","art17"],"fmt":"pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(18)","oblig":["Constitution du dossier technique complet (9 rubriques, Annexe IV)","Conservation 10 ans apres la derniere mise sur le marche (Art. 18)","Mise a jour obligatoire a chaque modification substantielle (Art. 83)","Mise a disposition des autorites de surveillance sur demande","Couverture : description, architecture, donnees, metriques, risques, conformite","Systeme QMS couvrant les 12 elements Art. 17(1)(a)-(k)","Politiques, procedures et instructions ecrites documentees","Gestion des non-conformites et des ecarts (Art. 17(1)(h))","Tracabilite des revisions, incidents et decisions qualite","Archivage de la documentation technique pendant 10 ans (Art. 18)","Procedure de signalement des incidents graves -- delai 15 jours (Art. 73)"]},
+  {"ico":"\uD83D\uDCC5","name":"Fiche synthétique — Calendrier des échéances AI Act","desc":"Toutes les dates d’application par catégorie d’obligation — de février 2025 (Art. 5) à août 2028 (annexe I), avec les échéances du règlement (UE) 2026/1744 : 2 décembre 2026, 2 août 2027 et 2 décembre 2027.","meta":"PDF · 1 page · Mis à jour trimestriellement","arts":["art6","art5","art50","art51"],"fmt":"pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(15)","oblig":["Classification selon l’Annexe I (secteurs harmonises) ou l’Annexe III","Auto-evaluation documentee avant mise sur le marche (Art. 6(2))","Declenchement des obligations Art. 9 a 15 si systeme classe haut risque","Enregistrement dans la base de donnees EU (Art. 49 ; base de donnees : Art. 71) pour systemes Annexe III","Mise a jour du registre lors de toute modification substantielle (Art. 3(23), Art. 43(4))","Evaluation des categories de pratiques interdites (Art. 5(1)(a)-(h), et (ba)-(bb) a partir du 2 decembre 2026)","Absence de manipulation subliminale ou de techniques inconscientes (Art. 5(1)(a))","Absence d’exploitation des vulnerabilites de groupes specifiques (Art. 5(1)(b))","Exclusion des systemes de notation sociale, par toute entite publique ou privee (Art. 5(1)(c))","Exclusion de l’identification biometrique a distance en temps reel dans les espaces accessibles au public a des fins repressives, sauf les trois exceptions strictes de l’Art. 5(1)(h) et les garanties de l’Art. 5(2)-(7)","Verification des exceptions legales applicables avant tout deploiement","Information claire aux utilisateurs interagissant avec une IA (Art. 50(1))","Mention visible et comprehensible par les personnes concernees","Watermarking technique des contenus synthetiques generes (Art. 50(2))","Marquage des deepfakes de maniere detectable (Art. 50(4))","Registre des divulgations effectuees et de leur format","Obligations de transparence applicables depuis le 2 aout 2026 (marquage des contenus synthetiques deja sur le marche : 2 decembre 2026, Art. 111(4))","Documentation technique des modeles GPAI etablie (Art. 53(1)(a))","Resume factuel des donnees d’entrainement publie (Art. 53(1)(b))","Politique de droit d’auteur respectee et documentee (Art. 53(1)(c))","Evaluation adversariale pour modeles a risque systemique (plus de 10e25 FLOPS)","Notification a la Commission europeenne si risque systemique (Art. 55(1)(b))","Revision annuelle des evaluations de risque systemique obligatoire"]},
+  {"ico":"\uD83D\uDCD6","name":"Guide — Classifier votre système IA selon l’AI Act","desc":"Arbre décisionnel en 7 étapes pour déterminer la catégorie de risque applicable, avec exemples par secteur.","meta":"PDF · Méthodologique · Tous systèmes IA","arts":["art5","art6"],"fmt":"pdf","ctaLabel":"Ouvrir le Simulateur","ctaAction":"go(\\'simulateur\\',null,\\'OUTILS\\',\\'Simulateur AI Act\\')","oblig":["Evaluation des categories de pratiques interdites (Art. 5(1)(a)-(h), et (ba)-(bb) a partir du 2 decembre 2026)","Absence de manipulation subliminale ou de techniques inconscientes (Art. 5(1)(a))","Absence d’exploitation des vulnerabilites de groupes specifiques (Art. 5(1)(b))","Exclusion des systemes de notation sociale, par toute entite publique ou privee (Art. 5(1)(c))","Exclusion de l’identification biometrique a distance en temps reel dans les espaces accessibles au public a des fins repressives, sauf les trois exceptions strictes de l’Art. 5(1)(h) et les garanties de l’Art. 5(2)-(7)","Verification des exceptions legales applicables avant tout deploiement","Classification selon l’Annexe I (secteurs harmonises) ou l’Annexe III","Auto-evaluation documentee avant mise sur le marche (Art. 6(2))","Declenchement des obligations Art. 9 a 15 si systeme classe haut risque","Enregistrement dans la base de donnees EU (Art. 49 ; base de donnees : Art. 71) pour systemes Annexe III","Mise a jour du registre lors de toute modification substantielle (Art. 3(23), Art. 43(4))"]},
+  {"ico":"\uD83D\uDCD6","name":"Guide — Audit de conformité AI Act (34 points)","desc":"Protocole d’audit en 34 points de contrôle — méthode, collecte de preuves, scoring, rapport d’écarts.","meta":"PDF · Généré par IA · Audit haut risque","arts":["art9","art11","art13","art14","art15","art17"],"fmt":"pdf ia","ctaLabel":"Lancer l’audit","ctaAction":"openAuditTab()","oblig":["Systeme de gestion des risques documente et maintenu (Art. 9(1))","Identification des risques connus et raisonnablement previsibles (Art. 9(2)(a))","Estimation et evaluation des risques lors de l’usage prevu et impropre (Art. 9(2)(b)(c))","Mesures de gestion mises en oeuvre et verifiees avant deploiement (Art. 9(3))","Tests de residualite confirmes sur le systeme final (Art. 9(5))","Revision continue tout au long du cycle de vie (Art. 9(9))","Constitution du dossier technique complet (9 rubriques, Annexe IV)","Conservation 10 ans apres la derniere mise sur le marche (Art. 18)","Mise a jour obligatoire a chaque modification substantielle (Art. 3(23), Art. 43(4))","Mise a disposition des autorites de surveillance sur demande","Couverture : description, architecture, donnees, metriques, risques, conformite","Notice d’utilisation complete fournie au deployeur (Art. 13(2))","Identite et coordonnees du fournisseur documentees (Art. 13(3)(a))","Capacites, limites, finalites et contraintes decrites (Art. 13(3)(b))","Metriques de precision et de robustesse communiquees (Art. 13(3)(b)(iii))","Risques residuels pour les droits fondamentaux identifies (Art. 13(3)(e))","Mesures de surveillance humaine recommandees au deployeur (Art. 13(3)(d))","Mecanismes de supervision integres dans l’interface (Art. 14(4)(a))","Comprehension des sorties du systeme par les superviseurs (Art. 14(4)(b))","Possibilite d’ignorer, corriger ou annuler les decisions IA (Art. 14(4)(c))","Bouton d’arret d’urgence operationnel et documente (Art. 14(4)(d))","Superviseurs qualifies designes, habilites et formes (Art. 14(5))","Niveaux d’exactitude appropries atteints et documentes (Art. 15(1))","Robustesse face aux donnees adversariales testee (Art. 15(4))","Metriques mesurees : Accuracy, Precision, Rappel, F1-Score, AUC-ROC","Resilience aux erreurs et aux pannes evaluee (MTTF/MTTR)","Conformite cybersecurite : ISO 27001 / NIS2 (Art. 15(5))","Systeme QMS couvrant les 12 elements Art. 17(1)(a)-(k)","Politiques, procedures et instructions ecrites documentees","Gestion des non-conformites et des ecarts (Art. 17(1)(h))","Tracabilite des revisions, incidents et decisions qualite","Archivage de la documentation technique pendant 10 ans (Art. 18)","Procedure de signalement des incidents graves -- delai 15 jours (Art. 73)"]},
+  {"ico":"\uD83D\uDCD6","name":"Guide — Constituer la documentation technique (Art. 11)","desc":"Méthode étape par étape pour constituer le dossier technique Annexe IV — qui produit quoi, dans quel ordre.","meta":"PDF · 4 pages · Fournisseurs haut risque","arts":["art11","art17"],"fmt":"pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(18)","oblig":["Constitution du dossier technique complet (9 rubriques, Annexe IV)","Conservation 10 ans apres la derniere mise sur le marche (Art. 18)","Mise a jour obligatoire a chaque modification substantielle (Art. 3(23), Art. 43(4))","Mise a disposition des autorites de surveillance sur demande","Couverture : description, architecture, donnees, metriques, risques, conformite","Systeme QMS couvrant les 12 elements Art. 17(1)(a)-(k)","Politiques, procedures et instructions ecrites documentees","Gestion des non-conformites et des ecarts (Art. 17(1)(h))","Tracabilite des revisions, incidents et decisions qualite","Archivage de la documentation technique pendant 10 ans (Art. 18)","Procedure de signalement des incidents graves -- delai 15 jours (Art. 73)"]},
   {"ico":"\uD83D\uDCD6","name":"Guide — Surveillance humaine (Art. 14)","desc":"Comment concevoir les interfaces de contrôle, former les superviseurs et documenter le bouton d’arrêt d’urgence.","meta":"PDF · 3 pages · Fournisseurs & déployeurs","arts":["art14","art13"],"fmt":"pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(19)","oblig":["Mecanismes de supervision integres dans l’interface (Art. 14(4)(a))","Comprehension des sorties du systeme par les superviseurs (Art. 14(4)(b))","Possibilite d’ignorer, corriger ou annuler les decisions IA (Art. 14(4)(c))","Bouton d’arret d’urgence operationnel et documente (Art. 14(4)(d))","Superviseurs qualifies designes, habilites et formes (Art. 14(5))","Notice d’utilisation complete fournie au deployeur (Art. 13(2))","Identite et coordonnees du fournisseur documentees (Art. 13(3)(a))","Capacites, limites, finalites et contraintes decrites (Art. 13(3)(b))","Metriques de precision et de robustesse communiquees (Art. 13(3)(b)(iii))","Risques residuels pour les droits fondamentaux identifies (Art. 13(3)(e))","Mesures de surveillance humaine recommandees au deployeur (Art. 13(3)(d))"]},
-  {"ico":"\uD83D\uDCD6","name":"Guide — Gouvernance des données d’entraînement (Art. 10)","desc":"Processus de qualification, détection des biais, documentation et vérifications de qualité recommandées.","meta":"PDF · 3 pages · Art. 10 + RGPD Art. 5","arts":["art10"],"fmt":"pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(20)","oblig":["Gouvernance des donnees d’entrainement, validation et test (Art. 10(1))","Pertinence et representativite verifiees des datasets (Art. 10(3))","Detection et correction des biais identifies dans les donnees (Art. 10(2))","Conformite RGPD pour les donnees personnelles utilisees (Art. 10(5))","Documentation des sources, methodes de collecte et traitements appliques"]},
-  {"ico":"\uD83D\uDCD6","name":"Guide — Conduire une FRIA (Art. 27)","desc":"Méthodologie complète : périmètre, parties prenantes, droits Charte UE, groupes vulnérables, documentation.","meta":"PDF · 5 pages · Déployeurs secteur public","arts":["art27","art6"],"fmt":"pdf","ctaLabel":"Ouvrir la FRIA","ctaAction":"go(\\'fria\\',null,\\'CONFORMITE\\',\\'FRIA\\')","oblig":["Identification des droits fondamentaux susceptibles d’etre affectes (Charte UE)","Consultation des representants des groupes potentiellement impactes","Evaluation des impacts sur les droits pertinents de la Charte UE","Identification des groupes vulnerables (mineurs, personnes agees, handicapees)","Documentation des mesures d’attenuation et de leur efficacite","Realisation avant deploiement et mise a jour periodique obligatoire","Classification selon l’Annexe I (secteurs harmonises) ou l’Annexe III","Auto-evaluation documentee avant mise sur le marche (Art. 6(2))","Declenchement des obligations Art. 9 a 15 si systeme classe haut risque","Enregistrement dans la base de donnees EU (Art. 71) pour systemes Annexe III","Mise a jour du registre lors de toute modification substantielle (Art. 83)"]},
+  {"ico":"\uD83D\uDCD6","name":"Guide — Gouvernance des données d’entraînement (Art. 10)","desc":"Processus de qualification, détection des biais, documentation et vérifications de qualité recommandées.","meta":"PDF · 3 pages · Art. 10 + RGPD Art. 5","arts":["art10"],"fmt":"pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(20)","oblig":["Gouvernance des donnees d’entrainement, validation et test (Art. 10(1))","Pertinence et representativite verifiees des datasets (Art. 10(3))","Detection et correction des biais identifies dans les donnees (Art. 10(2))","Conformite RGPD pour les donnees personnelles utilisees ; categories particulieres de donnees pour detecter et corriger les biais : conditions strictes de l’Art. 4a (qui remplace l’ancien Art. 10(5))","Documentation des sources, methodes de collecte et traitements appliques"]},
+  {"ico":"\uD83D\uDCD6","name":"Guide — Conduire une FRIA (Art. 27)","desc":"Méthodologie complète : périmètre, parties prenantes, droits Charte UE, groupes vulnérables, documentation.","meta":"PDF · 5 pages · Déployeurs secteur public","arts":["art27","art6"],"fmt":"pdf","ctaLabel":"Ouvrir la FRIA","ctaAction":"go(\\'fria\\',null,\\'CONFORMITE\\',\\'FRIA\\')","oblig":["Identification des droits fondamentaux susceptibles d’etre affectes (Charte UE)","Consultation des representants des groupes potentiellement impactes","Evaluation des impacts sur les droits pertinents de la Charte UE","Identification des groupes vulnerables (mineurs, personnes agees, handicapees)","Documentation des mesures d’attenuation et de leur efficacite","Realisation avant deploiement et mise a jour periodique obligatoire","Classification selon l’Annexe I (secteurs harmonises) ou l’Annexe III","Auto-evaluation documentee avant mise sur le marche (Art. 6(2))","Declenchement des obligations Art. 9 a 15 si systeme classe haut risque","Enregistrement dans la base de donnees EU (Art. 49 ; base de donnees : Art. 71) pour systemes Annexe III","Mise a jour du registre lors de toute modification substantielle (Art. 3(23), Art. 43(4))"]},
   {"ico":"\uD83D\uDCD6","name":"Guide — Obligations GPAI et modèles systémiques (Art. 51)","desc":"Obligations des fournisseurs de modèles GPAI — transparence, droit d’auteur, évaluation adversariale.","meta":"PDF · 3 pages · Fournisseurs LLM & fondation","arts":["art51"],"fmt":"pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(22)","oblig":["Documentation technique des modeles GPAI etablie (Art. 53(1)(a))","Resume factuel des donnees d’entrainement publie (Art. 53(1)(b))","Politique de droit d’auteur respectee et documentee (Art. 53(1)(c))","Evaluation adversariale pour modeles a risque systemique (plus de 10e25 FLOPS)","Notification a la Commission europeenne si risque systemique (Art. 55(1)(b))","Revision annuelle des evaluations de risque systemique obligatoire"]},
-  {"ico":"\uD83D\uDCCA","name":"Rapport d’audit de conformité (34 points)","desc":"Export PDF de votre audit EU AI Act avec statut réel de chaque contrôle, score global et plan d’action priorisé.","meta":"Sentinel · Généré par IA · Votre périmètre","arts":["art9","art11","art13","art14","art15"],"fmt":"sentinel ia","ctaLabel":"Lancer l’audit","ctaAction":"openAuditTab()","oblig":["Systeme de gestion des risques documente et maintenu (Art. 9(1))","Identification des risques connus et raisonnablement previsibles (Art. 9(2)(a))","Estimation et evaluation des risques lors de l’usage prevu et impropre (Art. 9(2)(b)(c))","Mesures de gestion mises en oeuvre et verifiees avant deploiement (Art. 9(3))","Tests de residualite confirmes sur le systeme final (Art. 9(5))","Revision continue tout au long du cycle de vie (Art. 9(9))","Constitution du dossier technique complet (9 rubriques, Annexe IV)","Conservation 10 ans apres la derniere mise sur le marche (Art. 18)","Mise a jour obligatoire a chaque modification substantielle (Art. 83)","Mise a disposition des autorites de surveillance sur demande","Couverture : description, architecture, donnees, metriques, risques, conformite","Notice d’utilisation complete fournie au deployeur (Art. 13(2))","Identite et coordonnees du fournisseur documentees (Art. 13(3)(a))","Capacites, limites, finalites et contraintes decrites (Art. 13(3)(b))","Metriques de precision et de robustesse communiquees (Art. 13(3)(b)(iii))","Risques residuels pour les droits fondamentaux identifies (Art. 13(3)(e))","Mesures de surveillance humaine recommandees au deployeur (Art. 13(3)(d))","Mecanismes de supervision integres dans l’interface (Art. 14(4)(a))","Comprehension des sorties du systeme par les superviseurs (Art. 14(4)(b))","Possibilite d’ignorer, corriger ou annuler les decisions IA (Art. 14(4)(c))","Bouton d’arret d’urgence operationnel et documente (Art. 14(4)(d))","Superviseurs qualifies designes, habilites et formes (Art. 14(5))","Niveaux d’exactitude appropries atteints et documentes (Art. 15(1))","Robustesse face aux donnees adversariales testee (Art. 15(4))","Metriques mesurees : Accuracy, Precision, Rappel, F1-Score, AUC-ROC","Resilience aux erreurs et aux pannes evaluee (MTTF/MTTR)","Conformite cybersecurite : ISO 27001 / NIS2 (Art. 15(5))"]},
+  {"ico":"\uD83D\uDCCA","name":"Rapport d’audit de conformité (34 points)","desc":"Export PDF de votre audit EU AI Act avec statut réel de chaque contrôle, score global et plan d’action priorisé.","meta":"Sentinel · Généré par IA · Votre périmètre","arts":["art9","art11","art13","art14","art15"],"fmt":"sentinel ia","ctaLabel":"Lancer l’audit","ctaAction":"openAuditTab()","oblig":["Systeme de gestion des risques documente et maintenu (Art. 9(1))","Identification des risques connus et raisonnablement previsibles (Art. 9(2)(a))","Estimation et evaluation des risques lors de l’usage prevu et impropre (Art. 9(2)(b)(c))","Mesures de gestion mises en oeuvre et verifiees avant deploiement (Art. 9(3))","Tests de residualite confirmes sur le systeme final (Art. 9(5))","Revision continue tout au long du cycle de vie (Art. 9(9))","Constitution du dossier technique complet (9 rubriques, Annexe IV)","Conservation 10 ans apres la derniere mise sur le marche (Art. 18)","Mise a jour obligatoire a chaque modification substantielle (Art. 3(23), Art. 43(4))","Mise a disposition des autorites de surveillance sur demande","Couverture : description, architecture, donnees, metriques, risques, conformite","Notice d’utilisation complete fournie au deployeur (Art. 13(2))","Identite et coordonnees du fournisseur documentees (Art. 13(3)(a))","Capacites, limites, finalites et contraintes decrites (Art. 13(3)(b))","Metriques de precision et de robustesse communiquees (Art. 13(3)(b)(iii))","Risques residuels pour les droits fondamentaux identifies (Art. 13(3)(e))","Mesures de surveillance humaine recommandees au deployeur (Art. 13(3)(d))","Mecanismes de supervision integres dans l’interface (Art. 14(4)(a))","Comprehension des sorties du systeme par les superviseurs (Art. 14(4)(b))","Possibilite d’ignorer, corriger ou annuler les decisions IA (Art. 14(4)(c))","Bouton d’arret d’urgence operationnel et documente (Art. 14(4)(d))","Superviseurs qualifies designes, habilites et formes (Art. 14(5))","Niveaux d’exactitude appropries atteints et documentes (Art. 15(1))","Robustesse face aux donnees adversariales testee (Art. 15(4))","Metriques mesurees : Accuracy, Precision, Rappel, F1-Score, AUC-ROC","Resilience aux erreurs et aux pannes evaluee (MTTF/MTTR)","Conformite cybersecurite : ISO 27001 / NIS2 (Art. 15(5))"]},
   {"ico":"\uD83D\uDDFA\uFE0F","name":"Matrice RACI — Parties prenantes","desc":"Export PDF/Word de votre matrice RACI actuelle avec rôles, responsabilités et interfaces de gouvernance IA.","meta":"Sentinel · Disponible · Parties prenantes","arts":["art17","art9"],"fmt":"sentinel ia","ctaLabel":"Ouvrir Parties prenantes","ctaAction":"go(\\'parties\\',null,\\'GOUVERNANCE\\',\\'Parties prenantes\\')","oblig":["Systeme QMS couvrant les 12 elements Art. 17(1)(a)-(k)","Politiques, procedures et instructions ecrites documentees","Gestion des non-conformites et des ecarts (Art. 17(1)(h))","Tracabilite des revisions, incidents et decisions qualite","Archivage de la documentation technique pendant 10 ans (Art. 18)","Procedure de signalement des incidents graves -- delai 15 jours (Art. 73)","Systeme de gestion des risques documente et maintenu (Art. 9(1))","Identification des risques connus et raisonnablement previsibles (Art. 9(2)(a))","Estimation et evaluation des risques lors de l’usage prevu et impropre (Art. 9(2)(b)(c))","Mesures de gestion mises en oeuvre et verifiees avant deploiement (Art. 9(3))","Tests de residualite confirmes sur le systeme final (Art. 9(5))","Revision continue tout au long du cycle de vie (Art. 9(9))"]},
-  {"ico":"\u2696\uFE0F","name":"Évaluation FRIA par système","desc":"Analyse des 8 droits fondamentaux pour chaque système à haut risque enregistré, avec mesures d’atténuation.","meta":"Sentinel · Disponible · FRIA interactive","arts":["art27","art6"],"fmt":"sentinel ia","ctaLabel":"Ouvrir la FRIA","ctaAction":"go(\\'fria\\',null,\\'CONFORMITE\\',\\'FRIA\\')","oblig":["Identification des droits fondamentaux susceptibles d’etre affectes (Charte UE)","Consultation des representants des groupes potentiellement impactes","Evaluation des impacts sur les droits pertinents de la Charte UE","Identification des groupes vulnerables (mineurs, personnes agees, handicapees)","Documentation des mesures d’attenuation et de leur efficacite","Realisation avant deploiement et mise a jour periodique obligatoire","Classification selon l’Annexe I (secteurs harmonises) ou l’Annexe III","Auto-evaluation documentee avant mise sur le marche (Art. 6(2))","Declenchement des obligations Art. 9 a 15 si systeme classe haut risque","Enregistrement dans la base de donnees EU (Art. 71) pour systemes Annexe III","Mise a jour du registre lors de toute modification substantielle (Art. 83)"]},
+  {"ico":"\u2696\uFE0F","name":"Évaluation FRIA par système","desc":"Analyse des 8 droits fondamentaux pour chaque système à haut risque enregistré, avec mesures d’atténuation.","meta":"Sentinel · Disponible · FRIA interactive","arts":["art27","art6"],"fmt":"sentinel ia","ctaLabel":"Ouvrir la FRIA","ctaAction":"go(\\'fria\\',null,\\'CONFORMITE\\',\\'FRIA\\')","oblig":["Identification des droits fondamentaux susceptibles d’etre affectes (Charte UE)","Consultation des representants des groupes potentiellement impactes","Evaluation des impacts sur les droits pertinents de la Charte UE","Identification des groupes vulnerables (mineurs, personnes agees, handicapees)","Documentation des mesures d’attenuation et de leur efficacite","Realisation avant deploiement et mise a jour periodique obligatoire","Classification selon l’Annexe I (secteurs harmonises) ou l’Annexe III","Auto-evaluation documentee avant mise sur le marche (Art. 6(2))","Declenchement des obligations Art. 9 a 15 si systeme classe haut risque","Enregistrement dans la base de donnees EU (Art. 49 ; base de donnees : Art. 71) pour systemes Annexe III","Mise a jour du registre lors de toute modification substantielle (Art. 3(23), Art. 43(4))"]},
   {"ico":"\uD83D\uDCC8","name":"Rapport de maturité IA — 6 livrables","desc":"Synthèse de votre niveau de maturité IA sur 6 dimensions : gouvernance, données, modèles, risques, conformité, opérations.","meta":"Sentinel · Généré par IA · Audit de maturité","arts":["art9","art17"],"fmt":"sentinel ia","ctaLabel":"Ouvrir l’audit","ctaAction":"go(\\'maturite\\',null,\\'AUDIT\\',\\'Maturite IA\\')","oblig":["Systeme de gestion des risques documente et maintenu (Art. 9(1))","Identification des risques connus et raisonnablement previsibles (Art. 9(2)(a))","Estimation et evaluation des risques lors de l’usage prevu et impropre (Art. 9(2)(b)(c))","Mesures de gestion mises en oeuvre et verifiees avant deploiement (Art. 9(3))","Tests de residualite confirmes sur le systeme final (Art. 9(5))","Revision continue tout au long du cycle de vie (Art. 9(9))","Systeme QMS couvrant les 12 elements Art. 17(1)(a)-(k)","Politiques, procedures et instructions ecrites documentees","Gestion des non-conformites et des ecarts (Art. 17(1)(h))","Tracabilite des revisions, incidents et decisions qualite","Archivage de la documentation technique pendant 10 ans (Art. 18)","Procedure de signalement des incidents graves -- delai 15 jours (Art. 73)"]},
-  {"ico":"\uD83D\uDD0D","name":"Rapport Shadow AI — Cartographie usages non déclarés","desc":"Inventaire des systèmes IA découverts hors registre, évaluation du risque et plan de régularisation.","meta":"Sentinel · Disponible · Module Shadow AI","arts":["art6","art17"],"fmt":"sentinel ia","ctaLabel":"Ouvrir Shadow AI","ctaAction":"go(\\'shadow-ai\\',null,\\'SECURITE\\',\\'Shadow AI\\')","oblig":["Classification selon l’Annexe I (secteurs harmonises) ou l’Annexe III","Auto-evaluation documentee avant mise sur le marche (Art. 6(2))","Declenchement des obligations Art. 9 a 15 si systeme classe haut risque","Enregistrement dans la base de donnees EU (Art. 71) pour systemes Annexe III","Mise a jour du registre lors de toute modification substantielle (Art. 83)","Systeme QMS couvrant les 12 elements Art. 17(1)(a)-(k)","Politiques, procedures et instructions ecrites documentees","Gestion des non-conformites et des ecarts (Art. 17(1)(h))","Tracabilite des revisions, incidents et decisions qualite","Archivage de la documentation technique pendant 10 ans (Art. 18)","Procedure de signalement des incidents graves -- delai 15 jours (Art. 73)"]},
-  {"ico":"\uD83D\uDCCB","name":"Registre IA — Export complet des systèmes déclarés","desc":"Export PDF du registre de vos systèmes IA avec classification, statut de conformité, responsable et historique.","meta":"Sentinel · Disponible · Registre IA","arts":["art11","art6"],"fmt":"sentinel ia","ctaLabel":"Ouvrir dans Sentinel","ctaAction":"go(\\'registre\\',null,\\'REGISTRE\\',\\'Registre IA\\')","oblig":["Constitution du dossier technique complet (9 rubriques, Annexe IV)","Conservation 10 ans apres la derniere mise sur le marche (Art. 18)","Mise a jour obligatoire a chaque modification substantielle (Art. 83)","Mise a disposition des autorites de surveillance sur demande","Couverture : description, architecture, donnees, metriques, risques, conformite","Classification selon l’Annexe I (secteurs harmonises) ou l’Annexe III","Auto-evaluation documentee avant mise sur le marche (Art. 6(2))","Declenchement des obligations Art. 9 a 15 si systeme classe haut risque","Enregistrement dans la base de donnees EU (Art. 71) pour systemes Annexe III","Mise a jour du registre lors de toute modification substantielle (Art. 83)"]},
-  {"ico":"\uD83C\uDF10","name":"Tableau comparatif — AI Act vs ISO 42001 vs NIST AI RMF","desc":"Mise en correspondance des exigences AI Act avec ISO 42001:2023 et le NIST AI Risk Management Framework.","meta":"PDF · Référence · Mise à jour semestrielle","arts":["art9","art17","art11"],"fmt":"pdf","ctaLabel":"Ouvrir le comparatif","ctaAction":"go(\\'comp\\',null,\\'BENCHMARKS\\',\\'Comparatif\\')","oblig":["Systeme de gestion des risques documente et maintenu (Art. 9(1))","Identification des risques connus et raisonnablement previsibles (Art. 9(2)(a))","Estimation et evaluation des risques lors de l’usage prevu et impropre (Art. 9(2)(b)(c))","Mesures de gestion mises en oeuvre et verifiees avant deploiement (Art. 9(3))","Tests de residualite confirmes sur le systeme final (Art. 9(5))","Revision continue tout au long du cycle de vie (Art. 9(9))","Systeme QMS couvrant les 12 elements Art. 17(1)(a)-(k)","Politiques, procedures et instructions ecrites documentees","Gestion des non-conformites et des ecarts (Art. 17(1)(h))","Tracabilite des revisions, incidents et decisions qualite","Archivage de la documentation technique pendant 10 ans (Art. 18)","Procedure de signalement des incidents graves -- delai 15 jours (Art. 73)","Constitution du dossier technique complet (9 rubriques, Annexe IV)","Conservation 10 ans apres la derniere mise sur le marche (Art. 18)","Mise a jour obligatoire a chaque modification substantielle (Art. 83)","Mise a disposition des autorites de surveillance sur demande","Couverture : description, architecture, donnees, metriques, risques, conformite"]},
+  {"ico":"\uD83D\uDD0D","name":"Rapport Shadow AI — Cartographie usages non déclarés","desc":"Inventaire des systèmes IA découverts hors registre, évaluation du risque et plan de régularisation.","meta":"Sentinel · Disponible · Module Shadow AI","arts":["art6","art17"],"fmt":"sentinel ia","ctaLabel":"Ouvrir Shadow AI","ctaAction":"go(\\'shadow-ai\\',null,\\'SECURITE\\',\\'Shadow AI\\')","oblig":["Classification selon l’Annexe I (secteurs harmonises) ou l’Annexe III","Auto-evaluation documentee avant mise sur le marche (Art. 6(2))","Declenchement des obligations Art. 9 a 15 si systeme classe haut risque","Enregistrement dans la base de donnees EU (Art. 49 ; base de donnees : Art. 71) pour systemes Annexe III","Mise a jour du registre lors de toute modification substantielle (Art. 3(23), Art. 43(4))","Systeme QMS couvrant les 12 elements Art. 17(1)(a)-(k)","Politiques, procedures et instructions ecrites documentees","Gestion des non-conformites et des ecarts (Art. 17(1)(h))","Tracabilite des revisions, incidents et decisions qualite","Archivage de la documentation technique pendant 10 ans (Art. 18)","Procedure de signalement des incidents graves -- delai 15 jours (Art. 73)"]},
+  {"ico":"\uD83D\uDCCB","name":"Registre IA — Export complet des systèmes déclarés","desc":"Export PDF du registre de vos systèmes IA avec classification, statut de conformité, responsable et historique.","meta":"Sentinel · Disponible · Registre IA","arts":["art11","art6"],"fmt":"sentinel ia","ctaLabel":"Ouvrir dans Sentinel","ctaAction":"go(\\'registre\\',null,\\'REGISTRE\\',\\'Registre IA\\')","oblig":["Constitution du dossier technique complet (9 rubriques, Annexe IV)","Conservation 10 ans apres la derniere mise sur le marche (Art. 18)","Mise a jour obligatoire a chaque modification substantielle (Art. 3(23), Art. 43(4))","Mise a disposition des autorites de surveillance sur demande","Couverture : description, architecture, donnees, metriques, risques, conformite","Classification selon l’Annexe I (secteurs harmonises) ou l’Annexe III","Auto-evaluation documentee avant mise sur le marche (Art. 6(2))","Declenchement des obligations Art. 9 a 15 si systeme classe haut risque","Enregistrement dans la base de donnees EU (Art. 49 ; base de donnees : Art. 71) pour systemes Annexe III","Mise a jour du registre lors de toute modification substantielle (Art. 3(23), Art. 43(4))"]},
+  {"ico":"\uD83C\uDF10","name":"Tableau comparatif — AI Act vs ISO 42001 vs NIST AI RMF","desc":"Mise en correspondance des exigences AI Act avec ISO 42001:2023 et le NIST AI Risk Management Framework.","meta":"PDF · Référence · Mise à jour semestrielle","arts":["art9","art17","art11"],"fmt":"pdf","ctaLabel":"Ouvrir le comparatif","ctaAction":"go(\\'comp\\',null,\\'BENCHMARKS\\',\\'Comparatif\\')","oblig":["Systeme de gestion des risques documente et maintenu (Art. 9(1))","Identification des risques connus et raisonnablement previsibles (Art. 9(2)(a))","Estimation et evaluation des risques lors de l’usage prevu et impropre (Art. 9(2)(b)(c))","Mesures de gestion mises en oeuvre et verifiees avant deploiement (Art. 9(3))","Tests de residualite confirmes sur le systeme final (Art. 9(5))","Revision continue tout au long du cycle de vie (Art. 9(9))","Systeme QMS couvrant les 12 elements Art. 17(1)(a)-(k)","Politiques, procedures et instructions ecrites documentees","Gestion des non-conformites et des ecarts (Art. 17(1)(h))","Tracabilite des revisions, incidents et decisions qualite","Archivage de la documentation technique pendant 10 ans (Art. 18)","Procedure de signalement des incidents graves -- delai 15 jours (Art. 73)","Constitution du dossier technique complet (9 rubriques, Annexe IV)","Conservation 10 ans apres la derniere mise sur le marche (Art. 18)","Mise a jour obligatoire a chaque modification substantielle (Art. 3(23), Art. 43(4))","Mise a disposition des autorites de surveillance sur demande","Couverture : description, architecture, donnees, metriques, risques, conformite"]},
   {"ico":"\u2699\uFE0F","name":"Procédure de gestion des incidents IA (Art. 73)","desc":"Workflow de détection, qualification, signalement et clôture des incidents graves — délai 15 jours ouvrables autorités.","meta":"Word · Vierge · Obligatoire haut risque","arts":["art9","art12"],"fmt":"word ia","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(30)","oblig":["Systeme de gestion des risques documente et maintenu (Art. 9(1))","Identification des risques connus et raisonnablement previsibles (Art. 9(2)(a))","Estimation et evaluation des risques lors de l’usage prevu et impropre (Art. 9(2)(b)(c))","Mesures de gestion mises en oeuvre et verifiees avant deploiement (Art. 9(3))","Tests de residualite confirmes sur le systeme final (Art. 9(5))","Revision continue tout au long du cycle de vie (Art. 9(9))","Journalisation automatique de chaque utilisation du systeme (Art. 12(2))","Enregistrement : donnees d’entree, decisions, anomalies, horodatage","Conservation des logs pendant toute la duree de vie (Art. 12(1))","Detection automatique des risques et incidents (Art. 12(2)(c))","Acces aux journaux garanti pour les autorites competentes (Art. 12(3))"]},
-  {"ico":"\u2699\uFE0F","name":"Procédure d’approbation des modifications substantielles (Art. 83)","desc":"Processus de réévaluation obligatoire avant tout changement majeur affectant la conformité du système.","meta":"Word · Vierge · Art. 83 modifications","arts":["art9","art11"],"fmt":"word","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(31)","oblig":["Systeme de gestion des risques documente et maintenu (Art. 9(1))","Identification des risques connus et raisonnablement previsibles (Art. 9(2)(a))","Estimation et evaluation des risques lors de l’usage prevu et impropre (Art. 9(2)(b)(c))","Mesures de gestion mises en oeuvre et verifiees avant deploiement (Art. 9(3))","Tests de residualite confirmes sur le systeme final (Art. 9(5))","Revision continue tout au long du cycle de vie (Art. 9(9))","Constitution du dossier technique complet (9 rubriques, Annexe IV)","Conservation 10 ans apres la derniere mise sur le marche (Art. 18)","Mise a jour obligatoire a chaque modification substantielle (Art. 83)","Mise a disposition des autorites de surveillance sur demande","Couverture : description, architecture, donnees, metriques, risques, conformite"]},
+  {"ico":"\u2699\uFE0F","name":"Procédure d’approbation des modifications substantielles (Art. 83)","desc":"Processus de réévaluation obligatoire avant tout changement majeur affectant la conformité du système.","meta":"Word · Vierge · Art. 83 modifications","arts":["art9","art11"],"fmt":"word","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(31)","oblig":["Systeme de gestion des risques documente et maintenu (Art. 9(1))","Identification des risques connus et raisonnablement previsibles (Art. 9(2)(a))","Estimation et evaluation des risques lors de l’usage prevu et impropre (Art. 9(2)(b)(c))","Mesures de gestion mises en oeuvre et verifiees avant deploiement (Art. 9(3))","Tests de residualite confirmes sur le systeme final (Art. 9(5))","Revision continue tout au long du cycle de vie (Art. 9(9))","Constitution du dossier technique complet (9 rubriques, Annexe IV)","Conservation 10 ans apres la derniere mise sur le marche (Art. 18)","Mise a jour obligatoire a chaque modification substantielle (Art. 3(23), Art. 43(4))","Mise a disposition des autorites de surveillance sur demande","Couverture : description, architecture, donnees, metriques, risques, conformite"]},
   {"ico":"\u2699\uFE0F","name":"Workflow d’intégration des fournisseurs IA tiers","desc":"Processus de qualification, évaluation de conformité et contractualisation des fournisseurs de systèmes IA.","meta":"Word · Avec checklist fournisseur","arts":["art13","art17"],"fmt":"word ia","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(32)","oblig":["Notice d’utilisation complete fournie au deployeur (Art. 13(2))","Identite et coordonnees du fournisseur documentees (Art. 13(3)(a))","Capacites, limites, finalites et contraintes decrites (Art. 13(3)(b))","Metriques de precision et de robustesse communiquees (Art. 13(3)(b)(iii))","Risques residuels pour les droits fondamentaux identifies (Art. 13(3)(e))","Mesures de surveillance humaine recommandees au deployeur (Art. 13(3)(d))","Systeme QMS couvrant les 12 elements Art. 17(1)(a)-(k)","Politiques, procedures et instructions ecrites documentees","Gestion des non-conformites et des ecarts (Art. 17(1)(h))","Tracabilite des revisions, incidents et decisions qualite","Archivage de la documentation technique pendant 10 ans (Art. 18)","Procedure de signalement des incidents graves -- delai 15 jours (Art. 73)"]},
   {"ico":"\u2699\uFE0F","name":"Processus de surveillance post-déploiement (Art. 9)","desc":"Plan de surveillance continue — KPIs, fréquence des tests, seuils d’alerte, procédure de retrait du marché.","meta":"Word · Vierge · Art. 9(9) obligatoire","arts":["art9","art12","art15"],"fmt":"word","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(33)","oblig":["Systeme de gestion des risques documente et maintenu (Art. 9(1))","Identification des risques connus et raisonnablement previsibles (Art. 9(2)(a))","Estimation et evaluation des risques lors de l’usage prevu et impropre (Art. 9(2)(b)(c))","Mesures de gestion mises en oeuvre et verifiees avant deploiement (Art. 9(3))","Tests de residualite confirmes sur le systeme final (Art. 9(5))","Revision continue tout au long du cycle de vie (Art. 9(9))","Journalisation automatique de chaque utilisation du systeme (Art. 12(2))","Enregistrement : donnees d’entree, decisions, anomalies, horodatage","Conservation des logs pendant toute la duree de vie (Art. 12(1))","Detection automatique des risques et incidents (Art. 12(2)(c))","Acces aux journaux garanti pour les autorites competentes (Art. 12(3))","Niveaux d’exactitude appropries atteints et documentes (Art. 15(1))","Robustesse face aux donnees adversariales testee (Art. 15(4))","Metriques mesurees : Accuracy, Precision, Rappel, F1-Score, AUC-ROC","Resilience aux erreurs et aux pannes evaluee (MTTF/MTTR)","Conformite cybersecurite : ISO 27001 / NIS2 (Art. 15(5))"]},
-  {"ico":"\u2699\uFE0F","name":"Procédure d’audit interne AI Act","desc":"Programme d’audit interne annuel — périmètre, méthode de sampling, grille d’évaluation, rapport et suivi.","meta":"Word · Généré par IA · Audit annuel","arts":["art9","art17","art11"],"fmt":"word ia","ctaLabel":"Lancer l’audit","ctaAction":"openAuditTab()","oblig":["Systeme de gestion des risques documente et maintenu (Art. 9(1))","Identification des risques connus et raisonnablement previsibles (Art. 9(2)(a))","Estimation et evaluation des risques lors de l’usage prevu et impropre (Art. 9(2)(b)(c))","Mesures de gestion mises en oeuvre et verifiees avant deploiement (Art. 9(3))","Tests de residualite confirmes sur le systeme final (Art. 9(5))","Revision continue tout au long du cycle de vie (Art. 9(9))","Systeme QMS couvrant les 12 elements Art. 17(1)(a)-(k)","Politiques, procedures et instructions ecrites documentees","Gestion des non-conformites et des ecarts (Art. 17(1)(h))","Tracabilite des revisions, incidents et decisions qualite","Archivage de la documentation technique pendant 10 ans (Art. 18)","Procedure de signalement des incidents graves -- delai 15 jours (Art. 73)","Constitution du dossier technique complet (9 rubriques, Annexe IV)","Conservation 10 ans apres la derniere mise sur le marche (Art. 18)","Mise a jour obligatoire a chaque modification substantielle (Art. 83)","Mise a disposition des autorites de surveillance sur demande","Couverture : description, architecture, donnees, metriques, risques, conformite"]},
+  {"ico":"\u2699\uFE0F","name":"Procédure d’audit interne AI Act","desc":"Programme d’audit interne annuel — périmètre, méthode de sampling, grille d’évaluation, rapport et suivi.","meta":"Word · Généré par IA · Audit annuel","arts":["art9","art17","art11"],"fmt":"word ia","ctaLabel":"Lancer l’audit","ctaAction":"openAuditTab()","oblig":["Systeme de gestion des risques documente et maintenu (Art. 9(1))","Identification des risques connus et raisonnablement previsibles (Art. 9(2)(a))","Estimation et evaluation des risques lors de l’usage prevu et impropre (Art. 9(2)(b)(c))","Mesures de gestion mises en oeuvre et verifiees avant deploiement (Art. 9(3))","Tests de residualite confirmes sur le systeme final (Art. 9(5))","Revision continue tout au long du cycle de vie (Art. 9(9))","Systeme QMS couvrant les 12 elements Art. 17(1)(a)-(k)","Politiques, procedures et instructions ecrites documentees","Gestion des non-conformites et des ecarts (Art. 17(1)(h))","Tracabilite des revisions, incidents et decisions qualite","Archivage de la documentation technique pendant 10 ans (Art. 18)","Procedure de signalement des incidents graves -- delai 15 jours (Art. 73)","Constitution du dossier technique complet (9 rubriques, Annexe IV)","Conservation 10 ans apres la derniere mise sur le marche (Art. 18)","Mise a jour obligatoire a chaque modification substantielle (Art. 3(23), Art. 43(4))","Mise a disposition des autorites de surveillance sur demande","Couverture : description, architecture, donnees, metriques, risques, conformite"]},
   {"ico":"\u2699\uFE0F","name":"Plan de formation — Acteurs de la chaîne IA (Art. 4)","desc":"Programme de sensibilisation et formation des équipes impliquées dans le cycle de vie des systèmes IA.","meta":"Word · Vierge · Art. 4 littératie IA","arts":["art14"],"fmt":"word","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(35)","oblig":["Mecanismes de supervision integres dans l’interface (Art. 14(4)(a))","Comprehension des sorties du systeme par les superviseurs (Art. 14(4)(b))","Possibilite d’ignorer, corriger ou annuler les decisions IA (Art. 14(4)(c))","Bouton d’arret d’urgence operationnel et documente (Art. 14(4)(d))","Superviseurs qualifies designes, habilites et formes (Art. 14(5))"]},
-  {"ico":"&#x1F6AB;","name":"Checklist auto-évaluation — Pratiques interdites (Art. 5)","desc":"Template des 8 catégories de pratiques interdites — grille d’analyse, justification et exception légale (Art. 5(2)–7).","meta":"Word + PDF · Vierge · Avant tout déploiement","arts":["art5"],"fmt":"word pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(36)","oblig":["Evaluation des 8 categories de pratiques interdites (Art. 5(1)(a)-(h))","Absence de manipulation subliminale ou de techniques inconscientes (Art. 5(1)(a))","Absence d’exploitation des vulnerabilites de groupes specifiques (Art. 5(1)(b))","Exclusion des systemes de notation sociale par autorites publiques (Art. 5(1)(c))","Exclusion de la biometrie en temps reel dans les espaces publics (hors Art. 5(2)-(7))","Verification des exceptions legales applicables avant tout deploiement"]},
-  {"ico":"&#x1F4CB;","name":"Registre des décisions — Pratiques Art. 5","desc":"Historique des évaluations Art. 5 par système — décision, justification, visa juridique, date de révision.","meta":"Sentinel · Traçabilité des décisions","arts":["art5","art6"],"fmt":"sentinel ia","ctaLabel":"Ouvrir dans Sentinel","ctaAction":"go(\\'registre\\',null,\\'REGISTRE\\',\\'Registre IA\\')","oblig":["Evaluation des 8 categories de pratiques interdites (Art. 5(1)(a)-(h))","Absence de manipulation subliminale ou de techniques inconscientes (Art. 5(1)(a))","Absence d’exploitation des vulnerabilites de groupes specifiques (Art. 5(1)(b))","Exclusion des systemes de notation sociale par autorites publiques (Art. 5(1)(c))","Exclusion de la biometrie en temps reel dans les espaces publics (hors Art. 5(2)-(7))","Verification des exceptions legales applicables avant tout deploiement","Classification selon l’Annexe I (secteurs harmonises) ou l’Annexe III","Auto-evaluation documentee avant mise sur le marche (Art. 6(2))","Declenchement des obligations Art. 9 a 15 si systeme classe haut risque","Enregistrement dans la base de donnees EU (Art. 71) pour systemes Annexe III","Mise a jour du registre lors de toute modification substantielle (Art. 83)"]},
-  {"ico":"&#x2699;&#xFE0F;","name":"Procédure de contrôle pré-déploiement — Art. 5","desc":"Workflow d’approbation avant mise en production — vérification des 8 catégories, visa DSI/DPO/Juriste, escalade direction.","meta":"Word · Vierge · Go/No-go signé","arts":["art5"],"fmt":"word","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(38)","oblig":["Evaluation des 8 categories de pratiques interdites (Art. 5(1)(a)-(h))","Absence de manipulation subliminale ou de techniques inconscientes (Art. 5(1)(a))","Absence d’exploitation des vulnerabilites de groupes specifiques (Art. 5(1)(b))","Exclusion des systemes de notation sociale par autorites publiques (Art. 5(1)(c))","Exclusion de la biometrie en temps reel dans les espaces publics (hors Art. 5(2)-(7))","Verification des exceptions legales applicables avant tout deploiement"]},
-  {"ico":"&#x2699;&#xFE0F;","name":"Procédure de classification des systèmes IA (Art. 6)","desc":"Workflow de classification — arbre décisionnel Annexe III, revûte DPO+RSSI, horodatage, enregistrement au registre.","meta":"Word · Vierge · Déclencher pour tout nouveau système","arts":["art6"],"fmt":"word ia","ctaLabel":"Ouvrir le Simulateur","ctaAction":"go(\\'simulateur\\',null,\\'OUTILS\\',\\'Simulateur AI Act\\')","oblig":["Classification selon l’Annexe I (secteurs harmonises) ou l’Annexe III","Auto-evaluation documentee avant mise sur le marche (Art. 6(2))","Declenchement des obligations Art. 9 a 15 si systeme classe haut risque","Enregistrement dans la base de donnees EU (Art. 71) pour systemes Annexe III","Mise a jour du registre lors de toute modification substantielle (Art. 83)"]},
-  {"ico":"&#x1F4CA;","name":"Rapport gouvernance des données (Art. 10)","desc":"Bilan gouvernance data — sources, qualité, biais détectés, mesures appliquées, conformité Art. 10 et RGPD.","meta":"Sentinel · Généré par IA · Par système","arts":["art10","art6"],"fmt":"sentinel ia","ctaLabel":"Ouvrir dans Sentinel","ctaAction":"go(\\'registre\\',null,\\'REGISTRE\\',\\'Registre IA\\')","oblig":["Gouvernance des donnees d’entrainement, validation et test (Art. 10(1))","Pertinence et representativite verifiees des datasets (Art. 10(3))","Detection et correction des biais identifies dans les donnees (Art. 10(2))","Conformite RGPD pour les donnees personnelles utilisees (Art. 10(5))","Documentation des sources, methodes de collecte et traitements appliques","Classification selon l’Annexe I (secteurs harmonises) ou l’Annexe III","Auto-evaluation documentee avant mise sur le marche (Art. 6(2))","Declenchement des obligations Art. 9 a 15 si systeme classe haut risque","Enregistrement dans la base de donnees EU (Art. 71) pour systemes Annexe III","Mise a jour du registre lors de toute modification substantielle (Art. 83)"]},
-  {"ico":"&#x2699;&#xFE0F;","name":"Procédure de qualification des données (Art. 10)","desc":"Validation qualité des datasets — grille d’évaluation, détection de biais, approbation responsable data, archivage.","meta":"Word · Vierge · Avant tout cycle d’entraînement","arts":["art10"],"fmt":"word","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(41)","oblig":["Gouvernance des donnees d’entrainement, validation et test (Art. 10(1))","Pertinence et representativite verifiees des datasets (Art. 10(3))","Detection et correction des biais identifies dans les donnees (Art. 10(2))","Conformite RGPD pour les donnees personnelles utilisees (Art. 10(5))","Documentation des sources, methodes de collecte et traitements appliques"]},
-  {"ico":"&#x1F4C4;","name":"Fiche synthétique — Art. 11 : Documentation technique (Annexe IV)","desc":"Contenu obligatoire du dossier (9 rubriques Annexe IV), responsabilités fournisseur, conservation 10 ans, lien Art. 18.","meta":"PDF · 2 pages · Annexe IV intégrée","arts":["art11","art17"],"fmt":"pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(42)","oblig":["Constitution du dossier technique complet (9 rubriques, Annexe IV)","Conservation 10 ans apres la derniere mise sur le marche (Art. 18)","Mise a jour obligatoire a chaque modification substantielle (Art. 83)","Mise a disposition des autorites de surveillance sur demande","Couverture : description, architecture, donnees, metriques, risques, conformite","Systeme QMS couvrant les 12 elements Art. 17(1)(a)-(k)","Politiques, procedures et instructions ecrites documentees","Gestion des non-conformites et des ecarts (Art. 17(1)(h))","Tracabilite des revisions, incidents et decisions qualite","Archivage de la documentation technique pendant 10 ans (Art. 18)","Procedure de signalement des incidents graves -- delai 15 jours (Art. 73)"]},
+  {"ico":"&#x1F6AB;","name":"Checklist auto-évaluation — Pratiques interdites (Art. 5)","desc":"Template des 8 catégories de pratiques interdites — grille d’analyse, justification et exception légale (Art. 5(2)–7).","meta":"Word + PDF · Vierge · Avant tout déploiement","arts":["art5"],"fmt":"word pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(36)","oblig":["Evaluation des categories de pratiques interdites (Art. 5(1)(a)-(h), et (ba)-(bb) a partir du 2 decembre 2026)","Absence de manipulation subliminale ou de techniques inconscientes (Art. 5(1)(a))","Absence d’exploitation des vulnerabilites de groupes specifiques (Art. 5(1)(b))","Exclusion des systemes de notation sociale, par toute entite publique ou privee (Art. 5(1)(c))","Exclusion de l’identification biometrique a distance en temps reel dans les espaces accessibles au public a des fins repressives, sauf les trois exceptions strictes de l’Art. 5(1)(h) et les garanties de l’Art. 5(2)-(7)","Verification des exceptions legales applicables avant tout deploiement"]},
+  {"ico":"&#x1F4CB;","name":"Registre des décisions — Pratiques Art. 5","desc":"Historique des évaluations Art. 5 par système — décision, justification, visa juridique, date de révision.","meta":"Sentinel · Traçabilité des décisions","arts":["art5","art6"],"fmt":"sentinel ia","ctaLabel":"Ouvrir dans Sentinel","ctaAction":"go(\\'registre\\',null,\\'REGISTRE\\',\\'Registre IA\\')","oblig":["Evaluation des categories de pratiques interdites (Art. 5(1)(a)-(h), et (ba)-(bb) a partir du 2 decembre 2026)","Absence de manipulation subliminale ou de techniques inconscientes (Art. 5(1)(a))","Absence d’exploitation des vulnerabilites de groupes specifiques (Art. 5(1)(b))","Exclusion des systemes de notation sociale, par toute entite publique ou privee (Art. 5(1)(c))","Exclusion de l’identification biometrique a distance en temps reel dans les espaces accessibles au public a des fins repressives, sauf les trois exceptions strictes de l’Art. 5(1)(h) et les garanties de l’Art. 5(2)-(7)","Verification des exceptions legales applicables avant tout deploiement","Classification selon l’Annexe I (secteurs harmonises) ou l’Annexe III","Auto-evaluation documentee avant mise sur le marche (Art. 6(2))","Declenchement des obligations Art. 9 a 15 si systeme classe haut risque","Enregistrement dans la base de donnees EU (Art. 49 ; base de donnees : Art. 71) pour systemes Annexe III","Mise a jour du registre lors de toute modification substantielle (Art. 3(23), Art. 43(4))"]},
+  {"ico":"&#x2699;&#xFE0F;","name":"Procédure de contrôle pré-déploiement — Art. 5","desc":"Workflow d’approbation avant mise en production — vérification des 8 catégories, visa DSI/DPO/Juriste, escalade direction.","meta":"Word · Vierge · Go/No-go signé","arts":["art5"],"fmt":"word","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(38)","oblig":["Evaluation des categories de pratiques interdites (Art. 5(1)(a)-(h), et (ba)-(bb) a partir du 2 decembre 2026)","Absence de manipulation subliminale ou de techniques inconscientes (Art. 5(1)(a))","Absence d’exploitation des vulnerabilites de groupes specifiques (Art. 5(1)(b))","Exclusion des systemes de notation sociale, par toute entite publique ou privee (Art. 5(1)(c))","Exclusion de l’identification biometrique a distance en temps reel dans les espaces accessibles au public a des fins repressives, sauf les trois exceptions strictes de l’Art. 5(1)(h) et les garanties de l’Art. 5(2)-(7)","Verification des exceptions legales applicables avant tout deploiement"]},
+  {"ico":"&#x2699;&#xFE0F;","name":"Procédure de classification des systèmes IA (Art. 6)","desc":"Workflow de classification — arbre décisionnel Annexe III, revûte DPO+RSSI, horodatage, enregistrement au registre.","meta":"Word · Vierge · Déclencher pour tout nouveau système","arts":["art6"],"fmt":"word ia","ctaLabel":"Ouvrir le Simulateur","ctaAction":"go(\\'simulateur\\',null,\\'OUTILS\\',\\'Simulateur AI Act\\')","oblig":["Classification selon l’Annexe I (secteurs harmonises) ou l’Annexe III","Auto-evaluation documentee avant mise sur le marche (Art. 6(2))","Declenchement des obligations Art. 9 a 15 si systeme classe haut risque","Enregistrement dans la base de donnees EU (Art. 49 ; base de donnees : Art. 71) pour systemes Annexe III","Mise a jour du registre lors de toute modification substantielle (Art. 3(23), Art. 43(4))"]},
+  {"ico":"&#x1F4CA;","name":"Rapport gouvernance des données (Art. 10)","desc":"Bilan gouvernance data — sources, qualité, biais détectés, mesures appliquées, conformité Art. 10 et RGPD.","meta":"Sentinel · Généré par IA · Par système","arts":["art10","art6"],"fmt":"sentinel ia","ctaLabel":"Ouvrir dans Sentinel","ctaAction":"go(\\'registre\\',null,\\'REGISTRE\\',\\'Registre IA\\')","oblig":["Gouvernance des donnees d’entrainement, validation et test (Art. 10(1))","Pertinence et representativite verifiees des datasets (Art. 10(3))","Detection et correction des biais identifies dans les donnees (Art. 10(2))","Conformite RGPD pour les donnees personnelles utilisees ; categories particulieres de donnees pour detecter et corriger les biais : conditions strictes de l’Art. 4a (qui remplace l’ancien Art. 10(5))","Documentation des sources, methodes de collecte et traitements appliques","Classification selon l’Annexe I (secteurs harmonises) ou l’Annexe III","Auto-evaluation documentee avant mise sur le marche (Art. 6(2))","Declenchement des obligations Art. 9 a 15 si systeme classe haut risque","Enregistrement dans la base de donnees EU (Art. 49 ; base de donnees : Art. 71) pour systemes Annexe III","Mise a jour du registre lors de toute modification substantielle (Art. 3(23), Art. 43(4))"]},
+  {"ico":"&#x2699;&#xFE0F;","name":"Procédure de qualification des données (Art. 10)","desc":"Validation qualité des datasets — grille d’évaluation, détection de biais, approbation responsable data, archivage.","meta":"Word · Vierge · Avant tout cycle d’entraînement","arts":["art10"],"fmt":"word","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(41)","oblig":["Gouvernance des donnees d’entrainement, validation et test (Art. 10(1))","Pertinence et representativite verifiees des datasets (Art. 10(3))","Detection et correction des biais identifies dans les donnees (Art. 10(2))","Conformite RGPD pour les donnees personnelles utilisees ; categories particulieres de donnees pour detecter et corriger les biais : conditions strictes de l’Art. 4a (qui remplace l’ancien Art. 10(5))","Documentation des sources, methodes de collecte et traitements appliques"]},
+  {"ico":"&#x1F4C4;","name":"Fiche synthétique — Art. 11 : Documentation technique (Annexe IV)","desc":"Contenu obligatoire du dossier (9 rubriques Annexe IV), responsabilités fournisseur, conservation 10 ans, lien Art. 18.","meta":"PDF · 2 pages · Annexe IV intégrée","arts":["art11","art17"],"fmt":"pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(42)","oblig":["Constitution du dossier technique complet (9 rubriques, Annexe IV)","Conservation 10 ans apres la derniere mise sur le marche (Art. 18)","Mise a jour obligatoire a chaque modification substantielle (Art. 3(23), Art. 43(4))","Mise a disposition des autorites de surveillance sur demande","Couverture : description, architecture, donnees, metriques, risques, conformite","Systeme QMS couvrant les 12 elements Art. 17(1)(a)-(k)","Politiques, procedures et instructions ecrites documentees","Gestion des non-conformites et des ecarts (Art. 17(1)(h))","Tracabilite des revisions, incidents et decisions qualite","Archivage de la documentation technique pendant 10 ans (Art. 18)","Procedure de signalement des incidents graves -- delai 15 jours (Art. 73)"]},
   {"ico":"&#x1F4C4;","name":"Fiche synthétique — Art. 12 : Journalisation automatique","desc":"Événements minimaux à enregistrer, durée de conservation des logs, accès autorités compétentes.","meta":"PDF · 1 page · Tableau événements obligatoires","arts":["art12"],"fmt":"pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(43)","oblig":["Journalisation automatique de chaque utilisation du systeme (Art. 12(2))","Enregistrement : donnees d’entree, decisions, anomalies, horodatage","Conservation des logs pendant toute la duree de vie (Art. 12(1))","Detection automatique des risques et incidents (Art. 12(2)(c))","Acces aux journaux garanti pour les autorites competentes (Art. 12(3))"]},
   {"ico":"&#x1F4D6;","name":"Guide — Implémenter la journalisation IA (Art. 12)","desc":"Architecture de logging conforme — événements à capturer, format, stockage sécurisé, intégration SIEM, accès audits.","meta":"PDF · 3 pages · DevSecOps & RSSI","arts":["art12","art15"],"fmt":"pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(44)","oblig":["Journalisation automatique de chaque utilisation du systeme (Art. 12(2))","Enregistrement : donnees d’entree, decisions, anomalies, horodatage","Conservation des logs pendant toute la duree de vie (Art. 12(1))","Detection automatique des risques et incidents (Art. 12(2)(c))","Acces aux journaux garanti pour les autorites competentes (Art. 12(3))","Niveaux d’exactitude appropries atteints et documentes (Art. 15(1))","Robustesse face aux donnees adversariales testee (Art. 15(4))","Metriques mesurees : Accuracy, Precision, Rappel, F1-Score, AUC-ROC","Resilience aux erreurs et aux pannes evaluee (MTTF/MTTR)","Conformite cybersecurite : ISO 27001 / NIS2 (Art. 15(5))"]},
   {"ico":"&#x1F4CB;","name":"Journal des événements IA — Export (Art. 12)","desc":"Export structuré du journal d’utilisation — horodatage, entrées, décisions, anomalies détectées par système.","meta":"Sentinel · Export CSV/PDF · Par période","arts":["art12"],"fmt":"sentinel ia","ctaLabel":"Ouvrir dans Sentinel","ctaAction":"go(\\'registre\\',null,\\'REGISTRE\\',\\'Registre IA\\')","oblig":["Journalisation automatique de chaque utilisation du systeme (Art. 12(2))","Enregistrement : donnees d’entree, decisions, anomalies, horodatage","Conservation des logs pendant toute la duree de vie (Art. 12(1))","Detection automatique des risques et incidents (Art. 12(2)(c))","Acces aux journaux garanti pour les autorites competentes (Art. 12(3))"]},
@@ -9805,15 +10248,15 @@ var TMPL_CATALOG=[
   {"ico":"&#x1F4C4;","name":"Fiche synthétique — Art. 15 : Exactitude, robustesse, cybersécurité","desc":"Niveaux d’exactitude requis, métriques acceptées (F1, AUC-ROC), robustesse adversariale, exigences cybersécurité.","meta":"PDF · 2 pages · Tableau métriques inclus","arts":["art15"],"fmt":"pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(47)","oblig":["Niveaux d’exactitude appropries atteints et documentes (Art. 15(1))","Robustesse face aux donnees adversariales testee (Art. 15(4))","Metriques mesurees : Accuracy, Precision, Rappel, F1-Score, AUC-ROC","Resilience aux erreurs et aux pannes evaluee (MTTF/MTTR)","Conformite cybersecurite : ISO 27001 / NIS2 (Art. 15(5))"]},
   {"ico":"&#x1F4C4;","name":"Fiche synthétique — Art. 17 : Système de management qualité","desc":"12 éléments obligatoires du QMS, liens ISO 42001/ISO 9001, rôle du responsable désigné, fréquence des revues.","meta":"PDF · 2 pages · ISO 42001 compatible","arts":["art17"],"fmt":"pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(48)","oblig":["Systeme QMS couvrant les 12 elements Art. 17(1)(a)-(k)","Politiques, procedures et instructions ecrites documentees","Gestion des non-conformites et des ecarts (Art. 17(1)(h))","Tracabilite des revisions, incidents et decisions qualite","Archivage de la documentation technique pendant 10 ans (Art. 18)","Procedure de signalement des incidents graves -- delai 15 jours (Art. 73)"]},
   {"ico":"&#x1F4C4;","name":"Fiche synthétique — Art. 27 : FRIA","desc":"Qui réalise la FRIA, quand, comment, droits Charte UE concernés, différence DPIA vs FRIA, notification autorité.","meta":"PDF · 2 pages · Déployeurs secteur public","arts":["art27"],"fmt":"pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(49)","oblig":["Identification des droits fondamentaux susceptibles d’etre affectes (Charte UE)","Consultation des representants des groupes potentiellement impactes","Evaluation des impacts sur les droits pertinents de la Charte UE","Identification des groupes vulnerables (mineurs, personnes agees, handicapees)","Documentation des mesures d’attenuation et de leur efficacite","Realisation avant deploiement et mise a jour periodique obligatoire"]},
-  {"ico":"&#x2699;&#xFE0F;","name":"Procédure de conduite de la FRIA (Art. 27)","desc":"Workflow complet — déclencheur, composition du groupe, consultation parties prenantes, rédaction, validation.","meta":"Word · Vierge · Avant tout déploiement Annexe III secteur public","arts":["art27","art6"],"fmt":"word ia","ctaLabel":"Ouvrir la FRIA","ctaAction":"go(\\'fria\\',null,\\'CONFORMITE\\',\\'FRIA\\')","oblig":["Identification des droits fondamentaux susceptibles d’etre affectes (Charte UE)","Consultation des representants des groupes potentiellement impactes","Evaluation des impacts sur les droits pertinents de la Charte UE","Identification des groupes vulnerables (mineurs, personnes agees, handicapees)","Documentation des mesures d’attenuation et de leur efficacite","Realisation avant deploiement et mise a jour periodique obligatoire","Classification selon l’Annexe I (secteurs harmonises) ou l’Annexe III","Auto-evaluation documentee avant mise sur le marche (Art. 6(2))","Declenchement des obligations Art. 9 a 15 si systeme classe haut risque","Enregistrement dans la base de donnees EU (Art. 71) pour systemes Annexe III","Mise a jour du registre lors de toute modification substantielle (Art. 83)"]},
-  {"ico":"&#x1F4C4;","name":"Fiche synthétique — Art. 47 : Déclaration UE de conformité","desc":"Contenu obligatoire Art. 47(2), moment de signature, normes harmonisables, conservation, mise à disposition autorités.","meta":"PDF · 1 page · Modèle signature inclus","arts":["art47"],"fmt":"pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(51)","oblig":["Declaration etablie avant mise sur le marche ou en service (Art. 47(1))","Contenu obligatoire Art. 47(2) : systeme, normes appliquees, organismes notifies","Normes harmonisees mentionnees : ISO 42001, EN 301 549, etc.","Identification des organismes notifies ayant intervenu (Art. 43)","Signature du representant legal autorise du fournisseur","Mise a jour obligatoire en cas de modification substantielle (Art. 83)"]},
-  {"ico":"&#x1F4D6;","name":"Guide — Établir la déclaration UE de conformité (Art. 47)","desc":"Processus de signature — qui signe, quand, normes harmonisées, mise à jour en cas de modification substantielle (Art. 83).","meta":"PDF · 2 pages · Fournisseurs haut risque","arts":["art47","art11"],"fmt":"pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(52)","oblig":["Declaration etablie avant mise sur le marche ou en service (Art. 47(1))","Contenu obligatoire Art. 47(2) : systeme, normes appliquees, organismes notifies","Normes harmonisees mentionnees : ISO 42001, EN 301 549, etc.","Identification des organismes notifies ayant intervenu (Art. 43)","Signature du representant legal autorise du fournisseur","Mise a jour obligatoire en cas de modification substantielle (Art. 83)","Constitution du dossier technique complet (9 rubriques, Annexe IV)","Conservation 10 ans apres la derniere mise sur le marche (Art. 18)","Mise a jour obligatoire a chaque modification substantielle (Art. 83)","Mise a disposition des autorites de surveillance sur demande","Couverture : description, architecture, donnees, metriques, risques, conformite"]},
-  {"ico":"&#x2705;","name":"Registre des déclarations UE de conformité (Art. 47)","desc":"Suivi de toutes les déclarations signées — système, version, date, signataire, normes, lien vers document.","meta":"Sentinel · Par système déclaré","arts":["art47","art6"],"fmt":"sentinel ia","ctaLabel":"Ouvrir dans Sentinel","ctaAction":"go(\\'registre\\',null,\\'REGISTRE\\',\\'Registre IA\\')","oblig":["Declaration etablie avant mise sur le marche ou en service (Art. 47(1))","Contenu obligatoire Art. 47(2) : systeme, normes appliquees, organismes notifies","Normes harmonisees mentionnees : ISO 42001, EN 301 549, etc.","Identification des organismes notifies ayant intervenu (Art. 43)","Signature du representant legal autorise du fournisseur","Mise a jour obligatoire en cas de modification substantielle (Art. 83)","Classification selon l’Annexe I (secteurs harmonises) ou l’Annexe III","Auto-evaluation documentee avant mise sur le marche (Art. 6(2))","Declenchement des obligations Art. 9 a 15 si systeme classe haut risque","Enregistrement dans la base de donnees EU (Art. 71) pour systemes Annexe III","Mise a jour du registre lors de toute modification substantielle (Art. 83)"]},
-  {"ico":"&#x2699;&#xFE0F;","name":"Procédure d’établissement et mise à jour de la déclaration (Art. 47)","desc":"Préparation, revûte juridique, signature, archivage, mise à jour lors de modifications substantielles (Art. 83).","meta":"Word · Vierge · Avant mise sur le marché","arts":["art47","art11"],"fmt":"word","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(54)","oblig":["Declaration etablie avant mise sur le marche ou en service (Art. 47(1))","Contenu obligatoire Art. 47(2) : systeme, normes appliquees, organismes notifies","Normes harmonisees mentionnees : ISO 42001, EN 301 549, etc.","Identification des organismes notifies ayant intervenu (Art. 43)","Signature du representant legal autorise du fournisseur","Mise a jour obligatoire en cas de modification substantielle (Art. 83)","Constitution du dossier technique complet (9 rubriques, Annexe IV)","Conservation 10 ans apres la derniere mise sur le marche (Art. 18)","Mise a jour obligatoire a chaque modification substantielle (Art. 83)","Mise a disposition des autorites de surveillance sur demande","Couverture : description, architecture, donnees, metriques, risques, conformite"]},
-  {"ico":"&#x1F4AC;","name":"Template de mention de transparence IA (Art. 50)","desc":"Modèles de divulgation pour chatbots, assistants, générateurs de contenu — formulations conformes Art. 50(1)(2)(3)(4).","meta":"Word · Vierge · À intégrer dans chaque interface","arts":["art50"],"fmt":"word","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(55)","oblig":["Information claire aux utilisateurs interagissant avec une IA (Art. 50(1))","Mention visible et comprehensible par les personnes concernees","Watermarking technique des contenus synthetiques generes (Art. 50(2))","Marquage des deepfakes de maniere detectable (Art. 50(4))","Registre des divulgations effectuees et de leur format","Obligations applicables depuis le 2 aout 2025"]},
-  {"ico":"&#x1F4D6;","name":"Guide — Obligations de transparence Art. 50","desc":"Quand informer, comment, quelle formulation, watermarking deepfakes — cas pratiques par type de système.","meta":"PDF · 3 pages · Applicable depuis août 2025","arts":["art50","art51"],"fmt":"pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(56)","oblig":["Information claire aux utilisateurs interagissant avec une IA (Art. 50(1))","Mention visible et comprehensible par les personnes concernees","Watermarking technique des contenus synthetiques generes (Art. 50(2))","Marquage des deepfakes de maniere detectable (Art. 50(4))","Registre des divulgations effectuees et de leur format","Obligations applicables depuis le 2 aout 2025","Documentation technique des modeles GPAI etablie (Art. 53(1)(a))","Resume factuel des donnees d’entrainement publie (Art. 53(1)(b))","Politique de droit d’auteur respectee et documentee (Art. 53(1)(c))","Evaluation adversariale pour modeles a risque systemique (plus de 10e25 FLOPS)","Notification a la Commission europeenne si risque systemique (Art. 55(1)(b))","Revision annuelle des evaluations de risque systemique obligatoire"]},
-  {"ico":"&#x1F4CB;","name":"Inventaire des mentions de transparence (Art. 50)","desc":"Pour chaque système : statut des mentions — présente/absente/à mettre à jour, canal, date de contrôle.","meta":"Sentinel · Contrôle continu","arts":["art50"],"fmt":"sentinel ia","ctaLabel":"Ouvrir dans Sentinel","ctaAction":"go(\\'registre\\',null,\\'REGISTRE\\',\\'Registre IA\\')","oblig":["Information claire aux utilisateurs interagissant avec une IA (Art. 50(1))","Mention visible et comprehensible par les personnes concernees","Watermarking technique des contenus synthetiques generes (Art. 50(2))","Marquage des deepfakes de maniere detectable (Art. 50(4))","Registre des divulgations effectuees et de leur format","Obligations applicables depuis le 2 aout 2025"]},
-  {"ico":"&#x2699;&#xFE0F;","name":"Procédure de contrôle des mentions de transparence (Art. 50)","desc":"Audit périodique de la conformité des mentions IA dans toutes les interfaces — checklist, responsable, fréquence.","meta":"Word · Vierge · Audit semestriel recommandé","arts":["art50"],"fmt":"word","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(58)","oblig":["Information claire aux utilisateurs interagissant avec une IA (Art. 50(1))","Mention visible et comprehensible par les personnes concernees","Watermarking technique des contenus synthetiques generes (Art. 50(2))","Marquage des deepfakes de maniere detectable (Art. 50(4))","Registre des divulgations effectuees et de leur format","Obligations applicables depuis le 2 aout 2025"]},
+  {"ico":"&#x2699;&#xFE0F;","name":"Procédure de conduite de la FRIA (Art. 27)","desc":"Workflow complet — déclencheur, composition du groupe, consultation parties prenantes, rédaction, validation.","meta":"Word · Vierge · Avant tout déploiement Annexe III secteur public","arts":["art27","art6"],"fmt":"word ia","ctaLabel":"Ouvrir la FRIA","ctaAction":"go(\\'fria\\',null,\\'CONFORMITE\\',\\'FRIA\\')","oblig":["Identification des droits fondamentaux susceptibles d’etre affectes (Charte UE)","Consultation des representants des groupes potentiellement impactes","Evaluation des impacts sur les droits pertinents de la Charte UE","Identification des groupes vulnerables (mineurs, personnes agees, handicapees)","Documentation des mesures d’attenuation et de leur efficacite","Realisation avant deploiement et mise a jour periodique obligatoire","Classification selon l’Annexe I (secteurs harmonises) ou l’Annexe III","Auto-evaluation documentee avant mise sur le marche (Art. 6(2))","Declenchement des obligations Art. 9 a 15 si systeme classe haut risque","Enregistrement dans la base de donnees EU (Art. 49 ; base de donnees : Art. 71) pour systemes Annexe III","Mise a jour du registre lors de toute modification substantielle (Art. 3(23), Art. 43(4))"]},
+  {"ico":"&#x1F4C4;","name":"Fiche synthétique — Art. 47 : Déclaration UE de conformité","desc":"Contenu obligatoire Art. 47(2), moment de signature, normes harmonisables, conservation, mise à disposition autorités.","meta":"PDF · 1 page · Modèle signature inclus","arts":["art47"],"fmt":"pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(51)","oblig":["Declaration etablie avant mise sur le marche ou en service (Art. 47(1))","Contenu obligatoire Art. 47(2) : systeme, normes appliquees, organismes notifies","Normes harmonisees mentionnees : ISO 42001, EN 301 549, etc.","Identification des organismes notifies ayant intervenu (Art. 43)","Signature du representant legal autorise du fournisseur","Mise a jour obligatoire en cas de modification substantielle (Art. 3(23), Art. 43(4))"]},
+  {"ico":"&#x1F4D6;","name":"Guide — Établir la déclaration UE de conformité (Art. 47)","desc":"Processus de signature — qui signe, quand, normes harmonisées, mise à jour en cas de modification substantielle (Art. 83).","meta":"PDF · 2 pages · Fournisseurs haut risque","arts":["art47","art11"],"fmt":"pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(52)","oblig":["Declaration etablie avant mise sur le marche ou en service (Art. 47(1))","Contenu obligatoire Art. 47(2) : systeme, normes appliquees, organismes notifies","Normes harmonisees mentionnees : ISO 42001, EN 301 549, etc.","Identification des organismes notifies ayant intervenu (Art. 43)","Signature du representant legal autorise du fournisseur","Mise a jour obligatoire en cas de modification substantielle (Art. 3(23), Art. 43(4))","Constitution du dossier technique complet (9 rubriques, Annexe IV)","Conservation 10 ans apres la derniere mise sur le marche (Art. 18)","Mise a jour obligatoire a chaque modification substantielle (Art. 3(23), Art. 43(4))","Mise a disposition des autorites de surveillance sur demande","Couverture : description, architecture, donnees, metriques, risques, conformite"]},
+  {"ico":"&#x2705;","name":"Registre des déclarations UE de conformité (Art. 47)","desc":"Suivi de toutes les déclarations signées — système, version, date, signataire, normes, lien vers document.","meta":"Sentinel · Par système déclaré","arts":["art47","art6"],"fmt":"sentinel ia","ctaLabel":"Ouvrir dans Sentinel","ctaAction":"go(\\'registre\\',null,\\'REGISTRE\\',\\'Registre IA\\')","oblig":["Declaration etablie avant mise sur le marche ou en service (Art. 47(1))","Contenu obligatoire Art. 47(2) : systeme, normes appliquees, organismes notifies","Normes harmonisees mentionnees : ISO 42001, EN 301 549, etc.","Identification des organismes notifies ayant intervenu (Art. 43)","Signature du representant legal autorise du fournisseur","Mise a jour obligatoire en cas de modification substantielle (Art. 3(23), Art. 43(4))","Classification selon l’Annexe I (secteurs harmonises) ou l’Annexe III","Auto-evaluation documentee avant mise sur le marche (Art. 6(2))","Declenchement des obligations Art. 9 a 15 si systeme classe haut risque","Enregistrement dans la base de donnees EU (Art. 49 ; base de donnees : Art. 71) pour systemes Annexe III","Mise a jour du registre lors de toute modification substantielle (Art. 3(23), Art. 43(4))"]},
+  {"ico":"&#x2699;&#xFE0F;","name":"Procédure d’établissement et mise à jour de la déclaration (Art. 47)","desc":"Préparation, revûte juridique, signature, archivage, mise à jour lors de modifications substantielles (Art. 83).","meta":"Word · Vierge · Avant mise sur le marché","arts":["art47","art11"],"fmt":"word","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(54)","oblig":["Declaration etablie avant mise sur le marche ou en service (Art. 47(1))","Contenu obligatoire Art. 47(2) : systeme, normes appliquees, organismes notifies","Normes harmonisees mentionnees : ISO 42001, EN 301 549, etc.","Identification des organismes notifies ayant intervenu (Art. 43)","Signature du representant legal autorise du fournisseur","Mise a jour obligatoire en cas de modification substantielle (Art. 3(23), Art. 43(4))","Constitution du dossier technique complet (9 rubriques, Annexe IV)","Conservation 10 ans apres la derniere mise sur le marche (Art. 18)","Mise a jour obligatoire a chaque modification substantielle (Art. 3(23), Art. 43(4))","Mise a disposition des autorites de surveillance sur demande","Couverture : description, architecture, donnees, metriques, risques, conformite"]},
+  {"ico":"&#x1F4AC;","name":"Template de mention de transparence IA (Art. 50)","desc":"Modèles de divulgation pour chatbots, assistants, générateurs de contenu — formulations conformes Art. 50(1)(2)(3)(4).","meta":"Word · Vierge · À intégrer dans chaque interface","arts":["art50"],"fmt":"word","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(55)","oblig":["Information claire aux utilisateurs interagissant avec une IA (Art. 50(1))","Mention visible et comprehensible par les personnes concernees","Watermarking technique des contenus synthetiques generes (Art. 50(2))","Marquage des deepfakes de maniere detectable (Art. 50(4))","Registre des divulgations effectuees et de leur format","Obligations de transparence applicables depuis le 2 aout 2026 (marquage des contenus synthetiques deja sur le marche : 2 decembre 2026, Art. 111(4))"]},
+  {"ico":"&#x1F4D6;","name":"Guide — Obligations de transparence Art. 50","desc":"Quand informer, comment, quelle formulation, watermarking deepfakes — cas pratiques par type de système.","meta":"PDF · 3 pages · Applicable depuis août 2026","arts":["art50","art51"],"fmt":"pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(56)","oblig":["Information claire aux utilisateurs interagissant avec une IA (Art. 50(1))","Mention visible et comprehensible par les personnes concernees","Watermarking technique des contenus synthetiques generes (Art. 50(2))","Marquage des deepfakes de maniere detectable (Art. 50(4))","Registre des divulgations effectuees et de leur format","Obligations de transparence applicables depuis le 2 aout 2026 (marquage des contenus synthetiques deja sur le marche : 2 decembre 2026, Art. 111(4))","Documentation technique des modeles GPAI etablie (Art. 53(1)(a))","Resume factuel des donnees d’entrainement publie (Art. 53(1)(b))","Politique de droit d’auteur respectee et documentee (Art. 53(1)(c))","Evaluation adversariale pour modeles a risque systemique (plus de 10e25 FLOPS)","Notification a la Commission europeenne si risque systemique (Art. 55(1)(b))","Revision annuelle des evaluations de risque systemique obligatoire"]},
+  {"ico":"&#x1F4CB;","name":"Inventaire des mentions de transparence (Art. 50)","desc":"Pour chaque système : statut des mentions — présente/absente/à mettre à jour, canal, date de contrôle.","meta":"Sentinel · Contrôle continu","arts":["art50"],"fmt":"sentinel ia","ctaLabel":"Ouvrir dans Sentinel","ctaAction":"go(\\'registre\\',null,\\'REGISTRE\\',\\'Registre IA\\')","oblig":["Information claire aux utilisateurs interagissant avec une IA (Art. 50(1))","Mention visible et comprehensible par les personnes concernees","Watermarking technique des contenus synthetiques generes (Art. 50(2))","Marquage des deepfakes de maniere detectable (Art. 50(4))","Registre des divulgations effectuees et de leur format","Obligations de transparence applicables depuis le 2 aout 2026 (marquage des contenus synthetiques deja sur le marche : 2 decembre 2026, Art. 111(4))"]},
+  {"ico":"&#x2699;&#xFE0F;","name":"Procédure de contrôle des mentions de transparence (Art. 50)","desc":"Audit périodique de la conformité des mentions IA dans toutes les interfaces — checklist, responsable, fréquence.","meta":"Word · Vierge · Audit semestriel recommandé","arts":["art50"],"fmt":"word","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(58)","oblig":["Information claire aux utilisateurs interagissant avec une IA (Art. 50(1))","Mention visible et comprehensible par les personnes concernees","Watermarking technique des contenus synthetiques generes (Art. 50(2))","Marquage des deepfakes de maniere detectable (Art. 50(4))","Registre des divulgations effectuees et de leur format","Obligations de transparence applicables depuis le 2 aout 2026 (marquage des contenus synthetiques deja sur le marche : 2 decembre 2026, Art. 111(4))"]},
   {"ico":"&#x1F9E0;","name":"Template de documentation GPAI (Art. 51)","desc":"Dossier technique modèles à usage général — paramètres, capacités, données, politique droit d’auteur, évaluation systémique si >10²⁵ FLOPS.","meta":"Word + PDF · Vierge · Fournisseurs LLM/fondation","arts":["art51"],"fmt":"word pdf","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(59)","oblig":["Documentation technique des modeles GPAI etablie (Art. 53(1)(a))","Resume factuel des donnees d’entrainement publie (Art. 53(1)(b))","Politique de droit d’auteur respectee et documentee (Art. 53(1)(c))","Evaluation adversariale pour modeles a risque systemique (plus de 10e25 FLOPS)","Notification a la Commission europeenne si risque systemique (Art. 55(1)(b))","Revision annuelle des evaluations de risque systemique obligatoire"]},
   {"ico":"&#x1F310;","name":"Rapport d’analyse de risque systémique GPAI (Art. 51)","desc":"Rapport d’évaluation adversariale — capacités émergentes, vecteurs d’attaque, mesures d’atténuation, notification Commission.","meta":"PDF · Art. 51(3) · Annuel","arts":["art51"],"fmt":"pdf sentinel","ctaLabel":"Ouvrir dans Sentinel","ctaAction":"go(\\'registre\\',null,\\'REGISTRE\\',\\'Registre IA\\')","oblig":["Documentation technique des modeles GPAI etablie (Art. 53(1)(a))","Resume factuel des donnees d’entrainement publie (Art. 53(1)(b))","Politique de droit d’auteur respectee et documentee (Art. 53(1)(c))","Evaluation adversariale pour modeles a risque systemique (plus de 10e25 FLOPS)","Notification a la Commission europeenne si risque systemique (Art. 55(1)(b))","Revision annuelle des evaluations de risque systemique obligatoire"]},
   {"ico":"&#x2699;&#xFE0F;","name":"Procédure d’évaluation adversariale GPAI (Art. 51)","desc":"Protocole red teaming — tests capacités émergentes, rapport résultats, notification Commission européenne, fréquence annuelle.","meta":"Word · Vierge · Modèles >10²⁵ FLOPS obligatoire","arts":["art51"],"fmt":"word ia","ctaLabel":"Générer ce document","ctaAction":"tmplGenerate(61)","oblig":["Documentation technique des modeles GPAI etablie (Art. 53(1)(a))","Resume factuel des donnees d’entrainement publie (Art. 53(1)(b))","Politique de droit d’auteur respectee et documentee (Art. 53(1)(c))","Evaluation adversariale pour modeles a risque systemique (plus de 10e25 FLOPS)","Notification a la Commission europeenne si risque systemique (Art. 55(1)(b))","Revision annuelle des evaluations de risque systemique obligatoire"]}
@@ -10578,7 +11021,7 @@ window.simBuildIntlComparison = function(classif){
     var diffColor = j.c === "EU" ? "var(--muted2)" : diff >= 0 ? "var(--accent)" : "var(--green)";
     var niveau = j.s>=8?"Très strict":j.s>=5?"Modéré":"Souple";
     return '<div class="intl-row"><div class="intl-flag">'+j.f+'</div>'
-      + '<div class="intl-name">'+j.name+'<div class="intl-reg">'+j.reg.substring(0,60)+(j.reg.length>60?'…':'')+'</div></div>'
+      + '<div class="intl-name">'+j.name+'<div class="intl-reg">'+j.reg+'</div></div>'
       + '<div class="intl-score" style="color:'+(j.s>=8?'var(--accent)':j.s>=5?'var(--orange)':'var(--green)')+'">'+j.s+'/10</div>'
       + '<div class="intl-niveau">'+niveau+'</div>'
       + '<div class="intl-diff" style="color:'+diffColor+'">'+diffTxt+'</div></div>';
@@ -13543,12 +13986,11 @@ window.histoSaveSanctions = function(){
   var type = document.getElementById('s-type').value;
   var ca = document.getElementById('s-ca').value;
   var size = document.getElementById('s-size').value;
-  var rec = document.getElementById('s-recid').value;
   var amount = document.getElementById('sanc-amount').textContent;
   var basis = document.getElementById('sanc-basis-txt').textContent;
 
   window.histoSave('sanctions', 'Calcul d exposition aux sanctions',
-    {type_infraction: type, ca: ca+'€', taille_entreprise: size, recidive: rec},
+    {type_infraction: type, ca: ca+'€', taille_entreprise: size},
     {amende_estimee: amount, base_legale: basis},
     'Sanctions — ' + basis + ' (' + amount + ')'
   ).then(function(r){
@@ -15505,7 +15947,7 @@ window.clientsRenderList = function(){
       var dateCreation = new Date(c.date_creation).toLocaleDateString('fr-FR');
       return '<div class="reg-sys-row" style="cursor:default">'
         + '<div class="rs-ico">🏢</div>'
-        + '<div><div class="rs-name">' + c.nom_entreprise + '</div><div class="rs-type">' + c.email + '</div></div>'
+        + '<div><div class="rs-name">' + sentDonnee(c.nom_entreprise) + '</div><div class="rs-type">' + sentDonnee(c.email) + '</div></div>'
         + '<div style="font-size:11px;color:var(--muted)">Créé le ' + dateCreation + '</div>'
         + '<div style="font-size:11px;color:var(--muted)">' + derniereConnexion + '</div>'
         + '<div><span class="chip ' + (c.actif ? 'chip-g' : 'chip-r') + '">' + (c.actif ? 'Actif' : 'Désactivé') + '</span></div>'
@@ -15525,6 +15967,7 @@ window.clientsInitPage = function(){
       if(deniedEl) deniedEl.style.display = 'none';
       window.clientsRenderList();
       window.emailHealthRender();
+      window.connexionsRender();
       window.infraStatusRender();
     } else {
       if(contentEl) contentEl.style.display = 'none';
@@ -15593,6 +16036,46 @@ window.emailHealthRender = function(){
       + (recentHtml || '<div class="reg-empty">Aucun envoi récent.</div>');
   }).catch(function(){
     holder.innerHTML = '<div class="reg-empty" style="color:var(--accent)">Impossible de charger le statut email.</div>';
+  });
+};
+
+/* ══ CONNEXIONS STRIPE ET BREVO — ce que les COMPTES disent, pas le code ══
+   Pendant un mois, le point de réception Stripe visait un hôte sans service et
+   rien ne l'affichait. /api/admin/connexions interroge les deux comptes avec la
+   configuration réelle du service ; ici on ne fait que lister ses alertes, par
+   gravité, et dire « Tout est branché » quand il n'y en a aucune. Les messages
+   viennent du serveur mais citent des adresses lues chez Stripe : échappés. */
+window.connexionsRender = function(){
+  var holder = document.getElementById('connexions-widget');
+  if(!holder) return;
+  function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+  holder.innerHTML = '<div class="reg-loading">Vérification des comptes Stripe et Brevo…</div>';
+  fetch('/api/admin/connexions').then(function(r){ return r.json().then(function(d){ return {status:r.status, data:d}; }); }).then(function(res){
+    if(res.status !== 200){
+      holder.innerHTML = '<div class="reg-empty" style="color:var(--accent)">Erreur serveur : ' + esc(res.data.error || 'cause inconnue') + '</div>';
+      return;
+    }
+    var d = res.data, alertes = d.alertes || [];
+    /* Les classes existantes : ok (vert) et warn (orange) ; le rouge suit le
+       même style en ligne que l'alerte de la santé email, juste au-dessus. */
+    var classes = {bloquant:'radar-registre-info', important:'radar-registre-info radar-registre-warn', info:'radar-registre-info'};
+    var styles  = {bloquant:'background:rgba(184,50,34,.06);border-color:rgba(184,50,34,.2);color:var(--accent);margin-top:8px', important:'margin-top:8px', info:'margin-top:8px'};
+    var icones  = {bloquant:'⛔', important:'⚠️', info:'ℹ️'};
+    var html = alertes.length
+      ? alertes.map(function(a){
+          var g = classes[a.gravite] ? a.gravite : 'info';
+          return '<div class="' + classes[g] + '" style="' + styles[g] + '">' + icones[g] + ' <strong>' + esc(a.code) + '</strong> — ' + esc(a.message) + '</div>';
+        }).join('')
+      : '<div class="radar-registre-info radar-registre-ok" style="margin-top:0">✅ Tout est branché — Stripe et Brevo répondent avec la configuration de ce service.</div>';
+    var de = (d.stripe || {}).dernier_evenement || {};
+    var dernier = !de.disponible ? 'journal non lu'
+      : de.recu_le ? 'il y a ' + de.age_heures + ' h (' + new Date(de.recu_le).toLocaleString('fr-FR', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'}) + ')'
+      : 'jamais';
+    html += '<div style="font-size:10.5px;color:var(--muted);margin-top:10px">Dernier événement Stripe reçu : ' + esc(dernier)
+      + ' · vérifié le ' + esc(d.verifie_le) + '</div>';
+    holder.innerHTML = html;
+  }).catch(function(){
+    holder.innerHTML = '<div class="reg-empty" style="color:var(--accent)">Impossible de vérifier les connexions.</div>';
   });
 };
 
@@ -15739,18 +16222,59 @@ window.sentinelCheckout = function(plan){
   function _fin(){ if(_ov && _ov.parentNode) _ov.parentNode.removeChild(_ov); }
   fetch('/api/sentinel/checkout', {method:'POST', credentials:'same-origin', headers:{'Content-Type':'application/json'}, body:JSON.stringify({plan:plan})})
     .then(function(r){ return r.json().then(function(j){ return j; }).catch(function(){ return {}; }); })
-    .then(function(j){ if(j && j.url){ window.location.href = j.url; } else { _fin(); window.location.href = '/tarifications'; } })
+    .then(function(j){
+      // Un client déjà abonné : le serveur a CHANGÉ le prix de son abonnement,
+      // il n'y a pas de caisse à ouvrir — la page se recharge avec l'offre.
+      if(j && j.modifie){ _fin(); window.location.reload(); return; }
+      if(j && j.url){ window.location.href = j.url; } else { _fin(); window.location.href = '/tarifications'; }
+    })
     .catch(function(){ _fin(); window.location.href = '/tarifications'; });
 };
 window.sentinelActivationToast = function(){
+  // « Offre activée » et « inscription confirmée » ne s'affichent qu'après
+  // la réponse « paye » du serveur, qui relit la session chez Stripe
+  // (/api/stripe/retour). Avant : « Votre offre est activée » s'affichait
+  // sans condition, y compris pendant le mois où aucune notification
+  // n'arrivait — l'offre restait gratuite derrière le message.
   try{
-    if(new URLSearchParams(location.search).get('activation') === 'ok'){
-      var t = document.createElement('div');
-      t.style.cssText = 'position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:10001;background:var(--green,#0E7C7B);color:#fff;padding:12px 22px;border-radius:10px;font-size:13px;font-weight:600;box-shadow:0 8px 30px rgba(0,0,0,.25)';
-      t.textContent = '\u2713 Votre offre est activée. Bienvenue !';
-      document.body.appendChild(t);
-      setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); }, 6000);
+    var q = new URLSearchParams(location.search);
+    var quoi = q.get('activation') === 'ok' ? 'offre' : (q.get('formation') === 'ok' ? 'formation' : null);
+    if(!quoi) return;
+    var t = document.createElement('div');
+    t.style.cssText = 'position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:10001;background:var(--green,#0E7C7B);color:#fff;padding:12px 22px;border-radius:10px;font-size:13px;font-weight:600;box-shadow:0 8px 30px rgba(0,0,0,.25)';
+    document.body.appendChild(t);
+    function montrer(txt, fond){
+      t.textContent = txt; t.style.background = fond;
+      setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); }, 8000);
     }
+    var attente = 'Paiement en cours de confirmation… ' + (quoi === 'offre'
+      ? 'votre offre s’ouvrira dès réception de l’encaissement.'
+      : 'votre inscription sera confirmée dès réception de l’encaissement.');
+    var sid = q.get('session_id');
+    // L'ADRESSE DE RETOUR EST EFFACÉE DÈS QU'ELLE EST LUE, et elle seule : les
+    // autres paramètres de la page sont conservés. Elle restait dans la barre,
+    // si bien que chaque F5 — et le rechargement que sentinelCheckout fait
+    // après un changement d'offre — redemandait la confirmation de la MÊME
+    // caisse. La session relue chez Stripe reste « payée » pour toujours :
+    // l'offre revenait, ou montait, sans le moindre prélèvement (mesuré).
+    try{
+      q.delete('activation'); q.delete('formation'); q.delete('session_id');
+      var reste = q.toString();
+      history.replaceState(null, '', location.pathname + (reste ? '?' + reste : '') + (location.hash || ''));
+    }catch(e){}
+    if(!sid){ montrer(attente, '#7a5c00'); return; }
+    t.textContent = 'Vérification du paiement…';
+    fetch('/api/stripe/retour?session_id=' + encodeURIComponent(sid), {credentials:'same-origin'})
+      .then(function(r){ return r.json(); })
+      .then(function(j){
+        if(j && j.statut === 'paye'){
+          montrer(quoi === 'offre' ? '✓ Votre offre est activée. Bienvenue !'
+                                   : '✓ Paiement reçu : votre inscription est confirmée.', 'var(--green,#0E7C7B)');
+        }else{
+          montrer(attente, '#7a5c00');
+        }
+      })
+      .catch(function(){ montrer(attente, '#7a5c00'); });
   }catch(e){}
 };
 if(document.readyState === 'complete'){ window.sentinelActivationToast(); } else { window.addEventListener('load', window.sentinelActivationToast); }
@@ -19614,7 +20138,11 @@ window.ia50Load = function(){
     var j = document.getElementById('ia50-jours');
     if(j) j.textContent = (d.jours_avant_echeance != null)
       ? (d.jours_avant_echeance >= 0 ? d.jours_avant_echeance + ' jour(s)' : 'Echeance depassee')
-      : '\u2014';
+      : 'Aucune echeance legale a venir';
+    /* Le compte a rebours vise la PROCHAINE echeance legale, donnee par le serveur :
+       le libelle « Avant le 2 aout 2026 » restait affiche deux mois apres cette date. */
+    var jl = document.getElementById('ia50-jours-lbl');
+    if(jl && d.prochaine_echeance) jl.textContent = 'Avant le ' + d.prochaine_echeance.date.split('-').reverse().join('/');
     var e = document.getElementById('ia50-echeances');
     if(e) e.innerHTML = (d.echeances || []).map(function(x){
       return '<div style="padding:1px 0"><strong style="color:var(--ink)">' + rgpdEsc(x.date) + '</strong> \u2014 ' + rgpdEsc(x.objet) + '</div>';
@@ -23475,16 +24003,24 @@ window.go = function(id){
 
 ;/* ── bloc 58/59 ── */
 
-/* ══ CALENDRIER CONSOLIDÉ EU AI ACT — Art. 113 + Digital Omnibus ══
-   Sources : texte officiel Art. 113 Règl.(UE) 2024/1689 (vérifié EUR-Lex),
-   et proposition Digital Omnibus 2024 pour les dates 2027-2028. */
+/* ══ CALENDRIER CONSOLIDÉ EU AI ACT — Art. 113 modifié par le règlement (UE) 2026/1744 ══
+   Sources : Art. 113 et Art. 111 du règlement (UE) 2024/1689 tels que modifiés par
+   le règlement (UE) 2026/1744 du 8 juillet 2026 (« Omnibus numérique sur l'IA »,
+   entré en vigueur le troisième jour après sa publication au JO). Vérifié contre le
+   texte de l'acte, non contre un résumé. */
 /* EXPOSÉ DÉLIBÉRÉMENT : c'est la SOURCE UNIQUE du calendrier d'application.
    La frise des résultats du simulateur (`simTimeline`) la lit au lieu de
    porter sa propre liste — elle en portait une, et les deux se sont mises à
    se contredire de dix-huit mois sur la même page. Toute nouvelle vue du
-   calendrier doit la lire elle aussi, jamais la recopier. */
+   calendrier doit la lire elle aussi, jamais la recopier.
+   CHAQUE LIGNE PORTE SA DATE ISO ET SA CLÉ. Le statut (passé / prochain / à venir)
+   se lit dans la date, jamais dans une étiquette écrite à la main : la ligne du
+   2 août 2026 restait « prochaine » deux mois après son échéance. La clé désigne
+   la ligne au code (souligner celle du système analysé) sans qu'il ait à
+   reconnaître un mot dans une phrase. */
 var AI_ACT_TIMELINE = [
   {
+    iso: "2024-08-01", cle: "vigueur",
     date: "1er août 2024",
     statut: "passe",
     quoi: "Entrée en vigueur du Règlement (UE) 2024/1689",
@@ -23492,43 +24028,107 @@ var AI_ACT_TIMELINE = [
     ref: "Art. 113"
   },
   {
+    iso: "2025-02-02", cle: "interdictions",
     date: "2 février 2025",
     statut: "passe",
     quoi: "Interdictions (Art. 5) — Définitions (Chap. I) — Obligation de culture IA (Art. 4)",
-    retenir: "Les organisations doivent déjà former les personnes qui utilisent ou supervisent des systèmes d'IA et bannir les pratiques interdites.",
-    ref: "Art. 113(a)"
+    retenir: "Les huit pratiques d'IA interdites de l'article 5(1), points a à h, s'appliquent depuis cette date. L'article 4 oblige fournisseurs et déployeurs à prendre des mesures pour développer la culture IA de leur personnel — sans garantir un niveau donné à chaque personne (texte remplacé par le règlement (UE) 2026/1744).",
+    ref: "Art. 113(a) — Art. 4 modifié par le règlement (UE) 2026/1744"
   },
   {
+    iso: "2025-08-02", cle: "gouvernance_gpai",
     date: "2 août 2025",
     statut: "passe",
-    quoi: "Gouvernance (Chap. VII) — Modèles GPAI (Chap. V) — Autorités nationales désignées",
+    quoi: "Gouvernance (Chap. VII) — Modèles GPAI (Chap. V) — Autorités nationales désignées — Sanctions des États membres (Chap. XII, hors Art. 101)",
     retenir: "Les fournisseurs de modèles généralistes sont directement concernés. Les entreprises utilisatrices doivent suivre ce que leurs fournisseurs documentent.",
     ref: "Art. 113(b)"
   },
   {
+    iso: "2026-08-02", cle: "transparence",
     date: "2 août 2026",
-    statut: "prochain",
+    statut: "passe",
     quoi: "Application générale : transparence (Art. 50) — supervision GPAI pleine — sanctions Commission",
-    retenir: "Chatbots, deepfakes, contenus générés ou manipulés, interactions IA : les entreprises doivent être prêtes. C'est l'échéance centrale.",
-    ref: "Art. 113"
+    retenir: "Chatbots, contenus synthétiques, hypertrucages, reconnaissance des émotions : les obligations de transparence de l'article 50 s'appliquent. Les fournisseurs de systèmes générant du contenu synthétique déjà sur le marché avant cette date ont jusqu'au 2 décembre 2026 pour le marquage (Art. 111(4)).",
+    ref: "Art. 113 — Art. 111(4) ajouté par le règlement (UE) 2026/1744"
   },
   {
+    iso: "2026-12-02", cle: "interdictions_2026",
+    date: "2 décembre 2026",
+    statut: "prochain",
+    quoi: "Deux nouvelles pratiques interdites (Art. 5(1), points ba et bb) — marquage des contenus synthétiques (Art. 50(2)) pour les systèmes déjà sur le marché",
+    retenir: "Sont interdits : générer ou manipuler des images, vidéos ou sons d'une personne identifiable, sexuellement explicites ou montrant ses parties intimes, sans son consentement (hypertrucages sexuels), et produire du matériel d'abus sexuel d'enfants. Le marquage lisible par machine des contenus synthétiques devient exigible, y compris pour les systèmes déjà commercialisés.",
+    ref: "Art. 113(a) et Art. 111(4) — règlement (UE) 2026/1744"
+  },
+  {
+    iso: "2027-08-02", cle: "gpai_herites",
+    date: "2 août 2027",
+    statut: "futur",
+    quoi: "Modèles d'IA à usage général mis sur le marché avant le 2 août 2025 — mise en conformité (Art. 111(3))",
+    retenir: "Les fournisseurs de modèles déjà sur le marché avant le 2 août 2025 doivent avoir pris les mesures nécessaires à leur conformité au plus tard à cette date.",
+    ref: "Art. 111(3)"
+  },
+  {
+    iso: "2027-12-02", cle: "annexe3",
     date: "2 décembre 2027",
     statut: "futur",
     quoi: "Systèmes à haut risque Annexe III (biométrie, emploi, crédit, justice, migration…)",
-    retenir: "Le haut risque ne disparaît pas : son calendrier est repoussé à une date désormais fixe. Préparer la documentation technique et les FRIA.",
-    ref: "Digital Omnibus"
+    retenir: "Le haut risque ne disparaît pas : son calendrier est repoussé à une date désormais fixe. Préparer la documentation technique, la FRIA et le système de gestion de la qualité. Système déjà sur le marché : seule une modification importante de sa conception rend le régime applicable (Art. 111(2)) ; systèmes destinés aux autorités publiques : mise en conformité au plus tard le 2 août 2030.",
+    ref: "Art. 113(c)(i) — règlement (UE) 2026/1744"
   },
   {
+    iso: "2028-08-02", cle: "annexe1",
     date: "2 août 2028",
     statut: "futur",
-    quoi: "Systèmes haut risque intégrés à des produits réglementés (Annexe I : machines, jouets, dispositifs médicaux…)",
-    retenir: "Les industriels et fabricants de produits réglementés doivent raisonner cycle de vie, conformité produit et documentation technique.",
-    ref: "Art. 113(c)"
+    quoi: "Systèmes haut risque intégrés à des produits réglementés (Annexe I, section A : dispositifs médicaux, jouets, ascenseurs, équipements radioélectriques…)",
+    retenir: "Les industriels et fabricants de produits réglementés doivent raisonner cycle de vie, conformité produit et documentation technique. Les machines (règlement (UE) 2023/1230) passent en section B de l'annexe I : elles relèvent de leur propre législation, où les exigences IA sont ajoutées par acte délégué applicable au plus tard le 2 août 2028.",
+    ref: "Art. 113(c)(ii) — règlement (UE) 2026/1744"
   }
 ];
 
+/* LE STATUT SE LIT DANS LA DATE. Rend les mêmes lignes, marquées : « passe » si
+   l'échéance est atteinte, « prochain » pour la première à venir, « futur » pour
+   les suivantes. `aujourdhui` est une date ISO (AAAA-MM-JJ). */
+function aiActStatuts(lignes, aujourdhui){
+  var prochain = false;
+  lignes.forEach(function(r){
+    if(r.iso <= aujourdhui) r.statut = 'passe';
+    else if(!prochain){ r.statut = 'prochain'; prochain = true; }
+    else r.statut = 'futur';
+  });
+  return lignes;
+}
+aiActStatuts(AI_ACT_TIMELINE, new Date().toISOString().slice(0, 10));
+
+/* Les deux lectures dont les autres écrans ont besoin : la ligne d'une clé, et la
+   prochaine échéance. Ils lisent le calendrier, ils ne recopient aucune date. */
+function aiActEcheance(cle){
+  for(var i = 0; i < AI_ACT_TIMELINE.length; i++){ if(AI_ACT_TIMELINE[i].cle === cle) return AI_ACT_TIMELINE[i]; }
+  return null;
+}
+function aiActProchaine(){
+  for(var i = 0; i < AI_ACT_TIMELINE.length; i++){ if(AI_ACT_TIMELINE[i].statut === 'prochain') return AI_ACT_TIMELINE[i]; }
+  return null;
+}
+
+/* L'ÉTIQUETTE D'APPLICABILITÉ D'UNE FICHE D'ARTICLE. Elle disait « Applicable août 2026 »
+   pour tout le chapitre du haut risque — la date d'avant le règlement (UE) 2026/1744 —
+   et « Applicable 2027 » pour deux articles du CRA dont l'un s'applique depuis le
+   11 septembre 2026. Elle se lit maintenant ainsi : la date propre à la fiche si elle
+   en porte une (`statut_txt`), sinon, pour le haut risque de l'AI Act, les deux dates
+   du calendrier consolidé — jamais une date écrite ici. */
+function aiActStatutArticle(a, ch){
+  if(a.statut_txt) return a.statut_txt;
+  var reg = (ch && ch.reglement) || 'ai_act';
+  if(reg === 'ai_act' && a.status === 'applicable'){
+    var e3 = aiActEcheance('annexe3'), e1 = aiActEcheance('annexe1');
+    return 'Applicable ' + (e3 ? e3.date : '') + ' (annexe III) · ' + (e1 ? e1.date : '') + ' (annexe I)';
+  }
+  return {actif:'Applicable', applicable:'Applicable', futur:'À venir'}[a.status] || a.status;
+}
+
 window.AI_ACT_TIMELINE = AI_ACT_TIMELINE;
+window.aiActEcheance = aiActEcheance;
+window.aiActProchaine = aiActProchaine;
 
 function aiActTimelineRender(){
   var tbody = document.getElementById('ai-act-timeline-body');
@@ -24239,16 +24839,16 @@ document.addEventListener('keydown', function(e){
         }
         document.getElementById('fo-angles').innerHTML =
             bloc(am.pratiques_interdites, 'Pratiques interdites (art. 5)', 'var(--accent)',
-                 function(x){ return '<li><b>' + ech(x.nom) + '</b> — '
+                 function(x){ return '<li><b>' + sentDonnee(x.nom) + '</b> — '
                    + (x.instruit ? (ech(unMontant(x.montant, x.devise)) + ' par mois')
                                  : 'montant non instruit') + '</li>'; })
           + bloc(am.haut_risque_non_chiffre, 'Haut risque, et coût inconnu', 'var(--amber)',
-                 function(x){ return '<li><b>' + ech(x.nom) + '</b> — ' + ech(x.pourquoi)
-                   + (x.product_owner ? ' <span class="muted">(à demander à ' + ech(x.product_owner) + ')</span>' : '')
+                 function(x){ return '<li><b>' + sentDonnee(x.nom) + '</b> — ' + ech(x.pourquoi)
+                   + (x.product_owner ? ' <span class="muted">(à demander à ' + sentDonnee(x.product_owner) + ')</span>' : '')
                    + '</li>'; })
           + bloc(am.fournisseur_sans_modele, 'Fournisseur nommé, modèle non déclaré', 'var(--blue)',
-                 function(x){ return '<li><b>' + ech(x.nom) + '</b> — fournisseur « '
-                   + ech(x.fournisseur) + ' »'
+                 function(x){ return '<li><b>' + sentDonnee(x.nom) + '</b> — fournisseur « '
+                   + sentDonnee(x.fournisseur) + ' »'
                    + (x.en_service ? ', <b>en service</b>' : '') + '</li>'; });
 
         /* Le coût par niveau de risque — la classification vient du Simulateur
@@ -24280,8 +24880,8 @@ document.addEventListener('keydown', function(e){
           ? ('<table class="tbl"><thead><tr><th>Système</th><th>Modèle</th><th>Mensuel</th>'
              + '<th>Calcul</th><th>Provenance du volume</th></tr></thead><tbody>'
              + lignes.map(function(l){
-                 return '<tr><td>' + ech(l.nom) + '</td><td>'
-                   + (l.modele ? ech(l.modele) : '<span class="muted">—</span>') + '</td><td>'
+                 return '<tr><td>' + sentDonnee(l.nom) + '</td><td>'
+                   + (l.modele ? sentDonnee(l.modele) : '<span class="muted">—</span>') + '</td><td>'
                    + (l.instruit ? ech(unMontant(l.montant, l.devise))
                                  : '<span class="muted">non instruit</span>')
                    + '</td><td style="font-size:11.5px">'
@@ -24312,7 +24912,7 @@ document.addEventListener('keydown', function(e){
             + '<table class="tbl"><thead><tr><th>Système</th><th>Étape</th><th>Ce qui manque</th>'
             + '<th>Pourquoi c’est ainsi</th></tr></thead><tbody>'
             + items.map(function(x){
-                return '<tr><td>' + ech(x.nom) + '</td><td>'
+                return '<tr><td>' + sentDonnee(x.nom) + '</td><td>'
                   + (x.cycle_vie_libelle ? ech(x.cycle_vie_libelle) : '<span class="muted">non déclarée</span>')
                   + '</td><td>' + ech(x.motif) + '</td><td style="font-size:11.5px">'
                   + ech(x.pourquoi) + '</td></tr>';
@@ -24353,7 +24953,7 @@ document.addEventListener('keydown', function(e){
                  + '<th>Leviers non déclarés</th></tr></thead><tbody>'
                  + lignesLev.map(function(l){
                      var abs = lm[String(l.id)] || [];
-                     return '<tr><td>' + ech(l.nom) + '</td><td>'
+                     return '<tr><td>' + sentDonnee(l.nom) + '</td><td>'
                        + (totalLev - abs.length) + ' / ' + totalLev + '</td><td>'
                        + abs.map(function(k){
                            return ech(refLev[k] || k); }).join(' · ')
@@ -24373,7 +24973,7 @@ document.addEventListener('keydown', function(e){
             + '<table class="tbl"><thead><tr><th>' + ech(p[0]) + '</th>'
             + '<th>Systèmes</th><th>Chiffrés</th><th>Mensuel</th></tr></thead><tbody>'
             + g.map(function(x){
-                return '<tr><td>' + ech(x.cle) + '</td><td>' + x.systemes + '</td><td>'
+                return '<tr><td>' + sentDonnee(x.cle) + '</td><td>' + x.systemes + '</td><td>'
                   + x.instruites + '</td><td>'
                   + (x.lisible ? ech(montants(x.mensuel_par_devise)) : '<span class="muted">non instruit</span>')
                   + '</td></tr>';
@@ -24389,7 +24989,7 @@ document.addEventListener('keydown', function(e){
              + '<table class="tbl"><thead><tr><th>Système</th><th>Modèle</th>'
              + '<th>Tâche</th><th>Écart</th><th>Lecture</th></tr></thead><tbody>'
              + dim.map(function(d){
-                 return '<tr><td>' + ech(d.nom) + '</td><td>' + ech(d.modele)
+                 return '<tr><td>' + sentDonnee(d.nom) + '</td><td>' + sentDonnee(d.modele)
                    + '</td><td>' + ech(d.classe_tache) + '</td><td>'
                    + (d.ecart > 0 ? '+' : '') + d.ecart + '</td><td>'
                    + ech(d.note) + '</td></tr>';
@@ -24410,7 +25010,7 @@ document.addEventListener('keydown', function(e){
             ? ('<table class="tbl"><thead><tr><th>Centre de coût</th><th>Mensuel</th>'
                + '<th>Plafond</th><th>Part</th></tr></thead><tbody>'
                + dep.atteints.map(function(a){
-                   return '<tr><td>' + ech(a.cle) + '</td><td>' + ech(unMontant(a.montant, a.devise))
+                   return '<tr><td>' + sentDonnee(a.cle) + '</td><td>' + ech(unMontant(a.montant, a.devise))
                      + '</td><td>' + ech(unMontant(a.plafond, a.devise)) + '</td><td>'
                      + (a.depasse ? '<b>' : '') + Math.round((a.part || 0) * 100) + ' %'
                      + (a.depasse ? ' — dépassé</b>' : '')
@@ -24585,10 +25185,10 @@ document.addEventListener('keydown', function(e){
       : 'Aucun système au registre : rien à peser tant que le parc n’est pas inscrit.';
     if(c.volume_manquant && c.volume_manquant.length)
       t += '<br><span style="color:var(--amber,#b45309)">Sans volume déclaré&nbsp;: </span>'
-         + c.volume_manquant.map(ech).join(', ')
+         + c.volume_manquant.map(sentDonnee).join(', ')
          + ' — <em>non instruit</em>, ce qui n’est pas la même chose que zéro.';
     if(c.ajustement_incomplet && c.ajustement_incomplet.length)
-      t += '<br>Ajustement fin incomplet&nbsp;: ' + c.ajustement_incomplet.map(ech).join(', ') + '.';
+      t += '<br>Ajustement fin incomplet&nbsp;: ' + c.ajustement_incomplet.map(sentDonnee).join(', ') + '.';
     document.getElementById('ei-couv-detail').innerHTML = t;
   }
 
@@ -24601,7 +25201,7 @@ document.addEventListener('keydown', function(e){
     z.innerHTML = '<div style="border:1px solid var(--rule2);border-left:3px solid var(--amber,#b45309);'
       + 'border-radius:10px;padding:12px 14px;background:var(--white);font-size:12px;line-height:1.6">'
       + '<strong>Périmètre incomplet sur ' + l.length + ' système' + (l.length > 1 ? 's' : '')
-      + '&nbsp;:</strong> ' + l.map(ech).join(', ')
+      + '&nbsp;:</strong> ' + l.map(sentDonnee).join(', ')
       + '.<br><span class="muted">Le terme d’hébergement vaut 0,15 Wh par REQUÊTE. '
       + 'Ces systèmes déclarent des jetons&nbsp;: le nombre d’appels est inconnu, et le déduire '
       + 'd’une longueur de réponse moyenne ferait entrer un chiffre que personne n’a déclaré. '
@@ -24658,7 +25258,7 @@ document.addEventListener('keydown', function(e){
       if(m.nature === 'declare' && m.profil_connu === false)
         etat.push('profil de modèle inconnu — classe moyenne retenue');
       h += '<tr style="border-bottom:1px solid var(--rule2)">'
-        + '<td style="padding:6px 8px"><strong>' + ech(l.nom) + '</strong></td>'
+        + '<td style="padding:6px 8px"><strong>' + sentDonnee(l.nom) + '</strong></td>'
         + '<td style="padding:6px 8px;font-variant-numeric:tabular-nums">'
         + kilo(m.wh, 1) + '</td>'
         + '<td style="padding:6px 8px;font-variant-numeric:tabular-nums">'
@@ -27970,7 +28570,7 @@ function qualifClasseOptions(retenue) {
 function qualifCarte(p) {
   var h = '<div class="tbl-wrap" style="margin:14px 0;padding:16px 18px">';
   h += '<div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline">'
-    + '<b style="font-size:13px">' + qualifEsc(p.systeme_nom || ('système #' + p.systeme_id)) + '</b>'
+    + '<b style="font-size:13px">' + (p.systeme_nom ? sentDonnee(p.systeme_nom) : qualifEsc('système #' + p.systeme_id)) + '</b>'
     + '<span style="font-family:var(--mono);font-size:10px;color:var(--muted2)">'
     + 'appui ' + qualifEsc(p.appui) + (p.fragile ? ' · <b>appui faible</b>' : '')
     + ' · ' + qualifEsc(p.moteur || '—') + ' · ' + qualifEsc(p.modele || '—')
@@ -28002,7 +28602,7 @@ function qualifCarte(p) {
     h += '<div style="margin-top:10px;font-size:11.5px;color:var(--muted2)">'
       + 'Retrouvés mot pour mot dans votre déclaration :</div>'
       + '<ul style="font-size:11.5px;margin:4px 0 0 18px">'
-      + p.indices.map(function (i) { return '<li>« ' + qualifEsc(i) + ' »</li>'; }).join('')
+      + p.indices.map(function (i) { return '<li>« ' + sentDonnee(i) + ' »</li>'; }).join('')
       + '</ul>';
   }
 
@@ -28015,10 +28615,10 @@ function qualifCarte(p) {
   if (p.statut !== 'en_attente') {
     h += '<div class="radar-registre-info radar-registre-ok" style="margin-top:12px">'
       + (p.statut === 'validee' ? 'Validée' : 'Écartée')
-      + ' par <b>' + qualifEsc(p.decide_par || '—') + '</b>'
+      + ' par <b>' + sentDonnee(p.decide_par || '—') + '</b>'
       + ' le ' + qualifEsc((p.decide_le || '').slice(0, 16).replace('T', ' à '))
       + (p.corrigee ? ' — <b>corrigée</b> en « ' + qualifEsc(p.classe_retenue) + ' »' : '')
-      + (p.motif_decision ? '<br>' + qualifEsc(p.motif_decision) : '')
+      + (p.motif_decision ? '<br>' + sentDonnee(p.motif_decision) : '')
       + '</div></div>';
     return h;
   }

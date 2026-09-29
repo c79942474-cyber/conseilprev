@@ -1,0 +1,36 @@
+{
+ "_pourquoi": "Chaque mutation FABRIQUE un défaut réel dans la ligne « zone critique » de la matrice (sentinel.page.js) et doit faire TOMBER la règle nommée de tests/test_sentinel_libelles_composes.py. Une mutation qui survit dit que la règle ne mesure pas ce qu'elle prétend ; une mutation qui fait tomber une AUTRE règle dit que la règle nommée vise à côté.",
+ "cibles": [
+  "tests/test_sentinel_libelles_composes.py"
+ ],
+ "mutations": [
+  {
+   "nom": "les deux étiquettes repartent dans un seul nœud texte",
+   "fichier": "sentinel.page.js",
+   "avant": "      + '<span class=\"eval-q\">'+(CLASSIF_LABELS[s.classification]||s.classification)+'</span> · '\n      + '<span class=\"eval-q\">'+(STATUT_LABELS[s.statut_conformite]||s.statut_conformite)+'</span> · '",
+   "apres": "      + (CLASSIF_LABELS[s.classification]||s.classification)+' · '\n      + (STATUT_LABELS[s.statut_conformite]||s.statut_conformite)+' · '",
+   "regle": "test_la_zone_critique_de_la_matrice_ne_garde_aucun_mot_francais"
+  },
+  {
+   "nom": "la classification se recolle au séparateur",
+   "fichier": "sentinel.page.js",
+   "avant": "'<span class=\"eval-q\">'+(CLASSIF_LABELS[s.classification]||s.classification)+'</span> · '",
+   "apres": "(CLASSIF_LABELS[s.classification]||s.classification)+' · '",
+   "regle": "test_chaque_etiquette_de_la_zone_critique_est_traduite_pour_elle_meme[Haut"
+  },
+  {
+   "nom": "le statut de conformité se recolle au séparateur",
+   "fichier": "sentinel.page.js",
+   "avant": "'<span class=\"eval-q\">'+(STATUT_LABELS[s.statut_conformite]||s.statut_conformite)+'</span> · '",
+   "apres": "(STATUT_LABELS[s.statut_conformite]||s.statut_conformite)+' · '",
+   "regle": "test_chaque_etiquette_de_la_zone_critique_est_traduite_pour_elle_meme[En"
+  },
+  {
+   "nom": "le secteur du client n'est plus déclaré donnée saisie",
+   "fichier": "sentinel.page.js",
+   "avant": "      + sentDonnee(s.secteur||\"\")+'</div></div>'",
+   "apres": "      + (s.secteur||\"\")+'</div></div>'",
+   "regle": "test_les_donnees_saisies_de_la_ligne_restent_intactes"
+  }
+ ]
+}

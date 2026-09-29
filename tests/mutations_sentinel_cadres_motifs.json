@@ -1,0 +1,253 @@
+{
+ "_pourquoi": "Chaque mutation FABRIQUE un défaut réel des cadres traduits ou des libellés composés (motifs) et doit faire TOMBER la règle nommée. Une mutation qui survit dit que la règle ne mesure pas ce qu'elle prétend ; une mutation qui fait tomber une AUTRE règle dit que la règle nommée vise à côté.",
+ "cibles": [
+  "tests/test_sentinel_cadres_motifs.py"
+ ],
+ "mutations": [
+  {
+   "nom": "le motif passe avant la clé exacte : une traduction écrite à la main est écrasée par la générique",
+   "fichier": "sentinel.i18n.js",
+   "avant": "  var t = d.texte[cle];\n  if (t !== undefined && t !== null) return t;\n  return sentMotifTraduire(cle, d);\n",
+   "apres": "  var m = sentMotifTraduire(cle, d);\n  if (m !== null) return m;\n  return d.texte[cle];\n",
+   "regle": "test_la_cle_exacte_passe_AVANT_le_motif"
+  },
+  {
+   "nom": "les nœuds texte ignorent les motifs",
+   "fichier": "sentinel.i18n.js",
+   "avant": "  var t = sentChercherTexte(sentNormaliser(v), dico);\n  if (t === undefined || t === null) return 0;\n",
+   "apres": "  var t = dico.texte[sentNormaliser(v)];\n  if (t === undefined || t === null) return 0;\n",
+   "regle": "test_un_libelle_compose_en_noeud_texte_garde_ses_blancs_et_revient_en_francais"
+  },
+  {
+   "nom": "les attributs (title, aria-label) ignorent les motifs",
+   "fichier": "sentinel.i18n.js",
+   "avant": "    var t = sentChercherTexte(sentNormaliser(v), dico);\n",
+   "apres": "    var t = dico.texte[sentNormaliser(v)];\n",
+   "regle": "test_un_libelle_compose_est_traduit_et_la_donnee_passe_intacte_title_ET_aria_label"
+  },
+  {
+   "nom": "sentTraduireCorps ne transmet plus les motifs reçus",
+   "fichier": "sentinel.i18n.js",
+   "avant": "            motifs: sentMotifsCompiler(dico.motif) };",
+   "apres": "            motifs: [] };",
+   "regle": "test_un_libelle_compose_est_traduit_et_la_donnee_passe_intacte_title_ET_aria_label"
+  },
+  {
+   "nom": "les motifs ne sont plus triés du plus long au plus court",
+   "fichier": "sentinel.i18n.js",
+   "avant": "    if (a.length !== b.length) return b.length - a.length;\n",
+   "apres": "",
+   "regle": "test_les_motifs_sont_compiles_UNE_fois_par_dictionnaire_du_plus_long_au_plus_court"
+  },
+  {
+   "nom": "à longueur égale, l'ordre du fichier décide : l'essai n'est plus déterministe",
+   "fichier": "sentinel.i18n.js",
+   "avant": "    return a < b ? -1 : (a > b ? 1 : 0);\n  });",
+   "apres": "    return 0;\n  });",
+   "regle": "test_les_motifs_sont_compiles_UNE_fois_par_dictionnaire_du_plus_long_au_plus_court"
+  },
+  {
+   "nom": "les motifs sont recompilés à chaque nœud",
+   "fichier": "sentinel.i18n.js",
+   "avant": "  if (SENT_MOTIFS_VUS.source === motifs) return SENT_MOTIFS_VUS.liste;\n",
+   "apres": "",
+   "regle": "test_les_motifs_sont_compiles_UNE_fois_par_dictionnaire_du_plus_long_au_plus_court"
+  },
+  {
+   "nom": "les caractères spéciaux d'un motif ne sont plus échappés : « . » devient « n'importe quoi »",
+   "fichier": "sentinel.i18n.js",
+   "avant": "    for (var m = 0; m < morceaux.length; m++) re.push(sentEchapperRe(morceaux[m]));\n",
+   "apres": "    for (var m = 0; m < morceaux.length; m++) re.push(morceaux[m]);\n",
+   "regle": "test_les_caracteres_speciaux_d_un_motif_sont_du_texte_pas_une_expression"
+  },
+  {
+   "nom": "un motif n'est plus ancré : il traduit un morceau d'une phrase plus longue",
+   "fichier": "sentinel.i18n.js",
+   "avant": "                 re: new RegExp('^' + re.join('(.+?)') + '$') });",
+   "apres": "                 re: new RegExp(re.join('(.+?)')) });",
+   "regle": "test_ce_qu_un_motif_ne_doit_pas_attraper_reste_en_francais[ancre-debut]"
+  },
+  {
+   "nom": "« {} » accepte un morceau vide",
+   "fichier": "sentinel.i18n.js",
+   "avant": "                 re: new RegExp('^' + re.join('(.+?)') + '$') });",
+   "apres": "                 re: new RegExp('^' + re.join('(.*?)') + '$') });",
+   "regle": "test_ce_qu_un_motif_ne_doit_pas_attraper_reste_en_francais[capture-vide]"
+  },
+  {
+   "nom": "un motif sans rien de fixe est admis : il attrape tout",
+   "fichier": "sentinel.i18n.js",
+   "avant": "    if (!/\\S/.test(morceaux.join(''))) continue;\n",
+   "apres": "",
+   "regle": "test_ce_qu_un_motif_ne_doit_pas_attraper_reste_en_francais[motif-sans-rien-de-fixe]"
+  },
+  {
+   "nom": "une traduction qui n'a pas autant de « {} » est admise : la donnée disparaît",
+   "fichier": "sentinel.i18n.js",
+   "avant": "    if (motifs[cles[i]].split(SENT_TROU).length !== morceaux.length) continue;\n",
+   "apres": "",
+   "regle": "test_ce_qu_un_motif_ne_doit_pas_attraper_reste_en_francais[trous-differents]"
+  },
+  {
+   "nom": "un morceau capturé n'est plus traduit quand il est une clé exacte",
+   "fichier": "sentinel.i18n.js",
+   "avant": "      sortie += (typeof t === 'string' ? t : capte) + morceaux[k];\n",
+   "apres": "      sortie += capte + morceaux[k];\n",
+   "regle": "test_un_morceau_capture_qui_est_une_cle_exacte_est_traduit_les_autres_sont_recopies"
+  },
+  {
+   "nom": "l'indice rejette un motif dont le morceau fixe ouvre le libellé",
+   "fichier": "sentinel.i18n.js",
+   "avant": "    if (cle.indexOf(m.indice) < 0) continue;\n",
+   "apres": "    if (cle.indexOf(m.indice) <= 0) continue;\n",
+   "regle": "test_les_chiffres_d_un_motif_reviennent_dans_l_ordre"
+  },
+  {
+   "nom": "les motifs s'appliquent au régime bloc : du texte brut recopié dans du HTML",
+   "fichier": "sentinel.i18n.js",
+   "avant": "  var t = dico.bloc[sentNormaliser(tc)];\n",
+   "apres": "  var t = dico.bloc[sentNormaliser(tc)] || sentMotifTraduire(sentNormaliser(tc), dico);\n",
+   "regle": "test_ce_qu_un_motif_ne_doit_pas_attraper_reste_en_francais[regime-bloc]"
+  },
+  {
+   "nom": "le cadre ignore la langue affichée par Sentinel",
+   "fichier": "sentinel.i18n.js",
+   "avant": "      if (l === 'en' || l === 'fr') return l;\n",
+   "apres": "",
+   "regle": "test_dans_le_cadre_de_Sentinel_la_langue_AFFICHEE_du_parent_fait_foi"
+  },
+  {
+   "nom": "le cadre obéit à un message qui ne vient pas de son parent",
+   "fichier": "sentinel.i18n.js",
+   "avant": "    if (e.source !== win.parent || e.origin !== win.location.origin) return;\n",
+   "apres": "    if (e.origin !== win.location.origin) return;\n",
+   "regle": "test_un_message_qui_ne_vient_pas_de_Sentinel_est_ignore[autre-source]"
+  },
+  {
+   "nom": "le cadre obéit à un message d'une autre origine",
+   "fichier": "sentinel.i18n.js",
+   "avant": "    if (e.source !== win.parent || e.origin !== win.location.origin) return;\n",
+   "apres": "    if (e.source !== win.parent) return;\n",
+   "regle": "test_un_message_qui_ne_vient_pas_de_Sentinel_est_ignore[autre-origine]"
+  },
+  {
+   "nom": "le cadre obéit à un message d'un autre type",
+   "fichier": "sentinel.i18n.js",
+   "avant": "    if (d && d.type === SENT_MESSAGE) poser(d.langue);\n",
+   "apres": "    if (d) poser(d.langue);\n",
+   "regle": "test_un_message_qui_ne_vient_pas_de_Sentinel_est_ignore[autre-type]"
+  },
+  {
+   "nom": "le cadre relit la langue à chaque écriture du stockage, quelle que soit la clé",
+   "fichier": "sentinel.i18n.js",
+   "avant": "    if (e.key === SENT_LANGUE_CLE || e.key === null) poser(sentCadreLangue(win));\n",
+   "apres": "    poser(sentCadreLangue(win));\n",
+   "regle": "test_le_cadre_suit_l_evenement_storage_de_la_cle_de_langue_et_d_elle_seule"
+  },
+  {
+   "nom": "le cadre ne suit plus l'événement storage",
+   "fichier": "sentinel.i18n.js",
+   "avant": "    if (e.key === SENT_LANGUE_CLE || e.key === null) poser(sentCadreLangue(win));\n",
+   "apres": "",
+   "regle": "test_le_cadre_suit_l_evenement_storage_de_la_cle_de_langue_et_d_elle_seule"
+  },
+  {
+   "nom": "une langue déjà en place est réappliquée : en français, le cadre parcourt son document pour rien",
+   "fichier": "sentinel.i18n.js",
+   "avant": "    if (l === courante) return;\n",
+   "apres": "",
+   "regle": "test_en_francais_un_cadre_ne_fait_RIEN_ni_telechargement_ni_observateur_ni_ecriture"
+  },
+  {
+   "nom": "au retour en français, la langue du document reste « en »",
+   "fichier": "sentinel.i18n.js",
+   "avant": "    else doc.documentElement.setAttribute('lang', langOrigine);\n",
+   "apres": "",
+   "regle": "test_le_cadre_suit_le_message_de_Sentinel_aller_ET_retour"
+  },
+  {
+   "nom": "le module se branche en cadre partout, même sans la marque",
+   "fichier": "sentinel.i18n.js",
+   "avant": "    && document.currentScript.hasAttribute('data-sent-cadre')) {",
+   "apres": ") {",
+   "regle": "test_le_module_se_branche_seul_QUAND_la_balise_porte_data_sent_cadre[sans-marque]"
+  },
+  {
+   "nom": "Sentinel prévient ses cadres à n'importe quelle origine",
+   "fichier": "sentinel.i18n.js",
+   "avant": "      cadres[i].contentWindow.postMessage({ type: SENT_MESSAGE, langue: langue }, origine);\n",
+   "apres": "      cadres[i].contentWindow.postMessage({ type: SENT_MESSAGE, langue: langue }, '*');\n",
+   "regle": "test_sentPrevenirCadres_ecrit_a_chaque_cadre_a_SA_propre_origine_et_survit_a_un_cadre_absent"
+  },
+  {
+   "nom": "sentSetLang ne prévient plus les cadres",
+   "fichier": "sentinel.page.js",
+   "avant": "  if (typeof sentPrevenirCadres === 'function') sentPrevenirCadres(document, SENT_LANG);\n",
+   "apres": "",
+   "regle": "test_sentSetLang_previent_les_cadres_APRES_avoir_applique_la_langue"
+  },
+  {
+   "nom": "panorama.html (panorama, enveloppe, empreinte du parc) ne charge plus le module",
+   "fichier": "panorama.html",
+   "avant": "  <script src=\"/sentinel.i18n.js\" data-sent-cadre defer></script>\n",
+   "apres": "",
+   "regle": "test_chaque_document_embarque_charge_le_module_en_mode_cadre_une_fois"
+  },
+  {
+   "nom": "la carte charge le module sans la marque de cadre : il ne se branche pas",
+   "fichier": "map.html",
+   "avant": "  <script src=\"/sentinel.i18n.js\" data-sent-cadre defer></script>\n",
+   "apres": "  <script src=\"/sentinel.i18n.js\" defer></script>\n",
+   "regle": "test_la_carte_publique_sert_la_balise_et_le_module_est_servi"
+  },
+  {
+   "nom": "l'observatoire ne charge plus le module",
+   "fichier": "observatoire.html",
+   "avant": "  <script src=\"/sentinel.i18n.js\" data-sent-cadre defer></script>\n",
+   "apres": "",
+   "regle": "test_chaque_document_embarque_charge_le_module_en_mode_cadre_une_fois"
+  },
+  {
+   "nom": "la fusion ignore la section « motif »",
+   "fichier": "sentinel_i18n.py",
+   "avant": "        for regime in ('texte', 'bloc', 'motif'):",
+   "apres": "        for regime in ('texte', 'bloc'):",
+   "regle": "test_la_route_sert_les_motifs_de_deux_fichiers_fusionnes"
+  },
+  {
+   "nom": "un motif fautif est servi quand même",
+   "fichier": "sentinel_i18n.py",
+   "avant": "                    if faute:\n",
+   "apres": "                    if False:\n",
+   "regle": "test_un_motif_fautif_est_NOMME_et_ecarte_les_autres_sont_servis[rien-de-fixe]"
+  },
+  {
+   "nom": "une section « motif » vide est servie : le dictionnaire d'avant change",
+   "fichier": "sentinel_i18n.py",
+   "avant": "    if not dico['motif']:\n        del dico['motif']\n",
+   "apres": "",
+   "regle": "test_sans_motif_le_dictionnaire_servi_est_celui_d_avant"
+  },
+  {
+   "nom": "un motif non normalisé est servi : il ne sera jamais trouvé",
+   "fichier": "sentinel_i18n.py",
+   "avant": "    if normaliser(cle) != cle:\n",
+   "apres": "    if False:\n",
+   "regle": "test_un_motif_fautif_est_NOMME_et_ecarte_les_autres_sont_servis[non-normalise]"
+  },
+  {
+   "nom": "un motif dont la traduction n'a pas autant de « # » est servi",
+   "fichier": "sentinel_i18n.py",
+   "avant": "    if val.count(u'#') != cle.count(u'#'):\n",
+   "apres": "    if False:\n",
+   "regle": "test_un_motif_fautif_est_NOMME_et_ecarte_les_autres_sont_servis[dieses-differents]"
+  },
+  {
+   "nom": "un conflit de motif n'est plus journalisé, le dernier gagne",
+   "fichier": "sentinel_i18n.py",
+   "avant": "                if deja is None:\n",
+   "apres": "                if deja is None or regime == 'motif':\n",
+   "regle": "test_un_conflit_de_motif_est_journalise_et_le_premier_gagne"
+  }
+ ]
+}

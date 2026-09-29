@@ -1,0 +1,23 @@
+{
+ "_lot": "65-cadre-observatoire",
+ "bloc": {
+  "Définition (N.B. de la carte source) : auteurs d’articles retenus pour présentation orale à NeurIPS (~top # % des publications). * Royaume-Uni, Allemagne, France et Canada : entre # et # % chacun des lieux de travail selon la carte source (lecture graphique — valeur précise non publiée). Inde : lieu de travail non disponible.": "Definition (note from the source map): authors of papers accepted for <em>oral presentation</em> at NeurIPS (~top # % of publications). * United Kingdom, Germany, France and Canada: between # and # % each of the places of work according to the source map (read off the chart — exact value not published). India: place of work not available.",
+  "Le document reprend tout ce que cette page calcule : modèles remarquables par pays, brevets accordés (parts, volumes et facteurs de croissance), chercheurs d’élite et soldes nets, adoption par les entreprises de l’Union, cadre et gouvernance. Les cartes et graphiques affichés à l’écran y sont joints en image, dans la vue que vous avez choisie. Chaque chapitre porte sa source, sa licence, son millésime et sa précision — et le dossier rappelle les crédits à reproduire, dont la licence sans dérivée des données de brevets.": "The document carries <b>everything this page computes</b>: notable models by country, patents granted (shares, volumes and growth factors), elite researchers and net balances, adoption by companies in the Union, framework and governance. The <b>maps and charts shown on screen</b> are attached as images, in the view you have chosen. Each chapter carries its source, its licence, its vintage and its precision — and the report recalls the credits to reproduce, including the <b>no-derivatives licence</b> of the patent data."
+ },
+ "texte": {
+  "Adoption entreprises UE": "EU enterprise adoption",
+  "Cadre & gouvernance UE": "EU framework & governance",
+  "Classement # (barres)": "# ranking (bars)",
+  "Epoch AI — « Data on Notable AI Models », epoch.ai": "Epoch AI — “Data on Notable AI Models”, epoch.ai",
+  "Flux origine → travail": "Origin → work flows",
+  "Lignes directrices (#)": "Guidelines (#)",
+  "Origine vs travail (barres)": "Origin vs work (bars)",
+  "Solde net (barres divergentes)": "Net balance (diverging bars)",
+  "Volet": "Section",
+  "données : seed · #/#/#": "data: seed · #/#/#",
+  "seed · classes (recomposition)": "seed · classes (recomposed)",
+  "seed — en attente du premier rafraîchissement serveur": "seed — awaiting the first server refresh",
+  "© UE #/#/UE · citation + lien": "© EU #/#/EU · citation + link",
+  "— pays": "— countries"
+ }
+}

@@ -102,7 +102,7 @@ def test_la_relance_va_au_client_ET_a_conseilprev(base, monkeypatch):
     env = A._formation_ia_relances(REF, envoyer=True)
     assert len(env) == 1
     assert "leclient@ex.fr" in envoyes
-    assert A.CONSEILPREV_INTERNAL_EMAIL in envoyes
+    assert A.CONSEILPREV_NOTIFY_EMAIL in envoyes
     assert len(envoyes) == 2
 
 

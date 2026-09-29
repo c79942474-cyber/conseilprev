@@ -155,7 +155,22 @@ def creneaux(depuis, jusqu=FIN_CAMPAGNE):
 # ═══════════════════════════════════════════════════════════════════════════
 TARIF_HT_CENTS = 80000            # 800,00 € HT — tarif annoncé, source unique
 GRATUITE_RANG = 0                 # la première réservation d'un client
-TVA_PCT = int(os.environ.get("FORMATION_TVA_PCT", "20") or "20")
+
+
+def _lire_tva(brut):
+    """Le taux, lu en NOMBRE : « 20 » comme « 5.5 » (taux réduit, art. 278-0
+    bis du CGI). `int()` faisait tomber l'import sur « 5.5 » — ValueError, et
+    l'application ne démarrait plus (mesuré). Un taux entier reste entier,
+    pour que « TVA 20 % » ne s'écrive pas « 20.0 % » ; une virgule française
+    est acceptée. Illisible : 20, le taux normal."""
+    try:
+        v = float(str(brut if brut not in (None, "") else "20").replace(",", "."))
+    except ValueError:
+        v = 20.0
+    return int(v) if v == int(v) else v
+
+
+TVA_PCT = _lire_tva(os.environ.get("FORMATION_TVA_PCT"))
 
 
 def _ttc(ht_cents):
@@ -189,7 +204,7 @@ def regle_tarifaire():
     return {
         "gratuite": "La première séance, sur l'un des quatre sujets, est "
                     "gratuite et se tient dans vos locaux.",
-        "payantes": "Les séances suivantes sont à 800 € HT chacune (TVA %d %%)."
+        "payantes": "Les séances suivantes sont à 800 € HT chacune (TVA %s %%)."
                     % TVA_PCT,
         "ht_cents": TARIF_HT_CENTS, "tva_pct": TVA_PCT,
         "ttc_cents": _ttc(TARIF_HT_CENTS),

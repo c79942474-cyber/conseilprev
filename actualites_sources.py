@@ -114,9 +114,12 @@ SOURCES_COMMUNIQUES = {
          "editeur": "Union européenne", "annee": "2024",
          "lien": "https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32024R1689",
          "nature": "texte réglementaire",
-         "note": "Les trois échéances citées — 2 août 2026, 2 décembre 2026, "
-                 "2 février 2027 — se vérifient dans ce texte et dans celui "
-                 "qui l'a modifié."},
+         "note": "Les deux échéances légales citées — 2 août 2026 et "
+                 "2 décembre 2026 (art. 111, § 4, ajouté par le règlement (UE) "
+                 "2026/1744) — se vérifient dans ce texte et dans celui qui l'a "
+                 "modifié. La date du 2 février 2027 est celle du code de "
+                 "bonnes pratiques, pour ses signataires : elle ne figure pas "
+                 "dans le règlement."},
         {"titre": "Code de bonnes pratiques sur le marquage et l'étiquetage des "
                   "contenus générés par l'IA", "editeur": "Commission européenne — Bureau de l'IA",
          "annee": "10 juin 2026", "lien": None, "nature": "code volontaire",

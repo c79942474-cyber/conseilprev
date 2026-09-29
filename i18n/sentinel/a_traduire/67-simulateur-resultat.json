@@ -1,0 +1,174 @@
+{
+ "_lot": "67-simulateur-resultat",
+ "_mots": 291,
+ "_pages": [
+  "simulateur"
+ ],
+ "_rubrique": "le résultat du simulateur en anglais : chaque fragment de phrase dans son propre élément, ses étiquettes, ses motifs",
+ "bloc": {
+  "L'exemption « libre et ouverte » ne s'applique pas :": {
+   "en": "<strong>The “free and open-source” exemption does not apply</strong>:",
+   "fr": "L'exemption « libre et ouverte » ne s'applique pas :",
+   "html": "<strong>L'exemption « libre et ouverte » ne s'applique pas</strong> :"
+  },
+  "L'exemption « libre et ouverte » paraît applicable :": {
+   "en": "<strong>The “free and open-source” exemption appears to apply</strong>:",
+   "fr": "L'exemption « libre et ouverte » paraît applicable :",
+   "html": "<strong>L'exemption « libre et ouverte » paraît applicable</strong> :"
+  }
+ },
+ "texte": {
+  "# février #": {
+   "en": "# February #",
+   "fr": "2 février 2025"
+  },
+  "#% du CA mondial": {
+   "en": "#% of worldwide turnover",
+   "fr": "7% du CA mondial"
+  },
+  ", mais": {
+   "en": ", but",
+   "fr": ", mais"
+  },
+  "Analyse d'impact (AIPD/DPIA) RGPD": {
+   "en": "GDPR impact assessment (DPIA)",
+   "fr": "Analyse d'impact (AIPD/DPIA) RGPD"
+  },
+  "Annexe I — produits réglementés": {
+   "en": "Annex I — regulated products",
+   "fr": "Annexe I — produits réglementés"
+  },
+  "Antériorité — Art. #(#)": {
+   "en": "Grandfathering — Art. #(#)",
+   "fr": "Antériorité — Art. 111(2)"
+  },
+  "Ce n'est probablement pas un système d'IA — Art. #(#)": {
+   "en": "This is probably not an AI system — Art. #(#)",
+   "fr": "Ce n'est probablement pas un système d'IA — Art. 3(1)"
+  },
+  "Documentation technique (Annexe IV)": {
+   "en": "Technical documentation (Annex IV)",
+   "fr": "Documentation technique (Annexe IV)"
+  },
+  "Définition incomplète — Art. #(#)": {
+   "en": "Incomplete definition — Art. #(#)",
+   "fr": "Définition incomplète — Art. 3(1)"
+  },
+  "Fournisseur": {
+   "en": "Provider",
+   "fr": "Fournisseur"
+  },
+  "Fournisseur GPAI - Art. # applicables (documentation, policy droits auteur, evaluations).": {
+   "en": "GPAI provider - Art. # apply (documentation, copyright policy, evaluations).",
+   "fr": "Fournisseur GPAI - Art. 53 applicables (documentation, policy droits auteur, evaluations)."
+  },
+  "Importateur": {
+   "en": "Importer",
+   "fr": "Importateur"
+  },
+  "L'exemption « libre et ouverte » ne s'applique pas": {
+   "en": "The “free and open-source” exemption does not apply",
+   "fr": "L'exemption « libre et ouverte » ne s'applique pas"
+  },
+  "L'exemption « libre et ouverte » paraît applicable": {
+   "en": "The “free and open-source” exemption appears to apply",
+   "fr": "L'exemption « libre et ouverte » paraît applicable"
+  },
+  "La classification ci-dessous est donnée à titre indicatif : elle ne vaut que si l'exclusion cesse de jouer — mise sur le marché, usage à double fin, essais en conditions réelles.": {
+   "en": "The classification below is given for information only: it holds only if the exclusion ceases to apply — placing on the market, dual-purpose use, testing in real-world conditions.",
+   "fr": "La classification ci-dessous est donnée à titre indicatif : elle ne vaut que si l'exclusion cesse de jouer — mise sur le marché, usage à double fin, essais en conditions réelles."
+  },
+  "La licence est peut-être libre, le régime reste entier.": {
+   "en": "The licence may well be free; the regime still applies in full.",
+   "fr": "La licence est peut-être libre, le régime reste entier."
+  },
+  "Les obligations ci-dessous sont celles de ce rôle, et de lui seul. Un même système peut être à haut risque pour tous les opérateurs sans que chacun doive la même chose.": {
+   "en": "The obligations below are those of this role, and of this role alone. The same system can be high-risk for all operators without each of them owing the same things.",
+   "fr": "Les obligations ci-dessous sont celles de ce rôle, et de lui seul. Un même système peut être à haut risque pour tous les opérateurs sans que chacun doive la même chose."
+  },
+  "Les points ba et bb s'appliqueront à compter du # décembre # : ce que ce système fait sera alors interdit.": {
+   "en": "Points ba and bb will apply from # December #: what this system does will then be prohibited.",
+   "fr": "Les points ba et bb s'appliqueront à compter du 2 décembre 2026 : ce que ce système fait sera alors interdit."
+  },
+  "Les points ba et bb sont interdits depuis le # décembre #.": {
+   "en": "Points ba and bb have been prohibited since # December #.",
+   "fr": "Les points ba et bb sont interdits depuis le 2 décembre 2026."
+  },
+  "Mandataire UE obligatoire": {
+   "en": "EU authorised representative required",
+   "fr": "Mandataire UE obligatoire"
+  },
+  "Modele a risque systemique (seuil #^# FLOPs) - Art. # applicables.": {
+   "en": "Systemic-risk model (#^# FLOPs threshold) - Art. # apply.",
+   "fr": "Modele a risque systemique (seuil 10^25 FLOPs) - Art. 55 applicables."
+  },
+  "PRATIQUE INTERDITE": {
+   "en": "PROHIBITED PRACTICE",
+   "fr": "PRATIQUE INTERDITE"
+  },
+  "Pratique interdite — Art. #(#)": {
+   "en": "Prohibited practice — Art. #(#)",
+   "fr": "Pratique interdite — Art. 5(1)"
+  },
+  "Pratique(s) reconnue(s) :": {
+   "en": "Practice(s) recognised:",
+   "fr": "Pratique(s) reconnue(s) :"
+  },
+  "Red-teaming, évaluation des risques systémiques, signalement d'incidents à la Commission. Obligatoire si >#^# FLOPs.": {
+   "en": "Red-teaming, systemic risk assessment, incident reporting to the Commission. Mandatory if >#^# FLOPs.",
+   "fr": "Red-teaming, évaluation des risques systémiques, signalement d'incidents à la Commission. Obligatoire si >10^25 FLOPs."
+  },
+  "Si l'organisation est une petite capitalisation intermédiaire (moins de # personnes, CA ≤ # M€ ou bilan ≤ # M€), le plafond est le plus bas des deux : # M€ (Art. #(#a)).": {
+   "en": "If the organisation is a small mid-cap enterprise (fewer than # persons, turnover ≤ # M€ or balance sheet ≤ # M€), the ceiling is the lower of the two: # M€ (Art. #(#a)).",
+   "fr": "Si l'organisation est une petite capitalisation intermédiaire (moins de 750 personnes, CA ≤ 150 M€ ou bilan ≤ 129 M€), le plafond est le plus bas des deux : 4,5 M€ (Art. 99(6a))."
+  },
+  "Vous êtes donc le": {
+   "en": "You are therefore the",
+   "fr": "Vous êtes donc le"
+  },
+  "aucune contrepartie déclarée.": {
+   "en": "no consideration declared.",
+   "fr": "aucune contrepartie déclarée."
+  },
+  "de ce système au sens du règlement, et vous en portez toutes les obligations — celles listées ci-dessous.": {
+   "en": "of this system within the meaning of the Regulation, and you bear all its obligations — those listed below.",
+   "fr": "de ce système au sens du règlement, et vous en portez toutes les obligations — celles listées ci-dessous."
+  },
+  "distributeur": {
+   "en": "distributor",
+   "fr": "distributeur"
+  },
+  "déployeur": {
+   "en": "deployer",
+   "fr": "déployeur"
+  },
+  "elle suppose une mise à disposition à titre gratuit, et": {
+   "en": "it presupposes availability free of charge, and",
+   "fr": "elle suppose une mise à disposition à titre gratuit, et"
+  },
+  "importateur": {
+   "en": "importer",
+   "fr": "importateur"
+  },
+  "rôle non déterminé": {
+   "en": "role not determined",
+   "fr": "rôle non déterminé"
+  },
+  "vous vous êtes déclaré": {
+   "en": "you declared yourself",
+   "fr": "vous vous êtes déclaré"
+  },
+  "● Conforme": {
+   "en": "● Compliant",
+   "fr": "● Conforme"
+  },
+  "● En cours": {
+   "en": "● In progress",
+   "fr": "● En cours"
+  },
+  "● Non réalisé": {
+   "en": "● Not done",
+   "fr": "● Non réalisé"
+  }
+ }
+}

@@ -1,0 +1,85 @@
+{
+ "_pourquoi": "Chaque mutation FABRIQUE un défaut réel du partage entre DONNÉES SAISIES et TEXTE DE SITE — le marquage à la source, le relevé qui le voit, l'agrégation qui l'écarte du verdict, le seuil qui tient la promesse — et doit faire TOMBER la règle nommée. Une mutation qui survit dit que la règle ne mesure pas ce qu'elle prétend ; une mutation qui fait tomber une AUTRE règle dit que la règle nommée vise à côté.",
+ "cibles": [
+  "tests/test_sentinel_donnees_saisies.py"
+ ],
+ "mutations": [
+  {
+   "nom": "la valeur saisie n'est plus déclarée donnée : elle repart dans la part française",
+   "fichier": "sentinel.page.js",
+   "avant": "  return '<span translate=\"no\">' + sentDonneeEch(v) + '</span>';\n",
+   "apres": "  return sentDonneeEch(v);\n",
+   "regle": "test_une_valeur_saisie_est_echappee_ET_declaree_donnee[nom-de-systeme-ordinaire]"
+  },
+  {
+   "nom": "le marquage n'échappe plus les chevrons : une valeur saisie devient du balisage",
+   "fichier": "sentinel.page.js",
+   "avant": "  return String(v == null ? '' : v).replace(/[&<>\"']/g, function (c) {\n    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '\"': '&quot;', \"'\": '&#39;' }[c];\n  });\n",
+   "apres": "  return String(v == null ? '' : v).replace(/[&\"']/g, function (c) {\n    return { '&': '&amp;', '\"': '&quot;', \"'\": '&#39;' }[c];\n  });\n",
+   "regle": "test_une_valeur_saisie_est_echappee_ET_declaree_donnee[chevrons-et-esperluette]"
+  },
+  {
+   "nom": "l'élément dont le title est entièrement une donnée ne se déclare plus : le moteur traduit un nom de système",
+   "fichier": "sentinel.page.js",
+   "avant": "var SENT_ATTR_DONNEE = ' translate=\"no\"';",
+   "apres": "var SENT_ATTR_DONNEE = '';",
+   "regle": "test_un_attribut_entierement_fait_d_une_donnee_est_porte_par_un_element_marque"
+  },
+  {
+   "nom": "le registre réaffiche le nom du système sans le marquer — 10 892 mots français pour un seul nom",
+   "fichier": "sentinel.page.js",
+   "avant": "'<div><div class=\"rs-name\">'+sentDonnee(s.nom)+pctBadge+'</div>",
+   "apres": "'<div><div class=\"rs-name\">'+s.nom+pctBadge+'</div>",
+   "regle": "test_chaque_valeur_saisie_affichee_est_marquee_donnee[registre-nom-du-systeme]"
+  },
+  {
+   "nom": "le FinOps réaffiche le nom et le modèle de chaque ligne sans les marquer",
+   "fichier": "sentinel.page.js",
+   "avant": "                 return '<tr><td>' + sentDonnee(l.nom) + '</td><td>'\n                   + (l.modele ? sentDonnee(l.modele) : '<span class=\"muted\">—</span>') + '</td><td>'",
+   "apres": "                 return '<tr><td>' + ech(l.nom) + '</td><td>'\n                   + (l.modele ? ech(l.modele) : '<span class=\"muted\">—</span>') + '</td><td>'",
+   "regle": "test_chaque_valeur_saisie_affichee_est_marquee_donnee[finops-le-detail-ligne-a-ligne]"
+  },
+  {
+   "nom": "le bouton « Supprimer <nom> du registre » se déclare donnée : le motif ne joue plus et la phrase entière reste en français",
+   "fichier": "sentinel.page.js",
+   "avant": "+ '<button type=\"button\" class=\"rs-del\" onclick=",
+   "apres": "+ '<button type=\"button\" class=\"rs-del\"' + SENT_ATTR_DONNEE + ' onclick=",
+   "regle": "test_les_libelles_composes_en_attribut_restent_traduits_par_les_motifs"
+  },
+  {
+   "nom": "l'agrégation ne met plus les données de côté : elles repèsent dans le verdict",
+   "fichier": "outils/sentinel_langue.js",
+   "avant": "    if (estDonnee(e)) { out.donnees.push(e); continue; }\n",
+   "apres": "    if (estDonnee(e) && false) { out.donnees.push(e); continue; }\n",
+   "regle": "test_les_donnees_saisies_sont_relevees_A_PART_et_hors_verdict"
+  },
+  {
+   "nom": "une donnée affichée dans un cadre n'est plus vue comme une donnée",
+   "fichier": "outils/sentinel_langue.js",
+   "avant": "  return String((e || {}).ou || '').indexOf(MARQUE_DONNEE) >= 0;\n",
+   "apres": "  return String((e || {}).ou || '').indexOf(MARQUE_DONNEE) === 0;\n",
+   "regle": "test_une_donnee_dans_un_cadre_est_une_donnee_d_abord"
+  },
+  {
+   "nom": "les cadres ressortent du verdict : un cinquième de ce qu'un lecteur voit cesse d'être regardé",
+   "fichier": "outils/sentinel_langue.js",
+   "avant": "    out.verdict.push(e);\n    if (estCadre(e)) out.cadres.push(e);\n",
+   "apres": "    if (estCadre(e)) { out.cadres.push(e); continue; }\n    out.verdict.push(e);\n",
+   "regle": "test_les_cadres_ENTRENT_desormais_dans_le_verdict_et_restent_dits_a_part"
+  },
+  {
+   "nom": "le résumé tait le volume des données écartées : la part tombe sans qu'on puisse relire pourquoi",
+   "fichier": "outils/sentinel_langue.js",
+   "avant": "    l.push('données (saisies, hors verdict) : ' + dn.mots_fr + ' mots fr / ' + dn.mots_en + ' en / '\n",
+   "apres": "    l.push('donnees : ' + dn.mots_fr + ' mots fr / ' + dn.mots_en + ' en / '\n",
+   "regle": "test_le_volume_des_donnees_ecartees_est_DIT_dans_le_resume"
+  },
+  {
+   "nom": "le relevé navigateur ne marque plus ce qui est sous translate=\"no\" : l'agrégation n'a plus rien à séparer",
+   "fichier": "recette_sentinel_langue.js",
+   "avant": "      prefixe = prefixe + 'donnee:';\n",
+   "apres": "      prefixe = prefixe + '';\n",
+   "regle": "test_le_releve_navigateur_marque_ce_qui_est_sous_translate_no"
+  }
+ ]
+}

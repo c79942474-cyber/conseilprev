@@ -1,0 +1,316 @@
+{
+ "_pourquoi": "Chaque mutation FABRIQUE un défaut réel dans le calcul des sanctions (source unique, calculateur, simulateur, fiches, page) et doit faire TOMBER la règle nommée de tests/test_sentinel_sanctions_article_99.py. Une mutation qui survit dit que la règle ne mesure pas ce qu'elle prétend ; une mutation qui fait tomber une AUTRE règle dit que la règle nommée vise à côté.",
+ "cibles": [
+  "tests/test_sentinel_sanctions_article_99.py"
+ ],
+ "mutations": [
+  {
+   "nom": "le plus bas des deux plafonds s'applique à tout le monde",
+   "fichier": "sentinel.page.js",
+   "avant": "max: bas ? Math.min(p.fixe, surCa) : Math.max(p.fixe, surCa) };",
+   "apres": "max: Math.min(p.fixe, surCa) };",
+   "regle": "test_pour_une_entreprise_c_est_le_plus_eleve_des_deux_plafonds"
+  },
+  {
+   "nom": "le plus élevé des deux plafonds s'applique à tout le monde, PME comprises",
+   "fichier": "sentinel.page.js",
+   "avant": "max: bas ? Math.min(p.fixe, surCa) : Math.max(p.fixe, surCa) };",
+   "apres": "max: Math.max(p.fixe, surCa) };",
+   "regle": "test_pour_une_pme_c_est_le_plus_bas_et_pour_une_petite_capitalisation_seulement_sur_les_paragraphes_4_et_5"
+  },
+  {
+   "nom": "le §3 perd son plafond fixe de 35 M€",
+   "fichier": "sentinel.page.js",
+   "avant": "fixe:35000000, pct:0.07,",
+   "apres": "fixe:3500000, pct:0.07,",
+   "regle": "test_la_source_unique_rend_le_plafond_de_l_article_99_pour_chaque_palier_et_chaque_taille"
+  },
+  {
+   "nom": "le §3 passe à 6 % du chiffre d'affaires",
+   "fichier": "sentinel.page.js",
+   "avant": "fixe:35000000, pct:0.07,",
+   "apres": "fixe:35000000, pct:0.06,",
+   "regle": "test_pour_une_entreprise_c_est_le_plus_eleve_des_deux_plafonds"
+  },
+  {
+   "nom": "la transparence retombe au palier du §5 dans la source",
+   "fichier": "sentinel.page.js",
+   "avant": "transparence: { art:'Art. 99(4)(g)', fixe:15000000, pct:0.03,",
+   "apres": "transparence: { art:'Art. 99(4)(g)', fixe:7500000, pct:0.01,",
+   "regle": "test_la_transparence_de_l_article_50_est_au_palier_du_paragraphe_4"
+  },
+  {
+   "nom": "l'article 101 reçoit la règle des PME de l'article 99(6)",
+   "fichier": "sentinel.page.js",
+   "avant": "fixe:15000000, pct:0.03, pme:false, smc:false,\n                  objet:'fournisseur de modèle",
+   "apres": "fixe:15000000, pct:0.03, pme:true, smc:false,\n                  objet:'fournisseur de modèle",
+   "regle": "test_pour_une_pme_c_est_le_plus_bas_et_pour_une_petite_capitalisation_seulement_sur_les_paragraphes_4_et_5"
+  },
+  {
+   "nom": "l'allègement des petites capitalisations s'étend au §3",
+   "fichier": "sentinel.page.js",
+   "avant": "fixe:35000000, pct:0.07, pme:true,  smc:false,",
+   "apres": "fixe:35000000, pct:0.07, pme:true,  smc:true,",
+   "regle": "test_pour_une_pme_c_est_le_plus_bas_et_pour_une_petite_capitalisation_seulement_sur_les_paragraphes_4_et_5"
+  },
+  {
+   "nom": "la petite capitalisation est confondue avec l'ETI",
+   "fichier": "sentinel.page.js",
+   "avant": "var smc = !pme && p.smc && taille === 'smc';",
+   "apres": "var smc = !pme && p.smc && taille === 'eti';",
+   "regle": "test_pour_une_pme_c_est_le_plus_bas_et_pour_une_petite_capitalisation_seulement_sur_les_paragraphes_4_et_5"
+  },
+  {
+   "nom": "la TPE n'est plus une PME",
+   "fichier": "sentinel.page.js",
+   "avant": "var pme = p.pme && (taille === 'tpe' || taille === 'pme');",
+   "apres": "var pme = p.pme && (taille === 'pme');",
+   "regle": "test_la_source_unique_rend_le_plafond_de_l_article_99_pour_chaque_palier_et_chaque_taille"
+  },
+  {
+   "nom": "le plafond n'est plus arrondi à l'euro",
+   "fichier": "sentinel.page.js",
+   "avant": "var surCa = Math.round(ca * p.pct);",
+   "apres": "var surCa = ca * p.pct;",
+   "regle": "test_la_source_unique_rend_le_plafond_de_l_article_99_pour_chaque_palier_et_chaque_taille"
+  },
+  {
+   "nom": "la règle appliquée n'est plus nommée (PME → §6)",
+   "fichier": "sentinel.page.js",
+   "avant": "regle_art: pme ? 'Art. 99(6)' : smc ? 'Art. 99(6a)' : p.art,",
+   "apres": "regle_art: p.art,",
+   "regle": "test_le_calculateur_dit_la_regle_appliquee_et_ne_pretend_pas_fixer_le_montant"
+  },
+  {
+   "nom": "la source ne nomme plus le §4(g) pour la transparence",
+   "fichier": "sentinel.page.js",
+   "avant": "transparence: { art:'Art. 99(4)(g)',",
+   "apres": "transparence: { art:'Art. 99(4)',",
+   "regle": "test_la_source_nomme_l_article_de_chaque_palier"
+  },
+  {
+   "nom": "le calculateur range le haut risque sous le palier de l'information",
+   "fichier": "sentinel.page.js",
+   "avant": "var palier={interdit:'interdit',haut:'obligations',transparence:'transparence',info:'info',gpai:'gpai'}[type];",
+   "apres": "var palier={interdit:'interdit',haut:'info',transparence:'transparence',info:'info',gpai:'gpai'}[type];",
+   "regle": "test_le_calculateur_affiche_le_plafond_de_l_article_99_pour_chaque_type_et_chaque_taille"
+  },
+  {
+   "nom": "le calculateur range la transparence sous le §4 générique",
+   "fichier": "sentinel.page.js",
+   "avant": "var palier={interdit:'interdit',haut:'obligations',transparence:'transparence',info:'info',gpai:'gpai'}[type];",
+   "apres": "var palier={interdit:'interdit',haut:'obligations',transparence:'obligations',info:'info',gpai:'gpai'}[type];",
+   "regle": "test_le_calculateur_range_la_transparence_et_le_gpai_sous_leur_article"
+  },
+  {
+   "nom": "le calculateur relit le champ « récidive »",
+   "fichier": "sentinel.page.js",
+   "avant": "  var size=document.getElementById('s-size').value;\n  // Tout le calcul vient de la source unique",
+   "apres": "  var size=document.getElementById('s-size').value; var rec=document.getElementById('s-recid').value;\n  // Tout le calcul vient de la source unique",
+   "regle": "test_le_calculateur_ne_lit_plus_de_recidive_et_ses_details_n_en_parlent_plus"
+  },
+  {
+   "nom": "le calculateur affiche le plafond comme le montant effectif",
+   "fichier": "sentinel.page.js",
+   "avant": "['Montant effectif','Fixé sous ce plafond — Art. 99(7)']",
+   "apres": "['Montant effectif','Égal au plafond']",
+   "regle": "test_le_calculateur_dit_la_regle_appliquee_et_ne_pretend_pas_fixer_le_montant"
+  },
+  {
+   "nom": "le calculateur ne dit plus quelle règle s'applique aux PME",
+   "fichier": "sentinel.page.js",
+   "avant": "'Le plus bas des deux plafonds — '+s.regle_art",
+   "apres": "'Plafond — '+s.regle_art",
+   "regle": "test_le_calculateur_dit_la_regle_appliquee_et_ne_pretend_pas_fixer_le_montant"
+  },
+  {
+   "nom": "l'historique relit le champ supprimé",
+   "fichier": "sentinel.page.js",
+   "avant": "{type_infraction: type, ca: ca+'€', taille_entreprise: size},",
+   "apres": "{type_infraction: type, ca: ca+'€', taille_entreprise: size, recidive: document.getElementById('s-recid').value},",
+   "regle": "test_l_enregistrement_dans_l_historique_ne_lit_plus_le_champ_supprime"
+  },
+  {
+   "nom": "un montant de l'article 99 recopié dans le calculateur",
+   "fichier": "sentinel.page.js",
+   "avant": "  var s=aiActSanctionMax(palier,ca,size);",
+   "apres": "  var plafond_recopie=15000000; var s=aiActSanctionMax(palier,ca,size);",
+   "regle": "test_aucun_montant_de_l_article_99_n_est_recopie_hors_de_la_source_unique[calcSanctions]"
+  },
+  {
+   "nom": "le simulateur ignore la règle des PME",
+   "fichier": "sentinel.page.js",
+   "avant": "var taille = (SIM_DATA.ca === 'startup' || SIM_DATA.ca === 'sme') ? 'pme' : 'eti';",
+   "apres": "var taille = 'eti';",
+   "regle": "test_une_pme_recoit_le_plus_bas_des_deux_plafonds_dans_le_simulateur"
+  },
+  {
+   "nom": "le simulateur applique d'office l'allègement à la tranche ETI",
+   "fichier": "sentinel.page.js",
+   "avant": "var taille = (SIM_DATA.ca === 'startup' || SIM_DATA.ca === 'sme') ? 'pme' : 'eti';",
+   "apres": "var taille = (SIM_DATA.ca === 'startup' || SIM_DATA.ca === 'sme') ? 'pme' : (SIM_DATA.ca === 'mid' ? 'smc' : 'eti');",
+   "regle": "test_la_tranche_eti_signale_l_allegement_possible_sans_l_appliquer"
+  },
+  {
+   "nom": "le simulateur range la transparence sous le palier de l'information",
+   "fichier": "sentinel.page.js",
+   "avant": "var palier = { interdit:'interdit', haut:'obligations', limite:'transparence' }[classif.level] || 'info';",
+   "apres": "var palier = { interdit:'interdit', haut:'obligations', limite:'info' }[classif.level] || 'info';",
+   "regle": "test_la_transparence_de_l_article_50_est_au_palier_du_paragraphe_4"
+  },
+  {
+   "nom": "le risque minimal reçoit le palier du §4",
+   "fichier": "sentinel.page.js",
+   "avant": "limite:'transparence' }[classif.level] || 'info';",
+   "apres": "limite:'transparence' }[classif.level] || 'obligations';",
+   "regle": "test_le_risque_minimal_ne_pretend_pas_a_une_amende_propre"
+  },
+  {
+   "nom": "7,5 M€ est arrondi à 8 M€",
+   "fichier": "sentinel.page.js",
+   "avant": "if(n>=1000000) return String(Math.round(n/100000)/10).replace('.',',')+' M€';",
+   "apres": "if(n>=1000000) return Math.round(n/1000000)+' M€';",
+   "regle": "test_un_montant_non_entier_n_est_plus_arrondi_a_l_unite_superieure"
+  },
+  {
+   "nom": "la virgule décimale redevient un point",
+   "fichier": "sentinel.page.js",
+   "avant": "return String(Math.round(n/100000)/10).replace('.',',')+' M€';",
+   "apres": "return String(Math.round(n/100000)/10)+' M€';",
+   "regle": "test_un_montant_non_entier_n_est_plus_arrondi_a_l_unite_superieure"
+  },
+  {
+   "nom": "l'allègement possible de la tranche ETI n'est plus signalé",
+   "fichier": "sentinel.page.js",
+   "avant": "if(taille === 'eti' && SIM_DATA.ca === 'mid' && AI_ACT_SANCTIONS[palier].smc){",
+   "apres": "if(false){",
+   "regle": "test_la_tranche_eti_signale_l_allegement_possible_sans_l_appliquer"
+  },
+  {
+   "nom": "l'allègement est signalé même pour une pratique interdite",
+   "fichier": "sentinel.page.js",
+   "avant": "if(taille === 'eti' && SIM_DATA.ca === 'mid' && AI_ACT_SANCTIONS[palier].smc){",
+   "apres": "if(taille === 'eti' && SIM_DATA.ca === 'mid'){",
+   "regle": "test_la_tranche_eti_signale_l_allegement_possible_sans_l_appliquer"
+  },
+  {
+   "nom": "le plafond allégé n'est plus chiffré",
+   "fichier": "sentinel.page.js",
+   "avant": "+ fmt(aiActSanctionMax(palier, ca, 'smc').max) + ' (Art. 99(6a)).');",
+   "apres": "+ fmt(s.max) + ' (Art. 99(6a)).');",
+   "regle": "test_la_tranche_eti_signale_l_allegement_possible_sans_l_appliquer"
+  },
+  {
+   "nom": "le risque minimal ne dit plus qu'il n'a pas d'obligation propre",
+   "fichier": "sentinel.page.js",
+   "avant": "if(palier === 'info') notes.push(",
+   "apres": "if(false) notes.push(",
+   "regle": "test_le_risque_minimal_ne_pretend_pas_a_une_amende_propre"
+  },
+  {
+   "nom": "le simulateur perd la règle appliquée (texte)",
+   "fichier": "sentinel.page.js",
+   "avant": "regle_txt: s.regle === 'plus_bas' ? 'Le plus bas des deux plafonds s\\'applique (PME, Art. 99(6))' : 'Le plus élevé des deux plafonds s\\'applique',",
+   "apres": "regle_txt: 'Le plus élevé des deux plafonds s\\'applique',",
+   "regle": "test_une_pme_recoit_le_plus_bas_des_deux_plafonds_dans_le_simulateur"
+  },
+  {
+   "nom": "un montant de l'article 99 recopié dans le simulateur",
+   "fichier": "sentinel.page.js",
+   "avant": "  var s = aiActSanctionMax(palier, ca, taille);\n  function fmt(n){",
+   "apres": "  var plafond_recopie = 35000000; var s = aiActSanctionMax(palier, ca, taille);\n  function fmt(n){",
+   "regle": "test_aucun_montant_de_l_article_99_n_est_recopie_hors_de_la_source_unique[simSanctions]"
+  },
+  {
+   "nom": "la classification recopie un numéro de paragraphe faux",
+   "fichier": "sentinel.page.js",
+   "avant": "    result.sanctions = simSanctionsRef('obligations');",
+   "apres": "    result.sanctions = { max_pct: '3% du CA mondial', max_flat: '15 000 000 €', art: 'Art. 99(2)' };",
+   "regle": "test_la_classification_lit_ses_references_de_sanction_dans_la_source"
+  },
+  {
+   "nom": "le risque minimal perd sa référence de sanction",
+   "fichier": "sentinel.page.js",
+   "avant": "sanctions: simSanctionsRef('info'), timeline: [] };",
+   "apres": "sanctions: {}, timeline: [] };",
+   "regle": "test_la_classification_lit_ses_references_de_sanction_dans_la_source"
+  },
+  {
+   "nom": "la référence de sanction perd son pourcentage",
+   "fichier": "sentinel.page.js",
+   "avant": "return { max_pct: Math.round(p.pct*100) + '% du CA mondial',",
+   "apres": "return { max_pct: '3% du CA mondial',",
+   "regle": "test_la_classification_lit_ses_references_de_sanction_dans_la_source"
+  },
+  {
+   "nom": "la référence de sanction perd le groupement des milliers",
+   "fichier": "sentinel.page.js",
+   "avant": "max_flat: String(p.fixe).replace(/\\B(?=(\\d{3})+(?!\\d))/g, ' ') + ' €',",
+   "apres": "max_flat: String(p.fixe) + ' €',",
+   "regle": "test_la_classification_lit_ses_references_de_sanction_dans_la_source"
+  },
+  {
+   "nom": "un montant de l'article 99 recopié dans la référence",
+   "fichier": "sentinel.page.js",
+   "avant": "  var p = AI_ACT_SANCTIONS[palier];\n  return { max_pct:",
+   "apres": "  var p = AI_ACT_SANCTIONS[palier]; var plafond_recopie = 7500000;\n  return { max_pct:",
+   "regle": "test_aucun_montant_de_l_article_99_n_est_recopie_hors_de_la_source_unique[simSanctionsRef]"
+  },
+  {
+   "nom": "la fonction n'est plus exposée pour les autres écrans",
+   "fichier": "sentinel.page.js",
+   "avant": "window.aiActSanctionMax = aiActSanctionMax;\n",
+   "apres": "",
+   "regle": "test_le_simulateur_et_le_calculateur_appellent_la_meme_fonction"
+  },
+  {
+   "nom": "la fiche de l'article 50 reprend le palier du §5",
+   "fichier": "sentinel.page.js",
+   "avant": "sanction:'15 M€ ou 3% CA mondial (Art. 99(4)(g))',",
+   "apres": "sanction:'7,5 M€ ou 1% CA mondial',",
+   "regle": "test_la_fiche_de_l_article_50_donne_le_palier_du_paragraphe_4"
+  },
+  {
+   "nom": "la fiche de l'article 99 reprend la formule vague sur les PME",
+   "fichier": "sentinel.page.js",
+   "avant": "pour une PME ou une start-up, le plus BAS (§6)",
+   "apres": "PME : proportionnalité garantie",
+   "regle": "test_la_fiche_de_l_article_99_distingue_les_trois_paliers_et_la_regle_des_pme"
+  },
+  {
+   "nom": "la page ne propose plus le palier GPAI",
+   "fichier": "sentinel.html",
+   "avant": "<option value=\"gpai\">Fournisseur de modèle d'IA à usage général — Art. 101 (15 M€ / 3 %)</option>",
+   "apres": "",
+   "regle": "test_la_page_propose_les_types_et_les_tailles_que_le_calcul_sait_traiter"
+  },
+  {
+   "nom": "la page range la transparence au palier du §5",
+   "fichier": "sentinel.html",
+   "avant": "Art. 99(4)(g) (15 M€ / 3 %)",
+   "apres": "Art. 99(4) (7,5 M€ / 1 %)",
+   "regle": "test_la_page_propose_les_types_et_les_tailles_que_le_calcul_sait_traiter"
+  },
+  {
+   "nom": "la page ne propose plus la petite capitalisation intermédiaire",
+   "fichier": "sentinel.html",
+   "avant": "<option value=\"smc\">Petite capitalisation intermédiaire — moins de 750 personnes, CA ≤ 150 M€ ou bilan ≤ 129 M€ (Art. 99(6a))</option>",
+   "apres": "",
+   "regle": "test_la_page_propose_les_types_et_les_tailles_que_le_calcul_sait_traiter"
+  },
+  {
+   "nom": "le champ « récidive » revient dans la page",
+   "fichier": "sentinel.html",
+   "avant": "<button class=\"submit\" onclick=\"calcSanctions()\"",
+   "apres": "<select id=\"s-recid\"></select><button class=\"submit\" onclick=\"calcSanctions()\"",
+   "regle": "test_le_calculateur_ne_lit_plus_de_recidive_et_ses_details_n_en_parlent_plus"
+  },
+  {
+   "nom": "la page ne dit plus qu'il n'y a ni majoration ni réduction forfaitaire",
+   "fichier": "sentinel.html",
+   "avant": " Le règlement ne prévoit ni majoration automatique en cas de récidive ni réduction forfaitaire pour les PME.",
+   "apres": "",
+   "regle": "test_la_page_ne_promet_ni_majoration_ni_reduction_forfaitaire"
+  }
+ ]
+}
