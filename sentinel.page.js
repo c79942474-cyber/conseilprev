@@ -4002,6 +4002,24 @@ window.simCompute = function(){
   simShowPanel(5);
   simRender();
 };
+/* ══ LA PORTE DU SIMULATEUR, ET POURQUOI IL EN FALLAIT UNE ══════════════
+   LE DÉFAUT MESURÉ. `SIM_DATA` et `simClassify` vivent dans cette fonction
+   anonyme, et deux boutons situés PLUS LOIN dans le fichier les nommaient
+   directement : « Ajouter au registre » et « Enregistrer dans l'historique ».
+   Hors de la portée, `SIM_DATA` n'existe pas — mesuré au navigateur,
+   `typeof SIM_DATA` rend « undefined » depuis la portée globale alors que
+   `simAddToRegistre` est bien une fonction. Leur garde
+   `typeof SIM_DATA === "undefined"` était donc TOUJOURS vraie : simulateur
+   rempli, le bouton répondait « Aucune simulation a enregistrer. Completez
+   d abord le simulateur. » Le pont entre deux modules de la cartographie ne
+   pouvait pas être franchi, et l'écran accusait l'utilisateur.
+
+   UNE PORTE, PAS UNE COPIE. `window.SIM_DATA = SIM_DATA` aurait figé la
+   référence : `simReset` réaffecte l'objet, et la copie aurait vieilli au
+   premier « Recommencer ». Un accesseur rend toujours l'état courant. */
+window.simDonnees = function(){ return SIM_DATA; };
+window.simClassifier = function(){ return simClassify(); };
+
 window.simReset = function(){
   SIM_DATA = {};
   SIM_STEP = 1;
@@ -8993,16 +9011,19 @@ var SECTEUR_LABELS = {
 var LEVEL_TO_CLASSIF = { interdit:"inacceptable", haut:"haut", limite:"limite", minimal:"minimal" };
 
 window.simAddToRegistre = function(){
-  if(typeof SIM_DATA === "undefined" || !SIM_DATA.name){
+  /* L'ÉTAT DU SIMULATEUR PASSE PAR SA PORTE. Nommé directement, il était
+     hors de portée et la garde ci-dessous était toujours vraie. */
+  var d = (typeof window.simDonnees === "function") ? window.simDonnees() : null;
+  if(!d || !d.name){
     alert("Aucune simulation a enregistrer. Completez d abord le simulateur.");
     return;
   }
-  var classif = simClassify();
+  var classif = window.simClassifier();
   var payload = {
-    nom: SIM_DATA.name,
-    finalite: SIM_DATA.desc || "",
-    secteur: SECTEUR_LABELS[SIM_DATA.secteur] || SIM_DATA.secteur || "",
-    type_systeme: SIM_DATA.type || "",
+    nom: d.name,
+    finalite: d.desc || "",
+    secteur: SECTEUR_LABELS[d.secteur] || d.secteur || "",
+    type_systeme: d.type || "",
     donnees_utilisees: "",
     classification: LEVEL_TO_CLASSIF[classif.level] || "a_evaluer",
     justification: classif.article || "",
@@ -14223,15 +14244,18 @@ window.histoSaveSanctions = function(){
 /* ══ EXTENSION HISTORIQUE — Simulateur, Maturite, FRIA, RACI ══ */
 
 window.histoSaveSimulateur = function(){
-  if(typeof SIM_DATA === "undefined" || !SIM_DATA.name){
+  /* Même porte, même raison : nommé directement, l'état était hors de
+     portée et ce bouton refusait toujours d'enregistrer. */
+  var d = (typeof window.simDonnees === "function") ? window.simDonnees() : null;
+  if(!d || !d.name){
     alert("Aucune simulation à enregistrer. Complétez d abord le simulateur.");
     return;
   }
-  var classif = simClassify();
+  var classif = window.simClassifier();
   window.histoSave('simulateur', 'Classification système IA (Simulateur)',
-    {nom_systeme: SIM_DATA.name, secteur: SIM_DATA.secteur||'', type: SIM_DATA.type||'', description: SIM_DATA.desc||''},
+    {nom_systeme: d.name, secteur: d.secteur||'', type: d.type||'', description: d.desc||''},
     {classification: classif.level, score: classif.score, article: classif.article},
-    'Simulation — ' + SIM_DATA.name
+    'Simulation — ' + d.name
   ).then(function(r){
     if(r && r.calcul) alert('✅ Simulation enregistrée dans l historique (#'+r.calcul.id+').');
     else alert('Erreur lors de l enregistrement.');
