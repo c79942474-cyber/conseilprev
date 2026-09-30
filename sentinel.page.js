@@ -1363,8 +1363,8 @@ var SENT_T = {
     'pg.nist-cadre.h1': 'The framework, <em>category by category</em>',
     'pg.nist-cadre.p': 'The statements are those of the document, in English and verbatim: they are works of the United States Government, and they are quoted. And a subcategory serves as <strong>evidence</strong> under review — translated, it can no longer be found in the document when the auditor asks where it is written.',
     'pg.nist-genai.eb': 'NIST AI RMF · Generative AI profile',
-    'pg.nist-genai.h1': 'Twelve risks, <em>six of them outside cyber</em>',
-    'pg.nist-genai.p': 'AI 600-1 is a <strong>profile</strong> of the framework, not a second framework: citing it without the framework underneath is citing the profile of nothing. And handing “generative AI risks according to NIST” to the CISO means making them answer for environmental footprint, bias and intellectual property, none of which they own.',
+    'pg.nist-genai.h1': '211 actions, <em>and the ceiling they set</em>',
+    'pg.nist-genai.p': 'AI 600-1 is a <strong>profile</strong> of the framework, not a second framework: it opens no thirteenth drawer, it <strong>caps</strong> the framework’s own. Declare the system generative and retain the risks that apply: the suggested actions of §3 attached to them become expected of you, and a category rated “proven” no longer is until they are held. Six of the twelve risks fall outside cybersecurity — handing them to the CISO means making them answer for environmental footprint, bias and intellectual property, none of which they own.',
     'pg.owasp-dix.eb': 'OWASP · Top 10 for LLMs',
     'pg.owasp-dix.h1': 'Ten failure modes, <em>and why they persist</em>',
     'pg.owasp-dix.p': 'It is neither a standard nor a certifiable framework: it is an inventory of what breaks most often. You do not comply with it, you use it to check that nothing obvious has been missed. <strong>It carries an edition</strong> — the previous one ignored system-prompt leakage, vector stores and unbounded consumption.',
@@ -11857,9 +11857,9 @@ var PAGE_GUIDES = {
   'nist-genai': {
     title: "NIST AI 600-1 — profil IA générative",
     sections: [
-      {h:"À quoi sert cette page", t:"À poser les douze risques propres à l’IA générative, et surtout à dire qui les tient. Six des douze ne relèvent pas de la cybersécurité : NRBC, contenus dangereux, empreinte environnementale, biais, propriété intellectuelle, contenus obscènes."},
-      {h:"Comment l’utiliser", t:"Servez-vous en pour répartir avant d’évaluer. Confier « les risques IA selon le NIST » au RSSI revient à lui faire répondre de sujets qu’il ne tient pas et sur lesquels il n’a aucun moyen d’action — ce qui produit un registre de risques que personne n’arbitre."},
-      {h:"Ce qu’elle ne fait pas", t:"Elle ne classe pas les douze par gravité : l’ordre est alphabétique dans le document, et le NIST s’est abstenu de poser une hiérarchie. Et AI 600-1 est un PROFIL du cadre, pas un second cadre : le citer sans le cadre en dessous, c’est citer le profil de rien."}
+      {h:"À quoi sert cette page", t:"À qualifier le système — génératif ou non —, à retenir lesquels des douze risques s’appliquent, et à déclarer lesquelles des 211 actions suggérées du §3 d’AI 600-1 sont tenues. Six des douze risques ne relèvent pas de la cybersécurité : NRBC, contenus dangereux, empreinte environnementale, biais, propriété intellectuelle, contenus obscènes."},
+      {h:"Comment l’utiliser", t:"Répondez d’abord à la qualification, puis retenez les risques : ce sont eux qui décident des actions applicables. Chaque sous-catégorie se répond en lot quand la réponse y est la même. Ce que vous déclarez ici PLAFONNE le taux du cadre : aucune action tenue, la catégorie ne dépasse pas « amorcé » ; une partie tenue, elle ne dépasse pas « tenu »."},
+      {h:"Ce qu’elle ne fait pas", t:"Elle ne classe pas les douze risques par gravité : l’ordre est alphabétique dans le document, et le NIST s’est abstenu de poser une hiérarchie. Elle ne retire rien au travail fait sur le cadre — elle borne ce qu’on peut en dire pour un système génératif. Et 23 des 72 sous-catégories ne portent aucune action : elles sont sans objet POUR LE PROFIL, jamais « non couvertes »."}
     ]
   },
   'nist53-socle': {
@@ -22006,7 +22006,7 @@ var GUIDED_PATHS = [
     steps: [
       {id:'nist-profil', label:"Profil par fonction", action:"Renseignez d\u2019abord les six cat\u00e9gories de GOVERN, avant de toucher aux trois autres fonctions.", gain:"Quatre notes s\u00e9par\u00e9es, et l\u2019avertissement quand l\u2019aval devance le socle d\u2019un point entier.", tip:"Aucune note globale n\u2019est rendue, et c\u2019est d\u00e9lib\u00e9r\u00e9 : une moyenne des quatre monte quand on cartographie beaucoup et qu\u2019on ne d\u00e9cide rien."},
       {id:'nist-cadre', label:"Le cadre, cat\u00e9gorie par cat\u00e9gorie", action:"D\u00e9pliez la cat\u00e9gorie sur laquelle vous travaillez et servez-vous de ses points comme d\u2019une liste de preuves \u00e0 demander.", gain:"Les \u00e9nonc\u00e9s d\u2019origine, en anglais et verbatim \u2014 ceux que l\u2019auditeur retrouvera dans le document.", tip:"Les sept caract\u00e9ristiques de confiance ne s\u2019additionnent pas : elles s\u2019arbitrent. Rendre un syst\u00e8me plus explicable peut le rendre moins s\u00fbr."},
-      {id:'nist-genai', label:"Profil IA g\u00e9n\u00e9rative", action:"R\u00e9partissez les douze risques AVANT de les \u00e9valuer : la page dit qui tient chacun.", gain:"Six des douze ne rel\u00e8vent pas de la cyber \u2014 les confier au RSSI produit un registre que personne n\u2019arbitre.", tip:"AI 600-1 est un PROFIL du cadre, pas un second cadre : le citer sans le cadre en dessous, c\u2019est citer le profil de rien."},
+      {id:'nist-genai', label:"Profil IA g\u00e9n\u00e9rative", action:"Qualifiez le syst\u00e8me, retenez les risques, puis r\u00e9pondez aux actions par sous-cat\u00e9gorie \u2014 le lot r\u00e9pond pour toute une sous-cat\u00e9gorie \u00e0 la fois.", gain:"Les 211 actions suggér\u00e9es du \u00a73, et le plafond qu\u2019elles posent sur le taux du cadre d\u00e8s que le syst\u00e8me est g\u00e9n\u00e9ratif.", tip:"Six des douze risques ne rel\u00e8vent pas de la cyber \u2014 les confier au RSSI produit un registre que personne n\u2019arbitre."},
       {id:'iso42001', label:"ISO 42001 \u2014 articles 4 \u00e0 10", action:"Comparez ce que vous venez de renseigner avec le corps de la norme.", gain:"Ce que le cadre NIST laisse volontaire, ISO 42001 le rend exigible \u2014 et certifiable.", tip:"Le rapprochement le plus utile n\u2019est pas point \u00e0 point : GOVERN recoupe les articles 5 et 6, et rien dans le cadre n\u2019impose de d\u00e9claration d\u2019applicabilit\u00e9."},
       {id:'cadre-normatif', label:"Cadre normatif", action:"Regardez ce que le cadre NIST apporte que les textes europ\u00e9ens n\u2019apportent pas.", gain:"Il est le seul \u00e0 donner une grammaire de RISQUE l\u00e0 o\u00f9 l\u2019IA Act donne une grammaire d\u2019OBLIGATION.", tip:"Un tiret dans une colonne n\u2019est pas un oubli : c\u2019est que le texte ne dit rien de ce module."},
       {id:'conf-taux', label:"Le taux de conformit\u00e9", action:"Ouvrez la carte NIST AI RMF : elle porte maintenant votre profil.", gain:"Les dix-neuf cat\u00e9gories que vous venez de renseigner remontent dans la synth\u00e8se des douze normes.", tip:"La carte dit ce que 100 % NE veut PAS dire ici : le cadre ne se certifie pas, il n'y a aucun auditeur au bout. Un taux plein signifie « tout est renseign\u00e9 et tenu », pas « conforme »."}
@@ -28528,28 +28528,8 @@ function nistPeindre() {
         }).join('');
   }
 
-  /* ── LE PROFIL IA GÉNÉRATIVE : douze risques, et QUI les tient ───────── */
-  var gb = document.getElementById('nist-genai-body');
-  if (gb) {
-    gb.className = '';
-    var horsCyber = R.risques_genai.filter(function (r) { return !r.cyber; });
-    gb.innerHTML = '<div class="band"><div class="status">'
-      + '<span class="dot"></span>' + horsCyber.length + ' de ces douze '
-      + 'risques ne relèvent pas de la cybersécurité. Les confier au RSSI '
-      + 'revient à lui faire répondre de sujets qu’il ne tient pas et sur '
-      + 'lesquels il n’a aucun moyen d’action.</div></div>'
-      + '<ul class="nist-gen">' + R.risques_genai.map(function (r) {
-          return '<li id="nist-gen-' + r.n + '" class="'
-            + (r.cyber ? 'gen-cy' : 'gen-non') + '">'
-            + '<span class="gen-n">' + r.n + '</span>'
-            + '<div><b>' + nistEsc(r.nom) + '</b> <code>'
-            + nistEsc(r.cle) + '</code>'
-            + '<i>' + (r.cyber ? 'Cyber' : 'Hors cyber') + ' · tenu par '
-            + nistEsc(r.qui_le_tient) + '</i>'
-            + (r.note ? '<p>' + nistEsc(r.note) + '</p>' : '')
-            + '</div></li>';
-        }).join('') + '</ul>';
-  }
+  /* ── LE PROFIL IA GÉNÉRATIVE : il a sa propre peinture ──────────────── */
+  genaiPeindre();
 }
 
 
@@ -29167,11 +29147,23 @@ function nistEvaluer() {
       + 'profil à zéro.</div>';
     return;
   }
+  /* LE PROFIL PART AVEC LES ÉTATS, et c'est ce qui fait que la note lue
+     ici est celle du taux de conformité. Sans lui, cet écran afficherait
+     GOVERN 3/3 pendant que la carte du taux annoncerait 33 % — le même
+     travail, deux chiffres, et le client entre les deux. */
+  /* LA DERNIÈRE DEMANDE PEINT, PAS LA DERNIÈRE RÉPONSE. Répondre à dix-neuf
+     catégories d'affilée lance dix-neuf appels ; rien ne garantit qu'ils
+     reviennent dans l'ordre, et une réponse en retard repeindrait un profil
+     calculé sur MOINS de réponses. C'est le défaut déjà rencontré et corrigé
+     sur le rail DORA — il vaut ici pour la même raison, et il coûte deux
+     lignes. */
+  var aJour = derniereDemande('nist-evaluer');
   fetch('/api/nist-ai-rmf/evaluer', {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ etats: NIST_DECL })
+    body: JSON.stringify({ etats: NIST_DECL, profil: GENAI_DECL })
   }).then(function (r) { return r.json(); })
     .then(function (j) {
+      if (!aJour()) return;
       if (!j || !j.ok) throw new Error('evaluer');
       NIST_EVAL = j;
       sortie.innerHTML = '<div class="q-verdict q-' + nistEsc(j.tete) + '">'
@@ -29182,20 +29174,418 @@ function nistEvaluer() {
               + '"><i>' + nistEsc(p.fonction) + '</i>'
               + (p.note === null ? '—' : p.note + '/' + p.sur) + '</span>';
           }).join('') + '</div>'
-        + '<p>' + nistEsc(j.dit) + '</p></div>';
+        + '<p>' + nistEsc(j.dit) + '</p>'
+        /* LE PLAFOND SE DIT LÀ OÙ LA NOTE SE LIT. Affiché seulement sur
+           l'écran du profil, il laisserait celui-ci inexpliqué : quatre
+           notes qui baissent sans qu'un mot dise pourquoi. */
+        + ((j.plafonds_du_profil && j.plafonds_du_profil.length)
+            ? '<div class="q-am"><span>Plafonné par le profil IA générative</span>'
+              + j.plafonds_du_profil.length + ' catégorie(s) ne peuvent pas '
+              + 'dépasser l’état que la couverture d’AI 600-1 autorise. '
+              + 'Le détail est sur l’écran «&nbsp;Profil IA '
+              + 'générative&nbsp;».</div>'
+            : '')
+        + '</div>';
     })
     .catch(function () {
+      if (!aJour()) return;
       sortie.innerHTML = '<div class="q-vide">Le calcul n’a pas abouti. '
         + 'Rechargez la page plutôt que de lire un profil incomplet.</div>';
     });
 }
+
+/* ══ LE PROFIL IA GÉNÉRATIVE : DE LA LECTURE À LA SAISIE ══════════════════
+ *
+ * CE QUE CET ÉCRAN NE FAISAIT PAS. Il affichait les douze risques d'AI 600-1
+ * et s'arrêtait là. Les 211 ACTIONS SUGGÉRÉES du §3 — celles qui disent quoi
+ * faire de ces risques — n'existaient nulle part dans le site. Le visiteur
+ * repartait avec une liste de sujets et aucun travail à mener.
+ *
+ * ET CE QUE LA SAISIE CHANGE AU TAUX. Ce n'est pas un questionnaire de plus :
+ * déclarer le système GÉNÉRATIF fait tomber le taux du cadre NIST, parce
+ * qu'une catégorie « prouvée » sur AI 100-1 ne l'est plus pour un système
+ * génératif si le profil y attache des actions qu'on ne tient pas. Le calcul
+ * est dans `nist_genai`, côté serveur, et c'est le MÊME que celui du taux de
+ * conformité — deux arithmétiques pour un seul nombre finissent toujours par
+ * se contredire devant le client.
+ *
+ * LES ÉNONCÉS NE SONT PAS RECOPIÉS ICI. Ils arrivent par
+ * /api/nist-ai-rmf/profil/referentiel. Écrits dans ce fichier, ils auraient
+ * existé en deux exemplaires, et la garde du module n'en garderait qu'un. */
+
+var GENAI_CLE_STOCK = 'cp-sentinel-nist-genai-v1';
+var GENAI_REF = null;
+var GENAI_ANALYSE = null;
+
+/* LA DÉCLARATION A TROIS CHAMPS, ET ELLE SE NORMALISE À LA LECTURE : un
+   stockage d'une version antérieure, ou vidé à moitié par un navigateur,
+   ne doit pas faire tomber la peinture sur un `.length` d'undefined. */
+function _genaiNormaliser(v) {
+  var d = (v && typeof v === 'object') ? v : {};
+  return {
+    /* TROIS VALEURS, PAS DEUX. « Pas encore répondu » n'est pas « non » :
+       « non » est une qualification assumée qui ne plafonne rien, et la
+       confondre avec le silence validerait le bloc sans que personne n'ait
+       qualifié le système. Le serveur lit `null` comme non génératif pour
+       le calcul, et le rail le lit comme une question sans réponse. */
+    genai: d.genai === true ? true : (d.genai === false ? false : null),
+    risques: Object.prototype.toString.call(d.risques) === '[object Array]'
+      ? d.risques.filter(function (n) { return typeof n === 'number'; }) : [],
+    actions: (d.actions && typeof d.actions === 'object') ? d.actions : {}
+  };
+}
+var GENAI_DECL = _genaiNormaliser(_declLire(GENAI_CLE_STOCK));
+
+function _genaiEcrire() {
+  _declEcrire(GENAI_CLE_STOCK, GENAI_DECL);
+  declPublier();
+}
+
+/* ── LES TROIS RÉPONSES POSSIBLES SUR UNE ACTION ──────────────────────────
+   « Sans réponse » n'en est pas une quatrième : c'est l'absence des trois.
+   Une action jamais ouverte n'est pas tenue — la compter autrement rendrait
+   100 % à un questionnaire vide. */
+var GENAI_ORDRE = ['tenue', 'non_tenue', 'sans_objet'];
+
+window.genaiBascule = function (el) {
+  var oui = el.getAttribute('data-oui') === '1';
+  if (GENAI_DECL.genai === oui) return;
+  GENAI_DECL.genai = oui;
+  _genaiEcrire();
+  genaiPeindre();
+  nistEvaluer();
+};
+
+window.genaiRisque = function (el) {
+  var n = parseInt(el.getAttribute('data-n'), 10);
+  var i = GENAI_DECL.risques.indexOf(n);
+  if (i < 0) { GENAI_DECL.risques.push(n); } else { GENAI_DECL.risques.splice(i, 1); }
+  GENAI_DECL.risques.sort(function (a, b) { return a - b; });
+  _genaiEcrire();
+  genaiPeindre();
+  nistEvaluer();
+};
+
+window.genaiAction = function (sel) {
+  var c = sel.getAttribute('data-cle');
+  if (sel.value) { GENAI_DECL.actions[c] = sel.value; }
+  else { delete GENAI_DECL.actions[c]; }
+  _genaiEcrire();
+  genaiEvaluer();
+  nistEvaluer();
+  genaiCompteur(c);
+};
+
+/* RÉPONDRE TRENTE FOIS À LA MÊME CHOSE N'EST PAS UNE MESURE, C'EST UN
+   ABANDON. Le lot répond pour une sous-catégorie entière — et l'écran
+   REPEINT la sous-catégorie seule, jamais la page : un repaint complet
+   refermerait les <details> ouverts et perdrait la place du lecteur. */
+window.genaiLot = function (el) {
+  var sc = el.getAttribute('data-sc'), etat = el.getAttribute('data-etat');
+  var codes = (GENAI_REF && GENAI_REF.par_sous_categorie
+               && GENAI_REF.par_sous_categorie[sc]) || [];
+  var champ = _genaiChamp();
+  codes.forEach(function (c) {
+    if (champ.indexOf(c) < 0) return;
+    if (etat) { GENAI_DECL.actions[c] = etat; } else { delete GENAI_DECL.actions[c]; }
+  });
+  _genaiEcrire();
+  var boite = document.getElementById('genai-sc-' + _genaiId(sc));
+  if (boite) {
+    boite.querySelectorAll('select.q-sel').forEach(function (s) {
+      s.value = GENAI_DECL.actions[s.getAttribute('data-cle')] || '';
+    });
+  }
+  genaiCompteur(codes[0]);
+  genaiEvaluer();
+  nistEvaluer();
+};
+
+function _genaiId(cle) {
+  return String(cle).replace(/[^A-Za-z0-9]+/g, '-');
+}
+
+/* LE CHAMP EST CALCULÉ ICI ET CÔTÉ SERVEUR, et les deux doivent rendre la
+   même liste. Celui-ci ne sert qu'à peindre ; c'est celui du serveur qui
+   compte. Le risque hors des douze n'ouvre rien : il n'est pas proposé. */
+function _genaiChamp() {
+  var R = GENAI_REF;
+  if (!R || GENAI_DECL.genai !== true || !GENAI_DECL.risques.length) return [];
+  var pris = GENAI_DECL.risques;
+  return R.actions.filter(function (a) {
+    for (var i = 0; i < a.risques.length; i++) {
+      if (pris.indexOf(a.risques[i]) >= 0) return true;
+    }
+    return false;
+  }).map(function (a) { return a.code; });
+}
+
+function genaiCompteur(code) {
+  var a = code && GENAI_REF
+    && GENAI_REF.actions.filter(function (x) { return x.code === code; })[0];
+  if (!a) return;
+  var e = document.getElementById('genai-nb-' + _genaiId(a.sous_categorie));
+  if (!e) return;
+  var champ = _genaiChamp();
+  var codes = (GENAI_REF.par_sous_categorie[a.sous_categorie] || [])
+    .filter(function (c) { return champ.indexOf(c) >= 0; });
+  var tenues = codes.filter(function (c) {
+    return GENAI_DECL.actions[c] === 'tenue'; }).length;
+  e.textContent = tenues + ' / ' + codes.length + ' tenue'
+    + (codes.length > 1 ? 's' : '');
+}
+
+function genaiPeindre() {
+  var gb = document.getElementById('nist-genai-body');
+  var R = NIST_REF && NIST_REF.referentiel;
+  if (!gb || !R) return;
+  gb.className = '';
+  var horsCyber = R.risques_genai.filter(function (r) { return !r.cyber; });
+  var actionsPar = {};
+  if (GENAI_REF) {
+    GENAI_REF.risques.forEach(function (r) { actionsPar[r.n] = r.actions; });
+  }
+  var pris = GENAI_DECL.risques;
+
+  var h = '<div class="band"><div class="status">'
+    + '<span class="dot"></span>' + horsCyber.length + ' de ces douze '
+    + 'risques ne relèvent pas de la cybersécurité. Les confier au RSSI '
+    + 'revient à lui faire répondre de sujets qu’il ne tient pas et sur '
+    + 'lesquels il n’a aucun moyen d’action.</div></div>';
+
+  /* ── LA QUESTION QUI COMMANDE TOUT LE RESTE ───────────────────────── */
+  h += '<div class="gen-bloc"><h3>Ce système est-il génératif&nbsp;?</h3>'
+    + '<p>AI 600-1 ne s’applique qu’à l’IA générative. Répondre «&nbsp;non&nbsp;» '
+    + 'n’est pas une dispense&nbsp;: c’est une qualification, et elle se '
+    + 'revoit le jour où un modèle de langage entre dans la chaîne. Répondre '
+    + '«&nbsp;oui&nbsp;» fait descendre le taux du cadre NIST partout où les '
+    + 'actions du profil ne sont pas tenues.</p>'
+    + '<div class="gen-oui" role="group" aria-label="Le système est-il génératif">'
+    /* AUCUN DES DEUX N'EST ENFONCÉ TANT QU'ON N'A PAS RÉPONDU. Peindre
+       « Non » par défaut ferait lire une qualification que personne n'a
+       donnée — et c'est celle qui ne plafonne rien. */
+    + '<button type="button" class="gen-b" data-oui="1" aria-pressed="'
+    + (GENAI_DECL.genai === true ? 'true' : 'false')
+    + '" onclick="genaiBascule(this)">Oui, génératif</button>'
+    + '<button type="button" class="gen-b" data-oui="0" aria-pressed="'
+    + (GENAI_DECL.genai === false ? 'true' : 'false')
+    + '" onclick="genaiBascule(this)">Non</button></div>'
+    + (GENAI_DECL.genai === null
+        ? '<p class="gen-nb">Sans réponse, le taux du cadre reste celui du '
+          + 'socle — et le rail de gauche garde ce bloc en attente.</p>' : '')
+    + '</div>';
+
+  /* ── LES DOUZE RISQUES : LISTE À LIRE, PUIS CASES À COCHER ────────── */
+  h += '<div class="gen-bloc"><h3>Les douze risques du profil</h3><p>'
+    + (GENAI_DECL.genai === true
+        ? 'Retenez ceux qui s’appliquent à CE système. Ce sont eux qui '
+          + 'décident lesquelles des 211 actions suggérées vous sont '
+          + 'opposables — et donc lesquelles des dix-neuf catégories du '
+          + 'cadre seront plafonnées.'
+        : 'Tant que le système n’est pas déclaré génératif, ces risques se '
+          + 'lisent sans rien commander. Ils restent affichés&nbsp;: la '
+          + 'qualification se revoit, et il vaut mieux savoir d’avance ce '
+          + 'qu’elle ouvrirait.')
+    + '</p><ul class="nist-gen">' + R.risques_genai.map(function (r) {
+        var choisi = pris.indexOf(r.n) >= 0;
+        return '<li id="nist-gen-' + r.n + '" class="'
+          + (r.cyber ? 'gen-cy' : 'gen-non') + (choisi ? ' gen-pris' : '') + '">'
+          + '<span class="gen-n">' + r.n + '</span>'
+          + '<div><b>' + nistEsc(r.nom) + '</b> <code>'
+          + nistEsc(r.cle) + '</code>'
+          + '<i>' + (r.cyber ? 'Cyber' : 'Hors cyber') + ' · tenu par '
+          + nistEsc(r.qui_le_tient) + '</i>'
+          + (r.note ? '<p>' + nistEsc(r.note) + '</p>' : '')
+          + (actionsPar[r.n] !== undefined
+              ? '<span class="gen-nb">' + actionsPar[r.n]
+                + ' action(s) du §3 le traitent</span>' : '')
+          + '</div>'
+          + (GENAI_DECL.genai === true
+              ? '<button type="button" class="gen-b gen-pick" data-n="' + r.n
+                + '" aria-pressed="' + (choisi ? 'true' : 'false')
+                + '" onclick="genaiRisque(this)">'
+                + (choisi ? 'Retenu' : 'Retenir') + '</button>'
+              : '')
+          + '</li>';
+      }).join('') + '</ul></div>';
+
+  /* ── LES ACTIONS APPLICABLES, GROUPÉES PAR SOUS-CATÉGORIE ─────────── */
+  if (GENAI_DECL.genai === true && GENAI_REF) {
+    var champ = _genaiChamp();
+    if (!champ.length) {
+      h += '<div class="gen-bloc"><h3>Aucune action applicable</h3><p>'
+        + (pris.length
+            ? 'Aucune action du §3 ne traite les risques retenus.'
+            : 'Aucun des douze risques n’est retenu. Le profil ne plafonne '
+              + 'donc rien — ce qui revient à dire que la génération '
+              + 'n’apporte aucun risque. C’est la réponse qu’un auditeur '
+              + 'ouvrira en premier.') + '</p></div>';
+    } else {
+      var parSc = {}, ordreSc = [];
+      GENAI_REF.actions.forEach(function (a) {
+        if (champ.indexOf(a.code) < 0) return;
+        if (!parSc[a.sous_categorie]) {
+          parSc[a.sous_categorie] = []; ordreSc.push(a.sous_categorie);
+        }
+        parSc[a.sous_categorie].push(a);
+      });
+      h += '<div class="gen-bloc"><h3>' + champ.length + ' actions suggérées '
+        + 'vous sont applicables</h3><p>Les énoncés sont ceux du document, '
+        + 'en anglais et verbatim&nbsp;: œuvre du gouvernement des '
+        + 'États-Unis, ils se citent — et c’est ce libellé qu’un auditeur '
+        + 'cherchera. «&nbsp;Sans objet&nbsp;» sort l’action du calcul, et '
+        + 'se justifie devant un tiers.</p></div>'
+        + ordreSc.map(function (sc) {
+            var liste = parSc[sc];
+            var tenues = liste.filter(function (a) {
+              return GENAI_DECL.actions[a.code] === 'tenue'; }).length;
+            return '<details class="gen-sc" id="genai-sc-' + _genaiId(sc) + '">'
+              + '<summary><code>' + nistEsc(sc) + '</code>'
+              + '<em id="genai-nb-' + _genaiId(sc) + '">' + tenues + ' / '
+              + liste.length + ' tenue' + (liste.length > 1 ? 's' : '')
+              + '</em></summary>'
+              + '<div class="gen-lot">'
+              + '<button type="button" class="gen-b" data-sc="' + nistEsc(sc)
+              + '" data-etat="tenue" onclick="genaiLot(this)">Tout tenu</button>'
+              + '<button type="button" class="gen-b" data-sc="' + nistEsc(sc)
+              + '" data-etat="non_tenue" onclick="genaiLot(this)">Tout non tenu</button>'
+              + '<button type="button" class="gen-b" data-sc="' + nistEsc(sc)
+              + '" data-etat="" onclick="genaiLot(this)">Effacer</button></div>'
+              + '<ul class="gen-act">' + liste.map(function (a) {
+                  var noms = a.risques.map(function (n) {
+                    var r = R.risques_genai.filter(function (x) { return x.n === n; })[0];
+                    return r ? r.nom : ('hors liste (' + n + ')');
+                  });
+                  return '<li><div class="gen-t"><code>' + nistEsc(a.code)
+                    + '</code>' + nistEsc(a.texte)
+                    + '<i>' + nistEsc(noms.join(' · ')) + '</i></div>'
+                    + _choix(GENAI_REF.etats_action, GENAI_ORDRE,
+                             GENAI_DECL.actions[a.code], 'genaiAction', a.code)
+                    + '</li>';
+                }).join('') + '</ul></details>';
+          }).join('');
+    }
+  }
+
+  h += '<div id="genai-verdict"></div><div id="genai-plan"></div>';
+
+  /* ── LES 23 SOUS-CATÉGORIES QUE LE PROFIL NE CHARGE PAS ───────────── */
+  if (GENAI_REF) {
+    h += '<div class="gen-muet"><b>' + GENAI_REF.sous_categories_sans_action.length
+      + ' des 72 sous-catégories du cadre ne portent AUCUNE action du '
+      + 'profil</b> — elles sont sans objet POUR LE PROFIL, jamais «&nbsp;non '
+      + 'couvertes&nbsp;». Le NIST n’a rien de particulier à y ajouter pour '
+      + 'l’IA générative&nbsp;; ce n’est pas un trou.<br>'
+      + GENAI_REF.sous_categories_sans_action.map(function (k) {
+          return '<code>' + nistEsc(k) + '</code>';
+        }).join('') + '</div>';
+  }
+
+  gb.innerHTML = h;
+  genaiEvaluer();
+}
+
+/* ── LE VERDICT ET LE PLAN, RENDUS PAR LE SERVEUR ─────────────────────────
+   UN SEUL APPEL REND LES DEUX. Séparés, l'écran aurait pu afficher une
+   couverture issue d'une déclaration et un plan issu de la suivante. */
+function genaiEvaluer() {
+  var vs = document.getElementById('genai-verdict');
+  var ps = document.getElementById('genai-plan');
+  if (!vs) return;
+  if (GENAI_DECL.genai !== true) {
+    GENAI_ANALYSE = null;
+    vs.innerHTML = '<div class="q-vide">'
+      + (GENAI_DECL.genai === false
+          ? 'Le système est déclaré NON génératif. Le profil AI 600-1 ne '
+            + 's’applique pas, et le taux du cadre reste celui du socle. '
+            + 'Ce n’est pas une dispense : c’est une qualification, et elle '
+            + 'se revoit.'
+          : 'La question n’a pas encore de réponse. Tant qu’elle n’en a '
+            + 'pas, rien n’est calculé — ni dans un sens ni dans l’autre.')
+      + '</div>';
+    if (ps) ps.innerHTML = '';
+    return;
+  }
+  /* MÊME GARDE : le lot répond pour une sous-catégorie entière d'un coup. */
+  var aJour = derniereDemande('genai-analyser');
+  fetch('/api/nist-ai-rmf/profil/analyser', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ profil: GENAI_DECL, etats: NIST_DECL, limite: 12 })
+  }).then(function (r) { return r.json(); })
+    .then(function (j) {
+      if (!aJour()) return;
+      if (!j || !j.ok) throw new Error('analyser');
+      GENAI_ANALYSE = j.analyse;
+      var a = j.analyse, cv = a.couverture;
+      vs.innerHTML = '<div class="q-verdict q-' + nistEsc(a.tete) + '">'
+        + '<div class="q-chif"><b>'
+        + (cv.taux === null ? '—' : cv.taux + '&nbsp;%')
+        + '</b> des actions applicables sont tenues · ' + cv.tenues + ' / '
+        + cv.portees + (cv.ecartees ? ' · ' + cv.ecartees + ' écartée(s)' : '')
+        + (cv.sans_reponse ? ' · ' + cv.sans_reponse + ' sans réponse' : '')
+        + '</div>'
+        + '<div class="q-notes">'
+        + '<span class="q-note q-socle"><i>catégories plafonnées</i>'
+        + a.categories_plafonnees + ' / 19</span>'
+        + '<span class="q-note"><i>actions applicables</i>' + a.champ + '</span>'
+        + '<span class="q-note"><i>risques retenus</i>' + a.risques.length
+        + ' / 12</span></div>'
+        + '<p>' + nistEsc(a.dit) + '</p>'
+        + (a.mouvements.length
+            ? '<div class="q-am"><span>Ce que le profil fait tomber</span>'
+              + a.mouvements.map(function (m) {
+                  return '<code>' + nistEsc(m.categorie) + '</code> '
+                    + nistEsc(m.de) + ' → <b>' + nistEsc(m.vers) + '</b>';
+                }).join(' · ') + '</div>'
+            : '')
+        + '<p>' + nistEsc(a.reserve) + '</p></div>';
+      if (!ps) return;
+      ps.innerHTML = j.plan.length
+        ? '<div class="gen-bloc"><h3>Par quoi commencer</h3><p>L’ordre est '
+          + 'calculé&nbsp;: une action qui traite quatre des risques retenus '
+          + 'passe devant une qui en traite un, et à portée égale GOVERN '
+          + 'commande — le reste en dépend. ' + j.plan.length
+          + ' action(s) affichée(s) sur ' + (cv.portees - cv.tenues)
+          + ' restantes.</p><ul class="gen-plan">'
+          + j.plan.map(function (e) {
+              return '<li><b>' + e.rang + '</b><div><code>'
+                + nistEsc(e.code) + '</code> ' + nistEsc(e.texte)
+                + '<i class="gen-nb">' + nistEsc(e.sous_categorie) + ' · '
+                + e.porte + ' risque(s) retenu(s) traité(s)</i></div></li>';
+            }).join('') + '</ul></div>'
+        : '';
+    })
+    .catch(function () {
+      if (!aJour()) return;
+      vs.innerHTML = '<div class="q-vide">Le calcul du profil n’a pas '
+        + 'abouti. Rien n’est affiché plutôt qu’une couverture '
+        + 'incomplète&nbsp;: un taux calculé sur la moitié des actions se '
+        + 'lit comme un taux.</div>';
+      if (ps) ps.innerHTML = '';
+    });
+}
+
 
 function nistInit() {
   /* LES RÉPONSES SURVIVENT À LA FERMETURE DE L'ONGLET, et repartent vers le
      taux de conformité dès le chargement — sans quoi le visiteur qui a
      répondu hier retrouverait ses cartes « non renseignées » aujourd'hui. */
   NIST_DECL = _declLire(NIST_CLE_STOCK);
+  GENAI_DECL = _genaiNormaliser(_declLire(GENAI_CLE_STOCK));
   declPublier();
+  /* LES 211 ACTIONS ARRIVENT EN PARALLÈLE DU CADRE, et la peinture les
+     attend : peinte avant, la page afficherait les douze risques sans le
+     travail qu'ils commandent, puis sauterait sous les yeux du lecteur. */
+  if (!GENAI_REF) {
+    fetch('/api/nist-ai-rmf/profil/referentiel')
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        if (!j || !j.ok) throw new Error('profil');
+        GENAI_REF = j.referentiel;
+        if (NIST_REF) genaiPeindre();
+      })
+      .catch(function () { GENAI_REF = null; });
+  }
   if (NIST_REF) { nistPeindre(); return; }
   fetch('/api/nist-ai-rmf/referentiel')
     .then(function (r) { return r.json(); })
@@ -30190,7 +30580,10 @@ var RAIL_DECL = {
              ecarts: CRA_ETAT.ecarts,
              chiffre_affaires: (ca && ca.value !== '') ? Number(ca.value) : null };
   },
-  nist_ai_rmf: function () { return { etats: NIST_DECL }; },
+  /* LE PROFIL VOYAGE AVEC LES ÉTATS : c'est lui qui plafonne le taux, et
+     un socle arrivé seul se lit «&nbsp;non génératif&nbsp;», c'est-à-dire
+     la seule réponse qui ne plafonne rien. */
+  nist_ai_rmf: function () { return { etats: NIST_DECL, profil: GENAI_DECL }; },
   owasp_llm: function () { return { etats: OWASP_DECL }; },
   nist_800_53: function () { return { socle: N53_SOCLE || null, etats: _n53Etats() }; },
   nist_800_82: function () { return { etats: N82_DECL }; },

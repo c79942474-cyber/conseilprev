@@ -701,6 +701,16 @@ RESERVES = {
          "ou": "dora · portée du taux"},
     ],
     "nist_ai_rmf": [
+        {"cle": "profil_genai",
+         "dit": "Le système est déclaré génératif : le taux est celui du "
+                "cadre PLAFONNÉ par le profil AI 600-1.",
+         "porte_sur": "Une catégorie dont les actions du profil ne sont pas "
+                      "tenues ne peut pas dépasser « amorcé » ; "
+                      "partiellement tenues, elle ne dépasse pas « tenu ». "
+                      "Le travail fait sur le cadre n'est pas retiré — c'est "
+                      "ce qu'on peut en dire pour un système génératif qui "
+                      "est borné.",
+         "ou": "nist · profil IA générative"},
         {"cle": "socle_devance",
          "dit": "Une ou plusieurs fonctions devancent GOVERN.",
          "porte_sur": "Le cadre place GOVERN au-dessus des trois autres. Le "
@@ -847,6 +857,26 @@ def _lire_cra(ev, dec=None):
     return parts, signaux
 
 
+def _nist_declaration(dec):
+    """Les états du cadre et la déclaration de profil, d'où qu'ils viennent.
+
+    DEUX FORMES ARRIVENT ICI, ET C'EST VOULU. Avant le profil AI 600-1, la
+    déclaration NIST ÉTAIT le dictionnaire des états — « GOVERN 1 » →
+    « tenu ». Les dossiers déjà enregistrés la portent ainsi, et les refuser
+    aurait effacé le taux de tout client qui n'a pas rouvert l'écran depuis.
+    La forme neuve les emboîte sous « etats » et ajoute « profil ».
+
+    ELLES SE DISTINGUENT SANS AMBIGUÏTÉ : aucune catégorie du cadre ne
+    s'appelle « etats » ni « profil ».
+    """
+    d = dec if isinstance(dec, dict) else {}
+    if "etats" in d or "profil" in d:
+        etats = d.get("etats") if isinstance(d.get("etats"), dict) else {}
+        profil = d.get("profil") if isinstance(d.get("profil"), dict) else {}
+        return etats, profil
+    return d, {}
+
+
 def _lire_nist(ev, dec=None):
     if not ev or not ev.get("ok"):
         return None, []
@@ -874,8 +904,14 @@ def _lire_nist(ev, dec=None):
         portees = total - sans_objet
         parts[cle] = (None if note is None or not sur or not portees
                       else int(round(100.0 * note * renseignees / (sur * portees))))
-    verrous = ["socle_devance"] if ev.get("devancent_le_socle") else []
-    return parts, verrous
+    signaux = ["socle_devance"] if ev.get("devancent_le_socle") else []
+    # LE PROFIL A DÉJÀ AGI SUR LES NOTES CI-DESSUS — il plafonne l'état de
+    # chaque catégorie qu'il charge. La réserve ne rabaisse donc rien de
+    # plus : elle DIT que le nombre affiché n'est pas celui du socle, ce que
+    # l'écran ne pourrait pas deviner d'un pourcentage.
+    if ev.get("plafonds_du_profil"):
+        signaux.append("profil_genai")
+    return parts, signaux
 
 
 def _lire_owasp(ev, dec=None):
@@ -1337,14 +1373,23 @@ def _ecarts_nist(ev, dec=None):
     if not ev or not ev.get("ok"):
         return []
     import nist_ai_rmf as _k
-    etats = dec or {}
+    # LES ÉTATS LUS ICI SONT CEUX QUE LE PROFIL A PLAFONNÉS, quand il y en
+    # a. Relire la déclaration brute aurait fait disparaître du plan
+    # exactement les catégories que le profil vient de faire tomber : le
+    # taux aurait baissé sans qu'aucune action ne dise pourquoi.
+    plafonnes = ev.get("etats_plafonnes")
+    etats = plafonnes if isinstance(plafonnes, dict) else _nist_declaration(dec)[0]
+    par_le_profil = {m["categorie"] for m in (ev.get("plafonds_du_profil") or ())}
     out = []
     for cat in _k.CATEGORIES:
         e = etats.get(cat["cle"])
         if e in ("prouve", "sans_objet"):
             continue
         out.append(_ec((cat["fonction"] or "").lower(), cat["cle"],
-                       cat.get("nom"), "nist · " + cat["fonction"],
+                       cat.get("nom"),
+                       "nist · profil IA générative"
+                       if cat["cle"] in par_le_profil
+                       else "nist · " + cat["fonction"],
                        cat["cle"]))
     return out
 
@@ -1950,8 +1995,29 @@ def _ev_rgpd(dec, d):
 
 
 def _ev_nist_ai_rmf(dec, d):
+    """Le cadre, puis le profil qui le plafonne — dans cet ordre.
+
+    LE PROFIL EST ÉVALUÉ AVANT D'ÊTRE APPLIQUÉ. S'il refuse la déclaration —
+    un code d'action qui n'existe pas, un état inconnu —, on ne plafonne
+    rien et on rend le refus : plafonner sur une saisie que le module
+    n'accepte pas reviendrait à baisser un taux sur la foi de données dont
+    on vient de dire qu'on ne les comprend pas.
+    """
     import nist_ai_rmf as _nist
-    return _nist.evaluer(dec)
+    import nist_genai as _profil
+    etats, prof = _nist_declaration(dec)
+    lu = _profil.analyse(prof, etats)
+    if not lu.get("ok"):
+        return {"ok": False, "motif": "profil_genai_illisible",
+                "detail": lu.get("detail"), "profil_motif": lu.get("motif")}
+    plafonnes, mouvements = _profil.etats_du_profil(etats, prof)
+    ev = _nist.evaluer(plafonnes)
+    if not ev.get("ok"):
+        return ev
+    ev["profil_genai"] = lu
+    ev["etats_plafonnes"] = plafonnes
+    ev["plafonds_du_profil"] = mouvements
+    return ev
 
 
 def _ev_owasp_llm(dec, d):
@@ -2151,6 +2217,21 @@ def _de_etats(v, e):
     return etats or None
 
 
+def _de_nist_ai_rmf(v, e):
+    """Les états du cadre ET la déclaration de profil, en une seule pièce.
+
+    LES DEUX VOYAGENT ENSEMBLE PARCE QUE LE SECOND COMMANDE LE PREMIER. Les
+    séparer aurait laissé arriver un socle sans son profil — et un socle
+    sans profil se lit « non génératif », c'est-à-dire la réponse qui ne
+    plafonne rien.
+    """
+    etats = _dict_de(v, "etats")
+    profil = v.get("profil") if isinstance(v.get("profil"), dict) else None
+    if not (etats or profil):
+        return None
+    return {"etats": etats or {}, "profil": profil or {}}
+
+
 def _de_nist_800_53(v, e):
     etats = _dict_de(v, "etats")
     socle = v.get("socle") or None
@@ -2222,7 +2303,7 @@ def _de_en18229_3(v, e):
 TRADUCTEURS = {
     "ia_act": _de_ia_act, "cra": _de_cra, "iso42001": _de_iso42001,
     "iso27001": _de_iso27001, "dora": _de_dora, "nis2": _de_nis2,
-    "rgpd": _de_rgpd, "nist_ai_rmf": _de_etats, "owasp_llm": _de_etats,
+    "rgpd": _de_rgpd, "nist_ai_rmf": _de_nist_ai_rmf, "owasp_llm": _de_etats,
     "nist_800_53": _de_nist_800_53, "nist_800_82": _de_nist_800_82,
     "en18229_3": _de_en18229_3,
 }

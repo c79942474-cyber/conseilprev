@@ -47,6 +47,7 @@ import cra
 import nis2
 import nis2_recyf
 import nist_ai_rmf
+import nist_genai
 import nist_800_53
 import nist_800_82
 import owasp_llm
@@ -341,11 +342,18 @@ BLOCS = {
            "Coter une catégorie suppose de savoir ce qu'elle recouvre.",
            "Le cadre est volontaire : il décrit des résultats, pas des "
            "contrôles imposés."),
-        _b("genai", "nist-genai", "Profil IA générative", "lecture",
-           "Les douze risques propres à l'IA générative (NIST AI 600-1).",
-           "Ils s'ajoutent au profil, ils ne le remplacent pas.",
-           "Un risque propre à l'IA générative se traite dans les "
-           "catégories existantes du cadre."),
+        _b("genai", "nist-genai", "Profil IA générative", "saisie",
+           "Le système est-il génératif, lesquels des douze risques "
+           "s'appliquent, et lesquelles des 211 actions suggérées du §3 "
+           "sont tenues.",
+           "Ce bloc NE S'AJOUTE PAS au profil : il le PLAFONNE. Une "
+           "catégorie « prouvée » sur le cadre ne l'est plus pour un "
+           "système génératif si les actions du profil n'y sont pas "
+           "tenues.",
+           "Déclarer le système génératif sans retenir un seul risque "
+           "revient à dire que la génération n'apporte rien — c'est la "
+           "réponse qu'un auditeur ouvrira en premier.",
+           ("profil",)),
     ),
     "owasp_llm": (
         _b("dix", "owasp-dix", "Les dix risques", "saisie",
@@ -904,11 +912,59 @@ def _cra(d):
 
 
 def _nist_ai_rmf(d):
+    """Deux blocs de saisie : le cadre, puis le profil qui le plafonne.
+
+    LE PROFIL NE RÉCLAME PAS 211 RÉPONSES, ET IL NE LE POURRAIT PAS. Il
+    réclame la qualification, les risques retenus, puis — par SOUS-CATÉGORIE
+    et non par action — celles où il reste une action sans réponse. Lister
+    les actions une à une aurait rendu un rail de cent cinquante lignes que
+    personne ne lit ; nommer la sous-catégorie dit où aller, ce qui est le
+    seul travail du rail.
+    """
     etats = _dict(d, "etats")
-    return ({"profil": [_q("%s — %s" % (c["cle"], c["nom"]))
-                        for c in nist_ai_rmf.CATEGORIES
-                        if etats.get(c["cle"]) not in nist_ai_rmf.ETATS]},
-            {}, {})
+    manque = {"profil": [_q("%s — %s" % (c["cle"], c["nom"]))
+                         for c in nist_ai_rmf.CATEGORIES
+                         if etats.get(c["cle"]) not in nist_ai_rmf.ETATS]}
+
+    profil = _dict(d, "profil")
+    genai = profil.get("genai")
+    if genai is not True and genai is not False:
+        # NI « OUI » NI « NON » : la question n'a pas été posée. La ranger du
+        # côté de « non » aurait validé le bloc sans que personne n'ait
+        # qualifié le système — et « non » est précisément la réponse qui ne
+        # plafonne rien.
+        manque["genai"] = [_q("Le système est-il génératif ? AI 600-1 ne "
+                              "s'applique qu'à l'IA générative.")]
+        return manque, {}, {}
+    if not genai:
+        manque["genai"] = []
+        return manque, {}, {}
+
+    retenus = nist_genai.risques_declares(profil.get("risques"))
+    if not retenus:
+        manque["genai"] = [_q("Au moins un des douze risques du profil — ou "
+                              "la décision assumée qu'aucun ne s'applique à "
+                              "ce système génératif.")]
+        return manque, {}, {}
+
+    actions = profil.get("actions") if isinstance(profil.get("actions"), dict) \
+        else {}
+    attente = []
+    for sc in (a["sous_categorie"] for a in
+               (nist_genai.ACTIONS_PAR_CODE[c]
+                for c in nist_genai.applicables(retenus))):
+        if sc not in attente:
+            attente.append(sc)
+    reste = []
+    for sc in attente:
+        ouvertes = [c for c in nist_genai.PAR_SOUS_CATEGORIE[sc]
+                    if c in set(nist_genai.applicables(retenus))
+                    and actions.get(c) not in nist_genai.ETATS_ACTION]
+        if ouvertes:
+            reste.append(_q("%s — %d action(s) du profil sans réponse"
+                            % (sc, len(ouvertes))))
+    manque["genai"] = reste
+    return manque, {}, {}
 
 
 def _owasp_llm(d):

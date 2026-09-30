@@ -52,6 +52,7 @@ import iso42001  # noqa: E402
 import nis2  # noqa: E402
 import nis2_recyf  # noqa: E402
 import nist_ai_rmf  # noqa: E402
+import nist_genai  # noqa: E402
 import nist_800_53  # noqa: E402
 import en18229_3
 import nist_800_82  # noqa: E402
@@ -194,9 +195,19 @@ def _remplis():
                                     in cra.ANNEXE_I_I + cra.ANNEXE_I_II],
                                    ("conforme", "partiel", "absent")),
                 "chiffre_affaires": 5e7},
-        "nist_ai_rmf": {"etats": _alterne(
-            [x["cle"] for x in nist_ai_rmf.CATEGORIES],
-            ("prouve", "tenu", "amorce", "absent"))},
+        #  NIST AI RMF : LE SOCLE **ET** LE PROFIL AI 600-1. Le banc ne
+        #  portait que les états du cadre ; depuis que le profil génératif
+        #  est un bloc de SAISIE, un banc sans lui laisse le rail au bleu et
+        #  cette règle ne mesure plus rien. Le système est déclaré génératif
+        #  avec trois risques, et CHAQUE action applicable porte une
+        #  réponse — c'est ce que « l'écran est rempli » veut dire ici.
+        "nist_ai_rmf": {
+            "etats": _alterne([x["cle"] for x in nist_ai_rmf.CATEGORIES],
+                              ("prouve", "tenu", "amorce", "absent")),
+            "profil": {"genai": True, "risques": [2, 7, 9],
+                       "actions": _alterne(
+                           nist_genai.applicables([2, 7, 9]),
+                           ("tenue", "non_tenue", "tenue", "sans_objet"))}},
         "owasp_llm": {"etats": _alterne([r["cle"] for r in owasp_llm.RISQUES],
                                         ("oui", "partiel", "non"))},
         "nist_800_53": {"socle": "moderate",
@@ -497,16 +508,41 @@ def test_une_brique_RGPD_reste_un_POURCENTAGE():
                                     "sensibilisation": 0}
 
 
-def test_une_declaration_ILLISIBLE_ne_fait_pas_tomber_les_dix_autres():
-    """MESURÉ : l'enveloppe `{"etats": …}` d'un écran, donnée telle quelle au
-    moteur NIST AI RMF, levait une TypeError, et l'écran du taux perdait
-    ses onze cartes. La carte fautive dit maintenant qu'elle est refusée."""
-    r = c.etat_des_lieux({"nist_ai_rmf": {"etats": {"GOVERN 1": "tenu"}},
+def test_une_declaration_ILLISIBLE_ne_fait_pas_tomber_les_douze_autres():
+    """MESURÉ : une déclaration NIST que le moteur refuse levait une
+    TypeError, et l'écran du taux perdait TOUTES ses cartes. La carte
+    fautive dit maintenant qu'elle est refusée, et les autres restent.
+
+    L'EXEMPLE A CHANGÉ, ET IL FAUT DIRE POURQUOI. Cette règle portait
+    l'enveloppe `{"etats": …}` d'un écran, qui était alors illisible pour ce
+    moteur. Depuis le profil AI 600-1, cette enveloppe EST la forme
+    canonique de la déclaration NIST — la règle suivante le mesure.
+
+    CE QUI LÈVE ENCORE, ET QUI EST LE POINT DE CETTE RÈGLE : une VALEUR que
+    le moteur ne peut même pas comparer. Une liste n'est pas hachable, donc
+    `v not in ETATS` lève une TypeError au lieu de rendre un refus propre —
+    et sans le `try` de `_evaluer`, l'écran du taux perdrait ses douze
+    cartes pour une seule qui déraille. Un état simplement INCONNU
+    (« peut-être ») ne suffirait plus : le moteur le refuse proprement."""
+    r = c.etat_des_lieux({"nist_ai_rmf": {"etats": {"GOVERN 1": ["tenu"]}},
                           "owasp_llm": {"LLM01": "oui"}})
     assert r["ok"]
     assert _carte(r, "owasp_llm")["taux"] is not None
     fautive = _carte(r, "nist_ai_rmf")
     assert fautive["taux"] is None and "refuse" in fautive["dit"], fautive["dit"]
+
+
+def test_l_enveloppe_etats_de_l_ecran_NIST_est_desormais_LUE():
+    """LA CONTREPARTIE DE LA RÈGLE PRÉCÉDENTE, et la raison d'être de la
+    compatibilité : les dossiers enregistrés avant le profil portent la
+    déclaration NIST sous deux formes — le dictionnaire d'états nu, et
+    l'enveloppe. Les DEUX rendent le même taux, sans quoi tout client qui
+    n'a pas rouvert l'écran verrait sa carte redevenir muette."""
+    nu = c.etat_des_lieux({"nist_ai_rmf": {"GOVERN 1": "tenu"}})
+    env = c.etat_des_lieux({"nist_ai_rmf": {"etats": {"GOVERN 1": "tenu"}}})
+    assert _carte(nu, "nist_ai_rmf")["taux"] is not None
+    assert (_carte(env, "nist_ai_rmf")["taux"]
+            == _carte(nu, "nist_ai_rmf")["taux"])
 
 
 # ══════════════════════════════════════════════════════════════════════════

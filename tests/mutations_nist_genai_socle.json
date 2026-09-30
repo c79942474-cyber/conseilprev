@@ -1,0 +1,105 @@
+{
+ "cibles": [
+  "tests/test_nist_genai_socle.py"
+ ],
+ "mutations": [
+  {
+   "nom": "le témoin du socle : le module cesse de se charger sans défaut",
+   "fichier": "nist_genai.py",
+   "avant": "_FAUTES = _verifier()",
+   "apres": "_FAUTES = _verifier() or _tordu()",
+   "regle": "test_le_module_se_charge_SANS_defaut_injecte"
+  },
+  {
+   "nom": "le compte d'actions cesse d'être confronté au relevé",
+   "fichier": "nist_genai.py",
+   "avant": "    if len(ACTIONS) != COMPTES_MESURES[\"actions\"]:",
+   "apres": "    if False:",
+   "regle": "test_le_module_REFUSE_un_COMPTE_D_ACTIONS_qui_ne_suit_pas_le_document"
+  },
+  {
+   "nom": "la distribution par risque n'est plus recomptée",
+   "fichier": "nist_genai.py",
+   "avant": "        eu = len(PAR_RISQUE.get(n, ()))\n        if eu != attendu:",
+   "apres": "        eu = attendu\n        if eu != attendu:",
+   "regle": "test_le_module_REFUSE_une_DISTRIBUTION_par_risque_qui_ne_retombe_pas"
+  },
+  {
+   "nom": "le compte par fonction n'est plus recompté",
+   "fichier": "nist_genai.py",
+   "avant": "        eu = len([a for a in ACTIONS if a[1].split(\" \", 1)[0] == f])",
+   "apres": "        eu = attendu",
+   "regle": "test_le_module_REFUSE_un_compte_par_FONCTION_qui_ne_retombe_pas"
+  },
+  {
+   "nom": "le plafond à zéro action n'est plus éprouvé",
+   "fichier": "nist_genai.py",
+   "avant": "    if sorted(tombees) != sorted(charge):",
+   "apres": "    if False:",
+   "regle": "test_le_module_REFUSE_un_PLAFOND_qui_ne_tombe_plus_a_zero_action"
+  },
+  {
+   "nom": "le contrôle « le plafond ne monte jamais » n'est plus joué",
+   "fichier": "nist_genai.py",
+   "avant": "    if reste != tout_absent:\n        fautes.append(\"le plafond du profil a RELEVÉ un état du socle : %s\"",
+   "apres": "    if False:\n        fautes.append(\"le plafond du profil a RELEVÉ un état du socle : %s\"",
+   "regle": "test_le_module_REFUSE_un_plafond_qui_RELEVE_un_etat_du_socle"
+  },
+  {
+   "nom": "la couverture du cas « ne monte jamais » redevient totale",
+   "fichier": "nist_genai.py",
+   "avant": "    moitie = {code: \"tenue\" for code in champ[:len(champ) // 2]}",
+   "apres": "    moitie = {code: \"tenue\" for code in champ}",
+   "regle": "test_le_module_REFUSE_un_plafond_qui_RELEVE_un_etat_du_socle"
+  },
+  {
+   "nom": "le cas du système non génératif n'est plus joué",
+   "fichier": "nist_genai.py",
+   "avant": "    if inchange != tout_prouve or mvts:",
+   "apres": "    if False:",
+   "regle": "test_le_module_REFUSE_un_plafond_qui_frappe_un_systeme_NON_generatif"
+  },
+  {
+   "nom": "l'étiquette hors des douze n'est plus éprouvée",
+   "fichier": "nist_genai.py",
+   "avant": "    if applicables([0]):",
+   "apres": "    if False:",
+   "regle": "test_le_module_REFUSE_que_l_etiquette_HORS_LISTE_ouvre_des_actions"
+  },
+  {
+   "nom": "le code n'est plus confronté à sa sous-catégorie",
+   "fichier": "nist_genai.py",
+   "avant": "        if attendu != sc:",
+   "apres": "        if False:",
+   "regle": "test_le_module_REFUSE_un_code_qui_CONTREDIT_sa_sous_categorie"
+  },
+  {
+   "nom": "les nombres des réconciliations ne sont plus confrontés",
+   "fichier": "nist_genai.py",
+   "avant": "        eu = len(PAR_RISQUE.get(r[\"risque\"], ()))\n        if eu != r[\"actions\"]:",
+   "apres": "        eu = r[\"actions\"]\n        if eu != r[\"actions\"]:",
+   "regle": "test_le_module_REFUSE_une_RECONCILIATION_dont_le_nombre_est_faux"
+  },
+  {
+   "nom": "les 23 sous-catégories muettes ne sont plus recomptées",
+   "fichier": "nist_genai.py",
+   "avant": "    if len(SOUS_CATEGORIES_SANS_ACTION) \\\n            != COMPTES_MESURES[\"sous_categories_sans_action\"]:",
+   "apres": "    if False:",
+   "regle": "test_le_module_REFUSE_un_compte_de_SOUS_CATEGORIES_SANS_ACTION_faux"
+  },
+  {
+   "nom": "une action sans réponse compte comme tenue — le module ne se charge plus du tout",
+   "fichier": "nist_genai.py",
+   "avant": "        else:\n            sans_reponse.append(c)",
+   "apres": "        else:\n            tenues.append(c)",
+   "regle": "test_le_module_se_charge_SANS_defaut_injecte"
+  },
+  {
+   "nom": "le code et la sous-catégorie peuvent se contredire",
+   "fichier": "nist_genai.py",
+   "avant": "        if attendu != sc:",
+   "apres": "        if False:",
+   "regle": "test_le_module_REFUSE_un_code_qui_CONTREDIT_sa_sous_categorie"
+  }
+ ]
+}

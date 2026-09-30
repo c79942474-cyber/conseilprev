@@ -99,18 +99,18 @@
    "regle": "test_HORS_CHAMP_au_rail_c_est_SANS_OBJET_au_taux[aucune-annexe]"
   },
   {
-   "nom": "une déclaration illisible fait tomber les onze cartes",
+   "nom": "une déclaration illisible fait tomber les douze cartes",
    "fichier": "conformite.py",
    "avant": "    try:\n        return f(dec, d)\n    except (TypeError, ValueError, AttributeError, KeyError):\n        return {\"ok\": False, \"motif\": \"declaration_illisible\"}",
    "apres": "    return f(dec, d)",
-   "regle": "test_une_declaration_ILLISIBLE_ne_fait_pas_tomber_les_dix_autres"
+   "regle": "test_une_declaration_ILLISIBLE_ne_fait_pas_tomber_les_douze_autres"
   },
   {
    "nom": "un refus se dit « rien n'a été évalué »",
    "fichier": "conformite.py",
    "avant": "                        \"manque.\" % motif) if motif else",
    "apres": "                        \"manque.\" % motif) if False else",
-   "regle": "test_une_declaration_ILLISIBLE_ne_fait_pas_tomber_les_dix_autres"
+   "regle": "test_une_declaration_ILLISIBLE_ne_fait_pas_tomber_les_douze_autres"
   },
   {
    "nom": "la surcharge 800-82 perd son socle en route",

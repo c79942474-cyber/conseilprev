@@ -2575,6 +2575,8 @@ def api_dora_contrat():
 
 import iso42001  # noqa: E402
 import nist_ai_rmf  # noqa: E402  — le cadre NIST, qui ne se certifie PAS :
+import nist_genai   # noqa: E402  — et son PROFIL IA générative, qui n'est
+                    # pas une norme de plus : il PLAFONNE le cadre ci-dessus
 import nist_800_53
 import nist_800_82
                     # la réserve voyage avec chaque réponse
@@ -2608,8 +2610,63 @@ def api_nist_evaluer():
     cartographie beaucoup et qu'on ne décide rien : c'est le profil le plus
     répandu, et celui que le cadre est écrit pour corriger."""
     data = request.get_json(silent=True) or {}
-    r = nist_ai_rmf.evaluer(data.get("etats"), aujourdhui=data.get("date"))
+    etats = data.get("etats")
+    profil = data.get("profil") if isinstance(data.get("profil"), dict) else {}
+
+    # LE PROFIL PLAFONNE AVANT QUE LA NOTE NE SOIT CALCULÉE, et c'est le même
+    # chemin que celui du taux de conformité (`conformite._ev_nist_ai_rmf`).
+    # Deux endroits qui calculent le même nombre finissent par le calculer
+    # différemment : ici on applique le plafond du module, on ne le refait
+    # pas. Sans profil déclaré, rien ne bouge — la réponse est celle d'avant.
+    lu = nist_genai.analyse(profil, etats if isinstance(etats, dict) else {})
+    if not lu.get("ok"):
+        return jsonify({"ok": False, "motif": "profil_genai_" + str(lu.get("motif")),
+                        "detail": lu.get("detail")}), 400
+    plafonnes, mouvements = nist_genai.etats_du_profil(etats, profil)
+
+    r = nist_ai_rmf.evaluer(plafonnes, aujourdhui=data.get("date"))
+    if r.get("ok"):
+        r["profil_genai"] = lu
+        r["plafonds_du_profil"] = mouvements
+        r["etats_declares"] = etats if isinstance(etats, dict) else {}
     return jsonify(r), (200 if r.get("ok") else 400)
+
+
+@app.route('/api/nist-ai-rmf/profil/referentiel', methods=['GET'])
+@rate_limit(limit=120, window=60)
+def api_nist_profil_referentiel():
+    """Les 211 actions suggérées d'AI 600-1, et à quoi chacune se rattache.
+
+    ELLES PARTENT EN ANGLAIS, MOT POUR MOT. C'est une œuvre du gouvernement
+    des États-Unis, donc citable — et c'est le libellé qu'un auditeur
+    cherchera. Traduites, elles deviendraient introuvables au moment précis
+    où l'on en a besoin.
+
+    L'ÉCRAN NE RECOPIE RIEN : il demande cette table. Les 211 énoncés
+    n'existent qu'ici, dans `nist_genai`, et une retouche d'un seul fait
+    tomber la garde du module au chargement."""
+    return jsonify({"ok": True, "referentiel": nist_genai.referentiel()})
+
+
+@app.route('/api/nist-ai-rmf/profil/analyser', methods=['POST'])
+@rate_limit(limit=120, window=60)
+def api_nist_profil_analyser():
+    """Ce que le profil fait au cadre : la couverture, les plafonds, le plan.
+
+    UNE SEULE ROUTE REND LES TROIS, parce qu'ils se lisent ensemble. Séparer
+    le plan de la couverture aurait laissé l'écran afficher « 40 % » et
+    « 12 actions » issus de deux appels — donc, une fois sur dix, de deux
+    déclarations différentes."""
+    data = request.get_json(silent=True) or {}
+    profil = data.get("profil") if isinstance(data.get("profil"), dict) else {}
+    etats = data.get("etats") if isinstance(data.get("etats"), dict) else {}
+    a = nist_genai.analyse(profil, etats)
+    if not a.get("ok"):
+        return jsonify(a), 400
+    limite = data.get("limite")
+    limite = limite if isinstance(limite, int) and 0 < limite <= 300 else None
+    return jsonify({"ok": True, "analyse": a,
+                    "plan": nist_genai.plan(profil, limite=limite)})
 
 
 @app.route('/api/nist-800-53/referentiel', methods=['GET'])

@@ -369,6 +369,57 @@ body{
 .nist-gen{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:9px}
 .nist-gen li{display:flex;gap:12px;border:1px solid var(--line);border-radius:11px;padding:11px 14px;background:var(--panel)}
 .nist-gen li.gen-non{border-style:dashed}
+/* ── LE PROFIL IA GÉNÉRATIVE : DE LA LECTURE À LA SAISIE ────────────────
+   Les douze risques étaient une liste à lire. Ils deviennent la question
+   qui commande tout le reste : ce sont eux qui décident lesquelles des 211
+   actions s'appliquent, donc lesquelles des dix-neuf catégories du cadre
+   seront plafonnées. Un risque RETENU se voit d'un coup d'œil — pas
+   seulement à une case cochée, que la couleur seule ne porte pas. */
+.gen-bloc{margin-top:20px;border:1px solid var(--line);border-radius:12px;
+  padding:14px 16px;background:var(--panel)}
+.gen-bloc h3{margin:0 0 6px;font-size:14px}
+.gen-bloc>p{margin:0;font-size:12.5px;line-height:1.6;color:var(--ink2)}
+.gen-oui{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.gen-b{font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;
+  padding:6px 14px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--line);background:transparent;color:var(--ink2);
+  transition:border-color .16s,color .16s,background .16s}
+.gen-b:hover{color:var(--ink);border-color:var(--ink2)}
+.gen-b[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);
+  color:var(--white)}
+.gen-b:focus-visible{outline:2px solid var(--gd,#d4a843);outline-offset:2px}
+.nist-gen li.gen-pris{border-color:var(--gd,#d4a843);border-style:solid}
+.nist-gen li .gen-pick{margin-left:auto;align-self:center}
+.gen-nb{font-family:var(--mono);font-size:10.5px;color:var(--ink2);display:block;
+  margin-top:3px}
+.gen-sc{border:1px solid var(--line);border-radius:11px;margin-top:8px;
+  overflow:hidden;background:var(--panel)}
+.gen-sc>summary{list-style:none;cursor:pointer;padding:10px 14px;display:flex;
+  flex-wrap:wrap;gap:8px;align-items:baseline;font-size:13px}
+.gen-sc>summary::-webkit-details-marker{display:none}
+.gen-sc>summary:focus-visible{outline:2px solid var(--acc,#6ea8fe);outline-offset:-2px}
+.gen-sc[open]{border-color:var(--acc,#6ea8fe)}
+.gen-sc summary em{margin-left:auto;font-family:var(--mono);font-size:10.5px;
+  color:var(--ink2);font-style:normal}
+.gen-lot{display:flex;gap:6px;padding:0 14px 8px;flex-wrap:wrap}
+.gen-act{list-style:none;margin:0;padding:0 14px 14px}
+.gen-act li{font-size:12.5px;line-height:1.55;padding:7px 0;
+  border-top:1px solid var(--line);display:flex;flex-wrap:wrap;
+  gap:8px 14px;align-items:flex-start}
+.gen-act .gen-t{flex:1 1 260px;min-width:0}
+.gen-act code{font-family:var(--mono);font-size:11px;margin-right:6px}
+.gen-act i{display:block;color:var(--ink2);font-size:11.5px;margin-top:3px;
+  font-style:normal}
+/* LE PLAN EST NUMÉROTÉ PARCE QU'IL EST ORDONNÉ : une action qui traite
+   quatre des risques déclarés passe devant une qui en traite un. */
+.gen-plan{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:8px}
+.gen-plan li{display:flex;gap:12px;border:1px solid var(--line);
+  border-radius:11px;padding:10px 14px;background:var(--panel);font-size:12.5px;
+  line-height:1.55}
+.gen-plan b{font-family:var(--mono);font-size:15px;color:var(--ink2);
+  flex:0 0 auto}
+.gen-muet{margin-top:16px;font-size:12px;line-height:1.6;color:var(--ink2)}
+.gen-muet code{font-family:var(--mono);font-size:10.5px;margin-right:5px}
 /* ── LA BASCULE DE LANGUE, EN HAUT DU MENU ─────────────────────────────
    Deux boutons, pas une liste déroulante : à deux choix, une liste ajoute
    un clic et cache l'état courant derrière lui. Ici, la langue active se
@@ -3808,7 +3859,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <div class="sb-section sb-pliable" data-grp="nist-ai-rmf" data-fam="conformite" role="button" tabindex="0" aria-expanded="false" onclick="sbReplier(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sbReplier(this)}" title="Replier ou déplier le cadre NIST"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 5.5v3M12 15.5v3M5.5 12h3M15.5 12h3"/><circle cx="12" cy="12" r="2.2"/></svg><span>NIST AI RMF — Gestion des risques IA</span><svg class="sb-chev" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></div>
     <div class="sb-item" data-norme="nist_ai_rmf" data-grp="nist-ai-rmf" role="button" tabindex="0" onclick="go('nist-profil',this,'NIST AI RMF','Profil par fonction');nistInit()" title="Les quatre fonctions notees separement — et l avertissement quand l aval devance la gouvernance"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/></svg></span>Profil par fonction</div>
     <div class="sb-item" data-norme="nist_ai_rmf" data-grp="nist-ai-rmf" role="button" tabindex="0" onclick="go('nist-cadre',this,'NIST AI RMF','Le cadre, catégorie par catégorie');nistInit()" title="Les categories du cadre, leurs points de preuve, et les sept caracteristiques de confiance"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg></span>Le cadre, catégorie par catégorie</div>
-    <div class="sb-item" data-norme="nist_ai_rmf" data-grp="nist-ai-rmf" role="button" tabindex="0" onclick="go('nist-genai',this,'NIST AI RMF','Profil IA générative');nistInit()" title="Les douze risques d AI 600-1, et les six qui ne relevent pas de la cyber"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M11 3.5l1.7 4.8 4.8 1.7-4.8 1.7L11 16.5l-1.7-4.8L4.5 10l4.8-1.7z"/><path d="M18.5 14.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z"/></svg></span>Profil IA générative</div>
+    <div class="sb-item" data-norme="nist_ai_rmf" data-grp="nist-ai-rmf" role="button" tabindex="0" onclick="go('nist-genai',this,'NIST AI RMF','Profil IA générative');nistInit()" title="Les 211 actions suggerees d AI 600-1 : elles plafonnent le taux du cadre des que le systeme est declare generatif"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M11 3.5l1.7 4.8 4.8 1.7-4.8 1.7L11 16.5l-1.7-4.8L4.5 10l4.8-1.7z"/><path d="M18.5 14.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z"/></svg></span>Profil IA générative</div>
     <div class="sb-section sb-pliable" data-grp="owasp-llm" data-fam="conformite" role="button" tabindex="0" aria-expanded="false" onclick="sbReplier(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sbReplier(this)}" title="Replier ou déplier le Top 10 OWASP LLM"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 6.5h3M4 12h3M4 17.5h3"/><path d="M10.5 6.5h9.5M10.5 12h9.5M10.5 17.5h9.5"/></svg><span>OWASP Top 10 LLM — Applications</span><svg class="sb-chev" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></div>
     <div class="sb-item" data-norme="owasp_llm" data-grp="owasp-llm" role="button" tabindex="0" onclick="go('owasp-dix',this,'OWASP LLM','Les dix risques');owaspInit()" title="Le millesime 2025, et pourquoi chacun persiste"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3.5 2.5 20h19z"/><path d="M12 10v4.5M12 17.2h.01"/></svg></span>Les dix risques</div>
     <div class="sb-item" data-norme="owasp_llm" data-grp="owasp-llm" role="button" tabindex="0" onclick="go('owasp-pont',this,'OWASP LLM','Ce qu’ISO 42001 ne couvre pas');owaspInit()" title="Les trois risques qu aucune mesure de l annexe A ne rencontre — et dont on se croit couvert"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg></span>Ce qu’ISO 42001 ne couvre pas</div>
@@ -5975,11 +6026,14 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 
 <div class="page" id="p-nist-genai">
   <span class="eyebrow" data-i18n="pg.nist-genai.eb">NIST AI RMF · Profil IA générative</span>
-  <h1 class="page-h" data-i18n-bloc="pg.nist-genai.h1">Douze risques, <em>dont six hors cyber</em></h1>
+  <h1 class="page-h" data-i18n-bloc="pg.nist-genai.h1">211 actions, <em>et le plafond qu'elles posent</em></h1>
   <p class="page-p" data-i18n-bloc="pg.nist-genai.p">AI 600-1 est un <strong>profil</strong> du cadre, pas un second cadre&nbsp;:
-    le citer sans le cadre en dessous, c'est citer le profil de rien. Et confier « les risques de
-    l'IA générative selon le NIST » au RSSI revient à lui faire répondre de l'empreinte
-    environnementale, des biais et de la propriété intellectuelle, qu'il ne tient pas.</p>
+    il n'ouvre donc pas un treizième tiroir, il <strong>plafonne</strong> celui du cadre. Déclarez le
+    système génératif et retenez les risques qui s'appliquent&nbsp;: les actions suggérées du §3 qui
+    s'y rattachent deviennent opposables, et une catégorie « prouvée » ne l'est plus tant qu'elles ne
+    sont pas tenues. Six des douze risques ne relèvent pas de la cybersécurité&nbsp;— les confier au
+    RSSI revient à lui faire répondre de l'empreinte environnementale, des biais et de la propriété
+    intellectuelle, qu'il ne tient pas.</p>
   <div id="nist-genai-body" class="veille-loading">Chargement…</div>
 </div>
 
