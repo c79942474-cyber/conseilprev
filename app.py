@@ -11428,7 +11428,26 @@ def registre_list():
     rows = cur.fetchall()
     conn.commit()
     conn.close()
-    return jsonify({'systemes': [registre_row_to_dict(r) for r in rows], 'moteur': 'postgres' if REGISTRE_USE_PG else 'sqlite'})
+    # `finops_ia` s'importe ICI, comme partout ailleurs dans ce fichier : il
+    # est chargé à la demande, et une table de prix sans source le refuse au
+    # chargement. Un import de module raté ne doit pas priver le client de son
+    # registre — la liste manquante vide seulement le menu déroulant.
+    try:
+        import finops_ia as _fo
+        _modeles = sorted(_fo.TARIFS)
+    except Exception as e:  # noqa: BLE001
+        logger.warning('REGISTRE_MODELES_INDISPONIBLES: %s', e)
+        _modeles = []
+    # LE VOCABULAIRE VOYAGE AVEC LES DONNÉES, SANS REQUÊTE DE PLUS. La fiche
+    # d'un système offre une liste de modèles ; elle doit être CELLE DE LA
+    # TABLE DE PRIX, sinon l'écran propose un modèle que le moteur ne sait pas
+    # chiffrer, ou en cache un qu'il sait. La recopier dans le JavaScript
+    # l'aurait figée le jour où la table bouge — et c'est l'écran qu'on aurait
+    # cru. Elle part donc d'ici, avec la liste des systèmes que le panneau
+    # demande déjà : zéro aller-retour supplémentaire.
+    return jsonify({'systemes': [registre_row_to_dict(r) for r in rows],
+                    'moteur': 'postgres' if REGISTRE_USE_PG else 'sqlite',
+                    'modeles_tarifes': _modeles})
 
 @app.route('/api/registre', methods=['POST'])
 @require_paid_plan

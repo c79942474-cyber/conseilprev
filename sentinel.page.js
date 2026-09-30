@@ -8148,6 +8148,13 @@ function regFetch(){
       }
       if(d._statut >= 400){ throw new Error('HTTP '+d._statut); }
       REG_DATA = d.systemes || [];
+    /* LA LISTE DES MODÈLES ARRIVE AVEC LES SYSTÈMES. Elle vient de la table
+       de prix du moteur, et la fiche d'un système l'offre telle quelle : le
+       menu ne peut donc pas proposer un modèle que le chiffrage ignore, ni
+       taire un modèle qu'il sait chiffrer. */
+    if (d.modeles_tarifes && typeof window.regModelesTarifesConnus === 'function') {
+      window.regModelesTarifesConnus(d.modeles_tarifes);
+    }
       regRender();
     })
     .catch(function(e){
@@ -8310,6 +8317,74 @@ window.regOpenModal = function(id){
         + '</datalist>'
         + (sys ? '' : '<div style="margin-top:8px"><button type="button" class="mat-export-btn" style="font-size:11px;padding:5px 12px" onclick="regReprendreFamille()" title="Reprendre le dossier d un systeme deja documente de cette famille">Reprendre le dossier d’un système de cette famille</button>'
              + '<span id="rf-famille-msg" style="margin-left:10px;font-size:11px;color:var(--muted)"></span></div>'))
+    /* ══ CE QUE LE FINOPS ET L'EMPREINTE ATTENDENT, ET QUI N'ÉTAIT NULLE PART ══
+       LE DÉFAUT MESURÉ. Le moteur FinOps réclame huit champs par système et
+       sert lui-même leur mode d'emploi : « Registre IA → fiche du système →
+       "Modèle" ». Ce renvoi désignait un champ qui N'EXISTAIT PAS. Mesure :
+       les huit noms (`modele`, `unite_facturation`, `volume_entree_mois`,
+       `volume_sortie_mois`, `volume_source`, `centre_cout`, `classe_tache`,
+       `leviers`) n'apparaissaient dans AUCUNE balise de saisie du dépôt.
+       La base les accepte, l'API les accepte en POST comme en PUT, le moteur
+       sait les chiffrer — seul le formulaire manquait. Conséquence à l'écran :
+       la couverture du chiffrage restait à « 0 / N » quoi qu'on fasse, et
+       chaque ligne sortait avec le motif « unité de facturation non
+       déclarée ». Le module était inutilisable, et il disait pourtant où
+       cliquer.
+
+       L'UNITÉ EST DANS LE LIBELLÉ, PAS DANS UNE NOTE DE BAS DE PAGE. Les
+       volumes sont des JETONS du mois, jamais des requêtes — et le même
+       champ est lu en requêtes par l'empreinte quand l'unité de facturation
+       le dit. Un nombre sans unité écrite à côté de la case est un nombre
+       qu'on saisit faux une fois sur deux.
+
+       LES LISTES NE SONT PAS RÉINVENTÉES ICI : ce sont celles du moteur
+       (`finops_ia.UNITES`, `TARIFS`, `CLASSES_TACHE`, `LEVIERS`), et une
+       règle compare les deux — sans quoi l'écran et le code dériveraient,
+       et c'est l'écran qu'on croirait. */
+    + '<div class="reg-form-section-title">Coût et empreinte — ce que le FinOps et l\'Empreinte IA lisent ici</div>'
+    + '<div class="reg-field" style="font-size:11.5px;color:var(--muted);line-height:1.55;margin-top:-4px">'
+      + 'Ces huit champs ne sont demandés qu\'ici. Sans eux, le <strong>FinOps de l\'IA</strong> '
+      + 'et l\'<strong>Empreinte IA du parc</strong> affichent une couverture de 0&nbsp;% : un système '
+      + 'sans volume déclaré ne coûte pas zéro, personne n\'a encore dit ce qu\'il consomme.</div>'
+    + regRow([
+        regField("Modèle employé", '<select id="rf-modele" class="reg-input">'+sel("modele", regModelesAvec(sys))+'</select>'),
+        regField("Unité de facturation", '<select id="rf-unite" class="reg-input">'+sel("unite_facturation",[
+            {v:"",l:"— Non déclarée —"},
+            {v:"jetons",l:"Jetons — facturé au jeton consommé (seule unité chiffrable)"},
+            {v:"requetes",l:"Requêtes — facturé à la requête, quelle que soit sa taille"},
+            {v:"heures_gpu",l:"Heures GPU — facturé au temps de calcul réservé"},
+            {v:"sieges",l:"Sièges — facturé par utilisateur et par mois"},
+            {v:"forfait",l:"Forfait — montant fixe, indépendant de l\'usage"}
+          ])+'</select>')
+      ])
+    + regRow([
+        regField("Volume d\'entrée du mois <span style=\"font-weight:400;color:var(--muted)\">— en jetons</span>",
+          '<input type="number" id="rf-vol-entree" class="reg-input" min="0" step="1" value="'+val("volume_entree_mois")+'" placeholder="Ex : 10000000 (10 millions de jetons)">'),
+        regField("Volume de sortie du mois <span style=\"font-weight:400;color:var(--muted)\">— en jetons</span>",
+          '<input type="number" id="rf-vol-sortie" class="reg-input" min="0" step="1" value="'+val("volume_sortie_mois")+'" placeholder="Ex : 1000000 (1 million de jetons)">')
+      ])
+    + regField("Source du volume <span style=\"font-weight:400;color:var(--muted)\">— d\'où vient le chiffre&nbsp;: sans elle, la ligne n\'est pas chiffrée</span>",
+        '<input type="text" id="rf-vol-source" class="reg-input" value="'+val("volume_source")+'" placeholder="Ex : console de facturation du fournisseur, relevé du 31/08">')
+    + regRow([
+        regField("Centre de coût", '<input type="text" id="rf-centre-cout" class="reg-input" value="'+val("centre_cout")+'" placeholder="Ex : CC-410">'),
+        regField("Classe de tâche <span style=\"font-weight:400;color:var(--muted)\">— sert au dimensionnement, pas au coût</span>",
+          '<select id="rf-classe-tache" class="reg-input">'+sel("classe_tache",[
+            {v:"",l:"— Non déclarée —"},
+            {v:"extraction",l:"Extraction ou classification sur texte court"},
+            {v:"redaction",l:"Rédaction ou reformulation guidée"},
+            {v:"analyse",l:"Analyse sur documents longs"},
+            {v:"raisonnement",l:"Raisonnement long ou agentique"}
+          ])+'</select>')
+      ])
+    + regField("Leviers d\'optimisation posés <span style=\"font-weight:400;color:var(--muted)\">— déclarés, jamais mesurés</span>",
+        '<div class="reg-checkbox-group" id="rf-leviers">'
+        + [['cache',"Cache de contexte"],['differe',"Traitement différé"],
+           ['requete_bornee',"Requête bornée"],['modele_par_etape',"Un modèle par étape"]].map(function(o){
+            var poses = regLeviersDe(sys);
+            var checked = (poses.indexOf(o[0]) !== -1) ? ' checked' : '';
+            return '<label class="reg-checkbox-opt"><input type="checkbox" value="'+o[0]+'"'+checked+'> '+o[1]+'</label>';
+          }).join('')
+        + '</div>')
     + (sys && (sys.classification==="haut"||sys.classification==="inacceptable") ? '<div class="radar-registre-info radar-registre-warn">⚖️ Système à haut risque — une <a href="#" onclick="regCloseModal();go(\'fria\',null,\'CONFORMITÉ\',\'Évaluation FRIA\');return false;">évaluation FRIA</a> peut être requise (Art. 27).</div>' : '')
     + '</div></div>'
     + '<div class="mat-modal-foot">'
@@ -8320,7 +8395,69 @@ window.regOpenModal = function(id){
 };
 
 function regField(label, input){ return '<div class="reg-field"><label class="reg-label">'+label+'</label>'+input+'</div>'; }
+
+/* LES MODÈLES DONT LE TARIF EST RELEVÉ — SERVIS, JAMAIS RECOPIÉS. La liste
+   vient de la réponse du FinOps (`modeles_tarifes`, soit les clés de
+   `finops_ia.TARIFS`). Tant que le panneau FinOps n'a pas été ouvert une
+   fois, on ne connaît rien : on offre alors le champ libre plutôt qu'une
+   liste inventée ici, qui dériverait de la table de prix le jour où elle
+   bouge. Un modèle hors table reste saisissable — le moteur le dira
+   « aucun tarif relevé », ce qui est vrai, au lieu de l'interdire. */
+var REG_MODELES_TARIFES = [];
+window.regModelesTarifesConnus = function (liste) {
+  REG_MODELES_TARIFES = (liste || []).slice();
+};
+/* UN MODÈLE DÉJÀ ENREGISTRÉ NE DISPARAÎT PAS DE SA PROPRE FICHE. S'il n'est
+   pas (ou plus) dans la table de prix, il est ajouté à la liste avec la
+   mention qui le dit : rouvrir une fiche ne doit pas effacer en silence ce
+   qu'on y avait mis. */
+function regModelesAvec(sys) {
+  var o = regModelesTarifes();
+  var m = sys && sys.modele ? String(sys.modele) : '';
+  if (!m) return o;
+  for (var i = 0; i < o.length; i++) { if (o[i].v === m) return o; }
+  o.push({ v: m, l: m + ' — aucun tarif relevé' });
+  return o;
+}
+function regModelesTarifes() {
+  var o = [{ v: "", l: "— Non déclaré —" }];
+  REG_MODELES_TARIFES.forEach(function (m) { o.push({ v: m, l: m }); });
+  return o;
+}
+
+/* Les leviers déjà posés sur ce système. La colonne est du JSON en base, et
+   `registre_row_to_dict` la rend en liste ; une déclaration plus ancienne
+   peut encore porter la chaîne « cache,differe ». On accepte les deux. */
+function regLeviersDe(sys) {
+  var l = sys && sys.leviers;
+  if (!l) return [];
+  if (Object.prototype.toString.call(l) === '[object Array]') return l;
+  return String(l).split(',').map(function (x) { return x.trim(); }).filter(Boolean);
+}
 function regRow(fields){ return '<div class="reg-form-row">'+fields.join("")+'</div>'; }
+
+/* ── CE QUI PART, ET CE QUI NE PART PAS ────────────────────────────────── */
+function regVide(id) {
+  var e = document.getElementById(id);
+  var v = e ? String(e.value).trim() : '';
+  return v === '' ? null : v;
+}
+/* `Number('')` vaut 0 : la conversion naïve transformait « rien saisi » en
+   « zéro jeton consommé », et le total devenait crédible et faux. */
+function regNombre(id) {
+  var e = document.getElementById(id);
+  var v = e ? String(e.value).trim() : '';
+  if (v === '') return null;
+  var n = Number(v.replace(',', '.'));
+  return isFinite(n) ? n : null;
+}
+function regCoches(id) {
+  var out = [];
+  var h = document.getElementById(id);
+  if (!h) return out;
+  h.querySelectorAll('input[type=checkbox]:checked').forEach(function (cb) { out.push(cb.value); });
+  return out;
+}
 
 /* Les familles déjà employées, triées et sans doublon. */
 function regFamillesConnues(){
@@ -8402,7 +8539,22 @@ window.regSave = function(){
     roles: rolesChecked,
     transparence_art50: document.getElementById("rf-transp").value,
     preuves_conformite: document.getElementById("rf-preuves").value.trim(),
-    famille: (document.getElementById("rf-famille") || {value:""}).value.trim()
+    famille: (document.getElementById("rf-famille") || {value:""}).value.trim(),
+    /* ── LES HUIT DU FINOPS ET DE L'EMPREINTE ──────────────────────────
+       UN CHAMP VIDE PART À `null`, JAMAIS À `""` NI À `0`. La colonne est
+       sans valeur par défaut, et c'est voulu : « un parc jamais instruit
+       afficherait un coût mensuel de zéro, crédible et faux ». Envoyer une
+       chaîne vide la remplirait d'un silence qui ressemble à une réponse ;
+       envoyer zéro mentirait. Un volume réellement NUL, lui, part bien à 0
+       et se chiffre — c'est une déclaration, pas une absence. */
+    modele: regVide("rf-modele"),
+    unite_facturation: regVide("rf-unite"),
+    volume_entree_mois: regNombre("rf-vol-entree"),
+    volume_sortie_mois: regNombre("rf-vol-sortie"),
+    volume_source: regVide("rf-vol-source"),
+    centre_cout: regVide("rf-centre-cout"),
+    classe_tache: regVide("rf-classe-tache"),
+    leviers: regCoches("rf-leviers")
   };
   if(!payload.nom){ alert("Le nom du système est obligatoire."); return; }
 
@@ -25045,6 +25197,13 @@ document.addEventListener('keydown', function(e){
               }).join('') + '</ul></div>';
         }
         var mods = j.modeles_tarifes || [];
+        /* LA LISTE DE LA FICHE DU REGISTRE VIENT D'ICI, ET DE NULLE PART
+           AILLEURS. Le formulaire offrait une liste de modèles ; la recopier
+           dans l'écran de saisie l'aurait figée le jour où la table de prix
+           bouge — et c'est l'écran qu'on aurait cru. */
+        if (typeof window.regModelesTarifesConnus === 'function') {
+          window.regModelesTarifesConnus(mods);
+        }
         var champs = j.champs_finops || {};
         var ailleurs = j.champs_lus_ailleurs || {};
         document.getElementById('fo-vocabulaire').innerHTML =
