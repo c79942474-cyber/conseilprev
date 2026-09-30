@@ -337,11 +337,29 @@ def test_un_VERROU_n_existe_que_la_ou_un_TIERS_refuse_de_poursuivre():
     s'arrête sur une déclaration irrecevable. Ne pas savoir si l'on est entité
     essentielle ou importante n'est pas une porte fermée : les dix mesures
     sont le même plancher dans les deux régimes.
+
+    LA SECONDE PORTE, ET ELLE SE MESURE AUSSI. Un cadre volontaire n'a pas
+    d'auditeur, mais un CALCUL peut fermer la porte à sa place : sur
+    prEN 18229-3, un scénario dont la latence d'intervention dépasse son délai
+    de réaction ne peut pas être supervisé, et aucune réponse ne rend cela
+    faux. Ce verrou-là est légitime — à condition de déclarer
+    `fonde_sur="arithmetique"` ET de dire QUEL calcul le fonde. Ce qui reste
+    interdit : plafonner « parce que c'est grave ». La sévérité inventée se
+    déclare dans RESERVES.
     """
-    for cle in c.VERROUS:
-        assert c.NORMES_PAR_CLE[cle]["nature"] == "certifiable", (
-            "%s porte un verrou sans être certifiable : sans auditeur au "
-            "bout, ce n'est pas un verrou mais une réserve" % cle)
+    for cle, verrous in c.VERROUS.items():
+        if c.NORMES_PAR_CLE[cle]["nature"] == "certifiable":
+            continue
+        for v in verrous:
+            assert v.get("fonde_sur") == "arithmetique", (
+                "%s porte le verrou %s sans être certifiable et sans qu'un "
+                "calcul le fonde : sans auditeur ni arithmétique au bout, ce "
+                "n'est pas un verrou mais une réserve" % (cle, v["cle"]))
+            #  LE CALCUL SE NOMME. « fondé sur un calcul » sans dire lequel
+            #  serait la même sévérité inventée, avec une étiquette de plus.
+            assert len(v.get("calcul") or "") >= 40, (
+                "le verrou %s de %s se dit fondé sur un calcul sans dire "
+                "lequel" % (v["cle"], cle))
     for cle, verrous in c.VERROUS.items():
         total = sum(x["poids"] for x in c.COMPOSITIONS[cle])
         for v in verrous:

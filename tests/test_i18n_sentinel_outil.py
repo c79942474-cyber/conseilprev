@@ -711,10 +711,13 @@ def _catalogue_reel():
     return json.load(io.open(CATALOGUE, encoding="utf-8"))
 
 
-def test_le_catalogue_du_depot_couvre_les_118_pages_de_PAGE_META_et_la_coquille():
+def test_le_catalogue_du_depot_couvre_les_122_pages_de_PAGE_META_et_la_coquille():
     cat = _catalogue_reel()
     rubriques = outil.lire_rubriques_page_js()
-    assert cat["pages"] == len(rubriques) == 118, (cat["pages"], len(rubriques))
+    #  LE CATALOGUE, LUI, SE REFAIT. Contrairement à la photo du point de
+    #  départ, il dit ce qu'il y a à traduire AUJOURD'HUI : une page neuve
+    #  y entre par un passage du relevé navigateur sur cette page-là.
+    assert cat["pages"] == len(rubriques) == 122, (cat["pages"], len(rubriques))
     assert cat["rubriques"] == rubriques, "les rubriques du catalogue ne sont plus celles de PAGE_META"
     pages_vues = set(p for r in ("bloc", "texte", "attr") for e in cat[r].values() for p in e["pages"])
     manquantes = sorted(set(rubriques) - pages_vues)

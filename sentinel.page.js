@@ -1031,6 +1031,10 @@ var PAGE_META = {
   'owasp-dix':     { section: 'OWASP LLM', label: 'Les dix risques' },
   'nist53-socle':  { section: 'NIST 800-53', label: 'Socle et dix-huit familles' },
   'nist82-ot':     { section: 'NIST 800-82', label: 'Surcharge industrielle' },
+  'en18229-role':  { section: 'prEN 18229-3', label: 'Rôle et périmètre' },
+  'en18229-scenarios': { section: 'prEN 18229-3', label: 'Scénarios et délais' },
+  'en18229-cadre': { section: 'prEN 18229-3', label: 'Cadre d’analyse' },
+  'en18229-score': { section: 'prEN 18229-3', label: 'Score et article 14' },
   'owasp-pont':    { section: 'OWASP LLM', label: 'Ce qu\u2019ISO 42001 ne couvre pas' },
   'iso42001-certif':{ section: 'ISO 42001', label: 'Chemin de certification' },
   'iso42001-ponts':{ section: 'ISO 42001', label: 'Ponts IA Act / RGPD / NIS 2' },
@@ -1194,6 +1198,23 @@ var SENT_T = {
     'pg.qualif-assistee.p': 'The engine reads the rows of the AI register, proposes a classification under Regulation (EU) 2024/1689, and quotes the excerpts of your own declaration it relies on. <strong>It writes nothing.</strong> A classification enters the register only through a decision you pronounce, which stays recorded next to what was proposed to you.',
     'nav.item.nist53-socle': 'Baseline and eighteen families',
     'nav.item.nist82-ot': 'Industrial overlay (OT)',
+    'nav.sec.en18229': 'prEN 18229-3 \u2014 Human oversight',
+    'nav.item.en18229-role': 'Role and scope',
+    'nav.item.en18229-scenarios': 'Scenarios and delays',
+    'nav.item.en18229-cadre': 'Assessment framework',
+    'nav.item.en18229-score': 'Score and Article 14',
+    'pg.en18229-role.eb': 'prEN 18229-3 \u00b7 Role',
+    'pg.en18229-role.h1': 'Who owes what, <em>and who receives it</em>',
+    'pg.en18229-role.p': 'This draft standard addresses its requirements to the <b>provider</b>, for the design of the system. What depends on the deployment context does not disappear: it is <b>passed to the deployer through the instructions for use</b>. Two roles, therefore two questionnaires and two scores \u2014 asking both the same questions would produce a figure that is wrong in both directions.',
+    'pg.en18229-scenarios.eb': 'prEN 18229-3 \u00b7 Scenarios',
+    'pg.en18229-scenarios.h1': 'The reaction delay <em>governs the measure</em>',
+    'pg.en18229-scenarios.p': 'For each risk scenario the standard requires a reaction delay, then requires that the intervention latency of the chosen measures be <b>measured</b> and verified as compatible with that delay. The engine compares those two figures \u2014 the ones you declare: the standard gives no threshold, and none is invented here.',
+    'pg.en18229-cadre.eb': 'prEN 18229-3 \u00b7 Framework',
+    'pg.en18229-cadre.h1': 'The assessment framework, <em>clause by clause</em>',
+    'pg.en18229-cadre.p': 'Your role\u2019s questions, each tied to the clause that grounds it, with what it is there to prevent and the pitfall the firm sees in the field. The questions are written by the firm: only clause numbers and titles are cited.',
+    'pg.en18229-score.eb': 'prEN 18229-3 \u00b7 Score',
+    'pg.en18229-score.h1': 'The score, its caps <em>and Article 14</em>',
+    'pg.en18229-score.p': 'The score says that what the standard expects is declared and that the arithmetic of the delay holds. A lock does not subtract points: it sets a cap, and the cap is named. Article 14 coverage reads paragraph by paragraph \u2014 a paragraph is not 80 % met.',
     'pg.nist53-socle.eb': 'NIST SP 800-53 · Rev. 4',
     'pg.nist53-socle.h1': 'Eighteen families, <em>and what commands them</em>',
     'pg.nist53-socle.p': 'The baseline — Low, Moderate or High — is not a choice: it <strong>follows</strong> from the system categorisation. Announcing it without having carried out the risk assessment means giving a result without its calculation. And four families — RA, PL, CA, PM — decide what the other fourteen must do: when the downstream outruns them, this module says so instead of averaging it away.',
@@ -11790,9 +11811,9 @@ var PAGE_GUIDES = {
     ]
   },
   'conf-taux': {
-    title: "Taux de conformité — les neuf normes",
+    title: "Taux de conformité — les douze normes",
     sections: [
-        {h:"À quoi sert cette page", t:"Elle rend un taux pour chacune des neuf normes, calculé à partir de ce que vous avez déjà renseigné dans les modules — rien n'est réévalué ici, tout est composé."},
+        {h:"À quoi sert cette page", t:"Elle rend un taux pour chacune des douze normes, calculé à partir de ce que vous avez déjà renseigné dans les modules — rien n'est réévalué ici, tout est composé."},
         {h:"Comment le lire", t:"Un taux n'est PAS une conformité. Sur une obligation légale, c'est une autorité qui tranche ; sur une norme certifiable, un organisme accrédité ; sur un cadre volontaire, personne. Chaque carte porte la phrase qui dit ce que 100 % ne veut pas dire, et elle compte autant que le chiffre."},
         {h:"Le trait ambre sur la barre", t:"C'est un PLAFOND. Un défaut qui arrête un auditeur — une déclaration d'applicabilité irrecevable, par exemple — n'efface pas le travail fait, mais interdit d'aller au-delà. Aucun effort sur le reste de la norme ne franchira ce trait tant que le verrou tient."},
         {h:"Le chiffre en tête", t:"C'est le PLUS BAS des taux mesurés, pas leur moyenne. Une moyenne dilue précisément la composante qu'il faut traiter en premier : deux cadres à 90 % et un à 30 % rendent 70 %, et le 30 % disparaît. La moyenne reste affichée à côté, avec son avertissement."},
@@ -11849,6 +11870,46 @@ var PAGE_GUIDES = {
       {h:"Quatre familles commandent les quatorze autres", t:"RA, PL, CA et PM produisent le socle, le plan et l’autorisation. Quand les familles techniques chiffrent plus haut qu’elles, ce n’est pas un programme de sécurité : c’est un inventaire d’outils. Le module le dit au lieu de le moyenner."},
       {h:"Pourquoi la révision 4 et non la 5", t:"Parce que c’est celle que la surcharge industrielle SP 800-82 Rev. 2 adapte — son annexe G le dit. La révision 5 est la version courante : elle ajoute les familles PT et SR et renomme CA. Un système déjà aligné sur la révision 5 lit donc ce taux contre un millésime antérieur au sien, et l’écran le rappelle avant le premier chiffre."},
       {h:"Limites à connaître", t:"Le module mesure par FAMILLE, pas par mesure : la répartition exacte des mesures par socle n’est pas reprise ici. Un ratio dont le dénominateur serait supposé vaudrait moins que son absence. Et ce catalogue ne se certifie pas : aucun organisme ne délivre d’attestation contre lui."}
+    ]
+  },
+  'en18229-role': {
+    title: "prEN 18229-3 — rôle et périmètre",
+    sections: [
+      {h:"À quoi sert cette page", t:"À dire qui, de vous ou de votre fournisseur, doit quoi. Ce projet de norme CEN sert l’article 14 de l’IA Act et adresse ses exigences au FOURNISSEUR, pour la conception du système ; ce qui dépend du contexte de déploiement est transmis au DÉPLOYEUR par la notice d’utilisation."},
+      {h:"Deux questionnaires, deux scores", t:"Poser les mêmes questions aux deux rôles donnerait un chiffre faux dans les deux sens : accablant pour le déployeur, qu’on noterait sur une interface qu’il n’a pas conçue ; indulgent pour le fournisseur, qu’on laisserait cocher « sans objet » sur son obligation principale. Qui conçoit ET exploite répond aux deux : le score retenu est celui du plus faible."},
+      {h:"Ce que la norme ne vous donne pas encore", t:"Elle est au stade de l’Enquête CEN : sa référence n’est PAS citée au Journal officiel de l’Union européenne. La tenir n’ouvre donc AUCUNE présomption de conformité à l’article 14. Le jour où elle sera citée, le même travail vaudra présomption — dans les limites de son domaine d’application."},
+      {h:"L’identification biométrique à distance change le questionnaire", t:"Neuf exigences n’existent que pour ces systèmes, et elles portent l’alinéa 14(5) : deux personnes physiques distinctes doivent vérifier chaque identification, et le système doit l’empêcher TECHNIQUEMENT de produire un effet avant. Déclarez-le ici, sinon ces neuf points restent cachés."},
+      {h:"Limites à connaître", t:"Le texte de la norme est la propriété du CEN : ce module en cite les numéros et les titres de paragraphes, et rien d’autre. Les questions du cadre sont rédigées par le cabinet. La mise en œuvre suppose de détenir le projet, qui s’obtient auprès d’un membre national du CEN — l’AFNOR en France."}
+    ]
+  },
+  'en18229-scenarios': {
+    title: "prEN 18229-3 — scénarios de risque et délais de réaction",
+    sections: [
+      {h:"À quoi sert cette page", t:"À la seule partie du cadre qui se CALCULE. Pour chaque scénario, la norme demande un délai de réaction (5.2.2) ; le 5.7.1 exige que la latence d’intervention des mesures choisies soit spécifiée, MESURÉE et vérifiée compatible avec ce délai. Ce sont ces deux nombres que le moteur compare."},
+      {h:"Aucun seuil n’est inventé ici", t:"La norme ne donne aucune valeur chiffrée : le délai se détermine par scénario à partir du type de sortie, de la situation dangereuse et de la gravité estimée. Le moteur compare donc ce que VOUS déclarez. Un module qui poserait « moins de 500 ms = surveillance continue » substituerait son chiffre à votre dossier de gestion des risques, et ne serait opposable à personne."},
+      {h:"Ce qui se passe quand la latence dépasse le délai", t:"La supervision humaine n’est alors pas, pour ce scénario, une mesure de gestion des risques. Deux issues, et une seule est recevable : relever la catégorie de mesure — le moteur dit lesquelles restent plus rapides —, ou appliquer le 5.2.4 et consigner l’impossibilité technique de l’intervention humaine en temps réel au dossier de gestion des risques. La consignation n’est pas une dispense : le risque reste, et d’autres mesures doivent le porter."},
+      {h:"Un délai unique pour tout un système est presque toujours faux", t:"Il se détermine par scénario. Le même système peut demander une intervention en millisecondes sur une sortie et en jours sur une autre — et les catégories de mesure qui tiennent ces deux délais n’ont rien à voir."},
+      {h:"Limites à connaître", t:"Les trois catégories sont rangées ici par latence atteignable, pas dans l’ordre du texte de la norme : c’est ce qui rend lisible le conseil « relevez la catégorie ». Les scénarios eux-mêmes s’identifient dans le processus de gestion des risques (prEN 18228), pas ici : cette page les reçoit et les confronte à leurs mesures."}
+    ]
+  },
+  'en18229-cadre': {
+    title: "prEN 18229-3 — le cadre d’analyse",
+    sections: [
+      {h:"À quoi sert cette page", t:"À répondre, paragraphe par paragraphe, aux exigences de VOTRE rôle. Chaque question porte le numéro et le titre du paragraphe qui la fonde, ce qu’elle sert à éviter, et le piège que le cabinet voit en mission sur ce point."},
+      {h:"Trois réponses, et « pas encore répondu » en est une", t:"Oui, partiellement, non — et l’absence de réponse, qui n’est pas un « non ». Le score dit sur combien de questions il porte ; une question sans réponse ne compte ni au numérateur ni au dénominateur. Un second clic sur la même réponse l’efface, pour que l’erreur de clic ne soit pas définitive."},
+      {h:"Les verrous se voient avant d’être atteints", t:"Quelques points plafonnent le score tant qu’ils ne sont pas tenus, et chacun annonce son plafond dans son propre encadré. Sans scénario de risque identifié, par exemple, rien en aval n’est calibré : le score ne dépasse pas 25 %, quel que soit le reste."},
+      {h:"Ce qui apparaît et disparaît", t:"Neuf exigences ne s’affichent que sur un système d’identification biométrique à distance. Une dixième n’apparaît que si vous avez déclaré laisser les notifications en temps réel au déployeur. Une exigence sans objet ne pèse ni au numérateur ni au dénominateur : la compter ferait baisser le score de qui n’a rien à faire."},
+      {h:"Limites à connaître", t:"Les questions sont rédigées par le cabinet à partir des paragraphes de la norme, dont seuls les numéros et les titres sont cités. Répondre « oui » ici n’est pas une preuve : c’est une déclaration, et la documentation technique est ce qui la rend démontrable."}
+    ]
+  },
+  'en18229-score': {
+    title: "prEN 18229-3 — score, documentation et article 14",
+    sections: [
+      {h:"À quoi sert cette page", t:"À la restitution. Rien ne s’y saisit : le score, ses plafonds, la documentation exigée et la couverture de l’article 14 sont tous DÉRIVÉS de ce que vous avez déclaré ailleurs."},
+      {h:"Ce que le score dit, et ce qu’il ne dit pas", t:"Il dit que ce que la norme attend est déclaré et que l’arithmétique du délai de réaction tient. Il ne dit pas qu’un organisme notifié l’a vu, ni que la norme est citée au Journal officiel — donc il ne vaut pas présomption de conformité."},
+      {h:"Un verrou ne retire pas des points, il pose un plafond", t:"Et le plafond se nomme, avec sa raison. La différence compte : « vous avez fait 70 % du chemin » est vrai, « vous êtes à 70 % de la conformité » est faux tant que la porte est fermée. Le brut reste affiché à côté du taux, pour qu’on voie le travail déjà fait."},
+      {h:"La documentation est dérivée, pas listée", t:"La norme renvoie sept éléments à la notice d’utilisation et sept à la documentation technique, mais trois de ces quatorze ne s’appliquent que sous condition. Une liste fixe ferait travailler sur des pièces que vous n’avez pas à produire ; cette page affiche ce qui vous est demandé, à vous."},
+      {h:"L’article 14 se lit par alinéa, sans pourcentage", t:"Un alinéa est couvert quand TOUS les paragraphes que l’annexe ZA lui associe sont tenus, ou il ne l’est pas. « 80 % de l’article 14 » n’aurait aucun sens — et l’annexe ZA est informative : c’est elle qui dit ce que la norme couvre, pas ce module."}
     ]
   },
   'nist82-ot': {
@@ -18852,7 +18913,7 @@ window.raasMsCell = function(p){
 /* ══ Indice de conformité global — consolide IA Act / RGPD / ISO 42001 ══ */
 
 /* ═══════════════════════════════════════════════════════════════════════
-   LE TAUX DE CONFORMITÉ DES ONZE NORMES
+   LE TAUX DE CONFORMITÉ DES DOUZE NORMES
    Tout le calcul est au serveur, dans `conformite.py` : cet écran ne fait
    que l'afficher. Refaire ici la moindre arithmétique donnerait DEUX vérités
    sur le même taux — c'est le défaut qui existait entre `gcAuditPct` et
@@ -21886,6 +21947,34 @@ var GUIDED_PATHS = [
     ]
   },
   {
+    id: 'en18229_supervision',
+    icon: '\u{1F441}',
+    role: "Supervision humaine \u2014 mon syst\u00e8me d'IA est \u00e0 haut risque et l'article 14 me le demande",
+    pitch: "L'article 14 de l'IA Act exige une supervision humaine EFFECTIVE. prEN 18229-3 dit comment la construire \u2014 et son point de bascule est arithm\u00e9tique : la latence d'intervention de vos mesures doit tenir le d\u00e9lai de r\u00e9action de chaque sc\u00e9nario de risque. Ce parcours pose d'abord qui doit quoi, puis ce calcul, puis le reste.",
+    steps: [
+      {id:'en18229-role', label:"R\u00f4le et p\u00e9rim\u00e8tre",
+       action:"D\u00e9clarez si vous \u00eates fournisseur, d\u00e9ployeur ou les deux, et si le syst\u00e8me identifie des personnes \u00e0 distance par la biom\u00e9trie.",
+       gain:"Le questionnaire, les verrous et le score en d\u00e9pendent : la norme adresse ses exigences au fournisseur et transmet au d\u00e9ployeur par la notice d'utilisation.",
+       tip:"Neuf exigences n'existent que pour l'identification biom\u00e9trique \u00e0 distance, et elles portent l'alin\u00e9a 14(5) \u2014 deux personnes physiques distinctes par identification."},
+      {id:'en18229-scenarios', label:"Sc\u00e9narios et d\u00e9lais",
+       action:"Pour chaque sc\u00e9nario de risque, d\u00e9clarez son d\u00e9lai de r\u00e9action, la cat\u00e9gorie de mesure retenue, et la latence d'intervention que vous avez MESUR\u00c9E.",
+       gain:"C'est le seul verrou du site qu'aucune case ne l\u00e8ve : si la latence d\u00e9passe le d\u00e9lai sans consignation de l'impossibilit\u00e9 technique, la supervision n'est pas une mesure de gestion des risques, et le taux est plafonn\u00e9.",
+       tip:"Un d\u00e9lai unique pour tout un syst\u00e8me est presque toujours faux : il se d\u00e9termine par sc\u00e9nario, et le m\u00eame syst\u00e8me peut demander des millisecondes sur une sortie et des jours sur une autre."},
+      {id:'en18229-cadre', label:"Cadre d'analyse",
+       action:"Descendez les exigences de votre r\u00f4le, paragraphe par paragraphe.",
+       gain:"Chaque question porte le paragraphe qui la fonde, ce qu'elle sert \u00e0 \u00e9viter, et le pi\u00e8ge du terrain. Les verrous annoncent leur plafond avant d'\u00eatre atteints.",
+       tip:"« Pas encore r\u00e9pondu » n'est pas « non » : une question sans r\u00e9ponse ne compte ni au num\u00e9rateur ni au d\u00e9nominateur, et le score dit sur combien il porte."},
+      {id:'en18229-score', label:"Score et article 14",
+       action:"Lisez le score, ses plafonds, la documentation exig\u00e9e et la couverture de l'article 14 alin\u00e9a par alin\u00e9a.",
+       gain:"La documentation est D\u00c9RIV\u00c9E de vos r\u00e9ponses : trois des quatorze \u00e9l\u00e9ments ne s'appliquent que sous condition, et l'\u00e9cran n'affiche que ce qui vous est demand\u00e9.",
+       tip:"Le vert ne vaut pas pr\u00e9somption de conformit\u00e9 : ce projet n'est pas encore cit\u00e9 au Journal officiel. Le jour o\u00f9 il le sera, le m\u00eame travail vaudra pr\u00e9somption."},
+      {id:'conf-taux', label:"Le taux de conformit\u00e9",
+       action:"Ouvrez la carte prEN 18229-3 : elle porte maintenant votre d\u00e9claration.",
+       gain:"Le taux se compose de trois parts \u2014 calibration, mesures, preuves \u2014 et la premi\u00e8re commande les deux autres.",
+       tip:"Sa r\u00e9serve est permanente, et elle n'est pas une pr\u00e9caution de style : sans citation au Journal officiel, aucune r\u00e9ponse n'ouvre de pr\u00e9somption."}
+    ]
+  },
+  {
     id: 'nist_800_53_82',
     icon: '\u{1F3ED}',
     role: "Syst\u00e8mes industriels \u2014 je dois s\u00e9curiser un proc\u00e9d\u00e9, pas un parc bureautique",
@@ -21920,7 +22009,7 @@ var GUIDED_PATHS = [
       {id:'nist-genai', label:"Profil IA g\u00e9n\u00e9rative", action:"R\u00e9partissez les douze risques AVANT de les \u00e9valuer : la page dit qui tient chacun.", gain:"Six des douze ne rel\u00e8vent pas de la cyber \u2014 les confier au RSSI produit un registre que personne n\u2019arbitre.", tip:"AI 600-1 est un PROFIL du cadre, pas un second cadre : le citer sans le cadre en dessous, c\u2019est citer le profil de rien."},
       {id:'iso42001', label:"ISO 42001 \u2014 articles 4 \u00e0 10", action:"Comparez ce que vous venez de renseigner avec le corps de la norme.", gain:"Ce que le cadre NIST laisse volontaire, ISO 42001 le rend exigible \u2014 et certifiable.", tip:"Le rapprochement le plus utile n\u2019est pas point \u00e0 point : GOVERN recoupe les articles 5 et 6, et rien dans le cadre n\u2019impose de d\u00e9claration d\u2019applicabilit\u00e9."},
       {id:'cadre-normatif', label:"Cadre normatif", action:"Regardez ce que le cadre NIST apporte que les textes europ\u00e9ens n\u2019apportent pas.", gain:"Il est le seul \u00e0 donner une grammaire de RISQUE l\u00e0 o\u00f9 l\u2019IA Act donne une grammaire d\u2019OBLIGATION.", tip:"Un tiret dans une colonne n\u2019est pas un oubli : c\u2019est que le texte ne dit rien de ce module."},
-      {id:'conf-taux', label:"Le taux de conformit\u00e9", action:"Ouvrez la carte NIST AI RMF : elle porte maintenant votre profil.", gain:"Les dix-neuf cat\u00e9gories que vous venez de renseigner remontent dans la synth\u00e8se des neuf normes.", tip:"La carte dit ce que 100 % NE veut PAS dire ici : le cadre ne se certifie pas, il n'y a aucun auditeur au bout. Un taux plein signifie « tout est renseign\u00e9 et tenu », pas « conforme »."}
+      {id:'conf-taux', label:"Le taux de conformit\u00e9", action:"Ouvrez la carte NIST AI RMF : elle porte maintenant votre profil.", gain:"Les dix-neuf cat\u00e9gories que vous venez de renseigner remontent dans la synth\u00e8se des douze normes.", tip:"La carte dit ce que 100 % NE veut PAS dire ici : le cadre ne se certifie pas, il n'y a aucun auditeur au bout. Un taux plein signifie « tout est renseign\u00e9 et tenu », pas « conforme »."}
     ]
   },
   {
@@ -21933,7 +22022,7 @@ var GUIDED_PATHS = [
       {id:'owasp-pont', label:"Ce qu\u2019ISO 42001 ne couvre pas", action:"Regardez d\u2019abord les lignes o\u00f9 la colonne des mesures est vide.", gain:"Trois risques ne rencontrent aucune mesure de l\u2019annexe A : aucun r\u00e9f\u00e9rentiel ne les rattrapera.", tip:"Ce sont aussi ceux dont on se croit couvert pr\u00e9cis\u00e9ment parce qu\u2019on est certifi\u00e9. « Notre SMIA couvre OWASP » est la phrase que cette page existe pour contredire."},
       {id:'iso42001-soa', label:"D\u00e9claration d\u2019applicabilit\u00e9", action:"Reprenez les mesures cit\u00e9es en face des risques, et v\u00e9rifiez leur statut chez vous.", gain:"Une mesure retenue mais non mise en \u0153uvre ne couvre rien \u2014 et c\u2019est sur la SoA que \u00e7a se voit.", tip:"Une mesure « touche » un risque ; elle ne le clot pas. Le pont ne dit pas l\u2019inverse."},
       {id:'ia-act-hub', label:"IA Act \u2014 vue d\u2019ensemble", action:"Situez lesquels de ces risques deviennent des obligations quand le syst\u00e8me est \u00e0 haut risque.", gain:"OWASP dit ce qui casse ; le r\u00e8glement dit ce qui est exigible. Les deux ne se d\u00e9duisent pas l\u2019un de l\u2019autre.", tip:"Un risque OWASP trait\u00e9 ne vaut pas conformit\u00e9, et une obligation tenue ne vaut pas s\u00e9curit\u00e9."},
-      {id:'conf-taux', label:"Le taux de conformit\u00e9", action:"Ouvrez la carte OWASP LLM : elle porte maintenant ce que vous venez de d\u00e9clarer.", gain:"Vos dix \u00e9tats remontent dans la synth\u00e8se des neuf normes. Tant que rien n'est d\u00e9clar\u00e9, la carte reste à « — » : une absence de mesure n'est pas un z\u00e9ro.", tip:"Le taux OWASP est plafonn\u00e9 par les trois risques hors annexe A. Ce plafond n'est pas un d\u00e9faut du calcul : c'est ce que la liste elle-m\u00eame dit de sa propre port\u00e9e."}
+      {id:'conf-taux', label:"Le taux de conformit\u00e9", action:"Ouvrez la carte OWASP LLM : elle porte maintenant ce que vous venez de d\u00e9clarer.", gain:"Vos dix \u00e9tats remontent dans la synth\u00e8se des douze normes. Tant que rien n'est d\u00e9clar\u00e9, la carte reste à « — » : une absence de mesure n'est pas un z\u00e9ro.", tip:"Le taux OWASP est plafonn\u00e9 par les trois risques hors annexe A. Ce plafond n'est pas un d\u00e9faut du calcul : c'est ce que la liste elle-m\u00eame dit de sa propre port\u00e9e."}
     ]
   },
   {
@@ -30105,6 +30194,14 @@ var RAIL_DECL = {
   owasp_llm: function () { return { etats: OWASP_DECL }; },
   nist_800_53: function () { return { socle: N53_SOCLE || null, etats: _n53Etats() }; },
   nist_800_82: function () { return { etats: N82_DECL }; },
+  /* LA SUPERVISION HUMAINE VIT DANS SON PROPRE BLOC, plus loin dans le
+     fichier : le collecteur passe par sa porte. Tant que le bloc n'est pas
+     chargé, la déclaration est vide — et le moteur dit « choisissez votre
+     rôle », ce qui est vrai. */
+  en18229_3: function () {
+    return (typeof window.en18229Declaration === 'function')
+      ? window.en18229Declaration() : {};
+  },
   /* LE REGISTRE N'EST PAS ENVOYÉ : seulement, pour chaque traitement, quels
      champs de l'article 30 sont remplis. Le texte des finalités ou des
      mesures de sécurité n'a rien à faire dans un calcul d'avancement. */
@@ -30354,7 +30451,16 @@ function railPeindreEcran(norme) {
   var nat = (p.natures || {})[b.nature] || {};
   var courant = (p.blocs || []).filter(function (x) { return x.cle === p.courante; })[0];
 
-  var ban = pg.querySelector('.rail-bandeau');
+  //  LE RAIL RECONNAÎT SON PROPRE BANDEAU, PAS N'IMPORTE QUELLE CARTE.
+  //  MESURÉ SUR prEN 18229-3 : le questionnaire peint ses trente questions
+  //  dans des cartes `.rail-bandeau` — la même classe, pour le même dessin.
+  //  Le rail prenait la PREMIÈRE de ces cartes pour la sienne et écrasait
+  //  son contenu : la question 5.2.1, celle qui porte le verrou à 25 %,
+  //  disparaissait de l'écran à chaque peinture. Trente questions annoncées,
+  //  vingt-neuf affichées, et rien ne le disait.
+  //  Le `role="status"` n'est posé QUE par le rail, à la création : c'est
+  //  lui, et non la classe, qui identifie le bandeau du rail.
+  var ban = pg.querySelector('.rail-bandeau[role="status"]');
   if (!ban) {
     ban = document.createElement('div');
     ban.className = 'rail-bandeau';
@@ -30619,3 +30725,513 @@ function railInit(apres) {
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', railInit);
 else railInit();
+
+
+;/* ══════════════════════════════════════════════════════════════════════════
+   prEN 18229-3 — LA SUPERVISION HUMAINE DES SYSTÈMES D'IA
+   ══════════════════════════════════════════════════════════════════════════
+
+   AUCUN LIBELLÉ DE LA NORME N'EST ÉCRIT ICI. Les numéros de paragraphes,
+   leurs titres, les questions du cadre, les catégories de mesure et la
+   correspondance de l'annexe ZA viennent tous de /api/en18229/referentiel,
+   c'est-à-dire du module Python — le seul endroit du dépôt où ils vivent. Le
+   texte est la propriété du CEN : un second exemplaire ici aurait divergé au
+   premier amendement, et la divergence se verrait chez le client.
+
+   CE QUE CET ÉCRAN AJOUTE AU MOTEUR, ET RIEN DE PLUS : la saisie, et le
+   rendu. Il ne recalcule aucun score, aucune adéquation, aucun plafond — il
+   envoie la déclaration et affiche ce que le moteur en dit. Un second calcul
+   côté navigateur finirait par contredire le premier.                      */
+
+(function () {
+  var REF = null;                  /* le référentiel, chargé une fois       */
+  var ETAT = {                     /* la déclaration, telle qu'on la saisit */
+    role: null, rbi: null, notifications_fournisseur: true,
+    fournisseur: {}, deployeur: {}, scenarios: []
+  };
+  var VU = null;                   /* la dernière analyse rendue            */
+
+  function esc(t) { return railEsc(String(t == null ? '' : t)); }
+
+  /* ── LA DÉCLARATION, POUR LE RAIL ET POUR LE TAUX ────────────────────────
+     UNE SEULE COLLECTE, comme pour les onze autres : l'objet que le rail
+     reçoit est celui que le taux de conformité reçoit, et la traduction vers
+     le format du moteur se fait en Python. */
+  window.en18229Declaration = function () {
+    var d = { rbi: ETAT.rbi, scenarios: ETAT.scenarios,
+              notifications_fournisseur: ETAT.notifications_fournisseur };
+    /* UN RÔLE NON ENDOSSÉ N'EST PAS UN RÔLE VIDE : on ne l'envoie pas. Le
+       moteur dirait « aucun rôle déclaré » sur un objet vide, ce qui est
+       vrai ; sur un objet présent mais vide, il compterait des zéros. */
+    if (ETAT.role === 'fournisseur' || ETAT.role === 'deux') {
+      d.fournisseur = ETAT.fournisseur;
+    }
+    if (ETAT.role === 'deployeur' || ETAT.role === 'deux') {
+      d.deployeur = ETAT.deployeur;
+    }
+    return d;
+  };
+
+  /* ── CE QUI DÉCLENCHE UN RECALCUL ────────────────────────────────────────
+     UNE RAFALE DE RÉPONSES FAIT UN SEUL APPEL. Le cadre compte quarante-six
+     questions : une requête par case consommerait le limiteur du serveur
+     avant la moitié du questionnaire. */
+  var attente = null;
+  function demander(viteFait) {
+    if (attente) clearTimeout(attente);
+    attente = setTimeout(function () { attente = null; analyser(); },
+                         viteFait ? 0 : 450);
+    /* LE RAIL ET LE TAUX APPRENNENT TOUT DE SUITE, EUX : ils ont leur propre
+       cadence, et le rail se peint sur la déclaration, pas sur l'analyse. */
+    if (typeof railDemander === 'function') railDemander('en18229_3');
+    if (typeof declarationsChangees === 'function') declarationsChangees();
+  }
+
+  function analyser() {
+    var d = window.en18229Declaration();
+    d.role = (ETAT.role === 'deux') ? 'fournisseur' : ETAT.role;
+    d.reponses = (d.role === 'deployeur') ? ETAT.deployeur : ETAT.fournisseur;
+    fetch('/api/en18229/analyse', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      credentials: 'same-origin', body: JSON.stringify(d)
+    }).then(function (r) { return r.json(); }).then(function (j) {
+      if (!j || !j.ok) return;
+      VU = j;
+      peindreCadre(); peindreScore(); peindreScenarios();
+    }).catch(function () {});
+  }
+
+  /* ── LE RÉFÉRENTIEL, CHARGÉ UNE FOIS ─────────────────────────────────── */
+  function charger(apres) {
+    if (REF) { apres(); return; }
+    fetch('/api/en18229/referentiel', { credentials: 'same-origin' })
+      .then(function (r) { return r.json(); })
+      .then(function (j) { if (j && j.ok) { REF = j; apres(); } })
+      .catch(function () {});
+  }
+
+  /* ══ 1. LE RÔLE, ET CE QU'IL PORTE ═══════════════════════════════════ */
+
+  function peindreRole() {
+    var box = document.getElementById('en18229-role-q');
+    if (!box || !REF) return;
+    /* LA PRÉSOMPTION QUI N'EXISTE PAS ENCORE SE DIT AVANT LE RESTE, et pas
+       dans une note de bas d'écran : un client qui l'ignore croirait acheter
+       une présomption de conformité à l'article 14. */
+    var pres = document.getElementById('en18229-presomption');
+    if (pres && !pres.innerHTML) {
+      pres.innerHTML = '<div class="radar-registre-info radar-registre-warn">'
+        + '<b>Ce projet de norme n’ouvre pas encore de présomption de '
+        + 'conformité.</b> ' + esc(REF.source.presomption_dit)
+        + '<br><span style="opacity:.85">' + esc(REF.source.licence)
+        + '</span></div>';
+    }
+    var choix = [['fournisseur', REF.roles.fournisseur],
+                 ['deployeur', REF.roles.deployeur],
+                 ['deux', { nom: 'Les deux',
+                            dit: 'Vous développez le système ET vous '
+                                 + 'l’exploitez sous votre autorité.',
+                            porte: 'Les deux jeux d’obligations existent '
+                                   + 'séparément : le score retenu est celui '
+                                   + 'du plus faible des deux.' }]];
+    box.innerHTML = '<div class="reg-filtres"><b>Votre rôle</b> '
+      + choix.map(function (c) {
+          return '<button type="button" class="mat-export-btn'
+            + (ETAT.role === c[0] ? ' on' : '') + '" onclick="en18229Role(\''
+            + c[0] + '\')">' + esc(c[1].nom) + '</button>';
+        }).join(' ')
+      + '</div><div class="reg-filtres" style="margin-top:8px">'
+      + '<b>Identification biométrique à distance</b> '
+      + [['oui', true], ['non', false]].map(function (c) {
+          //  « OUI » SEUL NE NOMME RIEN À LA SYNTHÈSE VOCALE. Le libellé
+          //  visible reste court ; le nom accessible dit ce qu'on répond.
+          return '<button type="button" class="mat-export-btn'
+            + (ETAT.rbi === c[1] ? ' on' : '') + '" aria-label="'
+            + 'Identification biométrique à distance : ' + c[0]
+            + '" onclick="en18229Rbi(' + c[1] + ')">' + c[0] + '</button>';
+        }).join(' ')
+      + '<span style="margin-left:10px;opacity:.8;font-size:11.5px">'
+      + 'Neuf exigences et l’alinéa 14(5) en dépendent.</span></div>'
+      + '<div class="reg-filtres" style="margin-top:8px">'
+      + '<b>Notifications en temps réel</b> '
+      + [['mises en œuvre par le fournisseur', true],
+         ['laissées au déployeur', false]].map(function (c) {
+          return '<button type="button" class="mat-export-btn'
+            + (ETAT.notifications_fournisseur === c[1] ? ' on' : '')
+            + '" onclick="en18229Notif(' + c[1] + ')">' + esc(c[0])
+            + '</button>';
+        }).join(' ') + '</div>';
+
+    var dit = document.getElementById('en18229-role-dit');
+    if (dit) {
+      var r = ETAT.role && (REF.roles[ETAT.role]
+        || { nom: 'Les deux rôles',
+             porte: 'Vous répondez aux deux questionnaires. Le score retenu '
+                    + 'est celui du plus faible des deux, parce qu’un score '
+                    + 'global cacherait le côté défaillant.',
+             transmet: 'Vous êtes votre propre déployeur : ce que vous vous '
+                       + 'spécifiez dans la notice, vous devez aussi le '
+                       + 'mettre en œuvre.' });
+      dit.innerHTML = r ? '<div class="rail-bandeau" data-etat="courante">'
+        + '<div class="rail-tete"><b>' + esc(r.nom) + '</b></div>'
+        + '<div>' + esc(r.porte) + '</div>'
+        + '<div style="margin-top:6px">' + esc(r.transmet) + '</div></div>'
+        : '';
+    }
+    var fam = document.getElementById('en18229-famille');
+    if (fam && !fam.innerHTML) {
+      /* LA FAMILLE SE DIT, parce que la supervision humaine n'est pas
+         autonome : elle est calibrée ailleurs et journalisée ailleurs. */
+      fam.innerHTML = '<div class="trait-note"><b>Ce document ne se tient pas '
+        + 'seul.</b><ul style="margin:6px 0 0;padding-left:18px">'
+        + REF.famille.filter(function (f) { return f.socle; })
+            .map(function (f) {
+              return '<li><b>' + esc(f.norme) + '</b> — ' + esc(f.titre)
+                + ' : ' + esc(f.porte) + '</li>'; }).join('')
+        + '</ul></div>';
+    }
+  }
+
+  window.en18229Role = function (r) {
+    ETAT.role = r; peindreRole(); peindreCadre(); demander(true);
+  };
+  window.en18229Rbi = function (v) {
+    ETAT.rbi = v; peindreRole(); peindreCadre(); demander(true);
+  };
+  window.en18229Notif = function (v) {
+    ETAT.notifications_fournisseur = v; peindreRole(); peindreCadre();
+    demander(true);
+  };
+
+  /* ══ 2. LES SCÉNARIOS DE RISQUE, ET LEUR ARITHMÉTIQUE ════════════════ */
+
+  function peindreScenarios() {
+    var form = document.getElementById('en18229-sc-form');
+    if (!form || !REF) return;
+    if (!form.innerHTML) {
+      var unites = Object.keys(REF.unites).map(function (u) {
+        return '<option value="' + u + '">' + esc(REF.unites[u].nom)
+          + '</option>'; }).join('');
+      form.innerHTML = '<div class="reg-filtres" style="flex-wrap:wrap;gap:8px">'
+        + '<input id="en18229-sc-nom" class="reg-input" placeholder="Nom du scénario de risque" style="min-width:220px">'
+        + '<span><input id="en18229-sc-delai" class="reg-input" type="number" min="0" step="any" placeholder="délai" style="width:90px">'
+        + ' <select id="en18229-sc-delai-u" class="reg-input">' + unites + '</select>'
+        + ' <span style="opacity:.8;font-size:11.5px">délai de réaction (5.2.2)</span></span>'
+        + '<span><input id="en18229-sc-lat" class="reg-input" type="number" min="0" step="any" placeholder="latence" style="width:90px">'
+        + ' <select id="en18229-sc-lat-u" class="reg-input">' + unites + '</select>'
+        + ' <span style="opacity:.8;font-size:11.5px">latence d’intervention mesurée (5.7.1)</span></span>'
+        + '</div><div class="reg-filtres" style="margin-top:8px;flex-wrap:wrap">'
+        + '<b>Catégories retenues</b> '
+        + REF.categories.map(function (c) {
+            return '<label style="margin-right:10px"><input type="checkbox" value="'
+              + c.cle + '" class="en18229-sc-cat"> ' + esc(c.nom)
+              + ' <span style="opacity:.75">(' + esc(c.clause) + ')</span></label>';
+          }).join('')
+        + '<label style="margin-right:10px"><input type="checkbox" id="en18229-sc-imp"> '
+        + 'Impossibilité technique consignée (5.2.4)</label>'
+        + '<button type="button" class="mat-export-btn" onclick="en18229AjouterScenario()">Ajouter ce scénario</button>'
+        + '</div>';
+    }
+    var cats = document.getElementById('en18229-categories');
+    if (cats && !cats.innerHTML) {
+      /* LES TROIS CATÉGORIES, RANGÉES PAR LATENCE ATTEIGNABLE — l'ordre du
+         moteur, pas celui du texte de la norme : c'est ce qui rend lisible
+         « relevez la catégorie ». */
+      cats.innerHTML = '<div class="trait-note"><b>Trois catégories, du plus '
+        + 'réactif au moins réactif.</b><ul style="margin:6px 0 0;padding-left:18px">'
+        + REF.categories.map(function (c) {
+            return '<li><b>' + esc(c.nom) + '</b> <span style="opacity:.75">('
+              + esc(c.clause) + ')</span> — ' + esc(c.quoi)
+              + '<br><span style="opacity:.85">' + esc(c.pourquoi) + '</span>'
+              + '<br><i>' + esc(c.piege) + '</i></li>'; }).join('')
+        + '</ul></div>';
+    }
+    var liste = document.getElementById('en18229-sc-liste');
+    if (!liste) return;
+    var lus = (VU && VU.scenarios) || [];
+    if (!lus.length) {
+      liste.innerHTML = '<div class="veille-loading">Aucun scénario déclaré. '
+        + 'Le délai de réaction se détermine par scénario (5.2.2) : un délai '
+        + 'unique pour tout un système est presque toujours faux.</div>';
+      return;
+    }
+    liste.innerHTML = '<div class="reg-sys-head" style="grid-template-columns:2fr 1fr 1fr 1.2fr 2.4fr">'
+      + '<div>Scénario</div><div>Délai</div><div>Latence</div><div>Catégories</div><div>Ce que le moteur en dit</div></div>'
+      + lus.map(function (s, i) {
+          var e = REF.etats_scenario[s.etat] || {};
+          var coul = { vert: 'var(--green)', rouge: 'var(--accent)',
+                       orange: 'var(--orange)', gris: 'var(--muted2)' }[e.couleur]
+                     || 'var(--muted2)';
+          return '<div class="reg-sys-row" style="grid-template-columns:2fr 1fr 1fr 1.2fr 2.4fr;cursor:default">'
+            + '<div><b>' + esc(s.nom || '(sans nom)') + '</b></div>'
+            + '<div class="rs-type">' + esc(s.delai_dit) + '</div>'
+            + '<div class="rs-type">' + esc(s.latence_dit) + '</div>'
+            + '<div class="rs-type">' + esc((s.categories || []).map(function (c) {
+                return (REF.categories.filter(function (x) { return x.cle === c; })[0]
+                        || {}).nom || c; }).join(', ') || '—') + '</div>'
+            + '<div><span style="color:' + coul + ';font-weight:600">'
+            + esc(e.nom || s.etat) + '</span>'
+            + (s.marge_dit ? ' <span style="opacity:.8">— marge ' + esc(s.marge_dit) + '</span>' : '')
+            + (s.depassement_dit ? ' <span style="opacity:.8">— dépassement ' + esc(s.depassement_dit) + '</span>' : '')
+            + (s.manque && s.manque.length ? '<br><span style="opacity:.9;font-size:11.5px">' + esc(s.manque[0]) + '</span>' : '')
+            + ' <button type="button" class="mat-export-btn" onclick="en18229RetirerScenario(' + i + ')">retirer</button>'
+            + '</div></div>';
+        }).join('');
+  }
+
+  window.en18229AjouterScenario = function () {
+    var v = function (id) { var e = document.getElementById(id); return e ? e.value : ''; };
+    var cats = Array.prototype.filter.call(
+      document.querySelectorAll('.en18229-sc-cat'),
+      function (c) { return c.checked; }).map(function (c) { return c.value; });
+    var imp = document.getElementById('en18229-sc-imp');
+    ETAT.scenarios.push({
+      nom: v('en18229-sc-nom'),
+      delai: v('en18229-sc-delai'), delai_unite: v('en18229-sc-delai-u'),
+      latence: v('en18229-sc-lat'), latence_unite: v('en18229-sc-lat-u'),
+      categories: cats, impossibilite_consignee: !!(imp && imp.checked)
+    });
+    ['en18229-sc-nom', 'en18229-sc-delai', 'en18229-sc-lat'].forEach(function (id) {
+      var e = document.getElementById(id); if (e) e.value = '';
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('.en18229-sc-cat'),
+      function (c) { c.checked = false; });
+    if (imp) imp.checked = false;
+    demander(true);
+  };
+
+  window.en18229RetirerScenario = function (i) {
+    ETAT.scenarios.splice(i, 1); demander(true);
+  };
+
+  /* ══ 3. LE CADRE D'ANALYSE ══════════════════════════════════════════ */
+
+  function peindreCadre() {
+    var box = document.getElementById('en18229-cadre-liste');
+    if (!box || !REF) return;
+    if (!ETAT.role) {
+      box.innerHTML = '<div class="veille-loading">Choisissez d’abord votre '
+        + 'rôle : la norme adresse ses exigences au fournisseur, et transmet '
+        + 'au déployeur par la notice d’utilisation.</div>';
+      return;
+    }
+    var roles = (ETAT.role === 'deux') ? ['fournisseur', 'deployeur']
+                                       : [ETAT.role];
+    box.innerHTML = roles.map(function (role) {
+      var rep = ETAT[role] || {};
+      var exs = REF.exigences.filter(function (e) {
+        if (e.role.indexOf(role) < 0) return false;
+        if (e.si === 'rbi' && !ETAT.rbi) return false;
+        if (e.si === 'pas_de_notification_fournisseur'
+            && ETAT.notifications_fournisseur) return false;
+        return true;
+      });
+      return '<h2 class="page-h2">' + esc(REF.roles[role].nom) + ' — '
+        + exs.length + ' exigence' + (exs.length > 1 ? 's' : '') + '</h2>'
+        + exs.map(function (e) {
+            var v = rep[e.cle];
+            return '<div class="rail-bandeau" data-etat="'
+              + (v === true ? 'validee' : (v === false ? 'verrouillee' : 'attente'))
+              + '"><div class="rail-tete"><b>' + esc(e.clause) + ' · '
+              + esc(e.titre) + '</b>'
+              + (e.verrou ? '<span class="rail-nature">verrou</span>' : '')
+              + '</div><div>' + esc(e.question) + '</div>'
+              + '<div style="margin-top:6px;opacity:.9">' + esc(e.pourquoi) + '</div>'
+              + '<div style="margin-top:4px;font-style:italic;opacity:.85">'
+              + esc(e.piege) + '</div>'
+              + (e.verrou ? '<div class="rail-manque"><b>' + esc(e.verrou)
+                          + '</b></div>' : '')
+              + '<div style="margin-top:8px">'
+              + [['oui', true], ['partiellement', 'partiel'], ['non', false]]
+                  .map(function (c) {
+                    var on = (v === c[1]) || (c[1] === 'partiel' && v === 'partiel');
+                    //  QUARANTE-SIX QUESTIONS, TROIS BOUTONS CHACUNE : lus
+                    //  l'un après l'autre, « oui, partiellement, non »
+                    //  cent trente-huit fois ne disent à quoi on répond
+                    //  que si le nom accessible porte le paragraphe.
+                    return '<button type="button" class="mat-export-btn'
+                      + (on ? ' on' : '') + '" aria-label="' + esc(c[0])
+                      + ' — ' + esc(e.clause) + ' ' + esc(e.titre)
+                      + '" onclick="en18229Repondre(\''
+                      + role + '\',\'' + e.cle + '\',' + JSON.stringify(c[1])
+                      + ')">' + c[0] + '</button>'; }).join(' ')
+              + '</div></div>';
+          }).join('');
+    }).join('');
+  }
+
+  window.en18229Repondre = function (role, cle, valeur) {
+    var rep = ETAT[role] || (ETAT[role] = {});
+    /* UN SECOND CLIC SUR LA MÊME RÉPONSE L'EFFACE : « pas encore répondu »
+       doit rester atteignable, sinon une erreur de clic est définitive. */
+    if (rep[cle] === valeur) delete rep[cle]; else rep[cle] = valeur;
+    peindreCadre(); demander(false);
+  };
+
+  /* ══ 4. LE SCORE, LA DOCUMENTATION ET L'ARTICLE 14 ══════════════════ */
+
+  function peindreScore() {
+    var box = document.getElementById('en18229-score-bloc');
+    if (!box || !VU) return;
+    var s = VU.score;
+    box.innerHTML = '<div class="rail-bandeau" data-etat="'
+      + (s.verrous.length ? 'verrouillee' : (s.complet ? 'validee' : 'courante'))
+      + '"><div class="rail-tete"><b>' + s.taux + ' % — ' + esc(VU.role.nom)
+      + '</b><span class="rail-nature">' + s.repondues + ' réponse'
+      + (s.repondues > 1 ? 's' : '') + ' sur ' + s.applicables
+      + ' exigences applicables</span></div>'
+      + '<div class="rail-barre" role="progressbar" aria-valuemin="0" '
+      + 'aria-valuemax="100" aria-valuenow="' + s.taux + '" aria-label="'
+      + s.taux + ' pour cent"><i style="width:' + s.taux + '%"></i></div>'
+      + (s.plafond < 100
+         ? '<div class="rail-manque"><b>Plafonné à ' + s.plafond + ' % — '
+           + s.brut + ' % de brut.</b><ul>'
+           + s.verrous.map(function (v) {
+               return '<li>' + esc(v.clause) + ' · ' + esc(v.titre) + ' — '
+                 + esc(v.dit) + '</li>'; }).join('') + '</ul></div>'
+         : '')
+      + '<div class="rail-reserve">' + esc(VU.reserve) + '</div></div>';
+
+    var plan = document.getElementById('en18229-plan');
+    if (plan) {
+      plan.innerHTML = !VU.plan.total ? ''
+        : '<h2 class="page-h2">Le plan — ' + VU.plan.total + ' point'
+          + (VU.plan.total > 1 ? 's' : '') + '</h2>'
+          + VU.plan.etapes.map(function (e) {
+              return '<div class="trait-note"><b>' + esc(e.nom) + '</b> — '
+                + esc(e.dit) + '<ul style="margin:6px 0 0;padding-left:18px">'
+                + e.lignes.map(function (l) {
+                    return '<li><b>' + esc(l.clause) + '</b> · '
+                      + esc(l.titre) + ' — ' + esc(l.quoi) + '</li>'; }).join('')
+                + '</ul></div>'; }).join('');
+    }
+
+    var doc = document.getElementById('en18229-doc');
+    if (doc) {
+      var bloc = function (titre, ou, liste) {
+        return '<div class="trait-note"><b>' + titre + ' — ' + liste.length
+          + ' élément' + (liste.length > 1 ? 's' : '')
+          + '</b><ul style="margin:6px 0 0;padding-left:18px">'
+          + liste.map(function (x) {
+              return '<li>' + esc(x.quoi) + ' <span style="opacity:.75">('
+                + esc(x.clause) + ')</span></li>'; }).join('') + '</ul></div>';
+      };
+      doc.innerHTML = '<h2 class="page-h2">La documentation, dérivée de vos '
+        + 'réponses</h2>'
+        + bloc('Notice d’utilisation', 'notice', VU.documentation.notice)
+        + bloc('Documentation technique', 'technique', VU.documentation.technique);
+    }
+
+    var a14 = document.getElementById('en18229-art14');
+    if (a14) {
+      var coul = { couvert: 'var(--green)', non_couvert: 'var(--accent)',
+                   sans_reponse: 'var(--muted2)', sans_objet: 'var(--rule2)' };
+      //  L'ÉTAT SE DIT EN FRANÇAIS. Le nom interne rendu tel quel donnait
+      //  « sans reponse » — sans accent, et sans rien expliquer — dans une
+      //  colonne que le client lit.
+      var ditEtat = { couvert: 'Couvert', non_couvert: 'Non couvert',
+                      sans_reponse: 'Sans réponse', sans_objet: 'Sans objet' };
+      a14.innerHTML = '<h2 class="page-h2">L’article 14, alinéa par alinéa</h2>'
+        + '<div class="trait-note">Un alinéa n’est pas tenu à 80 % : il est '
+        + 'couvert par tous les paragraphes que l’annexe ZA lui associe, ou il '
+        + 'ne l’est pas.</div>'
+        + '<div class="reg-sys-head" style="grid-template-columns:.8fr 2.6fr 1.4fr">'
+        + '<div>Alinéa</div><div>Ce qu’il exige</div><div>État</div></div>'
+        + VU.article_14.map(function (a) {
+            return '<div class="reg-sys-row" style="grid-template-columns:.8fr 2.6fr 1.4fr;cursor:default">'
+              + '<div><b>' + esc(a.alinea) + '</b></div>'
+              + '<div class="rs-type">' + esc(a.titre) + '</div>'
+              + '<div><span style="color:' + (coul[a.etat] || 'var(--muted2)')
+              + ';font-weight:600">' + esc(ditEtat[a.etat] || a.etat)
+              + '</span><br><span style="opacity:.85;font-size:11.5px">'
+              + esc(a.dit) + '</span></div></div>'; }).join('');
+    }
+  }
+
+  /* ── L'OUVERTURE D'UN DES QUATRE ÉCRANS ─────────────────────────────── */
+  var PANNEAUX = { 'en18229-role': peindreRole,
+                   'en18229-scenarios': peindreScenarios,
+                   'en18229-cadre': peindreCadre,
+                   'en18229-score': peindreScore };
+  var _goAvant = window.go;
+  window.go = function (id) {
+    var r = _goAvant ? _goAvant.apply(this, arguments) : undefined;
+    if (PANNEAUX[id]) {
+      charger(function () {
+        PANNEAUX[id]();
+        /* LE SCORE ET LES SCÉNARIOS ONT BESOIN D'UNE ANALYSE : sans elle, ils
+           afficheraient un écran vide alors que des réponses existent. */
+        if (!VU && (id === 'en18229-score' || id === 'en18229-scenarios')) {
+          demander(true);
+        }
+      });
+    }
+    return r;
+  };
+
+  /* ── LA MÉMOIRE DE L'ÉCRAN ──────────────────────────────────────────── */
+  if (typeof MEMOIRE === 'object' && MEMOIRE) {
+    MEMOIRE.en18229_3 = {
+      norme: 'en18229_3', nom: 'prEN 18229-3',
+      cle: 'cp-sentinel-en18229-v1',
+      /* RIEN N'EST ÉCRIT TANT QUE RIEN N'A ÉTÉ RÉPONDU. `ETAT` n'est jamais
+         vide — il porte ses six clés dès le chargement — donc le rendre tel
+         quel écrirait une entrée de magasin pour un écran que personne n'a
+         ouvert. Une règle du dépôt mesure ce défaut sur les onze autres
+         écrans ; celui-ci n'y échappe pas. */
+      lire: function () {
+        var rien = ETAT.role === null && ETAT.rbi === null
+          && ETAT.notifications_fournisseur === true
+          && !ETAT.scenarios.length
+          && !Object.keys(ETAT.fournisseur).length
+          && !Object.keys(ETAT.deployeur).length;
+        return rien ? null : ETAT;
+      },
+      relire: function (m) {
+        if (!m || typeof m !== 'object') return;
+        if (m.role === 'fournisseur' || m.role === 'deployeur'
+            || m.role === 'deux') ETAT.role = m.role;
+        if (m.rbi === true || m.rbi === false) ETAT.rbi = m.rbi;
+        if (m.notifications_fournisseur === false) {
+          ETAT.notifications_fournisseur = false;
+        }
+        /* SEULES LES TROIS VALEURS DE RÉPONSE SONT RELUES. Une valeur
+           étrangère dans le magasin compterait comme une réponse, et le
+           score porterait sur une question que personne n'a tranchée. */
+        ['fournisseur', 'deployeur'].forEach(function (role) {
+          var src = m[role];
+          if (!src || typeof src !== 'object') return;
+          Object.keys(src).forEach(function (k) {
+            var v = src[k];
+            if (v === true || v === false || v === 'partiel') ETAT[role][k] = v;
+          });
+        });
+        if (Array.isArray(m.scenarios)) {
+          ETAT.scenarios = m.scenarios.filter(function (x) {
+            return x && typeof x === 'object'; });
+        }
+      }
+    };
+    /* ── CE BLOC S'INSCRIT APRÈS LA RELECTURE GÉNÉRALE, DONC IL SE RELIT
+       LUI-MÊME ────────────────────────────────────────────────────────────
+       MESURÉ : `memoireRelire` parcourt MEMOIRE au chargement de la page ;
+       cette entrée n'y est pas encore, puisque le bloc vit à la fin du
+       fichier. Sans ce rattrapage, la mémoire serait ÉCRITE mais jamais
+       RELUE — un client retrouverait un écran vide avec ses réponses dans le
+       magasin, ce qui est le pire des deux mondes.
+
+       ET LE TÉMOIN D'ÉCRITURE SE POSE ICI AUSSI : c'est lui qui empêche le
+       premier clic d'écrire un formulaire vide dans le magasin. */
+    (function () {
+      var m = MEMOIRE.en18229_3, brut = null;
+      try { brut = localStorage.getItem(m.cle); } catch (e) {}
+      if (brut) {
+        try {
+          var o = JSON.parse(brut);
+          if (o && typeof o === 'object' && !Array.isArray(o)) m.relire(o);
+        } catch (e) {}
+      }
+      try { MEMOIRE_ECRIT.en18229_3 = JSON.stringify(m.lire()); } catch (e) {}
+    })();
+  }
+})();

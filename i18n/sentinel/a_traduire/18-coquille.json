@@ -381,10 +381,6 @@
    "en": "The Low, Moderate or High baseline FOLLOWS from the risk assessment — and the eighteen families are declared one by one",
    "fr": "Le socle Low, Moderate ou High DECOULE de l appreciation du risque — et les dix-huit familles se declarent une par une"
   },
-  "Le taux de chacune des onze normes, et le plan qui le fait monter": {
-   "en": "The rate of each of the eleven standards, and the plan that raises it",
-   "fr": "Le taux de chacune des onze normes, et le plan qui le fait monter"
-  },
   "Les # mesures de l annexe A # : retenue ou ecartee, justifiee, ET son statut de mise en oeuvre — trois colonnes": {
    "en": "The # Annex A # controls: included or excluded, justified, AND their implementation status — three columns",
    "fr": "Les 93 mesures de l annexe A 2022 : retenue ou ecartee, justifiee, ET son statut de mise en oeuvre — trois colonnes"
@@ -737,10 +733,6 @@
    "en": "Personal dashboard: tracking of your actions and your progress.",
    "fr": "Tableau de bord personnel : suivi de vos actions et de votre progression."
   },
-  "Taux de conformité — les onze normes": {
-   "en": "Compliance rate — the eleven standards",
-   "fr": "Taux de conformité — les onze normes"
-  },
   "Texte officiel Art. # sur EUR-Lex": {
    "en": "Official text of Art. # on EUR-Lex",
    "fr": "Texte officiel Art. 50 sur EUR-Lex"
@@ -832,6 +824,14 @@
   "🤖 Vous interagissez avec une IA —": {
    "en": "🤖 You are interacting with an AI —",
    "fr": "🤖 Vous interagissez avec une IA —"
+  },
+  "Taux de conformité — les douze normes": {
+   "fr": "Taux de conformité — les douze normes",
+   "en": "Compliance rate — the twelve standards"
+  },
+  "Le taux de chacune des douze normes, et le plan qui le fait monter": {
+   "fr": "Le taux de chacune des douze normes, et le plan qui le fait monter",
+   "en": "The rate of each of the twelve standards, and the plan that raises it"
   }
  }
 }

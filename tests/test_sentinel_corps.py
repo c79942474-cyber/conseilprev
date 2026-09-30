@@ -662,11 +662,26 @@ def test_le_module_est_charge_AVANT_sentinel_page_js_et_en_differe():
 
 
 def test_sentinel_html_n_est_pas_marque_element_par_element():
-    """LA CONCEPTION : le corps se traduit par contenu. Aucune nouvelle
-    marque data-i18n n'a été semée dans le corps pour ce lot — les 213 clés
-    de la coquille restent la seule chose que le HTML porte."""
-    assert SENTINEL.count("data-i18n=") <= 130, SENTINEL.count("data-i18n=")
-    assert SENTINEL.count("data-i18n-bloc=") <= 100
+    """LA CONCEPTION : le corps se traduit par contenu. Aucune marque
+    data-i18n n'est semée ÉLÉMENT PAR ÉLÉMENT dans le corps — les 213 clés
+    de la coquille restent la seule chose que le HTML porte.
+
+    CE QUE LES PLAFONDS GARDENT, ET CE QU'ILS N'INTERDISENT PAS. Ils
+    interdisent le marquage au détail ; ils n'interdisent pas qu'une page
+    nouvelle porte ce que porte déjà chacune des autres. Un écran de
+    Sentinel porte trois marques et pas une de plus : le surtitre, le titre
+    et le chapô — les trois seuls nœuds dont le texte est coupé par un
+    `<em>` ou un `<b>`, que le moteur par contenu ne sait pas recoller. Le
+    reste du corps n'en porte aucune, et c'est cela que la règle tient.
+
+    Le plafond a donc été relevé de ce que la douzième norme a coûté —
+    quatre écrans, soit 4 surtitres + 5 entrées de barre (données data-i18n)
+    et 4 titres + 4 chapôs (données data-i18n-bloc) — et de rien d'autre :
+    la marge au-dessus du relevé reste celle que le lot de traduction avait
+    laissée, 10 et 7."""
+    assert SENTINEL.count("data-i18n=") <= 139, SENTINEL.count("data-i18n=")
+    assert SENTINEL.count("data-i18n-bloc=") <= 108, \
+        SENTINEL.count("data-i18n-bloc=")
 
 
 # ══════════════════════════════════════════════════════════════════════════

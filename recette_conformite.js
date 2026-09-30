@@ -135,7 +135,7 @@ const DOSSIER = {
       mene: !!c.querySelector('.conf-go')
     }));
   });
-  ok('les onze normes sont rendues', cartes.length === 11, '',
+  ok('les douze normes sont rendues', cartes.length === 12, '',
      cartes.length + ' cartes');
   /* UNE NORME SANS AUCUNE RÉPONSE DIT « — », JAMAIS « 0 % ». Le CRA n'est
      pas dans le dossier : sa carte est celle d'un écran jamais ouvert. */

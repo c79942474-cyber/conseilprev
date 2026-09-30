@@ -2363,6 +2363,7 @@ import dora_ponts  # noqa: E402
 import dora_supervision  # noqa: E402
 import dora_parcours  # noqa: E402
 import parcours_normes  # noqa: E402
+import en18229_3  # noqa: E402
 
 
 @app.route('/api/dora/referentiel', methods=['GET'])
@@ -2468,6 +2469,42 @@ def api_dora_parcours():
     except Exception:
         app.logger.exception("parcours DORA")
         return jsonify({"ok": False, "erreur": "avancement_impossible"}), 500
+    return jsonify(r), 200
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  prEN 18229-3 — LA SUPERVISION HUMAINE DES SYSTÈMES D'IA
+# ═══════════════════════════════════════════════════════════════════════════
+
+@app.route('/api/en18229/referentiel', methods=['GET'])
+@rate_limit(limit=120, window=60)
+def api_en18229_referentiel():
+    """Le cadre d'analyse de la supervision humaine — numeros et titres seuls.
+
+    POURQUOI UNE ROUTE PLUTOT QU'UNE TABLE DANS LA PAGE, ET ICI PLUS QU'AILLEURS.
+    Le texte de la norme est la propriete du CEN : le module est le SEUL endroit
+    ou ses numeros et ses titres sont ecrits. Une liste recopiee dans le
+    JavaScript en ferait un second exemplaire a tenir a jour, et la divergence
+    se verrait chez le client.
+    """
+    return jsonify(dict(en18229_3.referentiel(), ok=True)), 200
+
+
+@app.route('/api/en18229/analyse', methods=['POST'])
+@rate_limit(limit=240, window=60)
+def api_en18229_analyse():
+    """Le score de supervision humaine, ses verrous et le plan qui en decoule.
+
+    MEME CADENCE QUE LE RAIL, POUR LA MEME RAISON : l'ecran redemande
+    l'analyse a chaque reponse, et un scenario de risque se saisit champ par
+    champ. Le regroupement des rafales est fait par l'ecran.
+    """
+    d = request.get_json(silent=True) or {}
+    try:
+        r = en18229_3.analyse(d)
+    except Exception:
+        app.logger.exception("en18229 analyse")
+        return jsonify({"ok": False, "erreur": "analyse_impossible"}), 500
     return jsonify(r), 200
 
 

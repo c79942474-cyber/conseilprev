@@ -137,6 +137,10 @@ QUI_JUGE = {
     # seulement un inventaire qui est exact ou ne l'est pas. Le vert y dit
     # « déclaré », et un inventaire complet de systèmes mal classés reste un
     # inventaire complet.
+    "en18229_3": "personne ne la prononce encore : le projet n'est pas cité "
+                 "au Journal officiel, donc le tenir n'ouvre aucune "
+                 "présomption de conformité à l'article 14 — le jour où la "
+                 "référence sera citée, le même travail vaudra présomption",
     "cartographier": "personne ne la prononce : ce n'est pas une "
                      "conformité mais un inventaire, et le vert y dit que "
                      "ce qu'un écran attend est déclaré — pas que la "
@@ -362,6 +366,45 @@ BLOCS = {
            "des dix-huit familles de mesures.",
            "Le socle décide de ce que chaque famille doit contenir.",
            "Révision 4 : ce n'est plus le dernier millésime du catalogue."),
+    ),
+    #  L'ORDRE N'EST PAS CELUI DE LA NORME, C'EST CELUI DU TRAVAIL : on ne
+    #  répond pas au cadre d'analyse avant de savoir à quel rôle on répond, et
+    #  on ne juge pas l'adéquation d'une mesure avant d'avoir posé le délai
+    #  qu'elle doit tenir.
+    "en18229_3": (
+        _b("role", "en18229-role", "Rôle et périmètre", "saisie",
+           "Fournisseur, déployeur, ou les deux — et si le système identifie "
+           "des personnes à distance par la biométrie.",
+           "La norme adresse ses exigences au fournisseur et transmet au "
+           "déployeur par la notice : le questionnaire, les verrous et le "
+           "score dépendent du rôle.",
+           "Un organisme qui conçoit ET exploite porte les deux jeux "
+           "d'obligations : le score retenu est celui du plus faible des "
+           "deux."),
+        _b("scenarios", "en18229-scenarios", "Scénarios et délais", "saisie",
+           "Un scénario de risque, son délai de réaction, la catégorie de "
+           "mesure retenue et la latence d'intervention mesurée.",
+           "C'est la seule partie du cadre qui se CALCULE : la latence "
+           "déclarée contre le délai déclaré.",
+           "Un scénario dont la latence dépasse le délai sans consignation de "
+           "l'impossibilité technique plafonne le score — aucune réponse au "
+           "questionnaire ne lève ce verrou.",
+           prerequis=("role",)),
+        _b("cadre", "en18229-cadre", "Cadre d’analyse", "saisie",
+           "Les questions de votre rôle, paragraphe par paragraphe.",
+           "C'est ce que le score compte, et ce que le plan d'action reprend "
+           "ligne par ligne.",
+           "Les questions de la section RBI n'apparaissent que si vous avez "
+           "déclaré un système d'identification biométrique à distance.",
+           prerequis=("role",)),
+        _b("score", "en18229-score", "Score et article 14", "lecture",
+           "Le score, ses plafonds, la documentation exigée et la couverture "
+           "de l'article 14 alinéa par alinéa.",
+           "C'est la restitution : rien ne s'y saisit, tout y est dérivé de "
+           "ce qui précède.",
+           "Le vert ne vaut pas présomption de conformité : le projet n'est "
+           "pas encore cité au Journal officiel.",
+           prerequis=("cadre",)),
     ),
     "nist_800_82": (
         _b("ot", "nist82-ot", "Surcharge industrielle (OT)", "saisie",
@@ -1051,7 +1094,75 @@ def _cartographier(d):
     return manque, sans_objet, {}
 
 
+def _en18229_3(d):
+    """CE QUE CHAQUE ÉCRAN DE prEN 18229-3 ATTEND, ET CE QUI LUI MANQUE.
+
+    AUCUN SEUIL N'EST RÉINVENTÉ ICI : le rail lit le moteur. Le rôle vient de
+    la déclaration, l'adéquation des scénarios du calcul du moteur, et
+    l'avancement du cadre du compte de ses propres exigences applicables.
+    """
+    import en18229_3 as _en
+    manque, sans_objet = {}, {}
+
+    # ── LE RÔLE : il commande le reste, donc il vient en premier ──────────
+    roles = [r for r in ("fournisseur", "deployeur")
+             if isinstance(d.get(r), dict) and d[r]]
+    if not roles:
+        manque.setdefault("role", []).append(
+            _q("Choisissez votre rôle — fournisseur, déployeur, ou les deux — "
+               "et répondez à son questionnaire"))
+    if d.get("rbi") is None:
+        manque.setdefault("role", []).append(
+            _q("Dites si le système identifie des personnes à distance par la "
+               "biométrie : neuf exigences en dépendent"))
+
+    # ── LES SCÉNARIOS : au moins un, et chacun doit tenir son délai ───────
+    scs = [x for x in (d.get("scenarios") or []) if isinstance(x, dict)]
+    if not scs:
+        manque.setdefault("scenarios", []).append(
+            _q("Déclarez au moins un scénario de risque avec son délai de "
+               "réaction : c'est lui qui commande le choix des mesures"))
+    else:
+        for x in scs:
+            r = _en.scenario(x)
+            if r["etat"] in ("tient", "impossible_consignee"):
+                continue
+            for m in (r["manque"] or []):
+                manque.setdefault("scenarios", []).append(
+                    _q("« %s » : %s" % (r["nom"] or "sans nom", m)))
+
+    # ── LE CADRE : les exigences applicables du rôle, sans réponse ────────
+    rbi = bool(d.get("rbi"))
+    notif = d.get("notifications_fournisseur")
+    notif = True if notif is None else bool(notif)
+    for role in (roles or []):
+        rep = d.get(role) or {}
+        for ex in _en.applicables(role, rbi, notif):
+            if _en._valeur(rep.get(ex["cle"])) is None:
+                manque.setdefault("cadre", []).append(
+                    _q("%s %s (%s) — sans réponse"
+                       % (ex["clause"], ex["titre"],
+                          _en.ROLES[role]["nom"].lower())))
+
+    # ── LE SCORE : un écran de lecture, qui a besoin du reste ─────────────
+    if not roles or not scs:
+        sans_objet["score"] = ("Le score se calcule sur un rôle et au moins "
+                               "un scénario de risque.")
+
+    #  LE CONTEXTE QUE LE BANDEAU AFFICHE : le rôle qui commande, et ce que
+    #  le score vaut. Un rail qui ne dirait pas le rôle laisserait croire que
+    #  les questions manquantes sont les mêmes pour tous.
+    contexte = {}
+    if roles:
+        contexte["role"] = " et ".join(_en.ROLES[r]["nom"] for r in roles)
+    if rbi:
+        contexte["rbi"] = ("Identification biométrique à distance : neuf "
+                           "exigences de plus, et l'alinéa 14(5) à tenir.")
+    return manque, sans_objet, contexte
+
+
 EVALUATEURS = {
+    "en18229_3": _en18229_3,
     "cartographier": _cartographier,
     "nis2": _nis2, "iso27001": _iso27001, "iso42001": _iso42001,
     "cra": _cra, "nist_ai_rmf": _nist_ai_rmf, "owasp_llm": _owasp_llm,

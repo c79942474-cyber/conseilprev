@@ -690,9 +690,9 @@ EXIGENCES = (
     _e("continue_generales", "5.3.4.1", "Exigences générales (surveillance "
        "continue)", ("fournisseur",),
        "La personne désignée a-t-elle un accès continu et en temps réel au "
-       "fonctionnement courant du système, à ses notifications et alertes, "
-       "et à la disponibilité des fonctions d'écrasement, d'arrêt et de "
-       "réinitialisation ?",
+       "fonctionnement courant du système et à ses notifications — et "
+       "sait-elle à tout instant si elle peut encore écraser une sortie, "
+       "couper le système ou le remettre à zéro ?",
        "Le statut des fonctions d'intervention fait partie de "
        "l'information de supervision : savoir qu'on peut arrêter est une "
        "condition pour arrêter.",
@@ -887,14 +887,14 @@ EXIGENCES = (
     _e("fonctions", "5.7.1", "Généralités (fonctions d'intervention)",
        ("fournisseur",),
        "Le système met-il en œuvre au moins une fonction parmi négligence, "
-       "écrasement et retour, PLUS une fonction d'arrêt ou un mode "
-       "opératoire sécurisé — et la latence d'intervention est-elle "
+       "écrasement et retour, PLUS de quoi couper le système ou le "
+       "basculer en marche dégradée sûre — et la latence est-elle "
        "spécifiée, mesurée et vérifiée comme compatible avec le délai de "
        "réaction ?",
        "C'est l'alinéa 14(4)(d) et (e). Sans fonction d'intervention, la "
        "supervision se réduit à regarder.",
        "L'abstention est une intervention : la personne désignée doit "
-       "pouvoir refuser d'utiliser une sortie avant de s'en servir, et ce "
+       "pouvoir écarter une sortie sans s'en servir, et ce "
        "refus s'enregistre comme un événement de supervision.",
        3,
        verrou="Sans fonction d'intervention, la supervision humaine ne peut "
@@ -930,9 +930,10 @@ EXIGENCES = (
        "personne désignée doit le savoir avant d'agir.",
        2),
     _e("etat_sur", "5.7.5", "Transition en état sécurisé", ("fournisseur",),
-       "La personne désignée dispose-t-elle d'un déclencheur d'état "
-       "sécurisé — physique ou virtuel — accessible INDÉPENDAMMENT de "
-       "l'état du système, et la transition est-elle validée sur le temps, "
+       "La personne désignée dispose-t-elle d'une commande de mise en "
+       "sécurité — bouton matériel ou commande logicielle — atteignable "
+       "INDÉPENDAMMENT du système, et la bascule est-elle validée sur le "
+       "temps, "
        "la stabilité, la complétude de l'atténuation et la récupération ?",
        "Un déclencheur qui passe par le système qu'il doit arrêter tombe "
        "avec lui. C'est le cas d'école, et il se produit.",
@@ -1086,9 +1087,9 @@ EXIGENCES = (
        "réponses) ?",
        "C'est là que vivent les preuves : critères d'acceptation, résultats "
        "de vérification, démonstration de non-surcharge, justifications.",
-       "Le dossier de gestion des risques (prEN 18228) reste le foyer des "
-       "déterminations de risque : la documentation technique porte les "
-       "preuves de conception et de vérification, pas les risques.",
+       "Les déterminations de risque restent au dossier tenu au titre de "
+       "prEN 18228 : c'est lui qui les porte. La documentation technique, "
+       "elle, porte les preuves de conception et de vérification.",
        2),
     _e("notice_recue", "6.1", "Lecture de la notice d'utilisation reçue",
        ("deployeur",),
@@ -1437,7 +1438,8 @@ ETAPES_PLAN = (
      "Ce qui sépare une conception d'une mesure qui fonctionne : critères "
      "d'acceptation, essais, résultats."),
     ("documenter", "Documenter",
-     "La notice d'utilisation et la documentation technique — c'est là que "
+     "Les deux pièces remises — notice d'utilisation, documentation "
+     "technique : c'est là que "
      "la conformité devient démontrable."),
 )
 
@@ -1574,6 +1576,62 @@ def analyse(d):
                    "que l'arithmétique du délai de réaction tient. Il ne "
                    "vaut pas présomption de conformité : %s"
                    % SOURCE["presomption_dit"],
+    }
+
+
+def evaluer(declaration):
+    """Le taux de ce référentiel, dans le format que le taux de conformité
+    du site attend.
+
+    LES DEUX RÔLES NE SE MOYENNENT PAS. Un organisme qui est fournisseur ET
+    déployeur porte deux jeux d'obligations distincts ; le taux affiché est
+    celui du PLUS FAIBLE des deux, parce qu'un score global calculé sur la
+    réunion des deux questionnaires cacherait le côté défaillant derrière le
+    côté tenu. La carte nomme le rôle qui commande.
+    """
+    d = declaration if isinstance(declaration, dict) else {}
+    rbi = bool(d.get("rbi"))
+    notif = d.get("notifications_fournisseur")
+    notif = True if notif is None else bool(notif)
+    scs = [scenario(x) for x in (d.get("scenarios") or [])
+           if isinstance(x, dict)]
+
+    #  LES RÔLES DÉCLARÉS, ET RIEN D'AUTRE. Un rôle qu'on n'a pas endossé ne
+    #  se note pas : il n'entre ni au numérateur ni au dénominateur.
+    roles = [r for r in ("fournisseur", "deployeur")
+             if isinstance(d.get(r), dict) and d[r]]
+    if not roles:
+        return {"ok": False, "motif": "aucun_role_declare",
+                "dit": "Choisissez votre rôle — fournisseur, déployeur, ou "
+                       "les deux — et répondez à son questionnaire."}
+
+    par_role = {}
+    for r in roles:
+        par_role[r] = score(r, d[r], rbi, notif, scs if r == "fournisseur"
+                            else None)
+    commande = min(roles, key=lambda r: par_role[r]["taux"])
+
+    verrous = []
+    for r in roles:
+        for v in par_role[r]["verrous"]:
+            verrous.append(dict(v, role=ROLES[r]["nom"]))
+
+    return {
+        "ok": True,
+        "taux": par_role[commande]["taux"],
+        "roles": {r: par_role[r] for r in roles},
+        "role_commande": commande,
+        "role_commande_nom": ROLES[commande]["nom"],
+        "rbi": rbi,
+        "scenarios": len(scs),
+        "scenarios_casses": len([x for x in scs if x["etat"]
+                                 == "impossible_non_consignee"]),
+        "verrous": verrous,
+        "certifiable": False,
+        "article_14": couverture_article_14(d.get(commande) or {}, rbi),
+        "reserve": "Rien ne se certifie contre prEN 18229-3 : ce taux dit la "
+                   "supervision humaine déclarée au regard d'un projet de "
+                   "norme. %s" % SOURCE["presomption_dit"],
     }
 
 

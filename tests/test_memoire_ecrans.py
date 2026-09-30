@@ -58,7 +58,13 @@ CLES = {"nis2": "cp-sentinel-nis2-v1", "recyf": "cp-sentinel-recyf-v2",
         #  pourtant ici : ses seize réponses n'étaient gardées nulle part et
         #  disparaissaient à chaque rechargement. Un module qu'on doit refaire
         #  pour avoir changé d'onglet ne se remplit jamais.
-        "maturite": "cp-sentinel-maturite-v1"}
+        "maturite": "cp-sentinel-maturite-v1",
+        #  prEN 18229-3 GARDE PLUS QUE DES RÉPONSES : son écran porte aussi le
+        #  rôle endossé, la nature du système (identification biométrique à
+        #  distance ou non) et la liste des scénarios de risque avec leurs deux
+        #  durées. Un client qui perdrait ses scénarios à chaque rechargement
+        #  ne les saisirait pas deux fois.
+        "en18229_3": "cp-sentinel-en18229-v1"}
 
 #: CE QUI GARDAIT DÉJÀ SES RÉPONSES, ET OÙ. Un référentiel du rail qui ne
 #: serait ni ici ni dans la mémoire des écrans perdrait les siennes au
