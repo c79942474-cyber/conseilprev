@@ -5945,6 +5945,14 @@ window.MAT_SECTORS = MAT_SECTORS;
 window.matSocle = function(s){ return matSocle(s); };
 window.MAT_PILLARS = MAT_PILLARS;
 window.matGetCur = function(){ return MAT_CUR; };
+/* LE SECTEUR REPRIS DE LA MÉMOIRE, SANS REPEINDRE. `matSelect` re-rend
+   l'écran ; au chargement, rien n'a encore été peint et le rendu partirait
+   d'un panneau qui n'existe pas. Cette porte-ci ne fait que poser le
+   secteur, et le rendu qui suivra le trouvera en place. */
+window.matReprendreSecteur = function(k){
+  if(k && window.MAT_SECTORS && window.MAT_SECTORS[k]) { MAT_CUR = k; return true; }
+  return false;
+};
 
 /* Phases du programme (issues du cahier des charges CONSEILPREV) */
 var MAT_PHASES = [
@@ -6306,7 +6314,20 @@ function matRender(){
       + '<div class="matq-global-box"><div><div class="matq-global-lbl">Score global de maturité</div>'
       + '<div><span class="matq-global-val" id="matq-global" style="color:'+lvl.color+'">'+g.toFixed(1)+'</span><span style="font-size:16px;color:var(--muted2)">/5</span> '
       + '<span class="matq-level-badge" id="matq-level" style="color:'+lvl.color+'">'+lvl.label+'</span></div>'
-      + '<div class="matq-level-desc" id="matq-level-desc">'+lvl.desc+'</div></div></div>'
+      + '<div class="matq-level-desc" id="matq-level-desc">'+lvl.desc+'</div>'
+      /* LE COMPTEUR EST DANS LA MÊME BOÎTE QUE LE SCORE, et pas ailleurs :
+         c'est le score qu'il qualifie. « 4,2 / 5 » obtenu sur deux questions
+         ne dit pas la même chose que le même 4,2 obtenu sur seize. */
+      /* PEINT DÈS LE RENDU, pas seulement au premier clic : laissé vide, le
+         compteur manquait exactement à qui n'a encore rien répondu — c'est-à-dire
+         à celui qui en a le plus besoin. Mesuré : à l'ouverture du panneau,
+         la ligne était vide jusqu'à la première réponse. */
+      + (function(){ var r = window.matRepondu(MAT_CUR);
+           return '<div class="matq-repondu" style="font-size:11.5px;color:var(--muted);margin-top:6px"'
+             + ' data-complet="' + (r.complet ? 'oui' : 'non') + '">'
+             + r.repondues + ' / ' + r.total + ' question' + (r.total > 1 ? 's' : '')
+             + ' répondue' + (r.total > 1 ? 's' : '') + '</div>'; })()
+      + '</div></div>'
       + '<div class="matq-pillar-grid">';
     MAT_PILLARS.forEach(function(p){
       var qs = window.MAT_QUESTIONS[p.id] || [];
@@ -6315,7 +6336,9 @@ function matRender(){
       html += '<div class="matq-pillar"><div class="matq-pillar-head"><span class="matq-pillar-name">'+p.label+tip(PILLAR_TIPS[p.id]||p.desc)+'</span>'
         + '<span class="matq-pillar-score-mini matq-score" data-pillar="'+p.id+'" style="color:'+col+'">'+sc.toFixed(1)+'/5</span></div>';
       qs.forEach(function(qo,i){
-        var cur = (window.MAT_ANSWERS[MAT_CUR] && window.MAT_ANSWERS[MAT_CUR][p.id]) ? window.MAT_ANSWERS[MAT_CUR][p.id][i] : 0;
+        /* `null` — pas encore répondu — n'allume aucun des trois boutons.
+           Le défaut d'origine mettait 0 ici, et « Non » paraissait choisi. */
+        var cur = (window.MAT_ANSWERS[MAT_CUR] && window.MAT_ANSWERS[MAT_CUR][p.id]) ? window.MAT_ANSWERS[MAT_CUR][p.id][i] : null;
         html += '<div class="matq-q"><div class="matq-q-text">'+qo.q+' <span class="matq-q-art">'+qo.art+'</span></div>'
           + '<div class="matq-opts">'
           + '<button class="matq-opt'+(cur===0?' on':'')+'" id="matq-'+p.id+'-'+i+'-0" onclick="matAnswer(\''+p.id+'\','+i+',0)" title="Cliquez pour repondre — recalcule le score de maturite en temps reel.">Non</button>'
@@ -6586,28 +6609,63 @@ var MAT_QUESTIONS = {
 /* État des réponses : { secteur: { pilier: [v1, v2] } } */
 var MAT_ANSWERS = {};
 
+/* ── « PAS ENCORE RÉPONDU » N'EST PAS UNE RÉPONSE ──────────────────────────
+   LE DÉFAUT MESURÉ. Les seize réponses étaient PRÉ-REMPLIES depuis le profil
+   sectoriel de référence, avant que l'utilisateur ait touché quoi que ce
+   soit. Relevé au navigateur, panneau ouvert et rien de cliqué : les huit
+   piliers portaient déjà une note et le score global affichait 2,7 / 5. Et
+   comme les trois boutons ne proposaient que Non (0), Partiel (0,5) et Oui
+   (1), un zéro par défaut était INDISCERNABLE d'un « Non » répondu. L'écran
+   rendait donc un diagnostic que personne n'avait posé, et aucun vert de
+   parcours ne pouvait être honnête.
+
+   C'est le défaut que ce dépôt a déjà corrigé six fois — l'audit IA Act,
+   l'AIPD, la privacy by design, la politique documentaire, la sensibilisation
+   et l'analyse de risque ReCyF : « pas coché » s'y confondait avec « pas
+   encore regardé ». Même remède : `null` est le troisième état, et il n'est
+   ni Non, ni Oui.
+
+   LE PROFIL SECTORIEL NE DISPARAÎT PAS, IL CHANGE DE RÔLE. Il reste la
+   RÉFÉRENCE affichée à côté du score — ce que fait le secteur —, au lieu
+   d'être une réponse prêtée à l'utilisateur. */
 function matInitAnswers(sectorKey){
   if(!MAT_ANSWERS[sectorKey]){
     MAT_ANSWERS[sectorKey] = {};
-    var ref = (window.MAT_SECTORS && window.MAT_SECTORS[sectorKey]) ? window.MAT_SECTORS[sectorKey].pillars : {};
     Object.keys(MAT_QUESTIONS).forEach(function(p){
-      /* Pré-remplir selon le profil sectoriel de référence (score/5 → 2 réponses) */
-      var refScore = ref[p] || 3;
-      var perQ = refScore / 5; /* 0..1 */
-      MAT_ANSWERS[sectorKey][p] = [
-        perQ >= 0.6 ? 1 : perQ >= 0.3 ? 0.5 : 0,
-        perQ >= 0.8 ? 1 : perQ >= 0.5 ? 0.5 : 0
-      ];
+      MAT_ANSWERS[sectorKey][p] = [null, null];
     });
   }
   return MAT_ANSWERS[sectorKey];
 }
 
+/* CE QUI EST RÉPONDU, ET SUR COMBIEN. Le score se calcule sur les réponses
+   REÇUES ; l'écran dit combien il en a reçu, pour qu'un 4,2/5 obtenu sur
+   deux questions ne se lise pas comme un 4,2/5 obtenu sur seize. */
+window.matRepondu = function(sectorKey){
+  var a = MAT_ANSWERS[sectorKey] || {};
+  var total = 0, repondues = 0;
+  Object.keys(MAT_QUESTIONS).forEach(function(p){
+    (MAT_QUESTIONS[p] || []).forEach(function(_, i){
+      total++;
+      var v = a[p] && a[p][i];
+      if(v === 0 || v === 0.5 || v === 1) repondues++;
+    });
+  });
+  return { repondues: repondues, total: total, complet: total > 0 && repondues === total };
+};
+
 /* Calcul du score d'un pilier sur 5 à partir des 2 réponses */
+/* LE SCORE PORTE SUR CE QUI EST RÉPONDU, PAS SUR CE QUI EST VIDE. Compter
+   une question sans réponse comme un « Non » donnerait un score bas qui a
+   l'air d'un diagnostic ; la moyenne des réponses reçues, elle, dit ce
+   qu'elle sait. Aucune réponse : zéro, et le compteur à côté dit pourquoi. */
 window.matPillarScore = function(sectorKey, pillar){
-  var a = (MAT_ANSWERS[sectorKey] && MAT_ANSWERS[sectorKey][pillar]) || [0,0];
-  var sum = a[0] + a[1]; /* 0..2 */
-  return Math.round(sum / 2 * 5 * 10) / 10; /* 0..5 */
+  var a = (MAT_ANSWERS[sectorKey] && MAT_ANSWERS[sectorKey][pillar]) || [null,null];
+  var recues = [];
+  for(var i=0; i<a.length; i++){ if(a[i] === 0 || a[i] === 0.5 || a[i] === 1) recues.push(a[i]); }
+  if(!recues.length) return 0;
+  var sum = recues.reduce(function(x,y){ return x + y; }, 0);
+  return Math.round(sum / recues.length * 5 * 10) / 10; /* 0..5 */
 };
 
 window.matGlobalScore = function(sectorKey){
@@ -6666,6 +6724,13 @@ function matRefreshScores(){
   document.querySelectorAll('.mat-hero-score-val').forEach(function(el){
     el.textContent = g.toFixed(1); el.style.color = lvl.color;
   });
+  /* COMBIEN DE QUESTIONS ONT UNE RÉPONSE. Un score sans ce compteur se lit
+     comme un diagnostic complet, quel que soit le nombre de réponses reçues. */
+  var r = window.matRepondu(s);
+  document.querySelectorAll('.matq-repondu').forEach(function(el){
+    el.textContent = r.repondues + ' / ' + r.total + ' question' + (r.total > 1 ? 's' : '') + ' répondue' + (r.total > 1 ? 's' : '');
+    el.setAttribute('data-complet', r.complet ? 'oui' : 'non');
+  });
   /* Regenerer le radar SVG dynamiquement */
   var holder = document.getElementById("mat-radar-holder");
   if(holder && typeof window.matRadar === "function"){
@@ -6678,7 +6743,7 @@ function matRefreshScores(){
     MAT_QUESTIONS[p].forEach(function(_,i){
       [0,0.5,1].forEach(function(v){
         var btn = document.getElementById("matq-"+p+"-"+i+"-"+v);
-        if(btn){ btn.classList.toggle("on", MAT_ANSWERS[s][p][i]===v); }
+        if(btn){ btn.classList.toggle("on", (MAT_ANSWERS[s] && MAT_ANSWERS[s][p] && MAT_ANSWERS[s][p][i]) === v); }
       });
     });
   });
@@ -29596,6 +29661,47 @@ function _memPoser(id, v) {
 }
 
 var MEMOIRE = {
+  /* L'AUDIT DE MATURITÉ N'AVAIT AUCUNE MÉMOIRE. Relevé au navigateur : aucune
+     clé de stockage ne le concernait, et les seize réponses disparaissaient à
+     chaque rechargement. Un module qu'on doit refaire entièrement pour avoir
+     changé d'onglet ne se remplit jamais ; et un vert de parcours qui
+     redevient rouge au rechargement ne vaut rien.
+     CE QUI EST GARDÉ : les réponses, par secteur, et le secteur choisi. Ce
+     que le module RECALCULE — les scores, le niveau, le radar — ne l'est pas.
+     LA VALEUR NULLE EST GARDÉE COMME TELLE : `nombre?` accepte `null`, et
+     c'est tout l'enjeu — « pas encore répondu » doit se relire « pas encore
+     répondu », jamais « Non ». */
+  maturite: { norme: 'maturite', nom: 'Audit de maturité IA',
+    cle: 'cp-sentinel-maturite-v1',
+    lire: function () {
+      if (typeof window.MAT_ANSWERS === 'undefined') return null;
+      return { reponses: window.MAT_ANSWERS,
+               secteur: (typeof window.matGetCur === 'function') ? window.matGetCur() : null };
+    },
+    relire: function (m) {
+      if (typeof window.MAT_ANSWERS === 'undefined') return;
+      var r = m && m.reponses;
+      if (!r || typeof r !== 'object') return;
+      /* Chaque secteur, chaque pilier, chaque réponse est relu AVEC SON TYPE :
+         une valeur d'un autre type est écartée seule, sans coûter les
+         quinze autres. Les seules réponses admises sont 0, 0.5, 1 et null. */
+      Object.keys(r).forEach(function (secteur) {
+        var piliers = r[secteur];
+        if (!piliers || typeof piliers !== 'object') return;
+        var garde = {};
+        Object.keys(piliers).forEach(function (pilier) {
+          var a = piliers[pilier];
+          if (!Array.isArray(a)) return;
+          garde[pilier] = a.map(function (v) {
+            return (v === 0 || v === 0.5 || v === 1) ? v : null;
+          });
+        });
+        if (Object.keys(garde).length) window.MAT_ANSWERS[secteur] = garde;
+      });
+      if (typeof m.secteur === 'string' && typeof window.matReprendreSecteur === 'function') {
+        window.matReprendreSecteur(m.secteur);
+      }
+    } },
   nis2: { norme: 'nis2', nom: 'NIS 2', cle: 'cp-sentinel-nis2-v1',
     lire: function () { return { etat: NIS2_ETAT, ca_groupe: _memChamp('nis2-ca') }; },
     relire: function (m) {

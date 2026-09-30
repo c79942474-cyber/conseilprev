@@ -1611,6 +1611,11 @@ textarea.form-el{min-height:86px;resize:vertical}
 
 /* ══ AUDIT MATURITÉ v2 — Questionnaire, tooltips, modal ══ */
 .matq-global-box{display:flex;align-items:center;gap:20px;background:var(--white);border:1px solid var(--rule);border-radius:6px;padding:18px 22px;margin-bottom:18px}
+/* LE COMPTEUR DE RÉPONSES. Vert quand les seize sont là — c'est la seule
+   chose que ce module puisse affirmer ; gris tant qu'il en manque, parce
+   qu'un score partiel n'est pas un diagnostic. */
+.matq-repondu{font-family:var(--mono);letter-spacing:.02em}
+.matq-repondu[data-complet="oui"]{color:var(--green) !important;font-weight:600}
 .matq-global-lbl{font-size:10px;font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted2);margin-bottom:4px}
 .matq-global-val{font-family:var(--serif);font-size:38px;line-height:1}
 .matq-level-badge{font-size:13px;font-weight:600;margin-left:10px}

@@ -1,0 +1,106 @@
+{
+ "_pourquoi": "Chaque mutation FABRIQUE un défaut réel de l'audit de maturité — une réponse prêtée à l'utilisateur, un « pas encore répondu » qui redevient un « Non », un score calculé sur des cases vides, une mémoire qui ne garde rien — et doit faire TOMBER la règle nommée de tests/test_maturite_non_renseigne.py.",
+ "cibles": [
+  "tests/test_maturite_non_renseigne.py"
+ ],
+ "mutations": [
+  {
+   "nom": "les réponses sont de nouveau pré-remplies à zéro",
+   "fichier": "sentinel.page.js",
+   "avant": "      MAT_ANSWERS[sectorKey][p] = [null, null];",
+   "apres": "      MAT_ANSWERS[sectorKey][p] = [0, 0];",
+   "regle": "test_a_l_ouverture_aucune_question_n_a_de_reponse"
+  },
+  {
+   "nom": "le profil sectoriel reprête ses notes à l'utilisateur",
+   "fichier": "sentinel.page.js",
+   "avant": "    Object.keys(MAT_QUESTIONS).forEach(function(p){\n      MAT_ANSWERS[sectorKey][p] = [null, null];\n    });",
+   "apres": "    var ref = (window.MAT_SECTORS && window.MAT_SECTORS[sectorKey]) ? window.MAT_SECTORS[sectorKey].pillars : {};\n    Object.keys(MAT_QUESTIONS).forEach(function(p){\n      MAT_ANSWERS[sectorKey][p] = [(ref[p]||3)/5 >= 0.6 ? 1 : 0, 0];\n    });",
+   "regle": "test_le_profil_sectoriel_ne_prete_plus_ses_notes_a_l_utilisateur"
+  },
+  {
+   "nom": "une case vide se compte comme une réponse",
+   "fichier": "sentinel.page.js",
+   "avant": "      if(v === 0 || v === 0.5 || v === 1) repondues++;",
+   "apres": "      repondues++;",
+   "regle": "test_a_l_ouverture_aucune_question_n_a_de_reponse"
+  },
+  {
+   "nom": "un « Non » répondu cesse de compter comme une réponse",
+   "fichier": "sentinel.page.js",
+   "avant": "      if(v === 0 || v === 0.5 || v === 1) repondues++;",
+   "apres": "      if(v === 0.5 || v === 1) repondues++;",
+   "regle": "test_un_non_repondu_compte_comme_une_reponse_et_vaut_zero"
+  },
+  {
+   "nom": "un « Partiel » cesse de compter comme une réponse",
+   "fichier": "sentinel.page.js",
+   "avant": "  for(var i=0; i<a.length; i++){ if(a[i] === 0 || a[i] === 0.5 || a[i] === 1) recues.push(a[i]); }",
+   "apres": "  for(var i=0; i<a.length; i++){ if(a[i] === 0 || a[i] === 1) recues.push(a[i]); }",
+   "regle": "test_les_trois_valeurs_admises_comptent_comme_une_reponse[0.5-2.5]"
+  },
+  {
+   "nom": "le score compte de nouveau les cases vides comme des zéros",
+   "fichier": "sentinel.page.js",
+   "avant": "  if(!recues.length) return 0;\n  var sum = recues.reduce(function(x,y){ return x + y; }, 0);\n  return Math.round(sum / recues.length * 5 * 10) / 10; /* 0..5 */",
+   "apres": "  var sum = (a[0] || 0) + (a[1] || 0);\n  return Math.round(sum / 2 * 5 * 10) / 10; /* 0..5 */",
+   "regle": "test_le_score_porte_sur_les_reponses_recues_et_pas_sur_les_cases_vides"
+  },
+  {
+   "nom": "le parcours se dit complet avant les seize réponses",
+   "fichier": "sentinel.page.js",
+   "avant": "  return { repondues: repondues, total: total, complet: total > 0 && repondues === total };",
+   "apres": "  return { repondues: repondues, total: total, complet: repondues > 0 };",
+   "regle": "test_un_parcours_commence_n_est_pas_un_parcours_complet"
+  },
+  {
+   "nom": "une question sans réponse rallume le bouton « Non »",
+   "fichier": "sentinel.page.js",
+   "avant": "window.MAT_ANSWERS[MAT_CUR][p.id][i] : null;",
+   "apres": "window.MAT_ANSWERS[MAT_CUR][p.id][i] : 0;",
+   "regle": "test_aucun_bouton_n_est_allume_par_defaut"
+  },
+  {
+   "nom": "le compteur n'est plus peint au rendu",
+   "fichier": "sentinel.page.js",
+   "avant": "+ (function(){ var r = window.matRepondu(MAT_CUR);",
+   "apres": "+ (function(){ var r = { repondues: 0, total: 0, complet: false };",
+   "regle": "test_l_ecran_dit_combien_de_questions_ont_une_reponse"
+  },
+  {
+   "nom": "le module perd sa mémoire",
+   "fichier": "sentinel.page.js",
+   "avant": "    cle: 'cp-sentinel-maturite-v1',",
+   "apres": "    cle: 'maturite',",
+   "regle": "test_le_module_a_une_memoire_declaree"
+  },
+  {
+   "nom": "la mémoire garde aussi un score qui se recalcule",
+   "fichier": "sentinel.page.js",
+   "avant": "      return { reponses: window.MAT_ANSWERS,",
+   "apres": "      return { reponses: window.MAT_ANSWERS, score: window.matGlobalScore('telecom'),",
+   "regle": "test_la_memoire_garde_les_reponses_et_le_secteur_pas_les_scores"
+  },
+  {
+   "nom": "la mémoire ne garde plus le secteur choisi",
+   "fichier": "sentinel.page.js",
+   "avant": "               secteur: (typeof window.matGetCur === 'function') ? window.matGetCur() : null };",
+   "apres": "               _: null };",
+   "regle": "test_la_memoire_garde_les_reponses_et_le_secteur_pas_les_scores"
+  },
+  {
+   "nom": "une réponse abîmée est recopiée telle quelle",
+   "fichier": "sentinel.page.js",
+   "avant": "            return (v === 0 || v === 0.5 || v === 1) ? v : null;",
+   "apres": "            return v;",
+   "regle": "test_une_reponse_illisible_est_ecartee_seule['oui']"
+  },
+  {
+   "nom": "une réponse hors barème est acceptée à la relecture",
+   "fichier": "sentinel.page.js",
+   "avant": "            return (v === 0 || v === 0.5 || v === 1) ? v : null;",
+   "apres": "            return (typeof v === 'number') ? v : null;",
+   "regle": "test_une_reponse_illisible_est_ecartee_seule[2]"
+  }
+ ]
+}

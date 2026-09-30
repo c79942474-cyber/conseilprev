@@ -53,7 +53,12 @@ NODE = shutil.which("node")
 CLES = {"nis2": "cp-sentinel-nis2-v1", "recyf": "cp-sentinel-recyf-v2",
         "iso27001": "cp-sentinel-iso27001-v1",
         "iso42001": "cp-sentinel-iso42001-v1",
-        "cra": "cp-sentinel-cra-v1", "dora": "cp-sentinel-dora-v1"}
+        "cra": "cp-sentinel-cra-v1", "dora": "cp-sentinel-dora-v1",
+        #  L'AUDIT DE MATURITÉ N'EST PAS UN RÉFÉRENTIEL DU RAIL, et il entre
+        #  pourtant ici : ses seize réponses n'étaient gardées nulle part et
+        #  disparaissaient à chaque rechargement. Un module qu'on doit refaire
+        #  pour avoir changé d'onglet ne se remplit jamais.
+        "maturite": "cp-sentinel-maturite-v1"}
 
 #: CE QUI GARDAIT DÉJÀ SES RÉPONSES, ET OÙ. Un référentiel du rail qui ne
 #: serait ni ici ni dans la mémoire des écrans perdrait les siennes au
