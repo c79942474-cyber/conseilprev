@@ -129,12 +129,18 @@ def test_le_taux_lit_ces_reponses_par_la_COLLECTE_DU_RAIL():
     assert "CONF_DECL" not in code, (
         "un global CONF_DECL est encore lu ou écrit : une seconde collecte "
         "pour les mêmes réponses, et le rail et le taux se contrediront")
+    #  NIST PORTE UN SECOND CHAMP, ET IL EST OBLIGATOIRE. Le profil
+    #  AI 600-1 PLAFONNE le taux du cadre : un socle qui arriverait seul se
+    #  lirait « non génératif », c'est-à-dire la seule réponse qui ne
+    #  plafonne rien — le taux remonterait donc à 100 % sans que personne
+    #  n'ait rien changé à ses réponses.
+    attendus = {"nist_ai_rmf": "{ etats: NIST_DECL, profil: GENAI_DECL }",
+                "owasp_llm": "{ etats: OWASP_DECL }"}
     for cfg in MODULES.values():
-        decl = "NIST_DECL" if cfg["norme"] == "nist_ai_rmf" else "OWASP_DECL"
-        assert re.search(r"%s: function \(\) \{ return \{ etats: %s \}; \}"
-                         % (cfg["norme"], decl), code), (
-            "le rail ne collecte plus %s : ni lui ni le taux ne verront ces "
-            "réponses" % cfg["norme"])
+        rendu = attendus[cfg["norme"]]
+        assert "%s: function () { return %s; }" % (cfg["norme"], rendu) in code, (
+            "le rail ne collecte plus %s sous la forme %s : ni lui ni le "
+            "taux ne verront ces réponses" % (cfg["norme"], rendu))
     assert "body: JSON.stringify({ecrans: ecrans})" in code, (
         "le taux n'envoie plus la collecte du rail")
 

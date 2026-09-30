@@ -1,0 +1,196 @@
+{
+ "cibles": [
+  "tests/test_nist_genai.py"
+ ],
+ "mutations": [
+  {
+   "nom": "le profil cesse de plafonner : le socle passe tel quel",
+   "fichier": "conformite.py",
+   "avant": "    plafonnes, mouvements = _profil.etats_du_profil(etats, prof)",
+   "apres": "    plafonnes, mouvements = etats, []",
+   "regle": "test_le_taux_du_cadre_TOMBE_quand_le_systeme_est_declare_generatif"
+  },
+  {
+   "nom": "un profil illisible est avalé au lieu d'être refusé",
+   "fichier": "conformite.py",
+   "avant": "    if not lu.get(\"ok\"):\n        return {\"ok\": False, \"motif\": \"profil_genai_illisible\",",
+   "apres": "    if False:\n        return {\"ok\": False, \"motif\": \"profil_genai_illisible\",",
+   "regle": "test_un_code_d_action_INCONNU_fait_REFUSER_la_norme_entiere"
+  },
+  {
+   "nom": "la réserve du profil ne part plus avec le taux",
+   "fichier": "conformite.py",
+   "avant": "    if ev.get(\"plafonds_du_profil\"):\n        signaux.append(\"profil_genai\")",
+   "apres": "    if False:\n        signaux.append(\"profil_genai\")",
+   "regle": "test_la_RESERVE_du_profil_dit_que_le_nombre_n_est_plus_celui_du_socle"
+  },
+  {
+   "nom": "les écarts relisent la déclaration brute, pas les états plafonnés",
+   "fichier": "conformite.py",
+   "avant": "    etats = plafonnes if isinstance(plafonnes, dict) else _nist_declaration(dec)[0]",
+   "apres": "    etats = _nist_declaration(dec)[0]",
+   "regle": "test_une_categorie_plafonnee_par_le_profil_devient_un_ECART_qui_le_DIT"
+  },
+  {
+   "nom": "un écart dû au profil renvoie à l'écran du cadre",
+   "fichier": "conformite.py",
+   "avant": "                       \"nist · profil IA générative\"\n                       if cat[\"cle\"] in par_le_profil",
+   "apres": "                       \"nist · \" + cat[\"fonction\"]\n                       if cat[\"cle\"] in par_le_profil",
+   "regle": "test_une_categorie_plafonnee_par_le_profil_devient_un_ECART_qui_le_DIT"
+  },
+  {
+   "nom": "le traducteur d'écran laisse le profil derrière lui",
+   "fichier": "conformite.py",
+   "avant": "    return {\"etats\": etats or {}, \"profil\": profil or {}}",
+   "apres": "    return {\"etats\": etats or {}, \"profil\": {}}",
+   "regle": "test_l_ecran_qui_n_envoie_PAS_son_profil_verrait_son_taux_REMONTER"
+  },
+  {
+   "nom": "la forme ancienne de déclaration n'est plus reconnue",
+   "fichier": "conformite.py",
+   "avant": "    if \"etats\" in d or \"profil\" in d:",
+   "apres": "    if True:",
+   "regle": "test_les_DEUX_formes_de_declaration_rendent_le_meme_taux"
+  },
+  {
+   "nom": "une action écartée reste au dénominateur",
+   "fichier": "nist_genai.py",
+   "avant": "    portees = len(portee) - len(ecartees)",
+   "apres": "    portees = len(portee)",
+   "regle": "test_une_action_ECARTEE_sort_du_denominateur_et_se_compte"
+  },
+  {
+   "nom": "une catégorie sans action applicable n'est plus dite sans objet",
+   "fichier": "nist_genai.py",
+   "avant": "        sans_objet_profil = not portee",
+   "apres": "        sans_objet_profil = False",
+   "regle": "test_une_categorie_que_les_risques_RETENUS_n_appellent_pas_est_SANS_OBJET"
+  },
+  {
+   "nom": "le plan se range par numéro de paragraphe",
+   "fichier": "nist_genai.py",
+   "avant": "    out.sort(key=lambda x: (-x[\"porte\"], rang_f.get(x[\"fonction\"], 9),\n                            x[\"code\"]))",
+   "apres": "    out.sort(key=lambda x: x[\"code\"])",
+   "regle": "test_le_plan_place_devant_ce_qui_traite_le_PLUS_de_risques_retenus"
+  },
+  {
+   "nom": "le plan compte les risques que le client n'a PAS retenus",
+   "fichier": "nist_genai.py",
+   "avant": "        portes = sorted(voulus.intersection(a[\"risques\"]))",
+   "apres": "        portes = sorted(n for n in a[\"risques\"] if n in _rmf.RISQUES_PAR_N)",
+   "regle": "test_le_plan_ne_compte_que_les_risques_RETENUS_dans_sa_portee"
+  },
+  {
+   "nom": "le plan réclame une action que le client a écartée",
+   "fichier": "nist_genai.py",
+   "avant": "        if actions.get(code) in (\"tenue\", \"sans_objet\"):",
+   "apres": "        if actions.get(code) in (\"tenue\",):",
+   "regle": "test_le_plan_ne_propose_QUE_des_actions_applicables_et_non_tenues"
+  },
+  {
+   "nom": "un code d'action inconnu est rangé en silence",
+   "fichier": "nist_genai.py",
+   "avant": "    if inconnues:\n        # UN CODE QU'ON NE CONNAÎT PAS NE SE RANGE PAS EN SILENCE.",
+   "apres": "    if False:\n        # UN CODE QU'ON NE CONNAÎT PAS NE SE RANGE PAS EN SILENCE.",
+   "regle": "test_un_code_d_action_INCONNU_fait_REFUSER_la_norme_entiere"
+  },
+  {
+   "nom": "un état d'action inconnu passe sans être refusé",
+   "fichier": "nist_genai.py",
+   "avant": "    mauvais = sorted(c for c, e in actions.items() if e not in ETATS_ACTION)",
+   "apres": "    mauvais = []",
+   "regle": "test_un_ETAT_d_action_inconnu_est_refuse_lui_aussi"
+  },
+  {
+   "nom": "un génératif sans risque déclaré se dit « partiel »",
+   "fichier": "nist_genai.py",
+   "avant": "    elif not declares:\n        tete, dit = \"risques_absents\", (",
+   "apres": "    elif False:\n        tete, dit = \"risques_absents\", (",
+   "regle": "test_aucun_risque_retenu_ne_plafonne_RIEN"
+  },
+  {
+   "nom": "une catégorie écartée au socle est rouverte par le profil",
+   "fichier": "nist_genai.py",
+   "avant": "    if plafond is None or etat not in _RANG or plafond not in _RANG:\n        return etat",
+   "apres": "    if plafond is None or plafond not in _RANG:\n        return etat",
+   "regle": "test_une_categorie_SANS_OBJET_au_socle_le_reste"
+  },
+  {
+   "nom": "le silence du client vaut « non génératif » dans le rail",
+   "fichier": "parcours_normes.py",
+   "avant": "    if genai is not True and genai is not False:",
+   "apres": "    if False:",
+   "regle": "test_le_rail_demande_la_QUALIFICATION_avant_tout_le_reste[sans-reponse-une-question]"
+  },
+  {
+   "nom": "le rail énumère les 211 actions au lieu des sous-catégories",
+   "fichier": "parcours_normes.py",
+   "avant": "            reste.append(_q(\"%s — %d action(s) du profil sans réponse\"\n                            % (sc, len(ouvertes))))",
+   "apres": "            reste.extend(_q(\"%s — %s\" % (sc, x)) for x in ouvertes)",
+   "regle": "test_le_rail_nomme_les_SOUS_CATEGORIES_en_attente_et_pas_les_211_actions"
+  },
+  {
+   "nom": "le bloc du profil redevient un écran de lecture",
+   "fichier": "parcours_normes.py",
+   "avant": "        _b(\"genai\", \"nist-genai\", \"Profil IA générative\", \"saisie\",",
+   "apres": "        _b(\"genai\", \"nist-genai\", \"Profil IA générative\", \"lecture\",",
+   "regle": "test_le_bloc_du_profil_est_une_SAISIE_et_non_une_lecture"
+  },
+  {
+   "nom": "la route d'évaluation ignore le profil qu'on lui envoie",
+   "fichier": "app.py",
+   "avant": "    plafonnes, mouvements = nist_genai.etats_du_profil(etats, profil)",
+   "apres": "    plafonnes, mouvements = etats, []",
+   "regle": "test_la_route_d_evaluation_et_le_TAUX_rendent_le_MEME_plafond"
+  },
+  {
+   "nom": "la route du profil rend 200 sur une déclaration refusée",
+   "fichier": "app.py",
+   "avant": "    a = nist_genai.analyse(profil, etats)\n    if not a.get(\"ok\"):\n        return jsonify(a), 400",
+   "apres": "    a = nist_genai.analyse(profil, etats)\n    if not a.get(\"ok\"):\n        return jsonify(a), 200",
+   "regle": "test_la_route_du_profil_REFUSE_une_declaration_illisible"
+  },
+  {
+   "nom": "la route du profil ne rend plus le plan",
+   "fichier": "app.py",
+   "avant": "    return jsonify({\"ok\": True, \"analyse\": a,\n                    \"plan\": nist_genai.plan(profil, limite=limite)})",
+   "apres": "    return jsonify({\"ok\": True, \"analyse\": a, \"plan\": []})",
+   "regle": "test_la_route_du_profil_rend_la_table_ET_le_plan"
+  },
+  {
+   "nom": "un énoncé d'action est recopié dans l'écran",
+   "fichier": "sentinel.html",
+   "avant": "  <div id=\"nist-genai-body\" class=\"veille-loading\">Chargement…</div>",
+   "apres": "  <div id=\"nist-genai-body\" class=\"veille-loading\">Align GAI development and use with applicable laws and regulations, including those related to data privacy.</div>",
+   "regle": "test_AUCUN_enonce_d_action_n_est_RECOPIE_dans_l_ecran"
+  },
+  {
+   "nom": "une part « profil » s'ajoute à la composition du cadre",
+   "fichier": "conformite.py",
+   "avant": "        {\"cle\": \"manage\", \"nom\": \"MANAGE\", \"poids\": 1,\n         \"pourquoi\": \"une fonction\"},\n    ],\n    \"owasp_llm\": [",
+   "apres": "        {\"cle\": \"manage\", \"nom\": \"MANAGE\", \"poids\": 1,\n         \"pourquoi\": \"une fonction\"},\n        {\"cle\": \"profil\", \"nom\": \"Profil GenAI\", \"poids\": 1,\n         \"pourquoi\": \"une part de plus\"},\n    ],\n    \"owasp_llm\": [",
+   "regle": "test_le_profil_n_ouvre_PAS_une_treizieme_norme"
+  },
+  {
+   "nom": "la source du profil se déclare certifiable",
+   "fichier": "nist_genai.py",
+   "avant": "    \"certifiable\": False,\n    \"profil_de\": \"NIST AI 100-1\",",
+   "apres": "    \"certifiable\": True,\n    \"profil_de\": \"NIST AI 100-1\",",
+   "regle": "test_la_source_dit_qu_elle_ne_se_certifie_PAS_et_qu_elle_est_un_PROFIL"
+  },
+  {
+   "nom": "l'étiquette hors des douze se dit définie au §2",
+   "fichier": "nist_genai.py",
+   "avant": "     \"au_paragraphe_2\": None,",
+   "apres": "     \"au_paragraphe_2\": \"Civil Rights violations\",",
+   "regle": "test_les_TROIS_CONTRADICTIONS_du_document_sont_DECLAREES_et_chiffrees"
+  },
+  {
+   "nom": "« pas encore regardée » devient « regardée, pas en place »",
+   "fichier": "nist_genai.py",
+   "avant": "        else:\n            sans_reponse.append(c)",
+   "apres": "        else:\n            refusees.append(c)",
+   "regle": "test_une_action_SANS_REPONSE_n_est_pas_tenue"
+  }
+ ]
+}
