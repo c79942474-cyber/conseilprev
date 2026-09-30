@@ -28477,7 +28477,9 @@ function nistPeindre() {
         + '<p class="nist-tombe"><span>Ce qui la fait tomber</span>'
         + nistEsc(f.ce_qui_la_fait_tomber) + '</p>'
         + '<ul class="nist-cats nist-q-cats">' + cats.map(function (c) {
-            return '<li><div class="nist-c-t"><code>' + nistEsc(c.cle)
+            return '<li' + (NIST_DECL[c.cle]
+                     ? ' data-etat="' + nistEsc(NIST_DECL[c.cle]) + '"' : '')
+              + '><div class="nist-c-t"><code>' + nistEsc(c.cle)
               + '</code> ' + nistEsc(c.nom) + '<i>' + nistEsc(c.dit) + '</i></div>'
               + _choix(R.etats, NIST_ORDRE, NIST_DECL[c.cle],
                        'nistRepondre', c.cle) + '</li>';
@@ -29062,6 +29064,20 @@ function declPublier() {
   if (typeof declarationsChangees === 'function') declarationsChangees();
 }
 
+/* L'ÉTAT RÉPONDU DOIT ATTEINDRE LE DOM, sans quoi la feuille de style n'a
+   rien à peindre : la valeur d'un <select> ne se sélectionne pas en CSS. On
+   la recopie donc sur la LIGNE, en `data-etat`, et la couleur en découle.
+
+   ET ON NE REPEINT PAS TOUT L'ÉCRAN POUR UNE RÉPONSE : repeindre refermerait
+   les <details> ouverts et ferait sauter la page sous le lecteur, pour dix-
+   neuf réponses d'affilée. Une seule ligne change, une seule ligne bouge. */
+function _marquerEtat(sel) {
+  var li = sel && sel.closest ? sel.closest('li') : null;
+  if (!li) return;
+  if (sel.value) { li.setAttribute('data-etat', sel.value); }
+  else { li.removeAttribute('data-etat'); }
+}
+
 function _choix(etats, ordre, valeur, surChange, cle) {
   return '<select class="q-sel" data-cle="' + nistEsc(cle) + '" '
     + 'onchange="' + surChange + '(this)" aria-label="État de '
@@ -29079,6 +29095,7 @@ var OWASP_ORDRE = ['non', 'partiel', 'oui', 'sans_objet'];
 
 window.owaspRepondre = function (sel) {
   var c = sel.getAttribute('data-cle');
+  _marquerEtat(sel);
   if (sel.value) { OWASP_DECL[c] = sel.value; } else { delete OWASP_DECL[c]; }
   _declEcrire(OWASP_CLE_STOCK, OWASP_DECL);
   declPublier();
@@ -29131,6 +29148,7 @@ var NIST_ORDRE = ['absent', 'amorce', 'tenu', 'prouve', 'sans_objet'];
 
 window.nistRepondre = function (sel) {
   var c = sel.getAttribute('data-cle');
+  _marquerEtat(sel);
   if (sel.value) { NIST_DECL[c] = sel.value; } else { delete NIST_DECL[c]; }
   _declEcrire(NIST_CLE_STOCK, NIST_DECL);
   declPublier();
@@ -29268,6 +29286,7 @@ window.genaiRisque = function (el) {
 
 window.genaiAction = function (sel) {
   var c = sel.getAttribute('data-cle');
+  _marquerEtat(sel);
   if (sel.value) { GENAI_DECL.actions[c] = sel.value; }
   else { delete GENAI_DECL.actions[c]; }
   _genaiEcrire();
@@ -29294,6 +29313,7 @@ window.genaiLot = function (el) {
   if (boite) {
     boite.querySelectorAll('select.q-sel').forEach(function (s) {
       s.value = GENAI_DECL.actions[s.getAttribute('data-cle')] || '';
+      _marquerEtat(s);
     });
   }
   genaiCompteur(codes[0]);
@@ -29456,7 +29476,10 @@ function genaiPeindre() {
                     var r = R.risques_genai.filter(function (x) { return x.n === n; })[0];
                     return r ? r.nom : ('hors liste (' + n + ')');
                   });
-                  return '<li><div class="gen-t"><code>' + nistEsc(a.code)
+                  return '<li' + (GENAI_DECL.actions[a.code]
+                           ? ' data-etat="'
+                             + nistEsc(GENAI_DECL.actions[a.code]) + '"' : '')
+                    + '><div class="gen-t"><code>' + nistEsc(a.code)
                     + '</code>' + nistEsc(a.texte)
                     + '<i>' + nistEsc(noms.join(' · ')) + '</i></div>'
                     + _choix(GENAI_REF.etats_action, GENAI_ORDRE,
@@ -29639,7 +29662,9 @@ function owaspPeindre() {
     db.innerHTML = '<p class="nist-q">Millésime <b>'
       + nistEsc(R.source.millesime) + '</b> · ' + nistEsc(R.source.dit) + '</p>'
       + '<ul class="ow-liste">' + R.risques.map(function (r) {
-          return '<li><div class="ow-t"><code>' + nistEsc(r.cle) + '</code> '
+          return '<li' + (OWASP_DECL[r.cle]
+                   ? ' data-etat="' + nistEsc(OWASP_DECL[r.cle]) + '"' : '')
+            + '><div class="ow-t"><code>' + nistEsc(r.cle) + '</code> '
             + '<b>' + nistEsc(r.nom) + '</b> <em>' + nistEsc(r.en) + '</em></div>'
             + '<p>' + nistEsc(r.quoi) + '</p>'
             + '<p class="ow-dure"><span>Pourquoi ça dure</span>'

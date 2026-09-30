@@ -63,6 +63,29 @@ html,body{height:100%}
   --serif:    'Instrument Serif', Georgia, serif;
   --sans:     'Inter', system-ui, sans-serif;
   --mono:     'JetBrains Mono', monospace;
+
+  /* ── LES CINQ JETONS QUI N'EXISTAIENT PAS ────────────────────────────
+     MESURÉ DANS LE NAVIGATEUR, pas déduit : `--line`, `--panel`, `--acc`,
+     `--gd` et `--warn` étaient lues par 36 règles des écrans NIST, OWASP et
+     ReCyF, et déclarées NULLE PART. Conséquence, et elle est plus grave
+     qu'une couleur manquante : `border:1px solid var(--line)` est un
+     raccourci INVALIDE quand la variable est vide — les trois composantes
+     retombent sur leur valeur initiale, donc `border-style:none`. Aucune
+     de ces cartes n'avait de bordure, et `background:var(--panel)` les
+     laissait transparentes. Dix-neuf catégories, douze risques et dix
+     lignes OWASP flottaient sur le fond de page, sans surface ni réglure.
+
+     LES REPLIS ÉCRITS AILLEURS DISENT D'OÙ VIENT LE DÉFAUT : ils valent
+     `#2a2a2a` et `#6ea8fe`, c'est-à-dire une réglure presque noire et un
+     bleu de fond sombre. Ces blocs ont été écrits pour un thème SOMBRE et
+     posés sur une page claire. On les ramène donc à la palette de CETTE
+     page — la réglure existante et le blanc — plutôt que d'inventer une
+     sixième nuance. */
+  --line:     #E1DFE7;
+  --panel:    #FFFFFF;
+  --acc:      #1C5A8A;
+  --gd:       #C47C1A;
+  --warn:     #C47C1A;
 }
 
 body{
@@ -368,7 +391,7 @@ body{
 .nist-sub li{font-size:12.5px;line-height:1.55;padding:5px 0;border-top:1px solid var(--line)}
 .nist-gen{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:9px}
 .nist-gen li{display:flex;gap:12px;border:1px solid var(--line);border-radius:11px;padding:11px 14px;background:var(--panel)}
-.nist-gen li.gen-non{border-style:dashed}
+.nist-gen li.gen-non{border-style:dashed;border-color:rgb(var(--hors) / .45)}
 /* ── LE PROFIL IA GÉNÉRATIVE : DE LA LECTURE À LA SAISIE ────────────────
    Les douze risques étaient une liste à lire. Ils deviennent la question
    qui commande tout le reste : ce sont eux qui décident lesquelles des 211
@@ -501,6 +524,161 @@ body{
 .ow-pont tr.ow-non td{color:var(--ink2)}
 .ow-pont tr.ow-non td:first-child{border-left:2px solid var(--warn,#e8b34a)}
 .ow-pont i{color:var(--ink2)}
+/* ── LE COIN ARRONDI MANGEAIT LA BARRE ─────────────────────────────────
+   MESURÉ SUR CAPTURE : un `border-radius` de 12 px sur une réglure de 3 px
+   n'en laisse voir qu'un arc, et la colonne d'états cesse de se lire d'une
+   ligne à l'autre. Les cartes qui portent un état gardent donc leur arrondi
+   à DROITE et le perdent à gauche.
+
+   ET CETTE RÈGLE EST ICI, TOUT EN BAS, POUR UNE RAISON DE CASCADE : posée
+   plus haut, elle était écrasée par les `border-radius` que `.gen-bloc`,
+   `.gen-plan li` et `.ow-liste li` redéclarent plus loin — à spécificité
+   égale, c'est la dernière qui gagne. Seul `.nist-f` en profitait, et la
+   capture le montrait : une carte redressée sur quatre. */
+.ow-liste li,.nist-f,.gen-plan li,.gen-bloc{border-radius:0 12px 12px 0}
+
+/* ── OÙ CE BLOC EST POSÉ, ET POURQUOI IL NE PEUT PAS ÊTRE AILLEURS ────
+   MESURÉ DANS LE NAVIGATEUR, SUR TROIS RÈGLES QUI NE PEIGNAIENT RIEN.
+   Posé au milieu du fichier, il était écrasé par les blocs de composants
+   qui viennent plus loin : `.gen-n` y reprenait l'encre grise, la pastille
+   GOVERN du verdict son doré générique, et la barre des angles morts
+   revenait à 2 px. À spécificité égale, c'est la dernière règle qui gagne,
+   et la feuille de style avait l'air juste dans les trois cas.
+
+   TOUTE LA COULEUR DE CES ÉCRANS TIENT DONC ICI, EN FIN DE CASCADE, où
+   elle voit passer les composants qu'elle teinte. */
+/* ══ LA COULEUR DE CES DEUX ÉCRANS, ET CE QU'ELLE DIT ══════════════════
+   ELLE N'EST PAS DÉCORATIVE, ET C'EST LA SEULE RÈGLE. Trois systèmes, pas
+   un de plus :
+
+     · LA TEINTE dit DE QUEL RÉFÉRENTIEL on parle. Elle est reprise de la
+       pastille du tiroir dans la barre — bronze pour NIST, rose pour
+       OWASP —, si bien qu'un lecteur qui tombe sur un écran sait d'où il
+       vient sans lire le fil d'Ariane. Avant, les deux écrans étaient
+       rigoureusement gris, donc indiscernables.
+
+     · LA DENSITÉ dit OÙ VOUS EN ÊTES. Les états forment une échelle
+       ordonnée — absent, amorcé, tenu, prouvé —, donc une seule teinte qui
+       fonce, jamais un arc-en-ciel : quatre couleurs différentes feraient
+       lire quatre catégories là où il y a quatre niveaux. Et surtout PAS de
+       rouge/vert : le cadre NIST refuse explicitement de prononcer une
+       conformité, et un vert dirait le contraire de ce que le module écrit.
+
+     · L'AMBRE dit UNE RÉSERVE, et rien d'autre : le plafond du profil IA
+       générative, les six risques que la cyber ne tient pas, les risques
+       OWASP qu'aucune mesure de l'annexe A ne couvre. Trois avertissements,
+       une seule couleur, déjà celle des réserves ailleurs dans le site.
+
+   LA COULEUR NE PORTE JAMAIS SEULE. Chaque état reste écrit dans son champ,
+   chaque risque hors cyber porte le mot « Hors cyber », chaque plafond porte
+   sa phrase. On peut lire ces écrans en niveaux de gris sans rien perdre. */
+#p-nist-profil,#p-nist-cadre,#p-nist-genai{--ref:128 72 16}
+#p-owasp-dix,#p-owasp-pont{--ref:211 93 148}
+:root{--hors:196 124 26;--cy:28 90 138}
+
+/* ── L'ÉCHELLE DES ÉTATS : UNE TEINTE QUI FONCE ────────────────────────
+   `sans objet` sort de l'échelle — ce n'est pas un niveau, c'est un refus
+   d'échelle. Il prend donc le gris et le tireté, jamais une nuance de la
+   teinte, qui le ferait lire comme « un peu tenu ». Et « pas encore
+   répondu » n'est pas « absent » : le pointillé dit qu'on n'a pas regardé,
+   le trait plein dit qu'on a regardé et qu'il n'y a rien. */
+
+/* ── LES QUATRE FONCTIONS : UNE COMMANDE, TROIS SUIVENT ────────────────
+   Le module l'écrit noir sur blanc — MAP, MEASURE et MANAGE supposent
+   GOVERN. La carte du socle porte donc la teinte pleine et un fond ; les
+   trois autres une réglure à peine teintée. Quatre couleurs égales auraient
+   dit l'inverse de ce que le cadre dit. */
+.nist-f{border-left:3px solid rgb(var(--ref) / .28);padding-left:14px}
+.nist-f.nist-socle{border-left-color:rgb(var(--ref));
+  background-image:linear-gradient(90deg,rgb(var(--ref) / .07),transparent 58%)}
+.nist-f-t b{color:rgb(var(--ref))}
+.nist-b{background:rgb(var(--ref) / .12);color:rgb(var(--ref));
+  border:1px solid rgb(var(--ref) / .3)}
+.nist-cats code,.nist-sub code,.ow-liste code,.gen-act code{
+  background:rgb(var(--ref) / .09);color:rgb(var(--ref));
+  border:1px solid rgb(var(--ref) / .18);border-radius:5px;padding:1px 5px}
+.nist-cat[open]{border-color:rgb(var(--ref) / .55)}
+.nist-cat>summary{border-left:3px solid rgb(var(--ref) / .3)}
+.nist-cat>summary:hover{background:rgb(var(--ref) / .05)}
+.nist-carac{border-left:3px solid rgb(var(--ref) / .45);padding-left:14px}
+.nist-carac li b{color:rgb(var(--ref))}
+
+/* ── LE PROFIL IA GÉNÉRATIVE ───────────────────────────────────────────
+   Cyber ou pas : DEUX ESPÈCES, pas deux niveaux — donc deux teintes
+   distinctes, et non une seule qui fonce. Le bleu du site pour ce que la
+   cyber tient ; l'ambre pour les six qu'elle ne tient pas, qui est le fait
+   le plus utile de cet écran. */
+.gen-n{display:inline-flex;align-items:center;justify-content:center;
+  width:26px;height:26px;flex:0 0 auto;border-radius:50%;
+  font-family:var(--mono);font-size:12px;font-weight:600;
+  background:rgb(var(--cy) / .12);color:rgb(var(--cy));
+  border:1px solid rgb(var(--cy) / .28)}
+.nist-gen li.gen-non .gen-n{background:rgb(var(--hors) / .14);
+  color:rgb(var(--hors));border-color:rgb(var(--hors) / .34)}
+.nist-gen li.gen-pris{background:rgb(var(--ref) / .06);
+  border-color:rgb(var(--ref) / .55)}
+.gen-b[aria-pressed="true"]{background:rgb(var(--ref));
+  border-color:rgb(var(--ref));color:var(--white)}
+.gen-bloc{border-top:3px solid rgb(var(--ref) / .55)}
+.gen-bloc h3{color:rgb(var(--ref))}
+.gen-sc[open]{border-color:rgb(var(--ref) / .5)}
+.gen-sc>summary{border-left:3px solid rgb(var(--ref) / .3)}
+.gen-sc>summary:hover{background:rgb(var(--ref) / .05)}
+.gen-plan li{border-left:3px solid rgb(var(--ref) / .5)}
+.gen-plan b{color:rgb(var(--ref))}
+.gen-muet{border-left:3px dashed var(--rule2);padding-left:12px}
+.gen-muet code{background:var(--bg2);color:var(--muted);border-radius:4px;
+  padding:1px 4px}
+
+/* ── L'AMBRE : TOUJOURS UNE RÉSERVE, JAMAIS UN NIVEAU ──────────────────
+   Le plafond tombé, et les risques qu'aucune mesure de l'annexe A d'ISO
+   42001 ne couvre. Deux écrans différents, même avertissement, même
+   couleur — sans quoi le lecteur apprendrait deux codes au lieu d'un. */
+.q-am{border-left:3px solid var(--warn);background:rgb(var(--hors) / .07);
+  padding:10px 12px;border-radius:0 8px 8px 0}
+.q-am span{color:var(--warn)}
+.ow-pont tr.ow-non td{background:rgb(var(--hors) / .07)}
+.ow-pont tr.ow-non td:first-child{border-left:3px solid var(--warn)}
+
+/* ── LE VERDICT : IL PORTE LA TEINTE DE SON RÉFÉRENTIEL ───────────────── */
+.q-verdict{border-top:3px solid rgb(var(--ref) / .55)}
+.q-chif b{color:rgb(var(--ref))}
+.q-note{background:rgb(var(--ref) / .05);border-color:rgb(var(--ref) / .22)}
+.q-note.q-socle{border-color:rgb(var(--ref));background:rgb(var(--ref) / .10)}
+
+/* ── L'ÉCHELLE DES ÉTATS, EN FIN DE CASCADE ET AVEC SON PARENT ─────────
+   MESURÉ DANS LE NAVIGATEUR, APRÈS UNE PREMIÈRE VERSION QUI NE PEIGNAIT
+   RIEN : écrites `[data-etat="tenu"]{…}`, ces règles pèsent (0,1,0) et
+   perdaient contre `.nist-cats li{border-left:…}` qui pèse (0,1,1). La
+   teinte de fond passait — rien ne la disputait — et la barre restait
+   grise ; la colonne d'états ne se lisait pas, et la capture le montrait.
+   Chaque état nomme donc sa ligne, et le bloc vient APRÈS les raccourcis
+   `border:` que `.ow-liste li` et consorts redéclarent plus haut.
+
+   `sans objet` SORT DE L'ÉCHELLE : ce n'est pas un niveau, c'est un refus
+   d'échelle. Gris et tireté, jamais une nuance de la teinte, qui le ferait
+   lire « un peu tenu ». Et « pas encore répondu » n'est pas « absent » :
+   le pointillé dit qu'on n'a pas regardé, le trait plein qu'on a regardé
+   et qu'il n'y a rien. */
+.nist-cats li,.ow-liste li,.gen-act li{border-left-width:3px;
+  border-left-style:dotted;border-left-color:var(--rule2);padding-left:11px;
+  transition:border-left-color .18s,background .18s}
+.nist-cats li[data-etat],.ow-liste li[data-etat],.gen-act li[data-etat]{
+  border-left-style:solid}
+.nist-cats li[data-etat="absent"],
+.ow-liste li[data-etat="non"],
+.gen-act li[data-etat="non_tenue"]{border-left-color:rgb(var(--ref) / .25)}
+.nist-cats li[data-etat="amorce"],
+.ow-liste li[data-etat="partiel"]{border-left-color:rgb(var(--ref) / .5)}
+.nist-cats li[data-etat="tenu"]{border-left-color:rgb(var(--ref) / .75)}
+.nist-cats li[data-etat="prouve"],
+.ow-liste li[data-etat="oui"],
+.gen-act li[data-etat="tenue"]{border-left-color:rgb(var(--ref));
+  background:rgb(var(--ref) / .07)}
+.nist-cats li[data-etat="sans_objet"],
+.ow-liste li[data-etat="sans_objet"],
+.gen-act li[data-etat="sans_objet"]{border-left-color:var(--rule2);
+  border-left-style:dashed;background:transparent}
 @media(max-width:760px){
   /* LE TABLEAU DU PONT NE SE REPLIE PAS EN UNE COLONNE : trois colonnes de
      rattachement n'ont pas de sens séparées. Il défile donc dans son propre

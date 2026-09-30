@@ -1,0 +1,140 @@
+{
+ "cibles": [
+  "tests/test_couleur_nist_owasp.py"
+ ],
+ "mutations": [
+  {
+   "nom": "le jeton de réglure redisparaît",
+   "fichier": "sentinel.html",
+   "avant": "  --line:     #E1DFE7;",
+   "apres": "  /* --line:  #E1DFE7; */",
+   "regle": "test_le_jeton_qui_manquait_est_DECLARE[--line]"
+  },
+  {
+   "nom": "le jeton de surface redisparaît",
+   "fichier": "sentinel.html",
+   "avant": "  --panel:    #FFFFFF;",
+   "apres": "  /* --panel: #FFFFFF; */",
+   "regle": "test_le_jeton_qui_manquait_est_DECLARE[--panel]"
+  },
+  {
+   "nom": "l'ambre des réserves redisparaît",
+   "fichier": "sentinel.html",
+   "avant": "  --warn:     #C47C1A;",
+   "apres": "  /* --warn:  #C47C1A; */",
+   "regle": "test_le_jeton_qui_manquait_est_DECLARE[--warn]"
+  },
+  {
+   "nom": "la réglure reprend le noir du thème sombre",
+   "fichier": "sentinel.html",
+   "avant": "  --line:     #E1DFE7;",
+   "apres": "  --line:     #2a2a2a;",
+   "regle": "test_les_replis_de_THEME_SOMBRE_ne_commandent_plus_la_page_claire"
+  },
+  {
+   "nom": "« sans objet » prend une nuance de la teinte",
+   "fichier": "sentinel.html",
+   "avant": ".gen-act li[data-etat=\"sans_objet\"]{border-left-color:var(--rule2);\n  border-left-style:dashed;background:transparent}",
+   "apres": ".gen-act li[data-etat=\"sans_objet\"]{border-left-color:rgb(var(--ref) / .35);\n  border-left-style:dashed;background:transparent}",
+   "regle": "test_SANS_OBJET_sort_de_l_echelle_et_ne_prend_PAS_la_teinte"
+  },
+  {
+   "nom": "« sans objet » perd sa forme propre et ne tient que par la couleur",
+   "fichier": "sentinel.html",
+   "avant": "  border-left-style:dashed;background:transparent}",
+   "apres": "  border-left-style:solid;background:transparent}",
+   "regle": "test_SANS_OBJET_sort_de_l_echelle_et_ne_prend_PAS_la_teinte"
+  },
+  {
+   "nom": "« pas encore répondu » se confond avec « absent »",
+   "fichier": "sentinel.html",
+   "avant": "  border-left-style:dotted;border-left-color:var(--rule2);padding-left:11px;",
+   "apres": "  border-left-style:solid;border-left-color:var(--rule2);padding-left:11px;",
+   "regle": "test_PAS_ENCORE_REPONDU_ne_se_confond_pas_avec_ABSENT"
+  },
+  {
+   "nom": "l'état « tenu » du cadre NIST perd sa nuance",
+   "fichier": "sentinel.html",
+   "avant": ".nist-cats li[data-etat=\"tenu\"]{border-left-color:rgb(var(--ref) / .75)}",
+   "apres": ".nist-cats li[data-etat=\"zzz\"]{border-left-color:rgb(var(--ref) / .75)}",
+   "regle": "test_chaque_etat_du_MOTEUR_porte_sa_couleur_a_l_ecran[nist_ai_rmf]"
+  },
+  {
+   "nom": "l'état « partiel » d'OWASP perd sa nuance",
+   "fichier": "sentinel.html",
+   "avant": ".ow-liste li[data-etat=\"partiel\"]",
+   "apres": ".ow-liste li[data-etat=\"zzz\"]",
+   "regle": "test_chaque_etat_du_MOTEUR_porte_sa_couleur_a_l_ecran[owasp_llm]"
+  },
+  {
+   "nom": "l'action « tenue » du profil perd sa nuance",
+   "fichier": "sentinel.html",
+   "avant": ".gen-act li[data-etat=\"tenue\"]{border-left-color:rgb(var(--ref));",
+   "apres": ".gen-act li[data-etat=\"zzz\"]{border-left-color:rgb(var(--ref));",
+   "regle": "test_chaque_etat_du_MOTEUR_porte_sa_couleur_a_l_ecran[nist_genai]"
+  },
+  {
+   "nom": "les deux référentiels reprennent la même teinte",
+   "fichier": "sentinel.html",
+   "avant": "#p-owasp-dix,#p-owasp-pont{--ref:211 93 148}",
+   "apres": "#p-owasp-dix,#p-owasp-pont{--ref:128 72 16}",
+   "regle": "test_les_deux_referentiels_ont_des_teintes_DISTINCTES"
+  },
+  {
+   "nom": "la page NIST cesse de reprendre la pastille de son tiroir",
+   "fichier": "sentinel.html",
+   "avant": "#p-nist-profil,#p-nist-cadre,#p-nist-genai{--ref:128 72 16}",
+   "apres": "#p-nist-profil,#p-nist-cadre,#p-nist-genai{--ref:130 70 20}",
+   "regle": "test_les_deux_referentiels_ont_des_teintes_DISTINCTES"
+  },
+  {
+   "nom": "un écran teinté ne déclare plus la teinte",
+   "fichier": "sentinel.html",
+   "avant": "#p-nist-profil,#p-nist-cadre,#p-nist-genai{--ref:128 72 16}",
+   "apres": "#p-nist-profil,#p-nist-cadre{--ref:128 72 16}",
+   "regle": "test_les_CINQ_ecrans_teintes_declarent_tous_la_teinte"
+  },
+  {
+   "nom": "cyber et hors cyber deviennent deux densités d'une seule teinte",
+   "fichier": "sentinel.html",
+   "avant": ":root{--hors:196 124 26;--cy:28 90 138}",
+   "apres": ":root{--hors:196 124 26;--cy:196 124 26}",
+   "regle": "test_le_CYBER_et_le_HORS_CYBER_sont_deux_ESPECES_pas_deux_niveaux"
+  },
+  {
+   "nom": "l'ambre des réserves sert aussi de marche à l'échelle",
+   "fichier": "sentinel.html",
+   "avant": ".nist-cats li[data-etat=\"tenu\"]{border-left-color:rgb(var(--ref) / .75)}",
+   "apres": ".nist-cats li[data-etat=\"tenu\"]{border-left-color:rgb(var(--hors) / .75)}",
+   "regle": "test_l_AMBRE_ne_sert_QU_A_une_reserve"
+  },
+  {
+   "nom": "les angles morts du pont perdent leur ambre",
+   "fichier": "sentinel.html",
+   "avant": ".ow-pont tr.ow-non td:first-child{border-left:3px solid var(--warn)}",
+   "apres": ".ow-pont tr.ow-non td:first-child{border-left:3px solid var(--rule2)}",
+   "regle": "test_l_AMBRE_ne_sert_QU_A_une_reserve"
+  },
+  {
+   "nom": "le cadre NIST cesse de recopier l'état répondu dans le DOM",
+   "fichier": "sentinel.page.js",
+   "avant": "  var c = sel.getAttribute('data-cle');\n  _marquerEtat(sel);\n  if (sel.value) { NIST_DECL[c] = sel.value; }",
+   "apres": "  var c = sel.getAttribute('data-cle');\n  if (sel.value) { NIST_DECL[c] = sel.value; }",
+   "regle": "test_l_etat_repondu_atteint_le_DOM_pour_que_la_feuille_de_style_le_voie"
+  },
+  {
+   "nom": "le lot du profil ne remarque pas les lignes qu'il vient de changer",
+   "fichier": "sentinel.page.js",
+   "avant": "      s.value = GENAI_DECL.actions[s.getAttribute('data-cle')] || '';\n      _marquerEtat(s);",
+   "apres": "      s.value = GENAI_DECL.actions[s.getAttribute('data-cle')] || '';",
+   "regle": "test_l_etat_repondu_atteint_le_DOM_pour_que_la_feuille_de_style_le_voie"
+  },
+  {
+   "nom": "le champ cesse d'écrire le nom de l'état : la couleur porte seule",
+   "fichier": "sentinel.page.js",
+   "avant": "          + nistEsc(etats[k].nom) + '</option>';",
+   "apres": "          + '</option>';",
+   "regle": "test_chaque_ligne_colorée_porte_AUSSI_son_etat_en_toutes_lettres"
+  }
+ ]
+}
