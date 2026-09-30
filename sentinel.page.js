@@ -1031,6 +1031,10 @@ var PAGE_META = {
   'owasp-dix':     { section: 'OWASP LLM', label: 'Les dix risques' },
   'nist53-socle':  { section: 'NIST 800-53', label: 'Socle et dix-huit familles' },
   'nist82-ot':     { section: 'NIST 800-82', label: 'Surcharge industrielle' },
+  'en18229-role':  { section: 'prEN 18229-3', label: 'Rôle et périmètre' },
+  'en18229-scenarios': { section: 'prEN 18229-3', label: 'Scénarios et délais' },
+  'en18229-cadre': { section: 'prEN 18229-3', label: 'Cadre d’analyse' },
+  'en18229-score': { section: 'prEN 18229-3', label: 'Score et article 14' },
   'owasp-pont':    { section: 'OWASP LLM', label: 'Ce qu\u2019ISO 42001 ne couvre pas' },
   'iso42001-certif':{ section: 'ISO 42001', label: 'Chemin de certification' },
   'iso42001-ponts':{ section: 'ISO 42001', label: 'Ponts IA Act / RGPD / NIS 2' },
@@ -1194,6 +1198,23 @@ var SENT_T = {
     'pg.qualif-assistee.p': 'The engine reads the rows of the AI register, proposes a classification under Regulation (EU) 2024/1689, and quotes the excerpts of your own declaration it relies on. <strong>It writes nothing.</strong> A classification enters the register only through a decision you pronounce, which stays recorded next to what was proposed to you.',
     'nav.item.nist53-socle': 'Baseline and eighteen families',
     'nav.item.nist82-ot': 'Industrial overlay (OT)',
+    'nav.sec.en18229': 'prEN 18229-3 \u2014 Human oversight',
+    'nav.item.en18229-role': 'Role and scope',
+    'nav.item.en18229-scenarios': 'Scenarios and delays',
+    'nav.item.en18229-cadre': 'Assessment framework',
+    'nav.item.en18229-score': 'Score and Article 14',
+    'pg.en18229-role.eb': 'prEN 18229-3 \u00b7 Role',
+    'pg.en18229-role.h1': 'Who owes what, <em>and who receives it</em>',
+    'pg.en18229-role.p': 'This draft standard addresses its requirements to the <b>provider</b>, for the design of the system. What depends on the deployment context does not disappear: it is <b>passed to the deployer through the instructions for use</b>. Two roles, therefore two questionnaires and two scores \u2014 asking both the same questions would produce a figure that is wrong in both directions.',
+    'pg.en18229-scenarios.eb': 'prEN 18229-3 \u00b7 Scenarios',
+    'pg.en18229-scenarios.h1': 'The reaction delay <em>governs the measure</em>',
+    'pg.en18229-scenarios.p': 'For each risk scenario the standard requires a reaction delay, then requires that the intervention latency of the chosen measures be <b>measured</b> and verified as compatible with that delay. The engine compares those two figures \u2014 the ones you declare: the standard gives no threshold, and none is invented here.',
+    'pg.en18229-cadre.eb': 'prEN 18229-3 \u00b7 Framework',
+    'pg.en18229-cadre.h1': 'The assessment framework, <em>clause by clause</em>',
+    'pg.en18229-cadre.p': 'Your role\u2019s questions, each tied to the clause that grounds it, with what it is there to prevent and the pitfall the firm sees in the field. The questions are written by the firm: only clause numbers and titles are cited.',
+    'pg.en18229-score.eb': 'prEN 18229-3 \u00b7 Score',
+    'pg.en18229-score.h1': 'The score, its caps <em>and Article 14</em>',
+    'pg.en18229-score.p': 'The score says that what the standard expects is declared and that the arithmetic of the delay holds. A lock does not subtract points: it sets a cap, and the cap is named. Article 14 coverage reads paragraph by paragraph \u2014 a paragraph is not 80 % met.',
     'pg.nist53-socle.eb': 'NIST SP 800-53 · Rev. 4',
     'pg.nist53-socle.h1': 'Eighteen families, <em>and what commands them</em>',
     'pg.nist53-socle.p': 'The baseline — Low, Moderate or High — is not a choice: it <strong>follows</strong> from the system categorisation. Announcing it without having carried out the risk assessment means giving a result without its calculation. And four families — RA, PL, CA, PM — decide what the other fourteen must do: when the downstream outruns them, this module says so instead of averaging it away.',
@@ -4002,6 +4023,24 @@ window.simCompute = function(){
   simShowPanel(5);
   simRender();
 };
+/* ══ LA PORTE DU SIMULATEUR, ET POURQUOI IL EN FALLAIT UNE ══════════════
+   LE DÉFAUT MESURÉ. `SIM_DATA` et `simClassify` vivent dans cette fonction
+   anonyme, et deux boutons situés PLUS LOIN dans le fichier les nommaient
+   directement : « Ajouter au registre » et « Enregistrer dans l'historique ».
+   Hors de la portée, `SIM_DATA` n'existe pas — mesuré au navigateur,
+   `typeof SIM_DATA` rend « undefined » depuis la portée globale alors que
+   `simAddToRegistre` est bien une fonction. Leur garde
+   `typeof SIM_DATA === "undefined"` était donc TOUJOURS vraie : simulateur
+   rempli, le bouton répondait « Aucune simulation a enregistrer. Completez
+   d abord le simulateur. » Le pont entre deux modules de la cartographie ne
+   pouvait pas être franchi, et l'écran accusait l'utilisateur.
+
+   UNE PORTE, PAS UNE COPIE. `window.SIM_DATA = SIM_DATA` aurait figé la
+   référence : `simReset` réaffecte l'objet, et la copie aurait vieilli au
+   premier « Recommencer ». Un accesseur rend toujours l'état courant. */
+window.simDonnees = function(){ return SIM_DATA; };
+window.simClassifier = function(){ return simClassify(); };
+
 window.simReset = function(){
   SIM_DATA = {};
   SIM_STEP = 1;
@@ -5945,6 +5984,14 @@ window.MAT_SECTORS = MAT_SECTORS;
 window.matSocle = function(s){ return matSocle(s); };
 window.MAT_PILLARS = MAT_PILLARS;
 window.matGetCur = function(){ return MAT_CUR; };
+/* LE SECTEUR REPRIS DE LA MÉMOIRE, SANS REPEINDRE. `matSelect` re-rend
+   l'écran ; au chargement, rien n'a encore été peint et le rendu partirait
+   d'un panneau qui n'existe pas. Cette porte-ci ne fait que poser le
+   secteur, et le rendu qui suivra le trouvera en place. */
+window.matReprendreSecteur = function(k){
+  if(k && window.MAT_SECTORS && window.MAT_SECTORS[k]) { MAT_CUR = k; return true; }
+  return false;
+};
 
 /* Phases du programme (issues du cahier des charges CONSEILPREV) */
 var MAT_PHASES = [
@@ -6306,7 +6353,20 @@ function matRender(){
       + '<div class="matq-global-box"><div><div class="matq-global-lbl">Score global de maturité</div>'
       + '<div><span class="matq-global-val" id="matq-global" style="color:'+lvl.color+'">'+g.toFixed(1)+'</span><span style="font-size:16px;color:var(--muted2)">/5</span> '
       + '<span class="matq-level-badge" id="matq-level" style="color:'+lvl.color+'">'+lvl.label+'</span></div>'
-      + '<div class="matq-level-desc" id="matq-level-desc">'+lvl.desc+'</div></div></div>'
+      + '<div class="matq-level-desc" id="matq-level-desc">'+lvl.desc+'</div>'
+      /* LE COMPTEUR EST DANS LA MÊME BOÎTE QUE LE SCORE, et pas ailleurs :
+         c'est le score qu'il qualifie. « 4,2 / 5 » obtenu sur deux questions
+         ne dit pas la même chose que le même 4,2 obtenu sur seize. */
+      /* PEINT DÈS LE RENDU, pas seulement au premier clic : laissé vide, le
+         compteur manquait exactement à qui n'a encore rien répondu — c'est-à-dire
+         à celui qui en a le plus besoin. Mesuré : à l'ouverture du panneau,
+         la ligne était vide jusqu'à la première réponse. */
+      + (function(){ var r = window.matRepondu(MAT_CUR);
+           return '<div class="matq-repondu" style="font-size:11.5px;color:var(--muted);margin-top:6px"'
+             + ' data-complet="' + (r.complet ? 'oui' : 'non') + '">'
+             + r.repondues + ' / ' + r.total + ' question' + (r.total > 1 ? 's' : '')
+             + ' répondue' + (r.total > 1 ? 's' : '') + '</div>'; })()
+      + '</div></div>'
       + '<div class="matq-pillar-grid">';
     MAT_PILLARS.forEach(function(p){
       var qs = window.MAT_QUESTIONS[p.id] || [];
@@ -6315,7 +6375,9 @@ function matRender(){
       html += '<div class="matq-pillar"><div class="matq-pillar-head"><span class="matq-pillar-name">'+p.label+tip(PILLAR_TIPS[p.id]||p.desc)+'</span>'
         + '<span class="matq-pillar-score-mini matq-score" data-pillar="'+p.id+'" style="color:'+col+'">'+sc.toFixed(1)+'/5</span></div>';
       qs.forEach(function(qo,i){
-        var cur = (window.MAT_ANSWERS[MAT_CUR] && window.MAT_ANSWERS[MAT_CUR][p.id]) ? window.MAT_ANSWERS[MAT_CUR][p.id][i] : 0;
+        /* `null` — pas encore répondu — n'allume aucun des trois boutons.
+           Le défaut d'origine mettait 0 ici, et « Non » paraissait choisi. */
+        var cur = (window.MAT_ANSWERS[MAT_CUR] && window.MAT_ANSWERS[MAT_CUR][p.id]) ? window.MAT_ANSWERS[MAT_CUR][p.id][i] : null;
         html += '<div class="matq-q"><div class="matq-q-text">'+qo.q+' <span class="matq-q-art">'+qo.art+'</span></div>'
           + '<div class="matq-opts">'
           + '<button class="matq-opt'+(cur===0?' on':'')+'" id="matq-'+p.id+'-'+i+'-0" onclick="matAnswer(\''+p.id+'\','+i+',0)" title="Cliquez pour repondre — recalcule le score de maturite en temps reel.">Non</button>'
@@ -6586,28 +6648,63 @@ var MAT_QUESTIONS = {
 /* État des réponses : { secteur: { pilier: [v1, v2] } } */
 var MAT_ANSWERS = {};
 
+/* ── « PAS ENCORE RÉPONDU » N'EST PAS UNE RÉPONSE ──────────────────────────
+   LE DÉFAUT MESURÉ. Les seize réponses étaient PRÉ-REMPLIES depuis le profil
+   sectoriel de référence, avant que l'utilisateur ait touché quoi que ce
+   soit. Relevé au navigateur, panneau ouvert et rien de cliqué : les huit
+   piliers portaient déjà une note et le score global affichait 2,7 / 5. Et
+   comme les trois boutons ne proposaient que Non (0), Partiel (0,5) et Oui
+   (1), un zéro par défaut était INDISCERNABLE d'un « Non » répondu. L'écran
+   rendait donc un diagnostic que personne n'avait posé, et aucun vert de
+   parcours ne pouvait être honnête.
+
+   C'est le défaut que ce dépôt a déjà corrigé six fois — l'audit IA Act,
+   l'AIPD, la privacy by design, la politique documentaire, la sensibilisation
+   et l'analyse de risque ReCyF : « pas coché » s'y confondait avec « pas
+   encore regardé ». Même remède : `null` est le troisième état, et il n'est
+   ni Non, ni Oui.
+
+   LE PROFIL SECTORIEL NE DISPARAÎT PAS, IL CHANGE DE RÔLE. Il reste la
+   RÉFÉRENCE affichée à côté du score — ce que fait le secteur —, au lieu
+   d'être une réponse prêtée à l'utilisateur. */
 function matInitAnswers(sectorKey){
   if(!MAT_ANSWERS[sectorKey]){
     MAT_ANSWERS[sectorKey] = {};
-    var ref = (window.MAT_SECTORS && window.MAT_SECTORS[sectorKey]) ? window.MAT_SECTORS[sectorKey].pillars : {};
     Object.keys(MAT_QUESTIONS).forEach(function(p){
-      /* Pré-remplir selon le profil sectoriel de référence (score/5 → 2 réponses) */
-      var refScore = ref[p] || 3;
-      var perQ = refScore / 5; /* 0..1 */
-      MAT_ANSWERS[sectorKey][p] = [
-        perQ >= 0.6 ? 1 : perQ >= 0.3 ? 0.5 : 0,
-        perQ >= 0.8 ? 1 : perQ >= 0.5 ? 0.5 : 0
-      ];
+      MAT_ANSWERS[sectorKey][p] = [null, null];
     });
   }
   return MAT_ANSWERS[sectorKey];
 }
 
+/* CE QUI EST RÉPONDU, ET SUR COMBIEN. Le score se calcule sur les réponses
+   REÇUES ; l'écran dit combien il en a reçu, pour qu'un 4,2/5 obtenu sur
+   deux questions ne se lise pas comme un 4,2/5 obtenu sur seize. */
+window.matRepondu = function(sectorKey){
+  var a = MAT_ANSWERS[sectorKey] || {};
+  var total = 0, repondues = 0;
+  Object.keys(MAT_QUESTIONS).forEach(function(p){
+    (MAT_QUESTIONS[p] || []).forEach(function(_, i){
+      total++;
+      var v = a[p] && a[p][i];
+      if(v === 0 || v === 0.5 || v === 1) repondues++;
+    });
+  });
+  return { repondues: repondues, total: total, complet: total > 0 && repondues === total };
+};
+
 /* Calcul du score d'un pilier sur 5 à partir des 2 réponses */
+/* LE SCORE PORTE SUR CE QUI EST RÉPONDU, PAS SUR CE QUI EST VIDE. Compter
+   une question sans réponse comme un « Non » donnerait un score bas qui a
+   l'air d'un diagnostic ; la moyenne des réponses reçues, elle, dit ce
+   qu'elle sait. Aucune réponse : zéro, et le compteur à côté dit pourquoi. */
 window.matPillarScore = function(sectorKey, pillar){
-  var a = (MAT_ANSWERS[sectorKey] && MAT_ANSWERS[sectorKey][pillar]) || [0,0];
-  var sum = a[0] + a[1]; /* 0..2 */
-  return Math.round(sum / 2 * 5 * 10) / 10; /* 0..5 */
+  var a = (MAT_ANSWERS[sectorKey] && MAT_ANSWERS[sectorKey][pillar]) || [null,null];
+  var recues = [];
+  for(var i=0; i<a.length; i++){ if(a[i] === 0 || a[i] === 0.5 || a[i] === 1) recues.push(a[i]); }
+  if(!recues.length) return 0;
+  var sum = recues.reduce(function(x,y){ return x + y; }, 0);
+  return Math.round(sum / recues.length * 5 * 10) / 10; /* 0..5 */
 };
 
 window.matGlobalScore = function(sectorKey){
@@ -6666,6 +6763,13 @@ function matRefreshScores(){
   document.querySelectorAll('.mat-hero-score-val').forEach(function(el){
     el.textContent = g.toFixed(1); el.style.color = lvl.color;
   });
+  /* COMBIEN DE QUESTIONS ONT UNE RÉPONSE. Un score sans ce compteur se lit
+     comme un diagnostic complet, quel que soit le nombre de réponses reçues. */
+  var r = window.matRepondu(s);
+  document.querySelectorAll('.matq-repondu').forEach(function(el){
+    el.textContent = r.repondues + ' / ' + r.total + ' question' + (r.total > 1 ? 's' : '') + ' répondue' + (r.total > 1 ? 's' : '');
+    el.setAttribute('data-complet', r.complet ? 'oui' : 'non');
+  });
   /* Regenerer le radar SVG dynamiquement */
   var holder = document.getElementById("mat-radar-holder");
   if(holder && typeof window.matRadar === "function"){
@@ -6678,7 +6782,7 @@ function matRefreshScores(){
     MAT_QUESTIONS[p].forEach(function(_,i){
       [0,0.5,1].forEach(function(v){
         var btn = document.getElementById("matq-"+p+"-"+i+"-"+v);
-        if(btn){ btn.classList.toggle("on", MAT_ANSWERS[s][p][i]===v); }
+        if(btn){ btn.classList.toggle("on", (MAT_ANSWERS[s] && MAT_ANSWERS[s][p] && MAT_ANSWERS[s][p][i]) === v); }
       });
     });
   });
@@ -8134,6 +8238,38 @@ function regSkeletonHTML(){
   return new Array(5).fill(row).join('');
 }
 
+/* ── LA COMPLÉTUDE D'UNE FICHE, UNE SEULE FOIS, ET HORS DE regRender ──────
+   ELLE VIVAIT DANS regRender, ET regFetch L'APPELAIT : mesuré au navigateur,
+   l'appel levait une ReferenceError que le `.catch` de regFetch avalait en
+   « Erreur de chargement » — la table du registre ne s'affichait plus, et le
+   rail de « Cartographier » disait « aucun système déclaré » à qui en avait
+   deux. La pastille de la ligne et le rail lisent désormais la MÊME fonction.
+
+   LES 10 QUESTIONS ESSENTIELLES (Hub France IA) : outil, service, usage,
+   données, personnes concernées, rôle, transparence, haut risque, preuves,
+   fournisseur. */
+function regCompleteness(s){
+  var champs = [s.nom, s.service, s.finalite, s.donnees_utilisees, s.personnes_concernees,
+    (s.roles && s.roles.length>0) ? "x" : "", (s.transparence_art50 && s.transparence_art50!=="a_evaluer") ? "x" : "",
+    (s.classification && s.classification!=="a_evaluer") ? "x" : "", s.preuves_conformite, s.fournisseur];
+  var remplis = champs.filter(function(c){ return c && c.toString().trim().length > 0; }).length;
+  return Math.round(remplis / champs.length * 100);
+}
+
+/* ── CE QUE LE RAIL DE « CARTOGRAPHIER » LIT DU REGISTRE ───────────────────
+   LA MÊME COMPLÉTUDE QUE LA PASTILLE DE CHAQUE LIGNE, pas une seconde
+   définition — sinon la ligne dirait 100 % et le rail « fiche incomplète ».
+   APPELÉE À CHAQUE CHANGEMENT DU REGISTRE, PAS SEULEMENT AU CHARGEMENT :
+   l'enregistrement d'une fiche et la suppression d'un système modifient
+   REG_DATA sur place, sans repasser par le serveur ; sans cet appel le rail
+   resterait sur la liste d'avant, et le vert d'un module rempli n'arriverait
+   qu'au rechargement de la page. */
+function regDeposerAuRail(){
+  if (typeof window.cartoDeposer !== 'function') return;
+  window.cartoDeposer('registre', { systemes: REG_DATA.map(function (x) {
+    return { nom: x.nom, completude: regCompleteness(x) }; }) });
+}
+
 function regFetch(){
   var body = document.getElementById("reg-sys-body");
   if(body) body.innerHTML = regSkeletonHTML();
@@ -8148,6 +8284,14 @@ function regFetch(){
       }
       if(d._statut >= 400){ throw new Error('HTTP '+d._statut); }
       REG_DATA = d.systemes || [];
+    /* LA LISTE DES MODÈLES ARRIVE AVEC LES SYSTÈMES. Elle vient de la table
+       de prix du moteur, et la fiche d'un système l'offre telle quelle : le
+       menu ne peut donc pas proposer un modèle que le chiffrage ignore, ni
+       taire un modèle qu'il sait chiffrer. */
+    if (d.modeles_tarifes && typeof window.regModelesTarifesConnus === 'function') {
+      window.regModelesTarifesConnus(d.modeles_tarifes);
+    }
+    regDeposerAuRail();
       regRender();
     })
     .catch(function(e){
@@ -8190,15 +8334,6 @@ function regRender(){
   function regAttr(v){
     return String(v == null ? '' : v).replace(/&/g,'&amp;').replace(/"/g,'&quot;')
       .replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  }
-  function regCompleteness(s){
-    // Les 10 questions essentielles (Hub France IA) : outil, service, usage,
-    // donnees, personnes concernees, role, transparence, haut risque, preuves, fournisseur.
-    var champs = [s.nom, s.service, s.finalite, s.donnees_utilisees, s.personnes_concernees,
-      (s.roles && s.roles.length>0) ? "x" : "", (s.transparence_art50 && s.transparence_art50!=="a_evaluer") ? "x" : "",
-      (s.classification && s.classification!=="a_evaluer") ? "x" : "", s.preuves_conformite, s.fournisseur];
-    var remplis = champs.filter(function(c){ return c && c.toString().trim().length > 0; }).length;
-    return Math.round(remplis / champs.length * 100);
   }
   body.innerHTML = data.map(function(s){
     var cl = CLASSIF_LABELS[s.classification] || CLASSIF_LABELS.a_evaluer;
@@ -8310,6 +8445,74 @@ window.regOpenModal = function(id){
         + '</datalist>'
         + (sys ? '' : '<div style="margin-top:8px"><button type="button" class="mat-export-btn" style="font-size:11px;padding:5px 12px" onclick="regReprendreFamille()" title="Reprendre le dossier d un systeme deja documente de cette famille">Reprendre le dossier d’un système de cette famille</button>'
              + '<span id="rf-famille-msg" style="margin-left:10px;font-size:11px;color:var(--muted)"></span></div>'))
+    /* ══ CE QUE LE FINOPS ET L'EMPREINTE ATTENDENT, ET QUI N'ÉTAIT NULLE PART ══
+       LE DÉFAUT MESURÉ. Le moteur FinOps réclame huit champs par système et
+       sert lui-même leur mode d'emploi : « Registre IA → fiche du système →
+       "Modèle" ». Ce renvoi désignait un champ qui N'EXISTAIT PAS. Mesure :
+       les huit noms (`modele`, `unite_facturation`, `volume_entree_mois`,
+       `volume_sortie_mois`, `volume_source`, `centre_cout`, `classe_tache`,
+       `leviers`) n'apparaissaient dans AUCUNE balise de saisie du dépôt.
+       La base les accepte, l'API les accepte en POST comme en PUT, le moteur
+       sait les chiffrer — seul le formulaire manquait. Conséquence à l'écran :
+       la couverture du chiffrage restait à « 0 / N » quoi qu'on fasse, et
+       chaque ligne sortait avec le motif « unité de facturation non
+       déclarée ». Le module était inutilisable, et il disait pourtant où
+       cliquer.
+
+       L'UNITÉ EST DANS LE LIBELLÉ, PAS DANS UNE NOTE DE BAS DE PAGE. Les
+       volumes sont des JETONS du mois, jamais des requêtes — et le même
+       champ est lu en requêtes par l'empreinte quand l'unité de facturation
+       le dit. Un nombre sans unité écrite à côté de la case est un nombre
+       qu'on saisit faux une fois sur deux.
+
+       LES LISTES NE SONT PAS RÉINVENTÉES ICI : ce sont celles du moteur
+       (`finops_ia.UNITES`, `TARIFS`, `CLASSES_TACHE`, `LEVIERS`), et une
+       règle compare les deux — sans quoi l'écran et le code dériveraient,
+       et c'est l'écran qu'on croirait. */
+    + '<div class="reg-form-section-title">Coût et empreinte — ce que le FinOps et l\'Empreinte IA lisent ici</div>'
+    + '<div class="reg-field" style="font-size:11.5px;color:var(--muted);line-height:1.55;margin-top:-4px">'
+      + 'Ces huit champs ne sont demandés qu\'ici. Sans eux, le <strong>FinOps de l\'IA</strong> '
+      + 'et l\'<strong>Empreinte IA du parc</strong> affichent une couverture de 0&nbsp;% : un système '
+      + 'sans volume déclaré ne coûte pas zéro, personne n\'a encore dit ce qu\'il consomme.</div>'
+    + regRow([
+        regField("Modèle employé", '<select id="rf-modele" class="reg-input">'+sel("modele", regModelesAvec(sys))+'</select>'),
+        regField("Unité de facturation", '<select id="rf-unite" class="reg-input">'+sel("unite_facturation",[
+            {v:"",l:"— Non déclarée —"},
+            {v:"jetons",l:"Jetons — facturé au jeton consommé (seule unité chiffrable)"},
+            {v:"requetes",l:"Requêtes — facturé à la requête, quelle que soit sa taille"},
+            {v:"heures_gpu",l:"Heures GPU — facturé au temps de calcul réservé"},
+            {v:"sieges",l:"Sièges — facturé par utilisateur et par mois"},
+            {v:"forfait",l:"Forfait — montant fixe, indépendant de l\'usage"}
+          ])+'</select>')
+      ])
+    + regRow([
+        regField("Volume d\'entrée du mois <span style=\"font-weight:400;color:var(--muted)\">— en jetons</span>",
+          '<input type="number" id="rf-vol-entree" class="reg-input" min="0" step="1" value="'+val("volume_entree_mois")+'" placeholder="Ex : 10000000 (10 millions de jetons)">'),
+        regField("Volume de sortie du mois <span style=\"font-weight:400;color:var(--muted)\">— en jetons</span>",
+          '<input type="number" id="rf-vol-sortie" class="reg-input" min="0" step="1" value="'+val("volume_sortie_mois")+'" placeholder="Ex : 1000000 (1 million de jetons)">')
+      ])
+    + regField("Source du volume <span style=\"font-weight:400;color:var(--muted)\">— d\'où vient le chiffre&nbsp;: sans elle, la ligne n\'est pas chiffrée</span>",
+        '<input type="text" id="rf-vol-source" class="reg-input" value="'+val("volume_source")+'" placeholder="Ex : console de facturation du fournisseur, relevé du 31/08">')
+    + regRow([
+        regField("Centre de coût", '<input type="text" id="rf-centre-cout" class="reg-input" value="'+val("centre_cout")+'" placeholder="Ex : CC-410">'),
+        regField("Classe de tâche <span style=\"font-weight:400;color:var(--muted)\">— sert au dimensionnement, pas au coût</span>",
+          '<select id="rf-classe-tache" class="reg-input">'+sel("classe_tache",[
+            {v:"",l:"— Non déclarée —"},
+            {v:"extraction",l:"Extraction ou classification sur texte court"},
+            {v:"redaction",l:"Rédaction ou reformulation guidée"},
+            {v:"analyse",l:"Analyse sur documents longs"},
+            {v:"raisonnement",l:"Raisonnement long ou agentique"}
+          ])+'</select>')
+      ])
+    + regField("Leviers d\'optimisation posés <span style=\"font-weight:400;color:var(--muted)\">— déclarés, jamais mesurés</span>",
+        '<div class="reg-checkbox-group" id="rf-leviers">'
+        + [['cache',"Cache de contexte"],['differe',"Traitement différé"],
+           ['requete_bornee',"Requête bornée"],['modele_par_etape',"Un modèle par étape"]].map(function(o){
+            var poses = regLeviersDe(sys);
+            var checked = (poses.indexOf(o[0]) !== -1) ? ' checked' : '';
+            return '<label class="reg-checkbox-opt"><input type="checkbox" value="'+o[0]+'"'+checked+'> '+o[1]+'</label>';
+          }).join('')
+        + '</div>')
     + (sys && (sys.classification==="haut"||sys.classification==="inacceptable") ? '<div class="radar-registre-info radar-registre-warn">⚖️ Système à haut risque — une <a href="#" onclick="regCloseModal();go(\'fria\',null,\'CONFORMITÉ\',\'Évaluation FRIA\');return false;">évaluation FRIA</a> peut être requise (Art. 27).</div>' : '')
     + '</div></div>'
     + '<div class="mat-modal-foot">'
@@ -8320,7 +8523,69 @@ window.regOpenModal = function(id){
 };
 
 function regField(label, input){ return '<div class="reg-field"><label class="reg-label">'+label+'</label>'+input+'</div>'; }
+
+/* LES MODÈLES DONT LE TARIF EST RELEVÉ — SERVIS, JAMAIS RECOPIÉS. La liste
+   vient de la réponse du FinOps (`modeles_tarifes`, soit les clés de
+   `finops_ia.TARIFS`). Tant que le panneau FinOps n'a pas été ouvert une
+   fois, on ne connaît rien : on offre alors le champ libre plutôt qu'une
+   liste inventée ici, qui dériverait de la table de prix le jour où elle
+   bouge. Un modèle hors table reste saisissable — le moteur le dira
+   « aucun tarif relevé », ce qui est vrai, au lieu de l'interdire. */
+var REG_MODELES_TARIFES = [];
+window.regModelesTarifesConnus = function (liste) {
+  REG_MODELES_TARIFES = (liste || []).slice();
+};
+/* UN MODÈLE DÉJÀ ENREGISTRÉ NE DISPARAÎT PAS DE SA PROPRE FICHE. S'il n'est
+   pas (ou plus) dans la table de prix, il est ajouté à la liste avec la
+   mention qui le dit : rouvrir une fiche ne doit pas effacer en silence ce
+   qu'on y avait mis. */
+function regModelesAvec(sys) {
+  var o = regModelesTarifes();
+  var m = sys && sys.modele ? String(sys.modele) : '';
+  if (!m) return o;
+  for (var i = 0; i < o.length; i++) { if (o[i].v === m) return o; }
+  o.push({ v: m, l: m + ' — aucun tarif relevé' });
+  return o;
+}
+function regModelesTarifes() {
+  var o = [{ v: "", l: "— Non déclaré —" }];
+  REG_MODELES_TARIFES.forEach(function (m) { o.push({ v: m, l: m }); });
+  return o;
+}
+
+/* Les leviers déjà posés sur ce système. La colonne est du JSON en base, et
+   `registre_row_to_dict` la rend en liste ; une déclaration plus ancienne
+   peut encore porter la chaîne « cache,differe ». On accepte les deux. */
+function regLeviersDe(sys) {
+  var l = sys && sys.leviers;
+  if (!l) return [];
+  if (Object.prototype.toString.call(l) === '[object Array]') return l;
+  return String(l).split(',').map(function (x) { return x.trim(); }).filter(Boolean);
+}
 function regRow(fields){ return '<div class="reg-form-row">'+fields.join("")+'</div>'; }
+
+/* ── CE QUI PART, ET CE QUI NE PART PAS ────────────────────────────────── */
+function regVide(id) {
+  var e = document.getElementById(id);
+  var v = e ? String(e.value).trim() : '';
+  return v === '' ? null : v;
+}
+/* `Number('')` vaut 0 : la conversion naïve transformait « rien saisi » en
+   « zéro jeton consommé », et le total devenait crédible et faux. */
+function regNombre(id) {
+  var e = document.getElementById(id);
+  var v = e ? String(e.value).trim() : '';
+  if (v === '') return null;
+  var n = Number(v.replace(',', '.'));
+  return isFinite(n) ? n : null;
+}
+function regCoches(id) {
+  var out = [];
+  var h = document.getElementById(id);
+  if (!h) return out;
+  h.querySelectorAll('input[type=checkbox]:checked').forEach(function (cb) { out.push(cb.value); });
+  return out;
+}
 
 /* Les familles déjà employées, triées et sans doublon. */
 function regFamillesConnues(){
@@ -8402,7 +8667,22 @@ window.regSave = function(){
     roles: rolesChecked,
     transparence_art50: document.getElementById("rf-transp").value,
     preuves_conformite: document.getElementById("rf-preuves").value.trim(),
-    famille: (document.getElementById("rf-famille") || {value:""}).value.trim()
+    famille: (document.getElementById("rf-famille") || {value:""}).value.trim(),
+    /* ── LES HUIT DU FINOPS ET DE L'EMPREINTE ──────────────────────────
+       UN CHAMP VIDE PART À `null`, JAMAIS À `""` NI À `0`. La colonne est
+       sans valeur par défaut, et c'est voulu : « un parc jamais instruit
+       afficherait un coût mensuel de zéro, crédible et faux ». Envoyer une
+       chaîne vide la remplirait d'un silence qui ressemble à une réponse ;
+       envoyer zéro mentirait. Un volume réellement NUL, lui, part bien à 0
+       et se chiffre — c'est une déclaration, pas une absence. */
+    modele: regVide("rf-modele"),
+    unite_facturation: regVide("rf-unite"),
+    volume_entree_mois: regNombre("rf-vol-entree"),
+    volume_sortie_mois: regNombre("rf-vol-sortie"),
+    volume_source: regVide("rf-vol-source"),
+    centre_cout: regVide("rf-centre-cout"),
+    classe_tache: regVide("rf-classe-tache"),
+    leviers: regCoches("rf-leviers")
   };
   if(!payload.nom){ alert("Le nom du système est obligatoire."); return; }
 
@@ -8432,6 +8712,7 @@ window.regSave = function(){
       } else {
         REG_DATA.unshift(d.systeme);
       }
+      regDeposerAuRail();
       regRender();
     })
     .catch(function(){ alert("Erreur lors de l'enregistrement."); });
@@ -8449,6 +8730,7 @@ window.regDelete = function(id){
       window.sentRegistreOublier();   /* même raison qu'à l'enregistrement */
       /* Retrait local de REG_DATA, sans recharger toute la liste depuis le serveur. */
       REG_DATA = REG_DATA.filter(function(s){ return s.id !== id; });
+      regDeposerAuRail();
       regRender();
       window.focusRendre('reg-sys-body', '.rs-del', rang);
     })
@@ -8776,16 +9058,19 @@ var SECTEUR_LABELS = {
 var LEVEL_TO_CLASSIF = { interdit:"inacceptable", haut:"haut", limite:"limite", minimal:"minimal" };
 
 window.simAddToRegistre = function(){
-  if(typeof SIM_DATA === "undefined" || !SIM_DATA.name){
+  /* L'ÉTAT DU SIMULATEUR PASSE PAR SA PORTE. Nommé directement, il était
+     hors de portée et la garde ci-dessous était toujours vraie. */
+  var d = (typeof window.simDonnees === "function") ? window.simDonnees() : null;
+  if(!d || !d.name){
     alert("Aucune simulation a enregistrer. Completez d abord le simulateur.");
     return;
   }
-  var classif = simClassify();
+  var classif = window.simClassifier();
   var payload = {
-    nom: SIM_DATA.name,
-    finalite: SIM_DATA.desc || "",
-    secteur: SECTEUR_LABELS[SIM_DATA.secteur] || SIM_DATA.secteur || "",
-    type_systeme: SIM_DATA.type || "",
+    nom: d.name,
+    finalite: d.desc || "",
+    secteur: SECTEUR_LABELS[d.secteur] || d.secteur || "",
+    type_systeme: d.type || "",
     donnees_utilisees: "",
     classification: LEVEL_TO_CLASSIF[classif.level] || "a_evaluer",
     justification: classif.article || "",
@@ -11526,9 +11811,9 @@ var PAGE_GUIDES = {
     ]
   },
   'conf-taux': {
-    title: "Taux de conformité — les neuf normes",
+    title: "Taux de conformité — les douze normes",
     sections: [
-        {h:"À quoi sert cette page", t:"Elle rend un taux pour chacune des neuf normes, calculé à partir de ce que vous avez déjà renseigné dans les modules — rien n'est réévalué ici, tout est composé."},
+        {h:"À quoi sert cette page", t:"Elle rend un taux pour chacune des douze normes, calculé à partir de ce que vous avez déjà renseigné dans les modules — rien n'est réévalué ici, tout est composé."},
         {h:"Comment le lire", t:"Un taux n'est PAS une conformité. Sur une obligation légale, c'est une autorité qui tranche ; sur une norme certifiable, un organisme accrédité ; sur un cadre volontaire, personne. Chaque carte porte la phrase qui dit ce que 100 % ne veut pas dire, et elle compte autant que le chiffre."},
         {h:"Le trait ambre sur la barre", t:"C'est un PLAFOND. Un défaut qui arrête un auditeur — une déclaration d'applicabilité irrecevable, par exemple — n'efface pas le travail fait, mais interdit d'aller au-delà. Aucun effort sur le reste de la norme ne franchira ce trait tant que le verrou tient."},
         {h:"Le chiffre en tête", t:"C'est le PLUS BAS des taux mesurés, pas leur moyenne. Une moyenne dilue précisément la composante qu'il faut traiter en premier : deux cadres à 90 % et un à 30 % rendent 70 %, et le 30 % disparaît. La moyenne reste affichée à côté, avec son avertissement."},
@@ -11585,6 +11870,46 @@ var PAGE_GUIDES = {
       {h:"Quatre familles commandent les quatorze autres", t:"RA, PL, CA et PM produisent le socle, le plan et l’autorisation. Quand les familles techniques chiffrent plus haut qu’elles, ce n’est pas un programme de sécurité : c’est un inventaire d’outils. Le module le dit au lieu de le moyenner."},
       {h:"Pourquoi la révision 4 et non la 5", t:"Parce que c’est celle que la surcharge industrielle SP 800-82 Rev. 2 adapte — son annexe G le dit. La révision 5 est la version courante : elle ajoute les familles PT et SR et renomme CA. Un système déjà aligné sur la révision 5 lit donc ce taux contre un millésime antérieur au sien, et l’écran le rappelle avant le premier chiffre."},
       {h:"Limites à connaître", t:"Le module mesure par FAMILLE, pas par mesure : la répartition exacte des mesures par socle n’est pas reprise ici. Un ratio dont le dénominateur serait supposé vaudrait moins que son absence. Et ce catalogue ne se certifie pas : aucun organisme ne délivre d’attestation contre lui."}
+    ]
+  },
+  'en18229-role': {
+    title: "prEN 18229-3 — rôle et périmètre",
+    sections: [
+      {h:"À quoi sert cette page", t:"À dire qui, de vous ou de votre fournisseur, doit quoi. Ce projet de norme CEN sert l’article 14 de l’IA Act et adresse ses exigences au FOURNISSEUR, pour la conception du système ; ce qui dépend du contexte de déploiement est transmis au DÉPLOYEUR par la notice d’utilisation."},
+      {h:"Deux questionnaires, deux scores", t:"Poser les mêmes questions aux deux rôles donnerait un chiffre faux dans les deux sens : accablant pour le déployeur, qu’on noterait sur une interface qu’il n’a pas conçue ; indulgent pour le fournisseur, qu’on laisserait cocher « sans objet » sur son obligation principale. Qui conçoit ET exploite répond aux deux : le score retenu est celui du plus faible."},
+      {h:"Ce que la norme ne vous donne pas encore", t:"Elle est au stade de l’Enquête CEN : sa référence n’est PAS citée au Journal officiel de l’Union européenne. La tenir n’ouvre donc AUCUNE présomption de conformité à l’article 14. Le jour où elle sera citée, le même travail vaudra présomption — dans les limites de son domaine d’application."},
+      {h:"L’identification biométrique à distance change le questionnaire", t:"Neuf exigences n’existent que pour ces systèmes, et elles portent l’alinéa 14(5) : deux personnes physiques distinctes doivent vérifier chaque identification, et le système doit l’empêcher TECHNIQUEMENT de produire un effet avant. Déclarez-le ici, sinon ces neuf points restent cachés."},
+      {h:"Limites à connaître", t:"Le texte de la norme est la propriété du CEN : ce module en cite les numéros et les titres de paragraphes, et rien d’autre. Les questions du cadre sont rédigées par le cabinet. La mise en œuvre suppose de détenir le projet, qui s’obtient auprès d’un membre national du CEN — l’AFNOR en France."}
+    ]
+  },
+  'en18229-scenarios': {
+    title: "prEN 18229-3 — scénarios de risque et délais de réaction",
+    sections: [
+      {h:"À quoi sert cette page", t:"À la seule partie du cadre qui se CALCULE. Pour chaque scénario, la norme demande un délai de réaction (5.2.2) ; le 5.7.1 exige que la latence d’intervention des mesures choisies soit spécifiée, MESURÉE et vérifiée compatible avec ce délai. Ce sont ces deux nombres que le moteur compare."},
+      {h:"Aucun seuil n’est inventé ici", t:"La norme ne donne aucune valeur chiffrée : le délai se détermine par scénario à partir du type de sortie, de la situation dangereuse et de la gravité estimée. Le moteur compare donc ce que VOUS déclarez. Un module qui poserait « moins de 500 ms = surveillance continue » substituerait son chiffre à votre dossier de gestion des risques, et ne serait opposable à personne."},
+      {h:"Ce qui se passe quand la latence dépasse le délai", t:"La supervision humaine n’est alors pas, pour ce scénario, une mesure de gestion des risques. Deux issues, et une seule est recevable : relever la catégorie de mesure — le moteur dit lesquelles restent plus rapides —, ou appliquer le 5.2.4 et consigner l’impossibilité technique de l’intervention humaine en temps réel au dossier de gestion des risques. La consignation n’est pas une dispense : le risque reste, et d’autres mesures doivent le porter."},
+      {h:"Un délai unique pour tout un système est presque toujours faux", t:"Il se détermine par scénario. Le même système peut demander une intervention en millisecondes sur une sortie et en jours sur une autre — et les catégories de mesure qui tiennent ces deux délais n’ont rien à voir."},
+      {h:"Limites à connaître", t:"Les trois catégories sont rangées ici par latence atteignable, pas dans l’ordre du texte de la norme : c’est ce qui rend lisible le conseil « relevez la catégorie ». Les scénarios eux-mêmes s’identifient dans le processus de gestion des risques (prEN 18228), pas ici : cette page les reçoit et les confronte à leurs mesures."}
+    ]
+  },
+  'en18229-cadre': {
+    title: "prEN 18229-3 — le cadre d’analyse",
+    sections: [
+      {h:"À quoi sert cette page", t:"À répondre, paragraphe par paragraphe, aux exigences de VOTRE rôle. Chaque question porte le numéro et le titre du paragraphe qui la fonde, ce qu’elle sert à éviter, et le piège que le cabinet voit en mission sur ce point."},
+      {h:"Trois réponses, et « pas encore répondu » en est une", t:"Oui, partiellement, non — et l’absence de réponse, qui n’est pas un « non ». Le score dit sur combien de questions il porte ; une question sans réponse ne compte ni au numérateur ni au dénominateur. Un second clic sur la même réponse l’efface, pour que l’erreur de clic ne soit pas définitive."},
+      {h:"Les verrous se voient avant d’être atteints", t:"Quelques points plafonnent le score tant qu’ils ne sont pas tenus, et chacun annonce son plafond dans son propre encadré. Sans scénario de risque identifié, par exemple, rien en aval n’est calibré : le score ne dépasse pas 25 %, quel que soit le reste."},
+      {h:"Ce qui apparaît et disparaît", t:"Neuf exigences ne s’affichent que sur un système d’identification biométrique à distance. Une dixième n’apparaît que si vous avez déclaré laisser les notifications en temps réel au déployeur. Une exigence sans objet ne pèse ni au numérateur ni au dénominateur : la compter ferait baisser le score de qui n’a rien à faire."},
+      {h:"Limites à connaître", t:"Les questions sont rédigées par le cabinet à partir des paragraphes de la norme, dont seuls les numéros et les titres sont cités. Répondre « oui » ici n’est pas une preuve : c’est une déclaration, et la documentation technique est ce qui la rend démontrable."}
+    ]
+  },
+  'en18229-score': {
+    title: "prEN 18229-3 — score, documentation et article 14",
+    sections: [
+      {h:"À quoi sert cette page", t:"À la restitution. Rien ne s’y saisit : le score, ses plafonds, la documentation exigée et la couverture de l’article 14 sont tous DÉRIVÉS de ce que vous avez déclaré ailleurs."},
+      {h:"Ce que le score dit, et ce qu’il ne dit pas", t:"Il dit que ce que la norme attend est déclaré et que l’arithmétique du délai de réaction tient. Il ne dit pas qu’un organisme notifié l’a vu, ni que la norme est citée au Journal officiel — donc il ne vaut pas présomption de conformité."},
+      {h:"Un verrou ne retire pas des points, il pose un plafond", t:"Et le plafond se nomme, avec sa raison. La différence compte : « vous avez fait 70 % du chemin » est vrai, « vous êtes à 70 % de la conformité » est faux tant que la porte est fermée. Le brut reste affiché à côté du taux, pour qu’on voie le travail déjà fait."},
+      {h:"La documentation est dérivée, pas listée", t:"La norme renvoie sept éléments à la notice d’utilisation et sept à la documentation technique, mais trois de ces quatorze ne s’appliquent que sous condition. Une liste fixe ferait travailler sur des pièces que vous n’avez pas à produire ; cette page affiche ce qui vous est demandé, à vous."},
+      {h:"L’article 14 se lit par alinéa, sans pourcentage", t:"Un alinéa est couvert quand TOUS les paragraphes que l’annexe ZA lui associe sont tenus, ou il ne l’est pas. « 80 % de l’article 14 » n’aurait aucun sens — et l’annexe ZA est informative : c’est elle qui dit ce que la norme couvre, pas ce module."}
     ]
   },
   'nist82-ot': {
@@ -14006,15 +14331,18 @@ window.histoSaveSanctions = function(){
 /* ══ EXTENSION HISTORIQUE — Simulateur, Maturite, FRIA, RACI ══ */
 
 window.histoSaveSimulateur = function(){
-  if(typeof SIM_DATA === "undefined" || !SIM_DATA.name){
+  /* Même porte, même raison : nommé directement, l'état était hors de
+     portée et ce bouton refusait toujours d'enregistrer. */
+  var d = (typeof window.simDonnees === "function") ? window.simDonnees() : null;
+  if(!d || !d.name){
     alert("Aucune simulation à enregistrer. Complétez d abord le simulateur.");
     return;
   }
-  var classif = simClassify();
+  var classif = window.simClassifier();
   window.histoSave('simulateur', 'Classification système IA (Simulateur)',
-    {nom_systeme: SIM_DATA.name, secteur: SIM_DATA.secteur||'', type: SIM_DATA.type||'', description: SIM_DATA.desc||''},
+    {nom_systeme: d.name, secteur: d.secteur||'', type: d.type||'', description: d.desc||''},
     {classification: classif.level, score: classif.score, article: classif.article},
-    'Simulation — ' + SIM_DATA.name
+    'Simulation — ' + d.name
   ).then(function(r){
     if(r && r.calcul) alert('✅ Simulation enregistrée dans l historique (#'+r.calcul.id+').');
     else alert('Erreur lors de l enregistrement.');
@@ -18585,7 +18913,7 @@ window.raasMsCell = function(p){
 /* ══ Indice de conformité global — consolide IA Act / RGPD / ISO 42001 ══ */
 
 /* ═══════════════════════════════════════════════════════════════════════
-   LE TAUX DE CONFORMITÉ DES ONZE NORMES
+   LE TAUX DE CONFORMITÉ DES DOUZE NORMES
    Tout le calcul est au serveur, dans `conformite.py` : cet écran ne fait
    que l'afficher. Refaire ici la moindre arithmétique donnerait DEUX vérités
    sur le même taux — c'est le défaut qui existait entre `gcAuditPct` et
@@ -21619,6 +21947,34 @@ var GUIDED_PATHS = [
     ]
   },
   {
+    id: 'en18229_supervision',
+    icon: '\u{1F441}',
+    role: "Supervision humaine \u2014 mon syst\u00e8me d'IA est \u00e0 haut risque et l'article 14 me le demande",
+    pitch: "L'article 14 de l'IA Act exige une supervision humaine EFFECTIVE. prEN 18229-3 dit comment la construire \u2014 et son point de bascule est arithm\u00e9tique : la latence d'intervention de vos mesures doit tenir le d\u00e9lai de r\u00e9action de chaque sc\u00e9nario de risque. Ce parcours pose d'abord qui doit quoi, puis ce calcul, puis le reste.",
+    steps: [
+      {id:'en18229-role', label:"R\u00f4le et p\u00e9rim\u00e8tre",
+       action:"D\u00e9clarez si vous \u00eates fournisseur, d\u00e9ployeur ou les deux, et si le syst\u00e8me identifie des personnes \u00e0 distance par la biom\u00e9trie.",
+       gain:"Le questionnaire, les verrous et le score en d\u00e9pendent : la norme adresse ses exigences au fournisseur et transmet au d\u00e9ployeur par la notice d'utilisation.",
+       tip:"Neuf exigences n'existent que pour l'identification biom\u00e9trique \u00e0 distance, et elles portent l'alin\u00e9a 14(5) \u2014 deux personnes physiques distinctes par identification."},
+      {id:'en18229-scenarios', label:"Sc\u00e9narios et d\u00e9lais",
+       action:"Pour chaque sc\u00e9nario de risque, d\u00e9clarez son d\u00e9lai de r\u00e9action, la cat\u00e9gorie de mesure retenue, et la latence d'intervention que vous avez MESUR\u00c9E.",
+       gain:"C'est le seul verrou du site qu'aucune case ne l\u00e8ve : si la latence d\u00e9passe le d\u00e9lai sans consignation de l'impossibilit\u00e9 technique, la supervision n'est pas une mesure de gestion des risques, et le taux est plafonn\u00e9.",
+       tip:"Un d\u00e9lai unique pour tout un syst\u00e8me est presque toujours faux : il se d\u00e9termine par sc\u00e9nario, et le m\u00eame syst\u00e8me peut demander des millisecondes sur une sortie et des jours sur une autre."},
+      {id:'en18229-cadre', label:"Cadre d'analyse",
+       action:"Descendez les exigences de votre r\u00f4le, paragraphe par paragraphe.",
+       gain:"Chaque question porte le paragraphe qui la fonde, ce qu'elle sert \u00e0 \u00e9viter, et le pi\u00e8ge du terrain. Les verrous annoncent leur plafond avant d'\u00eatre atteints.",
+       tip:"« Pas encore r\u00e9pondu » n'est pas « non » : une question sans r\u00e9ponse ne compte ni au num\u00e9rateur ni au d\u00e9nominateur, et le score dit sur combien il porte."},
+      {id:'en18229-score', label:"Score et article 14",
+       action:"Lisez le score, ses plafonds, la documentation exig\u00e9e et la couverture de l'article 14 alin\u00e9a par alin\u00e9a.",
+       gain:"La documentation est D\u00c9RIV\u00c9E de vos r\u00e9ponses : trois des quatorze \u00e9l\u00e9ments ne s'appliquent que sous condition, et l'\u00e9cran n'affiche que ce qui vous est demand\u00e9.",
+       tip:"Le vert ne vaut pas pr\u00e9somption de conformit\u00e9 : ce projet n'est pas encore cit\u00e9 au Journal officiel. Le jour o\u00f9 il le sera, le m\u00eame travail vaudra pr\u00e9somption."},
+      {id:'conf-taux', label:"Le taux de conformit\u00e9",
+       action:"Ouvrez la carte prEN 18229-3 : elle porte maintenant votre d\u00e9claration.",
+       gain:"Le taux se compose de trois parts \u2014 calibration, mesures, preuves \u2014 et la premi\u00e8re commande les deux autres.",
+       tip:"Sa r\u00e9serve est permanente, et elle n'est pas une pr\u00e9caution de style : sans citation au Journal officiel, aucune r\u00e9ponse n'ouvre de pr\u00e9somption."}
+    ]
+  },
+  {
     id: 'nist_800_53_82',
     icon: '\u{1F3ED}',
     role: "Syst\u00e8mes industriels \u2014 je dois s\u00e9curiser un proc\u00e9d\u00e9, pas un parc bureautique",
@@ -21653,7 +22009,7 @@ var GUIDED_PATHS = [
       {id:'nist-genai', label:"Profil IA g\u00e9n\u00e9rative", action:"R\u00e9partissez les douze risques AVANT de les \u00e9valuer : la page dit qui tient chacun.", gain:"Six des douze ne rel\u00e8vent pas de la cyber \u2014 les confier au RSSI produit un registre que personne n\u2019arbitre.", tip:"AI 600-1 est un PROFIL du cadre, pas un second cadre : le citer sans le cadre en dessous, c\u2019est citer le profil de rien."},
       {id:'iso42001', label:"ISO 42001 \u2014 articles 4 \u00e0 10", action:"Comparez ce que vous venez de renseigner avec le corps de la norme.", gain:"Ce que le cadre NIST laisse volontaire, ISO 42001 le rend exigible \u2014 et certifiable.", tip:"Le rapprochement le plus utile n\u2019est pas point \u00e0 point : GOVERN recoupe les articles 5 et 6, et rien dans le cadre n\u2019impose de d\u00e9claration d\u2019applicabilit\u00e9."},
       {id:'cadre-normatif', label:"Cadre normatif", action:"Regardez ce que le cadre NIST apporte que les textes europ\u00e9ens n\u2019apportent pas.", gain:"Il est le seul \u00e0 donner une grammaire de RISQUE l\u00e0 o\u00f9 l\u2019IA Act donne une grammaire d\u2019OBLIGATION.", tip:"Un tiret dans une colonne n\u2019est pas un oubli : c\u2019est que le texte ne dit rien de ce module."},
-      {id:'conf-taux', label:"Le taux de conformit\u00e9", action:"Ouvrez la carte NIST AI RMF : elle porte maintenant votre profil.", gain:"Les dix-neuf cat\u00e9gories que vous venez de renseigner remontent dans la synth\u00e8se des neuf normes.", tip:"La carte dit ce que 100 % NE veut PAS dire ici : le cadre ne se certifie pas, il n'y a aucun auditeur au bout. Un taux plein signifie « tout est renseign\u00e9 et tenu », pas « conforme »."}
+      {id:'conf-taux', label:"Le taux de conformit\u00e9", action:"Ouvrez la carte NIST AI RMF : elle porte maintenant votre profil.", gain:"Les dix-neuf cat\u00e9gories que vous venez de renseigner remontent dans la synth\u00e8se des douze normes.", tip:"La carte dit ce que 100 % NE veut PAS dire ici : le cadre ne se certifie pas, il n'y a aucun auditeur au bout. Un taux plein signifie « tout est renseign\u00e9 et tenu », pas « conforme »."}
     ]
   },
   {
@@ -21666,7 +22022,7 @@ var GUIDED_PATHS = [
       {id:'owasp-pont', label:"Ce qu\u2019ISO 42001 ne couvre pas", action:"Regardez d\u2019abord les lignes o\u00f9 la colonne des mesures est vide.", gain:"Trois risques ne rencontrent aucune mesure de l\u2019annexe A : aucun r\u00e9f\u00e9rentiel ne les rattrapera.", tip:"Ce sont aussi ceux dont on se croit couvert pr\u00e9cis\u00e9ment parce qu\u2019on est certifi\u00e9. « Notre SMIA couvre OWASP » est la phrase que cette page existe pour contredire."},
       {id:'iso42001-soa', label:"D\u00e9claration d\u2019applicabilit\u00e9", action:"Reprenez les mesures cit\u00e9es en face des risques, et v\u00e9rifiez leur statut chez vous.", gain:"Une mesure retenue mais non mise en \u0153uvre ne couvre rien \u2014 et c\u2019est sur la SoA que \u00e7a se voit.", tip:"Une mesure « touche » un risque ; elle ne le clot pas. Le pont ne dit pas l\u2019inverse."},
       {id:'ia-act-hub', label:"IA Act \u2014 vue d\u2019ensemble", action:"Situez lesquels de ces risques deviennent des obligations quand le syst\u00e8me est \u00e0 haut risque.", gain:"OWASP dit ce qui casse ; le r\u00e8glement dit ce qui est exigible. Les deux ne se d\u00e9duisent pas l\u2019un de l\u2019autre.", tip:"Un risque OWASP trait\u00e9 ne vaut pas conformit\u00e9, et une obligation tenue ne vaut pas s\u00e9curit\u00e9."},
-      {id:'conf-taux', label:"Le taux de conformit\u00e9", action:"Ouvrez la carte OWASP LLM : elle porte maintenant ce que vous venez de d\u00e9clarer.", gain:"Vos dix \u00e9tats remontent dans la synth\u00e8se des neuf normes. Tant que rien n'est d\u00e9clar\u00e9, la carte reste à « — » : une absence de mesure n'est pas un z\u00e9ro.", tip:"Le taux OWASP est plafonn\u00e9 par les trois risques hors annexe A. Ce plafond n'est pas un d\u00e9faut du calcul : c'est ce que la liste elle-m\u00eame dit de sa propre port\u00e9e."}
+      {id:'conf-taux', label:"Le taux de conformit\u00e9", action:"Ouvrez la carte OWASP LLM : elle porte maintenant ce que vous venez de d\u00e9clarer.", gain:"Vos dix \u00e9tats remontent dans la synth\u00e8se des douze normes. Tant que rien n'est d\u00e9clar\u00e9, la carte reste à « — » : une absence de mesure n'est pas un z\u00e9ro.", tip:"Le taux OWASP est plafonn\u00e9 par les trois risques hors annexe A. Ce plafond n'est pas un d\u00e9faut du calcul : c'est ce que la liste elle-m\u00eame dit de sa propre port\u00e9e."}
     ]
   },
   {
@@ -24778,6 +25134,16 @@ document.addEventListener('keydown', function(e){
           return;
         }
         var c = j.couverture;
+        /* LE RAIL LIT CE QUE CET ÉCRAN PEINT, et le nom des lignes non
+           chiffrées : le moteur en tire « renseignez le modèle, l'unité,
+           les volumes et leur source — Registre IA → fiche du système »,
+           c'est-à-dire l'endroit où aller, et non un pourcentage. */
+        if (typeof window.cartoDeposer === 'function') {
+          window.cartoDeposer('finops', { couverture: {
+            total: c.total, instruites: c.instruites,
+            non_chiffres: (c.lignes || []).filter(function (l) { return !l.instruit; })
+                            .map(function (l) { return l.nom; }) } });
+        }
         couv.textContent = c.total ? (c.instruites + ' / ' + c.total) : '0';
         document.getElementById('fo-couv-detail').innerHTML =
           c.total
@@ -25045,6 +25411,13 @@ document.addEventListener('keydown', function(e){
               }).join('') + '</ul></div>';
         }
         var mods = j.modeles_tarifes || [];
+        /* LA LISTE DE LA FICHE DU REGISTRE VIENT D'ICI, ET DE NULLE PART
+           AILLEURS. Le formulaire offrait une liste de modèles ; la recopier
+           dans l'écran de saisie l'aurait figée le jour où la table de prix
+           bouge — et c'est l'écran qu'on aurait cru. */
+        if (typeof window.regModelesTarifesConnus === 'function') {
+          window.regModelesTarifesConnus(mods);
+        }
         var champs = j.champs_finops || {};
         var ailleurs = j.champs_lus_ailleurs || {};
         document.getElementById('fo-vocabulaire').innerHTML =
@@ -25177,6 +25550,13 @@ document.addEventListener('keydown', function(e){
 
   function peindreCouverture(j){
     var c = j.couverture;
+    /* LE RAIL LIT CE QUE CET ÉCRAN PEINT, et le nom des systèmes sans
+       volume : sans eux, la barre dirait « incomplet » sans dire lequel. */
+    if (typeof window.cartoDeposer === 'function') {
+      window.cartoDeposer('empreinte', { couverture: {
+        systemes: c.systemes, chiffrable: c.chiffrable,
+        volume_manquant: c.volume_manquant || [] } });
+    }
     document.getElementById('ei-couv-chiffre').textContent =
       c.systemes ? (c.chiffrable + ' / ' + c.systemes) : '0';
     var t = c.systemes
@@ -28526,6 +28906,13 @@ function qualifCharger() {
     .then(function (r) { return r.json(); })
     .then(function (d) {
       QUALIF_PROPS = d.propositions || [];
+      /* CE QUI RESTE À CLASSER, TEL QUE LE SERVEUR LE COMPTE : les lignes du
+         registre sans classification. Le rail ne recompte rien — et la clé
+         est celle que la route renvoie : `restants`, essayé d'abord, est le
+         reste d'un LOT de propositions, pas le reste à classer. */
+      if (typeof window.cartoDeposer === 'function' && typeof d.a_qualifier === 'number') {
+        window.cartoDeposer('qualification', { a_qualifier: d.a_qualifier });
+      }
       qualifPeindre();
     })
     .catch(function () {
@@ -29437,6 +29824,47 @@ function _memPoser(id, v) {
 }
 
 var MEMOIRE = {
+  /* L'AUDIT DE MATURITÉ N'AVAIT AUCUNE MÉMOIRE. Relevé au navigateur : aucune
+     clé de stockage ne le concernait, et les seize réponses disparaissaient à
+     chaque rechargement. Un module qu'on doit refaire entièrement pour avoir
+     changé d'onglet ne se remplit jamais ; et un vert de parcours qui
+     redevient rouge au rechargement ne vaut rien.
+     CE QUI EST GARDÉ : les réponses, par secteur, et le secteur choisi. Ce
+     que le module RECALCULE — les scores, le niveau, le radar — ne l'est pas.
+     LA VALEUR NULLE EST GARDÉE COMME TELLE : `nombre?` accepte `null`, et
+     c'est tout l'enjeu — « pas encore répondu » doit se relire « pas encore
+     répondu », jamais « Non ». */
+  maturite: { norme: 'maturite', nom: 'Audit de maturité IA',
+    cle: 'cp-sentinel-maturite-v1',
+    lire: function () {
+      if (typeof window.MAT_ANSWERS === 'undefined') return null;
+      return { reponses: window.MAT_ANSWERS,
+               secteur: (typeof window.matGetCur === 'function') ? window.matGetCur() : null };
+    },
+    relire: function (m) {
+      if (typeof window.MAT_ANSWERS === 'undefined') return;
+      var r = m && m.reponses;
+      if (!r || typeof r !== 'object') return;
+      /* Chaque secteur, chaque pilier, chaque réponse est relu AVEC SON TYPE :
+         une valeur d'un autre type est écartée seule, sans coûter les
+         quinze autres. Les seules réponses admises sont 0, 0.5, 1 et null. */
+      Object.keys(r).forEach(function (secteur) {
+        var piliers = r[secteur];
+        if (!piliers || typeof piliers !== 'object') return;
+        var garde = {};
+        Object.keys(piliers).forEach(function (pilier) {
+          var a = piliers[pilier];
+          if (!Array.isArray(a)) return;
+          garde[pilier] = a.map(function (v) {
+            return (v === 0 || v === 0.5 || v === 1) ? v : null;
+          });
+        });
+        if (Object.keys(garde).length) window.MAT_ANSWERS[secteur] = garde;
+      });
+      if (typeof m.secteur === 'string' && typeof window.matReprendreSecteur === 'function') {
+        window.matReprendreSecteur(m.secteur);
+      }
+    } },
   nis2: { norme: 'nis2', nom: 'NIS 2', cle: 'cp-sentinel-nis2-v1',
     lire: function () { return { etat: NIS2_ETAT, ca_groupe: _memChamp('nis2-ca') }; },
     relire: function (m) {
@@ -29685,7 +30113,58 @@ window.railNormeDuPanneau = railNormeDuPanneau;
    UN COLLECTEUR PAR RÉFÉRENTIEL, ET AUCUNE DONNÉE FABRIQUÉE. Un module qui
    n'a encore rien chargé rend une déclaration vide, et le serveur dit ce
    qui manque — il ne suppose rien. */
+/* ── CE QUE « CARTOGRAPHIER » TIENT DÉJÀ, ET QUI NE VIT PAS TOUJOURS ICI ──
+   TROIS DE SES SEPT ÉCRANS N'ONT D'ÉTAT QUE SUR LE SERVEUR : le registre,
+   la qualification assistée et l'empreinte. Les collecteurs du rail, eux,
+   sont SYNCHRONES — ils rendent un objet, pas une promesse. Plutôt que de
+   rendre tout le rail asynchrone pour trois écrans, chacun DÉPOSE ici ce
+   qu'il vient de recevoir, au moment où il le reçoit. Le rail lit ce dépôt.
+
+   UN ÉCRAN JAMAIS OUVERT NE DÉPOSE RIEN, et c'est voulu : le moteur dit
+   alors « ouvrez l'écran, le chiffrage n'a pas encore été demandé », ce qui
+   est vrai — au lieu de supposer un parc vide et de peindre un vert ou un
+   rouge sur rien. */
+var CARTO_ETAT = {};
+window.cartoDeposer = function (cle, valeur) {
+  CARTO_ETAT[cle] = valeur;
+  /* Le dépôt change l'avancement : le rail se repeint, sans attendre le
+     prochain changement de page. */
+  if (typeof railDemander === 'function') railDemander('cartographier');
+};
+
 var RAIL_DECL = {
+  /* LES SEUILS NE SONT PAS RÉINVENTÉS ICI. La complétude d'une fiche est
+     celle que le registre affiche déjà en pastille ; les couvertures sont
+     celles que le FinOps et l'Empreinte peignent en tête de leur écran ;
+     le compteur de maturité est celui de la boîte du score. Le rail lit ce
+     que le client voit — sinon l'écran dirait une chose, la barre une
+     autre, et c'est l'écran qu'on croirait. */
+  cartographier: function () {
+    var d = {};
+
+    /* Le simulateur : son état courant, par sa porte. */
+    var sim = (typeof window.simDonnees === 'function') ? (window.simDonnees() || {}) : {};
+    var niveau = null;
+    try {
+      if (sim.name && typeof window.simClassifier === 'function') {
+        niveau = (window.simClassifier() || {}).level || null;
+      }
+    } catch (e) { niveau = null; }
+    d.simulateur = { nom: sim.name || null, secteur: sim.secteur || null,
+                     type: sim.type || null, niveau: niveau };
+
+    /* Le registre, la qualification, le FinOps, l'Empreinte : leur dépôt. */
+    d.registre = CARTO_ETAT.registre || {};
+    d.qualification = CARTO_ETAT.qualification || {};
+    d.finops = CARTO_ETAT.finops || {};
+    d.empreinte = CARTO_ETAT.empreinte || {};
+
+    /* L'audit de maturité vit entièrement dans cet onglet : on le lit. */
+    var cur = (typeof window.matGetCur === 'function') ? window.matGetCur() : null;
+    var r = (cur && typeof window.matRepondu === 'function') ? window.matRepondu(cur) : null;
+    d.maturite = r ? { repondues: r.repondues, total: r.total } : {};
+    return d;
+  },
   nis2: function () {
     var d = (typeof nis2Charge === 'function') ? nis2Charge() : {};
     d.mesures = NIS2_ETAT.mesures;
@@ -29715,6 +30194,14 @@ var RAIL_DECL = {
   owasp_llm: function () { return { etats: OWASP_DECL }; },
   nist_800_53: function () { return { socle: N53_SOCLE || null, etats: _n53Etats() }; },
   nist_800_82: function () { return { etats: N82_DECL }; },
+  /* LA SUPERVISION HUMAINE VIT DANS SON PROPRE BLOC, plus loin dans le
+     fichier : le collecteur passe par sa porte. Tant que le bloc n'est pas
+     chargé, la déclaration est vide — et le moteur dit « choisissez votre
+     rôle », ce qui est vrai. */
+  en18229_3: function () {
+    return (typeof window.en18229Declaration === 'function')
+      ? window.en18229Declaration() : {};
+  },
   /* LE REGISTRE N'EST PAS ENVOYÉ : seulement, pour chaque traitement, quels
      champs de l'article 30 sont remplis. Le texte des finalités ou des
      mesures de sécurité n'a rien à faire dans un calcul d'avancement. */
@@ -29883,6 +30370,24 @@ function railBulle(b, e, p) {
     + (nat ? '\n\n' + nat.nom + ' — ' + nat.dit : '');
 }
 
+/* TROIS BATTEMENTS VERTS, PUIS PLUS RIEN. La classe est retirée à la fin de
+   l'animation : la laisser en place rejouerait le clignotement au prochain
+   repeint de la barre — et la barre se repeint à chaque réponse. */
+var RAIL_FETE = {};
+function railFeter(it) {
+  var cle = _railPanneau(it) || '';
+  if (RAIL_FETE[cle]) clearTimeout(RAIL_FETE[cle]);
+  it.classList.remove('rail-fete');
+  /* UN REFLOW ENTRE LE RETRAIT ET LA POSE, sinon l'animation ne repart pas
+     quand deux blocs passent au vert à la suite. */
+  void it.offsetWidth;
+  it.classList.add('rail-fete');
+  RAIL_FETE[cle] = setTimeout(function () {
+    it.classList.remove('rail-fete');
+    RAIL_FETE[cle] = null;
+  }, 3200);
+}
+
 function railPeindreBarre(norme, p) {
   if (!p || !p.blocs) return;
   var etats = p.etats || {};
@@ -29913,7 +30418,17 @@ function railPeindreBarre(norme, p) {
       puce.setAttribute('title', '');
       it.appendChild(puce);
     }
+    /* ── LE PASSAGE AU VERT SE VOIT, ET UNE SEULE FOIS ────────────────────
+       CE QUI SE REMARQUE, C'EST LE CHANGEMENT. Sept onglets verts qui
+       clignotent en permanence ne signalent plus rien ; trois battements au
+       moment où un module se remplit, puis le filet vert qui reste, disent
+       « celui-là vient d'être fait ». La comparaison porte sur l'état
+       PRÉCÉDENT de l'onglet — pas sur une table tenue à côté, qui pourrait
+       mentir après un rechargement de page. */
+    var avant = it.getAttribute('data-rail');
+    var fait = (b.etat === 'validee' || b.etat === 'lue');
     it.setAttribute('data-rail', b.etat);
+    if (fait && avant && avant !== b.etat) railFeter(it);
     /* LA FLÈCHE VERS LE BAS DÉSIGNE LE BLOC ATTENDU. */
     puce.textContent = (b.etat === 'courante') ? '↓' : (e.puce || '');
     puce.setAttribute('aria-label', ' — ' + (e.nom || ''));
@@ -29936,7 +30451,16 @@ function railPeindreEcran(norme) {
   var nat = (p.natures || {})[b.nature] || {};
   var courant = (p.blocs || []).filter(function (x) { return x.cle === p.courante; })[0];
 
-  var ban = pg.querySelector('.rail-bandeau');
+  //  LE RAIL RECONNAÎT SON PROPRE BANDEAU, PAS N'IMPORTE QUELLE CARTE.
+  //  MESURÉ SUR prEN 18229-3 : le questionnaire peint ses trente questions
+  //  dans des cartes `.rail-bandeau` — la même classe, pour le même dessin.
+  //  Le rail prenait la PREMIÈRE de ces cartes pour la sienne et écrasait
+  //  son contenu : la question 5.2.1, celle qui porte le verrou à 25 %,
+  //  disparaissait de l'écran à chaque peinture. Trente questions annoncées,
+  //  vingt-neuf affichées, et rien ne le disait.
+  //  Le `role="status"` n'est posé QUE par le rail, à la création : c'est
+  //  lui, et non la classe, qui identifie le bandeau du rail.
+  var ban = pg.querySelector('.rail-bandeau[role="status"]');
   if (!ban) {
     ban = document.createElement('div');
     ban.className = 'rail-bandeau';
@@ -30104,6 +30628,23 @@ function _ecranCourant() {
   return p ? p.id.replace(/^p-/, '') : null;
 }
 
+/* LES GROUPES SANS TIROIR, ET LEURS NORMES — une demande par norme, pas une
+   par onglet : sept onglets de « Cartographier » valent UN appel. */
+function railGroupesDeployes() {
+  var vus = {};
+  Array.prototype.forEach.call(document.querySelectorAll('.sb-nav .sb-section'),
+    function (sec) {
+      if (sec.hasAttribute('aria-expanded')) return;
+      var n = sec.nextElementSibling;
+      while (n && !n.classList.contains('sb-section')) {
+        var k = n.getAttribute && n.getAttribute('data-norme');
+        if (k && k !== 'dora' && !vus[k]) { vus[k] = true; railDemander(k, true); }
+        n = n.nextElementSibling;
+      }
+    });
+}
+window.railGroupesDeployes = railGroupesDeployes;
+
 function railTiroirOuvert(sec) {
   var vus = {};
   var n = sec.nextElementSibling;
@@ -30165,6 +30706,14 @@ function railInit(apres) {
       Array.prototype.forEach.call(
         document.querySelectorAll('.sb-nav .sb-section[aria-expanded="true"]'),
         railTiroirOuvert);
+      /* ── ET LES GROUPES QUI N'ONT PAS DE TIROIR À OUVRIR ─────────────────
+         « CARTOGRAPHIER » N'EST PAS UN TIROIR : ses sept onglets sont visibles
+         dès l'ouverture de Sentinel. MESURÉ AU NAVIGATEUR : le client voyait
+         sept lignes et aucun guidage — 0 pastille sur 7 — jusqu'à ce qu'il
+         clique au hasard dans l'une d'elles, puisque rien n'était jamais
+         « ouvert ». Un en-tête sans `aria-expanded` est un groupe déployé
+         d'office : son rail se peint tout de suite. */
+      railGroupesDeployes();
       var pg = document.querySelector('.page.on');
       if (pg) railApresGo(pg.id.replace(/^p-/, ''));
     })
@@ -30176,3 +30725,513 @@ function railInit(apres) {
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', railInit);
 else railInit();
+
+
+;/* ══════════════════════════════════════════════════════════════════════════
+   prEN 18229-3 — LA SUPERVISION HUMAINE DES SYSTÈMES D'IA
+   ══════════════════════════════════════════════════════════════════════════
+
+   AUCUN LIBELLÉ DE LA NORME N'EST ÉCRIT ICI. Les numéros de paragraphes,
+   leurs titres, les questions du cadre, les catégories de mesure et la
+   correspondance de l'annexe ZA viennent tous de /api/en18229/referentiel,
+   c'est-à-dire du module Python — le seul endroit du dépôt où ils vivent. Le
+   texte est la propriété du CEN : un second exemplaire ici aurait divergé au
+   premier amendement, et la divergence se verrait chez le client.
+
+   CE QUE CET ÉCRAN AJOUTE AU MOTEUR, ET RIEN DE PLUS : la saisie, et le
+   rendu. Il ne recalcule aucun score, aucune adéquation, aucun plafond — il
+   envoie la déclaration et affiche ce que le moteur en dit. Un second calcul
+   côté navigateur finirait par contredire le premier.                      */
+
+(function () {
+  var REF = null;                  /* le référentiel, chargé une fois       */
+  var ETAT = {                     /* la déclaration, telle qu'on la saisit */
+    role: null, rbi: null, notifications_fournisseur: true,
+    fournisseur: {}, deployeur: {}, scenarios: []
+  };
+  var VU = null;                   /* la dernière analyse rendue            */
+
+  function esc(t) { return railEsc(String(t == null ? '' : t)); }
+
+  /* ── LA DÉCLARATION, POUR LE RAIL ET POUR LE TAUX ────────────────────────
+     UNE SEULE COLLECTE, comme pour les onze autres : l'objet que le rail
+     reçoit est celui que le taux de conformité reçoit, et la traduction vers
+     le format du moteur se fait en Python. */
+  window.en18229Declaration = function () {
+    var d = { rbi: ETAT.rbi, scenarios: ETAT.scenarios,
+              notifications_fournisseur: ETAT.notifications_fournisseur };
+    /* UN RÔLE NON ENDOSSÉ N'EST PAS UN RÔLE VIDE : on ne l'envoie pas. Le
+       moteur dirait « aucun rôle déclaré » sur un objet vide, ce qui est
+       vrai ; sur un objet présent mais vide, il compterait des zéros. */
+    if (ETAT.role === 'fournisseur' || ETAT.role === 'deux') {
+      d.fournisseur = ETAT.fournisseur;
+    }
+    if (ETAT.role === 'deployeur' || ETAT.role === 'deux') {
+      d.deployeur = ETAT.deployeur;
+    }
+    return d;
+  };
+
+  /* ── CE QUI DÉCLENCHE UN RECALCUL ────────────────────────────────────────
+     UNE RAFALE DE RÉPONSES FAIT UN SEUL APPEL. Le cadre compte quarante-six
+     questions : une requête par case consommerait le limiteur du serveur
+     avant la moitié du questionnaire. */
+  var attente = null;
+  function demander(viteFait) {
+    if (attente) clearTimeout(attente);
+    attente = setTimeout(function () { attente = null; analyser(); },
+                         viteFait ? 0 : 450);
+    /* LE RAIL ET LE TAUX APPRENNENT TOUT DE SUITE, EUX : ils ont leur propre
+       cadence, et le rail se peint sur la déclaration, pas sur l'analyse. */
+    if (typeof railDemander === 'function') railDemander('en18229_3');
+    if (typeof declarationsChangees === 'function') declarationsChangees();
+  }
+
+  function analyser() {
+    var d = window.en18229Declaration();
+    d.role = (ETAT.role === 'deux') ? 'fournisseur' : ETAT.role;
+    d.reponses = (d.role === 'deployeur') ? ETAT.deployeur : ETAT.fournisseur;
+    fetch('/api/en18229/analyse', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      credentials: 'same-origin', body: JSON.stringify(d)
+    }).then(function (r) { return r.json(); }).then(function (j) {
+      if (!j || !j.ok) return;
+      VU = j;
+      peindreCadre(); peindreScore(); peindreScenarios();
+    }).catch(function () {});
+  }
+
+  /* ── LE RÉFÉRENTIEL, CHARGÉ UNE FOIS ─────────────────────────────────── */
+  function charger(apres) {
+    if (REF) { apres(); return; }
+    fetch('/api/en18229/referentiel', { credentials: 'same-origin' })
+      .then(function (r) { return r.json(); })
+      .then(function (j) { if (j && j.ok) { REF = j; apres(); } })
+      .catch(function () {});
+  }
+
+  /* ══ 1. LE RÔLE, ET CE QU'IL PORTE ═══════════════════════════════════ */
+
+  function peindreRole() {
+    var box = document.getElementById('en18229-role-q');
+    if (!box || !REF) return;
+    /* LA PRÉSOMPTION QUI N'EXISTE PAS ENCORE SE DIT AVANT LE RESTE, et pas
+       dans une note de bas d'écran : un client qui l'ignore croirait acheter
+       une présomption de conformité à l'article 14. */
+    var pres = document.getElementById('en18229-presomption');
+    if (pres && !pres.innerHTML) {
+      pres.innerHTML = '<div class="radar-registre-info radar-registre-warn">'
+        + '<b>Ce projet de norme n’ouvre pas encore de présomption de '
+        + 'conformité.</b> ' + esc(REF.source.presomption_dit)
+        + '<br><span style="opacity:.85">' + esc(REF.source.licence)
+        + '</span></div>';
+    }
+    var choix = [['fournisseur', REF.roles.fournisseur],
+                 ['deployeur', REF.roles.deployeur],
+                 ['deux', { nom: 'Les deux',
+                            dit: 'Vous développez le système ET vous '
+                                 + 'l’exploitez sous votre autorité.',
+                            porte: 'Les deux jeux d’obligations existent '
+                                   + 'séparément : le score retenu est celui '
+                                   + 'du plus faible des deux.' }]];
+    box.innerHTML = '<div class="reg-filtres"><b>Votre rôle</b> '
+      + choix.map(function (c) {
+          return '<button type="button" class="mat-export-btn'
+            + (ETAT.role === c[0] ? ' on' : '') + '" onclick="en18229Role(\''
+            + c[0] + '\')">' + esc(c[1].nom) + '</button>';
+        }).join(' ')
+      + '</div><div class="reg-filtres" style="margin-top:8px">'
+      + '<b>Identification biométrique à distance</b> '
+      + [['oui', true], ['non', false]].map(function (c) {
+          //  « OUI » SEUL NE NOMME RIEN À LA SYNTHÈSE VOCALE. Le libellé
+          //  visible reste court ; le nom accessible dit ce qu'on répond.
+          return '<button type="button" class="mat-export-btn'
+            + (ETAT.rbi === c[1] ? ' on' : '') + '" aria-label="'
+            + 'Identification biométrique à distance : ' + c[0]
+            + '" onclick="en18229Rbi(' + c[1] + ')">' + c[0] + '</button>';
+        }).join(' ')
+      + '<span style="margin-left:10px;opacity:.8;font-size:11.5px">'
+      + 'Neuf exigences et l’alinéa 14(5) en dépendent.</span></div>'
+      + '<div class="reg-filtres" style="margin-top:8px">'
+      + '<b>Notifications en temps réel</b> '
+      + [['mises en œuvre par le fournisseur', true],
+         ['laissées au déployeur', false]].map(function (c) {
+          return '<button type="button" class="mat-export-btn'
+            + (ETAT.notifications_fournisseur === c[1] ? ' on' : '')
+            + '" onclick="en18229Notif(' + c[1] + ')">' + esc(c[0])
+            + '</button>';
+        }).join(' ') + '</div>';
+
+    var dit = document.getElementById('en18229-role-dit');
+    if (dit) {
+      var r = ETAT.role && (REF.roles[ETAT.role]
+        || { nom: 'Les deux rôles',
+             porte: 'Vous répondez aux deux questionnaires. Le score retenu '
+                    + 'est celui du plus faible des deux, parce qu’un score '
+                    + 'global cacherait le côté défaillant.',
+             transmet: 'Vous êtes votre propre déployeur : ce que vous vous '
+                       + 'spécifiez dans la notice, vous devez aussi le '
+                       + 'mettre en œuvre.' });
+      dit.innerHTML = r ? '<div class="rail-bandeau" data-etat="courante">'
+        + '<div class="rail-tete"><b>' + esc(r.nom) + '</b></div>'
+        + '<div>' + esc(r.porte) + '</div>'
+        + '<div style="margin-top:6px">' + esc(r.transmet) + '</div></div>'
+        : '';
+    }
+    var fam = document.getElementById('en18229-famille');
+    if (fam && !fam.innerHTML) {
+      /* LA FAMILLE SE DIT, parce que la supervision humaine n'est pas
+         autonome : elle est calibrée ailleurs et journalisée ailleurs. */
+      fam.innerHTML = '<div class="trait-note"><b>Ce document ne se tient pas '
+        + 'seul.</b><ul style="margin:6px 0 0;padding-left:18px">'
+        + REF.famille.filter(function (f) { return f.socle; })
+            .map(function (f) {
+              return '<li><b>' + esc(f.norme) + '</b> — ' + esc(f.titre)
+                + ' : ' + esc(f.porte) + '</li>'; }).join('')
+        + '</ul></div>';
+    }
+  }
+
+  window.en18229Role = function (r) {
+    ETAT.role = r; peindreRole(); peindreCadre(); demander(true);
+  };
+  window.en18229Rbi = function (v) {
+    ETAT.rbi = v; peindreRole(); peindreCadre(); demander(true);
+  };
+  window.en18229Notif = function (v) {
+    ETAT.notifications_fournisseur = v; peindreRole(); peindreCadre();
+    demander(true);
+  };
+
+  /* ══ 2. LES SCÉNARIOS DE RISQUE, ET LEUR ARITHMÉTIQUE ════════════════ */
+
+  function peindreScenarios() {
+    var form = document.getElementById('en18229-sc-form');
+    if (!form || !REF) return;
+    if (!form.innerHTML) {
+      var unites = Object.keys(REF.unites).map(function (u) {
+        return '<option value="' + u + '">' + esc(REF.unites[u].nom)
+          + '</option>'; }).join('');
+      form.innerHTML = '<div class="reg-filtres" style="flex-wrap:wrap;gap:8px">'
+        + '<input id="en18229-sc-nom" class="reg-input" placeholder="Nom du scénario de risque" style="min-width:220px">'
+        + '<span><input id="en18229-sc-delai" class="reg-input" type="number" min="0" step="any" placeholder="délai" style="width:90px">'
+        + ' <select id="en18229-sc-delai-u" class="reg-input">' + unites + '</select>'
+        + ' <span style="opacity:.8;font-size:11.5px">délai de réaction (5.2.2)</span></span>'
+        + '<span><input id="en18229-sc-lat" class="reg-input" type="number" min="0" step="any" placeholder="latence" style="width:90px">'
+        + ' <select id="en18229-sc-lat-u" class="reg-input">' + unites + '</select>'
+        + ' <span style="opacity:.8;font-size:11.5px">latence d’intervention mesurée (5.7.1)</span></span>'
+        + '</div><div class="reg-filtres" style="margin-top:8px;flex-wrap:wrap">'
+        + '<b>Catégories retenues</b> '
+        + REF.categories.map(function (c) {
+            return '<label style="margin-right:10px"><input type="checkbox" value="'
+              + c.cle + '" class="en18229-sc-cat"> ' + esc(c.nom)
+              + ' <span style="opacity:.75">(' + esc(c.clause) + ')</span></label>';
+          }).join('')
+        + '<label style="margin-right:10px"><input type="checkbox" id="en18229-sc-imp"> '
+        + 'Impossibilité technique consignée (5.2.4)</label>'
+        + '<button type="button" class="mat-export-btn" onclick="en18229AjouterScenario()">Ajouter ce scénario</button>'
+        + '</div>';
+    }
+    var cats = document.getElementById('en18229-categories');
+    if (cats && !cats.innerHTML) {
+      /* LES TROIS CATÉGORIES, RANGÉES PAR LATENCE ATTEIGNABLE — l'ordre du
+         moteur, pas celui du texte de la norme : c'est ce qui rend lisible
+         « relevez la catégorie ». */
+      cats.innerHTML = '<div class="trait-note"><b>Trois catégories, du plus '
+        + 'réactif au moins réactif.</b><ul style="margin:6px 0 0;padding-left:18px">'
+        + REF.categories.map(function (c) {
+            return '<li><b>' + esc(c.nom) + '</b> <span style="opacity:.75">('
+              + esc(c.clause) + ')</span> — ' + esc(c.quoi)
+              + '<br><span style="opacity:.85">' + esc(c.pourquoi) + '</span>'
+              + '<br><i>' + esc(c.piege) + '</i></li>'; }).join('')
+        + '</ul></div>';
+    }
+    var liste = document.getElementById('en18229-sc-liste');
+    if (!liste) return;
+    var lus = (VU && VU.scenarios) || [];
+    if (!lus.length) {
+      liste.innerHTML = '<div class="veille-loading">Aucun scénario déclaré. '
+        + 'Le délai de réaction se détermine par scénario (5.2.2) : un délai '
+        + 'unique pour tout un système est presque toujours faux.</div>';
+      return;
+    }
+    liste.innerHTML = '<div class="reg-sys-head" style="grid-template-columns:2fr 1fr 1fr 1.2fr 2.4fr">'
+      + '<div>Scénario</div><div>Délai</div><div>Latence</div><div>Catégories</div><div>Ce que le moteur en dit</div></div>'
+      + lus.map(function (s, i) {
+          var e = REF.etats_scenario[s.etat] || {};
+          var coul = { vert: 'var(--green)', rouge: 'var(--accent)',
+                       orange: 'var(--orange)', gris: 'var(--muted2)' }[e.couleur]
+                     || 'var(--muted2)';
+          return '<div class="reg-sys-row" style="grid-template-columns:2fr 1fr 1fr 1.2fr 2.4fr;cursor:default">'
+            + '<div><b>' + esc(s.nom || '(sans nom)') + '</b></div>'
+            + '<div class="rs-type">' + esc(s.delai_dit) + '</div>'
+            + '<div class="rs-type">' + esc(s.latence_dit) + '</div>'
+            + '<div class="rs-type">' + esc((s.categories || []).map(function (c) {
+                return (REF.categories.filter(function (x) { return x.cle === c; })[0]
+                        || {}).nom || c; }).join(', ') || '—') + '</div>'
+            + '<div><span style="color:' + coul + ';font-weight:600">'
+            + esc(e.nom || s.etat) + '</span>'
+            + (s.marge_dit ? ' <span style="opacity:.8">— marge ' + esc(s.marge_dit) + '</span>' : '')
+            + (s.depassement_dit ? ' <span style="opacity:.8">— dépassement ' + esc(s.depassement_dit) + '</span>' : '')
+            + (s.manque && s.manque.length ? '<br><span style="opacity:.9;font-size:11.5px">' + esc(s.manque[0]) + '</span>' : '')
+            + ' <button type="button" class="mat-export-btn" onclick="en18229RetirerScenario(' + i + ')">retirer</button>'
+            + '</div></div>';
+        }).join('');
+  }
+
+  window.en18229AjouterScenario = function () {
+    var v = function (id) { var e = document.getElementById(id); return e ? e.value : ''; };
+    var cats = Array.prototype.filter.call(
+      document.querySelectorAll('.en18229-sc-cat'),
+      function (c) { return c.checked; }).map(function (c) { return c.value; });
+    var imp = document.getElementById('en18229-sc-imp');
+    ETAT.scenarios.push({
+      nom: v('en18229-sc-nom'),
+      delai: v('en18229-sc-delai'), delai_unite: v('en18229-sc-delai-u'),
+      latence: v('en18229-sc-lat'), latence_unite: v('en18229-sc-lat-u'),
+      categories: cats, impossibilite_consignee: !!(imp && imp.checked)
+    });
+    ['en18229-sc-nom', 'en18229-sc-delai', 'en18229-sc-lat'].forEach(function (id) {
+      var e = document.getElementById(id); if (e) e.value = '';
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('.en18229-sc-cat'),
+      function (c) { c.checked = false; });
+    if (imp) imp.checked = false;
+    demander(true);
+  };
+
+  window.en18229RetirerScenario = function (i) {
+    ETAT.scenarios.splice(i, 1); demander(true);
+  };
+
+  /* ══ 3. LE CADRE D'ANALYSE ══════════════════════════════════════════ */
+
+  function peindreCadre() {
+    var box = document.getElementById('en18229-cadre-liste');
+    if (!box || !REF) return;
+    if (!ETAT.role) {
+      box.innerHTML = '<div class="veille-loading">Choisissez d’abord votre '
+        + 'rôle : la norme adresse ses exigences au fournisseur, et transmet '
+        + 'au déployeur par la notice d’utilisation.</div>';
+      return;
+    }
+    var roles = (ETAT.role === 'deux') ? ['fournisseur', 'deployeur']
+                                       : [ETAT.role];
+    box.innerHTML = roles.map(function (role) {
+      var rep = ETAT[role] || {};
+      var exs = REF.exigences.filter(function (e) {
+        if (e.role.indexOf(role) < 0) return false;
+        if (e.si === 'rbi' && !ETAT.rbi) return false;
+        if (e.si === 'pas_de_notification_fournisseur'
+            && ETAT.notifications_fournisseur) return false;
+        return true;
+      });
+      return '<h2 class="page-h2">' + esc(REF.roles[role].nom) + ' — '
+        + exs.length + ' exigence' + (exs.length > 1 ? 's' : '') + '</h2>'
+        + exs.map(function (e) {
+            var v = rep[e.cle];
+            return '<div class="rail-bandeau" data-etat="'
+              + (v === true ? 'validee' : (v === false ? 'verrouillee' : 'attente'))
+              + '"><div class="rail-tete"><b>' + esc(e.clause) + ' · '
+              + esc(e.titre) + '</b>'
+              + (e.verrou ? '<span class="rail-nature">verrou</span>' : '')
+              + '</div><div>' + esc(e.question) + '</div>'
+              + '<div style="margin-top:6px;opacity:.9">' + esc(e.pourquoi) + '</div>'
+              + '<div style="margin-top:4px;font-style:italic;opacity:.85">'
+              + esc(e.piege) + '</div>'
+              + (e.verrou ? '<div class="rail-manque"><b>' + esc(e.verrou)
+                          + '</b></div>' : '')
+              + '<div style="margin-top:8px">'
+              + [['oui', true], ['partiellement', 'partiel'], ['non', false]]
+                  .map(function (c) {
+                    var on = (v === c[1]) || (c[1] === 'partiel' && v === 'partiel');
+                    //  QUARANTE-SIX QUESTIONS, TROIS BOUTONS CHACUNE : lus
+                    //  l'un après l'autre, « oui, partiellement, non »
+                    //  cent trente-huit fois ne disent à quoi on répond
+                    //  que si le nom accessible porte le paragraphe.
+                    return '<button type="button" class="mat-export-btn'
+                      + (on ? ' on' : '') + '" aria-label="' + esc(c[0])
+                      + ' — ' + esc(e.clause) + ' ' + esc(e.titre)
+                      + '" onclick="en18229Repondre(\''
+                      + role + '\',\'' + e.cle + '\',' + JSON.stringify(c[1])
+                      + ')">' + c[0] + '</button>'; }).join(' ')
+              + '</div></div>';
+          }).join('');
+    }).join('');
+  }
+
+  window.en18229Repondre = function (role, cle, valeur) {
+    var rep = ETAT[role] || (ETAT[role] = {});
+    /* UN SECOND CLIC SUR LA MÊME RÉPONSE L'EFFACE : « pas encore répondu »
+       doit rester atteignable, sinon une erreur de clic est définitive. */
+    if (rep[cle] === valeur) delete rep[cle]; else rep[cle] = valeur;
+    peindreCadre(); demander(false);
+  };
+
+  /* ══ 4. LE SCORE, LA DOCUMENTATION ET L'ARTICLE 14 ══════════════════ */
+
+  function peindreScore() {
+    var box = document.getElementById('en18229-score-bloc');
+    if (!box || !VU) return;
+    var s = VU.score;
+    box.innerHTML = '<div class="rail-bandeau" data-etat="'
+      + (s.verrous.length ? 'verrouillee' : (s.complet ? 'validee' : 'courante'))
+      + '"><div class="rail-tete"><b>' + s.taux + ' % — ' + esc(VU.role.nom)
+      + '</b><span class="rail-nature">' + s.repondues + ' réponse'
+      + (s.repondues > 1 ? 's' : '') + ' sur ' + s.applicables
+      + ' exigences applicables</span></div>'
+      + '<div class="rail-barre" role="progressbar" aria-valuemin="0" '
+      + 'aria-valuemax="100" aria-valuenow="' + s.taux + '" aria-label="'
+      + s.taux + ' pour cent"><i style="width:' + s.taux + '%"></i></div>'
+      + (s.plafond < 100
+         ? '<div class="rail-manque"><b>Plafonné à ' + s.plafond + ' % — '
+           + s.brut + ' % de brut.</b><ul>'
+           + s.verrous.map(function (v) {
+               return '<li>' + esc(v.clause) + ' · ' + esc(v.titre) + ' — '
+                 + esc(v.dit) + '</li>'; }).join('') + '</ul></div>'
+         : '')
+      + '<div class="rail-reserve">' + esc(VU.reserve) + '</div></div>';
+
+    var plan = document.getElementById('en18229-plan');
+    if (plan) {
+      plan.innerHTML = !VU.plan.total ? ''
+        : '<h2 class="page-h2">Le plan — ' + VU.plan.total + ' point'
+          + (VU.plan.total > 1 ? 's' : '') + '</h2>'
+          + VU.plan.etapes.map(function (e) {
+              return '<div class="trait-note"><b>' + esc(e.nom) + '</b> — '
+                + esc(e.dit) + '<ul style="margin:6px 0 0;padding-left:18px">'
+                + e.lignes.map(function (l) {
+                    return '<li><b>' + esc(l.clause) + '</b> · '
+                      + esc(l.titre) + ' — ' + esc(l.quoi) + '</li>'; }).join('')
+                + '</ul></div>'; }).join('');
+    }
+
+    var doc = document.getElementById('en18229-doc');
+    if (doc) {
+      var bloc = function (titre, ou, liste) {
+        return '<div class="trait-note"><b>' + titre + ' — ' + liste.length
+          + ' élément' + (liste.length > 1 ? 's' : '')
+          + '</b><ul style="margin:6px 0 0;padding-left:18px">'
+          + liste.map(function (x) {
+              return '<li>' + esc(x.quoi) + ' <span style="opacity:.75">('
+                + esc(x.clause) + ')</span></li>'; }).join('') + '</ul></div>';
+      };
+      doc.innerHTML = '<h2 class="page-h2">La documentation, dérivée de vos '
+        + 'réponses</h2>'
+        + bloc('Notice d’utilisation', 'notice', VU.documentation.notice)
+        + bloc('Documentation technique', 'technique', VU.documentation.technique);
+    }
+
+    var a14 = document.getElementById('en18229-art14');
+    if (a14) {
+      var coul = { couvert: 'var(--green)', non_couvert: 'var(--accent)',
+                   sans_reponse: 'var(--muted2)', sans_objet: 'var(--rule2)' };
+      //  L'ÉTAT SE DIT EN FRANÇAIS. Le nom interne rendu tel quel donnait
+      //  « sans reponse » — sans accent, et sans rien expliquer — dans une
+      //  colonne que le client lit.
+      var ditEtat = { couvert: 'Couvert', non_couvert: 'Non couvert',
+                      sans_reponse: 'Sans réponse', sans_objet: 'Sans objet' };
+      a14.innerHTML = '<h2 class="page-h2">L’article 14, alinéa par alinéa</h2>'
+        + '<div class="trait-note">Un alinéa n’est pas tenu à 80 % : il est '
+        + 'couvert par tous les paragraphes que l’annexe ZA lui associe, ou il '
+        + 'ne l’est pas.</div>'
+        + '<div class="reg-sys-head" style="grid-template-columns:.8fr 2.6fr 1.4fr">'
+        + '<div>Alinéa</div><div>Ce qu’il exige</div><div>État</div></div>'
+        + VU.article_14.map(function (a) {
+            return '<div class="reg-sys-row" style="grid-template-columns:.8fr 2.6fr 1.4fr;cursor:default">'
+              + '<div><b>' + esc(a.alinea) + '</b></div>'
+              + '<div class="rs-type">' + esc(a.titre) + '</div>'
+              + '<div><span style="color:' + (coul[a.etat] || 'var(--muted2)')
+              + ';font-weight:600">' + esc(ditEtat[a.etat] || a.etat)
+              + '</span><br><span style="opacity:.85;font-size:11.5px">'
+              + esc(a.dit) + '</span></div></div>'; }).join('');
+    }
+  }
+
+  /* ── L'OUVERTURE D'UN DES QUATRE ÉCRANS ─────────────────────────────── */
+  var PANNEAUX = { 'en18229-role': peindreRole,
+                   'en18229-scenarios': peindreScenarios,
+                   'en18229-cadre': peindreCadre,
+                   'en18229-score': peindreScore };
+  var _goAvant = window.go;
+  window.go = function (id) {
+    var r = _goAvant ? _goAvant.apply(this, arguments) : undefined;
+    if (PANNEAUX[id]) {
+      charger(function () {
+        PANNEAUX[id]();
+        /* LE SCORE ET LES SCÉNARIOS ONT BESOIN D'UNE ANALYSE : sans elle, ils
+           afficheraient un écran vide alors que des réponses existent. */
+        if (!VU && (id === 'en18229-score' || id === 'en18229-scenarios')) {
+          demander(true);
+        }
+      });
+    }
+    return r;
+  };
+
+  /* ── LA MÉMOIRE DE L'ÉCRAN ──────────────────────────────────────────── */
+  if (typeof MEMOIRE === 'object' && MEMOIRE) {
+    MEMOIRE.en18229_3 = {
+      norme: 'en18229_3', nom: 'prEN 18229-3',
+      cle: 'cp-sentinel-en18229-v1',
+      /* RIEN N'EST ÉCRIT TANT QUE RIEN N'A ÉTÉ RÉPONDU. `ETAT` n'est jamais
+         vide — il porte ses six clés dès le chargement — donc le rendre tel
+         quel écrirait une entrée de magasin pour un écran que personne n'a
+         ouvert. Une règle du dépôt mesure ce défaut sur les onze autres
+         écrans ; celui-ci n'y échappe pas. */
+      lire: function () {
+        var rien = ETAT.role === null && ETAT.rbi === null
+          && ETAT.notifications_fournisseur === true
+          && !ETAT.scenarios.length
+          && !Object.keys(ETAT.fournisseur).length
+          && !Object.keys(ETAT.deployeur).length;
+        return rien ? null : ETAT;
+      },
+      relire: function (m) {
+        if (!m || typeof m !== 'object') return;
+        if (m.role === 'fournisseur' || m.role === 'deployeur'
+            || m.role === 'deux') ETAT.role = m.role;
+        if (m.rbi === true || m.rbi === false) ETAT.rbi = m.rbi;
+        if (m.notifications_fournisseur === false) {
+          ETAT.notifications_fournisseur = false;
+        }
+        /* SEULES LES TROIS VALEURS DE RÉPONSE SONT RELUES. Une valeur
+           étrangère dans le magasin compterait comme une réponse, et le
+           score porterait sur une question que personne n'a tranchée. */
+        ['fournisseur', 'deployeur'].forEach(function (role) {
+          var src = m[role];
+          if (!src || typeof src !== 'object') return;
+          Object.keys(src).forEach(function (k) {
+            var v = src[k];
+            if (v === true || v === false || v === 'partiel') ETAT[role][k] = v;
+          });
+        });
+        if (Array.isArray(m.scenarios)) {
+          ETAT.scenarios = m.scenarios.filter(function (x) {
+            return x && typeof x === 'object'; });
+        }
+      }
+    };
+    /* ── CE BLOC S'INSCRIT APRÈS LA RELECTURE GÉNÉRALE, DONC IL SE RELIT
+       LUI-MÊME ────────────────────────────────────────────────────────────
+       MESURÉ : `memoireRelire` parcourt MEMOIRE au chargement de la page ;
+       cette entrée n'y est pas encore, puisque le bloc vit à la fin du
+       fichier. Sans ce rattrapage, la mémoire serait ÉCRITE mais jamais
+       RELUE — un client retrouverait un écran vide avec ses réponses dans le
+       magasin, ce qui est le pire des deux mondes.
+
+       ET LE TÉMOIN D'ÉCRITURE SE POSE ICI AUSSI : c'est lui qui empêche le
+       premier clic d'écrire un formulaire vide dans le magasin. */
+    (function () {
+      var m = MEMOIRE.en18229_3, brut = null;
+      try { brut = localStorage.getItem(m.cle); } catch (e) {}
+      if (brut) {
+        try {
+          var o = JSON.parse(brut);
+          if (o && typeof o === 'object' && !Array.isArray(o)) m.relire(o);
+        } catch (e) {}
+      }
+      try { MEMOIRE_ECRIT.en18229_3 = JSON.stringify(m.lire()); } catch (e) {}
+    })();
+  }
+})();

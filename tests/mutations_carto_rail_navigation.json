@@ -1,0 +1,274 @@
+{
+ "_pourquoi": "Chaque mutation FABRIQUE un défaut réel de la navigation entre les sept modules de « Cartographier » — un onglet qui n'annonce pas son parcours, un filet invisible, un clignotement qui ne s'arrête pas ou qui ne part jamais, une complétude ré-enfermée dans regRender, un dépôt perdu, un verrou qui ne verrouille plus, un manque qui ne dit plus où saisir — et doit faire TOMBER la règle nommée de tests/test_carto_rail_navigation.py.",
+ "cibles": [
+  "tests/test_carto_rail_navigation.py"
+ ],
+ "mutations": [
+  {
+   "nom": "le groupe sans tiroir cesse d'être peint au chargement",
+   "fichier": "sentinel.page.js",
+   "avant": "      railGroupesDeployes();",
+   "apres": "",
+   "regle": "test_un_groupe_sans_tiroir_recoit_son_rail_des_le_chargement"
+  },
+  {
+   "nom": "le rail ne peint plus que les tiroirs ouverts",
+   "fichier": "sentinel.page.js",
+   "avant": "      if (sec.hasAttribute('aria-expanded')) return;",
+   "apres": "      if (!sec.hasAttribute('aria-expanded')) return;",
+   "regle": "test_le_groupe_deploye_est_celui_qui_n_a_pas_d_aria_expanded"
+  },
+  {
+   "nom": "un appel par onglet au lieu d'un par norme",
+   "fichier": "sentinel.page.js",
+   "avant": "        if (k && k !== 'dora' && !vus[k]) { vus[k] = true; railDemander(k, true); }",
+   "apres": "        if (k && k !== 'dora') { railDemander(k, true); }",
+   "regle": "test_le_groupe_deploye_est_celui_qui_n_a_pas_d_aria_expanded"
+  },
+  {
+   "nom": "un onglet perd sa déclaration de parcours",
+   "fichier": "sentinel.html",
+   "avant": "<div class=\"sb-item\" data-norme=\"cartographier\" data-grp=\"cartographier\" role=\"button\" tabindex=\"0\" onclick=\"go('finops'",
+   "apres": "<div class=\"sb-item\" data-grp=\"cartographier\" role=\"button\" tabindex=\"0\" onclick=\"go('finops'",
+   "regle": "test_les_sept_onglets_de_cartographier_declarent_leur_parcours"
+  },
+  {
+   "nom": "le filet du bloc validé disparaît",
+   "fichier": "sentinel.html",
+   "avant": ".sb-nav .sb-item[data-rail=\"validee\"]{box-shadow:inset 2px 0 0 0 var(--green);",
+   "apres": ".sb-nav .sb-item[data-rail=\"validee\"]{",
+   "regle": "test_chaque_etat_pose_un_filet_visible_sur_l_onglet[validee]"
+  },
+  {
+   "nom": "le filet de l'écran de lecture disparaît",
+   "fichier": "sentinel.html",
+   "avant": ".sb-nav .sb-item[data-rail=\"lue\"]{box-shadow:inset 2px 0 0 0 var(--green)}",
+   "apres": ".sb-nav .sb-item[data-rail=\"lue\"]{opacity:1}",
+   "regle": "test_chaque_etat_pose_un_filet_visible_sur_l_onglet[lue]"
+  },
+  {
+   "nom": "le filet de l'étape courante redevient une bordure",
+   "fichier": "sentinel.html",
+   "avant": ".sb-nav .sb-item[data-rail=\"courante\"]{box-shadow:inset 2px 0 0 0 var(--blue)}",
+   "apres": ".sb-nav .sb-item[data-rail=\"courante\"]{border-width:2px}",
+   "regle": "test_chaque_etat_pose_un_filet_visible_sur_l_onglet[courante]"
+  },
+  {
+   "nom": "le verrou perd son filet orange",
+   "fichier": "sentinel.html",
+   "avant": ".sb-nav .sb-item[data-rail=\"verrouillee\"]{box-shadow:inset 2px 0 0 0 var(--orange)}",
+   "apres": ".sb-nav .sb-item[data-rail=\"verrouillee\"]{box-shadow:inset 2px 0 0 0 var(--green)}",
+   "regle": "test_chaque_etat_pose_un_filet_visible_sur_l_onglet[verrouillee]"
+  },
+  {
+   "nom": "« lu » se peint du vert plein du validé",
+   "fichier": "sentinel.html",
+   "avant": ".sb-item[data-rail=\"lue\"] .rail-puce{border-color:var(--ink2);color:var(--ink2)}",
+   "apres": ".sb-item[data-rail=\"lue\"] .rail-puce{border-color:var(--green);background:var(--green);color:#fff}",
+   "regle": "test_le_vert_plein_reste_le_vert_du_valide_et_pas_celui_du_lu"
+  },
+  {
+   "nom": "le clignotement vert ne s'arrête jamais",
+   "fichier": "sentinel.html",
+   "avant": ".sb-nav .sb-item.rail-fete{animation:rail-fete 1s ease-in-out 3}",
+   "apres": ".sb-nav .sb-item.rail-fete{animation:rail-fete 1s ease-in-out infinite}",
+   "regle": "test_le_clignotement_vert_s_arrete_et_respecte_le_mouvement_reduit"
+  },
+  {
+   "nom": "le clignotement vert ignore le mouvement réduit",
+   "fichier": "sentinel.html",
+   "avant": "  .sb-nav .sb-item.rail-fete,\n  .sb-nav .sb-item.rail-fete .rail-puce{animation:none}",
+   "apres": "",
+   "regle": "test_le_clignotement_vert_s_arrete_et_respecte_le_mouvement_reduit"
+  },
+  {
+   "nom": "le clignotement repart à chaque repeint",
+   "fichier": "sentinel.page.js",
+   "avant": "    if (fait && avant && avant !== b.etat) railFeter(it);",
+   "apres": "    if (fait) railFeter(it);",
+   "regle": "test_le_clignotement_part_au_changement_d_etat_et_pas_a_chaque_repeint"
+  },
+  {
+   "nom": "le clignotement ne part jamais",
+   "fichier": "sentinel.page.js",
+   "avant": "    if (fait && avant && avant !== b.etat) railFeter(it);",
+   "apres": "",
+   "regle": "test_le_clignotement_part_au_changement_d_etat_et_pas_a_chaque_repeint"
+  },
+  {
+   "nom": "l'état précédent est lu APRÈS avoir été écrasé",
+   "fichier": "sentinel.page.js",
+   "avant": "    var avant = it.getAttribute('data-rail');\n    var fait = (b.etat === 'validee' || b.etat === 'lue');\n    it.setAttribute('data-rail', b.etat);",
+   "apres": "    var fait = (b.etat === 'validee' || b.etat === 'lue');\n    it.setAttribute('data-rail', b.etat);\n    var avant = it.getAttribute('data-rail');",
+   "regle": "test_le_clignotement_part_au_changement_d_etat_et_pas_a_chaque_repeint"
+  },
+  {
+   "nom": "la complétude retourne s'enfermer dans regRender",
+   "fichier": "sentinel.page.js",
+   "avant": "function regCompleteness(s){\n  var champs = [s.nom,",
+   "apres": "function regRender_bis(){ function regCompleteness(s){\n  var champs = [s.nom,",
+   "regle": "test_la_completude_d_une_fiche_est_atteignable_hors_de_regRender"
+  },
+  {
+   "nom": "la complétude compte une question de moins",
+   "fichier": "sentinel.page.js",
+   "avant": "    (s.classification && s.classification!==\"a_evaluer\") ? \"x\" : \"\", s.preuves_conformite, s.fournisseur];",
+   "apres": "    (s.classification && s.classification!==\"a_evaluer\") ? \"x\" : \"\", s.preuves_conformite];",
+   "regle": "test_le_depot_porte_la_meme_completude_que_la_pastille_de_la_ligne"
+  },
+  {
+   "nom": "le dépôt du chargement disparaît",
+   "fichier": "sentinel.page.js",
+   "avant": "    regDeposerAuRail();\n      regRender();\n    })\n    .catch(function(e){\n      if(body) body.innerHTML = '<div class=\"reg-loading\" style=\"color:var(--accent)\">Erreur de chargement ('+e.message+')",
+   "apres": "      regRender();\n    })\n    .catch(function(e){\n      if(body) body.innerHTML = '<div class=\"reg-loading\" style=\"color:var(--accent)\">Erreur de chargement ('+e.message+')",
+   "regle": "test_le_rail_apprend_chaque_changement_du_registre[chargement]"
+  },
+  {
+   "nom": "le dépôt de l'enregistrement disparaît",
+   "fichier": "sentinel.page.js",
+   "avant": "      }\n      regDeposerAuRail();\n      regRender();\n    })\n    .catch(function(){ alert(\"Erreur lors de l'enregistrement.\"); });",
+   "apres": "      }\n      regRender();\n    })\n    .catch(function(){ alert(\"Erreur lors de l'enregistrement.\"); });",
+   "regle": "test_le_rail_apprend_chaque_changement_du_registre[enregistrement]"
+  },
+  {
+   "nom": "le dépôt de la suppression disparaît",
+   "fichier": "sentinel.page.js",
+   "avant": "      REG_DATA = REG_DATA.filter(function(s){ return s.id !== id; });\n      regDeposerAuRail();",
+   "apres": "      REG_DATA = REG_DATA.filter(function(s){ return s.id !== id; });",
+   "regle": "test_le_rail_apprend_chaque_changement_du_registre[suppression]"
+  },
+  {
+   "nom": "le dépôt ne redemande pas le rail",
+   "fichier": "sentinel.page.js",
+   "avant": "  if (typeof railDemander === 'function') railDemander('cartographier');",
+   "apres": "  return;",
+   "regle": "test_un_depot_repeint_la_barre_sans_attendre_le_prochain_ecran"
+  },
+  {
+   "nom": "le collecteur fabrique un parc vide pour le FinOps",
+   "fichier": "sentinel.page.js",
+   "avant": "    d.finops = CARTO_ETAT.finops || {};",
+   "apres": "    d.finops = CARTO_ETAT.finops || { couverture: { total: 0, instruites: 0 } };",
+   "regle": "test_le_collecteur_rassemble_les_sept_ecrans_sans_rien_fabriquer"
+  },
+  {
+   "nom": "le collecteur oublie la classification du simulateur",
+   "fichier": "sentinel.page.js",
+   "avant": "        niveau = (window.simClassifier() || {}).level || null;",
+   "apres": "        niveau = null;",
+   "regle": "test_le_collecteur_rassemble_les_sept_ecrans_sans_rien_fabriquer"
+  },
+  {
+   "nom": "le collecteur oublie le compteur de maturité",
+   "fichier": "sentinel.page.js",
+   "avant": "    d.maturite = r ? { repondues: r.repondues, total: r.total } : {};",
+   "apres": "    d.maturite = {};",
+   "regle": "test_ce_que_le_collecteur_rend_est_ce_que_le_moteur_sait_lire"
+  },
+  {
+   "nom": "le dépôt de la qualification lit la clé d'une autre route",
+   "fichier": "sentinel.page.js",
+   "avant": "      if (typeof window.cartoDeposer === 'function' && typeof d.a_qualifier === 'number') {\n        window.cartoDeposer('qualification', { a_qualifier: d.a_qualifier });",
+   "apres": "      if (typeof window.cartoDeposer === 'function' && typeof d.restants === 'number') {\n        window.cartoDeposer('qualification', { a_qualifier: d.restants });",
+   "regle": "test_le_depot_du_rail_lit_la_cle_que_la_route_renvoie"
+  },
+  {
+   "nom": "la route qui liste cesse de compter ce qui reste à classer",
+   "fichier": "app.py",
+   "avant": "    return jsonify({'propositions': props, 'statut': statut,\n                    'a_qualifier': a_qualifier,",
+   "apres": "    return jsonify({'propositions': props, 'statut': statut,",
+   "regle": "test_la_route_qui_liste_les_propositions_compte_ce_qui_reste_a_classer"
+  },
+  {
+   "nom": "le comptage réinvente sa définition",
+   "fichier": "app.py",
+   "avant": "    a_qualifier = sum(1 for sysd in par_id.values()\n                      if qualification_assistee.sans_classification(sysd))",
+   "apres": "    a_qualifier = sum(1 for sysd in par_id.values()\n                      if not sysd.get('classification'))",
+   "regle": "test_la_route_qui_liste_les_propositions_compte_ce_qui_reste_a_classer"
+  },
+  {
+   "nom": "« a_evaluer » cesse de compter comme non classé",
+   "fichier": "qualification_assistee.py",
+   "avant": "CLASSES_NON_PRONONCEES = (\"\", \"a_evaluer\")",
+   "apres": "CLASSES_NON_PRONONCEES = (\"\",)",
+   "regle": "test_une_classification_non_prononcee_compte_dans_ce_qui_reste[a_evaluer]"
+  },
+  {
+   "nom": "une colonne vide cesse de compter comme non classée",
+   "fichier": "qualification_assistee.py",
+   "avant": "    if v is None:\n        return True\n    return str(v).strip() in CLASSES_NON_PRONONCEES",
+   "apres": "    if v is None:\n        return False\n    return str(v).strip() in CLASSES_NON_PRONONCEES",
+   "regle": "test_une_classification_non_prononcee_compte_dans_ce_qui_reste[None]"
+  },
+  {
+   "nom": "la définition du module dérive de celle du SQL",
+   "fichier": "qualification_assistee.py",
+   "avant": "CLASSES_NON_PRONONCEES = (\"\", \"a_evaluer\")",
+   "apres": "CLASSES_NON_PRONONCEES = (\"\", \"a_evaluer\", \"a_classer\")",
+   "regle": "test_la_definition_python_et_le_sql_de_la_route_qui_propose_s_accordent"
+  },
+  {
+   "nom": "un bloc de la cartographie disparaît",
+   "fichier": "parcours_normes.py",
+   "avant": "    _b(\"maturite\", \"maturite\", \"Audit de maturité IA\", \"saisie\",",
+   "apres": "    _b(\"maturite\", \"maturite\", \"Audit de maturité IA\", \"lecture\",",
+   "regle": "test_les_sept_blocs_remplis_donnent_sept_faits_sur_sept"
+  },
+  {
+   "nom": "le FinOps cesse de dépendre du registre",
+   "fichier": "parcours_normes.py",
+   "avant": "           \"ne coûte pas zéro — personne n'a encore dit ce qu'il consomme.\",\n           prerequis=(\"registre\",)),",
+   "apres": "           \"ne coûte pas zéro — personne n'a encore dit ce qu'il consomme.\",\n           prerequis=()),",
+   "regle": "test_les_trois_ecrans_qui_lisent_le_registre_sont_verrouilles_sans_lui[finops]"
+  },
+  {
+   "nom": "l'empreinte cesse de dépendre du registre",
+   "fichier": "parcours_normes.py",
+   "avant": "           \"Rien ne se saisit ici non plus : le volume vient de la fiche \"\n           \"du système, au Registre.\",\n           prerequis=(\"registre\",)),",
+   "apres": "           \"Rien ne se saisit ici non plus : le volume vient de la fiche \"\n           \"du système, au Registre.\",\n           prerequis=()),",
+   "regle": "test_les_trois_ecrans_qui_lisent_le_registre_sont_verrouilles_sans_lui[empreinte]"
+  },
+  {
+   "nom": "le manque FinOps ne dit plus où saisir",
+   "fichier": "parcours_normes.py",
+   "avant": "                _q(\"« %s » : renseignez le modèle, l'unité de facturation, \"\n                   \"les volumes du mois et leur source — Registre IA → \"\n                   \"fiche du système\" % nom))",
+   "apres": "                _q(\"le chiffrage est incomplet\"))",
+   "regle": "test_le_manque_nomme_le_systeme_ET_l_ecran_ou_le_remplir[finops-finops-couverture0-attendu0]"
+  },
+  {
+   "nom": "un registre vide ne dit plus qui en dépend",
+   "fichier": "parcours_normes.py",
+   "avant": "_q(\"Aucun système déclaré — le FinOps, l'Empreinte et la \"\n               \"qualification assistée lisent tous ce registre\"))",
+   "apres": "_q(\"Aucun système déclaré\"))",
+   "regle": "test_un_registre_vide_dit_qui_d_autre_en_depend"
+  },
+  {
+   "nom": "le parcours se dit une conformité",
+   "fichier": "parcours_normes.py",
+   "avant": "    \"cartographier\": \"personne ne la prononce : ce n'est pas une \"\n                     \"conformité mais un inventaire, et le vert y dit que \"\n                     \"ce qu'un écran attend est déclaré — pas que la \"\n                     \"déclaration est juste\",",
+   "apres": "    \"cartographier\": \"le Comité européen de l'IA\",",
+   "regle": "test_la_conclusion_refuse_de_dire_conformite"
+  },
+  {
+   "nom": "un écran jamais ouvert est supposé vide",
+   "fichier": "parcours_normes.py",
+   "avant": "    if not _nombre(fo_total):\n        manque.setdefault(\"finops\", []).append(\n            _q(\"Ouvrez l'écran : le chiffrage n'a pas encore été demandé\"))\n    elif fo_total and fo_ok != fo_total:",
+   "apres": "    if False:\n        pass\n    elif fo_total and fo_ok != fo_total:",
+   "regle": "test_un_ecran_jamais_ouvert_le_dit_au_lieu_de_supposer_un_parc_vide"
+  },
+  {
+   "nom": "le dépôt du chargement est désarmé sans disparaître",
+   "fichier": "sentinel.page.js",
+   "avant": "    }\n    regDeposerAuRail();\n      regRender();",
+   "apres": "    }\n    if (false) regDeposerAuRail();\n      regRender();",
+   "regle": "test_le_chargement_du_registre_depose_vraiment_au_rail"
+  },
+  {
+   "nom": "la complétude retourne dans regRender et le chargement échoue",
+   "fichier": "sentinel.page.js",
+   "avant": "function regCompleteness(s){\n  var champs = [s.nom,",
+   "apres": "function regCompleteness_ailleurs(s){\n  var champs = [s.nom,",
+   "regle": "test_le_chargement_du_registre_depose_vraiment_au_rail"
+  }
+ ]
+}

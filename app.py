@@ -2363,6 +2363,7 @@ import dora_ponts  # noqa: E402
 import dora_supervision  # noqa: E402
 import dora_parcours  # noqa: E402
 import parcours_normes  # noqa: E402
+import en18229_3  # noqa: E402
 
 
 @app.route('/api/dora/referentiel', methods=['GET'])
@@ -2468,6 +2469,42 @@ def api_dora_parcours():
     except Exception:
         app.logger.exception("parcours DORA")
         return jsonify({"ok": False, "erreur": "avancement_impossible"}), 500
+    return jsonify(r), 200
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  prEN 18229-3 — LA SUPERVISION HUMAINE DES SYSTÈMES D'IA
+# ═══════════════════════════════════════════════════════════════════════════
+
+@app.route('/api/en18229/referentiel', methods=['GET'])
+@rate_limit(limit=120, window=60)
+def api_en18229_referentiel():
+    """Le cadre d'analyse de la supervision humaine — numeros et titres seuls.
+
+    POURQUOI UNE ROUTE PLUTOT QU'UNE TABLE DANS LA PAGE, ET ICI PLUS QU'AILLEURS.
+    Le texte de la norme est la propriete du CEN : le module est le SEUL endroit
+    ou ses numeros et ses titres sont ecrits. Une liste recopiee dans le
+    JavaScript en ferait un second exemplaire a tenir a jour, et la divergence
+    se verrait chez le client.
+    """
+    return jsonify(dict(en18229_3.referentiel(), ok=True)), 200
+
+
+@app.route('/api/en18229/analyse', methods=['POST'])
+@rate_limit(limit=240, window=60)
+def api_en18229_analyse():
+    """Le score de supervision humaine, ses verrous et le plan qui en decoule.
+
+    MEME CADENCE QUE LE RAIL, POUR LA MEME RAISON : l'ecran redemande
+    l'analyse a chaque reponse, et un scenario de risque se saisit champ par
+    champ. Le regroupement des rafales est fait par l'ecran.
+    """
+    d = request.get_json(silent=True) or {}
+    try:
+        r = en18229_3.analyse(d)
+    except Exception:
+        app.logger.exception("en18229 analyse")
+        return jsonify({"ok": False, "erreur": "analyse_impossible"}), 500
     return jsonify(r), 200
 
 
@@ -11428,7 +11465,26 @@ def registre_list():
     rows = cur.fetchall()
     conn.commit()
     conn.close()
-    return jsonify({'systemes': [registre_row_to_dict(r) for r in rows], 'moteur': 'postgres' if REGISTRE_USE_PG else 'sqlite'})
+    # `finops_ia` s'importe ICI, comme partout ailleurs dans ce fichier : il
+    # est chargé à la demande, et une table de prix sans source le refuse au
+    # chargement. Un import de module raté ne doit pas priver le client de son
+    # registre — la liste manquante vide seulement le menu déroulant.
+    try:
+        import finops_ia as _fo
+        _modeles = sorted(_fo.TARIFS)
+    except Exception as e:  # noqa: BLE001
+        logger.warning('REGISTRE_MODELES_INDISPONIBLES: %s', e)
+        _modeles = []
+    # LE VOCABULAIRE VOYAGE AVEC LES DONNÉES, SANS REQUÊTE DE PLUS. La fiche
+    # d'un système offre une liste de modèles ; elle doit être CELLE DE LA
+    # TABLE DE PRIX, sinon l'écran propose un modèle que le moteur ne sait pas
+    # chiffrer, ou en cache un qu'il sait. La recopier dans le JavaScript
+    # l'aurait figée le jour où la table bouge — et c'est l'écran qu'on aurait
+    # cru. Elle part donc d'ici, avec la liste des systèmes que le panneau
+    # demande déjà : zéro aller-retour supplémentaire.
+    return jsonify({'systemes': [registre_row_to_dict(r) for r in rows],
+                    'moteur': 'postgres' if REGISTRE_USE_PG else 'sqlite',
+                    'modeles_tarifes': _modeles})
 
 @app.route('/api/registre', methods=['POST'])
 @require_paid_plan
@@ -12018,7 +12074,16 @@ def api_qualif_propositions():
         if s:
             p['ecart'] = qualification_assistee.ecart(
                 s, {'classe_proposee': p.get('classe_proposee')})
+    # CE QUI RESTE A CLASSER, COMPTE ICI ET PAS AILLEURS. Le rail de
+    # « Cartographier » le lisait dans une cle que cette route ne renvoyait
+    # pas : MESURE AU NAVIGATEUR, l'ecran de qualification s'ouvrait et la
+    # barre continuait de dire « ouvrez l'ecran, le lot n'a pas ete demande ».
+    # Le comptage se fait sur les lignes deja chargees ci-dessus — aucune
+    # requete de plus — et avec la definition du module, pas une seconde.
+    a_qualifier = sum(1 for sysd in par_id.values()
+                      if qualification_assistee.sans_classification(sysd))
     return jsonify({'propositions': props, 'statut': statut,
+                    'a_qualifier': a_qualifier,
                     'reserve': qualification_assistee.RESERVE})
 
 

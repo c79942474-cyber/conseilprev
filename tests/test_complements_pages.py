@@ -1135,13 +1135,19 @@ def test_apres_un_retrait_le_focus_RESTE_dans_la_liste(site):
           out.attendu = ['BUTTON[3]', 'BUTTON[1]', 'A[vide]', 'BODY'];
         """
     else:
-        code = _tranche("window.regDelete = function(id){")
+        #  LE VRAI DÉPÔT AU RAIL FAIT PARTIE DU CHEMIN DE SUPPRESSION : sans
+        #  lui dans le harnais, `regDelete` lèverait une ReferenceError que
+        #  son propre `.catch` changerait en « Erreur réseau », et la règle
+        #  mesurerait un échec de harnais au lieu du focus.
+        code = (_tranche("function regCompleteness(s){", "\nfunction regFetch(){")
+                + "\n" + _tranche("window.regDelete = function(id){"))
         scen = """
           var boite = new El('div', { id: 'reg-sys-body' }, document.body);
           global.REG_DATA = [{ id: 1 }, { id: 2 }, { id: 3 }];
           global.confirm = function () { return true; };
           global.alert = function (m) { throw new Error('alerte : ' + m); };
           global.regCloseModal = function () {}; window.sentRegistreOublier = function () {};
+          window.cartoDeposer = function () {};
           global.fetch = function () { return Promise.resolve({ status: 200, json: function () { return Promise.resolve({}); } }); };
           global.regRender = function () { repeindre(boite, function (b) {
             if (!REG_DATA.length) { new El('a', { href: '#', 'data-x': 'vide' }, b); return; }

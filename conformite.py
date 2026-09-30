@@ -159,6 +159,12 @@ NORMES = [
      "panneau": "nist53-socle",
      "mesure": "les dix-huit familles de mesures, et le socle qu'elles "
                "supposent"},
+    {"cle": "en18229_3", "nom": "prEN 18229-3", "nature": "cadre",
+     "texte": "prEN 18229-3:2026 (CEN/CLC JTC 21)",
+     "panneau": "en18229-role",
+     "mesure": "la supervision humaine de l'article 14 : les scénarios de "
+               "risque, leur délai de réaction, et les mesures qui doivent "
+               "le tenir"},
     {"cle": "nist_800_82", "nom": "NIST SP 800-82", "nature": "cadre",
      "texte": "NIST SP 800-82 Rev. 2 (2015)",
      "panneau": "nist82-ot",
@@ -172,9 +178,9 @@ NORMES_PAR_CLE = {n["cle"]: n for n in NORMES}
 #  UNE COULEUR PAR RÉFÉRENTIEL — DÉCLARÉE ICI, DÉRIVÉE PARTOUT
 # ══════════════════════════════════════════════════════════════════════════
 #
-# POURQUOI ELLE EST DANS CE FICHIER. C'est lui qui tient la liste des onze
+# POURQUOI ELLE EST DANS CE FICHIER. C'est lui qui tient la liste des douze
 # normes. Une seconde liste de couleurs, dans la feuille de style, se
-# séparerait de celle-ci au premier référentiel ajouté : la douzième norme
+# séparerait de celle-ci au premier référentiel ajouté : la treizième norme
 # arriverait sans couleur, ou hériterait de celle d'une autre — et rien ne
 # le dirait. La barre latérale et le rail lisent CELLE-CI.
 #
@@ -183,10 +189,11 @@ NORMES_PAR_CLE = {n["cle"]: n for n in NORMES}
 # hiérarchise pas, ne signale aucun état.
 #
 # ELLE N'EST JAMAIS SEULE À PORTER L'INFORMATION. Chaque entrée de la barre
-# garde son nom écrit. Onze teintes ne peuvent pas être TOUTES séparables
+# garde son nom écrit. Douze teintes ne peuvent pas être TOUTES séparables
 # deux à deux : mesurées toutes paires confondues, la plus proche tombe à
 # ΔE 12,2 en vision normale (sarcelle et ciel) et à 3,6 en protanopie
-# (violet et bleu). C'est le nom, pas la couleur, qui identifie ; la
+# (violet et bleu) — le pétrole de la douzième n'a rapproché ni l'une ni
+# l'autre, il est à ΔE 28,8 de son plus proche voisin de tiroir. C'est le nom, pas la couleur, qui identifie ; la
 # couleur fait retrouver d'un coup d'œil ce que le nom a déjà dit.
 #
 # L'ORDRE EST CELUI DE LA BARRE LATÉRALE, ET C'EST LE POINT. Deux couleurs
@@ -194,17 +201,20 @@ NORMES_PAR_CLE = {n["cle"]: n for n in NORMES}
 # VOISINS qui doivent se séparer. `ORDRE_BARRE` fixe l'ordre réel des
 # tiroirs, une règle le confronte à la page, et c'est dans CET ordre que la
 # palette a été validée — pire voisinage ΔE 20,8 en vision normale (plancher
-# 15) et 17,4 en deutéranopie (cible 8). Les deux NIST, qui partagent un
-# tiroir, sont voisins et comptent comme tels.
+# 15, sur bleu/sarcelle) et 18,8 en vision déficiente (cible 8, même paire).
+# Les deux NIST, qui partagent un tiroir, sont voisins et comptent comme
+# tels. LE PÉTROLE S'EST GLISSÉ ENTRE SARCELLE ET VIOLET, et cela a DÉFAIT
+# le pire voisinage déficient d'avant — sarcelle/violet à 17,4 — qui n'est
+# plus une adjacence : les deux ne se touchent plus.
 #
-# TROIS COULEURS DISENT DÉJÀ AUTRE CHOSE DANS SENTINEL, ET AUCUNE DES ONZE
+# TROIS COULEURS DISENT DÉJÀ AUTRE CHOSE DANS SENTINEL, ET AUCUNE DES DOUZE
 # NE LES IMITE. La terre cuite dit « ici » — elle prend l'icône au survol et
 # remplit la pastille de l'onglet ouvert ; le vert dit « bloc validé », le
-# bleu « bloc attendu », l'ambre « bloc verrouillé ». Aucune des onze n'est
+# bleu « bloc attendu », l'ambre « bloc verrouillé ». Aucune des douze n'est
 # à moins de ΔE 8 de l'une d'elles : ce n'est jamais le même pas de
 # couleur. ET LE VERT EST TENU À L'ÉCART TOUT ENTIER, pas seulement son pas
 # exact : c'est la couleur que le parcours donne à un bloc rempli, dans ces
-# onze modules mêmes. Un référentiel vert dans la barre se lirait « acquis ».
+# douze modules mêmes. Un référentiel vert dans la barre se lirait « acquis ».
 # D'où l'absence d'un rouge franc, d'un orange et d'un vert : les deux
 # premiers tomberaient sur la terre cuite ou sur l'ambre, le troisième sur
 # le sens que le rail lui donne.
@@ -225,17 +235,24 @@ COULEURS = {
     "owasp_llm":   "#D35D94",   # rose
     "nist_800_53": "#7F2E55",   # prune
     "nist_800_82": "#138BCF",   # ciel
+    "en18229_3":   "#00323C",   # pétrole
     # L'IA ACT N'EST PAS DANS LES TIROIRS DE CONFORMITÉ : son écran d'entrée
     # vit sous « Pilotage », parmi des onglets en terre cuite. Sa couleur ne
-    # voisine donc aucune des dix autres, et n'entre pas dans le contrôle
+    # voisine donc aucune des onze autres, et n'entre pas dans le contrôle
     # d'adjacence ; elle reste loin de la terre cuite qui l'entoure.
     "ia_act":      "#5F24B7",   # indigo
 }
 
 #: L'ORDRE OÙ LES RÉFÉRENTIELS SE SUIVENT DANS LA BARRE LATÉRALE. Il ne se
 #: devine pas de `NORMES`, dont l'ordre est celui de la page d'accueil.
-ORDRE_BARRE = ("rgpd", "iso27001", "iso42001", "dora", "nis2", "cra",
-               "nist_ai_rmf", "owasp_llm", "nist_800_53", "nist_800_82")
+#:
+#: LES DEUX NORMES DE L'IA VOISINENT, ET C'EST UN CHOIX : prEN 18229-3 sert
+#: l'article 14 de l'IA Act comme ISO/IEC 42001 sert son système de
+#: management. Un client qui ouvre l'une trouve l'autre à côté. La règle
+#: d'adjacence des couleurs est mesurée sur cet ordre, pas sur un autre.
+ORDRE_BARRE = ("rgpd", "iso27001", "iso42001", "en18229_3", "dora", "nis2",
+               "cra", "nist_ai_rmf", "owasp_llm", "nist_800_53",
+               "nist_800_82")
 
 
 def couleur(cle):
@@ -249,7 +266,7 @@ def couleur(cle):
 #: CE QUE LA PAGE D'ACCUEIL ANNONCE. Un seul endroit le décide ; la
 #: garde en bas de fichier le confronte à la table ci-dessus, et une
 #: règle de la suite le confronte au titre et à la grille de l'accueil.
-NORMES_ANNONCEES = 11
+NORMES_ANNONCEES = 12
 
 
 # ══════════════════════════════════════════════════════════════════════════
@@ -498,6 +515,24 @@ COMPOSITIONS = {
     # Dans un système industriel, la sûreté prime sur la sécurité : une
     # mesure qui peut arrêter un procédé est un événement de sûreté avant
     # d'être un incident informatique.
+    #  LA SUPERVISION HUMAINE SE COMPOSE DE TROIS PARTS, ET LA PREMIÈRE
+    #  COMMANDE LES DEUX AUTRES : sans scénario de risque ni délai de
+    #  réaction, une interface de revue ne se justifie par rien et une
+    #  vérification ne sait pas contre quoi conclure.
+    "en18229_3": [
+        {"cle": "calibration", "nom": "Scénarios, délais et sélection",
+         "poids": 3,
+         "pourquoi": "le délai de réaction décide quelle catégorie de mesure "
+                     "peut tenir un scénario ; tout le reste s'y réfère"},
+        {"cle": "mesures", "nom": "Mesures et fonctions d'intervention",
+         "poids": 2,
+         "pourquoi": "les interfaces, les notifications et les quatre "
+                     "fonctions — ce que la personne désignée voit et ce "
+                     "qu'elle peut faire"},
+        {"cle": "preuves", "nom": "Vérification et documentation", "poids": 2,
+         "pourquoi": "ce qui sépare une conception d'une mesure qui "
+                     "fonctionne, et ce qui la rend démontrable"},
+    ],
     "nist_800_82": [
         {"cle": "socle_ot", "nom": "Sûreté, disponibilité et reprise",
          "poids": 3,
@@ -513,6 +548,26 @@ COMPOSITIONS = {
 }
 
 VERROUS = {
+    #  LE SEUL VERROU DU SITE QUI NE VIENT PAS D'UNE CASE MAIS D'UN CALCUL.
+    #  Un scénario dont la latence d'intervention dépasse son délai de
+    #  réaction, sans que l'impossibilité technique soit consignée, est le cas
+    #  que la norme refuse nommément. Tant qu'il tient, on ne peut pas
+    #  prétendre que les mesures ni leurs preuves valent quelque chose : elles
+    #  sont calibrées sur un délai qu'elles ne tiennent pas.
+    "en18229_3": [
+        {"cle": "scenario_sans_intervention",
+         "dit": "Au moins un scénario de risque a une latence d'intervention "
+                "supérieure à son délai de réaction, sans consignation de "
+                "l'impossibilité technique au dossier de gestion des "
+                "risques. La supervision humaine n'y est pas une mesure de "
+                "gestion des risques.",
+         "bloque": ["mesures", "preuves"],
+         "ou": "en18229 · scénarios de risque",
+         "fonde_sur": "arithmetique",
+         "calcul": "la latence d'intervention déclarée du scénario (5.7.1) "
+                   "comparée à son délai de réaction déterminé (5.2.2) — deux "
+                   "nombres que le client déclare, aucun seuil inventé ici"},
+    ],
     "iso42001": [
         {"cle": "soa_irrecevable",
          "dit": "La déclaration d'applicabilité ne passe pas l'étape 1. "
@@ -557,6 +612,18 @@ VERROUS = {
 # parce que c'est là, et seulement là, qu'il y a une porte.
 
 RESERVES = {
+    "en18229_3": [
+        {"cle": "presomption",
+         "dit": "Ce projet de norme n'est pas encore cité au Journal officiel "
+                "de l'Union européenne au titre du Règlement (UE) 2024/1689 : "
+                "le tenir n'ouvre aucune présomption de conformité à "
+                "l'article 14.",
+         "porte_sur": "Le taux dit la supervision humaine déclarée au regard "
+                      "d'un projet à l'Enquête CEN. Le jour où la référence "
+                      "sera citée, le même travail vaudra présomption — dans "
+                      "les limites du domaine d'application de la norme.",
+         "ou": "en18229 · cadre d'analyse"},
+    ],
     "nis2": [
         {"cle": "non_qualifie",
          "dit": "L'entité n'est pas qualifiée : on ne sait pas si le régime "
@@ -917,12 +984,74 @@ PARTS_800_82 = {
 }
 
 
+#: À quelle part de la composition appartient chaque paragraphe du cadre.
+#: LA TABLE EST EXPLICITE, parce qu'une règle déduite du numéro se tromperait :
+#: 5.4.1 est une exigence de documentation pour le fournisseur et une exigence
+#: de mise en œuvre pour le déployeur.
+PARTS_EN18229 = {
+    "calibration": ("scenarios", "delai", "selection", "impossibilite",
+                    "surcharge", "categories", "deploy_conditions"),
+    "mesures": ("retro_interface", "retro_parametres", "alerte_conception",
+                "alerte_exigences", "continue_generales", "continue_ihm",
+                "continue_fonctionnalite", "biais_conception",
+                "biais_deployeur", "interpretation", "competences_deployeur",
+                "fonctions", "negligence", "ecrasement", "retour", "etat_sur",
+                "rbi_prevention", "rbi_statuts", "rbi_informations",
+                "rbi_interface", "rbi_entrees", "rbi_independance",
+                "rbi_deployeur", "deploy_mise_en_oeuvre"),
+    "preuves": ("revue_affectations", "retro_verif", "continue_verif",
+                "biais_tests", "comportement_apres", "entrainement",
+                "deploy_specification", "deploy_residuel",
+                "deploy_notifications", "deploy_verification",
+                "rbi_documentation", "rbi_competences", "notice",
+                "doc_technique", "notice_recue"),
+}
+
+
+def _lire_en18229_3(ev, dec=None):
+    """Les trois parts de la supervision humaine, lues sur le rôle qui commande.
+
+    LE RÔLE QUI COMMANDE EST LE PLUS FAIBLE DES DEUX, et c'est lui qu'on lit :
+    agréger les deux questionnaires ferait remonter le côté tenu par-dessus le
+    côté défaillant, exactement le mensonge que le moteur refuse.
+
+    LA RÉSERVE EST PERMANENTE : ce projet de norme n'est pas encore cité au
+    Journal officiel, donc aucune réponse ne peut ouvrir une présomption de
+    conformité."""
+    if not ev or not ev.get("ok"):
+        return None, []
+    import en18229_3 as _en
+    role = ev.get("role_commande") or "fournisseur"
+    reponses = ((dec or {}).get(role)
+                if isinstance((dec or {}).get(role), dict) else {})
+    exs = {e["cle"]: e for e in _en.applicables(
+        role, bool(ev.get("rbi")),
+        (dec or {}).get("notifications_fournisseur", True) is not False)}
+    parts = {}
+    for part, cles in PARTS_EN18229.items():
+        retenues = [exs[c] for c in cles if c in exs]
+        if not retenues:
+            parts[part] = None
+            continue
+        poids = sum(x["poids"] for x in retenues)
+        acquis = sum((_en._valeur(reponses.get(x["cle"])) or 0.0) * x["poids"]
+                     for x in retenues)
+        parts[part] = _pc(acquis, poids)
+    #  LE SIGNAL DU VERROU SE CALCULE, IL NE SE DÉCLARE PAS. C'est le moteur
+    #  qui dit si un scénario ne tient pas son délai : la carte du taux ne
+    #  recompte rien, elle lit.
+    signaux = ["presomption"]
+    if (ev.get("scenarios_casses") or 0) > 0:
+        signaux.append("scenario_sans_intervention")
+    return parts, signaux
+
+
 LECTEURS = {
     "iso42001": _lire_iso42001, "iso27001": _lire_iso27001,
     "nis2": _lire_nis2, "cra": _lire_cra, "nist_ai_rmf": _lire_nist,
     "owasp_llm": _lire_owasp, "ia_act": _lire_ia_act, "rgpd": _lire_rgpd,
     "nist_800_53": _lire_nist_800_53, "nist_800_82": _lire_nist_800_82,
-    "dora": _lire_dora,
+    "dora": _lire_dora, "en18229_3": _lire_en18229_3,
 }
 
 
@@ -1337,12 +1466,55 @@ def _part_de_l_axe(axe):
     return "conduite"
 
 
+def _ecarts_en18229_3(ev, dec=None):
+    """Un paragraphe non tenu est un écart — et un SCÉNARIO dont la mesure ne
+    tient pas le délai en est un autre, d'une nature différente.
+
+    LES DEUX SE DISTINGUENT AU PLAN, et c'est ce qui le rend utilisable :
+    combler le premier se fait sur l'écran du cadre ; combler le second
+    demande de relever la catégorie de mesure ou de consigner l'impossibilité
+    technique au dossier de gestion des risques. Les confondre ferait écrire
+    « répondez à la question » là où il faut refaire une analyse de risque."""
+    if not ev or not ev.get("ok"):
+        return []
+    import en18229_3 as _en
+    role = ev.get("role_commande") or "fournisseur"
+    reponses = ((dec or {}).get(role)
+                if isinstance((dec or {}).get(role), dict) else {})
+    out = []
+    #  LE SCÉNARIO CASSÉ PASSE DEVANT : c'est le défaut que la norme refuse
+    #  nommément, et il plafonne le taux.
+    for sc in (dec or {}).get("scenarios") or []:
+        if not isinstance(sc, dict):
+            continue
+        r = _en.scenario(sc)
+        if r["etat"] in ("tient", "impossible_consignee"):
+            continue
+        out.append(_ec("calibration", "scenario",
+                       "Scénario « %s » — %s"
+                       % (r["nom"] or "sans nom",
+                          _en.ETATS_SCENARIO[r["etat"]]["nom"]),
+                       "en18229 · scénarios de risque", "5.2.2"))
+    part_de = {c: part for part, cles in PARTS_EN18229.items() for c in cles}
+    for ex in _en.applicables(role, bool(ev.get("rbi")),
+                              (dec or {}).get("notifications_fournisseur",
+                                              True) is not False):
+        if _en._valeur(reponses.get(ex["cle"])) == 1.0:
+            continue
+        out.append(_ec(part_de.get(ex["cle"], "mesures"), ex["cle"],
+                       "%s — %s" % (ex["clause"], ex["titre"]),
+                       "en18229 · %s" % _en.ROLES[role]["nom"].lower(),
+                       ex["clause"]))
+    return out
+
+
 ECARTEURS = {
     "dora": _ecarts_dora,
     "iso42001": _ecarts_iso42001, "iso27001": _ecarts_iso27001,
     "nis2": _ecarts_nis2, "cra": _ecarts_cra, "nist_ai_rmf": _ecarts_nist,
     "owasp_llm": _ecarts_owasp, "ia_act": _ecarts_ia_act, "rgpd": _ecarts_rgpd,
     "nist_800_53": _ecarts_nist_800_53, "nist_800_82": _ecarts_nist_800_82,
+    "en18229_3": _ecarts_en18229_3,
 }
 
 
@@ -1800,12 +1972,20 @@ def _ev_nist_800_82(dec, d):
     return _n82.evaluer(dec.get("etats"), dec.get("etats_800_53"))
 
 
+def _ev_en18229_3(dec, d):
+    # LES DEUX RÔLES VOYAGENT ENSEMBLE, et le moteur retient le plus faible :
+    # un organisme qui conçoit ET exploite porte deux jeux d'obligations, et
+    # moyenner les deux cacherait le côté défaillant.
+    import en18229_3 as _en
+    return _en.evaluer(dec)
+
+
 EVALUATEURS = {
     "ia_act": _ev_ia_act, "cra": _ev_cra, "iso42001": _ev_iso42001,
     "iso27001": _ev_iso27001, "dora": _ev_dora, "nis2": _ev_nis2,
     "rgpd": _ev_rgpd, "nist_ai_rmf": _ev_nist_ai_rmf,
     "owasp_llm": _ev_owasp_llm, "nist_800_53": _ev_nist_800_53,
-    "nist_800_82": _ev_nist_800_82,
+    "nist_800_82": _ev_nist_800_82, "en18229_3": _ev_en18229_3,
 }
 
 
@@ -2019,11 +2199,32 @@ def _de_ia_act(v, e):
     return reponses or None
 
 
+def _de_en18229_3(v, e):
+    """L'écran de la supervision humaine → ce que son moteur attend.
+
+    UN ÉCRAN SANS RÔLE DÉCLARÉ N'EST PAS UNE DÉCLARATION. Le moteur rendrait
+    « aucun rôle déclaré », et la carte du taux afficherait un refus là où
+    « — » est la vérité : le sujet n'a pas été ouvert."""
+    roles = {r: _dict_de(v, r) for r in ("fournisseur", "deployeur")}
+    if not any(roles.values()):
+        return None
+    out = {"rbi": bool(v.get("rbi")),
+           "scenarios": v.get("scenarios") if isinstance(v.get("scenarios"), list)
+           else []}
+    if v.get("notifications_fournisseur") is not None:
+        out["notifications_fournisseur"] = bool(v.get("notifications_fournisseur"))
+    for r, rep in roles.items():
+        if rep:
+            out[r] = rep
+    return out
+
+
 TRADUCTEURS = {
     "ia_act": _de_ia_act, "cra": _de_cra, "iso42001": _de_iso42001,
     "iso27001": _de_iso27001, "dora": _de_dora, "nis2": _de_nis2,
     "rgpd": _de_rgpd, "nist_ai_rmf": _de_etats, "owasp_llm": _de_etats,
     "nist_800_53": _de_nist_800_53, "nist_800_82": _de_nist_800_82,
+    "en18229_3": _de_en18229_3,
 }
 
 
@@ -2253,16 +2454,38 @@ def _verifier():
         if cle not in COMPOSITIONS:
             fautes.append("verrou sur %s, qui n'a pas de composition" % cle)
             continue
-        # UN VERROU N'EXISTE QUE LÀ OÙ UN TIERS REFUSE D'ALLER PLUS LOIN.
-        # C'est la ligne qui le sépare d'une réserve, et elle est vérifiable :
-        # seules les normes certifiables ont un auditeur qui peut s'arrêter à
-        # la porte. Ailleurs, un plafond serait une sévérité inventée.
+        # UN VERROU N'EXISTE QUE LÀ OÙ UN TIERS REFUSE D'ALLER PLUS LOIN —
+        # OU LÀ OÙ L'ARITHMÉTIQUE DU MODULE PROUVE QUE LA PRÉTENTION EST
+        # FAUSSE. C'est la ligne qui le sépare d'une réserve, et elle est
+        # vérifiable de deux façons : les normes certifiables ont un auditeur
+        # qui peut s'arrêter à la porte ; ailleurs, un plafond n'est légitime
+        # que si un CALCUL le fonde, et le verrou doit alors le déclarer.
+        #
+        # LE CAS QUI A FAIT ÉCRIRE CETTE SECONDE PORTE : prEN 18229-3 n'a pas
+        # d'auditeur — le projet n'est même pas cité au Journal officiel — mais
+        # un scénario dont la latence d'intervention dépasse son délai de
+        # réaction ne peut PAS être supervisé, et aucune réponse ne rend cela
+        # faux. Laisser un taux monter dessus serait le mensonge que la norme
+        # refuse nommément. Ce qui reste interdit : plafonner « parce que c'est
+        # grave ». La sévérité inventée se déclare dans RESERVES.
         if NORMES_PAR_CLE.get(cle, {}).get("nature") != "certifiable":
-            fautes.append(
-                "%s porte un verrou sans être certifiable. Un verrou plafonne "
-                "un taux parce qu'un tiers refuse de poursuivre ; sans "
-                "auditeur au bout, ce n'est pas un verrou mais une réserve, "
-                "et elle se déclare dans RESERVES." % cle)
+            sans_calcul = [v["cle"] for v in verrous
+                           if v.get("fonde_sur") != "arithmetique"]
+            if sans_calcul:
+                fautes.append(
+                    "%s porte un verrou sans être certifiable et sans qu'un "
+                    "calcul le fonde (%s). Un verrou plafonne un taux parce "
+                    "qu'un tiers refuse de poursuivre, ou parce que "
+                    "l'arithmétique du module prouve la prétention fausse — et "
+                    "il doit alors porter fonde_sur=\"arithmetique\" et dire "
+                    "quel calcul. Sinon ce n'est pas un verrou mais une "
+                    "réserve, et elle se déclare dans RESERVES."
+                    % (cle, ", ".join(sans_calcul)))
+            for v in verrous:
+                if v.get("fonde_sur") == "arithmetique" and not v.get("calcul"):
+                    fautes.append(
+                        "le verrou %s de %s se dit fondé sur un calcul sans "
+                        "dire lequel" % (v["cle"], cle))
         connus = {c["cle"] for c in COMPOSITIONS[cle]}
         poids_total = sum(c["poids"] for c in COMPOSITIONS[cle])
         for v in verrous:

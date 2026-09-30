@@ -1,0 +1,141 @@
+{
+ "_pourquoi": "Chaque mutation FABRIQUE un défaut réel de la saisie du FinOps — une case qui disparaît, un champ qui ne part plus, un vocabulaire qui dérive de celui du moteur, une case vide qui devient un zéro — et doit faire TOMBER la règle nommée de tests/test_finops_saisie.py. Une mutation qui survit dit que la règle ne mesure pas ce qu'elle prétend ; une mutation qui fait tomber une AUTRE règle dit que la règle nommée vise à côté.",
+ "cibles": [
+  "tests/test_finops_saisie.py"
+ ],
+ "mutations": [
+  {
+   "nom": "la case du modèle disparaît du formulaire",
+   "fichier": "sentinel.page.js",
+   "avant": "'<select id=\"rf-modele\" class=\"reg-input\">'",
+   "apres": "'<select id=\"rf-modele-absent\" class=\"reg-input\">'",
+   "regle": "test_chaque_champ_du_finops_a_sa_case_dans_la_fiche[modele-rf-modele]"
+  },
+  {
+   "nom": "la case de l'unité de facturation disparaît",
+   "fichier": "sentinel.page.js",
+   "avant": "'<select id=\"rf-unite\" class=\"reg-input\">'",
+   "apres": "'<select id=\"rf-unite-absent\" class=\"reg-input\">'",
+   "regle": "test_chaque_champ_du_finops_a_sa_case_dans_la_fiche[unite_facturation-rf-unite]"
+  },
+  {
+   "nom": "la case du volume d'entrée disparaît",
+   "fichier": "sentinel.page.js",
+   "avant": "'<input type=\"number\" id=\"rf-vol-entree\"",
+   "apres": "'<input type=\"number\" id=\"rf-vol-entree-absent\"",
+   "regle": "test_chaque_champ_du_finops_a_sa_case_dans_la_fiche[volume_entree_mois-rf-vol-entree]"
+  },
+  {
+   "nom": "la case de la source du volume disparaît",
+   "fichier": "sentinel.page.js",
+   "avant": "'<input type=\"text\" id=\"rf-vol-source\"",
+   "apres": "'<input type=\"text\" id=\"rf-vol-source-absent\"",
+   "regle": "test_chaque_champ_du_finops_a_sa_case_dans_la_fiche[volume_source-rf-vol-source]"
+  },
+  {
+   "nom": "le modèle est saisi mais n'est plus envoyé",
+   "fichier": "sentinel.page.js",
+   "avant": "    modele: regVide(\"rf-modele\"),\n",
+   "apres": "",
+   "regle": "test_chaque_champ_du_finops_part_vers_le_serveur[modele-rf-modele]"
+  },
+  {
+   "nom": "la source du volume est saisie mais n'est plus envoyée",
+   "fichier": "sentinel.page.js",
+   "avant": "    volume_source: regVide(\"rf-vol-source\"),\n",
+   "apres": "",
+   "regle": "test_chaque_champ_du_finops_part_vers_le_serveur[volume_source-rf-vol-source]"
+  },
+  {
+   "nom": "les leviers cochés ne partent plus",
+   "fichier": "sentinel.page.js",
+   "avant": "    leviers: regCoches(\"rf-leviers\")\n",
+   "apres": "    leviers_absents: regCoches(\"rf-leviers\")\n",
+   "regle": "test_chaque_champ_du_finops_part_vers_le_serveur[leviers-rf-leviers]"
+  },
+  {
+   "nom": "une unité de facturation du moteur manque au formulaire",
+   "fichier": "sentinel.page.js",
+   "avant": "            {v:\"heures_gpu\",l:\"Heures GPU — facturé au temps de calcul réservé\"},\n",
+   "apres": "",
+   "regle": "test_les_unites_de_facturation_sont_celles_du_moteur"
+  },
+  {
+   "nom": "le formulaire invente une unité que le moteur ignore",
+   "fichier": "sentinel.page.js",
+   "avant": "            {v:\"forfait\",l:\"Forfait — montant fixe, indépendant de l\\'usage\"}",
+   "apres": "            {v:\"forfait\",l:\"Forfait — montant fixe, indépendant de l\\'usage\"},\n            {v:\"abonnement\",l:\"Abonnement\"}",
+   "regle": "test_les_unites_de_facturation_sont_celles_du_moteur"
+  },
+  {
+   "nom": "une classe de tâche du moteur manque au formulaire",
+   "fichier": "sentinel.page.js",
+   "avant": "            {v:\"analyse\",l:\"Analyse sur documents longs\"},\n",
+   "apres": "",
+   "regle": "test_les_classes_de_tache_sont_celles_du_moteur"
+  },
+  {
+   "nom": "un levier du moteur manque au formulaire",
+   "fichier": "sentinel.page.js",
+   "avant": "['requete_bornee',\"Requête bornée\"],['modele_par_etape',\"Un modèle par étape\"]",
+   "apres": "['requete_bornee',\"Requête bornée\"]",
+   "regle": "test_les_leviers_proposes_sont_ceux_du_moteur"
+  },
+  {
+   "nom": "la liste des modèles est recopiée en dur dans la case",
+   "fichier": "sentinel.page.js",
+   "avant": "sel(\"modele\", regModelesAvec(sys))",
+   "apres": "sel(\"modele\", [{v:\"\",l:\"— Non déclaré —\"},{v:\"claude-opus-5\",l:\"claude-opus-5\"}])",
+   "regle": "test_la_liste_des_modeles_est_servie_et_jamais_recopiee_a_l_ecran"
+  },
+  {
+   "nom": "le serveur cesse de servir la liste des modèles",
+   "fichier": "app.py",
+   "avant": "                    'modeles_tarifes': _modeles})",
+   "apres": "                    })",
+   "regle": "test_la_liste_des_modeles_est_servie_et_jamais_recopiee_a_l_ecran"
+  },
+  {
+   "nom": "l'unité « jetons » disparaît du libellé du volume d'entrée",
+   "fichier": "sentinel.page.js",
+   "avant": "        regField(\"Volume d\\'entrée du mois <span style=\\\"font-weight:400;color:var(--muted)\\\">— en jetons</span>\",",
+   "apres": "        regField(\"Volume d\\'entrée du mois\",",
+   "regle": "test_l_unite_des_volumes_est_ecrite_a_cote_de_la_case[rf-vol-entree]"
+  },
+  {
+   "nom": "l'unité « jetons » disparaît du libellé du volume de sortie",
+   "fichier": "sentinel.page.js",
+   "avant": "        regField(\"Volume de sortie du mois <span style=\\\"font-weight:400;color:var(--muted)\\\">— en jetons</span>\",",
+   "apres": "        regField(\"Volume de sortie du mois\",",
+   "regle": "test_l_unite_des_volumes_est_ecrite_a_cote_de_la_case[rf-vol-sortie]"
+  },
+  {
+   "nom": "une case vide de volume devient un zéro",
+   "fichier": "sentinel.page.js",
+   "avant": "  if (v === '') return null;\n  var n = Number(v.replace(',', '.'));\n  return isFinite(n) ? n : null;",
+   "apres": "  var n = Number(v.replace(',', '.'));\n  return isFinite(n) ? n : 0;",
+   "regle": "test_un_volume_non_saisi_part_a_rien_et_pas_a_zero"
+  },
+  {
+   "nom": "une colonne de volume prend une valeur par défaut",
+   "fichier": "app.py",
+   "avant": "registre_ajouter_colonne(cur, 'systemes_ia', 'volume_entree_mois', \"TEXT\")",
+   "apres": "registre_ajouter_colonne(cur, 'systemes_ia', 'volume_entree_mois', \"TEXT DEFAULT '0'\")",
+   "regle": "test_les_colonnes_de_volume_n_ont_toujours_aucune_valeur_par_defaut[volume_entree_mois]"
+  },
+  {
+   "nom": "le moteur réclame un neuvième champ que personne ne peut saisir",
+   "fichier": "finops_ia.py",
+   "avant": "    \"leviers\": {\"panneau\": \"registre\",",
+   "apres": "    \"remise_contractuelle\": {\"panneau\": \"registre\",\n                \"libelle\": \"Remise contractuelle\",\n                \"ou\": \"Registre IA → fiche du système → « Remise »\"},\n    \"leviers\": {\"panneau\": \"registre\",",
+   "regle": "test_le_moteur_reclame_bien_huit_champs_et_pas_un_de_plus"
+  },
+  {
+   "nom": "un volume réellement nul cesse d'être chiffré",
+   "fichier": "finops_ia.py",
+   "avant": "    if entree is None and sortie is None:",
+   "apres": "    if not entree and not sortie:",
+   "regle": "test_un_volume_nul_declare_se_chiffre_quand_meme"
+  }
+ ]
+}

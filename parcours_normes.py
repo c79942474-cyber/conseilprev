@@ -132,6 +132,19 @@ QUI_JUGE = {
     "ia_act": "l'autorité de surveillance du marché l'apprécie, et les "
               "systèmes à haut risque passent par une évaluation de la "
               "conformité",
+    # CARTOGRAPHIER N'EST PAS UNE CONFORMITÉ, et sa réserve doit le dire
+    # autrement que les autres : il n'y a ici aucune autorité à satisfaire,
+    # seulement un inventaire qui est exact ou ne l'est pas. Le vert y dit
+    # « déclaré », et un inventaire complet de systèmes mal classés reste un
+    # inventaire complet.
+    "en18229_3": "personne ne la prononce encore : le projet n'est pas cité "
+                 "au Journal officiel, donc le tenir n'ouvre aucune "
+                 "présomption de conformité à l'article 14 — le jour où la "
+                 "référence sera citée, le même travail vaudra présomption",
+    "cartographier": "personne ne la prononce : ce n'est pas une "
+                     "conformité mais un inventaire, et le vert y dit que "
+                     "ce qu'un écran attend est déclaré — pas que la "
+                     "déclaration est juste",
 }
 
 
@@ -354,6 +367,45 @@ BLOCS = {
            "Le socle décide de ce que chaque famille doit contenir.",
            "Révision 4 : ce n'est plus le dernier millésime du catalogue."),
     ),
+    #  L'ORDRE N'EST PAS CELUI DE LA NORME, C'EST CELUI DU TRAVAIL : on ne
+    #  répond pas au cadre d'analyse avant de savoir à quel rôle on répond, et
+    #  on ne juge pas l'adéquation d'une mesure avant d'avoir posé le délai
+    #  qu'elle doit tenir.
+    "en18229_3": (
+        _b("role", "en18229-role", "Rôle et périmètre", "saisie",
+           "Fournisseur, déployeur, ou les deux — et si le système identifie "
+           "des personnes à distance par la biométrie.",
+           "La norme adresse ses exigences au fournisseur et transmet au "
+           "déployeur par la notice : le questionnaire, les verrous et le "
+           "score dépendent du rôle.",
+           "Un organisme qui conçoit ET exploite porte les deux jeux "
+           "d'obligations : le score retenu est celui du plus faible des "
+           "deux."),
+        _b("scenarios", "en18229-scenarios", "Scénarios et délais", "saisie",
+           "Un scénario de risque, son délai de réaction, la catégorie de "
+           "mesure retenue et la latence d'intervention mesurée.",
+           "C'est la seule partie du cadre qui se CALCULE : la latence "
+           "déclarée contre le délai déclaré.",
+           "Un scénario dont la latence dépasse le délai sans consignation de "
+           "l'impossibilité technique plafonne le score — aucune réponse au "
+           "questionnaire ne lève ce verrou.",
+           prerequis=("role",)),
+        _b("cadre", "en18229-cadre", "Cadre d’analyse", "saisie",
+           "Les questions de votre rôle, paragraphe par paragraphe.",
+           "C'est ce que le score compte, et ce que le plan d'action reprend "
+           "ligne par ligne.",
+           "Les questions de la section RBI n'apparaissent que si vous avez "
+           "déclaré un système d'identification biométrique à distance.",
+           prerequis=("role",)),
+        _b("score", "en18229-score", "Score et article 14", "lecture",
+           "Le score, ses plafonds, la documentation exigée et la couverture "
+           "de l'article 14 alinéa par alinéa.",
+           "C'est la restitution : rien ne s'y saisit, tout y est dérivé de "
+           "ce qui précède.",
+           "Le vert ne vaut pas présomption de conformité : le projet n'est "
+           "pas encore cité au Journal officiel.",
+           prerequis=("cadre",)),
+    ),
     "nist_800_82": (
         _b("ot", "nist82-ot", "Surcharge industrielle (OT)", "saisie",
            "Les dix axes que l'industriel ajoute au socle 800-53.",
@@ -437,7 +489,94 @@ BLOCS = {
            "objet » sort le point du calcul ; un point sans réponse n'a "
            "pas encore été regardé."),
     ),
+    # ═══════════════════════════════════════════════════════════════════
+    #  CARTOGRAPHIER — LE PARCOURS QUI N'EN ÉTAIT PAS UN
+    # ═══════════════════════════════════════════════════════════════════
+    # CE N'EST PAS UN RÉFÉRENTIEL, et il entre pourtant ici. Mesuré au
+    # navigateur : les sept onglets de « Cartographier » ne portaient aucun
+    # attribut de parcours — zéro puce, zéro vert, zéro étape courante,
+    # aucun passage au suivant — quand les onze référentiels les avaient
+    # tous. Le client ne savait donc ni où il en était, ni quoi ouvrir
+    # ensuite, dans la section qui commence tout le reste.
+    #
+    # L'ORDRE EST CELUI DE LA BARRE, et il raconte une méthode : on
+    # découvre ce qui existe déjà (Shadow AI), on classe un système
+    # (Simulateur), on l'inscrit (Registre) — et le registre est la SOURCE
+    # de tout ce qui suit. La qualification assistée lit ses lignes, le
+    # FinOps et l'Empreinte lisent ses volumes. Ces trois-là sont donc
+    # VERROUILLÉS tant que le registre n'est pas fait, et le disent : c'est
+    # précisément ce qui manquait à qui ouvrait le FinOps et n'y trouvait
+    # aucun chiffre. L'audit de maturité, lui, ne lit rien et n'est lu par
+    # personne — il reste libre.
+    "cartographier": (
+        _b("shadow", "shadow-ai", "Découverte Shadow AI", "lecture",
+           "Les usages d'IA déjà en place que personne n'a déclarés, cas "
+           "par cas, et ce qu'il faut en faire.",
+           "On ne cartographie pas ce qu'on ignore : cet écran donne la "
+           "liste des endroits où regarder avant de déclarer quoi que ce "
+           "soit.",
+           "Rien ne s'y saisit : il se marque lu, et « lu » n'est pas vert."),
+        _b("simulateur", "simulateur", "Simulateur IA Act", "saisie",
+           "La classification d'un système au sens du règlement : son "
+           "niveau de risque, l'article qui le fonde, et les obligations "
+           "qui en découlent.",
+           "C'est la classification que le registre reprend, et que le "
+           "FinOps range par niveau de risque.",
+           "Un système classé ne rejoint le registre que si l'on clique "
+           "« Ajouter au Registre IA » : la classification seule ne "
+           "déclare rien."),
+        _b("registre", "registre", "Registre IA", "saisie",
+           "L'inventaire des systèmes d'IA : leur finalité, leur service, "
+           "leur classification, et les huit champs de coût et d'empreinte.",
+           "C'EST LA SOURCE. La qualification assistée, le FinOps et "
+           "l'Empreinte ne tiennent aucun inventaire à eux : ils lisent "
+           "celui-ci.",
+           "Un système inscrit mais incomplet compte pour un système : les "
+           "dix questions essentielles décident, pas la ligne."),
+        _b("qualification", "qualif-assistee", "Qualification assistée",
+           "saisie",
+           "Une proposition de classification par système non classé, avec "
+           "ses indices, à valider ou à écarter par une personne nommée.",
+           "Elle traite en lot ce que le simulateur fait un par un.",
+           "Le moteur PROPOSE : rien n'est écrit au registre sans une "
+           "décision et le nom de qui l'a prise.",
+           prerequis=("registre",)),
+        _b("finops", "finops", "FinOps IA", "saisie",
+           "Ce que coûte le parc déclaré : couverture du chiffrage, "
+           "montants par niveau de risque, attribution, leviers.",
+           "Un montant dont on ne peut pas dire d'où vient le volume n'est "
+           "pas opposable en comité.",
+           "Rien ne se saisit ici : les huit champs se remplissent sur la "
+           "fiche du système, au Registre. Un système sans volume déclaré "
+           "ne coûte pas zéro — personne n'a encore dit ce qu'il consomme.",
+           prerequis=("registre",)),
+        _b("empreinte", "empreinte-ia", "Empreinte IA du parc", "saisie",
+           "Ce que pèse le parc déclaré : électricité, CO₂e, eau, et la "
+           "trajectoire à l'horizon retenu.",
+           "Le même volume déclaré donne le coût et l'empreinte : on ne "
+           "tient pas deux inventaires.",
+           "Rien ne se saisit ici non plus : le volume vient de la fiche "
+           "du système, au Registre.",
+           prerequis=("registre",)),
+        _b("maturite", "maturite", "Audit de maturité IA", "saisie",
+           "Les huit piliers de la maturité IA, deux questions chacun, sur "
+           "une échelle Non / Partiel / Oui.",
+           "C'est le seul écran de cette section qui juge l'ORGANISATION "
+           "et non les systèmes.",
+           "« Pas encore répondu » n'est pas « Non » : le score porte sur "
+           "les réponses reçues, et le compteur dit sur combien."),
+    ),
 }
+
+# ── LES PARCOURS QUI NE SONT PAS DES RÉFÉRENTIELS DE CONFORMITÉ ───────────
+# « CARTOGRAPHIER » EST UN INVENTAIRE, PAS UNE NORME. Il a un rail — sept
+# écrans dans un ordre, avec des prérequis — mais pas de taux de conformité,
+# pas de couleur de référentiel dans la barre, pas de traducteur vers le
+# moteur de conformité, et personne ne prononce sa validité. Les gardes qui
+# parcourent BLOCS pour vérifier qu'une norme est traduite, colorée, chiffrée
+# et mémorisée lisent CETTE table pour savoir qui n'y est pas soumis — au lieu
+# de porter chacune sa propre liste d'exceptions, qui dériveraient.
+HORS_CONFORMITE = frozenset({"cartographier"})
 
 BLOCS_PAR_NORME = {n: {b["cle"]: b for b in bs} for n, bs in BLOCS.items()}
 for _n, _bs in BLOCS.items():
@@ -848,7 +987,183 @@ def _ia_act(d):
                       if audit.get(p.get("cle")) not in AUDIT_REPONSES]}, {}, {}
 
 
+def _cartographier(d):
+    """CE QUE CHAQUE ÉCRAN DE « CARTOGRAPHIER » ATTEND, ET CE QUI LUI MANQUE.
+
+    AUCUN DE CES SEUILS N'EST INVENTÉ ICI : chacun est celui que l'écran
+    applique déjà. Les dix questions essentielles sont celles du registre
+    (Hub France IA) ; la couverture du chiffrage est celle du moteur FinOps ;
+    la couverture des volumes est celle du moteur d'empreinte ; le lot à
+    qualifier est celui que le serveur constitue — « les systèmes non
+    classés ». Un seuil réinventé ici et l'écran dirait une chose, le rail
+    une autre.
+    """
+    manque, sans_objet = {}, {}
+
+    # ── LE SIMULATEUR : une classification, pas un formulaire commencé ──
+    sim = _dict(d, "simulateur")
+    if not _repondu(sim.get("nom")):
+        manque.setdefault("simulateur", []).append(
+            _q("Nommez le système, puis déroulez les quatre étapes"))
+    for cle, quoi in (("secteur", "Choisissez le secteur d'usage"),
+                      ("type", "Choisissez le type de système")):
+        if not _repondu(sim.get(cle)):
+            manque.setdefault("simulateur", []).append(_q(quoi))
+    if not _repondu(sim.get("niveau")):
+        manque.setdefault("simulateur", []).append(
+            _q("Terminez les quatre étapes : la classification n'est pas "
+               "encore rendue"))
+
+    # ── LE REGISTRE : au moins un système, et chacun complet ──
+    reg = _dict(d, "registre")
+    systemes = reg.get("systemes")
+    systemes = systemes if isinstance(systemes, list) else []
+    if not systemes:
+        manque.setdefault("registre", []).append(
+            _q("Aucun système déclaré — le FinOps, l'Empreinte et la "
+               "qualification assistée lisent tous ce registre"))
+    else:
+        for x in systemes:
+            if not isinstance(x, dict):
+                continue
+            if not _nombre(x.get("completude")) or x.get("completude") < 100:
+                manque.setdefault("registre", []).append(
+                    _q("« %s » : les dix questions essentielles ne sont pas "
+                       "toutes renseignées" % (x.get("nom") or "(sans nom)")))
+
+    # ── LA QUALIFICATION ASSISTÉE : plus rien à classer ──
+    qual = _dict(d, "qualification")
+    restants = qual.get("a_qualifier")
+    if not isinstance(restants, int):
+        manque.setdefault("qualification", []).append(
+            _q("Ouvrez l'écran : le lot à qualifier n'a pas encore été "
+               "demandé au moteur"))
+    elif restants > 0:
+        manque.setdefault("qualification", []).append(
+            _q("%d système(s) du registre n'ont pas de classification — "
+               "proposez, puis décidez" % restants))
+
+    # ── LE FINOPS ET L'EMPREINTE : ils ne se remplissent pas chez eux ──
+    # LEUR « MANQUE » NOMME LES SYSTÈMES ET L'ÉCRAN OÙ LES REMPLIR. Dire
+    # « la couverture est à 0 % » sans dire où saisir laisse exactement la
+    # question qui a été posée : on ne sait pas quelles données choisir.
+    fo = _dict(_dict(d, "finops"), "couverture")
+    fo_total, fo_ok = fo.get("total"), fo.get("instruites")
+    if not _nombre(fo_total):
+        manque.setdefault("finops", []).append(
+            _q("Ouvrez l'écran : le chiffrage n'a pas encore été demandé"))
+    elif fo_total and fo_ok != fo_total:
+        for nom in (fo.get("non_chiffres") or [])[:12]:
+            manque.setdefault("finops", []).append(
+                _q("« %s » : renseignez le modèle, l'unité de facturation, "
+                   "les volumes du mois et leur source — Registre IA → "
+                   "fiche du système" % nom))
+        if not manque.get("finops"):
+            manque["finops"] = [_q(
+                "%s ligne(s) sur %s ne sont pas chiffrées — les huit champs "
+                "se saisissent au Registre, sur la fiche du système"
+                % (int(fo_total) - int(fo_ok or 0), int(fo_total)))]
+
+    emp = _dict(_dict(d, "empreinte"), "couverture")
+    emp_total, emp_ok = emp.get("systemes"), emp.get("chiffrable")
+    if not _nombre(emp_total):
+        manque.setdefault("empreinte", []).append(
+            _q("Ouvrez l'écran : l'empreinte n'a pas encore été demandée"))
+    elif emp_total and emp_ok != emp_total:
+        for nom in (emp.get("volume_manquant") or [])[:12]:
+            manque.setdefault("empreinte", []).append(
+                _q("« %s » : renseignez le volume de sortie du mois — "
+                   "Registre IA → fiche du système" % nom))
+        if not manque.get("empreinte"):
+            manque["empreinte"] = [_q(
+                "%s système(s) sur %s sans volume déclaré — il se saisit au "
+                "Registre" % (int(emp_total) - int(emp_ok or 0), int(emp_total)))]
+
+    # ── L'AUDIT DE MATURITÉ : les seize questions ──
+    mat = _dict(d, "maturite")
+    rep, tot = mat.get("repondues"), mat.get("total")
+    if not _nombre(tot) or not tot:
+        manque.setdefault("maturite", []).append(
+            _q("Ouvrez l'écran : les huit piliers n'ont pas encore été "
+               "présentés"))
+    elif rep != tot:
+        manque.setdefault("maturite", []).append(
+            _q("%s question(s) sur %s sans réponse — « pas encore répondu » "
+               "n'est pas « Non »" % (int(tot) - int(rep or 0), int(tot))))
+
+    return manque, sans_objet, {}
+
+
+def _en18229_3(d):
+    """CE QUE CHAQUE ÉCRAN DE prEN 18229-3 ATTEND, ET CE QUI LUI MANQUE.
+
+    AUCUN SEUIL N'EST RÉINVENTÉ ICI : le rail lit le moteur. Le rôle vient de
+    la déclaration, l'adéquation des scénarios du calcul du moteur, et
+    l'avancement du cadre du compte de ses propres exigences applicables.
+    """
+    import en18229_3 as _en
+    manque, sans_objet = {}, {}
+
+    # ── LE RÔLE : il commande le reste, donc il vient en premier ──────────
+    roles = [r for r in ("fournisseur", "deployeur")
+             if isinstance(d.get(r), dict) and d[r]]
+    if not roles:
+        manque.setdefault("role", []).append(
+            _q("Choisissez votre rôle — fournisseur, déployeur, ou les deux — "
+               "et répondez à son questionnaire"))
+    if d.get("rbi") is None:
+        manque.setdefault("role", []).append(
+            _q("Dites si le système identifie des personnes à distance par la "
+               "biométrie : neuf exigences en dépendent"))
+
+    # ── LES SCÉNARIOS : au moins un, et chacun doit tenir son délai ───────
+    scs = [x for x in (d.get("scenarios") or []) if isinstance(x, dict)]
+    if not scs:
+        manque.setdefault("scenarios", []).append(
+            _q("Déclarez au moins un scénario de risque avec son délai de "
+               "réaction : c'est lui qui commande le choix des mesures"))
+    else:
+        for x in scs:
+            r = _en.scenario(x)
+            if r["etat"] in ("tient", "impossible_consignee"):
+                continue
+            for m in (r["manque"] or []):
+                manque.setdefault("scenarios", []).append(
+                    _q("« %s » : %s" % (r["nom"] or "sans nom", m)))
+
+    # ── LE CADRE : les exigences applicables du rôle, sans réponse ────────
+    rbi = bool(d.get("rbi"))
+    notif = d.get("notifications_fournisseur")
+    notif = True if notif is None else bool(notif)
+    for role in (roles or []):
+        rep = d.get(role) or {}
+        for ex in _en.applicables(role, rbi, notif):
+            if _en._valeur(rep.get(ex["cle"])) is None:
+                manque.setdefault("cadre", []).append(
+                    _q("%s %s (%s) — sans réponse"
+                       % (ex["clause"], ex["titre"],
+                          _en.ROLES[role]["nom"].lower())))
+
+    # ── LE SCORE : un écran de lecture, qui a besoin du reste ─────────────
+    if not roles or not scs:
+        sans_objet["score"] = ("Le score se calcule sur un rôle et au moins "
+                               "un scénario de risque.")
+
+    #  LE CONTEXTE QUE LE BANDEAU AFFICHE : le rôle qui commande, et ce que
+    #  le score vaut. Un rail qui ne dirait pas le rôle laisserait croire que
+    #  les questions manquantes sont les mêmes pour tous.
+    contexte = {}
+    if roles:
+        contexte["role"] = " et ".join(_en.ROLES[r]["nom"] for r in roles)
+    if rbi:
+        contexte["rbi"] = ("Identification biométrique à distance : neuf "
+                           "exigences de plus, et l'alinéa 14(5) à tenir.")
+    return manque, sans_objet, contexte
+
+
 EVALUATEURS = {
+    "en18229_3": _en18229_3,
+    "cartographier": _cartographier,
     "nis2": _nis2, "iso27001": _iso27001, "iso42001": _iso42001,
     "cra": _cra, "nist_ai_rmf": _nist_ai_rmf, "owasp_llm": _owasp_llm,
     "nist_800_53": _nist_800_53, "nist_800_82": _nist_800_82,
@@ -1045,4 +1360,8 @@ def _verifier():
 
 
 _FAUTES = _verifier()
+for _hc in HORS_CONFORMITE:
+    if _hc not in BLOCS:
+        _FAUTES.append("hors conformité : %s n'est pas un parcours" % _hc)
+
 assert not _FAUTES, "parcours_normes.py se contredit : %s" % _FAUTES

@@ -211,8 +211,13 @@ def test_une_cle_sans_traduction_GARDE_son_francais():
 # titre du Référentiel Cyber France publié par l'ANSSI. Le traduire
 # ferait chercher au lecteur anglophone un document qui n'existe pas
 # sous ce nom-là.
+# « prEN 18229-3 » EST UNE RÉFÉRENCE, pas une rubrique à traduire : c'est
+# le numéro sous lequel le CEN enregistre le projet de norme, identique
+# dans les trois versions linguistiques officielles. Seul son TITRE se
+# traduit — et il l'est. Traduire la référence ferait chercher au lecteur
+# anglophone un document qui n'existe pas sous ce numéro-là.
 NOMS_PROPRES = ("EU AI ACT", "NIS 2", "ReCyF", "ISO 42001", "ISO 27001",
-                "NIST AI RMF", "OWASP LLM", "DORA")
+                "NIST AI RMF", "OWASP LLM", "DORA", "prEN 18229-3")
 
 
 def test_les_noms_de_reglements_ne_sont_PAS_traduits():

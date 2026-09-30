@@ -1,5 +1,15 @@
 {
  "attr": {
+  "# blocs faits sur #": {
+   "fr": "0 blocs faits sur 3",
+   "mots": 3,
+   "pages": [
+    "en18229-cadre",
+    "en18229-role",
+    "en18229-scenarios",
+    "en18229-score"
+   ]
+  },
   "# h, # h, un mois — et l horloge demarre a la CONNAISSANCE de l incident, pas a sa survenance": {
    "fr": "24 h, 72 h, un mois — et l horloge demarre a la CONNAISSANCE de l incident, pas a sa survenance",
    "mots": 18,
@@ -1603,6 +1613,20 @@
     "_coquille"
    ]
   },
+  "Identification biométrique à distance : non": {
+   "fr": "Identification biométrique à distance : non",
+   "mots": 5,
+   "pages": [
+    "en18229-role"
+   ]
+  },
+  "Identification biométrique à distance : oui": {
+   "fr": "Identification biométrique à distance : oui",
+   "mots": 5,
+   "pages": [
+    "en18229-role"
+   ]
+  },
   "Identifier, qualifier et prioriser les cas d usage IA a fort impact metier (achats, finance, supply chain, operations, relation client).": {
    "fr": "Identifier, qualifier et prioriser les cas d usage IA a fort impact metier (achats, finance, supply chain, operations, relation client).",
    "mots": 20,
@@ -1768,8 +1792,8 @@
     "_coquille"
    ]
   },
-  "Le taux de chacune des onze normes, et le plan qui le fait monter": {
-   "fr": "Le taux de chacune des onze normes, et le plan qui le fait monter",
+  "Le taux de chacune des douze normes, et le plan qui le fait monter": {
+   "fr": "Le taux de chacune des douze normes, et le plan qui le fait monter",
    "mots": 14,
    "pages": [
     "_coquille"
@@ -2068,6 +2092,13 @@
     "cra"
    ]
   },
+  "Nom du scénario de risque": {
+   "fr": "Nom du scénario de risque",
+   "mots": 5,
+   "pages": [
+    "en18229-scenarios"
+   ]
+  },
   "Note (facultatif)": {
    "fr": "Note (facultatif)",
    "mots": 2,
@@ -2174,124 +2205,128 @@
    "fr": "Ouvrir le guide d’utilisation de cette page",
    "mots": 8,
    "pages": [
-    "pan-sia",
-    "enveloppe",
-    "empreinte-parc",
-    "obs-rd",
-    "empreinte",
-    "finops",
-    "empreinte-ia",
-    "ia50",
-    "rgpd-site",
-    "ia-act-hub",
-    "shadow-ai",
+    "adoption",
+    "apercu",
+    "articles",
+    "audit",
+    "audit-ia-act",
+    "benchmark",
+    "cadre-normatif",
+    "carto",
+    "carto-uc",
+    "clients",
+    "comp",
+    "compte",
+    "conf-limites",
+    "conf-plan",
+    "conf-taux",
+    "conformite-globale",
     "cra",
+    "cra-chiffre",
     "cra-ecarts",
     "cra-role",
-    "cra-chiffre",
     "cra-signalement",
-    "iso27001-risques",
-    "iso27001-soa",
-    "iso27001",
-    "iso27001-millesime",
-    "iso42001",
-    "iso42001-soa",
-    "nist-profil",
-    "nist-cadre",
-    "nist-genai",
-    "owasp-dix",
-    "nist53-socle",
-    "nist82-ot",
-    "owasp-pont",
-    "iso42001-certif",
-    "iso42001-ponts",
-    "dora-qualifier",
-    "dora-risque",
-    "dora-tiers",
     "dora-incident",
     "dora-iso",
+    "dora-qualifier",
+    "dora-risque",
     "dora-supervision",
-    "nis2-qualifier",
+    "dora-tiers",
+    "empreinte",
+    "empreinte-ia",
+    "empreinte-parc",
+    "en18229-cadre",
+    "en18229-role",
+    "en18229-scenarios",
+    "en18229-score",
+    "entreprise",
+    "enveloppe",
+    "equipe",
+    "espace",
+    "evals",
+    "fiche-ae",
+    "fiche-ar",
+    "fiche-au",
+    "fiche-br",
+    "fiche-ca",
+    "fiche-ch",
+    "fiche-cl",
+    "fiche-cn",
+    "fiche-de",
+    "fiche-eu",
+    "fiche-fr",
+    "fiche-gb",
+    "fiche-il",
+    "fiche-in",
+    "fiche-jp",
+    "fiche-kr",
+    "fiche-mx",
+    "fiche-my",
+    "fiche-ng",
+    "fiche-ru",
+    "fiche-sg",
+    "fiche-tr",
+    "fiche-us",
+    "fiche-za",
+    "finops",
+    "fria",
+    "geo",
+    "gouvernance",
+    "historique",
+    "ia-act-hub",
+    "ia50",
+    "ingenierie",
+    "iso27001",
+    "iso27001-millesime",
+    "iso27001-risques",
+    "iso27001-soa",
+    "iso42001",
+    "iso42001-certif",
+    "iso42001-ponts",
+    "iso42001-soa",
+    "juridique",
+    "matrice",
+    "maturite",
     "nis2",
-    "nis2-gouvernance",
-    "nis2-signalement",
     "nis2-chiffre",
-    "recyf-objectifs",
+    "nis2-gouvernance",
+    "nis2-qualifier",
+    "nis2-signalement",
+    "nist-cadre",
+    "nist-genai",
+    "nist-profil",
+    "nist53-socle",
+    "nist82-ot",
+    "obs-rd",
+    "owasp-dix",
+    "owasp-pont",
+    "pan-sia",
+    "parties",
+    "pricing",
+    "qualif-assistee",
+    "radar",
+    "rag",
     "recyf-analyse",
-    "rgpd-hub",
-    "rgpd-conformite",
-    "rgpd-sensibilisation",
-    "rgpd-doc",
-    "rgpd-pbd",
+    "recyf-objectifs",
+    "registre",
+    "regs",
+    "report",
     "rgpd-aipd",
     "rgpd-cartographie",
+    "rgpd-conformite",
+    "rgpd-doc",
+    "rgpd-hub",
+    "rgpd-pbd",
+    "rgpd-sensibilisation",
+    "rgpd-site",
     "rgpd-traitements",
-    "carto",
-    "comp",
-    "geo",
-    "regs",
-    "veille",
-    "historique",
-    "espace",
-    "maturite",
-    "gouvernance",
-    "registre",
-    "qualif-assistee",
-    "simulateur",
-    "audit-ia-act",
-    "matrice",
-    "articles",
-    "fria",
     "roadmap",
     "sanctions",
-    "benchmark",
-    "pricing",
+    "shadow-ai",
+    "simulateur",
     "templates",
-    "rag",
-    "clients",
-    "fiche-ch",
-    "fiche-br",
-    "fiche-cl",
-    "juridique",
-    "entreprise",
-    "conformite-globale",
-    "adoption",
-    "ingenierie",
-    "cadre-normatif",
-    "compte",
-    "conf-taux",
-    "conf-plan",
-    "conf-limites",
-    "apercu",
-    "evals",
-    "audit",
-    "equipe",
     "training",
-    "report",
-    "parties",
-    "radar",
-    "carto-uc",
-    "fiche-eu",
-    "fiche-de",
-    "fiche-fr",
-    "fiche-cn",
-    "fiche-ru",
-    "fiche-kr",
-    "fiche-ca",
-    "fiche-gb",
-    "fiche-tr",
-    "fiche-au",
-    "fiche-il",
-    "fiche-sg",
-    "fiche-in",
-    "fiche-my",
-    "fiche-us",
-    "fiche-ae",
-    "fiche-jp",
-    "fiche-ar",
-    "fiche-mx",
-    "fiche-za",
-    "fiche-ng"
+    "veille"
    ]
   },
   "Panorama des systèmes d'IA en entreprise et des centres de données dans l'UE": {
@@ -3570,6 +3605,13 @@
     "_coquille"
    ]
   },
+  "délai": {
+   "fr": "délai",
+   "mots": 1,
+   "pages": [
+    "en18229-scenarios"
+   ]
+  },
   "ex. #": {
    "fr": "ex. 45",
    "mots": 1,
@@ -3607,6 +3649,13 @@
     "pan-sia",
     "enveloppe",
     "empreinte-parc"
+   ]
+  },
+  "latence": {
+   "fr": "latence",
+   "mots": 1,
+   "pages": [
+    "en18229-scenarios"
    ]
   },
   "planning d’opération": {
@@ -3760,6 +3809,286 @@
    "mots": 4,
    "pages": [
     "carto"
+   ]
+  },
+  "# · Conception de l'interface homme-machine — Peut-on lire sur l'interface, sans se tromper, où en est le système et s'il sort de ses bornes — et la commande qui déclenche une atténuation résiste-t-elle à un geste involontaire quand le scénario le demande ?": {
+   "fr": "5.3.4.2 · Conception de l'interface homme-machine — Peut-on lire sur l'interface, sans se tromper, où en est le système et s'il sort de ses bornes — et la commande qui déclenche une atténuation résiste-t-elle à un geste involontaire quand le scénario le demande ?",
+   "html": "<b>5.3.4.2</b> · Conception de l'interface homme-machine — Peut-on lire sur l'interface, sans se tromper, où en est le système et s'il sort de ses bornes — et la commande qui déclenche une atténuation résiste-t-elle à un geste involontaire quand le scénario le demande ?",
+   "mots": 46,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "# · Conception des fonctions de notification — Vos seuils d'alerte viennent-ils des dangers prévisibles, de la cotation du risque et du temps dont la personne dispose — et l'alerte part-elle d'elle-même dès que le système atteint un état qui appelle quelqu'un ?": {
+   "fr": "5.3.3.1 · Conception des fonctions de notification — Vos seuils d'alerte viennent-ils des dangers prévisibles, de la cotation du risque et du temps dont la personne dispose — et l'alerte part-elle d'elle-même dès que le système atteint un état qui appelle quelqu'un ?",
+   "html": "<b>5.3.3.1</b> · Conception des fonctions de notification — Vos seuils d'alerte viennent-ils des dangers prévisibles, de la cotation du risque et du temps dont la personne dispose — et l'alerte part-elle d'elle-même dès que le système atteint un état qui appelle quelqu'un ?",
+   "mots": 45,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "# · Conditions relatives aux mesures et à la documentation mises en œuvre par le déployeur — Pour chaque mesure que le déployeur doit mettre en œuvre, la notice d'utilisation nomme-t-elle le risque visé, ce qu'il faut mettre en œuvre (technique, procédural, organisationnel), les critères de performance mesurables, les compétences requises et les méthodes de vérification recommandées ?": {
+   "fr": "5.4.1 · Conditions relatives aux mesures et à la documentation mises en œuvre par le déployeur — Pour chaque mesure que le déployeur doit mettre en œuvre, la notice d'utilisation nomme-t-elle le risque visé, ce qu'il faut mettre en œuvre (technique, procédural, organisationnel), les critères de performance mesurables, les compétences requises et les méthodes de vérification recommandées ?",
+   "html": "<b>5.4.1</b> · Conditions relatives aux mesures et à la documentation mises en œuvre par le déployeur — Pour chaque mesure que le déployeur doit mettre en œuvre, la notice d'utilisation nomme-t-elle le risque visé, ce qu'il faut mettre en œuvre (technique, procédural, organisationnel), les critères de performance mesurables, les compétences requises et les méthodes de vérification recommandées ?",
+   "mots": 58,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "# · Documentation technique — La documentation technique porte-t-elle les sept éléments que la norme y renvoie (voir le tableau de la documentation, dérivé de vos réponses) ?": {
+   "fr": "6.2 · Documentation technique — La documentation technique porte-t-elle les sept éléments que la norme y renvoie (voir le tableau de la documentation, dérivé de vos réponses) ?",
+   "html": "<b>6.2</b> · Documentation technique — La documentation technique porte-t-elle les sept éléments que la norme y renvoie (voir le tableau de la documentation, dérivé de vos réponses) ?",
+   "mots": 26,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "# · Délai de réaction — Sans délai de réaction, le choix des catégories de mesure n'est justifiable par rien : le score ne peut pas dépasser # %.": {
+   "fr": "5.2.2 · Délai de réaction — Sans délai de réaction, le choix des catégories de mesure n'est justifiable par rien : le score ne peut pas dépasser 40 %.",
+   "html": "<b>5.2.2</b> · Délai de réaction — Sans délai de réaction, le choix des catégories de mesure n'est justifiable par rien : le score ne peut pas dépasser 40 %.",
+   "mots": 24,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "# · Exigences d'interface (revue rétrospective) — Votre interface de revue porte-t-elle, pour chaque sortie, son journal horodaté, ses données d'entrée, ses scores de confiance, les alertes associées, la version du système — et permet-elle à la personne désignée d'y AJOUTER ses propres observations ?": {
+   "fr": "5.3.2.1 · Exigences d'interface (revue rétrospective) — Votre interface de revue porte-t-elle, pour chaque sortie, son journal horodaté, ses données d'entrée, ses scores de confiance, les alertes associées, la version du système — et permet-elle à la personne désignée d'y AJOUTER ses propres observations ?",
+   "html": "<b>5.3.2.1</b> · Exigences d'interface (revue rétrospective) — Votre interface de revue porte-t-elle, pour chaque sortie, son journal horodaté, ses données d'entrée, ses scores de confiance, les alertes associées, la version du système — et permet-elle à la personne désignée d'y AJOUTER ses propres observations ?",
+   "mots": 46,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "# · Exigences des fonctions de notification — Vos notifications sont-elles perceptibles et interprétables dans les conditions réelles d'exploitation, distinguées par urgence, présentées sur une modalité testée, et leur logique d'escalade est-elle validée comme émettant assez tôt pour permettre une action efficace ?": {
+   "fr": "5.3.3.2 · Exigences des fonctions de notification — Vos notifications sont-elles perceptibles et interprétables dans les conditions réelles d'exploitation, distinguées par urgence, présentées sur une modalité testée, et leur logique d'escalade est-elle validée comme émettant assez tôt pour permettre une action efficace ?",
+   "html": "<b>5.3.3.2</b> · Exigences des fonctions de notification — Vos notifications sont-elles perceptibles et interprétables dans les conditions réelles d'exploitation, distinguées par urgence, présentées sur une modalité testée, et leur logique d'escalade est-elle validée comme émettant assez tôt pour permettre une action efficace ?",
+   "mots": 43,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "# · Exigences générales (surveillance continue) — La personne désignée a-t-elle un accès continu et en temps réel au fonctionnement courant du système et à ses notifications — et sait-elle à tout instant si elle peut encore écraser une sortie, couper le système ou le remettre à zéro ?": {
+   "fr": "5.3.4.1 · Exigences générales (surveillance continue) — La personne désignée a-t-elle un accès continu et en temps réel au fonctionnement courant du système et à ses notifications — et sait-elle à tout instant si elle peut encore écraser une sortie, couper le système ou le remettre à zéro ?",
+   "html": "<b>5.3.4.1</b> · Exigences générales (surveillance continue) — La personne désignée a-t-elle un accès continu et en temps réel au fonctionnement courant du système et à ses notifications — et sait-elle à tout instant si elle peut encore écraser une sortie, couper le système ou le remettre à zéro ?",
+   "mots": 47,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "# · Fonctionnalité de l'interface — L'écran dit-il ce que le système sait et ne sait pas faire, et rapporte-t-il ce qu'il fait AUX scénarios de risque que vous avez identifiés — pas à des courbes générales ?": {
+   "fr": "5.3.4.3 · Fonctionnalité de l'interface — L'écran dit-il ce que le système sait et ne sait pas faire, et rapporte-t-il ce qu'il fait AUX scénarios de risque que vous avez identifiés — pas à des courbes générales ?",
+   "html": "<b>5.3.4.3</b> · Fonctionnalité de l'interface — L'écran dit-il ce que le système sait et ne sait pas faire, et rapporte-t-il ce qu'il fait AUX scénarios de risque que vous avez identifiés — pas à des courbes générales ?",
+   "mots": 39,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "# · Généralités (catégories de mesure) — Les mesures que vous avez sélectionnées appartiennent-elles aux trois catégories de la norme — revue rétrospective, intervention déclenchée par alerte, surveillance continue — ou sont-elles conçues pour satisfaire les critères de ces catégories ?": {
+   "fr": "5.3.1 · Généralités (catégories de mesure) — Les mesures que vous avez sélectionnées appartiennent-elles aux trois catégories de la norme — revue rétrospective, intervention déclenchée par alerte, surveillance continue — ou sont-elles conçues pour satisfaire les critères de ces catégories ?",
+   "html": "<b>5.3.1</b> · Généralités (catégories de mesure) — Les mesures que vous avez sélectionnées appartiennent-elles aux trois catégories de la norme — revue rétrospective, intervention déclenchée par alerte, surveillance continue — ou sont-elles conçues pour satisfaire les critères de ces catégories ?",
+   "mots": 37,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "# · Généralités (fonctions d'intervention) — Sans fonction d'intervention, la supervision humaine ne peut rien empêcher : le score ne peut pas dépasser # %.": {
+   "fr": "5.7.1 · Généralités (fonctions d'intervention) — Sans fonction d'intervention, la supervision humaine ne peut rien empêcher : le score ne peut pas dépasser 35 %.",
+   "html": "<b>5.7.1</b> · Généralités (fonctions d'intervention) — Sans fonction d'intervention, la supervision humaine ne peut rien empêcher : le score ne peut pas dépasser 35 %.",
+   "mots": 21,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "# · Identification des scénarios de risque — Sans scénario de risque identifié, aucune mesure de supervision n'est calibrée sur quoi que ce soit : le score ne peut pas dépasser # %.": {
+   "fr": "5.2.1 · Identification des scénarios de risque — Sans scénario de risque identifié, aucune mesure de supervision n'est calibrée sur quoi que ce soit : le score ne peut pas dépasser 25 %.",
+   "html": "<b>5.2.1</b> · Identification des scénarios de risque — Sans scénario de risque identifié, aucune mesure de supervision n'est calibrée sur quoi que ce soit : le score ne peut pas dépasser 25 %.",
+   "mots": 28,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "# · Impossibilité technique de l'intervention humaine en temps réel — Lorsqu'un délai de réaction ne laisse matériellement pas le temps d'une intervention humaine en conditions réelles, l'avez-vous consigné au dossier de gestion des risques, avec le temps minimal d'intervention que vous retenez ?": {
+   "fr": "5.2.4 · Impossibilité technique de l'intervention humaine en temps réel — Lorsqu'un délai de réaction ne laisse matériellement pas le temps d'une intervention humaine en conditions réelles, l'avez-vous consigné au dossier de gestion des risques, avec le temps minimal d'intervention que vous retenez ?",
+   "html": "<b>5.2.4</b> · Impossibilité technique de l'intervention humaine en temps réel — Lorsqu'un délai de réaction ne laisse matériellement pas le temps d'une intervention humaine en conditions réelles, l'avez-vous consigné au dossier de gestion des risques, avec le temps minimal d'intervention que vous retenez ?",
+   "mots": 46,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "# · Limitations du risque résiduel — La notice d'utilisation dit-elle quels risques résiduels subsistent même si les mesures du déployeur sont correctement mises en œuvre, et à quelles conditions ou limitations l'usage est soumis si elles ne le sont pas ?": {
+   "fr": "5.4.2 · Limitations du risque résiduel — La notice d'utilisation dit-elle quels risques résiduels subsistent même si les mesures du déployeur sont correctement mises en œuvre, et à quelles conditions ou limitations l'usage est soumis si elles ne le sont pas ?",
+   "html": "<b>5.4.2</b> · Limitations du risque résiduel — La notice d'utilisation dit-elle quels risques résiduels subsistent même si les mesures du déployeur sont correctement mises en œuvre, et à quelles conditions ou limitations l'usage est soumis si elles ne le sont pas ?",
+   "mots": 41,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "# · Matériel d'entraînement destiné aux personnes désignées — Le matériel d'entraînement couvre-t-il les limites et mises en garde, la façon dont la base de calcul des sorties peut produire des sorties exceptionnelles, et — pour un système qui continue d'apprendre — si les actions de supervision influencent ou non l'apprentissage ?": {
+   "fr": "5.6.2 · Matériel d'entraînement destiné aux personnes désignées — Le matériel d'entraînement couvre-t-il les limites et mises en garde, la façon dont la base de calcul des sorties peut produire des sorties exceptionnelles, et — pour un système qui continue d'apprendre — si les actions de supervision influencent ou non l'apprentissage ?",
+   "html": "<b>5.6.2</b> · Matériel d'entraînement destiné aux personnes désignées — Le matériel d'entraînement couvre-t-il les limites et mises en garde, la façon dont la base de calcul des sorties peut produire des sorties exceptionnelles, et — pour un système qui continue d'apprendre — si les actions de supervision influencent ou non l'apprentissage ?",
+   "mots": 52,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "# · Notice d'utilisation — La notice d'utilisation porte-t-elle les sept informations de supervision que la norme y renvoie (voir le tableau de la documentation, dérivé de vos réponses) ?": {
+   "fr": "6.1 · Notice d'utilisation — La notice d'utilisation porte-t-elle les sept informations de supervision que la norme y renvoie (voir le tableau de la documentation, dérivé de vos réponses) ?",
+   "html": "<b>6.1</b> · Notice d'utilisation — La notice d'utilisation porte-t-elle les sept informations de supervision que la norme y renvoie (voir le tableau de la documentation, dérivé de vos réponses) ?",
+   "mots": 30,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "# · Négligence — Lorsque la personne désignée rejette une sortie avant son exécution, le système s'abstient-il de l'exécuter, l'enregistre-t-il, et reste-t-il stable sans la rejouer ?": {
+   "fr": "5.7.2 · Négligence — Lorsque la personne désignée rejette une sortie avant son exécution, le système s'abstient-il de l'exécuter, l'enregistre-t-il, et reste-t-il stable sans la rejouer ?",
+   "html": "<b>5.7.2</b> · Négligence — Lorsque la personne désignée rejette une sortie avant son exécution, le système s'abstient-il de l'exécuter, l'enregistre-t-il, et reste-t-il stable sans la rejouer ?",
+   "mots": 31,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "# · Paramètres de conception (revue rétrospective) — Avez-vous déterminé la durée de conservation, les capacités de filtrage et d'agrégation, les mécanismes de signalement, les fonctions de revue et la traçabilité entre chaque sortie, son entrée, sa revue et l'action corrective ?": {
+   "fr": "5.3.2.2 · Paramètres de conception (revue rétrospective) — Avez-vous déterminé la durée de conservation, les capacités de filtrage et d'agrégation, les mécanismes de signalement, les fonctions de revue et la traçabilité entre chaque sortie, son entrée, sa revue et l'action corrective ?",
+   "html": "<b>5.3.2.2</b> · Paramètres de conception (revue rétrospective) — Avez-vous déterminé la durée de conservation, les capacités de filtrage et d'agrégation, les mécanismes de signalement, les fonctions de revue et la traçabilité entre chaque sortie, son entrée, sa revue et l'action corrective ?",
+   "mots": 41,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "# · Prévisibilité du comportement après intervention — Le comportement du système après une intervention est-il prévisible, et les écarts constatés sont-ils documentés et analysés dans la documentation technique ?": {
+   "fr": "5.7.1 · Prévisibilité du comportement après intervention — Le comportement du système après une intervention est-il prévisible, et les écarts constatés sont-ils documentés et analysés dans la documentation technique ?",
+   "html": "<b>5.7.1</b> · Prévisibilité du comportement après intervention — Le comportement du système après une intervention est-il prévisible, et les écarts constatés sont-ils documentés et analysés dans la documentation technique ?",
+   "mots": 28,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "# · Retour — La personne désignée peut-elle annuler une action DÉJÀ exécutée et ramener le processus à un état antérieur ou sécurisé, les processus dépendants reçoivent-ils l'ordre de revenir eux aussi, et la notice dit-elle ce qui est réversible et ce qui ne l'est pas ?": {
+   "fr": "5.7.4 · Retour — La personne désignée peut-elle annuler une action DÉJÀ exécutée et ramener le processus à un état antérieur ou sécurisé, les processus dépendants reçoivent-ils l'ordre de revenir eux aussi, et la notice dit-elle ce qui est réversible et ce qui ne l'est pas ?",
+   "html": "<b>5.7.4</b> · Retour — La personne désignée peut-elle annuler une action DÉJÀ exécutée et ramener le processus à un état antérieur ou sécurisé, les processus dépendants reçoivent-ils l'ordre de revenir eux aussi, et la notice dit-elle ce qui est réversible et ce qui ne l'est pas ?",
+   "mots": 48,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "# · Revue des affectations de supervision — Revoyez-vous les scénarios, les délais et les mesures lors de la surveillance après commercialisation et à chaque modification de conception, et mettez-vous à jour le dossier en conséquence ?": {
+   "fr": "5.2.6 · Revue des affectations de supervision — Revoyez-vous les scénarios, les délais et les mesures lors de la surveillance après commercialisation et à chaque modification de conception, et mettez-vous à jour le dossier en conséquence ?",
+   "html": "<b>5.2.6</b> · Revue des affectations de supervision — Revoyez-vous les scénarios, les délais et les mesures lors de la surveillance après commercialisation et à chaque modification de conception, et mettez-vous à jour le dossier en conséquence ?",
+   "mots": 35,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "# · Sensibilisation au biais d'automatisation — Votre conception oblige-t-elle la personne désignée à examiner vraiment une sortie avant de la retenir, au lieu de la laisser valider par habitude ?": {
+   "fr": "5.5.1 · Sensibilisation au biais d'automatisation — Votre conception oblige-t-elle la personne désignée à examiner vraiment une sortie avant de la retenir, au lieu de la laisser valider par habitude ?",
+   "html": "<b>5.5.1</b> · Sensibilisation au biais d'automatisation — Votre conception oblige-t-elle la personne désignée à examiner vraiment une sortie avant de la retenir, au lieu de la laisser valider par habitude ?",
+   "mots": 30,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "# · Support d'interprétation de sortie pour les personnes désignées — Le système, sa documentation et le matériel d'entraînement obligatoire permettent-ils aux personnes désignées de comprendre le fonctionnement, les capacités et les limites du système, et les compétences que vous supposez sont-elles DÉCLARÉES dans la notice ?": {
+   "fr": "5.6.1 · Support d'interprétation de sortie pour les personnes désignées — Le système, sa documentation et le matériel d'entraînement obligatoire permettent-ils aux personnes désignées de comprendre le fonctionnement, les capacités et les limites du système, et les compétences que vous supposez sont-elles DÉCLARÉES dans la notice ?",
+   "html": "<b>5.6.1</b> · Support d'interprétation de sortie pour les personnes désignées — Le système, sa documentation et le matériel d'entraînement obligatoire permettent-ils aux personnes désignées de comprendre le fonctionnement, les capacités et les limites du système, et les compétences que vous supposez sont-elles DÉCLARÉES dans la notice ?",
+   "mots": 47,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "# · Surcharge et conflit — Lorsqu'une seule personne désignée supervise plusieurs scénarios, avez-vous démontré et justifié dans la documentation technique qu'elle le peut sans surcharge cognitive ni conflit ?": {
+   "fr": "5.2.5 · Surcharge et conflit — Lorsqu'une seule personne désignée supervise plusieurs scénarios, avez-vous démontré et justifié dans la documentation technique qu'elle le peut sans surcharge cognitive ni conflit ?",
+   "html": "<b>5.2.5</b> · Surcharge et conflit — Lorsqu'une seule personne désignée supervise plusieurs scénarios, avez-vous démontré et justifié dans la documentation technique qu'elle le peut sans surcharge cognitive ni conflit ?",
+   "mots": 29,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "# · Sélection et documentation des mesures — Avez-vous sélectionné au moins une mesure par scénario, vérifié qu'elles sont COLLECTIVEMENT suffisantes pour permettre l'intervention dans le délai, et documenté ce choix au dossier de gestion des risques ?": {
+   "fr": "5.2.3 · Sélection et documentation des mesures — Avez-vous sélectionné au moins une mesure par scénario, vérifié qu'elles sont COLLECTIVEMENT suffisantes pour permettre l'intervention dans le délai, et documenté ce choix au dossier de gestion des risques ?",
+   "html": "<b>5.2.3</b> · Sélection et documentation des mesures — Avez-vous sélectionné au moins une mesure par scénario, vérifié qu'elles sont COLLECTIVEMENT suffisantes pour permettre l'intervention dans le délai, et documenté ce choix au dossier de gestion des risques ?",
+   "mots": 37,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "# · Tests de biais d'automatisation — Avez-vous testé si vos mesures maintiennent l'acceptation passive dans des limites acceptables — par exemple en présentant à des personnes représentatives un mélange de sorties correctes et volontairement erronées, et en mesurant ce qui passe ?": {
+   "fr": "5.5.2 · Tests de biais d'automatisation — Avez-vous testé si vos mesures maintiennent l'acceptation passive dans des limites acceptables — par exemple en présentant à des personnes représentatives un mélange de sorties correctes et volontairement erronées, et en mesurant ce qui passe ?",
+   "html": "<b>5.5.2</b> · Tests de biais d'automatisation — Avez-vous testé si vos mesures maintiennent l'acceptation passive dans des limites acceptables — par exemple en présentant à des personnes représentatives un mélange de sorties correctes et volontairement erronées, et en mesurant ce qui passe ?",
+   "mots": 41,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "# · Transition en état sécurisé — La personne désignée dispose-t-elle d'une commande de mise en sécurité — bouton matériel ou commande logicielle — atteignable INDÉPENDAMMENT du système, et la bascule est-elle validée sur le temps, la stabilité, la complétude de l'atténuation et la récupération ?": {
+   "fr": "5.7.5 · Transition en état sécurisé — La personne désignée dispose-t-elle d'une commande de mise en sécurité — bouton matériel ou commande logicielle — atteignable INDÉPENDAMMENT du système, et la bascule est-elle validée sur le temps, la stabilité, la complétude de l'atténuation et la récupération ?",
+   "html": "<b>5.7.5</b> · Transition en état sécurisé — La personne désignée dispose-t-elle d'une commande de mise en sécurité — bouton matériel ou commande logicielle — atteignable INDÉPENDAMMENT du système, et la bascule est-elle validée sur le temps, la stabilité, la complétude de l'atténuation et la récupération ?",
+   "mots": 45,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "# · Vérification (revue rétrospective) — Avez-vous vérifié que les personnes désignées repèrent les sorties incorrectes ou dangereuses et agissent DANS le délai de réaction, défini des critères d'acceptation, traité les écarts avant la mise sur le marché, et prévu comment la revue se poursuit si l'interface principale ou la journalisation tombe ?": {
+   "fr": "5.3.2.3.1 · Vérification (revue rétrospective) — Avez-vous vérifié que les personnes désignées repèrent les sorties incorrectes ou dangereuses et agissent DANS le délai de réaction, défini des critères d'acceptation, traité les écarts avant la mise sur le marché, et prévu comment la revue se poursuit si l'interface principale ou la journalisation tombe ?",
+   "html": "<b>5.3.2.3.1</b> · Vérification (revue rétrospective) — Avez-vous vérifié que les personnes désignées repèrent les sorties incorrectes ou dangereuses et agissent DANS le délai de réaction, défini des critères d'acceptation, traité les écarts avant la mise sur le marché, et prévu comment la revue se poursuit si l'interface principale ou la journalisation tombe ?",
+   "mots": 52,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "# · Vérification (surveillance continue) — Avez-vous vérifié que les personnes désignées accomplissent les tâches de supervision clés DANS le délai de réaction, avec des critères d'acceptation définis et des résultats consignés dans la documentation technique ?": {
+   "fr": "5.3.4.4 · Vérification (surveillance continue) — Avez-vous vérifié que les personnes désignées accomplissent les tâches de supervision clés DANS le délai de réaction, avec des critères d'acceptation définis et des résultats consignés dans la documentation technique ?",
+   "html": "<b>5.3.4.4</b> · Vérification (surveillance continue) — Avez-vous vérifié que les personnes désignées accomplissent les tâches de supervision clés DANS le délai de réaction, avec des critères d'acceptation définis et des résultats consignés dans la documentation technique ?",
+   "mots": 35,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "# · Écrasement — Lorsque la personne désignée substitue sa propre sortie, le chemin d'exécution automatique est-il interrompu, l'alternative humaine intégrée, et LES DEUX sorties — celle du système et la vôtre — enregistrées ?": {
+   "fr": "5.7.3 · Écrasement — Lorsque la personne désignée substitue sa propre sortie, le chemin d'exécution automatique est-il interrompu, l'alternative humaine intégrée, et LES DEUX sorties — celle du système et la vôtre — enregistrées ?",
+   "html": "<b>5.7.3</b> · Écrasement — Lorsque la personne désignée substitue sa propre sortie, le chemin d'exécution automatique est-il interrompu, l'alternative humaine intégrée, et LES DEUX sorties — celle du système et la vôtre — enregistrées ?",
+   "mots": 32,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "#(#)(a)": {
+   "fr": "14(3)(a)",
+   "html": "<b>14(3)(a)</b>",
+   "mots": 1,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "#(#)(b)": {
+   "fr": "14(3)(b)",
+   "html": "<b>14(3)(b)</b>",
+   "mots": 1,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "#(#)(c)": {
+   "fr": "14(4)(c)",
+   "html": "<b>14(4)(c)</b>",
+   "mots": 1,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "#(#)(d)": {
+   "fr": "14(4)(d)",
+   "html": "<b>14(4)(d)</b>",
+   "mots": 1,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "#(#)(e)": {
+   "fr": "14(4)(e)",
+   "html": "<b>14(4)(e)</b>",
+   "mots": 1,
+   "pages": [
+    "en18229-score"
    ]
   },
   "#. Aucune facturation sans double vérification : score Sentinel du domaine atteint et validation documentaire par CONSEILPREV.": {
@@ -4224,6 +4553,30 @@
    "mots": 2,
    "pages": [
     "_js"
+   ]
+  },
+  "Bloc # sur # · Cadre d’analyse — Verrouillé": {
+   "fr": "Bloc 3 sur 4 · Cadre d’analyse — Verrouillé",
+   "html": "<b>Bloc 3 sur 4 · Cadre d’analyse — Verrouillé</b>",
+   "mots": 6,
+   "pages": [
+    "en18229-cadre"
+   ]
+  },
+  "Bloc # sur # · Rôle et périmètre — À remplir maintenant": {
+   "fr": "Bloc 1 sur 4 · Rôle et périmètre — À remplir maintenant",
+   "html": "<b>Bloc 1 sur 4 · Rôle et périmètre — À remplir maintenant</b>",
+   "mots": 8,
+   "pages": [
+    "en18229-role"
+   ]
+  },
+  "Bloc # sur # · Scénarios et délais — Verrouillé": {
+   "fr": "Bloc 2 sur 4 · Scénarios et délais — Verrouillé",
+   "html": "<b>Bloc 2 sur 4 · Scénarios et délais — Verrouillé</b>",
+   "mots": 6,
+   "pages": [
+    "en18229-scenarios"
    ]
   },
   "Bonjour, je suis Sentinel, votre assistant reglementaire propulse par CONSEILPREV.": {
@@ -5335,6 +5688,14 @@
     "pan-sia",
     "enveloppe",
     "empreinte-parc"
+   ]
+  },
+  "EN #:# — Système de management de la qualité pour le règlement européen sur l'IA : Article # — la conception, la vérification et la modification des mesures de supervision, et la surveillance de leur efficacité après la mise sur le marché, relèvent de ce système.": {
+   "fr": "EN 18286:2026 — Système de management de la qualité pour le règlement européen sur l'IA : Article 17 — la conception, la vérification et la modification des mesures de supervision, et la surveillance de leur efficacité après la mise sur le marché, relèvent de ce système.",
+   "html": "<b>EN 18286:2026</b> — Système de management de la qualité pour le règlement européen sur l'IA : Article 17 — la conception, la vérification et la modification des mesures de supervision, et la surveillance de leur efficacité après la mise sur le marché, relèvent de ce système.",
+   "mots": 42,
+   "pages": [
+    "en18229-role"
    ]
   },
   "EN VIGUEUR depuis le": {
@@ -8879,6 +9240,30 @@
     "_js"
    ]
   },
+  "prEN # — Gestion des risques liés à l'IA : Article # — c'est là que les scénarios de risque sont identifiés, estimés et évalués, et que vit le dossier de gestion des risques sur lequel les mesures de supervision sont calibrées.": {
+   "fr": "prEN 18228 — Gestion des risques liés à l'IA : Article 9 — c'est là que les scénarios de risque sont identifiés, estimés et évalués, et que vit le dossier de gestion des risques sur lequel les mesures de supervision sont calibrées.",
+   "html": "<b>prEN 18228</b> — Gestion des risques liés à l'IA : Article 9 — c'est là que les scénarios de risque sont identifiés, estimés et évalués, et que vit le dossier de gestion des risques sur lequel les mesures de supervision sont calibrées.",
+   "mots": 39,
+   "pages": [
+    "en18229-role"
+   ]
+  },
+  "prEN #-# — Conservation des documents : Article # — la journalisation sur laquelle s'appuie toute revue de supervision, y compris l'enregistrement des interventions.": {
+   "fr": "prEN 18229-1 — Conservation des documents : Article 12 — la journalisation sur laquelle s'appuie toute revue de supervision, y compris l'enregistrement des interventions.",
+   "html": "<b>prEN 18229-1</b> — Conservation des documents : Article 12 — la journalisation sur laquelle s'appuie toute revue de supervision, y compris l'enregistrement des interventions.",
+   "mots": 21,
+   "pages": [
+    "en18229-role"
+   ]
+  },
+  "prEN #-# — Transparence et fourniture d'informations aux déployeurs : Article # — la notice d'utilisation, c'est-à-dire le véhicule par lequel les obligations qui dépendent du déploiement passent du fournisseur au déployeur.": {
+   "fr": "prEN 18229-2 — Transparence et fourniture d'informations aux déployeurs : Article 13 — la notice d'utilisation, c'est-à-dire le véhicule par lequel les obligations qui dépendent du déploiement passent du fournisseur au déployeur.",
+   "html": "<b>prEN 18229-2</b> — Transparence et fourniture d'informations aux déployeurs : Article 13 — la notice d'utilisation, c'est-à-dire le véhicule par lequel les obligations qui dépendent du déploiement passent du fournisseur au déployeur.",
+   "mots": 32,
+   "pages": [
+    "en18229-role"
+   ]
+  },
   "propre à la": {
    "fr": "propre à la",
    "html": "<b>propre à la",
@@ -9579,6 +9964,7 @@
   }
  },
  "genere_le": "2026-09-29T14:16:47.061Z",
+ "genere_le_en18229": "2026-09-30T13:38:28.541Z",
  "js": {
   "entrees": {
    "attr": 68,
@@ -9592,7 +9978,7 @@
    "texte": 80326
   }
  },
- "pages": 118,
+ "pages": 122,
  "rubriques": {
   "adoption": "BUSINESS",
   "apercu": "PILOTAGE",
@@ -9624,6 +10010,10 @@
   "empreinte": "EMPREINTE",
   "empreinte-ia": "CARTOGRAPHIER",
   "empreinte-parc": "ÉVALUER LE RISQUE",
+  "en18229-cadre": "prEN 18229-3",
+  "en18229-role": "prEN 18229-3",
+  "en18229-scenarios": "prEN 18229-3",
+  "en18229-score": "prEN 18229-3",
   "entreprise": "ENTREPRISE",
   "enveloppe": "ÉVALUER LE RISQUE",
   "equipe": "ÉQUIPE & FORMATION",
@@ -10030,6 +10420,13 @@
    "mots": 2,
    "pages": [
     "pan-sia"
+   ]
+  },
+  "# exigence(s) qui portent cet alinéa n'ont pas de réponse.": {
+   "fr": "7 exigence(s) qui portent cet alinéa n'ont pas de réponse.",
+   "mots": 11,
+   "pages": [
+    "en18229-score"
    ]
   },
   "# faits datés, avec leur éditeur": {
@@ -14529,6 +14926,13 @@
     "_js"
    ]
   },
+  "Ajouter ce scénario": {
+   "fr": "Ajouter ce scénario",
+   "mots": 3,
+   "pages": [
+    "en18229-scenarios"
+   ]
+  },
   "Ajouter des systemes →": {
    "fr": "Ajouter des systemes →",
    "mots": 3,
@@ -14706,6 +15110,13 @@
    "mots": 7,
    "pages": [
     "_js"
+   ]
+  },
+  "Alinéa": {
+   "fr": "Alinéa",
+   "mots": 1,
+   "pages": [
+    "en18229-score"
    ]
   },
   "Allemagne": {
@@ -18447,6 +18858,13 @@
     "iso27001-risques"
    ]
   },
+  "Aucun scénario déclaré. Le délai de réaction se détermine par scénario (#) : un délai unique pour tout un système est presque toujours faux.": {
+   "fr": "Aucun scénario déclaré. Le délai de réaction se détermine par scénario (5.2.2) : un délai unique pour tout un système est presque toujours faux.",
+   "mots": 22,
+   "pages": [
+    "en18229-scenarios"
+   ]
+  },
   "Aucun secteur déclaré.": {
    "fr": "Aucun secteur déclaré.",
    "mots": 3,
@@ -20487,6 +20905,13 @@
     "rgpd-traitements"
    ]
   },
+  "Bloc # sur # · Score et article # — Sans objet pour vous": {
+   "fr": "Bloc 4 sur 4 · Score et article 14 — Sans objet pour vous",
+   "mots": 9,
+   "pages": [
+    "en18229-score"
+   ]
+  },
   "Bloc # sur # · Sensibilisation — Pas encore atteint": {
    "fr": "Bloc 7 sur 8 · Sensibilisation — Pas encore atteint",
    "mots": 6,
@@ -20778,6 +21203,20 @@
    "mots": 79,
    "pages": [
     "enveloppe"
+   ]
+  },
+  "C'est la catégorie qui permet de corriger, d'escalader et de documenter — pas d'empêcher. Elle convient aux délais de réaction longs.": {
+   "fr": "C'est la catégorie qui permet de corriger, d'escalader et de documenter — pas d'empêcher. Elle convient aux délais de réaction longs.",
+   "mots": 23,
+   "pages": [
+    "en18229-scenarios"
+   ]
+  },
+  "C'est la seule catégorie qui n'a pas à réveiller quelqu'un : la personne regardait déjà. C'est donc la plus courte latence atteignable — et la plus chère, parce qu'elle occupe quelqu'un.": {
+   "fr": "C'est la seule catégorie qui n'a pas à réveiller quelqu'un : la personne regardait déjà. C'est donc la plus courte latence atteignable — et la plus chère, parce qu'elle occupe quelqu'un.",
+   "mots": 35,
+   "pages": [
+    "en18229-scenarios"
    ]
   },
   "C'est le PLUS BAS des taux mesurés, pas leur moyenne. Une moyenne dilue précisément la composante qu'il faut traiter en premier : deux cadres à # % et un à # % rendent # %, et le # % disparaît. La moyenne reste affichée à côté, avec son avertissement.": {
@@ -21576,6 +22015,13 @@
     "_js"
    ]
   },
+  "Calibrer sur les risques": {
+   "fr": "Calibrer sur les risques",
+   "mots": 4,
+   "pages": [
+    "en18229-score"
+   ]
+  },
   "Cambodge / ASEAN": {
    "fr": "Cambodge / ASEAN",
    "mots": 2,
@@ -22107,6 +22553,13 @@
     "_js"
    ]
   },
+  "Catégories retenues": {
+   "fr": "Catégories retenues",
+   "mots": 2,
+   "pages": [
+    "en18229-scenarios"
+   ]
+  },
   "Catégorise des personnes d'après leurs données biométriques pour en déduire des données sensibles": {
    "fr": "Catégorise des personnes d'après leurs données biométriques pour en déduire des données sensibles",
    "mots": 14,
@@ -22144,6 +22597,14 @@
    "pages": [
     "rgpd-aipd",
     "rgpd-cartographie"
+   ]
+  },
+  "Ce bloc dépend de : Rôle et périmètre. Complétez-le d'abord.": {
+   "fr": "Ce bloc dépend de : Rôle et périmètre. Complétez-le d'abord.",
+   "mots": 11,
+   "pages": [
+    "en18229-cadre",
+    "en18229-scenarios"
    ]
   },
   "Ce bloc dépend de : Suis-je concerné ?. Complétez-le d'abord.": {
@@ -22199,6 +22660,13 @@
    "mots": 49,
    "pages": [
     "carto-uc"
+   ]
+  },
+  "Ce document ne se tient pas seul.": {
+   "fr": "Ce document ne se tient pas seul.",
+   "mots": 7,
+   "pages": [
+    "en18229-role"
    ]
   },
   "Ce fichier est bien du JSON, mais ce n’est pas une sauvegarde": {
@@ -22360,6 +22828,13 @@
    "mots": 16,
    "pages": [
     "pricing"
+   ]
+  },
+  "Ce projet de norme n’ouvre pas encore de présomption de conformité.": {
+   "fr": "Ce projet de norme n’ouvre pas encore de présomption de conformité.",
+   "mots": 12,
+   "pages": [
+    "en18229-role"
    ]
   },
   "Ce qu'elle ne fait pas": {
@@ -22724,6 +23199,20 @@
     "_js"
    ]
   },
+  "Ce que vous exigiez de la revue rétrospective pour l'accepter, et ce que la vérification a donné": {
+   "fr": "Ce que vous exigiez de la revue rétrospective pour l'accepter, et ce que la vérification a donné",
+   "mots": 18,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "Ce que vous exigiez de la surveillance continue pour l'accepter, et ce que la vérification a donné": {
+   "fr": "Ce que vous exigiez de la surveillance continue pour l'accepter, et ce que la vérification a donné",
+   "mots": 18,
+   "pages": [
+    "en18229-score"
+   ]
+  },
   "Ce que vous laissez au prospect": {
    "fr": "Ce que vous laissez au prospect",
    "mots": 6,
@@ -22901,6 +23390,13 @@
     "finops"
    ]
   },
+  "Ce qui peut être annulé après exécution, et ce qui ne peut pas l'être": {
+   "fr": "Ce qui peut être annulé après exécution, et ce qui ne peut pas l'être",
+   "mots": 15,
+   "pages": [
+    "en18229-score"
+   ]
+  },
   "Ce qui plafonne ce taux": {
    "fr": "Ce qui plafonne ce taux",
    "mots": 5,
@@ -23054,6 +23550,13 @@
    "mots": 6,
    "pages": [
     "_js"
+   ]
+  },
+  "Ce qu’il exige": {
+   "fr": "Ce qu’il exige",
+   "mots": 4,
+   "pages": [
+    "en18229-score"
    ]
   },
   "Ce qu’il faut déclarer pour compter un ajustement fin": {
@@ -24372,6 +24875,13 @@
     "_js"
    ]
   },
+  "Choisie seule sur un délai de réaction court, elle ne tient pas le scénario : la sortie est déjà partie. Le # existe pour ce cas, et il demande de le CONSIGNER, pas de l'ignorer.": {
+   "fr": "Choisie seule sur un délai de réaction court, elle ne tient pas le scénario : la sortie est déjà partie. Le 5.2.4 existe pour ce cas, et il demande de le CONSIGNER, pas de l'ignorer.",
+   "mots": 34,
+   "pages": [
+    "en18229-scenarios"
+   ]
+  },
   "Choisir des fichiers…": {
    "fr": "Choisir des fichiers…",
    "mots": 3,
@@ -24463,6 +24973,13 @@
     "pricing"
    ]
   },
+  "Choisissez d’abord votre rôle : la norme adresse ses exigences au fournisseur, et transmet au déployeur par la notice d’utilisation.": {
+   "fr": "Choisissez d’abord votre rôle : la norme adresse ses exigences au fournisseur, et transmet au déployeur par la notice d’utilisation.",
+   "mots": 21,
+   "pages": [
+    "en18229-cadre"
+   ]
+  },
   "Choisissez le modele qui redige les livrables. Mistral Large (api.mistral.ai) ou Claude Sonnet (Anthropic via le proxy serveur). En cas d indisponibilite de Claude, bascule automatique sur Mistral.": {
    "fr": "Choisissez le modele qui redige les livrables. Mistral Large (api.mistral.ai) ou Claude Sonnet (Anthropic via le proxy serveur). En cas d indisponibilite de Claude, bascule automatique sur Mistral.",
    "mots": 30,
@@ -24504,6 +25021,13 @@
    "mots": 7,
    "pages": [
     "enveloppe"
+   ]
+  },
+  "Choisissez votre rôle — fournisseur, déployeur, ou les deux — et répondez à son questionnaire": {
+   "fr": "Choisissez votre rôle — fournisseur, déployeur, ou les deux — et répondez à son questionnaire",
+   "mots": 13,
+   "pages": [
+    "en18229-role"
    ]
   },
   "Choisissez votre secteur industriel et, si vous le souhaitez, les processus métiers prioritaires (achats, finance, supply chain, opérations, relation client). La cartographie s’adapte à votre contexte.": {
@@ -25601,6 +26125,13 @@
     "pricing"
    ]
   },
+  "Comment la revue continue quand l'interface principale ou la journalisation tombe": {
+   "fr": "Comment la revue continue quand l'interface principale ou la journalisation tombe",
+   "mots": 12,
+   "pages": [
+    "en18229-score"
+   ]
+  },
   "Comment le lire": {
    "fr": "Comment le lire",
    "mots": 3,
@@ -26062,6 +26593,13 @@
     "pricing"
    ]
   },
+  "Comprendre les capacités et les limites, et surveiller le fonctionnement": {
+   "fr": "Comprendre les capacités et les limites, et surveiller le fonctionnement",
+   "mots": 10,
+   "pages": [
+    "en18229-score"
+   ]
+  },
   "Comprendre les exigences de sécurité applicables aux systèmes IA (Art. # EU AI Act)": {
    "fr": "Comprendre les exigences de sécurité applicables aux systèmes IA (Art. 15 EU AI Act)",
    "mots": 13,
@@ -26226,6 +26764,13 @@
     "_js"
    ]
   },
+  "Conception permettant une supervision humaine effective": {
+   "fr": "Conception permettant une supervision humaine effective",
+   "mots": 6,
+   "pages": [
+    "en18229-score"
+   ]
+  },
   "Conception, développement et fabrication garantissant un niveau approprié en fonction des risques.": {
    "fr": "Conception, développement et fabrication garantissant un niveau approprié en fonction des risques.",
    "mots": 12,
@@ -26259,6 +26804,13 @@
    "mots": 10,
    "pages": [
     "_js"
+   ]
+  },
+  "Concevoir les mesures": {
+   "fr": "Concevoir les mesures",
+   "mots": 3,
+   "pages": [
+    "en18229-score"
    ]
   },
   "Concevoir, documenter & prouver": {
@@ -30508,6 +31060,13 @@
     "_js"
    ]
   },
+  "Dites si le système identifie des personnes à distance par la biométrie : neuf exigences en dépendent": {
+   "fr": "Dites si le système identifie des personnes à distance par la biométrie : neuf exigences en dépendent",
+   "mots": 16,
+   "pages": [
+    "en18229-role"
+   ]
+  },
   "Dites-nous votre besoin et votre implantation : nous répondons sous # h ouvrées.": {
    "fr": "Dites-nous votre besoin et votre implantation : nous répondons sous 24 h ouvrées.",
    "mots": 12,
@@ -30801,6 +31360,13 @@
     "fiche-eu"
    ]
   },
+  "Documentation technique — # éléments": {
+   "fr": "Documentation technique — 5 éléments",
+   "mots": 3,
+   "pages": [
+    "en18229-score"
+   ]
+  },
   "Documentation technique, contrat fournisseur, politique de marquage, captures d'écran…": {
    "fr": "Documentation technique, contrat fournisseur, politique de marquage, captures d'écran…",
    "mots": 10,
@@ -30850,6 +31416,13 @@
    "mots": 15,
    "pages": [
     "_js"
+   ]
+  },
+  "Documenter": {
+   "fr": "Documenter",
+   "mots": 1,
+   "pages": [
+    "en18229-score"
    ]
   },
   "Documenter et justifier toute décision de modération": {
@@ -31616,6 +32189,13 @@
     "_js"
    ]
   },
+  "Décider de ne pas utiliser le système, ou ignorer, outrepasser ou inverser une sortie": {
+   "fr": "Décider de ne pas utiliser le système, ou ignorer, outrepasser ou inverser une sortie",
+   "mots": 14,
+   "pages": [
+    "en18229-score"
+   ]
+  },
   "Décideur : le nom inscrit au registre à côté de la décision.": {
    "fr": "Décideur : le nom inscrit au registre à côté de la décision.",
    "mots": 11,
@@ -31838,6 +32418,13 @@
    "mots": 41,
    "pages": [
     "_js"
+   ]
+  },
+  "Déclarez au moins un scénario de risque avec son délai de réaction : c'est lui qui commande le choix des mesures": {
+   "fr": "Déclarez au moins un scénario de risque avec son délai de réaction : c'est lui qui commande le choix des mesures",
+   "mots": 21,
+   "pages": [
+    "en18229-scenarios"
    ]
   },
   "Déclarez d’abord la criticité de la fonction soutenue : tant qu’elle ne l’est pas, rien n’est compté, parce qu’un taux sur neuf clauses alors que quinze sont dues serait rassurant à tort. Regardez ensuite les deux que l’autorité ouvre en premier : le droit d’audit illimité (§#, e) et la stratégie de sortie (§#, f).": {
@@ -32423,6 +33010,7 @@
    "fr": "Déployeur",
    "mots": 1,
    "pages": [
+    "en18229-role",
     "shadow-ai"
    ]
   },
@@ -33456,6 +34044,13 @@
    "mots": 16,
    "pages": [
     "_js"
+   ]
+  },
+  "Elle n'occupe personne à plein temps, mais elle ajoute à la latence le temps de percevoir l'alerte et de reprendre le contexte.": {
+   "fr": "Elle n'occupe personne à plein temps, mais elle ajoute à la latence le temps de percevoir l'alerte et de reprendre le contexte.",
+   "mots": 24,
+   "pages": [
+    "en18229-scenarios"
    ]
   },
   "Elle ne chiffre PAS le coût de votre mise en conformité — ni jours-homme, ni honoraires d’organisme notifié. Ces chiffres ne sont ni dans le règlement ni publics de façon fiable, et les inventer produirait un document qui a l’air d’un devis sans en être un : il serait cité en comité. Et les montants affichés sont des PLAFONDS, jamais des prévisions : l’article #, §# impose de tenir compte de la nature, de la gravité et de la durée de l’infraction, des antécédents de l’opérateur et de sa taille. Le régime de sanctions lui-même est fixé par chaque État membre.": {
@@ -37271,6 +37866,7 @@
    "fr": "Fournisseur",
    "mots": 1,
    "pages": [
+    "en18229-role",
     "simulateur"
    ]
   },
@@ -39693,6 +40289,13 @@
     "simulateur"
    ]
   },
+  "Identification biométrique à distance": {
+   "fr": "Identification biométrique à distance",
+   "mots": 4,
+   "pages": [
+    "en18229-role"
+   ]
+  },
   "Identification biométrique à distance : INTERDITE si elle est utilisée en temps réel dans l'espace accessible au public à des fins répressives (Art. #(#)(h), trois exceptions strictes) ; sinon à haut risque (annexe III, point #(a)). Répondez à la question sur la finalité pour trancher.": {
    "fr": "Identification biométrique à distance : INTERDITE si elle est utilisée en temps réel dans l'espace accessible au public à des fins répressives (Art. 5(1)(h), trois exceptions strictes) ; sinon à haut risque (annexe III, point 1(a)). Répondez à la question sur la finalité pour trancher.",
    "mots": 44,
@@ -40084,11 +40687,12 @@
    "fr": "Il manque 1 réponse :",
    "mots": 3,
    "pages": [
-    "ia-act-hub",
     "cra",
-    "cra-role",
     "cra-chiffre",
-    "cra-signalement"
+    "cra-role",
+    "cra-signalement",
+    "en18229-scenarios",
+    "ia-act-hub"
    ]
   },
   "Il manque # réponses :": {
@@ -40096,9 +40700,10 @@
    "mots": 3,
    "pages": [
     "cra-ecarts",
+    "en18229-role",
+    "iso27001",
     "iso27001-risques",
     "iso27001-soa",
-    "iso27001",
     "iso42001"
    ]
   },
@@ -40360,6 +40965,13 @@
    "mots": 5,
    "pages": [
     "_js"
+   ]
+  },
+  "Impossibilité technique consignée (#)": {
+   "fr": "Impossibilité technique consignée (5.2.4)",
+   "mots": 3,
+   "pages": [
+    "en18229-scenarios"
    ]
   },
   "Impossible de charger le statut email.": {
@@ -41636,6 +42248,13 @@
     "_js"
    ]
   },
+  "Interpréter correctement les sorties": {
+   "fr": "Interpréter correctement les sorties",
+   "mots": 4,
+   "pages": [
+    "en18229-score"
+   ]
+  },
   "Interrogation des sources ouvertes en cours…": {
    "fr": "Interrogation des sources ouvertes en cours…",
    "mots": 6,
@@ -41664,6 +42283,13 @@
    "mots": 1,
    "pages": [
     "rag"
+   ]
+  },
+  "Interrompre le système ou l'arrêter": {
+   "fr": "Interrompre le système ou l'arrêter",
+   "mots": 6,
+   "pages": [
+    "en18229-score"
    ]
   },
   "Intesa Sanpaolo — Programme d'assistants génératifs internes (déploiement progressif)": {
@@ -43644,6 +44270,13 @@
     "_js"
    ]
   },
+  "La documentation des écarts de comportement du système après intervention": {
+   "fr": "La documentation des écarts de comportement du système après intervention",
+   "mots": 10,
+   "pages": [
+    "en18229-score"
+   ]
+  },
   "La documentation technique doit alors décrire le processus de développement, méthodes et outils compris (art. # et annexe IV). Une politique de développement assisté non écrite devient une pièce manquante du dossier, constatable lors de l’évaluation de conformité.": {
    "fr": "La documentation technique doit alors décrire le processus de développement, méthodes et outils compris (art. 11 et annexe IV). Une politique de développement assisté non écrite devient une pièce manquante du dossier, constatable lors de l’évaluation de conformité.",
    "mots": 38,
@@ -43656,6 +44289,13 @@
    "mots": 9,
    "pages": [
     "_js"
+   ]
+  },
+  "La documentation, dérivée de vos réponses": {
+   "fr": "La documentation, dérivée de vos réponses",
+   "mots": 6,
+   "pages": [
+    "en18229-score"
    ]
   },
   "La donnée est-elle qualifiée : périmètre, unité, mode de calcul, incertitude connue ?": {
@@ -43707,6 +44347,13 @@
    "mots": 19,
    "pages": [
     "iso27001-soa"
+   ]
+  },
+  "La démonstration de non-surcharge lorsqu'une personne désignée supervise plusieurs scénarios": {
+   "fr": "La démonstration de non-surcharge lorsqu'une personne désignée supervise plusieurs scénarios",
+   "mots": 12,
+   "pages": [
+    "en18229-score"
    ]
   },
   "La dépense réelle par système, calculée sur un volume que vous avez déclaré — jamais estimée à votre place.": {
@@ -44085,6 +44732,13 @@
    "mots": 26,
    "pages": [
     "iso42001-ponts"
+   ]
+  },
+  "La présomption de conformité à l'article # ne naîtra que le jour où la référence de la norme sera citée au Journal officiel de l'Union européenne au titre du Règlement (UE) #/#. Ce n'est pas le cas à ce jour : le projet est à l'Enquête CEN.": {
+   "fr": "La présomption de conformité à l'article 14 ne naîtra que le jour où la référence de la norme sera citée au Journal officiel de l'Union européenne au titre du Règlement (UE) 2024/1689. Ce n'est pas le cas à ce jour : le projet est à l'Enquête CEN.",
+   "mots": 48,
+   "pages": [
+    "en18229-role"
    ]
   },
   "La publication du modele open-weights DeepSeek R#, entraine pour des couts presentes comme tres inferieurs a ceux des laboratoires americains, remet en question l'efficacite des controles a l'export de puces et l'avance technologique americaine.": {
@@ -45732,7 +46386,10 @@
    "fr": "Le parcours attend :",
    "mots": 3,
    "pages": [
-    "_js"
+    "_js",
+    "en18229-cadre",
+    "en18229-scenarios",
+    "en18229-score"
    ]
   },
   "Le parcours commence par une question — construction neuve, extension ou rachat — parce que les mêmes critères ne se lisent pas dans le même ordre. Suivez la branche de votre projet jusqu’au bout.": {
@@ -45853,6 +46510,13 @@
    "pages": [
     "iso27001",
     "iso42001"
+   ]
+  },
+  "Le plan — # points": {
+   "fr": "Le plan — 30 points",
+   "mots": 3,
+   "pages": [
+    "en18229-score"
    ]
   },
   "Le plus bas des cadres évalués — c'est lui qui commande": {
@@ -46381,6 +47045,13 @@
     "_js"
    ]
   },
+  "Le score se calcule sur un rôle et au moins un scénario de risque.": {
+   "fr": "Le score se calcule sur un rôle et au moins un scénario de risque.",
+   "mots": 14,
+   "pages": [
+    "en18229-score"
+   ]
+  },
   "Le scoring multicritère combine : droits fondamentaux (évaluation FRIA par système), sécurité et gouvernance des données (Radar des risques, # dimensions pondérées), et performance réglementaire (Audit de conformité, # points).": {
    "fr": "Le scoring multicritère combine : droits fondamentaux (évaluation FRIA par système), sécurité et gouvernance des données (Radar des risques, 6 dimensions pondérées), et performance réglementaire (Audit de conformité, 34 points).",
    "mots": 27,
@@ -46720,6 +47391,13 @@
     "_js"
    ]
   },
+  "Le taux de fausses alertes est le vrai sujet : une alerte qui crie trop souvent n'est plus perçue, et la latence réelle s'allonge sans que rien dans la conception ait changé.": {
+   "fr": "Le taux de fausses alertes est le vrai sujet : une alerte qui crie trop souvent n'est plus perçue, et la latence réelle s'allonge sans que rien dans la conception ait changé.",
+   "mots": 33,
+   "pages": [
+    "en18229-scenarios"
+   ]
+  },
   "Le taux le plus bas est nommé : c’est celui-là qui se verra en inspection, pas la moyenne.": {
    "fr": "Le taux le plus bas est nommé : c’est celui-là qui se verra en inspection, pas la moyenne.",
    "mots": 19,
@@ -46893,6 +47571,16 @@
     "rgpd-sensibilisation",
     "rgpd-doc",
     "rgpd-pbd"
+   ]
+  },
+  "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : personne ne la prononce encore : le projet n'est pas cité au Journal officiel, donc le tenir n'ouvre aucune présomption de conformité à l'article # — le jour où la référence sera citée, le même travail vaudra présomption.": {
+   "fr": "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : personne ne la prononce encore : le projet n'est pas cité au Journal officiel, donc le tenir n'ouvre aucune présomption de conformité à l'article 14 — le jour où la référence sera citée, le même travail vaudra présomption.",
+   "mots": 61,
+   "pages": [
+    "en18229-cadre",
+    "en18229-role",
+    "en18229-scenarios",
+    "en18229-score"
    ]
   },
   "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : seul un organisme de certification accrédité la prononce, au terme d'un audit en deux étapes.": {
@@ -47381,6 +48069,13 @@
     "_js"
    ]
   },
+  "Les compétences supposées des personnes désignées pour interpréter les sorties": {
+   "fr": "Les compétences supposées des personnes désignées pour interpréter les sorties",
+   "mots": 10,
+   "pages": [
+    "en18229-score"
+   ]
+  },
   "Les constantes du modèle": {
    "fr": "Les constantes du modèle",
    "mots": 4,
@@ -47443,6 +48138,13 @@
    "mots": 14,
    "pages": [
     "_js"
+   ]
+  },
+  "Les deux": {
+   "fr": "Les deux",
+   "mots": 2,
+   "pages": [
+    "en18229-role"
    ]
   },
   "Les deux autres angles morts : la responsabilité personnelle des dirigeants (art. #) et l’enregistrement auprès de l’autorité (art. #, §#).": {
@@ -47831,6 +48533,13 @@
     "_js"
    ]
   },
+  "Les limites de ces mesures et le risque résiduel qui subsiste": {
+   "fr": "Les limites de ces mesures et le risque résiduel qui subsiste",
+   "mots": 11,
+   "pages": [
+    "en18229-score"
+   ]
+  },
   "Les membres de l'organe de direction SONT TENUS de suivre une formation": {
    "fr": "Les membres de l'organe de direction SONT TENUS de suivre une formation",
    "mots": 13,
@@ -47878,6 +48587,13 @@
    "mots": 66,
    "pages": [
     "iso42001-soa"
+   ]
+  },
+  "Les mesures de supervision que le déployeur met en œuvre, et la documentation exigée pour chacune": {
+   "fr": "Les mesures de supervision que le déployeur met en œuvre, et la documentation exigée pour chacune",
+   "mots": 16,
+   "pages": [
+    "en18229-score"
    ]
   },
   "Les mesures produites servent de preuve devant l'administration. Un modèle qui les corrige doit dire qu'il les corrige.": {
@@ -48688,6 +49404,13 @@
    "mots": 15,
    "pages": [
     "_js"
+   ]
+  },
+  "Lever les verrous": {
+   "fr": "Lever les verrous",
+   "mots": 3,
+   "pages": [
+    "en18229-score"
    ]
   },
   "Leviers d’optimisation": {
@@ -49708,6 +50431,13 @@
    "mots": 27,
    "pages": [
     "_js"
+   ]
+  },
+  "L’article #, alinéa par alinéa": {
+   "fr": "L’article 14, alinéa par alinéa",
+   "mots": 5,
+   "pages": [
+    "en18229-score"
    ]
   },
   "L’article #, §# vous oblige à faire prendre les mesures correctives ou à faire retirer — ce qui suppose de savoir joindre le fabricant, et sous quel délai.": {
@@ -51103,6 +51833,13 @@
     "_js"
    ]
   },
+  "Mesures d'intervention déclenchées par alerte": {
+   "fr": "Mesures d'intervention déclenchées par alerte",
+   "mots": 6,
+   "pages": [
+    "en18229-scenarios"
+   ]
+  },
   "Mesures de gestion des risques": {
    "fr": "Mesures de gestion des risques",
    "mots": 5,
@@ -51145,6 +51882,20 @@
     "iso42001-ponts"
    ]
   },
+  "Mesures de revue rétrospective": {
+   "fr": "Mesures de revue rétrospective",
+   "mots": 4,
+   "pages": [
+    "en18229-scenarios"
+   ]
+  },
+  "Mesures de surveillance continue": {
+   "fr": "Mesures de surveillance continue",
+   "mots": 4,
+   "pages": [
+    "en18229-scenarios"
+   ]
+  },
   "Mesures de surveillance humaine recommandees au deployeur (Art. #(#)(d))": {
    "fr": "Mesures de surveillance humaine recommandees au deployeur (Art. 13(3)(d))",
    "mots": 9,
@@ -51164,6 +51915,20 @@
    "mots": 2,
    "pages": [
     "_js"
+   ]
+  },
+  "Mesures identifiées par le fournisseur et mises en œuvre par le déployeur": {
+   "fr": "Mesures identifiées par le fournisseur et mises en œuvre par le déployeur",
+   "mots": 12,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "Mesures intégrées par le fournisseur avant la mise sur le marché": {
+   "fr": "Mesures intégrées par le fournisseur avant la mise sur le marché",
+   "mots": 11,
+   "pages": [
+    "en18229-score"
    ]
   },
   "Mesures mises en œuvre": {
@@ -53126,6 +53891,13 @@
     "ia50"
    ]
   },
+  "Ne concerne que les systèmes d'identification biométrique à distance.": {
+   "fr": "Ne concerne que les systèmes d'identification biométrique à distance.",
+   "mots": 10,
+   "pages": [
+    "en18229-score"
+   ]
+  },
   "Ne cree aucune obligation nouvelle : il regit la forme de celles des §# a §# qui jouent deja.": {
    "fr": "Ne cree aucune obligation nouvelle : il regit la forme de celles des §1 a §4 qui jouent deja.",
    "mots": 16,
@@ -53265,6 +54037,13 @@
    "pages": [
     "training",
     "_js"
+   ]
+  },
+  "Neuf exigences et l’alinéa #(#) en dépendent.": {
+   "fr": "Neuf exigences et l’alinéa 14(5) en dépendent.",
+   "mots": 7,
+   "pages": [
+    "en18229-role"
    ]
   },
   "Neuf référentiels, neuf taux, et une question : lequel traiter d’abord. Ce parcours part de la synthèse, descend au plan, et finit par ce que le plan NE PEUT PAS faire — c’est cette dernière étape qui rend les deux premières défendables en comité.": {
@@ -54022,6 +54801,13 @@
     "_js"
    ]
   },
+  "Notice d’utilisation — # éléments": {
+   "fr": "Notice d’utilisation — 4 éléments",
+   "mots": 4,
+   "pages": [
+    "en18229-score"
+   ]
+  },
   "Notification a la Commission europeenne si risque systemique (Art. #(#)(b))": {
    "fr": "Notification a la Commission europeenne si risque systemique (Art. 55(1)(b))",
    "mots": 10,
@@ -54104,6 +54890,13 @@
    "mots": 5,
    "pages": [
     "rgpd-site"
+   ]
+  },
+  "Notifications en temps réel": {
+   "fr": "Notifications en temps réel",
+   "mots": 4,
+   "pages": [
+    "en18229-role"
    ]
   },
   "Notifier aux destinataires des services les incidents importants susceptibles de nuire à la fourniture de ces services. Sans retard injustifié — aucun délai chiffré, ce qui n'en fait pas une obligation molle : « sans retard injustifié » se juge après coup, sur ce qu'on aurait pu faire.": {
@@ -56274,6 +57067,13 @@
    "mots": 2,
    "pages": [
     "simulateur"
+   ]
+  },
+  "PROTÉGÉE PAR LE DROIT D'AUTEUR — © CEN et ses membres nationaux, tous droits réservés. Aucune partie du texte normatif n'est reproduite ici : seuls les numéros et les titres de paragraphes sont cités, et tout ce qui les décrit — y compris chaque question du cadre d'analyse — est rédigé par le cabinet.": {
+   "fr": "PROTÉGÉE PAR LE DROIT D'AUTEUR — © CEN et ses membres nationaux, tous droits réservés. Aucune partie du texte normatif n'est reproduite ici : seuls les numéros et les titres de paragraphes sont cités, et tout ce qui les décrit — y compris chaque question du cadre d'analyse — est rédigé par le cabinet.",
+   "mots": 52,
+   "pages": [
+    "en18229-role"
    ]
   },
   "PUE constaté en exploitation": {
@@ -60768,6 +61568,13 @@
     "_js"
    ]
   },
+  "Prévention ou réduction des risques pour la santé, la sécurité et les droits fondamentaux": {
+   "fr": "Prévention ou réduction des risques pour la santé, la sécurité et les droits fondamentaux",
+   "mots": 14,
+   "pages": [
+    "en18229-score"
+   ]
+  },
   "Prévision d'activité": {
    "fr": "Prévision d'activité",
    "mots": 3,
@@ -64176,6 +64983,13 @@
     "obs-rd"
    ]
   },
+  "Rester conscient du biais d'automatisation": {
+   "fr": "Rester conscient du biais d'automatisation",
+   "mots": 6,
+   "pages": [
+    "en18229-score"
+   ]
+  },
   "Rester ici": {
    "fr": "Rester ici",
    "mots": 2,
@@ -66626,8 +67440,9 @@
    "fr": "Sans objet",
    "mots": 2,
    "pages": [
+    "_js",
     "audit-ia-act",
-    "_js"
+    "en18229-score"
    ]
   },
   "Sans objet (echange interactif)": {
@@ -66655,7 +67470,8 @@
    "fr": "Sans réponse",
    "mots": 2,
    "pages": [
-    "audit-ia-act"
+    "audit-ia-act",
+    "en18229-score"
    ]
   },
   "Sans session, Sentinel affiche ses référentiels publics mais rien de ce qui vous appartient.": {
@@ -71079,18 +71895,12 @@
     "_js"
    ]
   },
-  "Taux de conformité — les neuf normes": {
-   "fr": "Taux de conformité — les neuf normes",
+  "Taux de conformité — les douze normes": {
+   "fr": "Taux de conformité — les douze normes",
    "mots": 6,
    "pages": [
+    "_coquille",
     "_js"
-   ]
-  },
-  "Taux de conformité — les onze normes": {
-   "fr": "Taux de conformité — les onze normes",
-   "mots": 6,
-   "pages": [
-    "_coquille"
    ]
   },
   "Taux de conformité — plan de mise en conformité": {
@@ -72720,6 +73530,13 @@
     "_js"
    ]
   },
+  "Trois catégories, du plus réactif au moins réactif.": {
+   "fr": "Trois catégories, du plus réactif au moins réactif.",
+   "mots": 8,
+   "pages": [
+    "en18229-scenarios"
+   ]
+  },
   "Trois colonnes, pas deux : décision, justification, ET statut de mise en œuvre. La troisième est celle que l’auditeur recoupe avec le terrain.": {
    "fr": "Trois colonnes, pas deux : décision, justification, ET statut de mise en œuvre. La troisième est celle que l’auditeur recoupe avec le terrain.",
    "mots": 23,
@@ -73089,6 +73906,13 @@
    "mots": 20,
    "pages": [
     "_js"
+   ]
+  },
+  "Un alinéa n’est pas tenu à # % : il est couvert par tous les paragraphes que l’annexe ZA lui associe, ou il ne l’est pas.": {
+   "fr": "Un alinéa n’est pas tenu à 80 % : il est couvert par tous les paragraphes que l’annexe ZA lui associe, ou il ne l’est pas.",
+   "mots": 26,
+   "pages": [
+    "en18229-score"
    ]
   },
   "Un argumentaire d’implantation opposable, au lieu d’une préférence justifiée après coup.": {
@@ -74554,6 +75378,13 @@
     "_js"
    ]
   },
+  "Une surveillance continue sans essai d'aptitude à l'utilisation (#) est une hypothèse : rien ne dit que la personne verra ce que l'écran montre, ni dans quel délai.": {
+   "fr": "Une surveillance continue sans essai d'aptitude à l'utilisation (5.3.4.5) est une hypothèse : rien ne dit que la personne verra ce que l'écran montre, ni dans quel délai.",
+   "mots": 29,
+   "pages": [
+    "en18229-scenarios"
+   ]
+  },
   "Une synthèse annuelle de votre conformité à l'IA Act, adaptée à votre organisation et à vos périmètres.": {
    "fr": "Une synthèse annuelle de votre conformité à l'IA Act, adaptée à votre organisation et à vos périmètres.",
    "mots": 18,
@@ -75785,9 +76616,10 @@
    "fr": "Votre rôle",
    "mots": 2,
    "pages": [
-    "pan-sia",
+    "empreinte-parc",
+    "en18229-role",
     "enveloppe",
-    "empreinte-parc"
+    "pan-sia"
    ]
   },
   "Votre score moyen": {
@@ -76345,6 +77177,20 @@
    "mots": 4,
    "pages": [
     "rgpd-site"
+   ]
+  },
+  "Vérification séparée par au moins deux personnes physiques (identification biométrique à distance)": {
+   "fr": "Vérification séparée par au moins deux personnes physiques (identification biométrique à distance)",
+   "mots": 12,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "Vérifier": {
+   "fr": "Vérifier",
+   "mots": 1,
+   "pages": [
+    "en18229-score"
    ]
   },
   "Vérifier FRIA →": {
@@ -78976,6 +79822,13 @@
     "_js"
    ]
   },
+  "délai de réaction (#)": {
+   "fr": "délai de réaction (5.2.2)",
+   "mots": 3,
+   "pages": [
+    "en18229-scenarios"
+   ]
+  },
   "délai dépassé — fichier trop lourd ?": {
    "fr": "délai dépassé — fichier trop lourd ?",
    "mots": 5,
@@ -80166,12 +81019,26 @@
     "_js"
    ]
   },
+  "laissées au déployeur": {
+   "fr": "laissées au déployeur",
+   "mots": 3,
+   "pages": [
+    "en18229-role"
+   ]
+  },
   "lancez l’enveloppe ci-dessus": {
    "fr": "lancez l’enveloppe ci-dessus",
    "mots": 5,
    "pages": [
     "enveloppe",
     "empreinte-parc"
+   ]
+  },
+  "latence d’intervention mesurée (#)": {
+   "fr": "latence d’intervention mesurée (5.7.1)",
+   "mots": 4,
+   "pages": [
+    "en18229-scenarios"
    ]
   },
   "law-tracker.europa.eu": {
@@ -80683,6 +81550,13 @@
     "empreinte-parc"
    ]
   },
+  "mises en œuvre par le fournisseur": {
+   "fr": "mises en œuvre par le fournisseur",
+   "mots": 6,
+   "pages": [
+    "en18229-role"
+   ]
+  },
   "missions réelles ; les": {
    "fr": "missions réelles ; les",
    "mots": 3,
@@ -80860,8 +81734,9 @@
    "fr": "non",
    "mots": 1,
    "pages": [
-    "rgpd-site",
-    "cra-role"
+    "cra-role",
+    "en18229-role",
+    "rgpd-site"
    ]
   },
   "non assigne": {
@@ -81173,6 +82048,7 @@
    "fr": "oui",
    "mots": 1,
    "pages": [
+    "en18229-role",
     "rgpd-site"
    ]
   },
@@ -84136,8 +85012,9 @@
    "fr": "À lire — Rien à saisir : l'écran explique. Il se marque « lu », et « lu » n'est pas vert.",
    "mots": 18,
    "pages": [
-    "ia-act-hub",
     "cra-signalement",
+    "en18229-score",
+    "ia-act-hub",
     "iso27001-millesime",
     "nist-cadre",
     "nist-genai"
@@ -85261,7 +86138,8 @@
    "fr": "État",
    "mots": 1,
    "pages": [
-    "compte"
+    "compte",
+    "en18229-score"
    ]
   },
   "État de conformité, écarts, plan d'action et recommandations, remis chaque année.": {
@@ -86339,6 +87217,20 @@
     "_js"
    ]
   },
+  "— Ce qui sépare une conception d'une mesure qui fonctionne : critères d'acceptation, essais, résultats.": {
+   "fr": "— Ce qui sépare une conception d'une mesure qui fonctionne : critères d'acceptation, essais, résultats.",
+   "mots": 15,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "— Ces points plafonnent le score : rien d'autre ne le fera monter tant qu'ils tiennent.": {
+   "fr": "— Ces points plafonnent le score : rien d'autre ne le fera monter tant qu'ils tiennent.",
+   "mots": 16,
+   "pages": [
+    "en18229-score"
+   ]
+  },
   "— Choisissez un rôle —": {
    "fr": "— Choisissez un rôle —",
    "mots": 3,
@@ -86404,11 +87296,53 @@
     "iso42001-certif"
    ]
   },
+  "— La personne désignée a un accès continu et en temps réel à l'état du système, à ses sorties, à ses alertes et à la disponibilité des fonctions d'intervention.": {
+   "fr": "— La personne désignée a un accès continu et en temps réel à l'état du système, à ses sorties, à ses alertes et à la disponibilité des fonctions d'intervention.",
+   "mots": 30,
+   "pages": [
+    "en18229-scenarios"
+   ]
+  },
   "— Le CSIRT désigné comme coordinateur ET l'ENISA, SIMULTANÉMENT, par la plateforme unique de signalement.": {
    "fr": "— Le CSIRT désigné comme coordinateur ET l'ENISA, SIMULTANÉMENT, par la plateforme unique de signalement.",
    "mots": 15,
    "pages": [
     "cra-signalement"
+   ]
+  },
+  "— Le système notifie la personne désignée lorsqu'il entre dans un état qui demande une attention ou une intervention humaine ; la personne perçoit, évalue, puis intervient.": {
+   "fr": "— Le système notifie la personne désignée lorsqu'il entre dans un état qui demande une attention ou une intervention humaine ; la personne perçoit, évalue, puis intervient.",
+   "mots": 26,
+   "pages": [
+    "en18229-scenarios"
+   ]
+  },
+  "— Les deux pièces remises — notice d'utilisation, documentation technique : c'est là que la conformité devient démontrable.": {
+   "fr": "— Les deux pièces remises — notice d'utilisation, documentation technique : c'est là que la conformité devient démontrable.",
+   "mots": 17,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "— Les interfaces, les notifications et les fonctions d'intervention.": {
+   "fr": "— Les interfaces, les notifications et les fonctions d'intervention.",
+   "mots": 9,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "— Les scénarios, les délais de réaction et la sélection des mesures — tout le reste se justifie par rapport à eux.": {
+   "fr": "— Les scénarios, les délais de réaction et la sélection des mesures — tout le reste se justifie par rapport à eux.",
+   "mots": 20,
+   "pages": [
+    "en18229-score"
+   ]
+  },
+  "— Les sorties sont examinées APRÈS avoir été produites, sur une interface qui porte le journal des sorties, leurs entrées, les scores de confiance, les alertes associées et la version du système.": {
+   "fr": "— Les sorties sont examinées APRÈS avoir été produites, sur une interface qui porte le journal des sorties, leurs entrées, les scores de confiance, les alertes associées et la version du système.",
+   "mots": 31,
+   "pages": [
+    "en18229-scenarios"
    ]
   },
   "— Les tarifs d'OpenAI, Google, Mistral, Meta et des hébergeurs de modèles ouverts ne figurent pas dans la table : ils ne sont pas relevés ici. Les ajouter demande de reporter le prix publié, sa devise, sa date de relevé et son adresse — pas de l'estimer.": {
@@ -87384,6 +88318,15 @@
     "pricing"
    ]
   },
+  "↓ Rôle et périmètre": {
+   "fr": "↓ Rôle et périmètre",
+   "mots": 3,
+   "pages": [
+    "en18229-cadre",
+    "en18229-scenarios",
+    "en18229-score"
+   ]
+  },
   "↓ Suis-je concerné ?": {
    "fr": "↓ Suis-je concerné ?",
    "mots": 3,
@@ -88174,124 +89117,128 @@
    "fr": "❔ Guide d'utilisation",
    "mots": 3,
    "pages": [
-    "pan-sia",
-    "enveloppe",
-    "empreinte-parc",
-    "obs-rd",
-    "empreinte",
-    "finops",
-    "empreinte-ia",
-    "ia50",
-    "rgpd-site",
-    "ia-act-hub",
-    "shadow-ai",
+    "adoption",
+    "apercu",
+    "articles",
+    "audit",
+    "audit-ia-act",
+    "benchmark",
+    "cadre-normatif",
+    "carto",
+    "carto-uc",
+    "clients",
+    "comp",
+    "compte",
+    "conf-limites",
+    "conf-plan",
+    "conf-taux",
+    "conformite-globale",
     "cra",
+    "cra-chiffre",
     "cra-ecarts",
     "cra-role",
-    "cra-chiffre",
     "cra-signalement",
-    "iso27001-risques",
-    "iso27001-soa",
-    "iso27001",
-    "iso27001-millesime",
-    "iso42001",
-    "iso42001-soa",
-    "nist-profil",
-    "nist-cadre",
-    "nist-genai",
-    "owasp-dix",
-    "nist53-socle",
-    "nist82-ot",
-    "owasp-pont",
-    "iso42001-certif",
-    "iso42001-ponts",
-    "dora-qualifier",
-    "dora-risque",
-    "dora-tiers",
     "dora-incident",
     "dora-iso",
+    "dora-qualifier",
+    "dora-risque",
     "dora-supervision",
-    "nis2-qualifier",
+    "dora-tiers",
+    "empreinte",
+    "empreinte-ia",
+    "empreinte-parc",
+    "en18229-cadre",
+    "en18229-role",
+    "en18229-scenarios",
+    "en18229-score",
+    "entreprise",
+    "enveloppe",
+    "equipe",
+    "espace",
+    "evals",
+    "fiche-ae",
+    "fiche-ar",
+    "fiche-au",
+    "fiche-br",
+    "fiche-ca",
+    "fiche-ch",
+    "fiche-cl",
+    "fiche-cn",
+    "fiche-de",
+    "fiche-eu",
+    "fiche-fr",
+    "fiche-gb",
+    "fiche-il",
+    "fiche-in",
+    "fiche-jp",
+    "fiche-kr",
+    "fiche-mx",
+    "fiche-my",
+    "fiche-ng",
+    "fiche-ru",
+    "fiche-sg",
+    "fiche-tr",
+    "fiche-us",
+    "fiche-za",
+    "finops",
+    "fria",
+    "geo",
+    "gouvernance",
+    "historique",
+    "ia-act-hub",
+    "ia50",
+    "ingenierie",
+    "iso27001",
+    "iso27001-millesime",
+    "iso27001-risques",
+    "iso27001-soa",
+    "iso42001",
+    "iso42001-certif",
+    "iso42001-ponts",
+    "iso42001-soa",
+    "juridique",
+    "matrice",
+    "maturite",
     "nis2",
-    "nis2-gouvernance",
-    "nis2-signalement",
     "nis2-chiffre",
-    "recyf-objectifs",
+    "nis2-gouvernance",
+    "nis2-qualifier",
+    "nis2-signalement",
+    "nist-cadre",
+    "nist-genai",
+    "nist-profil",
+    "nist53-socle",
+    "nist82-ot",
+    "obs-rd",
+    "owasp-dix",
+    "owasp-pont",
+    "pan-sia",
+    "parties",
+    "pricing",
+    "qualif-assistee",
+    "radar",
+    "rag",
     "recyf-analyse",
-    "rgpd-hub",
-    "rgpd-conformite",
-    "rgpd-sensibilisation",
-    "rgpd-doc",
-    "rgpd-pbd",
+    "recyf-objectifs",
+    "registre",
+    "regs",
+    "report",
     "rgpd-aipd",
     "rgpd-cartographie",
+    "rgpd-conformite",
+    "rgpd-doc",
+    "rgpd-hub",
+    "rgpd-pbd",
+    "rgpd-sensibilisation",
+    "rgpd-site",
     "rgpd-traitements",
-    "carto",
-    "comp",
-    "geo",
-    "regs",
-    "veille",
-    "historique",
-    "espace",
-    "maturite",
-    "gouvernance",
-    "registre",
-    "qualif-assistee",
-    "simulateur",
-    "audit-ia-act",
-    "matrice",
-    "articles",
-    "fria",
     "roadmap",
     "sanctions",
-    "benchmark",
-    "pricing",
+    "shadow-ai",
+    "simulateur",
     "templates",
-    "rag",
-    "clients",
-    "fiche-ch",
-    "fiche-br",
-    "fiche-cl",
-    "juridique",
-    "entreprise",
-    "conformite-globale",
-    "adoption",
-    "ingenierie",
-    "cadre-normatif",
-    "compte",
-    "conf-taux",
-    "conf-plan",
-    "conf-limites",
-    "apercu",
-    "evals",
-    "audit",
-    "equipe",
     "training",
-    "report",
-    "parties",
-    "radar",
-    "carto-uc",
-    "fiche-eu",
-    "fiche-de",
-    "fiche-fr",
-    "fiche-cn",
-    "fiche-ru",
-    "fiche-kr",
-    "fiche-ca",
-    "fiche-gb",
-    "fiche-tr",
-    "fiche-au",
-    "fiche-il",
-    "fiche-sg",
-    "fiche-in",
-    "fiche-my",
-    "fiche-us",
-    "fiche-ae",
-    "fiche-jp",
-    "fiche-ar",
-    "fiche-mx",
-    "fiche-za",
-    "fiche-ng"
+    "veille"
    ]
   },
   "⤵ Poser le revenu d’ÉQUILIBRE (EVA nulle) — pour voir le cas limite": {

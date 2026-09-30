@@ -187,6 +187,31 @@ STATUTS = {
     "ecartee": "Écartée par une personne ; le registre n'a pas bougé",
 }
 
+# ── CE QUE « PAS ENCORE CLASSÉ » VEUT DIRE, DÉCLARÉ UNE SEULE FOIS ─────────
+# TROIS VALEURS DISENT LA MÊME CHOSE : la colonne vide, la chaîne vide et
+# « a_evaluer ». La route qui propose les classifications les nomme déjà dans
+# son SQL (« classification IS NULL OR classification='' OR
+# classification='a_evaluer' ») ; le comptage qui alimente le rail de
+# « Cartographier » lit CETTE table, pour que l'écran et la barre ne puissent
+# pas compter deux lots différents. Une règle garde l'accord des deux.
+CLASSES_NON_PRONONCEES = ("", "a_evaluer")
+
+
+def sans_classification(systeme):
+    """Vrai si aucune classification n'a été prononcée sur ce système.
+
+    « Prononcée » est le mot juste : seule une décision humaine écrit cette
+    colonne (voir `appliquer`), et « a_evaluer » est l'aveu qu'elle ne l'a pas
+    encore été — pas une classe.
+    """
+    if not isinstance(systeme, dict):
+        return False
+    v = systeme.get("classification")
+    if v is None:
+        return True
+    return str(v).strip() in CLASSES_NON_PRONONCEES
+
+
 DECISIONS = {
     "valider": {"statut": "validee", "ecrit_le_registre": True,
                 "nom": "Valider la proposition"},

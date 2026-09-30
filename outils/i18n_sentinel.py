@@ -78,7 +78,11 @@ NOMS_PROPRES = ['EU AI Act', 'NIS 2', 'DORA', 'CRA', 'ReCyF', 'ISO 27001',
                 # « Digital Omnibus » est le nom usuel du règlement (UE) 2026/1744 :
                 # il ne se traduit pas, et la règle « identique au français » doit
                 # l'accepter comme elle accepte « DORA » ou « EU AI Act ».
-                'Digital Omnibus']
+                'Digital Omnibus',
+                # LA RÉFÉRENCE D'UNE NORME NE SE TRADUIT PAS : « prEN 18229-3 »
+                # est ce qui l'identifie au CEN, et le traduire la rendrait
+                # introuvable. Seul son TITRE se traduit, et il l'est.
+                'prEN 18229-3']
 
 #: CE QUI DIT QU'UNE CHAÎNE EST DU FRANÇAIS : un accent, ou un mot-outil que
 #: l'anglais n'emploie pas. « plus », « en », « on » sont exclus : ils sont

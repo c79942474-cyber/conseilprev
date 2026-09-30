@@ -370,18 +370,49 @@ def _pages_de_PAGE_META():
     return re.findall(r"(?m)^\s*'?([A-Za-z0-9_-]+)'?\s*:\s*\{", src[i:j])
 
 
-def test_PAGE_META_porte_bien_118_pages():
-    assert len(_pages_de_PAGE_META()) == 118, len(_pages_de_PAGE_META())
+#: LES PAGES AJOUTÉES APRÈS LA PHOTO DU POINT DE DÉPART, et rien d'autre.
+#:
+#: POURQUOI CETTE LISTE EXISTE. MESURE_AVANT.json est une PHOTO : l'état des
+#: 118 pages d'alors, avant qu'une seule ligne ne soit traduite. Une page
+#: créée depuis n'y figure pas, et ne peut pas y figurer — la reprendre
+#: aujourd'hui photographierait un produit déjà traduit, ce qui ne serait
+#: plus un « avant ».
+#:
+#: CE QUE LA DÉCLARATION NE PERMET PAS. Elle ne dispense de rien : une page
+#: nommée ici doit être au CATALOGUE et traduite comme les autres — c'est
+#: test_i18n_sentinel_outil qui l'exige, et il ne connaît pas cette liste.
+#: Elle ne permet pas non plus d'y cacher une page ancienne : la règle
+#: vérifie que chacune est VRAIMENT absente de la photo.
+PAGES_APRES_LA_MESURE = frozenset({
+    "en18229-role", "en18229-scenarios", "en18229-cadre", "en18229-score",
+})
+
+
+def test_PAGE_META_porte_bien_122_pages():
+    assert len(_pages_de_PAGE_META()) == 122, len(_pages_de_PAGE_META())
 
 
 def test_MESURE_AVANT_couvre_chaque_page_de_PAGE_META():
     """Une page absente de la mesure est une page que le lot de traduction
-    n'aura pas à battre — donc qu'il pourra oublier."""
+    n'aura pas à battre — donc qu'il pourra oublier. Seules les pages nées
+    APRÈS la photo y échappent, et elles se déclarent une par une."""
     assert os.path.isfile(MESURE_AVANT), "i18n/sentinel/MESURE_AVANT.json manque"
     m = json.load(io.open(MESURE_AVANT, encoding="utf-8"))
     attendues = set(_pages_de_PAGE_META())
     mesurees = set(m["pages"])
-    assert attendues <= mesurees, "pages de PAGE_META absentes de la mesure : %s" % sorted(attendues - mesurees)
+    oubliees = sorted(attendues - mesurees - PAGES_APRES_LA_MESURE)
+    assert not oubliees, "pages de PAGE_META absentes de la mesure : %s" % oubliees
+    #  UNE DÉCLARATION QUI NE SERT PLUS EST UNE DÉCLARATION QUI MENT : une
+    #  page déclarée « née après » alors qu'elle est dans la photo ferait
+    #  croire à un trou qui n'existe pas, et couvrirait le jour où une vraie
+    #  page manquerait.
+    fantomes = sorted(PAGES_APRES_LA_MESURE & mesurees)
+    assert not fantomes, ("déclarées nées après la photo, mais bien dans la "
+                          "photo : %s" % fantomes)
+    inconnues = sorted(PAGES_APRES_LA_MESURE - attendues)
+    assert not inconnues, ("déclarées nées après la photo, mais absentes de "
+                           "PAGE_META : %s" % inconnues)
+    #  LA PHOTO GARDE SON COMPTE. Elle ne se recalcule pas : elle date.
     assert m["global"]["pages"] == len(m["pages"]) == 118, m["global"]
 
 

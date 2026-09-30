@@ -53,11 +53,24 @@ NODE = shutil.which("node")
 CLES = {"nis2": "cp-sentinel-nis2-v1", "recyf": "cp-sentinel-recyf-v2",
         "iso27001": "cp-sentinel-iso27001-v1",
         "iso42001": "cp-sentinel-iso42001-v1",
-        "cra": "cp-sentinel-cra-v1", "dora": "cp-sentinel-dora-v1"}
+        "cra": "cp-sentinel-cra-v1", "dora": "cp-sentinel-dora-v1",
+        #  L'AUDIT DE MATURITÉ N'EST PAS UN RÉFÉRENTIEL DU RAIL, et il entre
+        #  pourtant ici : ses seize réponses n'étaient gardées nulle part et
+        #  disparaissaient à chaque rechargement. Un module qu'on doit refaire
+        #  pour avoir changé d'onglet ne se remplit jamais.
+        "maturite": "cp-sentinel-maturite-v1",
+        #  prEN 18229-3 GARDE PLUS QUE DES RÉPONSES : son écran porte aussi le
+        #  rôle endossé, la nature du système (identification biométrique à
+        #  distance ou non) et la liste des scénarios de risque avec leurs deux
+        #  durées. Un client qui perdrait ses scénarios à chaque rechargement
+        #  ne les saisirait pas deux fois.
+        "en18229_3": "cp-sentinel-en18229-v1"}
 
 #: CE QUI GARDAIT DÉJÀ SES RÉPONSES, ET OÙ. Un référentiel du rail qui ne
 #: serait ni ici ni dans la mémoire des écrans perdrait les siennes au
 #: rechargement — c'est la règle de couverture qui le dit.
+import parcours_normes as pn
+
 DEJA_GARDES = {"nist_ai_rmf": "cp-sentinel-nist-profil-v1",
                "owasp_llm": "cp-sentinel-owasp-declares-v1",
                "nist_800_53": "cp-sentinel-nist53-v1",
@@ -391,7 +404,16 @@ def test_chaque_referentiel_du_rail_garde_ses_reponses_quelque_part():
       out.cles = {};
       Object.keys(MEMOIRE).forEach(function (k) { out.cles[k] = MEMOIRE[k].cle; });
     """)
-    sans = [n for n in o["rail"] if n not in o["memoire"] and n not in DEJA_GARDES]
+    #  « CARTOGRAPHIER » NE GARDE RIEN ICI, ET C'EST MESURÉ : six de ses sept
+    #  écrans vivent sur le serveur (le registre, la qualification, le FinOps,
+    #  l'empreinte) ou dans leur propre mémoire (`cp-sentinel-maturite-v1`, et
+    #  les écrans marqués lus dans `cp-sentinel-rail-v1`). Le seul état qui
+    #  reste dans la page est celui du simulateur, qui se rejoue en quatre
+    #  clics. Le moteur le déclare hors conformité ; une entrée de plus dans
+    #  MEMOIRE ne garderait rien que ces magasins ne gardent déjà.
+    hors = set(getattr(pn, "HORS_CONFORMITE", ()))
+    sans = [n for n in o["rail"]
+            if n not in o["memoire"] and n not in DEJA_GARDES and n not in hors]
     assert not sans, "référentiels du rail qui perdent leurs réponses : %s" % sans
     assert o["cles"] == CLES, o["cles"]
 

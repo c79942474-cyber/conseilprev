@@ -53,6 +53,7 @@ import nis2  # noqa: E402
 import nis2_recyf  # noqa: E402
 import nist_ai_rmf  # noqa: E402
 import nist_800_53  # noqa: E402
+import en18229_3
 import nist_800_82  # noqa: E402
 import owasp_llm  # noqa: E402
 
@@ -203,6 +204,18 @@ def _remplis():
                                           ("prouve", "tenu", "amorce"))},
         "nist_800_82": {"etats": _alterne([a["cle"] for a in nist_800_82.AXES],
                                           ("prouve", "tenu", "amorce"))},
+        #  prEN 18229-3 : LE BANC PORTE LES DEUX NOMBRES DU SCÉNARIO, et un
+        #  scénario qui TIENT son délai — sinon le verrou arithmétique
+        #  plafonnerait le taux et la règle mesurerait le plafond, pas le taux.
+        "en18229_3": {
+            "rbi": False,
+            "fournisseur": _alterne(
+                [e["cle"] for e in en18229_3.applicables("fournisseur")],
+                (True, True, "partiel")),
+            "scenarios": [{"nom": "Tri de courriels", "delai": 2,
+                           "delai_unite": "h", "latence": 20,
+                           "latence_unite": "min",
+                           "categories": ["retrospective"]}]},
         "rgpd": {"traitements": [{"nom": "Paie",
                                   "champs": {k: True for k, _l
                                              in pn.RGPD_CHAMPS_ART30},
@@ -271,7 +284,10 @@ def test_les_ONZE_ecrans_vierges_ensemble_rendent_onze_tirets():
 #  2. CE QUE LE RAIL DIT REMPLI, LE TAUX LE VOIT
 # ══════════════════════════════════════════════════════════════════════════
 
-RAIL = sorted(pn.BLOCS_PAR_NORME)
+#: LES NORMES DU RAIL — celles qui ont un taux de conformité. Le rail porte
+#: aussi « Cartographier », qui est un inventaire : il n'a ni traducteur, ni
+#: évaluateur, ni carte chiffrée, et le moteur le déclare hors conformité.
+RAIL = sorted(set(pn.BLOCS_PAR_NORME) - pn.HORS_CONFORMITE)
 
 
 def test_les_normes_du_rail_sont_TOUTES_traduites():
