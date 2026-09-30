@@ -34,6 +34,7 @@ import re
 
 import pytest
 
+import parcours_normes
 import conformite
 
 _RACINE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -221,9 +222,14 @@ def _classes_posees_sur_les_onglets():
     n'importe où : `active`, par exemple, est posée sur des pastilles de
     carrousel et des boutons, jamais sur un onglet.
 
-    Deux chemins sont reconnus, les deux qu'emploie le script : un parcours
+    Trois chemins sont reconnus, les trois qu'emploie le script : un parcours
     `querySelectorAll('.sb-item…').forEach(function (v) { v.classList… })`,
-    et une fonction appelée sur `v` qui pose elle-même la classe (`_ici`)."""
+    une fonction appelée sur `v` qui pose elle-même la classe (`_ici`), et le
+    parcours du rail — `var items = document.querySelectorAll('.sb-nav
+    .sb-item[data-norme="' + norme + '"]')` puis `Array.prototype.forEach.call(
+    items, function (it) { … })`, qui pose l'état d'un bloc sur son onglet.
+    CE TROISIÈME CHEMIN MANQUAIT, et la règle accusait le rail de styler une
+    classe morte alors qu'il la pose bien — sur un onglet, et sur lui seul."""
     def corps(depuis):
         n, i = 0, depuis
         while i < len(JS):
@@ -245,6 +251,21 @@ def _classes_posees_sur_les_onglets():
             r"\b%s\.classList\.(?:add|toggle)\(\s*'([\w-]+)'" % v, b))
         for f in re.findall(r"\b(\w+)\(\s*%s\s*\)" % v, b):
             posees |= aides.get(f, set())
+    #  LE PARCOURS DU RAIL : la liste des onglets est rangée dans une variable
+    #  (le sélecteur est composé avec le nom du référentiel), puis traversée par
+    #  `Array.prototype.forEach.call`. On exige que la variable vienne bien d'un
+    #  `querySelectorAll` visant `.sb-item` — sinon la règle se contenterait de
+    #  n'importe quelle liste, et laisserait passer le défaut qu'elle garde.
+    for m in re.finditer(r"var\s+(\w+)\s*=\s*document\.querySelectorAll\("
+                         r"\s*'[^']*\.sb-item[^']*'", JS):
+        liste = m.group(1)
+        for f in re.finditer(r"Array\.prototype\.forEach\.call\(\s*%s\s*,"
+                             r"\s*function\s*\(\s*(\w+)\s*\)\s*\{" % liste, JS):
+            v, b = f.group(1), corps(f.end() - 1)
+            posees |= set(re.findall(
+                r"\b%s\.classList\.(?:add|toggle)\(\s*'([\w-]+)'" % v, b))
+            for nom in re.findall(r"\b(\w+)\(\s*%s\s*\)" % v, b):
+                posees |= aides.get(nom, set())
     return posees
 
 
@@ -316,7 +337,11 @@ def test_la_feuille_de_style_NE_SE_SEPARE_PAS_de_la_table():
             "du moteur (%s) — ligne attendue : %s" % (cle, coul, attendu))
     declarees = set(re.findall(
         r'\.sb-item\[data-norme="([a-z0-9_]+)"\]\{--sb-ic:', HTML))
-    orphelines = declarees - set(conformite.COULEURS)
+    #  UN PARCOURS QUI N'EST PAS UNE NORME GARDE LE BLEU DE SON GROUPE, et le
+    #  moteur du rail le déclare hors conformité : la palette des référentiels
+    #  ne le concerne pas, et la barre ne doit pas le faire passer pour une norme.
+    orphelines = (declarees - set(conformite.COULEURS)
+                  - set(parcours_normes.HORS_CONFORMITE))
     assert not orphelines, (
         "la feuille de style colore des référentiels que le moteur ne "
         "connaît pas : %s" % sorted(orphelines))
@@ -453,7 +478,8 @@ def test_l_ORDRE_de_la_barre_est_celui_qui_a_ete_VALIDE():
     for cle in _entrees():
         if cle not in vus:
             vus.append(cle)
-    dans_barre = [c for c in vus if c != "ia_act"]
+    dans_barre = [c for c in vus if c != "ia_act"
+                  and c not in parcours_normes.HORS_CONFORMITE]
     assert dans_barre == list(conformite.ORDRE_BARRE), (
         "l'ordre d'affichage a changé sans que la palette soit revalidée :\n"
         "  écran  : %s\n  validé : %s" % (dans_barre, list(conformite.ORDRE_BARRE)))

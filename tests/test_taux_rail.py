@@ -271,7 +271,10 @@ def test_les_ONZE_ecrans_vierges_ensemble_rendent_onze_tirets():
 #  2. CE QUE LE RAIL DIT REMPLI, LE TAUX LE VOIT
 # ══════════════════════════════════════════════════════════════════════════
 
-RAIL = sorted(pn.BLOCS_PAR_NORME)
+#: LES NORMES DU RAIL — celles qui ont un taux de conformité. Le rail porte
+#: aussi « Cartographier », qui est un inventaire : il n'a ni traducteur, ni
+#: évaluateur, ni carte chiffrée, et le moteur le déclare hors conformité.
+RAIL = sorted(set(pn.BLOCS_PAR_NORME) - pn.HORS_CONFORMITE)
 
 
 def test_les_normes_du_rail_sont_TOUTES_traduites():

@@ -8217,6 +8217,38 @@ function regSkeletonHTML(){
   return new Array(5).fill(row).join('');
 }
 
+/* ── LA COMPLÉTUDE D'UNE FICHE, UNE SEULE FOIS, ET HORS DE regRender ──────
+   ELLE VIVAIT DANS regRender, ET regFetch L'APPELAIT : mesuré au navigateur,
+   l'appel levait une ReferenceError que le `.catch` de regFetch avalait en
+   « Erreur de chargement » — la table du registre ne s'affichait plus, et le
+   rail de « Cartographier » disait « aucun système déclaré » à qui en avait
+   deux. La pastille de la ligne et le rail lisent désormais la MÊME fonction.
+
+   LES 10 QUESTIONS ESSENTIELLES (Hub France IA) : outil, service, usage,
+   données, personnes concernées, rôle, transparence, haut risque, preuves,
+   fournisseur. */
+function regCompleteness(s){
+  var champs = [s.nom, s.service, s.finalite, s.donnees_utilisees, s.personnes_concernees,
+    (s.roles && s.roles.length>0) ? "x" : "", (s.transparence_art50 && s.transparence_art50!=="a_evaluer") ? "x" : "",
+    (s.classification && s.classification!=="a_evaluer") ? "x" : "", s.preuves_conformite, s.fournisseur];
+  var remplis = champs.filter(function(c){ return c && c.toString().trim().length > 0; }).length;
+  return Math.round(remplis / champs.length * 100);
+}
+
+/* ── CE QUE LE RAIL DE « CARTOGRAPHIER » LIT DU REGISTRE ───────────────────
+   LA MÊME COMPLÉTUDE QUE LA PASTILLE DE CHAQUE LIGNE, pas une seconde
+   définition — sinon la ligne dirait 100 % et le rail « fiche incomplète ».
+   APPELÉE À CHAQUE CHANGEMENT DU REGISTRE, PAS SEULEMENT AU CHARGEMENT :
+   l'enregistrement d'une fiche et la suppression d'un système modifient
+   REG_DATA sur place, sans repasser par le serveur ; sans cet appel le rail
+   resterait sur la liste d'avant, et le vert d'un module rempli n'arriverait
+   qu'au rechargement de la page. */
+function regDeposerAuRail(){
+  if (typeof window.cartoDeposer !== 'function') return;
+  window.cartoDeposer('registre', { systemes: REG_DATA.map(function (x) {
+    return { nom: x.nom, completude: regCompleteness(x) }; }) });
+}
+
 function regFetch(){
   var body = document.getElementById("reg-sys-body");
   if(body) body.innerHTML = regSkeletonHTML();
@@ -8238,6 +8270,7 @@ function regFetch(){
     if (d.modeles_tarifes && typeof window.regModelesTarifesConnus === 'function') {
       window.regModelesTarifesConnus(d.modeles_tarifes);
     }
+    regDeposerAuRail();
       regRender();
     })
     .catch(function(e){
@@ -8280,15 +8313,6 @@ function regRender(){
   function regAttr(v){
     return String(v == null ? '' : v).replace(/&/g,'&amp;').replace(/"/g,'&quot;')
       .replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  }
-  function regCompleteness(s){
-    // Les 10 questions essentielles (Hub France IA) : outil, service, usage,
-    // donnees, personnes concernees, role, transparence, haut risque, preuves, fournisseur.
-    var champs = [s.nom, s.service, s.finalite, s.donnees_utilisees, s.personnes_concernees,
-      (s.roles && s.roles.length>0) ? "x" : "", (s.transparence_art50 && s.transparence_art50!=="a_evaluer") ? "x" : "",
-      (s.classification && s.classification!=="a_evaluer") ? "x" : "", s.preuves_conformite, s.fournisseur];
-    var remplis = champs.filter(function(c){ return c && c.toString().trim().length > 0; }).length;
-    return Math.round(remplis / champs.length * 100);
   }
   body.innerHTML = data.map(function(s){
     var cl = CLASSIF_LABELS[s.classification] || CLASSIF_LABELS.a_evaluer;
@@ -8667,6 +8691,7 @@ window.regSave = function(){
       } else {
         REG_DATA.unshift(d.systeme);
       }
+      regDeposerAuRail();
       regRender();
     })
     .catch(function(){ alert("Erreur lors de l'enregistrement."); });
@@ -8684,6 +8709,7 @@ window.regDelete = function(id){
       window.sentRegistreOublier();   /* même raison qu'à l'enregistrement */
       /* Retrait local de REG_DATA, sans recharger toute la liste depuis le serveur. */
       REG_DATA = REG_DATA.filter(function(s){ return s.id !== id; });
+      regDeposerAuRail();
       regRender();
       window.focusRendre('reg-sys-body', '.rs-del', rang);
     })
@@ -25019,6 +25045,16 @@ document.addEventListener('keydown', function(e){
           return;
         }
         var c = j.couverture;
+        /* LE RAIL LIT CE QUE CET ÉCRAN PEINT, et le nom des lignes non
+           chiffrées : le moteur en tire « renseignez le modèle, l'unité,
+           les volumes et leur source — Registre IA → fiche du système »,
+           c'est-à-dire l'endroit où aller, et non un pourcentage. */
+        if (typeof window.cartoDeposer === 'function') {
+          window.cartoDeposer('finops', { couverture: {
+            total: c.total, instruites: c.instruites,
+            non_chiffres: (c.lignes || []).filter(function (l) { return !l.instruit; })
+                            .map(function (l) { return l.nom; }) } });
+        }
         couv.textContent = c.total ? (c.instruites + ' / ' + c.total) : '0';
         document.getElementById('fo-couv-detail').innerHTML =
           c.total
@@ -25425,6 +25461,13 @@ document.addEventListener('keydown', function(e){
 
   function peindreCouverture(j){
     var c = j.couverture;
+    /* LE RAIL LIT CE QUE CET ÉCRAN PEINT, et le nom des systèmes sans
+       volume : sans eux, la barre dirait « incomplet » sans dire lequel. */
+    if (typeof window.cartoDeposer === 'function') {
+      window.cartoDeposer('empreinte', { couverture: {
+        systemes: c.systemes, chiffrable: c.chiffrable,
+        volume_manquant: c.volume_manquant || [] } });
+    }
     document.getElementById('ei-couv-chiffre').textContent =
       c.systemes ? (c.chiffrable + ' / ' + c.systemes) : '0';
     var t = c.systemes
@@ -28774,6 +28817,13 @@ function qualifCharger() {
     .then(function (r) { return r.json(); })
     .then(function (d) {
       QUALIF_PROPS = d.propositions || [];
+      /* CE QUI RESTE À CLASSER, TEL QUE LE SERVEUR LE COMPTE : les lignes du
+         registre sans classification. Le rail ne recompte rien — et la clé
+         est celle que la route renvoie : `restants`, essayé d'abord, est le
+         reste d'un LOT de propositions, pas le reste à classer. */
+      if (typeof window.cartoDeposer === 'function' && typeof d.a_qualifier === 'number') {
+        window.cartoDeposer('qualification', { a_qualifier: d.a_qualifier });
+      }
       qualifPeindre();
     })
     .catch(function () {
@@ -29974,7 +30024,58 @@ window.railNormeDuPanneau = railNormeDuPanneau;
    UN COLLECTEUR PAR RÉFÉRENTIEL, ET AUCUNE DONNÉE FABRIQUÉE. Un module qui
    n'a encore rien chargé rend une déclaration vide, et le serveur dit ce
    qui manque — il ne suppose rien. */
+/* ── CE QUE « CARTOGRAPHIER » TIENT DÉJÀ, ET QUI NE VIT PAS TOUJOURS ICI ──
+   TROIS DE SES SEPT ÉCRANS N'ONT D'ÉTAT QUE SUR LE SERVEUR : le registre,
+   la qualification assistée et l'empreinte. Les collecteurs du rail, eux,
+   sont SYNCHRONES — ils rendent un objet, pas une promesse. Plutôt que de
+   rendre tout le rail asynchrone pour trois écrans, chacun DÉPOSE ici ce
+   qu'il vient de recevoir, au moment où il le reçoit. Le rail lit ce dépôt.
+
+   UN ÉCRAN JAMAIS OUVERT NE DÉPOSE RIEN, et c'est voulu : le moteur dit
+   alors « ouvrez l'écran, le chiffrage n'a pas encore été demandé », ce qui
+   est vrai — au lieu de supposer un parc vide et de peindre un vert ou un
+   rouge sur rien. */
+var CARTO_ETAT = {};
+window.cartoDeposer = function (cle, valeur) {
+  CARTO_ETAT[cle] = valeur;
+  /* Le dépôt change l'avancement : le rail se repeint, sans attendre le
+     prochain changement de page. */
+  if (typeof railDemander === 'function') railDemander('cartographier');
+};
+
 var RAIL_DECL = {
+  /* LES SEUILS NE SONT PAS RÉINVENTÉS ICI. La complétude d'une fiche est
+     celle que le registre affiche déjà en pastille ; les couvertures sont
+     celles que le FinOps et l'Empreinte peignent en tête de leur écran ;
+     le compteur de maturité est celui de la boîte du score. Le rail lit ce
+     que le client voit — sinon l'écran dirait une chose, la barre une
+     autre, et c'est l'écran qu'on croirait. */
+  cartographier: function () {
+    var d = {};
+
+    /* Le simulateur : son état courant, par sa porte. */
+    var sim = (typeof window.simDonnees === 'function') ? (window.simDonnees() || {}) : {};
+    var niveau = null;
+    try {
+      if (sim.name && typeof window.simClassifier === 'function') {
+        niveau = (window.simClassifier() || {}).level || null;
+      }
+    } catch (e) { niveau = null; }
+    d.simulateur = { nom: sim.name || null, secteur: sim.secteur || null,
+                     type: sim.type || null, niveau: niveau };
+
+    /* Le registre, la qualification, le FinOps, l'Empreinte : leur dépôt. */
+    d.registre = CARTO_ETAT.registre || {};
+    d.qualification = CARTO_ETAT.qualification || {};
+    d.finops = CARTO_ETAT.finops || {};
+    d.empreinte = CARTO_ETAT.empreinte || {};
+
+    /* L'audit de maturité vit entièrement dans cet onglet : on le lit. */
+    var cur = (typeof window.matGetCur === 'function') ? window.matGetCur() : null;
+    var r = (cur && typeof window.matRepondu === 'function') ? window.matRepondu(cur) : null;
+    d.maturite = r ? { repondues: r.repondues, total: r.total } : {};
+    return d;
+  },
   nis2: function () {
     var d = (typeof nis2Charge === 'function') ? nis2Charge() : {};
     d.mesures = NIS2_ETAT.mesures;
@@ -30172,6 +30273,24 @@ function railBulle(b, e, p) {
     + (nat ? '\n\n' + nat.nom + ' — ' + nat.dit : '');
 }
 
+/* TROIS BATTEMENTS VERTS, PUIS PLUS RIEN. La classe est retirée à la fin de
+   l'animation : la laisser en place rejouerait le clignotement au prochain
+   repeint de la barre — et la barre se repeint à chaque réponse. */
+var RAIL_FETE = {};
+function railFeter(it) {
+  var cle = _railPanneau(it) || '';
+  if (RAIL_FETE[cle]) clearTimeout(RAIL_FETE[cle]);
+  it.classList.remove('rail-fete');
+  /* UN REFLOW ENTRE LE RETRAIT ET LA POSE, sinon l'animation ne repart pas
+     quand deux blocs passent au vert à la suite. */
+  void it.offsetWidth;
+  it.classList.add('rail-fete');
+  RAIL_FETE[cle] = setTimeout(function () {
+    it.classList.remove('rail-fete');
+    RAIL_FETE[cle] = null;
+  }, 3200);
+}
+
 function railPeindreBarre(norme, p) {
   if (!p || !p.blocs) return;
   var etats = p.etats || {};
@@ -30202,7 +30321,17 @@ function railPeindreBarre(norme, p) {
       puce.setAttribute('title', '');
       it.appendChild(puce);
     }
+    /* ── LE PASSAGE AU VERT SE VOIT, ET UNE SEULE FOIS ────────────────────
+       CE QUI SE REMARQUE, C'EST LE CHANGEMENT. Sept onglets verts qui
+       clignotent en permanence ne signalent plus rien ; trois battements au
+       moment où un module se remplit, puis le filet vert qui reste, disent
+       « celui-là vient d'être fait ». La comparaison porte sur l'état
+       PRÉCÉDENT de l'onglet — pas sur une table tenue à côté, qui pourrait
+       mentir après un rechargement de page. */
+    var avant = it.getAttribute('data-rail');
+    var fait = (b.etat === 'validee' || b.etat === 'lue');
     it.setAttribute('data-rail', b.etat);
+    if (fait && avant && avant !== b.etat) railFeter(it);
     /* LA FLÈCHE VERS LE BAS DÉSIGNE LE BLOC ATTENDU. */
     puce.textContent = (b.etat === 'courante') ? '↓' : (e.puce || '');
     puce.setAttribute('aria-label', ' — ' + (e.nom || ''));
@@ -30393,6 +30522,23 @@ function _ecranCourant() {
   return p ? p.id.replace(/^p-/, '') : null;
 }
 
+/* LES GROUPES SANS TIROIR, ET LEURS NORMES — une demande par norme, pas une
+   par onglet : sept onglets de « Cartographier » valent UN appel. */
+function railGroupesDeployes() {
+  var vus = {};
+  Array.prototype.forEach.call(document.querySelectorAll('.sb-nav .sb-section'),
+    function (sec) {
+      if (sec.hasAttribute('aria-expanded')) return;
+      var n = sec.nextElementSibling;
+      while (n && !n.classList.contains('sb-section')) {
+        var k = n.getAttribute && n.getAttribute('data-norme');
+        if (k && k !== 'dora' && !vus[k]) { vus[k] = true; railDemander(k, true); }
+        n = n.nextElementSibling;
+      }
+    });
+}
+window.railGroupesDeployes = railGroupesDeployes;
+
 function railTiroirOuvert(sec) {
   var vus = {};
   var n = sec.nextElementSibling;
@@ -30454,6 +30600,14 @@ function railInit(apres) {
       Array.prototype.forEach.call(
         document.querySelectorAll('.sb-nav .sb-section[aria-expanded="true"]'),
         railTiroirOuvert);
+      /* ── ET LES GROUPES QUI N'ONT PAS DE TIROIR À OUVRIR ─────────────────
+         « CARTOGRAPHIER » N'EST PAS UN TIROIR : ses sept onglets sont visibles
+         dès l'ouverture de Sentinel. MESURÉ AU NAVIGATEUR : le client voyait
+         sept lignes et aucun guidage — 0 pastille sur 7 — jusqu'à ce qu'il
+         clique au hasard dans l'une d'elles, puisque rien n'était jamais
+         « ouvert ». Un en-tête sans `aria-expanded` est un groupe déployé
+         d'office : son rail se peint tout de suite. */
+      railGroupesDeployes();
       var pg = document.querySelector('.page.on');
       if (pg) railApresGo(pg.id.replace(/^p-/, ''));
     })

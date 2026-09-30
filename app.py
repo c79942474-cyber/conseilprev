@@ -12037,7 +12037,16 @@ def api_qualif_propositions():
         if s:
             p['ecart'] = qualification_assistee.ecart(
                 s, {'classe_proposee': p.get('classe_proposee')})
+    # CE QUI RESTE A CLASSER, COMPTE ICI ET PAS AILLEURS. Le rail de
+    # « Cartographier » le lisait dans une cle que cette route ne renvoyait
+    # pas : MESURE AU NAVIGATEUR, l'ecran de qualification s'ouvrait et la
+    # barre continuait de dire « ouvrez l'ecran, le lot n'a pas ete demande ».
+    # Le comptage se fait sur les lignes deja chargees ci-dessus — aucune
+    # requete de plus — et avec la definition du module, pas une seconde.
+    a_qualifier = sum(1 for sysd in par_id.values()
+                      if qualification_assistee.sans_classification(sysd))
     return jsonify({'propositions': props, 'statut': statut,
+                    'a_qualifier': a_qualifier,
                     'reserve': qualification_assistee.RESERVE})
 
 

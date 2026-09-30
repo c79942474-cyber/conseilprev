@@ -152,6 +152,9 @@ body{
 .sb-nav [data-grp="cra"]{--sb-ic:#9B0D9F}
 .sb-nav [data-grp="nist-ai-rmf"]{--sb-ic:#804810}
 .sb-nav [data-grp="owasp-llm"]{--sb-ic:#D35D94}
+/* CARTOGRAPHIER N'EST PAS UN RÉFÉRENTIEL : sa puce garde le bleu du
+   groupe, pour que le rail ne le fasse pas passer pour une norme. */
+.sb-nav .sb-item[data-norme="cartographier"]{--sb-ic:var(--blue)}
 .sb-nav .sb-item[data-norme="rgpd"]{--sb-ic:#C50759}
 .sb-nav .sb-item[data-norme="iso27001"]{--sb-ic:#355CD4}
 .sb-nav .sb-item[data-norme="iso42001"]{--sb-ic:#0A8D83}
@@ -568,6 +571,34 @@ body{
   0%,100%{box-shadow:0 0 0 0 rgba(28,90,138,.34)}
   50%    {box-shadow:0 0 0 5px rgba(28,90,138,0)}
 }
+/* ── L'ÉTAT SE VOIT SUR L'ONGLET, PAS SEULEMENT SUR SA PASTILLE ──────────
+   MESURÉ AU NAVIGATEUR : la pastille fait 18 px au bout d'une ligne de menu,
+   et l'onglet lui-même ne portait AUCUN contour — `border-width` valait 0 sur
+   tous les états. Un client qui parcourt sept modules du regard ne lisait
+   donc rien. Le filet à gauche reprend la grammaire du bandeau de l'écran :
+   même couleur, même sens. Il est posé en `box-shadow` intérieur, JAMAIS en
+   bordure : une bordure décalerait les sept lignes de la barre au premier
+   état peint. */
+.sb-nav .sb-item[data-rail="validee"]{box-shadow:inset 2px 0 0 0 var(--green);
+  background:rgba(45,122,71,.07)}
+.sb-nav .sb-item[data-rail="lue"]{box-shadow:inset 2px 0 0 0 var(--green)}
+.sb-nav .sb-item[data-rail="courante"]{box-shadow:inset 2px 0 0 0 var(--blue)}
+.sb-nav .sb-item[data-rail="verrouillee"]{box-shadow:inset 2px 0 0 0 var(--orange)}
+/* ── LE CLIGNOTEMENT VERT DU MODULE QUI VIENT D'ÊTRE REMPLI ───────────────
+   IL S'ARRÊTE, ET C'EST VOULU. Sept onglets verts qui clignotent en
+   permanence ne signalent plus rien : ce qui se remarque, c'est le passage
+   au vert. Trois battements, puis le filet vert reste. La classe est posée
+   par le rail au moment du changement d'état, et retirée après. */
+.sb-nav .sb-item.rail-fete{animation:rail-fete 1s ease-in-out 3}
+@keyframes rail-fete{
+  0%,100%{box-shadow:inset 2px 0 0 0 var(--green),0 0 0 0 rgba(45,122,71,.45)}
+  50%    {box-shadow:inset 2px 0 0 0 var(--green),0 0 0 4px rgba(45,122,71,0)}
+}
+.sb-nav .sb-item.rail-fete .rail-puce{animation:rail-fete-puce 1s ease-in-out 3}
+@keyframes rail-fete-puce{
+  0%,100%{border-color:var(--green);background:var(--green);color:#fff}
+  50%    {border-color:var(--green);background:var(--white);color:var(--green)}
+}
 .rail-puce[data-tooltip]::after{
   content:attr(data-tooltip);position:absolute;left:12px;right:8px;
   top:calc(100% + 4px);background:var(--ink,#111827);color:#fff;
@@ -615,6 +646,10 @@ body{
   color:var(--muted)}
 @media(prefers-reduced-motion:reduce){
   .sb-item[data-rail="courante"] .rail-puce{animation:none;border-width:2.5px}
+  /* LE CLIGNOTEMENT VERT S'EFFACE, LE FILET VERT RESTE : le signal demeure
+     visible sans mouvement, pour qui a demandé moins de mouvement. */
+  .sb-nav .sb-item.rail-fete,
+  .sb-nav .sb-item.rail-fete .rail-puce{animation:none}
 }
 /* ── CE QUI MANQUE, NOMMÉ. Un bloc qui bat sans dire ce qu'il attend
       n'est pas un guidage, c'est une humeur. */
@@ -3581,15 +3616,15 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <div class="sb-item" data-grp="pilotage" role="button" tabindex="0" onclick="go('cadre-normatif',this,'PILOTAGE','Cadre normatif')" title="Matrice de correspondance IA Act / RGPD / ISO 42001 : chaque module rattache a ses cadres, avec liens directs."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg></span><span data-i18n="nav.item.cadre-normatif">Cadre normatif</span></div>
     <div class="sb-item" data-grp="pilotage" role="button" tabindex="0" onclick="go('conformite-globale',this,'PILOTAGE','Indice de conformité global');gcLoad()" title="Indice consolidant IA Act, RGPD et ISO 42001 en un score unique, calcule depuis vos evaluations."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 12l7-7"/><path d="M12 12V2"/></svg></span><span data-i18n="nav.item.conformite-globale">Indice global</span></div>
     <div class="sb-section" data-grp="cartographier"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 6.5 9 4l6 2.5 6-2.5v13L15 19.5 9 17l-6 2.5z"/><path d="M9 4v13M15 6.5v13"/></svg><span data-i18n="nav.sec.cartographier">Cartographier</span></div>
-    <div class="sb-item" data-grp="cartographier" role="button" tabindex="0" onclick="go('shadow-ai',this,'CARTOGRAPHIER','Découverte Shadow AI')" title="Recensez les systemes IA invisibles deja presents dans votre organisation, avant de les classifier."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg></span><span data-i18n="nav.item.shadow-ai">Découverte Shadow AI</span></div>
-    <div class="sb-item" data-grp="cartographier" role="button" tabindex="0" onclick="go('simulateur',this,'CARTOGRAPHIER','Simulateur IA Act')" title="Classifiez un systeme IA selon le Reglement EU AI Act avant de l enregistrer au Registre."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span><span data-i18n="nav.item.simulateur">Simulateur IA Act</span></div>
-    <div class="sb-item" data-grp="cartographier" role="button" tabindex="0" onclick="go('registre',this,'CARTOGRAPHIER','Systèmes IA')" title="Registre des systemes IA connecte a une base de donnees reelle (ajout, edition, suppression)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 11v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6"/></svg></span><span data-i18n="nav.item.registre">Registre IA</span></div>
-    <div class="sb-item" data-grp="cartographier" role="button" tabindex="0" onclick="go('qualif-assistee',this,'CARTOGRAPHIER','Qualification assistée');qualifInit()" title="Le moteur propose une classification pour chaque ligne du registre ; vous la prononcez, et la decision reste tracee."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3l2.2 4.5 5 .7-3.6 3.5.9 5-4.5-2.4L7.5 16.7l.9-5L4.8 8.2l5-.7z"/><path d="M5 20h14"/></svg></span><span data-i18n="nav.item.qualif-assistee">Qualification assistée</span></div>
+    <div class="sb-item" data-norme="cartographier" data-grp="cartographier" role="button" tabindex="0" onclick="go('shadow-ai',this,'CARTOGRAPHIER','Découverte Shadow AI')" title="Recensez les systemes IA invisibles deja presents dans votre organisation, avant de les classifier."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg></span><span data-i18n="nav.item.shadow-ai">Découverte Shadow AI</span></div>
+    <div class="sb-item" data-norme="cartographier" data-grp="cartographier" role="button" tabindex="0" onclick="go('simulateur',this,'CARTOGRAPHIER','Simulateur IA Act')" title="Classifiez un systeme IA selon le Reglement EU AI Act avant de l enregistrer au Registre."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span><span data-i18n="nav.item.simulateur">Simulateur IA Act</span></div>
+    <div class="sb-item" data-norme="cartographier" data-grp="cartographier" role="button" tabindex="0" onclick="go('registre',this,'CARTOGRAPHIER','Systèmes IA')" title="Registre des systemes IA connecte a une base de donnees reelle (ajout, edition, suppression)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 11v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6"/></svg></span><span data-i18n="nav.item.registre">Registre IA</span></div>
+    <div class="sb-item" data-norme="cartographier" data-grp="cartographier" role="button" tabindex="0" onclick="go('qualif-assistee',this,'CARTOGRAPHIER','Qualification assistée');qualifInit()" title="Le moteur propose une classification pour chaque ligne du registre ; vous la prononcez, et la decision reste tracee."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3l2.2 4.5 5 .7-3.6 3.5.9 5-4.5-2.4L7.5 16.7l.9-5L4.8 8.2l5-.7z"/><path d="M5 20h14"/></svg></span><span data-i18n="nav.item.qualif-assistee">Qualification assistée</span></div>
     <!-- LE FINOPS SUIT LE REGISTRE, ET CE VOISINAGE EST L'IDÉE. Il ne tient
          aucun inventaire à lui : il LIT celui de la conformité. Un second
          inventaire tenu à part divergerait du premier dans le mois, et c'est
          celui qu'on oublie de corriger qui reste. -->
-    <div class="sb-item" data-grp="cartographier" role="button" tabindex="0" onclick="go('finops',this,'CARTOGRAPHIER','FinOps IA')" title="Ce que coute le parc declare : couverture, attribution par centre de cout, dimensionnement des modeles et plafonds."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2v20"/><path d="M17 6.5c0-1.9-2.2-3-5-3s-5 1.1-5 3 2.2 2.7 5 3.2 5 1.3 5 3.2-2.2 3-5 3-5-1.1-5-3"/></svg></span><span data-i18n="nav.item.finops">FinOps IA</span></div>
+    <div class="sb-item" data-norme="cartographier" data-grp="cartographier" role="button" tabindex="0" onclick="go('finops',this,'CARTOGRAPHIER','FinOps IA')" title="Ce que coute le parc declare : couverture, attribution par centre de cout, dimensionnement des modeles et plafonds."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2v20"/><path d="M17 6.5c0-1.9-2.2-3-5-3s-5 1.1-5 3 2.2 2.7 5 3.2 5 1.3 5 3.2-2.2 3-5 3-5-1.1-5-3"/></svg></span><span data-i18n="nav.item.finops">FinOps IA</span></div>
     <!-- TROIS PANNEAUX PORTENT LE MOT « EMPREINTE », ET CE N'EST PAS UN
          DOUBLON : « empreinte » mesure ce que CONSEILPREV consomme lui-même,
          relevé appel par appel ; « empreinte-parc » pèse les ÉQUIPEMENTS d'un
@@ -3597,8 +3632,8 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
          client — déclaré, jamais mesuré. Il est rangé à côté du FinOps parce
          qu'il lit le même inventaire : le même volume déclaré donne le coût
          divisé par un tarif, et l'énergie multiplié par des Wh. -->
-    <div class="sb-item" data-grp="cartographier" role="button" tabindex="0" onclick="go('empreinte-ia',this,'CARTOGRAPHIER','Empreinte IA du parc')" title="Ce que pese le parc d'IA declare au registre : couverture d'abord, puis electricite, CO2e, energie primaire et eau, et les trajectoires 2030."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3a6 6 0 0 0-6 6c0 4 6 12 6 12s6-8 6-12a6 6 0 0 0-6-6z"/><path d="M9.5 12.5l2 2 3.5-4"/></svg></span><span data-i18n="nav.item.empreinte-ia">Empreinte IA du parc</span></div>
-    <div class="sb-item" data-grp="cartographier" role="button" tabindex="0" onclick="go('maturite',this,'CARTOGRAPHIER','Audit de maturité IA')" title="Audit de maturite IA sectoriel : 8 piliers, questionnaire, KPIs, budget et livrables generes par IA."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 3v18h18"/><path d="M7 14l3-3 3 3 5-6"/></svg></span><span data-i18n="nav.item.maturite">Audit de maturité IA</span></div>
+    <div class="sb-item" data-norme="cartographier" data-grp="cartographier" role="button" tabindex="0" onclick="go('empreinte-ia',this,'CARTOGRAPHIER','Empreinte IA du parc')" title="Ce que pese le parc d'IA declare au registre : couverture d'abord, puis electricite, CO2e, energie primaire et eau, et les trajectoires 2030."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3a6 6 0 0 0-6 6c0 4 6 12 6 12s6-8 6-12a6 6 0 0 0-6-6z"/><path d="M9.5 12.5l2 2 3.5-4"/></svg></span><span data-i18n="nav.item.empreinte-ia">Empreinte IA du parc</span></div>
+    <div class="sb-item" data-norme="cartographier" data-grp="cartographier" role="button" tabindex="0" onclick="go('maturite',this,'CARTOGRAPHIER','Audit de maturité IA')" title="Audit de maturite IA sectoriel : 8 piliers, questionnaire, KPIs, budget et livrables generes par IA."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 3v18h18"/><path d="M7 14l3-3 3 3 5-6"/></svg></span><span data-i18n="nav.item.maturite">Audit de maturité IA</span></div>
     <div class="sb-section" data-grp="evaluer-le-risque"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3.2 21.5 20H2.5z"/><path d="M12 9.5v4.5M12 17h.01"/></svg><span data-i18n="nav.sec.evaluer-le-risque">Évaluer le risque</span></div>
     <div class="sb-item" data-grp="evaluer-le-risque" role="button" tabindex="0" onclick="go('pan-sia',this,'ÉVALUER LE RISQUE','Panorama IA & centres de données — UE')" title="Les cas d’IA documentés dans l’UE et le parc de centres de données qui les fait tourner, sur la même carte."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 3a14 14 0 010 18M3.6 9h16.8M3.6 15h16.8"/><circle cx="9" cy="9" r="1.4" fill="currentColor"/><circle cx="15" cy="13" r="1.4" fill="currentColor"/></svg></span><span data-i18n="nav.item.pan-sia">Panorama IA &amp; data centres</span></div>
     <!-- L'ÉTUDE D'ENVELOPPE A SON PROPRE MODULE, et il suit immédiatement le
