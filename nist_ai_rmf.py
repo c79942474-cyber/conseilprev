@@ -242,7 +242,7 @@ SOUS_CATEGORIES = (
     ("GOVERN 1.1", "Legal and regulatory requirements involving AI are understood, managed, and documented."),
     ("GOVERN 1.2", "The characteristics of trustworthy AI are integrated into organizational policies, processes, procedures, and practices."),
     ("GOVERN 1.3", "Processes, procedures, and practices are in place to determine the needed level of risk management activities based on the organization’s risk tolerance."),
-    ("GOVERN 1.4", "The risk management process and its outcomes are established through transparent policies, procedures, and other controls based on organizational risk priorities. Categories Subcategories Continued on next page Page 22 NIST AI…"),
+    ("GOVERN 1.4", "The risk management process and its outcomes are established through transparent policies, procedures, and other controls based on organizational risk priorities."),
     ("GOVERN 1.5", "Ongoing monitoring and periodic review of the risk management process and its outcomes are planned and organizational roles and responsibilities clearly defined, including determining the frequency of periodic review."),
     ("GOVERN 1.6", "Mechanisms are in place to inventory AI systems and are resourced according to organizational risk priorities."),
     ("GOVERN 1.7", "Processes and procedures are in place for decommissioning and phasing out AI systems safely and in a manner that does not increase risks or decrease the organization’s trustworthiness."),
@@ -257,7 +257,7 @@ SOUS_CATEGORIES = (
     ("GOVERN 5.1", "Organizational policies and practices are in place to collect, consider, prioritize, and integrate feedback from those external to the team that developed or deployed the AI system regarding the potential individual and…"),
     ("GOVERN 5.2", "Mechanisms are established to enable the team that developed or deployed AI systems to regularly incorporate adjudicated feedback from relevant AI actors into system design and implementation."),
     ("GOVERN 6.1", "Policies and procedures are in place that address AI risks associated with third-party entities, including risks of infringement of a third-party’s intellectual property or other rights."),
-    ("GOVERN 6.2", "Contingency processes are in place to handle failures or incidents in third-party data or AI systems deemed to be high-risk. Categories Subcategories 5.2 Map The MAP function establishes the context to frame risks related to…"),
+    ("GOVERN 6.2", "Contingency processes are in place to handle failures or incidents in third-party data or AI systems deemed to be high-risk."),
     ("MAP 1.1", "Intended purposes, potentially beneficial uses, contextspecific laws, norms and expectations, and prospective settings in which the AI system will be deployed are understood and documented. Considerations include: the specific…"),
     ("MAP 1.2", "Interdisciplinary AI actors, competencies, skills, and capacities for establishing context reflect demographic diversity and broad domain and user experience expertise, and their participation is documented. Opportunities for…"),
     ("MAP 1.3", "The organization’s mission and relevant goals for AI technology are understood and documented."),
@@ -275,7 +275,7 @@ SOUS_CATEGORIES = (
     ("MAP 4.1", "Approaches for mapping AI technology and legal risks of its components – including the use of third-party data or software – are in place, followed, and documented, as are risks of infringement of a third party’s intellectual…"),
     ("MAP 4.2", "Internal risk controls for components of the AI system, including third-party AI technologies, are identified and documented."),
     ("MAP 5.1", "Likelihood and magnitude of each identified impact (both potentially beneficial and harmful) based on expected use, past uses of AI systems in similar contexts, public incident reports, feedback from those external to the team…"),
-    ("MAP 5.2", "Practices and personnel for supporting regular engagement with relevant AI actors and integrating feedback about positive, negative, and unanticipated impacts are in place and documented. Categories Subcategories 5.3 Measure…"),
+    ("MAP 5.2", "Practices and personnel for supporting regular engagement with relevant AI actors and integrating feedback about positive, negative, and unanticipated impacts are in place and documented."),
     ("MEASURE 1.1", "Approaches and metrics for measurement of AI risks enumerated during the MAP function are selected for implementation starting with the most significant AI risks. The risks or trustworthiness characteristics that will not – or…"),
     ("MEASURE 1.2", "Appropriateness of AI metrics and effectiveness of existing controls are regularly assessed and updated, including reports of errors and potential impacts on affected communities."),
     ("MEASURE 1.3", "Internal experts who did not serve as front-line developers for the system and/or independent assessors are involved in regular assessments and updates. Domain experts, users, AI actors external to the team that developed or…"),
@@ -283,7 +283,7 @@ SOUS_CATEGORIES = (
     ("MEASURE 2.2", "Evaluations involving human subjects meet applicable requirements (including human subject protection) and are representative of the relevant population."),
     ("MEASURE 2.3", "AI system performance or assurance criteria are measured qualitatively or quantitatively and demonstrated for conditions similar to deployment setting(s). Measures are documented."),
     ("MEASURE 2.4", "The functionality and behavior of the AI system and its components – as identified in the MAP function – are monitored when in production."),
-    ("MEASURE 2.5", "The AI system to be deployed is demonstrated to be valid and reliable. Limitations of the generalizability beyond the conditions under which the technology was developed are documented. Categories Subcategories Continued on…"),
+    ("MEASURE 2.5", "The AI system to be deployed is demonstrated to be valid and reliable. Limitations of the generalizability beyond the conditions under which the technology was developed are documented."),
     ("MEASURE 2.6", "The AI system is evaluated regularly for safety risks – as identified in theMAP function. The AI system to be deployed is demonstrated to be safe, its residual negative risk does not exceed the risk tolerance, and it can fail…"),
     ("MEASURE 2.7", "AI system security and resilience – as identified in the MAP function – are evaluated and documented."),
     ("MEASURE 2.8", "Risks associated with transparency and accountability – as identified in the MAP function – are examined and documented."),
@@ -293,7 +293,7 @@ SOUS_CATEGORIES = (
     ("MEASURE 2.12", "Environmental impact and sustainability of AI model training and management activities – as identified in the MAP function – are assessed and documented."),
     ("MEASURE 2.13", "Effectiveness of the employed TEVV metrics and processes in the MEASURE function are evaluated and documented."),
     ("MEASURE 3.1", "Approaches, personnel, and documentation are in place to regularly identify and track existing, unanticipated, and emergent AI risks based on factors such as intended and actual performance in deployed contexts."),
-    ("MEASURE 3.2", "Risk tracking approaches are considered for settings where AI risks are difficult to assess using currently available measurement techniques or where metrics are not yet available. Categories Subcategories Continued on next…"),
+    ("MEASURE 3.2", "Risk tracking approaches are considered for settings where AI risks are difficult to assess using currently available measurement techniques or where metrics are not yet available."),
     ("MEASURE 3.3", "Feedback processes for end users and impacted communities to report problems and appeal system outcomes are established and integrated into AI system evaluation metrics."),
     ("MEASURE 4.1", "Measurement approaches for identifying AI risks are connected to deployment context(s) and informed through consultation with domain experts and other end users. Approaches are documented."),
     ("MEASURE 4.2", "Measurement results regarding AI system trustworthiness in deployment context(s) and across the AI lifecycle are informed by input from domain experts and relevant AI actors to validate whether the system is performing…"),
@@ -307,10 +307,10 @@ SOUS_CATEGORIES = (
     ("MANAGE 2.3", "Procedures are followed to respond to and recover from a previously unknown risk when it is identified."),
     ("MANAGE 2.4", "Mechanisms are in place and applied, and responsibilities are assigned and understood, to supersede, disengage, or deactivate AI systems that demonstrate performance or outcomes inconsistent with intended use."),
     ("MANAGE 3.1", "AI risks and benefits from third-party resources are regularly monitored, and risk controls are applied and documented."),
-    ("MANAGE 3.2", "Pre-trained models which are used for development are monitored as part of AI system regular monitoring and maintenance. Categories Subcategories Continued on next page Page 32 NIST AI 100-1 AI RMF 1.0 Table 4: Categories and…"),
+    ("MANAGE 3.2", "Pre-trained models which are used for development are monitored as part of AI system regular monitoring and maintenance."),
     ("MANAGE 4.1", "Post-deployment AI system monitoring plans are implemented, including mechanisms for capturing and evaluating input from users and other relevant AI actors, appeal and override, decommissioning, incident response, recovery,…"),
     ("MANAGE 4.2", "Measurable activities for continual improvements are integrated into AI system updates and include regular engagement with interested parties, including relevant AI actors."),
-    ("MANAGE 4.3", "Incidents and errors are communicated to relevant AI actors, including affected communities. Processes for tracking, responding to, and recovering from incidents and errors are followed and documented. Categories Subcategories…"),)
+    ("MANAGE 4.3", "Incidents and errors are communicated to relevant AI actors, including affected communities. Processes for tracking, responding to, and recovering from incidents and errors are followed and documented."),)
 
 SOUS_PAR_CATEGORIE = {}
 for _cle, _txt in SOUS_CATEGORIES:
