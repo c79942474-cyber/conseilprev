@@ -170,6 +170,17 @@ NORMES = [
      "panneau": "nist82-ot",
      "mesure": "les dix axes de la surcharge industrielle, plafonnés par le "
                "socle 800-53 qu'ils taillent"},
+    #  LA TREIZIÈME, ET LA SECONDE DU CEN/CLC JTC 21 : le système de
+    #  management de la qualité que l'article 17 impose au fournisseur d'un
+    #  système d'IA à haut risque. Comme prEN 18229-3, elle est au stade de
+    #  l'Enquête CEN — donc « cadre » et non « certifiable » : rien ne s'y
+    #  certifie tant que la référence n'est pas citée au Journal officiel.
+    {"cle": "en18286", "nom": "prEN 18286", "nature": "cadre",
+     "texte": "prEN 18286:2025 (CEN/CLC JTC 21)",
+     "panneau": "en18286-processus",
+     "mesure": "le système de management de la qualité de l'article 17 : la "
+               "stratégie de conformité réglementaire, et la charge de "
+               "preuve que l'approche retenue ouvre"},
 ]
 NORMES_PAR_CLE = {n["cle"]: n for n in NORMES}
 
@@ -236,6 +247,21 @@ COULEURS = {
     "nist_800_53": "#7F2E55",   # prune
     "nist_800_82": "#138BCF",   # ciel
     "en18229_3":   "#00323C",   # pétrole
+    #  AUBERGINE, ET NON LE VERT QU'ON AURAIT CHOISI D'INSTINCT. Mesuré :
+    #  un vert de qualité (#1F6F3F) tombait à ΔE 3,7 du vert qui dit
+    #  « bloc validé » dans le rail — un référentiel vert dans la barre se
+    #  lirait « acquis » avant d'avoir répondu à une seule question. Tout
+    #  l'arc du vert et du sarcelle est d'ailleurs fermé ici : le vert de
+    #  validation d'un côté, ISO 42001 et prEN 18229-3 de l'autre.
+    #  CETTE TEINTE EST LA PLUS ÉCARTÉE QUE LA PLACE PERMETTE. prEN 18286
+    #  est VOISINE de prEN 18229-3 (pétrole très sombre) et de DORA
+    #  (violet clair) dans la barre. Relevé : ΔE 18,7 du pétrole et 26,0 du
+    #  violet en vision normale ; 10,4 et 24,7 en vision déficiente. Les
+    #  planchers sont 15 et 8 : la paire la plus serrée passe à ×1,25,
+    #  quand les autres paires de la barre tiennent à ×1,4 ou mieux. C'est
+    #  le maximum atteignable entre ces deux voisines-là, et c'est une
+    #  contrainte de place, pas un relâchement du contrôle.
+    "en18286":     "#500078",   # aubergine
     # L'IA ACT N'EST PAS DANS LES TIROIRS DE CONFORMITÉ : son écran d'entrée
     # vit sous « Pilotage », parmi des onglets en terre cuite. Sa couleur ne
     # voisine donc aucune des onze autres, et n'entre pas dans le contrôle
@@ -250,7 +276,8 @@ COULEURS = {
 #: l'article 14 de l'IA Act comme ISO/IEC 42001 sert son système de
 #: management. Un client qui ouvre l'une trouve l'autre à côté. La règle
 #: d'adjacence des couleurs est mesurée sur cet ordre, pas sur un autre.
-ORDRE_BARRE = ("rgpd", "iso27001", "iso42001", "en18229_3", "dora", "nis2",
+ORDRE_BARRE = ("rgpd", "iso27001", "iso42001", "en18229_3", "en18286",
+               "dora", "nis2",
                "cra", "nist_ai_rmf", "owasp_llm", "nist_800_53",
                "nist_800_82")
 
@@ -266,7 +293,7 @@ def couleur(cle):
 #: CE QUE LA PAGE D'ACCUEIL ANNONCE. Un seul endroit le décide ; la
 #: garde en bas de fichier le confronte à la table ci-dessus, et une
 #: règle de la suite le confronte au titre et à la grille de l'accueil.
-NORMES_ANNONCEES = 12
+NORMES_ANNONCEES = 13
 
 
 # ══════════════════════════════════════════════════════════════════════════
@@ -519,6 +546,30 @@ COMPOSITIONS = {
     #  COMMANDE LES DEUX AUTRES : sans scénario de risque ni délai de
     #  réaction, une interface de revue ne se justifie par rien et une
     #  vérification ne sait pas contre quoi conclure.
+    #  CINQ PARTS, ET LE POIDS SUIT LA CHARGE RÉGLEMENTAIRE, pas le nombre
+    #  de paragraphes. La stratégie du §4.4 pèse le plus parce qu'elle n'a
+    #  d'équivalent ni dans ISO 9001 ni dans ISO/IEC 42001 : c'est ce que le
+    #  règlement AJOUTE, et ce qu'un SMQ déjà certifié ne porte pas.
+    "en18286": [
+        {"cle": "strategie", "nom": "Stratégie et documentation", "poids": 3,
+         "pourquoi": "le §4.4 est la pièce propre au règlement, et celle que "
+                     "l'organisme notifié ouvre en premier"},
+        {"cle": "direction", "nom": "Direction, planification, support",
+         "poids": 1,
+         "pourquoi": "le socle de management, celui qu'un SMQ déjà certifié "
+                     "apporte le plus souvent tel quel"},
+        {"cle": "produit", "nom": "Élaboration du produit", "poids": 2,
+         "pourquoi": "de la destination à la documentation technique : ce "
+                     "que l'évaluation de conformité examine"},
+        {"cle": "exploitation", "nom": "Exploitation et contrôle", "poids": 2,
+         "pourquoi": "surveillance après commercialisation et incidents "
+                     "graves — les deux obligations dont une autorité se "
+                     "saisit sans attendre un audit"},
+        {"cle": "performance", "nom": "Évaluation des performances",
+         "poids": 1,
+         "pourquoi": "la revue de direction ne produit rien par elle-même : "
+                     "elle décide de ce que le reste produit"},
+    ],
     "en18229_3": [
         {"cle": "calibration", "nom": "Scénarios, délais et sélection",
          "poids": 3,
@@ -612,6 +663,45 @@ VERROUS = {
 # parce que c'est là, et seulement là, qu'il y a une porte.
 
 RESERVES = {
+    "en18286": [
+        {"cle": "charge_de_preuve",
+         "dit": "Une ou plusieurs exigences essentielles sont traitées par "
+                "« autre norme » ou « autre solution technique » sans la "
+                "justification et la preuve objective que le §4.4.3.2.2 "
+                "réclame.",
+         "porte_sur": "La part « stratégie » n'est comptée qu'à moitié : le "
+                      "travail de documentation est réel, c'est la "
+                      "DÉMONSTRATION qui manque. Le détail est sur l'écran "
+                      "« Processus ».",
+         "ou": "en18286 · processus"},
+        {"cle": "presomption",
+         "dit": "Ce projet de norme n'est pas encore cité au Journal "
+                "officiel de l'Union européenne au titre du Règlement (UE) "
+                "2024/1689 : le tenir n'ouvre aucune présomption de "
+                "conformité à l'article 17.",
+         "porte_sur": "Le taux dit ce que le système de management déclaré "
+                      "couvre du tableau ZA.1. Il ne dit ni qu'un organisme "
+                      "notifié l'a vu, ni que la norme est citée.",
+         "ou": "en18286 · conformité"},
+        #  LA LACUNE EST DÉCLARÉE PAR LA NORME, PAS PAR NOUS. L'annexe ZA
+        #  porte une ligne « Non couvert » : la taire ferait lire 100 % comme
+        #  « article 17 tenu », ce que la norme elle-même dément.
+        {"cle": "za_incomplete",
+         "dit": "L'annexe ZA de cette norme déclare l'article 17(2) NON "
+                "COUVERT — les fournisseurs soumis à la législation de "
+                "l'Union sur les services financiers.",
+         "porte_sur": "Cent pour cent ici ne veut pas dire article 17 tenu : "
+                      "c'est la norme qui annonce sa propre limite.",
+         "ou": "en18286 · conformité"},
+        {"cle": "article_17_2",
+         "dit": "Votre régime relève de l'article 17(2) : les obligations de "
+                "gouvernance interne de la législation sur les services "
+                "financiers valent exécution de l'article 17.",
+         "porte_sur": "Le travail fait ici reste utile, mais il ne se "
+                      "substitue pas à ce que votre autorité de tutelle "
+                      "attend — et la norme ne couvre pas ce cas.",
+         "ou": "en18286 · conformité"},
+    ],
     "en18229_3": [
         {"cle": "presomption",
          "dit": "Ce projet de norme n'est pas encore cité au Journal officiel "
@@ -731,6 +821,15 @@ RESERVES = {
 # une entreprise hors champ —, pendant que le rail de son écran passait
 # tous les blocs en « sans objet ».
 SANS_OBJET = {
+    "en18286": {
+        "cle": "hors_champ",
+        "dit": "L'article 17 vise le FOURNISSEUR d'un système d'IA à haut "
+               "risque. Hors de cette qualification, il n'y a pas de taux à "
+               "mesurer, et ce n'est pas un zéro. La qualification se revoit : "
+               "un déployeur qui modifie substantiellement un système, ou qui "
+               "y appose son nom, DEVIENT fournisseur au sens du règlement.",
+        "ou": "en18286 · processus",
+    },
     "nis2": {
         "cle": "hors_champ",
         "dit": "Hors du champ de la directive, selon la qualification "
@@ -1082,7 +1181,34 @@ def _lire_en18229_3(ev, dec=None):
     return parts, signaux
 
 
+def _lire_en18286(ev, dec=None):
+    """Les cinq parts du SMQ de l'article 17, telles que le moteur les rend.
+
+    ON NE RECALCULE RIEN ICI. Le moteur a déjà appliqué le plafond de la
+    charge de preuve du 4.4.3.2.2 ; le recomposer ferait DEUX vérités sur le
+    même nombre, et c'est le défaut que ce fichier existe pour éviter.
+
+    HORS CHAMP, IL N'Y A PAS DE TAUX. Le signal part, et `taux_norme` rend
+    « — » avec sa raison plutôt qu'un zéro qui se lirait comme un constat.
+    """
+    if not ev or not ev.get("ok"):
+        return None, []
+    champ = ev.get("applicable") or {}
+    if champ.get("ok") is False:
+        return None, ["hors_champ"]
+    signaux = [r["cle"] for r in (ev.get("reserves") or [])]
+    #  LE PLAFOND EST DÉJÀ DANS LES PARTS. Le moteur rend `parts` plafonnées
+    #  et `parts_brutes` à côté ; on lit les premières, et on ne rejoue pas
+    #  le verrou ici — `conformite` le compterait une seconde fois, et son
+    #  arithmétique de verrou (qui RETIRE une part entière) ne rendrait pas
+    #  le même nombre que le moteur (qui la DEMI-COMPTE).
+    if (ev.get("score") or {}).get("verrous"):
+        signaux.append("charge_de_preuve")
+    return dict(ev.get("parts") or {}), signaux
+
+
 LECTEURS = {
+    "en18286": _lire_en18286,
     "iso42001": _lire_iso42001, "iso27001": _lire_iso27001,
     "nis2": _lire_nis2, "cra": _lire_cra, "nist_ai_rmf": _lire_nist,
     "owasp_llm": _lire_owasp, "ia_act": _lire_ia_act, "rgpd": _lire_rgpd,
@@ -1553,7 +1679,28 @@ def _ecarts_en18229_3(ev, dec=None):
     return out
 
 
+def _ecarts_en18286(ev, dec=None):
+    """Ce que le plan du module nomme déjà — repris tel quel.
+
+    LE PLAN DU MOTEUR EST DÉJÀ ORDONNÉ, et il met en tête ce qui PLAFONNE :
+    une exigence essentielle traitée par « autre solution » sans sa preuve
+    objective. Le réordonner ici ferait remonter un paragraphe du chapitre 10
+    devant le verrou qui l'empêche de compter.
+    """
+    if not ev or not ev.get("ok"):
+        return []
+    import en18286 as _en
+    if (ev.get("applicable") or {}).get("ok") is False:
+        return []
+    out = []
+    for e in _en.plan(dec or {}):
+        comp = e.get("part") or "strategie"
+        out.append(_ec(comp, e["cle"], e["quoi"], e["ou"], e.get("article")))
+    return out
+
+
 ECARTEURS = {
+    "en18286": _ecarts_en18286,
     "dora": _ecarts_dora,
     "iso42001": _ecarts_iso42001, "iso27001": _ecarts_iso27001,
     "nis2": _ecarts_nis2, "cra": _ecarts_cra, "nist_ai_rmf": _ecarts_nist,
@@ -2046,7 +2193,13 @@ def _ev_en18229_3(dec, d):
     return _en.evaluer(dec)
 
 
+def _ev_en18286(dec, d):
+    import en18286 as _en
+    return _en.evaluer(dec)
+
+
 EVALUATEURS = {
+    "en18286": _ev_en18286,
     "ia_act": _ev_ia_act, "cra": _ev_cra, "iso42001": _ev_iso42001,
     "iso27001": _ev_iso27001, "dora": _ev_dora, "nis2": _ev_nis2,
     "rgpd": _ev_rgpd, "nist_ai_rmf": _ev_nist_ai_rmf,
@@ -2300,7 +2453,26 @@ def _de_en18229_3(v, e):
     return out
 
 
+def _de_en18286(v, e):
+    """L'écran du SMQ de l'article 17 → ce que son moteur attend.
+
+    LA QUALIFICATION SUFFIT À FAIRE UNE DÉCLARATION, et c'est voulu : un
+    fournisseur qui vient de se déclarer hors champ a RÉPONDU. Sa carte doit
+    dire « sans objet », pas « — ». À l'inverse, un écran où rien n'est
+    touché reste absent, et le taux rend « — ».
+    """
+    qual = _dict_de(v, "qualification")
+    reponses = _dict_de(v, "reponses")
+    strat = v.get("strategie") if isinstance(v.get("strategie"), dict) else {}
+    certifie = _dict_de(v, "certifie")
+    if not (qual or reponses or strat or certifie):
+        return None
+    return {"qualification": qual, "reponses": reponses,
+            "strategie": strat, "certifie": certifie}
+
+
 TRADUCTEURS = {
+    "en18286": _de_en18286,
     "ia_act": _de_ia_act, "cra": _de_cra, "iso42001": _de_iso42001,
     "iso27001": _de_iso27001, "dora": _de_dora, "nis2": _de_nis2,
     "rgpd": _de_rgpd, "nist_ai_rmf": _de_nist_ai_rmf, "owasp_llm": _de_etats,

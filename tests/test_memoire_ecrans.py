@@ -72,6 +72,17 @@ CLES = {"nis2": "cp-sentinel-nis2-v1", "recyf": "cp-sentinel-recyf-v2",
 import parcours_normes as pn
 
 DEJA_GARDES = {"nist_ai_rmf": "cp-sentinel-nist-profil-v1",
+               #  prEN 18286 GARDE SES RÉPONSES PAR LE MÊME CHEMIN QUE LES
+               #  QUATRE LIGNES VOISINES, et non par la mémoire des écrans :
+               #  chacun de ses sept gestionnaires appelle `_en86Ecrire`, qui
+               #  écrit `cp-sentinel-en18286-v1` par `_declEcrire`, et
+               #  `en18286Init` relit ce magasin par `_declLire` avant de
+               #  peindre. Mesuré : la qualification, les cinq composantes de
+               #  la stratégie, les trois pièces du §4.4.3.2.2 et les
+               #  soixante-cinq réponses se retrouvent après rechargement.
+               #  Une entrée de plus dans MEMOIRE écrirait le même état deux
+               #  fois, sous deux clés, et la seconde écraserait la première.
+               "en18286": "cp-sentinel-en18286-v1",
                "owasp_llm": "cp-sentinel-owasp-declares-v1",
                "nist_800_53": "cp-sentinel-nist53-v1",
                "nist_800_82": "cp-sentinel-nist82-v1",

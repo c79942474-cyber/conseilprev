@@ -785,14 +785,20 @@ def test_les_DEUX_routes_existent_avec_leur_cadence_et_leur_refus():
 
 
 # ═══════════════════════════════════════════════════════════════════════════
-#  11. LA DOUZIÈME NORME DANS LE TAUX DE CONFORMITÉ
+#  11. CETTE NORME DANS LE TAUX DE CONFORMITÉ
 # ═══════════════════════════════════════════════════════════════════════════
 
-def test_la_norme_est_la_DOUZIEME_du_taux_de_conformite():
+def test_la_norme_EST_DANS_le_taux_de_conformite():
     """LE TITRE CODÉ EN DUR QUI DIT SEPT QUAND LA GRILLE EN MONTRE NEUF est un
-    défaut déjà rencontré. Le compte annoncé est celui de la table."""
-    assert conformite.NORMES_ANNONCEES == 12
-    assert len(conformite.NORMES) == 12, len(conformite.NORMES)
+    défaut déjà rencontré. Le compte annoncé est celui de la table.
+
+    CETTE RÈGLE NE PINNE PLUS LE TOTAL, ET C'EST VOULU. Elle le fixait à
+    douze ; la treizième norme — prEN 18286 — la faisait tomber sans qu'une
+    seule ligne de prEN 18229-3 ait bougé. Le total appartient à la règle
+    générique de `test_conformite`, qui le confronte À LA FOIS à la table, à
+    la grille d'accueil et au titre. Ici on mesure ce qui est propre à cette
+    norme-ci : qu'elle est dans la table, avec sa couleur."""
+    assert len(conformite.NORMES) == conformite.NORMES_ANNONCEES
     cles = [n["cle"] for n in conformite.NORMES]
     assert "en18229_3" in cles
     assert conformite.COULEURS["en18229_3"] == "#00323C"

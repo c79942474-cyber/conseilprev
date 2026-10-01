@@ -174,6 +174,7 @@ body{
 .sb-nav [data-grp="nis2"]{--sb-ic:#8F7515}
 .sb-nav [data-grp="cra"]{--sb-ic:#9B0D9F}
 .sb-nav [data-grp="en18229"]{--sb-ic:#00323C}
+.sb-nav [data-grp="en18286"]{--sb-ic:#500078}
 .sb-nav [data-grp="nist-ai-rmf"]{--sb-ic:#804810}
 .sb-nav [data-grp="owasp-llm"]{--sb-ic:#D35D94}
 /* CARTOGRAPHIER N'EST PAS UN RÉFÉRENTIEL : sa puce garde le bleu du
@@ -186,6 +187,7 @@ body{
 .sb-nav .sb-item[data-norme="nis2"]{--sb-ic:#8F7515}
 .sb-nav .sb-item[data-norme="cra"]{--sb-ic:#9B0D9F}
 .sb-nav .sb-item[data-norme="en18229_3"]{--sb-ic:#00323C}
+.sb-nav .sb-item[data-norme="en18286"]{--sb-ic:#500078}
 .sb-nav .sb-item[data-norme="nist_ai_rmf"]{--sb-ic:#804810}
 .sb-nav .sb-item[data-norme="owasp_llm"]{--sb-ic:#D35D94}
 .sb-nav .sb-item[data-norme="nist_800_53"]{--sb-ic:#7F2E55}
@@ -201,7 +203,7 @@ body{
 .sb-item .sb-icon:empty::before{content:'';width:8px;height:8px;
   border-radius:50%;background:currentColor}
 
-/* ── LE TAUX DE CONFORMITÉ DES DOUZE NORMES ──────────────────────────────
+/* ── LE TAUX DE CONFORMITÉ DES TREIZE NORMES ──────────────────────────────
    DEUX COULEURS SEULEMENT PORTENT UN SENS ICI, et c'est délibéré : l'ambre
    marque un VERROU — un défaut qui arrête un tiers — et le gris barré marque
    l'ABSENCE DE MESURE. Un taux bas n'est pas coloré : colorer la faiblesse
@@ -574,6 +576,7 @@ body{
    sa phrase. On peut lire ces écrans en niveaux de gris sans rien perdre. */
 #p-nist-profil,#p-nist-cadre,#p-nist-genai{--ref:128 72 16}
 #p-owasp-dix,#p-owasp-pont{--ref:211 93 148}
+#p-en18286-processus,#p-en18286-questionnaire,#p-en18286-conformite,#p-en18286-analyse{--ref:80 0 120}
 :root{--hors:196 124 26;--cy:28 90 138}
 
 /* ── L'ÉCHELLE DES ÉTATS : UNE TEINTE QUI FONCE ────────────────────────
@@ -3926,8 +3929,8 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
          frères d'une section jusqu'à la suivante, et une section de plus
          aurait coupé le groupe RGPD en deux. -->
     <div class="sb-famille" data-fam="conformite"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 2.5 20 6v6.2c0 4.9-3.3 8.6-8 9.8-4.7-1.2-8-4.9-8-9.8V6z"/><path d="M8.6 12.1 11 14.5l4.4-4.6"/></svg><span>Votre Mise en Conformité Réglementaire</span><span class="sb-famille-n" id="sb-fam-n" aria-hidden="true"></span></div>
-    <div class="sb-section sb-pliable" data-grp="taux-conformite" data-fam="conformite" role="button" tabindex="0" aria-expanded="false" onclick="sbReplier(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sbReplier(this)}" title="Le taux de chacune des douze normes, et le plan qui le fait monter"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg><span>Taux de conformité — les douze normes</span><svg class="sb-chev" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></div>
-    <div class="sb-item" data-grp="taux-conformite" role="button" tabindex="0" onclick="go('conf-taux',this,'TAUX DE CONFORMITÉ','Les onze taux');confInit()" title="Un taux par norme, ce qu il mesure, et ce qui le plafonne"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 5 5 19"/><circle cx="7" cy="7" r="2.5"/><circle cx="17" cy="17" r="2.5"/></svg></span>Les onze taux</div>
+    <div class="sb-section sb-pliable" data-grp="taux-conformite" data-fam="conformite" role="button" tabindex="0" aria-expanded="false" onclick="sbReplier(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sbReplier(this)}" title="Le taux de chacune des treize normes, et le plan qui le fait monter"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg><span>Taux de conformité — les treize normes</span><svg class="sb-chev" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></div>
+    <div class="sb-item" data-grp="taux-conformite" role="button" tabindex="0" onclick="go('conf-taux',this,'TAUX DE CONFORMITÉ','Le taux par norme');confInit()" title="Un taux par norme, ce qu il mesure, et ce qui le plafonne"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 5 5 19"/><circle cx="7" cy="7" r="2.5"/><circle cx="17" cy="17" r="2.5"/></svg></span>Les onze taux</div>
     <div class="sb-item" data-grp="taux-conformite" role="button" tabindex="0" onclick="go('conf-plan',this,'TAUX DE CONFORMITÉ','Plan de mise en conformité');confInit()" title="Les actions, du verrou au detail — et ce que chacune rapporte reellement"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 6h10M10 12h10M10 18h10"/><path d="M3.5 6l1.5 1.5L7.5 5M3.5 12l1.5 1.5L7.5 11M3.5 18l1.5 1.5L7.5 17"/></svg></span>Plan de mise en conformité</div>
     <div class="sb-item" data-grp="taux-conformite" role="button" tabindex="0" onclick="go('conf-limites',this,'TAUX DE CONFORMITÉ','Ce que le plan ne peut pas faire');confInit()" title="DORA sans instrument, le NIST non certifiable, et les trois risques LLM hors annexe A"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg></span>Ce que le plan ne peut pas faire</div>
     <div class="sb-section sb-pliable" data-grp="rgpd-et-privacy" data-fam="conformite" role="button" tabindex="0" aria-expanded="false" onclick="sbReplier(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sbReplier(this)}" title="Replier ou déplier RGPD &amp; Privacy"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="10.5" width="16" height="10" rx="2"/><path d="M7.8 10.5V7.5a4.2 4.2 0 0 1 8.4 0v3"/></svg><span>RGPD &amp; Privacy</span></div>
@@ -3982,6 +3985,11 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <div class="sb-item" data-norme="en18229_3" data-grp="en18229" role="button" tabindex="0" onclick="go('en18229-scenarios',this,'prEN 18229-3 — SUPERVISION HUMAINE','Scénarios et délais')" title="Un scenario de risque, son delai de reaction, la categorie de mesure choisie et la latence d intervention mesuree. Le moteur compare les deux nombres que vous declarez."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></span><span data-i18n="nav.item.en18229-scenarios">Scénarios et délais</span></div>
     <div class="sb-item" data-norme="en18229_3" data-grp="en18229" role="button" tabindex="0" onclick="go('en18229-cadre',this,'prEN 18229-3 — SUPERVISION HUMAINE','Cadre d’analyse')" title="Le questionnaire de votre role, paragraphe par paragraphe, avec ce que chaque point sert a eviter et le piege du terrain."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 11l3 3 5-6"/><rect x="3" y="3" width="18" height="18" rx="2.5"/></svg></span><span data-i18n="nav.item.en18229-cadre">Cadre d’analyse</span></div>
     <div class="sb-item" data-norme="en18229_3" data-grp="en18229" role="button" tabindex="0" onclick="go('en18229-score',this,'prEN 18229-3 — SUPERVISION HUMAINE','Score et article 14')" title="Le score de conformite, ses plafonds, la documentation exigee et la couverture de l article 14 alinea par alinea."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg></span><span data-i18n="nav.item.en18229-score">Score et article 14</span></div>
+    <div class="sb-section sb-pliable" data-grp="en18286" data-fam="conformite" role="button" tabindex="0" aria-expanded="false" onclick="sbReplier(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sbReplier(this)}" title="Replier ou deplier prEN 18286 : le systeme de management de la qualite que l article 17 de l IA Act impose au fournisseur d un systeme d IA a haut risque."><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 5.5h16M4 12h16M4 18.5h10"/><circle cx="18.5" cy="18.5" r="2.6"/><path d="M20.4 20.4L22 22"/></svg><span data-i18n="nav.sec.en18286">prEN 18286 — SMQ de l’article 17</span><svg class="sb-chev" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6"/></svg></div>
+    <div class="sb-item" data-norme="en18286" data-grp="en18286" role="button" tabindex="0" onclick="go('en18286-processus',this,'prEN 18286 — SMQ DE L’ARTICLE 17','Processus — stratégie §4.4');en18286Init()" title="La qualification, les cinq composantes de la strategie, et l approche retenue pour chacune des sept exigences essentielles. L approche commande la charge de preuve."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 6h5M4 12h5M4 18h5"/><path d="M11 6h4a2 2 0 012 2v8a2 2 0 01-2 2h-4"/><circle cx="19" cy="12" r="2"/></svg></span><span data-i18n="nav.item.en18286-processus">Processus — stratégie §4.4</span></div>
+    <div class="sb-item" data-norme="en18286" data-grp="en18286" role="button" tabindex="0" onclick="go('en18286-questionnaire',this,'prEN 18286 — SMQ DE L’ARTICLE 17','Questionnaire — chap. 4 à 10');en18286Init()" title="Les soixante-cinq paragraphes normatifs, du systeme de management a l evaluation des performances."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="3.5" width="16" height="17" rx="2"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></span><span data-i18n="nav.item.en18286-questionnaire">Questionnaire — chap. 4 à 10</span></div>
+    <div class="sb-item" data-norme="en18286" data-grp="en18286" role="button" tabindex="0" onclick="go('en18286-conformite',this,'prEN 18286 — SMQ DE L’ARTICLE 17','Conformité — annexe ZA');en18286Init()" title="L article 17 alinea par alinea, et le paragraphe de la norme qui le couvre. Une ligne reste non couverte : l article 17(2)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3l7 3v6c0 4.2-2.8 7.6-7 9-4.2-1.4-7-4.8-7-9V6z"/><path d="M9.2 12l2 2 3.6-4"/></svg></span><span data-i18n="nav.item.en18286-conformite">Conformité — annexe ZA</span></div>
+    <div class="sb-item" data-norme="en18286" data-grp="en18286" role="button" tabindex="0" onclick="go('en18286-analyse',this,'prEN 18286 — SMQ DE L’ARTICLE 17','Analyse — ponts et famille');en18286Init()" title="Ce qu un certificat ISO 9001 ou ISO/IEC 42001 apporte deja, ce qu il n apporte PAS, et les autres normes harmonisees de la famille."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 18V9M10 18V5M16 18v-6M22 18v-9"/><path d="M3 21h18"/></svg></span><span data-i18n="nav.item.en18286-analyse">Analyse — ponts et famille</span></div>
     <!-- ═══ NIS 2 — UNE DIRECTIVE, ET ÇA CHANGE TOUT LE CHIFFRAGE ═══
          À NE PAS LIRE COMME LE CRA. Le CRA est un RÈGLEMENT : ses montants
          sont les montants. NIS 2 est une DIRECTIVE : ce qui oblige une
@@ -6127,18 +6135,18 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 
 
 <!-- ═══════════════════════════════════════════════════════════════════
-     LE TAUX DE CONFORMITÉ DES DOUZE NORMES
+     LE TAUX DE CONFORMITÉ DES TREIZE NORMES
      Trois écrans, et le troisième compte autant que les deux premiers :
      les taux, le plan, et CE QUE LE PLAN NE PEUT PAS FAIRE. Un plan qui
      promettrait 100 % partout mentirait sur quatre points connus d'avance.
      ═══════════════════════════════════════════════════════════════════ -->
 <div class="page" id="p-conf-taux">
-  <span class="eyebrow" data-i18n="pg.conf-taux.eb">Taux de conformité · les douze normes</span>
-  <h1 class="page-h" data-i18n-bloc="pg.conf-taux.h1">Onze taux, et <em>ce qu'ils ne disent pas</em></h1>
+  <span class="eyebrow" data-i18n="pg.conf-taux.eb">Taux de conformité · les treize normes</span>
+  <h1 class="page-h" data-i18n-bloc="pg.conf-taux.h1">Treize taux, et <em>ce qu'ils ne disent pas</em></h1>
   <p class="page-p" data-i18n-bloc="pg.conf-taux.p">Chaque taux est composé des parts de sa norme, pondérées, puis
   <strong>plafonné par ses verrous</strong>&nbsp;: un défaut qui arrête un auditeur
-  n'efface pas le travail fait, il interdit de s'en prévaloir au-delà. Onze
-  pourcentages alignés se lisent comme onze fois la même chose&nbsp;; ils ne le sont
+  n'efface pas le travail fait, il interdit de s'en prévaloir au-delà. Treize
+  pourcentages alignés se lisent comme treize fois la même chose&nbsp;; ils ne le sont
   pas, et la <em>nature</em> de chaque norme dit ce que 100&nbsp;% veut dire —
   <strong>et ce qu'il ne veut pas dire</strong>.</p>
   <p class="page-p" data-i18n-bloc="pg.conf-taux.rail">Ces taux lisent <strong>les mêmes
@@ -6180,6 +6188,49 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
      divergé du moteur au premier amendement, et la divergence se serait vue
      chez le client, pas dans la recette.
      ═══════════════════════════════════════════════════════════════════ -->
+<div class="page" id="p-en18286-processus">
+  <span class="eyebrow" data-i18n="pg.en18286-processus.eb">prEN 18286 · Processus</span>
+  <h1 class="page-h" data-i18n-bloc="pg.en18286-processus.h1">L'approche choisie, <em>et ce qu'elle coûte en preuve</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.en18286-processus.p">L'article 17 impose au <b>fournisseur</b> d'un système d'IA à haut risque
+    un système de management de la qualité. Son §4.4 — la stratégie de conformité réglementaire — est la pièce que ni ISO 9001
+    ni ISO/IEC 42001 ne donnent. Pour chacune des sept exigences essentielles, vous CHOISISSEZ une approche, et ce choix
+    commande la charge de preuve&nbsp;: <strong>norme harmonisée ou spécification commune</strong>, il suffit de documenter&nbsp;;
+    <strong>autre norme ou autre solution technique</strong>, il faut en plus écrire ce qui n'est pas couvert, le justifier, et
+    produire la preuve objective. Le §4.4.3.2.2 l'exige, et le taux s'en trouve plafonné tant que ces pièces manquent.</p>
+  <div id="en18286-reserve"></div>
+  <div id="en18286-processus-body" class="veille-loading">Chargement…</div>
+</div>
+
+<div class="page" id="p-en18286-questionnaire">
+  <span class="eyebrow" data-i18n="pg.en18286-questionnaire.eb">prEN 18286 · Questionnaire</span>
+  <h1 class="page-h" data-i18n-bloc="pg.en18286-questionnaire.h1">Soixante-cinq paragraphes, <em>et cinq parts inégales</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.en18286-questionnaire.p">Les chapitres 4 à 10, paragraphe par paragraphe. Le poids de chaque
+    part suit la charge réglementaire et non le nombre de questions&nbsp;: le chapitre 4 pèse trois fois le chapitre 10, parce qu'il
+    porte le §4.4. Un paragraphe «&nbsp;sans objet&nbsp;» sort du calcul&nbsp;; un paragraphe sans réponse compte pour zéro —
+    l'inverse ferait monter le taux à mesure qu'on répond moins.</p>
+  <div id="en18286-questionnaire-body" class="veille-loading">Chargement…</div>
+</div>
+
+<div class="page" id="p-en18286-conformite">
+  <span class="eyebrow" data-i18n="pg.en18286-conformite.eb">prEN 18286 · Conformité</span>
+  <h1 class="page-h" data-i18n-bloc="pg.en18286-conformite.h1">L'article 17, <em>alinéa par alinéa</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.en18286-conformite.p">L'annexe ZA dit quels paragraphes de la norme couvrent quels alinéas du
+    règlement. C'est la seule vue qui dise ce que votre travail couvre <b>du règlement</b>, et non de la norme. Deux choses s'y lisent
+    qu'on préférerait taire&nbsp;: l'article 17(2) n'est couvert par <strong>aucun</strong> paragraphe, et ce projet n'étant pas cité
+    au Journal officiel, rien ici n'ouvre encore de présomption de conformité.</p>
+  <div id="en18286-conformite-body" class="veille-loading">Chargement…</div>
+</div>
+
+<div class="page" id="p-en18286-analyse">
+  <span class="eyebrow" data-i18n="pg.en18286-analyse.eb">prEN 18286 · Analyse</span>
+  <h1 class="page-h" data-i18n-bloc="pg.en18286-analyse.h1">Ce que votre certificat <em>ne vous donne pas</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.en18286-analyse.p">La norme porte deux tables de correspondance, avec ISO 9001:2015 et avec
+    ISO/IEC 42001:2023. Tout le monde y regarde ce qui correspond&nbsp;; ce qui compte, ce sont les <strong>deux lignes en face du
+    vide</strong> — le §4.4 et le chapitre 9, c'est-à-dire exactement ce que le règlement ajoute. Et prEN 18286 organise la façon de
+    répondre aux exigences essentielles&nbsp;: ce sont les <b>autres</b> normes de la famille qui disent comment y répondre.</p>
+  <div id="en18286-analyse-body" class="veille-loading">Chargement…</div>
+</div>
+
 <div class="page" id="p-nist-profil">
   <span class="eyebrow" data-i18n="pg.nist-profil.eb">NIST AI RMF · Profil</span>
   <h1 class="page-h" data-i18n-bloc="pg.nist-profil.h1">Quatre notes, et <em>laquelle commande</em></h1>

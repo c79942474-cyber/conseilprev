@@ -59,8 +59,13 @@ NODE = shutil.which("node")
 # savoir lequel ouvrir, ce qui est exactement la question à laquelle il
 # répond.
 TIROIRS = ["taux-conformite",
-           "rgpd-et-privacy", "iso27001", "iso42001", "en18229", "dora",
-           "nis2", "cra", "nist-ai-rmf", "owasp-llm", "nist-ot"]
+           "rgpd-et-privacy", "iso27001", "iso42001", "en18229", "en18286",
+           "dora", "nis2", "cra", "nist-ai-rmf", "owasp-llm", "nist-ot"]
+# LES DEUX NORMES DU CEN/CLC JTC 21 VOISINENT, et c'est le même mandat vu de
+# deux côtés : prEN 18229-3 tient la supervision humaine de l'article 14,
+# prEN 18286 le système de management de la qualité de l'article 17. Un
+# client qui ouvre l'une trouve l'autre à côté, et toutes deux suivent
+# ISO/IEC 42001 pour la même raison que la note ci-dessous.
 # prEN 18229-3 SUIT ISO/IEC 42001, ET C'EST LE MÊME SUJET VU DE DEUX CÔTÉS :
 # l'une monte le système de management de l'IA, l'autre tient la supervision
 # humaine de l'article 14. Un client qui ouvre l'une trouve l'autre à côté,

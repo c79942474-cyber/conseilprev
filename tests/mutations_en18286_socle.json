@@ -1,0 +1,106 @@
+{
+ "_pourquoi": "Le socle de prEN 18286 : chaque porte du garde-fou du moteur doit tomber sur SA règle. Les mutations portent sur les lignes de la GARDE elle-même — un refus d'import se lit en erreur de collecte, que le banc prendrait pour une survivante, donc les règles de ce fichier n'importent pas le module : elles injectent le défaut dans une copie jetable et lisent le message du refus. UNE PORTE N'A PAS SA MUTATION, ET C'EST MESURÉ : la ligne `p[\"chapitre\"] not in PART_DU_CHAPITRE` de la garde est REDONDANTE avec le rejeu d'arithmétique pour le seul défaut qu'on sache injecter — une part vidée de ses chapitres. La batterie l'a montrée survivante. Elle reste dans le moteur parce qu'elle NOMME la faute au lieu de la laisser sortir en nombre faux, et la règle `test_le_module_REFUSE_une_part_dont_AUCUN_chapitre_ne_releve` mesure bien ce refus ; mais aucune mutation ne la vise, puisque aucune ne la ferait tomber seule.",
+ "cibles": [
+  "tests/test_en18286_socle.py"
+ ],
+ "mutations": [
+  {
+   "nom": "le témoin du socle : le module cesse de se charger sans défaut",
+   "fichier": "en18286.py",
+   "avant": "_FAUTES = _verifier()",
+   "apres": "_FAUTES = _verifier() or _tordu()",
+   "regle": "test_le_module_se_charge_SANS_defaut_injecte"
+  },
+  {
+   "nom": "la source annonce une présomption que le JOUE n'a pas ouverte",
+   "fichier": "en18286.py",
+   "avant": "    \"presomption\": False,\n    \"licence\"",
+   "apres": "    \"presomption\": True,\n    \"licence\"",
+   "regle": "test_le_module_REFUSE_une_presomption_de_conformite_declaree"
+  },
+  {
+   "nom": "la réserve ne dit plus d'où viendrait la présomption",
+   "fichier": "en18286.py",
+   "avant": "    \"Ce projet de norme n'est pas encore cité au Journal officiel de l'Union \"",
+   "apres": "    \"Ce projet de norme n'est pas encore reconnu par la Commission \"",
+   "regle": "test_le_module_REFUSE_une_reserve_qui_ne_dit_plus_D_OU_viendrait_la_presomption"
+  },
+  {
+   "nom": "la licence cesse de nommer le droit d'auteur du CEN",
+   "fichier": "en18286.py",
+   "avant": "    \"licence\": \"PROTÉGÉE PAR LE DROIT D'AUTEUR",
+   "apres": "    \"licence\": \"Publiée par le CEN",
+   "regle": "test_le_module_REFUSE_une_licence_qui_ne_nomme_pas_le_droit_d_auteur"
+  },
+  {
+   "nom": "la garde cesse de vérifier que les références ZA se résolvent",
+   "fichier": "en18286.py",
+   "avant": "        for r in z[\"paragraphes\"]:\n            if not _resout(r):",
+   "apres": "        for r in z[\"paragraphes\"]:\n            if False:",
+   "regle": "test_le_module_REFUSE_une_reference_ZA_qui_ne_vise_AUCUN_paragraphe"
+  },
+  {
+   "nom": "la garde cesse de garder la ligne « non couvert » de l'annexe ZA",
+   "fichier": "en18286.py",
+   "avant": "    if len(ZA_NON_COUVERTS) != 1 or ZA_NON_COUVERTS[0] != \"Article 17(2)\":",
+   "apres": "    if False:",
+   "regle": "test_le_module_REFUSE_la_disparition_de_la_ligne_NON_COUVERTE"
+  },
+  {
+   "nom": "la garde ne NOMME plus le verrou de la charge de preuve",
+   "fichier": "en18286.py",
+   "avant": "    sans = score(_d(\"autre_solution\"))\n    if not sans[\"verrous\"]:",
+   "apres": "    sans = score(_d(\"autre_solution\"))\n    if False:",
+   "regle": "test_le_module_REFUSE_un_verrou_qui_ne_se_DECLENCHE_plus"
+  },
+  {
+   "nom": "la garde ne vérifie plus que les trois pièces LÈVENT le plafond",
+   "fichier": "en18286.py",
+   "avant": "    leve = score(_d(\"autre_solution\", pieces=True))\n    if leve[\"taux\"] != 100 or leve[\"verrous\"]:",
+   "apres": "    leve = score(_d(\"autre_solution\", pieces=True))\n    if False:",
+   "regle": "test_le_module_REFUSE_un_plafond_qui_ne_se_LEVE_plus"
+  },
+  {
+   "nom": "la garde laisse une approche ouvrir présomption ET charge de preuve",
+   "fichier": "en18286.py",
+   "avant": "        if a[\"presomption\"] and a[\"preuve\"] != \"documenter\":",
+   "apres": "        if False:",
+   "regle": "test_le_module_REFUSE_une_approche_qui_ouvre_presomption_ET_charge_de_preuve"
+  },
+  {
+   "nom": "la garde ne regarde plus la qualification À MOITIÉ faite",
+   "fichier": "en18286.py",
+   "avant": "    for moitie in ({\"fournisseur\": True}, {\"haut_risque\": True}):\n        if applicable({\"qualification\": moitie}).get(\"ok\") is not None:",
+   "apres": "    for moitie in ({\"fournisseur\": True}, {\"haut_risque\": True}):\n        if False:",
+   "regle": "test_le_module_REFUSE_de_confondre_le_SILENCE_avec_une_reponse"
+  },
+  {
+   "nom": "la garde ne vérifie plus qu'un non-fournisseur est hors champ",
+   "fichier": "en18286.py",
+   "avant": "    if applicable({\"qualification\": {\"fournisseur\": False,\n                                     \"haut_risque\": True}}).get(\"ok\") is not False:",
+   "apres": "    if False:",
+   "regle": "test_le_module_REFUSE_qu_un_NON_FOURNISSEUR_reste_dans_le_champ"
+  },
+  {
+   "nom": "la garde ne vérifie plus qu'un chapitre appartient à une part",
+   "fichier": "en18286.py",
+   "avant": "        if c[\"part\"] not in PARTS_PAR_CLE:",
+   "apres": "        if False:",
+   "regle": "test_le_module_REFUSE_un_chapitre_dont_la_PART_n_existe_pas"
+  },
+  {
+   "nom": "la résolution de l'annexe ZA perd son second sens",
+   "fichier": "en18286.py",
+   "avant": "            or reference.startswith(p[\"num\"] + \".\")]",
+   "apres": "            ]",
+   "regle": "test_la_resolution_a_DEUX_SENS_et_le_module_refuse_qu_elle_en_perde_un"
+  },
+  {
+   "nom": "la garde ne rejoue plus l'arithmétique du plafond",
+   "fichier": "en18286.py",
+   "avant": "    if sans[\"taux\"] >= plein[\"taux\"] or sans[\"taux\"] != sans[\"plafond\"]:",
+   "apres": "    if False:",
+   "regle": "test_le_module_REFUSE_un_plafond_qui_ne_TOMBE_plus"
+  }
+ ]
+}

@@ -674,13 +674,14 @@ def test_sentinel_html_n_est_pas_marque_element_par_element():
     `<em>` ou un `<b>`, que le moteur par contenu ne sait pas recoller. Le
     reste du corps n'en porte aucune, et c'est cela que la règle tient.
 
-    Le plafond a donc été relevé de ce que la douzième norme a coûté —
-    quatre écrans, soit 4 surtitres + 5 entrées de barre (données data-i18n)
-    et 4 titres + 4 chapôs (données data-i18n-bloc) — et de rien d'autre :
-    la marge au-dessus du relevé reste celle que le lot de traduction avait
-    laissée, 10 et 7."""
-    assert SENTINEL.count("data-i18n=") <= 139, SENTINEL.count("data-i18n=")
-    assert SENTINEL.count("data-i18n-bloc=") <= 108, \
+    Le plafond a donc été relevé de ce que la douzième PUIS la treizième
+    norme ont coûté — quatre écrans chacune, soit à chaque fois 4 surtitres
+    + 5 entrées de barre (données data-i18n) et 4 titres + 4 chapôs
+    (données data-i18n-bloc) — et de rien d'autre : la marge au-dessus du
+    relevé reste celle que le lot de traduction avait laissée, 10 et 7.
+    RELEVÉ APRÈS prEN 18286 : 138 et 109."""
+    assert SENTINEL.count("data-i18n=") <= 148, SENTINEL.count("data-i18n=")
+    assert SENTINEL.count("data-i18n-bloc=") <= 116, \
         SENTINEL.count("data-i18n-bloc=")
 
 

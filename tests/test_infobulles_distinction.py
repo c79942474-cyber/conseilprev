@@ -64,6 +64,7 @@ EN_LETTRES = {
     10: {"fr": "dix",   "en": "ten",    "de": "zehn"},
     11: {"fr": "onze",  "en": "eleven", "de": "elf"},
     12: {"fr": "douze", "en": "twelve", "de": "zwölf"},
+    13: {"fr": "treize", "en": "thirteen", "de": "dreizehn"},
 }
 
 
