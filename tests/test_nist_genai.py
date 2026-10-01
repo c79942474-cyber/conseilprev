@@ -544,9 +544,17 @@ def test_la_source_dit_qu_elle_ne_se_certifie_PAS_et_qu_elle_est_un_PROFIL():
 def test_le_profil_n_ouvre_PAS_une_treizieme_norme():
     """LE DOUBLE COMPTAGE QUE CE MODULE ÉVITE. Un tiroir à part aurait fait
     monter DEUX FOIS l'indice du cabinet pour un seul chantier — et la
-    moyenne consolidée aurait dilué d'autant les onze autres normes."""
+    moyenne consolidée aurait dilué d'autant les autres normes.
+
+    LE NOMBRE N'EST PLUS ÉPINGLÉ ICI, ET C'EST CE QUI A DÛ CHANGER. La règle
+    finissait par « == 12 » : le jour où prEN 18286 est devenue la treizième
+    norme, elle est tombée alors que le profil génératif n'y était pour
+    rien — elle mesurait sa propre constante. Ce qu'elle doit mesurer est
+    que `nist_genai` n'est NULLE PART dans la table des normes, et que le
+    nombre annoncé est bien celui de la table."""
     assert "nist_genai" not in c.NORMES_PAR_CLE
-    assert c.NORMES_ANNONCEES == len(c.NORMES) == 12
+    assert "nist_genai" not in [x["cle"] for x in c.NORMES]
+    assert c.NORMES_ANNONCEES == len(c.NORMES)
     assert "nist_genai" not in c.COMPOSITIONS
     #  ET IL N'AJOUTE AUCUNE PART à la norme qu'il plafonne : une part de
     #  plus aurait changé le poids de GOVERN sans que personne ne l'ait

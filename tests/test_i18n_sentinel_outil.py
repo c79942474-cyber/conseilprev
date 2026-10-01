@@ -100,6 +100,24 @@ for (const op of prog) {
       out.push({ nouvelles: n, coquille: c, cat: cat, stats: O.statistiques(cat) });
     }
     else if (op.op === 'options') out.push(O.lireOptions(op.argv));
+    else if (op.op === 'panneau') {
+      /* UN FAUX DOM, ET RIEN DE PLUS : un panneau, ses cadres, et une
+         fonction d'inventaire qui rend ce que le programme a ecrit.
+         L'un des cadres LEVE sur contentDocument : c'est le cas d'une
+         autre origine, et il doit etre saute sans bruit. */
+      const faux = (c) => (c === 'autre-origine'
+        ? { get contentDocument() { throw new Error('cross-origin'); } }
+        : { contentDocument: c === null ? null : { body: { __inv: c } } });
+      const el = { __inv: op.panneau.inv,
+                   querySelectorAll: () => (op.panneau.cadres || []).map(faux) };
+      const inventorier = (n) => JSON.parse(JSON.stringify(n.__inv));
+      out.push(O.inventaireDuPanneau(el, inventorier, op.cadres));
+    }
+    else if (op.op === 'fusionner') {
+      const cat = op.neuf;
+      const bilan = O.fusionner(cat, op.ancien);
+      out.push({ bilan: bilan, cat: cat });
+    }
     else out.push({ erreur: 'op inconnue ' + op.op });
   } catch (e) { out.push({ erreur: String(e && e.stack || e) }); }
 }
@@ -195,7 +213,13 @@ def test_l_outil_d_inventaire_emploie_sentInventaire_du_module_et_ne_le_reimplem
     """UNE CLÉ RELEVÉE SOUS UNE RÈGLE ET CHERCHÉE SOUS UNE AUTRE ne se
     retrouve jamais : l'inventaire DOIT être celui du module qui traduit."""
     code = re.sub(r"/\*.*?\*/", "", SRC_OUTIL_JS, flags=re.S)
-    assert "sentInventaire(el)" in code and "sentInventaire(document.body)" in code
+    #  L'INVENTAIRE D'UN PANNEAU PASSE PAR UNE FONCTION NOMMÉE — pour qu'une
+    #  règle puisse la jouer — mais c'est TOUJOURS `sentInventaire` du module
+    #  qui tranche : l'outil le lui passe en argument au lieu de l'appeler en
+    #  son nom. La règle vérifie donc les deux bouts du fil.
+    assert "f(el, sentInventaire, arg.cadres)" in code, (
+        "la passe ne donne plus l'inventaire du module à la descente")
+    assert "sentInventaire(document.body)" in code
     assert "function sentInventaire" not in code and "sentMarcher" not in code, "l'outil réimplémente le parcours"
     assert "typeof sentInventaire === 'function'" in code, "l'outil n'attend pas que le module soit chargé"
 
@@ -711,17 +735,192 @@ def _catalogue_reel():
     return json.load(io.open(CATALOGUE, encoding="utf-8"))
 
 
-def test_le_catalogue_du_depot_couvre_les_122_pages_de_PAGE_META_et_la_coquille():
+#: LES PAGES NÉES APRÈS LE DERNIER RELEVÉ NAVIGATEUR — une dette DÉCLARÉE,
+#: et non un oubli. Le catalogue SE REFAIT, c'est vrai ; mais le refaire
+#: suppose de rejouer la mesure navigateur dans les conditions de la
+#: précédente, et une passe partielle RETIRERAIT du catalogue ce que la page
+#: `_js` y apporte — 83 949 mots sur 150 045. Ce serait une régression
+#: silencieuse de l'inventaire : le catalogue dirait « rien à traduire » là
+#: où tout reste à traduire.
+#:
+#: MESURÉ, ET C'EST CE QUI A FAIT ÉCRIRE CETTE LISTE. Une passe sur les quatre
+#: écrans de prEN 18286 ne relève que 25 mots par page : leur corps est peint
+#: depuis le serveur, et il reste verrouillé pour un compte sans déclaration.
+#: Les quatre écrans de prEN 18229-3 et ceux du cadre NIST sont dans le même
+#: cas — le catalogue en possède ce que la passe précédente avait pu voir.
+#: Ces quatre pages attendent donc le lot de la nouvelle mesure navigateur.
+#:
+#: CE QUE LA DÉCLARATION NE PERMET PAS. Elle ne dispense aucune AUTRE page :
+#: toute page de PAGE_META absente du catalogue et absente de cette liste fait
+#: toujours tomber la règle. Et une page nommée ici que le catalogue
+#: COUVRIRAIT fait tomber la règle elle aussi — une dette payée qu'on
+#: continuerait de déclarer couvrirait le jour où une vraie page manquerait.
+PAGES_APRES_LE_CATALOGUE = frozenset({
+    "en18286-processus", "en18286-questionnaire",
+    "en18286-conformite", "en18286-analyse",
+})
+
+
+# ══════════════════════════════════════════════════════════════════════════
+#  7 bis. REFAIRE LE CATALOGUE SANS RIEN PERDRE
+# ══════════════════════════════════════════════════════════════════════════
+#
+# LE DÉFAUT QUI RENDAIT LA DETTE IMPAYABLE, ET IL A ÉTÉ MESURÉ. Le catalogue
+# « se refait », disait la règle ci-dessous. En pratique, non : une passe
+# refaite PERDAIT 1 920 clés (22 421 mots) sur les quatre pages à document
+# embarqué. `querySelectorAll` ne traverse pas la frontière d'un document, donc
+# l'inventaire s'arrêtait à la bordure de l'<iframe> ; les clés présentes au
+# catalogue y étaient entrées par un script d'appoint, une fois, qui n'est pas
+# au dépôt. Refaire le catalogue effaçait donc du travail déjà traduit, et
+# l'inventaire concluait « ces pages n'ont rien à traduire ».
+#
+# DEUX OPTIONS LE RÉPARENT, ET CES RÈGLES LES MESURENT :
+#   --cadres  descend dans les documents embarqués de MÊME origine ;
+#   --fusion  reprend d'une passe précédente ce que celle-ci n'a pas vu.
+
+
+PANNEAU = {
+    "inv": {"texte": {"du panneau": {"fr": "du panneau", "pages": [], "mots": 2}},
+            "bloc": {}, "attr": {}},
+    "cadres": [
+        {"texte": {"du cadre": {"fr": "du cadre", "pages": [], "mots": 2},
+                   "du panneau": {"fr": "ECRASERAIT", "pages": [], "mots": 1}},
+         "bloc": {"bloc du cadre": {"fr": "bloc", "pages": [], "mots": 1}},
+         "attr": {}},
+        "autre-origine",
+        None,
+    ],
+}
+
+
+def test_l_outil_sait_DESCENDRE_dans_les_documents_embarques():
+    """LA DESCENTE SE JOUE, ELLE NE SE LIT PAS. La première version de cette
+    règle cherchait « contentDocument » dans le source : la batterie de
+    mutations a montré qu'on pouvait ANNULER la descente sans la faire
+    tomber. Elle est donc une fonction nommée, jouée ici sur un faux DOM.
+
+    TROIS CADRES, TROIS CAS : un lisible, un d'une autre origine — dont le
+    `contentDocument` LÈVE, et ce n'est pas une faute : un document qu'on ne
+    peut pas lire n'est pas un document qu'on traduit —, et un sans corps."""
+    [sans, avec] = _node([
+        {"op": "panneau", "panneau": PANNEAU, "cadres": False},
+        {"op": "panneau", "panneau": PANNEAU, "cadres": True},
+    ])
+    assert sorted(sans["texte"]) == ["du panneau"], sans
+    assert sans["bloc"] == {}, sans
+    assert sorted(avec["texte"]) == ["du cadre", "du panneau"], avec
+    assert sorted(avec["bloc"]) == ["bloc du cadre"], avec
+    #  CE QUE LE PANNEAU PORTE PRIME SUR CE QUE LE CADRE EN DIT : la clé est
+    #  la même, et c'est l'écran principal qui la tranche.
+    assert avec["texte"]["du panneau"]["fr"] == "du panneau", avec["texte"]
+
+    #  LE DRAPEAU EST LU, et son défaut est FAUX : une option toujours active
+    #  changerait la mesure sans qu'on l'ait demandée.
+    [vide, drapeau] = _node([
+        {"op": "options", "argv": ["extraire"]},
+        {"op": "options", "argv": ["extraire", "--cadres"]},
+    ])
+    assert vide["cadres"] is False, vide
+    assert drapeau["cadres"] is True, drapeau
+
+
+def test_la_passe_DIT_ce_qu_elle_laisse_dans_les_cadres():
+    """UNE MESURE QU'ON NE VOIT PAS NE SE FAIT PAS. Quand la passe n'ouvre
+    pas les cadres — c'est son défaut —, elle doit dire que --cadres les
+    relève, et combien : sinon le trou se redevine à chaque fois."""
+    assert "documents embarqués NON ouverts" in SRC_OUTIL_JS
+    #  LE COMPTE DOIT ÊTRE DANS LA LIGNE QUE LA PASSE IMPRIME, et non
+    #  seulement dans l'en-tête du fichier : la batterie de mutations a montré
+    #  qu'on pouvait vider le message sans faire tomber la règle, parce que le
+    #  même nombre figure aussi dans le commentaire du haut.
+    i = SRC_OUTIL_JS.index("documents embarqués NON ouverts")
+    ligne = SRC_OUTIL_JS[i:i + 400]
+    assert "--cadres les relève" in ligne, ligne[:160]
+    assert "19 000 mots" in ligne, (
+        "la passe ne dit plus COMBIEN elle laisse dans les cadres : %r"
+        % ligne[:200])
+    #  LA LIGNE EST CONDITIONNELLE : la dire quand on VIENT de les ouvrir
+    #  serait un contresens.
+    assert "if (!opts.cadres) {" in SRC_OUTIL_JS, (
+        "la passe annonce le trou des cadres même quand elle les a ouverts")
+
+
+def test_une_passe_refaite_NE_PERD_PAS_ce_qu_elle_n_a_pas_visite():
+    """LE CŒUR DE LA RÉPARATION. La fusion reprend les clés de l'ancienne passe
+    que la nouvelle n'a pas vues ; elle NE touche à rien de ce que la nouvelle
+    a vu — un texte réécrit à l'écran ne se fait pas remplacer par son
+    ancienne version ; et elle laisse partir les clés d'une page que PAGE_META
+    ne connaît plus."""
+    neuf = {
+        "rubriques": {"alpha": "A", "beta": "B"},
+        "bloc": {}, "attr": {},
+        "texte": {"vue a l ecran": {"fr": "neuf", "pages": ["alpha"], "mots": 1}},
+    }
+    ancien = {
+        "bloc": {}, "attr": {},
+        "texte": {
+            "vue a l ecran": {"fr": "ANCIEN", "pages": ["alpha"], "mots": 9},
+            "jamais revue": {"fr": "gardee", "pages": ["beta"], "mots": 4},
+            "page disparue": {"fr": "perdue", "pages": ["gamma"], "mots": 7},
+            "coquille": {"fr": "gardee aussi", "pages": ["_coquille"], "mots": 3},
+        },
+    }
+    [r] = _node([{"op": "fusionner", "neuf": neuf, "ancien": ancien}])
+    cat = r["cat"]
+    assert r["bilan"]["reprises"] == 2, r["bilan"]
+    assert r["bilan"]["mots"] == 7, r["bilan"]
+    #  CE QUE LA NOUVELLE PASSE A VU N'EST PAS ÉCRASÉ.
+    assert cat["texte"]["vue a l ecran"]["fr"] == "neuf", cat["texte"]
+    #  CE QU'ELLE N'A PAS VU EST GARDÉ, avec sa page.
+    assert cat["texte"]["jamais revue"]["pages"] == ["beta"], cat["texte"]
+    assert "coquille" in cat["texte"], cat["texte"]
+    #  ET LA PAGE QUE PAGE_META NE CONNAÎT PLUS S'EN VA AVEC SES CLÉS.
+    assert "page disparue" not in cat["texte"], cat["texte"]
+
+
+def test_la_fusion_se_demande_et_ne_s_impose_pas():
+    """UNE FUSION TOUJOURS ACTIVE EMPÊCHERAIT DE MESURER CE QU'UNE PASSE
+    TROUVE SEULE — et c'est précisément la mesure qui a montré le défaut."""
+    [vide, avec] = _node([
+        {"op": "options", "argv": ["extraire"]},
+        {"op": "options", "argv": ["extraire", "--fusion", "vieux.json"]},
+    ])
+    assert vide["fusion"] == "", vide
+    assert avec["fusion"] == "vieux.json", avec
+    #  ET L'APPEL EST GARDÉ PAR L'OPTION. Sans cette ligne, la batterie de
+    #  mutations rendait la fusion inconditionnelle sans rien faire tomber :
+    #  `extraire` ne se joue pas sans navigateur, donc c'est la GARDE qui se
+    #  mesure ici — une passe qui fusionnerait toujours ne pourrait plus dire
+    #  ce qu'elle trouve SEULE, et c'est cette mesure-là qui a révélé le
+    #  trou des 1 920 clés.
+    assert "  if (opts.fusion) {" in SRC_OUTIL_JS, (
+        "la fusion n'est plus gardée par son option : elle s'imposerait à "
+        "chaque passe, et une passe ne se mesurerait plus seule")
+
+
+def test_le_catalogue_du_depot_couvre_les_pages_de_PAGE_META_et_la_coquille():
     cat = _catalogue_reel()
     rubriques = outil.lire_rubriques_page_js()
-    #  LE CATALOGUE, LUI, SE REFAIT. Contrairement à la photo du point de
-    #  départ, il dit ce qu'il y a à traduire AUJOURD'HUI : une page neuve
-    #  y entre par un passage du relevé navigateur sur cette page-là.
-    assert cat["pages"] == len(rubriques) == 122, (cat["pages"], len(rubriques))
-    assert cat["rubriques"] == rubriques, "les rubriques du catalogue ne sont plus celles de PAGE_META"
+    #  LE COMPTE N'EST PLUS ÉCRIT ICI, ET C'EST CE QUI A DÛ CHANGER. La règle
+    #  finissait par « == 122 » : le jour où PAGE_META en a porté 126, elle
+    #  est tombée sur sa propre constante. Ce qu'elle doit mesurer est
+    #  l'ACCORD entre le catalogue et PAGE_META, aux pages déclarées près.
+    assert len(rubriques) >= 122, "%d rubriques relevées" % len(rubriques)
+    assert cat["pages"] == len(rubriques) - len(PAGES_APRES_LE_CATALOGUE), (
+        "le catalogue couvre %d pages, PAGE_META en porte %d, et %d sont "
+        "déclarées nées après le relevé"
+        % (cat["pages"], len(rubriques), len(PAGES_APRES_LE_CATALOGUE)))
+    for page in sorted(PAGES_APRES_LE_CATALOGUE):
+        assert page in rubriques, (
+            "« %s » est déclarée née après le relevé, mais PAGE_META ne la "
+            "porte plus : la déclaration ne protège plus rien" % page)
     pages_vues = set(p for r in ("bloc", "texte", "attr") for e in cat[r].values() for p in e["pages"])
-    manquantes = sorted(set(rubriques) - pages_vues)
+    manquantes = sorted(set(rubriques) - pages_vues - PAGES_APRES_LE_CATALOGUE)
     assert not manquantes, "pages sans aucune entrée : %s" % manquantes
+    payees = sorted(PAGES_APRES_LE_CATALOGUE & pages_vues)
+    assert not payees, (
+        "déclarées nées après le relevé, mais le catalogue les couvre : %s "
+        "— la dette est payée, la déclaration doit disparaître" % payees)
     assert "_coquille" in pages_vues and "_js" in pages_vues
     assert cat["js"]["fichier"] == "sentinel.page.js"
 

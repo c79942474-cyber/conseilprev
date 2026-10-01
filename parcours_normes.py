@@ -46,6 +46,7 @@ import iso42001
 import cra
 import nis2
 import nis2_recyf
+import en18286
 import nist_ai_rmf
 import nist_genai
 import nist_800_53
@@ -122,6 +123,13 @@ QUI_JUGE = {
             "projet de loi de transposition —, sur pièces et par audit",
     "cra": "elle se démontre par la procédure d'évaluation de la conformité "
            "que la classe du produit impose, avant le marquage CE",
+    #  CE PROJET N'EST PAS CITÉ AU JOURNAL OFFICIEL : rien ne s'y présume
+    #  encore. Ce qui jugera, le jour venu, c'est l'évaluation de conformité
+    #  de l'article 43 — pas un audit de système de management.
+    "en18286": "ce projet de norme n'est pas encore cité au Journal officiel "
+               "de l'Union européenne : il n'ouvre aucune présomption de "
+               "conformité à l'article 17. Le jour venu, c'est l'organisme "
+               "notifié de l'évaluation de conformité qui l'appréciera",
     "nist_ai_rmf": "ce cadre est volontaire et ne se certifie pas : il n'y a "
                    "pas de conformité à prononcer",
     "owasp_llm": "cette liste est un classement de risques, pas une norme : "
@@ -327,6 +335,55 @@ BLOCS = {
            "C'est l'obligation du règlement qui s'applique la première.",
            "Elle vise aussi les produits déjà sur le marché.",
            ("role",)),
+    ),
+    #  QUATRE BLOCS, ET L'ORDRE N'EST PAS CELUI DU DOCUMENT. Le processus
+    #  vient en premier parce qu'il porte la QUALIFICATION : hors du champ de
+    #  l'article 17, les trois autres écrans n'ont rien à mesurer. Puis le
+    #  questionnaire, puis les deux lectures qui en découlent.
+    "en18286": (
+        _b("processus", "en18286-processus",
+           "Processus — stratégie §4.4", "saisie",
+           "La qualification, les cinq composantes de la stratégie du §4.4, "
+           "et l'approche retenue pour chacune des sept exigences "
+           "essentielles.",
+           "C'est la pièce que ni ISO 9001 ni ISO/IEC 42001 ne donnent, et "
+           "celle que l'organisme notifié ouvre en premier. L'approche "
+           "retenue COMMANDE la charge de preuve : « autre norme » et "
+           "« autre solution » réclament, en plus, ce qui n'est pas couvert, "
+           "la justification et la preuve objective.",
+           "Cocher « autre solution technique » sans ces trois pièces ne "
+           "laisse pas une exigence à moitié tenue : cela plafonne le taux, "
+           "parce que le §4.4.3.2.2 l'exige."),
+        _b("questionnaire", "en18286-questionnaire",
+           "Questionnaire — chap. 4 à 10", "saisie",
+           "Les soixante-cinq paragraphes normatifs, du système de "
+           "management à l'évaluation des performances.",
+           "Le taux par part s'en déduit, et le poids suit la charge "
+           "réglementaire : le chapitre 4 pèse trois fois le chapitre 10.",
+           "Un paragraphe « sans objet » sort du calcul ; un paragraphe sans "
+           "réponse compte pour zéro. L'inverse ferait monter le taux à "
+           "mesure qu'on répond MOINS.",
+           ("processus",)),
+        _b("conformite", "en18286-conformite",
+           "Conformité — annexe ZA", "lecture",
+           "L'article 17 alinéa par alinéa, et le paragraphe de la norme qui "
+           "le couvre.",
+           "C'est la seule vue qui dise ce que le travail fait COUVRE du "
+           "règlement, et non ce qu'il couvre de la norme.",
+           "L'annexe ZA porte une ligne « Non couvert » — l'article 17(2). "
+           "Cent pour cent ici ne veut donc pas dire article 17 tenu.",
+           ("questionnaire",)),
+        _b("analyse", "en18286-analyse",
+           "Analyse — ponts et famille", "lecture",
+           "Ce qu'un certificat ISO 9001 ou ISO/IEC 42001 apporte déjà, ce "
+           "qu'il n'apporte PAS, et les autres normes harmonisées de la "
+           "famille.",
+           "Les deux tables de correspondance se lisent à l'envers : ce qui "
+           "compte, ce sont les DEUX lignes en face du vide.",
+           "prEN 18286 organise la façon de répondre aux exigences "
+           "essentielles ; ce sont les AUTRES normes de la famille qui "
+           "disent comment y répondre.",
+           ("questionnaire",)),
     ),
     "nist_ai_rmf": (
         _b("profil", "nist-profil", "Profil par fonction", "saisie",
@@ -911,6 +968,74 @@ def _cra(d):
     return manque, {}, {}
 
 
+def _en18286(d):
+    """Ce qui manque à chacun des deux blocs de saisie.
+
+    LE PROCESSUS SE VALIDE SUR LA QUALIFICATION ET LA STRATÉGIE, pas sur le
+    questionnaire : ce sont deux blocs, et confondre leurs manques ferait
+    rougir le premier pour une réponse attendue dans le second.
+
+    HORS CHAMP, TOUT DEVIENT SANS OBJET. Un déployeur qui vient de se
+    déclarer tel a RÉPONDU : lui laisser soixante-cinq questions en attente
+    serait lui vendre un chantier que l'article 17 ne lui impose pas.
+    """
+    qual = _dict(d, "qualification")
+    manque = {}
+    champ = en18286.applicable({"qualification": qual})
+    if champ.get("ok") is None:
+        #  LES DEUX QUESTIONS SONT NOMMÉES SÉPARÉMENT, et seule celle qui
+        #  manque est demandée : dire « qualifiez-vous » à qui vient de
+        #  répondre à la moitié ne lui apprend pas laquelle il reste.
+        attente = []
+        if qual.get("fournisseur") is None:
+            attente.append(_q("Êtes-vous FOURNISSEUR du système — celui qui "
+                              "le met sur le marché ou en service sous son "
+                              "nom ? L'article 17 ne vise que lui."))
+        if qual.get("haut_risque") is None:
+            attente.append(_q("Le système est-il à HAUT RISQUE au sens de "
+                              "l'annexe III ou de l'article 6 ? C'est cette "
+                              "qualification qui déclenche l'article 17."))
+        manque["processus"] = attente
+        manque["questionnaire"] = []
+        return manque, {}, {}
+    if champ.get("ok") is False:
+        #  SANS OBJET, ET NON « À FAIRE » : la qualification déclarée écarte
+        #  la norme, et le rail doit le dire plutôt que de laisser quatre
+        #  blocs bleus.
+        #  ET IL PART EN DEUXIÈME POSITION, PAS EN TROISIÈME. Mesuré :
+        #  `avancement` lit `(manque, sans_objet, contexte)` ; rendu en
+        #  troisième, ce dictionnaire atterrissait dans le CONTEXTE, que rien
+        #  ne lit — et les quatre blocs d'un déployeur hors champ repassaient
+        #  « validée » et « courante », c'est-à-dire du travail à faire.
+        so = {b["cle"]: "L'article 17 vise le fournisseur d'un système d'IA "
+                        "à haut risque : hors de cette qualification, il n'y "
+                        "a rien à mesurer ici."
+              for b in BLOCS["en18286"]}
+        return {}, so, {}
+
+    st = en18286.strategie(d)
+    attente = [_q("Stratégie de conformité : « %s »" % c["nom"])
+               for c in st["composantes"] if not c["declaree"]]
+    for ligne in st["lignes"]:
+        if ligne["etat"] == "sans_approche":
+            attente.append(_q("Exigence essentielle « %s » (%s) : aucune "
+                              "approche retenue"
+                              % (ligne["nom"], ligne["article"])))
+        elif ligne["etat"] == "a_prouver":
+            attente.append(_q("Exigence essentielle « %s » : l'approche "
+                              "retenue réclame encore %d pièce(s) du "
+                              "§4.4.3.2.2"
+                              % (ligne["nom"], len(ligne["manque"]))))
+    manque["processus"] = attente
+
+    reponses = _dict(d, "reponses")
+    manque["questionnaire"] = [
+        _q("%s %s" % (p["num"], p["titre"]))
+        for p in en18286.PARAGRAPHES
+        if reponses.get(p["num"]) not in en18286.ETATS]
+    return manque, {}, {}
+
+
 def _nist_ai_rmf(d):
     """Deux blocs de saisie : le cadre, puis le profil qui le plafonne.
 
@@ -1221,7 +1346,8 @@ EVALUATEURS = {
     "en18229_3": _en18229_3,
     "cartographier": _cartographier,
     "nis2": _nis2, "iso27001": _iso27001, "iso42001": _iso42001,
-    "cra": _cra, "nist_ai_rmf": _nist_ai_rmf, "owasp_llm": _owasp_llm,
+    "cra": _cra, "en18286": _en18286,
+    "nist_ai_rmf": _nist_ai_rmf, "owasp_llm": _owasp_llm,
     "nist_800_53": _nist_800_53, "nist_800_82": _nist_800_82,
     "rgpd": _rgpd, "ia_act": _ia_act,
 }

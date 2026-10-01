@@ -55,6 +55,7 @@ import nist_ai_rmf  # noqa: E402
 import nist_genai  # noqa: E402
 import nist_800_53  # noqa: E402
 import en18229_3
+import en18286  # noqa: E402
 import nist_800_82  # noqa: E402
 import owasp_llm  # noqa: E402
 
@@ -123,6 +124,18 @@ def _alterne(cles, etats):
     """Des réponses qui ALTERNENT : ni toutes favorables, ni toutes
     défavorables."""
     return {k: etats[i % len(etats)] for i, k in enumerate(cles)}
+
+
+def _approche_86(approche):
+    """Une exigence essentielle de prEN 18286, avec la charge de preuve que
+    SON approche réclame. Les deux approches qui n'ouvrent aucune
+    présomption — autre norme, autre solution technique — portent les trois
+    pièces du §4.4.3.2.2 ; les deux autres n'ont rien à porter de plus."""
+    v = {"approche": approche}
+    if approche in en18286.APPROCHES_A_JUSTIFIER:
+        for p in en18286.PIECES_A_JUSTIFIER:
+            v[p["cle"]] = True
+    return v
 
 
 def _articles(module):
@@ -227,6 +240,28 @@ def _remplis():
                            "delai_unite": "h", "latence": 20,
                            "latence_unite": "min",
                            "categories": ["retrospective"]}]},
+        #  prEN 18286 : LE BANC HONORE LA CHARGE DE PREUVE DU §4.4.3.2.2,
+        #  et c'est délibéré. Les deux approches « à justifier » y portent
+        #  leurs trois pièces — sans elles, la part « stratégie » serait
+        #  plafonnée à la moitié et cette règle mesurerait le PLAFOND au
+        #  lieu du taux lu. Les quatre approches alternent, les cinq
+        #  composantes sont déclarées, et chacun des soixante-cinq
+        #  paragraphes porte une réponse : c'est ce que « l'écran est
+        #  rempli » veut dire ici, et c'est ce que le rail exige de ses
+        #  deux blocs de saisie.
+        "en18286": {
+            "qualification": {"fournisseur": True, "haut_risque": True,
+                              "services_financiers": False},
+            "strategie": {
+                "elements": {e["cle"]: True
+                             for e in en18286.ELEMENTS_STRATEGIE},
+                "exigences": {
+                    cle: _approche_86(ap) for cle, ap in _alterne(
+                        [e["cle"] for e in en18286.EXIGENCES_ESSENTIELLES],
+                        tuple(a["cle"] for a in en18286.APPROCHES)).items()}},
+            "reponses": _alterne([p["num"] for p in en18286.PARAGRAPHES],
+                                 ("tenu", "partiel", "absent", "tenu")),
+            "certifie": {"iso9001": True}},
         "rgpd": {"traitements": [{"nom": "Paie",
                                   "champs": {k: True for k, _l
                                              in pn.RGPD_CHAMPS_ART30},

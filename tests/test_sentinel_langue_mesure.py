@@ -385,11 +385,27 @@ def _pages_de_PAGE_META():
 #: vérifie que chacune est VRAIMENT absente de la photo.
 PAGES_APRES_LA_MESURE = frozenset({
     "en18229-role", "en18229-scenarios", "en18229-cadre", "en18229-score",
+    #  prEN 18286 — QUATRE ÉCRANS DE PLUS, NÉS APRÈS LA PHOTO EUX AUSSI.
+    "en18286-processus", "en18286-questionnaire",
+    "en18286-conformite", "en18286-analyse",
 })
 
 
-def test_PAGE_META_porte_bien_122_pages():
-    assert len(_pages_de_PAGE_META()) == 122, len(_pages_de_PAGE_META())
+def test_PAGE_META_porte_bien_toutes_les_pages_servies():
+    """LE COMPTE EST DÉRIVÉ, PLUS ÉCRIT. La règle disait « == 122 » : elle est
+    tombée le jour où la treizième norme a porté PAGE_META à 126 pages, alors
+    que PAGE_META et les panneaux servis s'accordaient parfaitement. Ce qui
+    compte n'a jamais été le chiffre : c'est que la table de navigation décrive
+    exactement les panneaux que le HTML sert — ni un de plus, ni un de moins.
+    Le plancher, lui, reste écrit : une lecture cassée qui rendrait trois
+    pages ne doit pas passer pour un produit qui en aurait perdu cent."""
+    pages = _pages_de_PAGE_META()
+    assert len(pages) >= 122, "%d pages relevées dans PAGE_META" % len(pages)
+    servis = set(re.findall(r'id="p-([a-z0-9-]+)"', _lire("sentinel.html")))
+    assert set(pages) == servis, (
+        "PAGE_META et les panneaux servis ne coïncident plus — déclarés sans "
+        "panneau : %s ; servis sans entrée : %s"
+        % (sorted(set(pages) - servis), sorted(servis - set(pages))))
 
 
 def test_MESURE_AVANT_couvre_chaque_page_de_PAGE_META():

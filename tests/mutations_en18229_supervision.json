@@ -195,8 +195,8 @@
   {
    "nom": "les deux normes de l'IA cessent de se toucher dans la barre",
    "fichier": "conformite.py",
-   "avant": "ORDRE_BARRE = (\"rgpd\", \"iso27001\", \"iso42001\", \"en18229_3\", \"dora\", \"nis2\",\n               \"cra\", \"nist_ai_rmf\", \"owasp_llm\", \"nist_800_53\",\n               \"nist_800_82\")",
-   "apres": "ORDRE_BARRE = (\"rgpd\", \"iso27001\", \"iso42001\", \"dora\", \"nis2\",\n               \"cra\", \"nist_ai_rmf\", \"owasp_llm\", \"nist_800_53\",\n               \"nist_800_82\", \"en18229_3\")",
+   "avant": "ORDRE_BARRE = (\"rgpd\", \"iso27001\", \"iso42001\", \"en18229_3\", \"en18286\",\n               \"dora\", \"nis2\",\n               \"cra\", \"nist_ai_rmf\", \"owasp_llm\", \"nist_800_53\",\n               \"nist_800_82\")",
+   "apres": "ORDRE_BARRE = (\"rgpd\", \"iso27001\", \"iso42001\", \"en18286\",\n               \"dora\", \"nis2\",\n               \"cra\", \"nist_ai_rmf\", \"owasp_llm\", \"nist_800_53\",\n               \"nist_800_82\", \"en18229_3\")",
    "regle": "test_les_DEUX_normes_de_l_IA_se_touchent_dans_la_barre"
   },
   {
@@ -291,16 +291,16 @@
    "regle": "test_le_rail_ne_prend_PAS_une_carte_du_questionnaire_pour_SON_bandeau"
   },
   {
-   "nom": "un écran annonce de nouveau onze normes quand la table en porte douze",
+   "nom": "un écran annonce de nouveau douze normes quand la table en porte treize",
    "fichier": "sentinel.html",
-   "avant": "<span>Taux de conformité — les douze normes</span>",
-   "apres": "<span>Taux de conformité — les onze normes</span>",
+   "avant": "<span>Taux de conformité — les treize normes</span>",
+   "apres": "<span>Taux de conformité — les douze normes</span>",
    "regle": "test_AUCUN_ecran_n_annonce_un_COMPTE_DE_NORMES_autre_que_celui_de_la_table"
   },
   {
    "nom": "le guide du taux revient au compte de neuf normes",
    "fichier": "sentinel.page.js",
-   "avant": "title: \"Taux de conformité — les douze normes\"",
+   "avant": "title: \"Taux de conformité — les treize normes\"",
    "apres": "title: \"Taux de conformité — les neuf normes\"",
    "regle": "test_AUCUN_ecran_n_annonce_un_COMPTE_DE_NORMES_autre_que_celui_de_la_table"
   }

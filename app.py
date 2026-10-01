@@ -2574,6 +2574,8 @@ def api_dora_contrat():
 
 
 import iso42001  # noqa: E402
+import en18286    # noqa: E402  — le SMQ de l'article 17 : au stade de
+                  # l'Enquête CEN, donc AUCUNE présomption de conformité
 import nist_ai_rmf  # noqa: E402  — le cadre NIST, qui ne se certifie PAS :
 import nist_genai   # noqa: E402  — et son PROFIL IA générative, qui n'est
                     # pas une norme de plus : il PLAFONNE le cadre ci-dessus
@@ -2587,6 +2589,42 @@ import qualification_assistee  # noqa: E402  — la proposition, jamais la
 import qualification_moteur    # noqa: E402  — et le seul endroit qui dit
                     # ce que le moteur a le droit de faire : rien
                     # 42001 ne rencontre pas
+
+
+@app.route('/api/en18286/referentiel', methods=['GET'])
+@rate_limit(limit=120, window=60)
+def api_en18286_referentiel():
+    """prEN 18286 : les 65 paragraphes, le processus du §4.4, l'annexe ZA.
+
+    LA RÉSERVE PART AVEC LES DONNÉES, pas en note de bas d'écran. Ce projet
+    de norme n'est pas cité au Journal officiel : il n'ouvre AUCUNE
+    présomption de conformité à l'article 17, et c'est la première chose
+    qu'un lecteur doit savoir avant de lire un pourcentage.
+
+    L'ÉCRAN NE RECOPIE RIEN. Le texte est la propriété du CEN : les énoncés
+    normatifs n'existent nulle part dans ce dépôt, et cette route ne rend
+    que des numéros, des titres et ce que le cabinet écrit."""
+    return jsonify({"ok": True, "referentiel": en18286.referentiel()})
+
+
+@app.route('/api/en18286/evaluer', methods=['POST'])
+@rate_limit(limit=120, window=60)
+def api_en18286_evaluer():
+    """Le score, la stratégie du §4.4, la couverture de l'article 17, le plan.
+
+    UN SEUL APPEL REND LES QUATRE, parce qu'ils se lisent ensemble. Séparés,
+    l'écran pourrait afficher un taux issu d'une déclaration et un plan issu
+    de la suivante — et le client verrait un plan qui ne mène pas au taux."""
+    data = request.get_json(silent=True) or {}
+    d = data.get("declaration") if isinstance(data.get("declaration"), dict) \
+        else data
+    r = en18286.evaluer(d, aujourdhui=data.get("date"))
+    if not r.get("ok"):
+        return jsonify(r), 400
+    limite = data.get("limite")
+    limite = limite if isinstance(limite, int) and 0 < limite <= 200 else None
+    r["plan"] = en18286.plan(d, limite=limite)
+    return jsonify(r), 200
 
 
 @app.route('/api/nist-ai-rmf/referentiel', methods=['GET'])

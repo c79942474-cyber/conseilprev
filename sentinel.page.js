@@ -1022,9 +1022,20 @@ var PAGE_META = {
   'iso27001-millesime':{ section: 'ISO 27001', label: '2013 \u2192 2022 : ce qui a changé' },
   'iso42001':      { section: 'ISO 42001', label: 'Articles 4 à 10' },
   'iso42001-soa':  { section: 'ISO 42001', label: 'Déclaration d\u2019applicabilité' },
-  'conf-taux': { section: 'Taux de conformité', label: 'Les neuf taux' },
+  /* AUCUN COMPTE DANS CE LIBELLÉ, et c'est une leçon payée : il a dit
+     « neuf » pendant que la grille en portait treize. Un compte se calcule
+     ou ne s'affiche pas — il ne s'écrit pas dans une table de navigation. */
+  'conf-taux': { section: 'Taux de conformité', label: 'Le taux par norme' },
   'conf-plan': { section: 'Taux de conformité', label: 'Plan de mise en conformité' },
   'conf-limites': { section: 'Taux de conformité', label: 'Ce que le plan ne peut pas faire' },
+  'en18286-processus':     { section: 'prEN 18286 — SMQ de l\u2019article 17',
+                             label: 'Processus — strat\u00e9gie \u00a74.4' },
+  'en18286-questionnaire': { section: 'prEN 18286 — SMQ de l\u2019article 17',
+                             label: 'Questionnaire — chap. 4 \u00e0 10' },
+  'en18286-conformite':    { section: 'prEN 18286 — SMQ de l\u2019article 17',
+                             label: 'Conformit\u00e9 — annexe ZA' },
+  'en18286-analyse':       { section: 'prEN 18286 — SMQ de l\u2019article 17',
+                             label: 'Analyse — ponts et famille' },
   'nist-profil':   { section: 'NIST AI RMF', label: 'Profil par fonction' },
   'nist-cadre':    { section: 'NIST AI RMF', label: 'Le cadre, cat\u00e9gorie par cat\u00e9gorie' },
   'nist-genai':    { section: 'NIST AI RMF', label: 'Profil IA générative' },
@@ -1215,6 +1226,23 @@ var SENT_T = {
     'pg.en18229-score.eb': 'prEN 18229-3 \u00b7 Score',
     'pg.en18229-score.h1': 'The score, its caps <em>and Article 14</em>',
     'pg.en18229-score.p': 'The score says that what the standard expects is declared and that the arithmetic of the delay holds. A lock does not subtract points: it sets a cap, and the cap is named. Article 14 coverage reads paragraph by paragraph \u2014 a paragraph is not 80 % met.',
+    'nav.sec.en18286': 'prEN 18286 \u2014 Article 17 QMS',
+    'nav.item.en18286-processus': 'Process \u2014 \u00a74.4 strategy',
+    'nav.item.en18286-questionnaire': 'Questionnaire \u2014 clauses 4 to 10',
+    'nav.item.en18286-conformite': 'Compliance \u2014 Annex ZA',
+    'nav.item.en18286-analyse': 'Analysis \u2014 bridges and family',
+    'pg.en18286-processus.eb': 'prEN 18286 \u00b7 Process',
+    'pg.en18286-processus.h1': 'The approach you choose, <em>and what it costs in proof</em>',
+    'pg.en18286-processus.p': 'Article 17 requires the <b>provider</b> of a high-risk AI system to operate a quality management system. Its \u00a74.4 \u2014 the regulatory compliance strategy \u2014 is the piece neither ISO 9001 nor ISO/IEC 42001 gives you. For each of the seven essential requirements you CHOOSE an approach, and that choice governs the burden of proof: with a <strong>harmonised standard or a common specification</strong>, documenting is enough; with <strong>another standard or another technical solution</strong>, you must also write down what is not covered, justify it, and produce the objective evidence. \u00a74.4.3.2.2 requires this, and the rate stays capped while those pieces are missing.',
+    'pg.en18286-questionnaire.eb': 'prEN 18286 \u00b7 Questionnaire',
+    'pg.en18286-questionnaire.h1': 'Sixty-five clauses, <em>and five unequal shares</em>',
+    'pg.en18286-questionnaire.p': 'Clauses 4 to 10, paragraph by paragraph. Each share is weighted by regulatory load, not by the number of questions: clause 4 weighs three times clause 10, because it carries \u00a74.4. A paragraph marked \u201cnot applicable\u201d leaves the calculation; a paragraph with no answer counts as zero \u2014 the reverse would raise the rate the less you answer.',
+    'pg.en18286-conformite.eb': 'prEN 18286 \u00b7 Compliance',
+    'pg.en18286-conformite.h1': 'Article 17, <em>point by point</em>',
+    'pg.en18286-conformite.p': 'Annex ZA says which clauses of the standard cover which points of the Regulation. It is the only view that says what your work covers <b>of the Regulation</b> rather than of the standard. Two things read there that one would rather not say: Article 17(2) is covered by <strong>no</strong> clause at all, and since this draft is not cited in the Official Journal, nothing here yet opens a presumption of conformity.',
+    'pg.en18286-analyse.eb': 'prEN 18286 \u00b7 Analysis',
+    'pg.en18286-analyse.h1': 'What your certificate <em>does not give you</em>',
+    'pg.en18286-analyse.p': 'The standard carries two correspondence tables, with ISO 9001:2015 and with ISO/IEC 42001:2023. Everyone looks there for what matches; what counts is the <strong>two rows facing the void</strong> \u2014 \u00a74.4 and clause 9, which is exactly what the Regulation adds. And prEN 18286 organises the way essential requirements are met: it is the <b>other</b> standards of the family that say how to meet them.',
     'pg.nist53-socle.eb': 'NIST SP 800-53 · Rev. 4',
     'pg.nist53-socle.h1': 'Eighteen families, <em>and what commands them</em>',
     'pg.nist53-socle.p': 'The baseline — Low, Moderate or High — is not a choice: it <strong>follows</strong> from the system categorisation. Announcing it without having carried out the risk assessment means giving a result without its calculation. And four families — RA, PL, CA, PM — decide what the other fourteen must do: when the downstream outruns them, this module says so instead of averaging it away.',
@@ -1399,8 +1427,8 @@ var SENT_T = {
     'pg.empreinte.h1': 'Digital <em>footprint</em>',
     'pg.empreinte.p': 'An automatic, real-time counter of the footprint of the site, the platform and the language models in use, computed from actual usage: tokens consumed, latency, pages served. Three methods are run in parallel on the same data, so their results can be compared.',
     'pg.conf-taux.eb': 'Compliance rate · the eleven standards',
-    'pg.conf-taux.h1': 'Eleven rates, and <em>what they do not say</em>',
-    'pg.conf-taux.p': 'Each rate is composed of its standard\'s weighted parts, then <strong>capped by its blockers</strong>: a defect that stops an auditor does not erase the work done, it forbids you to claim credit beyond it. Eleven percentages in a row read as eleven of the same thing; they are not, and the <em>nature</em> of each standard says what 100&nbsp;% means — <strong>and what it does not mean</strong>.',
+    'pg.conf-taux.h1': 'Thirteen rates, and <em>what they do not say</em>',
+    'pg.conf-taux.p': 'Each rate is composed of its standard\'s weighted parts, then <strong>capped by its blockers</strong>: a defect that stops an auditor does not erase the work done, it forbids you to claim credit beyond it. Thirteen percentages in a row read as thirteen of the same thing; they are not, and the <em>nature</em> of each standard says what 100&nbsp;% means — <strong>and what it does not mean</strong>.',
     'pg.conf-taux.rail': 'These rates read <strong>the same answers</strong> as each module\'s rail. The rail says what is <em>filled in</em>; the rate says what is <em>in place</em>. A module filled entirely with “partial” answers is all green on the rail and low here: that is not a contradiction, it is what remains to be done.',
     'pg.conf-plan.eb': 'Compliance rate · plan',
     'pg.conf-plan.h1': 'From blocker to detail, <em>and what each action earns</em>',
@@ -1444,6 +1472,11 @@ var SENT_SECTIONS_EN = {
   /* DEUX DÉSIGNATIONS DE DOCUMENT, DONC DEUX NOMS PROPRES. « NIST SP 800-53 »
      traduit ne se retrouve plus dans le catalogue quand un auditeur demande
      où c'est écrit — c'est la même raison qui fige déjà « NIST AI RMF ». */
+  /* prEN 18286 PORTE UNE RUBRIQUE EN PROSE, ET NON SON SEUL NUMÉRO : son
+     tiroir est le seul qui doive dire à quoi la norme sert, parce que
+     « prEN 18286 » ne l'apprend à personne. Ce qui s'y traduit est la
+     prose — le numéro, lui, traverse inchangé. */
+  'prEN 18286 — SMQ de l\u2019article 17': 'prEN 18286 — Article 17 QMS',
   'NIST 800-53': 'NIST 800-53',
   'NIST 800-82': 'NIST 800-82'
 };
@@ -1692,6 +1725,23 @@ function go(id, el, sec, pg) {
      `;qualifInit()` écrit dans le `onclick` de la barre latérale : la page
      s'ouvrait alors VIDE pour qui n'y arrivait pas par le menu — c'est-à-dire
      pour le parcours du directeur de programme, où elle figure. */
+  /* MÊME DÉFAUT, MÊME LIGNE, ET IL A ÉTÉ MESURÉ AVANT D'ÊTRE ÉCRIT :
+     `;en18286Init()` ne vit que dans le `onclick` des quatre onglets de
+     la barre. Or la carte « SMQ de l'article 17 » de l'accueil mène par
+     `?goto=en18286-processus`, et le parcours `en18286_smq` enchaîne ses
+     quatre étapes par `go()` : par ces deux chemins, les quatre écrans
+     s'ouvraient sur un « Chargement… » qui ne finissait jamais.
+     RELEVÉ : l'inventaire navigateur n'a trouvé AUCUN contenu sur ces
+     quatre pages — c'est ce silence qui a montré le trou. */
+  /* LES TROIS ÉCRANS DU TAUX DE CONFORMITÉ, ET C'EST LE MÊME DÉFAUT, SUR
+     LE PANNEAU LE PLUS VISITÉ DE TOUS. `confInit()` ne vivait que dans le
+     `onclick` de la barre — or `conf-taux` est la DERNIÈRE ÉTAPE de cinq
+     parcours guidés, et la carte « taux de conformité » de l'accueil y
+     mène par `?goto=`. RELEVÉ DANS UN NAVIGATEUR : arrivé par `go()`, le
+     panneau n'affichait que son chapô — aucune carte, aucun taux. Le
+     lecteur qu'un parcours venait d'y conduire voyait une page vide. */
+  if (id.indexOf('conf-') === 0 && typeof window.confInit === 'function') _apresPeinture(window.confInit);
+  if (id.indexOf('en18286') === 0 && typeof window.en18286Init === 'function') _apresPeinture(window.en18286Init);
   if (id === 'qualif-assistee' && typeof window.qualifInit === 'function') _apresPeinture(window.qualifInit);
   /* LE RAIL DU RÉFÉRENTIEL SE REPEINT SUR L'ÉCRAN QU'ON OUVRE — quel que
      soit le chemin : onglet, lien profond, parcours guidé ou passage
@@ -11811,9 +11861,9 @@ var PAGE_GUIDES = {
     ]
   },
   'conf-taux': {
-    title: "Taux de conformité — les douze normes",
+    title: "Taux de conformité — les treize normes",
     sections: [
-        {h:"À quoi sert cette page", t:"Elle rend un taux pour chacune des douze normes, calculé à partir de ce que vous avez déjà renseigné dans les modules — rien n'est réévalué ici, tout est composé."},
+        {h:"À quoi sert cette page", t:"Elle rend un taux pour chacune des treize normes, calculé à partir de ce que vous avez déjà renseigné dans les modules — rien n'est réévalué ici, tout est composé."},
         {h:"Comment le lire", t:"Un taux n'est PAS une conformité. Sur une obligation légale, c'est une autorité qui tranche ; sur une norme certifiable, un organisme accrédité ; sur un cadre volontaire, personne. Chaque carte porte la phrase qui dit ce que 100 % ne veut pas dire, et elle compte autant que le chiffre."},
         {h:"Le trait ambre sur la barre", t:"C'est un PLAFOND. Un défaut qui arrête un auditeur — une déclaration d'applicabilité irrecevable, par exemple — n'efface pas le travail fait, mais interdit d'aller au-delà. Aucun effort sur le reste de la norme ne franchira ce trait tant que le verrou tient."},
         {h:"Le chiffre en tête", t:"C'est le PLUS BAS des taux mesurés, pas leur moyenne. Une moyenne dilue précisément la composante qu'il faut traiter en premier : deux cadres à 90 % et un à 30 % rendent 70 %, et le 30 % disparaît. La moyenne reste affichée à côté, avec son avertissement."},
@@ -11836,6 +11886,45 @@ var PAGE_GUIDES = {
         {h:"À quoi sert cette page", t:"Elle nomme ce que le plan ne fermera pas, quoi qu'on fasse. Ces points sont connus d'avance : les taire ne les supprime pas, cela les fait découvrir devant l'auditeur."},
         {h:"Ce qu'on y trouve", t:"DORA, qui n'a pas d'instrument ici. Le NIST AI RMF, dont 100 % est une couverture et jamais une conformité — ce cadre n'est pas certifiable. Les risques du Top 10 LLM qu'aucune mesure de l'annexe A 42001 ne rencontre. Et, si vos normes certifiables atteignent 100 %, le rappel qu'il reste l'audit interne, la revue de direction et l'organisme accrédité."},
         {h:"À quoi cela sert en comité", t:"Un plan qui promet 100 % partout se défait à la première question précise. Poser ses limites soi-même est ce qui rend le reste crédible."}
+    ]
+  },
+  /* ── prEN 18286 — LES QUATRE ÉCRANS DU SMQ DE L'ARTICLE 17 ──────────────
+     AUCUN ÉNONCÉ DE LA NORME N'EST RECOPIÉ ICI. Le texte est la propriété du
+     CEN : ces guides en citent des numéros de paragraphe, des titres, et des
+     articles du règlement — qui, lui, est librement réutilisable. */
+  'en18286-processus': {
+    title: "prEN 18286 — processus et stratégie du §4.4",
+    sections: [
+      {h:"À quoi sert cette page", t:"À qualifier qui vous êtes au regard de l’article 17 du règlement (UE) 2024/1689, puis à déclarer la stratégie de conformité réglementaire du §4.4 : ses cinq composantes, et l’approche retenue pour chacune des sept exigences essentielles du chapitre III section 2. C’est la pièce que ni ISO 9001 ni ISO/IEC 42001 ne demandent, et celle qu’un organisme notifié ouvre en premier."},
+      {h:"Comment l’utiliser", t:"Répondez d’abord aux deux questions de qualification : l’article 17 vise le FOURNISSEUR d’un système à HAUT RISQUE, et hors de cette qualification les trois autres écrans n’ont rien à mesurer. Cochez ensuite les cinq composantes que votre stratégie couvre réellement, puis, exigence par exigence, l’approche que vous avez retenue — norme harmonisée, spécification commune, autre norme, autre solution technique, ou sans objet."},
+      {h:"L’approche retenue COMMANDE la charge de preuve", t:"Une norme harmonisée citée au Journal officiel et une spécification commune adoptée par acte d’exécution ouvrent présomption de conformité : il reste à documenter. « Autre norme » et « autre solution technique » n’en ouvrent aucune, et le §4.4.3.2.2 réclame alors trois pièces de plus — ce qui n’est pas couvert par écrit, la justification du choix, et la preuve objective que l’exigence est satisfaite. Les trois cases sont là pour cela."},
+      {h:"Ce qu’elle ne fait pas", t:"Elle ne choisit pas l’approche à votre place : le règlement laisse ce choix libre, et un module qui en désignerait une vous ferait prendre son avis pour le texte. Elle ne cache pas non plus le coût du choix : une exigence sur « autre norme » ou « autre solution » dont les trois pièces manquent ne laisse pas la part « stratégie » à moitié — elle la plafonne, et le plafond redescend sur le taux global."}
+    ]
+  },
+  'en18286-questionnaire': {
+    title: "prEN 18286 — les soixante-cinq paragraphes, chapitres 4 à 10",
+    sections: [
+      {h:"À quoi sert cette page", t:"À déclarer, paragraphe par paragraphe, où en est le système de management de la qualité : du contexte de l’organisme (chapitre 4) à l’amélioration (chapitre 10), en passant par l’exploitation et le contrôle (chapitre 8) et l’évaluation des performances (chapitre 9), qui porte la surveillance après commercialisation et le signalement des incidents graves."},
+      {h:"Comment l’utiliser", t:"Descendez les chapitres dans l’ordre : chacun porte ce qui le fait tomber en audit, et chaque question porte son numéro de paragraphe et son titre. Le bouton de lot répond pour tout un chapitre quand la réponse y est la même — à relire ensuite question par question, car c’est là que les écarts se trouvent. Quatre réponses : tenu, partiellement tenu, absent, sans objet."},
+      {h:"Le poids suit la charge réglementaire, pas le nombre de paragraphes", t:"Le chapitre 4 pèse trois fois le chapitre 10, parce qu’il porte le §4.4 — la seule partie du document qui n’ait d’équivalent dans aucune des deux normes ISO. Le chapitre 9 pèse autant que le 8, parce qu’une autorité se saisit de la surveillance et des incidents graves sans attendre un audit. Compter les paragraphes aurait fait l’inverse : le chapitre 9 en porte vingt-deux, le chapitre 5 en porte trois."},
+      {h:"Ce qu’elle ne fait pas", t:"Elle ne reproduit aucun énoncé de la norme : le texte est la propriété du CEN, et ce module en cite les numéros et les titres. Les questions sont rédigées par le cabinet. « Sans objet » sort un paragraphe du calcul ; une question SANS RÉPONSE compte pour zéro, et non comme une absence d’objet — l’inverse ferait monter le taux à mesure qu’on répond moins."}
+    ]
+  },
+  'en18286-conformite': {
+    title: "prEN 18286 — annexe ZA, l’article 17 alinéa par alinéa",
+    sections: [
+      {h:"À quoi sert cette page", t:"À lire l’annexe ZA dans le sens qui vous intéresse : non pas « qu’est-ce que ce paragraphe couvre », mais « cet alinéa de l’article 17, qui le couvre, et où en suis-je ». Chaque ligne du règlement porte les paragraphes de la norme qui la visent et le taux que vos réponses y produisent."},
+      {h:"La ligne la plus importante est celle qui est vide", t:"L’annexe ZA déclare elle-même l’article 17(2) — les fournisseurs soumis à la législation de l’Union sur les services financiers — NON COUVERT par aucun paragraphe. Un tableau qui masquerait cette ligne rendrait un cent pour cent mensonger. Si vous relevez des services financiers, l’écran du processus vous le dit autrement : vos obligations de gouvernance interne valent exécution de l’article 17."},
+      {h:"Ce qu’elle ne fait pas", t:"Elle n’ouvre aucune présomption de conformité, et ce n’est pas une précaution de style : ce projet est au stade de l’Enquête CEN, sa référence n’est PAS citée au Journal officiel de l’Union européenne. Le tenir intégralement ne dispense d’aucune démonstration devant un organisme notifié. Le jour où la référence sera citée, le même travail vaudra présomption — dans les limites de son domaine d’application."}
+    ]
+  },
+  'en18286-analyse': {
+    title: "prEN 18286 — ponts ISO et famille de normes",
+    sections: [
+      {h:"À quoi sert cette page", t:"À répondre à la question que pose tout détenteur d’un certificat : « j’ai ISO 9001, ou ISO/IEC 42001 — qu’est-ce qui me manque ? » Les deux tables de correspondance du document s’y lisent à l’envers : ce qui compte n’est pas ce qui correspond, c’est le petit nombre de lignes qui ne correspondent à rien."},
+      {h:"Deux chapitres n’ont d’équivalent nulle part", t:"La stratégie de conformité réglementaire du §4.4 et l’exploitation et le contrôle du chapitre 9 ne se retrouvent dans aucune des deux normes ISO. C’est exactement ce que le règlement ajoute à un système de management de la qualité ordinaire — et la raison pour laquelle « nous sommes certifiés 9001 » ne répond pas à l’article 17."},
+      {h:"La famille, et le document qu’on achète par erreur", t:"prEN 18286 organise la FAÇON de répondre aux exigences essentielles ; ce sont les autres projets de la famille qui disent comment y répondre — gestion des risques, données et gouvernance, conservation, transparence, supervision humaine, exactitude et robustesse. Acheter « la norme du SMQ » et croire avoir traité l’article 10, c’est se tromper de document. Les références que ce site traite déjà sont signalées."},
+      {h:"Ce qu’elle ne fait pas", t:"Elle ne masque pas les trois endroits où le document se contredit : deux paragraphes du chapitre 8 portent le même titre, l’annexe B étiquette l’un des projets de la famille sous un intitulé de partie qui n’est pas le sien, et elle en omet un que ce site traite pourtant. Les dire vaut mieux que les découvrir en réunion. Et cocher « nous le tenons » sur un pont ne vaut pas audit : c’est une déclaration, pas un certificat."}
     ]
   },
   'nist-profil': {
@@ -18913,7 +19002,7 @@ window.raasMsCell = function(p){
 /* ══ Indice de conformité global — consolide IA Act / RGPD / ISO 42001 ══ */
 
 /* ═══════════════════════════════════════════════════════════════════════
-   LE TAUX DE CONFORMITÉ DES DOUZE NORMES
+   LE TAUX DE CONFORMITÉ DES TREIZE NORMES
    Tout le calcul est au serveur, dans `conformite.py` : cet écran ne fait
    que l'afficher. Refaire ici la moindre arithmétique donnerait DEUX vérités
    sur le même taux — c'est le défaut qui existait entre `gcAuditPct` et
@@ -21928,7 +22017,7 @@ var GUIDED_PATHS = [
     role: "Direction — je veux savoir où nous en sommes sur les neuf, et par quoi commencer",
     pitch: "Neuf référentiels, neuf taux, et une question : lequel traiter d’abord. Ce parcours part de la synthèse, descend au plan, et finit par ce que le plan NE PEUT PAS faire — c’est cette dernière étape qui rend les deux premières défendables en comité.",
     steps: [
-      {id:'conf-taux', label:"Les neuf taux",
+      {id:'conf-taux', label:"Le taux par norme",
        action:"Lisez d’abord le chiffre en tête — le plus bas des taux mesurés —, puis repérez les cartes qui portent un trait ambre sur leur barre.",
        gain:"Où vous en êtes sur chacune des neuf, et lesquelles sont ARRÊTÉES par un verrou plutôt que simplement en retard.",
        tip:"Un taux n’est pas une conformité. Chaque carte porte la phrase qui dit ce que 100 % ne veut pas dire, et c’est elle qu’on cite en comité, pas le chiffre."},
@@ -21975,6 +22064,39 @@ var GUIDED_PATHS = [
     ]
   },
   {
+    /* PRESQUE PERSONNE N'ARRIVE ICI EN CHERCHANT « prEN 18286 ». On y arrive
+       en tenant un certificat ISO 9001 ou ISO/IEC 42001 et en se demandant ce
+       qu'il manque pour l'article 17. Le parcours part donc du §4.4 — la
+       seule pièce qu'aucune des deux normes ISO ne donne — et finit sur ce
+       que le certificat ne couvre pas. */
+    id: 'en18286_smq',
+    icon: '\u{1F4D8}',
+    role: "SMQ de l\u2019article 17 \u2014 je suis fournisseur d\u2019un syst\u00e8me \u00e0 haut risque, et mon certificat ISO ne suffit pas",
+    pitch: "L\u2019article 17 du r\u00e8glement (UE) 2024/1689 impose au fournisseur d\u2019un syst\u00e8me d\u2019IA \u00e0 haut risque un syst\u00e8me de management de la qualit\u00e9. prEN 18286 dit comment le construire, et une seule de ses parties n\u2019a d\u2019\u00e9quivalent ni dans ISO 9001 ni dans ISO/IEC 42001 : la strat\u00e9gie de conformit\u00e9 r\u00e9glementaire du \u00a74.4. Ce parcours la pose d\u2019abord, parce que c\u2019est elle qui plafonne tout le reste.",
+    steps: [
+      {id:'en18286-processus', label:"Processus \u2014 strat\u00e9gie \u00a74.4",
+       action:"Qualifiez-vous \u2014 fournisseur, haut risque \u2014 puis d\u00e9clarez les cinq composantes de la strat\u00e9gie et l\u2019approche retenue pour chacune des sept exigences essentielles.",
+       gain:"L\u2019approche retenue COMMANDE la charge de preuve : une norme harmonis\u00e9e ou une sp\u00e9cification commune ouvrent pr\u00e9somption et se documentent ; « autre norme » et « autre solution technique » r\u00e9clament en plus ce qui n\u2019est pas couvert, la justification et la preuve objective.",
+       tip:"Hors de la qualification « fournisseur d\u2019un syst\u00e8me \u00e0 haut risque », les trois \u00e9crans suivants n\u2019ont rien \u00e0 mesurer \u2014 et l\u2019\u00e9cran le dit au lieu de laisser soixante-cinq questions \u00e0 qui n\u2019y est pas tenu."},
+      {id:'en18286-questionnaire', label:"Questionnaire \u2014 chap. 4 \u00e0 10",
+       action:"Descendez les soixante-cinq paragraphes, chapitre par chapitre. Le bouton de lot r\u00e9pond pour un chapitre entier quand la r\u00e9ponse y est la m\u00eame.",
+       gain:"Le poids suit la charge r\u00e9glementaire et non le nombre de paragraphes : le chapitre 4 p\u00e8se trois fois le chapitre 10, et le chapitre 9 \u2014 surveillance apr\u00e8s commercialisation, incidents graves \u2014 autant que le chapitre 8.",
+       tip:"« Sans objet » sort un paragraphe du calcul ; une question sans r\u00e9ponse compte pour z\u00e9ro. L\u2019inverse ferait monter le taux \u00e0 mesure qu\u2019on r\u00e9pond MOINS."},
+      {id:'en18286-conformite', label:"Conformit\u00e9 \u2014 annexe ZA",
+       action:"Lisez l\u2019article 17 alin\u00e9a par alin\u00e9a, avec les paragraphes de la norme qui le visent et le taux que vos r\u00e9ponses y produisent.",
+       gain:"La ligne la plus importante du tableau est celle qui est VIDE : l\u2019annexe ZA d\u00e9clare elle-m\u00eame l\u2019article 17(2) non couvert par aucun paragraphe.",
+       tip:"Aucune pr\u00e9somption de conformit\u00e9 n\u2019en sort : ce projet est au stade de l\u2019Enqu\u00eate CEN, sa r\u00e9f\u00e9rence n\u2019est pas cit\u00e9e au Journal officiel. Le jour o\u00f9 elle le sera, le m\u00eame travail vaudra pr\u00e9somption."},
+      {id:'en18286-analyse', label:"Analyse \u2014 ponts et famille",
+       action:"Ouvrez les deux tables de correspondance, et regardez d\u2019abord les lignes en face du vide.",
+       gain:"Deux chapitres n\u2019ont d\u2019\u00e9quivalent dans aucune des deux normes ISO : la strat\u00e9gie de conformit\u00e9 r\u00e9glementaire du \u00a74.4, et l\u2019exploitation et le contr\u00f4le. C\u2019est exactement ce que le r\u00e8glement ajoute \u00e0 un SMQ ordinaire.",
+       tip:"Cette norme organise la FA\u00c7ON de r\u00e9pondre aux exigences essentielles ; ce sont les autres projets de la famille qui disent comment y r\u00e9pondre. L\u2019acheter en croyant avoir trait\u00e9 l\u2019article 10, c\u2019est se tromper de document."},
+      {id:'conf-taux', label:"Le taux de conformit\u00e9",
+       action:"Ouvrez la carte prEN 18286 : elle porte maintenant vos cinq parts.",
+       gain:"Le plafond de la charge de preuve y est D\u00c9J\u00c0 appliqu\u00e9 \u2014 la carte et l\u2019\u00e9cran du module rendent le m\u00eame nombre, et non deux v\u00e9rit\u00e9s sur le m\u00eame taux.",
+       tip:"Sa r\u00e9serve est permanente : sans citation au Journal officiel, c\u2019est l\u2019organisme notifi\u00e9 de l\u2019\u00e9valuation de conformit\u00e9 qui appr\u00e9ciera, et aucune r\u00e9ponse ici ne le lie."}
+    ]
+  },
+  {
     id: 'nist_800_53_82',
     icon: '\u{1F3ED}',
     role: "Syst\u00e8mes industriels \u2014 je dois s\u00e9curiser un proc\u00e9d\u00e9, pas un parc bureautique",
@@ -22009,7 +22131,7 @@ var GUIDED_PATHS = [
       {id:'nist-genai', label:"Profil IA g\u00e9n\u00e9rative", action:"Qualifiez le syst\u00e8me, retenez les risques, puis r\u00e9pondez aux actions par sous-cat\u00e9gorie \u2014 le lot r\u00e9pond pour toute une sous-cat\u00e9gorie \u00e0 la fois.", gain:"Les 211 actions suggér\u00e9es du \u00a73, et le plafond qu\u2019elles posent sur le taux du cadre d\u00e8s que le syst\u00e8me est g\u00e9n\u00e9ratif.", tip:"Six des douze risques ne rel\u00e8vent pas de la cyber \u2014 les confier au RSSI produit un registre que personne n\u2019arbitre."},
       {id:'iso42001', label:"ISO 42001 \u2014 articles 4 \u00e0 10", action:"Comparez ce que vous venez de renseigner avec le corps de la norme.", gain:"Ce que le cadre NIST laisse volontaire, ISO 42001 le rend exigible \u2014 et certifiable.", tip:"Le rapprochement le plus utile n\u2019est pas point \u00e0 point : GOVERN recoupe les articles 5 et 6, et rien dans le cadre n\u2019impose de d\u00e9claration d\u2019applicabilit\u00e9."},
       {id:'cadre-normatif', label:"Cadre normatif", action:"Regardez ce que le cadre NIST apporte que les textes europ\u00e9ens n\u2019apportent pas.", gain:"Il est le seul \u00e0 donner une grammaire de RISQUE l\u00e0 o\u00f9 l\u2019IA Act donne une grammaire d\u2019OBLIGATION.", tip:"Un tiret dans une colonne n\u2019est pas un oubli : c\u2019est que le texte ne dit rien de ce module."},
-      {id:'conf-taux', label:"Le taux de conformit\u00e9", action:"Ouvrez la carte NIST AI RMF : elle porte maintenant votre profil.", gain:"Les dix-neuf cat\u00e9gories que vous venez de renseigner remontent dans la synth\u00e8se des douze normes.", tip:"La carte dit ce que 100 % NE veut PAS dire ici : le cadre ne se certifie pas, il n'y a aucun auditeur au bout. Un taux plein signifie « tout est renseign\u00e9 et tenu », pas « conforme »."}
+      {id:'conf-taux', label:"Le taux de conformit\u00e9", action:"Ouvrez la carte NIST AI RMF : elle porte maintenant votre profil.", gain:"Les dix-neuf cat\u00e9gories que vous venez de renseigner remontent dans la synth\u00e8se des treize normes.", tip:"La carte dit ce que 100 % NE veut PAS dire ici : le cadre ne se certifie pas, il n'y a aucun auditeur au bout. Un taux plein signifie « tout est renseign\u00e9 et tenu », pas « conforme »."}
     ]
   },
   {
@@ -22022,7 +22144,7 @@ var GUIDED_PATHS = [
       {id:'owasp-pont', label:"Ce qu\u2019ISO 42001 ne couvre pas", action:"Regardez d\u2019abord les lignes o\u00f9 la colonne des mesures est vide.", gain:"Trois risques ne rencontrent aucune mesure de l\u2019annexe A : aucun r\u00e9f\u00e9rentiel ne les rattrapera.", tip:"Ce sont aussi ceux dont on se croit couvert pr\u00e9cis\u00e9ment parce qu\u2019on est certifi\u00e9. « Notre SMIA couvre OWASP » est la phrase que cette page existe pour contredire."},
       {id:'iso42001-soa', label:"D\u00e9claration d\u2019applicabilit\u00e9", action:"Reprenez les mesures cit\u00e9es en face des risques, et v\u00e9rifiez leur statut chez vous.", gain:"Une mesure retenue mais non mise en \u0153uvre ne couvre rien \u2014 et c\u2019est sur la SoA que \u00e7a se voit.", tip:"Une mesure « touche » un risque ; elle ne le clot pas. Le pont ne dit pas l\u2019inverse."},
       {id:'ia-act-hub', label:"IA Act \u2014 vue d\u2019ensemble", action:"Situez lesquels de ces risques deviennent des obligations quand le syst\u00e8me est \u00e0 haut risque.", gain:"OWASP dit ce qui casse ; le r\u00e8glement dit ce qui est exigible. Les deux ne se d\u00e9duisent pas l\u2019un de l\u2019autre.", tip:"Un risque OWASP trait\u00e9 ne vaut pas conformit\u00e9, et une obligation tenue ne vaut pas s\u00e9curit\u00e9."},
-      {id:'conf-taux', label:"Le taux de conformit\u00e9", action:"Ouvrez la carte OWASP LLM : elle porte maintenant ce que vous venez de d\u00e9clarer.", gain:"Vos dix \u00e9tats remontent dans la synth\u00e8se des douze normes. Tant que rien n'est d\u00e9clar\u00e9, la carte reste à « — » : une absence de mesure n'est pas un z\u00e9ro.", tip:"Le taux OWASP est plafonn\u00e9 par les trois risques hors annexe A. Ce plafond n'est pas un d\u00e9faut du calcul : c'est ce que la liste elle-m\u00eame dit de sa propre port\u00e9e."}
+      {id:'conf-taux', label:"Le taux de conformit\u00e9", action:"Ouvrez la carte OWASP LLM : elle porte maintenant ce que vous venez de d\u00e9clarer.", gain:"Vos dix \u00e9tats remontent dans la synth\u00e8se des treize normes. Tant que rien n'est d\u00e9clar\u00e9, la carte reste à « — » : une absence de mesure n'est pas un z\u00e9ro.", tip:"Le taux OWASP est plafonn\u00e9 par les trois risques hors annexe A. Ce plafond n'est pas un d\u00e9faut du calcul : c'est ce que la liste elle-m\u00eame dit de sa propre port\u00e9e."}
     ]
   },
   {
@@ -28477,7 +28599,9 @@ function nistPeindre() {
         + '<p class="nist-tombe"><span>Ce qui la fait tomber</span>'
         + nistEsc(f.ce_qui_la_fait_tomber) + '</p>'
         + '<ul class="nist-cats nist-q-cats">' + cats.map(function (c) {
-            return '<li><div class="nist-c-t"><code>' + nistEsc(c.cle)
+            return '<li' + (NIST_DECL[c.cle]
+                     ? ' data-etat="' + nistEsc(NIST_DECL[c.cle]) + '"' : '')
+              + '><div class="nist-c-t"><code>' + nistEsc(c.cle)
               + '</code> ' + nistEsc(c.nom) + '<i>' + nistEsc(c.dit) + '</i></div>'
               + _choix(R.etats, NIST_ORDRE, NIST_DECL[c.cle],
                        'nistRepondre', c.cle) + '</li>';
@@ -29062,6 +29186,20 @@ function declPublier() {
   if (typeof declarationsChangees === 'function') declarationsChangees();
 }
 
+/* L'ÉTAT RÉPONDU DOIT ATTEINDRE LE DOM, sans quoi la feuille de style n'a
+   rien à peindre : la valeur d'un <select> ne se sélectionne pas en CSS. On
+   la recopie donc sur la LIGNE, en `data-etat`, et la couleur en découle.
+
+   ET ON NE REPEINT PAS TOUT L'ÉCRAN POUR UNE RÉPONSE : repeindre refermerait
+   les <details> ouverts et ferait sauter la page sous le lecteur, pour dix-
+   neuf réponses d'affilée. Une seule ligne change, une seule ligne bouge. */
+function _marquerEtat(sel) {
+  var li = sel && sel.closest ? sel.closest('li') : null;
+  if (!li) return;
+  if (sel.value) { li.setAttribute('data-etat', sel.value); }
+  else { li.removeAttribute('data-etat'); }
+}
+
 function _choix(etats, ordre, valeur, surChange, cle) {
   return '<select class="q-sel" data-cle="' + nistEsc(cle) + '" '
     + 'onchange="' + surChange + '(this)" aria-label="État de '
@@ -29079,6 +29217,7 @@ var OWASP_ORDRE = ['non', 'partiel', 'oui', 'sans_objet'];
 
 window.owaspRepondre = function (sel) {
   var c = sel.getAttribute('data-cle');
+  _marquerEtat(sel);
   if (sel.value) { OWASP_DECL[c] = sel.value; } else { delete OWASP_DECL[c]; }
   _declEcrire(OWASP_CLE_STOCK, OWASP_DECL);
   declPublier();
@@ -29131,6 +29270,7 @@ var NIST_ORDRE = ['absent', 'amorce', 'tenu', 'prouve', 'sans_objet'];
 
 window.nistRepondre = function (sel) {
   var c = sel.getAttribute('data-cle');
+  _marquerEtat(sel);
   if (sel.value) { NIST_DECL[c] = sel.value; } else { delete NIST_DECL[c]; }
   _declEcrire(NIST_CLE_STOCK, NIST_DECL);
   declPublier();
@@ -29268,6 +29408,7 @@ window.genaiRisque = function (el) {
 
 window.genaiAction = function (sel) {
   var c = sel.getAttribute('data-cle');
+  _marquerEtat(sel);
   if (sel.value) { GENAI_DECL.actions[c] = sel.value; }
   else { delete GENAI_DECL.actions[c]; }
   _genaiEcrire();
@@ -29294,6 +29435,7 @@ window.genaiLot = function (el) {
   if (boite) {
     boite.querySelectorAll('select.q-sel').forEach(function (s) {
       s.value = GENAI_DECL.actions[s.getAttribute('data-cle')] || '';
+      _marquerEtat(s);
     });
   }
   genaiCompteur(codes[0]);
@@ -29456,7 +29598,10 @@ function genaiPeindre() {
                     var r = R.risques_genai.filter(function (x) { return x.n === n; })[0];
                     return r ? r.nom : ('hors liste (' + n + ')');
                   });
-                  return '<li><div class="gen-t"><code>' + nistEsc(a.code)
+                  return '<li' + (GENAI_DECL.actions[a.code]
+                           ? ' data-etat="'
+                             + nistEsc(GENAI_DECL.actions[a.code]) + '"' : '')
+                    + '><div class="gen-t"><code>' + nistEsc(a.code)
                     + '</code>' + nistEsc(a.texte)
                     + '<i>' + nistEsc(noms.join(' · ')) + '</i></div>'
                     + _choix(GENAI_REF.etats_action, GENAI_ORDRE,
@@ -29566,6 +29711,510 @@ function genaiEvaluer() {
 }
 
 
+/* ══ prEN 18286 — LE SMQ DE L'ARTICLE 17, EN QUATRE ÉCRANS ════════════════
+ *
+ * CE QUE CES QUATRE ÉCRANS FONT, ET QU'UN SEUL NE FERAIT PAS :
+ *   · PROCESSUS      la qualification, puis le §4.4 — et l'approche retenue
+ *                    pour chaque exigence essentielle, qui COMMANDE la
+ *                    charge de preuve ;
+ *   · QUESTIONNAIRE  les soixante-cinq paragraphes des chapitres 4 à 10 ;
+ *   · CONFORMITÉ     l'annexe ZA : ce que le travail couvre DU RÈGLEMENT ;
+ *   · ANALYSE        les deux ponts ISO lus à l'envers, et la famille.
+ *
+ * AUCUN ÉNONCÉ NORMATIF N'EST ÉCRIT ICI. Le texte est la propriété du CEN :
+ * l'écran demande au serveur des numéros, des titres et la prose du cabinet.
+ * Une règle vérifie qu'aucune suite de huit mots de la norme ne s'y trouve.
+ *
+ * LA QUALIFICATION COMMANDE L'AFFICHAGE. Hors du champ de l'article 17, les
+ * trois autres écrans n'ont rien à mesurer — et le dire vaut mieux que de
+ * laisser soixante-cinq questions à un déployeur qui n'y est pas tenu. */
+
+var EN18286_CLE_STOCK = 'cp-sentinel-en18286-v1';
+var EN18286_REF = null, EN18286_EVAL = null;
+
+function _en86Normaliser(v) {
+  var d = (v && typeof v === 'object') ? v : {};
+  var o = function (x) { return (x && typeof x === 'object') ? x : {}; };
+  var q = o(d.qualification), st = o(d.strategie);
+  return {
+    /* TROIS VALEURS, PAS DEUX, sur chaque question de qualification : « pas
+       encore répondu » n'est pas « non ». Ranger le silence du côté de
+       « non » déclarerait le client hors champ sans qu'il l'ait dit. */
+    qualification: {
+      fournisseur: q.fournisseur === true ? true
+        : (q.fournisseur === false ? false : null),
+      haut_risque: q.haut_risque === true ? true
+        : (q.haut_risque === false ? false : null),
+      services_financiers: q.services_financiers === true
+    },
+    reponses: o(d.reponses),
+    strategie: { elements: o(st.elements), exigences: o(st.exigences) },
+    certifie: o(d.certifie)
+  };
+}
+var EN18286_DECL = _en86Normaliser(_declLire(EN18286_CLE_STOCK));
+
+function _en86Ecrire() {
+  _declEcrire(EN18286_CLE_STOCK, EN18286_DECL);
+  declPublier();
+}
+
+function _en86Esc(s) { return nistEsc(s); }
+
+/* ── LES RÉPONSES ───────────────────────────────────────────────────── */
+
+window.en18286Qualif = function (el) {
+  var champ = el.getAttribute('data-champ');
+  var val = el.getAttribute('data-val');
+  var v = val === 'oui' ? true : (val === 'non' ? false : null);
+  if (champ === 'services_financiers') {
+    EN18286_DECL.qualification.services_financiers = (v === true);
+  } else {
+    EN18286_DECL.qualification[champ] = v;
+  }
+  _en86Ecrire();
+  en18286Peindre();
+};
+
+window.en18286Composante = function (el) {
+  var c = el.getAttribute('data-cle');
+  EN18286_DECL.strategie.elements[c] = !EN18286_DECL.strategie.elements[c];
+  _en86Ecrire();
+  en18286Peindre();
+};
+
+window.en18286Approche = function (sel) {
+  var c = sel.getAttribute('data-cle');
+  var v = EN18286_DECL.strategie.exigences[c] || {};
+  if (sel.value === 'sans_objet') { v = { sans_objet: true }; }
+  else if (sel.value) { v = { approche: sel.value,
+                              couverture_ecrite: v.couverture_ecrite,
+                              justification: v.justification,
+                              preuve_objective: v.preuve_objective }; }
+  else { v = {}; }
+  EN18286_DECL.strategie.exigences[c] = v;
+  _en86Ecrire();
+  en18286Peindre();
+};
+
+window.en18286Piece = function (el) {
+  var c = el.getAttribute('data-cle'), p = el.getAttribute('data-piece');
+  var v = EN18286_DECL.strategie.exigences[c] || {};
+  v[p] = !v[p];
+  EN18286_DECL.strategie.exigences[c] = v;
+  _en86Ecrire();
+  en18286Peindre();
+};
+
+window.en18286Repondre = function (sel) {
+  var n = sel.getAttribute('data-cle');
+  _marquerEtat(sel);
+  if (sel.value) { EN18286_DECL.reponses[n] = sel.value; }
+  else { delete EN18286_DECL.reponses[n]; }
+  _en86Ecrire();
+  en18286Evaluer();
+  en18286Compteur(n);
+};
+
+window.en18286Lot = function (el) {
+  var ch = el.getAttribute('data-ch'), etat = el.getAttribute('data-etat');
+  var boite = document.getElementById('en86-ch-' + ch);
+  if (!boite || !EN18286_REF) return;
+  EN18286_REF.paragraphes.forEach(function (p) {
+    if (p.chapitre !== ch) return;
+    if (etat) { EN18286_DECL.reponses[p.num] = etat; }
+    else { delete EN18286_DECL.reponses[p.num]; }
+  });
+  _en86Ecrire();
+  boite.querySelectorAll('select.q-sel').forEach(function (s) {
+    s.value = EN18286_DECL.reponses[s.getAttribute('data-cle')] || '';
+    _marquerEtat(s);
+  });
+  en18286Compteur(null, ch);
+  en18286Evaluer();
+};
+
+window.en18286Certifie = function (el) {
+  var c = el.getAttribute('data-cle');
+  EN18286_DECL.certifie[c] = !EN18286_DECL.certifie[c];
+  _en86Ecrire();
+  en18286Peindre();
+};
+
+function en18286Compteur(num, chapitre) {
+  if (!EN18286_REF) return;
+  var ch = chapitre;
+  if (!ch) {
+    var p = EN18286_REF.paragraphes.filter(function (x) { return x.num === num; })[0];
+    if (!p) return;
+    ch = p.chapitre;
+  }
+  var e = document.getElementById('en86-nb-' + ch);
+  if (!e) return;
+  var tous = EN18286_REF.paragraphes.filter(function (x) { return x.chapitre === ch; });
+  var tenus = tous.filter(function (x) {
+    return EN18286_DECL.reponses[x.num] === 'tenu'; }).length;
+  e.textContent = tenus + ' / ' + tous.length + ' tenu' + (tous.length > 1 ? 's' : '');
+}
+
+/* ── LA PEINTURE ────────────────────────────────────────────────────── */
+
+function _en86Bouton(champ, val, texte, actif) {
+  return '<button type="button" class="gen-b" data-champ="' + champ
+    + '" data-val="' + val + '" aria-pressed="' + (actif ? 'true' : 'false')
+    + '" onclick="en18286Qualif(this)">' + _en86Esc(texte) + '</button>';
+}
+
+function en18286Peindre() {
+  var R = EN18286_REF;
+  if (!R) return;
+  var q = EN18286_DECL.qualification;
+  var dansLeChamp = (q.fournisseur === true && q.haut_risque === true);
+  var repondu = (q.fournisseur !== null && q.haut_risque !== null);
+
+  var res = document.getElementById('en18286-reserve');
+  if (res) {
+    res.innerHTML = '<div class="status"><span class="dot"></span>'
+      + _en86Esc(R.reserve) + '</div>';
+  }
+
+  /* ── 1. PROCESSUS ─────────────────────────────────────────────────── */
+  var pb = document.getElementById('en18286-processus-body');
+  if (pb) {
+    pb.className = '';
+    var h = '<div class="gen-bloc"><h3>Qui doit tenir ce système de management</h3>'
+      + '<p>' + _en86Esc(R.hors_champ.porte_sur) + '</p>'
+      + '<div class="gen-oui" role="group" aria-label="Êtes-vous fournisseur">'
+      + _en86Bouton('fournisseur', 'oui', 'Je suis fournisseur', q.fournisseur === true)
+      + _en86Bouton('fournisseur', 'non', 'Je ne le suis pas', q.fournisseur === false)
+      + '</div>'
+      + '<div class="gen-oui" role="group" aria-label="Système à haut risque">'
+      + _en86Bouton('haut_risque', 'oui', 'Système à haut risque', q.haut_risque === true)
+      + _en86Bouton('haut_risque', 'non', 'Pas à haut risque', q.haut_risque === false)
+      + '</div>'
+      + '<div class="gen-oui" role="group" aria-label="Services financiers">'
+      + _en86Bouton('services_financiers', 'oui',
+                    'Soumis à la législation sur les services financiers',
+                    q.services_financiers === true)
+      + '</div>'
+      + (q.services_financiers
+          ? '<div class="q-am"><span>Article 17(2)</span>L’annexe ZA de cette '
+            + 'norme déclare l’article 17(2) NON COUVERT : vos obligations de '
+            + 'gouvernance interne valent exécution de l’article 17.</div>'
+          : '')
+      + '</div>';
+
+    if (!repondu) {
+      h += '<div class="q-vide">Répondez d’abord à la qualification. Tant '
+        + 'qu’elle n’est pas faite, rien n’est calculé — ni dans un sens ni '
+        + 'dans l’autre.</div>';
+    } else if (!dansLeChamp) {
+      h += '<div class="q-verdict q-hors_champ"><p>'
+        + _en86Esc(R.hors_champ.dit) + '</p><p>'
+        + _en86Esc(R.hors_champ.porte_sur) + '</p></div>';
+    } else {
+      h += '<div class="gen-bloc"><h3>Les cinq composantes de la stratégie '
+        + '(§4.4.1)</h3><p>Elles se déclarent toutes les cinq : la stratégie '
+        + 'n’est pas complète tant qu’il en manque une.</p>'
+        + '<ul class="nist-gen">' + R.elements_strategie.map(function (e) {
+            var on = !!EN18286_DECL.strategie.elements[e.cle];
+            return '<li' + (on ? ' class="gen-pris"' : '') + '><div>'
+              + '<b>' + _en86Esc(e.nom) + '</b> <code>' + _en86Esc(e.ou)
+              + '</code><i>' + _en86Esc(e.dit) + '</i></div>'
+              + '<button type="button" class="gen-b gen-pick" data-cle="'
+              + _en86Esc(e.cle) + '" aria-pressed="' + (on ? 'true' : 'false')
+              + '" onclick="en18286Composante(this)">'
+              + (on ? 'Déclarée' : 'Déclarer') + '</button></li>';
+          }).join('') + '</ul></div>'
+
+        + '<div class="gen-bloc"><h3>Les sept exigences essentielles, et '
+        + 'l’approche retenue pour chacune</h3><p>Les deux premières '
+        + 'approches se documentent. Les deux dernières se documentent, se '
+        + 'justifient ET se prouvent — c’est le §4.4.3.2.2, et c’est lui qui '
+        + 'plafonne le taux tant que les trois pièces manquent.</p></div>'
+        + '<ul class="ow-liste">' + R.exigences_essentielles.map(function (ex) {
+            var v = EN18286_DECL.strategie.exigences[ex.cle] || {};
+            var choisi = v.sans_objet ? 'sans_objet' : (v.approche || '');
+            var a = R.approches.filter(function (x) { return x.cle === v.approche; })[0];
+            var doitProuver = !!(a && a.preuve === 'justifier');
+            var etat = v.sans_objet ? 'sans_objet'
+              : (!a ? '' : (doitProuver
+                  && !(v.couverture_ecrite && v.justification && v.preuve_objective)
+                  ? 'partiel' : 'oui'));
+            return '<li' + (etat ? ' data-etat="' + etat + '"' : '') + '>'
+              + '<div class="ow-t"><code>' + _en86Esc(ex.article) + '</code> '
+              + '<b>' + _en86Esc(ex.nom) + '</b> <em>'
+              + _en86Esc(ex.norme || 'pas de norme harmonisée annoncée')
+              + '</em></div>'
+              + '<select class="q-sel" data-cle="' + _en86Esc(ex.cle)
+              + '" onchange="en18286Approche(this)" aria-label="Approche pour '
+              + _en86Esc(ex.nom) + '">'
+              + '<option value=""' + (choisi ? '' : ' selected')
+              + '>— aucune approche retenue</option>'
+              + R.approches.map(function (x) {
+                  return '<option value="' + _en86Esc(x.cle) + '"'
+                    + (choisi === x.cle ? ' selected' : '') + '>'
+                    + _en86Esc(x.lettre + ') ' + x.nom) + '</option>';
+                }).join('')
+              + '<option value="sans_objet"'
+              + (choisi === 'sans_objet' ? ' selected' : '')
+              + '>Sans objet pour ce système</option></select>'
+              + (a ? '<p class="gen-nb">' + _en86Esc(a.charge) + '</p>' : '')
+              + (doitProuver
+                  ? '<div class="gen-lot">' + R.pieces_a_justifier.map(function (pi) {
+                      var on = !!v[pi.cle];
+                      return '<button type="button" class="gen-b" data-cle="'
+                        + _en86Esc(ex.cle) + '" data-piece="' + _en86Esc(pi.cle)
+                        + '" aria-pressed="' + (on ? 'true' : 'false')
+                        + '" onclick="en18286Piece(this)">'
+                        + (on ? '✓ ' : '') + _en86Esc(pi.nom) + '</button>';
+                    }).join('') + '</div>'
+                  : '')
+              + '</li>';
+          }).join('') + '</ul>'
+        + '<div id="en18286-verdict"></div><div id="en18286-plan"></div>';
+    }
+    pb.innerHTML = h;
+  }
+
+  /* ── 2. QUESTIONNAIRE ─────────────────────────────────────────────── */
+  var qb = document.getElementById('en18286-questionnaire-body');
+  if (qb) {
+    qb.className = '';
+    if (!dansLeChamp) {
+      qb.innerHTML = '<div class="q-vide">' + _en86Esc(repondu
+        ? R.hors_champ.dit
+        : 'La qualification n’est pas faite : commencez par l’écran '
+          + '« Processus ».') + '</div>';
+    } else {
+      qb.innerHTML = R.chapitres.map(function (c) {
+        var paras = R.paragraphes.filter(function (p) { return p.chapitre === c.num; });
+        var tenus = paras.filter(function (p) {
+          return EN18286_DECL.reponses[p.num] === 'tenu'; }).length;
+        var part = R.parts.filter(function (x) {
+          return x.chapitres.indexOf(c.num) >= 0; })[0] || {};
+        return '<details class="gen-sc" id="en86-ch-' + _en86Esc(c.num) + '">'
+          + '<summary><code>Chapitre ' + _en86Esc(c.num) + '</code> <b>'
+          + _en86Esc(c.nom) + '</b><em id="en86-nb-' + _en86Esc(c.num) + '">'
+          + tenus + ' / ' + paras.length + ' tenu' + (paras.length > 1 ? 's' : '')
+          + '</em></summary>'
+          + '<p class="nist-q" style="padding:0 14px">' + _en86Esc(c.quoi)
+          + '</p>'
+          + '<p class="nist-tombe" style="padding:0 14px"><span>Ce qui le fait '
+          + 'tomber</span>' + _en86Esc(c.ce_qui_le_fait_tomber) + '</p>'
+          + '<div class="gen-lot"><button type="button" class="gen-b" data-ch="'
+          + _en86Esc(c.num) + '" data-etat="tenu" onclick="en18286Lot(this)">'
+          + 'Tout tenu</button><button type="button" class="gen-b" data-ch="'
+          + _en86Esc(c.num) + '" data-etat="absent" onclick="en18286Lot(this)">'
+          + 'Tout absent</button><button type="button" class="gen-b" data-ch="'
+          + _en86Esc(c.num) + '" data-etat="" onclick="en18286Lot(this)">'
+          + 'Effacer</button><span class="gen-nb">part «&nbsp;'
+          + _en86Esc(part.nom || '') + '&nbsp;», poids ' + (part.poids || '—')
+          + '</span></div>'
+          + '<ul class="gen-act">' + paras.map(function (p) {
+              var e = EN18286_DECL.reponses[p.num];
+              return '<li' + (e ? ' data-etat="' + _en86Esc(e) + '"' : '') + '>'
+                + '<div class="gen-t"><code>' + _en86Esc(p.num) + '</code>'
+                + _en86Esc(p.titre) + '<i>' + _en86Esc(p.demande) + '</i>'
+                + (p.piege ? '<i class="gen-nb">' + _en86Esc(p.piege) + '</i>' : '')
+                + '</div>'
+                + _choix(R.etats, R.ordre_etats, e, 'en18286Repondre', p.num)
+                + '</li>';
+            }).join('') + '</ul></details>';
+      }).join('');
+    }
+  }
+
+  en18286Evaluer();
+}
+
+/* ── 3 ET 4 : CONFORMITÉ ET ANALYSE, PEINTES PAR LE SERVEUR ───────────────
+   UN SEUL APPEL REND LE SCORE, LA STRATÉGIE, L'ANNEXE ZA ET LE PLAN. Séparés,
+   l'écran pourrait afficher un taux issu d'une déclaration et un plan issu de
+   la suivante — et le client verrait un plan qui ne mène pas au taux. */
+
+function en18286Evaluer() {
+  var vs = document.getElementById('en18286-verdict');
+  var ps = document.getElementById('en18286-plan');
+  var cb = document.getElementById('en18286-conformite-body');
+  var ab = document.getElementById('en18286-analyse-body');
+  var R = EN18286_REF;
+  if (!R) return;
+  /* MÊME GARDE DE CADENCE QUE LES AUTRES ÉCRANS : le lot répond pour un
+     chapitre entier d'un coup, et rien ne garantit l'ordre des réponses. */
+  var aJour = derniereDemande('en18286-evaluer');
+  fetch('/api/en18286/evaluer', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ declaration: EN18286_DECL, limite: 12 })
+  }).then(function (r) { return r.json(); })
+    .then(function (j) {
+      if (!aJour()) return;
+      if (!j || !j.ok) throw new Error('evaluer');
+      EN18286_EVAL = j;
+      var sc = j.score, hors = (j.applicable || {}).ok === false;
+
+      if (vs) {
+        vs.innerHTML = '<div class="q-verdict q-' + _en86Esc(j.tete) + '">'
+          + '<div class="q-chif"><b>' + sc.taux + '&nbsp;%</b> '
+          + (sc.plafonne ? 'de ' + sc.brut + ' % faits, plafonnés à '
+                           + sc.plafond + ' %' : 'du système de management déclaré')
+          + ' · ' + j.renseignes + ' / ' + j.paragraphes + ' paragraphes</div>'
+          + '<div class="q-notes">' + (sc.parts_plafonnees || sc.parts).map(function (p) {
+              return '<span class="q-note' + (p.cle === 'strategie' ? ' q-socle' : '')
+                + '"><i>' + _en86Esc(p.nom) + '</i>'
+                + (p.taux === null ? '—' : p.taux + ' %') + '</span>';
+            }).join('') + '</div>'
+          + '<p>' + _en86Esc(j.dit) + '</p>'
+          + (sc.verrous || []).map(function (v) {
+              return '<div class="q-am"><span>Charge de preuve — §4.4.3.2.2</span>'
+                + _en86Esc(v.dit) + ' ' + _en86Esc(v.porte_sur) + '</div>';
+            }).join('')
+          + (j.reserves || []).map(function (r) {
+              return '<p class="gen-nb">' + _en86Esc(r.dit) + '</p>';
+            }).join('')
+          + '</div>';
+      }
+      if (ps) {
+        ps.innerHTML = j.plan && j.plan.length
+          ? '<div class="gen-bloc"><h3>Par quoi commencer</h3><p>Ce qui '
+            + 'PLAFONNE passe devant : tant que la charge de preuve n’est pas '
+            + 'honorée, le reste bute sur le même plafond. Puis les '
+            + 'composantes de la stratégie, puis les paragraphes — par poids '
+            + 'de part. ' + j.plan.length + ' action(s) affichée(s).</p>'
+            + '<ul class="gen-plan">' + j.plan.map(function (e) {
+                return '<li><b>' + e.rang + '</b><div>' + _en86Esc(e.quoi)
+                  + (e.manque && e.manque.length
+                      ? '<i class="gen-nb">Manque : ' + _en86Esc(e.manque.join(' · ')) + '</i>'
+                      : '')
+                  + '<i class="gen-nb">' + _en86Esc(e.ou) + '</i></div></li>';
+              }).join('') + '</ul></div>'
+          : '';
+      }
+
+      if (cb) {
+        cb.className = '';
+        cb.innerHTML = hors
+          ? '<div class="q-vide">' + _en86Esc(R.hors_champ.dit) + '</div>'
+          : '<div class="band"><div class="status"><span class="dot"></span>'
+            + _en86Esc(R.reserve) + '</div></div>'
+            + '<table class="ow-pont"><thead><tr><th>Article du règlement</th>'
+            + '<th>Paragraphes de la norme</th><th>Où vous en êtes</th></tr>'
+            + '</thead><tbody>' + j.annexe_za.map(function (l) {
+                return '<tr' + (l.couvert_par_la_norme ? '' : ' class="ow-non"')
+                  + '><td><code>' + _en86Esc(l.article) + '</code><i>'
+                  + _en86Esc(l.dit) + '</i>'
+                  + (l.remarque ? '<i class="gen-nb">' + _en86Esc(l.remarque)
+                                  + '</i>' : '') + '</td>'
+                  + '<td>' + (l.vises.length
+                      ? l.vises.map(function (n) {
+                          return '<code>' + _en86Esc(n) + '</code>'; }).join(' ')
+                      : '<i>aucun</i>') + '</td>'
+                  + '<td>' + (!l.couvert_par_la_norme
+                      ? '<i>Non couvert par cette norme</i>'
+                      : (l.taux === null ? '<i>—</i>' : l.taux + ' %'))
+                  + '</td></tr>';
+              }).join('') + '</tbody></table>'
+            + '<div class="gen-muet"><b>Ce qu’il faut en retenir.</b> '
+            + j.za_non_couverts.length + ' ligne(s) de l’annexe ZA — '
+            + _en86Esc(j.za_non_couverts.join(', ')) + ' — ne sont couvertes '
+            + 'par AUCUN paragraphe de cette norme. Cent pour cent ici ne '
+            + 'veut donc pas dire article 17 tenu.</div>';
+      }
+
+      if (ab) {
+        ab.className = '';
+        ab.innerHTML = '<div class="gen-bloc"><h3>Ce que votre certificat ne '
+          + 'vous donne pas</h3><p>Les deux tables de correspondance de la '
+          + 'norme se lisent à l’envers : ce qui compte, ce sont les lignes '
+          + 'en face du vide — ' + j.sans_equivalent.map(function (x) {
+              return '<b>' + _en86Esc(x) + '</b>'; }).join(' et ')
+          + '. C’est exactement ce que le règlement ajoute.</p></div>'
+          + j.ponts.map(function (p) {
+              return '<details class="gen-sc"><summary><code>'
+                + _en86Esc(p.norme) + '</code> <b>' + _en86Esc(p.nom) + '</b>'
+                + '<em>' + p.correspondances + ' / ' + p.total
+                + ' lignes en correspondance</em></summary>'
+                + '<div class="gen-lot"><button type="button" class="gen-b" '
+                + 'data-cle="' + _en86Esc(p.cle) + '" aria-pressed="'
+                + (p.tenu ? 'true' : 'false')
+                + '" onclick="en18286Certifie(this)">'
+                + (p.tenu ? '✓ Nous le tenons' : 'Nous le tenons') + '</button>'
+                + (p.dans_le_site
+                    ? '<span class="gen-nb">ce référentiel a son propre '
+                      + 'tiroir dans Sentinel</span>' : '')
+                + '</div>'
+                + '<ul class="gen-act">' + p.lignes.map(function (l) {
+                    return '<li' + (l.couvert ? '' : ' data-etat="absent"')
+                      + '><div class="gen-t"><code>' + _en86Esc(l.ici)
+                      + '</code><i>' + (l.couvert
+                          ? 'correspond à ' + _en86Esc(l.la_bas)
+                          : 'AUCUNE correspondance — c’est ce que le '
+                            + 'règlement ajoute') + '</i></div></li>';
+                  }).join('') + '</ul></details>';
+            }).join('')
+          + '<div class="gen-bloc"><h3>La famille des normes harmonisées</h3>'
+          + '<p>prEN 18286 organise la façon de répondre aux exigences '
+          + 'essentielles. Ce sont les autres normes de la famille qui disent '
+          + 'comment y répondre : acheter « la norme du SMQ » et croire avoir '
+          + 'traité l’article 10, c’est se tromper de document.</p></div>'
+          + '<ul class="ow-liste">' + R.famille.map(function (f) {
+              return '<li' + (f.dans_le_site ? ' data-etat="oui"' : '') + '>'
+                + '<div class="ow-t"><code>' + _en86Esc(f.ref) + '</code> <b>'
+                + _en86Esc(f.aspect) + '</b> <em>' + _en86Esc(f.articles)
+                + '</em></div><p>' + _en86Esc(f.sujet) + '</p>'
+                + (f.note ? '<p class="gen-nb">' + _en86Esc(f.note) + '</p>' : '')
+                + (f.dans_le_site
+                    ? '<p class="gen-nb">Ce site la traite déjà.</p>' : '')
+                + '</li>';
+            }).join('') + '</ul>'
+          + '<div class="gen-muet"><b>Ce que le document se contredit à '
+          + 'lui-même, et qui est dit plutôt que masqué.</b>'
+          + R.contradictions.map(function (c) {
+              return '<p><code>' + _en86Esc(c.ou) + '</code> '
+                + _en86Esc(c.quoi) + ' <i>' + _en86Esc(c.fait) + '</i></p>';
+            }).join('') + '</div>';
+      }
+    })
+    .catch(function () {
+      if (!aJour()) return;
+      [vs, cb, ab].forEach(function (e) {
+        if (e) { e.className = '';
+          e.innerHTML = '<div class="q-vide">Le calcul n’a pas abouti. Rien '
+            + 'n’est affiché plutôt qu’une couverture partielle : sur un '
+            + 'texte réglementaire, un tableau tronqué qui ne dit pas qu’il '
+            + 'l’est vaut moins que pas de tableau.</div>'; }
+      });
+      if (ps) ps.innerHTML = '';
+    });
+}
+
+function en18286Init() {
+  EN18286_DECL = _en86Normaliser(_declLire(EN18286_CLE_STOCK));
+  declPublier();
+  if (EN18286_REF) { en18286Peindre(); return; }
+  fetch('/api/en18286/referentiel')
+    .then(function (r) { return r.json(); })
+    .then(function (j) {
+      if (!j || !j.ok) throw new Error('referentiel');
+      EN18286_REF = j.referentiel;
+      en18286Peindre();
+    })
+    .catch(function () {
+      /* RIEN PLUTÔT QU'UN RÉFÉRENTIEL PARTIEL : soixante-cinq paragraphes
+         dont il en manque dix se lisent comme cinquante-cinq, et personne
+         ne le voit. */
+      ['en18286-processus-body', 'en18286-questionnaire-body',
+       'en18286-conformite-body', 'en18286-analyse-body'].forEach(function (id) {
+        var e = document.getElementById(id);
+        if (e) e.innerHTML = '<div class="veille-loading">Le référentiel est '
+          + 'momentanément indisponible. Rien n’est affiché plutôt qu’une '
+          + 'liste partielle.</div>';
+      });
+    });
+}
+window.en18286Init = en18286Init;
+
+
 function nistInit() {
   /* LES RÉPONSES SURVIVENT À LA FERMETURE DE L'ONGLET, et repartent vers le
      taux de conformité dès le chargement — sans quoi le visiteur qui a
@@ -29639,7 +30288,9 @@ function owaspPeindre() {
     db.innerHTML = '<p class="nist-q">Millésime <b>'
       + nistEsc(R.source.millesime) + '</b> · ' + nistEsc(R.source.dit) + '</p>'
       + '<ul class="ow-liste">' + R.risques.map(function (r) {
-          return '<li><div class="ow-t"><code>' + nistEsc(r.cle) + '</code> '
+          return '<li' + (OWASP_DECL[r.cle]
+                   ? ' data-etat="' + nistEsc(OWASP_DECL[r.cle]) + '"' : '')
+            + '><div class="ow-t"><code>' + nistEsc(r.cle) + '</code> '
             + '<b>' + nistEsc(r.nom) + '</b> <em>' + nistEsc(r.en) + '</em></div>'
             + '<p>' + nistEsc(r.quoi) + '</p>'
             + '<p class="ow-dure"><span>Pourquoi ça dure</span>'
@@ -30583,6 +31234,11 @@ var RAIL_DECL = {
   /* LE PROFIL VOYAGE AVEC LES ÉTATS : c'est lui qui plafonne le taux, et
      un socle arrivé seul se lit «&nbsp;non génératif&nbsp;», c'est-à-dire
      la seule réponse qui ne plafonne rien. */
+  /* LA QUALIFICATION SUFFIT À FAIRE UNE DÉCLARATION : un fournisseur qui
+     vient de se déclarer hors champ a RÉPONDU, et sa carte doit dire
+     « sans objet » plutôt que « — ». Le traducteur du serveur fait la
+     distinction ; l'écran envoie ce qu'il tient, sans trier. */
+  en18286: function () { return EN18286_DECL; },
   nist_ai_rmf: function () { return { etats: NIST_DECL, profil: GENAI_DECL }; },
   owasp_llm: function () { return { etats: OWASP_DECL }; },
   nist_800_53: function () { return { socle: N53_SOCLE || null, etats: _n53Etats() }; },
