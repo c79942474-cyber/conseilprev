@@ -29,7 +29,19 @@
  *   node outils/i18n_sentinel.js extraire                 (lance le serveur lui-même)
  *   node outils/i18n_sentinel.js extraire --base http://127.0.0.1:9917 --token <jeton>
  * Options : --port 9931 (serveur lancé ici) · --sortie <fichier> · --attente <ms>
- *           (délai supplémentaire par page) · --pages a,b,c (sous-ensemble).
+ *           (délai supplémentaire par page) · --pages a,b,c (sous-ensemble)
+ *           · --cadres (descend dans les documents embarqués de même origine)
+ *           · --fusion <ancien> (garde d'une passe précédente ce que celle-ci
+ *             n'a pas visité — sans quoi un catalogue refait PERD des clés).
+ *
+ * POURQUOI --cadres N'EST PAS LE DÉFAUT. Quatre pages portent un <iframe> vers
+ * une route de l'application ; `querySelectorAll` ne traverse pas la frontière
+ * d'un document, donc leur texte propre était invisible ici. L'ouvrir ajoute
+ * 1 321 clés et ~19 000 mots de prose française qu'aucun dictionnaire ne
+ * couvre encore : la part couverte tombe de 99 % à 83 %, et le plancher de
+ * i18n/sentinel/SEUIL_COUVERTURE n'est plus tenu. Le drapeau existe pour que
+ * ce travail se MESURE en une commande au lieu de se deviner, et il sera le
+ * défaut le jour où ces mots seront traduits.
  *
  * Chargeable par node (require) : les fonctions pures — compterMots,
  * fusionnerInventaire, statistiques — sont exportées pour les règles.
@@ -119,6 +131,71 @@ function trie(obj) {
   for (const k of Object.keys(obj).sort()) out[k] = obj[k];
   return out;
 }
+/* CE QU'UNE PASSE NE VISITE PAS, ELLE NE DOIT PAS L'EFFACER.
+   LE DÉFAUT MESURÉ, ET IL RENDAIT LE CATALOGUE IRRÉGÉNÉRABLE : les quatre
+   pages à document embarqué portaient 1 920 clés (22 421 mots) entrées par un
+   script d'appoint qui n'est pas au dépôt. Toute passe refaite les PERDAIT, et
+   l'inventaire concluait « ces pages n'ont rien à traduire » — pendant que
+   leurs dictionnaires, eux, restaient au dépôt. Le catalogue ne pouvait donc
+   plus être refait sans mentir, et c'est ce qui a rendu la dette impayable.
+
+   CE QUE LA FUSION GARDE, ET CE QU'ELLE NE GARDE PAS. Elle reprend d'une passe
+   précédente les clés que celle-ci portait et que la nouvelle n'a PAS vues,
+   avec leurs pages. Elle ne touche à rien de ce que la nouvelle a vu : un
+   texte réécrit à l'écran ne se fait pas remplacer par son ancienne version.
+   Et elle ne reprend QUE des pages que la nouvelle passe connaît : une page
+   disparue de PAGE_META s'en va avec ses clés. */
+function fusionner(cat, ancien) {
+  const pagesConnues = new Set(Object.keys(cat.rubriques).concat(['_coquille', '_js']));
+  let reprises = 0, mots = 0;
+  for (const regime of ['bloc', 'texte', 'attr']) {
+    const src = ancien[regime] || {};
+    for (const cle of Object.keys(src)) {
+      if (cle in cat[regime]) continue;
+      const pages = (src[cle].pages || []).filter((p) => pagesConnues.has(p));
+      if (!pages.length) continue;
+      cat[regime][cle] = Object.assign({}, src[cle], { pages: pages });
+      reprises++; mots += src[cle].mots || 0;
+    }
+  }
+  return { reprises: reprises, mots: mots };
+}
+
+/* L'INVENTAIRE D'UN PANNEAU, CADRES COMPRIS — et c'est une fonction NOMMÉE
+   pour qu'une règle puisse la jouer. Elle vivait en ligne dans l'appel au
+   navigateur : aucune règle ne pouvait l'exercer, et la batterie de mutations
+   l'a montré — on pouvait annuler la descente sans rien faire tomber.
+
+   ELLE NE CONNAÎT NI `document` NI PLAYWRIGHT : on lui donne l'élément et la
+   fonction d'inventaire du module. C'est ce qui la rend jouable sur un faux
+   DOM, et c'est aussi ce qui garantit que l'inventaire et la traduction
+   obéissent aux mêmes règles — c'est `sentInventaire` qui tranche, pas elle.
+
+   UN CADRE D'UNE AUTRE ORIGINE EST SAUTÉ SANS BRUIT : `contentDocument` lève,
+   et ce n'est pas une faute — un document qu'on ne peut pas lire n'est pas un
+   document qu'on traduit. */
+function inventaireDuPanneau(el, inventorier, cadres) {
+  if (!el) return null;
+  const tout = inventorier(el);
+  if (!cadres) return tout;
+  const dedans = [];
+  for (const f of el.querySelectorAll('iframe')) {
+    let corps = null;
+    try { corps = f.contentDocument && f.contentDocument.body; } catch (e) { corps = null; }
+    if (corps) dedans.push(inventorier(corps));
+  }
+  for (const inv of dedans) {
+    for (const regime of ['bloc', 'texte', 'attr']) {
+      const src = inv[regime] || {};
+      tout[regime] = tout[regime] || {};
+      for (const cle of Object.keys(src)) {
+        if (!(cle in tout[regime])) tout[regime][cle] = src[cle];
+      }
+    }
+  }
+  return tout;
+}
+
 function ecrireCatalogue(cat, sortie) {
   const propre = {
     genere_le: cat.genere_le, pages: cat.pages, rubriques: trie(cat.rubriques),
@@ -250,10 +327,31 @@ async function extraire(opts) {
       await pg.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(r, 300)))));
       if (opts.attente) await pg.waitForTimeout(opts.attente);
     };
-    const inventaireDe = (id) => pg.evaluate((id) => {
-      const el = document.getElementById('p-' + id);
-      return el ? sentInventaire(el) : null;
-    }, id);
+    /* LES DOCUMENTS EMBARQUÉS COMPTENT, ET ILS ÉTAIENT INVISIBLES ICI.
+       Quatre pages de Sentinel portent un <iframe> vers une route de
+       l'application elle-même — /panorama, /observatoire, /enveloppe,
+       /empreinte-parc. `querySelectorAll` ne traverse PAS la frontière d'un
+       document : l'inventaire du panneau s'arrêtait donc à la bordure du
+       cadre, et relevait huit clés là où le cadre en porte deux mille.
+
+       MESURÉ : 1 946 clés manquaient au catalogue régénéré — 954 sur pan-sia,
+       503 sur enveloppe, 342 sur empreinte-parc, 147 sur obs-rd. Elles y
+       étaient entrées par un script d'appoint, une fois, qui n'est pas au
+       dépôt : refaire le catalogue les perdait, et l'inventaire concluait
+       « ces pages n'ont rien à traduire ».
+
+       UN CADRE D'UNE AUTRE ORIGINE EST SAUTÉ SANS BRUIT : `contentDocument`
+       lève, et ce n'est pas une faute — un document qu'on ne peut pas lire
+       n'est pas un document qu'on traduit. */
+    /* LA MÊME FONCTION QUE LES RÈGLES JOUENT, portée telle quelle dans la
+       page : son source part avec l'appel, donc il n'y a pas deux
+       versions de la descente — celle qu'on mesure et celle qui tourne. */
+    const SRC_INV = inventaireDuPanneau.toString();
+    const inventaireDe = (id) => pg.evaluate(
+      new Function('arg', 'const f = ' + SRC_INV + ';\n'
+        + "const el = document.getElementById('p-' + arg.id);\n"
+        + 'return f(el, sentInventaire, arg.cadres);'),
+      { id: id, cadres: !!opts.cadres });
 
     let absentes = [];
     for (let i = 0; i < ids.length; i++) {
@@ -280,9 +378,20 @@ async function extraire(opts) {
     if (absentes.length) console.log('  pages de PAGE_META sans élément #p-… : ' + absentes.join(', '));
     console.log('  coquille : +' + coquille + ' clés');
     if (erreurs.length) console.log('  erreurs de page : ' + erreurs.slice(0, 3).join(' | '));
+    if (!opts.cadres) {
+      console.log('  documents embarqués NON ouverts : --cadres les relève '
+        + '(mesuré : 1 321 clés de plus, ~19 000 mots, sur pan-sia, enveloppe, '
+        + 'empreinte-parc et obs-rd)');
+    }
   } finally {
     await nav.close();
     arreterServeur(serveur);
+  }
+  if (opts.fusion) {
+    const ancien = JSON.parse(fs.readFileSync(opts.fusion, 'utf8'));
+    const f = fusionner(cat, ancien);
+    console.log('  fusion avec ' + path.relative(RACINE, opts.fusion)
+      + ' : +' + f.reprises + ' clés non revues (' + f.mots + ' mots)');
   }
   ecrireCatalogue(cat, opts.sortie);
   const st = statistiques(cat);
@@ -301,7 +410,8 @@ async function extraire(opts) {
 /* ── LA LIGNE DE COMMANDE ────────────────────────────────────────────── */
 function lireOptions(argv) {
   const opts = { commande: argv[0], base: '', token: JETON_DEFAUT, port: PORT_DEFAUT,
-                 sortie: SORTIE_DEFAUT, attente: 0, pages: [] };
+                 sortie: SORTIE_DEFAUT, attente: 0, pages: [],
+                 cadres: false, fusion: '' };
   for (let i = 1; i < argv.length; i++) {
     const a = argv[i], v = argv[i + 1];
     if (a === '--base') { opts.base = String(v || '').replace(/\/$/, ''); i++; }
@@ -310,6 +420,8 @@ function lireOptions(argv) {
     else if (a === '--sortie') { opts.sortie = path.resolve(v); i++; }
     else if (a === '--attente') { opts.attente = parseInt(v, 10) || 0; i++; }
     else if (a === '--pages') { opts.pages = String(v || '').split(',').filter(Boolean); i++; }
+    else if (a === '--cadres') { opts.cadres = true; }
+    else if (a === '--fusion') { opts.fusion = v; i++; }
     else throw new Error('option inconnue : ' + a);
   }
   return opts;
@@ -318,11 +430,12 @@ function lireOptions(argv) {
 if (require.main === module) {
   const opts = lireOptions(process.argv.slice(2));
   if (opts.commande !== 'extraire') {
-    console.error('usage : node outils/i18n_sentinel.js extraire [--base URL --token JETON | --port N] [--sortie F] [--attente MS] [--pages a,b]');
+    console.error('usage : node outils/i18n_sentinel.js extraire [--base URL --token JETON | --port N] [--sortie F] [--attente MS] [--pages a,b] [--cadres] [--fusion ANCIEN]');
     process.exit(2);
   }
   extraire(opts).then(() => process.exit(0), (e) => { console.error(e); process.exit(1); });
 }
 
 module.exports = { compterMots, catalogueVide, fusionnerInventaire, fusionnerCoquille,
-                   statistiques, ecrireCatalogue, lireOptions };
+                   statistiques, ecrireCatalogue, lireOptions, fusionner,
+                   inventaireDuPanneau };

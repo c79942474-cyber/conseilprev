@@ -1,0 +1,64 @@
+{
+ "_pourquoi": "Refaire le catalogue de traduction sans rien perdre. MESURÉ : une passe refaite PERDAIT 1 920 clés (22 421 mots) sur les quatre pages à document embarqué — `querySelectorAll` ne traverse pas la frontière d'un document, et les clés du catalogue y étaient entrées par un script d'appoint qui n'est pas au dépôt. Deux options le réparent, et chaque mutation ici défait une seule de leurs garanties.",
+ "cibles": [
+  "tests/test_i18n_sentinel_outil.py"
+ ],
+ "mutations": [
+  {
+   "nom": "l'outil ne descend plus dans les documents embarqués",
+   "fichier": "outils/i18n_sentinel.js",
+   "avant": "  if (!cadres) return tout;",
+   "apres": "  return tout;  //",
+   "regle": "test_l_outil_sait_DESCENDRE_dans_les_documents_embarques"
+  },
+  {
+   "nom": "le drapeau des cadres devient le défaut, et la mesure change sans qu'on l'ait demandé",
+   "fichier": "outils/i18n_sentinel.js",
+   "avant": "                 cadres: false, fusion: '' };",
+   "apres": "                 cadres: true, fusion: '' };",
+   "regle": "test_l_outil_sait_DESCENDRE_dans_les_documents_embarques"
+  },
+  {
+   "nom": "la fusion écrase ce que la nouvelle passe a vu",
+   "fichier": "outils/i18n_sentinel.js",
+   "avant": "      if (cle in cat[regime]) continue;",
+   "apres": "      if (false) continue;",
+   "regle": "test_une_passe_refaite_NE_PERD_PAS_ce_qu_elle_n_a_pas_visite"
+  },
+  {
+   "nom": "la fusion reprend les clés d'une page que PAGE_META ne connaît plus",
+   "fichier": "outils/i18n_sentinel.js",
+   "avant": "      const pages = (src[cle].pages || []).filter((p) => pagesConnues.has(p));",
+   "apres": "      const pages = (src[cle].pages || []);",
+   "regle": "test_une_passe_refaite_NE_PERD_PAS_ce_qu_elle_n_a_pas_visite"
+  },
+  {
+   "nom": "la fusion compte les mots de ce qu'elle n'a pas reprise",
+   "fichier": "outils/i18n_sentinel.js",
+   "avant": "      reprises++; mots += src[cle].mots || 0;",
+   "apres": "      reprises++; mots += 0;",
+   "regle": "test_une_passe_refaite_NE_PERD_PAS_ce_qu_elle_n_a_pas_visite"
+  },
+  {
+   "nom": "la fusion devient inconditionnelle, et une passe ne se mesure plus seule",
+   "fichier": "outils/i18n_sentinel.js",
+   "avant": "  if (opts.fusion) {",
+   "apres": "  if (opts.fusion || true) {",
+   "regle": "test_la_fusion_se_demande_et_ne_s_impose_pas"
+  },
+  {
+   "nom": "la passe ne dit plus ce qu'elle laisse dans les cadres",
+   "fichier": "outils/i18n_sentinel.js",
+   "avant": "        + '(mesuré : 1 321 clés de plus, ~19 000 mots, sur pan-sia, enveloppe, '",
+   "apres": "        + '(voir la documentation de l\\'outil, '",
+   "regle": "test_la_passe_DIT_ce_qu_elle_laisse_dans_les_cadres"
+  },
+  {
+   "nom": "la descente avale les cadres d'une AUTRE origine au lieu de les sauter",
+   "fichier": "outils/i18n_sentinel.js",
+   "avant": "    if (corps) dedans.push(inventorier(corps));",
+   "apres": "    dedans.push(inventorier(corps));",
+   "regle": "test_l_outil_sait_DESCENDRE_dans_les_documents_embarques"
+  }
+ ]
+}
