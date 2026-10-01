@@ -82,7 +82,11 @@ NOMS_PROPRES = ['EU AI Act', 'NIS 2', 'DORA', 'CRA', 'ReCyF', 'ISO 27001',
                 # LA RÉFÉRENCE D'UNE NORME NE SE TRADUIT PAS : « prEN 18229-3 »
                 # est ce qui l'identifie au CEN, et le traduire la rendrait
                 # introuvable. Seul son TITRE se traduit, et il l'est.
-                'prEN 18229-3']
+                'prEN 18229-3',
+                # La treizième norme, pour la même raison, et parce que
+                # l'assembleur refusait « prEN # » comme « identique au
+                # français » : ce n'est pas du français, c'est une cote.
+                'prEN 18286']
 
 #: CE QUI DIT QU'UNE CHAÎNE EST DU FRANÇAIS : un accent, ou un mot-outil que
 #: l'anglais n'emploie pas. « plus », « en », « on » sont exclus : ils sont

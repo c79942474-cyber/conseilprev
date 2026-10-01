@@ -1,0 +1,655 @@
+{
+ "_lot": "35-js-6",
+ "_mots": 2431,
+ "_pages": [
+  "_js"
+ ],
+ "_rubrique": "_js",
+ "bloc": {},
+ "texte": {
+  "Choisir un fichier": {
+   "en": "Choose a file",
+   "fr": "Choisir un fichier"
+  },
+  "Choisir un pays d’implantation": {
+   "en": "Choose a country of location",
+   "fr": "Choisir un pays d’implantation"
+  },
+  "Choisissez d’abord votre": {
+   "en": "First choose your",
+   "fr": "Choisissez d’abord votre"
+  },
+  "Choisissez le type d’entité, puis ouvrez les cinq catégories du cadre simplifié et les six exclusions. Déclarez enfin si vous êtes identifié essentielle ou importante au titre de NIS # : c’est la condition de l’article #er, paragraphe #, et sans elle l’articulation ne se calcule pas. Le bloc du bas dit alors ce que l’article # de la directive écarte — articles #, #, # et chapitre VII — et ce qui reste dû malgré tout.": {
+   "en": "Choose the type of entity, then open the five categories of the simplified framework and the six exclusions. Finally, declare whether you are identified as essential or important under NIS #: this is the condition of Article #(#), and without it the articulation cannot be calculated. The bottom block then states what Article # of the Directive sets aside — Articles #, #, # and Chapter VII — and what remains due nonetheless.",
+   "fr": "Choisissez le type d’entité, puis ouvrez les cinq catégories du cadre simplifié et les six exclusions. Déclarez enfin si vous êtes identifié essentielle ou importante au titre de NIS 2 : c’est la condition de l’article 1er, paragraphe 2, et sans elle l’articulation ne se calcule pas. Le bloc du bas dit alors ce que l’article 4 de la directive écarte — articles 20, 21, 23 et chapitre VII — et ce qui reste dû malgré tout."
+  },
+  "Choisissez les dimensions AVANT de regarder le résultat. Les choisir après revient à construire la comparaison qui donne la réponse qu’on avait déjà.": {
+   "en": "Choose the dimensions BEFORE looking at the result. Choosing them afterwards amounts to building the comparison that gives the answer you already had.",
+   "fr": "Choisissez les dimensions AVANT de regarder le résultat. Les choisir après revient à construire la comparaison qui donne la réponse qu’on avait déjà."
+  },
+  "Choisissez les dimensions AVANT de regarder les scores : les choisir après revient à retenir le pays qu’on avait déjà en tête.": {
+   "en": "Choose the dimensions BEFORE looking at the scores: choosing them afterwards amounts to picking the country you already had in mind.",
+   "fr": "Choisissez les dimensions AVANT de regarder les scores : les choisir après revient à retenir le pays qu’on avait déjà en tête."
+  },
+  "Choisissez « prestataire tiers de services TIC », point u) de l’article #, §#.": {
+   "en": "Choose “ICT third-party service provider”, point (u) of Article #(#).",
+   "fr": "Choisissez « prestataire tiers de services TIC », point u) de l’article 2, §1."
+  },
+  "Chronologie des evolutions reglementaires": {
+   "en": "Timeline of regulatory developments",
+   "fr": "Chronologie des evolutions reglementaires"
+  },
+  "Ciblez d’abord les items « à faire » à fort impact.": {
+   "en": "Target the high-impact “to do” items first.",
+   "fr": "Ciblez d’abord les items « à faire » à fort impact."
+  },
+  "Ciblez le secteur et les processus, explorez les cas d’usage proposés, retenez ceux qui parlent à votre réalité, puis priorisez selon l’impact et la faisabilité. Le résultat alimente vos arbitrages d’investissement.": {
+   "en": "Target the sector and the processes, explore the proposed use cases, select those that speak to your reality, then prioritise by impact and feasibility. The result feeds your investment trade-offs.",
+   "fr": "Ciblez le secteur et les processus, explorez les cas d’usage proposés, retenez ceux qui parlent à votre réalité, puis priorisez selon l’impact et la faisabilité. Le résultat alimente vos arbitrages d’investissement."
+  },
+  "Citez toujours la version du référentiel et sa date : c’est la première chose que vérifie un contrôleur.": {
+   "en": "Always cite the version of the framework and its date: it is the first thing an inspector checks.",
+   "fr": "Citez toujours la version du référentiel et sa date : c’est la première chose que vérifie un contrôleur."
+  },
+  "Clarifier en interne qui porte la responsabilité \"fournisseur\" — souvent négligé car perçu comme usage technique.": {
+   "en": "Clarify internally who bears the “provider” responsibility — often neglected because it is perceived as technical use.",
+   "fr": "Clarifier en interne qui porte la responsabilité \"fournisseur\" — souvent négligé car perçu comme usage technique."
+  },
+  "Classe de risque DÉDUITE des caractéristiques factuelles par des règles écrites, et score d’exposition calculé terme à terme, chaque terme et son poids étant affichés.": {
+   "en": "Risk class DEDUCED from the factual characteristics by written rules, and exposure score calculated term by term, each term and its weight being displayed.",
+   "fr": "Classe de risque DÉDUITE des caractéristiques factuelles par des règles écrites, et score d’exposition calculé terme à terme, chaque terme et son poids étant affichés."
+  },
+  "Classe présumée": {
+   "en": "Presumed class",
+   "fr": "Classe présumée"
+  },
+  "Classement des pays et fiche par pays — avantages, inconvénients, commentaire d’arbitrage, perspectives # — à l’écran et à l’impression.": {
+   "en": "Ranking of countries and profile per country — advantages, drawbacks, trade-off commentary, outlook # — on screen and in print.",
+   "fr": "Classement des pays et fiche par pays — avantages, inconvénients, commentaire d’arbitrage, perspectives 2030 — à l’écran et à l’impression."
+  },
+  "Classer chaque système": {
+   "en": "Classify each system",
+   "fr": "Classer chaque système"
+  },
+  "Classer selon le niveau de risque": {
+   "en": "Classify by risk level",
+   "fr": "Classer selon le niveau de risque"
+  },
+  "Classez ce que vous distribuez.": {
+   "en": "Classify what you distribute.",
+   "fr": "Classez ce que vous distribuez."
+  },
+  "Classez ce que vous importez : la classe dit quelle procédure le fabricant devait suivre.": {
+   "en": "Classify what you import: the class says which procedure the manufacturer had to follow.",
+   "fr": "Classez ce que vous importez : la classe dit quelle procédure le fabricant devait suivre."
+  },
+  "Classez chaque cas d’usage retenu AVANT le comité d’engagement, pas après.": {
+   "en": "Classify each selected use case BEFORE the commitment committee, not after.",
+   "fr": "Classez chaque cas d’usage retenu AVANT le comité d’engagement, pas après."
+  },
+  "Classez le système, en commençant par les sept éléments de la définition de l’article #(#) et la question du rôle.": {
+   "en": "Classify the system, starting with the seven elements of the definition in Article #(#) and the question of the role.",
+   "fr": "Classez le système, en commençant par les sept éléments de la définition de l’article 3(1) et la question du rôle."
+  },
+  "Classification : Haut risque ou Inacceptable. Justification : préciser l'exception légale invoquée si usage prévu.": {
+   "en": "Classification: High risk or Unacceptable. Justification: specify the legal exception invoked if use is planned.",
+   "fr": "Classification : Haut risque ou Inacceptable. Justification : préciser l'exception légale invoquée si usage prévu."
+  },
+  "Classification : Haut risque. Données : données financières, comportementales. Preuves : documentation technique + politique d'explication.": {
+   "en": "Classification: High risk. Data: financial, behavioural data. Evidence: technical documentation + explanation policy.",
+   "fr": "Classification : Haut risque. Données : données financières, comportementales. Preuves : documentation technique + politique d'explication."
+  },
+  "Classification : Haut risque. Personnes : Patients. Rôle : Déployeur. Preuves : protocole de supervision médicale.": {
+   "en": "Classification: High risk. Persons: Patients. Role: Deployer. Evidence: medical oversight protocol.",
+   "fr": "Classification : Haut risque. Personnes : Patients. Rôle : Déployeur. Preuves : protocole de supervision médicale."
+  },
+  "Classification : Haut risque. Personnes concernées : Candidats, salariés. Rôle : Déployeur.": {
+   "en": "Classification: High risk. Data subjects: Candidates, employees. Role: Deployer.",
+   "fr": "Classification : Haut risque. Personnes concernées : Candidats, salariés. Rôle : Déployeur."
+  },
+  "Classification : Haut risque. Personnes concernées : Salariés. Transparence : information explicite obligatoire.": {
+   "en": "Classification: High risk. Data subjects: Employees. Transparency: explicit information mandatory.",
+   "fr": "Classification : Haut risque. Personnes concernées : Salariés. Transparence : information explicite obligatoire."
+  },
+  "Classification : Haut risque. Service : Direction pédagogique. Rôle : Déployeur. Personnes : Apprenants, étudiants.": {
+   "en": "Classification: High risk. Department: Teaching management. Role: Deployer. Persons: Learners, students.",
+   "fr": "Classification : Haut risque. Service : Direction pédagogique. Rôle : Déployeur. Personnes : Apprenants, étudiants."
+  },
+  "Classification GPAI à risque systémique": {
+   "en": "GPAI classification with systemic risk",
+   "fr": "Classification GPAI à risque systémique"
+  },
+  "Classification des systèmes à haut risque": {
+   "en": "Classification of high-risk systems",
+   "fr": "Classification des systèmes à haut risque"
+  },
+  "Classification identique à un modèle commercial selon l'usage. FRIA si haut risque.": {
+   "en": "Same classification as a commercial model, depending on use. FRIA if high-risk.",
+   "fr": "Classification identique à un modèle commercial selon l'usage. FRIA si haut risque."
+  },
+  "Classification lue chez :": {
+   "en": "Classification read from:",
+   "fr": "Classification lue chez :"
+  },
+  "Classification selon l’Annexe I (secteurs harmonises) ou l’Annexe III": {
+   "en": "Classification under Annex I (harmonised sectors) or Annex III",
+   "fr": "Classification selon l’Annexe I (secteurs harmonises) ou l’Annexe III"
+  },
+  "Classification système IA (Simulateur)": {
+   "en": "AI system classification (Simulator)",
+   "fr": "Classification système IA (Simulateur)"
+  },
+  "Classifier selon Annexe III EU AI Act": {
+   "en": "Classify under Annex III of the EU AI Act",
+   "fr": "Classifier selon Annexe III EU AI Act"
+  },
+  "Claude (Anthropic) ou Mistral Large, au choix dans l’interface. Le modèle RÉDIGE et EXPLIQUE ; il ne décide pas de ce qui s’applique — la qualification est calculée avant lui et lui est transmise.": {
+   "en": "Claude (Anthropic) or Mistral Large, selectable in the interface. The model DRAFTS and EXPLAINS; it does not decide what applies — the qualification is calculated before it and passed to it.",
+   "fr": "Claude (Anthropic) ou Mistral Large, au choix dans l’interface. Le modèle RÉDIGE et EXPLIQUE ; il ne décide pas de ce qui s’applique — la qualification est calculée avant lui et lui est transmise."
+  },
+  "Clauses # à # : contexte, leadership, planification, support, fonctionnement, évaluation, amélioration": {
+   "en": "Clauses # to #: context, leadership, planning, support, operation, performance evaluation, improvement",
+   "fr": "Clauses 4 à 10 : contexte, leadership, planification, support, fonctionnement, évaluation, amélioration"
+  },
+  "Cliquer pour assigner": {
+   "en": "Click to assign",
+   "fr": "Cliquer pour assigner"
+  },
+  "Cliquez + Ajouter un pays pour sélectionner jusqu à # juridictions. Le radar et le tableau se mettent à jour automatiquement. Utile pour choisir où déployer un système IA avec le moins de contraintes.": {
+   "en": "Click + Add a country to select up to # jurisdictions. The radar and the table update automatically. Useful for choosing where to deploy an AI system with the fewest constraints.",
+   "fr": "Cliquez + Ajouter un pays pour sélectionner jusqu à 4 juridictions. Le radar et le tableau se mettent à jour automatiquement. Utile pour choisir où déployer un système IA avec le moins de contraintes."
+  },
+  "Cliquez sur chaque carte pour déplier le détail : exemples concrets, applicabilité réelle, obligation légale exacte et conseil pratique. Une fois un système identifié, utilisez le bouton en bas de page pour l envoyer directement au Simulateur IA Act.": {
+   "en": "Click each card to expand the detail: concrete examples, actual applicability, exact legal obligation and practical advice. Once a system has been identified, use the button at the bottom of the page to send it directly to the AI Act simulator.",
+   "fr": "Cliquez sur chaque carte pour déplier le détail : exemples concrets, applicabilité réelle, obligation légale exacte et conseil pratique. Une fois un système identifié, utilisez le bouton en bas de page pour l envoyer directement au Simulateur IA Act."
+  },
+  "Cliquez sur les # cartes (Explorer, Comparer, Simuler) pour accéder directement aux outils correspondants. Les listes de droite sont triées par score, cliquables vers les fiches détaillées.": {
+   "en": "Click the # cards (Explore, Compare, Simulate) to go directly to the corresponding tools. The lists on the right are sorted by score and link to the detailed profiles.",
+   "fr": "Cliquez sur les 3 cartes (Explorer, Comparer, Simuler) pour accéder directement aux outils correspondants. Les listes de droite sont triées par score, cliquables vers les fiches détaillées."
+  },
+  "Cliquez sur une cellule pour faire défiler son statut. Changez de secteur pour voir les rôles et processus spécifiques apparaître (badge Sectoriel). Le bouton 🤖 génère un document complet d analyse de votre matrice par IA.": {
+   "en": "Click a cell to cycle through its status. Change sector to see the sector-specific roles and processes appear (Sector badge). The 🤖 button generates a complete AI analysis document of your matrix.",
+   "fr": "Cliquez sur une cellule pour faire défiler son statut. Changez de secteur pour voir les rôles et processus spécifiques apparaître (badge Sectoriel). Le bouton 🤖 génère un document complet d analyse de votre matrice par IA."
+  },
+  "Cliquez sur une ligne pour ouvrir le suivi détaillé du client.": {
+   "en": "Click a row to open the client’s detailed follow-up.",
+   "fr": "Cliquez sur une ligne pour ouvrir le suivi détaillé du client."
+  },
+  "Cliquez sur « Recalculer » après chaque campagne d’évaluation. Chaque cadre renvoie à ses modules : traitez d’abord la composante la plus basse, c’est elle qui tire l’indice vers le bas.": {
+   "en": "Click “Recalculate” after each assessment campaign. Each framework links to its modules: deal with the lowest component first — it is the one pulling the index down.",
+   "fr": "Cliquez sur « Recalculer » après chaque campagne d’évaluation. Chaque cadre renvoie à ses modules : traitez d’abord la composante la plus basse, c’est elle qui tire l’indice vers le bas."
+  },
+  "Cliquez un module pour ouvrir sa fiche complète : objectifs, programme détaillé, articles couverts, quiz et certification visée.": {
+   "en": "Click a module to open its full details: objectives, detailed programme, articles covered, quiz and target certification.",
+   "fr": "Cliquez un module pour ouvrir sa fiche complète : objectifs, programme détaillé, articles couverts, quiz et certification visée."
+  },
+  "Cliquez une carte pour être redirigé directement vers l outil qui génère ce document, avec vos données réelles déjà chargées.": {
+   "en": "Click a card to be taken directly to the tool that generates this document, with your actual data already loaded.",
+   "fr": "Cliquez une carte pour être redirigé directement vers l outil qui génère ce document, avec vos données réelles déjà chargées."
+  },
+  "Cliquez une icône dans la grille ou un système en zone critique pour ouvrir directement sa fiche dans le Registre IA.": {
+   "en": "Click an icon in the grid or a system in the critical zone to open its record directly in the AI register.",
+   "fr": "Cliquez une icône dans la grille ou un système en zone critique pour ouvrir directement sa fiche dans le Registre IA."
+  },
+  "Cliquez une ligne pour revenir directement à l outil correspondant (Simulateur ou Audit). Utile pour suivre votre progression dans le temps.": {
+   "en": "Click a row to go straight back to the corresponding tool (Simulator or Audit). Useful for tracking your progress over time.",
+   "fr": "Cliquez une ligne pour revenir directement à l outil correspondant (Simulateur ou Audit). Utile pour suivre votre progression dans le temps."
+  },
+  "Clé d accès incorrecte ou absente. Réessayez.": {
+   "en": "Access key incorrect or missing. Try again.",
+   "fr": "Clé d accès incorrecte ou absente. Réessayez."
+  },
+  "Cochez ce que vous faites réellement, pas ce qui figure dans votre plaquette. Si le verdict est « requalifié fabricant » ou « intégrateur », lisez la ligne « étendue » : elle dit si vous répondez de la partie que vous avez modifiée ou du produit entier, et c’est cette ligne-là qui décide de l’ampleur de la documentation technique à produire. Le chemin suivi est affiché sous le verdict : il sert à le contester.": {
+   "en": "Tick what you actually do, not what your brochure says. If the verdict is “reclassified as a manufacturer” or “integrator”, read the “extent” line: it says whether you answer for the part you modified or for the entire product, and it is that line which decides the scale of the technical documentation to produce. The path followed is displayed under the verdict: it serves to challenge it.",
+   "fr": "Cochez ce que vous faites réellement, pas ce qui figure dans votre plaquette. Si le verdict est « requalifié fabricant » ou « intégrateur », lisez la ligne « étendue » : elle dit si vous répondez de la partie que vous avez modifiée ou du produit entier, et c’est cette ligne-là qui décide de l’ampleur de la documentation technique à produire. Le chemin suivi est affiché sous le verdict : il sert à le contester."
+  },
+  "Cochez les modules à inclure et ordonnez-les. Le parcours vous guidera d’un module à l’autre jusqu’au coût et à la synthèse.": {
+   "en": "Tick the modules to include and put them in order. The path will guide you from one module to the next up to the cost and the summary.",
+   "fr": "Cochez les modules à inclure et ordonnez-les. Le parcours vous guidera d’un module à l’autre jusqu’au coût et à la synthèse."
+  },
+  "Code de l'action sociale et des familles": {
+   "en": "Code de l’action sociale et des familles [French Social Action and Families Code]",
+   "fr": "Code de l'action sociale et des familles"
+  },
+  "Code de l'éducation": {
+   "en": "Code de l’éducation [French Education Code]",
+   "fr": "Code de l'éducation"
+  },
+  "Code du travail": {
+   "en": "Code du travail [French Labour Code]",
+   "fr": "Code du travail"
+  },
+  "Code du travail (particulier employeur)": {
+   "en": "Code du travail [French Labour Code] (private individual as employer)",
+   "fr": "Code du travail (particulier employeur)"
+  },
+  "Collez le texte du contrat (# caractères minimum) ou chargez un fichier.": {
+   "en": "Paste the contract text (# characters minimum) or upload a file.",
+   "fr": "Collez le texte du contrat (200 caractères minimum) ou chargez un fichier."
+  },
+  "Commencez ici, avant de rouvrir le moindre document.": {
+   "en": "Start here, before reopening any document.",
+   "fr": "Commencez ici, avant de rouvrir le moindre document."
+  },
+  "Commencez ici, avant d’ouvrir le moindre questionnaire.": {
+   "en": "Start here, before opening any questionnaire.",
+   "fr": "Commencez ici, avant d’ouvrir le moindre questionnaire."
+  },
+  "Commencez par # à # cas transverses.": {
+   "en": "Start with # to # cross-functional cases.",
+   "fr": "Commencez par 2 à 3 cas transverses."
+  },
+  "Commencez par #, le domaine d’application : c’est la décision la plus structurante de toute la certification, parce que tout ce qui n’en est pas exclu par écrit sera audité. Un périmètre large rassure le client et double la facture ; un périmètre étroit passe l’audit et ne prouve rien à personne. Vérifiez ensuite #, planification des modifications : c’est le seul article que la version # a ajouté au corps de la norme.": {
+   "en": "Start with #, the scope: it is the most structuring decision of the entire certification, because everything not excluded in writing will be audited. A broad scope reassures the client and doubles the bill; a narrow scope passes the audit and proves nothing to anyone. Then check #, planning of changes: it is the only clause that the # edition added to the body of the standard.",
+   "fr": "Commencez par 4.3, le domaine d’application : c’est la décision la plus structurante de toute la certification, parce que tout ce qui n’en est pas exclu par écrit sera audité. Un périmètre large rassure le client et double la facture ; un périmètre étroit passe l’audit et ne prouve rien à personne. Vérifiez ensuite 6.3, planification des modifications : c’est le seul article que la version 2022 a ajouté au corps de la norme."
+  },
+  "Commencez par #, le périmètre : tout ce qui n’est pas exclu par écrit sera audité, et un périmètre flou est la première cause de dérive de coût d’un audit de certification. Enchaînez ensuite sur les articles marqués « propre à l’IA », qui portent la politique d’IA, l’appréciation des risques et l’évaluation d’impact. Les articles « mutualisables » se cotent vite si vous êtes déjà certifié ailleurs — vous les avez.": {
+   "en": "Start with #, the scope: everything not excluded in writing will be audited, and a vague scope is the leading cause of cost overruns in a certification audit. Then move on to the clauses marked “specific to AI”, which carry the AI policy, the risk assessment and the impact assessment. The “shareable” clauses are rated quickly if you are already certified elsewhere — you have them.",
+   "fr": "Commencez par 4.3, le périmètre : tout ce qui n’est pas exclu par écrit sera audité, et un périmètre flou est la première cause de dérive de coût d’un audit de certification. Enchaînez ensuite sur les articles marqués « propre à l’IA », qui portent la politique d’IA, l’appréciation des risques et l’évaluation d’impact. Les articles « mutualisables » se cotent vite si vous êtes déjà certifié ailleurs — vous les avez."
+  },
+  "Commencez par b) et d). La gestion des incidents commande l’horloge de l’article # ; la sécurité de la chaîne d’approvisionnement est la mesure que l’article #, §#, détaille le plus — il exige de tenir compte des vulnérabilités PROPRES à chaque fournisseur direct, ce qu’une politique fournisseurs générique ne fait pas. La mesure e), traitement et divulgation des vulnérabilités, recouvre largement l’annexe I du CRA : si vous fabriquez aussi un produit, le travail se fait une fois.": {
+   "en": "Start with b) and d). Incident handling drives the clock of Article #; supply chain security is the measure that Article #(#) details the most — it requires taking into account the vulnerabilities SPECIFIC to each direct supplier, which a generic supplier policy does not do. Measure e), vulnerability handling and disclosure, largely overlaps with Annex I of the CRA: if you also manufacture a product, the work is done once.",
+   "fr": "Commencez par b) et d). La gestion des incidents commande l’horloge de l’article 23 ; la sécurité de la chaîne d’approvisionnement est la mesure que l’article 21, §3, détaille le plus — il exige de tenir compte des vulnérabilités PROPRES à chaque fournisseur direct, ce qu’une politique fournisseurs générique ne fait pas. La mesure e), traitement et divulgation des vulnérabilités, recouvre largement l’annexe I du CRA : si vous fabriquez aussi un produit, le travail se fait une fois."
+  },
+  "Commencez par la fin : regardez ce qui fait échouer chacune des deux étapes.": {
+   "en": "Start at the end: look at what makes each of the two stages fail.",
+   "fr": "Commencez par la fin : regardez ce qui fait échouer chacune des deux étapes."
+  },
+  "Commencez par la politique : sans elle, la revue de code n’a pas de critère et se réduit à un avis.": {
+   "en": "Start with the policy: without it, code review has no criterion and comes down to an opinion.",
+   "fr": "Commencez par la politique : sans elle, la revue de code n’a pas de critère et se réduit à un avis."
+  },
+  "Commencez par le circuit d’un usage nouveau : c’est lui qui révèle les décisions que personne n’assume.": {
+   "en": "Start with the workflow for a new use: it is what reveals the decisions nobody takes ownership of.",
+   "fr": "Commencez par le circuit d’un usage nouveau : c’est lui qui révèle les décisions que personne n’assume."
+  },
+  "Commencez par le produit dont vous doutez, pas par le plus simple. Si vous le rangez en classe I, la case « normes harmonisées appliquées intégralement » décide de tout : cochée, vous restez en contrôle interne ; décochée, vous basculez chez l’organisme notifié. C’est la bascule la plus coûteuse du texte, et elle se joue là. En partie appliquées, ou pas encore publiées, comptent comme non appliquées.": {
+   "en": "Start with the product you have doubts about, not the simplest one. If you place it in class I, the “harmonised standards applied in full” box decides everything: ticked, you remain under internal control; unticked, you switch to the notified body. It is the costliest switch in the text, and it happens there. Partly applied, or not yet published, count as not applied.",
+   "fr": "Commencez par le produit dont vous doutez, pas par le plus simple. Si vous le rangez en classe I, la case « normes harmonisées appliquées intégralement » décide de tout : cochée, vous restez en contrôle interne ; décochée, vous basculez chez l’organisme notifié. C’est la bascule la plus coûteuse du texte, et elle se joue là. En partie appliquées, ou pas encore publiées, comptent comme non appliquées."
+  },
+  "Commencez par le périmètre, pas par l'analyse. L'objectif # impose que TOUS les systèmes soient couverts, et n'admet une exclusion que si une analyse de risques montre l'absence d'exposition aux trois risques nommés — interruption, divulgation, altération. Le référentiel ferme explicitement la porte du contournement : la présence de mesures de sécurité ne vaut pas justification. Vérifiez ensuite vos deux voies de preuve : un SMSI ISO/CEI #:# certifié, borné par son périmètre de certification, et une PACS qualifiée par l'ANSSI, bornée par le suivi du plan de traitement.": {
+   "en": "Start with the scope, not the analysis. Objective # requires ALL systems to be covered, and only admits an exclusion if a risk analysis shows the absence of exposure to the three named risks — interruption, disclosure, alteration. The framework explicitly closes the door to circumvention: the presence of security measures is not a justification. Then check your two routes of evidence: a certified ISO/IEC #:# ISMS, bounded by its certification scope, and a PACS qualified by ANSSI, bounded by the follow-up of the treatment plan.",
+   "fr": "Commencez par le périmètre, pas par l'analyse. L'objectif 1 impose que TOUS les systèmes soient couverts, et n'admet une exclusion que si une analyse de risques montre l'absence d'exposition aux trois risques nommés — interruption, divulgation, altération. Le référentiel ferme explicitement la porte du contournement : la présence de mesures de sécurité ne vaut pas justification. Vérifiez ensuite vos deux voies de preuve : un SMSI ISO/CEI 27001:2022 certifié, borné par son périmètre de certification, et une PACS qualifiée par l'ANSSI, bornée par le suivi du plan de traitement."
+  },
+  "Commencez par le rang #. Ne descendez au rang # qu’une fois les verrous levés.": {
+   "en": "Start with rank #. Only go down to rank # once the blockers have been lifted.",
+   "fr": "Commencez par le rang 1. Ne descendez au rang 2 qu’une fois les verrous levés."
+  },
+  "Commencez par les quatre exclusions de l’article #, §# : elles ne s’apprécient pas, elles se constatent, et l’une d’elles suffit à fermer la question. Un prestataire intragroupe, ou qui ne sert que des entités actives dans un seul État membre, ne peut pas être désigné, quelle que soit sa part de marché. Renseignez ensuite les parts mesurées.": {
+   "en": "Start with the four exclusions of Article #(#): they are not assessed, they are established, and any one of them is enough to close the question. A provider that is intra-group, or that only serves entities active in a single Member State, cannot be designated, whatever its market share. Then fill in the measured shares.",
+   "fr": "Commencez par les quatre exclusions de l’article 31, §8 : elles ne s’apprécient pas, elles se constatent, et l’une d’elles suffit à fermer la question. Un prestataire intragroupe, ou qui ne sert que des entités actives dans un seul État membre, ne peut pas être désigné, quelle que soit sa part de marché. Renseignez ensuite les parts mesurées."
+  },
+  "Commencez par les quatre exclusions de l’article #, §# : une seule suffit à fermer la question.": {
+   "en": "Start with the four exclusions of Article #(#): a single one is enough to close the question.",
+   "fr": "Commencez par les quatre exclusions de l’article 31, §8 : une seule suffit à fermer la question."
+  },
+  "Commencez par les traitements les plus sensibles ou à grande échelle.": {
+   "en": "Start with the most sensitive or large-scale processing activities.",
+   "fr": "Commencez par les traitements les plus sensibles ou à grande échelle."
+  },
+  "Commencez par là, avant tout inventaire.": {
+   "en": "Start there, before any inventory.",
+   "fr": "Commencez par là, avant tout inventaire."
+  },
+  "Commencez par là.": {
+   "en": "Start there.",
+   "fr": "Commencez par là."
+  },
+  "Commencez toujours par le registre des traitements : sans lui, les autres modules n’ont rien à traiter. Ajoutez vos traitements, puis laissez les autres pages en dériver.": {
+   "en": "Always start with the records of processing activities: without them, the other modules have nothing to process. Add your processing activities, then let the other pages derive from them.",
+   "fr": "Commencez toujours par le registre des traitements : sans lui, les autres modules n’ont rien à traiter. Ajoutez vos traitements, puis laissez les autres pages en dériver."
+  },
+  "Comment calculer les sanctions ?": {
+   "en": "How are penalties calculated?",
+   "fr": "Comment calculer les sanctions ?"
+  },
+  "Comment exporter le rapport audit ?": {
+   "en": "How do I export the audit report?",
+   "fr": "Comment exporter le rapport audit ?"
+  },
+  "Comment lire la carte ?": {
+   "en": "How to read the map?",
+   "fr": "Comment lire la carte ?"
+  },
+  "Comment lire les gains": {
+   "en": "How to read the gains",
+   "fr": "Comment lire les gains"
+  },
+  "Commission europeenne, publiees le # fevrier #.": {
+   "en": "European Commission, published on # February #.",
+   "fr": "Commission europeenne, publiees le 4 fevrier 2025."
+  },
+  "Comparaison internationale — où ce système serait-il moins contraint ?": {
+   "en": "International comparison — where would this system be less constrained?",
+   "fr": "Comparaison internationale — où ce système serait-il moins contraint ?"
+  },
+  "Comparaison à titre indicatif sur la sévérité réglementaire générale (cadre IA global), ne reflète pas une classification formelle de ce système dans chaque juridiction. Voir": {
+   "en": "Indicative comparison of general regulatory severity (overall AI framework); it does not reflect a formal classification of this system in each jurisdiction. See",
+   "fr": "Comparaison à titre indicatif sur la sévérité réglementaire générale (cadre IA global), ne reflète pas une classification formelle de ce système dans chaque juridiction. Voir"
+  },
+  "Comparateur — Sources et methodologie": {
+   "en": "Comparator — Sources and methodology",
+   "fr": "Comparateur — Sources et methodologie"
+  },
+  "Compare jusqu à # juridictions côte à côte sur # dimensions (Sévérité, Transparence, Responsabilité, Souveraineté, Sanctions, Innovation).": {
+   "en": "Compares up to # jurisdictions side by side on # dimensions (Severity, Transparency, Accountability, Sovereignty, Penalties, Innovation).",
+   "fr": "Compare jusqu à 4 juridictions côte à côte sur 6 dimensions (Sévérité, Transparence, Responsabilité, Souveraineté, Sanctions, Innovation)."
+  },
+  "Compare le taux de conformité réel de vos systèmes (Registre IA) à la moyenne de maturité calculée pour chaque secteur d activité.": {
+   "en": "Compares the actual compliance rate of your systems (AI register) with the average maturity calculated for each sector.",
+   "fr": "Compare le taux de conformité réel de vos systèmes (Registre IA) à la moyenne de maturité calculée pour chaque secteur d activité."
+  },
+  "Comparer EU et USA ?": {
+   "en": "Compare the EU and the USA?",
+   "fr": "Comparer EU et USA ?"
+  },
+  "Comparer les formules →": {
+   "en": "Compare the plans →",
+   "fr": "Comparer les formules →"
+  },
+  "Comparer suppose un registre à jour": {
+   "en": "Comparing requires an up-to-date register",
+   "fr": "Comparer suppose un registre à jour"
+  },
+  "Comparez avec le début réel affiché ci-dessous.": {
+   "en": "Compare with the actual start displayed below.",
+   "fr": "Comparez avec le début réel affiché ci-dessous."
+  },
+  "Comparez avec le régime de l’IA Act.": {
+   "en": "Compare with the AI Act regime.",
+   "fr": "Comparez avec le régime de l’IA Act."
+  },
+  "Comparez ce chiffre au coût de la mise en conformité — l’arbitrage devient évident.": {
+   "en": "Compare this figure with the cost of compliance — the trade-off becomes obvious.",
+   "fr": "Comparez ce chiffre au coût de la mise en conformité — l’arbitrage devient évident."
+  },
+  "Comparez ce que pèse votre parc déclaré et ce que pèse la plateforme elle-même, mesurée appel par appel.": {
+   "en": "Compare what your declared estate weighs with what the platform itself weighs, metered call by call.",
+   "fr": "Comparez ce que pèse votre parc déclaré et ce que pèse la plateforme elle-même, mesurée appel par appel."
+  },
+  "Comparez ce que vous venez de renseigner avec le corps de la norme.": {
+   "en": "Compare what you have just filled in with the body of the standard.",
+   "fr": "Comparez ce que vous venez de renseigner avec le corps de la norme."
+  },
+  "Comparez jusqu’à quatre cadres nationaux sur les dimensions qui décident de votre offre.": {
+   "en": "Compare up to four national frameworks on the dimensions that decide your offering.",
+   "fr": "Comparez jusqu’à quatre cadres nationaux sur les dimensions qui décident de votre offre."
+  },
+  "Comparez jusqu’à quatre juridictions sur les six dimensions réglementaires, côte à côte plutôt que l’une après l’autre.": {
+   "en": "Compare up to four jurisdictions on the six regulatory dimensions, side by side rather than one after the other.",
+   "fr": "Comparez jusqu’à quatre juridictions sur les six dimensions réglementaires, côte à côte plutôt que l’une après l’autre."
+  },
+  "Comparez les sites entre eux plutôt que de lire un total : c’est l’écart qui désigne où agir.": {
+   "en": "Compare the sites with one another rather than reading a total: it is the gap that shows where to act.",
+   "fr": "Comparez les sites entre eux plutôt que de lire un total : c’est l’écart qui désigne où agir."
+  },
+  "Comparez maturité, investissement et risque IA de votre secteur.": {
+   "en": "Compare your sector’s AI maturity, investment and risk.",
+   "fr": "Comparez maturité, investissement et risque IA de votre secteur."
+  },
+  "Comparez votre lecture à l’empreinte environnementale du parc cartographié : électricité, CO₂e, fabrication amortie, eau.": {
+   "en": "Compare your reading with the environmental footprint of the mapped estate: electricity, CO₂e, amortised manufacturing, water.",
+   "fr": "Comparez votre lecture à l’empreinte environnementale du parc cartographié : électricité, CO₂e, fabrication amortie, eau."
+  },
+  "Comparez votre profil sur # dimensions (gouvernance, sécurité, droits fondamentaux…) à la moyenne du secteur.": {
+   "en": "Compare your profile on # dimensions (governance, security, fundamental rights…) with the sector average.",
+   "fr": "Comparez votre profil sur 6 dimensions (gouvernance, sécurité, droits fondamentaux…) à la moyenne du secteur."
+  },
+  "Comparez à densité et à mode de refroidissement comparables : un site en eau perdue et un site en boucle fermée ne se comparent pas sur l’eau.": {
+   "en": "Compare at comparable density and cooling method: a once-through water site and a closed-loop site cannot be compared on water.",
+   "fr": "Comparez à densité et à mode de refroidissement comparables : un site en eau perdue et un site en boucle fermée ne se comparent pas sur l’eau."
+  },
+  "Compilation datée du cabinet — communiqués et décisions d’autorités": {
+   "en": "Dated compilation by the firm — press releases and decisions of authorities",
+   "fr": "Compilation datée du cabinet — communiqués et décisions d’autorités"
+  },
+  "Complète votre AIPD existante — la FRIA couvre des angles que le RGPD seul ne traite pas (biais, discrimination algorithmique).": {
+   "en": "Complements your existing DPIA — the FRIA covers angles that the GDPR alone does not address (bias, algorithmic discrimination).",
+   "fr": "Complète votre AIPD existante — la FRIA couvre des angles que le RGPD seul ne traite pas (biais, discrimination algorithmique)."
+  },
+  "Complémentaire de l’étape maturité de la cartographie.": {
+   "en": "Complementary to the maturity step of the mapping.",
+   "fr": "Complémentaire de l’étape maturité de la cartographie."
+  },
+  "Complémentaire à la Cartographie (qui est quantitative) : ici vous trouvez le contexte stratégique et les instruments clés de chaque bloc.": {
+   "en": "Complementary to the Mapping (which is quantitative): here you will find the strategic context and the key instruments of each bloc.",
+   "fr": "Complémentaire à la Cartographie (qui est quantitative) : ici vous trouvez le contexte stratégique et les instruments clés de chaque bloc."
+  },
+  "Compléter le registre des systèmes IA": {
+   "en": "Complete the AI systems register",
+   "fr": "Compléter le registre des systèmes IA"
+  },
+  "Complétude des champs art. #": {
+   "en": "Completeness of the fields, art. #",
+   "fr": "Complétude des champs art. 30"
+  },
+  "Comportement normal et attendu du middleware anti-scraping (app.py, fonction is_bot_blocked). Une requete dont le User-Agent correspond a un client HTTP generique (ex: Go-http-client, curl, python-requests) est journalisee et bloquee automatiquement. Exemple observe : IP #.x.x.x (plage Google Cloud Platform), UA Go-http-client/# -- probable scanner ou bot de monitoring tiers, sans lien avec Render lui-meme. Action requise : aucune, sauf si le volume de blocages devient anormalement eleve (scan agressif) ou si les tentatives ciblent specifiquement des routes sensibles (/api/registre, formulaires). A ne pas confondre avec les health checks internes Render (IP #, deja whitelistes dans le middleware).": {
+   "en": "Normal and expected behaviour of the anti-scraping middleware (app.py, function is_bot_blocked). A request whose User-Agent matches a generic HTTP client (e.g. Go-http-client, curl, python-requests) is logged and blocked automatically. Example observed: IP #.x.x.x (Google Cloud Platform range), UA Go-http-client/# -- probably a third-party scanner or monitoring bot, unrelated to Render itself. Action required: none, unless the volume of blocks becomes abnormally high (aggressive scan) or the attempts specifically target sensitive routes (/api/registre, forms). Not to be confused with Render’s internal health checks (IP #, already whitelisted in the middleware).",
+   "fr": "Comportement normal et attendu du middleware anti-scraping (app.py, fonction is_bot_blocked). Une requete dont le User-Agent correspond a un client HTTP generique (ex: Go-http-client, curl, python-requests) est journalisee et bloquee automatiquement. Exemple observe : IP 34.x.x.x (plage Google Cloud Platform), UA Go-http-client/2.0 -- probable scanner ou bot de monitoring tiers, sans lien avec Render lui-meme. Action requise : aucune, sauf si le volume de blocages devient anormalement eleve (scan agressif) ou si les tentatives ciblent specifiquement des routes sensibles (/api/registre, formulaires). A ne pas confondre avec les health checks internes Render (IP 127.0.0.1, deja whitelistes dans le middleware)."
+  },
+  "Composants de sécurité (Annexe I)": {
+   "en": "Safety components (Annex I)",
+   "fr": "Composants de sécurité (Annexe I)"
+  },
+  "Composants de sécurité de machines": {
+   "en": "Safety components of machinery",
+   "fr": "Composants de sécurité de machines"
+  },
+  "Comprehension des sorties du systeme par les superviseurs (Art. #(#)(b))": {
+   "en": "Understanding of the system’s outputs by the supervisors (Art. #(#)(b))",
+   "fr": "Comprehension des sorties du systeme par les superviseurs (Art. 14(4)(b))"
+  },
+  "Comprendre l'architecture du règlement (UE) #/#, identifier les rôles et situer l'organisation dans le calendrier.": {
+   "en": "Understand the architecture of Regulation (EU) #/#, identify the roles and place the organisation in the timetable.",
+   "fr": "Comprendre l'architecture du règlement (UE) 2024/1689, identifier les rôles et situer l'organisation dans le calendrier."
+  },
+  "Comprendre la norme, structurer un SMIA et préparer la certification.": {
+   "en": "Understand the standard, structure an AIMS and prepare for certification.",
+   "fr": "Comprendre la norme, structurer un SMIA et préparer la certification."
+  },
+  "Comprendre la structure d un système de management de l IA (SMIA) selon ISO/IEC #:#": {
+   "en": "Understand the structure of an AI management system (AIMS) under ISO/IEC #:#",
+   "fr": "Comprendre la structure d un système de management de l IA (SMIA) selon ISO/IEC 42001:2023"
+  },
+  "Comprendre le champ d application et la portée extraterritoriale du Règlement (UE) #/#": {
+   "en": "Understand the scope and the extraterritorial reach of Regulation (EU) #/#",
+   "fr": "Comprendre le champ d application et la portée extraterritoriale du Règlement (UE) 2024/1689"
+  },
+  "Comprendre les exigences de sécurité applicables aux systèmes IA (Art. # EU AI Act)": {
+   "en": "Understand the security requirements applicable to AI systems (Art. # EU AI Act)",
+   "fr": "Comprendre les exigences de sécurité applicables aux systèmes IA (Art. 15 EU AI Act)"
+  },
+  "Compteur en temps réel de l’empreinte du site, de la plateforme et des modèles de langage utilisés, à partir de l’usage réel : jetons consommés, latence, pages servies. Trois méthodes de calcul sont conduites en parallèle.": {
+   "en": "Real-time counter of the footprint of the site, the platform and the language models used, based on actual use: tokens consumed, latency, pages served. Three calculation methods are run in parallel.",
+   "fr": "Compteur en temps réel de l’empreinte du site, de la plateforme et des modèles de langage utilisés, à partir de l’usage réel : jetons consommés, latence, pages servies. Trois méthodes de calcul sont conduites en parallèle."
+  },
+  "Comptez les exigences non couvertes : ce sont elles qui ouvrent le palier lourd.": {
+   "en": "Count the requirements not covered: they are what opens the heavy tier.",
+   "fr": "Comptez les exigences non couvertes : ce sont elles qui ouvrent le palier lourd."
+  },
+  "Comptez les produits qui passent par un organisme notifié.": {
+   "en": "Count the products that go through a notified body.",
+   "fr": "Comptez les produits qui passent par un organisme notifié."
+  },
+  "Compétences techniques": {
+   "en": "Technical skills",
+   "fr": "Compétences techniques"
+  },
+  "Concentration lue sur la carte : plusieurs preneurs peuvent dépendre du même point de raccordement. Aucun modèle actuariel n’est appliqué.": {
+   "en": "Concentration read on the map: several offtakers may depend on the same connection point. No actuarial model is applied.",
+   "fr": "Concentration lue sur la carte : plusieurs preneurs peuvent dépendre du même point de raccordement. Aucun modèle actuariel n’est appliqué."
+  },
+  "Concentrez-vous d’abord sur # à # cas transverses à retour rapide.": {
+   "en": "Focus first on # to # cross-functional cases with a quick return.",
+   "fr": "Concentrez-vous d’abord sur 2 à 3 cas transverses à retour rapide."
+  },
+  "Concentrez-vous sur le pilier Confidentialité & Sécurité — où en êtes-vous réellement ?": {
+   "en": "Focus on the Confidentiality & Security pillar — where do you really stand?",
+   "fr": "Concentrez-vous sur le pilier Confidentialité & Sécurité — où en êtes-vous réellement ?"
+  },
+  "Conception / Développement / Pré-production / Production / Revue.": {
+   "en": "Design / Development / Pre-production / Production / Review.",
+   "fr": "Conception / Développement / Pré-production / Production / Revue."
+  },
+  "Conception assistée (BIM)": {
+   "en": "Computer-aided design (BIM)",
+   "fr": "Conception assistée (BIM)"
+  },
+  "Conception du cadre de gouvernance": {
+   "en": "Design of the governance framework",
+   "fr": "Conception du cadre de gouvernance"
+  },
+  "Conception et sous-traitance (art. #, #)": {
+   "en": "Design and subcontracting (art. #, #)",
+   "fr": "Conception et sous-traitance (art. 25.1, 28)"
+  },
+  "Concevoir des interfaces permettant la supervision effective": {
+   "en": "Design interfaces that enable effective oversight",
+   "fr": "Concevoir des interfaces permettant la supervision effective"
+  },
+  "Concevoir le système pour informer de son caractère d'IA": {
+   "en": "Design the system to disclose its AI nature",
+   "fr": "Concevoir le système pour informer de son caractère d'IA"
+  },
+  "Concilier innovation et protection des données sur tout le cycle de vie d'un système d'IA.": {
+   "en": "Reconcile innovation and data protection across the entire life cycle of an AI system.",
+   "fr": "Concilier innovation et protection des données sur tout le cycle de vie d'un système d'IA."
+  },
+  "Conditions et garanties contractuelles": {
+   "en": "Contractual terms and guarantees",
+   "fr": "Conditions et garanties contractuelles"
+  },
+  "Conditions imposées (si autorisation sous conditions)": {
+   "en": "Conditions imposed (if authorised subject to conditions)",
+   "fr": "Conditions imposées (si autorisation sous conditions)"
+  },
+  "Conduire et formaliser l'analyse d'impact prévue à l'article #.": {
+   "en": "Conduct and formalise the impact assessment provided for in Article #.",
+   "fr": "Conduire et formaliser l'analyse d'impact prévue à l'article 27."
+  },
+  "Conduisez la FRIA exigée pour certains systèmes à haut risque.": {
+   "en": "Conduct the FRIA required for certain high-risk systems.",
+   "fr": "Conduisez la FRIA exigée pour certains systèmes à haut risque."
+  },
+  "Conduisez l’évaluation d’impact sur les droits fondamentaux si la classification l’exige (art. #).": {
+   "en": "Conduct the fundamental rights impact assessment if the classification requires it (art. #).",
+   "fr": "Conduisez l’évaluation d’impact sur les droits fondamentaux si la classification l’exige (art. 27)."
+  },
+  "Conduite assistée / autonome": {
+   "en": "Assisted / autonomous driving",
+   "fr": "Conduite assistée / autonome"
+  },
+  "Conduite autonome et gestion du trafic = haut risque. Robustesse et sûreté maximales. Homologation sectorielle (EASA aérien, UNECE automobile).": {
+   "en": "Autonomous driving and traffic management = high-risk. Maximum robustness and safety. Sector type-approval (EASA for aviation, UNECE for automotive).",
+   "fr": "Conduite autonome et gestion du trafic = haut risque. Robustesse et sûreté maximales. Homologation sectorielle (EASA aérien, UNECE automobile)."
+  },
+  "Confier la supervision humaine à des personnes compétentes": {
+   "en": "Entrust human oversight to competent persons",
+   "fr": "Confier la supervision humaine à des personnes compétentes"
+  },
+  "Confirmer la réception de chaque notification sans délai": {
+   "en": "Confirm receipt of each notification without delay",
+   "fr": "Confirmer la réception de chaque notification sans délai"
+  },
+  "Confirmer l’effacement (art. #) des données de": {
+   "en": "Confirm the erasure (art. #) of the data of",
+   "fr": "Confirmer l’effacement (art. 17) des données de"
+  },
+  "Confirmez-vous définitivement cet effacement ?": {
+   "en": "Do you confirm this erasure permanently?",
+   "fr": "Confirmez-vous définitivement cet effacement ?"
+  },
+  "Conformite RGPD pour les donnees personnelles utilisees ; categories particulieres de donnees pour detecter et corriger les biais : conditions strictes de l’Art. #a (qui remplace l’ancien Art. #(#))": {
+   "en": "GDPR compliance for the personal data used; special categories of data to detect and correct biases: strict conditions of Art. #a (which replaces the former Art. #(#))",
+   "fr": "Conformite RGPD pour les donnees personnelles utilisees ; categories particulieres de donnees pour detecter et corriger les biais : conditions strictes de l’Art. 4a (qui remplace l’ancien Art. 10(5))"
+  },
+  "Conformité Audit": {
+   "en": "Audit compliance",
+   "fr": "Conformité Audit"
+  },
+  "Conformité RGPD consolidée": {
+   "en": "Consolidated GDPR compliance",
+   "fr": "Conformité RGPD consolidée"
+  },
+  "Conformité RGPD — mise en place": {
+   "en": "GDPR compliance — implementation",
+   "fr": "Conformité RGPD — mise en place"
+  },
+  "Conformité RGPD — tableau de bord": {
+   "en": "GDPR compliance — dashboard",
+   "fr": "Conformité RGPD — tableau de bord"
+  },
+  "Conformité largement atteinte, processus mesurés.": {
+   "en": "Compliance largely achieved, processes measured.",
+   "fr": "Conformité largement atteinte, processus mesurés."
+  },
+  "Conformité native à l’obligation RGPD de traçabilité (# ans), sans dispositif supplémentaire à maintenir.": {
+   "en": "Native compliance with the GDPR traceability obligation (# years), with no additional arrangement to maintain.",
+   "fr": "Conformité native à l’obligation RGPD de traçabilité (3 ans), sans dispositif supplémentaire à maintenir."
+  },
+  "Conformité par exigence, système de qualité (art. #).": {
+   "en": "Compliance by requirement, quality system (art. #).",
+   "fr": "Conformité par exigence, système de qualité (art. 17)."
+  },
+  "Conformité par référentiel": {
+   "en": "Compliance by framework",
+   "fr": "Conformité par référentiel"
+  },
+  "Conformité réglementaire": {
+   "en": "Regulatory compliance",
+   "fr": "Conformité réglementaire"
+  },
+  "Conformité technique — Systèmes haut risque": {
+   "en": "Technical compliance — High-risk systems",
+   "fr": "Conformité technique — Systèmes haut risque"
+  },
+  "Conformité — annexe ZA": {
+   "en": "Conformity — Annex ZA",
+   "fr": "Conformité — annexe ZA"
+  },
+  "Conformité, ingénieurs, chefs de produit": {
+   "en": "Compliance, engineers, product managers",
+   "fr": "Conformité, ingénieurs, chefs de produit"
+  },
+  "Conformité, juristes, métiers": {
+   "en": "Compliance, lawyers, business lines",
+   "fr": "Conformité, juristes, métiers"
+  },
+  "Connaître le calendrier d application et les échéances clés jusqu en #": {
+   "en": "Know the timetable of application and the key deadlines up to #",
+   "fr": "Connaître le calendrier d application et les échéances clés jusqu en 2027"
+  },
+  "Connectée à vos vraies données": {
+   "en": "Connected to your real data",
+   "fr": "Connectée à vos vraies données"
+  },
+  "Connexion et session": {
+   "en": "Sign-in and session",
+   "fr": "Connexion et session"
+  },
+  "Conseil juridique assisté": {
+   "en": "Assisted legal advice",
+   "fr": "Conseil juridique assisté"
+  },
+  "Conseil, ingénierie, bureaux d'études, professions juridiques et comptables, recherche et développement.": {
+   "en": "Consulting, engineering, design offices, legal and accounting professions, research and development.",
+   "fr": "Conseil, ingénierie, bureaux d'études, professions juridiques et comptables, recherche et développement."
+  },
+  "Consentement, contrat, obligation légale, intérêt légitime…": {
+   "en": "Consent, contract, legal obligation, legitimate interest…",
+   "fr": "Consentement, contrat, obligation légale, intérêt légitime…"
+  },
+  "Consentement, intérêt légitime, intérêt public": {
+   "en": "Consent, legitimate interest, public interest",
+   "fr": "Consentement, intérêt légitime, intérêt public"
+  },
+  "Conservation # ans apres la derniere mise sur le marche (Art. #)": {
+   "en": "Retention for # years after the last placing on the market (Art. #)",
+   "fr": "Conservation 10 ans apres la derniere mise sur le marche (Art. 18)"
+  },
+  "Conservation # ans conforme RGPD — utile en cas de contrôle a posteriori.": {
+   "en": "GDPR-compliant retention for # years — useful in the event of a subsequent inspection.",
+   "fr": "Conservation 3 ans conforme RGPD — utile en cas de contrôle a posteriori."
+  }
+ }
+}

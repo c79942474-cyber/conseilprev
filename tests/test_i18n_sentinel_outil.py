@@ -735,30 +735,15 @@ def _catalogue_reel():
     return json.load(io.open(CATALOGUE, encoding="utf-8"))
 
 
-#: LES PAGES NÉES APRÈS LE DERNIER RELEVÉ NAVIGATEUR — une dette DÉCLARÉE,
-#: et non un oubli. Le catalogue SE REFAIT, c'est vrai ; mais le refaire
-#: suppose de rejouer la mesure navigateur dans les conditions de la
-#: précédente, et une passe partielle RETIRERAIT du catalogue ce que la page
-#: `_js` y apporte — 83 949 mots sur 150 045. Ce serait une régression
-#: silencieuse de l'inventaire : le catalogue dirait « rien à traduire » là
-#: où tout reste à traduire.
-#:
-#: MESURÉ, ET C'EST CE QUI A FAIT ÉCRIRE CETTE LISTE. Une passe sur les quatre
-#: écrans de prEN 18286 ne relève que 25 mots par page : leur corps est peint
-#: depuis le serveur, et il reste verrouillé pour un compte sans déclaration.
-#: Les quatre écrans de prEN 18229-3 et ceux du cadre NIST sont dans le même
-#: cas — le catalogue en possède ce que la passe précédente avait pu voir.
-#: Ces quatre pages attendent donc le lot de la nouvelle mesure navigateur.
-#:
-#: CE QUE LA DÉCLARATION NE PERMET PAS. Elle ne dispense aucune AUTRE page :
-#: toute page de PAGE_META absente du catalogue et absente de cette liste fait
-#: toujours tomber la règle. Et une page nommée ici que le catalogue
-#: COUVRIRAIT fait tomber la règle elle aussi — une dette payée qu'on
-#: continuerait de déclarer couvrirait le jour où une vraie page manquerait.
-PAGES_APRES_LE_CATALOGUE = frozenset({
-    "en18286-processus", "en18286-questionnaire",
-    "en18286-conformite", "en18286-analyse",
-})
+#: LA DETTE EST PAYÉE, ET LA DÉCLARATION A DONC DISPARU. Quatre pages de
+#: prEN 18286 manquaient au catalogue : nées après le dernier relevé
+#: navigateur, elles étaient nommées ici plutôt que tues. La règle disait
+#: elle-même ce qui devait arriver — « une page nommée ici que le catalogue
+#: COUVRIRAIT fait tomber la règle à son tour » — et c'est ce qui est
+#: arrivé : la passe refaite les couvre, et la liste est tombée avec.
+#: Ce que la règle mesure redevient simple : le catalogue couvre EXACTEMENT
+#: les pages de PAGE_META. Pour qu'une dette puisse se redéclarer un jour,
+#: elle devra s'écrire ici de nouveau, avec sa raison — jamais se taire.
 
 
 # ══════════════════════════════════════════════════════════════════════════
@@ -906,21 +891,14 @@ def test_le_catalogue_du_depot_couvre_les_pages_de_PAGE_META_et_la_coquille():
     #  est tombée sur sa propre constante. Ce qu'elle doit mesurer est
     #  l'ACCORD entre le catalogue et PAGE_META, aux pages déclarées près.
     assert len(rubriques) >= 122, "%d rubriques relevées" % len(rubriques)
-    assert cat["pages"] == len(rubriques) - len(PAGES_APRES_LE_CATALOGUE), (
-        "le catalogue couvre %d pages, PAGE_META en porte %d, et %d sont "
-        "déclarées nées après le relevé"
-        % (cat["pages"], len(rubriques), len(PAGES_APRES_LE_CATALOGUE)))
-    for page in sorted(PAGES_APRES_LE_CATALOGUE):
-        assert page in rubriques, (
-            "« %s » est déclarée née après le relevé, mais PAGE_META ne la "
-            "porte plus : la déclaration ne protège plus rien" % page)
+    assert cat["pages"] == len(rubriques), (
+        "le catalogue couvre %d pages et PAGE_META en porte %d : une page "
+        "servie que l'inventaire ne voit pas dirait « rien à traduire » là "
+        "où tout reste à traduire"
+        % (cat["pages"], len(rubriques)))
     pages_vues = set(p for r in ("bloc", "texte", "attr") for e in cat[r].values() for p in e["pages"])
-    manquantes = sorted(set(rubriques) - pages_vues - PAGES_APRES_LE_CATALOGUE)
+    manquantes = sorted(set(rubriques) - pages_vues)
     assert not manquantes, "pages sans aucune entrée : %s" % manquantes
-    payees = sorted(PAGES_APRES_LE_CATALOGUE & pages_vues)
-    assert not payees, (
-        "déclarées nées après le relevé, mais le catalogue les couvre : %s "
-        "— la dette est payée, la déclaration doit disparaître" % payees)
     assert "_coquille" in pages_vues and "_js" in pages_vues
     assert cat["js"]["fichier"] == "sentinel.page.js"
 
@@ -942,13 +920,48 @@ def test_chaque_entree_du_catalogue_est_sa_propre_normalisation_avec_ses_mots_et
     assert n >= 3000, n
 
 
+#: LES TEXTES QU'UNE PASSE D'INVENTAIRE NE PEUT PAS VOIR — déclarés, avec
+#: le fichier qui les porte, et non tus. L'inventaire lit le DOM APRÈS la
+#: peinture : il ne peut donc voir ni un texte d'attente que le JavaScript
+#: remplace, ni une note qui dépend d'un état du serveur que la recette
+#: locale n'a pas (le flux de veille y est vide, et l'écran affiche
+#: « Signaux en attente… » à la place). Leur anglais est servi en
+#: production, et le supprimer rendrait ces deux textes au français.
+#:
+#: CE QUE LA DÉCLARATION NE PERMET PAS. Elle ne couvre que ces deux clés :
+#: toute AUTRE entrée périmée fait toujours tomber la règle. Une clé nommée
+#: ici dont le français aurait disparu de son fichier la fait tomber aussi
+#: — la déclaration ne protégerait plus rien. Et le jour où le catalogue en
+#: voit une, la règle tombe pour le dire : la dette est payée, la ligne doit
+#: disparaître. C'est ainsi que PAGES_APRES_LE_CATALOGUE a disparu.
+HORS_DE_PORTEE_DE_LA_PASSE = {
+    u"Chargement du moteur…": "sentinel.html",
+    u"CNIL · ANSSI · EU AI Act · Commission — rafraîchi côté serveur (# min)":
+        "panorama.html",
+}
+
+
 def test_les_dictionnaires_du_depot_passent_verifier_contre_le_catalogue_du_depot():
     """_exemple.json vise du VRAI texte : chaque clé est au catalogue, y
     compris celles que seul le JavaScript rend (les cartes de formation)."""
     fichiers = outil.fichiers_du_dossier(DOSSIER)
     assert fichiers and all(os.path.basename(f) != "CATALOGUE.json" for f in fichiers)
-    fautes = outil.verifier_fichiers(fichiers, _catalogue_reel())
+    cat = _catalogue_reel()
+    fautes = [f for f in outil.verifier_fichiers(fichiers, cat)
+              if not (f[2] in HORS_DE_PORTEE_DE_LA_PASSE
+                      and f[3].startswith(u"périmée"))]
     assert not fautes, fautes[:5]
+    #  LA DÉCLARATION SE MESURE DES DEUX CÔTÉS : le français existe encore à la
+    #  source, et le catalogue ne le voit toujours pas.
+    for cle, fichier in sorted(HORS_DE_PORTEE_DE_LA_PASSE.items()):
+        src = io.open(os.path.join(_RACINE, fichier), encoding="utf-8").read()
+        motif = u"[0-9 ]+".join(re.escape(p) for p in cle.split(u"#"))
+        assert re.search(motif, src), (
+            u"« %s » est déclaré hors de portée de la passe, mais %s ne le "
+            u"porte plus : la déclaration ne protège plus rien" % (cle[:40], fichier))
+        assert not (cle in cat["texte"] or cle in cat["bloc"] or cle in cat["attr"]), (
+            u"« %s » est au catalogue : la passe le voit désormais, la "
+            u"déclaration doit disparaître" % cle[:40])
 
 
 def test_la_route_ne_sert_pas_le_catalogue_et_le_dossier_reel_se_fusionne_sans_faute():

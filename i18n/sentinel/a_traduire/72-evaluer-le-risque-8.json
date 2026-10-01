@@ -1,0 +1,911 @@
+{
+ "_lot": "72-evaluer-le-risque-8",
+ "_mots": 2269,
+ "_pages": [
+  "pan-sia"
+ ],
+ "_rubrique": "ÉVALUER LE RISQUE",
+ "bloc": {},
+ "texte": {
+  "Poids : Glissement de terrain — horizon retenu": {
+   "en": "Weight: Landslide — selected horizon",
+   "fr": "Poids : Glissement de terrain — horizon retenu"
+  },
+  "Poids : Intensité carbone du réseau": {
+   "en": "Weight: Grid carbon intensity",
+   "fr": "Poids : Intensité carbone du réseau"
+  },
+  "Poids : Parc en service (filière constituée)": {
+   "en": "Weight: Estate in service (established industry)",
+   "fr": "Poids : Parc en service (filière constituée)"
+  },
+  "Poids : Pilotabilité du mix (nucléaire + hydro-dominant)": {
+   "en": "Weight: Dispatchability of the mix (nuclear + hydro-dominant)",
+   "fr": "Poids : Pilotabilité du mix (nucléaire + hydro-dominant)"
+  },
+  "Poids : Prix de l'électricité industrielle": {
+   "en": "Weight: Industrial electricity price",
+   "fr": "Poids : Prix de l'électricité industrielle"
+  },
+  "Poids : Précipitations extrêmes et ruissellement — horizon retenu": {
+   "en": "Weight: Extreme precipitation and runoff — selected horizon",
+   "fr": "Poids : Précipitations extrêmes et ruissellement — horizon retenu"
+  },
+  "Poids : Risque climatique physique du bâti (XDI)": {
+   "en": "Weight: Physical climate risk to buildings (XDI)",
+   "fr": "Poids : Risque climatique physique du bâti (XDI)"
+  },
+  "Poids : Risque d'inondation à l'horizon # (XDI)": {
+   "en": "Weight: Flood risk at the # horizon (XDI)",
+   "fr": "Poids : Risque d'inondation à l'horizon 2050 (XDI)"
+  },
+  "Poids : Risque de feu de forêt à l'horizon # (XDI)": {
+   "en": "Weight: Wildfire risk at the # horizon (XDI)",
+   "fr": "Poids : Risque de feu de forêt à l'horizon 2050 (XDI)"
+  },
+  "Poids : Submersion côtière — horizon retenu": {
+   "en": "Weight: Coastal flooding — selected horizon",
+   "fr": "Poids : Submersion côtière — horizon retenu"
+  },
+  "Poids : Sécheresse — horizon retenu": {
+   "en": "Weight: Drought — selected horizon",
+   "fr": "Poids : Sécheresse — horizon retenu"
+  },
+  "Poids : Étiage et régime des cours d'eau — horizon retenu": {
+   "en": "Weight: Low flow and river regime — selected horizon",
+   "fr": "Poids : Étiage et régime des cours d'eau — horizon retenu"
+  },
+  "Pologne · Distribution · À l'échelle": {
+   "en": "Poland · Retail · At scale",
+   "fr": "Pologne · Distribution · À l'échelle"
+  },
+  "Pologne · Services · Abandonné": {
+   "en": "Poland · Services · Abandoned",
+   "fr": "Pologne · Services · Abandonné"
+  },
+  "Pologne · Sécurité / Frontières · Production": {
+   "en": "Poland · Security / Borders · Production",
+   "fr": "Pologne · Sécurité / Frontières · Production"
+  },
+  "Portugal · Énergie · Production": {
+   "en": "Portugal · Energy · Production",
+   "fr": "Portugal · Énergie · Production"
+  },
+  "Pourquoi cette section.": {
+   "en": "Why this section.",
+   "fr": "Pourquoi cette section."
+  },
+  "Poursuivre sur l’étude de durabilité": {
+   "en": "Continue to the sustainability study",
+   "fr": "Poursuivre sur l’étude de durabilité"
+  },
+  "Pratique interdite": {
+   "en": "Prohibited practice",
+   "fr": "Pratique interdite"
+  },
+  "Pratique interdite (art. #)": {
+   "en": "Prohibited practice (art. #)",
+   "fr": "Pratique interdite (art. 5)"
+  },
+  "Prix contractuel de l’électricité (€/MWh)": {
+   "en": "Contractual price of electricity (€/MWh)",
+   "fr": "Prix contractuel de l’électricité (€/MWh)"
+  },
+  "Prix de l'électricité industrielle": {
+   "en": "Industrial electricity price",
+   "fr": "Prix de l'électricité industrielle"
+  },
+  "Prix de l'électricité industrielle par pays (classes)": {
+   "en": "Industrial electricity price by country (classes)",
+   "fr": "Prix de l'électricité industrielle par pays (classes)"
+  },
+  "Prix de l’électricité": {
+   "en": "Electricity price",
+   "fr": "Prix de l’électricité"
+  },
+  "Prix d’hébergement (€/kW/mois)": {
+   "en": "Hosting price (€/kW/month)",
+   "fr": "Prix d’hébergement (€/kW/mois)"
+  },
+  "Produits Sentinel mis à disposition": {
+   "en": "Sentinel products made available",
+   "fr": "Produits Sentinel mis à disposition"
+  },
+  "Programme d'assistants génératifs internes (déploiement progressif)": {
+   "en": "Internal generative assistants programme (phased deployment)",
+   "fr": "Programme d'assistants génératifs internes (déploiement progressif)"
+  },
+  "Prospectives #-#": {
+   "en": "Outlook #-#",
+   "fr": "Prospectives 2026-2030"
+  },
+  "Prospectives #-# — ce qui change, et ce que ça périme": {
+   "en": "Foresight #-# — what changes, and what it makes obsolete",
+   "fr": "Prospectives 2026-2030 — ce qui change, et ce que ça périme"
+  },
+  "Pré-tri des symptômes et orientation des patients en télémédecine": {
+   "en": "Symptom pre-triage and patient referral in telemedicine",
+   "fr": "Pré-tri des symptômes et orientation des patients en télémédecine"
+  },
+  "Précipitations extrêmes et ruissellement — horizon retenu": {
+   "en": "Extreme precipitation and runoff — selected horizon",
+   "fr": "Précipitations extrêmes et ruissellement — horizon retenu"
+  },
+  "Prévision de demande et chatbot d'assistance client": {
+   "en": "Demand forecasting and customer assistance chatbot",
+   "fr": "Prévision de demande et chatbot d'assistance client"
+  },
+  "Prévision de demande et d'équilibrage par apprentissage automatique": {
+   "en": "Demand and balancing forecasting by machine learning",
+   "fr": "Prévision de demande et d'équilibrage par apprentissage automatique"
+  },
+  "Prévision de production renouvelable et maintenance prédictive éolienne": {
+   "en": "Renewable generation forecasting and wind predictive maintenance",
+   "fr": "Prévision de production renouvelable et maintenance prédictive éolienne"
+  },
+  "Publiques, sous licence explicite, interrogeables sans inscription :": {
+   "en": "Public, under an explicit licence, queryable without registration:",
+   "fr": "Publiques, sous licence explicite, interrogeables sans inscription :"
+  },
+  "Puissance FERME en (année)": {
+   "en": "FIRM power in (year)",
+   "fr": "Puissance FERME en (année)"
+  },
+  "Puissance IT (MW)": {
+   "en": "IT load (MW)",
+   "fr": "Puissance IT (MW)"
+  },
+  "Puissance déjà contractée (MW)": {
+   "en": "Power already contracted (MW)",
+   "fr": "Puissance déjà contractée (MW)"
+  },
+  "Que se passe-t-il AU-DELÀ du point de projet : dégradation progressive, délestage de charge, ou arrêt ?": {
+   "en": "What happens BEYOND the design point: gradual degradation, load shedding, or shutdown?",
+   "fr": "Que se passe-t-il AU-DELÀ du point de projet : dégradation progressive, délestage de charge, ou arrêt ?"
+  },
+  "Quelle température extérieure de projet, et quelle période de retour retenue pour son dépassement ?": {
+   "en": "What outdoor design temperature, and what return period selected for exceeding it?",
+   "fr": "Quelle température extérieure de projet, et quelle période de retour retenue pour son dépassement ?"
+  },
+  "Randstad — Appariement algorithmique candidats-missions à l'échelle européenne": {
+   "en": "Randstad — Algorithmic candidate–assignment matching at European scale",
+   "fr": "Randstad — Appariement algorithmique candidats-missions à l'échelle européenne"
+  },
+  "Rappel d'échéances : pratiques interdites": {
+   "en": "Deadline reminder: prohibited practices",
+   "fr": "Rappel d'échéances : pratiques interdites"
+  },
+  "Rapporter l’empreinte de FABRICATION des équipements à leur usage annuel, pour qu’elle apparaisse dans le même total que l’électricité.": {
+   "en": "Relate the MANUFACTURING footprint of the equipment to its annual use, so that it appears in the same total as electricity.",
+   "fr": "Rapporter l’empreinte de FABRICATION des équipements à leur usage annuel, pour qu’elle apparaisse dans le même total que l’électricité."
+  },
+  "Rapports de développement durable des exploitants · The Green Grid · LBNL": {
+   "en": "Operators’ sustainability reports · The Green Grid · LBNL",
+   "fr": "Rapports de développement durable des exploitants · The Green Grid · LBNL"
+  },
+  "Recommandation produits et génération de contenu catalogue": {
+   "en": "Product recommendation and catalogue content generation",
+   "fr": "Recommandation produits et génération de contenu catalogue"
+  },
+  "Recommandation à l'échelle et DJ vocal génératif (voix clonée marquée)": {
+   "en": "Recommendation at scale and generative voice DJ (cloned voice, marked)",
+   "fr": "Recommandation à l'échelle et DJ vocal génératif (voix clonée marquée)"
+  },
+  "Reconstruction et lecture d'imagerie accélérées par IA (gamme SmartSpeed)": {
+   "en": "AI-accelerated image reconstruction and reading (SmartSpeed range)",
+   "fr": "Reconstruction et lecture d'imagerie accélérées par IA (gamme SmartSpeed)"
+  },
+  "Refroidissement imposé": {
+   "en": "Imposed cooling",
+   "fr": "Refroidissement imposé"
+  },
+  "Registre des traitements algorithmiques de l'administration": {
+   "en": "Register of the administration’s algorithmic processing",
+   "fr": "Registre des traitements algorithmiques de l'administration"
+  },
+  "Renault Group — Inspection qualité par vision et optimisation d'usine (plateforme avec Google Cloud)": {
+   "en": "Renault Group — Vision-based quality inspection and factory optimisation (platform with Google Cloud)",
+   "fr": "Renault Group — Inspection qualité par vision et optimisation d'usine (plateforme avec Google Cloud)"
+  },
+  "Renseigné, ce poste cesse d’être « à renseigner ».": {
+   "en": "Once filled in, this item stops being “to be filled in”.",
+   "fr": "Renseigné, ce poste cesse d’être « à renseigner »."
+  },
+  "Replika (Luka Inc., effets UE) — Compagnon conversationnel affectif accessible aux mineurs": {
+   "en": "Replika (Luka Inc., effects in the EU) — Emotional conversational companion accessible to minors",
+   "fr": "Replika (Luka Inc., effets UE) — Compagnon conversationnel affectif accessible aux mineurs"
+  },
+  "Revenir à la vue entière": {
+   "en": "Back to the full view",
+   "fr": "Revenir à la vue entière"
+  },
+  "Revolut — Détection de fraude paiement en temps réel par ML": {
+   "en": "Revolut — Real-time payment fraud detection by ML",
+   "fr": "Revolut — Détection de fraude paiement en temps réel par ML"
+  },
+  "Risque climatique physique du bâti (XDI)": {
+   "en": "Physical climate risk to buildings (XDI)",
+   "fr": "Risque climatique physique du bâti (XDI)"
+  },
+  "Risque d'inondation à l'horizon # (XDI)": {
+   "en": "Flood risk at the # horizon (XDI)",
+   "fr": "Risque d'inondation à l'horizon 2050 (XDI)"
+  },
+  "Risque de feu de forêt à l'horizon # (XDI)": {
+   "en": "Forest fire risk at the # horizon (XDI)",
+   "fr": "Risque de feu de forêt à l'horizon 2050 (XDI)"
+  },
+  "Risque de transparence": {
+   "en": "Transparency risk",
+   "fr": "Risque de transparence"
+  },
+  "Risque de transparence (art. #)": {
+   "en": "Transparency risk (art. #)",
+   "fr": "Risque de transparence (art. 50)"
+  },
+  "Risques financiers couverts": {
+   "en": "Financial risks covered",
+   "fr": "Risques financiers couverts"
+  },
+  "Ryanair — Tarification dynamique et assistance client automatisée": {
+   "en": "Ryanair — Dynamic pricing and automated customer support",
+   "fr": "Ryanair — Tarification dynamique et assistance client automatisée"
+  },
+  "Règlement (UE) #/# (AI Act) — art. #, #, #, annexes I et III ; échéances #-#": {
+   "en": "Regulation (EU) #/# (AI Act) — art. #, #, #, Annexes I and III; deadlines #-#",
+   "fr": "Règlement (UE) 2024/1689 (AI Act) — art. 5, 6, 50, annexes I et III ; échéances 2025-2027"
+  },
+  "Règlement (UE) #/# établissant des règles harmonisées concernant l'intelligence artificielle": {
+   "en": "Regulation (EU) #/# laying down harmonised rules on artificial intelligence",
+   "fr": "Règlement (UE) 2024/1689 établissant des règles harmonisées concernant l'intelligence artificielle"
+  },
+  "Règlement délégué (UE) #/# — indicateurs de durabilité des centres de données": {
+   "en": "Delegated Regulation (EU) #/# — sustainability indicators for data centres",
+   "fr": "Règlement délégué (UE) 2024/1364 — indicateurs de durabilité des centres de données"
+  },
+  "Réduire la carte": {
+   "en": "Shrink the map",
+   "fr": "Réduire la carte"
+  },
+  "Réduire — touche −, ou molette vers le bas": {
+   "en": "Zoom out — − key, or scroll wheel down",
+   "fr": "Réduire — touche −, ou molette vers le bas"
+  },
+  "Référentiels : OWASP LLM Top #, MITRE ATLAS, ANSSI génAI #, ENISA.": {
+   "en": "Frameworks: OWASP LLM Top #, MITRE ATLAS, ANSSI genAI #, ENISA.",
+   "fr": "Référentiels : OWASP LLM Top 10, MITRE ATLAS, ANSSI génAI 2024, ENISA."
+  },
+  "Référentiels appliqués": {
+   "en": "Frameworks applied",
+   "fr": "Référentiels appliqués"
+  },
+  "Régler le projet": {
+   "en": "Set up the project",
+   "fr": "Régler le projet"
+  },
+  "Répartition par classe de risque AI Act": {
+   "en": "Breakdown by AI Act risk class",
+   "fr": "Répartition par classe de risque AI Act"
+  },
+  "Réponses erronées engageant la responsabilité": {
+   "en": "Erroneous answers giving rise to liability",
+   "fr": "Réponses erronées engageant la responsabilité"
+  },
+  "Réseaux autonomes : détection d'anomalies et optimisation par ML (offre et usage interne)": {
+   "en": "Autonomous networks: anomaly detection and optimisation by ML (sold to customers and used internally)",
+   "fr": "Réseaux autonomes : détection d'anomalies et optimisation par ML (offre et usage interne)"
+  },
+  "Réserves sur le référentiel — # valeurs qu’un fait postérieur rend optimiste ou incomplète": {
+   "en": "Caveats on the reference framework — # values that a later fact makes optimistic or incomplete",
+   "fr": "Réserves sur le référentiel — 5 valeurs qu’un fait postérieur rend optimiste ou incomplète"
+  },
+  "Résolution · cadence": {
+   "en": "Resolution · cadence",
+   "fr": "Résolution · cadence"
+  },
+  "Réutilisation libre avec mention de la source — décision #/#/UE": {
+   "en": "Free reuse with acknowledgement of the source — Decision #/#/EU",
+   "fr": "Réutilisation libre avec mention de la source — décision 2011/833/UE"
+  },
+  "SAP — Copilote Joule intégré aux suites (fournisseur de SIA à des milliers d'entreprises UE) ; signataire du Pacte IA": {
+   "en": "SAP — Joule copilot built into the suites (AI system provider to thousands of EU companies); signatory of the AI Pact",
+   "fr": "SAP — Copilote Joule intégré aux suites (fournisseur de SIA à des milliers d'entreprises UE) ; signataire du Pacte IA"
+  },
+  "SNCF — Maintenance prédictive du matériel roulant et surveillance d'infrastructures": {
+   "en": "SNCF — Predictive maintenance of rolling stock and infrastructure monitoring",
+   "fr": "SNCF — Maintenance prédictive du matériel roulant et surveillance d'infrastructures"
+  },
+  "Sans découpage, l’engagement est réputé d’un seul tenant. Le phasage ne supprime pas le risque : il le rend refusable.": {
+   "en": "Without phasing, the commitment is deemed to be in one block. Phasing does not remove the risk: it makes it refusable.",
+   "fr": "Sans découpage, l’engagement est réputé d’un seul tenant. Le phasage ne supprime pas le risque : il le rend refusable."
+  },
+  "Santander — Scoring de crédit ML consommateurs (Openbank et réseaux)": {
+   "en": "Santander — ML consumer credit scoring (Openbank and networks)",
+   "fr": "Santander — Scoring de crédit ML consommateurs (Openbank et réseaux)"
+  },
+  "Schneider Electric — Copilotes génAI (Resource Advisor) et optimisation énergétique client": {
+   "en": "Schneider Electric — GenAI copilots (Resource Advisor) and client energy optimisation",
+   "fr": "Schneider Electric — Copilotes génAI (Resource Advisor) et optimisation énergétique client"
+  },
+  "Score d’un pays = Σ (poids × note du critère) ÷ Σ poids. Les notes #-# par critère sont calculées côté serveur, formules ci-dessus. Un critère sans note pour un pays est ÉCARTÉ de son calcul — il n’est jamais remplacé par un zéro ni par une moyenne.": {
+   "en": "A country’s score = Σ (weight × criterion score) ÷ Σ weights. The #-# scores per criterion are calculated server-side, formulas above. A criterion with no score for a country is EXCLUDED from its calculation — it is never replaced by a zero or by an average.",
+   "fr": "Score d’un pays = Σ (poids × note du critère) ÷ Σ poids. Les notes 0-100 par critère sont calculées côté serveur, formules ci-dessus. Un critère sans note pour un pays est ÉCARTÉ de son calcul — il n’est jamais remplacé par un zéro ni par une moyenne."
+  },
+  "Scoring de crédit ML consommateurs (Openbank et réseaux)": {
+   "en": "ML consumer credit scoring (Openbank and networks)",
+   "fr": "Scoring de crédit ML consommateurs (Openbank et réseaux)"
+  },
+  "Secteur centres d'appels (plusieurs opérateurs)": {
+   "en": "Call centre sector (several operators)",
+   "fr": "Secteur centres d'appels (plusieurs opérateurs)"
+  },
+  "Secteur centres d'appels (plusieurs opérateurs) — Pilotes d'analyse des émotions des téléconseillers en temps réel — abandonnés à l'entrée en vigueur de l'art. #": {
+   "en": "Call centre sector (several operators) — Pilots of real-time emotion analysis of call centre agents — abandoned when art. # entered into force",
+   "fr": "Secteur centres d'appels (plusieurs opérateurs) — Pilotes d'analyse des émotions des téléconseillers en temps réel — abandonnés à l'entrée en vigueur de l'art. 5"
+  },
+  "Secteurs les plus représentés": {
+   "en": "Most represented sectors",
+   "fr": "Secteurs les plus représentés"
+  },
+  "Sections de la page": {
+   "en": "Page sections",
+   "fr": "Sections de la page"
+  },
+  "Services de fusion EUROSUR : détection d'embarcations et suivi d'activité par imagerie satellitaire aux frontières extérieures": {
+   "en": "EUROSUR fusion services: vessel detection and activity tracking by satellite imagery at the external borders",
+   "fr": "Services de fusion EUROSUR : détection d'embarcations et suivi d'activité par imagerie satellitaire aux frontières extérieures"
+  },
+  "Siemens Healthineers — AI-Rad Companion : aide à la lecture radiologique multi-organes": {
+   "en": "Siemens Healthineers — AI-Rad Companion: multi-organ radiology reading support",
+   "fr": "Siemens Healthineers — AI-Rad Companion : aide à la lecture radiologique multi-organes"
+  },
+  "Siemens — Aide au tri de candidatures et mobilité interne assistée": {
+   "en": "Siemens — Support for sorting job applications and assisted internal mobility",
+   "fr": "Siemens — Aide au tri de candidatures et mobilité interne assistée"
+  },
+  "Siemens — Industrial Copilot (avec Microsoft) : génAI pour l'ingénierie d'automatisation": {
+   "en": "Siemens — Industrial Copilot (with Microsoft): genAI for automation engineering",
+   "fr": "Siemens — Industrial Copilot (avec Microsoft) : génAI pour l'ingénierie d'automatisation"
+  },
+  "Signaux": {
+   "en": "Signals",
+   "fr": "Signaux"
+  },
+  "Signaux en attente du premier rafraîchissement serveur.": {
+   "en": "Signals awaiting the first server refresh.",
+   "fr": "Signaux en attente du premier rafraîchissement serveur."
+  },
+  "Signaux en continu — autorités & institutions": {
+   "en": "Continuous signals — authorities & institutions",
+   "fr": "Signaux en continu — autorités & institutions"
+  },
+  "Signaux non chargés (hors-ligne, premier accès ou flux injoignables) — voir `etat`.": {
+   "en": "Signals not loaded (offline, first access or unreachable feeds) — see `etat`.",
+   "fr": "Signaux non chargés (hors-ligne, premier accès ou flux injoignables) — voir `etat`."
+  },
+  "Situation des nappes phréatiques au #er août #": {
+   "en": "Groundwater levels at # August #",
+   "fr": "Situation des nappes phréatiques au 1er août 2026"
+  },
+  "Situer l’empreinte d’un cas d’usage face à celle de l’infrastructure.": {
+   "en": "Place the footprint of a use case against that of the infrastructure.",
+   "fr": "Situer l’empreinte d’un cas d’usage face à celle de l’infrastructure."
+  },
+  "Slovénie": {
+   "en": "Slovenia",
+   "fr": "Slovénie"
+  },
+  "Socle de données ouvertes": {
+   "en": "Open data foundation",
+   "fr": "Socle de données ouvertes"
+  },
+  "Socle — énergie, eau, prix, filière": {
+   "en": "Foundation — energy, water, price, generation source",
+   "fr": "Socle — énergie, eau, prix, filière"
+  },
+  "Sources de cette section.": {
+   "en": "Sources for this section.",
+   "fr": "Sources de cette section."
+  },
+  "Sources site par site, cas par cas": {
+   "en": "Sources site by site, case by case",
+   "fr": "Sources site par site, cas par cas"
+  },
+  "Sources, méthode et vérification": {
+   "en": "Sources, method and verification",
+   "fr": "Sources, méthode et vérification"
+  },
+  "Sous #, la pénalité de charge partielle devient le premier poste de perte.": {
+   "en": "Below #, the part-load penalty becomes the largest source of loss.",
+   "fr": "Sous 0,55, la pénalité de charge partielle devient le premier poste de perte."
+  },
+  "Souscription augmentée et couverture des risques de modèles IA (aiSure)": {
+   "en": "Augmented underwriting and cover for AI model risks (aiSure)",
+   "fr": "Souscription augmentée et couverture des risques de modèles IA (aiSure)"
+  },
+  "Spotify — Recommandation à l'échelle et DJ vocal génératif (voix clonée marquée)": {
+   "en": "Spotify — Recommendation at scale and generative voice DJ (cloned voice, marked)",
+   "fr": "Spotify — Recommandation à l'échelle et DJ vocal génératif (voix clonée marquée)"
+  },
+  "Stade": {
+   "en": "Stage",
+   "fr": "Stade"
+  },
+  "Stellantis — Partenariat Mistral AI : assistant d'ingénierie et IA embarquée conversationnelle": {
+   "en": "Stellantis — Mistral AI partnership: engineering assistant and embedded conversational AI",
+   "fr": "Stellantis — Partenariat Mistral AI : assistant d'ingénierie et IA embarquée conversationnelle"
+  },
+  "Stress hydrique": {
+   "en": "Water stress",
+   "fr": "Stress hydrique"
+  },
+  "Stress hydrique par pays (WEI+) et compétition d'usages": {
+   "en": "Water stress by country (WEI+) and competition between uses",
+   "fr": "Stress hydrique par pays (WEI+) et compétition d'usages"
+  },
+  "Structure de marché — ce qui contraint l’exécution, pas la localisation": {
+   "en": "Market structure — what constrains execution, not location",
+   "fr": "Structure de marché — ce qui contraint l’exécution, pas la localisation"
+  },
+  "Submersion côtière — horizon retenu": {
+   "en": "Coastal flooding — chosen horizon",
+   "fr": "Submersion côtière — horizon retenu"
+  },
+  "Suivi algorithmique de la productivité des salariés en entrepôt (scanners)": {
+   "en": "Algorithmic monitoring of warehouse employee productivity (scanners)",
+   "fr": "Suivi algorithmique de la productivité des salariés en entrepôt (scanners)"
+  },
+  "Suivre le parcours « Analyse financière et reporting extra-financier » à partir d’ici": {
+   "en": "Follow the “Financial analysis and non-financial reporting” path from here",
+   "fr": "Suivre le parcours « Analyse financière et reporting extra-financier » à partir d’ici"
+  },
+  "Suivre le parcours « Assurance — souscription et sinistres » à partir d’ici": {
+   "en": "Follow the “Insurance — underwriting and claims” path from here",
+   "fr": "Suivre le parcours « Assurance — souscription et sinistres » à partir d’ici"
+  },
+  "Suivre le parcours « Banque — financement de projet » à partir d’ici": {
+   "en": "Follow the “Banking — project finance” path from here",
+   "fr": "Suivre le parcours « Banque — financement de projet » à partir d’ici"
+  },
+  "Suivre le parcours « Climat et gaz à effet de serre » à partir d’ici": {
+   "en": "Follow the “Climate and greenhouse gases” path from here",
+   "fr": "Suivre le parcours « Climat et gaz à effet de serre » à partir d’ici"
+  },
+  "Suivre le parcours « Eau et biodiversité » à partir d’ici": {
+   "en": "Follow the “Water and biodiversity” path from here",
+   "fr": "Suivre le parcours « Eau et biodiversité » à partir d’ici"
+  },
+  "Suivre le parcours « Enveloppe d’investissement et DPGF » à partir d’ici": {
+   "en": "Follow the “Investment envelope and DPGF” path from here",
+   "fr": "Suivre le parcours « Enveloppe d’investissement et DPGF » à partir d’ici"
+  },
+  "Suivre le parcours « Investissement & implantation — centres de données » à partir d’ici": {
+   "en": "Follow the “Investment & siting — data centres” path from here",
+   "fr": "Suivre le parcours « Investissement & implantation — centres de données » à partir d’ici"
+  },
+  "Suivre le parcours « Étude de faisabilité chiffrée » à partir d’ici": {
+   "en": "Follow the “Costed feasibility study” path from here",
+   "fr": "Suivre le parcours « Étude de faisabilité chiffrée » à partir d’ici"
+  },
+  "Sur les parcours": {
+   "en": "On the paths",
+   "fr": "Sur les parcours"
+  },
+  "Sur quelle SÉRIE le refroidissement a-t-il été dimensionné — normales observées, ou projections ? La réponse « normales » suffit à connaître la marge : aucune.": {
+   "en": "Against which SERIES was the cooling sized — observed normals, or projections? The answer “normals” is enough to know the margin: none.",
+   "fr": "Sur quelle SÉRIE le refroidissement a-t-il été dimensionné — normales observées, ou projections ? La réponse « normales » suffit à connaître la marge : aucune."
+  },
+  "Suède": {
+   "en": "Sweden",
+   "fr": "Suède"
+  },
+  "Suède · Distribution · Production": {
+   "en": "Sweden · Retail · Production",
+   "fr": "Suède · Distribution · Production"
+  },
+  "Suède · Fintech · À l'échelle": {
+   "en": "Sweden · Fintech · At scale",
+   "fr": "Suède · Fintech · À l'échelle"
+  },
+  "Suède · Médias · À l'échelle": {
+   "en": "Sweden · Media · At scale",
+   "fr": "Suède · Médias · À l'échelle"
+  },
+  "Suède · Santé numérique · Production": {
+   "en": "Sweden · Digital health · Production",
+   "fr": "Suède · Santé numérique · Production"
+  },
+  "Suède · Énergie · Production": {
+   "en": "Sweden · Energy · Production",
+   "fr": "Suède · Énergie · Production"
+  },
+  "SynthID-Text — filigrane statistique pour le texte généré": {
+   "en": "SynthID-Text — statistical watermark for generated text",
+   "fr": "SynthID-Text — filigrane statistique pour le texte généré"
+  },
+  "Synthèse CONSEILPREV d'après AEE, services géologiques nationaux et GIEC AR# chapitre #": {
+   "en": "CONSEILPREV synthesis based on the EEA, national geological surveys and IPCC AR# chapter #",
+   "fr": "Synthèse CONSEILPREV d'après AEE, services géologiques nationaux et GIEC AR6 chapitre 9"
+  },
+  "Synthèse CONSEILPREV d'après GIEC AR# (groupes I et II, chapitre Europe), Agence européenne pour l'environnement (European Climate Risk Assessment, indicateurs d'aléas) et JRC PESETA IV": {
+   "en": "CONSEILPREV synthesis based on IPCC AR# (Working Groups I and II, Europe chapter), the European Environment Agency (European Climate Risk Assessment, hazard indicators) and JRC PESETA IV",
+   "fr": "Synthèse CONSEILPREV d'après GIEC AR6 (groupes I et II, chapitre Europe), Agence européenne pour l'environnement (European Climate Risk Assessment, indicateurs d'aléas) et JRC PESETA IV"
+  },
+  "Synthèse sur le marquage des contenus générés par IA": {
+   "en": "Summary on the marking of AI-generated content",
+   "fr": "Synthèse sur le marquage des contenus générés par IA"
+  },
+  "Sécheresse — horizon retenu": {
+   "en": "Drought — chosen horizon",
+   "fr": "Sécheresse — horizon retenu"
+  },
+  "Sélectionnez un pays sur la carte pour afficher ses": {
+   "en": "Select a country on the map to display its",
+   "fr": "Sélectionnez un pays sur la carte pour afficher ses"
+  },
+  "Tarification dynamique et assistance client automatisée": {
+   "en": "Dynamic pricing and automated customer support",
+   "fr": "Tarification dynamique et assistance client automatisée"
+  },
+  "Tarification et sélection des risques santé/prévoyance assistées par ML": {
+   "en": "ML-assisted pricing and risk selection for health and protection insurance",
+   "fr": "Tarification et sélection des risques santé/prévoyance assistées par ML"
+  },
+  "Taux de charge moyen": {
+   "en": "Average load factor",
+   "fr": "Taux de charge moyen"
+  },
+  "Tchéquie": {
+   "en": "Czechia",
+   "fr": "Tchéquie"
+  },
+  "Tchéquie · Automobile · Production": {
+   "en": "Czechia · Automotive · Production",
+   "fr": "Tchéquie · Automobile · Production"
+  },
+  "Telefónica": {
+   "en": "Telefónica",
+   "fr": "Telefónica"
+  },
+  "Telefónica — Plateforme interne « Kernel » et génAI multi-métiers ; signataire du Pacte IA": {
+   "en": "Telefónica — Internal “Kernel” platform and genAI across business lines; signatory of the AI Pact",
+   "fr": "Telefónica — Plateforme interne « Kernel » et génAI multi-métiers ; signataire du Pacte IA"
+  },
+  "Tempéré océanique · parc # · file #": {
+   "en": "Temperate oceanic · estate # · queue #",
+   "fr": "Tempéré océanique · parc 32 · file 4"
+  },
+  "Tendances et prospective": {
+   "en": "Trends and foresight",
+   "fr": "Tendances et prospective"
+  },
+  "Thales — cortAIx : accélérateur IA (#+ chercheurs) pour systèmes critiques et défense": {
+   "en": "Thales — cortAIx: AI accelerator (#+ researchers) for critical systems and defence",
+   "fr": "Thales — cortAIx : accélérateur IA (100+ chercheurs) pour systèmes critiques et défense"
+  },
+  "TotalEnergies — Assistants génAI internes et optimisation d'actifs industriels": {
+   "en": "TotalEnergies — Internal genAI assistants and industrial asset optimisation",
+   "fr": "TotalEnergies — Assistants génAI internes et optimisation d'actifs industriels"
+  },
+  "Tous climats": {
+   "en": "All climates",
+   "fr": "Tous climats"
+  },
+  "Tous les pays": {
+   "en": "All countries",
+   "fr": "Tous les pays"
+  },
+  "Tous les verdicts": {
+   "en": "All verdicts",
+   "fr": "Tous les verdicts"
+  },
+  "Tous les verdicts sont publiés, y compris les défavorables": {
+   "en": "All verdicts are published, including unfavourable ones",
+   "fr": "Tous les verdicts sont publiés, y compris les défavorables"
+  },
+  "Tous les éditeurs": {
+   "en": "All publishers",
+   "fr": "Tous les éditeurs"
+  },
+  "Tous niveaux": {
+   "en": "All levels",
+   "fr": "Tous niveaux"
+  },
+  "Tous pays": {
+   "en": "All countries",
+   "fr": "Tous pays"
+  },
+  "Tous stades": {
+   "en": "All stages",
+   "fr": "Tous stades"
+  },
+  "Toutes classes": {
+   "en": "All classes",
+   "fr": "Toutes classes"
+  },
+  "Toutes intensités": {
+   "en": "All intensities",
+   "fr": "Toutes intensités"
+  },
+  "Toutes les sources, avec leurs liens": {
+   "en": "All sources, with their links",
+   "fr": "Toutes les sources, avec leurs liens"
+  },
+  "Tranches d’investissement (MW, séparés par des virgules)": {
+   "en": "Investment tranches (MW, comma-separated)",
+   "fr": "Tranches d’investissement (MW, séparés par des virgules)"
+  },
+  "Trier les cas": {
+   "en": "Sort the cases",
+   "fr": "Trier les cas"
+  },
+  "Trier par": {
+   "en": "Sort by",
+   "fr": "Trier par"
+  },
+  "Trois réacteurs nucléaires arrêtés ; défaillances de transformateurs privant de courant # # foyers dans le Finistère, # # dans les Yvelines, # # à Nantes.": {
+   "en": "Three nuclear reactors shut down; transformer failures cutting power to # # households in Finistère, # # in Yvelines, # # in Nantes.",
+   "fr": "Trois réacteurs nucléaires arrêtés ; défaillances de transformateurs privant de courant 119 000 foyers dans le Finistère, 27 000 dans les Yvelines, 1 400 à Nantes."
+  },
+  "Télécoms": {
+   "en": "Telecoms",
+   "fr": "Télécoms"
+  },
+  "Un chiffre de cette page peut entrer dans une note d’investissement, un dossier de crédit, un questionnaire de souscription ou un inventaire d’émissions. Aucun de ces usages ne se satisfait d’un résultat : il faut la source, le millésime et le moyen de refaire le chemin. Tout est donc listé ici —": {
+   "en": "A figure on this page may go into an investment memo, a credit file, an underwriting questionnaire or an emissions inventory. None of these uses can make do with a result alone: it needs the source, the edition and the means to retrace the path. Everything is therefore listed here —",
+   "fr": "Un chiffre de cette page peut entrer dans une note d’investissement, un dossier de crédit, un questionnaire de souscription ou un inventaire d’émissions. Aucun de ces usages ne se satisfait d’un résultat : il faut la source, le millésime et le moyen de refaire le chemin. Tout est donc listé ici —"
+  },
+  "Un même cas porte souvent": {
+   "en": "A single case often carries",
+   "fr": "Un même cas porte souvent"
+  },
+  "Un même risque compté deux fois.": {
+   "en": "The same risk counted twice.",
+   "fr": "Un même risque compté deux fois."
+  },
+  "Un pays est signalé quand il réunit les DEUX conditions : (#) son climat a conçu le refroidissement pour un été doux — classe nordique ou tempérée ; (#) l’eau s’y tend, soit par l’aléa sécheresse à l’horizon retenu (niveau élevé ou très élevé), soit par le stress hydrique national déjà classé élevé. Un pays méridional n’est jamais signalé : non parce qu’il est épargné, mais parce que son point de conception a été posé pour la chaleur. À l’horizon affiché,": {
+   "en": "A country is flagged when it meets BOTH conditions: (#) its climate designed the cooling for a mild summer — Nordic or temperate class; (#) water is under strain there, either through the drought hazard at the chosen horizon (high or very high level), or through national water stress already classed as high. A southern country is never flagged: not because it is spared, but because its design point was set for heat. At the horizon shown,",
+   "fr": "Un pays est signalé quand il réunit les DEUX conditions : (1) son climat a conçu le refroidissement pour un été doux — classe nordique ou tempérée ; (2) l’eau s’y tend, soit par l’aléa sécheresse à l’horizon retenu (niveau élevé ou très élevé), soit par le stress hydrique national déjà classé élevé. Un pays méridional n’est jamais signalé : non parce qu’il est épargné, mais parce que son point de conception a été posé pour la chaleur. À l’horizon affiché,"
+  },
+  "Un podium Suède / Finlande / Norvège et un podium Espagne / Italie / Grèce ont les mêmes rangs et ne disent pas la même chose : l’un envoie au nord, l’autre au sud. La carte le montre d’un coup d’œil.": {
+   "en": "A Sweden / Finland / Norway podium and a Spain / Italy / Greece podium have the same ranks and do not say the same thing: one points north, the other south. The map shows it at a glance.",
+   "fr": "Un podium Suède / Finlande / Norvège et un podium Espagne / Italie / Grèce ont les mêmes rangs et ne disent pas la même chose : l’un envoie au nord, l’autre au sud. La carte le montre d’un coup d’œil."
+  },
+  "Un risque assumé et écrit n’est pas un risque oublié — c’est cette distinction que cherche un investisseur.": {
+   "en": "A risk owned and written down is not a risk forgotten — that is the distinction an investor looks for.",
+   "fr": "Un risque assumé et écrit n’est pas un risque oublié — c’est cette distinction que cherche un investisseur."
+  },
+  "Un volume d’eau est un prélèvement calculé, pas une consommation mesurée": {
+   "en": "A water volume is a calculated withdrawal, not a measured consumption",
+   "fr": "Un volume d’eau est un prélèvement calculé, pas une consommation mesurée"
+  },
+  "Une contrainte contractuelle prime sur toute déduction.": {
+   "en": "A contractual constraint overrides any inference.",
+   "fr": "Une contrainte contractuelle prime sur toute déduction."
+  },
+  "Une même couleur dit la même chose partout :": {
+   "en": "The same colour means the same thing everywhere:",
+   "fr": "Une même couleur dit la même chose partout :"
+  },
+  "Une prévision n’est pas une donnée.": {
+   "en": "A forecast is not data.",
+   "fr": "Une prévision n’est pas une donnée."
+  },
+  "Uptime Institute Global Data Center Survey · rapports d’exploitants (Google, Meta, OVHcloud) · LBNL": {
+   "en": "Uptime Institute Global Data Center Survey · operators’ reports (Google, Meta, OVHcloud) · LBNL",
+   "fr": "Uptime Institute Global Data Center Survey · rapports d’exploitants (Google, Meta, OVHcloud) · LBNL"
+  },
+  "Vague de chaleur au-delà du point de projet, dans un climat tempéré océanique — c’est-à-dire là où le dimensionnement supposait des étés doux.": {
+   "en": "Heatwave beyond the design point, in a temperate oceanic climate — that is, where the sizing assumed mild summers.",
+   "fr": "Vague de chaleur au-delà du point de projet, dans un climat tempéré océanique — c’est-à-dire là où le dimensionnement supposait des étés doux."
+  },
+  "Valeur retenue": {
+   "en": "Value used",
+   "fr": "Valeur retenue"
+  },
+  "Vattenfall — Prévision de demande et d'équilibrage par apprentissage automatique": {
+   "en": "Vattenfall — Demand and balancing forecasting by machine learning",
+   "fr": "Vattenfall — Prévision de demande et d'équilibrage par apprentissage automatique"
+  },
+  "Vecteurs de vulnérabilité les plus fréquents": {
+   "en": "Most frequent vulnerability vectors",
+   "fr": "Vecteurs de vulnérabilité les plus fréquents"
+  },
+  "Vide = déduit du climat et du stress hydrique du pays.": {
+   "en": "Empty = inferred from the country’s climate and water stress.",
+   "fr": "Vide = déduit du climat et du stress hydrique du pays."
+  },
+  "Vision qualité en ligne d'assemblage et génAI d'ingénierie interne": {
+   "en": "In-line quality vision on the assembly line and internal engineering genAI",
+   "fr": "Vision qualité en ligne d'assemblage et génAI d'ingénierie interne"
+  },
+  "Vision qualité en production (Regensburg) et IA d'usine": {
+   "en": "Quality vision in production (Regensburg) and factory AI",
+   "fr": "Vision qualité en production (Regensburg) et IA d'usine"
+  },
+  "Voir le détail calculé pour Finlande": {
+   "en": "View the calculated details for Finland",
+   "fr": "Voir le détail calculé pour Finlande"
+  },
+  "Voir le détail calculé pour Norvège (hors UE)": {
+   "en": "View the calculated details for Norway (outside the EU)",
+   "fr": "Voir le détail calculé pour Norvège (hors UE)"
+  },
+  "Voir le détail calculé pour Suède": {
+   "en": "View the calculated details for Sweden",
+   "fr": "Voir le détail calculé pour Suède"
+  },
+  "Volkswagen — ChatGPT intégré à l'assistant vocal IDA (via Cerence) sur véhicules européens": {
+   "en": "Volkswagen — ChatGPT integrated into the IDA voice assistant (via Cerence) in European vehicles",
+   "fr": "Volkswagen — ChatGPT intégré à l'assistant vocal IDA (via Cerence) sur véhicules européens"
+  },
+  "Votre hypothèse de commercialisation : le module la prend telle quelle et en tire l’année de marge positive. Il ne la devine pas.": {
+   "en": "Your commercialisation assumption: the module takes it as it stands and derives the year of positive margin from it. It does not guess it.",
+   "fr": "Votre hypothèse de commercialisation : le module la prend telle quelle et en tire l’année de marge positive. Il ne la devine pas."
+  },
+  "Vue entière — touche #": {
+   "en": "Full view — # key",
+   "fr": "Vue entière — touche 0"
+  },
+  "Vérification factuelle": {
+   "en": "Fact check",
+   "fr": "Vérification factuelle"
+  },
+  "Vérifier une valeur avec une seule maison n’est pas un recoupement : ces contrôles tiennent comme ordre de grandeur, pas comme confirmation indépendante.": {
+   "en": "Checking a value against a single publisher is not cross-checking: these checks hold as an order of magnitude, not as independent confirmation.",
+   "fr": "Vérifier une valeur avec une seule maison n’est pas un recoupement : ces contrôles tiennent comme ordre de grandeur, pas comme confirmation indépendante."
+  },
+  "WUE — eau par kilowattheure informatique": {
+   "en": "WUE — water per IT kilowatt-hour",
+   "fr": "WUE — eau par kilowattheure informatique"
+  },
+  "Water exploitation index plus (WEI+) — millésime #": {
+   "en": "Water exploitation index plus (WEI+) — # edition",
+   "fr": "Water exploitation index plus (WEI+) — millésime 2022"
+  },
+  "Water exploitation index plus (WEI+) — millésime # — Agence européenne pour l'environnement (AEE)": {
+   "en": "Water exploitation index plus (WEI+) — # edition — European Environment Agency (EEA)",
+   "fr": "Water exploitation index plus (WEI+) — millésime 2022 — Agence européenne pour l'environnement (AEE)"
+  },
+  "Worldcoin / World (Tools for Humanity) — Collecte d'iris contre jetons (orbs) auprès du grand public européen": {
+   "en": "Worldcoin / World (Tools for Humanity) — Iris collection in exchange for tokens (orbs) from the European general public",
+   "fr": "Worldcoin / World (Tools for Humanity) — Collecte d'iris contre jetons (orbs) auprès du grand public européen"
+  },
+  "XDI (Cross Dependency Initiative), août #": {
+   "en": "XDI (Cross Dependency Initiative), August #",
+   "fr": "XDI (Cross Dependency Initiative), août 2025"
+  },
+  "XDI, août # — rang au « Aggregated Damage Risk » #, dix premiers États membres publiés — note = # × (rang − #) ÷ # — le rang est comparé aux VINGT-SEPT États membres, pas aux dix publiés : le dixième plafonne à # et non à #. Risque ABSOLU, donc partiellement lié à la taille du parc bâti. Pays hors des dix, ou hors de l'Union = pas de note": {
+   "en": "XDI, August # — rank in the “Aggregated Damage Risk” #, top ten Member States published — score = # × (rank − #) ÷ # — the rank is compared with the TWENTY-SEVEN Member States, not with the ten published: the tenth is capped at # and not at #. ABSOLUTE risk, and therefore partly linked to the size of the building stock. Countries outside the ten, or outside the Union = no score",
+   "fr": "XDI, août 2025 — rang au « Aggregated Damage Risk » 2050, dix premiers États membres publiés — note = 100 × (rang − 1) ÷ 26 — le rang est comparé aux VINGT-SEPT États membres, pas aux dix publiés : le dixième plafonne à 35 et non à 100. Risque ABSOLU, donc partiellement lié à la taille du parc bâti. Pays hors des dix, ou hors de l'Union = pas de note"
+  },
+  "XDI, juin # — part des centres planifiés à haut risque de dommage, réglages de faible résilience — note = # − # × part à haut risque ÷ pire part du panel (# %, Suisse) ; pays hors classement = pas de note": {
+   "en": "XDI, June # — share of planned centres at high risk of damage, low-resilience settings — score = # − # × high-risk share ÷ worst share in the panel (# %, Switzerland); countries not ranked = no score",
+   "fr": "XDI, juin 2026 — part des centres planifiés à haut risque de dommage, réglages de faible résilience — note = 100 − 100 × part à haut risque ÷ pire part du panel (33 %, Suisse) ; pays hors classement = pas de note"
+  },
+  "XDI, septembre # — rang au « Aggregated Damage Ratio » #, vingt-sept États membres classés — note = # × (rang − #) ÷ # ; ratio rapporté au coût de remplacement, donc peu sensible à la taille du parc. Crues et ruissellement seuls — submersion côtière non couverte. Pays hors de l'Union = pas de note": {
+   "en": "XDI, September # — rank in the “Aggregated Damage Ratio” #, twenty-seven Member States ranked — score = # × (rank − #) ÷ #; ratio relative to replacement cost, and therefore not very sensitive to the size of the building stock. River flooding and runoff only — coastal flooding not covered. Countries outside the Union = no score",
+   "fr": "XDI, septembre 2025 — rang au « Aggregated Damage Ratio » 2050, vingt-sept États membres classés — note = 100 × (rang − 1) ÷ 26 ; ratio rapporté au coût de remplacement, donc peu sensible à la taille du parc. Crues et ruissellement seuls — submersion côtière non couverte. Pays hors de l'Union = pas de note"
+  },
+  "Yearly electricity generation — parts de production #, arrondies à # points": {
+   "en": "Yearly electricity generation — # generation shares, rounded to # points",
+   "fr": "Yearly electricity generation — parts de production 2024, arrondies à 5 points"
+  },
+  "Zalando — Assistant mode fondé sur ChatGPT et recommandation de taille": {
+   "en": "Zalando — Fashion assistant based on ChatGPT and size recommendation",
+   "fr": "Zalando — Assistant mode fondé sur ChatGPT et recommandation de taille"
+  },
+  "Zones identifiées pour l’implantation de centres de données bas carbone destinés à l’IA": {
+   "en": "Areas identified for siting low-carbon data centres dedicated to AI",
+   "fr": "Zones identifiées pour l’implantation de centres de données bas carbone destinés à l’IA"
+  },
+  "adresse non enregistrée": {
+   "en": "address not saved",
+   "fr": "adresse non enregistrée"
+  },
+  "annonce publique de l’État français, février #": {
+   "en": "public announcement by the French State, February #",
+   "fr": "annonce publique de l’État français, février 2025"
+  },
+  "annoncés": {
+   "en": "announced",
+   "fr": "annoncés"
+  },
+  "annuelle pour l'enquête sur l'usage des TIC et de l'IA": {
+   "en": "annual for the survey on the use of ICT and AI",
+   "fr": "annuelle pour l'enquête sur l'usage des TIC et de l'IA"
+  },
+  "autorités": {
+   "en": "authorities",
+   "fr": "autorités"
+  },
+  "calcul en cours…": {
+   "en": "computing…",
+   "fr": "calcul en cours…"
+  },
+  "calculé": {
+   "en": "calculated",
+   "fr": "calculé"
+  },
+  "cas documentés au panel": {
+   "en": "cases documented in the panel",
+   "fr": "cas documentés au panel"
+  },
+  "cas du panel": {
+   "en": "panel cases",
+   "fr": "cas du panel"
+  },
+  "cas d’IA": {
+   "en": "AI cases",
+   "fr": "cas d’IA"
+  },
+  "cas identifiable (entreprise + usage + stade) documenté par une source publique nommée et datée": {
+   "en": "identifiable case (company + use + stage) documented by a named and dated public source",
+   "fr": "cas identifiable (entreprise + usage + stade) documenté par une source publique nommée et datée"
+  },
+  "ce panorama est un": {
+   "en": "this overview is a",
+   "fr": "ce panorama est un"
+  },
+  "ce que l'administration française publie effectivement en ouvert sur un thème": {
+   "en": "what the French administration actually publishes as open data on a topic",
+   "fr": "ce que l'administration française publie effectivement en ouvert sur un thème"
+  },
+  "centres de données": {
+   "en": "data centres",
+   "fr": "centres de données"
+  },
+  "certain / déduit — aucun modèle de langage dans la chaîne": {
+   "en": "certain / inferred — no language model in the chain",
+   "fr": "certain / déduit — aucun modèle de langage dans la chaîne"
+  },
+  "ces titres proviennent des flux officiels et sont rapprochés du panel par correspondance stricte de noms.": {
+   "en": "these titles come from the official feeds and are matched to the panel by strict name matching.",
+   "fr": "ces titres proviennent des flux officiels et sont rapprochés du panel par correspondance stricte de noms."
+  },
+  "chaque constante avec son éditeur, son millésime et son lien": {
+   "en": "each constant with its publisher, its edition and its link",
+   "fr": "chaque constante avec son éditeur, son millésime et son lien"
+  },
+  "chargement du cadre…": {
+   "en": "loading the frame…",
+   "fr": "chargement du cadre…"
+  },
+  "chargement du référentiel…": {
+   "en": "loading the reference set…",
+   "fr": "chargement du référentiel…"
+  },
+  "chargement…": {
+   "en": "loading…",
+   "fr": "chargement…"
+  },
+  "classes d'exposition CONSEILPREV d'après GIEC AR#, AEE et JRC (climat_#.py) — # pays couverts, aux deux horizons — faible=#, modéré=#, élevé=#, très élevé=#": {
+   "en": "CONSEILPREV exposure classes based on IPCC AR#, the EEA and the JRC (climat_#.py) — # countries covered, at both horizons — low=#, moderate=#, high=#, very high=#",
+   "fr": "classes d'exposition CONSEILPREV d'après GIEC AR6, AEE et JRC (climat_2050.py) — 29 pays couverts, aux deux horizons — faible=85, modéré=60, élevé=30, très élevé=10"
+  },
+  "classes d'exposition CONSEILPREV d'après GIEC AR#, AEE et JRC (climat_#.py) — # pays couverts, aux deux horizons — faible=#, modéré=#, élevé=#, très élevé=# ; sans objet=# pour un pays sans littoral — un fait, pas une donnée manquante ⚠ recouvre partiellement « climat_physique » : mettre les deux à poids fort compte deux fois le même risque": {
+   "en": "CONSEILPREV exposure classes based on IPCC AR#, the EEA and the JRC (climat_#.py) — # countries covered, at both horizons — low=#, moderate=#, high=#, very high=#; not applicable=# for a landlocked country — a fact, not missing data ⚠ partially overlaps “climat_physique”: giving both a heavy weight counts the same risk twice",
+   "fr": "classes d'exposition CONSEILPREV d'après GIEC AR6, AEE et JRC (climat_2050.py) — 29 pays couverts, aux deux horizons — faible=85, modéré=60, élevé=30, très élevé=10 ; sans objet=100 pour un pays sans littoral — un fait, pas une donnée manquante ⚠ recouvre partiellement « climat_physique » : mettre les deux à poids fort compte deux fois le même risque"
+  },
+  "classes d'exposition CONSEILPREV d'après GIEC AR#, AEE et JRC (climat_#.py) — # pays couverts, aux deux horizons — faible=#, modéré=#, élevé=#, très élevé=# ⚠ recouvre partiellement « eau » : mettre les deux à poids fort compte deux fois le même risque": {
+   "en": "CONSEILPREV exposure classes based on IPCC AR#, the EEA and the JRC (climat_#.py) — # countries covered, at both horizons — low=#, moderate=#, high=#, very high=# ⚠ partially overlaps “eau”: giving both a heavy weight counts the same risk twice",
+   "fr": "classes d'exposition CONSEILPREV d'après GIEC AR6, AEE et JRC (climat_2050.py) — 29 pays couverts, aux deux horizons — faible=85, modéré=60, élevé=30, très élevé=10 ⚠ recouvre partiellement « eau » : mettre les deux à poids fort compte deux fois le même risque"
+  },
+  "classes d'exposition CONSEILPREV d'après GIEC AR#, AEE et JRC (climat_#.py) — # pays couverts, aux deux horizons — faible=#, modéré=#, élevé=#, très élevé=# ⚠ recouvre partiellement « feux » : mettre les deux à poids fort compte deux fois le même risque": {
+   "en": "CONSEILPREV exposure classes based on IPCC AR#, the EEA and the JRC (climat_#.py) — # countries covered, at both horizons — low=#, moderate=#, high=#, very high=# ⚠ partially overlaps “feux”: giving both a heavy weight counts the same risk twice",
+   "fr": "classes d'exposition CONSEILPREV d'après GIEC AR6, AEE et JRC (climat_2050.py) — 29 pays couverts, aux deux horizons — faible=85, modéré=60, élevé=30, très élevé=10 ⚠ recouvre partiellement « feux » : mettre les deux à poids fort compte deux fois le même risque"
+  },
+  "classes d'exposition CONSEILPREV d'après GIEC AR#, AEE et JRC (climat_#.py) — # pays couverts, aux deux horizons — faible=#, modéré=#, élevé=#, très élevé=# ⚠ recouvre partiellement « inondations » et « climat_physique » : mettre les deux à poids fort compte deux fois le même risque": {
+   "en": "CONSEILPREV exposure classes based on IPCC AR#, the EEA and the JRC (climat_#.py) — # countries covered, at both horizons — low=#, moderate=#, high=#, very high=# ⚠ partially overlaps “inondations” and “climat_physique”: giving both a heavy weight counts the same risk twice",
+   "fr": "classes d'exposition CONSEILPREV d'après GIEC AR6, AEE et JRC (climat_2050.py) — 29 pays couverts, aux deux horizons — faible=85, modéré=60, élevé=30, très élevé=10 ⚠ recouvre partiellement « inondations » et « climat_physique » : mettre les deux à poids fort compte deux fois le même risque"
+  },
+  "classes d’aléas": {
+   "en": "hazard classes",
+   "fr": "classes d’aléas"
+  },
+  "classes latitudinales — PUE par mode (datacentres.py) — nordique=#, tempéré=#, méridional=# — la classe dit combien d'heures par an l'air extérieur reste sous le seuil du free cooling direct (~#-# °C, ADEME) ; au-delà, la climatisation prend le relais et, selon la conception, l'eau avec elle. ⚠ CETTE NOTE MESURE UNE OPPORTUNITÉ, PAS UNE RÉSILIENCE : elle dit ce qu'on économise les jours ordinaires, jamais si l'installation tient le jour le plus chaud. Les défaillances constatées ont eu lieu en climat TEMPÉRÉ — Rennes, Pantin, Londres — précisément là où le dimensionnement supposait des étés doux. Voir « point de conception » et la conjonction chaleur × eau": {
+   "en": "latitudinal classes — PUE by mode (datacentres.py) — Nordic=#, temperate=#, southern=# — the class says how many hours a year the outside air stays below the direct free cooling threshold (~#-# °C, ADEME); beyond that, air conditioning takes over and, depending on the design, water with it. ⚠ THIS SCORE MEASURES AN OPPORTUNITY, NOT RESILIENCE: it says what is saved on ordinary days, never whether the installation holds on the hottest day. The failures observed occurred in a TEMPERATE climate — Rennes, Pantin, London — precisely where the sizing assumed mild summers. See “design point” and the heat × water conjunction",
+   "fr": "classes latitudinales — PUE par mode (datacentres.py) — nordique=90, tempéré=65, méridional=35 — la classe dit combien d'heures par an l'air extérieur reste sous le seuil du free cooling direct (~24-25 °C, ADEME) ; au-delà, la climatisation prend le relais et, selon la conception, l'eau avec elle. ⚠ CETTE NOTE MESURE UNE OPPORTUNITÉ, PAS UNE RÉSILIENCE : elle dit ce qu'on économise les jours ordinaires, jamais si l'installation tient le jour le plus chaud. Les défaillances constatées ont eu lieu en climat TEMPÉRÉ — Rennes, Pantin, Londres — précisément là où le dimensionnement supposait des étés doux. Voir « point de conception » et la conjonction chaleur × eau"
+  }
+ }
+}

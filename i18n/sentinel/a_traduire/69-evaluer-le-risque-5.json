@@ -1,0 +1,337 @@
+{
+ "_lot": "69-evaluer-le-risque-5",
+ "_mots": 2194,
+ "_pages": [
+  "pan-sia"
+ ],
+ "_rubrique": "ÉVALUER LE RISQUE",
+ "bloc": {
+  "Chaque document porte la version de tous les référentiels mobilisés, la nature de chaque valeur, ses sources et les réserves qui les qualifient. Aucun modèle de langage n’intervient dans leur rédaction : ils sont composés par calcul déterministe, et le disent en toutes lettres. Ils ne portent donc pas le marquage de l’article #, qui ne s’appliquerait pas.": {
+   "en": "Each document carries the <b>version</b> of every reference set used, the <b>nature</b> of each value, its <b>sources</b> and the <b>caveats</b> that qualify them. No language model takes part in drafting them: they are composed by deterministic calculation, and say so in as many words. They therefore do not carry the article # marking, which would not apply.",
+   "fr": "Chaque document porte la version de tous les référentiels mobilisés, la nature de chaque valeur, ses sources et les réserves qui les qualifient. Aucun modèle de langage n’intervient dans leur rédaction : ils sont composés par calcul déterministe, et le disent en toutes lettres. Ils ne portent donc pas le marquage de l’article 50, qui ne s’appliquerait pas.",
+   "html": "Chaque document porte la <b>version</b> de tous les référentiels mobilisés, la <b>nature</b> de chaque valeur, ses <b>sources</b> et les <b>réserves</b> qui les qualifient. Aucun modèle de langage n’intervient dans leur rédaction : ils sont composés par calcul déterministe, et le disent en toutes lettres. Ils ne portent donc pas le marquage de l’article 50, qui ne s’appliquerait pas."
+  },
+  "Choisissez les phases que vous confiez et les missions que vous retenez : le chiffrage suit. Les honoraires portent sur le montant des travaux — la ligne de maîtrise d’œuvre et la provision pour aléas en sont retirées —, et le barème distingue le clos-couvert du lot technique, dont les taux diffèrent d’un facteur huit sur certaines missions.": {
+   "en": "Choose the <b>phases</b> you entrust and the <b>assignments</b> you retain: the costing follows. The fees apply to the amount of the <b>works</b> — the design-management line and the contingency provision are removed from it — and the scale distinguishes the <b>shell and envelope</b> from the <b>technical package</b>, whose rates differ by a factor of eight on some assignments.",
+   "fr": "Choisissez les phases que vous confiez et les missions que vous retenez : le chiffrage suit. Les honoraires portent sur le montant des travaux — la ligne de maîtrise d’œuvre et la provision pour aléas en sont retirées —, et le barème distingue le clos-couvert du lot technique, dont les taux diffèrent d’un facteur huit sur certaines missions.",
+   "html": "Choisissez les <b>phases</b> que vous confiez et les <b>missions</b> que vous retenez : le chiffrage suit. Les honoraires portent sur le montant des <b>travaux</b> — la ligne de maîtrise d’œuvre et la provision pour aléas en sont retirées —, et le barème distingue le <b>clos-couvert</b> du <b>lot technique</b>, dont les taux diffèrent d’un facteur huit sur certaines missions."
+  },
+  "Comprendre": {
+   "en": "<span>Understand</span>",
+   "fr": "Comprendre",
+   "html": "<span>Comprendre</span>"
+  },
+  "Contexte, pas preuve. Aucune mesure satellitaire ne démontre l'usage d'une IA. Ces couches sont la matière première d'une partie des systèmes recensés — jamais l'indice de leur existence.": {
+   "en": "<b>Context, not proof.</b> No satellite measurement demonstrates the use of an AI. These layers are the raw material of some of the systems listed — never the evidence of their existence.",
+   "fr": "Contexte, pas preuve. Aucune mesure satellitaire ne démontre l'usage d'une IA. Ces couches sont la matière première d'une partie des systèmes recensés — jamais l'indice de leur existence.",
+   "html": "<b>Contexte, pas preuve.</b> Aucune mesure satellitaire ne démontre l'usage d'une IA. Ces couches sont la matière première d'une partie des systèmes recensés — jamais l'indice de leur existence."
+  },
+  "Critères de conception — refroidissement imposé, classe d’air ASHRAE, PUE contractuel, taux de charge, prix et intensité carbone de votre contrat. Chacun remplace une déduction par VOTRE donnée.": {
+   "en": "Design criteria <span>— imposed cooling, ASHRAE air class, contractual PUE, load factor, price and carbon intensity of your contract. Each replaces an inference with YOUR data.</span>",
+   "fr": "Critères de conception — refroidissement imposé, classe d’air ASHRAE, PUE contractuel, taux de charge, prix et intensité carbone de votre contrat. Chacun remplace une déduction par VOTRE donnée.",
+   "html": "Critères de conception <span>— refroidissement imposé, classe d’air ASHRAE, PUE contractuel, taux de charge, prix et intensité carbone de votre contrat. Chacun remplace une déduction par VOTRE donnée.</span>"
+  },
+  "Deux inventaires sur la même carte. Les cas d’IA documentés (POC, pilotes, production, abandons) mi-# → mi-#, classés selon le Règlement (UE) #/#, avec profil de vulnérabilités cyber, couche réglementaire des # États membres et score d'exposition calculé. Et le parc de centres de données qui les fait tourner : électricité, CO₂e sur cycle de vie, eau de refroidissement et critères d’implantation, pays par pays. Base de travail pour décideurs.": {
+   "en": "Two inventories on the same map. The documented <b>AI cases</b> (POCs, pilots, production, abandonments) mid-# → mid-#, classified under Regulation (EU) #/#, with a cyber vulnerability profile, the regulatory layer of the # Member States and a computed exposure score. And the <b>data centre fleet</b> that runs them: electricity, lifecycle CO₂e, cooling water and siting criteria, country by country. A working base for decision-makers.",
+   "fr": "Deux inventaires sur la même carte. Les cas d’IA documentés (POC, pilotes, production, abandons) mi-2023 → mi-2026, classés selon le Règlement (UE) 2024/1689, avec profil de vulnérabilités cyber, couche réglementaire des 27 États membres et score d'exposition calculé. Et le parc de centres de données qui les fait tourner : électricité, CO₂e sur cycle de vie, eau de refroidissement et critères d’implantation, pays par pays. Base de travail pour décideurs.",
+   "html": "Deux inventaires sur la même carte. Les <b>cas d’IA</b> documentés (POC, pilotes, production, abandons) mi-2023 → mi-2026, classés selon le Règlement (UE) 2024/1689, avec profil de vulnérabilités cyber, couche réglementaire des 27 États membres et score d'exposition calculé. Et le <b>parc de centres de données</b> qui les fait tourner : électricité, CO₂e sur cycle de vie, eau de refroidissement et critères d’implantation, pays par pays. Base de travail pour décideurs."
+  },
+  "D’où vient le coût au mégawatt, et ce qu’il ne dit pas. Il provient d’un relevé publié — Soben, part of Accenture, Data Centre Trends Report # : « cloud data centres currently cost between $# million and $# million per MW, GW+ AI data centres are costing as much as $# million per MW ». La source est en dollars : la conversion passe par un taux affiché et modifiable, un taux du jour n’étant pas une donnée de référentiel. Elle couvre le cloud et les campus d’IA, pas la colocation ni le site régional, dont la nature reste marquée en conséquence. Et elle reste un ordre de grandeur de marché : ce module ne fabrique pas VOTRE prix — aucun des # centres du référentiel ne publiant sa capacité, rien ici ne remplace vos devis. Ce que le module apporte est ailleurs : la structure complète de la DPGF, la modulation par les seuls critères sourcés de cette page, la liste explicite de ce qu’il ne peut pas trancher, et la comparaison entre pays sur le coût total de possession — car sur le seul investissement, elle afficherait zéro.": {
+   "en": "<b>Where the cost per megawatt comes from, and what it does not say.</b> It comes from a published survey — <b>Soben, part of Accenture, Data Centre Trends Report #</b>: “cloud data centres currently cost between $# million and $# million per MW, GW+ AI data centres are costing as much as $# million per MW”. The source is in <b>dollars</b>: the conversion goes through a displayed, editable rate, since a rate of the day is not reference data. It covers cloud and AI campuses, <b>not</b> colocation or the regional site, whose nature is marked accordingly. And it remains a market order of magnitude: this module does not manufacture YOUR price — as none of the # centres in the reference set publishes its capacity, nothing here replaces your quotes. What the module brings is elsewhere: the <b>complete structure of the bill of quantities</b>, the modulation by the <b>sourced criteria alone</b> of this page, the <b>explicit list of what it cannot settle</b>, and the comparison between countries on <b>total cost of ownership</b> — because on capital expenditure alone it would show zero.",
+   "fr": "D’où vient le coût au mégawatt, et ce qu’il ne dit pas. Il provient d’un relevé publié — Soben, part of Accenture, Data Centre Trends Report 2026 : « cloud data centres currently cost between $8 million and $10 million per MW, GW+ AI data centres are costing as much as $17 million per MW ». La source est en dollars : la conversion passe par un taux affiché et modifiable, un taux du jour n’étant pas une donnée de référentiel. Elle couvre le cloud et les campus d’IA, pas la colocation ni le site régional, dont la nature reste marquée en conséquence. Et elle reste un ordre de grandeur de marché : ce module ne fabrique pas VOTRE prix — aucun des 97 centres du référentiel ne publiant sa capacité, rien ici ne remplace vos devis. Ce que le module apporte est ailleurs : la structure complète de la DPGF, la modulation par les seuls critères sourcés de cette page, la liste explicite de ce qu’il ne peut pas trancher, et la comparaison entre pays sur le coût total de possession — car sur le seul investissement, elle afficherait zéro.",
+   "html": "<b>D’où vient le coût au mégawatt, et ce qu’il ne dit pas.</b> Il provient d’un relevé publié — <b>Soben, part of Accenture, Data Centre Trends Report 2026</b> : « cloud data centres currently cost between $8 million and $10 million per MW, GW+ AI data centres are costing as much as $17 million per MW ». La source est en <b>dollars</b> : la conversion passe par un taux affiché et modifiable, un taux du jour n’étant pas une donnée de référentiel. Elle couvre le cloud et les campus d’IA, <b>pas</b> la colocation ni le site régional, dont la nature reste marquée en conséquence. Et elle reste un ordre de grandeur de marché : ce module ne fabrique pas VOTRE prix — aucun des 97 centres du référentiel ne publiant sa capacité, rien ici ne remplace vos devis. Ce que le module apporte est ailleurs : la <b>structure complète de la DPGF</b>, la modulation par les <b>seuls critères sourcés</b> de cette page, la <b>liste explicite de ce qu’il ne peut pas trancher</b>, et la comparaison entre pays sur le <b>coût total de possession</b> — car sur le seul investissement, elle afficherait zéro."
+  },
+  "File « à qualifier » : ces titres proviennent des flux officiels et sont rapprochés du panel par correspondance stricte de noms. Aucun n'entre dans les scores tant qu'il n'a pas été vérifié et versé au référentiel (versionné). L'automatisation détecte ; l'expert tranche.": {
+   "en": "<b>“To be qualified” queue:</b> these headlines come from the official feeds and are matched to the panel by strict name correspondence. <b>None enters the scores</b> until it has been checked and filed into the reference set (versioned). Automation detects; the expert decides.",
+   "fr": "File « à qualifier » : ces titres proviennent des flux officiels et sont rapprochés du panel par correspondance stricte de noms. Aucun n'entre dans les scores tant qu'il n'a pas été vérifié et versé au référentiel (versionné). L'automatisation détecte ; l'expert tranche.",
+   "html": "<b>File « à qualifier » :</b> ces titres proviennent des flux officiels et sont rapprochés du panel par correspondance stricte de noms. <b>Aucun n'entre dans les scores</b> tant qu'il n'a pas été vérifié et versé au référentiel (versionné). L'automatisation détecte ; l'expert tranche."
+  },
+  "La décision est chiffrée ; elle n’est pas instruite. Ce qui suit part sur le site d’ingénierie : le bilan énergie-eau-carbone d’un côté, la séquence des pièces et le prix de la maîtrise d’œuvre de l’autre. Deux chemins, deux contenus — ils sont nommés ci-dessous.": {
+   "en": "<b>The decision is costed; it is not examined.</b> What follows goes off to the <b>engineering site</b>: the energy-water-carbon account on one side, the sequence of documents and the price of design management on the other. Two paths, two contents — they are named below.",
+   "fr": "La décision est chiffrée ; elle n’est pas instruite. Ce qui suit part sur le site d’ingénierie : le bilan énergie-eau-carbone d’un côté, la séquence des pièces et le prix de la maîtrise d’œuvre de l’autre. Deux chemins, deux contenus — ils sont nommés ci-dessous.",
+   "html": "<b>La décision est chiffrée ; elle n’est pas instruite.</b> Ce qui suit part sur le <b>site d’ingénierie</b> : le bilan énergie-eau-carbone d’un côté, la séquence des pièces et le prix de la maîtrise d’œuvre de l’autre. Deux chemins, deux contenus — ils sont nommés ci-dessous."
+  },
+  "La puissance informatique et l’enveloppe travaux sont reprises de l’étude ci-dessus. Ce bloc en déduit les quantités, le prix indicatif et le carbone de fabrication — puis il rend le montant qui s’ajoutera au capital employé de la création de valeur, deux blocs plus bas. Le lire après l’EVA donnerait un ROCE surestimé d’un tiers.": {
+   "en": "<b>The IT load and the works envelope are taken from the study above.</b> This block derives the quantities, the indicative price and the manufacturing carbon from them — then it returns the amount that <b>will be added to the capital employed</b> in value creation, two blocks further down. Reading it after the EVA would give a ROCE overstated by a third.",
+   "fr": "La puissance informatique et l’enveloppe travaux sont reprises de l’étude ci-dessus. Ce bloc en déduit les quantités, le prix indicatif et le carbone de fabrication — puis il rend le montant qui s’ajoutera au capital employé de la création de valeur, deux blocs plus bas. Le lire après l’EVA donnerait un ROCE surestimé d’un tiers.",
+   "html": "<b>La puissance informatique et l’enveloppe travaux sont reprises de l’étude ci-dessus.</b> Ce bloc en déduit les quantités, le prix indicatif et le carbone de fabrication — puis il rend le montant qui <b>s’ajoutera au capital employé</b> de la création de valeur, deux blocs plus bas. Le lire après l’EVA donnerait un ROCE surestimé d’un tiers."
+  },
+  "Le bilan énergie, eau et carbone et la trajectoire de décarbonation se mènent sur l’autre site du cabinet. Ce bouton fabrique un lien qui y porte le profil technique — pays et puissance — pour ne pas le ressaisir. Il vous montre ce qu’il contient avant que vous n’en fassiez quoi que ce soit : rien n’est envoyé tant que vous ne suivez pas le lien.": {
+   "en": "The energy, water and carbon account and the decarbonisation trajectory are conducted on the firm’s other site. This button builds a link that carries <b>the technical profile</b> there — country and load — so that you do not have to re-enter it. It shows you what it contains before you do anything with it: nothing is sent as long as you do not follow the link.",
+   "fr": "Le bilan énergie, eau et carbone et la trajectoire de décarbonation se mènent sur l’autre site du cabinet. Ce bouton fabrique un lien qui y porte le profil technique — pays et puissance — pour ne pas le ressaisir. Il vous montre ce qu’il contient avant que vous n’en fassiez quoi que ce soit : rien n’est envoyé tant que vous ne suivez pas le lien.",
+   "html": "Le bilan énergie, eau et carbone et la trajectoire de décarbonation se mènent sur l’autre site du cabinet. Ce bouton fabrique un lien qui y porte <b>le profil technique</b> — pays et puissance — pour ne pas le ressaisir. Il vous montre ce qu’il contient avant que vous n’en fassiez quoi que ce soit&nbsp;: rien n’est envoyé tant que vous ne suivez pas le lien."
+  },
+  "Le même calcul répond à deux questions, c'est pourquoi ce bloc figure dans les deux vues. Côté investissement : combien d'équipements la puissance informatique impose, à quel prix indicatif, et quelle part du total. Côté empreinte : leur carbone de fabrication au scope # du GHG Protocol, catégories # et # — la troisième composante, sans laquelle les scopes # et # ne font pas un bilan. Le module est partagé octet pour octet avec la page d'ingénierie de conseilprevcyber : les quantités y sont les mêmes, à la ligne près.": {
+   "en": "<b>The same calculation answers two questions, which is why this block appears in both views.</b> On the investment side: how much equipment the IT load imposes, at what indicative price, and what share of the total. On the footprint side: their manufacturing carbon under <b>GHG Protocol scope #</b>, categories # and # — the third component, without which scopes # and # do not make an account. The module is shared <b>byte for byte</b> with the conseilprevcyber engineering page: the quantities there are the same, line for line.",
+   "fr": "Le même calcul répond à deux questions, c'est pourquoi ce bloc figure dans les deux vues. Côté investissement : combien d'équipements la puissance informatique impose, à quel prix indicatif, et quelle part du total. Côté empreinte : leur carbone de fabrication au scope 3 du GHG Protocol, catégories 1 et 2 — la troisième composante, sans laquelle les scopes 1 et 2 ne font pas un bilan. Le module est partagé octet pour octet avec la page d'ingénierie de conseilprevcyber : les quantités y sont les mêmes, à la ligne près.",
+   "html": "<b>Le même calcul répond à deux questions, c'est pourquoi ce bloc figure dans les deux vues.</b> Côté investissement&nbsp;: combien d'équipements la puissance informatique impose, à quel prix indicatif, et quelle part du total. Côté empreinte&nbsp;: leur carbone de fabrication au <b>scope&nbsp;3 du GHG Protocol</b>, catégories 1 et 2 — la troisième composante, sans laquelle les scopes 1 et 2 ne font pas un bilan. Le module est partagé <b>octet pour octet</b> avec la page d'ingénierie de conseilprevcyber&nbsp;: les quantités y sont les mêmes, à la ligne près."
+  },
+  "Le tableau qui suit est une analyse, pas une donnée. Avantages, inconvénients et commentaire par pays — la lecture du cabinet, datée, à discuter. Cliquez un pays pour ouvrir le détail de son parc.": {
+   "en": "<b>The table that follows is an analysis, not data.</b> Advantages, drawbacks and commentary by country — the firm’s reading, dated, open to discussion. Click a country to open the detail of its fleet.",
+   "fr": "Le tableau qui suit est une analyse, pas une donnée. Avantages, inconvénients et commentaire par pays — la lecture du cabinet, datée, à discuter. Cliquez un pays pour ouvrir le détail de son parc.",
+   "html": "<b>Le tableau qui suit est une analyse, pas une donnée.</b> Avantages, inconvénients et commentaire par pays — la lecture du cabinet, datée, à discuter. Cliquez un pays pour ouvrir le détail de son parc."
+  },
+  "Le tableau qui suit se lit par pays. Cliquez sur un pays pour ouvrir le détail de tous ses centres de données : statut, mise en service, capacité et investissement annoncés, électricité, eau, refroidissement, CO₂e — et, pour chaque valeur, si elle est publiée, déduite du site ou seulement de sa classe.": {
+   "en": "<b>The table that follows reads country by country.</b> <b>Click a country</b> to open the detail of <b>all its data centres</b>: status, commissioning, announced capacity and investment, electricity, water, cooling, CO₂e — and, for each value, whether it is <b>published</b>, inferred from the <b>site</b> or only from its <b>class</b>.",
+   "fr": "Le tableau qui suit se lit par pays. Cliquez sur un pays pour ouvrir le détail de tous ses centres de données : statut, mise en service, capacité et investissement annoncés, électricité, eau, refroidissement, CO₂e — et, pour chaque valeur, si elle est publiée, déduite du site ou seulement de sa classe.",
+   "html": "<b>Le tableau qui suit se lit par pays.</b> <b>Cliquez sur un pays</b> pour ouvrir le détail de <b>tous ses centres de données</b> : statut, mise en service, capacité et investissement annoncés, électricité, eau, refroidissement, CO₂e — et, pour chaque valeur, si elle est <b>publiée</b>, déduite du <b>site</b> ou seulement de sa <b>classe</b>."
+  },
+  "Les chiffres ci-dessus préparent une décision d'investissement. Ce diagnostic répond à l'autre question, celle qu'on pose rarement avant de commander un tableau de bord : l'organisation a-t-elle de quoi l'instruire, et ensuite suivre son exécution ? Un comité qui reçoit une enveloppe à ±# % sans série datée ni grille de lecture ne décide pas mieux avec un graphique de plus — il décide à l'intuition, avec un chiffre pour se rassurer.": {
+   "en": "The figures above prepare an investment decision. This diagnosis answers the other question, the one rarely asked before commissioning a dashboard: <b>does the organisation have what it takes to examine it, and then to track its execution?</b> A committee that receives a ±# % envelope with no dated series and no reading grid does not decide better with one more chart — it decides on intuition, with a figure for reassurance.",
+   "fr": "Les chiffres ci-dessus préparent une décision d'investissement. Ce diagnostic répond à l'autre question, celle qu'on pose rarement avant de commander un tableau de bord : l'organisation a-t-elle de quoi l'instruire, et ensuite suivre son exécution ? Un comité qui reçoit une enveloppe à ±30 % sans série datée ni grille de lecture ne décide pas mieux avec un graphique de plus — il décide à l'intuition, avec un chiffre pour se rassurer.",
+   "html": "Les chiffres ci-dessus préparent une décision d'investissement. Ce diagnostic répond à l'autre question, celle qu'on pose rarement avant de commander un tableau de bord&nbsp;: <b>l'organisation a-t-elle de quoi l'instruire, et ensuite suivre son exécution&nbsp;?</b> Un comité qui reçoit une enveloppe à ±30&nbsp;% sans série datée ni grille de lecture ne décide pas mieux avec un graphique de plus — il décide à l'intuition, avec un chiffre pour se rassurer."
+  },
+  "Les quatorze lots ci-dessus s'arrêtent aux murs, aux fluides et à l'électricité. Le lot Aménagement des salles informatiques couvre les planchers techniques, les chemins de câbles et la distribution en salle — il porte lui-même la mention « hors serveurs ». Les machines sont un investissement séparé, et quand le même maître d'ouvrage porte les deux, elles pèsent le tiers de l'investissement total. Raisonner sur la seule enveloppe travaux fait arbitrer des économies de génie civil pendant que le poste le plus lourd passe sans discussion.": {
+   "en": "The fourteen packages above stop at the walls, the fluids and the electricity. The <b>IT room fit-out</b> package covers raised floors, cable trays and in-room distribution — it carries the words “excluding servers” itself. The machines are a <b>separate</b> investment, and when the same client carries both, they account for a third of the total investment. Reasoning on the construction envelope alone leads to arbitrating civil engineering savings while the heaviest item goes through without discussion.",
+   "fr": "Les quatorze lots ci-dessus s'arrêtent aux murs, aux fluides et à l'électricité. Le lot Aménagement des salles informatiques couvre les planchers techniques, les chemins de câbles et la distribution en salle — il porte lui-même la mention « hors serveurs ». Les machines sont un investissement séparé, et quand le même maître d'ouvrage porte les deux, elles pèsent le tiers de l'investissement total. Raisonner sur la seule enveloppe travaux fait arbitrer des économies de génie civil pendant que le poste le plus lourd passe sans discussion.",
+   "html": "Les quatorze lots ci-dessus s'arrêtent aux murs, aux fluides et à l'électricité. Le lot <b>Aménagement des salles informatiques</b> couvre les planchers techniques, les chemins de câbles et la distribution en salle — il porte lui-même la mention «&nbsp;hors serveurs&nbsp;». Les machines sont un investissement <b>séparé</b>, et quand le même maître d'ouvrage porte les deux, elles pèsent le tiers de l'investissement total. Raisonner sur la seule enveloppe travaux fait arbitrer des économies de génie civil pendant que le poste le plus lourd passe sans discussion."
+  },
+  "Les systèmes d’IA et les centres de données réellement déployés dans l’UE": {
+   "en": "The AI systems and data centres <em>actually deployed</em> in the EU",
+   "fr": "Les systèmes d’IA et les centres de données réellement déployés dans l’UE",
+   "html": "Les systèmes d’IA et les centres de données <em>réellement déployés</em> dans l’UE"
+  },
+  "Lire avant d'exploiter : ce panorama est un panel représentatif de cas publiquement documentés, pas un recensement — les déploiements non communiqués n'y figurent pas. Le score mesure l'exposition réglementaire du cas d'usage (classe de risque, stade, données, signaux publics) ; il n'est pas un audit de conformité des entreprises citées. Seuls les faits sourcés (sanctions, décisions, engagements publics) sont imputés nominativement.": {
+   "en": "<b>Read before use:</b> this panorama is a <b>representative panel of publicly documented cases</b>, not a census — deployments that were never disclosed do not appear in it. The score measures the <b>regulatory exposure of the use case</b> (risk class, stage, data, public signals); it is <b>not a compliance audit</b> of the companies named. Only sourced facts (penalties, decisions, public commitments) are attributed by name.",
+   "fr": "Lire avant d'exploiter : ce panorama est un panel représentatif de cas publiquement documentés, pas un recensement — les déploiements non communiqués n'y figurent pas. Le score mesure l'exposition réglementaire du cas d'usage (classe de risque, stade, données, signaux publics) ; il n'est pas un audit de conformité des entreprises citées. Seuls les faits sourcés (sanctions, décisions, engagements publics) sont imputés nominativement.",
+   "html": "<b>Lire avant d'exploiter :</b> ce panorama est un <b>panel représentatif de cas publiquement documentés</b>, pas un recensement — les déploiements non communiqués n'y figurent pas. Le score mesure l'<b>exposition réglementaire du cas d'usage</b> (classe de risque, stade, données, signaux publics) ; il n'est <b>pas un audit de conformité</b> des entreprises citées. Seuls les faits sourcés (sanctions, décisions, engagements publics) sont imputés nominativement."
+  },
+  "L’enveloppe dit ce que le projet coûte. Ces trois indicateurs disent ce qu’il rapporte au regard du capital immobilisé — et ils ne peuvent pas se calculer sans vous : revenu attendu, coût du capital et taux d’impôt sont des décisions d’investisseur, pas des données de référentiel. Tant qu’elles ne sont pas saisies, les trois sont non instruits, et non pas nuls.": {
+   "en": "The envelope says what the project <b>costs</b>. These three indicators say what it <b>earns relative to the capital tied up</b> — and they cannot be computed without you: expected revenue, cost of capital and tax rate are investor decisions, not reference data. Until they are entered, all three are <b>not examined</b>, and not zero.",
+   "fr": "L’enveloppe dit ce que le projet coûte. Ces trois indicateurs disent ce qu’il rapporte au regard du capital immobilisé — et ils ne peuvent pas se calculer sans vous : revenu attendu, coût du capital et taux d’impôt sont des décisions d’investisseur, pas des données de référentiel. Tant qu’elles ne sont pas saisies, les trois sont non instruits, et non pas nuls.",
+   "html": "L’enveloppe dit ce que le projet <b>coûte</b>. Ces trois indicateurs disent ce qu’il <b>rapporte au regard du capital immobilisé</b> — et ils ne peuvent pas se calculer sans vous&nbsp;: revenu attendu, coût du capital et taux d’impôt sont des décisions d’investisseur, pas des données de référentiel. Tant qu’elles ne sont pas saisies, les trois sont <b>non instruits</b>, et non pas nuls."
+  },
+  "Observer": {
+   "en": "<span>Observe</span>",
+   "fr": "Observer",
+   "html": "<span>Observer</span>"
+  },
+  "Prolonger la durée de vie : le gain, et son point de bascule. Allonger la vie d'un serveur étale son carbone de fabrication sur plus d'années et repousse la fabrication d'un remplaçant. Le gain est réel. Mais un parc dont l'âge moyen augmente consomme davantage à service rendu égal. La question n'est donc pas si l'allongement paie : c'est jusqu'où, et cela dépend du mix électrique qui alimente le site.": {
+   "en": "<b>Extending the lifetime: the gain, and its tipping point.</b> Extending a server’s life spreads its manufacturing carbon over more years and defers the manufacture of a replacement. The gain is real. But a fleet whose average age rises consumes more for the same service delivered. So the question is not <i>whether</i> extension pays: it is <b>how far</b>, and that depends on the electricity mix that feeds the site.",
+   "fr": "Prolonger la durée de vie : le gain, et son point de bascule. Allonger la vie d'un serveur étale son carbone de fabrication sur plus d'années et repousse la fabrication d'un remplaçant. Le gain est réel. Mais un parc dont l'âge moyen augmente consomme davantage à service rendu égal. La question n'est donc pas si l'allongement paie : c'est jusqu'où, et cela dépend du mix électrique qui alimente le site.",
+   "html": "<b>Prolonger la durée de vie&nbsp;: le gain, et son point de bascule.</b> Allonger la vie d'un serveur étale son carbone de fabrication sur plus d'années et repousse la fabrication d'un remplaçant. Le gain est réel. Mais un parc dont l'âge moyen augmente consomme davantage à service rendu égal. La question n'est donc pas <i>si</i> l'allongement paie&nbsp;: c'est <b>jusqu'où</b>, et cela dépend du mix électrique qui alimente le site."
+  },
+  "Publiques, sous licence explicite, interrogeables sans inscription : vous pouvez refaire la requête. C'est la seule couche de cette page qu'un lecteur vérifie de bout en bout, sans nous.": {
+   "en": "Public, under an explicit licence, queryable without registration: <b>you can run the query again</b>. It is the only layer of this page that a reader checks end to end, without us.",
+   "fr": "Publiques, sous licence explicite, interrogeables sans inscription : vous pouvez refaire la requête. C'est la seule couche de cette page qu'un lecteur vérifie de bout en bout, sans nous.",
+   "html": "Publiques, sous licence explicite, interrogeables sans inscription : <b>vous pouvez refaire la requête</b>. C'est la seule couche de cette page qu'un lecteur vérifie de bout en bout, sans nous."
+  },
+  "Rappel d'échéances : pratiques interdites en vigueur depuis le # février # ; obligations GPAI depuis le # août # ; haut risque annexe III au # décembre # ; annexe I au # août #.": {
+   "en": "Deadline reminder: prohibited practices <b>in force since # February #</b>; GPAI obligations since <b># August #</b>; high risk annex III on <b># December #</b>; annex I on <b># August #</b>.",
+   "fr": "Rappel d'échéances : pratiques interdites en vigueur depuis le 2 février 2025 ; obligations GPAI depuis le 2 août 2025 ; haut risque annexe III au 2 décembre 2027 ; annexe I au 2 août 2028.",
+   "html": "Rappel d'échéances : pratiques interdites <b>en vigueur depuis le 2 février 2025</b> ; obligations GPAI depuis le <b>2 août 2025</b> ; haut risque annexe III au <b>2 décembre 2027</b> ; annexe I au <b>2 août 2028</b>."
+  },
+  "Sélectionnez un pays sur la carte pour afficher ses autorités (surveillance AI Act, cybersécurité, protection des données), sa stratégie IA et les cas du panel qui s'y rattachent.": {
+   "en": "Select a country on the map to show its <b>authorities</b> (AI Act supervision, cybersecurity, data protection), its <b>AI strategy</b> and the <b>panel cases</b> attached to it.",
+   "fr": "Sélectionnez un pays sur la carte pour afficher ses autorités (surveillance AI Act, cybersécurité, protection des données), sa stratégie IA et les cas du panel qui s'y rattachent.",
+   "html": "Sélectionnez un pays sur la carte pour afficher ses <b>autorités</b> (surveillance AI Act, cybersécurité, protection des données), sa <b>stratégie IA</b> et les <b>cas du panel</b> qui s'y rattachent."
+  },
+  "Un tableau de bord ne doit pas seulement afficher des données : il doit signaler où une décision est attendue, sans que le lecteur ait à comparer mentalement chaque valeur à sa cible. Trois mécanismes s'en chargent ici — la forme choisie pour la donnée, le seuil coloré, et la tendance mesurée. S'y ajoutent les trois apports de l'analyse augmentée : projection de l'indicateur, détection d'anomalies et commentaire en langage naturel.": {
+   "en": "A dashboard must not merely display data: it must signal <b>where a decision is expected</b>, without the reader having to compare each value with its target in their head. Three mechanisms do that here — the form chosen for the data, the coloured threshold, and the measured trend. To these are added the three contributions of augmented analytics: <b>projection</b> of the indicator, <b>anomaly detection</b> and <b>natural-language commentary</b>.",
+   "fr": "Un tableau de bord ne doit pas seulement afficher des données : il doit signaler où une décision est attendue, sans que le lecteur ait à comparer mentalement chaque valeur à sa cible. Trois mécanismes s'en chargent ici — la forme choisie pour la donnée, le seuil coloré, et la tendance mesurée. S'y ajoutent les trois apports de l'analyse augmentée : projection de l'indicateur, détection d'anomalies et commentaire en langage naturel.",
+   "html": "Un tableau de bord ne doit pas seulement afficher des données&nbsp;: il doit signaler <b>où une décision est attendue</b>, sans que le lecteur ait à comparer mentalement chaque valeur à sa cible. Trois mécanismes s'en chargent ici — la forme choisie pour la donnée, le seuil coloré, et la tendance mesurée. S'y ajoutent les trois apports de l'analyse augmentée&nbsp;: <b>projection</b> de l'indicateur, <b>détection d'anomalies</b> et <b>commentaire en langage naturel</b>."
+  },
+  "Une alerte ne se déclenche pas sur du bruit. C'est ce que ce moteur tient et qu'un tableur ne tient pas : il connaît l'incertitude de ses grandeurs. Une enveloppe à ±# % qui dépasse sa cible de # % n'a rien franchi — l'écart est dans le bruit. Le rouge exige un dépassement supérieur à la fois à la tolérance et à l'incertitude ; entre les deux, l'état affiché est « écart non démontré ». Sans cette règle, le troisième faux positif éteint la vigilance sur tous les autres.": {
+   "en": "<b>An alert does not fire on noise.</b> This is what this engine holds and a spreadsheet does not: it knows the uncertainty of its quantities. A ±# % envelope that exceeds its target by # % has crossed nothing — the gap is within the noise. Red requires an overrun greater than both the tolerance and the uncertainty; between the two, the state shown is “gap not demonstrated”. Without this rule, the third false positive puts out vigilance on all the others.",
+   "fr": "Une alerte ne se déclenche pas sur du bruit. C'est ce que ce moteur tient et qu'un tableur ne tient pas : il connaît l'incertitude de ses grandeurs. Une enveloppe à ±30 % qui dépasse sa cible de 12 % n'a rien franchi — l'écart est dans le bruit. Le rouge exige un dépassement supérieur à la fois à la tolérance et à l'incertitude ; entre les deux, l'état affiché est « écart non démontré ». Sans cette règle, le troisième faux positif éteint la vigilance sur tous les autres.",
+   "html": "<b>Une alerte ne se déclenche pas sur du bruit.</b> C'est ce que ce moteur tient et qu'un tableur ne tient pas&nbsp;: il connaît l'incertitude de ses grandeurs. Une enveloppe à ±30&nbsp;% qui dépasse sa cible de 12&nbsp;% n'a rien franchi — l'écart est dans le bruit. Le rouge exige un dépassement supérieur à la fois à la tolérance et à l'incertitude&nbsp;; entre les deux, l'état affiché est «&nbsp;écart non démontré&nbsp;». Sans cette règle, le troisième faux positif éteint la vigilance sur tous les autres."
+  },
+  "Une prévision n’est pas une donnée. Les faits ci-dessous proviennent de quatre rapports d’éditeurs nommés, lus intégralement : chaque entrée porte sa citation verbatim, sa page et son éditeur, pour que vous puissiez la vérifier plutôt que nous croire. Les entrées marquées prévision engagent leur auteur, pas la réalité. Et lorsqu’un fait postérieur rend optimiste une valeur affichée ailleurs sur cette page — la classe de prix finlandaise en est l’exemple —, il est inscrit en réserve datée à côté d’elle, jamais substitué en silence : vous devez pouvoir retrouver ce que vous avez cité la semaine dernière.": {
+   "en": "<b>A forecast is not data.</b> The facts below come from four named publishers’ reports, read in full: each entry carries its <b>verbatim quotation</b>, its <b>page</b> and its publisher, so that you can check it rather than take our word for it. Entries marked <b>forecast</b> commit their author, not reality. And when a later fact makes a value shown elsewhere on this page look optimistic — the Finnish price class is the example — it is recorded as a <b>dated caveat beside it</b>, never silently substituted: you must be able to find again what you quoted last week.",
+   "fr": "Une prévision n’est pas une donnée. Les faits ci-dessous proviennent de quatre rapports d’éditeurs nommés, lus intégralement : chaque entrée porte sa citation verbatim, sa page et son éditeur, pour que vous puissiez la vérifier plutôt que nous croire. Les entrées marquées prévision engagent leur auteur, pas la réalité. Et lorsqu’un fait postérieur rend optimiste une valeur affichée ailleurs sur cette page — la classe de prix finlandaise en est l’exemple —, il est inscrit en réserve datée à côté d’elle, jamais substitué en silence : vous devez pouvoir retrouver ce que vous avez cité la semaine dernière.",
+   "html": "<b>Une prévision n’est pas une donnée.</b> Les faits ci-dessous proviennent de quatre rapports d’éditeurs nommés, lus intégralement : chaque entrée porte sa <b>citation verbatim</b>, sa <b>page</b> et son éditeur, pour que vous puissiez la vérifier plutôt que nous croire. Les entrées marquées <b>prévision</b> engagent leur auteur, pas la réalité. Et lorsqu’un fait postérieur rend optimiste une valeur affichée ailleurs sur cette page — la classe de prix finlandaise en est l’exemple —, il est inscrit en <b>réserve datée à côté d’elle</b>, jamais substitué en silence : vous devez pouvoir retrouver ce que vous avez cité la semaine dernière."
+  },
+  "Vous avez un investissement et un coût d’exploitation. Le bloc suivant les confronte au capital employé : un projet peut être le moins cher et rester destructeur de valeur, et c’est là que cela se voit.": {
+   "en": "<b>You have an investment and an operating cost.</b> The next block sets them against the <b>capital employed</b>: a project can be the cheapest and still destroy value, and that is where it shows.",
+   "fr": "Vous avez un investissement et un coût d’exploitation. Le bloc suivant les confronte au capital employé : un projet peut être le moins cher et rester destructeur de valeur, et c’est là que cela se voit.",
+   "html": "<b>Vous avez un investissement et un coût d’exploitation.</b> Le bloc suivant les confronte au <b>capital employé</b> : un projet peut être le moins cher et rester destructeur de valeur, et c’est là que cela se voit."
+  },
+  "Vous avez une enveloppe et un pays retenu. Le bloc suivant en tire le montant des travaux et la part du lot technique — les deux seules grandeurs dont dépendent les honoraires de maîtrise d’œuvre.": {
+   "en": "<b>You have an envelope and a chosen country.</b> The next block derives the <b>amount of the works</b> and the <b>share of the technical package</b> from them — the only two quantities on which the design-management fees depend.",
+   "fr": "Vous avez une enveloppe et un pays retenu. Le bloc suivant en tire le montant des travaux et la part du lot technique — les deux seules grandeurs dont dépendent les honoraires de maîtrise d’œuvre.",
+   "html": "<b>Vous avez une enveloppe et un pays retenu.</b> Le bloc suivant en tire le <b>montant des travaux</b> et la <b>part du lot technique</b> — les deux seules grandeurs dont dépendent les honoraires de maîtrise d’œuvre."
+  },
+  "Vous avez une enveloppe. Personne n’a encore demandé si quelqu’un louera. Le business case, sous « Régler le projet », éprouve la demande, le calendrier électrique et le remplissage au point mort — et ses huit constats entrent dans le même verdict GO / NO GO.": {
+   "en": "<b>You have an envelope. Nobody has yet asked whether anyone will rent.</b> The business case, under “Set up the project”, tests the demand, the electrical timetable and the <b>occupancy at break-even</b> — and its eight findings feed the same GO / NO GO verdict.",
+   "fr": "Vous avez une enveloppe. Personne n’a encore demandé si quelqu’un louera. Le business case, sous « Régler le projet », éprouve la demande, le calendrier électrique et le remplissage au point mort — et ses huit constats entrent dans le même verdict GO / NO GO.",
+   "html": "<b>Vous avez une enveloppe. Personne n’a encore demandé si quelqu’un louera.</b> Le business case, sous « Régler le projet », éprouve la demande, le calendrier électrique et le <b>remplissage au point mort</b> — et ses huit constats entrent dans le même verdict GO / NO GO."
+  },
+  "Vous n’avez pas encore de plan d’affaires ? Le calcul répond quand même à la question qui décide : combien ce projet doit-il rapporter pour ne pas détruire de valeur ? Ce seuil sort de l’enveloppe déjà calculée et de deux chiffres seulement — coût du capital et taux d’impôt, qui sont des décisions, pas des prévisions. Il s’affiche en tête du résultat ; les trois indicateurs viennent ensuite, pour qui a le plan.": {
+   "en": "<b>No business plan yet?</b> The calculation still answers the question that decides: <b>how much must this project earn in order not to destroy value?</b> That threshold comes out of the envelope already computed and of <b>two figures only</b> — cost of capital and tax rate, which are decisions, not forecasts. It is shown at the head of the result; the three indicators come next, for whoever has the plan.",
+   "fr": "Vous n’avez pas encore de plan d’affaires ? Le calcul répond quand même à la question qui décide : combien ce projet doit-il rapporter pour ne pas détruire de valeur ? Ce seuil sort de l’enveloppe déjà calculée et de deux chiffres seulement — coût du capital et taux d’impôt, qui sont des décisions, pas des prévisions. Il s’affiche en tête du résultat ; les trois indicateurs viennent ensuite, pour qui a le plan.",
+   "html": "<b>Vous n’avez pas encore de plan d’affaires&nbsp;?</b> Le calcul répond quand même à la question qui décide&nbsp;: <b>combien ce projet doit-il rapporter pour ne pas détruire de valeur&nbsp;?</b> Ce seuil sort de l’enveloppe déjà calculée et de <b>deux chiffres seulement</b> — coût du capital et taux d’impôt, qui sont des décisions, pas des prévisions. Il s’affiche en tête du résultat&nbsp;; les trois indicateurs viennent ensuite, pour qui a le plan."
+  },
+  "Vérifier": {
+   "en": "<span>Check</span>",
+   "fr": "Vérifier",
+   "html": "<span>Vérifier</span>"
+  },
+  "À présenter aux sponsors dès le départ, y compris si la conclusion déçoit. Recalibrer une ambition en ouverture coûte une réunion ; expliquer six mois plus tard pourquoi le tableau de bord n'est pas utilisé coûte le projet — et la confiance qui allait avec. La note de restitution ci-dessous porte le verdict en tête, jamais en annexe.": {
+   "en": "<b>To be put to the sponsors from the outset, including when the conclusion disappoints.</b> Recalibrating an ambition at the opening costs one meeting; explaining six months later why the dashboard is not being used costs the project — and the trust that came with it. The summary note below carries the verdict at the head, never in an annex.",
+   "fr": "À présenter aux sponsors dès le départ, y compris si la conclusion déçoit. Recalibrer une ambition en ouverture coûte une réunion ; expliquer six mois plus tard pourquoi le tableau de bord n'est pas utilisé coûte le projet — et la confiance qui allait avec. La note de restitution ci-dessous porte le verdict en tête, jamais en annexe.",
+   "html": "<b>À présenter aux sponsors dès le départ, y compris si la conclusion déçoit.</b> Recalibrer une ambition en ouverture coûte une réunion&nbsp;; expliquer six mois plus tard pourquoi le tableau de bord n'est pas utilisé coûte le projet — et la confiance qui allait avec. La note de restitution ci-dessous porte le verdict en tête, jamais en annexe."
+  }
+ },
+ "texte": {
+  "# août #": {
+   "en": "# August #",
+   "fr": "2 août 2025"
+  },
+  "# cas du panel": {
+   "en": "# cases in the panel",
+   "fr": "7 cas du panel"
+  },
+  "# contrôle(s)": {
+   "en": "# check(s)",
+   "fr": "43 contrôle(s)"
+  },
+  "# décembre #": {
+   "en": "# December #",
+   "fr": "2 décembre 2027"
+  },
+  "# entrées": {
+   "en": "# entries",
+   "fr": "6 entrées"
+  },
+  "# et plus": {
+   "en": "# and over",
+   "fr": "60 et plus"
+  },
+  "# kgCO₂e par MWh d’électricité informatique": {
+   "en": "# kgCO₂e per MWh of IT electricity",
+   "fr": "22 kgCO₂e par MWh d’électricité informatique"
+  },
+  "# mois · périmé": {
+   "en": "# months · outdated",
+   "fr": "51 mois · périmé"
+  },
+  "# mois · à vérifier": {
+   "en": "# months · to be checked",
+   "fr": "21 mois · à vérifier"
+  },
+  "# pays · référentiel #-#-e": {
+   "en": "# countries · reference framework #-#-e",
+   "fr": "28 pays · référentiel 2026-08-e"
+  },
+  "# secteurs · fenêtre juin # → juillet #": {
+   "en": "# sectors · window June # → July #",
+   "fr": "38 secteurs · fenêtre juin 2023 → juillet 2026"
+  },
+  "# source sur # interrogées ont répondu · sans clé d'API": {
+   "en": "# source out of # queried responded · no API key",
+   "fr": "0 source sur 3 interrogées ont répondu · sans clé d'API"
+  },
+  "# sources sur # s'ouvrent d'un clic ; # sont des synthèses du cabinet, qui ne renvoient à aucune publication ; # citent un éditeur dont l'adresse n'est pas encore enregistrée.": {
+   "en": "# sources out of # open in one click; # are syntheses by the firm, which point to no publication; # cite a publisher whose address is not yet recorded.",
+   "fr": "32 sources sur 53 s'ouvrent d'un clic ; 4 sont des synthèses du cabinet, qui ne renvoient à aucune publication ; 17 citent un éditeur dont l'adresse n'est pas encore enregistrée."
+  },
+  "# sources · # ouvrables d’un clic": {
+   "en": "# sources · # openable in one click",
+   "fr": "53 sources · 32 ouvrables d’un clic"
+  },
+  "# tendances · # jalons · # réserves": {
+   "en": "# trends · # milestones · # caveats",
+   "fr": "10 tendances · 11 jalons · 5 réserves"
+  },
+  "# à #": {
+   "en": "# to #",
+   "fr": "40 à 59"
+  },
+  "# à # L/kWh selon le mode de refroidissement": {
+   "en": "# to # L/kWh depending on the cooling method",
+   "fr": "0,00 à 2,20 L/kWh selon le mode de refroidissement"
+  },
+  "# à # gCO₂e/kWh selon le pays, approche cycle de vie": {
+   "en": "# to # gCO₂e/kWh depending on the country, life-cycle approach",
+   "fr": "30 à 660 gCO₂e/kWh selon le pays, approche cycle de vie"
+  },
+  "# à # selon le mode de refroidissement": {
+   "en": "# to # depending on the cooling method",
+   "fr": "1,10 à 1,60 selon le mode de refroidissement"
+  },
+  "#. Norvège (hors UE)": {
+   "en": "#. Norway (outside the EU)",
+   "fr": "3. Norvège (hors UE)"
+  },
+  "#. Suède": {
+   "en": "#. Sweden",
+   "fr": "1. Suède"
+  },
+  "(classe de risque, stade, données, signaux publics) ; il n'est": {
+   "en": "(risk class, stage, data, public signals); it is",
+   "fr": "(classe de risque, stade, données, signaux publics) ; il n'est"
+  },
+  "(indice WEI+ de l’AEE et compétition avec l’irrigation agricole), le": {
+   "en": "(EEA WEI+ index and competition with agricultural irrigation), the",
+   "fr": "(indice WEI+ de l’AEE et compétition avec l’irrigation agricole), le"
+  },
+  "(nucléaire, renouvelables, centrales fossiles), la": {
+   "en": "(nuclear, renewables, fossil plants), the",
+   "fr": "(nucléaire, renouvelables, centrales fossiles), la"
+  },
+  "(surveillance AI Act, cybersécurité, protection des données), sa": {
+   "en": "(AI Act supervision, cybersecurity, data protection), its",
+   "fr": "(surveillance AI Act, cybersécurité, protection des données), sa"
+  },
+  ", en": {
+   "en": ", in",
+   "fr": ", en"
+  },
+  ", jamais substitué en silence : vous devez pouvoir retrouver ce que vous avez cité la semaine dernière.": {
+   "en": ", never silently substituted: you must be able to find what you cited last week.",
+   "fr": ", jamais substitué en silence : vous devez pouvoir retrouver ce que vous avez cité la semaine dernière."
+  },
+  ", le": {
+   "en": ", the",
+   "fr": ", le"
+  },
+  ", le score selon vos poids, puis les classes carbone, eau et prix ; la dernière ligne donne le free cooling, le parc en service et la file de raccordement #. Cliquez une tuile pour ouvrir la fiche du pays. Pour comparer colonne par colonne, avec la source de chaque critère, choisissez « Tableau détaillé » dans": {
+   "en": ", the score according to your weights, then the carbon, water and price classes; the last row gives free cooling, the estate in service and the # connection queue. Click a tile to open the country profile. To compare column by column, with the source of each criterion, choose “Detailed table” in",
+   "fr": ", le score selon vos poids, puis les classes carbone, eau et prix ; la dernière ligne donne le free cooling, le parc en service et la file de raccordement 2030. Cliquez une tuile pour ouvrir la fiche du pays. Pour comparer colonne par colonne, avec la source de chaque critère, choisissez « Tableau détaillé » dans"
+  },
+  ", pas un recensement — les déploiements non communiqués n'y figurent pas. Le score mesure l'": {
+   "en": ", not a census — undisclosed deployments do not appear in it. The score measures the",
+   "fr": ", pas un recensement — les déploiements non communiqués n'y figurent pas. Le score mesure l'"
+  },
+  ", pour qu’on y retrouve le sien d’un coup d’œil sans dérouler vingt-trois lignes : le": {
+   "en": ", so that you can find your own at a glance without scrolling through twenty-three rows: the",
+   "fr": ", pour qu’on y retrouve le sien d’un coup d’œil sans dérouler vingt-trois lignes : le"
+  },
+  ", puis électricité et eau —": {
+   "en": ", then electricity and water —",
+   "fr": ", puis électricité et eau —"
+  },
+  ", qui est signalé comme tel.": {
+   "en": ", which is flagged as such.",
+   "fr": ", qui est signalé comme tel."
+  },
+  ", sa": {
+   "en": ", its",
+   "fr": ", sa"
+  },
+  ". C'est la seule couche de cette page qu'un lecteur vérifie de bout en bout, sans nous.": {
+   "en": ". It is the only layer of this page that a reader can verify end to end, without us.",
+   "fr": ". C'est la seule couche de cette page qu'un lecteur vérifie de bout en bout, sans nous."
+  },
+  ". Chaque tuile porte le": {
+   "en": ". Each tile carries the",
+   "fr": ". Chaque tuile porte le"
+  },
+  ". Réglez le poids de chaque critère selon votre projet — construction neuve, extension ou rachat — et lisez le classement.": {
+   "en": ". Set the weight of each criterion according to your project — new build, extension or acquisition — and read the ranking.",
+   "fr": ". Réglez le poids de chaque critère selon votre projet — construction neuve, extension ou rachat — et lisez le classement."
+  },
+  ": +# m · valeur CALCULÉE par interpolation — le GIEC ne publie pas cet horizon · À cet horizon, la trajectoire d'émissions ne change que # cm : l'élévation est déjà engagée.": {
+   "en": ": +# m · CALCULATED value by interpolation — the IPCC does not publish this horizon · At this horizon, the emissions trajectory changes only # cm: the rise is already locked in.",
+   "fr": ": +0,116 m · valeur CALCULÉE par interpolation — le GIEC ne publie pas cet horizon · À cet horizon, la trajectoire d'émissions ne change que 4 cm : l'élévation est déjà engagée."
+  },
+  ": un registre qui n’afficherait que ses succès ne serait pas vérifiable, il serait promotionnel. Quand un contrôle a conduit à corriger une valeur, la valeur d’origine reste écrite — sans elle, un lecteur qui aurait cité l’ancienne ne saurait pas qu’il doit se corriger.": {
+   "en": ": a register that showed only its successes would not be verifiable, it would be promotional. When a check led to a value being corrected, the original value remains written — without it, a reader who had cited the old one would not know they need to correct themselves.",
+   "fr": ": un registre qui n’afficherait que ses succès ne serait pas vérifiable, il serait promotionnel. Quand un contrôle a conduit à corriger une valeur, la valeur d’origine reste écrite — sans elle, un lecteur qui aurait cité l’ancienne ne saurait pas qu’il doit se corriger."
+  },
+  ": un score pondéré additionne, une conjonction ne s’additionne pas. Il se lit à côté du classement, jamais dedans. Chaque fiche concernée porte son motif propre.": {
+   "en": ": a weighted score adds up; a conjunction does not add up. It is read beside the ranking, never inside it. Each profile concerned carries its own reason.",
+   "fr": ": un score pondéré additionne, une conjonction ne s’additionne pas. Il se lit à côté du classement, jamais dedans. Chaque fiche concernée porte son motif propre."
+  }
+ }
+}

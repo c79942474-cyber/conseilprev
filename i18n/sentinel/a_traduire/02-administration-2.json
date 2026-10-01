@@ -1,6 +1,6 @@
 {
  "_lot": "02-administration-2",
- "_mots": 1518,
+ "_mots": 2067,
  "_pages": [
   "ia50",
   "rgpd-site"
@@ -21,206 +21,228 @@
    "en": "Two sets coexist. The “GDPR compliance” and “Records of processing” modules concern the <strong>client’s</strong> organisation. The “GDPR — CONSEILPREV” and “AI Act transparency” modules concern <strong>our own compliance</strong>: public site and Sentinel platform. They are reserved for CONSEILPREV and hidden from clients. In the event of an inspection, only the latter make up your file.",
    "fr": "Deux ensembles coexistent. Les modules « Conformité RGPD » et « Registre des traitements » portent sur l'organisation du client. Les modules « RGPD — CONSEILPREV » et « Transparence IA Act » portent sur notre propre conformité : site public et plateforme Sentinel. Ils sont réservés à CONSEILPREV et masqués pour les clients. En cas de contrôle, seuls ces derniers constituent votre dossier.",
    "html": "Deux ensembles coexistent. Les modules « Conformité RGPD » et « Registre des traitements » portent sur l'organisation du <strong>client</strong>. Les modules « RGPD — CONSEILPREV » et « Transparence IA Act » portent sur <strong>notre propre conformité</strong> : site public et plateforme Sentinel. Ils sont réservés à CONSEILPREV et masqués pour les clients. En cas de contrôle, seuls ces derniers constituent votre dossier."
-  },
-  "Effacement. Le compte est anonymisé, les données du périmètre Entreprise supprimées, les preuves de consentement anonymisées mais conservées à titre de preuve. Les pièces comptables demeurent (art. #.b). Vérifiez l'identité, saisissez l'adresse, confirmez ; l'opération est tracée.Portabilité. L'export produit un fichier structuré, lisible par machine : compte, périmètre, consentements. Vérifiez l'identité, exportez, remettez par un canal sûr. Ce mécanisme répond aussi à l'exigence de portabilité et de changement de fournisseur portée par le Data Act.": {
-   "en": "<strong>Erasure.</strong> The account is anonymised, the Enterprise-scope data deleted, and consent records anonymised but kept as evidence. Accounting documents remain (art. #.b). Verify the identity, enter the address, confirm; the operation is logged.<br><br><strong>Portability.</strong> The export produces a structured, machine-readable file: account, scope, consents. Verify the identity, export, hand over through a secure channel. This mechanism also meets the portability and provider-switching requirement set by the Data Act.",
-   "fr": "Effacement. Le compte est anonymisé, les données du périmètre Entreprise supprimées, les preuves de consentement anonymisées mais conservées à titre de preuve. Les pièces comptables demeurent (art. 17.3.b). Vérifiez l'identité, saisissez l'adresse, confirmez ; l'opération est tracée.Portabilité. L'export produit un fichier structuré, lisible par machine : compte, périmètre, consentements. Vérifiez l'identité, exportez, remettez par un canal sûr. Ce mécanisme répond aussi à l'exigence de portabilité et de changement de fournisseur portée par le Data Act.",
-   "html": "<strong>Effacement.</strong> Le compte est anonymisé, les données du périmètre Entreprise supprimées, les preuves de consentement anonymisées mais conservées à titre de preuve. Les pièces comptables demeurent (art. 17.3.b). Vérifiez l'identité, saisissez l'adresse, confirmez ; l'opération est tracée.<br><br><strong>Portabilité.</strong> L'export produit un fichier structuré, lisible par machine : compte, périmètre, consentements. Vérifiez l'identité, exportez, remettez par un canal sûr. Ce mécanisme répond aussi à l'exigence de portabilité et de changement de fournisseur portée par le Data Act."
-  },
-  "L'archivage fige l'état de conformité à une date : contenu complet, indice et empreinte chaînée sur le rapport précédent.Procédure. Archivez au minimum chaque trimestre, ainsi qu'avant et après toute évolution significative du site. En contrôle, produisez le rapport d'audit complet accompagné de l'historique scellé : c'est la démonstration de votre responsabilité au sens de l'article #.": {
-   "en": "Archiving freezes the compliance status at a given date: full content, index and a hash chained to the previous report.<br><br><strong>Procedure.</strong> Archive at least every quarter, as well as before and after any significant change to the site. In an inspection, produce the full audit report together with the sealed history: it demonstrates your accountability within the meaning of Article #.",
-   "fr": "L'archivage fige l'état de conformité à une date : contenu complet, indice et empreinte chaînée sur le rapport précédent.Procédure. Archivez au minimum chaque trimestre, ainsi qu'avant et après toute évolution significative du site. En contrôle, produisez le rapport d'audit complet accompagné de l'historique scellé : c'est la démonstration de votre responsabilité au sens de l'article 5.2.",
-   "html": "L'archivage fige l'état de conformité à une date : contenu complet, indice et empreinte chaînée sur le rapport précédent.<br><br><strong>Procédure.</strong> Archivez au minimum chaque trimestre, ainsi qu'avant et après toute évolution significative du site. En contrôle, produisez le rapport d'audit complet accompagné de l'historique scellé : c'est la démonstration de votre responsabilité au sens de l'article 5.2."
-  },
-  "L'indice agrège les contrôles conformes, hors éléments non applicables. « Actualiser la conformité » recalcule le taux à partir de l'état réel de la base : preuves, retraits, données échues, AIPD, demandes en cours. La case « Temps réel » relance le calcul toutes les trente secondes tant que la page est affichée. La ligne d'anomalies indique le nombre de non-conformités détectées et les articles concernés. Ne laissez jamais une anomalie persister sans traitement ni justification écrite.": {
-   "en": "The index aggregates the compliant checks, excluding items that are not applicable. “Refresh compliance” recalculates the rate from the actual state of the database: evidence, withdrawals, expired data, DPIAs, pending requests. The “Real time” box reruns the calculation every thirty seconds while the page is displayed. The anomalies line shows the number of non-compliances detected and the articles concerned. <strong>Never let an anomaly persist</strong> without treatment or written justification.",
-   "fr": "L'indice agrège les contrôles conformes, hors éléments non applicables. « Actualiser la conformité » recalcule le taux à partir de l'état réel de la base : preuves, retraits, données échues, AIPD, demandes en cours. La case « Temps réel » relance le calcul toutes les trente secondes tant que la page est affichée. La ligne d'anomalies indique le nombre de non-conformités détectées et les articles concernés. Ne laissez jamais une anomalie persister sans traitement ni justification écrite.",
-   "html": "L'indice agrège les contrôles conformes, hors éléments non applicables. « Actualiser la conformité » recalcule le taux à partir de l'état réel de la base : preuves, retraits, données échues, AIPD, demandes en cours. La case « Temps réel » relance le calcul toutes les trente secondes tant que la page est affichée. La ligne d'anomalies indique le nombre de non-conformités détectées et les articles concernés. <strong>Ne laissez jamais une anomalie persister</strong> sans traitement ni justification écrite."
-  },
-  "Le rapport d'audit complet, à jour et imprimable.L'historique des rapports archivés et scellés.Le registre des activités de traitement, exporté.Le registre des preuves de consentement, exporté.Le journal des purges, prouvant l'application effective des durées.Les analyses d'impact validées.Le registre des demandes de droits, avec les délais respectés.L'attestation de transparence de l'article #, avec le registre des usages d'IA.": {
-   "en": "The full audit report, up to date and printable.<br>The history of archived and sealed reports.<br>The records of processing activities, exported.<br>The consent records, exported.<br>The purge log, proving that retention periods are actually applied.<br>The validated impact assessments.<br>The register of rights requests, with the deadlines met.<br>The Article # transparency attestation, with the register of AI uses.",
-   "fr": "Le rapport d'audit complet, à jour et imprimable.L'historique des rapports archivés et scellés.Le registre des activités de traitement, exporté.Le registre des preuves de consentement, exporté.Le journal des purges, prouvant l'application effective des durées.Les analyses d'impact validées.Le registre des demandes de droits, avec les délais respectés.L'attestation de transparence de l'article 50, avec le registre des usages d'IA.",
-   "html": "Le rapport d'audit complet, à jour et imprimable.<br>L'historique des rapports archivés et scellés.<br>Le registre des activités de traitement, exporté.<br>Le registre des preuves de consentement, exporté.<br>Le journal des purges, prouvant l'application effective des durées.<br>Les analyses d'impact validées.<br>Le registre des demandes de droits, avec les délais respectés.<br>L'attestation de transparence de l'article 50, avec le registre des usages d'IA."
-  },
-  "Le tableau recense destinataires, pays et garantie applicable. Les prestataires hors Union relèvent des clauses contractuelles types ou du cadre de protection applicable.Procédure. Avant d'ajouter un prestataire, vérifiez sa localisation et la garantie invoquée, puis inscrivez-la ici et dans le registre.": {
-   "en": "The table lists recipients, countries and the applicable safeguard. Providers outside the Union rely on standard contractual clauses or the applicable protection framework.<br><br><strong>Procedure.</strong> Before adding a provider, check its location and the safeguard invoked, then record it here and in the records.",
-   "fr": "Le tableau recense destinataires, pays et garantie applicable. Les prestataires hors Union relèvent des clauses contractuelles types ou du cadre de protection applicable.Procédure. Avant d'ajouter un prestataire, vérifiez sa localisation et la garantie invoquée, puis inscrivez-la ici et dans le registre.",
-   "html": "Le tableau recense destinataires, pays et garantie applicable. Les prestataires hors Union relèvent des clauses contractuelles types ou du cadre de protection applicable.<br><br><strong>Procédure.</strong> Avant d'ajouter un prestataire, vérifiez sa localisation et la garantie invoquée, puis inscrivez-la ici et dans le registre."
-  },
-  "Les durées sont désormais appliquées, et non plus seulement déclarées.Procédure. Lancez d'abord « Simuler la purge » : les enregistrements échus s'affichent sans aucune modification ; vérifiez la cohérence des volumes. Lancez ensuite « Exécuter la purge » : les données échues sont anonymisées, l'opération est journalisée et scellée par chaînage d'empreintes.Le journal des purges est votre preuve de suppression : chaque entrée porte l'empreinte de la précédente, rendant toute altération détectable.Automatisation. Une tâche planifiée quotidienne appelle le point d'entrée de purge avec le secret partagé. Sans elle, exécutez la purge manuellement au moins chaque trimestre, avec trace.": {
-   "en": "Retention periods are now <strong>applied</strong>, no longer merely declared.<br><br><strong>Procedure.</strong> First run “Simulate the purge”: the expired records are shown without any change; check that the volumes are consistent. Then run “Run the purge”: expired data are anonymised, and the operation is logged and sealed by hash chaining.<br><br>The purge log is your <strong>evidence of deletion</strong>: each entry carries the hash of the previous one, making any alteration detectable.<br><br><strong>Automation.</strong> A daily scheduled task calls the purge endpoint with the shared secret. Without it, run the purge manually at least every quarter, keeping a record.",
-   "fr": "Les durées sont désormais appliquées, et non plus seulement déclarées.Procédure. Lancez d'abord « Simuler la purge » : les enregistrements échus s'affichent sans aucune modification ; vérifiez la cohérence des volumes. Lancez ensuite « Exécuter la purge » : les données échues sont anonymisées, l'opération est journalisée et scellée par chaînage d'empreintes.Le journal des purges est votre preuve de suppression : chaque entrée porte l'empreinte de la précédente, rendant toute altération détectable.Automatisation. Une tâche planifiée quotidienne appelle le point d'entrée de purge avec le secret partagé. Sans elle, exécutez la purge manuellement au moins chaque trimestre, avec trace.",
-   "html": "Les durées sont désormais <strong>appliquées</strong>, et non plus seulement déclarées.<br><br><strong>Procédure.</strong> Lancez d'abord « Simuler la purge » : les enregistrements échus s'affichent sans aucune modification ; vérifiez la cohérence des volumes. Lancez ensuite « Exécuter la purge » : les données échues sont anonymisées, l'opération est journalisée et scellée par chaînage d'empreintes.<br><br>Le journal des purges est votre <strong>preuve de suppression</strong> : chaque entrée porte l'empreinte de la précédente, rendant toute altération détectable.<br><br><strong>Automatisation.</strong> Une tâche planifiée quotidienne appelle le point d'entrée de purge avec le secret partagé. Sans elle, exécutez la purge manuellement au moins chaque trimestre, avec trace."
-  },
-  "RGPD — CONSEILPREV": {
-   "en": "GDPR — <em>CONSEILPREV</em>",
-   "fr": "RGPD — CONSEILPREV",
-   "html": "RGPD — <em>CONSEILPREV</em>"
-  },
-  "Source unique de CONSEILPREV, stockée en base et éditable ici. Chaque traitement documente finalité, base légale, données, durée et destinataires.Procédure. À chaque évolution du site — nouveau formulaire, nouveau sous-traitant, nouvelle fonctionnalité — ajoutez ou modifiez la ligne le jour même. Exportez en JSON pour vos archives. Un registre non tenu à jour est la première faiblesse relevée en contrôle.": {
-   "en": "CONSEILPREV’s single source, stored in the database and editable here. Each processing activity documents purpose, legal basis, data, retention period and recipients.<br><br><strong>Procedure.</strong> With every change to the site — new form, new processor, new feature — add or edit the row the same day. Export as JSON for your archives. <strong>Records that are not kept up to date are the first weakness found in an inspection.</strong>",
-   "fr": "Source unique de CONSEILPREV, stockée en base et éditable ici. Chaque traitement documente finalité, base légale, données, durée et destinataires.Procédure. À chaque évolution du site — nouveau formulaire, nouveau sous-traitant, nouvelle fonctionnalité — ajoutez ou modifiez la ligne le jour même. Exportez en JSON pour vos archives. Un registre non tenu à jour est la première faiblesse relevée en contrôle.",
-   "html": "Source unique de CONSEILPREV, stockée en base et éditable ici. Chaque traitement documente finalité, base légale, données, durée et destinataires.<br><br><strong>Procédure.</strong> À chaque évolution du site — nouveau formulaire, nouveau sous-traitant, nouvelle fonctionnalité — ajoutez ou modifiez la ligne le jour même. Exportez en JSON pour vos archives. <strong>Un registre non tenu à jour est la première faiblesse relevée en contrôle.</strong>"
-  },
-  "Test de seuil sur neuf critères : à partir de deux critères, l'AIPD est requise.Procédure. Cochez les critères. Si le seuil est atteint, renseignez la description systématique, la nécessité et la proportionnalité, les risques pour les droits et libertés, les mesures prévues, le risque résiduel et l'avis du délégué. Enregistrez en brouillon, puis en version validée une fois l'analyse arrêtée.Point d'attention. Un risque résiduel élevé impose la consultation préalable de l'autorité de contrôle. Vos usages d'IA relèvent du critère d'usage innovant : ils appellent une AIPD.": {
-   "en": "Threshold test on nine criteria: from <strong>two criteria</strong> upwards, a DPIA is required.<br><br><strong>Procedure.</strong> Tick the criteria. If the threshold is reached, fill in the systematic description, necessity and proportionality, the risks to the rights and freedoms, the measures envisaged, the residual risk and the DPO’s opinion. Save as a draft, then as a validated version once the assessment is finalised.<br><br><strong>Point of attention.</strong> A high residual risk requires prior consultation of the supervisory authority. Your uses of AI fall under the innovative-use criterion: they call for a DPIA.",
-   "fr": "Test de seuil sur neuf critères : à partir de deux critères, l'AIPD est requise.Procédure. Cochez les critères. Si le seuil est atteint, renseignez la description systématique, la nécessité et la proportionnalité, les risques pour les droits et libertés, les mesures prévues, le risque résiduel et l'avis du délégué. Enregistrez en brouillon, puis en version validée une fois l'analyse arrêtée.Point d'attention. Un risque résiduel élevé impose la consultation préalable de l'autorité de contrôle. Vos usages d'IA relèvent du critère d'usage innovant : ils appellent une AIPD.",
-   "html": "Test de seuil sur neuf critères : à partir de <strong>deux critères</strong>, l'AIPD est requise.<br><br><strong>Procédure.</strong> Cochez les critères. Si le seuil est atteint, renseignez la description systématique, la nécessité et la proportionnalité, les risques pour les droits et libertés, les mesures prévues, le risque résiduel et l'avis du délégué. Enregistrez en brouillon, puis en version validée une fois l'analyse arrêtée.<br><br><strong>Point d'attention.</strong> Un risque résiduel élevé impose la consultation préalable de l'autorité de contrôle. Vos usages d'IA relèvent du critère d'usage innovant : ils appellent une AIPD."
-  },
-  "Toute demande est enregistrée avec son échéance d'un mois.Procédure. Enregistrez dès réception, en précisant le type. Vérifiez l'identité du demandeur avant toute exécution. Utilisez l'outil adapté : effacement (art. #) ou export structuré (art. #). Marquez enfin la demande comme traitée. Les demandes hors délai sont signalées et pèsent sur l'indice.": {
-   "en": "Every request is recorded with its one-month deadline.<br><br><strong>Procedure.</strong> Record it on receipt, specifying the type. Verify the requester’s identity before any action. Use the appropriate tool: erasure (art. #) or structured export (art. #). Finally, mark the request as handled. Overdue requests are flagged and weigh on the index.",
-   "fr": "Toute demande est enregistrée avec son échéance d'un mois.Procédure. Enregistrez dès réception, en précisant le type. Vérifiez l'identité du demandeur avant toute exécution. Utilisez l'outil adapté : effacement (art. 17) ou export structuré (art. 20). Marquez enfin la demande comme traitée. Les demandes hors délai sont signalées et pèsent sur l'indice.",
-   "html": "Toute demande est enregistrée avec son échéance d'un mois.<br><br><strong>Procédure.</strong> Enregistrez dès réception, en précisant le type. Vérifiez l'identité du demandeur avant toute exécution. Utilisez l'outil adapté : effacement (art. 17) ou export structuré (art. 20). Marquez enfin la demande comme traitée. Les demandes hors délai sont signalées et pèsent sur l'indice."
   }
  },
  "texte": {
-  "# · Analyse d'impact (art. #)": {
-   "en": "# · Impact assessment (art. #)",
-   "fr": "7 · Analyse d'impact (art. 35)"
+  "# bis · Ce que fait la plateforme elle-même": {
+   "en": "# bis · What the platform itself does",
+   "fr": "4 bis · Ce que fait la plateforme elle-même"
   },
-  "# · Demandes d'exercice de droits (art. #)": {
-   "en": "# · Data subject requests (art. #)",
-   "fr": "8 · Demandes d'exercice de droits (art. 12)"
+  "# jour(s)": {
+   "en": "# day(s)",
+   "fr": "62 jour(s)"
   },
-  "# · Effacement (art. #) et portabilité (art. # · Data Act)": {
-   "en": "# · Erasure (art. #) and portability (art. # · Data Act)",
-   "fr": "9 · Effacement (art. 17) et portabilité (art. 20 · Data Act)"
+  "# · Distinguer fournisseur et déployeur": {
+   "en": "# · Distinguishing provider and deployer",
+   "fr": "2 · Distinguer fournisseur et déployeur"
   },
-  "# · Historique d'audit (art. #)": {
-   "en": "# · Audit history (art. #)",
-   "fr": "10 · Historique d'audit (art. 5.2)"
+  "# · Exceptions de l'article #, § #": {
+   "en": "# · Exceptions under Article #(#)",
+   "fr": "5 · Exceptions de l'article 50, § 4"
   },
-  "# · Indice de conformité et actualisation": {
-   "en": "# · Compliance index and refresh",
-   "fr": "2 · Indice de conformité et actualisation"
+  "# · Exploiter le registre des usages": {
+   "en": "# · Using the register of uses",
+   "fr": "7 · Exploiter le registre des usages"
   },
-  "# · Preuves de consentement (art. #)": {
-   "en": "# · Consent records (art. #)",
-   "fr": "3 · Preuves de consentement (art. 7)"
+  "# · Informer dès la première interaction": {
+   "en": "# · Informing from the first interaction",
+   "fr": "3 · Informer dès la première interaction"
   },
-  "# · Périmètres : ne pas confondre": {
-   "en": "# · Scopes: do not confuse them",
-   "fr": "1 · Périmètres : ne pas confondre"
+  "# · Marquer et étiqueter les contenus produits": {
+   "en": "# · Marking and labelling the content produced",
+   "fr": "4 · Marquer et étiqueter les contenus produits"
   },
-  "# · Registre des traitements (art. #)": {
-   "en": "# · Records of processing (art. #)",
-   "fr": "4 · Registre des traitements (art. 30)"
+  "# · Quatre critères de la détection": {
+   "en": "# · Four detection criteria",
+   "fr": "6 · Quatre critères de la détection"
   },
-  "# · Rythme d'exploitation recommandé": {
-   "en": "# · Recommended operating rhythm",
-   "fr": "11 · Rythme d'exploitation recommandé"
+  "# · Que produire en cas de contrôle": {
+   "en": "# · What to produce in an inspection",
+   "fr": "8 · Que produire en cas de contrôle"
   },
-  "# · Rétention et purge (art. #.e)": {
-   "en": "# · Retention and purge (art. #.e)",
-   "fr": "6 · Rétention et purge (art. 5.1.e)"
+  "# · Échéances à retenir": {
+   "en": "# · Key deadlines",
+   "fr": "1 · Échéances à retenir"
   },
-  "# · Transferts hors UE (chapitre V)": {
-   "en": "# · Transfers outside the EU (Chapter V)",
-   "fr": "5 · Transferts hors UE (chapitre V)"
+  "+ # (modalités)": {
+   "en": "+ # (arrangements)",
+   "fr": "+ 50.5 (modalités)"
   },
-  "Administration · Conformité": {
-   "en": "Administration · Compliance",
-   "fr": "Administration · Conformité"
+  "A examiner page par page : voir le troisieme niveau ci-dessous, notamment le droit de la consommation.": {
+   "en": "To be examined page by page: see the third level below, consumer law in particular.",
+   "fr": "A examiner page par page : voir le troisieme niveau ci-dessous, notamment le droit de la consommation."
+  },
+  "Actualites du site (redaction assistee par IA)": {
+   "en": "Site news (AI-assisted writing)",
+   "fr": "Actualites du site (redaction assistee par IA)"
+  },
+  "Administration · IA Act": {
+   "en": "Administration · AI Act",
+   "fr": "Administration · IA Act"
+  },
+  "Ajouter": {
+   "en": "Add",
+   "fr": "Ajouter"
   },
   "Ajouter un traitement au registre (art. #)": {
    "en": "Add a processing activity to the records (art. #)",
    "fr": "Ajouter un traitement au registre (art. 30)"
   },
-  "Analyse d'impact relative à la protection des données (art. #)": {
-   "en": "Data protection impact assessment (art. #)",
-   "fr": "Analyse d'impact relative à la protection des données (art. 35)"
+  "Analyses generees par IA dans les modules Sentinel": {
+   "en": "AI-generated analyses in the Sentinel modules",
+   "fr": "Analyses generees par IA dans les modules Sentinel"
   },
-  "Anonymise le compte, supprime les données liées ; les preuves de consentement sont anonymisées et conservées à titre de preuve ; les pièces comptables demeurent (art. #.b).": {
-   "en": "Anonymises the account and deletes the linked data; consent records are anonymised and kept as evidence; accounting documents remain (art. #.b).",
-   "fr": "Anonymise le compte, supprime les données liées ; les preuves de consentement sont anonymisées et conservées à titre de preuve ; les pièces comptables demeurent (art. 17.3.b)."
+  "Applique : aucun hypertrucage produit ; les actualites du site invoquent l'exception de controle editorial, publiee et nominative.": {
+   "en": "Applied: no deepfake produced; the site news invokes the editorial control exception, published and named.",
+   "fr": "Applique : aucun hypertrucage produit ; les actualites du site invoquent l'exception de controle editorial, publiee et nominative."
   },
-  "Archiver fige l'état de conformité à une date : contenu complet, indice et empreinte chaînée sur le rapport précédent. Toute altération devient détectable, ce qui confère au dossier sa valeur probante.": {
-   "en": "Archiving freezes the compliance status at a given date: full content, index and a hash chained to the previous report. Any alteration becomes detectable, which gives the file its evidential value.",
-   "fr": "Archiver fige l'état de conformité à une date : contenu complet, indice et empreinte chaînée sur le rapport précédent. Toute altération devient détectable, ce qui confère au dossier sa valeur probante."
+  "Applique : les assistants du site public et le Copilote Sentinel affichent la mention des la premiere interaction.": {
+   "en": "Applied: the public site assistants and the Sentinel Copilot display the notice from the first interaction.",
+   "fr": "Applique : les assistants du site public et le Copilote Sentinel affichent la mention des la premiere interaction."
   },
-  "Archiver le rapport actuel": {
-   "en": "Archive the current report",
-   "fr": "Archiver le rapport actuel"
+  "Applique : mentions affichees des l'ouverture de l'assistant, et non reportees dans une page de conditions.": {
+   "en": "Applied: notices displayed as soon as the assistant opens, and not relegated to a terms page.",
+   "fr": "Applique : mentions affichees des l'ouverture de l'assistant, et non reportees dans une page de conditions."
   },
-  "Automatisation : tâche planifiée quotidienne appelant /api/cron/rgpd-purge avec le secret CRON_SECRET.": {
-   "en": "Automation: a daily scheduled task calling /api/cron/rgpd-purge with the CRON_SECRET secret.",
-   "fr": "Automatisation : tâche planifiée quotidienne appelant /api/cron/rgpd-purge avec le secret CRON_SECRET."
+  "Applique : proprietes de fichier (ai-generated, reference au #) inserees dans chaque document exporte, et relues a chaque verification.": {
+   "en": "Applied: file properties (ai-generated, reference to #) inserted in every exported document, and re-read at each check.",
+   "fr": "Applique : proprietes de fichier (ai-generated, reference au 50.2) inserees dans chaque document exporte, et relues a chaque verification."
+  },
+  "Art. #": {
+   "en": "Art. #",
+   "fr": "Art. 50.1"
+  },
+  "Article ou publication d'actualite generee par IA pour informer le public": {
+   "en": "An AI-generated news article or publication informing the public",
+   "fr": "Article ou publication d'actualite generee par IA pour informer le public"
+  },
+  "Assistants conversationnels du site public (#)": {
+   "en": "Public site conversational assistants (#)",
+   "fr": "Assistants conversationnels du site public (2)"
+  },
+  "Assistants du site public et Copilote Sentinel : mention des la premiere interaction, mesuree sur les pages reellement servies.": {
+   "en": "Public-site assistants and the Sentinel Copilot: a notice from the very first interaction, measured on the pages actually served.",
+   "fr": "Assistants du site public et Copilote Sentinel : mention des la premiere interaction, mesuree sur les pages reellement servies."
+  },
+  "Attestation de transparence": {
+   "en": "Transparency attestation",
+   "fr": "Attestation de transparence"
+  },
+  "Aucune": {
+   "en": "None",
+   "fr": "Aucune"
+  },
+  "Aucune mention visible : le §# est un marquage technique, pas un etiquetage a l'ecran.": {
+   "en": "No visible notice: § # is a technical marking, not an on-screen label.",
+   "fr": "Aucune mention visible : le §2 est un marquage technique, pas un etiquetage a l'ecran."
+  },
+  "Aucune production de ce type a ce jour. Si elle survenait, elle releverait du §# et non d'un simple bandeau interne.": {
+   "en": "No output of this kind to date. Were there any, it would fall under §# and not under a mere internal banner.",
+   "fr": "Aucune production de ce type a ce jour. Si elle survenait, elle releverait du §4 et non d'un simple bandeau interne."
+  },
+  "Aucune.": {
+   "en": "None.",
+   "fr": "Aucune."
+  },
+  "Avant le # août #": {
+   "en": "Before # August #",
+   "fr": "Avant le 2 août 2026"
+  },
+  "Avant le #/#/#": {
+   "en": "Before #/#/#",
+   "fr": "Avant le 02/12/2026"
   },
   "Avis du délégué à la protection des données": {
    "en": "Data protection officer’s opinion",
    "fr": "Avis du délégué à la protection des données"
   },
-  "Chaque acceptation, personnalisation, refus ou retrait est horodaté (bannière, formulaires, inscriptions). Adresse IP hachée et agent utilisateur tronqué (minimisation, art. #).": {
-   "en": "Every acceptance, customisation, refusal or withdrawal is timestamped (banner, forms, sign-ups). IP address hashed and user agent truncated (minimisation, art. #).",
-   "fr": "Chaque acceptation, personnalisation, refus ou retrait est horodaté (bannière, formulaires, inscriptions). Adresse IP hachée et agent utilisateur tronqué (minimisation, art. 5)."
+  "Bandeau \"AI GENERATED\" sur la reponse — EN PLACE": {
+   "en": "“AI GENERATED” banner on the response — IN PLACE",
+   "fr": "Bandeau \"AI GENERATED\" sur la reponse — EN PLACE"
   },
-  "Contrôles automatiques et déclaratifs, hors éléments non applicables.": {
-   "en": "Automatic and declarative checks, excluding items that are not applicable.",
-   "fr": "Contrôles automatiques et déclaratifs, hors éléments non applicables."
+  "Bandeau \"AI GENERATED\" sur la sortie — EN PLACE": {
+   "en": "“AI GENERATED” banner on the output — IN PLACE",
+   "fr": "Bandeau \"AI GENERATED\" sur la sortie — EN PLACE"
   },
-  "Critères du traitement": {
-   "en": "Processing criteria",
-   "fr": "Critères du traitement"
+  "Bandeau « AI GENERATED » sur la synthese de l'explorateur": {
+   "en": "“AI GENERATED” banner on the explorer summary",
+   "fr": "Bandeau « AI GENERATED » sur la synthese de l'explorateur"
   },
-  "Demandes d'exercice de droits (art. #)": {
-   "en": "Data subject requests (art. #)",
-   "fr": "Demandes d'exercice de droits (art. 12)"
+  "Ce que l'article # impose — et à qui": {
+   "en": "What Article # requires — and of whom",
+   "fr": "Ce que l'article 50 impose — et à qui"
+  },
+  "Chaque ligne n'invoque que les paragraphes qui obligent son role": {
+   "en": "Each row invokes only the paragraphs that bind its role",
+   "fr": "Chaque ligne n'invoque que les paragraphes qui obligent son role"
+  },
+  "Chatbot ou assistant conversationnel": {
+   "en": "A chatbot or conversational assistant",
+   "fr": "Chatbot ou assistant conversationnel"
+  },
+  "Chez nous": {
+   "en": "At our firm",
+   "fr": "Chez nous"
+  },
+  "Christophe CERF": {
+   "en": "Christophe CERF",
+   "fr": "Christophe CERF"
+  },
+  "Conforme": {
+   "en": "Compliant",
+   "fr": "Conforme"
+  },
+  "Contenu": {
+   "en": "Content",
+   "fr": "Contenu"
+  },
+  "Contrat et bonne foi": {
+   "en": "Contract and good faith",
+   "fr": "Contrat et bonne foi"
+  },
+  "Controle editorial humain (art. # par. #) : examen humain systematique avant publication ; responsabilite editoriale assumee nommement": {
+   "en": "Human editorial control (art. # para. #): systematic human review before publication; editorial responsibility assumed by name",
+   "fr": "Controle editorial humain (art. 50 par. 4) : examen humain systematique avant publication ; responsabilite editoriale assumee nommement"
+  },
+  "Copilote Sentinel (assistant de la plateforme)": {
+   "en": "Sentinel Copilot (platform assistant)",
+   "fr": "Copilote Sentinel (assistant de la plateforme)"
   },
   "Description systématique du traitement": {
    "en": "Systematic description of the processing",
    "fr": "Description systématique du traitement"
   },
-  "Destinataires": {
-   "en": "Recipients",
-   "fr": "Destinataires"
+  "Documents (texte et indicateurs)": {
+   "en": "Documents (text and indicators)",
+   "fr": "Documents (texte et indicateurs)"
   },
-  "Droit à l'effacement (art. #)": {
-   "en": "Right to erasure (art. #)",
-   "fr": "Droit à l'effacement (art. 17)"
+  "Donnees personnelles (RGPD)": {
+   "en": "Personal data (GDPR)",
+   "fr": "Donnees personnelles (RGPD)"
   },
-  "Durée": {
-   "en": "Retention",
-   "fr": "Durée"
+  "Droit de la consommation": {
+   "en": "Consumer law",
+   "fr": "Droit de la consommation"
   },
-  "Durées de conservation appliquées, non plus seulement déclarées. La purge anonymise les données échues et journalise l'opération, scellée par chaînage d'empreintes : c'est votre preuve de suppression en cas de contrôle.": {
-   "en": "Retention periods applied, no longer merely declared. The purge anonymises expired data and logs the operation, sealed by hash chaining: this is your evidence of deletion in the event of an inspection.",
-   "fr": "Durées de conservation appliquées, non plus seulement déclarées. La purge anonymise les données échues et journalise l'opération, scellée par chaînage d'empreintes : c'est votre preuve de suppression en cas de contrôle."
+  "Dû": {
+   "en": "Due",
+   "fr": "Dû"
   },
-  "Effacer": {
-   "en": "Erase",
-   "fr": "Effacer"
+  "En cas de decision automatisee ou de profilage, des exigences specifiques s'ajoutent.": {
+   "en": "Where there is automated decision-making or profiling, specific requirements are added.",
+   "fr": "En cas de decision automatisee ou de profilage, des exigences specifiques s'ajoutent."
   },
-  "Enregistrer": {
-   "en": "Save",
-   "fr": "Enregistrer"
+  "Exception": {
+   "en": "Exception",
+   "fr": "Exception"
   },
-  "Enregistrer l'AIPD": {
-   "en": "Save the DPIA",
-   "fr": "Enregistrer l'AIPD"
-  },
-  "Erreur.": {
-   "en": "Error.",
-   "fr": "Erreur."
-  },
-  "Export structuré des données d'une personne (compte, périmètre Entreprise, consentements), à lui remettre sur demande dans un format lisible par machine.": {
-   "en": "Structured export of a person’s data (account, Enterprise scope, consents), to be handed to them on request in a machine-readable format.",
-   "fr": "Export structuré des données d'une personne (compte, périmètre Entreprise, consentements), à lui remettre sur demande dans un format lisible par machine."
-  },
-  "Exporter": {
-   "en": "Export",
-   "fr": "Exporter"
-  },
-  "Exporter JSON": {
-   "en": "Export JSON",
-   "fr": "Exporter JSON"
+  "Exemple : faux avis, faux temoignage, personnage artificiel presente comme reel.": {
+   "en": "For example: a fake review, a fake testimonial, an artificial character presented as real.",
+   "fr": "Exemple : faux avis, faux temoignage, personnage artificiel presente comme reel."
   },
   "Exporter le registre affiché au format CSV": {
    "en": "Export the displayed records as CSV",
    "fr": "Exporter le registre affiché au format CSV"
-  },
-  "Exécuter la purge": {
-   "en": "Run the purge",
-   "fr": "Exécuter la purge"
   },
   "Exécuter la purge : anonymisation des données échues, journalisée et scellée": {
    "en": "Run the purge: anonymisation of expired data, logged and sealed",
@@ -230,61 +252,249 @@
    "en": "Freeze and seal the current compliance status",
    "fr": "Figer et sceller l'état de conformité actuel"
   },
-  "Finalité": {
-   "en": "Purpose",
-   "fr": "Finalité"
+  "Fonction d'assistance a l'edition standard, ou absence de modification substantielle des donnees d'entree.": {
+   "en": "Assistive function for standard editing, or no substantial modification of the input data.",
+   "fr": "Fonction d'assistance a l'edition standard, ou absence de modification substantielle des donnees d'entree."
   },
-  "Finalité, base légale, données, durée de conservation et destinataires, pour chaque traitement du site et de la plateforme.": {
-   "en": "Purpose, legal basis, data, retention period and recipients, for each processing activity of the site and the platform.",
-   "fr": "Finalité, base légale, données, durée de conservation et destinataires, pour chaque traitement du site et de la plateforme."
+  "Guide d'exploitation — article #": {
+   "en": "Operating guide — Article #",
+   "fr": "Guide d'exploitation — article 50"
   },
-  "Guide d'exploitation": {
-   "en": "Operating guide",
-   "fr": "Guide d'exploitation"
-  },
-  "Guide opérationnel complet. Rappel : outillage technique et documentaire ; les qualifications juridiques, durées, bases légales et exceptions doivent être validées par un conseil compétent.": {
-   "en": "Complete operational guide. Reminder: technical and documentary tooling; legal qualifications, retention periods, legal bases and exceptions must be validated by competent counsel.",
-   "fr": "Guide opérationnel complet. Rappel : outillage technique et documentaire ; les qualifications juridiques, durées, bases légales et exceptions doivent être validées par un conseil compétent."
+  "Guide opérationnel complet. Rappel : outillage technique ; la qualification de fournisseur ou de déployeur et les exceptions invoquées doivent être validées par un conseil compétent.": {
+   "en": "Complete operational guide. Reminder: technical tooling; the qualification as provider or deployer and the exceptions invoked must be validated by competent counsel.",
+   "fr": "Guide opérationnel complet. Rappel : outillage technique ; la qualification de fournisseur ou de déployeur et les exceptions invoquées doivent être validées par un conseil compétent."
   },
   "Générer le rapport d'audit complet, imprimable / PDF, pour une demande externe": {
    "en": "Generate the full audit report, printable / PDF, for an external request",
    "fr": "Générer le rapport d'audit complet, imprimable / PDF, pour une demande externe"
   },
-  "Historique des rapports d'audit (art. # · responsabilité)": {
-   "en": "Audit report history (art. # · accountability)",
-   "fr": "Historique des rapports d'audit (art. 5.2 · responsabilité)"
+  "Informer l'utilisateur qu'il interagit avec une IA, sauf si c'est evident.": {
+   "en": "Inform the user that they are interacting with an AI, unless this is obvious.",
+   "fr": "Informer l'utilisateur qu'il interagit avec une IA, sauf si c'est evident."
   },
-  "Indice de conformité": {
-   "en": "Compliance index",
-   "fr": "Indice de conformité"
+  "L'AI Act ne s'applique pas toujours, mais d'autres regles peuvent imposer une information loyale.": {
+   "en": "The AI Act does not always apply, but other rules may require fair disclosure.",
+   "fr": "L'AI Act ne s'applique pas toujours, mais d'autres regles peuvent imposer une information loyale."
   },
-  "Journal des purges (preuve scellée)": {
-   "en": "Purge log (sealed evidence)",
-   "fr": "Journal des purges (preuve scellée)"
+  "L'article # cree une transparence ciblee. Il n'impose pas d'etiqueter tous les contenus « generes par IA » : chaque paragraphe vise une situation precise et un destinataire precis. Ce que la maison fait au-dela est un engagement, pas une obligation — et le dire est ce qui donne sa valeur au marquage la ou il est du.": {
+   "en": "Article # creates targeted transparency. It does not require labelling all “AI-generated” content: each paragraph targets a specific situation and a specific recipient. What the firm does beyond that is a commitment, not an obligation — and saying so is what gives the marking its value where it is due.",
+   "fr": "L'article 50 cree une transparence ciblee. Il n'impose pas d'etiqueter tous les contenus « generes par IA » : chaque paragraphe vise une situation precise et un destinataire precis. Ce que la maison fait au-dela est un engagement, pas une obligation — et le dire est ce qui donne sa valeur au marquage la ou il est du."
+  },
+  "L'article # ne cree pas d'obligation generale de signaler tous les usages internes de l'IA.": {
+   "en": "Article # creates no general duty to disclose every internal use of AI.",
+   "fr": "L'article 50 ne cree pas d'obligation generale de signaler tous les usages internes de l'IA."
+  },
+  "L'article # ne l'impose pas, en l'absence d'hypertrucage ou de texte d'interet public. Le contrat, la bonne foi ou une charte client, eux, peuvent l'exiger.": {
+   "en": "Article # does not require it, absent a deepfake or a text of public interest. The contract, good faith or a client charter may well do so.",
+   "fr": "L'article 50 ne l'impose pas, en l'absence d'hypertrucage ou de texte d'interet public. Le contrat, la bonne foi ou une charte client, eux, peuvent l'exiger."
+  },
+  "L'information doit etre claire, distincte et fournie au plus tard lors de la premiere interaction ou exposition.": {
+   "en": "The information must be clear, distinguishable and provided at the latest at the time of the first interaction or exposure.",
+   "fr": "L'information doit etre claire, distincte et fournie au plus tard lors de la premiere interaction ou exposition."
+  },
+  "La bonne foi contractuelle peut justifier une transparence sur l'usage d'une IA dans certaines prestations.": {
+   "en": "Contractual good faith may warrant disclosing the use of an AI in certain engagements.",
+   "fr": "La bonne foi contractuelle peut justifier une transparence sur l'usage d'une IA dans certaines prestations."
+  },
+  "La transparence peut etre adaptee pour ne pas nuire a l'experience de l'oeuvre.": {
+   "en": "Transparency may be adapted so as not to spoil the experience of the work.",
+   "fr": "La transparence peut etre adaptee pour ne pas nuire a l'experience de l'oeuvre."
+  },
+  "La transparence porte alors sur le TRAITEMENT des donnees, pas seulement sur le contenu genere.": {
+   "en": "Transparency then bears on the PROCESSING of the data, not only on the generated content.",
+   "fr": "La transparence porte alors sur le TRAITEMENT des donnees, pas seulement sur le contenu genere."
+  },
+  "Le cadre de l'article # est complet et coherent (# §, # cas, # niveaux)": {
+   "en": "The Article # framework is complete and consistent (# §, # cases, # levels)",
+   "fr": "Le cadre de l'article 50 est complet et coherent (5 §, 7 cas, 3 niveaux)"
+  },
+  "Le contrat peut imposer d'informer le client de l'usage d'une IA.": {
+   "en": "The contract may require the client to be told that an AI is used.",
+   "fr": "Le contrat peut imposer d'informer le client de l'usage d'une IA."
+  },
+  "Le professionnel doit delivrer une information loyale.": {
+   "en": "The trader owes fair disclosure.",
+   "fr": "Le professionnel doit delivrer une information loyale."
+  },
+  "Les hypertrucages (deepfakes) doivent etre signales comme artificiellement generes ou manipules. Les textes publies pour informer le public sur des questions d'interet public doivent l'etre aussi lorsqu'ils sont generes ou manipules par IA.": {
+   "en": "Deepfakes must be disclosed as artificially generated or manipulated. Texts published to inform the public on matters of public interest must also be disclosed when they are generated or manipulated by AI.",
+   "fr": "Les hypertrucages (deepfakes) doivent etre signales comme artificiellement generes ou manipules. Les textes publies pour informer le public sur des questions d'interet public doivent l'etre aussi lorsqu'ils sont generes ou manipules par IA."
+  },
+  "Les livrables portent une mention visible et un marquage machine : c'est un ENGAGEMENT de la maison, et il est desormais ecrit comme tel dans les proprietes du fichier — non plus « au titre de l'article # ».": {
+   "en": "Deliverables carry a visible notice and a machine-readable marking: this is a COMMITMENT of the firm, and it is now written as such in the file properties — no longer « under article # ».",
+   "fr": "Les livrables portent une mention visible et un marquage machine : c'est un ENGAGEMENT de la maison, et il est desormais ecrit comme tel dans les proprietes du fichier — non plus « au titre de l'article 50 »."
+  },
+  "Les mentions d'IA, le bandeau « AI GENERATED » et le marquage des documents sont mesurés sur les fichiers servis et sur un document généré à l'instant — jamais déclarés. Ce qui n'est pas mesurable par une machine (l'examen humain de l'art. #) est rendu comme attestation, pas converti en vert.": {
+   "en": "AI notices, the “AI GENERATED” banner and document marking are measured on the files served and on a document generated on the spot — never declared. What a machine cannot measure (the human review of art. #) is shown as an attestation, not turned green.",
+   "fr": "Les mentions d'IA, le bandeau « AI GENERATED » et le marquage des documents sont mesurés sur les fichiers servis et sur un document généré à l'instant — jamais déclarés. Ce qui n'est pas mesurable par une machine (l'examen humain de l'art. 50.4) est rendu comme attestation, pas converti en vert."
+  },
+  "Les personnes doivent etre informees qu'elles interagissent avec un systeme d'IA.": {
+   "en": "People must be informed that they are interacting with an AI system.",
+   "fr": "Les personnes doivent etre informees qu'elles interagissent avec un systeme d'IA."
+  },
+  "Les personnes exposees a un systeme de reconnaissance des emotions ou de categorisation biometrique doivent en etre informees.": {
+   "en": "People exposed to an emotion recognition or biometric categorisation system must be informed of it.",
+   "fr": "Les personnes exposees a un systeme de reconnaissance des emotions ou de categorisation biometrique doivent en etre informees."
+  },
+  "Les politiques fournisseurs et chartes client peuvent l'exiger.": {
+   "en": "Supplier policies and client charters may require it.",
+   "fr": "Les politiques fournisseurs et chartes client peuvent l'exiger."
+  },
+  "Les supports internes ne portent pas de marquage au titre du §# ; ils peuvent en porter un par choix de gouvernance.": {
+   "en": "Internal material carries no marking under §#; it may carry one as a governance choice.",
+   "fr": "Les supports internes ne portent pas de marquage au titre du §50 ; ils peuvent en porter un par choix de gouvernance."
+  },
+  "Les systemes generant du texte, de l'image, de l'audio ou de la video synthetiques doivent permettre un marquage DETECTABLE PAR UNE MACHINE du contenu genere ou manipule.": {
+   "en": "Systems generating synthetic text, image, audio or video must enable MACHINE-DETECTABLE marking of the generated or manipulated content.",
+   "fr": "Les systemes generant du texte, de l'image, de l'audio ou de la video synthetiques doivent permettre un marquage DETECTABLE PAR UNE MACHINE du contenu genere ou manipule."
+  },
+  "Marquage": {
+   "en": "Marking",
+   "fr": "Marquage"
+  },
+  "Marquage lisible par machine dans les documents exportes": {
+   "en": "Machine-readable marking in exported documents",
+   "fr": "Marquage lisible par machine dans les documents exportes"
+  },
+  "Mention \"AI GENERATED\" / \"AI ASSISTED\" apposee sur le document — EN PLACE": {
+   "en": "“AI GENERATED” / “AI ASSISTED” notice affixed to the document — IN PLACE",
+   "fr": "Mention \"AI GENERATED\" / \"AI ASSISTED\" apposee sur le document — EN PLACE"
+  },
+  "Mention d'IA affichee des la premiere interaction (art. #) — EN PLACE": {
+   "en": "AI notice displayed from the first interaction (art. #) — IN PLACE",
+   "fr": "Mention d'IA affichee des la premiere interaction (art. 50.1) — EN PLACE"
+  },
+  "Mention d'IA des la premiere interaction — assistant Sentinel": {
+   "en": "AI notice from the first interaction — Sentinel assistant",
+   "fr": "Mention d'IA des la premiere interaction — assistant Sentinel"
+  },
+  "Mention d'IA des la premiere interaction — chat du site public": {
+   "en": "AI notice from the first interaction — public site chat",
+   "fr": "Mention d'IA des la premiere interaction — chat du site public"
+  },
+  "Mention visible ; metadonnees lisibles par machine a l'export": {
+   "en": "Visible notice; machine-readable metadata on export",
+   "fr": "Mention visible ; metadonnees lisibles par machine a l'export"
+  },
+  "Mention visible apposee sur la sortie ; metadonnees dans les documents exportes": {
+   "en": "Visible notice affixed to the output; metadata in exported documents",
+   "fr": "Mention visible apposee sur la sortie ; metadonnees dans les documents exportes"
+  },
+  "Mesure en cours…": {
+   "en": "Measurement in progress…",
+   "fr": "Mesure en cours…"
   },
   "Mesures prévues pour traiter les risques": {
    "en": "Measures envisaged to address the risks",
    "fr": "Mesures prévues pour traiter les risques"
   },
-  "Mécanismes de transfert des données (chapitre V)": {
-   "en": "Data transfer mechanisms (Chapter V)",
-   "fr": "Mécanismes de transfert des données (chapitre V)"
+  "Mesuré": {
+   "en": "Measured",
+   "fr": "Mesuré"
+  },
+  "Mesuré le #-#-# #:#:# UTC — les fichiers servis sont relus à chaque mesure ; la case « Conforme » reste une attestation humaine.": {
+   "en": "Measured on #-#-# #:#:# UTC — the files served are re-read at each measurement; the “Compliant” box remains a human attestation.",
+   "fr": "Mesuré le 2026-10-01 15:26:07 UTC — les fichiers servis sont relus à chaque mesure ; la case « Conforme » reste une attestation humaine."
+  },
+  "Metadonnees lisibles par machine (ai-generated, ai-disclosure) inserees dans le document — EN PLACE": {
+   "en": "Machine-readable metadata (ai-generated, ai-disclosure) inserted in the document — IN PLACE",
+   "fr": "Metadonnees lisibles par machine (ai-generated, ai-disclosure) inserees dans le document — EN PLACE"
+  },
+  "Modalités": {
+   "en": "Arrangements",
+   "fr": "Modalités"
+  },
+  "Motif": {
+   "en": "Reason",
+   "fr": "Motif"
+  },
+  "Même si l'AI Act ne s'applique pas, d'autres obligations peuvent jouer": {
+   "en": "Even if the AI Act does not apply, other obligations may come into play",
+   "fr": "Même si l'AI Act ne s'applique pas, d'autres obligations peuvent jouer"
+  },
+  "NON en principe": {
+   "en": "NO in principle",
+   "fr": "NON en principe"
+  },
+  "Ne concerne aucun contenu genere : c'est l'exposition au systeme qui declenche l'information.": {
+   "en": "Does not concern any generated content: it is exposure to the system that triggers the information.",
+   "fr": "Ne concerne aucun contenu genere : c'est l'exposition au systeme qui declenche l'information."
+  },
+  "Ne cree aucune obligation nouvelle : il regit la forme de celles des §# a §# qui jouent deja.": {
+   "en": "Creates no new obligation: it governs the form of those in § # to § # that already apply.",
+   "fr": "Ne cree aucune obligation nouvelle : il regit la forme de celles des §1 a §4 qui jouent deja."
+  },
+  "Ni les contenus internes, ni les livrables remis a un client : la publication au public, et son objet, sont la condition.": {
+   "en": "Neither internal content nor deliverables handed to a client: publication to the public, and its subject, are the condition.",
+   "fr": "Ni les contenus internes, ni les livrables remis a un client : la publication au public, et son objet, sont la condition."
+  },
+  "Non requis : contenu NON genere par IA (reprise sans reformulation ; la selection par mots-cles ne constitue pas une generation)": {
+   "en": "Not required: content NOT generated by AI (taken over without rewording; selection by keywords does not constitute generation)",
+   "fr": "Non requis : contenu NON genere par IA (reprise sans reformulation ; la selection par mots-cles ne constitue pas une generation)"
+  },
+  "Non requis : exception invoquee — mention de transparence et de responsabilite editoriale publiee sur la page Actualites — EN PLACE": {
+   "en": "Not required: exception invoked — transparency and editorial responsibility notice published on the News page — IN PLACE",
+   "fr": "Non requis : exception invoquee — mention de transparence et de responsabilite editoriale publiee sur la page Actualites — EN PLACE"
   },
   "Note (facultatif)": {
    "en": "Note (optional)",
    "fr": "Note (facultatif)"
   },
-  "Portabilité (art. # · Data Act)": {
-   "en": "Portability (art. # · Data Act)",
-   "fr": "Portabilité (art. 20 · Data Act)"
+  "OUI": {
+   "en": "YES",
+   "fr": "OUI"
   },
-  "Périmètre : notre propre conformité": {
-   "en": "Scope: our own compliance",
-   "fr": "Périmètre : notre propre conformité"
+  "OUI, mais allégé": {
+   "en": "YES, but lighter",
+   "fr": "OUI, mais allégé"
   },
-  "Rapport d'audit complet": {
-   "en": "Full audit report",
-   "fr": "Rapport d'audit complet"
+  "Obligation du deployeur": {
+   "en": "Deployer obligation",
+   "fr": "Obligation du deployeur"
+  },
+  "Obligation du fournisseur": {
+   "en": "Provider obligation",
+   "fr": "Obligation du fournisseur"
+  },
+  "Oeuvre manifestement artistique, creative, satirique ou de fiction : transparence allegee, sans nuire a l'oeuvre. Pour les textes : examen humain ou controle editorial avec une responsabilite editoriale assumee.": {
+   "en": "Evidently artistic, creative, satirical or fictional work: lighter transparency, without hampering the work. For texts: human review or editorial control with editorial responsibility assumed.",
+   "fr": "Oeuvre manifestement artistique, creative, satirique ou de fiction : transparence allegee, sans nuire a l'oeuvre. Pour les textes : examen humain ou controle editorial avec une responsabilite editoriale assumee."
+  },
+  "Oeuvre satirique, fiction, creation artistique": {
+   "en": "A satirical work, fiction, artistic creation",
+   "fr": "Oeuvre satirique, fiction, creation artistique"
+  },
+  "Page Actualites : exception de controle editorial invoquee, avec une responsabilite editoriale publiee et nominative — l'exception ne vaut que documentee.": {
+   "en": "News page: the editorial-control exception is invoked, with an editorial responsibility that is published and named — the exception holds only when documented.",
+   "fr": "Page Actualites : exception de controle editorial invoquee, avec une responsabilite editoriale publiee et nominative — l'exception ne vaut que documentee."
+  },
+  "Paragraphe": {
+   "en": "Paragraph",
+   "fr": "Paragraphe"
+  },
+  "Point clé —": {
+   "en": "Key point —",
+   "fr": "Point clé —"
+  },
+  "Presentation interne (support de reunion, note de travail)": {
+   "en": "An internal presentation (meeting deck, working note)",
+   "fr": "Presentation interne (support de reunion, note de travail)"
+  },
+  "Prestataire qui redige un livrable client avec l'aide d'une IA": {
+   "en": "A provider drafting a client deliverable with the help of an AI",
+   "fr": "Prestataire qui redige un livrable client avec l'aide d'une IA"
+  },
+  "Préparation": {
+   "en": "Readiness",
+   "fr": "Préparation"
+  },
+  "Quand l'obligation s'applique-t-elle ? — sept situations": {
+   "en": "When does the obligation apply? — seven situations",
+   "fr": "Quand l'obligation s'applique-t-elle ? — sept situations"
+  },
+  "Rapports generes par Sentinel (IA Act annuel, audit RGPD, attestation art. #)": {
+   "en": "Reports generated by Sentinel (annual AI Act, GDPR audit, art. # attestation)",
+   "fr": "Rapports generes par Sentinel (IA Act annuel, audit RGPD, attestation art. 50)"
   },
   "Recalcule automatiquement le taux toutes les # secondes tant que cette page est ouverte": {
    "en": "Automatically recalculates the rate every # seconds while this page is open",
@@ -294,21 +504,9 @@
    "en": "Recalculate the GDPR compliance rate immediately from the actual state of the site (evidence, records, checks)",
    "fr": "Recalculer immédiatement le taux de conformité RGPD à partir de l'état réel du site (preuves, registre, contrôles)"
   },
-  "Rechercher": {
-   "en": "Search",
-   "fr": "Rechercher"
-  },
   "Rechercher une adresse…": {
    "en": "Search for an address…",
    "fr": "Rechercher une adresse…"
-  },
-  "Registre des activités de traitement (art. #)": {
-   "en": "Records of processing activities (art. #)",
-   "fr": "Registre des activités de traitement (art. 30)"
-  },
-  "Registre des preuves de consentement (art. #)": {
-   "en": "Consent records register (art. #)",
-   "fr": "Registre des preuves de consentement (art. 7)"
   },
   "Registre des usages d'IA (art. #)": {
    "en": "Register of AI uses (art. #)",
@@ -318,69 +516,237 @@
    "en": "Evidential register of CONSEILPREV’s uses of artificial intelligence: role, nature of the content, machine-readable marking, visible labelling, exceptions invoked and editorial owner. The transparency obligations of Article # apply from # August #. Technical tooling, to be validated by your legal counsel.",
    "fr": "Registre probant des usages d'intelligence artificielle de CONSEILPREV : rôle, nature des contenus, marquage lisible par machine, étiquetage visible, exceptions invoquées et responsable éditorial. Les obligations de transparence de l'article 50 entrent en application le 2 août 2026. Outillage technique, à valider par votre conseil juridique."
   },
-  "Rétention et suppression automatique (art. #.e · Data Act)": {
-   "en": "Automatic retention and deletion (art. #.e · Data Act)",
-   "fr": "Rétention et suppression automatique (art. 5.1.e · Data Act)"
+  "Responsabilite editoriale publiee (exception art. #)": {
+   "en": "Published editorial responsibility (exception, art. #)",
+   "fr": "Responsabilite editoriale publiee (exception art. 50.4)"
   },
-  "Simuler la purge": {
-   "en": "Simulate the purge",
-   "fr": "Simuler la purge"
+  "Responsable": {
+   "en": "Controller",
+   "fr": "Responsable"
+  },
+  "Retirer": {
+   "en": "Remove",
+   "fr": "Retirer"
+  },
+  "Rien sur le contenu produit : c'est l'interaction qui est signalee, pas ce qui en sort.": {
+   "en": "Nothing on the content produced: it is the interaction that is flagged, not what comes out of it.",
+   "fr": "Rien sur le contenu produit : c'est l'interaction qui est signalee, pas ce qui en sort."
+  },
+  "Rôle": {
+   "en": "Role",
+   "fr": "Rôle"
+  },
+  "SANS OBJET, et c'est examine, pas oublie : la plateforme n'exploite aucun systeme de reconnaissance des emotions ni de categorisation biometrique, et ne traite aucune donnee biometrique.": {
+   "en": "NOT APPLICABLE, and this has been examined, not forgotten: the platform operates no emotion recognition or biometric categorisation system, and processes no biometric data.",
+   "fr": "SANS OBJET, et c'est examine, pas oublie : la plateforme n'exploite aucun systeme de reconnaissance des emotions ni de categorisation biometrique, et ne traite aucune donnee biometrique."
+  },
+  "Sans objet": {
+   "en": "Not applicable",
+   "fr": "Sans objet"
+  },
+  "Sans objet (echange interactif)": {
+   "en": "Not applicable (interactive exchange)",
+   "fr": "Sans objet (echange interactif)"
+  },
+  "Sans objet (echange interactif, non diffuse comme publication)": {
+   "en": "Not applicable (interactive exchange, not disseminated as a publication)",
+   "fr": "Sans objet (echange interactif, non diffuse comme publication)"
+  },
+  "Sans objet (redaction assistee, publication sous responsabilite editoriale)": {
+   "en": "Not applicable (assisted writing, published under editorial responsibility)",
+   "fr": "Sans objet (redaction assistee, publication sous responsabilite editoriale)"
+  },
+  "Sans objet : la plateforme ne produit pas d'oeuvre de fiction.": {
+   "en": "Not applicable: the platform produces no work of fiction.",
+   "fr": "Sans objet : la plateforme ne produit pas d'oeuvre de fiction."
+  },
+  "Sauf si cela est evident au regard du contexte d'usage.": {
+   "en": "Unless this is obvious from the context of use.",
+   "fr": "Sauf si cela est evident au regard du contexte d'usage."
+  },
+  "Si l'outil d'IA traite des donnees personnelles, les personnes doivent en etre informees conformement au RGPD.": {
+   "en": "If the AI tool processes personal data, the persons concerned must be informed in accordance with the GDPR.",
+   "fr": "Si l'outil d'IA traite des donnees personnelles, les personnes doivent en etre informees conformement au RGPD."
+  },
+  "Si le contenu constitue un hypertrucage, la nature artificielle doit etre signalee.": {
+   "en": "If the content amounts to a deepfake, its artificial nature must be disclosed.",
+   "fr": "Si le contenu constitue un hypertrucage, la nature artificielle doit etre signalee."
   },
   "Simuler sans rien modifier : affiche les données au-delà de leur durée": {
    "en": "Simulate without changing anything: shows the data past their retention period",
    "fr": "Simuler sans rien modifier : affiche les données au-delà de leur durée"
   },
-  "Tableau de bord de conformité du site CONSEILPREV et de la plateforme Sentinel : vérification selon les articles #, #, #, # et # du RGPD, registre des preuves de consentement, registre des traitements, transferts, droits des personnes et rapport d'audit pour toute demande externe. Outillage technique, à valider par votre conseil juridique.": {
-   "en": "Compliance dashboard for the CONSEILPREV site and the Sentinel platform: verification against Articles #, #, #, # and # of the GDPR, consent records, records of processing, transfers, data subject rights and audit report for any external request. Technical tooling, to be validated by your legal counsel.",
-   "fr": "Tableau de bord de conformité du site CONSEILPREV et de la plateforme Sentinel : vérification selon les articles 5, 7, 17, 25 et 30 du RGPD, registre des preuves de consentement, registre des traitements, transferts, droits des personnes et rapport d'audit pour toute demande externe. Outillage technique, à valider par votre conseil juridique."
+  "Situation": {
+   "en": "Case",
+   "fr": "Situation"
+  },
+  "Support commercial, page produit presentant un service": {
+   "en": "Sales material, a product page presenting a service",
+   "fr": "Support commercial, page produit presentant un service"
+  },
+  "Synthese de la base de connaissance (explorateur RAG)": {
+   "en": "Knowledge base summary (RAG explorer)",
+   "fr": "Synthese de la base de connaissance (explorateur RAG)"
   },
   "Temps réel": {
    "en": "Real time",
    "fr": "Temps réel"
   },
-  "Test de seuil sur les neuf critères de référence : à partir de deux critères, l'AIPD est requise. L'analyse est conservée côté serveur, versionnée, et opposable en audit.": {
-   "en": "Threshold test on the nine reference criteria: from two criteria upwards, a DPIA is required. The assessment is kept server-side, versioned, and defensible in an audit.",
-   "fr": "Test de seuil sur les neuf critères de référence : à partir de deux critères, l'AIPD est requise. L'analyse est conservée côté serveur, versionnée, et opposable en audit."
+  "Texte (reponses aux clients, moteurs Claude et Mistral)": {
+   "en": "Text (responses to clients, Claude and Mistral engines)",
+   "fr": "Texte (reponses aux clients, moteurs Claude et Mistral)"
+  },
+  "Texte (reponses aux visiteurs)": {
+   "en": "Text (responses to visitors)",
+   "fr": "Texte (reponses aux visiteurs)"
+  },
+  "Texte d'analyse produit par IA": {
+   "en": "Analysis text produced by AI",
+   "fr": "Texte d'analyse produit par IA"
+  },
+  "Texte d'interet public elabore avec l'assistance d'une IA": {
+   "en": "Text of public interest prepared with the assistance of an AI",
+   "fr": "Texte d'interet public elabore avec l'assistance d'une IA"
+  },
+  "Texte de synthese genere par IA, avec citations": {
+   "en": "Summary text generated by AI, with citations",
+   "fr": "Texte de synthese genere par IA, avec citations"
   },
   "Titre de l'AIPD": {
    "en": "DPIA title",
    "fr": "Titre de l'AIPD"
   },
-  "Toute demande est enregistrée avec son échéance d'un mois. Les demandes hors délai sont signalées et pèsent sur l'indice de conformité.": {
-   "en": "Every request is recorded with its one-month deadline. Overdue requests are flagged and weigh on the compliance index.",
-   "fr": "Toute demande est enregistrée avec son échéance d'un mois. Les demandes hors délai sont signalées et pèsent sur l'indice de conformité."
-  },
-  "Traitement": {
-   "en": "Processing activity",
-   "fr": "Traitement"
+  "Titres et resumes repris des sources externes": {
+   "en": "Titles and summaries taken from external sources",
+   "fr": "Titres et resumes repris des sources externes"
   },
   "Traitement concerné (ex. assistants conversationnels)": {
    "en": "Processing activity concerned (e.g. conversational assistants)",
    "fr": "Traitement concerné (ex. assistants conversationnels)"
   },
-  "Vérification de conformité — articles #, #, #, #, # · DSA · DMA · Data Act": {
-   "en": "Compliance check — Articles #, #, #, #, # · DSA · DMA · Data Act",
-   "fr": "Vérification de conformité — articles 5, 7, 17, 25, 30 · DSA · DMA · Data Act"
+  "Transparence due ?": {
+   "en": "Transparency owed?",
+   "fr": "Transparence due ?"
+  },
+  "Transparence requise si le texte est publie pour informer le public sur une question d'interet public.": {
+   "en": "Transparency is required where the text is published to inform the public on a matter of public interest.",
+   "fr": "Transparence requise si le texte est publie pour informer le public sur une question d'interet public."
+  },
+  "Une communication trompeuse sur l'origine ou la nature d'une IA peut poser difficulte.": {
+   "en": "A misleading communication about the origin or nature of an AI may be a problem.",
+   "fr": "Une communication trompeuse sur l'origine ou la nature d'une IA peut poser difficulte."
+  },
+  "Usages autorises a des fins de detection ou de prevention d'infractions, dans les conditions prevues par le reglement.": {
+   "en": "Uses authorised for the purpose of detecting or preventing criminal offences, under the conditions laid down by the Regulation.",
+   "fr": "Usages autorises a des fins de detection ou de prevention d'infractions, dans les conditions prevues par le reglement."
+  },
+  "Veille reglementaire (flux RSS du site)": {
+   "en": "Regulatory watch (site RSS feed)",
+   "fr": "Veille reglementaire (flux RSS du site)"
+  },
+  "Video publicitaire avec avatar ou voix artificiels": {
+   "en": "An advertising video with an artificial avatar or voice",
+   "fr": "Video publicitaire avec avatar ou voix artificiels"
   },
   "Vérification mesurée — sur les artefacts réellement servis": {
    "en": "Measured verification — on the artefacts actually served",
    "fr": "Vérification mesurée — sur les artefacts réellement servis"
   },
-  "Vérification non encore effectuée.": {
-   "en": "Verification not yet carried out.",
-   "fr": "Vérification non encore effectuée."
+  "a arbitrer (qualification ou reference, pas les deux) — « Assistants conversationnels du site publ » declare « deployeur » mais invoque l'art. #, qui oblige le fournisseur ; « Copilote Sentinel (assistant de la plate » declare « deployeur » mais invoque l'art. #, qui oblige le fournisseur": {
+   "en": "to be settled (role or reference, not both) — « Assistants conversationnels du site publ » declares « deployer » yet invokes art. #, which binds the provider; « Copilote Sentinel (assistant de la plate » declares « deployer » yet invokes art. #, which binds the provider",
+   "fr": "a arbitrer (qualification ou reference, pas les deux) — « Assistants conversationnels du site publ » declare « deployeur » mais invoque l'art. 50.1, qui oblige le fournisseur ; « Copilote Sentinel (assistant de la plate » declare « deployeur » mais invoque l'art. 50.1, qui oblige le fournisseur"
   },
   "adresse@exemple.fr": {
    "en": "name@example.com",
    "fr": "adresse@exemple.fr"
   },
-  "— site public et plateforme Sentinel. À ne pas confondre avec les modules « Conformité RGPD » et « Registre des traitements », qui portent sur l'organisation du client.": {
-   "en": "— public site and Sentinel platform. Not to be confused with the “GDPR compliance” and “Records of processing” modules, which concern the client’s organisation.",
-   "fr": "— site public et plateforme Sentinel. À ne pas confondre avec les modules « Conformité RGPD » et « Registre des traitements », qui portent sur l'organisation du client."
+  "art. #": {
+   "en": "art. #",
+   "fr": "art. 50.1"
   },
-  "↻ Actualiser la conformité": {
-   "en": "↻ Refresh compliance",
-   "fr": "↻ Actualiser la conformité"
+  "art. # + #": {
+   "en": "art. # + #",
+   "fr": "art. 50.3 + 50.4"
+  },
+  "aucun": {
+   "en": "none",
+   "fr": "aucun"
+  },
+  "bandeau « AI GENERATED » present dans le rendu de la synthese (sentinel.html)": {
+   "en": "“AI GENERATED” banner present in the rendering of the summary (sentinel.html)",
+   "fr": "bandeau « AI GENERATED » present dans le rendu de la synthese (sentinel.html)"
+  },
+  "cadre relu a l'instant : # paragraphes avec destinataire, §# motive sans objet, # cas a verdict ferme, # obligations au-dela de l'AI Act": {
+   "en": "framework re-read just now: # paragraphs with a recipient, § # reasoned as not applicable, # cases with a firm verdict, # obligations beyond the AI Act",
+   "fr": "cadre relu a l'instant : 5 paragraphes avec destinataire, §3 motive sans objet, 7 cas a verdict ferme, 3 obligations au-dela de l'AI Act"
+  },
+  "deployeur": {
+   "en": "deployer",
+   "fr": "deployeur"
+  },
+  "document genere a l'instant : proprietes du fichier portant « AI-generated », le paragraphe #, le fournisseur qui le doit, et la mention visible donnee pour un engagement (docProps/core.xml lu, pas suppose)": {
+   "en": "document generated just now: file properties carrying “AI-generated”, paragraph #, the provider who owes it, and the visible notice given as a commitment (docProps/core.xml read, not assumed)",
+   "fr": "document genere a l'instant : proprietes du fichier portant « AI-generated », le paragraphe 50.2, le fournisseur qui le doit, et la mention visible donnee pour un engagement (docProps/core.xml lu, pas suppose)"
+  },
+  "fournisseur": {
+   "en": "provider",
+   "fr": "fournisseur"
+  },
+  "la mention de responsabilite editoriale est publiee sur la page Actualites — la realite de l'examen humain reste une attestation, qu'aucune machine ne peut mesurer (art. #)": {
+   "en": "the editorial responsibility notice is published on the News page — the reality of the human review remains an attestation that no machine can measure (art. #)",
+   "fr": "la mention de responsabilite editoriale est publiee sur la page Actualites — la realite de l'examen humain reste une attestation, qu'aucune machine ne peut mesurer (art. 50.4)"
+  },
+  "mention « Vous interagissez avec une IA » presente dans index.html, avec la reference au Regl. (UE) #/#": {
+   "en": "notice “You are interacting with an AI” present in index.html, with the reference to Reg. (EU) #/#",
+   "fr": "mention « Vous interagissez avec une IA » presente dans index.html, avec la reference au Regl. (UE) 2024/1689"
+  },
+  "mention « Vous interagissez avec une IA » presente dans sentinel.html, avec la reference au Regl. (UE) #/#": {
+   "en": "notice “You are interacting with an AI” present in sentinel.html, with the reference to Reg. (EU) #/#",
+   "fr": "mention « Vous interagissez avec une IA » presente dans sentinel.html, avec la reference au Regl. (UE) 2024/1689"
+  },
+  "mesuré conforme": {
+   "en": "measured compliant",
+   "fr": "mesuré conforme"
+  },
+  "mesuré en partie — attestation requise": {
+   "en": "partly measured — attestation required",
+   "fr": "mesuré en partie — attestation requise"
+  },
+  "mesuré ✓": {
+   "en": "measured ✓",
+   "fr": "mesuré ✓"
+  },
+  "partiel": {
+   "en": "partial",
+   "fr": "partiel"
+  },
+  "À VÉRIFIER": {
+   "en": "TO BE VERIFIED",
+   "fr": "À VÉRIFIER"
+  },
+  "Étiquetage": {
+   "en": "Labelling",
+   "fr": "Étiquetage"
+  },
+  "— Date du code de bonnes pratiques pour ses signataires (interoperabilite du marquage, acces a la detection) : engagement volontaire, non une echeance du reglement.": {
+   "en": "— Date of the code of practice for its signatories (interoperable marking, access to detection): a voluntary commitment, not a deadline set by the Regulation.",
+   "fr": "— Date du code de bonnes pratiques pour ses signataires (interoperabilite du marquage, acces a la detection) : engagement volontaire, non une echeance du reglement."
+  },
+  "— Entree en application des obligations de transparence (art. #) : marquage (fournisseurs) et etiquetage (deployeurs).": {
+   "en": "— Date of application of the transparency obligations (art. #): marking (providers) and labelling (deployers).",
+   "fr": "— Entree en application des obligations de transparence (art. 50) : marquage (fournisseurs) et etiquetage (deployeurs)."
+  },
+  "— Fin de la periode transitoire pour les systemes deja sur le marche.": {
+   "en": "— End of the transitional period for systems already on the market.",
+   "fr": "— Fin de la periode transitoire pour les systemes deja sur le marche."
+  },
+  "— Marquage lisible par machine (art. # par. #) : fin du delai accorde aux systemes generant du contenu synthetique deja sur le marche avant le # aout # (art. # par. #).": {
+   "en": "— Machine-readable marking (art. # para. #): end of the period granted to systems generating synthetic content already on the market before # August # (art. # para. #).",
+   "fr": "— Marquage lisible par machine (art. 50 par. 2) : fin du delai accorde aux systemes generant du contenu synthetique deja sur le marche avant le 2 aout 2026 (art. 111 par. 4)."
+  },
+  "— Solution d'interoperabilite du marquage et acces a la detection (fournisseurs).": {
+   "en": "— Interoperability solution for marking and access to detection (providers).",
+   "fr": "— Solution d'interoperabilite du marquage et acces a la detection (fournisseurs)."
   },
   "↻ Mesurer maintenant": {
    "en": "↻ Measure now",

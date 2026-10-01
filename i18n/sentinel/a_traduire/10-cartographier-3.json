@@ -1,0 +1,937 @@
+{
+ "_lot": "10-cartographier-3",
+ "_mots": 2302,
+ "_pages": [
+  "maturite",
+  "qualif-assistee",
+  "registre",
+  "shadow-ai"
+ ],
+ "_rubrique": "CARTOGRAPHIER",
+ "bloc": {
+  "Applicable ? Dépend — risque limité sauf si décisions sur des personnes (RH, crédit)": {
+   "en": "<strong>Applicable?</strong> It depends — limited risk unless decisions are made about people (HR, credit)",
+   "fr": "Applicable ? Dépend — risque limité sauf si décisions sur des personnes (RH, crédit)",
+   "html": "<strong>Applicable ?</strong> Dépend — risque limité sauf si décisions sur des personnes (RH, crédit)"
+  },
+  "Applicable ? Indirectement — responsabilité de vérification incombe au donneur d'ordre": {
+   "en": "<strong>Applicable?</strong> Indirectly — the duty to verify falls on the client commissioning the work",
+   "fr": "Applicable ? Indirectement — responsabilité de vérification incombe au donneur d'ordre",
+   "html": "<strong>Applicable ?</strong> Indirectement — responsabilité de vérification incombe au donneur d'ordre"
+  },
+  "Applicable ? Oui si basé sur un modèle GPAI (GPT-#, Claude, Gemini…) — obligations Art. # s'appliquent au fournisseur": {
+   "en": "<strong>Applicable?</strong> Yes if based on a GPAI model (GPT-#, Claude, Gemini…) — Art. # obligations apply to the provider",
+   "fr": "Applicable ? Oui si basé sur un modèle GPAI (GPT-4, Claude, Gemini…) — obligations Art. 53 s'appliquent au fournisseur",
+   "html": "<strong>Applicable ?</strong> Oui si basé sur un modèle GPAI (GPT-4, Claude, Gemini…) — obligations Art. 53 s'appliquent au fournisseur"
+  },
+  "Applicable ? Oui systématiquement — Annexe III, point #(a)": {
+   "en": "<strong>Applicable?</strong> Yes, systematically — Annex III, point #(a)",
+   "fr": "Applicable ? Oui systématiquement — Annexe III, point 4(a)",
+   "html": "<strong>Applicable ?</strong> Oui systématiquement — Annexe III, point 4(a)"
+  },
+  "Applicable ? Oui — Annexe III point #(a-d) : accès à l'éducation, évaluation des résultats, surveillance des examens": {
+   "en": "<strong>Applicable?</strong> Yes — Annex III, point #(a-d): access to education, evaluation of learning outcomes, monitoring of exams",
+   "fr": "Applicable ? Oui — Annexe III point 3(a-d) : accès à l'éducation, évaluation des résultats, surveillance des examens",
+   "html": "<strong>Applicable ?</strong> Oui — Annexe III point 3(a-d) : accès à l'éducation, évaluation des résultats, surveillance des examens"
+  },
+  "Applicable ? Oui — Annexe III point #(b) : systèmes d'allocation de tâches ou d'évaluation du comportement des travailleurs": {
+   "en": "<strong>Applicable?</strong> Yes — Annex III, point #(b): systems for allocating tasks or evaluating the behaviour of workers",
+   "fr": "Applicable ? Oui — Annexe III point 4(b) : systèmes d'allocation de tâches ou d'évaluation du comportement des travailleurs",
+   "html": "<strong>Applicable ?</strong> Oui — Annexe III point 4(b) : systèmes d'allocation de tâches ou d'évaluation du comportement des travailleurs"
+  },
+  "Applicable ? Oui — Annexe III point #(b) et #(c) : évaluation de la solvabilité et tarification assurance santé": {
+   "en": "<strong>Applicable?</strong> Yes — Annex III, points #(b) and #(c): creditworthiness assessment and health insurance pricing",
+   "fr": "Applicable ? Oui — Annexe III point 5(b) et 5(c) : évaluation de la solvabilité et tarification assurance santé",
+   "html": "<strong>Applicable ?</strong> Oui — Annexe III point 5(b) et 5(c) : évaluation de la solvabilité et tarification assurance santé"
+  },
+  "Applicable ? Oui — Annexe III point #(d) : systèmes d'évaluation et de classification des appels d'urgence et de triage": {
+   "en": "<strong>Applicable?</strong> Yes — Annex III, point #(d): systems for evaluating and classifying emergency calls and for triage",
+   "fr": "Applicable ? Oui — Annexe III point 5(d) : systèmes d'évaluation et de classification des appels d'urgence et de triage",
+   "html": "<strong>Applicable ?</strong> Oui — Annexe III point 5(d) : systèmes d'évaluation et de classification des appels d'urgence et de triage"
+  },
+  "Applicable ? Oui — dès qu'il y a interaction directe avec une personne physique": {
+   "en": "<strong>Applicable?</strong> Yes — as soon as there is direct interaction with a natural person",
+   "fr": "Applicable ? Oui — dès qu'il y a interaction directe avec une personne physique",
+   "html": "<strong>Applicable ?</strong> Oui — dès qu'il y a interaction directe avec une personne physique"
+  },
+  "Applicable ? Oui — déployeur du modèle, potentiellement fournisseur du produit final": {
+   "en": "<strong>Applicable?</strong> Yes — deployer of the model, potentially provider of the final product",
+   "fr": "Applicable ? Oui — déployeur du modèle, potentiellement fournisseur du produit final",
+   "html": "<strong>Applicable ?</strong> Oui — déployeur du modèle, potentiellement fournisseur du produit final"
+  },
+  "Applicable ? Oui — l'entreprise devient fournisseur de fait dès qu'elle héberge sous son nom": {
+   "en": "<strong>Applicable?</strong> Yes — the company becomes a de facto provider as soon as it hosts under its own name",
+   "fr": "Applicable ? Oui — l'entreprise devient fournisseur de fait dès qu'elle héberge sous son nom",
+   "html": "<strong>Applicable ?</strong> Oui — l'entreprise devient fournisseur de fait dès qu'elle héberge sous son nom"
+  },
+  "Applicable ? Oui — obligation de marquage, distincte de l'obligation d'information": {
+   "en": "<strong>Applicable?</strong> Yes — marking obligation, distinct from the information obligation",
+   "fr": "Applicable ? Oui — obligation de marquage, distincte de l'obligation d'information",
+   "html": "<strong>Applicable ?</strong> Oui — obligation de marquage, distincte de l'obligation d'information"
+  },
+  "Applicable ? Oui, voire interdit selon l'usage — Annexe III point # + Art. # pour certaines utilisations": {
+   "en": "<strong>Applicable?</strong> Yes, or even prohibited depending on the use — Annex III, point # + Art. # for certain uses",
+   "fr": "Applicable ? Oui, voire interdit selon l'usage — Annexe III point 1 + Art. 5 pour certaines utilisations",
+   "html": "<strong>Applicable ?</strong> Oui, voire interdit selon l'usage — Annexe III point 1 + Art. 5 pour certaines utilisations"
+  },
+  "Applicable ? Partiellement — obligation de transparence sur la personnalisation (Art. #§#). Pratiques de manipulation : interdites (Art. #§#(a-b)).": {
+   "en": "<strong>Applicable?</strong> Partially — transparency obligation on personalisation (Art. #(#)). Manipulative practices: prohibited (Art. #(#)(a-b)).",
+   "fr": "Applicable ? Partiellement — obligation de transparence sur la personnalisation (Art. 50§2). Pratiques de manipulation : interdites (Art. 5§1(a-b)).",
+   "html": "<strong>Applicable ?</strong> Partiellement — obligation de transparence sur la personnalisation (Art. 50§2). Pratiques de manipulation : interdites (Art. 5§1(a-b))."
+  },
+  "Applicable ? Potentiellement — Annexe III point # si utilisée comme composante de sécurité d'une infrastructure critique": {
+   "en": "<strong>Applicable?</strong> Potentially — Annex III, point # if used as a safety component of critical infrastructure",
+   "fr": "Applicable ? Potentiellement — Annexe III point 2 si utilisée comme composante de sécurité d'une infrastructure critique",
+   "html": "<strong>Applicable ?</strong> Potentiellement — Annexe III point 2 si utilisée comme composante de sécurité d'une infrastructure critique"
+  },
+  "Applicable ? Souvent oui — l'entreprise est déployeur (Art. #§#), même sans avoir développé l'outil": {
+   "en": "<strong>Applicable?</strong> Often yes — the company is a deployer (Art. #(#)), even without having developed the tool",
+   "fr": "Applicable ? Souvent oui — l'entreprise est déployeur (Art. 3§4), même sans avoir développé l'outil",
+   "html": "<strong>Applicable ?</strong> Souvent oui — l'entreprise est déployeur (Art. 3§4), même sans avoir développé l'outil"
+  },
+  "Bloc # sur # · Qualification assistée — Validé": {
+   "en": "<b>Block # of # · Assisted qualification — Validated</b>",
+   "fr": "Bloc 4 sur 7 · Qualification assistée — Validé",
+   "html": "<b>Bloc 4 sur 7 · Qualification assistée — Validé</b>"
+  },
+  "Bloc # sur # · Registre IA — Validé": {
+   "en": "<b>Block # of # · AI Register — Validated</b>",
+   "fr": "Bloc 3 sur 7 · Registre IA — Validé",
+   "html": "<b>Bloc 3 sur 7 · Registre IA — Validé</b>"
+  },
+  "Découverte Shadow AI": {
+   "en": "<em>Shadow AI</em> discovery",
+   "fr": "Découverte Shadow AI",
+   "html": "Découverte <em>Shadow AI</em>"
+  },
+  "Exemples : Agence créa utilisant un générateur d'images, cabinet conseil utilisant un LLM": {
+   "en": "<strong>Examples:</strong> Creative agency using an image generator, consultancy using an LLM",
+   "fr": "Exemples : Agence créa utilisant un générateur d'images, cabinet conseil utilisant un LLM",
+   "html": "<strong>Exemples :</strong> Agence créa utilisant un générateur d'images, cabinet conseil utilisant un LLM"
+  },
+  "Exemples : Assistant service client, chatbot RH interne, agent conversationnel": {
+   "en": "<strong>Examples:</strong> Customer service assistant, internal HR chatbot, conversational agent",
+   "fr": "Exemples : Assistant service client, chatbot RH interne, agent conversationnel",
+   "html": "<strong>Exemples :</strong> Assistant service client, chatbot RH interne, agent conversationnel"
+  },
+  "Exemples : Contrôle d'accès par reconnaissance faciale, détection d'émotion à l'embauche, catégorisation de personnes par attributs": {
+   "en": "<strong>Examples:</strong> Access control by facial recognition, emotion detection in hiring, categorisation of people by attributes",
+   "fr": "Exemples : Contrôle d'accès par reconnaissance faciale, détection d'émotion à l'embauche, catégorisation de personnes par attributs",
+   "html": "<strong>Exemples :</strong> Contrôle d'accès par reconnaissance faciale, détection d'émotion à l'embauche, catégorisation de personnes par attributs"
+  },
+  "Exemples : Copilot M#, Salesforce Einstein, options IA activées par un éditeur sans annonce": {
+   "en": "<strong>Examples:</strong> Copilot M#, Salesforce Einstein, AI options switched on by a vendor without notice",
+   "fr": "Exemples : Copilot M365, Salesforce Einstein, options IA activées par un éditeur sans annonce",
+   "html": "<strong>Exemples :</strong> Copilot M365, Salesforce Einstein, options IA activées par un éditeur sans annonce"
+  },
+  "Exemples : Copilote RAG interne, assistant analysant des données métier": {
+   "en": "<strong>Examples:</strong> Internal RAG copilot, assistant analysing business data",
+   "fr": "Exemples : Copilote RAG interne, assistant analysant des données métier",
+   "html": "<strong>Exemples :</strong> Copilote RAG interne, assistant analysant des données métier"
+  },
+  "Exemples : Credit scoring automatisé, notation de solvabilité, IA d'évaluation de risque pour assurance vie/santé": {
+   "en": "<strong>Examples:</strong> Automated credit scoring, creditworthiness rating, risk-assessment AI for life/health insurance",
+   "fr": "Exemples : Credit scoring automatisé, notation de solvabilité, IA d'évaluation de risque pour assurance vie/santé",
+   "html": "<strong>Exemples :</strong> Credit scoring automatisé, notation de solvabilité, IA d'évaluation de risque pour assurance vie/santé"
+  },
+  "Exemples : Détection d'intrusion par ML, réponse automatique aux incidents, analyse comportementale du réseau (UEBA)": {
+   "en": "<strong>Examples:</strong> ML-based intrusion detection, automated incident response, network behaviour analysis (UEBA)",
+   "fr": "Exemples : Détection d'intrusion par ML, réponse automatique aux incidents, analyse comportementale du réseau (UEBA)",
+   "html": "<strong>Exemples :</strong> Détection d'intrusion par ML, réponse automatique aux incidents, analyse comportementale du réseau (UEBA)"
+  },
+  "Exemples : Llama, Mistral ou autre modèle déployé sur l'infrastructure de l'entreprise": {
+   "en": "<strong>Examples:</strong> Llama, Mistral or another model deployed on the company’s infrastructure",
+   "fr": "Exemples : Llama, Mistral ou autre modèle déployé sur l'infrastructure de l'entreprise",
+   "html": "<strong>Exemples :</strong> Llama, Mistral ou autre modèle déployé sur l'infrastructure de l'entreprise"
+  },
+  "Exemples : Monitoring de productivité, analyse des emails internes, détection de fraude interne par IA, suivi du temps en temps réel": {
+   "en": "<strong>Examples:</strong> Productivity monitoring, analysis of internal emails, AI-based internal fraud detection, real-time time tracking",
+   "fr": "Exemples : Monitoring de productivité, analyse des emails internes, détection de fraude interne par IA, suivi du temps en temps réel",
+   "html": "<strong>Exemples :</strong> Monitoring de productivité, analyse des emails internes, détection de fraude interne par IA, suivi du temps en temps réel"
+  },
+  "Exemples : OpenAI, Anthropic, Mistral via API intégrée dans un produit ou service": {
+   "en": "<strong>Examples:</strong> OpenAI, Anthropic, Mistral via an API integrated into a product or service",
+   "fr": "Exemples : OpenAI, Anthropic, Mistral via API intégrée dans un produit ou service",
+   "html": "<strong>Exemples :</strong> OpenAI, Anthropic, Mistral via API intégrée dans un produit ou service"
+  },
+  "Exemples : Recommandations de contenu (Netflix, Spotify-like), publicité ciblée par profil IA, personnalisation de flux": {
+   "en": "<strong>Examples:</strong> Content recommendations (Netflix- or Spotify-like), AI profile-based targeted advertising, feed personalisation",
+   "fr": "Exemples : Recommandations de contenu (Netflix, Spotify-like), publicité ciblée par profil IA, personnalisation de flux",
+   "html": "<strong>Exemples :</strong> Recommandations de contenu (Netflix, Spotify-like), publicité ciblée par profil IA, personnalisation de flux"
+  },
+  "Exemples : Systèmes d'admission automatisée, évaluation des apprenants, orientation scolaire par IA, anti-triche pendant les examens": {
+   "en": "<strong>Examples:</strong> Automated admission systems, assessment of learners, AI-based educational guidance, anti-cheating during exams",
+   "fr": "Exemples : Systèmes d'admission automatisée, évaluation des apprenants, orientation scolaire par IA, anti-triche pendant les examens",
+   "html": "<strong>Exemples :</strong> Systèmes d'admission automatisée, évaluation des apprenants, orientation scolaire par IA, anti-triche pendant les examens"
+  },
+  "Exemples : Traduction juridique ou médicale automatisée, sous-titrage automatique, localisation de contenu par IA": {
+   "en": "<strong>Examples:</strong> Automated legal or medical translation, automatic subtitling, AI content localisation",
+   "fr": "Exemples : Traduction juridique ou médicale automatisée, sous-titrage automatique, localisation de contenu par IA",
+   "html": "<strong>Exemples :</strong> Traduction juridique ou médicale automatisée, sous-titrage automatique, localisation de contenu par IA"
+  },
+  "Exemples : Tri de CV, scoring candidats, matching poste/profil": {
+   "en": "<strong>Examples:</strong> CV screening, candidate scoring, job/profile matching",
+   "fr": "Exemples : Tri de CV, scoring candidats, matching poste/profil",
+   "html": "<strong>Exemples :</strong> Tri de CV, scoring candidats, matching poste/profil"
+  },
+  "Exemples : Triage des urgences par IA, aide au diagnostic, systèmes de priorisation des patients, IA de prescription": {
+   "en": "<strong>Examples:</strong> AI emergency triage, diagnostic support, patient prioritisation systems, prescription AI",
+   "fr": "Exemples : Triage des urgences par IA, aide au diagnostic, systèmes de priorisation des patients, IA de prescription",
+   "html": "<strong>Exemples :</strong> Triage des urgences par IA, aide au diagnostic, systèmes de priorisation des patients, IA de prescription"
+  },
+  "Exemples : Visuels marketing générés, synthèse vocale, rédaction de contenus publiés": {
+   "en": "<strong>Examples:</strong> Generated marketing visuals, speech synthesis, drafting of published content",
+   "fr": "Exemples : Visuels marketing générés, synthèse vocale, rédaction de contenus publiés",
+   "html": "<strong>Exemples :</strong> Visuels marketing générés, synthèse vocale, rédaction de contenus publiés"
+  },
+  "Obligation : Haut risque (Annexe III point #(b)). Documentation technique, supervision humaine obligatoire, information des salariés. Compatibilité RGPD Art. # à vérifier.": {
+   "en": "<strong>Obligation:</strong> High risk (Annex III, point #(b)). Technical documentation, mandatory human oversight, informing employees. Compatibility with GDPR Art. # to be checked.",
+   "fr": "Obligation : Haut risque (Annexe III point 4(b)). Documentation technique, supervision humaine obligatoire, information des salariés. Compatibilité RGPD Art. 88 à vérifier.",
+   "html": "<strong>Obligation :</strong> Haut risque (Annexe III point 4(b)). Documentation technique, supervision humaine obligatoire, information des salariés. Compatibilité RGPD Art. 88 à vérifier."
+  },
+  "Obligation : Haut risque (Annexe III point #(b-c)). Documentation technique, droit d'explication de la décision, supervision humaine. Art. # RGPD si décision automatisée.": {
+   "en": "<strong>Obligation:</strong> High risk (Annex III, point #(b-c)). Technical documentation, right to an explanation of the decision, human oversight. GDPR Art. # if the decision is automated.",
+   "fr": "Obligation : Haut risque (Annexe III point 5(b-c)). Documentation technique, droit d'explication de la décision, supervision humaine. Art. 22 RGPD si décision automatisée.",
+   "html": "<strong>Obligation :</strong> Haut risque (Annexe III point 5(b-c)). Documentation technique, droit d'explication de la décision, supervision humaine. Art. 22 RGPD si décision automatisée."
+  },
+  "Obligation : Haut risque (Annexe III point #(d)). Documentation technique renforcée, traçabilité des décisions, supervision médicale humaine impérative.": {
+   "en": "<strong>Obligation:</strong> High risk (Annex III, point #(d)). Enhanced technical documentation, traceability of decisions, human medical oversight essential.",
+   "fr": "Obligation : Haut risque (Annexe III point 5(d)). Documentation technique renforcée, traçabilité des décisions, supervision médicale humaine impérative.",
+   "html": "<strong>Obligation :</strong> Haut risque (Annexe III point 5(d)). Documentation technique renforcée, traçabilité des décisions, supervision médicale humaine impérative."
+  },
+  "Obligation : Haut risque (Annexe III point #). Information des personnes concernées obligatoire. Supervision humaine des décisions d'admission ou d'évaluation.": {
+   "en": "<strong>Obligation:</strong> High risk (Annex III, point #). Informing the data subjects is mandatory. Human oversight of admission or assessment decisions.",
+   "fr": "Obligation : Haut risque (Annexe III point 3). Information des personnes concernées obligatoire. Supervision humaine des décisions d'admission ou d'évaluation.",
+   "html": "<strong>Obligation :</strong> Haut risque (Annexe III point 3). Information des personnes concernées obligatoire. Supervision humaine des décisions d'admission ou d'évaluation."
+  },
+  "Obligation : Haut risque (Art. #§# + Annexe III). FRIA obligatoire pour les organismes publics (Art. #). Documentation technique et supervision humaine requises.": {
+   "en": "<strong>Obligation:</strong> High risk (Art. #(#) + Annex III). FRIA mandatory for public bodies (Art. #). Technical documentation and human oversight required.",
+   "fr": "Obligation : Haut risque (Art. 6§2 + Annexe III). FRIA obligatoire pour les organismes publics (Art. 27). Documentation technique et supervision humaine requises.",
+   "html": "<strong>Obligation :</strong> Haut risque (Art. 6§2 + Annexe III). FRIA obligatoire pour les organismes publics (Art. 27). Documentation technique et supervision humaine requises."
+  },
+  "Obligation : Haut risque systématique (Annexe III point #). Identification biométrique à distance en espace public : interdite sauf exceptions Art. #§#. Reconnaissance émotionnelle sur le lieu de travail : interdite (Art. #§#(f)).": {
+   "en": "<strong>Obligation:</strong> Systematically high risk (Annex III, point #). Remote biometric identification in publicly accessible spaces: prohibited save for the exceptions in Art. #(#). Emotion recognition in the workplace: prohibited (Art. #(#)(f)).",
+   "fr": "Obligation : Haut risque systématique (Annexe III point 1). Identification biométrique à distance en espace public : interdite sauf exceptions Art. 5§2. Reconnaissance émotionnelle sur le lieu de travail : interdite (Art. 5§1(f)).",
+   "html": "<strong>Obligation :</strong> Haut risque systématique (Annexe III point 1). Identification biométrique à distance en espace public : interdite sauf exceptions Art. 5§2. Reconnaissance émotionnelle sur le lieu de travail : interdite (Art. 5§1(f))."
+  },
+  "Obligation : Information claire que l'utilisateur interagit avec une IA (Art. #§#). Applicable au # août #.": {
+   "en": "<strong>Obligation:</strong> Clear information that the user is interacting with an AI (Art. #(#)). Applicable from # August #.",
+   "fr": "Obligation : Information claire que l'utilisateur interagit avec une IA (Art. 50§1). Applicable au 2 août 2026.",
+   "html": "<strong>Obligation :</strong> Information claire que l'utilisateur interagit avec une IA (Art. 50§1). Applicable au 2 août 2026."
+  },
+  "Obligation : Informer les utilisateurs que le contenu est personnalisé par IA (Art. #§#). Manipulations exploitant les vulnérabilités psychologiques : interdites Art. #§#(a). Systèmes de notation sociale : interdits Art. #§#(c).": {
+   "en": "<strong>Obligation:</strong> Inform users that the content is personalised by AI (Art. #(#)). Manipulation exploiting psychological vulnerabilities: prohibited, Art. #(#)(a). Social scoring systems: prohibited, Art. #(#)(c).",
+   "fr": "Obligation : Informer les utilisateurs que le contenu est personnalisé par IA (Art. 50§2). Manipulations exploitant les vulnérabilités psychologiques : interdites Art. 5§1(a). Systèmes de notation sociale : interdits Art. 5§1(c).",
+   "html": "<strong>Obligation :</strong> Informer les utilisateurs que le contenu est personnalisé par IA (Art. 50§2). Manipulations exploitant les vulnérabilités psychologiques : interdites Art. 5§1(a). Systèmes de notation sociale : interdits Art. 5§1(c)."
+  },
+  "Obligation : Marquage machine-readable des contenus générés (Art. #§#). Deepfakes et textes d'intérêt public : signalement obligatoire (Art. #§#). Délai Digital Omnibus : # décembre #.": {
+   "en": "<strong>Obligation:</strong> Machine-readable marking of generated content (Art. #(#)). Deepfakes and texts of public interest: mandatory disclosure (Art. #(#)). Digital Omnibus deadline: # December #.",
+   "fr": "Obligation : Marquage machine-readable des contenus générés (Art. 50§2). Deepfakes et textes d'intérêt public : signalement obligatoire (Art. 50§4). Délai Digital Omnibus : 2 décembre 2026.",
+   "html": "<strong>Obligation :</strong> Marquage machine-readable des contenus générés (Art. 50§2). Deepfakes et textes d'intérêt public : signalement obligatoire (Art. 50§4). Délai Digital Omnibus : 2 décembre 2026."
+  },
+  "Obligation : Modification substantielle → obligations fournisseur (Art. #). Transparence Art. # si interaction avec des personnes.": {
+   "en": "<strong>Obligation:</strong> Substantial modification → provider obligations (Art. #). Transparency under Art. # if there is interaction with people.",
+   "fr": "Obligation : Modification substantielle → obligations fournisseur (Art. 25). Transparence Art. 50 si interaction avec des personnes.",
+   "html": "<strong>Obligation :</strong> Modification substantielle → obligations fournisseur (Art. 25). Transparence Art. 50 si interaction avec des personnes."
+  },
+  "Obligation : Pas d'obligation directe AI Act, mais risque non-conformité par ricochet (contenu non marqué, biais non documenté).": {
+   "en": "<strong>Obligation:</strong> No direct AI Act obligation, but a knock-on risk of non-compliance (unmarked content, undocumented bias).",
+   "fr": "Obligation : Pas d'obligation directe AI Act, mais risque non-conformité par ricochet (contenu non marqué, biais non documenté).",
+   "html": "<strong>Obligation :</strong> Pas d'obligation directe AI Act, mais risque non-conformité par ricochet (contenu non marqué, biais non documenté)."
+  },
+  "Obligation : Si décisionnel sur des personnes : potentiellement haut risque. Sinon, bonne pratique ISO/IEC #.": {
+   "en": "<strong>Obligation:</strong> If it takes decisions about people: potentially high risk. Otherwise, good practice under ISO/IEC #.",
+   "fr": "Obligation : Si décisionnel sur des personnes : potentiellement haut risque. Sinon, bonne pratique ISO/IEC 42001.",
+   "html": "<strong>Obligation :</strong> Si décisionnel sur des personnes : potentiellement haut risque. Sinon, bonne pratique ISO/IEC 42001."
+  },
+  "Obligation : Si l'infrastructure est critique (eau, énergie, finance, numérique) : haut risque (Annexe III point #). Sinon : risque limité mais NIS# s'applique en parallèle.": {
+   "en": "<strong>Obligation:</strong> If the infrastructure is critical (water, energy, finance, digital): high risk (Annex III, point #). Otherwise: limited risk, but NIS # applies in parallel.",
+   "fr": "Obligation : Si l'infrastructure est critique (eau, énergie, finance, numérique) : haut risque (Annexe III point 2). Sinon : risque limité mais NIS2 s'applique en parallèle.",
+   "html": "<strong>Obligation :</strong> Si l'infrastructure est critique (eau, énergie, finance, numérique) : haut risque (Annexe III point 2). Sinon : risque limité mais NIS2 s'applique en parallèle."
+  },
+  "Obligation : Si la traduction produit du contenu publié : marquage Art. #§#. Si le modèle est GPAI : vérifier que le fournisseur respecte Art. # (documentation, politique d'utilisation acceptable).": {
+   "en": "<strong>Obligation:</strong> If the translation produces published content: marking under Art. #(#). If the model is GPAI: check that the provider complies with Art. # (documentation, acceptable use policy).",
+   "fr": "Obligation : Si la traduction produit du contenu publié : marquage Art. 50§2. Si le modèle est GPAI : vérifier que le fournisseur respecte Art. 53 (documentation, politique d'utilisation acceptable).",
+   "html": "<strong>Obligation :</strong> Si la traduction produit du contenu publié : marquage Art. 50§2. Si le modèle est GPAI : vérifier que le fournisseur respecte Art. 53 (documentation, politique d'utilisation acceptable)."
+  },
+  "Obligation : Vérifier auprès de l'éditeur le niveau de risque. Si interaction avec des personnes : Art. #§# applicable au # août #.": {
+   "en": "<strong>Obligation:</strong> Check the risk level with the vendor. If there is interaction with people: Art. #(#) applicable from # August #.",
+   "fr": "Obligation : Vérifier auprès de l'éditeur le niveau de risque. Si interaction avec des personnes : Art. 50§1 applicable au 2 août 2026.",
+   "html": "<strong>Obligation :</strong> Vérifier auprès de l'éditeur le niveau de risque. Si interaction avec des personnes : Art. 50§1 applicable au 2 août 2026."
+  },
+  "Obligation : Vérifier documentation du fournisseur (Art. # si GPAI). Si interaction avec des personnes : Art. # à votre charge.": {
+   "en": "<strong>Obligation:</strong> Check the provider’s documentation (Art. # if GPAI). If there is interaction with people: Art. # is your responsibility.",
+   "fr": "Obligation : Vérifier documentation du fournisseur (Art. 53 si GPAI). Si interaction avec des personnes : Art. 50 à votre charge.",
+   "html": "<strong>Obligation :</strong> Vérifier documentation du fournisseur (Art. 53 si GPAI). Si interaction avec des personnes : Art. 50 à votre charge."
+  },
+  "Registre des systèmes IA": {
+   "en": "Register of <em>AI systems</em>",
+   "fr": "Registre des systèmes IA",
+   "html": "Registre des <em>systèmes IA</em>"
+  },
+  "💡 Conseil : Ajouter une clause contractuelle standard exigeant la déclaration de tout usage IA dans les livrables.": {
+   "en": "<strong>💡 Tip:</strong> Add a standard contractual clause requiring the disclosure of any use of AI in deliverables.",
+   "fr": "💡 Conseil : Ajouter une clause contractuelle standard exigeant la déclaration de tout usage IA dans les livrables.",
+   "html": "<strong>💡 Conseil :</strong> Ajouter une clause contractuelle standard exigeant la déclaration de tout usage IA dans les livrables."
+  },
+  "💡 Conseil : Attention aux traductions dans des contextes réglementés (médical, juridique, financier) — une erreur de traduction IA peut engager la responsabilité sans que le prestataire soit couvert.": {
+   "en": "<strong>💡 Tip:</strong> Beware of translations in regulated contexts (medical, legal, financial) — an AI translation error can create liability without the service provider being covered.",
+   "fr": "💡 Conseil : Attention aux traductions dans des contextes réglementés (médical, juridique, financier) — une erreur de traduction IA peut engager la responsabilité sans que le prestataire soit couvert.",
+   "html": "<strong>💡 Conseil :</strong> Attention aux traductions dans des contextes réglementés (médical, juridique, financier) — une erreur de traduction IA peut engager la responsabilité sans que le prestataire soit couvert."
+  }
+ },
+ "texte": {
+  "# déploiement": {
+   "en": "# deployment",
+   "fr": "1 déploiement"
+  },
+  "# déploiements": {
+   "en": "# deployments",
+   "fr": "1944 déploiements"
+  },
+  "+ Ajouter un système": {
+   "en": "+ Add a system",
+   "fr": "+ Ajouter un système"
+  },
+  ": claude-agent-sdk (Claude Code en sous-processus, sans aucun outil) · modèle": {
+   "en": ": claude-agent-sdk (Claude Code as a subprocess, with no tools at all) · model",
+   "fr": ": claude-agent-sdk (Claude Code en sous-processus, sans aucun outil) · modèle"
+  },
+  ": — · modèle": {
+   "en": ": — · model",
+   "fr": ": — · modèle"
+  },
+  "A evaluer": {
+   "en": "To be assessed",
+   "fr": "A evaluer"
+  },
+  "Acces a un service financier essentiel.": {
+   "en": "Access to an essential financial service.",
+   "fr": "Acces a un service financier essentiel."
+  },
+  "Ajouter ce systeme au Registre IA": {
+   "en": "Add this system to the AI register",
+   "fr": "Ajouter ce systeme au Registre IA"
+  },
+  "Ajouter un nouveau systeme IA au registre.": {
+   "en": "Add a new AI system to the register.",
+   "fr": "Ajouter un nouveau systeme IA au registre."
+  },
+  "Aucune proposition": {
+   "en": "No proposal",
+   "fr": "Aucune proposition"
+  },
+  "Aucune proposition à afficher. Lancez « Proposer » pour que le moteur lise les systèmes non classés.": {
+   "en": "No proposal to show. Run “Propose” so that the engine reads the unclassified systems.",
+   "fr": "Aucune proposition à afficher. Lancez « Proposer » pour que le moteur lise les systèmes non classés."
+  },
+  "Cette proposition est un pré-diagnostic. Elle ne vaut pas avis juridique et ne prononce aucune qualification : la classification inscrite au registre est celle qu'une personne identifiée a décidée, et la trace de cette décision est conservée.": {
+   "en": "This proposal is a pre-diagnosis. It is not legal advice and makes no qualification: the classification recorded in the register is the one an identified person has decided, and the trace of that decision is kept.",
+   "fr": "Cette proposition est un pré-diagnostic. Elle ne vaut pas avis juridique et ne prononce aucune qualification : la classification inscrite au registre est celle qu'une personne identifiée a décidée, et la trace de cette décision est conservée."
+  },
+  "Choisir les propositions affichées": {
+   "en": "Choose the proposals shown",
+   "fr": "Choisir les propositions affichées"
+  },
+  "Classifier ce systeme dans le Simulateur — champs pré-remplis automatiquement": {
+   "en": "Classify this system in the Simulator — fields pre-filled automatically",
+   "fr": "Classifier ce systeme dans le Simulateur — champs pré-remplis automatiquement"
+  },
+  "Classifier le systeme identifie": {
+   "en": "Classify the identified system",
+   "fr": "Classifier le systeme identifie"
+  },
+  "Cliquer pour déplier": {
+   "en": "Click to expand",
+   "fr": "Cliquer pour déplier"
+  },
+  "Conformité": {
+   "en": "Compliance",
+   "fr": "Conformité"
+  },
+  "Consulter les documents de votre base de connaissance lies au Registre IA.": {
+   "en": "View the documents in your knowledge base linked to the AI register.",
+   "fr": "Consulter les documents de votre base de connaissance lies au Registre IA."
+  },
+  "Demande une proposition pour les systemes du registre qui n ont pas encore de classification.": {
+   "en": "Requests a proposal for the register systems that do not yet have a classification.",
+   "fr": "Demande une proposition pour les systemes du registre qui n ont pas encore de classification."
+  },
+  "Décideur": {
+   "en": "Decision-maker",
+   "fr": "Décideur"
+  },
+  "Décideur : le nom inscrit au registre à côté de la décision.": {
+   "en": "Decision-maker: the name recorded in the register next to the decision.",
+   "fr": "Décideur : le nom inscrit au registre à côté de la décision."
+  },
+  "En attente de décision": {
+   "en": "Awaiting decision",
+   "fr": "En attente de décision"
+  },
+  "Erreur de chargement (HTTP #). Vérifiez la connexion au serveur.": {
+   "en": "Loading error (HTTP #). Check the connection to the server.",
+   "fr": "Erreur de chargement (HTTP 429). Vérifiez la connexion au serveur."
+  },
+  "Evaluer l impact sur les droits fondamentaux": {
+   "en": "Assess the impact on fundamental rights",
+   "fr": "Evaluer l impact sur les droits fondamentaux"
+  },
+  "Evaluer l'impact sur les droits fondamentaux": {
+   "en": "Assess the impact on fundamental rights",
+   "fr": "Evaluer l'impact sur les droits fondamentaux"
+  },
+  "Explorer des cas d usage IA courants par direction metier, generiques ou specifiques a votre secteur.": {
+   "en": "Explore common AI use cases by business department, generic or specific to your sector.",
+   "fr": "Explorer des cas d usage IA courants par direction metier, generiques ou specifiques a votre secteur."
+  },
+  "Fiche #% complète (# questions essentielles IA Act)": {
+   "en": "Record #% complete (# essential AI Act questions)",
+   "fr": "Fiche 40% complète (10 questions essentielles IA Act)"
+  },
+  "Filtrer les cas d'usage par niveau de risque réglementaire": {
+   "en": "Filter the use cases by regulatory risk level",
+   "fr": "Filtrer les cas d'usage par niveau de risque réglementaire"
+  },
+  "Inventaire complet de vos déploiements IA classifiés selon l'EU AI Act, connecté à une base de données persistante. Obligatoire pour les systèmes haut risque (Art. #, #).": {
+   "en": "A complete inventory of your AI deployments, classified under the EU AI Act and connected to a persistent database. Mandatory for high-risk systems (Art. #, #).",
+   "fr": "Inventaire complet de vos déploiements IA classifiés selon l'EU AI Act, connecté à une base de données persistante. Obligatoire pour les systèmes haut risque (Art. 49, 71)."
+  },
+  "Liste exhaustive des systèmes IA classés par niveau de risque (Annexe III EU AI Act), avec…": {
+   "en": "Exhaustive list of AI systems classified by risk level (Annex III EU AI Act), with…",
+   "fr": "Liste exhaustive des systèmes IA classés par niveau de risque (Annexe III EU AI Act), avec…"
+  },
+  "Livrables finaux générés par IA": {
+   "en": "Final deliverables generated by AI",
+   "fr": "Livrables finaux générés par IA"
+  },
+  "Livrables produits a l issue de cette phase. Duree : #–# semaines (#/# – #/#).": {
+   "en": "Deliverables produced at the end of this phase. Duration: #–# weeks (#/# – #/#).",
+   "fr": "Livrables produits a l issue de cette phase. Duree : 3–4 semaines (01/07 – 28/07)."
+  },
+  "Livrables produits a l issue de cette phase. Duree : Continu (À partir du #/#).": {
+   "en": "Deliverables produced at the end of this phase. Duration: Continuous (From #/#).",
+   "fr": "Livrables produits a l issue de cette phase. Duree : Continu (À partir du 02/12)."
+  },
+  "Maintenance prédictive réseau": {
+   "en": "Predictive network maintenance",
+   "fr": "Maintenance prédictive réseau"
+  },
+  "Manuel de gouvernance IA": {
+   "en": "AI governance manual",
+   "fr": "Manuel de gouvernance IA"
+  },
+  "Maturité / #": {
+   "en": "Maturity / #",
+   "fr": "Maturité / 5"
+  },
+  "Methodologie d'audit en # etapes : Pre-audit (applicabilite), Audit documentaire automatise, Audit terrain, Tests directs sur les systemes IA.": {
+   "en": "Audit methodology in # steps: Pre-audit (applicability), Automated documentary audit, On-site audit, Direct tests on the AI systems.",
+   "fr": "Methodologie d'audit en 4 etapes : Pre-audit (applicabilite), Audit documentaire automatise, Audit terrain, Tests directs sur les systemes IA."
+  },
+  "Mistral Large": {
+   "en": "Mistral Large",
+   "fr": "Mistral Large"
+  },
+  "Modele de regression / ML supervise ·": {
+   "en": "Regression model / supervised ML ·",
+   "fr": "Modele de regression / ML supervise ·"
+  },
+  "Moteur": {
+   "en": "Engine",
+   "fr": "Moteur"
+  },
+  "Moteur IA :": {
+   "en": "AI engine:",
+   "fr": "Moteur IA :"
+  },
+  "Motif de votre décision (facultatif)": {
+   "en": "Reason for your decision (optional)",
+   "fr": "Motif de votre décision (facultatif)"
+  },
+  "NACE Rév. #, Règlement délégué (UE) #/# de la Commission du # octobre # modifiant le règlement (CE) n° #/# du Parlement européen et du Conseil établissant la nomenclature statistique des activités économiques NACE Rév. # —": {
+   "en": "NACE Rev. #, Commission Delegated Regulation (EU) #/# of # October # amending Regulation (EC) No #/# of the European Parliament and of the Council establishing the statistical classification of economic activities NACE Revision # —",
+   "fr": "NACE Rév. 2.1, Règlement délégué (UE) 2023/137 de la Commission du 10 octobre 2022 modifiant le règlement (CE) n° 1893/2006 du Parlement européen et du Conseil établissant la nomenclature statistique des activités économiques NACE Rév. 2 —"
+  },
+  "OUTILS ACTIFS": {
+   "en": "ACTIVE TOOLS",
+   "fr": "OUTILS ACTIFS"
+  },
+  "Obtenir des réponses correctes du système, même en cas d'entrées erronées ou contradictoires.": {
+   "en": "Obtain correct responses from the system, even with erroneous or contradictory inputs.",
+   "fr": "Obtenir des réponses correctes du système, même en cas d'entrées erronées ou contradictoires."
+  },
+  "Obtenir, utiliser et protéger correctement les données et les modèles.": {
+   "en": "Obtain, use and protect data and models correctly.",
+   "fr": "Obtenir, utiliser et protéger correctement les données et les modèles."
+  },
+  "Optimisation allocation spectre": {
+   "en": "Spectrum allocation optimisation",
+   "fr": "Optimisation allocation spectre"
+  },
+  "Opérateurs, équipementiers réseau, fournisseurs de services de communication.": {
+   "en": "Operators, network equipment manufacturers, communication service providers.",
+   "fr": "Opérateurs, équipementiers réseau, fournisseurs de services de communication."
+  },
+  "Organisations internationales et extraterritoriales": {
+   "en": "International and extraterritorial organisations",
+   "fr": "Organisations internationales et extraterritoriales"
+  },
+  "Ou choisir directement parmi les huit profils relevés": {
+   "en": "Or choose directly from the eight profiles identified",
+   "fr": "Ou choisir directement parmi les huit profils relevés"
+  },
+  "Outils de gouvernance IA": {
+   "en": "AI governance tools",
+   "fr": "Outils de gouvernance IA"
+  },
+  "Ouvrir le Registre IA": {
+   "en": "Open the AI register",
+   "fr": "Ouvrir le Registre IA"
+  },
+  "Ouvrir →": {
+   "en": "Open →",
+   "fr": "Ouvrir →"
+  },
+  "Partiel": {
+   "en": "Partial",
+   "fr": "Partiel"
+  },
+  "Permettre aux parties prenantes de faire des choix éclairés concernant leur engagement dans un système d'IA.": {
+   "en": "Enable stakeholders to make informed choices about their engagement with an AI system.",
+   "fr": "Permettre aux parties prenantes de faire des choix éclairés concernant leur engagement dans un système d'IA."
+  },
+  "Phase # — Conception du cadre de gouvernance": {
+   "en": "Phase # — Design of the governance framework",
+   "fr": "Phase 2 — Conception du cadre de gouvernance"
+  },
+  "Phase # — Diagnostic initial": {
+   "en": "Phase # — Initial diagnostic",
+   "fr": "Phase 1 — Diagnostic initial"
+  },
+  "Phase # — Déploiement opérationnel": {
+   "en": "Phase # — Operational deployment",
+   "fr": "Phase 3 — Déploiement opérationnel"
+  },
+  "Phase # — Maintenance et amélioration continue": {
+   "en": "Phase # — Maintenance and continual improvement",
+   "fr": "Phase 4 — Maintenance et amélioration continue"
+  },
+  "Plan d'action — # phases": {
+   "en": "Action plan — # phases",
+   "fr": "Plan d'action — 4 phases"
+  },
+  "Plan de maintenance & amélioration continue": {
+   "en": "Maintenance & continual improvement plan",
+   "fr": "Plan de maintenance & amélioration continue"
+  },
+  "Politiques et procédures conformes à l'EU AI Act (gestion des données, développement responsable, contrôle des modèles, transparence) et au système de management de l'IA ISO/IEC # (Art. # Leadership, Art. # Planification). Inclut les rôles (Responsable IA, DPO, Comité de Gouvernance) — Art. # EU AI Act / Annexe A.# ISO #.": {
+   "en": "Policies and procedures compliant with the EU AI Act (data management, responsible development, model control, transparency) and with the ISO/IEC # AI management system (clause # Leadership, clause # Planning). Includes the roles (AI lead, DPO, Governance Committee) — Art. # EU AI Act / Annex A.# ISO #.",
+   "fr": "Politiques et procédures conformes à l'EU AI Act (gestion des données, développement responsable, contrôle des modèles, transparence) et au système de management de l'IA ISO/IEC 42001 (Art. 5 Leadership, Art. 6 Planification). Inclut les rôles (Responsable IA, DPO, Comité de Gouvernance) — Art. 17 EU AI Act / Annexe A.3 ISO 42001."
+  },
+  "Politiques et procédures conformes à l'EU AI Act (gestion des données, développement respo…": {
+   "en": "Policies and procedures compliant with the EU AI Act (data management, responsible develo…",
+   "fr": "Politiques et procédures conformes à l'EU AI Act (gestion des données, développement respo…"
+  },
+  "Pratiques absentes ou ad hoc. Risque de non-conformité élevé.": {
+   "en": "Practices absent or ad hoc. High risk of non-compliance.",
+   "fr": "Pratiques absentes ou ad hoc. Risque de non-conformité élevé."
+  },
+  "Prise en compte des impacts sur les différents groupes de parties prenantes.": {
+   "en": "Taking account of the impacts on the different groups of stakeholders.",
+   "fr": "Prise en compte des impacts sur les différents groupes de parties prenantes."
+  },
+  "Processus documentés mais déploiement partiel.": {
+   "en": "Processes documented but only partially deployed.",
+   "fr": "Processus documentés mais déploiement partiel."
+  },
+  "Procédure d'audit de maturité": {
+   "en": "Maturity audit procedure",
+   "fr": "Procédure d'audit de maturité"
+  },
+  "Programme de formation": {
+   "en": "Training programme",
+   "fr": "Programme de formation"
+  },
+  "Programme de mise en conformite en # phases : Diagnostic, Conception du cadre de gouvernance, Deploiement operationnel, Maintenance continue. Methodologie CONSEILPREV.": {
+   "en": "Compliance programme in # phases: Diagnostic, Design of the governance framework, Operational deployment, Continuous maintenance. CONSEILPREV methodology.",
+   "fr": "Programme de mise en conformite en 4 phases : Diagnostic, Conception du cadre de gouvernance, Deploiement operationnel, Maintenance continue. Methodologie CONSEILPREV."
+  },
+  "Programme de mise en conformité sur # semaines environ.": {
+   "en": "Compliance programme over about # weeks.",
+   "fr": "Programme de mise en conformité sur 24 semaines environ."
+  },
+  "Protection renforcée des données clients (RGPD, ePrivacy). Chiffrement des communications et des métadonnées de connexion.": {
+   "en": "Enhanced protection of client data (GDPR, ePrivacy). Encryption of communications and connection metadata.",
+   "fr": "Protection renforcée des données clients (RGPD, ePrivacy). Chiffrement des communications et des métadonnées de connexion."
+  },
+  "Pré-audit": {
+   "en": "Pre-audit",
+   "fr": "Pré-audit"
+  },
+  "Prévention des réponses nuisibles et des utilisations abusives du système.": {
+   "en": "Prevention of harmful responses and misuse of the system.",
+   "fr": "Prévention des réponses nuisibles et des utilisations abusives du système."
+  },
+  "Questionnaire d'auto-évaluation": {
+   "en": "Self-assessment questionnaire",
+   "fr": "Questionnaire d'auto-évaluation"
+  },
+  "ROBUSTESSE & VERACITE (Art. #, #). Exactitude des reponses meme face a des entrees erronees. On evalue : le niveau d exactitude mesure et documente, la resilience aux erreurs et conditions degradees, les tests adversariaux.": {
+   "en": "ROBUSTNESS & ACCURACY (Art. #, #). Accuracy of responses even with erroneous inputs. We assess: the level of accuracy measured and documented, resilience to errors and degraded conditions, adversarial tests.",
+   "fr": "ROBUSTESSE & VERACITE (Art. 15, 9). Exactitude des reponses meme face a des entrees erronees. On evalue : le niveau d exactitude mesure et documente, la resilience aux erreurs et conditions degradees, les tests adversariaux."
+  },
+  "Rapport complet : tableau de bord KPIs, budget, calendrier, spécificités sectorielles, # piliers, procédure d'audit et livrables.": {
+   "en": "Full report: KPI dashboard, budget, schedule, sector specifics, # pillars, audit procedure and deliverables.",
+   "fr": "Rapport complet : tableau de bord KPIs, budget, calendrier, spécificités sectorielles, 8 piliers, procédure d'audit et livrables."
+  },
+  "Rapport d'audit de maturité": {
+   "en": "Maturity audit report",
+   "fr": "Rapport d'audit de maturité"
+  },
+  "Rechercher par nom, secteur, type, responsable…": {
+   "en": "Search by name, sector, type, owner…",
+   "fr": "Rechercher par nom, secteur, type, responsable…"
+  },
+  "Recommandations d'outils : registre IA (OneTrust/ServiceNow), tableau de bord de conformité (Power BI/Tableau), outil AIRI (CONSEILPREV) pour l'analyse automatisée des risques. Spécifications de mise en œuvre alignées sur les exigences de support et d'information documentée de l'ISO/IEC # (Art. #).": {
+   "en": "Tool recommendations: AI register (OneTrust/ServiceNow), compliance dashboard (Power BI/Tableau), AIRI tool (CONSEILPREV) for automated risk analysis. Implementation specifications aligned with the support and documented information requirements of ISO/IEC # (clause #).",
+   "fr": "Recommandations d'outils : registre IA (OneTrust/ServiceNow), tableau de bord de conformité (Power BI/Tableau), outil AIRI (CONSEILPREV) pour l'analyse automatisée des risques. Spécifications de mise en œuvre alignées sur les exigences de support et d'information documentée de l'ISO/IEC 42001 (Art. 7)."
+  },
+  "Recommandations d'outils : registre IA (OneTrust/ServiceNow), tableau de bord de conformit…": {
+   "en": "Tool recommendations: AI register (OneTrust/ServiceNow), compliance dashboard…",
+   "fr": "Recommandations d'outils : registre IA (OneTrust/ServiceNow), tableau de bord de conformit…"
+  },
+  "Refusés nommément : . Les lignes du registre voyagent en données dans la demande ; le moteur n’ouvre aucun fichier et n’écrit nulle part.": {
+   "en": "Explicitly refused: . The register rows travel as data in the request; the engine opens no file and writes nowhere.",
+   "fr": "Refusés nommément : . Les lignes du registre voyagent en données dans la demande ; le moteur n’ouvre aucun fichier et n’écrit nulle part."
+  },
+  "Refusés nommément : Read, Write, Edit, NotebookEdit, Bash, BashOutput, Glob, Grep, WebFetch, WebSearch, Task, TodoWrite. Les lignes du registre voyagent en données dans la demande ; le moteur n’ouvre aucun fichier et n’écrit nulle part.": {
+   "en": "Explicitly refused: Read, Write, Edit, NotebookEdit, Bash, BashOutput, Glob, Grep, WebFetch, WebSearch, Task, TodoWrite. The register rows travel as data in the request; the engine opens no file and writes nowhere.",
+   "fr": "Refusés nommément : Read, Write, Edit, NotebookEdit, Bash, BashOutput, Glob, Grep, WebFetch, WebSearch, Task, TodoWrite. Les lignes du registre voyagent en données dans la demande ; le moteur n’ouvre aucun fichier et n’écrit nulle part."
+  },
+  "Registre": {
+   "en": "Register",
+   "fr": "Registre"
+  },
+  "Regression logistique / XGBoost ·": {
+   "en": "Logistic regression / XGBoost ·",
+   "fr": "Regression logistique / XGBoost ·"
+  },
+  "Respect des engagements contractuels (SLA, RGPD). Gestion des réclamations liées à l'IA (erreurs de facturation automatisée).": {
+   "en": "Compliance with contractual commitments (SLA, GDPR). Handling of AI-related complaints (automated billing errors).",
+   "fr": "Respect des engagements contractuels (SLA, RGPD). Gestion des réclamations liées à l'IA (erreurs de facturation automatisée)."
+  },
+  "Revue d'applicabilité : périmètre des systèmes IA, classification préliminaire selon l'Annexe III, identification des données sensibles, planning et budget de la phase de diagnostic. Intègre la détermination du contexte et du périmètre exigée par ISO/IEC # (clauses # à #).": {
+   "en": "Applicability review: scope of the AI systems, preliminary classification under Annex III, identification of sensitive data, schedule and budget for the diagnostic phase. Incorporates the determination of context and scope required by ISO/IEC # (clauses # to #).",
+   "fr": "Revue d'applicabilité : périmètre des systèmes IA, classification préliminaire selon l'Annexe III, identification des données sensibles, planning et budget de la phase de diagnostic. Intègre la détermination du contexte et du périmètre exigée par ISO/IEC 42001 (clauses 4.1 à 4.3)."
+  },
+  "Revue d'applicabilité du système d'IA.": {
+   "en": "Applicability review of the AI system.",
+   "fr": "Revue d'applicabilité du système d'IA."
+  },
+  "Risque limite": {
+   "en": "Limited risk",
+   "fr": "Risque limite"
+  },
+  "Robustesse & Véracité": {
+   "en": "Robustness & Accuracy",
+   "fr": "Robustesse & Véracité"
+  },
+  "Réglementations internationales": {
+   "en": "International regulations",
+   "fr": "Réglementations internationales"
+  },
+  "Résilience des infrastructures": {
+   "en": "Infrastructure resilience",
+   "fr": "Résilience des infrastructures"
+  },
+  "SURETE (Art. #, #). Prevention des reponses nuisibles et des usages abusifs. On evalue : le systeme de gestion des risques documente, les tests avant deploiement, les mesures d attenuation des risques residuels.": {
+   "en": "SAFETY (Art. #, #). Prevention of harmful responses and misuse. We assess: the documented risk management system, tests before deployment, measures to mitigate residual risks.",
+   "fr": "SURETE (Art. 9, 15). Prevention des reponses nuisibles et des usages abusifs. On evalue : le systeme de gestion des risques documente, les tests avant deploiement, les mesures d attenuation des risques residuels."
+  },
+  "Santé / Médical": {
+   "en": "Health / Medical",
+   "fr": "Santé / Médical"
+  },
+  "Score": {
+   "en": "Score",
+   "fr": "Score"
+  },
+  "Score de maturité (#–#) par pilier, mappé aux articles du Règlement (UE) #/#. Répondez au questionnaire ci-dessous pour ajuster les scores.": {
+   "en": "Maturity score (#–#) per pillar, mapped to the articles of Regulation (EU) #/#. Answer the questionnaire below to adjust the scores.",
+   "fr": "Score de maturité (1–5) par pilier, mappé aux articles du Règlement (UE) 2024/1689. Répondez au questionnaire ci-dessous pour ajuster les scores."
+  },
+  "Score de maturité (#–#) pour chacun des # piliers de l'EU AI Act, avec recommandations prioritaires pour atteindre la conformité. Évaluation enrichie par les exigences d'audit interne et de revue de direction de l'ISO/IEC # (Art. #).": {
+   "en": "Maturity score (#–#) for each of the # pillars of the EU AI Act, with priority recommendations for achieving compliance. Assessment enriched by the internal audit and management review requirements of ISO/IEC # (clause #).",
+   "fr": "Score de maturité (1–5) pour chacun des 8 piliers de l'EU AI Act, avec recommandations prioritaires pour atteindre la conformité. Évaluation enrichie par les exigences d'audit interne et de revue de direction de l'ISO/IEC 42001 (Art. 9)."
+  },
+  "Score de maturité (#–#) pour chacun des # piliers de l'EU AI Act, avec recommandations pri…": {
+   "en": "Maturity score (#–#) for each of the # pillars of the EU AI Act, with priority recommend…",
+   "fr": "Score de maturité (1–5) pour chacun des 8 piliers de l'EU AI Act, avec recommandations pri…"
+  },
+  "Score global de maturite IA, moyenne des # piliers evalues selon le Reglement (UE) #/#. Echelle : # Initial, # Emergent, # Defini, # Maitrise, # Optimise. Calcule a partir de vos reponses au questionnaire.": {
+   "en": "Overall AI maturity score, average of the # pillars assessed under Regulation (EU) #/#. Scale: # Initial, # Emerging, # Defined, # Managed, # Optimised. Calculated from your answers to the questionnaire.",
+   "fr": "Score global de maturite IA, moyenne des 8 piliers evalues selon le Reglement (UE) 2024/1689. Echelle : 1 Initial, 2 Emergent, 3 Defini, 4 Maitrise, 5 Optimise. Calcule a partir de vos reponses au questionnaire."
+  },
+  "Score global de maturité": {
+   "en": "Overall maturity score",
+   "fr": "Score global de maturité"
+  },
+  "Secteur public / Administration": {
+   "en": "Public sector / Administration",
+   "fr": "Secteur public / Administration"
+  },
+  "Self-assessment questionnaire": {
+   "en": "Self-assessment questionnaire",
+   "fr": "Self-assessment questionnaire"
+  },
+  "Services administratifs et de soutien": {
+   "en": "Administrative and support services",
+   "fr": "Services administratifs et de soutien"
+  },
+  "Services professionnels, scientifiques et techniques": {
+   "en": "Professional, scientific and technical services",
+   "fr": "Services professionnels, scientifiques et techniques"
+  },
+  "Services à la personne et particuliers employeurs": {
+   "en": "Personal services and private employers",
+   "fr": "Services à la personne et particuliers employeurs"
+  },
+  "Spécificités du secteur Télécom": {
+   "en": "Specifics of the Telecom sector",
+   "fr": "Spécificités du secteur Télécom"
+  },
+  "Supports pédagogiques (modules, quiz) et plan de formation pour les équipes (Métiers, IT, Data, Juridique) sur l'EU AI Act, les # piliers et les processus de gouvernance. Certificats de participation — Art. # EU AI Act (littératie IA) et Annexe A.# / clause #-# ISO/IEC # (compétences et sensibilisation).": {
+   "en": "Training materials (modules, quizzes) and training plan for the teams (Business, IT, Data, Legal) on the EU AI Act, the # pillars and the governance processes. Certificates of attendance — Art. # EU AI Act (AI literacy) and Annex A.# / clause #-# ISO/IEC # (competence and awareness).",
+   "fr": "Supports pédagogiques (modules, quiz) et plan de formation pour les équipes (Métiers, IT, Data, Juridique) sur l'EU AI Act, les 8 piliers et les processus de gouvernance. Certificats de participation — Art. 4 EU AI Act (littératie IA) et Annexe A.4.6 / clause 7.2-7.3 ISO/IEC 42001 (compétences et sensibilisation)."
+  },
+  "Supports pédagogiques (modules, quiz) et plan de formation pour les équipes (Métiers, IT, …": {
+   "en": "Training materials (modules, quizzes) and training plan for the teams (Business, IT, …",
+   "fr": "Supports pédagogiques (modules, quiz) et plan de formation pour les équipes (Métiers, IT, …"
+  },
+  "Supprimer Assistant de tri des courriels du registre": {
+   "en": "Remove Assistant de tri des courriels from the register",
+   "fr": "Supprimer Assistant de tri des courriels du registre"
+  },
+  "Supprimer Chatbot service client du registre": {
+   "en": "Remove Chatbot service client from the register",
+   "fr": "Supprimer Chatbot service client du registre"
+  },
+  "Supprimer Detection de fraude transactionnelle du registre": {
+   "en": "Remove Detection de fraude transactionnelle from the register",
+   "fr": "Supprimer Detection de fraude transactionnelle du registre"
+  },
+  "Supprimer Maintenance predictive reseau du registre": {
+   "en": "Remove Maintenance predictive reseau from the register",
+   "fr": "Supprimer Maintenance predictive reseau du registre"
+  },
+  "Supprimer Recette — deux fois du registre": {
+   "en": "Remove Recette — deux fois from the register",
+   "fr": "Supprimer Recette — deux fois du registre"
+  },
+  "Supprimer Recette — la décision écrit du registre": {
+   "en": "Remove Recette — la décision écrit from the register",
+   "fr": "Supprimer Recette — la décision écrit du registre"
+  },
+  "Supprimer Recette — proposition sans écriture du registre": {
+   "en": "Remove Recette — proposition sans écriture from the register",
+   "fr": "Supprimer Recette — proposition sans écriture du registre"
+  },
+  "Supprimer Recette — sans nom saisi du registre": {
+   "en": "Remove Recette — sans nom saisi from the register",
+   "fr": "Supprimer Recette — sans nom saisi du registre"
+  },
+  "Supprimer Recette — écartée du registre": {
+   "en": "Remove Recette — écartée from the register",
+   "fr": "Supprimer Recette — écartée du registre"
+  },
+  "Système IA": {
+   "en": "AI system",
+   "fr": "Système IA"
+  },
+  "Systèmes IA typiques du secteur": {
+   "en": "Typical AI systems in the sector",
+   "fr": "Systèmes IA typiques du secteur"
+  },
+  "Sécurité des réseaux (NIS#) et continuité de service. Tests de robustesse des systèmes IA critiques (maintenance prédictive).": {
+   "en": "Network security (NIS #) and service continuity. Robustness tests of critical AI systems (predictive maintenance).",
+   "fr": "Sécurité des réseaux (NIS2) et continuité de service. Tests de robustesse des systèmes IA critiques (maintenance prédictive)."
+  },
+  "Sûreté": {
+   "en": "Safety",
+   "fr": "Sûreté"
+  },
+  "TRANSPARENCE (Art. #, #). Information des parties prenantes sur l usage de l IA. On evalue : l information que l on interagit avec une IA, le marquage des contenus generes (watermarking), la documentation accessible.": {
+   "en": "TRANSPARENCY (Art. #, #). Informing stakeholders about the use of AI. We assess: informing people that they are interacting with an AI, the marking of generated content (watermarking), accessible documentation.",
+   "fr": "TRANSPARENCE (Art. 13, 50). Information des parties prenantes sur l usage de l IA. On evalue : l information que l on interagit avec une IA, le marquage des contenus generes (watermarking), la documentation accessible."
+  },
+  "Tableau de bord de pilotage (KPIs)": {
+   "en": "Steering dashboard (KPIs)",
+   "fr": "Tableau de bord de pilotage (KPIs)"
+  },
+  "Tests directs": {
+   "en": "Direct tests",
+   "fr": "Tests directs"
+  },
+  "Transport / Mobilité": {
+   "en": "Transport / Mobility",
+   "fr": "Transport / Mobilité"
+  },
+  "Télécom": {
+   "en": "Telecom",
+   "fr": "Télécom"
+  },
+  "Un système de gestion de la qualité (SGQ) couvrant l'IA est-il en place ?": {
+   "en": "Is a quality management system (QMS) covering AI in place?",
+   "fr": "Un système de gestion de la qualité (SGQ) couvrant l'IA est-il en place ?"
+  },
+  "Un système de gestion des risques documenté est-il établi et tenu à jour ?": {
+   "en": "Is a documented risk management system established and kept up to date?",
+   "fr": "Un système de gestion des risques documenté est-il établi et tenu à jour ?"
+  },
+  "Une notice d'utilisation documente-t-elle les capacités, limites et performances du système ?": {
+   "en": "Do instructions for use document the system’s capabilities, limitations and performance?",
+   "fr": "Une notice d'utilisation documente-t-elle les capacités, limites et performances du système ?"
+  },
+  "Votre activité au classement européen": {
+   "en": "Your activity in the European classification (NACE)",
+   "fr": "Votre activité au classement européen"
+  },
+  "Votre nom et votre rôle (ex. C. Cerf — DPO)": {
+   "en": "Your name and role (e.g. C. Cerf — DPO)",
+   "fr": "Votre nom et votre rôle (ex. C. Cerf — DPO)"
+  },
+  "aucun outil": {
+   "en": "no tool",
+   "fr": "aucun outil"
+  },
+  "désignent un profil sectoriel.": {
+   "en": "denote a sector profile.",
+   "fr": "désignent un profil sectoriel."
+  },
+  "ePrivacy": {
+   "en": "ePrivacy Directive",
+   "fr": "ePrivacy"
+  },
+  "portent un socle relevé — point de départ observé, budget et durée issus de missions réelles ; les # autres portent un régime lu dans les textes et le disent, sans socle ni budget.": {
+   "en": "carry a recorded baseline — observed starting point, budget and duration drawn from real engagements; the # others carry a regime read from the texts and say so, with no baseline and no budget.",
+   "fr": "portent un socle relevé — point de départ observé, budget et durée issus de missions réelles ; les 13 autres portent un régime lu dans les textes et le disent, sans socle ni budget."
+  },
+  "« Evaluer la solvabilite pour l'octroi de credit »": {
+   "en": "« Assessing creditworthiness for the granting of credit »",
+   "fr": "« Evaluer la solvabilite pour l'octroi de credit »"
+  },
+  "« historique credit »": {
+   "en": "« credit history »",
+   "fr": "« historique credit »"
+  },
+  "· # tour.": {
+   "en": "· # round.",
+   "fr": "· 1 tour."
+  },
+  "· Art. # §# et annexe III — domaines à haut risque": {
+   "en": "· Art. #(#) and Annex III — high-risk areas",
+   "fr": "· Art. 6 §2 et annexe III — domaines à haut risque"
+  },
+  "· tour.": {
+   "en": "· turns.",
+   "fr": "· tour."
+  },
+  "À évaluer →": {
+   "en": "To be assessed →",
+   "fr": "À évaluer →"
+  },
+  "Énergie / Utilities": {
+   "en": "Energy / Utilities",
+   "fr": "Énergie / Utilities"
+  },
+  "Équité": {
+   "en": "Fairness",
+   "fr": "Équité"
+  },
+  "Évaluation des # piliers de maturité IA": {
+   "en": "Assessment of the # AI maturity pillars",
+   "fr": "Évaluation des 8 piliers de maturité IA"
+  },
+  "Évaluation structurée selon les # piliers de l'EU AI Act, déclinée par secteur d'activité. Analyse, scoring, plan d'action et livrables téléchargeables.": {
+   "en": "A structured assessment against the # pillars of the EU AI Act, broken down by sector. Analysis, scoring, action plan and downloadable deliverables.",
+   "fr": "Évaluation structurée selon les 8 piliers de l'EU AI Act, déclinée par secteur d'activité. Analyse, scoring, plan d'action et livrables téléchargeables."
+  },
+  "Évaluation sur site avec les équipes métiers : protocole d'entretiens, observation des systèmes en conditions réelles, vérification de la supervision humaine et de la gouvernance, alignée sur les exigences d'exploitation et d'audit interne de l'ISO/IEC # (Art. #, #).": {
+   "en": "On-site assessment with the business teams: interview protocol, observation of the systems in real conditions, verification of human oversight and governance, aligned with the operation and internal audit requirements of ISO/IEC # (clauses #, #).",
+   "fr": "Évaluation sur site avec les équipes métiers : protocole d'entretiens, observation des systèmes en conditions réelles, vérification de la supervision humaine et de la gouvernance, alignée sur les exigences d'exploitation et d'audit interne de l'ISO/IEC 42001 (Art. 8, 9.2)."
+  },
+  "Évaluation sur site avec les équipes métiers.": {
+   "en": "On-site assessment with the business teams.",
+   "fr": "Évaluation sur site avec les équipes métiers."
+  },
+  "— Section d’activité (NACE Rév. #) —": {
+   "en": "— Activity section (NACE Rev. #) —",
+   "fr": "— Section d’activité (NACE Rév. 2.1) —"
+  },
+  "↓ Document Word": {
+   "en": "↓ Word document",
+   "fr": "↓ Document Word"
+  },
+  "↓ Rapport PDF": {
+   "en": "↓ PDF report",
+   "fr": "↓ Rapport PDF"
+  },
+  "① Conception": {
+   "en": "① Design",
+   "fr": "① Conception"
+  },
+  "▸ Cadre de gouvernance + Politiques + Matrice RACI + Système de veille": {
+   "en": "▸ Governance framework + Policies + RACI matrix + Watch system",
+   "fr": "▸ Cadre de gouvernance + Politiques + Matrice RACI + Système de veille"
+  },
+  "▸ Environnement opérationnel + Rapports d'audit + Équipes formées (#%)": {
+   "en": "▸ Operational environment + Audit reports + Trained teams (#%)",
+   "fr": "▸ Environnement opérationnel + Rapports d'audit + Équipes formées (100%)"
+  },
+  "▸ Rapport de diagnostic + Registre IA préliminaire + Matrice des écarts": {
+   "en": "▸ Diagnostic report + Preliminary AI register + Gap matrix",
+   "fr": "▸ Rapport de diagnostic + Registre IA préliminaire + Matrice des écarts"
+  },
+  "▸ Rapports trimestriels + Mises à jour + Plan d'amélioration continue": {
+   "en": "▸ Quarterly reports + Updates + Continual improvement plan",
+   "fr": "▸ Rapports trimestriels + Mises à jour + Plan d'amélioration continue"
+  },
+  "⚙ Générer le guide →": {
+   "en": "⚙ Generate the guide →",
+   "fr": "⚙ Générer le guide →"
+  },
+  "⚙️ Proposer pour les systèmes non classés": {
+   "en": "⚙️ Propose for the unclassified systems",
+   "fr": "⚙️ Proposer pour les systèmes non classés"
+  },
+  "✕ Écarter": {
+   "en": "✕ Reject",
+   "fr": "✕ Écarter"
+  },
+  "🏢 Générer le guide →": {
+   "en": "🏢 Generate the guide →",
+   "fr": "🏢 Générer le guide →"
+  },
+  "💾 Enregistrer dans l’historique": {
+   "en": "💾 Save to history",
+   "fr": "💾 Enregistrer dans l’historique"
+  },
+  "📁 Générer le guide →": {
+   "en": "📁 Generate the guide →",
+   "fr": "📁 Générer le guide →"
+  },
+  "📚 Base de connaissance": {
+   "en": "📚 Knowledge base",
+   "fr": "📚 Base de connaissance"
+  },
+  "📚 Cas d usage": {
+   "en": "📚 Use cases",
+   "fr": "📚 Cas d usage"
+  },
+  "🔍 Générer le guide →": {
+   "en": "🔍 Generate the guide →",
+   "fr": "🔍 Générer le guide →"
+  }
+ }
+}

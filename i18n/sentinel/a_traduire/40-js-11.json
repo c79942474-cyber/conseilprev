@@ -1,0 +1,931 @@
+{
+ "_lot": "40-js-11",
+ "_mots": 2415,
+ "_pages": [
+  "_js"
+ ],
+ "_rubrique": "_js",
+ "bloc": {},
+ "texte": {
+  "En tant que fournisseur (Art. #), vous portez l'integralite des obligations du cycle de conception d'un systeme IA a haut risque. Les sept jalons s'appliquent : registre, classification, systeme de gestion des risques (Art. #), documentation technique (Art. #), analyse d'impact sur les droits fondamentaux, audit de conformite et attestation finale (Art. #) precedant le marquage CE.": {
+   "en": "As a provider (Art. #), you carry all the obligations of the design cycle of a high-risk AI system. All seven milestones apply: register, classification, risk management system (Art. #), technical documentation (Art. #), fundamental rights impact assessment, compliance audit and final attestation (Art. #) preceding the CE marking.",
+   "fr": "En tant que fournisseur (Art. 16), vous portez l'integralite des obligations du cycle de conception d'un systeme IA a haut risque. Les sept jalons s'appliquent : registre, classification, systeme de gestion des risques (Art. 9), documentation technique (Art. 11), analyse d'impact sur les droits fondamentaux, audit de conformite et attestation finale (Art. 47) precedant le marquage CE."
+  },
+  "Encadrement des transferts hors UE (clauses types)": {
+   "en": "Safeguards for transfers outside the EU (standard clauses)",
+   "fr": "Encadrement des transferts hors UE (clauses types)"
+  },
+  "Encadrement et référents": {
+   "en": "Management and leads",
+   "fr": "Encadrement et référents"
+  },
+  "Encadrement strict (Art. # sur l'identification biométrique). Bases légales spécifiques requises. Proportionnalité.": {
+   "en": "Strict framework (Art. # on biometric identification). Specific legal bases required. Proportionality.",
+   "fr": "Encadrement strict (Art. 5 sur l'identification biométrique). Bases légales spécifiques requises. Proportionnalité."
+  },
+  "Enregistrement dans la base de donnees EU (Art. # ; base de donnees : Art. #) pour systemes Annexe III": {
+   "en": "Registration in the EU database (Art. #; database: Art. #) for Annex III systems",
+   "fr": "Enregistrement dans la base de donnees EU (Art. 49 ; base de donnees : Art. 71) pour systemes Annexe III"
+  },
+  "Enregistrement dans la base de données de l'Union": {
+   "en": "Registration in the EU database",
+   "fr": "Enregistrement dans la base de données de l'Union"
+  },
+  "Enregistrement de la demande…": {
+   "en": "Saving the request…",
+   "fr": "Enregistrement de la demande…"
+  },
+  "Enregistrement du système avant sa mise sur le marché ou en service.": {
+   "en": "Registration of the system before placing on the market or putting into service.",
+   "fr": "Enregistrement du système avant sa mise sur le marché ou en service."
+  },
+  "Enregistrement refusé (HTTP": {
+   "en": "Save refused (HTTP",
+   "fr": "Enregistrement refusé (HTTP"
+  },
+  "Enregistrer au Registre IA": {
+   "en": "Save to the AI register",
+   "fr": "Enregistrer au Registre IA"
+  },
+  "Enregistrer cette evaluation FRIA dans l historique persistant et tracable (RGPD).": {
+   "en": "Save this FRIA assessment to the persistent and traceable history (GDPR).",
+   "fr": "Enregistrer cette evaluation FRIA dans l historique persistant et tracable (RGPD)."
+  },
+  "Enregistrer dans la base EU AI Office": {
+   "en": "Register in the EU AI Office database",
+   "fr": "Enregistrer dans la base EU AI Office"
+  },
+  "Enregistrer la décision": {
+   "en": "Save the decision",
+   "fr": "Enregistrer la décision"
+  },
+  "Enregistrer la fiche KYC": {
+   "en": "Save the KYC record",
+   "fr": "Enregistrer la fiche KYC"
+  },
+  "Enregistrer la relance": {
+   "en": "Save the reminder",
+   "fr": "Enregistrer la relance"
+  },
+  "Enregistrer le contrat courant": {
+   "en": "Save the current contract",
+   "fr": "Enregistrer le contrat courant"
+  },
+  "Enregistrer le mandataire dans la base de données EU": {
+   "en": "Register the authorised representative in the EU database",
+   "fr": "Enregistrer le mandataire dans la base de données EU"
+  },
+  "Enregistrer le modèle auprès de l'AI Office": {
+   "en": "Register the model with the AI Office",
+   "fr": "Enregistrer le modèle auprès de l'AI Office"
+  },
+  "Enregistrer le statut": {
+   "en": "Save the status",
+   "fr": "Enregistrer le statut"
+  },
+  "Enregistrer le système dans la base de données EU avant mise sur le marché": {
+   "en": "Register the system in the EU database before placing on the market",
+   "fr": "Enregistrer le système dans la base de données EU avant mise sur le marché"
+  },
+  "Enregistrer les modifications": {
+   "en": "Save changes",
+   "fr": "Enregistrer les modifications"
+  },
+  "Enregistrez chaque système classifié avec sa finalité, son fournisseur et les données qu’il utilise.": {
+   "en": "Record each classified system with its purpose, its provider and the data it uses.",
+   "fr": "Enregistrez chaque système classifié avec sa finalité, son fournisseur et les données qu’il utilise."
+  },
+  "Enregistrez chaque système classifié avec sa finalité, son fournisseur et ses données utilisées.": {
+   "en": "Record each classified system with its purpose, its provider and the data used.",
+   "fr": "Enregistrez chaque système classifié avec sa finalité, son fournisseur et ses données utilisées."
+  },
+  "Enregistrez le système classifié avec sa finalité.": {
+   "en": "Record the classified system with its purpose.",
+   "fr": "Enregistrez le système classifié avec sa finalité."
+  },
+  "Ensemble du personnel": {
+   "en": "All staff",
+   "fr": "Ensemble du personnel"
+  },
+  "Entité financière — je monte ma résilience opérationnelle": {
+   "en": "Financial entity — I am building my operational resilience",
+   "fr": "Entité financière — je monte ma résilience opérationnelle"
+  },
+  "Entité responsable": {
+   "en": "Responsible entity",
+   "fr": "Entité responsable"
+  },
+  "Entreprises et références": {
+   "en": "Companies and references",
+   "fr": "Entreprises et références"
+  },
+  "Entreprises générales, second œuvre, travaux publics, maîtrise d'œuvre d'exécution.": {
+   "en": "General contractors, finishing trades, public works, construction project management.",
+   "fr": "Entreprises générales, second œuvre, travaux publics, maîtrise d'œuvre d'exécution."
+  },
+  "Enveloppe d'investissement — décision GO / NO GO": {
+   "en": "Investment envelope — GO / NO-GO decision",
+   "fr": "Enveloppe d'investissement — décision GO / NO GO"
+  },
+  "Enveloppe d’investissement et DPGF": {
+   "en": "Investment envelope and DPGF",
+   "fr": "Enveloppe d’investissement et DPGF"
+  },
+  "Enveloppe résultats (": {
+   "en": "Results envelope (",
+   "fr": "Enveloppe résultats ("
+  },
+  "Enveloppe résultats totale (HT)": {
+   "en": "Total results envelope (excl. VAT)",
+   "fr": "Enveloppe résultats totale (HT)"
+  },
+  "Environnement opérationnel + Rapports d'audit + Équipes formées (#%)": {
+   "en": "Operational environment + Audit reports + Trained teams (#%)",
+   "fr": "Environnement opérationnel + Rapports d'audit + Équipes formées (100%)"
+  },
+  "Envisager la certification ISO # (SMIA)": {
+   "en": "Consider ISO # certification (AIMS)",
+   "fr": "Envisager la certification ISO 42001 (SMIA)"
+  },
+  "Envoi et extraction du texte…": {
+   "en": "Uploading and extracting the text…",
+   "fr": "Envoi et extraction du texte…"
+  },
+  "Envoyer par email à CONSEILPREV la synthèse des impayés et relances en attente ?": {
+   "en": "Email CONSEILPREV the summary of unpaid invoices and pending reminders?",
+   "fr": "Envoyer par email à CONSEILPREV la synthèse des impayés et relances en attente ?"
+  },
+  "Envoyer quand même": {
+   "en": "Send anyway",
+   "fr": "Envoyer quand même"
+  },
+  "Envoyer un email de rappel de paiement au client pour la facture": {
+   "en": "Send a payment reminder email to the client for the invoice",
+   "fr": "Envoyer un email de rappel de paiement au client pour la facture"
+  },
+  "Equilibrage automatique du reseau (smart grid)": {
+   "en": "Automated grid balancing (smart grid)",
+   "fr": "Equilibrage automatique du reseau (smart grid)"
+  },
+  "Equipe projet valorisee au taux journalier moyen (TJM) du marche conseil IA/GRC.": {
+   "en": "Project team valued at the average daily rate of the AI/GRC consulting market.",
+   "fr": "Equipe projet valorisee au taux journalier moyen (TJM) du marche conseil IA/GRC."
+  },
+  "Erreur de chargement (": {
+   "en": "Loading error (",
+   "fr": "Erreur de chargement ("
+  },
+  "Erreur de chargement KYC.": {
+   "en": "Error loading KYC.",
+   "fr": "Erreur de chargement KYC."
+  },
+  "Erreur de chargement de l historique.": {
+   "en": "Error loading the history.",
+   "fr": "Erreur de chargement de l historique."
+  },
+  "Erreur de chargement des clients.": {
+   "en": "Error loading clients.",
+   "fr": "Erreur de chargement des clients."
+  },
+  "Erreur de chargement des relances.": {
+   "en": "Error loading reminders.",
+   "fr": "Erreur de chargement des relances."
+  },
+  "Erreur de chargement du Registre IA.": {
+   "en": "Error loading the AI register.",
+   "fr": "Erreur de chargement du Registre IA."
+  },
+  "Erreur de chargement du portefeuille.": {
+   "en": "Error loading the portfolio.",
+   "fr": "Erreur de chargement du portefeuille."
+  },
+  "Erreur de chargement du registre.": {
+   "en": "Error loading the register.",
+   "fr": "Erreur de chargement du registre."
+  },
+  "Erreur de chargement du tableau de bord.": {
+   "en": "Error loading the dashboard.",
+   "fr": "Erreur de chargement du tableau de bord."
+  },
+  "Erreur de generation. Reessayez ou contactez christophe.cerf@outlook.com": {
+   "en": "Generation error. Try again or contact christophe.cerf@outlook.com",
+   "fr": "Erreur de generation. Reessayez ou contactez christophe.cerf@outlook.com"
+  },
+  "Erreur de génération. Réessayez ou contactez christophe.cerf@outlook.com": {
+   "en": "Generation error. Try again or contact christophe.cerf@outlook.com",
+   "fr": "Erreur de génération. Réessayez ou contactez christophe.cerf@outlook.com"
+  },
+  "Erreur de prévision réduite ; visibilité trésorerie allongée.": {
+   "en": "Reduced forecasting error; longer cash visibility.",
+   "fr": "Erreur de prévision réduite ; visibilité trésorerie allongée."
+  },
+  "Erreur de traitement de la réponse IA.": {
+   "en": "Error processing the AI response.",
+   "fr": "Erreur de traitement de la réponse IA."
+  },
+  "Erreur lors de l ajout au registre.": {
+   "en": "Error while adding to the register.",
+   "fr": "Erreur lors de l ajout au registre."
+  },
+  "Erreur lors de l enregistrement.": {
+   "en": "Error while saving.",
+   "fr": "Erreur lors de l enregistrement."
+  },
+  "Erreur lors de l'analyse. Reessayez.": {
+   "en": "Error during analysis. Try again.",
+   "fr": "Erreur lors de l'analyse. Reessayez."
+  },
+  "Erreur lors de l'enregistrement.": {
+   "en": "Error while saving.",
+   "fr": "Erreur lors de l'enregistrement."
+  },
+  "Erreur lors de la création.": {
+   "en": "Error while creating.",
+   "fr": "Erreur lors de la création."
+  },
+  "Erreur lors de la recherche. Réessayez.": {
+   "en": "Error during search. Try again.",
+   "fr": "Erreur lors de la recherche. Réessayez."
+  },
+  "Erreur lors de la suppression.": {
+   "en": "Error while deleting.",
+   "fr": "Erreur lors de la suppression."
+  },
+  "Erreur lors de l’accès à Stripe.": {
+   "en": "Error while accessing Stripe.",
+   "fr": "Erreur lors de l’accès à Stripe."
+  },
+  "Erreur réseau lors de la suppression.": {
+   "en": "Network error while deleting.",
+   "fr": "Erreur réseau lors de la suppression."
+  },
+  "Erreur réseau.": {
+   "en": "Network error.",
+   "fr": "Erreur réseau."
+  },
+  "Estimation automatique des degats et du montant d indemnisation.": {
+   "en": "Automated estimation of damage and the compensation amount.",
+   "fr": "Estimation automatique des degats et du montant d indemnisation."
+  },
+  "Estimation automatisée de valeur": {
+   "en": "Automated valuation",
+   "fr": "Estimation automatisée de valeur"
+  },
+  "Estimation de cadrage à valider avec CONSEILPREV avant tout engagement.": {
+   "en": "Scoping estimate to be validated with CONSEILPREV before any commitment.",
+   "fr": "Estimation de cadrage à valider avec CONSEILPREV avant tout engagement."
+  },
+  "Estimation de coûts": {
+   "en": "Cost estimation",
+   "fr": "Estimation de coûts"
+  },
+  "Estimation et evaluation des risques lors de l’usage prevu et impropre (Art. #(#)(b)(c))": {
+   "en": "Estimation and evaluation of risks during intended use and misuse (Art. #(#)(b)(c))",
+   "fr": "Estimation et evaluation des risques lors de l’usage prevu et impropre (Art. 9(2)(b)(c))"
+  },
+  "Estimation indicative fondee sur les taux du marche conseil IA/GRC (France #) et un profil sectoriel de reference. Les couts reels dependent du perimetre precis. Document de travail CONSEILPREV.": {
+   "en": "Indicative estimate based on AI/GRC consulting market rates (France #) and a reference sector profile. Actual costs depend on the precise scope. CONSEILPREV working document.",
+   "fr": "Estimation indicative fondee sur les taux du marche conseil IA/GRC (France 2025) et un profil sectoriel de reference. Les couts reels dependent du perimetre precis. Document de travail CONSEILPREV."
+  },
+  "Estimations CONSEILPREV ponderees sur # dimensions (Severite, Transparence, Responsabilite, Souverainete des donnees, Sanctions, Innovation). Methodologie interne, pas de note officielle externe. A vocation d aide a la decision uniquement.": {
+   "en": "CONSEILPREV estimates weighted over # dimensions (Severity, Transparency, Accountability, Data sovereignty, Penalties, Innovation). Internal methodology, not an official external score. Intended solely as a decision aid.",
+   "fr": "Estimations CONSEILPREV ponderees sur 6 dimensions (Severite, Transparence, Responsabilite, Souverainete des donnees, Sanctions, Innovation). Methodologie interne, pas de note officielle externe. A vocation d aide a la decision uniquement."
+  },
+  "Estimations de cadrage a valider avec les metiers et la direction financiere. Genere par Sentinel AI.": {
+   "en": "Scoping estimates to be validated with the business lines and the finance department. Generated by Sentinel AI.",
+   "fr": "Estimations de cadrage a valider avec les metiers et la direction financiere. Genere par Sentinel AI."
+  },
+  "Estimations de cadrage à valider avec CONSEILPREV et votre direction financière avant tout engagement.": {
+   "en": "Scoping estimates to be validated with CONSEILPREV and your finance department before any commitment.",
+   "fr": "Estimations de cadrage à valider avec CONSEILPREV et votre direction financière avant tout engagement."
+  },
+  "Estimations de cadrage à valider avec CONSEILPREV et votre direction financière.": {
+   "en": "Scoping estimates to be validated with CONSEILPREV and your finance department.",
+   "fr": "Estimations de cadrage à valider avec CONSEILPREV et votre direction financière."
+  },
+  "Estimations à valider avec CONSEILPREV.": {
+   "en": "Estimates to be validated with CONSEILPREV.",
+   "fr": "Estimations à valider avec CONSEILPREV."
+  },
+  "Estime l exposition financière en cas de non-conformité, selon le barème de l Art. # EU AI Act (jusqu à #M€ ou #% du CA mondial).": {
+   "en": "Estimates the financial exposure in the event of non-compliance, according to the scale in Art. # EU AI Act (up to €#M or #% of worldwide turnover).",
+   "fr": "Estime l exposition financière en cas de non-conformité, selon le barème de l Art. 99 EU AI Act (jusqu à 35M€ ou 7% du CA mondial)."
+  },
+  "Estimé via l'audit de maturité": {
+   "en": "Estimated via the maturity audit",
+   "fr": "Estimé via l'audit de maturité"
+  },
+  "Et le plafond se nomme, avec sa raison. La différence compte : « vous avez fait # % du chemin » est vrai, « vous êtes à # % de la conformité » est faux tant que la porte est fermée. Le brut reste affiché à côté du taux, pour qu’on voie le travail déjà fait.": {
+   "en": "And the cap is named, with its reason. The difference matters: « you have done # % of the way » is true, « you are at # % of compliance » is false as long as the door is shut. The gross figure stays displayed beside the rate, so that the work already done can be seen.",
+   "fr": "Et le plafond se nomme, avec sa raison. La différence compte : « vous avez fait 70 % du chemin » est vrai, « vous êtes à 70 % de la conformité » est faux tant que la porte est fermée. Le brut reste affiché à côté du taux, pour qu’on voie le travail déjà fait."
+  },
+  "Etapes du simulateur ?": {
+   "en": "Simulator steps?",
+   "fr": "Etapes du simulateur ?"
+  },
+  "Eurostat — prix industriels de l’électricité, série nrg_pc_#, en classes": {
+   "en": "Eurostat — industrial electricity prices, series nrg_pc_#, by band",
+   "fr": "Eurostat — prix industriels de l’électricité, série nrg_pc_205, en classes"
+  },
+  "Evaluation adversariale pour modeles a risque systemique (plus de #e# FLOPS)": {
+   "en": "Adversarial testing for models with systemic risk (more than #e# FLOPS)",
+   "fr": "Evaluation adversariale pour modeles a risque systemique (plus de 10e25 FLOPS)"
+  },
+  "Evaluation automatisee de la capacite de remboursement d un client.": {
+   "en": "Automated assessment of a client’s repayment capacity.",
+   "fr": "Evaluation automatisee de la capacite de remboursement d un client."
+  },
+  "Evaluation automatisee de la performance": {
+   "en": "Automated performance assessment",
+   "fr": "Evaluation automatisee de la performance"
+  },
+  "Evaluation automatisee des sinistres": {
+   "en": "Automated claims assessment",
+   "fr": "Evaluation automatisee des sinistres"
+  },
+  "Evaluation automatisee du risque financier ou reputationnel d un fournisseur.": {
+   "en": "Automated assessment of a supplier’s financial or reputational risk.",
+   "fr": "Evaluation automatisee du risque financier ou reputationnel d un fournisseur."
+  },
+  "Evaluation de conformite Art. # ?": {
+   "en": "Art. # conformity assessment?",
+   "fr": "Evaluation de conformite Art. 43 ?"
+  },
+  "Evaluation des categories de pratiques interdites (Art. #(#)(a)-(h), et (ba)-(bb) a partir du # decembre #)": {
+   "en": "Assessment of the categories of prohibited practices (Art. #(#)(a)-(h), and (ba)-(bb) from # December #)",
+   "fr": "Evaluation des categories de pratiques interdites (Art. 5(1)(a)-(h), et (ba)-(bb) a partir du 2 decembre 2026)"
+  },
+  "Evaluation des impacts sur les droits pertinents de la Charte UE": {
+   "en": "Assessment of impacts on the relevant rights of the EU Charter",
+   "fr": "Evaluation des impacts sur les droits pertinents de la Charte UE"
+  },
+  "Ex : Gestion de la paie": {
+   "en": "e.g. Payroll management",
+   "fr": "Ex : Gestion de la paie"
+  },
+  "Ex : durée du contrat + # ans": {
+   "en": "e.g. contract duration + # years",
+   "fr": "Ex : durée du contrat + 5 ans"
+  },
+  "Ex : identité, coordonnées, données de connexion": {
+   "en": "e.g. identity, contact details, connection data",
+   "fr": "Ex : identité, coordonnées, données de connexion"
+  },
+  "Ex : salariés, clients, prospects": {
+   "en": "e.g. employees, clients, prospects",
+   "fr": "Ex : salariés, clients, prospects"
+  },
+  "Exactitude, robustesse et cybersécurité": {
+   "en": "Accuracy, robustness and cybersecurity",
+   "fr": "Exactitude, robustesse et cybersécurité"
+  },
+  "Examen momentanément": {
+   "en": "Review temporarily",
+   "fr": "Examen momentanément"
+  },
+  "Excellence opérationnelle, amélioration continue.": {
+   "en": "Operational excellence, continual improvement.",
+   "fr": "Excellence opérationnelle, amélioration continue."
+  },
+  "Exclusion de l’identification biometrique a distance en temps reel dans les espaces accessibles au public a des fins repressives, sauf les trois exceptions strictes de l’Art. #(#)(h) et les garanties de l’Art. #(#)-(#)": {
+   "en": "Exclusion of real-time remote biometric identification in publicly accessible spaces for law-enforcement purposes, except for the three strict exceptions of Art. #(#)(h) and the safeguards of Art. #(#)-(#)",
+   "fr": "Exclusion de l’identification biometrique a distance en temps reel dans les espaces accessibles au public a des fins repressives, sauf les trois exceptions strictes de l’Art. 5(1)(h) et les garanties de l’Art. 5(2)-(7)"
+  },
+  "Exclusion des systemes de notation sociale, par toute entite publique ou privee (Art. #(#)(c))": {
+   "en": "Exclusion of social scoring systems, by any public or private entity (Art. #(#)(c))",
+   "fr": "Exclusion des systemes de notation sociale, par toute entite publique ou privee (Art. 5(1)(c))"
+  },
+  "Execution automatisee d ordres selon des signaux de marche.": {
+   "en": "Automated order execution based on market signals.",
+   "fr": "Execution automatisee d ordres selon des signaux de marche."
+  },
+  "Exercer le droit à l’effacement": {
+   "en": "Exercise the right to erasure",
+   "fr": "Exercer le droit à l’effacement"
+  },
+  "Exigences sur la qualité, la provenance et la gestion des données d'entraînement et d'usage.": {
+   "en": "Requirements on the quality, provenance and management of training and operational data.",
+   "fr": "Exigences sur la qualité, la provenance et la gestion des données d'entraînement et d'usage."
+  },
+  "Existe-t-il un risque de traitement disproportionné ou insuffisamment sécurisé des données ?": {
+   "en": "Is there a risk of disproportionate or insufficiently secured data processing?",
+   "fr": "Existe-t-il un risque de traitement disproportionné ou insuffisamment sécurisé des données ?"
+  },
+  "Existe-t-il une voie de recours claire en cas de décision défavorable issue du système IA ?": {
+   "en": "Is there a clear means of redress in the event of an adverse decision resulting from the AI system?",
+   "fr": "Existe-t-il une voie de recours claire en cas de décision défavorable issue du système IA ?"
+  },
+  "Existence d'un registre national ou international où les systèmes à risque doivent être déclarés.": {
+   "en": "Existence of a national or international register in which risky systems must be declared.",
+   "fr": "Existence d'un registre national ou international où les systèmes à risque doivent être déclarés."
+  },
+  "Existence d'une classification par niveau de risque avec obligations renforcées pour les systèmes à fort impact.": {
+   "en": "Existence of a classification by risk level with stronger obligations for high-impact systems.",
+   "fr": "Existence d'une classification par niveau de risque avec obligations renforcées pour les systèmes à fort impact."
+  },
+  "Explicabilité clinique": {
+   "en": "Clinical explainability",
+   "fr": "Explicabilité clinique"
+  },
+  "Expliquer en langage clair la logique du traitement automatisé concerné": {
+   "en": "Explain in plain language the logic of the automated processing concerned",
+   "fr": "Expliquer en langage clair la logique du traitement automatisé concerné"
+  },
+  "Exploitable directement comme preuve documentaire en cas de contrôle CNIL.": {
+   "en": "Directly usable as documentary evidence in the event of a CNIL inspection.",
+   "fr": "Exploitable directement comme preuve documentaire en cas de contrôle CNIL."
+  },
+  "Exploitations agricoles, coopératives, industries de transformation alimentaire, sylviculture et pêche.": {
+   "en": "Farms, cooperatives, food processing industries, forestry and fishing.",
+   "fr": "Exploitations agricoles, coopératives, industries de transformation alimentaire, sylviculture et pêche."
+  },
+  "Exploiter un centre de données — par rôle": {
+   "en": "Operating a data centre — by role",
+   "fr": "Exploiter un centre de données — par rôle"
+  },
+  "Export CSV des cas filtrés, avec classe, règles appliquées et sources.": {
+   "en": "CSV export of the filtered cases, with class, rules applied and sources.",
+   "fr": "Export CSV des cas filtrés, avec classe, règles appliquées et sources."
+  },
+  "Export CSV des cas filtrés, et fiches site avec leur nature.": {
+   "en": "CSV export of the filtered cases, and site records with their nature.",
+   "fr": "Export CSV des cas filtrés, et fiches site avec leur nature."
+  },
+  "Export CSV des cas filtrés, et fiches site portant la nature de chaque valeur.": {
+   "en": "CSV export of the filtered cases, and site records carrying the nature of each value.",
+   "fr": "Export CSV des cas filtrés, et fiches site portant la nature de chaque valeur."
+  },
+  "Export CSV ligne à ligne, portant pour chaque système l’état de sa déclaration.": {
+   "en": "Row-by-row CSV export, showing for each system the status of its declaration.",
+   "fr": "Export CSV ligne à ligne, portant pour chaque système l’état de sa déclaration."
+  },
+  "Export téléchargé — à remettre après vérification d’identité.": {
+   "en": "Export downloaded — to be handed over after identity verification.",
+   "fr": "Export téléchargé — à remettre après vérification d’identité."
+  },
+  "Exporter cette AIPD (PDF)": {
+   "en": "Export this DPIA (PDF)",
+   "fr": "Exporter cette AIPD (PDF)"
+  },
+  "Exposition aux amendes (art. #).": {
+   "en": "Exposure to fines (art. #).",
+   "fr": "Exposition aux amendes (art. 99)."
+  },
+  "Exposition chiffrée — article #": {
+   "en": "Quantified exposure — Article #",
+   "fr": "Exposition chiffrée — article 64"
+  },
+  "Exposition maximale estimée": {
+   "en": "Estimated maximum exposure",
+   "fr": "Exposition maximale estimée"
+  },
+  "Exposé des motifs": {
+   "en": "Explanatory memorandum",
+   "fr": "Exposé des motifs"
+  },
+  "Extraction de clauses cles et detection de risques contractuels.": {
+   "en": "Extraction of key clauses and detection of contractual risks.",
+   "fr": "Extraction de clauses cles et detection de risques contractuels."
+  },
+  "Extraction et controle automatique des donnees de facturation.": {
+   "en": "Automatic extraction and checking of billing data.",
+   "fr": "Extraction et controle automatique des donnees de facturation."
+  },
+  "Extraction minière, carrières, exploitation pétrolière et gazière, première transformation de matières premières.": {
+   "en": "Mining, quarrying, oil and gas extraction, primary processing of raw materials.",
+   "fr": "Extraction minière, carrières, exploitation pétrolière et gazière, première transformation de matières premières."
+  },
+  "Extraction ou classification sur texte court": {
+   "en": "Extraction or classification on short text",
+   "fr": "Extraction ou classification sur texte court"
+  },
+  "Exécuter la purge ? Les données au-delà de leur durée seront anonymisées. L’opération est journalisée et scellée.": {
+   "en": "Run the purge? Data beyond its retention period will be anonymised. The operation is logged and sealed.",
+   "fr": "Exécuter la purge ? Les données au-delà de leur durée seront anonymisées. L’opération est journalisée et scellée."
+  },
+  "FRIA non requise": {
+   "en": "FRIA not required",
+   "fr": "FRIA non requise"
+  },
+  "Fabricant — je conçois et je mets sur le marché": {
+   "en": "Manufacturer — I design and place on the market",
+   "fr": "Fabricant — je conçois et je mets sur le marché"
+  },
+  "Facteur d’émission": {
+   "en": "Emission factor",
+   "fr": "Facteur d’émission"
+  },
+  "Facteur ou paramètre": {
+   "en": "Factor or parameter",
+   "fr": "Facteur ou paramètre"
+  },
+  "Facteur(s) substitué(s) par configuration,": {
+   "en": "Factor(s) substituted by configuration,",
+   "fr": "Facteur(s) substitué(s) par configuration,"
+  },
+  "Facteurs servis par le moteur avec leur nature : texte réglementaire, relevé, ou hypothèse du cabinet": {
+   "en": "Factors served by the engine with their nature: regulatory text, reading, or the firm’s assumption",
+   "fr": "Facteurs servis par le moteur avec leur nature : texte réglementaire, relevé, ou hypothèse du cabinet"
+  },
+  "Facturer tous les jalons vérifiés de ce client ? Chaque jalon sera échelonné sur # mensualités (montants figés).": {
+   "en": "Invoice all verified milestones for this client? Each milestone will be spread over # monthly instalments (fixed amounts).",
+   "fr": "Facturer tous les jalons vérifiés de ce client ? Chaque jalon sera échelonné sur 2 mensualités (montants figés)."
+  },
+  "Factures impayées": {
+   "en": "Unpaid invoices",
+   "fr": "Factures impayées"
+  },
+  "Factures émises selon l'échéancier": {
+   "en": "Invoices issued according to the payment schedule",
+   "fr": "Factures émises selon l'échéancier"
+  },
+  "Facultatif — les thèmes": {
+   "en": "Optional — the topics",
+   "fr": "Facultatif — les thèmes"
+  },
+  "Faire approuver formellement la politique de cybersécurité IA par la direction": {
+   "en": "Have the AI cybersecurity policy formally approved by senior management",
+   "fr": "Faire approuver formellement la politique de cybersécurité IA par la direction"
+  },
+  "Faire approuver une politique IA formelle par la direction": {
+   "en": "Have a formal AI policy approved by senior management",
+   "fr": "Faire approuver une politique IA formelle par la direction"
+  },
+  "Faire auditer ces mesures par un tiers indépendant": {
+   "en": "Have these measures audited by an independent third party",
+   "fr": "Faire auditer ces mesures par un tiers indépendant"
+  },
+  "Faire le lien entre l’infrastructure et le règlement : les systèmes d’IA qui tournent dans vos centres de données doivent être classés, inscrits et gouvernés.": {
+   "en": "Link the infrastructure to the Regulation: the AI systems running in your data centres must be classified, recorded and governed.",
+   "fr": "Faire le lien entre l’infrastructure et le règlement : les systèmes d’IA qui tournent dans vos centres de données doivent être classés, inscrits et gouvernés."
+  },
+  "Faisabilité : maturité technique, complexité d’intégration et disponibilité des moyens. # = difficile, # = aisée.": {
+   "en": "Feasibility: technical maturity, integration complexity and availability of resources. # = difficult, # = easy.",
+   "fr": "Faisabilité : maturité technique, complexité d’intégration et disponibilité des moyens. 1 = difficile, 5 = aisée."
+  },
+  "Faites coter par ceux qui exploitent, pas par ceux qui pilotent. Un score obtenu en atelier de direction mesure l’optimisme de la direction.": {
+   "en": "Have the rating done by those who operate, not by those who steer. A score obtained in a senior management workshop measures senior management’s optimism.",
+   "fr": "Faites coter par ceux qui exploitent, pas par ceux qui pilotent. Un score obtenu en atelier de direction mesure l’optimisme de la direction."
+  },
+  "Faites de cette étape un jalon obligatoire du comité d’engagement — c’est ce que fait le parcours du directeur de programme.": {
+   "en": "Make this step a mandatory milestone of the commitment committee — that is what the programme director’s path does.",
+   "fr": "Faites de cette étape un jalon obligatoire du comité d’engagement — c’est ce que fait le parcours du directeur de programme."
+  },
+  "Faites la partie II en premier si vous hésitez. Le cas le plus courant n’est pas un produit mal conçu : c’est un produit conforme partie I dans une entreprise qui n’a ni nomenclature logicielle, ni politique de divulgation coordonnée, ni adresse de signalement — et cela se répare par de l’organisation, pas par du code.": {
+   "en": "Do Part II first if you are unsure. The most common case is not a poorly designed product: it is a product compliant with Part I in a company that has no software bill of materials, no coordinated disclosure policy and no reporting address — and that is fixed through organisation, not through code.",
+   "fr": "Faites la partie II en premier si vous hésitez. Le cas le plus courant n’est pas un produit mal conçu : c’est un produit conforme partie I dans une entreprise qui n’a ni nomenclature logicielle, ni politique de divulgation coordonnée, ni adresse de signalement — et cela se répare par de l’organisation, pas par du code."
+  },
+  "Faites relire les pièces du montage : raccordement, PPA, bail, contrat de colocation ou d’hébergement.": {
+   "en": "Have the documents of the arrangement reviewed: grid connection, PPA, lease, colocation or hosting contract.",
+   "fr": "Faites relire les pièces du montage : raccordement, PPA, bail, contrat de colocation ou d’hébergement."
+  },
+  "Famille de systèmes": {
+   "en": "System family",
+   "fr": "Famille de systèmes"
+  },
+  "Ferme le bandeau : l’avancement": {
+   "en": "Closes the banner: progress",
+   "fr": "Ferme le bandeau : l’avancement"
+  },
+  "Fermer la session sur ce navigateur": {
+   "en": "End the session on this browser",
+   "fr": "Fermer la session sur ce navigateur"
+  },
+  "Feuille de route": {
+   "en": "Roadmap",
+   "fr": "Feuille de route"
+  },
+  "Feuille de route priorisée": {
+   "en": "Prioritised roadmap",
+   "fr": "Feuille de route priorisée"
+  },
+  "Fiabilité des chiffres": {
+   "en": "Reliability of the figures",
+   "fr": "Fiabilité des chiffres"
+  },
+  "Fiche de classification produite à l’étape précédente, avec la règle du règlement (UE) #/# qui l’a produite": {
+   "en": "Classification record produced at the previous step, with the rule of Regulation (EU) #/# that produced it",
+   "fr": "Fiche de classification produite à l’étape précédente, avec la règle du règlement (UE) 2024/1689 qui l’a produite"
+  },
+  "Fiche de classification — niveau de risque, obligations, échéances.": {
+   "en": "Classification record — risk level, obligations, deadlines.",
+   "fr": "Fiche de classification — niveau de risque, obligations, échéances."
+  },
+  "Fiche de formation ·": {
+   "en": "Course details ·",
+   "fr": "Fiche de formation ·"
+  },
+  "Fiche enregistrée — statut :": {
+   "en": "Record saved — status:",
+   "fr": "Fiche enregistrée — statut :"
+  },
+  "Fiche pays — cadre réglementaire IA": {
+   "en": "Country profile — AI regulatory framework",
+   "fr": "Fiche pays — cadre réglementaire IA"
+  },
+  "Fiches juridictions (detail par pays)": {
+   "en": "Jurisdiction profiles (details by country)",
+   "fr": "Fiches juridictions (detail par pays)"
+  },
+  "Fichier trop volumineux (max # Ko)": {
+   "en": "File too large (max # kB)",
+   "fr": "Fichier trop volumineux (max 200 Ko)"
+  },
+  "File de raccordement #-# COMPTÉE depuis les statuts des # sites, pas déclarée. Le statut sert d’échelle de certitude : en exploitation, en construction, autorisé, annoncé, abandonné.": {
+   "en": "Grid connection queue #-# COUNTED from the statuses of the # sites, not declared. The status serves as a scale of certainty: in operation, under construction, authorised, announced, abandoned.",
+   "fr": "File de raccordement 2026-2030 COMPTÉE depuis les statuts des 249 sites, pas déclarée. Le statut sert d’échelle de certitude : en exploitation, en construction, autorisé, annoncé, abandonné."
+  },
+  "File indisponible — les demandes déjà enregistrées ne sont pas perdues, seule leur lecture a échoué.": {
+   "en": "Queue unavailable — requests already recorded are not lost, only reading them failed.",
+   "fr": "File indisponible — les demandes déjà enregistrées ne sont pas perdues, seule leur lecture a échoué."
+  },
+  "File injoignable — vérifiez la connexion, puis rouvrez la page.": {
+   "en": "Queue unreachable — check the connection, then reopen the page.",
+   "fr": "File injoignable — vérifiez la connexion, puis rouvrez la page."
+  },
+  "Filtrer par secteur :": {
+   "en": "Filter by sector:",
+   "fr": "Filtrer par secteur :"
+  },
+  "Filtrez le plan sur les deux nouvelles normes.": {
+   "en": "Filter the plan on the two new standards.",
+   "fr": "Filtrez le plan sur les deux nouvelles normes."
+  },
+  "Filtrez par type de calcul avec le menu déroulant. Chaque calcul enregistré ailleurs sur Sentinel (bouton 💾 Enregistrer dans l historique) apparaît ici automatiquement, daté et consultable à tout moment.": {
+   "en": "Filter by type of calculation with the drop-down menu. Each calculation saved elsewhere on Sentinel (💾 Save to history button) appears here automatically, dated and viewable at any time.",
+   "fr": "Filtrez par type de calcul avec le menu déroulant. Chaque calcul enregistré ailleurs sur Sentinel (bouton 💾 Enregistrer dans l historique) apparaît ici automatiquement, daté et consultable à tout moment."
+  },
+  "FinOps de l’IA — ce que ça coûte à l’usage": {
+   "en": "AI FinOps — what it costs in use",
+   "fr": "FinOps de l’IA — ce que ça coûte à l’usage"
+  },
+  "Finalité(s)": {
+   "en": "Purpose(s)",
+   "fr": "Finalité(s)"
+  },
+  "Finalité(s) *": {
+   "en": "Purpose(s) *",
+   "fr": "Finalité(s) *"
+  },
+  "Finance / Comptabilité": {
+   "en": "Finance / Accounting",
+   "fr": "Finance / Comptabilité"
+  },
+  "Financer ou assurer un centre de données": {
+   "en": "Financing or insuring a data centre",
+   "fr": "Financer ou assurer un centre de données"
+  },
+  "Fixez le circuit de validation des nouveaux usages et la composition du comité.": {
+   "en": "Set the approval workflow for new uses and the composition of the committee.",
+   "fr": "Fixez le circuit de validation des nouveaux usages et la composition du comité."
+  },
+  "Fixez le périmètre du code assisté, les données qui peuvent sortir, et le marquage de ce qui est généré.": {
+   "en": "Set the scope of assisted code, the data that may leave, and the marking of what is generated.",
+   "fr": "Fixez le périmètre du code assisté, les données qui peuvent sortir, et le marquage de ce qui est généré."
+  },
+  "Fixé sous ce plafond — Art. #(#)": {
+   "en": "Set below this ceiling — Art. #(#)",
+   "fr": "Fixé sous ce plafond — Art. 99(7)"
+  },
+  "Fonctionnalite IA conversationnelle integree au produit logiciel.": {
+   "en": "Conversational AI feature built into the software product.",
+   "fr": "Fonctionnalite IA conversationnelle integree au produit logiciel."
+  },
+  "Fonctionnalités IA SaaS": {
+   "en": "SaaS AI features",
+   "fr": "Fonctionnalités IA SaaS"
+  },
+  "Fonctionnalités IA dans des SaaS": {
+   "en": "AI features in SaaS products",
+   "fr": "Fonctionnalités IA dans des SaaS"
+  },
+  "Fonctionnement fiable en conditions variables (météo, luminosité, signalisation dégradée). Tests adversariaux obligatoires.": {
+   "en": "Reliable operation in variable conditions (weather, lighting, degraded signage). Adversarial testing mandatory.",
+   "fr": "Fonctionnement fiable en conditions variables (météo, luminosité, signalisation dégradée). Tests adversariaux obligatoires."
+  },
+  "Fond de carte (map.html)": {
+   "en": "Base map (map.html)",
+   "fr": "Fond de carte (map.html)"
+  },
+  "Fondée sur le consentement explicite de la personne": {
+   "en": "Based on the explicit consent of the person",
+   "fr": "Fondée sur le consentement explicite de la personne"
+  },
+  "Forfait — montant fixe, indépendant de l'usage": {
+   "en": "Flat fee — a fixed amount, independent of usage",
+   "fr": "Forfait — montant fixe, indépendant de l'usage"
+  },
+  "Formaliser le SGQ en politiques et procédures écrites": {
+   "en": "Formalise the QMS in written policies and procedures",
+   "fr": "Formaliser le SGQ en politiques et procédures écrites"
+  },
+  "Formalisez qui valide, qui exécute et qui est informé pour chaque processus de contrôle.": {
+   "en": "Formalise who validates, who executes and who is informed for each control process.",
+   "fr": "Formalisez qui valide, qui exécute et qui est informé pour chaque processus de contrôle."
+  },
+  "Format non accepté. Formats acceptés : PDF, Word (.docx), Excel (.xlsx, .xlsm), texte, Markdown, CSV, journal, JSON, YAML.": {
+   "en": "Format not accepted. Accepted formats: PDF, Word (.docx), Excel (.xlsx, .xlsm), text, Markdown, CSV, log, JSON, YAML.",
+   "fr": "Format non accepté. Formats acceptés : PDF, Word (.docx), Excel (.xlsx, .xlsm), texte, Markdown, CSV, journal, JSON, YAML."
+  },
+  "Formation approfondie des relais RGPD / référents": {
+   "en": "In-depth training of GDPR relays / leads",
+   "fr": "Formation approfondie des relais RGPD / référents"
+  },
+  "Formation, audits, tests et documentation.": {
+   "en": "Training, audits, tests and documentation.",
+   "fr": "Formation, audits, tests et documentation."
+  },
+  "Former les dirigeants à évaluer les risques cyber liés aux systèmes IA": {
+   "en": "Train managers to assess the cyber risks linked to AI systems",
+   "fr": "Former les dirigeants à évaluer les risques cyber liés aux systèmes IA"
+  },
+  "Former les opérateurs et déployeurs aux mécanismes de contrôle": {
+   "en": "Train operators and deployers in the oversight mechanisms",
+   "fr": "Former les opérateurs et déployeurs aux mécanismes de contrôle"
+  },
+  "Formulaire de demande d’un audit accompagné, conduit selon la méthodologie CONSEILPREV (AI Act, NIS # et RGPD croisés). Il s’agit d’une prestation humaine, à distinguer de l’Audit IA Act en autonomie disponible dans le même menu.": {
+   "en": "Request form for an assisted audit, conducted according to the CONSEILPREV methodology (AI Act, NIS # and GDPR cross-referenced). It is a service delivered by people, to be distinguished from the self-service AI Act audit available in the same menu.",
+   "fr": "Formulaire de demande d’un audit accompagné, conduit selon la méthodologie CONSEILPREV (AI Act, NIS 2 et RGPD croisés). Il s’agit d’une prestation humaine, à distinguer de l’Audit IA Act en autonomie disponible dans le même menu."
+  },
+  "Formé n’est pas adopté": {
+   "en": "Trained is not adopted",
+   "fr": "Formé n’est pas adopté"
+  },
+  "Fouille de textes et de données": {
+   "en": "Text and data mining",
+   "fr": "Fouille de textes et de données"
+  },
+  "Fournis un etat des lieux factuel et a jour (debut #) de la regulation de l intelligence artificielle pour la juridiction suivante :": {
+   "en": "Provide a factual and up-to-date (early #) overview of artificial intelligence regulation for the following jurisdiction:",
+   "fr": "Fournis un etat des lieux factuel et a jour (debut 2026) de la regulation de l intelligence artificielle pour la juridiction suivante :"
+  },
+  "Fournisseur (développe ou met sur le marché)": {
+   "en": "Provider (develops or places on the market)",
+   "fr": "Fournisseur (développe ou met sur le marché)"
+  },
+  "Fournisseur / Éditeur": {
+   "en": "Provider / Vendor",
+   "fr": "Fournisseur / Éditeur"
+  },
+  "Fournisseur : concevoir le système pour informer que l'on interagit avec une IA, sauf si c'est évident (Art. #(#))": {
+   "en": "Provider: design the system to inform people that they are interacting with an AI, unless this is obvious (Art. #(#))",
+   "fr": "Fournisseur : concevoir le système pour informer que l'on interagit avec une IA, sauf si c'est évident (Art. 50(1))"
+  },
+  "Fournisseur : les systèmes destinés à interagir directement avec des personnes les informent qu'elles interagissent avec une IA, sauf si cela est évident (§#) ; les sorties audio, image, vidéo ou texte générées ou manipulées sont marquées dans un format lisible par machine et détectables comme artificielles (§# — pour un système déjà sur le marché avant le # août # : au plus tard le # décembre #, Art. #(#), ajouté par le règlement (UE) #/#). Déployeur : information des personnes exposées à un système de reconnaissance des émotions ou de catégorisation biométrique (§#) ; mention que le contenu est artificiel pour un hypertrucage et pour un texte publié afin d'informer le public sur des questions d'intérêt public, sauf relecture humaine ou contrôle éditorial (§#). Le code de bonnes pratiques est un engagement volontaire : il ne remplace pas ces obligations.": {
+   "en": "Provider: systems intended to interact directly with people inform them that they are interacting with an AI, unless this is obvious (§#); generated or manipulated audio, image, video or text outputs are marked in a machine-readable format and detectable as artificially generated or manipulated (§# — for a system already on the market before # August #: by # December # at the latest, Art. #(#), added by Regulation (EU) #/#). Deployer: informing the persons exposed to an emotion recognition or biometric categorisation system (§#); disclosure that the content is artificially generated for a deepfake and for a text published to inform the public on matters of public interest, unless there has been human review or editorial control (§#). The code of practice is a voluntary commitment: it does not replace these obligations.",
+   "fr": "Fournisseur : les systèmes destinés à interagir directement avec des personnes les informent qu'elles interagissent avec une IA, sauf si cela est évident (§1) ; les sorties audio, image, vidéo ou texte générées ou manipulées sont marquées dans un format lisible par machine et détectables comme artificielles (§2 — pour un système déjà sur le marché avant le 2 août 2026 : au plus tard le 2 décembre 2026, Art. 111(4), ajouté par le règlement (UE) 2026/1744). Déployeur : information des personnes exposées à un système de reconnaissance des émotions ou de catégorisation biométrique (§3) ; mention que le contenu est artificiel pour un hypertrucage et pour un texte publié afin d'informer le public sur des questions d'intérêt public, sauf relecture humaine ou contrôle éditorial (§4). Le code de bonnes pratiques est un engagement volontaire : il ne remplace pas ces obligations."
+  },
+  "Fournisseur : marquer les contenus synthétiques dans un format lisible par machine, détectable comme artificiel (Art. #(#)) — au plus tard le # décembre # pour un système déjà sur le marché avant le # août # (Art. #(#))": {
+   "en": "Provider: mark synthetic content in a machine-readable format, detectable as artificial (Art. #(#)) — by # December # at the latest for a system already on the market before # August # (Art. #(#))",
+   "fr": "Fournisseur : marquer les contenus synthétiques dans un format lisible par machine, détectable comme artificiel (Art. 50(2)) — au plus tard le 2 décembre 2026 pour un système déjà sur le marché avant le 2 août 2026 (Art. 111(4))"
+  },
+  "Fournisseur : nom du modèle + éditeur API. Rôle : Déployeur (+ Fournisseur si intégration dans produit).": {
+   "en": "Provider: model name + API vendor. Role: Deployer (+ Provider if integrated into a product).",
+   "fr": "Fournisseur : nom du modèle + éditeur API. Rôle : Déployeur (+ Fournisseur si intégration dans produit)."
+  },
+  "Fournisseur : nom du prestataire. Preuves : clause contractuelle IA à joindre au registre.": {
+   "en": "Provider: name of the service provider. Evidence: AI contractual clause to be attached to the register.",
+   "fr": "Fournisseur : nom du prestataire. Preuves : clause contractuelle IA à joindre au registre."
+  },
+  "Fournisseur d'un système à haut risque : formaliser par écrit avec chaque fournisseur de composant, modèle ou outil les informations et l'assistance nécessaires (Art. #(#))": {
+   "en": "Provider of a high-risk system: formalise in writing, with each supplier of a component, model or tool, the information and assistance needed (Art. #(#))",
+   "fr": "Fournisseur d'un système à haut risque : formaliser par écrit avec chaque fournisseur de composant, modèle ou outil les informations et l'assistance nécessaires (Art. 25(4))"
+  },
+  "Fournisseur initial : préparer la documentation et l'accès technique dus au nouveau fournisseur (Art. #(#))": {
+   "en": "Initial provider: prepare the documentation and technical access owed to the new provider (Art. #(#))",
+   "fr": "Fournisseur initial : préparer la documentation et l'accès technique dus au nouveau fournisseur (Art. 25(2))"
+  },
+  "Fournisseur nommé, modèle non déclaré": {
+   "en": "Provider named, model not declared",
+   "fr": "Fournisseur nommé, modèle non déclaré"
+  },
+  "Fournisseur — je mets un système sur le marché": {
+   "en": "Provider — I place a system on the market",
+   "fr": "Fournisseur — je mets un système sur le marché"
+  },
+  "Fournisseur, déployeur, importateur ou distributeur — cumulable (Art. #§#-#).": {
+   "en": "Provider, deployer, importer or distributor — may be combined (Art. #(#)-(#)).",
+   "fr": "Fournisseur, déployeur, importateur ou distributeur — cumulable (Art. 3§3-7)."
+  },
+  "Fournisseur, déployeur, importateur, distributeur : le même article n’impose pas la même chose. Identifiez votre rôle avant de lire, sinon vous appliquerez le devoir d’un autre.": {
+   "en": "Provider, deployer, importer, distributor: the same Article does not impose the same thing. Identify your role before reading, otherwise you will apply someone else’s duty.",
+   "fr": "Fournisseur, déployeur, importateur, distributeur : le même article n’impose pas la même chose. Identifiez votre rôle avant de lire, sinon vous appliquerez le devoir d’un autre."
+  },
+  "Fournisseurs : gestion des risques, documentation, qualité (Art. #-#)": {
+   "en": "Providers: risk management, documentation, quality (Art. #-#)",
+   "fr": "Fournisseurs : gestion des risques, documentation, qualité (Art. 9-17)"
+  },
+  "Fournisseurs de modèles de fondation : documentation technique, résumé d'entraînement, politique de droits d'auteur. Seuil #^# FLOPs pour risque systémique.": {
+   "en": "Foundation model providers: technical documentation, training summary, copyright policy. Threshold of #^# FLOPs for systemic risk.",
+   "fr": "Fournisseurs de modèles de fondation : documentation technique, résumé d'entraînement, politique de droits d'auteur. Seuil 10^25 FLOPs pour risque systémique."
+  },
+  "Fournisseurs et déployeurs prennent des mesures pour soutenir le développement de la culture (littératie) de l'IA de leur personnel et des autres personnes qui exploitent ou utilisent des systèmes d'IA pour leur compte, compte tenu de leurs connaissances techniques, de leur expérience, de leur formation, du contexte d'utilisation et des personnes visées. Cette obligation n'impose pas de garantir un niveau précis de culture de l'IA à chaque personne (Art. #(#), remplacé par le règlement (UE) #/#). La Commission et les États membres soutiennent ces efforts, en particulier ceux des PME (#(#)).": {
+   "en": "Providers and deployers take measures to support the development of AI literacy among their staff and other persons who operate or use AI systems on their behalf, taking into account their technical knowledge, experience, education and training, the context of use and the persons concerned. This obligation does not require guaranteeing a specific level of AI literacy for each person (Art. #(#), replaced by Regulation (EU) #/#). The Commission and the Member States support these efforts, in particular those of SMEs (#(#)).",
+   "fr": "Fournisseurs et déployeurs prennent des mesures pour soutenir le développement de la culture (littératie) de l'IA de leur personnel et des autres personnes qui exploitent ou utilisent des systèmes d'IA pour leur compte, compte tenu de leurs connaissances techniques, de leur expérience, de leur formation, du contexte d'utilisation et des personnes visées. Cette obligation n'impose pas de garantir un niveau précis de culture de l'IA à chaque personne (Art. 4(1), remplacé par le règlement (UE) 2026/1744). La Commission et les États membres soutiennent ces efforts, en particulier ceux des PME (4(2))."
+  },
+  "Fournisseurs établis hors UE doivent désigner un mandataire établi dans l'UE par mandat écrit avant mise sur le marché européen.": {
+   "en": "Providers established outside the EU must appoint an authorised representative established in the EU by written mandate before placing on the European market.",
+   "fr": "Fournisseurs établis hors UE doivent désigner un mandataire établi dans l'UE par mandat écrit avant mise sur le marché européen."
+  },
+  "Gain / coût": {
+   "en": "Gain / cost",
+   "fr": "Gain / coût"
+  },
+  "Gain annuel = assiette annuelle × taux de gain.": {
+   "en": "Annual gain = annual base × gain rate.",
+   "fr": "Gain annuel = assiette annuelle × taux de gain."
+  },
+  "Gain annuel estimé": {
+   "en": "Estimated annual gain",
+   "fr": "Gain annuel estimé"
+  },
+  "Garantie d egalite de traitement et droit au recours citoyen": {
+   "en": "Guarantee of equal treatment and citizens’ right of redress",
+   "fr": "Garantie d egalite de traitement et droit au recours citoyen"
+  },
+  "Garanties dues même sous exception": {
+   "en": "Safeguards due even under an exception",
+   "fr": "Garanties dues même sous exception"
+  },
+  "Garantir des choix par défaut neutres": {
+   "en": "Ensure neutral default choices",
+   "fr": "Garantir des choix par défaut neutres"
+  },
+  "Garantir l'intégrité et l'accessibilité des journaux aux autorités": {
+   "en": "Ensure the integrity of logs and their accessibility to the authorities",
+   "fr": "Garantir l'intégrité et l'accessibilité des journaux aux autorités"
+  },
+  "Garantir les droits des personnes concernées face aux décisions automatisées (Art. # RGPD)": {
+   "en": "Guarantee the rights of data subjects in the face of automated decisions (Art. # GDPR)",
+   "fr": "Garantir les droits des personnes concernées face aux décisions automatisées (Art. 22 RGPD)"
+  },
+  "Garantir une intervention humaine significative et un droit de contestation": {
+   "en": "Ensure meaningful human intervention and a right to challenge",
+   "fr": "Garantir une intervention humaine significative et un droit de contestation"
+  },
+  "Garde-fou : plafond contractuel appliqué": {
+   "en": "Safeguard: contractual cap applied",
+   "fr": "Garde-fou : plafond contractuel appliqué"
+  },
+  "Generation assistee de plans et prototypes (IA generative)": {
+   "en": "Assisted generation of plans and prototypes (generative AI)",
+   "fr": "Generation assistee de plans et prototypes (IA generative)"
+  },
+  "Generation automatisee de scenarios de demo adaptes au prospect.": {
+   "en": "Automated generation of demo scenarios tailored to the prospect.",
+   "fr": "Generation automatisee de scenarios de demo adaptes au prospect."
+  },
+  "Generation de contenu marketing (visuels, textes)": {
+   "en": "Marketing content generation (visuals, copy)",
+   "fr": "Generation de contenu marketing (visuels, textes)"
+  },
+  "Generation de premiers projets de contrats": {
+   "en": "Generation of first drafts of contracts",
+   "fr": "Generation de premiers projets de contrats"
+  },
+  "Generation en cours par": {
+   "en": "Generating with",
+   "fr": "Generation en cours par"
+  },
+  "Generation et execution automatisee de scenarios de test.": {
+   "en": "Automated generation and execution of test scenarios.",
+   "fr": "Generation et execution automatisee de scenarios de test."
+  },
+  "Genere cote client via window.print(). Aucune donnee n est stockee cote serveur ni transmise a CONSEILPREV automatiquement.": {
+   "en": "Generated client-side via window.print(). No data is stored server-side or passed to CONSEILPREV automatically.",
+   "fr": "Genere cote client via window.print(). Aucune donnee n est stockee cote serveur ni transmise a CONSEILPREV automatiquement."
+  },
+  "Genere via Sentinel AI - CONSEILPREV. Pour le detail complet, voir le document joint (a exporter en PDF depuis l outil). Cordialement,": {
+   "en": "Generated via Sentinel AI - CONSEILPREV. For full details, see the attached document (to be exported as PDF from the tool). Kind regards,",
+   "fr": "Genere via Sentinel AI - CONSEILPREV. Pour le detail complet, voir le document joint (a exporter en PDF depuis l outil). Cordialement,"
+  },
+  "Geometrie calculee localement en JavaScript (pas de librairie graphique externe). Limite a # pays simultanes.": {
+   "en": "Geometry calculated locally in JavaScript (no external charting library). Limited to # countries at a time.",
+   "fr": "Geometrie calculee localement en JavaScript (pas de librairie graphique externe). Limite a 4 pays simultanes."
+  },
+  "Gestion automatisee des acces (IAM augmente)": {
+   "en": "Automated access management (augmented IAM)",
+   "fr": "Gestion automatisee des acces (IAM augmente)"
+  },
+  "Gestion de la paie mandataire": {
+   "en": "Payroll management for an authorised representative",
+   "fr": "Gestion de la paie mandataire"
+  },
+  "Gestion de stock et de réapprovisionnement": {
+   "en": "Stock and replenishment management",
+   "fr": "Gestion de stock et de réapprovisionnement"
+  },
+  "Gestion des Sinistres": {
+   "en": "Claims Management",
+   "fr": "Gestion des Sinistres"
+  },
+  "Gestion des clients": {
+   "en": "Client management",
+   "fr": "Gestion des clients"
+  },
+  "Gestion des données et des tiers (Annexe A.#, A.#)": {
+   "en": "Data and third-party management (Annex A.#, A.#)",
+   "fr": "Gestion des données et des tiers (Annexe A.7, A.10)"
+  }
+ }
+}

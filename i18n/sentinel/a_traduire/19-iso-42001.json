@@ -1,0 +1,617 @@
+{
+ "_lot": "19-iso-42001",
+ "_mots": 2230,
+ "_pages": [
+  "iso42001",
+  "iso42001-certif",
+  "iso42001-ponts",
+  "iso42001-soa"
+ ],
+ "_rubrique": "ISO 42001",
+ "bloc": {
+  "Bloc # sur # · Articles # à # — À remplir maintenant": {
+   "en": "<b>Block # of # · Clauses # to # — To fill in now</b>",
+   "fr": "Bloc 1 sur 4 · Articles 4 à 10 — À remplir maintenant",
+   "html": "<b>Bloc 1 sur 4 · Articles 4 à 10 — À remplir maintenant</b>"
+  },
+  "C’est le second taux qui dit l’effort réel. Les articles « mutualisables » se greffent sur un système de management déjà en place ; ceux marqués « propre à l’IA » sont ce que # ajoute, et il n’y en a que #.": {
+   "en": "It is the <b>second</b> rate that says what the effort really is. The « shareable » clauses graft onto a management system already in place; those marked « AI-specific » are what # adds, and there are only #.",
+   "fr": "C’est le second taux qui dit l’effort réel. Les articles « mutualisables » se greffent sur un système de management déjà en place ; ceux marqués « propre à l’IA » sont ce que 42001 ajoute, et il n’y en a que 9.",
+   "html": "C’est le <b>second</b> taux qui dit l’effort réel. Les articles « mutualisables » se greffent sur un système de management déjà en place ; ceux marqués « propre à l’IA » sont ce que 42001 ajoute, et il n’y en a que 9."
+  },
+  "ISO/IEC #:# est protégée par le droit d'auteur (© ISO/IEC #). Cet écran cite des numéros et des titres d'articles et de mesures ; tout ce qui les décrit est rédigé par le cabinet. Aucune phrase du texte normatif n'y est reproduite. La mise en œuvre suppose de détenir la norme, qui s'achète auprès de l'ISO ou de l'AFNOR.": {
+   "en": "<b>ISO/IEC #:# is protected by copyright (© ISO/IEC #).</b> This screen cites clause and control <b>numbers</b> and <b>titles</b>; everything that describes them is written by the firm. No sentence of the normative text is reproduced. Implementation requires holding the standard, which can be purchased from ISO or AFNOR.",
+   "fr": "ISO/IEC 42001:2023 est protégée par le droit d'auteur (© ISO/IEC 2023). Cet écran cite des numéros et des titres d'articles et de mesures ; tout ce qui les décrit est rédigé par le cabinet. Aucune phrase du texte normatif n'y est reproduite. La mise en œuvre suppose de détenir la norme, qui s'achète auprès de l'ISO ou de l'AFNOR.",
+   "html": "<b>ISO/IEC 42001:2023 est protégée par le droit d'auteur (© ISO/IEC 2023).</b> Cet écran cite des <b>numéros</b> et des <b>titres</b> d'articles et de mesures ; tout ce qui les décrit est rédigé par le cabinet. Aucune phrase du texte normatif n'y est reproduite. La mise en œuvre suppose de détenir la norme, qui s'achète auprès de l'ISO ou de l'AFNOR."
+  },
+  "ISO/IEC #:# — ISO/IEC #:# — Technologies de l'information — Intelligence artificielle — Système de management. La mise en œuvre suppose de détenir le texte de la norme, qui s'achète auprès de l'ISO ou d'un organisme national de normalisation (AFNOR en France).": {
+   "en": "<b>ISO/IEC #:#</b> — ISO/IEC #:# — Information technology — Artificial intelligence — Management system. Implementing it assumes you hold the text of the standard, which is bought from ISO or from a national standards body (AFNOR in France).",
+   "fr": "ISO/IEC 42001:2023 — ISO/IEC 42001:2023 — Technologies de l'information — Intelligence artificielle — Système de management. La mise en œuvre suppose de détenir le texte de la norme, qui s'achète auprès de l'ISO ou d'un organisme national de normalisation (AFNOR en France).",
+   "html": "<b>ISO/IEC 42001:2023</b> — ISO/IEC 42001:2023 — Technologies de l'information — Intelligence artificielle — Système de management. La mise en œuvre suppose de détenir le texte de la norme, qui s'achète auprès de l'ISO ou d'un organisme national de normalisation (AFNOR en France)."
+  },
+  "Le fait qui coûte le plus cher, et qu'aucun taux ne montre. Un organisme qui a mis en œuvre trente-six mesures sur trente-huit et laissé deux cases vides échoue à l'étape #. Un organisme qui en retient dix-huit et en écarte vingt, chacune motivée, passe. La conformité ne se compte pas en cases cochées : elle se compte en cases décidées.": {
+   "en": "<b>The most costly fact, and one that no rate shows.</b> An organisation that has implemented thirty-six controls out of thirty-eight and left two boxes empty <b>fails at stage #</b>. An organisation that includes eighteen and excludes twenty, each one justified, <b>passes</b>. Compliance is not counted in ticked boxes: it is counted in boxes <b>decided</b>.",
+   "fr": "Le fait qui coûte le plus cher, et qu'aucun taux ne montre. Un organisme qui a mis en œuvre trente-six mesures sur trente-huit et laissé deux cases vides échoue à l'étape 1. Un organisme qui en retient dix-huit et en écarte vingt, chacune motivée, passe. La conformité ne se compte pas en cases cochées : elle se compte en cases décidées.",
+   "html": "<b>Le fait qui coûte le plus cher, et qu'aucun taux ne montre.</b> Un organisme qui a mis en œuvre trente-six mesures sur trente-huit et laissé deux cases vides <b>échoue à l'étape&nbsp;1</b>. Un organisme qui en retient dix-huit et en écarte vingt, chacune motivée, <b>passe</b>. La conformité ne se compte pas en cases cochées : elle se compte en cases <b>décidées</b>."
+  },
+  "Les mesures de l'annexe A ne sont pas exhaustives : la norme prévoit qu'un organisme en conçoive d'autres si le traitement des risques l'exige. Couvrir les trente-huit ne suffit donc pas à rendre la déclaration complète — elle l'est si elle couvre les options de traitement retenues.": {
+   "en": "The Annex A controls <b>are not exhaustive</b>: the standard provides that an organisation designs others if risk treatment requires it. Covering all thirty-eight is therefore not enough to make the statement complete — it is complete if it covers the treatment options selected.",
+   "fr": "Les mesures de l'annexe A ne sont pas exhaustives : la norme prévoit qu'un organisme en conçoive d'autres si le traitement des risques l'exige. Couvrir les trente-huit ne suffit donc pas à rendre la déclaration complète — elle l'est si elle couvre les options de traitement retenues.",
+   "html": "Les mesures de l'annexe&nbsp;A <b>ne sont pas exhaustives</b> : la norme prévoit qu'un organisme en conçoive d'autres si le traitement des risques l'exige. Couvrir les trente-huit ne suffit donc pas à rendre la déclaration complète — elle l'est si elle couvre les options de traitement retenues."
+  },
+  "NON recevable pour un audit d’étape #. La déclaration n'est PAS recevable pour un audit d'étape #. Ce n'est pas un défaut de sécurité, c'est un défaut de document — et il se corrige en écrivant, pas en développant.": {
+   "en": "<b>NOT admissible for a stage-# audit.</b> The statement is NOT admissible for a stage-# audit. This is not a security defect, it is a document defect — and it is put right by writing, not by developing.",
+   "fr": "NON recevable pour un audit d’étape 1. La déclaration n'est PAS recevable pour un audit d'étape 1. Ce n'est pas un défaut de sécurité, c'est un défaut de document — et il se corrige en écrivant, pas en développant.",
+   "html": "<b>NON recevable pour un audit d’étape 1.</b> La déclaration n'est PAS recevable pour un audit d'étape 1. Ce n'est pas un défaut de sécurité, c'est un défaut de document — et il se corrige en écrivant, pas en développant."
+  },
+  "Un article de # à # ne se déclare pas « sans objet » : ce sont des exigences, et elles ne s'écartent pas. Seules les mesures de l'annexe A peuvent être écartées, et seulement avec justification (art. # f). Une déclaration « sans objet » posée sur un article est ignorée par le moteur, qui le dit.": {
+   "en": "A clause from # to # cannot be declared “not applicable”: these are <b>requirements</b>, and they cannot be excluded. Only Annex A controls can be excluded, and only with justification (clause # f)). A “not applicable” declaration placed on a clause is ignored by the engine, which says so.",
+   "fr": "Un article de 4 à 10 ne se déclare pas « sans objet » : ce sont des exigences, et elles ne s'écartent pas. Seules les mesures de l'annexe A peuvent être écartées, et seulement avec justification (art. 6.1.3 f). Une déclaration « sans objet » posée sur un article est ignorée par le moteur, qui le dit.",
+   "html": "Un article de 4 à 10 ne se déclare pas « sans objet » : ce sont des <b>exigences</b>, et elles ne s'écartent pas. Seules les mesures de l'annexe&nbsp;A peuvent être écartées, et seulement avec justification (art.&nbsp;6.1.3&nbsp;f). Une déclaration « sans objet » posée sur un article est ignorée par le moteur, qui le dit."
+  },
+  "Un cycle d'audit interne (art. #) et une revue de direction (art. #) doivent avoir eu lieu avant l'étape #. Ce sont des exigences, et elles ne se fabriquent pas la veille : elles laissent des traces datées, ou elles n'ont pas eu lieu.": {
+   "en": "An internal audit cycle (clause #) and a management review (clause #) must <b>have taken place</b> before stage #. These are requirements, and they cannot be manufactured the day before: they leave dated traces, or they have not taken place.",
+   "fr": "Un cycle d'audit interne (art. 9.2) et une revue de direction (art. 9.3) doivent avoir eu lieu avant l'étape 2. Ce sont des exigences, et elles ne se fabriquent pas la veille : elles laissent des traces datées, ou elles n'ont pas eu lieu.",
+   "html": "Un cycle d'audit interne (art.&nbsp;9.2) et une revue de direction (art.&nbsp;9.3) doivent avoir <b>eu lieu</b> avant l'étape&nbsp;2. Ce sont des exigences, et elles ne se fabriquent pas la veille : elles laissent des traces datées, ou elles n'ont pas eu lieu."
+  },
+  "propre à l’IA : cet article ne se reprend pas d’un système de management existant · mutualisable : se greffe sur un système de management déjà en place (ISO #, #…).": {
+   "en": "<b>AI-specific</b>: this clause cannot be carried over from an existing management system · <b>shareable</b>: grafts onto a management system already in place (ISO #, #…).",
+   "fr": "propre à l’IA : cet article ne se reprend pas d’un système de management existant · mutualisable : se greffe sur un système de management déjà en place (ISO 27001, 9001…).",
+   "html": "<b>propre à l’IA</b> : cet article ne se reprend pas d’un système de management existant · <b>mutualisable</b> : se greffe sur un système de management déjà en place (ISO 27001, 9001…)."
+  }
+ },
+ "texte": {
+  "# Compréhension de l'organisme et de son contexte": {
+   "en": "# Understanding the organization and its context",
+   "fr": "4.1 Compréhension de l'organisme et de son contexte"
+  },
+  "# Détermination du périmètre du système de management de l'IA": {
+   "en": "# Determining the scope of the AI management system",
+   "fr": "4.3 Détermination du périmètre du système de management de l'IA"
+  },
+  "# Politique d'IA": {
+   "en": "# AI policy",
+   "fr": "5.2 Politique d'IA"
+  },
+  "# Système de management de l'IA": {
+   "en": "# AI management system",
+   "fr": "4.4 Système de management de l'IA"
+  },
+  "# mesure(s) ne sont ni retenues ni écartées : A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#": {
+   "en": "# control(s) are neither included nor excluded: A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#",
+   "fr": "38 mesure(s) ne sont ni retenues ni écartées : A.2.2, A.2.3, A.2.4, A.3.2, A.3.3, A.4.2, A.4.3, A.4.4, A.4.5, A.4.6, A.5.2, A.5.3, A.5.4, A.5.5, A.6.1.2, A.6.1.3, A.6.2.2, A.6.2.3, A.6.2.4, A.6.2.5, A.6.2.6, A.6.2.7, A.6.2.8, A.7.2, A.7.3, A.7.4, A.7.5, A.7.6, A.8.2, A.8.3, A.8.4, A.8.5, A.9.2, A.9.3, A.9.4, A.10.2, A.10.3, A.10.4"
+  },
+  "# protège l'information ; # gouverne l'IA. Les objets diffèrent, et aucune des deux certifications n'emporte l'autre.": {
+   "en": "# protects information; # governs AI. The objects differ, and neither certification carries the other.",
+   "fr": "27001 protège l'information ; 42001 gouverne l'IA. Les objets diffèrent, et aucune des deux certifications n'emporte l'autre."
+  },
+  "# retenues · # écartées · # à trancher": {
+   "en": "# included · # excluded · # to decide",
+   "fr": "0 retenues · 0 écartées · 3 à trancher"
+  },
+  "#. Audit d'étape # — mise en œuvre": {
+   "en": "#. Stage # audit — implementation",
+   "fr": "2. Audit d'étape 2 — mise en œuvre"
+  },
+  "#. Audit d'étape # — revue documentaire": {
+   "en": "#. Stage # audit — documentation review",
+   "fr": "1. Audit d'étape 1 — revue documentaire"
+  },
+  "#. Audits de surveillance": {
+   "en": "#. Surveillance audits",
+   "fr": "3. Audits de surveillance"
+  },
+  "#. Contexte de l'organisme": {
+   "en": "#. Context of the organization",
+   "fr": "4. Contexte de l'organisme"
+  },
+  "#. Exploitation": {
+   "en": "#. Operation",
+   "fr": "8. Exploitation"
+  },
+  "#. Soutien": {
+   "en": "#. Support",
+   "fr": "7. Soutien"
+  },
+  ": cet article ne se reprend pas d’un système de management existant ·": {
+   "en": ": this clause does not carry over from an existing management system ·",
+   "fr": ": cet article ne se reprend pas d’un système de management existant ·"
+  },
+  "A.# Alignement sur les autres politiques organisationnelles — retenue ou écartée": {
+   "en": "A.# Alignment with other organizational policies — included or excluded",
+   "fr": "A.2.3 Alignement sur les autres politiques organisationnelles — retenue ou écartée"
+  },
+  "A.# Cycle de vie de système d'IA": {
+   "en": "A.# AI system life cycle",
+   "fr": "A.6 Cycle de vie de système d'IA"
+  },
+  "A.# Documentation des ressources — retenue ou écartée": {
+   "en": "A.# Resource documentation — included or excluded",
+   "fr": "A.4.2 Documentation des ressources — retenue ou écartée"
+  },
+  "A.# Données pour les systèmes d'IA": {
+   "en": "A.# Data for AI systems",
+   "fr": "A.7 Données pour les systèmes d'IA"
+  },
+  "A.# Examen de la politique d'IA — retenue ou écartée": {
+   "en": "A.# Review of the AI policy — included or excluded",
+   "fr": "A.2.4 Examen de la politique d'IA — retenue ou écartée"
+  },
+  "A.# Informations à l'attention des parties intéressées des systèmes d'IA": {
+   "en": "A.# Information for interested parties of AI systems",
+   "fr": "A.8 Informations à l'attention des parties intéressées des systèmes d'IA"
+  },
+  "A.# Organisation interne": {
+   "en": "A.# Internal organisation",
+   "fr": "A.3 Organisation interne"
+  },
+  "A.# Politique d'IA — retenue ou écartée": {
+   "en": "A.# AI policy — included or excluded",
+   "fr": "A.2.2 Politique d'IA — retenue ou écartée"
+  },
+  "A.# Politiques relatives à l'IA": {
+   "en": "A.# Policies related to AI",
+   "fr": "A.2 Politiques relatives à l'IA"
+  },
+  "A.# Relations avec les tiers et avec les clients": {
+   "en": "A.# Third-party and customer relationships",
+   "fr": "A.10 Relations avec les tiers et avec les clients"
+  },
+  "A.# Ressources pour les systèmes d'IA": {
+   "en": "A.# Resources for AI systems",
+   "fr": "A.4 Ressources pour les systèmes d'IA"
+  },
+  "A.# Rôles et responsabilités en matière d'IA — retenue ou écartée": {
+   "en": "A.# AI roles and responsibilities — included or excluded",
+   "fr": "A.3.2 Rôles et responsabilités en matière d'IA — retenue ou écartée"
+  },
+  "A.# Signalement des préoccupations — retenue ou écartée": {
+   "en": "A.# Reporting of concerns — included or excluded",
+   "fr": "A.3.3 Signalement des préoccupations — retenue ou écartée"
+  },
+  "A.# Utilisation des systèmes d'IA": {
+   "en": "A.# Use of AI systems",
+   "fr": "A.9 Utilisation des systèmes d'IA"
+  },
+  "A.# Évaluation des impacts des systèmes d'IA": {
+   "en": "A.# Assessing impacts of AI systems",
+   "fr": "A.5 Évaluation des impacts des systèmes d'IA"
+  },
+  "Acquisition de données": {
+   "en": "Acquisition of data",
+   "fr": "Acquisition de données"
+  },
+  "Alignement sur les autres politiques organisationnelles": {
+   "en": "Alignment with other organizational policies",
+   "fr": "Alignement sur les autres politiques organisationnelles"
+  },
+  "Appréciation des risques liés à l'IA": {
+   "en": "AI risk assessment",
+   "fr": "Appréciation des risques liés à l'IA"
+  },
+  "Articles ISO concernés : #, #": {
+   "en": "ISO clauses concerned: #, #",
+   "fr": "Articles ISO concernés : 6.1.4, 8.4"
+  },
+  "Articles ISO concernés : #, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #": {
+   "en": "ISO clauses concerned: #, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #",
+   "fr": "Articles ISO concernés : 10.1, 10.2, 4.1, 4.2, 5.1, 5.3, 6.1.1, 6.2, 6.3, 7.1, 7.2, 7.3, 7.4, 7.5.1, 7.5.2, 7.5.3, 8.1, 9.1, 9.2.1, 9.2.2, 9.3.1, 9.3.2, 9.3.3"
+  },
+  "Bloc # sur # · Articles # à # — À remplir maintenant": {
+   "en": "Block # of # · Clauses # to # — To be filled in now",
+   "fr": "Bloc 1 sur 4 · Articles 4 à 10 — À remplir maintenant"
+  },
+  "Bloc # sur # · Chemin de certification — Pas encore atteint": {
+   "en": "Block # of # · Certification path — Not yet reached",
+   "fr": "Bloc 3 sur 4 · Chemin de certification — Pas encore atteint"
+  },
+  "Bloc # sur # · Ponts IA Act / RGPD / NIS # — Pas encore atteint": {
+   "en": "Block # of # · Bridges to the AI Act / GDPR / NIS # — Not yet reached",
+   "fr": "Bloc 4 sur 4 · Ponts IA Act / RGPD / NIS 2 — Pas encore atteint"
+  },
+  "Ce qu'on mesure, comment, à quelle fréquence, et ce qu'on conclut des mesures.": {
+   "en": "What is measured, how, how often, and what is concluded from the measurements.",
+   "fr": "Ce qu'on mesure, comment, à quelle fréquence, et ce qu'on conclut des mesures."
+  },
+  "Ce que la direction doit avoir sous les yeux : suites des revues précédentes, changements, performance, non-conformités, retours des parties intéressées.": {
+   "en": "What senior management must have in front of it: follow-up of previous reviews, changes, performance, nonconformities, feedback from interested parties.",
+   "fr": "Ce que la direction doit avoir sous les yeux : suites des revues précédentes, changements, performance, non-conformités, retours des parties intéressées."
+  },
+  "Ce qui la fait tomber — Un système monté pour l'audit et abandonné ensuite — visible au premier audit de surveillance.": {
+   "en": "What makes it fail — A system set up for the audit and abandoned afterwards — visible at the first surveillance audit.",
+   "fr": "Ce qui la fait tomber — Un système monté pour l'audit et abandonné ensuite — visible au premier audit de surveillance."
+  },
+  "Ce qui la fait tomber — Un écart entre la déclaration d'applicabilité et la réalité — une mesure retenue dont rien n'atteste la mise en œuvre.": {
+   "en": "What makes it fail — A gap between the Statement of Applicability and reality — an included control whose implementation nothing evidences.",
+   "fr": "Ce qui la fait tomber — Un écart entre la déclaration d'applicabilité et la réalité — une mesure retenue dont rien n'atteste la mise en œuvre."
+  },
+  "Ce qui la fait tomber — Une déclaration d'applicabilité incomplète — une mesure ni retenue ni écartée, ou une décision sans justification. Le défaut est documentaire, et il arrête tout avant l'étape #.": {
+   "en": "What makes it fail — An incomplete Statement of Applicability — a control neither included nor excluded, or a decision without justification. The defect is documentary, and it stops everything before stage #.",
+   "fr": "Ce qui la fait tomber — Une déclaration d'applicabilité incomplète — une mesure ni retenue ni écartée, ou une décision sans justification. Le défaut est documentaire, et il arrête tout avant l'étape 2."
+  },
+  "Certification par un organisme tiers accrédité — la seule des quatre références de Sentinel qui délivre un certificat opposable.": {
+   "en": "Certification by an accredited third-party body — the only one of Sentinel’s four references that issues a certificate you can show.",
+   "fr": "Certification par un organisme tiers accrédité — la seule des quatre références de Sentinel qui délivre un certificat opposable."
+  },
+  "Cet article ne se reprend pas d’un système de management existant": {
+   "en": "This clause does not carry over from an existing management system",
+   "fr": "Cet article ne se reprend pas d’un système de management existant"
+  },
+  "Choisir les mesures, vérifier qu'elles couvrent les options de traitement retenues, et PRODUIRE LA DÉCLARATION D'APPLICABILITÉ avec la justification de chaque inclusion et de chaque exclusion.": {
+   "en": "Choose the controls, check that they cover the treatment options selected, and PRODUCE THE STATEMENT OF APPLICABILITY with the justification for each inclusion and each exclusion.",
+   "fr": "Choisir les mesures, vérifier qu'elles couvrent les options de traitement retenues, et PRODUIRE LA DÉCLARATION D'APPLICABILITÉ avec la justification de chaque inclusion et de chaque exclusion."
+  },
+  "Communication des incidents": {
+   "en": "Communication of incidents",
+   "fr": "Communication des incidents"
+  },
+  "Compréhension de l'organisme et de son contexte": {
+   "en": "Understanding the organization and its context",
+   "fr": "Compréhension de l'organisme et de son contexte"
+  },
+  "Comptes rendus externes": {
+   "en": "External minutes",
+   "fr": "Comptes rendus externes"
+  },
+  "Dire aux utilisateurs, aux clients et au public ce qu'ils doivent savoir — y compris quand ça se passe mal.": {
+   "en": "Tell users, clients and the public what they need to know — including when things go wrong.",
+   "fr": "Dire aux utilisateurs, aux clients et au public ce qu'ils doivent savoir — y compris quand ça se passe mal."
+  },
+  "Disponibilité, protection, conservation, suppression — y compris pour les documents d'origine externe.": {
+   "en": "Availability, protection, retention, deletion — including for documents of external origin.",
+   "fr": "Disponibilité, protection, conservation, suppression — y compris pour les documents d'origine externe."
+  },
+  "Documentation de la conception et du développement du système d'IA": {
+   "en": "Documentation of AI system design and development",
+   "fr": "Documentation de la conception et du développement du système d'IA"
+  },
+  "Documentation des ressources": {
+   "en": "Resource documentation",
+   "fr": "Documentation des ressources"
+  },
+  "Documentation des évaluations de l'impact du système d'IA": {
+   "en": "Documentation of AI system impact assessments",
+   "fr": "Documentation des évaluations de l'impact du système d'IA"
+  },
+  "Documentation et informations du système à l'attention des utilisateurs": {
+   "en": "System documentation and information for users",
+   "fr": "Documentation et informations du système à l'attention des utilisateurs"
+  },
+  "Documentation technique du système d'IA": {
+   "en": "AI system technical documentation",
+   "fr": "Documentation technique du système d'IA"
+  },
+  "Donner à la direction une orientation écrite et un soutien pour les systèmes d'IA.": {
+   "en": "Give senior management written direction and support for AI systems.",
+   "fr": "Donner à la direction une orientation écrite et un soutien pour les systèmes d'IA."
+  },
+  "Données pour le développement et l'amélioration du système d'IA": {
+   "en": "Data for development and enhancement of AI system",
+   "fr": "Données pour le développement et l'amélioration du système d'IA"
+  },
+  "Déploiement du système d'IA": {
+   "en": "AI system deployment",
+   "fr": "Déploiement du système d'IA"
+  },
+  "Détermination du périmètre du système de management de l'IA": {
+   "en": "Determining the scope of the AI management system",
+   "fr": "Détermination du périmètre du système de management de l'IA"
+  },
+  "Encadrer l'usage : pour quoi le système est prévu, et ce qu'on s'interdit d'en faire.": {
+   "en": "Frame the use: what the system is intended for, and what you forbid yourself to do with it.",
+   "fr": "Encadrer l'usage : pour quoi le système est prévu, et ce qu'on s'interdit d'en faire."
+  },
+  "Enregistrement des journaux d'événements du système d'IA": {
+   "en": "AI system recording of event logs",
+   "fr": "Enregistrement des journaux d'événements du système d'IA"
+  },
+  "Examen de la politique d'IA": {
+   "en": "Review of the AI policy",
+   "fr": "Examen de la politique d'IA"
+  },
+  "Exigences et spécification du système d'IA": {
+   "en": "AI system requirements and specification",
+   "fr": "Exigences et spécification du système d'IA"
+  },
+  "Exploitation et surveillance du système d'IA": {
+   "en": "AI system operation and monitoring",
+   "fr": "Exploitation et surveillance du système d'IA"
+  },
+  "Faire tourner ce qui a été planifié, maîtriser les changements, et tenir les processus externalisés.": {
+   "en": "Run what has been planned, control changes, and keep hold of outsourced processes.",
+   "fr": "Faire tourner ce qui a été planifié, maîtriser les changements, et tenir les processus externalisés."
+  },
+  "Fournisseurs": {
+   "en": "Providers",
+   "fr": "Fournisseurs"
+  },
+  "Fréquence, méthodes, responsabilités, exigences de compte rendu — et des auditeurs qui n'auditent pas leur propre travail.": {
+   "en": "Frequency, methods, responsibilities, reporting requirements — and auditors who do not audit their own work.",
+   "fr": "Fréquence, méthodes, responsabilités, exigences de compte rendu — et des auditeurs qui n'auditent pas leur propre travail."
+  },
+  "ISO/IEC # (sécurité de l'information)": {
+   "en": "ISO/IEC # (information security)",
+   "fr": "ISO/IEC 27001 (sécurité de l'information)"
+  },
+  "Identifier, analyser et évaluer les risques que l'IA fait courir — à l'organisme ET aux personnes. La double lecture est ce qui distingue cette appréciation d'une analyse de risque classique.": {
+   "en": "Identify, analyse and evaluate the risks that AI creates — for the organisation AND for individuals. This dual reading is what distinguishes this assessment from a conventional risk analysis.",
+   "fr": "Identifier, analyser et évaluer les risques que l'IA fait courir — à l'organisme ET aux personnes. La double lecture est ce qui distingue cette appréciation d'une analyse de risque classique."
+  },
+  "Informations à l'attention des parties intéressées": {
+   "en": "Information for interested parties",
+   "fr": "Informations à l'attention des parties intéressées"
+  },
+  "Installer la redevabilité : que quelqu'un réponde de chaque système, et qu'une préoccupation puisse remonter.": {
+   "en": "Establish accountability: someone answers for each system, and a concern can be escalated.",
+   "fr": "Installer la redevabilité : que quelqu'un réponde de chaque système, et qu'une préoccupation puisse remonter."
+  },
+  "Justification — obligatoire dans les deux cas": {
+   "en": "Justification — mandatory in both cases",
+   "fr": "Justification — obligatoire dans les deux cas"
+  },
+  "L'AIDF de l'article # est due par certains DÉPLOYEURS de systèmes à haut risque et suit une liste de points imposée par le règlement. Une évaluation #, même excellente, ne la constitue pas.": {
+   "en": "The FRIA under Article # is owed by certain DEPLOYERS of high-risk systems and follows a list of points imposed by the Regulation. A # assessment, however excellent, does not constitute one.",
+   "fr": "L'AIDF de l'article 27 est due par certains DÉPLOYEURS de systèmes à haut risque et suit une liste de points imposée par le règlement. Une évaluation 42001, même excellente, ne la constitue pas."
+  },
+  "L'AIPD de l'article # porte sur les seules données à caractère personnel, et sur les droits des personnes concernées. Un système d'IA sans données personnelles n'en relève pas ; un traitement sans IA en relève quand même.": {
+   "en": "The DPIA under Article # covers personal data only, and the rights of data subjects. An AI system without personal data does not fall under it; processing without AI falls under it all the same.",
+   "fr": "L'AIPD de l'article 35 porte sur les seules données à caractère personnel, et sur les droits des personnes concernées. Un système d'IA sans données personnelles n'en relève pas ; un traitement sans IA en relève quand même."
+  },
+  "L'appréciation des risques, exécutée et tenue à jour — à intervalles planifiés et quand quelque chose change.": {
+   "en": "The risk assessment, performed and kept up to date — at planned intervals and when something changes.",
+   "fr": "L'appréciation des risques, exécutée et tenue à jour — à intervalles planifiés et quand quelque chose change."
+  },
+  "L'auditeur vérifie que ce qui est écrit est fait : preuves d'exécution, enregistrements, entretiens.": {
+   "en": "The auditor checks that what is written is done: evidence of execution, records, interviews.",
+   "fr": "L'auditeur vérifie que ce qui est écrit est fait : preuves d'exécution, enregistrements, entretiens."
+  },
+  "L'auditeur vérifie que le système EXISTE sur le papier : périmètre, politique, appréciation des risques, déclaration d'applicabilité, plan d'audit interne.": {
+   "en": "The auditor checks that the system EXISTS on paper: scope, policy, risk assessment, Statement of Applicability, internal audit plan.",
+   "fr": "L'auditeur vérifie que le système EXISTE sur le papier : périmètre, politique, appréciation des risques, déclaration d'applicabilité, plan d'audit interne."
+  },
+  "L'inventaire des systèmes, la cartographie des personnes affectées et la méthode d'évaluation d'impact servent aussi à l'analyse d'impact sur les droits fondamentaux (AIDF, art. #).": {
+   "en": "The inventory of systems, the mapping of affected persons and the impact assessment method also serve the fundamental rights impact assessment (FRIA, art. #).",
+   "fr": "L'inventaire des systèmes, la cartographie des personnes affectées et la méthode d'évaluation d'impact servent aussi à l'analyse d'impact sur les droits fondamentaux (AIDF, art. 27)."
+  },
+  "L'évaluation d'impact, exécutée. C'est ici que le travail fait pour l'AIDF du RGPD et pour l'AIDF de l'IA Act se réutilise — et ici qu'il ne suffit pas.": {
+   "en": "The impact assessment, performed. This is where the work done for the GDPR DPIA and for the AI Act FRIA carries over — and where it is not enough.",
+   "fr": "L'évaluation d'impact, exécutée. C'est ici que le travail fait pour l'AIDF du RGPD et pour l'AIDF de l'IA Act se réutilise — et ici qu'il ne suffit pas."
+  },
+  "L'évaluation d'impact, vue depuis la planification : elle doit être prévue, cadrée et reliée à l'appréciation des risques.": {
+   "en": "The impact assessment, seen from planning: it must be planned, scoped and linked to the risk assessment.",
+   "fr": "L'évaluation d'impact, vue depuis la planification : elle doit être prévue, cadrée et reliée à l'appréciation des risques."
+  },
+  "La communication des incidents (A.#) et la maîtrise des fournisseurs (A.#) recouvrent en partie les mesures b) et d) de l'article #, §#.": {
+   "en": "Communication of incidents (A.#) and supplier control (A.#) partly overlap measures (b) and (d) of Article #(#).",
+   "fr": "La communication des incidents (A.8.4) et la maîtrise des fournisseurs (A.10.3) recouvrent en partie les mesures b) et d) de l'article 21, §2."
+  },
+  "La déclaration n'est PAS recevable pour un audit d'étape #. Ce n'est pas un défaut de sécurité, c'est un défaut de document — et il se corrige en écrivant, pas en développant.": {
+   "en": "The statement is NOT admissible for a stage # audit. It is not a security defect, it is a document defect — and it is corrected by writing, not by developing.",
+   "fr": "La déclaration n'est PAS recevable pour un audit d'étape 1. Ce n'est pas un défaut de sécurité, c'est un défaut de document — et il se corrige en écrivant, pas en développant."
+  },
+  "La provenance et la préparation des données alimentent directement le registre des traitements et l'analyse d'impact relative à la protection des données (AIPD, art. #).": {
+   "en": "Data provenance and preparation feed directly into the records of processing activities and the data protection impact assessment (DPIA, art. #).",
+   "fr": "La provenance et la préparation des données alimentent directement le registre des traitements et l'analyse d'impact relative à la protection des données (AIPD, art. 35)."
+  },
+  "La structure harmonisée est la même : revue de direction, audit interne, non-conformités, informations documentées se greffent sur le système existant.": {
+   "en": "The harmonised structure is the same: management review, internal audit, nonconformities and documented information graft onto the existing system.",
+   "fr": "La structure harmonisée est la même : revue de direction, audit interne, non-conformités, informations documentées se greffent sur le système existant."
+  },
+  "Le certificat vit : des audits périodiques vérifient que le système tient.": {
+   "en": "The certificate lives on: periodic audits check that the system holds.",
+   "fr": "Le certificat vit : des audits périodiques vérifient que le système tient."
+  },
+  "Le document court qui dit ce que l'organisme s'autorise et s'interdit en matière d'IA, et qui engage sa direction.": {
+   "en": "The short document that says what the organisation allows and forbids itself in matters of AI, and that commits its senior management.",
+   "fr": "Le document court qui dit ce que l'organisme s'autorise et s'interdit en matière d'IA, et qui engage sa direction."
+  },
+  "Le référentiel de la norme est momentanément indisponible. Rien n’est affiché plutôt qu’une liste partielle : préparer un audit sur un périmètre tronqué coûte plus cher que l’attendre.": {
+   "en": "The standard’s reference framework is temporarily unavailable. Nothing is shown rather than a partial list: preparing an audit on a truncated scope costs more than waiting for it.",
+   "fr": "Le référentiel de la norme est momentanément indisponible. Rien n’est affiché plutôt qu’une liste partielle : préparer un audit sur un périmètre tronqué coûte plus cher que l’attendre."
+  },
+  "Les changements du système de management se planifient ; ils ne se constatent pas après coup.": {
+   "en": "Changes to the management system are planned; they are not discovered after the fact.",
+   "fr": "Les changements du système de management se planifient ; ils ne se constatent pas après coup."
+  },
+  "Les mesures de l'annexe A ne sont pas exhaustives : un organisme peut en concevoir d'autres, ou s'inspirer de sources existantes, si le traitement des risques l'exige. Une déclaration d'applicabilité qui couvre les trente-huit mesures de l'annexe A n'est pas pour autant complète : elle l'est si elle couvre les options de traitement retenues, ce qui peut demander davantage.": {
+   "en": "Annex A controls are not exhaustive: an organisation can design others, or draw on existing sources, if risk treatment requires it. A Statement of Applicability that covers the thirty-eight Annex A controls is not complete for all that: it is complete if it covers the risk treatment options selected, which may demand more.",
+   "fr": "Les mesures de l'annexe A ne sont pas exhaustives : un organisme peut en concevoir d'autres, ou s'inspirer de sources existantes, si le traitement des risques l'exige. Une déclaration d'applicabilité qui couvre les trente-huit mesures de l'annexe A n'est pas pour autant complète : elle l'est si elle couvre les options de traitement retenues, ce qui peut demander davantage."
+  },
+  "Mesures de l’annexe A : A.#, A.#": {
+   "en": "Annex A controls: A.#, A.#",
+   "fr": "Mesures de l’annexe A : A.8.4, A.10.3"
+  },
+  "Mesures de l’annexe A : A.#, A.#, A.#, A.#": {
+   "en": "Annex A controls: A.#, A.#, A.#, A.#",
+   "fr": "Mesures de l’annexe A : A.5.2, A.5.3, A.5.4, A.5.5"
+  },
+  "NIS # impose des DÉLAIS — # h, # h, un mois — que la norme ne fixe pas. Un processus # conforme peut manquer entièrement l'horloge de l'article #.": {
+   "en": "NIS # imposes DEADLINES — # h, # h, one month — that the standard does not set. A compliant # process can entirely miss the Article # clock.",
+   "fr": "NIS 2 impose des DÉLAIS — 24 h, 72 h, un mois — que la norme ne fixe pas. Un processus 42001 conforme peut manquer entièrement l'horloge de l'article 23."
+  },
+  "Nommer ce qui, dehors et dedans, pèse sur la façon dont l'organisme conçoit ou utilise l'IA : marché, droit applicable, attentes sociétales, maturité interne.": {
+   "en": "Name what, outside and inside, weighs on the way the organisation designs or uses AI: market, applicable law, societal expectations, internal maturity.",
+   "fr": "Nommer ce qui, dehors et dedans, pèse sur la façon dont l'organisme conçoit ou utilise l'IA : marché, droit applicable, attentes sociétales, maturité interne."
+  },
+  "Objectifs d'IA et planification pour les atteindre": {
+   "en": "AI objectives and planning to achieve them",
+   "fr": "Objectifs d'IA et planification pour les atteindre"
+  },
+  "Objectifs d'utilisation responsable": {
+   "en": "Objectives for responsible use",
+   "fr": "Objectifs d'utilisation responsable"
+  },
+  "Objectifs pour un développement responsable du système d'IA": {
+   "en": "Objectives for responsible development of AI system",
+   "fr": "Objectifs pour un développement responsable du système d'IA"
+  },
+  "Planification des changements": {
+   "en": "Planning of changes",
+   "fr": "Planification des changements"
+  },
+  "Politique d'IA": {
+   "en": "AI policy",
+   "fr": "Politique d'IA"
+  },
+  "Processus d'utilisation responsable des systèmes d'IA": {
+   "en": "Processes for responsible use of AI systems",
+   "fr": "Processus d'utilisation responsable des systèmes d'IA"
+  },
+  "Processus d'évaluation de l'impact du système d'IA": {
+   "en": "AI system impact assessment process",
+   "fr": "Processus d'évaluation de l'impact du système d'IA"
+  },
+  "Processus de conception et de développement responsables du système d'IA": {
+   "en": "Processes for responsible AI system design and development",
+   "fr": "Processus de conception et de développement responsables du système d'IA"
+  },
+  "Propre à l’IA — # / #": {
+   "en": "Specific to AI — # / #",
+   "fr": "Propre à l’IA — 0 / 9"
+  },
+  "Provenance des données": {
+   "en": "Data provenance",
+   "fr": "Provenance des données"
+  },
+  "Préparation des données": {
+   "en": "Data preparation",
+   "fr": "Préparation des données"
+  },
+  "Qualité des données pour les systèmes d'IA": {
+   "en": "Quality of data for AI systems",
+   "fr": "Qualité des données pour les systèmes d'IA"
+  },
+  "Qui décide, qui met en œuvre, qui contrôle — et qui répond quand un système se comporte mal.": {
+   "en": "Who decides, who implements, who checks — and who answers when a system misbehaves.",
+   "fr": "Qui décide, qui met en œuvre, qui contrôle — et qui répond quand un système se comporte mal."
+  },
+  "Recenser ce dont les systèmes dépendent — données, outils, infrastructure, humains — pour pouvoir en apprécier les risques.": {
+   "en": "Identify what the systems depend on — data, tools, infrastructure, people — so that you can assess their risks.",
+   "fr": "Recenser ce dont les systèmes dépendent — données, outils, infrastructure, humains — pour pouvoir en apprécier les risques."
+  },
+  "Recenser qui a quelque chose à perdre ou à dire — clients, salariés, personnes soumises aux décisions du système, régulateurs — et ce que chacun attend.": {
+   "en": "List who has something to lose or to say — clients, employees, people subject to the system’s decisions, regulators — and what each expects.",
+   "fr": "Recenser qui a quelque chose à perdre ou à dire — clients, salariés, personnes soumises aux décisions du système, régulateurs — et ce que chacun attend."
+  },
+  "Ressources d'outillage": {
+   "en": "Tooling resources",
+   "fr": "Ressources d'outillage"
+  },
+  "Ressources de données": {
+   "en": "Data resources",
+   "fr": "Ressources de données"
+  },
+  "Ressources humaines": {
+   "en": "Human resources",
+   "fr": "Ressources humaines"
+  },
+  "Ressources système et informatiques": {
+   "en": "System and computing resources",
+   "fr": "Ressources système et informatiques"
+  },
+  "Règlement (UE) #/# (IA Act)": {
+   "en": "Regulation (EU) #/# (AI Act)",
+   "fr": "Règlement (UE) 2024/1689 (IA Act)"
+  },
+  "Répartir les responsabilités avec les fournisseurs et les clients — et s'assurer que ce qu'on achète tient les mêmes engagements.": {
+   "en": "Allocate responsibilities with suppliers and clients — and make sure that what you buy holds to the same commitments.",
+   "fr": "Répartir les responsabilités avec les fournisseurs et les clients — et s'assurer que ce qu'on achète tient les mêmes engagements."
+  },
+  "Répartition des responsabilités": {
+   "en": "Allocating responsibilities",
+   "fr": "Répartition des responsabilités"
+  },
+  "Rôles et responsabilités en matière d'IA": {
+   "en": "AI roles and responsibilities",
+   "fr": "Rôles et responsabilités en matière d'IA"
+  },
+  "Rôles, responsabilités et autorités au sein de l'organisme": {
+   "en": "Roles, responsibilities and authorities",
+   "fr": "Rôles, responsabilités et autorités au sein de l'organisme"
+  },
+  "Sans justification": {
+   "en": "Without justification",
+   "fr": "Sans justification"
+  },
+  "Savoir d'où viennent les données, ce qu'elles valent, et ce qu'on leur a fait subir avant l'entraînement.": {
+   "en": "Know where the data comes from, what it is worth, and what has been done to it before training.",
+   "fr": "Savoir d'où viennent les données, ce qu'elles valent, et ce qu'on leur a fait subir avant l'entraînement."
+  },
+  "Signalement des préoccupations": {
+   "en": "Reporting of concerns",
+   "fr": "Signalement des préoccupations"
+  },
+  "Système de management de l'IA": {
+   "en": "AI management system",
+   "fr": "Système de management de l'IA"
+  },
+  "Tenir le système de bout en bout : objectifs de développement, conception, vérification, déploiement, exploitation, journalisation.": {
+   "en": "Cover the system end to end: development objectives, design, verification, deployment, operation, logging.",
+   "fr": "Tenir le système de bout en bout : objectifs de développement, conception, vérification, déploiement, exploitation, journalisation."
+  },
+  "Traitement des risques liés à l'IA": {
+   "en": "AI risk treatment",
+   "fr": "Traitement des risques liés à l'IA"
+  },
+  "Un cycle d'audit interne (art. #) et une revue de direction (art. #) doivent avoir eu lieu AVANT l'étape # — ce sont des exigences, et l'organisme ne peut pas les produire le jour de l'audit.": {
+   "en": "An internal audit cycle (clause #) and a management review (clause #) must have taken place BEFORE stage # — these are requirements, and the organisation cannot produce them on the day of the audit.",
+   "fr": "Un cycle d'audit interne (art. 9.2) et une revue de direction (art. 9.3) doivent avoir eu lieu AVANT l'étape 2 — ce sont des exigences, et l'organisme ne peut pas les produire le jour de l'audit."
+  },
+  "Utilisation prévue du système d'IA": {
+   "en": "Intended use of the AI system",
+   "fr": "Utilisation prévue du système d'IA"
+  },
+  "Vérification et validation du système d'IA": {
+   "en": "AI system verification and validation",
+   "fr": "Vérification et validation du système d'IA"
+  },
+  "art. # d) et NOTE #": {
+   "en": "clause # d) and NOTE #",
+   "fr": "art. 6.1.3 d) et NOTE 2"
+  },
+  "propre à l’IA": {
+   "en": "AI-specific",
+   "fr": "propre à l’IA"
+  },
+  "taux qui dit l’effort réel. Les articles « mutualisables » se greffent sur un système de management déjà en place ; ceux marqués « propre à l’IA » sont ce que # ajoute, et il n’y en a que #.": {
+   "en": "rate that shows the real effort. The “shareable” clauses graft onto a management system already in place; those marked “specific to AI” are what # adds, and there are only #.",
+   "fr": "taux qui dit l’effort réel. Les articles « mutualisables » se greffent sur un système de management déjà en place ; ceux marqués « propre à l’IA » sont ce que 42001 ajoute, et il n’y en a que 9."
+  },
+  "Écrire ce qui est dedans et ce qui est dehors. Un périmètre flou est la première cause de dérive de coût d'un audit : tout ce qui n'est pas exclu par écrit est audité.": {
+   "en": "Write down what is in and what is out. A vague scope is the first cause of cost overrun in an audit: everything that is not excluded in writing is audited.",
+   "fr": "Écrire ce qui est dedans et ce qui est dehors. Un périmètre flou est la première cause de dérive de coût d'un audit : tout ce qui n'est pas exclu par écrit est audité."
+  },
+  "Établir, mettre en œuvre, tenir à jour et améliorer le système lui-même — l'article qui dit que le reste doit exister pour de bon, pas seulement sur le papier.": {
+   "en": "Establish, implement, maintain and improve the system itself — the clause that says the rest must exist for real, not just on paper.",
+   "fr": "Établir, mettre en œuvre, tenir à jour et améliorer le système lui-même — l'article qui dit que le reste doit exister pour de bon, pas seulement sur le papier."
+  },
+  "Évaluation de l'impact du système d'IA": {
+   "en": "AI system impact assessment",
+   "fr": "Évaluation de l'impact du système d'IA"
+  },
+  "Évaluation de l'impact du système d'IA sur des personnes ou groupes potentiels": {
+   "en": "Assessing AI system impact on individuals or groups of individuals",
+   "fr": "Évaluation de l'impact du système d'IA sur des personnes ou groupes potentiels"
+  },
+  "Évaluation des impacts sociétaux des systèmes d'IA": {
+   "en": "Assessing societal impacts of AI systems",
+   "fr": "Évaluation des impacts sociétaux des systèmes d'IA"
+  },
+  "Évaluer ce que les systèmes font subir aux personnes, aux groupes et à la société — le point de couture avec l'IA Act et le RGPD.": {
+   "en": "Assess what the systems do to individuals, groups and society — the seam with the AI Act and the GDPR.",
+   "fr": "Évaluer ce que les systèmes font subir aux personnes, aux groupes et à la société — le point de couture avec l'IA Act et le RGPD."
+  },
+  "Être certifié # ne rend conforme à aucune obligation légale et n'en dispense d'aucune ; inversement, un système parfaitement conforme à l'IA Act ne vaut pas un système de management certifié. Les deux se nourrissent, aucun n'emporte l'autre.": {
+   "en": "Being # certified does not make you compliant with any legal obligation and does not exempt you from any; conversely, a system fully compliant with the AI Act is not worth a certified management system. The two feed each other; neither carries the other.",
+   "fr": "Être certifié 42001 ne rend conforme à aucune obligation légale et n'en dispense d'aucune ; inversement, un système parfaitement conforme à l'IA Act ne vaut pas un système de management certifié. Les deux se nourrissent, aucun n'emporte l'autre."
+  },
+  "— ISO/IEC #:# — Technologies de l'information — Intelligence artificielle — Système de management. La mise en œuvre suppose de détenir le texte de la norme, qui s'achète auprès de l'ISO ou d'un organisme national de normalisation (AFNOR en France).": {
+   "en": "— ISO/IEC #:# — Information technology — Artificial intelligence — Management system. Implementation requires holding the text of the standard, which can be purchased from ISO or from a national standards body (AFNOR in France).",
+   "fr": "— ISO/IEC 42001:2023 — Technologies de l'information — Intelligence artificielle — Système de management. La mise en œuvre suppose de détenir le texte de la norme, qui s'achète auprès de l'ISO ou d'un organisme national de normalisation (AFNOR en France)."
+  },
+  "↓ Articles # à #": {
+   "en": "↓ Clauses # to #",
+   "fr": "↓ Articles 4 à 10"
+  }
+ }
+}

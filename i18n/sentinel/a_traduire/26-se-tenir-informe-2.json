@@ -1,0 +1,1050 @@
+{
+ "_lot": "26-se-tenir-informe-2",
+ "_mots": 2388,
+ "_pages": [
+  "geo",
+  "obs-rd",
+  "regs"
+ ],
+ "_rubrique": "SE TENIR INFORMÉ",
+ "bloc": {
+  "Définition (N.B. de la carte source) : auteurs d’articles retenus pour présentation orale à NeurIPS (~top # % des publications). * Royaume-Uni, Allemagne, France et Canada : entre # et # % chacun des lieux de travail selon la carte source (lecture graphique — valeur précise non publiée). Inde : lieu de travail non disponible.": {
+   "en": "Definition (note from the source map): authors of papers accepted for <em>oral presentation</em> at NeurIPS (~top # % of publications). * United Kingdom, Germany, France and Canada: between # and # % each of the places of work according to the source map (read off the chart — exact value not published). India: place of work not available.",
+   "fr": "Définition (N.B. de la carte source) : auteurs d’articles retenus pour présentation orale à NeurIPS (~top 2 % des publications). * Royaume-Uni, Allemagne, France et Canada : entre 2 et 4 % chacun des lieux de travail selon la carte source (lecture graphique — valeur précise non publiée). Inde : lieu de travail non disponible.",
+   "html": "Définition (N.B. de la carte source) : auteurs d’articles retenus pour <em>présentation orale</em> à NeurIPS (~top 2 % des publications). * Royaume-Uni, Allemagne, France et Canada : entre 2 et 4 % chacun des lieux de travail selon la carte source (lecture graphique — valeur précise non publiée). Inde : lieu de travail non disponible."
+  },
+  "La carte réglementaire dit où l'IA est encadrée. Celle-ci dit où elle est produite : modèles remarquables, chercheurs d'élite (NeurIPS), brevets accordés et adoption par les entreprises européennes. Chaque série porte sa source, sa licence et sa précision.": {
+   "en": "The regulatory map says where AI is <em>regulated</em>. This one says where it is <em>produced</em>: notable models, elite researchers (NeurIPS), patents granted and adoption by European companies. Each series carries its source, its licence and its precision.",
+   "fr": "La carte réglementaire dit où l'IA est encadrée. Celle-ci dit où elle est produite : modèles remarquables, chercheurs d'élite (NeurIPS), brevets accordés et adoption par les entreprises européennes. Chaque série porte sa source, sa licence et sa précision.",
+   "html": "La carte réglementaire dit où l'IA est <em>encadrée</em>. Celle-ci dit où elle est <em>produite</em> : modèles remarquables, chercheurs d'élite (NeurIPS), brevets accordés et adoption par les entreprises européennes. Chaque série porte sa source, sa licence et sa précision."
+  },
+  "Le document reprend tout ce que cette page calcule : modèles remarquables par pays, brevets accordés (parts, volumes et facteurs de croissance), chercheurs d’élite et soldes nets, adoption par les entreprises de l’Union, cadre et gouvernance. Les cartes et graphiques affichés à l’écran y sont joints en image, dans la vue que vous avez choisie. Chaque chapitre porte sa source, sa licence, son millésime et sa précision — et le dossier rappelle les crédits à reproduire, dont la licence sans dérivée des données de brevets.": {
+   "en": "The document carries <b>everything this page computes</b>: notable models by country, patents granted (shares, volumes and growth factors), elite researchers and net balances, adoption by companies in the Union, framework and governance. The <b>maps and charts shown on screen</b> are attached as images, in the view you have chosen. Each chapter carries its source, its licence, its vintage and its precision — and the report recalls the credits to reproduce, including the <b>no-derivatives licence</b> of the patent data.",
+   "fr": "Le document reprend tout ce que cette page calcule : modèles remarquables par pays, brevets accordés (parts, volumes et facteurs de croissance), chercheurs d’élite et soldes nets, adoption par les entreprises de l’Union, cadre et gouvernance. Les cartes et graphiques affichés à l’écran y sont joints en image, dans la vue que vous avez choisie. Chaque chapitre porte sa source, sa licence, son millésime et sa précision — et le dossier rappelle les crédits à reproduire, dont la licence sans dérivée des données de brevets.",
+   "html": "Le document reprend <b>tout ce que cette page calcule</b> : modèles remarquables par pays, brevets accordés (parts, volumes et facteurs de croissance), chercheurs d’élite et soldes nets, adoption par les entreprises de l’Union, cadre et gouvernance. Les <b>cartes et graphiques affichés à l’écran</b> y sont joints en image, dans la vue que vous avez choisie. Chaque chapitre porte sa source, sa licence, son millésime et sa précision — et le dossier rappelle les crédits à reproduire, dont la <b>licence sans dérivée</b> des données de brevets."
+  },
+  "Où se crée l'intelligence artificielle": {
+   "en": "Where artificial intelligence is <em>created</em>",
+   "fr": "Où se crée l'intelligence artificielle",
+   "html": "Où se <em>crée</em> l'intelligence artificielle"
+  }
+ },
+ "texte": {
+  "# M€ ou #% CA mondial": {
+   "en": "€# M or #% of worldwide turnover",
+   "fr": "35 M€ ou 7% CA mondial"
+  },
+  "# · révisé #": {
+   "en": "# · revised #",
+   "fr": "2018 · révisé 2021"
+  },
+  ", la plus forte attraction nette ; la Chine en forme # % et n’en emploie que # % —": {
+   "en": ", the strongest net attraction; China trains # % and employs only # % —",
+   "fr": ", la plus forte attraction nette ; la Chine en forme 26 % et n’en emploie que 12 % —"
+  },
+  ", l’Europe de": {
+   "en": ", Europe from",
+   "fr": ", l’Europe de"
+  },
+  ". Survoler une ligne pour le détail. « Autres » — le reste du monde — y figure aussi : sur une carte il n’avait pas de territoire, dans une figure de flux il a sa ligne comme les autres.": {
+   "en": ". Hover over a row for the detail. “Other” — the rest of the world — appears too: on a map it had no territory; in a flow figure it has its row like the others.",
+   "fr": ". Survoler une ligne pour le détail. « Autres » — le reste du monde — y figure aussi : sur une carte il n’avait pas de territoire, dans une figure de flux il a sa ligne comme les autres."
+  },
+  ": modèles remarquables par pays, brevets accordés (parts, volumes et facteurs de croissance), chercheurs d’élite et soldes nets, adoption par les entreprises de l’Union, cadre et gouvernance. Les": {
+   "en": ": notable models by country, patents granted (shares, volumes and growth factors), elite researchers and net balances, adoption by Union companies, framework and governance. The",
+   "fr": ": modèles remarquables par pays, brevets accordés (parts, volumes et facteurs de croissance), chercheurs d’élite et soldes nets, adoption par les entreprises de l’Union, cadre et gouvernance. Les"
+  },
+  "; la flèche donne le sens du mouvement et la colonne de droite le solde en points. Les États-Unis forment # % des chercheurs d’élite et en emploient # % —": {
+   "en": "; the arrow gives the direction of movement and the right-hand column the balance in points. The United States trains # % of elite researchers and employs # % —",
+   "fr": "; la flèche donne le sens du mouvement et la colonne de droite le solde en points. Les États-Unis forment 28 % des chercheurs d’élite et en emploient 57 % —"
+  },
+  "AI Index (Stanford HAI) · données CSET · #–#": {
+   "en": "AI Index (Stanford HAI) · CSET data · #–#",
+   "fr": "AI Index (Stanford HAI) · données CSET · 2010–2023"
+  },
+  "AI Index Report, Stanford HAI — données brevets : CSET (Georgetown)": {
+   "en": "AI Index Report, Stanford HAI — patent data: CSET (Georgetown)",
+   "fr": "AI Index Report, Stanford HAI — données brevets : CSET (Georgetown)"
+  },
+  "AI Watch (JRC)": {
+   "en": "AI Watch (JRC)",
+   "fr": "AI Watch (JRC)"
+  },
+  "AI Watch — suivi de l’IA par la Commission (Centre commun de recherche, JRC)": {
+   "en": "AI Watch — the Commission’s AI monitoring (Joint Research Centre, JRC)",
+   "fr": "AI Watch — suivi de l’IA par la Commission (Centre commun de recherche, JRC)"
+  },
+  "ALTAI (#)": {
+   "en": "ALTAI (2020)",
+   "fr": "ALTAI (2020)"
+  },
+  "Actualité gouvernance": {
+   "en": "Governance news",
+   "fr": "Actualité gouvernance"
+  },
+  "Actualités & publications": {
+   "en": "News & publications",
+   "fr": "Actualités & publications"
+  },
+  "Adoption de l’IA par les entreprises (UE)": {
+   "en": "AI adoption by companies (EU)",
+   "fr": "Adoption de l’IA par les entreprises (UE)"
+  },
+  "Adoption entreprises UE": {
+   "en": "EU enterprise adoption",
+   "fr": "Adoption entreprises UE"
+  },
+  "Agrandir : les volumes, puis les pays sans modèle. Double-clic sur un pays : détail direct.": {
+   "en": "Zoom in: the volumes, then the countries with no model. Double-click a country: direct detail.",
+   "fr": "Agrandir : les volumes, puis les pays sans modèle. Double-clic sur un pays : détail direct."
+  },
+  "Aller à un pays": {
+   "en": "Go to a country",
+   "fr": "Aller à un pays"
+  },
+  "Aller à — pays ou code ISO": {
+   "en": "Go to — country or ISO code",
+   "fr": "Aller à — pays ou code ISO"
+  },
+  "Alliance européenne pour l’IA": {
+   "en": "European AI Alliance",
+   "fr": "Alliance européenne pour l’IA"
+  },
+  "Alliance européenne pour l’IA (plateforme Futurium de la Commission)": {
+   "en": "European AI Alliance (the Commission’s Futurium platform)",
+   "fr": "Alliance européenne pour l’IA (plateforme Futurium de la Commission)"
+  },
+  "Aucun titre en cache — disponible au prochain rafraîchissement en production.": {
+   "en": "No headline cached — available at the next refresh in production.",
+   "fr": "Aucun titre en cache — disponible au prochain rafraîchissement en production."
+  },
+  "Avec sanctions": {
+   "en": "With penalties",
+   "fr": "Avec sanctions"
+  },
+  "Brevets d’IA": {
+   "en": "AI patents",
+   "fr": "Brevets d’IA"
+  },
+  "Brevets d’IA accordés — part du total mondial (%)": {
+   "en": "AI patents granted — share of the world total (%)",
+   "fr": "Brevets d’IA accordés — part du total mondial (%)"
+  },
+  "Bureau de l’IA": {
+   "en": "AI Office",
+   "fr": "Bureau de l’IA"
+  },
+  "CC BY-ND # · citation": {
+   "en": "CC BY-ND # · quotation",
+   "fr": "CC BY-ND 4.0 · citation"
+  },
+  "Cadre & gouvernance UE": {
+   "en": "EU framework & governance",
+   "fr": "Cadre & gouvernance UE"
+  },
+  "Carte mondiale : nombre de modèles d’IA remarquables créés par pays entre # et l’été #, en cinq classes de #-# à #-#. Les États-Unis et la Chine dominent (classe #-#).": {
+   "en": "World map: number of notable AI models created per country between # and summer #, in five classes from #-# to #-#. The United States and China dominate (class #-#).",
+   "fr": "Carte mondiale : nombre de modèles d’IA remarquables créés par pays entre 2003 et l’été 2024, en cinq classes de 1-10 à 101-560. Les États-Unis et la Chine dominent (classe 101-560)."
+  },
+  "Carto n°#, # © Areion/Capri — « Recherche et développement dans le domaine de l’IA »": {
+   "en": "Carto No #, # © Areion/Capri — “Recherche et développement dans le domaine de l’IA” [Research and development in the field of AI]",
+   "fr": "Carto n°89, 2025 © Areion/Capri — « Recherche et développement dans le domaine de l’IA »"
+  },
+  "Ce que montre cette vue.": {
+   "en": "What this view shows.",
+   "fr": "Ce que montre cette vue."
+  },
+  "Ce qu’elle ne montre pas :": {
+   "en": "What it does not show:",
+   "fr": "Ce qu’elle ne montre pas :"
+  },
+  "Cette page traite du Règlement (UE) #/#, déjà adopté ; ce qui est encore en procédure se suit là-bas.": {
+   "en": "This page covers Regulation (EU) #/#, already adopted; what is still going through the procedure is tracked there.",
+   "fr": "Cette page traite du Règlement (UE) 2024/1689, déjà adopté ; ce qui est encore en procédure se suit là-bas."
+  },
+  "Chargement des actualités…": {
+   "en": "Loading news…",
+   "fr": "Chargement des actualités…"
+  },
+  "Chercheurs d’élite": {
+   "en": "Elite researchers",
+   "fr": "Chercheurs d’élite"
+  },
+  "Chercheurs d’élite en IA (#) — origine vs lieu de travail": {
+   "en": "Elite AI researchers (#) — origin vs place of work",
+   "fr": "Chercheurs d’élite en IA (2022) — origine vs lieu de travail"
+  },
+  "Classement # (barres)": {
+   "en": "# ranking (bars)",
+   "fr": "Classement 2023 (barres)"
+  },
+  "Commission européenne — # février #": {
+   "en": "European Commission — # February #",
+   "fr": "Commission européenne — 4 février 2025"
+  },
+  "Composition (barres empilées)": {
+   "en": "Composition (stacked bars)",
+   "fr": "Composition (barres empilées)"
+  },
+  "Conformité · EU AI Act": {
+   "en": "Compliance · EU AI Act",
+   "fr": "Conformité · EU AI Act"
+  },
+  "Couches de la carte": {
+   "en": "Map layers",
+   "fr": "Couches de la carte"
+  },
+  "Cybersécurité des entités essentielles et importantes. Applicable aux systèmes IA dans les infrastructures critiques. Obligations de déclaration d'incidents.": {
+   "en": "Cybersecurity of essential and important entities. Applies to AI systems in critical infrastructure. Incident reporting obligations.",
+   "fr": "Cybersécurité des entités essentielles et importantes. Applicable aux systèmes IA dans les infrastructures critiques. Obligations de déclaration d'incidents."
+  },
+  "Derniers titres — flux stratégie UE": {
+   "en": "Latest headlines — EU strategy feed",
+   "fr": "Derniers titres — flux stratégie UE"
+  },
+  "Directive (UE) #/# — Réseau & SI": {
+   "en": "Directive (EU) #/# — Network & information systems",
+   "fr": "Directive (UE) 2022/2555 — Réseau & SI"
+  },
+  "Données de la carte (tableau)": {
+   "en": "Map data (table)",
+   "fr": "Données de la carte (tableau)"
+  },
+  "Données du graphique (tableau)": {
+   "en": "Chart data (table)",
+   "fr": "Données du graphique (tableau)"
+  },
+  "Dossier complet — les cinq panneaux, leurs tableaux et leurs figures": {
+   "en": "Full file — the five panels, their tables and their figures",
+   "fr": "Dossier complet — les cinq panneaux, leurs tableaux et leurs figures"
+  },
+  "Définition (N.B. de la carte source) : auteurs d’articles retenus pour": {
+   "en": "Definition (NB from the source map): authors of papers accepted at",
+   "fr": "Définition (N.B. de la carte source) : auteurs d’articles retenus pour"
+  },
+  "Déployeurs": {
+   "en": "Deployers",
+   "fr": "Déployeurs"
+  },
+  "EU AI Act": {
+   "en": "EU AI Act",
+   "fr": "EU AI Act"
+  },
+  "EU Law Tracker": {
+   "en": "EU Law Tracker",
+   "fr": "EU Law Tracker"
+  },
+  "Emporter l’Observatoire — Word et PDF": {
+   "en": "Take the Observatory with you — Word and PDF",
+   "fr": "Emporter l’Observatoire — Word et PDF"
+  },
+  "En vigueur": {
+   "en": "In force",
+   "fr": "En vigueur"
+  },
+  "Encadre la responsabilité des plateformes et intermédiaires en ligne : lutte contre les contenus illicites, transparence des systèmes de recommandation et de modération. S'articule avec l'AI Act pour les systèmes de modération algorithmique.": {
+   "en": "Governs the liability of online platforms and intermediaries: combating illegal content, transparency of recommender and moderation systems. Interlocks with the AI Act for algorithmic moderation systems.",
+   "fr": "Encadre la responsabilité des plateformes et intermédiaires en ligne : lutte contre les contenus illicites, transparence des systèmes de recommandation et de modération. S'articule avec l'AI Act pour les systèmes de modération algorithmique."
+  },
+  "Encadre les 'contrôleurs d'accès' (grandes plateformes numériques) pour garantir des conditions de concurrence équitables. Pertinent pour les systèmes IA intégrés à des plateformes désignées comme contrôleurs d'accès.": {
+   "en": "Governs “gatekeepers” (large digital platforms) to ensure fair conditions of competition. Relevant for AI systems built into platforms designated as gatekeepers.",
+   "fr": "Encadre les 'contrôleurs d'accès' (grandes plateformes numériques) pour garantir des conditions de concurrence équitables. Pertinent pour les systèmes IA intégrés à des plateformes désignées comme contrôleurs d'accès."
+  },
+  "Epoch AI — « Data on Notable AI Models », epoch.ai": {
+   "en": "Epoch AI — “Data on Notable AI Models”, epoch.ai",
+   "fr": "Epoch AI — « Data on Notable AI Models », epoch.ai"
+  },
+  "Eurostat · isoc_eb_ai · CC BY #": {
+   "en": "Eurostat · isoc_eb_ai · CC BY 4.0",
+   "fr": "Eurostat · isoc_eb_ai · CC BY 4.0"
+  },
+  "Eurostat — enquête TIC entreprises (isoc_eb_ai)": {
+   "en": "Eurostat — survey on ICT usage in enterprises (isoc_eb_ai)",
+   "fr": "Eurostat — enquête TIC entreprises (isoc_eb_ai)"
+  },
+  "Eurostat, ci-dessus, appartient au même socle public que Copernicus (observation de la Terre, règlement délégué UE #/#), NASA (domaine public) et data.gouv.fr (DINUM · Licence Ouverte). Ces sources sont interrogées en direct, sans clé d’API, et documentées avec leurs limites dans le module": {
+   "en": "Eurostat, above, belongs to the same public foundation as Copernicus (Earth observation, Delegated Regulation (EU) #/#), NASA (public domain) and data.gouv.fr (DINUM · Licence Ouverte). These sources are queried live, with no API key, and documented with their limits in the module",
+   "fr": "Eurostat, ci-dessus, appartient au même socle public que Copernicus (observation de la Terre, règlement délégué UE 1159/2013), NASA (domaine public) et data.gouv.fr (DINUM · Licence Ouverte). Ces sources sont interrogées en direct, sans clé d’API, et documentées avec leurs limites dans le module"
+  },
+  "Exigences de cybersécurité pour tout produit comportant des éléments numériques (logiciels et matériels). Obligations de notification des vulnérabilités dès le # septembre #, application complète au # décembre #.": {
+   "en": "Cybersecurity requirements for any product with digital elements (software and hardware). Vulnerability reporting obligations from # September #, full application on # December #.",
+   "fr": "Exigences de cybersécurité pour tout produit comportant des éléments numériques (logiciels et matériels). Obligations de notification des vulnérabilités dès le 11 septembre 2026, application complète au 11 décembre 2027."
+  },
+  "Explication : Adoption par les entreprises": {
+   "en": "Explanation: Adoption by companies",
+   "fr": "Explication : Adoption par les entreprises"
+  },
+  "Explication : Brevets d’IA accordés": {
+   "en": "Explanation: AI patents granted",
+   "fr": "Explication : Brevets d’IA accordés"
+  },
+  "Explication : Flux des chercheurs d’élite": {
+   "en": "Explanation: Flows of elite researchers",
+   "fr": "Explication : Flux des chercheurs d’élite"
+  },
+  "Explication : Où l’IA est produite": {
+   "en": "Explanation: Where AI is produced",
+   "fr": "Explication : Où l’IA est produite"
+  },
+  "Explication : Sources et fraîcheur": {
+   "en": "Explanation: Sources and freshness",
+   "fr": "Explication : Sources et fraîcheur"
+  },
+  "Flux origine → travail": {
+   "en": "Origin → work flows",
+   "fr": "Flux origine → travail"
+  },
+  "Flux stratégie UE (Commission européenne — digital-strategy.ec.europa.eu ; artificialintelligenceact.eu, Future of Life Institute)": {
+   "en": "EU strategy feed (European Commission — digital-strategy.ec.europa.eu; artificialintelligenceact.eu, Future of Life Institute)",
+   "fr": "Flux stratégie UE (Commission européenne — digital-strategy.ec.europa.eu ; artificialintelligenceact.eu, Future of Life Institute)"
+  },
+  "GPAI": {
+   "en": "GPAI",
+   "fr": "GPAI"
+  },
+  "GUIDELINES": {
+   "en": "GUIDELINES",
+   "fr": "GUIDELINES"
+  },
+  "Groupe d’experts de haut niveau sur l’IA (AI HLEG) — Lignes directrices en matière d’éthique pour une IA digne de confiance, et liste d’évaluation ALTAI": {
+   "en": "High-Level Expert Group on AI (AI HLEG) — Ethics Guidelines for Trustworthy AI, and the ALTAI assessment list",
+   "fr": "Groupe d’experts de haut niveau sur l’IA (AI HLEG) — Lignes directrices en matière d’éthique pour une IA digne de confiance, et liste d’évaluation ALTAI"
+  },
+  "Interprétation officielle des # pratiques IA interdites (Art. #). Conditions cumulatives, cas d'usage pratiques, exemples sectoriels.": {
+   "en": "Official interpretation of the # prohibited AI practices (Art. #). Cumulative conditions, practical use cases, sectoral examples.",
+   "fr": "Interprétation officielle des 8 pratiques IA interdites (Art. 5). Conditions cumulatives, cas d'usage pratiques, exemples sectoriels."
+  },
+  "Jusqu'à # M€ ou #% du CA mondial": {
+   "en": "Up to €# million or #% of worldwide turnover",
+   "fr": "Jusqu'à 15 M€ ou 2,5% du CA mondial"
+  },
+  "Jusqu'à #% du CA mondial": {
+   "en": "Up to #% of worldwide turnover",
+   "fr": "Jusqu'à 6% du CA mondial"
+  },
+  "Jusqu'à #% du CA mondial (#% en récidive)": {
+   "en": "Up to #% of worldwide turnover (#% for a repeat offence)",
+   "fr": "Jusqu'à 10% du CA mondial (20% en récidive)"
+  },
+  "La feuille de route politique UE/États membres : utile pour anticiper les priorités de financement et les stratégies nationales qui encadreront vos projets.": {
+   "en": "The EU/Member State policy roadmap: useful for anticipating the funding priorities and national strategies that will frame your projects.",
+   "fr": "La feuille de route politique UE/États membres : utile pour anticiper les priorités de financement et les stratégies nationales qui encadreront vos projets."
+  },
+  "La grille d’auto-évaluation de référence : utilisez ALTAI pour documenter, exigence par exigence (# au total), la fiabilité d’un système avant sa mise en service.": {
+   "en": "The reference self-assessment grid: use ALTAI to document, requirement by requirement (# in total), the trustworthiness of a system before it is put into service.",
+   "fr": "La grille d’auto-évaluation de référence : utilisez ALTAI pour documenter, exigence par exigence (7 au total), la fiabilité d’un système avant sa mise en service."
+  },
+  "La répartition du gâteau. La Chine passe d’environ": {
+   "en": "Splitting the pie. China goes from about",
+   "fr": "La répartition du gâteau. La Chine passe d’environ"
+  },
+  "Le canal de consultation : suivez-y les consultations publiques et ateliers de la Commission pour anticiper les actes d’exécution et lignes directrices à venir.": {
+   "en": "The consultation channel: follow the Commission’s public consultations and workshops there to anticipate forthcoming implementing acts and guidelines.",
+   "fr": "Le canal de consultation : suivez-y les consultations publiques et ateliers de la Commission pour anticiper les actes d’exécution et lignes directrices à venir."
+  },
+  "Le document reprend": {
+   "en": "The document includes",
+   "fr": "Le document reprend"
+  },
+  "Le socle juridique : vérifiez la classification de risque de chacun de vos systèmes d’IA et le calendrier d’application (transparence de l’article # depuis le # août #, haut risque de l’annexe III au # décembre #) ; le Bureau de l’IA supervise les modèles à usage général.": {
+   "en": "The legal foundation: check the risk classification of each of your AI systems and the application timetable (Article # transparency since # August #, Annex III high-risk from # December #); the AI Office oversees general-purpose models.",
+   "fr": "Le socle juridique : vérifiez la classification de risque de chacun de vos systèmes d’IA et le calendrier d’application (transparence de l’article 50 depuis le 2 août 2026, haut risque de l’annexe III au 2 décembre 2027) ; le Bureau de l’IA supervise les modèles à usage général."
+  },
+  "Lecture du graphique": {
+   "en": "Reading the chart",
+   "fr": "Lecture du graphique"
+  },
+  "Les indicateurs officiels (investissements, adoption, talents) : citez-les pour étayer une analyse d’impact ou un dossier de conformité auprès d’une autorité.": {
+   "en": "The official indicators (investment, adoption, talent): cite them to support an impact assessment or a compliance file before an authority.",
+   "fr": "Les indicateurs officiels (investissements, adoption, talents) : citez-les pour étayer une analyse d’impact ou un dossier de conformité auprès d’une autorité."
+  },
+  "Les systèmes d’IA réellement déployés dans l’UE": {
+   "en": "AI systems actually deployed in the EU",
+   "fr": "Les systèmes d’IA réellement déployés dans l’UE"
+  },
+  "Licence": {
+   "en": "Licence",
+   "fr": "Licence"
+  },
+  "Lignes directrices (#)": {
+   "en": "Guidelines (#)",
+   "fr": "Lignes directrices (2019)"
+  },
+  "Lignes directrices Art. #": {
+   "en": "Guidelines, Art. #",
+   "fr": "Lignes directrices Art. 5"
+  },
+  "MacroPolo · d’après NeurIPS # · en %": {
+   "en": "MacroPolo · based on NeurIPS # · in %",
+   "fr": "MacroPolo · d’après NeurIPS 2022 · en %"
+  },
+  "MacroPolo — The Global AI Talent Tracker #, Paulson Institute (d’après NeurIPS #)": {
+   "en": "MacroPolo — The Global AI Talent Tracker #, Paulson Institute (based on NeurIPS #)",
+   "fr": "MacroPolo — The Global AI Talent Tracker 2.0, Paulson Institute (d’après NeurIPS 2022)"
+  },
+  "Management du risque lié à l'IA": {
+   "en": "AI risk management",
+   "fr": "Management du risque lié à l'IA"
+  },
+  "Modèles d’IA remarquables créés par pays (# – été #)": {
+   "en": "Notable AI models created by country (# – summer #)",
+   "fr": "Modèles d’IA remarquables créés par pays (2003 – été 2024)"
+  },
+  "Modèles remarquables (carte)": {
+   "en": "Notable models (map)",
+   "fr": "Modèles remarquables (carte)"
+  },
+  "Modèles remarquables créés # – été # (nombre par pays)": {
+   "en": "Notable models created # – summer # (number per country)",
+   "fr": "Modèles remarquables créés 2003 – été 2024 (nombre par pays)"
+  },
+  "NIS#": {
+   "en": "NIS #",
+   "fr": "NIS2"
+  },
+  "Obligations article par article": {
+   "en": "Obligations article by article",
+   "fr": "Obligations article par article"
+  },
+  "Observatoire": {
+   "en": "Observatory",
+   "fr": "Observatoire"
+  },
+  "Observatoire R&D IA — modèles, talents, brevets": {
+   "en": "AI R&D observatory — models, talent, patents",
+   "fr": "Observatoire R&D IA — modèles, talents, brevets"
+  },
+  "Observatoire R&D dans le domaine de l'IA": {
+   "en": "R&D observatory in the field of AI",
+   "fr": "Observatoire R&D dans le domaine de l'IA"
+  },
+  "Origine vs travail (barres)": {
+   "en": "Origin vs work (bars)",
+   "fr": "Origine vs travail (barres)"
+  },
+  "Où se crée l’intelligence artificielle : modèles remarquables, chercheurs d’élite, brevets et adoption en entreprise. Vues recomposées depuis les sources primaires publiques (Epoch AI, MacroPolo/NeurIPS, AI Index/CSET, Eurostat).": {
+   "en": "Where artificial intelligence is created: notable models, elite researchers, patents and adoption by companies. Views rebuilt from the public primary sources (Epoch AI, MacroPolo/NeurIPS, AI Index/CSET, Eurostat).",
+   "fr": "Où se crée l’intelligence artificielle : modèles remarquables, chercheurs d’élite, brevets et adoption en entreprise. Vues recomposées depuis les sources primaires publiques (Epoch AI, MacroPolo/NeurIPS, AI Index/CSET, Eurostat)."
+  },
+  "Part du monde (%)": {
+   "en": "Share of the world (%)",
+   "fr": "Part du monde (%)"
+  },
+  "Plan coordonné IA": {
+   "en": "Coordinated Plan on AI",
+   "fr": "Plan coordonné IA"
+  },
+  "Plan coordonné dans le domaine de l’IA": {
+   "en": "Coordinated Plan on Artificial Intelligence",
+   "fr": "Plan coordonné dans le domaine de l’IA"
+  },
+  "Points # publiés (exacts) ; séries #–# : lecture graphique, la bande colorée figure l’incertitude de ± # points. « Reste du monde » est déduit (# − Chine − États-Unis − Europe), d’où son trait discontinu. Barres grises : volume mondial de brevets d’IA accordés, en milliers (axe de droite, lecture graphique).": {
+   "en": "The # points published (exact); #–# series: graphical reading, the coloured band shows the uncertainty of ± # points. “Rest of the world” is derived (# − China − United States − Europe), hence its dashed line. Grey bars: world volume of AI patents granted, in thousands (right-hand axis, graphical reading).",
+   "fr": "Points 2023 publiés (exacts) ; séries 2010–2022 : lecture graphique, la bande colorée figure l’incertitude de ± 3 points. « Reste du monde » est déduit (100 − Chine − États-Unis − Europe), d’où son trait discontinu. Barres grises : volume mondial de brevets d’IA accordés, en milliers (axe de droite, lecture graphique)."
+  },
+  "Premier cadre horizontal mondial sur l'IA. Classification par risque, obligations haut risque, pratiques interdites, GPAI, sanctions. Application progressive #-#.": {
+   "en": "The world’s first horizontal framework on AI. Risk classification, high-risk obligations, prohibited practices, GPAI, penalties. Phased application #-#.",
+   "fr": "Premier cadre horizontal mondial sur l'IA. Classification par risque, obligations haut risque, pratiques interdites, GPAI, sanctions. Application progressive 2024-2027."
+  },
+  "Rafraîchissement": {
+   "en": "Refresh",
+   "fr": "Rafraîchissement"
+  },
+  "Recommandations pour gérer les risques spécifiques à l'IA, en complément de l'ISO #. Couvre les risques liés aux données, à la dynamique des performances IA et aux impacts sociétaux. Complémentaire à l'ISO/IEC #.": {
+   "en": "Recommendations for managing AI-specific risks, complementing ISO #. Covers risks related to data, to the dynamics of AI performance and to societal impacts. Complementary to ISO/IEC #.",
+   "fr": "Recommandations pour gérer les risques spécifiques à l'IA, en complément de l'ISO 31000. Couvre les risques liés aux données, à la dynamique des performances IA et aux impacts sociétaux. Complémentaire à l'ISO/IEC 42001."
+  },
+  "Recomposition depuis les sources primaires publiques citées ci-dessus — inspiration : Carto n°#, # © Areion/Capri ; la carte originale n’est pas reproduite. Chaque série porte sa précision : « exact », « classe » ou « lecture graphique (±) ». Fond de carte © OpenStreetMap © CARTO.": {
+   "en": "Rebuilt from the public primary sources cited above — inspiration: Carto No #, # © Areion/Capri; the original map is not reproduced. Each series carries its precision: “exact”, “class” or “graphical reading (±)”. Base map © OpenStreetMap © CARTO.",
+   "fr": "Recomposition depuis les sources primaires publiques citées ci-dessus — inspiration : Carto n°89, 2025 © Areion/Capri ; la carte originale n’est pas reproduite. Chaque série porte sa précision : « exact », « classe » ou « lecture graphique (±) ». Fond de carte © OpenStreetMap © CARTO."
+  },
+  "Remise en question de la strategie americaine de containment. Debats sur la securite des modeles chinois deployes a l'international et sur la pertinence des restrictions a l'export.": {
+   "en": "The American containment strategy called into question. Debates over the security of Chinese models deployed internationally and over the relevance of export restrictions.",
+   "fr": "Remise en question de la strategie americaine de containment. Debats sur la securite des modeles chinois deployes a l'international et sur la pertinence des restrictions a l'export."
+  },
+  "Renforcement de l'etiquetage des contenus IA en Chine": {
+   "en": "Stronger labelling of AI content in China",
+   "fr": "Renforcement de l'etiquetage des contenus IA en Chine"
+  },
+  "Reste du monde": {
+   "en": "Rest of the world",
+   "fr": "Reste du monde"
+  },
+  "Revocation de l'Executive Order # (administration Trump)": {
+   "en": "Revocation of Executive Order # (Trump administration)",
+   "fr": "Revocation de l'Executive Order 14110 (administration Trump)"
+  },
+  "Rupture majeure en janvier # : l'administration Trump révoque l'EO # (Biden) et signe l'EO #, réorientant la politique IA fédérale vers la « domination » compétitive et la dérégulation. La fragmentation entre États fédérés s'accentue.": {
+   "en": "Major break in January #: the Trump administration revokes EO # (Biden) and signs EO #, reorienting federal AI policy towards competitive “dominance” and deregulation. Fragmentation between the federated States is increasing.",
+   "fr": "Rupture majeure en janvier 2025 : l'administration Trump révoque l'EO 14110 (Biden) et signe l'EO 14179, réorientant la politique IA fédérale vers la « domination » compétitive et la dérégulation. La fragmentation entre États fédérés s'accentue."
+  },
+  "RÉGULATEUR MONDIAL": {
+   "en": "GLOBAL REGULATOR",
+   "fr": "RÉGULATEUR MONDIAL"
+  },
+  "Règlement (UE) #/# — AI Act — et Bureau de l’IA (AI Office)": {
+   "en": "Regulation (EU) #/# — AI Act — and the AI Office",
+   "fr": "Règlement (UE) 2024/1689 — AI Act — et Bureau de l’IA (AI Office)"
+  },
+  "Règlement (UE) #/# — Cyber-résilience": {
+   "en": "Regulation (EU) #/# — Cyber resilience",
+   "fr": "Règlement (UE) 2024/2847 — Cyber-résilience"
+  },
+  "Règlement (UE) #/# — JO L du #": {
+   "en": "Regulation (EU) #/# — OJ L of #",
+   "fr": "Règlement (UE) 2024/1689 — JO L du 12.7.2024"
+  },
+  "Règlement (UE) #/# — JOUE L #": {
+   "en": "Regulation (EU) #/# — OJ L #",
+   "fr": "Règlement (UE) 2016/679 — JOUE L 119"
+  },
+  "Règlement (UE) #/# — Marchés numériques": {
+   "en": "Regulation (EU) #/# — Digital markets",
+   "fr": "Règlement (UE) 2022/1925 — Marchés numériques"
+  },
+  "Règlement (UE) #/# — Résilience numérique": {
+   "en": "Regulation (EU) #/# — Digital resilience",
+   "fr": "Règlement (UE) 2022/2554 — Résilience numérique"
+  },
+  "Règlement (UE) #/# — Services numériques": {
+   "en": "Regulation (EU) #/# — Digital services",
+   "fr": "Règlement (UE) 2022/2065 — Services numériques"
+  },
+  "Règlement général protection données. Art. # : décisions entièrement automatisées. Art. # : AIPD obligatoire pour traitements IA à risque élevé.": {
+   "en": "General Data Protection Regulation. Art. #: fully automated decisions. Art. #: DPIA mandatory for high-risk AI processing.",
+   "fr": "Règlement général protection données. Art. 22 : décisions entièrement automatisées. Art. 35 : AIPD obligatoire pour traitements IA à risque élevé."
+  },
+  "Règlements IA": {
+   "en": "AI regulations",
+   "fr": "Règlements IA"
+  },
+  "Référence de bonne pratique (non obligatoire)": {
+   "en": "Good-practice reference (not mandatory)",
+   "fr": "Référence de bonne pratique (non obligatoire)"
+  },
+  "Référence pour conformité Art. # AI Act": {
+   "en": "Reference for compliance with Art. # AI Act",
+   "fr": "Référence pour conformité Art. 17 AI Act"
+  },
+  "Référence pour l'application des sanctions Art. #": {
+   "en": "Reference for the enforcement of penalties, Art. #",
+   "fr": "Référence pour l'application des sanctions Art. 5"
+  },
+  "Référence pour les pays africains francophones (Maroc, Sénégal, Côte d'Ivoire)": {
+   "en": "Reference for French-speaking African countries (Morocco, Senegal, Côte d’Ivoire)",
+   "fr": "Référence pour les pays africains francophones (Maroc, Sénégal, Côte d'Ivoire)"
+  },
+  "Réglementations": {
+   "en": "Regulations",
+   "fr": "Réglementations"
+  },
+  "Résilience opérationnelle numérique du secteur financier. Couvre les systèmes IA utilisés par banques, assureurs, sociétés d'investissement.": {
+   "en": "Digital operational resilience of the financial sector. Covers AI systems used by banks, insurers and investment firms.",
+   "fr": "Résilience opérationnelle numérique du secteur financier. Couvre les systèmes IA utilisés par banques, assureurs, sociétés d'investissement."
+  },
+  "STANDARD": {
+   "en": "STANDARD",
+   "fr": "STANDARD"
+  },
+  "Sanctions administratives par autorité nationale": {
+   "en": "Administrative penalties by national authority",
+   "fr": "Sanctions administratives par autorité nationale"
+  },
+  "Section précédente (Alt + flèche haut)": {
+   "en": "Previous section (Alt + up arrow)",
+   "fr": "Section précédente (Alt + flèche haut)"
+  },
+  "Section suivante (Alt + flèche bas)": {
+   "en": "Next section (Alt + down arrow)",
+   "fr": "Section suivante (Alt + flèche bas)"
+  },
+  "Sept. # (effet)": {
+   "en": "Sept. # (effect)",
+   "fr": "Sept. 2025 (effet)"
+  },
+  "Socle de données ouvertes.": {
+   "en": "Open data foundation.",
+   "fr": "Socle de données ouvertes."
+  },
+  "Solde net (barres divergentes)": {
+   "en": "Net balance (diverging bars)",
+   "fr": "Solde net (barres divergentes)"
+  },
+  "Source : Epoch AI, « Data on Notable AI Models » (CC BY #). Le seed affiche les classes d’effectifs (précision « classe » ; hors États-Unis, Chine, Canada, Royaume-Uni, Allemagne et France : « classe, lecture de carte ») ; en mode live, les comptes exacts Epoch AI les remplacent. Cliquez un pays pour le détail (modèles, chercheurs d’élite, adoption UE si disponible).": {
+   "en": "Source: Epoch AI, “Data on Notable AI Models” (CC BY #). The seed shows count classes (precision “class”; outside the United States, China, Canada, the United Kingdom, Germany and France: “class, map reading”); in live mode, the exact Epoch AI counts replace them. Click a country for the detail (models, elite researchers, EU adoption if available).",
+   "fr": "Source : Epoch AI, « Data on Notable AI Models » (CC BY 4.0). Le seed affiche les classes d’effectifs (précision « classe » ; hors États-Unis, Chine, Canada, Royaume-Uni, Allemagne et France : « classe, lecture de carte ») ; en mode live, les comptes exacts Epoch AI les remplacent. Cliquez un pays pour le détail (modèles, chercheurs d’élite, adoption UE si disponible)."
+  },
+  "Sources : textes officiels (Federal Register, EUR-Lex, Commission européenne, Cyberspace Administration of China) et analyses de cabinets juridiques. Les scores de risque sont des estimations CONSEILPREV à vocation d'aide à la décision et ne constituent pas un avis juridique. Dernière mise à jour : juin #.": {
+   "en": "Sources: official texts (Federal Register, EUR-Lex, European Commission, Cyberspace Administration of China) and law firm analyses. The risk scores are CONSEILPREV estimates intended as decision aids and do not constitute legal advice. Last updated: June #.",
+   "fr": "Sources : textes officiels (Federal Register, EUR-Lex, Commission européenne, Cyberspace Administration of China) et analyses de cabinets juridiques. Les scores de risque sont des estimations CONSEILPREV à vocation d'aide à la décision et ne constituent pas un avis juridique. Dernière mise à jour : juin 2026."
+  },
+  "Sources vérifiées via Legal Data Hunter (#+ juridictions, mise à jour en continu) · EUR-Lex (# #+ textes consolidés) · e-Gov Japan · KLRI Korea · Congress.gov · CAC China · OCDE AI Observatory": {
+   "en": "Sources verified through Legal Data Hunter (#+ jurisdictions, continuously updated) · EUR-Lex (# #+ consolidated texts) · e-Gov Japan · KLRI Korea · Congress.gov · CAC China · OECD AI Observatory",
+   "fr": "Sources vérifiées via Legal Data Hunter (230+ juridictions, mise à jour en continu) · EUR-Lex (55 000+ textes consolidés) · e-Gov Japan · KLRI Korea · Congress.gov · CAC China · OCDE AI Observatory"
+  },
+  "Sources, licences & fraîcheur": {
+   "en": "Sources, licences & freshness",
+   "fr": "Sources, licences & fraîcheur"
+  },
+  "Sous sanctions internationales depuis #. Acces restreint aux semi-conducteurs et technologies occidentales. Ecosysteme IA isole, dependant de la substitution nationale et de la cooperation avec la Chine.": {
+   "en": "Under international sanctions since #. Restricted access to Western semiconductors and technologies. An isolated AI ecosystem, dependent on national substitution and on cooperation with China.",
+   "fr": "Sous sanctions internationales depuis 2022. Acces restreint aux semi-conducteurs et technologies occidentales. Ecosysteme IA isole, dependant de la substitution nationale et de la cooperation avec la Chine."
+  },
+  "Sous surveillance active": {
+   "en": "Under active monitoring",
+   "fr": "Sous surveillance active"
+  },
+  "Standard international pour les systèmes de management de l'IA. Aligné sur l'AI Act (Art. #). Outil clé pour démontrer la conformité aux exigences de gouvernance.": {
+   "en": "International standard for AI management systems. Aligned with the AI Act (Art. #). A key tool for demonstrating compliance with governance requirements.",
+   "fr": "Standard international pour les systèmes de management de l'IA. Aligné sur l'AI Act (Art. 17). Outil clé pour démontrer la conformité aux exigences de gouvernance."
+  },
+  "Suivi des évolutions normatives IA, RGPD, NIS# et cybersécurité": {
+   "en": "Tracking of regulatory developments in AI, GDPR, NIS # and cybersecurity",
+   "fr": "Suivi des évolutions normatives IA, RGPD, NIS2 et cybersécurité"
+  },
+  "Surveillance des tensions internationales, sanctions et alliances qui redessinent le paysage réglementaire de l'intelligence artificielle.": {
+   "en": "Monitoring of the international tensions, sanctions and alliances that are redrawing the regulatory landscape of artificial intelligence.",
+   "fr": "Surveillance des tensions internationales, sanctions et alliances qui redessinent le paysage réglementaire de l'intelligence artificielle."
+  },
+  "Système de management de l'IA (SMIA)": {
+   "en": "AI management system (AIMS)",
+   "fr": "Système de management de l'IA (SMIA)"
+  },
+  "TEXTES OFFICIELS EU": {
+   "en": "OFFICIAL EU TEXTS",
+   "fr": "TEXTES OFFICIELS EU"
+  },
+  "Technologie": {
+   "en": "Technology",
+   "fr": "Technologie"
+  },
+  "Tension principale : l'AI Omnibus (#-#) introduit des simplifications qui divisent — défenseurs des droits fondamentaux vs. industrie. Risque de dilution du cadre originel.": {
+   "en": "Main tension: the AI Omnibus (#-#) introduces simplifications that divide — fundamental rights advocates vs. industry. Risk of diluting the original framework.",
+   "fr": "Tension principale : l'AI Omnibus (2025-2026) introduit des simplifications qui divisent — défenseurs des droits fondamentaux vs. industrie. Risque de dilution du cadre originel."
+  },
+  "Tensions technologiques majeures avec les Etats-Unis (controles a l'export de semi-conducteurs avances). Ecosysteme souverain (DeepSeek, Qwen, Ernie). Risque de decouplage technologique.": {
+   "en": "Major technological tensions with the United States (export controls on advanced semiconductors). Sovereign ecosystem (DeepSeek, Qwen, Ernie). Risk of technological decoupling.",
+   "fr": "Tensions technologiques majeures avec les Etats-Unis (controles a l'export de semi-conducteurs avances). Ecosysteme souverain (DeepSeek, Qwen, Ernie). Risque de decouplage technologique."
+  },
+  "Texte officiel ↗": {
+   "en": "Official text ↗",
+   "fr": "Texte officiel ↗"
+  },
+  "Texte sur EUR-Lex": {
+   "en": "Text on EUR-Lex",
+   "fr": "Texte sur EUR-Lex"
+  },
+  "Textes officiels et obligations article par article — Règlement (UE) #/#.": {
+   "en": "Official texts and obligations article by article — Regulation (EU) #/#.",
+   "fr": "Textes officiels et obligations article par article — Règlement (UE) 2024/1689."
+  },
+  "Textes réglementaires": {
+   "en": "Regulatory texts",
+   "fr": "Textes réglementaires"
+  },
+  "Tous": {
+   "en": "All",
+   "fr": "Tous"
+  },
+  "Tous les textes (#)": {
+   "en": "All texts (#)",
+   "fr": "Tous les textes (10)"
+  },
+  "Toutes": {
+   "en": "All",
+   "fr": "Toutes"
+  },
+  "Télécharger en PDF": {
+   "en": "Download as PDF",
+   "fr": "Télécharger en PDF"
+  },
+  "Télécharger en Word": {
+   "en": "Download as Word",
+   "fr": "Télécharger en Word"
+  },
+  "Utilisateurs": {
+   "en": "Users",
+   "fr": "Utilisateurs"
+  },
+  "Valeur approchée (seed — précision : « ≈, à confirmer par le flux »). Détail par pays au prochain rafraîchissement (Eurostat, isoc_eb_ai, CC BY #).": {
+   "en": "Approximate value (seed — precision: “≈, to be confirmed by the feed”). Detail by country at the next refresh (Eurostat, isoc_eb_ai, CC BY #).",
+   "fr": "Valeur approchée (seed — précision : « ≈, à confirmer par le flux »). Détail par pays au prochain rafraîchissement (Eurostat, isoc_eb_ai, CC BY 4.0)."
+  },
+  "Veille stratégique": {
+   "en": "Strategic watch",
+   "fr": "Veille stratégique"
+  },
+  "Veille — actualité de la réglementation IA": {
+   "en": "Watch — AI regulation news",
+   "fr": "Veille — actualité de la réglementation IA"
+  },
+  "Veille — tensions et évolutions normatives": {
+   "en": "Watch — regulatory tensions and developments",
+   "fr": "Veille — tensions et évolutions normatives"
+  },
+  "Voir tout →": {
+   "en": "View all →",
+   "fr": "Voir tout →"
+  },
+  "Volet": {
+   "en": "Section",
+   "fr": "Volet"
+  },
+  "Volume accordé": {
+   "en": "Volume granted",
+   "fr": "Volume accordé"
+  },
+  "Volume accordé (échelle log)": {
+   "en": "Volume granted (log scale)",
+   "fr": "Volume accordé (échelle log)"
+  },
+  "au point": {
+   "en": "to the point",
+   "fr": "au point"
+  },
+  "aucun modèle recensé": {
+   "en": "no model recorded",
+   "fr": "aucun modèle recensé"
+  },
+  "calcul déterministe · aucune rédaction par IA": {
+   "en": "deterministic calculation · no AI drafting",
+   "fr": "calcul déterministe · aucune rédaction par IA"
+  },
+  "cartes et graphiques affichés à l’écran": {
+   "en": "maps and charts displayed on screen",
+   "fr": "cartes et graphiques affichés à l’écran"
+  },
+  "chaque ligne va du point": {
+   "en": "each line runs from the point",
+   "fr": "chaque ligne va du point"
+  },
+  "contour pointillé — bloc, pas un pays": {
+   "en": "dashed outline — a bloc, not a country",
+   "fr": "contour pointillé — bloc, pas un pays"
+  },
+  "contour pointillé — valeur non publiée": {
+   "en": "dashed outline — value not published",
+   "fr": "contour pointillé — valeur non publiée"
+  },
+  "critical": {
+   "en": "critical",
+   "fr": "critical"
+  },
+  "crédits obligatoires": {
+   "en": "mandatory credits",
+   "fr": "crédits obligatoires"
+  },
+  "depuis #": {
+   "en": "since #",
+   "fr": "depuis 2018"
+  },
+  "des brevets d’IA accordés, les États-Unis reculent de": {
+   "en": "of AI patents granted, the United States falls back by",
+   "fr": "des brevets d’IA accordés, les États-Unis reculent de"
+  },
+  "des données de brevets.": {
+   "en": "of the patent data.",
+   "fr": "des données de brevets."
+  },
+  "des entreprises de l’UE-# utilisaient au moins une technologie d’IA en #.": {
+   "en": "of EU-# companies used at least one AI technology in #.",
+   "fr": "des entreprises de l’UE-27 utilisaient au moins une technologie d’IA en 2024."
+  },
+  "données : seed · #/#/#": {
+   "en": "data: seed · #/#/#",
+   "fr": "données : seed · 29/07/2026"
+  },
+  "elevated": {
+   "en": "elevated",
+   "fr": "elevated"
+  },
+  "formés dans le pays": {
+   "en": "trained in the country",
+   "fr": "formés dans le pays"
+  },
+  "high": {
+   "en": "high",
+   "fr": "high"
+  },
+  "indisponible · aucun flux joignable — Commission européenne — Stratégie numérique : ProxyError: HTTPSConn": {
+   "en": "unavailable · no feed reachable — European Commission — Digital strategy: ProxyError: HTTPSConn",
+   "fr": "indisponible · aucun flux joignable — Commission européenne — Stratégie numérique : ProxyError: HTTPSConn"
+  },
+  "inspiration éditoriale": {
+   "en": "editorial inspiration",
+   "fr": "inspiration éditoriale"
+  },
+  "la carte originale n’est pas reproduite": {
+   "en": "the original map is not reproduced",
+   "fr": "la carte originale n’est pas reproduite"
+  },
+  "la taille du gâteau. Le volume mondial a été multiplié par # sur la période — une part qui baisse peut recouvrir un nombre qui monte. Basculez sur": {
+   "en": "the size of the pie. World volume was multiplied by # over the period — a falling share can hide a rising number. Switch to",
+   "fr": "la taille du gâteau. Le volume mondial a été multiplié par 60 sur la période — une part qui baisse peut recouvrir un nombre qui monte. Basculez sur"
+  },
+  "law-tracker.europa.eu": {
+   "en": "law-tracker.europa.eu",
+   "fr": "law-tracker.europa.eu"
+  },
+  "le classement des écarts d’un coup d’œil — la vue": {
+   "en": "the ranking of the gaps at a glance — the view",
+   "fr": "le classement des écarts d’un coup d’œil — la vue"
+  },
+  "le range sur un seul axe.": {
+   "en": "puts it on a single axis.",
+   "fr": "le range sur un seul axe."
+  },
+  "licence sans dérivée": {
+   "en": "no-derivatives licence",
+   "fr": "licence sans dérivée"
+  },
+  "low": {
+   "en": "low",
+   "fr": "low"
+  },
+  "moderate": {
+   "en": "moderate",
+   "fr": "moderate"
+  },
+  "o": {
+   "en": "o",
+   "fr": "o"
+  },
+  "pour le voir.": {
+   "en": "to see it.",
+   "fr": "pour le voir."
+  },
+  "présentation orale": {
+   "en": "oral presentation",
+   "fr": "présentation orale"
+  },
+  "référentiel fermé · vérifié": {
+   "en": "closed reference framework · verified",
+   "fr": "référentiel fermé · vérifié"
+  },
+  "seed": {
+   "en": "seed",
+   "fr": "seed"
+  },
+  "seed · classes (recomposition)": {
+   "en": "seed · classes (recomposed)",
+   "fr": "seed · classes (recomposition)"
+  },
+  "seed — en attente du premier rafraîchissement serveur": {
+   "en": "seed — awaiting the first server refresh",
+   "fr": "seed — en attente du premier rafraîchissement serveur"
+  },
+  "statique — annuel (avril), catalogage manuel": {
+   "en": "static — annual (April), manual cataloguing",
+   "fr": "statique — annuel (avril), catalogage manuel"
+  },
+  "statique — édition ~triennale, catalogage manuel": {
+   "en": "static — ~triennial edition, manual cataloguing",
+   "fr": "statique — édition ~triennale, catalogage manuel"
+  },
+  "tout ce que cette page calcule": {
+   "en": "everything this page calculates",
+   "fr": "tout ce que cette page calcule"
+  },
+  "valeur non publiée": {
+   "en": "value not published",
+   "fr": "valeur non publiée"
+  },
+  "y sont joints en image, dans la vue que vous avez choisie. Chaque chapitre porte sa source, sa licence, son millésime et sa précision — et le dossier rappelle les crédits à reproduire, dont la": {
+   "en": "are attached as images, in the view you have chosen. Each chapter carries its source, its licence, its edition and its precision — and the file restates the credits to reproduce, including the",
+   "fr": "y sont joints en image, dans la vue que vous avez choisie. Chaque chapitre porte sa source, sa licence, son millésime et sa précision — et le dossier rappelle les crédits à reproduire, dont la"
+  },
+  "© MacroPolo · citation": {
+   "en": "© MacroPolo · quotation",
+   "fr": "© MacroPolo · citation"
+  },
+  "© UE #/#/UE · citation + lien": {
+   "en": "© EU #/#/EU · citation + link",
+   "fr": "© UE 2011/833/UE · citation + lien"
+  },
+  "« Autres » — # % de l’origine et # % du lieu de travail — n’est rattaché à aucun pays et ne figure pas sur la carte.": {
+   "en": "“Other” — # % of origin and # % of place of work — is not attached to any country and does not appear on the map.",
+   "fr": "« Autres » — 28 % de l’origine et 31 % du lieu de travail — n’est rattaché à aucun pays et ne figure pas sur la carte."
+  },
+  "« formés »": {
+   "en": "“trained”",
+   "fr": "« formés »"
+  },
+  "Élevé": {
+   "en": "High",
+   "fr": "Élevé"
+  },
+  "États + DC": {
+   "en": "States + DC",
+   "fr": "États + DC"
+  },
+  "États membres": {
+   "en": "Member States",
+   "fr": "États membres"
+  },
+  "Évolution #–# de la part des brevets d’IA accordés : la Chine passe d’environ # % à # %, les États-Unis reculent d’environ # % à # %, l’Europe d’environ # % à # %, le reste du monde d’environ # % à # %. En volume absolu, les trois acteurs progressent : l’Europe est multipliée par #, les États-Unis par #, la Chine par #.": {
+   "en": "#–# change in the share of AI patents granted: China goes from about # % to # %, the United States falls from about # % to # %, Europe from about # % to # %, the rest of the world from about # % to # %. In absolute volume, all three players grow: Europe is multiplied by #, the United States by #, China by #.",
+   "fr": "Évolution 2010–2023 de la part des brevets d’IA accordés : la Chine passe d’environ 13 % à 69,7 %, les États-Unis reculent d’environ 40 % à 14,2 %, l’Europe d’environ 8 % à 2,8 %, le reste du monde d’environ 39 % à 13,3 %. En volume absolu, les trois acteurs progressent : l’Europe est multipliée par 21, les États-Unis par 22, la Chine par 327."
+  },
+  "à": {
+   "en": "to",
+   "fr": "à"
+  },
+  "à NeurIPS (~top # % des publications). * Royaume-Uni, Allemagne, France et Canada : entre # et # % chacun des lieux de travail selon la carte source (lecture graphique — valeur précise non publiée). Inde : lieu de travail non disponible.": {
+   "en": "at NeurIPS (~top # % of publications). * United Kingdom, Germany, France and Canada: between # and # % each of places of work according to the source map (graphical reading — precise value not published). India: place of work not available.",
+   "fr": "à NeurIPS (~top 2 % des publications). * Royaume-Uni, Allemagne, France et Canada : entre 2 et 4 % chacun des lieux de travail selon la carte source (lecture graphique — valeur précise non publiée). Inde : lieu de travail non disponible."
+  },
+  "— Art. # encadrant les décisions entièrement automatisées.": {
+   "en": "— Art. # governing fully automated decisions.",
+   "fr": "— Art. 22 encadrant les décisions entièrement automatisées."
+  },
+  "— audit de sécurité, interdiction du ciblage discriminatoire.": {
+   "en": "— security audit, ban on discriminatory targeting.",
+   "fr": "— audit de sécurité, interdiction du ciblage discriminatoire."
+  },
+  "— cadre fondé sur les risques, applicatoin progressive #-#. Art. # en vigueur depuis fév. #.": {
+   "en": "— risk-based framework, phased application #-#. Art. # in force since Feb. #.",
+   "fr": "— cadre fondé sur les risques, applicatoin progressive 2024-2027. Art. 5 en vigueur depuis fév. 2025."
+  },
+  "— cybersécurité des IA déployées dans les entités critiques.": {
+   "en": "— cybersecurity of AI deployed in critical entities.",
+   "fr": "— cybersécurité des IA déployées dans les entités critiques."
+  },
+  "— encadrement des deepfakes et contenus synthétiques.": {
+   "en": "— regulation of deepfakes and synthetic content.",
+   "fr": "— encadrement des deepfakes et contenus synthétiques."
+  },
+  "— enregistrement obligatoire des LLM, watermarking, interdiction des contenus contraires aux valeurs socialistes.": {
+   "en": "— mandatory registration of LLMs, watermarking, ban on content contrary to socialist values.",
+   "fr": "— enregistrement obligatoire des LLM, watermarking, interdiction des contenus contraires aux valeurs socialistes."
+  },
+  "— le suivi de la législation de l'Union, sur": {
+   "en": "— tracking of Union legislation, on",
+   "fr": "— le suivi de la législation de l'Union, sur"
+  },
+  "— loi de protection des données personnelles avec exigences de localisation et transfert encadrés.": {
+   "en": "— personal data protection law with localisation requirements and regulated transfers.",
+   "fr": "— loi de protection des données personnelles avec exigences de localisation et transfert encadrés."
+  },
+  "— pays": {
+   "en": "— countries",
+   "fr": "— pays"
+  },
+  "— qui recense aussi les systèmes européens bâtis sur ces données : contrôles agricoles par imagerie Sentinel, surveillance des frontières, cartographie de crise.": {
+   "en": "— which also lists the European systems built on this data: agricultural checks by Sentinel imagery, border surveillance, crisis mapping.",
+   "fr": "— qui recense aussi les systèmes européens bâtis sur ces données : contrôles agricoles par imagerie Sentinel, surveillance des frontières, cartographie de crise."
+  },
+  "— résilience opérationnelle numérique du secteur financier, IA incluse.": {
+   "en": "— digital operational resilience of the financial sector, AI included.",
+   "fr": "— résilience opérationnelle numérique du secteur financier, IA incluse."
+  },
+  "— survolez les barres": {
+   "en": "— hover over the bars",
+   "fr": "— survolez les barres"
+  },
+  "⚖️ IAPP — Global AI Law Tracker ↗": {
+   "en": "⚖️ IAPP — Global AI Law Tracker ↗",
+   "fr": "⚖️ IAPP — Global AI Law Tracker ↗"
+  },
+  "⚙ Gérer la surveillance": {
+   "en": "⚙ Manage monitoring",
+   "fr": "⚙ Gérer la surveillance"
+  },
+  "⚡ Legal Data Hunter (# juridictions) ↗": {
+   "en": "⚡ Legal Data Hunter (# jurisdictions) ↗",
+   "fr": "⚡ Legal Data Hunter (230 juridictions) ↗"
+  },
+  "⬇ Données CSV": {
+   "en": "⬇ Data (CSV)",
+   "fr": "⬇ Données CSV"
+  },
+  "⬇ Rapport d'analyse PDF": {
+   "en": "⬇ Analysis report (PDF)",
+   "fr": "⬇ Rapport d'analyse PDF"
+  },
+  "🇨🇳 Chine — Règlements IA — CAC ↗": {
+   "en": "🇨🇳 China — AI regulations — CAC ↗",
+   "fr": "🇨🇳 Chine — Règlements IA — CAC ↗"
+  },
+  "🇬🇧 UK — Automated Vehicles Act # ↗": {
+   "en": "🇬🇧 UK — Automated Vehicles Act 2024 ↗",
+   "fr": "🇬🇧 UK — Automated Vehicles Act 2024 ↗"
+  },
+  "🇯🇵 Japon — Loi IA # — e-Gov ↗": {
+   "en": "🇯🇵 Japan — AI Law # — e-Gov ↗",
+   "fr": "🇯🇵 Japon — Loi IA 2025 — e-Gov ↗"
+  },
+  "🇰🇷 Corée — AI Basic Act # — KLRI ↗": {
+   "en": "🇰🇷 Korea — AI Basic Act # — KLRI ↗",
+   "fr": "🇰🇷 Corée — AI Basic Act 2026 — KLRI ↗"
+  },
+  "🇺🇸 US — AI Accountability Act — Congress.gov ↗": {
+   "en": "🇺🇸 US — AI Accountability Act — Congress.gov ↗",
+   "fr": "🇺🇸 US — AI Accountability Act — Congress.gov ↗"
+  },
+  "🌐 AI Act Explorer (article par article) ↗": {
+   "en": "🌐 AI Act Explorer (article by article) ↗",
+   "fr": "🌐 AI Act Explorer (article par article) ↗"
+  },
+  "🎓 Stanford HAI — AI Index annuel ↗": {
+   "en": "🎓 Stanford HAI — annual AI Index ↗",
+   "fr": "🎓 Stanford HAI — AI Index annuel ↗"
+  },
+  "📊 AI Incident Database (AIID) ↗": {
+   "en": "📊 AI Incident Database (AIID) ↗",
+   "fr": "📊 AI Incident Database (AIID) ↗"
+  },
+  "📋 AI Act (Reg. #/#) — EUR-Lex ↗": {
+   "en": "📋 AI Act (Reg. #/#) — EUR-Lex ↗",
+   "fr": "📋 AI Act (Reg. 2024/1689) — EUR-Lex ↗"
+  },
+  "📋 AI Act (Règl. #/#) — EUR-Lex ↗": {
+   "en": "📋 AI Act (Reg. #/#) — EUR-Lex ↗",
+   "fr": "📋 AI Act (Règl. 2024/1689) — EUR-Lex ↗"
+  },
+  "📋 Commission européenne — AI Policy ↗": {
+   "en": "📋 European Commission — AI Policy ↗",
+   "fr": "📋 Commission européenne — AI Policy ↗"
+  },
+  "📋 DORA (Reg. #/#) — EUR-Lex ↗": {
+   "en": "📋 DORA (Reg. #/#) — EUR-Lex ↗",
+   "fr": "📋 DORA (Reg. 2022/2554) — EUR-Lex ↗"
+  },
+  "📋 DORA (Règl. #/#) — EUR-Lex ↗": {
+   "en": "📋 DORA (Reg. #/#) — EUR-Lex ↗",
+   "fr": "📋 DORA (Règl. 2022/2554) — EUR-Lex ↗"
+  },
+  "📋 EDPB — Décisions & Guidelines ↗": {
+   "en": "📋 EDPB — Decisions & Guidelines ↗",
+   "fr": "📋 EDPB — Décisions & Guidelines ↗"
+  },
+  "📋 GDPR (Reg. #/#) — EUR-Lex ↗": {
+   "en": "📋 GDPR (Reg. 2016/679) — EUR-Lex ↗",
+   "fr": "📋 GDPR (Reg. 2016/679) — EUR-Lex ↗"
+  },
+  "📋 NIS # (Dir. #/#) — EUR-Lex ↗": {
+   "en": "📋 NIS # (Dir. #/#) — EUR-Lex ↗",
+   "fr": "📋 NIS 2 (Dir. 2022/2555) — EUR-Lex ↗"
+  },
+  "📋 NIS# (Dir. #/#) — EUR-Lex ↗": {
+   "en": "📋 NIS # (Dir. #/#) — EUR-Lex ↗",
+   "fr": "📋 NIS2 (Dir. 2022/2555) — EUR-Lex ↗"
+  },
+  "📋 RGPD (Règl. #/#) — EUR-Lex ↗": {
+   "en": "📋 GDPR (Reg. #/#) — EUR-Lex ↗",
+   "fr": "📋 RGPD (Règl. 2016/679) — EUR-Lex ↗"
+  },
+  "📡 Sources officielles et open source utilisées": {
+   "en": "📡 Official and open-source sources used",
+   "fr": "📡 Sources officielles et open source utilisées"
+  },
+  "🔒 GDPRhub — Décisions DPA (# #+) ↗": {
+   "en": "🔒 GDPRhub — DPA decisions (# #+) ↗",
+   "fr": "🔒 GDPRhub — Décisions DPA (3 200+) ↗"
+  },
+  "🔬 OCDE — AI Policy Observatory (#+ pays) ↗": {
+   "en": "🔬 OECD — AI Policy Observatory (#+ countries) ↗",
+   "fr": "🔬 OCDE — AI Policy Observatory (60+ pays) ↗"
+  }
+ }
+}

@@ -1,0 +1,731 @@
+{
+ "_lot": "18-iso-27001-2",
+ "_mots": 1745,
+ "_pages": [
+  "iso27001-millesime",
+  "iso27001-risques",
+  "iso27001-soa"
+ ],
+ "_rubrique": "ISO 27001",
+ "bloc": {
+  "Bloc # sur # · Analyse de risque — À remplir maintenant": {
+   "en": "<b>Block # of # · Risk analysis — To fill in now</b>",
+   "fr": "Bloc 1 sur 4 · Analyse de risque — À remplir maintenant",
+   "html": "<b>Bloc 1 sur 4 · Analyse de risque — À remplir maintenant</b>"
+  },
+  "Bloc # sur # · Déclaration d’applicabilité — Pas encore atteint": {
+   "en": "<b>Block # of # · Statement of applicability — Not reached yet</b>",
+   "fr": "Bloc 2 sur 4 · Déclaration d’applicabilité — Pas encore atteint",
+   "html": "<b>Bloc 2 sur 4 · Déclaration d’applicabilité — Pas encore atteint</b>"
+  },
+  "ISO/IEC #:# est protégée par le droit d'auteur (© ISO/IEC). Cet écran cite des numéros et des titres d'articles et de mesures ; tout ce qui les décrit est rédigé par le cabinet. Aucune phrase du texte normatif n'y est reproduite, et aucune question du questionnaire d'auto-évaluation BSI qui a servi de point de départ — il est la propriété de son éditeur. La mise en œuvre suppose de détenir la norme.": {
+   "en": "<b>ISO/IEC #:# is protected by copyright (© ISO/IEC).</b> This screen cites clause and control <b>numbers</b> and <b>titles</b>; everything that describes them is written by the firm. No sentence of the normative text is reproduced, nor any question from the BSI self-assessment questionnaire that served as a starting point — it is the property of its publisher. Implementation requires holding the standard.",
+   "fr": "ISO/IEC 27001:2022 est protégée par le droit d'auteur (© ISO/IEC). Cet écran cite des numéros et des titres d'articles et de mesures ; tout ce qui les décrit est rédigé par le cabinet. Aucune phrase du texte normatif n'y est reproduite, et aucune question du questionnaire d'auto-évaluation BSI qui a servi de point de départ — il est la propriété de son éditeur. La mise en œuvre suppose de détenir la norme.",
+   "html": "<b>ISO/IEC 27001:2022 est protégée par le droit d'auteur (© ISO/IEC).</b> Cet écran cite des <b>numéros</b> et des <b>titres</b> d'articles et de mesures ; tout ce qui les décrit est rédigé par le cabinet. Aucune phrase du texte normatif n'y est reproduite, et aucune question du questionnaire d'auto-évaluation BSI qui a servi de point de départ — il est la propriété de son éditeur. La mise en œuvre suppose de détenir la norme."
+  },
+  "Le risque résiduel s'accepte par le PROPRIÉTAIRE DU RISQUE (art. # e), pas par le RSSI ni par le consultant. C'est la clause qui transforme un exercice technique en acte de direction, et celle qui manque le plus souvent : une colonne « propriétaire » remplie, et aucune trace datée d'une acceptation. L'auditeur demande la signature, pas le nom.": {
+   "en": "<b>Residual risk is accepted by the RISK OWNER</b> (clause # e)), not by the CISO or the consultant. It is the clause that turns a technical exercise into a management act, and the one most often missing: an “owner” column filled in, and no dated trace of an acceptance. The auditor asks for the signature, not the name.",
+   "fr": "Le risque résiduel s'accepte par le PROPRIÉTAIRE DU RISQUE (art. 6.1.3 e), pas par le RSSI ni par le consultant. C'est la clause qui transforme un exercice technique en acte de direction, et celle qui manque le plus souvent : une colonne « propriétaire » remplie, et aucune trace datée d'une acceptation. L'auditeur demande la signature, pas le nom.",
+   "html": "<b>Le risque résiduel s'accepte par le PROPRIÉTAIRE DU RISQUE</b> (art.&nbsp;6.1.3&nbsp;e), pas par le RSSI ni par le consultant. C'est la clause qui transforme un exercice technique en acte de direction, et celle qui manque le plus souvent : une colonne « propriétaire » remplie, et aucune trace datée d'une acceptation. L'auditeur demande la signature, pas le nom."
+  },
+  "Les critères d'acceptation se fixent AVANT d'apprécier (art. # a). Les écrire après avoir vu les résultats donne un registre où tout est acceptable — et c'est invisible à la lecture, puisque seul l'ordre de rédaction distingue les deux. Cet écran compare les deux dates.": {
+   "en": "<b>Acceptance criteria are set BEFORE assessing</b> (clause # a)). Writing them after seeing the results gives a register where everything is acceptable — and that is invisible on reading, since only the order of drafting distinguishes the two. This screen compares the two dates.",
+   "fr": "Les critères d'acceptation se fixent AVANT d'apprécier (art. 6.1.2 a). Les écrire après avoir vu les résultats donne un registre où tout est acceptable — et c'est invisible à la lecture, puisque seul l'ordre de rédaction distingue les deux. Cet écran compare les deux dates.",
+   "html": "<b>Les critères d'acceptation se fixent AVANT d'apprécier</b> (art.&nbsp;6.1.2&nbsp;a). Les écrire après avoir vu les résultats donne un registre où tout est acceptable — et c'est invisible à la lecture, puisque seul l'ordre de rédaction distingue les deux. Cet écran compare les deux dates."
+  },
+  "NON recevable pour un audit d’étape #. La déclaration n'est PAS recevable. Le défaut est documentaire, et il se corrige en écrivant, pas en développant.": {
+   "en": "<b>NOT admissible for a stage-# audit.</b> The statement is NOT admissible. The defect is documentary, and it is put right by writing, not by developing.",
+   "fr": "NON recevable pour un audit d’étape 1. La déclaration n'est PAS recevable. Le défaut est documentaire, et il se corrige en écrivant, pas en développant.",
+   "html": "<b>NON recevable pour un audit d’étape 1.</b> La déclaration n'est PAS recevable. Le défaut est documentaire, et il se corrige en écrivant, pas en développant."
+  },
+  "Un plan n'est pas une mesure. Tant qu'une mesure n'est pas déclarée mise en œuvre, le niveau résiduel saisi reste une prévision : le module retient le niveau initial. Servir un résiduel prévu comme un acquis est la façon la plus courante de rendre un registre vert sans avoir rien fait.": {
+   "en": "<b>A plan is not a measure.</b> As long as a measure is not declared implemented, the residual level entered remains a forecast: the module uses the initial level. Serving a planned residual as an achieved one is the most common way of turning a register green without having done anything.",
+   "fr": "Un plan n'est pas une mesure. Tant qu'une mesure n'est pas déclarée mise en œuvre, le niveau résiduel saisi reste une prévision : le module retient le niveau initial. Servir un résiduel prévu comme un acquis est la façon la plus courante de rendre un registre vert sans avoir rien fait.",
+   "html": "<b>Un plan n'est pas une mesure.</b> Tant qu'une mesure n'est pas déclarée mise en œuvre, le niveau résiduel saisi reste une prévision : le module retient le niveau initial. Servir un résiduel prévu comme un acquis est la façon la plus courante de rendre un registre vert sans avoir rien fait."
+  },
+  "Une mesure écartée n'a pas de statut de mise en œuvre, et ne doit pas en avoir : lui en demander un ferait compter comme un manque ce qui est une décision. Le taux de mise en œuvre ne porte donc que sur les mesures retenues.": {
+   "en": "An <b>excluded</b> control has no implementation status, and must not have one: asking it for one would count as a gap what is a decision. The implementation rate therefore covers only <b>included</b> controls.",
+   "fr": "Une mesure écartée n'a pas de statut de mise en œuvre, et ne doit pas en avoir : lui en demander un ferait compter comme un manque ce qui est une décision. Le taux de mise en œuvre ne porte donc que sur les mesures retenues.",
+   "html": "Une mesure <b>écartée</b> n'a pas de statut de mise en œuvre, et ne doit pas en avoir : lui en demander un ferait compter comme un manque ce qui est une décision. Le taux de mise en œuvre ne porte donc que sur les mesures <b>retenues</b>."
+  },
+  "nouvelle en # : cette mesure n’existait pas dans ISO/IEC #:#.": {
+   "en": "<b>new in #</b>: this control did not exist in ISO/IEC #:#.",
+   "fr": "nouvelle en 2022 : cette mesure n’existait pas dans ISO/IEC 27001:2013.",
+   "html": "<b>nouvelle en 2022</b> : cette mesure n’existait pas dans ISO/IEC 27001:2013."
+  }
+ },
+ "texte": {
+  "# mesure(s) ne sont ni retenues ni écartées : A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#…": {
+   "en": "# control(s) are neither included nor excluded: A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#…",
+   "fr": "93 mesure(s) ne sont ni retenues ni écartées : A.5.1, A.5.2, A.5.3, A.5.4, A.5.5, A.5.6, A.5.7, A.5.8…"
+  },
+  "# mesures · # retenues · # écartées · # à trancher · # nouvelles en #": {
+   "en": "# controls · # included · # excluded · # to decide · # new in #",
+   "fr": "37 mesures · 0 retenues · 0 écartées · 37 à trancher · 3 nouvelles en 2022"
+  },
+  "+ Ajouter un risque": {
+   "en": "+ Add a risk",
+   "fr": "+ Ajouter un risque"
+  },
+  ": cette mesure n’existait pas dans ISO/IEC #:#.": {
+   "en": ": this control did not exist in ISO/IEC #:#.",
+   "fr": ": cette mesure n’existait pas dans ISO/IEC 27001:2013."
+  },
+  "A.# Fonctions et responsabilités liées à la sécurité de l'information — retenue ou écartée": {
+   "en": "A.# Information security roles and responsibilities — included or excluded",
+   "fr": "A.5.2 Fonctions et responsabilités liées à la sécurité de l'information — retenue ou écartée"
+  },
+  "A.# Mesures liées aux personnes": {
+   "en": "A.# People controls",
+   "fr": "A.6 Mesures liées aux personnes"
+  },
+  "A.# Mesures organisationnelles": {
+   "en": "A.# Organizational controls",
+   "fr": "A.5 Mesures organisationnelles"
+  },
+  "A.# Mesures physiques": {
+   "en": "A.# Physical controls",
+   "fr": "A.7 Mesures physiques"
+  },
+  "A.# Mesures technologiques": {
+   "en": "A.# Technological controls",
+   "fr": "A.8 Mesures technologiques"
+  },
+  "A.# Politiques de sécurité de l'information — retenue ou écartée": {
+   "en": "A.# Policies for information security — included or excluded",
+   "fr": "A.5.1 Politiques de sécurité de l'information — retenue ou écartée"
+  },
+  "A.# Relations avec des groupes d'intérêt spécifiques — retenue ou écartée": {
+   "en": "A.# Contact with special interest groups — included or excluded",
+   "fr": "A.5.6 Relations avec des groupes d'intérêt spécifiques — retenue ou écartée"
+  },
+  "A.# Relations avec les autorités — retenue ou écartée": {
+   "en": "A.# Contact with authorities — included or excluded",
+   "fr": "A.5.5 Relations avec les autorités — retenue ou écartée"
+  },
+  "A.# Responsabilités de la direction — retenue ou écartée": {
+   "en": "A.# Management responsibilities — included or excluded",
+   "fr": "A.5.4 Responsabilités de la direction — retenue ou écartée"
+  },
+  "A.# Séparation des tâches — retenue ou écartée": {
+   "en": "A.# Segregation of duties — included or excluded",
+   "fr": "A.5.3 Séparation des tâches — retenue ou écartée"
+  },
+  "Accès au code source": {
+   "en": "Access to source code",
+   "fr": "Accès au code source"
+  },
+  "Activités de surveillance": {
+   "en": "Monitoring activities",
+   "fr": "Activités de surveillance"
+  },
+  "Antériorité des critères NON établie.": {
+   "en": "Prior establishment of the criteria NOT established.",
+   "fr": "Antériorité des critères NON établie."
+  },
+  "Appréciation faite le": {
+   "en": "Assessment carried out on",
+   "fr": "Appréciation faite le"
+  },
+  "Au moins un risque porté au registre": {
+   "en": "At least one risk entered in the register",
+   "fr": "Au moins un risque porté au registre"
+  },
+  "Au-delà de ce niveau (vraisemblance × conséquence), un risque ne peut pas être simplement maintenu": {
+   "en": "Above this level (likelihood × consequence), a risk cannot simply be retained",
+   "fr": "Au-delà de ce niveau (vraisemblance × conséquence), un risque ne peut pas être simplement maintenu"
+  },
+  "Au-dessus du seuil, après traitement": {
+   "en": "Above the threshold, after treatment",
+   "fr": "Au-dessus du seuil, après traitement"
+  },
+  "Aucun risque déclaré. Ajoutez-en un : tout le reste de la norme en découle.": {
+   "en": "No risk declared. Add one: the whole rest of the standard follows from it.",
+   "fr": "Aucun risque déclaré. Ajoutez-en un : tout le reste de la norme en découle."
+  },
+  "Authentification sécurisée": {
+   "en": "Secure authentication",
+   "fr": "Authentification sécurisée"
+  },
+  "Bloc # sur # · Analyse de risque — À remplir maintenant": {
+   "en": "Block # of # · Risk assessment — To be filled in now",
+   "fr": "Bloc 1 sur 4 · Analyse de risque — À remplir maintenant"
+  },
+  "Bloc # sur # · Déclaration d’applicabilité — Pas encore atteint": {
+   "en": "Block # of # · Statement of Applicability — Not yet reached",
+   "fr": "Bloc 2 sur 4 · Déclaration d’applicabilité — Pas encore atteint"
+  },
+  "Bureau propre et écran vide": {
+   "en": "Clear desk and clear screen",
+   "fr": "Bureau propre et écran vide"
+  },
+  "Ce que la DSI met en œuvre : accès, journaux, réseaux, cryptographie, développement. Le thème le plus fourni, et le seul qu'on croit connaître.": {
+   "en": "What the IT department implements: access, logs, networks, cryptography, development. The richest theme, and the only one people think they know.",
+   "fr": "Ce que la DSI met en œuvre : accès, journaux, réseaux, cryptographie, développement. Le thème le plus fourni, et le seul qu'on croit connaître."
+  },
+  "Ce que le SMSI couvre — tout ce qui n’en est pas exclu par écrit sera audité": {
+   "en": "What the ISMS covers — everything not excluded from it in writing will be audited",
+   "fr": "Ce que le SMSI couvre — tout ce qui n’en est pas exclu par écrit sera audité"
+  },
+  "Ce qui se décide et s'écrit : politiques, rôles, inventaires, classification, fournisseurs, incidents, conformité.": {
+   "en": "What is decided and written down: policies, roles, inventories, classification, suppliers, incidents, compliance.",
+   "fr": "Ce qui se décide et s'écrit : politiques, rôles, inventaires, classification, fournisseurs, incidents, conformité."
+  },
+  "Ce qui se joue avant, pendant et après le contrat de travail — et qui ne se répare par aucun outil.": {
+   "en": "What happens before, during and after the employment contract — and cannot be fixed by any tool.",
+   "fr": "Ce qui se joue avant, pendant et après le contrat de travail — et qui ne se répare par aucun outil."
+  },
+  "Ces # mesures n'existaient pas dans ISO/IEC #:#. Un organisme certifié contre l'ancienne version a celles-là devant lui, et elles seules — pas les #.": {
+   "en": "These # controls did not exist in ISO/IEC #:#. An organisation certified against the old edition has these in front of it, and these alone — not the #.",
+   "fr": "Ces 11 mesures n'existaient pas dans ISO/IEC 27001:2013. Un organisme certifié contre l'ancienne version a celles-là devant lui, et elles seules — pas les 93."
+  },
+  "Cette mesure n’existait pas dans ISO/IEC #:#": {
+   "en": "This control did not exist in ISO/IEC #:#",
+   "fr": "Cette mesure n’existait pas dans ISO/IEC 27001:2013"
+  },
+  "Classification des informations": {
+   "en": "Classification of information",
+   "fr": "Classification des informations"
+  },
+  "Cloisonnement des réseaux": {
+   "en": "Segregation of networks",
+   "fr": "Cloisonnement des réseaux"
+  },
+  "Codage sécurisé": {
+   "en": "Secure coding",
+   "fr": "Codage sécurisé"
+  },
+  "Conditions générales d'embauche": {
+   "en": "Terms and conditions of employment",
+   "fr": "Conditions générales d'embauche"
+  },
+  "Conformité aux politiques, règles et normes de sécurité de l'information": {
+   "en": "Compliance with policies, rules and standards for information security",
+   "fr": "Conformité aux politiques, règles et normes de sécurité de l'information"
+  },
+  "Contrôle d'accès": {
+   "en": "Access control",
+   "fr": "Contrôle d'accès"
+  },
+  "Contrôles d'accès physique": {
+   "en": "Physical entry",
+   "fr": "Contrôles d'accès physique"
+  },
+  "Critères établis le": {
+   "en": "Criteria established on",
+   "fr": "Critères établis le"
+  },
+  "Cycle de vie de développement sécurisé": {
+   "en": "Secure development life cycle",
+   "fr": "Cycle de vie de développement sécurisé"
+  },
+  "Dimensionnement": {
+   "en": "Sizing",
+   "fr": "Dimensionnement"
+  },
+  "Domaine d’application du SMSI (art. #)": {
+   "en": "Scope of the ISMS (clause #)",
+   "fr": "Domaine d’application du SMSI (art. 4.3)"
+  },
+  "Droits d'accès": {
+   "en": "Access rights",
+   "fr": "Droits d'accès"
+  },
+  "Droits de propriété intellectuelle": {
+   "en": "Intellectual property rights",
+   "fr": "Droits de propriété intellectuelle"
+  },
+  "Déclaration d'applicabilité →": {
+   "en": "Statement of Applicability →",
+   "fr": "Déclaration d'applicabilité →"
+  },
+  "Déclaration des événements de sécurité de l'information": {
+   "en": "Information security event reporting",
+   "fr": "Déclaration des événements de sécurité de l'information"
+  },
+  "Développement externalisé": {
+   "en": "Outsourced development",
+   "fr": "Développement externalisé"
+  },
+  "Effacer les réponses ISO #": {
+   "en": "Clear the ISO # answers",
+   "fr": "Effacer les réponses ISO 27001"
+  },
+  "Emplacement et protection du matériel": {
+   "en": "Equipment siting and protection",
+   "fr": "Emplacement et protection du matériel"
+  },
+  "Engagements de confidentialité ou de non-divulgation": {
+   "en": "Confidentiality or non-disclosure agreements",
+   "fr": "Engagements de confidentialité ou de non-divulgation"
+  },
+  "Exigences de sécurité des applications": {
+   "en": "Application security requirements",
+   "fr": "Exigences de sécurité des applications"
+  },
+  "Exigences légales, statutaires, réglementaires et contractuelles": {
+   "en": "Legal, statutory, regulatory and contractual requirements",
+   "fr": "Exigences légales, statutaires, réglementaires et contractuelles"
+  },
+  "Filtrage web": {
+   "en": "Web filtering",
+   "fr": "Filtrage web"
+  },
+  "Fonctions et responsabilités liées à la sécurité de l'information": {
+   "en": "Information security roles and responsibilities",
+   "fr": "Fonctions et responsabilités liées à la sécurité de l'information"
+  },
+  "Gestion de la sécurité de l'information dans la chaîne d'approvisionnement des produits et services TIC": {
+   "en": "Managing information security in the ICT supply chain",
+   "fr": "Gestion de la sécurité de l'information dans la chaîne d'approvisionnement des produits et services TIC"
+  },
+  "Gestion des changements": {
+   "en": "Change management",
+   "fr": "Gestion des changements"
+  },
+  "Gestion des configurations": {
+   "en": "Configuration management",
+   "fr": "Gestion des configurations"
+  },
+  "Gestion des identités": {
+   "en": "Identity management",
+   "fr": "Gestion des identités"
+  },
+  "Gestion des vulnérabilités techniques": {
+   "en": "Management of technical vulnerabilities",
+   "fr": "Gestion des vulnérabilités techniques"
+  },
+  "Informations d'authentification": {
+   "en": "Authentication information",
+   "fr": "Informations d'authentification"
+  },
+  "Informations de test": {
+   "en": "Test information",
+   "fr": "Informations de test"
+  },
+  "Installation de logiciels sur des systèmes en exploitation": {
+   "en": "Installation of software on operational systems",
+   "fr": "Installation de logiciels sur des systèmes en exploitation"
+  },
+  "Inventaire des informations et autres actifs associés": {
+   "en": "Inventory of information and other associated assets",
+   "fr": "Inventaire des informations et autres actifs associés"
+  },
+  "Journalisation": {
+   "en": "Logging",
+   "fr": "Journalisation"
+  },
+  "Justification — obligatoire dans les deux sens": {
+   "en": "Justification — mandatory both ways",
+   "fr": "Justification — obligatoire dans les deux sens"
+  },
+  "La date de l'appréciation des risques": {
+   "en": "The date of the risk assessment",
+   "fr": "La date de l'appréciation des risques"
+  },
+  "La date à laquelle les critères d'acceptation ont été établis": {
+   "en": "The date on which the acceptance criteria were established",
+   "fr": "La date à laquelle les critères d'acceptation ont été établis"
+  },
+  "La date à laquelle les critères d’acceptation ont été ARRÊTÉS": {
+   "en": "The date on which the acceptance criteria were SET",
+   "fr": "La date à laquelle les critères d’acceptation ont été ARRÊTÉS"
+  },
+  "La date à laquelle les risques ont été cotés": {
+   "en": "The date on which the risks were rated",
+   "fr": "La date à laquelle les risques ont été cotés"
+  },
+  "La déclaration n'est PAS recevable. Le défaut est documentaire, et il se corrige en écrivant, pas en développant.": {
+   "en": "The statement is NOT admissible. The defect is documentary, and it is corrected by writing, not by developing.",
+   "fr": "La déclaration n'est PAS recevable. Le défaut est documentaire, et il se corrige en écrivant, pas en développant."
+  },
+  "Le domaine d'application du SMSI (art. #)": {
+   "en": "The scope of the ISMS (clause #)",
+   "fr": "Le domaine d'application du SMSI (art. 4.3)"
+  },
+  "Le plan de traitement ne tient pas en l'état. Ce ne sont pas des défauts techniques : ce sont des défauts de DÉCISION, et ils se corrigent par des signatures, pas par des outils.": {
+   "en": "The treatment plan does not hold as it stands. These are not technical defects: they are defects of DECISION, and they are corrected by signatures, not by tools.",
+   "fr": "Le plan de traitement ne tient pas en l'état. Ce ne sont pas des défauts techniques : ce sont des défauts de DÉCISION, et ils se corrigent par des signatures, pas par des outils."
+  },
+  "Le plan de traitement ne tient pas en l’état.": {
+   "en": "The treatment plan does not hold as it stands.",
+   "fr": "Le plan de traitement ne tient pas en l’état."
+  },
+  "Le questionnaire fourni — ISO/IEC #:# — Questionnaire d'auto-évaluation": {
+   "en": "The questionnaire supplied — ISO/IEC #:# — Self-assessment questionnaire",
+   "fr": "Le questionnaire fourni — ISO/IEC 27001:2013 — Questionnaire d'auto-évaluation"
+  },
+  "Le référentiel de la norme est momentanément indisponible. Rien n’est affiché plutôt qu’une liste partielle : préparer un audit sur une annexe A tronquée coûte plus cher que l’attendre.": {
+   "en": "The standard’s reference framework is temporarily unavailable. Nothing is shown rather than a partial list: preparing an audit on a truncated Annex A costs more than waiting for it.",
+   "fr": "Le référentiel de la norme est momentanément indisponible. Rien n’est affiché plutôt qu’une liste partielle : préparer un audit sur une annexe A tronquée coûte plus cher que l’attendre."
+  },
+  "Le texte acheté, ou le catalogue de l'organisme national de normalisation": {
+   "en": "The purchased text, or the catalogue of the national standards body",
+   "fr": "Le texte acheté, ou le catalogue de l'organisme national de normalisation"
+  },
+  "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : seul un organisme de certification accrédité la prononce, au terme d'un audit en deux étapes.": {
+   "en": "Green on this path means that what a block expects has been filled in. It does not mean that you are compliant: only an accredited certification body can declare that, at the end of a two-stage audit.",
+   "fr": "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : seul un organisme de certification accrédité la prononce, au terme d'un audit en deux étapes."
+  },
+  "Les # mesures apparues en #": {
+   "en": "The # controls introduced in #",
+   "fr": "Les 11 mesures apparues en 2022"
+  },
+  "Les # mesures apparues en # — dont # non décidées.": {
+   "en": "The # controls introduced in # — of which # undecided.",
+   "fr": "Les 11 mesures apparues en 2022 — dont 11 non décidées."
+  },
+  "Les certificats émis contre ISO/IEC #:# ont dû être migrés vers la version # à l'issue d'une période de transition fixée par l'IAF.": {
+   "en": "Certificates issued against ISO/IEC #:# had to be migrated to the # edition at the end of a transition period set by the IAF.",
+   "fr": "Les certificats émis contre ISO/IEC 27001:2013 ont dû être migrés vers la version 2022 à l'issue d'une période de transition fixée par l'IAF."
+  },
+  "Les critères d'acceptation ne portent aucune date. Rien ne permet de montrer qu'ils précèdent l'appréciation, et c'est ce que l'auditeur demandera.": {
+   "en": "The acceptance criteria carry no date. Nothing shows that they precede the assessment, and that is what the auditor will ask for.",
+   "fr": "Les critères d'acceptation ne portent aucune date. Rien ne permet de montrer qu'ils précèdent l'appréciation, et c'est ce que l'auditeur demandera."
+  },
+  "Les deux annexes A n'ont AUCUN rapport : # mesures de sécurité d'un côté, # mesures de gouvernance de l'IA de l'autre. Et le domaine d'application du système de management de l'IA n'est pas celui du système de management de la sécurité — le reprendre tel quel est l'erreur la plus courante de cette greffe.": {
+   "en": "The two Annex A's have NOTHING to do with each other: # security controls on one side, # AI governance controls on the other. And the scope of the AI management system is not that of the security management system — carrying it over as it stands is the commonest mistake of this graft.",
+   "fr": "Les deux annexes A n'ont AUCUN rapport : 93 mesures de sécurité d'un côté, 38 mesures de gouvernance de l'IA de l'autre. Et le domaine d'application du système de management de l'IA n'est pas celui du système de management de la sécurité — le reprendre tel quel est l'erreur la plus courante de cette greffe."
+  },
+  "Les dix mesures de l'article #, §#, trouvent presque toutes un répondant dans l'annexe A : un système de management certifié est le socle de preuves le plus direct qu'une entité puisse présenter.": {
+   "en": "Nearly all ten measures of Article #(#) have a counterpart in Annex A: a certified management system is the most direct body of evidence an entity can put forward.",
+   "fr": "Les dix mesures de l'article 21, §2, trouvent presque toutes un répondant dans l'annexe A : un système de management certifié est le socle de preuves le plus direct qu'une entité puisse présenter."
+  },
+  "Les murs, les portes, les câbles et le matériel — le thème qu'un organisme entièrement infogéré croit pouvoir écarter, et qui le rattrape par ses propres bureaux.": {
+   "en": "Walls, doors, cables and equipment — the theme that a fully outsourced organisation thinks it can exclude, and that catches up with it through its own offices.",
+   "fr": "Les murs, les portes, les câbles et le matériel — le thème qu'un organisme entièrement infogéré croit pouvoir écarter, et qui le rattrape par ses propres bureaux."
+  },
+  "Lignes incomplètes": {
+   "en": "Incomplete rows",
+   "fr": "Lignes incomplètes"
+  },
+  "Maintenance du matériel": {
+   "en": "Equipment maintenance",
+   "fr": "Maintenance du matériel"
+  },
+  "Marquage des informations": {
+   "en": "Labelling of information",
+   "fr": "Marquage des informations"
+  },
+  "Masquage des données": {
+   "en": "Data masking",
+   "fr": "Masquage des données"
+  },
+  "Mise au rebut ou recyclage sécurisé du matériel": {
+   "en": "Secure disposal or re-use of equipment",
+   "fr": "Mise au rebut ou recyclage sécurisé du matériel"
+  },
+  "NIS # impose des DÉLAIS de signalement — # h, # h, un mois (art. #) — que la norme ne fixe pas, une responsabilité PERSONNELLE des dirigeants (art. #), et un enregistrement auprès de l'autorité (art. #, §#). Aucun certificat ne couvre ces trois-là.": {
+   "en": "NIS # sets reporting DEADLINES — # h, # h, one month (art. #) — that the standard does not set, a PERSONAL liability of senior management (art. #), and registration with the authority (art. #(#)). No certificate covers those three.",
+   "fr": "NIS 2 impose des DÉLAIS de signalement — 24 h, 72 h, un mois (art. 23) — que la norme ne fixe pas, une responsabilité PERSONNELLE des dirigeants (art. 20), et un enregistrement auprès de l'autorité (art. 3, §4). Aucun certificat ne couvre ces trois-là."
+  },
+  "Ne montrer que les # nouvelles": {
+   "en": "Show only the # new ones",
+   "fr": "Ne montrer que les 11 nouvelles"
+  },
+  "Non décidées": {
+   "en": "Not decided",
+   "fr": "Non décidées"
+  },
+  "Planification et préparation de la gestion des incidents de sécurité de l'information": {
+   "en": "Information security incident management planning and preparation",
+   "fr": "Planification et préparation de la gestion des incidents de sécurité de l'information"
+  },
+  "Politiques de sécurité de l'information": {
+   "en": "Policies for information security",
+   "fr": "Politiques de sécurité de l'information"
+  },
+  "Principes d'ingénierie et d'architecture des systèmes sécurisés": {
+   "en": "Secure system architecture and engineering principles",
+   "fr": "Principes d'ingénierie et d'architecture des systèmes sécurisés"
+  },
+  "Prise en compte de la sécurité de l'information dans les accords conclus avec les fournisseurs": {
+   "en": "Addressing information security within supplier agreements",
+   "fr": "Prise en compte de la sécurité de l'information dans les accords conclus avec les fournisseurs"
+  },
+  "Privilèges d'accès": {
+   "en": "Privileged access rights",
+   "fr": "Privilèges d'accès"
+  },
+  "Processus disciplinaire": {
+   "en": "Disciplinary process",
+   "fr": "Processus disciplinaire"
+  },
+  "Procédures d'exploitation documentées": {
+   "en": "Documented operating procedures",
+   "fr": "Procédures d'exploitation documentées"
+  },
+  "Protection contre les menaces physiques et environnementales": {
+   "en": "Protecting against physical and environmental threats",
+   "fr": "Protection contre les menaces physiques et environnementales"
+  },
+  "Protection contre les programmes malveillants": {
+   "en": "Protection against malware",
+   "fr": "Protection contre les programmes malveillants"
+  },
+  "Protection de la vie privée et des données à caractère personnel": {
+   "en": "Privacy and protection of PII",
+   "fr": "Protection de la vie privée et des données à caractère personnel"
+  },
+  "Protection des enregistrements": {
+   "en": "Protection of records",
+   "fr": "Protection des enregistrements"
+  },
+  "Protection des systèmes d'information pendant les tests d'audit": {
+   "en": "Protection of information systems during audit testing",
+   "fr": "Protection des systèmes d'information pendant les tests d'audit"
+  },
+  "Préparation des TIC pour la continuité d'activité": {
+   "en": "ICT readiness for business continuity",
+   "fr": "Préparation des TIC pour la continuité d'activité"
+  },
+  "Prévention de la fuite de données": {
+   "en": "Data leakage prevention",
+   "fr": "Prévention de la fuite de données"
+  },
+  "Périmètres de sécurité physique": {
+   "en": "Physical security perimeters",
+   "fr": "Périmètres de sécurité physique"
+  },
+  "Recueil de preuves": {
+   "en": "Collection of evidence",
+   "fr": "Recueil de preuves"
+  },
+  "Redondance des moyens de traitement de l'information": {
+   "en": "Redundancy of information processing facilities",
+   "fr": "Redondance des moyens de traitement de l'information"
+  },
+  "Relations avec des groupes d'intérêt spécifiques": {
+   "en": "Contact with special interest groups",
+   "fr": "Relations avec des groupes d'intérêt spécifiques"
+  },
+  "Relations avec les autorités": {
+   "en": "Contact with authorities",
+   "fr": "Relations avec les autorités"
+  },
+  "Renseignement sur les menaces": {
+   "en": "Threat intelligence",
+   "fr": "Renseignement sur les menaces"
+  },
+  "Responsabilités après la fin ou le changement d'un contrat de travail": {
+   "en": "Responsibilities after termination or change of employment",
+   "fr": "Responsabilités après la fin ou le changement d'un contrat de travail"
+  },
+  "Responsabilités de la direction": {
+   "en": "Management responsibilities",
+   "fr": "Responsabilités de la direction"
+  },
+  "Restitution des actifs": {
+   "en": "Return of assets",
+   "fr": "Restitution des actifs"
+  },
+  "Restriction d'accès à l'information": {
+   "en": "Information access restriction",
+   "fr": "Restriction d'accès à l'information"
+  },
+  "Retenues": {
+   "en": "Selected",
+   "fr": "Retenues"
+  },
+  "Retenues sans statut": {
+   "en": "Included without a status",
+   "fr": "Retenues sans statut"
+  },
+  "Revue indépendante de la sécurité de l'information": {
+   "en": "Independent review of information security",
+   "fr": "Revue indépendante de la sécurité de l'information"
+  },
+  "Risques cotés": {
+   "en": "Rated risks",
+   "fr": "Risques cotés"
+  },
+  "Règlement (UE) #/# (CRA)": {
+   "en": "Regulation (EU) #/# (CRA)",
+   "fr": "Règlement (UE) 2024/2847 (CRA)"
+  },
+  "Règlement (UE) #/# (RGPD)": {
+   "en": "Regulation (EU) #/# (GDPR)",
+   "fr": "Règlement (UE) 2016/679 (RGPD)"
+  },
+  "Réponse aux incidents de sécurité de l'information": {
+   "en": "Response to information security incidents",
+   "fr": "Réponse aux incidents de sécurité de l'information"
+  },
+  "Sans acceptation du propriétaire": {
+   "en": "Without the owner’s acceptance",
+   "fr": "Sans acceptation du propriétaire"
+  },
+  "Sauvegarde des informations": {
+   "en": "Information backup",
+   "fr": "Sauvegarde des informations"
+  },
+  "Sensibilisation, apprentissage et formation à la sécurité de l'information": {
+   "en": "Information security awareness, education and training",
+   "fr": "Sensibilisation, apprentissage et formation à la sécurité de l'information"
+  },
+  "Services généraux": {
+   "en": "Supporting utilities",
+   "fr": "Services généraux"
+  },
+  "Seuil d’acceptation": {
+   "en": "Acceptance threshold",
+   "fr": "Seuil d’acceptation"
+  },
+  "Supports de stockage": {
+   "en": "Storage media",
+   "fr": "Supports de stockage"
+  },
+  "Suppression d'informations": {
+   "en": "Information deletion",
+   "fr": "Suppression d'informations"
+  },
+  "Surveillance de la sécurité physique": {
+   "en": "Physical security monitoring",
+   "fr": "Surveillance de la sécurité physique"
+  },
+  "Surveillance, revue et gestion des changements des services fournisseurs": {
+   "en": "Monitoring, review and change management of supplier services",
+   "fr": "Surveillance, revue et gestion des changements des services fournisseurs"
+  },
+  "Synchronisation des horloges": {
+   "en": "Clock synchronization",
+   "fr": "Synchronisation des horloges"
+  },
+  "Sécurisation des bureaux, des salles et des équipements": {
+   "en": "Securing offices, rooms and facilities",
+   "fr": "Sécurisation des bureaux, des salles et des équipements"
+  },
+  "Sécurité de l'information dans l'utilisation de services en nuage": {
+   "en": "Information security for use of cloud services",
+   "fr": "Sécurité de l'information dans l'utilisation de services en nuage"
+  },
+  "Sécurité de l'information dans la gestion de projet": {
+   "en": "Information security in project management",
+   "fr": "Sécurité de l'information dans la gestion de projet"
+  },
+  "Sécurité de l'information dans les relations avec les fournisseurs": {
+   "en": "Information security in supplier relationships",
+   "fr": "Sécurité de l'information dans les relations avec les fournisseurs"
+  },
+  "Sécurité de l'information durant une perturbation": {
+   "en": "Information security during disruption",
+   "fr": "Sécurité de l'information durant une perturbation"
+  },
+  "Sécurité des actifs hors des locaux": {
+   "en": "Security of assets off-premises",
+   "fr": "Sécurité des actifs hors des locaux"
+  },
+  "Sécurité des réseaux": {
+   "en": "Networks security",
+   "fr": "Sécurité des réseaux"
+  },
+  "Sécurité des services réseau": {
+   "en": "Security of network services",
+   "fr": "Sécurité des services réseau"
+  },
+  "Sécurité du câblage": {
+   "en": "Cabling security",
+   "fr": "Sécurité du câblage"
+  },
+  "Sélection des candidats": {
+   "en": "Screening",
+   "fr": "Sélection des candidats"
+  },
+  "Séparation des environnements de développement, de test et de production": {
+   "en": "Separation of development, test and production environments",
+   "fr": "Séparation des environnements de développement, de test et de production"
+  },
+  "Séparation des tâches": {
+   "en": "Segregation of duties",
+   "fr": "Séparation des tâches"
+  },
+  "Terminaux finaux des utilisateurs": {
+   "en": "User end point devices",
+   "fr": "Terminaux finaux des utilisateurs"
+  },
+  "Tests de sécurité dans le développement et l'acceptation": {
+   "en": "Security testing in development and acceptance",
+   "fr": "Tests de sécurité dans le développement et l'acceptation"
+  },
+  "Tirer des enseignements des incidents de sécurité de l'information": {
+   "en": "Learning from information security incidents",
+   "fr": "Tirer des enseignements des incidents de sécurité de l'information"
+  },
+  "Tout retenir": {
+   "en": "Include all",
+   "fr": "Tout retenir"
+  },
+  "Tout écarter": {
+   "en": "Exclude all",
+   "fr": "Tout écarter"
+  },
+  "Transfert de l'information": {
+   "en": "Information transfer",
+   "fr": "Transfert de l'information"
+  },
+  "Travail dans les zones sécurisées": {
+   "en": "Working in secure areas",
+   "fr": "Travail dans les zones sécurisées"
+  },
+  "Travail à distance": {
+   "en": "Remote working",
+   "fr": "Travail à distance"
+  },
+  "Un certificat non migré cesse d'être valide à l'issue de la transition, quelle que soit la date d'expiration imprimée dessus.": {
+   "en": "A certificate that has not been migrated ceases to be valid at the end of the transition, whatever the expiry date printed on it.",
+   "fr": "Un certificat non migré cesse d'être valide à l'issue de la transition, quelle que soit la date d'expiration imprimée dessus."
+  },
+  "Un certificat émis contre la version # cesse d'être valide à l'issue de cette période, quelle que soit sa date d'expiration imprimée.": {
+   "en": "A certificate issued against the # edition ceases to be valid at the end of this period, whatever its printed expiry date.",
+   "fr": "Un certificat émis contre la version 2013 cesse d'être valide à l'issue de cette période, quelle que soit sa date d'expiration imprimée."
+  },
+  "Utilisation correcte des informations et autres actifs associés": {
+   "en": "Acceptable use of information and other associated assets",
+   "fr": "Utilisation correcte des informations et autres actifs associés"
+  },
+  "Utilisation de la cryptographie": {
+   "en": "Use of cryptography",
+   "fr": "Utilisation de la cryptographie"
+  },
+  "Utilisation de programmes utilitaires à privilèges": {
+   "en": "Use of privileged utility programs",
+   "fr": "Utilisation de programmes utilitaires à privilèges"
+  },
+  "ex. le SI de production du siège, hors filiales": {
+   "en": "e.g. the head office production IS, excluding subsidiaries",
+   "fr": "ex. le SI de production du siège, hors filiales"
+  },
+  "norme volontaire": {
+   "en": "voluntary standard",
+   "fr": "norme volontaire"
+  },
+  "nouvelle en #": {
+   "en": "new in #",
+   "fr": "nouvelle en 2022"
+  },
+  "obligation légale": {
+   "en": "legal obligation",
+   "fr": "obligation légale"
+  },
+  "© BSI Group. Document commercial d'un organisme de certification. Aucune de ses questions n'est reprise ici : les questions de ce module sont rédigées par le cabinet.": {
+   "en": "© BSI Group. Commercial document of a certification body. None of its questions is reproduced here: the questions in this module are written by the firm.",
+   "fr": "© BSI Group. Document commercial d'un organisme de certification. Aucune de ses questions n'est reprise ici : les questions de ce module sont rédigées par le cabinet."
+  },
+  "Écartées, motivées": {
+   "en": "Excluded, with reasons",
+   "fr": "Écartées, motivées"
+  },
+  "Échelles du cabinet : la norme n’en impose aucune. Le niveau est le produit de la vraisemblance et de la conséquence — il se refait de tête, et laisse la discussion là où elle est utile, sur les cotations elles-mêmes.": {
+   "en": "The firm’s scales: the standard imposes none. The level is the product of likelihood and consequence — it can be redone mentally, and keeps the discussion where it is useful, on the ratings themselves.",
+   "fr": "Échelles du cabinet : la norme n’en impose aucune. Le niveau est le produit de la vraisemblance et de la conséquence — il se refait de tête, et laisse la discussion là où elle est utile, sur les cotations elles-mêmes."
+  },
+  "Évaluation des événements de sécurité de l'information et prise de décision": {
+   "en": "Assessment and decision on information security events",
+   "fr": "Évaluation des événements de sécurité de l'information et prise de décision"
+  },
+  "↓ Analyse de risque": {
+   "en": "↓ Risk assessment",
+   "fr": "↓ Analyse de risque"
+  }
+ }
+}
