@@ -1,0 +1,1270 @@
+{
+ "_lot": "23-nist-800-82-nist-ai-rmf-owasp-llm-pilotage-etc",
+ "_mots": 2260,
+ "_pages": [
+  "nist82-ot",
+  "nist-cadre",
+  "nist-genai",
+  "nist-profil",
+  "owasp-dix",
+  "owasp-pont",
+  "apercu",
+  "cadre-normatif",
+  "conformite-globale",
+  "espace",
+  "ia-act-hub",
+  "report",
+  "rgpd-aipd",
+  "rgpd-cartographie",
+  "rgpd-conformite",
+  "rgpd-doc",
+  "rgpd-hub",
+  "rgpd-pbd",
+  "rgpd-sensibilisation",
+  "rgpd-traitements"
+ ],
+ "_rubrique": "NIST 800-82 + NIST AI RMF + OWASP LLM + PILOTAGE + RGPD & PRIVACY",
+ "bloc": {
+  "Annexe I, parties I et II": {
+   "en": "<b>Annex I, Parts I and II</b>",
+   "fr": "Annexe I, parties I et II",
+   "html": "<b>Annexe I, parties I et II</b>"
+  },
+  "Art. # · # · # · annexes III et IV": {
+   "en": "<b>Art. # · # · # · Annexes III and IV</b>",
+   "fr": "Art. 7 · 8 · 32 · annexes III et IV",
+   "html": "<b>Art. 7 · 8 · 32 · annexes III et IV</b>"
+  },
+  "Art. # · # — en vigueur": {
+   "en": "<b>Art. # · # — in force</b>",
+   "fr": "Art. 14 · 16 — en vigueur",
+   "html": "<b>Art. 14 · 16 — en vigueur</b>"
+  },
+  "Bloc # sur # · AIPD (art. #) — Verrouillé": {
+   "en": "<b>Block # of # · DPIA (art. #) — Locked</b>",
+   "fr": "Bloc 4 sur 8 · AIPD (art. 35) — Verrouillé",
+   "html": "<b>Bloc 4 sur 8 · AIPD (art. 35) — Verrouillé</b>"
+  },
+  "Bloc # sur # · Les dix risques — À remplir maintenant": {
+   "en": "<b>Block # of # · The ten risks — To fill in now</b>",
+   "fr": "Bloc 1 sur 2 · Les dix risques — À remplir maintenant",
+   "html": "<b>Bloc 1 sur 2 · Les dix risques — À remplir maintenant</b>"
+  },
+  "Bloc # sur # · Politique documentaire — Pas encore atteint": {
+   "en": "<b>Block # of # · Documentation policy — Not reached yet</b>",
+   "fr": "Bloc 6 sur 8 · Politique documentaire — Pas encore atteint",
+   "html": "<b>Bloc 6 sur 8 · Politique documentaire — Pas encore atteint</b>"
+  },
+  "Bloc # sur # · Privacy by design — Pas encore atteint": {
+   "en": "<b>Block # of # · Privacy by design — Not reached yet</b>",
+   "fr": "Bloc 5 sur 8 · Privacy by design — Pas encore atteint",
+   "html": "<b>Bloc 5 sur 8 · Privacy by design — Pas encore atteint</b>"
+  },
+  "Bloc # sur # · Profil IA générative — Verrouillé": {
+   "en": "<b>Block # of # · Generative AI profile — Locked</b>",
+   "fr": "Bloc 3 sur 3 · Profil IA générative — Verrouillé",
+   "html": "<b>Bloc 3 sur 3 · Profil IA générative — Verrouillé</b>"
+  },
+  "Bloc # sur # · Profil par fonction — À remplir maintenant": {
+   "en": "<b>Block # of # · Profile by function — To fill in now</b>",
+   "fr": "Bloc 1 sur 3 · Profil par fonction — À remplir maintenant",
+   "html": "<b>Bloc 1 sur 3 · Profil par fonction — À remplir maintenant</b>"
+  },
+  "Bloc # sur # · Registre des traitements — Pas encore atteint": {
+   "en": "<b>Block # of # · Record of processing activities — Not reached yet</b>",
+   "fr": "Bloc 2 sur 8 · Registre des traitements — Pas encore atteint",
+   "html": "<b>Bloc 2 sur 8 · Registre des traitements — Pas encore atteint</b>"
+  },
+  "Bloc # sur # · Sensibilisation — Pas encore atteint": {
+   "en": "<b>Block # of # · Awareness — Not reached yet</b>",
+   "fr": "Bloc 7 sur 8 · Sensibilisation — Pas encore atteint",
+   "html": "<b>Bloc 7 sur 8 · Sensibilisation — Pas encore atteint</b>"
+  },
+  "Bloc # sur # · Surcharge industrielle (OT) — À remplir maintenant": {
+   "en": "<b>Block # of # · Industrial overlay (OT) — To fill in now</b>",
+   "fr": "Bloc 1 sur 1 · Surcharge industrielle (OT) — À remplir maintenant",
+   "html": "<b>Bloc 1 sur 1 · Surcharge industrielle (OT) — À remplir maintenant</b>"
+  },
+  "Cadre normatif — IA Act · RGPD · ISO/IEC # · CRA": {
+   "en": "<em>Regulatory</em> landscape — AI Act · GDPR · ISO/IEC # · CRA",
+   "fr": "Cadre normatif — IA Act · RGPD · ISO/IEC 42001 · CRA",
+   "html": "Cadre <em>normatif</em> — IA Act · RGPD · ISO/IEC 42001 · CRA"
+  },
+  "Classes annexes III / IV — art. # · #": {
+   "en": "<b>Annex III / IV classes</b> — art. # · #",
+   "fr": "Classes annexes III / IV — art. 7 · 8",
+   "html": "<b>Classes annexes III / IV</b> — art. 7 · 8"
+  },
+  "ISO/IEC # fournit le système de management ; l'IA Act, le RGPD et le CRA en constituent les exigences réglementaires. Un même module sert donc souvent plusieurs cadres à la fois — mais pas toujours : un tiret dans une colonne signifie que ce cadre ne dit rien de ce module, et c'est une information, pas une case oubliée. Les trois cadres comptent trois unités d'analyse différentes — des systèmes d'IA, des traitements, des produits — et c'est pourquoi le CRA a son registre à lui plutôt qu'une colonne dans celui de l'IA Act.": {
+   "en": "ISO/IEC # provides the management system; the AI Act, the GDPR and the CRA supply its regulatory requirements. The same module therefore often serves several frameworks at once — <b>but not always</b>: a dash in a column means that this framework says nothing about this module, and that is information, not a forgotten box. <b>The three frameworks count three different units of analysis</b> — AI systems, processing activities, products — and that is why the CRA has its own register rather than a column in the AI Act one.",
+   "fr": "ISO/IEC 42001 fournit le système de management ; l'IA Act, le RGPD et le CRA en constituent les exigences réglementaires. Un même module sert donc souvent plusieurs cadres à la fois — mais pas toujours : un tiret dans une colonne signifie que ce cadre ne dit rien de ce module, et c'est une information, pas une case oubliée. Les trois cadres comptent trois unités d'analyse différentes — des systèmes d'IA, des traitements, des produits — et c'est pourquoi le CRA a son registre à lui plutôt qu'une colonne dans celui de l'IA Act.",
+   "html": "ISO/IEC 42001 fournit le système de management ; l'IA Act, le RGPD et le CRA en constituent les exigences réglementaires. Un même module sert donc souvent plusieurs cadres à la fois — <b>mais pas toujours</b>&nbsp;: un tiret dans une colonne signifie que ce cadre ne dit rien de ce module, et c'est une information, pas une case oubliée. <b>Les trois cadres comptent trois unités d'analyse différentes</b> — des systèmes d'IA, des traitements, des produits — et c'est pourquoi le CRA a son registre à lui plutôt qu'une colonne dans celui de l'IA Act."
+  },
+  "Indice de conformité global": {
+   "en": "<em>Global</em> compliance index",
+   "fr": "Indice de conformité global",
+   "html": "Indice de conformité <em>global</em>"
+  },
+  "L'état mondial de larégulation IA": {
+   "en": "The state of<br><em>AI regulation</em> worldwide",
+   "fr": "L'état mondial de larégulation IA",
+   "html": "L'état mondial de la<br><em>régulation IA</em>"
+  },
+  "Matrice de correspondance reliant chaque module de Sentinel à ses cadres : le Règlement sur l'IA pour les obligations réglementaires, le RGPD pour la protection des données, le Cyber Resilience Act pour la cybersécurité des produits, et la norme ISO/IEC # comme système de management de l'IA qui structure l'ensemble. Chaque ligne renvoie directement au module concerné.": {
+   "en": "Correspondence matrix linking each Sentinel module to its frameworks: the AI Regulation for regulatory obligations, the GDPR for data protection, the <b>Cyber Resilience Act</b> for product cybersecurity, and the ISO/IEC # standard as the AI management system that structures the whole. Each row links directly to the module concerned.",
+   "fr": "Matrice de correspondance reliant chaque module de Sentinel à ses cadres : le Règlement sur l'IA pour les obligations réglementaires, le RGPD pour la protection des données, le Cyber Resilience Act pour la cybersécurité des produits, et la norme ISO/IEC 42001 comme système de management de l'IA qui structure l'ensemble. Chaque ligne renvoie directement au module concerné.",
+   "html": "Matrice de correspondance reliant chaque module de Sentinel à ses cadres : le Règlement sur l'IA pour les obligations réglementaires, le RGPD pour la protection des données, le <b>Cyber Resilience Act</b> pour la cybersécurité des produits, et la norme ISO/IEC 42001 comme système de management de l'IA qui structure l'ensemble. Chaque ligne renvoie directement au module concerné."
+  },
+  "Mes actions du jour": {
+   "en": "My actions <em>today</em>",
+   "fr": "Mes actions du jour",
+   "html": "Mes actions <em>du jour</em>"
+  },
+  "Procédure art. # · annexe VIII": {
+   "en": "<b>Procedure, art. #</b> · Annex VIII",
+   "fr": "Procédure art. 32 · annexe VIII",
+   "html": "<b>Procédure art. 32</b> · annexe VIII"
+  },
+  "Registre PRODUITS distinct — art. #": {
+   "en": "<b>Separate PRODUCTS register</b> — art. #",
+   "fr": "Registre PRODUITS distinct — art. 3",
+   "html": "<b>Registre PRODUITS distinct</b> — art. 3"
+  },
+  "Vue d'ensemble IA Act": {
+   "en": "<em>AI Act</em> overview",
+   "fr": "Vue d'ensemble IA Act",
+   "html": "Vue d'ensemble <em>IA Act</em>"
+  },
+  "Vue direction": {
+   "en": "<em>Executive</em> view",
+   "fr": "Vue direction",
+   "html": "Vue <em>direction</em>"
+  }
+ },
+ "texte": {
+  "# blocs faits sur #": {
+   "en": "# blocks done out of #",
+   "fr": "0 blocs faits sur 2"
+  },
+  "# point(s) de l audit IA Act à compléter": {
+   "en": "# AI Act audit point(s) to complete",
+   "fr": "34 point(s) de l audit IA Act à compléter"
+  },
+  "# système(s) à haut risque — vérifier FRIA applicable": {
+   "en": "# high-risk system(s) — check whether a FRIA applies",
+   "fr": "1130 système(s) à haut risque — vérifier FRIA applicable"
+  },
+  "# système(s) à évaluer ou non conformes": {
+   "en": "# system(s) to be assessed or non-compliant",
+   "fr": "1 système(s) à évaluer ou non conformes"
+  },
+  "+ Ajouter un traitement": {
+   "en": "+ Add a processing activity",
+   "fr": "+ Ajouter un traitement"
+  },
+  "A.#": {
+   "en": "A.#",
+   "fr": "A.7"
+  },
+  "A.# (données)": {
+   "en": "A.# (data)",
+   "fr": "A.7 (données)"
+  },
+  "A.# (inventaire)": {
+   "en": "A.# (inventory)",
+   "fr": "A.4 (inventaire)"
+  },
+  "A.# · A.#": {
+   "en": "A.# · A.#",
+   "fr": "A.6 · A.9"
+  },
+  "AE": {
+   "en": "AE",
+   "fr": "AE"
+  },
+  "AI Act + RGPD + NIS#": {
+   "en": "AI Act + GDPR + NIS #",
+   "fr": "AI Act + RGPD + NIS2"
+  },
+  "AI Basic Act — en vigueur depuis le # janvier #": {
+   "en": "AI Basic Act — in force since # January #",
+   "fr": "AI Basic Act — en vigueur depuis le 22 janvier 2026"
+  },
+  "AI Guidelines for Business + Hiroshima AI Process": {
+   "en": "AI Guidelines for Business + Hiroshima AI Process",
+   "fr": "AI Guidelines for Business + Hiroshima AI Process"
+  },
+  "AIPD — protection des données": {
+   "en": "DPIA — data protection",
+   "fr": "AIPD — protection des données"
+  },
+  "AR": {
+   "en": "AR",
+   "fr": "AR"
+  },
+  "Actions en attente": {
+   "en": "Pending actions",
+   "fr": "Actions en attente"
+  },
+  "Actions prioritaires": {
+   "en": "Priority actions",
+   "fr": "Actions prioritaires"
+  },
+  "Actions réalisées": {
+   "en": "Actions carried out",
+   "fr": "Actions réalisées"
+  },
+  "Activité récente": {
+   "en": "Recent activity",
+   "fr": "Activité récente"
+  },
+  "Afrique & MO": {
+   "en": "Africa & Middle East",
+   "fr": "Afrique & MO"
+  },
+  "Afrique du Sud": {
+   "en": "South Africa",
+   "fr": "Afrique du Sud"
+  },
+  "Allemagne": {
+   "en": "Germany",
+   "fr": "Allemagne"
+  },
+  "Amériques": {
+   "en": "Americas",
+   "fr": "Amériques"
+  },
+  "Analyse d'écart CRA": {
+   "en": "CRA gap analysis",
+   "fr": "Analyse d'écart CRA"
+  },
+  "Annexe I, partie I, §# et §#": {
+   "en": "Annex I, Part I, points # and #",
+   "fr": "Annexe I, partie I, §6 et §8"
+  },
+  "Annexe I, partie II (compétences)": {
+   "en": "Annex I, Part II (competence)",
+   "fr": "Annexe I, partie II (compétences)"
+  },
+  "Annexe I, partie II (processus)": {
+   "en": "Annex I, Part II (processes)",
+   "fr": "Annexe I, partie II (processus)"
+  },
+  "Annexe I, partie II, §# (divulgation)": {
+   "en": "Annex I, Part II, point # (disclosure)",
+   "fr": "Annexe I, partie II, §5 (divulgation)"
+  },
+  "Annexe VII (doc. technique) · annexe V": {
+   "en": "Annex VII (technical doc.) · Annex V",
+   "fr": "Annexe VII (doc. technique) · annexe V"
+  },
+  "Argentine": {
+   "en": "Argentina",
+   "fr": "Argentine"
+  },
+  "Art. # (SMQ)": {
+   "en": "Art. # (QMS)",
+   "fr": "Art. 17 (SMQ)"
+  },
+  "Art. # (amendes CRA, régime distinct)": {
+   "en": "Art. # (CRA fines, separate regime)",
+   "fr": "Art. 64 (amendes CRA, régime distinct)"
+  },
+  "Art. # (complément)": {
+   "en": "Art. # (supplement)",
+   "fr": "Art. 35 (complément)"
+  },
+  "Art. # (conception) · annexe I": {
+   "en": "Art. # (design) · Annex I",
+   "fr": "Art. 13 (conception) · annexe I"
+  },
+  "Art. # (données)": {
+   "en": "Art. # (data)",
+   "fr": "Art. 10 (données)"
+  },
+  "Art. # (gestion des risques)": {
+   "en": "Art. # (risk management)",
+   "fr": "Art. 9 (gestion des risques)"
+  },
+  "Art. # (gouvernance des données)": {
+   "en": "Art. # (data governance)",
+   "fr": "Art. 10 (gouvernance des données)"
+  },
+  "Art. # (incidents graves, régime distinct)": {
+   "en": "Art. # (serious incidents, separate regime)",
+   "fr": "Art. 73 (incidents graves, régime distinct)"
+  },
+  "Art. # (lié)": {
+   "en": "Art. # (related)",
+   "fr": "Art. 27 (lié)"
+  },
+  "Art. # (maîtrise de l'IA)": {
+   "en": "Art. # (AI literacy)",
+   "fr": "Art. 4 (maîtrise de l'IA)"
+  },
+  "Art. # (pré-analyse)": {
+   "en": "Art. # (pre-analysis)",
+   "fr": "Art. 35 (pré-analyse)"
+  },
+  "Art. # (sécurité, voisin)": {
+   "en": "Art. # (security, adjacent)",
+   "fr": "Art. 32 (sécurité, voisin)"
+  },
+  "Art. # · #": {
+   "en": "Art. # · #",
+   "fr": "Art. 26 · 28"
+  },
+  "Art. # · # (violations, régime distinct)": {
+   "en": "Art. # · # (breaches, separate regime)",
+   "fr": "Art. 33 · 34 (violations, régime distinct)"
+  },
+  "Art. # · Annexe III": {
+   "en": "Art. # · Annex III",
+   "fr": "Art. 6 · Annexe III"
+  },
+  "Art. # · Annexe IV": {
+   "en": "Art. # · Annex IV",
+   "fr": "Art. 11 · Annexe IV"
+  },
+  "Art. #, §# (évaluation des risques)": {
+   "en": "Art. #(#) (risk assessment)",
+   "fr": "Art. 13, §2 (évaluation des risques)"
+  },
+  "Asie-Pacifique": {
+   "en": "Asia-Pacific",
+   "fr": "Asie-Pacifique"
+  },
+  "Au moins un traitement au registre": {
+   "en": "At least one processing activity in the records",
+   "fr": "Au moins un traitement au registre"
+  },
+  "Aucun cadre spécifique — initiatives sectorielles": {
+   "en": "No specific framework — sectoral initiatives",
+   "fr": "Aucun cadre spécifique — initiatives sectorielles"
+  },
+  "Aucune activité récente. Vos actions (audits, évaluations, livrables générés) apparaîtront ici.": {
+   "en": "No recent activity. Your actions (audits, assessments, generated deliverables) will appear here.",
+   "fr": "Aucune activité récente. Vos actions (audits, évaluations, livrables générés) apparaîtront ici."
+  },
+  "Aucune réutilisation incompatible sans nouvelle base légale": {
+   "en": "No incompatible reuse without a new legal basis",
+   "fr": "Aucune réutilisation incompatible sans nouvelle base légale"
+  },
+  "Aucune évaluation enregistrée.": {
+   "en": "No assessment saved.",
+   "fr": "Aucune évaluation enregistrée."
+  },
+  "Audit IA Act": {
+   "en": "AI Act audit",
+   "fr": "Audit IA Act"
+  },
+  "Audit de maturité IA": {
+   "en": "AI maturity audit",
+   "fr": "Audit de maturité IA"
+  },
+  "Authentification en conduite": {
+   "en": "Authentication during operations",
+   "fr": "Authentification en conduite"
+  },
+  "Benchmark côte-à-côte des frameworks nationaux.": {
+   "en": "Side-by-side benchmark of national frameworks.",
+   "fr": "Benchmark côte-à-côte des frameworks nationaux."
+  },
+  "Bloc # sur # · AIPD (art. #) — Verrouillé": {
+   "en": "Block # of # · DPIA (art. #) — Locked",
+   "fr": "Bloc 4 sur 8 · AIPD (art. 35) — Verrouillé"
+  },
+  "Bloc # sur # · Cartographie des traitements — Verrouillé": {
+   "en": "Block # of # · Processing map — Locked",
+   "fr": "Bloc 3 sur 8 · Cartographie des traitements — Verrouillé"
+  },
+  "Bloc # sur # · Ce qu’ISO # ne couvre pas — Pas encore atteint": {
+   "en": "Block # of # · What ISO # does not cover — Not yet reached",
+   "fr": "Bloc 2 sur 2 · Ce qu’ISO 42001 ne couvre pas — Pas encore atteint"
+  },
+  "Bloc # sur # · Conformité RGPD — Pas encore atteint": {
+   "en": "Block # of # · GDPR compliance — Not yet reached",
+   "fr": "Bloc 8 sur 8 · Conformité RGPD — Pas encore atteint"
+  },
+  "Bloc # sur # · Le cadre, catégorie par catégorie — Pas encore atteint": {
+   "en": "Block # of # · The framework, category by category — Not yet reached",
+   "fr": "Bloc 2 sur 3 · Le cadre, catégorie par catégorie — Pas encore atteint"
+  },
+  "Bloc # sur # · Les dix risques — À remplir maintenant": {
+   "en": "Block # of # · The ten risks — To fill in now",
+   "fr": "Bloc 1 sur 2 · Les dix risques — À remplir maintenant"
+  },
+  "Bloc # sur # · Politique documentaire — Pas encore atteint": {
+   "en": "Block # of # · Documentation policy — Not yet reached",
+   "fr": "Bloc 6 sur 8 · Politique documentaire — Pas encore atteint"
+  },
+  "Bloc # sur # · Privacy by design — Pas encore atteint": {
+   "en": "Block # of # · Privacy by design — Not yet reached",
+   "fr": "Bloc 5 sur 8 · Privacy by design — Pas encore atteint"
+  },
+  "Bloc # sur # · Profil IA générative — Pas encore atteint": {
+   "en": "Block # of # · Generative AI profile — Not yet reached",
+   "fr": "Bloc 3 sur 3 · Profil IA générative — Pas encore atteint"
+  },
+  "Bloc # sur # · Profil par fonction — À remplir maintenant": {
+   "en": "Block # of # · Profile by function — To fill in now",
+   "fr": "Bloc 1 sur 3 · Profil par fonction — À remplir maintenant"
+  },
+  "Bloc # sur # · Registre des traitements — Pas encore atteint": {
+   "en": "Block # of # · Records of processing — Not yet reached",
+   "fr": "Bloc 2 sur 8 · Registre des traitements — Pas encore atteint"
+  },
+  "Bloc # sur # · Sensibilisation — Pas encore atteint": {
+   "en": "Block # of # · Awareness — Not yet reached",
+   "fr": "Bloc 7 sur 8 · Sensibilisation — Pas encore atteint"
+  },
+  "Bloc # sur # · Surcharge industrielle (OT) — À remplir maintenant": {
+   "en": "Block # of # · Industrial overlay (OT) — To fill in now",
+   "fr": "Bloc 1 sur 1 · Surcharge industrielle (OT) — À remplir maintenant"
+  },
+  "Bloc # sur # · Vue d’ensemble IA Act — À remplir maintenant": {
+   "en": "Block # of # · AI Act overview — To be filled in now",
+   "fr": "Bloc 1 sur 2 · Vue d’ensemble IA Act — À remplir maintenant"
+  },
+  "Bloc # sur # · Vue d’ensemble — À remplir maintenant": {
+   "en": "Block # of # · Overview — To fill in now",
+   "fr": "Bloc 1 sur 8 · Vue d’ensemble — À remplir maintenant"
+  },
+  "CH": {
+   "en": "CH",
+   "fr": "CH"
+  },
+  "CN": {
+   "en": "CN",
+   "fr": "CN"
+  },
+  "CRA": {
+   "en": "CRA",
+   "fr": "CRA"
+  },
+  "Cadres émergents": {
+   "en": "Emerging frameworks",
+   "fr": "Cadres émergents"
+  },
+  "Calcul de l'indice…": {
+   "en": "Computing the index…",
+   "fr": "Calcul de l'indice…"
+  },
+  "Calculateur de sanctions": {
+   "en": "Penalty calculator",
+   "fr": "Calculateur de sanctions"
+  },
+  "Cartographie des cas d'usage": {
+   "en": "Use-case mapping",
+   "fr": "Cartographie des cas d'usage"
+  },
+  "Cartographie des traitements": {
+   "en": "Processing map",
+   "fr": "Cartographie des traitements"
+  },
+  "Cartographier": {
+   "en": "Map",
+   "fr": "Cartographier"
+  },
+  "Ce bloc dépend de : Profil par fonction. Complétez-le d'abord.": {
+   "en": "This block depends on: Profile by function. Complete that one first.",
+   "fr": "Ce bloc dépend de : Profil par fonction. Complétez-le d'abord."
+  },
+  "Ce bloc dépend de : Registre des traitements. Complétez-le d'abord.": {
+   "en": "This block depends on: Records of processing. Complete it first.",
+   "fr": "Ce bloc dépend de : Registre des traitements. Complétez-le d'abord."
+  },
+  "Ce dispositif couvre la classification des systèmes (art. #, annexe III), le système de gestion des risques (art. #), la documentation technique (art. #), la FRIA (art. #) et les sanctions (art. #). Voir aussi le cadre normatif pour la correspondance avec le RGPD et l'ISO/IEC #. CONSEILPREV peut réaliser un audit approfondi.": {
+   "en": "This framework covers the classification of systems (art. #, Annex III), the risk management system (art. #), technical documentation (art. #), the FRIA (art. #) and penalties (art. #). See also the regulatory landscape for the correspondence with the GDPR and ISO/IEC #. CONSEILPREV can carry out an in-depth audit.",
+   "fr": "Ce dispositif couvre la classification des systèmes (art. 6, annexe III), le système de gestion des risques (art. 9), la documentation technique (art. 11), la FRIA (art. 27) et les sanctions (art. 99). Voir aussi le cadre normatif pour la correspondance avec le RGPD et l'ISO/IEC 42001. CONSEILPREV peut réaliser un audit approfondi."
+  },
+  "Ce dispositif couvre le registre des traitements (art. #), la privacy by design (art. #), l'AIPD (art. #), la documentation au titre du principe de responsabilité (accountability, art. #) et la sensibilisation. La conformité se démontre par des mesures effectives et documentées ; CONSEILPREV peut réaliser un audit approfondi et un accompagnement.": {
+   "en": "This framework covers the records of processing activities (art. #), privacy by design (art. #), the DPIA (art. #), documentation under the accountability principle (art. #) and awareness. Compliance is demonstrated through effective, documented measures; CONSEILPREV can carry out an in-depth audit and provide support.",
+   "fr": "Ce dispositif couvre le registre des traitements (art. 30), la privacy by design (art. 25), l'AIPD (art. 35), la documentation au titre du principe de responsabilité (accountability, art. 5.2) et la sensibilisation. La conformité se démontre par des mesures effectives et documentées ; CONSEILPREV peut réaliser un audit approfondi et un accompagnement."
+  },
+  "Ce registre matérialise l'article # du RGPD. Les mentions relatives au responsable de traitement, au délégué à la protection des données et aux droits des personnes doivent être tenues à jour. Les données saisies sont propres à votre compte. CONSEILPREV peut vous accompagner dans la constitution et la revue de ce registre.": {
+   "en": "This register gives effect to Article # of the GDPR. The entries relating to the controller, the data protection officer and data subject rights must be kept up to date. The data entered is specific to your account. CONSEILPREV can support you in building and reviewing these records.",
+   "fr": "Ce registre matérialise l'article 30 du RGPD. Les mentions relatives au responsable de traitement, au délégué à la protection des données et aux droits des personnes doivent être tenues à jour. Les données saisies sont propres à votre compte. CONSEILPREV peut vous accompagner dans la constitution et la revue de ce registre."
+  },
+  "Cet indice consolide des éléments déclaratifs et le registre des traitements ; il constitue une aide au pilotage et ne vaut pas attestation de conformité juridique. La conformité RGPD se démontre par des mesures effectives et documentées. CONSEILPREV peut réaliser un audit approfondi et un plan de mise en conformité.": {
+   "en": "This index consolidates declarative elements and the records of processing activities; it is a steering aid and is not an attestation of legal compliance. GDPR compliance is demonstrated through effective, documented measures. CONSEILPREV can carry out an in-depth audit and a compliance plan.",
+   "fr": "Cet indice consolide des éléments déclaratifs et le registre des traitements ; il constitue une aide au pilotage et ne vaut pas attestation de conformité juridique. La conformité RGPD se démontre par des mesures effectives et documentées. CONSEILPREV peut réaliser un audit approfondi et un plan de mise en conformité."
+  },
+  "Cette cartographie se met à jour à partir du registre des traitements. Alimentez le registre pour en enrichir la vue. Les données particulières de l'article # et les transferts hors Union appellent des garanties renforcées, que CONSEILPREV peut vous aider à qualifier.": {
+   "en": "This map updates from the records of processing activities. Feed the records to enrich the view. The special categories of data under Article # and transfers outside the European Union call for enhanced safeguards, which CONSEILPREV can help you qualify.",
+   "fr": "Cette cartographie se met à jour à partir du registre des traitements. Alimentez le registre pour en enrichir la vue. Les données particulières de l'article 9 et les transferts hors Union appellent des garanties renforcées, que CONSEILPREV peut vous aider à qualifier."
+  },
+  "Cette check-list matérialise l'article # du RGPD et les principes de la protection des données dès la conception. Elle constitue une aide à la décision : les mesures déclarées en place doivent correspondre à des dispositifs réellement en place et documentés. « Sans objet » sort un contrôle du calcul ; « non » l’y laisse, à zéro. CONSEILPREV peut vous accompagner dans leur mise en œuvre et leur preuve.": {
+   "en": "This checklist gives effect to Article # of the GDPR and to the principles of data protection by design. It is a decision aid: the measures declared in place must correspond to arrangements actually in place and documented. “Not applicable” takes a control out of the calculation; “no” leaves it in, at zero. CONSEILPREV can support you in implementing and evidencing them.",
+   "fr": "Cette check-list matérialise l'article 25 du RGPD et les principes de la protection des données dès la conception. Elle constitue une aide à la décision : les mesures déclarées en place doivent correspondre à des dispositifs réellement en place et documentés. « Sans objet » sort un contrôle du calcul ; « non » l’y laisse, à zéro. CONSEILPREV peut vous accompagner dans leur mise en œuvre et leur preuve."
+  },
+  "Cette matrice de correspondance est une aide au pilotage transverse. Les rattachements normatifs sont indicatifs et doivent être validés au regard de votre périmètre et de la version en vigueur des textes. CONSEILPREV peut réaliser une cartographie de conformité approfondie couvrant les trois cadres.": {
+   "en": "This correspondence matrix is a cross-functional steering aid. The links to standards are indicative and must be validated against your scope and the version of the texts in force. CONSEILPREV can carry out an in-depth compliance mapping covering the three frameworks.",
+   "fr": "Cette matrice de correspondance est une aide au pilotage transverse. Les rattachements normatifs sont indicatifs et doivent être validés au regard de votre périmètre et de la version en vigueur des textes. CONSEILPREV peut réaliser une cartographie de conformité approfondie couvrant les trois cadres."
+  },
+  "Chaque traitement a une finalité déterminée et documentée": {
+   "en": "Each processing activity has a specified and documented purpose",
+   "fr": "Chaque traitement a une finalité déterminée et documentée"
+  },
+  "Chargement de la cartographie…": {
+   "en": "Loading the map…",
+   "fr": "Chargement de la cartographie…"
+  },
+  "Chargement des traitements…": {
+   "en": "Loading processing activities…",
+   "fr": "Chargement des traitements…"
+  },
+  "Chargement du dispositif…": {
+   "en": "Loading the framework…",
+   "fr": "Chargement du dispositif…"
+  },
+  "Chargement du registre…": {
+   "en": "Loading the register…",
+   "fr": "Chargement du registre…"
+  },
+  "Chaîne de valeur": {
+   "en": "Value chain",
+   "fr": "Chaîne de valeur"
+  },
+  "Chaîne de valeur — art. # · # à #": {
+   "en": "Value chain — art. # · # to #",
+   "fr": "Chaîne de valeur — art. 13 · 19 à 22"
+  },
+  "Chine": {
+   "en": "China",
+   "fr": "Chine"
+  },
+  "Chine, Japon, Corée": {
+   "en": "China, Japan, Korea",
+   "fr": "Chine, Japon, Corée"
+  },
+  "Classification IA Act": {
+   "en": "AI Act classification",
+   "fr": "Classification IA Act"
+  },
+  "Clause #": {
+   "en": "Clause 7.5",
+   "fr": "Clause 7.5"
+  },
+  "Clause # (amélioration)": {
+   "en": "Clause # (improvement)",
+   "fr": "Clause 10.1 (amélioration)"
+  },
+  "Clause # (audit interne)": {
+   "en": "Clause # (internal audit)",
+   "fr": "Clause 9.2 (audit interne)"
+  },
+  "Clause # (contexte)": {
+   "en": "Clause # (context)",
+   "fr": "Clause 4.1 (contexte)"
+  },
+  "Clause # (non-conformité)": {
+   "en": "Clause # (nonconformity)",
+   "fr": "Clause 10.2 (non-conformité)"
+  },
+  "Clause # (surveillance)": {
+   "en": "Clause # (monitoring)",
+   "fr": "Clause 9.1 (surveillance)"
+  },
+  "Clause # · #": {
+   "en": "Clause 7.2 · 7.3",
+   "fr": "Clause 7.2 · 7.3"
+  },
+  "Clause # · # · A.#": {
+   "en": "Clause 6.1 · 8.2 · A.5",
+   "fr": "Clause 6.1 · 8.2 · A.5"
+  },
+  "Clause # · A.#": {
+   "en": "Clause 4.2 · A.8",
+   "fr": "Clause 4.2 · A.8"
+  },
+  "Clauses # à #": {
+   "en": "Clauses # to #",
+   "fr": "Clauses 4 à 6"
+  },
+  "Comparer les pays": {
+   "en": "Compare countries",
+   "fr": "Comparer les pays"
+  },
+  "Concevoir, documenter & prouver": {
+   "en": "Design, document & prove",
+   "fr": "Concevoir, documenter & prouver"
+  },
+  "Conduite à tenir en cas de violation de données": {
+   "en": "What to do in the event of a personal data breach",
+   "fr": "Conduite à tenir en cas de violation de données"
+  },
+  "Conformité Audit IA Act": {
+   "en": "AI Act audit compliance",
+   "fr": "Conformité Audit IA Act"
+  },
+  "Conformité RGPD": {
+   "en": "GDPR compliance",
+   "fr": "Conformité RGPD"
+  },
+  "Consolidation des indicateurs…": {
+   "en": "Consolidating indicators…",
+   "fr": "Consolidation des indicateurs…"
+  },
+  "Consolidation des trois cadres — Règlement IA, RGPD et ISO/IEC # — en un indice unique, calculé à partir de vos évaluations dans la plateforme. Chaque cadre renvoie directement à ses modules.": {
+   "en": "Consolidates the three frameworks — the AI Act, the GDPR and ISO/IEC # — into a single index, computed from your assessments in the platform. Each framework links directly to its modules.",
+   "fr": "Consolidation des trois cadres — Règlement IA, RGPD et ISO/IEC 42001 — en un indice unique, calculé à partir de vos évaluations dans la plateforme. Chaque cadre renvoie directement à ses modules."
+  },
+  "Convention-cadre IA Conseil de l'Europe + LPD révisée": {
+   "en": "Council of Europe AI Framework Convention + revised FADP",
+   "fr": "Convention-cadre IA Conseil de l'Europe + LPD révisée"
+  },
+  "Corée du Sud": {
+   "en": "South Korea",
+   "fr": "Corée du Sud"
+  },
+  "DE": {
+   "en": "DE",
+   "fr": "DE"
+  },
+  "Dernières évaluations (# sur #)": {
+   "en": "Latest assessments (# of #)",
+   "fr": "Dernières évaluations (0 sur 0)"
+  },
+  "Des durées de conservation sont définies par catégorie de données": {
+   "en": "Retention periods are defined per data category",
+   "fr": "Des durées de conservation sont définies par catégorie de données"
+  },
+  "Disponibilité et fenêtres d'arrêt": {
+   "en": "Availability and shutdown windows",
+   "fr": "Disponibilité et fenêtres d'arrêt"
+  },
+  "Documentation & modèles": {
+   "en": "Documentation & templates",
+   "fr": "Documentation & modèles"
+  },
+  "Documents en place": {
+   "en": "Documents in place",
+   "fr": "Documents en place"
+  },
+  "EU": {
+   "en": "EU",
+   "fr": "EU"
+  },
+  "EU AI Act + Stratégie nationale IA + CNIL": {
+   "en": "EU AI Act + National AI Strategy + CNIL",
+   "fr": "EU AI Act + Stratégie nationale IA + CNIL"
+  },
+  "EU AI Act + loi nationale d application + BSI": {
+   "en": "EU AI Act + national implementing law + BSI",
+   "fr": "EU AI Act + loi nationale d application + BSI"
+  },
+  "EU AI Act — Règlement #/# (transparence art. # depuis le # août # ; haut risque annexe III au # décembre #)": {
+   "en": "EU AI Act — Regulation #/# (transparency, art. #, since # August #; Annex III high-risk on # December #)",
+   "fr": "EU AI Act — Règlement 2024/1689 (transparence art. 50 depuis le 2 août 2026 ; haut risque annexe III au 2 décembre 2027)"
+  },
+  "Europe": {
+   "en": "Europe",
+   "fr": "Europe"
+  },
+  "Explorer la carte": {
+   "en": "Explore the map",
+   "fr": "Explorer la carte"
+  },
+  "Exporter la check-list (PDF)": {
+   "en": "Export the checklist (PDF)",
+   "fr": "Exporter la check-list (PDF)"
+  },
+  "Exporter le bilan (PDF)": {
+   "en": "Export the summary (PDF)",
+   "fr": "Exporter le bilan (PDF)"
+  },
+  "Exporter le plan (PDF)": {
+   "en": "Export the plan (PDF)",
+   "fr": "Exporter le plan (PDF)"
+  },
+  "Exporter le registre (PDF)": {
+   "en": "Export the register (PDF)",
+   "fr": "Exporter le registre (PDF)"
+  },
+  "Exporter le suivi (PDF)": {
+   "en": "Export the tracker (PDF)",
+   "fr": "Exporter le suivi (PDF)"
+  },
+  "FR": {
+   "en": "FR",
+   "fr": "FR"
+  },
+  "FRIA — droits fondamentaux": {
+   "en": "FRIA — fundamental rights",
+   "fr": "FRIA — droits fondamentaux"
+  },
+  "Formation aux procédures de traitement et de conservation": {
+   "en": "Training in processing and retention procedures",
+   "fr": "Formation aux procédures de traitement et de conservation"
+  },
+  "Former, sensibiliser & sanctions": {
+   "en": "Train, raise awareness & penalties",
+   "fr": "Former, sensibiliser & sanctions"
+  },
+  "France": {
+   "en": "France",
+   "fr": "France"
+  },
+  "GOVERN # — Compétences et diversité des équipes": {
+   "en": "GOVERN # — Team skills and diversity",
+   "fr": "GOVERN 3 — Compétences et diversité des équipes"
+  },
+  "GOVERN # — Culture du risque": {
+   "en": "GOVERN # — Risk culture",
+   "fr": "GOVERN 4 — Culture du risque"
+  },
+  "GOVERN # — Engagement des parties prenantes": {
+   "en": "GOVERN # — Stakeholder engagement",
+   "fr": "GOVERN 5 — Engagement des parties prenantes"
+  },
+  "GOVERN # — Politiques, processus et pratiques": {
+   "en": "GOVERN # — Policies, processes and practices",
+   "fr": "GOVERN 1 — Politiques, processus et pratiques"
+  },
+  "GOVERN # — Redevabilité et rôles nommés": {
+   "en": "GOVERN # — Accountability and named roles",
+   "fr": "GOVERN 2 — Redevabilité et rôles nommés"
+  },
+  "GOVERN # — Risques des tiers": {
+   "en": "GOVERN # — Third-party risks",
+   "fr": "GOVERN 6 — Risques des tiers"
+  },
+  "Generative AI Measures + AI Labeling Rules + amendements loi cybersécurité (#er janv. #)": {
+   "en": "Generative AI Measures + AI Labeling Rules + cybersecurity law amendments (# Jan. #)",
+   "fr": "Generative AI Measures + AI Labeling Rules + amendements loi cybersécurité (1er janv. 2026)"
+  },
+  "Gestion des demandes d'exercice des droits": {
+   "en": "Management of requests to exercise rights",
+   "fr": "Gestion des demandes d'exercice des droits"
+  },
+  "Gouverner & cadrer": {
+   "en": "Govern & scope",
+   "fr": "Gouverner & cadrer"
+  },
+  "Hub Training": {
+   "en": "Training hub",
+   "fr": "Hub Training"
+  },
+  "IL": {
+   "en": "IL",
+   "fr": "IL"
+  },
+  "ISO/IEC #": {
+   "en": "ISO/IEC #",
+   "fr": "ISO/IEC 42001"
+  },
+  "Il manque # réponse :": {
+   "en": "Missing # answer:",
+   "fr": "Il manque 1 réponse :"
+  },
+  "Inacceptable": {
+   "en": "Unacceptable",
+   "fr": "Inacceptable"
+  },
+  "Indicateurs stratégiques consolidés, pensés pour la présentation à votre direction ou à votre client — pour vos actions personnelles au quotidien, voir": {
+   "en": "Consolidated strategic indicators, designed for presentation to your senior management or to your client — for your own day-to-day actions, see",
+   "fr": "Indicateurs stratégiques consolidés, pensés pour la présentation à votre direction ou à votre client — pour vos actions personnelles au quotidien, voir"
+  },
+  "Israël": {
+   "en": "Israel",
+   "fr": "Israël"
+  },
+  "JP": {
+   "en": "JP",
+   "fr": "JP"
+  },
+  "Japon": {
+   "en": "Japan",
+   "fr": "Japon"
+  },
+  "Juridictions couvertes": {
+   "en": "Jurisdictions covered",
+   "fr": "Juridictions couvertes"
+  },
+  "J’ai lu cet écran — bloc suivant ↓": {
+   "en": "I have read this screen — next block ↓",
+   "fr": "J’ai lu cet écran — bloc suivant ↓"
+  },
+  "KR": {
+   "en": "KR",
+   "fr": "KR"
+  },
+  "L'indice IA Act reflète l'avancement de l'Audit IA Act, l'indice RGPD la conformité RGPD consolidée, et l'indice ISO # est estimé à partir de l'audit de maturité, dont les piliers correspondent aux clauses de la norme. Ces indices sont des aides au pilotage, non des attestations. CONSEILPREV peut réaliser un audit de conformité approfondi couvrant les trois cadres.": {
+   "en": "The AI Act index reflects the progress of the AI Act audit, the GDPR index the consolidated GDPR compliance, and the ISO # index is estimated from the maturity audit, whose pillars correspond to the clauses of the standard. These indices are steering aids, not attestations. CONSEILPREV can carry out an in-depth compliance audit covering the three frameworks.",
+   "fr": "L'indice IA Act reflète l'avancement de l'Audit IA Act, l'indice RGPD la conformité RGPD consolidée, et l'indice ISO 42001 est estimé à partir de l'audit de maturité, dont les piliers correspondent aux clauses de la norme. Ces indices sont des aides au pilotage, non des attestations. CONSEILPREV peut réaliser un audit de conformité approfondi couvrant les trois cadres."
+  },
+  "LLM# — Autonomie excessive": {
+   "en": "LLM# — Excessive agency",
+   "fr": "LLM06 — Autonomie excessive"
+  },
+  "LLM# — Chaîne d'approvisionnement": {
+   "en": "LLM# — Supply Chain",
+   "fr": "LLM03 — Chaîne d'approvisionnement"
+  },
+  "LLM# — Divulgation d'informations sensibles": {
+   "en": "LLM# — Sensitive Information Disclosure",
+   "fr": "LLM02 — Divulgation d'informations sensibles"
+  },
+  "LLM# — Empoisonnement des données et du modèle": {
+   "en": "LLM# — Data and Model Poisoning",
+   "fr": "LLM04 — Empoisonnement des données et du modèle"
+  },
+  "LLM# — Injection d'invite": {
+   "en": "LLM# — Prompt Injection",
+   "fr": "LLM01 — Injection d'invite"
+  },
+  "LLM# — Traitement incorrect des sorties": {
+   "en": "LLM# — Improper Output Handling",
+   "fr": "LLM05 — Traitement incorrect des sorties"
+  },
+  "La documentation atteste votre conformité au titre du principe de responsabilité (accountability, art. # RGPD). Chaque document doit être établi, tenu à jour et opposable. Les états déclarés ici sont une aide au pilotage et ne préjugent pas de la validité juridique des pièces. CONSEILPREV peut vous accompagner dans leur constitution.": {
+   "en": "Documentation evidences your compliance under the accountability principle (art. # GDPR). Each document must be drawn up, kept up to date and enforceable. The statuses declared here are a steering aid and do not prejudge the legal validity of the documents. CONSEILPREV can support you in drawing them up.",
+   "fr": "La documentation atteste votre conformité au titre du principe de responsabilité (accountability, art. 5.2 RGPD). Chaque document doit être établi, tenu à jour et opposable. Les états déclarés ici sont une aide au pilotage et ne préjugent pas de la validité juridique des pièces. CONSEILPREV peut vous accompagner dans leur constitution."
+  },
+  "La sensibilisation des personnes habilitées à traiter des données est une mesure de conformité attendue (art. #.b pour le DPO, art. # pour la sécurité). Le suivi ci-dessous aide à planifier et à prouver ces actions. CONSEILPREV peut fournir supports et sessions adaptés à vos métiers industriels.": {
+   "en": "Awareness-raising for the people authorised to process data is an expected compliance measure (art. #.b for the DPO, art. # for security). The tracking below helps you plan and evidence these actions. CONSEILPREV can provide materials and sessions tailored to your industrial business lines.",
+   "fr": "La sensibilisation des personnes habilitées à traiter des données est une mesure de conformité attendue (art. 39.1.b pour le DPO, art. 32 pour la sécurité). Le suivi ci-dessous aide à planifier et à prouver ces actions. CONSEILPREV peut fournir supports et sessions adaptés à vos métiers industriels."
+  },
+  "La sûreté commande la sécurité": {
+   "en": "Safety governs security",
+   "fr": "La sûreté commande la sécurité"
+  },
+  "Le système est-il génératif ? AI #-# ne s'applique qu'à l'IA générative.": {
+   "en": "Is the system generative? AI #-# applies to generative AI only.",
+   "fr": "Le système est-il génératif ? AI 600-1 ne s'applique qu'à l'IA générative."
+  },
+  "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : ce cadre est volontaire et ne se certifie pas : il n'y a pas de conformité à prononcer.": {
+   "en": "The green of this path says that what a block expects has been filled in. It does not say that you are compliant: this framework is voluntary and is not certified: there is no compliance to declare.",
+   "fr": "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : ce cadre est volontaire et ne se certifie pas : il n'y a pas de conformité à prononcer."
+  },
+  "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : ce guide ne se certifie pas : il n'y a pas de conformité à prononcer.": {
+   "en": "The green of this path says that what a block expects has been filled in. It does not say that you are compliant: this guide is not certified: there is no compliance to declare.",
+   "fr": "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : ce guide ne se certifie pas : il n'y a pas de conformité à prononcer."
+  },
+  "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : cette liste est un classement de risques, pas une norme : il n'y a pas de conformité à prononcer.": {
+   "en": "The green of this path says that what a block expects has been filled in. It does not say that you are compliant: this list is a ranking of risks, not a standard: there is no compliance to declare.",
+   "fr": "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : cette liste est un classement de risques, pas une norme : il n'y a pas de conformité à prononcer."
+  },
+  "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : l'autorité de surveillance du marché l'apprécie, et les systèmes à haut risque passent par une évaluation de la conformité.": {
+   "en": "The green on this path says that what a block expects has been filled in. It does not say that you are compliant: the market surveillance authority assesses that, and high-risk systems go through a conformity assessment.",
+   "fr": "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : l'autorité de surveillance du marché l'apprécie, et les systèmes à haut risque passent par une évaluation de la conformité."
+  },
+  "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : la CNIL apprécie, et l'article #, paragraphe #, met la preuve de la conformité à la charge du responsable de traitement.": {
+   "en": "The green of this path says that what a block expects is filled in. It does not say that you are compliant: the CNIL assesses, and Article #, paragraph #, places the burden of proving compliance on the controller.",
+   "fr": "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : la CNIL apprécie, et l'article 5, paragraphe 2, met la preuve de la conformité à la charge du responsable de traitement."
+  },
+  "Les champs facultatifs sont distingués des champs obligatoires": {
+   "en": "Optional fields are distinguished from required fields",
+   "fr": "Les champs facultatifs sont distingués des champs obligatoires"
+  },
+  "Les juridictions les plus contraignantes": {
+   "en": "The most restrictive jurisdictions",
+   "fr": "Les juridictions les plus contraignantes"
+  },
+  "Les moins sévères": {
+   "en": "The least severe",
+   "fr": "Les moins sévères"
+  },
+  "Les plus accueillantes à l'innovation": {
+   "en": "The most innovation-friendly",
+   "fr": "Les plus accueillantes à l'innovation"
+  },
+  "Lisez l'écran, puis marquez-le lu — le bouton est au bas de l'écran": {
+   "en": "Read the screen, then mark it as read — the button is at the bottom of the screen",
+   "fr": "Lisez l'écran, puis marquez-le lu — le bouton est au bas de l'écran"
+  },
+  "MX": {
+   "en": "MX",
+   "fr": "MX"
+  },
+  "Matrice / Radar des risques": {
+   "en": "Risk matrix / radar",
+   "fr": "Matrice / Radar des risques"
+  },
+  "Mentions d'information des personnes (art. #-#)": {
+   "en": "Information notices for data subjects (Art. #-#)",
+   "fr": "Mentions d'information des personnes (art. 13-14)"
+  },
+  "Mexique": {
+   "en": "Mexico",
+   "fr": "Mexique"
+  },
+  "Model AI Governance Framework + AI Verify": {
+   "en": "Model AI Governance Framework + AI Verify",
+   "fr": "Model AI Governance Framework + AI Verify"
+  },
+  "Module Sentinel": {
+   "en": "Sentinel module",
+   "fr": "Module Sentinel"
+  },
+  "Mon Espace": {
+   "en": "My workspace",
+   "fr": "Mon Espace"
+  },
+  "Mon Espace →": {
+   "en": "My workspace →",
+   "fr": "Mon Espace →"
+  },
+  "Méthodologie : le besoin d'AIPD est présumé requis dès que deux des neuf critères de la CNIL sont réunis, ou dans les cas de l'article #(#). Les risques sont appréciés selon la gravité et la vraisemblance de trois événements redoutés — accès illégitime, modification non désirée, disparition des données — sur l'échelle de la CNIL. Aide à la décision : une AIPD formelle doit être documentée et, le cas échéant, soumise à la CNIL au titre de l'article #. CONSEILPREV peut vous accompagner dans sa conduite.": {
+   "en": "Methodology: a DPIA is presumed to be required as soon as two of the CNIL’s nine criteria are met, or in the cases of Article #(#). Risks are assessed by the severity and likelihood of three feared events — illegitimate access, unwanted modification, disappearance of data — on the CNIL scale. Decision aid: a formal DPIA must be documented and, where applicable, submitted to the CNIL under Article #. CONSEILPREV can support you in carrying it out.",
+   "fr": "Méthodologie : le besoin d'AIPD est présumé requis dès que deux des neuf critères de la CNIL sont réunis, ou dans les cas de l'article 35(3). Les risques sont appréciés selon la gravité et la vraisemblance de trois événements redoutés — accès illégitime, modification non désirée, disparition des données — sur l'échelle de la CNIL. Aide à la décision : une AIPD formelle doit être documentée et, le cas échéant, soumise à la CNIL au titre de l'article 36. CONSEILPREV peut vous accompagner dans sa conduite."
+  },
+  "NG": {
+   "en": "NG",
+   "fr": "NG"
+  },
+  "NIST AI RMF + Executive Orders + State laws": {
+   "en": "NIST AI RMF + Executive Orders + State laws",
+   "fr": "NIST AI RMF + Executive Orders + State laws"
+  },
+  "National AI Plan (draft) + POPIA": {
+   "en": "National AI Plan (draft) + POPIA",
+   "fr": "National AI Plan (draft) + POPIA"
+  },
+  "National AI Strategy (draft #) + NDPA": {
+   "en": "National AI Strategy (draft 2024) + NDPA",
+   "fr": "National AI Strategy (draft 2024) + NDPA"
+  },
+  "Nigéria": {
+   "en": "Nigeria",
+   "fr": "Nigéria"
+  },
+  "Ouvrir l audit →": {
+   "en": "Open the audit →",
+   "fr": "Ouvrir l audit →"
+  },
+  "Ouvrir le registre": {
+   "en": "Open the register",
+   "fr": "Ouvrir le registre"
+  },
+  "Parties prenantes": {
+   "en": "Stakeholders",
+   "fr": "Parties prenantes"
+  },
+  "Pilotage · Cadre normatif": {
+   "en": "Steering · Regulatory landscape",
+   "fr": "Pilotage · Cadre normatif"
+  },
+  "Pilotage · Conformité": {
+   "en": "Steering · Compliance",
+   "fr": "Pilotage · Conformité"
+  },
+  "Pilotage · Règlement IA": {
+   "en": "Steering · AI Act",
+   "fr": "Pilotage · Règlement IA"
+  },
+  "Plan d'action": {
+   "en": "Action plan",
+   "fr": "Plan d'action"
+  },
+  "Point d'entrée du dispositif de conformité au Règlement sur l'IA : cartographier et classer les systèmes, évaluer les risques, documenter et prouver. Avancement et accès direct à chaque module.": {
+   "en": "Entry point to the AI Act compliance framework: map and classify systems, assess risks, document and prove. Progress and direct access to each module.",
+   "fr": "Point d'entrée du dispositif de conformité au Règlement sur l'IA : cartographier et classer les systèmes, évaluer les risques, documenter et prouver. Avancement et accès direct à chaque module."
+  },
+  "Points uniques de défaillance et redondance": {
+   "en": "Single points of failure and redundancy",
+   "fr": "Points uniques de défaillance et redondance"
+  },
+  "Policy on AI Regulation (#)": {
+   "en": "Policy on AI Regulation (2023)",
+   "fr": "Policy on AI Regulation (2023)"
+  },
+  "Politique cookies et traceurs": {
+   "en": "Cookies and trackers policy",
+   "fr": "Politique cookies et traceurs"
+  },
+  "Politique de protection des données": {
+   "en": "Data protection policy",
+   "fr": "Politique de protection des données"
+  },
+  "Politique documentaire": {
+   "en": "Documentation policy",
+   "fr": "Politique documentaire"
+  },
+  "Privacy by design": {
+   "en": "Privacy by design",
+   "fr": "Privacy by design"
+  },
+  "Procédure d'exercice des droits (art. #-#)": {
+   "en": "Procedure for exercising rights (art. #-#)",
+   "fr": "Procédure d'exercice des droits (art. 15-22)"
+  },
+  "Produits & classification": {
+   "en": "Products & classification",
+   "fr": "Produits & classification"
+  },
+  "Produits numériques — Cyber Resilience Act": {
+   "en": "Digital products — Cyber Resilience Act",
+   "fr": "Produits numériques — Cyber Resilience Act"
+  },
+  "Progression": {
+   "en": "Progress",
+   "fr": "Progression"
+  },
+  "Périmètre : votre organisation.": {
+   "en": "Scope: your organisation.",
+   "fr": "Périmètre : votre organisation."
+  },
+  "RGPD": {
+   "en": "GDPR",
+   "fr": "RGPD"
+  },
+  "Rappel annuel des bonnes pratiques (données, mots de passe)": {
+   "en": "Annual reminder of good practice (data, passwords)",
+   "fr": "Rappel annuel des bonnes pratiques (données, mots de passe)"
+  },
+  "Rechercher par nom, finalité, service, responsable…": {
+   "en": "Search by name, purpose, department, owner…",
+   "fr": "Rechercher par nom, finalité, service, responsable…"
+  },
+  "Recommandation éthique IA + Loi #": {
+   "en": "AI ethics recommendation + Law #",
+   "fr": "Recommandation éthique IA + Loi 25.326"
+  },
+  "Registre des systèmes IA": {
+   "en": "AI systems register",
+   "fr": "Registre des systèmes IA"
+  },
+  "Registre des traitements": {
+   "en": "Records of processing",
+   "fr": "Registre des traitements"
+  },
+  "Registre des traitements du sous-traitant (art. #)": {
+   "en": "Processor’s records of processing (art. #)",
+   "fr": "Registre des traitements du sous-traitant (art. 30.2)"
+  },
+  "Reporting": {
+   "en": "Reporting",
+   "fr": "Reporting"
+  },
+  "Reporting →": {
+   "en": "Reporting →",
+   "fr": "Reporting →"
+  },
+  "Rien à saisir : l'écran explique. Il se marque « lu », et « lu » n'est pas vert.": {
+   "en": "Nothing to enter: the screen explains. It is marked “read”, and “read” is not green.",
+   "fr": "Rien à saisir : l'écran explique. Il se marque « lu », et « lu » n'est pas vert."
+  },
+  "Risque limité": {
+   "en": "Limited risk",
+   "fr": "Risque limité"
+  },
+  "Risque minimal": {
+   "en": "Minimal risk",
+   "fr": "Risque minimal"
+  },
+  "Règl. (UE) #/#": {
+   "en": "Reg. (EU) #/#",
+   "fr": "Règl. (UE) 2024/2847"
+  },
+  "Règlement IA": {
+   "en": "AI Act",
+   "fr": "Règlement IA"
+  },
+  "Règles de filtrage et flux unidirectionnels": {
+   "en": "Filtering rules and unidirectional flows",
+   "fr": "Règles de filtrage et flux unidirectionnels"
+  },
+  "Régimes stricts": {
+   "en": "Strict regimes",
+   "fr": "Régimes stricts"
+  },
+  "Réglementations & veille": {
+   "en": "Regulations & watch",
+   "fr": "Réglementations & veille"
+  },
+  "Répartition du Registre IA par classification": {
+   "en": "AI register breakdown by classification",
+   "fr": "Répartition du Registre IA par classification"
+  },
+  "SG": {
+   "en": "SG",
+   "fr": "SG"
+  },
+  "Score moyen de contrainte réglementaire (#–#)": {
+   "en": "Average regulatory constraint score (#–#)",
+   "fr": "Score moyen de contrainte réglementaire (0–10)"
+  },
+  "Segmentation et protection de frontière": {
+   "en": "Segmentation and boundary protection",
+   "fr": "Segmentation et protection de frontière"
+  },
+  "Sensibilisation": {
+   "en": "Awareness",
+   "fr": "Sensibilisation"
+  },
+  "Sensibilisation au risque cyber (phishing, ingénierie sociale)": {
+   "en": "Cyber risk awareness (phishing, social engineering)",
+   "fr": "Sensibilisation au risque cyber (phishing, ingénierie sociale)"
+  },
+  "Sensibilisation générale RGPD à l'embauche": {
+   "en": "General GDPR awareness on hiring",
+   "fr": "Sensibilisation générale RGPD à l'embauche"
+  },
+  "Seules les données strictement nécessaires sont collectées": {
+   "en": "Only strictly necessary data is collected",
+   "fr": "Seules les données strictement nécessaires sont collectées"
+  },
+  "Signalement art. #": {
+   "en": "Reporting, art. #",
+   "fr": "Signalement art. 14"
+  },
+  "Simuler un déploiement": {
+   "en": "Simulate a deployment",
+   "fr": "Simuler un déploiement"
+  },
+  "Singapour": {
+   "en": "Singapore",
+   "fr": "Singapour"
+  },
+  "Stratégies adoptées": {
+   "en": "Adopted strategies",
+   "fr": "Stratégies adoptées"
+  },
+  "Suisse": {
+   "en": "Switzerland",
+   "fr": "Suisse"
+  },
+  "Systèmes au Registre": {
+   "en": "Systems in the register",
+   "fr": "Systèmes au Registre"
+  },
+  "Systèmes au Registre IA": {
+   "en": "Systems in the AI register",
+   "fr": "Systèmes au Registre IA"
+  },
+  "Systèmes à haut risque": {
+   "en": "High-risk systems",
+   "fr": "Systèmes à haut risque"
+  },
+  "Sévérité moyenne": {
+   "en": "Average severity",
+   "fr": "Sévérité moyenne"
+  },
+  "Sévérité par région": {
+   "en": "Severity by region",
+   "fr": "Sévérité par région"
+  },
+  "Texte intégral": {
+   "en": "Full text",
+   "fr": "Texte intégral"
+  },
+  "UAE AI Strategy # + AI Charter": {
+   "en": "UAE AI Strategy 2031 + AI Charter",
+   "fr": "UAE AI Strategy 2031 + AI Charter"
+  },
+  "US": {
+   "en": "US",
+   "fr": "US"
+  },
+  "US EO + Canada AIDA": {
+   "en": "US EO + Canada AIDA",
+   "fr": "US EO + Canada AIDA"
+  },
+  "Une lecture éditoriale des risques réglementaires et géopolitiques de l'intelligence artificielle, à travers #+ juridictions et les standards internationaux.": {
+   "en": "An editorial reading of the regulatory and geopolitical risks of artificial intelligence, across #+ jurisdictions and the international standards.",
+   "fr": "Une lecture éditoriale des risques réglementaires et géopolitiques de l'intelligence artificielle, à travers 60+ juridictions et les standards internationaux."
+  },
+  "Une purge ou anonymisation automatique est prévue à échéance": {
+   "en": "An automatic purge or anonymisation is planned at the deadline",
+   "fr": "Une purge ou anonymisation automatique est prévue à échéance"
+  },
+  "Union européenne": {
+   "en": "European Union",
+   "fr": "Union européenne"
+  },
+  "Voir la FRIA (AI Act)": {
+   "en": "View the FRIA (AI Act)",
+   "fr": "Voir la FRIA (AI Act)"
+  },
+  "Voir le Registre →": {
+   "en": "View the register →",
+   "fr": "Voir le Registre →"
+  },
+  "Voir le cadre normatif": {
+   "en": "View the regulatory landscape",
+   "fr": "Voir le cadre normatif"
+  },
+  "Voir tout ↗": {
+   "en": "View all ↗",
+   "fr": "Voir tout ↗"
+  },
+  "Votre activité récente et les actions à traiter en priorité — pour une vue exécutive et des KPIs de pilotage, consultez le": {
+   "en": "Your recent activity and the actions to handle first — for an executive view and steering KPIs, see the",
+   "fr": "Votre activité récente et les actions à traiter en priorité — pour une vue exécutive et des KPIs de pilotage, consultez le"
+  },
+  "Vue mondiale des juridictions et réglementations IA.": {
+   "en": "Worldwide view of AI jurisdictions and regulations.",
+   "fr": "Vue mondiale des juridictions et réglementations IA."
+  },
+  "ZA": {
+   "en": "ZA",
+   "fr": "ZA"
+  },
+  "cadres nationaux en vigueur": {
+   "en": "national frameworks in force",
+   "fr": "cadres nationaux en vigueur"
+  },
+  "pays & régions suivis": {
+   "en": "countries & regions tracked",
+   "fr": "pays & régions suivis"
+  },
+  "score ≥ #/#": {
+   "en": "score ≥ 7/10",
+   "fr": "score ≥ 7/10"
+  },
+  "sur # — contrainte réglementaire": {
+   "en": "out of # — regulatory constraint",
+   "fr": "sur 10 — contrainte réglementaire"
+  },
+  "À lire — Rien à saisir : l'écran explique. Il se marque « lu », et « lu » n'est pas vert.": {
+   "en": "To read — Nothing to enter: the screen explains. It is marked “read”, and “read” is not green.",
+   "fr": "À lire — Rien à saisir : l'écran explique. Il se marque « lu », et « lu » n'est pas vert."
+  },
+  "Édition du jour": {
+   "en": "Today’s edition",
+   "fr": "Édition du jour"
+  },
+  "Émirats Arabes Unis": {
+   "en": "United Arab Emirates",
+   "fr": "Émirats Arabes Unis"
+  },
+  "États-Unis": {
+   "en": "United States",
+   "fr": "États-Unis"
+  },
+  "Évaluations enregistrées": {
+   "en": "Saved assessments",
+   "fr": "Évaluations enregistrées"
+  },
+  "Évaluer la conformité pour votre cas d'usage.": {
+   "en": "Assess compliance for your use case.",
+   "fr": "Évaluer la conformité pour votre cas d'usage."
+  },
+  "Évaluer les risques": {
+   "en": "Assess risks",
+   "fr": "Évaluer les risques"
+  },
+  "↓ Les dix risques": {
+   "en": "↓ The ten risks",
+   "fr": "↓ Les dix risques"
+  },
+  "↓ Profil par fonction": {
+   "en": "↓ Profile by function",
+   "fr": "↓ Profil par fonction"
+  },
+  "↓ Vue d’ensemble": {
+   "en": "↓ Overview",
+   "fr": "↓ Vue d’ensemble"
+  },
+  "↻ Actualiser": {
+   "en": "↻ Refresh",
+   "fr": "↻ Actualiser"
+  },
+  "↻ Recalculer": {
+   "en": "↻ Recalculate",
+   "fr": "↻ Recalculer"
+  }
+ }
+}

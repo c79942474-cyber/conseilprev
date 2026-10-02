@@ -1,0 +1,959 @@
+{
+ "_lot": "27-taux-de-conformite-pren-18286-smq-de-larticle-17",
+ "_mots": 2393,
+ "_pages": [
+  "conf-limites",
+  "conf-plan",
+  "conf-taux",
+  "en18286-analyse",
+  "en18286-conformite",
+  "en18286-processus",
+  "en18286-questionnaire"
+ ],
+ "_rubrique": "Taux de conformité + prEN 18286 — SMQ de l’article 17",
+ "bloc": {
+  "# % ne veut pas dire : Une conformité. Ce cadre n'est pas certifiable : il n'existe aucun auditeur au bout, et personne ne peut délivrer d'attestation contre lui.": {
+   "en": "# % does not mean: Compliance. This framework is not certifiable: there is no auditor at the end of it, and nobody can issue an attestation against it.",
+   "fr": "100 % ne veut pas dire : Une conformité. Ce cadre n'est pas certifiable : il n'existe aucun auditeur au bout, et personne ne peut délivrer d'attestation contre lui.",
+   "html": "<b>100 % ne veut pas dire :</b> Une conformité. Ce cadre n'est pas certifiable : il n'existe aucun auditeur au bout, et personne ne peut délivrer d'attestation contre lui."
+  },
+  "# Améliorationcorrespond à # Amélioration": {
+   "en": "# Improvementmatches # Improvement",
+   "fr": "10.3 Améliorationcorrespond à 10 Amélioration",
+   "html": "<code>10.3 Amélioration</code><i>correspond à 10 Amélioration</i>"
+  },
+  "# Communicationcorrespond à # Communication avec les clients": {
+   "en": "# Communicationmatches # Customer communication",
+   "fr": "7.3 Communicationcorrespond à 8.2.1 Communication avec les clients",
+   "html": "<code>7.3 Communication</code><i>correspond à 8.2.1 Communication avec les clients</i>"
+  },
+  "# Compétencescorrespond à # Compétences": {
+   "en": "# Competencematches # Competence",
+   "fr": "7.2 Compétencescorrespond à 7.2 Compétences",
+   "html": "<code>7.2 Compétences</code><i>correspond à 7.2 Compétences</i>"
+  },
+  "# Domaine d'applicationcorrespond à # Domaine d'application": {
+   "en": "# Scopematches # Scope",
+   "fr": "1 Domaine d'applicationcorrespond à 1 Domaine d'application",
+   "html": "<code>1 Domaine d'application</code><i>correspond à 1 Domaine d'application</i>"
+  },
+  "# Exploitation et contrôleAUCUNE correspondance — c’est ce que le règlement ajoute": {
+   "en": "# Operation and controlNO match — this is what the Regulation adds",
+   "fr": "9 Exploitation et contrôleAUCUNE correspondance — c’est ce que le règlement ajoute",
+   "html": "<code>9 Exploitation et contrôle</code><i>AUCUNE correspondance — c’est ce que le règlement ajoute</i>"
+  },
+  "# Informations documentéescorrespond à # Informations documentées": {
+   "en": "# Documented informationmatches # Documented information",
+   "fr": "4.5 Informations documentéescorrespond à 7.5 Informations documentées",
+   "html": "<code>4.5 Informations documentées</code><i>correspond à 7.5 Informations documentées</i>"
+  },
+  "# Planificationcorrespond à # Planification": {
+   "en": "# Planningmatches # Planning",
+   "fr": "6 Planificationcorrespond à 6 Planification",
+   "html": "<code>6 Planification</code><i>correspond à 6 Planification</i>"
+  },
+  "# Responsabilité de la directioncorrespond à # Leadership": {
+   "en": "# Management responsibilitymatches # Leadership",
+   "fr": "5 Responsabilité de la directioncorrespond à 5 Leadership",
+   "html": "<code>5 Responsabilité de la direction</code><i>correspond à 5 Leadership</i>"
+  },
+  "# Stratégie de conformité réglementaireAUCUNE correspondance — c’est ce que le règlement ajoute": {
+   "en": "# Regulatory compliance strategyNO match — this is what the Regulation adds",
+   "fr": "4.4 Stratégie de conformité réglementaireAUCUNE correspondance — c’est ce que le règlement ajoute",
+   "html": "<code>4.4 Stratégie de conformité réglementaire</code><i>AUCUNE correspondance — c’est ce que le règlement ajoute</i>"
+  },
+  "# Support — ressourcescorrespond à # Ressources": {
+   "en": "# Support — resourcesmatches # Resources",
+   "fr": "7.1 Support — ressourcescorrespond à 7.1 Ressources",
+   "html": "<code>7.1 Support — ressources</code><i>correspond à 7.1 Ressources</i>"
+  },
+  "# Supportcorrespond à # Soutien": {
+   "en": "# Supportmatches # Support",
+   "fr": "7 Supportcorrespond à 7 Soutien",
+   "html": "<code>7 Support</code><i>correspond à 7 Soutien</i>"
+  },
+  "# et # Deux paragraphes portent le MÊME titre, « Exigences relatives au système d'IA », à trois numéros d'écart. Les deux sont conservés, distingués par leur numéro. Les fusionner aurait fait disparaître un paragraphe que l'annexe ZA peut viser ; les renommer aurait inventé un titre que le document ne porte pas.": {
+   "en": "# and # Two clauses carry the SAME title, “Requirements for the AI system”, three numbers apart. Both are kept, told apart by their number. Merging them would have made a clause disappear that Annex ZA can point to; renaming them would have invented a title the document does not carry.",
+   "fr": "8.3.2.1 et 8.3.2.3 Deux paragraphes portent le MÊME titre, « Exigences relatives au système d'IA », à trois numéros d'écart. Les deux sont conservés, distingués par leur numéro. Les fusionner aurait fait disparaître un paragraphe que l'annexe ZA peut viser ; les renommer aurait inventé un titre que le document ne porte pas.",
+   "html": "<code>8.3.2.1 et 8.3.2.3</code> Deux paragraphes portent le MÊME titre, « Exigences relatives au système d'IA », à trois numéros d'écart. <i>Les deux sont conservés, distingués par leur numéro. Les fusionner aurait fait disparaître un paragraphe que l'annexe ZA peut viser ; les renommer aurait inventé un titre que le document ne porte pas.</i>"
+  },
+  "# Élaboration du produitcorrespond à # Réalisation": {
+   "en": "# Product developmentmatches # Realization",
+   "fr": "8 Élaboration du produitcorrespond à 8 Réalisation",
+   "html": "<code>8 Élaboration du produit</code><i>correspond à 8 Réalisation</i>"
+  },
+  "# Évaluation des performancescorrespond à # Évaluation des performances": {
+   "en": "# Performance evaluationmatches # Performance evaluation",
+   "fr": "10 Évaluation des performancescorrespond à 9 Évaluation des performances",
+   "html": "<code>10 Évaluation des performances</code><i>correspond à 9 Évaluation des performances</i>"
+  },
+  "# à # Système de management de la qualitécorrespond à # Contexte de l'organisme (# à #)": {
+   "en": "# to # Quality management systemmatches # Context of the organization (# to #)",
+   "fr": "4.1 à 4.3 Système de management de la qualitécorrespond à 4 Contexte de l'organisme (4.1 à 4.4)",
+   "html": "<code>4.1 à 4.3 Système de management de la qualité</code><i>correspond à 4 Contexte de l'organisme (4.1 à 4.4)</i>"
+  },
+  "Annexe B, tableau B.# La ligne de prEN #-# est intitulée « Crédibilité Partie # » — le même libellé que la ligne précédente, qui est bien la partie #. La partie est rétablie d'après la référence elle-même (prEN #-#) et d'après l'article visé (#). Le libellé d'origine est rappelé à l'écran.": {
+   "en": "Annex B, Table B.# The prEN #-# row is labelled “Trustworthiness Part #” — the same label as the row before it, which really is part #. The part is restored from the reference itself (prEN #-#) and from the Article it addresses (#). The original label is recalled on screen.",
+   "fr": "Annexe B, tableau B.1 La ligne de prEN 18229-2 est intitulée « Crédibilité Partie 1 » — le même libellé que la ligne précédente, qui est bien la partie 1. La partie est rétablie d'après la référence elle-même (prEN 18229-2) et d'après l'article visé (15). Le libellé d'origine est rappelé à l'écran.",
+   "html": "<code>Annexe B, tableau B.1</code> La ligne de prEN 18229-2 est intitulée « Crédibilité Partie 1 » — le même libellé que la ligne précédente, qui est bien la partie 1. <i>La partie est rétablie d'après la référence elle-même (prEN 18229-2) et d'après l'article visé (15). Le libellé d'origine est rappelé à l'écran.</i>"
+  },
+  "Annexe B, tableau B.# Le tableau ne liste PAS prEN #-# (supervision humaine). Il range les articles # à # sous prEN #-#. Le module ne l'ajoute pas au tableau : il le signale comme une norme de la famille que ce site traite déjà, en disant que le rattachement vient du site et non de l'annexe B.": {
+   "en": "Annex B, Table B.# The table does NOT list prEN #-# (human oversight). It files Articles # to # under prEN #-#. This module does not add it to the table: it flags it as a standard of the family this site already covers, and says the attribution comes from the site and not from Annex B.",
+   "fr": "Annexe B, tableau B.1 Le tableau ne liste PAS prEN 18229-3 (supervision humaine). Il range les articles 12 à 14 sous prEN 18229-1. Le module ne l'ajoute pas au tableau : il le signale comme une norme de la famille que ce site traite déjà, en disant que le rattachement vient du site et non de l'annexe B.",
+   "html": "<code>Annexe B, tableau B.1</code> Le tableau ne liste PAS prEN 18229-3 (supervision humaine). Il range les articles 12 à 14 sous prEN 18229-1. <i>Le module ne l'ajoute pas au tableau : il le signale comme une norme de la famille que ce site traite déjà, en disant que le rattachement vient du site et non de l'annexe B.</i>"
+  },
+  "Article #(#) — première phraseLa documentation technique, établie avant la mise sur le marché et tenue à jour.": {
+   "en": "Article #(#) — first sentenceThe technical documentation, drawn up before placing on the market and kept up to date.",
+   "fr": "Article 11(1) — première phraseLa documentation technique, établie avant la mise sur le marché et tenue à jour.",
+   "html": "<code>Article 11(1) — première phrase</code><i>La documentation technique, établie avant la mise sur le marché et tenue à jour.</i>"
+  },
+  "Article #(#)(a)La stratégie de respect de la réglementation, y compris pour les modifications.": {
+   "en": "Article #(#)(a)The strategy for regulatory compliance, including for modifications.",
+   "fr": "Article 17(1)(a)La stratégie de respect de la réglementation, y compris pour les modifications.",
+   "html": "<code>Article 17(1)(a)</code><i>La stratégie de respect de la réglementation, y compris pour les modifications.</i>"
+  },
+  "Article #(#)(b)Les techniques et procédures de conception et de contrôle de la conception.": {
+   "en": "Article #(#)(b)The techniques and procedures for design and design control.",
+   "fr": "Article 17(1)(b)Les techniques et procédures de conception et de contrôle de la conception.",
+   "html": "<code>Article 17(1)(b)</code><i>Les techniques et procédures de conception et de contrôle de la conception.</i>"
+  },
+  "Article #(#)(c)Les techniques et procédures de développement, de contrôle et d'assurance qualité.": {
+   "en": "Article #(#)(c)The techniques and procedures for development, quality control and quality assurance.",
+   "fr": "Article 17(1)(c)Les techniques et procédures de développement, de contrôle et d'assurance qualité.",
+   "html": "<code>Article 17(1)(c)</code><i>Les techniques et procédures de développement, de contrôle et d'assurance qualité.</i>"
+  },
+  "Article #(#)(d)Les procédures d'examen, d'essai et de validation.": {
+   "en": "Article #(#)(d)The examination, test and validation procedures.",
+   "fr": "Article 17(1)(d)Les procédures d'examen, d'essai et de validation.",
+   "html": "<code>Article 17(1)(d)</code><i>Les procédures d'examen, d'essai et de validation.</i>"
+  },
+  "Article #(#)(e)Les spécifications techniques, dont les normes appliquées — et, quand elles ne le sont pas entièrement, les moyens employés.": {
+   "en": "Article #(#)(e)The technical specifications, including the standards applied — and, where they are not applied in full, the means used.",
+   "fr": "Article 17(1)(e)Les spécifications techniques, dont les normes appliquées — et, quand elles ne le sont pas entièrement, les moyens employés.",
+   "html": "<code>Article 17(1)(e)</code><i>Les spécifications techniques, dont les normes appliquées — et, quand elles ne le sont pas entièrement, les moyens employés.</i>"
+  },
+  "Article #(#)(f)Les systèmes et procédures de gestion des données.": {
+   "en": "Article #(#)(f)The systems and procedures for data management.",
+   "fr": "Article 17(1)(f)Les systèmes et procédures de gestion des données.",
+   "html": "<code>Article 17(1)(f)</code><i>Les systèmes et procédures de gestion des données.</i>"
+  },
+  "Article #(#)(h)Le système de surveillance après commercialisation.": {
+   "en": "Article #(#)(h)The post-market monitoring system.",
+   "fr": "Article 17(1)(h)Le système de surveillance après commercialisation.",
+   "html": "<code>Article 17(1)(h)</code><i>Le système de surveillance après commercialisation.</i>"
+  },
+  "Article #(#)(i)Les procédures de signalement d'un incident grave.": {
+   "en": "Article #(#)(i)The procedures for reporting a serious incident.",
+   "fr": "Article 17(1)(i)Les procédures de signalement d'un incident grave.",
+   "html": "<code>Article 17(1)(i)</code><i>Les procédures de signalement d'un incident grave.</i>"
+  },
+  "Article #(#)(j)La communication avec les autorités, les organismes notifiés, les autres opérateurs, les clients et les parties intéressées.": {
+   "en": "Article #(#)(j)Communication with authorities, notified bodies, other operators, customers and interested parties.",
+   "fr": "Article 17(1)(j)La communication avec les autorités, les organismes notifiés, les autres opérateurs, les clients et les parties intéressées.",
+   "html": "<code>Article 17(1)(j)</code><i>La communication avec les autorités, les organismes notifiés, les autres opérateurs, les clients et les parties intéressées.</i>"
+  },
+  "Article #(#)(k)Les systèmes et procédures d'archivage de la documentation et des informations.": {
+   "en": "Article #(#)(k)The systems and procedures for record-keeping of documentation and information.",
+   "fr": "Article 17(1)(k)Les systèmes et procédures d'archivage de la documentation et des informations.",
+   "html": "<code>Article 17(1)(k)</code><i>Les systèmes et procédures d'archivage de la documentation et des informations.</i>"
+  },
+  "Article #(#)(l)La gestion des ressources, y compris la sécurité de l'approvisionnement.": {
+   "en": "Article #(#)(l)Resource management, including security-of-supply measures.",
+   "fr": "Article 17(1)(l)La gestion des ressources, y compris la sécurité de l'approvisionnement.",
+   "html": "<code>Article 17(1)(l)</code><i>La gestion des ressources, y compris la sécurité de l'approvisionnement.</i>"
+  },
+  "Article #(#)(m)Le cadre de responsabilité de la direction et du personnel.": {
+   "en": "Article #(#)(m)The accountability framework for management and staff.",
+   "fr": "Article 17(1)(m)Le cadre de responsabilité de la direction et du personnel.",
+   "html": "<code>Article 17(1)(m)</code><i>Le cadre de responsabilité de la direction et du personnel.</i>"
+  },
+  "Article #La surveillance après commercialisation par les fournisseurs, et le plan qui l'accompagne.": {
+   "en": "Article #Post-market monitoring by providers, and the plan that goes with it.",
+   "fr": "Article 72La surveillance après commercialisation par les fournisseurs, et le plan qui l'accompagne.",
+   "html": "<code>Article 72</code><i>La surveillance après commercialisation par les fournisseurs, et le plan qui l'accompagne.</i>"
+  },
+  "Bloc # sur # · Processus — stratégie §# — À remplir maintenant": {
+   "en": "Block # of # · Process — §# strategy — Fill this in now",
+   "fr": "Bloc 1 sur 4 · Processus — stratégie §4.4 — À remplir maintenant",
+   "html": "<b>Bloc 1 sur 4 · Processus — stratégie §4.4 — À remplir maintenant</b>"
+  },
+  "Bloc # sur # · Questionnaire — chap. # à # — Verrouillé": {
+   "en": "Block # of # · Questionnaire — clauses # to # — Locked",
+   "fr": "Bloc 2 sur 4 · Questionnaire — chap. 4 à 10 — Verrouillé",
+   "html": "<b>Bloc 2 sur 4 · Questionnaire — chap. 4 à 10 — Verrouillé</b>"
+  },
+  "Ce qu’il faut en retenir. # ligne(s) de l’annexe ZA — Article #(#) — ne sont couvertes par AUCUN paragraphe de cette norme. Cent pour cent ici ne veut donc pas dire article # tenu.": {
+   "en": "What to take from this. # row(s) of Annex ZA — Article #(#) — are covered by NO clause of this standard. One hundred per cent here therefore does not mean Article # is met.",
+   "fr": "Ce qu’il faut en retenir. 1 ligne(s) de l’annexe ZA — Article 17(2) — ne sont couvertes par AUCUN paragraphe de cette norme. Cent pour cent ici ne veut donc pas dire article 17 tenu.",
+   "html": "<b>Ce qu’il faut en retenir.</b> 1 ligne(s) de l’annexe ZA — Article 17(2) — ne sont couvertes par AUCUN paragraphe de cette norme. Cent pour cent ici ne veut donc pas dire article 17 tenu."
+  },
+  "Direction, planification, support# %": {
+   "en": "Leadership, planning, support# %",
+   "fr": "Direction, planification, support0 %",
+   "html": "<span>Direction, planification, support</span><b>0 %</b>"
+  },
+  "Exploitation et contrôle# %": {
+   "en": "Operation and control# %",
+   "fr": "Exploitation et contrôle0 %",
+   "html": "<span>Exploitation et contrôle</span><b>0 %</b>"
+  },
+  "ISO #:# Systèmes de management de la qualité — Exigences# / # lignes en correspondance": {
+   "en": "ISO #:# Quality management systems — Requirements# / # rows matched",
+   "fr": "ISO 9001:2015 Systèmes de management de la qualité — Exigences11 / 13 lignes en correspondance",
+   "html": "<code>ISO 9001:2015</code> <b>Systèmes de management de la qualité — Exigences</b><em>11 / 13 lignes en correspondance</em>"
+  },
+  "ISO/IEC #:# Système de management de l'intelligence artificielle# / # lignes en correspondance": {
+   "en": "ISO/IEC #:# Artificial intelligence management system# / # rows matched",
+   "fr": "ISO/IEC 42001:2023 Système de management de l'intelligence artificielle9 / 11 lignes en correspondance",
+   "html": "<code>ISO/IEC 42001:2023</code> <b>Système de management de l'intelligence artificielle</b><em>9 / 11 lignes en correspondance</em>"
+  },
+  "Les deux tables de correspondance de la norme se lisent à l’envers : ce qui compte, ce sont les lignes en face du vide — # Stratégie de conformité réglementaire et # Exploitation et contrôle. C’est exactement ce que le règlement ajoute.": {
+   "en": "The standard’s two correspondence tables read backwards: what counts is the rows facing the void — # Regulatory compliance strategy and # Operation and control. That is exactly what the Regulation adds.",
+   "fr": "Les deux tables de correspondance de la norme se lisent à l’envers : ce qui compte, ce sont les lignes en face du vide — 4.4 Stratégie de conformité réglementaire et 9 Exploitation et contrôle. C’est exactement ce que le règlement ajoute.",
+   "html": "Les deux tables de correspondance de la norme se lisent à l’envers : ce qui compte, ce sont les lignes en face du vide — <b>4.4 Stratégie de conformité réglementaire</b> et <b>9 Exploitation et contrôle</b>. C’est exactement ce que le règlement ajoute."
+  },
+  "Non couvert par cette norme": {
+   "en": "Not covered by this standard",
+   "fr": "Non couvert par cette norme",
+   "html": "<i>Non couvert par cette norme</i>"
+  },
+  "Stratégie et documentation# %": {
+   "en": "Strategy and documentation# %",
+   "fr": "Stratégie et documentation0 %",
+   "html": "<span>Stratégie et documentation</span><b>0 %</b>"
+  },
+  "aucun": {
+   "en": "none",
+   "fr": "aucun",
+   "html": "<i>aucun</i>"
+  },
+  "prEN # Cybersécurité Article #": {
+   "en": "prEN # Cybersecurity Article #",
+   "fr": "prEN 18282 Cybersécurité Article 15",
+   "html": "<code>prEN 18282</code> <b>Cybersécurité</b> <em>Article 15</em>"
+  },
+  "prEN # Gestion des risques Article #": {
+   "en": "prEN # Risk management Article #",
+   "fr": "prEN 18228 Gestion des risques Article 9",
+   "html": "<code>prEN 18228</code> <b>Gestion des risques</b> <em>Article 9</em>"
+  },
+  "prEN # Qualité des données Article #": {
+   "en": "prEN # Data quality Article #",
+   "fr": "prEN 18284 Qualité des données Article 10",
+   "html": "<code>prEN 18284</code> <b>Qualité des données</b> <em>Article 10</em>"
+  },
+  "prEN #-# Crédibilité — partie # Article #": {
+   "en": "prEN #-# Trustworthiness — part # Article #",
+   "fr": "prEN 18229-2 Crédibilité — partie 2 Article 15",
+   "html": "<code>prEN 18229-2</code> <b>Crédibilité — partie 2</b> <em>Article 15</em>"
+  },
+  "prEN #-# Crédibilité — partie # Articles # à #": {
+   "en": "prEN #-# Trustworthiness — part # Articles # to #",
+   "fr": "prEN 18229-1 Crédibilité — partie 1 Articles 12 à 14",
+   "html": "<code>prEN 18229-1</code> <b>Crédibilité — partie 1</b> <em>Articles 12 à 14</em>"
+  },
+  "prEN #-# Supervision humaine Article #": {
+   "en": "prEN #-# Human oversight Article #",
+   "fr": "prEN 18229-3 Supervision humaine Article 14",
+   "html": "<code>prEN 18229-3</code> <b>Supervision humaine</b> <em>Article 14</em>"
+  },
+  "À faire : L'annoncer pour ce qu'il est : une couverture volontaire, utile en appui d'une démarche #.": {
+   "en": "To do: Present it for what it is — voluntary coverage, useful in support of a # programme.",
+   "fr": "À faire : L'annoncer pour ce qu'il est : une couverture volontaire, utile en appui d'une démarche 42001.",
+   "html": "<b>À faire :</b> L'annoncer pour ce qu'il est : une couverture volontaire, utile en appui d'une démarche 42001."
+  },
+  "À faire : Les traiter comme des risques techniques, hors du plan de certification.": {
+   "en": "To do: Treat them as technical risks, outside the certification plan.",
+   "fr": "À faire : Les traiter comme des risques techniques, hors du plan de certification.",
+   "html": "<b>À faire :</b> Les traiter comme des risques techniques, hors du plan de certification."
+  },
+  "Élaboration du produit# %": {
+   "en": "Product development# %",
+   "fr": "Élaboration du produit0 %",
+   "html": "<span>Élaboration du produit</span><b>0 %</b>"
+  },
+  "Évaluation des performances# %": {
+   "en": "Performance evaluation# %",
+   "fr": "Évaluation des performances0 %",
+   "html": "<span>Évaluation des performances</span><b>0 %</b>"
+  }
+ },
+ "texte": {
+  "# % sur le NIST AI RMF n'est pas une conformité.": {
+   "en": "# % on the NIST AI RMF is not compliance.",
+   "fr": "100 % sur le NIST AI RMF n'est pas une conformité."
+  },
+  "# Actions de traitement des risques": {
+   "en": "# Risk treatment actions",
+   "fr": "8.1 Actions de traitement des risques"
+  },
+  "# Actions pour traiter les risques liés au fonctionnement du système de management": {
+   "en": "# Actions to address risks related to the operation of the management system",
+   "fr": "6.1 Actions pour traiter les risques liés au fonctionnement du système de management"
+  },
+  "# Amélioration": {
+   "en": "# Improvement",
+   "fr": "10.3 Amélioration"
+  },
+  "# Changements apportés au domaine d'application": {
+   "en": "# Changes to the scope",
+   "fr": "10.4.2 Changements apportés au domaine d'application"
+  },
+  "# Changements apportés au processus": {
+   "en": "# Changes to the process",
+   "fr": "10.4.3 Changements apportés au processus"
+  },
+  "# Changements — planification": {
+   "en": "# Changes — planning",
+   "fr": "9.3.1 Changements — planification"
+  },
+  "# Chaîne d'approvisionnement — généralités": {
+   "en": "# Supply chain — general",
+   "fr": "9.2.1 Chaîne d'approvisionnement — généralités"
+  },
+  "# Compétences": {
+   "en": "# Competence",
+   "fr": "7.2 Compétences"
+  },
+  "# Contrôles de la conception et du développement": {
+   "en": "# Design and development controls",
+   "fr": "8.3.2.4 Contrôles de la conception et du développement"
+  },
+  "# Déploiement": {
+   "en": "# Deployment",
+   "fr": "9.1.1 Déploiement"
+  },
+  "# Détermination des étapes du cycle de vie": {
+   "en": "# Determining the life-cycle stages",
+   "fr": "8.2 Détermination des étapes du cycle de vie"
+  },
+  "# Détermination du domaine d'application du système de management de la qualité": {
+   "en": "# Determining the scope of the quality management system",
+   "fr": "4.3 Détermination du domaine d'application du système de management de la qualité"
+  },
+  "# Exigences et spécifications": {
+   "en": "# Requirements and specifications",
+   "fr": "9.2.4 Exigences et spécifications"
+  },
+  "# Exigences relatives au système d'IA": {
+   "en": "# Requirements for the AI system",
+   "fr": "8.3.2.1 Exigences relatives au système d'IA"
+  },
+  "# Exploitation et surveillance": {
+   "en": "# Operation and monitoring",
+   "fr": "9.1.2 Exploitation et surveillance"
+  },
+  "# Généralités": {
+   "en": "# General",
+   "fr": "4.1 Généralités"
+  },
+  "# Identifier les exigences réglementaires applicables": {
+   "en": "# Identifying the applicable regulatory requirements",
+   "fr": "4.2 Identifier les exigences réglementaires applicables"
+  },
+  "# Initialisation": {
+   "en": "# Initiation",
+   "fr": "8.3.1 Initialisation"
+  },
+  "# Objectifs qualité": {
+   "en": "# Quality objectives",
+   "fr": "6.2.1 Objectifs qualité"
+  },
+  "# Passage en revue des exigences relatives au système d'IA": {
+   "en": "# Review of the requirements for the AI system",
+   "fr": "8.3.2.2 Passage en revue des exigences relatives au système d'IA"
+  },
+  "# Planification de la réalisation des objectifs qualité": {
+   "en": "# Planning to achieve the quality objectives",
+   "fr": "6.2.2 Planification de la réalisation des objectifs qualité"
+  },
+  "# Planification des changements — généralités": {
+   "en": "# Planning of changes — general",
+   "fr": "10.4.1 Planification des changements — généralités"
+  },
+  "# Ressources": {
+   "en": "# Resources",
+   "fr": "7.1 Ressources"
+  },
+  "# Revue — généralités": {
+   "en": "# Review — general",
+   "fr": "10.2.1 Revue — généralités"
+  },
+  "# Rôles, responsabilité et autorités": {
+   "en": "# Roles, responsibility and authorities",
+   "fr": "5.3 Rôles, responsabilité et autorités"
+  },
+  "# Surveillance et ré-évaluation": {
+   "en": "# Monitoring and reassessment",
+   "fr": "9.2.3 Surveillance et ré-évaluation"
+  },
+  "# Vérification du système d'IA": {
+   "en": "# Verification of the AI system",
+   "fr": "8.4.1 Vérification du système d'IA"
+  },
+  "# et #": {
+   "en": "# and #",
+   "fr": "4.4.2 et 4.4.3"
+  },
+  "# normes de natures différentes ne s'additionnent pas. Une moyenne entre une obligation légale, une norme certifiable et un cadre volontaire produit un nombre qu'aucun auditeur, aucune autorité et aucun assureur ne reconnaîtra.": {
+   "en": "# standards of different natures do not add up. An average of a legal obligation, a certifiable standard and a voluntary framework produces a figure no auditor, no authority and no insurer will recognise.",
+   "fr": "13 normes de natures différentes ne s'additionnent pas. Une moyenne entre une obligation légale, une norme certifiable et un cadre volontaire produit un nombre qu'aucun auditeur, aucune autorité et aucun assureur ne reconnaîtra."
+  },
+  "# Éléments d'entrée de la revue de direction": {
+   "en": "# Management review inputs",
+   "fr": "10.2.2 Éléments d'entrée de la revue de direction"
+  },
+  "# Éléments de sortie de la revue": {
+   "en": "# Review outputs",
+   "fr": "10.2.3 Éléments de sortie de la revue"
+  },
+  "# Établissement de la politique qualité": {
+   "en": "# Establishing the quality policy",
+   "fr": "5.2.1 Établissement de la politique qualité"
+  },
+  "# Étendue du contrôle": {
+   "en": "# Extent of control",
+   "fr": "9.2.5 Étendue du contrôle"
+  },
+  "# Évaluation et sélection": {
+   "en": "# Evaluation and selection",
+   "fr": "9.2.2 Évaluation et sélection"
+  },
+  "ABSENTE du tableau B.#, qui range les articles # à # sous prEN #-#. Elle figure ici parce que ce site la traite déjà — le rattachement vient du site, pas de l'annexe B.": {
+   "en": "ABSENT from Table B.#, which files Articles # to # under prEN #-#. It appears here because this site already covers it — the attribution comes from the site, not from Annex B.",
+   "fr": "ABSENTE du tableau B.1, qui range les articles 12 à 14 sous prEN 18229-1. Elle figure ici parce que ce site la traite déjà — le rattachement vient du site, pas de l'annexe B."
+  },
+  "Article du règlement": {
+   "en": "Article of the Regulation",
+   "fr": "Article du règlement"
+  },
+  "Aucun point : lever une réserve ne déplace pas le taux, elle en fixe le sens.": {
+   "en": "No points: lifting a caveat does not move the rate, it settles what the rate means.",
+   "fr": "Aucun point : lever une réserve ne déplace pas le taux, elle en fixe le sens."
+  },
+  "Aucun verrou. Le taux monte en refermant les écarts.": {
+   "en": "No blocker. The rate rises as the gaps close.",
+   "fr": "Aucun verrou. Le taux monte en refermant les écarts."
+  },
+  "Bloc # sur # · Analyse — ponts et famille — Verrouillé": {
+   "en": "Block # of # · Analysis — bridges and family — Locked",
+   "fr": "Bloc 4 sur 4 · Analyse — ponts et famille — Verrouillé"
+  },
+  "Bloc # sur # · Conformité — annexe ZA — Verrouillé": {
+   "en": "Block # of # · Compliance — Annex ZA — Locked",
+   "fr": "Bloc 3 sur 4 · Conformité — annexe ZA — Verrouillé"
+  },
+  "Bénéfices et coûts attendus": {
+   "en": "Expected benefits and costs",
+   "fr": "Bénéfices et coûts attendus"
+  },
+  "Cadre pour la crédibilité des systèmes d'IA": {
+   "en": "Framework for the trustworthiness of AI systems",
+   "fr": "Cadre pour la crédibilité des systèmes d'IA"
+  },
+  "Cadre pour la crédibilité des systèmes d'IA — partie #": {
+   "en": "Framework for the trustworthiness of AI systems — part #",
+   "fr": "Cadre pour la crédibilité des systèmes d'IA — partie 3"
+  },
+  "Cadre volontaire · couverture du cadre": {
+   "en": "Voluntary framework · framework coverage",
+   "fr": "Cadre volontaire · couverture du cadre"
+  },
+  "Ce bloc dépend de : Processus — stratégie §#. Complétez-le d'abord.": {
+   "en": "This block depends on: Process — §# strategy. Complete it first.",
+   "fr": "Ce bloc dépend de : Processus — stratégie §4.4. Complétez-le d'abord."
+  },
+  "Ce bloc dépend de : Questionnaire — chap. # à #. Complétez-le d'abord.": {
+   "en": "This block depends on: Questionnaire — clauses # to #. Complete it first.",
+   "fr": "Ce bloc dépend de : Questionnaire — chap. 4 à 10. Complétez-le d'abord."
+  },
+  "Ce cadre n'est pas certifiable : aucun organisme ne délivre d'attestation contre lui. Le taux mesure la couverture que vous déclarez, et rien de plus — l'annoncer comme une conformité serait une faute devant un client comme devant un assureur.": {
+   "en": "This framework is not certifiable: no body issues an attestation against it. The rate measures the coverage you declare, and nothing more — presenting it as compliance would be a fault before a client as before an insurer.",
+   "fr": "Ce cadre n'est pas certifiable : aucun organisme ne délivre d'attestation contre lui. Le taux mesure la couverture que vous déclarez, et rien de plus — l'annoncer comme une conformité serait une faute devant un client comme devant un assureur."
+  },
+  "Ce n'est pas une dispense : la qualification se revoit. Un déployeur qui modifie substantiellement un système, ou qui y appose son nom, DEVIENT fournisseur au sens du règlement.": {
+   "en": "This is not a dispensation: the classification is revisited. A deployer who substantially modifies a system, or puts their name on it, BECOMES a provider within the meaning of the Regulation.",
+   "fr": "Ce n'est pas une dispense : la qualification se revoit. Un déployeur qui modifie substantiellement un système, ou qui y appose son nom, DEVIENT fournisseur au sens du règlement."
+  },
+  "Ce projet de norme n'est pas encore cité au Journal officiel de l'Union européenne au titre du Règlement (UE) #/# : le tenir n'ouvre aucune présomption de conformité à l'article #.": {
+   "en": "This draft standard is not yet cited in the Official Journal of the European Union under Regulation (EU) #/#: meeting it opens no presumption of conformity with Article #.",
+   "fr": "Ce projet de norme n'est pas encore cité au Journal officiel de l'Union européenne au titre du Règlement (UE) 2024/1689 : le tenir n'ouvre aucune présomption de conformité à l'article 17."
+  },
+  "Ce projet de norme n'est pas encore cité au Journal officiel de l'Union européenne au titre du Règlement (UE) #/# : le tenir n'ouvre aucune présomption de conformité à l'article #. Le jour où la référence sera citée, le même travail vaudra présomption — dans les limites du tableau ZA.#, et sans l'article #(#) que la norme déclare elle-même non couvert.": {
+   "en": "This draft standard is not yet cited in the Official Journal of the European Union under Regulation (EU) #/#: meeting it opens no presumption of conformity with Article #. The day the reference is cited, the same work will carry presumption — within the limits of Table ZA.#, and without Article #(#), which the standard itself declares not covered.",
+   "fr": "Ce projet de norme n'est pas encore cité au Journal officiel de l'Union européenne au titre du Règlement (UE) 2024/1689 : le tenir n'ouvre aucune présomption de conformité à l'article 17. Le jour où la référence sera citée, le même travail vaudra présomption — dans les limites du tableau ZA.1, et sans l'article 17(2) que la norme déclare elle-même non couvert."
+  },
+  "Ce que le document se contredit à lui-même, et qui est dit plutôt que masqué.": {
+   "en": "Where the document contradicts itself — said rather than hidden.",
+   "fr": "Ce que le document se contredit à lui-même, et qui est dit plutôt que masqué."
+  },
+  "Ce que votre certificat ne vous donne pas": {
+   "en": "What your certificate does not give you",
+   "fr": "Ce que votre certificat ne vous donne pas"
+  },
+  "Ce site la traite déjà.": {
+   "en": "This site already covers it.",
+   "fr": "Ce site la traite déjà."
+  },
+  "Cent pour cent ici ne veut pas dire article # tenu : c'est la norme qui annonce sa propre limite. Lever cette réserve ne change aucun point : elle décide de ce que les points veulent dire.": {
+   "en": "One hundred per cent here does not mean Article # is met: it is the standard that announces its own limit. Lifting this caveat changes no points: it decides what the points mean.",
+   "fr": "Cent pour cent ici ne veut pas dire article 17 tenu : c'est la norme qui annonce sa propre limite. Lever cette réserve ne change aucun point : elle décide de ce que les points veulent dire."
+  },
+  "Ces risques-là ne se referment par aucun travail de certification : ils se traitent dans l'architecture et l'exploitation. Une organisation certifiée # les garde entiers.": {
+   "en": "Those risks close through no certification work at all: they are dealt with in architecture and operations. An organisation certified to # keeps them whole.",
+   "fr": "Ces risques-là ne se referment par aucun travail de certification : ils se traitent dans l'architecture et l'exploitation. Une organisation certifiée 42001 les garde entiers."
+  },
+  "Compétences et diversité des équipes": {
+   "en": "Team skills and diversity",
+   "fr": "Compétences et diversité des équipes"
+  },
+  "Couvert dans la mesure où les obligations sont couvertes par l'article #.": {
+   "en": "Covered in so far as the obligations are covered by Article #.",
+   "fr": "Couvert dans la mesure où les obligations sont couvertes par l'article 17."
+  },
+  "Culture du risque": {
+   "en": "Risk culture",
+   "fr": "Culture du risque"
+  },
+  "DORA": {
+   "en": "DORA",
+   "fr": "DORA"
+  },
+  "De la destination à la documentation technique : ce que l'évaluation de conformité examine.": {
+   "en": "From intended purpose to technical documentation: what the conformity assessment examines.",
+   "fr": "De la destination à la documentation technique : ce que l'évaluation de conformité examine."
+  },
+  "Effets sur les personnes et la société": {
+   "en": "Effects on people and society",
+   "fr": "Effets sur les personnes et la société"
+  },
+  "Engagement des parties prenantes": {
+   "en": "Stakeholder engagement",
+   "fr": "Engagement des parties prenantes"
+  },
+  "Exigences relatives au système de gestion des risques": {
+   "en": "Requirements for the risk management system",
+   "fr": "Exigences relatives au système de gestion des risques"
+  },
+  "GOVERN #": {
+   "en": "GOVERN 1",
+   "fr": "GOVERN 1"
+  },
+  "IA Act": {
+   "en": "AI Act",
+   "fr": "IA Act"
+  },
+  "Je ne le suis pas": {
+   "en": "I am not",
+   "fr": "Je ne le suis pas"
+  },
+  "Je suis fournisseur": {
+   "en": "I am a provider",
+   "fr": "Je suis fournisseur"
+  },
+  "L'annexe ZA de cette norme déclare l'article #(#) NON COUVERT — les fournisseurs soumis à la législation de l'Union sur les services financiers.": {
+   "en": "Annex ZA of this standard declares Article #(#) NOT COVERED — providers subject to Union financial services law.",
+   "fr": "L'annexe ZA de cette norme déclare l'article 17(2) NON COUVERT — les fournisseurs soumis à la législation de l'Union sur les services financiers."
+  },
+  "L'obligation même de tenir un système de management de la qualité.": {
+   "en": "The obligation to operate a quality management system in the first place.",
+   "fr": "L'obligation même de tenir un système de management de la qualité."
+  },
+  "LLM#, LLM#, LLM# ne rencontrent aucune mesure de l'annexe A #.": {
+   "en": "LLM#, LLM#, LLM# meet no control of Annex A of #.",
+   "fr": "LLM05, LLM07, LLM10 ne rencontrent aucune mesure de l'annexe A 42001."
+  },
+  "La famille des normes harmonisées": {
+   "en": "The family of harmonised standards",
+   "fr": "La famille des normes harmonisées"
+  },
+  "La qualification n’est pas faite : commencez par l’écran « Processus ».": {
+   "en": "The classification has not been made: start with the “Process” screen.",
+   "fr": "La qualification n’est pas faite : commencez par l’écran « Processus »."
+  },
+  "La revue de direction ne produit rien par elle-même : elle décide de ce que le reste produit.": {
+   "en": "The management review produces nothing by itself: it decides what everything else produces.",
+   "fr": "La revue de direction ne produit rien par elle-même : elle décide de ce que le reste produit."
+  },
+  "Le contexte est établi": {
+   "en": "The context is established",
+   "fr": "Le contexte est établi"
+  },
+  "Le socle : le cadre lui-même place cette fonction au-dessus des trois autres.": {
+   "en": "The foundation: the framework itself places this function above the other three.",
+   "fr": "Le socle : le cadre lui-même place cette fonction au-dessus des trois autres."
+  },
+  "Le socle de management, celui qu'un SMQ déjà certifié apporte le plus souvent tel quel.": {
+   "en": "The management foundation — the part an already-certified QMS most often brings as it stands.",
+   "fr": "Le socle de management, celui qu'un SMQ déjà certifié apporte le plus souvent tel quel."
+  },
+  "Le système de gestion des risques de l'article #.": {
+   "en": "The risk management system of Article #.",
+   "fr": "Le système de gestion des risques de l'article 9."
+  },
+  "Le système est catégorisé": {
+   "en": "The system is categorised",
+   "fr": "Le système est catégorisé"
+  },
+  "Le système est-il à HAUT RISQUE au sens de l'annexe III ou de l'article # ? C'est cette qualification qui déclenche l'article #.": {
+   "en": "Is the system HIGH-RISK within the meaning of Annex III or of Article #? That classification is what triggers Article #.",
+   "fr": "Le système est-il à HAUT RISQUE au sens de l'annexe III ou de l'article 6 ? C'est cette qualification qui déclenche l'article 17."
+  },
+  "Le tableau B.# intitule cette ligne « Crédibilité Partie # », comme la précédente. La partie est rétablie d'après la référence et l'article visé.": {
+   "en": "Table B.# labels this row “Trustworthiness Part #”, like the one before. The part is restored from the reference and from the Article addressed.",
+   "fr": "Le tableau B.1 intitule cette ligne « Crédibilité Partie 1 », comme la précédente. La partie est rétablie d'après la référence et l'article visé."
+  },
+  "Le taux dit ce que le système de management déclaré couvre du tableau ZA.#. Il ne dit ni qu'un organisme notifié l'a vu, ni que la norme est citée. Lever cette réserve ne change aucun point : elle décide de ce que les points veulent dire.": {
+   "en": "The rate says what the declared management system covers of Table ZA.#. It says neither that a notified body has seen it, nor that the standard is cited. Lifting this caveat changes no points: it decides what the points mean.",
+   "fr": "Le taux dit ce que le système de management déclaré couvre du tableau ZA.1. Il ne dit ni qu'un organisme notifié l'a vu, ni que la norme est citée. Lever cette réserve ne change aucun point : elle décide de ce que les points veulent dire."
+  },
+  "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : ce projet de norme n'est pas encore cité au Journal officiel de l'Union européenne : il n'ouvre aucune présomption de conformité à l'article #. Le jour venu, c'est l'organisme notifié de l'évaluation de conformité qui l'appréciera.": {
+   "en": "Green on this path says what a block asks for is filled in. It does not say you are compliant: this draft standard is not yet cited in the Official Journal of the European Union, so it opens no presumption of conformity with Article #. When the day comes, it is the notified body for the conformity assessment that will judge.",
+   "fr": "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : ce projet de norme n'est pas encore cité au Journal officiel de l'Union européenne : il n'ouvre aucune présomption de conformité à l'article 17. Le jour venu, c'est l'organisme notifié de l'évaluation de conformité qui l'appréciera."
+  },
+  "Le §# est la pièce propre au règlement, et celle que l'organisme notifié ouvre en premier.": {
+   "en": "§# is the piece specific to the Regulation, and the one the notified body opens first.",
+   "fr": "Le §4.4 est la pièce propre au règlement, et celle que l'organisme notifié ouvre en premier."
+  },
+  "Les fournisseurs soumis à la législation de l'Union sur les services financiers, dont les obligations de gouvernance interne valent exécution de l'article #.": {
+   "en": "Providers subject to Union financial services law, whose internal governance obligations count as fulfilling Article #.",
+   "fr": "Les fournisseurs soumis à la législation de l'Union sur les services financiers, dont les obligations de gouvernance interne valent exécution de l'article 17."
+  },
+  "Les taux mesurent le travail déclaré, jamais un jugement de conformité. Sur une obligation, c'est une autorité qui tranche ; sur une norme certifiable, un organisme accrédité ; sur un cadre volontaire, personne.": {
+   "en": "The rates measure declared work, never a judgment of compliance. On an obligation, an authority decides; on a certifiable standard, an accredited body; on a voluntary framework, nobody.",
+   "fr": "Les taux mesurent le travail déclaré, jamais un jugement de conformité. Sur une obligation, c'est une autorité qui tranche ; sur une norme certifiable, un organisme accrédité ; sur un cadre volontaire, personne."
+  },
+  "Liste de risques · risques traités": {
+   "en": "Risk list · risks addressed",
+   "fr": "Liste de risques · risques traités"
+  },
+  "MANAGE #": {
+   "en": "MANAGE 1",
+   "fr": "MANAGE 1"
+  },
+  "MAP #": {
+   "en": "MAP #",
+   "fr": "MAP 1"
+  },
+  "MEASURE #": {
+   "en": "MEASURE 1",
+   "fr": "MEASURE 1"
+  },
+  "Mesure : l'appréciation du risque, les articles et la déclaration d'applicabilité": {
+   "en": "Measures: the risk assessment, the clauses and the statement of applicability",
+   "fr": "Mesure : l'appréciation du risque, les articles et la déclaration d'applicabilité"
+  },
+  "Mesure : la complétude du dispositif documentaire": {
+   "en": "Measures: the completeness of the documentation set",
+   "fr": "Mesure : la complétude du dispositif documentaire"
+  },
+  "Mesure : la supervision humaine de l'article # : les scénarios de risque, leur délai de réaction, et les mesures qui doivent le tenir": {
+   "en": "Measures: the human oversight of Article # — the risk scenarios, their reaction time, and the measures that must hold it",
+   "fr": "Mesure : la supervision humaine de l'article 14 : les scénarios de risque, leur délai de réaction, et les mesures qui doivent le tenir"
+  },
+  "Mesure : le système de management de la qualité de l'article # : la stratégie de conformité réglementaire, et la charge de preuve que l'approche retenue ouvre": {
+   "en": "Measures: the quality management system of Article # — the regulatory compliance strategy, and the burden of proof the chosen approach opens",
+   "fr": "Mesure : le système de management de la qualité de l'article 17 : la stratégie de conformité réglementaire, et la charge de preuve que l'approche retenue ouvre"
+  },
+  "Mesure : les articles # à # et la déclaration d'applicabilité": {
+   "en": "Measures: clauses # to # and the statement of applicability",
+   "fr": "Mesure : les articles 4 à 10 et la déclaration d'applicabilité"
+  },
+  "Mesure : les articles du règlement délégué (UE) #/# du régime qui est le vôtre, et les quinze clauses de l'article #": {
+   "en": "Measures: the articles of Delegated Regulation (EU) #/# for your own regime, and the fifteen clauses of Article #",
+   "fr": "Mesure : les articles du règlement délégué (UE) 2024/1774 du régime qui est le vôtre, et les quinze clauses de l'article 30"
+  },
+  "Mesure : les dix axes de la surcharge industrielle, plafonnés par le socle #-# qu'ils taillent": {
+   "en": "Measures: the ten axes of the industrial overlay, capped by the #-# baseline they tailor",
+   "fr": "Mesure : les dix axes de la surcharge industrielle, plafonnés par le socle 800-53 qu'ils taillent"
+  },
+  "Mesure : les dix mesures de l'article # §# et la gouvernance de l'article #": {
+   "en": "Measures: the ten measures of Article #(#) and the governance of Article #",
+   "fr": "Mesure : les dix mesures de l'article 21 §2 et la gouvernance de l'article 20"
+  },
+  "Mesure : les dix risques de la liste": {
+   "en": "Measures: the ten risks on the list",
+   "fr": "Mesure : les dix risques de la liste"
+  },
+  "Mesure : les dix-huit familles de mesures, et le socle qu'elles supposent": {
+   "en": "Measures: the eighteen control families, and the baseline they presuppose",
+   "fr": "Mesure : les dix-huit familles de mesures, et le socle qu'elles supposent"
+  },
+  "Mesure : les exigences de l'annexe I, parties I et II": {
+   "en": "Measures: the requirements of Annex I, Parts I and II",
+   "fr": "Mesure : les exigences de l'annexe I, parties I et II"
+  },
+  "Mesure : les soixante-douze sous-catégories des quatre fonctions": {
+   "en": "Measures: the seventy-two subcategories of the four functions",
+   "fr": "Mesure : les soixante-douze sous-catégories des quatre fonctions"
+  },
+  "Mesure : les trente-quatre points de l'audit, article par article": {
+   "en": "Measures: the thirty-four audit points, article by article",
+   "fr": "Mesure : les trente-quatre points de l'audit, article par article"
+  },
+  "Méthodes et métriques": {
+   "en": "Methods and metrics",
+   "fr": "Méthodes et métriques"
+  },
+  "NIS #": {
+   "en": "NIS #",
+   "fr": "NIS 2"
+  },
+  "NIST AI RMF": {
+   "en": "NIST AI RMF",
+   "fr": "NIST AI RMF"
+  },
+  "NIST AI RMF · +# pts": {
+   "en": "NIST AI RMF · +# pts",
+   "fr": "NIST AI RMF · +40 pts"
+  },
+  "NIST SP #-#": {
+   "en": "NIST SP #-#",
+   "fr": "NIST SP 800-53"
+  },
+  "Non couvert.": {
+   "en": "Not covered.",
+   "fr": "Non couvert."
+  },
+  "Norme certifiable · préparation à l'audit de certification": {
+   "en": "Certifiable standard · readiness for the certification audit",
+   "fr": "Norme certifiable · préparation à l'audit de certification"
+  },
+  "Nous le tenons": {
+   "en": "We meet it",
+   "fr": "Nous le tenons"
+  },
+  "OWASP Top # LLM": {
+   "en": "OWASP Top 10 LLM",
+   "fr": "OWASP Top 10 LLM"
+  },
+  "Obligation légale · écarts mesurés refermés": {
+   "en": "Legal obligation · measured gaps closed",
+   "fr": "Obligation légale · écarts mesurés refermés"
+  },
+  "Ouvrir le module →": {
+   "en": "Open the module →",
+   "fr": "Ouvrir le module →"
+  },
+  "Où vous en êtes": {
+   "en": "Where you stand",
+   "fr": "Où vous en êtes"
+  },
+  "Paragraphes de la norme": {
+   "en": "Clauses of the standard",
+   "fr": "Paragraphes de la norme"
+  },
+  "Pas à haut risque": {
+   "en": "Not high-risk",
+   "fr": "Pas à haut risque"
+  },
+  "Politiques, processus et pratiques": {
+   "en": "Policies, processes and practices",
+   "fr": "Politiques, processus et pratiques"
+  },
+  "Priorisation et traitement": {
+   "en": "Prioritisation and treatment",
+   "fr": "Priorisation et traitement"
+  },
+  "Qualité et gouvernance des jeux de données dans l'IA": {
+   "en": "Quality and governance of data sets in AI",
+   "fr": "Qualité et gouvernance des jeux de données dans l'IA"
+  },
+  "Qui doit tenir ce système de management": {
+   "en": "Who has to operate this management system",
+   "fr": "Qui doit tenir ce système de management"
+  },
+  "Rang # — le propre à chaque norme": {
+   "en": "Rank # — what is specific to each standard",
+   "fr": "Rang 3 — le propre à chaque norme"
+  },
+  "Rang # — lever ce qui plafonne ou met en doute": {
+   "en": "Rank # — remove what caps or casts doubt",
+   "fr": "Rang 1 — lever ce qui plafonne ou met en doute"
+  },
+  "Redevabilité et rôles nommés": {
+   "en": "Accountability and named roles",
+   "fr": "Redevabilité et rôles nommés"
+  },
+  "Refermer les # écart(s) de « Direction, planification, support »": {
+   "en": "Close the # gap(s) in “Leadership, planning, support”",
+   "fr": "Refermer les 11 écart(s) de « Direction, planification, support »"
+  },
+  "Refermer les # écart(s) de « Exploitation et contrôle »": {
+   "en": "Close the # gap(s) in “Operation and control”",
+   "fr": "Refermer les 22 écart(s) de « Exploitation et contrôle »"
+  },
+  "Refermer les # écart(s) de « GOVERN »": {
+   "en": "Close the # gap(s) in “GOVERN”",
+   "fr": "Refermer les 6 écart(s) de « GOVERN »"
+  },
+  "Refermer les # écart(s) de « MANAGE »": {
+   "en": "Close the # gap(s) in “MANAGE”",
+   "fr": "Refermer les 4 écart(s) de « MANAGE »"
+  },
+  "Refermer les # écart(s) de « MAP »": {
+   "en": "Close the # gap(s) in “MAP”",
+   "fr": "Refermer les 5 écart(s) de « MAP »"
+  },
+  "Refermer les # écart(s) de « MEASURE »": {
+   "en": "Close the # gap(s) in “MEASURE”",
+   "fr": "Refermer les 4 écart(s) de « MEASURE »"
+  },
+  "Refermer les # écart(s) de « Stratégie et documentation »": {
+   "en": "Close the # gap(s) in “Strategy and documentation”",
+   "fr": "Refermer les 16 écart(s) de « Stratégie et documentation »"
+  },
+  "Refermer les # écart(s) de « Élaboration du produit »": {
+   "en": "Close the # gap(s) in “Product development”",
+   "fr": "Refermer les 13 écart(s) de « Élaboration du produit »"
+  },
+  "Refermer les # écart(s) de « Évaluation des performances »": {
+   "en": "Close the # gap(s) in “Performance evaluation”",
+   "fr": "Refermer les 8 écart(s) de « Évaluation des performances »"
+  },
+  "Retour sur l'efficacité de la mesure": {
+   "en": "Feedback on the measure's effectiveness",
+   "fr": "Retour sur l'efficacité de la mesure"
+  },
+  "Rien n'a encore été évalué sur cette norme.": {
+   "en": "Nothing has been assessed on this standard yet.",
+   "fr": "Rien n'a encore été évalué sur cette norme."
+  },
+  "Risques des composants, tiers compris": {
+   "en": "Component risks, third parties included",
+   "fr": "Risques des composants, tiers compris"
+  },
+  "Risques des tiers": {
+   "en": "Third-party risks",
+   "fr": "Risques des tiers"
+  },
+  "Risques des tiers, gérés": {
+   "en": "Third-party risks, managed",
+   "fr": "Risques des tiers, gérés"
+  },
+  "Répondez d’abord à la qualification. Tant qu’elle n’est pas faite, rien n’est calculé — ni dans un sens ni dans l’autre.": {
+   "en": "Answer the classification first. Until it is made, nothing is computed — in either direction.",
+   "fr": "Répondez d’abord à la qualification. Tant qu’elle n’est pas faite, rien n’est calculé — ni dans un sens ni dans l’autre."
+  },
+  "Réponse, reprise et communication": {
+   "en": "Response, recovery and communication",
+   "fr": "Réponse, reprise et communication"
+  },
+  "Services financiers": {
+   "en": "Financial services",
+   "fr": "Services financiers"
+  },
+  "Soumis à la législation sur les services financiers": {
+   "en": "Subject to Union financial services law",
+   "fr": "Soumis à la législation sur les services financiers"
+  },
+  "Sous réserve de l'utilisation d'un système de gestion des risques conforme à l'article #.": {
+   "en": "Subject to the use of a risk management system compliant with Article #.",
+   "fr": "Sous réserve de l'utilisation d'un système de gestion des risques conforme à l'article 9."
+  },
+  "Spécifications de cybersécurité pour les systèmes d'IA": {
+   "en": "Cybersecurity specifications for AI systems",
+   "fr": "Spécifications de cybersécurité pour les systèmes d'IA"
+  },
+  "Stratégie de conformité : « La conformité aux exigences essentielles » n'est pas déclarée.": {
+   "en": "Compliance strategy: “Conformity with the essential requirements” is not declared.",
+   "fr": "Stratégie de conformité : « La conformité aux exigences essentielles » n'est pas déclarée."
+  },
+  "Stratégie de conformité : « La conformité du système de management lui-même » n'est pas déclarée.": {
+   "en": "Compliance strategy: “Conformity of the management system itself” is not declared.",
+   "fr": "Stratégie de conformité : « La conformité du système de management lui-même » n'est pas déclarée."
+  },
+  "Stratégie de conformité : « La stratégie de gestion des données » n'est pas déclarée.": {
+   "en": "Compliance strategy: “The data management strategy” is not declared.",
+   "fr": "Stratégie de conformité : « La stratégie de gestion des données » n'est pas déclarée."
+  },
+  "Stratégie de conformité : « La surveillance après commercialisation » n'est pas déclarée.": {
+   "en": "Compliance strategy: “Post-market monitoring” is not declared.",
+   "fr": "Stratégie de conformité : « La surveillance après commercialisation » n'est pas déclarée."
+  },
+  "Stratégie de conformité : « Les incidents graves » n'est pas déclarée.": {
+   "en": "Compliance strategy: “Serious incidents” is not declared.",
+   "fr": "Stratégie de conformité : « Les incidents graves » n'est pas déclarée."
+  },
+  "Stratégies de maximisation et de réduction": {
+   "en": "Maximisation and reduction strategies",
+   "fr": "Stratégies de maximisation et de réduction"
+  },
+  "Suivi des risques dans le temps": {
+   "en": "Tracking risks over time",
+   "fr": "Suivi des risques dans le temps"
+  },
+  "Surveillance après commercialisation et incidents graves — les deux obligations dont une autorité se saisit sans attendre un audit.": {
+   "en": "Post-market monitoring and serious incidents — the two obligations an authority takes up without waiting for an audit.",
+   "fr": "Surveillance après commercialisation et incidents graves — les deux obligations dont une autorité se saisit sans attendre un audit."
+  },
+  "Système à haut risque": {
+   "en": "High-risk system",
+   "fr": "Système à haut risque"
+  },
+  "Une fonction.": {
+   "en": "One function.",
+   "fr": "Une fonction."
+  },
+  "ce référentiel a son propre tiroir dans Sentinel": {
+   "en": "this framework has its own drawer in Sentinel",
+   "fr": "ce référentiel a son propre tiroir dans Sentinel"
+  },
+  "le présent document": {
+   "en": "this document",
+   "fr": "le présent document"
+  },
+  "prEN #": {
+   "en": "prEN #",
+   "fr": "prEN 18286"
+  },
+  "prEN # organise la façon de répondre aux exigences essentielles. Ce sont les autres normes de la famille qui disent comment y répondre : acheter « la norme du SMQ » et croire avoir traité l’article #, c’est se tromper de document.": {
+   "en": "prEN # organizes the WAY essential requirements are met. It is the other standards of the family that say how to meet them: buying “the QMS standard” and believing Article # is dealt with means reaching for the wrong document.",
+   "fr": "prEN 18286 organise la façon de répondre aux exigences essentielles. Ce sont les autres normes de la famille qui disent comment y répondre : acheter « la norme du SMQ » et croire avoir traité l’article 10, c’est se tromper de document."
+  },
+  "prEN # · +# pts": {
+   "en": "prEN # · +# pts",
+   "fr": "prEN 18286 · +33 pts"
+  },
+  "prEN # · sens": {
+   "en": "prEN # · meaning",
+   "fr": "prEN 18286 · sens"
+  },
+  "prEN #-#": {
+   "en": "prEN #-#",
+   "fr": "prEN 18229-3"
+  },
+  "Évaluation des caractéristiques de confiance": {
+   "en": "Assessment of the trustworthiness characteristics",
+   "fr": "Évaluation des caractéristiques de confiance"
+  },
+  "Êtes-vous FOURNISSEUR du système — celui qui le met sur le marché ou en service sous son nom ? L'article # ne vise que lui.": {
+   "en": "Are you the PROVIDER of the system — the one placing it on the market or putting it into service under their own name? Article # addresses only them.",
+   "fr": "Êtes-vous FOURNISSEUR du système — celui qui le met sur le marché ou en service sous son nom ? L'article 17 ne vise que lui."
+  },
+  "Êtes-vous fournisseur": {
+   "en": "Are you a provider",
+   "fr": "Êtes-vous fournisseur"
+  },
+  "— # % est le taux de prEN #, le plus bas des # normes évaluées — c'est lui qui commande. La moyenne (# %) ne remplace pas cette lecture : elle dilue précisément ce qu'il faut traiter en premier.": {
+   "en": "— # % is the rate of prEN #, the lowest of the # standards assessed — that is the one that commands. The average (# %) does not replace this reading: it dilutes precisely what has to be dealt with first.",
+   "fr": "— 0 % est le taux de prEN 18286, le plus bas des 1 normes évaluées — c'est lui qui commande. La moyenne (0 %) ne remplace pas cette lecture : elle dilue précisément ce qu'il faut traiter en premier."
+  },
+  "… et # autre(s)": {
+   "en": "… and # other(s)",
+   "fr": "… et 8 autre(s)"
+  },
+  "↓ Processus — stratégie §#": {
+   "en": "↓ Process — §# strategy",
+   "fr": "↓ Processus — stratégie §4.4"
+  },
+  "⚠ Ce projet de norme n'est pas encore cité au Journal officiel de l'Union européenne au titre du Règlement (UE) #/# : le tenir n'ouvre aucune présomption de conformité à l'article #. Le taux dit ce que le système de management déclaré couvre du tableau ZA.#. Il ne dit ni qu'un organisme notifié l'a vu, ni que la norme est citée.": {
+   "en": "⚠ This draft standard is not yet cited in the Official Journal of the European Union under Regulation (EU) #/#: meeting it opens no presumption of conformity with Article #. The rate says what the declared management system covers of Table ZA.#. It says neither that a notified body has seen it, nor that the standard is cited.",
+   "fr": "⚠ Ce projet de norme n'est pas encore cité au Journal officiel de l'Union européenne au titre du Règlement (UE) 2024/1689 : le tenir n'ouvre aucune présomption de conformité à l'article 17. Le taux dit ce que le système de management déclaré couvre du tableau ZA.1. Il ne dit ni qu'un organisme notifié l'a vu, ni que la norme est citée."
+  },
+  "⚠ L'annexe ZA de cette norme déclare l'article #(#) NON COUVERT — les fournisseurs soumis à la législation de l'Union sur les services financiers. Cent pour cent ici ne veut pas dire article # tenu : c'est la norme qui annonce sa propre limite.": {
+   "en": "⚠ Annex ZA of this standard declares Article #(#) NOT COVERED — providers subject to Union financial services law. One hundred per cent here does not mean Article # is met: it is the standard that announces its own limit.",
+   "fr": "⚠ L'annexe ZA de cette norme déclare l'article 17(2) NON COUVERT — les fournisseurs soumis à la législation de l'Union sur les services financiers. Cent pour cent ici ne veut pas dire article 17 tenu : c'est la norme qui annonce sa propre limite."
+  }
+ }
+}

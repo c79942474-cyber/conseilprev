@@ -1,0 +1,467 @@
+{
+ "_lot": "65-routes-5",
+ "_mots": 2381,
+ "_pages": [
+  "_routes"
+ ],
+ "_rubrique": "_routes",
+ "bloc": {},
+ "texte": {
+  "La communication à l'autorité compétente du nom, de l'adresse et des coordonnées, du secteur et sous-secteur, et des États membres où l'entité fournit ses services.": {
+   "en": "Communicating to the competent authority the name, address and contact details, the sector and sub-sector, and the Member States where the entity provides its services.",
+   "fr": "La communication à l'autorité compétente du nom, de l'adresse et des coordonnées, du secteur et sous-secteur, et des États membres où l'entité fournit ses services."
+  },
+  "La comparaison visuelle est l'acte de revue. Une résolution insuffisante rend la revue formelle.": {
+   "en": "The visual comparison IS the act of review. Insufficient resolution turns the review into a formality.",
+   "fr": "La comparaison visuelle est l'acte de revue. Une résolution insuffisante rend la revue formelle."
+  },
+  "La conformité aux exigences essentielles": {
+   "en": "Conformity with the essential requirements",
+   "fr": "La conformité aux exigences essentielles"
+  },
+  "La conformité du système de management lui-même": {
+   "en": "Conformity of the management system itself",
+   "fr": "La conformité du système de management lui-même"
+  },
+  "La conjonction de l'article # du règlement délégué (UE) #/#, puis les trois échéances.": {
+   "en": "The combination of article # of Delegated Regulation (EU) #/#, then the three deadlines.",
+   "fr": "La conjonction de l'article 8 du règlement délégué (UE) 2024/1772, puis les trois échéances."
+  },
+  "La correspondance avec ISO/IEC # est un rapprochement du cabinet, établi sur l'objet de chaque article du règlement délégué. Elle n'est publiée par aucun organisme et ne lie personne.": {
+   "en": "The mapping to ISO/IEC # is the firm's own, built on the subject of each article of the delegated regulation. It is published by no body and binds nobody.",
+   "fr": "La correspondance avec ISO/IEC 27001 est un rapprochement du cabinet, établi sur l'objet de chaque article du règlement délégué. Elle n'est publiée par aucun organisme et ne lie personne."
+  },
+  "La criticité des services touchés est une PORTE, pas un septième seuil : sans elle, aucun verdict ne peut être rendu.": {
+   "en": "The criticality of the services affected is a GATE, not a seventh threshold: without it, no verdict can be returned.",
+   "fr": "La criticité des services touchés est une PORTE, pas un septième seuil : sans elle, aucun verdict ne peut être rendu."
+  },
+  "La culture, les rôles, les politiques et les processus qui décident de ce qu'on fait de l'IA — et de qui en répond.": {
+   "en": "The culture, the roles, the policies and the processes that decide what is done with AI — and who answers for it.",
+   "fr": "La culture, les rôles, les politiques et les processus qui décident de ce qu'on fait de l'IA — et de qui en répond."
+  },
+  "La destination commande la qualification à haut risque, donc tout le reste. L'écrire après la conception, c'est la déduire du produit au lieu de l'avoir choisie.": {
+   "en": "The intended purpose governs the high-risk qualification, and therefore everything else. Writing it after the design means deducing it from the product instead of having chosen it.",
+   "fr": "La destination commande la qualification à haut risque, donc tout le reste. L'écrire après la conception, c'est la déduire du produit au lieu de l'avoir choisie."
+  },
+  "La destination du système d'IA est-elle déterminée et écrite ?": {
+   "en": "Is the AI system's intended purpose determined and written down?",
+   "fr": "La destination du système d'IA est-elle déterminée et écrite ?"
+  },
+  "La direction démontre-t-elle son engagement par des actes constatables, et non par une déclaration de politique ?": {
+   "en": "Does management demonstrate its commitment through observable acts, and not through a policy statement?",
+   "fr": "La direction démontre-t-elle son engagement par des actes constatables, et non par une déclaration de politique ?"
+  },
+  "La divulgation à des personnes non autorisées d'informations sensibles traitées par les activités ou services de l'entité": {
+   "en": "The disclosure to unauthorised persons of sensitive information processed by the entity's activities or services",
+   "fr": "La divulgation à des personnes non autorisées d'informations sensibles traitées par les activités ou services de l'entité"
+  },
+  "La documentation du SMQ existe-t-elle, et couvre-t-elle ce que la norme attend ?": {
+   "en": "Does the QMS documentation exist, and does it cover what the standard expects?",
+   "fr": "La documentation du SMQ existe-t-elle, et couvre-t-elle ce que la norme attend ?"
+  },
+  "La documentation opérationnelle — celle qui sert à faire, pas à prouver — est-elle tenue ?": {
+   "en": "Is the operational documentation — the kind used to do the work, not to prove it — kept up?",
+   "fr": "La documentation opérationnelle — celle qui sert à faire, pas à prouver — est-elle tenue ?"
+  },
+  "La documentation technique porte-t-elle les mécanismes d'indépendance mis en œuvre, les résultats d'essai qui démontrent qu'ils fonctionnent, et les options de configuration offertes aux déployeurs pour la gestion du flux de revue ?": {
+   "en": "Does the technical documentation carry the independence mechanisms implemented, the test results that demonstrate they work, and the configuration options offered to deployers for managing the review flow?",
+   "fr": "La documentation technique porte-t-elle les mécanismes d'indépendance mis en œuvre, les résultats d'essai qui démontrent qu'ils fonctionnent, et les options de configuration offertes aux déployeurs pour la gestion du flux de revue ?"
+  },
+  "La documentation technique porte-t-elle les sept éléments que la norme y renvoie (voir le tableau de la documentation, dérivé de vos réponses) ?": {
+   "en": "Does the technical documentation carry the seven items the standard sends to it (see the documentation table, derived from your answers)?",
+   "fr": "La documentation technique porte-t-elle les sept éléments que la norme y renvoie (voir le tableau de la documentation, dérivé de vos réponses) ?"
+  },
+  "La documentation technique, établie avant la mise sur le marché et tenue à jour.": {
+   "en": "The technical documentation, drawn up before placing on the market and kept up to date.",
+   "fr": "La documentation technique, établie avant la mise sur le marché et tenue à jour."
+  },
+  "La donnée entre par trois portes — l'entraînement, le contexte récupéré, l'invite — et l'atténuation de l'une ne couvre pas les deux autres.": {
+   "en": "Data comes in through three doors — training, retrieved context, the prompt — and mitigating one does not cover the other two.",
+   "fr": "La donnée entre par trois portes — l'entraînement, le contexte récupéré, l'invite — et l'atténuation de l'une ne couvre pas les deux autres."
+  },
+  "La durabilité environnementale est-elle prise en compte dans l'élaboration ?": {
+   "en": "Is environmental sustainability taken into account in the development?",
+   "fr": "La durabilité environnementale est-elle prise en compte dans l'élaboration ?"
+  },
+  "La durée de conservation se règle sur le temps nécessaire pour identifier et imputer un dommage — pas sur une politique d'archivage générique.": {
+   "en": "The retention period is set by the time needed to identify a harm and attribute it — not by a generic archiving policy.",
+   "fr": "La durée de conservation se règle sur le temps nécessaire pour identifier et imputer un dommage — pas sur une politique d'archivage générique."
+  },
+  "La décision de revue exige-t-elle une action explicite — aucune action passive ne valant décision — le système permet-il d'enregistrer des observations, et consigne-t-il décision, notes et horodatage ?": {
+   "en": "Does the review decision require an explicit action — no passive action counting as a decision — does the system allow observations to be recorded, and does it log the decision, the notes and the timestamp?",
+   "fr": "La décision de revue exige-t-elle une action explicite — aucune action passive ne valant décision — le système permet-il d'enregistrer des observations, et consigne-t-il décision, notes et horodatage ?"
+  },
+  "La déclaration d'applicabilité ne passe pas l'étape #.": {
+   "en": "The statement of applicability does not pass stage #.",
+   "fr": "La déclaration d'applicabilité ne passe pas l'étape 1."
+  },
+  "La déclaration d'applicabilité ne passe pas l'étape #. L'auditeur s'arrête au document : aucun taux de maturité ne rattrape ce défaut.": {
+   "en": "The statement of applicability does not pass stage #. The auditor stops at the document: no maturity rate makes up for that defect.",
+   "fr": "La déclaration d'applicabilité ne passe pas l'étape 1. L'auditeur s'arrête au document : aucun taux de maturité ne rattrape ce défaut."
+  },
+  "La déclaration ne porte pas les champs sans lesquels aucune qualification n'est possible.": {
+   "en": "The declaration does not carry the fields without which no qualification is possible.",
+   "fr": "La déclaration ne porte pas les champs sans lesquels aucune qualification n'est possible."
+  },
+  "La dégradation ou l'interruption, directe ou indirecte, des activités ou services de l'entité": {
+   "en": "The degradation or interruption, direct or indirect, of the entity's activities or services",
+   "fr": "La dégradation ou l'interruption, directe ou indirecte, des activités ou services de l'entité"
+  },
+  "La démonstration se fait sur la charge RÉELLE attendue, pas sur un poste théorique : c'est le nombre de scénarios simultanés qui compte, pas le nombre d'écrans.": {
+   "en": "The demonstration is made against the REAL expected load, not a theoretical workstation: it is the number of simultaneous scenarios that counts, not the number of screens.",
+   "fr": "La démonstration se fait sur la charge RÉELLE attendue, pas sur un poste théorique : c'est le nombre de scénarios simultanés qui compte, pas le nombre d'écrans."
+  },
+  "La dépendance des entités financières aux services du prestataire pour leurs fonctions critiques ou importantes.": {
+   "en": "How dependent the financial entities are on the provider's services for their critical or important functions.",
+   "fr": "La dépendance des entités financières aux services du prestataire pour leurs fonctions critiques ou importantes."
+  },
+  "La dépendance directe ET indirecte — la sous-traitance est comptée, ce qui fait apparaître des dépendances qu'aucun contrat ne montre.": {
+   "en": "Direct AND indirect dependence — subcontracting is counted, which brings out dependencies no contract shows.",
+   "fr": "La dépendance directe ET indirecte — la sous-traitance est comptée, ce qui fait apparaître des dépendances qu'aucun contrat ne montre."
+  },
+  "La dépendance du prestataire à l'égard des MÊMES sous-traitants pour des services soutenant des fonctions critiques ou importantes.": {
+   "en": "The provider's dependence on THE SAME subcontractors for services supporting critical or important functions.",
+   "fr": "La dépendance du prestataire à l'égard des MÊMES sous-traitants pour des services soutenant des fonctions critiques ou importantes."
+  },
+  "La dérogation microentreprise ne vise QUE le point e) du paragraphe #, et seulement pour une microentreprise.": {
+   "en": "The microenterprise derogation covers ONLY point (e) of paragraph #, and only for a microenterprise.",
+   "fr": "La dérogation microentreprise ne vise QUE le point e) du paragraphe 3, et seulement pour une microentreprise."
+  },
+  "La désignation ouvre un cadre de supervision européen, et une redevance dont le plancher est de cinquante mille euros par an.": {
+   "en": "The designation opens a European oversight framework, and a fee whose floor is fifty thousand euro a year.",
+   "fr": "La désignation ouvre un cadre de supervision européen, et une redevance dont le plancher est de cinquante mille euros par an."
+  },
+  "La finalité déclarée ne touche aucun domaine des annexes, n'est pas interdite, et le système n'interagit pas avec des personnes ni ne produit de contenu de synthèse.": {
+   "en": "The declared purpose touches none of the areas in the annexes, is not prohibited, and the system neither interacts with people nor produces synthetic content.",
+   "fr": "La finalité déclarée ne touche aucun domaine des annexes, n'est pas interdite, et le système n'interagit pas avec des personnes ni ne produit de contenu de synthèse."
+  },
+  "La finalité déclarée relève d'un des huit domaines de l'annexe III (biométrie, infrastructures critiques, éducation, emploi, services essentiels et crédit, répression, migration, justice et démocratie).": {
+   "en": "The declared purpose falls within one of the eight areas of Annex III (biometrics, critical infrastructure, education, employment, essential services and credit, law enforcement, migration, justice and democracy).",
+   "fr": "La finalité déclarée relève d'un des huit domaines de l'annexe III (biométrie, infrastructures critiques, éducation, emploi, services essentiels et crédit, répression, migration, justice et démocratie)."
+  },
+  "La finalité déclarée relève d'une des pratiques que l'article # interdit (notation sociale, manipulation, reconnaissance des émotions au travail, police prédictive, moisson non ciblée d'images faciales).": {
+   "en": "The declared purpose falls within one of the practices article # prohibits (social scoring, manipulation, emotion recognition at work, predictive policing, untargeted scraping of facial images).",
+   "fr": "La finalité déclarée relève d'une des pratiques que l'article 5 interdit (notation sociale, manipulation, reconnaissance des émotions au travail, police prédictive, moisson non ciblée d'images faciales)."
+  },
+  "La finalité touche un domaine de l'annexe III, mais le système ne fait qu'une tâche procédurale étroite, ou améliore un travail humain déjà fait, sans se substituer à l'appréciation humaine. La dérogation doit être documentée avant la mise sur le marché (art. # §#).": {
+   "en": "The purpose touches an Annex III area, but the system performs only a narrow procedural task, or improves human work already done, without replacing human judgement. The derogation must be documented before placing on the market (art. #(#)).",
+   "fr": "La finalité touche un domaine de l'annexe III, mais le système ne fait qu'une tâche procédurale étroite, ou améliore un travail humain déjà fait, sans se substituer à l'appréciation humaine. La dérogation doit être documentée avant la mise sur le marché (art. 6 §4)."
+  },
+  "La formation du personnel est un encouragement : elle s'affiche, mais le bloc se valide sans elle.": {
+   "en": "Staff training is an encouragement: it is displayed, but the block validates without it.",
+   "fr": "La formation du personnel est un encouragement : elle s'affiche, mais le bloc se valide sans elle."
+  },
+  "La formation ne vise pas que le comité de direction : les personnes EXPOSÉES au risque y sont nommées à égalité.": {
+   "en": "The training does not target the management committee alone: the people EXPOSED to the risk are named there on an equal footing.",
+   "fr": "La formation ne vise pas que le comité de direction : les personnes EXPOSÉES au risque y sont nommées à égalité."
+  },
+  "La forme est imposée. Un envoi complet mais mal structuré est un envoi à refaire.": {
+   "en": "The form is prescribed. A complete but badly structured submission is a submission to do again.",
+   "fr": "La forme est imposée. Un envoi complet mais mal structuré est un envoi à refaire."
+  },
+  "La gestion des ressources, y compris la sécurité de l'approvisionnement.": {
+   "en": "Resource management, including security of supply.",
+   "fr": "La gestion des ressources, y compris la sécurité de l'approvisionnement."
+  },
+  "La justification de votre impossibilité à implémenter ces notifications doit figurer dans la documentation technique, en renvoyant au délai de réaction.": {
+   "en": "The justification for your inability to implement these alerts must appear in the technical documentation, with a reference to the reaction time.",
+   "fr": "La justification de votre impossibilité à implémenter ces notifications doit figurer dans la documentation technique, en renvoyant au délai de réaction."
+  },
+  "La justification de votre impossibilité à implémenter les notifications en temps réel, en renvoyant au délai de réaction": {
+   "en": "The justification for your inability to implement real-time alerts, with a reference to the reaction time",
+   "fr": "La justification de votre impossibilité à implémenter les notifications en temps réel, en renvoyant au délai de réaction"
+  },
+  "La justification des mesures retenues": {
+   "en": "The justification of the measures chosen",
+   "fr": "La justification des mesures retenues"
+  },
+  "La justification s'appuie sur une analyse de risques. Sans elle, l'exclusion n'est pas recevable.": {
+   "en": "The justification rests on a risk analysis. Without one, the exclusion is not admissible.",
+   "fr": "La justification s'appuie sur une analyse de risques. Sans elle, l'exclusion n'est pas recevable."
+  },
+  "La latence d'intervention déclarée dépasse le délai de réaction. La supervision humaine n'est pas, pour ce scénario, une mesure de gestion des risques : relevez la catégorie de mesure, ou appliquez le #.": {
+   "en": "The declared intervention latency exceeds the reaction time. Human oversight is not, for this scenario, a risk-management measure: raise the category of measure, or apply #.",
+   "fr": "La latence d'intervention déclarée dépasse le délai de réaction. La supervision humaine n'est pas, pour ce scénario, une mesure de gestion des risques : relevez la catégorie de mesure, ou appliquez le 5.2.4."
+  },
+  "La latence d'intervention déclarée est inférieure ou égale au délai de réaction déterminé pour ce scénario.": {
+   "en": "The declared intervention latency is less than or equal to the reaction time determined for this scenario.",
+   "fr": "La latence d'intervention déclarée est inférieure ou égale au délai de réaction déterminé pour ce scénario."
+  },
+  "La latence dépasse le délai et aucune consignation au titre du # n'est déclarée. C'est le cas que la norme refuse : une affectation de supervision sans capacité d'intervention n'est pas une mesure.": {
+   "en": "The latency exceeds the deadline and no record under # is declared. This is the case the standard refuses: an oversight assignment with no capacity to intervene is not a measure.",
+   "fr": "La latence dépasse le délai et aucune consignation au titre du 5.2.4 n'est déclarée. C'est le cas que la norme refuse : une affectation de supervision sans capacité d'intervention n'est pas une mesure."
+  },
+  "La ligne de prEN #-# est intitulée « Crédibilité Partie # » — le même libellé que la ligne précédente, qui est bien la partie #.": {
+   "en": "The prEN #-# row is titled « Trustworthiness Part # » — the same wording as the previous row, which really is part #.",
+   "fr": "La ligne de prEN 18229-2 est intitulée « Crédibilité Partie 1 » — le même libellé que la ligne précédente, qui est bien la partie 1."
+  },
+  "La ligne du registre n'est pas lisible.": {
+   "en": "The register row cannot be read.",
+   "fr": "La ligne du registre n'est pas lisible."
+  },
+  "La liste des conditions NON réversibles est la partie qui compte : un virement exécuté et un courriel envoyé ne se rattrapent pas, et la personne désignée doit le savoir avant d'agir.": {
+   "en": "The list of NON-reversible conditions is the part that counts: a transfer executed and an email sent cannot be taken back, and the designated person must know it before acting.",
+   "fr": "La liste des conditions NON réversibles est la partie qui compte : un virement exécuté et un courriel envoyé ne se rattrapent pas, et la personne désignée doit le savoir avant d'agir."
+  },
+  "La liste des dix risques et leurs intitulés #.": {
+   "en": "The list of the ten risks and their # titles.",
+   "fr": "La liste des dix risques et leurs intitulés 2025."
+  },
+  "La liste des prestataires désignés critiques n'est pas reproduite. Elle est publiée par le comité mixte et mise à jour chaque année ; la recopier ici garantirait qu'elle soit fausse un jour sans que rien ne le signale.": {
+   "en": "The list of providers designated critical is not reproduced. It is published by the Joint Committee and updated each year; copying it here would guarantee that it is wrong one day with nothing to say so.",
+   "fr": "La liste des prestataires désignés critiques n'est pas reproduite. Elle est publiée par le comité mixte et mise à jour chaque année ; la recopier ici garantirait qu'elle soit fausse un jour sans que rien ne le signale."
+  },
+  "La liste des prestataires tiers de services TIC désignés critiques.": {
+   "en": "The list of third-party ICT service providers designated critical.",
+   "fr": "La liste des prestataires tiers de services TIC désignés critiques."
+  },
+  "La maîtrise de l'écosystème": {
+   "en": "Command of the ecosystem",
+   "fr": "La maîtrise de l'écosystème"
+  },
+  "La maîtrise du système d'information": {
+   "en": "Command of the information system",
+   "fr": "La maîtrise du système d'information"
+  },
+  "La mesure ne tient pas le délai": {
+   "en": "The measure does not hold the deadline",
+   "fr": "La mesure ne tient pas le délai"
+  },
+  "La mesure tient le délai": {
+   "en": "The measure holds the deadline",
+   "fr": "La mesure tient le délai"
+  },
+  "La mise en œuvre suppose de détenir le projet de norme, qui s'obtient auprès d'un membre national du CEN (AFNOR en France) ; au stade de l'Enquête, il est diffusé pour commentaires.": {
+   "en": "Implementing it assumes you hold the draft standard, which is obtained from a national member of CEN (AFNOR in France); at the Enquiry stage, it is circulated for comment.",
+   "fr": "La mise en œuvre suppose de détenir le projet de norme, qui s'obtient auprès d'un membre national du CEN (AFNOR en France) ; au stade de l'Enquête, il est diffusé pour commentaires."
+  },
+  "La mise en œuvre suppose de détenir le texte de la norme, qui s'achète auprès de l'ISO ou d'un organisme national de normalisation (AFNOR en France).": {
+   "en": "Implementing it assumes you hold the text of the standard, which is bought from ISO or from a national standards body (AFNOR in France).",
+   "fr": "La mise en œuvre suppose de détenir le texte de la norme, qui s'achète auprès de l'ISO ou d'un organisme national de normalisation (AFNOR en France)."
+  },
+  "La norme adresse ses exigences au fournisseur et transmet au déployeur par la notice : le questionnaire, les verrous et le score dépendent du rôle.": {
+   "en": "The standard addresses its requirements to the provider and passes them to the deployer through the instructions: the questionnaire, the locks and the score depend on the role.",
+   "fr": "La norme adresse ses exigences au fournisseur et transmet au déployeur par la notice : le questionnaire, les verrous et le score dépendent du rôle."
+  },
+  "La norme ne vous adresse pas directement ses exigences : elle les adresse à votre fournisseur. Ce qui vous revient arrive par la notice d'utilisation — et c'est précisément ce que ce cadre vous sert à EXIGER d'un fournisseur, puis à mettre en œuvre.": {
+   "en": "The standard does not address its requirements to you directly: it addresses them to your provider. What falls to you arrives through the instructions for use — and that is precisely what this framework lets you DEMAND of a provider, and then implement.",
+   "fr": "La norme ne vous adresse pas directement ses exigences : elle les adresse à votre fournisseur. Ce qui vous revient arrive par la notice d'utilisation — et c'est précisément ce que ce cadre vous sert à EXIGER d'un fournisseur, puis à mettre en œuvre."
+  },
+  "La norme vous adresse ses exigences. Elles portent sur la conception et le développement : les mesures de supervision elles-mêmes, leur vérification, et les informations que vous transmettez au déployeur.": {
+   "en": "The standard addresses its requirements to you. They bear on design and development: the oversight measures themselves, their verification, and the information you pass on to the deployer.",
+   "fr": "La norme vous adresse ses exigences. Elles portent sur la conception et le développement : les mesures de supervision elles-mêmes, leur vérification, et les informations que vous transmettez au déployeur."
+  },
+  "La notice d'utilisation dit-elle quels risques résiduels subsistent même si les mesures du déployeur sont correctement mises en œuvre, et à quelles conditions ou limitations l'usage est soumis si elles ne le sont pas ?": {
+   "en": "Do the instructions for use say which residual risks remain even where the deployer's measures are correctly implemented, and what conditions or limitations apply to use where they are not?",
+   "fr": "La notice d'utilisation dit-elle quels risques résiduels subsistent même si les mesures du déployeur sont correctement mises en œuvre, et à quelles conditions ou limitations l'usage est soumis si elles ne le sont pas ?"
+  },
+  "La notice d'utilisation définit-elle les compétences et la formation minimales des réviseurs — savoir se servir de l'interface, savoir lire un score de confiance et un indicateur de qualité, être averti du biais d'automatisation — et recommande-t-elle un contenu de formation ?": {
+   "en": "Do the instructions for use define the reviewers' minimum competences and training — being able to use the interface, being able to read a confidence score and a quality indicator, being warned about automation bias — and do they recommend training content?",
+   "fr": "La notice d'utilisation définit-elle les compétences et la formation minimales des réviseurs — savoir se servir de l'interface, savoir lire un score de confiance et un indicateur de qualité, être averti du biais d'automatisation — et recommande-t-elle un contenu de formation ?"
+  },
+  "La notice d'utilisation est-elle produite, et porte-t-elle ce que le déployeur doit savoir pour tenir ses propres obligations ?": {
+   "en": "Are the instructions for use produced, and do they carry what the deployer needs to know in order to meet its own obligations?",
+   "fr": "La notice d'utilisation est-elle produite, et porte-t-elle ce que le déployeur doit savoir pour tenir ses propres obligations ?"
+  },
+  "La notice d'utilisation porte-t-elle les sept informations de supervision que la norme y renvoie (voir le tableau de la documentation, dérivé de vos réponses) ?": {
+   "en": "Do the instructions for use carry the seven pieces of oversight information the standard sends to them (see the documentation table, derived from your answers)?",
+   "fr": "La notice d'utilisation porte-t-elle les sept informations de supervision que la norme y renvoie (voir le tableau de la documentation, dérivé de vos réponses) ?"
+  },
+  "La notice est le seul véhicule par lequel les obligations dépendantes du déploiement passent au déployeur. Ce qu'elle ne dit pas reste sans porteur.": {
+   "en": "The instructions are the only vehicle through which the deployment-dependent obligations pass to the deployer. What they do not say is left with nobody carrying it.",
+   "fr": "La notice est le seul véhicule par lequel les obligations dépendantes du déploiement passent au déployeur. Ce qu'elle ne dit pas reste sans porteur."
+  },
+  "La part « stratégie » n'est comptée qu'à moitié : le travail de documentation est réel, c'est la DÉMONSTRATION qui manque. Le détail est sur l'écran « Processus ».": {
+   "en": "The « strategy » share is counted at only half: the documentation work is real, it is the DEMONSTRATION that is missing. The detail is on the « Process » screen.",
+   "fr": "La part « stratégie » n'est comptée qu'à moitié : le travail de documentation est réel, c'est la DÉMONSTRATION qui manque. Le détail est sur l'écran « Processus »."
+  },
+  "La partie est rétablie d'après la référence elle-même (prEN #-#) et d'après l'article visé (#). Le libellé d'origine est rappelé à l'écran.": {
+   "en": "The part is restored from the reference itself (prEN #-#) and from the article addressed (#). The original wording is recalled on screen.",
+   "fr": "La partie est rétablie d'après la référence elle-même (prEN 18229-2) et d'après l'article visé (15). Le libellé d'origine est rappelé à l'écran."
+  },
+  "La personne désignée a un accès continu et en temps réel à l'état du système, à ses sorties, à ses alertes et à la disponibilité des fonctions d'intervention.": {
+   "en": "The designated person has continuous, real-time access to the state of the system, to its outputs, to its alerts and to the availability of the intervention functions.",
+   "fr": "La personne désignée a un accès continu et en temps réel à l'état du système, à ses sorties, à ses alertes et à la disponibilité des fonctions d'intervention."
+  },
+  "La personne désignée a-t-elle un accès continu et en temps réel au fonctionnement courant du système et à ses notifications — et sait-elle à tout instant si elle peut encore écraser une sortie, couper le système ou le remettre à zéro ?": {
+   "en": "Does the designated person have continuous, real-time access to the system's current operation and to its alerts — and do they know at any moment whether they can still override an output, shut the system down or reset it?",
+   "fr": "La personne désignée a-t-elle un accès continu et en temps réel au fonctionnement courant du système et à ses notifications — et sait-elle à tout instant si elle peut encore écraser une sortie, couper le système ou le remettre à zéro ?"
+  },
+  "La personne désignée annule une action DÉJÀ EXÉCUTÉE et ramène le processus à un état antérieur ou sécurisé.": {
+   "en": "The designated person undoes an action ALREADY EXECUTED and brings the process back to an earlier or safe state.",
+   "fr": "La personne désignée annule une action DÉJÀ EXÉCUTÉE et ramène le processus à un état antérieur ou sécurisé."
+  },
+  "La personne désignée bloque la sortie du système et lui substitue une alternative qu'elle fournit ; le chemin automatique est interrompu.": {
+   "en": "The designated person blocks the system's output and substitutes an alternative of their own; the automatic path is interrupted.",
+   "fr": "La personne désignée bloque la sortie du système et lui substitue une alternative qu'elle fournit ; le chemin automatique est interrompu."
+  },
+  "La personne désignée dispose-t-elle d'une commande de mise en sécurité — bouton matériel ou commande logicielle — atteignable INDÉPENDAMMENT du système, et la bascule est-elle validée sur le temps, la stabilité, la complétude de l'atténuation et la récupération ?": {
+   "en": "Does the designated person have a safe-state control — a hardware button or a software command — reachable INDEPENDENTLY of the system, and is the transition validated on time, stability, completeness of mitigation and recovery?",
+   "fr": "La personne désignée dispose-t-elle d'une commande de mise en sécurité — bouton matériel ou commande logicielle — atteignable INDÉPENDAMMENT du système, et la bascule est-elle validée sur le temps, la stabilité, la complétude de l'atténuation et la récupération ?"
+  },
+  "La personne désignée déclenche un état sécurisé prédéfini — ou un arrêt, lorsque l'arrêt est lui-même un état sécurisé — par un déclencheur accessible indépendamment de l'état du système.": {
+   "en": "The designated person triggers a predefined safe state — or a shutdown, where shutdown is itself a safe state — through a trigger reachable independently of the system's state.",
+   "fr": "La personne désignée déclenche un état sécurisé prédéfini — ou un arrêt, lorsque l'arrêt est lui-même un état sécurisé — par un déclencheur accessible indépendamment de l'état du système."
+  },
+  "La personne désignée peut-elle annuler une action DÉJÀ exécutée et ramener le processus à un état antérieur ou sécurisé, les processus dépendants reçoivent-ils l'ordre de revenir eux aussi, et la notice dit-elle ce qui est réversible et ce qui ne l'est pas ?": {
+   "en": "Can the designated person undo an action ALREADY executed and bring the process back to an earlier or safe state, do the dependent processes receive the order to revert as well, and do the instructions say what is reversible and what is not?",
+   "fr": "La personne désignée peut-elle annuler une action DÉJÀ exécutée et ramener le processus à un état antérieur ou sécurisé, les processus dépendants reçoivent-ils l'ordre de revenir eux aussi, et la notice dit-elle ce qui est réversible et ce qui ne l'est pas ?"
+  },
+  "La personne désignée rejette explicitement une sortie AVANT son exécution ; le système ne l'exécute pas et ne la rejoue pas.": {
+   "en": "The designated person explicitly rejects an output BEFORE it is executed; the system neither executes it nor replays it.",
+   "fr": "La personne désignée rejette explicitement une sortie AVANT son exécution ; le système ne l'exécute pas et ne la rejoue pas."
+  },
+  "La politique qualité, les rôles, et qui répond de quoi.": {
+   "en": "The quality policy, the roles, and who answers for what.",
+   "fr": "La politique qualité, les rôles, et qui répond de quoi."
+  },
+  "La politique qui tranche un désaccord entre réviseurs relève du propriétaire du système : elle doit être définie et documentée, pas improvisée.": {
+   "en": "The policy that settles a disagreement between reviewers belongs to the system owner: it must be defined and documented, not improvised.",
+   "fr": "La politique qui tranche un désaccord entre réviseurs relève du propriétaire du système : elle doit être définie et documentée, pas improvisée."
+  },
+  "La preuve objective que l'exigence est satisfaite": {
+   "en": "Objective evidence that the requirement is satisfied",
+   "fr": "La preuve objective que l'exigence est satisfaite"
+  },
+  "La proportionnalité tient compte du degré d'exposition, de la taille de l'entité, et de la probabilité et de la gravité des incidents.": {
+   "en": "Proportionality takes account of the degree of exposure, the entity's size, and the likelihood and severity of incidents.",
+   "fr": "La proportionnalité tient compte du degré d'exposition, de la taille de l'entité, et de la probabilité et de la gravité des incidents."
+  },
+  "La proposition n'est pas motivée.": {
+   "en": "The proposal gives no reasons.",
+   "fr": "La proposition n'est pas motivée."
+  },
+  "La protection des données se conçoit avant la mise en production, pas après.": {
+   "en": "Data protection is designed before go-live, not after.",
+   "fr": "La protection des données se conçoit avant la mise en production, pas après."
+  },
+  "La présence de données biométriques ou sensibles déplace la qualification, et le RGPD s'y ajoute.": {
+   "en": "The presence of biometric or sensitive data shifts the qualification, and the GDPR is added on top.",
+   "fr": "La présence de données biométriques ou sensibles déplace la qualification, et le RGPD s'y ajoute."
+  },
+  "La présentation des sorties et des indicateurs de confiance relève de la prEN #-# : ce paragraphe ne traite que les fonctions de supervision.": {
+   "en": "Presenting the outputs and the confidence indicators comes under prEN #-#: this clause deals only with the oversight functions.",
+   "fr": "La présentation des sorties et des indicateurs de confiance relève de la prEN 18229-2 : ce paragraphe ne traite que les fonctions de supervision."
+  },
+  "La prévention est technique chez le fournisseur ; l'affectation est organisationnelle chez vous. Les deux sont nécessaires.": {
+   "en": "The prevention is technical, at the provider's end; the assignment is organisational, at yours. Both are needed.",
+   "fr": "La prévention est technique chez le fournisseur ; l'affectation est organisationnelle chez vous. Les deux sont nécessaires."
+  },
+  "La qualification, les cinq composantes de la stratégie du §#, et l'approche retenue pour chacune des sept exigences essentielles.": {
+   "en": "The qualification, the five components of the §# strategy, and the approach chosen for each of the seven essential requirements.",
+   "fr": "La qualification, les cinq composantes de la stratégie du §4.4, et l'approche retenue pour chacune des sept exigences essentielles."
+  },
+  "La qualité rédactionnelle fait présumer la justesse : plus le texte est bien écrit, moins on le relit.": {
+   "en": "Good writing makes correctness presumed: the better the text reads, the less it gets re-read.",
+   "fr": "La qualité rédactionnelle fait présumer la justesse : plus le texte est bien écrit, moins on le relit."
+  },
+  "La responsabilité NOMMÉE et personnelle de l'organe de direction sur le cadre de gestion du risque lié aux TIC. La mesure A.# demande un engagement ; le règlement désigne un responsable.": {
+   "en": "The NAMED, personal responsibility of the management body for the ICT risk management framework. Control A.# asks for a commitment; the Regulation designates someone accountable.",
+   "fr": "La responsabilité NOMMÉE et personnelle de l'organe de direction sur le cadre de gestion du risque lié aux TIC. La mesure A.5.4 demande un engagement ; le règlement désigne un responsable."
+  },
+  "La revue de direction : elle ne produit rien par elle-même, elle décide de ce que le reste produit.": {
+   "en": "The management review: it produces nothing by itself, it decides on what the rest produces.",
+   "fr": "La revue de direction : elle ne produit rien par elle-même, elle décide de ce que le reste produit."
+  },
+  "La revue de direction, l'amélioration, et la planification des changements du système de management.": {
+   "en": "The management review, improvement, and the planning of changes to the management system.",
+   "fr": "La revue de direction, l'amélioration, et la planification des changements du système de management."
+  },
+  "La revue produit-elle des décisions tracées, et pas seulement un compte rendu ?": {
+   "en": "Does the review produce decisions on the record, and not just minutes?",
+   "fr": "La revue produit-elle des décisions tracées, et pas seulement un compte rendu ?"
+  },
+  "La revue reçoit-elle ce qu'il lui faut pour décider — surveillance, incidents, non-conformités, changements, retours des déployeurs ?": {
+   "en": "Does the review receive what it needs in order to decide — monitoring, incidents, nonconformities, changes, feedback from deployers?",
+   "fr": "La revue reçoit-elle ce qu'il lui faut pour décider — surveillance, incidents, non-conformités, changements, retours des déployeurs ?"
+  },
+  "La réponse du moteur n'est pas un objet JSON exploitable.": {
+   "en": "The engine's reply is not a usable JSON object.",
+   "fr": "La réponse du moteur n'est pas un objet JSON exploitable."
+  },
+  "La révision # (#) parle d'ICS et surcharge #-# Rev. #. La révision # (#) parle d'OT et vise la révision #.": {
+   "en": "Revision # (#) speaks of ICS and overlays #-# Rev. #. Revision # (#) speaks of OT and targets revision #.",
+   "fr": "La révision 2 (2015) parle d'ICS et surcharge 800-53 Rev. 4. La révision 3 (2023) parle d'OT et vise la révision 5."
+  },
+  "La révision # ajoute les familles PT et SR et renomme CA. Un système déjà aligné sur la révision # lit ce taux contre un millésime antérieur au sien.": {
+   "en": "Revision # adds the PT and SR families and renames CA. A system already aligned on revision # reads this rate against an edition older than its own.",
+   "fr": "La révision 5 ajoute les familles PT et SR et renomme CA. Un système déjà aligné sur la révision 5 lit ce taux contre un millésime antérieur au sien."
+  },
+  "La seconde moitié s'oublie : ce qui se passe si la mesure N'EST PAS mise en œuvre doit être écrit, sinon le système est utilisé hors de sa destination sans que personne le sache.": {
+   "en": "The second half gets forgotten: what happens if the measure is NOT implemented has to be written down, otherwise the system is used outside its intended purpose with nobody knowing.",
+   "fr": "La seconde moitié s'oublie : ce qui se passe si la mesure N'EST PAS mise en œuvre doit être écrit, sinon le système est utilisé hors de sa destination sans que personne le sache."
+  },
+  "La sensibilisation au biais d'automatisation est explicitement citée parmi les compétences : sur un flux de milliers d'identifications, c'est le risque premier.": {
+   "en": "Awareness of automation bias is expressly listed among the competences: on a flow of thousands of identifications, it is the first risk.",
+   "fr": "La sensibilisation au biais d'automatisation est explicitement citée parmi les compétences : sur un flux de milliers d'identifications, c'est le risque premier."
+  },
+  "La seule fiche disponible à ce jour — architectures sécurisées, objectifs # et # — et la confirmation que la collection n'est ni prescriptive ni exhaustive.": {
+   "en": "The only sheet available to date — secure architectures, objectives # and # — and the confirmation that the collection is neither prescriptive nor exhaustive.",
+   "fr": "La seule fiche disponible à ce jour — architectures sécurisées, objectifs 7 et 8 — et la confirmation que la collection n'est ni prescriptive ni exhaustive."
+  },
+  "La seule qui soit un préalable : un système qui ne marche pas n'a pas besoin d'être équitable.": {
+   "en": "The only one that is a precondition: a system that does not work has no need to be fair.",
+   "fr": "La seule qui soit un préalable : un système qui ne marche pas n'a pas besoin d'être équitable."
+  },
+  "La sortie doit rester isolée pendant la revue : si elle est consultable par les systèmes en aval « pour information », elle n'est pas isolée.": {
+   "en": "The output must stay isolated during the review: if downstream systems can read it « for information », it is not isolated.",
+   "fr": "La sortie doit rester isolée pendant la revue : si elle est consultable par les systèmes en aval « pour information », elle n'est pas isolée."
+  },
+  "La sortie du modèle est reprise telle quelle par le système d'aval — requête, commande, page rendue — sans être traitée comme une entrée non fiable.": {
+   "en": "The model's output is taken as it stands by the downstream system — a query, a command, a rendered page — without being treated as untrusted input.",
+   "fr": "La sortie du modèle est reprise telle quelle par le système d'aval — requête, commande, page rendue — sans être traitée comme une entrée non fiable."
+  },
+  "La sous-traitance est dans l'obligation, pas à côté : un prestataire qui exploite le système ne déplace pas la responsabilité.": {
+   "en": "Subcontracting is inside the obligation, not beside it: a provider who operates the system does not move the responsibility.",
+   "fr": "La sous-traitance est dans l'obligation, pas à côté : un prestataire qui exploite le système ne déplace pas la responsabilité."
+  },
+  "La stratégie de conformité réglementaire est-elle déterminée et documentée, avec ses cinq composantes ?": {
+   "en": "Is the regulatory compliance strategy determined and documented, with its five components?",
+   "fr": "La stratégie de conformité réglementaire est-elle déterminée et documentée, avec ses cinq composantes ?"
+  },
+  "La stratégie de gestion des données": {
+   "en": "The data management strategy",
+   "fr": "La stratégie de gestion des données"
+  },
+  "La stratégie de gestion des données est-elle établie et tenue ?": {
+   "en": "Is the data management strategy established and kept up?",
+   "fr": "La stratégie de gestion des données est-elle établie et tenue ?"
+  },
+  "La stratégie de respect de la réglementation, y compris pour les modifications.": {
+   "en": "The regulatory compliance strategy, including for modifications.",
+   "fr": "La stratégie de respect de la réglementation, y compris pour les modifications."
+  },
+  "La supervision se dégrade par la fatigue, la baisse de vigilance et le conflit d'attention bien avant de se dégrader par une faute de conception.": {
+   "en": "Oversight degrades through fatigue, falling vigilance and competing demands on attention long before it degrades through a design fault.",
+   "fr": "La supervision se dégrade par la fatigue, la baisse de vigilance et le conflit d'attention bien avant de se dégrader par une faute de conception."
+  },
+  "La surveillance après commercialisation": {
+   "en": "Post-market monitoring",
+   "fr": "La surveillance après commercialisation"
+  },
+  "La surveillance après commercialisation par les fournisseurs, et le plan qui l'accompagne.": {
+   "en": "Post-market monitoring by providers, and the plan that goes with it.",
+   "fr": "La surveillance après commercialisation par les fournisseurs, et le plan qui l'accompagne."
+  },
+  "La surveillance de l'autorité compétente — ACPR ou AMF en France. Un organisme accrédité certifie un système de management ; il ne délivre aucune conformité à un règlement.": {
+   "en": "Supervision by the competent authority — the ACPR or the AMF in France. An accredited body certifies a management system; it issues no compliance with a regulation.",
+   "fr": "La surveillance de l'autorité compétente — ACPR ou AMF en France. Un organisme accrédité certifie un système de management ; il ne délivre aucune conformité à un règlement."
+  },
+  "La taille n'est pas renseignée.": {
+   "en": "The size is not filled in.",
+   "fr": "La taille n'est pas renseignée."
+  },
+  "La taille ne décide PAS du régime. Une microentreprise qui n'est dans aucune des cinq catégories de l'article #, paragraphe #, relève du cadre complet.": {
+   "en": "Size does NOT decide the regime. A microenterprise that is in none of the five categories of article #(#) falls under the full framework.",
+   "fr": "La taille ne décide PAS du régime. Une microentreprise qui n'est dans aucune des cinq catégories de l'article 16, paragraphe 1, relève du cadre complet."
+  },
+  "La transmission des notifications d'incident aux CSIRT ou aux autorités désignés au titre de NIS #, lorsque l'État membre en décide ainsi.": {
+   "en": "The forwarding of incident notifications to the CSIRTs or authorities designated under NIS #, where the Member State so decides.",
+   "fr": "La transmission des notifications d'incident aux CSIRT ou aux autorités désignés au titre de NIS 2, lorsque l'État membre en décide ainsi."
+  },
+  "La validation démontre-t-elle que le système tient sa destination dans les conditions réelles d'usage ?": {
+   "en": "Does the validation demonstrate that the system meets its intended purpose under real conditions of use?",
+   "fr": "La validation démontre-t-elle que le système tient sa destination dans les conditions réelles d'usage ?"
+  }
+ }
+}

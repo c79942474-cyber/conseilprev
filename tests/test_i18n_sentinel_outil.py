@@ -901,18 +901,17 @@ def test_le_catalogue_du_depot_porte_la_page_des_routes_et_son_inventaire():
     « rien à traduire » sur les treize questionnaires de normes."""
     cat = _catalogue_reel()
     pages = set(p for r in ("bloc", "texte", "attr") for e in cat[r].values() for p in e["pages"])
-    #  TANT QUE LA PASSE N'A PAS ÉTÉ JOUÉE, la règle SAUTE en le disant —
-    #  comme le gardien de couverture saute quand le catalogue n'existe pas
-    #  encore. Un « passe » silencieux laisserait croire la source relevée.
-    #  Elle mord dès la première passe : la commande existe et elle est
-    #  mesurée par ses propres règles ; ce qui manque est la TRADUCTION des
-    #  26 143 mots qu'elle découvre, et le plancher de couverture
-    #  (i18n/sentinel/SEUIL_COUVERTURE) interdit de les parker au dépôt.
-    if "_routes" not in pages:
-        pytest.skip("la passe « routes » n'a pas encore été jouée sur le "
-                    "catalogue du dépôt : ses 26 143 mots attendent leur "
-                    "traduction, et le plancher de couverture interdit de "
-                    "les committer non traduits")
+    #  LA DETTE EST PAYÉE, ET LE SAUT A DONC DISPARU. La règle sautait tant
+    #  que la passe « routes » n'avait pas été jouée sur le catalogue du
+    #  dépôt : ses 26 143 mots inédits attendaient leur traduction, et le
+    #  plancher de couverture (i18n/sentinel/SEUIL_COUVERTURE) interdisait de
+    #  les parker ici non traduits. Ils le sont — la couverture en mots du
+    #  catalogue entier, routes comprises, est mesurée à 99,5 %. La règle
+    #  EXIGE donc désormais la page, au lieu de l'attendre.
+    assert "_routes" in pages, (
+        "le catalogue du dépôt ne porte plus la page « _routes » : les treize "
+        "questionnaires de normes rediraient « rien à traduire » là où les "
+        "routes servent 33 830 mots de français")
     n = sum(1 for r in ("bloc", "texte", "attr") for e in cat[r].values() if "_routes" in e["pages"])
     mots = sum(e["mots"] for r in ("bloc", "texte", "attr") for e in cat[r].values() if "_routes" in e["pages"])
     assert n >= 2000 and mots >= 30000, "%d entrées, %d mots sous « _routes »" % (n, mots)
