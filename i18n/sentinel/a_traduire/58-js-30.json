@@ -328,11 +328,11 @@
    "fr": "global cacherait le côté défaillant."
   },
   "go('maturite',null,'AUDIT','Maturité IA')": {
-   "en": "go('maturite',null,'AUDIT','Maturité IA')",
+   "en": "go('maturite',null,'AUDIT','AI maturity')",
    "fr": "go('maturite',null,'AUDIT','Maturité IA')"
   },
   "go('shadow-ai',null,'SÉCURITÉ','Shadow AI')": {
-   "en": "go('shadow-ai',null,'SÉCURITÉ','Shadow AI')",
+   "en": "go('shadow-ai',null,'SECURITY','Shadow AI')",
    "fr": "go('shadow-ai',null,'SÉCURITÉ','Shadow AI')"
   },
   "gouvernance interne valent exécution de l’article #.": {

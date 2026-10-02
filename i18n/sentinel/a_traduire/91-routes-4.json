@@ -1,0 +1,211 @@
+{
+ "_lot": "91-routes-4",
+ "_mots": 885,
+ "_pages": [
+  "_routes"
+ ],
+ "_rubrique": "_routes",
+ "bloc": {},
+ "texte": {
+  "Traiter les risques auxquels l'organisme est lié par une relation d'affaires": {
+   "en": "Address the risks the organisation is linked to by a business relationship",
+   "fr": "Traiter les risques auxquels l'organisme est lié par une relation d'affaires"
+  },
+  "Traiter les risques que l'organisme cause ou auxquels il contribue": {
+   "en": "Address the risks the organisation causes or contributes to",
+   "fr": "Traiter les risques que l'organisme cause ou auxquels il contribue"
+  },
+  "Un cadrage qui s'arrête aux systèmes que la DSI a achetés. Les usages arrivés par une carte bancaire d'équipe n'y figurent pas, et ce sont ceux qui posent problème.": {
+   "en": "A scoping exercise that stops at the systems the IT department bought. The uses that arrived on a team credit card are not in it, and those are the ones that cause trouble.",
+   "fr": "Un cadrage qui s'arrête aux systèmes que la DSI a achetés. Les usages arrivés par une carte bancaire d'équipe n'y figurent pas, et ce sont ceux qui posent problème."
+  },
+  "Un dispositif de réclamation qui existe sans être accessible. Le document attend un mécanisme légitime par lequel les parties prenantes peuvent réellement saisir l'entreprise.": {
+   "en": "A complaints arrangement that exists without being accessible. The document expects a legitimate mechanism through which stakeholders can actually raise matters with the enterprise.",
+   "fr": "Un dispositif de réclamation qui existe sans être accessible. Le document attend un mécanisme légitime par lequel les parties prenantes peuvent réellement saisir l'entreprise."
+  },
+  "Un désengagement présenté comme la seule réponse responsable. Partir peut aggraver l'incidence pour les personnes et supprime le levier qui restait.": {
+   "en": "Disengagement presented as the only responsible answer. Leaving can worsen the impact for people and removes the leverage that was left.",
+   "fr": "Un désengagement présenté comme la seule réponse responsable. Partir peut aggraver l'incidence pour les personnes et supprime le levier qui restait."
+  },
+  "Un exercice de cadrage qui dit OÙ les risques peuvent se trouver et où ils peuvent être les plus significatifs — avant toute évaluation approfondie.": {
+   "en": "A scoping exercise that says WHERE the risks may be found and where they may be most significant — before any in-depth assessment.",
+   "fr": "Un exercice de cadrage qui dit OÙ les risques peuvent se trouver et où ils peuvent être les plus significatifs — avant toute évaluation approfondie."
+  },
+  "Un rapport qui publie les politiques et jamais les incidences. Le document demande les deux, et nomme les capacités, limites et usages inappropriés du système.": {
+   "en": "A report that publishes the policies and never the impacts. The document calls for both, and names the system's capabilities, limitations and inappropriate uses.",
+   "fr": "Un rapport qui publie les politiques et jamais les incidences. Le document demande les deux, et nomme les capacités, limites et usages inappropriés du système."
+  },
+  "Un risque dont la réalisation est déjà documentée dans un déploiement comparable.": {
+   "en": "A risk whose occurrence is already documented in a comparable deployment.",
+   "fr": "Un risque dont la réalisation est déjà documentée dans un déploiement comparable."
+  },
+  "Un suivi qui mesure l'activité — nombre de revues, nombre de formations — et jamais le résultat pour les personnes.": {
+   "en": "Tracking that measures activity — number of reviews, number of training sessions — and never the outcome for people.",
+   "fr": "Un suivi qui mesure l'activité — nombre de revues, nombre de formations — et jamais le résultat pour les personnes."
+  },
+  "Un système d'IA employé pour déterminer la durée des peines dans des affaires pénales.": {
+   "en": "An AI system used to determine the length of sentences in criminal cases.",
+   "fr": "Un système d'IA employé pour déterminer la durée des peines dans des affaires pénales."
+  },
+  "Une compensation financière pour le dommage économiquement appréciable — atteinte physique ou morale, perte de revenus.": {
+   "en": "Financial compensation for harm that can be economically assessed — physical or mental harm, lost earnings.",
+   "fr": "Une compensation financière pour le dommage économiquement appréciable — atteinte physique ou morale, perte de revenus."
+  },
+  "Une cotation sans justification. Le document demande un processus CRÉDIBLE dont la logique est rendue publique : un chiffre sans raison n'en est pas un.": {
+   "en": "A rating with no justification. The document calls for a CREDIBLE process whose rationale is publicly communicated: a figure with no reason is not one.",
+   "fr": "Une cotation sans justification. Le document demande un processus CRÉDIBLE dont la logique est rendue publique : un chiffre sans raison n'en est pas un."
+  },
+  "Une incidence dont le dommage ne peut pas être défait, quelle que soit la somme engagée ensuite.": {
+   "en": "An impact whose harm cannot be undone, whatever sum is committed afterwards.",
+   "fr": "Une incidence dont le dommage ne peut pas être défait, quelle que soit la somme engagée ensuite."
+  },
+  "Une liste des risques propres à l'IA.": {
+   "en": "A list of the risks specific to AI.",
+   "fr": "Une liste des risques propres à l'IA."
+  },
+  "Une politique IA écrite par la conformité et jamais lue par ceux qui construisent. Elle existe, elle est datée, et elle ne change aucune décision d'architecture.": {
+   "en": "An AI policy written by compliance and never read by those who build. It exists, it is dated, and it changes no architecture decision.",
+   "fr": "Une politique IA écrite par la conformité et jamais lue par ceux qui construisent. Elle existe, elle est datée, et elle ne change aucune décision d'architecture."
+  },
+  "Une responsabilité attribuée à une fonction qui n'a ni le budget ni l'autorité d'arrêter une mise en service. Elle signera ce qu'on lui présentera.": {
+   "en": "A responsibility assigned to a function that has neither the budget nor the authority to stop a go-live. It will sign whatever is put in front of it.",
+   "fr": "Une responsabilité attribuée à une fonction qui n'a ni le budget ni l'autorité d'arrêter une mise en service. Elle signera ce qu'on lui présentera."
+  },
+  "Une table d'équivalence entre les cadres.": {
+   "en": "An equivalence table between the frameworks.",
+   "fr": "Une table d'équivalence entre les cadres."
+  },
+  "Une évaluation faite une fois, à la mise en service, sur la version d'alors. Le fournisseur a changé le modèle depuis.": {
+   "en": "An assessment done once, at go-live, on the version of the day. The provider has changed the model since.",
+   "fr": "Une évaluation faite une fois, à la mise en service, sur la version d'alors. Le fournisseur a changé le modèle depuis."
+  },
+  "User de son levier sur la ou les relations d'affaires pour qu'elles préviennent ou atténuent — et construire ce levier s'il manque.": {
+   "en": "Using its leverage over the business relationship or relationships so that they prevent or mitigate — and building that leverage if it is missing.",
+   "fr": "User de son levier sur la ou les relations d'affaires pour qu'elles préviennent ou atténuent — et construire ce levier s'il manque."
+  },
+  "User de son levier sur la relation d'affaires — et le construire s'il manque. Le document nomme trois réponses possibles : poursuivre la relation pendant l'atténuation, la suspendre temporairement, ou s'en désengager.": {
+   "en": "Using its leverage over the business relationship — and building it if it is missing. The document names three possible responses: continuing the relationship during mitigation, temporarily suspending it, or disengaging from it.",
+   "fr": "User de son levier sur la relation d'affaires — et le construire s'il manque. Le document nomme trois réponses possibles : poursuivre la relation pendant l'atténuation, la suspendre temporairement, ou s'en désengager."
+  },
+  "Utilisateur du système d'IA": {
+   "en": "User of the AI system",
+   "fr": "Utilisateur du système d'IA"
+  },
+  "Votre activité produit l'incidence par elle-même. Le document attend la cessation ET la réparation : prévenir ne suffit plus, le dommage existe.": {
+   "en": "Your activity produces the impact by itself. The document expects cessation AND remediation: preventing is no longer enough, the harm exists.",
+   "fr": "Votre activité produit l'incidence par elle-même. Le document attend la cessation ET la réparation : prévenir ne suffit plus, le dommage existe."
+  },
+  "Votre activité, combinée à celle d'autres, produit l'incidence ; ou elle cause, facilite ou encourage un autre à la produire. Le document exige que la contribution soit SUBSTANTIELLE : elle n'inclut pas les contributions mineures ou négligeables.": {
+   "en": "Your activity, in combination with that of others, produces the impact; or it causes, facilitates or incentivises another to produce it. The document requires the contribution to be SUBSTANTIAL: it does not include minor or trivial contributions.",
+   "fr": "Votre activité, combinée à celle d'autres, produit l'incidence ; ou elle cause, facilite ou encourage un autre à la produire. Le document exige que la contribution soit SUBSTANTIELLE : elle n'inclut pas les contributions mineures ou négligeables."
+  },
+  "Vous fournissez ce avec quoi un système d'IA se construit : données, annotation, création et conservation de jeux de données, code mis à disposition de tiers — contributions à des bibliothèques ouvertes comprises —, métriques et mesures d'évaluation. Ou les intrants qui le portent : capital, infrastructure numérique et services administratifs (calcul, nuage, plateformes de paiement, plateformes de travail numériques, systèmes d'exploitation, magasins d'applications, éditeurs de sécurité et de logiciels d'entreprise), matériel (semi-conducteurs, équipements réseau).": {
+   "en": "You supply what an AI system is built with: data, annotation, dataset creation and curation, code made available to third parties — contributions to open libraries included —, metrics and evaluation measures. Or the inputs that carry it: capital, digital infrastructure and administrative services (compute, cloud, payment platforms, digital labour platforms, operating systems, app stores, security and enterprise software providers), hardware (semiconductors, network equipment).",
+   "fr": "Vous fournissez ce avec quoi un système d'IA se construit : données, annotation, création et conservation de jeux de données, code mis à disposition de tiers — contributions à des bibliothèques ouvertes comprises —, métriques et mesures d'évaluation. Ou les intrants qui le portent : capital, infrastructure numérique et services administratifs (calcul, nuage, plateformes de paiement, plateformes de travail numériques, systèmes d'exploitation, magasins d'applications, éditeurs de sécurité et de logiciels d'entreprise), matériel (semi-conducteurs, équipements réseau)."
+  },
+  "Vous utilisez des systèmes d'IA dans vos opérations, vos produits ou vos services — établissements financiers et entreprises de l'économie réelle comprises, y compris celles dont le métier n'a rien à voir avec l'IA. Le document attend de vous que la diligence sur ces systèmes entre dans votre diligence d'ensemble : si le système ne porte pas de risque significatif, d'autres sujets passent devant.": {
+   "en": "You use AI systems in your operations, your products or your services — financial institutions and real-economy enterprises included, including those whose business has nothing to do with AI. The document expects due diligence on those systems to enter your overall due diligence: if the system carries no significant risk, other topics come first.",
+   "fr": "Vous utilisez des systèmes d'IA dans vos opérations, vos produits ou vos services — établissements financiers et entreprises de l'économie réelle comprises, y compris celles dont le métier n'a rien à voir avec l'IA. Le document attend de vous que la diligence sur ces systèmes entre dans votre diligence d'ensemble : si le système ne porte pas de risque significatif, d'autres sujets passent devant."
+  },
+  "Vous êtes dans le cycle de vie du système : planification et conception, construction du modèle ou adaptation d'un modèle existant, test, évaluation, vérification et validation, déploiement quel qu'en soit le canal — y compris la distribution de logiciel ouvert —, exploitation pour des clients et surveillance. Un organisme qui modifie et redéploie un modèle existant pour son propre usage en fait partie.": {
+   "en": "You are in the system lifecycle: planning and design, building the model or adapting an existing model, testing, evaluating, verifying and validating, deploying through whatever channel — including the distribution of open-source software —, operating for customers and monitoring. An organisation that modifies and re-deploys an existing model for its own use is part of it.",
+   "fr": "Vous êtes dans le cycle de vie du système : planification et conception, construction du modèle ou adaptation d'un modèle existant, test, évaluation, vérification et validation, déploiement quel qu'en soit le canal — y compris la distribution de logiciel ouvert —, exploitation pour des clients et surveillance. Un organisme qui modifie et redéploie un modèle existant pour son propre usage en fait partie."
+  },
+  "Where a business relationship’s due diligence information is not publicly available, seek to engage with business relationships to increase transparency or to demonstrate due diligence through confidential bilateral or multilateral arrangements (e.g., disclosure to trusted industry or multi - stakeholder initiatives or non-disclosure agreements).": {
+   "en": "Where a business relationship’s due diligence information is not publicly available, seek to engage with business relationships to increase transparency or to demonstrate due diligence through confidential bilateral or multilateral arrangements (e.g., disclosure to trusted industry or multi - stakeholder initiatives or non-disclosure agreements).",
+   "fr": "Where a business relationship’s due diligence information is not publicly available, seek to engage with business relationships to increase transparency or to demonstrate due diligence through confidential bilateral or multilateral arrangements (e.g., disclosure to trusted industry or multi - stakeholder initiatives or non-disclosure agreements)."
+  },
+  "calcul et nuage": {
+   "en": "compute and cloud",
+   "fr": "calcul et nuage"
+  },
+  "ce qui empêche la diligence d'être un exercice annuel": {
+   "en": "what stops due diligence being an annual exercise",
+   "fr": "ce qui empêche la diligence d'être un exercice annuel"
+  },
+  "code pour des tiers": {
+   "en": "code for third parties",
+   "fr": "code pour des tiers"
+  },
+  "construction ou adaptation du modèle": {
+   "en": "building or adapting the model",
+   "fr": "construction ou adaptation du modèle"
+  },
+  "données et annotation": {
+   "en": "data and annotation",
+   "fr": "données et annotation"
+  },
+  "exploitation et surveillance": {
+   "en": "operation and monitoring",
+   "fr": "exploitation et surveillance"
+  },
+  "jeux de données": {
+   "en": "datasets",
+   "fr": "jeux de données"
+  },
+  "l'attente la plus forte du cadre dès que l'entreprise cause ou contribue": {
+   "en": "the strongest expectation in the framework as soon as the enterprise causes or contributes",
+   "fr": "l'attente la plus forte du cadre dès que l'entreprise cause ou contribue"
+  },
+  "l'étape qui commande toutes les autres : sans incidences identifiées, qualifiées et priorisées, les étapes # à # n'ont pas d'objet": {
+   "en": "the step that governs all the others: with no impacts identified, qualified and prioritised, steps # to # have no object",
+   "fr": "l'étape qui commande toutes les autres : sans incidences identifiées, qualifiées et priorisées, les étapes 3 à 6 n'ont pas d'objet"
+  },
+  "la part que les parties prenantes peuvent vérifier": {
+   "en": "the share that stakeholders can verify",
+   "fr": "la part que les parties prenantes peuvent vérifier"
+  },
+  "le seul endroit où quelque chose change pour les personnes": {
+   "en": "the only place where something changes for people",
+   "fr": "le seul endroit où quelque chose change pour les personnes"
+  },
+  "le socle, et celui qu'un système de management déjà en place apporte le plus souvent tel quel": {
+   "en": "the foundation, and the one an existing management system most often supplies as it stands",
+   "fr": "le socle, et celui qu'un système de management déjà en place apporte le plus souvent tel quel"
+  },
+  "les six étapes de la diligence, l'implication dans l'incidence — causer, contribuer, être lié — et les quatre facteurs de priorisation": {
+   "en": "the six steps of due diligence, involvement in the impact — causing, contributing, being linked — and the four prioritisation factors",
+   "fr": "les six étapes de la diligence, l'implication dans l'incidence — causer, contribuer, être lié — et les quatre facteurs de priorisation"
+  },
+  "métriques d'évaluation": {
+   "en": "evaluation metrics",
+   "fr": "métriques d'évaluation"
+  },
+  "ocde · conformité": {
+   "en": "ocde · conformity",
+   "fr": "ocde · conformité"
+  },
+  "test et validation": {
+   "en": "testing and validation",
+   "fr": "test et validation"
+  },
+  "usage dans les opérations": {
+   "en": "use in operations",
+   "fr": "usage dans les opérations"
+  },
+  "usage dans les produits": {
+   "en": "use in products",
+   "fr": "usage dans les produits"
+  },
+  "usage dans les services": {
+   "en": "use in services",
+   "fr": "usage dans les services"
+  },
+  "À suivre": {
+   "en": "To watch",
+   "fr": "À suivre"
+  },
+  "À traiter": {
+   "en": "To address",
+   "fr": "À traiter"
+  },
+  "États-Unis — NIST AI Risk Management Framework": {
+   "en": "United States — NIST AI Risk Management Framework",
+   "fr": "États-Unis — NIST AI Risk Management Framework"
+  },
+  "Évaluation approfondie des risques les plus significatifs": {
+   "en": "In-depth assessment of the most significant risks",
+   "fr": "Évaluation approfondie des risques les plus significatifs"
+  }
+ }
+}

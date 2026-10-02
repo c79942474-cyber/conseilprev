@@ -197,7 +197,7 @@
    "fr": "93 mesures · thèmes A.5 à A.8 · en vigueur"
   },
   "# point(s)": {
-   "en": "2 point(s)",
+   "en": "# point(s)",
    "fr": "2 point(s)"
   },
   "#. Amélioration": {
@@ -213,7 +213,7 @@
    "fr": "8. Fonctionnement"
   },
   "#. Leadership": {
-   "en": "5. Leadership",
+   "en": "#. Leadership",
    "fr": "5. Leadership"
   },
   "#. Planification": {
@@ -221,7 +221,7 @@
    "fr": "6. Planification"
   },
   "#. Support": {
-   "en": "7. Support",
+   "en": "#. Support",
    "fr": "7. Support"
   },
   "#. Évaluation des performances": {

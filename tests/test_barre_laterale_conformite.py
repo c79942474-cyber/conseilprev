@@ -60,7 +60,13 @@ NODE = shutil.which("node")
 # répond.
 TIROIRS = ["taux-conformite",
            "rgpd-et-privacy", "iso27001", "iso42001", "en18229", "en18286",
-           "dora", "nis2", "cra", "nist-ai-rmf", "owasp-llm", "nist-ot"]
+           "dora", "nis2", "cra", "nist-ai-rmf", "owasp-llm", "nist-ot",
+           #  LA DILIGENCE OCDE FERME LA FAMILLE, et sa place est la seule
+           #  qui tienne : c'est le seul référentiel de la barre qui ne
+           #  demande pas si LE SYSTÈME est conforme mais si L'ENTREPRISE
+           #  a fait ce qu'il fallait pour savoir. Le mettre entre deux
+           #  normes de système ferait croire à une de plus.
+           "ocde"]
 # LES DEUX NORMES DU CEN/CLC JTC 21 VOISINENT, et c'est le même mandat vu de
 # deux côtés : prEN 18229-3 tient la supervision humaine de l'article 14,
 # prEN 18286 le système de management de la qualité de l'article 17. Un

@@ -536,7 +536,7 @@
    "fr": "Exigences relatives au système de gestion des risques"
   },
   "GOVERN #": {
-   "en": "GOVERN 1",
+   "en": "GOVERN #",
    "fr": "GOVERN 1"
   },
   "IA Act": {
@@ -628,7 +628,7 @@
    "fr": "Liste de risques · risques traités"
   },
   "MANAGE #": {
-   "en": "MANAGE 1",
+   "en": "MANAGE #",
    "fr": "MANAGE 1"
   },
   "MAP #": {
@@ -636,7 +636,7 @@
    "fr": "MAP 1"
   },
   "MEASURE #": {
-   "en": "MEASURE 1",
+   "en": "MEASURE #",
    "fr": "MEASURE 1"
   },
   "Mesure : l'appréciation du risque, les articles et la déclaration d'applicabilité": {
@@ -724,7 +724,7 @@
    "fr": "Nous le tenons"
   },
   "OWASP Top # LLM": {
-   "en": "OWASP Top 10 LLM",
+   "en": "OWASP Top # LLM",
    "fr": "OWASP Top 10 LLM"
   },
   "Obligation légale · écarts mesurés refermés": {

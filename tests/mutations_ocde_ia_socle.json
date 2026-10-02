@@ -1,0 +1,43 @@
+{
+ "_pourquoi": "Le socle de la diligence OCDE : chaque porte de la garde du moteur doit tomber sur SA regle. Les mutations portent sur les lignes de la GARDE elle-meme — un refus d'import se lit en erreur de collecte, que le banc prendrait pour une survivante, donc les regles de ce fichier n'importent pas le module : elles injectent le defaut dans une copie jetable et lisent le message du refus. Les quatre portes d'ici sont les quatre que la batterie de tests/test_ocde_ia.py a montrees hors de sa portee.",
+ "cibles": [
+  "tests/test_ocde_ia_socle.py"
+ ],
+ "mutations": [
+  {
+   "nom": "le temoin : le module refuse de se charger meme sans defaut injecte",
+   "fichier": "ocde_ia.py",
+   "avant": "_FAUTES = _verifier()\n",
+   "apres": "_FAUTES = _verifier() or [\"tordu\"]\n",
+   "regle": "test_le_module_se_charge_SANS_defaut_injecte"
+  },
+  {
+   "nom": "la porte qui compte retenus + ecartes cesse de compter",
+   "fichier": "ocde_ia.py",
+   "avant": "    if len(retenus) + len(ecartes) != len(EXEMPLES):\n",
+   "apres": "    if False:\n",
+   "regle": "test_le_module_REFUSE_que_les_exemples_hors_groupe_comptent_zero"
+  },
+  {
+   "nom": "la porte qui rejoue l'etape 6 vide sous « cause » cesse de la rejouer",
+   "fichier": "ocde_ia.py",
+   "avant": "    if sc[\"taux\"] != 0:\n",
+   "apres": "    if False:\n",
+   "regle": "test_le_module_REFUSE_un_verrou_d_etape_qui_ne_porte_que_sur_SON_etape"
+  },
+  {
+   "nom": "la porte qui recompose le plafond global cesse de le recomposer",
+   "fichier": "ocde_ia.py",
+   "avant": "    if recompose != sc2[\"plafond\"]:\n",
+   "apres": "    if False:\n",
+   "regle": "test_le_module_REFUSE_un_plafond_global_qui_n_est_pas_la_recomposition"
+  },
+  {
+   "nom": "la porte qui compte les cadres mesures cesse de les compter",
+   "fichier": "ocde_ia.py",
+   "avant": "    if len(CADRES_MESURES) != 3:\n",
+   "apres": "    if False:\n",
+   "regle": "test_le_module_REFUSE_un_quatrieme_cadre_declare_mesure"
+  }
+ ]
+}

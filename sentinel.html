@@ -177,6 +177,13 @@ body{
 .sb-nav [data-grp="en18286"]{--sb-ic:#500078}
 .sb-nav [data-grp="nist-ai-rmf"]{--sb-ic:#804810}
 .sb-nav [data-grp="owasp-llm"]{--sb-ic:#D35D94}
+/* LA QUATORZIÈME, ET SA COULEUR EST UNE DÉCISION DE LICENCE AUTANT QUE DE
+   MAQUETTE : CC BY interdit d'employer l'identité visuelle de l'OCDE ou de
+   suggérer qu'elle adosse cet usage. Le bleu de l'OCDE est donc écarté, et
+   ce sang-de-bœuf a été choisi par la mesure — ΔE 15,7 de la teinte de norme
+   la plus proche, 24,1 de la couleur d'état la plus proche, 11,4:1 de
+   contraste sur sa propre pastille. */
+.sb-nav [data-grp="ocde"]{--sb-ic:#550707}
 /* CARTOGRAPHIER N'EST PAS UN RÉFÉRENTIEL : sa puce garde le bleu du
    groupe, pour que le rail ne le fasse pas passer pour une norme. */
 .sb-nav .sb-item[data-norme="cartographier"]{--sb-ic:var(--blue)}
@@ -193,6 +200,7 @@ body{
 .sb-nav .sb-item[data-norme="nist_800_53"]{--sb-ic:#7F2E55}
 .sb-nav .sb-item[data-norme="nist_800_82"]{--sb-ic:#138BCF}
 .sb-nav .sb-item[data-norme="ia_act"]{--sb-ic:#5F24B7}
+.sb-nav .sb-item[data-norme="ocde"]{--sb-ic:#550707}
 /* ── LA PASTILLE VIDE PORTE UN POINT. Vingt-huit onglets de référentiel n'ont
       pas de dessin : leur pastille, teintée à 9 %, laissait la couleur presque
       invisible — constaté à l'écran sur DORA et NIS 2. Le point prend
@@ -203,7 +211,7 @@ body{
 .sb-item .sb-icon:empty::before{content:'';width:8px;height:8px;
   border-radius:50%;background:currentColor}
 
-/* ── LE TAUX DE CONFORMITÉ DES TREIZE NORMES ──────────────────────────────
+/* ── LE TAUX DE CONFORMITÉ DES QUATORZE NORMES ──────────────────────────────
    DEUX COULEURS SEULEMENT PORTENT UN SENS ICI, et c'est délibéré : l'ambre
    marque un VERROU — un défaut qui arrête un tiers — et le gris barré marque
    l'ABSENCE DE MESURE. Un taux bas n'est pas coloré : colorer la faiblesse
@@ -577,6 +585,7 @@ body{
 #p-nist-profil,#p-nist-cadre,#p-nist-genai{--ref:128 72 16}
 #p-owasp-dix,#p-owasp-pont{--ref:211 93 148}
 #p-en18286-processus,#p-en18286-questionnaire,#p-en18286-conformite,#p-en18286-analyse{--ref:80 0 120}
+#p-ocde-processus,#p-ocde-questionnaire,#p-ocde-conformite,#p-ocde-analyse{--ref:85 7 7}
 :root{--hors:196 124 26;--cy:28 90 138}
 
 /* ── L'ÉCHELLE DES ÉTATS : UNE TEINTE QUI FONCE ────────────────────────
@@ -3929,7 +3938,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
          frères d'une section jusqu'à la suivante, et une section de plus
          aurait coupé le groupe RGPD en deux. -->
     <div class="sb-famille" data-fam="conformite"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 2.5 20 6v6.2c0 4.9-3.3 8.6-8 9.8-4.7-1.2-8-4.9-8-9.8V6z"/><path d="M8.6 12.1 11 14.5l4.4-4.6"/></svg><span>Votre Mise en Conformité Réglementaire</span><span class="sb-famille-n" id="sb-fam-n" aria-hidden="true"></span></div>
-    <div class="sb-section sb-pliable" data-grp="taux-conformite" data-fam="conformite" role="button" tabindex="0" aria-expanded="false" onclick="sbReplier(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sbReplier(this)}" title="Le taux de chacune des treize normes, et le plan qui le fait monter"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg><span>Taux de conformité — les treize normes</span><svg class="sb-chev" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></div>
+    <div class="sb-section sb-pliable" data-grp="taux-conformite" data-fam="conformite" role="button" tabindex="0" aria-expanded="false" onclick="sbReplier(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sbReplier(this)}" title="Le taux de chacune des quatorze normes, et le plan qui le fait monter"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg><span>Taux de conformité — les quatorze normes</span><svg class="sb-chev" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></div>
     <div class="sb-item" data-grp="taux-conformite" role="button" tabindex="0" onclick="go('conf-taux',this,'TAUX DE CONFORMITÉ','Le taux par norme');confInit()" title="Un taux par norme, ce qu il mesure, et ce qui le plafonne"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 5 5 19"/><circle cx="7" cy="7" r="2.5"/><circle cx="17" cy="17" r="2.5"/></svg></span>Les onze taux</div>
     <div class="sb-item" data-grp="taux-conformite" role="button" tabindex="0" onclick="go('conf-plan',this,'TAUX DE CONFORMITÉ','Plan de mise en conformité');confInit()" title="Les actions, du verrou au detail — et ce que chacune rapporte reellement"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 6h10M10 12h10M10 18h10"/><path d="M3.5 6l1.5 1.5L7.5 5M3.5 12l1.5 1.5L7.5 11M3.5 18l1.5 1.5L7.5 17"/></svg></span>Plan de mise en conformité</div>
     <div class="sb-item" data-grp="taux-conformite" role="button" tabindex="0" onclick="go('conf-limites',this,'TAUX DE CONFORMITÉ','Ce que le plan ne peut pas faire');confInit()" title="DORA sans instrument, le NIST non certifiable, et les trois risques LLM hors annexe A"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg></span>Ce que le plan ne peut pas faire</div>
@@ -4062,6 +4071,11 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <div class="sb-section sb-pliable" data-grp="nist-ot" data-fam="conformite" role="button" tabindex="0" aria-expanded="false" onclick="sbReplier(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sbReplier(this)}" title="Replier ou déplier NIST SP 800-53 et 800-82"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="4" width="18" height="6" rx="1.5"/><rect x="3" y="14" width="18" height="6" rx="1.5"/><path d="M7 7h.01M7 17h.01"/></svg><span>NIST 800-53 &amp; 800-82 — Systèmes industriels</span><svg class="sb-chev" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></div>
     <div class="sb-item" data-norme="nist_800_53" data-grp="nist-ot" role="button" tabindex="0" onclick="go('nist53-socle',this,'NIST 800-53','Socle et dix-huit familles');nist53Init()" title="Le socle Low, Moderate ou High DECOULE de l appreciation du risque — et les dix-huit familles se declarent une par une"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg></span><span data-i18n="nav.item.nist53-socle">Socle et dix-huit familles</span></div>
     <div class="sb-item" data-norme="nist_800_82" data-grp="nist-ot" role="button" tabindex="0" onclick="go('nist82-ot',this,'NIST 800-82','Surcharge industrielle');nist82Init()" title="Les dix axes que l industriel AJOUTE — chacun plafonne par la famille 800-53 qu il taille"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 21V11l5 3v-3l5 3v-3l5 3V4h3v17z"/><path d="M3 21h18"/></svg></span><span data-i18n="nav.item.nist82-ot">Surcharge industrielle (OT)</span></div>
+    <div class="sb-section sb-pliable" data-grp="ocde" data-fam="conformite" role="button" tabindex="0" aria-expanded="false" onclick="sbReplier(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sbReplier(this)}" title="Replier ou deplier le guide OCDE sur le devoir de diligence pour une IA responsable : instrument VOLONTAIRE, sans presomption de conformite a aucune date."><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3.5 9h17M3.5 15h17"/><path d="M12 3c2.5 2.6 2.5 15.4 0 18M12 3c-2.5 2.6-2.5 15.4 0 18"/></svg><span data-i18n="nav.sec.ocde">Diligence OCDE — IA responsable</span><svg class="sb-chev" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></div>
+    <div class="sb-item" data-norme="ocde" data-grp="ocde" role="button" tabindex="0" onclick="go('ocde-processus',this,'DILIGENCE OCDE — IA RESPONSABLE','Processus — groupes et implication');ocdeInit()" title="Les trois groupes d acteur, l implication dans l incidence (causer, contribuer, etre lie) et la priorisation sur quatre facteurs. C est l implication qui plafonne le taux."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 6h4M5 12h4M5 18h4"/><path d="M11 6h3a2 2 0 012 2v8a2 2 0 01-2 2h-3"/><circle cx="19" cy="12" r="2.2"/></svg></span><span data-i18n="nav.item.ocde-processus">Processus — groupes et implication</span></div>
+    <div class="sb-item" data-norme="ocde" data-grp="ocde" role="button" tabindex="0" onclick="go('ocde-questionnaire',this,'DILIGENCE OCDE — IA RESPONSABLE','Questionnaire — les six étapes');ocdeInit()" title="Les exemples pratiques du document, ranges par etape et par sous-etape. Seuls ceux qu un de vos groupes vise entrent dans le calcul."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="3.5" width="16" height="17" rx="2"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></span><span data-i18n="nav.item.ocde-questionnaire">Questionnaire — les six étapes</span></div>
+    <div class="sb-item" data-norme="ocde" data-grp="ocde" role="button" tabindex="0" onclick="go('ocde-conformite',this,'DILIGENCE OCDE — IA RESPONSABLE','Conformité — feuilles de route');ocdeInit()" title="Les quatre-vingt-onze lignes de pont que le document donne lui-meme vers vingt autres cadres. Il ecrit que ce n est PAS un cadre d equivalence."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 17h4a4 4 0 004-4V9"/><path d="M21 17h-4a4 4 0 01-4-4V9"/><circle cx="12" cy="6" r="2.5"/></svg></span><span data-i18n="nav.item.ocde-conformite">Conformité — feuilles de route</span></div>
+    <div class="sb-item" data-norme="ocde" data-grp="ocde" role="button" tabindex="0" onclick="go('ocde-analyse',this,'DILIGENCE OCDE — IA RESPONSABLE','Analyse — licence et limites');ocdeInit()" title="La source, sa licence CC BY 4.0 et les deux mentions qu elle impose, ce que le document s exclut lui-meme, et ce que ce module refuse de dire."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 18V9M10 18V5M16 18v-6M22 18v-9"/><path d="M3 21h18"/></svg></span><span data-i18n="nav.item.ocde-analyse">Analyse — licence et limites</span></div>
     <div class="sb-section" data-grp="juridique"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 6.5S9.5 4.5 3.5 4.5v13c6 0 8.5 2 8.5 2s2.5-2 8.5-2v-13c-6 0-8.5 2-8.5 2z"/><path d="M12 6.5v13"/></svg><span data-i18n="nav.sec.juridique">Juridique</span></div>
     <div class="sb-item" data-grp="juridique" role="button" tabindex="0" onclick="go('juridique',this,'JURIDIQUE','Conseil juridique assisté');juInit()" title="Qualification reglementaire deterministe, lectures possibles des textes, clausier fournisseurs et revue de contrat — droit du numerique, cyber IT/OT/ICS et IA."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3v18"/><path d="M5 7h5l-2.5 5a2.5 2.5 0 0 0 5 0L10 7"/><path d="M14 7h5l-2.5 5a2.5 2.5 0 0 0 5 0L19 7"/><path d="M5 21h14"/><path d="M9 7h6"/></svg></span><span data-i18n="nav.item.juridique">Conseil juridique</span></div>
     <div class="sb-section" data-grp="entreprise"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3.5 21V9.5l6-3v14.5"/><path d="M9.5 21V13l7-3v11"/><path d="M16.5 21V6.5l4 2V21"/><path d="M2.5 21h19"/></svg><span data-i18n="nav.sec.entreprise">Entreprise</span></div>
@@ -6135,18 +6149,18 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 
 
 <!-- ═══════════════════════════════════════════════════════════════════
-     LE TAUX DE CONFORMITÉ DES TREIZE NORMES
+     LE TAUX DE CONFORMITÉ DES QUATORZE NORMES
      Trois écrans, et le troisième compte autant que les deux premiers :
      les taux, le plan, et CE QUE LE PLAN NE PEUT PAS FAIRE. Un plan qui
      promettrait 100 % partout mentirait sur quatre points connus d'avance.
      ═══════════════════════════════════════════════════════════════════ -->
 <div class="page" id="p-conf-taux">
-  <span class="eyebrow" data-i18n="pg.conf-taux.eb">Taux de conformité · les treize normes</span>
-  <h1 class="page-h" data-i18n-bloc="pg.conf-taux.h1">Treize taux, et <em>ce qu'ils ne disent pas</em></h1>
+  <span class="eyebrow" data-i18n="pg.conf-taux.eb">Taux de conformité · les quatorze normes</span>
+  <h1 class="page-h" data-i18n-bloc="pg.conf-taux.h1">Quatorze taux, et <em>ce qu'ils ne disent pas</em></h1>
   <p class="page-p" data-i18n-bloc="pg.conf-taux.p">Chaque taux est composé des parts de sa norme, pondérées, puis
   <strong>plafonné par ses verrous</strong>&nbsp;: un défaut qui arrête un auditeur
-  n'efface pas le travail fait, il interdit de s'en prévaloir au-delà. Treize
-  pourcentages alignés se lisent comme treize fois la même chose&nbsp;; ils ne le sont
+  n'efface pas le travail fait, il interdit de s'en prévaloir au-delà. Quatorze
+  pourcentages alignés se lisent comme quatorze fois la même chose&nbsp;; ils ne le sont
   pas, et la <em>nature</em> de chaque norme dit ce que 100&nbsp;% veut dire —
   <strong>et ce qu'il ne veut pas dire</strong>.</p>
   <p class="page-p" data-i18n-bloc="pg.conf-taux.rail">Ces taux lisent <strong>les mêmes
@@ -6229,6 +6243,51 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     vide</strong> — le §4.4 et le chapitre 9, c'est-à-dire exactement ce que le règlement ajoute. Et prEN 18286 organise la façon de
     répondre aux exigences essentielles&nbsp;: ce sont les <b>autres</b> normes de la famille qui disent comment y répondre.</p>
   <div id="en18286-analyse-body" class="veille-loading">Chargement…</div>
+</div>
+
+<div class="page" id="p-ocde-processus">
+  <span class="eyebrow" data-i18n="pg.ocde-processus.eb">Diligence OCDE · Processus</span>
+  <h1 class="page-h" data-i18n-bloc="pg.ocde-processus.h1">Votre implication, <em>et ce qu'elle rend non négociable</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.ocde-processus.p">Trois questions, et elles commandent tout le reste. Quels <b>groupes</b> votre
+    organisme occupe dans la chaîne de valeur de l'IA&nbsp;— le document dit expressément qu'ils ne sont ni rigides ni exclusifs.
+    Votre <b>implication</b> dans l'incidence&nbsp;: la causer, y contribuer, ou y être lié par une relation d'affaires&nbsp;— c'est elle
+    qui fixe le niveau de diligence attendu, et c'est elle qui <strong>plafonne le taux</strong>. Et la <b>priorisation</b> sur quatre
+    facteurs, dont le document exige qu'elle soit crédible&nbsp;: une cotation sans justification écrite n'en est pas une.</p>
+  <div id="ocde-reserve"></div>
+  <div id="ocde-processus-body" class="veille-loading">Chargement…</div>
+</div>
+
+<div class="page" id="p-ocde-questionnaire">
+  <span class="eyebrow" data-i18n="pg.ocde-questionnaire.eb">Diligence OCDE · Questionnaire</span>
+  <h1 class="page-h" data-i18n-bloc="pg.ocde-questionnaire.h1">Six étapes, <em>et une liste que sa source dit incomplète</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.ocde-questionnaire.p">Les exemples pratiques du document, rangés par étape et par sous-étape.
+    Ceux qu'aucun de vos groupes ne vise <strong>sortent du calcul</strong> au lieu de compter zéro&nbsp;: le document les adresse à
+    quelqu'un d'autre. Les énoncés restent en anglais, comme les actions du profil NIST&nbsp;— c'est le libellé qu'un auditeur
+    cherchera. Et ce que ce taux dit s'appelle <b>couverture des exemples retenus</b>, jamais conformité&nbsp;: le document écrit
+    lui-même que ses exemples ne constituent pas une liste de contrôle exhaustive.</p>
+  <div id="ocde-questionnaire-body" class="veille-loading">Chargement…</div>
+</div>
+
+<div class="page" id="p-ocde-conformite">
+  <span class="eyebrow" data-i18n="pg.ocde-conformite.eb">Diligence OCDE · Conformité</span>
+  <h1 class="page-h" data-i18n-bloc="pg.ocde-conformite.h1">Les ponts, <em>donnés par le document lui-même</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.ocde-conformite.p">Six tableaux, un par étape, quatre-vingt-onze lignes&nbsp;: c'est l'OCDE qui
+    rapproche sa démarche des dispositions de vingt autres cadres&nbsp;— IA Act, DSA, CSDDD, ISO/IEC&nbsp;42001, 23894, 38507, 42005,
+    ISO&nbsp;31000, IEEE&nbsp;7000, principes directeurs de l'ONU, cadre du NIST, et sept cadres nationaux. Deux choses s'y lisent qu'on
+    préférerait taire&nbsp;: le document écrit que ce n'est <strong>pas</strong> un cadre d'équivalence, et sur ces vingt cadres,
+    Sentinel en mesure <b>trois</b>.</p>
+  <div id="ocde-conformite-body" class="veille-loading">Chargement…</div>
+</div>
+
+<div class="page" id="p-ocde-analyse">
+  <span class="eyebrow" data-i18n="pg.ocde-analyse.eb">Diligence OCDE · Analyse</span>
+  <h1 class="page-h" data-i18n-bloc="pg.ocde-analyse.h1">Ce qui est de l'OCDE, <em>et ce qui est du cabinet</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.ocde-analyse.p">Une première dans Sentinel&nbsp;: une source dont la licence permet de citer,
+    de traduire et d'adapter. <b>CC BY 4.0</b>&nbsp;— là où les textes du CEN et de l'ISO n'existent ici que par leurs numéros et
+    leurs titres. La licence impose trois choses en échange, et cet écran les porte&nbsp;: citer l'œuvre, et deux mentions
+    mot pour mot, l'une parce que les intitulés sont <b>traduits</b>, l'autre parce que le découpage du questionnaire est une
+    <b>adaptation</b>. S'y lisent aussi ce que le document s'exclut lui-même et ce que ce module refuse de dire.</p>
+  <div id="ocde-analyse-body" class="veille-loading">Chargement…</div>
 </div>
 
 <div class="page" id="p-nist-profil">

@@ -149,7 +149,7 @@
    "fr": "0 g–0 g"
   },
   "# pages": {
-   "en": "521 pages",
+   "en": "# pages",
    "fr": "521 pages"
   },
   "# requête(s) journalisée(s) au total, dont # aujourd’hui · # page(s) comptabilisée(s) · clé Anthropic :": {
@@ -341,7 +341,7 @@
    "fr": "EISm servis"
   },
   "EcoLogits, ML.ENERGY, Base Empreinte ADEME, RTE eCO#mix": {
-   "en": "EcoLogits, ML.ENERGY, Base Empreinte ADEME, RTE eCO2mix",
+   "en": "EcoLogits, ML.ENERGY, Base Empreinte ADEME, RTE eCO#mix",
    "fr": "EcoLogits, ML.ENERGY, Base Empreinte ADEME, RTE eCO2mix"
   },
   "Effacer les réponses DORA": {

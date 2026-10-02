@@ -1,0 +1,190 @@
+{
+ "_pourquoi": "Diligence OCDE : chaque regle de tests/test_ocde_ia.py doit tomber sur SON defaut. Le moteur porte une garde qui rejoue son arithmetique a l'import : les mutations qui la feraient lever sortiraient en erreur de COLLECTE, que le banc prendrait pour une survivante. Celles d'ici passent donc la garde et portent sur ce qu'elle ne couvre pas : la licence servie et peinte, le hors-perimetre, l'asymetrie des implications, la portee de chaque verrou, la lecture par conformite, le rail, les routes, l'inventaire i18n, la feuille de style et les quatre ecrans.",
+ "cibles": [
+  "tests/test_ocde_ia.py"
+ ],
+ "mutations": [
+  {
+   "nom": "le referentiel servi perd la mention d'adaptation",
+   "fichier": "ocde_ia.py",
+   "avant": "        \"mention_adaptation\": MENTION_ADAPTATION,\n",
+   "apres": "        \"mention_adaptation\": \"\",\n",
+   "regle": "test_les_DEUX_mentions_que_la_licence_impose_sont_au_referentiel_SERVI"
+  },
+  {
+   "nom": "le referentiel servi perd la citation de l'oeuvre",
+   "fichier": "ocde_ia.py",
+   "avant": "        \"citation\": SOURCE[\"citation\"],\n",
+   "apres": "        \"citation\": \"OECD, Paris.\",\n",
+   "regle": "test_les_DEUX_mentions_que_la_licence_impose_sont_au_referentiel_SERVI"
+  },
+  {
+   "nom": "l'interdit du logo cesse de dire ce que le module FAIT",
+   "fichier": "ocde_ia.py",
+   "avant": "     \"fait\": \"La couleur du tiroir de ce module dans la barre latérale n'est \"\n             \"pas le bleu de l'OCDE, et aucune marque de l'OCDE n'est \"\n             \"reproduite.\"},\n",
+   "apres": "     \"fait\": \"Rien de particulier.\"},\n",
+   "regle": "test_la_licence_INTERDIT_le_logo_et_le_module_le_dit_ET_le_fait"
+  },
+  {
+   "nom": "le hors-perimetre que le document s'exclut lui-meme devient vide",
+   "fichier": "ocde_ia.py",
+   "avant": "        \"hors_perimetre\": [dict(h) for h in HORS_PERIMETRE],\n",
+   "apres": "        \"hors_perimetre\": [],\n",
+   "regle": "test_ce_que_le_document_s_exclut_LUI_MEME_est_declare"
+  },
+  {
+   "nom": "l'avertissement « this table is not an equivalency framework » disparait",
+   "fichier": "ocde_ia.py",
+   "avant": "        \"avertissement_feuilles\": AVERTISSEMENT_FEUILLES,\n",
+   "apres": "        \"avertissement_feuilles\": \"See the other frameworks.\",\n",
+   "regle": "test_les_ponts_ne_valent_PAS_equivalence_et_le_document_le_dit"
+  },
+  {
+   "nom": "l'implication est declaree figee, et le lien direct ne devient plus une contribution",
+   "fichier": "ocde_ia.py",
+   "avant": "        \"implication_non_figee\": IMPLICATION_NON_FIGEE,\n        \"reparations\": [dict(r) for r in REPARATIONS],\n",
+   "apres": "        \"implication_non_figee\": \"\",\n        \"reparations\": [dict(r) for r in REPARATIONS],\n",
+   "regle": "test_l_implication_N_EST_PAS_FIGEE_et_le_module_le_dit"
+  },
+  {
+   "nom": "le module met quelqu'un hors champ : « ok » devient False sans groupe",
+   "fichier": "ocde_ia.py",
+   "avant": "        return {\"ok\": None, \"groupes\": (), \"implication\": None,\n",
+   "apres": "        return {\"ok\": False, \"groupes\": (), \"implication\": None,\n",
+   "regle": "test_sans_groupe_declare_RIEN_n_est_calcule_et_ce_n_est_pas_un_zero"
+  },
+  {
+   "nom": "la gravite devient une moyenne des trois facteurs au lieu du maximum",
+   "fichier": "ocde_ia.py",
+   "avant": "            gravite = max(notes[c] for c in FACTEURS_DE_GRAVITE)\n",
+   "apres": "            gravite = int(round(sum(notes[c] for c in FACTEURS_DE_GRAVITE)\n                                / float(len(FACTEURS_DE_GRAVITE))))\n",
+   "regle": "test_la_gravite_se_lit_sur_TROIS_facteurs_et_la_saillance_les_croise"
+  },
+  {
+   "nom": "la saillance cesse de croiser la gravite avec la probabilite",
+   "fichier": "ocde_ia.py",
+   "avant": "            saillance = gravite * notes[\"probabilite\"]\n",
+   "apres": "            saillance = gravite\n",
+   "regle": "test_la_gravite_se_lit_sur_TROIS_facteurs_et_la_saillance_les_croise"
+  },
+  {
+   "nom": "une ligne incomplete rend quand meme une saillance",
+   "fichier": "ocde_ia.py",
+   "avant": "        if manquants:\n            ligne.update(gravite=None, saillance=None, palier=None)\n            incompletes.append(cle)\n",
+   "apres": "        if manquants and False:\n            ligne.update(gravite=None, saillance=None, palier=None)\n            incompletes.append(cle)\n",
+   "regle": "test_une_ligne_INCOMPLETE_ne_rend_PAS_de_saillance_et_ne_plafonne_pas"
+  },
+  {
+   "nom": "le verrou de la priorisation porte sur toutes les parts, pas sur « identifier »",
+   "fichier": "ocde_ia.py",
+   "avant": "    if pr[\"sans_justification\"]:\n        _poser(\"identifier\",\n               int(round(100 * PLAFOND_PRIORISATION_SANS_JUSTIFICATION)))\n",
+   "apres": "    if pr[\"sans_justification\"]:\n        for _x in ETAPES:\n            _poser(_x[\"cle\"],\n                   int(round(100 * PLAFOND_PRIORISATION_SANS_JUSTIFICATION)))\n",
+   "regle": "test_une_cotation_SANS_justification_plafonne_la_seule_part_identifier"
+  },
+  {
+   "nom": "« etre lie » rend la reparation non negociable, et l'asymetrie disparait",
+   "fichier": "ocde_ia.py",
+   "avant": "     \"commande\": (\"traiter\",),\n",
+   "apres": "     \"commande\": (\"traiter\", \"reparer\"),\n",
+   "regle": "test_ETRE_LIE_ne_la_rend_PAS_non_negociable_et_c_est_l_asymetrie"
+  },
+  {
+   "nom": "le poids de l'etape « faire cesser » passe de trois a un",
+   "fichier": "ocde_ia.py",
+   "avant": "     \"nom\": \"Faire cesser, prévenir et atténuer les incidences négatives\",\n     \"poids\": 3,\n",
+   "apres": "     \"nom\": \"Faire cesser, prévenir et atténuer les incidences négatives\",\n     \"poids\": 1,\n",
+   "regle": "test_les_POIDS_de_l_indice_sont_ceux_du_moteur"
+  },
+  {
+   "nom": "la couleur du tiroir devient le bleu de l'OCDE",
+   "fichier": "conformite.py",
+   "avant": "    \"ocde\":        \"#550707\",   # sang-de-bœuf\n",
+   "apres": "    \"ocde\":        \"#0059A8\",   # bleu\n",
+   "regle": "test_la_licence_INTERDIT_le_logo_et_le_module_le_dit_ET_le_fait"
+  },
+  {
+   "nom": "l'indice recompose les parts BRUTES : deux verites sur le meme nombre",
+   "fichier": "conformite.py",
+   "avant": "    signaux = [r[\"cle\"] for r in (ev.get(\"reserves\") or [])]\n    return dict(ev.get(\"parts\") or {}), signaux\n",
+   "apres": "    signaux = [r[\"cle\"] for r in (ev.get(\"reserves\") or [])]\n    return dict(ev.get(\"parts_brutes\") or {}), signaux\n",
+   "regle": "test_l_INDICE_rend_le_MEME_taux_que_le_moteur"
+  },
+  {
+   "nom": "la quatorzieme norme n'est plus la derniere de la barre",
+   "fichier": "conformite.py",
+   "avant": "               \"nist_800_82\", \"ocde\")\n",
+   "apres": "               \"ocde\", \"nist_800_82\")\n",
+   "regle": "test_la_QUATORZIEME_norme_est_annoncee_et_atteignable"
+  },
+  {
+   "nom": "le rail dit « sans objet » la ou le guide n'ecarte personne",
+   "fichier": "parcours_normes.py",
+   "avant": "    manque[\"questionnaire\"] = reste\n    return manque, {}, {}\n",
+   "apres": "    manque[\"questionnaire\"] = reste\n    return manque, {\"processus\": \"ce guide n'ecarte personne\"}, {}\n",
+   "regle": "test_le_RAIL_connait_les_quatre_blocs_et_ne_dit_JAMAIS_sans_objet"
+  },
+  {
+   "nom": "la reserve du rail laisse croire qu'une date la levera",
+   "fichier": "parcours_normes.py",
+   "avant": "    \"ocde\": \"ce guide est volontaire : il met en œuvre deux recommandations \"\n            \"de l'OCDE et n'ouvre aucune présomption de conformité, à aucune \"\n            \"date. Aucun organisme ne délivre d'attestation contre lui\",\n",
+   "apres": "    \"ocde\": \"ce guide n'ouvre pas encore de présomption de conformité\",\n",
+   "regle": "test_la_reserve_du_rail_dit_que_la_date_NE_CHANGERA_RIEN"
+  },
+  {
+   "nom": "la route du referentiel ne sert plus la table du module",
+   "fichier": "app.py",
+   "avant": "    return jsonify({\"ok\": True, \"referentiel\": ocde_ia.referentiel()})\n",
+   "apres": "    return jsonify({\"ok\": True, \"referentiel\": {}})\n",
+   "regle": "test_les_routes_repondent_et_portent_la_reserve"
+  },
+  {
+   "nom": "la route du referentiel sort de l'inventaire i18n sans etre declaree",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "    '/api/ocde/referentiel',\n",
+   "apres": "",
+   "regle": "test_la_route_du_referentiel_est_RELEVEE_par_l_inventaire_i18n"
+  },
+  {
+   "nom": "les quatre pages perdent la couleur du referentiel",
+   "fichier": "sentinel.html",
+   "avant": "#p-ocde-processus,#p-ocde-questionnaire,#p-ocde-conformite,#p-ocde-analyse{--ref:85 7 7}",
+   "apres": "#p-ocde-processus,#p-ocde-questionnaire,#p-ocde-conformite,#p-ocde-analyse{}",
+   "regle": "test_les_quatre_panneaux_portent_la_couleur_du_referentiel"
+  },
+  {
+   "nom": "l'ecran du questionnaire perd son corps",
+   "fichier": "sentinel.html",
+   "avant": "  <div id=\"ocde-questionnaire-body\" class=\"veille-loading\">Chargement…</div>",
+   "apres": "  <div id=\"ocde-questionnaire-corps\" class=\"veille-loading\">Chargement…</div>",
+   "regle": "test_chaque_ecran_existe_avec_son_corps_et_son_onglet[questionnaire]"
+  },
+  {
+   "nom": "go() n'amorce plus le module : « Chargement… » sans fin",
+   "fichier": "sentinel.page.js",
+   "avant": "  if (id.indexOf('ocde') === 0 && typeof window.ocdeInit === 'function') _apresPeinture(window.ocdeInit);",
+   "apres": "  if (id.indexOf('ocde@') === 0 && typeof window.ocdeInit === 'function') _apresPeinture(window.ocdeInit);",
+   "regle": "test_les_quatre_ecrans_s_ouvrent_aussi_par_un_LIEN_PROFOND"
+  },
+  {
+   "nom": "l'ecran cesse de peindre la mention d'adaptation",
+   "fichier": "sentinel.page.js",
+   "avant": "    + '<p class=\"ocde-mention\"><i>' + _ocdeEsc(R.mention_adaptation)\n    + '</i></p></div>';\n",
+   "apres": "    + '</div>';\n",
+   "regle": "test_l_ECRAN_peint_les_deux_mentions_et_la_citation"
+  },
+  {
+   "nom": "l'ecran cesse de peindre la citation de l'oeuvre",
+   "fichier": "sentinel.page.js",
+   "avant": "    + '<p class=\"ocde-cite\">' + _ocdeEsc(R.citation) + '</p>'\n",
+   "apres": "",
+   "regle": "test_l_ECRAN_peint_les_deux_mentions_et_la_citation"
+  },
+  {
+   "nom": "la declaration de l'ecran n'est plus ramassee pour le rail et le taux",
+   "fichier": "sentinel.page.js",
+   "avant": "  ocde: function () { return OCDE_DECL; },\n",
+   "apres": "",
+   "regle": "test_la_declaration_de_l_ecran_est_RAMASSEE_une_seule_fois"
+  }
+ ]
+}

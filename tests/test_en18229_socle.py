@@ -164,6 +164,6 @@ def test_conformite_REFUSE_un_compte_de_normes_qui_NE_SUIT_PAS_la_table(tmp_path
     """LE TITRE CODÉ EN DUR QUI DIT SEPT QUAND LA GRILLE EN MONTRE NEUF est un
     défaut déjà rencontré sur ce site, et corrigé une fois. La garde le tient
     maintenant des deux côtés."""
-    m = _refus(tmp_path, "conformite", "NORMES_ANNONCEES = 13",
-               "NORMES_ANNONCEES = 12")
+    m = _refus(tmp_path, "conformite", "NORMES_ANNONCEES = 14",
+               "NORMES_ANNONCEES = 13")
     assert "annonce" in m or "normes" in m, m

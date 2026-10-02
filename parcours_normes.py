@@ -47,6 +47,7 @@ import cra
 import nis2
 import nis2_recyf
 import en18286
+import ocde_ia
 import nist_ai_rmf
 import nist_genai
 import nist_800_53
@@ -130,6 +131,12 @@ QUI_JUGE = {
                "de l'Union européenne : il n'ouvre aucune présomption de "
                "conformité à l'article 17. Le jour venu, c'est l'organisme "
                "notifié de l'évaluation de conformité qui l'appréciera",
+    #  CELUI-LÀ NE SE CITERA JAMAIS AU JOURNAL OFFICIEL : c'est un guide de
+    #  mise en œuvre de deux recommandations, pas une norme harmonisée. La
+    #  réserve ne tombera pas avec le temps.
+    "ocde": "ce guide est volontaire : il met en œuvre deux recommandations "
+            "de l'OCDE et n'ouvre aucune présomption de conformité, à aucune "
+            "date. Aucun organisme ne délivre d'attestation contre lui",
     "nist_ai_rmf": "ce cadre est volontaire et ne se certifie pas : il n'y a "
                    "pas de conformité à prononcer",
     "owasp_llm": "cette liste est un classement de risques, pas une norme : "
@@ -340,6 +347,59 @@ BLOCS = {
     #  vient en premier parce qu'il porte la QUALIFICATION : hors du champ de
     #  l'article 17, les trois autres écrans n'ont rien à mesurer. Puis le
     #  questionnaire, puis les deux lectures qui en découlent.
+    #  LE PROCESSUS EN PREMIER, ET POUR UNE RAISON PLUS FORTE QUE L'ORDRE DU
+    #  DOCUMENT : il porte les GROUPES, sans lesquels le questionnaire ne sait
+    #  pas lesquels des 115 exemples visent ce client, et l'IMPLICATION, qui
+    #  fixe le niveau de diligence attendu aux étapes 3 et 6.
+    "ocde": (
+        _b("processus", "ocde-processus",
+           "Processus — groupes et implication", "saisie",
+           "Les trois groupes d'acteur — ils ne sont ni rigides ni exclusifs "
+           "—, l'implication dans l'incidence, et la priorisation sur quatre "
+           "facteurs.",
+           "L'implication COMMANDE le niveau de diligence attendu : causer "
+           "oblige à faire cesser ET à réparer, contribuer à cesser sa part "
+           "et construire son levier, être lié à user de ce levier. C'est "
+           "elle qui plafonne le taux.",
+           "Se ranger en « lien direct » et ne rien faire : le document écrit "
+           "qu'un lien direct devient une CONTRIBUTION si l'entreprise "
+           "continue sans agir."),
+        _b("questionnaire", "ocde-questionnaire",
+           "Questionnaire — les six étapes", "saisie",
+           "Les exemples pratiques du document, par étape et par sous-étape. "
+           "Seuls ceux qu'un de vos groupes vise entrent dans le calcul.",
+           "Le poids suit la charge, pas le nombre d'exemples : l'étape 3 en "
+           "porte vingt-quatre pour le seul groupe 2 et l'étape 6 n'en porte "
+           "que deux — or c'est l'étape 6 qui est l'attente la plus forte dès "
+           "que l'entreprise cause ou contribue.",
+           "Lire ce taux comme une conformité. Le document déclare ses "
+           "exemples non exhaustifs : ce qui se mesure ici s'appelle "
+           "couverture des exemples retenus.",
+           ("processus",)),
+        _b("conformite", "ocde-conformite",
+           "Conformité — feuilles de route", "lecture",
+           "Les quatre-vingt-onze lignes de pont que le document donne "
+           "lui-même vers vingt autres cadres.",
+           "Les ponts viennent du DOCUMENT, pas du cabinet : c'est l'OCDE qui "
+           "rapproche ses six étapes des dispositions de l'IA Act, d'ISO/IEC "
+           "42001, du cadre du NIST et de dix-sept autres.",
+           "En faire une équivalence. Le document écrit que ce n'est pas un "
+           "cadre d'équivalence — et sur ces vingt cadres, Sentinel en mesure "
+           "trois.",
+           ("questionnaire",)),
+        _b("analyse", "ocde-analyse",
+           "Analyse — licence et limites", "lecture",
+           "La source, sa licence CC BY 4.0 et les deux mentions qu'elle "
+           "impose, ce que le document s'exclut lui-même, et ce que ce module "
+           "refuse de dire.",
+           "Une première dans Sentinel : une source qu'on peut citer, "
+           "traduire et adapter — là où les textes du CEN et de l'ISO "
+           "n'existent ici que par leurs numéros et leurs titres.",
+           "Croire que la licence autorise tout : le matériel de tiers en est "
+           "exclu, et le logo comme l'identité visuelle de l'OCDE sont "
+           "interdits.",
+           ("conformite",)),
+    ),
     "en18286": (
         _b("processus", "en18286-processus",
            "Processus — stratégie §4.4", "saisie",
@@ -1036,6 +1096,66 @@ def _en18286(d):
     return manque, {}, {}
 
 
+def _ocde(d):
+    """Ce qui manque aux deux blocs de saisie de la diligence OCDE.
+
+    IL N'Y A PAS DE HORS-CHAMP ICI, et c'est une différence de fond avec les
+    treize autres : ce guide n'écarte personne. Toute entreprise de la chaîne
+    de valeur de l'IA est attendue sur la diligence, les PME comprises — le
+    document le dit, et ajoute seulement que la mesure se proportionne. Le
+    rail ne rend donc JAMAIS « sans objet » pour cette norme.
+
+    LE PROCESSUS SE VALIDE SUR LES GROUPES, L'IMPLICATION ET LA PRIORISATION,
+    pas sur le questionnaire. Confondre les deux ferait rougir le premier pour
+    une réponse attendue dans le second.
+    """
+    qual = _dict(d, "qualification")
+    groupes = ocde_ia.groupes_declares({"qualification": qual})
+    attente = []
+    if not groupes:
+        attente.append(_q("Quel ou quels GROUPES d'acteur votre organisme "
+                          "occupe-t-il dans la chaîne de valeur de l'IA ? Ils "
+                          "ne sont ni rigides ni exclusifs : déclarez-en "
+                          "autant que nécessaire."))
+    if ocde_ia.implication_declaree({"qualification": qual}) is None:
+        attente.append(_q("Votre IMPLICATION dans l'incidence : la causez-vous, "
+                          "y contribuez-vous, ou y êtes-vous lié par une "
+                          "relation d'affaires ? C'est elle qui fixe le niveau "
+                          "de diligence attendu."))
+    pr = ocde_ia.priorisation(d)
+    if not pr["renseignee"]:
+        attente.append(_q("La PRIORISATION de l'étape 2.4 : coter les risques "
+                          "sur l'échelle, la portée, l'irrémédiabilité et la "
+                          "probabilité."))
+    else:
+        for cle in pr["incompletes"]:
+            attente.append(_q("Risque « %s » : un facteur au moins n'est pas "
+                              "coté — trois sur quatre ne font pas une "
+                              "priorisation" % cle))
+        for cle in pr["sans_justification"]:
+            attente.append(_q("Risque « %s » : coté sans justification écrite, "
+                              "et le document exige un processus crédible"
+                              % cle))
+    manque = {"processus": attente}
+
+    #  LE QUESTIONNAIRE NE RÉCLAME QUE LES EXEMPLES RETENUS, et il ne les
+    #  liste pas un à un : cent quinze lignes rendraient le rail illisible.
+    #  Il réclame par ÉTAPE, comme le profil du NIST réclame par
+    #  sous-catégorie.
+    reponses = _dict(d, "reponses")
+    retenus, _ = ocde_ia.exemples_retenus(groupes)
+    reste = []
+    for et in ocde_ia.ETAPES:
+        n = len([e for e in retenus
+                 if ocde_ia.UNITES_PAR_CLE[e["unite"]]["etape"] == et["num"]
+                 and reponses.get(e["cle"]) not in ocde_ia.ETATS])
+        if n:
+            reste.append(_q("Étape %d « %s » : %d exemple(s) sans réponse"
+                            % (et["num"], et["nom"], n)))
+    manque["questionnaire"] = reste
+    return manque, {}, {}
+
+
 def _nist_ai_rmf(d):
     """Deux blocs de saisie : le cadre, puis le profil qui le plafonne.
 
@@ -1346,7 +1466,7 @@ EVALUATEURS = {
     "en18229_3": _en18229_3,
     "cartographier": _cartographier,
     "nis2": _nis2, "iso27001": _iso27001, "iso42001": _iso42001,
-    "cra": _cra, "en18286": _en18286,
+    "cra": _cra, "en18286": _en18286, "ocde": _ocde,
     "nist_ai_rmf": _nist_ai_rmf, "owasp_llm": _owasp_llm,
     "nist_800_53": _nist_800_53, "nist_800_82": _nist_800_82,
     "rgpd": _rgpd, "ia_act": _ia_act,

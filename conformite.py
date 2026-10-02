@@ -181,6 +181,21 @@ NORMES = [
      "mesure": "le système de management de la qualité de l'article 17 : la "
                "stratégie de conformité réglementaire, et la charge de "
                "preuve que l'approche retenue ouvre"},
+    #  LA QUATORZIÈME, ET LA PREMIÈRE QUI NE SOIT NI UNE OBLIGATION NI UNE
+    #  NORME : un GUIDE DE MISE EN ŒUVRE de deux recommandations de l'OCDE.
+    #  « cadre », donc, comme le NIST — mais pour une raison plus forte que
+    #  les deux prEN : celles-là vaudront présomption le jour de leur
+    #  citation au Journal officiel, celui-ci jamais. Et ce qu'il mesure
+    #  n'est pas ce que les treize autres mesurent : elles demandent si LE
+    #  SYSTÈME est conforme, celui-ci demande si L'ENTREPRISE a fait ce
+    #  qu'il fallait pour savoir — relations d'affaires, amont et aval
+    #  compris.
+    {"cle": "ocde", "nom": "Diligence OCDE", "nature": "cadre",
+     "texte": "OECD Due Diligence Guidance for Responsible AI (2026)",
+     "panneau": "ocde-processus",
+     "mesure": "les six étapes de la diligence, l'implication dans "
+               "l'incidence — causer, contribuer, être lié — et les quatre "
+               "facteurs de priorisation"},
 ]
 NORMES_PAR_CLE = {n["cle"]: n for n in NORMES}
 
@@ -267,6 +282,14 @@ COULEURS = {
     # voisine donc aucune des onze autres, et n'entre pas dans le contrôle
     # d'adjacence ; elle reste loin de la terre cuite qui l'entoure.
     "ia_act":      "#5F24B7",   # indigo
+    #  LE SANG-DE-BŒUF, ET LE BLEU DE L'OCDE ÉCARTÉ PAR SA PROPRE LICENCE :
+    #  CC BY interdit d'employer son identité visuelle ou de suggérer qu'elle
+    #  adosse cet usage. Relevé : ΔE 15,7 de la teinte de norme la plus
+    #  proche, 24,1 de la couleur d'état la plus proche, 11,4:1 de contraste
+    #  sur sa propre pastille. Dans la barre, sa seule voisine est NIST
+    #  800-82 (bleu vif), à ΔE 40,0 en vision normale et 35,3 en vision
+    #  déficiente — la paire la plus large de la barre.
+    "ocde":        "#550707",   # sang-de-bœuf
 }
 
 #: L'ORDRE OÙ LES RÉFÉRENTIELS SE SUIVENT DANS LA BARRE LATÉRALE. Il ne se
@@ -279,7 +302,7 @@ COULEURS = {
 ORDRE_BARRE = ("rgpd", "iso27001", "iso42001", "en18229_3", "en18286",
                "dora", "nis2",
                "cra", "nist_ai_rmf", "owasp_llm", "nist_800_53",
-               "nist_800_82")
+               "nist_800_82", "ocde")
 
 
 def couleur(cle):
@@ -293,7 +316,7 @@ def couleur(cle):
 #: CE QUE LA PAGE D'ACCUEIL ANNONCE. Un seul endroit le décide ; la
 #: garde en bas de fichier le confronte à la table ci-dessus, et une
 #: règle de la suite le confronte au titre et à la grille de l'accueil.
-NORMES_ANNONCEES = 13
+NORMES_ANNONCEES = 14
 
 
 # ══════════════════════════════════════════════════════════════════════════
@@ -426,6 +449,30 @@ def evaluer_audit_ia_act(reponses=None):
 # la seconde est fausse tant que la porte est fermée.
 
 COMPOSITIONS = {
+    #  LES SIX ÉTAPES DE LA DILIGENCE, AVEC LES POIDS DU MOTEUR. Les
+    #  recopier ici est un doublon assumé et surveillé : une règle confronte
+    #  ces poids à `ocde_ia.ETAPES`, parce que deux jeux de poids rendraient
+    #  deux taux pour la même déclaration.
+    "ocde": [
+        {"cle": "ancrer", "nom": "Ancrer dans les politiques", "poids": 1,
+         "pourquoi": "le socle, et celui qu'un système de management déjà en "
+                     "place apporte le plus souvent tel quel"},
+        {"cle": "identifier", "nom": "Identifier et évaluer", "poids": 3,
+         "pourquoi": "l'étape qui commande toutes les autres : sans "
+                     "incidences identifiées, qualifiées et priorisées, les "
+                     "étapes 3 à 6 n'ont pas d'objet"},
+        {"cle": "traiter", "nom": "Faire cesser, prévenir, atténuer",
+         "poids": 3,
+         "pourquoi": "le seul endroit où quelque chose change pour les "
+                     "personnes"},
+        {"cle": "suivre", "nom": "Suivre la mise en œuvre", "poids": 1,
+         "pourquoi": "ce qui empêche la diligence d'être un exercice annuel"},
+        {"cle": "communiquer", "nom": "Rendre compte", "poids": 1,
+         "pourquoi": "la part que les parties prenantes peuvent vérifier"},
+        {"cle": "reparer", "nom": "Réparer ou y coopérer", "poids": 2,
+         "pourquoi": "l'attente la plus forte du cadre dès que l'entreprise "
+                     "cause ou contribue"},
+    ],
     "iso42001": [
         {"cle": "articles", "nom": "Articles 4 à 10 tenus", "poids": 2,
          "pourquoi": "le système de management lui-même ; sans lui il n'y a "
@@ -663,6 +710,37 @@ VERROUS = {
 # parce que c'est là, et seulement là, qu'il y a une porte.
 
 RESERVES = {
+    #  AUCUNE DE CES TROIS NE SE LÈVE PAR LE TRAVAIL. La première est la
+    #  nature de l'instrument, la deuxième l'aveu du document sur ses propres
+    #  exemples, la troisième son refus d'équivalence.
+    "ocde": [
+        {"cle": "volontaire",
+         "dit": "Ce guide est VOLONTAIRE : c'est la mise en œuvre de deux "
+                "recommandations de l'OCDE, pas une norme harmonisée. Il "
+                "n'ouvre aucune présomption de conformité, et aucune date ne "
+                "changera cela.",
+         "porte_sur": "Le taux dit la diligence déclarée. Aucun organisme ne "
+                      "délivre d'attestation contre ce guide — à la "
+                      "différence de prEN 18286, qui vaudra présomption le "
+                      "jour de sa citation au Journal officiel.",
+         "ou": "ocde · analyse"},
+        {"cle": "non_exhaustif",
+         "dit": "Le document déclare lui-même que ses exemples pratiques ne "
+                "constituent pas une liste de contrôle exhaustive.",
+         "porte_sur": "Ce que ce taux mesure s'appelle « couverture des "
+                      "exemples retenus », jamais conformité : un organisme "
+                      "peut les tenir tous et rester en défaut sur un risque "
+                      "qu'aucun d'eux ne nomme.",
+         "ou": "ocde · questionnaire"},
+        {"cle": "pas_equivalence",
+         "dit": "Les six feuilles de route rapprochent les étapes de l'OCDE "
+                "des dispositions de vingt autres cadres. Le document écrit "
+                "que ce n'est PAS un cadre d'équivalence.",
+         "porte_sur": "Tenir ISO/IEC 42001 ou le cadre du NIST ne vaut pas "
+                      "diligence OCDE, et l'inverse est vrai aussi. Sur ces "
+                      "vingt cadres, Sentinel en mesure trois.",
+         "ou": "ocde · conformité"},
+    ],
     "en18286": [
         {"cle": "charge_de_preuve",
          "dit": "Une ou plusieurs exigences essentielles sont traitées par "
@@ -1207,7 +1285,30 @@ def _lire_en18286(ev, dec=None):
     return dict(ev.get("parts") or {}), signaux
 
 
+def _lire_ocde(ev, dec=None):
+    """Les six parts de la diligence, telles que le moteur les rend.
+
+    ON NE RECALCULE RIEN ICI. Le moteur a déjà posé ses trois plafonds SUR
+    LES PARTS — et c'est pour cette raison qu'il les y a posés : un plafond
+    laissé sur le seul total ne serait jamais arrivé jusqu'ici, et l'indice
+    afficherait un chiffre plus haut que l'écran du module.
+
+    IL N'Y A PAS DE HORS-CHAMP. Ce guide n'écarte personne : toute entreprise
+    de la chaîne de valeur de l'IA est attendue sur la diligence, les PME
+    comprises. Tant que les groupes ne sont pas déclarés, il n'y a pas de
+    taux — mais ce n'est pas un « sans objet », c'est une question sans
+    réponse, et `taux_norme` rend « — ».
+    """
+    if not ev or not ev.get("ok"):
+        return None, []
+    if (ev.get("applicable") or {}).get("ok") is not True:
+        return None, []
+    signaux = [r["cle"] for r in (ev.get("reserves") or [])]
+    return dict(ev.get("parts") or {}), signaux
+
+
 LECTEURS = {
+    "ocde": _lire_ocde,
     "en18286": _lire_en18286,
     "iso42001": _lire_iso42001, "iso27001": _lire_iso27001,
     "nis2": _lire_nis2, "cra": _lire_cra, "nist_ai_rmf": _lire_nist,
@@ -1699,7 +1800,38 @@ def _ecarts_en18286(ev, dec=None):
     return out
 
 
+#: OÙ TOMBE CHAQUE ACTION DU PLAN DE L'OCDE. Les trois premières portent sur
+#: la qualification, qui vit dans l'étape 2 : c'est là que le document range
+#: l'implication (2.3) et la priorisation (2.4).
+_OCDE_COMPOSANT = {"groupes": "identifier", "implication": "identifier",
+                   "priorisation": "identifier",
+                   "justifier_priorisation": "identifier"}
+
+
+def _ecarts_ocde(ev, dec=None):
+    """Ce que le plan du module nomme déjà — repris tel quel, dans son ordre.
+
+    LE PLAN DU MOTEUR EST DÉJÀ ORDONNÉ, et il met en tête ce qui DÉBLOQUE :
+    les groupes, puis l'implication, puis ce que l'implication rend non
+    négociable. Le réordonner ici ferait remonter l'étape 5 devant la
+    question qui empêche tout le reste de compter.
+    """
+    if not ev or not ev.get("ok"):
+        return []
+    import ocde_ia as _o
+    if (ev.get("applicable") or {}).get("ok") is not True:
+        return []
+    out = []
+    for e in _o.plan(dec or {}, limite=24)["actions"]:
+        comp = _OCDE_COMPOSANT.get(e["cle"])
+        if comp is None and e["cle"].startswith("etape_"):
+            comp = e["cle"][len("etape_"):]
+        out.append(_ec(comp or "identifier", e["cle"], e["quoi"], e["ou"]))
+    return out
+
+
 ECARTEURS = {
+    "ocde": _ecarts_ocde,
     "en18286": _ecarts_en18286,
     "dora": _ecarts_dora,
     "iso42001": _ecarts_iso42001, "iso27001": _ecarts_iso27001,
@@ -2198,7 +2330,13 @@ def _ev_en18286(dec, d):
     return _en.evaluer(dec)
 
 
+def _ev_ocde(dec, d):
+    import ocde_ia as _o
+    return _o.evaluer(dec)
+
+
 EVALUATEURS = {
+    "ocde": _ev_ocde,
     "en18286": _ev_en18286,
     "ia_act": _ev_ia_act, "cra": _ev_cra, "iso42001": _ev_iso42001,
     "iso27001": _ev_iso27001, "dora": _ev_dora, "nis2": _ev_nis2,
@@ -2471,7 +2609,26 @@ def _de_en18286(v, e):
             "strategie": strat, "certifie": certifie}
 
 
+def _de_ocde(v, e):
+    """L'écran de la diligence OCDE → ce que son moteur attend.
+
+    LA QUALIFICATION SUFFIT À FAIRE UNE DÉCLARATION : un organisme qui vient
+    de déclarer ses groupes et son implication a RÉPONDU, même sans une seule
+    réponse au questionnaire — et sa carte doit le montrer. À l'inverse, un
+    écran où rien n'est touché reste absent, et le taux rend « — ».
+    """
+    qual = _dict_de(v, "qualification")
+    reponses = _dict_de(v, "reponses")
+    prio = v.get("priorisation") if isinstance(v.get("priorisation"), list) \
+        else []
+    if not (qual or reponses or prio):
+        return None
+    return {"qualification": qual, "reponses": reponses,
+            "priorisation": prio}
+
+
 TRADUCTEURS = {
+    "ocde": _de_ocde,
     "en18286": _de_en18286,
     "ia_act": _de_ia_act, "cra": _de_cra, "iso42001": _de_iso42001,
     "iso27001": _de_iso27001, "dora": _de_dora, "nis2": _de_nis2,

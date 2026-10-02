@@ -14,8 +14,8 @@
   {
    "nom": "conformite recompose les parts BRUTES : deux vérités sur un nombre",
    "fichier": "conformite.py",
-   "avant": "    return dict(ev.get(\"parts\") or {}), signaux",
-   "apres": "    return dict(ev.get(\"parts_brutes\") or {}), signaux",
+   "avant": "        signaux.append(\"charge_de_preuve\")\n    return dict(ev.get(\"parts\") or {}), signaux",
+   "apres": "        signaux.append(\"charge_de_preuve\")\n    return dict(ev.get(\"parts_brutes\") or {}), signaux",
    "regle": "test_le_moteur_et_la_carte_du_taux_rendent_LE_MEME_nombre"
   },
   {
@@ -154,8 +154,8 @@
   {
    "nom": "l'écran vierge devient une déclaration, et la carte affiche un taux",
    "fichier": "conformite.py",
-   "avant": "    qual = _dict_de(v, \"qualification\")\n    reponses = _dict_de(v, \"reponses\")",
-   "apres": "    qual = {\"fournisseur\": True, \"haut_risque\": True}\n    reponses = _dict_de(v, \"reponses\")",
+   "avant": "    qual = _dict_de(v, \"qualification\")\n    reponses = _dict_de(v, \"reponses\")\n    strat = v.get(\"strategie\") if isinstance(v.get(\"strategie\"), dict) else {}",
+   "apres": "    qual = {\"fournisseur\": True, \"haut_risque\": True}\n    reponses = _dict_de(v, \"reponses\")\n    strat = v.get(\"strategie\") if isinstance(v.get(\"strategie\"), dict) else {}",
    "regle": "test_la_qualification_SEULE_fait_deja_une_declaration"
   },
   {
@@ -217,7 +217,7 @@
   {
    "nom": "le titre de l'écran du taux fige à nouveau onze normes",
    "fichier": "sentinel.html",
-   "avant": "<h1 class=\"page-h\" data-i18n-bloc=\"pg.conf-taux.h1\">Treize taux, et <em>ce qu'ils ne disent pas</em></h1>",
+   "avant": "<h1 class=\"page-h\" data-i18n-bloc=\"pg.conf-taux.h1\">Quatorze taux, et <em>ce qu'ils ne disent pas</em></h1>",
    "apres": "<h1 class=\"page-h\" data-i18n-bloc=\"pg.conf-taux.h1\">Onze taux, et <em>ce qu'ils ne disent pas</em></h1>",
    "regle": "test_aucun_ECRAN_du_taux_ne_fige_un_COMPTE_de_normes_devenu_faux"
   },

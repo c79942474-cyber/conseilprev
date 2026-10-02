@@ -48,7 +48,7 @@
    "fr": "16 questions fondées sur les exigences du Règlement (UE) 2024/1689. Vos réponses recalculent les scores de maturité en temps réel."
   },
   "# sections": {
-   "en": "22 sections",
+   "en": "# sections",
    "fr": "22 sections"
   },
   "# étapes méthodologiques CONSEILPREV. Cliquez sur une étape pour générer son guide sectoriel par IA (planning + budget), avec analyse optionnelle de vos données.": {
@@ -532,23 +532,23 @@
    "fr": "Provenance du volume"
   },
   "Recette — deux fois": {
-   "en": "Recette — deux fois",
+   "en": "Test run — twice",
    "fr": "Recette — deux fois"
   },
   "Recette — la décision écrit": {
-   "en": "Recette — la décision écrit",
+   "en": "Test run — the decision writes",
    "fr": "Recette — la décision écrit"
   },
   "Recette — proposition sans écriture": {
-   "en": "Recette — proposition sans écriture",
+   "en": "Test run — a proposal with no write",
    "fr": "Recette — proposition sans écriture"
   },
   "Recette — sans nom saisi": {
-   "en": "Recette — sans nom saisi",
+   "en": "Test run — no name entered",
    "fr": "Recette — sans nom saisi"
   },
   "Recette — écartée": {
-   "en": "Recette — écartée",
+   "en": "Test run — set aside",
    "fr": "Recette — écartée"
   },
   "Registre IA — Product Owner": {

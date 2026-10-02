@@ -480,6 +480,7 @@ ROUTES_REFERENTIEL = (
     '/api/dora/referentiel',
     '/api/en18229/referentiel',
     '/api/en18286/referentiel',
+    '/api/ocde/referentiel',
     '/api/parcours/referentiel',
     '/api/nist-ai-rmf/referentiel',
     '/api/nist-ai-rmf/profil/referentiel',

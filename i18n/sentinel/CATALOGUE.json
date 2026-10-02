@@ -1989,6 +1989,13 @@
     "_coquille"
    ]
   },
+  "La source, sa licence CC BY # et les deux mentions qu elle impose, ce que le document s exclut lui-meme, et ce que ce module refuse de dire.": {
+   "fr": "La source, sa licence CC BY 4.0 et les deux mentions qu elle impose, ce que le document s exclut lui-meme, et ce que ce module refuse de dire.",
+   "mots": 29,
+   "pages": [
+    "_coquille"
+   ]
+  },
   "La transposition francaise : # objectifs, # moyens pour une essentielle, # pour une importante — texte pas encore en vigueur": {
    "fr": "La transposition francaise : 20 objectifs, 152 moyens pour une essentielle, 76 pour une importante — texte pas encore en vigueur",
    "mots": 16,
@@ -2103,8 +2110,8 @@
     "_coquille"
    ]
   },
-  "Le taux de chacune des treize normes, et le plan qui le fait monter": {
-   "fr": "Le taux de chacune des treize normes, et le plan qui le fait monter",
+  "Le taux de chacune des quatorze normes, et le plan qui le fait monter": {
+   "fr": "Le taux de chacune des quatorze normes, et le plan qui le fait monter",
    "mots": 14,
    "pages": [
     "_coquille"
@@ -2194,6 +2201,13 @@
     "_coquille"
    ]
   },
+  "Les exemples pratiques du document, ranges par etape et par sous-etape. Seuls ceux qu un de vos groupes vise entrent dans le calcul.": {
+   "fr": "Les exemples pratiques du document, ranges par etape et par sous-etape. Seuls ceux qu un de vos groupes vise entrent dans le calcul.",
+   "mots": 24,
+   "pages": [
+    "_coquille"
+   ]
+  },
   "Les jeux de données ouverts qui alimentent la page": {
    "fr": "Les jeux de données ouverts qui alimentent la page",
    "mots": 9,
@@ -2235,6 +2249,13 @@
     "_coquille"
    ]
   },
+  "Les quatre-vingt-onze lignes de pont que le document donne lui-meme vers vingt autres cadres. Il ecrit que ce n est PAS un cadre d equivalence.": {
+   "fr": "Les quatre-vingt-onze lignes de pont que le document donne lui-meme vers vingt autres cadres. Il ecrit que ce n est PAS un cadre d equivalence.",
+   "mots": 28,
+   "pages": [
+    "_coquille"
+   ]
+  },
   "Les soixante-cinq paragraphes normatifs, du systeme de management a l evaluation des performances.": {
    "fr": "Les soixante-cinq paragraphes normatifs, du systeme de management a l evaluation des performances.",
    "mots": 14,
@@ -2252,6 +2273,13 @@
   "Les trente-deux sous-articles du corps de la norme, et le taux d effort REEL pour qui est deja certifie #": {
    "fr": "Les trente-deux sous-articles du corps de la norme, et le taux d effort REEL pour qui est deja certifie 27001",
    "mots": 21,
+   "pages": [
+    "_coquille"
+   ]
+  },
+  "Les trois groupes d acteur, l implication dans l incidence (causer, contribuer, etre lie) et la priorisation sur quatre facteurs. C est l implication qui plafonne le taux.": {
+   "fr": "Les trois groupes d acteur, l implication dans l incidence (causer, contribuer, etre lie) et la priorisation sur quatre facteurs. C est l implication qui plafonne le taux.",
+   "mots": 28,
    "pages": [
     "_coquille"
    ]
@@ -2589,6 +2617,10 @@
     "en18286-questionnaire",
     "en18286-conformite",
     "en18286-analyse",
+    "ocde-processus",
+    "ocde-questionnaire",
+    "ocde-conformite",
+    "ocde-analyse",
     "nist-profil",
     "nist-cadre",
     "nist-genai",
@@ -3048,6 +3080,13 @@
    "mots": 12,
    "pages": [
     "ia50"
+   ]
+  },
+  "Replier ou deplier le guide OCDE sur le devoir de diligence pour une IA responsable : instrument VOLONTAIRE, sans presomption de conformite a aucune date.": {
+   "fr": "Replier ou deplier le guide OCDE sur le devoir de diligence pour une IA responsable : instrument VOLONTAIRE, sans presomption de conformite a aucune date.",
+   "mots": 24,
+   "pages": [
+    "_coquille"
    ]
   },
   "Replier ou deplier prEN # : le systeme de management de la qualite que l article # de l IA Act impose au fournisseur d un systeme d IA a haut risque.": {
@@ -5840,6 +5879,14 @@
     "simulateur"
    ]
   },
+  "CC BY #. Le découpage du questionnaire, les poids, les": {
+   "fr": "CC BY 4.0. Le découpage du questionnaire, les poids, les",
+   "html": "<b>CC BY 4.0</b>. Le découpage du questionnaire, les poids, les",
+   "mots": 9,
+   "pages": [
+    "_js"
+   ]
+  },
   "CONSEILPREV (SARL) · SIREN # # # · # rue Auguste Chabrières, # Paris · Responsable : Christophe CERF": {
    "fr": "CONSEILPREV (SARL) · SIREN 494 530 157 · 19 rue Auguste Chabrières, 75015 Paris · Responsable : Christophe CERF",
    "html": "CONSEILPREV (SARL) · SIREN 494 530 157 · 19 rue Auguste Chabrières, 75015 Paris · Responsable : Christophe CERF<br>",
@@ -7226,6 +7273,14 @@
     "ia50"
    ]
   },
+  "Elle n’est pas figée": {
+   "fr": "Elle n’est pas figée",
+   "html": "<span>Elle n’est pas figée</span>",
+   "mots": 5,
+   "pages": [
+    "_js"
+   ]
+  },
   "Empreinte IA du parc déclaré": {
    "fr": "Empreinte IA du parc déclaré",
    "html": "Empreinte IA <em>du parc déclaré</em>",
@@ -7898,8 +7953,8 @@
    ]
   },
   "Intervalle de confiance mois #Pessimiste (# €) : progression # % plus lente.Optimiste (# €) : progression # % plus rapide (orgs. ISO #/#).L’écart reflète l’incertitude sur votre vitesse de mise en conformité.": {
-   "fr": "Intervalle de confiance mois 6Pessimiste (439 €) : progression 45 % plus lente.Optimiste (632 €) : progression 50 % plus rapide (orgs. ISO 9001/27001).L’écart reflète l’incertitude sur votre vitesse de mise en conformité.",
-   "html": "<strong>Intervalle de confiance mois&nbsp;6</strong><br><em>Pessimiste (439 €)</em>&nbsp;: progression 45&nbsp;% plus lente.<br><em>Optimiste (632 €)</em>&nbsp;: progression 50&nbsp;% plus rapide (orgs. ISO&nbsp;9001/27001).<br>L’écart reflète l’incertitude sur votre vitesse de mise en conformité.",
+   "fr": "Intervalle de confiance mois 6Pessimiste (435 €) : progression 45 % plus lente.Optimiste (632 €) : progression 50 % plus rapide (orgs. ISO 9001/27001).L’écart reflète l’incertitude sur votre vitesse de mise en conformité.",
+   "html": "<strong>Intervalle de confiance mois&nbsp;6</strong><br><em>Pessimiste (435 €)</em>&nbsp;: progression 45&nbsp;% plus lente.<br><em>Optimiste (632 €)</em>&nbsp;: progression 50&nbsp;% plus rapide (orgs. ISO&nbsp;9001/27001).<br>L’écart reflète l’incertitude sur votre vitesse de mise en conformité.",
    "mots": 26,
    "pages": [
     "pricing"
@@ -8303,6 +8358,14 @@
     "pan-sia",
     "enveloppe",
     "empreinte-parc"
+   ]
+  },
+  "Le piège": {
+   "fr": "Le piège",
+   "html": "<span>Le piège</span>",
+   "mots": 2,
+   "pages": [
+    "_js"
    ]
   },
   "Le piège :": {
@@ -10530,6 +10593,14 @@
     "ia50"
    ]
   },
+  "Travail déclaré :": {
+   "fr": "Travail déclaré :",
+   "html": "Travail déclaré : <b>",
+   "mots": 2,
+   "pages": [
+    "_js"
+   ]
+  },
   "Trois catégories, du plus": {
    "fr": "Trois catégories, du plus",
    "html": "<b>Trois catégories, du plus",
@@ -10943,6 +11014,14 @@
    "fr": "catégories plafonnées",
    "html": "<i>catégories plafonnées</i>",
    "mots": 2,
+   "pages": [
+    "_js"
+   ]
+  },
+  "ce que la qualification laisse revendiquer :": {
+   "fr": "ce que la qualification laisse revendiquer :",
+   "html": "ce que la qualification laisse revendiquer : <b>",
+   "mots": 6,
    "pages": [
     "_js"
    ]
@@ -11974,8 +12053,8 @@
    ]
   },
   "Écart cumulé # moisSaaS : # # €Hybride : # # €SaaS moins coûteux de # € sur # mois. L’écart s’inverse généralement dès M#-M#.": {
-   "fr": "Écart cumulé 6 moisSaaS : 2 700 €Hybride : 3 044 €SaaS moins coûteux de 344 € sur 6 mois. L’écart s’inverse généralement dès M8-M10.",
-   "html": "<strong>Écart cumulé 6 mois</strong><br>SaaS&nbsp;: <em>2 700 €</em><br>Hybride&nbsp;: <em>3 044 €</em><br>SaaS moins coûteux de 344 € sur 6&nbsp;mois. L’écart s’inverse généralement dès M8-M10.",
+   "fr": "Écart cumulé 6 moisSaaS : 2 700 €Hybride : 3 030 €SaaS moins coûteux de 330 € sur 6 mois. L’écart s’inverse généralement dès M8-M10.",
+   "html": "<strong>Écart cumulé 6 mois</strong><br>SaaS&nbsp;: <em>2 700 €</em><br>Hybride&nbsp;: <em>3 030 €</em><br>SaaS moins coûteux de 330 € sur 6&nbsp;mois. L’écart s’inverse généralement dès M8-M10.",
    "mots": 18,
    "pages": [
     "pricing"
@@ -12089,6 +12168,14 @@
    "fr": "— corrigée en «",
    "html": "— <b>corrigée</b> en «",
    "mots": 2,
+   "pages": [
+    "_js"
+   ]
+  },
+  "— les énoncés ci-dessous sont ceux de l’OCDE, repris en": {
+   "fr": "— les énoncés ci-dessous sont ceux de l’OCDE, repris en",
+   "html": "</i> — les énoncés ci-dessous sont ceux de l’OCDE, repris en",
+   "mots": 11,
    "pages": [
     "_js"
    ]
@@ -12456,33 +12543,33 @@
    ]
   }
  },
- "genere_le": "2026-10-01T15:28:35.710Z",
+ "genere_le": "2026-10-02T13:14:15.283Z",
  "js": {
   "entrees": {
    "attr": 72,
-   "bloc": 330,
-   "texte": 6356
+   "bloc": 336,
+   "texte": 6442
   },
   "fichier": "sentinel.page.js",
   "mots": {
    "attr": 619,
-   "bloc": 3182,
-   "texte": 84671
+   "bloc": 3217,
+   "texte": 86376
   }
  },
- "pages": 126,
+ "pages": 130,
  "routes": {
   "entrees": {
    "attr": 0,
    "bloc": 0,
-   "texte": 2268
+   "texte": 2442
   },
   "mots": {
    "attr": 0,
    "bloc": 0,
-   "texte": 33830
+   "texte": 37307
   },
-  "routes": 16
+  "routes": 17
  },
  "rubriques": {
   "adoption": "BUSINESS",
@@ -12582,6 +12669,10 @@
   "nist53-socle": "NIST 800-53",
   "nist82-ot": "NIST 800-82",
   "obs-rd": "SE TENIR INFORMÉ",
+  "ocde-analyse": "Diligence OCDE — IA responsable",
+  "ocde-conformite": "Diligence OCDE — IA responsable",
+  "ocde-processus": "Diligence OCDE — IA responsable",
+  "ocde-questionnaire": "Diligence OCDE — IA responsable",
   "owasp-dix": "OWASP LLM",
   "owasp-pont": "OWASP LLM",
   "pan-sia": "ÉVALUER LE RISQUE",
@@ -13683,7 +13774,7 @@
    ]
   },
   "# onglets": {
-   "fr": "53 onglets",
+   "fr": "57 onglets",
    "mots": 1,
    "pages": [
     "_coquille"
@@ -13931,7 +14022,7 @@
    ]
   },
   "# système(s) inventoriés": {
-   "fr": "1 système(s) inventoriés",
+   "fr": "0 système(s) inventoriés",
    "mots": 3,
    "pages": [
     "roadmap"
@@ -13959,7 +14050,7 @@
    ]
   },
   "# systèmes": {
-   "fr": "1 systèmes",
+   "fr": "0 systèmes",
    "mots": 1,
    "pages": [
     "audit-ia-act"
@@ -14577,6 +14668,13 @@
    "mots": 17,
    "pages": [
     "_js"
+   ]
+  },
+  "#-# (version révisée)": {
+   "fr": "2026-05 (version révisée)",
+   "mots": 2,
+   "pages": [
+    "_routes"
    ]
   },
   "#. Alerte précoce": {
@@ -16367,9 +16465,7 @@
    "fr": "A.7",
    "mots": 1,
    "pages": [
-    "cadre-normatif",
-    "iso27001-soa",
-    "iso42001-soa"
+    "cadre-normatif"
    ]
   },
   "A.# (données)": {
@@ -17501,6 +17597,13 @@
     "fiche-fr"
    ]
   },
+  "Acteur du cycle de vie du système": {
+   "fr": "Acteur du cycle de vie du système",
+   "mots": 7,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Actif": {
    "fr": "Actif",
    "mots": 1,
@@ -18256,6 +18359,13 @@
   "Ajouter le premier système IA →": {
    "fr": "Ajouter le premier système IA →",
    "mots": 5,
+   "pages": [
+    "_js"
+   ]
+  },
+  "Ajouter un risque": {
+   "fr": "Ajouter un risque",
+   "mots": 3,
    "pages": [
     "_js"
    ]
@@ -19067,6 +19177,14 @@
     "_js"
    ]
   },
+  "Analyse — licence et limites": {
+   "fr": "Analyse — licence et limites",
+   "mots": 4,
+   "pages": [
+    "_js",
+    "_routes"
+   ]
+  },
   "Analyse — ponts et famille": {
    "fr": "Analyse — ponts et famille",
    "mots": 4,
@@ -19116,6 +19234,20 @@
    "mots": 2,
    "pages": [
     "_coquille"
+   ]
+  },
+  "Ancrer dans les politiques": {
+   "fr": "Ancrer dans les politiques",
+   "mots": 4,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Ancrer la conduite responsable dans les politiques et les systèmes de management": {
+   "fr": "Ancrer la conduite responsable dans les politiques et les systèmes de management",
+   "mots": 12,
+   "pages": [
+    "_routes"
    ]
   },
   "Angles morts de la conformité IA": {
@@ -19865,6 +19997,13 @@
     "nis2"
    ]
   },
+  "Approuvé et déclassifié le # janvier #": {
+   "fr": "Approuvé et déclassifié le 26 janvier 2026",
+   "mots": 5,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Appréciation des risques de sécurité de l'information": {
    "fr": "Appréciation des risques de sécurité de l'information",
    "mots": 8,
@@ -19907,6 +20046,13 @@
    "mots": 3,
    "pages": [
     "iso27001-risques"
+   ]
+  },
+  "Apprécier son implication dans l'incidence": {
+   "fr": "Apprécier son implication dans l'incidence",
+   "mots": 6,
+   "pages": [
+    "_routes"
    ]
   },
   "Apres la revocation de l'Executive Order # de Biden le # janvier # (via l'EO #), l'administration Trump signe l'EO # Removing Barriers to American Leadership in Artificial Intelligence. Il leve les obligations de reporting des modeles de fondation et mandate un AI Action Plan sous # jours.": {
@@ -20020,11 +20166,9 @@
    ]
   },
   "Art. #": {
-   "fr": "Art. 50.1",
+   "fr": "Art. 9",
    "mots": 1,
    "pages": [
-    "ia50",
-    "rgpd-site",
     "cadre-normatif",
     "maturite",
     "simulateur",
@@ -21727,6 +21871,20 @@
     "_routes"
    ]
   },
+  "Assurer la réparation ou y coopérer": {
+   "fr": "Assurer la réparation ou y coopérer",
+   "mots": 6,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Assurer la réparation ou y coopérer, lorsqu'il y a lieu": {
+   "fr": "Assurer la réparation ou y coopérer, lorsqu'il y a lieu",
+   "mots": 11,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Atelier : AIPD sur un traitement IA": {
    "fr": "Atelier : AIPD sur un traitement IA",
    "mots": 6,
@@ -21869,6 +22027,13 @@
   "Atteintes aux droits civiques": {
    "fr": "Atteintes aux droits civiques",
    "mots": 4,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Attentes vis-à-vis des relations d'affaires": {
+   "fr": "Attentes vis-à-vis des relations d'affaires",
+   "mots": 8,
    "pages": [
     "_routes"
    ]
@@ -23316,11 +23481,25 @@
     "qualif-assistee"
    ]
   },
+  "Aucune présomption de conformité n'en sort, et aucune date ne changera cela : ce guide met en œuvre deux recommandations, il n'est pas une norme harmonisée.": {
+   "fr": "Aucune présomption de conformité n'en sort, et aucune date ne changera cela : ce guide met en œuvre deux recommandations, il n'est pas une norme harmonisée.",
+   "mots": 27,
+   "pages": [
+    "_js"
+   ]
+  },
   "Aucune présomption de conformité n’en sort : ce projet est au stade de l’Enquête CEN, sa référence n’est pas citée au Journal officiel. Le jour où elle le sera, le même travail vaudra présomption.": {
    "fr": "Aucune présomption de conformité n’en sort : ce projet est au stade de l’Enquête CEN, sa référence n’est pas citée au Journal officiel. Le jour où elle le sera, le même travail vaudra présomption.",
    "mots": 36,
    "pages": [
     "_js"
+   ]
+  },
+  "Aucune présomption, à aucune date": {
+   "fr": "Aucune présomption, à aucune date",
+   "mots": 5,
+   "pages": [
+    "_routes"
    ]
   },
   "Aucune purge executee a ce jour : lancer la purge ou attendre la tache planifiee.": {
@@ -24094,14 +24273,7 @@
    "fr": "Avant la prochaine échéance légale",
    "mots": 5,
    "pages": [
-    "roadmap",
-    "simulateur",
-    "articles",
-    "audit-ia-act",
-    "maturite",
-    "ia50",
-    "templates",
-    "sanctions"
+    "ia50"
    ]
   },
   "Avant le": {
@@ -26033,7 +26205,6 @@
    "mots": 1,
    "pages": [
     "cadre-normatif",
-    "conf-taux",
     "regs"
    ]
   },
@@ -26094,6 +26265,13 @@
     "_js"
    ]
   },
+  "Cadrage initial des risques": {
+   "fr": "Cadrage initial des risques",
+   "mots": 4,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Cadre": {
    "fr": "Cadre",
    "mots": 1,
@@ -26119,12 +26297,7 @@
    "fr": "Cadre de gestion du risque",
    "mots": 5,
    "pages": [
-    "dora-qualifier",
-    "dora-risque",
-    "dora-tiers",
-    "dora-incident",
-    "dora-iso",
-    "dora-supervision",
+    "_coquille",
     "_js",
     "_routes"
    ]
@@ -27143,6 +27316,20 @@
     "simulateur"
    ]
   },
+  "Causer oblige à faire cesser ET à réparer le dommage. Contribuer oblige à cesser sa contribution, réparer sa part, et construire son levier sur la relation d’affaires. Être lié oblige à user de ce levier, et à le construire s’il manque. C’est l’encadré # du document, et c’est de là que vient le plafond : aucune part ne peut être revendiquée au-delà de l’étape que votre implication rend non négociable.": {
+   "fr": "Causer oblige à faire cesser ET à réparer le dommage. Contribuer oblige à cesser sa contribution, réparer sa part, et construire son levier sur la relation d’affaires. Être lié oblige à user de ce levier, et à le construire s’il manque. C’est l’encadré 2.4 du document, et c’est de là que vient le plafond : aucune part ne peut être revendiquée au-delà de l’étape que votre implication rend non négociable.",
+   "mots": 75,
+   "pages": [
+    "_js"
+   ]
+  },
+  "Causer, contribuer, ou être lié : la question à trois réponses qui décide du niveau de diligence attendu. Elle se renseigne sur l'écran « processus », et c'est elle qui plafonne le taux.": {
+   "fr": "Causer, contribuer, ou être lié : la question à trois réponses qui décide du niveau de diligence attendu. Elle se renseigne sur l'écran « processus », et c'est elle qui plafonne le taux.",
+   "mots": 32,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Caviardage et anonymisation de pièces": {
    "fr": "Caviardage et anonymisation de pièces",
    "mots": 5,
@@ -27365,6 +27552,13 @@
    "mots": 7,
    "pages": [
     "_js"
+   ]
+  },
+  "Ce guide est VOLONTAIRE : c'est la mise en œuvre de deux recommandations de l'OCDE, pas une norme harmonisée. Il n'ouvre aucune présomption de conformité, et aucune date ne changera cela.": {
+   "fr": "Ce guide est VOLONTAIRE : c'est la mise en œuvre de deux recommandations de l'OCDE, pas une norme harmonisée. Il n'ouvre aucune présomption de conformité, et aucune date ne changera cela.",
+   "mots": 33,
+   "pages": [
+    "_routes"
    ]
   },
   "Ce lien n’emporte AUCUN montant.": {
@@ -27767,12 +27961,33 @@
     "iso27001-millesime"
    ]
   },
+  "Ce que ce module refuse de dire": {
+   "fr": "Ce que ce module refuse de dire",
+   "mots": 7,
+   "pages": [
+    "_js"
+   ]
+  },
   "Ce que ce rôle vous fait porter": {
    "fr": "Ce que ce rôle vous fait porter",
    "mots": 7,
    "pages": [
     "cra-role",
     "_js"
+   ]
+  },
+  "Ce que ce tableau n’est pas": {
+   "fr": "Ce que ce tableau n’est pas",
+   "mots": 7,
+   "pages": [
+    "_js"
+   ]
+  },
+  "Ce que ce taux mesure s'appelle « couverture des exemples retenus », jamais conformité : un organisme peut les tenir tous et rester en défaut sur un risque qu'aucun d'eux ne nomme.": {
+   "fr": "Ce que ce taux mesure s'appelle « couverture des exemples retenus », jamais conformité : un organisme peut les tenir tous et rester en défaut sur un risque qu'aucun d'eux ne nomme.",
+   "mots": 32,
+   "pages": [
+    "_routes"
    ]
   },
   "Ce que cela": {
@@ -27887,6 +28102,13 @@
     "_routes"
    ]
   },
+  "Ce que la licence interdit": {
+   "fr": "Ce que la licence interdit",
+   "mots": 5,
+   "pages": [
+    "_js"
+   ]
+  },
   "Ce que la machine produit : un texte plausible, pas un texte vrai — et pourquoi la distinction décide de tout": {
    "fr": "Ce que la machine produit : un texte plausible, pas un texte vrai — et pourquoi la distinction décide de tout",
    "mots": 19,
@@ -27949,6 +28171,13 @@
    "mots": 16,
    "pages": [
     "en18286-analyse"
+   ]
+  },
+  "Ce que le document s’exclut lui-même": {
+   "fr": "Ce que le document s’exclut lui-même",
+   "mots": 8,
+   "pages": [
+    "_js"
    ]
   },
   "Ce que le moteur en dit": {
@@ -28259,9 +28488,30 @@
     "_routes"
    ]
   },
+  "Ce qui empêche la diligence d'être un exercice annuel : le document demande de chercher ce que les passes précédentes ont manqué.": {
+   "fr": "Ce qui empêche la diligence d'être un exercice annuel : le document demande de chercher ce que les passes précédentes ont manqué.",
+   "mots": 22,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Ce qui est attendu": {
    "fr": "Ce qui est attendu",
    "mots": 4,
+   "pages": [
+    "_js"
+   ]
+  },
+  "Ce qui est de l'OCDE, et ce qui est du cabinet": {
+   "fr": "Ce qui est de l'OCDE, et ce qui est du cabinet",
+   "mots": 12,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Ce qui est de l’OCDE, et ce qui": {
+   "fr": "Ce qui est de l’OCDE, et ce qui",
+   "mots": 9,
    "pages": [
     "_js"
    ]
@@ -28744,6 +28994,13 @@
     "_js"
    ]
   },
+  "Ce sont les éléments d'une liste imbriquée que le document numérote comme une liste de premier rang : chacun est un facteur à considérer, et la phrase qui les introduit est dans l'exemple précédent.": {
+   "fr": "Ce sont les éléments d'une liste imbriquée que le document numérote comme une liste de premier rang : chacun est un facteur à considérer, et la phrase qui les introduit est dans l'exemple précédent.",
+   "mots": 35,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Ce système est-il génératif ?": {
    "fr": "Ce système est-il génératif ?",
    "mots": 5,
@@ -28765,11 +29022,25 @@
     "_js"
    ]
   },
+  "Ce taux dit la part des exemples pratiques retenus par vos groupes que vous déclarez tenus. Ce n'est PAS un taux de conformité : le document écrit lui-même que ses exemples ne constituent pas une liste de contrôle exhaustive, et aucun organisme ne délivre d'attestation contre ce guide. Un organisme peut avoir tenu les # exemples et rester en défaut de diligence sur un risque qu'aucun d'eux ne nomme.": {
+   "fr": "Ce taux dit la part des exemples pratiques retenus par vos groupes que vous déclarez tenus. Ce n'est PAS un taux de conformité : le document écrit lui-même que ses exemples ne constituent pas une liste de contrôle exhaustive, et aucun organisme ne délivre d'attestation contre ce guide. Un organisme peut avoir tenu les 115 exemples et rester en défaut de diligence sur un risque qu'aucun d'eux ne nomme.",
+   "mots": 72,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Ce taux mesure ce que l'industriel AJOUTE au catalogue #-#, et il est plafonné par ce que ce catalogue porte déjà.": {
    "fr": "Ce taux mesure ce que l'industriel AJOUTE au catalogue 800-53, et il est plafonné par ce que ce catalogue porte déjà.",
    "mots": 21,
    "pages": [
     "_routes"
+   ]
+  },
+  "Ce taux ne s'appelle pas conformité, et le mot n'apparaît nulle part : le document déclare lui-même ses exemples non exhaustifs.": {
+   "fr": "Ce taux ne s'appelle pas conformité, et le mot n'apparaît nulle part : le document déclare lui-même ses exemples non exhaustifs.",
+   "mots": 23,
+   "pages": [
+    "_js"
    ]
   },
   "Ce taux porte sur le cadre de gestion du risque et sur les contrats. Il ne porte sur rien d'autre.": {
@@ -29039,6 +29310,13 @@
     "_routes"
    ]
   },
+  "Ces lignes sont celles du document : c'est l'OCDE qui rapproche ses six étapes des dispositions de # autres cadres, en # lignes. Le document écrit que ce n'est PAS un cadre d'équivalence — la portée et la nature des attentes varient d'un cadre à l'autre. Et sur ces # cadres, Sentinel en mesure # : les # autres sont nommés ici et non tenus par le cabinet.": {
+   "fr": "Ces lignes sont celles du document : c'est l'OCDE qui rapproche ses six étapes des dispositions de 20 autres cadres, en 91 lignes. Le document écrit que ce n'est PAS un cadre d'équivalence — la portée et la nature des attentes varient d'un cadre à l'autre. Et sur ces 20 cadres, Sentinel en mesure 3 : les 17 autres sont nommés ici et non tenus par le cabinet.",
+   "mots": 66,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Ces montants sont des plafonds : l'autorité fixe l'amende en dessous, d'après l'Art. #(#).": {
    "fr": "Ces montants sont des plafonds : l'autorité fixe l'amende en dessous, d'après l'Art. 99(7).",
    "mots": 16,
@@ -29128,6 +29406,13 @@
    "mots": 49,
    "pages": [
     "rgpd-conformite"
+   ]
+  },
+  "Cet instrument est VOLONTAIRE : c'est le guide de mise en œuvre de deux recommandations de l'OCDE, pas une norme harmonisée. Il n'ouvre aucune présomption de conformité, aucun organisme ne délivre d'attestation contre lui, et aucune date ne changera cela — à la différence de prEN #, qui vaudra présomption le jour de sa citation au Journal officiel. Le travail fait ici sert la diligence de l'entreprise et les cadres que les feuilles de route nomment ; il ne tient lieu d'aucun.": {
+   "fr": "Cet instrument est VOLONTAIRE : c'est le guide de mise en œuvre de deux recommandations de l'OCDE, pas une norme harmonisée. Il n'ouvre aucune présomption de conformité, aucun organisme ne délivre d'attestation contre lui, et aucune date ne changera cela — à la différence de prEN 18286, qui vaudra présomption le jour de sa citation au Journal officiel. Le travail fait ici sert la diligence de l'entreprise et les cadres que les feuilles de route nomment ; il ne tient lieu d'aucun.",
+   "mots": 84,
+   "pages": [
+    "_routes"
    ]
   },
   "Cet écran ne pose plus de questions : il LIT votre audit IA Act.": {
@@ -29785,13 +30070,17 @@
    "mots": 1,
    "pages": [
     "juridique",
+    "empreinte",
+    "ia50",
+    "rgpd-site",
     "nist-profil",
     "nist-cadre",
     "nist-genai",
     "owasp-dix",
     "nist53-socle",
     "nist82-ot",
-    "owasp-pont"
+    "owasp-pont",
+    "registre"
    ]
   },
   "Charger": {
@@ -30006,6 +30295,13 @@
    "mots": 3,
    "pages": [
     "_js"
+   ]
+  },
+  "Chercher ce que les passes précédentes ont manqué, vérifier que des risques évalués ne sont pas devenus inacceptables, et mesurer l'efficacité de l'association des parties prenantes elle-même.": {
+   "fr": "Chercher ce que les passes précédentes ont manqué, vérifier que des risques évalués ne sont pas devenus inacceptables, et mesurer l'efficacité de l'association des parties prenantes elle-même.",
+   "mots": 30,
+   "pages": [
+    "_routes"
    ]
   },
   "Chercheurs d’élite": {
@@ -30365,6 +30661,13 @@
   "Choisissez d’abord votre rôle : la norme adresse ses exigences au fournisseur, et transmet au déployeur par la notice d’utilisation.": {
    "fr": "Choisissez d’abord votre rôle : la norme adresse ses exigences au fournisseur, et transmet au déployeur par la notice d’utilisation.",
    "mots": 21,
+   "pages": [
+    "en18229-cadre"
+   ]
+  },
+  "Choisissez d’abord votre rôle.": {
+   "fr": "Choisissez d’abord votre rôle.",
+   "mots": 5,
    "pages": [
     "en18229-cadre"
    ]
@@ -30731,7 +31034,6 @@
    "fr": "Classification",
    "mots": 1,
    "pages": [
-    "dora-incident",
     "registre",
     "simulateur"
    ]
@@ -31794,6 +32096,13 @@
    "mots": 19,
    "pages": [
     "nis2-signalement",
+    "_routes"
+   ]
+  },
+  "Communiquer à l'extérieur les politiques, les processus, les incidences identifiées et priorisées, les critères de priorisation, les mesures prises et leurs résultats — avec les égards dus au secret des affaires et au droit de la concurrence.": {
+   "fr": "Communiquer à l'extérieur les politiques, les processus, les incidences identifiées et priorisées, les critères de priorisation, les mesures prises et leurs résultats — avec les égards dus au secret des affaires et au droit de la concurrence.",
+   "mots": 37,
+   "pages": [
     "_routes"
    ]
   },
@@ -32865,6 +33174,14 @@
     "_routes"
    ]
   },
+  "Conformité — feuilles de route": {
+   "fr": "Conformité — feuilles de route",
+   "mots": 4,
+   "pages": [
+    "_js",
+    "_routes"
+   ]
+  },
   "Conformité, ingénieurs, chefs de produit": {
    "fr": "Conformité, ingénieurs, chefs de produit",
    "mots": 5,
@@ -32944,6 +33261,13 @@
    "mots": 3,
    "pages": [
     "_js"
+   ]
+  },
+  "Conseil de l'Europe — Convention-cadre sur l'IA et méthodologie HUDERIA": {
+   "fr": "Conseil de l'Europe — Convention-cadre sur l'IA et méthodologie HUDERIA",
+   "mots": 12,
+   "pages": [
+    "_routes"
    ]
   },
   "Conseil de l'Union européenne et Parlement européen": {
@@ -33824,12 +34148,7 @@
    "fr": "Contrats — article 30",
    "mots": 2,
    "pages": [
-    "dora-qualifier",
-    "dora-risque",
-    "dora-tiers",
-    "dora-incident",
-    "dora-iso",
-    "dora-supervision"
+    "_coquille"
    ]
   },
   "Contreparties centrales au sens de l'article #, point #), du règlement (UE) n° #/#": {
@@ -34322,6 +34641,13 @@
     "_js"
    ]
   },
+  "Corée — AI Basic Act": {
+   "fr": "Corée — AI Basic Act",
+   "mots": 4,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Costa Rica": {
    "fr": "Costa Rica",
    "mots": 2,
@@ -34440,6 +34766,13 @@
    "mots": 4,
    "pages": [
     "empreinte-ia"
+   ]
+  },
+  "Couverture des exemples retenus": {
+   "fr": "Couverture des exemples retenus",
+   "mots": 4,
+   "pages": [
+    "_routes"
    ]
   },
   "Couverture du chiffrage": {
@@ -34563,6 +34896,13 @@
     "_js"
    ]
   },
+  "Creative Commons Attribution # International (CC BY #) — © OCDE #. La reproduction, la traduction et l'adaptation sont permises, à charge de citer l'œuvre, d'identifier les modifications et de porter les mentions que la licence impose. Le matériel de tiers en est exclu.": {
+   "fr": "Creative Commons Attribution 4.0 International (CC BY 4.0) — © OCDE 2026. La reproduction, la traduction et l'adaptation sont permises, à charge de citer l'œuvre, d'identifier les modifications et de porter les mentions que la licence impose. Le matériel de tiers en est exclu.",
+   "mots": 42,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Creative Commons — se cite et s'adapte avec attribution.": {
    "fr": "Creative Commons — se cite et s'adapte avec attribution.",
    "mots": 9,
@@ -34642,6 +34982,13 @@
    "mots": 3,
    "pages": [
     "iso27001-risques"
+   ]
+  },
+  "Croire que la licence autorise tout : le matériel de tiers en est exclu, et le logo comme l'identité visuelle de l'OCDE sont interdits.": {
+   "fr": "Croire que la licence autorise tout : le matériel de tiers en est exclu, et le logo comme l'identité visuelle de l'OCDE sont interdits.",
+   "mots": 25,
+   "pages": [
+    "_routes"
    ]
   },
   "Croisement ou combinaison d'ensembles de donnees": {
@@ -34999,6 +35346,13 @@
     "_js"
    ]
   },
+  "C’est la question qui commande le NIVEAU de": {
+   "fr": "C’est la question qui commande le NIVEAU de",
+   "mots": 9,
+   "pages": [
+    "_js"
+   ]
+  },
   "C’est la réponse la plus fréquente, et elle se traite : passez le produit au Simulateur avant d’arbitrer les cinq autres points, car la réponse change ce qu’ils doivent contenir.": {
    "fr": "C’est la réponse la plus fréquente, et elle se traite : passez le produit au Simulateur avant d’arbitrer les cinq autres points, car la réponse change ce qu’ils doivent contenir.",
    "mots": 32,
@@ -35128,6 +35482,13 @@
     "_js"
    ]
   },
+  "C’est mon cas": {
+   "fr": "C’est mon cas",
+   "mots": 4,
+   "pages": [
+    "_js"
+   ]
+  },
   "C’est votre pièce maîtresse face à l’autorité : elle dit ce que vous avez retenu, pourquoi, et où vous en êtes.": {
    "fr": "C’est votre pièce maîtresse face à l’autorité : elle dit ce que vous avez retenu, pourquoi, et où vous en êtes.",
    "mots": 22,
@@ -35184,7 +35545,6 @@
    "fr": "DMA",
    "mots": 1,
    "pages": [
-    "rgpd-site",
     "regs"
    ]
   },
@@ -35213,7 +35573,6 @@
    "fr": "DORA",
    "mots": 1,
    "pages": [
-    "conf-taux",
     "regs"
    ]
   },
@@ -35403,7 +35762,6 @@
    "fr": "DPO",
    "mots": 1,
    "pages": [
-    "gouvernance",
     "parties"
    ]
   },
@@ -35440,7 +35798,6 @@
    "fr": "DSA",
    "mots": 1,
    "pages": [
-    "rgpd-site",
     "regs"
    ]
   },
@@ -36151,6 +36508,13 @@
     "_routes"
    ]
   },
+  "Des attentes communiquées une fois à la signature, jamais reprises ensuite. Le document demande des canaux qui durent.": {
+   "fr": "Des attentes communiquées une fois à la signature, jamais reprises ensuite. Le document demande des canaux qui durent.",
+   "mots": 18,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Des cas d’usage sont retenus dans la cartographie.": {
    "fr": "Des cas d’usage sont retenus dans la cartographie.",
    "mots": 9,
@@ -36288,6 +36652,13 @@
     "_js"
    ]
   },
+  "Des politiques écrites, adoptées et diffusées, qui énoncent l'engagement de l'organisme sur les Principes de l'OCDE sur l'IA et le Guide EM — et qui portent le plan de mise en œuvre de la diligence, pour les opérations propres comme pour les relations d'affaires.": {
+   "fr": "Des politiques écrites, adoptées et diffusées, qui énoncent l'engagement de l'organisme sur les Principes de l'OCDE sur l'IA et le Guide EM — et qui portent le plan de mise en œuvre de la diligence, pour les opérations propres comme pour les relations d'affaires.",
+   "mots": 48,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Des pratiques existent, sans constance ni responsable désigné.": {
    "fr": "Des pratiques existent, sans constance ni responsable désigné.",
    "mots": 8,
@@ -36298,6 +36669,13 @@
   "Des procédures de signalement des incidents graves sont-elles documentées, mises en œuvre et tenues à jour ?": {
    "fr": "Des procédures de signalement des incidents graves sont-elles documentées, mises en œuvre et tenues à jour ?",
    "mots": 17,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Des recommandations biaisées dans un service public d'aide sociale, qui aboutissent à la suppression de l'aide pour des milliers de familles.": {
+   "fr": "Des recommandations biaisées dans un service public d'aide sociale, qui aboutissent à la suppression de l'aide pour des milliers de familles.",
+   "mots": 23,
    "pages": [
     "_routes"
    ]
@@ -36368,6 +36746,13 @@
     "_routes"
    ]
   },
+  "Des évaluations itératives et de plus en plus fines, sur DEUX périmètres que le document sépare : les activités propres de l'organisme, et ses relations d'affaires.": {
+   "fr": "Des évaluations itératives et de plus en plus fines, sur DEUX périmètres que le document sépare : les activités propres de l'organisme, et ses relations d'affaires.",
+   "mots": 27,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Descendez les chapitres dans l’ordre : chacun porte ce qui le fait tomber en audit, et chaque question porte son numéro de paragraphe et son titre. Le bouton de lot répond pour tout un chapitre quand la réponse y est la même — à relire ensuite question par question, car c’est là que les écarts se trouvent. Quatre réponses : tenu, partiellement tenu, absent, sans objet.": {
    "fr": "Descendez les chapitres dans l’ordre : chacun porte ce qui le fait tomber en audit, et chaque question porte son numéro de paragraphe et son titre. Le bouton de lot répond pour tout un chapitre quand la réponse y est la même — à relire ensuite question par question, car c’est là que les écarts se trouvent. Quatre réponses : tenu, partiellement tenu, absent, sans objet.",
    "mots": 65,
@@ -36382,9 +36767,23 @@
     "_js"
    ]
   },
+  "Descendez les six étapes. Seuls les exemples qu'un de vos groupes vise entrent dans le calcul ; les autres en sortent au lieu de compter zéro.": {
+   "fr": "Descendez les six étapes. Seuls les exemples qu'un de vos groupes vise entrent dans le calcul ; les autres en sortent au lieu de compter zéro.",
+   "mots": 26,
+   "pages": [
+    "_js"
+   ]
+  },
   "Descendez les soixante-cinq paragraphes, chapitre par chapitre. Le bouton de lot répond pour un chapitre entier quand la réponse y est la même.": {
    "fr": "Descendez les soixante-cinq paragraphes, chapitre par chapitre. Le bouton de lot répond pour un chapitre entier quand la réponse y est la même.",
    "mots": 24,
+   "pages": [
+    "_js"
+   ]
+  },
+  "Descendez les étapes dans l’ordre : chacune porte sa sous-étape, ce qu’elle demande et le piège qui s’y trouve. Le bouton de lot répond pour une étape entière quand la réponse y est la même. Quatre réponses : tenu, partiellement tenu, absent, sans objet.": {
+   "fr": "Descendez les étapes dans l’ordre : chacune porte sa sous-étape, ce qu’elle demande et le piège qui s’y trouve. Le bouton de lot répond pour une étape entière quand la réponse y est la même. Quatre réponses : tenu, partiellement tenu, absent, sans objet.",
+   "mots": 46,
    "pages": [
     "_js"
    ]
@@ -36787,6 +37186,13 @@
     "_routes"
    ]
   },
+  "Deux exemples pratiques seulement, et l'attente la plus forte du cadre : dès que l'entreprise cause ou contribue, elle est attendue sur la réparation du dommage, pas seulement sur sa prévention.": {
+   "fr": "Deux exemples pratiques seulement, et l'attente la plus forte du cadre : dès que l'entreprise cause ou contribue, elle est attendue sur la réparation du dommage, pas seulement sur sa prévention.",
+   "mots": 32,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Deux extractions des mêmes journaux, à trente et à quatre-vingt-dix jours, sur la même cohorte nominative. Sans la date de départ écrite quelque part, le chiffre ne veut rien dire.": {
    "fr": "Deux extractions des mêmes journaux, à trente et à quatre-vingt-dix jours, sur la même cohorte nominative. Sans la date de départ écrite quelque part, le chiffre ne veut rien dire.",
    "mots": 32,
@@ -37041,6 +37447,34 @@
   "Dignité humaine": {
    "fr": "Dignité humaine",
    "mots": 2,
+   "pages": [
+    "_js"
+   ]
+  },
+  "Diligence OCDE — je veux savoir si mon entreprise a fait ce qu'il fallait, pas seulement si mon système est conforme": {
+   "fr": "Diligence OCDE — je veux savoir si mon entreprise a fait ce qu'il fallait, pas seulement si mon système est conforme",
+   "mots": 21,
+   "pages": [
+    "_js"
+   ]
+  },
+  "Diligence OCDE — la source, sa licence et ses limites": {
+   "fr": "Diligence OCDE — la source, sa licence et ses limites",
+   "mots": 9,
+   "pages": [
+    "_js"
+   ]
+  },
+  "Diligence OCDE — les six feuilles de route": {
+   "fr": "Diligence OCDE — les six feuilles de route",
+   "mots": 7,
+   "pages": [
+    "_js"
+   ]
+  },
+  "Diligence OCDE — les six étapes et leurs exemples": {
+   "fr": "Diligence OCDE — les six étapes et leurs exemples",
+   "mots": 8,
    "pages": [
     "_js"
    ]
@@ -37315,6 +37749,13 @@
    "pages": [
     "regs",
     "_js"
+   ]
+  },
+  "Directive (UE) #/# — devoir de vigilance des entreprises en matière de durabilité (CSDDD)": {
+   "fr": "Directive (UE) 2024/1760 — devoir de vigilance des entreprises en matière de durabilité (CSDDD)",
+   "mots": 12,
+   "pages": [
+    "_routes"
    ]
   },
   "Directives de l'Autorité protection vie privée": {
@@ -38218,7 +38659,6 @@
    "fr": "Données",
    "mots": 1,
    "pages": [
-    "rgpd-site",
     "radar"
    ]
   },
@@ -39049,6 +39489,13 @@
     "_js"
    ]
   },
+  "Déclarez AUTANT DE GROUPES que nécessaire : le document écrit expressément qu’ils ne sont ni rigides ni exclusifs, et un éditeur qui entraîne sur ses propres données et exploite pour ses clients est dans deux. Choisissez ensuite votre implication — causer, contribuer, être lié — puis cotez vos risques sur les quatre facteurs, chacun avec sa justification écrite.": {
+   "fr": "Déclarez AUTANT DE GROUPES que nécessaire : le document écrit expressément qu’ils ne sont ni rigides ni exclusifs, et un éditeur qui entraîne sur ses propres données et exploite pour ses clients est dans deux. Choisissez ensuite votre implication — causer, contribuer, être lié — puis cotez vos risques sur les quatre facteurs, chacun avec sa justification écrite.",
+   "mots": 56,
+   "pages": [
+    "_js"
+   ]
+  },
   "Déclarez au moins un scénario de risque avec son délai de réaction : c'est lui qui commande le choix des mesures": {
    "fr": "Déclarez au moins un scénario de risque avec son délai de réaction : c'est lui qui commande le choix des mesures",
    "mots": 21,
@@ -39059,6 +39506,20 @@
   "Déclarez d’abord la criticité de la fonction soutenue : tant qu’elle ne l’est pas, rien n’est compté, parce qu’un taux sur neuf clauses alors que quinze sont dues serait rassurant à tort. Regardez ensuite les deux que l’autorité ouvre en premier : le droit d’audit illimité (§#, e) et la stratégie de sortie (§#, f).": {
    "fr": "Déclarez d’abord la criticité de la fonction soutenue : tant qu’elle ne l’est pas, rien n’est compté, parce qu’un taux sur neuf clauses alors que quinze sont dues serait rassurant à tort. Regardez ensuite les deux que l’autorité ouvre en premier : le droit d’audit illimité (§3, e) et la stratégie de sortie (§3, f).",
    "mots": 58,
+   "pages": [
+    "_js"
+   ]
+  },
+  "Déclarez d’abord un groupe. Tant qu’aucun ne": {
+   "fr": "Déclarez d’abord un groupe. Tant qu’aucun ne",
+   "mots": 9,
+   "pages": [
+    "_js"
+   ]
+  },
+  "Déclarez d’abord votre ou vos": {
+   "fr": "Déclarez d’abord votre ou vos",
+   "mots": 6,
    "pages": [
     "_js"
    ]
@@ -39089,6 +39550,13 @@
    "mots": 89,
    "pages": [
     "entreprise"
+   ]
+  },
+  "Déclarez vos groupes — ils ne sont ni rigides ni exclusifs —, votre implication dans l'incidence, et cotez vos risques sur les quatre facteurs avec leur justification.": {
+   "fr": "Déclarez vos groupes — ils ne sont ni rigides ni exclusifs —, votre implication dans l'incidence, et cotez vos risques sur les quatre facteurs avec leur justification.",
+   "mots": 26,
+   "pages": [
+    "_js"
    ]
   },
   "Déclarez vos produits et choisissez leur classe. Commencez par celui dont vous doutez, pas par le plus simple.": {
@@ -39721,8 +40189,7 @@
    "fr": "Déployeur",
    "mots": 1,
    "pages": [
-    "shadow-ai",
-    "en18229-role"
+    "shadow-ai"
    ]
   },
   "Déployeur (utilise sous sa propre autorité)": {
@@ -40428,7 +40895,6 @@
    "fr": "EN VIGUEUR",
    "mots": 2,
    "pages": [
-    "cra",
     "regs"
    ]
   },
@@ -40696,8 +41162,7 @@
    "fr": "Effacer",
    "mots": 1,
    "pages": [
-    "rgpd-site",
-    "gouvernance"
+    "rgpd-site"
    ]
   },
   "Effacer de ce navigateur les réponses": {
@@ -40984,6 +41449,13 @@
     "_js"
    ]
   },
+  "Elle ne fige pas votre implication : le document écrit qu’un lien direct devient une CONTRIBUTION si l’entreprise continue sans rien faire. Et elle ne prend pas la cotation pour une priorisation : le document demande un processus CRÉDIBLE dont la logique est rendue publique, donc une cotation sans justification écrite plafonne la part « identifier » à la moitié.": {
+   "fr": "Elle ne fige pas votre implication : le document écrit qu’un lien direct devient une CONTRIBUTION si l’entreprise continue sans rien faire. Et elle ne prend pas la cotation pour une priorisation : le document demande un processus CRÉDIBLE dont la logique est rendue publique, donc une cotation sans justification écrite plafonne la part « identifier » à la moitié.",
+   "mots": 58,
+   "pages": [
+    "_js"
+   ]
+  },
   "Elle ne fusionne aucun document et ne prétend pas qu’un livrable en vaille un autre. Être certifié # ne rend conforme à aucune obligation légale et n’en dispense d’aucune ; inversement, un système parfaitement conforme à l’IA Act ne vaut pas un système de management certifié. Un budget bâti sur « on fera une seule analyse » se défait au premier contrôle.": {
    "fr": "Elle ne fusionne aucun document et ne prétend pas qu’un livrable en vaille un autre. Être certifié 42001 ne rend conforme à aucune obligation légale et n’en dispense d’aucune ; inversement, un système parfaitement conforme à l’IA Act ne vaut pas un système de management certifié. Un budget bâti sur « on fera une seule analyse » se défait au premier contrôle.",
    "mots": 62,
@@ -41110,6 +41582,13 @@
     "_js"
    ]
   },
+  "Elle ne rend pas un taux de conformité, et le mot n’y figure pas. Le document déclare lui-même que ses exemples ne constituent pas une liste de contrôle exhaustive : ce qui se mesure ici s’appelle COUVERTURE DES EXEMPLES RETENUS. Un organisme peut les tenir tous et rester en défaut de diligence sur un risque qu’aucun d’eux ne nomme.": {
+   "fr": "Elle ne rend pas un taux de conformité, et le mot n’y figure pas. Le document déclare lui-même que ses exemples ne constituent pas une liste de contrôle exhaustive : ce qui se mesure ici s’appelle COUVERTURE DES EXEMPLES RETENUS. Un organisme peut les tenir tous et rester en défaut de diligence sur un risque qu’aucun d’eux ne nomme.",
+   "mots": 63,
+   "pages": [
+    "_js"
+   ]
+  },
   "Elle ne reproduit AUCUNE phrase de la norme : ISO/IEC #:# est protégée par le droit d’auteur, et cette page en cite les numéros et les titres, tout le reste étant rédigé par le cabinet. Détenir le texte reste nécessaire pour se certifier. Elle n’accepte pas non plus qu’un article de # à # soit déclaré « sans objet » : ce sont des exigences, elles ne s’écartent pas. Seules les mesures de l’annexe A le peuvent, et seulement avec justification.": {
    "fr": "Elle ne reproduit AUCUNE phrase de la norme : ISO/IEC 42001:2023 est protégée par le droit d’auteur, et cette page en cite les numéros et les titres, tout le reste étant rédigé par le cabinet. Détenir le texte reste nécessaire pour se certifier. Elle n’accepte pas non plus qu’un article de 4 à 10 soit déclaré « sans objet » : ce sont des exigences, elles ne s’écartent pas. Seules les mesures de l’annexe A le peuvent, et seulement avec justification.",
    "mots": 80,
@@ -41222,8 +41701,8 @@
     "_js"
    ]
   },
-  "Elle rend un taux pour chacune des treize normes, calculé à partir de ce que vous avez déjà renseigné dans les modules — rien n'est réévalué ici, tout est composé.": {
-   "fr": "Elle rend un taux pour chacune des treize normes, calculé à partir de ce que vous avez déjà renseigné dans les modules — rien n'est réévalué ici, tout est composé.",
+  "Elle rend un taux pour chacune des quatorze normes, calculé à partir de ce que vous avez déjà renseigné dans les modules — rien n'est réévalué ici, tout est composé.": {
+   "fr": "Elle rend un taux pour chacune des quatorze normes, calculé à partir de ce que vous avez déjà renseigné dans les modules — rien n'est réévalué ici, tout est composé.",
    "mots": 30,
    "pages": [
     "_js"
@@ -41571,6 +42050,13 @@
    "mots": 2,
    "pages": [
     "audit-ia-act"
+   ]
+  },
+  "En faire une équivalence. Le document écrit que ce n'est pas un cadre d'équivalence — et sur ces vingt cadres, Sentinel en mesure trois.": {
+   "fr": "En faire une équivalence. Le document écrit que ce n'est pas un cadre d'équivalence — et sur ces vingt cadres, Sentinel en mesure trois.",
+   "mots": 25,
+   "pages": [
+    "_routes"
    ]
   },
   "En kg CO₂ éq. par an. Base": {
@@ -42140,6 +42626,13 @@
     "_routes"
    ]
   },
+  "Entre dans le plan de l'étape #, après les risques saillants.": {
+   "fr": "Entre dans le plan de l'étape 3, après les risques saillants.",
+   "mots": 11,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Entree en application des pratiques IA interdites (Art. # AI Act)": {
    "fr": "Entree en application des pratiques IA interdites (Art. 5 AI Act)",
    "mots": 10,
@@ -42152,7 +42645,6 @@
    "fr": "Entreprise",
    "mots": 1,
    "pages": [
-    "compte",
     "audit",
     "pricing"
    ]
@@ -44334,6 +44826,41 @@
     "_routes"
    ]
   },
+  "Faire cesser ce qui cause ou contribue, et bâtir les plans qui préviennent et atténuent les incidences futures.": {
+   "fr": "Faire cesser ce qui cause ou contribue, et bâtir les plans qui préviennent et atténuent les incidences futures.",
+   "mots": 18,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Faire cesser l'activité qui cause, prévenir les incidences potentielles, et RÉPARER le dommage déjà causé.": {
+   "fr": "Faire cesser l'activité qui cause, prévenir les incidences potentielles, et RÉPARER le dommage déjà causé.",
+   "mots": 16,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Faire cesser sa contribution, prévenir celle à venir, réparer SA PART du dommage, et construire son levier sur les relations d'affaires pour prévenir le reste.": {
+   "fr": "Faire cesser sa contribution, prévenir celle à venir, réparer SA PART du dommage, et construire son levier sur les relations d'affaires pour prévenir le reste.",
+   "mots": 26,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Faire cesser, prévenir et atténuer les incidences négatives": {
+   "fr": "Faire cesser, prévenir et atténuer les incidences négatives",
+   "mots": 8,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Faire cesser, prévenir, atténuer": {
+   "fr": "Faire cesser, prévenir, atténuer",
+   "mots": 4,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Faire le lien entre l’infrastructure et le règlement : les systèmes d’IA qui tournent dans vos centres de données doivent être classés, inscrits et gouvernés.": {
    "fr": "Faire le lien entre l’infrastructure et le règlement : les systèmes d’IA qui tournent dans vos centres de données doivent être classés, inscrits et gouvernés.",
    "mots": 26,
@@ -45479,7 +46006,6 @@
    "fr": "Fournisseurs",
    "mots": 1,
    "pages": [
-    "iso42001-soa",
     "regs"
    ]
   },
@@ -46774,6 +47300,13 @@
     "empreinte-parc"
    ]
   },
+  "Guide OCDE sur le devoir de diligence pour une conduite responsable des entreprises (#)": {
+   "fr": "Guide OCDE sur le devoir de diligence pour une conduite responsable des entreprises (2018)",
+   "mots": 13,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Guide d'audit documentaire automatisé": {
    "fr": "Guide d'audit documentaire automatisé",
    "mots": 5,
@@ -47712,7 +48245,6 @@
    "fr": "IA Act",
    "mots": 2,
    "pages": [
-    "conf-taux",
     "training"
    ]
   },
@@ -47906,6 +48438,13 @@
     "_js"
    ]
   },
+  "ISO # et ISO/IEC #": {
+   "fr": "ISO 31000 et ISO/IEC 23894",
+   "mots": 4,
+   "pages": [
+    "_routes"
+   ]
+  },
   "ISO # — Management de l’IA": {
    "fr": "ISO 42001 — Management de l’IA",
    "mots": 5,
@@ -47938,8 +48477,7 @@
    "fr": "ISO/IEC 42001",
    "mots": 2,
    "pages": [
-    "cadre-normatif",
-    "conf-taux"
+    "cadre-normatif"
    ]
   },
   "ISO/IEC # (management de l'IA)": {
@@ -47994,11 +48532,31 @@
     "_js"
    ]
   },
+  "ISO/IEC # — management du risque de l'IA": {
+   "fr": "ISO/IEC 23894 — management du risque de l'IA",
+   "mots": 8,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "ISO/IEC # — système de management de l'IA": {
+   "fr": "ISO/IEC 42001 — système de management de l'IA",
+   "mots": 8,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "ISO/IEC # — évaluation d'impact d'un SIA": {
+   "fr": "ISO/IEC 42005 — évaluation d'impact d'un SIA",
+   "mots": 8,
+   "pages": [
+    "_routes"
+   ]
+  },
   "ISO/IEC #:#": {
-   "fr": "ISO/IEC 27001:2013",
+   "fr": "ISO/IEC 42001:2023",
    "mots": 2,
    "pages": [
-    "iso27001-millesime",
     "regs"
    ]
   },
@@ -48026,6 +48584,13 @@
   "ISO/IEC #:# — Technologies de l'information — Intelligence artificielle — Système de management": {
    "fr": "ISO/IEC 42001:2023 — Technologies de l'information — Intelligence artificielle — Système de management",
    "mots": 11,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "ISO/IEC #:# — gouvernance de l'usage de l'IA": {
+   "fr": "ISO/IEC 38507:2022 — gouvernance de l'usage de l'IA",
+   "mots": 9,
    "pages": [
     "_routes"
    ]
@@ -48411,6 +48976,20 @@
     "_js"
    ]
   },
+  "Identifier et évaluer": {
+   "fr": "Identifier et évaluer",
+   "mots": 3,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Identifier et évaluer les incidences négatives réelles et potentielles": {
+   "fr": "Identifier et évaluer les incidences négatives réelles et potentielles",
+   "mots": 9,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Identifier l'autorité nationale de surveillance compétente dans chaque État membre de déploiement": {
    "fr": "Identifier l'autorité nationale de surveillance compétente dans chaque État membre de déploiement",
    "mots": 13,
@@ -48600,6 +49179,13 @@
    "mots": 24,
    "pages": [
     "_js"
+   ]
+  },
+  "Il est interdit de suggérer que l'OCDE adosse cet usage de l'œuvre.": {
+   "fr": "Il est interdit de suggérer que l'OCDE adosse cet usage de l'œuvre.",
+   "mots": 14,
+   "pages": [
+    "_routes"
    ]
   },
   "Il est le seul à donner une grammaire de RISQUE là où l’IA Act donne une grammaire d’OBLIGATION.": {
@@ -48817,6 +49403,13 @@
    "mots": 59,
    "pages": [
     "_js"
+   ]
+  },
+  "Ils sont conservés tels quels. Les fusionner produirait un exemple de quatre mille caractères ; les réécrire inventerait une phrase que le document ne porte pas.": {
+   "fr": "Ils sont conservés tels quels. Les fusionner produirait un exemple de quatre mille caractères ; les réécrire inventerait une phrase que le document ne porte pas.",
+   "mots": 25,
+   "pages": [
+    "_routes"
    ]
   },
   "Immobilier et gestion d'actifs bâtis": {
@@ -49065,12 +49658,7 @@
    "fr": "Incident majeur et délais",
    "mots": 4,
    "pages": [
-    "dora-qualifier",
-    "dora-risque",
-    "dora-tiers",
-    "dora-incident",
-    "dora-iso",
-    "dora-supervision",
+    "_coquille",
     "_js",
     "_routes"
    ]
@@ -51164,7 +51752,6 @@
    "fr": "Juridique",
    "mots": 1,
    "pages": [
-    "gouvernance",
     "carto-uc"
    ]
   },
@@ -51645,6 +52232,13 @@
    "mots": 4,
    "pages": [
     "_js"
+   ]
+  },
+  "L'ancrage dans les organes, les structures, les processus et les équipes, de sorte que la diligence se fasse dans le cours normal du travail — en tenant compte de l'indépendance et de l'autonomie que le droit national reconnaît à certains de ces organes.": {
+   "fr": "L'ancrage dans les organes, les structures, les processus et les équipes, de sorte que la diligence se fasse dans le cours normal du travail — en tenant compte de l'indépendance et de l'autonomie que le droit national reconnaît à certains de ces organes.",
+   "mots": 45,
+   "pages": [
+    "_routes"
    ]
   },
   "L'annexe A l'effleure : elle demande d'encadrer, pas de construire la parade technique.": {
@@ -52180,6 +52774,13 @@
     "_js"
    ]
   },
+  "L'estimation de la probabilité que l'incidence se produise.": {
+   "fr": "L'estimation de la probabilité que l'incidence se produise.",
+   "mots": 10,
+   "pages": [
+    "_routes"
+   ]
+  },
   "L'estimation engage la responsabilité professionnelle": {
    "fr": "L'estimation engage la responsabilité professionnelle",
    "mots": 6,
@@ -52190,6 +52791,13 @@
   "L'exclusion et sa justification doivent figurer explicitement dans la liste des systèmes. Une exclusion tacite n'existe pas.": {
    "fr": "L'exclusion et sa justification doivent figurer explicitement dans la liste des systèmes. Une exclusion tacite n'existe pas.",
    "mots": 19,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "L'exemple ne s'applique pas à votre organisme — et il faut pouvoir dire pourquoi. Les exemples qu'aucun de vos groupes ne vise sortent déjà du calcul sans que vous ayez à le dire.": {
+   "fr": "L'exemple ne s'applique pas à votre organisme — et il faut pouvoir dire pourquoi. Les exemples qu'aucun de vos groupes ne vise sortent déjà du calcul sans que vous ayez à le dire.",
+   "mots": 35,
    "pages": [
     "_routes"
    ]
@@ -52296,6 +52904,27 @@
    "mots": 7,
    "pages": [
     "_js"
+   ]
+  },
+  "L'implication COMMANDE le niveau de diligence attendu : causer oblige à faire cesser ET à réparer, contribuer à cesser sa part et construire son levier, être lié à user de ce levier. C'est elle qui plafonne le taux.": {
+   "fr": "L'implication COMMANDE le niveau de diligence attendu : causer oblige à faire cesser ET à réparer, contribuer à cesser sa part et construire son levier, être lié à user de ce levier. C'est elle qui plafonne le taux.",
+   "mots": 39,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "L'implication fixe le niveau de diligence attendu : causer oblige à faire cesser ET à réparer, contribuer à cesser sa part et construire son levier, être lié à user de ce levier. C'est elle qui plafonne le taux, et c'est l'encadré # du document qui le dit.": {
+   "fr": "L'implication fixe le niveau de diligence attendu : causer oblige à faire cesser ET à réparer, contribuer à cesser sa part et construire son levier, être lié à user de ce levier. C'est elle qui plafonne le taux, et c'est l'encadré 2.4 du document qui le dit.",
+   "mots": 49,
+   "pages": [
+    "_js"
+   ]
+  },
+  "L'incidence est rattachée à vos opérations, produits ou services par une relation d'affaires. Le document note que la contribution ou le lien direct, une fois le système déployé, vendu ou revendu, va souvent avec un risque non atténué à la conception ou un utilisateur final à haut risque.": {
+   "fr": "L'incidence est rattachée à vos opérations, produits ou services par une relation d'affaires. Le document note que la contribution ou le lien direct, une fois le système déployé, vendu ou revendu, va souvent avec un risque non atténué à la conception ou un utilisateur final à haut risque.",
+   "mots": 50,
+   "pages": [
+    "_routes"
    ]
   },
   "L'incidence sur la disponibilité, l'authenticité, l'intégrité ou la confidentialité nuit ou nuira aux objectifs opérationnels ou au respect des exigences réglementaires": {
@@ -52470,6 +53099,20 @@
     "nis2-gouvernance"
    ]
   },
+  "L'organisme CONTRIBUE à l'incidence": {
+   "fr": "L'organisme CONTRIBUE à l'incidence",
+   "mots": 6,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "L'organisme est LIÉ à l'incidence par une relation d'affaires": {
+   "fr": "L'organisme est LIÉ à l'incidence par une relation d'affaires",
+   "mots": 12,
+   "pages": [
+    "_routes"
+   ]
+  },
   "L'une des conditions de l'article #, points a) à d), est remplie": {
    "fr": "L'une des conditions de l'article 2, points a) à d), est remplie",
    "mots": 13,
@@ -52631,6 +53274,13 @@
     "_routes"
    ]
   },
+  "L'étape qui commande toutes les autres : sans incidences identifiées, qualifiées par l'implication et priorisées, les étapes # à # n'ont pas d'objet.": {
+   "fr": "L'étape qui commande toutes les autres : sans incidences identifiées, qualifiées par l'implication et priorisées, les étapes 3 à 6 n'ont pas d'objet.",
+   "mots": 24,
+   "pages": [
+    "_routes"
+   ]
+  },
   "L'état de l'amendement ISO/IEC #:#/Amd # relatif au changement climatique (articles # et #)": {
    "fr": "L'état de l'amendement ISO/IEC 27001:2022/Amd 1 relatif au changement climatique (articles 4.1 et 4.2)",
    "mots": 14,
@@ -52642,6 +53292,13 @@
   "L'état du système ne se résume pas à « en marche » : actif, inactif, dégradé et sécurisé ne demandent pas la même réaction.": {
    "fr": "L'état du système ne se résume pas à « en marche » : actif, inactif, dégradé et sécurisé ne demandent pas la même réaction.",
    "mots": 22,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "L'étendue de l'incidence — combien de personnes, quel territoire.": {
+   "fr": "L'étendue de l'incidence — combien de personnes, quel territoire.",
+   "mots": 10,
    "pages": [
     "_routes"
    ]
@@ -53289,6 +53946,13 @@
     "_js"
    ]
   },
+  "La couleur du tiroir de ce module dans la barre latérale n'est pas le bleu de l'OCDE, et aucune marque de l'OCDE n'est reproduite.": {
+   "fr": "La couleur du tiroir de ce module dans la barre latérale n'est pas le bleu de l'OCDE, et aucune marque de l'OCDE n'est reproduite.",
+   "mots": 28,
+   "pages": [
+    "_routes"
+   ]
+  },
   "La criticité des services touchés est une PORTE, pas un septième seuil : sans elle, aucun verdict ne peut être rendu.": {
    "fr": "La criticité des services touchés est une PORTE, pas un septième seuil : sans elle, aucun verdict ne peut être rendu.",
    "mots": 20,
@@ -53869,6 +54533,20 @@
     "_routes"
    ]
   },
+  "La gravité de l'incidence.": {
+   "fr": "La gravité de l'incidence.",
+   "mots": 5,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "La gravité se lit sur l’échelle, la portée et l’irrémédiabilité ;": {
+   "fr": "La gravité se lit sur l’échelle, la portée et l’irrémédiabilité ;",
+   "mots": 12,
+   "pages": [
+    "_js"
+   ]
+  },
   "La grille d’auto-évaluation de référence : utilisez ALTAI pour documenter, exigence par exigence (# au total), la fiabilité d’un système avant sa mise en service.": {
    "fr": "La grille d’auto-évaluation de référence : utilisez ALTAI pour documenter, exigence par exigence (7 au total), la fiabilité d’un système avant sa mise en service.",
    "mots": 26,
@@ -53925,11 +54603,32 @@
     "_routes"
    ]
   },
+  "La licence CC BY de l’OCDE ne couvre pas le matériel de tiers présent dans son œuvre. Les clauses d’ISO, de l’IEEE et d’AI Verify citées dans ces tableaux sont donc rendues par NUMÉRO ET INTITULÉ seulement, comme un index — la même doctrine que les modules ISO de ce dépôt.": {
+   "fr": "La licence CC BY de l’OCDE ne couvre pas le matériel de tiers présent dans son œuvre. Les clauses d’ISO, de l’IEEE et d’AI Verify citées dans ces tableaux sont donc rendues par NUMÉRO ET INTITULÉ seulement, comme un index — la même doctrine que les modules ISO de ce dépôt.",
+   "mots": 54,
+   "pages": [
+    "_js"
+   ]
+  },
+  "La licence CC BY permettrait de les traduire. Ils ne le sont pas, pour la raison qui vaut déjà pour les # actions du profil IA générative du NIST : c’est le libellé qu’un auditeur cherchera. Une traduction obligerait en outre à porter la mention d’adaptation sur chacune des # lignes. Le français autour d’eux est du cabinet.": {
+   "fr": "La licence CC BY permettrait de les traduire. Ils ne le sont pas, pour la raison qui vaut déjà pour les 212 actions du profil IA générative du NIST : c’est le libellé qu’un auditeur cherchera. Une traduction obligerait en outre à porter la mention d’adaptation sur chacune des 115 lignes. Le français autour d’eux est du cabinet.",
+   "mots": 59,
+   "pages": [
+    "_js"
+   ]
+  },
   "La licence est peut-être libre, le régime reste entier.": {
    "fr": "La licence est peut-être libre, le régime reste entier.",
    "mots": 10,
    "pages": [
     "_js"
+   ]
+  },
+  "La licence ne couvre pas le matériel de tiers présent dans l'œuvre.": {
+   "fr": "La licence ne couvre pas le matériel de tiers présent dans l'œuvre.",
+   "mots": 13,
+   "pages": [
+    "_routes"
    ]
   },
   "La ligne de prEN #-# est intitulée « Crédibilité Partie # » — le même libellé que la ligne précédente, qui est bien la partie #.": {
@@ -54047,6 +54746,13 @@
   "La maîtrise du système d'information": {
    "fr": "La maîtrise du système d'information",
    "mots": 6,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "La mesure dans laquelle l'incidence peut être réparée — les limites à la possibilité de rétablir les personnes ou l'environnement dans leur situation antérieure.": {
+   "fr": "La mesure dans laquelle l'incidence peut être réparée — les limites à la possibilité de rétablir les personnes ou l'environnement dans leur situation antérieure.",
+   "mots": 25,
    "pages": [
     "_routes"
    ]
@@ -54240,6 +54946,13 @@
     "_js"
    ]
   },
+  "La part que les parties prenantes peuvent vérifier. Elle ne crée rien par elle-même et rend le reste opposable.": {
+   "fr": "La part que les parties prenantes peuvent vérifier. Elle ne crée rien par elle-même et rend le reste opposable.",
+   "mots": 20,
+   "pages": [
+    "_routes"
+   ]
+  },
   "La part variable du modèle hybride est automatiquement plafonnée à #× le socle fixe — si ce plafond est atteint, un badge (plafonné) apparaît dans les résultats. Ce n est plus juste une recommandation textuelle : c est intégré au calcul.": {
    "fr": "La part variable du modèle hybride est automatiquement plafonnée à 4× le socle fixe — si ce plafond est atteint, un badge (plafonné) apparaît dans les résultats. Ce n est plus juste une recommandation textuelle : c est intégré au calcul.",
    "mots": 39,
@@ -54428,6 +55141,13 @@
    "mots": 50,
    "pages": [
     "enveloppe"
+   ]
+  },
+  "La priorisation sur la gravité et la probabilité, quand il n'est pas possible de tout traiter en même temps. Les quatre facteurs se cotent sur l'écran « processus », et chacun demande sa justification écrite.": {
+   "fr": "La priorisation sur la gravité et la probabilité, quand il n'est pas possible de tout traiter en même temps. Les quatre facteurs se cotent sur l'écran « processus », et chacun demande sa justification écrite.",
+   "mots": 35,
+   "pages": [
+    "_routes"
    ]
   },
   "La probabilité de défaillance que vous porterez dans la matrice cesse d’être une intuition : elle s’appuie sur un socle mesuré.": {
@@ -54628,6 +55348,13 @@
    "mots": 6,
    "pages": [
     "_js"
+   ]
+  },
+  "La relation d'un organisme à une incidence n'est pas statique. Elle change avec la situation, et avec ce que la diligence fait baisser. Le document le dit dans l'autre sens aussi : un organisme qui reste lié à une incidence et ne prend aucune mesure pour l'atténuer voit son lien direct devenir une CONTRIBUTION avec le temps.": {
+   "fr": "La relation d'un organisme à une incidence n'est pas statique. Elle change avec la situation, et avec ce que la diligence fait baisser. Le document le dit dans l'autre sens aussi : un organisme qui reste lié à une incidence et ne prend aucune mesure pour l'atténuer voit son lien direct devenir une CONTRIBUTION avec le temps.",
+   "mots": 60,
+   "pages": [
+    "_routes"
    ]
   },
   "La responsabilité NOMMÉE et personnelle de l'organe de direction sur le cadre de gestion du risque lié aux TIC. La mesure A.# demande un engagement ; le règlement désigne un responsable.": {
@@ -54888,6 +55615,20 @@
    "mots": 54,
    "pages": [
     "pan-sia"
+   ]
+  },
+  "La source": {
+   "fr": "La source",
+   "mots": 2,
+   "pages": [
+    "_js"
+   ]
+  },
+  "La source, sa licence CC BY # et les deux mentions qu'elle impose, ce que le document s'exclut lui-même, et ce que ce module refuse de dire.": {
+   "fr": "La source, sa licence CC BY 4.0 et les deux mentions qu'elle impose, ce que le document s'exclut lui-même, et ce que ce module refuse de dire.",
+   "mots": 29,
+   "pages": [
+    "_routes"
    ]
   },
   "La sous-traitance est dans l'obligation, pas à côté : un prestataire qui exploite le système ne déplace pas la responsabilité.": {
@@ -55705,6 +56446,13 @@
     "_js"
    ]
   },
+  "Le calcul n’a pas pu être obtenu. Aucun taux n’est affiché : un écran vide se voit, un taux inventé ne se voit pas.": {
+   "fr": "Le calcul n’a pas pu être obtenu. Aucun taux n’est affiché : un écran vide se voit, un taux inventé ne se voit pas.",
+   "mots": 25,
+   "pages": [
+    "conf-taux"
+   ]
+  },
   "Le calcul répond quand même à la question qui décide :": {
    "fr": "Le calcul répond quand même à la question qui décide :",
    "mots": 10,
@@ -56179,6 +56927,13 @@
     "_routes"
    ]
   },
+  "Le document attend qu'il passe devant : c'est un des risques les plus significatifs, et l'étape # commence par lui.": {
+   "fr": "Le document attend qu'il passe devant : c'est un des risques les plus significatifs, et l'étape 3 commence par lui.",
+   "mots": 21,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Le document court qui dit ce que l'organisme s'autorise et s'interdit en matière d'IA, et qui engage sa direction.": {
    "fr": "Le document court qui dit ce que l'organisme s'autorise et s'interdit en matière d'IA, et qui engage sa direction.",
    "mots": 23,
@@ -56202,6 +56957,13 @@
     "_routes"
    ]
   },
+  "Le document déclare lui-même que ses exemples pratiques ne constituent pas une liste de contrôle exhaustive.": {
+   "fr": "Le document déclare lui-même que ses exemples pratiques ne constituent pas une liste de contrôle exhaustive.",
+   "mots": 17,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Le document emploie « confabulation » plutôt qu'« hallucination » : le second terme prête au système une expérience qu'il n'a pas.": {
    "fr": "Le document emploie « confabulation » plutôt qu'« hallucination » : le second terme prête au système une expérience qu'il n'a pas.",
    "mots": 20,
@@ -56216,6 +56978,13 @@
     "_js"
    ]
   },
+  "Le document note que plusieurs options peuvent se combiner selon l'ampleur et le contexte du dommage, et que la réparation effective dépend du contexte.": {
+   "fr": "Le document note que plusieurs options peuvent se combiner selon l'ampleur et le contexte du dommage, et que la réparation effective dépend du contexte.",
+   "mots": 25,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Le document porte deux paragraphes du même titre, # et # : les deux sont conservés, distingués par leur numéro.": {
    "fr": "Le document porte deux paragraphes du même titre, 8.3.2.1 et 8.3.2.3 : les deux sont conservés, distingués par leur numéro.",
    "mots": 17,
@@ -56228,6 +56997,27 @@
    "mots": 3,
    "pages": [
     "obs-rd"
+   ]
+  },
+  "Le document s'en exclut expressément et renvoie à un autre guide de diligence de l'OCDE.": {
+   "fr": "Le document s'en exclut expressément et renvoie à un autre guide de diligence de l'OCDE.",
+   "mots": 17,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Le document se déclare « risk-agnostic » pour rester valable dans le temps : il nomme des cadres qui listent des risques, il n'en dresse pas la liste. Ce module ne lui en prête pas une.": {
+   "fr": "Le document se déclare « risk-agnostic » pour rester valable dans le temps : il nomme des cadres qui listent des risques, il n'en dresse pas la liste. Ce module ne lui en prête pas une.",
+   "mots": 35,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Le document écrit que ce n'est PAS un cadre d'équivalence — et sur ces vingt cadres, Sentinel en mesure trois. Les dix-sept autres sont nommés ici et non tenus.": {
+   "fr": "Le document écrit que ce n'est PAS un cadre d'équivalence — et sur ces vingt cadres, Sentinel en mesure trois. Les dix-sept autres sont nommés ici et non tenus.",
+   "mots": 31,
+   "pages": [
+    "_js"
    ]
   },
   "Le domaine d'application du SMSI (art. #)": {
@@ -56296,6 +57086,13 @@
   "Le droit d'accès s'étend aux informations sur la logique sous-jacente et aux conséquences du traitement automatisé — implique des mécanismes d'explicabilité dès la conception.": {
    "fr": "Le droit d'accès s'étend aux informations sur la logique sous-jacente et aux conséquences du traitement automatisé — implique des mécanismes d'explicabilité dès la conception.",
    "mots": 27,
+   "pages": [
+    "_js"
+   ]
+  },
+  "Le droit d’auteur des tiers": {
+   "fr": "Le droit d’auteur des tiers",
+   "mots": 6,
    "pages": [
     "_js"
    ]
@@ -56529,6 +57326,20 @@
    "mots": 7,
    "pages": [
     "empreinte-parc"
+   ]
+  },
+  "Le logo, l'identité visuelle et l'image de couverture de l'OCDE ne peuvent pas être employés sans autorisation expresse.": {
+   "fr": "Le logo, l'identité visuelle et l'image de couverture de l'OCDE ne peuvent pas être employés sans autorisation expresse.",
+   "mots": 21,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Le logo, l’identité visuelle et l’image de couverture de l’OCDE, et toute suggestion que l’OCDE adosse cet usage. Conséquence concrète : la couleur de ce module dans la barre latérale n’est pas le bleu de l’OCDE, et aucune marque n’est reproduite.": {
+   "fr": "Le logo, l’identité visuelle et l’image de couverture de l’OCDE, et toute suggestion que l’OCDE adosse cet usage. Conséquence concrète : la couleur de ce module dans la barre latérale n’est pas le bleu de l’OCDE, et aucune marque n’est reproduite.",
+   "mots": 47,
+   "pages": [
+    "_js"
    ]
   },
   "Le maintien dans la durée est-il organisé — qui réévalue, quand, et que déclenche un écart ?": {
@@ -57201,6 +58012,14 @@
     "_js"
    ]
   },
+  "Le poids suit la charge, pas le nombre d'exemples : l'étape # en porte vingt-quatre pour le seul groupe # et l'étape # n'en porte que deux — or c'est l'étape # qui est l'attente la plus forte dès que l'entreprise cause ou contribue.": {
+   "fr": "Le poids suit la charge, pas le nombre d'exemples : l'étape 3 en porte vingt-quatre pour le seul groupe 2 et l'étape 6 n'en porte que deux — or c'est l'étape 6 qui est l'attente la plus forte dès que l'entreprise cause ou contribue.",
+   "mots": 47,
+   "pages": [
+    "_js",
+    "_routes"
+   ]
+  },
   "Le point d'entrée du dispositif IA Act : cartographier, classer, évaluer, documenter, prouver.": {
    "fr": "Le point d'entrée du dispositif IA Act : cartographier, classer, évaluer, documenter, prouver.",
    "mots": 13,
@@ -57780,6 +58599,20 @@
     "_js"
    ]
   },
+  "Le référentiel est momentanément indisponible. Rien n’est affiché plutôt qu’une liste partielle.": {
+   "fr": "Le référentiel est momentanément indisponible. Rien n’est affiché plutôt qu’une liste partielle.",
+   "mots": 14,
+   "pages": [
+    "en18286-processus",
+    "en18286-questionnaire",
+    "en18286-conformite",
+    "en18286-analyse",
+    "ocde-processus",
+    "ocde-questionnaire",
+    "ocde-conformite",
+    "ocde-analyse"
+   ]
+  },
   "Le référentiel fait office de preuve : c'est le chemin le moins coûteux en contrôle.": {
    "fr": "Le référentiel fait office de preuve : c'est le chemin le moins coûteux en contrôle.",
    "mots": 15,
@@ -57984,6 +58817,13 @@
     "_routes"
    ]
   },
+  "Le seul endroit où quelque chose change pour les personnes. Tout le reste documente ; celle-ci agit.": {
+   "fr": "Le seul endroit où quelque chose change pour les personnes. Tout le reste documente ; celle-ci agit.",
+   "mots": 17,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Le seul indicateur que cette plateforme calcule elle-même": {
    "fr": "Le seul indicateur que cette plateforme calcule elle-même",
    "mots": 9,
@@ -58025,6 +58865,13 @@
    "mots": 19,
    "pages": [
     "simulateur"
+   ]
+  },
+  "Le site porte une page /dsa qui expose le règlement ; aucun module ne le mesure.": {
+   "fr": "Le site porte une page /dsa qui expose le règlement ; aucun module ne le mesure.",
+   "mots": 15,
+   "pages": [
+    "_routes"
    ]
   },
   "Le site vaut son": {
@@ -58110,6 +58957,13 @@
    "mots": 7,
    "pages": [
     "_js"
+   ]
+  },
+  "Le socle, et celui qu'un système de management déjà en place — ISO/IEC #, ISO #, un dispositif RSE — apporte le plus souvent tel quel.": {
+   "fr": "Le socle, et celui qu'un système de management déjà en place — ISO/IEC 42001, ISO 9001, un dispositif RSE — apporte le plus souvent tel quel.",
+   "mots": 24,
+   "pages": [
+    "_routes"
    ]
   },
   "Le statut des fonctions d'intervention fait partie de l'information de supervision : savoir qu'on peut arrêter est une condition pour arrêter.": {
@@ -58526,6 +59380,13 @@
     "conf-plan"
    ]
   },
+  "Le taux dit la diligence déclarée. Aucun organisme ne délivre d'attestation contre ce guide — à la différence de prEN #, qui vaudra présomption le jour de sa citation au Journal officiel.": {
+   "fr": "Le taux dit la diligence déclarée. Aucun organisme ne délivre d'attestation contre ce guide — à la différence de prEN 18286, qui vaudra présomption le jour de sa citation au Journal officiel.",
+   "mots": 31,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Le taux dit la supervision humaine déclarée au regard d'un projet à l'Enquête CEN. Le jour où la référence sera citée, le même travail vaudra présomption — dans les limites du domaine d'application de la norme.": {
    "fr": "Le taux dit la supervision humaine déclarée au regard d'un projet à l'Enquête CEN. Le jour où la référence sera citée, le même travail vaudra présomption — dans les limites du domaine d'application de la norme.",
    "mots": 38,
@@ -58744,6 +59605,13 @@
    "mots": 43,
    "pages": [
     "nist53-socle",
+    "_routes"
+   ]
+  },
+  "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : ce guide est volontaire : il met en œuvre deux recommandations de l'OCDE et n'ouvre aucune présomption de conformité, à aucune date. Aucun organisme ne délivre d'attestation contre lui.": {
+   "fr": "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : ce guide est volontaire : il met en œuvre deux recommandations de l'OCDE et n'ouvre aucune présomption de conformité, à aucune date. Aucun organisme ne délivre d'attestation contre lui.",
+   "mots": 54,
+   "pages": [
     "_routes"
    ]
   },
@@ -59193,6 +60061,20 @@
     "_js"
    ]
   },
+  "Les PME sont tenues à la diligence comme les autres. Le document reconnaît qu'elles n'en ont pas la même capacité — moyens limités, levier plus faible sur les relations d'affaires, coût de la prévention — et que la mesure se proportionne à leur situation. Elle ne disparaît pas.": {
+   "fr": "Les PME sont tenues à la diligence comme les autres. Le document reconnaît qu'elles n'en ont pas la même capacité — moyens limités, levier plus faible sur les relations d'affaires, coût de la prévention — et que la mesure se proportionne à leur situation. Elle ne disparaît pas.",
+   "mots": 49,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Les Principes de l'OCDE sur l'IA (Recommandation du Conseil sur l'intelligence artificielle, révisée en mai #) et le Guide OCDE à l'intention des entreprises multinationales sur la conduite responsable des entreprises (#)": {
+   "fr": "Les Principes de l'OCDE sur l'IA (Recommandation du Conseil sur l'intelligence artificielle, révisée en mai 2024) et le Guide OCDE à l'intention des entreprises multinationales sur la conduite responsable des entreprises (2023)",
+   "mots": 34,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Les QUATRE usages de l'annexe III, point #": {
    "fr": "Les QUATRE usages de l'annexe III, point 3",
    "mots": 8,
@@ -59305,6 +60187,13 @@
     "_js"
    ]
   },
+  "Les attentes et les politiques portées dans la relation elle-même : fournisseurs d'intrants, partenaires de vente, clients et utilisateurs.": {
+   "fr": "Les attentes et les politiques portées dans la relation elle-même : fournisseurs d'intrants, partenaires de vente, clients et utilisateurs.",
+   "mots": 20,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Les attestations nominatives et datées des dirigeants eux-mêmes — pas celles des équipes.": {
    "fr": "Les attestations nominatives et datées des dirigeants eux-mêmes — pas celles des équipes.",
    "mots": 13,
@@ -59325,6 +60214,13 @@
    "mots": 18,
    "pages": [
     "_js"
+   ]
+  },
+  "Les autres formes": {
+   "fr": "Les autres formes",
+   "mots": 3,
+   "pages": [
+    "_routes"
    ]
   },
   "Les autres sont des outils posés sur un processus inchangé — le gain chiffré au dossier de valeur ne viendra pas les chercher.": {
@@ -59455,6 +60351,13 @@
   "Les changements prédéterminés sont-ils décrits dans la documentation technique avant d'être mis en œuvre ?": {
    "fr": "Les changements prédéterminés sont-ils décrits dans la documentation technique avant d'être mis en œuvre ?",
    "mots": 16,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Les chaînes d'approvisionnement des intrants matériels — extraction des matières premières, fabrication des composants.": {
+   "fr": "Les chaînes d'approvisionnement des intrants matériels — extraction des matières premières, fabrication des composants.",
+   "mots": 14,
    "pages": [
     "_routes"
    ]
@@ -59744,6 +60647,13 @@
     "pan-sia"
    ]
   },
+  "Les deux mentions de licence voyagent avec le référentiel, et l'écran dit que les poids, les plafonds et le découpage du questionnaire sont du cabinet.": {
+   "fr": "Les deux mentions de licence voyagent avec le référentiel, et l'écran dit que les poids, les plafonds et le découpage du questionnaire sont du cabinet.",
+   "mots": 26,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Les deux n’échouent pas aux mêmes endroits.": {
    "fr": "Les deux n’échouent pas aux mêmes endroits.",
    "mots": 8,
@@ -59952,8 +60862,8 @@
     "_routes"
    ]
   },
-  "Les dix-neuf catégories que vous venez de renseigner remontent dans la synthèse des treize normes.": {
-   "fr": "Les dix-neuf catégories que vous venez de renseigner remontent dans la synthèse des treize normes.",
+  "Les dix-neuf catégories que vous venez de renseigner remontent dans la synthèse des quatorze normes.": {
+   "fr": "Les dix-neuf catégories que vous venez de renseigner remontent dans la synthèse des quatorze normes.",
    "mots": 16,
    "pages": [
     "_js"
@@ -60120,6 +61030,20 @@
     "carto-uc"
    ]
   },
+  "Les exemples ne sont pas exhaustifs": {
+   "fr": "Les exemples ne sont pas exhaustifs",
+   "mots": 6,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Les exemples pratiques du document, par étape et par sous-étape. Seuls ceux qu'un de vos groupes vise entrent dans le calcul.": {
+   "fr": "Les exemples pratiques du document, par étape et par sous-étape. Seuls ceux qu'un de vos groupes vise entrent dans le calcul.",
+   "mots": 23,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Les exigences de l’annexe I et les articles # et # relèvent du palier le plus lourd : # M€ ou # % du chiffre d’affaires mondial.": {
    "fr": "Les exigences de l’annexe I et les articles 13 et 14 relèvent du palier le plus lourd : 15 M€ ou 2,5 % du chiffre d’affaires mondial.",
    "mots": 23,
@@ -60181,6 +61105,13 @@
    "mots": 9,
    "pages": [
     "empreinte-parc"
+   ]
+  },
+  "Les feuilles de route citent les clauses d'ISO, de l'IEEE et d'AI Verify par NUMÉRO ET INTITULÉ seulement, comme un index.": {
+   "fr": "Les feuilles de route citent les clauses d'ISO, de l'IEEE et d'AI Verify par NUMÉRO ET INTITULÉ seulement, comme un index.",
+   "mots": 24,
+   "pages": [
+    "_routes"
    ]
   },
   "Les fournisseurs de modeles de fondation (GPAI) doivent se conformer aux obligations de transparence et de documentation. Les amendes de l'Article # deviennent executoires.": {
@@ -60367,6 +61298,20 @@
   "Les interfaces, les notifications et les fonctions d'intervention.": {
    "fr": "Les interfaces, les notifications et les fonctions d'intervention.",
    "mots": 9,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Les intitulés des étapes et les": {
+   "fr": "Les intitulés des étapes et les",
+   "mots": 6,
+   "pages": [
+    "_js"
+   ]
+  },
+  "Les intitulés et les # exemples pratiques viennent du document, sous licence CC BY #. Le découpage du questionnaire, les poids, les plafonds et tout le français autour sont du cabinet — les deux mentions que la licence impose sont portées à l'écran, mot pour mot.": {
+   "fr": "Les intitulés et les 115 exemples pratiques viennent du document, sous licence CC BY 4.0. Le découpage du questionnaire, les poids, les plafonds et tout le français autour sont du cabinet — les deux mentions que la licence impose sont portées à l'écran, mot pour mot.",
+   "mots": 44,
    "pages": [
     "_routes"
    ]
@@ -60765,6 +61710,13 @@
     "_routes"
    ]
   },
+  "Les options de réparation que le document": {
+   "fr": "Les options de réparation que le document",
+   "mots": 7,
+   "pages": [
+    "_js"
+   ]
+  },
   "Les opérateurs sont-ils formés et habilités à superviser le système IA ?": {
    "fr": "Les opérateurs sont-ils formés et habilités à superviser le système IA ?",
    "mots": 12,
@@ -60913,6 +61865,34 @@
    "pages": [
     "nis2",
     "_routes"
+   ]
+  },
+  "Les ponts ne valent pas équivalence": {
+   "fr": "Les ponts ne valent pas équivalence",
+   "mots": 6,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Les ponts viennent du DOCUMENT, pas du cabinet : c'est l'OCDE qui rapproche ses six étapes de l'IA Act, d'ISO/IEC #, du cadre du NIST et de dix-sept autres cadres.": {
+   "fr": "Les ponts viennent du DOCUMENT, pas du cabinet : c'est l'OCDE qui rapproche ses six étapes de l'IA Act, d'ISO/IEC 42001, du cadre du NIST et de dix-sept autres cadres.",
+   "mots": 34,
+   "pages": [
+    "_js"
+   ]
+  },
+  "Les ponts viennent du DOCUMENT, pas du cabinet : c'est l'OCDE qui rapproche ses six étapes des dispositions de l'IA Act, d'ISO/IEC #, du cadre du NIST et de dix-sept autres.": {
+   "fr": "Les ponts viennent du DOCUMENT, pas du cabinet : c'est l'OCDE qui rapproche ses six étapes des dispositions de l'IA Act, d'ISO/IEC 42001, du cadre du NIST et de dix-sept autres.",
+   "mots": 35,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Les ponts, donnés par le": {
+   "fr": "Les ponts, donnés par le",
+   "mots": 5,
+   "pages": [
+    "_js"
    ]
   },
   "Les praticiens doivent comprendre et pouvoir contester les recommandations IA. Supervision humaine renforcée (Art. #) sur toute décision médicale.": {
@@ -61091,6 +62071,13 @@
    "mots": 9,
    "pages": [
     "simulateur"
+   ]
+  },
+  "Les quatre-vingt-onze lignes de pont que le document donne lui-même vers vingt autres cadres.": {
+   "fr": "Les quatre-vingt-onze lignes de pont que le document donne lui-même vers vingt autres cadres.",
+   "mots": 17,
+   "pages": [
+    "_routes"
    ]
   },
   "Les quatre-vingt-treize mesures de l'annexe A et les chapitres # à #, cités par numéro.": {
@@ -61391,6 +62378,27 @@
     "dora-qualifier"
    ]
   },
+  "Les six feuilles de route montrent où les exigences se ressemblent. Le document écrit qu'elles ne constituent PAS un cadre d'équivalence, « as the scope and nature of the expectations in the other frameworks may vary ».": {
+   "fr": "Les six feuilles de route montrent où les exigences se ressemblent. Le document écrit qu'elles ne constituent PAS un cadre d'équivalence, « as the scope and nature of the expectations in the other frameworks may vary ».",
+   "mots": 37,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Les six feuilles de route rapprochent les étapes de l'OCDE des dispositions d'autres cadres. Le document écrit que ce n'est pas un cadre d'équivalence : tenir ISO/IEC # ou le cadre du NIST ne vaut pas diligence OCDE, et l'inverse est vrai aussi.": {
+   "fr": "Les six feuilles de route rapprochent les étapes de l'OCDE des dispositions d'autres cadres. Le document écrit que ce n'est pas un cadre d'équivalence : tenir ISO/IEC 42001 ou le cadre du NIST ne vaut pas diligence OCDE, et l'inverse est vrai aussi.",
+   "mots": 47,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Les six feuilles de route rapprochent les étapes de l'OCDE des dispositions de vingt autres cadres. Le document écrit que ce n'est PAS un cadre d'équivalence.": {
+   "fr": "Les six feuilles de route rapprochent les étapes de l'OCDE des dispositions de vingt autres cadres. Le document écrit que ce n'est PAS un cadre d'équivalence.",
+   "mots": 29,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Les six seuils du": {
    "fr": "Les six seuils du",
    "mots": 4,
@@ -61567,6 +62575,13 @@
     "_js"
    ]
   },
+  "Les textes du CEN et de l’ISO sont protégés : prEN #-#, prEN #, ISO/IEC # et ISO/IEC # n’existent ici que par leurs numéros et leurs titres. Celui-ci peut être cité, traduit et adapté — à trois conditions que la licence formule elle-même, et que cet écran honore : citer l’œuvre, et porter deux mentions, l’une pour la traduction, l’autre pour l’adaptation.": {
+   "fr": "Les textes du CEN et de l’ISO sont protégés : prEN 18229-3, prEN 18286, ISO/IEC 42001 et ISO/IEC 27001 n’existent ici que par leurs numéros et leurs titres. Celui-ci peut être cité, traduit et adapté — à trois conditions que la licence formule elle-même, et que cet écran honore : citer l’œuvre, et porter deux mentions, l’une pour la traduction, l’autre pour l’adaptation.",
+   "mots": 66,
+   "pages": [
+    "_js"
+   ]
+  },
   "Les totaux ci-dessous ne comptent QUE ces systèmes.": {
    "fr": "Les totaux ci-dessous ne comptent QUE ces systèmes.",
    "mots": 9,
@@ -61584,6 +62599,13 @@
   "Les trajectoires ne sont pas un référentiel": {
    "fr": "Les trajectoires ne sont pas un référentiel",
    "mots": 7,
+   "pages": [
+    "_js"
+   ]
+  },
+  "Les treize autres référentiels de Sentinel demandent si LE SYSTÈME est conforme. Celui-ci demande autre chose : l'entreprise a-t-elle identifié, prévenu, traité et réparé les incidences négatives de l'IA — les siennes, et celles de ses relations d'affaires, en amont comme en aval. Six étapes, trois groupes d'acteur, et une question qui commande tout : causez-vous l'incidence, y contribuez-vous, ou y êtes-vous seulement lié ?": {
+   "fr": "Les treize autres référentiels de Sentinel demandent si LE SYSTÈME est conforme. Celui-ci demande autre chose : l'entreprise a-t-elle identifié, prévenu, traité et réparé les incidences négatives de l'IA — les siennes, et celles de ses relations d'affaires, en amont comme en aval. Six étapes, trois groupes d'acteur, et une question qui commande tout : causez-vous l'incidence, y contribuez-vous, ou y êtes-vous seulement lié ?",
+   "mots": 72,
    "pages": [
     "_js"
    ]
@@ -61636,6 +62658,20 @@
    "pages": [
     "training",
     "_js"
+   ]
+  },
+  "Les trois groupes d'acteur — ils ne sont ni rigides ni exclusifs —, l'implication dans l'incidence, et la priorisation sur quatre facteurs.": {
+   "fr": "Les trois groupes d'acteur — ils ne sont ni rigides ni exclusifs —, l'implication dans l'incidence, et la priorisation sur quatre facteurs.",
+   "mots": 23,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Les trois groupes ne sont ni rigides ni exclusifs — le document le dit lui-même. Déclarez-en autant que votre organisme en occupe : le questionnaire montre alors les exemples de chacun, et ceux qu'aucun de vos groupes ne vise sortent du calcul au lieu de compter zéro.": {
+   "fr": "Les trois groupes ne sont ni rigides ni exclusifs — le document le dit lui-même. Déclarez-en autant que votre organisme en occupe : le questionnaire montre alors les exemples de chacun, et ceux qu'aucun de vos groupes ne vise sortent du calcul au lieu de compter zéro.",
+   "mots": 48,
+   "pages": [
+    "_routes"
    ]
   },
   "Les trois indicateurs de cette page sont OBSERVÉS — c’est-à-dire qu’une méthode est écrite pour chacun, et qu’on saurait refaire le relevé.": {
@@ -62082,6 +63118,13 @@
     "empreinte-parc"
    ]
   },
+  "Lire ce taux comme une conformité. Le document déclare ses exemples non exhaustifs : ce qui se mesure ici s'appelle couverture des exemples retenus.": {
+   "fr": "Lire ce taux comme une conformité. Le document déclare ses exemples non exhaustifs : ce qui se mesure ici s'appelle couverture des exemples retenus.",
+   "mots": 24,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Lire et appliquer la notice d'utilisation du fournisseur": {
    "fr": "Lire et appliquer la notice d'utilisation du fournisseur",
    "mots": 9,
@@ -62120,6 +63163,13 @@
   "Lire l’empreinte du parc, poste par poste": {
    "fr": "Lire l’empreinte du parc, poste par poste",
    "mots": 8,
+   "pages": [
+    "_js"
+   ]
+  },
+  "Lisez ce qui vient de l'OCDE, ce qui vient du cabinet, et ce que le document s'exclut lui-même.": {
+   "fr": "Lisez ce qui vient de l'OCDE, ce qui vient du cabinet, et ce que le document s'exclut lui-même.",
+   "mots": 21,
    "pages": [
     "_js"
    ]
@@ -62245,6 +63295,13 @@
   "Lisez les quatre étapes AVANT d’en avoir besoin.": {
    "fr": "Lisez les quatre étapes AVANT d’en avoir besoin.",
    "mots": 9,
+   "pages": [
+    "_js"
+   ]
+  },
+  "Lisez les quatre-vingt-onze lignes de pont, étape par étape, et la colonne qui dit si Sentinel mesure le cadre d'en face.": {
+   "fr": "Lisez les quatre-vingt-onze lignes de pont, étape par étape, et la colonne qui dit si Sentinel mesure le cadre d'en face.",
+   "mots": 24,
    "pages": [
     "_js"
    ]
@@ -62733,6 +63790,13 @@
   "Lorsqu'une seule personne désignée supervise plusieurs scénarios, avez-vous démontré et justifié dans la documentation technique qu'elle le peut sans surcharge cognitive ni conflit ?": {
    "fr": "Lorsqu'une seule personne désignée supervise plusieurs scénarios, avez-vous démontré et justifié dans la documentation technique qu'elle le peut sans surcharge cognitive ni conflit ?",
    "mots": 26,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Lorsque l'organisme a causé une incidence réelle ou y a contribué, rétablir les personnes dans la situation qui serait la leur si elle ne s'était pas produite, autant que possible, et à la mesure de l'incidence.": {
+   "fr": "Lorsque l'organisme a causé une incidence réelle ou y a contribué, rétablir les personnes dans la situation qui serait la leur si elle ne s'était pas produite, autant que possible, et à la mesure de l'incidence.",
+   "mots": 39,
    "pages": [
     "_routes"
    ]
@@ -63289,6 +64353,13 @@
   "L’identification biométrique à distance change le questionnaire": {
    "fr": "L’identification biométrique à distance change le questionnaire",
    "mots": 8,
+   "pages": [
+    "_js"
+   ]
+  },
+  "L’implication COMMANDE le niveau attendu": {
+   "fr": "L’implication COMMANDE le niveau attendu",
+   "mots": 6,
    "pages": [
     "_js"
    ]
@@ -64341,7 +65412,6 @@
    "fr": "Mensuel",
    "mots": 1,
    "pages": [
-    "finops",
     "pricing"
    ]
   },
@@ -64868,6 +65938,13 @@
    "mots": 18,
    "pages": [
     "ia50"
+   ]
+  },
+  "Met en œuvre": {
+   "fr": "Met en œuvre",
+   "mots": 3,
+   "pages": [
+    "_js"
    ]
   },
   "Met un produit à disposition sur le marché sans être ni fabricant ni importateur.": {
@@ -67580,7 +68657,6 @@
    "pages": [
     "ingenierie",
     "maturite",
-    "gouvernance",
     "simulateur"
    ]
   },
@@ -68366,6 +69442,20 @@
     "_js"
    ]
   },
+  "OCDE — Comité de la politique de l'économie numérique (CPEN, par son Groupe de travail sur la gouvernance de l'IA) et Comité de l'investissement (par son Groupe de travail sur la conduite responsable des entreprises)": {
+   "fr": "OCDE — Comité de la politique de l'économie numérique (CPEN, par son Groupe de travail sur la gouvernance de l'IA) et Comité de l'investissement (par son Groupe de travail sur la conduite responsable des entreprises)",
+   "mots": 37,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "OCDE — Guide sur le devoir de diligence pour une intelligence artificielle responsable": {
+   "fr": "OCDE — Guide sur le devoir de diligence pour une intelligence artificielle responsable",
+   "mots": 12,
+   "pages": [
+    "_routes"
+   ]
+  },
   "OCDE — dependance modeles proprietaires, concentration des couts IA": {
    "fr": "OCDE — dependance modeles proprietaires, concentration des couts IA",
    "mots": 8,
@@ -68394,6 +69484,13 @@
    "mots": 1,
    "pages": [
     "carto"
+   ]
+  },
+  "ONU — Principes directeurs relatifs aux entreprises et aux droits de l'homme": {
+   "fr": "ONU — Principes directeurs relatifs aux entreprises et aux droits de l'homme",
+   "mots": 12,
+   "pages": [
+    "_routes"
    ]
   },
   "OPTIONNEL": {
@@ -69430,7 +70527,6 @@
    "pages": [
     "ingenierie",
     "maturite",
-    "gouvernance",
     "simulateur"
    ]
   },
@@ -69804,6 +70900,13 @@
   "Ouvrez l’audit structuré en cinq étapes et faites-le porter sur le périmètre que vous venez de classer.": {
    "fr": "Ouvrez l’audit structuré en cinq étapes et faites-le porter sur le périmètre que vous venez de classer.",
    "mots": 19,
+   "pages": [
+    "_js"
+   ]
+  },
+  "Ouvrez l’étape qui vous occupe et lisez la colonne de droite : elle dit si Sentinel mesure ce cadre-là. Sur les vingt, trois sont mesurés ici — l’IA Act, ISO/IEC # et le cadre du NIST. Les dix-sept autres sont nommés par l’OCDE et non tenus par le cabinet, et l’écran le dit plutôt que de les présenter comme couverts.": {
+   "fr": "Ouvrez l’étape qui vous occupe et lisez la colonne de droite : elle dit si Sentinel mesure ce cadre-là. Sur les vingt, trois sont mesurés ici — l’IA Act, ISO/IEC 42001 et le cadre du NIST. Les dix-sept autres sont nommés par l’OCDE et non tenus par le cabinet, et l’écran le dit plutôt que de les présenter comme couverts.",
+   "mots": 64,
    "pages": [
     "_js"
    ]
@@ -72622,7 +73725,6 @@
    "fr": "Politique",
    "mots": 1,
    "pages": [
-    "iso27001",
     "geo"
    ]
   },
@@ -72772,6 +73874,13 @@
    "pages": [
     "carto",
     "_js"
+   ]
+  },
+  "Politiques de conduite responsable": {
+   "fr": "Politiques de conduite responsable",
+   "mots": 4,
+   "pages": [
+    "_routes"
    ]
   },
   "Politiques de sécurité de l'information": {
@@ -73456,6 +74565,13 @@
     "_js"
    ]
   },
+  "Pourquoi les énoncés restent en anglais": {
+   "fr": "Pourquoi les énoncés restent en anglais",
+   "mots": 6,
+   "pages": [
+    "_js"
+   ]
+  },
   "Pourquoi un devis parfait ne fait pas un business case": {
    "fr": "Pourquoi un devis parfait ne fait pas un business case",
    "mots": 10,
@@ -73689,12 +74805,7 @@
    "fr": "Prestataire critique — supervision",
    "mots": 3,
    "pages": [
-    "dora-qualifier",
-    "dora-risque",
-    "dora-tiers",
-    "dora-incident",
-    "dora-iso",
-    "dora-supervision"
+    "_coquille"
    ]
   },
   "Prestataire de services TIC — je sers des entités financières": {
@@ -74133,6 +75244,20 @@
     "_js"
    ]
   },
+  "Prioriser les risques (étape #)": {
+   "fr": "Prioriser les risques (étape 2.4)",
+   "mots": 4,
+   "pages": [
+    "_js"
+   ]
+  },
+  "Prioriser les risques les plus saillants": {
+   "fr": "Prioriser les risques les plus saillants",
+   "mots": 6,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Prioriser par niveau de risque": {
    "fr": "Prioriser par niveau de risque",
    "mots": 5,
@@ -74315,6 +75440,13 @@
     "_js"
    ]
   },
+  "Processus d'Hiroshima — Code de conduite international pour les systèmes d'IA avancés": {
+   "fr": "Processus d'Hiroshima — Code de conduite international pour les systèmes d'IA avancés",
+   "mots": 13,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Processus d'utilisation responsable des systèmes d'IA": {
    "fr": "Processus d'utilisation responsable des systèmes d'IA",
    "mots": 8,
@@ -74437,6 +75569,14 @@
    "mots": 3,
    "pages": [
     "carto-uc"
+   ]
+  },
+  "Processus — groupes et implication": {
+   "fr": "Processus — groupes et implication",
+   "mots": 4,
+   "pages": [
+    "_js",
+    "_routes"
    ]
   },
   "Processus — stratégie §#": {
@@ -75931,7 +77071,6 @@
    "fr": "Périmètre",
    "mots": 1,
    "pages": [
-    "empreinte",
     "audit"
    ]
   },
@@ -76063,12 +77202,7 @@
    "fr": "Qualification et régime",
    "mots": 3,
    "pages": [
-    "dora-qualifier",
-    "dora-risque",
-    "dora-tiers",
-    "dora-incident",
-    "dora-iso",
-    "dora-supervision",
+    "_coquille",
     "_js",
     "_routes"
    ]
@@ -76303,6 +77437,20 @@
    "mots": 4,
    "pages": [
     "training",
+    "_js"
+   ]
+  },
+  "Quatre exemples du §# commencent en minuscule.": {
+   "fr": "Quatre exemples du §2.2 commencent en minuscule.",
+   "mots": 6,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Quatre facteurs, et la justification que le document exige : il": {
+   "fr": "Quatre facteurs, et la justification que le document exige : il",
+   "mots": 10,
+   "pages": [
     "_js"
    ]
   },
@@ -76593,6 +77741,14 @@
     "_routes"
    ]
   },
+  "Questionnaire — les six étapes": {
+   "fr": "Questionnaire — les six étapes",
+   "mots": 4,
+   "pages": [
+    "_js",
+    "_routes"
+   ]
+  },
   "Questions spécifiques aux modèles de fondation, LLM et aux enjeux de données personnelles.": {
    "fr": "Questions spécifiques aux modèles de fondation, LLM et aux enjeux de données personnelles.",
    "mots": 13,
@@ -76761,6 +77917,13 @@
     "_js"
    ]
   },
+  "Qu’il y aurait une présomption de conformité — l’instrument est volontaire, et aucune date ne changera cela. Qu’il porterait un catalogue de risques — le document se déclare « risk-agnostic ». Qu’il couvrirait la chaîne du matériel — il s’en exclut lui-même et renvoie au guide minerais.": {
+   "fr": "Qu’il y aurait une présomption de conformité — l’instrument est volontaire, et aucune date ne changera cela. Qu’il porterait un catalogue de risques — le document se déclare « risk-agnostic ». Qu’il couvrirait la chaîne du matériel — il s’en exclut lui-même et renvoie au guide minerais.",
+   "mots": 49,
+   "pages": [
+    "_js"
+   ]
+  },
   "R": {
    "fr": "R",
    "mots": 1,
@@ -76836,7 +77999,6 @@
    "mots": 1,
    "pages": [
     "cadre-normatif",
-    "conf-taux",
     "regs",
     "training",
     "maturite",
@@ -78580,7 +79742,6 @@
    "mots": 6,
    "pages": [
     "rgpd-site",
-    "rgpd-doc",
     "_js"
    ]
   },
@@ -78655,7 +79816,6 @@
    "pages": [
     "cadre-normatif",
     "maturite",
-    "gouvernance",
     "_js"
    ]
   },
@@ -78989,6 +80149,13 @@
    "mots": 17,
    "pages": [
     "_js"
+   ]
+  },
+  "Rendre compte des actions menées": {
+   "fr": "Rendre compte des actions menées",
+   "mots": 5,
+   "pages": [
+    "_routes"
    ]
   },
   "Rendre la gouvernance de l'IA opérationnelle": {
@@ -79651,9 +80818,6 @@
    "fr": "Ressources",
    "mots": 1,
    "pages": [
-    "empreinte-ia",
-    "iso27001",
-    "iso42001",
     "templates"
    ]
   },
@@ -79683,7 +80847,6 @@
    "fr": "Ressources humaines",
    "mots": 2,
    "pages": [
-    "iso42001-soa",
     "carto-uc"
    ]
   },
@@ -79713,6 +80876,13 @@
    "mots": 4,
    "pages": [
     "iso42001-soa",
+    "_routes"
+   ]
+  },
+  "Reste au registre et se revoit ; ne commande pas d'action immédiate.": {
+   "fr": "Reste au registre et se revoit ; ne commande pas d'action immédiate.",
+   "mots": 12,
+   "pages": [
     "_routes"
    ]
   },
@@ -80320,7 +81490,6 @@
    "fr": "Risque limite",
    "mots": 2,
    "pages": [
-    "registre",
     "articles"
    ]
   },
@@ -80329,7 +81498,6 @@
    "mots": 2,
    "pages": [
     "report",
-    "matrice",
     "_js"
    ]
   },
@@ -80840,6 +82008,20 @@
    "pages": [
     "regs",
     "_js"
+   ]
+  },
+  "Règlement (UE) #/# — DSA": {
+   "fr": "Règlement (UE) 2022/2065 — DSA",
+   "mots": 3,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Règlement (UE) #/# — IA Act": {
+   "fr": "Règlement (UE) 2024/1689 — IA Act",
+   "mots": 4,
+   "pages": [
+    "_routes"
    ]
   },
   "Règlement (UE) #/# — JO L du #": {
@@ -81616,6 +82798,13 @@
     "_js"
    ]
   },
+  "Réparer ou y coopérer": {
+   "fr": "Réparer ou y coopérer",
+   "mots": 4,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Répartir les responsabilités avec les fournisseurs et les clients — et s'assurer que ce qu'on achète tient les mêmes engagements.": {
    "fr": "Répartir les responsabilités avec les fournisseurs et les clients — et s'assurer que ce qu'on achète tient les mêmes engagements.",
    "mots": 21,
@@ -81702,6 +82891,13 @@
    "mots": 3,
    "pages": [
     "_js"
+   ]
+  },
+  "Répondez au cadre d’analyse pour obtenir un score.": {
+   "fr": "Répondez au cadre d’analyse pour obtenir un score.",
+   "mots": 9,
+   "pages": [
+    "en18229-score"
    ]
   },
   "Répondez au questionnaire avant d enregistrer cette évaluation.": {
@@ -82083,6 +83279,13 @@
    "mots": 10,
    "pages": [
     "templates"
+   ]
+  },
+  "Rétablir la personne ou le groupe dans la position qui serait la sienne si le dommage ne s'était pas produit.": {
+   "fr": "Rétablir la personne ou le groupe dans la position qui serait la sienne si le dommage ne s'était pas produit.",
+   "mots": 21,
+   "pages": [
+    "_routes"
    ]
   },
   "Rétention et suppression automatique (art. #.e · Data Act)": {
@@ -82738,8 +83941,6 @@
    "fr": "Sans objet",
    "mots": 2,
    "pages": [
-    "ia50",
-    "en18229-score",
     "audit-ia-act",
     "_js",
     "_routes"
@@ -82812,7 +84013,6 @@
    "fr": "Sans réponse",
    "mots": 2,
    "pages": [
-    "en18229-score",
     "audit-ia-act",
     "_js"
    ]
@@ -83345,6 +84545,21 @@
     "_routes"
    ]
   },
+  "Se ranger en « lien direct » et ne rien faire : le document écrit qu'un lien direct devient une CONTRIBUTION si l'entreprise continue sans agir.": {
+   "fr": "Se ranger en « lien direct » et ne rien faire : le document écrit qu'un lien direct devient une CONTRIBUTION si l'entreprise continue sans agir.",
+   "mots": 25,
+   "pages": [
+    "_js",
+    "_routes"
+   ]
+  },
+  "Se ranger en « lien direct » et ne rien faire. Le document écrit que le lien direct devient une CONTRIBUTION si l'entreprise continue sans agir.": {
+   "fr": "Se ranger en « lien direct » et ne rien faire. Le document écrit que le lien direct devient une CONTRIBUTION si l'entreprise continue sans agir.",
+   "mots": 25,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Se situer dans sa filière": {
    "fr": "Se situer dans sa filière",
    "mots": 5,
@@ -83363,7 +84578,6 @@
    "fr": "Secteur",
    "mots": 1,
    "pages": [
-    "nis2-qualifier",
     "registre",
     "benchmark"
    ]
@@ -83563,9 +84777,7 @@
    "fr": "Sensibilisation",
    "mots": 1,
    "pages": [
-    "cadre-normatif",
-    "iso27001",
-    "iso42001"
+    "cadre-normatif"
    ]
   },
   "Sensibilisation au biais d'automatisation": {
@@ -84722,7 +85934,7 @@
    "fr": "Sources",
    "mots": 1,
    "pages": [
-    "empreinte"
+    "_coquille"
    ]
   },
   "Sources : EcoLogits (GenAI Impact) · Boavizta · ADEME Base Empreinte · RTE éCO#mix / ODRÉ · ML.ENERGY.": {
@@ -85535,6 +86747,27 @@
    "mots": 9,
    "pages": [
     "regs"
+   ]
+  },
+  "Suivre la mise en œuvre": {
+   "fr": "Suivre la mise en œuvre",
+   "mots": 5,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Suivre la mise en œuvre et les résultats": {
+   "fr": "Suivre la mise en œuvre et les résultats",
+   "mots": 8,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Suivre la mise en œuvre et les résultats de la diligence": {
+   "fr": "Suivre la mise en œuvre et les résultats de la diligence",
+   "mots": 11,
+   "pages": [
+    "_routes"
    ]
   },
   "Suivre le parcours guidé « Eau et biodiversité » →": {
@@ -86553,9 +87786,6 @@
    "fr": "Système",
    "mots": 1,
    "pages": [
-    "finops",
-    "empreinte-ia",
-    "ia50",
     "simulateur"
    ]
   },
@@ -86869,6 +88099,13 @@
   "Systèmes de management de la qualité — Exigences": {
    "fr": "Systèmes de management de la qualité — Exigences",
    "mots": 7,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Systèmes de management internes": {
+   "fr": "Systèmes de management internes",
+   "mots": 4,
    "pages": [
     "_routes"
    ]
@@ -87957,8 +89194,8 @@
     "_coquille"
    ]
   },
-  "Taux de conformité — les treize normes": {
-   "fr": "Taux de conformité — les treize normes",
+  "Taux de conformité — les quatorze normes": {
+   "fr": "Taux de conformité — les quatorze normes",
    "mots": 6,
    "pages": [
     "_coquille",
@@ -88210,6 +89447,13 @@
    "mots": 3,
    "pages": [
     "pan-sia"
+   ]
+  },
+  "Tenir ISO/IEC # ou le cadre du NIST ne vaut pas diligence OCDE, et l'inverse est vrai aussi. Sur ces vingt cadres, Sentinel en mesure trois.": {
+   "fr": "Tenir ISO/IEC 42001 ou le cadre du NIST ne vaut pas diligence OCDE, et l'inverse est vrai aussi. Sur ces vingt cadres, Sentinel en mesure trois.",
+   "mots": 27,
+   "pages": [
+    "_routes"
    ]
   },
   "Tenir le dispositif dans la durée": {
@@ -88849,6 +90093,13 @@
     "_js"
    ]
   },
+  "Tout effacer": {
+   "fr": "Tout effacer",
+   "mots": 2,
+   "pages": [
+    "_js"
+   ]
+  },
   "Tout ne mérite pas le circuit complet : prétendre le contraire fait naître le contournement, c’est-à-dire le shadow AI.": {
    "fr": "Tout ne mérite pas le circuit complet : prétendre le contraire fait naître le contournement, c’est-à-dire le shadow AI.",
    "mots": 21,
@@ -89261,6 +90512,20 @@
   "Traiter l'arrivée, la mobilité et le départ comme des événements de sécurité, et former ceux qui sont exposés.": {
    "fr": "Traiter l'arrivée, la mobilité et le départ comme des événements de sécurité, et former ceux qui sont exposés.",
    "mots": 19,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Traiter les risques auxquels l'organisme est lié par une relation d'affaires": {
+   "fr": "Traiter les risques auxquels l'organisme est lié par une relation d'affaires",
+   "mots": 13,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Traiter les risques que l'organisme cause ou auxquels il contribue": {
+   "fr": "Traiter les risques que l'organisme cause ou auxquels il contribue",
+   "mots": 11,
    "pages": [
     "_routes"
    ]
@@ -90356,9 +91621,23 @@
     "_routes"
    ]
   },
+  "Un cadrage qui s'arrête aux systèmes que la DSI a achetés. Les usages arrivés par une carte bancaire d'équipe n'y figurent pas, et ce sont ceux qui posent problème.": {
+   "fr": "Un cadrage qui s'arrête aux systèmes que la DSI a achetés. Les usages arrivés par une carte bancaire d'équipe n'y figurent pas, et ce sont ceux qui posent problème.",
+   "mots": 32,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Un cadre de gouvernance sans porteurs identifiés reste un document mort — ici, il devient opérationnel.": {
    "fr": "Un cadre de gouvernance sans porteurs identifiés reste un document mort — ici, il devient opérationnel.",
    "mots": 15,
+   "pages": [
+    "_js"
+   ]
+  },
+  "Un cadre d’équivalence — et c’est le document qui l’écrit : « this table is not an equivalency framework, as the scope and nature of the expectations in the other frameworks may vary ». Tenir ISO/IEC # ne vaut pas diligence OCDE, et l’inverse est vrai aussi.": {
+   "fr": "Un cadre d’équivalence — et c’est le document qui l’écrit : « this table is not an equivalency framework, as the scope and nature of the expectations in the other frameworks may vary ». Tenir ISO/IEC 42001 ne vaut pas diligence OCDE, et l’inverse est vrai aussi.",
+   "mots": 47,
    "pages": [
     "_js"
    ]
@@ -90605,6 +91884,13 @@
     "_js"
    ]
   },
+  "Un dispositif de réclamation qui existe sans être accessible. Le document attend un mécanisme légitime par lequel les parties prenantes peuvent réellement saisir l'entreprise.": {
+   "fr": "Un dispositif de réclamation qui existe sans être accessible. Le document attend un mécanisme légitime par lequel les parties prenantes peuvent réellement saisir l'entreprise.",
+   "mots": 25,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Un dispositif qui survit au départ de la personne qui l’a monté.": {
    "fr": "Un dispositif qui survit au départ de la personne qui l’a monté.",
    "mots": 13,
@@ -90696,11 +91982,25 @@
     "_routes"
    ]
   },
+  "Un désengagement présenté comme la seule réponse responsable. Partir peut aggraver l'incidence pour les personnes et supprime le levier qui restait.": {
+   "fr": "Un désengagement présenté comme la seule réponse responsable. Partir peut aggraver l'incidence pour les personnes et supprime le levier qui restait.",
+   "mots": 22,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Un enjeu élevé appelle systématiquement un conseil externe.": {
    "fr": "Un enjeu élevé appelle systématiquement un conseil externe.",
    "mots": 8,
    "pages": [
     "juridique"
+   ]
+  },
+  "Un exercice de cadrage qui dit OÙ les risques peuvent se trouver et où ils peuvent être les plus significatifs — avant toute évaluation approfondie.": {
+   "fr": "Un exercice de cadrage qui dit OÙ les risques peuvent se trouver et où ils peuvent être les plus significatifs — avant toute évaluation approfondie.",
+   "mots": 24,
+   "pages": [
+    "_routes"
    ]
   },
   "Un expert CONSEILPREV vous accompagne à chaque étape.": {
@@ -91132,6 +92432,13 @@
     "_js"
    ]
   },
+  "Un rapport qui publie les politiques et jamais les incidences. Le document demande les deux, et nomme les capacités, limites et usages inappropriés du système.": {
+   "fr": "Un rapport qui publie les politiques et jamais les incidences. Le document demande les deux, et nomme les capacités, limites et usages inappropriés du système.",
+   "mots": 25,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Un rapport qui résiste à la question « sur quel périmètre ? », posée systématiquement.": {
    "fr": "Un rapport qui résiste à la question « sur quel périmètre ? », posée systématiquement.",
    "mots": 12,
@@ -91195,6 +92502,13 @@
     "pan-sia",
     "enveloppe",
     "empreinte-parc"
+   ]
+  },
+  "Un risque dont la réalisation est déjà documentée dans un déploiement comparable.": {
+   "fr": "Un risque dont la réalisation est déjà documentée dans un déploiement comparable.",
+   "mots": 12,
+   "pages": [
+    "_routes"
    ]
   },
   "Un risque non chiffrable n’est pas un risque nul : inscrivez-le avec la mention « à mesurer », il disparaîtra sinon du dossier.": {
@@ -91274,6 +92588,13 @@
     "_js"
    ]
   },
+  "Un suivi qui mesure l'activité — nombre de revues, nombre de formations — et jamais le résultat pour les personnes.": {
+   "fr": "Un suivi qui mesure l'activité — nombre de revues, nombre de formations — et jamais le résultat pour les personnes.",
+   "mots": 19,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Un support de comité qui dit ce qui est mesuré, ce qui est calculé et ce qui reste à trancher en data room.": {
    "fr": "Un support de comité qui dit ce qui est mesuré, ce qui est calculé et ce qui reste à trancher en data room.",
    "mots": 23,
@@ -91340,6 +92661,13 @@
   "Un système d'IA change ; ses scénarios de risque changent avec lui. Une supervision calibrée une fois vieillit sans que rien ne le signale.": {
    "fr": "Un système d'IA change ; ses scénarios de risque changent avec lui. Une supervision calibrée une fois vieillit sans que rien ne le signale.",
    "mots": 24,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Un système d'IA employé pour déterminer la durée des peines dans des affaires pénales.": {
+   "fr": "Un système d'IA employé pour déterminer la durée des peines dans des affaires pénales.",
+   "mots": 15,
    "pages": [
     "_routes"
    ]
@@ -91787,6 +93115,13 @@
     "_js"
    ]
   },
+  "Une compensation financière pour le dommage économiquement appréciable — atteinte physique ou morale, perte de revenus.": {
+   "fr": "Une compensation financière pour le dommage économiquement appréciable — atteinte physique ou morale, perte de revenus.",
+   "mots": 15,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Une conformité. Ce cadre n'est pas certifiable : il n'existe aucun auditeur au bout, et personne ne peut délivrer d'attestation contre lui.": {
    "fr": "Une conformité. Ce cadre n'est pas certifiable : il n'existe aucun auditeur au bout, et personne ne peut délivrer d'attestation contre lui.",
    "mots": 24,
@@ -91801,6 +93136,13 @@
     "pan-sia",
     "enveloppe",
     "empreinte-parc"
+   ]
+  },
+  "Une cotation sans justification. Le document demande un processus CRÉDIBLE dont la logique est rendue publique : un chiffre sans raison n'en est pas un.": {
+   "fr": "Une cotation sans justification. Le document demande un processus CRÉDIBLE dont la logique est rendue publique : un chiffre sans raison n'en est pas un.",
+   "mots": 25,
+   "pages": [
+    "_routes"
    ]
   },
   "Une culture de conformité entretenue et traçable.": {
@@ -92029,6 +93371,13 @@
     "_routes"
    ]
   },
+  "Une incidence dont le dommage ne peut pas être défait, quelle que soit la somme engagée ensuite.": {
+   "fr": "Une incidence dont le dommage ne peut pas être défait, quelle que soit la somme engagée ensuite.",
+   "mots": 17,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Une information claire est fournie aux personnes concernées": {
    "fr": "Une information claire est fournie aux personnes concernées",
    "mots": 8,
@@ -92055,6 +93404,13 @@
    "mots": 21,
    "pages": [
     "_js"
+   ]
+  },
+  "Une liste des risques propres à l'IA.": {
+   "fr": "Une liste des risques propres à l'IA.",
+   "mots": 8,
+   "pages": [
+    "_routes"
    ]
   },
   "Une liste faite une fois à la conception. Un système requalifié à haut risque en cours de vie ne déclenche rien.": {
@@ -92352,6 +93708,13 @@
     "_js"
    ]
   },
+  "Une politique IA écrite par la conformité et jamais lue par ceux qui construisent. Elle existe, elle est datée, et elle ne change aucune décision d'architecture.": {
+   "fr": "Une politique IA écrite par la conformité et jamais lue par ceux qui construisent. Elle existe, elle est datée, et elle ne change aucune décision d'architecture.",
+   "mots": 27,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Une politique IA écrite par la conformité, jamais lue par ceux qui construisent. Elle existe, elle est datée, et elle n'a aucun effet sur une seule décision d'architecture.": {
    "fr": "Une politique IA écrite par la conformité, jamais lue par ceux qui construisent. Elle existe, elle est datée, et elle n'a aucun effet sur une seule décision d'architecture.",
    "mots": 30,
@@ -92378,6 +93741,21 @@
    "fr": "Une politique qualité générique recopiée d'ISO 9001 : elle passe l'audit du SMQ et ne dit rien du règlement.",
    "mots": 19,
    "pages": [
+    "_routes"
+   ]
+  },
+  "Une première dans Sentinel": {
+   "fr": "Une première dans Sentinel",
+   "mots": 4,
+   "pages": [
+    "_js"
+   ]
+  },
+  "Une première dans Sentinel : une source qu'on peut citer, traduire et adapter — là où les textes du CEN et de l'ISO n'existent ici que par leurs numéros et leurs titres.": {
+   "fr": "Une première dans Sentinel : une source qu'on peut citer, traduire et adapter — là où les textes du CEN et de l'ISO n'existent ici que par leurs numéros et leurs titres.",
+   "mots": 33,
+   "pages": [
+    "_js",
     "_routes"
    ]
   },
@@ -92443,6 +93821,13 @@
    "pages": [
     "rgpd-pbd",
     "_js"
+   ]
+  },
+  "Une responsabilité attribuée à une fonction qui n'a ni le budget ni l'autorité d'arrêter une mise en service. Elle signera ce qu'on lui présentera.": {
+   "fr": "Une responsabilité attribuée à une fonction qui n'a ni le budget ni l'autorité d'arrêter une mise en service. Elle signera ce qu'on lui présentera.",
+   "mots": 28,
+   "pages": [
+    "_routes"
    ]
   },
   "Une responsabilité réglementaire attribuée à une fonction qui n'a ni le budget ni l'autorité d'arrêter une mise sur le marché. Elle signera ce qu'on lui présentera.": {
@@ -92565,6 +93950,13 @@
     "entreprise"
    ]
   },
+  "Une table d'équivalence entre les cadres.": {
+   "fr": "Une table d'équivalence entre les cadres.",
+   "mots": 7,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Une trace datée écrite pendant la crise vaut mieux qu’une reconstitution écrite après. Elle se fait en deux minutes, au moment où personne n’en a.": {
    "fr": "Une trace datée écrite pendant la crise vaut mieux qu’une reconstitution écrite après. Elle se fait en deux minutes, au moment où personne n’en a.",
    "mots": 27,
@@ -92645,6 +94037,13 @@
   "Une évaluation faite une fois, à la mise en service, sur la version d'alors. Le fournisseur a changé le modèle depuis, et l'évaluation porte sur un système qui n'existe plus.": {
    "fr": "Une évaluation faite une fois, à la mise en service, sur la version d'alors. Le fournisseur a changé le modèle depuis, et l'évaluation porte sur un système qui n'existe plus.",
    "mots": 33,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Une évaluation faite une fois, à la mise en service, sur la version d'alors. Le fournisseur a changé le modèle depuis.": {
+   "fr": "Une évaluation faite une fois, à la mise en service, sur la version d'alors. Le fournisseur a changé le modèle depuis.",
+   "mots": 22,
    "pages": [
     "_routes"
    ]
@@ -92794,6 +94193,20 @@
     "_routes"
    ]
   },
+  "User de son levier sur la ou les relations d'affaires pour qu'elles préviennent ou atténuent — et construire ce levier s'il manque.": {
+   "fr": "User de son levier sur la ou les relations d'affaires pour qu'elles préviennent ou atténuent — et construire ce levier s'il manque.",
+   "mots": 24,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "User de son levier sur la relation d'affaires — et le construire s'il manque. Le document nomme trois réponses possibles : poursuivre la relation pendant l'atténuation, la suspendre temporairement, ou s'en désengager.": {
+   "fr": "User de son levier sur la relation d'affaires — et le construire s'il manque. Le document nomme trois réponses possibles : poursuivre la relation pendant l'atténuation, la suspendre temporairement, ou s'en désengager.",
+   "mots": 34,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Utile pour les cas sensibles de votre liste courte.": {
    "fr": "Utile pour les cas sensibles de votre liste courte.",
    "mots": 9,
@@ -92806,6 +94219,13 @@
    "mots": 16,
    "pages": [
     "_js"
+   ]
+  },
+  "Utilisateur du système d'IA": {
+   "fr": "Utilisateur du système d'IA",
+   "mots": 5,
+   "pages": [
+    "_routes"
    ]
   },
   "Utilisateurs": {
@@ -93718,8 +95138,8 @@
     "enveloppe"
    ]
   },
-  "Vos dix états remontent dans la synthèse des treize normes. Tant que rien n'est déclaré, la carte reste à « — » : une absence de mesure n'est pas un zéro.": {
-   "fr": "Vos dix états remontent dans la synthèse des treize normes. Tant que rien n'est déclaré, la carte reste à « — » : une absence de mesure n'est pas un zéro.",
+  "Vos dix états remontent dans la synthèse des quatorze normes. Tant que rien n'est déclaré, la carte reste à « — » : une absence de mesure n'est pas un zéro.": {
+   "fr": "Vos dix états remontent dans la synthèse des quatorze normes. Tant que rien n'est déclaré, la carte reste à « — » : une absence de mesure n'est pas un zéro.",
    "mots": 29,
    "pages": [
     "_js"
@@ -93735,6 +95155,13 @@
   "Vos développeurs s’en servent déjà. Ce module traite ce qui manque : la politique qui dit ce qui est permis, et la grille qui dit comment le relire.": {
    "fr": "Vos développeurs s’en servent déjà. Ce module traite ce qui manque : la politique qui dit ce qui est permis, et la grille qui dit comment le relire.",
    "mots": 28,
+   "pages": [
+    "_js"
+   ]
+  },
+  "Vos groupes retiennent tous les exemples du document.": {
+   "fr": "Vos groupes retiennent tous les exemples du document.",
+   "mots": 8,
    "pages": [
     "_js"
    ]
@@ -93841,11 +95268,25 @@
     "maturite"
    ]
   },
+  "Votre activité produit l'incidence par elle-même. Le document attend la cessation ET la réparation : prévenir ne suffit plus, le dommage existe.": {
+   "fr": "Votre activité produit l'incidence par elle-même. Le document attend la cessation ET la réparation : prévenir ne suffit plus, le dommage existe.",
+   "mots": 23,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Votre activité récente et les actions à traiter en priorité — pour une vue exécutive et des KPIs de pilotage, consultez le": {
    "fr": "Votre activité récente et les actions à traiter en priorité — pour une vue exécutive et des KPIs de pilotage, consultez le",
    "mots": 21,
    "pages": [
     "espace"
+   ]
+  },
+  "Votre activité, combinée à celle d'autres, produit l'incidence ; ou elle cause, facilite ou encourage un autre à la produire. Le document exige que la contribution soit SUBSTANTIELLE : elle n'inclut pas les contributions mineures ou négligeables.": {
+   "fr": "Votre activité, combinée à celle d'autres, produit l'incidence ; ou elle cause, facilite ou encourage un autre à la produire. Le document exige que la contribution soit SUBSTANTIELLE : elle n'inclut pas les contributions mineures ou négligeables.",
+   "mots": 38,
+   "pages": [
+    "_routes"
    ]
   },
   "Votre autorité compétente apprécie, chez vous, l'incidence des mesures prises par le prestataire sur la base des recommandations — notamment l'adéquation et la cohérence des mesures correctives que VOUS avez mises en œuvre pour atténuer les risques recensés.": {
@@ -93883,6 +95324,13 @@
     "pan-sia",
     "enveloppe",
     "empreinte-parc"
+   ]
+  },
+  "Votre implication dans l’incidence": {
+   "fr": "Votre implication dans l’incidence",
+   "mots": 5,
+   "pages": [
+    "_js"
    ]
   },
   "Votre interface de revue porte-t-elle, pour chaque sortie, son journal horodaté, ses données d'entrée, ses scores de confiance, les alertes associées, la version du système — et permet-elle à la personne désignée d'y AJOUTER ses propres observations ?": {
@@ -93925,6 +95373,13 @@
    "mots": 11,
    "pages": [
     "simulateur"
+   ]
+  },
+  "Votre place dans la chaîne de valeur": {
+   "fr": "Votre place dans la chaîne de valeur",
+   "mots": 7,
+   "pages": [
+    "_js"
    ]
   },
   "Votre plan actuel": {
@@ -94165,6 +95620,13 @@
     "_js"
    ]
   },
+  "Vous fournissez ce avec quoi un système d'IA se construit : données, annotation, création et conservation de jeux de données, code mis à disposition de tiers — contributions à des bibliothèques ouvertes comprises —, métriques et mesures d'évaluation. Ou les intrants qui le portent : capital, infrastructure numérique et services administratifs (calcul, nuage, plateformes de paiement, plateformes de travail numériques, systèmes d'exploitation, magasins d'applications, éditeurs de sécurité et de logiciels d'entreprise), matériel (semi-conducteurs, équipements réseau).": {
+   "fr": "Vous fournissez ce avec quoi un système d'IA se construit : données, annotation, création et conservation de jeux de données, code mis à disposition de tiers — contributions à des bibliothèques ouvertes comprises —, métriques et mesures d'évaluation. Ou les intrants qui le portent : capital, infrastructure numérique et services administratifs (calcul, nuage, plateformes de paiement, plateformes de travail numériques, systèmes d'exploitation, magasins d'applications, éditeurs de sécurité et de logiciels d'entreprise), matériel (semi-conducteurs, équipements réseau).",
+   "mots": 77,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Vous lancez un nouveau traitement. Ce parcours applique la privacy by design dès la conception, puis l’AIPD et la documentation.": {
    "fr": "Vous lancez un nouveau traitement. Ce parcours applique la privacy by design dès la conception, puis l’AIPD et la documentation.",
    "mots": 21,
@@ -94348,9 +95810,23 @@
     "_js"
    ]
   },
+  "Vous utilisez des systèmes d'IA dans vos opérations, vos produits ou vos services — établissements financiers et entreprises de l'économie réelle comprises, y compris celles dont le métier n'a rien à voir avec l'IA. Le document attend de vous que la diligence sur ces systèmes entre dans votre diligence d'ensemble : si le système ne porte pas de risque significatif, d'autres sujets passent devant.": {
+   "fr": "Vous utilisez des systèmes d'IA dans vos opérations, vos produits ou vos services — établissements financiers et entreprises de l'économie réelle comprises, y compris celles dont le métier n'a rien à voir avec l'IA. Le document attend de vous que la diligence sur ces systèmes entre dans votre diligence d'ensemble : si le système ne porte pas de risque significatif, d'autres sujets passent devant.",
+   "mots": 68,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Vous utilisez le système d'IA sous votre propre autorité, hors activité personnelle non professionnelle.": {
    "fr": "Vous utilisez le système d'IA sous votre propre autorité, hors activité personnelle non professionnelle.",
    "mots": 15,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Vous êtes dans le cycle de vie du système : planification et conception, construction du modèle ou adaptation d'un modèle existant, test, évaluation, vérification et validation, déploiement quel qu'en soit le canal — y compris la distribution de logiciel ouvert —, exploitation pour des clients et surveillance. Un organisme qui modifie et redéploie un modèle existant pour son propre usage en fait partie.": {
+   "fr": "Vous êtes dans le cycle de vie du système : planification et conception, construction du modèle ou adaptation d'un modèle existant, test, évaluation, vérification et validation, déploiement quel qu'en soit le canal — y compris la distribution de logiciel ouvert —, exploitation pour des clients et surveillance. Un organisme qui modifie et redéploie un modèle existant pour son propre usage en fait partie.",
+   "mots": 62,
    "pages": [
     "_routes"
    ]
@@ -94945,6 +96421,13 @@
     "empreinte-ia"
    ]
   },
+  "Where a business relationship’s due diligence information is not publicly available, seek to engage with business relationships to increase transparency or to demonstrate due diligence through confidential bilateral or multilateral arrangements (e.g., disclosure to trusted industry or multi - stakeholder initiatives or non-disclosure agreements).": {
+   "fr": "Where a business relationship’s due diligence information is not publicly available, seek to engage with business relationships to increase transparency or to demonstrate due diligence through confidential bilateral or multilateral arrangements (e.g., disclosure to trusted industry or multi - stakeholder initiatives or non-disclosure agreements).",
+   "mots": 46,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Word": {
    "fr": "Word",
    "mots": 1,
@@ -95518,6 +97001,13 @@
   "an, quel que soit son chiffre d’affaires": {
    "fr": "an, quel que soit son chiffre d’affaires",
    "mots": 8,
+   "pages": [
+    "_js"
+   ]
+  },
+  "anglais : c’est le libellé qu’un auditeur cherchera.": {
+   "fr": "anglais : c’est le libellé qu’un auditeur cherchera.",
+   "mots": 9,
    "pages": [
     "_js"
    ]
@@ -96220,6 +97710,13 @@
     "empreinte-parc"
    ]
   },
+  "calcul et nuage": {
+   "fr": "calcul et nuage",
+   "mots": 3,
+   "pages": [
+    "_routes"
+   ]
+  },
   "calculé": {
    "fr": "calculé",
    "mots": 1,
@@ -96425,6 +97922,13 @@
   "ce qui distingue cette norme d'un SMSI générique — c'est là que se joue l'étape #": {
    "fr": "ce qui distingue cette norme d'un SMSI générique — c'est là que se joue l'étape 2",
    "mots": 17,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "ce qui empêche la diligence d'être un exercice annuel": {
+   "fr": "ce qui empêche la diligence d'être un exercice annuel",
+   "mots": 10,
    "pages": [
     "_routes"
    ]
@@ -96743,6 +98247,13 @@
     "pan-sia"
    ]
   },
+  "code pour des tiers": {
+   "fr": "code pour des tiers",
+   "mots": 4,
+   "pages": [
+    "_routes"
+   ]
+  },
   "code-sans-secrets": {
    "fr": "code-sans-secrets",
    "mots": 3,
@@ -96902,6 +98413,13 @@
    "mots": 10,
    "pages": [
     "_js"
+   ]
+  },
+  "construction ou adaptation du modèle": {
+   "fr": "construction ou adaptation du modèle",
+   "mots": 5,
+   "pages": [
+    "_routes"
    ]
   },
   "construit par nos soins": {
@@ -97291,6 +98809,13 @@
     "_js"
    ]
   },
+  "de l’IA": {
+   "fr": "de l’IA",
+   "mots": 3,
+   "pages": [
+    "_js"
+   ]
+  },
   "de l’annexe A réellement en place précisent la carte.": {
    "fr": "de l’annexe A réellement en place précisent la carte.",
    "mots": 10,
@@ -97352,6 +98877,13 @@
    "mots": 1,
    "pages": [
     "rgpd-site"
+   ]
+  },
+  "demande un processus CRÉDIBLE dont la logique est rendue publique.": {
+   "fr": "demande un processus CRÉDIBLE dont la logique est rendue publique.",
+   "mots": 10,
+   "pages": [
+    "_js"
    ]
   },
   "deployeur": {
@@ -97440,6 +98972,13 @@
     "empreinte-parc"
    ]
   },
+  "diligence attendu — et c’est elle qui plafonne le taux.": {
+   "fr": "diligence attendu — et c’est elle qui plafonne le taux.",
+   "mots": 10,
+   "pages": [
+    "_js"
+   ]
+  },
   "dirigeant : l’article # n’en prévoit pas. C’est la différence la": {
    "fr": "dirigeant : l’article 33 n’en prévoit pas. C’est la différence la",
    "mots": 12,
@@ -97487,6 +99026,13 @@
    "mots": 32,
    "pages": [
     "ia50"
+   ]
+  },
+  "document lui-même": {
+   "fr": "document lui-même",
+   "mots": 3,
+   "pages": [
+    "_js"
    ]
   },
   "document(s) trouvé(s) ·": {
@@ -97545,6 +99091,13 @@
    "mots": 2,
    "pages": [
     "obs-rd"
+   ]
+  },
+  "données et annotation": {
+   "fr": "données et annotation",
+   "mots": 3,
+   "pages": [
+    "_routes"
    ]
   },
   "dora · portée du taux": {
@@ -97606,6 +99159,13 @@
   "du plus faible des deux.": {
    "fr": "du plus faible des deux.",
    "mots": 5,
+   "pages": [
+    "_js"
+   ]
+  },
+  "du risque": {
+   "fr": "du risque",
+   "mots": 2,
    "pages": [
     "_js"
    ]
@@ -98189,6 +99749,13 @@
     "_js"
    ]
   },
+  "entreprises, et ceux qui ne vous visent pas ne doivent pas vous": {
+   "fr": "entreprises, et ceux qui ne vous visent pas ne doivent pas vous",
+   "mots": 12,
+   "pages": [
+    "_js"
+   ]
+  },
   "essentielles. Ce sont les autres normes de la famille qui disent": {
    "fr": "essentielles. Ce sont les autres normes de la famille qui disent",
    "mots": 11,
@@ -98206,6 +99773,20 @@
   "est celui du plus faible des deux, parce qu’un score": {
    "fr": "est celui du plus faible des deux, parce qu’un score",
    "mots": 11,
+   "pages": [
+    "_js"
+   ]
+  },
+  "est du cabinet": {
+   "fr": "est du cabinet",
+   "mots": 3,
+   "pages": [
+    "_js"
+   ]
+  },
+  "est du cabinet — le document donne les facteurs, pas le": {
+   "fr": "est du cabinet — le document donne les facteurs, pas le",
+   "mots": 10,
    "pages": [
     "_js"
    ]
@@ -98331,6 +99912,34 @@
     "iso27001-risques"
    ]
   },
+  "exemple(s) ne visent aucun de vos": {
+   "fr": "exemple(s) ne visent aucun de vos",
+   "mots": 7,
+   "pages": [
+    "_js"
+   ]
+  },
+  "exemples du document ne s’adressent pas tous aux mêmes": {
+   "fr": "exemples du document ne s’adressent pas tous aux mêmes",
+   "mots": 10,
+   "pages": [
+    "_js"
+   ]
+  },
+  "exemples pratiques viennent de ce document, sous licence": {
+   "fr": "exemples pratiques viennent de ce document, sous licence",
+   "mots": 8,
+   "pages": [
+    "_js"
+   ]
+  },
+  "exemples vous visent, et rien n’est": {
+   "fr": "exemples vous visent, et rien n’est",
+   "mots": 7,
+   "pages": [
+    "_js"
+   ]
+  },
   "explicable peut le rendre moins sûr.": {
    "fr": "explicable peut le rendre moins sûr.",
    "mots": 6,
@@ -98343,6 +99952,13 @@
    "mots": 9,
    "pages": [
     "_js"
+   ]
+  },
+  "exploitation et surveillance": {
+   "fr": "exploitation et surveillance",
+   "mots": 3,
+   "pages": [
+    "_routes"
    ]
   },
   "exposition réglementaire du cas d'usage": {
@@ -98614,6 +100230,20 @@
    "mots": 5,
    "pages": [
     "pan-sia"
+   ]
+  },
+  "groupes : ils SORTENT du calcul au lieu de compter zéro.": {
+   "fr": "groupes : ils SORTENT du calcul au lieu de compter zéro.",
+   "mots": 10,
+   "pages": [
+    "_js"
+   ]
+  },
+  "groupes sur l’écran « Processus ». Les": {
+   "fr": "groupes sur l’écran « Processus ». Les",
+   "mots": 6,
+   "pages": [
+    "_js"
    ]
   },
   "h)": {
@@ -98990,6 +100620,13 @@
     "pan-sia"
    ]
   },
+  "jeux de données": {
+   "fr": "jeux de données",
+   "mots": 3,
+   "pages": [
+    "_routes"
+   ]
+  },
   "journal non lu": {
    "fr": "journal non lu",
    "mots": 3,
@@ -99102,6 +100739,13 @@
     "_routes"
    ]
   },
+  "l'attente la plus forte du cadre dès que l'entreprise cause ou contribue": {
+   "fr": "l'attente la plus forte du cadre dès que l'entreprise cause ou contribue",
+   "mots": 14,
+   "pages": [
+    "_routes"
+   ]
+  },
   "l'entrée, la mobilité et le départ des personnes": {
    "fr": "l'entrée, la mobilité et le départ des personnes",
    "mots": 9,
@@ -99150,6 +100794,13 @@
    "mots": 14,
    "pages": [
     "enveloppe"
+   ]
+  },
+  "l'étape qui commande toutes les autres : sans incidences identifiées, qualifiées et priorisées, les étapes # à # n'ont pas d'objet": {
+   "fr": "l'étape qui commande toutes les autres : sans incidences identifiées, qualifiées et priorisées, les étapes 3 à 6 n'ont pas d'objet",
+   "mots": 21,
+   "pages": [
+    "_routes"
    ]
   },
   "l'état de référence, et ce qui se passe quand il dérive": {
@@ -99279,6 +100930,13 @@
     "pan-sia"
    ]
   },
+  "la part que les parties prenantes peuvent vérifier": {
+   "fr": "la part que les parties prenantes peuvent vérifier",
+   "mots": 8,
+   "pages": [
+    "_routes"
+   ]
+  },
   "la procédure d'évaluation de la conformité a bien été menée à bien par le fabricant (art. #)": {
    "fr": "la procédure d'évaluation de la conformité a bien été menée à bien par le fabricant (art. 32)",
    "mots": 17,
@@ -99305,6 +100963,13 @@
    "mots": 18,
    "pages": [
     "_routes"
+   ]
+  },
+  "la saillance la croise avec la probabilité. Ce choix d’arithmétique": {
+   "fr": "la saillance la croise avec la probabilité. Ce choix d’arithmétique",
+   "mots": 11,
+   "pages": [
+    "_js"
    ]
   },
   "la session d’administration avait expiré au moment du téléchargement.": {
@@ -99629,6 +101294,13 @@
     "pan-sia"
    ]
   },
+  "le seul endroit où quelque chose change pour les personnes": {
+   "fr": "le seul endroit où quelque chose change pour les personnes",
+   "mots": 10,
+   "pages": [
+    "_routes"
+   ]
+  },
   "le socle : le cadre lui-même place cette fonction au-dessus des trois autres": {
    "fr": "le socle : le cadre lui-même place cette fonction au-dessus des trois autres",
    "mots": 14,
@@ -99639,6 +101311,13 @@
   "le socle de management, celui qu'un SMQ déjà certifié apporte le plus souvent tel quel": {
    "fr": "le socle de management, celui qu'un SMQ déjà certifié apporte le plus souvent tel quel",
    "mots": 16,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "le socle, et celui qu'un système de management déjà en place apporte le plus souvent tel quel": {
+   "fr": "le socle, et celui qu'un système de management déjà en place apporte le plus souvent tel quel",
+   "mots": 18,
    "pages": [
     "_routes"
    ]
@@ -99874,6 +101553,13 @@
     "_routes"
    ]
   },
+  "les six étapes de la diligence, l'implication dans l'incidence — causer, contribuer, être lié — et les quatre facteurs de priorisation": {
+   "fr": "les six étapes de la diligence, l'implication dans l'incidence — causer, contribuer, être lié — et les quatre facteurs de priorisation",
+   "mots": 21,
+   "pages": [
+    "_routes"
+   ]
+  },
   "les soixante-douze sous-catégories des quatre fonctions": {
    "fr": "les soixante-douze sous-catégories des quatre fonctions",
    "mots": 8,
@@ -100102,6 +101788,13 @@
   "l’est vaut moins que pas de tableau.": {
    "fr": "l’est vaut moins que pas de tableau.",
    "mots": 8,
+   "pages": [
+    "_js"
+   ]
+  },
+  "l’est, le questionnaire ne sait pas lesquels des": {
+   "fr": "l’est, le questionnaire ne sait pas lesquels des",
+   "mots": 9,
    "pages": [
     "_js"
    ]
@@ -100417,6 +102110,13 @@
     "fiche-ar"
    ]
   },
+  "métriques d'évaluation": {
+   "fr": "métriques d'évaluation",
+   "mots": 3,
+   "pages": [
+    "_routes"
+   ]
+  },
   "ne l’est pas.": {
    "fr": "ne l’est pas.",
    "mots": 4,
@@ -100639,6 +102339,13 @@
     "_js"
    ]
   },
+  "non tenu ici": {
+   "fr": "non tenu ici",
+   "mots": 3,
+   "pages": [
+    "_js"
+   ]
+  },
   "non testé": {
    "fr": "non testé",
    "mots": 2,
@@ -100834,6 +102541,20 @@
   "obtenu. Aucun taux n’est affiché : un écran vide se": {
    "fr": "obtenu. Aucun taux n’est affiché : un écran vide se",
    "mots": 10,
+   "pages": [
+    "_js"
+   ]
+  },
+  "ocde · conformité": {
+   "fr": "ocde · conformité",
+   "mots": 2,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "ocde-et-": {
+   "fr": "ocde-et-",
+   "mots": 2,
    "pages": [
     "_js"
    ]
@@ -101145,6 +102866,13 @@
    "mots": 3,
    "pages": [
     "pan-sia"
+   ]
+  },
+  "plafonds et tout le français autour sont du cabinet.": {
+   "fr": "plafonds et tout le français autour sont du cabinet.",
+   "mots": 9,
+   "pages": [
+    "_js"
    ]
   },
   "plafonne le taux tant que les trois pièces manquent.": {
@@ -102050,6 +103778,13 @@
   "restante(s), relancez pour continuer.": {
    "fr": "restante(s), relancez pour continuer.",
    "mots": 5,
+   "pages": [
+    "_js"
+   ]
+  },
+  "retenu(s) sur": {
+   "fr": "retenu(s) sur",
+   "mots": 3,
    "pages": [
     "_js"
    ]
@@ -103162,6 +104897,13 @@
     "pan-sia"
    ]
   },
+  "test et validation": {
+   "fr": "test et validation",
+   "mots": 3,
+   "pages": [
+    "_routes"
+   ]
+  },
   "texte réglementaire, un tableau tronqué qui ne dit pas qu’il": {
    "fr": "texte réglementaire, un tableau tronqué qui ne dit pas qu’il",
    "mots": 11,
@@ -103181,6 +104923,13 @@
    "mots": 4,
    "pages": [
     "_routes"
+   ]
+  },
+  "tiers : la licence CC BY de l’OCDE ne le couvre pas.": {
+   "fr": "tiers : la licence CC BY de l’OCDE ne le couvre pas.",
+   "mots": 12,
+   "pages": [
+    "_js"
    ]
   },
   "tourisme": {
@@ -103457,6 +105206,27 @@
    "mots": 10,
    "pages": [
     "gouvernance"
+   ]
+  },
+  "usage dans les opérations": {
+   "fr": "usage dans les opérations",
+   "mots": 4,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "usage dans les produits": {
+   "fr": "usage dans les produits",
+   "mots": 4,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "usage dans les services": {
+   "fr": "usage dans les services",
+   "mots": 4,
+   "pages": [
+    "_routes"
    ]
   },
   "usage(s) conforme(s) sur": {
@@ -104283,7 +106053,6 @@
    "fr": "À VENIR",
    "mots": 2,
    "pages": [
-    "cra",
     "regs",
     "_js"
    ]
@@ -104401,6 +106170,13 @@
     "pan-sia"
    ]
   },
+  "À dire ce qui vient de l’OCDE et ce qui vient du cabinet. Les intitulés des étapes et les # exemples pratiques viennent du document, sous licence CC BY #. Le découpage du questionnaire, les poids, les plafonds et tout le français autour sont du cabinet.": {
+   "fr": "À dire ce qui vient de l’OCDE et ce qui vient du cabinet. Les intitulés des étapes et les 115 exemples pratiques viennent du document, sous licence CC BY 4.0. Le découpage du questionnaire, les poids, les plafonds et tout le français autour sont du cabinet.",
+   "mots": 45,
+   "pages": [
+    "_js"
+   ]
+  },
   "À dire ce qu’aucun questionnaire d’auto-évaluation en circulation ne dit : l’annexe A est passée de # mesures en # chapitres à # en # thèmes, dont onze entièrement nouvelles. Le document BSI qui a servi de point de départ à ce module date de # et porte sur la version # — le remplir aujourd’hui prépare contre une norme retirée, sur une numérotation qui n’existe plus.": {
    "fr": "À dire ce qu’aucun questionnaire d’auto-évaluation en circulation ne dit : l’annexe A est passée de 114 mesures en 14 chapitres à 93 en 4 thèmes, dont onze entièrement nouvelles. Le document BSI qui a servi de point de départ à ce module date de 2016 et porte sur la version 2013 — le remplir aujourd’hui prépare contre une norme retirée, sur une numérotation qui n’existe plus.",
    "mots": 65,
@@ -104425,6 +106201,13 @@
   "À donner au comité de direction le seul chiffre du CRA qui soit exact et opposable : les trois paliers d’amende de l’article #, en euros et en pourcentage du chiffre d’affaires mondial. « # millions OU # % » n’est pas un choix de l’autorité — c’est le plus élevé des deux, et il existe donc un chiffre d’affaires en dessous duquel le montant fixe commande toujours.": {
    "fr": "À donner au comité de direction le seul chiffre du CRA qui soit exact et opposable : les trois paliers d’amende de l’article 64, en euros et en pourcentage du chiffre d’affaires mondial. « 15 millions OU 2,5 % » n’est pas un choix de l’autorité — c’est le plus élevé des deux, et il existe donc un chiffre d’affaires en dessous duquel le montant fixe commande toujours.",
    "mots": 67,
+   "pages": [
+    "_js"
+   ]
+  },
+  "À déclarer, exemple par exemple, où en est la diligence : ancrer dans les politiques (étape #), identifier et évaluer (#), faire cesser, prévenir et atténuer (#), suivre (#), rendre compte (#), réparer ou y coopérer (#). Les # exemples pratiques viennent du document ; seuls ceux qu’un de vos groupes vise entrent dans le calcul.": {
+   "fr": "À déclarer, exemple par exemple, où en est la diligence : ancrer dans les politiques (étape 1), identifier et évaluer (2), faire cesser, prévenir et atténuer (3), suivre (4), rendre compte (5), réparer ou y coopérer (6). Les 115 exemples pratiques viennent du document ; seuls ceux qu’un de vos groupes vise entrent dans le calcul.",
+   "mots": 48,
    "pages": [
     "_js"
    ]
@@ -104512,6 +106295,13 @@
    "mots": 2,
    "pages": [
     "_routes"
+   ]
+  },
+  "À lire les quatre-vingt-onze lignes de pont que le document donne LUI-MÊME : pour chacune de ses six étapes, les dispositions voisines de vingt autres cadres — IA Act, DSA, CSDDD, ISO/IEC #, #, #, #, ISO #, IEEE #, principes directeurs de l’ONU, cadre du NIST, et sept cadres nationaux.": {
+   "fr": "À lire les quatre-vingt-onze lignes de pont que le document donne LUI-MÊME : pour chacune de ses six étapes, les dispositions voisines de vingt autres cadres — IA Act, DSA, CSDDD, ISO/IEC 42001, 23894, 38507, 42005, ISO 31000, IEEE 7000, principes directeurs de l’ONU, cadre du NIST, et sept cadres nationaux.",
+   "mots": 48,
+   "pages": [
+    "_js"
    ]
   },
   "À lire l’annexe ZA dans le sens qui vous intéresse : non pas « qu’est-ce que ce paragraphe couvre », mais « cet alinéa de l’article #, qui le couvre, et où en suis-je ». Chaque ligne du règlement porte les paragraphes de la norme qui la visent et le taux que vos réponses y produisent.": {
@@ -104603,6 +106393,13 @@
   "À planifier": {
    "fr": "À planifier",
    "mots": 2,
+   "pages": [
+    "_js"
+   ]
+  },
+  "À poser les trois choses qui commandent tout le reste : les GROUPES que votre organisme occupe dans la chaîne de valeur de l’IA, votre IMPLICATION dans l’incidence, et la PRIORISATION des risques. Le questionnaire ne sait pas lesquels des # exemples vous visent avant les groupes, et le niveau de diligence attendu aux étapes # et # dépend de l’implication.": {
+   "fr": "À poser les trois choses qui commandent tout le reste : les GROUPES que votre organisme occupe dans la chaîne de valeur de l’IA, votre IMPLICATION dans l’incidence, et la PRIORISATION des risques. Le questionnaire ne sait pas lesquels des 115 exemples vous visent avant les groupes, et le niveau de diligence attendu aux étapes 3 et 6 dépend de l’implication.",
+   "mots": 60,
    "pages": [
     "_js"
    ]
@@ -104832,6 +106629,13 @@
     "_js"
    ]
   },
+  "À suivre": {
+   "fr": "À suivre",
+   "mots": 2,
+   "pages": [
+    "_routes"
+   ]
+  },
   "À surface égale, les charges d’IA dissipent bien davantage : le besoin de refroidissement monte pendant que la marge de conception descend.": {
    "fr": "À surface égale, les charges d’IA dissipent bien davantage : le besoin de refroidissement monte pendant que la marge de conception descend.",
    "mots": 22,
@@ -104844,6 +106648,13 @@
    "mots": 80,
    "pages": [
     "_js"
+   ]
+  },
+  "À traiter": {
+   "fr": "À traiter",
+   "mots": 2,
+   "pages": [
+    "_routes"
    ]
   },
   "À trancher si un incident doit être notifié, puis à dire quand. Le règlement délégué (UE) #/# pose une CONJONCTION : des services critiques touchés ET, soit l’accès malveillant réussi à lui seul, soit deux autres seuils ensemble. La criticité est une porte, pas un septième seuil.": {
@@ -104902,7 +106713,6 @@
    "pages": [
     "shadow-ai",
     "report",
-    "matrice",
     "_js"
    ]
   },
@@ -105872,10 +107682,7 @@
    "fr": "État",
    "mots": 1,
    "pages": [
-    "empreinte-ia",
-    "compte",
-    "cra-ecarts",
-    "en18229-score"
+    "compte"
    ]
   },
   "État de conformité, écarts, plan d'action et recommandations, remis chaque année.": {
@@ -105952,6 +107759,13 @@
     "carto",
     "fiche-us",
     "_js"
+   ]
+  },
+  "États-Unis — NIST AI Risk Management Framework": {
+   "fr": "États-Unis — NIST AI Risk Management Framework",
+   "mots": 7,
+   "pages": [
+    "_routes"
    ]
   },
   "États-Unis, ils se citent — et c’est ce libellé qu’un auditeur": {
@@ -106070,6 +107884,13 @@
    "mots": 4,
    "pages": [
     "_js"
+   ]
+  },
+  "Évaluation approfondie des risques les plus significatifs": {
+   "fr": "Évaluation approfondie des risques les plus significatifs",
+   "mots": 7,
+   "pages": [
+    "_routes"
    ]
   },
   "Évaluation automatisée de la performance": {
@@ -106690,8 +108511,7 @@
    "mots": 1,
    "pages": [
     "comp",
-    "geo",
-    "registre"
+    "geo"
    ]
   },
   "× #–# %": {
@@ -106991,6 +108811,13 @@
    "mots": 10,
    "pages": [
     "_routes"
+   ]
+  },
+  "être comptés.": {
+   "fr": "être comptés.",
+   "mots": 2,
+   "pages": [
+    "_js"
    ]
   },
   "être lu en entier": {
@@ -109173,6 +111000,10 @@
     "en18286-questionnaire",
     "en18286-conformite",
     "en18286-analyse",
+    "ocde-processus",
+    "ocde-questionnaire",
+    "ocde-conformite",
+    "ocde-analyse",
     "nist-profil",
     "nist-cadre",
     "nist-genai",
