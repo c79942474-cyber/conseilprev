@@ -1,0 +1,85 @@
+{
+ "_pourquoi": "LA TROISIÈME SOURCE DU CATALOGUE : ce que le serveur peint. Les écrans de normes viennent d'une route JSON peinte après coup, et la passe navigateur ne les relève que si le compte a déclaré quelque chose. MESURÉ : 1 671 entrées, 26 538 mots que seize routes servent et que le catalogue n'avait jamais vus — et « couverture » annonçait 99,6 % sur un inventaire aveugle à ce texte-là. Chaque mutation ici défait une seule garantie de la commande « routes ».",
+ "cibles": [
+  "tests/test_i18n_sentinel_outil.py"
+ ],
+ "mutations": [
+  {
+   "nom": "une route de référentiel cesse d'être relevée, et son questionnaire sort de l'inventaire",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "    '/api/en18286/referentiel',\n",
+   "apres": "",
+   "regle": "test_la_liste_des_routes_RELEVEES_couvre_toutes_celles_d_app_py"
+  },
+  {
+   "nom": "une route est écartée sans raison lisible",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "        u\"sert les lignes de la base du client, pas du texte de produit\",",
+   "apres": "        u\"plus tard\",",
+   "regle": "test_la_liste_des_routes_RELEVEES_couvre_toutes_celles_d_app_py"
+  },
+  {
+   "nom": "l'inventaire ne descend plus dans les listes imbriquées d'une charge",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "    if isinstance(o, (list, tuple)):\n        for e in o:\n            for x in chaines_d_une_charge(e, prof + 1):\n                yield x",
+   "apres": "    if isinstance(o, (list, tuple)):\n        return",
+   "regle": "test_les_charges_des_routes_se_classent_comme_le_DOM_les_classerait"
+  },
+  {
+   "nom": "les CLÉS d'un dictionnaire ne sont plus relevées, alors qu'elles s'affichent",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "        for k, v in o.items():\n            for x in chaines_d_une_charge(k, prof + 1):\n                yield x",
+   "apres": "        for k, v in o.items():\n            if False:\n                yield k",
+   "regle": "test_les_charges_des_routes_se_classent_comme_le_DOM_les_classerait"
+  },
+  {
+   "nom": "une chaîne porteuse de balises est traitée comme du texte plat, et le bloc disparaît",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "            if '<' in s and '>' in s and _BALISE.search(s):\n                candidats = entrees_d_un_html(s)",
+   "apres": "            if False:\n                candidats = entrees_d_un_html(s)",
+   "regle": "test_les_charges_des_routes_se_classent_comme_le_DOM_les_classerait"
+  },
+  {
+   "nom": "le filtre de langue tombe, et l'anglais entre comme du français à traduire",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "                fr = aplanir(fr)\n                if not est_francais(fr) or est_identifiant(fr):\n                    continue\n                cle = normaliser(fr)\n                if cle in out[regime]:\n                    continue\n                ent = {'fr': fr, 'mots': compter_mots(fr)}\n                if regime == 'bloc':\n                    ent['html'] = aplanir(html)",
+   "apres": "                fr = aplanir(fr)\n                if est_identifiant(fr):\n                    continue\n                cle = normaliser(fr)\n                if cle in out[regime]:\n                    continue\n                ent = {'fr': fr, 'mots': compter_mots(fr)}\n                if regime == 'bloc':\n                    ent['html'] = aplanir(html)",
+   "regle": "test_les_charges_des_routes_se_classent_comme_le_DOM_les_classerait"
+  },
+  {
+   "nom": "une passe partielle écrit quand même, et retire du catalogue ce que la route muette y apporte",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "    if fautes and not args.malgre_les_fautes:",
+   "apres": "    if False:",
+   "regle": "test_une_route_qui_ne_repond_pas_est_une_FAUTE_et_rien_n_est_ecrit"
+  },
+  {
+   "nom": "une route muette devient une charge vide au lieu d'une faute",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "            fautes.append((r, u'HTTP %d' % rep.status_code))\n            continue",
+   "apres": "            charges.append({})\n            continue",
+   "regle": "test_les_charges_sont_LUES_des_routes_et_une_route_muette_est_une_FAUTE"
+  },
+  {
+   "nom": "le retrait d'une source efface la page d'écran d'une clé partagée",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "            if pages == [page]:\n                del cat[regime][cle]\n                effacees += 1\n            else:\n                pages.remove(page)",
+   "apres": "            del cat[regime][cle]\n            effacees += 1",
+   "regle": "test_routes_en_ligne_de_commande_ajoute_la_page_des_routes_et_la_REJOUE_sans_rien_garder"
+  },
+  {
+   "nom": "une clé déjà vue à l'écran se fait REMPLACER ses pages par la source",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "                vues += 1\n                if page not in deja['pages']:\n                    deja['pages'].append(page)",
+   "apres": "                vues += 1\n                deja['pages'] = [page]",
+   "regle": "test_routes_en_ligne_de_commande_ajoute_la_page_des_routes_et_la_REJOUE_sans_rien_garder"
+  },
+  {
+   "nom": "la page des routes redevient une rubrique du menu et se regroupe avec elle",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "PAGES_HORS_MENU = ('_coquille', '_js', '_routes')",
+   "apres": "PAGES_HORS_MENU = ('_coquille', '_js')",
+   "regle": "test_les_pages_hors_menu_ne_se_regroupent_avec_aucune_rubrique"
+  }
+ ]
+}
