@@ -1,0 +1,744 @@
+{
+ "_lot": "08-cartographier-1",
+ "_mots": 2336,
+ "_pages": [
+  "empreinte-ia",
+  "finops"
+ ],
+ "_rubrique": "CARTOGRAPHIER",
+ "bloc": {
+  "# % du parc déclaré est chiffrable. Toutes les lignes portent un volume et sa source.": {
+   "en": "<b># %</b> of the declared estate can be quantified. Every line carries a volume and its source.",
+   "fr": "100 % du parc déclaré est chiffrable. Toutes les lignes portent un volume et sa source.",
+   "html": "<b>100 %</b> du parc déclaré est chiffrable. Toutes les lignes portent un volume et sa source."
+  },
+  "# % du parc porte un volume déclaré. Les totaux ci-dessous ne comptent QUE ces systèmes.": {
+   "en": "<strong># %</strong> of the estate carries a declared volume. The totals below count ONLY those systems.",
+   "fr": "100 % du parc porte un volume déclaré. Les totaux ci-dessous ne comptent QUE ces systèmes.",
+   "html": "<strong>100 %</strong> du parc porte un volume déclaré. Les totaux ci-dessous ne comptent QUE ces systèmes."
+  },
+  "Aucun plafond n’est posé. Les plafonds se passent à /api/finops par le paramètre seuils, par centre de coût — un plafond est une décision de comité, révisée à chaque exercice, et le figer dans une table obligerait à une migration pour changer un nombre.": {
+   "en": "No cap is set. Caps are passed to /api/finops through the <code>seuils</code> parameter, per cost centre — a cap is a committee decision, revised each financial year, and freezing it in a table would mean a migration every time a number changes.",
+   "fr": "Aucun plafond n’est posé. Les plafonds se passent à /api/finops par le paramètre seuils, par centre de coût — un plafond est une décision de comité, révisée à chaque exercice, et le figer dans une table obligerait à une migration pour changer un nombre.",
+   "html": "Aucun plafond n’est posé. Les plafonds se passent à /api/finops par le paramètre <code>seuils</code>, par centre de coût — un plafond est une décision de comité, révisée à chaque exercice, et le figer dans une table obligerait à une migration pour changer un nombre."
+  },
+  "Bloc # sur # · Empreinte IA du parc — Verrouillé": {
+   "en": "<b>Block # of # · AI footprint of the estate — Locked</b>",
+   "fr": "Bloc 6 sur 7 · Empreinte IA du parc — Verrouillé",
+   "html": "<b>Bloc 6 sur 7 · Empreinte IA du parc — Verrouillé</b>"
+  },
+  "Bloc # sur # · FinOps IA — Verrouillé": {
+   "en": "<b>Block # of # · AI FinOps — Locked</b>",
+   "fr": "Bloc 5 sur 7 · FinOps IA — Verrouillé",
+   "html": "<b>Bloc 5 sur 7 · FinOps IA — Verrouillé</b>"
+  },
+  "Ce que coûte le parc que vous avez déjà déclaré. Cette page ne tient aucun inventaire à elle : elle lit le registre des systèmes d’IA — le même que celui de la conformité. L’attribution que le FinOps réclame (propriétaire, service, finalité) y est déjà, et c’est la moitié la plus coûteuse de la démarche.": {
+   "en": "What the estate you have already declared costs. This page keeps no inventory of its own: it reads the <strong>AI systems register</strong> — the same one compliance uses. The attribution FinOps demands (owner, department, purpose) is already there, and it is the costliest half of the exercise.",
+   "fr": "Ce que coûte le parc que vous avez déjà déclaré. Cette page ne tient aucun inventaire à elle : elle lit le registre des systèmes d’IA — le même que celui de la conformité. L’attribution que le FinOps réclame (propriétaire, service, finalité) y est déjà, et c’est la moitié la plus coûteuse de la démarche.",
+   "html": "Ce que coûte le parc que vous avez déjà déclaré. Cette page ne tient aucun inventaire à elle : elle lit le <strong>registre des systèmes d’IA</strong> — le même que celui de la conformité. L’attribution que le FinOps réclame (propriétaire, service, finalité) y est déjà, et c’est la moitié la plus coûteuse de la démarche."
+  },
+  "Ce que pèse le parc de systèmes d’IA que vous avez déjà déclaré au Registre. Cette page ne tient aucun inventaire à elle : le même volume déclaré donne le coût quand on le divise par un tarif, et l’énergie quand on le multiplie par des wattheures par millier de jetons. Un second inventaire, tenu à côté, divergerait du premier dans le mois.": {
+   "en": "What the estate of AI systems you have already declared in the <strong>Register</strong> weighs. This page keeps no inventory of its own: the same declared volume gives the cost when divided by a rate, and the energy when multiplied by watt-hours per thousand tokens. A second inventory, kept alongside, would diverge from the first within a month.",
+   "fr": "Ce que pèse le parc de systèmes d’IA que vous avez déjà déclaré au Registre. Cette page ne tient aucun inventaire à elle : le même volume déclaré donne le coût quand on le divise par un tarif, et l’énergie quand on le multiplie par des wattheures par millier de jetons. Un second inventaire, tenu à côté, divergerait du premier dans le mois.",
+   "html": "Ce que pèse le parc de systèmes d’IA que vous avez déjà déclaré au <strong>Registre</strong>. Cette page ne tient aucun inventaire à elle&nbsp;: le même volume déclaré donne le coût quand on le divise par un tarif, et l’énergie quand on le multiplie par des wattheures par millier de jetons. Un second inventaire, tenu à côté, divergerait du premier dans le mois."
+  },
+  "Ces champs se saisissent sur la fiche du système, au Registre. Aucun n’est deviné : une campagne d’ajustement ne s’estime pas depuis un volume d’usage.": {
+   "en": "These fields are entered on the system record, in the <strong>Register</strong>. None is guessed: a fine-tuning campaign cannot be estimated from a usage volume.",
+   "fr": "Ces champs se saisissent sur la fiche du système, au Registre. Aucun n’est deviné : une campagne d’ajustement ne s’estime pas depuis un volume d’usage.",
+   "html": "Ces champs se saisissent sur la fiche du système, au <strong>Registre</strong>. Aucun n’est deviné&nbsp;: une campagne d’ajustement ne s’estime pas depuis un volume d’usage."
+  },
+  "Chaque montant porte sa formule chiffrée et la provenance du volume. Un montant dont on ne peut pas dire d’où vient le volume n’est pas opposable en comité.": {
+   "en": "Each amount carries <strong>its costed formula</strong> and <strong>the provenance of the volume</strong>. An amount whose volume cannot be traced to its source is not defensible in a steering committee.",
+   "fr": "Chaque montant porte sa formule chiffrée et la provenance du volume. Un montant dont on ne peut pas dire d’où vient le volume n’est pas opposable en comité.",
+   "html": "Chaque montant porte <strong>sa formule chiffrée</strong> et <strong>la provenance du volume</strong>. Un montant dont on ne peut pas dire d’où vient le volume n’est pas opposable en comité."
+  },
+  "Déclarés, jamais mesurés : cette page ne peut pas savoir si un cache est réellement branché. Ce qu’elle apporte est la question posée à chaque ligne — une case jamais cochée sur vingt lignes se voit, l’absence de la question ne se voit pas.": {
+   "en": "<strong>Declared, never measured</strong>: this page cannot know whether a cache is actually connected. What it contributes is the question asked on every line — a box never ticked across twenty lines shows, the absence of the question does not.",
+   "fr": "Déclarés, jamais mesurés : cette page ne peut pas savoir si un cache est réellement branché. Ce qu’elle apporte est la question posée à chaque ligne — une case jamais cochée sur vingt lignes se voit, l’absence de la question ne se voit pas.",
+   "html": "<strong>Déclarés, jamais mesurés</strong>&nbsp;: cette page ne peut pas savoir si un cache est réellement branché. Ce qu’elle apporte est la question posée à chaque ligne — une case jamais cochée sur vingt lignes se voit, l’absence de la question ne se voit pas."
+  },
+  "Empreinte IA du parc déclaré": {
+   "en": "AI footprint <em>of the declared estate</em>",
+   "fr": "Empreinte IA du parc déclaré",
+   "html": "Empreinte IA <em>du parc déclaré</em>"
+  },
+  "FinOps de l’IA": {
+   "en": "AI <em>FinOps</em>",
+   "fr": "FinOps de l’IA",
+   "html": "FinOps <em>de l’IA</em>"
+  },
+  "HYPOTHÈSE DU CABINET, PAS UNE MESURE. Ordre de grandeur calé sur l'approche Boavizta, simplifié en pourcentage ajouté à l'usage. À REMPLACER par une analyse de cycle de vie du matériel réel — `equipements_it` porte déjà les empreintes produit par poste. · hypothese_cabinet": {
+   "en": "THE FIRM'S ASSUMPTION, NOT A MEASUREMENT. An order of magnitude set on the Boavizta approach, simplified into a percentage added to usage. TO BE REPLACED by a life-cycle analysis of the real hardware — `equipements_it` already carries the product footprints item by item. · <em>hypothese_cabinet</em>",
+   "fr": "HYPOTHÈSE DU CABINET, PAS UNE MESURE. Ordre de grandeur calé sur l'approche Boavizta, simplifié en pourcentage ajouté à l'usage. À REMPLACER par une analyse de cycle de vie du matériel réel — `equipements_it` porte déjà les empreintes produit par poste. · hypothese_cabinet",
+   "html": "HYPOTHÈSE DU CABINET, PAS UNE MESURE. Ordre de grandeur calé sur l'approche Boavizta, simplifié en pourcentage ajouté à l'usage. À REMPLACER par une analyse de cycle de vie du matériel réel — `equipements_it` porte déjà les empreintes produit par poste. · <em>hypothese_cabinet</em>"
+  },
+  "HYPOTHÈSE DU CABINET, calée sur la consommation observée d'une instance de la plateforme rapportée au nombre de requêtes servies. · hypothese_cabinet": {
+   "en": "THE FIRM'S ASSUMPTION, set on the consumption observed on one instance of the platform divided by the number of requests served. · <em>hypothese_cabinet</em>",
+   "fr": "HYPOTHÈSE DU CABINET, calée sur la consommation observée d'une instance de la plateforme rapportée au nombre de requêtes servies. · hypothese_cabinet",
+   "html": "HYPOTHÈSE DU CABINET, calée sur la consommation observée d'une instance de la plateforme rapportée au nombre de requêtes servies. · <em>hypothese_cabinet</em>"
+  },
+  "HYPOTHÈSE DU CABINET. Ordre de grandeur usuel de la littérature sur l'intensité énergétique des réseaux fixes, dont les valeurs publiées s'étalent sur plus d'un ordre de grandeur selon le périmètre retenu (cœur seul, ou cœur + accès + terminal). · hypothese_cabinet": {
+   "en": "THE FIRM'S ASSUMPTION. The usual order of magnitude in the literature on the energy intensity of fixed networks, whose published values span more than an order of magnitude depending on the scope taken (core only, or core + access + device). · <em>hypothese_cabinet</em>",
+   "fr": "HYPOTHÈSE DU CABINET. Ordre de grandeur usuel de la littérature sur l'intensité énergétique des réseaux fixes, dont les valeurs publiées s'étalent sur plus d'un ordre de grandeur selon le périmètre retenu (cœur seul, ou cœur + accès + terminal). · hypothese_cabinet",
+   "html": "HYPOTHÈSE DU CABINET. Ordre de grandeur usuel de la littérature sur l'intensité énergétique des réseaux fixes, dont les valeurs publiées s'étalent sur plus d'un ordre de grandeur selon le périmètre retenu (cœur seul, ou cœur + accès + terminal). · <em>hypothese_cabinet</em>"
+  },
+  "La classification vient du Simulateur IA Act et du Registre IA : elle n’est pas redemandée ici. L’ordre suit le règlement, jamais les effectifs — un seul système haut risque se lit avant quinze systèmes à risque minimal.": {
+   "en": "The classification comes from the <strong>AI&nbsp;Act simulator</strong> and the <strong>AI register</strong>: it is not asked for again here. The order follows the Regulation, never the headcounts — a single high-risk system is read before fifteen minimal-risk systems.",
+   "fr": "La classification vient du Simulateur IA Act et du Registre IA : elle n’est pas redemandée ici. L’ordre suit le règlement, jamais les effectifs — un seul système haut risque se lit avant quinze systèmes à risque minimal.",
+   "html": "La classification vient du <strong>Simulateur IA&nbsp;Act</strong> et du <strong>Registre IA</strong>&nbsp;: elle n’est pas redemandée ici. L’ordre suit le règlement, jamais les effectifs — un seul système haut risque se lit avant quinze systèmes à risque minimal."
+  },
+  "L’inférence et l’ajustement fin sont rendus séparément. Les mêler ferait disparaître le terme qui, sur un parc qui affine ses modèles, est souvent le plus lourd.": {
+   "en": "<strong>Inference</strong> and <strong>fine-tuning</strong> are reported separately. Mixing them would make the term disappear that, on an estate that fine-tunes its models, is often the heaviest.",
+   "fr": "L’inférence et l’ajustement fin sont rendus séparément. Les mêler ferait disparaître le terme qui, sur un parc qui affine ses modèles, est souvent le plus lourd.",
+   "html": "L’<strong>inférence</strong> et l’<strong>ajustement fin</strong> sont rendus séparément. Les mêler ferait disparaître le terme qui, sur un parc qui affine ses modèles, est souvent le plus lourd."
+  },
+  "Règlement délégué (UE) #/# de la Commission du # décembre # révisant le coefficient d'énergie primaire pour l'électricité, annexe — remplace la note # de l'annexe IV de la directive #/#/UE. CELEX #R#. · texte_reglementaire": {
+   "en": "Commission Delegated Regulation (EU) #/# of # December # revising the primary energy factor for electricity, Annex — replaces note # of Annex IV to Directive #/#/EU. CELEX #R#. · <em>texte_reglementaire</em>",
+   "fr": "Règlement délégué (UE) 2023/807 de la Commission du 15 décembre 2022 révisant le coefficient d'énergie primaire pour l'électricité, annexe — remplace la note 3 de l'annexe IV de la directive 2012/27/UE. CELEX 32023R0807. · texte_reglementaire",
+   "html": "Règlement délégué (UE) 2023/807 de la Commission du 15 décembre 2022 révisant le coefficient d'énergie primaire pour l'électricité, annexe — remplace la note 3 de l'annexe IV de la directive 2012/27/UE. CELEX 32023R0807. · <em>texte_reglementaire</em>"
+  },
+  "Servis par le moteur, jamais recopiés ici — sans quoi l’écran et le code dériveraient, et c’est l’écran qu’on croirait. Chacun porte sa nature : texte réglementaire, relevé, ou hypothèse du cabinet.": {
+   "en": "Served by the engine, never copied here — otherwise the screen and the code would drift apart, and it is the screen you would believe. Each carries its <strong>nature</strong>: regulatory text, reading, or the firm’s assumption.",
+   "fr": "Servis par le moteur, jamais recopiés ici — sans quoi l’écran et le code dériveraient, et c’est l’écran qu’on croirait. Chacun porte sa nature : texte réglementaire, relevé, ou hypothèse du cabinet.",
+   "html": "Servis par le moteur, jamais recopiés ici — sans quoi l’écran et le code dériveraient, et c’est l’écran qu’on croirait. Chacun porte sa <strong>nature</strong>&nbsp;: texte réglementaire, relevé, ou hypothèse du cabinet."
+  },
+  "Un indicateur absent est déclaré absent, avec ce qu’il faudrait pour l’établir. Le remplir d’un nombre sans auteur serait pire que de ne rien afficher.": {
+   "en": "A missing indicator is <strong>declared missing</strong>, with what it would take to establish it. Filling it with a number that has no author would be worse than showing nothing.",
+   "fr": "Un indicateur absent est déclaré absent, avec ce qu’il faudrait pour l’établir. Le remplir d’un nombre sans auteur serait pire que de ne rien afficher.",
+   "html": "Un indicateur absent est <strong>déclaré absent</strong>, avec ce qu’il faudrait pour l’établir. Le remplir d’un nombre sans auteur serait pire que de ne rien afficher."
+  },
+  "Une case cochée dit qu’un levier est déclaré, jamais qu’il est branché : cette page ne peut pas le vérifier.": {
+   "en": "A ticked box says that a lever is <em>declared</em>, never that it is <em>connected</em>: this page cannot verify it.",
+   "fr": "Une case cochée dit qu’un levier est déclaré, jamais qu’il est branché : cette page ne peut pas le vérifier.",
+   "html": "Une case cochée dit qu’un levier est <em>déclaré</em>, jamais qu’il est <em>branché</em> : cette page ne peut pas le vérifier."
+  },
+  "Une heuristique, jamais un verdict : « ce modèle est trop gros » suppose de connaître la qualité attendue, le taux d’erreur toléré et ce qu’une erreur coûte. L’écart de rang dit où regarder.": {
+   "en": "A <strong>heuristic</strong>, never a verdict: “this model is too big” assumes you know the expected quality, the tolerated error rate and what an error costs. The rank gap says where to look.",
+   "fr": "Une heuristique, jamais un verdict : « ce modèle est trop gros » suppose de connaître la qualité attendue, le taux d’erreur toléré et ce qu’une erreur coûte. L’écart de rang dit où regarder.",
+   "html": "Une <strong>heuristique</strong>, jamais un verdict&nbsp;: « ce modèle est trop gros » suppose de connaître la qualité attendue, le taux d’erreur toléré et ce qu’une erreur coûte. L’écart de rang dit où regarder."
+  },
+  "Version du moteur #-#-a. Mix retenu : FR, # g CO₂/kWh (Facteur par defaut (ADEME, repli)) ; hébergement # g CO₂/kWh (Facteur moyen pays (repli)).Rien n’est mesuré : Sentinel ne tourne pas dans vos applications. Les volumes viennent de votre registre, et un système que personne n’y a inscrit ne pèse rien ici — ce qui ne veut pas dire qu’il ne consomme pas.": {
+   "en": "Engine version #-#-a. Mix used: FR, # g CO₂/kWh (Default factor (ADEME, fallback)) ; hosting # g CO₂/kWh (Country average factor (fallback)).<br>Nothing is measured: Sentinel does not run inside your applications. The volumes come from your register, and a system nobody entered there weighs nothing here — which does not mean it consumes nothing.",
+   "fr": "Version du moteur 2026-09-a. Mix retenu : FR, 60,0 g CO₂/kWh (Facteur par defaut (ADEME, repli)) ; hébergement 380,0 g CO₂/kWh (Facteur moyen pays (repli)).Rien n’est mesuré : Sentinel ne tourne pas dans vos applications. Les volumes viennent de votre registre, et un système que personne n’y a inscrit ne pèse rien ici — ce qui ne veut pas dire qu’il ne consomme pas.",
+   "html": "Version du moteur 2026-09-a. Mix retenu&nbsp;: FR, 60,0 g CO₂/kWh (Facteur par defaut (ADEME, repli)) ; hébergement 380,0 g CO₂/kWh (Facteur moyen pays (repli)).<br>Rien n’est mesuré : Sentinel ne tourne pas dans vos applications. Les volumes viennent de votre registre, et un système que personne n’y a inscrit ne pèse rien ici — ce qui ne veut pas dire qu’il ne consomme pas."
+  },
+  "analyse — Analyse sur documents longs": {
+   "en": "<code>analyse</code> — Analysis on long documents",
+   "fr": "analyse — Analyse sur documents longs",
+   "html": "<code>analyse</code> — Analyse sur documents longs"
+  },
+  "classification": {
+   "en": "classification",
+   "fr": "classification",
+   "html": "<code>classification</code>"
+  },
+  "claude-fable-# · claude-haiku-#-# · claude-opus-#-# · claude-opus-# · claude-sonnet-#-# · claude-sonnet-#": {
+   "en": "claude-fable-# · claude-haiku-#-# · claude-opus-#-# · claude-opus-# · claude-sonnet-#-# · claude-sonnet-#",
+   "fr": "claude-fable-5 · claude-haiku-4-5 · claude-opus-4-8 · claude-opus-5 · claude-sonnet-4-6 · claude-sonnet-5",
+   "html": "<code>claude-fable-5</code> · <code>claude-haiku-4-5</code> · <code>claude-opus-4-8</code> · <code>claude-opus-5</code> · <code>claude-sonnet-4-6</code> · <code>claude-sonnet-5</code>"
+  },
+  "coûts hors modèle — Stockage vectoriel, orchestration, supervision, temps humain de relecture : ces postes sont réels et absents ici. Un coût de modèle n'est pas un coût de cas d'usage.": {
+   "en": "<b>costs beyond the model</b> — Vector storage, orchestration, monitoring, human review time: these items are real and absent here. A model cost is not a use-case cost.",
+   "fr": "coûts hors modèle — Stockage vectoriel, orchestration, supervision, temps humain de relecture : ces postes sont réels et absents ici. Un coût de modèle n'est pas un coût de cas d'usage.",
+   "html": "<b>coûts hors modèle</b> — Stockage vectoriel, orchestration, supervision, temps humain de relecture : ces postes sont réels et absents ici. Un coût de modèle n'est pas un coût de cas d'usage."
+  },
+  "cycle_vie": {
+   "en": "cycle_vie",
+   "fr": "cycle_vie",
+   "html": "<code>cycle_vie</code>"
+  },
+  "extraction — Extraction ou classification sur texte court": {
+   "en": "<code>extraction</code> — Extraction or classification on short text",
+   "fr": "extraction — Extraction ou classification sur texte court",
+   "html": "<code>extraction</code> — Extraction ou classification sur texte court"
+  },
+  "forfait — montant fixe, indépendant de l'usage": {
+   "en": "<code>forfait</code> — a fixed amount, independent of usage",
+   "fr": "forfait — montant fixe, indépendant de l'usage",
+   "html": "<code>forfait</code> — montant fixe, indépendant de l'usage"
+  },
+  "fournisseur": {
+   "en": "fournisseur",
+   "fr": "fournisseur",
+   "html": "<code>fournisseur</code>"
+  },
+  "heures_gpu — facturé au temps de calcul réservé": {
+   "en": "<code>heures_gpu</code> — billed on reserved compute time",
+   "fr": "heures_gpu — facturé au temps de calcul réservé",
+   "html": "<code>heures_gpu</code> — facturé au temps de calcul réservé"
+  },
+  "jetons — facturé au jeton consommé (entrée + sortie)": {
+   "en": "<code>jetons</code> — billed per token consumed (input + output)",
+   "fr": "jetons — facturé au jeton consommé (entrée + sortie)",
+   "html": "<code>jetons</code> — facturé au jeton consommé (entrée + sortie)"
+  },
+  "product_owner": {
+   "en": "product_owner",
+   "fr": "product_owner",
+   "html": "<code>product_owner</code>"
+  },
+  "raisonnement — Raisonnement long ou agentique": {
+   "en": "<code>raisonnement</code> — Long or agentic reasoning",
+   "fr": "raisonnement — Raisonnement long ou agentique",
+   "html": "<code>raisonnement</code> — Raisonnement long ou agentique"
+  },
+  "redaction — Rédaction ou reformulation guidée": {
+   "en": "<code>redaction</code> — Guided drafting or rewriting",
+   "fr": "redaction — Rédaction ou reformulation guidée",
+   "html": "<code>redaction</code> — Rédaction ou reformulation guidée"
+  },
+  "remises et contrats — Un contrat entreprise, une remise au volume, un cache de contexte ou un traitement différé changent le coût réel, parfois d'un ordre de grandeur. Le module ne les connaît pas et ne les devine pas.": {
+   "en": "<b>discounts and contracts</b> — An enterprise contract, a volume discount, a context cache or deferred processing change the real cost, sometimes by an order of magnitude. The module does not know them and does not guess them.",
+   "fr": "remises et contrats — Un contrat entreprise, une remise au volume, un cache de contexte ou un traitement différé changent le coût réel, parfois d'un ordre de grandeur. Le module ne les connaît pas et ne les devine pas.",
+   "html": "<b>remises et contrats</b> — Un contrat entreprise, une remise au volume, un cache de contexte ou un traitement différé changent le coût réel, parfois d'un ordre de grandeur. Le module ne les connaît pas et ne les devine pas."
+  },
+  "requetes — facturé à la requête, quel que soit sa taille": {
+   "en": "<code>requetes</code> — billed per request, whatever its size",
+   "fr": "requetes — facturé à la requête, quel que soit sa taille",
+   "html": "<code>requetes</code> — facturé à la requête, quel que soit sa taille"
+  },
+  "service": {
+   "en": "service",
+   "fr": "service",
+   "html": "<code>service</code>"
+  },
+  "sieges — facturé par utilisateur et par mois": {
+   "en": "<code>sieges</code> — billed per user per month",
+   "fr": "sieges — facturé par utilisateur et par mois",
+   "html": "<code>sieges</code> — facturé par utilisateur et par mois"
+  },
+  "statut_conformite": {
+   "en": "statut_conformite",
+   "fr": "statut_conformite",
+   "html": "<code>statut_conformite</code>"
+  },
+  "tarifs autres editeurs — Les tarifs d'OpenAI, Google, Mistral, Meta et des hébergeurs de modèles ouverts ne figurent pas dans la table : ils ne sont pas relevés ici. Les ajouter demande de reporter le prix publié, sa devise, sa date de relevé et son adresse — pas de l'estimer.": {
+   "en": "<b>other vendors' prices</b> — The prices of OpenAI, Google, Mistral, Meta and of open-model hosts are not in the table: they are not recorded here. Adding them means transcribing the published price, its currency, the date it was read and its address — not estimating it.",
+   "fr": "tarifs autres editeurs — Les tarifs d'OpenAI, Google, Mistral, Meta et des hébergeurs de modèles ouverts ne figurent pas dans la table : ils ne sont pas relevés ici. Les ajouter demande de reporter le prix publié, sa devise, sa date de relevé et son adresse — pas de l'estimer.",
+   "html": "<b>tarifs autres editeurs</b> — Les tarifs d'OpenAI, Google, Mistral, Meta et des hébergeurs de modèles ouverts ne figurent pas dans la table : ils ne sont pas relevés ici. Les ajouter demande de reporter le prix publié, sa devise, sa date de relevé et son adresse — pas de l'estimer."
+  },
+  "taux de change — Aucun taux n'est appliqué. Les montants sortent en dollars quand le tarif l'est. Convertir suppose un taux daté, et un taux inventé produirait un montant faux d'apparence précise.": {
+   "en": "<b>exchange rate</b> — No rate is applied. Amounts come out in dollars where the price is in dollars. Converting assumes a dated rate, and an invented rate would produce a wrong amount with a precise look.",
+   "fr": "taux de change — Aucun taux n'est appliqué. Les montants sortent en dollars quand le tarif l'est. Convertir suppose un taux daté, et un taux inventé produirait un montant faux d'apparence précise.",
+   "html": "<b>taux de change</b> — Aucun taux n'est appliqué. Les montants sortent en dollars quand le tarif l'est. Convertir suppose un taux daté, et un taux inventé produirait un montant faux d'apparence précise."
+  }
+ },
+ "texte": {
+  "# USD": {
+   "en": "# USD",
+   "fr": "19,50 USD"
+  },
+  "% des émissions d'usage": {
+   "en": "% of use-phase emissions",
+   "fr": "% des émissions d'usage"
+  },
+  "(# jetons d'entrée / #e# × #) + (# jetons de sortie / #e# × #) USD": {
+   "en": "(# input tokens / #e# × #) + (# output tokens / #e# × #) USD",
+   "fr": "(4000000 jetons d'entrée / 1e6 × 3.0) + (500000 jetons de sortie / 1e6 × 15.0) USD"
+  },
+  ", ce qui n’est pas la même chose que zéro.": {
+   "en": ", which is not the same thing as zero.",
+   "fr": ", ce qui n’est pas la même chose que zéro."
+  },
+  ", par centre de coût — un plafond est une décision de comité, révisée à chaque exercice, et le figer dans une table obligerait à une migration pour changer un nombre.": {
+   "en": ", per cost centre — a cap is a committee decision, revised each financial year, and freezing it in a table would require a migration to change a number.",
+   "fr": ", par centre de coût — un plafond est une décision de comité, révisée à chaque exercice, et le figer dans une table obligerait à une migration pour changer un nombre."
+  },
+  "Adoption forte · efficacité limitée": {
+   "en": "Strong adoption · limited efficiency",
+   "fr": "Adoption forte · efficacité limitée"
+  },
+  "Adoption forte · efficacité élevée": {
+   "en": "Strong adoption · high efficiency",
+   "fr": "Adoption forte · efficacité élevée"
+  },
+  "Adoption modérée · efficacité limitée": {
+   "en": "Moderate adoption · limited efficiency",
+   "fr": "Adoption modérée · efficacité limitée"
+  },
+  "Adoption modérée · efficacité élevée": {
+   "en": "Moderate adoption · high efficiency",
+   "fr": "Adoption modérée · efficacité élevée"
+  },
+  "Adoption sans limites": {
+   "en": "Unlimited adoption",
+   "fr": "Adoption sans limites"
+  },
+  "Adoption soutenue · efficacité moyenne": {
+   "en": "Sustained adoption · average efficiency",
+   "fr": "Adoption soutenue · efficacité moyenne"
+  },
+  "Agit sur l'usage ET sur l'incorporé — allonger la durée de vie déplace la fabrication sur davantage d'années de service.": {
+   "en": "Acts on use AND on embodied impact — extending lifetime spreads manufacturing over more years of service.",
+   "fr": "Agit sur l'usage ET sur l'incorporé — allonger la durée de vie déplace la fabrication sur davantage d'années de service."
+  },
+  "Agit sur le petit facteur : un PUE de # ramené à # retire # % de l'énergie d'infrastructure, pas # % du total.": {
+   "en": "Acts on the small factor: a PUE of # brought down to # removes # % of the infrastructure energy, not # % of the total.",
+   "fr": "Agit sur le petit facteur : un PUE de 1,6 ramené à 1,2 retire 25 % de l'énergie d'infrastructure, pas 25 % du total."
+  },
+  "Ajustement fin — kg CO₂e/mois": {
+   "en": "Fine-tuning — kg CO₂e/month",
+   "fr": "Ajustement fin — kg CO₂e/mois"
+  },
+  "Ajustement fin, amorti": {
+   "en": "Fine-tuning, amortised",
+   "fr": "Ajustement fin, amorti"
+  },
+  "Attribution": {
+   "en": "Cost attribution",
+   "fr": "Attribution"
+  },
+  "Aucun facteur d'épuisement abiotique sourçable n'a été retenu. Le calculer demande soit une base ACV donnant l'ADP par équipement, soit la fiche d'empreinte produit du constructeur. Sans elle, l'indicateur serait un nombre sans auteur.": {
+   "en": "No sourceable abiotic depletion factor has been retained. Computing one requires either an LCA database giving the ADP per item of equipment, or the manufacturer's product footprint sheet. Without it, the indicator would be a number with no author.",
+   "fr": "Aucun facteur d'épuisement abiotique sourçable n'a été retenu. Le calculer demande soit une base ACV donnant l'ADP par équipement, soit la fiche d'empreinte produit du constructeur. Sans elle, l'indicateur serait un nombre sans auteur."
+  },
+  "Aucun fournisseur ne publie la consommation réelle d’une requête. Les volumes viennent de votre registre, les facteurs portent leur source et leur nature, et rien n’est estimé à votre place. N’en tirez ni allégation de neutralité ni émissions évitées.": {
+   "en": "No provider publishes the actual consumption of a request. The volumes come from your register, the factors carry their source and their nature, and nothing is estimated on your behalf. Draw from it neither a neutrality claim nor avoided emissions.",
+   "fr": "Aucun fournisseur ne publie la consommation réelle d’une requête. Les volumes viennent de votre registre, les facteurs portent leur source et leur nature, et rien n’est estimé à votre place. N’en tirez ni allégation de neutralité ni émissions évitées."
+  },
+  "Aucun plafond n’est posé. Les plafonds se passent à /api/finops par le paramètre": {
+   "en": "No cap is set. Caps are passed to /api/finops through the parameter",
+   "fr": "Aucun plafond n’est posé. Les plafonds se passent à /api/finops par le paramètre"
+  },
+  "Aucun système ne porte à la fois un modèle connu et une classe de tâche déclarée. La classe ne se devine pas depuis la finalité, qui est du texte libre.": {
+   "en": "No system carries both a known model and a declared task class. The class cannot be guessed from the purpose, which is free text.",
+   "fr": "Aucun système ne porte à la fois un modèle connu et une classe de tâche déclarée. La classe ne se devine pas depuis la finalité, qui est du texte libre."
+  },
+  "Aucune ligne non instruite.": {
+   "en": "No row left unexamined.",
+   "fr": "Aucune ligne non instruite."
+  },
+  "Calcul": {
+   "en": "Calculation",
+   "fr": "Calcul"
+  },
+  "Cartographier · Coûts": {
+   "en": "Map · Costs",
+   "fr": "Cartographier · Coûts"
+  },
+  "Cartographier · Empreinte": {
+   "en": "Map · Footprint",
+   "fr": "Cartographier · Empreinte"
+  },
+  "Ce bloc dépend de : Registre IA. Complétez-le d'abord.": {
+   "en": "This block depends on: AI Register. Complete that one first.",
+   "fr": "Ce bloc dépend de : Registre IA. Complétez-le d'abord."
+  },
+  "Ce que cette page NE redemande pas": {
+   "en": "What this page does NOT ask for again",
+   "fr": "Ce que cette page NE redemande pas"
+  },
+  "Ce que cette page ne sait pas": {
+   "en": "What this page does not know",
+   "fr": "Ce que cette page ne sait pas"
+  },
+  "Ce qui distingue une lacune ATTENDUE d'une lacune À COMBLER. Un système en conception n'a pas de volume parce qu'il ne consomme rien ; un système en production n'en a pas parce que personne ne l'a relevé.": {
+   "en": "What tells an EXPECTED gap from a gap TO BE CLOSED. A system still in design has no volume because it consumes nothing; a system in production has none because nobody recorded it.",
+   "fr": "Ce qui distingue une lacune ATTENDUE d'une lacune À COMBLER. Un système en conception n'a pas de volume parce qu'il ne consomme rien ; un système en production n'en a pas parce que personne ne l'a relevé."
+  },
+  "Ce qui n’est pas chiffré, et pourquoi": {
+   "en": "What is not costed, and why",
+   "fr": "Ce qui n’est pas chiffré, et pourquoi"
+  },
+  "Ce qui reste à faire porter au budget. Un système en cours de mise en conformité a un coût de conformité à venir, distinct de son coût d'usage.": {
+   "en": "What is still to be charged to the budget. A system being brought into compliance has a compliance cost ahead of it, distinct from its running cost.",
+   "fr": "Ce qui reste à faire porter au budget. Un système en cours de mise en conformité a un coût de conformité à venir, distinct de son coût d'usage."
+  },
+  "Ce qui se déclare, et où": {
+   "en": "What is declared, and where",
+   "fr": "Ce qui se déclare, et où"
+  },
+  "Ce qu’il apporte au chiffrage": {
+   "en": "What it brings to the costing",
+   "fr": "Ce qu’il apporte au chiffrage"
+  },
+  "Ce qu’il faut déclarer pour compter un ajustement fin": {
+   "en": "What must be declared to count a fine-tuning",
+   "fr": "Ce qu’il faut déclarer pour compter un ajustement fin"
+  },
+  "Centre de coût": {
+   "en": "Cost centre",
+   "fr": "Centre de coût"
+  },
+  "Champ": {
+   "en": "Field",
+   "fr": "Champ"
+  },
+  "Chiffrage indisponible pour le moment.": {
+   "en": "Costing unavailable for now.",
+   "fr": "Chiffrage indisponible pour le moment."
+  },
+  "Chiffrés": {
+   "en": "Costed",
+   "fr": "Chiffrés"
+  },
+  "Classe de tâche": {
+   "en": "Task class",
+   "fr": "Classe de tâche"
+  },
+  "Classes de tâche": {
+   "en": "Task classes",
+   "fr": "Classes de tâche"
+  },
+  "Classification lue chez : Simulateur IA Act, puis le Registre IA.": {
+   "en": "Classification read from: AI Act simulator, then the AI register.",
+   "fr": "Classification lue chez : Simulateur IA Act, puis le Registre IA."
+  },
+  "Coefficient de passage électricité finale → énergie primaire": {
+   "en": "Final electricity → primary energy conversion factor",
+   "fr": "Coefficient de passage électricité finale → énergie primaire"
+  },
+  "Comment le lire": {
+   "en": "How to read it",
+   "fr": "Comment le lire"
+  },
+  "Console de facturation du fournisseur, septembre #": {
+   "en": "The provider's billing console, September #",
+   "fr": "Console de facturation du fournisseur, septembre 2026"
+  },
+  "Couverture de l’étude": {
+   "en": "Coverage of the study",
+   "fr": "Couverture de l’étude"
+  },
+  "Couverture du chiffrage": {
+   "en": "Coverage of the costing",
+   "fr": "Couverture du chiffrage"
+  },
+  "Coût mensuel — catalogue": {
+   "en": "Monthly cost — catalogue",
+   "fr": "Coût mensuel — catalogue"
+  },
+  "De quel éditeur relève la ligne. Quand le modèle n'est pas déclaré, le fournisseur dit au moins CHEZ QUI le tarif est à relever — et si cet éditeur figure ou non dans la table.": {
+   "en": "Which vendor the line belongs to. Where the model is not declared, the provider at least says WHOSE price list is to be read — and whether that vendor is in the table or not.",
+   "fr": "De quel éditeur relève la ligne. Quand le modèle n'est pas déclaré, le fournisseur dit au moins CHEZ QUI le tarif est à relever — et si cet éditeur figure ou non dans la table."
+  },
+  "Dimensionnement des modèles": {
+   "en": "Model sizing",
+   "fr": "Dimensionnement des modèles"
+  },
+  "Déclaré, jamais mesuré.": {
+   "en": "Declared, never measured.",
+   "fr": "Déclaré, jamais mesuré."
+  },
+  "Déclarée par qui connaît le cas d’usage. Elle ne se devine pas depuis la finalité, qui est du texte libre et dirait n’importe quoi.": {
+   "en": "Declared by whoever knows the use case. It cannot be guessed from the purpose, which is free text and could say anything.",
+   "fr": "Déclarée par qui connaît le cas d’usage. Elle ne se devine pas depuis la finalité, qui est du texte libre et dirait n’importe quoi."
+  },
+  "Déjà recueilli par": {
+   "en": "Already collected by",
+   "fr": "Déjà recueilli par"
+  },
+  "Eau": {
+   "en": "Water",
+   "fr": "Eau"
+  },
+  "Efficacité des centres de données": {
+   "en": "Data centre efficiency",
+   "fr": "Efficacité des centres de données"
+  },
+  "En kg CO₂ éq. par an. Base # kg — inférence ET ajustement fin annualisés, jamais l’inférence seule.": {
+   "en": "In kg CO₂ eq. per year. Base # kg — inference AND fine-tuning annualised, never inference alone.",
+   "fr": "En kg CO₂ éq. par an. Base 2,2 kg — inférence ET ajustement fin annualisés, jamais l’inférence seule."
+  },
+  "Expansion maîtrisée": {
+   "en": "Controlled expansion",
+   "fr": "Expansion maîtrisée"
+  },
+  "Génération d'accélérateurs, durée de vie, taux de charge.": {
+   "en": "Accelerator generation, lifetime, load rate.",
+   "fr": "Génération d'accélérateurs, durée de vie, taux de charge."
+  },
+  "HYPOTHÈSE DU CABINET, PAS UNE MESURE. Ordre de grandeur calé sur l'approche Boavizta, simplifié en pourcentage ajouté à l'usage. À REMPLACER par une analyse de cycle de vie du matériel réel — `equipements_it` porte déjà les empreintes produit par poste. ·": {
+   "en": "FIRM’S ASSUMPTION, NOT A MEASUREMENT. Order of magnitude calibrated on the Boavizta approach, simplified as a percentage added to use. TO BE REPLACED by a life-cycle assessment of the actual hardware — `equipements_it` already carries the product footprints per workstation. ·",
+   "fr": "HYPOTHÈSE DU CABINET, PAS UNE MESURE. Ordre de grandeur calé sur l'approche Boavizta, simplifié en pourcentage ajouté à l'usage. À REMPLACER par une analyse de cycle de vie du matériel réel — `equipements_it` porte déjà les empreintes produit par poste. ·"
+  },
+  "HYPOTHÈSE DU CABINET, calée sur la consommation observée d'une instance de la plateforme rapportée au nombre de requêtes servies. ·": {
+   "en": "FIRM’S ASSUMPTION, calibrated on the observed consumption of one platform instance divided by the number of requests served. ·",
+   "fr": "HYPOTHÈSE DU CABINET, calée sur la consommation observée d'une instance de la plateforme rapportée au nombre de requêtes servies. ·"
+  },
+  "HYPOTHÈSE DU CABINET. Ordre de grandeur usuel de la littérature sur l'intensité énergétique des réseaux fixes, dont les valeurs publiées s'étalent sur plus d'un ordre de grandeur selon le périmètre retenu (cœur seul, ou cœur + accès + terminal). ·": {
+   "en": "FIRM’S ASSUMPTION. Usual order of magnitude in the literature on the energy intensity of fixed networks, whose published values span more than one order of magnitude depending on the scope used (core only, or core + access + terminal). ·",
+   "fr": "HYPOTHÈSE DU CABINET. Ordre de grandeur usuel de la littérature sur l'intensité énergétique des réseaux fixes, dont les valeurs publiées s'étalent sur plus d'un ordre de grandeur selon le périmètre retenu (cœur seul, ou cœur + accès + terminal). ·"
+  },
+  "Horizon": {
+   "en": "Time horizon",
+   "fr": "Horizon"
+  },
+  "Inférence": {
+   "en": "Inference",
+   "fr": "Inférence"
+  },
+  "Inférence — kWh/mois": {
+   "en": "Inference — kWh/month",
+   "fr": "Inférence — kWh/mois"
+  },
+  "Inférence — kg CO₂e/mois": {
+   "en": "Inference — kg CO₂e/month",
+   "fr": "Inférence — kg CO₂e/mois"
+  },
+  "Intensité énergétique du transport de données": {
+   "en": "Energy intensity of data transport",
+   "fr": "Intensité énergétique du transport de données"
+  },
+  "La base d'attribution métier — déjà tenue pour la conformité, et réemployée telle quelle ici.": {
+   "en": "The business allocation base — already kept for compliance, and reused here as it stands.",
+   "fr": "La base d'attribution métier — déjà tenue pour la conformité, et réemployée telle quelle ici."
+  },
+  "La classification n'est pas faite. Le montant se lit, le risque non — et c'est le second qui commande le premier.": {
+   "en": "The classification has not been done. The amount can be read, the risk cannot — and it is the second that governs the first.",
+   "fr": "La classification n'est pas faite. Le montant se lit, le risque non — et c'est le second qui commande le premier."
+  },
+  "Le coût d'usage est ici l'essentiel du coût.": {
+   "en": "Usage cost is the bulk of the cost here.",
+   "fr": "Le coût d'usage est ici l'essentiel du coût."
+  },
+  "Le coût d'usage n'est qu'une part du coût réel : la gestion des risques, la documentation technique, la journalisation et l'évaluation de conformité en portent une autre, que ce module ne chiffre pas.": {
+   "en": "Usage cost is only part of the real cost: risk management, technical documentation, logging and conformity assessment carry another part, which this module does not cost.",
+   "fr": "Le coût d'usage n'est qu'une part du coût réel : la gestion des risques, la documentation technique, la journalisation et l'évaluation de conformité en portent une autre, que ce module ne chiffre pas."
+  },
+  "Le coût par niveau de risque": {
+   "en": "Cost by risk level",
+   "fr": "Le coût par niveau de risque"
+  },
+  "Le détail, ligne à ligne": {
+   "en": "The detail, line by line",
+   "fr": "Le détail, ligne à ligne"
+  },
+  "Le détail, système par système": {
+   "en": "The detail, system by system",
+   "fr": "Le détail, système par système"
+  },
+  "Le fournisseur est déclaré, le modèle non : le tarif est relevable chez un éditeur nommé. C'est la lacune la moins coûteuse à combler du lot.": {
+   "en": "The provider is declared, the model is not: the price can be read from a named vendor. It is the cheapest gap to close in the batch.",
+   "fr": "Le fournisseur est déclaré, le modèle non : le tarif est relevable chez un éditeur nommé. C'est la lacune la moins coûteuse à combler du lot."
+  },
+  "Le niveau de risque au sens du règlement (UE) #/#. Un euro dépensé sur un système haut risque ne se lit pas comme un euro dépensé sur un système à risque minimal : le premier porte des obligations qui ont, elles aussi, un coût.": {
+   "en": "The risk level within the meaning of Regulation (EU) #/#. A euro spent on a high-risk system does not read like a euro spent on a minimal-risk system: the first carries obligations that have a cost of their own.",
+   "fr": "Le niveau de risque au sens du règlement (UE) 2024/1689. Un euro dépensé sur un système haut risque ne se lit pas comme un euro dépensé sur un système à risque minimal : le premier porte des obligations qui ont, elles aussi, un coût."
+  },
+  "Le seul levier que le client actionne seul, sans rien changer d'autre.": {
+   "en": "The only lever the client pulls alone, without changing anything else.",
+   "fr": "Le seul levier que le client actionne seul, sans rien changer d'autre."
+  },
+  "Le terme d’hébergement vaut # Wh par REQUÊTE. Ces systèmes déclarent des jetons : le nombre d’appels est inconnu, et le déduire d’une longueur de réponse moyenne ferait entrer un chiffre que personne n’a déclaré. Leur méthode C ne porte donc que la majoration de fabrication. Déclarez l’unité de facturation « requêtes » là où c’est le cas pour les compter entièrement.": {
+   "en": "The hosting term is worth # Wh per REQUEST. These systems declare tokens: the number of calls is unknown, and deriving it from an average response length would bring in a figure nobody declared. Their method C therefore carries the manufacturing uplift alone. Declare the billing unit « requests » wherever that is the case, so they can be counted in full.",
+   "fr": "Le terme d’hébergement vaut 0,15 Wh par REQUÊTE. Ces systèmes déclarent des jetons : le nombre d’appels est inconnu, et le déduire d’une longueur de réponse moyenne ferait entrer un chiffre que personne n’a déclaré. Leur méthode C ne porte donc que la majoration de fabrication. Déclarez l’unité de facturation « requêtes » là où c’est le cas pour les compter entièrement."
+  },
+  "Les facteurs, et d’où ils viennent": {
+   "en": "The factors, and where they come from",
+   "fr": "Les facteurs, et d’où ils viennent"
+  },
+  "Les indicateurs servis, et celui qui ne l’est pas": {
+   "en": "The indicators served, and the one that is not",
+   "fr": "Les indicateurs servis, et celui qui ne l’est pas"
+  },
+  "Localisation des centres, contrats d'origine, décarbonation du réseau.": {
+   "en": "Location of the centres, guarantee-of-origin contracts, grid decarbonisation.",
+   "fr": "Localisation des centres, contrats d'origine, décarbonation du réseau."
+  },
+  "MJ par mois": {
+   "en": "MJ per month",
+   "fr": "MJ par mois"
+  },
+  "Majoration forfaitaire des impacts incorporés (méthode C)": {
+   "en": "Flat-rate uplift for embodied impacts (method C)",
+   "fr": "Majoration forfaitaire des impacts incorporés (méthode C)"
+  },
+  "Matériel": {
+   "en": "Hardware",
+   "fr": "Matériel"
+  },
+  "Mix électrique": {
+   "en": "Electricity mix",
+   "fr": "Mix électrique"
+  },
+  "Modèles": {
+   "en": "Models",
+   "fr": "Modèles"
+  },
+  "Ne change RIEN à l'électricité consommée ni à l'énergie primaire : il ne déplace que les émissions. Le confondre avec un gain d'efficacité est l'erreur la plus commune.": {
+   "en": "Changes NOTHING in the electricity consumed or in primary energy: it only shifts emissions. Mistaking it for an efficiency gain is the most common error.",
+   "fr": "Ne change RIEN à l'électricité consommée ni à l'énergie primaire : il ne déplace que les émissions. Le confondre avec un gain d'efficacité est l'erreur la plus commune."
+  },
+  "Non servi": {
+   "en": "Not served",
+   "fr": "Non servi"
+  },
+  "PUE, famille de refroidissement, récupération de chaleur.": {
+   "en": "PUE, cooling family, heat recovery.",
+   "fr": "PUE, famille de refroidissement, récupération de chaleur."
+  },
+  "Percée technologique": {
+   "en": "Technological breakthrough",
+   "fr": "Percée technologique"
+  },
+  "Point ouvert : La directive #/#/UE amendée a été refondue par la directive (UE) #/# ; la reprise du # dans la refonte n'a pas été vérifiée.": {
+   "en": "Open point: Directive #/#/EU as amended has been recast by Directive (EU) #/#; whether the # carries over into the recast has not been verified.",
+   "fr": "Point ouvert : La directive 2012/27/UE amendée a été refondue par la directive (UE) 2023/1791 ; la reprise du 1,9 dans la refonte n'a pas été vérifiée."
+  },
+  "Progression régulière": {
+   "en": "Steady progression",
+   "fr": "Progression régulière"
+  },
+  "Périmètre incomplet sur # système :": {
+   "en": "Incomplete scope on # system:",
+   "fr": "Périmètre incomplet sur 1 système :"
+  },
+  "REPÈRES DU CABINET, PAS UN RÉFÉRENTIEL. Les intitulés reprennent une lecture courante du sujet ; les taux sont des choix de milieu de plage posés ici. Le plan d'adoption du client les remplace.": {
+   "en": "FIRM’S BENCHMARKS, NOT A FRAMEWORK. The labels follow a common reading of the subject; the rates are mid-range choices set here. The client’s adoption plan replaces them.",
+   "fr": "REPÈRES DU CABINET, PAS UN RÉFÉRENTIEL. Les intitulés reprennent une lecture courante du sujet ; les taux sont des choix de milieu de plage posés ici. Le plan d'adoption du client les remplace."
+  },
+  "Ressources": {
+   "en": "Resources",
+   "fr": "Ressources"
+  },
+  "Rien n’est mesuré : Sentinel ne tourne pas dans vos applications. Les volumes viennent de votre registre, et un système que personne n’y a inscrit ne pèse rien ici — ce qui ne veut pas dire qu’il ne consomme pas.": {
+   "en": "Nothing is measured: Sentinel does not run inside your applications. The volumes come from your register, and a system nobody has recorded in it weighs nothing here — which does not mean it consumes nothing.",
+   "fr": "Rien n’est mesuré : Sentinel ne tourne pas dans vos applications. Les volumes viennent de votre registre, et un système que personne n’y a inscrit ne pèse rien ici — ce qui ne veut pas dire qu’il ne consomme pas."
+  },
+  "Règlement délégué (UE) #/# de la Commission du # décembre # révisant le coefficient d'énergie primaire pour l'électricité, annexe — remplace la note # de l'annexe IV de la directive #/#/UE. CELEX #R#. ·": {
+   "en": "Commission Delegated Regulation (EU) #/# of # December # revising the primary energy factor for electricity, Annex — replaces note # of Annex IV to Directive #/#/EU. CELEX #R#. ·",
+   "fr": "Règlement délégué (UE) 2023/807 de la Commission du 15 décembre 2022 révisant le coefficient d'énergie primaire pour l'électricité, annexe — remplace la note 3 de l'annexe IV de la directive 2012/27/UE. CELEX 32023R0807. ·"
+  },
+  "Réserves : Le texte vise le calcul d'ÉCONOMIES d'énergie en primaire par approche ascendante. L'employer sur une consommation est une transposition assumée. C'est en outre un coefficient PAR DÉFAUT, qu'un État membre peut remplacer en le justifiant.": {
+   "en": "Caveats: The text targets the calculation of primary energy SAVINGS through a bottom-up approach. Using it on a consumption is a deliberate transposition. It is also a DEFAULT factor, which a Member State may replace with justification.",
+   "fr": "Réserves : Le texte vise le calcul d'ÉCONOMIES d'énergie en primaire par approche ascendante. L'employer sur une consommation est une transposition assumée. C'est en outre un coefficient PAR DÉFAUT, qu'un État membre peut remplacer en le justifiant."
+  },
+  "Réserves : Une majoration en pourcentage ne distingue ni le calcul, ni le stockage, ni le réseau : elle rend un ordre de grandeur, pas un cycle de vie.": {
+   "en": "Caveats: A percentage uplift distinguishes neither computing, nor storage, nor network: it gives an order of magnitude, not a life cycle.",
+   "fr": "Réserves : Une majoration en pourcentage ne distingue ni le calcul, ni le stockage, ni le réseau : elle rend un ordre de grandeur, pas un cycle de vie."
+  },
+  "Scénario": {
+   "en": "Scenario",
+   "fr": "Scénario"
+  },
+  "Sobriété et efficacité": {
+   "en": "Sufficiency and efficiency",
+   "fr": "Sobriété et efficacité"
+  },
+  "Taille du modèle appelé, mise en cache, requête bornée, modèle par étape.": {
+   "en": "Size of the model called, caching, bounded request, model per step.",
+   "fr": "Taille du modèle appelé, mise en cache, requête bornée, modèle par étape."
+  },
+  "Texte source": {
+   "en": "Source text",
+   "fr": "Texte source"
+  },
+  "Total du parc": {
+   "en": "Total for the estate",
+   "fr": "Total du parc"
+  },
+  "Trajectoires à l’horizon": {
+   "en": "Trajectories to the horizon",
+   "fr": "Trajectoires à l’horizon"
+  },
+  "Version du moteur #-#-a. Mix retenu : FR, # g CO₂/kWh (Facteur par defaut (ADEME, repli)) ; hébergement # g CO₂/kWh (Facteur moyen pays (repli)).": {
+   "en": "Engine version #-#-a. Selected mix: FR, # g CO₂/kWh (Default factor (ADEME, fallback)); hosting # g CO₂/kWh (National average factor (fallback)).",
+   "fr": "Version du moteur 2026-09-a. Mix retenu : FR, 60,0 g CO₂/kWh (Facteur par defaut (ADEME, repli)) ; hébergement 380,0 g CO₂/kWh (Facteur moyen pays (repli))."
+  },
+  "Wh/requête servie": {
+   "en": "Wh/request served",
+   "fr": "Wh/requête servie"
+  },
+  "agit sur efficacite": {
+   "en": "acts on efficiency",
+   "fr": "agit sur efficacite"
+  },
+  "agit sur ges": {
+   "en": "acts on GHG",
+   "fr": "agit sur ges"
+  },
+  "ajustement fin — à déclarer : amorti_mois, heures_accelerateur, nombre_accelerateurs, pue, puissance_w · hébergement non dérivable": {
+   "en": "fine-tuning — to be declared: amorti_mois, heures_accelerateur, nombre_accelerateurs, pue, puissance_w · hosting not derivable",
+   "fr": "ajustement fin — à déclarer : amorti_mois, heures_accelerateur, nombre_accelerateurs, pue, puissance_w · hébergement non dérivable"
+  },
+  "aucun volume de sortie déclaré · ajustement fin — à déclarer : amorti_mois, heures_accelerateur, nombre_accelerateurs, pue, puissance_w": {
+   "en": "no output volume declared · fine-tuning — to declare: amorti_mois, heures_accelerateur, nombre_accelerateurs, pue, puissance_w",
+   "fr": "aucun volume de sortie déclaré · ajustement fin — à déclarer : amorti_mois, heures_accelerateur, nombre_accelerateurs, pue, puissance_w"
+  },
+  "du parc porte un volume déclaré. Les totaux ci-dessous ne comptent QUE ces systèmes.": {
+   "en": "of the estate carries a declared volume. The totals below count ONLY these systems.",
+   "fr": "du parc porte un volume déclaré. Les totaux ci-dessous ne comptent QUE ces systèmes."
+  },
+  "heures_accelerateur": {
+   "en": "heures_accelerateur",
+   "fr": "heures_accelerateur"
+  },
+  "kWh par mois": {
+   "en": "kWh per month",
+   "fr": "kWh par mois"
+  },
+  "kWh/Go": {
+   "en": "kWh/GB",
+   "fr": "kWh/Go"
+  },
+  "kg CO₂ éq. par mois": {
+   "en": "kg CO₂ eq. per month",
+   "fr": "kg CO₂ éq. par mois"
+  },
+  "m³ éq. par mois": {
+   "en": "m³ eq. per month",
+   "fr": "m³ éq. par mois"
+  },
+  "nombre_accelerateurs": {
+   "en": "nombre_accelerateurs",
+   "fr": "nombre_accelerateurs"
+  },
+  "sans": {
+   "en": "without",
+   "fr": "sans"
+  },
+  "texte_reglementaire": {
+   "en": "texte_reglementaire",
+   "fr": "texte_reglementaire"
+  },
+  "Électricité": {
+   "en": "Electricity",
+   "fr": "Électricité"
+  },
+  "Émissions de GES": {
+   "en": "GHG emissions",
+   "fr": "Émissions de GES"
+  },
+  "Énergie d'hébergement d'une requête HTTP (instance + PUE)": {
+   "en": "Hosting energy for one HTTP request (instance + PUE)",
+   "fr": "Énergie d'hébergement d'une requête HTTP (instance + PUE)"
+  },
+  "Énergie primaire": {
+   "en": "Primary energy",
+   "fr": "Énergie primaire"
+  },
+  "État": {
+   "en": "Status",
+   "fr": "État"
+  },
+  "Étude indisponible pour le moment.": {
+   "en": "Study unavailable for now.",
+   "fr": "Étude indisponible pour le moment."
+  },
+  "× base": {
+   "en": "× baseline",
+   "fr": "× base"
+  },
+  "— Combien d'accélérateurs ont tourné en parallèle.": {
+   "en": "— How many accelerators ran in parallel.",
+   "fr": "— Combien d'accélérateurs ont tourné en parallèle."
+  },
+  "— Durée de la campagne, en heures d'accélérateur cumulées.": {
+   "en": "— Duration of the run, in cumulative accelerator hours.",
+   "fr": "— Durée de la campagne, en heures d'accélérateur cumulées."
+  },
+  "— Puissance unitaire déclarée, en watts (fiche technique du parc, ou l'un des repères de PUISSANCE_ACCELERATEUR).": {
+   "en": "— Declared unit power, in watts (estate data sheet, or one of the PUISSANCE_ACCELERATEUR benchmarks).",
+   "fr": "— Puissance unitaire déclarée, en watts (fiche technique du parc, ou l'un des repères de PUISSANCE_ACCELERATEUR)."
+  },
+  "— Rendement du centre de données où la campagne a tourné.": {
+   "en": "— Efficiency of the data centre where the run took place.",
+   "fr": "— Rendement du centre de données où la campagne a tourné."
+  },
+  "— Sur combien de mois de service le modèle affiné est amorti.": {
+   "en": "— Over how many months of service the fine-tuned model is amortised.",
+   "fr": "— Sur combien de mois de service le modèle affiné est amorti."
+  }
+ }
+}

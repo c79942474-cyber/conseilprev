@@ -1,0 +1,10 @@
+{
+ "_lot": "84-administration-business-cartographier-conformite-etc",
+ "bloc": {},
+ "texte": {
+  "Choisissez d’abord votre rôle.": "Choose your role first.",
+  "Le calcul n’a pas pu être obtenu. Aucun taux n’est affiché : un écran vide se voit, un taux inventé ne se voit pas.": "The calculation could not be obtained. No rate is displayed: an empty screen is noticed, an invented rate is not.",
+  "Le référentiel est momentanément indisponible. Rien n’est affiché plutôt qu’une liste partielle.": "The framework is momentarily unavailable. Nothing is displayed rather than a partial list.",
+  "Répondez au cadre d’analyse pour obtenir un score.": "Answer the analysis framework to obtain a score."
+ }
+}

@@ -58,6 +58,7 @@ import en18229_3
 import en18286  # noqa: E402
 import nist_800_82  # noqa: E402
 import owasp_llm  # noqa: E402
+import ocde_ia  # noqa: E402
 
 
 def _lire(nom):
@@ -262,6 +263,23 @@ def _remplis():
             "reponses": _alterne([p["num"] for p in en18286.PARAGRAPHES],
                                  ("tenu", "partiel", "absent", "tenu")),
             "certifie": {"iso9001": True}},
+        #  LA DILIGENCE OCDE : LES DEUX BLOCS DE SAISIE REMPLIS. Le
+        #  processus porte un groupe, l'implication et une priorisation
+        #  JUSTIFIÉE ; le questionnaire répond à tous les exemples que ce
+        #  groupe retient — et à EUX SEULS, puisque les autres sortent du
+        #  calcul au lieu de compter zéro.
+        "ocde": {
+            "qualification": {"groupes": ["cycle_vie"],
+                              "implication": "contribue"},
+            "reponses": _alterne(
+                [e["cle"] for e in ocde_ia.exemples_retenus(("cycle_vie",))[0]],
+                ("tenu", "partiel", "tenu", "absent")),
+            "priorisation": [
+                {"cle": "r1", "nom": "Biais du scoring sur les candidatures",
+                 "echelle": "eleve", "portee": "moyen",
+                 "irremediabilite": "faible", "probabilite": "moyen",
+                 "justification": "Volume annuel et population concernée "
+                                  "chiffrés, logique rendue publique."}]},
         "rgpd": {"traitements": [{"nom": "Paie",
                                   "champs": {k: True for k, _l
                                              in pn.RGPD_CHAMPS_ART30},

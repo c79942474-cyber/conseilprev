@@ -1036,6 +1036,14 @@ var PAGE_META = {
                              label: 'Conformit\u00e9 — annexe ZA' },
   'en18286-analyse':       { section: 'prEN 18286 — SMQ de l\u2019article 17',
                              label: 'Analyse — ponts et famille' },
+  'ocde-processus':        { section: 'Diligence OCDE — IA responsable',
+                             label: 'Processus — groupes et implication' },
+  'ocde-questionnaire':    { section: 'Diligence OCDE — IA responsable',
+                             label: 'Questionnaire — les six étapes' },
+  'ocde-conformite':       { section: 'Diligence OCDE — IA responsable',
+                             label: 'Conformité — feuilles de route' },
+  'ocde-analyse':          { section: 'Diligence OCDE — IA responsable',
+                             label: 'Analyse — licence et limites' },
   'nist-profil':   { section: 'NIST AI RMF', label: 'Profil par fonction' },
   'nist-cadre':    { section: 'NIST AI RMF', label: 'Le cadre, cat\u00e9gorie par cat\u00e9gorie' },
   'nist-genai':    { section: 'NIST AI RMF', label: 'Profil IA générative' },
@@ -1243,6 +1251,23 @@ var SENT_T = {
     'pg.en18286-analyse.eb': 'prEN 18286 \u00b7 Analysis',
     'pg.en18286-analyse.h1': 'What your certificate <em>does not give you</em>',
     'pg.en18286-analyse.p': 'The standard carries two correspondence tables, with ISO 9001:2015 and with ISO/IEC 42001:2023. Everyone looks there for what matches; what counts is the <strong>two rows facing the void</strong> \u2014 \u00a74.4 and clause 9, which is exactly what the Regulation adds. And prEN 18286 organises the way essential requirements are met: it is the <b>other</b> standards of the family that say how to meet them.',
+    'nav.sec.ocde': 'OECD due diligence \u2014 responsible AI',
+    'nav.item.ocde-processus': 'Process \u2014 groups and involvement',
+    'nav.item.ocde-questionnaire': 'Questionnaire \u2014 the six steps',
+    'nav.item.ocde-conformite': 'Compliance \u2014 roadmaps',
+    'nav.item.ocde-analyse': 'Analysis \u2014 licence and limits',
+    'pg.ocde-processus.eb': 'OECD due diligence \u00b7 Process',
+    'pg.ocde-processus.h1': 'Your involvement, <em>and what it makes non-negotiable</em>',
+    'pg.ocde-processus.p': 'Three questions, and they govern all the rest. Which <b>groups</b> your organisation occupies in the AI value chain \u2014 the document expressly says they are neither rigid nor exclusive. Your <b>involvement</b> in the impact: causing it, contributing to it, or being linked to it through a business relationship \u2014 that is what sets the level of due diligence expected, and that is what <strong>caps the rate</strong>. And the <b>prioritisation</b> on four factors, which the document requires to be credible: a rating with no written justification is not one.',
+    'pg.ocde-questionnaire.eb': 'OECD due diligence \u00b7 Questionnaire',
+    'pg.ocde-questionnaire.h1': 'Six steps, <em>and a list its own source calls incomplete</em>',
+    'pg.ocde-questionnaire.p': 'The practical examples of the document, arranged by step and by sub-step. Those that none of your groups is targeted by <strong>leave the calculation</strong> instead of counting zero: the document addresses them to someone else. The statements stay in English, like the actions of the NIST profile \u2014 it is the wording an auditor will look for. And what this rate says is called <b>coverage of the examples retained</b>, never conformity: the document itself writes that its examples do not constitute an exhaustive checklist.',
+    'pg.ocde-conformite.eb': 'OECD due diligence \u00b7 Compliance',
+    'pg.ocde-conformite.h1': 'The bridges, <em>given by the document itself</em>',
+    'pg.ocde-conformite.p': 'Six tables, one per step, ninety-one rows: it is the OECD that sets its approach alongside the provisions of twenty other frameworks \u2014 AI Act, DSA, CSDDD, ISO/IEC\u00a042001, 23894, 38507, 42005, ISO\u00a031000, IEEE\u00a07000, the UN Guiding Principles, the NIST framework, and seven national frameworks. Two things read there that one would rather not say: the document writes that this is <strong>not</strong> an equivalency framework, and of those twenty frameworks, Sentinel measures <b>three</b>.',
+    'pg.ocde-analyse.eb': 'OECD due diligence \u00b7 Analysis',
+    'pg.ocde-analyse.h1': 'What comes from the OECD, <em>and what comes from the firm</em>',
+    'pg.ocde-analyse.p': 'A first in Sentinel: a source whose licence allows citing, translating and adapting. <b>CC BY 4.0</b> \u2014 where the CEN and ISO texts exist here only through their numbers and their titles. The licence imposes three things in exchange, and this screen carries them: cite the work, and two notices word for word, one because the titles are <b>translated</b>, the other because the cut of the questionnaire is an <b>adaptation</b>. Also read there: what the document excludes itself, and what this module refuses to say.',
     'pg.nist53-socle.eb': 'NIST SP 800-53 · Rev. 4',
     'pg.nist53-socle.h1': 'Eighteen families, <em>and what commands them</em>',
     'pg.nist53-socle.p': 'The baseline — Low, Moderate or High — is not a choice: it <strong>follows</strong> from the system categorisation. Announcing it without having carried out the risk assessment means giving a result without its calculation. And four families — RA, PL, CA, PM — decide what the other fourteen must do: when the downstream outruns them, this module says so instead of averaging it away.',
@@ -1450,6 +1475,8 @@ var SENT_T = {
  *  Traduits, ils deviennent introuvables dans le document officiel — ce qui
  *  est exactement ce qu'un auditeur vient chercher. */
 var SENT_SECTIONS_EN = {
+  'DILIGENCE OCDE — IA RESPONSABLE': 'OECD DUE DILIGENCE — RESPONSIBLE AI',
+  'Diligence OCDE — IA responsable': 'OECD due diligence — responsible AI',
   'PILOTAGE': 'STEERING',
   'CARTOGRAPHIER': 'MAP',
   'ÉVALUER LE RISQUE': 'ASSESS RISK',
@@ -1742,6 +1769,11 @@ function go(id, el, sec, pg) {
      lecteur qu'un parcours venait d'y conduire voyait une page vide. */
   if (id.indexOf('conf-') === 0 && typeof window.confInit === 'function') _apresPeinture(window.confInit);
   if (id.indexOf('en18286') === 0 && typeof window.en18286Init === 'function') _apresPeinture(window.en18286Init);
+  /* MEME CROCHET POUR LES QUATRE ECRANS DE L'OCDE, et pour la
+     meme raison : `;ocdeInit()` ne vit que dans le `onclick` de
+     la barre, et un lien profond ou un parcours guide passe par
+     `go()` sans l'executer. */
+  if (id.indexOf('ocde') === 0 && typeof window.ocdeInit === 'function') _apresPeinture(window.ocdeInit);
   if (id === 'qualif-assistee' && typeof window.qualifInit === 'function') _apresPeinture(window.qualifInit);
   /* LE RAIL DU RÉFÉRENTIEL SE REPEINT SUR L'ÉCRAN QU'ON OUVRE — quel que
      soit le chemin : onglet, lien profond, parcours guidé ou passage
@@ -11861,9 +11893,9 @@ var PAGE_GUIDES = {
     ]
   },
   'conf-taux': {
-    title: "Taux de conformité — les treize normes",
+    title: "Taux de conformité — les quatorze normes",
     sections: [
-        {h:"À quoi sert cette page", t:"Elle rend un taux pour chacune des treize normes, calculé à partir de ce que vous avez déjà renseigné dans les modules — rien n'est réévalué ici, tout est composé."},
+        {h:"À quoi sert cette page", t:"Elle rend un taux pour chacune des quatorze normes, calculé à partir de ce que vous avez déjà renseigné dans les modules — rien n'est réévalué ici, tout est composé."},
         {h:"Comment le lire", t:"Un taux n'est PAS une conformité. Sur une obligation légale, c'est une autorité qui tranche ; sur une norme certifiable, un organisme accrédité ; sur un cadre volontaire, personne. Chaque carte porte la phrase qui dit ce que 100 % ne veut pas dire, et elle compte autant que le chiffre."},
         {h:"Le trait ambre sur la barre", t:"C'est un PLAFOND. Un défaut qui arrête un auditeur — une déclaration d'applicabilité irrecevable, par exemple — n'efface pas le travail fait, mais interdit d'aller au-delà. Aucun effort sur le reste de la norme ne franchira ce trait tant que le verrou tient."},
         {h:"Le chiffre en tête", t:"C'est le PLUS BAS des taux mesurés, pas leur moyenne. Une moyenne dilue précisément la composante qu'il faut traiter en premier : deux cadres à 90 % et un à 30 % rendent 70 %, et le 30 % disparaît. La moyenne reste affichée à côté, avec son avertissement."},
@@ -11886,6 +11918,46 @@ var PAGE_GUIDES = {
         {h:"À quoi sert cette page", t:"Elle nomme ce que le plan ne fermera pas, quoi qu'on fasse. Ces points sont connus d'avance : les taire ne les supprime pas, cela les fait découvrir devant l'auditeur."},
         {h:"Ce qu'on y trouve", t:"DORA, qui n'a pas d'instrument ici. Le NIST AI RMF, dont 100 % est une couverture et jamais une conformité — ce cadre n'est pas certifiable. Les risques du Top 10 LLM qu'aucune mesure de l'annexe A 42001 ne rencontre. Et, si vos normes certifiables atteignent 100 %, le rappel qu'il reste l'audit interne, la revue de direction et l'organisme accrédité."},
         {h:"À quoi cela sert en comité", t:"Un plan qui promet 100 % partout se défait à la première question précise. Poser ses limites soi-même est ce qui rend le reste crédible."}
+    ]
+  },
+  /* ── OCDE — LES QUATRE ÉCRANS DE LA DILIGENCE ──────────────────
+     ICI, ET POUR LA PREMIÈRE FOIS DANS SENTINEL, LA SOURCE SE CITE : le
+     document est sous CC BY 4.0. Ces guides en reprennent donc les intitulés
+     et les énoncés, et portent ce que la licence impose. */
+  'ocde-processus': {
+    title: "Diligence OCDE — groupes, implication, priorisation",
+    sections: [
+      {h:"À quoi sert cette page", t:"À poser les trois choses qui commandent tout le reste : les GROUPES que votre organisme occupe dans la chaîne de valeur de l’IA, votre IMPLICATION dans l’incidence, et la PRIORISATION des risques. Le questionnaire ne sait pas lesquels des 115 exemples vous visent avant les groupes, et le niveau de diligence attendu aux étapes 3 et 6 dépend de l’implication."},
+      {h:"Comment l’utiliser", t:"Déclarez AUTANT DE GROUPES que nécessaire : le document écrit expressément qu’ils ne sont ni rigides ni exclusifs, et un éditeur qui entraîne sur ses propres données et exploite pour ses clients est dans deux. Choisissez ensuite votre implication — causer, contribuer, être lié — puis cotez vos risques sur les quatre facteurs, chacun avec sa justification écrite."},
+      {h:"L’implication COMMANDE le niveau attendu", t:"Causer oblige à faire cesser ET à réparer le dommage. Contribuer oblige à cesser sa contribution, réparer sa part, et construire son levier sur la relation d’affaires. Être lié oblige à user de ce levier, et à le construire s’il manque. C’est l’encadré 2.4 du document, et c’est de là que vient le plafond : aucune part ne peut être revendiquée au-delà de l’étape que votre implication rend non négociable."},
+      {h:"Ce qu’elle ne fait pas", t:"Elle ne fige pas votre implication : le document écrit qu’un lien direct devient une CONTRIBUTION si l’entreprise continue sans rien faire. Et elle ne prend pas la cotation pour une priorisation : le document demande un processus CRÉDIBLE dont la logique est rendue publique, donc une cotation sans justification écrite plafonne la part « identifier » à la moitié."}
+    ]
+  },
+  'ocde-questionnaire': {
+    title: "Diligence OCDE — les six étapes et leurs exemples",
+    sections: [
+      {h:"À quoi sert cette page", t:"À déclarer, exemple par exemple, où en est la diligence : ancrer dans les politiques (étape 1), identifier et évaluer (2), faire cesser, prévenir et atténuer (3), suivre (4), rendre compte (5), réparer ou y coopérer (6). Les 115 exemples pratiques viennent du document ; seuls ceux qu’un de vos groupes vise entrent dans le calcul."},
+      {h:"Comment l’utiliser", t:"Descendez les étapes dans l’ordre : chacune porte sa sous-étape, ce qu’elle demande et le piège qui s’y trouve. Le bouton de lot répond pour une étape entière quand la réponse y est la même. Quatre réponses : tenu, partiellement tenu, absent, sans objet."},
+      {h:"Pourquoi les énoncés restent en anglais", t:"La licence CC BY permettrait de les traduire. Ils ne le sont pas, pour la raison qui vaut déjà pour les 212 actions du profil IA générative du NIST : c’est le libellé qu’un auditeur cherchera. Une traduction obligerait en outre à porter la mention d’adaptation sur chacune des 115 lignes. Le français autour d’eux est du cabinet."},
+      {h:"Ce qu’elle ne fait pas", t:"Elle ne rend pas un taux de conformité, et le mot n’y figure pas. Le document déclare lui-même que ses exemples ne constituent pas une liste de contrôle exhaustive : ce qui se mesure ici s’appelle COUVERTURE DES EXEMPLES RETENUS. Un organisme peut les tenir tous et rester en défaut de diligence sur un risque qu’aucun d’eux ne nomme."}
+    ]
+  },
+  'ocde-conformite': {
+    title: "Diligence OCDE — les six feuilles de route",
+    sections: [
+      {h:"À quoi sert cette page", t:"À lire les quatre-vingt-onze lignes de pont que le document donne LUI-MÊME : pour chacune de ses six étapes, les dispositions voisines de vingt autres cadres — IA Act, DSA, CSDDD, ISO/IEC 42001, 23894, 38507, 42005, ISO 31000, IEEE 7000, principes directeurs de l’ONU, cadre du NIST, et sept cadres nationaux."},
+      {h:"Comment l’utiliser", t:"Ouvrez l’étape qui vous occupe et lisez la colonne de droite : elle dit si Sentinel mesure ce cadre-là. Sur les vingt, trois sont mesurés ici — l’IA Act, ISO/IEC 42001 et le cadre du NIST. Les dix-sept autres sont nommés par l’OCDE et non tenus par le cabinet, et l’écran le dit plutôt que de les présenter comme couverts."},
+      {h:"Ce que ce tableau n’est pas", t:"Un cadre d’équivalence — et c’est le document qui l’écrit : « this table is not an equivalency framework, as the scope and nature of the expectations in the other frameworks may vary ». Tenir ISO/IEC 42001 ne vaut pas diligence OCDE, et l’inverse est vrai aussi."},
+      {h:"Le droit d’auteur des tiers", t:"La licence CC BY de l’OCDE ne couvre pas le matériel de tiers présent dans son œuvre. Les clauses d’ISO, de l’IEEE et d’AI Verify citées dans ces tableaux sont donc rendues par NUMÉRO ET INTITULÉ seulement, comme un index — la même doctrine que les modules ISO de ce dépôt."}
+    ]
+  },
+  'ocde-analyse': {
+    title: "Diligence OCDE — la source, sa licence et ses limites",
+    sections: [
+      {h:"À quoi sert cette page", t:"À dire ce qui vient de l’OCDE et ce qui vient du cabinet. Les intitulés des étapes et les 115 exemples pratiques viennent du document, sous licence CC BY 4.0. Le découpage du questionnaire, les poids, les plafonds et tout le français autour sont du cabinet."},
+      {h:"Une première dans Sentinel", t:"Les textes du CEN et de l’ISO sont protégés : prEN 18229-3, prEN 18286, ISO/IEC 42001 et ISO/IEC 27001 n’existent ici que par leurs numéros et leurs titres. Celui-ci peut être cité, traduit et adapté — à trois conditions que la licence formule elle-même, et que cet écran honore : citer l’œuvre, et porter deux mentions, l’une pour la traduction, l’autre pour l’adaptation."},
+      {h:"Ce que la licence interdit", t:"Le logo, l’identité visuelle et l’image de couverture de l’OCDE, et toute suggestion que l’OCDE adosse cet usage. Conséquence concrète : la couleur de ce module dans la barre latérale n’est pas le bleu de l’OCDE, et aucune marque n’est reproduite."},
+      {h:"Ce que ce module refuse de dire", t:"Qu’il y aurait une présomption de conformité — l’instrument est volontaire, et aucune date ne changera cela. Qu’il porterait un catalogue de risques — le document se déclare « risk-agnostic ». Qu’il couvrirait la chaîne du matériel — il s’en exclut lui-même et renvoie au guide minerais."}
     ]
   },
   /* ── prEN 18286 — LES QUATRE ÉCRANS DU SMQ DE L'ARTICLE 17 ──────────────
@@ -19002,7 +19074,7 @@ window.raasMsCell = function(p){
 /* ══ Indice de conformité global — consolide IA Act / RGPD / ISO 42001 ══ */
 
 /* ═══════════════════════════════════════════════════════════════════════
-   LE TAUX DE CONFORMITÉ DES TREIZE NORMES
+   LE TAUX DE CONFORMITÉ DES QUATORZE NORMES
    Tout le calcul est au serveur, dans `conformite.py` : cet écran ne fait
    que l'afficher. Refaire ici la moindre arithmétique donnerait DEUX vérités
    sur le même taux — c'est le défaut qui existait entre `gcAuditPct` et
@@ -22064,6 +22136,35 @@ var GUIDED_PATHS = [
     ]
   },
   {
+    /* ── LA DILIGENCE OCDE ── Le seul parcours qui ne demande pas si LE
+       SYSTÈME est conforme, mais si L'ENTREPRISE a fait ce qu'il fallait pour
+       savoir — relations d'affaires, amont et aval compris. Il commence par
+       la qualification parce qu'elle commande tout le reste, et finit sur la
+       licence, parce que c'est la condition à laquelle ce module existe. */
+    id: 'ocde_diligence',
+    icon: '\u{1F9ED}',
+    role: "Diligence OCDE — je veux savoir si mon entreprise a fait ce qu'il fallait, pas seulement si mon système est conforme",
+    pitch: "Les treize autres référentiels de Sentinel demandent si LE SYSTÈME est conforme. Celui-ci demande autre chose : l'entreprise a-t-elle identifié, prévenu, traité et réparé les incidences négatives de l'IA — les siennes, et celles de ses relations d'affaires, en amont comme en aval. Six étapes, trois groupes d'acteur, et une question qui commande tout : causez-vous l'incidence, y contribuez-vous, ou y êtes-vous seulement lié ?",
+    steps: [
+      {id:'ocde-processus', label:"Processus — groupes et implication",
+       action:"Déclarez vos groupes — ils ne sont ni rigides ni exclusifs —, votre implication dans l'incidence, et cotez vos risques sur les quatre facteurs avec leur justification.",
+       gain:"L'implication fixe le niveau de diligence attendu : causer oblige à faire cesser ET à réparer, contribuer à cesser sa part et construire son levier, être lié à user de ce levier. C'est elle qui plafonne le taux, et c'est l'encadré 2.4 du document qui le dit.",
+       tip:"Se ranger en « lien direct » et ne rien faire : le document écrit qu'un lien direct devient une CONTRIBUTION si l'entreprise continue sans agir."},
+      {id:'ocde-questionnaire', label:"Questionnaire — les six étapes",
+       action:"Descendez les six étapes. Seuls les exemples qu'un de vos groupes vise entrent dans le calcul ; les autres en sortent au lieu de compter zéro.",
+       gain:"Le poids suit la charge, pas le nombre d'exemples : l'étape 3 en porte vingt-quatre pour le seul groupe 2 et l'étape 6 n'en porte que deux — or c'est l'étape 6 qui est l'attente la plus forte dès que l'entreprise cause ou contribue.",
+       tip:"Ce taux ne s'appelle pas conformité, et le mot n'apparaît nulle part : le document déclare lui-même ses exemples non exhaustifs."},
+      {id:'ocde-conformite', label:"Conformité — feuilles de route",
+       action:"Lisez les quatre-vingt-onze lignes de pont, étape par étape, et la colonne qui dit si Sentinel mesure le cadre d'en face.",
+       gain:"Les ponts viennent du DOCUMENT, pas du cabinet : c'est l'OCDE qui rapproche ses six étapes de l'IA Act, d'ISO/IEC 42001, du cadre du NIST et de dix-sept autres cadres.",
+       tip:"Le document écrit que ce n'est PAS un cadre d'équivalence — et sur ces vingt cadres, Sentinel en mesure trois. Les dix-sept autres sont nommés ici et non tenus."},
+      {id:'ocde-analyse', label:"Analyse — licence et limites",
+       action:"Lisez ce qui vient de l'OCDE, ce qui vient du cabinet, et ce que le document s'exclut lui-même.",
+       gain:"Une première dans Sentinel : une source qu'on peut citer, traduire et adapter — là où les textes du CEN et de l'ISO n'existent ici que par leurs numéros et leurs titres.",
+       tip:"Aucune présomption de conformité n'en sort, et aucune date ne changera cela : ce guide met en œuvre deux recommandations, il n'est pas une norme harmonisée."}
+    ]
+  },
+  {
     /* PRESQUE PERSONNE N'ARRIVE ICI EN CHERCHANT « prEN 18286 ». On y arrive
        en tenant un certificat ISO 9001 ou ISO/IEC 42001 et en se demandant ce
        qu'il manque pour l'article 17. Le parcours part donc du §4.4 — la
@@ -22131,7 +22232,7 @@ var GUIDED_PATHS = [
       {id:'nist-genai', label:"Profil IA g\u00e9n\u00e9rative", action:"Qualifiez le syst\u00e8me, retenez les risques, puis r\u00e9pondez aux actions par sous-cat\u00e9gorie \u2014 le lot r\u00e9pond pour toute une sous-cat\u00e9gorie \u00e0 la fois.", gain:"Les 211 actions suggér\u00e9es du \u00a73, et le plafond qu\u2019elles posent sur le taux du cadre d\u00e8s que le syst\u00e8me est g\u00e9n\u00e9ratif.", tip:"Six des douze risques ne rel\u00e8vent pas de la cyber \u2014 les confier au RSSI produit un registre que personne n\u2019arbitre."},
       {id:'iso42001', label:"ISO 42001 \u2014 articles 4 \u00e0 10", action:"Comparez ce que vous venez de renseigner avec le corps de la norme.", gain:"Ce que le cadre NIST laisse volontaire, ISO 42001 le rend exigible \u2014 et certifiable.", tip:"Le rapprochement le plus utile n\u2019est pas point \u00e0 point : GOVERN recoupe les articles 5 et 6, et rien dans le cadre n\u2019impose de d\u00e9claration d\u2019applicabilit\u00e9."},
       {id:'cadre-normatif', label:"Cadre normatif", action:"Regardez ce que le cadre NIST apporte que les textes europ\u00e9ens n\u2019apportent pas.", gain:"Il est le seul \u00e0 donner une grammaire de RISQUE l\u00e0 o\u00f9 l\u2019IA Act donne une grammaire d\u2019OBLIGATION.", tip:"Un tiret dans une colonne n\u2019est pas un oubli : c\u2019est que le texte ne dit rien de ce module."},
-      {id:'conf-taux', label:"Le taux de conformit\u00e9", action:"Ouvrez la carte NIST AI RMF : elle porte maintenant votre profil.", gain:"Les dix-neuf cat\u00e9gories que vous venez de renseigner remontent dans la synth\u00e8se des treize normes.", tip:"La carte dit ce que 100 % NE veut PAS dire ici : le cadre ne se certifie pas, il n'y a aucun auditeur au bout. Un taux plein signifie « tout est renseign\u00e9 et tenu », pas « conforme »."}
+      {id:'conf-taux', label:"Le taux de conformit\u00e9", action:"Ouvrez la carte NIST AI RMF : elle porte maintenant votre profil.", gain:"Les dix-neuf cat\u00e9gories que vous venez de renseigner remontent dans la synth\u00e8se des quatorze normes.", tip:"La carte dit ce que 100 % NE veut PAS dire ici : le cadre ne se certifie pas, il n'y a aucun auditeur au bout. Un taux plein signifie « tout est renseign\u00e9 et tenu », pas « conforme »."}
     ]
   },
   {
@@ -22144,7 +22245,7 @@ var GUIDED_PATHS = [
       {id:'owasp-pont', label:"Ce qu\u2019ISO 42001 ne couvre pas", action:"Regardez d\u2019abord les lignes o\u00f9 la colonne des mesures est vide.", gain:"Trois risques ne rencontrent aucune mesure de l\u2019annexe A : aucun r\u00e9f\u00e9rentiel ne les rattrapera.", tip:"Ce sont aussi ceux dont on se croit couvert pr\u00e9cis\u00e9ment parce qu\u2019on est certifi\u00e9. « Notre SMIA couvre OWASP » est la phrase que cette page existe pour contredire."},
       {id:'iso42001-soa', label:"D\u00e9claration d\u2019applicabilit\u00e9", action:"Reprenez les mesures cit\u00e9es en face des risques, et v\u00e9rifiez leur statut chez vous.", gain:"Une mesure retenue mais non mise en \u0153uvre ne couvre rien \u2014 et c\u2019est sur la SoA que \u00e7a se voit.", tip:"Une mesure « touche » un risque ; elle ne le clot pas. Le pont ne dit pas l\u2019inverse."},
       {id:'ia-act-hub', label:"IA Act \u2014 vue d\u2019ensemble", action:"Situez lesquels de ces risques deviennent des obligations quand le syst\u00e8me est \u00e0 haut risque.", gain:"OWASP dit ce qui casse ; le r\u00e8glement dit ce qui est exigible. Les deux ne se d\u00e9duisent pas l\u2019un de l\u2019autre.", tip:"Un risque OWASP trait\u00e9 ne vaut pas conformit\u00e9, et une obligation tenue ne vaut pas s\u00e9curit\u00e9."},
-      {id:'conf-taux', label:"Le taux de conformit\u00e9", action:"Ouvrez la carte OWASP LLM : elle porte maintenant ce que vous venez de d\u00e9clarer.", gain:"Vos dix \u00e9tats remontent dans la synth\u00e8se des treize normes. Tant que rien n'est d\u00e9clar\u00e9, la carte reste à « — » : une absence de mesure n'est pas un z\u00e9ro.", tip:"Le taux OWASP est plafonn\u00e9 par les trois risques hors annexe A. Ce plafond n'est pas un d\u00e9faut du calcul : c'est ce que la liste elle-m\u00eame dit de sa propre port\u00e9e."}
+      {id:'conf-taux', label:"Le taux de conformit\u00e9", action:"Ouvrez la carte OWASP LLM : elle porte maintenant ce que vous venez de d\u00e9clarer.", gain:"Vos dix \u00e9tats remontent dans la synth\u00e8se des quatorze normes. Tant que rien n'est d\u00e9clar\u00e9, la carte reste à « — » : une absence de mesure n'est pas un z\u00e9ro.", tip:"Le taux OWASP est plafonn\u00e9 par les trois risques hors annexe A. Ce plafond n'est pas un d\u00e9faut du calcul : c'est ce que la liste elle-m\u00eame dit de sa propre port\u00e9e."}
     ]
   },
   {
@@ -30215,6 +30316,507 @@ function en18286Init() {
 window.en18286Init = en18286Init;
 
 
+/* ═══════════════════════════════════════════════════════════════════════
+ * OCDE — LE DEVOIR DE DILIGENCE POUR UNE IA RESPONSABLE
+ *
+ * QUATRE ÉCRANS, ET DEUX D'ENTRE EUX SE SAISISSENT. Le « processus » porte
+ * la qualification — les groupes, l'implication, la priorisation — et c'est
+ * lui qui PLAFONNE. Le « questionnaire » porte les exemples pratiques que
+ * les groupes déclarés retiennent. Les deux autres se lisent.
+ *
+ * LES EXEMPLES RESTENT EN ANGLAIS, et l'écran le dit : c'est l'énoncé de
+ * l'OCDE, repris verbatim sous CC BY 4.0, comme les actions du profil NIST.
+ * Les traduire obligerait à porter la mention d'adaptation sur chacune des
+ * cent quinze lignes, et ferait perdre le libellé qu'un auditeur cherche.
+ *
+ * LES DEUX MENTIONS DE LICENCE SONT SUR L'ÉCRAN, pas dans un pied de page :
+ * c'est la condition à laquelle ce module a le droit d'exister, et une
+ * règle vérifie qu'elles y sont. */
+
+var OCDE_CLE_STOCK = 'cp-sentinel-ocde-v1';
+var OCDE_REF = null, OCDE_EVAL = null;
+
+function _ocdeNormaliser(v) {
+  var d = (v && typeof v === 'object') ? v : {};
+  var o = function (x) { return (x && typeof x === 'object') ? x : {}; };
+  var q = o(d.qualification);
+  var g = Array.isArray(q.groupes) ? q.groupes : [];
+  return {
+    /* LES GROUPES SONT UNE LISTE, PAS UN CHOIX. Le document écrit qu'ils
+       « are not rigid nor exclusive » : un éditeur qui entraîne sur ses
+       propres données ET exploite pour ses clients est dans deux groupes,
+       et l'écran doit le laisser dire. */
+    qualification: {
+      groupes: g.filter(function (x) { return typeof x === 'string'; }),
+      implication: (typeof q.implication === 'string') ? q.implication : null
+    },
+    reponses: o(d.reponses),
+    priorisation: Array.isArray(d.priorisation) ? d.priorisation : []
+  };
+}
+var OCDE_DECL = _ocdeNormaliser(_declLire(OCDE_CLE_STOCK));
+
+function _ocdeEcrire() {
+  _declEcrire(OCDE_CLE_STOCK, OCDE_DECL);
+  declPublier();
+}
+
+function _ocdeEsc(s) { return nistEsc(s); }
+
+/* ── LA SAISIE ──────────────────────────────────────────────────────── */
+
+window.ocdeGroupe = function (el) {
+  var c = el.getAttribute('data-cle');
+  var l = OCDE_DECL.qualification.groupes;
+  var i = l.indexOf(c);
+  if (i >= 0) { l.splice(i, 1); } else { l.push(c); }
+  _ocdeEcrire();
+  ocdePeindre();
+};
+
+window.ocdeImplication = function (el) {
+  var c = el.getAttribute('data-cle');
+  OCDE_DECL.qualification.implication =
+    (OCDE_DECL.qualification.implication === c) ? null : c;
+  _ocdeEcrire();
+  ocdePeindre();
+};
+
+window.ocdeRepondre = function (sel) {
+  var c = sel.getAttribute('data-cle');
+  _marquerEtat(sel);
+  if (sel.value) { OCDE_DECL.reponses[c] = sel.value; }
+  else { delete OCDE_DECL.reponses[c]; }
+  _ocdeEcrire();
+  ocdeCompteur(c);
+  ocdeEvaluer();
+};
+
+window.ocdeLot = function (el) {
+  var et = el.getAttribute('data-etape'), etat = el.getAttribute('data-etat');
+  if (!OCDE_REF) return;
+  _ocdeRetenus().forEach(function (e) {
+    if (String(_ocdeEtapeDe(e)) !== String(et)) return;
+    if (etat) { OCDE_DECL.reponses[e.cle] = etat; }
+    else { delete OCDE_DECL.reponses[e.cle]; }
+  });
+  _ocdeEcrire();
+  var boite = document.getElementById('ocde-et-' + et);
+  if (boite) {
+    boite.querySelectorAll('select.q-sel').forEach(function (s) {
+      s.value = OCDE_DECL.reponses[s.getAttribute('data-cle')] || '';
+      _marquerEtat(s);
+    });
+  }
+  ocdeCompteur(null, et);
+  ocdeEvaluer();
+};
+
+window.ocdeRisqueAjouter = function () {
+  OCDE_DECL.priorisation.push({
+    cle: 'r' + (OCDE_DECL.priorisation.length + 1), nom: '',
+    echelle: '', portee: '', irremediabilite: '', probabilite: '',
+    justification: ''
+  });
+  _ocdeEcrire();
+  ocdePeindre();
+};
+
+window.ocdeRisqueRetirer = function (el) {
+  var i = Number(el.getAttribute('data-i'));
+  if (i >= 0 && i < OCDE_DECL.priorisation.length) {
+    OCDE_DECL.priorisation.splice(i, 1);
+    _ocdeEcrire();
+    ocdePeindre();
+  }
+};
+
+window.ocdeRisqueChamp = function (el) {
+  var i = Number(el.getAttribute('data-i')), ch = el.getAttribute('data-champ');
+  var r = OCDE_DECL.priorisation[i];
+  if (!r) return;
+  r[ch] = el.value;
+  _ocdeEcrire();
+  /* LE TEXTE NE REPEINT PAS L'ÉCRAN : repeindre à chaque frappe ferait
+     perdre le curseur. Seules les cotations, qui changent le calcul, le
+     font. */
+  if (ch === 'nom' || ch === 'justification') { ocdeEvaluer(); }
+  else { ocdePeindre(); }
+};
+
+/* ── CE QUE LES GROUPES DÉCLARÉS RETIENNENT ─────────────────────────── */
+
+function _ocdeEtapeDe(ex) {
+  if (!OCDE_REF) return null;
+  var u = OCDE_REF.unites.filter(function (x) { return x.cle === ex.unite; })[0];
+  return u ? u.etape : null;
+}
+
+function _ocdeRetenus() {
+  if (!OCDE_REF) return [];
+  var g = OCDE_DECL.qualification.groupes;
+  if (!g.length) return [];
+  return OCDE_REF.exemples.filter(function (e) {
+    return e.groupes.some(function (x) { return g.indexOf(x) >= 0; });
+  });
+}
+
+function ocdeCompteur(cle, etape) {
+  if (!OCDE_REF) return;
+  var et = etape;
+  if (!et) {
+    var e = OCDE_REF.exemples.filter(function (x) { return x.cle === cle; })[0];
+    if (!e) return;
+    et = _ocdeEtapeDe(e);
+  }
+  var n = document.getElementById('ocde-nb-' + et);
+  if (!n) return;
+  var tous = _ocdeRetenus().filter(function (x) {
+    return String(_ocdeEtapeDe(x)) === String(et); });
+  var tenus = tous.filter(function (x) {
+    return OCDE_DECL.reponses[x.cle] === 'tenu'; }).length;
+  n.textContent = tenus + ' / ' + tous.length + ' tenu' + (tous.length > 1 ? 's' : '');
+}
+
+/* ── LA PEINTURE ────────────────────────────────────────────────────── */
+
+function _ocdeBouton(fn, cle, texte, actif) {
+  return '<button type="button" class="gen-b gen-pick" data-cle="'
+    + _ocdeEsc(cle) + '" aria-pressed="' + (actif ? 'true' : 'false')
+    + '" onclick="' + fn + '(this)">' + _ocdeEsc(texte) + '</button>';
+}
+
+/* LA LICENCE EST UN BLOC D'ÉCRAN, PAS UNE NOTE. Elle part sur les quatre
+   pages : la citation de l'œuvre, puis les deux mentions que CC BY impose —
+   l'une parce que les intitulés sont TRADUITS, l'autre parce que le
+   découpage du questionnaire est une ADAPTATION. */
+function _ocdeLicence(R) {
+  return '<div class="gen-bloc ocde-lic"><h3>Ce qui est de l’OCDE, et ce qui '
+    + 'est du cabinet</h3>'
+    + '<p class="ocde-cite">' + _ocdeEsc(R.citation) + '</p>'
+    + '<p>Les intitulés des étapes et les ' + R.exemples.length
+    + ' exemples pratiques viennent de ce document, sous licence '
+    + '<b>CC BY 4.0</b>. Le découpage du questionnaire, les poids, les '
+    + 'plafonds et tout le français autour sont du cabinet.</p>'
+    + '<p class="ocde-mention"><i>' + _ocdeEsc(R.mention_traduction)
+    + '</i></p>'
+    + '<p class="ocde-mention"><i>' + _ocdeEsc(R.mention_adaptation)
+    + '</i></p></div>';
+}
+
+function ocdePeindre() {
+  var R = OCDE_REF;
+  if (!R) return;
+  var g = OCDE_DECL.qualification.groupes;
+  var impl = OCDE_DECL.qualification.implication;
+
+  var res = document.getElementById('ocde-reserve');
+  if (res) {
+    res.innerHTML = '<div class="status"><span class="dot"></span>'
+      + _ocdeEsc(R.reserve) + '</div>';
+  }
+
+  /* ── 1. PROCESSUS : la qualification, l’implication, la priorisation ── */
+  var pb = document.getElementById('ocde-processus-body');
+  if (pb) {
+    pb.className = '';
+    var h = '<div class="gen-bloc"><h3>Votre place dans la chaîne de valeur '
+      + 'de l’IA</h3><p>' + _ocdeEsc(R.non_exclusifs) + '</p>'
+      + '<ul class="nist-gen">' + R.groupes.map(function (x) {
+          var on = g.indexOf(x.cle) >= 0;
+          return '<li' + (on ? ' class="gen-pris"' : '') + '><div>'
+            + '<b>Groupe ' + x.num + ' — ' + _ocdeEsc(x.nom) + '</b>'
+            + '<i>' + _ocdeEsc(x.dit) + '</i></div>'
+            + _ocdeBouton('ocdeGroupe', x.cle, on ? 'Déclaré' : 'Déclarer', on)
+            + '</li>';
+        }).join('') + '</ul>'
+      + '<p class="ocde-pme">' + _ocdeEsc(R.pme) + '</p></div>';
+
+    if (!g.length) {
+      h += '<div class="q-vide">Déclarez d’abord un groupe. Tant qu’aucun ne '
+        + 'l’est, le questionnaire ne sait pas lesquels des '
+        + R.exemples.length + ' exemples vous visent, et rien n’est '
+        + 'calculé.</div>';
+    } else {
+      h += '<div class="gen-bloc"><h3>Votre implication dans l’incidence '
+        + '(étape 2.3)</h3><p>C’est la question qui commande le NIVEAU de '
+        + 'diligence attendu — et c’est elle qui plafonne le taux.</p>'
+        + '<ul class="ow-liste">' + R.implications.map(function (x) {
+            var on = (impl === x.cle);
+            return '<li' + (on ? ' data-etat="oui"' : '') + '>'
+              + '<div class="ow-t"><b>' + _ocdeEsc(x.nom) + '</b> <em>'
+              + _ocdeEsc(x.en) + '</em></div>'
+              + '<p>' + _ocdeEsc(x.dit) + '</p>'
+              + '<p><b>Attendu :</b> ' + _ocdeEsc(x.attendu) + '</p>'
+              + _ocdeBouton('ocdeImplication', x.cle,
+                            on ? 'Déclarée' : 'C’est mon cas', on)
+              + '</li>';
+          }).join('') + '</ul>'
+        + '<div class="q-am"><span>Elle n’est pas figée</span>'
+        + _ocdeEsc(R.implication_non_figee) + '</div></div>'
+
+        + '<div class="gen-bloc"><h3>Prioriser les risques (étape 2.4)</h3>'
+        + '<p>Quatre facteurs, et la justification que le document exige : il '
+        + 'demande un processus CRÉDIBLE dont la logique est rendue publique. '
+        + 'La gravité se lit sur l’échelle, la portée et l’irrémédiabilité ; '
+        + 'la saillance la croise avec la probabilité. Ce choix d’arithmétique '
+        + 'est du cabinet — le document donne les facteurs, pas le '
+        + 'barème.</p>'
+        + '<table class="ocde-prio"><thead><tr><th>Risque</th>'
+        + R.facteurs.map(function (f) {
+            return '<th title="' + _ocdeEsc(f.dit) + '">' + _ocdeEsc(f.nom)
+              + '</th>'; }).join('')
+        + '<th>Justification</th><th>Saillance</th><th></th></tr></thead>'
+        + '<tbody>' + OCDE_DECL.priorisation.map(function (r, i) {
+            var l = (OCDE_EVAL && OCDE_EVAL.priorisation
+                     && OCDE_EVAL.priorisation.lignes[i]) || {};
+            var pal = (R.paliers.filter(function (p) {
+              return p.cle === l.palier; })[0] || {}).nom || '—';
+            return '<tr' + (l.saillance === null || l.saillance === undefined
+                            ? '' : ' data-palier="' + _ocdeEsc(l.palier) + '"')
+              + '><td><input type="text" value="' + _ocdeEsc(r.nom || '')
+              + '" data-i="' + i + '" data-champ="nom" '
+              + 'oninput="ocdeRisqueChamp(this)" aria-label="Nom du risque '
+              + (i + 1) + '" placeholder="ce qui peut arriver, et à qui"></td>'
+              + R.facteurs.map(function (f) {
+                  return '<td><select class="q-sel" data-i="' + i
+                    + '" data-champ="' + _ocdeEsc(f.cle)
+                    + '" onchange="ocdeRisqueChamp(this)" aria-label="'
+                    + _ocdeEsc(f.nom) + ' du risque ' + (i + 1) + '">'
+                    + '<option value="">—</option>'
+                    + R.ordre_niveaux.map(function (n) {
+                        return '<option value="' + _ocdeEsc(n) + '"'
+                          + (r[f.cle] === n ? ' selected' : '') + '>'
+                          + _ocdeEsc(R.niveaux[n].nom) + '</option>';
+                      }).join('') + '</select></td>';
+                }).join('')
+              + '<td><input type="text" value="'
+              + _ocdeEsc(r.justification || '') + '" data-i="' + i
+              + '" data-champ="justification" oninput="ocdeRisqueChamp(this)" '
+              + 'aria-label="Justification du risque ' + (i + 1)
+              + '" placeholder="pourquoi cette cotation"></td>'
+              + '<td class="ocde-sail">' + _ocdeEsc(pal) + '</td>'
+              + '<td><button type="button" class="gen-b" data-i="' + i
+              + '" onclick="ocdeRisqueRetirer(this)" aria-label="Retirer le '
+              + 'risque ' + (i + 1) + '">Retirer</button></td></tr>';
+          }).join('') + '</tbody></table>'
+        + '<button type="button" class="gen-b" onclick="ocdeRisqueAjouter()">'
+        + 'Ajouter un risque</button></div>';
+    }
+    h += _ocdeLicence(R);
+    pb.innerHTML = h;
+  }
+
+  /* ── 2. QUESTIONNAIRE : les exemples que les groupes retiennent ─────── */
+  var qb = document.getElementById('ocde-questionnaire-body');
+  if (qb) {
+    qb.className = '';
+    if (!g.length) {
+      qb.innerHTML = '<div class="q-vide">Déclarez d’abord votre ou vos '
+        + 'groupes sur l’écran « Processus ». Les ' + R.exemples.length
+        + ' exemples du document ne s’adressent pas tous aux mêmes '
+        + 'entreprises, et ceux qui ne vous visent pas ne doivent pas vous '
+        + 'être comptés.</div>';
+    } else {
+      var retenus = _ocdeRetenus();
+      var ecartes = R.exemples.length - retenus.length;
+      var hq = '<div class="gen-bloc"><h3>' + retenus.length + ' exemple(s) '
+        + 'retenu(s) sur ' + R.exemples.length + '</h3>'
+        + '<p>' + (ecartes ? ecartes + ' exemple(s) ne visent aucun de vos '
+            + 'groupes : ils SORTENT du calcul au lieu de compter zéro. '
+            : 'Vos groupes retiennent tous les exemples du document. ')
+        + _ocdeEsc(R.ce_que_le_taux_n_est_pas) + '</p>'
+        + '<p class="ocde-vo"><i>' + _ocdeEsc(R.avertissement_exemples)
+        + '</i> — les énoncés ci-dessous sont ceux de l’OCDE, repris en '
+        + 'anglais : c’est le libellé qu’un auditeur cherchera.</p></div>';
+
+      hq += R.etapes.map(function (et) {
+        var exs = retenus.filter(function (x) {
+          return String(_ocdeEtapeDe(x)) === String(et.num); });
+        if (!exs.length) return '';
+        var unites = R.unites.filter(function (u) { return u.etape === et.num; });
+        var tenus = exs.filter(function (x) {
+          return OCDE_DECL.reponses[x.cle] === 'tenu'; }).length;
+        return '<details class="q-ch" id="ocde-et-' + et.num + '"><summary>'
+          + '<b>Étape ' + et.num + ' — ' + _ocdeEsc(et.nom) + '</b>'
+          + '<span class="q-nb" id="ocde-nb-' + et.num + '">' + tenus + ' / '
+          + exs.length + ' tenu' + (exs.length > 1 ? 's' : '') + '</span>'
+          + '</summary>'
+          + '<p class="q-pq">' + _ocdeEsc(et.pourquoi) + '</p>'
+          + '<div class="q-lot">'
+          + '<button type="button" class="gen-b" data-etape="' + et.num
+          + '" data-etat="tenu" onclick="ocdeLot(this)">Tout tenu</button>'
+          + '<button type="button" class="gen-b" data-etape="' + et.num
+          + '" data-etat="" onclick="ocdeLot(this)">Tout effacer</button>'
+          + '</div>'
+          + unites.map(function (u) {
+              var ux = exs.filter(function (x) { return x.unite === u.cle; });
+              if (!ux.length) return '';
+              var sen = R.sous_etapes_en.filter(function (s) {
+                return s.num === u.cle; })[0];
+              return '<div class="ocde-unite"><h4><code>' + _ocdeEsc(u.cle)
+                + '</code> ' + _ocdeEsc(u.nom)
+                + (sen ? ' <em>' + _ocdeEsc(sen.en) + '</em>' : '') + '</h4>'
+                + '<p>' + _ocdeEsc(u.demande) + '</p>'
+                + '<div class="q-am"><span>Le piège</span>'
+                + _ocdeEsc(u.piege) + '</div>'
+                + '<ul class="ow-liste">' + ux.map(function (e) {
+                    var v = OCDE_DECL.reponses[e.cle] || '';
+                    return '<li' + (v ? ' data-etat="' + _ocdeEsc(v) + '"' : '')
+                      + '><div class="ow-t"><code>' + _ocdeEsc(e.cle)
+                      + '</code>' + (e.volet ? ' <em>' + _ocdeEsc(e.volet)
+                        + '</em>' : '') + '</div>'
+                      + '<p lang="en" class="ocde-vo">' + _ocdeEsc(e.en) + '</p>'
+                      + _choix(R.etats, R.ordre_etats, v, 'ocdeRepondre', e.cle)
+                      + '</li>';
+                  }).join('') + '</ul></div>';
+            }).join('')
+          + '</details>';
+      }).join('');
+      qb.innerHTML = hq + '<div id="ocde-verdict"></div>';
+    }
+  }
+
+  /* ── 3. CONFORMITÉ : les six feuilles de route ───────────────────────── */
+  var cb = document.getElementById('ocde-conformite-body');
+  if (cb) {
+    cb.className = '';
+    var F = R.feuilles;
+    cb.innerHTML = '<div class="gen-bloc"><h3>Les ponts, donnés par le '
+      + 'document lui-même</h3><p>' + _ocdeEsc(F.dit) + '</p>'
+      + '<p class="ocde-vo"><i>' + _ocdeEsc(F.avertissement) + '</i></p></div>'
+      + F.etapes.map(function (e) {
+          return '<details class="q-ch"><summary><b>Étape ' + e.etape + ' — '
+            + _ocdeEsc(e.nom) + '</b><span class="q-nb">' + e.cadres
+            + ' cadres · ' + e.mesures + ' mesuré' + (e.mesures > 1 ? 's' : '')
+            + ' ici</span></summary>'
+            + '<table class="ocde-feuille"><thead><tr><th>Cadre</th>'
+            + '<th>Dispositions voisines</th><th>Sentinel</th></tr></thead>'
+            + '<tbody>' + e.lignes.map(function (l) {
+                return '<tr' + (l.mesure ? ' data-mesure="oui"' : '') + '>'
+                  + '<td>' + _ocdeEsc(l.nom)
+                  + (l.tiers ? ' <span class="ocde-tiers" title="Matériel de '
+                      + 'tiers : la licence CC BY de l’OCDE ne le couvre pas. '
+                      + 'Numéro et intitulé seulement.">tiers</span>' : '')
+                  + '</td><td lang="en">' + _ocdeEsc(l.disposition) + '</td>'
+                  + '<td>' + (l.mesure
+                      ? '<b>mesuré</b>'
+                      : (l.note ? _ocdeEsc(l.note) : 'non tenu ici'))
+                  + '</td></tr>';
+              }).join('') + '</tbody></table></details>';
+        }).join('')
+      + _ocdeLicence(R);
+  }
+
+  /* ── 4. ANALYSE : ce que la diligence ajoute à la conformité ─────────── */
+  var ab = document.getElementById('ocde-analyse-body');
+  if (ab) {
+    ab.className = '';
+    ab.innerHTML = '<div class="gen-bloc"><h3>La source</h3>'
+      + '<ul class="nist-gen">'
+      + [['Titre', R.source.en], ['Éditeur', R.source.editeur],
+         ['Millésime', R.source.millesime], ['Approbation', R.source.approuve],
+         ['Met en œuvre', R.source.met_en_oeuvre],
+         ['Socle', R.source.socle], ['DOI', R.source.doi],
+         ['Licence', R.source.licence]].map(function (p) {
+          return '<li><div><b>' + _ocdeEsc(p[0]) + '</b><i>'
+            + _ocdeEsc(p[1]) + '</i></div></li>'; }).join('')
+      + '</ul></div>'
+      + '<div class="gen-bloc"><h3>Ce que ce module refuse de dire</h3>'
+      + '<ul class="nist-gen">' + R.reserves.map(function (x) {
+          return '<li><div><b>' + _ocdeEsc(x.nom) + '</b><i>'
+            + _ocdeEsc(x.dit) + '</i></div></li>'; }).join('') + '</ul></div>'
+      + '<div class="gen-bloc"><h3>Ce que le document s’exclut lui-même</h3>'
+      + '<ul class="nist-gen">' + R.hors_perimetre.map(function (x) {
+          return '<li><div><b>' + _ocdeEsc(x.quoi) + '</b><i>'
+            + _ocdeEsc(x.dit) + '</i></div></li>'; }).join('') + '</ul></div>'
+      + '<div class="gen-bloc"><h3>Ce que la licence interdit</h3>'
+      + '<ul class="nist-gen">' + R.interdits.map(function (x) {
+          return '<li><div><b>' + _ocdeEsc(x.dit) + '</b><i>'
+            + _ocdeEsc(x.fait) + '</i></div></li>'; }).join('') + '</ul></div>'
+      + '<div class="gen-bloc"><h3>Les options de réparation que le document '
+      + 'nomme</h3><ul class="nist-gen">' + R.reparations.map(function (x) {
+          return '<li><div><b>' + _ocdeEsc(x.nom) + '</b><i>'
+            + _ocdeEsc(x.dit) + '</i></div></li>'; }).join('') + '</ul></div>'
+      + _ocdeLicence(R);
+  }
+
+  ocdeEvaluer();
+}
+
+/* ── LE VERDICT ─────────────────────────────────────────────────────── */
+
+function ocdeEvaluer() {
+  if (!OCDE_REF) return;
+  fetch('/api/ocde/evaluer', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ declaration: OCDE_DECL })
+  }).then(function (r) { return r.json(); })
+    .then(function (j) {
+      if (!j || !j.ok) return;
+      OCDE_EVAL = j;
+      var v = document.getElementById('ocde-verdict');
+      if (!v) return;
+      var sc = j.score;
+      v.innerHTML = '<div class="q-verdict q-' + _ocdeEsc(j.tete) + '">'
+        + '<div class="q-taux"><b>' + (sc.taux === null ? '—' : sc.taux + ' %')
+        + '</b><span>' + _ocdeEsc(j.nom_du_taux) + '</span></div>'
+        + '<p>' + _ocdeEsc(j.dit) + '</p>'
+        + '<p class="q-trois">Travail déclaré : <b>' + sc.brut + ' %</b> · '
+        + 'ce que la qualification laisse revendiquer : <b>' + sc.plafond
+        + ' %</b> · retenu : <b>' + sc.taux + ' %</b></p>'
+        + (sc.verrous.length
+            ? '<ul class="q-verrous">' + sc.verrous.map(function (x) {
+                return '<li><b>' + _ocdeEsc(x.dit) + '</b> '
+                  + _ocdeEsc(x.porte_sur) + ' <code>' + _ocdeEsc(x.ou)
+                  + '</code></li>'; }).join('') + '</ul>'
+            : '')
+        + '<ul class="q-parts">' + sc.etapes_plafonnees.map(function (e) {
+            var brut = sc.etapes.filter(function (x) {
+              return x.cle === e.cle; })[0] || {};
+            return '<li><span>Étape ' + e.num + '</span><b>'
+              + (e.taux === null ? '—' : e.taux + ' %') + '</b>'
+              + (brut.taux !== e.taux
+                  ? '<i>plafonnée — ' + brut.taux + ' % déclarés</i>' : '')
+              + '</li>';
+          }).join('') + '</ul>'
+        + (j.plan && j.plan.actions.length
+            ? '<ol class="q-plan">' + j.plan.actions.map(function (a) {
+                return '<li><b>' + _ocdeEsc(a.quoi) + '</b> '
+                  + _ocdeEsc(a.pourquoi) + ' <code>' + _ocdeEsc(a.ou)
+                  + '</code></li>'; }).join('') + '</ol>'
+            : '')
+        + '</div>';
+    }).catch(function () {});
+}
+
+function ocdeInit() {
+  OCDE_DECL = _ocdeNormaliser(_declLire(OCDE_CLE_STOCK));
+  declPublier();
+  if (OCDE_REF) { ocdePeindre(); return; }
+  fetch('/api/ocde/referentiel')
+    .then(function (r) { return r.json(); })
+    .then(function (j) {
+      if (!j || !j.ok) throw new Error('referentiel');
+      OCDE_REF = j.referentiel;
+      ocdePeindre();
+    })
+    .catch(function () {
+      /* RIEN PLUTÔT QU'UN RÉFÉRENTIEL PARTIEL : cent quinze exemples dont il
+         en manque vingt se lisent comme quatre-vingt-quinze, et personne ne
+         le voit. */
+      ['ocde-processus-body', 'ocde-questionnaire-body',
+       'ocde-conformite-body', 'ocde-analyse-body'].forEach(function (id) {
+        var e = document.getElementById(id);
+        if (e) e.innerHTML = '<div class="veille-loading">Le référentiel est '
+          + 'momentanément indisponible. Rien n’est affiché plutôt qu’une '
+          + 'liste partielle.</div>';
+      });
+    });
+}
+window.ocdeInit = ocdeInit;
+
+
 function nistInit() {
   /* LES RÉPONSES SURVIVENT À LA FERMETURE DE L'ONGLET, et repartent vers le
      taux de conformité dès le chargement — sans quoi le visiteur qui a
@@ -31239,6 +31841,12 @@ var RAIL_DECL = {
      « sans objet » plutôt que « — ». Le traducteur du serveur fait la
      distinction ; l'écran envoie ce qu'il tient, sans trier. */
   en18286: function () { return EN18286_DECL; },
+  /* LA DILIGENCE OCDE : les groupes, l'implication, les reponses et
+     la priorisation partent ENSEMBLE. Les separer ferait arriver
+     un questionnaire sans sa qualification — et le moteur, qui
+     plafonne sur l'implication, rendrait un taux plus haut que
+     l'ecran. */
+  ocde: function () { return OCDE_DECL; },
   nist_ai_rmf: function () { return { etats: NIST_DECL, profil: GENAI_DECL }; },
   owasp_llm: function () { return { etats: OWASP_DECL }; },
   nist_800_53: function () { return { socle: N53_SOCLE || null, etats: _n53Etats() }; },

@@ -161,14 +161,14 @@
   {
    "nom": "litteraux rejoué garde les chaînes disparues du JavaScript",
    "fichier": "outils/i18n_sentinel.py",
-   "avant": "    effacees = retirer_litteraux(cat)\n",
-   "apres": "    effacees = 0\n",
+   "avant": "    effacees = retirer_source(cat, '_js')\n",
+   "apres": "    effacees = 0  #\n",
    "regle": "test_litteraux_en_ligne_de_commande_ajoute_la_page_js_au_catalogue"
   },
   {
    "nom": "litteraux rejoué efface les entrées vues à l'écran avec leurs pages",
    "fichier": "outils/i18n_sentinel.py",
-   "avant": "            if pages == ['_js']:",
+   "avant": "            if pages == [page]:",
    "apres": "            if True:",
    "regle": "test_litteraux_en_ligne_de_commande_ajoute_la_page_js_au_catalogue"
   },
@@ -189,7 +189,7 @@
   {
    "nom": "lots ne regroupe plus les petites rubriques : un fichier par rubrique de 80 mots",
    "fichier": "outils/i18n_sentinel.py",
-   "avant": "        if total < taille and rub not in ('_coquille', '_js'):",
+   "avant": "        if total < taille and rub not in PAGES_HORS_MENU:",
    "apres": "        if False:",
    "regle": "test_lots_regroupent_les_petites_rubriques_entieres_sans_depasser_la_taille"
   },
@@ -203,8 +203,8 @@
   {
    "nom": "lots regroupe la coquille avec les rubriques du menu",
    "fichier": "outils/i18n_sentinel.py",
-   "avant": "        if total < taille and rub not in ('_coquille', '_js'):",
-   "apres": "        if total < taille:",
+   "avant": "        if total < taille and rub not in PAGES_HORS_MENU:",
+   "apres": "        if total < taille or True:",
    "regle": "test_lots_regroupent_les_petites_rubriques_entieres_sans_depasser_la_taille"
   },
   {

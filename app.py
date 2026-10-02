@@ -2583,6 +2583,11 @@ import nist_800_53
 import nist_800_82
                     # la réserve voyage avec chaque réponse
 import owasp_llm    # noqa: E402  — le Top 10 LLM 2025, et surtout ce qu'ISO
+import ocde_ia     # noqa: E402  — le guide OCDE sur le devoir de
+                   # diligence pour une IA responsable : VOLONTAIRE, donc
+                   # aucune présomption à aucune date, et sous licence
+                   # CC BY 4.0 — les deux mentions que la licence impose
+                   # voyagent avec chaque réponse
 import conformite
 import qualification_assistee  # noqa: E402  — la proposition, jamais la
                     # décision : ce module ne connaît ni clé ni réseau
@@ -2624,6 +2629,44 @@ def api_en18286_evaluer():
     limite = data.get("limite")
     limite = limite if isinstance(limite, int) and 0 < limite <= 200 else None
     r["plan"] = en18286.plan(d, limite=limite)
+    return jsonify(r), 200
+
+
+@app.route('/api/ocde/referentiel', methods=['GET'])
+@rate_limit(limit=120, window=60)
+def api_ocde_referentiel():
+    """Diligence OCDE : 3 groupes, 6 étapes, 115 exemples, 91 lignes de pont.
+
+    DEUX CHOSES PARTENT AVEC LES DONNÉES, et aucune n'est une note de bas
+    d'écran. La première est la RÉSERVE : cet instrument est volontaire, il
+    n'ouvre aucune présomption de conformité, et aucune date ne changera
+    cela — à la différence de prEN 18286. La seconde est la LICENCE : les
+    intitulés et les 115 exemples pratiques viennent du document sous CC BY
+    4.0, et la licence impose de citer l'œuvre ET de porter deux mentions,
+    l'une pour la traduction, l'autre pour l'adaptation. C'est la condition
+    à laquelle ce module a le droit d'exister : elle ne se délègue pas au
+    gabarit."""
+    return jsonify({"ok": True, "referentiel": ocde_ia.referentiel()})
+
+
+@app.route('/api/ocde/evaluer', methods=['POST'])
+@rate_limit(limit=120, window=60)
+def api_ocde_evaluer():
+    """La couverture par étape, les verrous, la priorisation, le plan.
+
+    UN SEUL APPEL REND LE TOUT, parce que les quatre se lisent ensemble : le
+    plafond vient de l'implication déclarée et de la priorisation, et un
+    écran qui lirait le taux et le plan sur deux appels pourrait montrer un
+    plan qui ne mène pas à ce taux."""
+    data = request.get_json(silent=True) or {}
+    d = data.get("declaration") if isinstance(data.get("declaration"), dict) \
+        else data
+    r = ocde_ia.evaluer(d, aujourdhui=data.get("date"))
+    if not r.get("ok"):
+        return jsonify(r), 400
+    limite = data.get("limite")
+    limite = limite if isinstance(limite, int) and 0 < limite <= 200 else None
+    r["plan"] = ocde_ia.plan(d, limite=(limite or 12))
     return jsonify(r), 200
 
 

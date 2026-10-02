@@ -388,6 +388,12 @@ PAGES_APRES_LA_MESURE = frozenset({
     #  prEN 18286 — QUATRE ÉCRANS DE PLUS, NÉS APRÈS LA PHOTO EUX AUSSI.
     "en18286-processus", "en18286-questionnaire",
     "en18286-conformite", "en18286-analyse",
+    #  DILIGENCE OCDE — LES QUATRE DERNIERS, NÉS APRÈS LA PHOTO AUSSI. Ils
+    #  ne lui échappent pas pour autant : le lot de traduction les a battus
+    #  par les dix-sept clés de la coquille et par le catalogue, où leurs
+    #  quatre pages sont à 100 %.
+    "ocde-processus", "ocde-questionnaire",
+    "ocde-conformite", "ocde-analyse",
 })
 
 

@@ -1,0 +1,891 @@
+{
+ "_lot": "12-cartographier-5",
+ "_mots": 2292,
+ "_pages": [
+  "simulateur"
+ ],
+ "_rubrique": "CARTOGRAPHIER",
+ "bloc": {},
+ "texte": {
+  "Définition incomplète — Art. #(#)": {
+   "en": "Incomplete definition — Art. #(#)",
+   "fr": "Définition incomplète — Art. 3(1)"
+  },
+  "Délégation de service public, mission d'intérêt général : hôpital privé, opérateur de transport, organisme de protection sociale.": {
+   "en": "Delegated public service, mission of general interest: private hospital, transport operator, social protection body.",
+   "fr": "Délégation de service public, mission d'intérêt général : hôpital privé, opérateur de transport, organisme de protection sociale."
+  },
+  "Démocratie / Élections": {
+   "en": "Democracy / Elections",
+   "fr": "Démocratie / Élections"
+  },
+  "Déployeur — nous l'utilisons sous notre autorité, dans un cadre professionnel": {
+   "en": "Deployer — we use it under our authority, in a professional context",
+   "fr": "Déployeur — nous l'utilisons sous notre autorité, dans un cadre professionnel"
+  },
+  "Détecte des écarts sans se substituer à l'évaluation humaine": {
+   "en": "Detects deviations without replacing the human assessment",
+   "fr": "Détecte des écarts sans se substituer à l'évaluation humaine"
+  },
+  "Développé et mis en service dans le seul but de la recherche et du développement scientifiques": {
+   "en": "Developed and put into service for the sole purpose of scientific research and development",
+   "fr": "Développé et mis en service dans le seul but de la recherche et du développement scientifiques"
+  },
+  "Elles sont employées, et pas seulement produites.": {
+   "en": "They are used, and not merely produced.",
+   "fr": "Elles sont employées, et pas seulement produites."
+  },
+  "Emploi / RH / Recrutement": {
+   "en": "Employment / HR / Recruitment",
+   "fr": "Emploi / RH / Recrutement"
+  },
+  "En tirez-vous une contrepartie, sous quelque forme que ce soit ?": {
+   "en": "Do you obtain anything in return, in any form whatsoever?",
+   "fr": "En tirez-vous une contrepartie, sous quelque forme que ce soit ?"
+  },
+  "Entrée en vigueur du Règlement (UE) #/#": {
+   "en": "Entry into force of Regulation (EU) #/#",
+   "fr": "Entrée en vigueur du Règlement (UE) 2024/1689"
+  },
+  "Est-ce bien un « système d'IA » au sens du règlement ?": {
+   "en": "Is it really an “AI system” within the meaning of the Regulation?",
+   "fr": "Est-ce bien un « système d'IA » au sens du règlement ?"
+  },
+  "Ex: alerte sur anomalie, sans influencer la décision finale": {
+   "en": "E.g.: alert on an anomaly, without influencing the final decision",
+   "fr": "Ex: alerte sur anomalie, sans influencer la décision finale"
+  },
+  "Ex: correction orthographique d'un texte déjà rédigé par un humain": {
+   "en": "E.g.: spelling correction of a text already written by a human",
+   "fr": "Ex: correction orthographique d'un texte déjà rédigé par un humain"
+  },
+  "Ex: formatage de données, extraction d'informations sans interprétation": {
+   "en": "E.g.: data formatting, information extraction without interpretation",
+   "fr": "Ex: formatage de données, extraction d'informations sans interprétation"
+  },
+  "Ex: pré-tri ou pré-classement avant examen humain complet": {
+   "en": "E.g.: pre-sorting or pre-ranking before a full human review",
+   "fr": "Ex: pré-tri ou pré-classement avant examen humain complet"
+  },
+  "Exception du point (f) : seul cet usage échappe à l'interdiction de l'inférence des émotions.": {
+   "en": "Exception under point (f): only this use escapes the prohibition of emotion inference.",
+   "fr": "Exception du point (f) : seul cet usage échappe à l'interdiction de l'inférence des émotions."
+  },
+  "Exploite les vulnérabilités d'une personne ou d'un groupe": {
+   "en": "Exploits the vulnerabilities of a person or a group",
+   "fr": "Exploite les vulnérabilités d'une personne ou d'un groupe"
+  },
+  "Fournisseur GPAI - Art. # applicables (documentation, policy droits auteur, evaluations).": {
+   "en": "GPAI provider - Art. # apply (documentation, copyright policy, evaluations).",
+   "fr": "Fournisseur GPAI - Art. 53 applicables (documentation, policy droits auteur, evaluations)."
+  },
+  "Fournisseur — nous le développons, ou nous le mettons sur le marché sous notre nom": {
+   "en": "Provider — we develop it, or we place it on the market under our name",
+   "fr": "Fournisseur — nous le développons, ou nous le mettons sur le marché sous notre nom"
+  },
+  "GPAI / Données": {
+   "en": "GPAI / Data",
+   "fr": "GPAI / Données"
+  },
+  "Gouvernance (Chap. VII) — Modèles GPAI (Chap. V) — Autorités nationales désignées": {
+   "en": "Governance (Chap. VII) — GPAI models (Chap. V) — Designated national authorities",
+   "fr": "Gouvernance (Chap. VII) — Modèles GPAI (Chap. V) — Autorités nationales désignées"
+  },
+  "Gouvernance (Chap. VII) — Modèles GPAI (Chap. V) — Autorités nationales désignées — Sanctions des États membres (Chap. XII, hors Art. #)": {
+   "en": "Governance (Chap. VII) — GPAI models (Chap. V) — Designated national authorities — Member State penalties (Chap. XII, excluding Art. #)",
+   "fr": "Gouvernance (Chap. VII) — Modèles GPAI (Chap. V) — Autorités nationales désignées — Sanctions des États membres (Chap. XII, hors Art. 101)"
+  },
+  "Génère des contenus synthétiques (texte, image, voix, vidéo)": {
+   "en": "Generates synthetic content (text, image, voice, video)",
+   "fr": "Génère des contenus synthétiques (texte, image, voix, vidéo)"
+  },
+  "Génère ou manipule des images, vidéos ou sons sexuellement explicites — ou montrant les parties intimes — d'une personne identifiable, sans son consentement": {
+   "en": "Generates or manipulates sexually explicit images, videos or audio — or images showing the intimate parts — of an identifiable person, without their consent",
+   "fr": "Génère ou manipule des images, vidéos ou sons sexuellement explicites — ou montrant les parties intimes — d'une personne identifiable, sans son consentement"
+  },
+  "Génère ou manipule du matériel d'abus sexuel d'enfants": {
+   "en": "Generates or manipulates child sexual abuse material",
+   "fr": "Génère ou manipule du matériel d'abus sexuel d'enfants"
+  },
+  "Hors UE — mais système utilisé dans l'UE ou affectant des personnes dans l'UE": {
+   "en": "Outside the EU — but the system is used in the EU or affects people in the EU",
+   "fr": "Hors UE — mais système utilisé dans l'UE ou affectant des personnes dans l'UE"
+  },
+  "Hors UE — système uniquement utilisé hors UE": {
+   "en": "Outside the EU — system used only outside the EU",
+   "fr": "Hors UE — système uniquement utilisé hors UE"
+  },
+  "Identification biométrique a posteriori uniquement": {
+   "en": "Post-remote biometric identification only",
+   "fr": "Identification biométrique a posteriori uniquement"
+  },
+  "Identification du système IA": {
+   "en": "Identification of the AI system",
+   "fr": "Identification du système IA"
+  },
+  "Identification à distance · catégorisation par attributs sensibles · reconnaissance d'émotions": {
+   "en": "Remote identification · categorisation by sensitive attributes · emotion recognition",
+   "fr": "Identification à distance · catégorisation par attributs sensibles · reconnaissance d'émotions"
+  },
+  "Il fonctionne avec un certain degré d'autonomie": {
+   "en": "It operates with a certain degree of autonomy",
+   "fr": "Il fonctionne avec un certain degré d'autonomie"
+  },
+  "Il peut faire preuve d'adaptativité après son déploiement": {
+   "en": "It may exhibit adaptiveness after deployment",
+   "fr": "Il peut faire preuve d'adaptativité après son déploiement"
+  },
+  "Il poursuit des objectifs explicites ou implicites": {
+   "en": "It pursues explicit or implicit objectives",
+   "fr": "Il poursuit des objectifs explicites ou implicites"
+  },
+  "Il produit des prédictions, contenus, recommandations ou décisions": {
+   "en": "It produces predictions, content, recommendations or decisions",
+   "fr": "Il produit des prédictions, contenus, recommandations ou décisions"
+  },
+  "Il produit un résultat sans qu'un humain valide chaque étape intermédiaire.": {
+   "en": "It produces an output without a human validating each intermediate step.",
+   "fr": "Il produit un résultat sans qu'un humain valide chaque étape intermédiaire."
+  },
+  "Il s'exécute sur une machine, matériel ou logiciel.": {
+   "en": "It runs on a machine, hardware or software.",
+   "fr": "Il s'exécute sur une machine, matériel ou logiciel."
+  },
+  "Impact sur des groupes de personnes": {
+   "en": "Impact on groups of people",
+   "fr": "Impact sur des groupes de personnes"
+  },
+  "Importateur": {
+   "en": "Importer",
+   "fr": "Importateur"
+  },
+  "Importateur — nous mettons sur le marché de l'Union un système d'un fournisseur établi hors UE": {
+   "en": "Importer — we place on the Union market a system from a provider established outside the EU",
+   "fr": "Importateur — nous mettons sur le marché de l'Union un système d'un fournisseur établi hors UE"
+  },
+  "Incertain — à analyser": {
+   "en": "Uncertain — to be analysed",
+   "fr": "Incertain — à analyser"
+  },
+  "Infrastructures critiques": {
+   "en": "Critical infrastructure",
+   "fr": "Infrastructures critiques"
+  },
+  "Infère les émotions de personnes au travail ou dans un établissement d'enseignement": {
+   "en": "Infers the emotions of persons in the workplace or in an educational institution",
+   "fr": "Infère les émotions de personnes au travail ou dans un établissement d'enseignement"
+  },
+  "Interdictions (Art. #) — Définitions (Chap. I) — Obligation de culture IA (Art. #)": {
+   "en": "Prohibitions (Art. #) — Definitions (Chapter I) — AI literacy obligation (Art. #)",
+   "fr": "Interdictions (Art. 5) — Définitions (Chap. I) — Obligation de culture IA (Art. 4)"
+  },
+  "Interdit, sauf trois exceptions strictes — victimes et personnes disparues, menace imminente, infraction grave — avec autorisation préalable d'une autorité judiciaire ou administrative indépendante (Art. #(#) à #(#)).": {
+   "en": "Prohibited, except for three strict exceptions — victims and missing persons, imminent threat, serious offence — with prior authorisation from an independent judicial or administrative authority (Art. #(#) to #(#)).",
+   "fr": "Interdit, sauf trois exceptions strictes — victimes et personnes disparues, menace imminente, infraction grave — avec autorisation préalable d'une autorité judiciaire ou administrative indépendante (Art. 5(2) à 5(7))."
+  },
+  "Je déploie un GPAI tiers (OpenAI, Anthropic, Mistral…)": {
+   "en": "I deploy a third-party GPAI (OpenAI, Anthropic, Mistral…)",
+   "fr": "Je déploie un GPAI tiers (OpenAI, Anthropic, Mistral…)"
+  },
+  "Je ne sais pas encore": {
+   "en": "I do not know yet",
+   "fr": "Je ne sais pas encore"
+  },
+  "Je suis une personne physique et je l'utilise à titre strictement personnel et non professionnel": {
+   "en": "I am a natural person and I use it strictly for personal, non-professional purposes",
+   "fr": "Je suis une personne physique et je l'utilise à titre strictement personnel et non professionnel"
+  },
+  "L'analyse d'impact sur les droits fondamentaux (AIDF) n'est pas due par tous les déployeurs de systèmes à haut risque : elle ne l'est que dans les cas énumérés ci-dessous. Cette question ne sert qu'au rôle de déployeur ; elle est sans effet sur les autres.": {
+   "en": "The fundamental rights impact assessment (FRIA) is not owed by every deployer of high-risk systems: it is owed only in the cases listed below. This question serves only the deployer role; it has no effect on the others.",
+   "fr": "L'analyse d'impact sur les droits fondamentaux (AIDF) n'est pas due par tous les déployeurs de systèmes à haut risque : elle ne l'est que dans les cas énumérés ci-dessous. Cette question ne sert qu'au rôle de déployeur ; elle est sans effet sur les autres."
+  },
+  "L'antériorité tombe : le système est traité comme un système neuf.": {
+   "en": "Grandfathering falls away: the system is treated as a new system.",
+   "fr": "L'antériorité tombe : le système est traité comme un système neuf."
+  },
+  "L'exemption ne se pose pas.": {
+   "en": "The exemption does not arise.",
+   "fr": "L'exemption ne se pose pas."
+  },
+  "L'exemption « libre et ouverte » ne s'applique pas": {
+   "en": "The “free and open-source” exemption does not apply",
+   "fr": "L'exemption « libre et ouverte » ne s'applique pas"
+  },
+  "L'exemption « libre et ouverte » paraît applicable": {
+   "en": "The “free and open-source” exemption appears to apply",
+   "fr": "L'exemption « libre et ouverte » paraît applicable"
+  },
+  "L'élément décisif. Apprentissage, raisonnement, modélisation — par opposition à un enchaînement de règles écrites par une personne.": {
+   "en": "The decisive element. Learning, reasoning, modelling — as opposed to a chain of rules written by a person.",
+   "fr": "L'élément décisif. Apprentissage, raisonnement, modélisation — par opposition à un enchaînement de règles écrites par une personne."
+  },
+  "La condition de l'article #(#)(b) n'est pas remplie : pas de haut risque à ce titre.": {
+   "en": "The condition of Article #(#)(b) is not met: not high-risk on that basis.",
+   "fr": "La condition de l'article 6(1)(b) n'est pas remplie : pas de haut risque à ce titre."
+  },
+  "La fonction IA est une aide, une optimisation, une automatisation, un confort ou un contrôle qualité sans lien avec la sécurité": {
+   "en": "The AI function is an aid, an optimisation, an automation, a comfort feature or a quality check unrelated to safety",
+   "fr": "La fonction IA est une aide, une optimisation, une automatisation, un confort ou un contrôle qualité sans lien avec la sécurité"
+  },
+  "Lancer l'audit complet →": {
+   "en": "Run the full audit →",
+   "fr": "Lancer l'audit complet →"
+  },
+  "Le compte à rebours a commencé. Le texte est adopté et directement applicable selon son calendrier progressif.": {
+   "en": "The countdown has begun. The text is adopted and directly applicable according to its phased timetable.",
+   "fr": "Le compte à rebours a commencé. Le texte est adopté et directement applicable selon son calendrier progressif."
+  },
+  "Le diffusez-vous sous licence libre et ouverte ?": {
+   "en": "Do you distribute it under a free and open-source licence?",
+   "fr": "Le diffusez-vous sous licence libre et ouverte ?"
+  },
+  "Le haut risque ne disparaît pas : son calendrier est repoussé à une date désormais fixe. Préparer la documentation technique et les FRIA.": {
+   "en": "High risk is not going away: its timetable is pushed back to a date that is now fixed. Prepare the technical documentation and the FRIAs.",
+   "fr": "Le haut risque ne disparaît pas : son calendrier est repoussé à une date désormais fixe. Préparer la documentation technique et les FRIA."
+  },
+  "Le haut risque ne disparaît pas : son calendrier est repoussé à une date désormais fixe. Préparer la documentation technique, la FRIA et le système de gestion de la qualité. Système déjà sur le marché : seule une modification importante de sa conception rend le régime applicable (Art. #(#)) ; systèmes destinés aux autorités publiques : mise en conformité au plus tard le # août #.": {
+   "en": "High risk does not go away: its timetable is pushed back to a date that is now fixed. Prepare the technical documentation, the FRIA and the quality management system. System already on the market: only a significant change in its design makes the regime applicable (Art. #(#)); systems intended for public authorities: compliance by # August # at the latest.",
+   "fr": "Le haut risque ne disparaît pas : son calendrier est repoussé à une date désormais fixe. Préparer la documentation technique, la FRIA et le système de gestion de la qualité. Système déjà sur le marché : seule une modification importante de sa conception rend le régime applicable (Art. 111(2)) ; systèmes destinés aux autorités publiques : mise en conformité au plus tard le 2 août 2030."
+  },
+  "Le haut risque, s'il existe, vient de l'annexe III.": {
+   "en": "High risk, if any, comes from Annex III.",
+   "fr": "Le haut risque, s'il existe, vient de l'annexe III."
+  },
+  "Le moment où la conformité coûte le moins cher à construire.": {
+   "en": "The moment when compliance is cheapest to build.",
+   "fr": "Le moment où la conformité coûte le moins cher à construire."
+  },
+  "Le produit relève du règlement Machines (UE) #/#": {
+   "en": "The product falls under the Machinery Regulation (EU) #/#",
+   "fr": "Le produit relève du règlement Machines (UE) 2023/1230"
+  },
+  "Le profilage annule systématiquement l'exception ci-dessus — le système reste haut risque dans tous les cas.": {
+   "en": "Profiling systematically cancels the exception above — the system remains high-risk in all cases.",
+   "fr": "Le profilage annule systématiquement l'exception ci-dessus — le système reste haut risque dans tous les cas."
+  },
+  "Le seul élément facultatif de la définition : « peut », et non « doit ».": {
+   "en": "The only optional element of the definition: “may”, not “must”.",
+   "fr": "Le seul élément facultatif de la définition : « peut », et non « doit »."
+  },
+  "Le simulateur rendra alors les obligations de CHAQUE rôle, sans trancher — et vous dira ce qui manque pour trancher.": {
+   "en": "The simulator will then return the obligations of EACH role, without deciding — and will tell you what is missing in order to decide.",
+   "fr": "Le simulateur rendra alors les obligations de CHAQUE rôle, sans trancher — et vous dira ce qui manque pour trancher."
+  },
+  "Le système est-il un composant de sécurité d'un produit — ou un produit — relevant de la législation d'harmonisation de l'annexe I ?": {
+   "en": "Is the system a safety component of a product — or a product — covered by the Annex I harmonisation legislation?",
+   "fr": "Le système est-il un composant de sécurité d'un produit — ou un produit — relevant de la législation d'harmonisation de l'annexe I ?"
+  },
+  "Le système prend ou influence directement la décision": {
+   "en": "The system takes or directly influences the decision",
+   "fr": "Le système prend ou influence directement la décision"
+  },
+  "Le système sort-il du champ du règlement ?": {
+   "en": "Does the system fall outside the scope of the Regulation?",
+   "fr": "Le système sort-il du champ du règlement ?"
+  },
+  "Le système vise à influencer les comportements de manière non transparente": {
+   "en": "The system aims to influence behaviour in a non-transparent way",
+   "fr": "Le système vise à influencer les comportements de manière non transparente"
+  },
+  "Les fournisseurs de modèles déjà sur le marché avant le # août # doivent avoir pris les mesures nécessaires à leur conformité au plus tard à cette date.": {
+   "en": "Providers of models already on the market before # August # must have taken the measures needed for their compliance by that date at the latest.",
+   "fr": "Les fournisseurs de modèles déjà sur le marché avant le 2 août 2025 doivent avoir pris les mesures nécessaires à leur conformité au plus tard à cette date."
+  },
+  "Les fournisseurs de modèles généralistes sont directement concernés. Les entreprises utilisatrices doivent suivre ce que leurs fournisseurs documentent.": {
+   "en": "Providers of general-purpose models are directly concerned. User companies must follow what their providers document.",
+   "fr": "Les fournisseurs de modèles généralistes sont directement concernés. Les entreprises utilisatrices doivent suivre ce que leurs fournisseurs documentent."
+  },
+  "Les huit pratiques d'IA interdites de l'article #(#), points a à h, s'appliquent depuis cette date. L'article # oblige fournisseurs et déployeurs à prendre des mesures pour développer la culture IA de leur personnel — sans garantir un niveau donné à chaque personne (texte remplacé par le règlement (UE) #/#).": {
+   "en": "The eight prohibited AI practices of Article #(#), points a to h, have applied since that date. Article # requires providers and deployers to take measures to develop the AI literacy of their staff — without guaranteeing a given level for each person (text replaced by Regulation (EU) #/#).",
+   "fr": "Les huit pratiques d'IA interdites de l'article 5(1), points a à h, s'appliquent depuis cette date. L'article 4 oblige fournisseurs et déployeurs à prendre des mesures pour développer la culture IA de leur personnel — sans garantir un niveau donné à chaque personne (texte remplacé par le règlement (UE) 2026/1744)."
+  },
+  "Les industriels et fabricants de produits réglementés doivent raisonner cycle de vie, conformité produit et documentation technique.": {
+   "en": "Industrial firms and manufacturers of regulated products must think in terms of life cycle, product conformity and technical documentation.",
+   "fr": "Les industriels et fabricants de produits réglementés doivent raisonner cycle de vie, conformité produit et documentation technique."
+  },
+  "Les industriels et fabricants de produits réglementés doivent raisonner cycle de vie, conformité produit et documentation technique. Les machines (règlement (UE) #/#) passent en section B de l'annexe I : elles relèvent de leur propre législation, où les exigences IA sont ajoutées par acte délégué applicable au plus tard le # août #.": {
+   "en": "Manufacturers of regulated products must think in terms of life cycle, product compliance and technical documentation. Machinery (Regulation (EU) #/#) moves to Section B of Annex I: it falls under its own legislation, where the AI requirements are added by delegated act applicable by # August # at the latest.",
+   "fr": "Les industriels et fabricants de produits réglementés doivent raisonner cycle de vie, conformité produit et documentation technique. Les machines (règlement (UE) 2023/1230) passent en section B de l'annexe I : elles relèvent de leur propre législation, où les exigences IA sont ajoutées par acte délégué applicable au plus tard le 2 août 2028."
+  },
+  "Les organisations doivent déjà former les personnes qui utilisent ou supervisent des systèmes d'IA et bannir les pratiques interdites.": {
+   "en": "Organisations must already train the people who use or oversee AI systems, and ban the prohibited practices.",
+   "fr": "Les organisations doivent déjà former les personnes qui utilisent ou supervisent des systèmes d'IA et bannir les pratiques interdites."
+  },
+  "Les points ba et bb s'appliqueront à compter du # décembre # : ce que ce système fait sera alors interdit.": {
+   "en": "Points ba and bb will apply from # December #: what this system does will then be prohibited.",
+   "fr": "Les points ba et bb s'appliqueront à compter du 2 décembre 2026 : ce que ce système fait sera alors interdit."
+  },
+  "Les points ba et bb sont interdits depuis le # décembre #.": {
+   "en": "Points ba and bb have been prohibited since # December #.",
+   "fr": "Les points ba et bb sont interdits depuis le 2 décembre 2026."
+  },
+  "Les quatre types de sorties visés par la définition.": {
+   "en": "The four types of output covered by the definition.",
+   "fr": "Les quatre types de sorties visés par la définition."
+  },
+  "Licence payante, abonnement, paiement à l'usage.": {
+   "en": "Paid licence, subscription, pay-per-use.",
+   "fr": "Licence payante, abonnement, paiement à l'usage."
+  },
+  "Maintenance prédictive, optimisation de processus, outil interne sans impact externe": {
+   "en": "Predictive maintenance, process optimisation, internal tool with no external impact",
+   "fr": "Maintenance prédictive, optimisation de processus, outil interne sans impact externe"
+  },
+  "Mandataire UE obligatoire": {
+   "en": "EU authorised representative required",
+   "fr": "Mandataire UE obligatoire"
+  },
+  "Marquage lisible par machine à la charge du fournisseur (Art. #(#)) ; signalement des hypertrucages et des textes d'intérêt public à la charge du déployeur (Art. #(#)).": {
+   "en": "Machine-readable marking is the provider's responsibility (Art. #(#)); disclosure of deepfakes and of texts of public interest is the deployer's responsibility (Art. #(#)).",
+   "fr": "Marquage lisible par machine à la charge du fournisseur (Art. 50(2)) ; signalement des hypertrucages et des textes d'intérêt public à la charge du déployeur (Art. 50(4))."
+  },
+  "Migration / Asile / Frontières": {
+   "en": "Migration / Asylum / Borders",
+   "fr": "Migration / Asile / Frontières"
+  },
+  "Modele a risque systemique (seuil #^# FLOPs) - Art. # applicables.": {
+   "en": "Systemic-risk model (#^# FLOPs threshold) - Art. # apply.",
+   "fr": "Modele a risque systemique (seuil 10^25 FLOPs) - Art. 55 applicables."
+  },
+  "Modèle entraîné sur large quantité de données, polyvalent, utilisable dans de multiples contextes (LLM, modèle de vision généraliste, modèle audio).": {
+   "en": "Model trained on a large amount of data, versatile, usable in multiple contexts (LLM, general-purpose vision model, audio model).",
+   "fr": "Modèle entraîné sur large quantité de données, polyvalent, utilisable dans de multiples contextes (LLM, modèle de vision généraliste, modèle audio)."
+  },
+  "Modèles d'IA à usage général mis sur le marché avant le # août # — mise en conformité (Art. #(#))": {
+   "en": "General-purpose AI models placed on the market before # August # — compliance (Art. #(#))",
+   "fr": "Modèles d'IA à usage général mis sur le marché avant le 2 août 2025 — mise en conformité (Art. 111(3))"
+  },
+  "Modèles à usage général (GPAI) et données": {
+   "en": "General-purpose AI models (GPAI) and data",
+   "fr": "Modèles à usage général (GPAI) et données"
+  },
+  "Ni l'un ni l'autre — mais le système évalue la solvabilité, ou tarife un risque en assurance vie ou santé": {
+   "en": "Neither — but the system assesses creditworthiness, or prices a risk in life or health insurance",
+   "fr": "Ni l'un ni l'autre — mais le système évalue la solvabilité, ou tarife un risque en assurance vie ou santé"
+  },
+  "Nom du système IA": {
+   "en": "Name of the AI system",
+   "fr": "Nom du système IA"
+  },
+  "Nommez le système, puis déroulez les quatre étapes": {
+   "en": "Name the system, then work through the four steps",
+   "fr": "Nommez le système, puis déroulez les quatre étapes"
+  },
+  "Non interdit par le point (h), mais à haut risque (annexe III, point #(a)) et soumis à l'article # du RGPD.": {
+   "en": "Not prohibited under point (h), but high-risk (Annex III, point #(a)) and subject to Article # of the GDPR.",
+   "fr": "Non interdit par le point (h), mais à haut risque (annexe III, point 1(a)) et soumis à l'article 9 du RGPD."
+  },
+  "Non — ce n'est pas un produit de l'annexe I": {
+   "en": "No — it is not an Annex I product",
+   "fr": "Non — ce n'est pas un produit de l'annexe I"
+  },
+  "Non — diffusion propriétaire ou fermée": {
+   "en": "No — proprietary or closed distribution",
+   "fr": "Non — diffusion propriétaire ou fermée"
+  },
+  "Non — données anonymisées ou techniques uniquement": {
+   "en": "No — anonymised or technical data only",
+   "fr": "Non — données anonymisées ou techniques uniquement"
+  },
+  "Non — pas d'identification biométrique publique": {
+   "en": "No — no public biometric identification",
+   "fr": "Non — pas d'identification biométrique publique"
+  },
+  "Non — système IA spécifique à une tâche": {
+   "en": "No — task-specific AI system",
+   "fr": "Non — système IA spécifique à une tâche"
+  },
+  "Non — système backend sans interaction directe": {
+   "en": "No — backend system with no direct interaction",
+   "fr": "Non — système backend sans interaction directe"
+  },
+  "Notation sociale": {
+   "en": "Social scoring",
+   "fr": "Notation sociale"
+  },
+  "Nous avons apposé notre nom ou notre marque sur le système": {
+   "en": "We have put our name or trademark on the system",
+   "fr": "Nous avons apposé notre nom ou notre marque sur le système"
+  },
+  "Nous avons changé sa destination, et il devient de ce fait à haut risque": {
+   "en": "We have changed its intended purpose, and it becomes high-risk as a result",
+   "fr": "Nous avons changé sa destination, et il devient de ce fait à haut risque"
+  },
+  "Nous en demandons un prix": {
+   "en": "We charge a price for it",
+   "fr": "Nous en demandons un prix"
+  },
+  "Nous l'avons modifié substantiellement": {
+   "en": "We have substantially modified it",
+   "fr": "Nous l'avons modifié substantiellement"
+  },
+  "Nous monétisons un autre service qui en dépend, ou exigeons des données personnelles en contrepartie": {
+   "en": "We monetise another service that depends on it, or require personal data in return",
+   "fr": "Nous monétisons un autre service qui en dépend, ou exigeons des données personnelles en contrepartie"
+  },
+  "Nous recevons des dons liés à sa mise à disposition": {
+   "en": "We receive donations linked to making it available",
+   "fr": "Nous recevons des dons liés à sa mise à disposition"
+  },
+  "Nous vendons du support, de l'intégration ou de la maintenance autour": {
+   "en": "We sell support, integration or maintenance around it",
+   "fr": "Nous vendons du support, de l'intégration ou de la maintenance autour"
+  },
+  "Obligation d'information que l'utilisateur interagit avec une IA (Art. #)": {
+   "en": "Obligation to inform users that they are interacting with an AI (Art. #)",
+   "fr": "Obligation d'information que l'utilisateur interagit avec une IA (Art. 50.1)"
+  },
+  "Obligation de marquage et de watermarking (Art. #-#)": {
+   "en": "Marking and watermarking obligation (Art. #-#)",
+   "fr": "Obligation de marquage et de watermarking (Art. 50.2-4)"
+  },
+  "Obligations": {
+   "en": "Obligations",
+   "fr": "Obligations"
+  },
+  "Obligations de déployeur : vérification des politiques fournisseur, transparence utilisateurs": {
+   "en": "Deployer obligations: verification of provider policies, transparency towards users",
+   "fr": "Obligations de déployeur : vérification des politiques fournisseur, transparence utilisateurs"
+  },
+  "Obligations renforcées Art. # : évaluation adversariale, signalement incidents, cybersécurité": {
+   "en": "Enhanced obligations under Art. #: adversarial evaluation, incident reporting, cybersecurity",
+   "fr": "Obligations renforcées Art. 55 : évaluation adversariale, signalement incidents, cybersécurité"
+  },
+  "Obligations spécifiques Art. # (documentation, politique de droits d'auteur, résumé de données)": {
+   "en": "Specific obligations under Art. # (documentation, copyright policy, data summary)",
+   "fr": "Obligations spécifiques Art. 53 (documentation, politique de droits d'auteur, résumé de données)"
+  },
+  "Octroi/refus de crédit, recrutement, accès à des services, décision médicale": {
+   "en": "Granting/refusal of credit, recruitment, access to services, medical decision",
+   "fr": "Octroi/refus de crédit, recrutement, accès à des services, décision médicale"
+  },
+  "Organisme de droit public": {
+   "en": "Body governed by public law",
+   "fr": "Organisme de droit public"
+  },
+  "Organisme privé fournissant un service public": {
+   "en": "Private body providing a public service",
+   "fr": "Organisme privé fournissant un service public"
+  },
+  "Oui — GPAI à capacités systémiques (seuil #^# FLOPs)": {
+   "en": "Yes — GPAI with systemic capabilities (threshold #^# FLOPs)",
+   "fr": "Oui — GPAI à capacités systémiques (seuil 10^25 FLOPs)"
+  },
+  "Oui — chatbot, assistant, agent conversationnel": {
+   "en": "Yes — chatbot, assistant, conversational agent",
+   "fr": "Oui — chatbot, assistant, agent conversationnel"
+  },
+  "Oui — données personnelles standard": {
+   "en": "Yes — standard personal data",
+   "fr": "Oui — données personnelles standard"
+  },
+  "Oui — données sensibles (santé, biométrie, opinions politiques, origine ethnique…)": {
+   "en": "Yes — sensitive data (health, biometrics, political opinions, ethnic origin…)",
+   "fr": "Oui — données sensibles (santé, biométrie, opinions politiques, origine ethnique…)"
+  },
+  "Oui — et le produit exige une évaluation de conformité par un tiers": {
+   "en": "Yes — and the product requires third-party conformity assessment",
+   "fr": "Oui — et le produit exige une évaluation de conformité par un tiers"
+  },
+  "Oui — identification temps réel en espace public": {
+   "en": "Yes — real-time identification in a public space",
+   "fr": "Oui — identification temps réel en espace public"
+  },
+  "Oui — je développe/fournis un modèle GPAI": {
+   "en": "Yes — I develop/provide a GPAI model",
+   "fr": "Oui — je développe/fournis un modèle GPAI"
+  },
+  "Oui — licence libre et ouverte": {
+   "en": "Yes — free and open-source licence",
+   "fr": "Oui — licence libre et ouverte"
+  },
+  "Oui — mais le produit n'exige pas d'évaluation par un tiers": {
+   "en": "Yes — but the product does not require third-party assessment",
+   "fr": "Oui — mais le produit n'exige pas d'évaluation par un tiers"
+  },
+  "Oui — sans finalité répressive": {
+   "en": "Yes — without a law-enforcement purpose",
+   "fr": "Oui — sans finalité répressive"
+  },
+  "Oui — un tiers en a fait son système": {
+   "en": "Yes — a third party has made it its own system",
+   "fr": "Oui — un tiers en a fait son système"
+  },
+  "Oui — à des fins répressives (police, poursuites pénales)": {
+   "en": "Yes — for law-enforcement purposes (police, criminal prosecution)",
+   "fr": "Oui — à des fins répressives (police, poursuites pénales)"
+  },
+  "PRATIQUE INTERDITE": {
+   "en": "PROHIBITED PRACTICE",
+   "fr": "PRATIQUE INTERDITE"
+  },
+  "Pas d'AIDF au titre de l'article # — les autres obligations du déployeur restent dues.": {
+   "en": "No FRIA under Article # — the deployer’s other obligations remain due.",
+   "fr": "Pas d'AIDF au titre de l'article 27 — les autres obligations du déployeur restent dues."
+  },
+  "Pas d'obligation de transparence Art. #": {
+   "en": "No transparency obligation under Art. #",
+   "fr": "Pas d'obligation de transparence Art. 50"
+  },
+  "Pas de profilage individuel": {
+   "en": "No individual profiling",
+   "fr": "Pas de profilage individuel"
+  },
+  "Pas de techniques manipulatrices ou subliminales": {
+   "en": "No manipulative or subliminal techniques",
+   "fr": "Pas de techniques manipulatrices ou subliminales"
+  },
+  "Pas encore mis sur le marché — projet en cours": {
+   "en": "Not yet placed on the market — project in progress",
+   "fr": "Pas encore mis sur le marché — projet en cours"
+  },
+  "Pas soumis au régime GPAI des Art. #-#": {
+   "en": "Not subject to the GPAI regime of Art. #-#",
+   "fr": "Pas soumis au régime GPAI des Art. 51-55"
+  },
+  "Passé en section B de l'annexe I : seuls l'article #(#), l'article #a et les articles # à # s'appliquent (Art. #(#)).": {
+   "en": "Moved to Section B of Annex I: only Article #(#), Article #a and Articles # to # apply (Art. #(#)).",
+   "fr": "Passé en section B de l'annexe I : seuls l'article 6(1), l'article 60a et les articles 102 à 112 s'appliquent (Art. 2(2))."
+  },
+  "Personne n'a repris, modifié ou réorienté ce système.": {
+   "en": "Nobody has taken over, modified or repurposed this system.",
+   "fr": "Personne n'a repris, modifié ou réorienté ce système."
+  },
+  "Poids, architecture et paramètres accessibles, licence permettant l'usage, la modification et la redistribution.": {
+   "en": "Weights, architecture and parameters accessible, licence allowing use, modification and redistribution.",
+   "fr": "Poids, architecture et paramètres accessibles, licence permettant l'usage, la modification et la redistribution."
+  },
+  "Polygraphes aux frontières · évaluation de risque migratoire · examen de demandes d'asile/visa · identification": {
+   "en": "Polygraphs at borders · migration risk assessment · examination of asylum/visa applications · identification",
+   "fr": "Polygraphes aux frontières · évaluation de risque migratoire · examen de demandes d'asile/visa · identification"
+  },
+  "Pratique interdite — Art. #(#)": {
+   "en": "Prohibited practice — Art. #(#)",
+   "fr": "Pratique interdite — Art. 5(1)"
+  },
+  "Pratique(s) reconnue(s) :": {
+   "en": "Practice(s) recognised:",
+   "fr": "Pratique(s) reconnue(s) :"
+  },
+  "Quel est l'impact du système sur les personnes ?": {
+   "en": "What is the system’s impact on people?",
+   "fr": "Quel est l'impact du système sur les personnes ?"
+  },
+  "Quel rôle tenez-vous pour ce système ?": {
+   "en": "What role do you hold for this system?",
+   "fr": "Quel rôle tenez-vous pour ce système ?"
+  },
+  "Questions spécifiques aux modèles de fondation, LLM et aux enjeux de données personnelles.": {
+   "en": "Questions specific to foundation models, LLMs and personal data issues.",
+   "fr": "Questions spécifiques aux modèles de fondation, LLM et aux enjeux de données personnelles."
+  },
+  "RGPD Art. #": {
+   "en": "GDPR Art. #",
+   "fr": "RGPD Art. 22"
+  },
+  "RGPD applicable, AIPD si risque élevé, droit d'opposition aux décisions automatisées (Art. #)": {
+   "en": "GDPR applicable, DPIA if high risk, right to object to automated decisions (Art. #)",
+   "fr": "RGPD applicable, AIPD si risque élevé, droit d'opposition aux décisions automatisées (Art. 22)"
+  },
+  "RGPD non applicable — vérifier réelle anonymisation": {
+   "en": "GDPR not applicable — check that the anonymisation is real",
+   "fr": "RGPD non applicable — vérifier réelle anonymisation"
+  },
+  "Recherche, essai ou développement avant toute mise sur le marché ou en service": {
+   "en": "Research, testing or development before any placing on the market or putting into service",
+   "fr": "Recherche, essai ou développement avant toute mise sur le marché ou en service"
+  },
+  "Recrutement/sélection · conditions de travail, promotion, licenciement, surveillance des performances": {
+   "en": "Recruitment/selection · working conditions, promotion, dismissal, performance monitoring",
+   "fr": "Recrutement/sélection · conditions de travail, promotion, licenciement, surveillance des performances"
+  },
+  "Red-teaming, évaluation des risques systémiques, signalement d'incidents à la Commission. Obligatoire si >#^# FLOPs.": {
+   "en": "Red-teaming, systemic risk assessment, incident reporting to the Commission. Mandatory if >#^# FLOPs.",
+   "fr": "Red-teaming, évaluation des risques systémiques, signalement d'incidents à la Commission. Obligatoire si >10^25 FLOPs."
+  },
+  "Règlement (UE) #/# du # juin #": {
+   "en": "Regulation (EU) #/# of # June #",
+   "fr": "Règlement (UE) 2024/1689 du 13 juin 2024"
+  },
+  "Régime complet, sans aménagement d'antériorité.": {
+   "en": "Full regime, with no grandfathering arrangement.",
+   "fr": "Régime complet, sans aménagement d'antériorité."
+  },
+  "Résultats": {
+   "en": "Results",
+   "fr": "Résultats"
+  },
+  "Secteur d'activité": {
+   "en": "Sector",
+   "fr": "Secteur d'activité"
+  },
+  "Services essentiels / Crédit / Aides": {
+   "en": "Essential services / Credit / Benefits",
+   "fr": "Services essentiels / Crédit / Aides"
+  },
+  "Ses sorties influencent un environnement physique ou virtuel": {
+   "en": "Its outputs influence a physical or virtual environment",
+   "fr": "Ses sorties influencent un environnement physique ou virtuel"
+  },
+  "Si l'organisation est une petite capitalisation intermédiaire (moins de # personnes, CA ≤ # M€ ou bilan ≤ # M€), le plafond est le plus bas des deux : # M€ (Art. #(#a)).": {
+   "en": "If the organisation is a small mid-cap enterprise (fewer than # persons, turnover ≤ # M€ or balance sheet ≤ # M€), the ceiling is the lower of the two: # M€ (Art. #(#a)).",
+   "fr": "Si l'organisation est une petite capitalisation intermédiaire (moins de 750 personnes, CA ≤ 150 M€ ou bilan ≤ 129 M€), le plafond est le plus bas des deux : 4,5 M€ (Art. 99(6a))."
+  },
+  "Si un domaine Annexe III est sélectionné — votre système remplit-il une de ces conditions ?": {
+   "en": "If an Annex III area is selected — does your system meet one of these conditions?",
+   "fr": "Si un domaine Annexe III est sélectionné — votre système remplit-il une de ces conditions ?"
+  },
+  "Sont interdits : générer ou manipuler des images, vidéos ou sons d'une personne identifiable, sexuellement explicites ou montrant ses parties intimes, sans son consentement (hypertrucages sexuels), et produire du matériel d'abus sexuel d'enfants. Le marquage lisible par machine des contenus synthétiques devient exigible, y compris pour les systèmes déjà commercialisés.": {
+   "en": "Prohibited: generating or manipulating images, videos or audio of an identifiable person, sexually explicit or showing their intimate parts, without their consent (sexual deepfakes), and producing child sexual abuse material. Machine-readable marking of synthetic content becomes due, including for systems already marketed.",
+   "fr": "Sont interdits : générer ou manipuler des images, vidéos ou sons d'une personne identifiable, sexuellement explicites ou montrant ses parties intimes, sans son consentement (hypertrucages sexuels), et produire du matériel d'abus sexuel d'enfants. Le marquage lisible par machine des contenus synthétiques devient exigible, y compris pour les systèmes déjà commercialisés."
+  },
+  "Suivant →": {
+   "en": "Next →",
+   "fr": "Suivant →"
+  },
+  "Systèmes haut risque intégrés à des produits réglementés (Annexe I : machines, jouets, dispositifs médicaux…)": {
+   "en": "High-risk systems embedded in regulated products (Annex I: machinery, toys, medical devices…)",
+   "fr": "Systèmes haut risque intégrés à des produits réglementés (Annexe I : machines, jouets, dispositifs médicaux…)"
+  },
+  "Systèmes haut risque intégrés à des produits réglementés (Annexe I, section A : dispositifs médicaux, jouets, ascenseurs, équipements radioélectriques…)": {
+   "en": "High-risk systems embedded in regulated products (Annex I, Section A: medical devices, toys, lifts, radio equipment…)",
+   "fr": "Systèmes haut risque intégrés à des produits réglementés (Annexe I, section A : dispositifs médicaux, jouets, ascenseurs, équipements radioélectriques…)"
+  },
+  "Systèmes à haut risque Annexe III (biométrie, emploi, crédit, justice, migration…)": {
+   "en": "Annex III high-risk systems (biometrics, employment, credit, justice, migration…)",
+   "fr": "Systèmes à haut risque Annexe III (biométrie, emploi, crédit, justice, migration…)"
+  },
+  "Sélectionnez le type de système…": {
+   "en": "Select the type of system…",
+   "fr": "Sélectionnez le type de système…"
+  },
+  "Sélectionnez tous les domaines applicables.": {
+   "en": "Select all applicable areas.",
+   "fr": "Sélectionnez tous les domaines applicables."
+  },
+  "Sélectionnez votre secteur…": {
+   "en": "Select your sector…",
+   "fr": "Sélectionnez votre secteur…"
+  },
+  "Techniques au-dessous du seuil de conscience, exploitation des vulnérabilités (âge, handicap), altération substantielle du comportement.": {
+   "en": "Techniques below the threshold of consciousness, exploitation of vulnerabilities (age, disability), material distortion of behaviour.",
+   "fr": "Techniques au-dessous du seuil de conscience, exploitation des vulnérabilités (âge, handicap), altération substantielle du comportement."
+  },
+  "Terminez les quatre étapes : la classification n'est pas encore rendue": {
+   "en": "Complete the four steps: the classification is not delivered yet",
+   "fr": "Terminez les quatre étapes : la classification n'est pas encore rendue"
+  },
+  "Type de système IA": {
+   "en": "Type of AI system",
+   "fr": "Type de système IA"
+  },
+  "Tâche procédurale étroite": {
+   "en": "Narrow procedural task",
+   "fr": "Tâche procédurale étroite"
+  },
+  "Tâche préparatoire à une évaluation": {
+   "en": "Task preparatory to an assessment",
+   "fr": "Tâche préparatoire à une évaluation"
+  },
+  "Un système relevant d'un domaine Annexe III n'est pas automatiquement haut risque s'il remplit une de ces conditions.": {
+   "en": "A system falling within an Annex III area is not automatically high-risk if it meets one of these conditions.",
+   "fr": "Un système relevant d'un domaine Annexe III n'est pas automatiquement haut risque s'il remplit une de ces conditions."
+  },
+  "Un tiers a-t-il rebaptisé, modifié substantiellement ou réorienté un système que VOUS avez mis sur le marché ?": {
+   "en": "Has a third party rebranded, substantially modified or repurposed a system that YOU placed on the market?",
+   "fr": "Un tiers a-t-il rebaptisé, modifié substantiellement ou réorienté un système que VOUS avez mis sur le marché ?"
+  },
+  "Une fonction-objectif déclarée, ou un but déduit de son entraînement.": {
+   "en": "A declared objective function, or a goal inferred from its training.",
+   "fr": "Une fonction-objectif déclarée, ou un but déduit de son entraînement."
+  },
+  "Usage exclusivement militaire, de défense ou de sécurité nationale": {
+   "en": "Exclusively military, defence or national security use",
+   "fr": "Usage exclusivement militaire, de défense ou de sécurité nationale"
+  },
+  "Usage interne — pas de décision directe sur des personnes": {
+   "en": "Internal use — no direct decision about people",
+   "fr": "Usage interne — pas de décision directe sur des personnes"
+  },
+  "Utilisé pour calculer le plafond de sanction applicable (en % du CA mondial).": {
+   "en": "Used to calculate the applicable penalty ceiling (as a % of worldwide turnover).",
+   "fr": "Utilisé pour calculer le plafond de sanction applicable (en % du CA mondial)."
+  },
+  "Version hébergée payante, création de compte obligatoire, données d'usage exploitées à d'autres fins que la sécurité ou l'interopérabilité.": {
+   "en": "Paid hosted version, mandatory account creation, usage data exploited for purposes other than security or interoperability.",
+   "fr": "Version hébergée payante, création de compte obligatoire, données d'usage exploitées à d'autres fins que la sécurité ou l'interopérabilité."
+  },
+  "Votre organisation est-elle établie dans l'UE ou vise-t-elle le marché européen ?": {
+   "en": "Is your organisation established in the EU or does it target the European market?",
+   "fr": "Votre organisation est-elle établie dans l'UE ou vise-t-elle le marché européen ?"
+  },
+  "Votre organisation relève-t-elle de l'un de ces cas ?": {
+   "en": "Does your organisation fall under one of these cases?",
+   "fr": "Votre organisation relève-t-elle de l'un de ces cas ?"
+  },
+  "Votre système effectue-t-il un profilage de personnes physiques ?": {
+   "en": "Does your system carry out profiling of natural persons?",
+   "fr": "Votre système effectue-t-il un profilage de personnes physiques ?"
+  },
+  "Votre système effectue-t-il une identification biométrique à distance en temps réel dans des espaces publics ?": {
+   "en": "Does your system perform real-time remote biometric identification in publicly accessible spaces?",
+   "fr": "Votre système effectue-t-il une identification biométrique à distance en temps réel dans des espaces publics ?"
+  },
+  "Votre système effectue-t-il une identification biométrique à distance en temps réel dans un espace accessible au public ?": {
+   "en": "Does your system perform real-time remote biometric identification in a publicly accessible space?",
+   "fr": "Votre système effectue-t-il une identification biométrique à distance en temps réel dans un espace accessible au public ?"
+  },
+  "Votre système est-il destiné à interagir directement avec des utilisateurs finaux ?": {
+   "en": "Is your system intended to interact directly with end users?",
+   "fr": "Votre système est-il destiné à interagir directement avec des utilisateurs finaux ?"
+  },
+  "Votre système est-il un modèle d'IA à usage général (GPAI) ?": {
+   "en": "Is your system a general-purpose AI model (GPAI)?",
+   "fr": "Votre système est-il un modèle d'IA à usage général (GPAI) ?"
+  },
+  "Votre système est-il utilisé dans l'un des domaines à haut risque de l'Annexe III ?": {
+   "en": "Is your system used in one of the high-risk areas of Annex III?",
+   "fr": "Votre système est-il utilisé dans l'un des domaines à haut risque de l'Annexe III ?"
+  },
+  "Votre système relève-t-il de l'une de ces autres pratiques interdites ?": {
+   "en": "Does your system fall under one of these other prohibited practices?",
+   "fr": "Votre système relève-t-il de l'une de ces autres pratiques interdites ?"
+  },
+  "Votre système traite-t-il des données personnelles ?": {
+   "en": "Does your system process personal data?",
+   "fr": "Votre système traite-t-il des données personnelles ?"
+  },
+  "Votre système utilise-t-il des techniques subliminales ou manipulatrices ?": {
+   "en": "Does your system use subliminal or manipulative techniques?",
+   "fr": "Votre système utilise-t-il des techniques subliminales ou manipulatrices ?"
+  },
+  "distributeur": {
+   "en": "distributor",
+   "fr": "distributeur"
+  },
+  "déployeur": {
+   "en": "deployer",
+   "fr": "déployeur"
+  },
+  "importateur": {
+   "en": "importer",
+   "fr": "importateur"
+  },
+  "rôle non déterminé": {
+   "en": "role not determined",
+   "fr": "rôle non déterminé"
+  },
+  "À apprécier au cas par cas : un don libre et sans contrepartie ne vaut pas prix, un « don » qui conditionne l'accès en est un.": {
+   "en": "To be assessed case by case: a free donation with nothing in return is not a price; a “donation” that conditions access is one.",
+   "fr": "À apprécier au cas par cas : un don libre et sans contrepartie ne vaut pas prix, un « don » qui conditionne l'accès en est un."
+  },
+  "À partir du # décembre #": {
+   "en": "From # December #",
+   "fr": "À partir du 2 décembre 2027"
+  },
+  "Éducation / Formation": {
+   "en": "Education / Training",
+   "fr": "Éducation / Formation"
+  },
+  "Établie dans l'UE — fournisseur ou déployeur": {
+   "en": "Established in the EU — provider or deployer",
+   "fr": "Établie dans l'UE — fournisseur ou déployeur"
+  },
+  "Étape # / #": {
+   "en": "Step # / #",
+   "fr": "Étape 1 / 4"
+  },
+  "Étape # sur #": {
+   "en": "Step # of #",
+   "fr": "Étape 1 sur 5"
+  },
+  "État de vos obligations de conformité": {
+   "en": "Status of your compliance obligations",
+   "fr": "État de vos obligations de conformité"
+  },
+  "État, collectivité, établissement public, agence.": {
+   "en": "State, local authority, public institution, agency.",
+   "fr": "État, collectivité, établissement public, agence."
+  },
+  "Évaluation automatisée de traits, comportements ou caractéristiques personnelles": {
+   "en": "Automated assessment of personal traits, behaviour or characteristics",
+   "fr": "Évaluation automatisée de traits, comportements ou caractéristiques personnelles"
+  },
+  "Évaluation de risque de victimisation/récidive · polygraphes · fiabilité des preuves · profilage pénal": {
+   "en": "Assessment of the risk of victimisation/reoffending · polygraphs · reliability of evidence · criminal profiling",
+   "fr": "Évaluation de risque de victimisation/récidive · polygraphes · fiabilité des preuves · profilage pénal"
+  },
+  "Évalue le risque qu'une personne commette une infraction, sur le seul profilage": {
+   "en": "Assesses the risk that a person will commit an offence, based solely on profiling",
+   "fr": "Évalue le risque qu'une personne commette une infraction, sur le seul profilage"
+  },
+  "Évaluez la conformité de votre système IA selon le Règlement (UE) #/# — classification, obligations et sanctions en # étapes, avant de l enregistrer au Registre.": {
+   "en": "Assess the compliance of your AI system under Regulation (EU) #/# — classification, obligations and penalties in # steps, before recording it in the register.",
+   "fr": "Évaluez la conformité de votre système IA selon le Règlement (UE) 2024/1689 — classification, obligations et sanctions en 5 étapes, avant de l enregistrer au Registre."
+  },
+  "— Texte officiel Journal officiel L du #": {
+   "en": "— Official text, Official Journal L of #",
+   "fr": "— Texte officiel Journal officiel L du 12.7.2024"
+  },
+  "… mais son usage est destiné à des raisons médicales ou de sécurité": {
+   "en": "… but its use is intended for medical or safety reasons",
+   "fr": "… mais son usage est destiné à des raisons médicales ou de sécurité"
+  },
+  "← Retour": {
+   "en": "← Back",
+   "fr": "← Retour"
+  },
+  "↺ Nouvelle simulation": {
+   "en": "↺ New simulation",
+   "fr": "↺ Nouvelle simulation"
+  },
+  "⏳ # août #": {
+   "en": "⏳ # August #",
+   "fr": "⏳ 2 août 2027"
+  },
+  "⏳ # décembre #": {
+   "en": "⏳ # December #",
+   "fr": "⏳ 2 décembre 2027"
+  },
+  "● Conforme": {
+   "en": "● Compliant",
+   "fr": "● Conforme"
+  },
+  "● En cours": {
+   "en": "● In progress",
+   "fr": "● En cours"
+  },
+  "● Non réalisé": {
+   "en": "● Not done",
+   "fr": "● Non réalisé"
+  },
+  "⚡ # août #": {
+   "en": "⚡ # August #",
+   "fr": "⚡ 2 août 2026"
+  },
+  "⚡ # décembre #": {
+   "en": "⚡ # December #",
+   "fr": "⚡ 2 décembre 2026"
+  },
+  "✅ # août #": {
+   "en": "✅ # August #",
+   "fr": "✅ 2 août 2025"
+  },
+  "✅ # février #": {
+   "en": "✅ # February #",
+   "fr": "✅ 2 février 2025"
+  },
+  "✅ #er août #": {
+   "en": "✅ # August #",
+   "fr": "✅ 1er août 2024"
+  },
+  "💾 Historique": {
+   "en": "💾 History",
+   "fr": "💾 Historique"
+  },
+  "📅 Calendrier consolidé EU AI Act": {
+   "en": "📅 Consolidated EU AI Act timeline",
+   "fr": "📅 Calendrier consolidé EU AI Act"
+  }
+ }
+}

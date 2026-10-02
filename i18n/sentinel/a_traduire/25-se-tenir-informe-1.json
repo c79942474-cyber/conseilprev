@@ -1,0 +1,1356 @@
+{
+ "_lot": "25-se-tenir-informe-1",
+ "_mots": 2412,
+ "_pages": [
+  "carto",
+  "comp",
+  "geo"
+ ],
+ "_rubrique": "SE TENIR INFORMÉ",
+ "bloc": {
+  "# juridictions analysées sur # critères": {
+   "en": "<strong>#</strong> jurisdictions analysed against <strong># criteria</strong>",
+   "fr": "46 juridictions analysées sur 12 critères",
+   "html": "<strong>46</strong> juridictions analysées sur <strong>12 critères</strong>"
+  },
+  "AI Omnibus (#-#) — simplification en cours, accord politique mai #, report systèmes haut risque à déc. #.": {
+   "en": "<strong>AI Omnibus (#-#)</strong> — simplification under way, political agreement in May #, high-risk systems postponed to Dec. #.",
+   "fr": "AI Omnibus (2025-2026) — simplification en cours, accord politique mai 2026, report systèmes haut risque à déc. 2027.",
+   "html": "<strong>AI Omnibus (2025-2026)</strong> — simplification en cours, accord politique mai 2026, report systèmes haut risque à déc. 2027."
+  },
+  "California AI laws (#-#) — SB # (rejeté) puis série de lois sectorielles (santé, emploi, deepfakes).": {
+   "en": "<strong>California AI laws (#-#)</strong> — SB # (rejected), then a series of sectoral laws (health, employment, deepfakes).",
+   "fr": "California AI laws (2024-2025) — SB 1047 (rejeté) puis série de lois sectorielles (santé, emploi, deepfakes).",
+   "html": "<strong>California AI laws (2024-2025)</strong> — SB 1047 (rejeté) puis série de lois sectorielles (santé, emploi, deepfakes)."
+  },
+  "Carte mondiale desrégulations IA": {
+   "en": "World map of<br><em>AI regulations</em>",
+   "fr": "Carte mondiale desrégulations IA",
+   "html": "Carte mondiale des<br><em>régulations IA</em>"
+  },
+  "Colorado SB # (#) — premier État à légiférer sur les IA à haut risque. Modèle pour d'autres États.": {
+   "en": "<strong>Colorado SB # (#)</strong> — the first State to legislate on high-risk AI. A model for other States.",
+   "fr": "Colorado SB 205 (2024) — premier État à légiférer sur les IA à haut risque. Modèle pour d'autres États.",
+   "html": "<strong>Colorado SB 205 (2024)</strong> — premier État à légiférer sur les IA à haut risque. Modèle pour d'autres États."
+  },
+  "Comparer les juridictions": {
+   "en": "Compare <em>jurisdictions</em>",
+   "fr": "Comparer les juridictions",
+   "html": "Comparer les <em>juridictions</em>"
+  },
+  "EO # (# jan. #) — « Removing Barriers to American Leadership in AI ». Mandate un AI Action Plan en # jours, lève les obligations de reporting.": {
+   "en": "<strong>EO # (# Jan. #)</strong> — “Removing Barriers to American Leadership in AI”. Mandates an AI Action Plan within # days, lifts the reporting obligations.",
+   "fr": "EO 14179 (23 jan. 2025) — « Removing Barriers to American Leadership in AI ». Mandate un AI Action Plan en 180 jours, lève les obligations de reporting.",
+   "html": "<strong>EO 14179 (23 jan. 2025)</strong> — « Removing Barriers to American Leadership in AI ». Mandate un AI Action Plan en 180 jours, lève les obligations de reporting."
+  },
+  "FTC enforcement — utilisation des lois anti-pratiques déloyales pour encadrer les IA sans législation spécifique.": {
+   "en": "<strong>FTC enforcement</strong> — use of unfair-practices laws to regulate AI without specific legislation.",
+   "fr": "FTC enforcement — utilisation des lois anti-pratiques déloyales pour encadrer les IA sans législation spécifique.",
+   "html": "<strong>FTC enforcement</strong> — utilisation des lois anti-pratiques déloyales pour encadrer les IA sans législation spécifique."
+  },
+  "NIST AI RMF (#) — cadre volontaire de gestion des risques, largement adopté en pratique par les entreprises.": {
+   "en": "<strong>NIST AI RMF (#)</strong> — voluntary risk management framework, widely adopted in practice by companies.",
+   "fr": "NIST AI RMF (2023) — cadre volontaire de gestion des risques, largement adopté en pratique par les entreprises.",
+   "html": "<strong>NIST AI RMF (2023)</strong> — cadre volontaire de gestion des risques, largement adopté en pratique par les entreprises."
+  },
+  "New Generation AI Governance Principles (#) — cadre éthique non contraignant, base des règles ultérieures.": {
+   "en": "<strong>New Generation AI Governance Principles (#)</strong> — non-binding ethics framework, the basis of later rules.",
+   "fr": "New Generation AI Governance Principles (2019) — cadre éthique non contraignant, base des règles ultérieures.",
+   "html": "<strong>New Generation AI Governance Principles (2019)</strong> — cadre éthique non contraignant, base des règles ultérieures."
+  },
+  "Souveraineté données : #/#": {
+   "en": "Data sovereignty: <strong>#/#</strong>",
+   "fr": "Souveraineté données : 10/10",
+   "html": "Souveraineté données : <strong>10/10</strong>"
+  },
+  "Sévérité : #/#": {
+   "en": "Severity: <strong>#/#</strong>",
+   "fr": "Sévérité : 9.2/10",
+   "html": "Sévérité : <strong>9.2/10</strong>"
+  },
+  "Sévérité fédérale : #/#": {
+   "en": "Federal severity: <strong>#/#</strong>",
+   "fr": "Sévérité fédérale : 4.5/10",
+   "html": "Sévérité fédérale : <strong>4.5/10</strong>"
+  },
+  "Tensions & alliancesréglementaires": {
+   "en": "<em>Regulatory</em><br>tensions &amp; alliances",
+   "fr": "Tensions & alliancesréglementaires",
+   "html": "Tensions &amp; alliances<br><em>réglementaires</em>"
+  }
+ },
+ "texte": {
+  "# aout #": {
+   "en": "# August #",
+   "fr": "2 aout 2025"
+  },
+  "# fevrier #": {
+   "en": "# February #",
+   "fr": "4 fevrier 2025"
+  },
+  "# janvier #": {
+   "en": "# January #",
+   "fr": "28 janvier 2025"
+  },
+  "# juridictions analysées selon # critères réglementaires, avec mise à jour en temps réel par IA (Mistral / Claude). Triées par sévérité ci-dessous.": {
+   "en": "# jurisdictions analysed against # regulatory criteria, updated in real time by AI (Mistral / Claude). Sorted by severity below.",
+   "fr": "46 juridictions analysées selon 12 critères réglementaires, avec mise à jour en temps réel par IA (Mistral / Claude). Triées par sévérité ci-dessous."
+  },
+  "#Md": {
+   "en": "#bn",
+   "fr": "1.4Md"
+  },
+  "#M€": {
+   "en": "€#M",
+   "fr": "35M€"
+  },
+  "#ère loi protection données d Asie du Sud + nouvelle stratégie nationale IA": {
+   "en": "#st data protection law in South Asia + new national AI strategy",
+   "fr": "1ère loi protection données d Asie du Sud + nouvelle stratégie nationale IA"
+  },
+  "+ Ajouter un pays ▾": {
+   "en": "+ Add a country ▾",
+   "fr": "+ Ajouter un pays ▾"
+  },
+  "+ Ajouter une juridiction a surveiller": {
+   "en": "+ Add a jurisdiction to monitor",
+   "fr": "+ Ajouter une juridiction a surveiller"
+  },
+  "> AI Act Art. #": {
+   "en": "> AI Act Art. #",
+   "fr": "> AI Act Art. 5"
+  },
+  "> CAC / Generative AI Measures": {
+   "en": "> CAC / Generative AI Measures",
+   "fr": "> CAC / Generative AI Measures"
+  },
+  "> Commission europeenne": {
+   "en": "> European Commission",
+   "fr": "> Commission europeenne"
+  },
+  "> EC Guidelines (# fev. #)": {
+   "en": "> EC Guidelines (# Feb. #)",
+   "fr": "> EC Guidelines (4 fev. 2025)"
+  },
+  "> EO # - Wikipedia": {
+   "en": "> EO # - Wikipedia",
+   "fr": "> EO 14179 - Wikipedia"
+  },
+  "> EUR-Lex #/#": {
+   "en": "> EUR-Lex #/#",
+   "fr": "> EUR-Lex 2024/1689"
+  },
+  "> Federal Register (EO #)": {
+   "en": "> Federal Register (EO #)",
+   "fr": "> Federal Register (EO 14179)"
+  },
+  "> Squire Patton Boggs": {
+   "en": "> Squire Patton Boggs",
+   "fr": "> Squire Patton Boggs"
+  },
+  "> White House": {
+   "en": "> White House",
+   "fr": "> White House"
+  },
+  "@ RISQUE CRITIQUE": {
+   "en": "@ CRITICAL RISK",
+   "fr": "@ RISQUE CRITIQUE"
+  },
+  "@ RISQUE ELEVE": {
+   "en": "@ HIGH RISK",
+   "fr": "@ RISQUE ELEVE"
+  },
+  "@ RISQUE HAUT": {
+   "en": "@ HIGH RISK",
+   "fr": "@ RISQUE HAUT"
+  },
+  "@ RISQUE MODERE": {
+   "en": "@ MODERATE RISK",
+   "fr": "@ RISQUE MODERE"
+  },
+  "AI (Regulation) Bill au Parlement + approche sectorielle par régulateurs": {
+   "en": "AI (Regulation) Bill in Parliament + sectoral approach through regulators",
+   "fr": "AI (Regulation) Bill au Parlement + approche sectorielle par régulateurs"
+  },
+  "AI Act (Règl. #/#) ↗": {
+   "en": "AI Act (Reg. #/#) ↗",
+   "fr": "AI Act (Règl. 2024/1689) ↗"
+  },
+  "AI Ethics Framework + Mandatory Guardrails (proposé)": {
+   "en": "AI Ethics Framework + Mandatory Guardrails (proposed)",
+   "fr": "AI Ethics Framework + Mandatory Guardrails (proposé)"
+  },
+  "AI Ethics and Accountability Bill (déc. #) + obligations MeitY étiquetage (fév. #)": {
+   "en": "AI Ethics and Accountability Bill (Dec. #) + MeitY labelling obligations (Feb. #)",
+   "fr": "AI Ethics and Accountability Bill (déc. 2025) + obligations MeitY étiquetage (fév. 2026)"
+  },
+  "AI Promotion Act (mai #) + Hiroshima AI Process": {
+   "en": "AI Promotion Act (May #) + Hiroshima AI Process",
+   "fr": "AI Promotion Act (mai 2025) + Hiroshima AI Process"
+  },
+  "AIDA (Artificial Intelligence and Data Act) — en cours d adoption": {
+   "en": "AIDA (Artificial Intelligence and Data Act) — being adopted",
+   "fr": "AIDA (Artificial Intelligence and Data Act) — en cours d adoption"
+  },
+  "ASIA": {
+   "en": "ASIA",
+   "fr": "ASIA"
+  },
+  "AU": {
+   "en": "AU",
+   "fr": "AU"
+  },
+  "AU Australia": {
+   "en": "AU Australia",
+   "fr": "AU Australia"
+  },
+  "AU Australie": {
+   "en": "AU Australia",
+   "fr": "AU Australie"
+  },
+  "Ajouter un pays au comparateur (# maximum).": {
+   "en": "Add a country to the comparator (# maximum).",
+   "fr": "Ajouter un pays au comparateur (4 maximum)."
+  },
+  "Algorithm Recommendation Regulations (#) ↗": {
+   "en": "Algorithm Recommendation Regulations (#) ↗",
+   "fr": "Algorithm Recommendation Regulations (2022) ↗"
+  },
+  "Amende max": {
+   "en": "Maximum fine",
+   "fr": "Amende max"
+  },
+  "Analyse géopolitique des IA": {
+   "en": "Geopolitical analysis of AI",
+   "fr": "Analyse géopolitique des IA"
+  },
+  "Apres la revocation de l'Executive Order # de Biden le # janvier # (via l'EO #), l'administration Trump signe l'EO # Removing Barriers to American Leadership in Artificial Intelligence. Il leve les obligations de reporting des modeles de fondation et mandate un AI Action Plan sous # jours.": {
+   "en": "After the revocation of Biden’s Executive Order # on # January # (via EO #), the Trump administration signs EO # Removing Barriers to American Leadership in Artificial Intelligence. It lifts the reporting obligations for foundation models and mandates an AI Action Plan within # days.",
+   "fr": "Apres la revocation de l'Executive Order 14110 de Biden le 20 janvier 2025 (via l'EO 14148), l'administration Trump signe l'EO 14179 Removing Barriers to American Leadership in Artificial Intelligence. Il leve les obligations de reporting des modeles de fondation et mandate un AI Action Plan sous 180 jours."
+  },
+  "Arabie Saoudite": {
+   "en": "Saudi Arabia",
+   "fr": "Arabie Saoudite"
+  },
+  "Aucun cadre IA spécifique — initiatives sectorielles uniquement": {
+   "en": "No specific AI framework — sectoral initiatives only",
+   "fr": "Aucun cadre IA spécifique — initiatives sectorielles uniquement"
+  },
+  "Aucune actualité disponible pour le moment.": {
+   "en": "No news available for the moment.",
+   "fr": "Aucune actualité disponible pour le moment."
+  },
+  "Australie": {
+   "en": "Australia",
+   "fr": "Australie"
+  },
+  "BASES OPEN SOURCE": {
+   "en": "OPEN-SOURCE FOUNDATIONS",
+   "fr": "BASES OPEN SOURCE"
+  },
+  "BH": {
+   "en": "BH",
+   "fr": "BH"
+  },
+  "BR": {
+   "en": "BR",
+   "fr": "BR"
+  },
+  "Bahreïn": {
+   "en": "Bahrain",
+   "fr": "Bahreïn"
+  },
+  "Benchmark": {
+   "en": "Benchmark",
+   "fr": "Benchmark"
+  },
+  "Bloc européen": {
+   "en": "European bloc",
+   "fr": "Bloc européen"
+  },
+  "Brésil": {
+   "en": "Brazil",
+   "fr": "Brésil"
+  },
+  "CA": {
+   "en": "CA",
+   "fr": "CA"
+  },
+  "CATÉGORIE :": {
+   "en": "CATEGORY:",
+   "fr": "CATÉGORIE :"
+  },
+  "CHANGEMENT POLITIQUE": {
+   "en": "POLICY CHANGE",
+   "fr": "CHANGEMENT POLITIQUE"
+  },
+  "CHANGEMENT REGLEMENTAIRE": {
+   "en": "REGULATORY CHANGE",
+   "fr": "CHANGEMENT REGLEMENTAIRE"
+  },
+  "CL": {
+   "en": "CL",
+   "fr": "CL"
+  },
+  "CONTRÔLE SOUVERAIN": {
+   "en": "SOVEREIGN CONTROL",
+   "fr": "CONTRÔLE SOUVERAIN"
+  },
+  "CR": {
+   "en": "CR",
+   "fr": "CR"
+  },
+  "Cadre : #ère loi protection données d Asie du Sud + nouvelle stratégie nationale IA — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: #st data protection law in South Asia + new national AI strategy — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : 1ère loi protection données d Asie du Sud + nouvelle stratégie nationale IA — Score 4/10 — Dernière vérification : 12/01/2026"
+  },
+  "Cadre : AI (Regulation) Bill au Parlement + approche sectorielle par régulateurs — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: AI (Regulation) Bill in Parliament + sectoral approach through regulators — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : AI (Regulation) Bill au Parlement + approche sectorielle par régulateurs — Score 6/10 — Dernière vérification : 01/02/2026"
+  },
+  "Cadre : AI Basic Act — en vigueur depuis le # janvier # — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: AI Basic Act — in force since # January # — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : AI Basic Act — en vigueur depuis le 22 janvier 2026 — Score 8.3/10 — Dernière vérification : 03/02/2026"
+  },
+  "Cadre : AI Ethics Framework + Mandatory Guardrails (proposé) — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: AI Ethics Framework + Mandatory Guardrails (proposed) — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : AI Ethics Framework + Mandatory Guardrails (proposé) — Score 5.7/10 — Dernière vérification : 10/01/2026"
+  },
+  "Cadre : AI Ethics and Accountability Bill (déc. #) + obligations MeitY étiquetage (fév. #) — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: AI Ethics and Accountability Bill (Dec. #) + MeitY labelling obligations (Feb. #) — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : AI Ethics and Accountability Bill (déc. 2025) + obligations MeitY étiquetage (fév. 2026) — Score 5.5/10 — Dernière vérification : 03/02/2026"
+  },
+  "Cadre : AI Promotion Act (mai #) + Hiroshima AI Process — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: AI Promotion Act (May #) + Hiroshima AI Process — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : AI Promotion Act (mai 2025) + Hiroshima AI Process — Score 6.8/10 — Dernière vérification : 03/02/2026"
+  },
+  "Cadre : AIDA (Artificial Intelligence and Data Act) — en cours d adoption — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: AIDA (Artificial Intelligence and Data Act) — being adopted — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : AIDA (Artificial Intelligence and Data Act) — en cours d adoption — Score 6.5/10 — Dernière vérification : 10/01/2026"
+  },
+  "Cadre : Aucun cadre IA spécifique — initiatives sectorielles uniquement — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: No specific AI framework — sectoral initiatives only — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : Aucun cadre IA spécifique — initiatives sectorielles uniquement — Score 2.4/10 — Dernière vérification : 01/09/2025"
+  },
+  "Cadre : Cadre de gouvernance Agentic AI (#er mondial, janv. #) + AI Verify — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: Agentic AI governance framework (#st in the world, Jan. #) + AI Verify — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : Cadre de gouvernance Agentic AI (1er mondial, janv. 2026) + AI Verify — Score 7/10 — Dernière vérification : 03/02/2026"
+  },
+  "Cadre : Cadre régional ASEAN sur la gouvernance IA + lois nationales émergentes — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: ASEAN regional framework on AI governance + emerging national laws — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : Cadre régional ASEAN sur la gouvernance IA + lois nationales émergentes — Score 2.5/10 — Dernière vérification : 01/12/2025"
+  },
+  "Cadre : Convention-cadre IA Conseil de l Europe + LPD révisée — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: Council of Europe AI Framework Convention + revised FADP — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : Convention-cadre IA Conseil de l Europe + LPD révisée — Score 6.5/10 — Dernière vérification : 10/01/2026"
+  },
+  "Cadre : Data Protection Act + National AI Strategy # ans (autorité IA responsable proposée) — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: Data Protection Act + #-year National AI Strategy (responsible AI authority proposed) — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : Data Protection Act + National AI Strategy 10 ans (autorité IA responsable proposée) — Score 4.7/10 — Dernière vérification : 12/01/2026"
+  },
+  "Cadre : Data Protection Act contraignant + stratégie nationale IA — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: Binding Data Protection Act + national AI strategy — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : Data Protection Act contraignant + stratégie nationale IA — Score 4.6/10 — Dernière vérification : 12/01/2026"
+  },
+  "Cadre : EU AI Act + AESIA (agence nationale de supervision IA) — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: EU AI Act + AESIA (national AI supervisory agency) — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : EU AI Act + AESIA (agence nationale de supervision IA) — Score 7.3/10 — Dernière vérification : 03/02/2026"
+  },
+  "Cadre : EU AI Act + Stratégie nationale IA + CNIL — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: EU AI Act + National AI Strategy + CNIL — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : EU AI Act + Stratégie nationale IA + CNIL — Score 8.5/10 — Dernière vérification : 03/02/2026"
+  },
+  "Cadre : EU AI Act + loi nationale d application + BSI — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: EU AI Act + national implementing law + BSI — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : EU AI Act + loi nationale d application + BSI — Score 8.8/10 — Dernière vérification : 03/02/2026"
+  },
+  "Cadre : EU AI Act + régulateur algorithmique national renforcé — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: EU AI Act + strengthened national algorithmic regulator — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : EU AI Act + régulateur algorithmique national renforcé — Score 5.4/10 — Dernière vérification : 15/01/2026"
+  },
+  "Cadre : EU AI Act — Règlement #/# (transparence art. # depuis le # août # ; haut risque annexe III au # décembre #) — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: EU AI Act — Regulation #/# (transparency, art. #, since # August #; Annex III high-risk on # December #) — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : EU AI Act — Règlement 2024/1689 (transparence art. 50 depuis le 2 août 2026 ; haut risque annexe III au 2 décembre 2027) — Score 9.2/10 — Dernière vérification : 03/02/2026"
+  },
+  "Cadre : Feuille de route nationale IA (# ans) + loi protection données récente — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: National AI roadmap (# years) + recent data protection law — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : Feuille de route nationale IA (5 ans) + loi protection données récente — Score 4.1/10 — Dernière vérification : 12/01/2026"
+  },
+  "Cadre : Generative AI Measures + AI Labeling Rules + amendements loi cybersécurité (#er janv. #) — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: Generative AI Measures + AI Labeling Rules + cybersecurity law amendments (# Jan. #) — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : Generative AI Measures + AI Labeling Rules + amendements loi cybersécurité (1er janv. 2026) — Score 8.2/10 — Dernière vérification : 03/02/2026"
+  },
+  "Cadre : Loi protection des données (CNDP) + stratégie Maroc IA # — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: Data protection law (CNDP) + Morocco AI # strategy — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : Loi protection des données (CNDP) + stratégie Maroc IA 2030 — Score 4.8/10 — Dernière vérification : 12/01/2026"
+  },
+  "Cadre : Loi protection des données (MTCIT) + programme national IA — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: Data protection law (MTCIT) + national AI programme — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : Loi protection des données (MTCIT) + programme national IA — Score 3.7/10 — Dernière vérification : 12/01/2026"
+  },
+  "Cadre : Loi protection des données + politique IA secteur public en déploiement — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: Data protection law + public-sector AI policy being deployed — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : Loi protection des données + politique IA secteur public en déploiement — Score 3.2/10 — Dernière vérification : 12/01/2026"
+  },
+  "Cadre : Loi protection des données + stratégie nationale IA soutenue par l UNESCO — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: Data protection law + national AI strategy supported by UNESCO — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : Loi protection des données + stratégie nationale IA soutenue par l UNESCO — Score 3.6/10 — Dernière vérification : 12/01/2026"
+  },
+  "Cadre : Loi protection des données de longue date + stratégies nationales IA successives — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: Long-standing data protection law + successive national AI strategies — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : Loi protection des données de longue date + stratégies nationales IA successives — Score 3.4/10 — Dernière vérification : 12/01/2026"
+  },
+  "Cadre : Loi protection des données type RGPD + projets de loi IA en discussion — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: GDPR-style data protection law + AI bills under discussion — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : Loi protection des données type RGPD + projets de loi IA en discussion — Score 2.8/10 — Dernière vérification : 12/01/2026"
+  },
+  "Cadre : Loi protection données alignée RGPD (nouvelle) + service de protection des données — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: New GDPR-aligned data protection law + data protection service — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : Loi protection données alignée RGPD (nouvelle) + service de protection des données — Score 4.2/10 — Dernière vérification : 12/01/2026"
+  },
+  "Cadre : Loi sur l intelligence artificielle (interdit scoring social et manipulation) — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: Law on artificial intelligence (bans social scoring and manipulation) — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : Loi sur l intelligence artificielle (interdit scoring social et manipulation) — Score 6.3/10 — Dernière vérification : 20/01/2026"
+  },
+  "Cadre : NIST AI RMF + lois étatiques (Colorado, Texas, Californie #) + EO # — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: NIST AI RMF + state laws (Colorado, Texas, California #) + EO # — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : NIST AI RMF + lois étatiques (Colorado, Texas, Californie 2026) + EO 14179 — Score 5.2/10 — Dernière vérification : 03/02/2026"
+  },
+  "Cadre : National AI Policy # approuvée + loi protection données en projet — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: National AI Policy # approved + draft data protection law — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : National AI Policy 2025 approuvée + loi protection données en projet — Score 3.9/10 — Dernière vérification : 12/01/2026"
+  },
+  "Cadre : National AI Policy + projet de loi IA — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: National AI Policy + AI bill — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : National AI Policy + projet de loi IA — Score 3/10 — Dernière vérification : 01/10/2025"
+  },
+  "Cadre : National AI Policy Framework (projet) + loi protection données contraignante — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: National AI Policy Framework (draft) + binding data protection law — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : National AI Policy Framework (projet) + loi protection données contraignante — Score 4.4/10 — Dernière vérification : 12/01/2026"
+  },
+  "Cadre : National AI Roadmap #-# + PDPA — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: National AI Roadmap #-# + PDPA — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : National AI Roadmap 2021-2025 + PDPA — Score 4.3/10 — Dernière vérification : 01/12/2025"
+  },
+  "Cadre : National AI Strategy (projet #) + NDPA — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: National AI Strategy (draft #) + NDPA — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : National AI Strategy (projet 2024) + NDPA — Score 2.3/10 — Dernière vérification : 01/09/2025"
+  },
+  "Cadre : National AI Strategy + Digital Code — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: National AI Strategy + Digital Code — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : National AI Strategy + Digital Code — Score 7.5/10 — Dernière vérification : 15/01/2026"
+  },
+  "Cadre : PDPL + décisions d application SDAIA (# en #) — approche souple — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: PDPL + SDAIA implementing decisions (# in #) — flexible approach — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : PDPL + décisions d application SDAIA (48 en 2025) — approche souple — Score 5/10 — Dernière vérification : 20/01/2026"
+  },
+  "Cadre : PL #/# (cadre IA complet, vote final attendu) + LGPD — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: PL #/# (comprehensive AI framework, final vote expected) + LGPD — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : PL 2338/2023 (cadre IA complet, vote final attendu) + LGPD — Score 6.2/10 — Dernière vérification : 15/01/2026"
+  },
+  "Cadre : Politique de régulation de l IA (#) + loi protection données — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: AI regulation policy (#) + data protection law — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : Politique de régulation de l IA (2023) + loi protection données — Score 3.5/10 — Dernière vérification : 01/11/2025"
+  },
+  "Cadre : Politique nationale IA complète (référence Afrique) + loi protection données — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: Comprehensive national AI policy (a reference for Africa) + data protection law — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : Politique nationale IA complète (référence Afrique) + loi protection données — Score 4.5/10 — Dernière vérification : 12/01/2026"
+  },
+  "Cadre : Projet de loi IA basé sur les risques (au Parlement) + KVKK — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: Risk-based AI bill (in Parliament) + KVKK — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : Projet de loi IA basé sur les risques (au Parlement) + KVKK — Score 5.8/10 — Dernière vérification : 20/01/2026"
+  },
+  "Cadre : Recommandation éthique IA + loi protection données (loi #) — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: AI ethics recommendation + data protection law (Law #) — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : Recommandation éthique IA + loi protection données (loi 25.326) — Score 2.7/10 — Dernière vérification : 01/09/2025"
+  },
+  "Cadre : Régime de protection des données mature + stratégie nationale IA et éthique — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: Mature data protection regime + national AI and ethics strategy — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : Régime de protection des données mature + stratégie nationale IA et éthique — Score 3.8/10 — Dernière vérification : 12/01/2026"
+  },
+  "Cadre : Régulation protection des données (CITRA) + stratégie et cadre de gouvernance IA émergents — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: Data protection regulation (CITRA) + emerging AI strategy and governance framework — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : Régulation protection des données (CITRA) + stratégie et cadre de gouvernance IA émergents — Score 3.1/10 — Dernière vérification : 12/01/2026"
+  },
+  "Cadre : Stratégie nationale IA + feuille de route DTI + loi vie privée contraignante — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: National AI strategy + DTI roadmap + binding privacy law — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : Stratégie nationale IA + feuille de route DTI + loi vie privée contraignante — Score 2.9/10 — Dernière vérification : 12/01/2026"
+  },
+  "Cadre : Stratégie nationale IA + lignes directrices éthiques + loi vie privée contraignante — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: National AI strategy + ethical guidelines + binding privacy law — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : Stratégie nationale IA + lignes directrices éthiques + loi vie privée contraignante — Score 3.3/10 — Dernière vérification : 12/01/2026"
+  },
+  "Cadre : UAE AI Strategy # + AI Charter — Score #/# — Dernière vérification : #/#/#": {
+   "en": "Framework: UAE AI Strategy # + AI Charter — Score #/# — Last checked: #/#/#",
+   "fr": "Cadre : UAE AI Strategy 2031 + AI Charter — Score 2.8/10 — Dernière vérification : 01/09/2025"
+  },
+  "Cadre de gouvernance Agentic AI (#er mondial, janv. #) + AI Verify": {
+   "en": "Agentic AI governance framework (#st in the world, Jan. #) + AI Verify",
+   "fr": "Cadre de gouvernance Agentic AI (1er mondial, janv. 2026) + AI Verify"
+  },
+  "Cadre régional ASEAN sur la gouvernance IA + lois nationales émergentes": {
+   "en": "ASEAN regional framework on AI governance + emerging national laws",
+   "fr": "Cadre régional ASEAN sur la gouvernance IA + lois nationales émergentes"
+  },
+  "Cambodge / ASEAN": {
+   "en": "Cambodia / ASEAN",
+   "fr": "Cambodge / ASEAN"
+  },
+  "Canada": {
+   "en": "Canada",
+   "fr": "Canada"
+  },
+  "Cartographie": {
+   "en": "Mapping",
+   "fr": "Cartographie"
+  },
+  "Chili": {
+   "en": "Chile",
+   "fr": "Chili"
+  },
+  "Chronologie des évolutions": {
+   "en": "Timeline of developments",
+   "fr": "Chronologie des évolutions"
+  },
+  "Claude": {
+   "en": "Claude",
+   "fr": "Claude"
+  },
+  "Comparateur": {
+   "en": "Comparator",
+   "fr": "Comparateur"
+  },
+  "Comparateur de juridictions": {
+   "en": "Jurisdiction comparator",
+   "fr": "Comparateur de juridictions"
+  },
+  "Compétition normative sur l'IA : blocs réglementaires, fragmentation et influence des standards.": {
+   "en": "Regulatory competition over AI: regulatory blocs, fragmentation and the influence of standards.",
+   "fr": "Compétition normative sur l'IA : blocs réglementaires, fragmentation et influence des standards."
+  },
+  "Contrôles à l'export de puces (BIS) : principal levier de politique IA internationale": {
+   "en": "Chip export controls (BIS): the main lever of international AI policy",
+   "fr": "Contrôles à l'export de puces (BIS) : principal levier de politique IA internationale"
+  },
+  "Convention-cadre IA Conseil de l Europe + LPD révisée": {
+   "en": "Council of Europe AI Framework Convention + revised FADP",
+   "fr": "Convention-cadre IA Conseil de l Europe + LPD révisée"
+  },
+  "Coopération avec Singapour sur la gouvernance IA (MOU EU-SG #)": {
+   "en": "Cooperation with Singapore on AI governance (EU-SG MOU #)",
+   "fr": "Coopération avec Singapour sur la gouvernance IA (MOU EU-SG 2024)"
+  },
+  "Costa Rica": {
+   "en": "Costa Rica",
+   "fr": "Costa Rica"
+  },
+  "Critique : # juridiction — Sous sanctions / isolement": {
+   "en": "Critical: # jurisdiction — Under sanctions / isolation",
+   "fr": "Critique : 1 juridiction — Sous sanctions / isolement"
+  },
+  "DE Allemagne": {
+   "en": "DE Germany",
+   "fr": "DE Allemagne"
+  },
+  "DE Germany": {
+   "en": "DE Germany",
+   "fr": "DE Germany"
+  },
+  "DORA (Règl. #/#) ↗": {
+   "en": "DORA (Reg. #/#) ↗",
+   "fr": "DORA (Règl. 2022/2554) ↗"
+  },
+  "Data Protection Act + National AI Strategy # ans (autorité IA responsable proposée)": {
+   "en": "Data Protection Act + #-year National AI Strategy (responsible AI authority proposed)",
+   "fr": "Data Protection Act + National AI Strategy 10 ans (autorité IA responsable proposée)"
+  },
+  "Data Protection Act contraignant + stratégie nationale IA": {
+   "en": "Binding Data Protection Act + national AI strategy",
+   "fr": "Data Protection Act contraignant + stratégie nationale IA"
+  },
+  "Deep Synthesis Regulations (#) ↗": {
+   "en": "Deep Synthesis Regulations (#) ↗",
+   "fr": "Deep Synthesis Regulations (2022) ↗"
+  },
+  "DeepSeek R# bouleverse l'equilibre technologique US-Chine": {
+   "en": "DeepSeek R# upsets the US-China technological balance",
+   "fr": "DeepSeek R1 bouleverse l'equilibre technologique US-Chine"
+  },
+  "DeepSeek, Qwen, Ernie Bot — écosystème souverain remettant en cause l'hégémonie US": {
+   "en": "DeepSeek, Qwen, Ernie Bot — a sovereign ecosystem challenging US hegemony",
+   "fr": "DeepSeek, Qwen, Ernie Bot — écosystème souverain remettant en cause l'hégémonie US"
+  },
+  "Dernière vérification": {
+   "en": "Last checked",
+   "fr": "Dernière vérification"
+  },
+  "Des son premier jour de mandat, le President Trump revoque l'EO # de Biden sur l'IA sure, securisee et digne de confiance via l'Executive Order #, marquant l'abandon de l'approche federale fondee sur la gestion des risques.": {
+   "en": "From his first day in office, President Trump revokes Biden’s EO # on safe, secure and trustworthy AI through Executive Order #, marking the abandonment of the federal approach based on risk management.",
+   "fr": "Des son premier jour de mandat, le President Trump revoque l'EO 14110 de Biden sur l'IA sure, securisee et digne de confiance via l'Executive Order 14148, marquant l'abandon de l'approche federale fondee sur la gestion des risques."
+  },
+  "Directive NIS# sur EUR-Lex": {
+   "en": "NIS # Directive on EUR-Lex",
+   "fr": "Directive NIS2 sur EUR-Lex"
+  },
+  "Distribution des risques géopolitiques": {
+   "en": "Distribution of geopolitical risks",
+   "fr": "Distribution des risques géopolitiques"
+  },
+  "Dites-nous votre besoin et votre implantation : nous répondons sous # h ouvrées.": {
+   "en": "Tell us your need and your location: we reply within # working hours.",
+   "fr": "Dites-nous votre besoin et votre implantation : nous répondons sous 24 h ouvrées."
+  },
+  "Divergence normative accrue avec l'approche europeenne. Allegement des contraintes pour les developpeurs US, mais incertitude sur le reporting de securite. Les Etats (Colorado, Californie) continuent leur propre regulation.": {
+   "en": "Greater regulatory divergence from the European approach. Constraints eased for US developers, but uncertainty over safety reporting. The States (Colorado, California) continue with their own regulation.",
+   "fr": "Divergence normative accrue avec l'approche europeenne. Allegement des contraintes pour les developpeurs US, mais incertitude sur le reporting de securite. Les Etats (Colorado, Californie) continuent leur propre regulation."
+  },
+  "Doctrine chinoise": {
+   "en": "Chinese doctrine",
+   "fr": "Doctrine chinoise"
+  },
+  "Dynamiques de tension": {
+   "en": "Tension dynamics",
+   "fr": "Dynamiques de tension"
+  },
+  "Décrire mon projet →": {
+   "en": "Describe my project →",
+   "fr": "Décrire mon projet →"
+  },
+  "EC": {
+   "en": "EC",
+   "fr": "EC"
+  },
+  "ENTREE EN VIGUEUR": {
+   "en": "ENTRY INTO FORCE",
+   "fr": "ENTREE EN VIGUEUR"
+  },
+  "ES": {
+   "en": "ES",
+   "fr": "ES"
+  },
+  "EU AI Act + AESIA (agence nationale de supervision IA)": {
+   "en": "EU AI Act + AESIA (national AI supervisory agency)",
+   "fr": "EU AI Act + AESIA (agence nationale de supervision IA)"
+  },
+  "EU AI Act + régulateur algorithmique national renforcé": {
+   "en": "EU AI Act + strengthened national algorithmic regulator",
+   "fr": "EU AI Act + régulateur algorithmique national renforcé"
+  },
+  "EUROPE": {
+   "en": "EUROPE",
+   "fr": "EUROPE"
+  },
+  "Entree en application des pratiques IA interdites (Art. # AI Act)": {
+   "en": "Prohibited AI practices start to apply (Art. # AI Act)",
+   "fr": "Entree en application des pratiques IA interdites (Art. 5 AI Act)"
+  },
+  "Entrée en vigueur": {
+   "en": "Entry into force",
+   "fr": "Entrée en vigueur"
+  },
+  "Espagne": {
+   "en": "Spain",
+   "fr": "Espagne"
+  },
+  "Evenements recents (#j)": {
+   "en": "Recent events (#d)",
+   "fr": "Evenements recents (30j)"
+  },
+  "Export du modèle de surveillance IA via la BRI vers #+ pays en développement": {
+   "en": "Export of the AI surveillance model via the BRI to #+ developing countries",
+   "fr": "Export du modèle de surveillance IA via la BRI vers 40+ pays en développement"
+  },
+  "Exportation du modèle vers le Brésil (PL #), le Chili, le Canada (AIDA)": {
+   "en": "Export of the model to Brazil (PL #), Chile, Canada (AIDA)",
+   "fr": "Exportation du modèle vers le Brésil (PL 2338), le Chili, le Canada (AIDA)"
+  },
+  "Extraterritorial": {
+   "en": "Extraterritorial",
+   "fr": "Extraterritorial"
+  },
+  "Extraterritorial CN": {
+   "en": "Extraterritorial CN",
+   "fr": "Extraterritorial CN"
+  },
+  "FILTRER :": {
+   "en": "FILTER:",
+   "fr": "FILTRER :"
+  },
+  "Faible : # juridictions — Cadre souple, peu de contraintes": {
+   "en": "Low: # jurisdictions — Flexible framework, few constraints",
+   "fr": "Faible : 10 juridictions — Cadre souple, peu de contraintes"
+  },
+  "Feuille de route nationale IA (# ans) + loi protection données récente": {
+   "en": "National AI roadmap (# years) + recent data protection law",
+   "fr": "Feuille de route nationale IA (5 ans) + loi protection données récente"
+  },
+  "Fin des directives federales de safety testing imposees aux grands modeles. Bascule vers une logique de deregulation et de competitivite.": {
+   "en": "End of the federal safety-testing directives imposed on large models. A shift towards deregulation and competitiveness.",
+   "fr": "Fin des directives federales de safety testing imposees aux grands modeles. Bascule vers une logique de deregulation et de competitivite."
+  },
+  "Flux publics agrégés · mise à jour automatique. Estimations et actualités à vérifier aux sources officielles.": {
+   "en": "Aggregated public feeds · updated automatically. Estimates and news items to be checked against the official sources.",
+   "fr": "Flux publics agrégés · mise à jour automatique. Estimations et actualités à vérifier aux sources officielles."
+  },
+  "Forcer le rafraîchissement": {
+   "en": "Force refresh",
+   "fr": "Forcer le rafraîchissement"
+  },
+  "Fragmentation interne : patchwork réglementaire étatique créant une incertitude pour les entreprises": {
+   "en": "Internal fragmentation: a patchwork of state regulation creating uncertainty for companies",
+   "fr": "Fragmentation interne : patchwork réglementaire étatique créant une incertitude pour les entreprises"
+  },
+  "Fragmenté": {
+   "en": "Fragmented",
+   "fr": "Fragmenté"
+  },
+  "Friction UE-US : divergence croissante sur la sécurité des modèles de fondation et le transfert de données": {
+   "en": "EU-US friction: growing divergence on the safety of foundation models and on data transfers",
+   "fr": "Friction UE-US : divergence croissante sur la sécurité des modèles de fondation et le transfert de données"
+  },
+  "GB": {
+   "en": "GB",
+   "fr": "GB"
+  },
+  "GE": {
+   "en": "GE",
+   "fr": "GE"
+  },
+  "GH": {
+   "en": "GH",
+   "fr": "GH"
+  },
+  "GUIDANCE": {
+   "en": "GUIDANCE",
+   "fr": "GUIDANCE"
+  },
+  "Generative AI Measures (#) ↗": {
+   "en": "Generative AI Measures (#) ↗",
+   "fr": "Generative AI Measures (2023) ↗"
+  },
+  "Generative AI Service Management Provisions (CAC, #)": {
+   "en": "Generative AI Service Management Provisions (CAC, #)",
+   "fr": "Generative AI Service Management Provisions (CAC, 2023)"
+  },
+  "Gerer la liste des juridictions sous surveillance.": {
+   "en": "Manage the list of jurisdictions under monitoring.",
+   "fr": "Gerer la liste des juridictions sous surveillance."
+  },
+  "Ghana": {
+   "en": "Ghana",
+   "fr": "Ghana"
+  },
+  "Géopolitique": {
+   "en": "Geopolitics",
+   "fr": "Géopolitique"
+  },
+  "Géorgie": {
+   "en": "Georgia",
+   "fr": "Géorgie"
+  },
+  "Gérer les juridictions à surveiller": {
+   "en": "Manage the jurisdictions to monitor",
+   "fr": "Gérer les juridictions à surveiller"
+  },
+  "Haut : # juridiction — Tensions géopolitiques majeures": {
+   "en": "High: # jurisdiction — Major geopolitical tensions",
+   "fr": "Haut : 1 juridiction — Tensions géopolitiques majeures"
+  },
+  "IN": {
+   "en": "IN",
+   "fr": "IN"
+  },
+  "INDICATEUR": {
+   "en": "INDICATOR",
+   "fr": "INDICATEUR"
+  },
+  "Inde": {
+   "en": "India",
+   "fr": "Inde"
+  },
+  "Indicateurs": {
+   "en": "Indicators",
+   "fr": "Indicateurs"
+  },
+  "Influence géopolitique": {
+   "en": "Geopolitical influence",
+   "fr": "Influence géopolitique"
+  },
+  "Innovation": {
+   "en": "Innovation",
+   "fr": "Innovation"
+  },
+  "Instruments clés": {
+   "en": "Key instruments",
+   "fr": "Instruments clés"
+  },
+  "JO": {
+   "en": "JO",
+   "fr": "JO"
+  },
+  "Jordanie": {
+   "en": "Jordan",
+   "fr": "Jordanie"
+  },
+  "Juridictions a risque critique": {
+   "en": "Critical-risk jurisdictions",
+   "fr": "Juridictions a risque critique"
+  },
+  "Juridictions stables": {
+   "en": "Stable jurisdictions",
+   "fr": "Juridictions stables"
+  },
+  "Juridictions à surveiller": {
+   "en": "Jurisdictions to monitor",
+   "fr": "Juridictions à surveiller"
+  },
+  "KE": {
+   "en": "KE",
+   "fr": "KE"
+  },
+  "KH": {
+   "en": "KH",
+   "fr": "KH"
+  },
+  "KW": {
+   "en": "KW",
+   "fr": "KW"
+  },
+  "KZ": {
+   "en": "KZ",
+   "fr": "KZ"
+  },
+  "Kazakhstan": {
+   "en": "Kazakhstan",
+   "fr": "Kazakhstan"
+  },
+  "Kenya": {
+   "en": "Kenya",
+   "fr": "Kenya"
+  },
+  "Koweït": {
+   "en": "Kuwait",
+   "fr": "Koweït"
+  },
+  "Kuwait": {
+   "en": "Kuwait",
+   "fr": "Kuwait"
+  },
+  "L'EU AI Act (Règlement #/#) s'impose comme le premier cadre horizontal contraignant au monde. Via le mécanisme d'extraterritorialité, il s'applique à toute entreprise visant le marché européen, exerçant un effet réglementaire mondial comparable au « Brussels Effect ».": {
+   "en": "The EU AI Act (Regulation #/#) stands as the world’s first binding horizontal framework. Through its extraterritorial mechanism, it applies to any company targeting the European market, exerting a global regulatory effect comparable to the “Brussels Effect”.",
+   "fr": "L'EU AI Act (Règlement 2024/1689) s'impose comme le premier cadre horizontal contraignant au monde. Via le mécanisme d'extraterritorialité, il s'applique à toute entreprise visant le marché européen, exerçant un effet réglementaire mondial comparable au « Brussels Effect »."
+  },
+  "LK": {
+   "en": "LK",
+   "fr": "LK"
+  },
+  "La Chine a développé un corpus réglementaire IA dense et ciblé, articulé autour du contrôle des contenus, de la souveraineté des données et de la sécurité algorithmique. Modèle alternatif à l'approche droits fondamentaux européenne, exporté via les routes numériques de la BRI.": {
+   "en": "China has developed a dense, targeted body of AI regulation, built around content control, data sovereignty and algorithmic security. An alternative model to the European fundamental rights approach, exported via the BRI’s digital routes.",
+   "fr": "La Chine a développé un corpus réglementaire IA dense et ciblé, articulé autour du contrôle des contenus, de la souveraineté des données et de la sécurité algorithmique. Modèle alternatif à l'approche droits fondamentaux européenne, exporté via les routes numériques de la BRI."
+  },
+  "La Commission europeenne publie ses Guidelines on Prohibited AI Practices detaillant les conditions cumulatives des # interdictions de l'Article #, avec des cas d'usage pratiques. Document non contraignant, l'interpretation faisant autorite etant reservee a la CJUE.": {
+   "en": "The European Commission publishes its Guidelines on Prohibited AI Practices detailing the cumulative conditions of the # prohibitions of Article #, with practical use cases. A non-binding document, authoritative interpretation being reserved to the CJEU.",
+   "fr": "La Commission europeenne publie ses Guidelines on Prohibited AI Practices detaillant les conditions cumulatives des 8 interdictions de l'Article 5, avec des cas d'usage pratiques. Document non contraignant, l'interpretation faisant autorite etant reservee a la CJUE."
+  },
+  "La carte n’a pas pu se charger": {
+   "en": "The map could not load",
+   "fr": "La carte n’a pas pu se charger"
+  },
+  "La publication du modele open-weights DeepSeek R#, entraine pour des couts presentes comme tres inferieurs a ceux des laboratoires americains, remet en question l'efficacite des controles a l'export de puces et l'avance technologique americaine.": {
+   "en": "The release of the open-weights DeepSeek R# model, trained at costs presented as far lower than those of American laboratories, calls into question the effectiveness of chip export controls and America’s technological lead.",
+   "fr": "La publication du modele open-weights DeepSeek R1, entraine pour des couts presentes comme tres inferieurs a ceux des laboratoires americains, remet en question l'efficacite des controles a l'export de puces et l'avance technologique americaine."
+  },
+  "Les # categories de pratiques a risque inacceptable deviennent directement applicables dans toute l'UE : manipulation subliminale, exploitation des vulnerabilites, notation sociale, police predictive par profilage, scraping non cible d'images faciales, reconnaissance emotionnelle au travail/education, categorisation biometrique de donnees sensibles, et identification biometrique a distance en temps reel. L'obligation de litteratie IA (Art. #) s'applique aussi.": {
+   "en": "The # categories of unacceptable-risk practices become directly applicable throughout the EU: subliminal manipulation, exploitation of vulnerabilities, social scoring, predictive policing based on profiling, untargeted scraping of facial images, emotion recognition at work/in education, biometric categorisation of sensitive data, and real-time remote biometric identification. The AI literacy obligation (Art. #) also applies.",
+   "fr": "Les 8 categories de pratiques a risque inacceptable deviennent directement applicables dans toute l'UE : manipulation subliminale, exploitation des vulnerabilites, notation sociale, police predictive par profilage, scraping non cible d'images faciales, reconnaissance emotionnelle au travail/education, categorisation biometrique de donnees sensibles, et identification biometrique a distance en temps reel. L'obligation de litteratie IA (Art. 4) s'applique aussi."
+  },
+  "Les entreprises operant en Europe doivent immediatement auditer leurs systemes. Amendes jusqu'a # M EUR ou # % du CA mondial. Premier jalon d'une application en cascade jusqu'en #.": {
+   "en": "Companies operating in Europe must audit their systems immediately. Fines of up to EUR # million or # % of worldwide turnover. The first milestone of a cascading application through to #.",
+   "fr": "Les entreprises operant en Europe doivent immediatement auditer leurs systemes. Amendes jusqu'a 35 M EUR ou 7 % du CA mondial. Premier jalon d'une application en cascade jusqu'en 2027."
+  },
+  "Les fournisseurs de modeles de fondation (GPAI) doivent se conformer aux obligations de transparence et de documentation. Les amendes de l'Article # deviennent executoires.": {
+   "en": "Providers of foundation models (GPAI) must comply with the transparency and documentation obligations. The fines of Article # become enforceable.",
+   "fr": "Les fournisseurs de modeles de fondation (GPAI) doivent se conformer aux obligations de transparence et de documentation. Les amendes de l'Article 5 deviennent executoires."
+  },
+  "Les obligations pour les modeles d'IA a usage general (GPAI) deviennent applicables, ainsi que le regime de sanctions de l'Article #. Les Etats membres devaient designer leurs autorites de surveillance du marche (MSA) a cette date.": {
+   "en": "The obligations for general-purpose AI models (GPAI) become applicable, as does the penalty regime of Article #. Member States were to designate their market surveillance authorities (MSAs) by this date.",
+   "fr": "Les obligations pour les modeles d'IA a usage general (GPAI) deviennent applicables, ainsi que le regime de sanctions de l'Article 99. Les Etats membres devaient designer leurs autorites de surveillance du marche (MSA) a cette date."
+  },
+  "Les regles de la Cyberspace Administration of China (CAC) sur l'etiquetage des contenus generes par IA renforcent l'obligation de marquage visible et implicite (metadonnees) des contenus synthetiques, dans la continuite des Generative AI Measures de #.": {
+   "en": "The Cyberspace Administration of China (CAC) rules on labelling AI-generated content strengthen the obligation of visible and implicit (metadata) marking of synthetic content, in continuity with the Generative AI Measures of #.",
+   "fr": "Les regles de la Cyberspace Administration of China (CAC) sur l'etiquetage des contenus generes par IA renforcent l'obligation de marquage visible et implicite (metadonnees) des contenus synthetiques, dans la continuite des Generative AI Measures de 2023."
+  },
+  "Liens directs vers les textes officiels et bases de données publiques": {
+   "en": "Direct links to official texts and public databases",
+   "fr": "Liens directs vers les textes officiels et bases de données publiques"
+  },
+  "Lignes directrices de la Commission sur les pratiques interdites": {
+   "en": "Commission guidelines on prohibited practices",
+   "fr": "Lignes directrices de la Commission sur les pratiques interdites"
+  },
+  "Localisation des données : obstacle majeur aux déploiements multinationaux": {
+   "en": "Data localisation: a major obstacle to multinational deployments",
+   "fr": "Localisation des données : obstacle majeur aux déploiements multinationaux"
+  },
+  "Loi fédérale IA": {
+   "en": "Federal AI law",
+   "fr": "Loi fédérale IA"
+  },
+  "Loi protection des données (CNDP) + stratégie Maroc IA #": {
+   "en": "Data protection law (CNDP) + Morocco AI # strategy",
+   "fr": "Loi protection des données (CNDP) + stratégie Maroc IA 2030"
+  },
+  "Loi protection des données (MTCIT) + programme national IA": {
+   "en": "Data protection law (MTCIT) + national AI programme",
+   "fr": "Loi protection des données (MTCIT) + programme national IA"
+  },
+  "Loi protection des données + politique IA secteur public en déploiement": {
+   "en": "Data protection law + public-sector AI policy being deployed",
+   "fr": "Loi protection des données + politique IA secteur public en déploiement"
+  },
+  "Loi protection des données + stratégie nationale IA soutenue par l UNESCO": {
+   "en": "Data protection law + national AI strategy supported by UNESCO",
+   "fr": "Loi protection des données + stratégie nationale IA soutenue par l UNESCO"
+  },
+  "Loi protection des données de longue date + stratégies nationales IA successives": {
+   "en": "Long-standing data protection law + successive national AI strategies",
+   "fr": "Loi protection des données de longue date + stratégies nationales IA successives"
+  },
+  "Loi protection des données type RGPD + projets de loi IA en discussion": {
+   "en": "GDPR-style data protection law + AI bills under discussion",
+   "fr": "Loi protection des données type RGPD + projets de loi IA en discussion"
+  },
+  "Loi protection données alignée RGPD (nouvelle) + service de protection des données": {
+   "en": "New GDPR-aligned data protection law + data protection service",
+   "fr": "Loi protection données alignée RGPD (nouvelle) + service de protection des données"
+  },
+  "Loi sur l intelligence artificielle (interdit scoring social et manipulation)": {
+   "en": "Law on artificial intelligence (bans social scoring and manipulation)",
+   "fr": "Loi sur l intelligence artificielle (interdit scoring social et manipulation)"
+  },
+  "Loi sur la protection des informations personnelles (NPC, #)": {
+   "en": "Personal Information Protection Law (NPC, #)",
+   "fr": "Loi sur la protection des informations personnelles (NPC, 2021)"
+  },
+  "Lois étatiques": {
+   "en": "State laws",
+   "fr": "Lois étatiques"
+  },
+  "LÉGISLATIONS MONDIALES": {
+   "en": "WORLDWIDE LEGISLATION",
+   "fr": "LÉGISLATIONS MONDIALES"
+  },
+  "MA": {
+   "en": "MA",
+   "fr": "MA"
+  },
+  "MY": {
+   "en": "MY",
+   "fr": "MY"
+  },
+  "Malaisie": {
+   "en": "Malaysia",
+   "fr": "Malaisie"
+  },
+  "Maroc": {
+   "en": "Morocco",
+   "fr": "Maroc"
+  },
+  "Mettez en regard jusqu'à # juridictions parmi #, sur # dimensions réglementaires, avec données synchronisées en temps réel.": {
+   "en": "Compare up to # of the # jurisdictions side by side, on # regulatory dimensions, with data synchronised in real time.",
+   "fr": "Mettez en regard jusqu'à 4 juridictions parmi 46, sur 6 dimensions réglementaires, avec données synchronisées en temps réel."
+  },
+  "Mettez en regard jusqu'à quatre cadres nationaux et identifiez la juridiction la plus favorable à votre déploiement.": {
+   "en": "Compare up to four national frameworks side by side and identify the jurisdiction most favourable to your deployment.",
+   "fr": "Mettez en regard jusqu'à quatre cadres nationaux et identifiez la juridiction la plus favorable à votre déploiement."
+  },
+  "Mise à jour IA :": {
+   "en": "AI update:",
+   "fr": "Mise à jour IA :"
+  },
+  "Mistral": {
+   "en": "Mistral",
+   "fr": "Mistral"
+  },
+  "Modèle américain": {
+   "en": "American model",
+   "fr": "Modèle américain"
+  },
+  "Modéré": {
+   "en": "Moderate",
+   "fr": "Modéré"
+  },
+  "Modéré #–#": {
+   "en": "Moderate #–#",
+   "fr": "Modéré 5–8"
+  },
+  "Modéré : # juridictions — Régulation sectorielle en place": {
+   "en": "Moderate: # jurisdictions — Sectoral regulation in place",
+   "fr": "Modéré : 10 juridictions — Régulation sectorielle en place"
+  },
+  "NIS# (Dir. #/#) ↗": {
+   "en": "NIS # (Dir. #/#) ↗",
+   "fr": "NIS2 (Dir. 2022/2555) ↗"
+  },
+  "NIST AI RMF + lois étatiques (Colorado, Texas, Californie #) + EO #": {
+   "en": "NIST AI RMF + state laws (Colorado, Texas, California #) + EO #",
+   "fr": "NIST AI RMF + lois étatiques (Colorado, Texas, Californie 2026) + EO 14179"
+  },
+  "NL": {
+   "en": "NL",
+   "fr": "NL"
+  },
+  "National AI Policy # approuvée + loi protection données en projet": {
+   "en": "National AI Policy # approved + draft data protection law",
+   "fr": "National AI Policy 2025 approuvée + loi protection données en projet"
+  },
+  "National AI Policy + projet de loi IA": {
+   "en": "National AI Policy + AI bill",
+   "fr": "National AI Policy + projet de loi IA"
+  },
+  "National AI Policy Framework (projet) + loi protection données contraignante": {
+   "en": "National AI Policy Framework (draft) + binding data protection law",
+   "fr": "National AI Policy Framework (projet) + loi protection données contraignante"
+  },
+  "National AI Roadmap #-# + PDPA": {
+   "en": "National AI Roadmap #-# + PDPA",
+   "fr": "National AI Roadmap 2021-2025 + PDPA"
+  },
+  "National AI Strategy (projet #) + NDPA": {
+   "en": "National AI Strategy (draft #) + NDPA",
+   "fr": "National AI Strategy (projet 2024) + NDPA"
+  },
+  "National AI Strategy + Digital Code": {
+   "en": "National AI Strategy + Digital Code",
+   "fr": "National AI Strategy + Digital Code"
+  },
+  "Niveaux de contrainte réglementaire mondiale": {
+   "en": "Levels of regulatory constraint worldwide",
+   "fr": "Niveaux de contrainte réglementaire mondiale"
+  },
+  "Nouveau standard de watermarking en Chine. Les plateformes doivent adapter leur chaine de distribution de contenu. Modele potentiellement exporte vers les pays partenaires.": {
+   "en": "New watermarking standard in China. Platforms must adapt their content distribution chain. A model potentially exported to partner countries.",
+   "fr": "Nouveau standard de watermarking en Chine. Les plateformes doivent adapter leur chaine de distribution de contenu. Modele potentiellement exporte vers les pays partenaires."
+  },
+  "Nouvel Executive Order # - virage pro-innovation americain": {
+   "en": "New Executive Order # - American pro-innovation shift",
+   "fr": "Nouvel Executive Order 14179 - virage pro-innovation americain"
+  },
+  "OM": {
+   "en": "OM",
+   "fr": "OM"
+  },
+  "Obligations GPAI et regime de sanctions de l'AI Act applicables": {
+   "en": "AI Act GPAI obligations and penalty regime applicable",
+   "fr": "Obligations GPAI et regime de sanctions de l'AI Act applicables"
+  },
+  "Oman": {
+   "en": "Oman",
+   "fr": "Oman"
+  },
+  "PDPL + décisions d application SDAIA (# en #) — approche souple": {
+   "en": "PDPL + SDAIA implementing decisions (# in #) — flexible approach",
+   "fr": "PDPL + décisions d application SDAIA (48 en 2025) — approche souple"
+  },
+  "PH": {
+   "en": "PH",
+   "fr": "PH"
+  },
+  "PIPL (#) ↗": {
+   "en": "PIPL (#) ↗",
+   "fr": "PIPL (2021) ↗"
+  },
+  "PIVOT DÉRÉGLEMENTAIRE": {
+   "en": "DEREGULATORY PIVOT",
+   "fr": "PIVOT DÉRÉGLEMENTAIRE"
+  },
+  "PK": {
+   "en": "PK",
+   "fr": "PK"
+  },
+  "PL #/# (cadre IA complet, vote final attendu) + LGPD": {
+   "en": "PL #/# (comprehensive AI framework, final vote expected) + LGPD",
+   "fr": "PL 2338/2023 (cadre IA complet, vote final attendu) + LGPD"
+  },
+  "Pakistan": {
+   "en": "Pakistan",
+   "fr": "Pakistan"
+  },
+  "Pays BRI": {
+   "en": "BRI countries",
+   "fr": "Pays BRI"
+  },
+  "Pays influencés": {
+   "en": "Countries influenced",
+   "fr": "Pays influencés"
+  },
+  "Pays-Bas": {
+   "en": "Netherlands",
+   "fr": "Pays-Bas"
+  },
+  "Philippines": {
+   "en": "Philippines",
+   "fr": "Philippines"
+  },
+  "Plus récent d'abord": {
+   "en": "Newest first",
+   "fr": "Plus récent d'abord"
+  },
+  "Point critique : DeepSeek R# (jan. #) a démontré qu'un modèle performant pouvait être développé avec des contraintes de puces de calcul, contournant partiellement les contrôles à l'export américains et modifiant l'équilibre stratégique mondial.": {
+   "en": "Critical point: DeepSeek R# (Jan. #) showed that a high-performing model could be developed under computing-chip constraints, partly circumventing American export controls and shifting the global strategic balance.",
+   "fr": "Point critique : DeepSeek R1 (jan. 2025) a démontré qu'un modèle performant pouvait être développé avec des contraintes de puces de calcul, contournant partiellement les contrôles à l'export américains et modifiant l'équilibre stratégique mondial."
+  },
+  "Point critique : les entreprises US opérant en UE restent soumises à l'AI Act. Le découplage réglementaire contraint les multinationales à maintenir deux référentiels de conformité distincts.": {
+   "en": "Critical point: US companies operating in the EU remain subject to the AI Act. Regulatory decoupling forces multinationals to maintain two separate compliance frameworks.",
+   "fr": "Point critique : les entreprises US opérant en UE restent soumises à l'AI Act. Le découplage réglementaire contraint les multinationales à maintenir deux référentiels de conformité distincts."
+  },
+  "Politique de régulation de l IA (#) + loi protection données": {
+   "en": "AI regulation policy (#) + data protection law",
+   "fr": "Politique de régulation de l IA (2023) + loi protection données"
+  },
+  "Politique nationale IA complète (référence Afrique) + loi protection données": {
+   "en": "Comprehensive national AI policy (a reference for Africa) + data protection law",
+   "fr": "Politique nationale IA complète (référence Afrique) + loi protection données"
+  },
+  "Profil réglementaire": {
+   "en": "Regulatory profile",
+   "fr": "Profil réglementaire"
+  },
+  "Projet de loi IA basé sur les risques (au Parlement) + KVKK": {
+   "en": "Risk-based AI bill (in Parliament) + KVKK",
+   "fr": "Projet de loi IA basé sur les risques (au Parlement) + KVKK"
+  },
+  "Provisions on the Administration of Deep Synthesis Internet Information Services (CAC, #)": {
+   "en": "Provisions on the Administration of Deep Synthesis Internet Information Services (CAC, #)",
+   "fr": "Provisions on the Administration of Deep Synthesis Internet Information Services (CAC, 2022)"
+  },
+  "Provisions on the Management of Algorithmic Recommendations (CAC, #)": {
+   "en": "Provisions on the Management of Algorithmic Recommendations (CAC, #)",
+   "fr": "Provisions on the Management of Algorithmic Recommendations (CAC, 2022)"
+  },
+  "QA": {
+   "en": "QA",
+   "fr": "QA"
+  },
+  "Qatar": {
+   "en": "Qatar",
+   "fr": "Qatar"
+  },
+  "RGPD (Règl. #/#) ↗": {
+   "en": "GDPR (Reg. #/#) ↗",
+   "fr": "RGPD (Règl. 2016/679) ↗"
+  },
+  "RU": {
+   "en": "RU",
+   "fr": "RU"
+  },
+  "RUPTURE TECHNOLOGIQUE": {
+   "en": "TECHNOLOGICAL DISRUPTION",
+   "fr": "RUPTURE TECHNOLOGIQUE"
+  },
+  "RW": {
+   "en": "RW",
+   "fr": "RW"
+  },
+  "Recommandation éthique IA + loi protection données (loi #)": {
+   "en": "AI ethics recommendation + data protection law (Law #)",
+   "fr": "Recommandation éthique IA + loi protection données (loi 25.326)"
+  },
+  "Referentiel d'interpretation essentiel pour les DPO et responsables conformite afin d'evaluer si un systeme releve d'une pratique interdite.": {
+   "en": "An essential interpretation reference for DPOs and compliance officers, to assess whether a system falls under a prohibited practice.",
+   "fr": "Referentiel d'interpretation essentiel pour les DPO et responsables conformite afin d'evaluer si un systeme releve d'une pratique interdite."
+  },
+  "Responsabilité": {
+   "en": "Accountability",
+   "fr": "Responsabilité"
+  },
+  "Retirer AU du comparateur": {
+   "en": "Remove AU from the comparator",
+   "fr": "Retirer AU du comparateur"
+  },
+  "Retirer DE du comparateur": {
+   "en": "Remove DE from the comparator",
+   "fr": "Retirer DE du comparateur"
+  },
+  "Risque géopolitique": {
+   "en": "Geopolitical risk",
+   "fr": "Risque géopolitique"
+  },
+  "Royaume-Uni": {
+   "en": "United Kingdom",
+   "fr": "Royaume-Uni"
+  },
+  "Russie": {
+   "en": "Russia",
+   "fr": "Russie"
+  },
+  "Rwanda": {
+   "en": "Rwanda",
+   "fr": "Rwanda"
+  },
+  "Règlement DORA sur EUR-Lex": {
+   "en": "DORA Regulation on EUR-Lex",
+   "fr": "Règlement DORA sur EUR-Lex"
+  },
+  "Régime de protection des données mature + stratégie nationale IA et éthique": {
+   "en": "Mature data protection regime + national AI and ethics strategy",
+   "fr": "Régime de protection des données mature + stratégie nationale IA et éthique"
+  },
+  "Régulation protection des données (CITRA) + stratégie et cadre de gouvernance IA émergents": {
+   "en": "Data protection regulation (CITRA) + emerging AI strategy and governance framework",
+   "fr": "Régulation protection des données (CITRA) + stratégie et cadre de gouvernance IA émergents"
+  },
+  "Réponse sous # h ouvrées · sans engagement": {
+   "en": "Reply within # working hours · no commitment",
+   "fr": "Réponse sous 24 h ouvrées · sans engagement"
+  },
+  "SA": {
+   "en": "SA",
+   "fr": "SA"
+  },
+  "Sa bibliothèque cartographique est servie par un domaine tiers (unpkg.com) que votre réseau ou votre navigateur n’a pas pu joindre. Les données, elles, sont intactes.": {
+   "en": "Its mapping library is served by a third-party domain (unpkg.com) that your network or your browser could not reach. The data itself is intact.",
+   "fr": "Sa bibliothèque cartographique est servie par un domaine tiers (unpkg.com) que votre réseau ou votre navigateur n’a pas pu joindre. Les données, elles, sont intactes."
+  },
+  "Sanctions": {
+   "en": "Penalties",
+   "fr": "Sanctions"
+  },
+  "Souple < #": {
+   "en": "Flexible < #",
+   "fr": "Souple < 5"
+  },
+  "Souveraineté": {
+   "en": "Sovereignty",
+   "fr": "Souveraineté"
+  },
+  "Sri Lanka": {
+   "en": "Sri Lanka",
+   "fr": "Sri Lanka"
+  },
+  "Stratégie nationale IA + feuille de route DTI + loi vie privée contraignante": {
+   "en": "National AI strategy + DTI roadmap + binding privacy law",
+   "fr": "Stratégie nationale IA + feuille de route DTI + loi vie privée contraignante"
+  },
+  "Stratégie nationale IA + lignes directrices éthiques + loi vie privée contraignante": {
+   "en": "National AI strategy + ethical guidelines + binding privacy law",
+   "fr": "Stratégie nationale IA + lignes directrices éthiques + loi vie privée contraignante"
+  },
+  "Sélectionnez au moins deux pays pour comparer.": {
+   "en": "Select at least two countries to compare.",
+   "fr": "Sélectionnez au moins deux pays pour comparer."
+  },
+  "Sévérité": {
+   "en": "Severity",
+   "fr": "Sévérité"
+  },
+  "TN": {
+   "en": "TN",
+   "fr": "TN"
+  },
+  "TR": {
+   "en": "TR",
+   "fr": "TR"
+  },
+  "Telecharger le rapport d analyse geopolitique au format PDF.": {
+   "en": "Download the geopolitical analysis report as a PDF.",
+   "fr": "Telecharger le rapport d analyse geopolitique au format PDF."
+  },
+  "Telecharger les donnees geopolitiques au format CSV.": {
+   "en": "Download the geopolitical data as a CSV file.",
+   "fr": "Telecharger les donnees geopolitiques au format CSV."
+  },
+  "Texte officiel RGPD sur EUR-Lex": {
+   "en": "Official GDPR text on EUR-Lex",
+   "fr": "Texte officiel RGPD sur EUR-Lex"
+  },
+  "Texte officiel sur EUR-Lex": {
+   "en": "Official text on EUR-Lex",
+   "fr": "Texte officiel sur EUR-Lex"
+  },
+  "Toutes les juridictions — triées par sévérité": {
+   "en": "All jurisdictions — sorted by severity",
+   "fr": "Toutes les juridictions — triées par sévérité"
+  },
+  "Transparence": {
+   "en": "Transparency",
+   "fr": "Transparence"
+  },
+  "Très strict ≥ #": {
+   "en": "Very strict ≥ #",
+   "fr": "Très strict ≥ 8"
+  },
+  "Tunisie": {
+   "en": "Tunisia",
+   "fr": "Tunisie"
+  },
+  "Turquie": {
+   "en": "Turkey",
+   "fr": "Turquie"
+  },
+  "UY": {
+   "en": "UY",
+   "fr": "UY"
+  },
+  "Uruguay": {
+   "en": "Uruguay",
+   "fr": "Uruguay"
+  },
+  "Utiliser Claude Sonnet pour la mise a jour IA.": {
+   "en": "Use Claude Sonnet for the AI update.",
+   "fr": "Utiliser Claude Sonnet pour la mise a jour IA."
+  },
+  "Utiliser Mistral Large pour la mise a jour IA.": {
+   "en": "Use Mistral Large for the AI update.",
+   "fr": "Utiliser Mistral Large pour la mise a jour IA."
+  },
+  "Veille réglementaire IA — actualités mondiales": {
+   "en": "AI regulatory watch — worldwide news",
+   "fr": "Veille réglementaire IA — actualités mondiales"
+  },
+  "Voir les # critères d évaluation →": {
+   "en": "View the # assessment criteria →",
+   "fr": "Voir les 12 critères d évaluation →"
+  },
+  "Voir les mêmes juridictions dans le Panorama →": {
+   "en": "View the same jurisdictions in the Overview →",
+   "fr": "Voir les mêmes juridictions dans le Panorama →"
+  },
+  "Vous cherchez un partenaire dans votre région ?": {
+   "en": "Looking for a partner in your region?",
+   "fr": "Vous cherchez un partenaire dans votre région ?"
+  },
+  "Élevé : # juridictions — Cadre contraignant, sanctions actives": {
+   "en": "High: # jurisdictions — Binding framework, active penalties",
+   "fr": "Élevé : 3 juridictions — Cadre contraignant, sanctions actives"
+  },
+  "Équateur": {
+   "en": "Ecuador",
+   "fr": "Équateur"
+  },
+  "×": {
+   "en": "×",
+   "fr": "×"
+  },
+  "↓ Exporter CSV": {
+   "en": "↓ Export CSV",
+   "fr": "↓ Exporter CSV"
+  },
+  "● RISQUE MODÉRÉ": {
+   "en": "● MODERATE RISK",
+   "fr": "● RISQUE MODÉRÉ"
+  },
+  "● RISQUE ÉLEVÉ": {
+   "en": "● HIGH RISK",
+   "fr": "● RISQUE ÉLEVÉ"
+  },
+  "🇦🇺 Australie": {
+   "en": "🇦🇺 Australia",
+   "fr": "🇦🇺 Australie"
+  },
+  "🇩🇪 Allemagne": {
+   "en": "🇩🇪 Germany",
+   "fr": "🇩🇪 Allemagne"
+  }
+ }
+}

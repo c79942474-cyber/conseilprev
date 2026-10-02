@@ -1,0 +1,1007 @@
+{
+ "_lot": "13-cra-produits",
+ "_mots": 2392,
+ "_pages": [
+  "cra",
+  "cra-chiffre",
+  "cra-ecarts",
+  "cra-role",
+  "cra-signalement"
+ ],
+ "_rubrique": "CRA — PRODUITS",
+ "bloc": {
+  "Adresse de contact pour le signalement": {
+   "en": "<b>Reporting contact address</b>",
+   "fr": "Adresse de contact pour le signalement",
+   "html": "<b>Adresse de contact pour le signalement</b>"
+  },
+  "Alerte précoce": {
+   "en": "<b>Early warning</b>",
+   "fr": "Alerte précoce",
+   "html": "<b>Alerte précoce</b>"
+  },
+  "Aucun chiffre d’affaires déclaré : seuls les montants fixes sont affichés. Ils constituent le plancher de l’exposition, pas son plafond — au-delà d’un certain chiffre d’affaires, c’est le pourcentage qui commande.": {
+   "en": "No turnover declared: only the fixed amounts are shown. They are the <b>floor</b> of the exposure, not its ceiling — above a certain turnover, it is the percentage that governs.",
+   "fr": "Aucun chiffre d’affaires déclaré : seuls les montants fixes sont affichés. Ils constituent le plancher de l’exposition, pas son plafond — au-delà d’un certain chiffre d’affaires, c’est le pourcentage qui commande.",
+   "html": "Aucun chiffre d’affaires déclaré : seuls les montants fixes sont affichés. Ils constituent le <b>plancher</b> de l’exposition, pas son plafond — au-delà d’un certain chiffre d’affaires, c’est le pourcentage qui commande."
+  },
+  "Aucune vulnérabilité exploitable connue à la mise sur le marché": {
+   "en": "<b>No known exploitable vulnerability when placed on the market</b>",
+   "fr": "Aucune vulnérabilité exploitable connue à la mise sur le marché",
+   "html": "<b>Aucune vulnérabilité exploitable connue à la mise sur le marché</b>"
+  },
+  "Bloc # sur # · Analyse d’écart — Verrouillé": {
+   "en": "<b>Block # of # · Gap analysis — Locked</b>",
+   "fr": "Bloc 3 sur 5 · Analyse d’écart — Verrouillé",
+   "html": "<b>Bloc 3 sur 5 · Analyse d’écart — Verrouillé</b>"
+  },
+  "Bloc # sur # · Exposition chiffrée — Verrouillé": {
+   "en": "<b>Block # of # · Quantified exposure — Locked</b>",
+   "fr": "Bloc 4 sur 5 · Exposition chiffrée — Verrouillé",
+   "html": "<b>Bloc 4 sur 5 · Exposition chiffrée — Verrouillé</b>"
+  },
+  "Bloc # sur # · Produits & classification — Verrouillé": {
+   "en": "<b>Block # of # · Products &amp; classification — Locked</b>",
+   "fr": "Bloc 2 sur 5 · Produits & classification — Verrouillé",
+   "html": "<b>Bloc 2 sur 5 · Produits &amp; classification — Verrouillé</b>"
+  },
+  "Bloc # sur # · Qualifier mon rôle — À remplir maintenant": {
+   "en": "<b>Block # of # · Qualify my role — To fill in now</b>",
+   "fr": "Bloc 1 sur 5 · Qualifier mon rôle — À remplir maintenant",
+   "html": "<b>Bloc 1 sur 5 · Qualifier mon rôle — À remplir maintenant</b>"
+  },
+  "Ce module constate ce qui est déclaré ; il ne qualifie pas votre produit à votre place. La classe commande la procédure, donc le budget et le calendrier : elle est choisie par vous, les annexes sont affichées à côté pour que ce choix se fasse en connaissance de cause. Les exclusions sectorielles et la clause générale de l'article # relèvent d'une analyse juridique, pas d'une case cochée. Seul le texte publié au Journal officiel fait foi.": {
+   "en": "This module <b>records what is declared</b>; it does not qualify your product for you. The class drives the procedure, and therefore the budget and the timetable: you choose it, and the annexes are shown alongside so that the choice is an informed one. The sectoral exclusions and the general clause of Article&nbsp;# are a matter for legal analysis, not a ticked box. Only the text published in the Official Journal is authentic.",
+   "fr": "Ce module constate ce qui est déclaré ; il ne qualifie pas votre produit à votre place. La classe commande la procédure, donc le budget et le calendrier : elle est choisie par vous, les annexes sont affichées à côté pour que ce choix se fasse en connaissance de cause. Les exclusions sectorielles et la clause générale de l'article 2 relèvent d'une analyse juridique, pas d'une case cochée. Seul le texte publié au Journal officiel fait foi.",
+   "html": "Ce module <b>constate ce qui est déclaré</b> ; il ne qualifie pas votre produit à votre place. La classe commande la procédure, donc le budget et le calendrier : elle est choisie par vous, les annexes sont affichées à côté pour que ce choix se fasse en connaissance de cause. Les exclusions sectorielles et la clause générale de l'article&nbsp;2 relèvent d'une analyse juridique, pas d'une case cochée. Seul le texte publié au Journal officiel fait foi."
+  },
+  "Ce module ne chiffre que ce que le texte chiffre. Il n'estime aucun coût de mise en conformité — ni jours-homme, ni honoraires d'organisme notifié : ces chiffres ne sont ni dans le règlement ni publics de façon fiable, et les inventer donnerait un document qui a l'air d'un devis sans en être un. Les montants ci-dessus sont des plafonds, pas des prévisions : l'article #, §# impose de tenir compte de la nature, de la gravité et de la durée de l'infraction, des antécédents et de la taille de l'entreprise. Le régime de sanctions lui-même est fixé par chaque État membre.": {
+   "en": "<b>This module only puts figures on what the text puts figures on.</b> It estimates no compliance cost — neither person-days nor notified body fees: these figures are neither in the Regulation nor reliably public, and inventing them would produce a document that looks like a quote without being one. The amounts above are <b>ceilings</b>, not forecasts: Article #(#) requires account to be taken of the nature, gravity and duration of the infringement, previous infringements and the size of the company. The penalty regime itself is set by each Member State.",
+   "fr": "Ce module ne chiffre que ce que le texte chiffre. Il n'estime aucun coût de mise en conformité — ni jours-homme, ni honoraires d'organisme notifié : ces chiffres ne sont ni dans le règlement ni publics de façon fiable, et les inventer donnerait un document qui a l'air d'un devis sans en être un. Les montants ci-dessus sont des plafonds, pas des prévisions : l'article 64, §5 impose de tenir compte de la nature, de la gravité et de la durée de l'infraction, des antécédents et de la taille de l'entreprise. Le régime de sanctions lui-même est fixé par chaque État membre.",
+   "html": "<b>Ce module ne chiffre que ce que le texte chiffre.</b> Il n'estime aucun coût de mise en conformité — ni jours-homme, ni honoraires d'organisme notifié : ces chiffres ne sont ni dans le règlement ni publics de façon fiable, et les inventer donnerait un document qui a l'air d'un devis sans en être un. Les montants ci-dessus sont des <b>plafonds</b>, pas des prévisions : l'article 64, §5 impose de tenir compte de la nature, de la gravité et de la durée de l'infraction, des antécédents et de la taille de l'entreprise. Le régime de sanctions lui-même est fixé par chaque État membre."
+  },
+  "Cette qualification suit ce que vous déclarez. Elle s'établit en droit sur les faits réels — et notamment la notion de modification substantielle, qui s'apprécie au regard de la cybersécurité du produit, non de l'ampleur technique du changement. Un correctif mineur qui rouvre une surface d'attaque peut être substantiel ; une refonte qui n'y touche pas peut ne pas l'être.": {
+   "en": "This qualification follows what you declare. In law it is established on the actual facts — in particular the notion of <b>substantial modification</b>, which is assessed with regard to the product’s cybersecurity, not the technical extent of the change. A minor patch that reopens an attack surface can be substantial; an overhaul that does not touch it may not be.",
+   "fr": "Cette qualification suit ce que vous déclarez. Elle s'établit en droit sur les faits réels — et notamment la notion de modification substantielle, qui s'apprécie au regard de la cybersécurité du produit, non de l'ampleur technique du changement. Un correctif mineur qui rouvre une surface d'attaque peut être substantiel ; une refonte qui n'y touche pas peut ne pas l'être.",
+   "html": "Cette qualification suit ce que vous déclarez. Elle s'établit en droit sur les faits réels — et notamment la notion de <b>modification substantielle</b>, qui s'apprécie au regard de la cybersécurité du produit, non de l'ampleur technique du changement. Un correctif mineur qui rouvre une surface d'attaque peut être substantiel ; une refonte qui n'y touche pas peut ne pas l'être."
+  },
+  "Communication sur les vulnérabilités corrigées": {
+   "en": "<b>Information about fixed vulnerabilities</b>",
+   "fr": "Communication sur les vulnérabilités corrigées",
+   "html": "<b>Communication sur les vulnérabilités corrigées</b>"
+  },
+  "Confidentialité des données": {
+   "en": "<b>Confidentiality of data</b>",
+   "fr": "Confidentialité des données",
+   "html": "<b>Confidentialité des données</b>"
+  },
+  "Configuration de sécurité par défaut": {
+   "en": "<b>Secure-by-default configuration</b>",
+   "fr": "Configuration de sécurité par défaut",
+   "html": "<b>Configuration de sécurité par défaut</b>"
+  },
+  "Correction par mises à jour de sécurité": {
+   "en": "<b>Remediation through security updates</b>",
+   "fr": "Correction par mises à jour de sécurité",
+   "html": "<b>Correction par mises à jour de sécurité</b>"
+  },
+  "Correction sans retard": {
+   "en": "<b>Remediation without delay</b>",
+   "fr": "Correction sans retard",
+   "html": "<b>Correction sans retard</b>"
+  },
+  "Diffusion gratuite et sans délai des correctifs": {
+   "en": "<b>Free and prompt distribution of patches</b>",
+   "fr": "Diffusion gratuite et sans délai des correctifs",
+   "html": "<b>Diffusion gratuite et sans délai des correctifs</b>"
+  },
+  "Disponibilité des fonctions essentielles": {
+   "en": "<b>Availability of essential functions</b>",
+   "fr": "Disponibilité des fonctions essentielles",
+   "html": "<b>Disponibilité des fonctions essentielles</b>"
+  },
+  "Distribution sécurisée des mises à jour": {
+   "en": "<b>Secure distribution of updates</b>",
+   "fr": "Distribution sécurisée des mises à jour",
+   "html": "<b>Distribution sécurisée des mises à jour</b>"
+  },
+  "Enregistrement et surveillance de l'activité": {
+   "en": "<b>Recording and monitoring of activity</b>",
+   "fr": "Enregistrement et surveillance de l'activité",
+   "html": "<b>Enregistrement et surveillance de l'activité</b>"
+  },
+  "Intégrité des données, commandes et configuration": {
+   "en": "<b>Integrity of data, commands and configuration</b>",
+   "fr": "Intégrité des données, commandes et configuration",
+   "html": "<b>Intégrité des données, commandes et configuration</b>"
+  },
+  "La notification part simultanément au CSIRT désigné coordinateur et à l'ENISA, par la plateforme unique de signalement de l'article #. Prévenir l'un puis l'autre, ou l'un seulement, n'est pas ce que le texte demande.": {
+   "en": "The notification goes <b>simultaneously</b> to the CSIRT designated as coordinator <b>and</b> to ENISA, through the single reporting platform of Article&nbsp;#. Notifying one and then the other, or only one of them, is not what the text requires.",
+   "fr": "La notification part simultanément au CSIRT désigné coordinateur et à l'ENISA, par la plateforme unique de signalement de l'article 16. Prévenir l'un puis l'autre, ou l'un seulement, n'est pas ce que le texte demande.",
+   "html": "La notification part <b>simultanément</b> au CSIRT désigné coordinateur <b>et</b> à l'ENISA, par la plateforme unique de signalement de l'article&nbsp;16. Prévenir l'un puis l'autre, ou l'un seulement, n'est pas ce que le texte demande."
+  },
+  "Limitation des surfaces d'attaque": {
+   "en": "<b>Limitation of attack surfaces</b>",
+   "fr": "Limitation des surfaces d'attaque",
+   "html": "<b>Limitation des surfaces d'attaque</b>"
+  },
+  "Minimisation des données": {
+   "en": "<b>Data minimisation</b>",
+   "fr": "Minimisation des données",
+   "html": "<b>Minimisation des données</b>"
+  },
+  "Niveau de cybersécurité approprié aux risques": {
+   "en": "<b>A level of cybersecurity appropriate to the risks</b>",
+   "fr": "Niveau de cybersécurité approprié aux risques",
+   "html": "<b>Niveau de cybersécurité approprié aux risques</b>"
+  },
+  "Nomenclature des logiciels (SBOM)": {
+   "en": "<b>Software bill of materials (SBOM)</b>",
+   "fr": "Nomenclature des logiciels (SBOM)",
+   "html": "<b>Nomenclature des logiciels (SBOM)</b>"
+  },
+  "Notification d'incident": {
+   "en": "<b>Incident notification</b>",
+   "fr": "Notification d'incident",
+   "html": "<b>Notification d'incident</b>"
+  },
+  "Notification de vulnérabilité": {
+   "en": "<b>Vulnerability notification</b>",
+   "fr": "Notification de vulnérabilité",
+   "html": "<b>Notification de vulnérabilité</b>"
+  },
+  "Politique de divulgation coordonnée": {
+   "en": "<b>Coordinated disclosure policy</b>",
+   "fr": "Politique de divulgation coordonnée",
+   "html": "<b>Politique de divulgation coordonnée</b>"
+  },
+  "Protection contre l'accès non autorisé": {
+   "en": "<b>Protection against unauthorised access</b>",
+   "fr": "Protection contre l'accès non autorisé",
+   "html": "<b>Protection contre l'accès non autorisé</b>"
+  },
+  "Rapport final": {
+   "en": "<b>Final report</b>",
+   "fr": "Rapport final",
+   "html": "<b>Rapport final</b>"
+  },
+  "Réduction de l'impact d'un incident": {
+   "en": "<b>Reduction of the impact of an incident</b>",
+   "fr": "Réduction de l'impact d'un incident",
+   "html": "<b>Réduction de l'impact d'un incident</b>"
+  },
+  "Suppression sécurisée des données et paramètres": {
+   "en": "<b>Secure deletion of data and settings</b>",
+   "fr": "Suppression sécurisée des données et paramètres",
+   "html": "<b>Suppression sécurisée des données et paramètres</b>"
+  },
+  "Tests et examens de sécurité réguliers": {
+   "en": "<b>Regular security testing and reviews</b>",
+   "fr": "Tests et examens de sécurité réguliers",
+   "html": "<b>Tests et examens de sécurité réguliers</b>"
+  },
+  "Une exigence non renseignée n'est pas une exigence conforme. Le taux affiché est toujours accompagné du nombre de lignes vides : un taux calculé sur trois exigences renseignées ne dit rien des dix-huit autres.": {
+   "en": "A requirement <b>that is not filled in is not a compliant requirement</b>. The rate displayed always comes with the number of empty rows: a rate calculated on three requirements filled in says nothing about the other eighteen.",
+   "fr": "Une exigence non renseignée n'est pas une exigence conforme. Le taux affiché est toujours accompagné du nombre de lignes vides : un taux calculé sur trois exigences renseignées ne dit rien des dix-huit autres.",
+   "html": "Une exigence <b>non renseignée n'est pas une exigence conforme</b>. Le taux affiché est toujours accompagné du nombre de lignes vides : un taux calculé sur trois exigences renseignées ne dit rien des dix-huit autres."
+  }
+ },
+ "texte": {
+  "# % de conformité déclarée": {
+   "en": "# % declared compliance",
+   "fr": "0 % de conformité déclarée"
+  },
+  "# M€": {
+   "en": "# M€",
+   "fr": "15 M€"
+  },
+  "# h": {
+   "en": "# h",
+   "fr": "24 h"
+  },
+  "# jours": {
+   "en": "# days",
+   "fr": "3 jours"
+  },
+  "# non renseignée(s)": {
+   "en": "# not provided",
+   "fr": "21 non renseignée(s)"
+  },
+  "% du CA mondial": {
+   "en": "% of worldwide turnover",
+   "fr": "% du CA mondial"
+  },
+  "+ Ajouter au registre": {
+   "en": "+ Add to the register",
+   "fr": "+ Ajouter au registre"
+  },
+  ": elles survivent à un rechargement de la page, et ne sont pas enregistrées sur votre compte. Sur un poste partagé, ou avant de répondre pour une autre entité, effacez-les.": {
+   "en": ": they survive a page reload and are not saved to your account. On a shared computer, or before answering for another entity, clear them.",
+   "fr": ": elles survivent à un rechargement de la page, et ne sont pas enregistrées sur votre compte. Sur un poste partagé, ou avant de répondre pour une autre entité, effacez-les."
+  },
+  "Adresse de contact pour le signalement": {
+   "en": "Contact address for reporting",
+   "fr": "Adresse de contact pour le signalement"
+  },
+  "Alerte précoce": {
+   "en": "Early warning",
+   "fr": "Alerte précoce"
+  },
+  "Annexe I, partie I — Propriétés du produit": {
+   "en": "Annex I, Part I — Product properties",
+   "fr": "Annexe I, partie I — Propriétés du produit"
+  },
+  "Annexe I, partie II — Gestion des vulnérabilités": {
+   "en": "Annex I, Part II — Vulnerability handling",
+   "fr": "Annexe I, partie II — Gestion des vulnérabilités"
+  },
+  "Apportez-vous une MODIFICATION SUBSTANTIELLE à un produit déjà mis sur le marché ?": {
+   "en": "Are you making a SUBSTANTIAL MODIFICATION to a product already placed on the market?",
+   "fr": "Apportez-vous une MODIFICATION SUBSTANTIELLE à un produit déjà mis sur le marché ?"
+  },
+  "Assistants virtuels polyvalents pour maison intelligente": {
+   "en": "Smart home general purpose virtual assistants",
+   "fr": "Assistants virtuels polyvalents pour maison intelligente"
+  },
+  "Au moins un produit comportant des éléments numériques, avec son nom et sa classe": {
+   "en": "At least one product with digital elements, with its name and class",
+   "fr": "Au moins un produit comportant des éléments numériques, avec son nom et sa classe"
+  },
+  "Au moins une réponse sur ce que vous faites du produit": {
+   "en": "At least one answer on what you do with the product",
+   "fr": "Au moins une réponse sur ce que vous faites du produit"
+  },
+  "Aucun chiffre d’affaires déclaré : seuls les montants fixes sont affichés. Ils constituent le": {
+   "en": "No turnover declared: only the fixed amounts are shown. They are the",
+   "fr": "Aucun chiffre d’affaires déclaré : seuls les montants fixes sont affichés. Ils constituent le"
+  },
+  "Aucun produit déclaré. Ajoutez-en un pour obtenir sa procédure.": {
+   "en": "No product declared. Add one to get its procedure.",
+   "fr": "Aucun produit déclaré. Ajoutez-en un pour obtenir sa procédure."
+  },
+  "Aucune vulnérabilité exploitable connue à la mise sur le marché": {
+   "en": "No known exploitable vulnerability when placed on the market",
+   "fr": "Aucune vulnérabilité exploitable connue à la mise sur le marché"
+  },
+  "Bloc # sur # · Analyse d’écart — Verrouillé": {
+   "en": "Block # of # · Gap analysis — Locked",
+   "fr": "Bloc 3 sur 5 · Analyse d’écart — Verrouillé"
+  },
+  "Bloc # sur # · Exposition chiffrée — Verrouillé": {
+   "en": "Block # of # · Quantified exposure — Locked",
+   "fr": "Bloc 4 sur 5 · Exposition chiffrée — Verrouillé"
+  },
+  "Bloc # sur # · Produits & classification — Verrouillé": {
+   "en": "Block # of # · Products & classification — Locked",
+   "fr": "Bloc 2 sur 5 · Produits & classification — Verrouillé"
+  },
+  "Bloc # sur # · Qualifier mon rôle — À remplir maintenant": {
+   "en": "Block # of # · Qualify my role — To fill in now",
+   "fr": "Bloc 1 sur 5 · Qualifier mon rôle — À remplir maintenant"
+  },
+  "Bloc # sur # · Signalement art. # — Verrouillé": {
+   "en": "Block # of # · Reporting, art. # — Locked",
+   "fr": "Bloc 5 sur 5 · Signalement art. 14 — Verrouillé"
+  },
+  "C'est le tuyau : un produit important de classe II ne peut être évalué que par un organisme notifié, et ces organismes ne sont désignés que depuis cette date.": {
+   "en": "This is the bottleneck: an important product of class II can only be assessed by a notified body, and these bodies have only been designated since that date.",
+   "fr": "C'est le tuyau : un produit important de classe II ne peut être évalué que par un organisme notifié, et ces organismes ne sont désignés que depuis cette date."
+  },
+  "Calculer l'exposition": {
+   "en": "Calculate exposure",
+   "fr": "Calculer l'exposition"
+  },
+  "Cartes à puce ou dispositifs similaires, y compris éléments sécurisés": {
+   "en": "Smart cards or similar devices, including secure elements",
+   "fr": "Cartes à puce ou dispositifs similaires, y compris éléments sécurisés"
+  },
+  "Ce bloc dépend de : Qualifier mon rôle. Complétez-le d'abord.": {
+   "en": "This block depends on: Qualify my role. Complete it first.",
+   "fr": "Ce bloc dépend de : Qualifier mon rôle. Complétez-le d'abord."
+  },
+  "Ce que ce rôle vous fait porter": {
+   "en": "What this role makes you bear",
+   "fr": "Ce que ce rôle vous fait porter"
+  },
+  "Ce qui commande": {
+   "en": "What drives",
+   "fr": "Ce qui commande"
+  },
+  "Ce qui est transmis": {
+   "en": "What is transmitted",
+   "fr": "Ce qui est transmis"
+  },
+  "Ce qui module le montant, et interdit de lire ces chiffres comme une prévision": {
+   "en": "What modulates the amount, and forbids reading these figures as a forecast",
+   "fr": "Ce qui module le montant, et interdit de lire ces chiffres comme une prévision"
+  },
+  "Ce qu’elle demande": {
+   "en": "What it requires",
+   "fr": "Ce qu’elle demande"
+  },
+  "Ce qu’elle emporte": {
+   "en": "What it entails",
+   "fr": "Ce qu’elle emporte"
+  },
+  "Cette modification a des répercussions sur la cybersécurité de l’ENSEMBLE du produit": {
+   "en": "This modification affects the cybersecurity of the ENTIRE product",
+   "fr": "Cette modification a des répercussions sur la cybersécurité de l’ENSEMBLE du produit"
+  },
+  "Chargement des exigences…": {
+   "en": "Loading the requirements…",
+   "fr": "Chargement des exigences…"
+  },
+  "Chargement des échéances…": {
+   "en": "Loading the deadlines…",
+   "fr": "Chargement des échéances…"
+  },
+  "Chiffre d'affaires annuel mondial (M€)": {
+   "en": "Annual worldwide turnover (€M)",
+   "fr": "Chiffre d'affaires annuel mondial (M€)"
+  },
+  "Circuits intégrés spécifiques (ASIC) et réseaux de portes programmables (FPGA) dotés de fonctionnalités liées à la sécurité": {
+   "en": "Application-specific integrated circuits (ASIC) and field-programmable gate arrays (FPGA) with security-related functionalities",
+   "fr": "Circuits intégrés spécifiques (ASIC) et réseaux de portes programmables (FPGA) dotés de fonctionnalités liées à la sécurité"
+  },
+  "Communication sur les vulnérabilités corrigées": {
+   "en": "Disclosure of fixed vulnerabilities",
+   "fr": "Communication sur les vulnérabilités corrigées"
+  },
+  "Conception, développement et fabrication garantissant un niveau approprié en fonction des risques.": {
+   "en": "Design, development and production ensuring an appropriate level based on the risks.",
+   "fr": "Conception, développement et fabrication garantissant un niveau approprié en fonction des risques."
+  },
+  "Concevez-vous ou faites-vous concevoir ce produit ?": {
+   "en": "Do you design this product or have it designed?",
+   "fr": "Concevez-vous ou faites-vous concevoir ce produit ?"
+  },
+  "Confidentialité des données": {
+   "en": "Data confidentiality",
+   "fr": "Confidentialité des données"
+  },
+  "Configuration de sécurité par défaut": {
+   "en": "Secure by default configuration",
+   "fr": "Configuration de sécurité par défaut"
+  },
+  "Correction par mises à jour de sécurité": {
+   "en": "Remediation through security updates",
+   "fr": "Correction par mises à jour de sécurité"
+  },
+  "Correction sans retard": {
+   "en": "Remediation without delay",
+   "fr": "Correction sans retard"
+  },
+  "Description de la vulnérabilité, gravité et répercussions, acteur malveillant le cas échéant, précisions sur le correctif.": {
+   "en": "Description of the vulnerability, severity and impact, malicious actor where applicable, details of the security update.",
+   "fr": "Description de la vulnérabilité, gravité et répercussions, acteur malveillant le cas échéant, précisions sur le correctif."
+  },
+  "Description détaillée, gravité et répercussions, type de menace ou cause profonde, mesures d'atténuation appliquées et en cours.": {
+   "en": "Detailed description, severity and impact, type of threat or root cause, mitigation measures applied and ongoing.",
+   "fr": "Description détaillée, gravité et répercussions, type de menace ou cause profonde, mesures d'atténuation appliquées et en cours."
+  },
+  "Diffusion gratuite et sans délai des correctifs": {
+   "en": "Free and prompt dissemination of patches",
+   "fr": "Diffusion gratuite et sans délai des correctifs"
+  },
+  "Disponibilité des fonctions essentielles": {
+   "en": "Availability of essential functions",
+   "fr": "Disponibilité des fonctions essentielles"
+  },
+  "Dispositifs matériels avec boîtier de sécurité": {
+   "en": "Hardware devices with security boxes",
+   "fr": "Dispositifs matériels avec boîtier de sécurité"
+  },
+  "Distributeur": {
+   "en": "Distributor",
+   "fr": "Distributeur"
+  },
+  "Distribution sécurisée des mises à jour": {
+   "en": "Secure distribution of updates",
+   "fr": "Distribution sécurisée des mises à jour"
+  },
+  "Délai": {
+   "en": "Deadline",
+   "fr": "Délai"
+  },
+  "EN VIGUEUR": {
+   "en": "IN FORCE",
+   "fr": "EN VIGUEUR"
+  },
+  "Effacer les réponses CRA": {
+   "en": "Clear the CRA answers",
+   "fr": "Effacer les réponses CRA"
+  },
+  "Enregistrement et surveillance de l'activité": {
+   "en": "Recording and monitoring of activity",
+   "fr": "Enregistrement et surveillance de l'activité"
+  },
+  "Et ce que TOUS portent, quel que soit le rôle": {
+   "en": "And what ALL of them carry, whatever the role",
+   "fr": "Et ce que TOUS portent, quel que soit le rôle"
+  },
+  "Exigence": {
+   "en": "Requirement",
+   "fr": "Exigence"
+  },
+  "Exigences essentielles et obligations du fabricant": {
+   "en": "Essential requirements and manufacturer obligations",
+   "fr": "Exigences essentielles et obligations du fabricant"
+  },
+  "Gestion et correction des vulnérabilités sans retard, par mises à jour de sécurité fournies séparément des mises à jour de fonctionnalité quand c'est techniquement possible.": {
+   "en": "Handling and remediation of vulnerabilities without delay, through security updates provided separately from functionality updates where technically feasible.",
+   "fr": "Gestion et correction des vulnérabilités sans retard, par mises à jour de sécurité fournies séparément des mises à jour de fonctionnalité quand c'est techniquement possible."
+  },
+  "Gestionnaires de démarrage": {
+   "en": "Boot managers",
+   "fr": "Gestionnaires de démarrage"
+  },
+  "Gestionnaires de mots de passe": {
+   "en": "Password managers",
+   "fr": "Gestionnaires de mots de passe"
+  },
+  "Hyperviseurs et systèmes d'exécution de conteneurs": {
+   "en": "Hypervisors and container runtime systems",
+   "fr": "Hyperviseurs et systèmes d'exécution de conteneurs"
+  },
+  "Il manque # réponses :": {
+   "en": "Missing # answers:",
+   "fr": "Il manque 21 réponses :"
+  },
+  "Incident grave ayant des répercussions sur la sécurité du produit": {
+   "en": "Severe incident having an impact on the security of the product",
+   "fr": "Incident grave ayant des répercussions sur la sécurité du produit"
+  },
+  "Indiquant au minimum si l'incident pourrait avoir été causé par des actes illicites ou malveillants.": {
+   "en": "Indicating at a minimum whether the incident may have been caused by unlawful or malicious acts.",
+   "fr": "Indiquant au minimum si l'incident pourrait avoir été causé par des actes illicites ou malveillants."
+  },
+  "Informations générales sur le produit, nature de l'exploitation et de la vulnérabilité, mesures correctives prises et celles que les utilisateurs peuvent prendre.": {
+   "en": "General information about the product, nature of the exploit and of the vulnerability, corrective measures taken and those users can take.",
+   "fr": "Informations générales sur le produit, nature de l'exploitation et de la vulnérabilité, mesures correctives prises et celles que les utilisateurs peuvent prendre."
+  },
+  "Informations inexactes aux organismes notifiés et aux autorités": {
+   "en": "Incorrect information to notified bodies and authorities",
+   "fr": "Informations inexactes aux organismes notifiés et aux autorités"
+  },
+  "Infrastructure à clé publique et logiciels d'émission de certificats numériques": {
+   "en": "Public key infrastructure and digital certificate issuance software",
+   "fr": "Infrastructure à clé publique et logiciels d'émission de certificats numériques"
+  },
+  "Interfaces réseau physiques et virtuelles": {
+   "en": "Physical and virtual network interfaces",
+   "fr": "Interfaces réseau physiques et virtuelles"
+  },
+  "Intégrité des données, commandes et configuration": {
+   "en": "Integrity of data, commands and configuration",
+   "fr": "Intégrité des données, commandes et configuration"
+  },
+  "Je conçois ou fais concevoir ce produit": {
+   "en": "I design this product or have it designed",
+   "fr": "Je conçois ou fais concevoir ce produit"
+  },
+  "Je le mets sur le marché sous MON nom ou MA marque": {
+   "en": "I place it on the market under MY name or MY brand",
+   "fr": "Je le mets sur le marché sous MON nom ou MA marque"
+  },
+  "Je le mets à disposition sans l’avoir conçu ni importé": {
+   "en": "I make it available without having designed or imported it",
+   "fr": "Je le mets à disposition sans l’avoir conçu ni importé"
+  },
+  "Jouets connectés à caractéristiques sociales interactives ou à fonctions de localisation": {
+   "en": "Connected toys with interactive social features or location-tracking functions",
+   "fr": "Jouets connectés à caractéristiques sociales interactives ou à fonctions de localisation"
+  },
+  "Journalisation des accès et modifications pertinents pour la sécurité, avec possibilité de désactivation.": {
+   "en": "Logging of security-relevant access and modifications, with an option to disable it.",
+   "fr": "Journalisation des accès et modifications pertinents pour la sécurité, avec possibilité de désactivation."
+  },
+  "J’y apporte une modification substantielle": {
+   "en": "I make a substantial modification to it",
+   "fr": "J’y apporte une modification substantielle"
+  },
+  "La fourniture d'informations inexactes, incomplètes ou trompeuses aux organismes notifiés et aux autorités de surveillance du marché, en réponse à une demande.": {
+   "en": "The supply of incorrect, incomplete or misleading information to notified bodies and market surveillance authorities in reply to a request.",
+   "fr": "La fourniture d'informations inexactes, incomplètes ou trompeuses aux organismes notifiés et aux autorités de surveillance du marché, en réponse à une demande."
+  },
+  "La seule obligation dont le retard se compte DÉJÀ : # h pour l'alerte précoce, # h pour la notification.": {
+   "en": "The only obligation whose delay ALREADY counts: # h for the early warning, # h for the notification.",
+   "fr": "La seule obligation dont le retard se compte DÉJÀ : 24 h pour l'alerte précoce, 72 h pour la notification."
+  },
+  "Le chemin suivi": {
+   "en": "The path followed",
+   "fr": "Le chemin suivi"
+  },
+  "Le chiffre d'affaires annuel mondial de l'exercice précédent": {
+   "en": "The worldwide annual turnover of the preceding financial year",
+   "fr": "Le chiffre d'affaires annuel mondial de l'exercice précédent"
+  },
+  "Le fabricant est établi hors de l’Union, et c’est moi qui mets le produit sur le marché de l’Union": {
+   "en": "The manufacturer is established outside the Union, and I am the one placing the product on the Union market",
+   "fr": "Le fabricant est établi hors de l’Union, et c’est moi qui mets le produit sur le marché de l’Union"
+  },
+  "Le fabricant est-il établi HORS de l'Union, et mettez-vous vous-même le produit sur le marché de l'Union ?": {
+   "en": "Is the manufacturer established OUTSIDE the Union, and are you yourself placing the product on the Union market?",
+   "fr": "Le fabricant est-il établi HORS de l'Union, et mettez-vous vous-même le produit sur le marché de l'Union ?"
+  },
+  "Le fabricant prend connaissance d'un incident grave affectant la sécurité du produit.": {
+   "en": "The manufacturer becomes aware of a severe incident affecting the security of the product.",
+   "fr": "Le fabricant prend connaissance d'un incident grave affectant la sécurité du produit."
+  },
+  "Le fabricant prend connaissance d'une vulnérabilité de son produit qui est activement exploitée.": {
+   "en": "The manufacturer becomes aware of a vulnerability in its product that is actively exploited.",
+   "fr": "Le fabricant prend connaissance d'une vulnérabilité de son produit qui est activement exploitée."
+  },
+  "Le non-respect des exigences essentielles de cybersécurité de l'annexe I et des obligations des articles # et #.": {
+   "en": "Non-compliance with the essential cybersecurity requirements of Annex I and the obligations of Articles # and #.",
+   "fr": "Le non-respect des exigences essentielles de cybersécurité de l'annexe I et des obligations des articles 13 et 14."
+  },
+  "Le non-respect des obligations des articles # à #, #, # §#-#, # §#-#, # §#-#-#, # §#, #, #, #, # et #.": {
+   "en": "Non-compliance with the obligations of Articles # to #, #, #(#)-(#), #(#)-(#), #(#)-(#)-(#), #(#), #, #, #, # and #.",
+   "fr": "Le non-respect des obligations des articles 18 à 23, 28, 30 §1-4, 31 §1-4, 32 §1-2-3, 33 §5, 39, 41, 47, 49 et 53."
+  },
+  "Le produit est mis à disposition sans vulnérabilité exploitable connue.": {
+   "en": "The product is made available without any known exploitable vulnerability.",
+   "fr": "Le produit est mis à disposition sans vulnérabilité exploitable connue."
+  },
+  "Le produit est soumis régulièrement à des tests et examens efficaces.": {
+   "en": "The product is regularly subjected to effective tests and reviews.",
+   "fr": "Le produit est soumis régulièrement à des tests et examens efficaces."
+  },
+  "Le référentiel du règlement est momentanément indisponible. Rien n’est affiché plutôt qu’un tableau partiel : sur un texte réglementaire, une liste tronquée qui ne dit pas qu’elle l’est vaut moins que pas de liste du tout.": {
+   "en": "The Regulation’s reference data is temporarily unavailable. Nothing is shown rather than a partial table: for a regulatory text, a truncated list that does not say it is truncated is worth less than no list at all.",
+   "fr": "Le référentiel du règlement est momentanément indisponible. Rien n’est affiché plutôt qu’un tableau partiel : sur un texte réglementaire, une liste tronquée qui ne dit pas qu’elle l’est vaut moins que pas de liste du tout."
+  },
+  "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : elle se démontre par la procédure d'évaluation de la conformité que la classe du produit impose, avant le marquage CE.": {
+   "en": "The green on this path says that what a block expects has been filled in. It does not say that you are compliant: compliance is demonstrated through the conformity assessment procedure that the product’s class imposes, before CE marking.",
+   "fr": "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : elle se démontre par la procédure d'évaluation de la conformité que la classe du produit impose, avant le marquage CE."
+  },
+  "Les mises à jour correctives sont diffusées sans délai et à titre gratuit, accompagnées d'un avis informant les utilisateurs.": {
+   "en": "Corrective updates are disseminated without delay and free of charge, accompanied by an advisory informing users.",
+   "fr": "Les mises à jour correctives sont diffusées sans délai et à titre gratuit, accompagnées d'un avis informant les utilisateurs."
+  },
+  "Limitation des surfaces d'attaque": {
+   "en": "Limitation of attack surfaces",
+   "fr": "Limitation des surfaces d'attaque"
+  },
+  "Logiciels qui recherchent, suppriment ou mettent en quarantaine des logiciels malveillants": {
+   "en": "Software that searches for, removes or quarantines malicious software",
+   "fr": "Logiciels qui recherchent, suppriment ou mettent en quarantaine des logiciels malveillants"
+  },
+  "Marquage CE, déclaration UE de conformité, documentation technique, exigences essentielles de l'annexe I.": {
+   "en": "CE marking, EU declaration of conformity, technical documentation, essential requirements of Annex I.",
+   "fr": "Marquage CE, déclaration UE de conformité, documentation technique, exigences essentielles de l'annexe I."
+  },
+  "Mettez-vous le produit sur le marché sous VOTRE nom ou VOTRE marque ?": {
+   "en": "Are you placing the product on the market under YOUR name or YOUR trademark?",
+   "fr": "Mettez-vous le produit sur le marché sous VOTRE nom ou VOTRE marque ?"
+  },
+  "Microcontrôleurs dotés de fonctionnalités liées à la sécurité": {
+   "en": "Microcontrollers with security-related functionalities",
+   "fr": "Microcontrôleurs dotés de fonctionnalités liées à la sécurité"
+  },
+  "Microcontrôleurs résistants aux manipulations": {
+   "en": "Tamper-resistant microcontrollers",
+   "fr": "Microcontrôleurs résistants aux manipulations"
+  },
+  "Microprocesseurs dotés de fonctionnalités liées à la sécurité": {
+   "en": "Microprocessors with security-related functionalities",
+   "fr": "Microprocesseurs dotés de fonctionnalités liées à la sécurité"
+  },
+  "Microprocesseurs résistants aux manipulations": {
+   "en": "Tamper-resistant microprocessors",
+   "fr": "Microprocesseurs résistants aux manipulations"
+  },
+  "Minimisation des données": {
+   "en": "Data minimisation",
+   "fr": "Minimisation des données"
+  },
+  "Mis à disposition sur le marché de l'Union": {
+   "en": "Made available on the Union market",
+   "fr": "Mis à disposition sur le marché de l'Union"
+  },
+  "Montant fixe": {
+   "en": "Fixed amount",
+   "fr": "Montant fixe"
+  },
+  "Mécanismes de contrôle d'accès et d'authentification appropriés.": {
+   "en": "Appropriate access control and authentication mechanisms.",
+   "fr": "Mécanismes de contrôle d'accès et d'authentification appropriés."
+  },
+  "Mécanismes garantissant que les correctifs parviennent aux produits de façon sûre et rapide.": {
+   "en": "Mechanisms ensuring that patches reach products securely and quickly.",
+   "fr": "Mécanismes garantissant que les correctifs parviennent aux produits de façon sûre et rapide."
+  },
+  "Nature de l'incident, évaluation initiale, mesures correctives prises et celles que les utilisateurs peuvent prendre.": {
+   "en": "Nature of the incident, initial assessment, corrective measures taken and those users can take.",
+   "fr": "Nature de l'incident, évaluation initiale, mesures correctives prises et celles que les utilisateurs peuvent prendre."
+  },
+  "Navigateurs autonomes et intégrés": {
+   "en": "Standalone and embedded browsers",
+   "fr": "Navigateurs autonomes et intégrés"
+  },
+  "Niveau de cybersécurité approprié aux risques": {
+   "en": "Level of cybersecurity appropriate to the risks",
+   "fr": "Niveau de cybersécurité approprié aux risques"
+  },
+  "Nom du produit — ex. « Passerelle VPN industrielle »": {
+   "en": "Product name — e.g. “Industrial VPN gateway”",
+   "fr": "Nom du produit — ex. « Passerelle VPN industrielle »"
+  },
+  "Nomenclature des logiciels (SBOM)": {
+   "en": "Software bill of materials (SBOM)",
+   "fr": "Nomenclature des logiciels (SBOM)"
+  },
+  "Normes harmonisées appliquées": {
+   "en": "Harmonised standards applied",
+   "fr": "Normes harmonisées appliquées"
+  },
+  "Notification d'incident": {
+   "en": "Incident notification",
+   "fr": "Notification d'incident"
+  },
+  "Notification de vulnérabilité": {
+   "en": "Vulnerability notification",
+   "fr": "Notification de vulnérabilité"
+  },
+  "Obligations des autres opérateurs et de la procédure": {
+   "en": "Obligations of other operators and of the procedure",
+   "fr": "Obligations des autres opérateurs et de la procédure"
+  },
+  "Palier": {
+   "en": "Tier",
+   "fr": "Palier"
+  },
+  "Pare-feu, systèmes de détection et de prévention des intrusions": {
+   "en": "Firewalls, intrusion detection and prevention systems",
+   "fr": "Pare-feu, systèmes de détection et de prévention des intrusions"
+  },
+  "Passerelles pour compteur intelligent au sein des systèmes intelligents de mesure, et autres dispositifs à des fins de sécurité avancées": {
+   "en": "Smart meter gateways within smart metering systems, and other devices for advanced security purposes",
+   "fr": "Passerelles pour compteur intelligent au sein des systèmes intelligents de mesure, et autres dispositifs à des fins de sécurité avancées"
+  },
+  "Point de contact permettant à un tiers de signaler une vulnérabilité découverte, et partage d'informations sur les composants tiers.": {
+   "en": "Contact point allowing a third party to report a discovered vulnerability, and sharing of information about third-party components.",
+   "fr": "Point de contact permettant à un tiers de signaler une vulnérabilité découverte, et partage d'informations sur les composants tiers."
+  },
+  "Politique de divulgation coordonnée": {
+   "en": "Coordinated disclosure policy",
+   "fr": "Politique de divulgation coordonnée"
+  },
+  "Possibilité pour l'utilisateur d'effacer données et configuration de façon sûre et facile, et de les transférer.": {
+   "en": "Ability for the user to erase data and settings securely and easily, and to transfer them.",
+   "fr": "Possibilité pour l'utilisateur d'effacer données et configuration de façon sûre et facile, et de les transférer."
+  },
+  "Produit comportant des éléments numériques": {
+   "en": "Product with digital elements",
+   "fr": "Produit comportant des éléments numériques"
+  },
+  "Produits avec fonction de réseau privé virtuel (VPN)": {
+   "en": "Products with virtual private network (VPN) functionality",
+   "fr": "Produits avec fonction de réseau privé virtuel (VPN)"
+  },
+  "Produits critiques — # catégories": {
+   "en": "Critical products — # categories",
+   "fr": "Produits critiques — 3 catégories"
+  },
+  "Produits domestiques intelligents dotés de fonctionnalités de sécurité (serrures, caméras, surveillance pour bébé, alarmes)": {
+   "en": "Smart home products with security functionalities (locks, cameras, baby monitoring, alarm systems)",
+   "fr": "Produits domestiques intelligents dotés de fonctionnalités de sécurité (serrures, caméras, surveillance pour bébé, alarmes)"
+  },
+  "Produits importants — classe I — # catégories": {
+   "en": "Important products — class I — # categories",
+   "fr": "Produits importants — classe I — 19 catégories"
+  },
+  "Produits importants — classe II — # catégories": {
+   "en": "Important products — class II — # categories",
+   "fr": "Produits importants — classe II — 4 catégories"
+  },
+  "Produits portables personnels de surveillance de la santé hors règlements (UE) #/# et #/#, ou destinés aux enfants": {
+   "en": "Personal wearable health monitoring products outside Regulations (EU) #/# and #/#, or intended for children",
+   "fr": "Produits portables personnels de surveillance de la santé hors règlements (UE) 2017/745 et 2017/746, ou destinés aux enfants"
+  },
+  "Protection contre l'accès non autorisé": {
+   "en": "Protection against unauthorised access",
+   "fr": "Protection contre l'accès non autorisé"
+  },
+  "Protection contre la manipulation ou la modification non autorisée.": {
+   "en": "Protection against unauthorised manipulation or modification.",
+   "fr": "Protection contre la manipulation ou la modification non autorisée."
+  },
+  "Protection des données au repos, en transit et en traitement, par chiffrement ou autre moyen adapté.": {
+   "en": "Protection of data at rest, in transit and in processing, through encryption or other appropriate means.",
+   "fr": "Protection des données au repos, en transit et en traitement, par chiffrement ou autre moyen adapté."
+  },
+  "Question": {
+   "en": "Question",
+   "fr": "Question"
+  },
+  "Recensement et documentation des vulnérabilités et des composants, par une nomenclature lisible par machine couvrant au moins les dépendances de niveau supérieur.": {
+   "en": "Identification and documentation of vulnerabilities and components, through a machine-readable bill of materials covering at least the top-level dependencies.",
+   "fr": "Recensement et documentation des vulnérabilités et des composants, par une nomenclature lisible par machine couvrant au moins les dépendances de niveau supérieur."
+  },
+  "Retenu": {
+   "en": "Selected",
+   "fr": "Retenu"
+  },
+  "Routeurs, modems destinés à la connexion à l'internet et commutateurs": {
+   "en": "Routers, modems intended for connection to the internet, and switches",
+   "fr": "Routeurs, modems destinés à la connexion à l'internet et commutateurs"
+  },
+  "Réduction de l'impact d'un incident": {
+   "en": "Reduction of the impact of an incident",
+   "fr": "Réduction de l'impact d'un incident"
+  },
+  "Réduction des interfaces exposées, y compris externes.": {
+   "en": "Reduction of exposed interfaces, including external ones.",
+   "fr": "Réduction des interfaces exposées, y compris externes."
+  },
+  "Répondez aux questions ci-dessus.": {
+   "en": "Answer the questions above.",
+   "fr": "Répondez aux questions ci-dessus."
+  },
+  "Réponse": {
+   "en": "Answer",
+   "fr": "Réponse"
+  },
+  "Résilience et atténuation des effets des attaques par déni de service.": {
+   "en": "Resilience against and mitigation of denial-of-service attacks.",
+   "fr": "Résilience et atténuation des effets des attaques par déni de service."
+  },
+  "Saisissez un chiffre d'affaires, ou calculez sans pour voir les montants fixes.": {
+   "en": "Enter a turnover, or calculate without one to see the fixed amounts.",
+   "fr": "Saisissez un chiffre d'affaires, ou calculez sans pour voir les montants fixes."
+  },
+  "Signalement sans retard injustifié, en indiquant le cas échéant les États membres où le produit a été mis à disposition.": {
+   "en": "Reporting without undue delay, indicating where applicable the Member States in which the product has been made available.",
+   "fr": "Signalement sans retard injustifié, en indiquant le cas échéant les États membres où le produit a été mis à disposition."
+  },
+  "Suppression sécurisée des données et paramètres": {
+   "en": "Secure deletion of data and settings",
+   "fr": "Suppression sécurisée des données et paramètres"
+  },
+  "Sur demande des autorités de surveillance : le nom et l'adresse de qui vous a fourni le produit, et de qui vous l'avez fourni. Cela suppose de le savoir — donc de l'avoir consigné au moment de la transaction, pas au moment de la demande.": {
+   "en": "At the request of market surveillance authorities: the name and address of whoever supplied the product to you, and of whoever you supplied it to. This assumes you know it — and therefore that you recorded it at the time of the transaction, not at the time of the request.",
+   "fr": "Sur demande des autorités de surveillance : le nom et l'adresse de qui vous a fourni le produit, et de qui vous l'avez fourni. Cela suppose de le savoir — donc de l'avoir consigné au moment de la transaction, pas au moment de la demande."
+  },
+  "Systèmes d'exploitation": {
+   "en": "Operating systems",
+   "fr": "Systèmes d'exploitation"
+  },
+  "Systèmes de gestion de la qualité": {
+   "en": "Quality management systems",
+   "fr": "Systèmes de gestion de la qualité"
+  },
+  "Systèmes de gestion des identités, logiciels et dispositifs de gestion des accès privilégiés (dont lecteurs d'authentification, de contrôle d'accès et biométriques)": {
+   "en": "Identity management systems, privileged access management software and devices (including authentication, access control and biometric readers)",
+   "fr": "Systèmes de gestion des identités, logiciels et dispositifs de gestion des accès privilégiés (dont lecteurs d'authentification, de contrôle d'accès et biométriques)"
+  },
+  "Systèmes de gestion des informations et des événements de sécurité (SIEM)": {
+   "en": "Security information and event management (SIEM) systems",
+   "fr": "Systèmes de gestion des informations et des événements de sécurité (SIEM)"
+  },
+  "Techniques et mesures d'atténuation limitant la portée d'une compromission.": {
+   "en": "Mitigation techniques and measures limiting the reach of a compromise.",
+   "fr": "Techniques et mesures d'atténuation limitant la portée d'une compromission."
+  },
+  "Tests et examens de sécurité réguliers": {
+   "en": "Regular security tests and reviews",
+   "fr": "Tests et examens de sécurité réguliers"
+  },
+  "Traitement limité aux données adéquates, pertinentes et nécessaires à l'utilisation prévue.": {
+   "en": "Processing limited to data that is adequate, relevant and necessary for the intended use.",
+   "fr": "Traitement limité aux données adéquates, pertinentes et nécessaires à l'utilisation prévue."
+  },
+  "Une exigence non renseignée n’est pas une exigence conforme : elle n’entre pas au numérateur.": {
+   "en": "A requirement not provided is not a compliant requirement: it does not count towards the numerator.",
+   "fr": "Une exigence non renseignée n’est pas une exigence conforme : elle n’entre pas au numérateur."
+  },
+  "Une politique de divulgation coordonnée des vulnérabilités est établie et appliquée.": {
+   "en": "A coordinated vulnerability disclosure policy is put in place and enforced.",
+   "fr": "Une politique de divulgation coordonnée des vulnérabilités est établie et appliquée."
+  },
+  "Vider": {
+   "en": "Empty",
+   "fr": "Vider"
+  },
+  "Vos réponses restent dans ce navigateur": {
+   "en": "Your answers stay in this browser",
+   "fr": "Vos réponses restent dans ce navigateur"
+  },
+  "Vulnérabilité activement exploitée": {
+   "en": "Actively exploited vulnerability",
+   "fr": "Vulnérabilité activement exploitée"
+  },
+  "Vulnérabilités corrigeables par mise à jour, y compris automatique et activée par défaut mais désactivable.": {
+   "en": "Vulnerabilities can be addressed through updates, including automatic updates enabled by default but with an opt-out.",
+   "fr": "Vulnérabilités corrigeables par mise à jour, y compris automatique et activée par défaut mais désactivable."
+  },
+  "agir avec la diligence requise": {
+   "en": "act with due care",
+   "fr": "agir avec la diligence requise"
+  },
+  "annexe III": {
+   "en": "Annex III",
+   "fr": "annexe III"
+  },
+  "annexe IV": {
+   "en": "Annex IV",
+   "fr": "annexe IV"
+  },
+  "art. # ou # — vous êtes fabricant pour ce que vous modifiez": {
+   "en": "art. # or # — you are the manufacturer for what you modify",
+   "fr": "art. 21 ou 22 — vous êtes fabricant pour ce que vous modifiez"
+  },
+  "art. # — vous êtes fabricant": {
+   "en": "art. # — you are the manufacturer",
+   "fr": "art. 21 — vous êtes fabricant"
+  },
+  "art. # — vous êtes fabricant d'origine": {
+   "en": "art. # — you are the original manufacturer",
+   "fr": "art. 3 — vous êtes fabricant d'origine"
+  },
+  "art. # — vous êtes importateur": {
+   "en": "art. # — you are the importer",
+   "fr": "art. 19 — vous êtes importateur"
+  },
+  "art. #, §#": {
+   "en": "art. #(#)",
+   "fr": "art. 64, §2"
+  },
+  "art. #, §# et §#": {
+   "en": "art. #(#) and (#)",
+   "fr": "art. 14, §3 et §4"
+  },
+  "art. #, §# et §# · art. #": {
+   "en": "art. #(#) and (#) · art. #",
+   "fr": "art. 14, §1 et §3 · art. 16"
+  },
+  "bascule à # M€ de chiffre d’affaires": {
+   "en": "switches at €# million of turnover",
+   "fr": "bascule à 600 M€ de chiffre d’affaires"
+  },
+  "de l’exposition, pas son plafond — au-delà d’un certain chiffre d’affaires, c’est le pourcentage qui commande.": {
+   "en": "of the exposure, not its ceiling — above a certain turnover, the percentage governs.",
+   "fr": "de l’exposition, pas son plafond — au-delà d’un certain chiffre d’affaires, c’est le pourcentage qui commande."
+  },
+  "depuis le #-#-# (# j) — Article # — signalement des vulnérabilités activement exploitées et des incidents graves": {
+   "en": "since #-#-# (# d) — Article # — reporting of actively exploited vulnerabilities and severe incidents",
+   "fr": "depuis le 2026-09-11 (20 j) — Article 14 — signalement des vulnérabilités activement exploitées et des incidents graves"
+  },
+  "depuis le #-#-# (# j) — Chapitre IV (art. # à #) — notification des organismes d'évaluation de la conformité": {
+   "en": "since #-#-# (# d) — Chapter IV (art. # to #) — notification of conformity assessment bodies",
+   "fr": "depuis le 2026-06-11 (112 j) — Chapitre IV (art. 35 à 51) — notification des organismes d'évaluation de la conformité"
+  },
+  "ei-# — Aucune vulnérabilité exploitable connue à la mise sur le marché": {
+   "en": "ei-# — No known exploitable vulnerability when placed on the market",
+   "fr": "ei-02 — Aucune vulnérabilité exploitable connue à la mise sur le marché"
+  },
+  "ei-# — Confidentialité des données": {
+   "en": "ei-# — Data confidentiality",
+   "fr": "ei-06 — Confidentialité des données"
+  },
+  "ei-# — Configuration de sécurité par défaut": {
+   "en": "ei-# — Secure by default configuration",
+   "fr": "ei-03 — Configuration de sécurité par défaut"
+  },
+  "ei-# — Correction par mises à jour de sécurité": {
+   "en": "ei-# — Remediation through security updates",
+   "fr": "ei-04 — Correction par mises à jour de sécurité"
+  },
+  "ei-# — Niveau de cybersécurité approprié aux risques": {
+   "en": "ei-# — Level of cybersecurity appropriate to the risks",
+   "fr": "ei-01 — Niveau de cybersécurité approprié aux risques"
+  },
+  "ei-# — Protection contre l'accès non autorisé": {
+   "en": "ei-# — Protection against unauthorised access",
+   "fr": "ei-05 — Protection contre l'accès non autorisé"
+  },
+  "ex. #": {
+   "en": "e.g. #",
+   "fr": "ex. 45"
+  },
+  "faire prendre les mesures correctives, ou faire retirer": {
+   "en": "have corrective measures taken, or have the product withdrawn",
+   "fr": "faire prendre les mesures correctives, ou faire retirer"
+  },
+  "informer sans retard injustifié en cas de risque important": {
+   "en": "inform without undue delay in the event of a significant risk",
+   "fr": "informer sans retard injustifié en cas de risque important"
+  },
+  "intégralement": {
+   "en": "in full",
+   "fr": "intégralement"
+  },
+  "l'existence d'amendes déjà infligées au même opérateur pour une infraction similaire": {
+   "en": "whether fines have already been imposed on the same operator for a similar infringement",
+   "fr": "l'existence d'amendes déjà infligées au même opérateur pour une infraction similaire"
+  },
+  "la nature, la gravité et la durée de l'infraction et de ses conséquences": {
+   "en": "the nature, gravity and duration of the infringement and of its consequences",
+   "fr": "la nature, la gravité et la durée de l'infraction et de ses conséquences"
+  },
+  "la taille de l'entreprise, en particulier s'il s'agit d'une micro, petite ou moyenne entreprise, y compris une jeune entreprise": {
+   "en": "the size of the company, in particular whether it is a micro, small or medium-sized enterprise, including a start-up",
+   "fr": "la taille de l'entreprise, en particulier s'il s'agit d'une micro, petite ou moyenne entreprise, y compris une jeune entreprise"
+  },
+  "le #-#-# (dans # j) — Application générale du règlement": {
+   "en": "on #-#-# (in # d) — General application of the Regulation",
+   "fr": "le 2027-12-11 (dans 436 j) — Application générale du règlement"
+  },
+  "le montant fixe": {
+   "en": "the fixed amount",
+   "fr": "le montant fixe"
+  },
+  "ne pas mettre à disposition tant qu'un produit qu'il croit non conforme n'a pas été mis en conformité": {
+   "en": "not make available a product it believes non-compliant until it has been brought into compliance",
+   "fr": "ne pas mettre à disposition tant qu'un produit qu'il croit non conforme n'a pas été mis en conformité"
+  },
+  "non": {
+   "en": "no",
+   "fr": "non"
+  },
+  "se vérifie sur l’organisation, et vaut pendant toute la période d’assistance": {
+   "en": "is verified on the organisation, and holds for the whole support period",
+   "fr": "se vérifie sur l’organisation, et vaut pendant toute la période d’assistance"
+  },
+  "se vérifie sur une version du produit": {
+   "en": "is verified on a version of the product",
+   "fr": "se vérifie sur une version du produit"
+  },
+  "sur # exigence(s) retenue(s),": {
+   "en": "out of # included requirement(s),",
+   "fr": "sur 21 exigence(s) retenue(s),"
+  },
+  "sur #.": {
+   "en": "out of #.",
+   "fr": "sur 21."
+  },
+  "vérifier que le fabricant ET l'importateur se sont conformés à leurs obligations, et que tous les documents nécessaires lui ont été COMMUNIQUÉS": {
+   "en": "verify that the manufacturer AND the importer have complied with their obligations, and that all the necessary documents have been PROVIDED to it",
+   "fr": "vérifier que le fabricant ET l'importateur se sont conformés à leurs obligations, et que tous les documents nécessaires lui ont été COMMUNIQUÉS"
+  },
+  "vérifier que le marquage CE est apposé": {
+   "en": "verify that the CE marking is affixed",
+   "fr": "vérifier que le marquage CE est apposé"
+  },
+  "À VENIR": {
+   "en": "UPCOMING",
+   "fr": "À VENIR"
+  },
+  "À la publication d'une mise à jour : description, identification du produit, conséquences, gravité, et aide à la remédiation.": {
+   "en": "When an update is published: description, product identification, consequences, severity, and help with remediation.",
+   "fr": "À la publication d'une mise à jour : description, identification du produit, conséquences, gravité, et aide à la remédiation."
+  },
+  "Étape": {
+   "en": "Stage",
+   "fr": "Étape"
+  },
+  "État sûr à la livraison, avec possibilité de réinitialisation à l'état d'origine ; dérogation possible pour un produit sur mesure.": {
+   "en": "Secure state on delivery, with the option to reset to the original state; derogation possible for a tailor-made product.",
+   "fr": "État sûr à la livraison, avec possibilité de réinitialisation à l'état d'origine ; dérogation possible pour un produit sur mesure."
+  },
+  "à compter de la mise à disposition d'une mesure de correction ou d'atténuation": {
+   "en": "from the availability of a corrective or mitigating measure",
+   "fr": "à compter de la mise à disposition d'une mesure de correction ou d'atténuation"
+  },
+  "à compter de la notification d'incident": {
+   "en": "from the incident notification",
+   "fr": "à compter de la notification d'incident"
+  },
+  "— Le CSIRT désigné comme coordinateur ET l'ENISA, SIMULTANÉMENT, par la plateforme unique de signalement.": {
+   "en": "— The CSIRT designated as coordinator AND ENISA, SIMULTANEOUSLY, through the single reporting platform.",
+   "fr": "— Le CSIRT désigné comme coordinateur ET l'ENISA, SIMULTANÉMENT, par la plateforme unique de signalement."
+  },
+  "— Vous mettez le produit à disposition sans le concevoir, l'importer, le marquer ni le modifier.": {
+   "en": "— You make the product available without designing, importing, marking or modifying it.",
+   "fr": "— Vous mettez le produit à disposition sans le concevoir, l'importer, le marquer ni le modifier."
+  },
+  "… et # autre(s), sur cet écran.": {
+   "en": "… and # other(s), on this screen.",
+   "fr": "… et 15 autre(s), sur cet écran."
+  },
+  "↓ Qualifier mon rôle": {
+   "en": "↓ Qualify my role",
+   "fr": "↓ Qualifier mon rôle"
+  }
+ }
+}

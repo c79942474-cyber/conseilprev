@@ -83,6 +83,15 @@ DEJA_GARDES = {"nist_ai_rmf": "cp-sentinel-nist-profil-v1",
                #  Une entrée de plus dans MEMOIRE écrirait le même état deux
                #  fois, sous deux clés, et la seconde écraserait la première.
                "en18286": "cp-sentinel-en18286-v1",
+               #  LA DILIGENCE OCDE GARDE SES RÉPONSES PAR LE MÊME CHEMIN,
+               #  et pour la même raison. Mesuré dans le dépôt : ses huit
+               #  gestionnaires (groupes, implication, réponse, lot,
+               #  ajout/retrait/champ d'un risque, effacement) appellent
+               #  tous `_ocdeEcrire`, qui écrit `cp-sentinel-ocde-v1` par
+               #  `_declEcrire`, et `ocdeInit` relit ce magasin par
+               #  `_declLire` AVANT de peindre. Une entrée de plus dans
+               #  MEMOIRE écrirait le même état sous deux clés.
+               "ocde": "cp-sentinel-ocde-v1",
                "owasp_llm": "cp-sentinel-owasp-declares-v1",
                "nist_800_53": "cp-sentinel-nist53-v1",
                "nist_800_82": "cp-sentinel-nist82-v1",

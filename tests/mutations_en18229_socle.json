@@ -76,8 +76,8 @@
   {
    "nom": "le taux annonce douze normes quand la table en porte treize",
    "fichier": "conformite.py",
-   "avant": "NORMES_ANNONCEES = 13",
-   "apres": "NORMES_ANNONCEES = 12",
+   "avant": "NORMES_ANNONCEES = 14",
+   "apres": "NORMES_ANNONCEES = 13",
    "regle": "test_conformite_REFUSE_un_compte_de_normes_qui_NE_SUIT_PAS_la_table"
   }
  ]

@@ -82,7 +82,11 @@ NOMS_PROPRES = ['EU AI Act', 'NIS 2', 'DORA', 'CRA', 'ReCyF', 'ISO 27001',
                 # LA RÉFÉRENCE D'UNE NORME NE SE TRADUIT PAS : « prEN 18229-3 »
                 # est ce qui l'identifie au CEN, et le traduire la rendrait
                 # introuvable. Seul son TITRE se traduit, et il l'est.
-                'prEN 18229-3']
+                'prEN 18229-3',
+                # La treizième norme, pour la même raison, et parce que
+                # l'assembleur refusait « prEN # » comme « identique au
+                # français » : ce n'est pas du français, c'est une cote.
+                'prEN 18286']
 
 #: CE QUI DIT QU'UNE CHAÎNE EST DU FRANÇAIS : un accent, ou un mot-outil que
 #: l'anglais n'emploie pas. « plus », « en », « on » sont exclus : ils sont
@@ -158,8 +162,15 @@ def lire_rubriques_page_js(chemin=None):
     return out
 
 
+#: LES PAGES QUI NE SONT PAS DU MENU : la coquille (l'en-tête et le pied,
+#: servis partout), les littéraux du JavaScript, et ce que les routes
+#: servent. Elles ne se regroupent avec aucune rubrique, parce qu'aucune
+#: rubrique ne les contient.
+PAGES_HORS_MENU = ('_coquille', '_js', '_routes')
+
+
 def rubrique_de(page, rubriques):
-    if page in ('_coquille', '_js'):
+    if page in PAGES_HORS_MENU:
         return page
     return rubriques.get(page) or '_autre'
 
@@ -377,40 +388,41 @@ def entrees_des_litteraux(src):
     return out
 
 
-def retirer_litteraux(cat):
-    """Efface la contribution « _js » d'un passage précédent : les entrées
-    qui n'étaient QUE du JavaScript, et l'étiquette « _js » des autres. Sans
-    cela, rejouer « litteraux » après une correction du code garderait les
-    chaînes disparues du JavaScript — un catalogue qui ne maigrit jamais ne
-    mesure plus rien. Rend le nombre d'entrées effacées."""
+def retirer_source(cat, page):
+    """Efface la contribution d'une SOURCE (« _js », « _routes ») d'un
+    passage précédent : les entrées qui ne venaient QUE d'elle, et son
+    étiquette sur les autres. Sans cela, rejouer la passe après une
+    correction du code garderait les chaînes qui ont disparu — un catalogue
+    qui ne maigrit jamais ne mesure plus rien. Rend le nombre d'entrées
+    effacées."""
     effacees = 0
     for regime in ('bloc', 'texte', 'attr'):
         for cle in list(cat[regime]):
             pages = cat[regime][cle].get('pages') or []
-            if '_js' not in pages:
+            if page not in pages:
                 continue
-            if pages == ['_js']:
+            if pages == [page]:
                 del cat[regime][cle]
                 effacees += 1
             else:
-                pages.remove('_js')
+                pages.remove(page)
     return effacees
 
 
-def ajouter_litteraux(cat, entrees):
-    """Ajoute au catalogue, page « _js » ; une clé déjà relevée à l'écran
-    reçoit « _js » en plus. Rend (nouvelles, déjà vues)."""
+def ajouter_source(cat, entrees, page):
+    """Ajoute au catalogue sous cette page de source ; une clé déjà relevée
+    à l'écran la reçoit EN PLUS de ses pages. Rend (nouvelles, déjà vues)."""
     nouvelles, vues = 0, 0
     for regime in ('bloc', 'texte', 'attr'):
         for cle, ent in entrees[regime].items():
             deja = cat[regime].get(cle)
             if deja is None:
-                cat[regime][cle] = dict(ent, pages=['_js'])
+                cat[regime][cle] = dict(ent, pages=[page])
                 nouvelles += 1
             else:
                 vues += 1
-                if '_js' not in deja['pages']:
-                    deja['pages'].append('_js')
+                if page not in deja['pages']:
+                    deja['pages'].append(page)
     return nouvelles, vues
 
 
@@ -418,10 +430,10 @@ def cmd_litteraux(args):
     cat = charger_catalogue(args.catalogue)
     src = io.open(args.js, encoding='utf-8').read()
     entrees = entrees_des_litteraux(src)
-    effacees = retirer_litteraux(cat)
+    effacees = retirer_source(cat, '_js')
     if effacees:
         print(u'  passage précédent effacé : %d entrée(s) « _js »' % effacees)
-    nouvelles, vues = ajouter_litteraux(cat, entrees)
+    nouvelles, vues = ajouter_source(cat, entrees, '_js')
     cat['js'] = {'fichier': os.path.basename(args.js),
                  'entrees': {r: len(entrees[r]) for r in ('bloc', 'texte', 'attr')},
                  'mots': {r: sum(e['mots'] for e in entrees[r].values()) for r in ('bloc', 'texte', 'attr')}}
@@ -431,6 +443,163 @@ def cmd_litteraux(args):
              len(entrees['bloc']), len(entrees['texte']), len(entrees['attr']), nouvelles, vues))
     for r in ('bloc', 'texte', 'attr'):
         print(u'  %-6s %6d entrées %7d mots' % (r, cat['js']['entrees'][r], cat['js']['mots'][r]))
+    return 0
+
+
+# ══════════════════════════════════════════════════════════════════════════
+#  ROUTES — ce que le SERVEUR peint, et qu'une passe navigateur ne voit pas
+# ══════════════════════════════════════════════════════════════════════════
+#
+# POURQUOI UNE TROISIÈME SOURCE. Le catalogue a deux entrées : le DOM qu'une
+# passe navigateur relève, et les littéraux de sentinel.page.js. Les écrans
+# de normes n'y sont ni dans l'un ni dans l'autre. Leur contenu — chaque
+# question, chaque titre de paragraphe, chaque piège de terrain, chaque
+# raison — vient d'une route JSON que le JavaScript peint APRÈS coup, et la
+# passe ne la relève que si le compte a déclaré quelque chose : sur un compte
+# vierge, les quatre écrans de prEN 18286 rendent 25 mots par page.
+#
+# MESURÉ : 1 671 entrées, 26 538 mots que les routes servent et que le
+# catalogue n'avait jamais vus — plus du double de ce que la passe et le
+# JavaScript apportent ensemble pour ces mêmes écrans. Sans cette commande,
+# ces mots ne peuvent entrer dans aucun lot, et « couverture » annonçait
+# 99,6 % sur un inventaire qui ne les comptait pas.
+#
+# LE RUNTIME LES TRADUIT DÉJÀ : sentinel.i18n.js tient un MutationObserver,
+# actif en anglais seulement, qui traduit ce que le JavaScript rend après
+# coup. Il ne manque donc que l'inventaire — pas la mécanique.
+
+#: LES ROUTES RELEVÉES. Appelées par le client de test de Flask, parce que
+#: trois d'entre elles (conformité, ISO 42001, ISO 27001) composent leur
+#: charge SUR PLACE : appeler les modules à la place des routes perdrait
+#: leurs 2 764 mots. Une règle mesure que cette liste couvre toutes les
+#: routes « referentiel » d'app.py.
+ROUTES_REFERENTIEL = (
+    '/api/cra/referentiel',
+    '/api/nis2/referentiel',
+    '/api/recyf/referentiel',
+    '/api/dora/referentiel',
+    '/api/en18229/referentiel',
+    '/api/en18286/referentiel',
+    '/api/ocde/referentiel',
+    '/api/parcours/referentiel',
+    '/api/nist-ai-rmf/referentiel',
+    '/api/nist-ai-rmf/profil/referentiel',
+    '/api/nist-800-53/referentiel',
+    '/api/nist-800-82/referentiel',
+    '/api/owasp-llm/referentiel',
+    '/api/conformite/referentiel',
+    '/api/iso42001/referentiel',
+    '/api/iso27001/referentiel',
+    '/api/qualification/referentiel',
+)
+
+#: ET CELLES QU'ON NE RELÈVE PAS, avec la raison — une route écartée en
+#: silence serait un trou de plus, et la règle exige que chaque exclusion
+#: soit nommée ici.
+ROUTES_HORS_INVENTAIRE = {
+    '/api/formation/referentiel':
+        u"sert les lignes de la base du client, pas du texte de produit",
+    '/api/gouvernance/referentiel':
+        u"derrière la porte d'un compte, et son contenu est le comité de ce "
+        u"client — pas du texte de produit",
+}
+
+
+def chaines_d_une_charge(o, prof=0):
+    """Toutes les chaînes d'une charge JSON, clés comprises : un libellé est
+    parfois la clé d'un dictionnaire, et il s'affiche tout autant."""
+    if prof > 14:
+        return
+    if isinstance(o, str):
+        yield o
+        return
+    if isinstance(o, dict):
+        for k, v in o.items():
+            for x in chaines_d_une_charge(k, prof + 1):
+                yield x
+            for x in chaines_d_une_charge(v, prof + 1):
+                yield x
+        return
+    if isinstance(o, (list, tuple)):
+        for e in o:
+            for x in chaines_d_une_charge(e, prof + 1):
+                yield x
+
+
+def entrees_des_charges(charges):
+    """{regime: {clé: {fr, html?, mots}}} — ce que les routes servent et qui
+    est du français. Une chaîne qui porte des balises de mise en forme nues
+    est classée comme le DOM la classerait (un BLOC), par le même
+    `entrees_d_un_html` que les littéraux du JavaScript."""
+    out = {'bloc': {}, 'texte': {}, 'attr': {}}
+    for charge in charges:
+        for s in chaines_d_une_charge(charge):
+            if '<' in s and '>' in s and _BALISE.search(s):
+                candidats = entrees_d_un_html(s)
+            else:
+                candidats = [('texte', s, None)]
+            for regime, fr, html in candidats:
+                fr = aplanir(fr)
+                if not est_francais(fr) or est_identifiant(fr):
+                    continue
+                cle = normaliser(fr)
+                if cle in out[regime]:
+                    continue
+                ent = {'fr': fr, 'mots': compter_mots(fr)}
+                if regime == 'bloc':
+                    ent['html'] = aplanir(html)
+                out[regime][cle] = ent
+    return out
+
+
+def charges_des_routes(routes):
+    """Les charges JSON que ces routes rendent. Rend (charges, fautes) —
+    une route qui ne répond pas 200, ou qui ne rend pas du JSON, est une
+    FAUTE nommée et non une charge vide : un inventaire muet mentirait."""
+    import json as _json
+    sys.path.insert(0, RACINE)
+    import app as _app
+    client = _app.app.test_client()
+    charges, fautes = [], []
+    for r in routes:
+        rep = client.get(r)
+        if rep.status_code != 200:
+            fautes.append((r, u'HTTP %d' % rep.status_code))
+            continue
+        try:
+            charges.append(_json.loads(rep.data.decode('utf-8')))
+        except ValueError:
+            fautes.append((r, u'la réponse n\'est pas du JSON'))
+    return charges, fautes
+
+
+def cmd_routes(args):
+    cat = charger_catalogue(args.catalogue)
+    charges, fautes = charges_des_routes(args.route or list(ROUTES_REFERENTIEL))
+    for r, motif in fautes:
+        print(u'  %-38s %s' % (r, motif))
+    if fautes and not args.malgre_les_fautes:
+        print(u'  RIEN N\'EST ÉCRIT : %d route(s) n\'ont pas répondu, et un '
+              u'inventaire partiel RETIRERAIT du catalogue ce qu\'elles y '
+              u'apportent (--malgre-les-fautes pour forcer)' % len(fautes))
+        return 1
+    entrees = entrees_des_charges(charges)
+    effacees = retirer_source(cat, '_routes')
+    if effacees:
+        print(u'  passage précédent effacé : %d entrée(s) « _routes »' % effacees)
+    nouvelles, vues = ajouter_source(cat, entrees, '_routes')
+    cat['routes'] = {
+        'routes': len(charges),
+        'entrees': {r: len(entrees[r]) for r in ('bloc', 'texte', 'attr')},
+        'mots': {r: sum(e['mots'] for e in entrees[r].values()) for r in ('bloc', 'texte', 'attr')}}
+    ecrire_json(args.catalogue, cat)
+    print(u'  %d route(s) : %d entrées françaises (bloc %d, texte %d, attr %d) '
+          u'— %d nouvelles au catalogue, %d déjà vues ailleurs'
+          % (len(charges), sum(len(entrees[r]) for r in entrees),
+             len(entrees['bloc']), len(entrees['texte']), len(entrees['attr']),
+             nouvelles, vues))
+    for r in ('bloc', 'texte', 'attr'):
+        print(u'  %-6s %6d entrées %7d mots' % (r, cat['routes']['entrees'][r], cat['routes']['mots'][r]))
     return 0
 
 
@@ -622,8 +791,8 @@ def decouper_lots(cat, taille=2500, rubriques=None, dico=None):
         menu (par-dessus les lourdes), jusqu'à la taille d'un lot (10 % de
         marge) : une rubrique de 80 mots ne fait pas un fichier à elle
         seule, et une rubrique n'est jamais coupée pour remplir un lot.
-    « _coquille » et « _js » ne sont pas des rubriques du menu : ils ne se
-    regroupent avec rien. Avec `dico`, les entrées déjà traduites sont
+    Les pages hors menu (« _coquille », « _js », « _routes ») ne sont pas
+    des rubriques : elles ne se regroupent avec rien. Avec `dico`, les entrées déjà traduites sont
     laissées de côté."""
     rubriques = cat.get('rubriques') or rubriques or {}
     par_rubrique = {}
@@ -653,7 +822,7 @@ def decouper_lots(cat, taille=2500, rubriques=None, dico=None):
     for rub in sorted(par_rubrique):
         entrees = sorted(par_rubrique[rub], key=lambda e: (e[0], e[1], e[2]))
         total = sum(e[3].get('mots', 0) for e in entrees)
-        if total < taille and rub not in ('_coquille', '_js'):
+        if total < taille and rub not in PAGES_HORS_MENU:
             if groupe and mots_groupe[0] + total > taille * 1.1:
                 clore_groupe()
             groupe.append((rub, entrees))
@@ -853,6 +1022,14 @@ def analyseur():
     a.add_argument('--catalogue', default=CATALOGUE)
     a.add_argument('--js', default=PAGE_JS)
     a.set_defaults(fn=cmd_litteraux)
+
+    a = sp.add_parser('routes', help='ajoute au catalogue le français que les routes servent (page _routes)')
+    a.add_argument('--catalogue', default=CATALOGUE)
+    a.add_argument('--route', action='append', default=None,
+                   help='ne relève que cette route (répétable ; défaut : ROUTES_REFERENTIEL)')
+    a.add_argument('--malgre-les-fautes', action='store_true',
+                   help='écrit même si une route n\'a pas répondu (au risque de retirer ses clés)')
+    a.set_defaults(fn=cmd_routes)
 
     a = sp.add_parser('verifier', help='éprouve les fichiers i18n/sentinel/*.json contre le catalogue')
     a.add_argument('fichiers', nargs='*', help='fichiers à vérifier (défaut : tout le dossier hors CATALOGUE)')

@@ -1,0 +1,282 @@
+{
+ "_lot": "04-audit-compte-conformite",
+ "_mots": 384,
+ "_pages": [
+  "audit",
+  "compte",
+  "veille"
+ ],
+ "_rubrique": "AUDIT + COMPTE + CONFORMITÉ",
+ "bloc": {
+  "Connexion et session": {
+   "en": "Sign-in and <em>session</em>",
+   "fr": "Connexion et session",
+   "html": "Connexion et <em>session</em>"
+  },
+  "Lancer un audit IA Act": {
+   "en": "Run an <em>AI Act audit</em>",
+   "fr": "Lancer un audit IA Act",
+   "html": "Lancer un <em>audit IA Act</em>"
+  },
+  "Veille qualifiée par IA": {
+   "en": "<em>AI-qualified</em> watch",
+   "fr": "Veille qualifiée par IA",
+   "html": "Veille <em>qualifiée par IA</em>"
+  },
+  "🎯 Analyse personnalisee sur # systeme(s) de votre Registre IA. Moteur : IA.": {
+   "en": "🎯 Personalised analysis on # system(s) from your AI register. Engine: AI.",
+   "fr": "🎯 Analyse personnalisee sur 1 systeme(s) de votre Registre IA. Moteur : IA.",
+   "html": "🎯 Analyse personnalisee sur <strong>1 systeme(s)</strong> de votre Registre IA. Moteur : IA."
+  }
+ },
+ "texte": {
+  "AI safety testing requirements under EO #": {
+   "en": "AI safety testing requirements under EO #",
+   "fr": "AI safety testing requirements under EO 14179"
+  },
+  "ALL": {
+   "en": "ALL",
+   "fr": "ALL"
+  },
+  "ANSSI : recommandations de securite pour les systemes d'IA": {
+   "en": "ANSSI: security recommendations for AI systems",
+   "fr": "ANSSI : recommandations de securite pour les systemes d'IA"
+  },
+  "Afficher le flux RSS brut sans analyse IA, toutes sources confondues.": {
+   "en": "Show the raw RSS feed without AI analysis, all sources combined.",
+   "fr": "Afficher le flux RSS brut sans analyse IA, toutes sources confondues."
+  },
+  "Afficher les actualites analysees par IA selon leur impact sur vos systemes.": {
+   "en": "Show the news analysed by AI according to its impact on your systems.",
+   "fr": "Afficher les actualites analysees par IA selon leur impact sur vos systemes."
+  },
+  "Afficher les actualites dans toutes les langues.": {
+   "en": "Show news in all languages.",
+   "fr": "Afficher les actualites dans toutes les langues."
+  },
+  "Ajouter des systemes →": {
+   "en": "Add systems →",
+   "fr": "Ajouter des systemes →"
+  },
+  "Analyse non disponible — pertinence generale non personnalisee.": {
+   "en": "Analysis not available — general relevance, not personalised.",
+   "fr": "Analyse non disponible — pertinence generale non personnalisee."
+  },
+  "Aucune actualite a analyser pour le moment.": {
+   "en": "No news to analyse for the moment.",
+   "fr": "Aucune actualite a analyser pour le moment."
+  },
+  "Audit de conformité": {
+   "en": "Compliance audit",
+   "fr": "Audit de conformité"
+  },
+  "Audit structuré en # étapes — méthodologie CONSEILPREV, conforme EU AI Act + NIS# + RGPD.": {
+   "en": "A structured audit in # steps — CONSEILPREV methodology, aligned with the EU AI Act + NIS # + GDPR.",
+   "fr": "Audit structuré en 5 étapes — méthodologie CONSEILPREV, conforme EU AI Act + NIS2 + RGPD."
+  },
+  "CNIL : fiches pratiques sur l'IA et le RGPD": {
+   "en": "CNIL: practical fact sheets on AI and the GDPR",
+   "fr": "CNIL : fiches pratiques sur l'IA et le RGPD"
+  },
+  "CONSEILPREV — accès administrateur": {
+   "en": "CONSEILPREV — administrator access",
+   "fr": "CONSEILPREV — accès administrateur"
+  },
+  "Changer de compte": {
+   "en": "Switch account",
+   "fr": "Changer de compte"
+  },
+  "Chaque actualité est analysée par IA et croisée avec votre Registre IA réel pour évaluer son impact potentiel sur vos systèmes effectivement déployés.": {
+   "en": "Each news item is analysed by AI and cross-checked against your actual AI register to assess its potential impact on the systems you have actually deployed.",
+   "fr": "Chaque actualité est analysée par IA et croisée avec votre Registre IA réel pour évaluer son impact potentiel sur vos systèmes effectivement déployés."
+  },
+  "Compte": {
+   "en": "Account",
+   "fr": "Compte"
+  },
+  "Connecté sur ce navigateur": {
+   "en": "Signed in on this browser",
+   "fr": "Connecté sur ce navigateur"
+  },
+  "Décrivez vos systèmes IA à auditer…": {
+   "en": "Describe the AI systems to audit…",
+   "fr": "Décrivez vos systèmes IA à auditer…"
+  },
+  "Démarrer un audit assisté": {
+   "en": "Start an assisted audit",
+   "fr": "Démarrer un audit assisté"
+  },
+  "EN — filtrer les actualités en anglais": {
+   "en": "EN — filter news in English",
+   "fr": "EN — filtrer les actualités en anglais"
+  },
+  "EU AI Act : les obligations GPAI applicables depuis aout #": {
+   "en": "EU AI Act: the GPAI obligations applicable since August #",
+   "fr": "EU AI Act : les obligations GPAI applicables depuis aout 2025"
+  },
+  "Email professionnel": {
+   "en": "Work email",
+   "fr": "Email professionnel"
+  },
+  "Entreprise": {
+   "en": "Company",
+   "fr": "Entreprise"
+  },
+  "Envoyer un email pre-rempli avec les alertes a impact haut detectees.": {
+   "en": "Send a pre-filled email with the high-impact alerts detected.",
+   "fr": "Envoyer un email pre-rempli avec les alertes a impact haut detectees."
+  },
+  "FR — filtrer les actualités en français": {
+   "en": "FR — filter news in French",
+   "fr": "FR — filtrer les actualités en français"
+  },
+  "Feuille de route priorisée avec délais réglementaires.": {
+   "en": "Prioritised roadmap with regulatory deadlines.",
+   "fr": "Feuille de route priorisée avec délais réglementaires."
+  },
+  "Impact moyen": {
+   "en": "Average impact",
+   "fr": "Impact moyen"
+  },
+  "Inventaire et classification selon l'annexe III de l'AI Act.": {
+   "en": "Inventory and classification under Annex III of the AI Act.",
+   "fr": "Inventaire et classification selon l'annexe III de l'AI Act."
+  },
+  "LANGUE :": {
+   "en": "LANGUAGE:",
+   "fr": "LANGUE :"
+  },
+  "Le Registre, l’audit, les analyses et les documents sont rattachés à un compte. Sans session, Sentinel affiche ses référentiels publics mais rien de ce qui vous appartient.": {
+   "en": "The Register, the audit, the analyses and the documents are attached to an account. Without a session, Sentinel shows its public frameworks but nothing that belongs to you.",
+   "fr": "Le Registre, l’audit, les analyses et les documents sont rattachés à un compte. Sans session, Sentinel affiche ses référentiels publics mais rien de ce qui vous appartient."
+  },
+  "Les modules qui lisent vos données resteront vides": {
+   "en": "Modules that read your data will remain empty",
+   "fr": "Les modules qui lisent vos données resteront vides"
+  },
+  "Non connecté": {
+   "en": "Not signed in",
+   "fr": "Non connecté"
+  },
+  "Offre": {
+   "en": "Plan",
+   "fr": "Offre"
+  },
+  "Prénom Nom": {
+   "en": "First name Last name",
+   "fr": "Prénom Nom"
+  },
+  "Qui est connecté, sous quelle offre, et par où passer pour se connecter ou se déconnecter. Cette page ne conserve rien : elle lit la session en cours et la donne à voir.": {
+   "en": "Who is signed in, under which plan, and where to go to sign in or sign out. This page keeps nothing: it reads the current session and shows it.",
+   "fr": "Qui est connecté, sous quelle offre, et par où passer pour se connecter ou se déconnecter. Cette page ne conserve rien : elle lit la session en cours et la donne à voir."
+  },
+  "Raison sociale": {
+   "en": "Company name",
+   "fr": "Raison sociale"
+  },
+  "Scoring multicritère : droits fondamentaux, sécurité, performance.": {
+   "en": "Multi-criteria scoring: fundamental rights, safety, performance.",
+   "fr": "Scoring multicritère : droits fondamentaux, sécurité, performance."
+  },
+  "Se connecter": {
+   "en": "Sign in",
+   "fr": "Se connecter"
+  },
+  "Se déconnecter": {
+   "en": "Sign out",
+   "fr": "Se déconnecter"
+  },
+  "Se déconnecter ferme la session sur ce navigateur uniquement. Les données du Registre, de l’audit et des analyses restent enregistrées sur le compte.": {
+   "en": "Signing out ends the session on this browser only. The data of the Register, the audit and the analyses remain saved on the account.",
+   "fr": "Se déconnecter ferme la session sur ce navigateur uniquement. Les données du Registre, de l’audit et des analyses restent enregistrées sur le compte."
+  },
+  "Soumettre la demande →": {
+   "en": "Submit the request →",
+   "fr": "Soumettre la demande →"
+  },
+  "Un expert CONSEILPREV vous accompagne à chaque étape.": {
+   "en": "A CONSEILPREV expert supports you at every step.",
+   "fr": "Un expert CONSEILPREV vous accompagne à chaque étape."
+  },
+  "Veille réglementaire": {
+   "en": "Regulatory watch",
+   "fr": "Veille réglementaire"
+  },
+  "Votre nom": {
+   "en": "Your name",
+   "fr": "Votre nom"
+  },
+  "actualité(s) à impact haut détectée(s)": {
+   "en": "high-impact news item(s) detected",
+   "fr": "actualité(s) à impact haut détectée(s)"
+  },
+  "aucune session": {
+   "en": "no session",
+   "fr": "aucune session"
+  },
+  "session ouverte": {
+   "en": "session open",
+   "fr": "session ouverte"
+  },
+  "vous@entreprise.com": {
+   "en": "you@company.com",
+   "fr": "vous@entreprise.com"
+  },
+  "État de la session": {
+   "en": "Session status",
+   "fr": "État de la session"
+  },
+  "① Cartographier": {
+   "en": "① Map",
+   "fr": "① Cartographier"
+  },
+  "② Évaluer": {
+   "en": "② Assess",
+   "fr": "② Évaluer"
+  },
+  "③ Planifier": {
+   "en": "③ Plan",
+   "fr": "③ Planifier"
+  },
+  "⚖️ AI Act EU": {
+   "en": "⚖️ EU AI Act",
+   "fr": "⚖️ AI Act EU"
+  },
+  "⚠️ Aucun systeme dans votre Registre IA — scoring generique non personnalise.": {
+   "en": "⚠️ No system in your AI register — generic, non-personalised scoring.",
+   "fr": "⚠️ Aucun systeme dans votre Registre IA — scoring generique non personnalise."
+  },
+  "✉ Notifier les parties prenantes": {
+   "en": "✉ Notify the stakeholders",
+   "fr": "✉ Notifier les parties prenantes"
+  },
+  "🇫🇷 FR": {
+   "en": "🇫🇷 FR",
+   "fr": "🇫🇷 FR"
+  },
+  "🇬🇧 EN": {
+   "en": "🇬🇧 EN",
+   "fr": "🇬🇧 EN"
+  },
+  "🇺🇸 Federal Register": {
+   "en": "🇺🇸 Federal Register",
+   "fr": "🇺🇸 Federal Register"
+  },
+  "🎯 Veille qualifiée": {
+   "en": "🎯 Qualified watch",
+   "fr": "🎯 Veille qualifiée"
+  },
+  "📡 Flux brut (# sources)": {
+   "en": "📡 Raw feed (# sources)",
+   "fr": "📡 Flux brut (12 sources)"
+  },
+  "🔒 CNIL": {
+   "en": "🔒 CNIL",
+   "fr": "🔒 CNIL"
+  },
+  "🛡 ANSSI": {
+   "en": "🛡 ANSSI",
+   "fr": "🛡 ANSSI"
+  }
+ }
+}

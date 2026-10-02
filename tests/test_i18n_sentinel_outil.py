@@ -30,6 +30,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import types
 import unicodedata
 
 import pytest
@@ -726,6 +727,199 @@ def test_litteraux_en_ligne_de_commande_ajoute_la_page_js_au_catalogue(dossier, 
 
 
 # ══════════════════════════════════════════════════════════════════════════
+#  7 ter. LA TROISIÈME SOURCE — ce que le SERVEUR peint
+# ══════════════════════════════════════════════════════════════════════════
+#
+# LE TROU QUE CES RÈGLES MESURENT. Le catalogue avait deux entrées : le DOM
+# qu'une passe navigateur relève, et les littéraux de sentinel.page.js. Les
+# écrans de normes n'étaient dans ni l'une ni l'autre : leur contenu vient
+# d'une route JSON peinte APRÈS coup, et la passe ne la relève que si le
+# compte a déclaré quelque chose. MESURÉ : 1 671 entrées, 26 538 mots que les
+# routes servent et que le catalogue n'avait jamais vus — et « couverture »
+# annonçait 99,6 % sur un inventaire aveugle à ce texte-là.
+#
+# POURQUOI LE CLIENT DE TEST ET NON LES MODULES. Treize routes sur seize sont
+# minces (`jsonify(module.referentiel())`), mais trois composent leur charge
+# SUR PLACE : conformité, ISO 42001, ISO 27001. Les appeler par leurs modules
+# perdrait leurs 2 764 mots, et le perdrait en silence.
+
+
+CHARGE = {
+    "titre": "Le contexte de l'organisme",
+    "note": "Une phrase <strong>appuyée</strong> et servie telle quelle",
+    "anglais": "Review vendor contracts and avoid arbitrary termination of services",
+    "route": "/api/en18286/referentiel",
+    "paragraphes": [{"num": "4.1", "dit": "Le contexte de l'organisme"},
+                    {"num": "4.2", "dit": "Les parties intéressées et leurs attentes"}],
+    "Le libellé qui est une CLÉ": "oui",
+    #  UNE CLÉ DÉJÀ AU CATALOGUE par une page d'écran : la route doit s'ajouter
+    #  à ses pages, jamais les remplacer.
+    "deja": "Un expert CONSEILPREV vous accompagne",
+}
+
+
+def test_les_charges_des_routes_se_classent_comme_le_DOM_les_classerait():
+    """UNE CHAÎNE SERVIE PAR UNE ROUTE est du texte d'écran : plate elle est
+    un TEXTE, porteuse de balises nues elle est un BLOC — le même
+    `entrees_d_un_html` que les littéraux du JavaScript en décide. L'anglais
+    et les identifiants n'entrent pas, et un libellé en position de CLÉ de
+    dictionnaire entre, parce qu'il s'affiche tout autant."""
+    e = outil.entrees_des_charges([CHARGE])
+    assert "Le contexte de l'organisme" in e["texte"]
+    assert e["texte"]["Le contexte de l'organisme"]["mots"] == 5
+    assert "Les parties intéressées et leurs attentes" in e["texte"], "une chaîne imbriquée est perdue"
+    assert "Le libellé qui est une CLÉ" in e["texte"], "une clé de dictionnaire n'est pas relevée"
+    assert "Une phrase appuyée et servie telle quelle" in e["bloc"], sorted(e["bloc"])
+    assert e["bloc"]["Une phrase appuyée et servie telle quelle"]["html"] == \
+        "Une phrase <strong>appuyée</strong> et servie telle quelle"
+    assert not any("Review vendor" in c for c in e["texte"]), "de l'anglais entre comme du français à traduire"
+    assert not any(c.startswith("/api/") for c in e["texte"]), "une route est prise pour un libellé"
+    #  LE MÊME TEXTE SERVI DEUX FOIS n'est qu'une entrée : « 4.1 » et le titre
+    #  portent la même phrase, et elle ne se traduit qu'une fois.
+    assert sum(1 for c in e["texte"] if c == "Le contexte de l'organisme") == 1
+
+
+class _Reponse(object):
+    def __init__(self, code, corps):
+        self.status_code, self.data = code, corps.encode("utf-8")
+
+
+class _Client(object):
+    """Le client de test de Flask, réduit à ce que l'outil lui demande."""
+    def __init__(self, table):
+        self.table = table
+
+    def get(self, route):
+        return self.table[route]
+
+
+def test_les_charges_sont_LUES_des_routes_et_une_route_muette_est_une_FAUTE(monkeypatch):
+    """LA SEULE PIÈCE QUI PARLE AU SERVEUR. Une route qui répond autre chose
+    que 200, ou autre chose que du JSON, doit remonter comme une FAUTE
+    NOMMÉE : la rendre comme une charge vide ferait croire la passe complète,
+    et le passage suivant retirerait du catalogue tout ce que cette route y
+    apportait — le défaut exact qui avait rendu la dette des cadres
+    impayable."""
+    faux = types.ModuleType("app")
+    faux.app = types.SimpleNamespace(test_client=lambda: _Client({
+        "/ok": _Reponse(200, '{"t": "Le contexte de l\'organisme"}'),
+        "/muette": _Reponse(401, '{}'),
+        "/pas-json": _Reponse(200, '<html>une page d\'erreur</html>'),
+    }))
+    monkeypatch.setitem(sys.modules, "app", faux)
+    charges, fautes = outil.charges_des_routes(["/ok", "/muette", "/pas-json"])
+    assert charges == [{"t": "Le contexte de l'organisme"}], charges
+    assert [f[0] for f in fautes] == ["/muette", "/pas-json"], fautes
+    assert "401" in fautes[0][1], fautes[0]
+    assert "JSON" in fautes[1][1], fautes[1]
+
+
+def test_une_route_qui_ne_repond_pas_est_une_FAUTE_et_rien_n_est_ecrit(dossier, capsys, monkeypatch):
+    """UN INVENTAIRE PARTIEL RETIRERAIT DU CATALOGUE ce que la route muette y
+    apporte — exactement le défaut qui avait rendu la dette des cadres
+    impayable. La commande refuse donc d'écrire, et le dit."""
+    c = os.path.join(dossier, "CATALOGUE.json")
+    avant = io.open(c, encoding="utf-8").read()
+    monkeypatch.setattr(outil, "charges_des_routes",
+                        lambda routes: ([], [("/api/x/referentiel", "HTTP 401")]))
+    assert outil.main(["routes", "--catalogue", c]) == 1
+    sortie = capsys.readouterr().out
+    assert "HTTP 401" in sortie and "RIEN N'EST ÉCRIT" in sortie, sortie
+    assert io.open(c, encoding="utf-8").read() == avant, "le catalogue a été réécrit malgré la faute"
+    #  FORCÉ, la commande écrit — et c'est alors un choix nommé.
+    assert outil.main(["routes", "--catalogue", c, "--malgre-les-fautes"]) == 0
+
+
+def test_routes_en_ligne_de_commande_ajoute_la_page_des_routes_et_la_REJOUE_sans_rien_garder(
+        dossier, capsys, monkeypatch):
+    c = os.path.join(dossier, "CATALOGUE.json")
+    monkeypatch.setattr(outil, "charges_des_routes", lambda routes: ([CHARGE], []))
+    assert outil.main(["routes", "--catalogue", c]) == 0
+    cat = json.load(io.open(c, encoding="utf-8"))
+    assert cat["texte"]["Le contexte de l'organisme"]["pages"] == ["_routes"]
+    #  UNE CLÉ DÉJÀ VUE À L'ÉCRAN reçoit « _routes » EN PLUS de ses pages.
+    assert cat["texte"]["Un expert CONSEILPREV vous accompagne"]["pages"] == ["b", "_routes"], \
+        cat["texte"]["Un expert CONSEILPREV vous accompagne"]["pages"]
+    assert cat["routes"]["routes"] == 1 and cat["routes"]["mots"]["texte"] >= 4
+    assert "nouvelles au catalogue" in capsys.readouterr().out
+    #  REJOUÉ APRÈS UNE CORRECTION DU MOTEUR : ce que la route ne sert plus
+    #  quitte le catalogue, et la page d'écran d'une clé partagée reste.
+    monkeypatch.setattr(outil, "charges_des_routes",
+                        lambda routes: ([{"a": "Une seule phrase servie encore"}], []))
+    assert outil.main(["routes", "--catalogue", c]) == 0
+    cat = json.load(io.open(c, encoding="utf-8"))
+    assert "Le contexte de l'organisme" not in cat["texte"], "une chaîne que la route ne sert plus reste"
+    assert cat["texte"]["Un expert CONSEILPREV vous accompagne"]["pages"] == ["b"], \
+        cat["texte"]["Un expert CONSEILPREV vous accompagne"]["pages"]
+    assert cat["texte"]["Une seule phrase servie encore"]["pages"] == ["_routes"]
+    assert "passage précédent effacé" in capsys.readouterr().out
+
+
+def test_la_liste_des_routes_RELEVEES_couvre_toutes_celles_d_app_py():
+    """UNE ROUTE DE RÉFÉRENTIEL QUI N'EST NI RELEVÉE NI ÉCARTÉE serait un trou
+    silencieux : le jour où une quatorzième norme arrive, son questionnaire
+    entier resterait hors de l'inventaire et « couverture » n'en saurait
+    rien. Chaque écart porte donc sa raison, écrite."""
+    src = io.open(os.path.join(_RACINE, "app.py"), encoding="utf-8").read()
+    servies = set(re.findall(r"@app\.route\('(/api/[^']*referentiel[^']*)'", src))
+    assert len(servies) >= 18, "%d routes de référentiel relevées dans app.py" % len(servies)
+    relevees = set(outil.ROUTES_REFERENTIEL)
+    ecartees = set(outil.ROUTES_HORS_INVENTAIRE)
+    oubliees = sorted(servies - relevees - ecartees)
+    assert not oubliees, (
+        "routes de référentiel ni relevées ni écartées : %s — leur texte "
+        "n'entrerait dans aucun lot" % oubliees)
+    fantomes = sorted((relevees | ecartees) - servies)
+    assert not fantomes, (
+        "déclarées mais absentes d'app.py : %s — la déclaration ne protège "
+        "plus rien" % fantomes)
+    assert not (relevees & ecartees), sorted(relevees & ecartees)
+    for r, raison in outil.ROUTES_HORS_INVENTAIRE.items():
+        assert len(raison.split()) >= 5, (
+            "« %s » est écartée sans raison lisible : %r" % (r, raison))
+
+
+def test_les_pages_hors_menu_ne_se_regroupent_avec_aucune_rubrique():
+    """« _routes » rejoint « _coquille » et « _js » : ce ne sont pas des
+    rubriques du menu, et un lot ne les mélange pas à une rubrique légère."""
+    assert outil.PAGES_HORS_MENU == ("_coquille", "_js", "_routes")
+    assert outil.rubrique_de("_routes", {"_routes": "ÉVALUER"}) == "_routes", (
+        "une rubrique déclarée pour une page hors menu la capturerait")
+    cat = {"bloc": {}, "attr": {},
+           "texte": {"r%d" % i: {"fr": "r%d" % i, "mots": 1, "pages": ["_routes"]} for i in range(3)},
+           "rubriques": {"p": "AUDIT"}}
+    cat["texte"]["p1"] = {"fr": "p1", "mots": 1, "pages": ["p"]}
+    lots = outil.decouper_lots(cat, taille=2500)
+    rubs = {l["rubrique"] for l in lots}
+    assert "_routes" in rubs and "AUDIT" in rubs, rubs
+    assert not any(l["rubrique"] not in ("_routes", "AUDIT") for l in lots), rubs
+
+
+def test_le_catalogue_du_depot_porte_la_page_des_routes_et_son_inventaire():
+    """CE QUE LE DÉPÔT DOIT MONTRER : la troisième source est relevée, et son
+    volume est annoncé. Un catalogue qui perdrait « _routes » redirait
+    « rien à traduire » sur les treize questionnaires de normes."""
+    cat = _catalogue_reel()
+    pages = set(p for r in ("bloc", "texte", "attr") for e in cat[r].values() for p in e["pages"])
+    #  LA DETTE EST PAYÉE, ET LE SAUT A DONC DISPARU. La règle sautait tant
+    #  que la passe « routes » n'avait pas été jouée sur le catalogue du
+    #  dépôt : ses 26 143 mots inédits attendaient leur traduction, et le
+    #  plancher de couverture (i18n/sentinel/SEUIL_COUVERTURE) interdisait de
+    #  les parker ici non traduits. Ils le sont — la couverture en mots du
+    #  catalogue entier, routes comprises, est mesurée à 99,5 %. La règle
+    #  EXIGE donc désormais la page, au lieu de l'attendre.
+    assert "_routes" in pages, (
+        "le catalogue du dépôt ne porte plus la page « _routes » : les treize "
+        "questionnaires de normes rediraient « rien à traduire » là où les "
+        "routes servent 33 830 mots de français")
+    n = sum(1 for r in ("bloc", "texte", "attr") for e in cat[r].values() if "_routes" in e["pages"])
+    mots = sum(e["mots"] for r in ("bloc", "texte", "attr") for e in cat[r].values() if "_routes" in e["pages"])
+    assert n >= 2000 and mots >= 30000, "%d entrées, %d mots sous « _routes »" % (n, mots)
+    assert cat["routes"]["routes"] == len(outil.ROUTES_REFERENTIEL), cat["routes"]
+    assert cat["routes"]["mots"]["texte"] >= 30000, cat["routes"]["mots"]
+
+
+# ══════════════════════════════════════════════════════════════════════════
 #  8. LE CATALOGUE ET LES LOTS COMMITÉS — les entrées des traducteurs
 # ══════════════════════════════════════════════════════════════════════════
 
@@ -735,30 +929,15 @@ def _catalogue_reel():
     return json.load(io.open(CATALOGUE, encoding="utf-8"))
 
 
-#: LES PAGES NÉES APRÈS LE DERNIER RELEVÉ NAVIGATEUR — une dette DÉCLARÉE,
-#: et non un oubli. Le catalogue SE REFAIT, c'est vrai ; mais le refaire
-#: suppose de rejouer la mesure navigateur dans les conditions de la
-#: précédente, et une passe partielle RETIRERAIT du catalogue ce que la page
-#: `_js` y apporte — 83 949 mots sur 150 045. Ce serait une régression
-#: silencieuse de l'inventaire : le catalogue dirait « rien à traduire » là
-#: où tout reste à traduire.
-#:
-#: MESURÉ, ET C'EST CE QUI A FAIT ÉCRIRE CETTE LISTE. Une passe sur les quatre
-#: écrans de prEN 18286 ne relève que 25 mots par page : leur corps est peint
-#: depuis le serveur, et il reste verrouillé pour un compte sans déclaration.
-#: Les quatre écrans de prEN 18229-3 et ceux du cadre NIST sont dans le même
-#: cas — le catalogue en possède ce que la passe précédente avait pu voir.
-#: Ces quatre pages attendent donc le lot de la nouvelle mesure navigateur.
-#:
-#: CE QUE LA DÉCLARATION NE PERMET PAS. Elle ne dispense aucune AUTRE page :
-#: toute page de PAGE_META absente du catalogue et absente de cette liste fait
-#: toujours tomber la règle. Et une page nommée ici que le catalogue
-#: COUVRIRAIT fait tomber la règle elle aussi — une dette payée qu'on
-#: continuerait de déclarer couvrirait le jour où une vraie page manquerait.
-PAGES_APRES_LE_CATALOGUE = frozenset({
-    "en18286-processus", "en18286-questionnaire",
-    "en18286-conformite", "en18286-analyse",
-})
+#: LA DETTE EST PAYÉE, ET LA DÉCLARATION A DONC DISPARU. Quatre pages de
+#: prEN 18286 manquaient au catalogue : nées après le dernier relevé
+#: navigateur, elles étaient nommées ici plutôt que tues. La règle disait
+#: elle-même ce qui devait arriver — « une page nommée ici que le catalogue
+#: COUVRIRAIT fait tomber la règle à son tour » — et c'est ce qui est
+#: arrivé : la passe refaite les couvre, et la liste est tombée avec.
+#: Ce que la règle mesure redevient simple : le catalogue couvre EXACTEMENT
+#: les pages de PAGE_META. Pour qu'une dette puisse se redéclarer un jour,
+#: elle devra s'écrire ici de nouveau, avec sa raison — jamais se taire.
 
 
 # ══════════════════════════════════════════════════════════════════════════
@@ -906,21 +1085,14 @@ def test_le_catalogue_du_depot_couvre_les_pages_de_PAGE_META_et_la_coquille():
     #  est tombée sur sa propre constante. Ce qu'elle doit mesurer est
     #  l'ACCORD entre le catalogue et PAGE_META, aux pages déclarées près.
     assert len(rubriques) >= 122, "%d rubriques relevées" % len(rubriques)
-    assert cat["pages"] == len(rubriques) - len(PAGES_APRES_LE_CATALOGUE), (
-        "le catalogue couvre %d pages, PAGE_META en porte %d, et %d sont "
-        "déclarées nées après le relevé"
-        % (cat["pages"], len(rubriques), len(PAGES_APRES_LE_CATALOGUE)))
-    for page in sorted(PAGES_APRES_LE_CATALOGUE):
-        assert page in rubriques, (
-            "« %s » est déclarée née après le relevé, mais PAGE_META ne la "
-            "porte plus : la déclaration ne protège plus rien" % page)
+    assert cat["pages"] == len(rubriques), (
+        "le catalogue couvre %d pages et PAGE_META en porte %d : une page "
+        "servie que l'inventaire ne voit pas dirait « rien à traduire » là "
+        "où tout reste à traduire"
+        % (cat["pages"], len(rubriques)))
     pages_vues = set(p for r in ("bloc", "texte", "attr") for e in cat[r].values() for p in e["pages"])
-    manquantes = sorted(set(rubriques) - pages_vues - PAGES_APRES_LE_CATALOGUE)
+    manquantes = sorted(set(rubriques) - pages_vues)
     assert not manquantes, "pages sans aucune entrée : %s" % manquantes
-    payees = sorted(PAGES_APRES_LE_CATALOGUE & pages_vues)
-    assert not payees, (
-        "déclarées nées après le relevé, mais le catalogue les couvre : %s "
-        "— la dette est payée, la déclaration doit disparaître" % payees)
     assert "_coquille" in pages_vues and "_js" in pages_vues
     assert cat["js"]["fichier"] == "sentinel.page.js"
 
@@ -942,13 +1114,48 @@ def test_chaque_entree_du_catalogue_est_sa_propre_normalisation_avec_ses_mots_et
     assert n >= 3000, n
 
 
+#: LES TEXTES QU'UNE PASSE D'INVENTAIRE NE PEUT PAS VOIR — déclarés, avec
+#: le fichier qui les porte, et non tus. L'inventaire lit le DOM APRÈS la
+#: peinture : il ne peut donc voir ni un texte d'attente que le JavaScript
+#: remplace, ni une note qui dépend d'un état du serveur que la recette
+#: locale n'a pas (le flux de veille y est vide, et l'écran affiche
+#: « Signaux en attente… » à la place). Leur anglais est servi en
+#: production, et le supprimer rendrait ces deux textes au français.
+#:
+#: CE QUE LA DÉCLARATION NE PERMET PAS. Elle ne couvre que ces deux clés :
+#: toute AUTRE entrée périmée fait toujours tomber la règle. Une clé nommée
+#: ici dont le français aurait disparu de son fichier la fait tomber aussi
+#: — la déclaration ne protégerait plus rien. Et le jour où le catalogue en
+#: voit une, la règle tombe pour le dire : la dette est payée, la ligne doit
+#: disparaître. C'est ainsi que PAGES_APRES_LE_CATALOGUE a disparu.
+HORS_DE_PORTEE_DE_LA_PASSE = {
+    u"Chargement du moteur…": "sentinel.html",
+    u"CNIL · ANSSI · EU AI Act · Commission — rafraîchi côté serveur (# min)":
+        "panorama.html",
+}
+
+
 def test_les_dictionnaires_du_depot_passent_verifier_contre_le_catalogue_du_depot():
     """_exemple.json vise du VRAI texte : chaque clé est au catalogue, y
     compris celles que seul le JavaScript rend (les cartes de formation)."""
     fichiers = outil.fichiers_du_dossier(DOSSIER)
     assert fichiers and all(os.path.basename(f) != "CATALOGUE.json" for f in fichiers)
-    fautes = outil.verifier_fichiers(fichiers, _catalogue_reel())
+    cat = _catalogue_reel()
+    fautes = [f for f in outil.verifier_fichiers(fichiers, cat)
+              if not (f[2] in HORS_DE_PORTEE_DE_LA_PASSE
+                      and f[3].startswith(u"périmée"))]
     assert not fautes, fautes[:5]
+    #  LA DÉCLARATION SE MESURE DES DEUX CÔTÉS : le français existe encore à la
+    #  source, et le catalogue ne le voit toujours pas.
+    for cle, fichier in sorted(HORS_DE_PORTEE_DE_LA_PASSE.items()):
+        src = io.open(os.path.join(_RACINE, fichier), encoding="utf-8").read()
+        motif = u"[0-9 ]+".join(re.escape(p) for p in cle.split(u"#"))
+        assert re.search(motif, src), (
+            u"« %s » est déclaré hors de portée de la passe, mais %s ne le "
+            u"porte plus : la déclaration ne protège plus rien" % (cle[:40], fichier))
+        assert not (cle in cat["texte"] or cle in cat["bloc"] or cle in cat["attr"]), (
+            u"« %s » est au catalogue : la passe le voit désormais, la "
+            u"déclaration doit disparaître" % cle[:40])
 
 
 def test_la_route_ne_sert_pas_le_catalogue_et_le_dossier_reel_se_fusionne_sans_faute():
