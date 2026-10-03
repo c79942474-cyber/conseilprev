@@ -828,7 +828,14 @@ def test_AUCUN_ecran_n_annonce_un_COMPTE_DE_NORMES_autre_que_celui_de_la_table()
     for nom, src in (("sentinel.html", SENTINEL), ("index.html",
                      _lire("index.html")), ("index.page.js",
                      _lire("index.page.js")), ("sentinel.page.js", PAGEJS)):
-        for m in re.finditer(r"(\d{1,2}|%s)\s+(normes?|standards?|Normen)"
+        #  « RÉFÉRENTIEL » EST LE MOT QUI A LAISSÉ PASSER LA DÉRIVE. La règle
+        #  ne regardait que « normes » : l'accueil a donc annoncé « Voir les 9
+        #  référentiels » dans les trois langues pendant cinq normes, un
+        #  parcours en a promis neuf, et un guide se vantait d'en tenir neuf —
+        #  tout cela sous une règle verte. Les trois langues du mot entrent
+        #  avec lui, puisque les trois libellés existent.
+        for m in re.finditer(r"(\d{1,2}|%s)\s+(normes?|standards?|Normen"
+                             r"|r\u00e9f\u00e9rentiels?|frameworks?|Referenzrahmen)"
                              % "|".join(NOMBRES_EN_LETTRES), src, re.I):
             brut = m.group(1).lower()
             #  « \u2014 normes » N'EST PAS « 14 NORMES » : dans un littéral
