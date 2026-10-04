@@ -108,6 +108,20 @@
     l: [["Nous écrire", "/support"], ["Les formules Sentinel", "/tarifications"]]
   };
 
+  GUIDES["/formation-ia"] = {
+    t: "L’invitation du 9 novembre",
+    p: "L’invitation à l’après-midi de formation « Gouverner et sécuriser l’IA » — lundi 9 novembre 2026, 14h–18h, Novotel Paris Les Halles. C’est l’adresse à partager : elle survit au bandeau de l’accueil, qui disparaît le soir de la formation.",
+    s: ["Commencez par « L’invitation en deux minutes » : le pitch dit l’écart que l’après-midi vient combler, et les trois encadrés disent ce qu’on emporte en partant.",
+      "Le programme est une frise horaire : les quatre points violets sont les modules, le reste est l’ouverture, la pause et la clôture.",
+      "« S’inscrire gratuitement » ouvre votre messagerie avec un courriel déjà rédigé — il ne reste qu’à compléter votre nom et à l’envoyer.",
+      "« Ajouter à mon agenda » télécharge un fichier .ics : il pose la séance à l’heure de Paris et un rappel la veille.",
+      "Lisez les conditions avant de vous inscrire : la date et le lieu peuvent bouger, et la page dit dans quels cas."],
+    k: [["Gratuit, mais sur inscription", "Les places sont limitées : c’est le courriel d’inscription qui retient la vôtre, pas la lecture de cette page."],
+      ["Report et annulation", "L’événement peut être reporté ou décalé faute de participants, ou annulé au plus tard 10 jours avant ; il peut aussi se tenir dans un autre Novotel à Paris."],
+      ["Langue", "La formation se donne en français."]],
+    l: [["Le catalogue de formations", "/formations"], ["Réserver une séance sur votre site", "/formation"], ["Nous écrire", "/support"]]
+  };
+
   GUIDES["/formation"] = {
     t: "Réserver une formation IA",
     p: "La réservation de l’offre « Angles morts de la conformité IA » : quatre sujets au choix, une séance de 4 h par semaine jusqu’en mars 2027, sur VOTRE site et en Île-de-France, la première offerte puis 800 € HT.",

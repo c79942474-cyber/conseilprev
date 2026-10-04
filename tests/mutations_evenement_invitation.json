@@ -1,0 +1,78 @@
+{
+ "_pourquoi": "L'invitation du 9 novembre existe a DEUX endroits : le bandeau de l'accueil (ecrit a la main) et la page /formation-ia (ENGENDREE depuis evenement.py), plus un script partage qui fabrique le fichier d'agenda pour les deux. CHAQUE MUTATION PORTE SUR LA COPIE OU UNE SEULE REGLE PEUT TOMBER : celles qui mesurent les faits visent le bandeau, qui est ecrit a la main ; celles qui visent la page ou le script partage portent sur ce qu'aucune regle de fait ne lit, pour que seule la regle de derive tombe. Toucher a la fois un fait ET un fichier engendre ferait tomber deux regles, et la batterie ne saurait plus laquelle elle mesure.",
+ "cibles": [
+  "tests/test_evenement_invitation.py"
+ ],
+ "mutations": [
+  {
+   "nom": "M1 — une étape du programme change dans le bandeau seul",
+   "fichier": "index.html",
+   "avant": "<time datetime=\"2026-11-09T15:45+01:00\">15:45</time>",
+   "apres": "<time datetime=\"2026-11-09T15:40+01:00\">15:40</time>",
+   "regle": "test_les_deux_copies_portent_la_meme_etape[15:45]"
+  },
+  {
+   "nom": "M2 — le bandeau perd la condition de l'autre Novotel",
+   "fichier": "index.html",
+   "avant": "<li data-i18n=\"inv.cond2\">Si besoin, l'événement pourra se dérouler dans un autre Novotel à Paris, à une autre date à définir.</li>",
+   "apres": "<li data-i18n=\"inv.cond2\">Le lieu est définitif.</li>",
+   "regle": "test_le_bandeau_de_l_accueil_porte_le_fait[condition-autre-novotel]"
+  },
+  {
+   "nom": "M3 — le titre du bandeau cesse d'être un lien",
+   "fichier": "index.html",
+   "avant": "<h2 class=\"inv-titre\" id=\"inv-titre\"><a class=\"inv-titre-lien\" href=\"/formation-ia\">",
+   "apres": "<h2 class=\"inv-titre\" id=\"inv-titre\"><a class=\"inv-titre-lien\" href=\"/formations\">",
+   "regle": "test_le_titre_du_bandeau_est_le_lien_vers_la_page"
+  },
+  {
+   "nom": "M4 — la borne de fin du .ics part d'une heure",
+   "fichier": "evenement.js",
+   "avant": "    fin: Date.UTC(2026, 10, 9, 17, 0, 0),",
+   "apres": "    fin: Date.UTC(2026, 10, 9, 18, 0, 0),",
+   "regle": "test_le_script_partage_porte_les_bornes_du_module"
+  },
+  {
+   "nom": "M5 — la route de la page disparaît d'app.py",
+   "fichier": "app.py",
+   "avant": "    '/formation-ia':      'formation-ia.html',",
+   "apres": "",
+   "regle": "test_la_page_est_publiee_par_le_serveur"
+  },
+  {
+   "nom": "M6 — index.html cesse de charger le script partagé",
+   "fichier": "index.html",
+   "avant": "<script src=\"/evenement.js\" defer></script>\n<script src=\"/index.page.js\" defer></script>",
+   "apres": "<script src=\"/index.page.js\" defer></script>",
+   "regle": "test_les_deux_pages_chargent_le_script_partage[index.html]"
+  },
+  {
+   "nom": "M7 — un lien d'inscription du bandeau change d'objet",
+   "fichier": "index.html",
+   "avant": "<a class=\"inv-pdf\" href=\"/formation-ia\"><span data-i18n=\"inv.page\">",
+   "apres": "<a class=\"inv-pdf\" href=\"mailto:christophe.cerf@outlook.com?subject=Autre\"><span data-i18n=\"inv.page\">",
+   "regle": "test_le_bandeau_offre_aussi_le_lien_en_toutes_lettres"
+  },
+  {
+   "nom": "M8 — la page engendrée est modifiée à la main (couleur du titre)",
+   "fichier": "formation-ia.html",
+   "avant": "  --teal:#5eead4; --gold:#fbbf24;",
+   "apres": "  --teal:#5eead4; --gold:#ffcc00;",
+   "regle": "test_la_page_engendree_est_a_jour"
+  },
+  {
+   "nom": "M9 — le script partagé est modifié à la main",
+   "fichier": "evenement.js",
+   "avant": "    page: \"/formation-ia\",",
+   "apres": "    page: \"/formation\",",
+   "regle": "test_la_page_engendree_est_a_jour"
+  },
+  {
+   "nom": "M10 — la page d'invitation perd son guide",
+   "fichier": "guide.js",
+   "avant": "  GUIDES[\"/formation-ia\"] = {",
+   "apres": "  GUIDES[\"/formation-ia-autre\"] = {",
+   "regle": "test_la_page_a_son_guide"
+  }
+ ]
+}
