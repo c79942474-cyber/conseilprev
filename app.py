@@ -7157,6 +7157,14 @@ PAGES = {
     '/actualites':        'actualites.html',
     '/formations':        'formations.html',
     '/formation':         'formation.html',
+    # L'INVITATION D'UN ÉVÉNEMENT A SON ADRESSE À ELLE, et c'est tout
+    # son objet : c'est le lien qu'on colle dans un courriel ou sur
+    # LinkedIn. Le bandeau de l'accueil y mène ; mais un bandeau ne se
+    # partage pas, et il disparaît le soir de la formation.
+    # LA PAGE EST ENGENDRÉE depuis evenement.py — voir
+    # outils/engendrer_invitation.py et la règle qui refuse qu'elle
+    # vieillisse pendant que le module change.
+    '/formation-ia':      'formation-ia.html',
     '/empreinte':         'empreinte.html',
     '/tarifications':     'tarifications.html',
     '/dsa':               'dsa.html',
