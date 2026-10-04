@@ -229,6 +229,154 @@ nav{
 /* Badge */
 .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(100,80,220,.25);border:1px solid rgba(140,120,255,.4);border-radius:100px;padding:8px 22px;font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.12em;color:#c4b8ff}
 .hb-dot{color:#a685e8;font-size:14px}
+/* ═══ BANDEAU D'INVITATION — formation du 9 novembre 2026 ═══
+   Un BILLET : la souche porte la date, la perforation la sépare du corps,
+   et deux encoches la marquent sur les bords. Les encoches sont TAILLÉES
+   (mask), pas peintes : un disque de la couleur du fond mentirait dès que
+   l'image du hero passe derrière. Le masque rognant aussi l'ombre portée,
+   l'ombre est confiée au parent, en drop-shadow, qui suit la découpe. */
+.inv{width:100%;max-width:940px;text-align:left;font-family:"DM Sans",sans-serif;filter:drop-shadow(0 18px 40px rgba(4,2,22,.55))}
+.inv [hidden],.hero-badge[hidden]{display:none !important}
+.inv-billet{
+  --inv-perf:124px;
+  position:relative;display:grid;
+  grid-template-columns:var(--inv-perf) minmax(0,1fr) 262px;
+  grid-template-areas:"souche corps resa" "souche outils resa";
+  background:linear-gradient(135deg,rgba(30,17,78,.94) 0%,rgba(19,11,54,.95) 100%);
+  border:1px solid rgba(196,181,232,.30);border-radius:16px;
+  -webkit-mask:radial-gradient(circle at var(--inv-perf) 0,transparent 10px,#000 10.5px) top/100% 51% no-repeat,
+               radial-gradient(circle at var(--inv-perf) 100%,transparent 10px,#000 10.5px) bottom/100% 51% no-repeat;
+          mask:radial-gradient(circle at var(--inv-perf) 0,transparent 10px,#000 10.5px) top/100% 51% no-repeat,
+               radial-gradient(circle at var(--inv-perf) 100%,transparent 10px,#000 10.5px) bottom/100% 51% no-repeat;
+}
+.inv-souche{
+  grid-area:souche;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  padding:18px 8px;color:#fff;text-align:center;
+  background:linear-gradient(165deg,#5b21b6 0%,#7c3aed 52%,#a21caf 100%);
+  border-right:2px dashed rgba(255,255,255,.42);
+}
+.inv-s-jour,.inv-s-mois{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase}
+.inv-s-num{font-family:"Cormorant Garamond",serif;font-weight:700;font-size:60px;line-height:.86;letter-spacing:-.02em}
+.inv-s-h{margin-top:9px;font-family:"Space Mono",monospace;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;background:rgba(10,6,32,.34);white-space:nowrap}
+.inv-corps{grid-area:corps;display:flex;flex-direction:column;gap:6px;padding:18px 22px 0 26px;min-width:0}
+.inv-sur{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin:0;font-family:"Space Mono",monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#5eead4}
+.inv-puce{font-size:10px;letter-spacing:.06em;text-transform:none;padding:2px 9px;border-radius:999px;border:1px solid rgba(94,234,212,.45);color:#99f6e4;white-space:nowrap}
+.inv-puce-or{border-color:rgba(251,191,36,.55);color:#fcd34d;background:rgba(251,191,36,.08)}
+.inv-titre{margin:0;font-family:"Cormorant Garamond",serif;font-weight:700;font-size:clamp(27px,3.3vw,35px);line-height:1.04;letter-spacing:-.01em;color:#fff;text-wrap:balance}
+.inv-pour{margin:0;font-size:14px;line-height:1.45;color:rgba(232,224,255,.88)}
+.inv-quand{display:flex;flex-direction:column;gap:1px;margin:2px 0 0;font-size:13px;line-height:1.5;color:rgba(212,186,255,.80)}
+.inv-ligne{display:flex;align-items:flex-start;gap:7px}
+.inv-ico{flex:none;margin-top:3px;opacity:.85}
+.inv-quand-d{color:#fff;font-weight:500}
+.inv-outils{grid-area:outils;display:flex;flex-wrap:wrap;align-content:flex-start;gap:8px;padding:12px 22px 18px 26px}
+.inv-court{display:none}
+.inv-btn{
+  display:inline-flex;align-items:center;gap:7px;padding:7px 13px;border-radius:8px;
+  border:1px solid rgba(196,181,232,.34);background:rgba(255,255,255,.05);color:#efe9ff;
+  font:500 12.5px/1.2 "DM Sans",sans-serif;text-decoration:none;cursor:pointer;
+  transition:background .16s,border-color .16s;
+}
+.inv-btn:hover{background:rgba(255,255,255,.11);border-color:rgba(216,180,254,.62)}
+.inv-chev{transition:transform .18s}
+.inv-btn[aria-expanded="true"]{background:rgba(124,58,237,.28);border-color:rgba(216,180,254,.62)}
+.inv-btn[aria-expanded="true"] .inv-chev{transform:rotate(180deg)}
+.inv-resa{
+  grid-area:resa;display:flex;flex-direction:column;justify-content:center;gap:9px;
+  padding:18px 22px;border-left:1px solid rgba(196,181,232,.16);background:rgba(124,58,237,.07);
+}
+.inv-cta{
+  display:flex;align-items:center;justify-content:center;gap:8px;padding:13px 14px;border-radius:10px;
+  font-weight:600;font-size:14.5px;color:#fff;text-decoration:none;text-align:center;white-space:nowrap;
+  background:linear-gradient(135deg,#7c3aed 0%,#a855f7 55%,#db2777 100%);
+  box-shadow:0 6px 22px rgba(168,85,247,.42);transition:transform .16s,box-shadow .16s;
+}
+.inv-cta:hover{transform:translateY(-1px);box-shadow:0 10px 28px rgba(168,85,247,.58)}
+.inv-resa-note{margin:0;font-size:12px;line-height:1.4;color:rgba(212,186,255,.78);text-align:center}
+.inv-lien{align-self:center;padding:0;border:0;background:none;font:500 12px/1.4 "DM Sans",sans-serif;color:#d8b4fe;text-decoration:underline;text-decoration-color:rgba(216,180,254,.45);text-underline-offset:3px;cursor:pointer}
+.inv-lien:hover{color:#fff;text-decoration-color:#fff}
+.inv a:focus-visible,.inv button:focus-visible{outline:2px solid #5eead4;outline-offset:2px}
+/* La convention [data-tooltip] ouvre sa bulle AU-DESSUS : ici elle
+   naîtrait sous la barre fixe, qui la couvrirait. Dans le bandeau, la bulle
+   s'ouvre donc vers le bas, flèche retournée. */
+.inv [data-tooltip]::after{bottom:auto;top:calc(100% + 10px)}
+.inv [data-tooltip]::before{bottom:auto;top:100%;border-top-color:transparent;border-bottom-color:rgba(180,138,247,.3)}
+.inv-statut{margin:0;padding:0 4px;font-size:12.5px;line-height:1.5;color:#99f6e4}
+.inv-statut:not(:empty){margin-top:9px}
+.inv-prog{
+  margin-top:10px;padding:20px 22px 18px;border-radius:14px;
+  background:rgba(14,8,42,.94);border:1px solid rgba(196,181,232,.24);
+}
+.inv-prog-grille{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:26px}
+.inv-h3{margin:0 0 10px;font-family:"Space Mono",monospace;font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#c4b5fd}
+.inv-frise{list-style:none;margin:0;padding:0}
+.inv-frise li{position:relative;display:grid;grid-template-columns:46px minmax(0,1fr);column-gap:26px;padding:6px 0}
+.inv-frise li::before{content:"";position:absolute;left:58px;top:0;bottom:0;width:1px;background:rgba(196,181,232,.24)}
+.inv-frise li:first-child::before{top:14px}
+.inv-frise li:last-child::before{bottom:auto;height:14px}
+.inv-frise li::after{content:"";position:absolute;left:54.5px;top:11px;width:8px;height:8px;border-radius:50%;background:#1c1150;border:1px solid rgba(196,181,232,.65)}
+.inv-frise li.inv-mod::after{background:#a855f7;border-color:#e9d5ff}
+.inv-frise time{font-family:"Space Mono",monospace;font-size:12px;line-height:1.6;color:#5eead4;font-variant-numeric:tabular-nums}
+.inv-frise strong{display:block;font-size:14px;font-weight:500;line-height:1.4;color:#fff}
+.inv-frise span{display:block;margin-top:2px;font-size:12.5px;line-height:1.45;color:rgba(212,186,255,.78)}
+.inv-frise li.inv-pause strong{font-weight:400;font-style:italic;color:#fcd34d}
+.inv-bloc+.inv-bloc{margin-top:16px;padding-top:16px;border-top:1px solid rgba(196,181,232,.14)}
+.inv-anim{display:flex;gap:12px;align-items:flex-start}
+.inv-initiales{flex:none;display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#db2777);font-family:"Cormorant Garamond",serif;font-weight:700;font-size:17px;color:#fff}
+.inv-anim p{margin:0;font-size:13px;line-height:1.55;color:rgba(232,224,255,.88)}
+.inv-anim strong{color:#fff;font-weight:500}
+.inv-adr{font-style:normal;font-size:13px;line-height:1.55;color:#f1ecff}
+.inv-metro{margin:6px 0 0;font-size:12.5px;color:rgba(212,186,255,.78)}
+.inv-liens{margin:8px 0 0;font-size:13px}
+.inv-contact{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;font-size:13px}
+.inv-prog a{color:#d8b4fe;text-decoration:underline;text-decoration-color:rgba(216,180,254,.42);text-underline-offset:3px}
+.inv-prog a:hover{color:#fff;text-decoration-color:#fff}
+.inv-conditions{margin:18px -10px 0;padding:14px 10px 10px;border-top:1px dashed rgba(196,181,232,.26);border-radius:0 0 8px 8px;outline:none}
+.inv-conditions.inv-vu{animation:invVu 1.8s ease-out}
+@keyframes invVu{0%{background:rgba(251,191,36,.15)}100%{background:transparent}}
+.inv-cond-liste{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:5px;font-size:13px;line-height:1.5;color:rgba(232,224,255,.88)}
+.inv-cond-liste li{position:relative;padding-left:16px}
+.inv-cond-liste li::before{content:"";position:absolute;left:3px;top:.62em;width:6px;height:6px;border-radius:50%;background:#fbbf24}
+.inv-cond-liste strong{color:#fcd34d;font-weight:500}
+.inv-pied{display:flex;flex-wrap:wrap;align-items:center;gap:8px 24px;margin-top:10px;font-size:13px;color:rgba(232,224,255,.88)}
+.inv-pied p{margin:0}
+.inv-mini{margin-left:6px;padding:3px 10px;border-radius:6px;border:1px solid rgba(196,181,232,.36);background:rgba(255,255,255,.05);color:#efe9ff;font:500 11.5px/1.4 "DM Sans",sans-serif;cursor:pointer}
+.inv-mini:hover{background:rgba(255,255,255,.11)}
+/* Tablette : la réservation passe sous le corps, à côté de la souche. */
+@media(max-width:860px){
+  .inv-billet{--inv-perf:112px;grid-template-columns:var(--inv-perf) minmax(0,1fr);grid-template-areas:"souche corps" "souche resa" "souche outils"}
+  .inv-resa{flex-direction:row;flex-wrap:wrap;align-items:center;gap:8px 14px;padding:14px 22px 0 26px;border-left:0;background:none}
+  .inv-resa-note{text-align:left}
+}
+/* Téléphone : la souche devient une bande en tête, la perforation passe à
+   l'horizontale et les encoches sur les côtés. */
+@media(max-width:560px){
+  .inv-billet{
+    grid-template-columns:1fr;grid-template-areas:"souche" "corps" "resa" "outils";
+    -webkit-mask:radial-gradient(circle at 0 56px,transparent 10px,#000 10.5px) left/51% 100% no-repeat,
+                 radial-gradient(circle at 100% 56px,transparent 10px,#000 10.5px) right/51% 100% no-repeat;
+            mask:radial-gradient(circle at 0 56px,transparent 10px,#000 10.5px) left/51% 100% no-repeat,
+                 radial-gradient(circle at 100% 56px,transparent 10px,#000 10.5px) right/51% 100% no-repeat;
+  }
+  .inv-souche{flex-direction:row;flex-wrap:nowrap;gap:10px;height:56px;padding:8px 16px;border-right:0;border-bottom:2px dashed rgba(255,255,255,.42);box-sizing:border-box}
+  .inv-s-num{font-size:34px}
+  .inv-s-h{margin-top:0}
+  .inv-corps{padding:16px 18px 0}
+  .inv-resa{padding:14px 18px 0}
+  .inv-cta{flex:1 1 100%}
+  .inv-resa-note{display:none}
+  .inv-lien{flex:1 1 100%;text-align:center}
+  .inv-outils{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));padding:10px 18px 18px}
+  .inv-outils .inv-btn{justify-content:center;padding:8px 6px}
+  .inv-long{display:none}
+  .inv-court{display:inline}
+  .inv-prog{padding:18px 16px 16px}
+  .inv-prog-grille{grid-template-columns:1fr;gap:20px}
+}
+@media(prefers-reduced-motion:reduce){
+  .inv-btn,.inv-cta,.inv-chev{transition:none}
+  .inv-conditions.inv-vu{animation:none}
+  .inv-cta:hover{transform:none}
+}
 
 /* Titre */
 .hero-main-title{font-family:"Cormorant Garamond",serif;font-size:clamp(44px,7.5vw,96px);font-weight:700;line-height:.95;letter-spacing:-.03em;color:#fff;margin:0;text-shadow:0 2px 40px rgba(0,0,0,.7)}
@@ -4315,8 +4463,117 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
   <div class="hero-overlay"></div>
   <div class="hero-content">
 
-    <!-- Badge AIES -->
-    <div class="hero-badge">
+    <!-- BANDEAU D'INVITATION — FORMATION DU LUNDI 9 NOVEMBRE 2026.
+         Il prend la place du badge « Sentinel AI — Gouvernance IA » jusqu'à
+         la fin de la formation (18 h, heure de Paris). Passé cette heure,
+         index.page.js le retire et rend le badge, gardé plus bas : une
+         invitation à une date passée, en tête de l'accueil, dirait au
+         visiteur que le site n'est plus tenu.
+         LA SOUCHE EST CACHÉE AUX LECTEURS D'ÉCRAN, ET C'EST VOULU : elle
+         redit en gros ce que le corps écrit en toutes lettres. Lue deux
+         fois, la date serait du bruit.
+         LE LIEN D'INSCRIPTION EST CELUI DE L'INVITATION PDF, OCTET POUR
+         OCTET : même destinataire, même objet, même corps pré-rempli. -->
+    <section class="inv" id="inv-bandeau" aria-labelledby="inv-titre">
+      <div class="inv-billet">
+        <div class="inv-souche" aria-hidden="true">
+          <span class="inv-s-jour" data-i18n="inv.s.jour">Lundi</span>
+          <span class="inv-s-num">9</span>
+          <span class="inv-s-mois" data-i18n="inv.s.mois">Novembre 2026</span>
+          <span class="inv-s-h" data-i18n="inv.s.h">14h – 18h</span>
+        </div>
+        <div class="inv-corps">
+          <p class="inv-sur">
+            <span data-i18n="inv.sur">Invitation gratuite · CONSEILPREV</span>
+            <span class="inv-puce inv-puce-or" data-i18n="inv.places">Places limitées</span>
+            <span class="inv-puce" id="inv-compte" hidden></span>
+          </p>
+          <h2 class="inv-titre" id="inv-titre" data-i18n="inv.titre">Gouverner et sécuriser l'IA</h2>
+          <p class="inv-pour" data-i18n="inv.pour">Formation pratique pour RSSI, DSI, CAIO, dirigeants et grands comptes</p>
+          <p class="inv-quand">
+            <span class="inv-ligne"><svg class="inv-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span class="inv-quand-d" data-i18n="inv.date">Lundi 9 novembre 2026, de 14h00 à 18h00</span></span>
+            <span class="inv-ligne"><svg class="inv-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg><span>Novotel Paris Les Halles, 8 place Marguerite de Navarre, 75001 Paris</span></span>
+          </p>
+        </div>
+        <div class="inv-resa">
+          <a class="inv-cta" id="inv-inscrire" href="mailto:christophe.cerf@outlook.com?subject=Inscription%20-%20Formation%20IA%20du%209%20novembre%202026&amp;body=Bonjour%2C%0A%0AJe%20souhaite%20m%27inscrire%20%C3%A0%20la%20formation%20%C2%AB%20Gouverner%20et%20s%C3%A9curiser%20l%27IA%20%C2%BB%20du%20lundi%209%20novembre%202026%20(14h-18h)%20au%20Novotel%20Paris%20Les%20Halles.%0A%0ANom%20%3A%0AFonction%20%3A%0ASoci%C3%A9t%C3%A9%20%3A%0AT%C3%A9l%C3%A9phone%20%3A%0A%0ACordialement" data-tooltip="Ouvre votre messagerie avec un e-mail d'inscription prêt à envoyer" data-i18n-tip="inv.cta.tip"><span data-i18n="inv.cta">S'inscrire gratuitement</span> <span aria-hidden="true">→</span></a>
+          <p class="inv-resa-note" data-i18n="inv.resa">Gratuit sur inscription par e-mail</p>
+          <button type="button" class="inv-lien" id="inv-cond-btn" aria-controls="inv-programme"><span data-i18n="inv.cond.voir">Voir les conditions</span></button>
+        </div>
+        <!-- Deux libellés par bouton, l'un long, l'autre court : le court ne
+             s'affiche que sur téléphone, où les trois tiennent alors sur une
+             ligne. Le libellé masqué (display:none) n'entre pas dans le nom
+             accessible : le lecteur d'écran entend celui qu'on voit. -->
+        <div class="inv-outils">
+          <button type="button" class="inv-btn" id="inv-prog-btn" aria-expanded="false" aria-controls="inv-programme"><span class="inv-long" data-i18n="inv.prog">Voir le programme</span><span class="inv-court" data-i18n="inv.prog.c">Programme</span><svg class="inv-chev" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" focusable="false"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></button>
+          <button type="button" class="inv-btn" id="inv-agenda" data-tooltip="Fichier .ics pour Outlook, Apple Calendrier ou Google Agenda" data-i18n-tip="inv.agenda.tip"><svg class="inv-ico" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" focusable="false"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4M12 13v5M9.5 15.5h5"/></svg><span class="inv-long" data-i18n="inv.agenda">Ajouter à mon agenda</span><span class="inv-court" data-i18n="inv.agenda.c">Agenda</span></button>
+          <a class="inv-btn" id="inv-itineraire" href="https://www.google.com/maps/dir/?api=1&amp;destination=Novotel%20Paris%20Les%20Halles%2C%208%20place%20Marguerite%20de%20Navarre%2C%2075001%20Paris" target="_blank" rel="noopener"><span data-i18n="inv.itin">Itinéraire</span> <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+      <p class="inv-statut" id="inv-statut" role="status" aria-live="polite"></p>
+      <div class="inv-prog" id="inv-programme" hidden>
+        <div class="inv-prog-grille">
+          <div>
+            <h3 class="inv-h3" data-i18n="inv.prog.titre">Programme de l'après-midi</h3>
+            <ol class="inv-frise">
+              <li><time datetime="2026-11-09T14:00+01:00">14:00</time><div><strong data-i18n="inv.p1">Accueil des participants</strong></div></li>
+              <li><time datetime="2026-11-09T14:15+01:00">14:15</time><div><strong data-i18n="inv.p2">Ouverture : votre IA est gouvernée, est-elle sécurisée ?</strong><span data-i18n="inv.p2d">Enjeux pour les directions et les grands comptes</span></div></li>
+              <li class="inv-mod"><time datetime="2026-11-09T14:30+01:00">14:30</time><div><strong data-i18n="inv.p3">Module 1 · Choisir la bonne IA</strong><span data-i18n="inv.p3d">Règles, ML, deep learning, IA générative, agents : la technologie adaptée à chaque problème</span></div></li>
+              <li class="inv-mod"><time datetime="2026-11-09T15:00+01:00">15:00</time><div><strong data-i18n="inv.p4">Module 2 · Gouvernance et conformité</strong><span data-i18n="inv.p4d">AI Act, RGPD, ISO 42001, registre des systèmes et Charte IA</span></div></li>
+              <li class="inv-pause"><time datetime="2026-11-09T15:45+01:00">15:45</time><div><strong data-i18n="inv.p5">Pause café et échanges</strong></div></li>
+              <li class="inv-mod"><time datetime="2026-11-09T16:00+01:00">16:00</time><div><strong data-i18n="inv.p6">Module 3 · Cyber for AI et AI Security</strong><span data-i18n="inv.p6d">Injection de prompt, agents, Shadow IA et menaces armées par l'IA</span></div></li>
+              <li class="inv-mod"><time datetime="2026-11-09T16:45+01:00">16:45</time><div><strong data-i18n="inv.p7">Module 4 · Atelier pratique</strong><span data-i18n="inv.p7d">Cartographier vos usages : autorisé, interdit ou à valider</span></div></li>
+              <li><time datetime="2026-11-09T17:30+01:00">17:30</time><div><strong data-i18n="inv.p8">Feuille de route NIS 2 et CRA</strong><span data-i18n="inv.p8d">Vos priorités à 90 jours, questions et échanges</span></div></li>
+              <li><time datetime="2026-11-09T18:00+01:00">18:00</time><div><strong data-i18n="inv.p9">Clôture</strong></div></li>
+            </ol>
+          </div>
+          <div class="inv-infos">
+            <div class="inv-bloc">
+              <h3 class="inv-h3" data-i18n="inv.anim.t">Animé par</h3>
+              <div class="inv-anim">
+                <span class="inv-initiales" aria-hidden="true">CC</span>
+                <p data-i18n="inv.anim"><strong>Christophe CERF</strong>, CEO de CONSEILPREV, expert Cyber GRC, AI Security et Safety Engineering, certifié AIGP (IAPP).</p>
+              </div>
+            </div>
+            <div class="inv-bloc">
+              <h3 class="inv-h3" data-i18n="inv.lieu.t">Lieu de la formation</h3>
+              <address class="inv-adr">Novotel Paris Les Halles<br>8 place Marguerite de Navarre<br>75001 Paris, France</address>
+              <p class="inv-metro" data-i18n="inv.metro">Métro et RER : Châtelet – Les Halles</p>
+              <p class="inv-liens"><a href="https://www.google.com/maps/dir/?api=1&amp;destination=Novotel%20Paris%20Les%20Halles%2C%208%20place%20Marguerite%20de%20Navarre%2C%2075001%20Paris" target="_blank" rel="noopener"><span data-i18n="inv.carte">Voir l'itinéraire</span> <span aria-hidden="true">↗</span></a> <span aria-hidden="true">·</span> <a id="inv-gcal" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Gouverner%20et%20s%C3%A9curiser%20l%27IA%20%E2%80%94%20formation%20CONSEILPREV&amp;dates=20261109T130000Z%2F20261109T170000Z&amp;ctz=Europe%2FParis&amp;location=Novotel%20Paris%20Les%20Halles%2C%208%20place%20Marguerite%20de%20Navarre%2C%2075001%20Paris&amp;details=Formation%20pratique%20pour%20RSSI%2C%20DSI%2C%20CAIO%2C%20dirigeants%20et%20grands%20comptes.%20Gratuit%20sur%20inscription%20%3A%20christophe.cerf%40outlook.com" target="_blank" rel="noopener"><span data-i18n="inv.gcal">Google Agenda</span> <span aria-hidden="true">↗</span></a></p>
+            </div>
+            <div class="inv-bloc">
+              <h3 class="inv-h3" data-i18n="inv.contact.t">Contact</h3>
+              <ul class="inv-contact">
+                <li><a href="tel:+33660692145">+33 6 60 69 21 45</a></li>
+                <li><a href="mailto:christophe.cerf@i-aes.com">christophe.cerf@i-aes.com</a></li>
+                <li><a href="https://www.linkedin.com/in/cerfchristophe" target="_blank" rel="noopener">linkedin.com/in/cerfchristophe</a></li>
+                <li><a href="https://i-aes.eu" target="_blank" rel="noopener">i-aes.eu</a> <span aria-hidden="true">·</span> <a href="https://i-aes.com" target="_blank" rel="noopener">i-aes.com</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!-- LES CONDITIONS SE LISENT AVANT DE S'INSCRIRE : « Voir les
+             conditions », sous le bouton d'inscription, ouvre ce panneau et y
+             mène le regard. Les deux phrases du report sont aussi celles que
+             portent le fichier agenda et le lien Google Agenda — une seule
+             source, le dictionnaire de la page. -->
+        <div class="inv-conditions" id="inv-conditions" tabindex="-1">
+          <h3 class="inv-h3" data-i18n="inv.cond.t">Conditions</h3>
+          <ul class="inv-cond-liste">
+            <li><strong data-i18n="inv.gratuit">Gratuit sur inscription · places limitées</strong></li>
+            <li data-i18n="inv.cond1">L'événement peut être reporté ou décalé en cas de participation insuffisante, ou annulé au plus tard 10 jours avant.</li>
+            <li data-i18n="inv.cond2">Si besoin, l'événement pourra se dérouler dans un autre Novotel à Paris, à une autre date à définir.</li>
+          </ul>
+        </div>
+        <div class="inv-pied">
+          <p><span data-i18n="inv.parmail">Inscription par e-mail :</span> <a href="mailto:christophe.cerf@outlook.com?subject=Inscription%20-%20Formation%20IA%20du%209%20novembre%202026&amp;body=Bonjour%2C%0A%0AJe%20souhaite%20m%27inscrire%20%C3%A0%20la%20formation%20%C2%AB%20Gouverner%20et%20s%C3%A9curiser%20l%27IA%20%C2%BB%20du%20lundi%209%20novembre%202026%20(14h-18h)%20au%20Novotel%20Paris%20Les%20Halles.%0A%0ANom%20%3A%0AFonction%20%3A%0ASoci%C3%A9t%C3%A9%20%3A%0AT%C3%A9l%C3%A9phone%20%3A%0A%0ACordialement">christophe.cerf@outlook.com</a> <button type="button" class="inv-mini" id="inv-copier"><span data-i18n="inv.copier">Copier l'adresse</span></button></p>
+          <p><a class="inv-pdf" href="/evenements/invitation-formation-ia-2026-11-09.pdf" download="Conseilprev_Invitation_Formation_IA_9_novembre_2026.pdf"><span data-i18n="inv.pdf">Télécharger l'invitation (PDF)</span></a></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Badge AIES — rendu par index.page.js quand la formation est passée. -->
+    <div class="hero-badge" id="hero-badge-sentinel" hidden>
       <span class="hb-dot">◎</span> <span data-i18n="hero.badge">Sentinel AI — Gouvernance IA</span>
     </div>
 
@@ -4645,7 +4902,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
         <div class="diff-ico">⚖️</div>
         <h3 class="diff-title" data-i18n="df.jur.t">Double expertise Juridique &amp; Tech</h3>
         <p class="diff-desc" data-i18n="df.jur.d">Conformité réglementaire et implémentation technique réunies dans une approche intégrée et cohérente.</p>
-        <a class="diff-go" href="#normes"><span data-i18n="dg.jur">Voir les 9 référentiels</span> →</a>
+        <a class="diff-go" href="#normes"><span data-i18n="dg.jur">Voir les 14 référentiels</span> →</a>
       </div>
       <div class="diff-card" data-tooltip="La carte mondiale de Sentinel compare 46 juridictions sur 12 critères — pour savoir où une donnée peut aller, et sous quel régime." data-i18n-tip="tip.df.intl">
         <div class="diff-ico">🌍</div>

@@ -11907,7 +11907,7 @@ var PAGE_GUIDES = {
     sections: [
         {h:"À quoi sert cette page", t:"Elle transforme les écarts mesurés en actions ordonnées, chacune avec ce qu'elle rapporte réellement sur quelles normes."},
         {h:"Les trois rangs", t:"Rang 1, lever ce qui plafonne ou met en doute — tant qu'un verrou tient, tout le reste bute sur le même plafond. Rang 2, ce qui sert plusieurs normes à la fois. Rang 3, le propre à chacune."},
-        {h:"Les actions à double effet", t:"Elles viennent de rapprochements DÉCLARÉS entre référentiels — les mesures de l'annexe A 27001 qui servent l'article 21 §2 de NIS 2, celles de l'annexe A 42001 qui rencontrent un risque du Top 10 LLM. Aucun n'est inventé ici : c'est le seul vrai bénéfice à tenir neuf référentiels au même endroit."},
+        {h:"Les actions à double effet", t:"Elles viennent de rapprochements DÉCLARÉS entre référentiels — les mesures de l'annexe A 27001 qui servent l'article 21 §2 de NIS 2, celles de l'annexe A 42001 qui rencontrent un risque du Top 10 LLM. Aucun n'est inventé ici : c'est le seul vrai bénéfice à tenir quatorze référentiels au même endroit."},
         {h:"Comment lire les gains", t:"Ils sont calculés À LA SUITE, sur l'état laissé par les actions précédentes, et se cumulent donc exactement jusqu'au plafond. Un gain nul se lit de deux façons : « sens », quand l'action fixe ce que les points veulent dire sans en ajouter ; « confisqué par le verrou », quand le travail serait réel mais que le plafond l'interdit."},
         {h:"Par où commencer", t:"Par le haut. L'ordre n'est pas un classement de difficulté, c'est celui dans lequel les actions se rendent payantes les unes les autres."}
     ]
@@ -22086,12 +22086,12 @@ var GUIDED_PATHS = [
   {
     id: 'taux_conformite',
     icon: '\u{1F4CA}',
-    role: "Direction — je veux savoir où nous en sommes sur les neuf, et par quoi commencer",
-    pitch: "Neuf référentiels, neuf taux, et une question : lequel traiter d’abord. Ce parcours part de la synthèse, descend au plan, et finit par ce que le plan NE PEUT PAS faire — c’est cette dernière étape qui rend les deux premières défendables en comité.",
+    role: "Direction — je veux savoir où nous en sommes sur les quatorze, et par quoi commencer",
+    pitch: "Quatorze référentiels, quatorze taux, et une question : lequel traiter d’abord. Ce parcours part de la synthèse, descend au plan, et finit par ce que le plan NE PEUT PAS faire — c’est cette dernière étape qui rend les deux premières défendables en comité.",
     steps: [
       {id:'conf-taux', label:"Le taux par norme",
        action:"Lisez d’abord le chiffre en tête — le plus bas des taux mesurés —, puis repérez les cartes qui portent un trait ambre sur leur barre.",
-       gain:"Où vous en êtes sur chacune des neuf, et lesquelles sont ARRÊTÉES par un verrou plutôt que simplement en retard.",
+       gain:"Où vous en êtes sur chacune des quatorze, et lesquelles sont ARRÊTÉES par un verrou plutôt que simplement en retard.",
        tip:"Un taux n’est pas une conformité. Chaque carte porte la phrase qui dit ce que 100 % ne veut pas dire, et c’est elle qu’on cite en comité, pas le chiffre."},
       {id:'conf-plan', label:"Plan de mise en conformité",
        action:"Commencez par le rang 1. Ne descendez au rang 2 qu’une fois les verrous levés.",
@@ -26952,7 +26952,7 @@ function doraRailPeindre() {
        panneau que le premier. */
     + '<div class="dr-auto-zone"></div>';
   Array.prototype.forEach.call(rails, function (r) { r.innerHTML = html; });
-  /* LE MÊME AVANCEMENT, DANS LA BARRE : les onze référentiels y montrent
+  /* LE MÊME AVANCEMENT, DANS LA BARRE : tous les référentiels du rail y montrent
      leur rail de la même façon, DORA compris. */
   if (typeof window.railPeindreBarre === 'function') window.railPeindreBarre('dora', p);
 }
@@ -31692,12 +31692,12 @@ memoireRelire();
 
 
 /* ═══════════════════════════════════════════════════════════════════════
-   LE RAIL DES ONZE RÉFÉRENTIELS — DANS LA BARRE, PAS SEULEMENT DANS DORA
+   LE RAIL DE TOUS LES RÉFÉRENTIELS — DANS LA BARRE, PAS SEULEMENT DANS DORA
    ═══════════════════════════════════════════════════════════════════════
 
    LA DEMANDE. Dans chaque module de « Votre Mise en Conformité » : quand un
    bloc est rempli, il passe au vert et l'écran passe au bloc suivant, avec
-   une infobulle à chaque fois et une flèche vers le bas — pour les onze
+   une infobulle à chaque fois et une flèche vers le bas — pour tous les
    référentiels. DORA avait déjà son rail dans ses écrans ; les dix autres
    l'ont ici, et les onze le montrent dans la barre.
 
