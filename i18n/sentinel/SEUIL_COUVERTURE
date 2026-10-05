@@ -5,4 +5,28 @@
 #
 # NE PAS CONFONDRE avec i18n/sentinel/SEUIL, qui est un PLAFOND : la part
 # francaise encore visible a l'ecran que le depot promet de ne pas depasser.
-0.994
+#
+# 5 OCTOBRE 2026 — DE 0,994 A 0,999, ET CE QUI A PERMIS DE LE MONTER.
+# La passe d'inventaire etait prise pour un navigateur automatise : elle ne
+# spoofait que deux des trois signaux que sentinel.page.js envoie a
+# /api/client-signal, le serveur bloquait son adresse 1 800 s, et TOUT ce
+# qu'une route sert s'inventoriait sur « Chargement... ». Le catalogue ne
+# voyait donc pas 6 214 mots de francais que six modules servaient — la
+# diligence OCDE pour l'essentiel. Reparee, la passe les a releves : la
+# couverture est TOMBEE de 99,5 % a 93,5 %, sur un catalogue enfin complet.
+# Ce qui l'a ramenee a 100,0 % (206 282 / 206 282 mots, 15 972 / 15 972
+# entrees) :
+#   - i18n/sentinel/92-donnees-partage-dga-data-act.json — 311 entrees, les
+#     deux reglements du quinzieme et du seizieme referentiel ;
+#   - i18n/sentinel/93-dette-revelee-ocde-et-divers.json — 205 entrees, la
+#     dette que la passe reparee a revelee ;
+#   - i18n/sentinel/SANS_TRADUCTION.json — 338 cles qui n'ont RIEN a
+#     traduire, declarees une par une avec leur raison : une citation d'un
+#     texte anglais, un nom propre, un identifiant, une valeur. Les compter
+#     comme du travail en attente rendait le plancher inatteignable ;
+#   - la mesure elle-meme : `couverture` ignorait les motifs, que le
+#     navigateur applique pourtant. Elle les applique desormais.
+# LE PLANCHER RESTE SOUS LA MESURE, d'un cheveu : 0,999 laisse place a une
+# etiquette neuve le temps qu'elle soit traduite, et tombe des qu'un ecran
+# entier arrive en francais.
+0.999

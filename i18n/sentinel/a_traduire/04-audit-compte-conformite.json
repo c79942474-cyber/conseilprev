@@ -1,6 +1,6 @@
 {
  "_lot": "04-audit-compte-conformite",
- "_mots": 384,
+ "_mots": 376,
  "_pages": [
   "audit",
   "compte",
@@ -25,15 +25,11 @@
   },
   "🎯 Analyse personnalisee sur # systeme(s) de votre Registre IA. Moteur : IA.": {
    "en": "🎯 Personalised analysis on # system(s) from your AI register. Engine: AI.",
-   "fr": "🎯 Analyse personnalisee sur 1 systeme(s) de votre Registre IA. Moteur : IA.",
-   "html": "🎯 Analyse personnalisee sur <strong>1 systeme(s)</strong> de votre Registre IA. Moteur : IA."
+   "fr": "🎯 Analyse personnalisee sur 2189 systeme(s) de votre Registre IA. Moteur : IA.",
+   "html": "🎯 Analyse personnalisee sur <strong>2189 systeme(s)</strong> de votre Registre IA. Moteur : IA."
   }
  },
  "texte": {
-  "AI safety testing requirements under EO #": {
-   "en": "AI safety testing requirements under EO #",
-   "fr": "AI safety testing requirements under EO 14179"
-  },
   "ALL": {
    "en": "ALL",
    "fr": "ALL"
@@ -257,10 +253,6 @@
   "🇬🇧 EN": {
    "en": "🇬🇧 EN",
    "fr": "🇬🇧 EN"
-  },
-  "🇺🇸 Federal Register": {
-   "en": "🇺🇸 Federal Register",
-   "fr": "🇺🇸 Federal Register"
   },
   "🎯 Veille qualifiée": {
    "en": "🎯 Qualified watch",

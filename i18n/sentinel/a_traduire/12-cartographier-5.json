@@ -1,12 +1,52 @@
 {
  "_lot": "12-cartographier-5",
- "_mots": 2292,
+ "_mots": 2373,
  "_pages": [
   "simulateur"
  ],
  "_rubrique": "CARTOGRAPHIER",
  "bloc": {},
  "texte": {
+  "Dans les conditions et pour la destination prévues par le fournisseur.": {
+   "en": "Under the conditions and for the intended purpose foreseen by the provider.",
+   "fr": "Dans les conditions et pour la destination prévues par le fournisseur."
+  },
+  "Depuis quand ce système est-il sur le marché ?": {
+   "en": "Since when has this system been on the market?",
+   "fr": "Depuis quand ce système est-il sur le marché ?"
+  },
+  "Des techniques de personnalisation pourraient être concernées": {
+   "en": "Personalisation techniques could be concerned",
+   "fr": "Des techniques de personnalisation pourraient être concernées"
+  },
+  "Description du cas d'usage": {
+   "en": "Description of the use case",
+   "fr": "Description du cas d'usage"
+  },
+  "Deux nouvelles pratiques interdites (Art. #(#), points ba et bb) — marquage des contenus synthétiques (Art. #(#)) pour les systèmes déjà sur le marché": {
+   "en": "Two new prohibited practices (Art. #(#), points ba and bb) — marking of synthetic content (Art. #(#)) for systems already on the market",
+   "fr": "Deux nouvelles pratiques interdites (Art. 5(1), points ba et bb) — marquage des contenus synthétiques (Art. 50(2)) pour les systèmes déjà sur le marché"
+  },
+  "Digital Omnibus": {
+   "en": "Digital Omnibus",
+   "fr": "Digital Omnibus"
+  },
+  "Distributeur — nous le mettons à disposition sans être ni fournisseur ni importateur": {
+   "en": "Distributor — we make it available without being either the provider or the importer",
+   "fr": "Distributeur — nous le mettons à disposition sans être ni fournisseur ni importateur"
+  },
+  "Documentation technique (Annexe IV)": {
+   "en": "Technical documentation (Annex IV)",
+   "fr": "Documentation technique (Annexe IV)"
+  },
+  "Décisions individuelles contraignantes": {
+   "en": "Binding individual decisions",
+   "fr": "Décisions individuelles contraignantes"
+  },
+  "Décrivez votre système et son contexte de déploiement.": {
+   "en": "Describe your system and its deployment context.",
+   "fr": "Décrivez votre système et son contexte de déploiement."
+  },
   "Définition incomplète — Art. #(#)": {
    "en": "Incomplete definition — Art. #(#)",
    "fr": "Définition incomplète — Art. 3(1)"
@@ -438,10 +478,6 @@
   "Obligation de marquage et de watermarking (Art. #-#)": {
    "en": "Marking and watermarking obligation (Art. #-#)",
    "fr": "Obligation de marquage et de watermarking (Art. 50.2-4)"
-  },
-  "Obligations": {
-   "en": "Obligations",
-   "fr": "Obligations"
   },
   "Obligations de déployeur : vérification des politiques fournisseur, transparence utilisateurs": {
    "en": "Deployer obligations: verification of provider policies, transparency towards users",

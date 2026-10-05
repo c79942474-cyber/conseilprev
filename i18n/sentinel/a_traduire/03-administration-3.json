@@ -1,11 +1,16 @@
 {
  "_lot": "03-administration-3",
- "_mots": 1963,
+ "_mots": 2015,
  "_pages": [
   "rgpd-site"
  ],
  "_rubrique": "ADMINISTRATION",
  "bloc": {
+  "Deux ensembles coexistent. Les modules « Conformité RGPD » et « Registre des traitements » portent sur l'organisation du client. Les modules « RGPD — CONSEILPREV » et « Transparence IA Act » portent sur notre propre conformité : site public et plateforme Sentinel. Ils sont réservés à CONSEILPREV et masqués pour les clients. En cas de contrôle, seuls ces derniers constituent votre dossier.": {
+   "en": "Two sets coexist. The “GDPR compliance” and “Records of processing” modules concern the <strong>client’s</strong> organisation. The “GDPR — CONSEILPREV” and “AI Act transparency” modules concern <strong>our own compliance</strong>: public site and Sentinel platform. They are reserved for CONSEILPREV and hidden from clients. In the event of an inspection, only the latter make up your file.",
+   "fr": "Deux ensembles coexistent. Les modules « Conformité RGPD » et « Registre des traitements » portent sur l'organisation du client. Les modules « RGPD — CONSEILPREV » et « Transparence IA Act » portent sur notre propre conformité : site public et plateforme Sentinel. Ils sont réservés à CONSEILPREV et masqués pour les clients. En cas de contrôle, seuls ces derniers constituent votre dossier.",
+   "html": "Deux ensembles coexistent. Les modules « Conformité RGPD » et « Registre des traitements » portent sur l'organisation du <strong>client</strong>. Les modules « RGPD — CONSEILPREV » et « Transparence IA Act » portent sur <strong>notre propre conformité</strong> : site public et plateforme Sentinel. Ils sont réservés à CONSEILPREV et masqués pour les clients. En cas de contrôle, seuls ces derniers constituent votre dossier."
+  },
   "Effacement. Le compte est anonymisé, les données du périmètre Entreprise supprimées, les preuves de consentement anonymisées mais conservées à titre de preuve. Les pièces comptables demeurent (art. #.b). Vérifiez l'identité, saisissez l'adresse, confirmez ; l'opération est tracée.Portabilité. L'export produit un fichier structuré, lisible par machine : compte, périmètre, consentements. Vérifiez l'identité, exportez, remettez par un canal sûr. Ce mécanisme répond aussi à l'exigence de portabilité et de changement de fournisseur portée par le Data Act.": {
    "en": "<strong>Erasure.</strong> The account is anonymised, the Enterprise-scope data deleted, and consent records anonymised but kept as evidence. Accounting documents remain (art. #.b). Verify the identity, enter the address, confirm; the operation is logged.<br><br><strong>Portability.</strong> The export produces a structured, machine-readable file: account, scope, consents. Verify the identity, export, hand over through a secure channel. This mechanism also meets the portability and provider-switching requirement set by the Data Act.",
    "fr": "Effacement. Le compte est anonymisé, les données du périmètre Entreprise supprimées, les preuves de consentement anonymisées mais conservées à titre de preuve. Les pièces comptables demeurent (art. 17.3.b). Vérifiez l'identité, saisissez l'adresse, confirmez ; l'opération est tracée.Portabilité. L'export produit un fichier structuré, lisible par machine : compte, périmètre, consentements. Vérifiez l'identité, exportez, remettez par un canal sûr. Ce mécanisme répond aussi à l'exigence de portabilité et de changement de fournisseur portée par le Data Act.",
@@ -80,15 +85,15 @@
   },
   "# non-conformité(s) détectée(s)": {
    "en": "# case(s) of non-compliance detected",
-   "fr": "4 non-conformité(s) détectée(s)"
+   "fr": "3 non-conformité(s) détectée(s)"
   },
   "# preuve(s) au total — # affichée(s)": {
    "en": "# piece(s) of evidence in total — # shown",
-   "fr": "0 preuve(s) au total — 0 affichée(s)"
+   "fr": "1638 preuve(s) au total — 300 affichée(s)"
   },
   "# preuve(s) horodatee(s) enregistrees ; # retrait(s) trace(s).": {
    "en": "# time-stamped piece(s) of evidence saved; # withdrawal(s) traced.",
-   "fr": "0 preuve(s) horodatee(s) enregistrees ; 0 retrait(s) trace(s)."
+   "fr": "1638 preuve(s) horodatee(s) enregistrees ; 96 retrait(s) trace(s)."
   },
   "# traitements documentes (finalite, base, duree, destinataires), exportables.": {
    "en": "# processing activities documented (purpose, basis, retention, recipients), exportable.",
@@ -146,10 +151,6 @@
    "en": "Access (art. #)",
    "fr": "Accès (art. 15)"
   },
-  "Action": {
-   "en": "Action",
-   "fr": "Action"
-  },
   "Administration · Conformité": {
    "en": "Administration · Compliance",
    "fr": "Administration · Conformité"
@@ -181,10 +182,6 @@
   "Anonymise le compte, supprime les données liées ; les preuves de consentement sont anonymisées et conservées à titre de preuve ; les pièces comptables demeurent (art. #.b).": {
    "en": "Anonymises the account and deletes the linked data; consent records are anonymised and kept as evidence; accounting documents remain (art. #.b).",
    "fr": "Anonymise le compte, supprime les données liées ; les preuves de consentement sont anonymisées et conservées à titre de preuve ; les pièces comptables demeurent (art. 17.3.b)."
-  },
-  "Anthropic": {
-   "en": "Anthropic",
-   "fr": "Anthropic"
   },
   "Anthropic (Etats-Unis — CCT/DPF) ; Mistral (UE)": {
    "en": "Anthropic (United States — SCC/DPF) ; Mistral (EU)",
@@ -281,10 +278,6 @@
   "Base légale": {
    "en": "Legal basis",
    "fr": "Base légale"
-  },
-  "Brevo": {
-   "en": "Brevo",
-   "fr": "Brevo"
   },
   "Brevo (UE)": {
    "en": "Brevo (EU)",
@@ -440,7 +433,7 @@
   },
   "Dernière vérification : #:#:# · # preuve(s) de consentement · # retrait(s)": {
    "en": "Last check: #:#:# · # consent record(s) · # withdrawal(s)",
-   "fr": "Dernière vérification : 15:26:08 · 0 preuve(s) de consentement · 0 retrait(s)"
+   "fr": "Dernière vérification : 15:51:15 · 1638 preuve(s) de consentement · 96 retrait(s)"
   },
   "Destinataire": {
    "en": "Recipient",
@@ -594,6 +587,10 @@
    "en": "Audit report history (art. # · accountability)",
    "fr": "Historique des rapports d'audit (art. 5.2 · responsabilité)"
   },
+  "Horodatage (UTC)": {
+   "en": "Timestamp (UTC)",
+   "fr": "Horodatage (UTC)"
+  },
   "IP hachees et agent utilisateur tronque dans les preuves ; donnees limitees aux finalites declarees.": {
    "en": "Hashed IPs and truncated user agent in the evidence; data limited to the declared purposes.",
    "fr": "IP hachees et agent utilisateur tronque dans les preuves ; donnees limitees aux finalites declarees."
@@ -674,14 +671,6 @@
    "en": "Minimisation and accuracy",
    "fr": "Minimisation et exactitude"
   },
-  "Mistral AI": {
-   "en": "Mistral AI",
-   "fr": "Mistral AI"
-  },
-  "Mode": {
-   "en": "Mode",
-   "fr": "Mode"
-  },
   "Mécanismes de transfert des données (chapitre V)": {
    "en": "Data transfer mechanisms (Chapter V)",
    "fr": "Mécanismes de transfert des données (chapitre V)"
@@ -705,6 +694,10 @@
   "Pays": {
    "en": "Country",
    "fr": "Pays"
+  },
+  "Personne": {
+   "en": "Person",
+   "fr": "Personne"
   },
   "Personnes vulnerables": {
    "en": "Vulnerable persons",
@@ -778,10 +771,6 @@
    "en": "Consent records register (art. #)",
    "fr": "Registre des preuves de consentement (art. 7)"
   },
-  "Render": {
-   "en": "Render",
-   "fr": "Render"
-  },
   "Render (UE)": {
    "en": "Render (EU)",
    "fr": "Render (UE)"
@@ -845,10 +834,6 @@
   "Statut": {
    "en": "Status",
    "fr": "Statut"
-  },
-  "Stripe": {
-   "en": "Stripe",
-   "fr": "Stripe"
   },
   "Stripe (Etats-Unis — clauses contractuelles types / DPF)": {
    "en": "Stripe (United States — standard contractual clauses / DPF)",
@@ -921,6 +906,14 @@
   "declaratif": {
    "en": "self-declared",
    "fr": "declaratif"
+  },
+  "non": {
+   "en": "no",
+   "fr": "non"
+  },
+  "oui": {
+   "en": "yes",
+   "fr": "oui"
   },
   "signaler": {
    "en": "flag",

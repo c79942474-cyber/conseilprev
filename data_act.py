@@ -636,15 +636,52 @@ ETATS = {"tenu": 1.0, "partiel": 0.5, "non_tenu": 0.0, "sans_objet": None}
 
 
 def _part(cles, reponses):
-    valeurs = []
+    """La part d'une famille d'obligations : les « sans objet » SORTENT du
+    dénominateur, les points SANS RÉPONSE comptent ZÉRO et Y RESTENT.
+
+    POURQUOI LES « SANS OBJET » SORTENT. Un point que la qualité déclarée ne
+    vise pas n'est pas un manquement : le compter contre le client lui
+    reprocherait son métier. C'est la règle qu'`ocde_ia` avait posée la
+    première, et elle vaut ici pour la même raison.
+
+    POURQUOI LES SANS-RÉPONSE N'EN SORTENT PAS, ET CE QUI A ÉTÉ MESURÉ. Cette
+    fonction les sortait aussi — elle ne gardait que les valeurs connues et
+    divisait par leur nombre. Mesuré : un prestataire d'intermédiation qui
+    déclarait tenir UN des dix-neuf points de sa qualité lisait 100 %, et
+    `conformite._lire_dga` servait ce 100 % à l'indice des seize
+    référentiels, qui affichait donc le DGA maîtrisé sur un dix-neuvième de
+    son contenu. C'est exactement ce que `ocde_ia` et `en18286` nomment « le
+    pire réglage possible » : sortir du dénominateur ce qu'on n'a pas
+    regardé fait monter le taux à mesure qu'on répond MOINS. Le
+    dénominateur est donc celui des obligations de la qualité, moins les
+    seuls « sans objet ».
+
+    LES TROIS NOMBRES RENDUS : le taux, le nombre de points RENSEIGNÉS — qui
+    dit combien du questionnaire a été regardé, et que l'écran affiche à
+    côté du taux pour qu'un taux bas se lise « pas encore répondu » et non
+    « non tenu » —, et le nombre de points ATTENDUS, qui est celui sur
+    lequel le taux porte.
+    """
+    cles = tuple(cles)
+    portes, acquis, renseignes = 0, 0.0, 0
     for c in cles:
-        v = ETATS.get(reponses.get(c))
+        brut = reponses.get(c)
+        if brut == "sans_objet":
+            continue
+        portes += 1
+        v = ETATS.get(brut)
         if v is not None:
-            valeurs.append(v)
-    if not valeurs:
-        return None, 0, len(tuple(cles))
-    return (round(100.0 * sum(valeurs) / len(valeurs)), len(valeurs),
-            len(tuple(cles)))
+            renseignes += 1
+            acquis += v
+    #  UN QUESTIONNAIRE VIDE NE REND PAS 0 %, IL NE REND RIEN. Compter zéro
+    #  dès qu'une qualité est déclarée dirait « vous ne tenez aucun de vos
+    #  dix-neuf points » à qui n'a simplement pas encore ouvert l'écran, et
+    #  l'indice des seize référentiels l'afficherait. L'absence de réponse
+    #  pèse zéro DANS un taux, elle ne fabrique pas un taux à elle seule —
+    #  c'est aussi ce que dit la tête « vide » de l'évaluation.
+    if not portes or not renseignes:
+        return None, renseignes, portes
+    return round(100.0 * acquis / portes), renseignes, portes
 
 
 #  ══════════════════════════════════════════════════════════════════════════
@@ -781,10 +818,28 @@ def evaluer(declaration=None, aujourdhui=None):
     champ = applicable(d)
     sc = score(d)
     ech = echeances(d, aujourdhui)
+    # LE CHAPITRE PASSÉ AU CALCUL D'EXPOSITION, ET POURQUOI CE N'EST PLUS
+    # `None` QUAND AUCUN CHAPITRE OUVERT N'EST EXPOSÉ.
+    #
+    # CE QUI A ÉTÉ MESURÉ : un fournisseur de services de traitement de
+    # données n'ouvre que les chapitres VI et VII, dont aucun n'est désigné
+    # par l'article 40 §4. Cette ligne cherchait le premier chapitre exposé
+    # et rendait `None` quand elle n'en trouvait aucun — or `exposition()`
+    # lit `None` comme « on ne sait pas lequel », pas comme « aucun », et
+    # retombait sur l'arithmétique de l'article 83 §5. La route annonçait
+    # donc 20 000 000 EUR de plafond européen à qui n'en encourt aucun :
+    # exactement le contresens contre lequel l'écran du module met en garde
+    # (« Croire que ce chapitre expose au plafond du RGPD »).
+    #
+    # ON NOMME DONC UN CHAPITRE OUVERT, exposé si l'un l'est, le premier
+    # ouvert sinon : le calcul rend alors « regime_national » et renvoie à
+    # ce que dit la sanction nationale. `None` ne reste réservé qu'au cas où
+    # AUCUN chapitre n'est ouvert — hors champ, non qualifié, exempté —, où
+    # il n'y a pas de chapitre à nommer.
+    exposes = [c for c in champ["chapitres"]
+               if CHAPITRES_PAR_CLE[c]["rgpd_art83"]]
     expo = exposition(d.get("chiffre_affaires"),
-                      chapitre=next((c for c in champ["chapitres"]
-                                     if CHAPITRES_PAR_CLE[c]["rgpd_art83"]),
-                                    None))
+                      chapitre=(exposes or champ["chapitres"] or [None])[0])
     echues = [e for e in ech if e["echue"] and e["vous_vise"]
               and e["cle"] != "application"]
 
@@ -809,9 +864,11 @@ def evaluer(declaration=None, aujourdhui=None):
             % (len(echues), echues[0]["article"], echues[0]["date"]))
     else:
         tete, dit = "mesure", (
-            "%d %% des obligations renseignées de vos qualités sont "
-            "déclarées tenues, sur %d points attendus."
-            % (sc["total"] or 0, sc["attendus"]))
+            "%d %% des obligations attendues de vos qualités sont "
+            "déclarées tenues, sur %d points attendus dont %d "
+            "renseigné(s). Un point qu'on n'a pas regardé compte zéro : "
+            "le taux monte quand on répond, jamais quand on s'abstient."
+            % (sc["total"] or 0, sc["attendus"], sc["renseignes"]))
 
     return {
         "ok": True,

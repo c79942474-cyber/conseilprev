@@ -1,0 +1,455 @@
+{
+ "_lot": "76-routes-13",
+ "_mots": 2385,
+ "_pages": [
+  "_routes"
+ ],
+ "_rubrique": "_routes",
+ "bloc": {},
+ "texte": {
+  "Une catégorie muette compte comme absente : le profil s'étale sur toutes.": {
+   "en": "A silent category counts as absent: the profile spreads across all of them.",
+   "fr": "Une catégorie muette compte comme absente : le profil s'étale sur toutes."
+  },
+  "Une cellule de crise qui existe avant la crise, avec des moyens de communication qui survivent à la panne du système.": {
+   "en": "A crisis unit that exists before the crisis, with means of communication that survive the system going down.",
+   "fr": "Une cellule de crise qui existe avant la crise, avec des moyens de communication qui survivent à la panne du système."
+  },
+  "Une certification # ne dispense pas de les traiter.": {
+   "en": "A # certification is no exemption from addressing them.",
+   "fr": "Une certification 42001 ne dispense pas de les traiter."
+  },
+  "Une certification ISO/IEC # ne couvre pas le Top # : elle en rencontre une partie, en effleure une autre, et en laisse # entièrement hors de sa portée.": {
+   "en": "An ISO/IEC # certification does not cover the Top #: it meets part of it, brushes past another part, and leaves # entirely outside its reach.",
+   "fr": "Une certification ISO/IEC 42001 ne couvre pas le Top 10 : elle en rencontre une partie, en effleure une autre, et en laisse 3 entièrement hors de sa portée."
+  },
+  "Une clause absente ne se rattrape pas après la signature : il faut rouvrir le contrat, et le prestataire n'y a aucun intérêt.": {
+   "en": "A missing clause cannot be caught up after signature: the contract has to be reopened, and the provider has no interest in that.",
+   "fr": "Une clause absente ne se rattrape pas après la signature : il faut rouvrir le contrat, et le prestataire n'y a aucun intérêt."
+  },
+  "Une commande d'arrêt trop facile à heurter crée un danger de plus ; une commande trop difficile à atteindre annule la mesure.": {
+   "en": "A stop control too easy to knock creates one more hazard; a control too hard to reach cancels the measure.",
+   "fr": "Une commande d'arrêt trop facile à heurter crée un danger de plus ; une commande trop difficile à atteindre annule la mesure."
+  },
+  "Une compensation financière pour le dommage économiquement appréciable — atteinte physique ou morale, perte de revenus.": {
+   "en": "Financial compensation for harm that can be economically assessed — physical or mental harm, lost earnings.",
+   "fr": "Une compensation financière pour le dommage économiquement appréciable — atteinte physique ou morale, perte de revenus."
+  },
+  "Une conformité. Ce cadre n'est pas certifiable : il n'existe aucun auditeur au bout, et personne ne peut délivrer d'attestation contre lui.": {
+   "en": "Compliance. This framework cannot be certified: there is no auditor at the end of it, and nobody can issue an attestation against it.",
+   "fr": "Une conformité. Ce cadre n'est pas certifiable : il n'existe aucun auditeur au bout, et personne ne peut délivrer d'attestation contre lui."
+  },
+  "Une continuité raisonnable du service, des mécanismes d'accès, de transfert et d'extraction des données stockées, et l'exercice des droits des personnes concernées.": {
+   "en": "Reasonable continuity of the service, mechanisms for accessing, transferring and retrieving the stored data, and the exercise of the data subjects' rights.",
+   "fr": "Une continuité raisonnable du service, des mécanismes d'accès, de transfert et d'extraction des données stockées, et l'exercice des droits des personnes concernées."
+  },
+  "Une cotation sans justification. Le document demande un processus CRÉDIBLE dont la logique est rendue publique : un chiffre sans raison n'en est pas un.": {
+   "en": "A rating with no justification. The document calls for a CREDIBLE process whose rationale is publicly communicated: a figure with no reason is not one.",
+   "fr": "Une cotation sans justification. Le document demande un processus CRÉDIBLE dont la logique est rendue publique : un chiffre sans raison n'en est pas un."
+  },
+  "Une directive n'est pas d'application directe : ce qui oblige une entité, c'est la loi de transposition de chaque État membre où elle fournit ses services. Les montants et délais repris ici sont ceux de la directive — des MINIMA imposés aux États. Une transposition nationale peut être plus exigeante, jamais moins.": {
+   "en": "A directive is not directly applicable: what binds an entity is the transposing law of each Member State where it provides its services. The amounts and deadlines carried here are those of the directive — MINIMA imposed on the Member States. A national transposition may be stricter, never laxer.",
+   "fr": "Une directive n'est pas d'application directe : ce qui oblige une entité, c'est la loi de transposition de chaque État membre où elle fournit ses services. Les montants et délais repris ici sont ceux de la directive — des MINIMA imposés aux États. Une transposition nationale peut être plus exigeante, jamais moins."
+  },
+  "Une documentation technique est-elle établie et tenue à jour pour CHAQUE système d'IA ?": {
+   "en": "Is technical documentation established and kept up to date for EVERY AI system?",
+   "fr": "Une documentation technique est-elle établie et tenue à jour pour CHAQUE système d'IA ?"
+  },
+  "Une déclaration d'applicabilité amputée de sa troisième colonne, ou un registre de risques sans acceptation datée des propriétaires. Deux défauts documentaires, et ils arrêtent tout.": {
+   "en": "A statement of applicability with its third column cut off, or a risk register with no dated acceptance by the owners. Two documentary defects, and they stop everything.",
+   "fr": "Une déclaration d'applicabilité amputée de sa troisième colonne, ou un registre de risques sans acceptation datée des propriétaires. Deux défauts documentaires, et ils arrêtent tout."
+  },
+  "Une déclaration d'applicabilité incomplète — une mesure ni retenue ni écartée, ou une décision sans justification. Le défaut est documentaire, et il arrête tout avant l'étape #.": {
+   "en": "An incomplete statement of applicability — a control neither retained nor ruled out, or a decision with no justification. The defect is documentary, and it stops everything before stage #.",
+   "fr": "Une déclaration d'applicabilité incomplète — une mesure ni retenue ni écartée, ou une décision sans justification. Le défaut est documentaire, et il arrête tout avant l'étape 2."
+  },
+  "Une déclaration d'applicabilité qui couvre les trente-huit mesures de l'annexe A n'est pas pour autant complète : elle l'est si elle couvre les options de traitement retenues, ce qui peut demander davantage.": {
+   "en": "A statement of applicability that covers the thirty-eight Annex A controls is not complete for that reason: it is complete if it covers the treatment options retained, which may call for more.",
+   "fr": "Une déclaration d'applicabilité qui couvre les trente-huit mesures de l'annexe A n'est pas pour autant complète : elle l'est si elle couvre les options de traitement retenues, ce qui peut demander davantage."
+  },
+  "Une entité financière qui est une microentreprise peut convenir que les droits d'accès, d'inspection et d'audit soient délégués à une tierce partie indépendante nommée par le prestataire, l'entité restant habilitée à lui demander en tout temps des informations et une garantie sur la performance.": {
+   "en": "A financial entity that is a microenterprise may agree that the rights of access, inspection and audit be delegated to an independent third party appointed by the provider, the entity remaining entitled to request information and assurance on performance from it at any time.",
+   "fr": "Une entité financière qui est une microentreprise peut convenir que les droits d'accès, d'inspection et d'audit soient délégués à une tierce partie indépendante nommée par le prestataire, l'entité restant habilitée à lui demander en tout temps des informations et une garantie sur la performance."
+  },
+  "Une entreprise moyenne est exemptée tant qu'elle l'est depuis moins d'un an, et ses produits le sont pendant un an après leur mise sur le marché.": {
+   "en": "A medium-sized enterprise is exempt as long as it has held that status for less than one year, and its products are exempt for one year after being placed on the market.",
+   "fr": "Une entreprise moyenne est exemptée tant qu'elle l'est depuis moins d'un an, et ses produits le sont pendant un an après leur mise sur le marché."
+  },
+  "Une entreprise publique ou à capitaux publics se mesure sur son effectif et ses comptes, comme les autres.": {
+   "en": "A public or publicly-owned undertaking is measured on its headcount and its accounts, like the others.",
+   "fr": "Une entreprise publique ou à capitaux publics se mesure sur son effectif et ses comptes, comme les autres."
+  },
+  "Une exclusion motivée par les mesures de sécurité en place est refusée par le référentiel lui-même : « la mise en œuvre de mesures de sécurité sur ces systèmes d'information ne permet pas de justifier qu'ils ne sont exposés à aucun des risques précités ».": {
+   "en": "An exclusion justified by the security measures in place is refused by the framework itself: “implementing security measures on those information systems does not justify a claim that they are exposed to none of the aforementioned risks”.",
+   "fr": "Une exclusion motivée par les mesures de sécurité en place est refusée par le référentiel lui-même : « la mise en œuvre de mesures de sécurité sur ces systèmes d'information ne permet pas de justifier qu'ils ne sont exposés à aucun des risques précités »."
+  },
+  "Une gouvernance par les risques, tenue à jour": {
+   "en": "Risk-based governance, kept up to date",
+   "fr": "Une gouvernance par les risques, tenue à jour"
+  },
+  "Une immunité, ni une conformité. Une liste de risques n'est pas un référentiel d'exigences, et traiter les dix n'épuise pas les risques d'une application.": {
+   "en": "Immunity, nor compliance. A list of risks is not a requirements framework, and addressing the ten does not exhaust an application's risks.",
+   "fr": "Une immunité, ni une conformité. Une liste de risques n'est pas un référentiel d'exigences, et traiter les dix n'épuise pas les risques d'une application."
+  },
+  "Une incidence dont le dommage ne peut pas être défait, quelle que soit la somme engagée ensuite.": {
+   "en": "An impact whose harm cannot be undone, whatever sum is committed afterwards.",
+   "fr": "Une incidence dont le dommage ne peut pas être défait, quelle que soit la somme engagée ensuite."
+  },
+  "Une liste des risques propres à l'IA.": {
+   "en": "A list of the risks specific to AI.",
+   "fr": "Une liste des risques propres à l'IA."
+  },
+  "Une liste faite une fois à la conception. Un système requalifié à haut risque en cours de vie ne déclenche rien.": {
+   "en": "A list drawn up once at design time. A system reclassified as high-risk during its life triggers nothing.",
+   "fr": "Une liste faite une fois à la conception. Un système requalifié à haut risque en cours de vie ne déclenche rien."
+  },
+  "Une liste recopiée dans un écran vieillit sans prévenir. Celle-ci se consulte à sa source.": {
+   "en": "A list copied into a screen ages without warning. This one is consulted at its source.",
+   "fr": "Une liste recopiée dans un écran vieillit sans prévenir. Celle-ci se consulte à sa source."
+  },
+  "Une matrice de compétences tenue pour les auditeurs et jamais pour les recrutements. Le jour où l'équipe qui sait change, personne ne s'en aperçoit.": {
+   "en": "A competence matrix kept for the auditors and never for recruitment. The day the team that knows changes, nobody notices.",
+   "fr": "Une matrice de compétences tenue pour les auditeurs et jamais pour les recrutements. Le jour où l'équipe qui sait change, personne ne s'en aperçoit."
+  },
+  "Une mesure ni retenue ni écartée suffit à rendre la déclaration irrecevable.": {
+   "en": "One control neither retained nor ruled out is enough to make the statement inadmissible.",
+   "fr": "Une mesure ni retenue ni écartée suffit à rendre la déclaration irrecevable."
+  },
+  "Une mesure non renseignée n'est pas une mesure conforme : elle reste au dénominateur.": {
+   "en": "An unfilled control is not a compliant control: it stays in the denominator.",
+   "fr": "Une mesure non renseignée n'est pas une mesure conforme : elle reste au dénominateur."
+  },
+  "Une mesure organisationnelle qui ne se forme pas ne se tient pas.": {
+   "en": "An organisational measure that is not trained for is not held.",
+   "fr": "Une mesure organisationnelle qui ne se forme pas ne se tient pas."
+  },
+  "Une mesure par scénario est le plancher ; l'adéquation au délai est le critère. Quand aucune catégorie seule n'y suffit, il faut les combiner.": {
+   "en": "One measure per scenario is the floor; fitness to the deadline is the criterion. Where no single category suffices, they have to be combined.",
+   "fr": "Une mesure par scénario est le plancher ; l'adéquation au délai est le critère. Quand aucune catégorie seule n'y suffit, il faut les combiner."
+  },
+  "Une mesure taillée ne peut pas être plus solide que celle qu'elle taille : un axe déclaré au-dessus de sa famille #-# est ramené à elle, et le dépassement est signalé plutôt qu'effacé.": {
+   "en": "A tailored control cannot be stronger than the one it tailors: an axis declared above its #-# family is brought back down to it, and the overshoot is flagged rather than erased.",
+   "fr": "Une mesure taillée ne peut pas être plus solide que celle qu'elle taille : un axe déclaré au-dessus de sa famille 800-53 est ramené à elle, et le dépassement est signalé plutôt qu'effacé."
+  },
+  "Une mesure « prévue » n'est pas une mesure mise en œuvre : ce qui compte est la procédure écrite, la personne nommée et la preuve qu'elle l'applique.": {
+   "en": "A “planned” control is not an implemented control: what counts is the written procedure, the named person and the evidence that they apply it.",
+   "fr": "Une mesure « prévue » n'est pas une mesure mise en œuvre : ce qui compte est la procédure écrite, la personne nommée et la preuve qu'elle l'applique."
+  },
+  "Une modalité unique — le visuel — échoue dès que la personne désignée regarde ailleurs, ce qui est le cas normal d'un poste qui fait autre chose.": {
+   "en": "A single modality — the visual one — fails as soon as the designated person looks away, which is the normal case for a station that does something else too.",
+   "fr": "Une modalité unique — le visuel — échoue dès que la personne désignée regarde ailleurs, ce qui est le cas normal d'un poste qui fait autre chose."
+  },
+  "Une norme européenne harmonisée, citée au Journal officiel au titre du règlement.": {
+   "en": "A harmonised European standard, cited in the Official Journal under the regulation.",
+   "fr": "Une norme européenne harmonisée, citée au Journal officiel au titre du règlement."
+  },
+  "Une norme qui n'est ni harmonisée ni spécification commune — une norme internationale, sectorielle ou nationale.": {
+   "en": "A standard that is neither harmonised nor a common specification — an international, sectoral or national standard.",
+   "fr": "Une norme qui n'est ni harmonisée ni spécification commune — une norme internationale, sectorielle ou nationale."
+  },
+  "Une ou plusieurs exigences essentielles sont traitées par « autre norme » ou « autre solution technique » sans la justification et la preuve objective que le §# réclame.": {
+   "en": "One or more essential requirements are addressed by “other standard” or “other technical solution” without the justification and objective evidence that §# calls for.",
+   "fr": "Une ou plusieurs exigences essentielles sont traitées par « autre norme » ou « autre solution technique » sans la justification et la preuve objective que le §4.4.3.2.2 réclame."
+  },
+  "Une ou plusieurs fonctions devancent GOVERN.": {
+   "en": "One or more functions are ahead of GOVERN.",
+   "fr": "Une ou plusieurs fonctions devancent GOVERN."
+  },
+  "Une partie de la preuve existe ; l'article demande en plus quelque chose que la norme ne couvre pas.": {
+   "en": "Part of the evidence exists; the article additionally calls for something the standard does not cover.",
+   "fr": "Une partie de la preuve existe ; l'article demande en plus quelque chose que la norme ne couvre pas."
+  },
+  "Une personne désignée qui ignore que son écrasement nourrit le modèle ne peut pas mesurer la portée de son geste.": {
+   "en": "A designated person unaware that their override feeds the model cannot gauge the reach of their action.",
+   "fr": "Une personne désignée qui ignore que son écrasement nourrit le modèle ne peut pas mesurer la portée de son geste."
+  },
+  "Une personne désignée qui ne sait pas ce que fait le système après son geste n'intervient plus qu'à contrecœur.": {
+   "en": "A designated person who does not know what the system does after their action intervenes only reluctantly from then on.",
+   "fr": "Une personne désignée qui ne sait pas ce que fait le système après son geste n'intervient plus qu'à contrecœur."
+  },
+  "Une perte aurait un effet GRAVE ou CATASTROPHIQUE, y compris des atteintes graves aux personnes.": {
+   "en": "A loss would have a SEVERE or CATASTROPHIC effect, including serious harm to individuals.",
+   "fr": "Une perte aurait un effet GRAVE ou CATASTROPHIQUE, y compris des atteintes graves aux personnes."
+  },
+  "Une perte aurait un effet LIMITÉ sur les missions, les actifs ou les personnes.": {
+   "en": "A loss would have a LIMITED effect on operations, assets or individuals.",
+   "fr": "Une perte aurait un effet LIMITÉ sur les missions, les actifs ou les personnes."
+  },
+  "Une perte aurait un effet SÉRIEUX — dégradation notable, préjudice financier ou humain sans danger vital.": {
+   "en": "A loss would have a SERIOUS effect — significant degradation, financial or human harm short of life-threatening.",
+   "fr": "Une perte aurait un effet SÉRIEUX — dégradation notable, préjudice financier ou humain sans danger vital."
+  },
+  "Une perturbation du service pourrait avoir un impact important sur la sécurité publique, la sûreté publique ou la santé publique": {
+   "en": "A disruption of the service could have a significant impact on public safety, public security or public health",
+   "fr": "Une perturbation du service pourrait avoir un impact important sur la sécurité publique, la sûreté publique ou la santé publique"
+  },
+  "Une perturbation pourrait induire un risque systémique important, en particulier avec un impact transfrontière": {
+   "en": "A disruption could induce significant systemic risk, in particular with a cross-border impact",
+   "fr": "Une perturbation pourrait induire un risque systémique important, en particulier avec un impact transfrontière"
+  },
+  "Une politique IA écrite par la conformité et jamais lue par ceux qui construisent. Elle existe, elle est datée, et elle ne change aucune décision d'architecture.": {
+   "en": "An AI policy written by compliance and never read by those who build. It exists, it is dated, and it changes no architecture decision.",
+   "fr": "Une politique IA écrite par la conformité et jamais lue par ceux qui construisent. Elle existe, elle est datée, et elle ne change aucune décision d'architecture."
+  },
+  "Une politique IA écrite par la conformité, jamais lue par ceux qui construisent. Elle existe, elle est datée, et elle n'a aucun effet sur une seule décision d'architecture.": {
+   "en": "An AI policy written by compliance, never read by those who build. It exists, it is dated, and it has no effect on a single architecture decision.",
+   "fr": "Une politique IA écrite par la conformité, jamais lue par ceux qui construisent. Elle existe, elle est datée, et elle n'a aucun effet sur une seule décision d'architecture."
+  },
+  "Une politique qualité est-elle établie, et dit-elle quelque chose de vos systèmes d'IA en particulier ?": {
+   "en": "Is a quality policy established, and does it say anything about your AI systems in particular?",
+   "fr": "Une politique qualité est-elle établie, et dit-elle quelque chose de vos systèmes d'IA en particulier ?"
+  },
+  "Une politique qualité générique recopiée d'ISO # : elle passe l'audit du SMQ et ne dit rien du règlement.": {
+   "en": "A generic quality policy copied from ISO #: it passes the QMS audit and says nothing about the regulation.",
+   "fr": "Une politique qualité générique recopiée d'ISO 9001 : elle passe l'audit du SMQ et ne dit rien du règlement."
+  },
+  "Une procédure documentée définit-elle approbation, diffusion, version, conservation et retrait des documents ?": {
+   "en": "Does a documented procedure define approval, distribution, versioning, retention and withdrawal of documents?",
+   "fr": "Une procédure documentée définit-elle approbation, diffusion, version, conservation et retrait des documents ?"
+  },
+  "Une procédure existe pour notifier la cessation d'activité dans les quinze jours": {
+   "en": "A procedure exists for notifying the cessation of activity within fifteen days",
+   "fr": "Une procédure existe pour notifier la cessation d'activité dans les quinze jours"
+  },
+  "Une proposition de classification par système non classé, avec ses indices, à valider ou à écarter par une personne nommée.": {
+   "en": "One classification proposal per unclassified system, with its indications, to be approved or set aside by a named person.",
+   "fr": "Une proposition de classification par système non classé, avec ses indices, à valider ou à écarter par une personne nommée."
+  },
+  "Une responsabilité attribuée à une fonction qui n'a ni le budget ni l'autorité d'arrêter une mise en service. Elle signera ce qu'on lui présentera.": {
+   "en": "A responsibility assigned to a function that has neither the budget nor the authority to stop a go-live. It will sign whatever is put in front of it.",
+   "fr": "Une responsabilité attribuée à une fonction qui n'a ni le budget ni l'autorité d'arrêter une mise en service. Elle signera ce qu'on lui présentera."
+  },
+  "Une responsabilité réglementaire attribuée à une fonction qui n'a ni le budget ni l'autorité d'arrêter une mise sur le marché. Elle signera ce qu'on lui présentera.": {
+   "en": "A regulatory responsibility assigned to a function that has neither the budget nor the authority to stop a placing on the market. It will sign whatever is put in front of it.",
+   "fr": "Une responsabilité réglementaire attribuée à une fonction qui n'a ni le budget ni l'autorité d'arrêter une mise sur le marché. Elle signera ce qu'on lui présentera."
+  },
+  "Une revue de direction annuelle sur un système qui change tous les mois. Elle arrive après les décisions qu'elle devait éclairer.": {
+   "en": "An annual management review on a system that changes every month. It arrives after the decisions it was meant to inform.",
+   "fr": "Une revue de direction annuelle sur un système qui change tous les mois. Elle arrive après les décisions qu'elle devait éclairer."
+  },
+  "Une revue du système de management est-elle conduite à intervalles planifiés ?": {
+   "en": "Is a review of the management system conducted at planned intervals?",
+   "fr": "Une revue du système de management est-elle conduite à intervalles planifiés ?"
+  },
+  "Une revue sans indicateur de qualité ne peut pas distinguer une identification douteuse d'une image médiocre.": {
+   "en": "A review with no quality indicator cannot tell a doubtful identification from a poor image.",
+   "fr": "Une revue sans indicateur de qualité ne peut pas distinguer une identification douteuse d'une image médiocre."
+  },
+  "Une revue sans les entrées ni la version du système ne permet pas de dire si le comportement était dans les limites attendues : elle constate sans pouvoir conclure.": {
+   "en": "A review without the inputs and the system version cannot say whether the behaviour was within the expected bounds: it observes without being able to conclude.",
+   "fr": "Une revue sans les entrées ni la version du système ne permet pas de dire si le comportement était dans les limites attendues : elle constate sans pouvoir conclure."
+  },
+  "Une seule mesure non décidée renvoie l'organisme à l'étape documentaire.": {
+   "en": "A single undecided control sends the organisation back to the documentary stage.",
+   "fr": "Une seule mesure non décidée renvoie l'organisme à l'étape documentaire."
+  },
+  "Une solution que vous avez construite vous-même, ou que votre profession recommande.": {
+   "en": "A solution you built yourself, or that your profession recommends.",
+   "fr": "Une solution que vous avez construite vous-même, ou que votre profession recommande."
+  },
+  "Une sortie rejetée doit être exclue de toute action opérationnelle, pas seulement marquée.": {
+   "en": "A rejected output must be excluded from any operational action, not merely flagged.",
+   "fr": "Une sortie rejetée doit être exclue de toute action opérationnelle, pas seulement marquée."
+  },
+  "Une spécification commune adoptée par un acte d'exécution de la Commission.": {
+   "en": "A common specification adopted by a Commission implementing act.",
+   "fr": "Une spécification commune adoptée par un acte d'exécution de la Commission."
+  },
+  "Une spécification incomplète transforme une obligation transmise en obligation impossible : le déployeur ne peut pas tester ce dont il n'a pas l'interface.": {
+   "en": "An incomplete specification turns a passed-on obligation into an impossible one: the deployer cannot test what they have no interface for.",
+   "fr": "Une spécification incomplète transforme une obligation transmise en obligation impossible : le déployeur ne peut pas tester ce dont il n'a pas l'interface."
+  },
+  "Une surveillance après commercialisation qui attend la réclamation. Le règlement demande une approche ACTIVE, et c'est le chapitre qu'aucune des deux normes ISO ne couvre.": {
+   "en": "Post-market monitoring that waits for the complaint. The regulation calls for an ACTIVE approach, and that is the chapter neither ISO standard covers.",
+   "fr": "Une surveillance après commercialisation qui attend la réclamation. Le règlement demande une approche ACTIVE, et c'est le chapitre qu'aucune des deux normes ISO ne couvre."
+  },
+  "Une surveillance détachée des scénarios n'est qu'un mur d'écrans : c'est l'écart au seuil de risque qui appelle un geste.": {
+   "en": "Monitoring detached from the scenarios is just a wall of screens: it is the deviation from the risk threshold that calls for an action.",
+   "fr": "Une surveillance détachée des scénarios n'est qu'un mur d'écrans : c'est l'écart au seuil de risque qui appelle un geste."
+  },
+  "Une table d'équivalence entre les cadres.": {
+   "en": "An equivalence table between the frameworks.",
+   "fr": "Une table d'équivalence entre les cadres."
+  },
+  "Une vérification qui rejoue le jeu d'essai de l'entraînement. Elle prouve que le modèle a appris, pas qu'il tient ses exigences.": {
+   "en": "A verification that replays the training test set. It proves the model has learned, not that it holds its requirements.",
+   "fr": "Une vérification qui rejoue le jeu d'essai de l'entraînement. Elle prouve que le modèle a appris, pas qu'il tient ses exigences."
+  },
+  "Une évaluation faite une fois, à la mise en service, sur la version d'alors. Le fournisseur a changé le modèle depuis, et l'évaluation porte sur un système qui n'existe plus.": {
+   "en": "An assessment done once, at go-live, on the version of the day. The provider has changed the model since, and the assessment bears on a system that no longer exists.",
+   "fr": "Une évaluation faite une fois, à la mise en service, sur la version d'alors. Le fournisseur a changé le modèle depuis, et l'évaluation porte sur un système qui n'existe plus."
+  },
+  "Une évaluation faite une fois, à la mise en service, sur la version d'alors. Le fournisseur a changé le modèle depuis.": {
+   "en": "An assessment done once, at go-live, on the version of the day. The provider has changed the model since.",
+   "fr": "Une évaluation faite une fois, à la mise en service, sur la version d'alors. Le fournisseur a changé le modèle depuis."
+  },
+  "User de son levier sur la ou les relations d'affaires pour qu'elles préviennent ou atténuent — et construire ce levier s'il manque.": {
+   "en": "Using its leverage over the business relationship or relationships so that they prevent or mitigate — and building that leverage if it is missing.",
+   "fr": "User de son levier sur la ou les relations d'affaires pour qu'elles préviennent ou atténuent — et construire ce levier s'il manque."
+  },
+  "User de son levier sur la relation d'affaires — et le construire s'il manque. Le document nomme trois réponses possibles : poursuivre la relation pendant l'atténuation, la suspendre temporairement, ou s'en désengager.": {
+   "en": "Using its leverage over the business relationship — and building it if it is missing. The document names three possible responses: continuing the relationship during mitigation, temporarily suspending it, or disengaging from it.",
+   "fr": "User de son levier sur la relation d'affaires — et le construire s'il manque. Le document nomme trois réponses possibles : poursuivre la relation pendant l'atténuation, la suspendre temporairement, ou s'en désengager."
+  },
+  "Utilisateur du système d'IA": {
+   "en": "User of the AI system",
+   "fr": "Utilisateur du système d'IA"
+  },
+  "Utilisateur, dans l'Union, d'un produit connecté ou d'un service connexe": {
+   "en": "User, in the Union, of a connected product or a related service",
+   "fr": "Utilisateur, dans l'Union, d'un produit connecté ou d'un service connexe"
+  },
+  "Utilisation des systèmes d'IA": {
+   "en": "Use of AI systems",
+   "fr": "Utilisation des systèmes d'IA"
+  },
+  "Utiliser le système hors des conditions de sa destination vous fait sortir du cadre où le fournisseur a démontré quoi que ce soit.": {
+   "en": "Using the system outside the conditions of its intended purpose takes you out of the frame in which the provider demonstrated anything.",
+   "fr": "Utiliser le système hors des conditions de sa destination vous fait sortir du cadre où le fournisseur a démontré quoi que ce soit."
+  },
+  "Validation du système d'IA": {
+   "en": "Validation of the AI system",
+   "fr": "Validation du système d'IA"
+  },
+  "Validation, risques résiduels acceptés, plan d'action": {
+   "en": "Validation, residual risks accepted, action plan",
+   "fr": "Validation, risques résiduels acceptés, plan d'action"
+  },
+  "Valide et fiable": {
+   "en": "Valid and reliable",
+   "fr": "Valide et fiable"
+  },
+  "Valider la proposition": {
+   "en": "Approve the proposal",
+   "fr": "Valider la proposition"
+  },
+  "Vendre sous sa marque ou modifier substantiellement un produit fait de vous un fabricant.": {
+   "en": "Selling under your own brand or substantially modifying a product makes you a manufacturer.",
+   "fr": "Vendre sous sa marque ou modifier substantiellement un produit fait de vous un fabricant."
+  },
+  "Vie privée": {
+   "en": "Privacy",
+   "fr": "Vie privée"
+  },
+  "Viendra à son tour. Rien n'empêche de l'ouvrir dès maintenant.": {
+   "en": "Its turn will come. Nothing stops you opening it now.",
+   "fr": "Viendra à son tour. Rien n'empêche de l'ouvrir dès maintenant."
+  },
+  "Vos notifications sont-elles perceptibles et interprétables dans les conditions réelles d'exploitation, distinguées par urgence, présentées sur une modalité testée, et leur logique d'escalade est-elle validée comme émettant assez tôt pour permettre une action efficace ?": {
+   "en": "Are your notifications perceptible and interpretable under real operating conditions, distinguished by urgency, presented on a tested modality, and is their escalation logic validated as firing early enough to allow effective action?",
+   "fr": "Vos notifications sont-elles perceptibles et interprétables dans les conditions réelles d'exploitation, distinguées par urgence, présentées sur une modalité testée, et leur logique d'escalade est-elle validée comme émettant assez tôt pour permettre une action efficace ?"
+  },
+  "Vos personnes désignées sont-elles averties du biais d'automatisation, et votre organisation du travail leur laisse-t-elle le temps d'examiner réellement les sorties ?": {
+   "en": "Are your designated persons warned about automation bias, and does the way you organise the work leave them the time to examine the outputs for real?",
+   "fr": "Vos personnes désignées sont-elles averties du biais d'automatisation, et votre organisation du travail leur laisse-t-elle le temps d'examiner réellement les sorties ?"
+  },
+  "Vos seuils d'alerte viennent-ils des dangers prévisibles, de la cotation du risque et du temps dont la personne dispose — et l'alerte part-elle d'elle-même dès que le système atteint un état qui appelle quelqu'un ?": {
+   "en": "Do your alert thresholds come from the foreseeable hazards, the risk rating and the time the person has — and does the alert fire by itself as soon as the system reaches a state that calls for somebody?",
+   "fr": "Vos seuils d'alerte viennent-ils des dangers prévisibles, de la cotation du risque et du temps dont la personne dispose — et l'alerte part-elle d'elle-même dès que le système atteint un état qui appelle quelqu'un ?"
+  },
+  "Votre SMQ est-il établi par écrit, tenu à jour, et son efficacité entretenue dans le temps ?": {
+   "en": "Is your QMS established in writing, kept up to date, and its effectiveness maintained over time?",
+   "fr": "Votre SMQ est-il établi par écrit, tenu à jour, et son efficacité entretenue dans le temps ?"
+  },
+  "Votre activité produit l'incidence par elle-même. Le document attend la cessation ET la réparation : prévenir ne suffit plus, le dommage existe.": {
+   "en": "Your activity produces the impact by itself. The document expects cessation AND remediation: preventing is no longer enough, the harm exists.",
+   "fr": "Votre activité produit l'incidence par elle-même. Le document attend la cessation ET la réparation : prévenir ne suffit plus, le dommage existe."
+  },
+  "Votre activité, combinée à celle d'autres, produit l'incidence ; ou elle cause, facilite ou encourage un autre à la produire. Le document exige que la contribution soit SUBSTANTIELLE : elle n'inclut pas les contributions mineures ou négligeables.": {
+   "en": "Your activity, in combination with that of others, produces the impact; or it causes, facilitates or incentivises another to produce it. The document requires the contribution to be SUBSTANTIAL: it does not include minor or trivial contributions.",
+   "fr": "Votre activité, combinée à celle d'autres, produit l'incidence ; ou elle cause, facilite ou encourage un autre à la produire. Le document exige que la contribution soit SUBSTANTIELLE : elle n'inclut pas les contributions mineures ou négligeables."
+  },
+  "Votre autorité compétente apprécie, chez vous, l'incidence des mesures prises par le prestataire sur la base des recommandations — notamment l'adéquation et la cohérence des mesures correctives que VOUS avez mises en œuvre pour atténuer les risques recensés.": {
+   "en": "Your competent authority assesses, at your end, the impact of the measures taken by the provider on the basis of the recommendations — in particular the adequacy and consistency of the corrective measures YOU have implemented to mitigate the risks identified.",
+   "fr": "Votre autorité compétente apprécie, chez vous, l'incidence des mesures prises par le prestataire sur la base des recommandations — notamment l'adéquation et la cohérence des mesures correctives que VOUS avez mises en œuvre pour atténuer les risques recensés."
+  },
+  "Votre conception oblige-t-elle la personne désignée à examiner vraiment une sortie avant de la retenir, au lieu de la laisser valider par habitude ?": {
+   "en": "Does your design oblige the designated person to really examine an output before adopting it, rather than letting it be approved out of habit?",
+   "fr": "Votre conception oblige-t-elle la personne désignée à examiner vraiment une sortie avant de la retenir, au lieu de la laisser valider par habitude ?"
+  },
+  "Votre interface de revue porte-t-elle, pour chaque sortie, son journal horodaté, ses données d'entrée, ses scores de confiance, les alertes associées, la version du système — et permet-elle à la personne désignée d'y AJOUTER ses propres observations ?": {
+   "en": "Does your review interface carry, for each output, its time-stamped log, its input data, its confidence scores, the associated alerts, the system version — and does it let the designated person ADD their own observations to it?",
+   "fr": "Votre interface de revue porte-t-elle, pour chaque sortie, son journal horodaté, ses données d'entrée, ses scores de confiance, les alertes associées, la version du système — et permet-elle à la personne désignée d'y AJOUTER ses propres observations ?"
+  },
+  "Votre registre des traitements et vos AIPD ne sont pas suspendus parce qu'une opération relève du DGA.": {
+   "en": "Your record of processing activities and your DPIAs are not suspended because an operation falls under the DGA.",
+   "fr": "Votre registre des traitements et vos AIPD ne sont pas suspendus parce qu'une opération relève du DGA."
+  },
+  "Votre régime relève de l'article #(#) : les obligations de gouvernance interne de la législation sur les services financiers valent exécution de l'article #.": {
+   "en": "Your regime falls under article #(#): the internal governance obligations of the financial services legislation count as compliance with article #.",
+   "fr": "Votre régime relève de l'article 17(2) : les obligations de gouvernance interne de la législation sur les services financiers valent exécution de l'article 17."
+  },
+  "Vous demandez à un organisme public la réutilisation de données protégées par un secret commercial, un secret statistique, un droit de propriété intellectuelle de tiers ou la protection des données personnelles.": {
+   "en": "You ask a public sector body for the re-use of data protected by commercial confidentiality, statistical confidentiality, third-party intellectual property rights or the protection of personal data.",
+   "fr": "Vous demandez à un organisme public la réutilisation de données protégées par un secret commercial, un secret statistique, un droit de propriété intellectuelle de tiers ou la protection des données personnelles."
+  },
+  "Vous développez le système d'IA, ou vous le faites développer, et vous le mettez sur le marché ou en service sous votre nom ou votre marque.": {
+   "en": "You develop the AI system, or have it developed, and you place it on the market or put it into service under your own name or trademark.",
+   "fr": "Vous développez le système d'IA, ou vous le faites développer, et vous le mettez sur le marché ou en service sous votre nom ou votre marque."
+  },
+  "Vous exploitez des machines, des véhicules, des équipements industriels ou médicaux connectés. C'est la qualité qui donne des DROITS plutôt que des obligations — mais elle en porte aussi : articles # §#, §# et #.": {
+   "en": "You operate connected machinery, vehicles, industrial or medical equipment. This is the capacity that confers RIGHTS rather than obligations — but it carries some too: Articles #(#), (#) and #.",
+   "fr": "Vous exploitez des machines, des véhicules, des équipements industriels ou médicaux connectés. C'est la qualité qui donne des DROITS plutôt que des obligations — mais elle en porte aussi : articles 4 §10, §11 et 6."
+  },
+  "Vous exploitez une place de marché de données, un espace de données, une plateforme d'échange, ou une coopérative de données — les trois catégories de l'article #.": {
+   "en": "You operate a data marketplace, a data space, an exchange platform, or a data cooperative — the three categories of Article #.",
+   "fr": "Vous exploitez une place de marché de données, un espace de données, une plateforme d'échange, ou une coopérative de données — les trois catégories de l'article 10."
+  },
+  "Vous fournissez ce avec quoi un système d'IA se construit : données, annotation, création et conservation de jeux de données, code mis à disposition de tiers — contributions à des bibliothèques ouvertes comprises —, métriques et mesures d'évaluation. Ou les intrants qui le portent : capital, infrastructure numérique et services administratifs (calcul, nuage, plateformes de paiement, plateformes de travail numériques, systèmes d'exploitation, magasins d'applications, éditeurs de sécurité et de logiciels d'entreprise), matériel (semi-conducteurs, équipements réseau).": {
+   "en": "You supply what an AI system is built with: data, annotation, dataset creation and curation, code made available to third parties — contributions to open libraries included —, metrics and evaluation measures. Or the inputs that carry it: capital, digital infrastructure and administrative services (compute, cloud, payment platforms, digital labour platforms, operating systems, app stores, security and enterprise software providers), hardware (semiconductors, network equipment).",
+   "fr": "Vous fournissez ce avec quoi un système d'IA se construit : données, annotation, création et conservation de jeux de données, code mis à disposition de tiers — contributions à des bibliothèques ouvertes comprises —, métriques et mesures d'évaluation. Ou les intrants qui le portent : capital, infrastructure numérique et services administratifs (calcul, nuage, plateformes de paiement, plateformes de travail numériques, systèmes d'exploitation, magasins d'applications, éditeurs de sécurité et de logiciels d'entreprise), matériel (semi-conducteurs, équipements réseau)."
+  },
+  "Vous invoquez un besoin exceptionnel au titre des articles # à # pour exécuter une mission d'intérêt public.": {
+   "en": "You invoke an exceptional need under Articles # to # in order to perform a task in the public interest.",
+   "fr": "Vous invoquez un besoin exceptionnel au titre des articles 14 à 22 pour exécuter une mission d'intérêt public."
+  },
+  "Vous participez à un espace de données, ou vous déployez des contrats intelligents pour des tiers dans l'exécution d'un accord de partage de données.": {
+   "en": "You take part in a data space, or you deploy smart contracts for third parties in the performance of a data sharing agreement.",
+   "fr": "Vous participez à un espace de données, ou vous déployez des contrats intelligents pour des tiers dans l'exécution d'un accord de partage de données."
+  },
+  "Vous utilisez des systèmes d'IA dans vos opérations, vos produits ou vos services — établissements financiers et entreprises de l'économie réelle comprises, y compris celles dont le métier n'a rien à voir avec l'IA. Le document attend de vous que la diligence sur ces systèmes entre dans votre diligence d'ensemble : si le système ne porte pas de risque significatif, d'autres sujets passent devant.": {
+   "en": "You use AI systems in your operations, your products or your services — financial institutions and real-economy enterprises included, including those whose business has nothing to do with AI. The document expects due diligence on those systems to enter your overall due diligence: if the system carries no significant risk, other topics come first.",
+   "fr": "Vous utilisez des systèmes d'IA dans vos opérations, vos produits ou vos services — établissements financiers et entreprises de l'économie réelle comprises, y compris celles dont le métier n'a rien à voir avec l'IA. Le document attend de vous que la diligence sur ces systèmes entre dans votre diligence d'ensemble : si le système ne porte pas de risque significatif, d'autres sujets passent devant."
+  },
+  "Vous utilisez le système d'IA sous votre propre autorité, hors activité personnelle non professionnelle.": {
+   "en": "You use the AI system under your own authority, outside a personal non-professional activity.",
+   "fr": "Vous utilisez le système d'IA sous votre propre autorité, hors activité personnelle non professionnelle."
+  },
+  "Vous êtes dans le cycle de vie du système : planification et conception, construction du modèle ou adaptation d'un modèle existant, test, évaluation, vérification et validation, déploiement quel qu'en soit le canal — y compris la distribution de logiciel ouvert —, exploitation pour des clients et surveillance. Un organisme qui modifie et redéploie un modèle existant pour son propre usage en fait partie.": {
+   "en": "You are in the system lifecycle: planning and design, building the model or adapting an existing model, testing, evaluating, verifying and validating, deploying through whatever channel — including the distribution of open-source software —, operating for customers and monitoring. An organisation that modifies and re-deploys an existing model for its own use is part of it.",
+   "fr": "Vous êtes dans le cycle de vie du système : planification et conception, construction du modèle ou adaptation d'un modèle existant, test, évaluation, vérification et validation, déploiement quel qu'en soit le canal — y compris la distribution de logiciel ouvert —, exploitation pour des clients et surveillance. Un organisme qui modifie et redéploie un modèle existant pour son propre usage en fait partie."
+  },
+  "Vous êtes inscrit, ou vous demandez l'inscription, au registre public national des organisations altruistes. L'enregistrement est volontaire ; ses obligations, non.": {
+   "en": "You are entered, or you apply to be entered, in the national public register of data altruism organisations. Registration is voluntary; its obligations are not.",
+   "fr": "Vous êtes inscrit, ou vous demandez l'inscription, au registre public national des organisations altruistes. L'enregistrement est volontaire ; ses obligations, non."
+  },
+  "Vulnérabilité activement exploitée et incident grave : les échéances de vingt-quatre heures, soixante-douze heures, puis le rapport final.": {
+   "en": "Actively exploited vulnerability and serious incident: the twenty-four-hour and seventy-two-hour deadlines, then the final report.",
+   "fr": "Vulnérabilité activement exploitée et incident grave : les échéances de vingt-quatre heures, soixante-douze heures, puis le rapport final."
+  },
+  "Véhicules automobiles, remorques et semi-remorques": {
+   "en": "Motor vehicles, trailers and semi-trailers",
+   "fr": "Véhicules automobiles, remorques et semi-remorques"
+  },
+  "Vérification (revue rétrospective)": {
+   "en": "Verification (retrospective review)",
+   "fr": "Vérification (revue rétrospective)"
+  },
+  "Vérification (surveillance continue)": {
+   "en": "Verification (continuous monitoring)",
+   "fr": "Vérification (surveillance continue)"
+  },
+  "Vérification du système d'IA": {
+   "en": "Verification of the AI system",
+   "fr": "Vérification du système d'IA"
+  },
+  "Vérification et documentation": {
+   "en": "Verification and documentation",
+   "fr": "Vérification et documentation"
+  },
+  "Vérification par le déployeur de ses propres mesures": {
+   "en": "Verification by the deployer of its own measures",
+   "fr": "Vérification par le déployeur de ses propres mesures"
+  }
+ }
+}

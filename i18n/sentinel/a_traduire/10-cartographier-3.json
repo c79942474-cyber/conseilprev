@@ -1,6 +1,6 @@
 {
  "_lot": "10-cartographier-3",
- "_mots": 2302,
+ "_mots": 2362,
  "_pages": [
   "maturite",
   "qualif-assistee",
@@ -94,6 +94,16 @@
    "fr": "Bloc 4 sur 7 · Qualification assistée — Validé",
    "html": "<b>Bloc 4 sur 7 · Qualification assistée — Validé</b>"
   },
+  "Bloc # sur # · Qualification assistée — Verrouillé": {
+   "en": "<b>Block # of # · Assisted qualification — Locked</b>",
+   "fr": "Bloc 4 sur 7 · Qualification assistée — Verrouillé",
+   "html": "<b>Bloc 4 sur 7 · Qualification assistée — Verrouillé</b>"
+  },
+  "Bloc # sur # · Registre IA — Pas encore atteint": {
+   "en": "<b>Block # of # · AI register — Not yet reached</b>",
+   "fr": "Bloc 3 sur 7 · Registre IA — Pas encore atteint",
+   "html": "<b>Bloc 3 sur 7 · Registre IA — Pas encore atteint</b>"
+  },
   "Bloc # sur # · Registre IA — Validé": {
    "en": "<b>Block # of # · AI Register — Validated</b>",
    "fr": "Bloc 3 sur 7 · Registre IA — Validé",
@@ -184,6 +194,11 @@
    "fr": "Exemples : Visuels marketing générés, synthèse vocale, rédaction de contenus publiés",
    "html": "<strong>Exemples :</strong> Visuels marketing générés, synthèse vocale, rédaction de contenus publiés"
   },
+  "Haut risque · Art. # §# et annexe III — domaines à haut risque": {
+   "en": "<b>High risk</b> · Art. #(#) and Annex III — high-risk areas",
+   "fr": "Haut risque · Art. 6 §2 et annexe III — domaines à haut risque",
+   "html": "<b>Haut risque</b> · Art. 6 §2 et annexe III — domaines à haut risque"
+  },
   "Obligation : Haut risque (Annexe III point #(b)). Documentation technique, supervision humaine obligatoire, information des salariés. Compatibilité RGPD Art. # à vérifier.": {
    "en": "<strong>Obligation:</strong> High risk (Annex III, point #(b)). Technical documentation, mandatory human oversight, informing employees. Compatibility with GDPR Art. # to be checked.",
    "fr": "Obligation : Haut risque (Annexe III point 4(b)). Documentation technique, supervision humaine obligatoire, information des salariés. Compatibilité RGPD Art. 88 à vérifier.",
@@ -234,50 +249,15 @@
    "fr": "Obligation : Modification substantielle → obligations fournisseur (Art. 25). Transparence Art. 50 si interaction avec des personnes.",
    "html": "<strong>Obligation :</strong> Modification substantielle → obligations fournisseur (Art. 25). Transparence Art. 50 si interaction avec des personnes."
   },
-  "Obligation : Pas d'obligation directe AI Act, mais risque non-conformité par ricochet (contenu non marqué, biais non documenté).": {
-   "en": "<strong>Obligation:</strong> No direct AI Act obligation, but a knock-on risk of non-compliance (unmarked content, undocumented bias).",
-   "fr": "Obligation : Pas d'obligation directe AI Act, mais risque non-conformité par ricochet (contenu non marqué, biais non documenté).",
-   "html": "<strong>Obligation :</strong> Pas d'obligation directe AI Act, mais risque non-conformité par ricochet (contenu non marqué, biais non documenté)."
-  },
-  "Obligation : Si décisionnel sur des personnes : potentiellement haut risque. Sinon, bonne pratique ISO/IEC #.": {
-   "en": "<strong>Obligation:</strong> If it takes decisions about people: potentially high risk. Otherwise, good practice under ISO/IEC #.",
-   "fr": "Obligation : Si décisionnel sur des personnes : potentiellement haut risque. Sinon, bonne pratique ISO/IEC 42001.",
-   "html": "<strong>Obligation :</strong> Si décisionnel sur des personnes : potentiellement haut risque. Sinon, bonne pratique ISO/IEC 42001."
-  },
-  "Obligation : Si l'infrastructure est critique (eau, énergie, finance, numérique) : haut risque (Annexe III point #). Sinon : risque limité mais NIS# s'applique en parallèle.": {
-   "en": "<strong>Obligation:</strong> If the infrastructure is critical (water, energy, finance, digital): high risk (Annex III, point #). Otherwise: limited risk, but NIS # applies in parallel.",
-   "fr": "Obligation : Si l'infrastructure est critique (eau, énergie, finance, numérique) : haut risque (Annexe III point 2). Sinon : risque limité mais NIS2 s'applique en parallèle.",
-   "html": "<strong>Obligation :</strong> Si l'infrastructure est critique (eau, énergie, finance, numérique) : haut risque (Annexe III point 2). Sinon : risque limité mais NIS2 s'applique en parallèle."
-  },
-  "Obligation : Si la traduction produit du contenu publié : marquage Art. #§#. Si le modèle est GPAI : vérifier que le fournisseur respecte Art. # (documentation, politique d'utilisation acceptable).": {
-   "en": "<strong>Obligation:</strong> If the translation produces published content: marking under Art. #(#). If the model is GPAI: check that the provider complies with Art. # (documentation, acceptable use policy).",
-   "fr": "Obligation : Si la traduction produit du contenu publié : marquage Art. 50§2. Si le modèle est GPAI : vérifier que le fournisseur respecte Art. 53 (documentation, politique d'utilisation acceptable).",
-   "html": "<strong>Obligation :</strong> Si la traduction produit du contenu publié : marquage Art. 50§2. Si le modèle est GPAI : vérifier que le fournisseur respecte Art. 53 (documentation, politique d'utilisation acceptable)."
-  },
-  "Obligation : Vérifier auprès de l'éditeur le niveau de risque. Si interaction avec des personnes : Art. #§# applicable au # août #.": {
-   "en": "<strong>Obligation:</strong> Check the risk level with the vendor. If there is interaction with people: Art. #(#) applicable from # August #.",
-   "fr": "Obligation : Vérifier auprès de l'éditeur le niveau de risque. Si interaction avec des personnes : Art. 50§1 applicable au 2 août 2026.",
-   "html": "<strong>Obligation :</strong> Vérifier auprès de l'éditeur le niveau de risque. Si interaction avec des personnes : Art. 50§1 applicable au 2 août 2026."
-  },
-  "Obligation : Vérifier documentation du fournisseur (Art. # si GPAI). Si interaction avec des personnes : Art. # à votre charge.": {
-   "en": "<strong>Obligation:</strong> Check the provider’s documentation (Art. # if GPAI). If there is interaction with people: Art. # is your responsibility.",
-   "fr": "Obligation : Vérifier documentation du fournisseur (Art. 53 si GPAI). Si interaction avec des personnes : Art. 50 à votre charge.",
-   "html": "<strong>Obligation :</strong> Vérifier documentation du fournisseur (Art. 53 si GPAI). Si interaction avec des personnes : Art. 50 à votre charge."
-  },
   "Registre des systèmes IA": {
    "en": "Register of <em>AI systems</em>",
    "fr": "Registre des systèmes IA",
    "html": "Registre des <em>systèmes IA</em>"
   },
-  "💡 Conseil : Ajouter une clause contractuelle standard exigeant la déclaration de tout usage IA dans les livrables.": {
-   "en": "<strong>💡 Tip:</strong> Add a standard contractual clause requiring the disclosure of any use of AI in deliverables.",
-   "fr": "💡 Conseil : Ajouter une clause contractuelle standard exigeant la déclaration de tout usage IA dans les livrables.",
-   "html": "<strong>💡 Conseil :</strong> Ajouter une clause contractuelle standard exigeant la déclaration de tout usage IA dans les livrables."
-  },
-  "💡 Conseil : Attention aux traductions dans des contextes réglementés (médical, juridique, financier) — une erreur de traduction IA peut engager la responsabilité sans que le prestataire soit couvert.": {
-   "en": "<strong>💡 Tip:</strong> Beware of translations in regulated contexts (medical, legal, financial) — an AI translation error can create liability without the service provider being covered.",
-   "fr": "💡 Conseil : Attention aux traductions dans des contextes réglementés (médical, juridique, financier) — une erreur de traduction IA peut engager la responsabilité sans que le prestataire soit couvert.",
-   "html": "<strong>💡 Conseil :</strong> Attention aux traductions dans des contextes réglementés (médical, juridique, financier) — une erreur de traduction IA peut engager la responsabilité sans que le prestataire soit couvert."
+  "À évaluer → Haut risque": {
+   "en": "To be assessed → <b>High risk</b>",
+   "fr": "À évaluer → Haut risque",
+   "html": "À évaluer → <b>Haut risque</b>"
   }
  },
  "texte": {
@@ -287,7 +267,7 @@
   },
   "# déploiements": {
    "en": "# deployments",
-   "fr": "1944 déploiements"
+   "fr": "2189 déploiements"
   },
   "+ Ajouter un système": {
    "en": "+ Add a system",
@@ -329,9 +309,17 @@
    "en": "This proposal is a pre-diagnosis. It is not legal advice and makes no qualification: the classification recorded in the register is the one an identified person has decided, and the trace of that decision is kept.",
    "fr": "Cette proposition est un pré-diagnostic. Elle ne vaut pas avis juridique et ne prononce aucune qualification : la classification inscrite au registre est celle qu'une personne identifiée a décidée, et la trace de cette décision est conservée."
   },
+  "Chargement du moteur…": {
+   "en": "Loading the engine…",
+   "fr": "Chargement du moteur…"
+  },
   "Choisir les propositions affichées": {
    "en": "Choose the proposals shown",
    "fr": "Choisir les propositions affichées"
+  },
+  "Classe retenue": {
+   "en": "Class retained",
+   "fr": "Classe retenue"
   },
   "Classifier ce systeme dans le Simulateur — champs pré-remplis automatiquement": {
    "en": "Classify this system in the Simulator — fields pre-filled automatically",
@@ -369,6 +357,10 @@
    "en": "Awaiting decision",
    "fr": "En attente de décision"
   },
+  "En cours": {
+   "en": "In progress",
+   "fr": "En cours"
+  },
   "Erreur de chargement (HTTP #). Vérifiez la connexion au serveur.": {
    "en": "Loading error (HTTP #). Check the connection to the server.",
    "fr": "Erreur de chargement (HTTP 429). Vérifiez la connexion au serveur."
@@ -396,6 +388,26 @@
   "Inventaire complet de vos déploiements IA classifiés selon l'EU AI Act, connecté à une base de données persistante. Obligatoire pour les systèmes haut risque (Art. #, #).": {
    "en": "A complete inventory of your AI deployments, classified under the EU AI Act and connected to a persistent database. Mandatory for high-risk systems (Art. #, #).",
    "fr": "Inventaire complet de vos déploiements IA classifiés selon l'EU AI Act, connecté à une base de données persistante. Obligatoire pour les systèmes haut risque (Art. 49, 71)."
+  },
+  "Les jeux de données d'entraînement sont-ils examinés pour détecter et corriger les biais ?": {
+   "en": "Are the training datasets examined to detect and correct bias?",
+   "fr": "Les jeux de données d'entraînement sont-ils examinés pour détecter et corriger les biais ?"
+  },
+  "Les opérateurs sont-ils formés et habilités à superviser le système IA ?": {
+   "en": "Are operators trained and authorised to oversee the AI system?",
+   "fr": "Les opérateurs sont-ils formés et habilités à superviser le système IA ?"
+  },
+  "Les rôles et responsabilités (Responsable IA, DPO, Comité) sont-ils définis et documentés ?": {
+   "en": "Are the roles and responsibilities (AI lead, DPO, Committee) defined and documented?",
+   "fr": "Les rôles et responsabilités (Responsable IA, DPO, Comité) sont-ils définis et documentés ?"
+  },
+  "Les utilisateurs sont-ils informés qu'ils interagissent avec un système d'IA ?": {
+   "en": "Are users informed that they are interacting with an AI system?",
+   "fr": "Les utilisateurs sont-ils informés qu'ils interagissent avec un système d'IA ?"
+  },
+  "Liste exhaustive des systèmes IA classés par niveau de risque (Annexe III EU AI Act), avec fiches techniques : données utilisées, modèles, finalité et conformité. Obligatoire pour les systèmes à haut risque (Art. #, #). Structure alignée sur l'inventaire des ressources IA exigé par ISO/IEC # (Annexe A.#, A.#).": {
+   "en": "Exhaustive list of AI systems classified by risk level (Annex III EU AI Act), with technical records: data used, models, purpose and compliance. Mandatory for high-risk systems (Art. #, #). Structure aligned with the inventory of AI resources required by ISO/IEC # (Annex A.#, A.#).",
+   "fr": "Liste exhaustive des systèmes IA classés par niveau de risque (Annexe III EU AI Act), avec fiches techniques : données utilisées, modèles, finalité et conformité. Obligatoire pour les systèmes à haut risque (Art. 49, 71). Structure alignée sur l'inventaire des ressources IA exigé par ISO/IEC 42001 (Annexe A.4, A.7)."
   },
   "Liste exhaustive des systèmes IA classés par niveau de risque (Annexe III EU AI Act), avec…": {
    "en": "Exhaustive list of AI systems classified by risk level (Annex III EU AI Act), with…",
@@ -428,10 +440,6 @@
   "Methodologie d'audit en # etapes : Pre-audit (applicabilite), Audit documentaire automatise, Audit terrain, Tests directs sur les systemes IA.": {
    "en": "Audit methodology in # steps: Pre-audit (applicability), Automated documentary audit, On-site audit, Direct tests on the AI systems.",
    "fr": "Methodologie d'audit en 4 etapes : Pre-audit (applicabilite), Audit documentaire automatise, Audit terrain, Tests directs sur les systemes IA."
-  },
-  "Mistral Large": {
-   "en": "Mistral Large",
-   "fr": "Mistral Large"
   },
   "Modele de regression / ML supervise ·": {
    "en": "Regression model / supervised ML ·",
@@ -484,6 +492,10 @@
   "Outils de gouvernance IA": {
    "en": "AI governance tools",
    "fr": "Outils de gouvernance IA"
+  },
+  "Ouvrez l'écran : le lot à qualifier n'a pas encore été demandé au moteur": {
+   "en": "Open the screen: the batch to qualify has not yet been requested from the engine",
+   "fr": "Ouvrez l'écran : le lot à qualifier n'a pas encore été demandé au moteur"
   },
   "Ouvrir le Registre IA": {
    "en": "Open the AI register",
@@ -621,6 +633,10 @@
    "en": "Compliance with contractual commitments (SLA, GDPR). Handling of AI-related complaints (automated billing errors).",
    "fr": "Respect des engagements contractuels (SLA, RGPD). Gestion des réclamations liées à l'IA (erreurs de facturation automatisée)."
   },
+  "Retrouvés mot pour mot dans votre déclaration :": {
+   "en": "Found word for word in your declaration:",
+   "fr": "Retrouvés mot pour mot dans votre déclaration :"
+  },
   "Revue d'applicabilité : périmètre des systèmes IA, classification préliminaire selon l'Annexe III, identification des données sensibles, planning et budget de la phase de diagnostic. Intègre la détermination du contexte et du périmètre exigée par ISO/IEC # (clauses # à #).": {
    "en": "Applicability review: scope of the AI systems, preliminary classification under Annex III, identification of sensitive data, schedule and budget for the diagnostic phase. Incorporates the determination of context and scope required by ISO/IEC # (clauses # to #).",
    "fr": "Revue d'applicabilité : périmètre des systèmes IA, classification préliminaire selon l'Annexe III, identification des données sensibles, planning et budget de la phase de diagnostic. Intègre la détermination du contexte et du périmètre exigée par ISO/IEC 42001 (clauses 4.1 à 4.3)."
@@ -653,10 +669,6 @@
    "en": "Health / Medical",
    "fr": "Santé / Médical"
   },
-  "Score": {
-   "en": "Score",
-   "fr": "Score"
-  },
   "Score de maturité (#–#) par pilier, mappé aux articles du Règlement (UE) #/#. Répondez au questionnaire ci-dessous pour ajuster les scores.": {
    "en": "Maturity score (#–#) per pillar, mapped to the articles of Regulation (EU) #/#. Answer the questionnaire below to adjust the scores.",
    "fr": "Score de maturité (1–5) par pilier, mappé aux articles du Règlement (UE) 2024/1689. Répondez au questionnaire ci-dessous pour ajuster les scores."
@@ -680,10 +692,6 @@
   "Secteur public / Administration": {
    "en": "Public sector / Administration",
    "fr": "Secteur public / Administration"
-  },
-  "Self-assessment questionnaire": {
-   "en": "Self-assessment questionnaire",
-   "fr": "Self-assessment questionnaire"
   },
   "Services administratifs et de soutien": {
    "en": "Administrative and support services",
@@ -744,6 +752,10 @@
   "Supprimer Recette — écartée du registre": {
    "en": "Remove Recette — écartée from the register",
    "fr": "Supprimer Recette — écartée du registre"
+  },
+  "Supprimer Scoring credit automatise du registre": {
+   "en": "Delete Scoring credit automatise from the register",
+   "fr": "Supprimer Scoring credit automatise du registre"
   },
   "Système IA": {
    "en": "AI system",
@@ -821,6 +833,26 @@
    "en": "« Assessing creditworthiness for the granting of credit »",
    "fr": "« Evaluer la solvabilite pour l'octroi de credit »"
   },
+  "« Recette — deux fois » : les dix questions essentielles ne sont pas toutes renseignées": {
+   "en": "'Recipe — twice': the ten essential questions are not all filled in",
+   "fr": "« Recette — deux fois » : les dix questions essentielles ne sont pas toutes renseignées"
+  },
+  "« Recette — la décision écrit » : les dix questions essentielles ne sont pas toutes renseignées": {
+   "en": "'Recipe — the decision writes': the ten essential questions are not all filled in",
+   "fr": "« Recette — la décision écrit » : les dix questions essentielles ne sont pas toutes renseignées"
+  },
+  "« Recette — proposition sans écriture » : les dix questions essentielles ne sont pas toutes renseignées": {
+   "en": "'Recipe — proposal without writing': the ten essential questions are not all filled in",
+   "fr": "« Recette — proposition sans écriture » : les dix questions essentielles ne sont pas toutes renseignées"
+  },
+  "« Recette — sans nom saisi » : les dix questions essentielles ne sont pas toutes renseignées": {
+   "en": "'Recipe — no name entered': the ten essential questions are not all filled in",
+   "fr": "« Recette — sans nom saisi » : les dix questions essentielles ne sont pas toutes renseignées"
+  },
+  "« Recette — écartée » : les dix questions essentielles ne sont pas toutes renseignées": {
+   "en": "'Recipe — set aside': the ten essential questions are not all filled in",
+   "fr": "« Recette — écartée » : les dix questions essentielles ne sont pas toutes renseignées"
+  },
   "« historique credit »": {
    "en": "« credit history »",
    "fr": "« historique credit »"
@@ -877,10 +909,6 @@
    "en": "↓ PDF report",
    "fr": "↓ Rapport PDF"
   },
-  "① Conception": {
-   "en": "① Design",
-   "fr": "① Conception"
-  },
   "▸ Cadre de gouvernance + Politiques + Matrice RACI + Système de veille": {
    "en": "▸ Governance framework + Policies + RACI matrix + Watch system",
    "fr": "▸ Cadre de gouvernance + Politiques + Matrice RACI + Système de veille"
@@ -904,6 +932,10 @@
   "⚙️ Proposer pour les systèmes non classés": {
    "en": "⚙️ Propose for the unclassified systems",
    "fr": "⚙️ Proposer pour les systèmes non classés"
+  },
+  "✓ Valider et inscrire au registre": {
+   "en": "✓ Validate and record in the register",
+   "fr": "✓ Valider et inscrire au registre"
   },
   "✕ Écarter": {
    "en": "✕ Reject",

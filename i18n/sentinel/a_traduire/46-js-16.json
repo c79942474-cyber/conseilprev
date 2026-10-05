@@ -1,0 +1,475 @@
+{
+ "_lot": "46-js-16",
+ "_mots": 2484,
+ "_pages": [
+  "_js"
+ ],
+ "_rubrique": "_js",
+ "bloc": {},
+ "texte": {
+  "Le cadre s'applique-t-il aux acteurs étrangers dont les systèmes affectent des personnes sur le territoire ?": {
+   "en": "Does the framework apply to foreign actors whose systems affect people on the territory?",
+   "fr": "Le cadre s'applique-t-il aux acteurs étrangers dont les systèmes affectent des personnes sur le territoire ?"
+  },
+  "Le calcul de recevabilité": {
+   "en": "The admissibility calculation",
+   "fr": "Le calcul de recevabilité"
+  },
+  "Le calcul du profil n’a pas": {
+   "en": "The profile calculation did not",
+   "fr": "Le calcul du profil n’a pas"
+  },
+  "Le calcul est momentanément": {
+   "en": "The calculation is temporarily",
+   "fr": "Le calcul est momentanément"
+  },
+  "Le calcul n’a pas abouti.": {
+   "en": "The calculation did not complete.",
+   "fr": "Le calcul n’a pas abouti."
+  },
+  "Le calcul n’a pas abouti. Rien": {
+   "en": "The calculation did not complete. Nothing",
+   "fr": "Le calcul n’a pas abouti. Rien"
+  },
+  "Le calcul n’a pas pu être": {
+   "en": "The calculation could not be",
+   "fr": "Le calcul n’a pas pu être"
+  },
+  "Le calendrier d'application n'a pas pu être chargé. Reportez-vous au tableau « Calendrier consolidé EU AI Act » en tête de cette page.": {
+   "en": "The application timetable could not be loaded. Refer to the “Consolidated EU AI Act timetable” table at the top of this page.",
+   "fr": "Le calendrier d'application n'a pas pu être chargé. Reportez-vous au tableau « Calendrier consolidé EU AI Act » en tête de cette page."
+  },
+  "Le candidat écarté doit pouvoir le savoir": {
+   "en": "The rejected candidate must be able to know",
+   "fr": "Le candidat écarté doit pouvoir le savoir"
+  },
+  "Le cas le plus courant n’est pas un produit mal conçu : c’est un produit conforme partie I dans une entreprise sans nomenclature logicielle ni politique de divulgation coordonnée.": {
+   "en": "The most common case is not a badly designed product: it is a product compliant with Part I in a company with no software bill of materials and no coordinated disclosure policy.",
+   "fr": "Le cas le plus courant n’est pas un produit mal conçu : c’est un produit conforme partie I dans une entreprise sans nomenclature logicielle ni politique de divulgation coordonnée."
+  },
+  "Le cas retenu est redessiné.": {
+   "en": "The selected use case has been redesigned.",
+   "fr": "Le cas retenu est redessiné."
+  },
+  "Le champ qui compte": {
+   "en": "The field that matters",
+   "fr": "Le champ qui compte"
+  },
+  "Le chapitre # pèse trois fois le chapitre #, parce qu’il porte le §# — la seule partie du document qui n’ait d’équivalent dans aucune des deux normes ISO. Le chapitre # pèse autant que le #, parce qu’une autorité se saisit de la surveillance et des incidents graves sans attendre un audit. Compter les paragraphes aurait fait l’inverse : le chapitre # en porte vingt-deux, le chapitre # en porte trois.": {
+   "en": "Chapter # weighs three times chapter #, because it carries §# — the only part of the document that has no counterpart in either ISO standard. Chapter # weighs as much as #, because an authority takes up post-market monitoring and serious incidents without waiting for an audit. Counting paragraphs would have done the opposite: chapter # carries twenty-two of them, chapter # carries three.",
+   "fr": "Le chapitre 4 pèse trois fois le chapitre 10, parce qu’il porte le §4.4 — la seule partie du document qui n’ait d’équivalent dans aucune des deux normes ISO. Le chapitre 9 pèse autant que le 8, parce qu’une autorité se saisit de la surveillance et des incidents graves sans attendre un audit. Compter les paragraphes aurait fait l’inverse : le chapitre 9 en porte vingt-deux, le chapitre 5 en porte trois."
+  },
+  "Le chapitre IV — clauses contractuelles abusives — s’applique aux contrats conclus après le # septembre #, et au # septembre # aux contrats conclus avant cette date s’ils sont à durée indéterminée ou viennent à échéance au moins dix ans à compter du # janvier #.": {
+   "en": "Chapter IV — unfair contractual terms — applies to contracts concluded after # September #, and from # September # to contracts concluded before that date where they are of indefinite duration or expire at least ten years from # January #.",
+   "fr": "Le chapitre IV — clauses contractuelles abusives — s’applique aux contrats conclus après le 12 septembre 2025, et au 12 septembre 2027 aux contrats conclus avant cette date s’ils sont à durée indéterminée ou viennent à échéance au moins dix ans à compter du 11 janvier 2024."
+  },
+  "Le chemin « Analyse financière et reporting »": {
+   "en": "The “Financial analysis and reporting” path",
+   "fr": "Le chemin « Analyse financière et reporting »"
+  },
+  "Le chemin « Assurance — souscription et sinistres »": {
+   "en": "The “Insurance — underwriting and claims” path",
+   "fr": "Le chemin « Assurance — souscription et sinistres »"
+  },
+  "Le chemin « Banque — financement de projet »": {
+   "en": "The “Banking — project finance” path",
+   "fr": "Le chemin « Banque — financement de projet »"
+  },
+  "Le chemin « Climat et gaz à effet de serre »": {
+   "en": "The “Climate and greenhouse gases” path",
+   "fr": "Le chemin « Climat et gaz à effet de serre »"
+  },
+  "Le chemin « Eau et biodiversité »": {
+   "en": "The “Water and biodiversity” path",
+   "fr": "Le chemin « Eau et biodiversité »"
+  },
+  "Le chiffre en tête": {
+   "en": "The headline figure",
+   "fr": "Le chiffre en tête"
+  },
+  "Le chiffre sur lequel la décision se prend, décomposé par lot plutôt qu’assis sur un ratio au kilowatt.": {
+   "en": "The figure on which the decision is made, broken down by lot rather than based on a per-kilowatt ratio.",
+   "fr": "Le chiffre sur lequel la décision se prend, décomposé par lot plutôt qu’assis sur un ratio au kilowatt."
+  },
+  "Le cinquième indicateur — l’épuisement des ressources — est déclaré ABSENT avec ce qu’il faudrait pour l’établir. Ne le remplacez pas par un ordre de grandeur trouvé ailleurs : un indicateur ACV sans facteur sourcé est un nombre sans auteur.": {
+   "en": "The fifth indicator — resource depletion — is declared ABSENT, together with what would be needed to establish it. Do not replace it with an order of magnitude found elsewhere: an LCA indicator without a sourced factor is a number without an author.",
+   "fr": "Le cinquième indicateur — l’épuisement des ressources — est déclaré ABSENT avec ce qu’il faudrait pour l’établir. Ne le remplacez pas par un ordre de grandeur trouvé ailleurs : un indicateur ACV sans facteur sourcé est un nombre sans auteur."
+  },
+  "Le client sera notifié par email.": {
+   "en": "The client will be notified by email.",
+   "fr": "Le client sera notifié par email."
+  },
+  "Le code de sûreté et de sécurité passe alors par le même chemin que le reste. C’est tenable si — et seulement si — la revue renforcée du point # s’y applique intégralement, ce qui suppose des relecteurs qui la connaissent.": {
+   "en": "Safety and security code then goes through the same path as everything else. That is tenable if — and only if — the enhanced review in point # applies to it in full, which requires reviewers who know it.",
+   "fr": "Le code de sûreté et de sécurité passe alors par le même chemin que le reste. C’est tenable si — et seulement si — la revue renforcée du point 2 s’y applique intégralement, ce qui suppose des relecteurs qui la connaissent."
+  },
+  "Le coefficient d’énergie primaire porte trois réserves et un point ouvert : recopiez-les, ne les résumez pas.": {
+   "en": "The primary energy coefficient carries three caveats and one open point: copy them out, do not summarise them.",
+   "fr": "Le coefficient d’énergie primaire porte trois réserves et un point ouvert : recopiez-les, ne les résumez pas."
+  },
+  "Le comité n’arbitre pas sur un règlement, il arbitre sur des montants et des dates.": {
+   "en": "The committee does not decide on a regulation, it decides on amounts and dates.",
+   "fr": "Le comité n’arbitre pas sur un règlement, il arbitre sur des montants et des dates."
+  },
+  "Le coût de l’accompagnement et l’enveloppe RaaS.": {
+   "en": "The cost of support and the RaaS envelope.",
+   "fr": "Le coût de l’accompagnement et l’enveloppe RaaS."
+  },
+  "Le coût de l’accompagnement, à rapprocher du gain annuel estimé au chiffrage.": {
+   "en": "The cost of support, to be set against the annual gain estimated in the costing.",
+   "fr": "Le coût de l’accompagnement, à rapprocher du gain annuel estimé au chiffrage."
+  },
+  "Le coût du parc, poste par poste": {
+   "en": "The cost of the estate, line by line",
+   "fr": "Le coût du parc, poste par poste"
+  },
+  "Le coût d’une capacité supplémentaire opposé à ce qu’elle rapporte — et le cas où il vaut mieux densifier l’existant.": {
+   "en": "The cost of additional capacity set against what it earns — and the case where it is better to densify what exists.",
+   "fr": "Le coût d’une capacité supplémentaire opposé à ce qu’elle rapporte — et le cas où il vaut mieux densifier l’existant."
+  },
+  "Le critère caché est le vrai risque": {
+   "en": "The hidden criterion is the real risk",
+   "fr": "Le critère caché est le vrai risque"
+  },
+  "Le crédit à la consommation bascule en haut risque": {
+   "en": "Consumer credit tips into high-risk",
+   "fr": "Le crédit à la consommation bascule en haut risque"
+  },
+  "Le dimensionnement est une heuristique, jamais un verdict : « ce modèle est trop gros » suppose de connaître la qualité attendue et ce qu’une erreur coûte.": {
+   "en": "Sizing is a heuristic, never a verdict: “this model is too big” presupposes knowing the expected quality and what an error costs.",
+   "fr": "Le dimensionnement est une heuristique, jamais un verdict : « ce modèle est trop gros » suppose de connaître la qualité attendue et ce qu’une erreur coûte."
+  },
+  "Le document exporté porte le routage,": {
+   "en": "The exported document carries the routing,",
+   "fr": "Le document exporté porte le routage,"
+  },
+  "Le document écrit que ce n'est PAS un cadre d'équivalence — et sur ces vingt cadres, Sentinel en mesure trois. Les dix-sept autres sont nommés ici et non tenus.": {
+   "en": "The document writes that this is NOT an equivalency framework — and of those twenty frameworks, Sentinel measures three. The other seventeen are named here and not held.",
+   "fr": "Le document écrit que ce n'est PAS un cadre d'équivalence — et sur ces vingt cadres, Sentinel en mesure trois. Les dix-sept autres sont nommés ici et non tenus."
+  },
+  "Le domaine d’application (art. #) se revérifie aussi : s’il a bougé depuis la dernière certification et que rien ne l’a écrit, l’audit le trouvera.": {
+   "en": "The scope (clause #) is also re-checked: if it has moved since the last certification and nothing has recorded it, the audit will find it.",
+   "fr": "Le domaine d’application (art. 4.3) se revérifie aussi : s’il a bougé depuis la dernière certification et que rien ne l’a écrit, l’audit le trouvera."
+  },
+  "Le dossier client envoyé à un modèle tiers": {
+   "en": "The client file sent to a third-party model",
+   "fr": "Le dossier client envoyé à un modèle tiers"
+  },
+  "Le dossier de décision, chiffré": {
+   "en": "The decision file, costed",
+   "fr": "Le dossier de décision, chiffré"
+  },
+  "Le dossier de preuve": {
+   "en": "The evidence file",
+   "fr": "Le dossier de preuve"
+  },
+  "Le dossier d’arbitrage": {
+   "en": "The decision file",
+   "fr": "Le dossier d’arbitrage"
+  },
+  "Le droit d'accès s'étend aux informations sur la logique sous-jacente et aux conséquences du traitement automatisé — implique des mécanismes d'explicabilité dès la conception.": {
+   "en": "The right of access extends to information about the underlying logic and the consequences of automated processing — which implies explainability mechanisms from the design stage.",
+   "fr": "Le droit d'accès s'étend aux informations sur la logique sous-jacente et aux conséquences du traitement automatisé — implique des mécanismes d'explicabilité dès la conception."
+  },
+  "Le droit d’auteur des tiers": {
+   "en": "Third-party copyright",
+   "fr": "Le droit d’auteur des tiers"
+  },
+  "Le délai de réaction se détermine par scénario (#) : un délai": {
+   "en": "The reaction time is determined scenario by scenario (#): a deadline",
+   "fr": "Le délai de réaction se détermine par scénario (5.2.2) : un délai"
+  },
+  "Le déployeur d'un système de reconnaissance des émotions ou de catégorisation biométrique informe les personnes exposées de son fonctionnement et traite les données conformément au RGPD. Sans objet pour les usages autorisés par la loi en matière pénale.": {
+   "en": "The deployer of an emotion recognition or biometric categorisation system informs the exposed persons about its operation and processes the data in accordance with the GDPR. Not applicable to uses permitted by law in criminal matters.",
+   "fr": "Le déployeur d'un système de reconnaissance des émotions ou de catégorisation biométrique informe les personnes exposées de son fonctionnement et traite les données conformément au RGPD. Sans objet pour les usages autorisés par la loi en matière pénale."
+  },
+  "Le déployeur d'un système qui génère ou manipule une image, un son ou une vidéo constituant un hypertrucage indique que le contenu est artificiel ; de même pour le texte publié afin d'informer le public sur des questions d'intérêt public, sauf relecture humaine ou contrôle éditorial avec responsabilité éditoriale. Œuvre manifestement artistique, satirique ou fictionnelle : mention limitée, sans entraver l'œuvre.": {
+   "en": "The deployer of a system that generates or manipulates an image, audio or video constituting a deepfake discloses that the content is artificially generated or manipulated; likewise for text published to inform the public on matters of public interest, unless it has undergone human review or editorial control with editorial responsibility. Manifestly artistic, satirical or fictional work: limited disclosure, without hampering the work.",
+   "fr": "Le déployeur d'un système qui génère ou manipule une image, un son ou une vidéo constituant un hypertrucage indique que le contenu est artificiel ; de même pour le texte publié afin d'informer le public sur des questions d'intérêt public, sauf relecture humaine ou contrôle éditorial avec responsabilité éditoriale. Œuvre manifestement artistique, satirique ou fictionnelle : mention limitée, sans entraver l'œuvre."
+  },
+  "Le déployeur ne semble pas relever des # catégories de l'Art. #(#) (organisme public, prestataire de service public, ou scoring crédit/assurance). FRIA recommandée à titre préventif mais non obligatoire en l'état.": {
+   "en": "The deployer does not appear to fall within the # categories of Art. #(#) (public body, provider of public services, or credit/insurance scoring). A FRIA is recommended as a precaution but is not mandatory as things stand.",
+   "fr": "Le déployeur ne semble pas relever des 3 catégories de l'Art. 27(1) (organisme public, prestataire de service public, ou scoring crédit/assurance). FRIA recommandée à titre préventif mais non obligatoire en l'état."
+  },
+  "Le détail est sur l’écran «&nbsp;Profil IA": {
+   "en": "The detail is on the «&nbsp;Generative AI",
+   "fr": "Le détail est sur l’écran «&nbsp;Profil IA"
+  },
+  "Le fichier a été refusé AVANT d atteindre Sentinel : il dépasse la taille": {
+   "en": "The file was rejected BEFORE reaching Sentinel: it exceeds the size",
+   "fr": "Le fichier a été refusé AVANT d atteindre Sentinel : il dépasse la taille"
+  },
+  "Le fichier est complet en apparence mais son contenu est mal formé": {
+   "en": "The file looks complete but its content is malformed",
+   "fr": "Le fichier est complet en apparence mais son contenu est mal formé"
+  },
+  "Le fichier n’a pas pu": {
+   "en": "The file could not",
+   "fr": "Le fichier n’a pas pu"
+  },
+  "Le fournisseur d'un système à haut risque et le tiers qui lui fournit un système, un modèle, un outil, un service ou un composant précisent par écrit les informations, capacités, accès techniques et assistance nécessaires à sa pleine conformité. Ne joue pas pour les outils publiés sous licence libre et ouverte, modèles d'IA à usage général exceptés.": {
+   "en": "The provider of a high-risk system and the third party that supplies it with a system, model, tool, service or component specify in writing the information, capabilities, technical access and assistance needed for its full compliance. Does not apply to tools published under a free and open licence, general-purpose AI models being excepted.",
+   "fr": "Le fournisseur d'un système à haut risque et le tiers qui lui fournit un système, un modèle, un outil, un service ou un composant précisent par écrit les informations, capacités, accès techniques et assistance nécessaires à sa pleine conformité. Ne joue pas pour les outils publiés sous licence libre et ouverte, modèles d'IA à usage général exceptés."
+  },
+  "Le fournisseur qui considère ou a des raisons de considérer qu'un système haut risque déjà mis sur le marché n'est pas conforme prend immédiatement les actions correctives nécessaires : mise en conformité, retrait, désactivation ou rappel. Il informe distributeurs, déployeurs, mandataire et importateurs.": {
+   "en": "A provider who considers or has reason to consider that a high-risk system already placed on the market is not compliant shall immediately take the necessary corrective actions: bringing it into conformity, withdrawal, disabling or recall. It informs distributors, deployers, the authorised representative and importers.",
+   "fr": "Le fournisseur qui considère ou a des raisons de considérer qu'un système haut risque déjà mis sur le marché n'est pas conforme prend immédiatement les actions correctives nécessaires : mise en conformité, retrait, désactivation ou rappel. Il informe distributeurs, déployeurs, mandataire et importateurs."
+  },
+  "Le fournisseur signale tout incident grave aux autorités de surveillance du marché de l'État membre concerné. Délai : # jours après établissement du lien causal (par défaut), # jours en cas d'infraction généralisée ou d'incident grave au sens de l'Art. #(#)(b), # jours en cas de décès d'une personne.": {
+   "en": "The provider reports any serious incident to the market surveillance authorities of the Member State concerned. Deadline: # days after the causal link is established (by default), # days in the event of a widespread infringement or a serious incident within the meaning of Art. #(#)(b), # days in the event of a person’s death.",
+   "fr": "Le fournisseur signale tout incident grave aux autorités de surveillance du marché de l'État membre concerné. Délai : 15 jours après établissement du lien causal (par défaut), 2 jours en cas d'infraction généralisée ou d'incident grave au sens de l'Art. 3(49)(b), 10 jours en cas de décès d'une personne."
+  },
+  "Le graphique montre une courbe réaliste entourée d une fourchette pessimiste/optimiste (zone pointillée), plus réaliste qu une projection unique figée. La carte de résultats affiche aussi la fourchette chiffrée au mois #.": {
+   "en": "The chart shows a realistic curve surrounded by a pessimistic/optimistic range (dotted area), more realistic than a single fixed projection. The results card also shows the range in figures at month #.",
+   "fr": "Le graphique montre une courbe réaliste entourée d une fourchette pessimiste/optimiste (zone pointillée), plus réaliste qu une projection unique figée. La carte de résultats affiche aussi la fourchette chiffrée au mois 6."
+  },
+  "Le lien Voir les # critères d évaluation → explique la méthodologie complète de scoring.": {
+   "en": "The View the # assessment criteria → link explains the full scoring methodology.",
+   "fr": "Le lien Voir les 12 critères d évaluation → explique la méthodologie complète de scoring."
+  },
+  "Le lien entre les choix techniques et la facture, sur des volumes que vous avez déclarés.": {
+   "en": "The link between technical choices and the bill, on volumes you have declared.",
+   "fr": "Le lien entre les choix techniques et la facture, sur des volumes que vous avez déclarés."
+  },
+  "Le logo, l’identité visuelle et l’image de couverture de l’OCDE, et toute suggestion que l’OCDE adosse cet usage. Conséquence concrète : la couleur de ce module dans la barre latérale n’est pas le bleu de l’OCDE, et aucune marque n’est reproduite.": {
+   "en": "The OECD's logo, visual identity and cover image, and any suggestion that the OECD endorses this use. Concrete consequence: this module's colour in the sidebar is not the OECD blue, and no mark is reproduced.",
+   "fr": "Le logo, l’identité visuelle et l’image de couverture de l’OCDE, et toute suggestion que l’OCDE adosse cet usage. Conséquence concrète : la couleur de ce module dans la barre latérale n’est pas le bleu de l’OCDE, et aucune marque n’est reproduite."
+  },
+  "Le marché réel, pas le marché annoncé": {
+   "en": "The real market, not the announced market",
+   "fr": "Le marché réel, pas le marché annoncé"
+  },
+  "Le marquage lisible par machine est une obligation du FOURNISSEUR du système : savoir si vous en êtes un décide de ce que vous devez.": {
+   "en": "Machine-readable marking is an obligation of the system’s PROVIDER: knowing whether you are one decides what you owe.",
+   "fr": "Le marquage lisible par machine est une obligation du FOURNISSEUR du système : savoir si vous en êtes un décide de ce que vous devez."
+  },
+  "Le marquage n’est pas une formalité : il conditionne ce que vous pourrez affirmer plus tard sur l’origine du code.": {
+   "en": "Marking is not a formality: it determines what you will be able to state later about the origin of the code.",
+   "fr": "Le marquage n’est pas une formalité : il conditionne ce que vous pourrez affirmer plus tard sur l’origine du code."
+  },
+  "Le module audit n est pas encore charge. Ouvrez d abord l onglet Audit IA Act.": {
+   "en": "The audit module is not loaded yet. Open the AI Act audit tab first.",
+   "fr": "Le module audit n est pas encore charge. Ouvrez d abord l onglet Audit IA Act."
+  },
+  "Le module mesure par FAMILLE, pas par mesure : la répartition exacte des mesures par socle n’est pas reprise ici. Un ratio dont le dénominateur serait supposé vaudrait moins que son absence. Et ce catalogue ne se certifie pas : aucun organisme ne délivre d’attestation contre lui.": {
+   "en": "The module measures by FAMILY, not by control: the exact distribution of controls per baseline is not reproduced here. A ratio whose denominator was assumed would be worth less than its absence. And this catalogue is not certified: no body issues an attestation against it.",
+   "fr": "Le module mesure par FAMILLE, pas par mesure : la répartition exacte des mesures par socle n’est pas reprise ici. Un ratio dont le dénominateur serait supposé vaudrait moins que son absence. Et ce catalogue ne se certifie pas : aucun organisme ne délivre d’attestation contre lui."
+  },
+  "Le modèle de comparaison applique des paliers de remise (-#% à partir de # systèmes, -#% à #, -#% à #+), pour un comparatif plus réaliste qu un tarif linéaire.": {
+   "en": "The comparison model applies discount tiers (-#% from # systems, -#% from #, -#% from #+), for a more realistic comparison than a linear rate.",
+   "fr": "Le modèle de comparaison applique des paliers de remise (-6% à partir de 20 systèmes, -12% à 30, -20% à 50+), pour un comparatif plus réaliste qu un tarif linéaire."
+  },
+  "Le montant ne classe pas à lui seul : c’est le croisement qui décide, et c’est lui qu’on vous demandera de justifier.": {
+   "en": "The amount alone does not classify: it is the cross-check that decides, and that is what you will be asked to justify.",
+   "fr": "Le montant ne classe pas à lui seul : c’est le croisement qui décide, et c’est lui qu’on vous demandera de justifier."
+  },
+  "Le montant que vous arbitrez, calculé sur ce que vos équipes ont déclaré — jamais estimé à votre place.": {
+   "en": "The amount you are deciding on, calculated on what your teams have declared — never estimated on your behalf.",
+   "fr": "Le montant que vous arbitrez, calculé sur ce que vos équipes ont déclaré — jamais estimé à votre place."
+  },
+  "Le moteur lit les lignes du Registre IA qui n’ont pas de classification, et propose pour chacune une classe, l’article qui la soutient, et les extraits de votre déclaration sur lesquels il s’appuie.": {
+   "en": "The engine reads the rows of the AI register that have no classification, and proposes for each a class, the article that supports it, and the extracts from your declaration on which it relies.",
+   "fr": "Le moteur lit les lignes du Registre IA qui n’ont pas de classification, et propose pour chacune une classe, l’article qui la soutient, et les extraits de votre déclaration sur lesquels il s’appuie."
+  },
+  "Le moteur n’a pas répondu.": {
+   "en": "The engine did not respond.",
+   "fr": "Le moteur n’a pas répondu."
+  },
+  "Le moteur n’écrit jamais le registre": {
+   "en": "The engine never writes to the register",
+   "fr": "Le moteur n’écrit jamais le registre"
+  },
+  "Le motif est nommé, jamais générique. « Ce PDF ne contient pas de texte : c’est une image scannée » appelle une reconnaissance optique ; « la lecture des PDF n’est pas disponible sur ce serveur » est un problème d’installation, pas de fichier. Un document refusé dans un lot n’interrompt pas les autres : le transfert continue et liste ses rejets à la fin.": {
+   "en": "The reason is named, never generic. “This PDF contains no text: it is a scanned image” calls for optical character recognition; “PDF reading is not available on this server” is an installation problem, not a file problem. A document rejected in a batch does not stop the others: the upload continues and lists its rejections at the end.",
+   "fr": "Le motif est nommé, jamais générique. « Ce PDF ne contient pas de texte : c’est une image scannée » appelle une reconnaissance optique ; « la lecture des PDF n’est pas disponible sur ce serveur » est un problème d’installation, pas de fichier. Un document refusé dans un lot n’interrompt pas les autres : le transfert continue et liste ses rejets à la fin."
+  },
+  "Le médecin reste responsable de la décision finale — l'IA ne peut pas substituer le jugement clinique. Documenter explicitement la chaîne de responsabilité.": {
+   "en": "The doctor remains responsible for the final decision — AI cannot replace clinical judgement. Document the chain of responsibility explicitly.",
+   "fr": "Le médecin reste responsable de la décision finale — l'IA ne peut pas substituer le jugement clinique. Documenter explicitement la chaîne de responsabilité."
+  },
+  "Le même geste commercial qui vous a fait intégrateur vous a fait changer de palier. C’est le chiffre à porter au comité qui décide d’industrialiser une offre d’intégration.": {
+   "en": "The same commercial move that made you an integrator made you change tier. That is the figure to take to the committee deciding whether to industrialise an integration offer.",
+   "fr": "Le même geste commercial qui vous a fait intégrateur vous a fait changer de palier. C’est le chiffre à porter au comité qui décide d’industrialiser une offre d’intégration."
+  },
+  "Le même inventaire sert à l’IA Act et au RGPD : il est toujours écrit une fois de trop, jamais une fois de trop peu.": {
+   "en": "The same inventory serves the AI Act and the GDPR: it is always written once too often, never once too few.",
+   "fr": "Le même inventaire sert à l’IA Act et au RGPD : il est toujours écrit une fois de trop, jamais une fois de trop peu."
+  },
+  "Le même profil ne donne pas le même radar dans la santé et dans la logistique. Comparer votre radar à celui d’une autre organisation n’a de sens qu’à secteur égal.": {
+   "en": "The same profile does not give the same radar in healthcare and in logistics. Comparing your radar with another organisation’s only makes sense within the same sector.",
+   "fr": "Le même profil ne donne pas le même radar dans la santé et dans la logistique. Comparer votre radar à celui d’une autre organisation n’a de sens qu’à secteur égal."
+  },
+  "Le même raisonnement, sur le scoring": {
+   "en": "The same reasoning, on scoring",
+   "fr": "Le même raisonnement, sur le scoring"
+  },
+  "Le navigateur a enregistré la réponse sans la décompresser.": {
+   "en": "The browser saved the response without decompressing it.",
+   "fr": "Le navigateur a enregistré la réponse sans la décompresser."
+  },
+  "Le navigateur a enregistré une page sous le nom du fichier attendu : page": {
+   "en": "The browser saved a page under the name of the expected file: page",
+   "fr": "Le navigateur a enregistré une page sous le nom du fichier attendu : page"
+  },
+  "Le niveau de risque et les obligations exactes, avant d’avoir engagé la moindre dépense de mise en conformité.": {
+   "en": "The risk level and the exact obligations, before you have committed any compliance spending.",
+   "fr": "Le niveau de risque et les obligations exactes, avant d’avoir engagé la moindre dépense de mise en conformité."
+  },
+  "Le niveau de risque et les obligations légales.": {
+   "en": "The risk level and the legal obligations.",
+   "fr": "Le niveau de risque et les obligations légales."
+  },
+  "Le nom de l’usage est requis.": {
+   "en": "The name of the use is required.",
+   "fr": "Le nom de l’usage est requis."
+  },
+  "Le nom du système est obligatoire.": {
+   "en": "The system name is required.",
+   "fr": "Le nom du système est obligatoire."
+  },
+  "Le nom du traitement est obligatoire.": {
+   "en": "The processing activity name is required.",
+   "fr": "Le nom du traitement est obligatoire."
+  },
+  "Le nom d’une personne et une échéance. « La direction » et « au deuxième trimestre » ne sont pas des réponses.": {
+   "en": "A person’s name and a deadline. “Senior management” and “in the second quarter” are not answers.",
+   "fr": "Le nom d’une personne et une échéance. « La direction » et « au deuxième trimestre » ne sont pas des réponses."
+  },
+  "Le parc, d’abord — pas le site témoin": {
+   "en": "The estate first — not the showcase site",
+   "fr": "Le parc, d’abord — pas le site témoin"
+  },
+  "Le parcours commence par une question — construction neuve, extension ou rachat — parce que les mêmes critères ne se lisent pas dans le même ordre. Suivez la branche de votre projet jusqu’au bout.": {
+   "en": "The path starts with a question — new build, extension or acquisition — because the same criteria are not read in the same order. Follow the branch of your project to the end.",
+   "fr": "Le parcours commence par une question — construction neuve, extension ou rachat — parce que les mêmes critères ne se lisent pas dans le même ordre. Suivez la branche de votre projet jusqu’au bout."
+  },
+  "Le parcours investisseur : trois scénarios": {
+   "en": "The investor path: three scenarios",
+   "fr": "Le parcours investisseur : trois scénarios"
+  },
+  "Le parcours investisseur commence par une question — construction neuve, extension d’un parc existant, ou rachat/M&A — parce que les mêmes critères ne se lisent pas dans le même ordre. NEUVE : l’électricité décide avant le foncier, puis climat/PUE/eau, la file de raccordement, et la due diligence (prix et PPA, délai opposable, eau au point exact). EXTENSION : où l’opérateur est déjà, densité du pays, la file de raccordement que les annonces réservent, et le permis d’extension qui n’est jamais acquis. M&A : le statut comme échelle de certitude, la fiche déclaré/calculé, puis la liste des questions de data room que le référentiel ne peut pas trancher — PUE mesuré douze mois, raccordement contractuel, baux, CAPEX engagé, structure de détention. L’adresse porte le scénario (#parcours=invest.ma) : envoyez à chacun le bon chemin.": {
+   "en": "The investor path starts with a question — new build, extension of an existing estate, or acquisition/M&A — because the same criteria are not read in the same order. NEW BUILD: electricity decides before land, then climate/PUE/water, the connection queue, and due diligence (price and PPA, an enforceable timeline, water at the exact point). EXTENSION: where the operator already is, the country’s density, the connection queue that announcements reserve, and the extension permit that is never a given. M&A: status as a scale of certainty, the declared/calculated record, then the list of data room questions the framework cannot decide — PUE measured over twelve months, contractual connection, leases, committed CAPEX, ownership structure. The address carries the scenario (#parcours=invest.ma): send each person the right path.",
+   "fr": "Le parcours investisseur commence par une question — construction neuve, extension d’un parc existant, ou rachat/M&A — parce que les mêmes critères ne se lisent pas dans le même ordre. NEUVE : l’électricité décide avant le foncier, puis climat/PUE/eau, la file de raccordement, et la due diligence (prix et PPA, délai opposable, eau au point exact). EXTENSION : où l’opérateur est déjà, densité du pays, la file de raccordement que les annonces réservent, et le permis d’extension qui n’est jamais acquis. M&A : le statut comme échelle de certitude, la fiche déclaré/calculé, puis la liste des questions de data room que le référentiel ne peut pas trancher — PUE mesuré douze mois, raccordement contractuel, baux, CAPEX engagé, structure de détention. L’adresse porte le scénario (#parcours=invest.ma) : envoyez à chacun le bon chemin."
+  },
+  "Le passage du constat à l’instruction : l’audit produit les pièces que la matrice suivante hiérarchisera.": {
+   "en": "The move from finding to examination: the audit produces the documents that the next matrix will prioritise.",
+   "fr": "Le passage du constat à l’instruction : l’audit produit les pièces que la matrice suivante hiérarchisera."
+  },
+  "Le passage du tableau au dispositif : un rôle sans titulaire dans l’outil se voit, un rôle sans titulaire dans un document ne se voit pas.": {
+   "en": "The move from the table to the framework: a role without a holder in the tool shows, a role without a holder in a document does not.",
+   "fr": "Le passage du tableau au dispositif : un rôle sans titulaire dans l’outil se voit, un rôle sans titulaire dans un document ne se voit pas."
+  },
+  "Le passage à l’échelle sans perdre la trace : sur un registre de plusieurs dizaines de systèmes, la lecture est automatisée, la DÉCISION ne l’est pas, et chaque classification garde le nom de qui l’a prononcée.": {
+   "en": "Scaling up without losing the trail: on a register of several dozen systems, the reading is automated, the DECISION is not, and each classification keeps the name of whoever made it.",
+   "fr": "Le passage à l’échelle sans perdre la trace : sur un registre de plusieurs dizaines de systèmes, la lecture est automatisée, la DÉCISION ne l’est pas, et chaque classification garde le nom de qui l’a prononcée."
+  },
+  "Le piège": {
+   "en": "The trap",
+   "fr": "Le piège"
+  },
+  "Le piège :": {
+   "en": "The trap:",
+   "fr": "Le piège :"
+  },
+  "Le piège propre au code généré : un test écrit d’après l’implémentation passe toujours, y compris quand l’implémentation est fausse. Le test doit venir de ce qui est ATTENDU, pas de ce qui a été produit.": {
+   "en": "The trap specific to generated code: a test written from the implementation always passes, including when the implementation is wrong. The test must come from what is EXPECTED, not from what was produced.",
+   "fr": "Le piège propre au code généré : un test écrit d’après l’implémentation passe toujours, y compris quand l’implémentation est fausse. Le test doit venir de ce qui est ATTENDU, pas de ce qui a été produit."
+  },
+  "Le plafond de la charge de preuve y est DÉJÀ appliqué — la carte et l’écran du module rendent le même nombre, et non deux vérités sur le même taux.": {
+   "en": "The burden-of-proof cap is ALREADY applied there — the card and the module's screen return the same number, and not two truths about the same rate.",
+   "fr": "Le plafond de la charge de preuve y est DÉJÀ appliqué — la carte et l’écran du module rendent le même nombre, et non deux vérités sur le même taux."
+  },
+  "Le plafond, et pourquoi il est affiché": {
+   "en": "The ceiling, and why it is displayed",
+   "fr": "Le plafond, et pourquoi il est affiché"
+  },
+  "Le plan de sensibilisation reste à réaliser en grande partie.": {
+   "en": "The awareness plan remains largely to be done.",
+   "fr": "Le plan de sensibilisation reste à réaliser en grande partie."
+  },
+  "Le plan de traitement tient.": {
+   "en": "The treatment plan holds.",
+   "fr": "Le plan de traitement tient."
+  },
+  "Le plan —": {
+   "en": "The plan —",
+   "fr": "Le plan —"
+  },
+  "Le plus bas des cadres évalués — c'est lui qui commande": {
+   "en": "The lowest of the frameworks assessed — it is the one that governs",
+   "fr": "Le plus bas des cadres évalués — c'est lui qui commande"
+  },
+  "Le plus bas des deux plafonds s'applique (PME, Art. #(#))": {
+   "en": "The lower of the two ceilings applies (SME, Art. #(#))",
+   "fr": "Le plus bas des deux plafonds s'applique (PME, Art. 99(6))"
+  },
+  "Le plus bas des deux plafonds —": {
+   "en": "The lower of the two ceilings —",
+   "fr": "Le plus bas des deux plafonds —"
+  },
+  "Le plus durable, le plus bruyant. À réserver aux zones où l’origine change ce qu’un relecteur doit faire — sans quoi le marquage devient un bruit qu’on cesse de lire.": {
+   "en": "The most durable, the noisiest. Reserve it for areas where the origin changes what a reviewer must do — otherwise the marking becomes noise people stop reading.",
+   "fr": "Le plus durable, le plus bruyant. À réserver aux zones où l’origine change ce qu’un relecteur doit faire — sans quoi le marquage devient un bruit qu’on cesse de lire."
+  },
+  "Le plus élevé des deux plafonds s'applique": {
+   "en": "The higher of the two ceilings applies",
+   "fr": "Le plus élevé des deux plafonds s'applique"
+  },
+  "Le plus élevé des deux plafonds —": {
+   "en": "The higher of the two ceilings —",
+   "fr": "Le plus élevé des deux plafonds —"
+  },
+  "Le poids suit la charge réglementaire et non le nombre de paragraphes : le chapitre # pèse trois fois le chapitre #, et le chapitre # — surveillance après commercialisation, incidents graves — autant que le chapitre #.": {
+   "en": "The weight follows the regulatory load and not the number of paragraphs: chapter # weighs three times chapter #, and chapter # — post-market monitoring, serious incidents — as much as chapter #.",
+   "fr": "Le poids suit la charge réglementaire et non le nombre de paragraphes : le chapitre 4 pèse trois fois le chapitre 10, et le chapitre 9 — surveillance après commercialisation, incidents graves — autant que le chapitre 8."
+  },
+  "Le poids suit la charge réglementaire, pas le nombre de paragraphes": {
+   "en": "The weight follows the regulatory load, not the number of paragraphs",
+   "fr": "Le poids suit la charge réglementaire, pas le nombre de paragraphes"
+  },
+  "Le poids suit la charge, pas le nombre d'exemples : l'étape # en porte vingt-quatre pour le seul groupe # et l'étape # n'en porte que deux — or c'est l'étape # qui est l'attente la plus forte dès que l'entreprise cause ou contribue.": {
+   "en": "The weight follows the burden, not the number of examples: step # carries twenty-four of them for group # alone and step # carries only two — yet it is step # that is the strongest expectation as soon as the company causes or contributes.",
+   "fr": "Le poids suit la charge, pas le nombre d'exemples : l'étape 3 en porte vingt-quatre pour le seul groupe 2 et l'étape 6 n'en porte que deux — or c'est l'étape 6 qui est l'attente la plus forte dès que l'entreprise cause ou contribue."
+  },
+  "Le point de départ sur les huit piliers, le budget et la durée viennent": {
+   "en": "The starting point on the eight pillars, the budget and the duration come",
+   "fr": "Le point de départ sur les huit piliers, le budget et la durée viennent"
+  },
+  "Le point où un refroidissement évaporatif entre en compétition d’usage avec l’agriculture — c’est souvent là que se joue le permis, pas dans le dossier électrique.": {
+   "en": "The point where evaporative cooling competes for use with agriculture — that is often where the permit is decided, not in the electrical file.",
+   "fr": "Le point où un refroidissement évaporatif entre en compétition d’usage avec l’agriculture — c’est souvent là que se joue le permis, pas dans le dossier électrique."
+  },
+  "Le pourcentage mesure une reprise de PREUVES, pas une conformité : il ne dit pas que ces articles sont tenus, et encore moins que l’autorité l’admettra. Et le piège de cette greffe est le périmètre — celui du système de management est choisi par l’organisme, celui du règlement ne l’est pas.": {
+   "en": "The percentage measures a carry-over of EVIDENCE, not compliance: it does not say that these articles are met, still less that the authority will accept it. And the trap of this graft is the scope — that of the management system is chosen by the organisation, that of the Regulation is not.",
+   "fr": "Le pourcentage mesure une reprise de PREUVES, pas une conformité : il ne dit pas que ces articles sont tenus, et encore moins que l’autorité l’admettra. Et le piège de cette greffe est le périmètre — celui du système de management est choisi par l’organisme, celui du règlement ne l’est pas."
+  },
+  "Le premier bloc de la page ne montre aucun montant. Il croise deux choses que ni le registre ni le chiffrage ne voient seuls : un système classé HAUT RISQUE, en service, et dont personne n’a dit ce qu’il consomme. C’est la première ligne à traiter, avant tout arbitrage de plafond — un système qui porte les obligations les plus lourdes du règlement et dont le budget n’est pas instruit est le pire des deux mondes.": {
+   "en": "The first block of the page shows no amount. It cross-checks two things that neither the register nor the costing sees on its own: a system classified HIGH-RISK, in service, and for which nobody has said what it consumes. That is the first row to deal with, before any decision on caps — a system that carries the heaviest obligations of the Regulation and whose budget has not been examined is the worst of both worlds.",
+   "fr": "Le premier bloc de la page ne montre aucun montant. Il croise deux choses que ni le registre ni le chiffrage ne voient seuls : un système classé HAUT RISQUE, en service, et dont personne n’a dit ce qu’il consomme. C’est la première ligne à traiter, avant tout arbitrage de plafond — un système qui porte les obligations les plus lourdes du règlement et dont le budget n’est pas instruit est le pire des deux mondes."
+  },
+  "Le premier bloc ne montre aucun total. Un parc de vingt systèmes dont trois sont déclarés produit un chiffre crédible et faux, et rien ne le signale : un total ne dit pas ce qu’il ignore. Lisez la couverture, relancez les déclarations manquantes, et seulement ensuite les indicateurs.": {
+   "en": "The first block shows no total. An estate of twenty systems of which three are declared produces a credible and wrong figure, and nothing flags it: a total does not say what it does not know. Read the coverage, chase the missing declarations, and only then the indicators.",
+   "fr": "Le premier bloc ne montre aucun total. Un parc de vingt systèmes dont trois sont déclarés produit un chiffre crédible et faux, et rien ne le signale : un total ne dit pas ce qu’il ignore. Lisez la couverture, relancez les déclarations manquantes, et seulement ensuite les indicateurs."
+  },
+  "Le principe à retenir": {
+   "en": "The principle to remember",
+   "fr": "Le principe à retenir"
+  },
+  "Le prix réel de l’électricité est un contrat : la statistique publique ne le voit pas, ne la citez jamais comme prix du projet.": {
+   "en": "The real price of electricity is a contract: public statistics do not see it, never cite them as the project price.",
+   "fr": "Le prix réel de l’électricité est un contrat : la statistique publique ne le voit pas, ne la citez jamais comme prix du projet."
+  },
+  "Le produit relève de l'annexe I mais n'exige pas d'évaluation de conformité par un tiers : la condition de l'article #(#)(b) n'est pas remplie, le système n'est pas à haut risque à ce titre. Un produit soumis à évaluation par un tiers pour des risques autres que la santé et la sécurité (spectre radioélectrique, interférences électromagnétiques sans effet sur la santé ou la sécurité) ne remplit pas non plus cette condition (Art. #(#c)).": {
+   "en": "The product falls under Annex I but does not require third-party conformity assessment: the condition of Article #(#)(b) is not met, so the system is not high-risk on that basis. A product subject to third-party assessment for risks other than health and safety (radio spectrum, electromagnetic interference with no effect on health or safety) does not meet that condition either (Art. #(#c)).",
+   "fr": "Le produit relève de l'annexe I mais n'exige pas d'évaluation de conformité par un tiers : la condition de l'article 6(1)(b) n'est pas remplie, le système n'est pas à haut risque à ce titre. Un produit soumis à évaluation par un tiers pour des risques autres que la santé et la sécurité (spectre radioélectrique, interférences électromagnétiques sans effet sur la santé ou la sécurité) ne remplit pas non plus cette condition (Art. 6(1c))."
+  },
+  "Le présent contrat définit les modalités de la tarification RaaS (Results as a Service) par laquelle le Client rémunère le Prestataire selon l’atteinte vérifiée de jalons de conformité à l’AI Act, et non selon un forfait fixe.": {
+   "en": "This contract sets out the terms of RaaS (Results as a Service) pricing, under which the Client pays the Provider according to the verified achievement of AI Act compliance milestones, and not according to a flat fee.",
+   "fr": "Le présent contrat définit les modalités de la tarification RaaS (Results as a Service) par laquelle le Client rémunère le Prestataire selon l’atteinte vérifiée de jalons de conformité à l’AI Act, et non selon un forfait fixe."
+  },
+  "Le présent contrat est soumis au droit français. À défaut de résolution amiable, tout litige relatif à sa formation, son exécution ou son interprétation relève de la compétence du Tribunal de commerce de Paris.": {
+   "en": "This contract is governed by French law. Failing an amicable settlement, any dispute relating to its formation, performance or interpretation falls within the jurisdiction of the Tribunal de commerce de Paris [Paris Commercial Court].",
+   "fr": "Le présent contrat est soumis au droit français. À défaut de résolution amiable, tout litige relatif à sa formation, son exécution ou son interprétation relève de la compétence du Tribunal de commerce de Paris."
+  }
+ }
+}

@@ -1,0 +1,78 @@
+{
+ "_pourquoi": "CE QUE CES MUTATIONS ÉPROUVENT, ET POURQUOI ELLES EXISTENT.\nLes règles de tests/test_donnees_partage.py lisent la CHARGE des routes DGA et Data Act, et non les constantes des modules. Une règle qui lit une charge peut passer pour une raison sans rapport avec ce qu'elle prétend : il suffit que la clé existe. Chaque mutation ci-dessous réinjecte un défaut qui a RÉELLEMENT été mesuré dans ces deux modules, ou son symétrique, et doit faire tomber la règle NOMMÉE — celle qui dit garder ce point, et pas une voisine qui tomberait par accident.",
+ "cibles": [
+  "tests/test_donnees_partage.py"
+ ],
+ "mutations": [
+  {
+   "nom": "le denominateur du DGA redevient celui des REPONSES : 1 point tenu sur 19 ferait 100 %",
+   "fichier": "dga.py",
+   "avant": "        if brut == \"sans_objet\":\n            continue\n        portes += 1\n",
+   "apres": "        if ETATS.get(brut) is None:\n            continue\n        portes += 1\n",
+   "regle": "test_un_point_NON_RENSEIGNE_compte_ZERO_et_le_denominateur_ne_bouge_pas[/api/dga/evaluer-/api/dga/referentiel-intermediaire]"
+  },
+  {
+   "nom": "le denominateur du Data Act redevient celui des REPONSES",
+   "fichier": "data_act.py",
+   "avant": "        if brut == \"sans_objet\":\n            continue\n        portes += 1\n",
+   "apres": "        if ETATS.get(brut) is None:\n            continue\n        portes += 1\n",
+   "regle": "test_un_point_NON_RENSEIGNE_compte_ZERO_et_le_denominateur_ne_bouge_pas[/api/data-act/evaluer-/api/data-act/referentiel-fabricant]"
+  },
+  {
+   "nom": "un questionnaire VIDE rend 0 % au lieu de rien",
+   "fichier": "dga.py",
+   "avant": "    if not portes or not renseignes:\n",
+   "apres": "    if not portes:\n",
+   "regle": "test_un_questionnaire_VIDE_ne_rend_AUCUN_chiffre[/api/dga/evaluer-intermediaire]"
+  },
+  {
+   "nom": "un questionnaire Data Act VIDE rend 0 % au lieu de rien",
+   "fichier": "data_act.py",
+   "avant": "    if not portes or not renseignes:\n",
+   "apres": "    if not portes:\n",
+   "regle": "test_un_questionnaire_VIDE_ne_rend_AUCUN_chiffre[/api/data-act/evaluer-fabricant]"
+  },
+  {
+   "nom": "un « sans objet » cesse de sortir du denominateur : le metier du client lui est reproche",
+   "fichier": "dga.py",
+   "avant": "        if brut == \"sans_objet\":\n            continue\n",
+   "apres": "        if brut == \"jamais_cet_etat\":\n            continue\n",
+   "regle": "test_un_point_NON_RENSEIGNE_compte_ZERO_et_le_denominateur_ne_bouge_pas[/api/dga/evaluer-/api/dga/referentiel-intermediaire]"
+  },
+  {
+   "nom": "le questionnaire attend les 42 obligations du reglement, pas celles de la qualite",
+   "fichier": "dga.py",
+   "avant": "        cles = OBLIGATIONS_PAR_QUALITE.get(q, ())\n",
+   "apres": "        cles = tuple(OBLIGATIONS_PAR_CLE)\n",
+   "regle": "test_le_DENOMINATEUR_est_celui_de_la_qualite_declaree_et_D_ELLE_SEULE"
+  },
+  {
+   "nom": "l'exposition retombe sur l'article 83 §5 quand AUCUN chapitre ouvert n'est expose",
+   "fichier": "data_act.py",
+   "avant": "                      chapitre=(exposes or champ[\"chapitres\"] or [None])[0])\n",
+   "apres": "                      chapitre=(exposes or [None])[0])\n",
+   "regle": "test_un_chapitre_NON_DESIGNE_par_l_article_40_4_n_a_PAS_de_plafond_europeen"
+  },
+  {
+   "nom": "le comite europeen cesse de dire qu'il n'oblige personne",
+   "fichier": "dga.py",
+   "avant": "     \"quoi\": (\"Un organe consultatif institué par le règlement. Il ne crée \"\n              \"d'obligation pour aucune entreprise.\")},\n",
+   "apres": "     \"quoi\": (\"Un organe consultatif institué par le règlement, composé \"\n              \"de représentants des États membres.\")},\n",
+   "regle": "test_la_charge_du_DGA_porte_les_quatre_cadres_dont_TROIS_assujettissent"
+  },
+  {
+   "nom": "le DGA promet une presomption de conformite qu'aucun de ses articles ne donne",
+   "fichier": "dga.py",
+   "avant": "        \"nom_du_taux\": NOM_DU_TAUX,\n        \"presomption\": False,\n    }\n",
+   "apres": "        \"nom_du_taux\": NOM_DU_TAUX,\n        \"presomption\": True,\n    }\n",
+   "regle": "test_AUCUN_des_deux_reglements_ne_promet_de_presomption[/api/dga/referentiel]"
+  },
+  {
+   "nom": "le Data Act promet une presomption de conformite",
+   "fichier": "data_act.py",
+   "avant": "        \"nom_du_taux\": NOM_DU_TAUX,\n        \"presomption\": False,\n    }\n",
+   "apres": "        \"nom_du_taux\": NOM_DU_TAUX,\n        \"presomption\": True,\n    }\n",
+   "regle": "test_AUCUN_des_deux_reglements_ne_promet_de_presomption[/api/data-act/referentiel]"
+  }
+ ]
+}

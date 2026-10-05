@@ -76,6 +76,41 @@ def test_le_fichier_SEUIL_existe_et_porte_une_part_entre_0_et_1():
     assert 0.0 <= s <= 1.0, s
 
 
+def test_LES_DEUX_MESURES_DE_COUVERTURE_DECIDENT_LA_MEME_CHOSE():
+    """DEUX IMPLÉMENTATIONS POUR UNE QUESTION, ET ELLES AVAIENT DIVERGÉ.
+    outils/sentinel_langue_couverture (lu ici) et outils/i18n_sentinel
+    (`couverture`) répondent tous deux à « cette clé est-elle traduite ? ».
+    Elles comptent les MOTS avec deux expressions différentes — c'est voulu,
+    chacune sert un côté —, mais la DÉCISION par clé doit être la même. Elle
+    ne l'était plus : l'une ignorait les motifs et la table « rien à
+    traduire », l'autre non, et le même produit mesurait 93,5 % ici et 97 %
+    là. Cette règle refuse la dérive au lieu de la découvrir six mois plus
+    tard sur un plancher devenu faux."""
+    if not os.path.exists(CATALOGUE):
+        pytest.skip("i18n/sentinel/CATALOGUE.json absent")
+    import importlib.util as _iu
+    spec = _iu.spec_from_file_location(
+        "outil_i18n", os.path.join(_RACINE, "outils", "i18n_sentinel.py"))
+    outil = _iu.module_from_spec(spec)
+    spec.loader.exec_module(outil)
+
+    cat = C.lire_json(CATALOGUE)
+    ici = C.couverture(cat, C.dictionnaires_du_dossier())
+    import sentinel_i18n
+    dico, _ = sentinel_i18n.fusionner(DOSSIER)
+    la_bas = outil.couverture(outil.charger_catalogue(CATALOGUE), dico)
+
+    manque_ici = set((r, c) for r, c, _n in ici["manquantes"])
+    manque_la_bas = set((e["regime"], e["cle"]) for e in la_bas["global"]["manquantes"])
+    #  L'ATTRIBUT SE CHERCHE DANS « texte » DES DEUX CÔTÉS, mais l'un garde le
+    #  régime d'origine et l'autre aussi : les paires sont comparables telles
+    #  quelles.
+    assert manque_ici == manque_la_bas, (
+        u"les deux mesures ne décident pas la même chose — ici seulement : %s ; "
+        u"là-bas seulement : %s"
+        % (sorted(manque_ici - manque_la_bas)[:3], sorted(manque_la_bas - manque_ici)[:3]))
+
+
 def test_la_couverture_en_mots_du_catalogue_atteint_le_SEUIL():
     """LA RÈGLE QUI TOMBERA le jour où une page française est ajoutée sans
     traduction : le catalogue grossit, la couverture baisse sous le seuil.

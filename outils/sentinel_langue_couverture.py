@@ -36,6 +36,7 @@ RACINE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DOSSIER = os.path.join(RACINE, 'i18n', 'sentinel')
 CATALOGUE = os.path.join(DOSSIER, 'CATALOGUE.json')
 SEUIL = os.path.join(DOSSIER, 'SEUIL_COUVERTURE')
+SANS_TRADUCTION = os.path.join(DOSSIER, 'SANS_TRADUCTION.json')
 
 #: Les régimes du catalogue et le dictionnaire où chacun se cherche : les
 #: attributs (title, aria-label…) se traduisent par le dictionnaire « texte ».
@@ -95,14 +96,19 @@ def dictionnaires_du_dossier(dossier=None):
     'bloc': {clé: en}}. Une valeur qui n'est pas une chaîne non vide n'est
     pas une traduction."""
     dossier = DOSSIER if dossier is None else dossier
-    dico = {'texte': {}, 'bloc': {}}
+    #  « motif » EST DU DOSSIER LUI AUSSI, et il y manquait. Les libellés
+    #  composés (« ↓ {} », « Bloc # sur # · {} — Verrouillé ») ne sont des
+    #  clés littérales d'aucun fichier : c'est un motif qui les sert, dans le
+    #  navigateur comme dans la mesure. Les omettre ici comptait comme NON
+    #  TRADUIT ce que le lecteur voit pourtant en anglais.
+    dico = {'texte': {}, 'bloc': {}, 'motif': {}}
     for p in sorted(glob.glob(os.path.join(dossier, '*.json'))):
         if not est_dictionnaire(p):
             continue
         lot = lire_json(p)
         if not isinstance(lot, dict):
             continue
-        for regime in ('texte', 'bloc'):
+        for regime in ('texte', 'bloc', 'motif'):
             entrees = lot.get(regime) or {}
             if not isinstance(entrees, dict):
                 continue
@@ -112,12 +118,53 @@ def dictionnaires_du_dossier(dossier=None):
     return dico
 
 
-def couverture(catalogue, dico):
+def lire_sans_traduction(chemin=None):
+    """{clé: raison} — CE QUI N'A RIEN À TRADUIRE, déclaré clé par clé dans
+    i18n/sentinel/SANS_TRADUCTION.json : une citation d'un texte anglais, un
+    nom propre, un identifiant, une valeur. Un fichier absent rend {}, ce qui
+    rend la mesure PLUS exigeante et jamais moins.
+
+    LA TABLE EST BORNÉE AILLEURS, et c'est important : la règle
+    tests/test_i18n_sentinel_outil éprouve que chaque clé est au catalogue,
+    porte une raison écrite, n'est pas traduite par ailleurs, et que le POIDS
+    total garé reste sous un plafond. Sans ce plafond, la table serait le
+    moyen de tenir ce plancher-ci sans traduire une ligne."""
+    chemin = SANS_TRADUCTION if chemin is None else chemin
+    d = lire_json(chemin)
+    if not isinstance(d, dict):
+        return {}
+    cles = d.get('cles')
+    return cles if isinstance(cles, dict) else {}
+
+
+def couverture(catalogue, dico, sans_traduction=None):
     """{mots_total, mots_couverts, part, cles_total, cles_couvertes,
     manquantes: [(régime, clé, mots)…] triées des plus longues aux plus
     courtes}. `part` vaut 1.0 sur un catalogue vide : rien à traduire, tout
-    est traduit."""
+    est traduit.
+
+    UNE CLÉ EST COUVERTE DE TROIS FAÇONS, LES MÊMES QUE DANS LE NAVIGATEUR :
+    son entrée exacte au dictionnaire ; un MOTIF qui s'applique à elle (le
+    navigateur fait de même — `sentChercherTexte` essaie l'entrée, puis les
+    motifs) ; ou sa déclaration dans SANS_TRADUCTION.
+    POURQUOI LES TROIS SONT ICI. Cette mesure et celle de
+    outils/i18n_sentinel.py répondent à la MÊME question, et elles avaient
+    divergé : l'une connaissait les motifs et la table, l'autre non. Deux
+    chiffres pour une question, c'est un chiffre de trop —
+    tests/test_sentinel_langue_gardien éprouve désormais leur ÉGALITÉ sur le
+    catalogue du dépôt, et la divergence retombera le jour où elle revient."""
     cles = cles_du_catalogue(catalogue)
+    sans = lire_sans_traduction() if sans_traduction is None else sans_traduction
+    #  LES MOTIFS, COMPILÉS PAR LE MODULE PARTAGÉ : c'est `sentinel_i18n` qui
+    #  porte la règle, et le navigateur la joue à l'identique.
+    try:
+        import sys
+        if RACINE not in sys.path:
+            sys.path.insert(0, RACINE)
+        import sentinel_i18n as _m
+        motifs = _m.motifs_compiles(dico.get('motif') or {})
+    except Exception:
+        motifs, _m = [], None
     total = couverts = n_cles = n_couv = 0
     manquantes = []
     for regime, entrees in cles.items():
@@ -125,7 +172,14 @@ def couverture(catalogue, dico):
         for cle, n in entrees.items():
             total += n
             n_cles += 1
-            if cle in cible:
+            ok = cle in cible
+            #  LE RÉGIME BLOC N'A PAS DE MOTIFS : `sentChercherBloc` ne les
+            #  consulte pas, donc la mesure ne doit pas les lui accorder.
+            if not ok and regime != 'bloc' and motifs and _m is not None:
+                ok = bool(_m.motif_traduire(cle, motifs, dico.get('texte') or {}))
+            if not ok and cle in sans:
+                ok = True
+            if ok:
                 couverts += n
                 n_couv += 1
             else:

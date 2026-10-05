@@ -1,0 +1,667 @@
+{
+ "_lot": "75-routes-12",
+ "_mots": 2463,
+ "_pages": [
+  "_routes"
+ ],
+ "_rubrique": "_routes",
+ "bloc": {},
+ "texte": {
+  "Se faire regarder par quelqu'un d'autre, à intervalle défini, et traiter ce qui en sort.": {
+   "en": "Being looked at by somebody else, at a defined interval, and handling what comes out of it.",
+   "fr": "Se faire regarder par quelqu'un d'autre, à intervalle défini, et traiter ce qui en sort."
+  },
+  "Se ranger en « lien direct » et ne rien faire. Le document écrit que le lien direct devient une CONTRIBUTION si l'entreprise continue sans agir.": {
+   "en": "Filing yourself under “directly linked” and doing nothing. The document writes that direct linkage becomes a CONTRIBUTION if the enterprise carries on without acting.",
+   "fr": "Se ranger en « lien direct » et ne rien faire. Le document écrit que le lien direct devient une CONTRIBUTION si l'entreprise continue sans agir."
+  },
+  "Sensibilisation au biais d'automatisation": {
+   "en": "Automation bias awareness",
+   "fr": "Sensibilisation au biais d'automatisation"
+  },
+  "Sensibilisation des personnes désignées au biais d'automatisation": {
+   "en": "Automation bias awareness for the designated persons",
+   "fr": "Sensibilisation des personnes désignées au biais d'automatisation"
+  },
+  "Service essentiel interrompu, tiers affectés, obligation de notification possible.": {
+   "en": "Essential service interrupted, third parties affected, notification obligation possible.",
+   "fr": "Service essentiel interrompu, tiers affectés, obligation de notification possible."
+  },
+  "Services d'intermédiation de données": {
+   "en": "Data intermediation services",
+   "fr": "Services d'intermédiation de données"
+  },
+  "Services de coopératives de données": {
+   "en": "Data cooperative services",
+   "fr": "Services de coopératives de données"
+  },
+  "Services postaux et d'expédition": {
+   "en": "Postal and courier services",
+   "fr": "Services postaux et d'expédition"
+  },
+  "Seul prestataire, dans un État membre, d'un service essentiel au maintien d'activités sociétales ou économiques critiques": {
+   "en": "The sole provider in a Member State of a service essential for the maintenance of critical societal or economic activities",
+   "fr": "Seul prestataire, dans un État membre, d'un service essentiel au maintien d'activités sociétales ou économiques critiques"
+  },
+  "Seulement sur les systèmes d'information COUVERTS PAR LA CERTIFICATION. Un périmètre de certification restreint ne couvre qu'une partie de l'objectif — le reste reste à démontrer.": {
+   "en": "Only on the information systems COVERED BY THE CERTIFICATION. A narrow certification scope covers only part of the objective — the rest remains to be demonstrated.",
+   "fr": "Seulement sur les systèmes d'information COUVERTS PAR LA CERTIFICATION. Un périmètre de certification restreint ne couvre qu'une partie de l'objectif — le reste reste à démontrer."
+  },
+  "Si les mesures d'exécution restent inefficaces, l'autorité peut faire suspendre une certification ou une autorisation, et faire INTERDIRE TEMPORAIREMENT au directeur général ou au représentant légal d'exercer des responsabilités dirigeantes dans l'entité.": {
+   "en": "If the enforcement measures remain ineffective, the authority may have a certification or an authorisation suspended, and have the chief executive officer or legal representative TEMPORARILY BARRED from exercising managerial responsibilities in the entity.",
+   "fr": "Si les mesures d'exécution restent inefficaces, l'autorité peut faire suspendre une certification ou une autorisation, et faire INTERDIRE TEMPORAIREMENT au directeur général ou au représentant légal d'exercer des responsabilités dirigeantes dans l'entité."
+  },
+  "Signalement d'incidents graves — généralités": {
+   "en": "Serious incident reporting — general",
+   "fr": "Signalement d'incidents graves — généralités"
+  },
+  "Six semaines à compter de la notification": {
+   "en": "Six weeks from the notification",
+   "fr": "Six semaines à compter de la notification"
+  },
+  "Société de gestion": {
+   "en": "Management company",
+   "fr": "Société de gestion"
+  },
+  "Son périmètre est-il déterminé ?": {
+   "en": "Is its scope determined?",
+   "fr": "Son périmètre est-il déterminé ?"
+  },
+  "Sont-ils surveillés et ré-évalués en cours de vie ?": {
+   "en": "Are they monitored and reassessed over their life?",
+   "fr": "Sont-ils surveillés et ré-évalués en cours de vie ?"
+  },
+  "Spécification commune": {
+   "en": "Common specification",
+   "fr": "Spécification commune"
+  },
+  "Spécifications relatives aux notifications mises en œuvre par le déployeur": {
+   "en": "Specifications for the notifications implemented by the deployer",
+   "fr": "Spécifications relatives aux notifications mises en œuvre par le déployeur"
+  },
+  "Statut juridique, forme, structure de propriété, filiales pertinentes et numéro d'enregistrement": {
+   "en": "Legal status, form, ownership structure, relevant subsidiaries and registration number",
+   "fr": "Statut juridique, forme, structure de propriété, filiales pertinentes et numéro d'enregistrement"
+  },
+  "Stockage temporaire, organisation, conversion, anonymisation, pseudonymisation : seulement sur demande ou approbation expresse, et les outils de tiers ne servent à rien d'autre.": {
+   "en": "Temporary storage, curation, conversion, anonymisation, pseudonymisation: only upon express request or approval, and third-party tools serve nothing else.",
+   "fr": "Stockage temporaire, organisation, conversion, anonymisation, pseudonymisation : seulement sur demande ou approbation expresse, et les outils de tiers ne servent à rien d'autre."
+  },
+  "Stratégie commerciale future — changements de groupe ou de gestion, nouveaux marchés, nouvelles activités": {
+   "en": "Future business strategy — group or management changes, new markets, new activities",
+   "fr": "Stratégie commerciale future — changements de groupe ou de gestion, nouveaux marchés, nouvelles activités"
+  },
+  "Stratégie de sortie : période de transition obligatoire pendant laquelle le service continue, et qui permet de migrer ailleurs ou de réinternaliser": {
+   "en": "Exit strategy: a mandatory transition period during which the service continues, allowing migration elsewhere or reinsourcing",
+   "fr": "Stratégie de sortie : période de transition obligatoire pendant laquelle le service continue, et qui permet de migrer ailleurs ou de réinternaliser"
+  },
+  "Stratégie et documentation": {
+   "en": "Strategy and documentation",
+   "fr": "Stratégie et documentation"
+  },
+  "Structure d'entreprise — société mère et entreprises liées fournissant des services TIC à des entités financières de l'Union": {
+   "en": "Corporate structure — parent company and related undertakings providing ICT services to Union financial entities",
+   "fr": "Structure d'entreprise — société mère et entreprises liées fournissant des services TIC à des entités financières de l'Union"
+  },
+  "Suivi des recommandations de l'article #, paragraphe #, point d)": {
+   "en": "Follow-up of the recommendations of article #, paragraph #, point (d)",
+   "fr": "Suivi des recommandations de l'article 35, paragraphe 1, point d)"
+  },
+  "Suivre la mise en œuvre": {
+   "en": "Track implementation",
+   "fr": "Suivre la mise en œuvre"
+  },
+  "Suivre la mise en œuvre et les résultats": {
+   "en": "Track implementation and results",
+   "fr": "Suivre la mise en œuvre et les résultats"
+  },
+  "Suivre la mise en œuvre et les résultats de la diligence": {
+   "en": "Track implementation and results of due diligence",
+   "fr": "Suivre la mise en œuvre et les résultats de la diligence"
+  },
+  "Supervision de la sécurité des systèmes d'information": {
+   "en": "Oversight of information system security",
+   "fr": "Supervision de la sécurité des systèmes d'information"
+  },
+  "Supervision effective — travaux de l'équipe d'examen conjoint et conseils des experts indépendants": {
+   "en": "Effective oversight — work of the joint examination team and advice of the independent experts",
+   "fr": "Supervision effective — travaux de l'équipe d'examen conjoint et conseils des experts indépendants"
+  },
+  "Supervisé depuis le #er janvier : au plus tard le # avril de la même année.": {
+   "en": "Under oversight since # January: by # April of the same year at the latest.",
+   "fr": "Supervisé depuis le 1er janvier : au plus tard le 30 avril de la même année."
+  },
+  "Support d'interprétation de sortie pour les personnes désignées": {
+   "en": "Output interpretation support for the designated persons",
+   "fr": "Support d'interprétation de sortie pour les personnes désignées"
+  },
+  "Sur demande de l'utilisateur, les données sont mises à la disposition d'un tiers, dans les mêmes conditions de qualité et de délai": {
+   "en": "At the user's request, the data is made available to a third party, on the same conditions of quality and timing",
+   "fr": "Sur demande de l'utilisateur, les données sont mises à la disposition d'un tiers, dans les mêmes conditions de qualité et de délai"
+  },
+  "Surcharge et conflit": {
+   "en": "Overload and conflict",
+   "fr": "Surcharge et conflit"
+  },
+  "Surveillance après commercialisation et incidents graves — les deux obligations dont une autorité se saisit sans attendre un audit, et le second chapitre sans équivalent ISO.": {
+   "en": "Post-market monitoring and serious incidents — the two obligations an authority takes up without waiting for an audit, and the second chapter with no ISO equivalent.",
+   "fr": "Surveillance après commercialisation et incidents graves — les deux obligations dont une autorité se saisit sans attendre un audit, et le second chapitre sans équivalent ISO."
+  },
+  "Surveillance après commercialisation — généralités": {
+   "en": "Post-market monitoring — general",
+   "fr": "Surveillance après commercialisation — généralités"
+  },
+  "Surveillance et ré-évaluation": {
+   "en": "Monitoring and reassessment",
+   "fr": "Surveillance et ré-évaluation"
+  },
+  "Surveillance permanente de la sécurité et du fonctionnement de tous les systèmes de TIC": {
+   "en": "Continuous monitoring of the security and functioning of all ICT systems",
+   "fr": "Surveillance permanente de la sécurité et du fonctionnement de tous les systèmes de TIC"
+  },
+  "Surveiller sans perturber": {
+   "en": "Monitoring without disrupting",
+   "fr": "Surveiller sans perturber"
+  },
+  "Survient plusieurs fois par an, ou une vulnérabilité exploitable est déjà connue.": {
+   "en": "Occurs several times a year, or an exploitable vulnerability is already known.",
+   "fr": "Survient plusieurs fois par an, ou une vulnérabilité exploitable est déjà connue."
+  },
+  "Système de management de l'intelligence artificielle": {
+   "en": "Artificial intelligence management system",
+   "fr": "Système de management de l'intelligence artificielle"
+  },
+  "Système de management de la qualité": {
+   "en": "Quality management system",
+   "fr": "Système de management de la qualité"
+  },
+  "Système de management de la qualité pour le règlement européen sur l'IA": {
+   "en": "Quality management system for EU AI Act regulatory purposes",
+   "fr": "Système de management de la qualité pour le règlement européen sur l'IA"
+  },
+  "Systèmes de management de la qualité — Exigences": {
+   "en": "Quality management systems — Requirements",
+   "fr": "Systèmes de management de la qualité — Exigences"
+  },
+  "Systèmes de management internes": {
+   "en": "Internal management systems",
+   "fr": "Systèmes de management internes"
+  },
+  "Sécurisation de l'architecture des systèmes d'information": {
+   "en": "Securing the architecture of information systems",
+   "fr": "Sécurisation de l'architecture des systèmes d'information"
+  },
+  "Sécurisation de la configuration des ressources des systèmes d'information": {
+   "en": "Securing the configuration of information system resources",
+   "fr": "Sécurisation de la configuration des ressources des systèmes d'information"
+  },
+  "Sécurisation des accès distants aux systèmes d'information": {
+   "en": "Securing remote access to information systems",
+   "fr": "Sécurisation des accès distants aux systèmes d'information"
+  },
+  "Sécurisation des informations en transit": {
+   "en": "Securing information in transit",
+   "fr": "Sécurisation des informations en transit"
+  },
+  "Sécurisé et résilient": {
+   "en": "Secure and resilient",
+   "fr": "Sécurisé et résilient"
+  },
+  "Sécurité de l'information": {
+   "en": "Information security",
+   "fr": "Sécurité de l'information"
+  },
+  "Sécurité des données et des systèmes": {
+   "en": "Data and system security",
+   "fr": "Sécurité des données et des systèmes"
+  },
+  "Sécurité des données, des systèmes et des réseaux": {
+   "en": "Data, system and network security",
+   "fr": "Sécurité des données, des systèmes et des réseaux"
+  },
+  "Sécurité des opérations de TIC": {
+   "en": "ICT operations security",
+   "fr": "Sécurité des opérations de TIC"
+  },
+  "Sécurité du stockage, du traitement et de la transmission": {
+   "en": "Security of storage, processing and transmission",
+   "fr": "Sécurité du stockage, du traitement et de la transmission"
+  },
+  "Sécurité physique et environnementale": {
+   "en": "Physical and environmental security",
+   "fr": "Sécurité physique et environnementale"
+  },
+  "Sélection des approches": {
+   "en": "Selection of approaches",
+   "fr": "Sélection des approches"
+  },
+  "Sélection des mesures": {
+   "en": "Selection of measures",
+   "fr": "Sélection des mesures"
+  },
+  "Sélection et documentation des mesures": {
+   "en": "Selection and documentation of measures",
+   "fr": "Sélection et documentation des mesures"
+  },
+  "Sûreté, disponibilité et reprise": {
+   "en": "Safety, availability and recovery",
+   "fr": "Sûreté, disponibilité et reprise"
+  },
+  "Taille non déclarée": {
+   "en": "Size not declared",
+   "fr": "Taille non déclarée"
+  },
+  "Tenir ISO/IEC # ou le cadre du NIST ne vaut pas diligence OCDE, et l'inverse est vrai aussi. Sur ces vingt cadres, Sentinel en mesure trois.": {
+   "en": "Holding ISO/IEC # or the NIST framework does not amount to OECD due diligence, and the reverse is true too. Of those twenty frameworks, Sentinel measures three.",
+   "fr": "Tenir ISO/IEC 42001 ou le cadre du NIST ne vaut pas diligence OCDE, et l'inverse est vrai aussi. Sur ces vingt cadres, Sentinel en mesure trois."
+  },
+  "Tenir des registres complets et exacts : qui traite, quand et combien de temps, pour quelle finalité déclarée, contre quelles redevances": {
+   "en": "Keeping complete and accurate records: who processes, when and for how long, for which declared purpose, against which fees",
+   "fr": "Tenir des registres complets et exacts : qui traite, quand et combien de temps, pour quelle finalité déclarée, contre quelles redevances"
+  },
+  "Tenu, ET démontrable devant un tiers sans préparation.": {
+   "en": "Held, AND demonstrable to a third party with no preparation.",
+   "fr": "Tenu, ET démontrable devant un tiers sans préparation."
+  },
+  "Tests de biais d'automatisation": {
+   "en": "Automation bias testing",
+   "fr": "Tests de biais d'automatisation"
+  },
+  "Tests de sécurité des TIC": {
+   "en": "ICT security testing",
+   "fr": "Tests de sécurité des TIC"
+  },
+  "Tests des plans de continuité des activités": {
+   "en": "Business continuity plan testing",
+   "fr": "Tests des plans de continuité des activités"
+  },
+  "Tests des plans de continuité des activités de TIC": {
+   "en": "ICT business continuity plan testing",
+   "fr": "Tests des plans de continuité des activités de TIC"
+  },
+  "Tests réguliers de ces plans et de l'efficacité des contrôles": {
+   "en": "Regular testing of those plans and of the effectiveness of the controls",
+   "fr": "Tests réguliers de ces plans et de l'efficacité des contrôles"
+  },
+  "Texte de l'Union, réutilisable avec attribution": {
+   "en": "Union text, reusable with attribution",
+   "fr": "Texte de l'Union, réutilisable avec attribution"
+  },
+  "Tous les champs attendus de ce bloc sont renseignés. Cela ne vaut pas conformité — c'est l'autorité qui apprécie.": {
+   "en": "Every field expected in this block is filled in. That is not compliance — it is the authority that assesses.",
+   "fr": "Tous les champs attendus de ce bloc sont renseignés. Cela ne vaut pas conformité — c'est l'autorité qui apprécie."
+  },
+  "Tous les sous-critères de seuil sont atteints. Les AES procèdent alors à l'évaluation « étape # », qui ne se calcule pas : ce module l'énonce et ne la simule pas.": {
+   "en": "All the threshold sub-criteria are met. The ESAs then carry out the “step #” assessment, which is not computed: this module states it and does not simulate it.",
+   "fr": "Tous les sous-critères de seuil sont atteints. Les AES procèdent alors à l'évaluation « étape 2 », qui ne se calcule pas : ce module l'énonce et ne la simule pas."
+  },
+  "Tout autre motif pertinent": {
+   "en": "Any other relevant ground",
+   "fr": "Tout autre motif pertinent"
+  },
+  "Toute autre circonstance aggravante ou atténuante": {
+   "en": "Any other aggravating or mitigating circumstance",
+   "fr": "Toute autre circonstance aggravante ou atténuante"
+  },
+  "Toute communication entre les AES et les prestataires critiques se fait par voie électronique.": {
+   "en": "All communication between the ESAs and the critical providers takes place electronically.",
+   "fr": "Toute communication entre les AES et les prestataires critiques se fait par voie électronique."
+  },
+  "Toute modification des renseignements du §# est notifiée dans les quatorze jours (§#).": {
+   "en": "Any change to the particulars in §# is notified within fourteen days (§#).",
+   "fr": "Toute modification des renseignements du §6 est notifiée dans les quatorze jours (§12)."
+  },
+  "Toute personne, autre que le fabricant, l'importateur ou le distributeur, qui apporte une modification substantielle à un produit déjà sur le marché et le met à disposition.": {
+   "en": "Any person, other than the manufacturer, the importer or the distributor, who makes a substantial modification to a product already on the market and makes it available.",
+   "fr": "Toute personne, autre que le fabricant, l'importateur ou le distributeur, qui apporte une modification substantielle à un produit déjà sur le marché et le met à disposition."
+  },
+  "Toutes les parties coopèrent de bonne foi pour rendre le changement effectif, dans les délais et en préservant la continuité": {
+   "en": "All parties cooperate in good faith to make the switch effective, within the deadlines and preserving continuity",
+   "fr": "Toutes les parties coopèrent de bonne foi pour rendre le changement effectif, dans les délais et en préservant la continuité"
+  },
+  "Traitement incorrect des sorties": {
+   "en": "Improper output handling",
+   "fr": "Traitement incorrect des sorties"
+  },
+  "Traiter l'arrivée, la mobilité et le départ comme des événements de sécurité, et former ceux qui sont exposés.": {
+   "en": "Treating arrival, movement and departure as security events, and training those who are exposed.",
+   "fr": "Traiter l'arrivée, la mobilité et le départ comme des événements de sécurité, et former ceux qui sont exposés."
+  },
+  "Traiter les risques auxquels l'organisme est lié par une relation d'affaires": {
+   "en": "Address the risks the organisation is linked to by a business relationship",
+   "fr": "Traiter les risques auxquels l'organisme est lié par une relation d'affaires"
+  },
+  "Traiter les risques que l'organisme cause ou auxquels il contribue": {
+   "en": "Address the risks the organisation causes or contributes to",
+   "fr": "Traiter les risques que l'organisme cause ou auxquels il contribue"
+  },
+  "Traiter, arbitrer, surveiller : affecter les ressources, décider ce qu'on accepte, préparer la réponse et la reprise.": {
+   "en": "Handle, arbitrate, monitor: allocate the resources, decide what is accepted, prepare the response and the recovery.",
+   "fr": "Traiter, arbitrer, surveiller : affecter les ressources, décider ce qu'on accepte, préparer la réponse et la reprise."
+  },
+  "Transferts de données à caractère non personnel vers des pays tiers": {
+   "en": "Transfers of non-personal data to third countries",
+   "fr": "Transferts de données à caractère non personnel vers des pays tiers"
+  },
+  "Transition en état sécurisé": {
+   "en": "Transition to safe state",
+   "fr": "Transition en état sécurisé"
+  },
+  "Transmettre par les canaux électroniques sécurisés dédiés indiqués par le superviseur principal, dans la forme et selon la structure qu'il définit, en localisant clairement chaque élément demandé.": {
+   "en": "Submit through the dedicated secure electronic channels indicated by the lead overseer, in the form and structure it defines, clearly locating each item requested.",
+   "fr": "Transmettre par les canaux électroniques sécurisés dédiés indiqués par le superviseur principal, dans la forme et selon la structure qu'il définit, en localisant clairement chaque élément demandé."
+  },
+  "Transparence et fourniture d'informations aux déployeurs": {
+   "en": "Transparency and provision of information to deployers",
+   "fr": "Transparence et fourniture d'informations aux déployeurs"
+  },
+  "Transports aériens": {
+   "en": "Air transport",
+   "fr": "Transports aériens"
+  },
+  "Transports par eau": {
+   "en": "Water transport",
+   "fr": "Transports par eau"
+  },
+  "Trente jours civils à compter de la réception de la déclaration": {
+   "en": "Thirty calendar days from receipt of the declaration",
+   "fr": "Trente jours civils à compter de la réception de la déclaration"
+  },
+  "Trois ans est un PLANCHER, pas une cadence : un incident rouvre l'analyse sans attendre l'échéance.": {
+   "en": "Three years is a FLOOR, not a cadence: an incident reopens the analysis without waiting for the due date.",
+   "fr": "Trois ans est un PLANCHER, pas une cadence : un incident rouvre l'analyse sans attendre l'échéance."
+  },
+  "Un SMSI certifié conforme à l'ISO/CEI #:#": {
+   "en": "An ISMS certified to ISO/IEC #:#",
+   "fr": "Un SMSI certifié conforme à l'ISO/CEI 27001:2022"
+  },
+  "Un article le nomme.": {
+   "en": "An article names it.",
+   "fr": "Un article le nomme."
+  },
+  "Un article non déclaré compte pour zéro ET reste au dénominateur : le silence n'allège pas l'exigence.": {
+   "en": "An undeclared article counts as zero AND stays in the denominator: silence does not lighten the requirement.",
+   "fr": "Un article non déclaré compte pour zéro ET reste au dénominateur : le silence n'allège pas l'exigence."
+  },
+  "Un axe est plafonné par la plus faible des familles #-# qu'il taille.": {
+   "en": "An axis is capped by the weakest of the #-# families it tailors.",
+   "fr": "Un axe est plafonné par la plus faible des familles 800-53 qu'il taille."
+  },
+  "Un bloc précédent n'est pas complet, et celui-ci en dépend. Il ne s'ouvrira pas tant que l'autre n'est pas renseigné.": {
+   "en": "An earlier block is not complete, and this one depends on it. It will not open until the other is filled in.",
+   "fr": "Un bloc précédent n'est pas complet, et celui-ci en dépend. Il ne s'ouvrira pas tant que l'autre n'est pas renseigné."
+  },
+  "Un cadrage qui s'arrête aux systèmes que la DSI a achetés. Les usages arrivés par une carte bancaire d'équipe n'y figurent pas, et ce sont ceux qui posent problème.": {
+   "en": "A scoping exercise that stops at the systems the IT department bought. The uses that arrived on a team credit card are not in it, and those are the ones that cause trouble.",
+   "fr": "Un cadrage qui s'arrête aux systèmes que la DSI a achetés. Les usages arrivés par une carte bancaire d'équipe n'y figurent pas, et ce sont ceux qui posent problème."
+  },
+  "Un changement de processus est-il revu avant d'être appliqué ?": {
+   "en": "Is a process change reviewed before being applied?",
+   "fr": "Un changement de processus est-il revu avant d'être appliqué ?"
+  },
+  "Un changement de périmètre est-il traité comme tel — et ses effets sur la stratégie de conformité repris ?": {
+   "en": "Is a change of scope handled as such — and are its effects on the compliance strategy picked up?",
+   "fr": "Un changement de périmètre est-il traité comme tel — et ses effets sur la stratégie de conformité repris ?"
+  },
+  "Un critère sans réponse n'est pas un « non » : tant qu'il en reste un, l'AIPD ne peut pas être dite « non requise ».": {
+   "en": "An unanswered criterion is not a “no”: as long as one remains, the DPIA cannot be said to be “not required”.",
+   "fr": "Un critère sans réponse n'est pas un « non » : tant qu'il en reste un, l'AIPD ne peut pas être dite « non requise »."
+  },
+  "Un cycle d'audit interne (art. #) et une revue de direction (art. #) doivent avoir eu lieu AVANT l'étape #. Ils laissent des traces datées : ils ne se fabriquent pas la veille.": {
+   "en": "An internal audit cycle (art. #) and a management review (art. #) must have taken place BEFORE stage #. They leave dated traces: they cannot be manufactured the day before.",
+   "fr": "Un cycle d'audit interne (art. 9.2) et une revue de direction (art. 9.3) doivent avoir eu lieu AVANT l'étape 2. Ils laissent des traces datées : ils ne se fabriquent pas la veille."
+  },
+  "Un dispositif de réclamation qui existe sans être accessible. Le document attend un mécanisme légitime par lequel les parties prenantes peuvent réellement saisir l'entreprise.": {
+   "en": "A complaints arrangement that exists without being accessible. The document expects a legitimate mechanism through which stakeholders can actually raise matters with the enterprise.",
+   "fr": "Un dispositif de réclamation qui existe sans être accessible. Le document attend un mécanisme légitime par lequel les parties prenantes peuvent réellement saisir l'entreprise."
+  },
+  "Un déclencheur qui passe par le système qu'il doit arrêter tombe avec lui. C'est le cas d'école, et il se produit.": {
+   "en": "A trigger that runs through the system it is meant to stop goes down with it. It is the textbook case, and it happens.",
+   "fr": "Un déclencheur qui passe par le système qu'il doit arrêter tombe avec lui. C'est le cas d'école, et il se produit."
+  },
+  "Un délai qui expire et vaut validation détruit la garantie de l'alinéa #(#).": {
+   "en": "A deadline that expires and counts as approval destroys the guarantee of paragraph #(#).",
+   "fr": "Un délai qui expire et vaut validation détruit la garantie de l'alinéa 14(5)."
+  },
+  "Un délai unique pour tout le système est presque toujours faux : il est déterminé par le scénario, donc il varie d'un scénario à l'autre.": {
+   "en": "A single deadline for the whole system is almost always wrong: it is determined by the scenario, so it varies from one scenario to the next.",
+   "fr": "Un délai unique pour tout le système est presque toujours faux : il est déterminé par le scénario, donc il varie d'un scénario à l'autre."
+  },
+  "Un déployeur qui ne connaît pas le risque résiduel ne peut pas l'accepter — et c'est lui qui l'accepte.": {
+   "en": "A deployer who does not know the residual risk cannot accept it — and it is the deployer who accepts it.",
+   "fr": "Un déployeur qui ne connaît pas le risque résiduel ne peut pas l'accepter — et c'est lui qui l'accepte."
+  },
+  "Un désengagement présenté comme la seule réponse responsable. Partir peut aggraver l'incidence pour les personnes et supprime le levier qui restait.": {
+   "en": "Disengagement presented as the only responsible answer. Leaving can worsen the impact for people and removes the leverage that was left.",
+   "fr": "Un désengagement présenté comme la seule réponse responsable. Partir peut aggraver l'incidence pour les personnes et supprime le levier qui restait."
+  },
+  "Un enregistrement VOLONTAIRE qui, une fois obtenu, rend contraignants les articles #, #, # et #.": {
+   "en": "A VOLUNTARY registration which, once obtained, makes Articles #, #, # and # binding.",
+   "fr": "Un enregistrement VOLONTAIRE qui, une fois obtenu, rend contraignants les articles 18, 20, 21 et 22."
+  },
+  "Un exercice de cadrage qui dit OÙ les risques peuvent se trouver et où ils peuvent être les plus significatifs — avant toute évaluation approfondie.": {
+   "en": "A scoping exercise that says WHERE the risks may be found and where they may be most significant — before any in-depth assessment.",
+   "fr": "Un exercice de cadrage qui dit OÙ les risques peuvent se trouver et où ils peuvent être les plus significatifs — avant toute évaluation approfondie."
+  },
+  "Un fournisseur de modèle change de version sans préavis : la ré-évaluation est le seul endroit où cela se voit.": {
+   "en": "A model provider changes version with no notice: the reassessment is the only place where that shows.",
+   "fr": "Un fournisseur de modèle change de version sans préavis : la ré-évaluation est le seul endroit où cela se voit."
+  },
+  "Un importateur ou un distributeur qui met le produit sur le marché sous SON propre nom ou SA propre marque, ou qui y apporte une modification substantielle, EST un fabricant au sens du règlement.": {
+   "en": "An importer or a distributor that places the product on the market under ITS own name or ITS own trademark, or that makes a substantial modification to it, IS a manufacturer within the meaning of the regulation.",
+   "fr": "Un importateur ou un distributeur qui met le produit sur le marché sous SON propre nom ou SA propre marque, ou qui y apporte une modification substantielle, EST un fabricant au sens du règlement."
+  },
+  "Un indice avancé ne se retrouve pas dans la déclaration : il n'est pas vérifiable.": {
+   "en": "An indication put forward that is not found in the declaration is not verifiable.",
+   "fr": "Un indice avancé ne se retrouve pas dans la déclaration : il n'est pas vérifiable."
+  },
+  "Un intermédiaire de cette catégorie est un sujet du RGPD par construction, pas par accident.": {
+   "en": "An intermediary of this category is a GDPR subject by construction, not by accident.",
+   "fr": "Un intermédiaire de cette catégorie est un sujet du RGPD par construction, pas par accident."
+  },
+  "Un inventaire des défaillances les plus fréquentes, pas un référentiel de conformité. « Conforme OWASP » ne veut rien dire.": {
+   "en": "An inventory of the most frequent failures, not a compliance framework. “OWASP compliant” means nothing.",
+   "fr": "Un inventaire des défaillances les plus fréquentes, pas un référentiel de conformité. « Conforme OWASP » ne veut rien dire."
+  },
+  "Un inventaire des systèmes qui s'arrête à ceux que la DSI a achetés. Les usages arrivés par une carte bancaire d'équipe n'y figurent pas, et ce sont ceux qui posent problème.": {
+   "en": "An inventory of systems that stops at the ones the IT department bought. The uses that arrived on a team credit card are not in it, and those are the ones that cause trouble.",
+   "fr": "Un inventaire des systèmes qui s'arrête à ceux que la DSI a achetés. Les usages arrivés par une carte bancaire d'équipe n'y figurent pas, et ce sont ceux qui posent problème."
+  },
+  "Un jeu de données mixte — personnel et non personnel inextricablement liés — reste arbitré par le RGPD.": {
+   "en": "A mixed dataset — personal and non-personal inextricably linked — remains arbitrated by the GDPR.",
+   "fr": "Un jeu de données mixte — personnel et non personnel inextricablement liés — reste arbitré par le RGPD."
+  },
+  "Un montant dont on ne peut pas dire d'où vient le volume n'est pas opposable en comité.": {
+   "en": "A figure whose volume cannot be sourced carries no weight in a committee.",
+   "fr": "Un montant dont on ne peut pas dire d'où vient le volume n'est pas opposable en comité."
+  },
+  "Un niveau approprié pour les données non personnelles, et le niveau le PLUS ÉLEVÉ pour les informations sensibles sous l'angle de la concurrence.": {
+   "en": "An appropriate level for non-personal data, and the HIGHEST level for information that is sensitive from a competition standpoint.",
+   "fr": "Un niveau approprié pour les données non personnelles, et le niveau le PLUS ÉLEVÉ pour les informations sensibles sous l'angle de la concurrence."
+  },
+  "Un objectif de volume horaire sur un poste de supervision est l'antidote exact de la supervision.": {
+   "en": "A throughput target on an oversight station is the exact antidote to oversight.",
+   "fr": "Un objectif de volume horaire sur un poste de supervision est l'antidote exact de la supervision."
+  },
+  "Un organe consultatif institué par le règlement. Il ne crée d'obligation pour aucune entreprise.": {
+   "en": "An advisory body established by the Regulation. It creates an obligation for no undertaking.",
+   "fr": "Un organe consultatif institué par le règlement. Il ne crée d'obligation pour aucune entreprise."
+  },
+  "Un organe de règlement des litiges certifié est accessible, et ses décisions sont traitées de bonne foi": {
+   "en": "A certified dispute settlement body is available, and its decisions are handled in good faith",
+   "fr": "Un organe de règlement des litiges certifié est accessible, et ses décisions sont traitées de bonne foi"
+  },
+  "Un organisme certifié en # a onze mesures nouvelles devant lui — pas #.": {
+   "en": "An organisation certified in # has eleven new controls ahead of it — not #.",
+   "fr": "Un organisme certifié en 2013 a onze mesures nouvelles devant lui — pas 93."
+  },
+  "Un organisme notifié approuve et surveille le système qualité couvrant conception, fabrication et contrôle.": {
+   "en": "A notified body approves and monitors the quality system covering design, manufacture and inspection.",
+   "fr": "Un organisme notifié approuve et surveille le système qualité couvrant conception, fabrication et contrôle."
+  },
+  "Un organisme notifié examine le type, puis le fabricant garantit la conformité de la production à ce type.": {
+   "en": "A notified body examines the type, then the manufacturer guarantees that production conforms to that type.",
+   "fr": "Un organisme notifié examine le type, puis le fabricant garantit la conformité de la production à ce type."
+  },
+  "Un organisme qui conçoit ET exploite porte les deux jeux d'obligations : le score retenu est celui du plus faible des deux.": {
+   "en": "An organisation that designs AND operates carries both sets of obligations: the score retained is that of the weaker of the two.",
+   "fr": "Un organisme qui conçoit ET exploite porte les deux jeux d'obligations : le score retenu est celui du plus faible des deux."
+  },
+  "Un paragraphe « sans objet » sort du calcul ; un paragraphe sans réponse compte pour zéro. L'inverse ferait monter le taux à mesure qu'on répond MOINS.": {
+   "en": "A clause marked “not applicable” leaves the calculation; an unanswered clause counts as zero. The reverse would raise the rate the LESS you answer.",
+   "fr": "Un paragraphe « sans objet » sort du calcul ; un paragraphe sans réponse compte pour zéro. L'inverse ferait monter le taux à mesure qu'on répond MOINS."
+  },
+  "Un plan d'action sans date ni nom n'est pas un plan : c'est une liste de souhaits, et le référentiel fixe ce minimum.": {
+   "en": "An action plan with no date and no name is not a plan: it is a wish list, and the framework sets that minimum.",
+   "fr": "Un plan d'action sans date ni nom n'est pas un plan : c'est une liste de souhaits, et le référentiel fixe ce minimum."
+  },
+  "Un poids se télécharge comme une image de conteneur, sans rien de l'outillage de vérification qui existe pour le logiciel.": {
+   "en": "A weight file is downloaded like a container image, with none of the verification tooling that exists for software.",
+   "fr": "Un poids se télécharge comme une image de conteneur, sans rien de l'outillage de vérification qui existe pour le logiciel."
+  },
+  "Un point non renseigné n'est pas un point tenu, et l'écran ne rend aucun chiffre par défaut : un questionnaire vide n'est pas une conformité à zéro.": {
+   "en": "A point not filled in is not a point met, and the screen returns no figure by default: an empty questionnaire is not compliance at zero.",
+   "fr": "Un point non renseigné n'est pas un point tenu, et l'écran ne rend aucun chiffre par défaut : un questionnaire vide n'est pas une conformité à zéro."
+  },
+  "Un pont n'est pas une équivalence : il réutilise une preuve, il ne transfère pas une obligation.": {
+   "en": "A bridge is not an equivalence: it reuses a piece of evidence, it does not transfer an obligation.",
+   "fr": "Un pont n'est pas une équivalence : il réutilise une preuve, il ne transfère pas une obligation."
+  },
+  "Un prestataire critique qui fait partie d'un groupe désigne une personne morale comme point de coordination, pour la représentation et la communication avec le superviseur principal.": {
+   "en": "A critical provider that is part of a group designates a legal person as coordination point, for representation and communication with the lead overseer.",
+   "fr": "Un prestataire critique qui fait partie d'un groupe désigne une personne morale comme point de coordination, pour la représentation et la communication avec le superviseur principal."
+  },
+  "Un prestataire non établi dans l'Union qui y propose ses services désigne un représentant légal dans un État membre (§#).": {
+   "en": "A provider not established in the Union that offers its services there designates a legal representative in a Member State (§#).",
+   "fr": "Un prestataire non établi dans l'Union qui y propose ses services désigne un représentant légal dans un État membre (§3)."
+  },
+  "Un prestataire qui ne figure pas sur la liste publiée peut demander à être désigné critique.": {
+   "en": "A provider not on the published list may request to be designated critical.",
+   "fr": "Un prestataire qui ne figure pas sur la liste publiée peut demander à être désigné critique."
+  },
+  "Un périmètre qui nomme des entités juridiques plutôt que des produits : il ne permet pas de dire si LE système évalué est dedans.": {
+   "en": "A scope that names legal entities rather than products: it does not allow anyone to say whether THE system being assessed is inside it.",
+   "fr": "Un périmètre qui nomme des entités juridiques plutôt que des produits : il ne permet pas de dire si LE système évalué est dedans."
+  },
+  "Un périmètre écrit pour le certificat et non pour le produit : il nomme l'entreprise, pas les systèmes d'IA à haut risque qu'elle met sur le marché. L'organisme notifié ouvre alors un dossier qui ne recouvre pas le système qu'il doit évaluer.": {
+   "en": "A scope written for the certificate and not for the product: it names the company, not the high-risk AI systems it places on the market. The notified body then opens a file that does not cover the system it has to assess.",
+   "fr": "Un périmètre écrit pour le certificat et non pour le produit : il nomme l'entreprise, pas les systèmes d'IA à haut risque qu'elle met sur le marché. L'organisme notifié ouvre alors un dossier qui ne recouvre pas le système qu'il doit évaluer."
+  },
+  "Un questionnaire encore écrit contre # ne vise plus la norme en vigueur.": {
+   "en": "A questionnaire still written against # no longer targets the standard in force.",
+   "fr": "Un questionnaire encore écrit contre 2013 ne vise plus la norme en vigueur."
+  },
+  "Un rapport qui publie les politiques et jamais les incidences. Le document demande les deux, et nomme les capacités, limites et usages inappropriés du système.": {
+   "en": "A report that publishes the policies and never the impacts. The document calls for both, and names the system's capabilities, limitations and inappropriate uses.",
+   "fr": "Un rapport qui publie les politiques et jamais les incidences. Le document demande les deux, et nomme les capacités, limites et usages inappropriés du système."
+  },
+  "Un registre de risques tenu à jour et jamais arbitré. Tout y est noté, rien n'y est refusé, et le système part quand même.": {
+   "en": "A risk register kept up to date and never arbitrated. Everything is noted in it, nothing is refused, and the system ships anyway.",
+   "fr": "Un registre de risques tenu à jour et jamais arbitré. Tout y est noté, rien n'y est refusé, et le système part quand même."
+  },
+  "Un retour qui ne prévient pas les processus en aval laisse le système dans un état incohérent : une moitié est revenue, l'autre non.": {
+   "en": "A rollback that does not warn the downstream processes leaves the system in an inconsistent state: one half has rolled back, the other has not.",
+   "fr": "Un retour qui ne prévient pas les processus en aval laisse le système dans un état incohérent : une moitié est revenue, l'autre non."
+  },
+  "Un risque dont la réalisation est déjà documentée dans un déploiement comparable.": {
+   "en": "A risk whose occurrence is already documented in a comparable deployment.",
+   "fr": "Un risque dont la réalisation est déjà documentée dans un déploiement comparable."
+  },
+  "Un scénario de risque, son délai de réaction, la catégorie de mesure retenue et la latence d'intervention mesurée.": {
+   "en": "A risk scenario, its reaction time, the measure category retained and the measured intervention latency.",
+   "fr": "Un scénario de risque, son délai de réaction, la catégorie de mesure retenue et la latence d'intervention mesurée."
+  },
+  "Un scénario dont la latence dépasse le délai sans consignation de l'impossibilité technique plafonne le score — aucune réponse au questionnaire ne lève ce verrou.": {
+   "en": "A scenario whose latency exceeds the deadline without the technical impossibility being recorded caps the score — no answer in the questionnaire lifts that lock.",
+   "fr": "Un scénario dont la latence dépasse le délai sans consignation de l'impossibilité technique plafonne le score — aucune réponse au questionnaire ne lève ce verrou."
+  },
+  "Un site internet public porte des informations complètes et à jour sur le prestataire et son activité": {
+   "en": "A public website carries complete and up-to-date information on the provider and its activity",
+   "fr": "Un site internet public porte des informations complètes et à jour sur le prestataire et son activité"
+  },
+  "Un site internet public, complet et à jour": {
+   "en": "A public website, complete and up to date",
+   "fr": "Un site internet public, complet et à jour"
+  },
+  "Un suivi qui mesure l'activité — nombre de revues, nombre de formations — et jamais le résultat pour les personnes.": {
+   "en": "Tracking that measures activity — number of reviews, number of training sessions — and never the outcome for people.",
+   "fr": "Un suivi qui mesure l'activité — nombre de revues, nombre de formations — et jamais le résultat pour les personnes."
+  },
+  "Un système classé ne rejoint le registre que si l'on clique « Ajouter au Registre IA » : la classification seule ne déclare rien.": {
+   "en": "A classified system joins the register only if “Add to the AI Register” is clicked: classification alone declares nothing.",
+   "fr": "Un système classé ne rejoint le registre que si l'on clique « Ajouter au Registre IA » : la classification seule ne déclare rien."
+  },
+  "Un système d'IA change ; ses scénarios de risque changent avec lui. Une supervision calibrée une fois vieillit sans que rien ne le signale.": {
+   "en": "An AI system changes; its risk scenarios change with it. Oversight calibrated once ages without anything flagging it.",
+   "fr": "Un système d'IA change ; ses scénarios de risque changent avec lui. Une supervision calibrée une fois vieillit sans que rien ne le signale."
+  },
+  "Un système d'IA employé pour déterminer la durée des peines dans des affaires pénales.": {
+   "en": "An AI system used to determine the length of sentences in criminal cases.",
+   "fr": "Un système d'IA employé pour déterminer la durée des peines dans des affaires pénales."
+  },
+  "Un système de surveillance après commercialisation est-il établi ?": {
+   "en": "Is a post-market monitoring system established?",
+   "fr": "Un système de surveillance après commercialisation est-il établi ?"
+  },
+  "Un système inscrit mais incomplet compte pour un système : les dix questions essentielles décident, pas la ligne.": {
+   "en": "A system entered but incomplete counts as one system: the ten essential questions decide, not the row.",
+   "fr": "Un système inscrit mais incomplet compte pour un système : les dix questions essentielles décident, pas la ligne."
+  },
+  "Un système monté pour l'audit et abandonné ensuite — visible au premier audit de surveillance.": {
+   "en": "A system set up for the audit and dropped afterwards — visible at the first surveillance audit.",
+   "fr": "Un système monté pour l'audit et abandonné ensuite — visible au premier audit de surveillance."
+  },
+  "Un système qui décide À PROPOS de personnes n'est pas le même qu'un système qui n'en touche aucune.": {
+   "en": "A system that decides ABOUT people is not the same as a system that touches none.",
+   "fr": "Un système qui décide À PROPOS de personnes n'est pas le même qu'un système qui n'en touche aucune."
+  },
+  "Un taux de # %. L'absence de mesure n'est pas une absence de conformité — c'est une absence de mesure, et les deux ne se confondent pas.": {
+   "en": "A rate of # %. The absence of measurement is not an absence of compliance — it is an absence of measurement, and the two are not the same thing.",
+   "fr": "Un taux de 0 %. L'absence de mesure n'est pas une absence de conformité — c'est une absence de mesure, et les deux ne se confondent pas."
+  },
+  "Un taux mesuré sur un questionnaire ne dit pas si le produit déjà vendu peut être repris.": {
+   "en": "A rate measured on a questionnaire does not say whether the product already sold can be retrofitted.",
+   "fr": "Un taux mesuré sur un questionnaire ne dit pas si le produit déjà vendu peut être repris."
+  },
+  "Un traitement déclaré sans sa base légale n'est pas un traitement renseigné.": {
+   "en": "A processing operation declared without its legal basis is not a documented processing operation.",
+   "fr": "Un traitement déclaré sans sa base légale n'est pas un traitement renseigné."
+  },
+  "Un État membre peut exclure de son territoire les entités visées à l'article #, paragraphe #, points #) à #), de la directive #/#/UE.": {
+   "en": "A Member State may exclude from its territory the entities referred to in article #, paragraph #, points #) to #), of directive #/#/EU.",
+   "fr": "Un État membre peut exclure de son territoire les entités visées à l'article 2, paragraphe 5, points 4) à 23), de la directive 2013/36/UE."
+  },
+  "Un écart entre la colonne « statut » de la déclaration et le terrain. C'est exactement ce que cette colonne sert à vérifier.": {
+   "en": "A gap between the “status” column of the statement and the ground truth. That is exactly what the column is there to check.",
+   "fr": "Un écart entre la colonne « statut » de la déclaration et le terrain. C'est exactement ce que cette colonne sert à vérifier."
+  },
+  "Un écart entre la déclaration d'applicabilité et la réalité — une mesure retenue dont rien n'atteste la mise en œuvre.": {
+   "en": "A gap between the statement of applicability and reality — a control retained with nothing to attest its implementation.",
+   "fr": "Un écart entre la déclaration d'applicabilité et la réalité — une mesure retenue dont rien n'atteste la mise en œuvre."
+  },
+  "Une PME est donc plus exposée ici que sous l'IA Act, et c'est l'inverse de ce qu'on attend.": {
+   "en": "An SME is therefore more exposed here than under the AI Act, which is the opposite of what one expects.",
+   "fr": "Une PME est donc plus exposée ici que sous l'IA Act, et c'est l'inverse de ce qu'on attend."
+  },
+  "Une alerte dont le seuil ne vient pas du dossier de gestion des risques est un réglage d'ingénieur, pas une mesure.": {
+   "en": "An alert whose threshold does not come from the risk management file is an engineer's setting, not a measure.",
+   "fr": "Une alerte dont le seuil ne vient pas du dossier de gestion des risques est un réglage d'ingénieur, pas une mesure."
+  },
+  "Une analyse de risque produite par la seule équipe sécurité, sans arbitrage de moyens, ne répond pas à cette exigence.": {
+   "en": "A risk analysis produced by the security team alone, with no arbitration of resources, does not meet this requirement.",
+   "fr": "Une analyse de risque produite par la seule équipe sécurité, sans arbitrage de moyens, ne répond pas à cette exigence."
+  },
+  "Une analyse qui ne cite aucune de ses cinq entrées est une opinion, pas une analyse — et c'est ce qu'un contrôle regardera.": {
+   "en": "An analysis that cites none of its five inputs is an opinion, not an analysis — and that is what an inspection will look at.",
+   "fr": "Une analyse qui ne cite aucune de ses cinq entrées est une opinion, pas une analyse — et c'est ce qu'un contrôle regardera."
+  },
+  "Une appréciation des risques qui n'a pas été refaite : l'article # l'exige à intervalles planifiés ET après tout changement notable.": {
+   "en": "A risk assessment that has not been redone: article # requires it at planned intervals AND after any significant change.",
+   "fr": "Une appréciation des risques qui n'a pas été refaite : l'article 8.2 l'exige à intervalles planifiés ET après tout changement notable."
+  },
+  "Une catégorie dont les actions du profil ne sont pas tenues ne peut pas dépasser « amorcé » ; partiellement tenues, elle ne dépasse pas « tenu ». Le travail fait sur le cadre n'est pas retiré — c'est ce qu'on peut en dire pour un système génératif qui est borné.": {
+   "en": "A category whose profile actions are not held cannot go beyond “started”; partly held, it does not go beyond “held”. The work done on the framework is not taken away — what is bounded is what can be said of it for a generative system.",
+   "fr": "Une catégorie dont les actions du profil ne sont pas tenues ne peut pas dépasser « amorcé » ; partiellement tenues, elle ne dépasse pas « tenu ». Le travail fait sur le cadre n'est pas retiré — c'est ce qu'on peut en dire pour un système génératif qui est borné."
+  }
+ }
+}

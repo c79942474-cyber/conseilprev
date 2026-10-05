@@ -502,22 +502,52 @@ ETATS = {
 
 
 def _part(cles, reponses):
-    """La part d'une famille d'obligations : les « sans objet » SORTENT.
+    """La part d'une famille d'obligations : les « sans objet » SORTENT du
+    dénominateur, les points SANS RÉPONSE comptent ZÉRO et Y RESTENT.
 
-    POURQUOI ILS SORTENT AU LIEU DE COMPTER ZÉRO. Un point que la qualité
-    déclarée ne vise pas n'est pas un manquement : le compter contre le
-    client lui reprocherait son métier. C'est la règle qu'`ocde_ia` avait
-    posée la première, et elle vaut ici pour la même raison.
+    POURQUOI LES « SANS OBJET » SORTENT. Un point que la qualité déclarée ne
+    vise pas n'est pas un manquement : le compter contre le client lui
+    reprocherait son métier. C'est la règle qu'`ocde_ia` avait posée la
+    première, et elle vaut ici pour la même raison.
+
+    POURQUOI LES SANS-RÉPONSE N'EN SORTENT PAS, ET CE QUI A ÉTÉ MESURÉ. Cette
+    fonction les sortait aussi — elle ne gardait que les valeurs connues et
+    divisait par leur nombre. Mesuré : un prestataire d'intermédiation qui
+    déclarait tenir UN des dix-neuf points de sa qualité lisait 100 %, et
+    `conformite._lire_dga` servait ce 100 % à l'indice des seize
+    référentiels, qui affichait donc le DGA maîtrisé sur un dix-neuvième de
+    son contenu. C'est exactement ce que `ocde_ia` et `en18286` nomment « le
+    pire réglage possible » : sortir du dénominateur ce qu'on n'a pas
+    regardé fait monter le taux à mesure qu'on répond MOINS. Le
+    dénominateur est donc celui des obligations de la qualité, moins les
+    seuls « sans objet ».
+
+    LES TROIS NOMBRES RENDUS : le taux, le nombre de points RENSEIGNÉS — qui
+    dit combien du questionnaire a été regardé, et que l'écran affiche à
+    côté du taux pour qu'un taux bas se lise « pas encore répondu » et non
+    « non tenu » —, et le nombre de points ATTENDUS, qui est celui sur
+    lequel le taux porte.
     """
-    valeurs = []
+    cles = tuple(cles)
+    portes, acquis, renseignes = 0, 0.0, 0
     for c in cles:
-        v = ETATS.get(reponses.get(c))
+        brut = reponses.get(c)
+        if brut == "sans_objet":
+            continue
+        portes += 1
+        v = ETATS.get(brut)
         if v is not None:
-            valeurs.append(v)
-    if not valeurs:
-        return None, 0, len(tuple(cles))
-    return (round(100.0 * sum(valeurs) / len(valeurs)), len(valeurs),
-            len(tuple(cles)))
+            renseignes += 1
+            acquis += v
+    #  UN QUESTIONNAIRE VIDE NE REND PAS 0 %, IL NE REND RIEN. Compter zéro
+    #  dès qu'une qualité est déclarée dirait « vous ne tenez aucun de vos
+    #  dix-neuf points » à qui n'a simplement pas encore ouvert l'écran, et
+    #  l'indice des seize référentiels l'afficherait. L'absence de réponse
+    #  pèse zéro DANS un taux, elle ne fabrique pas un taux à elle seule —
+    #  c'est aussi ce que dit la tête « vide » de l'évaluation.
+    if not portes or not renseignes:
+        return None, renseignes, portes
+    return round(100.0 * acquis / portes), renseignes, portes
 
 
 #  ══════════════════════════════════════════════════════════════════════════
@@ -740,9 +770,11 @@ def evaluer(declaration=None, aujourdhui=None):
         tete, dit = "art37_echu", art37["dit"]
     else:
         tete, dit = "mesure", (
-            "%d %% des obligations renseignées de vos qualités sont "
-            "déclarées tenues, sur %d points attendus."
-            % (sc["total"] or 0, sc["attendus"]))
+            "%d %% des obligations attendues de vos qualités sont "
+            "déclarées tenues, sur %d points attendus dont %d "
+            "renseigné(s). Un point qu'on n'a pas regardé compte zéro : "
+            "le taux monte quand on répond, jamais quand on s'abstient."
+            % (sc["total"] or 0, sc["attendus"], sc["renseignes"]))
 
     return {
         "ok": True,

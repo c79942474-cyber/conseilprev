@@ -1,0 +1,687 @@
+{
+ "_lot": "64-routes-1",
+ "_mots": 2430,
+ "_pages": [
+  "_routes"
+ ],
+ "_rubrique": "_routes",
+ "bloc": {},
+ "texte": {
+  "# % la part pondérée des champs déclarés, # % le nombre d'indices retrouvés mot pour mot dans la déclaration (plafonné à trois). La confiance annoncée par le moteur n'y entre pas.": {
+   "en": "# % the weighted share of the fields declared, # % the number of clues found word for word in the declaration (capped at three). The confidence the engine announces does not enter into it.",
+   "fr": "70 % la part pondérée des champs déclarés, 30 % le nombre d'indices retrouvés mot pour mot dans la déclaration (plafonné à trois). La confiance annoncée par le moteur n'y entre pas."
+  },
+  "# Communication avec les clients": {
+   "en": "# Communication with clients",
+   "fr": "8.2.1 Communication avec les clients"
+  },
+  "# Contexte de l'organisme (# à #)": {
+   "en": "# Context of the organisation (# to #)",
+   "fr": "4 Contexte de l'organisme (4.1 à 4.4)"
+  },
+  "# Exploitation et contrôle": {
+   "en": "# Operation and control",
+   "fr": "9 Exploitation et contrôle"
+  },
+  "# Informations documentées": {
+   "en": "# Documented information",
+   "fr": "4.5 Informations documentées"
+  },
+  "# Responsabilité de la direction": {
+   "en": "# Management responsibility",
+   "fr": "5 Responsabilité de la direction"
+  },
+  "# Stratégie de conformité réglementaire": {
+   "en": "# Regulatory compliance strategy",
+   "fr": "4.4 Stratégie de conformité réglementaire"
+  },
+  "# Élaboration du produit": {
+   "en": "# Product development",
+   "fr": "8 Élaboration du produit"
+  },
+  "# Évaluation des performances": {
+   "en": "# Performance evaluation",
+   "fr": "10 Évaluation des performances"
+  },
+  "# à # Système de management de la qualité": {
+   "en": "# to # Quality management system",
+   "fr": "4.1 à 4.3 Système de management de la qualité"
+  },
+  "#-# (version révisée)": {
+   "en": "#-# (revised version)",
+   "fr": "2026-05 (version révisée)"
+  },
+  "Absente du contrat": {
+   "en": "Absent from the contract",
+   "fr": "Absente du contrat"
+  },
+  "Accès international illicite aux données non personnelles": {
+   "en": "Unlawful international access to non-personal data",
+   "fr": "Accès international illicite aux données non personnelles"
+  },
+  "Accès réussi, malveillant et non autorisé aux réseaux et systèmes d'information, susceptible d'entraîner des pertes de données": {
+   "en": "Successful, malicious and unauthorised access to network and information systems, liable to cause data losses",
+   "fr": "Accès réussi, malveillant et non autorisé aux réseaux et systèmes d'information, susceptible d'entraîner des pertes de données"
+  },
+  "Accès équitable, transparent et non discriminatoire": {
+   "en": "Fair, transparent and non-discriminatory access",
+   "fr": "Accès équitable, transparent et non discriminatoire"
+  },
+  "Accès, personnes et lieux": {
+   "en": "Access, people and premises",
+   "fr": "Accès, personnes et lieux"
+  },
+  "Achats et sécurité des projets": {
+   "en": "Procurement and project security",
+   "fr": "Achats et sécurité des projets"
+  },
+  "Acquisition, développement et maintenance ; vulnérabilités": {
+   "en": "Acquisition, development and maintenance; vulnerabilities",
+   "fr": "Acquisition, développement et maintenance ; vulnérabilités"
+  },
+  "Acquisition, développement et maintenance des systèmes de TIC": {
+   "en": "Acquisition, development and maintenance of ICT systems",
+   "fr": "Acquisition, développement et maintenance des systèmes de TIC"
+  },
+  "Acte délégué C(#) # de la Commission du # février #": {
+   "en": "Commission delegated act C(#) # of # February #",
+   "fr": "Acte délégué C(2024) 902 de la Commission du 22 février 2024"
+  },
+  "Acte délégué C(#) #, article #": {
+   "en": "Delegated act C(#) #, article #",
+   "fr": "Acte délégué C(2024) 896, article 6"
+  },
+  "Acte délégué C(#) #, article #, §#": {
+   "en": "Delegated act C(#) #, article #(#)",
+   "fr": "Acte délégué C(2024) 896, article 3, §4"
+  },
+  "Acte délégué C(#) #, article #, §# a)": {
+   "en": "Delegated act C(#) #, article #(#)(a)",
+   "fr": "Acte délégué C(2024) 896, article 2, §5 a)"
+  },
+  "Acte délégué C(#) #, article #, §# b)": {
+   "en": "Delegated act C(#) #, article #(#)(b)",
+   "fr": "Acte délégué C(2024) 896, article 2, §5 b)"
+  },
+  "Acte délégué C(#) #, article #, §#, renvoyant à l'article #, paragraphe #, point d) i), de DORA": {
+   "en": "Delegated act C(#) #, article #(#), referring to article #(#)(d)(i) of DORA",
+   "fr": "Acte délégué C(2024) 896, article 5, §5, renvoyant à l'article 31, paragraphe 2, point d) i), de DORA"
+  },
+  "Acte délégué C(#) #, article #, §§# a) et #": {
+   "en": "Delegated act C(#) #, article #(#)(a) and (#)",
+   "fr": "Acte délégué C(2024) 896, article 2, §§1 a) et 2"
+  },
+  "Acte délégué C(#) #, article #, §§# a), # et # a)": {
+   "en": "Delegated act C(#) #, article #(#)(a), (#) and (#)(a)",
+   "fr": "Acte délégué C(2024) 896, article 5, §§1 a), 2 et 4 a)"
+  },
+  "Acte délégué C(#) #, article #, §§# b) et #": {
+   "en": "Delegated act C(#) #, article #(#)(b) and (#)",
+   "fr": "Acte délégué C(2024) 896, article 2, §§1 b) et 3"
+  },
+  "Acte délégué C(#) #, article #, §§# b), # et # b)": {
+   "en": "Delegated act C(#) #, article #(#)(b), (#) and (#)(b)",
+   "fr": "Acte délégué C(2024) 896, article 5, §§1 b), 3 et 4 b)"
+  },
+  "Acte délégué C(#) #, article premier": {
+   "en": "Delegated act C(#) #, article 1",
+   "fr": "Acte délégué C(2024) 896, article premier"
+  },
+  "Acteur du cycle de vie du système": {
+   "en": "Actor in the system lifecycle",
+   "fr": "Acteur du cycle de vie du système"
+  },
+  "Actions de traitement des risques": {
+   "en": "Risk treatment actions",
+   "fr": "Actions de traitement des risques"
+  },
+  "Actions pour traiter les risques liés au fonctionnement du système de management": {
+   "en": "Actions to address the risks bearing on how the management system runs",
+   "fr": "Actions pour traiter les risques liés au fonctionnement du système de management"
+  },
+  "Administrateur d'indices de référence d'importance critique": {
+   "en": "An administrator of critical benchmarks",
+   "fr": "Administrateur d'indices de référence d'importance critique"
+  },
+  "Administration des systèmes d'information depuis des ressources dédiées": {
+   "en": "Administration of information systems from dedicated resources",
+   "fr": "Administration des systèmes d'information depuis des ressources dédiées"
+  },
+  "Administrer depuis un poste dédié, sur un réseau dédié — douze moyens, aucun attendu d'une entité importante.": {
+   "en": "Administering from a dedicated workstation, on a dedicated network — twelve means, none of them expected of an important entity.",
+   "fr": "Administrer depuis un poste dédié, sur un réseau dédié — douze moyens, aucun attendu d'une entité importante."
+  },
+  "Adresse de l'établissement principal dans l'Union, des succursales, ou du représentant légal": {
+   "en": "Address of the main establishment in the Union, of the branches, or of the legal representative",
+   "fr": "Adresse de l'établissement principal dans l'Union, des succursales, ou du représentant légal"
+  },
+  "Affectation de deux réviseurs indépendants": {
+   "en": "Assignment of two independent reviewers",
+   "fr": "Affectation de deux réviseurs indépendants"
+  },
+  "Affectation de personnes désignées compétentes": {
+   "en": "Assignment of competent designated persons",
+   "fr": "Affectation de personnes désignées compétentes"
+  },
+  "Affectez-vous effectivement deux personnes physiques distinctes, avec les compétences déclarées dans la notice, à la revue de chaque sortie d'identification — et votre configuration du système ne ramène-t-elle pas la revue à une seule personne ?": {
+   "en": "Do you in fact assign two separate natural persons, with the competences declared in the instructions for use, to the review of every identification output — and does your configuration of the system not bring the review back down to a single person?",
+   "fr": "Affectez-vous effectivement deux personnes physiques distinctes, avec les compétences déclarées dans la notice, à la revue de chaque sortie d'identification — et votre configuration du système ne ramène-t-elle pas la revue à une seule personne ?"
+  },
+  "Agence de notation de crédit": {
+   "en": "A credit rating agency",
+   "fr": "Agence de notation de crédit"
+  },
+  "Agir au mieux de l'intérêt des personnes concernées": {
+   "en": "Acting in the data subjects' best interests",
+   "fr": "Agir au mieux de l'intérêt des personnes concernées"
+  },
+  "Agir sans but lucratif et être juridiquement indépendante de toute entité lucrative": {
+   "en": "Operating on a not-for-profit basis and being legally independent of any for-profit entity",
+   "fr": "Agir sans but lucratif et être juridiquement indépendante de toute entité lucrative"
+  },
+  "Aligne huit directives sectorielles financières sur la résilience opérationnelle numérique.": {
+   "en": "Aligns eight sectoral financial directives on digital operational resilience.",
+   "fr": "Aligne huit directives sectorielles financières sur la résilience opérationnelle numérique."
+  },
+  "Altruisme en matière de données": {
+   "en": "Data altruism",
+   "fr": "Altruisme en matière de données"
+  },
+  "Ancrer dans les politiques": {
+   "en": "Embed in policies",
+   "fr": "Ancrer dans les politiques"
+  },
+  "Ancrer la conduite responsable dans les politiques et les systèmes de management": {
+   "en": "Embed responsible business conduct in policies and management systems",
+   "fr": "Ancrer la conduite responsable dans les politiques et les systèmes de management"
+  },
+  "Annexe I, partie II — vulnérabilités": {
+   "en": "Annex I, Part II — vulnerabilities",
+   "fr": "Annexe I, partie II — vulnérabilités"
+  },
+  "Annuel, en euros, en une seule tranche. Les notes de débit laissent au moins trente jours.": {
+   "en": "Annual, in euro, in a single instalment. The debit notes allow at least thirty days.",
+   "fr": "Annuel, en euros, en une seule tranche. Les notes de débit laissent au moins trente jours."
+  },
+  "Application générale du règlement": {
+   "en": "General application of the Regulation",
+   "fr": "Application générale du règlement"
+  },
+  "Application à l'échelle d'un groupe": {
+   "en": "Application at group level",
+   "fr": "Application à l'échelle d'un groupe"
+  },
+  "Appliquer le recueil de règles adopté par acte délégué : information, exigences techniques et de sécurité, communication, interopérabilité": {
+   "en": "Applying the rulebook adopted by delegated act: information, technical and security requirements, communication, interoperability",
+   "fr": "Appliquer le recueil de règles adopté par acte délégué : information, exigences techniques et de sécurité, communication, interopérabilité"
+  },
+  "Approche de surveillance": {
+   "en": "Supervision approach",
+   "fr": "Approche de surveillance"
+  },
+  "Approche « tous risques » — protéger les réseaux et les systèmes d'information ET leur environnement physique.": {
+   "en": "An « all-hazards » approach — protecting network and information systems AND their physical environment.",
+   "fr": "Approche « tous risques » — protéger les réseaux et les systèmes d'information ET leur environnement physique."
+  },
+  "Approuvé et déclassifié le # janvier #": {
+   "en": "Approved and declassified on # January #",
+   "fr": "Approuvé et déclassifié le 26 janvier 2026"
+  },
+  "Appréciation du risque conduite": {
+   "en": "Risk assessment carried out",
+   "fr": "Appréciation du risque conduite"
+  },
+  "Apprécier son implication dans l'incidence": {
+   "en": "Assess your involvement in the impact",
+   "fr": "Apprécier son implication dans l'incidence"
+  },
+  "Après les recommandations de l'article #, paragraphe #, point d), remettre un rapport contenant un PLAN DE MESURES CORRECTIVES, conforme au calendrier fixé par le superviseur principal pour chaque recommandation, puis rendre compte de sa mise en œuvre.": {
+   "en": "After the recommendations of article #(#)(d), submit a report containing a REMEDIAL ACTION PLAN, in line with the timetable the lead overseer sets for each recommendation, then report on its implementation.",
+   "fr": "Après les recommandations de l'article 35, paragraphe 1, point d), remettre un rapport contenant un PLAN DE MESURES CORRECTIVES, conforme au calendrier fixé par le superviseur principal pour chaque recommandation, puis rendre compte de sa mise en œuvre."
+  },
+  "Architecture et flux": {
+   "en": "Architecture and flows",
+   "fr": "Architecture et flux"
+  },
+  "Art. # §# et annexe I — composant de sécurité d'un produit réglementé": {
+   "en": "Art. #(#) and Annex I — safety component of a regulated product",
+   "fr": "Art. 6 §1 et annexe I — composant de sécurité d'un produit réglementé"
+  },
+  "Art. # §# et annexe III — domaines à haut risque": {
+   "en": "Art. #(#) and Annex III — high-risk areas",
+   "fr": "Art. 6 §2 et annexe III — domaines à haut risque"
+  },
+  "Art. # §# — dérogation au haut risque": {
+   "en": "Art. #(#) — derogation from high risk",
+   "fr": "Art. 6 §3 — dérogation au haut risque"
+  },
+  "Art. # — obligations de transparence": {
+   "en": "Art. # — transparency obligations",
+   "fr": "Art. 50 — obligations de transparence"
+  },
+  "Article # du règlement (UE) #/#": {
+   "en": "Article # of Regulation (EU) #/#",
+   "fr": "Article 16 du règlement (UE) 2022/2554"
+  },
+  "Article # hors cybersécurité.": {
+   "en": "Article # outside cybersecurity.",
+   "fr": "Article 15 hors cybersécurité."
+  },
+  "Article # — Mesures de gestion des risques en matière de cybersécurité": {
+   "en": "Article # — Cybersecurity risk-management measures",
+   "fr": "Article 21 — Mesures de gestion des risques en matière de cybersécurité"
+  },
+  "Article # — Obligations de notification": {
+   "en": "Article # — Reporting obligations",
+   "fr": "Article 23 — Obligations de notification"
+  },
+  "Article # — c'est là que les scénarios de risque sont identifiés, estimés et évalués, et que vit le dossier de gestion des risques sur lequel les mesures de supervision sont calibrées.": {
+   "en": "Article # — this is where risk scenarios are identified, estimated and evaluated, and where the risk-management file on which the oversight measures are calibrated lives.",
+   "fr": "Article 9 — c'est là que les scénarios de risque sont identifiés, estimés et évalués, et que vit le dossier de gestion des risques sur lequel les mesures de supervision sont calibrées."
+  },
+  "Article # — la conception, la vérification et la modification des mesures de supervision, et la surveillance de leur efficacité après la mise sur le marché, relèvent de ce système.": {
+   "en": "Article # — the design, verification and modification of the oversight measures, and the monitoring of their effectiveness after they are placed on the market, come under this system.",
+   "fr": "Article 17 — la conception, la vérification et la modification des mesures de supervision, et la surveillance de leur efficacité après la mise sur le marché, relèvent de ce système."
+  },
+  "Article # — la journalisation sur laquelle s'appuie toute revue de supervision, y compris l'enregistrement des interventions.": {
+   "en": "Article # — the logging on which every oversight review rests, including the recording of interventions.",
+   "fr": "Article 12 — la journalisation sur laquelle s'appuie toute revue de supervision, y compris l'enregistrement des interventions."
+  },
+  "Article # — la notice d'utilisation, c'est-à-dire le véhicule par lequel les obligations qui dépendent du déploiement passent du fournisseur au déployeur.": {
+   "en": "Article # — the instructions for use, that is, the vehicle through which the obligations that depend on deployment pass from the provider to the deployer.",
+   "fr": "Article 13 — la notice d'utilisation, c'est-à-dire le véhicule par lequel les obligations qui dépendent du déploiement passent du fournisseur au déployeur."
+  },
+  "Article # — signalement des vulnérabilités activement exploitées et des incidents graves": {
+   "en": "Article # — reporting of actively exploited vulnerabilities and of severe incidents",
+   "fr": "Article 14 — signalement des vulnérabilités activement exploitées et des incidents graves"
+  },
+  "Article #(#) — première phrase": {
+   "en": "Article #(#) — first sentence",
+   "fr": "Article 11(1) — première phrase"
+  },
+  "Article #, paragraphe # ; règlement délégué (UE) #/#, article premier": {
+   "en": "Article #(#); Delegated Regulation (EU) #/#, article 1",
+   "fr": "Article 31, paragraphe 11 ; règlement délégué (UE) 2025/295, article premier"
+  },
+  "Article #, paragraphe # — l'autorité compétente peut écarter le report pour d'autres entités importantes ou systémiques. La décision est notifiée et ne vaut que pour les incidents déclarés après cette notification.": {
+   "en": "Article #(#) — the competent authority may set the deferral aside for other important or systemic entities. The decision is notified and applies only to incidents reported after that notification.",
+   "fr": "Article 5, paragraphe 6 — l'autorité compétente peut écarter le report pour d'autres entités importantes ou systémiques. La décision est notifiée et ne vaut que pour les incidents déclarés après cette notification."
+  },
+  "Article #, paragraphe # — le report ne s'applique pas à la notification initiale ni au rapport intermédiaire des établissements de crédit, des contreparties centrales, des plates-formes de négociation, ni des entités essentielles ou importantes au sens de l'article # de la directive (UE) #/#.": {
+   "en": "Article #(#) — the deferral does not apply to the initial notification or to the intermediate report of credit institutions, central counterparties, trading venues, or essential or important entities within the meaning of article # of Directive (EU) #/#.",
+   "fr": "Article 5, paragraphe 5 — le report ne s'applique pas à la notification initiale ni au rapport intermédiaire des établissements de crédit, des contreparties centrales, des plates-formes de négociation, ni des entités essentielles ou importantes au sens de l'article 3 de la directive (UE) 2022/2555."
+  },
+  "Article #, paragraphe #, dernier alinéa": {
+   "en": "Article #(#), last subparagraph",
+   "fr": "Article 30, paragraphe 3, dernier alinéa"
+  },
+  "Article #, paragraphe #, qui renvoie à l'acte d'exécution de l'article #, premier alinéa, point a) ii).": {
+   "en": "Article #(#), which refers to the implementing act of article #, first subparagraph, point (a)(ii).",
+   "fr": "Article 19, paragraphe 4, qui renvoie à l'acte d'exécution de l'article 20, premier alinéa, point a) ii)."
+  },
+  "Articles # et #, qui renvoient à des normes techniques.": {
+   "en": "Articles # and #, which refer to technical standards.",
+   "fr": "Articles 26 et 27, qui renvoient à des normes techniques."
+  },
+  "Articles # à # du règlement (UE) #/#": {
+   "en": "Articles # to # of Regulation (EU) #/#",
+   "fr": "Articles 5 à 15 du règlement (UE) 2022/2554"
+  },
+  "Articles # à # tenus": {
+   "en": "Clauses # to # met",
+   "fr": "Articles 4 à 10 tenus"
+  },
+  "Articles propres à l'IA": {
+   "en": "AI-specific clauses",
+   "fr": "Articles propres à l'IA"
+  },
+  "Assistance en cas d'incident lié aux TIC, sans frais supplémentaires ou à un coût déterminé à l'avance": {
+   "en": "Assistance in the event of an ICT-related incident, at no additional cost or at a cost determined in advance",
+   "fr": "Assistance en cas d'incident lié aux TIC, sans frais supplémentaires ou à un coût déterminé à l'avance"
+  },
+  "Assister le superviseur principal dans l'évaluation prévue à l'article #, paragraphe #, de DORA": {
+   "en": "Assisting the lead overseer in the assessment provided for in article #(#) of DORA",
+   "fr": "Assister le superviseur principal dans l'évaluation prévue à l'article 33, paragraphe 2, de DORA"
+  },
+  "Assister le superviseur principal dans la préparation du plan de supervision individuel annuel (DORA, article #, paragraphe #)": {
+   "en": "Assisting the lead overseer in preparing the annual individual oversight plan (DORA, article #(#))",
+   "fr": "Assister le superviseur principal dans la préparation du plan de supervision individuel annuel (DORA, article 33, paragraphe 4)"
+  },
+  "Assurance complète de la qualité (module H)": {
+   "en": "Full quality assurance (module H)",
+   "fr": "Assurance complète de la qualité (module H)"
+  },
+  "Assurance, sous-traitance, clause contractuelle. Le risque reste porté par l'organisme : le partage déplace la charge financière, pas la responsabilité.": {
+   "en": "Insurance, subcontracting, a contractual clause. The risk is still borne by the organisation: sharing moves the financial burden, not the responsibility.",
+   "fr": "Assurance, sous-traitance, clause contractuelle. Le risque reste porté par l'organisme : le partage déplace la charge financière, pas la responsabilité."
+  },
+  "Assurer la protection des réseaux et systèmes d'information, y compris en cas de recours à la sous-traitance": {
+   "en": "Ensuring the protection of network and information systems, including where subcontracting is used",
+   "fr": "Assurer la protection des réseaux et systèmes d'information, y compris en cas de recours à la sous-traitance"
+  },
+  "Assurer la réparation ou y coopérer": {
+   "en": "Provide remediation or co-operate in it",
+   "fr": "Assurer la réparation ou y coopérer"
+  },
+  "Assurer la réparation ou y coopérer, lorsqu'il y a lieu": {
+   "en": "Provide remediation or co-operate in it, where appropriate",
+   "fr": "Assurer la réparation ou y coopérer, lorsqu'il y a lieu"
+  },
+  "Assurer un niveau de sécurité approprié pour le stockage et le traitement des données non personnelles collectées": {
+   "en": "Ensuring an appropriate level of security for the storage and processing of the non-personal data collected",
+   "fr": "Assurer un niveau de sécurité approprié pour le stockage et le traitement des données non personnelles collectées"
+  },
+  "Atteinte durable à l'activité, aux personnes ou à la réputation ; survie de l'organisme en question.": {
+   "en": "Lasting harm to the business, to people or to reputation; the organisation's survival in question.",
+   "fr": "Atteinte durable à l'activité, aux personnes ou à la réputation ; survie de l'organisme en question."
+  },
+  "Atteintes aux droits civiques": {
+   "en": "Harms to civil rights",
+   "fr": "Atteintes aux droits civiques"
+  },
+  "Attentes vis-à-vis des relations d'affaires": {
+   "en": "Expectations on business relationships",
+   "fr": "Attentes vis-à-vis des relations d'affaires"
+  },
+  "Au moins deux occurrences en six mois": {
+   "en": "At least two occurrences in six months",
+   "fr": "Au moins deux occurrences en six mois"
+  },
+  "Au moins un scénario de risque a une latence d'intervention supérieure à son délai de réaction, sans consignation de l'impossibilité technique au dossier de gestion des risques. La supervision humaine n'y est pas une mesure de gestion des risques.": {
+   "en": "At least one risk scenario has an intervention latency longer than its reaction time, with no record of the technical impossibility in the risk-management file. Human oversight is not a risk-management measure there.",
+   "fr": "Au moins un scénario de risque a une latence d'intervention supérieure à son délai de réaction, sans consignation de l'impossibilité technique au dossier de gestion des risques. La supervision humaine n'y est pas une mesure de gestion des risques."
+  },
+  "Au moins un sous-critère de seuil n'est pas atteint. L'acte délégué C(#) # exige qu'ils le soient TOUS pour passer à l'étape # : la désignation ne peut pas aboutir en l'état.": {
+   "en": "At least one threshold sub-criterion is not met. Delegated act C(#) # requires them ALL to be met before moving to step #: the designation cannot go through as things stand.",
+   "fr": "Au moins un sous-critère de seuil n'est pas atteint. L'acte délégué C(2024) 896 exige qu'ils le soient TOUS pour passer à l'étape 2 : la désignation ne peut pas aboutir en l'état."
+  },
+  "Au moins une des quatre exclusions de l'article #, paragraphe #, s'applique. La désignation est fermée, quelle que soit la part de marché.": {
+   "en": "At least one of the four exclusions in article #(#) applies. The designation is closed, whatever the market share.",
+   "fr": "Au moins une des quatre exclusions de l'article 31, paragraphe 8, s'applique. La désignation est fermée, quelle que soit la part de marché."
+  },
+  "Au plus tard soixante-douze heures après la soumission de la notification initiale, même si rien n'a changé. Puis une mise à jour sans retard injustifié, et en tout état de cause lorsque les activités régulières ont repris.": {
+   "en": "Within seventy-two hours of the initial notification being submitted, even if nothing has changed. Then an update without undue delay, and in any event once regular activities have resumed.",
+   "fr": "Au plus tard soixante-douze heures après la soumission de la notification initiale, même si rien n'a changé. Puis une mise à jour sans retard injustifié, et en tout état de cause lorsque les activités régulières ont repris."
+  },
+  "Au plus tard un mois après la soumission du rapport intermédiaire ou de sa dernière mise à jour.": {
+   "en": "Within one month of the intermediate report, or of its latest update, being submitted.",
+   "fr": "Au plus tard un mois après la soumission du rapport intermédiaire ou de sa dernière mise à jour."
+  },
+  "Au sens de l'article # : l'État, les autorités régionales ou locales, les organismes de droit public, et leurs associations. Une entreprise publique n'en est pas un pour ce chapitre — l'article # §# a) l'exclut.": {
+   "en": "Within the meaning of Article #: the State, regional or local authorities, bodies governed by public law, and associations formed by them. A public undertaking is not one of them for this Chapter — Article #(#)(a) excludes it.",
+   "fr": "Au sens de l'article 2 : l'État, les autorités régionales ou locales, les organismes de droit public, et leurs associations. Une entreprise publique n'en est pas un pour ce chapitre — l'article 3 §2 a) l'exclut."
+  },
+  "Au-delà de ce niveau (vraisemblance × conséquence), le risque ne peut pas être simplement maintenu : il appelle un traitement.": {
+   "en": "Above this level (likelihood × consequence), the risk cannot simply be retained: it calls for treatment.",
+   "fr": "Au-delà de ce niveau (vraisemblance × conséquence), le risque ne peut pas être simplement maintenu : il appelle un traitement."
+  },
+  "Au-delà de la petite entreprise et en deçà des seuils de la grande entreprise, au sens de l'article #.": {
+   "en": "Above a small enterprise and below the large-enterprise thresholds, within the meaning of article #.",
+   "fr": "Au-delà de la petite entreprise et en deçà des seuils de la grande entreprise, au sens de l'article 3."
+  },
+  "Au-delà des seuils de la moyenne entreprise.": {
+   "en": "Above the medium-enterprise thresholds.",
+   "fr": "Au-delà des seuils de la moyenne entreprise."
+  },
+  "Aucun accord d'exclusivité ne restreint la réutilisation des données, hors les cas et durées que l'article autorise": {
+   "en": "No exclusivity agreement restricts the re-use of the data, outside the cases and durations the Article allows",
+   "fr": "Aucun accord d'exclusivité ne restreint la réutilisation des données, hors les cas et durées que l'article autorise"
+  },
+  "Aucun cas connu dans l'organisme ni dans son secteur ; exigerait un concours de circonstances.": {
+   "en": "No known case in the organisation or in its sector; it would take a combination of circumstances.",
+   "fr": "Aucun cas connu dans l'organisme ni dans son secteur ; exigerait un concours de circonstances."
+  },
+  "Aucun des écarts que ce module sait mesurer ne reste ouvert.": {
+   "en": "None of the gaps this module can measure is still open.",
+   "fr": "Aucun des écarts que ce module sait mesurer ne reste ouvert."
+  },
+  "Aucun indice n'est avancé à l'appui de la proposition.": {
+   "en": "No clue is put forward in support of the proposal.",
+   "fr": "Aucun indice n'est avancé à l'appui de la proposition."
+  },
+  "Aucun obstacle précommercial, commercial, technique, contractuel ou organisationnel n'empêche le client de changer de fournisseur, d'atteindre l'équivalence fonctionnelle, ou de résilier": {
+   "en": "No pre-commercial, commercial, technical, contractual or organisational obstacle prevents the customer from switching provider, achieving functional equivalence, or terminating",
+   "fr": "Aucun obstacle précommercial, commercial, technique, contractuel ou organisationnel n'empêche le client de changer de fournisseur, d'atteindre l'équivalence fonctionnelle, ou de résilier"
+  },
+  "Aucun prestataire critique ne paie moins de # # EUR par an, quel que soit son chiffre d'affaires.": {
+   "en": "No critical provider pays less than # # EUR a year, whatever its turnover.",
+   "fr": "Aucun prestataire critique ne paie moins de 50 000 EUR par an, quel que soit son chiffre d'affaires."
+  },
+  "Aucun recours à des moyens coercitifs ni exploitation de lacunes de l'infrastructure technique du détenteur pour obtenir l'accès": {
+   "en": "No use of coercive means, nor exploitation of gaps in the data holder's technical infrastructure, to obtain access",
+   "fr": "Aucun recours à des moyens coercitifs ni exploitation de lacunes de l'infrastructure technique du détenteur pour obtenir l'accès"
+  },
+  "Aucun transfert ni accès gouvernemental de pays tiers à des données non personnelles détenues dans l'Union n'est accordé hors des conditions de l'article # ; le client est informé": {
+   "en": "No third-country governmental transfer of, or access to, non-personal data held in the Union is granted outside the conditions of Article #; the customer is informed",
+   "fr": "Aucun transfert ni accès gouvernemental de pays tiers à des données non personnelles détenues dans l'Union n'est accordé hors des conditions de l'article 32 ; le client est informé"
+  },
+  "Aucun. L'autorité exerce ses pouvoirs de supervision sans avoir à établir un manquement préalable.": {
+   "en": "None. The authority exercises its oversight powers without having to establish a prior breach.",
+   "fr": "Aucun. L'autorité exerce ses pouvoirs de supervision sans avoir à établir un manquement préalable."
+  },
+  "Aucune approche n'est retenue pour cette exigence essentielle.": {
+   "en": "No approach is chosen for this essential requirement.",
+   "fr": "Aucune approche n'est retenue pour cette exigence essentielle."
+  },
+  "Aucune clause abusive au sens de l'article # n'est imposée unilatéralement à une autre entreprise": {
+   "en": "No unfair term within the meaning of Article # is unilaterally imposed on another undertaking",
+   "fr": "Aucune clause abusive au sens de l'article 13 n'est imposée unilatéralement à une autre entreprise"
+  },
+  "Aucune de ces qualités": {
+   "en": "None of these capacities",
+   "fr": "Aucune de ces qualités"
+  },
+  "Aucune des cinq catégories de l'article #, paragraphe #, n'est déclarée.": {
+   "en": "None of the five categories in article #(#) is declared.",
+   "fr": "Aucune des cinq catégories de l'article 16, paragraphe 1, n'est déclarée."
+  },
+  "Aucune des pratiques interdites par le §# : interface non neutre, profilage non convenu, transmission à un autre tiers, usage pour développer un produit concurrent, détournement contre la position commerciale de l'utilisateur": {
+   "en": "None of the practices prohibited by §#: a non-neutral interface, profiling not agreed upon, passing the data to another third party, use to develop a competing product, turning the data against the user's economic position",
+   "fr": "Aucune des pratiques interdites par le §2 : interface non neutre, profilage non convenu, transmission à un autre tiers, usage pour développer un produit concurrent, détournement contre la position commerciale de l'utilisateur"
+  },
+  "Aucune interface ne rend indûment difficile l'exercice des droits : pas de choix non neutre, pas d'atteinte à l'autonomie de décision": {
+   "en": "No interface makes the exercise of rights unduly difficult: no non-neutral choices, no impairment of decision-making autonomy",
+   "fr": "Aucune interface ne rend indûment difficile l'exercice des droits : pas de choix non neutre, pas d'atteinte à l'autonomie de décision"
+  },
+  "Aucune intervention humaine ne rentre dans ce délai, et l'impossibilité est consignée au dossier de gestion des risques. La supervision ne porte pas ce risque : d'autres mesures doivent le porter.": {
+   "en": "No human intervention fits within that deadline, and the impossibility is recorded in the risk-management file. Oversight does not carry this risk: other measures have to carry it.",
+   "fr": "Aucune intervention humaine ne rentre dans ce délai, et l'impossibilité est consignée au dossier de gestion des risques. La supervision ne porte pas ce risque : d'autres mesures doivent le porter."
+  },
+  "Aucune mesure de l'annexe A ne le rencontre. C'est un risque applicatif, et # est un système de management.": {
+   "en": "No Annex A control meets it. This is an application-level risk, and # is a management system.",
+   "fr": "Aucune mesure de l'annexe A ne le rencontre. C'est un risque applicatif, et 42001 est un système de management."
+  },
+  "Aucune mesure de supervision sélectionnée": {
+   "en": "No oversight measure selected",
+   "fr": "Aucune mesure de supervision sélectionnée"
+  },
+  "Aucune obligation du DGA ne s'invoque contre le RGPD : l'arbitrage est écrit d'avance.": {
+   "en": "No DGA obligation may be invoked against the GDPR: the arbitration is written in advance.",
+   "fr": "Aucune obligation du DGA ne s'invoque contre le RGPD : l'arbitrage est écrit d'avance."
+  },
+  "Aucune présomption, à aucune date": {
+   "en": "No presumption, at any date",
+   "fr": "Aucune présomption, à aucune date"
+  },
+  "Aucune tentative de réidentification, et notification à l'organisme de toute réidentification survenue": {
+   "en": "No attempt at re-identification, and notification to the body of any re-identification that occurred",
+   "fr": "Aucune tentative de réidentification, et notification à l'organisme de toute réidentification survenue"
+  },
+  "Audit d'étape # — mise en œuvre": {
+   "en": "Stage # audit — implementation",
+   "fr": "Audit d'étape 2 — mise en œuvre"
+  },
+  "Audit d'étape # — revue documentaire": {
+   "en": "Stage # audit — documentation review",
+   "fr": "Audit d'étape 1 — revue documentaire"
+  },
+  "Audit de la sécurité des systèmes d'information": {
+   "en": "Information system security audit",
+   "fr": "Audit de la sécurité des systèmes d'information"
+  },
+  "Audits ad hoc, notamment après un incident important": {
+   "en": "Ad hoc audits, in particular after a significant incident",
+   "fr": "Audits ad hoc, notamment après un incident important"
+  },
+  "Audits de surveillance": {
+   "en": "Surveillance audits",
+   "fr": "Audits de surveillance"
+  },
+  "Audits de sécurité ciblés, par un organisme indépendant ou l'autorité": {
+   "en": "Targeted security audits, by an independent body or by the authority",
+   "fr": "Audits de sécurité ciblés, par un organisme indépendant ou l'autorité"
+  },
+  "Audits de sécurité réguliers ET ciblés, par un organisme indépendant ou l'autorité": {
+   "en": "Regular AND targeted security audits, by an independent body or by the authority",
+   "fr": "Audits de sécurité réguliers ET ciblés, par un organisme indépendant ou l'autorité"
+  },
+  "Authentification à plusieurs facteurs, communications sécurisées": {
+   "en": "Multi-factor authentication, secured communications",
+   "fr": "Authentification à plusieurs facteurs, communications sécurisées"
+  },
+  "Auto-évaluable SI le fabricant applique intégralement les normes harmonisées, spécifications communes ou schémas de certification pertinents. Sinon, organisme notifié.": {
+   "en": "Self-assessable IF the manufacturer applies in full the relevant harmonised standards, common specifications or certification schemes. Otherwise, a notified body.",
+   "fr": "Auto-évaluable SI le fabricant applique intégralement les normes harmonisées, spécifications communes ou schémas de certification pertinents. Sinon, organisme notifié."
+  },
+  "Autoévaluation de la substituabilité de chaque service, et connaissance des autres prestataires capables de le rendre": {
+   "en": "Self-assessment of how substitutable each service is, and knowledge of the other providers able to deliver it",
+   "fr": "Autoévaluation de la substituabilité de chaque service, et connaissance des autres prestataires capables de le rendre"
+  },
+  "Autre spécification ou solution technique": {
+   "en": "Another specification or technical solution",
+   "fr": "Autre spécification ou solution technique"
+  },
+  "Autres matériels de transport": {
+   "en": "Other transport equipment",
+   "fr": "Autres matériels de transport"
+  },
+  "Autres règles de l'Union couvrant les mêmes risques à un niveau au moins équivalent": {
+   "en": "Other Union rules covering the same risks to at least an equivalent level",
+   "fr": "Autres règles de l'Union couvrant les mêmes risques à un niveau au moins équivalent"
+  },
+  "Autres éléments des systèmes, protocoles et outils visant à réduire au minimum l’incidence du risque lié aux TIC": {
+   "en": "Other elements of the systems, protocols and tools intended to minimise the impact of ICT risk",
+   "fr": "Autres éléments des systèmes, protocoles et outils visant à réduire au minimum l’incidence du risque lié aux TIC"
+  },
+  "Avant de coter, savoir ce qui est déjà produit. L'apprendre après revient à coter deux fois les mêmes articles.": {
+   "en": "Before scoring, know what is already produced. Learning it afterwards means scoring the same clauses twice.",
+   "fr": "Avant de coter, savoir ce qui est déjà produit. L'apprendre après revient à coter deux fois les mêmes articles."
+  },
+  "Avant de fournir le service. L'activité peut commencer dès la notification soumise (§#), sous réserve des conditions du chapitre III.": {
+   "en": "Before providing the service. The activity may begin as soon as the notification is submitted (§#), subject to the conditions of Chapter III.",
+   "fr": "Avant de fournir le service. L'activité peut commencer dès la notification soumise (§4), sous réserve des conditions du chapitre III."
+  },
+  "Avant la fourniture d'un service connexe, l'utilisateur reçoit les neuf informations du §#, dont l'identité du détenteur de données, le droit de réclamation et l'existence de secrets d'affaires": {
+   "en": "Before a related service is provided, the user receives the nine items of information in §#, including the identity of the data holder, the right to lodge a complaint and the existence of trade secrets",
+   "fr": "Avant la fourniture d'un service connexe, l'utilisateur reçoit les neuf informations du §3, dont l'identité du détenteur de données, le droit de réclamation et l'existence de secrets d'affaires"
+  },
+  "Avant la vente, la location ou le crédit-bail, l'utilisateur reçoit les quatre informations du §# : type, format et volume estimé ; génération en continu et en temps réel ; stockage et durée ; moyens d'accès, d'extraction et d'effacement": {
+   "en": "Before the sale, rent or lease, the user receives the four items of information in §#: type, format and estimated volume; continuous and real-time generation; storage and duration; means of access, retrieval and erasure",
+   "fr": "Avant la vente, la location ou le crédit-bail, l'utilisateur reçoit les quatre informations du §2 : type, format et volume estimé ; génération en continu et en temps réel ; stockage et durée ; moyens d'accès, d'extraction et d'effacement"
+  },
+  "Avantages financiers obtenus ou pertes évitées, s'ils sont établis de manière fiable": {
+   "en": "Financial benefits gained or losses avoided, where these are reliably established",
+   "fr": "Avantages financiers obtenus ou pertes évitées, s'ils sont établis de manière fiable"
+  },
+  "Avez-vous déterminé la durée de conservation, les capacités de filtrage et d'agrégation, les mécanismes de signalement, les fonctions de revue et la traçabilité entre chaque sortie, son entrée, sa revue et l'action corrective ?": {
+   "en": "Have you determined the retention period, the filtering and aggregation capabilities, the alerting mechanisms, the review functions and the traceability between each output, its input, its review and the corrective action?",
+   "fr": "Avez-vous déterminé la durée de conservation, les capacités de filtrage et d'agrégation, les mécanismes de signalement, les fonctions de revue et la traçabilité entre chaque sortie, son entrée, sa revue et l'action corrective ?"
+  },
+  "Avez-vous déterminé, pour CHAQUE scénario, le délai de réaction, en tenant compte de vos critères d'acceptabilité du risque ?": {
+   "en": "Have you determined, for EACH scenario, the reaction time, taking your risk acceptability criteria into account?",
+   "fr": "Avez-vous déterminé, pour CHAQUE scénario, le délai de réaction, en tenant compte de vos critères d'acceptabilité du risque ?"
+  },
+  "Avez-vous identifié, au niveau logique ou fonctionnel, les scénarios où une sortie du système peut conduire à un dommage et où la supervision humaine est nécessaire pour l'empêcher ou l'atténuer ?": {
+   "en": "Have you identified, at the logical or functional level, the scenarios where an output of the system can lead to harm and where human oversight is needed to prevent or mitigate it?",
+   "fr": "Avez-vous identifié, au niveau logique ou fonctionnel, les scénarios où une sortie du système peut conduire à un dommage et où la supervision humaine est nécessaire pour l'empêcher ou l'atténuer ?"
+  },
+  "Avez-vous lu les risques résiduels et les conditions d'utilisation de la notice, et les tenez-vous — ou avez-vous formellement accepté les risques que vous ne couvrez pas ?": {
+   "en": "Have you read the residual risks and the conditions of use in the instructions, and do you meet them — or have you formally accepted the risks you do not cover?",
+   "fr": "Avez-vous lu les risques résiduels et les conditions d'utilisation de la notice, et les tenez-vous — ou avez-vous formellement accepté les risques que vous ne couvrez pas ?"
+  },
+  "Avez-vous mis en œuvre CHAQUE mesure de supervision que la notice d'utilisation vous attribue, avec les moyens techniques, les procédures et l'organisation qu'elle spécifie ?": {
+   "en": "Have you implemented EVERY oversight measure the instructions for use assign to you, with the technical means, the procedures and the organisation they specify?",
+   "fr": "Avez-vous mis en œuvre CHAQUE mesure de supervision que la notice d'utilisation vous attribue, avec les moyens techniques, les procédures et l'organisation qu'elle spécifie ?"
+  },
+  "Avez-vous reçu de votre fournisseur une notice d'utilisation qui porte ces informations de supervision — et, si elle est muette sur l'un des points, l'avez-vous réclamé par écrit ?": {
+   "en": "Have you received from your provider instructions for use that carry this oversight information — and, where they are silent on one of the points, have you asked for it in writing?",
+   "fr": "Avez-vous reçu de votre fournisseur une notice d'utilisation qui porte ces informations de supervision — et, si elle est muette sur l'un des points, l'avez-vous réclamé par écrit ?"
+  },
+  "Avez-vous sélectionné au moins une mesure par scénario, vérifié qu'elles sont COLLECTIVEMENT suffisantes pour permettre l'intervention dans le délai, et documenté ce choix au dossier de gestion des risques ?": {
+   "en": "Have you selected at least one measure per scenario, checked that they are COLLECTIVELY sufficient to allow intervention within the deadline, and documented that choice in the risk-management file?",
+   "fr": "Avez-vous sélectionné au moins une mesure par scénario, vérifié qu'elles sont COLLECTIVEMENT suffisantes pour permettre l'intervention dans le délai, et documenté ce choix au dossier de gestion des risques ?"
+  },
+  "Avez-vous testé si vos mesures maintiennent l'acceptation passive dans des limites acceptables — par exemple en présentant à des personnes représentatives un mélange de sorties correctes et volontairement erronées, et en mesurant ce qui passe ?": {
+   "en": "Have you tested whether your measures keep passive acceptance within acceptable bounds — for instance by presenting representative people with a mix of correct and deliberately wrong outputs, and measuring what gets through?",
+   "fr": "Avez-vous testé si vos mesures maintiennent l'acceptation passive dans des limites acceptables — par exemple en présentant à des personnes représentatives un mélange de sorties correctes et volontairement erronées, et en mesurant ce qui passe ?"
+  },
+  "Avez-vous vérifié que les personnes désignées accomplissent les tâches de supervision clés DANS le délai de réaction, avec des critères d'acceptation définis et des résultats consignés dans la documentation technique ?": {
+   "en": "Have you checked that the designated persons carry out the key oversight tasks WITHIN the reaction time, with defined acceptance criteria and results recorded in the technical documentation?",
+   "fr": "Avez-vous vérifié que les personnes désignées accomplissent les tâches de supervision clés DANS le délai de réaction, avec des critères d'acceptation définis et des résultats consignés dans la documentation technique ?"
+  },
+  "Avez-vous vérifié que les personnes désignées repèrent les sorties incorrectes ou dangereuses et agissent DANS le délai de réaction, défini des critères d'acceptation, traité les écarts avant la mise sur le marché, et prévu comment la revue se poursuit si l'interface principale ou la journalisation tombe ?": {
+   "en": "Have you checked that the designated persons spot incorrect or hazardous outputs and act WITHIN the reaction time, defined acceptance criteria, dealt with the gaps before placing on the market, and planned how the review carries on if the main interface or the logging fails?",
+   "fr": "Avez-vous vérifié que les personnes désignées repèrent les sorties incorrectes ou dangereuses et agissent DANS le délai de réaction, défini des critères d'acceptation, traité les écarts avant la mise sur le marché, et prévu comment la revue se poursuit si l'interface principale ou la journalisation tombe ?"
+  },
+  "Avez-vous vérifié, par les méthodes que la notice recommande, que chaque mesure tourne bien chez vous ET qu'elle produit l'effet attendu, au regard des critères de performance qu'elle donne ?": {
+   "en": "Have you checked, by the methods the instructions recommend, that each measure does run on your side AND that it produces the expected effect, against the performance criteria they give?",
+   "fr": "Avez-vous vérifié, par les méthodes que la notice recommande, que chaque mesure tourne bien chez vous ET qu'elle produit l'effet attendu, au regard des critères de performance qu'elle donne ?"
+  },
+  "Avez-vous établi, par écrit, quelles exigences réglementaires s'appliquent à chacun de vos systèmes d'IA ?": {
+   "en": "Have you established, in writing, which regulatory requirements apply to each of your AI systems?",
+   "fr": "Avez-vous établi, par écrit, quelles exigences réglementaires s'appliquent à chacun de vos systèmes d'IA ?"
+  },
+  "Biais nuisibles et homogénéisation": {
+   "en": "Harmful bias and homogenisation",
+   "fr": "Biais nuisibles et homogénéisation"
+  },
+  "C'EST LA SOURCE. La qualification assistée, le FinOps et l'Empreinte ne tiennent aucun inventaire à eux : ils lisent celui-ci.": {
+   "en": "THIS IS THE SOURCE. Assisted qualification, FinOps and the footprint keep no inventory of their own: they read this one.",
+   "fr": "C'EST LA SOURCE. La qualification assistée, le FinOps et l'Empreinte ne tiennent aucun inventaire à eux : ils lisent celui-ci."
+  },
+  "C'est ce que le score compte, et ce que le plan d'action reprend ligne par ligne.": {
+   "en": "This is what the score counts, and what the action plan takes up line by line.",
+   "fr": "C'est ce que le score compte, et ce que le plan d'action reprend ligne par ligne."
+  },
+  "C'est ce qui sépare une évolution prévue d'une modification substantielle qui rouvre l'évaluation de conformité.": {
+   "en": "This is what separates a planned change from a substantial modification that reopens the conformity assessment.",
+   "fr": "C'est ce qui sépare une évolution prévue d'une modification substantielle qui rouvre l'évaluation de conformité."
+  },
+  "C'est l'alinéa #(#) du règlement : la vérification séparée par au moins deux personnes. « Techniquement » veut dire que la procédure ne suffit pas.": {
+   "en": "This is subparagraph #(#) of the Regulation: separate verification by at least two persons. « Technically » means that a procedure is not enough.",
+   "fr": "C'est l'alinéa 14(5) du règlement : la vérification séparée par au moins deux personnes. « Techniquement » veut dire que la procédure ne suffit pas."
+  },
+  "C'est l'alinéa #(#)(b) du règlement. Une personne qui valide tout par habitude n'est pas une mesure de gestion des risques, même si elle clique.": {
+   "en": "This is subparagraph #(#)(b) of the Regulation. A person who approves everything out of habit is not a risk-management measure, even if they click.",
+   "fr": "C'est l'alinéa 14(4)(b) du règlement. Une personne qui valide tout par habitude n'est pas une mesure de gestion des risques, même si elle clique."
+  },
+  "C'est l'alinéa #(#)(c). Un score de confiance qu'on ne sait pas lire n'aide personne, et des compétences supposées mais non déclarées ne seront pas recrutées.": {
+   "en": "This is subparagraph #(#)(c). A confidence score nobody knows how to read helps no one, and competences that are assumed but not declared will not be hired.",
+   "fr": "C'est l'alinéa 14(4)(c). Un score de confiance qu'on ne sait pas lire n'aide personne, et des compétences supposées mais non déclarées ne seront pas recrutées."
+  },
+  "C'est l'alinéa #(#)(d) et (e). Sans fonction d'intervention, la supervision se réduit à regarder.": {
+   "en": "This is subparagraph #(#)(d) and (e). Without an intervention function, oversight comes down to watching.",
+   "fr": "C'est l'alinéa 14(4)(d) et (e). Sans fonction d'intervention, la supervision se réduit à regarder."
+  },
+  "C'est l'alinéa (f) de l'article #(#), et il renvoie à l'article # : l'ensemble de la gouvernance des jeux de données.": {
+   "en": "This is subparagraph (f) of article #(#), and it refers to article #: the whole governance of the data sets.",
+   "fr": "C'est l'alinéa (f) de l'article 17(1), et il renvoie à l'article 10 : l'ensemble de la gouvernance des jeux de données."
+  },
+  "C'est l'alinéa (j) de l'article #(#). Le jour d'un incident grave, c'est le seul chemin qui compte.": {
+   "en": "This is subparagraph (j) of article #(#). On the day of a serious incident, it is the only path that counts.",
+   "fr": "C'est l'alinéa (j) de l'article 17(1). Le jour d'un incident grave, c'est le seul chemin qui compte."
+  },
+  "C'est l'alinéa (l) de l'article #(#). Un modèle de fondation acheté sur étagère en fait partie.": {
+   "en": "This is subparagraph (l) of article #(#). A foundation model bought off the shelf is part of it.",
+   "fr": "C'est l'alinéa (l) de l'article 17(1). Un modèle de fondation acheté sur étagère en fait partie."
+  },
+  "C'est l'arithmétique du module : une approche « autre » sans justification ni preuve objective plafonne le score, parce que la norme elle-même l'exige au #.": {
+   "en": "This is the module's arithmetic: an « other » approach with no justification and no objective evidence caps the score, because the standard itself requires them at #.",
+   "fr": "C'est l'arithmétique du module : une approche « autre » sans justification ni preuve objective plafonne le score, parce que la norme elle-même l'exige au 4.4.3.2.2."
+  },
+  "C'est l'artefact que l'auditeur ouvre en premier.": {
+   "en": "This is the artefact the auditor opens first.",
+   "fr": "C'est l'artefact que l'auditeur ouvre en premier."
+  }
+ }
+}

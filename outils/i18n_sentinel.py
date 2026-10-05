@@ -57,6 +57,12 @@ from sentinel_i18n import aplanir, normaliser  # noqa: E402
 
 DOSSIER = sentinel_i18n.DOSSIER
 CATALOGUE = os.path.join(DOSSIER, 'CATALOGUE.json')
+#: CE QUI N'A RIEN À TRADUIRE, DÉCLARÉ CLÉ PAR CLÉ AVEC SA RAISON. Le
+#: catalogue relève tout ce que l'écran montre ; une partie de ce qu'il montre
+#: est une citation d'un texte anglais, un nom propre, un identifiant ou une
+#: valeur. Compter ces clés comme du travail en attente rendait le plancher de
+#: SEUIL_COUVERTURE inatteignable — et un plancher inatteignable ne garde rien.
+SANS_TRADUCTION = os.path.join(DOSSIER, 'SANS_TRADUCTION.json')
 A_TRADUIRE = os.path.join(DOSSIER, 'a_traduire')
 PAGE_JS = os.path.join(RACINE, 'sentinel.page.js')
 
@@ -146,6 +152,18 @@ def ecrire_json(chemin, obj):
         os.makedirs(d)
     with io.open(chemin, 'w', encoding='utf-8') as f:
         f.write(texte)
+
+
+def lire_sans_traduction(chemin=None):
+    """{clé: raison} — vide si le fichier n'est pas là, ce qui rend la mesure
+    PLUS exigeante et jamais moins."""
+    chemin = SANS_TRADUCTION if chemin is None else chemin
+    try:
+        d = charger_json(chemin)
+    except (OSError, ValueError):
+        return {}
+    cles = d.get('cles') if isinstance(d, dict) else None
+    return cles if isinstance(cles, dict) else {}
 
 
 def charger_catalogue(chemin=None):
@@ -731,7 +749,7 @@ def cmd_verifier(args):
 #  COUVERTURE — ce qui est traduit, ce qui manque, page par page
 # ══════════════════════════════════════════════════════════════════════════
 
-def couverture(cat, dico):
+def couverture(cat, dico, sans_traduction=None):
     """{'pages': {page: {mots, couverts, entrees, traduites, manquantes}},
     'global': {...}}. Une entrée est couverte si sa clé est au dictionnaire
     servi (les attributs dans « texte ») avec une valeur non vide. Une entrée
@@ -750,6 +768,11 @@ def couverture(cat, dico):
     #  motifs, et la mesure ne doit donc pas le faire non plus.
     _motifs = sentinel_i18n.motifs_compiles(dico.get('motif') or {})
     _texte = dico.get('texte') or {}
+    #  ET CE QUI N'A RIEN À TRADUIRE, qui compte comme couvert : une citation
+    #  anglaise, un nom propre, un identifiant, une valeur. Chaque clé est
+    #  déclarée avec sa raison dans i18n/sentinel/SANS_TRADUCTION.json, et une
+    #  règle éprouve la table — on ne peut pas y garer du français.
+    _sans = sans_traduction if sans_traduction is not None else lire_sans_traduction()
     for regime in ('bloc', 'texte', 'attr'):
         d = dico.get(dico_de(regime)) or {}
         for cle, ent in cat[regime].items():
@@ -757,6 +780,8 @@ def couverture(cat, dico):
             if not ok and regime != 'bloc' and _motifs:
                 par_motif = sentinel_i18n.motif_traduire(cle, _motifs, _texte)
                 ok = bool(par_motif and par_motif.strip())
+            if not ok and cle in _sans:
+                ok = True
             m = ent.get('mots', compter_mots(ent['fr']))
             cibles = [glob_] + [pages.setdefault(p, {'mots': 0, 'couverts': 0, 'entrees': 0, 'traduites': 0, 'manquantes': []})
                                 for p in ent.get('pages') or ['_sans_page']]
@@ -808,7 +833,7 @@ def _slug(s):
     return re.sub(r'-+', '-', re.sub(r'[^A-Za-z0-9]+', '-', s)).strip('-').lower() or 'autre'
 
 
-def decouper_lots(cat, taille=2500, rubriques=None, dico=None):
+def decouper_lots(cat, taille=2500, rubriques=None, dico=None, sans=None):
     """Les lots de travail : [{nom, rubrique, rubriques, pages, mots, texte,
     bloc}]. Chaque entrée va dans la rubrique de sa PREMIÈRE page.
       · UNE RUBRIQUE PLUS LOURDE QU'UN LOT est coupée en parts ÉGALES (et non
@@ -820,13 +845,23 @@ def decouper_lots(cat, taille=2500, rubriques=None, dico=None):
         seule, et une rubrique n'est jamais coupée pour remplir un lot.
     Les pages hors menu (« _coquille », « _js », « _routes ») ne sont pas
     des rubriques : elles ne se regroupent avec rien. Avec `dico`, les entrées déjà traduites sont
-    laissées de côté."""
+    laissées de côté.
+
+    ET CE QUI N'A RIEN À TRADUIRE N'ENTRE PAS DANS L'INBOX. Les fichiers de
+    travail sont les ENTRÉES DES TRADUCTEURS : une citation d'un texte
+    anglais, un nom propre, un identifiant ou une valeur n'y a pas sa place,
+    et y laisser une case vide à côté ferait croire à du travail en attente.
+    Les clés déclarées dans i18n/sentinel/SANS_TRADUCTION.json sont donc
+    laissées de côté comme celles qui sont déjà traduites."""
     rubriques = cat.get('rubriques') or rubriques or {}
+    sans = lire_sans_traduction() if sans is None else sans
     par_rubrique = {}
     for regime in ('bloc', 'texte', 'attr'):
         d = (dico or {}).get(dico_de(regime)) or {}
         for cle, ent in cat[regime].items():
             if dico is not None and (d.get(cle) or '').strip():
+                continue
+            if cle in sans:
                 continue
             #  UN ATTRIBUT DONT LA CLÉ EST AUSSI UN TEXTE est la même entrée
             #  pour la route (les deux se cherchent dans « texte ») : une

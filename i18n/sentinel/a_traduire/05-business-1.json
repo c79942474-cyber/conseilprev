@@ -1,6 +1,6 @@
 {
  "_lot": "05-business-1",
- "_mots": 2381,
+ "_mots": 2384,
  "_pages": [
   "adoption",
   "benchmark",
@@ -142,7 +142,7 @@
   },
   "# secteur(s) avec données réelles": {
    "en": "# sector(s) with actual data",
-   "fr": "3 secteur(s) avec données réelles"
+   "fr": "1 secteur(s) avec données réelles"
   },
   ", qui seul détermine le niveau de risque et les obligations exactes.": {
    "en": ", which alone determines the risk level and the exact obligations.",
@@ -376,6 +376,10 @@
    "en": "Measure",
    "fr": "Mesurer"
   },
+  "Moyenne Finance / Banque / Assurance": {
+   "en": "Medium-sized Finance / Banking / Insurance",
+   "fr": "Moyenne Finance / Banque / Assurance"
+  },
   "Moyenne Services professionnels, scientifiques et techniques": {
    "en": "Average — professional, scientific and technical services",
    "fr": "Moyenne Services professionnels, scientifiques et techniques"
@@ -608,10 +612,6 @@
    "en": "measure before scaling up",
    "fr": "mesurer avant de généraliser"
   },
-  "null%": {
-   "en": "null%",
-   "fr": "null%"
-  },
   "pas": {
    "en": "not",
    "fr": "pas"
@@ -726,7 +726,7 @@
   },
   "● VOUS (# syst.)": {
    "en": "● YOU (# syst.)",
-   "fr": "● VOUS (1 syst.)"
+   "fr": "● VOUS (2187 syst.)"
   },
   "⚡ Énergie / Utilities": {
    "en": "⚡ Energy / Utilities",

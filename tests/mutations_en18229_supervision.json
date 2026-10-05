@@ -1,308 +1,308 @@
 {
- "cibles": [
-  "tests/test_en18229_supervision.py"
- ],
- "mutations": [
-  {
-   "nom": "l'ordre des gardes s'inverse : la latence se juge avant le délai",
-   "fichier": "en18229_3.py",
-   "avant": "    if delai is None:\n        r[\"etat\"] = \"sans_delai\"",
-   "apres": "    if delai is None and False:\n        r[\"etat\"] = \"sans_delai\"",
-   "regle": "test_l_ORDRE_DES_GARDES_est_celui_de_la_norme[d0-sans_delai]"
-  },
-  {
-   "nom": "un scénario sans mesure passe la garde du 5.2.3",
-   "fichier": "en18229_3.py",
-   "avant": "    if not cats:\n        r[\"etat\"] = \"sans_mesure\"",
-   "apres": "    if not cats and False:\n        r[\"etat\"] = \"sans_mesure\"",
-   "regle": "test_l_ORDRE_DES_GARDES_est_celui_de_la_norme[d1-sans_mesure]"
-  },
-  {
-   "nom": "la latence non déclarée cesse d'être signalée",
-   "fichier": "en18229_3.py",
-   "avant": "    if latence is None:\n        r[\"etat\"] = \"sans_latence\"",
-   "apres": "    if latence is None and False:\n        r[\"etat\"] = \"sans_latence\"",
-   "regle": "test_l_ORDRE_DES_GARDES_est_celui_de_la_norme[d2-sans_latence]"
-  },
-  {
-   "nom": "une durée négative devient une durée",
-   "fichier": "en18229_3.py",
-   "avant": "    if n is None or n < 0:",
-   "apres": "    if n is None:",
-   "regle": "test_les_unites_se_ramenent_en_millisecondes_et_une_case_VIDE_n_est_PAS_zero"
-  },
-  {
-   "nom": "la virgule décimale française redevient un point",
-   "fichier": "en18229_3.py",
-   "avant": "                else (\"%.1f\" % v).replace(\".\", \",\")",
-   "apres": "                else (\"%.1f\" % v)",
-   "regle": "test_une_duree_se_lit_avec_LA_VIRGULE_decimale_francaise"
-  },
-  {
-   "nom": "le conseil propose de relever une catégorie déjà au maximum",
-   "fichier": "en18229_3.py",
-   "avant": "    if r[\"rang\"] < 3:",
-   "apres": "    if r[\"rang\"] <= 3:",
-   "regle": "test_quand_la_categorie_la_PLUS_RAPIDE_est_deja_prise_le_conseil_CHANGE"
-  },
-  {
-   "nom": "un lot de catégories cote sur la plus LENTE",
-   "fichier": "en18229_3.py",
-   "avant": "    return max(rangs) if rangs else 0",
-   "apres": "    return min(rangs) if rangs else 0",
-   "regle": "test_le_RANG_d_un_lot_de_categories_est_celui_de_la_plus_rapide"
-  },
-  {
-   "nom": "le conseil chiffré perd son dépassement",
-   "fichier": "en18229_3.py",
-   "avant": "                           % (r[\"depassement_dit\"],\n                              \" ou \".join(sorted(plus_rapide))))",
-   "apres": "                           % (\"\",\n                              \" ou \".join(sorted(plus_rapide))))",
-   "regle": "test_le_conseil_d_un_scenario_qui_NE_TIENT_PAS_est_CHIFFRE_et_nomme_la_sortie"
-  },
-  {
-   "nom": "le déployeur reçoit les questions de conception du fournisseur",
-   "fichier": "en18229_3.py",
-   "avant": "        if role not in ex[\"role\"]:\n            continue",
-   "apres": "        if False:\n            continue",
-   "regle": "test_le_deployeur_n_est_PAS_note_sur_la_conception"
-  },
-  {
-   "nom": "les neuf exigences de l'IBD s'appliquent à tout le monde",
-   "fichier": "en18229_3.py",
-   "avant": "        if ex[\"si\"] == \"rbi\" and not rbi:\n            continue\n        if ex[\"si\"] == \"pas_de_notification_fournisseur\"",
-   "apres": "        if ex[\"si\"] == \"rbi\" and not rbi and False:\n            continue\n        if ex[\"si\"] == \"pas_de_notification_fournisseur\"",
-   "regle": "test_les_NEUF_exigences_du_5_point_8_ne_s_appliquent_QU_A_L_IBD"
-  },
-  {
-   "nom": "la question du 5.4.3 est posée même au fournisseur qui notifie",
-   "fichier": "en18229_3.py",
-   "avant": "        if ex[\"si\"] == \"pas_de_notification_fournisseur\" \\\n                and notifications_fournisseur:",
-   "apres": "        if ex[\"si\"] == \"pas_de_notification_fournisseur\" \\\n                and not notifications_fournisseur:",
-   "regle": "test_l_exigence_du_5_point_4_point_3_n_existe_QUE_si_le_fournisseur_ne_notifie_PAS"
-  },
-  {
-   "nom": "le rôle le plus FORT commande le taux retenu",
-   "fichier": "en18229_3.py",
-   "avant": "    commande = min(roles, key=lambda r: par_role[r][\"taux\"])",
-   "apres": "    commande = max(roles, key=lambda r: par_role[r][\"taux\"])",
-   "regle": "test_le_taux_retenu_est_celui_du_ROLE_LE_PLUS_FAIBLE_et_il_est_nomme"
-  },
-  {
-   "nom": "le moteur rend un taux sans qu'aucun rôle soit endossé",
-   "fichier": "en18229_3.py",
-   "avant": "        return {\"ok\": False, \"motif\": \"aucun_role_declare\",",
-   "apres": "        return {\"ok\": True, \"motif\": \"aucun_role_declare\",",
-   "regle": "test_SANS_ROLE_declare_le_moteur_REFUSE_de_rendre_un_taux"
-  },
-  {
-   "nom": "une question sans réponse compte comme un non",
-   "fichier": "en18229_3.py",
-   "avant": "    if isinstance(r, str) and r.strip().lower() in (\"partiel\", \"partiellement\"):\n        return VALEURS[\"partiel\"]\n    return None",
-   "apres": "    if isinstance(r, str) and r.strip().lower() in (\"partiel\", \"partiellement\"):\n        return VALEURS[\"partiel\"]\n    return 0.0",
-   "regle": "test_une_question_SANS_REPONSE_n_est_pas_un_NON"
-  },
-  {
-   "nom": "le plafond retenu devient le plus HAUT des verrous",
-   "fichier": "en18229_3.py",
-   "avant": "    plafond = min([v[\"plafond\"] for v in verrous], default=100)",
-   "apres": "    plafond = max([v[\"plafond\"] for v in verrous], default=100)",
-   "regle": "test_un_VERROU_ne_retire_PAS_de_points_il_POSE_un_plafond"
-  },
-  {
-   "nom": "le verrou arithmétique frappe aussi le déployeur",
-   "fichier": "en18229_3.py",
-   "avant": "    if role == \"fournisseur\":\n        casses = [s for s in (scenarios or [])",
-   "apres": "    if role or True:\n        casses = [s for s in (scenarios or [])",
-   "regle": "test_le_verrou_ARITHMETIQUE_ne_frappe_QUE_le_fournisseur"
-  },
-  {
-   "nom": "« 1 scénarios » : le pluriel ne suit plus le nombre",
-   "fichier": "en18229_3.py",
-   "avant": "% (len(casses), \"s\" if len(casses) > 1 else \"\",",
-   "apres": "% (len(casses), \"s\",",
-   "regle": "test_l_accord_du_verrou_arithmetique_SUIT_le_nombre_de_scenarios"
-  },
-  {
-   "nom": "« 1 scénario ont une latence » : le verbe ne suit plus",
-   "fichier": "en18229_3.py",
-   "avant": "                          \"ont\" if len(casses) > 1 else \"a\",",
-   "apres": "                          \"ont\",",
-   "regle": "test_l_accord_du_verrou_arithmetique_SUIT_le_nombre_de_scenarios"
-  },
-  {
-   "nom": "la documentation de l'IBD est demandée à tous",
-   "fichier": "en18229_3.py",
-   "avant": "        if si == \"rbi\" and not rbi:\n            continue",
-   "apres": "        if si == \"rbi\" and not rbi and False:\n            continue",
-   "regle": "test_la_documentation_exigee_SUIT_le_systeme_et_ne_liste_PAS_quatorze_lignes"
-  },
-  {
-   "nom": "l'alinéa 14(5) est déclaré non couvert hors identification biométrique",
-   "fichier": "en18229_3.py",
-   "avant": "        if alinea in ZA_RBI and not rbi:",
-   "apres": "        if alinea in ZA_RBI and not rbi and False:",
-   "regle": "test_l_alinea_14_5_est_SANS_OBJET_hors_identification_biometrique"
-  },
-  {
-   "nom": "un « non » ne découvre plus l'alinéa qu'il porte",
-   "fichier": "en18229_3.py",
-   "avant": "        if manquantes:\n            etat, dit = \"non_couvert\"",
-   "apres": "        if manquantes and False:\n            etat, dit = \"non_couvert\"",
-   "regle": "test_un_alinea_de_l_article_14_est_COUVERT_ou_il_ne_l_est_PAS"
-  },
-  {
-   "nom": "un point verrouillé est compté deux fois dans le plan",
-   "fichier": "en18229_3.py",
-   "avant": "        if ex[\"cle\"] in cles_verrouillees:\n            continue",
-   "apres": "        if ex[\"cle\"] in cles_verrouillees and False:\n            continue",
-   "regle": "test_le_plan_met_les_VERROUS_EN_TETE_et_pas_dans_l_ordre_des_paragraphes"
-  },
-  {
-   "nom": "un scénario cassé n'entre plus dans le plan",
-   "fichier": "en18229_3.py",
-   "avant": "        if sc.get(\"etat\") in (\"tient\", \"impossible_consignee\"):",
-   "apres": "        if sc.get(\"etat\") in (\"tient\", \"impossible_consignee\", \"impossible_non_consignee\"):",
-   "regle": "test_un_scenario_CASSE_entre_dans_le_plan_a_l_etape_ou_il_se_repare"
-  },
-  {
-   "nom": "le taux du référentiel se déclare certifiable",
-   "fichier": "en18229_3.py",
-   "avant": "        \"certifiable\": False,\n        \"article_14\":",
-   "apres": "        \"certifiable\": True,\n        \"article_14\":",
-   "regle": "test_le_taux_du_referentiel_PORTE_sa_reserve_et_ne_se_certifie_PAS"
-  },
-  {
-   "nom": "une exigence reçoit un champ qui peut porter du texte normatif",
-   "fichier": "en18229_3.py",
-   "avant": "    return {\"cle\": cle, \"clause\": clause, \"titre\": titre, \"role\": role,",
-   "apres": "    return {\"cle\": cle, \"clause\": clause, \"titre\": titre, \"role\": role,\n            \"texte\": titre,",
-   "regle": "test_une_exigence_ne_porte_QUE_les_champs_declares"
-  },
-  {
-   "nom": "une question reprend huit mots du texte normatif",
-   "fichier": "en18229_3.py",
-   "avant": "       \"sait-elle à tout instant si elle peut encore écraser une sortie, \"\n       \"couper le système ou le remettre à zéro ?\",",
-   "apres": "       \"et à la disponibilité des fonctions d'écrasement, d'arrêt et de \"\n       \"réinitialisation ?\",",
-   "regle": "test_AUCUNE_suite_de_huit_mots_du_module_n_est_dans_le_texte_de_la_norme"
-  },
-  {
-   "nom": "la couleur du tiroir se sépare de la feuille de style",
-   "fichier": "conformite.py",
-   "avant": "    \"en18229_3\":   \"#00323C\",   # pétrole",
-   "apres": "    \"en18229_3\":   \"#0A3C48\",   # pétrole",
-   "regle": "test_la_barre_porte_le_tiroir_de_la_norme_a_SA_couleur"
-  },
-  {
-   "nom": "les deux normes de l'IA cessent de se toucher dans la barre",
-   "fichier": "conformite.py",
-   "avant": "ORDRE_BARRE = (\"rgpd\", \"iso27001\", \"iso42001\", \"en18229_3\", \"en18286\",\n               \"dora\", \"nis2\",\n               \"cra\", \"nist_ai_rmf\", \"owasp_llm\", \"nist_800_53\",\n               \"nist_800_82\", \"ocde\")",
-   "apres": "ORDRE_BARRE = (\"rgpd\", \"iso27001\", \"iso42001\", \"en18286\",\n               \"dora\", \"nis2\",\n               \"cra\", \"nist_ai_rmf\", \"owasp_llm\", \"nist_800_53\",\n               \"nist_800_82\", \"ocde\", \"en18229_3\")",
-   "regle": "test_les_DEUX_normes_de_l_IA_se_touchent_dans_la_barre"
-  },
-  {
-   "nom": "le verrou ne dit plus sur quelle latence il repose",
-   "fichier": "conformite.py",
-   "avant": "         \"calcul\": \"la latence d'intervention déclarée du scénario (5.7.1) \"",
-   "apres": "         \"calcul\": \"le rapprochement des deux nombres du scénario (5.7.1) \"",
-   "regle": "test_le_verrou_d_une_norme_NON_CERTIFIABLE_est_fonde_sur_l_ARITHMETIQUE"
-  },
-  {
-   "nom": "la réserve de présomption cesse de dire qu'il n'y en a aucune",
-   "fichier": "conformite.py",
-   "avant": "                \"le tenir n'ouvre aucune présomption de conformité à \"",
-   "apres": "                \"le tenir vaut travail de conformité à \"",
-   "regle": "test_la_norme_porte_une_RESERVE_de_presomption_dans_le_taux"
-  },
-  {
-   "nom": "le bloc du score devient un bloc de saisie",
-   "fichier": "parcours_normes.py",
-   "avant": "        _b(\"score\", \"en18229-score\", \"Score et article 14\", \"lecture\",",
-   "apres": "        _b(\"score\", \"en18229-score\", \"Score et article 14\", \"saisie\",",
-   "regle": "test_les_QUATRE_blocs_du_parcours_declarent_leurs_PREREQUIS"
-  },
-  {
-   "nom": "le bloc des scénarios perd son prérequis de rôle",
-   "fichier": "parcours_normes.py",
-   "avant": "           \"l'impossibilité technique plafonne le score — aucune réponse au \"\n           \"questionnaire ne lève ce verrou.\",\n           prerequis=(\"role\",)),",
-   "apres": "           \"l'impossibilité technique plafonne le score — aucune réponse au \"\n           \"questionnaire ne lève ce verrou.\"),",
-   "regle": "test_les_QUATRE_blocs_du_parcours_declarent_leurs_PREREQUIS"
-  },
-  {
-   "nom": "le rail déclare le rôle rempli alors qu'aucun n'est endossé",
-   "fichier": "parcours_normes.py",
-   "avant": "    if not roles:\n        manque.setdefault(\"role\", []).append(\n            _q(\"Choisissez votre rôle",
-   "apres": "    if not roles and False:\n        manque.setdefault(\"role\", []).append(\n            _q(\"Choisissez votre rôle",
-   "regle": "test_le_rail_de_la_norme_se_remplit_bloc_par_bloc_sur_une_VRAIE_declaration"
-  },
-  {
-   "nom": "la route d'analyse rend une trace d'exécution au client",
-   "fichier": "app.py",
-   "avant": "        app.logger.exception(\"en18229 analyse\")\n        return jsonify({\"ok\": False, \"erreur\": \"analyse_impossible\"}), 500",
-   "apres": "        app.logger.exception(\"en18229 analyse\")\n        raise",
-   "regle": "test_les_DEUX_routes_existent_avec_leur_cadence_et_leur_refus"
-  },
-  {
-   "nom": "l'état d'un alinéa redevient son nom interne",
-   "fichier": "sentinel.page.js",
-   "avant": "+ ';font-weight:600\">' + esc(ditEtat[a.etat] || a.etat)",
-   "apres": "+ ';font-weight:600\">' + esc(a.etat.replace(/_/g, ' '))",
-   "regle": "test_l_etat_d_un_alinea_se_dit_EN_FRANCAIS_et_pas_par_son_nom_interne"
-  },
-  {
-   "nom": "les boutons de réponse perdent leur nom accessible",
-   "fichier": "sentinel.page.js",
-   "avant": "                      + (on ? ' on' : '') + '\" aria-label=\"' + esc(c[0])\n                      + ' — ' + esc(e.clause) + ' ' + esc(e.titre)\n                      + '\" onclick=\"en18229Repondre(\\''",
-   "apres": "                      + (on ? ' on' : '') + '\" onclick=\"en18229Repondre(\\''",
-   "regle": "test_les_boutons_de_reponse_portent_un_NOM_accessible_qui_dit_a_quoi"
-  },
-  {
-   "nom": "l'écran recopie une question au lieu de la demander",
-   "fichier": "sentinel.page.js",
-   "avant": "  window.en18229Declaration = function () {",
-   "apres": "  var _RECOPIE = 'Avez-vous sélectionné au moins une mesure par scénario, vérifié';\n  window.en18229Declaration = function () {",
-   "regle": "test_les_quatre_ecrans_ne_RECOPIENT_aucune_question_et_vont_les_CHERCHER"
-  },
-  {
-   "nom": "le tiroir de la norme perd sa couleur propre",
-   "fichier": "sentinel.html",
-   "avant": ".sb-nav [data-grp=\"en18229\"]{--sb-ic:#00323C}",
-   "apres": ".sb-nav [data-grp=\"en18229\"]{--sb-ic:#355CD4}",
-   "regle": "test_la_barre_porte_le_tiroir_de_la_norme_a_SA_couleur"
-  },
-  {
-   "nom": "un des quatre écrans disparaît de la barre",
-   "fichier": "sentinel.html",
-   "avant": "onclick=\"go('en18229-score',this,'prEN 18229-3 — SUPERVISION HUMAINE','Score et article 14')\"",
-   "apres": "onclick=\"goX('en18229-score',this,'prEN 18229-3 — SUPERVISION HUMAINE','Score et article 14')\"",
-   "regle": "test_les_quatre_ecrans_existent_et_sont_ATTEIGNABLES_depuis_la_barre[p-en18229-score]"
-  },
-  {
-   "nom": "le rail reprend n'importe quelle carte pour son bandeau",
-   "fichier": "sentinel.page.js",
-   "avant": "  var ban = pg.querySelector('.rail-bandeau[role=\"status\"]');",
-   "apres": "  var ban = pg.querySelector('.rail-bandeau');",
-   "regle": "test_le_rail_ne_prend_PAS_une_carte_du_questionnaire_pour_SON_bandeau"
-  },
-  {
-   "nom": "une carte du questionnaire s'attribue le rôle du bandeau du rail",
-   "fichier": "sentinel.page.js",
-   "avant": "            return '<div class=\"rail-bandeau\" data-etat=\"'\n              + (v === true ? 'validee'",
-   "apres": "            return '<div class=\"rail-bandeau\" role=\"status\" data-etat=\"'\n              + (v === true ? 'validee'",
-   "regle": "test_le_rail_ne_prend_PAS_une_carte_du_questionnaire_pour_SON_bandeau"
-  },
-  {
-   "nom": "un écran annonce de nouveau douze normes quand la table en porte treize",
-   "fichier": "sentinel.html",
-   "avant": "<span>Taux de conformité — les quatorze normes</span>",
-   "apres": "<span>Taux de conformité — les douze normes</span>",
-   "regle": "test_AUCUN_ecran_n_annonce_un_COMPTE_DE_NORMES_autre_que_celui_de_la_table"
-  },
-  {
-   "nom": "le guide du taux revient au compte de neuf normes",
-   "fichier": "sentinel.page.js",
-   "avant": "title: \"Taux de conformité — les quatorze normes\"",
-   "apres": "title: \"Taux de conformité — les neuf normes\"",
-   "regle": "test_AUCUN_ecran_n_annonce_un_COMPTE_DE_NORMES_autre_que_celui_de_la_table"
-  }
- ]
+  "cibles": [
+    "tests/test_en18229_supervision.py"
+  ],
+  "mutations": [
+    {
+      "nom": "l'ordre des gardes s'inverse : la latence se juge avant le délai",
+      "fichier": "en18229_3.py",
+      "avant": "    if delai is None:\n        r[\"etat\"] = \"sans_delai\"",
+      "apres": "    if delai is None and False:\n        r[\"etat\"] = \"sans_delai\"",
+      "regle": "test_l_ORDRE_DES_GARDES_est_celui_de_la_norme[d0-sans_delai]"
+    },
+    {
+      "nom": "un scénario sans mesure passe la garde du 5.2.3",
+      "fichier": "en18229_3.py",
+      "avant": "    if not cats:\n        r[\"etat\"] = \"sans_mesure\"",
+      "apres": "    if not cats and False:\n        r[\"etat\"] = \"sans_mesure\"",
+      "regle": "test_l_ORDRE_DES_GARDES_est_celui_de_la_norme[d1-sans_mesure]"
+    },
+    {
+      "nom": "la latence non déclarée cesse d'être signalée",
+      "fichier": "en18229_3.py",
+      "avant": "    if latence is None:\n        r[\"etat\"] = \"sans_latence\"",
+      "apres": "    if latence is None and False:\n        r[\"etat\"] = \"sans_latence\"",
+      "regle": "test_l_ORDRE_DES_GARDES_est_celui_de_la_norme[d2-sans_latence]"
+    },
+    {
+      "nom": "une durée négative devient une durée",
+      "fichier": "en18229_3.py",
+      "avant": "    if n is None or n < 0:",
+      "apres": "    if n is None:",
+      "regle": "test_les_unites_se_ramenent_en_millisecondes_et_une_case_VIDE_n_est_PAS_zero"
+    },
+    {
+      "nom": "la virgule décimale française redevient un point",
+      "fichier": "en18229_3.py",
+      "avant": "                else (\"%.1f\" % v).replace(\".\", \",\")",
+      "apres": "                else (\"%.1f\" % v)",
+      "regle": "test_une_duree_se_lit_avec_LA_VIRGULE_decimale_francaise"
+    },
+    {
+      "nom": "le conseil propose de relever une catégorie déjà au maximum",
+      "fichier": "en18229_3.py",
+      "avant": "    if r[\"rang\"] < 3:",
+      "apres": "    if r[\"rang\"] <= 3:",
+      "regle": "test_quand_la_categorie_la_PLUS_RAPIDE_est_deja_prise_le_conseil_CHANGE"
+    },
+    {
+      "nom": "un lot de catégories cote sur la plus LENTE",
+      "fichier": "en18229_3.py",
+      "avant": "    return max(rangs) if rangs else 0",
+      "apres": "    return min(rangs) if rangs else 0",
+      "regle": "test_le_RANG_d_un_lot_de_categories_est_celui_de_la_plus_rapide"
+    },
+    {
+      "nom": "le conseil chiffré perd son dépassement",
+      "fichier": "en18229_3.py",
+      "avant": "                           % (r[\"depassement_dit\"],\n                              \" ou \".join(sorted(plus_rapide))))",
+      "apres": "                           % (\"\",\n                              \" ou \".join(sorted(plus_rapide))))",
+      "regle": "test_le_conseil_d_un_scenario_qui_NE_TIENT_PAS_est_CHIFFRE_et_nomme_la_sortie"
+    },
+    {
+      "nom": "le déployeur reçoit les questions de conception du fournisseur",
+      "fichier": "en18229_3.py",
+      "avant": "        if role not in ex[\"role\"]:\n            continue",
+      "apres": "        if False:\n            continue",
+      "regle": "test_le_deployeur_n_est_PAS_note_sur_la_conception"
+    },
+    {
+      "nom": "les neuf exigences de l'IBD s'appliquent à tout le monde",
+      "fichier": "en18229_3.py",
+      "avant": "        if ex[\"si\"] == \"rbi\" and not rbi:\n            continue\n        if ex[\"si\"] == \"pas_de_notification_fournisseur\"",
+      "apres": "        if ex[\"si\"] == \"rbi\" and not rbi and False:\n            continue\n        if ex[\"si\"] == \"pas_de_notification_fournisseur\"",
+      "regle": "test_les_NEUF_exigences_du_5_point_8_ne_s_appliquent_QU_A_L_IBD"
+    },
+    {
+      "nom": "la question du 5.4.3 est posée même au fournisseur qui notifie",
+      "fichier": "en18229_3.py",
+      "avant": "        if ex[\"si\"] == \"pas_de_notification_fournisseur\" \\\n                and notifications_fournisseur:",
+      "apres": "        if ex[\"si\"] == \"pas_de_notification_fournisseur\" \\\n                and not notifications_fournisseur:",
+      "regle": "test_l_exigence_du_5_point_4_point_3_n_existe_QUE_si_le_fournisseur_ne_notifie_PAS"
+    },
+    {
+      "nom": "le rôle le plus FORT commande le taux retenu",
+      "fichier": "en18229_3.py",
+      "avant": "    commande = min(roles, key=lambda r: par_role[r][\"taux\"])",
+      "apres": "    commande = max(roles, key=lambda r: par_role[r][\"taux\"])",
+      "regle": "test_le_taux_retenu_est_celui_du_ROLE_LE_PLUS_FAIBLE_et_il_est_nomme"
+    },
+    {
+      "nom": "le moteur rend un taux sans qu'aucun rôle soit endossé",
+      "fichier": "en18229_3.py",
+      "avant": "        return {\"ok\": False, \"motif\": \"aucun_role_declare\",",
+      "apres": "        return {\"ok\": True, \"motif\": \"aucun_role_declare\",",
+      "regle": "test_SANS_ROLE_declare_le_moteur_REFUSE_de_rendre_un_taux"
+    },
+    {
+      "nom": "une question sans réponse compte comme un non",
+      "fichier": "en18229_3.py",
+      "avant": "    if isinstance(r, str) and r.strip().lower() in (\"partiel\", \"partiellement\"):\n        return VALEURS[\"partiel\"]\n    return None",
+      "apres": "    if isinstance(r, str) and r.strip().lower() in (\"partiel\", \"partiellement\"):\n        return VALEURS[\"partiel\"]\n    return 0.0",
+      "regle": "test_une_question_SANS_REPONSE_n_est_pas_un_NON"
+    },
+    {
+      "nom": "le plafond retenu devient le plus HAUT des verrous",
+      "fichier": "en18229_3.py",
+      "avant": "    plafond = min([v[\"plafond\"] for v in verrous], default=100)",
+      "apres": "    plafond = max([v[\"plafond\"] for v in verrous], default=100)",
+      "regle": "test_un_VERROU_ne_retire_PAS_de_points_il_POSE_un_plafond"
+    },
+    {
+      "nom": "le verrou arithmétique frappe aussi le déployeur",
+      "fichier": "en18229_3.py",
+      "avant": "    if role == \"fournisseur\":\n        casses = [s for s in (scenarios or [])",
+      "apres": "    if role or True:\n        casses = [s for s in (scenarios or [])",
+      "regle": "test_le_verrou_ARITHMETIQUE_ne_frappe_QUE_le_fournisseur"
+    },
+    {
+      "nom": "« 1 scénarios » : le pluriel ne suit plus le nombre",
+      "fichier": "en18229_3.py",
+      "avant": "% (len(casses), \"s\" if len(casses) > 1 else \"\",",
+      "apres": "% (len(casses), \"s\",",
+      "regle": "test_l_accord_du_verrou_arithmetique_SUIT_le_nombre_de_scenarios"
+    },
+    {
+      "nom": "« 1 scénario ont une latence » : le verbe ne suit plus",
+      "fichier": "en18229_3.py",
+      "avant": "                          \"ont\" if len(casses) > 1 else \"a\",",
+      "apres": "                          \"ont\",",
+      "regle": "test_l_accord_du_verrou_arithmetique_SUIT_le_nombre_de_scenarios"
+    },
+    {
+      "nom": "la documentation de l'IBD est demandée à tous",
+      "fichier": "en18229_3.py",
+      "avant": "        if si == \"rbi\" and not rbi:\n            continue",
+      "apres": "        if si == \"rbi\" and not rbi and False:\n            continue",
+      "regle": "test_la_documentation_exigee_SUIT_le_systeme_et_ne_liste_PAS_quatorze_lignes"
+    },
+    {
+      "nom": "l'alinéa 14(5) est déclaré non couvert hors identification biométrique",
+      "fichier": "en18229_3.py",
+      "avant": "        if alinea in ZA_RBI and not rbi:",
+      "apres": "        if alinea in ZA_RBI and not rbi and False:",
+      "regle": "test_l_alinea_14_5_est_SANS_OBJET_hors_identification_biometrique"
+    },
+    {
+      "nom": "un « non » ne découvre plus l'alinéa qu'il porte",
+      "fichier": "en18229_3.py",
+      "avant": "        if manquantes:\n            etat, dit = \"non_couvert\"",
+      "apres": "        if manquantes and False:\n            etat, dit = \"non_couvert\"",
+      "regle": "test_un_alinea_de_l_article_14_est_COUVERT_ou_il_ne_l_est_PAS"
+    },
+    {
+      "nom": "un point verrouillé est compté deux fois dans le plan",
+      "fichier": "en18229_3.py",
+      "avant": "        if ex[\"cle\"] in cles_verrouillees:\n            continue",
+      "apres": "        if ex[\"cle\"] in cles_verrouillees and False:\n            continue",
+      "regle": "test_le_plan_met_les_VERROUS_EN_TETE_et_pas_dans_l_ordre_des_paragraphes"
+    },
+    {
+      "nom": "un scénario cassé n'entre plus dans le plan",
+      "fichier": "en18229_3.py",
+      "avant": "        if sc.get(\"etat\") in (\"tient\", \"impossible_consignee\"):",
+      "apres": "        if sc.get(\"etat\") in (\"tient\", \"impossible_consignee\", \"impossible_non_consignee\"):",
+      "regle": "test_un_scenario_CASSE_entre_dans_le_plan_a_l_etape_ou_il_se_repare"
+    },
+    {
+      "nom": "le taux du référentiel se déclare certifiable",
+      "fichier": "en18229_3.py",
+      "avant": "        \"certifiable\": False,\n        \"article_14\":",
+      "apres": "        \"certifiable\": True,\n        \"article_14\":",
+      "regle": "test_le_taux_du_referentiel_PORTE_sa_reserve_et_ne_se_certifie_PAS"
+    },
+    {
+      "nom": "une exigence reçoit un champ qui peut porter du texte normatif",
+      "fichier": "en18229_3.py",
+      "avant": "    return {\"cle\": cle, \"clause\": clause, \"titre\": titre, \"role\": role,",
+      "apres": "    return {\"cle\": cle, \"clause\": clause, \"titre\": titre, \"role\": role,\n            \"texte\": titre,",
+      "regle": "test_une_exigence_ne_porte_QUE_les_champs_declares"
+    },
+    {
+      "nom": "une question reprend huit mots du texte normatif",
+      "fichier": "en18229_3.py",
+      "avant": "       \"sait-elle à tout instant si elle peut encore écraser une sortie, \"\n       \"couper le système ou le remettre à zéro ?\",",
+      "apres": "       \"et à la disponibilité des fonctions d'écrasement, d'arrêt et de \"\n       \"réinitialisation ?\",",
+      "regle": "test_AUCUNE_suite_de_huit_mots_du_module_n_est_dans_le_texte_de_la_norme"
+    },
+    {
+      "nom": "la couleur du tiroir se sépare de la feuille de style",
+      "fichier": "conformite.py",
+      "avant": "    \"en18229_3\":   \"#00323C\",   # pétrole",
+      "apres": "    \"en18229_3\":   \"#0A3C48\",   # pétrole",
+      "regle": "test_la_barre_porte_le_tiroir_de_la_norme_a_SA_couleur"
+    },
+    {
+      "nom": "les deux normes de l'IA cessent de se toucher dans la barre",
+      "fichier": "conformite.py",
+      "avant": "ORDRE_BARRE = (\"rgpd\", \"dga\", \"data_act\",\n               \"iso27001\", \"iso42001\", \"en18229_3\", \"en18286\",\n               \"dora\", \"nis2\",\n               \"cra\", \"nist_ai_rmf\", \"owasp_llm\", \"nist_800_53\",\n               \"nist_800_82\", \"ocde\")",
+      "apres": "ORDRE_BARRE = (\"rgpd\", \"dga\", \"data_act\",\n               \"iso27001\", \"iso42001\", \"en18286\",\n               \"dora\", \"nis2\",\n               \"cra\", \"nist_ai_rmf\", \"owasp_llm\", \"nist_800_53\",\n               \"nist_800_82\", \"ocde\", \"en18229_3\")",
+      "regle": "test_les_DEUX_normes_de_l_IA_se_touchent_dans_la_barre"
+    },
+    {
+      "nom": "le verrou ne dit plus sur quelle latence il repose",
+      "fichier": "conformite.py",
+      "avant": "         \"calcul\": \"la latence d'intervention déclarée du scénario (5.7.1) \"",
+      "apres": "         \"calcul\": \"le rapprochement des deux nombres du scénario (5.7.1) \"",
+      "regle": "test_le_verrou_d_une_norme_NON_CERTIFIABLE_est_fonde_sur_l_ARITHMETIQUE"
+    },
+    {
+      "nom": "la réserve de présomption cesse de dire qu'il n'y en a aucune",
+      "fichier": "conformite.py",
+      "avant": "                \"le tenir n'ouvre aucune présomption de conformité à \"",
+      "apres": "                \"le tenir vaut travail de conformité à \"",
+      "regle": "test_la_norme_porte_une_RESERVE_de_presomption_dans_le_taux"
+    },
+    {
+      "nom": "le bloc du score devient un bloc de saisie",
+      "fichier": "parcours_normes.py",
+      "avant": "        _b(\"score\", \"en18229-score\", \"Score et article 14\", \"lecture\",",
+      "apres": "        _b(\"score\", \"en18229-score\", \"Score et article 14\", \"saisie\",",
+      "regle": "test_les_QUATRE_blocs_du_parcours_declarent_leurs_PREREQUIS"
+    },
+    {
+      "nom": "le bloc des scénarios perd son prérequis de rôle",
+      "fichier": "parcours_normes.py",
+      "avant": "           \"l'impossibilité technique plafonne le score — aucune réponse au \"\n           \"questionnaire ne lève ce verrou.\",\n           prerequis=(\"role\",)),",
+      "apres": "           \"l'impossibilité technique plafonne le score — aucune réponse au \"\n           \"questionnaire ne lève ce verrou.\"),",
+      "regle": "test_les_QUATRE_blocs_du_parcours_declarent_leurs_PREREQUIS"
+    },
+    {
+      "nom": "le rail déclare le rôle rempli alors qu'aucun n'est endossé",
+      "fichier": "parcours_normes.py",
+      "avant": "    if not roles:\n        manque.setdefault(\"role\", []).append(\n            _q(\"Choisissez votre rôle",
+      "apres": "    if not roles and False:\n        manque.setdefault(\"role\", []).append(\n            _q(\"Choisissez votre rôle",
+      "regle": "test_le_rail_de_la_norme_se_remplit_bloc_par_bloc_sur_une_VRAIE_declaration"
+    },
+    {
+      "nom": "la route d'analyse rend une trace d'exécution au client",
+      "fichier": "app.py",
+      "avant": "        app.logger.exception(\"en18229 analyse\")\n        return jsonify({\"ok\": False, \"erreur\": \"analyse_impossible\"}), 500",
+      "apres": "        app.logger.exception(\"en18229 analyse\")\n        raise",
+      "regle": "test_les_DEUX_routes_existent_avec_leur_cadence_et_leur_refus"
+    },
+    {
+      "nom": "l'état d'un alinéa redevient son nom interne",
+      "fichier": "sentinel.page.js",
+      "avant": "+ ';font-weight:600\">' + esc(ditEtat[a.etat] || a.etat)",
+      "apres": "+ ';font-weight:600\">' + esc(a.etat.replace(/_/g, ' '))",
+      "regle": "test_l_etat_d_un_alinea_se_dit_EN_FRANCAIS_et_pas_par_son_nom_interne"
+    },
+    {
+      "nom": "les boutons de réponse perdent leur nom accessible",
+      "fichier": "sentinel.page.js",
+      "avant": "                      + (on ? ' on' : '') + '\" aria-label=\"' + esc(c[0])\n                      + ' — ' + esc(e.clause) + ' ' + esc(e.titre)\n                      + '\" onclick=\"en18229Repondre(\\''",
+      "apres": "                      + (on ? ' on' : '') + '\" onclick=\"en18229Repondre(\\''",
+      "regle": "test_les_boutons_de_reponse_portent_un_NOM_accessible_qui_dit_a_quoi"
+    },
+    {
+      "nom": "l'écran recopie une question au lieu de la demander",
+      "fichier": "sentinel.page.js",
+      "avant": "  window.en18229Declaration = function () {",
+      "apres": "  var _RECOPIE = 'Avez-vous sélectionné au moins une mesure par scénario, vérifié';\n  window.en18229Declaration = function () {",
+      "regle": "test_les_quatre_ecrans_ne_RECOPIENT_aucune_question_et_vont_les_CHERCHER"
+    },
+    {
+      "nom": "le tiroir de la norme perd sa couleur propre",
+      "fichier": "sentinel.html",
+      "avant": ".sb-nav [data-grp=\"en18229\"]{--sb-ic:#00323C}",
+      "apres": ".sb-nav [data-grp=\"en18229\"]{--sb-ic:#355CD4}",
+      "regle": "test_la_barre_porte_le_tiroir_de_la_norme_a_SA_couleur"
+    },
+    {
+      "nom": "un des quatre écrans disparaît de la barre",
+      "fichier": "sentinel.html",
+      "avant": "onclick=\"go('en18229-score',this,'prEN 18229-3 — SUPERVISION HUMAINE','Score et article 14')\"",
+      "apres": "onclick=\"goX('en18229-score',this,'prEN 18229-3 — SUPERVISION HUMAINE','Score et article 14')\"",
+      "regle": "test_les_quatre_ecrans_existent_et_sont_ATTEIGNABLES_depuis_la_barre[p-en18229-score]"
+    },
+    {
+      "nom": "le rail reprend n'importe quelle carte pour son bandeau",
+      "fichier": "sentinel.page.js",
+      "avant": "  var ban = pg.querySelector('.rail-bandeau[role=\"status\"]');",
+      "apres": "  var ban = pg.querySelector('.rail-bandeau');",
+      "regle": "test_le_rail_ne_prend_PAS_une_carte_du_questionnaire_pour_SON_bandeau"
+    },
+    {
+      "nom": "une carte du questionnaire s'attribue le rôle du bandeau du rail",
+      "fichier": "sentinel.page.js",
+      "avant": "            return '<div class=\"rail-bandeau\" data-etat=\"'\n              + (v === true ? 'validee'",
+      "apres": "            return '<div class=\"rail-bandeau\" role=\"status\" data-etat=\"'\n              + (v === true ? 'validee'",
+      "regle": "test_le_rail_ne_prend_PAS_une_carte_du_questionnaire_pour_SON_bandeau"
+    },
+    {
+      "nom": "un écran annonce de nouveau douze normes quand la table en porte seize",
+      "fichier": "sentinel.html",
+      "avant": "<span>Taux de conformité — les seize normes</span>",
+      "apres": "<span>Taux de conformité — les douze normes</span>",
+      "regle": "test_AUCUN_ecran_n_annonce_un_COMPTE_DE_NORMES_autre_que_celui_de_la_table"
+    },
+    {
+      "nom": "le guide du taux revient au compte de neuf normes",
+      "fichier": "sentinel.page.js",
+      "avant": "title: \"Taux de conformité — les seize normes\"",
+      "apres": "title: \"Taux de conformité — les neuf normes\"",
+      "regle": "test_AUCUN_ecran_n_annonce_un_COMPTE_DE_NORMES_autre_que_celui_de_la_table"
+    }
+  ]
 }

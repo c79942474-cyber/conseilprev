@@ -1,0 +1,640 @@
+{
+ "_lot": "82-evaluer-le-risque-2",
+ "_mots": 2294,
+ "_pages": [
+  "empreinte-parc",
+  "enveloppe"
+ ],
+ "_rubrique": "ÉVALUER LE RISQUE",
+ "bloc": {
+  "Enveloppe d’investissement et DPGF — décision GO / NO GO": {
+   "en": "Investment envelope and DPGF — <em>GO / NO-GO</em> decision",
+   "fr": "Enveloppe d’investissement et DPGF — décision GO / NO GO",
+   "html": "Enveloppe d’investissement et DPGF — décision <em>GO / NO GO</em>"
+  },
+  "Les pays se comparent sur le coût total de possession : c’est le seul chiffre qui les départage, l’investissement étant identique par construction. La création de valeur se lit en EVA, ROCE et free cash flow. Chaque grandeur porte sa nature et sa source ; les postes que le référentiel ne peut pas trancher restent affichés vides, avec la question à poser — les masquer donnerait l’illusion d’une décision complète.": {
+   "en": "Countries are compared on <b>total cost of ownership</b>: it is the only figure that separates them, the investment being identical by construction. Value creation is read in EVA, ROCE and free cash flow. Each quantity carries its nature and its source; the items that the reference framework cannot decide remain displayed <b>empty</b>, with the question to ask — hiding them would give the illusion of a complete decision.",
+   "fr": "Les pays se comparent sur le coût total de possession : c’est le seul chiffre qui les départage, l’investissement étant identique par construction. La création de valeur se lit en EVA, ROCE et free cash flow. Chaque grandeur porte sa nature et sa source ; les postes que le référentiel ne peut pas trancher restent affichés vides, avec la question à poser — les masquer donnerait l’illusion d’une décision complète.",
+   "html": "Les pays se comparent sur le <b>coût total de possession</b>&nbsp;: c’est le seul chiffre qui les départage, l’investissement étant identique par construction. La création de valeur se lit en EVA, ROCE et free cash flow. Chaque grandeur porte sa nature et sa source&nbsp;; les postes que le référentiel ne peut pas trancher restent affichés <b>vides</b>, avec la question à poser — les masquer donnerait l’illusion d’une décision complète."
+  },
+  "L’avis GO / NO GO reposait sur cinq constats, et ils étaient tous du côté de l’offre : le budget tient-il, le chiffrage est-il assez complet, le réseau suivra-t-il, le calendrier est-il réaliste, le site sera-t-il conforme. Aucun ne demandait si quelqu’un louera. Huit tests s’y ajoutent — demande contractée, calendrier contre accès à l’électricité, robustesse économique, besoins des clients finaux, concurrence annoncée sur la zone, greenfield ou brownfield, modularité et phasage, risques financiers couverts — et ils entrent dans le même verdict : un dossier n’en a qu’un, et deux avis séparés finiraient par se contredire.Le chiffre qui décide est le taux de remplissage au point mort. Une marge calculée à pleine charge ne dit rien — tous les projets sont rentables pleins ; ce qui se demande en comité, c’est à partir de quel remplissage le site couvre ses coûts, et de combien on en est loin. Aucun prix n’est embarqué : sans prix d’hébergement déclaré, le point mort est dit indéterminé plutôt que calculé sur une valeur par défaut — que personne ne conteste.": {
+   "en": "The GO / NO-GO opinion rested on five findings, and they were <b>all on the supply side</b>: does the budget hold, is the costing complete enough, will the grid keep up, is the timetable realistic, will the site be compliant. None asked <b>whether anyone will lease</b>. Eight tests are added — contracted demand, timetable against access to electricity, economic robustness, end-client needs, announced competition in the area, greenfield or brownfield, modularity and phasing, financial risks covered — and they feed into <b>the same verdict</b>: a file has only one, and two separate opinions would end up contradicting each other.<br><br>The figure that decides is the <b>break-even occupancy rate</b>. A margin calculated at full load says nothing — every project is profitable when full; what is asked in committee is from what occupancy level the site covers its costs, and how far away from it you are. <b>No price is built in</b>: without a declared hosting price, break-even is stated as <b>undetermined</b> rather than calculated on a default value — that nobody contests.",
+   "fr": "L’avis GO / NO GO reposait sur cinq constats, et ils étaient tous du côté de l’offre : le budget tient-il, le chiffrage est-il assez complet, le réseau suivra-t-il, le calendrier est-il réaliste, le site sera-t-il conforme. Aucun ne demandait si quelqu’un louera. Huit tests s’y ajoutent — demande contractée, calendrier contre accès à l’électricité, robustesse économique, besoins des clients finaux, concurrence annoncée sur la zone, greenfield ou brownfield, modularité et phasage, risques financiers couverts — et ils entrent dans le même verdict : un dossier n’en a qu’un, et deux avis séparés finiraient par se contredire.Le chiffre qui décide est le taux de remplissage au point mort. Une marge calculée à pleine charge ne dit rien — tous les projets sont rentables pleins ; ce qui se demande en comité, c’est à partir de quel remplissage le site couvre ses coûts, et de combien on en est loin. Aucun prix n’est embarqué : sans prix d’hébergement déclaré, le point mort est dit indéterminé plutôt que calculé sur une valeur par défaut — que personne ne conteste.",
+   "html": "L’avis GO / NO GO reposait sur cinq constats, et ils étaient <b>tous du côté de l’offre</b>&nbsp;: le budget tient-il, le chiffrage est-il assez complet, le réseau suivra-t-il, le calendrier est-il réaliste, le site sera-t-il conforme. Aucun ne demandait <b>si quelqu’un louera</b>. Huit tests s’y ajoutent — demande contractée, calendrier contre accès à l’électricité, robustesse économique, besoins des clients finaux, concurrence annoncée sur la zone, greenfield ou brownfield, modularité et phasage, risques financiers couverts — et ils entrent dans <b>le même verdict</b>&nbsp;: un dossier n’en a qu’un, et deux avis séparés finiraient par se contredire.<br><br>Le chiffre qui décide est le <b>taux de remplissage au point mort</b>. Une marge calculée à pleine charge ne dit rien — tous les projets sont rentables pleins&nbsp;; ce qui se demande en comité, c’est à partir de quel remplissage le site couvre ses coûts, et de combien on en est loin. <b>Aucun prix n’est embarqué</b>&nbsp;: sans prix d’hébergement déclaré, le point mort est dit <b>indéterminé</b> plutôt que calculé sur une valeur par défaut — que personne ne conteste."
+  }
+ },
+ "texte": {
+  "# / # renseigné": {
+   "en": "# / # provided",
+   "fr": "0 / 11 renseigné"
+  },
+  "# hypothèses sur # sont déjà posées": {
+   "en": "# of # assumptions are already set",
+   "fr": "4 hypothèses sur 7 sont déjà posées"
+  },
+  "% des travaux · tolérance # % · incertitude ±# %": {
+   "en": "% of works · tolerance # % · uncertainty ±# %",
+   "fr": "% des travaux · tolérance 15 % · incertitude ±15 %"
+  },
+  "% · tolérance # % · incertitude ±# %": {
+   "en": "% · tolerance # % · uncertainty ±# %",
+   "fr": "% · tolérance 10 % · incertitude ±5 %"
+  },
+  "(étape #) : le lien pré-rempli se fabrique sur ce chiffrage. Sans lui, il ne reste que l’adresse nue, où tout est à ressaisir —": {
+   "en": "(step #): the pre-filled link is built on this costing. Without it, only the bare address remains, where everything has to be re-entered —",
+   "fr": "(étape 4) : le lien pré-rempli se fabrique sur ce chiffrage. Sans lui, il ne reste que l’adresse nue, où tout est à ressaisir —"
+  },
+  ", catégories # et # — la troisième composante, sans laquelle les scopes # et # ne font pas un bilan. Le module est partagé": {
+   "en": ", categories # and # — the third component, without which scopes # and # do not make an inventory. The module is shared",
+   "fr": ", catégories 1 et 2 — la troisième composante, sans laquelle les scopes 1 et 2 ne font pas un bilan. Le module est partagé"
+  },
+  ", dont les taux diffèrent d’un facteur huit sur certaines missions.": {
+   "en": ", whose rates differ by a factor of eight on some engagements.",
+   "fr": ", dont les taux diffèrent d’un facteur huit sur certaines missions."
+  },
+  ", et la comparaison entre pays sur le": {
+   "en": ", and the comparison between countries on the",
+   "fr": ", et la comparaison entre pays sur le"
+  },
+  ", et non pas nuls.": {
+   "en": ", and not zero.",
+   "fr": ", et non pas nuls."
+  },
+  ", et quand le même maître d'ouvrage porte les deux, elles pèsent le tiers de l'investissement total. Raisonner sur la seule enveloppe travaux fait arbitrer des économies de génie civil pendant que le poste le plus lourd passe sans discussion.": {
+   "en": ", and when the same project owner carries both, they weigh a third of the total investment. Reasoning on the construction works envelope alone leads to trading off civil engineering savings while the heaviest item passes without discussion.",
+   "fr": ", et quand le même maître d'ouvrage porte les deux, elles pèsent le tiers de l'investissement total. Raisonner sur la seule enveloppe travaux fait arbitrer des économies de génie civil pendant que le poste le plus lourd passe sans discussion."
+  },
+  ", la modulation par les": {
+   "en": ", the modulation by the",
+   "fr": ", la modulation par les"
+  },
+  ", sans que le lecteur ait à comparer mentalement chaque valeur à sa cible. Trois mécanismes s'en chargent ici — la forme choisie pour la donnée, le seuil coloré, et la tendance mesurée. S'y ajoutent les trois apports de l'analyse augmentée :": {
+   "en": ", without the reader having to mentally compare each value with its target. Three mechanisms handle this here — the form chosen for the data, the coloured threshold, and the measured trend. Added to these are the three contributions of augmented analytics:",
+   "fr": ", sans que le lecteur ait à comparer mentalement chaque valeur à sa cible. Trois mécanismes s'en chargent ici — la forme choisie pour la donnée, le seuil coloré, et la tendance mesurée. S'y ajoutent les trois apports de l'analyse augmentée :"
+  },
+  ". Ces trois indicateurs disent ce qu’il": {
+   "en": ". These three indicators say what it",
+   "fr": ". Ces trois indicateurs disent ce qu’il"
+  },
+  ": Revenu annuel attendu et Coût moyen pondéré du capital et Taux d'impôt sur les sociétés. Ce module refuse de les proposer — ce sont des décisions, pas des résultats, et le coût du capital est précisément le taux qui juge ce projet.": {
+   "en": ": Expected annual revenue and Weighted average cost of capital and Corporate income tax rate. This module refuses to suggest them — they are decisions, not results, and the cost of capital is precisely the rate that judges this project.",
+   "fr": ": Revenu annuel attendu et Coût moyen pondéré du capital et Taux d'impôt sur les sociétés. Ce module refuse de les proposer — ce sont des décisions, pas des résultats, et le coût du capital est précisément le taux qui juge ce projet."
+  },
+  ": la conversion passe par un taux affiché et modifiable, un taux du jour n’étant pas une donnée de référentiel. Elle couvre le cloud et les campus d’IA,": {
+   "en": ": the conversion uses a displayed, editable rate, since a daily rate is not reference data. It covers cloud and AI campuses,",
+   "fr": ": la conversion passe par un taux affiché et modifiable, un taux du jour n’étant pas une donnée de référentiel. Elle couvre le cloud et les campus d’IA,"
+  },
+  ": le bilan énergie-eau-carbone d’un côté, la séquence des pièces et le prix de la maîtrise d’œuvre de l’autre. Deux chemins, deux contenus — ils sont nommés ci-dessous.": {
+   "en": ": the energy-water-carbon inventory on one side, the sequence of documents and the price of project management on the other. Two paths, two contents — they are named below.",
+   "fr": ": le bilan énergie-eau-carbone d’un côté, la séquence des pièces et le prix de la maîtrise d’œuvre de l’autre. Deux chemins, deux contenus — ils sont nommés ci-dessous."
+  },
+  ": un projet peut être le moins cher et rester destructeur de valeur, et c’est là que cela se voit.": {
+   "en": ": a project can be the cheapest and still destroy value, and this is where it shows.",
+   "fr": ": un projet peut être le moins cher et rester destructeur de valeur, et c’est là que cela se voit."
+  },
+  "Aller à l’étape # →": {
+   "en": "Go to step # →",
+   "fr": "Aller à l’étape 1 →"
+  },
+  "Aménagement des salles informatiques": {
+   "en": "Fit-out of the IT rooms",
+   "fr": "Aménagement des salles informatiques"
+  },
+  "Armer le pilotage": {
+   "en": "Set up steering",
+   "fr": "Armer le pilotage"
+  },
+  "Assistance aux contrats de travaux — L'analyse des offres, la mise au point des marchés et la vérification de ce que chaque entreprise a réellement inclus.": {
+   "en": "Assistance with works contracts — Analysis of tenders, finalisation of contracts and verification of what each contractor has actually included.",
+   "fr": "Assistance aux contrats de travaux — L'analyse des offres, la mise au point des marchés et la vérification de ce que chaque entreprise a réellement inclus."
+  },
+  "Au-delà d’environ # kW par baie, l’air ne suffit plus.": {
+   "en": "Above about # kW per rack, air is no longer enough.",
+   "fr": "Au-delà d’environ 40 kW par baie, l’air ne suffit plus."
+  },
+  "Aucun champ renseigné : les huit tests de viabilité ressortiront indéterminés, et le verdict ne parlera que de construction.": {
+   "en": "No field provided: the eight viability tests will come out undetermined, and the verdict will only speak of construction.",
+   "fr": "Aucun champ renseigné : les huit tests de viabilité ressortiront indéterminés, et le verdict ne parlera que de construction."
+  },
+  "Avancement des études par phase": {
+   "en": "Progress of the studies by phase",
+   "fr": "Avancement des études par phase"
+  },
+  "Avant-projet définitif — Les choix techniques arrêtés, les puissances, les surfaces définitives et l'estimation détaillée par lot.": {
+   "en": "Final preliminary design — Technical choices settled, power ratings, final floor areas and the detailed estimate per work package.",
+   "fr": "Avant-projet définitif — Les choix techniques arrêtés, les puissances, les surfaces définitives et l'estimation détaillée par lot."
+  },
+  "Avant-projet sommaire et permis de construire — Le parti architectural et technique, les surfaces, l'implantation, et le dossier de permis de construire — avec le volet ICPE pour un centre de données.": {
+   "en": "Outline preliminary design and building permit — The architectural and technical concept, floor areas, siting, and the building permit application — with the ICPE [French classified installations for environmental protection] section for a data centre.",
+   "fr": "Avant-projet sommaire et permis de construire — Le parti architectural et technique, les surfaces, l'implantation, et le dossier de permis de construire — avec le volet ICPE pour un centre de données."
+  },
+  "Avis sur la solidité et la sécurité des personnes. — Obligatoire pour certaines catégories d'ouvrages — dont les bâtiments à risque particulier. À vérifier sur votre projet, mais l'hypothèse par défaut est qu'il s'applique. (Code de la construction et de l'habitation, art. L#-# et suivants)": {
+   "en": "Opinion on structural soundness and the safety of persons. — Mandatory for certain categories of works — including buildings with particular risks. To be checked for your project, but the default assumption is that it applies. (Code de la construction et de l'habitation [French Construction and Housing Code], art. L#-# et seq.)",
+   "fr": "Avis sur la solidité et la sécurité des personnes. — Obligatoire pour certaines catégories d'ouvrages — dont les bâtiments à risque particulier. À vérifier sur votre projet, mais l'hypothèse par défaut est qu'il s'applique. (Code de la construction et de l'habitation, art. L125-1 et suivants)"
+  },
+  "Axe d'amélioration": {
+   "en": "Area for improvement",
+   "fr": "Axe d'amélioration"
+  },
+  "BET Acoustique": {
+   "en": "Acoustic engineering consultant",
+   "fr": "BET Acoustique"
+  },
+  "BET Sécurité incendie": {
+   "en": "Fire safety engineering consultant",
+   "fr": "BET Sécurité incendie"
+  },
+  "BET Économie de la construction": {
+   "en": "Construction cost consultant",
+   "fr": "BET Économie de la construction"
+  },
+  "Besoin en fonds de roulement (M€)": {
+   "en": "Working capital requirement (€M)",
+   "fr": "Besoin en fonds de roulement (M€)"
+  },
+  "Bilan énergie, eau et carbone": {
+   "en": "Energy, water and carbon inventory",
+   "fr": "Bilan énergie, eau et carbone"
+  },
+  "C'est ce que ce moteur tient et qu'un tableur ne tient pas : il connaît l'incertitude de ses grandeurs. Une enveloppe à ±# % qui dépasse sa cible de # % n'a rien franchi — l'écart est dans le bruit. Le rouge exige un dépassement supérieur à la fois à la tolérance et à l'incertitude ; entre les deux, l'état affiché est « écart non démontré ». Sans cette règle, le troisième faux positif éteint la vigilance sur tous les autres.": {
+   "en": "This is what this engine holds and a spreadsheet does not: it knows the uncertainty of its quantities. An envelope at ±# % that exceeds its target by # % has crossed nothing — the gap is within the noise. Red requires an overrun greater than both the tolerance and the uncertainty; in between, the status shown is “gap not demonstrated”. Without this rule, the third false positive switches off vigilance on all the others.",
+   "fr": "C'est ce que ce moteur tient et qu'un tableur ne tient pas : il connaît l'incertitude de ses grandeurs. Une enveloppe à ±30 % qui dépasse sa cible de 12 % n'a rien franchi — l'écart est dans le bruit. Le rouge exige un dépassement supérieur à la fois à la tolérance et à l'incertitude ; entre les deux, l'état affiché est « écart non démontré ». Sans cette règle, le troisième faux positif éteint la vigilance sur tous les autres."
+  },
+  "Calcul classique": {
+   "en": "Conventional calculation",
+   "fr": "Calcul classique"
+  },
+  "Calculer l’enveloppe": {
+   "en": "Calculate the envelope",
+   "fr": "Calculer l’enveloppe"
+  },
+  "Calculer l’enveloppe →": {
+   "en": "Calculate the envelope →",
+   "fr": "Calculer l’enveloppe →"
+  },
+  "Calculez d’abord l’enveloppe ci-dessus : ces indicateurs se construisent sur elle.": {
+   "en": "First calculate the envelope above: these indicators are built on it.",
+   "fr": "Calculez d’abord l’enveloppe ci-dessus : ces indicateurs se construisent sur elle."
+  },
+  "Calculez d’abord l’enveloppe ci-dessus : les honoraires se calculent sur les travaux qu’elle contient.": {
+   "en": "First calculate the envelope above: the fees are calculated on the works it contains.",
+   "fr": "Calculez d’abord l’enveloppe ci-dessus : les honoraires se calculent sur les travaux qu’elle contient."
+  },
+  "Calendrier de marché": {
+   "en": "Market timetable",
+   "fr": "Calendrier de marché"
+  },
+  "Campus hyperscale (cloud) — # à # M€/MW": {
+   "en": "Hyperscale campus (cloud) — €# to €# M/MW",
+   "fr": "Campus hyperscale (cloud) — 7.36 à 9.2 M€/MW"
+  },
+  "Ce bloc en déduit les quantités, le prix indicatif et le carbone de fabrication — puis il rend le montant qui": {
+   "en": "This block derives the quantities, the indicative price and the manufacturing carbon from it — then it returns the amount that",
+   "fr": "Ce bloc en déduit les quantités, le prix indicatif et le carbone de fabrication — puis il rend le montant qui"
+  },
+  "Ce lien n’emporte AUCUN montant.": {
+   "en": "This link carries NO amount.",
+   "fr": "Ce lien n’emporte AUCUN montant."
+  },
+  "Ce lien-là, lui, porte une assiette de travaux": {
+   "en": "That link, on the other hand, carries a works base",
+   "fr": "Ce lien-là, lui, porte une assiette de travaux"
+  },
+  "Ce que la réglementation demande — et ce qu’elle ne demande pas": {
+   "en": "What the regulation requires — and what it does not",
+   "fr": "Ce que la réglementation demande — et ce qu’elle ne demande pas"
+  },
+  "Ce que le calcul vaut, confronté à ce qui a été publié": {
+   "en": "What the calculation is worth, set against what has been published",
+   "fr": "Ce que le calcul vaut, confronté à ce qui a été publié"
+  },
+  "Ce que le total tranche": {
+   "en": "What the total decides",
+   "fr": "Ce que le total tranche"
+  },
+  "Ce que montre cette section.": {
+   "en": "What this section shows.",
+   "fr": "Ce que montre cette section."
+  },
+  "Ce qui suit part sur le": {
+   "en": "What follows starts from the",
+   "fr": "Ce qui suit part sur le"
+  },
+  "Ce seuil sort de l’enveloppe déjà calculée et de": {
+   "en": "This threshold comes from the envelope already calculated and from",
+   "fr": "Ce seuil sort de l’enveloppe déjà calculée et de"
+  },
+  "Centres de données : > # % du total · systèmes d’IA : < # %": {
+   "en": "Data centres: > # % of the total · AI systems: < # %",
+   "fr": "Centres de données : > 99 % du total · systèmes d’IA : < 1 %"
+  },
+  "Ces deux grandeurs sont": {
+   "en": "These two quantities are",
+   "fr": "Ces deux grandeurs sont"
+  },
+  "Ces quatre taux ne sont PAS une référence de marché : ce module n'en a aucune de publiable, et en fabriquer une la rendrait crue. Ce sont quatre structures de financement, posées pour que vous voyiez de combien le verdict bouge entre elles — l'écart du simple au double. Le taux qui jugera votre projet est celui de votre comité d'investissement.": {
+   "en": "These four rates are NOT a market reference: this module has none it could publish, and making one up would make it believed. They are four financing structures, set so that you can see how much the verdict moves between them — the gap can be twofold. The rate that will judge your project is that of your investment committee.",
+   "fr": "Ces quatre taux ne sont PAS une référence de marché : ce module n'en a aucune de publiable, et en fabriquer une la rendrait crue. Ce sont quatre structures de financement, posées pour que vous voyiez de combien le verdict bouge entre elles — l'écart du simple au double. Le taux qui jugera votre projet est celui de votre comité d'investissement."
+  },
+  "Cliquez sur un pays": {
+   "en": "Click on a country",
+   "fr": "Cliquez sur un pays"
+  },
+  "Comment ces chiffres sont obtenus.": {
+   "en": "How these figures are obtained.",
+   "fr": "Comment ces chiffres sont obtenus."
+  },
+  "Comparateur pondéré d’implantation": {
+   "en": "Weighted siting comparator",
+   "fr": "Comparateur pondéré d’implantation"
+  },
+  "Consommation annuelle estimée × intensité carbone du pays pour l’usage ; énergie informatique × # kgCO₂e/MWh pour la fabrication amortie. Moyennes annuelles #, approche cycle de vie, d’après les séries Ember (facteurs GIEC AR#), recoupées avec l’Agence européenne pour l’environnement. Approche production : pour un pays fortement importateur, l’intensité vue au point de raccordement est plus élevée.": {
+   "en": "Estimated annual consumption × the country’s carbon intensity for use; IT energy × # kgCO₂e/MWh for amortised manufacturing. Annual averages #, life-cycle approach, based on the Ember series (IPCC AR# factors), cross-checked with the European Environment Agency. Production-based approach: for a heavily importing country, the intensity seen at the grid connection point is higher.",
+   "fr": "Consommation annuelle estimée × intensité carbone du pays pour l’usage ; énergie informatique × 22 kgCO₂e/MWh pour la fabrication amortie. Moyennes annuelles 2024, approche cycle de vie, d’après les séries Ember (facteurs GIEC AR5), recoupées avec l’Agence européenne pour l’environnement. Approche production : pour un pays fortement importateur, l’intensité vue au point de raccordement est plus élevée."
+  },
+  "Détente directe (DX) sur air": {
+   "en": "Direct expansion (DX) on air",
+   "fr": "Détente directe (DX) sur air"
+  },
+  "Eau de la source": {
+   "en": "Source water",
+   "fr": "Eau de la source"
+  },
+  "Eau du site": {
+   "en": "On-site water",
+   "fr": "Eau du site"
+  },
+  "Empreinte annuelle du parc cartographié, un pays par tuile": {
+   "en": "Annual footprint of the mapped estate, one country per tile",
+   "fr": "Empreinte annuelle du parc cartographié, un pays par tuile"
+  },
+  "Enveloppe d'investissement, DPGF et décision GO / NO GO": {
+   "en": "Investment envelope, DPGF and GO / NO-GO decision",
+   "fr": "Enveloppe d'investissement, DPGF et décision GO / NO GO"
+  },
+  "Explication : EWIF — l’eau qu’il faut pour produire un kilowattheure": {
+   "en": "Explanation: EWIF — the water needed to produce a kilowatt-hour",
+   "fr": "Explication : EWIF — l’eau qu’il faut pour produire un kilowattheure"
+  },
+  "Explication : Eau consommée, eau prélevée : l’écart va jusqu’à un facteur dix": {
+   "en": "Explanation: Water consumed, water withdrawn: the gap reaches a factor of ten",
+   "fr": "Explication : Eau consommée, eau prélevée : l’écart va jusqu’à un facteur dix"
+  },
+  "Explication : Eau de refroidissement": {
+   "en": "Explanation: Cooling water",
+   "fr": "Explication : Eau de refroidissement"
+  },
+  "Explication : Empreinte cycle de vie": {
+   "en": "Explanation: Life-cycle footprint",
+   "fr": "Explication : Empreinte cycle de vie"
+  },
+  "Explication : Foncier identifié pour les centres de données": {
+   "en": "Explanation: Land identified for data centres",
+   "fr": "Explication : Foncier identifié pour les centres de données"
+  },
+  "Explication : Nappe phréatique, et niveau piézométrique": {
+   "en": "Explanation: Groundwater, and piezometric level",
+   "fr": "Explication : Nappe phréatique, et niveau piézométrique"
+  },
+  "Explication : Refroidissement adiabatique": {
+   "en": "Explanation: Adiabatic cooling",
+   "fr": "Explication : Refroidissement adiabatique"
+  },
+  "Explication : Usage et fabrication": {
+   "en": "Explanation: Use and manufacturing",
+   "fr": "Explication : Usage et fabrication"
+  },
+  "Fabrication amortie sur la durée de vie · # %": {
+   "en": "Manufacturing amortised over the lifetime · # %",
+   "fr": "Fabrication amortie sur la durée de vie · 8 %"
+  },
+  "Free cooling indirect à assistance adiabatique": {
+   "en": "Indirect free cooling with adiabatic assistance",
+   "fr": "Free cooling indirect à assistance adiabatique"
+  },
+  "Ingénierie de projet": {
+   "en": "Project engineering",
+   "fr": "Ingénierie de projet"
+  },
+  "Intensité du réseau": {
+   "en": "Grid intensity",
+   "fr": "Intensité du réseau"
+  },
+  "LE BLOC QUI TRANCHE — # modes de refroidissement comparés": {
+   "en": "THE DECIDING BLOCK — # cooling modes compared",
+   "fr": "LE BLOC QUI TRANCHE — 5 modes de refroidissement comparés"
+  },
+  "La fabrication est amortie linéairement, sans tenir compte du taux de renouvellement réel des serveurs, plus rapide sur les charges d’IA.": {
+   "en": "Manufacturing is amortised linearly, without taking account of the actual server renewal rate, which is faster for AI workloads.",
+   "fr": "La fabrication est amortie linéairement, sans tenir compte du taux de renouvellement réel des serveurs, plus rapide sur les charges d’IA."
+  },
+  "Le cycle de vie complet des systèmes cartographiés : l’électricité qu’ils consomment, le CO₂ que cette électricité représente dans leur pays, la fabrication des équipements amortie sur leur durée de vie, et l’eau de refroidissement. La même chaîne de calcul que la page": {
+   "en": "The full life cycle of the mapped systems: the electricity they consume, the CO₂ that electricity represents in their country, the manufacturing of the equipment amortised over its lifetime, and the cooling water. The same calculation chain as the page",
+   "fr": "Le cycle de vie complet des systèmes cartographiés : l’électricité qu’ils consomment, le CO₂ que cette électricité représente dans leur pays, la fabrication des équipements amortie sur leur durée de vie, et l’eau de refroidissement. La même chaîne de calcul que la page"
+  },
+  "Le liseré donne l’intensité du réseau —": {
+   "en": "The border gives the grid intensity —",
+   "fr": "Le liseré donne l’intensité du réseau —"
+  },
+  "Le poste qu’on oublie.": {
+   "en": "The item that gets forgotten.",
+   "fr": "Le poste qu’on oublie."
+  },
+  "Le site vaut son": {
+   "en": "The site is worth its",
+   "fr": "Le site vaut son"
+  },
+  "Le tableau ci-dessus donne l’eau": {
+   "en": "The table above gives the water",
+   "fr": "Le tableau ci-dessus donne l’eau"
+  },
+  "Le tableau qui suit se lit par pays.": {
+   "en": "The following table reads by country.",
+   "fr": "Le tableau qui suit se lit par pays."
+  },
+  "Les deux blocs ouverts ci-dessous suffisent à trancher : les": {
+   "en": "The two blocks open below are enough to decide: the",
+   "fr": "Les deux blocs ouverts ci-dessous suffisent à trancher : les"
+  },
+  "Les deux eaux, et ce que valent ces chiffres": {
+   "en": "The two waters, and what these figures are worth",
+   "fr": "Les deux eaux, et ce que valent ces chiffres"
+  },
+  "Les deux fourchettes SE RECOUVRENT : au bas des hypothèses de WUE, l’eau amont domine largement ; au haut, c’est l’eau de site. Le total du parc ne tranche donc pas l’arbitrage — c’est le rapport EWIF × PUE ÷ WUE, mode de refroidissement par mode, qui le tranche.": {
+   "en": "The two ranges OVERLAP: at the low end of the WUE assumptions, upstream water clearly dominates; at the high end, it is on-site water. The estate total therefore does not decide the trade-off — it is the EWIF × PUE ÷ WUE ratio, cooling mode by mode, that decides it.",
+   "fr": "Les deux fourchettes SE RECOUVRENT : au bas des hypothèses de WUE, l’eau amont domine largement ; au haut, c’est l’eau de site. Le total du parc ne tranche donc pas l’arbitrage — c’est le rapport EWIF × PUE ÷ WUE, mode de refroidissement par mode, qui le tranche."
+  },
+  "Les familles que le parc ne code pas encore": {
+   "en": "The families the estate does not yet encode",
+   "fr": "Les familles que le parc ne code pas encore"
+  },
+  "Les intensités carbone sont des moyennes annuelles. L’intensité réelle varie d’un facteur trois dans la journée : un calcul déplacé de la nuit au midi solaire change son empreinte sans changer sa consommation.": {
+   "en": "Carbon intensities are annual averages. Actual intensity varies by a factor of three during the day: a calculation moved from night to solar noon changes its footprint without changing its consumption.",
+   "fr": "Les intensités carbone sont des moyennes annuelles. L’intensité réelle varie d’un facteur trois dans la journée : un calcul déplacé de la nuit au midi solaire change son empreinte sans changer sa consommation."
+  },
+  "L’eau de FABRICATION du matériel n’est comptée nulle part — ni ici, ni dans le bilan amont. Une usine de semi-conducteurs consomme de l’ordre de # millions de litres d’eau ultrapure par jour ; la part imputable à un serveur ne se reconstitue pas sans données constructeur, et les fabricants ne les publient pas. Le poste fabrication ci-dessus porte donc le CARBONE incorporé, jamais l’eau incorporée.": {
+   "en": "The water used to MANUFACTURE the hardware is counted nowhere — neither here nor in the upstream inventory. A semiconductor plant consumes around # million litres of ultrapure water per day; the share attributable to one server cannot be reconstructed without manufacturer data, and manufacturers do not publish it. The manufacturing item above therefore carries embodied CARBON, never embodied water.",
+   "fr": "L’eau de FABRICATION du matériel n’est comptée nulle part — ni ici, ni dans le bilan amont. Une usine de semi-conducteurs consomme de l’ordre de 38 millions de litres d’eau ultrapure par jour ; la part imputable à un serveur ne se reconstitue pas sans données constructeur, et les fabricants ne les publient pas. Le poste fabrication ci-dessus porte donc le CARBONE incorporé, jamais l’eau incorporée."
+  },
+  "L’eau de la colonne ci-contre est celle du REFROIDISSEMENT, et elle seule. L’eau consommée en amont pour produire l’électricité — considérable pour le thermique et le nucléaire — n’y est pas ajoutée, pour ne pas mélanger deux responsabilités : elle est calculée et publiée À PART, dans le bilan « l’eau que le WUE ne compte pas » de cette même section. Sur les parcs nationaux où les deux termes sont publiés, l’amont pèse de huit à douze fois le site.": {
+   "en": "The water in the adjacent column is COOLING water, and only that. The water consumed upstream to produce the electricity — considerable for thermal and nuclear — is not added to it, so as not to mix two responsibilities: it is calculated and published SEPARATELY, in the “water that WUE does not count” inventory in this same section. On the national estates where both terms are published, upstream weighs eight to twelve times the site.",
+   "fr": "L’eau de la colonne ci-contre est celle du REFROIDISSEMENT, et elle seule. L’eau consommée en amont pour produire l’électricité — considérable pour le thermique et le nucléaire — n’y est pas ajoutée, pour ne pas mélanger deux responsabilités : elle est calculée et publiée À PART, dans le bilan « l’eau que le WUE ne compte pas » de cette même section. Sur les parcs nationaux où les deux termes sont publiés, l’amont pèse de huit à douze fois le site."
+  },
+  "L’eau de la source, pays par pays": {
+   "en": "Source water, country by country",
+   "fr": "L’eau de la source, pays par pays"
+  },
+  "L’eau française, bassin par bassin — l’état des": {
+   "en": "French water, basin by basin — the state of the",
+   "fr": "L’eau française, bassin par bassin — l’état des"
+  },
+  "L’eau que le WUE ne compte pas": {
+   "en": "The water that WUE does not count",
+   "fr": "L’eau que le WUE ne compte pas"
+  },
+  "Nature, sources et limites": {
+   "en": "Nature, sources and limits",
+   "fr": "Nature, sources et limites"
+  },
+  "Ne baisse que si l’on achète moins de matériel, ou si on le garde plus longtemps. Un réseau propre n’y change rien.": {
+   "en": "Only falls if you buy less hardware, or keep it longer. A clean grid changes nothing.",
+   "fr": "Ne baisse que si l’on achète moins de matériel, ou si on le garde plus longtemps. Un réseau propre n’y change rien."
+  },
+  "Où cela se décide.": {
+   "en": "Where this is decided.",
+   "fr": "Où cela se décide."
+  },
+  "PARC ≠ TOTAL — # centres de données et # systèmes d’IA sont cartographiés ; le parc européen réel en compte plusieurs milliers. Les cumuls par pays ne sont donc pas des inventaires nationaux.": {
+   "en": "ESTATE ≠ TOTAL — # data centres and # AI systems are mapped; the actual European estate numbers several thousand. The per-country totals are therefore not national inventories.",
+   "fr": "PARC ≠ TOTAL — 254 centres de données et 72 systèmes d’IA sont cartographiés ; le parc européen réel en compte plusieurs milliers. Les cumuls par pays ne sont donc pas des inventaires nationaux."
+  },
+  "Panorama · mesure": {
+   "en": "Overview · measurement",
+   "fr": "Panorama · mesure"
+  },
+  "Par où commencer.": {
+   "en": "Where to start.",
+   "fr": "Par où commencer."
+  },
+  "Prélevée pour le refroidissement. Déclaration obligatoire au-delà de # kW informatiques (directive #/#, règlement délégué #/#).": {
+   "en": "Withdrawn for cooling. Reporting mandatory above # kW of IT power (Directive #/#, Delegated Regulation #/#).",
+   "fr": "Prélevée pour le refroidissement. Déclaration obligatoire au-delà de 500 kW informatiques (directive 2023/1791, règlement délégué 2024/1364)."
+  },
+  "Quelques ordres de grandeur pour situer": {
+   "en": "A few orders of magnitude for context",
+   "fr": "Quelques ordres de grandeur pour situer"
+  },
+  "Ramenées au kilowattheure informatique, les deux eaux se comparent": {
+   "en": "Brought back to the IT kilowatt-hour, the two waters can be compared",
+   "fr": "Ramenées au kilowattheure informatique, les deux eaux se comparent"
+  },
+  "Récupération de chaleur fatale": {
+   "en": "Waste heat recovery",
+   "fr": "Récupération de chaleur fatale"
+  },
+  "Répartition de l’empreinte carbone : # % d’usage, # % de fabrication": {
+   "en": "Breakdown of the carbon footprint: # % use, # % manufacturing",
+   "fr": "Répartition de l’empreinte carbone : 92 % d’usage, 8 % de fabrication"
+  },
+  "SCOPE # HORS PÉRIMÈTRE. Ces chiffres couvrent l’électricité consommée (scope # du GHG Protocol) et le matériel amorti (scope #). Ils n’incluent NI les fuites de fluide frigorigène, NI le carburant des groupes électrogènes — les deux postes directs d’un centre de données, et sur un site à détente directe la fuite de fluide dépasse régulièrement le carburant. Ces valeurs ne s’obtiennent que sur le site lui-même : charge en fluide, taux de fuite, volume de gazole. Pour un site tiers observé de l’extérieur, elles ne sont pas accessibles et ne sont donc pas estimées. Un bilan d’entreprise complet les exige : cette carte ne remplace pas un BEGES.": {
+   "en": "SCOPE # OUT OF SCOPE. These figures cover the electricity consumed (scope # of the GHG Protocol) and the amortised hardware (scope #). They include NEITHER refrigerant leaks NOR generator fuel — the two direct items of a data centre, and on a direct-expansion site refrigerant leakage regularly exceeds fuel. These values can only be obtained on the site itself: refrigerant charge, leak rate, diesel volume. For a third-party site observed from outside, they are not accessible and are therefore not estimated. A complete company inventory requires them: this map does not replace a BEGES [French regulatory greenhouse gas emissions report].",
+   "fr": "SCOPE 1 HORS PÉRIMÈTRE. Ces chiffres couvrent l’électricité consommée (scope 2 du GHG Protocol) et le matériel amorti (scope 3). Ils n’incluent NI les fuites de fluide frigorigène, NI le carburant des groupes électrogènes — les deux postes directs d’un centre de données, et sur un site à détente directe la fuite de fluide dépasse régulièrement le carburant. Ces valeurs ne s’obtiennent que sur le site lui-même : charge en fluide, taux de fuite, volume de gazole. Pour un site tiers observé de l’extérieur, elles ne sont pas accessibles et ne sont donc pas estimées. Un bilan d’entreprise complet les exige : cette carte ne remplace pas un BEGES."
+  },
+  "Suivre le parcours guidé « Eau et biodiversité » →": {
+   "en": "Follow the “Water and biodiversity” guided path →",
+   "fr": "Suivre le parcours guidé « Eau et biodiversité » →"
+  },
+  "Sur un site alimenté en électricité peu carbonée — Suède à # g, France à # g — la fabrication des serveurs pèse plus lourd que leur usage. Une carte qui n’afficherait que l’usage classerait ces pays quasiment à zéro, ce qui serait faux.": {
+   "en": "On a site supplied with low-carbon electricity — Sweden at # g, France at # g — manufacturing the servers weighs more than using them. A map showing only use would rank these countries at almost zero, which would be wrong.",
+   "fr": "Sur un site alimenté en électricité peu carbonée — Suède à 45 g, France à 60 g — la fabrication des serveurs pèse plus lourd que leur usage. Une carte qui n’afficherait que l’usage classerait ces pays quasiment à zéro, ce qui serait faux."
+  },
+  "Tableau détaillé": {
+   "en": "Detailed table",
+   "fr": "Tableau détaillé"
+  },
+  "Tour évaporative / circuit d’eau": {
+   "en": "Evaporative tower / water circuit",
+   "fr": "Tour évaporative / circuit d’eau"
+  },
+  "Un centre qui passe au refroidissement sec affiche alors un WUE nul tout en consommant davantage d’eau à la source.": {
+   "en": "A centre that switches to dry cooling then shows a WUE of zero while consuming more water at the source.",
+   "fr": "Un centre qui passe au refroidissement sec affiche alors un WUE nul tout en consommant davantage d’eau à la source."
+  },
+  "Un mètre cube n’est pas un mètre cube — d’où vient l’eau": {
+   "en": "A cubic metre is not a cubic metre — where the water comes from",
+   "fr": "Un mètre cube n’est pas un mètre cube — d’où vient l’eau"
+  },
+  "Un projet annoncé qui ne se réalise pas figure au cumul de son pays tant qu’il n’est pas retiré du référentiel. Le curseur d’horizon permet de l’écarter de la lecture.": {
+   "en": "An announced project that does not materialise stays in its country’s total until it is removed from the repository. The horizon slider lets you leave it out of the reading.",
+   "fr": "Un projet annoncé qui ne se réalise pas figure au cumul de son pays tant qu’il n’est pas retiré du référentiel. Le curseur d’horizon permet de l’écarter de la lecture."
+  },
+  "Usage — électricité × intensité du réseau · # %": {
+   "en": "Use — electricity × grid intensity · # %",
+   "fr": "Usage — électricité × intensité du réseau · 92 %"
+  },
+  "Voici le second terme du bilan, pour les mêmes # centres.": {
+   "en": "Here is the second term of the inventory, for the same # centres.",
+   "fr": "Voici le second terme du bilan, pour les mêmes 254 centres."
+  },
+  "WUE #–# · PUE #–# · amont #–# L/kWh informatique": {
+   "en": "WUE #–# · PUE #–# · upstream #–# L/IT kWh",
+   "fr": "WUE 0–0,2 · PUE 1,3–1,6 · amont 1,3–1,6 L/kWh informatique"
+  },
+  "WUE #–# · PUE #–# · amont #–# L/kWh informatique · aucune eau sur le site — tout le bilan eau est en amont": {
+   "en": "WUE #–# · PUE #–# · upstream #–# L/IT kWh · no water on site — the entire water inventory is upstream",
+   "fr": "WUE 0–0,1 · PUE 1,1–1,25 · amont 1,1–1,25 L/kWh informatique · aucune eau sur le site — tout le bilan eau est en amont"
+  },
+  "WUE #–# · PUE #–# · amont #–# L/kWh informatique · la chaleur exportée n’est plus à évacuer : elle sort du bilan eau du site": {
+   "en": "WUE #–# · PUE #–# · upstream #–# L/IT kWh · exported heat no longer has to be removed: it leaves the site’s water inventory",
+   "fr": "WUE 0–0,2 · PUE 1,1–1,3 · amont 1,1–1,3 L/kWh informatique · la chaleur exportée n’est plus à évacuer : elle sort du bilan eau du site"
+  },
+  "WUE #–# · PUE #–# · amont #–# L/kWh informatique · l’eau n’est consommée qu’aux heures chaudes : la moyenne annuelle masque les pointes estivales, quand la ressource est tendue": {
+   "en": "WUE #–# · PUE #–# · upstream #–# L/IT kWh · water is only consumed in hot hours: the annual average hides the summer peaks, when the resource is under strain",
+   "fr": "WUE 0,8–2,2 · PUE 1,2–1,45 · amont 1,2–1,45 L/kWh informatique · l’eau n’est consommée qu’aux heures chaudes : la moyenne annuelle masque les pointes estivales, quand la ressource est tendue"
+  },
+  "adiabatiques": {
+   "en": "adiabatic",
+   "fr": "adiabatiques"
+  },
+  "amont ÷ site : ×# à sans borne": {
+   "en": "upstream ÷ site: ×# to unbounded",
+   "fr": "amont ÷ site : ×6,5 à sans borne"
+  },
+  "amont ÷ site : ×# à ×#": {
+   "en": "upstream ÷ site: ×# to ×#",
+   "fr": "amont ÷ site : ×0,5 à ×1,8"
+  },
+  "au-delà. L’eau prélevée et la part des centres de données figurent dans le": {
+   "en": "beyond. Water withdrawn and the share of data centres appear in the",
+   "fr": "au-delà. L’eau prélevée et la part des centres de données figurent dans le"
+  },
+  "centres de données au calcul": {
+   "en": "data centres in the calculation",
+   "fr": "centres de données au calcul"
+  },
+  "consommée": {
+   "en": "consumed",
+   "fr": "consommée"
+  },
+  "consommée en amont pour produire l’électricité achetée": {
+   "en": "consumed upstream to produce the electricity purchased",
+   "fr": "consommée en amont pour produire l’électricité achetée"
+  },
+  "deux volumes": {
+   "en": "two volumes",
+   "fr": "deux volumes"
+  },
+  "du site, appliquée au parc au lieu d’une requête.": {
+   "en": "of the site, applied to the estate instead of a request.",
+   "fr": "du site, appliquée au parc au lieu d’une requête."
+  },
+  "eau de refroidissement, millions de m³ par an": {
+   "en": "cooling water, millions of m³ per year",
+   "fr": "eau de refroidissement, millions de m³ par an"
+  },
+  "empreinte non dérivable · # centre(s) · # SIA": {
+   "en": "footprint not derivable · # centre(s) · # AI syst.",
+   "fr": "empreinte non dérivable · 1 centre(s) · 0 SIA"
+  },
+  "et lire le paradoxe de l’évaporation ·": {
+   "en": "and read the evaporation paradox ·",
+   "fr": "et lire le paradoxe de l’évaporation ·"
+  },
+  "foncier identifié": {
+   "en": "land identified",
+   "fr": "foncier identifié"
+  },
+  "incertitude ±# % sur le terme amont · # limites assumées": {
+   "en": "uncertainty ±# % on the upstream term · # acknowledged limits",
+   "fr": "incertitude ±40 % sur le terme amont · 7 limites assumées"
+  },
+  "intervalle trop large pour conclure — et c’est dit": {
+   "en": "range too wide to conclude — and it says so",
+   "fr": "intervalle trop large pour conclure — et c’est dit"
+  },
+  "jusqu’à #,": {
+   "en": "up to #,",
+   "fr": "jusqu’à 250,"
+  },
+  "l’amont domine toujours": {
+   "en": "upstream always dominates",
+   "fr": "l’amont domine toujours"
+  },
+  "mise à jour #-#-# #:# · # sur la moyenne annuelle #": {
+   "en": "updated #-#-# #:# · # on the annual average for #",
+   "fr": "mise à jour 2026-09-25 07:56 · 29 sur la moyenne annuelle 2024"
+  },
+  "mode par mode": {
+   "en": "mode by mode",
+   "fr": "mode par mode"
+  },
+  "non estimée": {
+   "en": "not estimated",
+   "fr": "non estimée"
+  },
+  "ou seulement de sa": {
+   "en": "or only its",
+   "fr": "ou seulement de sa"
+  },
+  "par an, sur le parc cartographié": {
+   "en": "per year, on the mapped estate",
+   "fr": "par an, sur le parc cartographié"
+  },
+  "portent des nappes basses · # sur # en BAISSE": {
+   "en": "have low water tables · # of # FALLING",
+   "fr": "portent des nappes basses · 9 sur 9 en BAISSE"
+  },
+  "pour ouvrir le détail de": {
+   "en": "to open the details of",
+   "fr": "pour ouvrir le détail de"
+  },
+  "publiée": {
+   "en": "published",
+   "fr": "publiée"
+  },
+  "selon les hypothèses": {
+   "en": "depending on the assumptions",
+   "fr": "selon les hypothèses"
+  },
+  "sous # gCO₂e/kWh,": {
+   "en": "below # gCO₂e/kWh,",
+   "fr": "sous 100 gCO₂e/kWh,"
+  },
+  "sous le foncier annoncé": {
+   "en": "under the announced land",
+   "fr": "sous le foncier annoncé"
+  },
+  "sur le site": {
+   "en": "on the site",
+   "fr": "sur le site"
+  },
+  "systèmes d’IA au calcul": {
+   "en": "AI systems in the calculation",
+   "fr": "systèmes d’IA au calcul"
+  },
+  "tous ses centres de données": {
+   "en": "all its data centres",
+   "fr": "tous ses centres de données"
+  },
+  "× PUE. Le trait montre la fourchette, pas une valeur : sur une plage de # à # L/kWh, une barre pleine raconterait un chiffre là où il n’y a qu’un intervalle.": {
+   "en": "× PUE. The line shows the range, not a value: over a span of # to # L/kWh, a solid bar would tell a figure where there is only an interval.",
+   "fr": "× PUE. Le trait montre la fourchette, pas une valeur : sur une plage de 0 à 2,2 L/kWh, une barre pleine raconterait un chiffre là où il n’y a qu’un intervalle."
+  },
+  "— ce que coûte le mode de refroidissement retenu ·": {
+   "en": "— what the selected cooling mode costs ·",
+   "fr": "— ce que coûte le mode de refroidissement retenu ·"
+  },
+  "— c’est elle, et elle seule, qui dit quelle conception consomme le moins d’eau au total. Les blocs repliés justifient ce résultat et se picorent : chacun annonce son contenu sans qu’on ait à l’ouvrir.": {
+   "en": "— it is this, and this alone, that says which design consumes the least water in total. The collapsed blocks justify this result and can be dipped into: each announces its content without you having to open it.",
+   "fr": "— c’est elle, et elle seule, qui dit quelle conception consomme le moins d’eau au total. Les blocs repliés justifient ce résultat et se picorent : chacun annonce son contenu sans qu’on ait à l’ouvrir."
+  },
+  "— la séquence des pièces, phase par phase (accès abonné)": {
+   "en": "— the sequence of documents, phase by phase (subscriber access)",
+   "fr": "— la séquence des pièces, phase par phase (accès abonné)"
+  },
+  "— régler le poids du critère": {
+   "en": "— set the weight of the criterion",
+   "fr": "— régler le poids du critère"
+  }
+ }
+}

@@ -1172,6 +1172,54 @@ def test_les_dictionnaires_du_depot_passent_verifier_contre_le_catalogue_du_depo
             u"déclaration doit disparaître" % cle[:40])
 
 
+#: LE POIDS QU'ON A LE DROIT DE GARER DANS « RIEN À TRADUIRE ». Mesuré au
+#: 5 octobre 2026 : 1 752 mots sur 206 282, soit 0,85 % du catalogue. Le
+#: plafond est posé À PEINE AU-DESSUS. Pourquoi un plafond : la table dispense
+#: de traduire, donc elle peut tout dispenser. Un module entier qu'on y
+#: garerait ferait monter la couverture à 100 % sans qu'une ligne soit
+#: traduite — et le plancher de SEUIL_COUVERTURE ne garderait plus rien.
+PLAFOND_SANS_TRADUCTION = 2200
+
+
+def test_la_table_SANS_TRADUCTION_ne_peut_pas_servir_a_garer_du_francais():
+    """CE QU'ELLE DÉCLARE EST VRAI, ET BORNÉ. Chaque clé est au catalogue,
+    porte une raison écrite, et le poids total garé reste sous un plafond —
+    sans quoi la table deviendrait le moyen de tenir le plancher de couverture
+    sans traduire."""
+    chemin = os.path.join(DOSSIER, "SANS_TRADUCTION.json")
+    assert os.path.isfile(chemin), "i18n/sentinel/SANS_TRADUCTION.json manque"
+    cles = outil.lire_sans_traduction(chemin)
+    assert cles, "la table est vide : lire_sans_traduction ne lit pas le fichier"
+    cat = _catalogue_reel()
+    #  1. AUCUNE CLÉ FANTÔME. Une clé qui n'est plus au catalogue dispenserait
+    #     de traduire un texte que personne ne sert plus — et masquerait le
+    #     jour où un texte VOISIN arriverait, lui, en français.
+    absentes = sorted(c for c in cles
+                      if not (c in cat["texte"] or c in cat["bloc"] or c in cat["attr"]))
+    assert not absentes, (
+        u"déclarées « rien à traduire » mais plus au catalogue : %s" % absentes[:5])
+    #  2. CHAQUE CLÉ PORTE SA RAISON, et une raison d'une ligne n'en est pas une.
+    muettes = sorted(c for c, r in cles.items() if not isinstance(r, str) or len(r.strip()) < 40)
+    assert not muettes, u"déclarées sans raison écrite : %s" % muettes[:5]
+    #  3. LE POIDS GARÉ EST BORNÉ, et c'est la garde qui compte.
+    poids = 0
+    for regime in ("bloc", "texte", "attr"):
+        for c, e in cat[regime].items():
+            if c in cles:
+                poids += e.get("mots", 0)
+    assert poids <= PLAFOND_SANS_TRADUCTION, (
+        u"%d mots garés dans « rien à traduire », plafond %d : la table sert à "
+        u"nommer ce qui n'a pas de traduction, pas à dispenser un module de la "
+        u"sienne" % (poids, PLAFOND_SANS_TRADUCTION))
+    #  4. ET ELLE NE PEUT PAS ÊTRE AUSSI UN DICTIONNAIRE. Une clé déclarée ici
+    #     ET traduite ailleurs dirait deux choses contraires du même texte.
+    dico, _ = sentinel_i18n.fusionner(DOSSIER)
+    doubles = sorted(c for c in cles
+                     if (dico.get("texte") or {}).get(c) or (dico.get("bloc") or {}).get(c))
+    assert not doubles, (
+        u"déclarées « rien à traduire » ET traduites : %s" % doubles[:5])
+
+
 def test_la_route_ne_sert_pas_le_catalogue_et_le_dossier_reel_se_fusionne_sans_faute():
     """LE CATALOGUE EST DANS LE DOSSIER SERVI : ses valeurs sont des fiches,
     pas des chaînes. Le servir ferait 900 Ko de plus et une faute par
@@ -1205,6 +1253,14 @@ def test_les_fichiers_de_travail_du_depot_couvrent_le_catalogue_sans_doublon_et_
     #  UN ATTRIBUT DONT LA CLÉ EST AUSSI UN TEXTE est une seule case pour la
     #  route : les deux se cherchent dans « texte ».
     attendues = set([("bloc", k) for k in cat["bloc"]] + [("texte", k) for k in cat["texte"]] + [("texte", k) for k in cat["attr"]])
+    #  ET CE QUI N'A RIEN À TRADUIRE N'EST PAS DU TRAVAIL. Une citation d'un
+    #  texte anglais, un nom propre, un identifiant ou une valeur n'entre pas
+    #  dans l'inbox des traducteurs : y laisser une case vide ferait compter
+    #  comme en attente ce qui n'attend rien. La table est bornée par
+    #  test_la_table_SANS_TRADUCTION_ne_peut_pas_servir_a_garer_du_francais —
+    #  elle ne peut donc pas servir à vider l'inbox d'un module entier.
+    sans = outil.lire_sans_traduction()
+    attendues = set((r, k) for r, k in attendues if k not in sans)
     assert len(vues) == len(set(vues)), "doublons entre fichiers de travail : %s" % [v for v in vues if vues.count(v) > 1][:3]
     assert set(vues) == attendues, "écart catalogue / lots : %s" % sorted(attendues ^ set(vues))[:5]
     assert remplies == len(vues), (

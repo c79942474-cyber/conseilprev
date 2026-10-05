@@ -1,0 +1,463 @@
+{
+ "_lot": "48-js-18",
+ "_mots": 2516,
+ "_pages": [
+  "_js"
+ ],
+ "_rubrique": "_js",
+ "bloc": {},
+ "texte": {
+  "Les générations ajoutent volontiers une fonctionnalité voisine, une option, un cache. Ce qui n’a pas été demandé n’a pas été spécifié, donc pas revu, donc pas testé — et se retrouve pourtant en production.": {
+   "en": "Generated output readily adds a neighbouring feature, an option, a cache. What was not requested was not specified, so not reviewed, so not tested — and yet it ends up in production.",
+   "fr": "Les générations ajoutent volontiers une fonctionnalité voisine, une option, un cache. Ce qui n’a pas été demandé n’a pas été spécifié, donc pas revu, donc pas testé — et se retrouve pourtant en production."
+  },
+  "Les huit domaines à haut risque — biométrie, infrastructures critiques, éducation, emploi, services essentiels, répression, migration, justice — n'atteignent pas l'extraction en tant que telle. Deux portes restent : l'annexe I par le règlement Machines pour l'IA embarquée, et l'annexe III, point # dès qu'on évalue les performances d'un opérateur.": {
+   "en": "The eight high-risk areas — biometrics, critical infrastructure, education, employment, essential services, law enforcement, migration, justice — do not reach extraction as such. Two doors remain: Annex I through the Machinery Regulation for embedded AI, and Annex III, point # as soon as an operator’s performance is assessed.",
+   "fr": "Les huit domaines à haut risque — biométrie, infrastructures critiques, éducation, emploi, services essentiels, répression, migration, justice — n'atteignent pas l'extraction en tant que telle. Deux portes restent : l'annexe I par le règlement Machines pour l'IA embarquée, et l'annexe III, point 4 dès qu'on évalue les performances d'un opérateur."
+  },
+  "Les indicateurs marqués DÉCLARÉ sont des affirmations, et ce document ne les présente pas autrement.": {
+   "en": "The indicators marked DECLARED are assertions, and this document presents them as nothing else.",
+   "fr": "Les indicateurs marqués DÉCLARÉ sont des affirmations, et ce document ne les présente pas autrement."
+  },
+  "Les indices sont comparés MOT POUR MOT à la déclaration. Une reformulation, même juste, n’est pas vérifiable : la proposition passe alors sur « à compléter », avec la liste de ce qui manque.": {
+   "en": "The clues are compared WORD FOR WORD with the declaration. A rewording, even an accurate one, cannot be verified: the proposal then moves to “to be completed”, with the list of what is missing.",
+   "fr": "Les indices sont comparés MOT POUR MOT à la déclaration. Une reformulation, même juste, n’est pas vérifiable : la proposition passe alors sur « à compléter », avec la liste de ce qui manque."
+  },
+  "Les intitulés des étapes et les": {
+   "en": "The step titles and the",
+   "fr": "Les intitulés des étapes et les"
+  },
+  "Les journaux sont ce qui rendra votre usage démontrable — et la surveillance ce qui vous permettra de suspendre à temps plutôt que d’expliquer après.": {
+   "en": "The logs are what will make your use demonstrable — and monitoring is what will let you suspend in time rather than explain afterwards.",
+   "fr": "Les journaux sont ce qui rendra votre usage démontrable — et la surveillance ce qui vous permettra de suspendre à temps plutôt que d’expliquer après."
+  },
+  "Les lacunes sont séparées selon l’étape du cycle de vie déclarée au Registre. Un système EN CONCEPTION n’a pas de volume parce qu’il ne consomme rien : ce n’est pas une lacune. Un système EN PRODUCTION n’en a pas parce que personne ne l’a relevé : c’en est une. Sans ce partage, un parc de vingt systèmes dont douze sont en conception affiche huit lignes « manquantes » comme un reproche, et l’on part relancer douze équipes qui n’ont rien à déclarer.": {
+   "en": "The gaps are separated according to the life-cycle stage declared in the register. A system IN DESIGN has no volume because it consumes nothing: that is not a gap. A system IN PRODUCTION has none because nobody has recorded it: that is one. Without this split, an estate of twenty systems of which twelve are in design shows eight “missing” rows as a reproach, and you set off chasing twelve teams that have nothing to declare.",
+   "fr": "Les lacunes sont séparées selon l’étape du cycle de vie déclarée au Registre. Un système EN CONCEPTION n’a pas de volume parce qu’il ne consomme rien : ce n’est pas une lacune. Un système EN PRODUCTION n’en a pas parce que personne ne l’a relevé : c’en est une. Sans ce partage, un parc de vingt systèmes dont douze sont en conception affiche huit lignes « manquantes » comme un reproche, et l’on part relancer douze équipes qui n’ont rien à déclarer."
+  },
+  "Les lignes du registre voyagent en données dans la demande ;": {
+   "en": "The register rows travel as data in the request;",
+   "fr": "Les lignes du registre voyagent en données dans la demande ;"
+  },
+  "Les mentions d'information sont accessibles au moment de la collecte": {
+   "en": "Information notices are accessible at the time of collection",
+   "fr": "Les mentions d'information sont accessibles au moment de la collecte"
+  },
+  "Les mesures produites servent de preuve devant l'administration. Un modèle qui les corrige doit dire qu'il les corrige.": {
+   "en": "The measurements produced serve as evidence before the administration. A model that corrects them must say that it corrects them.",
+   "fr": "Les mesures produites servent de preuve devant l'administration. Un modèle qui les corrige doit dire qu'il les corrige."
+  },
+  "Les micro et petites entreprises sont exemptées du chapitre II — et du chapitre II SEULEMENT — à deux conditions : n’avoir aucune entreprise partenaire ou liée qui ne soit pas elle aussi micro ou petite, et ne pas travailler en sous-traitance pour fabriquer ou concevoir un produit connecté. Déclarer « petite entreprise » ne suffit donc pas, et la page ne l’accorde pas sans les deux réponses.": {
+   "en": "Micro and small enterprises are exempt from Chapter II — and from Chapter II ONLY — on two conditions: having no partner or linked enterprise that is not itself micro or small, and not working as a subcontractor to manufacture or design a connected product. Declaring 'small enterprise' is therefore not enough, and the page does not grant it without both answers.",
+   "fr": "Les micro et petites entreprises sont exemptées du chapitre II — et du chapitre II SEULEMENT — à deux conditions : n’avoir aucune entreprise partenaire ou liée qui ne soit pas elle aussi micro ou petite, et ne pas travailler en sous-traitance pour fabriquer ou concevoir un produit connecté. Déclarer « petite entreprise » ne suffit donc pas, et la page ne l’accorde pas sans les deux réponses."
+  },
+  "Les modules, accrochés aux scores réels": {
+   "en": "The modules, tied to the actual scores",
+   "fr": "Les modules, accrochés aux scores réels"
+  },
+  "Les montants sont un ordre de grandeur CATALOGUE, calculé sur des tarifs publiés et datés. Un contrat entreprise, une remise au volume, un cache de contexte ou un traitement différé donnent un coût réel différent, parfois d’un ordre de grandeur. Rien ici ne remplace la lecture de votre facture, et rien n’est mesuré : Sentinel ne tourne pas dans vos applications. Les leviers d’optimisation sont DÉCLARÉS, jamais vérifiés — une case cochée dit qu’un cache existe, pas qu’il est branché.": {
+   "en": "The amounts are a CATALOGUE order of magnitude, calculated on published and dated rates. An enterprise contract, a volume discount, a context cache or deferred processing give a different real cost, sometimes by an order of magnitude. Nothing here replaces reading your invoice, and nothing is measured: Sentinel does not run in your applications. The optimisation levers are DECLARED, never verified — a ticked box says a cache exists, not that it is switched on.",
+   "fr": "Les montants sont un ordre de grandeur CATALOGUE, calculé sur des tarifs publiés et datés. Un contrat entreprise, une remise au volume, un cache de contexte ou un traitement différé donnent un coût réel différent, parfois d’un ordre de grandeur. Rien ici ne remplace la lecture de votre facture, et rien n’est mesuré : Sentinel ne tourne pas dans vos applications. Les leviers d’optimisation sont DÉCLARÉS, jamais vérifiés — une case cochée dit qu’un cache existe, pas qu’il est branché."
+  },
+  "Les objectifs s’appliquent à TOUS les systèmes.": {
+   "en": "The objectives apply to ALL systems.",
+   "fr": "Les objectifs s’appliquent à TOUS les systèmes."
+  },
+  "Les obligations DORA sont adaptées à la taille, la nature, la complexité et le profil de risque de chaque entité financière.": {
+   "en": "DORA obligations are adapted to the size, nature, complexity and risk profile of each financial entity.",
+   "fr": "Les obligations DORA sont adaptées à la taille, la nature, la complexité et le profil de risque de chaque entité financière."
+  },
+  "Les obligations ci-dessous sont celles de ce rôle, et de lui seul. Un même système peut être à haut risque pour tous les opérateurs sans que chacun doive la même chose.": {
+   "en": "The obligations below are those of this role, and of this role alone. The same system can be high-risk for all operators without each of them owing the same things.",
+   "fr": "Les obligations ci-dessous sont celles de ce rôle, et de lui seul. Un même système peut être à haut risque pour tous les opérateurs sans que chacun doive la même chose."
+  },
+  "Les obligations de transparence de l’article # s’appliquent au # août #, mais le marquage machine se prépare en amont : il touche la chaîne de production des contenus, pas seulement leur affichage.": {
+   "en": "The transparency obligations of Article # apply from # August #, but machine marking is prepared upstream: it affects the content production chain, not just how content is displayed.",
+   "fr": "Les obligations de transparence de l’article 50 s’appliquent au 2 août 2026, mais le marquage machine se prépare en amont : il touche la chaîne de production des contenus, pas seulement leur affichage."
+  },
+  "Les obligations des articles # à # relèvent du palier intermédiaire : # M€ ou # % du chiffre d’affaires mondial.": {
+   "en": "The obligations in Articles # to # fall under the intermediate tier: €# million or # % of worldwide turnover.",
+   "fr": "Les obligations des articles 18 à 23 relèvent du palier intermédiaire : 10 M€ ou 2 % du chiffre d’affaires mondial."
+  },
+  "Les obligations du fournisseur ne s’arrêtent pas à la mise sur le marché : elles courent sur toute la durée de vie du système.": {
+   "en": "The provider’s obligations do not stop at placing on the market: they run for the whole lifetime of the system.",
+   "fr": "Les obligations du fournisseur ne s’arrêtent pas à la mise sur le marché : elles courent sur toute la durée de vie du système."
+  },
+  "Les onze mesures neuves sont nommées : renseignement sur les menaces, services en nuage, préparation des TIC, surveillance physique, configurations, suppression, masquage, fuite de données, surveillance, filtrage web, codage sécurisé.": {
+   "en": "The eleven new controls are named: threat intelligence, cloud services, ICT readiness, physical security monitoring, configuration management, information deletion, data masking, data leakage prevention, monitoring activities, web filtering, secure coding.",
+   "fr": "Les onze mesures neuves sont nommées : renseignement sur les menaces, services en nuage, préparation des TIC, surveillance physique, configurations, suppression, masquage, fuite de données, surveillance, filtrage web, codage sécurisé."
+  },
+  "Les options de réparation que le document": {
+   "en": "The remediation options that the",
+   "fr": "Les options de réparation que le document"
+  },
+  "Les organes de direction doivent approuver les mesures de gestion des risques cyber, superviser leur mise en œuvre, et peuvent être tenus personnellement responsables en cas de manquement.": {
+   "en": "Management bodies must approve the cybersecurity risk-management measures, oversee their implementation, and can be held personally liable in the event of a breach.",
+   "fr": "Les organes de direction doivent approuver les mesures de gestion des risques cyber, superviser leur mise en œuvre, et peuvent être tenus personnellement responsables en cas de manquement."
+  },
+  "Les paramètres par défaut sont les plus protecteurs": {
+   "en": "Default settings are the most protective",
+   "fr": "Les paramètres par défaut sont les plus protecteurs"
+  },
+  "Les pastilles rouges et orange signalent les points à traiter en priorité.": {
+   "en": "The red and orange dots flag the points to deal with first.",
+   "fr": "Les pastilles rouges et orange signalent les points à traiter en priorité."
+  },
+  "Les personnes concernées peuvent-elles comprendre, contester et obtenir réexamen humain d'une décision automatisée ?": {
+   "en": "Can data subjects understand, challenge and obtain human review of an automated decision?",
+   "fr": "Les personnes concernées peuvent-elles comprendre, contester et obtenir réexamen humain d'une décision automatisée ?"
+  },
+  "Les personnes ont le droit de ne pas faire l'objet d'une décision exclusivement automatisée ayant des effets juridiques.": {
+   "en": "People have the right not to be subject to a decision based solely on automated processing that produces legal effects.",
+   "fr": "Les personnes ont le droit de ne pas faire l'objet d'une décision exclusivement automatisée ayant des effets juridiques."
+  },
+  "Les points ba et bb s'appliqueront à compter du": {
+   "en": "Points ba and bb will apply from",
+   "fr": "Les points ba et bb s'appliqueront à compter du"
+  },
+  "Les points ba et bb sont interdits depuis le": {
+   "en": "Points ba and bb have been prohibited since",
+   "fr": "Les points ba et bb sont interdits depuis le"
+  },
+  "Les ponts viennent du DOCUMENT, pas du cabinet : c'est l'OCDE qui rapproche ses six étapes de l'IA Act, d'ISO/IEC #, du cadre du NIST et de dix-sept autres cadres.": {
+   "en": "The bridges come from the DOCUMENT, not from the firm: it is the OECD that sets its six steps alongside the AI Act, ISO/IEC #, the NIST framework and seventeen other frameworks.",
+   "fr": "Les ponts viennent du DOCUMENT, pas du cabinet : c'est l'OCDE qui rapproche ses six étapes de l'IA Act, d'ISO/IEC 42001, du cadre du NIST et de dix-sept autres cadres."
+  },
+  "Les ponts, donnés par le": {
+   "en": "The bridges, given by the",
+   "fr": "Les ponts, donnés par le"
+  },
+  "Les praticiens doivent comprendre et pouvoir contester les recommandations IA. Supervision humaine renforcée (Art. #) sur toute décision médicale.": {
+   "en": "Practitioners must understand and be able to challenge AI recommendations. Enhanced human oversight (Art. #) on every medical decision.",
+   "fr": "Les praticiens doivent comprendre et pouvoir contester les recommandations IA. Supervision humaine renforcée (Art. 14) sur toute décision médicale."
+  },
+  "Les privilèges d'une organisation ne dispensent pas ses fournisseurs établis dans l'Union de leurs propres obligations. La conformité se traite au contrat.": {
+   "en": "An organisation’s privileges do not exempt its suppliers established in the Union from their own obligations. Compliance is handled in the contract.",
+   "fr": "Les privilèges d'une organisation ne dispensent pas ses fournisseurs établis dans l'Union de leurs propres obligations. La conformité se traite au contrat."
+  },
+  "Les projets ABANDONNÉS sont conservés exprès dans le référentiel : un refus renseigne autant qu’une annonce sur les contraintes d’un territoire.": {
+   "en": "ABANDONED projects are deliberately kept in the framework: a refusal says as much as an announcement about a territory’s constraints.",
+   "fr": "Les projets ABANDONNÉS sont conservés exprès dans le référentiel : un refus renseigne autant qu’une annonce sur les contraintes d’un territoire."
+  },
+  "Les qualités décident des chapitres, et les chapitres décident de l'exposition : seuls les chapitres II, III et V encourent le plafond de l'article # §# du RGPD.": {
+   "en": "The capacities decide the Chapters, and the Chapters decide the exposure: only Chapters II, III and V incur the cap of Article #(#) GDPR.",
+   "fr": "Les qualités décident des chapitres, et les chapitres décident de l'exposition : seuls les chapitres II, III et V encourent le plafond de l'article 83 §5 du RGPD."
+  },
+  "Les quatre exclusions": {
+   "en": "The four exclusions",
+   "fr": "Les quatre exclusions"
+  },
+  "Les quatre fonds de carte": {
+   "en": "The four map backgrounds",
+   "fr": "Les quatre fonds de carte"
+  },
+  "Les quatre indicateurs, et celui qui manque": {
+   "en": "The four indicators, and the one that is missing",
+   "fr": "Les quatre indicateurs, et celui qui manque"
+  },
+  "Les quatre phases ne dépendent pas du secteur. La durée, si — et elle n'est pas calibrée ici.": {
+   "en": "The four phases do not depend on the sector. The duration does — and it is not calibrated here.",
+   "fr": "Les quatre phases ne dépendent pas du secteur. La durée, si — et elle n'est pas calibrée ici."
+  },
+  "Les quatre phases, les livrables et le questionnaire restent applicables :": {
+   "en": "The four phases, the deliverables and the questionnaire remain applicable:",
+   "fr": "Les quatre phases, les livrables et le questionnaire restent applicables :"
+  },
+  "Les quatre points sur lesquels aucun travail ne mènera à # %, nommés d’avance.": {
+   "en": "The four points on which no amount of work will lead to # %, named in advance.",
+   "fr": "Les quatre points sur lesquels aucun travail ne mènera à 100 %, nommés d’avance."
+  },
+  "Les questions de data room": {
+   "en": "The data room questions",
+   "fr": "Les questions de data room"
+  },
+  "Les questions sont rédigées par le cabinet à partir des paragraphes de la norme, dont seuls les numéros et les titres sont cités. Répondre « oui » ici n’est pas une preuve : c’est une déclaration, et la documentation technique est ce qui la rend démontrable.": {
+   "en": "The questions are written by the firm from the paragraphs of the standard, of which only the numbers and the titles are cited. Answering « yes » here is not evidence: it is a declaration, and the technical documentation is what makes it demonstrable.",
+   "fr": "Les questions sont rédigées par le cabinet à partir des paragraphes de la norme, dont seuls les numéros et les titres sont cités. Répondre « oui » ici n’est pas une preuve : c’est une déclaration, et la documentation technique est ce qui la rend démontrable."
+  },
+  "Les raccourcis « tout retenir » et « tout écarter » font gagner trente-huit clics, pas trente-huit décisions : la déclaration reste irrecevable tant que les motifs manquent.": {
+   "en": "The “include all” and “exclude all” shortcuts save thirty-eight clicks, not thirty-eight decisions: the statement remains inadmissible as long as the reasons are missing.",
+   "fr": "Les raccourcis « tout retenir » et « tout écarter » font gagner trente-huit clics, pas trente-huit décisions : la déclaration reste irrecevable tant que les motifs manquent."
+  },
+  "Les risques résiduels sont explicitement acceptés (#)": {
+   "en": "Residual risks are explicitly accepted (#)",
+   "fr": "Les risques résiduels sont explicitement acceptés (16.3)"
+  },
+  "Les régimes ci-dessous sont établis par lecture des textes — annexe III": {
+   "en": "The regimes below are established by reading the texts — Annex III",
+   "fr": "Les régimes ci-dessous sont établis par lecture des textes — annexe III"
+  },
+  "Les rôles non attribués sont le vrai plan de recrutement : ils disent ce qui manque, en langage de poste et non de compétence.": {
+   "en": "The unassigned roles are the real recruitment plan: they say what is missing, in the language of posts rather than skills.",
+   "fr": "Les rôles non attribués sont le vrai plan de recrutement : ils disent ce qui manque, en langage de poste et non de compétence."
+  },
+  "Les rôles, ouverts dans l’outil": {
+   "en": "The roles, opened in the tool",
+   "fr": "Les rôles, ouverts dans l’outil"
+  },
+  "Les scores de risque sont des estimations CONSEILPREV a vocation d aide a la decision et ne constituent pas un avis juridique. Sources : textes officiels (Federal Register, EUR-Lex, Commission europeenne, CAC) et analyses de cabinets juridiques.": {
+   "en": "Risk scores are CONSEILPREV estimates intended as decision support and do not constitute legal advice. Sources: official texts (Federal Register, EUR-Lex, European Commission, CAC) and law firm analyses.",
+   "fr": "Les scores de risque sont des estimations CONSEILPREV a vocation d aide a la decision et ne constituent pas un avis juridique. Sources : textes officiels (Federal Register, EUR-Lex, Commission europeenne, CAC) et analyses de cabinets juridiques."
+  },
+  "Les scores sont auto-declares. Cette evaluation ne constitue pas un avis juridique. Pour un audit certifie, contactez christophe.cerf@outlook.com": {
+   "en": "Scores are self-declared. This assessment does not constitute legal advice. For a certified audit, contact christophe.cerf@outlook.com",
+   "fr": "Les scores sont auto-declares. Cette evaluation ne constitue pas un avis juridique. Pour un audit certifie, contactez christophe.cerf@outlook.com"
+  },
+  "Les sept caractéristiques": {
+   "en": "The seven characteristics",
+   "fr": "Les sept caractéristiques"
+  },
+  "Les sept caractéristiques de confiance ne s’additionnent pas : elles s’arbitrent. Rendre un système plus explicable peut le rendre moins sûr.": {
+   "en": "The seven trustworthiness characteristics do not add up: they are traded off. Making a system more explainable can make it less secure.",
+   "fr": "Les sept caractéristiques de confiance ne s’additionnent pas : elles s’arbitrent. Rendre un système plus explicable peut le rendre moins sûr."
+  },
+  "Les sept exigences essentielles, et": {
+   "en": "The seven essential requirements, and",
+   "fr": "Les sept exigences essentielles, et"
+  },
+  "Les six chemins ci-dessus s’arrêtent au bord de cette page — or une décision d’implantation ne s’y arrête pas. La barre latérale de Sentinel porte, sous « Centres de données », CINQ rôles qui commencent ici et continuent ailleurs : implantation, énergie-eau-climat, financement et assurance, reporting extra-financier, et conformité de l’IA hébergée. Chacun ouvre cette page sur le chemin qui le concerne, puis enchaîne sur l’Empreinte numérique, le conseil juridique, la matrice des risques, le Registre IA ou la vue direction. Le référentiel situe et compare ; ces modules-là chiffrent votre périmètre et documentent vos preuves — la frontière entre les deux est volontaire, et le parcours vous la fait franchir au bon moment.": {
+   "en": "The six paths above stop at the edge of this page — but a siting decision does not stop there. The Sentinel sidebar carries, under “Data centres”, FIVE roles that start here and continue elsewhere: siting, energy-water-climate, finance and insurance, non-financial reporting, and compliance of hosted AI. Each one opens this page on the path that concerns it, then moves on to the Digital footprint, legal advice, the risk matrix, the AI register or the Executive view. The framework positions and compares; those modules quantify your scope and document your evidence — the boundary between the two is deliberate, and the path takes you across it at the right moment.",
+   "fr": "Les six chemins ci-dessus s’arrêtent au bord de cette page — or une décision d’implantation ne s’y arrête pas. La barre latérale de Sentinel porte, sous « Centres de données », CINQ rôles qui commencent ici et continuent ailleurs : implantation, énergie-eau-climat, financement et assurance, reporting extra-financier, et conformité de l’IA hébergée. Chacun ouvre cette page sur le chemin qui le concerne, puis enchaîne sur l’Empreinte numérique, le conseil juridique, la matrice des risques, le Registre IA ou la vue direction. Le référentiel situe et compare ; ces modules-là chiffrent votre périmètre et documentent vos preuves — la frontière entre les deux est volontaire, et le parcours vous la fait franchir au bon moment."
+  },
+  "Les six décisions de conception": {
+   "en": "The six design decisions",
+   "fr": "Les six décisions de conception"
+  },
+  "Les six décisions sont celles de votre organisation ; les conséquences écrites sont l’avis de": {
+   "en": "The six decisions are your organisation’s; the written consequences are the opinion of",
+   "fr": "Les six décisions sont celles de votre organisation ; les conséquences écrites sont l’avis de"
+  },
+  "Les six exclusions — article #,": {
+   "en": "The six exclusions — Article #,",
+   "fr": "Les six exclusions — article 2,"
+  },
+  "Les six seuils du": {
+   "en": "The six thresholds of the",
+   "fr": "Les six seuils du"
+  },
+  "Les sorties audio, image, vidéo ou texte générées ou manipulées sont marquées dans un format lisible par machine et détectables comme artificielles — solutions efficaces, interopérables, robustes et fiables dans la limite du possible technique. Le §# n'impose aucune mention visible. Système déjà sur le marché avant le # août # : jusqu'au # décembre #.": {
+   "en": "Generated or manipulated audio, image, video or text outputs are marked in a machine-readable format and detectable as artificially generated or manipulated — effective, interoperable, robust and reliable solutions as far as technically feasible. §# imposes no visible label. System already on the market before # August #: until # December #.",
+   "fr": "Les sorties audio, image, vidéo ou texte générées ou manipulées sont marquées dans un format lisible par machine et détectables comme artificielles — solutions efficaces, interopérables, robustes et fiables dans la limite du possible technique. Le §2 n'impose aucune mention visible. Système déjà sur le marché avant le 2 août 2026 : jusqu'au 2 décembre 2026."
+  },
+  "Les systèmes destinés à interagir directement avec des personnes sont conçus de façon que celles-ci sachent qu'elles interagissent avec une IA, sauf si cela est évident pour une personne raisonnablement informée et attentive au vu du contexte.": {
+   "en": "Systems intended to interact directly with people are designed so that those people know they are interacting with an AI, unless this is obvious to a reasonably well-informed, observant and circumspect person given the context.",
+   "fr": "Les systèmes destinés à interagir directement avec des personnes sont conçus de façon que celles-ci sachent qu'elles interagissent avec une IA, sauf si cela est évident pour une personne raisonnablement informée et attentive au vu du contexte."
+  },
+  "Les systèmes facturés au jeton sortent avec un hébergement NON compté, et la page les nomme : le nombre de requêtes est inconnu, et le déduire ferait entrer un chiffre que personne n’a déclaré.": {
+   "en": "Systems billed per token come out with hosting NOT counted, and the page names them: the number of requests is unknown, and deducing it would introduce a figure that nobody declared.",
+   "fr": "Les systèmes facturés au jeton sortent avec un hébergement NON compté, et la page les nomme : le nombre de requêtes est inconnu, et le déduire ferait entrer un chiffre que personne n’a déclaré."
+  },
+  "Les systèmes haut risque journalisent automatiquement les événements. Journaux permettant de reconstituer les circonstances des incidents. Horodatage, données d'entrée, identifiants de référence de la base de données.": {
+   "en": "High-risk systems automatically log events. Logs that make it possible to reconstruct the circumstances of incidents. Timestamps, input data, reference identifiers of the database.",
+   "fr": "Les systèmes haut risque journalisent automatiquement les événements. Journaux permettant de reconstituer les circonstances des incidents. Horodatage, données d'entrée, identifiants de référence de la base de données."
+  },
+  "Les territoires où l’eau, et non l’électricité, sera le facteur limitant.": {
+   "en": "The territories where water, not electricity, will be the limiting factor.",
+   "fr": "Les territoires où l’eau, et non l’électricité, sera le facteur limitant."
+  },
+  "Les textes du CEN et de l’ISO sont protégés : prEN #-#, prEN #, ISO/IEC # et ISO/IEC # n’existent ici que par leurs numéros et leurs titres. Celui-ci peut être cité, traduit et adapté — à trois conditions que la licence formule elle-même, et que cet écran honore : citer l’œuvre, et porter deux mentions, l’une pour la traduction, l’autre pour l’adaptation.": {
+   "en": "The CEN and ISO texts are protected: prEN #-#, prEN #, ISO/IEC # and ISO/IEC # exist here only through their numbers and their titles. This one may be cited, translated and adapted — on three conditions the licence states itself, and that this screen honours: cite the work, and carry two notices, one for the translation, the other for the adaptation.",
+   "fr": "Les textes du CEN et de l’ISO sont protégés : prEN 18229-3, prEN 18286, ISO/IEC 42001 et ISO/IEC 27001 n’existent ici que par leurs numéros et leurs titres. Celui-ci peut être cité, traduit et adapté — à trois conditions que la licence formule elle-même, et que cet écran honore : citer l’œuvre, et porter deux mentions, l’une pour la traduction, l’autre pour l’adaptation."
+  },
+  "Les totaux ci-dessous ne comptent QUE ces systèmes.": {
+   "en": "The totals below count ONLY these systems.",
+   "fr": "Les totaux ci-dessous ne comptent QUE ces systèmes."
+  },
+  "Les trajectoires ne sont pas un référentiel": {
+   "en": "Trajectories are not a framework",
+   "fr": "Les trajectoires ne sont pas un référentiel"
+  },
+  "Les treize autres référentiels de Sentinel demandent si LE SYSTÈME est conforme. Celui-ci demande autre chose : l'entreprise a-t-elle identifié, prévenu, traité et réparé les incidences négatives de l'IA — les siennes, et celles de ses relations d'affaires, en amont comme en aval. Six étapes, trois groupes d'acteur, et une question qui commande tout : causez-vous l'incidence, y contribuez-vous, ou y êtes-vous seulement lié ?": {
+   "en": "Sentinel's thirteen other frameworks ask whether THE SYSTEM is compliant. This one asks something else: has the company identified, prevented, addressed and remedied the adverse impacts of AI — its own, and those of its business relationships, upstream and downstream. Six steps, three actor groups, and one question that commands everything: do you cause the impact, do you contribute to it, or are you only linked to it?",
+   "fr": "Les treize autres référentiels de Sentinel demandent si LE SYSTÈME est conforme. Celui-ci demande autre chose : l'entreprise a-t-elle identifié, prévenu, traité et réparé les incidences négatives de l'IA — les siennes, et celles de ses relations d'affaires, en amont comme en aval. Six étapes, trois groupes d'acteur, et une question qui commande tout : causez-vous l'incidence, y contribuez-vous, ou y êtes-vous seulement lié ?"
+  },
+  "Les trois cadres se recouvrent sans se confondre : une AIPD (RGPD art. #) ne vaut pas FRIA (AI Act art. #), et ISO # n’est pas une présomption de conformité au Règlement. La matrice montre les recouvrements, elle ne les fusionne pas.": {
+   "en": "The three frameworks overlap without merging: a DPIA (GDPR Art. #) is not a FRIA (AI Act Art. #), and ISO # is not a presumption of conformity with the Regulation. The matrix shows the overlaps, it does not merge them.",
+   "fr": "Les trois cadres se recouvrent sans se confondre : une AIPD (RGPD art. 35) ne vaut pas FRIA (AI Act art. 27), et ISO 42001 n’est pas une présomption de conformité au Règlement. La matrice montre les recouvrements, elle ne les fusionne pas."
+  },
+  "Les trois catégories sont rangées ici par latence atteignable, pas dans l’ordre du texte de la norme : c’est ce qui rend lisible le conseil « relevez la catégorie ». Les scénarios eux-mêmes s’identifient dans le processus de gestion des risques (prEN #), pas ici : cette page les reçoit et les confronte à leurs mesures.": {
+   "en": "The three categories are arranged here by attainable latency, not in the order of the standard's text: that is what makes the advice « raise the category » readable. The scenarios themselves are identified in the risk-management process (prEN #), not here: this page receives them and sets them against their measures.",
+   "fr": "Les trois catégories sont rangées ici par latence atteignable, pas dans l’ordre du texte de la norme : c’est ce qui rend lisible le conseil « relevez la catégorie ». Les scénarios eux-mêmes s’identifient dans le processus de gestion des risques (prEN 18228), pas ici : cette page les reçoit et les confronte à leurs mesures."
+  },
+  "Les trois conditions cumulatives": {
+   "en": "The three cumulative conditions",
+   "fr": "Les trois conditions cumulatives"
+  },
+  "Les trois indicateurs de cette page sont OBSERVÉS — c’est-à-dire qu’une méthode est écrite pour chacun, et qu’on saurait refaire le relevé.": {
+   "en": "The three indicators on this page are OBSERVED — meaning that a method is written for each one, and that the reading could be taken again.",
+   "fr": "Les trois indicateurs de cette page sont OBSERVÉS — c’est-à-dire qu’une méthode est écrite pour chacun, et qu’on saurait refaire le relevé."
+  },
+  "Les trois indicateurs portent une méthode de mesure écrite.": {
+   "en": "The three indicators carry a written measurement method.",
+   "fr": "Les trois indicateurs portent une méthode de mesure écrite."
+  },
+  "Les trois rangs": {
+   "en": "The three ranks",
+   "fr": "Les trois rangs"
+  },
+  "Les très grandes plateformes et moteurs de recherche doivent évaluer et atténuer les risques systémiques de leurs services, incluant les systèmes algorithmiques.": {
+   "en": "Very large online platforms and search engines must assess and mitigate the systemic risks of their services, including algorithmic systems.",
+   "fr": "Les très grandes plateformes et moteurs de recherche doivent évaluer et atténuer les risques systémiques de leurs services, incluant les systèmes algorithmiques."
+  },
+  "Les usages agricoles courants ne figurent dans aucun des huit domaines à haut risque. Restent le régime général et l'article # dès qu'un contenu est généré.": {
+   "en": "Common agricultural uses do not appear in any of the eight high-risk areas. What remains is the general regime and Article # as soon as content is generated.",
+   "fr": "Les usages agricoles courants ne figurent dans aucun des huit domaines à haut risque. Restent le régime général et l'article 50 dès qu'un contenu est généré."
+  },
+  "Les valeurs d’adoption sont DÉCLARÉES, pas mesurées dans vos applications : elles valent ce que vaut la remontée terrain.": {
+   "en": "The adoption values are DECLARED, not measured in your applications: they are only as good as the reporting from the field.",
+   "fr": "Les valeurs d’adoption sont DÉCLARÉES, pas mesurées dans vos applications : elles valent ce que vaut la remontée terrain."
+  },
+  "Les verrous se voient avant d’être atteints": {
+   "en": "The locks are seen before they are reached",
+   "fr": "Les verrous se voient avant d’être atteints"
+  },
+  "Les vingt objectifs": {
+   "en": "The twenty objectives",
+   "fr": "Les vingt objectifs"
+  },
+  "Les écarts de la surcharge y sont séparés en deux natures : ceux qui se comblent dans l'atelier industriel, et ceux qui demandent d'abord de reprendre une famille #-# manquante. Les confondre ferait écrire une action impossible.": {
+   "en": "The overlay’s gaps are split into two kinds: those that are closed in the industrial workshop, and those that first require taking up a missing #-# family. Confusing them would lead to writing an impossible action.",
+   "fr": "Les écarts de la surcharge y sont séparés en deux natures : ceux qui se comblent dans l'atelier industriel, et ceux qui demandent d'abord de reprendre une famille 800-53 manquante. Les confondre ferait écrire une action impossible."
+  },
+  "Les échéances de l’article # — # décembre #, # février # — concernent directement les systèmes génératifs.": {
+   "en": "The deadlines of Article # — # December #, # February # — directly concern generative systems.",
+   "fr": "Les échéances de l’article 50 — 2 décembre 2026, 2 février 2027 — concernent directement les systèmes génératifs."
+  },
+  "Les énoncés d’origine, en anglais et verbatim — ceux que l’auditeur retrouvera dans le document.": {
+   "en": "The original statements, in English and verbatim — the ones the auditor will find in the document.",
+   "fr": "Les énoncés d’origine, en anglais et verbatim — ceux que l’auditeur retrouvera dans le document."
+  },
+  "Les énoncés sont ceux du document,": {
+   "en": "The statements are those of the document,",
+   "fr": "Les énoncés sont ceux du document,"
+  },
+  "Les établissements d'enseignement sont souvent inconscients de leur statut de déployeur haut risque lorsqu'ils utilisent des outils tiers d'évaluation ou d'orientation.": {
+   "en": "Educational institutions are often unaware of their status as high-risk deployers when they use third-party assessment or guidance tools.",
+   "fr": "Les établissements d'enseignement sont souvent inconscients de leur statut de déployeur haut risque lorsqu'ils utilisent des outils tiers d'évaluation ou d'orientation."
+  },
+  "Leur méthode C ne porte donc que la majoration de fabrication. Déclarez l’unité de": {
+   "en": "Their method C therefore only carries the manufacturing uplift. Declare the unit of",
+   "fr": "Leur méthode C ne porte donc que la majoration de fabrication. Déclarez l’unité de"
+  },
+  "Liberté d'expression et d'information": {
+   "en": "Freedom of expression and information",
+   "fr": "Liberté d'expression et d'information"
+  },
+  "Licences, plateformes et infrastructure securisee.": {
+   "en": "Licences, platforms and secure infrastructure.",
+   "fr": "Licences, plateformes et infrastructure securisee."
+  },
+  "Licéité du traitement": {
+   "en": "Lawfulness of processing",
+   "fr": "Licéité du traitement"
+  },
+  "Limitation de la conservation (art. #.e)": {
+   "en": "Storage limitation (Art. #(e))",
+   "fr": "Limitation de la conservation (art. 5.1.e)"
+  },
+  "Limitation des finalités (art. #.b)": {
+   "en": "Purpose limitation (Art. #(b))",
+   "fr": "Limitation des finalités (art. 5.1.b)"
+  },
+  "Limiter strictement les bases documentaires des systèmes RAG aux données nécessaires": {
+   "en": "Strictly limit the document bases of RAG systems to the data needed",
+   "fr": "Limiter strictement les bases documentaires des systèmes RAG aux données nécessaires"
+  },
+  "Limites à connaître": {
+   "en": "Limits to be aware of",
+   "fr": "Limites à connaître"
+  },
+  "Lire et appliquer la notice d'utilisation du fournisseur": {
+   "en": "Read and apply the provider’s instructions for use",
+   "fr": "Lire et appliquer la notice d'utilisation du fournisseur"
+  },
+  "Lire la figure des chercheurs": {
+   "en": "Reading the researchers figure",
+   "fr": "Lire la figure des chercheurs"
+  },
+  "Lire le chiffre de la filiale divise l’exposition par l’écart entre la filiale et le groupe. C’est le plus gros facteur d’erreur de ce calcul.": {
+   "en": "Reading the subsidiary’s figure divides the exposure by the gap between the subsidiary and the group. It is the largest source of error in this calculation.",
+   "fr": "Lire le chiffre de la filiale divise l’exposition par l’écart entre la filiale et le groupe. C’est le plus gros facteur d’erreur de ce calcul."
+  },
+  "Lire l’empreinte du parc, poste par poste": {
+   "en": "Read the footprint of the estate, line by line",
+   "fr": "Lire l’empreinte du parc, poste par poste"
+  },
+  "Lire un taux élevé comme une présomption : aucun des deux règlements ne prévoit de certification, et le seul signe extérieur que le DGA crée est le label de son article # §#, délivré par une autorité.": {
+   "en": "Reading a high rate as a presumption: neither Regulation provides for certification, and the only outward sign the DGA creates is the label of its Article #(#), issued by an authority.",
+   "fr": "Lire un taux élevé comme une présomption : aucun des deux règlements ne prévoit de certification, et le seul signe extérieur que le DGA crée est le label de son article 11 §9, délivré par une autorité."
+  },
+  "Lire « sans préjudice » comme « sans rapport » : c'est l'inverse, et votre registre des traitements n'est pas suspendu.": {
+   "en": "Reading 'without prejudice' as 'unrelated': the opposite holds, and your record of processing activities is not suspended.",
+   "fr": "Lire « sans préjudice » comme « sans rapport » : c'est l'inverse, et votre registre des traitements n'est pas suspendu."
+  },
+  "Lisez ce qui vient de l'OCDE, ce qui vient du cabinet, et ce que le document s'exclut lui-même.": {
+   "en": "Read what comes from the OECD, what comes from the firm, and what the document excludes itself.",
+   "fr": "Lisez ce qui vient de l'OCDE, ce qui vient du cabinet, et ce que le document s'exclut lui-même."
+  },
+  "Lisez d’abord ce qui fait tomber chaque étape, puis remontez. L’étape # est DOCUMENTAIRE : on peut y échouer sans qu’aucune faiblesse technique n’existe, et c’est le cas le plus fréquent. L’étape # vérifie que ce qui est écrit est fait. Planifiez le cycle d’audit interne et la revue de direction bien avant : ce sont des exigences des articles # et #, elles laissent des traces datées, et elles ne se fabriquent pas la veille.": {
+   "en": "First read what makes each stage fail, then work back up. Stage # is DOCUMENTARY: you can fail it without any technical weakness existing, and that is the most frequent case. Stage # checks that what is written is done. Schedule the internal audit cycle and the management review well in advance: they are requirements of clauses # and #, they leave dated traces, and they cannot be fabricated the day before.",
+   "fr": "Lisez d’abord ce qui fait tomber chaque étape, puis remontez. L’étape 1 est DOCUMENTAIRE : on peut y échouer sans qu’aucune faiblesse technique n’existe, et c’est le cas le plus fréquent. L’étape 2 vérifie que ce qui est écrit est fait. Planifiez le cycle d’audit interne et la revue de direction bien avant : ce sont des exigences des articles 9.2 et 9.3, elles laissent des traces datées, et elles ne se fabriquent pas la veille."
+  },
+  "Lisez d’abord le chiffre en tête — le plus bas des taux mesurés —, puis repérez les cartes qui portent un trait ambre sur leur barre.": {
+   "en": "First read the headline figure — the lowest of the rates measured — then spot the cards that carry an amber line on their bar.",
+   "fr": "Lisez d’abord le chiffre en tête — le plus bas des taux mesurés —, puis repérez les cartes qui portent un trait ambre sur leur barre."
+  },
+  "Lisez la COUVERTURE avant tout montant, puis le coût par système, par centre de coût et par service.": {
+   "en": "Read the COVERAGE before any amount, then the cost per system, per cost centre and per department.",
+   "fr": "Lisez la COUVERTURE avant tout montant, puis le coût par système, par centre de coût et par service."
+  },
+  "Lisez la couverture, puis le coût par centre de coût et par service.": {
+   "en": "Read the coverage, then the cost per cost centre and per department.",
+   "fr": "Lisez la couverture, puis le coût par centre de coût et par service."
+  },
+  "Lisez la couverture, puis l’électricité, les émissions, l’énergie primaire et l’eau ; enfin les trajectoires à l’horizon.": {
+   "en": "Read the coverage, then electricity, emissions, primary energy and water; finally the trajectories to the horizon.",
+   "fr": "Lisez la couverture, puis l’électricité, les émissions, l’énergie primaire et l’eau ; enfin les trajectoires à l’horizon."
+  },
+  "Lisez la synthèse éditoriale des risques réglementaires et géopolitiques, avant d’entrer dans le détail d’un pays.": {
+   "en": "Read the editorial summary of regulatory and geopolitical risks before going into the details of a country.",
+   "fr": "Lisez la synthèse éditoriale des risques réglementaires et géopolitiques, avant d’entrer dans le détail d’un pays."
+  },
+  "Lisez le coût une fois l’inventaire tenu, et regardez le dimensionnement des modèles.": {
+   "en": "Read the cost once the inventory is kept up, and look at model sizing.",
+   "fr": "Lisez le coût une fois l’inventaire tenu, et regardez le dimensionnement des modèles."
+  },
+  "Lisez le même inventaire sous l’angle physique : électricité, émissions, énergie primaire et eau, puis les trajectoires à l’horizon.": {
+   "en": "Read the same inventory from the physical angle: electricity, emissions, primary energy and water, then the trajectories to the horizon.",
+   "fr": "Lisez le même inventaire sous l’angle physique : électricité, émissions, énergie primaire et eau, puis les trajectoires à l’horizon."
+  },
+  "Lisez le score, ses plafonds, la documentation exigée et la couverture de l'article # alinéa par alinéa.": {
+   "en": "Read the score, its caps, the documentation required and the coverage of article # subparagraph by subparagraph.",
+   "fr": "Lisez le score, ses plafonds, la documentation exigée et la couverture de l'article 14 alinéa par alinéa."
+  },
+  "Lisez les articles #, #, # et # : quelle procédure d’évaluation s’applique, quelle déclaration UE établir, où apposer le marquage CE, et quand enregistrer le système dans la base de données de l’Union.": {
+   "en": "Read Articles #, #, # and #: which assessment procedure applies, which EU declaration to draw up, where to affix the CE marking, and when to register the system in the EU database.",
+   "fr": "Lisez les articles 43, 47, 48 et 49 : quelle procédure d’évaluation s’applique, quelle déclaration UE établir, où apposer le marquage CE, et quand enregistrer le système dans la base de données de l’Union."
+  },
+  "Lisez les cinq dispositions du texte qui relient ce règlement au RGPD, puis marquez l'écran lu.": {
+   "en": "Read the five provisions in the text that link this Regulation to the GDPR, then mark the screen as read.",
+   "fr": "Lisez les cinq dispositions du texte qui relient ce règlement au RGPD, puis marquez l'écran lu."
+  },
+  "Lisez les deux mécaniques AVANT d’en avoir besoin. Repérez qui, chez vous, peut déclencher une alerte précoce un vendredi soir.": {
+   "en": "Read both mechanisms BEFORE you need them. Identify who, in your organisation, can send an early warning on a Friday evening.",
+   "fr": "Lisez les deux mécaniques AVANT d’en avoir besoin. Repérez qui, chez vous, peut déclencher une alerte précoce un vendredi soir."
+  },
+  "Lisez les obligations de transparence de l’article # si le système produit du texte, de l’image, de l’audio ou de la vidéo.": {
+   "en": "Read the transparency obligations of Article # if the system produces text, images, audio or video.",
+   "fr": "Lisez les obligations de transparence de l’article 50 si le système produit du texte, de l’image, de l’audio ou de la vidéo."
+  },
+  "Lisez les quatre dispositions du pont, renseignez votre chiffre d'affaires annuel mondial pour voir l'exposition réelle, puis marquez l'écran lu.": {
+   "en": "Read the four provisions of the bridge, fill in your total worldwide annual turnover to see the real exposure, then mark the screen as read.",
+   "fr": "Lisez les quatre dispositions du pont, renseignez votre chiffre d'affaires annuel mondial pour voir l'exposition réelle, puis marquez l'écran lu."
+  },
+  "Lisez les quatre indicateurs servis — électricité, émissions, énergie primaire, eau — et relevez la part du parc réellement déclarée avant de citer un total.": {
+   "en": "Read the four indicators served — electricity, emissions, primary energy, water — and note the share of the estate actually declared before citing a total.",
+   "fr": "Lisez les quatre indicateurs servis — électricité, émissions, énergie primaire, eau — et relevez la part du parc réellement déclarée avant de citer un total."
+  },
+  "Lisez les quatre étapes AVANT d’en avoir besoin, et repérez qui, chez vous, peut déclencher une alerte précoce un vendredi soir : vingt-quatre heures, c’est un week-end. Notez la SECONDE notification, que tout le monde oublie — le même paragraphe # impose de prévenir les DESTINATAIRES de vos services des incidents susceptibles de nuire à la fourniture, et le paragraphe # de leur dire ce qu’ils peuvent appliquer eux-mêmes. Cette liste ne se fabrique pas le jour de l’incident.": {
+   "en": "Read the four steps BEFORE you need them, and identify who, in your organisation, can send an early warning on a Friday evening: twenty-four hours is a weekend. Note the SECOND notification, which everyone forgets — the same paragraph # requires you to inform the RECIPIENTS of your services of incidents likely to affect provision, and paragraph # to tell them what they can apply themselves. This list is not put together on the day of the incident.",
+   "fr": "Lisez les quatre étapes AVANT d’en avoir besoin, et repérez qui, chez vous, peut déclencher une alerte précoce un vendredi soir : vingt-quatre heures, c’est un week-end. Notez la SECONDE notification, que tout le monde oublie — le même paragraphe 1 impose de prévenir les DESTINATAIRES de vos services des incidents susceptibles de nuire à la fourniture, et le paragraphe 2 de leur dire ce qu’ils peuvent appliquer eux-mêmes. Cette liste ne se fabrique pas le jour de l’incident."
+  }
+ }
+}

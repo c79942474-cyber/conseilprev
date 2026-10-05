@@ -1,0 +1,823 @@
+{
+ "_lot": "67-routes-4",
+ "_mots": 2427,
+ "_pages": [
+  "_routes"
+ ],
+ "_rubrique": "_routes",
+ "bloc": {},
+ "texte": {
+  "Déclarer le système génératif sans retenir un seul risque revient à dire que la génération n'apporte rien — c'est la réponse qu'un auditeur ouvrira en premier.": {
+   "en": "Declaring the system generative without selecting a single risk amounts to saying that generation brings nothing — that is the answer an auditor will open first.",
+   "fr": "Déclarer le système génératif sans retenir un seul risque revient à dire que la génération n'apporte rien — c'est la réponse qu'un auditeur ouvrira en premier."
+  },
+  "Déclarer les thèmes de l'annexe A réellement en place précise la carte — c'est facultatif, et le bloc se valide sans.": {
+   "en": "Declaring which Annex A themes are really in place sharpens the map — it is optional, and the block validates without it.",
+   "fr": "Déclarer les thèmes de l'annexe A réellement en place précise la carte — c'est facultatif, et le bloc se valide sans."
+  },
+  "Découper une activité en filiales ne fait pas baisser l'appréciation : elle est consolidée.": {
+   "en": "Splitting an activity across subsidiaries does not lower the assessment: it is consolidated.",
+   "fr": "Découper une activité en filiales ne fait pas baisser l'appréciation : elle est consolidée."
+  },
+  "Défini, appliqué, porté par quelqu'un de nommé.": {
+   "en": "Defined, applied, owned by someone named.",
+   "fr": "Défini, appliqué, porté par quelqu'un de nommé."
+  },
+  "Déjà survenu ici, ou survient régulièrement dans le secteur.": {
+   "en": "Has already happened here, or happens regularly in the sector.",
+   "fr": "Déjà survenu ici, ou survient régulièrement dans le secteur."
+  },
+  "Délai de réaction": {
+   "en": "Reaction time",
+   "fr": "Délai de réaction"
+  },
+  "Délai de réaction non déterminé": {
+   "en": "Reaction time not determined",
+   "fr": "Délai de réaction non déterminé"
+  },
+  "Délais de préavis et obligations de notification, y compris de tout développement susceptible d'affecter significativement la capacité du prestataire": {
+   "en": "Notice periods and reporting obligations, including of any development liable to affect the provider's capacity significantly",
+   "fr": "Délais de préavis et obligations de notification, y compris de tout développement susceptible d'affecter significativement la capacité du prestataire"
+  },
+  "Délégué à la protection des données": {
+   "en": "Data protection officer",
+   "fr": "Délégué à la protection des données"
+  },
+  "Déléguée à une tierce partie (dérogation microentreprise)": {
+   "en": "Delegated to a third party (microenterprise derogation)",
+   "fr": "Déléguée à une tierce partie (dérogation microentreprise)"
+  },
+  "Dépend d'un bloc précédent : ce qu'il demanderait ne se détermine pas sans lui.": {
+   "en": "Depends on an earlier block: what it would ask cannot be determined without it.",
+   "fr": "Dépend d'un bloc précédent : ce qu'il demanderait ne se détermine pas sans lui."
+  },
+  "Déploiement, chaîne d'approvisionnement, changements, surveillance après commercialisation, incidents graves, non-conformités.": {
+   "en": "Deployment, supply chain, changes, post-market monitoring, serious incidents, nonconformities.",
+   "fr": "Déploiement, chaîne d'approvisionnement, changements, surveillance après commercialisation, incidents graves, non-conformités."
+  },
+  "Dépositaire central de titres": {
+   "en": "A central securities depository",
+   "fr": "Dépositaire central de titres"
+  },
+  "Désignation des prestataires comme critiques": {
+   "en": "Designation of providers as critical",
+   "fr": "Désignation des prestataires comme critiques"
+  },
+  "Désignation du superviseur principal": {
+   "en": "Designation of the lead overseer",
+   "fr": "Désignation du superviseur principal"
+  },
+  "Désigné en cours d'année : au plus tard le # décembre de cette année.": {
+   "en": "Designated during the year: by # December of that year at the latest.",
+   "fr": "Désigné en cours d'année : au plus tard le 31 décembre de cette année."
+  },
+  "Détecter, qualifier, traiter — et savoir à quel moment l'horloge du signalement démarre.": {
+   "en": "Detecting, qualifying, handling — and knowing the moment the reporting clock starts.",
+   "fr": "Détecter, qualifier, traiter — et savoir à quel moment l'horloge du signalement démarre."
+  },
+  "Détection des activités anormales et critères pour la détection des incidents liés aux TIC et la réponse à ces incidents": {
+   "en": "Detection of anomalous activities and criteria for detecting and responding to ICT-related incidents",
+   "fr": "Détection des activités anormales et critères pour la détection des incidents liés aux TIC et la réponse à ces incidents"
+  },
+  "Détection des incidents liés aux TIC et réponse à ces incidents": {
+   "en": "Detection of and response to ICT-related incidents",
+   "fr": "Détection des incidents liés aux TIC et réponse à ces incidents"
+  },
+  "Détection, réponse et repli": {
+   "en": "Detection, response and fallback",
+   "fr": "Détection, réponse et repli"
+  },
+  "Détermination de la stratégie": {
+   "en": "Determining the strategy",
+   "fr": "Détermination de la stratégie"
+  },
+  "Détermination des étapes du cycle de vie": {
+   "en": "Determining the life cycle stages",
+   "fr": "Détermination des étapes du cycle de vie"
+  },
+  "Détermination du domaine d'application du système de management de la qualité": {
+   "en": "Determining the scope of the quality management system",
+   "fr": "Détermination du domaine d'application du système de management de la qualité"
+  },
+  "Eaux usées": {
+   "en": "Waste water",
+   "fr": "Eaux usées"
+  },
+  "Effectives, proportionnées et dissuasives, en tenant compte des recommandations du comité européen de l'innovation dans le domaine des données.": {
+   "en": "Effective, proportionate and dissuasive, taking account of the recommendations of the European Data Innovation Board.",
+   "fr": "Effectives, proportionnées et dissuasives, en tenant compte des recommandations du comité européen de l'innovation dans le domaine des données."
+  },
+  "Elle est tenue par les autorités européennes de surveillance, et n'est pas dans le texte.": {
+   "en": "It is kept by the European Supervisory Authorities, and is not in the text.",
+   "fr": "Elle est tenue par les autorités européennes de surveillance, et n'est pas dans le texte."
+  },
+  "Elle ne montre que ce que le registre contient.": {
+   "en": "It shows only what the register contains.",
+   "fr": "Elle ne montre que ce que le registre contient."
+  },
+  "Elle oblige à écrire ce qui est réversible et ce qui ne l'est pas : un virement parti et un courriel envoyé ne se rattrapent pas.": {
+   "en": "It forces you to write down what is reversible and what is not: a transfer gone out and an email sent cannot be taken back.",
+   "fr": "Elle oblige à écrire ce qui est réversible et ce qui ne l'est pas : un virement parti et un courriel envoyé ne se rattrapent pas."
+  },
+  "Elle place le risque numérique devant le dirigeant exécutif ET les responsables d'activité, et s'assure que des moyens financiers, humains ou techniques adéquats sont alloués. L'approche par la conformité et l'approche par les risques sont complémentaires et peuvent être mutualisées.": {
+   "en": "It puts digital risk in front of the chief executive AND the business owners, and makes sure adequate financial, human or technical resources are allocated. The compliance-led approach and the risk-led approach are complementary and can be shared.",
+   "fr": "Elle place le risque numérique devant le dirigeant exécutif ET les responsables d'activité, et s'assure que des moyens financiers, humains ou techniques adéquats sont alloués. L'approche par la conformité et l'approche par les risques sont complémentaires et peuvent être mutualisées."
+  },
+  "Elle traite en lot ce que le simulateur fait un par un.": {
+   "en": "It handles as a batch what the simulator does one at a time.",
+   "fr": "Elle traite en lot ce que le simulateur fait un par un."
+  },
+  "Elle vise aussi les produits déjà sur le marché.": {
+   "en": "It also covers products already on the market.",
+   "fr": "Elle vise aussi les produits déjà sur le marché."
+  },
+  "Empoisonnement des données et du modèle": {
+   "en": "Data and model poisoning",
+   "fr": "Empoisonnement des données et du modèle"
+  },
+  "Empêcher l'exécution de ce qui n'a pas été voulu, et le détecter quand l'empêchement a échoué.": {
+   "en": "Preventing the execution of what was not intended, and detecting it when the prevention has failed.",
+   "fr": "Empêcher l'exécution de ce qui n'a pas été voulu, et le détecter quand l'empêchement a échoué."
+  },
+  "Empêcher la partie à qui la clause est imposée d'utiliser les données qu'elle a fournies ou générées pendant le contrat": {
+   "en": "Preventing the party on whom the term is imposed from using the data it provided or generated during the contract",
+   "fr": "Empêcher la partie à qui la clause est imposée d'utiliser les données qu'elle a fournies ou générées pendant le contrat"
+  },
+  "Empêcher le transfert ou l'accès illicites": {
+   "en": "Preventing unlawful transfer or access",
+   "fr": "Empêcher le transfert ou l'accès illicites"
+  },
+  "En cas de conflit entre le règlement et le droit de la protection des données à caractère personnel ou de la vie privée, ce dernier PRÉVAUT.": {
+   "en": "In the event of a conflict between the Regulation and personal data protection or privacy law, the latter PREVAILS.",
+   "fr": "En cas de conflit entre le règlement et le droit de la protection des données à caractère personnel ou de la vie privée, ce dernier PRÉVAUT."
+  },
+  "En cas de conflit entre le règlement et le droit de la protection des données à caractère personnel, ce dernier PRÉVAUT.": {
+   "en": "In the event of a conflict between the Regulation and personal data protection law, the latter PREVAILS.",
+   "fr": "En cas de conflit entre le règlement et le droit de la protection des données à caractère personnel, ce dernier PRÉVAUT."
+  },
+  "En faire une équivalence. Le document écrit que ce n'est pas un cadre d'équivalence — et sur ces vingt cadres, Sentinel en mesure trois.": {
+   "en": "Turning it into an equivalence. The document writes that this is not an equivalency framework — and of those twenty frameworks, Sentinel measures three.",
+   "fr": "En faire une équivalence. Le document écrit que ce n'est pas un cadre d'équivalence — et sur ces vingt cadres, Sentinel en mesure trois."
+  },
+  "En place et appliqué, sans preuve systématique.": {
+   "en": "In place and applied, without systematic evidence.",
+   "fr": "En place et appliqué, sans preuve systématique."
+  },
+  "En place et démontrable": {
+   "en": "In place and demonstrable",
+   "fr": "En place et démontrable"
+  },
+  "En place, appliqué, et démontrable sur pièce.": {
+   "en": "In place, applied, and demonstrable on the documents.",
+   "fr": "En place, appliqué, et démontrable sur pièce."
+  },
+  "En place, appliqué, et montrable sur pièce.": {
+   "en": "In place, applied, and can be shown on the documents.",
+   "fr": "En place, appliqué, et montrable sur pièce."
+  },
+  "Encadrer ce qui entre depuis l'extérieur, là où la sécurité physique du poste n'est plus garantie.": {
+   "en": "Framing what comes in from outside, where the physical security of the device is no longer guaranteed.",
+   "fr": "Encadrer ce qui entre depuis l'extérieur, là où la sécurité physique du poste n'est plus garantie."
+  },
+  "Enquête CEN": {
+   "en": "CEN Enquiry",
+   "fr": "Enquête CEN"
+  },
+  "Enregistrer les deux est ce qui permet, six mois plus tard, de mesurer qui avait raison et d'ajuster le système ou la formation.": {
+   "en": "Recording both is what makes it possible, six months later, to measure who was right and to adjust the system or the training.",
+   "fr": "Enregistrer les deux est ce qui permet, six mois plus tard, de mesurer qui avait raison et d'ajuster le système ou la formation."
+  },
+  "Entité critique au titre de la directive (UE) #/#": {
+   "en": "A critical entity under Directive (EU) #/#",
+   "fr": "Entité critique au titre de la directive (UE) 2022/2557"
+  },
+  "Entité critique en raison de son importance spécifique au niveau national ou régional": {
+   "en": "An entity critical because of its specific importance at national or regional level",
+   "fr": "Entité critique en raison de son importance spécifique au niveau national ou régional"
+  },
+  "Entité de l'administration publique au niveau régional dont la perturbation pourrait avoir un impact important": {
+   "en": "A public administration entity at regional level whose disruption could have a significant impact",
+   "fr": "Entité de l'administration publique au niveau régional dont la perturbation pourrait avoir un impact important"
+  },
+  "Entité de l'administration publique des pouvoirs publics centraux": {
+   "en": "A public administration entity of central government",
+   "fr": "Entité de l'administration publique des pouvoirs publics centraux"
+  },
+  "Entité essentielle": {
+   "en": "Essential entity",
+   "fr": "Entité essentielle"
+  },
+  "Entité fournissant des services d'enregistrement de noms de domaine": {
+   "en": "An entity providing domain name registration services",
+   "fr": "Entité fournissant des services d'enregistrement de noms de domaine"
+  },
+  "Entité importante": {
+   "en": "Important entity",
+   "fr": "Entité importante"
+  },
+  "Entité recensée comme entité critique au titre de la directive (UE) #/# (résilience des entités critiques)": {
+   "en": "An entity identified as a critical entity under Directive (EU) #/# (resilience of critical entities)",
+   "fr": "Entité recensée comme entité critique au titre de la directive (UE) 2022/2557 (résilience des entités critiques)"
+  },
+  "Entre dans le plan de l'étape #, après les risques saillants.": {
+   "en": "Enters the step # plan, after the salient risks.",
+   "fr": "Entre dans le plan de l'étape 3, après les risques saillants."
+  },
+  "Entre les personnes concernées — ou les personnes physiques mettant à disposition des données non personnelles — et les utilisateurs potentiels, notamment pour permettre l'exercice des droits prévus par le RGPD.": {
+   "en": "Between data subjects — or natural persons making non-personal data available — and prospective data users, in particular to enable the exercise of the rights conferred by the GDPR.",
+   "fr": "Entre les personnes concernées — ou les personnes physiques mettant à disposition des données non personnelles — et les utilisateurs potentiels, notamment pour permettre l'exercice des droits prévus par le RGPD."
+  },
+  "Entreprise d'assurance ou de réassurance": {
+   "en": "An insurance or reinsurance undertaking",
+   "fr": "Entreprise d'assurance ou de réassurance"
+  },
+  "Entrée en vigueur.": {
+   "en": "Entry into force.",
+   "fr": "Entrée en vigueur."
+  },
+  "Est désigné le prestataire qui remplit tous les sous-critères « étape # » ET dont l'évaluation « étape # » est positive — par les AES, via le comité mixte, sur recommandation du forum de supervision, après expiration du délai de déclaration motivée.": {
+   "en": "The provider designated is the one that meets all the « step # » sub-criteria AND whose « step # » assessment is positive — by the ESAs, through the Joint Committee, on a recommendation of the Oversight Forum, once the period for a reasoned statement has expired.",
+   "fr": "Est désigné le prestataire qui remplit tous les sous-critères « étape 1 » ET dont l'évaluation « étape 2 » est positive — par les AES, via le comité mixte, sur recommandation du forum de supervision, après expiration du délai de déclaration motivée."
+  },
+  "Estimation de la part de marché dans le secteur financier de l'Union, et par type d'entité financière, pour l'année de la demande et l'année précédente": {
+   "en": "An estimate of the market share in the Union financial sector, and by type of financial entity, for the year of the request and the previous year",
+   "fr": "Estimation de la part de marché dans le secteur financier de l'Union, et par type d'entité financière, pour l'année de la demande et l'année précédente"
+  },
+  "Et en tant que de besoin — notamment après un incident de sécurité ou une évolution majeure du contexte métier, technique ou organisationnel.": {
+   "en": "And whenever needed — in particular after a security incident or a major change in the business, technical or organisational context.",
+   "fr": "Et en tant que de besoin — notamment après un incident de sécurité ou une évolution majeure du contexte métier, technique ou organisationnel."
+  },
+  "Examen UE de type (module B) + conformité au type sur contrôle interne de la production (module C)": {
+   "en": "EU type-examination (module B) + conformity to type based on internal production control (module C)",
+   "fr": "Examen UE de type (module B) + conformité au type sur contrôle interne de la production (module C)"
+  },
+  "Exclure les voies de recours de la partie à qui la clause est imposée, ou la responsabilité de celui qui l'impose": {
+   "en": "Excluding the remedies of the party on whom the term is imposed, or the liability of the party imposing it",
+   "fr": "Exclure les voies de recours de la partie à qui la clause est imposée, ou la responsabilité de celui qui l'impose"
+  },
+  "Exclure ou limiter la responsabilité de celui qui a imposé la clause en cas d'acte intentionnel ou de négligence grave": {
+   "en": "Excluding or limiting the liability of the party that imposed the term in the event of an intentional act or gross negligence",
+   "fr": "Exclure ou limiter la responsabilité de celui qui a imposé la clause en cas d'acte intentionnel ou de négligence grave"
+  },
+  "Exercices, tests et entrainements": {
+   "en": "Exercises, tests and drills",
+   "fr": "Exercices, tests et entrainements"
+  },
+  "Exigences d'interface (revue rétrospective)": {
+   "en": "Interface requirements (retrospective review)",
+   "fr": "Exigences d'interface (revue rétrospective)"
+  },
+  "Exigences de l'annexe I, partie I": {
+   "en": "Requirements of Annex I, Part I",
+   "fr": "Exigences de l'annexe I, partie I"
+  },
+  "Exigences des fonctions de notification": {
+   "en": "Requirements for the alerting functions",
+   "fr": "Exigences des fonctions de notification"
+  },
+  "Exigences et spécifications": {
+   "en": "Requirements and specifications",
+   "fr": "Exigences et spécifications"
+  },
+  "Exigences générales (surveillance continue)": {
+   "en": "General requirements (continuous monitoring)",
+   "fr": "Exigences générales (surveillance continue)"
+  },
+  "Exigences relatives au système d'IA": {
+   "en": "Requirements for the AI system",
+   "fr": "Exigences relatives au système d'IA"
+  },
+  "Exigences relatives aux compétences du réviseur manuel": {
+   "en": "Requirements for the manual reviewer's competences",
+   "fr": "Exigences relatives aux compétences du réviseur manuel"
+  },
+  "Exigences relatives aux entrées de revue": {
+   "en": "Requirements for the review inputs",
+   "fr": "Exigences relatives aux entrées de revue"
+  },
+  "Exigences relatives à la conception de l'interface de revue": {
+   "en": "Requirements for the design of the review interface",
+   "fr": "Exigences relatives à la conception de l'interface de revue"
+  },
+  "Exigences relatives à la documentation (RBI)": {
+   "en": "Documentation requirements (RBI)",
+   "fr": "Exigences relatives à la documentation (RBI)"
+  },
+  "Explicable et interprétable": {
+   "en": "Explainable and interpretable",
+   "fr": "Explicable et interprétable"
+  },
+  "Exploitants de plates-formes de négociation au sens de l'article #, point #), de la directive #/#/UE": {
+   "en": "Operators of trading venues within the meaning of article #(#) of Directive #/#/EU",
+   "fr": "Exploitants de plates-formes de négociation au sens de l'article 4, point 24), de la directive 2014/65/UE"
+  },
+  "Exploitation et contrôle": {
+   "en": "Operation and control",
+   "fr": "Exploitation et contrôle"
+  },
+  "Exploitation et surveillance": {
+   "en": "Operation and monitoring",
+   "fr": "Exploitation et surveillance"
+  },
+  "Exploitation, détection et reprise": {
+   "en": "Operation, detection and recovery",
+   "fr": "Exploitation, détection et reprise"
+  },
+  "Fabricant, importateur et distributeur ne portent pas les mêmes obligations. Si vous n'êtes pas fabricant, une partie des exigences mesurées ici ne vous incombe pas — et d'autres, qui ne sont pas mesurées, vous incombent.": {
+   "en": "Manufacturer, importer and distributor do not carry the same obligations. If you are not the manufacturer, some of the requirements measured here are not yours — and others, which are not measured, are.",
+   "fr": "Fabricant, importateur et distributeur ne portent pas les mêmes obligations. Si vous n'êtes pas fabricant, une partie des exigences mesurées ici ne vous incombe pas — et d'autres, qui ne sont pas mesurées, vous incombent."
+  },
+  "Fabrication, production et distribution de produits chimiques": {
+   "en": "Manufacture, production and distribution of chemicals",
+   "fr": "Fabrication, production et distribution de produits chimiques"
+  },
+  "Faiblesses des vecteurs et des plongements": {
+   "en": "Vector and embedding weaknesses",
+   "fr": "Faiblesses des vecteurs et des plongements"
+  },
+  "Faire autrement est permis, mais la preuve change de camp : c'est à l'entité de la construire, objectif par objectif.": {
+   "en": "Doing it otherwise is allowed, but the burden of proof changes sides: it is for the entity to build it, objective by objective.",
+   "fr": "Faire autrement est permis, mais la preuve change de camp : c'est à l'entité de la construire, objectif par objectif."
+  },
+  "Faire cesser ce qui cause ou contribue, et bâtir les plans qui préviennent et atténuent les incidences futures.": {
+   "en": "Ceasing what causes or contributes, and building the plans that prevent and mitigate future impacts.",
+   "fr": "Faire cesser ce qui cause ou contribue, et bâtir les plans qui préviennent et atténuent les incidences futures."
+  },
+  "Faire cesser l'activité qui cause, prévenir les incidences potentielles, et RÉPARER le dommage déjà causé.": {
+   "en": "Ceasing the activity that causes, preventing potential impacts, and REMEDIATING the harm already caused.",
+   "fr": "Faire cesser l'activité qui cause, prévenir les incidences potentielles, et RÉPARER le dommage déjà causé."
+  },
+  "Faire cesser sa contribution, prévenir celle à venir, réparer SA PART du dommage, et construire son levier sur les relations d'affaires pour prévenir le reste.": {
+   "en": "Ceasing its contribution, preventing the contribution to come, remediating ITS SHARE of the harm, and building its leverage over business relationships to prevent the rest.",
+   "fr": "Faire cesser sa contribution, prévenir celle à venir, réparer SA PART du dommage, et construire son levier sur les relations d'affaires pour prévenir le reste."
+  },
+  "Faire cesser, prévenir et atténuer les incidences négatives": {
+   "en": "Cease, prevent and mitigate adverse impacts",
+   "fr": "Faire cesser, prévenir et atténuer les incidences négatives"
+  },
+  "Faire cesser, prévenir, atténuer": {
+   "en": "Cease, prevent, mitigate",
+   "fr": "Faire cesser, prévenir, atténuer"
+  },
+  "Faire porter la sécurité par le dirigeant exécutif, avec des rôles écrits, une politique, et de quoi vérifier qu'elle est suivie.": {
+   "en": "Having security carried by the chief executive, with written roles, a policy, and the means to check that it is followed.",
+   "fr": "Faire porter la sécurité par le dirigeant exécutif, avec des rôles écrits, une politique, et de quoi vérifier qu'elle est suivie."
+  },
+  "Finalité et personne morale distincte": {
+   "en": "Purpose and separate legal person",
+   "fr": "Finalité et personne morale distincte"
+  },
+  "Fonctionnalité de l'interface": {
+   "en": "Interface functionality",
+   "fr": "Fonctionnalité de l'interface"
+  },
+  "Format et contenu du rapport sur le réexamen du cadre de gestion du risque lié aux TIC": {
+   "en": "Format and content of the report on the review of the ICT risk management framework",
+   "fr": "Format et contenu du rapport sur le réexamen du cadre de gestion du risque lié aux TIC"
+  },
+  "Format et contenu du rapport sur le réexamen du cadre simplifié de gestion du risque lié aux TIC": {
+   "en": "Format and content of the report on the review of the simplified ICT risk management framework",
+   "fr": "Format et contenu du rapport sur le réexamen du cadre simplifié de gestion du risque lié aux TIC"
+  },
+  "Format reçu, conversion encadrée, non-participation": {
+   "en": "Format received, framed conversion, opt-out",
+   "fr": "Format reçu, conversion encadrée, non-participation"
+  },
+  "Fournir au superviseur principal, à sa demande, toute information nécessaire à ses missions — y compris les accords et les COPIES DES DOCUMENTS CONTRACTUELS conclus avec les entités financières.": {
+   "en": "Supplying the lead overseer, on request, with any information needed for its tasks — including the arrangements and COPIES OF THE CONTRACTUAL DOCUMENTS concluded with the financial entities.",
+   "fr": "Fournir au superviseur principal, à sa demande, toute information nécessaire à ses missions — y compris les accords et les COPIES DES DOCUMENTS CONTRACTUELS conclus avec les entités financières."
+  },
+  "Fournir des outils pour obtenir le consentement ou l'autorisation, ET pour les retirer facilement": {
+   "en": "Providing tools to obtain consent or permission, AND to withdraw them easily",
+   "fr": "Fournir des outils pour obtenir le consentement ou l'autorisation, ET pour les retirer facilement"
+  },
+  "Fournir les informations sur les accords de sous-traitance selon le MODÈLE figurant en annexe du règlement délégué.": {
+   "en": "Supplying the information on the subcontracting arrangements using the TEMPLATE annexed to the delegated regulation.",
+   "fr": "Fournir les informations sur les accords de sous-traitance selon le MODÈLE figurant en annexe du règlement délégué."
+  },
+  "Fournisseur de réseaux de communications électroniques publics ou de services de communications électroniques accessibles au public": {
+   "en": "A provider of public electronic communications networks or of publicly available electronic communications services",
+   "fr": "Fournisseur de réseaux de communications électroniques publics ou de services de communications électroniques accessibles au public"
+  },
+  "Fournisseur de réseaux de communications électroniques publics ou de services de communications électroniques accessibles au public constituant une moyenne entreprise": {
+   "en": "A provider of public electronic communications networks or of publicly available electronic communications services that is a medium-sized enterprise",
+   "fr": "Fournisseur de réseaux de communications électroniques publics ou de services de communications électroniques accessibles au public constituant une moyenne entreprise"
+  },
+  "Fournisseur, déployeur, ou les deux — et si le système identifie des personnes à distance par la biométrie.": {
+   "en": "Provider, deployer, or both — and whether the system identifies persons remotely through biometrics.",
+   "fr": "Fournisseur, déployeur, ou les deux — et si le système identifie des personnes à distance par la biométrie."
+  },
+  "Fournisseurs de réseaux de communications électroniques publics": {
+   "en": "Providers of public electronic communications networks",
+   "fr": "Fournisseurs de réseaux de communications électroniques publics"
+  },
+  "Fournisseurs de services DNS": {
+   "en": "DNS service providers",
+   "fr": "Fournisseurs de services DNS"
+  },
+  "Fournisseurs de services d'informatique en nuage": {
+   "en": "Cloud computing service providers",
+   "fr": "Fournisseurs de services d'informatique en nuage"
+  },
+  "Fournisseurs de services de centres de données": {
+   "en": "Data centre service providers",
+   "fr": "Fournisseurs de services de centres de données"
+  },
+  "Fournisseurs de services de communications électroniques accessibles au public": {
+   "en": "Providers of publicly available electronic communications services",
+   "fr": "Fournisseurs de services de communications électroniques accessibles au public"
+  },
+  "Fournisseurs de services de sécurité gérés": {
+   "en": "Managed security service providers",
+   "fr": "Fournisseurs de services de sécurité gérés"
+  },
+  "Fournisseurs de services gérés": {
+   "en": "Managed service providers",
+   "fr": "Fournisseurs de services gérés"
+  },
+  "Fournisseurs numériques": {
+   "en": "Digital providers",
+   "fr": "Fournisseurs numériques"
+  },
+  "Fourniture d'informations à des fins de revue": {
+   "en": "Provision of information for review purposes",
+   "fr": "Fourniture d'informations à des fins de revue"
+  },
+  "Fuite de l'invite système": {
+   "en": "System prompt leakage",
+   "fr": "Fuite de l'invite système"
+  },
+  "Garantie d'accès, de récupération et de restitution des données en cas d'insolvabilité, de résolution, de cessation d'activité ou de résiliation": {
+   "en": "A guarantee of access to, recovery of and return of the data in the event of insolvency, resolution, discontinuation of business or termination",
+   "fr": "Garantie d'accès, de récupération et de restitution des données en cas d'insolvabilité, de résolution, de cessation d'activité ou de résiliation"
+  },
+  "Garantir la résilience des activités": {
+   "en": "Ensuring the resilience of operations",
+   "fr": "Garantir la résilience des activités"
+  },
+  "Gestion de la continuité des activités de TIC": {
+   "en": "ICT business continuity management",
+   "fr": "Gestion de la continuité des activités de TIC"
+  },
+  "Gestion de la sécurité des réseaux": {
+   "en": "Network security management",
+   "fr": "Gestion de la sécurité des réseaux"
+  },
+  "Gestion de l’identité": {
+   "en": "Identity management",
+   "fr": "Gestion de l’identité"
+  },
+  "Gestion des capacités et des performances": {
+   "en": "Capacity and performance management",
+   "fr": "Gestion des capacités et des performances"
+  },
+  "Gestion des changements dans les TIC": {
+   "en": "ICT change management",
+   "fr": "Gestion des changements dans les TIC"
+  },
+  "Gestion des clés cryptographiques": {
+   "en": "Cryptographic key management",
+   "fr": "Gestion des clés cryptographiques"
+  },
+  "Gestion des données": {
+   "en": "Data management",
+   "fr": "Gestion des données"
+  },
+  "Gestion des déchets": {
+   "en": "Waste management",
+   "fr": "Gestion des déchets"
+  },
+  "Gestion des identités et des accès des utilisateurs aux systèmes d'information": {
+   "en": "Management of user identities and of access to information systems",
+   "fr": "Gestion des identités et des accès des utilisateurs aux systèmes d'information"
+  },
+  "Gestion des projets de TIC": {
+   "en": "ICT project management",
+   "fr": "Gestion des projets de TIC"
+  },
+  "Gestion des projets de TIC et des changements dans les TIC": {
+   "en": "ICT project and ICT change management",
+   "fr": "Gestion des projets de TIC et des changements dans les TIC"
+  },
+  "Gestion des risques liés à l'IA": {
+   "en": "AI risk management",
+   "fr": "Gestion des risques liés à l'IA"
+  },
+  "Gestion des services TIC (interentreprises)": {
+   "en": "ICT service management (business-to-business)",
+   "fr": "Gestion des services TIC (interentreprises)"
+  },
+  "Gestion des vulnérabilités et des correctifs": {
+   "en": "Vulnerability and patch management",
+   "fr": "Gestion des vulnérabilités et des correctifs"
+  },
+  "Gestion du risque lié aux TIC": {
+   "en": "ICT risk management",
+   "fr": "Gestion du risque lié aux TIC"
+  },
+  "Gestionnaire de fonds d'investissement alternatifs": {
+   "en": "An alternative investment fund manager",
+   "fr": "Gestionnaire de fonds d'investissement alternatifs"
+  },
+  "Gouvernance de l'article #": {
+   "en": "Governance under article #",
+   "fr": "Gouvernance de l'article 20"
+  },
+  "Gouvernance du cadre de supervision": {
+   "en": "Governance of the oversight framework",
+   "fr": "Gouvernance du cadre de supervision"
+  },
+  "Gouvernance et organisation": {
+   "en": "Governance and organisation",
+   "fr": "Gouvernance et organisation"
+  },
+  "Guide OCDE sur le devoir de diligence pour une conduite responsable des entreprises (#)": {
+   "en": "OECD Due Diligence Guidance for Responsible Business Conduct (#)",
+   "fr": "Guide OCDE sur le devoir de diligence pour une conduite responsable des entreprises (2018)"
+  },
+  "Généralités (catégories de mesure)": {
+   "en": "General (categories of measure)",
+   "fr": "Généralités (catégories de mesure)"
+  },
+  "Généralités (fonctions d'intervention)": {
+   "en": "General (intervention functions)",
+   "fr": "Généralités (fonctions d'intervention)"
+  },
+  "Généralités (processus de revue)": {
+   "en": "General (review process)",
+   "fr": "Généralités (processus de revue)"
+  },
+  "Gêne interne, absorbée sans décision de direction.": {
+   "en": "An internal nuisance, absorbed without a management decision.",
+   "fr": "Gêne interne, absorbée sans décision de direction."
+  },
+  "Hors annexes I et III, hors art. # et hors art. #": {
+   "en": "Outside Annexes I and III, outside art. # and outside art. #",
+   "fr": "Hors annexes I et III, hors art. 5 et hors art. 50"
+  },
+  "Hors du champ du règlement": {
+   "en": "Outside the scope of the Regulation",
+   "fr": "Hors du champ du règlement"
+  },
+  "Hors périmètre, avec une justification écrite — le catalogue l'autorise, il ne l'offre pas.": {
+   "en": "Out of scope, with a written justification — the catalogue allows it, it does not give it away.",
+   "fr": "Hors périmètre, avec une justification écrite — le catalogue l'autorise, il ne l'offre pas."
+  },
+  "ISO/IEC #:# — Questionnaire d'auto-évaluation": {
+   "en": "ISO/IEC #:# — Self-assessment questionnaire",
+   "fr": "ISO/IEC 27001:2013 — Questionnaire d'auto-évaluation"
+  },
+  "ISO/IEC #:# — Sécurité de l'information, cybersécurité et protection de la vie privée — Systèmes de management de la sécurité de l'information — Exigences": {
+   "en": "ISO/IEC #:# — Information security, cybersecurity and privacy protection — Information security management systems — Requirements",
+   "fr": "ISO/IEC 27001:2022 — Sécurité de l'information, cybersécurité et protection de la vie privée — Systèmes de management de la sécurité de l'information — Exigences"
+  },
+  "ISO/IEC #:# — Technologies de l'information — Intelligence artificielle — Système de management": {
+   "en": "ISO/IEC #:# — Information technology — Artificial intelligence — Management system",
+   "fr": "ISO/IEC 42001:2023 — Technologies de l'information — Intelligence artificielle — Système de management"
+  },
+  "Identification des opérateurs économiques": {
+   "en": "Identification of economic operators",
+   "fr": "Identification des opérateurs économiques"
+  },
+  "Identification des scénarios de risque": {
+   "en": "Identification of the risk scenarios",
+   "fr": "Identification des scénarios de risque"
+  },
+  "Identification des sous-traitants qui sont eux-mêmes désignés prestataires tiers critiques": {
+   "en": "Identification of the subcontractors that are themselves designated critical third-party providers",
+   "fr": "Identification des sous-traitants qui sont eux-mêmes désignés prestataires tiers critiques"
+  },
+  "Identification et détection rapides des sources de risque et des anomalies, et traitement rapide des incidents": {
+   "en": "Prompt identification and detection of sources of risk and of anomalies, and prompt handling of incidents",
+   "fr": "Identification et détection rapides des sources de risque et des anomalies, et traitement rapide des incidents"
+  },
+  "Identification et réaction aux incidents de sécurité": {
+   "en": "Identification of and reaction to security incidents",
+   "fr": "Identification et réaction aux incidents de sécurité"
+  },
+  "Identifier et évaluer": {
+   "en": "Identify and assess",
+   "fr": "Identifier et évaluer"
+  },
+  "Identifier et évaluer les incidences négatives réelles et potentielles": {
+   "en": "Identify and assess actual and potential adverse impacts",
+   "fr": "Identifier et évaluer les incidences négatives réelles et potentielles"
+  },
+  "Identifier les exigences réglementaires applicables": {
+   "en": "Identifying the applicable regulatory requirements",
+   "fr": "Identifier les exigences réglementaires applicables"
+  },
+  "Il commande tout le reste : hors champ, rien ne s'applique ; essentielle ou importante, la supervision et le plafond d'amende changent.": {
+   "en": "It governs everything else: out of scope, nothing applies; essential or important, the supervision and the fine ceiling change.",
+   "fr": "Il commande tout le reste : hors champ, rien ne s'applique ; essentielle ou importante, la supervision et le plafond d'amende changent."
+  },
+  "Il commande tout le reste. Le régime décide si vingt-six articles vous sont opposables ou quatorze, et les deux jeux ne se recouvrent pas.": {
+   "en": "It governs everything else. The regime decides whether twenty-six articles are enforceable against you or fourteen, and the two sets do not overlap.",
+   "fr": "Il commande tout le reste. Le régime décide si vingt-six articles vous sont opposables ou quatorze, et les deux jeux ne se recouvrent pas."
+  },
+  "Il commande tout, et il peut tout clore : le règlement n'impose rien à qui n'est aucune des quatre, et c'est le cas de la très grande majorité des entreprises.": {
+   "en": "It commands everything, and it can close everything: the Regulation imposes nothing on whoever is none of the four, and that is the case for the vast majority of companies.",
+   "fr": "Il commande tout, et il peut tout clore : le règlement n'impose rien à qui n'est aucune des quatre, et c'est le cas de la très grande majorité des entreprises."
+  },
+  "Il est interdit de suggérer que l'OCDE adosse cet usage de l'œuvre.": {
+   "en": "It is forbidden to suggest that the OECD endorses this use of the work.",
+   "fr": "Il est interdit de suggérer que l'OCDE adosse cet usage de l'œuvre."
+  },
+  "Il se lit à la fin : il ne dit que ce que les écrans précédents contiennent.": {
+   "en": "It is read last: it says only what the preceding screens contain.",
+   "fr": "Il se lit à la fin : il ne dit que ce que les écrans précédents contiennent."
+  },
+  "Il viendra à son tour. L'ordre des blocs porte une décision : le régime de l'article # commande ce que les suivants mesurent.": {
+   "en": "It will come in its turn. The order of the blocks carries a decision: the regime of article # governs what the following ones measure.",
+   "fr": "Il viendra à son tour. L'ordre des blocs porte une décision : le régime de l'article 16 commande ce que les suivants mesurent."
+  },
+  "Ils sont conservés tels quels. Les fusionner produirait un exemple de quatre mille caractères ; les réécrire inventerait une phrase que le document ne porte pas.": {
+   "en": "They are kept as they stand. Merging them would produce a four-thousand-character example; rewriting them would invent a sentence the document does not carry.",
+   "fr": "Ils sont conservés tels quels. Les fusionner produirait un exemple de quatre mille caractères ; les réécrire inventerait une phrase que le document ne porte pas."
+  },
+  "Impossibilité technique NON consignée": {
+   "en": "Technical impossibility NOT recorded",
+   "fr": "Impossibilité technique NON consignée"
+  },
+  "Impossibilité technique de l'intervention humaine en temps réel": {
+   "en": "Technical impossibility of real-time human intervention",
+   "fr": "Impossibilité technique de l'intervention humaine en temps réel"
+  },
+  "Incidence dans deux États membres ou plus": {
+   "en": "Impact in two or more Member States",
+   "fr": "Incidence dans deux États membres ou plus"
+  },
+  "Informations à l'attention des parties intéressées des systèmes d'IA": {
+   "en": "Information for the interested parties of the AI systems",
+   "fr": "Informations à l'attention des parties intéressées des systèmes d'IA"
+  },
+  "Informer préalablement, clairement et intelligiblement, des objectifs d'intérêt général et de la localisation d'un traitement en pays tiers": {
+   "en": "Informing beforehand, clearly and intelligibly, of the general-interest objectives and of the location of any processing in a third country",
+   "fr": "Informer préalablement, clairement et intelligiblement, des objectifs d'intérêt général et de la localisation d'un traitement en pays tiers"
+  },
+  "Informer sans retard en cas d'accès non autorisé": {
+   "en": "Informing without delay in the event of unauthorised access",
+   "fr": "Informer sans retard en cas d'accès non autorisé"
+  },
+  "Informer sans retard les détenteurs de tout transfert, accès ou usage non autorisé": {
+   "en": "Informing the data holders without delay of any unauthorised transfer, access or use",
+   "fr": "Informer sans retard les détenteurs de tout transfert, accès ou usage non autorisé"
+  },
+  "Infractions antérieures": {
+   "en": "Previous infringements",
+   "fr": "Infractions antérieures"
+  },
+  "Infrastructure numérique": {
+   "en": "Digital infrastructure",
+   "fr": "Infrastructure numérique"
+  },
+  "Infrastructures des marchés financiers": {
+   "en": "Financial market infrastructures",
+   "fr": "Infrastructures des marchés financiers"
+  },
+  "Inscrire la date au registre d'informations de l'article #, paragraphe # : elle change le régime de surveillance de ce contrat.": {
+   "en": "Entering the date in the register of information of article #(#): it changes the supervision regime for that contract.",
+   "fr": "Inscrire la date au registre d'informations de l'article 28, paragraphe 3 : elle change le régime de surveillance de ce contrat."
+  },
+  "Inspections sur place et contrôles à distance ex post": {
+   "en": "On-site inspections and ex post remote checks",
+   "fr": "Inspections sur place et contrôles à distance ex post"
+  },
+  "Inspections sur place et contrôles à distance, y compris des contrôles aléatoires": {
+   "en": "On-site inspections and remote checks, including random checks",
+   "fr": "Inspections sur place et contrôles à distance, y compris des contrôles aléatoires"
+  },
+  "Institution de retraite professionnelle": {
+   "en": "An institution for occupational retirement provision",
+   "fr": "Institution de retraite professionnelle"
+  },
+  "Interaction avec les déployeurs": {
+   "en": "Interaction with deployers",
+   "fr": "Interaction avec les déployeurs"
+  },
+  "Intermédiaire d'assurance, de réassurance ou d'assurance à titre accessoire": {
+   "en": "An insurance, reinsurance or ancillary insurance intermediary",
+   "fr": "Intermédiaire d'assurance, de réassurance ou d'assurance à titre accessoire"
+  },
+  "Intermédiation au profit des personnes concernées": {
+   "en": "Intermediation for data subjects",
+   "fr": "Intermédiation au profit des personnes concernées"
+  },
+  "Intermédiation entre détenteurs et utilisateurs de données": {
+   "en": "Intermediation between data holders and data users",
+   "fr": "Intermédiation entre détenteurs et utilisateurs de données"
+  },
+  "Interopérabilité avec les autres intermédiaires": {
+   "en": "Interoperability with other intermediaries",
+   "fr": "Interopérabilité avec les autres intermédiaires"
+  },
+  "Interruption de service supérieure à # heures pour des services TIC soutenant des fonctions critiques ou importantes": {
+   "en": "Service interruption longer than # hours for ICT services supporting critical or important functions",
+   "fr": "Interruption de service supérieure à 2 heures pour des services TIC soutenant des fonctions critiques ou importantes"
+  },
+  "Intégrateur — modification substantielle (art. #)": {
+   "en": "Integrator — substantial modification (art. #)",
+   "fr": "Intégrateur — modification substantielle (art. 22)"
+  },
+  "Intégration de la sécurité numérique dans la gestion des ressources humaines": {
+   "en": "Embedding digital security in human resources management",
+   "fr": "Intégration de la sécurité numérique dans la gestion des ressources humaines"
+  },
+  "Intégrité de l'information": {
+   "en": "Integrity of the information",
+   "fr": "Intégrité de l'information"
+  },
+  "Intérêts de retard de l'article # du règlement (UE, Euratom) #/#.": {
+   "en": "Default interest under article # of Regulation (EU, Euratom) #/#.",
+   "fr": "Intérêts de retard de l'article 99 du règlement (UE, Euratom) 2018/1046."
+  },
+  "JO L # du #": {
+   "en": "OJ L # of #",
+   "fr": "JO L 152 du 3.6.2022"
+  },
+  "JO L # du #, p. #": {
+   "en": "OJ L # of #, p. #",
+   "fr": "JO L 333 du 27.12.2022, p. 80"
+  },
+  "JO L du #": {
+   "en": "OJ L of #",
+   "fr": "JO L du 20.11.2024"
+  },
+  "Journal de l'activité d'intermédiation": {
+   "en": "Log of the data intermediation activity",
+   "fr": "Journal de l'activité d'intermédiation"
+  },
+  "Juridiction des pays tiers, et outils de retrait": {
+   "en": "Third-country jurisdiction, and withdrawal tools",
+   "fr": "Juridiction des pays tiers, et outils de retrait"
+  },
+  "L'absence de solutions de substitution réelles — nombre limité d'acteurs, part de marché, technologie propriétaire — et la difficulté de migrer données et charges de travail ailleurs, en coût, en délai et en risque ajouté.": {
+   "en": "The absence of real alternatives — a limited number of players, market share, proprietary technology — and the difficulty of migrating data and workloads elsewhere, in cost, in time and in added risk.",
+   "fr": "L'absence de solutions de substitution réelles — nombre limité d'acteurs, part de marché, technologie propriétaire — et la difficulté de migrer données et charges de travail ailleurs, en coût, en délai et en risque ajouté."
+  },
+  "L'absence de solutions de substitution réelles, même partielles — nombre limité d'acteurs, part de marché, complexité technique, technologie propriétaire, caractéristiques propres de l'organisation.": {
+   "en": "The absence of real alternatives, even partial ones — a limited number of players, market share, technical complexity, proprietary technology, the organisation's own characteristics.",
+   "fr": "L'absence de solutions de substitution réelles, même partielles — nombre limité d'acteurs, part de marché, complexité technique, technologie propriétaire, caractéristiques propres de l'organisation."
+  },
+  "L'abstention est une intervention : la personne désignée doit pouvoir écarter une sortie sans s'en servir, et ce refus s'enregistre comme un événement de supervision.": {
+   "en": "Abstaining is an intervention: the designated person must be able to set an output aside without using it, and that refusal is recorded as an oversight event.",
+   "fr": "L'abstention est une intervention : la personne désignée doit pouvoir écarter une sortie sans s'en servir, et ce refus s'enregistre comme un événement de supervision."
+  },
+  "L'acceptation d'un risque résiduel se décide au niveau qui a le pouvoir de l'accepter, et se trace : sinon elle n'a pas eu lieu.": {
+   "en": "The acceptance of a residual risk is decided at the level with the power to accept it, and it is recorded: otherwise it did not happen.",
+   "fr": "L'acceptation d'un risque résiduel se décide au niveau qui a le pouvoir de l'accepter, et se trace : sinon elle n'a pas eu lieu."
+  },
+  "L'accepter en l'état. Légitime SI le niveau respecte les critères d'acceptation établis, et si le propriétaire l'a écrit et daté.": {
+   "en": "Accepting it as it stands. Legitimate IF the level meets the acceptance criteria established, and if the owner has written and dated it.",
+   "fr": "L'accepter en l'état. Légitime SI le niveau respecte les critères d'acceptation établis, et si le propriétaire l'a écrit et daté."
+  },
+  "L'accès se fait dans un environnement sécurisé de traitement, ou sur des données anonymisées, modifiées ou agrégées": {
+   "en": "Access takes place within a secure processing environment, or on anonymised, modified or aggregated data",
+   "fr": "L'accès se fait dans un environnement sécurisé de traitement, ou sur des données anonymisées, modifiées ou agrégées"
+  },
+  "L'acte d'exécution n'est pas au corpus. Ce module n'affiche donc aucun délai chiffré : le faire présenterait comme sourcé un chiffre qui ne l'est pas.": {
+   "en": "The implementing act is not in the corpus. This module therefore shows no figure for the deadline: doing so would present as sourced a figure that is not.",
+   "fr": "L'acte d'exécution n'est pas au corpus. Ce module n'affiche donc aucun délai chiffré : le faire présenterait comme sourcé un chiffre qui ne l'est pas."
+  },
+  "L'acte délégué C(#) # ne dit pas expressément si les deux parts du sous-critère # et du sous-critère # doivent être atteintes dans LA MÊME catégorie d'entités financières, comme l'article #, paragraphe #, l'impose pour les sous-critères # et #. Le module calcule les DEUX lectures et signale quand elles divergent, plutôt que d'en choisir une en silence.": {
+   "en": "Delegated act C(#) # does not say expressly whether the two shares of sub-criterion # and sub-criterion # must be reached within THE SAME category of financial entities, as article #(#) requires for sub-criteria # and #. The module computes BOTH readings and flags where they diverge, rather than picking one in silence.",
+   "fr": "L'acte délégué C(2024) 896 ne dit pas expressément si les deux parts du sous-critère 4.1 et du sous-critère 4.2 doivent être atteintes dans LA MÊME catégorie d'entités financières, comme l'article 2, paragraphe 4, l'impose pour les sous-critères 1.1 et 1.2. Le module calcule les DEUX lectures et signale quand elles divergent, plutôt que d'en choisir une en silence."
+  },
+  "L'action est en place pour ce système.": {
+   "en": "The action is in place for this system.",
+   "fr": "L'action est en place pour ce système."
+  },
+  "L'action ne s'applique pas à ce système — et il faut pouvoir dire pourquoi.": {
+   "en": "The action does not apply to this system — and you must be able to say why.",
+   "fr": "L'action ne s'applique pas à ce système — et il faut pouvoir dire pourquoi."
+  },
+  "L'agent dispose de plus d'outils, de droits ou de latitude que sa tâche n'en demande.": {
+   "en": "The agent has more tools, more rights or more latitude than its task calls for.",
+   "fr": "L'agent dispose de plus d'outils, de droits ou de latitude que sa tâche n'en demande."
+  },
+  "L'ajout d'observations par la personne désignée est régulièrement oublié : ce qu'elle savait de l'environnement au moment de la sortie n'est dans aucun journal machine.": {
+   "en": "Letting the designated person add observations is regularly forgotten: what they knew of the environment at the time of the output is in no machine log.",
+   "fr": "L'ajout d'observations par la personne désignée est régulièrement oublié : ce qu'elle savait de l'environnement au moment de la sortie n'est dans aucun journal machine."
+  },
+  "L'alinéa (h) de l'article #(#), et l'article #. C'est le chapitre qu'aucune des deux normes ISO ne couvre.": {
+   "en": "Subparagraph (h) of article #(#), and article #. This is the chapter that neither ISO standard covers.",
+   "fr": "L'alinéa (h) de l'article 17(1), et l'article 72. C'est le chapitre qu'aucune des deux normes ISO ne couvre."
+  },
+  "L'alinéa (i) de l'article #(#). Sept exigences dans ce seul paragraphe — c'est le plus chargé de la norme.": {
+   "en": "Subparagraph (i) of article #(#). Seven requirements in that one clause — the heaviest in the standard.",
+   "fr": "L'alinéa (i) de l'article 17(1). Sept exigences dans ce seul paragraphe — c'est le plus chargé de la norme."
+  },
+  "L'alinéa (m) de l'article #(#) ne demande pas un nom : il demande une responsabilité qui porte.": {
+   "en": "Subparagraph (m) of article #(#) does not ask for a name: it asks for a responsibility that carries weight.",
+   "fr": "L'alinéa (m) de l'article 17(1) ne demande pas un nom : il demande une responsabilité qui porte."
+  },
+  "L'altération des informations nécessaires aux activités ou services de l'entité": {
+   "en": "The alteration of the information needed for the entity's activities or services",
+   "fr": "L'altération des informations nécessaires aux activités ou services de l'entité"
+  },
+  "L'analyse de risque elle-même : gouvernance sous le dirigeant exécutif, chaque système couvert, risques résiduels acceptés, plan d'action daté et attribué, réexamen triennal.": {
+   "en": "The risk analysis itself: governance under the chief executive, every system covered, residual risks accepted, a dated and assigned action plan, a three-yearly review.",
+   "fr": "L'analyse de risque elle-même : gouvernance sous le dirigeant exécutif, chaque système couvert, risques résiduels acceptés, plan d'action daté et attribué, réexamen triennal."
+  }
+ }
+}

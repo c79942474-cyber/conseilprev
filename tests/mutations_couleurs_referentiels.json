@@ -35,8 +35,8 @@
     {
       "nom": "l'ordre de barre validé n'est plus celui de l'écran",
       "fichier": "conformite.py",
-      "avant": "ORDRE_BARRE = (\"rgpd\", \"iso27001\", \"iso42001\", \"en18229_3\", \"en18286\",",
-      "apres": "ORDRE_BARRE = (\"rgpd\", \"iso42001\", \"iso27001\", \"en18229_3\", \"en18286\",",
+      "avant": "ORDRE_BARRE = (\"rgpd\", \"dga\", \"data_act\",\n               \"iso27001\", \"iso42001\", \"en18229_3\", \"en18286\",",
+      "apres": "ORDRE_BARRE = (\"rgpd\", \"dga\", \"data_act\",\n               \"iso42001\", \"iso27001\", \"en18229_3\", \"en18286\",",
       "regle": "test_l_ORDRE_de_la_barre_est_celui_qui_a_ete_VALIDE"
     },
     {
