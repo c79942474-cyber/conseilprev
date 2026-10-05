@@ -1129,10 +1129,24 @@ def test_chaque_entree_du_catalogue_est_sa_propre_normalisation_avec_ses_mots_et
 #: voit une, la règle tombe pour le dire : la dette est payée, la ligne doit
 #: disparaître. C'est ainsi que PAGES_APRES_LE_CATALOGUE a disparu.
 HORS_DE_PORTEE_DE_LA_PASSE = {
-    u"Chargement du moteur…": "sentinel.html",
+    #  UNE SEULE RESTE, ET C'EST UNE VRAIE. Son français vit dans le document
+    #  EMBARQUÉ de panorama.html : `querySelectorAll` ne traverse pas la
+    #  frontière d'un document, et la passe n'ouvre les cadres que sur
+    #  --cadres (qui ferait tomber le plancher de couverture, faute que les
+    #  19 000 mots de ces cadres soient traduits). Que ce texte-là soit bien
+    #  en anglais est mesuré ailleurs, dans un navigateur :
+    #  tests/test_sentinel_cadres_traduits.
     u"CNIL · ANSSI · EU AI Act · Commission — rafraîchi côté serveur (# min)":
         "panorama.html",
 }
+#  « Chargement du moteur… » N'Y EST PLUS, ET C'EST LA RÈGLE QUI L'A EXIGÉ.
+#  Elle disait : « le jour où le catalogue en voit une, la règle tombe pour le
+#  dire : la dette est payée, la ligne doit disparaître. » C'est arrivé. La
+#  passe d'inventaire ne spoofait que deux des trois signaux que
+#  sentinel.page.js envoie à /api/client-signal : le serveur la prenait pour un
+#  navigateur automatisé et bloquait l'adresse 1 800 s, donc TOUT ce qu'une
+#  API peint s'inventoriait sur son texte d'attente. Le troisième signal posé,
+#  la passe voit la peinture — et ce texte d'attente avec elle.
 
 
 def test_les_dictionnaires_du_depot_passent_verifier_contre_le_catalogue_du_depot():

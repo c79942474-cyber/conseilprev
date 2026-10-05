@@ -166,7 +166,6 @@
   "Où en sont ceux à qui vous vendez": "Where the people you sell to stand",
   "Où le matériel de formation se range": "Where the training material is stored",
   "Où le saisir": "Where to enter it",
-  "Où vous en êtes sur chacune des neuf, et lesquelles sont ARRÊTÉES par un verrou plutôt que simplement en retard.": "Where you stand on each of the nine, and which ones are STOPPED by a blocker rather than simply behind.",
   "PDF officiel fourni par le client (EU_IA_ACT.pdf). Articles retranscrits et vulgarises par CONSEILPREV.": "Official PDF provided by the client (EU_IA_ACT.pdf). Articles transcribed and explained in plain language by CONSEILPREV.",
   "PDF officiel fourni par le client, extrait via pdftotext. Articles couverts par le moteur : #, #, #, #, #, #, # a #, #, #, #, #, #, #.": "Official PDF provided by the client, extracted via pdftotext. Articles covered by the engine: #, #, #, #, #, #, # to #, #, #, #, #, #, #.",
   "PME (< # salariés)": "SME (< # employees)",
@@ -238,6 +237,7 @@
   "Pièces de conformité (art. #, #).": "Compliance documents (art. #, #).",
   "Pièces à communiquer, référentiel des données à masquer.": "Documents to be disclosed, reference list of the data to be masked.",
   "Plan d action en # phases (même méthodologie que l Audit de maturité), avec progression calculée à partir de votre Registre IA et de l Audit IA Act réels — pas des chiffres figés.": "Action plan in # phases (same methodology as the maturity audit), with progress calculated from your actual AI register and AI Act audit — not fixed figures.",
-  "Plan de maintenance": "Maintenance plan"
+  "Plan de maintenance": "Maintenance plan",
+  "Où vous en êtes sur chacune des seize, et lesquelles sont ARRÊTÉES par un verrou plutôt que simplement en retard.": "Where you stand on each of the sixteen, and which ones are STOPPED by a blocker rather than simply behind."
  }
 }

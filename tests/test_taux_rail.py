@@ -47,6 +47,12 @@ sys.path.insert(0, _RACINE)
 import conformite as c  # noqa: E402
 import parcours_normes as pn  # noqa: E402
 import cra  # noqa: E402
+import data_act as _da  # noqa: E402
+
+#: LES OBLIGATIONS DU DATA ACT, LUES ET NON RECOPIÉES. Une liste écrite ici
+#: se serait séparée du moteur au premier article ajouté, et le banc aurait
+#: rempli un écran que l'écran réel ne considère plus comme rempli.
+_DA_OBL = _da.OBLIGATIONS
 import iso27001  # noqa: E402
 import iso42001  # noqa: E402
 import nis2  # noqa: E402
@@ -167,6 +173,27 @@ def _remplis():
     banc où tout est « conforme » ne distingue pas un taux lu d'un taux
     plafonné à cent."""
     return {
+        #  LES DEUX RÈGLEMENTS DE LA DONNÉE. La QUALIFICATION fait partie du
+        #  remplissage : sans elle, aucun de leurs blocs n'a d'objet, et le
+        #  rail a raison de ne rien valider. Les réponses sont moyennes —
+        #  « tenu » et « partiel » mêlés —, et le chiffre d'affaires est posé
+        #  parce que le bloc du pont le réclame dès qu'un chapitre exposé à
+        #  l'article 83 §5 du RGPD est ouvert.
+        "dga": {"qualites": ["intermediaire"], "anterieur_2022": False,
+                "reponses": dict(
+                    [("art12_%s" % l, "tenu" if i % 3 else "partiel")
+                     for i, l in enumerate("abcdefghijklmno")]
+                    + [("art11_notification", "tenu"),
+                       ("art11_site", "partiel"),
+                       ("art11_modification", "tenu"),
+                       ("art11_cessation", "tenu")])},
+        "data_act": {"qualites": ["fabricant", "cloud"], "taille": "grande",
+                     "chiffre_affaires": 120000000,
+                     "reponses": dict(
+                         [(o["cle"], "tenu" if i % 3 else "partiel")
+                          for i, o in enumerate(
+                              [x for x in _DA_OBL
+                               if x["qualite"] in ("fabricant", "cloud")])])},
         "iso27001": {"perimetre": "SI de production",
                      "criteres": {"seuil_acceptation": 6,
                                   "etabli_le": "2026-01-10",

@@ -59,6 +59,22 @@ const JETON_DEFAUT = 'recette_locale_idf_0123456789abcdef';
 const PORT_DEFAUT = 9931;
 const NAVIGATEUR = 'Mozilla/5.0 (X11; Linux x86_64) Firefox/130.0';
 
+/* LE LIMITEUR DU SERVEUR, ET POURQUOI CETTE PASSE DOIT LE RESPECTER.
+   `rate_limit` borne chaque route à 120 requêtes par minute et par adresse,
+   mais un dépassement répété BLOQUE l'adresse — et un blocage ferme TOUTES
+   les routes, parce que `limiter.check` commence par `is_blocked`. Une passe
+   qui enchaîne 137 pages sans souffler se fait donc couper vers la
+   quarantième, et tout ce qu'une API peint s'inventorie sur « Chargement… ».
+   MESURÉ : sur deux pages seules, dga-qualifier rend +19 clés et
+   data-act-cloud +15 ; dans la passe complète, aux rangs 37 à 43, les mêmes
+   pages rendaient +0.
+   LES VALEURS VIENNENT DE recette_sentinel_langue.js, qui porte le même
+   mécanisme depuis la mesure de la part française : 100 requêtes de marge
+   sous les 120 du serveur, et une minute (plus un peu) de silence quand il
+   a refusé quand même. */
+const REQUETES_MAX = Number(process.env.REQUETES_MAX || 100);
+const SILENCE = Number(process.env.SILENCE || 62000);
+
 /* UN MOT : une suite de lettres latines, accents compris. LA MÊME définition
    que outils/i18n_sentinel.py — les deux comptent les mêmes mots, sinon la
    couverture d'une page serait mesurée avec deux règles. */
@@ -293,13 +309,49 @@ async function extraire(opts) {
   const cat = catalogueVide();
   try {
     const ctx = await nav.newContext({ viewport: { width: 1500, height: 1000 }, userAgent: NAVIGATEUR });
+    /* LES TROIS SIGNAUX, ET IL EN MANQUAIT UN — CE QUI RENDAIT CETTE PASSE
+       AVEUGLE À TOUT CE QU'UNE ROUTE SERT. sentinel.page.js envoie un signal
+       silencieux à /api/client-signal dès que l'un des trois est vrai :
+       `navigator.webdriver`, `navigator.plugins.length === 0`,
+       `navigator.languages` vide. Le serveur BLOQUE alors l'adresse 1 800 s,
+       et le blocage ferme TOUTES les routes (limiter.check commence par
+       is_blocked) : les panneaux qui tirent leur contenu d'une API
+       s'inventoriaient sur « Chargement… ».
+       MESURÉ : 8 appels d'API au chargement, 7 refusés en 429 ;
+       `headless_browser_detected` au journal ; `sentInventaire` rendait
+       2 clés de texte sur dga-qualifier, qui en porte des centaines. La
+       fusion masquait le trou en reprenant 10 968 clés de la passe
+       précédente — un catalogue qui se « refaisait » sans rien voir.
+       recette_sentinel_langue.js, elle, spoofait bien les trois ; c'est de là
+       que vient la ligne qui manquait. */
     await ctx.addInitScript(() => {
       Object.defineProperty(navigator, 'webdriver', { get: () => false });
+      Object.defineProperty(navigator, 'plugins', { get: () => [1, 2, 3] });
       Object.defineProperty(navigator, 'languages', { get: () => ['fr-FR', 'fr'] });
     });
     const pg = await ctx.newPage();
     const erreurs = [];
     pg.on('pageerror', (e) => erreurs.push(String(e).slice(0, 160)));
+    /* LA MINUTE GLISSANTE DES REQUÊTES, et le compte des 429 — qui disent
+       que le serveur a refusé malgré la marge. */
+    const horodatages = [];
+    let refus = 0, attentes = 0, silences = 0;
+    pg.on('request', (r) => { if (r.url().indexOf(base) === 0) horodatages.push(Date.now()); });
+    pg.on('response', (r) => { if (r.status() === 429) refus++; });
+    const recentes = () => {
+      const t = Date.now() - 60000;
+      while (horodatages.length && horodatages[0] < t) horodatages.shift();
+      return horodatages.length;
+    };
+    const pause = (ms) => new Promise((r) => setTimeout(r, ms));
+    const respirer = async () => { while (recentes() >= REQUETES_MAX) { attentes++; await pause(1000); } };
+    const silence = async (pourquoi) => {
+      silences++;
+      process.stdout.write('  … ' + pourquoi + ' : ' + Math.round(SILENCE / 1000) + ' s de silence\n');
+      await pause(SILENCE);
+      horodatages.length = 0;
+      refus = 0;
+    };
     /* LA CONNEXION PAR JETON ATTERRIT SUR /sentinel ; un seul chargement,
        puis les pages s'ouvrent par go() sans recharger (la page tire plus
        de cent appels d'API à l'ouverture). */
@@ -354,10 +406,23 @@ async function extraire(opts) {
       { id: id, cadres: !!opts.cadres });
 
     let absentes = [];
+    /* UN REFUS AU CHARGEMENT SE RATTRAPE AVANT DE COMMENCER : une page
+       ouverte sur des 429 montre « Chargement… », et l'inventorier
+       écrirait ce « Chargement… » au catalogue comme s'il était le produit. */
+    if (refus) {
+      await silence(refus + ' réponses 429 au chargement');
+      await pg.goto(base + '/sentinel', { waitUntil: 'commit' });
+      await pg.waitForFunction(() => typeof sentInventaire === 'function' && typeof go === 'function',
+                               null, { timeout: 60000 });
+      await pg.waitForTimeout(2500);
+      await pg.evaluate(() => { if (typeof sentSetLang === 'function') sentSetLang('fr'); });
+    }
     for (let i = 0; i < ids.length; i++) {
       const id = ids[i];
+      await respirer();
       await pg.evaluate((id) => { try { go(id); } catch (e) { /* une page sans rendu propre */ } }, id);
       await attendreRendu();
+      if (refus) await silence(refus + ' réponses 429 sur ' + id);
       const inv = await inventaireDe(id);
       if (!inv) { absentes.push(id); continue; }
       const n = fusionnerInventaire(cat, inv, id);
@@ -377,6 +442,12 @@ async function extraire(opts) {
     cat.genere_le = new Date().toISOString();
     if (absentes.length) console.log('  pages de PAGE_META sans élément #p-… : ' + absentes.join(', '));
     console.log('  coquille : +' + coquille + ' clés');
+    /* CE QUE LE LIMITEUR A COÛTÉ, ÉCRIT : une passe qui aurait soufflé
+       cinquante fois n'a pas mesuré la même chose qu'une passe qui n'a
+       jamais attendu, et un 429 restant dit qu'une page a pu être relevée
+       sur un « Chargement… ». */
+    console.log('  limiteur : ' + attentes + ' seconde(s) d\'attente, '
+      + silences + ' silence(s), ' + refus + ' refus 429 non rattrapé(s)');
     if (erreurs.length) console.log('  erreurs de page : ' + erreurs.slice(0, 3).join(' | '));
     if (!opts.cadres) {
       console.log('  documents embarqués NON ouverts : --cadres les relève '

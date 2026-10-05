@@ -1261,6 +1261,41 @@ var SENT_T = {
     'pg.en18286-analyse.eb': 'prEN 18286 \u00b7 Analysis',
     'pg.en18286-analyse.h1': 'What your certificate <em>does not give you</em>',
     'pg.en18286-analyse.p': 'The standard carries two correspondence tables, with ISO 9001:2015 and with ISO/IEC 42001:2023. Everyone looks there for what matches; what counts is the <strong>two rows facing the void</strong> \u2014 \u00a74.4 and clause 9, which is exactly what the Regulation adds. And prEN 18286 organises the way essential requirements are met: it is the <b>other</b> standards of the family that say how to meet them.',
+    /* LES DEUX RÈGLEMENTS DE LA DONNÉE. Les intitulés d'articles restent tels
+       que le Journal officiel anglais les écrit — « data intermediation
+       services », « connected product », « data holder » — parce que c'est le
+       libellé qu'un auditeur cherchera, comme pour les énoncés du NIST. */
+    'nav.item.dga-qualifier': 'DGA — qualification',
+    'nav.item.dga-obligations': 'DGA — obligations',
+    'nav.item.dga-pont-rgpd': 'DGA ↔ GDPR',
+    'nav.item.data-act-qualifier': 'Data Act — qualification',
+    'nav.item.data-act-obligations': 'Data Act — obligations',
+    'nav.item.data-act-cloud': 'Switching providers',
+    'nav.item.data-act-pont-rgpd': 'Data Act ↔ GDPR',
+
+    'pg.dga-qualifier.eb': 'DGA · Qualification',
+    'pg.dga-qualifier.h1': 'Does the Regulation catch you? <em>For most, it does not</em>',
+    'pg.dga-qualifier.p': 'Regulation (EU) 2022/868 establishes only <b>four frameworks</b> in its Article 1(1), and only three of them create obligations: the re-use of certain protected data held by a <b>public sector body</b>, <b>data intermediation services</b>, and <b>data altruism</b>. A company that is none of those has <strong>nothing to do</strong> under this text, and saying so is this screen’s first service: a tool that invented a rate for it would sell a project that does not exist.',
+    'pg.dga-obligations.eb': 'DGA · Obligations',
+    'pg.dga-obligations.h1': 'Fifteen conditions, <em>and a deadline already past</em>',
+    'pg.dga-obligations.p': 'The obligations of <b>your</b> capacities, and of those alone: the fifteen conditions of Article 12 and the notification of Article 11 for a data intermediation provider, Articles 18, 20, 21 and 22 for a recognised data altruism organisation — exactly those that Article 34 makes sanctionable. <strong>Article 37 has expired</strong>: a provider already supplying the service on 23 June 2022 had to comply with Chapter III by 24 September 2025 at the latest. That date has passed; a breach is no longer a delay.',
+    'pg.dga-pont-rgpd.eb': 'DGA · GDPR bridge',
+    'pg.dga-pont-rgpd.h1': 'The GDPR prevails, <em>and the DGA creates no legal basis</em>',
+    'pg.dga-pont-rgpd.p': 'This bridge is not a navigation convenience: it is <b>written in the text</b>, and every point below carries the article that says it. Article 1(3) states that data protection law applies to <b>all</b> personal data processed in connection with the Regulation, that it <strong>prevails in the event of conflict</strong>, and that the DGA <strong>does not create a legal basis</strong> nor alter GDPR rights. And Article 10(b) goes further: intermediation services for data subjects exist precisely to let them exercise their GDPR rights.',
+
+    'pg.data-act-qualifier.eb': 'Data Act · Qualification',
+    'pg.data-act-qualifier.h1': 'Seven capacities, <em>and none depends on where you are established</em>',
+    'pg.data-act-qualifier.p': 'Article 1(3) lists seven addressees, and repeats for the manufacturer, the data holder and the cloud provider: “<b>irrespective of their place of establishment</b>”. A company outside the Union placing a connected product on the Union market, or serving customers in the Union, is bound — this is the most frequent misreading. The <b>Article 7 exemption</b> exists for micro and small enterprises, but it covers only <strong>Chapter II</strong>, and only where there is no larger partner or linked enterprise and no subcontracting: unfair contractual terms, switching providers and international access do not know it.',
+    'pg.data-act-obligations.eb': 'Data Act · Obligations',
+    'pg.data-act-obligations.h1': 'The chapters your capacities open, <em>and the real calendar</em>',
+    'pg.data-act-obligations.p': 'The Regulation has applied since 12 September 2025, but Article 50 staggers it: the accessibility-by-design obligation of Article 3(1) covers connected products and related services placed on the market <strong>after 12 September 2026</strong> — a date now past, so an enforceable state and not a project; Chapter IV applies to contracts concluded after 12 September 2025, and from 12 September 2027 to earlier contracts of indefinite duration or due to expire at least ten years from 11 January 2024. The screen places each deadline relative to today.',
+    'pg.data-act-cloud.eb': 'Data Act · Switching providers',
+    'pg.data-act-cloud.h1': 'Leaving your provider, <em>free of charge from 12 January 2027</em>',
+    'pg.data-act-cloud.p': 'Articles 23 to 31 dismantle the obstacles to switching data processing service providers: pre-commercial, commercial, technical, contractual and organisational obstacles (Art. 23), mandatory contractual terms (Art. 25), customer information (Art. 26), good-faith cooperation (Art. 27), transparency on the hosting jurisdiction (Art. 28). And Article 29(1) <strong>removes all switching charges on 12 January 2027</strong>; until then reduced charges are allowed, capped at the costs directly linked.',
+    'pg.data-act-pont-rgpd.eb': 'Data Act · GDPR bridge',
+    'pg.data-act-pont-rgpd.h1': 'It complements Articles 15 and 20, <em>and borrows the Article 83(5) cap</em>',
+    'pg.data-act-pont-rgpd.p': 'Four provisions link this Regulation to the GDPR, and the last is the heaviest. Article 1(5) says the Chapter II rights <b>complement</b> GDPR Articles 15 and 20 — they do not replace them — and that the GDPR prevails in the event of conflict. Article 4(12) requires a GDPR Article 6 basis where the user is not the data subject. And Article 40(4) gives the GDPR supervisory authorities — the CNIL — competence for Chapters II, III and V, <strong>up to the amount of GDPR Article 83(5)</strong>: EUR 20 000 000 or 4 % of total worldwide annual turnover, whichever is higher. Article 83(5) provides <strong>no reduction for SMEs</strong>, where Article 99(6) of the AI Act keeps the lower cap for them.',
+
     'nav.sec.ocde': 'OECD due diligence \u2014 responsible AI',
     'nav.item.ocde-processus': 'Process \u2014 groups and involvement',
     'nav.item.ocde-questionnaire': 'Questionnaire \u2014 the six steps',
@@ -1515,7 +1550,11 @@ var SENT_SECTIONS_EN = {
      prose — le numéro, lui, traverse inchangé. */
   'prEN 18286 — SMQ de l\u2019article 17': 'prEN 18286 — Article 17 QMS',
   'NIST 800-53': 'NIST 800-53',
-  'NIST 800-82': 'NIST 800-82'
+  'NIST 800-82': 'NIST 800-82',
+  /* LE TIROIR DES DEUX RÈGLEMENTS DE LA DONNÉE. « Data & Sharing » et non
+     « Data & Exchange » : le règlement (UE) 2023/2854 parle de « data
+     sharing » dans son propre titre anglais. */
+  'Données & Partage': 'Data & Sharing'
 };
 
 function sentTr(cle) {
@@ -1784,6 +1823,19 @@ function go(id, el, sec, pg) {
      la barre, et un lien profond ou un parcours guide passe par
      `go()` sans l'executer. */
   if (id.indexOf('ocde') === 0 && typeof window.ocdeInit === 'function') _apresPeinture(window.ocdeInit);
+  /* LES SEPT ÉCRANS DE « DONNÉES & PARTAGE », ET LE DÉFAUT A ÉTÉ MESURÉ
+     AVANT D'ÊTRE ÉCRIT — par la passe d'inventaire, qui est le seul outil
+     du dépôt capable de dire ce qu'un panneau montre VRAIMENT. Elle a
+     relevé TROIS clés sur chacune des sept pages : « Chargement… », le
+     bouton du guide, et le titre de ce bouton. Autrement dit : rien. Aucun
+     chemin n'amorçait `dpInit` — ni l'onglet de la barre, ni `?goto=`, ni
+     le parcours `donnees_partage`, dont les huit étapes passent toutes par
+     `go()`. Les quinze conditions de l'article 12 et les trente-trois
+     obligations du Data Act n'étaient affichées nulle part.
+     DEUX PRÉFIXES, PARCE QUE LES CLÉS SONT DEUX : « dga » et « data-act ».
+     Un seul crochet sur « d » attraperait « dora » et « documents ». */
+  if ((id.indexOf('dga') === 0 || id.indexOf('data-act') === 0)
+      && typeof window.dpInit === 'function') _apresPeinture(window.dpInit);
   if (id === 'qualif-assistee' && typeof window.qualifInit === 'function') _apresPeinture(window.qualifInit);
   /* LE RAIL DU RÉFÉRENTIEL SE REPEINT SUR L'ÉCRAN QU'ON OUVRE — quel que
      soit le chemin : onglet, lien profond, parcours guidé ou passage
@@ -22159,12 +22211,12 @@ var GUIDED_PATHS = [
   {
     id: 'taux_conformite',
     icon: '\u{1F4CA}',
-    role: "Direction — je veux savoir où nous en sommes sur les quatorze, et par quoi commencer",
+    role: "Direction — je veux savoir où nous en sommes sur les seize, et par quoi commencer",
     pitch: "Seize référentiels, seize taux, et une question : lequel traiter d’abord. Ce parcours part de la synthèse, descend au plan, et finit par ce que le plan NE PEUT PAS faire — c’est cette dernière étape qui rend les deux premières défendables en comité.",
     steps: [
       {id:'conf-taux', label:"Le taux par norme",
        action:"Lisez d’abord le chiffre en tête — le plus bas des taux mesurés —, puis repérez les cartes qui portent un trait ambre sur leur barre.",
-       gain:"Où vous en êtes sur chacune des quatorze, et lesquelles sont ARRÊTÉES par un verrou plutôt que simplement en retard.",
+       gain:"Où vous en êtes sur chacune des seize, et lesquelles sont ARRÊTÉES par un verrou plutôt que simplement en retard.",
        tip:"Un taux n’est pas une conformité. Chaque carte porte la phrase qui dit ce que 100 % ne veut pas dire, et c’est elle qu’on cite en comité, pas le chiffre."},
       {id:'conf-plan', label:"Plan de mise en conformité",
        action:"Commencez par le rang 1. Ne descendez au rang 2 qu’une fois les verrous levés.",
@@ -22235,6 +22287,58 @@ var GUIDED_PATHS = [
        action:"Lisez ce qui vient de l'OCDE, ce qui vient du cabinet, et ce que le document s'exclut lui-même.",
        gain:"Une première dans Sentinel : une source qu'on peut citer, traduire et adapter — là où les textes du CEN et de l'ISO n'existent ici que par leurs numéros et leurs titres.",
        tip:"Aucune présomption de conformité n'en sort, et aucune date ne changera cela : ce guide met en œuvre deux recommandations, il n'est pas une norme harmonisée."}
+    ]
+  },
+  {
+    /* LES DEUX RÈGLEMENTS DE LA DONNÉE, ET UN PARCOURS QUI PEUT S'ARRÊTER À
+       SA PREMIÈRE ÉTAPE. C'est le seul de Sentinel dans ce cas, et c'est
+       voulu : le DGA n'établit que quatre cadres, et la très grande majorité
+       des entreprises ne relève d'aucun. « Aucune de ces qualités » est une
+       réponse complète, pas un abandon — le rail valide l'étape et clôt le
+       parcours au lieu de réclamer six écrans sans objet.
+
+       L'ORDRE EST CELUI DU RISQUE, PAS CELUI DES TEXTES. Le Data Act passe
+       avant le DGA dans l'usage réel : il saisit tout fabricant de produit
+       connecté et tout client de cloud, et une de ses échéances est déjà
+       passée. Mais le DGA ouvre le parcours parce que sa qualification est
+       la plus rapide à écarter — deux clics, et on sait. */
+    id: 'donnees_partage',
+    icon: '\u{1F5C3}',
+    role: "Données & Partage — je produis, je détiens, je vends ou j'héberge des données, et je veux savoir ce que les deux règlements m'imposent",
+    pitch: "Sentinel mesurait l'IA, la cybersécurité, la résilience et les données PERSONNELLES. Il ne mesurait rien sur les données NON personnelles : un produit connecté, un contrat de cloud, une place de marché de données n'entraient par aucune porte. Ces deux règlements sont ce chaînon — et le second emprunte au RGPD son plafond de sanction, sans la réduction PME que l'IA Act accorde.",
+    steps: [
+      {id:'dga-qualifier', label:"DGA — qualification",
+       action:"Déclarez votre qualité au titre du règlement (UE) 2022/868, ou cochez « aucune de ces qualités » — qui est une réponse complète et clôt ce parcours.",
+       gain:"Le règlement n'établit que quatre cadres, et trois seulement créent des obligations. Savoir en deux clics qu'on n'en relève d'aucun vaut mieux qu'un taux inventé sur un chantier qui n'existe pas.",
+       tip:"Confondre « rien de déclaré » et « hors champ » : le premier ne rend aucun taux, le second rend « sans objet » — et seul le second est une réponse."},
+      {id:'dga-obligations', label:"DGA — obligations",
+       action:"Renseignez les quinze conditions de l'article 12 et la notification de l'article 11 si vous êtes intermédiaire de données ; les articles 18, 20, 21 et 22 si vous êtes une organisation altruiste reconnue.",
+       gain:"Ce sont exactement les articles que l'article 34 rend sanctionnables — pas un de plus, pas un de moins.",
+       tip:"Croire que l'échéance de l'article 37 se rattrape : elle est passée le 24 septembre 2025, et un intermédiaire antérieur au 23 juin 2022 qui n'a pas notifié est en infraction, pas en retard."},
+      {id:'dga-pont-rgpd', label:"DGA ↔ RGPD",
+       action:"Lisez les cinq dispositions du texte qui relient ce règlement au RGPD, puis marquez l'écran lu.",
+       gain:"L'article 1er §3 dit que le RGPD prévaut en cas de conflit et que le DGA ne crée AUCUNE base juridique de traitement : relever du DGA ne dispense pas de l'article 6.",
+       tip:"Lire « sans préjudice » comme « sans rapport » : c'est l'inverse, et votre registre des traitements n'est pas suspendu."},
+      {id:'data-act-qualifier', label:"Data Act — qualification",
+       action:"Déclarez laquelle ou lesquelles des sept qualités de l'article 1er §3 sont les vôtres, et répondez aux deux conditions de l'exemption de l'article 7 si vous êtes micro ou petite entreprise.",
+       gain:"Les qualités décident des chapitres, et les chapitres décident de l'exposition : seuls les chapitres II, III et V encourent le plafond de l'article 83 §5 du RGPD.",
+       tip:"Se croire hors champ parce qu'on n'est pas établi dans l'Union : le texte répète « quel que soit le lieu d'établissement » pour le fabricant, le détenteur et le fournisseur de cloud."},
+      {id:'data-act-obligations', label:"Data Act — obligations",
+       action:"Renseignez les obligations des chapitres que vos qualités ouvrent, et lisez où chaque échéance de l'article 50 tombe par rapport à aujourd'hui.",
+       gain:"L'accessibilité dès la conception de l'article 3 §1 vise les produits mis sur le marché après le 12 septembre 2026 : cette date est passée, donc c'est un état exigible et non un projet.",
+       tip:"Prendre l'exemption de l'article 7 pour un hors-champ général : elle ne couvre que le chapitre II."},
+      {id:'data-act-cloud', label:"Changement de fournisseur",
+       action:"Renseignez les articles 23 à 31 : obstacles, clauses contractuelles, information du client, bonne foi, transparence sur la juridiction d'hébergement, frais.",
+       gain:"L'article 29 §1 supprime tout frais de changement au 12 janvier 2027 ; d'ici là ils sont réduits et plafonnés aux coûts directement liés. C'est la seule obligation du règlement encore à venir.",
+       tip:"Croire ce chapitre exposé au plafond du RGPD : l'article 40 §4 ne désigne que les chapitres II, III et V, et pour le VI le régime est national."},
+      {id:'data-act-pont-rgpd', label:"Data Act ↔ RGPD",
+       action:"Lisez les quatre dispositions du pont, renseignez votre chiffre d'affaires annuel mondial pour voir l'exposition réelle, puis marquez l'écran lu.",
+       gain:"L'article 40 §4 donne compétence à la CNIL jusqu'au montant de l'article 83 §5 du RGPD — 20 000 000 EUR ou 4 % du chiffre d'affaires mondial, le plus élevé — et l'article 83 §5 ne prévoit AUCUNE réduction pour les PME, là où l'article 99 §6 de l'IA Act en prévoit une.",
+       tip:"Croire que l'accès du chapitre II remplace les articles 15 et 20 du RGPD : l'article 1er §5 dit qu'il les COMPLÈTE, et répondre à l'un ne purge pas l'autre."},
+      {id:'conf-taux', label:"Le taux de conformité",
+       action:"Ouvrez les cartes DGA et Data Act : elles portent le taux de vos qualités, les réserves, et le plan dérivé de ce qui manque.",
+       gain:"Les deux règlements entrent dans l'indice comme les quatorze autres : un indice qui en mesurerait quatorze et ignorerait deux règlements applicables annoncerait un chiffre faux.",
+       tip:"Lire un taux élevé comme une présomption : aucun des deux règlements ne prévoit de certification, et le seul signe extérieur que le DGA crée est le label de son article 11 §9, délivré par une autorité."}
     ]
   },
   {
@@ -32987,8 +33091,8 @@ else railInit();
    moteur au premier article corrigé — et c'est l'écran, pas le moteur, que
    le client lit. */
 var DGA_REF = null, DA_REF = null;
-var DGA_CLE_STOCK = 'sentinel.dga.v1';
-var DA_CLE_STOCK = 'sentinel.data_act.v1';
+var DGA_CLE_STOCK = 'cp-sentinel-dga-v1';
+var DA_CLE_STOCK = 'cp-sentinel-data-act-v1';
 var DGA_DECL = { qualites: [], reponses: {}, anterieur_2022: false };
 var DA_DECL = { qualites: [], reponses: {}, taille: null,
                 sans_partenaire_plus_grand: false,

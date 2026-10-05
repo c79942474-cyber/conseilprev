@@ -92,6 +92,18 @@ DEJA_GARDES = {"nist_ai_rmf": "cp-sentinel-nist-profil-v1",
                #  `_declLire` AVANT de peindre. Une entrée de plus dans
                #  MEMOIRE écrirait le même état sous deux clés.
                "ocde": "cp-sentinel-ocde-v1",
+               #  LES DEUX RÈGLEMENTS DE LA DONNÉE GARDENT LEURS RÉPONSES
+               #  PAR LE MÊME CHEMIN, et pour la même raison que l'OCDE et
+               #  prEN 18286 : leurs cinq gestionnaires communs — qualité,
+               #  état d'une obligation, drapeau de l'article 7, taille,
+               #  chiffre d'affaires — passent tous par `dpEnregistrer`, qui
+               #  écrit `cp-sentinel-dga-v1` ou `cp-sentinel-data-act-v1` par
+               #  `_declEcrire`, et `dpInit` relit les deux magasins par
+               #  `_declLire` AVANT de peindre. Une entrée de plus dans
+               #  MEMOIRE écrirait le même état sous deux clés, et la seconde
+               #  écraserait la première.
+               "dga": "cp-sentinel-dga-v1",
+               "data_act": "cp-sentinel-data-act-v1",
                "owasp_llm": "cp-sentinel-owasp-declares-v1",
                "nist_800_53": "cp-sentinel-nist53-v1",
                "nist_800_82": "cp-sentinel-nist82-v1",

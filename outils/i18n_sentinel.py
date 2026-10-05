@@ -86,7 +86,16 @@ NOMS_PROPRES = ['EU AI Act', 'NIS 2', 'DORA', 'CRA', 'ReCyF', 'ISO 27001',
                 # La treizième norme, pour la même raison, et parce que
                 # l'assembleur refusait « prEN # » comme « identique au
                 # français » : ce n'est pas du français, c'est une cote.
-                'prEN 18286']
+                'prEN 18286',
+                # LES NOMS USUELS DES QUINZIÈME ET SEIZIÈME RÈGLEMENTS, et ils
+                # sont au même titre que « DORA » ou « Digital Omnibus » : le
+                # règlement (UE) 2022/868 s'appelle « DGA » et le règlement
+                # (UE) 2023/2854 « Data Act » dans les deux langues. La règle
+                # travaille donc dans les deux sens, et les deux comptent :
+                # une traduction qui PERDRAIT le nom est refusée, et « Data
+                # Act » seul — un titre d'onglet qui n'a rien à traduire —
+                # cesse d'être refusé comme « identique au français ».
+                'DGA', 'Data Act']
 
 #: CE QUI DIT QU'UNE CHAÎNE EST DU FRANÇAIS : un accent, ou un mot-outil que
 #: l'anglais n'emploie pas. « plus », « en », « on » sont exclus : ils sont
@@ -481,6 +490,8 @@ ROUTES_REFERENTIEL = (
     '/api/en18229/referentiel',
     '/api/en18286/referentiel',
     '/api/ocde/referentiel',
+    '/api/dga/referentiel',
+    '/api/data-act/referentiel',
     '/api/parcours/referentiel',
     '/api/nist-ai-rmf/referentiel',
     '/api/nist-ai-rmf/profil/referentiel',
@@ -726,10 +737,26 @@ def couverture(cat, dico):
     servi (les attributs dans « texte ») avec une valeur non vide. Une entrée
     vue sur deux pages compte pour les deux ; le global la compte une fois."""
     pages, glob_ = {}, {'mots': 0, 'couverts': 0, 'entrees': 0, 'traduites': 0, 'manquantes': []}
+    #  LES MOTIFS COMPTENT, ET ILS NE COMPTAIENT PAS. Le navigateur traduit une
+    #  clé du régime texte en DEUX temps — l'entrée exacte, puis les motifs
+    #  (`sentChercherTexte`). Cette mesure ne regardait que la première, donc
+    #  elle déclarait « non traduit » un libellé composé que le lecteur voit
+    #  pourtant en anglais. MESURÉ : la passe navigateur réparée a relevé les
+    #  libellés du rail (« ↓ DGA — qualification », « Bloc # sur # · … —
+    #  Verrouillé ») ; aucun n'est une clé littérale, tous sont servis par un
+    #  motif. Un plancher de couverture tenu contre une mesure fausse n'est
+    #  pas un plancher — c'est un chiffre.
+    #  LE RÉGIME BLOC N'EN A PAS : `sentChercherBloc` ne consulte pas les
+    #  motifs, et la mesure ne doit donc pas le faire non plus.
+    _motifs = sentinel_i18n.motifs_compiles(dico.get('motif') or {})
+    _texte = dico.get('texte') or {}
     for regime in ('bloc', 'texte', 'attr'):
         d = dico.get(dico_de(regime)) or {}
         for cle, ent in cat[regime].items():
             ok = bool((d.get(cle) or '').strip()) if isinstance(d.get(cle), str) else False
+            if not ok and regime != 'bloc' and _motifs:
+                par_motif = sentinel_i18n.motif_traduire(cle, _motifs, _texte)
+                ok = bool(par_motif and par_motif.strip())
             m = ent.get('mots', compter_mots(ent['fr']))
             cibles = [glob_] + [pages.setdefault(p, {'mots': 0, 'couverts': 0, 'entrees': 0, 'traduites': 0, 'manquantes': []})
                                 for p in ent.get('pages') or ['_sans_page']]

@@ -96,7 +96,6 @@
   "Où en est réellement le socle": "Where the baseline really stands",
   "Où en sont ceux à qui vous vendez": "Where the people you sell to stand",
   "Où le matériel de formation se range": "Where the training material is stored",
-  "Où vous en êtes sur chacune des neuf, et lesquelles sont ARRÊTÉES par un verrou plutôt que simplement en retard.": "Where you stand on each of the nine, and which ones are STOPPED by a blocker rather than simply behind.",
   "PDF officiel fourni par le client (EU_IA_ACT.pdf). Articles retranscrits et vulgarises par CONSEILPREV.": "Official PDF provided by the client (EU_IA_ACT.pdf). Articles transcribed and explained in plain language by CONSEILPREV.",
   "PDF officiel fourni par le client, extrait via pdftotext. Articles couverts par le moteur : #, #, #, #, #, #, # a #, #, #, #, #, #, #.": "Official PDF provided by the client, extracted via pdftotext. Articles covered by the engine: #, #, #, #, #, #, # to #, #, #, #, #, #, #.",
   "PLAFONNE passe devant : tant que la charge de preuve n’est pas": "CAPS comes first: for as long as the burden of proof is not",
@@ -216,6 +215,7 @@
   "Posez une question.": "Ask a question.",
   "Positionne vos systèmes réels du Registre IA sur une grille Probabilité de non-conformité × Impact, pour repérer en un coup d œil les priorités.": "Positions the actual systems in your AI register on a Likelihood of non-compliance × Impact grid, so you can spot the priorities at a glance.",
   "Positionnement gravité × probabilité ; aucune pondération cachée.": "Severity × likelihood positioning; no hidden weighting.",
-  "Positionnement gravité × probabilité, sans pondération cachée. Aucune note globale ne vient masquer un écart isolé.": "Severity × likelihood positioning, with no hidden weighting. No overall score masks an isolated gap."
+  "Positionnement gravité × probabilité, sans pondération cachée. Aucune note globale ne vient masquer un écart isolé.": "Severity × likelihood positioning, with no hidden weighting. No overall score masks an isolated gap.",
+  "Où vous en êtes sur chacune des seize, et lesquelles sont ARRÊTÉES par un verrou plutôt que simplement en retard.": "Where you stand on each of the sixteen, and which ones are STOPPED by a blocker rather than simply behind."
  }
 }
