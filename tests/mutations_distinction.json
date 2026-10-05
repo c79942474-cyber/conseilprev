@@ -147,7 +147,7 @@
   {
    "nom": "une carte perd son appel",
    "fichier": "index.html",
-   "avant": "\n        <a class=\"diff-go\" href=\"#normes\"><span data-i18n=\"dg.jur\">Voir les 14 référentiels</span> →</a>",
+   "avant": "\n        <a class=\"diff-go\" href=\"#normes\"><span data-i18n=\"dg.jur\">Voir les 16 référentiels</span> →</a>",
    "apres": "",
    "regle": "test_CHACUNE_des_six_cartes_porte_son_appel"
   },

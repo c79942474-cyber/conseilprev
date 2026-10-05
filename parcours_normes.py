@@ -48,6 +48,8 @@ import nis2
 import nis2_recyf
 import en18286
 import ocde_ia
+import dga
+import data_act
 import nist_ai_rmf
 import nist_genai
 import nist_800_53
@@ -114,6 +116,24 @@ NATURES = {
 # ═══════════════════════════════════════════════════════════════════════
 
 QUI_JUGE = {
+    #  LES DEUX RÈGLEMENTS DE LA DONNÉE NE SE CERTIFIENT PAS, et ils ne
+    #  disent pas qui juge de la même façon. Le DGA ne porte aucun plafond
+    #  européen : l'autorité et la sanction sont nationales. Le Data Act, lui,
+    #  emprunte à l'article 83 §5 du RGPD, donc c'est l'autorité RGPD qui
+    #  juge et qui sanctionne — pour les chapitres II, III et V seulement.
+    "dga": "l'autorité nationale compétente en matière de services "
+           "d'intermédiation de données l'apprécie, et le seul signe "
+           "extérieur que le règlement crée est le label de l'article 11 §9, "
+           "délivré par elle — jamais par un questionnaire. L'article 34 "
+           "renvoie aux États membres le régime des sanctions, sans aucun "
+           "plafond européen",
+    "data_act": "pour les chapitres II, III et V, ce sont les autorités de "
+                "contrôle du RGPD — la CNIL en France — qui l'apprécient, "
+                "jusqu'au montant de l'article 83 §5 du RGPD : "
+                "20 000 000 EUR ou 4 % du chiffre d'affaires annuel mondial "
+                "total, le plus élevé étant retenu, et sans la réduction PME "
+                "que l'article 99 §6 de l'IA Act prévoit. Pour les "
+                "chapitres IV, VI et VII, le régime est national",
     "rgpd": "la CNIL apprécie, et l'article 5, paragraphe 2, met la preuve "
             "de la conformité à la charge du responsable de traitement",
     "iso27001": "seul un organisme de certification accrédité la prononce, "
@@ -351,6 +371,103 @@ BLOCS = {
     #  DOCUMENT : il porte les GROUPES, sans lesquels le questionnaire ne sait
     #  pas lesquels des 115 exemples visent ce client, et l'IMPLICATION, qui
     #  fixe le niveau de diligence attendu aux étapes 3 et 6.
+    #  ── LE DGA : TROIS BLOCS, ET LE PREMIER PEUT CLORE LE PARCOURS ──────
+    #  C'est le seul rail de Sentinel dont la première étape puisse être la
+    #  DERNIÈRE : déclarer « aucune de ces qualités » est une réponse
+    #  complète, et le parcours s'arrête là. Les quatorze autres référentiels
+    #  n'ont pas ce cas — ils supposent tous que le client est concerné.
+    "dga": (
+        _b("qualifier", "dga-qualifier", "DGA — qualification", "saisie",
+           "Les quatre cadres de l'article 1er §1, et laquelle de leurs "
+           "qualités est la vôtre — organisme du secteur public, "
+           "réutilisateur, prestataire de services d'intermédiation de "
+           "données, organisation altruiste reconnue, ou aucune.",
+           "Il commande tout, et il peut tout clore : le règlement n'impose "
+           "rien à qui n'est aucune des quatre, et c'est le cas de la très "
+           "grande majorité des entreprises.",
+           "Confondre « rien de déclaré » et « hors champ ». Le premier est "
+           "une question sans réponse et ne rend aucun taux ; le second est "
+           "une réponse, et la carte du taux dit « sans objet »."),
+        _b("obligations", "dga-obligations", "DGA — obligations",
+           "saisie",
+           "Les quinze conditions de l'article 12 et la notification de "
+           "l'article 11 pour un intermédiaire ; les articles 18, 20, 21 et "
+           "22 pour une organisation altruiste. Ce sont exactement ceux que "
+           "l'article 34 rend sanctionnables.",
+           "Un point non renseigné n'est pas un point tenu, et l'écran ne "
+           "rend aucun chiffre par défaut : un questionnaire vide n'est pas "
+           "une conformité à zéro.",
+           "Croire que l'échéance de l'article 37 se rattrape. Un "
+           "prestataire qui fournissait déjà le service au 23 juin 2022 "
+           "devait notifier au plus tard le 24 septembre 2025 : la date est "
+           "passée, et le manquement est constitué.",
+           ("qualifier",)),
+        _b("pont-rgpd", "dga-pont-rgpd", "DGA ↔ RGPD", "lecture",
+           "Les cinq dispositions du texte qui relient ce règlement au "
+           "RGPD : l'article 1er §3 en quatre points, et l'article 10 b).",
+           "Parce qu'un client qui croit le DGA autonome cherchera sa base "
+           "légale dans le mauvais texte. L'article 1er §3 dit que le "
+           "règlement n'en crée aucune.",
+           "Lire « sans préjudice » comme « sans rapport ». C'est le "
+           "contraire : le RGPD s'applique à TOUTES les données "
+           "personnelles traitées en lien avec le règlement, et il prévaut "
+           "en cas de conflit.",
+           ("qualifier",)),
+    ),
+    #  ── LE DATA ACT : QUATRE BLOCS, DONT UN POUR LE SEUL CLOUD ──────────
+    #  Le chapitre VI a son bloc à lui parce qu'il vise une qualité que les
+    #  autres chapitres ne visent pas, et qu'il porte la seule échéance du
+    #  règlement encore à venir : le 12 janvier 2027.
+    "data_act": (
+        _b("qualifier", "data-act-qualifier", "Data Act — qualification",
+           "saisie",
+           "Les sept qualités de l'article 1er §3 — fabricant, utilisateur, "
+           "détenteur, destinataire, organisme du secteur public, "
+           "fournisseur de services de traitement de données, participant à "
+           "un espace de données — et l'exemption de l'article 7.",
+           "Les qualités décident des chapitres, et les chapitres décident "
+           "des obligations ET de l'exposition : seuls les chapitres II, III "
+           "et V sont exposés au plafond de l'article 83 §5 du RGPD.",
+           "Se croire hors champ parce qu'on n'est pas établi dans l'Union. "
+           "Le texte répète « quel que soit le lieu d'établissement » pour "
+           "le fabricant, le détenteur et le fournisseur de cloud."),
+        _b("obligations", "data-act-obligations",
+           "Data Act — obligations", "saisie",
+           "Les obligations des chapitres que vos qualités ouvrent, et le "
+           "calendrier de l'article 50 situé par rapport à aujourd'hui.",
+           "Parce qu'une échéance passée ne se planifie pas, elle se répare. "
+           "L'accessibilité dès la conception de l'article 3 §1 vise les "
+           "produits mis sur le marché après le 12 septembre 2026.",
+           "Prendre l'exemption de l'article 7 pour un hors-champ général. "
+           "Elle ne couvre que le chapitre II, et seulement sans entreprise "
+           "liée plus grande et hors sous-traitance.",
+           ("qualifier",)),
+        _b("cloud", "data-act-cloud", "Changement de fournisseur", "saisie",
+           "Les articles 23 à 31 : obstacles au changement, clauses "
+           "contractuelles obligatoires, information du client, coopération "
+           "de bonne foi, et la suppression des frais au 12 janvier 2027.",
+           "C'est le seul chapitre dont une obligation n'est pas encore "
+           "exigible : d'ici le 12 janvier 2027, des frais réduits restent "
+           "admis, plafonnés aux coûts directement liés.",
+           "Croire que ce chapitre expose au plafond du RGPD. L'article 40 "
+           "§4 ne désigne que les chapitres II, III et V : pour le VI, le "
+           "régime est national, et aucun plafond européen ne s'applique.",
+           ("qualifier",)),
+        _b("pont-rgpd", "data-act-pont-rgpd",
+           "Data Act ↔ RGPD", "lecture",
+           "Les quatre dispositions qui relient ce règlement au RGPD, dont "
+           "celle qui emprunte son plafond de sanction.",
+           "Parce que c'est l'autorité RGPD — la CNIL — qui sanctionne les "
+           "chapitres II, III et V, jusqu'au montant de l'article 83 §5 : "
+           "20 000 000 EUR ou 4 % du chiffre d'affaires mondial, le plus "
+           "élevé. Et l'article 83 §5 ne prévoit AUCUNE réduction pour les "
+           "PME, là où l'article 99 §6 de l'IA Act retient pour elles le "
+           "plafond le plus bas.",
+           "Croire que l'accès du chapitre II remplace les articles 15 et "
+           "20 du RGPD. L'article 1er §5 dit qu'il les COMPLÈTE : deux "
+           "droits, deux régimes, et répondre à l'un ne purge pas l'autre.",
+           ("qualifier",)),
+    ),
     "ocde": (
         _b("processus", "ocde-processus",
            "Processus — groupes et implication", "saisie",
@@ -746,6 +863,21 @@ def _liste(d, cle):
     qu'il envoie la liste ENTIÈRE."""
     v = d.get(cle)
     return [x for x in v if isinstance(x, dict)] if isinstance(v, list) else []
+
+
+def _cles(d, cle):
+    """Une liste de CLÉS, telle que l'écran l'envoie : ["fabricant", ...].
+
+    POURQUOI ELLE NE PASSE PAS PAR `_liste`. Celle-là attend des objets
+    {cle, nom, reponse} — le format des questionnaires. Les qualifications
+    des deux règlements de la donnée sont des listes de chaînes, et `_liste`
+    les rendait VIDES sans rien dire : le rail réclamait la qualification à
+    un client qui venait de la faire, et le hors-champ ne se validait jamais.
+    """
+    v = d.get(cle)
+    if isinstance(v, str):
+        v = [v]
+    return [x for x in v if isinstance(x, str)] if isinstance(v, list) else []
 
 
 def _sans_reponse(d, cle, faute):
@@ -1462,7 +1594,136 @@ def _en18229_3(d):
     return manque, sans_objet, contexte
 
 
+def _dga(d):
+    """Ce qui manque aux deux blocs de saisie du DGA.
+
+    LE HORS-CHAMP EST UNE VALIDATION, PAS UN TROU. Déclarer « aucune de ces
+    qualités » remplit le bloc de qualification ET clôt le parcours : les
+    blocs suivants n'ont plus d'objet, et le rail ne doit pas les laisser en
+    attente d'une réponse que le client n'a pas à donner.
+    """
+    qualites = [q for q in _cles(d, "qualites") if q in dga.QUALITES_PAR_CLE]
+    rep = _dict(d, "reponses")
+    manque = {"qualifier": [], "obligations": [], "pont-rgpd": []}
+    if not qualites:
+        manque["qualifier"].append(_q(
+            "Laquelle des qualités du règlement est la vôtre ? Organisme du "
+            "secteur public détenant des données protégées, réutilisateur, "
+            "prestataire de services d'intermédiation de données, "
+            "organisation altruiste reconnue — ou aucune des quatre, ce qui "
+            "est une réponse complète."))
+        return manque, {}, {}
+    if qualites == ["aucune"]:
+        #  HORS CHAMP DÉCLARÉ : les deux blocs suivants n'ont plus d'objet, et
+        #  ils portent leur raison. Rendre des listes vides les aurait fait
+        #  lire « validés », donc fermer le parcours en prétendant un travail
+        #  qui n'a pas lieu d'être.
+        hc = ("Vous avez déclaré n'être aucune des quatre qualités du "
+              "règlement : il ne vous impose rien, et il n'y a donc rien à "
+              "renseigner ici.")
+        return manque, {"obligations": hc, "pont-rgpd": hc}, {}
+    utiles = [q for q in qualites if q != "aucune"]
+    attendus = []
+    for q in utiles:
+        attendus.extend(dga.OBLIGATIONS_PAR_QUALITE.get(q, ()))
+    sans = [c for c in attendus if c not in rep]
+    if sans:
+        manque["obligations"].append(_q(
+            "%d point(s) sur %d ne sont pas renseignés : un point non "
+            "renseigné n'est pas un point tenu."
+            % (len(sans), len(attendus))))
+    if "intermediaire" in utiles and d.get("anterieur_2022") is None:
+        manque["qualifier"].append(_q(
+            "Fournissiez-vous déjà des services d'intermédiation de données "
+            "au 23 juin 2022 ? L'article 37 vous donnait jusqu'au "
+            "24 septembre 2025, et cette date est passée."))
+    return manque, {}, {"qualites": utiles}
+
+
+def _data_act(d):
+    """Ce qui manque aux trois blocs de saisie du Data Act.
+
+    L'EXEMPTION DE L'ARTICLE 7 NE SE DÉDUIT PAS DE LA TAILLE SEULE, et le
+    rail le réclame explicitement : l'article la refuse à qui a une
+    entreprise liée plus grande, et à qui travaille en sous-traitance.
+    Accorder l'exemption sur la seule case « petite entreprise » fermerait le
+    chapitre II à tort.
+    """
+    qualites = [q for q in _cles(d, "qualites")
+                if q in data_act.QUALITES_PAR_CLE]
+    rep = _dict(d, "reponses")
+    manque = {"qualifier": [], "obligations": [], "cloud": [],
+              "pont-rgpd": []}
+    if not qualites:
+        manque["qualifier"].append(_q(
+            "Laquelle ou lesquelles des sept qualités de l'article 1er §3 "
+            "sont les vôtres ? Elles s'appliquent QUEL QUE SOIT votre lieu "
+            "d'établissement."))
+        return manque, {}, {}
+    if qualites == ["aucune"]:
+        hc = ("Vous avez déclaré n'être aucune des sept qualités de "
+              "l'article 1er §3 : aucun chapitre ne vous saisit, et il n'y a "
+              "rien à renseigner ici.")
+        return manque, {"obligations": hc, "cloud": hc, "pont-rgpd": hc}, {}
+    utiles = [q for q in qualites if q != "aucune"]
+    champ = data_act.applicable({"qualites": utiles, "taille": d.get("taille"),
+                                 "sans_partenaire_plus_grand":
+                                     d.get("sans_partenaire_plus_grand"),
+                                 "hors_sous_traitance":
+                                     d.get("hors_sous_traitance")})
+    #  LE CHAPITRE II NE SE FERME QUE SUR LES DEUX CONDITIONS DE L'ARTICLE 7.
+    vise_ii = any("II" in data_act.QUALITES_PAR_CLE[q]["chapitres"]
+                  for q in utiles)
+    if vise_ii and d.get("taille") in ("micro", "petite"):
+        if d.get("sans_partenaire_plus_grand") is None:
+            manque["qualifier"].append(_q(
+                "Avez-vous une entreprise partenaire ou liée qui ne soit pas "
+                "elle aussi micro ou petite ? L'article 7 §1 refuse "
+                "l'exemption dans ce cas."))
+        if d.get("hors_sous_traitance") is None:
+            manque["qualifier"].append(_q(
+                "Travaillez-vous en sous-traitance pour fabriquer ou "
+                "concevoir un produit connecté, ou fournir un service "
+                "connexe ? L'article 7 §1 refuse alors l'exemption."))
+    chapitres = champ["chapitres"]
+    hors_cloud, cloud = [], []
+    for q in utiles:
+        for c in data_act.OBLIGATIONS_PAR_QUALITE.get(q, ()):
+            o = data_act.OBLIGATIONS_PAR_CLE[c]
+            if o["chapitre"] not in chapitres or c in rep:
+                continue
+            (cloud if o["chapitre"] in ("VI", "VII") else hors_cloud).append(c)
+    if hors_cloud:
+        manque["obligations"].append(_q(
+            "%d point(s) des chapitres ouverts ne sont pas renseignés."
+            % len(hors_cloud)))
+    if cloud:
+        manque["cloud"].append(_q(
+            "%d point(s) du changement de fournisseur ne sont pas "
+            "renseignés." % len(cloud)))
+    #  LE CHIFFRE D'AFFAIRES N'EST RÉCLAMÉ QUE S'IL CHANGE QUELQUE CHOSE :
+    #  sans chapitre exposé à l'article 83 §5, il ne sert à rien de le
+    #  demander.
+    if (any(data_act.CHAPITRES_PAR_CLE[c]["rgpd_art83"] for c in chapitres)
+            and d.get("chiffre_affaires") is None):
+        manque["pont-rgpd"].append(_q(
+            "Votre chiffre d'affaires annuel mondial total : sans lui, seul "
+            "le montant fixe de 20 000 000 EUR est connu, et le plafond réel "
+            "est le PLUS ÉLEVÉ des deux."))
+    #  LE BLOC DU CLOUD EST SANS OBJET POUR QUI N'EST PAS FOURNISSEUR, et le
+    #  dire vaut mieux que de le laisser en attente d'une réponse qu'un
+    #  fabricant n'a pas à donner.
+    so = {}
+    if "cloud" not in utiles:
+        so["cloud"] = ("Le chapitre VI vise le FOURNISSEUR de services de "
+                       "traitement de données. Vous ne l'avez pas déclaré "
+                       "parmi vos qualités : en tant que client, vous "
+                       "bénéficiez de ces droits, vous n'y êtes pas tenu.")
+    return manque, so, {"qualites": utiles, "chapitres": list(chapitres)}
+
+
 EVALUATEURS = {
+    "dga": _dga, "data_act": _data_act,
     "en18229_3": _en18229_3,
     "cartographier": _cartographier,
     "nis2": _nis2, "iso27001": _iso27001, "iso42001": _iso42001,

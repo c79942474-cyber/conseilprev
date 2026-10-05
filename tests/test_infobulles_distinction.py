@@ -66,6 +66,8 @@ EN_LETTRES = {
     12: {"fr": "douze", "en": "twelve", "de": "zwölf"},
     13: {"fr": "treize", "en": "thirteen", "de": "dreizehn"},
     14: {"fr": "quatorze", "en": "fourteen", "de": "vierzehn"},
+    15: {"fr": "quinze", "en": "fifteen", "de": "fünfzehn"},
+    16: {"fr": "seize",  "en": "sixteen", "de": "sechzehn"},
 }
 
 

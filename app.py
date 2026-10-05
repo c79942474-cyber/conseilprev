@@ -2589,6 +2589,8 @@ import ocde_ia     # noqa: E402  — le guide OCDE sur le devoir de
                    # CC BY 4.0 — les deux mentions que la licence impose
                    # voyagent avec chaque réponse
 import conformite
+import dga
+import data_act
 import qualification_assistee  # noqa: E402  — la proposition, jamais la
                     # décision : ce module ne connaît ni clé ni réseau
 import qualification_moteur    # noqa: E402  — et le seul endroit qui dit
@@ -2667,6 +2669,83 @@ def api_ocde_evaluer():
     limite = data.get("limite")
     limite = limite if isinstance(limite, int) and 0 < limite <= 200 else None
     r["plan"] = ocde_ia.plan(d, limite=(limite or 12))
+    return jsonify(r), 200
+
+
+# ══════════════════════════════════════════════════════════════════════════
+#  LES DEUX RÈGLEMENTS DE LA DONNÉE — DGA ET DATA ACT
+# ══════════════════════════════════════════════════════════════════════════
+#
+# QUATRE ROUTES, DEUX PAR RÈGLEMENT, et le même partage qu'ailleurs : la
+# TABLE part en GET (elle ne dépend d'aucune déclaration), l'ÉVALUATION en
+# POST (elle en dépend entièrement). Le pont RGPD voyage dans les DEUX, parce
+# que l'écran du pont le lit sans rien déclarer et que la carte du taux le
+# cite avec son chiffre.
+
+@app.route('/api/dga/referentiel', methods=['GET'])
+@rate_limit(limit=120, window=60)
+def api_dga_referentiel():
+    """DGA : 4 cadres, 5 qualités, 15 conditions de l'article 12, 14 points
+    d'altruisme, et le pont RGPD en cinq dispositions.
+
+    CE QUI PART AVEC LA TABLE, ET QUI N'EST PAS DÉCORATIF : l'absence de
+    plafond européen. L'article 34 renvoie aux États membres sans énoncer
+    aucun montant, là où le Data Act emprunte celui de l'article 83 §5 du
+    RGPD. Un écran muet sur l'exposition laisserait croire qu'elle est
+    nulle, et une règle vérifie que `plafond_ue` est bien None."""
+    return jsonify({"ok": True, "referentiel": dga.referentiel()})
+
+
+@app.route('/api/dga/evaluer', methods=['POST'])
+@rate_limit(limit=120, window=60)
+def api_dga_evaluer():
+    """La qualification, le taux de ses obligations, l'article 37, le plan.
+
+    LE HORS-CHAMP EST UN 200, PAS UN 400. Un client qui déclare n'être
+    aucune des quatre qualités a RÉPONDU : lui rendre une erreur lui ferait
+    croire que sa déclaration n'est pas partie."""
+    data = request.get_json(silent=True) or {}
+    d = data.get("declaration") if isinstance(data.get("declaration"), dict) \
+        else data
+    r = dga.evaluer(d, aujourdhui=data.get("date"))
+    if not r.get("ok"):
+        return jsonify(r), 400
+    limite = data.get("limite")
+    limite = limite if isinstance(limite, int) and 0 < limite <= 200 else None
+    r["plan"] = dga.plan(d, limite=(limite or 24))
+    return jsonify(r), 200
+
+
+@app.route('/api/data-act/referentiel', methods=['GET'])
+@rate_limit(limit=120, window=60)
+def api_data_act_referentiel():
+    """Data Act : 6 chapitres, 7 qualités, 10 clauses de l'article 13, les
+    échéances de l'article 50, et le pont RGPD en quatre dispositions.
+
+    LES DEUX NOMBRES DE L'ARTICLE 83 §5 DU RGPD PARTENT AVEC LA TABLE —
+    20 000 000 EUR et 4 % —, avec le fait que c'est le PLUS ÉLEVÉ qui est
+    retenu et qu'aucune réduction PME n'existe. Les laisser au JavaScript
+    rejouerait le défaut du calculateur de l'article 99, qui rendait le plus
+    BAS des deux plafonds et divisait l'exposition par dix."""
+    return jsonify({"ok": True, "referentiel": data_act.referentiel()})
+
+
+@app.route('/api/data-act/evaluer', methods=['POST'])
+@rate_limit(limit=120, window=60)
+def api_data_act_evaluer():
+    """Les chapitres ouverts, le taux, les échéances situées, l'exposition.
+
+    L'EXPOSITION SE CALCULE ICI ET NON À L'ÉCRAN, pour la raison écrite
+    au-dessus : l'arithmétique de l'article 83 §5 a une seule source."""
+    data = request.get_json(silent=True) or {}
+    d = data.get("declaration") if isinstance(data.get("declaration"), dict) \
+        else data
+    r = data_act.evaluer(d, aujourdhui=data.get("date"))
+    if not r.get("ok"):
+        return jsonify(r), 400
+    limite = data.get("limite")
+    limite = limite if isinstance(limite, int) and 0 < limite <= 200 else None
+    r["plan"] = data_act.plan(d, limite=(limite or 24))
     return jsonify(r), 200
 
 

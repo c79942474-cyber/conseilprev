@@ -196,6 +196,29 @@ NORMES = [
      "mesure": "les six étapes de la diligence, l'implication dans "
                "l'incidence — causer, contribuer, être lié — et les quatre "
                "facteurs de priorisation"},
+    #  LA QUINZIÈME ET LA SEIZIÈME : LES DEUX RÈGLEMENTS DE LA DONNÉE, et le
+    #  premier couple de cette table dont la question d'ouverture n'est pas
+    #  « à quel point êtes-vous conforme ? » mais « le règlement vous
+    #  saisit-il ? ». Pour le DGA, la réponse est NON pour la très grande
+    #  majorité des entreprises : il n'établit que quatre cadres, et trois
+    #  seulement créent des obligations. Les quatorze autres référentiels
+    #  mesuraient l'IA, la cybersécurité, la résilience et les données
+    #  PERSONNELLES ; ces deux-là mesurent les données NON personnelles que
+    #  l'entreprise produit, détient, vend ou héberge — le chaînon qui
+    #  manquait.
+    {"cle": "dga", "nom": "DGA", "nature": "obligation",
+     "texte": "Règlement (UE) 2022/868",
+     "panneau": "dga-qualifier",
+     "mesure": "les obligations de la qualité déclarée : les quinze "
+               "conditions de l'article 12 pour un intermédiaire de "
+               "données, les articles 18, 20, 21 et 22 pour une "
+               "organisation altruiste"},
+    {"cle": "data_act", "nom": "Data Act", "nature": "obligation",
+     "texte": "Règlement (UE) 2023/2854",
+     "panneau": "data-act-qualifier",
+     "mesure": "les obligations des chapitres que vos qualités ouvrent — "
+               "produits connectés, partage légal, clauses abusives, "
+               "besoin exceptionnel, changement de fournisseur"},
 ]
 NORMES_PAR_CLE = {n["cle"]: n for n in NORMES}
 
@@ -290,6 +313,34 @@ COULEURS = {
     #  800-82 (bleu vif), à ΔE 40,0 en vision normale et 35,3 en vision
     #  déficiente — la paire la plus large de la barre.
     "ocde":        "#550707",   # sang-de-bœuf
+    #  LES DEUX RÈGLEMENTS DE LA DONNÉE — ET UNE PALETTE ARRIVÉE AU BOUT DE
+    #  SA PLACE. Quatorze teintes avaient déjà pris les familles utilisables :
+    #  le vert et le sarcelle sont fermés (validation du rail, ISO 42001,
+    #  prEN 18229-3), le rouge et l'orange aussi (terre cuite du « ici »,
+    #  ambre du verrou). Le relevé l'a dit sans ambiguïté : en exigeant
+    #  l'écart complet — ΔE 15 en vision normale et 8 en vision déficiente
+    #  entre tiroirs VOISINS, 8 de toute couleur d'état, 3:1 de contraste sur
+    #  sa propre pastille — il ne restait que DEUX créneaux, et les voici.
+    #
+    #  L'OUTREMER, voisin du cramoisi du RGPD : ΔE 38,4 en vision normale
+    #  (×2,56 du plancher) et 16,8 en vision déficiente (×2,10), 18,2 de la
+    #  couleur d'état la plus proche, 10,31:1 de contraste. C'est la plus
+    #  large adjacence que le groupe neuf apporte.
+    #
+    #  LE MAUVE POUSSIÉREUX, entre l'outremer et le bleu d'ISO 27001 :
+    #  ΔE 31,0 / 21,9 d'un côté, 18,9 / 16,1 de l'autre — la paire la plus
+    #  serrée du groupe passe à ×1,26, comme prEN 18286 passait à ×1,25. Il
+    #  est à ΔE 13,7 du rose d'OWASP, qui n'est PAS son voisin de barre : la
+    #  règle d'adjacence ne s'y applique pas, et c'est le nom, pas la
+    #  couleur, qui identifie — le dépôt l'écrit depuis la onzième norme.
+    #
+    #  CE QUI A ÉTÉ ÉCARTÉ, ET MESURÉ AVANT DE L'ÊTRE : un sarcelle sombre
+    #  pour le Data Act tombait à ΔE 3,0 du pétrole de prEN 18229-3 — deux
+    #  référentiels indistinguables ; un premier mauve passait à ΔE 8,1 de
+    #  la couleur du bloc attendu, soit 1 % au-dessus du plancher, une marge
+    #  qu'un seul retouchage de feuille de style aurait effacée.
+    "dga":         "#1200A2",   # outremer
+    "data_act":    "#8A667B",   # mauve poussiéreux
 }
 
 #: L'ORDRE OÙ LES RÉFÉRENTIELS SE SUIVENT DANS LA BARRE LATÉRALE. Il ne se
@@ -299,7 +350,11 @@ COULEURS = {
 #: l'article 14 de l'IA Act comme ISO/IEC 42001 sert son système de
 #: management. Un client qui ouvre l'une trouve l'autre à côté. La règle
 #: d'adjacence des couleurs est mesurée sur cet ordre, pas sur un autre.
-ORDRE_BARRE = ("rgpd", "iso27001", "iso42001", "en18229_3", "en18286",
+#: LE GROUPE « DONNÉES & PARTAGE » SUIT CELUI DU RGPD, et la palette a été
+#: validée dans CET ordre : cramoisi, outremer, mauve, puis le bleu
+#: d'ISO 27001. Le voisinage que le groupe crée est mesuré au-dessus.
+ORDRE_BARRE = ("rgpd", "dga", "data_act",
+               "iso27001", "iso42001", "en18229_3", "en18286",
                "dora", "nis2",
                "cra", "nist_ai_rmf", "owasp_llm", "nist_800_53",
                "nist_800_82", "ocde")
@@ -316,7 +371,7 @@ def couleur(cle):
 #: CE QUE LA PAGE D'ACCUEIL ANNONCE. Un seul endroit le décide ; la
 #: garde en bas de fichier le confronte à la table ci-dessus, et une
 #: règle de la suite le confronte au titre et à la grille de l'accueil.
-NORMES_ANNONCEES = 14
+NORMES_ANNONCEES = 16
 
 
 # ══════════════════════════════════════════════════════════════════════════
@@ -449,6 +504,32 @@ def evaluer_audit_ia_act(reponses=None):
 # la seconde est fausse tant que la porte est fermée.
 
 COMPOSITIONS = {
+    #  UN SEUL COMPOSANT POUR CHACUN DES DEUX RÈGLEMENTS DE LA DONNÉE, et
+    #  c'est une contrainte du modèle, pas une paresse. Les composants d'une
+    #  norme sont FIXES : une part non renseignée compte pour zéro, sinon le
+    #  taux monterait à mesure qu'on renseigne moins. Or ici l'ensemble des
+    #  obligations VARIE avec la qualification — un fournisseur de cloud seul
+    #  ne doit rien aux chapitres II, III et V. Une composition par qualité
+    #  ferait donc diviser son taux par sept. Le moteur compose ses parts par
+    #  qualité et ne rend ici que le résultat ; c'est son écran qui montre le
+    #  détail. Le Top 10 OWASP avait déjà un composant unique, pour une
+    #  raison voisine.
+    "dga": [
+        {"cle": "obligations", "nom": "Les obligations de la qualité déclarée",
+         "poids": 1,
+         "pourquoi": "le règlement n'établit que quatre cadres, et la "
+                     "qualification décide lesquels s'appliquent — pondérer "
+                     "entre eux supposerait qu'un client les cumule, ce qui "
+                     "est l'exception"},
+    ],
+    "data_act": [
+        {"cle": "obligations", "nom": "Les obligations des chapitres ouverts",
+         "poids": 1,
+         "pourquoi": "les sept qualités de l'article 1er §3 ouvrent des "
+                     "chapitres différents, et l'exemption de l'article 7 en "
+                     "retire un : le dénominateur est celui de VOTRE "
+                     "périmètre, pas celui du règlement entier"},
+    ],
     #  LES SIX ÉTAPES DE LA DILIGENCE, AVEC LES POIDS DU MOTEUR. Les
     #  recopier ici est un doublon assumé et surveillé : une règle confronte
     #  ces poids à `ocde_ia.ETAPES`, parce que deux jeux de poids rendraient
@@ -710,6 +791,48 @@ VERROUS = {
 # parce que c'est là, et seulement là, qu'il y a une porte.
 
 RESERVES = {
+    "dga": [
+        {"cle": "art37_echu",
+         "dit": ("L'échéance transitoire de l'article 37 est passée depuis le "
+                 "24 septembre 2025. Un prestataire qui fournissait déjà des "
+                 "services d'intermédiation de données au 23 juin 2022 et qui "
+                 "n'a pas notifié n'est pas en retard sur un calendrier : il "
+                 "est en infraction."),
+         "porte_sur": ("Le taux peut être élevé et le manquement constitué : "
+                       "la notification ne se rattrape pas, elle se fait."),
+         "ou": "dga · obligations"},
+        {"cle": "exposition_nationale",
+         "dit": ("L'article 34 renvoie aux États membres le régime des "
+                 "sanctions, SANS plafond européen — contrairement au Data "
+                 "Act, qui emprunte celui de l'article 83 §5 du RGPD. "
+                 "L'exposition financière se lit dans le droit national."),
+         "porte_sur": ("Ce module ne chiffre aucune amende, et un écran muet "
+                       "sur l'exposition laisserait croire qu'elle est "
+                       "nulle."),
+         "ou": "dga · obligations"},
+    ],
+    "data_act": [
+        {"cle": "exposition_rgpd",
+         "dit": ("Pour les manquements aux chapitres II, III et V, "
+                 "l'article 40 §4 donne compétence aux autorités de contrôle "
+                 "du RGPD — la CNIL — jusqu'au montant de l'article 83 §5 : "
+                 "20 000 000 EUR ou 4 % du chiffre d'affaires annuel mondial "
+                 "total, le plus élevé étant retenu. L'article 83 §5 ne "
+                 "prévoit AUCUNE réduction pour les PME, là où l'article 99 "
+                 "§6 de l'IA Act retient pour elles le plafond le plus bas."),
+         "porte_sur": ("Une PME est donc plus exposée ici que sous l'IA Act, "
+                       "et c'est l'inverse de ce qu'on attend."),
+         "ou": "data-act · pont RGPD"},
+        {"cle": "echeance_passee",
+         "dit": ("L'obligation d'accessibilité dès la conception de "
+                 "l'article 3 §1 vise les produits connectés et services "
+                 "connexes mis sur le marché après le 12 septembre 2026. "
+                 "Cette date est passée : pour ces produits, ce n'est plus un "
+                 "calendrier, c'est un état exigible."),
+         "porte_sur": ("Un taux mesuré sur un questionnaire ne dit pas si le "
+                       "produit déjà vendu peut être repris."),
+         "ou": "data-act · obligations"},
+    ],
     #  AUCUNE DE CES TROIS NE SE LÈVE PAR LE TRAVAIL. La première est la
     #  nature de l'instrument, la deuxième l'aveu du document sur ses propres
     #  exemples, la troisième son refus d'équivalence.
@@ -899,6 +1022,26 @@ RESERVES = {
 # une entreprise hors champ —, pendant que le rail de son écran passait
 # tous les blocs en « sans objet ».
 SANS_OBJET = {
+    "dga": {
+        "cle": "hors_champ",
+        "dit": ("Le règlement n'établit que quatre cadres — réutilisation de "
+                "données du secteur public, services d'intermédiation de "
+                "données, altruisme en matière de données, comité européen. "
+                "Hors de ces qualités, il n'impose rien, et ce n'est pas un "
+                "zéro : c'est le cas de la très grande majorité des "
+                "entreprises. La qualification se revoit le jour où l'on "
+                "ouvre une place de marché de données."),
+        "ou": "dga · qualification"},
+    "data_act": {
+        "cle": "hors_champ",
+        "dit": ("Aucune des sept qualités de l'article 1er §3 n'est déclarée, "
+                "ou l'exemption de l'article 7 ferme le seul chapitre qui "
+                "vous concernait. Il n'y a pas de taux à mesurer, et ce n'est "
+                "pas un zéro. ATTENTION : le règlement est "
+                "extraterritorial — un fabricant ou un fournisseur de cloud "
+                "est tenu quel que soit son lieu d'établissement dès qu'il "
+                "touche le marché de l'Union."),
+        "ou": "data-act · qualification"},
     "en18286": {
         "cle": "hors_champ",
         "dit": "L'article 17 vise le FOURNISSEUR d'un système d'IA à haut "
@@ -1307,7 +1450,61 @@ def _lire_ocde(ev, dec=None):
     return dict(ev.get("parts") or {}), signaux
 
 
+def _lire_dga(ev, dec=None):
+    """LA QUALIFICATION COMMANDE, ET LE HORS-CHAMP EST UNE RÉPONSE.
+
+    Trois sorties, et les trois sont différentes :
+      · rien de déclaré            → (None, [])          → le taux dit « — » ;
+      · hors champ déclaré         → (None, ["hors_champ"]) → SANS_OBJET ;
+      · une qualité au moins       → le taux des obligations de cette qualité.
+
+    LES « SANS OBJET » SONT DÉJÀ SORTIS DU DÉNOMINATEUR PAR LE MOTEUR. Les
+    recompter ici reprocherait au client son métier.
+    """
+    if not ev or not ev.get("ok"):
+        return None, []
+    champ = ev.get("applicable") or {}
+    if champ.get("ok") is None:
+        return None, []
+    if champ.get("ok") is False:
+        return None, ["hors_champ"]
+    signaux = []
+    art37 = ev.get("art37")
+    if art37 and art37.get("echue") and not art37.get("notifie"):
+        signaux.append("art37_echu")
+    signaux.append("exposition_nationale")
+    total = (ev.get("score") or {}).get("total")
+    return {"obligations": total}, signaux
+
+
+def _lire_data_act(ev, dec=None):
+    """COMME LE DGA, PLUS L'EXEMPTION DE L'ARTICLE 7.
+
+    Un fabricant micro ou petit, sans entreprise liée plus grande et hors
+    sous-traitance, voit le chapitre II se fermer. S'il ne relevait que de
+    celui-là, il n'y a plus rien à mesurer — et c'est un hors-champ MOTIVÉ,
+    pas une absence de réponse.
+    """
+    if not ev or not ev.get("ok"):
+        return None, []
+    champ = ev.get("applicable") or {}
+    if champ.get("ok") is None:
+        return None, []
+    if champ.get("ok") is False or not champ.get("chapitres"):
+        return None, ["hors_champ"]
+    signaux = ["exposition_rgpd"]
+    for e in ev.get("echeances") or []:
+        if (e.get("echue") and e.get("vous_vise")
+                and e.get("cle") == "art3_produits"):
+            signaux.append("echeance_passee")
+            break
+    total = (ev.get("score") or {}).get("total")
+    return {"obligations": total}, signaux
+
+
 LECTEURS = {
+    "dga": _lire_dga,
+    "data_act": _lire_data_act,
     "ocde": _lire_ocde,
     "en18286": _lire_en18286,
     "iso42001": _lire_iso42001, "iso27001": _lire_iso27001,
@@ -1830,7 +2027,37 @@ def _ecarts_ocde(ev, dec=None):
     return out
 
 
+def _ecarts_dga(ev, dec=None):
+    """Le plan du module, repris tel quel — et vide hors du champ.
+
+    ON NE PROPOSE RIEN À QUI N'EST PAS CONCERNÉ. Un plan d'action adressé à
+    une entreprise que le règlement ne saisit pas serait un devis, pas un
+    conseil.
+    """
+    if not ev or not ev.get("ok"):
+        return []
+    if (ev.get("applicable") or {}).get("ok") is not True:
+        return []
+    import dga as _d
+    return [_ec("obligations", a["cle"], a["quoi"], a["ou"])
+            for a in _d.plan(dec or {}, limite=24)["actions"]]
+
+
+def _ecarts_data_act(ev, dec=None):
+    """Le plan du module, repris tel quel — échéances passées en tête."""
+    if not ev or not ev.get("ok"):
+        return []
+    champ = ev.get("applicable") or {}
+    if champ.get("ok") is not True or not champ.get("chapitres"):
+        return []
+    import data_act as _a
+    return [_ec("obligations", a["cle"], a["quoi"], a["ou"])
+            for a in _a.plan(dec or {}, limite=24)["actions"]]
+
+
 ECARTEURS = {
+    "dga": _ecarts_dga,
+    "data_act": _ecarts_data_act,
     "ocde": _ecarts_ocde,
     "en18286": _ecarts_en18286,
     "dora": _ecarts_dora,
@@ -2335,7 +2562,19 @@ def _ev_ocde(dec, d):
     return _o.evaluer(dec)
 
 
+def _ev_dga(dec, d):
+    import dga as _d
+    return _d.evaluer(dec)
+
+
+def _ev_data_act(dec, d):
+    import data_act as _a
+    return _a.evaluer(dec)
+
+
 EVALUATEURS = {
+    "dga": _ev_dga,
+    "data_act": _ev_data_act,
     "ocde": _ev_ocde,
     "en18286": _ev_en18286,
     "ia_act": _ev_ia_act, "cra": _ev_cra, "iso42001": _ev_iso42001,
@@ -2627,7 +2866,52 @@ def _de_ocde(v, e):
             "priorisation": prio}
 
 
+def _de_dga(v, e):
+    """L'écran du DGA → ce que son moteur attend.
+
+    LA QUALIFICATION SEULE SUFFIT À FAIRE UNE DÉCLARATION, et le hors-champ
+    aussi : un client qui vient de cocher « aucune de ces qualités » a
+    RÉPONDU, et sa carte doit le dire au lieu d'afficher « — ».
+    """
+    qualites = v.get("qualites")
+    if isinstance(qualites, str):
+        qualites = [qualites]
+    if not isinstance(qualites, list):
+        qualites = []
+    reponses = _dict_de(v, "reponses")
+    if not (qualites or reponses):
+        return None
+    return {"qualites": qualites, "reponses": reponses,
+            "anterieur_2022": v.get("anterieur_2022") is True}
+
+
+def _de_data_act(v, e):
+    """L'écran du Data Act → ce que son moteur attend.
+
+    LE CHIFFRE D'AFFAIRES VOYAGE, PARCE QUE L'EXPOSITION EN DÉPEND : le
+    plafond de l'article 83 §5 du RGPD est le PLUS ÉLEVÉ de 20 M EUR et de
+    4 % du chiffre d'affaires mondial. Sans lui, le module ne connaît que le
+    montant fixe, et il le dit.
+    """
+    qualites = v.get("qualites")
+    if isinstance(qualites, str):
+        qualites = [qualites]
+    if not isinstance(qualites, list):
+        qualites = []
+    reponses = _dict_de(v, "reponses")
+    if not (qualites or reponses):
+        return None
+    return {"qualites": qualites, "reponses": reponses,
+            "taille": v.get("taille"),
+            "sans_partenaire_plus_grand":
+                v.get("sans_partenaire_plus_grand") is True,
+            "hors_sous_traitance": v.get("hors_sous_traitance") is True,
+            "chiffre_affaires": v.get("chiffre_affaires")}
+
+
 TRADUCTEURS = {
+    "dga": _de_dga,
+    "data_act": _de_data_act,
     "ocde": _de_ocde,
     "en18286": _de_en18286,
     "ia_act": _de_ia_act, "cra": _de_cra, "iso42001": _de_iso42001,
