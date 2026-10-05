@@ -1,12 +1,204 @@
 {
  "_lot": "68-routes-5",
- "_mots": 2441,
+ "_mots": 2393,
  "_pages": [
   "_routes"
  ],
  "_rubrique": "_routes",
  "bloc": {},
  "texte": {
+  "Il viendra à son tour. L'ordre des blocs porte une décision : le régime de l'article # commande ce que les suivants mesurent.": {
+   "en": "It will come in its turn. The order of the blocks carries a decision: the regime of article # governs what the following ones measure.",
+   "fr": "Il viendra à son tour. L'ordre des blocs porte une décision : le régime de l'article 16 commande ce que les suivants mesurent."
+  },
+  "Ils sont conservés tels quels. Les fusionner produirait un exemple de quatre mille caractères ; les réécrire inventerait une phrase que le document ne porte pas.": {
+   "en": "They are kept as they stand. Merging them would produce a four-thousand-character example; rewriting them would invent a sentence the document does not carry.",
+   "fr": "Ils sont conservés tels quels. Les fusionner produirait un exemple de quatre mille caractères ; les réécrire inventerait une phrase que le document ne porte pas."
+  },
+  "Impossibilité technique NON consignée": {
+   "en": "Technical impossibility NOT recorded",
+   "fr": "Impossibilité technique NON consignée"
+  },
+  "Impossibilité technique de l'intervention humaine en temps réel": {
+   "en": "Technical impossibility of real-time human intervention",
+   "fr": "Impossibilité technique de l'intervention humaine en temps réel"
+  },
+  "Incidence dans deux États membres ou plus": {
+   "en": "Impact in two or more Member States",
+   "fr": "Incidence dans deux États membres ou plus"
+  },
+  "Informations à l'attention des parties intéressées des systèmes d'IA": {
+   "en": "Information for the interested parties of the AI systems",
+   "fr": "Informations à l'attention des parties intéressées des systèmes d'IA"
+  },
+  "Informer préalablement, clairement et intelligiblement, des objectifs d'intérêt général et de la localisation d'un traitement en pays tiers": {
+   "en": "Informing beforehand, clearly and intelligibly, of the general-interest objectives and of the location of any processing in a third country",
+   "fr": "Informer préalablement, clairement et intelligiblement, des objectifs d'intérêt général et de la localisation d'un traitement en pays tiers"
+  },
+  "Informer sans retard en cas d'accès non autorisé": {
+   "en": "Informing without delay in the event of unauthorised access",
+   "fr": "Informer sans retard en cas d'accès non autorisé"
+  },
+  "Informer sans retard les détenteurs de tout transfert, accès ou usage non autorisé": {
+   "en": "Informing the data holders without delay of any unauthorised transfer, access or use",
+   "fr": "Informer sans retard les détenteurs de tout transfert, accès ou usage non autorisé"
+  },
+  "Infractions antérieures": {
+   "en": "Previous infringements",
+   "fr": "Infractions antérieures"
+  },
+  "Infrastructure numérique": {
+   "en": "Digital infrastructure",
+   "fr": "Infrastructure numérique"
+  },
+  "Infrastructures des marchés financiers": {
+   "en": "Financial market infrastructures",
+   "fr": "Infrastructures des marchés financiers"
+  },
+  "Inscrire la date au registre d'informations de l'article #, paragraphe # : elle change le régime de surveillance de ce contrat.": {
+   "en": "Entering the date in the register of information of article #(#): it changes the supervision regime for that contract.",
+   "fr": "Inscrire la date au registre d'informations de l'article 28, paragraphe 3 : elle change le régime de surveillance de ce contrat."
+  },
+  "Inspections sur place et contrôles à distance ex post": {
+   "en": "On-site inspections and ex post remote checks",
+   "fr": "Inspections sur place et contrôles à distance ex post"
+  },
+  "Inspections sur place et contrôles à distance, y compris des contrôles aléatoires": {
+   "en": "On-site inspections and remote checks, including random checks",
+   "fr": "Inspections sur place et contrôles à distance, y compris des contrôles aléatoires"
+  },
+  "Institution de retraite professionnelle": {
+   "en": "An institution for occupational retirement provision",
+   "fr": "Institution de retraite professionnelle"
+  },
+  "Interaction avec les déployeurs": {
+   "en": "Interaction with deployers",
+   "fr": "Interaction avec les déployeurs"
+  },
+  "Intermédiaire d'assurance, de réassurance ou d'assurance à titre accessoire": {
+   "en": "An insurance, reinsurance or ancillary insurance intermediary",
+   "fr": "Intermédiaire d'assurance, de réassurance ou d'assurance à titre accessoire"
+  },
+  "Intermédiation au profit des personnes concernées": {
+   "en": "Intermediation for data subjects",
+   "fr": "Intermédiation au profit des personnes concernées"
+  },
+  "Intermédiation entre détenteurs et utilisateurs de données": {
+   "en": "Intermediation between data holders and data users",
+   "fr": "Intermédiation entre détenteurs et utilisateurs de données"
+  },
+  "Interopérabilité avec les autres intermédiaires": {
+   "en": "Interoperability with other intermediaries",
+   "fr": "Interopérabilité avec les autres intermédiaires"
+  },
+  "Interruption de service supérieure à # heures pour des services TIC soutenant des fonctions critiques ou importantes": {
+   "en": "Service interruption longer than # hours for ICT services supporting critical or important functions",
+   "fr": "Interruption de service supérieure à 2 heures pour des services TIC soutenant des fonctions critiques ou importantes"
+  },
+  "Intégrateur — modification substantielle (art. #)": {
+   "en": "Integrator — substantial modification (art. #)",
+   "fr": "Intégrateur — modification substantielle (art. 22)"
+  },
+  "Intégration de la sécurité numérique dans la gestion des ressources humaines": {
+   "en": "Embedding digital security in human resources management",
+   "fr": "Intégration de la sécurité numérique dans la gestion des ressources humaines"
+  },
+  "Intégrité de l'information": {
+   "en": "Integrity of the information",
+   "fr": "Intégrité de l'information"
+  },
+  "Intérêts de retard de l'article # du règlement (UE, Euratom) #/#.": {
+   "en": "Default interest under article # of Regulation (EU, Euratom) #/#.",
+   "fr": "Intérêts de retard de l'article 99 du règlement (UE, Euratom) 2018/1046."
+  },
+  "JO L # du #": {
+   "en": "OJ L # of #",
+   "fr": "JO L 152 du 3.6.2022"
+  },
+  "JO L # du #, p. #": {
+   "en": "OJ L # of #, p. #",
+   "fr": "JO L 333 du 27.12.2022, p. 80"
+  },
+  "JO L du #": {
+   "en": "OJ L of #",
+   "fr": "JO L du 20.11.2024"
+  },
+  "Journal de l'activité d'intermédiation": {
+   "en": "Log of the data intermediation activity",
+   "fr": "Journal de l'activité d'intermédiation"
+  },
+  "Juridiction des pays tiers, et outils de retrait": {
+   "en": "Third-country jurisdiction, and withdrawal tools",
+   "fr": "Juridiction des pays tiers, et outils de retrait"
+  },
+  "L'absence de solutions de substitution réelles — nombre limité d'acteurs, part de marché, technologie propriétaire — et la difficulté de migrer données et charges de travail ailleurs, en coût, en délai et en risque ajouté.": {
+   "en": "The absence of real alternatives — a limited number of players, market share, proprietary technology — and the difficulty of migrating data and workloads elsewhere, in cost, in time and in added risk.",
+   "fr": "L'absence de solutions de substitution réelles — nombre limité d'acteurs, part de marché, technologie propriétaire — et la difficulté de migrer données et charges de travail ailleurs, en coût, en délai et en risque ajouté."
+  },
+  "L'absence de solutions de substitution réelles, même partielles — nombre limité d'acteurs, part de marché, complexité technique, technologie propriétaire, caractéristiques propres de l'organisation.": {
+   "en": "The absence of real alternatives, even partial ones — a limited number of players, market share, technical complexity, proprietary technology, the organisation's own characteristics.",
+   "fr": "L'absence de solutions de substitution réelles, même partielles — nombre limité d'acteurs, part de marché, complexité technique, technologie propriétaire, caractéristiques propres de l'organisation."
+  },
+  "L'abstention est une intervention : la personne désignée doit pouvoir écarter une sortie sans s'en servir, et ce refus s'enregistre comme un événement de supervision.": {
+   "en": "Abstaining is an intervention: the designated person must be able to set an output aside without using it, and that refusal is recorded as an oversight event.",
+   "fr": "L'abstention est une intervention : la personne désignée doit pouvoir écarter une sortie sans s'en servir, et ce refus s'enregistre comme un événement de supervision."
+  },
+  "L'acceptation d'un risque résiduel se décide au niveau qui a le pouvoir de l'accepter, et se trace : sinon elle n'a pas eu lieu.": {
+   "en": "The acceptance of a residual risk is decided at the level with the power to accept it, and it is recorded: otherwise it did not happen.",
+   "fr": "L'acceptation d'un risque résiduel se décide au niveau qui a le pouvoir de l'accepter, et se trace : sinon elle n'a pas eu lieu."
+  },
+  "L'accepter en l'état. Légitime SI le niveau respecte les critères d'acceptation établis, et si le propriétaire l'a écrit et daté.": {
+   "en": "Accepting it as it stands. Legitimate IF the level meets the acceptance criteria established, and if the owner has written and dated it.",
+   "fr": "L'accepter en l'état. Légitime SI le niveau respecte les critères d'acceptation établis, et si le propriétaire l'a écrit et daté."
+  },
+  "L'accès se fait dans un environnement sécurisé de traitement, ou sur des données anonymisées, modifiées ou agrégées": {
+   "en": "Access takes place within a secure processing environment, or on anonymised, modified or aggregated data",
+   "fr": "L'accès se fait dans un environnement sécurisé de traitement, ou sur des données anonymisées, modifiées ou agrégées"
+  },
+  "L'acte d'exécution n'est pas au corpus. Ce module n'affiche donc aucun délai chiffré : le faire présenterait comme sourcé un chiffre qui ne l'est pas.": {
+   "en": "The implementing act is not in the corpus. This module therefore shows no figure for the deadline: doing so would present as sourced a figure that is not.",
+   "fr": "L'acte d'exécution n'est pas au corpus. Ce module n'affiche donc aucun délai chiffré : le faire présenterait comme sourcé un chiffre qui ne l'est pas."
+  },
+  "L'acte délégué C(#) # ne dit pas expressément si les deux parts du sous-critère # et du sous-critère # doivent être atteintes dans LA MÊME catégorie d'entités financières, comme l'article #, paragraphe #, l'impose pour les sous-critères # et #. Le module calcule les DEUX lectures et signale quand elles divergent, plutôt que d'en choisir une en silence.": {
+   "en": "Delegated act C(#) # does not say expressly whether the two shares of sub-criterion # and sub-criterion # must be reached within THE SAME category of financial entities, as article #(#) requires for sub-criteria # and #. The module computes BOTH readings and flags where they diverge, rather than picking one in silence.",
+   "fr": "L'acte délégué C(2024) 896 ne dit pas expressément si les deux parts du sous-critère 4.1 et du sous-critère 4.2 doivent être atteintes dans LA MÊME catégorie d'entités financières, comme l'article 2, paragraphe 4, l'impose pour les sous-critères 1.1 et 1.2. Le module calcule les DEUX lectures et signale quand elles divergent, plutôt que d'en choisir une en silence."
+  },
+  "L'action est en place pour ce système.": {
+   "en": "The action is in place for this system.",
+   "fr": "L'action est en place pour ce système."
+  },
+  "L'action ne s'applique pas à ce système — et il faut pouvoir dire pourquoi.": {
+   "en": "The action does not apply to this system — and you must be able to say why.",
+   "fr": "L'action ne s'applique pas à ce système — et il faut pouvoir dire pourquoi."
+  },
+  "L'agent dispose de plus d'outils, de droits ou de latitude que sa tâche n'en demande.": {
+   "en": "The agent has more tools, more rights or more latitude than its task calls for.",
+   "fr": "L'agent dispose de plus d'outils, de droits ou de latitude que sa tâche n'en demande."
+  },
+  "L'ajout d'observations par la personne désignée est régulièrement oublié : ce qu'elle savait de l'environnement au moment de la sortie n'est dans aucun journal machine.": {
+   "en": "Letting the designated person add observations is regularly forgotten: what they knew of the environment at the time of the output is in no machine log.",
+   "fr": "L'ajout d'observations par la personne désignée est régulièrement oublié : ce qu'elle savait de l'environnement au moment de la sortie n'est dans aucun journal machine."
+  },
+  "L'alinéa (h) de l'article #(#), et l'article #. C'est le chapitre qu'aucune des deux normes ISO ne couvre.": {
+   "en": "Subparagraph (h) of article #(#), and article #. This is the chapter that neither ISO standard covers.",
+   "fr": "L'alinéa (h) de l'article 17(1), et l'article 72. C'est le chapitre qu'aucune des deux normes ISO ne couvre."
+  },
+  "L'alinéa (i) de l'article #(#). Sept exigences dans ce seul paragraphe — c'est le plus chargé de la norme.": {
+   "en": "Subparagraph (i) of article #(#). Seven requirements in that one clause — the heaviest in the standard.",
+   "fr": "L'alinéa (i) de l'article 17(1). Sept exigences dans ce seul paragraphe — c'est le plus chargé de la norme."
+  },
+  "L'alinéa (m) de l'article #(#) ne demande pas un nom : il demande une responsabilité qui porte.": {
+   "en": "Subparagraph (m) of article #(#) does not ask for a name: it asks for a responsibility that carries weight.",
+   "fr": "L'alinéa (m) de l'article 17(1) ne demande pas un nom : il demande une responsabilité qui porte."
+  },
+  "L'altération des informations nécessaires aux activités ou services de l'entité": {
+   "en": "The alteration of the information needed for the entity's activities or services",
+   "fr": "L'altération des informations nécessaires aux activités ou services de l'entité"
+  },
+  "L'analyse de risque elle-même : gouvernance sous le dirigeant exécutif, chaque système couvert, risques résiduels acceptés, plan d'action daté et attribué, réexamen triennal.": {
+   "en": "The risk analysis itself: governance under the chief executive, every system covered, residual risks accepted, a dated and assigned action plan, a three-yearly review.",
+   "fr": "L'analyse de risque elle-même : gouvernance sous le dirigeant exécutif, chaque système couvert, risques résiduels acceptés, plan d'action daté et attribué, réexamen triennal."
+  },
   "L'analyse de risque y cesse d'être une case sur dix et devient quatre exigences vérifiables.": {
    "en": "Risk analysis there stops being one box out of ten and becomes four verifiable requirements.",
    "fr": "L'analyse de risque y cesse d'être une case sur dix et devient quatre exigences vérifiables."
@@ -38,6 +230,10 @@
   "L'annexe ZA le dit sous réserve : l'alinéa (g) n'est couvert que SI le système de gestion des risques est conforme à l'article #.": {
    "en": "Annex ZA says so with a reservation: subparagraph (g) is covered only IF the risk management system complies with article #.",
    "fr": "L'annexe ZA le dit sous réserve : l'alinéa (g) n'est couvert que SI le système de gestion des risques est conforme à l'article 9."
+  },
+  "L'annexe ZA porte une ligne sans aucun paragraphe en face.": {
+   "en": "Annex ZA carries a row with no clause facing it.",
+   "fr": "L'annexe ZA porte une ligne sans aucun paragraphe en face."
   },
   "L'annexe ZA porte une ligne « Non couvert » — l'article #(#). Cent pour cent ici ne veut donc pas dire article # tenu.": {
    "en": "Annex ZA carries a « Not covered » row — article #(#). A hundred per cent here therefore does not mean article # is met.",
@@ -211,6 +407,10 @@
    "en": "The exemption of Article # covers only Chapter II, and subject to conditions. An SME remains bound by Chapters IV, VI and VII.",
    "fr": "L'exemption de l'article 7 ne couvre que le chapitre II, et sous conditions. Une PME reste tenue par les chapitres IV, VI et VII."
   },
+  "L'exemption de l'article # ne vise que les micro et petites entreprises.": {
+   "en": "The exemption in Article # covers only micro and small enterprises.",
+   "fr": "L'exemption de l'article 7 ne vise que les micro et petites entreprises."
+  },
   "L'exigence ne s'applique pas à ce système — et il faut pouvoir dire pourquoi.": {
    "en": "The requirement does not apply to this system — and you must be able to say why.",
    "fr": "L'exigence ne s'applique pas à ce système — et il faut pouvoir dire pourquoi."
@@ -290,174 +490,6 @@
   "L'obligation de l'article # §# — accessibilité des données dès la conception — s'applique aux produits connectés et aux services connexes mis sur le marché après cette date.": {
    "en": "The obligation of Article #(#) — data accessibility by design — applies to connected products and related services placed on the market after that date.",
    "fr": "L'obligation de l'article 3 §1 — accessibilité des données dès la conception — s'applique aux produits connectés et aux services connexes mis sur le marché après cette date."
-  },
-  "L'obligation porte sur les ACTIVITÉS, pas sur les systèmes : continuer à servir, pas seulement redémarrer une machine.": {
-   "en": "The obligation bears on the ACTIVITIES, not on the systems: carrying on serving, not just restarting a machine.",
-   "fr": "L'obligation porte sur les ACTIVITÉS, pas sur les systèmes : continuer à servir, pas seulement redémarrer une machine."
-  },
-  "L'option est propre à chaque État membre et doit être vérifiée auprès de l'autorité nationale. Elle n'est pas présumée exercée.": {
-   "en": "The option belongs to each Member State and must be checked with the national authority. It is not presumed to have been exercised.",
-   "fr": "L'option est propre à chaque État membre et doit être vérifiée auprès de l'autorité nationale. Elle n'est pas présumée exercée."
-  },
-  "L'organisme CONTRIBUE à l'incidence": {
-   "en": "The organisation CONTRIBUTES to the impact",
-   "fr": "L'organisme CONTRIBUE à l'incidence"
-  },
-  "L'organisme est LIÉ à l'incidence par une relation d'affaires": {
-   "en": "The organisation is LINKED to the impact by a business relationship",
-   "fr": "L'organisme est LIÉ à l'incidence par une relation d'affaires"
-  },
-  "L'une des conditions de l'article #, points a) à d), est remplie": {
-   "en": "One of the conditions in article #, points (a) to (d), is met",
-   "fr": "L'une des conditions de l'article 2, points a) à d), est remplie"
-  },
-  "L'écart le plus fréquent : la supervision est confiée au poste disponible, pas au profil déclaré.": {
-   "en": "The commonest gap: oversight is given to whoever is available, not to the profile declared.",
-   "fr": "L'écart le plus fréquent : la supervision est confiée au poste disponible, pas au profil déclaré."
-  },
-  "L'échange se fait au format reçu ; toute conversion est justifiée et ouvre une possibilité de non-participation, sauf si le droit de l'Union l'exige.": {
-   "en": "Exchange takes place in the format received; any conversion is justified and opens an opt-out, unless Union law requires it.",
-   "fr": "L'échange se fait au format reçu ; toute conversion est justifiée et ouvre une possibilité de non-participation, sauf si le droit de l'Union l'exige."
-  },
-  "L'échéance transitoire de l'article # est passée depuis le # septembre #. Un prestataire qui fournissait déjà des services d'intermédiation de données au # juin # et qui n'a pas notifié n'est pas en retard sur un calendrier : il est en infraction.": {
-   "en": "The transitional deadline of Article # passed on # September #. A provider that was already supplying data intermediation services on # June # and has not notified is not behind a timetable: it is in breach.",
-   "fr": "L'échéance transitoire de l'article 37 est passée depuis le 24 septembre 2025. Un prestataire qui fournissait déjà des services d'intermédiation de données au 23 juin 2022 et qui n'a pas notifié n'est pas en retard sur un calendrier : il est en infraction."
-  },
-  "L'écran dit-il ce que le système sait et ne sait pas faire, et rapporte-t-il ce qu'il fait AUX scénarios de risque que vous avez identifiés — pas à des courbes générales ?": {
-   "en": "Does the screen say what the system can and cannot do, and does it relate what it does TO the risk scenarios you have identified — not to general curves?",
-   "fr": "L'écran dit-il ce que le système sait et ne sait pas faire, et rapporte-t-il ce qu'il fait AUX scénarios de risque que vous avez identifiés — pas à des courbes générales ?"
-  },
-  "L'équipe d'examen conjoint : qui supervise réellement, avec quelles tâches et sous quelle coordination.": {
-   "en": "The joint examination team: who actually oversees, with what tasks and under whose coordination.",
-   "fr": "L'équipe d'examen conjoint : qui supervise réellement, avec quelles tâches et sous quelle coordination."
-  },
-  "L'équipe d'examen conjoint exerce les activités de supervision, sous la coordination du coordonnateur du superviseur principal.": {
-   "en": "The joint examination team carries out the oversight activities, under the coordination of the lead overseer's coordinator.",
-   "fr": "L'équipe d'examen conjoint exerce les activités de supervision, sous la coordination du coordonnateur du superviseur principal."
-  },
-  "L'équivalence est acquise si les mesures de gestion des risques valent au moins celles de l'article #, paragraphes # et #, ou si l'acte sectoriel ouvre aux CSIRT, aux autorités compétentes ou aux points de contact uniques un accès immédiat aux notifications et pose des exigences de notification au moins équivalentes à l'article #, paragraphes # à #.": {
-   "en": "Equivalence is established if the risk-management measures are at least as good as those of article #(#) and (#), or if the sectoral act gives the CSIRTs, the competent authorities or the single points of contact immediate access to the notifications and sets reporting requirements at least equivalent to article #(#) to (#).",
-   "fr": "L'équivalence est acquise si les mesures de gestion des risques valent au moins celles de l'article 21, paragraphes 1 et 2, ou si l'acte sectoriel ouvre aux CSIRT, aux autorités compétentes ou aux points de contact uniques un accès immédiat aux notifications et pose des exigences de notification au moins équivalentes à l'article 23, paragraphes 1 à 6."
-  },
-  "L'étape # dépend d'une lecture que le texte ne tranche pas": {
-   "en": "Step # depends on a reading the text does not settle",
-   "fr": "L'étape 1 dépend d'une lecture que le texte ne tranche pas"
-  },
-  "L'étape # est franchie — l'étape # s'apprécie": {
-   "en": "Step # is cleared — step # is assessed",
-   "fr": "L'étape 1 est franchie — l'étape 2 s'apprécie"
-  },
-  "L'étape # n'est pas franchie": {
-   "en": "Step # is not cleared",
-   "fr": "L'étape 1 n'est pas franchie"
-  },
-  "L'étape qui commande toutes les autres : sans incidences identifiées, qualifiées par l'implication et priorisées, les étapes # à # n'ont pas d'objet.": {
-   "en": "The step that governs all the others: with no impacts identified, qualified by involvement and prioritised, steps # to # have no object.",
-   "fr": "L'étape qui commande toutes les autres : sans incidences identifiées, qualifiées par l'implication et priorisées, les étapes 3 à 6 n'ont pas d'objet."
-  },
-  "L'état du système ne se résume pas à « en marche » : actif, inactif, dégradé et sécurisé ne demandent pas la même réaction.": {
-   "en": "The state of the system is not just « running »: active, inactive, degraded and safe do not call for the same reaction.",
-   "fr": "L'état du système ne se résume pas à « en marche » : actif, inactif, dégradé et sécurisé ne demandent pas la même réaction."
-  },
-  "L'étendue de l'incidence — combien de personnes, quel territoire.": {
-   "en": "The reach of the impact — how many people, what territory.",
-   "fr": "L'étendue de l'incidence — combien de personnes, quel territoire."
-  },
-  "L'étendue du contrôle exercé sur chaque maillon est-elle déterminée en fonction de ce qu'il porte ?": {
-   "en": "Is the extent of the control exercised over each link determined by what that link carries?",
-   "fr": "L'étendue du contrôle exercé sur chaque maillon est-elle déterminée en fonction de ce qu'il porte ?"
-  },
-  "LES CRITÈRES DE DÉSIGNATION, CHIFFRÉS : deux étapes, quatre sous-critères de seuil, et la barre des # %.": {
-   "en": "THE DESIGNATION CRITERIA, IN FIGURES: two steps, four threshold sub-criteria, and the # % bar.",
-   "fr": "LES CRITÈRES DE DÉSIGNATION, CHIFFRÉS : deux étapes, quatre sous-critères de seuil, et la barre des 10 %."
-  },
-  "La CNIL garde ses pouvoirs sur les traitements de données personnelles d'un intermédiaire ou d'une organisation altruiste.": {
-   "en": "The CNIL retains its powers over the personal data processing of an intermediary or of a data altruism organisation.",
-   "fr": "La CNIL garde ses pouvoirs sur les traitements de données personnelles d'un intermédiaire ou d'une organisation altruiste."
-  },
-  "La Commission publie des lignes directrices clarifiant l'application des paragraphes # et #, et les réexamine.": {
-   "en": "The Commission publishes guidelines clarifying the application of paragraphs # and #, and reviews them.",
-   "fr": "La Commission publie des lignes directrices clarifiant l'application des paragraphes 1 et 2, et les réexamine."
-  },
-  "La Commission tient un registre public de tous les prestataires proposant leurs services dans l'Union (§#).": {
-   "en": "The Commission maintains a public register of all providers offering their services in the Union (§#).",
-   "fr": "La Commission tient un registre public de tous les prestataires proposant leurs services dans l'Union (§10)."
-  },
-  "La PSSI et les spécificités sectorielles": {
-   "en": "The information security policy and the sector's own features",
-   "fr": "La PSSI et les spécificités sectorielles"
-  },
-  "La base vectorielle d'un RAG rend des fragments que le demandeur n'avait pas le droit de lire, ou ingère des fragments empoisonnés.": {
-   "en": "A RAG's vector store returns fragments the requester had no right to read, or ingests poisoned fragments.",
-   "fr": "La base vectorielle d'un RAG rend des fragments que le demandeur n'avait pas le droit de lire, ou ingère des fragments empoisonnés."
-  },
-  "La catégorie ne s'applique pas — et il faut pouvoir dire pourquoi.": {
-   "en": "The category does not apply — and you must be able to say why.",
-   "fr": "La catégorie ne s'applique pas — et il faut pouvoir dire pourquoi."
-  },
-  "La certification porte sur le système de management, pas sur chaque système d'IA.": {
-   "en": "The certification covers the management system, not each AI system.",
-   "fr": "La certification porte sur le système de management, pas sur chaque système d'IA."
-  },
-  "La cessation d'activité est notifiée dans les quinze jours (§#).": {
-   "en": "The cessation of activity is notified within fifteen days (§#).",
-   "fr": "La cessation d'activité est notifiée dans les quinze jours (§13)."
-  },
-  "La chaîne d'approvisionnement du modèle.": {
-   "en": "The model's supply chain.",
-   "fr": "La chaîne d'approvisionnement du modèle."
-  },
-  "La chaîne d'approvisionnement du système d'IA est-elle maîtrisée ?": {
-   "en": "Is the AI system's supply chain under control?",
-   "fr": "La chaîne d'approvisionnement du système d'IA est-elle maîtrisée ?"
-  },
-  "La chaîne de notification : alerte précoce, notification, rapport final.": {
-   "en": "The reporting chain: early warning, notification, final report.",
-   "fr": "La chaîne de notification : alerte précoce, notification, rapport final."
-  },
-  "La chaîne de notification et ses délais en heures, les tests de pénétration fondés sur la menace, et le registre d'informations de l'article #, paragraphe #, ne sont pas dans ce nombre. Cent pour cent ici ne veut pas dire DORA tenu.": {
-   "en": "The reporting chain and its deadlines in hours, the threat-led penetration testing, and the register of information of article #(#) are not in this figure. A hundred per cent here does not mean DORA is met.",
-   "fr": "La chaîne de notification et ses délais en heures, les tests de pénétration fondés sur la menace, et le registre d'informations de l'article 28, paragraphe 3, ne sont pas dans ce nombre. Cent pour cent ici ne veut pas dire DORA tenu."
-  },
-  "La chaîne se répète à blanc, elle ne se coche pas. Les délais courent en heures, et la première échue commande.": {
-   "en": "The chain is rehearsed, not ticked. The deadlines run in hours, and the first one to fall due governs.",
-   "fr": "La chaîne se répète à blanc, elle ne se coche pas. Les délais courent en heures, et la première échue commande."
-  },
-  "La classe commande la procédure d'évaluation, donc le budget.": {
-   "en": "The class governs the assessment procedure, and therefore the budget.",
-   "fr": "La classe commande la procédure d'évaluation, donc le budget."
-  },
-  "La classe est DÉCLARÉE, jamais devinée du nom du produit.": {
-   "en": "The class is DECLARED, never guessed from the product's name.",
-   "fr": "La classe est DÉCLARÉE, jamais devinée du nom du produit."
-  },
-  "La classe proposée n'appartient pas au vocabulaire du registre.": {
-   "en": "The class proposed is not in the register's vocabulary.",
-   "fr": "La classe proposée n'appartient pas au vocabulaire du registre."
-  },
-  "La classification d'un système au sens du règlement : son niveau de risque, l'article qui le fonde, et les obligations qui en découlent.": {
-   "en": "A system's classification within the meaning of the Regulation: its risk level, the article it rests on, and the obligations that follow.",
-   "fr": "La classification d'un système au sens du règlement : son niveau de risque, l'article qui le fonde, et les obligations qui en découlent."
-  },
-  "La classification des incidents contre les seuils chiffrés qui décident de la notification — clients touchés, durée, États membres concernés, coûts.": {
-   "en": "The classification of incidents against the numerical thresholds that decide on notification — clients affected, duration, Member States concerned, costs.",
-   "fr": "La classification des incidents contre les seuils chiffrés qui décident de la notification — clients touchés, durée, États membres concernés, coûts."
-  },
-  "La collecte est massive, la relecture ne l'est pas, et l'effet n'apparaît qu'à l'usage.": {
-   "en": "The collection is massive, the review is not, and the effect only shows in use.",
-   "fr": "La collecte est massive, la relecture ne l'est pas, et l'effet n'apparaît qu'à l'usage."
-  },
-  "La communication avec les autorités, les organismes notifiés et les déployeurs est-elle organisée et tenue ?": {
-   "en": "Is communication with the authorities, the notified bodies and the deployers organised and kept up?",
-   "fr": "La communication avec les autorités, les organismes notifiés et les déployeurs est-elle organisée et tenue ?"
-  },
-  "La communication avec les autorités, les organismes notifiés, les autres opérateurs, les clients et les parties intéressées.": {
-   "en": "Communication with the authorities, the notified bodies, the other operators, the clients and the interested parties.",
-   "fr": "La communication avec les autorités, les organismes notifiés, les autres opérateurs, les clients et les parties intéressées."
-  },
-  "La communication à l'autorité compétente du nom, de l'adresse et des coordonnées, du secteur et sous-secteur, et des États membres où l'entité fournit ses services.": {
-   "en": "Communicating to the competent authority the name, address and contact details, the sector and sub-sector, and the Member States where the entity provides its services.",
-   "fr": "La communication à l'autorité compétente du nom, de l'adresse et des coordonnées, du secteur et sous-secteur, et des États membres où l'entité fournit ses services."
   }
  }
 }

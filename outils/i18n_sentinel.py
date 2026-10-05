@@ -581,6 +581,169 @@ def entrees_des_charges(charges):
     return out
 
 
+#: ══════════════════════════════════════════════════════════════════════════
+#:  LES SONDES — CE QUE LES ROUTES D'ÉVALUATION SERVENT
+#: ══════════════════════════════════════════════════════════════════════════
+#:
+#: POURQUOI ELLES EXISTENT, ET CE QUI A ÉTÉ MESURÉ. `ROUTES_REFERENTIEL`
+#: ci-dessus ne relève que des GET : le référentiel d'un module, c'est-à-dire
+#: ce qu'il saurait dire AVANT qu'on lui parle. Les seize routes
+#: d'ÉVALUATION sont des POST, et leurs phrases sont COMPOSÉES par le
+#: serveur au moment de répondre — elles n'existent dans aucun fichier HTML,
+#: donc ni la passe navigateur ni la passe de routes ne pouvait les voir.
+#: Mesuré avec une déclaration vide : 52 chaînes de français, 958 mots, que
+#: le catalogue ignorait et que le plancher de couverture comptait donc pour
+#: rien. Un lecteur anglophone qui remplit un questionnaire les lisait en
+#: français.
+#:
+#: CE QU'UNE SONDE DOIT ÊTRE. Une charge déclarée en clair, avec la raison de
+#: sa forme, et la TÊTE qu'elle doit ouvrir quand le module en rend une. La
+#: tête est ce qui rend la sonde vérifiable : une charge qui cesserait d'être
+#: acceptée, ou qui retomberait sur « rien de déclaré », n'inventorierait
+#: plus les phrases pour lesquelles elle a été écrite, et
+#: `tests/test_i18n_sentinel_outil.py` le refuse.
+#:
+#: CE QU'ELLES NE COUVRENT PAS ENCORE, ET JE LE DÉCLARE PLUTÔT QUE DE LE
+#: TAIRE : sept modules n'ouvrent ici que leur tête « rien de déclaré »,
+#: parce que leur vocabulaire de qualification et de réponses n'est pas celui
+#: qu'une sonde écrite à la main devine. Les phrases du taux de ces
+#: sept-là — « X % des … attendues sont déclarées tenues » et leurs
+#: voisines — restent hors inventaire. `tete_attendue` à `None` le dit
+#: route par route, et la règle compte combien il en reste : la dette est
+#: visible, bornée, et ne peut pas grossir en silence.
+SONDES_EVALUATION = (
+    {'route': '/api/dga/evaluer',
+     'charge': {'qualites': ['intermediaire'], 'reponses': {'art12_a': 'tenu'}},
+     'tete_attendue': 'mesure',
+     'pourquoi': u"un prestataire d'intermédiation qui tient un point sur "
+                 u"dix-neuf : la tête du taux, celle qui porte la phrase que "
+                 u"l'écran affiche à côté du chiffre"},
+    {'route': '/api/dga/evaluer',
+     'charge': {'qualites': ['aucune']},
+     'tete_attendue': 'hors_champ',
+     'pourquoi': u"« aucune de ces qualités » est la réponse de la plupart "
+                 u"des clients, et son texte est le plus lu du module"},
+    {'route': '/api/data-act/evaluer',
+     'charge': {'qualites': ['fabricant'], 'chiffre_affaires': 8000000,
+                'reponses': {'fab_conception': 'tenu'}},
+     'tete_attendue': 'echeance_passee',
+     'pourquoi': u"une PME fabricant : l'échéance de l'article 3 §1 est "
+                 u"passée, et cette tête-là prime sur celle du taux"},
+    {'route': '/api/data-act/evaluer',
+     'charge': {'qualites': ['cloud'], 'chiffre_affaires': 5000000},
+     'tete_attendue': None,
+     'pourquoi': u"un fournisseur de services de traitement : il n'ouvre que "
+                 u"des chapitres hors article 40 §4, et c'est la phrase du "
+                 u"régime national qu'on vient chercher"},
+    {'route': '/api/en18286/evaluer',
+     'charge': {'qualification': {'fournisseur': True, 'haut_risque': True},
+                'reponses': {'4.4.1': 'tenu'}},
+     'tete_attendue': 'strategie_incomplete',
+     'pourquoi': u"un fournisseur de système à haut risque dont la stratégie "
+                 u"du 4.4 n'est pas complète — l'état le plus fréquent"},
+    {'route': '/api/cra/evaluer',
+     'charge': {'nom': 'Sonde', 'marche_ue': True, 'classe': 'important_ii'},
+     'tete_attendue': None,
+     'pourquoi': u"la route exige un nom ; un produit de classe importante II "
+                 u"ouvre l'organisme notifié et ses réserves"},
+    {'route': '/api/cra/exposition',
+     'charge': {'chiffre_affaires': 50000000},
+     'tete_attendue': None,
+     'pourquoi': u"l'exposition chiffrée de l'article 64, et la réserve qui "
+                 u"dit que ces montants sont des plafonds"},
+    {'route': '/api/nis2/evaluer',
+     'charge': {'nom': 'Sonde', 'secteur': 'energie', 'taille': 'grande'},
+     'tete_attendue': None,
+     'pourquoi': u"la route exige un nom ; une grande entité du secteur de "
+                 u"l'énergie est le cas d'école de l'entité essentielle"},
+    {'route': '/api/nis2/exposition',
+     'charge': {'chiffre_affaires': 50000000, 'qualification': 'essentielle'},
+     'tete_attendue': None,
+     'pourquoi': u"le plancher sur le plafond de l'article 34, qui ne se lit "
+                 u"pas comme celui du RGPD"},
+    {'route': '/api/dora/evaluer',
+     'charge': {'types': ['etablissement_credit'], 'taille': 'grande'},
+     'tete_attendue': None,
+     'pourquoi': u"un établissement de crédit : le régime de l'article 16 "
+                 u"décide des articles opposables, et l'articulation avec "
+                 u"NIS 2 n'apparaît qu'une fois le type déclaré"},
+    {'route': '/api/iso42001/evaluer',
+     'charge': {'nom': 'Sonde'},
+     'tete_attendue': None,
+     'pourquoi': u"la route exige un nom ; la déclaration d'applicabilité "
+                 u"irrecevable est l'état de départ de tout organisme"},
+    {'route': '/api/iso27001/evaluer',
+     'charge': {'nom': 'Sonde'},
+     'tete_attendue': None,
+     'pourquoi': u"la route exige un nom ; l'analyse de risque sans critères "
+                 u"est l'état de départ"},
+    {'route': '/api/ocde/evaluer',
+     'charge': {},
+     'tete_attendue': 'non_qualifie',
+     'pourquoi': u"le guide ne rend aucun chiffre sans groupe d'acteur "
+                 u"déclaré, et ce refus motivé est le premier texte lu"},
+    {'route': '/api/nist-ai-rmf/evaluer',
+     'charge': {},
+     'tete_attendue': 'vide',
+     'pourquoi': u"un profil vide n'est pas un profil à zéro, et la réserve "
+                 u"de non-certification est servie dès la première réponse"},
+    {'route': '/api/nist-ai-rmf/profil/analyser',
+     'charge': {'generatif': True},
+     'tete_attendue': None,
+     'pourquoi': u"le profil AI 600-1 et sa réserve : 211 actions "
+                 u"« suggérées », qui ne se certifient pas"},
+    {'route': '/api/nist-800-53/evaluer',
+     'charge': {},
+     'tete_attendue': None,
+     'pourquoi': u"la maille par FAMILLE et la réserve de non-certification, "
+                 u"servies sans qu'aucun socle soit déclaré"},
+    {'route': '/api/nist-800-82/evaluer',
+     'charge': {},
+     'tete_attendue': None,
+     'pourquoi': u"le verrou qui dit qu'une surcharge industrielle sans "
+                 u"socle 800-53 mesure une adaptation de rien"},
+    {'route': '/api/owasp-llm/evaluer',
+     'charge': {},
+     'tete_attendue': 'vide',
+     'pourquoi': u"le Top 10 n'est pas un barème, et la liste le dit avant "
+                 u"d'afficher quoi que ce soit"},
+)
+
+
+def charges_des_sondes(sondes):
+    """Les charges que les routes d'ÉVALUATION rendent, et les fautes.
+
+    MÊME EXIGENCE QUE POUR LES GET : une route qui ne répond pas 200 est une
+    faute nommée, pas une charge vide. Une sonde qui n'ouvre pas la tête
+    qu'elle déclare en est une autre — elle inventorierait autre chose que ce
+    pour quoi elle a été écrite, et personne ne le verrait."""
+    import json as _json
+    sys.path.insert(0, RACINE)
+    import app as _app
+    client = _app.app.test_client()
+    charges, fautes = [], []
+    for s in sondes:
+        rep = client.post(s['route'], json=s['charge'])
+        if rep.status_code != 200:
+            fautes.append((s['route'], u'HTTP %d' % rep.status_code))
+            continue
+        try:
+            j = _json.loads(rep.data.decode('utf-8'))
+        except ValueError:
+            fautes.append((s['route'], u'la réponse n\'est pas du JSON'))
+            continue
+        attendue = s.get('tete_attendue')
+        if attendue is not None:
+            tete = j.get('tete') or (j.get('analyse') or {}).get('tete') \
+                or (j.get('applicable') or {}).get('motif')
+            if tete != attendue:
+                fautes.append((s['route'], u'tête « %s » au lieu de « %s »'
+                               % (tete, attendue)))
+                continue
+        charges.append(j)
+    return charges, fautes
+
+
 def charges_des_routes(routes):
     """Les charges JSON que ces routes rendent. Rend (charges, fautes) —
     une route qui ne répond pas 200, ou qui ne rend pas du JSON, est une
@@ -605,6 +768,23 @@ def charges_des_routes(routes):
 def cmd_routes(args):
     cat = charger_catalogue(args.catalogue)
     charges, fautes = charges_des_routes(args.route or list(ROUTES_REFERENTIEL))
+    #  LES SONDES PARTENT DANS LE MÊME PASSAGE, ET SOUS LA MÊME SOURCE.
+    #  Deux passages distincts laisseraient la source « _routes » du premier
+    #  être effacée par le second : le catalogue perdrait la moitié de ce
+    #  qu'il vient d'apprendre, et le plancher de couverture tomberait sans
+    #  qu'aucune phrase ait changé. `--route` cible les GET seuls, donc les
+    #  sondes ne partent que sur un passage complet.
+    sondes = [] if args.route else list(SONDES_EVALUATION)
+    #  LES DEUX COMPTES RESTENT DISTINCTS. `routes` dit combien de GET de
+    #  référentiel ont répondu, `sondes` combien de POST d'évaluation : les
+    #  additionner en un seul nombre ferait croire à dix-huit référentiels de
+    #  plus, et la règle qui confronte ce compte à ROUTES_REFERENTIEL ne
+    #  mesurerait plus rien.
+    n_get = len(charges)
+    if sondes:
+        ch_sondes, f_sondes = charges_des_sondes(sondes)
+        charges += ch_sondes
+        fautes += f_sondes
     for r, motif in fautes:
         print(u'  %-38s %s' % (r, motif))
     if fautes and not args.malgre_les_fautes:
@@ -618,13 +798,15 @@ def cmd_routes(args):
         print(u'  passage précédent effacé : %d entrée(s) « _routes »' % effacees)
     nouvelles, vues = ajouter_source(cat, entrees, '_routes')
     cat['routes'] = {
-        'routes': len(charges),
+        'routes': n_get,
+        'sondes': len(sondes),
         'entrees': {r: len(entrees[r]) for r in ('bloc', 'texte', 'attr')},
         'mots': {r: sum(e['mots'] for e in entrees[r].values()) for r in ('bloc', 'texte', 'attr')}}
     ecrire_json(args.catalogue, cat)
-    print(u'  %d route(s) : %d entrées françaises (bloc %d, texte %d, attr %d) '
-          u'— %d nouvelles au catalogue, %d déjà vues ailleurs'
-          % (len(charges), sum(len(entrees[r]) for r in entrees),
+    print(u'  %d charge(s), dont %d sonde(s) d\'évaluation : %d entrées '
+          u'françaises (bloc %d, texte %d, attr %d) — %d nouvelles au '
+          u'catalogue, %d déjà vues ailleurs'
+          % (len(charges), len(sondes), sum(len(entrees[r]) for r in entrees),
              len(entrees['bloc']), len(entrees['texte']), len(entrees['attr']),
              nouvelles, vues))
     for r in ('bloc', 'texte', 'attr'):

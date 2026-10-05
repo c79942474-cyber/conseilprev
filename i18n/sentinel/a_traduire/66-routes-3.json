@@ -1,12 +1,88 @@
 {
  "_lot": "66-routes-3",
- "_mots": 2423,
+ "_mots": 2384,
  "_pages": [
   "_routes"
  ],
  "_rubrique": "_routes",
  "bloc": {},
  "texte": {
+  "Ce taux dit la part des exemples pratiques retenus par vos groupes que vous déclarez tenus. Ce n'est PAS un taux de conformité : le document écrit lui-même que ses exemples ne constituent pas une liste de contrôle exhaustive, et aucun organisme ne délivre d'attestation contre ce guide. Un organisme peut avoir tenu les # exemples et rester en défaut de diligence sur un risque qu'aucun d'eux ne nomme.": {
+   "en": "This rate states the share of the practical examples retained by your groups that you declare held. It is NOT a compliance rate: the document itself writes that its examples do not constitute an exhaustive check list, and no body issues an attestation against this guidance. An organisation can have held all # examples and still fall short on due diligence for a risk none of them names.",
+   "fr": "Ce taux dit la part des exemples pratiques retenus par vos groupes que vous déclarez tenus. Ce n'est PAS un taux de conformité : le document écrit lui-même que ses exemples ne constituent pas une liste de contrôle exhaustive, et aucun organisme ne délivre d'attestation contre ce guide. Un organisme peut avoir tenu les 115 exemples et rester en défaut de diligence sur un risque qu'aucun d'eux ne nomme."
+  },
+  "Ce taux mesure ce que l'industriel AJOUTE au catalogue #-#, et il est plafonné par ce que ce catalogue porte déjà.": {
+   "en": "This rate measures what the industrial side ADDS to the #-# catalogue, and it is capped by what that catalogue already carries.",
+   "fr": "Ce taux mesure ce que l'industriel AJOUTE au catalogue 800-53, et il est plafonné par ce que ce catalogue porte déjà."
+  },
+  "Ce taux porte sur le cadre de gestion du risque et sur les contrats. Il ne porte sur rien d'autre.": {
+   "en": "This rate covers the risk management framework and the contracts. It covers nothing else.",
+   "fr": "Ce taux porte sur le cadre de gestion du risque et sur les contrats. Il ne porte sur rien d'autre."
+  },
+  "Ce type d'entité figure à l'annexe I de la directive. L'absence d'identification suppose que l'entité reste sous les seuils de taille de l'article #, paragraphe #.": {
+   "en": "This kind of entity is listed in Annex I to the Directive. The absence of identification assumes the entity stays below the size thresholds of article #(#).",
+   "fr": "Ce type d'entité figure à l'annexe I de la directive. L'absence d'identification suppose que l'entité reste sous les seuils de taille de l'article 2, paragraphe 1."
+  },
+  "Ce type d'entité ne figure ni à l'annexe I ni à l'annexe II de la directive. Une identification comme entité essentielle ou importante suppose donc une désignation nationale au titre de l'article #, paragraphe #, points b) à e).": {
+   "en": "This kind of entity is listed in neither Annex I nor Annex II to the Directive. Identification as an essential or important entity therefore assumes a national designation under article #(#), points (b) to (e).",
+   "fr": "Ce type d'entité ne figure ni à l'annexe I ni à l'annexe II de la directive. Une identification comme entité essentielle ou importante suppose donc une désignation nationale au titre de l'article 2, paragraphe 2, points b) à e)."
+  },
+  "Celle que la cyber revendique — et la seule des sept qu'elle couvre.": {
+   "en": "The one cybersecurity claims — and the only one of the seven it covers.",
+   "fr": "Celle que la cyber revendique — et la seule des sept qu'elle couvre."
+  },
+  "Cent pour cent ici ne veut pas dire article # tenu : c'est la norme qui annonce sa propre limite.": {
+   "en": "A hundred per cent here does not mean article # is met: it is the standard that announces its own limit.",
+   "fr": "Cent pour cent ici ne veut pas dire article 17 tenu : c'est la norme qui annonce sa propre limite."
+  },
+  "Cent pour cent sur cette norme ne veut pas dire article # tenu : la norme elle-même déclare une lacune.": {
+   "en": "One hundred per cent on this standard does not mean Article # is met: the standard itself declares a gap.",
+   "fr": "Cent pour cent sur cette norme ne veut pas dire article 17 tenu : la norme elle-même déclare une lacune."
+  },
+  "Certification au titre du règlement (UE) #/#, lorsqu'un schéma est disponible et pertinent.": {
+   "en": "Certification under Regulation (EU) #/#, where a scheme is available and relevant.",
+   "fr": "Certification au titre du règlement (UE) 2019/881, lorsqu'un schéma est disponible et pertinent."
+  },
+  "Certification par un organisme tiers accrédité. Avec ISO/IEC #, l'une des deux seules références de cet espace qui délivre un certificat opposable — RGPD, NIS # et CRA sont du droit.": {
+   "en": "Certification by an accredited third-party body. Together with ISO/IEC #, one of the only two frameworks in this space that issues an enforceable certificate — the GDPR, NIS # and the CRA are law.",
+   "fr": "Certification par un organisme tiers accrédité. Avec ISO/IEC 42001, l'une des deux seules références de cet espace qui délivre un certificat opposable — RGPD, NIS 2 et CRA sont du droit."
+  },
+  "Ces articles ne se reprennent pas d'un autre système de management : périmètre, politique, et les deux qui portent l'appréciation et le traitement des risques.": {
+   "en": "These clauses cannot be carried over from another management system: scope, policy, and the two that carry risk assessment and risk treatment.",
+   "fr": "Ces articles ne se reprennent pas d'un autre système de management : périmètre, politique, et les deux qui portent l'appréciation et le traitement des risques."
+  },
+  "Ces articles ne se reprennent pas d'un système de management existant : ce sont eux qui portent ce que # ajoute.": {
+   "en": "These clauses cannot be carried over from an existing management system: they are the ones that carry what # adds.",
+   "fr": "Ces articles ne se reprennent pas d'un système de management existant : ce sont eux qui portent ce que 42001 ajoute."
+  },
+  "Ces exigences sont-elles passées en revue avant d'engager la conception ?": {
+   "en": "Are these requirements reviewed before the design is started?",
+   "fr": "Ces exigences sont-elles passées en revue avant d'engager la conception ?"
+  },
+  "Ces montants sont des PLAFONDS, pas des prévisions. L'article #, §# impose de tenir compte de la nature, de la gravité et de la durée de l'infraction, des antécédents de l'opérateur et de sa taille. Le régime de sanctions lui-même est fixé par chaque État membre.": {
+   "en": "These amounts are CAPS, not forecasts. Article #(#) requires the nature, gravity and duration of the infringement, the operator's record and its size to be taken into account. The penalty regime itself is set by each Member State.",
+   "fr": "Ces montants sont des PLAFONDS, pas des prévisions. L'article 64, §5 impose de tenir compte de la nature, de la gravité et de la durée de l'infraction, des antécédents de l'opérateur et de sa taille. Le régime de sanctions lui-même est fixé par chaque État membre."
+  },
+  "Ces points plafonnent le score : rien d'autre ne le fera monter tant qu'ils tiennent.": {
+   "en": "These points cap the score: nothing else will raise it while they hold.",
+   "fr": "Ces points plafonnent le score : rien d'autre ne le fera monter tant qu'ils tiennent."
+  },
+  "Cette date est fixée au plus tard un mois après la notification": {
+   "en": "That date is set no later than one month after the notification",
+   "fr": "Cette date est fixée au plus tard un mois après la notification"
+  },
+  "Cette exclusion ne se coche pas : elle s'établit texte contre texte, risque par risque, au regard des exigences essentielles de l'annexe I. Elle appelle une analyse juridique, pas une déclaration.": {
+   "en": "This exclusion is not a tick-box: it is established text against text, risk by risk, against the essential requirements of Annex I. It calls for a legal analysis, not a declaration.",
+   "fr": "Cette exclusion ne se coche pas : elle s'établit texte contre texte, risque par risque, au regard des exigences essentielles de l'annexe I. Elle appelle une analyse juridique, pas une déclaration."
+  },
+  "Cette liste est celle de l'article # du règlement (UE) #/#. Elle dit ce que le contrat doit COMPORTER ; elle ne juge pas la rédaction des clauses, qui relève d'un conseil juridique.": {
+   "en": "This list is the one in article # of Regulation (EU) #/#. It says what the contract must CONTAIN; it does not judge the drafting of the clauses, which is a matter for legal advice.",
+   "fr": "Cette liste est celle de l'article 30 du règlement (UE) 2022/2554. Elle dit ce que le contrat doit COMPORTER ; elle ne juge pas la rédaction des clauses, qui relève d'un conseil juridique."
+  },
+  "Cette norme vise le FOURNISSEUR d'un système d'IA à haut risque — celui qui le met sur le marché ou en service sous son nom. Hors de cette qualification, l'article # ne s'applique pas, et ce module ne rend aucun taux.": {
+   "en": "This standard addresses the PROVIDER of a high-risk AI system — the one who places it on the market or puts it into service under their own name. Outside that qualification, article # does not apply, and this module returns no rate.",
+   "fr": "Cette norme vise le FOURNISSEUR d'un système d'IA à haut risque — celui qui le met sur le marché ou en service sous son nom. Hors de cette qualification, l'article 17 ne s'applique pas, et ce module ne rend aucun taux."
+  },
   "Cette revue relève du système de management de la qualité (EN #:#) : si vous n'en avez pas, elle n'aura pas de déclencheur.": {
    "en": "This review comes under the quality management system (EN #:#): if you do not have one, it will have no trigger.",
    "fr": "Cette revue relève du système de management de la qualité (EN 18286:2026) : si vous n'en avez pas, elle n'aura pas de déclencheur."
@@ -562,154 +638,6 @@
   "Deux choses distinctes : le mécanisme, et le sens pour celui qui subit la décision.": {
    "en": "Two distinct things: the mechanism, and what it means for the person on the receiving end of the decision.",
    "fr": "Deux choses distinctes : le mécanisme, et le sens pour celui qui subit la décision."
-  },
-  "Deux critères réunis rendent l'AIPD obligatoire (article #).": {
-   "en": "Two criteria together make the DPIA mandatory (article #).",
-   "fr": "Deux critères réunis rendent l'AIPD obligatoire (article 35)."
-  },
-  "Deux des sept éléments ne s'appliquent qu'aux systèmes d'identification biométrique à distance, et un seul quand vous n'implémentez pas les notifications : le tableau les affiche selon vos réponses.": {
-   "en": "Two of the seven items apply only to remote biometric identification systems, and one only where you do not implement the alerts: the table shows them according to your answers.",
-   "fr": "Deux des sept éléments ne s'appliquent qu'aux systèmes d'identification biométrique à distance, et un seul quand vous n'implémentez pas les notifications : le tableau les affiche selon vos réponses."
-  },
-  "Deux droits, deux régimes. Répondre au titre du Data Act ne purge pas une demande d'accès RGPD, et l'inverse est vrai aussi.": {
-   "en": "Two rights, two regimes. Answering under the Data Act does not discharge a GDPR access request, and the converse holds as well.",
-   "fr": "Deux droits, deux régimes. Répondre au titre du Data Act ne purge pas une demande d'accès RGPD, et l'inverse est vrai aussi."
-  },
-  "Deux exemples pratiques seulement, et l'attente la plus forte du cadre : dès que l'entreprise cause ou contribue, elle est attendue sur la réparation du dommage, pas seulement sur sa prévention.": {
-   "en": "Two practical examples only, and the strongest expectation in the framework: as soon as the enterprise causes or contributes, it is expected to remediate the harm, not merely to prevent it.",
-   "fr": "Deux exemples pratiques seulement, et l'attente la plus forte du cadre : dès que l'entreprise cause ou contribue, elle est attendue sur la réparation du dommage, pas seulement sur sa prévention."
-  },
-  "Deux paragraphes portent le MÊME titre, « Exigences relatives au système d'IA », à trois numéros d'écart.": {
-   "en": "Two clauses carry the SAME title, « Requirements for the AI system », three numbers apart.",
-   "fr": "Deux paragraphes portent le MÊME titre, « Exigences relatives au système d'IA », à trois numéros d'écart."
-  },
-  "Deux revues du même compte ou une seconde revue qui voit la première ne font pas deux vérifications indépendantes : elles en font une, et l'alinéa #(#) n'est pas tenu.": {
-   "en": "Two reviews from the same account, or a second review that can see the first, do not make two independent verifications: they make one, and subparagraph #(#) is not met.",
-   "fr": "Deux revues du même compte ou une seconde revue qui voit la première ne font pas deux vérifications indépendantes : elles en font une, et l'alinéa 14(5) n'est pas tenu."
-  },
-  "Deux réviseurs mal formés ne valent pas mieux qu'un réviseur formé, et l'alinéa #(#) exige les deux.": {
-   "en": "Two poorly trained reviewers are no better than one trained reviewer, and subparagraph #(#) requires both.",
-   "fr": "Deux réviseurs mal formés ne valent pas mieux qu'un réviseur formé, et l'alinéa 14(5) exige les deux."
-  },
-  "Diligence requise et évaluation des risques en ce qui concerne le recours à des sous-traitants": {
-   "en": "Due diligence and risk assessment regarding the use of subcontractors",
-   "fr": "Diligence requise et évaluation des risques en ce qui concerne le recours à des sous-traitants"
-  },
-  "Direction des risques, affaires publiques": {
-   "en": "Risk management, public affairs",
-   "fr": "Direction des risques, affaires publiques"
-  },
-  "Direction immobilière et RSE": {
-   "en": "Real estate and CSR management",
-   "fr": "Direction immobilière et RSE"
-  },
-  "Directive (UE) #/# du Parlement européen et du Conseil du # décembre # concernant des mesures destinées à assurer un niveau élevé commun de cybersécurité dans l'ensemble de l'Union, modifiant le règlement (UE) n° #/# et la directive (UE) #/#, et abrogeant la directive (UE) #/# (directive SRI #)": {
-   "en": "Directive (EU) #/# of the European Parliament and of the Council of # December # on measures for a high common level of cybersecurity across the Union, amending Regulation (EU) No #/# and Directive (EU) #/#, and repealing Directive (EU) #/# (NIS # Directive)",
-   "fr": "Directive (UE) 2022/2555 du Parlement européen et du Conseil du 14 décembre 2022 concernant des mesures destinées à assurer un niveau élevé commun de cybersécurité dans l'ensemble de l'Union, modifiant le règlement (UE) n° 910/2014 et la directive (UE) 2018/1972, et abrogeant la directive (UE) 2016/1148 (directive SRI 2)"
-  },
-  "Dispositif médical / diagnostic in vitro": {
-   "en": "Medical device / in vitro diagnostic",
-   "fr": "Dispositif médical / diagnostic in vitro"
-  },
-  "Dispositifs médicaux et dispositifs médicaux de diagnostic in vitro": {
-   "en": "Medical devices and in vitro diagnostic medical devices",
-   "fr": "Dispositifs médicaux et dispositifs médicaux de diagnostic in vitro"
-  },
-  "Dispositions sur la disponibilité, l'authenticité, l'intégrité et la confidentialité, données à caractère personnel comprises": {
-   "en": "Provisions on availability, authenticity, integrity and confidentiality, including of personal data",
-   "fr": "Dispositions sur la disponibilité, l'authenticité, l'intégrité et la confidentialité, données à caractère personnel comprises"
-  },
-  "Dix personnes ou plus et moins de cinquante, et chiffre d'affaires annuel ou total du bilan supérieur à # millions d'euros sans excéder # millions.": {
-   "en": "Ten persons or more and fewer than fifty, with an annual turnover or balance sheet total above # million euro but not exceeding # million.",
-   "fr": "Dix personnes ou plus et moins de cinquante, et chiffre d'affaires annuel ou total du bilan supérieur à 2 millions d'euros sans excéder 10 millions."
-  },
-  "Document public de l'administration française.": {
-   "en": "A public document of the French administration.",
-   "fr": "Document public de l'administration française."
-  },
-  "Document public de l'administration française. Les # moyens de conformité ne sont pas reproduits ici.": {
-   "en": "A public document of the French administration. The # means of compliance are not reproduced here.",
-   "fr": "Document public de l'administration française. Les 152 moyens de conformité ne sont pas reproduits ici."
-  },
-  "Documentation du système de management de la qualité": {
-   "en": "Quality management system documentation",
-   "fr": "Documentation du système de management de la qualité"
-  },
-  "Documentation opérationnelle": {
-   "en": "Operational documentation",
-   "fr": "Documentation opérationnelle"
-  },
-  "Documenter ce qui n'est PAS entièrement couvert, justifier les mesures retenues, et produire la preuve objective que l'exigence est satisfaite.": {
-   "en": "Documenting what is NOT fully covered, justifying the measures chosen, and producing objective evidence that the requirement is satisfied.",
-   "fr": "Documenter ce qui n'est PAS entièrement couvert, justifier les mesures retenues, et produire la preuve objective que l'exigence est satisfaite."
-  },
-  "Documenter votre propre réaction aux recommandations faites à votre prestataire. C'est de cela qu'on vous demandera compte, et non du comportement du prestataire.": {
-   "en": "Documenting your own response to the recommendations made to your provider. That is what you will be held to account for, not the provider's behaviour.",
-   "fr": "Documenter votre propre réaction aux recommandations faites à votre prestataire. C'est de cela qu'on vous demandera compte, et non du comportement du prestataire."
-  },
-  "Documenté ailleurs dans le secteur, jamais survenu ici.": {
-   "en": "Documented elsewhere in the sector, never happened here.",
-   "fr": "Documenté ailleurs dans le secteur, jamais survenu ici."
-  },
-  "Domaine d'application de la surveillance": {
-   "en": "Scope of the monitoring",
-   "fr": "Domaine d'application de la surveillance"
-  },
-  "Donner à celui qui impose la clause le droit exclusif de dire si les données sont conformes au contrat, ou d'interpréter une clause": {
-   "en": "Giving the party imposing the term the sole right to determine whether the data is in conformity with the contract, or to interpret a term",
-   "fr": "Donner à celui qui impose la clause le droit exclusif de dire si les données sont conformes au contrat, ou d'interpréter une clause"
-  },
-  "Données dont la fourniture ne relève pas de la mission de service public de l'organisme concerné": {
-   "en": "Data whose supply does not fall within the public task of the body concerned",
-   "fr": "Données dont la fourniture ne relève pas de la mission de service public de l'organisme concerné"
-  },
-  "Données détenues par des entreprises publiques": {
-   "en": "Data held by public undertakings",
-   "fr": "Données détenues par des entreprises publiques"
-  },
-  "Données détenues par des radiodiffuseurs de service public, leurs filiales et les organismes accomplissant une mission de radiodiffusion de service public": {
-   "en": "Data held by public service broadcasters, their subsidiaries and bodies fulfilling a public service broadcasting remit",
-   "fr": "Données détenues par des radiodiffuseurs de service public, leurs filiales et les organismes accomplissant une mission de radiodiffusion de service public"
-  },
-  "Données détenues par des établissements culturels et d'enseignement": {
-   "en": "Data held by cultural and educational establishments",
-   "fr": "Données détenues par des établissements culturels et d'enseignement"
-  },
-  "Données pour les systèmes d'IA": {
-   "en": "Data for AI systems",
-   "fr": "Données pour les systèmes d'IA"
-  },
-  "Données protégées pour des raisons de sécurité publique, de défense ou de sécurité nationale": {
-   "en": "Data protected on grounds of public security, defence or national security",
-   "fr": "Données protégées pour des raisons de sécurité publique, de défense ou de sécurité nationale"
-  },
-  "Droit de suivi permanent des performances : droits illimités d'accès, d'inspection et d'audit, niveaux d'assurance alternatifs, coopération aux inspections sur place, précisions sur leur portée et leur fréquence": {
-   "en": "The right to monitor performance on an ongoing basis: unrestricted rights of access, inspection and audit, alternative assurance levels, cooperation with on-site inspections, and details of their scope and frequency",
-   "fr": "Droit de suivi permanent des performances : droits illimités d'accès, d'inspection et d'audit, niveaux d'assurance alternatifs, coopération aux inspections sur place, précisions sur leur portée et leur fréquence"
-  },
-  "Droits de propriété intellectuelle de tiers": {
-   "en": "Third-party intellectual property rights",
-   "fr": "Droits de propriété intellectuelle de tiers"
-  },
-  "Droits de résiliation et délais de préavis minimaux": {
-   "en": "Termination rights and minimum notice periods",
-   "fr": "Droits de résiliation et délais de préavis minimaux"
-  },
-  "Du cycle de vie à la documentation technique : conception, développement, vérification, validation, données.": {
-   "en": "From the life cycle to the technical documentation: design, development, verification, validation, data.",
-   "fr": "Du cycle de vie à la documentation technique : conception, développement, vérification, validation, données."
-  },
-  "Durabilité environnementale": {
-   "en": "Environmental sustainability",
-   "fr": "Durabilité environnementale"
-  },
-  "Durée de l'incident supérieure à # heures": {
-   "en": "Incident duration longer than # hours",
-   "fr": "Durée de l'incident supérieure à 24 heures"
-  },
-  "Déclaration standardisée délivrée sur demande, dans un délai d'une semaine à compter de la notification dûment complétée (§#).": {
-   "en": "A standardised declaration issued on request, within one week of the duly completed notification (§#).",
-   "fr": "Déclaration standardisée délivrée sur demande, dans un délai d'une semaine à compter de la notification dûment complétée (§8)."
   }
  }
 }

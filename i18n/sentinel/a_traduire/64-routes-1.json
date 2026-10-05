@@ -1,39 +1,135 @@
 {
  "_lot": "64-routes-1",
- "_mots": 2430,
+ "_mots": 2399,
  "_pages": [
   "_routes"
  ],
  "_rubrique": "_routes",
  "bloc": {},
  "texte": {
+  "# % des obligations attendues de vos qualités sont déclarées tenues, sur # points attendus dont # renseigné(s). Un point qu'on n'a pas regardé compte zéro : le taux monte quand on répond, jamais quand on s'abstient.": {
+   "en": "# % of the obligations expected of your capacities are declared as kept, out of # expected points of which # answered. A point nobody has looked at counts zero: the rate rises when you answer, never when you abstain.",
+   "fr": "5 % des obligations attendues de vos qualités sont déclarées tenues, sur 19 points attendus dont 1 renseigné(s). Un point qu'on n'a pas regardé compte zéro : le taux monte quand on répond, jamais quand on s'abstient."
+  },
   "# % la part pondérée des champs déclarés, # % le nombre d'indices retrouvés mot pour mot dans la déclaration (plafonné à trois). La confiance annoncée par le moteur n'y entre pas.": {
    "en": "# % the weighted share of the fields declared, # % the number of clues found word for word in the declaration (capped at three). The confidence the engine announces does not enter into it.",
    "fr": "70 % la part pondérée des champs déclarés, 30 % le nombre d'indices retrouvés mot pour mot dans la déclaration (plafonné à trois). La confiance annoncée par le moteur n'y entre pas."
+  },
+  "# Approche de surveillance": {
+   "en": "# Monitoring approach",
+   "fr": "9.4.3 Approche de surveillance"
+  },
+  "# Changements déclenchant une action": {
+   "en": "# Changes triggering action",
+   "fr": "9.3.3 Changements déclenchant une action"
+  },
+  "# Changements prédéterminés": {
+   "en": "# Predetermined changes",
+   "fr": "9.3.4 Changements prédéterminés"
   },
   "# Communication avec les clients": {
    "en": "# Communication with clients",
    "fr": "8.2.1 Communication avec les clients"
   },
+  "# Communication à des fins réglementaires": {
+   "en": "# Communication for regulatory purposes",
+   "fr": "7.3.3 Communication à des fins réglementaires"
+  },
+  "# Communication — généralités": {
+   "en": "# Communication — general",
+   "fr": "7.3.1 Communication — généralités"
+  },
   "# Contexte de l'organisme (# à #)": {
    "en": "# Context of the organisation (# to #)",
    "fr": "4 Contexte de l'organisme (4.1 à 4.4)"
+  },
+  "# Documentation du système de management de la qualité": {
+   "en": "# Quality management system documentation",
+   "fr": "4.5.1 Documentation du système de management de la qualité"
+  },
+  "# Documentation opérationnelle": {
+   "en": "# Operational documentation",
+   "fr": "4.5.2 Documentation opérationnelle"
+  },
+  "# Domaine d'application de la surveillance": {
+   "en": "# Scope of the monitoring",
+   "fr": "9.4.2 Domaine d'application de la surveillance"
+  },
+  "# Durabilité environnementale": {
+   "en": "# Environmental sustainability",
+   "fr": "8.6 Durabilité environnementale"
   },
   "# Exploitation et contrôle": {
    "en": "# Operation and control",
    "fr": "9 Exploitation et contrôle"
   },
+  "# Gestion des données": {
+   "en": "# Data management",
+   "fr": "8.5 Gestion des données"
+  },
   "# Informations documentées": {
    "en": "# Documented information",
    "fr": "4.5 Informations documentées"
+  },
+  "# Interaction avec les déployeurs": {
+   "en": "# Interaction with deployers",
+   "fr": "9.4.6 Interaction avec les déployeurs"
+  },
+  "# Maîtrise des informations documentées": {
+   "en": "# Control of documented information",
+   "fr": "4.5.4 Maîtrise des informations documentées"
+  },
+  "# Mise à jour des informations documentées": {
+   "en": "# Updating documented information",
+   "fr": "4.5.3 Mise à jour des informations documentées"
+  },
+  "# Non-conformité et action corrective": {
+   "en": "# Non-conformity and corrective action",
+   "fr": "9.6.1 Non-conformité et action corrective"
+  },
+  "# Non-conformités identifiées par la surveillance après commercialisation": {
+   "en": "# Non-conformities identified by post-market monitoring",
+   "fr": "9.4.7 Non-conformités identifiées par la surveillance après commercialisation"
+  },
+  "# Passage en revue des changements": {
+   "en": "# Review of changes",
+   "fr": "9.3.2 Passage en revue des changements"
+  },
+  "# Procédures de signalement": {
+   "en": "# Reporting procedures",
+   "fr": "9.5.2 Procédures de signalement"
   },
   "# Responsabilité de la direction": {
    "en": "# Management responsibility",
    "fr": "5 Responsabilité de la direction"
   },
+  "# Risques nouveaux et émergents": {
+   "en": "# New and emerging risks",
+   "fr": "9.4.5 Risques nouveaux et émergents"
+  },
+  "# Signalement d'incidents graves — généralités": {
+   "en": "# Serious incident reporting — general",
+   "fr": "9.5.1 Signalement d'incidents graves — généralités"
+  },
   "# Stratégie de conformité réglementaire": {
    "en": "# Regulatory compliance strategy",
    "fr": "4.4 Stratégie de conformité réglementaire"
+  },
+  "# Surveillance après commercialisation — généralités": {
+   "en": "# Post-market monitoring — general",
+   "fr": "9.4.1 Surveillance après commercialisation — généralités"
+  },
+  "# Sélection des approches": {
+   "en": "# Selection of approaches",
+   "fr": "4.4.3.1 Sélection des approches"
+  },
+  "# Sélection des mesures": {
+   "en": "# Selection of measures",
+   "fr": "4.4.3.2 Sélection des mesures"
+  },
+  "# Validation du système d'IA": {
+   "en": "# AI system validation",
+   "fr": "8.4.2 Validation du système d'IA"
   },
   "# Élaboration du produit": {
    "en": "# Product development",
@@ -47,9 +143,17 @@
    "en": "# to # Quality management system",
    "fr": "4.1 à 4.3 Système de management de la qualité"
   },
+  "# échéance(s) qui vous visent sont passées, dont art. #, al. # (#-#-#). Ce n'est plus un calendrier : c'est un état exigible.": {
+   "en": "# deadline(s) that concern you have passed, including art. #, subpara. # (#-#-#). This is no longer a calendar: it is an enforceable state.",
+   "fr": "1 échéance(s) qui vous visent sont passées, dont art. 50, al. 3 (2026-09-12). Ce n'est plus un calendrier : c'est un état exigible."
+  },
   "#-# (version révisée)": {
    "en": "#-# (revised version)",
    "fr": "2026-05 (version révisée)"
+  },
+  "AI #-# est un PROFIL d'AI #-#, et il ne se certifie pas davantage que lui. Ces # actions sont « suggérées » — le document le dit ainsi, et il ne prétend ni être exhaustif ni convenir à tous les systèmes. Elles ne valent donc pas une liste de contrôle opposable : elles disent ce qu'un tiers s'attendra à trouver, et ce qu'il faudra savoir justifier quand il ne le trouvera pas.": {
+   "en": "AI #-# is a PROFILE of AI #-#, and it is no more certifiable than its parent. These # actions are “suggested” — the document says so itself, and it claims to be neither exhaustive nor suitable for every system. They are therefore not an enforceable checklist: they say what a third party will expect to find, and what you will need to be able to justify when they do not find it.",
+   "fr": "AI 600-1 est un PROFIL d'AI 100-1, et il ne se certifie pas davantage que lui. Ces 211 actions sont « suggérées » — le document le dit ainsi, et il ne prétend ni être exhaustif ni convenir à tous les systèmes. Elles ne valent donc pas une liste de contrôle opposable : elles disent ce qu'un tiers s'attendra à trouver, et ce qu'il faudra savoir justifier quand il ne le trouvera pas."
   },
   "Absente du contrat": {
    "en": "Absent from the contract",
@@ -154,6 +258,10 @@
   "Adresse de l'établissement principal dans l'Union, des succursales, ou du représentant légal": {
    "en": "Address of the main establishment in the Union, of the branches, or of the legal representative",
    "fr": "Adresse de l'établissement principal dans l'Union, des succursales, ou du représentant légal"
+  },
+  "Adresse et coordonnées actualisées, y compris adresses électroniques, plages d'IP et numéros de téléphone": {
+   "en": "Up-to-date address and contact details, including e-mail addresses, IP ranges and telephone numbers",
+   "fr": "Adresse et coordonnées actualisées, y compris adresses électroniques, plages d'IP et numéros de téléphone"
   },
   "Affectation de deux réviseurs indépendants": {
    "en": "Assignment of two independent reviewers",
@@ -266,6 +374,10 @@
   "Article # hors cybersécurité.": {
    "en": "Article # outside cybersecurity.",
    "fr": "Article 15 hors cybersécurité."
+  },
+  "Article # §# du Data Act, par renvoi à l'article # §# du RGPD : le plus élevé de # # # EUR et de # % du chiffre d'affaires annuel mondial total, soit # # # EUR. L'article # §# ne prévoit aucune réduction pour les PME.": {
+   "en": "Article #(#) of the Data Act, by reference to Article #(#) of the GDPR: the higher of # # # EUR and # % of total worldwide annual turnover, i.e. # # # EUR. Article #(#) provides for no reduction for SMEs.",
+   "fr": "Article 40 §4 du Data Act, par renvoi à l'article 83 §5 du RGPD : le plus élevé de 20 000 000 EUR et de 4 % du chiffre d'affaires annuel mondial total, soit 20 000 000 EUR. L'article 83 §5 ne prévoit aucune réduction pour les PME."
   },
   "Article # — Mesures de gestion des risques en matière de cybersécurité": {
    "en": "Article # — Cybersecurity risk-management measures",
@@ -435,6 +547,10 @@
    "en": "None of the gaps this module can measure is still open.",
    "fr": "Aucun des écarts que ce module sait mesurer ne reste ouvert."
   },
+  "Aucun groupe d'acteur n'est déclaré. Le questionnaire ne sait pas lesquels des # exemples vous visent, et le module ne rend aucun chiffre : un taux calculé sur des exemples adressés à quelqu'un d'autre ne voudrait rien dire.": {
+   "en": "No actor group is declared. The questionnaire does not know which of the # examples concern you, and the module returns no figure: a rate computed on examples addressed to someone else would mean nothing.",
+   "fr": "Aucun groupe d'acteur n'est déclaré. Le questionnaire ne sait pas lesquels des 115 exemples vous visent, et le module ne rend aucun chiffre : un taux calculé sur des exemples adressés à quelqu'un d'autre ne voudrait rien dire."
+  },
   "Aucun indice n'est avancé à l'appui de la proposition.": {
    "en": "No clue is put forward in support of the proposal.",
    "fr": "Aucun indice n'est avancé à l'appui de la proposition."
@@ -454,6 +570,14 @@
   "Aucun transfert ni accès gouvernemental de pays tiers à des données non personnelles détenues dans l'Union n'est accordé hors des conditions de l'article # ; le client est informé": {
    "en": "No third-country governmental transfer of, or access to, non-personal data held in the Union is granted outside the conditions of Article #; the customer is informed",
    "fr": "Aucun transfert ni accès gouvernemental de pays tiers à des données non personnelles détenues dans l'Union n'est accordé hors des conditions de l'article 32 ; le client est informé"
+  },
+  "Aucun type d'entité déclaré à l'article #, paragraphe #.": {
+   "en": "No entity type declared under Article #(#).",
+   "fr": "Aucun type d'entité déclaré à l'article 2, paragraphe 1."
+  },
+  "Aucun type d'entité déclaré, ou type inconnu de l'article #, paragraphe #.": {
+   "en": "No entity type declared, or a type unknown to Article #(#).",
+   "fr": "Aucun type d'entité déclaré, ou type inconnu de l'article 2, paragraphe 1."
   },
   "Aucun. L'autorité exerce ses pouvoirs de supervision sans avoir à établir un manquement préalable.": {
    "en": "None. The authority exercises its oversight powers without having to establish a prior breach.",
@@ -478,6 +602,10 @@
   "Aucune des pratiques interdites par le §# : interface non neutre, profilage non convenu, transmission à un autre tiers, usage pour développer un produit concurrent, détournement contre la position commerciale de l'utilisateur": {
    "en": "None of the practices prohibited by §#: a non-neutral interface, profiling not agreed upon, passing the data to another third party, use to develop a competing product, turning the data against the user's economic position",
    "fr": "Aucune des pratiques interdites par le §2 : interface non neutre, profilage non convenu, transmission à un autre tiers, usage pour développer un produit concurrent, détournement contre la position commerciale de l'utilisateur"
+  },
+  "Aucune famille SP #-# n'est déclarée. La surcharge industrielle adapte ce catalogue : sans lui, ce taux mesure une adaptation de rien.": {
+   "en": "No SP #-# family is declared. The industrial overlay adapts that catalogue: without it, this rate measures an adaptation of nothing.",
+   "fr": "Aucune famille SP 800-53 n'est déclarée. La surcharge industrielle adapte ce catalogue : sans lui, ce taux mesure une adaptation de rien."
   },
   "Aucune interface ne rend indûment difficile l'exercice des droits : pas de choix non neutre, pas d'atteinte à l'autonomie de décision": {
    "en": "No interface makes the exercise of rights unduly difficult: no non-neutral choices, no impairment of decision-making autonomy",
@@ -614,74 +742,6 @@
   "Avez-vous testé si vos mesures maintiennent l'acceptation passive dans des limites acceptables — par exemple en présentant à des personnes représentatives un mélange de sorties correctes et volontairement erronées, et en mesurant ce qui passe ?": {
    "en": "Have you tested whether your measures keep passive acceptance within acceptable bounds — for instance by presenting representative people with a mix of correct and deliberately wrong outputs, and measuring what gets through?",
    "fr": "Avez-vous testé si vos mesures maintiennent l'acceptation passive dans des limites acceptables — par exemple en présentant à des personnes représentatives un mélange de sorties correctes et volontairement erronées, et en mesurant ce qui passe ?"
-  },
-  "Avez-vous vérifié que les personnes désignées accomplissent les tâches de supervision clés DANS le délai de réaction, avec des critères d'acceptation définis et des résultats consignés dans la documentation technique ?": {
-   "en": "Have you checked that the designated persons carry out the key oversight tasks WITHIN the reaction time, with defined acceptance criteria and results recorded in the technical documentation?",
-   "fr": "Avez-vous vérifié que les personnes désignées accomplissent les tâches de supervision clés DANS le délai de réaction, avec des critères d'acceptation définis et des résultats consignés dans la documentation technique ?"
-  },
-  "Avez-vous vérifié que les personnes désignées repèrent les sorties incorrectes ou dangereuses et agissent DANS le délai de réaction, défini des critères d'acceptation, traité les écarts avant la mise sur le marché, et prévu comment la revue se poursuit si l'interface principale ou la journalisation tombe ?": {
-   "en": "Have you checked that the designated persons spot incorrect or hazardous outputs and act WITHIN the reaction time, defined acceptance criteria, dealt with the gaps before placing on the market, and planned how the review carries on if the main interface or the logging fails?",
-   "fr": "Avez-vous vérifié que les personnes désignées repèrent les sorties incorrectes ou dangereuses et agissent DANS le délai de réaction, défini des critères d'acceptation, traité les écarts avant la mise sur le marché, et prévu comment la revue se poursuit si l'interface principale ou la journalisation tombe ?"
-  },
-  "Avez-vous vérifié, par les méthodes que la notice recommande, que chaque mesure tourne bien chez vous ET qu'elle produit l'effet attendu, au regard des critères de performance qu'elle donne ?": {
-   "en": "Have you checked, by the methods the instructions recommend, that each measure does run on your side AND that it produces the expected effect, against the performance criteria they give?",
-   "fr": "Avez-vous vérifié, par les méthodes que la notice recommande, que chaque mesure tourne bien chez vous ET qu'elle produit l'effet attendu, au regard des critères de performance qu'elle donne ?"
-  },
-  "Avez-vous établi, par écrit, quelles exigences réglementaires s'appliquent à chacun de vos systèmes d'IA ?": {
-   "en": "Have you established, in writing, which regulatory requirements apply to each of your AI systems?",
-   "fr": "Avez-vous établi, par écrit, quelles exigences réglementaires s'appliquent à chacun de vos systèmes d'IA ?"
-  },
-  "Biais nuisibles et homogénéisation": {
-   "en": "Harmful bias and homogenisation",
-   "fr": "Biais nuisibles et homogénéisation"
-  },
-  "C'EST LA SOURCE. La qualification assistée, le FinOps et l'Empreinte ne tiennent aucun inventaire à eux : ils lisent celui-ci.": {
-   "en": "THIS IS THE SOURCE. Assisted qualification, FinOps and the footprint keep no inventory of their own: they read this one.",
-   "fr": "C'EST LA SOURCE. La qualification assistée, le FinOps et l'Empreinte ne tiennent aucun inventaire à eux : ils lisent celui-ci."
-  },
-  "C'est ce que le score compte, et ce que le plan d'action reprend ligne par ligne.": {
-   "en": "This is what the score counts, and what the action plan takes up line by line.",
-   "fr": "C'est ce que le score compte, et ce que le plan d'action reprend ligne par ligne."
-  },
-  "C'est ce qui sépare une évolution prévue d'une modification substantielle qui rouvre l'évaluation de conformité.": {
-   "en": "This is what separates a planned change from a substantial modification that reopens the conformity assessment.",
-   "fr": "C'est ce qui sépare une évolution prévue d'une modification substantielle qui rouvre l'évaluation de conformité."
-  },
-  "C'est l'alinéa #(#) du règlement : la vérification séparée par au moins deux personnes. « Techniquement » veut dire que la procédure ne suffit pas.": {
-   "en": "This is subparagraph #(#) of the Regulation: separate verification by at least two persons. « Technically » means that a procedure is not enough.",
-   "fr": "C'est l'alinéa 14(5) du règlement : la vérification séparée par au moins deux personnes. « Techniquement » veut dire que la procédure ne suffit pas."
-  },
-  "C'est l'alinéa #(#)(b) du règlement. Une personne qui valide tout par habitude n'est pas une mesure de gestion des risques, même si elle clique.": {
-   "en": "This is subparagraph #(#)(b) of the Regulation. A person who approves everything out of habit is not a risk-management measure, even if they click.",
-   "fr": "C'est l'alinéa 14(4)(b) du règlement. Une personne qui valide tout par habitude n'est pas une mesure de gestion des risques, même si elle clique."
-  },
-  "C'est l'alinéa #(#)(c). Un score de confiance qu'on ne sait pas lire n'aide personne, et des compétences supposées mais non déclarées ne seront pas recrutées.": {
-   "en": "This is subparagraph #(#)(c). A confidence score nobody knows how to read helps no one, and competences that are assumed but not declared will not be hired.",
-   "fr": "C'est l'alinéa 14(4)(c). Un score de confiance qu'on ne sait pas lire n'aide personne, et des compétences supposées mais non déclarées ne seront pas recrutées."
-  },
-  "C'est l'alinéa #(#)(d) et (e). Sans fonction d'intervention, la supervision se réduit à regarder.": {
-   "en": "This is subparagraph #(#)(d) and (e). Without an intervention function, oversight comes down to watching.",
-   "fr": "C'est l'alinéa 14(4)(d) et (e). Sans fonction d'intervention, la supervision se réduit à regarder."
-  },
-  "C'est l'alinéa (f) de l'article #(#), et il renvoie à l'article # : l'ensemble de la gouvernance des jeux de données.": {
-   "en": "This is subparagraph (f) of article #(#), and it refers to article #: the whole governance of the data sets.",
-   "fr": "C'est l'alinéa (f) de l'article 17(1), et il renvoie à l'article 10 : l'ensemble de la gouvernance des jeux de données."
-  },
-  "C'est l'alinéa (j) de l'article #(#). Le jour d'un incident grave, c'est le seul chemin qui compte.": {
-   "en": "This is subparagraph (j) of article #(#). On the day of a serious incident, it is the only path that counts.",
-   "fr": "C'est l'alinéa (j) de l'article 17(1). Le jour d'un incident grave, c'est le seul chemin qui compte."
-  },
-  "C'est l'alinéa (l) de l'article #(#). Un modèle de fondation acheté sur étagère en fait partie.": {
-   "en": "This is subparagraph (l) of article #(#). A foundation model bought off the shelf is part of it.",
-   "fr": "C'est l'alinéa (l) de l'article 17(1). Un modèle de fondation acheté sur étagère en fait partie."
-  },
-  "C'est l'arithmétique du module : une approche « autre » sans justification ni preuve objective plafonne le score, parce que la norme elle-même l'exige au #.": {
-   "en": "This is the module's arithmetic: an « other » approach with no justification and no objective evidence caps the score, because the standard itself requires them at #.",
-   "fr": "C'est l'arithmétique du module : une approche « autre » sans justification ni preuve objective plafonne le score, parce que la norme elle-même l'exige au 4.4.3.2.2."
-  },
-  "C'est l'artefact que l'auditeur ouvre en premier.": {
-   "en": "This is the artefact the auditor opens first.",
-   "fr": "C'est l'artefact que l'auditeur ouvre en premier."
   }
  }
 }

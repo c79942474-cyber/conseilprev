@@ -1,12 +1,80 @@
 {
  "_lot": "65-routes-2",
- "_mots": 2421,
+ "_mots": 2401,
  "_pages": [
   "_routes"
  ],
  "_rubrique": "_routes",
  "bloc": {},
  "texte": {
+  "Avez-vous vérifié que les personnes désignées accomplissent les tâches de supervision clés DANS le délai de réaction, avec des critères d'acceptation définis et des résultats consignés dans la documentation technique ?": {
+   "en": "Have you checked that the designated persons carry out the key oversight tasks WITHIN the reaction time, with defined acceptance criteria and results recorded in the technical documentation?",
+   "fr": "Avez-vous vérifié que les personnes désignées accomplissent les tâches de supervision clés DANS le délai de réaction, avec des critères d'acceptation définis et des résultats consignés dans la documentation technique ?"
+  },
+  "Avez-vous vérifié que les personnes désignées repèrent les sorties incorrectes ou dangereuses et agissent DANS le délai de réaction, défini des critères d'acceptation, traité les écarts avant la mise sur le marché, et prévu comment la revue se poursuit si l'interface principale ou la journalisation tombe ?": {
+   "en": "Have you checked that the designated persons spot incorrect or hazardous outputs and act WITHIN the reaction time, defined acceptance criteria, dealt with the gaps before placing on the market, and planned how the review carries on if the main interface or the logging fails?",
+   "fr": "Avez-vous vérifié que les personnes désignées repèrent les sorties incorrectes ou dangereuses et agissent DANS le délai de réaction, défini des critères d'acceptation, traité les écarts avant la mise sur le marché, et prévu comment la revue se poursuit si l'interface principale ou la journalisation tombe ?"
+  },
+  "Avez-vous vérifié, par les méthodes que la notice recommande, que chaque mesure tourne bien chez vous ET qu'elle produit l'effet attendu, au regard des critères de performance qu'elle donne ?": {
+   "en": "Have you checked, by the methods the instructions recommend, that each measure does run on your side AND that it produces the expected effect, against the performance criteria they give?",
+   "fr": "Avez-vous vérifié, par les méthodes que la notice recommande, que chaque mesure tourne bien chez vous ET qu'elle produit l'effet attendu, au regard des critères de performance qu'elle donne ?"
+  },
+  "Avez-vous établi, par écrit, quelles exigences réglementaires s'appliquent à chacun de vos systèmes d'IA ?": {
+   "en": "Have you established, in writing, which regulatory requirements apply to each of your AI systems?",
+   "fr": "Avez-vous établi, par écrit, quelles exigences réglementaires s'appliquent à chacun de vos systèmes d'IA ?"
+  },
+  "Biais nuisibles et homogénéisation": {
+   "en": "Harmful bias and homogenisation",
+   "fr": "Biais nuisibles et homogénéisation"
+  },
+  "C'EST LA SOURCE. La qualification assistée, le FinOps et l'Empreinte ne tiennent aucun inventaire à eux : ils lisent celui-ci.": {
+   "en": "THIS IS THE SOURCE. Assisted qualification, FinOps and the footprint keep no inventory of their own: they read this one.",
+   "fr": "C'EST LA SOURCE. La qualification assistée, le FinOps et l'Empreinte ne tiennent aucun inventaire à eux : ils lisent celui-ci."
+  },
+  "C'est ce que le score compte, et ce que le plan d'action reprend ligne par ligne.": {
+   "en": "This is what the score counts, and what the action plan takes up line by line.",
+   "fr": "C'est ce que le score compte, et ce que le plan d'action reprend ligne par ligne."
+  },
+  "C'est ce qui sépare une évolution prévue d'une modification substantielle qui rouvre l'évaluation de conformité.": {
+   "en": "This is what separates a planned change from a substantial modification that reopens the conformity assessment.",
+   "fr": "C'est ce qui sépare une évolution prévue d'une modification substantielle qui rouvre l'évaluation de conformité."
+  },
+  "C'est l'alinéa #(#) du règlement : la vérification séparée par au moins deux personnes. « Techniquement » veut dire que la procédure ne suffit pas.": {
+   "en": "This is subparagraph #(#) of the Regulation: separate verification by at least two persons. « Technically » means that a procedure is not enough.",
+   "fr": "C'est l'alinéa 14(5) du règlement : la vérification séparée par au moins deux personnes. « Techniquement » veut dire que la procédure ne suffit pas."
+  },
+  "C'est l'alinéa #(#)(b) du règlement. Une personne qui valide tout par habitude n'est pas une mesure de gestion des risques, même si elle clique.": {
+   "en": "This is subparagraph #(#)(b) of the Regulation. A person who approves everything out of habit is not a risk-management measure, even if they click.",
+   "fr": "C'est l'alinéa 14(4)(b) du règlement. Une personne qui valide tout par habitude n'est pas une mesure de gestion des risques, même si elle clique."
+  },
+  "C'est l'alinéa #(#)(c). Un score de confiance qu'on ne sait pas lire n'aide personne, et des compétences supposées mais non déclarées ne seront pas recrutées.": {
+   "en": "This is subparagraph #(#)(c). A confidence score nobody knows how to read helps no one, and competences that are assumed but not declared will not be hired.",
+   "fr": "C'est l'alinéa 14(4)(c). Un score de confiance qu'on ne sait pas lire n'aide personne, et des compétences supposées mais non déclarées ne seront pas recrutées."
+  },
+  "C'est l'alinéa #(#)(d) et (e). Sans fonction d'intervention, la supervision se réduit à regarder.": {
+   "en": "This is subparagraph #(#)(d) and (e). Without an intervention function, oversight comes down to watching.",
+   "fr": "C'est l'alinéa 14(4)(d) et (e). Sans fonction d'intervention, la supervision se réduit à regarder."
+  },
+  "C'est l'alinéa (f) de l'article #(#), et il renvoie à l'article # : l'ensemble de la gouvernance des jeux de données.": {
+   "en": "This is subparagraph (f) of article #(#), and it refers to article #: the whole governance of the data sets.",
+   "fr": "C'est l'alinéa (f) de l'article 17(1), et il renvoie à l'article 10 : l'ensemble de la gouvernance des jeux de données."
+  },
+  "C'est l'alinéa (j) de l'article #(#). Le jour d'un incident grave, c'est le seul chemin qui compte.": {
+   "en": "This is subparagraph (j) of article #(#). On the day of a serious incident, it is the only path that counts.",
+   "fr": "C'est l'alinéa (j) de l'article 17(1). Le jour d'un incident grave, c'est le seul chemin qui compte."
+  },
+  "C'est l'alinéa (l) de l'article #(#). Un modèle de fondation acheté sur étagère en fait partie.": {
+   "en": "This is subparagraph (l) of article #(#). A foundation model bought off the shelf is part of it.",
+   "fr": "C'est l'alinéa (l) de l'article 17(1). Un modèle de fondation acheté sur étagère en fait partie."
+  },
+  "C'est l'arithmétique du module : une approche « autre » sans justification ni preuve objective plafonne le score, parce que la norme elle-même l'exige au #.": {
+   "en": "This is the module's arithmetic: an « other » approach with no justification and no objective evidence caps the score, because the standard itself requires them at #.",
+   "fr": "C'est l'arithmétique du module : une approche « autre » sans justification ni preuve objective plafonne le score, parce que la norme elle-même l'exige au 4.4.3.2.2."
+  },
+  "C'est l'artefact que l'auditeur ouvre en premier.": {
+   "en": "This is the artefact the auditor opens first.",
+   "fr": "C'est l'artefact que l'auditeur ouvre en premier."
+  },
   "C'est l'audit que le taux de conformité de l'IA Act lit.": {
    "en": "This is the audit that the AI Act compliance rate reads.",
    "fr": "C'est l'audit que le taux de conformité de l'IA Act lit."
@@ -374,66 +442,6 @@
   "Ce sont les éléments d'une liste imbriquée que le document numérote comme une liste de premier rang : chacun est un facteur à considérer, et la phrase qui les introduit est dans l'exemple précédent.": {
    "en": "These are the items of a nested list that the document numbers as a top-level list: each one is a factor to consider, and the sentence that introduces them is in the previous example.",
    "fr": "Ce sont les éléments d'une liste imbriquée que le document numérote comme une liste de premier rang : chacun est un facteur à considérer, et la phrase qui les introduit est dans l'exemple précédent."
-  },
-  "Ce taux dit la part des exemples pratiques retenus par vos groupes que vous déclarez tenus. Ce n'est PAS un taux de conformité : le document écrit lui-même que ses exemples ne constituent pas une liste de contrôle exhaustive, et aucun organisme ne délivre d'attestation contre ce guide. Un organisme peut avoir tenu les # exemples et rester en défaut de diligence sur un risque qu'aucun d'eux ne nomme.": {
-   "en": "This rate states the share of the practical examples retained by your groups that you declare held. It is NOT a compliance rate: the document itself writes that its examples do not constitute an exhaustive check list, and no body issues an attestation against this guidance. An organisation can have held all # examples and still fall short on due diligence for a risk none of them names.",
-   "fr": "Ce taux dit la part des exemples pratiques retenus par vos groupes que vous déclarez tenus. Ce n'est PAS un taux de conformité : le document écrit lui-même que ses exemples ne constituent pas une liste de contrôle exhaustive, et aucun organisme ne délivre d'attestation contre ce guide. Un organisme peut avoir tenu les 115 exemples et rester en défaut de diligence sur un risque qu'aucun d'eux ne nomme."
-  },
-  "Ce taux mesure ce que l'industriel AJOUTE au catalogue #-#, et il est plafonné par ce que ce catalogue porte déjà.": {
-   "en": "This rate measures what the industrial side ADDS to the #-# catalogue, and it is capped by what that catalogue already carries.",
-   "fr": "Ce taux mesure ce que l'industriel AJOUTE au catalogue 800-53, et il est plafonné par ce que ce catalogue porte déjà."
-  },
-  "Ce taux porte sur le cadre de gestion du risque et sur les contrats. Il ne porte sur rien d'autre.": {
-   "en": "This rate covers the risk management framework and the contracts. It covers nothing else.",
-   "fr": "Ce taux porte sur le cadre de gestion du risque et sur les contrats. Il ne porte sur rien d'autre."
-  },
-  "Ce type d'entité figure à l'annexe I de la directive. L'absence d'identification suppose que l'entité reste sous les seuils de taille de l'article #, paragraphe #.": {
-   "en": "This kind of entity is listed in Annex I to the Directive. The absence of identification assumes the entity stays below the size thresholds of article #(#).",
-   "fr": "Ce type d'entité figure à l'annexe I de la directive. L'absence d'identification suppose que l'entité reste sous les seuils de taille de l'article 2, paragraphe 1."
-  },
-  "Ce type d'entité ne figure ni à l'annexe I ni à l'annexe II de la directive. Une identification comme entité essentielle ou importante suppose donc une désignation nationale au titre de l'article #, paragraphe #, points b) à e).": {
-   "en": "This kind of entity is listed in neither Annex I nor Annex II to the Directive. Identification as an essential or important entity therefore assumes a national designation under article #(#), points (b) to (e).",
-   "fr": "Ce type d'entité ne figure ni à l'annexe I ni à l'annexe II de la directive. Une identification comme entité essentielle ou importante suppose donc une désignation nationale au titre de l'article 2, paragraphe 2, points b) à e)."
-  },
-  "Celle que la cyber revendique — et la seule des sept qu'elle couvre.": {
-   "en": "The one cybersecurity claims — and the only one of the seven it covers.",
-   "fr": "Celle que la cyber revendique — et la seule des sept qu'elle couvre."
-  },
-  "Cent pour cent ici ne veut pas dire article # tenu : c'est la norme qui annonce sa propre limite.": {
-   "en": "A hundred per cent here does not mean article # is met: it is the standard that announces its own limit.",
-   "fr": "Cent pour cent ici ne veut pas dire article 17 tenu : c'est la norme qui annonce sa propre limite."
-  },
-  "Certification au titre du règlement (UE) #/#, lorsqu'un schéma est disponible et pertinent.": {
-   "en": "Certification under Regulation (EU) #/#, where a scheme is available and relevant.",
-   "fr": "Certification au titre du règlement (UE) 2019/881, lorsqu'un schéma est disponible et pertinent."
-  },
-  "Certification par un organisme tiers accrédité. Avec ISO/IEC #, l'une des deux seules références de cet espace qui délivre un certificat opposable — RGPD, NIS # et CRA sont du droit.": {
-   "en": "Certification by an accredited third-party body. Together with ISO/IEC #, one of the only two frameworks in this space that issues an enforceable certificate — the GDPR, NIS # and the CRA are law.",
-   "fr": "Certification par un organisme tiers accrédité. Avec ISO/IEC 42001, l'une des deux seules références de cet espace qui délivre un certificat opposable — RGPD, NIS 2 et CRA sont du droit."
-  },
-  "Ces exigences sont-elles passées en revue avant d'engager la conception ?": {
-   "en": "Are these requirements reviewed before the design is started?",
-   "fr": "Ces exigences sont-elles passées en revue avant d'engager la conception ?"
-  },
-  "Ces points plafonnent le score : rien d'autre ne le fera monter tant qu'ils tiennent.": {
-   "en": "These points cap the score: nothing else will raise it while they hold.",
-   "fr": "Ces points plafonnent le score : rien d'autre ne le fera monter tant qu'ils tiennent."
-  },
-  "Cette date est fixée au plus tard un mois après la notification": {
-   "en": "That date is set no later than one month after the notification",
-   "fr": "Cette date est fixée au plus tard un mois après la notification"
-  },
-  "Cette exclusion ne se coche pas : elle s'établit texte contre texte, risque par risque, au regard des exigences essentielles de l'annexe I. Elle appelle une analyse juridique, pas une déclaration.": {
-   "en": "This exclusion is not a tick-box: it is established text against text, risk by risk, against the essential requirements of Annex I. It calls for a legal analysis, not a declaration.",
-   "fr": "Cette exclusion ne se coche pas : elle s'établit texte contre texte, risque par risque, au regard des exigences essentielles de l'annexe I. Elle appelle une analyse juridique, pas une déclaration."
-  },
-  "Cette liste est celle de l'article # du règlement (UE) #/#. Elle dit ce que le contrat doit COMPORTER ; elle ne juge pas la rédaction des clauses, qui relève d'un conseil juridique.": {
-   "en": "This list is the one in article # of Regulation (EU) #/#. It says what the contract must CONTAIN; it does not judge the drafting of the clauses, which is a matter for legal advice.",
-   "fr": "Cette liste est celle de l'article 30 du règlement (UE) 2022/2554. Elle dit ce que le contrat doit COMPORTER ; elle ne juge pas la rédaction des clauses, qui relève d'un conseil juridique."
-  },
-  "Cette norme vise le FOURNISSEUR d'un système d'IA à haut risque — celui qui le met sur le marché ou en service sous son nom. Hors de cette qualification, l'article # ne s'applique pas, et ce module ne rend aucun taux.": {
-   "en": "This standard addresses the PROVIDER of a high-risk AI system — the one who places it on the market or puts it into service under their own name. Outside that qualification, article # does not apply, and this module returns no rate.",
-   "fr": "Cette norme vise le FOURNISSEUR d'un système d'IA à haut risque — celui qui le met sur le marché ou en service sous son nom. Hors de cette qualification, l'article 17 ne s'applique pas, et ce module ne rend aucun taux."
   }
  }
 }

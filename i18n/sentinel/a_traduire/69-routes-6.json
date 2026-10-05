@@ -1,12 +1,180 @@
 {
  "_lot": "69-routes-6",
- "_mots": 2415,
+ "_mots": 2399,
  "_pages": [
   "_routes"
  ],
  "_rubrique": "_routes",
  "bloc": {},
  "texte": {
+  "L'obligation porte sur les ACTIVITÉS, pas sur les systèmes : continuer à servir, pas seulement redémarrer une machine.": {
+   "en": "The obligation bears on the ACTIVITIES, not on the systems: carrying on serving, not just restarting a machine.",
+   "fr": "L'obligation porte sur les ACTIVITÉS, pas sur les systèmes : continuer à servir, pas seulement redémarrer une machine."
+  },
+  "L'option est propre à chaque État membre et doit être vérifiée auprès de l'autorité nationale. Elle n'est pas présumée exercée.": {
+   "en": "The option belongs to each Member State and must be checked with the national authority. It is not presumed to have been exercised.",
+   "fr": "L'option est propre à chaque État membre et doit être vérifiée auprès de l'autorité nationale. Elle n'est pas présumée exercée."
+  },
+  "L'organisme CONTRIBUE à l'incidence": {
+   "en": "The organisation CONTRIBUTES to the impact",
+   "fr": "L'organisme CONTRIBUE à l'incidence"
+  },
+  "L'organisme est LIÉ à l'incidence par une relation d'affaires": {
+   "en": "The organisation is LINKED to the impact by a business relationship",
+   "fr": "L'organisme est LIÉ à l'incidence par une relation d'affaires"
+  },
+  "L'une des conditions de l'article #, points a) à d), est remplie": {
+   "en": "One of the conditions in article #, points (a) to (d), is met",
+   "fr": "L'une des conditions de l'article 2, points a) à d), est remplie"
+  },
+  "L'écart le plus fréquent : la supervision est confiée au poste disponible, pas au profil déclaré.": {
+   "en": "The commonest gap: oversight is given to whoever is available, not to the profile declared.",
+   "fr": "L'écart le plus fréquent : la supervision est confiée au poste disponible, pas au profil déclaré."
+  },
+  "L'échange se fait au format reçu ; toute conversion est justifiée et ouvre une possibilité de non-participation, sauf si le droit de l'Union l'exige.": {
+   "en": "Exchange takes place in the format received; any conversion is justified and opens an opt-out, unless Union law requires it.",
+   "fr": "L'échange se fait au format reçu ; toute conversion est justifiée et ouvre une possibilité de non-participation, sauf si le droit de l'Union l'exige."
+  },
+  "L'échéance transitoire de l'article # est passée depuis le # septembre #. Un prestataire qui fournissait déjà des services d'intermédiation de données au # juin # et qui n'a pas notifié n'est pas en retard sur un calendrier : il est en infraction.": {
+   "en": "The transitional deadline of Article # passed on # September #. A provider that was already supplying data intermediation services on # June # and has not notified is not behind a timetable: it is in breach.",
+   "fr": "L'échéance transitoire de l'article 37 est passée depuis le 24 septembre 2025. Un prestataire qui fournissait déjà des services d'intermédiation de données au 23 juin 2022 et qui n'a pas notifié n'est pas en retard sur un calendrier : il est en infraction."
+  },
+  "L'écran dit-il ce que le système sait et ne sait pas faire, et rapporte-t-il ce qu'il fait AUX scénarios de risque que vous avez identifiés — pas à des courbes générales ?": {
+   "en": "Does the screen say what the system can and cannot do, and does it relate what it does TO the risk scenarios you have identified — not to general curves?",
+   "fr": "L'écran dit-il ce que le système sait et ne sait pas faire, et rapporte-t-il ce qu'il fait AUX scénarios de risque que vous avez identifiés — pas à des courbes générales ?"
+  },
+  "L'équipe d'examen conjoint : qui supervise réellement, avec quelles tâches et sous quelle coordination.": {
+   "en": "The joint examination team: who actually oversees, with what tasks and under whose coordination.",
+   "fr": "L'équipe d'examen conjoint : qui supervise réellement, avec quelles tâches et sous quelle coordination."
+  },
+  "L'équipe d'examen conjoint exerce les activités de supervision, sous la coordination du coordonnateur du superviseur principal.": {
+   "en": "The joint examination team carries out the oversight activities, under the coordination of the lead overseer's coordinator.",
+   "fr": "L'équipe d'examen conjoint exerce les activités de supervision, sous la coordination du coordonnateur du superviseur principal."
+  },
+  "L'équivalence est acquise si les mesures de gestion des risques valent au moins celles de l'article #, paragraphes # et #, ou si l'acte sectoriel ouvre aux CSIRT, aux autorités compétentes ou aux points de contact uniques un accès immédiat aux notifications et pose des exigences de notification au moins équivalentes à l'article #, paragraphes # à #.": {
+   "en": "Equivalence is established if the risk-management measures are at least as good as those of article #(#) and (#), or if the sectoral act gives the CSIRTs, the competent authorities or the single points of contact immediate access to the notifications and sets reporting requirements at least equivalent to article #(#) to (#).",
+   "fr": "L'équivalence est acquise si les mesures de gestion des risques valent au moins celles de l'article 21, paragraphes 1 et 2, ou si l'acte sectoriel ouvre aux CSIRT, aux autorités compétentes ou aux points de contact uniques un accès immédiat aux notifications et pose des exigences de notification au moins équivalentes à l'article 23, paragraphes 1 à 6."
+  },
+  "L'étape # dépend d'une lecture que le texte ne tranche pas": {
+   "en": "Step # depends on a reading the text does not settle",
+   "fr": "L'étape 1 dépend d'une lecture que le texte ne tranche pas"
+  },
+  "L'étape # est franchie — l'étape # s'apprécie": {
+   "en": "Step # is cleared — step # is assessed",
+   "fr": "L'étape 1 est franchie — l'étape 2 s'apprécie"
+  },
+  "L'étape # n'est pas franchie": {
+   "en": "Step # is not cleared",
+   "fr": "L'étape 1 n'est pas franchie"
+  },
+  "L'étape qui commande toutes les autres : sans incidences identifiées, qualifiées par l'implication et priorisées, les étapes # à # n'ont pas d'objet.": {
+   "en": "The step that governs all the others: with no impacts identified, qualified by involvement and prioritised, steps # to # have no object.",
+   "fr": "L'étape qui commande toutes les autres : sans incidences identifiées, qualifiées par l'implication et priorisées, les étapes 3 à 6 n'ont pas d'objet."
+  },
+  "L'état du système ne se résume pas à « en marche » : actif, inactif, dégradé et sécurisé ne demandent pas la même réaction.": {
+   "en": "The state of the system is not just « running »: active, inactive, degraded and safe do not call for the same reaction.",
+   "fr": "L'état du système ne se résume pas à « en marche » : actif, inactif, dégradé et sécurisé ne demandent pas la même réaction."
+  },
+  "L'étendue de l'incidence — combien de personnes, quel territoire.": {
+   "en": "The reach of the impact — how many people, what territory.",
+   "fr": "L'étendue de l'incidence — combien de personnes, quel territoire."
+  },
+  "L'étendue du contrôle exercé sur chaque maillon est-elle déterminée en fonction de ce qu'il porte ?": {
+   "en": "Is the extent of the control exercised over each link determined by what that link carries?",
+   "fr": "L'étendue du contrôle exercé sur chaque maillon est-elle déterminée en fonction de ce qu'il porte ?"
+  },
+  "LES CRITÈRES DE DÉSIGNATION, CHIFFRÉS : deux étapes, quatre sous-critères de seuil, et la barre des # %.": {
+   "en": "THE DESIGNATION CRITERIA, IN FIGURES: two steps, four threshold sub-criteria, and the # % bar.",
+   "fr": "LES CRITÈRES DE DÉSIGNATION, CHIFFRÉS : deux étapes, quatre sous-critères de seuil, et la barre des 10 %."
+  },
+  "La CNIL garde ses pouvoirs sur les traitements de données personnelles d'un intermédiaire ou d'une organisation altruiste.": {
+   "en": "The CNIL retains its powers over the personal data processing of an intermediary or of a data altruism organisation.",
+   "fr": "La CNIL garde ses pouvoirs sur les traitements de données personnelles d'un intermédiaire ou d'une organisation altruiste."
+  },
+  "La Commission publie des lignes directrices clarifiant l'application des paragraphes # et #, et les réexamine.": {
+   "en": "The Commission publishes guidelines clarifying the application of paragraphs # and #, and reviews them.",
+   "fr": "La Commission publie des lignes directrices clarifiant l'application des paragraphes 1 et 2, et les réexamine."
+  },
+  "La Commission tient un registre public de tous les prestataires proposant leurs services dans l'Union (§#).": {
+   "en": "The Commission maintains a public register of all providers offering their services in the Union (§#).",
+   "fr": "La Commission tient un registre public de tous les prestataires proposant leurs services dans l'Union (§10)."
+  },
+  "La PSSI et les spécificités sectorielles": {
+   "en": "The information security policy and the sector's own features",
+   "fr": "La PSSI et les spécificités sectorielles"
+  },
+  "La base vectorielle d'un RAG rend des fragments que le demandeur n'avait pas le droit de lire, ou ingère des fragments empoisonnés.": {
+   "en": "A RAG's vector store returns fragments the requester had no right to read, or ingests poisoned fragments.",
+   "fr": "La base vectorielle d'un RAG rend des fragments que le demandeur n'avait pas le droit de lire, ou ingère des fragments empoisonnés."
+  },
+  "La catégorie ne s'applique pas — et il faut pouvoir dire pourquoi.": {
+   "en": "The category does not apply — and you must be able to say why.",
+   "fr": "La catégorie ne s'applique pas — et il faut pouvoir dire pourquoi."
+  },
+  "La certification porte sur le système de management, pas sur chaque système d'IA.": {
+   "en": "The certification covers the management system, not each AI system.",
+   "fr": "La certification porte sur le système de management, pas sur chaque système d'IA."
+  },
+  "La cessation d'activité est notifiée dans les quinze jours (§#).": {
+   "en": "The cessation of activity is notified within fifteen days (§#).",
+   "fr": "La cessation d'activité est notifiée dans les quinze jours (§13)."
+  },
+  "La chaîne d'approvisionnement du modèle.": {
+   "en": "The model's supply chain.",
+   "fr": "La chaîne d'approvisionnement du modèle."
+  },
+  "La chaîne d'approvisionnement du système d'IA est-elle maîtrisée ?": {
+   "en": "Is the AI system's supply chain under control?",
+   "fr": "La chaîne d'approvisionnement du système d'IA est-elle maîtrisée ?"
+  },
+  "La chaîne de notification : alerte précoce, notification, rapport final.": {
+   "en": "The reporting chain: early warning, notification, final report.",
+   "fr": "La chaîne de notification : alerte précoce, notification, rapport final."
+  },
+  "La chaîne de notification et ses délais en heures, les tests de pénétration fondés sur la menace, et le registre d'informations de l'article #, paragraphe #, ne sont pas dans ce nombre. Cent pour cent ici ne veut pas dire DORA tenu.": {
+   "en": "The reporting chain and its deadlines in hours, the threat-led penetration testing, and the register of information of article #(#) are not in this figure. A hundred per cent here does not mean DORA is met.",
+   "fr": "La chaîne de notification et ses délais en heures, les tests de pénétration fondés sur la menace, et le registre d'informations de l'article 28, paragraphe 3, ne sont pas dans ce nombre. Cent pour cent ici ne veut pas dire DORA tenu."
+  },
+  "La chaîne se répète à blanc, elle ne se coche pas. Les délais courent en heures, et la première échue commande.": {
+   "en": "The chain is rehearsed, not ticked. The deadlines run in hours, and the first one to fall due governs.",
+   "fr": "La chaîne se répète à blanc, elle ne se coche pas. Les délais courent en heures, et la première échue commande."
+  },
+  "La classe commande la procédure d'évaluation, donc le budget.": {
+   "en": "The class governs the assessment procedure, and therefore the budget.",
+   "fr": "La classe commande la procédure d'évaluation, donc le budget."
+  },
+  "La classe est DÉCLARÉE, jamais devinée du nom du produit.": {
+   "en": "The class is DECLARED, never guessed from the product's name.",
+   "fr": "La classe est DÉCLARÉE, jamais devinée du nom du produit."
+  },
+  "La classe proposée n'appartient pas au vocabulaire du registre.": {
+   "en": "The class proposed is not in the register's vocabulary.",
+   "fr": "La classe proposée n'appartient pas au vocabulaire du registre."
+  },
+  "La classification d'un système au sens du règlement : son niveau de risque, l'article qui le fonde, et les obligations qui en découlent.": {
+   "en": "A system's classification within the meaning of the Regulation: its risk level, the article it rests on, and the obligations that follow.",
+   "fr": "La classification d'un système au sens du règlement : son niveau de risque, l'article qui le fonde, et les obligations qui en découlent."
+  },
+  "La classification des incidents contre les seuils chiffrés qui décident de la notification — clients touchés, durée, États membres concernés, coûts.": {
+   "en": "The classification of incidents against the numerical thresholds that decide on notification — clients affected, duration, Member States concerned, costs.",
+   "fr": "La classification des incidents contre les seuils chiffrés qui décident de la notification — clients touchés, durée, États membres concernés, coûts."
+  },
+  "La collecte est massive, la relecture ne l'est pas, et l'effet n'apparaît qu'à l'usage.": {
+   "en": "The collection is massive, the review is not, and the effect only shows in use.",
+   "fr": "La collecte est massive, la relecture ne l'est pas, et l'effet n'apparaît qu'à l'usage."
+  },
+  "La communication avec les autorités, les organismes notifiés et les déployeurs est-elle organisée et tenue ?": {
+   "en": "Is communication with the authorities, the notified bodies and the deployers organised and kept up?",
+   "fr": "La communication avec les autorités, les organismes notifiés et les déployeurs est-elle organisée et tenue ?"
+  },
+  "La communication avec les autorités, les organismes notifiés, les autres opérateurs, les clients et les parties intéressées.": {
+   "en": "Communication with the authorities, the notified bodies, the other operators, the clients and the interested parties.",
+   "fr": "La communication avec les autorités, les organismes notifiés, les autres opérateurs, les clients et les parties intéressées."
+  },
+  "La communication à l'autorité compétente du nom, de l'adresse et des coordonnées, du secteur et sous-secteur, et des États membres où l'entité fournit ses services.": {
+   "en": "Communicating to the competent authority the name, address and contact details, the sector and sub-sector, and the Member States where the entity provides its services.",
+   "fr": "La communication à l'autorité compétente du nom, de l'adresse et des coordonnées, du secteur et sous-secteur, et des États membres où l'entité fournit ses services."
+  },
   "La comparaison visuelle est l'acte de revue. Une résolution insuffisante rend la revue formelle.": {
    "en": "The visual comparison IS the act of review. Insufficient resolution turns the review into a formality.",
    "fr": "La comparaison visuelle est l'acte de revue. Une résolution insuffisante rend la revue formelle."
@@ -106,6 +274,10 @@
   "La déclaration d'applicabilité ne passe pas l'étape #.": {
    "en": "The statement of applicability does not pass stage #.",
    "fr": "La déclaration d'applicabilité ne passe pas l'étape 1."
+  },
+  "La déclaration d'applicabilité ne passe pas l'étape #. Aucun taux de maturité ne rattrape ce défaut : l'auditeur s'arrête au document.": {
+   "en": "The statement of applicability does not pass step #. No maturity rate makes up for that defect: the auditor stops at the document.",
+   "fr": "La déclaration d'applicabilité ne passe pas l'étape 1. Aucun taux de maturité ne rattrape ce défaut : l'auditeur s'arrête au document."
   },
   "La déclaration d'applicabilité ne passe pas l'étape #. L'auditeur s'arrête au document : aucun taux de maturité ne rattrape ce défaut.": {
    "en": "The statement of applicability does not pass stage #. The auditor stops at the document: no maturity rate makes up for that defect.",
@@ -314,142 +486,6 @@
   "La partie est rétablie d'après la référence elle-même (prEN #-#) et d'après l'article visé (#). Le libellé d'origine est rappelé à l'écran.": {
    "en": "The part is restored from the reference itself (prEN #-#) and from the article addressed (#). The original wording is recalled on screen.",
    "fr": "La partie est rétablie d'après la référence elle-même (prEN 18229-2) et d'après l'article visé (15). Le libellé d'origine est rappelé à l'écran."
-  },
-  "La personne désignée a un accès continu et en temps réel à l'état du système, à ses sorties, à ses alertes et à la disponibilité des fonctions d'intervention.": {
-   "en": "The designated person has continuous, real-time access to the state of the system, to its outputs, to its alerts and to the availability of the intervention functions.",
-   "fr": "La personne désignée a un accès continu et en temps réel à l'état du système, à ses sorties, à ses alertes et à la disponibilité des fonctions d'intervention."
-  },
-  "La personne désignée a-t-elle un accès continu et en temps réel au fonctionnement courant du système et à ses notifications — et sait-elle à tout instant si elle peut encore écraser une sortie, couper le système ou le remettre à zéro ?": {
-   "en": "Does the designated person have continuous, real-time access to the system's current operation and to its alerts — and do they know at any moment whether they can still override an output, shut the system down or reset it?",
-   "fr": "La personne désignée a-t-elle un accès continu et en temps réel au fonctionnement courant du système et à ses notifications — et sait-elle à tout instant si elle peut encore écraser une sortie, couper le système ou le remettre à zéro ?"
-  },
-  "La personne désignée annule une action DÉJÀ EXÉCUTÉE et ramène le processus à un état antérieur ou sécurisé.": {
-   "en": "The designated person undoes an action ALREADY EXECUTED and brings the process back to an earlier or safe state.",
-   "fr": "La personne désignée annule une action DÉJÀ EXÉCUTÉE et ramène le processus à un état antérieur ou sécurisé."
-  },
-  "La personne désignée bloque la sortie du système et lui substitue une alternative qu'elle fournit ; le chemin automatique est interrompu.": {
-   "en": "The designated person blocks the system's output and substitutes an alternative of their own; the automatic path is interrupted.",
-   "fr": "La personne désignée bloque la sortie du système et lui substitue une alternative qu'elle fournit ; le chemin automatique est interrompu."
-  },
-  "La personne désignée dispose-t-elle d'une commande de mise en sécurité — bouton matériel ou commande logicielle — atteignable INDÉPENDAMMENT du système, et la bascule est-elle validée sur le temps, la stabilité, la complétude de l'atténuation et la récupération ?": {
-   "en": "Does the designated person have a safe-state control — a hardware button or a software command — reachable INDEPENDENTLY of the system, and is the transition validated on time, stability, completeness of mitigation and recovery?",
-   "fr": "La personne désignée dispose-t-elle d'une commande de mise en sécurité — bouton matériel ou commande logicielle — atteignable INDÉPENDAMMENT du système, et la bascule est-elle validée sur le temps, la stabilité, la complétude de l'atténuation et la récupération ?"
-  },
-  "La personne désignée déclenche un état sécurisé prédéfini — ou un arrêt, lorsque l'arrêt est lui-même un état sécurisé — par un déclencheur accessible indépendamment de l'état du système.": {
-   "en": "The designated person triggers a predefined safe state — or a shutdown, where shutdown is itself a safe state — through a trigger reachable independently of the system's state.",
-   "fr": "La personne désignée déclenche un état sécurisé prédéfini — ou un arrêt, lorsque l'arrêt est lui-même un état sécurisé — par un déclencheur accessible indépendamment de l'état du système."
-  },
-  "La personne désignée peut-elle annuler une action DÉJÀ exécutée et ramener le processus à un état antérieur ou sécurisé, les processus dépendants reçoivent-ils l'ordre de revenir eux aussi, et la notice dit-elle ce qui est réversible et ce qui ne l'est pas ?": {
-   "en": "Can the designated person undo an action ALREADY executed and bring the process back to an earlier or safe state, do the dependent processes receive the order to revert as well, and do the instructions say what is reversible and what is not?",
-   "fr": "La personne désignée peut-elle annuler une action DÉJÀ exécutée et ramener le processus à un état antérieur ou sécurisé, les processus dépendants reçoivent-ils l'ordre de revenir eux aussi, et la notice dit-elle ce qui est réversible et ce qui ne l'est pas ?"
-  },
-  "La personne désignée rejette explicitement une sortie AVANT son exécution ; le système ne l'exécute pas et ne la rejoue pas.": {
-   "en": "The designated person explicitly rejects an output BEFORE it is executed; the system neither executes it nor replays it.",
-   "fr": "La personne désignée rejette explicitement une sortie AVANT son exécution ; le système ne l'exécute pas et ne la rejoue pas."
-  },
-  "La politique qualité, les rôles, et qui répond de quoi.": {
-   "en": "The quality policy, the roles, and who answers for what.",
-   "fr": "La politique qualité, les rôles, et qui répond de quoi."
-  },
-  "La politique qui tranche un désaccord entre réviseurs relève du propriétaire du système : elle doit être définie et documentée, pas improvisée.": {
-   "en": "The policy that settles a disagreement between reviewers belongs to the system owner: it must be defined and documented, not improvised.",
-   "fr": "La politique qui tranche un désaccord entre réviseurs relève du propriétaire du système : elle doit être définie et documentée, pas improvisée."
-  },
-  "La preuve objective que l'exigence est satisfaite": {
-   "en": "Objective evidence that the requirement is satisfied",
-   "fr": "La preuve objective que l'exigence est satisfaite"
-  },
-  "La priorisation sur la gravité et la probabilité, quand il n'est pas possible de tout traiter en même temps. Les quatre facteurs se cotent sur l'écran « processus », et chacun demande sa justification écrite.": {
-   "en": "Prioritisation on severity and likelihood, when it is not possible to address everything at once. The four factors are rated on the “process” screen, and each calls for its written justification.",
-   "fr": "La priorisation sur la gravité et la probabilité, quand il n'est pas possible de tout traiter en même temps. Les quatre facteurs se cotent sur l'écran « processus », et chacun demande sa justification écrite."
-  },
-  "La proportionnalité tient compte du degré d'exposition, de la taille de l'entité, et de la probabilité et de la gravité des incidents.": {
-   "en": "Proportionality takes account of the degree of exposure, the entity's size, and the likelihood and severity of incidents.",
-   "fr": "La proportionnalité tient compte du degré d'exposition, de la taille de l'entité, et de la probabilité et de la gravité des incidents."
-  },
-  "La proposition n'est pas motivée.": {
-   "en": "The proposal gives no reasons.",
-   "fr": "La proposition n'est pas motivée."
-  },
-  "La protection des données se conçoit avant la mise en production, pas après.": {
-   "en": "Data protection is designed before go-live, not after.",
-   "fr": "La protection des données se conçoit avant la mise en production, pas après."
-  },
-  "La présence de données biométriques ou sensibles déplace la qualification, et le RGPD s'y ajoute.": {
-   "en": "The presence of biometric or sensitive data shifts the qualification, and the GDPR is added on top.",
-   "fr": "La présence de données biométriques ou sensibles déplace la qualification, et le RGPD s'y ajoute."
-  },
-  "La présentation des sorties et des indicateurs de confiance relève de la prEN #-# : ce paragraphe ne traite que les fonctions de supervision.": {
-   "en": "Presenting the outputs and the confidence indicators comes under prEN #-#: this clause deals only with the oversight functions.",
-   "fr": "La présentation des sorties et des indicateurs de confiance relève de la prEN 18229-2 : ce paragraphe ne traite que les fonctions de supervision."
-  },
-  "La prévention est technique chez le fournisseur ; l'affectation est organisationnelle chez vous. Les deux sont nécessaires.": {
-   "en": "The prevention is technical, at the provider's end; the assignment is organisational, at yours. Both are needed.",
-   "fr": "La prévention est technique chez le fournisseur ; l'affectation est organisationnelle chez vous. Les deux sont nécessaires."
-  },
-  "La qualification, les cinq composantes de la stratégie du §#, et l'approche retenue pour chacune des sept exigences essentielles.": {
-   "en": "The qualification, the five components of the §# strategy, and the approach chosen for each of the seven essential requirements.",
-   "fr": "La qualification, les cinq composantes de la stratégie du §4.4, et l'approche retenue pour chacune des sept exigences essentielles."
-  },
-  "La qualité rédactionnelle fait présumer la justesse : plus le texte est bien écrit, moins on le relit.": {
-   "en": "Good writing makes correctness presumed: the better the text reads, the less it gets re-read.",
-   "fr": "La qualité rédactionnelle fait présumer la justesse : plus le texte est bien écrit, moins on le relit."
-  },
-  "La relation d'un organisme à une incidence n'est pas statique. Elle change avec la situation, et avec ce que la diligence fait baisser. Le document le dit dans l'autre sens aussi : un organisme qui reste lié à une incidence et ne prend aucune mesure pour l'atténuer voit son lien direct devenir une CONTRIBUTION avec le temps.": {
-   "en": "An organisation's relationship to an impact is not static. It changes with the situation, and with what due diligence brings down. The document says it the other way round too: an organisation that stays linked to an impact and takes no measure to mitigate it sees its direct linkage become a CONTRIBUTION over time.",
-   "fr": "La relation d'un organisme à une incidence n'est pas statique. Elle change avec la situation, et avec ce que la diligence fait baisser. Le document le dit dans l'autre sens aussi : un organisme qui reste lié à une incidence et ne prend aucune mesure pour l'atténuer voit son lien direct devenir une CONTRIBUTION avec le temps."
-  },
-  "La responsabilité NOMMÉE et personnelle de l'organe de direction sur le cadre de gestion du risque lié aux TIC. La mesure A.# demande un engagement ; le règlement désigne un responsable.": {
-   "en": "The NAMED, personal responsibility of the management body for the ICT risk management framework. Control A.# asks for a commitment; the Regulation designates someone accountable.",
-   "fr": "La responsabilité NOMMÉE et personnelle de l'organe de direction sur le cadre de gestion du risque lié aux TIC. La mesure A.5.4 demande un engagement ; le règlement désigne un responsable."
-  },
-  "La revue de direction : elle ne produit rien par elle-même, elle décide de ce que le reste produit.": {
-   "en": "The management review: it produces nothing by itself, it decides on what the rest produces.",
-   "fr": "La revue de direction : elle ne produit rien par elle-même, elle décide de ce que le reste produit."
-  },
-  "La revue de direction, l'amélioration, et la planification des changements du système de management.": {
-   "en": "The management review, improvement, and the planning of changes to the management system.",
-   "fr": "La revue de direction, l'amélioration, et la planification des changements du système de management."
-  },
-  "La revue produit-elle des décisions tracées, et pas seulement un compte rendu ?": {
-   "en": "Does the review produce decisions on the record, and not just minutes?",
-   "fr": "La revue produit-elle des décisions tracées, et pas seulement un compte rendu ?"
-  },
-  "La revue reçoit-elle ce qu'il lui faut pour décider — surveillance, incidents, non-conformités, changements, retours des déployeurs ?": {
-   "en": "Does the review receive what it needs in order to decide — monitoring, incidents, nonconformities, changes, feedback from deployers?",
-   "fr": "La revue reçoit-elle ce qu'il lui faut pour décider — surveillance, incidents, non-conformités, changements, retours des déployeurs ?"
-  },
-  "La réponse du moteur n'est pas un objet JSON exploitable.": {
-   "en": "The engine's reply is not a usable JSON object.",
-   "fr": "La réponse du moteur n'est pas un objet JSON exploitable."
-  },
-  "La révision # (#) parle d'ICS et surcharge #-# Rev. #. La révision # (#) parle d'OT et vise la révision #.": {
-   "en": "Revision # (#) speaks of ICS and overlays #-# Rev. #. Revision # (#) speaks of OT and targets revision #.",
-   "fr": "La révision 2 (2015) parle d'ICS et surcharge 800-53 Rev. 4. La révision 3 (2023) parle d'OT et vise la révision 5."
-  },
-  "La révision # ajoute les familles PT et SR et renomme CA. Un système déjà aligné sur la révision # lit ce taux contre un millésime antérieur au sien.": {
-   "en": "Revision # adds the PT and SR families and renames CA. A system already aligned on revision # reads this rate against an edition older than its own.",
-   "fr": "La révision 5 ajoute les familles PT et SR et renomme CA. Un système déjà aligné sur la révision 5 lit ce taux contre un millésime antérieur au sien."
-  },
-  "La seconde moitié s'oublie : ce qui se passe si la mesure N'EST PAS mise en œuvre doit être écrit, sinon le système est utilisé hors de sa destination sans que personne le sache.": {
-   "en": "The second half gets forgotten: what happens if the measure is NOT implemented has to be written down, otherwise the system is used outside its intended purpose with nobody knowing.",
-   "fr": "La seconde moitié s'oublie : ce qui se passe si la mesure N'EST PAS mise en œuvre doit être écrit, sinon le système est utilisé hors de sa destination sans que personne le sache."
-  },
-  "La sensibilisation au biais d'automatisation est explicitement citée parmi les compétences : sur un flux de milliers d'identifications, c'est le risque premier.": {
-   "en": "Awareness of automation bias is expressly listed among the competences: on a flow of thousands of identifications, it is the first risk.",
-   "fr": "La sensibilisation au biais d'automatisation est explicitement citée parmi les compétences : sur un flux de milliers d'identifications, c'est le risque premier."
-  },
-  "La seule fiche disponible à ce jour — architectures sécurisées, objectifs # et # — et la confirmation que la collection n'est ni prescriptive ni exhaustive.": {
-   "en": "The only sheet available to date — secure architectures, objectives # and # — and the confirmation that the collection is neither prescriptive nor exhaustive.",
-   "fr": "La seule fiche disponible à ce jour — architectures sécurisées, objectifs 7 et 8 — et la confirmation que la collection n'est ni prescriptive ni exhaustive."
-  },
-  "La seule qui soit un préalable : un système qui ne marche pas n'a pas besoin d'être équitable.": {
-   "en": "The only one that is a precondition: a system that does not work has no need to be fair.",
-   "fr": "La seule qui soit un préalable : un système qui ne marche pas n'a pas besoin d'être équitable."
-  },
-  "La sortie doit rester isolée pendant la revue : si elle est consultable par les systèmes en aval « pour information », elle n'est pas isolée.": {
-   "en": "The output must stay isolated during the review: if downstream systems can read it « for information », it is not isolated.",
-   "fr": "La sortie doit rester isolée pendant la revue : si elle est consultable par les systèmes en aval « pour information », elle n'est pas isolée."
   }
  }
 }

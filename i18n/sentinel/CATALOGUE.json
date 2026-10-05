@@ -13462,14 +13462,15 @@
   "entrees": {
    "attr": 0,
    "bloc": 0,
-   "texte": 2718
+   "texte": 2857
   },
   "mots": {
    "attr": 0,
    "bloc": 0,
-   "texte": 42786
+   "texte": 45199
   },
-  "routes": 19
+  "routes": 19,
+  "sondes": 18
  },
  "rubriques": {
   "adoption": "BUSINESS",
@@ -13653,6 +13654,13 @@
     "cra-ecarts"
    ]
   },
+  "# % des obligations attendues de vos qualités sont déclarées tenues, sur # points attendus dont # renseigné(s). Un point qu'on n'a pas regardé compte zéro : le taux monte quand on répond, jamais quand on s'abstient.": {
+   "fr": "5 % des obligations attendues de vos qualités sont déclarées tenues, sur 19 points attendus dont 1 renseigné(s). Un point qu'on n'a pas regardé compte zéro : le taux monte quand on répond, jamais quand on s'abstient.",
+   "mots": 36,
+   "pages": [
+    "_routes"
+   ]
+  },
   "# % des usages connus": {
    "fr": "100 % des usages connus",
    "mots": 3,
@@ -13734,14 +13742,16 @@
    "fr": "8.1 Actions de traitement des risques",
    "mots": 5,
    "pages": [
-    "conf-plan"
+    "conf-plan",
+    "_routes"
    ]
   },
   "# Actions pour traiter les risques liés au fonctionnement du système de management": {
    "fr": "6.1 Actions pour traiter les risques liés au fonctionnement du système de management",
    "mots": 12,
    "pages": [
-    "conf-plan"
+    "conf-plan",
+    "_routes"
    ]
   },
   "# Actual and potential impacts": {
@@ -13758,18 +13768,41 @@
     "conf-plan"
    ]
   },
+  "# Approche de surveillance": {
+   "fr": "9.4.3 Approche de surveillance",
+   "mots": 3,
+   "pages": [
+    "_routes"
+   ]
+  },
   "# Changements apportés au domaine d'application": {
    "fr": "10.4.2 Changements apportés au domaine d'application",
    "mots": 6,
    "pages": [
-    "conf-plan"
+    "conf-plan",
+    "_routes"
    ]
   },
   "# Changements apportés au processus": {
    "fr": "10.4.3 Changements apportés au processus",
    "mots": 4,
    "pages": [
-    "conf-plan"
+    "conf-plan",
+    "_routes"
+   ]
+  },
+  "# Changements déclenchant une action": {
+   "fr": "9.3.3 Changements déclenchant une action",
+   "mots": 4,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "# Changements prédéterminés": {
+   "fr": "9.3.4 Changements prédéterminés",
+   "mots": 2,
+   "pages": [
+    "_routes"
    ]
   },
   "# Changements — planification": {
@@ -13783,12 +13816,27 @@
    "fr": "9.2.1 Chaîne d'approvisionnement — généralités",
    "mots": 4,
    "pages": [
-    "conf-plan"
+    "conf-plan",
+    "_routes"
    ]
   },
   "# Communication avec les clients": {
    "fr": "8.2.1 Communication avec les clients",
    "mots": 4,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "# Communication à des fins réglementaires": {
+   "fr": "7.3.3 Communication à des fins réglementaires",
+   "mots": 5,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "# Communication — généralités": {
+   "fr": "7.3.1 Communication — généralités",
+   "mots": 2,
    "pages": [
     "_routes"
    ]
@@ -13840,7 +13888,8 @@
    "fr": "8.3.2.4 Contrôles de la conception et du développement",
    "mots": 7,
    "pages": [
-    "conf-plan"
+    "conf-plan",
+    "_routes"
    ]
   },
   "# Directeur de Programme (# mois)": {
@@ -13848,6 +13897,34 @@
    "mots": 4,
    "pages": [
     "_js"
+   ]
+  },
+  "# Documentation du système de management de la qualité": {
+   "fr": "4.5.1 Documentation du système de management de la qualité",
+   "mots": 8,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "# Documentation opérationnelle": {
+   "fr": "4.5.2 Documentation opérationnelle",
+   "mots": 2,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "# Domaine d'application de la surveillance": {
+   "fr": "9.4.2 Domaine d'application de la surveillance",
+   "mots": 6,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "# Durabilité environnementale": {
+   "fr": "8.6 Durabilité environnementale",
+   "mots": 2,
+   "pages": [
+    "_routes"
    ]
   },
   "# DÉCEMBRE #": {
@@ -13868,14 +13945,16 @@
    "fr": "8.2 Détermination des étapes du cycle de vie",
    "mots": 7,
    "pages": [
-    "conf-plan"
+    "conf-plan",
+    "_routes"
    ]
   },
   "# Détermination du domaine d'application du système de management de la qualité": {
    "fr": "4.3 Détermination du domaine d'application du système de management de la qualité",
    "mots": 12,
    "pages": [
-    "conf-plan"
+    "conf-plan",
+    "_routes"
    ]
   },
   "# Détermination du domaine d'application du système de management de la sécurité de l'information": {
@@ -13896,14 +13975,16 @@
    "fr": "9.2.4 Exigences et spécifications",
    "mots": 3,
    "pages": [
-    "conf-plan"
+    "conf-plan",
+    "_routes"
    ]
   },
   "# Exigences relatives au système d'IA": {
    "fr": "8.3.2.1 Exigences relatives au système d'IA",
    "mots": 6,
    "pages": [
-    "conf-plan"
+    "conf-plan",
+    "_routes"
    ]
   },
   "# Exploitation et contrôle": {
@@ -13917,7 +13998,15 @@
    "fr": "9.1.2 Exploitation et surveillance",
    "mots": 3,
    "pages": [
-    "conf-plan"
+    "conf-plan",
+    "_routes"
+   ]
+  },
+  "# Gestion des données": {
+   "fr": "8.5 Gestion des données",
+   "mots": 3,
+   "pages": [
+    "_routes"
    ]
   },
   "# Généralités": {
@@ -13931,7 +14020,8 @@
    "fr": "4.2 Identifier les exigences réglementaires applicables",
    "mots": 5,
    "pages": [
-    "conf-plan"
+    "conf-plan",
+    "_routes"
    ]
   },
   "# Informations documentées": {
@@ -13948,12 +14038,33 @@
     "conf-plan"
    ]
   },
+  "# Interaction avec les déployeurs": {
+   "fr": "9.4.6 Interaction avec les déployeurs",
+   "mots": 4,
+   "pages": [
+    "_routes"
+   ]
+  },
   "# Leadership et engagement": {
    "fr": "5.1 Leadership et engagement",
    "mots": 3,
    "pages": [
     "iso27001",
     "iso42001"
+   ]
+  },
+  "# Maîtrise des informations documentées": {
+   "fr": "4.5.4 Maîtrise des informations documentées",
+   "mots": 4,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "# Mise à jour des informations documentées": {
+   "fr": "4.5.3 Mise à jour des informations documentées",
+   "mots": 6,
+   "pages": [
+    "_routes"
    ]
   },
   "# M€": {
@@ -13993,32 +14104,57 @@
     "_js"
    ]
   },
+  "# Non-conformité et action corrective": {
+   "fr": "9.6.1 Non-conformité et action corrective",
+   "mots": 5,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "# Non-conformités identifiées par la surveillance après commercialisation": {
+   "fr": "9.4.7 Non-conformités identifiées par la surveillance après commercialisation",
+   "mots": 8,
+   "pages": [
+    "_routes"
+   ]
+  },
   "# Objectifs qualité": {
    "fr": "6.2.1 Objectifs qualité",
    "mots": 2,
    "pages": [
-    "conf-plan"
+    "conf-plan",
+    "_routes"
+   ]
+  },
+  "# Passage en revue des changements": {
+   "fr": "9.3.2 Passage en revue des changements",
+   "mots": 5,
+   "pages": [
+    "_routes"
    ]
   },
   "# Passage en revue des exigences relatives au système d'IA": {
    "fr": "8.3.2.2 Passage en revue des exigences relatives au système d'IA",
    "mots": 10,
    "pages": [
-    "conf-plan"
+    "conf-plan",
+    "_routes"
    ]
   },
   "# Planification de la réalisation des objectifs qualité": {
    "fr": "6.2.2 Planification de la réalisation des objectifs qualité",
    "mots": 7,
    "pages": [
-    "conf-plan"
+    "conf-plan",
+    "_routes"
    ]
   },
   "# Planification des changements — généralités": {
    "fr": "10.4.1 Planification des changements — généralités",
    "mots": 4,
    "pages": [
-    "conf-plan"
+    "conf-plan",
+    "_routes"
    ]
   },
   "# Politique": {
@@ -14033,6 +14169,13 @@
    "mots": 3,
    "pages": [
     "iso42001"
+   ]
+  },
+  "# Procédures de signalement": {
+   "fr": "9.5.2 Procédures de signalement",
+   "mots": 3,
+   "pages": [
+    "_routes"
    ]
   },
   "# Responsabilité de la direction": {
@@ -14053,14 +14196,30 @@
    "fr": "10.2.1 Revue — généralités",
    "mots": 2,
    "pages": [
-    "conf-plan"
+    "conf-plan",
+    "_routes"
+   ]
+  },
+  "# Risques nouveaux et émergents": {
+   "fr": "9.4.5 Risques nouveaux et émergents",
+   "mots": 4,
+   "pages": [
+    "_routes"
    ]
   },
   "# Rôles, responsabilité et autorités": {
    "fr": "5.3 Rôles, responsabilité et autorités",
    "mots": 4,
    "pages": [
-    "conf-plan"
+    "conf-plan",
+    "_routes"
+   ]
+  },
+  "# Signalement d'incidents graves — généralités": {
+   "fr": "9.5.1 Signalement d'incidents graves — généralités",
+   "mots": 5,
+   "pages": [
+    "_routes"
    ]
   },
   "# Stratégie de conformité réglementaire": {
@@ -14070,11 +14229,19 @@
     "_routes"
    ]
   },
+  "# Surveillance après commercialisation — généralités": {
+   "fr": "9.4.1 Surveillance après commercialisation — généralités",
+   "mots": 4,
+   "pages": [
+    "_routes"
+   ]
+  },
   "# Surveillance et ré-évaluation": {
    "fr": "9.2.3 Surveillance et ré-évaluation",
    "mots": 4,
    "pages": [
-    "conf-plan"
+    "conf-plan",
+    "_routes"
    ]
   },
   "# Système de management de l'IA": {
@@ -14091,6 +14258,20 @@
     "iso27001"
    ]
   },
+  "# Sélection des approches": {
+   "fr": "4.4.3.1 Sélection des approches",
+   "mots": 3,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "# Sélection des mesures": {
+   "fr": "4.4.3.2 Sélection des mesures",
+   "mots": 3,
+   "pages": [
+    "_routes"
+   ]
+  },
   "# USD": {
    "fr": "19,50 USD",
    "mots": 1,
@@ -14098,11 +14279,19 @@
     "finops"
    ]
   },
+  "# Validation du système d'IA": {
+   "fr": "8.4.2 Validation du système d'IA",
+   "mots": 5,
+   "pages": [
+    "_routes"
+   ]
+  },
   "# Vérification du système d'IA": {
    "fr": "8.4.1 Vérification du système d'IA",
    "mots": 5,
    "pages": [
-    "conf-plan"
+    "conf-plan",
+    "_routes"
    ]
   },
   "# Wh": {
@@ -14587,14 +14776,16 @@
    "fr": "38 mesure(s) ne sont ni retenues ni écartées : A.2.2, A.2.3, A.2.4, A.3.2, A.3.3, A.4.2, A.4.3, A.4.4, A.4.5, A.4.6, A.5.2, A.5.3, A.5.4, A.5.5, A.6.1.2, A.6.1.3, A.6.2.2, A.6.2.3, A.6.2.4, A.6.2.5, A.6.2.6, A.6.2.7, A.6.2.8, A.7.2, A.7.3, A.7.4, A.7.5, A.7.6, A.8.2, A.8.3, A.8.4, A.8.5, A.9.2, A.9.3, A.9.4, A.10.2, A.10.3, A.10.4",
    "mots": 46,
    "pages": [
-    "iso42001-soa"
+    "iso42001-soa",
+    "_routes"
    ]
   },
   "# mesure(s) ne sont ni retenues ni écartées : A.#, A.#, A.#, A.#, A.#, A.#, A.#, A.#…": {
    "fr": "93 mesure(s) ne sont ni retenues ni écartées : A.5.1, A.5.2, A.5.3, A.5.4, A.5.5, A.5.6, A.5.7, A.5.8…",
    "mots": 16,
    "pages": [
-    "iso27001-soa"
+    "iso27001-soa",
+    "_routes"
    ]
   },
   "# mesures · # retenues · # écartées · # à trancher · # nouvelles en #": {
@@ -15437,28 +15628,32 @@
    "fr": "10.2.2 Éléments d'entrée de la revue de direction",
    "mots": 8,
    "pages": [
-    "conf-plan"
+    "conf-plan",
+    "_routes"
    ]
   },
   "# Éléments de sortie de la revue": {
    "fr": "10.2.3 Éléments de sortie de la revue",
    "mots": 6,
    "pages": [
-    "conf-plan"
+    "conf-plan",
+    "_routes"
    ]
   },
   "# Établissement de la politique qualité": {
    "fr": "5.2.1 Établissement de la politique qualité",
    "mots": 5,
    "pages": [
-    "conf-plan"
+    "conf-plan",
+    "_routes"
    ]
   },
   "# Étendue du contrôle": {
    "fr": "9.2.5 Étendue du contrôle",
    "mots": 3,
    "pages": [
-    "conf-plan"
+    "conf-plan",
+    "_routes"
    ]
   },
   "# Évaluation des performances": {
@@ -15472,7 +15667,8 @@
    "fr": "9.2.2 Évaluation et sélection",
    "mots": 3,
    "pages": [
-    "conf-plan"
+    "conf-plan",
+    "_routes"
    ]
   },
   "# à #": {
@@ -15522,6 +15718,13 @@
    "mots": 6,
    "pages": [
     "pan-sia"
+   ]
+  },
+  "# échéance(s) qui vous visent sont passées, dont art. #, al. # (#-#-#). Ce n'est plus un calendrier : c'est un état exigible.": {
+   "fr": "1 échéance(s) qui vous visent sont passées, dont art. 50, al. 3 (2026-09-12). Ce n'est plus un calendrier : c'est un état exigible.",
+   "mots": 21,
+   "pages": [
+    "_routes"
    ]
   },
   "# éléments obligatoires du QMS, liens ISO #/ISO #, rôle du responsable désigné, fréquence des revues.": {
@@ -17829,6 +18032,13 @@
     "_coquille"
    ]
   },
+  "AI #-# est un PROFIL d'AI #-#, et il ne se certifie pas davantage que lui. Ces # actions sont « suggérées » — le document le dit ainsi, et il ne prétend ni être exhaustif ni convenir à tous les systèmes. Elles ne valent donc pas une liste de contrôle opposable : elles disent ce qu'un tiers s'attendra à trouver, et ce qu'il faudra savoir justifier quand il ne le trouvera pas.": {
+   "fr": "AI 600-1 est un PROFIL d'AI 100-1, et il ne se certifie pas davantage que lui. Ces 211 actions sont « suggérées » — le document le dit ainsi, et il ne prétend ni être exhaustif ni convenir à tous les systèmes. Elles ne valent donc pas une liste de contrôle opposable : elles disent ce qu'un tiers s'attendra à trouver, et ce qu'il faudra savoir justifier quand il ne le trouvera pas.",
+   "mots": 70,
+   "pages": [
+    "_routes"
+   ]
+  },
   "AI #-# ne s’applique qu’à l’IA générative. Répondre « non »": {
    "fr": "AI 600-1 ne s’applique qu’à l’IA générative. Répondre « non »",
    "mots": 11,
@@ -19032,6 +19242,13 @@
   "Adresse de l'établissement principal dans l'Union, des succursales, ou du représentant légal": {
    "fr": "Adresse de l'établissement principal dans l'Union, des succursales, ou du représentant légal",
    "mots": 14,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Adresse et coordonnées actualisées, y compris adresses électroniques, plages d'IP et numéros de téléphone": {
+   "fr": "Adresse et coordonnées actualisées, y compris adresses électroniques, plages d'IP et numéros de téléphone",
+   "mots": 15,
    "pages": [
     "_routes"
    ]
@@ -22487,6 +22704,13 @@
     "_routes"
    ]
   },
+  "Article # §# du Data Act, par renvoi à l'article # §# du RGPD : le plus élevé de # # # EUR et de # % du chiffre d'affaires annuel mondial total, soit # # # EUR. L'article # §# ne prévoit aucune réduction pour les PME.": {
+   "fr": "Article 40 §4 du Data Act, par renvoi à l'article 83 §5 du RGPD : le plus élevé de 20 000 000 EUR et de 4 % du chiffre d'affaires annuel mondial total, soit 20 000 000 EUR. L'article 83 §5 ne prévoit aucune réduction pour les PME.",
+   "mots": 36,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Article # — Conditions de facturation": {
    "fr": "Article 3 — Conditions de facturation",
    "mots": 4,
@@ -23867,6 +24091,13 @@
     "empreinte-ia"
    ]
   },
+  "Aucun groupe d'acteur n'est déclaré. Le questionnaire ne sait pas lesquels des # exemples vous visent, et le module ne rend aucun chiffre : un taux calculé sur des exemples adressés à quelqu'un d'autre ne voudrait rien dire.": {
+   "fr": "Aucun groupe d'acteur n'est déclaré. Le questionnaire ne sait pas lesquels des 115 exemples vous visent, et le module ne rend aucun chiffre : un taux calculé sur des exemples adressés à quelqu'un d'autre ne voudrait rien dire.",
+   "mots": 40,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Aucun impact identifié": {
    "fr": "Aucun impact identifié",
    "mots": 3,
@@ -24326,6 +24557,20 @@
     "_routes"
    ]
   },
+  "Aucun type d'entité déclaré à l'article #, paragraphe #.": {
+   "fr": "Aucun type d'entité déclaré à l'article 2, paragraphe 1.",
+   "mots": 9,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Aucun type d'entité déclaré, ou type inconnu de l'article #, paragraphe #.": {
+   "fr": "Aucun type d'entité déclaré, ou type inconnu de l'article 2, paragraphe 1.",
+   "mots": 12,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Aucun usage client sur la période.": {
    "fr": "Aucun usage client sur la période.",
    "mots": 6,
@@ -24697,6 +24942,13 @@
    "mots": 3,
    "pages": [
     "_js"
+   ]
+  },
+  "Aucune famille SP #-# n'est déclarée. La surcharge industrielle adapte ce catalogue : sans lui, ce taux mesure une adaptation de rien.": {
+   "fr": "Aucune famille SP 800-53 n'est déclarée. La surcharge industrielle adapte ce catalogue : sans lui, ce taux mesure une adaptation de rien.",
+   "mots": 21,
+   "pages": [
+    "_routes"
    ]
   },
   "Aucune interface ne rend indûment difficile l'exercice des droits : pas de choix non neutre, pas d'atteinte à l'autonomie de décision": {
@@ -30718,6 +30970,13 @@
     "conf-plan"
    ]
   },
+  "Cent pour cent sur cette norme ne veut pas dire article # tenu : la norme elle-même déclare une lacune.": {
+   "fr": "Cent pour cent sur cette norme ne veut pas dire article 17 tenu : la norme elle-même déclare une lacune.",
+   "mots": 19,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Centralise tous les calculs enregistrés depuis Sentinel (simulations, audits, tarification, sanctions, FRIA, RACI) — preuve documentaire traçable et conforme RGPD (conservation # ans).": {
    "fr": "Centralise tous les calculs enregistrés depuis Sentinel (simulations, audits, tarification, sanctions, FRIA, RACI) — preuve documentaire traçable et conforme RGPD (conservation 3 ans).",
    "mots": 21,
@@ -30852,7 +31111,22 @@
    "fr": "Ces 11 mesures n'existaient pas dans ISO/IEC 27001:2013. Un organisme certifié contre l'ancienne version a celles-là devant lui, et elles seules — pas les 93.",
    "mots": 25,
    "pages": [
-    "iso27001-soa"
+    "iso27001-soa",
+    "_routes"
+   ]
+  },
+  "Ces articles ne se reprennent pas d'un autre système de management : périmètre, politique, et les deux qui portent l'appréciation et le traitement des risques.": {
+   "fr": "Ces articles ne se reprennent pas d'un autre système de management : périmètre, politique, et les deux qui portent l'appréciation et le traitement des risques.",
+   "mots": 26,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Ces articles ne se reprennent pas d'un système de management existant : ce sont eux qui portent ce que # ajoute.": {
+   "fr": "Ces articles ne se reprennent pas d'un système de management existant : ce sont eux qui portent ce que 42001 ajoute.",
+   "mots": 20,
+   "pages": [
+    "_routes"
    ]
   },
   "Ces cadres évoluent vite : plusieurs pays ont adopté ou révisé leur législation IA en #-#. La date de mise à jour figure sur la fiche — vérifiez-la avant de vous en prévaloir dans un acte juridique.": {
@@ -30896,6 +31170,13 @@
    "mots": 66,
    "pages": [
     "ocde-conformite",
+    "_routes"
+   ]
+  },
+  "Ces montants sont des PLAFONDS, pas des prévisions. L'article #, §# impose de tenir compte de la nature, de la gravité et de la durée de l'infraction, des antécédents de l'opérateur et de sa taille. Le régime de sanctions lui-même est fixé par chaque État membre.": {
+   "fr": "Ces montants sont des PLAFONDS, pas des prévisions. L'article 64, §5 impose de tenir compte de la nature, de la gravité et de la durée de l'infraction, des antécédents de l'opérateur et de sa taille. Le régime de sanctions lui-même est fixé par chaque État membre.",
+   "mots": 48,
+   "pages": [
     "_routes"
    ]
   },
@@ -31996,7 +32277,8 @@
    "fr": "Chiffre d'affaires annuel mondial total de l'entreprise à laquelle l'entité appartient — pas celui de la seule entité concernée.",
    "mots": 21,
    "pages": [
-    "nis2-chiffre"
+    "nis2-chiffre",
+    "_routes"
    ]
   },
   "Chiffre d’affaires annuel mondial (EUR)": {
@@ -41412,6 +41694,13 @@
     "ocde-processus"
    ]
   },
+  "Déclarer le ou les groupes d'acteur que votre organisme occupe dans la chaîne de valeur de l'IA.": {
+   "fr": "Déclarer le ou les groupes d'acteur que votre organisme occupe dans la chaîne de valeur de l'IA.",
+   "mots": 19,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Déclarer le périmètre avant de le peser": {
    "fr": "Déclarer le périmètre avant de le peser",
    "mots": 7,
@@ -49101,6 +49390,13 @@
     "_js"
    ]
   },
+  "Gestion des vulnérabilités (annexe I, partie II)": {
+   "fr": "Gestion des vulnérabilités (annexe I, partie II)",
+   "mots": 7,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Gestion des vulnérabilités et des correctifs": {
    "fr": "Gestion des vulnérabilités et des correctifs",
    "mots": 6,
@@ -49933,6 +50229,13 @@
   "Gêne interne, absorbée sans décision de direction.": {
    "fr": "Gêne interne, absorbée sans décision de direction.",
    "mots": 7,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "HORS CHAMP. Vous n'êtes ni un organisme du secteur public détenant des données protégées, ni un réutilisateur, ni un prestataire de services d'intermédiation de données, ni une organisation altruiste reconnue. Le règlement (UE) #/# ne vous impose alors aucune obligation. C'est le cas de la très grande majorité des entreprises, et le dire vaut mieux que de vous proposer un chantier sans objet.": {
+   "fr": "HORS CHAMP. Vous n'êtes ni un organisme du secteur public détenant des données protégées, ni un réutilisateur, ni un prestataire de services d'intermédiation de données, ni une organisation altruiste reconnue. Le règlement (UE) 2022/868 ne vous impose alors aucune obligation. C'est le cas de la très grande majorité des entreprises, et le dire vaut mieux que de vous proposer un chantier sans objet.",
+   "mots": 65,
    "pages": [
     "_routes"
    ]
@@ -54809,6 +55112,13 @@
     "_routes"
    ]
   },
+  "L'annexe ZA porte une ligne sans aucun paragraphe en face.": {
+   "fr": "L'annexe ZA porte une ligne sans aucun paragraphe en face.",
+   "mots": 11,
+   "pages": [
+    "_routes"
+   ]
+  },
   "L'annexe ZA porte une ligne « Non couvert » — l'article #(#). Cent pour cent ici ne veut donc pas dire article # tenu.": {
    "fr": "L'annexe ZA porte une ligne « Non couvert » — l'article 17(2). Cent pour cent ici ne veut donc pas dire article 17 tenu.",
    "mots": 21,
@@ -55303,6 +55613,13 @@
   "L'exemption de l'article # ne couvre que le chapitre II, et sous conditions. Une PME reste tenue par les chapitres IV, VI et VII.": {
    "fr": "L'exemption de l'article 7 ne couvre que le chapitre II, et sous conditions. Une PME reste tenue par les chapitres IV, VI et VII.",
    "mots": 25,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "L'exemption de l'article # ne vise que les micro et petites entreprises.": {
+   "fr": "L'exemption de l'article 7 ne vise que les micro et petites entreprises.",
+   "mots": 13,
    "pages": [
     "_routes"
    ]
@@ -56237,7 +56554,8 @@
    "fr": "La catégorie de taille ne se prononce pas sans effectif ni chiffre d'affaires ou total du bilan.",
    "mots": 18,
    "pages": [
-    "nis2-qualifier"
+    "nis2-qualifier",
+    "_routes"
    ]
   },
   "La catégorie ne s'applique pas — et il faut pouvoir dire pourquoi.": {
@@ -56868,6 +57186,13 @@
     "_routes"
    ]
   },
+  "La déclaration d'applicabilité ne passe pas l'étape #. Aucun taux de maturité ne rattrape ce défaut : l'auditeur s'arrête au document.": {
+   "fr": "La déclaration d'applicabilité ne passe pas l'étape 1. Aucun taux de maturité ne rattrape ce défaut : l'auditeur s'arrête au document.",
+   "mots": 23,
+   "pages": [
+    "_routes"
+   ]
+  },
   "La déclaration d'applicabilité ne passe pas l'étape #. L'auditeur s'arrête au document : aucun taux de maturité ne rattrape ce défaut.": {
    "fr": "La déclaration d'applicabilité ne passe pas l'étape 1. L'auditeur s'arrête au document : aucun taux de maturité ne rattrape ce défaut.",
    "mots": 23,
@@ -56886,14 +57211,16 @@
    "fr": "La déclaration n'est PAS recevable pour un audit d'étape 1. Ce n'est pas un défaut de sécurité, c'est un défaut de document — et il se corrige en écrivant, pas en développant.",
    "mots": 34,
    "pages": [
-    "iso42001-soa"
+    "iso42001-soa",
+    "_routes"
    ]
   },
   "La déclaration n'est PAS recevable. Le défaut est documentaire, et il se corrige en écrivant, pas en développant.": {
    "fr": "La déclaration n'est PAS recevable. Le défaut est documentaire, et il se corrige en écrivant, pas en développant.",
    "mots": 19,
    "pages": [
-    "iso27001-soa"
+    "iso27001-soa",
+    "_routes"
    ]
   },
   "La déclaration ne porte pas les champs sans lesquels aucune qualification n'est possible.": {
@@ -57884,6 +58211,13 @@
     "_js"
    ]
   },
+  "La qualification est faite, rien n'est renseigné. Le module ne rend aucun chiffre par défaut : un questionnaire vide n'est pas une conformité à zéro, c'est une conformité qu'on n'a pas regardée.": {
+   "fr": "La qualification est faite, rien n'est renseigné. Le module ne rend aucun chiffre par défaut : un questionnaire vide n'est pas une conformité à zéro, c'est une conformité qu'on n'a pas regardée.",
+   "mots": 36,
+   "pages": [
+    "_routes"
+   ]
+  },
   "La qualification ne se demande pas : l’État dresse la liste et l’entité s’y déclare elle-même, au plus tard le # avril #. Cette date est passée. Une entité non enregistrée n’est pas « pas encore concernée » : elle est en manquement sur une obligation dont l’échéance est derrière elle.": {
    "fr": "La qualification ne se demande pas : l’État dresse la liste et l’entité s’y déclare elle-même, au plus tard le 17 avril 2025. Cette date est passée. Une entité non enregistrée n’est pas « pas encore concernée » : elle est en manquement sur une obligation dont l’échéance est derrière elle.",
    "mots": 51,
@@ -58264,6 +58598,13 @@
     "_js"
    ]
   },
+  "La stratégie de conformité réglementaire du §# n'est pas complète. C'est la pièce que ni ISO # ni ISO/IEC # ne donnent, et celle que l'organisme notifié ouvre en premier.": {
+   "fr": "La stratégie de conformité réglementaire du §4.4 n'est pas complète. C'est la pièce que ni ISO 9001 ni ISO/IEC 42001 ne donnent, et celle que l'organisme notifié ouvre en premier.",
+   "mots": 31,
+   "pages": [
+    "_routes"
+   ]
+  },
   "La stratégie de conformité réglementaire est-elle déterminée et documentée, avec ses cinq composantes ?": {
    "fr": "La stratégie de conformité réglementaire est-elle déterminée et documentée, avec ses cinq composantes ?",
    "mots": 14,
@@ -58412,6 +58753,13 @@
    "mots": 37,
    "pages": [
     "_js"
+   ]
+  },
+  "La taille n'est pas renseignée : la qualification ne peut pas être prononcée.": {
+   "fr": "La taille n'est pas renseignée : la qualification ne peut pas être prononcée.",
+   "mots": 13,
+   "pages": [
+    "_routes"
    ]
   },
   "La taille n'est pas renseignée.": {
@@ -58850,6 +59198,13 @@
     "_routes"
    ]
   },
+  "Le Top # OWASP n'est pas un référentiel de conformité : on ne s'y conforme pas, on s'en sert pour ne rien oublier d'évident. Il porte un millésime, et celui-ci est # — le précédent ignorait la fuite d'invite système, les bases vectorielles et la consommation non bornée.": {
+   "fr": "Le Top 10 OWASP n'est pas un référentiel de conformité : on ne s'y conforme pas, on s'en sert pour ne rien oublier d'évident. Il porte un millésime, et celui-ci est 2025 — le précédent ignorait la fuite d'invite système, les bases vectorielles et la consommation non bornée.",
+   "mots": 50,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Le bandeau du haut annonce le mode de recherche réellement disponible — hybride (mots et sens fusionnés), lexical (mots seuls), ou indisponible — et POURQUOI : clé d’embeddings absente, extension pgvector non installée, documents non indexés. Il donne aussi les formats que ce serveur sait vraiment lire et la taille maximale. Une base muette a toujours une raison ; elle est écrite là.": {
    "fr": "Le bandeau du haut annonce le mode de recherche réellement disponible — hybride (mots et sens fusionnés), lexical (mots seuls), ou indisponible — et POURQUOI : clé d’embeddings absente, extension pgvector non installée, documents non indexés. Il donne aussi les formats que ce serveur sait vraiment lire et la taille maximale. Une base muette a toujours une raison ; elle est écrite là.",
    "mots": 60,
@@ -58976,6 +59331,13 @@
    "pages": [
     "iso27001",
     "iso42001",
+    "_routes"
+   ]
+  },
+  "Le cadre NIST AI RMF ne se certifie pas : aucun organisme n'accrédite, aucun auditeur n'habilite, aucun certificat n'existe. « Conforme NIST AI RMF » ne veut rien dire. Ce profil dit où vous en êtes de VOTRE usage du cadre, et rien d'autre.": {
+   "fr": "Le cadre NIST AI RMF ne se certifie pas : aucun organisme n'accrédite, aucun auditeur n'habilite, aucun certificat n'existe. « Conforme NIST AI RMF » ne veut rien dire. Ce profil dit où vous en êtes de VOTRE usage du cadre, et rien d'autre.",
+   "mots": 45,
+   "pages": [
     "_routes"
    ]
   },
@@ -59760,6 +60122,13 @@
     "_routes"
    ]
   },
+  "Le domaine d'application n'est pas écrit. C'est la première décision de la certification et la plus structurante : tout ce qui n'en est pas exclu par écrit sera audité.": {
+   "fr": "Le domaine d'application n'est pas écrit. C'est la première décision de la certification et la plus structurante : tout ce qui n'en est pas exclu par écrit sera audité.",
+   "mots": 32,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Le domaine d'application. Celui du système de management est choisi par l'organisme ; celui du règlement ne l'est pas — il couvre tout ce qui soutient les fonctions critiques ou importantes. Reprendre le premier pour le second est l'erreur la plus courante de cette greffe.": {
    "fr": "Le domaine d'application. Celui du système de management est choisi par l'organisme ; celui du règlement ne l'est pas — il couvre tout ce qui soutient les fonctions critiques ou importantes. Reprendre le premier pour le second est l'erreur la plus courante de cette greffe.",
    "mots": 47,
@@ -60186,6 +60555,13 @@
    "mots": 15,
    "pages": [
     "recyf-objectifs"
+   ]
+  },
+  "Le module travaille par FAMILLE, pas par mesure : la répartition des mesures par socle n'est pas reprise ici, et un ratio au dénominateur supposé vaudrait moins que son absence.": {
+   "fr": "Le module travaille par FAMILLE, pas par mesure : la répartition des mesures par socle n'est pas reprise ici, et un ratio au dénominateur supposé vaudrait moins que son absence.",
+   "mots": 30,
+   "pages": [
+    "_routes"
    ]
   },
   "Le modèle de comparaison applique des paliers de remise (-#% à partir de # systèmes, -#% à #, -#% à #+), pour un comparatif plus réaliste qu un tarif linéaire.": {
@@ -60670,7 +61046,8 @@
    "fr": "Le plan de traitement ne tient pas en l'état. Ce ne sont pas des défauts techniques : ce sont des défauts de DÉCISION, et ils se corrigent par des signatures, pas par des outils.",
    "mots": 34,
    "pages": [
-    "iso27001-risques"
+    "iso27001-risques",
+    "_routes"
    ]
   },
   "Le plan de traitement ne tient pas en l’état.": {
@@ -62042,6 +62419,13 @@
     "_js"
    ]
   },
+  "Le système n'est pas déclaré génératif. Le profil AI #-# ne s'applique pas, et le taux du cadre reste celui du socle. Ce n'est pas une dispense : c'est une qualification, et elle se revoit le jour où un modèle de langage entre dans la chaîne.": {
+   "fr": "Le système n'est pas déclaré génératif. Le profil AI 600-1 ne s'applique pas, et le taux du cadre reste celui du socle. Ce n'est pas une dispense : c'est une qualification, et elle se revoit le jour où un modèle de langage entre dans la chaîne.",
+   "mots": 48,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Le système notifie la personne désignée lorsqu'il entre dans un état qui demande une attention ou une intervention humaine ; la personne perçoit, évalue, puis intervient.": {
    "fr": "Le système notifie la personne désignée lorsqu'il entre dans un état qui demande une attention ou une intervention humaine ; la personne perçoit, évalue, puis intervient.",
    "mots": 26,
@@ -62226,6 +62610,13 @@
    "mots": 47,
    "pages": [
     "conf-plan"
+   ]
+  },
+  "Le taux dit ce que le système de management déclaré couvre du tableau ZA.#. Il ne dit pas qu'un organisme notifié l'a vu, ni que la norme est citée au JOUE.": {
+   "fr": "Le taux dit ce que le système de management déclaré couvre du tableau ZA.1. Il ne dit pas qu'un organisme notifié l'a vu, ni que la norme est citée au JOUE.",
+   "mots": 33,
+   "pages": [
+    "_routes"
    ]
   },
   "Le taux dit la diligence déclarée. Aucun organisme ne délivre d'attestation contre ce guide — à la différence de prEN #, qui vaudra présomption le jour de sa citation au Journal officiel.": {
@@ -63313,6 +63704,13 @@
     "_js"
    ]
   },
+  "Les cinq lignes ne pèsent pas pareil : quatre sont des obligations, la formation du personnel est un encouragement. Le taux ci-dessus ne compte que les quatre.": {
+   "fr": "Les cinq lignes ne pèsent pas pareil : quatre sont des obligations, la formation du personnel est un encouragement. Le taux ci-dessus ne compte que les quatre.",
+   "mots": 27,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Les cinq scénarios sont des repères du cabinet : des choix de milieu de plage, pas une norme. Le plan d’adoption de votre organisation les remplace. Attention au levier du mix électrique : il ne change RIEN à l’électricité consommée ni à l’énergie primaire, il déplace seulement les émissions. Le confondre avec un gain d’efficacité est l’erreur la plus commune.": {
    "fr": "Les cinq scénarios sont des repères du cabinet : des choix de milieu de plage, pas une norme. Le plan d’adoption de votre organisation les remplace. Attention au levier du mix électrique : il ne change RIEN à l’électricité consommée ni à l’énergie primaire, il déplace seulement les émissions. Le confondre avec un gain d’efficacité est l’erreur la plus commune.",
    "mots": 63,
@@ -63488,7 +63886,8 @@
    "fr": "Les critères d'acceptation ne portent aucune date. Rien ne permet de montrer qu'ils précèdent l'appréciation, et c'est ce que l'auditeur demandera.",
    "mots": 26,
    "pages": [
-    "iso27001-risques"
+    "iso27001-risques",
+    "_routes"
    ]
   },
   "Les critères de maturité attendus sont-ils écrits, avec un seuil chiffré par critère ?": {
@@ -63632,7 +64031,8 @@
    "fr": "Les deux paliers pivotent au même chiffre d'affaires — 500 M€ : en dessous, ce sont les planchers forfaitaires qui commandent ; au-dessus, les pourcentages. L'écart entre les deux qualifications reste de 43 % de part et d'autre.",
    "mots": 36,
    "pages": [
-    "nis2-chiffre"
+    "nis2-chiffre",
+    "_routes"
    ]
   },
   "Les deux parts de substituabilité atteignent le seuil, mais dans des catégories différentes. Selon que la même catégorie est exigée ou non, l'étape # est franchie ou non — et l'acte délégué ne le dit pas expressément.": {
@@ -66731,6 +67131,13 @@
   "Liste des prestataires DÉJÀ désignés critiques qui s'appuient sur les services du demandeur": {
    "fr": "Liste des prestataires DÉJÀ désignés critiques qui s'appuient sur les services du demandeur",
    "mots": 14,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Liste des États membres où l'entité fournit des services relevant du champ de la directive": {
+   "fr": "Liste des États membres où l'entité fournit des services relevant du champ de la directive",
+   "mots": 16,
    "pages": [
     "_routes"
    ]
@@ -72028,6 +72435,13 @@
    "mots": 4,
    "pages": [
     "clients"
+   ]
+  },
+  "Nom de l'entité": {
+   "fr": "Nom de l'entité",
+   "mots": 4,
+   "pages": [
+    "_routes"
    ]
   },
   "Nom de la personne morale": {
@@ -80137,6 +80551,13 @@
     "_js"
    ]
   },
+  "Propriétés du produit (annexe I, partie I)": {
+   "fr": "Propriétés du produit (annexe I, partie I)",
+   "mots": 7,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Prospection et scoring de portefeuille": {
    "fr": "Prospection et scoring de portefeuille",
    "mots": 5,
@@ -84154,6 +84575,202 @@
     "data-act-cloud"
    ]
   },
+  "Renseigner — art. # : Aucun obstacle précommercial, commercial, technique, contractuel ou organisationnel n'empêche le client de changer de fournisseur, d'atteindre l'équivalence fonctionnelle, ou de résilier": {
+   "fr": "Renseigner — art. 23 : Aucun obstacle précommercial, commercial, technique, contractuel ou organisationnel n'empêche le client de changer de fournisseur, d'atteindre l'équivalence fonctionnelle, ou de résilier",
+   "mots": 26,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Renseigner — art. # : Aucun transfert ni accès gouvernemental de pays tiers à des données non personnelles détenues dans l'Union n'est accordé hors des conditions de l'article # ; le client est informé": {
+   "fr": "Renseigner — art. 32 : Aucun transfert ni accès gouvernemental de pays tiers à des données non personnelles détenues dans l'Union n'est accordé hors des conditions de l'article 32 ; le client est informé",
+   "mots": 32,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Renseigner — art. # : Le client reçoit l'information sur les procédures de changement, les formats, les outils d'exportation et les restrictions connues": {
+   "fr": "Renseigner — art. 26 : Le client reçoit l'information sur les procédures de changement, les formats, les outils d'exportation et les restrictions connues",
+   "mots": 22,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Renseigner — art. # : Le contrat est transparent sur la juridiction où les données sont hébergées et sur les mesures techniques, organisationnelles et juridiques prises contre un accès international non conforme": {
+   "fr": "Renseigner — art. 28 : Le contrat est transparent sur la juridiction où les données sont hébergées et sur les mesures techniques, organisationnelles et juridiques prises contre un accès international non conforme",
+   "mots": 29,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Renseigner — art. # : Le contrat porte les clauses de changement de fournisseur : délai de transition maximal de trente jours, préavis de résiliation de deux mois au plus, assistance, et énumération des données et actifs numériques portables": {
+   "fr": "Renseigner — art. 25 : Le contrat porte les clauses de changement de fournisseur : délai de transition maximal de trente jours, préavis de résiliation de deux mois au plus, assistance, et énumération des données et actifs numériques portables",
+   "mots": 35,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Renseigner — art. # : Les frais de changement de fournisseur sont supprimés au # janvier # ; d'ici là ils sont réduits et plafonnés aux coûts directement liés, et l'information précontractuelle du §# est fournie": {
+   "fr": "Renseigner — art. 29 : Les frais de changement de fournisseur sont supprimés au 12 janvier 2027 ; d'ici là ils sont réduits et plafonnés aux coûts directement liés, et l'information précontractuelle du §4 est fournie",
+   "mots": 31,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Renseigner — art. # : Les obligations techniques du changement sont tenues selon la catégorie de service, l'équivalence fonctionnelle comprise là où l'article l'exige": {
+   "fr": "Renseigner — art. 30 : Les obligations techniques du changement sont tenues selon la catégorie de service, l'équivalence fonctionnelle comprise là où l'article l'exige",
+   "mots": 24,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Renseigner — art. # : Toutes les parties coopèrent de bonne foi pour rendre le changement effectif, dans les délais et en préservant la continuité": {
+   "fr": "Renseigner — art. 27 : Toutes les parties coopèrent de bonne foi pour rendre le changement effectif, dans les délais et en préservant la continuité",
+   "mots": 22,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Renseigner — art. # b) : Les modalités commerciales, tarification comprise, ne dépendent pas de l'usage d'autres services du même prestataire ou d'une entité liée.": {
+   "fr": "Renseigner — art. 12 b) : Les modalités commerciales, tarification comprise, ne dépendent pas de l'usage d'autres services du même prestataire ou d'une entité liée.",
+   "mots": 25,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Renseigner — art. # c) : Date, heure, géolocalisation, durée et connexions établies ne servent qu'au développement du service — fraude et cybersécurité comprises — et sont communiquées au détenteur sur demande.": {
+   "fr": "Renseigner — art. 12 c) : Date, heure, géolocalisation, durée et connexions établies ne servent qu'au développement du service — fraude et cybersécurité comprises — et sont communiquées au détenteur sur demande.",
+   "mots": 28,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Renseigner — art. # d) : L'échange se fait au format reçu ; toute conversion est justifiée et ouvre une possibilité de non-participation, sauf si le droit de l'Union l'exige.": {
+   "fr": "Renseigner — art. 12 d) : L'échange se fait au format reçu ; toute conversion est justifiée et ouvre une possibilité de non-participation, sauf si le droit de l'Union l'exige.",
+   "mots": 30,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Renseigner — art. # e) : Stockage temporaire, organisation, conversion, anonymisation, pseudonymisation : seulement sur demande ou approbation expresse, et les outils de tiers ne servent à rien d'autre.": {
+   "fr": "Renseigner — art. 12 e) : Stockage temporaire, organisation, conversion, anonymisation, pseudonymisation : seulement sur demande ou approbation expresse, et les outils de tiers ne servent à rien d'autre.",
+   "mots": 26,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Renseigner — art. # f) : Y compris sur les prix et les conditions de service, à l'égard des personnes concernées, des détenteurs et des utilisateurs.": {
+   "fr": "Renseigner — art. 12 f) : Y compris sur les prix et les conditions de service, à l'égard des personnes concernées, des détenteurs et des utilisateurs.",
+   "mots": 24,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Renseigner — art. # g) : Des procédures pour prévenir les pratiques frauduleuses ou abusives de parties cherchant à obtenir un accès.": {
+   "fr": "Renseigner — art. 12 g) : Des procédures pour prévenir les pratiques frauduleuses ou abusives de parties cherchant à obtenir un accès.",
+   "mots": 19,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Renseigner — art. # h) : Une continuité raisonnable du service, des mécanismes d'accès, de transfert et d'extraction des données stockées, et l'exercice des droits des personnes concernées.": {
+   "fr": "Renseigner — art. 12 h) : Une continuité raisonnable du service, des mécanismes d'accès, de transfert et d'extraction des données stockées, et l'exercice des droits des personnes concernées.",
+   "mots": 28,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Renseigner — art. # i) : Par des normes ouvertes communément utilisées dans le secteur.": {
+   "fr": "Renseigner — art. 12 i) : Par des normes ouvertes communément utilisées dans le secteur.",
+   "mots": 12,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Renseigner — art. # j) : Des mesures techniques, juridiques et organisationnelles contre le transfert ou l'accès illicites aux données non personnelles.": {
+   "fr": "Renseigner — art. 12 j) : Des mesures techniques, juridiques et organisationnelles contre le transfert ou l'accès illicites aux données non personnelles.",
+   "mots": 20,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Renseigner — art. # k) : Le détenteur est informé sans retard de tout transfert, accès ou usage non autorisé portant sur les données non personnelles partagées.": {
+   "fr": "Renseigner — art. 12 k) : Le détenteur est informé sans retard de tout transfert, accès ou usage non autorisé portant sur les données non personnelles partagées.",
+   "mots": 24,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Renseigner — art. # l) : Un niveau approprié pour les données non personnelles, et le niveau le PLUS ÉLEVÉ pour les informations sensibles sous l'angle de la concurrence.": {
+   "fr": "Renseigner — art. 12 l) : Un niveau approprié pour les données non personnelles, et le niveau le PLUS ÉLEVÉ pour les informations sensibles sous l'angle de la concurrence.",
+   "mots": 27,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Renseigner — art. # m) : Les informer et, le cas échéant, les conseiller de manière concise, transparente et accessible sur les utilisations prévues AVANT qu'elles ne consentent.": {
+   "fr": "Renseigner — art. 12 m) : Les informer et, le cas échéant, les conseiller de manière concise, transparente et accessible sur les utilisations prévues AVANT qu'elles ne consentent.",
+   "mots": 26,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Renseigner — art. # n) : Préciser la juridiction du pays tiers où l'usage est prévu, et fournir des outils pour donner ET retirer le consentement ou l'autorisation.": {
+   "fr": "Renseigner — art. 12 n) : Préciser la juridiction du pays tiers où l'usage est prévu, et fournir des outils pour donner ET retirer le consentement ou l'autorisation.",
+   "mots": 27,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Renseigner — art. # o) : Le prestataire tient un journal de son activité d'intermédiation.": {
+   "fr": "Renseigner — art. 12 o) : Le prestataire tient un journal de son activité d'intermédiation.",
+   "mots": 13,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Renseigner — art. # §# : Avant la fourniture d'un service connexe, l'utilisateur reçoit les neuf informations du §#, dont l'identité du détenteur de données, le droit de réclamation et l'existence de secrets d'affaires": {
+   "fr": "Renseigner — art. 3 §3 : Avant la fourniture d'un service connexe, l'utilisateur reçoit les neuf informations du §3, dont l'identité du détenteur de données, le droit de réclamation et l'existence de secrets d'affaires",
+   "mots": 34,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Renseigner — art. # §# : Avant la vente, la location ou le crédit-bail, l'utilisateur reçoit les quatre informations du §# : type, format et volume estimé ; génération en continu et en temps réel ; stockage et durée ; moyens d'accès, d'extraction et d'effacement": {
+   "fr": "Renseigner — art. 3 §2 : Avant la vente, la location ou le crédit-bail, l'utilisateur reçoit les quatre informations du §2 : type, format et volume estimé ; génération en continu et en temps réel ; stockage et durée ; moyens d'accès, d'extraction et d'effacement",
+   "mots": 41,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Renseigner — art. # §# : La notification a été soumise à l'autorité compétente avant la fourniture du service": {
+   "fr": "Renseigner — art. 11 §1 : La notification a été soumise à l'autorité compétente avant la fourniture du service",
+   "mots": 16,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Renseigner — art. # §# : Les modifications des renseignements notifiés sont transmises dans les quatorze jours": {
+   "fr": "Renseigner — art. 11 §12 : Les modifications des renseignements notifiés sont transmises dans les quatorze jours",
+   "mots": 13,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Renseigner — art. # §# : Une procédure existe pour notifier la cessation d'activité dans les quinze jours": {
+   "fr": "Renseigner — art. 11 §13 : Une procédure existe pour notifier la cessation d'activité dans les quinze jours",
+   "mots": 15,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Renseigner — art. # §# d) : Un site internet public porte des informations complètes et à jour sur le prestataire et son activité": {
+   "fr": "Renseigner — art. 11 §6 d) : Un site internet public porte des informations complètes et à jour sur le prestataire et son activité",
+   "mots": 20,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Renseignez d'abord votre qualification : la page refuse de chiffrer sans elle, et ce refus est le premier service rendu. Le principe de proportionnalité réserve les objectifs # à # aux entités essentielles, et réduit le nombre de moyens attendus pour quinze autres — # pour une essentielle, # pour une importante, exactement la moitié. C'est le premier texte où la distinction essentielle / importante change LES MESURES, et pas seulement la supervision et le plafond d'amende.": {
    "fr": "Renseignez d'abord votre qualification : la page refuse de chiffrer sans elle, et ce refus est le premier service rendu. Le principe de proportionnalité réserve les objectifs 16 à 20 aux entités essentielles, et réduit le nombre de moyens attendus pour quinze autres — 152 pour une essentielle, 76 pour une importante, exactement la moitié. C'est le premier texte où la distinction essentielle / importante change LES MESURES, et pas seulement la supervision et le plafond d'amende.",
    "mots": 73,
@@ -85298,6 +85915,20 @@
     "_routes"
    ]
   },
+  "Rien n'est renseigné. La liste ci-dessous n'est pas un barème : elle sert à vérifier qu'aucune de ces dix défaillances n'a été oubliée, pas à obtenir une note.": {
+   "fr": "Rien n'est renseigné. La liste ci-dessous n'est pas un barème : elle sert à vérifier qu'aucune de ces dix défaillances n'a été oubliée, pas à obtenir une note.",
+   "mots": 32,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Rien n'est renseigné. Le cadre ne rend aucun chiffre par défaut : un profil vide n'est pas un profil à zéro.": {
+   "fr": "Rien n'est renseigné. Le cadre ne rend aucun chiffre par défaut : un profil vide n'est pas un profil à zéro.",
+   "mots": 22,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Rien ne distingue, dans une invite, la consigne de la donnée. C'est une propriété du procédé : aucun correctif ne la fera disparaître, et tout ce qui se construit ici est de l'atténuation.": {
    "fr": "Rien ne distingue, dans une invite, la consigne de la donnée. C'est une propriété du procédé : aucun correctif ne la fera disparaître, et tout ce qui se construit ici est de l'atténuation.",
    "mots": 34,
@@ -85307,6 +85938,20 @@
   },
   "Rien ne s'y saisit : il se marque lu, et « lu » n'est pas vert.": {
    "fr": "Rien ne s'y saisit : il se marque lu, et « lu » n'est pas vert.",
+   "mots": 15,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Rien ne se certifie contre SP #-# : ce taux dit l'adaptation industrielle déclarée d'un catalogue volontaire, pas une conformité reconnue.": {
+   "fr": "Rien ne se certifie contre SP 800-82 : ce taux dit l'adaptation industrielle déclarée d'un catalogue volontaire, pas une conformité reconnue.",
+   "mots": 21,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Rien ne se mesure avant : le questionnaire ne sait pas lesquels des # exemples vous visent.": {
+   "fr": "Rien ne se mesure avant : le questionnaire ne sait pas lesquels des 115 exemples vous visent.",
    "mots": 15,
    "pages": [
     "_routes"
@@ -87671,6 +88316,13 @@
     "_routes"
    ]
   },
+  "SP #-# ne se certifie pas. Aucun organisme ne délivre d'attestation contre ce catalogue : ce taux dit une couverture déclarée, pas une conformité reconnue.": {
+   "fr": "SP 800-53 ne se certifie pas. Aucun organisme ne délivre d'attestation contre ce catalogue : ce taux dit une couverture déclarée, pas une conformité reconnue.",
+   "mots": 24,
+   "pages": [
+    "_routes"
+   ]
+  },
   "STANDARD": {
    "fr": "STANDARD",
    "mots": 1,
@@ -88718,6 +89370,13 @@
    "mots": 3,
    "pages": [
     "pricing"
+   ]
+  },
+  "Secteur et sous-secteur des annexes I ou II": {
+   "fr": "Secteur et sous-secteur des annexes I ou II",
+   "mots": 9,
+   "pages": [
+    "_routes"
    ]
   },
   "Secteur industriel": {
@@ -90477,6 +91136,13 @@
     "_routes"
    ]
   },
+  "Statut non renseigné": {
+   "fr": "Statut non renseigné",
+   "mots": 3,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Stellantis — Partenariat Mistral AI : assistant d'ingénierie et IA embarquée conversationnelle": {
    "fr": "Stellantis — Partenariat Mistral AI : assistant d'ingénierie et IA embarquée conversationnelle",
    "mots": 11,
@@ -90530,35 +91196,40 @@
    "fr": "Stratégie de conformité : « La conformité aux exigences essentielles » n'est pas déclarée.",
    "mots": 12,
    "pages": [
-    "conf-plan"
+    "conf-plan",
+    "_routes"
    ]
   },
   "Stratégie de conformité : « La conformité du système de management lui-même » n'est pas déclarée.": {
    "fr": "Stratégie de conformité : « La conformité du système de management lui-même » n'est pas déclarée.",
    "mots": 15,
    "pages": [
-    "conf-plan"
+    "conf-plan",
+    "_routes"
    ]
   },
   "Stratégie de conformité : « La stratégie de gestion des données » n'est pas déclarée.": {
    "fr": "Stratégie de conformité : « La stratégie de gestion des données » n'est pas déclarée.",
    "mots": 13,
    "pages": [
-    "conf-plan"
+    "conf-plan",
+    "_routes"
    ]
   },
   "Stratégie de conformité : « La surveillance après commercialisation » n'est pas déclarée.": {
    "fr": "Stratégie de conformité : « La surveillance après commercialisation » n'est pas déclarée.",
    "mots": 11,
    "pages": [
-    "conf-plan"
+    "conf-plan",
+    "_routes"
    ]
   },
   "Stratégie de conformité : « Les incidents graves » n'est pas déclarée.": {
    "fr": "Stratégie de conformité : « Les incidents graves » n'est pas déclarée.",
    "mots": 10,
    "pages": [
-    "conf-plan"
+    "conf-plan",
+    "_routes"
    ]
   },
   "Stratégie de sortie : période de transition obligatoire pendant laquelle le service continue, et qui permet de migrer ailleurs ou de réinternaliser": {
@@ -94437,6 +95108,13 @@
   "Toute modification des renseignements du §# est notifiée dans les quatorze jours (§#).": {
    "fr": "Toute modification des renseignements du §6 est notifiée dans les quatorze jours (§12).",
    "mots": 11,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Toute modification est notifiée sans tarder, et en tout état de cause dans un délai de deux semaines.": {
+   "fr": "Toute modification est notifiée sans tarder, et en tout état de cause dans un délai de deux semaines.",
+   "mots": 18,
    "pages": [
     "_routes"
    ]
@@ -100107,6 +100785,13 @@
     "_js"
    ]
   },
+  "Vous mettez sur le marché un système d'IA à haut risque sous votre nom : l'article # vous impose un système de management de la qualité.": {
+   "fr": "Vous mettez sur le marché un système d'IA à haut risque sous votre nom : l'article 17 vous impose un système de management de la qualité.",
+   "mots": 26,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Vous n avez pas le temps d entrer dans le détail opérationne": {
    "fr": "Vous n avez pas le temps d entrer dans le détail opérationne",
    "mots": 12,
@@ -100246,6 +100931,20 @@
    "mots": 17,
    "pages": [
     "_js"
+   ]
+  },
+  "Vous relevez de # chapitre(s) du règlement. Les obligations affichées sont celles de vos qualités, et d'elles seules.": {
+   "fr": "Vous relevez de 1 chapitre(s) du règlement. Les obligations affichées sont celles de vos qualités, et d'elles seules.",
+   "mots": 19,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Vous relevez de # des quatre cadres du règlement. Les obligations affichées sont celles de vos qualités, et d'elles seules.": {
+   "fr": "Vous relevez de 1 des quatre cadres du règlement. Les obligations affichées sont celles de vos qualités, et d'elles seules.",
+   "mots": 20,
+   "pages": [
+    "_routes"
    ]
   },
   "Vous répondez aux deux questionnaires. Le score retenu": {
@@ -101621,6 +102320,13 @@
     "_routes"
    ]
   },
+  "art. # et #": {
+   "fr": "art. 6.1.2 et 6.1.3",
+   "mots": 2,
+   "pages": [
+    "_routes"
+   ]
+  },
   "art. # ou # — vous êtes fabricant pour ce que vous modifiez": {
    "fr": "art. 21 ou 22 — vous êtes fabricant pour ce que vous modifiez",
    "mots": 10,
@@ -102678,6 +103384,13 @@
    "mots": 11,
    "pages": [
     "_js"
+   ]
+  },
+  "chiffre d'affaires ou total du bilan": {
+   "fr": "chiffre d'affaires ou total du bilan",
+   "mots": 7,
+   "pages": [
+    "_routes"
    ]
   },
   "chiffre d’affaires, c’est le pourcentage qui commande.": {
@@ -108937,6 +109650,13 @@
     "_js"
    ]
   },
+  "se vérifie sur l'organisation du fabricant, et vaut pendant toute la période d'assistance": {
+   "fr": "se vérifie sur l'organisation du fabricant, et vaut pendant toute la période d'assistance",
+   "mots": 15,
+   "pages": [
+    "_routes"
+   ]
+  },
   "se vérifie sur l’organisation, et vaut pendant toute la période d’assistance": {
    "fr": "se vérifie sur l’organisation, et vaut pendant toute la période d’assistance",
    "mots": 13,
@@ -108950,7 +109670,8 @@
    "mots": 7,
    "pages": [
     "cra-ecarts",
-    "_js"
+    "_js",
+    "_routes"
    ]
   },
   "secteur d activité": {
@@ -111740,6 +112461,13 @@
    "mots": 2,
    "pages": [
     "_js"
+   ]
+  },
+  "Échéance passée le #-#-# (art. #, al. #) : L'obligation de l'article # §# — accessibilité des données dès la conception — s'applique aux produits connectés et aux services connexes mis sur le marché après cette date.": {
+   "fr": "Échéance passée le 2026-09-12 (art. 50, al. 3) : L'obligation de l'article 3 §1 — accessibilité des données dès la conception — s'applique aux produits connectés et aux services connexes mis sur le marché après cette date.",
+   "mots": 32,
+   "pages": [
+    "_routes"
    ]
   },
   "Échéances #-# (Art. #)": {
