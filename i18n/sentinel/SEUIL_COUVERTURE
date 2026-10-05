@@ -26,7 +26,26 @@
 #     comme du travail en attente rendait le plancher inatteignable ;
 #   - la mesure elle-meme : `couverture` ignorait les motifs, que le
 #     navigateur applique pourtant. Elle les applique desormais.
-# LE PLANCHER RESTE SOUS LA MESURE, d'un cheveu : 0,999 laisse place a une
-# etiquette neuve le temps qu'elle soit traduite, et tombe des qu'un ecran
-# entier arrive en francais.
-0.999
+# 5 OCTOBRE 2026, PLUS TARD — DE 0,999 A 1,0, SUR DEMANDE EXPLICITE.
+# Le plancher restait sous la mesure d'un cheveu : 0,999 laissait place a une
+# etiquette neuve le temps qu'elle soit traduite. Cette marge est retiree.
+#
+# CE QU'ELLE COUTAIT. 0,999 sur 197 360 mots, c'est 197 mots de francais
+# qu'un ecran pouvait servir a un lecteur anglophone sans qu'aucune regle ne
+# bronche — de quoi loger un paragraphe entier, et de quoi laisser une dette
+# s'installer a bas bruit. La derniere fois qu'un trou d'inventaire a ete
+# rouvert (les seize routes d'evaluation, 958 mots), il n'a ete vu que parce
+# que quelqu'un l'a cherche, pas parce qu'une regle l'a dit.
+#
+# CE QU'ELLE COUTE MAINTENANT. A 1,0, le premier mot de francais ajoute sans
+# sa traduction fait tomber
+# tests/test_sentinel_langue_gardien.py::test_la_couverture_en_mots_du_catalogue_atteint_le_SEUIL,
+# et le message nomme les cles a traduire. Il n'y a plus de delai de grace :
+# on traduit dans le meme passage, ou l'on declare la cle dans
+# i18n/sentinel/SANS_TRADUCTION.json avec sa raison — cette table est bornee
+# par sa propre regle, elle ne peut pas servir a garer du francais.
+#
+# MESURE AU MOMENT DE LA MONTEE : 1,000000 exactement — 197 360 / 197 360
+# mots, 16 070 / 16 070 cles, zero manquante. Le plancher ne redescend pas :
+# le faire baisser demande d'ecrire ici pourquoi, et ce qui est abandonne.
+1.0
