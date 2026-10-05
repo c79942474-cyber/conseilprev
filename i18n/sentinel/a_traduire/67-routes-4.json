@@ -1,6 +1,6 @@
 {
  "_lot": "67-routes-4",
- "_mots": 2392,
+ "_mots": 2415,
  "_pages": [
   "_routes"
  ],
@@ -786,6 +786,10 @@
   "Il se lit à la fin : il ne dit que ce que les écrans précédents contiennent.": {
    "en": "It is read last: it says only what the preceding screens contain.",
    "fr": "Il se lit à la fin : il ne dit que ce que les écrans précédents contiennent."
+  },
+  "Il viendra à son tour. L'ordre des blocs porte une décision : le régime de l'article # commande ce que les suivants mesurent.": {
+   "en": "It will come in its turn. The order of the blocks carries a decision: the regime of article # governs what the following ones measure.",
+   "fr": "Il viendra à son tour. L'ordre des blocs porte une décision : le régime de l'article 16 commande ce que les suivants mesurent."
   }
  }
 }

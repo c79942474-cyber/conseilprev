@@ -1,12 +1,16 @@
 {
  "_lot": "66-routes-3",
- "_mots": 2384,
+ "_mots": 2419,
  "_pages": [
   "_routes"
  ],
  "_rubrique": "_routes",
  "bloc": {},
  "texte": {
+  "Ce sont les éléments d'une liste imbriquée que le document numérote comme une liste de premier rang : chacun est un facteur à considérer, et la phrase qui les introduit est dans l'exemple précédent.": {
+   "en": "These are the items of a nested list that the document numbers as a top-level list: each one is a factor to consider, and the sentence that introduces them is in the previous example.",
+   "fr": "Ce sont les éléments d'une liste imbriquée que le document numérote comme une liste de premier rang : chacun est un facteur à considérer, et la phrase qui les introduit est dans l'exemple précédent."
+  },
   "Ce taux dit la part des exemples pratiques retenus par vos groupes que vous déclarez tenus. Ce n'est PAS un taux de conformité : le document écrit lui-même que ses exemples ne constituent pas une liste de contrôle exhaustive, et aucun organisme ne délivre d'attestation contre ce guide. Un organisme peut avoir tenu les # exemples et rester en défaut de diligence sur un risque qu'aucun d'eux ne nomme.": {
    "en": "This rate states the share of the practical examples retained by your groups that you declare held. It is NOT a compliance rate: the document itself writes that its examples do not constitute an exhaustive check list, and no body issues an attestation against this guidance. An organisation can have held all # examples and still fall short on due diligence for a risk none of them names.",
    "fr": "Ce taux dit la part des exemples pratiques retenus par vos groupes que vous déclarez tenus. Ce n'est PAS un taux de conformité : le document écrit lui-même que ses exemples ne constituent pas une liste de contrôle exhaustive, et aucun organisme ne délivre d'attestation contre ce guide. Un organisme peut avoir tenu les 115 exemples et rester en défaut de diligence sur un risque qu'aucun d'eux ne nomme."

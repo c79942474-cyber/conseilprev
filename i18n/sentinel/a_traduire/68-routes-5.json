@@ -1,16 +1,12 @@
 {
  "_lot": "68-routes-5",
- "_mots": 2393,
+ "_mots": 2418,
  "_pages": [
   "_routes"
  ],
  "_rubrique": "_routes",
  "bloc": {},
  "texte": {
-  "Il viendra à son tour. L'ordre des blocs porte une décision : le régime de l'article # commande ce que les suivants mesurent.": {
-   "en": "It will come in its turn. The order of the blocks carries a decision: the regime of article # governs what the following ones measure.",
-   "fr": "Il viendra à son tour. L'ordre des blocs porte une décision : le régime de l'article 16 commande ce que les suivants mesurent."
-  },
   "Ils sont conservés tels quels. Les fusionner produirait un exemple de quatre mille caractères ; les réécrire inventerait une phrase que le document ne porte pas.": {
    "en": "They are kept as they stand. Merging them would produce a four-thousand-character example; rewriting them would invent a sentence the document does not carry.",
    "fr": "Ils sont conservés tels quels. Les fusionner produirait un exemple de quatre mille caractères ; les réécrire inventerait une phrase que le document ne porte pas."
@@ -194,6 +190,10 @@
   "L'altération des informations nécessaires aux activités ou services de l'entité": {
    "en": "The alteration of the information needed for the entity's activities or services",
    "fr": "L'altération des informations nécessaires aux activités ou services de l'entité"
+  },
+  "L'analyse d'incidences sur les activités de l'article #, paragraphe #, du règlement, et les objectifs de temps et de point de reprise qui en découlent.": {
+   "en": "The business impact analysis of Article #(#) of the regulation, and the recovery time and recovery point objectives that follow from it.",
+   "fr": "L'analyse d'incidences sur les activités de l'article 11, paragraphe 5, du règlement, et les objectifs de temps et de point de reprise qui en découlent."
   },
   "L'analyse de risque elle-même : gouvernance sous le dirigeant exécutif, chaque système couvert, risques résiduels acceptés, plan d'action daté et attribué, réexamen triennal.": {
    "en": "The risk analysis itself: governance under the chief executive, every system covered, residual risks accepted, a dated and assigned action plan, a three-yearly review.",
@@ -430,6 +430,10 @@
   "L'horloge part de la PRISE DE CONNAISSANCE de l'incident important, pas de sa résolution.": {
    "en": "The clock starts from BECOMING AWARE of the significant incident, not from its resolution.",
    "fr": "L'horloge part de la PRISE DE CONNAISSANCE de l'incident important, pas de sa résolution."
+  },
+  "L'identification comme entité essentielle ou importante, au titre des dispositions nationales transposant l'article # de la directive, n'est pas déclarée.": {
+   "en": "Identification as an essential or important entity, under the national provisions transposing Article # of the directive, is not declared.",
+   "fr": "L'identification comme entité essentielle ou importante, au titre des dispositions nationales transposant l'article 3 de la directive, n'est pas déclarée."
   },
   "L'identification comme entité essentielle ou importante, et l'inscription sur la liste que l'État membre établit.": {
    "en": "Identification as an essential or important entity, and entry on the list the Member State draws up.",

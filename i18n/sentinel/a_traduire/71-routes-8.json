@@ -1,6 +1,6 @@
 {
  "_lot": "71-routes-8",
- "_mots": 2382,
+ "_mots": 2405,
  "_pages": [
   "_routes"
  ],
@@ -95,6 +95,10 @@
    "en": "The same declared volume gives both the cost and the footprint: there is no keeping two inventories.",
    "fr": "Le même volume déclaré donne le coût et l'empreinte : on ne tient pas deux inventaires."
   },
+  "Le niveau de TOLÉRANCE au risque lié aux TIC approuvé au titre de l'article #, paragraphe #, point b), du règlement.": {
+   "en": "The ICT risk TOLERANCE level approved under Article #(#)(b) of the regulation.",
+   "fr": "Le niveau de TOLÉRANCE au risque lié aux TIC approuvé au titre de l'article 6, paragraphe 8, point b), du règlement."
+  },
   "Le niveau le plus exigeant du règlement, adossé à un schéma européen de certification de cybersécurité.": {
    "en": "The most demanding level of the Regulation, backed by a European cybersecurity certification scheme.",
    "fr": "Le niveau le plus exigeant du règlement, adossé à un schéma européen de certification de cybersécurité."
@@ -178,6 +182,22 @@
   "Le périmètre nomme-t-il les systèmes d'IA couverts — et dit-il ce qui en est exclu, et pourquoi ?": {
    "en": "Does the scope name the AI systems covered — and does it say what is excluded from it, and why?",
    "fr": "Le périmètre nomme-t-il les systèmes d'IA couverts — et dit-il ce qui en est exclu, et pourquoi ?"
+  },
+  "Le rapport sur le réexamen du cadre, dans un format électronique interrogeable, destiné à l'autorité compétente. Aucune mesure de l'annexe A ne le produit.": {
+   "en": "The report on the review of the framework, in a searchable electronic format, intended for the competent authority. No Annex A control produces it.",
+   "fr": "Le rapport sur le réexamen du cadre, dans un format électronique interrogeable, destiné à l'autorité compétente. Aucune mesure de l'annexe A ne le produit."
+  },
+  "Le rattachement au cadre de gestion du risque lié aux TIC de l'article # du règlement et son approbation par l'organe de direction.": {
+   "en": "The link to the ICT risk management framework of Article # of the regulation and its approval by the management body.",
+   "fr": "Le rattachement au cadre de gestion du risque lié aux TIC de l'article 6 du règlement et son approbation par l'organe de direction."
+  },
+  "Le rattachement au processus de gestion des incidents de l'article # du règlement, et la classification de l'article # qui décide de la notification.": {
+   "en": "The link to the incident management process of Article # of the regulation, and the Article # classification that decides on notification.",
+   "fr": "Le rattachement au processus de gestion des incidents de l'article 17 du règlement, et la classification de l'article 18 qui décide de la notification."
+  },
+  "Le rattachement des projets de TIC à la stratégie de résilience opérationnelle numérique et le compte rendu à l'organe de direction.": {
+   "en": "The link between ICT projects and the digital operational resilience strategy, and the report to the management body.",
+   "fr": "Le rattachement des projets de TIC à la stratégie de résilience opérationnelle numérique et le compte rendu à l'organe de direction."
   },
   "Le recours à une prestation d'accompagnement et de conseil en sécurité (PACS) qualifiée par l'ANSSI, au titre de l'article # du décret n° #-# du # mars # modifié": {
    "en": "The use of a security support and advisory service (PACS) qualified by ANSSI, under article # of Decree No #-# of # March # as amended",
@@ -426,22 +446,6 @@
   "Le taux par part s'en déduit, et le poids suit la charge réglementaire : le chapitre # pèse trois fois le chapitre #.": {
    "en": "The rate per share follows from it, and the weight follows the regulatory load: chapter # weighs three times chapter #.",
    "fr": "Le taux par part s'en déduit, et le poids suit la charge réglementaire : le chapitre 4 pèse trois fois le chapitre 10."
-  },
-  "Le taux peut être élevé et le manquement constitué : la notification ne se rattrape pas, elle se fait.": {
-   "en": "The rate can be high and the breach still made out: the notification cannot be caught up on, it is made.",
-   "fr": "Le taux peut être élevé et le manquement constitué : la notification ne se rattrape pas, elle se fait."
-  },
-  "Le taux vaut pour les dix mesures, qui sont le même plancher dans les deux régimes. Ce qui change avec la qualification, c'est la supervision — a priori ou a posteriori — et le plafond des sanctions.": {
-   "en": "The rate holds for the ten measures, which are the same floor under both regimes. What the qualification changes is the supervision — ex ante or ex post — and the ceiling on penalties.",
-   "fr": "Le taux vaut pour les dix mesures, qui sont le même plancher dans les deux régimes. Ce qui change avec la qualification, c'est la supervision — a priori ou a posteriori — et le plafond des sanctions."
-  },
-  "Le texte n'est pas en vigueur : le vert dit « déclaré », pas « exigé aujourd'hui ».": {
-   "en": "The text is not in force: green says “declared”, not “required today”.",
-   "fr": "Le texte n'est pas en vigueur : le vert dit « déclaré », pas « exigé aujourd'hui »."
-  },
-  "Le texte produit ressemble à du texte écrit par un humain de confiance. C'est la faute d'injection classique, déplacée d'un cran.": {
-   "en": "The text produced looks like text written by a trusted human. This is the classic injection flaw, moved up one notch.",
-   "fr": "Le texte produit ressemble à du texte écrit par un humain de confiance. C'est la faute d'injection classique, déplacée d'un cran."
   }
  }
 }

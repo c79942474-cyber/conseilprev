@@ -1306,22 +1306,9 @@ def test_l_outil_python_est_documente_et_expose_ses_cinq_commandes(capsys):
 #  LES SONDES — CE QUE LES ROUTES D'ÉVALUATION SERVENT
 # ══════════════════════════════════════════════════════════════════════════
 
-#: LE PLAFOND DE LA DETTE DÉCLARÉE. Une sonde dont `tete_attendue` vaut
-#: `None` n'ouvre que la tête « rien de déclaré » du module : les phrases du
-#: taux de ce module-là restent hors inventaire. C'est une dette, elle est
-#: bornée ici, et le plafond ne monte pas sans qu'on l'écrive.
-#:
-#: IL VAUT EXACTEMENT LA MESURE, PAS UN CHIFFRE ROND AU-DESSUS. Onze sondes
-#: sont dans ce cas aujourd'hui ; un plafond à douze aurait laissé une
-#: douzième s'ajouter en silence, et un plafond qui ne mord jamais n'est pas
-#: une mesure. Le faire descendre est un progrès, le faire monter demande
-#: d'écrire pourquoi.
-PLAFOND_SONDES_SANS_TETE = 11
-
-
 def test_les_routes_d_EVALUATION_sont_toutes_SONDEES_ou_ecartees_avec_leur_raison():
     """UNE ROUTE D'ÉVALUATION QUI N'EST NI SONDÉE NI ÉCARTÉE EST LE TROU QUE
-    CETTE SÉRIE VIENT DE BOUCHER.
+    CETTE SÉRIE A BOUCHÉ.
 
     CE QUI A ÉTÉ MESURÉ. `ROUTES_REFERENTIEL` ne relève que des GET : ce
     qu'un module sait dire AVANT qu'on lui parle. Les routes d'évaluation
@@ -1350,53 +1337,70 @@ def test_les_routes_d_EVALUATION_sont_toutes_SONDEES_ou_ecartees_avec_leur_raiso
         "rien" % fantomes)
 
 
-def test_chaque_sonde_PORTE_sa_raison_et_une_charge_qui_la_justifie():
-    """UNE SONDE SANS RAISON EST UNE CHARGE QU'ON N'OSE PLUS TOUCHER. Six
-    mois plus tard, personne ne sait si `{'qualites': ['intermediaire']}`
-    visait la tête du taux ou un hasard de copie, et la corriger devient un
-    pari. Chaque sonde dit donc ce qu'elle va chercher."""
+def test_chaque_sonde_PORTE_son_temoin_et_la_raison_de_sa_charge():
+    """UNE SONDE SANS TÉMOIN NE PROUVE RIEN, et une sonde sans raison est une
+    charge qu'on n'ose plus toucher.
+
+    LE TÉMOIN EST LE CONTRAT, ET IL A REMPLACÉ LA TÊTE. La version
+    précédente comparait une `tete_attendue` à la tête de la charge, et ce
+    proxy ne couvrait pas les seize routes : six n'ont aucune tête (ce sont
+    des calculateurs), `cra` dit son périmètre par `perimetre.dans` et laisse
+    `motif` vide quand le règlement s'applique — à juste titre, un motif est
+    une raison d'exclusion —, `nis2` et `dora` répondent par une PHRASE dans
+    `qualification.motif`. Onze sondes se déclaraient « sans tête », ce qui
+    mêlait deux choses très différentes : celles qui n'en ont pas, et celles
+    dont on n'atteignait pas la tête. Le témoin dit la même chose pour les
+    dix-huit, sans tiers ni plafond à tenir."""
     for s in outil.SONDES_EVALUATION:
         assert s['route'].startswith('/api/'), s
         assert isinstance(s['charge'], dict), s
-        assert 'tete_attendue' in s, (
-            "« %s » ne dit pas quelle tête elle ouvre, même pour dire "
-            "« aucune »" % s['route'])
+        assert len(s.get('temoin', '')) >= 24, (
+            "« %s » n'a pas de témoin assez distinctif : %r — un fragment "
+            "court se trouverait par hasard dans une autre phrase"
+            % (s['route'], s.get('temoin')))
         assert len(s.get('pourquoi', '').split()) >= 8, (
             "« %s » est sondée sans raison lisible : %r"
             % (s['route'], s.get('pourquoi')))
 
 
-def test_une_sonde_qui_n_ouvre_PAS_sa_tete_est_une_FAUTE_et_non_une_charge_vide():
-    """CE QUI REND UNE SONDE VÉRIFIABLE. Une charge qui cesserait d'être
-    acceptée — un vocabulaire de qualification qui change, une clé de
-    réponse renommée — retomberait sur la tête « rien de déclaré » et
-    n'inventorierait plus les phrases pour lesquelles elle a été écrite.
-    Rien ne le dirait : le catalogue serait simplement plus petit, et la
-    couverture resterait à 100 % de moins en moins de choses."""
+def test_une_sonde_dont_le_TEMOIN_manque_est_une_FAUTE_et_non_une_charge_vide():
+    """CE QUI REND UNE SONDE VÉRIFIABLE. Une charge qui cesserait de
+    qualifier le module — un vocabulaire qui change, une clé de réponse
+    renommée — obtiendrait toujours un 200, mais ne servirait plus que le
+    refus du module. Rien ne le dirait : le catalogue serait simplement plus
+    petit, et la couverture resterait à 100 % de moins en moins de choses."""
     bonne = {'route': '/api/dga/evaluer',
              'charge': {'qualites': ['intermediaire'],
                         'reponses': {'art12_a': 'tenu'}},
-             'tete_attendue': 'mesure', 'pourquoi': u'x' * 40}
+             'temoin': u"des obligations attendues de vos qualités sont déclarées tenues",
+             'pourquoi': u'x ' * 10}
     charges, fautes = outil.charges_des_sondes([bonne])
     assert len(charges) == 1 and not fautes, fautes
 
-    mauvaise = dict(bonne, tete_attendue='hors_champ')
-    charges, fautes = outil.charges_des_sondes([mauvaise])
-    assert not charges, "une sonde qui vise à côté a quand même été relevée"
-    assert len(fautes) == 1 and 'tête' in fautes[0][1], fautes
+    #  LA MÊME SONDE, DÉQUALIFIÉE. Pas par une clé inventée — `evaluer`
+    #  REFUSE une obligation inconnue (HTTP 400) au lieu de l'ignorer, et
+    #  c'est une bonne nouvelle — mais par une charge valide SANS réponse :
+    #  le module retombe sur sa tête « vide », et la phrase du taux, qui est
+    #  le témoin, disparaît sans que rien d'autre ne bronche.
+    muette = dict(bonne, charge={'qualites': ['intermediaire']})
+    charges, fautes = outil.charges_des_sondes([muette])
+    assert not charges, "une sonde déqualifiée a quand même été relevée"
+    assert len(fautes) == 1 and u'témoin' in fautes[0][1], fautes
+
+    sans_temoin = dict(bonne, temoin=u'')
+    charges, fautes = outil.charges_des_sondes([sans_temoin])
+    assert not charges and fautes and u'témoin' in fautes[0][1], fautes
 
     refusee = {'route': '/api/nis2/evaluer', 'charge': {},
-               'tete_attendue': None, 'pourquoi': u'x' * 40}
+               'temoin': u'x' * 30, 'pourquoi': u'x ' * 10}
     charges, fautes = outil.charges_des_sondes([refusee])
     assert not charges and fautes and 'HTTP' in fautes[0][1], fautes
 
 
 def test_les_sondes_du_depot_passent_TOUTES_et_apportent_du_francais():
-    """ET ELLES APPORTENT QUELQUE CHOSE. Une sonde qui répond 200, ouvre sa
-    tête et ne rend aucune phrase française n'inventorie rien : elle coûte un
-    appel et donne l'illusion d'une couverture. La dette qui reste — les
-    modules dont seule la tête « rien de déclaré » est atteinte — est bornée
-    par PLAFOND_SONDES_SANS_TETE, et ce plafond est écrit."""
+    """ET ELLES APPORTENT QUELQUE CHOSE. Une sonde qui répond 200, porte son
+    témoin et ne rend aucune phrase française n'inventorie rien : elle coûte
+    un appel et donne l'illusion d'une couverture."""
     charges, fautes = outil.charges_des_sondes(outil.SONDES_EVALUATION)
     assert not fautes, "sondes en faute : %s" % (fautes,)
     assert len(charges) == len(outil.SONDES_EVALUATION)
@@ -1405,11 +1409,50 @@ def test_les_sondes_du_depot_passent_TOUTES_et_apportent_du_francais():
     assert mots > 5000, (
         "les sondes ne rapportent que %d mots de français — elles n'ouvrent "
         "plus les charges qu'elles visaient" % mots)
-    sans_tete = [s['route'] for s in outil.SONDES_EVALUATION
-                 if s['tete_attendue'] is None]
-    assert len(sans_tete) <= PLAFOND_SONDES_SANS_TETE, (
-        "%d sonde(s) n'ouvrent que la tête « rien de déclaré » (plafond %d) : "
-        "%s" % (len(sans_tete), PLAFOND_SONDES_SANS_TETE, sorted(sans_tete)))
+
+
+def test_la_sonde_QUALIFIANTE_rapporte_plus_que_la_charge_vide_la_ou_c_est_vrai():
+    """CE QUI A ÉTÉ MESURÉ, SONDE PAR SONDE, ET CE QUE ÇA A CORRIGÉ.
+
+    Onze sondes se déclaraient en dette : « leur vocabulaire n'est pas celui
+    qu'une sonde écrite à la main devine, donc les phrases de leur taux
+    restent hors inventaire ». Mesuré route par route, en comparant le
+    français neuf qu'une charge VIDE fait entrer à celui qu'une charge
+    QUALIFIANTE fait entrer :
+      · DORA  — la clé est `entite` au SINGULIER, pas `types` : +13 phrases,
+        dont le régime de l'article 16 et l'aveu « REPRISE DE PREUVES » ;
+      · NIS 2 — la taille se prononce sur l'effectif et le chiffre
+        d'affaires, pas sur un mot : +3 phrases ;
+      · CRA, le profil NIST et le Data Act cloud — +0. Le module ne sert
+        RIEN de plus une fois qualifié.
+    La dette n'en était donc une que pour deux routes sur onze, et elle est
+    payée. Pour les autres, la promesse de travail était vide : c'est pour
+    cela qu'il faut mesurer une dette avant de la déclarer.
+
+    CETTE RÈGLE GARDE LE GAIN : si la charge de DORA ou de NIS 2 revenait à
+    une forme qui ne qualifie pas, le témoin tomberait — et cette règle dit
+    en plus de combien le catalogue se viderait."""
+    par_route = {}
+    for s in outil.SONDES_EVALUATION:
+        par_route.setdefault(s['route'], []).append(s)
+    for route, attendu in ((u'/api/dora/evaluer', 10),
+                           (u'/api/nis2/evaluer', 3)):
+        sonde = par_route[route][0]
+        pleine, f1 = outil.charges_des_sondes([sonde])
+        assert not f1, (route, f1)
+        vide, f2 = outil.charges_des_sondes(
+            [dict(sonde, charge={}, temoin=None)])
+        #  LA CHARGE VIDE N'A PAS À PASSER : ce qu'on mesure est ce qu'elle
+        #  servirait, pas qu'elle soit acceptable comme sonde.
+        if f2 and 'HTTP' in (f2[0][1] or ''):
+            vide = []
+        ep = outil.entrees_des_charges(pleine)
+        ev = outil.entrees_des_charges(vide)
+        gain = len(ep['texte']) - len(ev['texte'])
+        assert gain >= attendu, (
+            "la sonde « %s » ne rapporte plus que %d phrase(s) de plus que "
+            "la charge vide (au moins %d attendues) : sa déclaration a cessé "
+            "de qualifier le module" % (route, gain, attendu))
 
 
 def test_le_catalogue_du_depot_PORTE_ce_que_les_sondes_ont_releve():
@@ -1422,14 +1465,16 @@ def test_le_catalogue_du_depot_PORTE_ce_que_les_sondes_ont_releve():
         "le catalogue ne dit pas combien de sondes l'ont alimenté")
     assert cat['routes']['sondes'] == len(outil.SONDES_EVALUATION), (
         cat['routes']['sondes'], len(outil.SONDES_EVALUATION))
-    #  TROIS PHRASES QUE SEULE UNE SONDE PEUT AVOIR FAIT ENTRER : la tête du
+    #  QUATRE PHRASES QUE SEULE UNE SONDE PEUT AVOIR FAIT ENTRER : la tête du
     #  taux (qui n'apparaît qu'un questionnaire rempli), le hors-champ du
-    #  DGA, et le régime national du Data Act.
+    #  DGA, le régime national du Data Act, et l'aveu de DORA — celui-là
+    #  n'entre que si la charge QUALIFIE l'entité.
     temoins = [
         u"# % des obligations attendues de vos qualités sont déclarées "
         u"tenues, sur # points attendus dont # renseigné(s).",
         u"HORS CHAMP. Vous n'êtes ni un organisme du secteur public",
         u"Article # §# du Data Act, par renvoi à l'article # §# du RGPD",
+        u"Ce pourcentage mesure une REPRISE DE PREUVES",
     ]
     cles = cat['texte']
     for t in temoins:

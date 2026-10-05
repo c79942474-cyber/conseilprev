@@ -1,12 +1,28 @@
 {
  "_lot": "72-routes-9",
- "_mots": 2395,
+ "_mots": 2426,
  "_pages": [
   "_routes"
  ],
  "_rubrique": "_routes",
  "bloc": {},
  "texte": {
+  "Le taux peut être élevé et le manquement constitué : la notification ne se rattrape pas, elle se fait.": {
+   "en": "The rate can be high and the breach still made out: the notification cannot be caught up on, it is made.",
+   "fr": "Le taux peut être élevé et le manquement constitué : la notification ne se rattrape pas, elle se fait."
+  },
+  "Le taux vaut pour les dix mesures, qui sont le même plancher dans les deux régimes. Ce qui change avec la qualification, c'est la supervision — a priori ou a posteriori — et le plafond des sanctions.": {
+   "en": "The rate holds for the ten measures, which are the same floor under both regimes. What the qualification changes is the supervision — ex ante or ex post — and the ceiling on penalties.",
+   "fr": "Le taux vaut pour les dix mesures, qui sont le même plancher dans les deux régimes. Ce qui change avec la qualification, c'est la supervision — a priori ou a posteriori — et le plafond des sanctions."
+  },
+  "Le texte n'est pas en vigueur : le vert dit « déclaré », pas « exigé aujourd'hui ».": {
+   "en": "The text is not in force: green says “declared”, not “required today”.",
+   "fr": "Le texte n'est pas en vigueur : le vert dit « déclaré », pas « exigé aujourd'hui »."
+  },
+  "Le texte produit ressemble à du texte écrit par un humain de confiance. C'est la faute d'injection classique, déplacée d'un cran.": {
+   "en": "The text produced looks like text written by a trusted human. This is the classic injection flaw, moved up one notch.",
+   "fr": "Le texte produit ressemble à du texte écrit par un humain de confiance. C'est la faute d'injection classique, déplacée d'un cran."
+  },
   "Le traitement des non-conformités est-il documenté ?": {
    "en": "Is the handling of non-conformities documented?",
    "fr": "Le traitement des non-conformités est-il documenté ?"
@@ -167,6 +183,10 @@
    "en": "The conditions under which certain categories of protected data held by a public sector body may be re-used.",
    "fr": "Les conditions auxquelles certaines catégories de données protégées détenues par un organisme du secteur public peuvent être réutilisées."
   },
+  "Les conditions d'activation et de désactivation des plans, et leur articulation avec la notification des incidents majeurs.": {
+   "en": "The conditions for activating and deactivating the plans, and how they relate to the notification of major incidents.",
+   "fr": "Les conditions d'activation et de désactivation des plans, et leur articulation avec la notification des incidents majeurs."
+  },
   "Les conditions de réutilisation sont non discriminatoires, proportionnées et objectivement justifiées": {
    "en": "The re-use conditions are non-discriminatory, proportionate and objectively justified",
    "fr": "Les conditions de réutilisation sont non discriminatoires, proportionnées et objectivement justifiées"
@@ -190,6 +210,10 @@
   "Les coopératives de données, nommées comme telles.": {
    "en": "Data cooperatives, named as such.",
    "fr": "Les coopératives de données, nommées comme telles."
+  },
+  "Les critères de déclenchement de la détection, alignés sur les seuils du règlement délégué (UE) #/#.": {
+   "en": "The detection trigger criteria, aligned with the thresholds of delegated regulation (EU) #/#.",
+   "fr": "Les critères de déclenchement de la détection, alignés sur les seuils du règlement délégué (UE) 2024/1772."
   },
   "Les critères de performance sont dans la notice pour être mesurés. Sans mesure, vous avez une procédure, pas une preuve.": {
    "en": "The performance criteria are in the instructions in order to be measured. Without measurement, you have a procedure, not evidence.",
@@ -466,30 +490,6 @@
   "Les mesures techniques de protection sont proportionnées et n'entravent pas l'exercice des droits ; un usage non autorisé déclenche les recours de l'article #": {
    "en": "The technical protection measures are proportionate and do not hinder the exercise of rights; unauthorised use triggers the remedies of Article #",
    "fr": "Les mesures techniques de protection sont proportionnées et n'entravent pas l'exercice des droits ; un usage non autorisé déclenche les recours de l'article 11"
-  },
-  "Les microentreprises et les entités relevant de l'article #, paragraphe #, du règlement (UE) #/#.": {
-   "en": "Microenterprises and the entities falling under article #, paragraph #, of regulation (EU) #/#.",
-   "fr": "Les microentreprises et les entités relevant de l'article 16, paragraphe 1, du règlement (UE) 2022/2554."
-  },
-  "Les microentreprises et les petites entreprises, au sens de la recommandation #/#/CE.": {
-   "en": "Micro and small enterprises, within the meaning of Recommendation #/#/EC.",
-   "fr": "Les microentreprises et les petites entreprises, au sens de la recommandation 2003/361/CE."
-  },
-  "Les modalités commerciales, tarification comprise, ne dépendent pas de l'usage d'autres services du même prestataire ou d'une entité liée.": {
-   "en": "The commercial terms, pricing included, do not depend on the use of other services of the same provider or of a related entity.",
-   "fr": "Les modalités commerciales, tarification comprise, ne dépendent pas de l'usage d'autres services du même prestataire ou d'une entité liée."
-  },
-  "Les modalités des tests de pénétration fondés sur la menace.": {
-   "en": "The terms of threat-led penetration testing.",
-   "fr": "Les modalités des tests de pénétration fondés sur la menace."
-  },
-  "Les modifications des renseignements notifiés sont transmises dans les quatorze jours": {
-   "en": "Changes to the notified particulars are communicated within fourteen days",
-   "fr": "Les modifications des renseignements notifiés sont transmises dans les quatorze jours"
-  },
-  "Les montants de l'article # §# sont des PLAFONDS. L'amende se fixe en dessous, au regard des critères de l'article # §# et de l'article # §# du RGPD.": {
-   "en": "The amounts in Article #(#) are CAPS. The fine is set below them, in the light of the criteria of Article #(#) and of Article #(#) GDPR.",
-   "fr": "Les montants de l'article 83 §5 sont des PLAFONDS. L'amende se fixe en dessous, au regard des critères de l'article 40 §3 et de l'article 83 §2 du RGPD."
   }
  }
 }

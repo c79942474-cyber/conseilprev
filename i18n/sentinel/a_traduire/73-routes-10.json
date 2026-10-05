@@ -1,12 +1,36 @@
 {
  "_lot": "73-routes-10",
- "_mots": 2389,
+ "_mots": 2398,
  "_pages": [
   "_routes"
  ],
  "_rubrique": "_routes",
  "bloc": {},
  "texte": {
+  "Les microentreprises et les entités relevant de l'article #, paragraphe #, du règlement (UE) #/#.": {
+   "en": "Microenterprises and the entities falling under article #, paragraph #, of regulation (EU) #/#.",
+   "fr": "Les microentreprises et les entités relevant de l'article 16, paragraphe 1, du règlement (UE) 2022/2554."
+  },
+  "Les microentreprises et les petites entreprises, au sens de la recommandation #/#/CE.": {
+   "en": "Micro and small enterprises, within the meaning of Recommendation #/#/EC.",
+   "fr": "Les microentreprises et les petites entreprises, au sens de la recommandation 2003/361/CE."
+  },
+  "Les modalités commerciales, tarification comprise, ne dépendent pas de l'usage d'autres services du même prestataire ou d'une entité liée.": {
+   "en": "The commercial terms, pricing included, do not depend on the use of other services of the same provider or of a related entity.",
+   "fr": "Les modalités commerciales, tarification comprise, ne dépendent pas de l'usage d'autres services du même prestataire ou d'une entité liée."
+  },
+  "Les modalités des tests de pénétration fondés sur la menace.": {
+   "en": "The terms of threat-led penetration testing.",
+   "fr": "Les modalités des tests de pénétration fondés sur la menace."
+  },
+  "Les modifications des renseignements notifiés sont transmises dans les quatorze jours": {
+   "en": "Changes to the notified particulars are communicated within fourteen days",
+   "fr": "Les modifications des renseignements notifiés sont transmises dans les quatorze jours"
+  },
+  "Les montants de l'article # §# sont des PLAFONDS. L'amende se fixe en dessous, au regard des critères de l'article # §# et de l'article # §# du RGPD.": {
+   "en": "The amounts in Article #(#) are CAPS. The fine is set below them, in the light of the criteria of Article #(#) and of Article #(#) GDPR.",
+   "fr": "Les montants de l'article 83 §5 sont des PLAFONDS. L'amende se fixe en dessous, au regard des critères de l'article 40 §3 et de l'article 83 §2 du RGPD."
+  },
   "Les métadonnées contextuelles sont ce qui permet de reconstituer la scène plus tard, en cas de contestation.": {
    "en": "Contextual metadata are what allows the scene to be reconstructed later, if it is disputed.",
    "fr": "Les métadonnées contextuelles sont ce qui permet de reconstituer la scène plus tard, en cas de contestation."
@@ -498,30 +522,6 @@
   "Mise en place après la PREMIÈRE désignation d'un prestataire comme critique, par le superviseur principal en accord avec le réseau de supervision commun de l'article #, paragraphe #, de DORA. Elle peut être mise à jour en cas de changement significatif de la situation du prestataire.": {
    "en": "Set up after the FIRST designation of a provider as critical, by the lead overseer in agreement with the joint oversight network of article #, paragraph #, of DORA. It may be updated in the event of a significant change in the provider's situation.",
    "fr": "Mise en place après la PREMIÈRE désignation d'un prestataire comme critique, par le superviseur principal en accord avec le réseau de supervision commun de l'article 34, paragraphe 1, de DORA. Elle peut être mise à jour en cas de changement significatif de la situation du prestataire."
-  },
-  "Mise en œuvre d'un cadre de gouvernance de la sécurité numérique": {
-   "en": "Implementation of a digital security governance framework",
-   "fr": "Mise en œuvre d'un cadre de gouvernance de la sécurité numérique"
-  },
-  "Mise en œuvre d'une approche par les risques": {
-   "en": "Implementation of a risk-based approach",
-   "fr": "Mise en œuvre d'une approche par les risques"
-  },
-  "Mise en œuvre des conclusions des tests et de l'analyse post-incident, et programmes de sensibilisation et de formation": {
-   "en": "Implementation of the conclusions of testing and post-incident analysis, and awareness and training programmes",
-   "fr": "Mise en œuvre des conclusions des tests et de l'analyse post-incident, et programmes de sensibilisation et de formation"
-  },
-  "Mise en œuvre et test de plans d'urgence, et mesures, outils et politiques de sécurité des TIC de niveau approprié": {
-   "en": "Implementation and testing of contingency plans, and ICT security measures, tools and policies of an appropriate level",
-   "fr": "Mise en œuvre et test de plans d'urgence, et mesures, outils et politiques de sécurité des TIC de niveau approprié"
-  },
-  "Mise en œuvre par le déployeur des mesures spécifiées": {
-   "en": "Implementation by the deployer of the specified measures",
-   "fr": "Mise en œuvre par le déployeur des mesures spécifiées"
-  },
-  "Mise à disposition au profit d'organismes du secteur public en cas de besoin exceptionnel": {
-   "en": "Making data available to public sector bodies in the event of an exceptional need",
-   "fr": "Mise à disposition au profit d'organismes du secteur public en cas de besoin exceptionnel"
   }
  }
 }

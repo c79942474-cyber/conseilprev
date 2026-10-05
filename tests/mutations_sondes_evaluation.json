@@ -1,5 +1,5 @@
 {
- "_pourquoi": "LES SONDES DES ROUTES D'ÉVALUATION — chaque règle de tests/test_i18n_sentinel_outil.py doit tomber sur SON défaut. Ces sondes sont le seul chemin par lequel les phrases COMPOSÉES par les POST entrent au catalogue : si l'une d'elles cesse d'ouvrir la charge qu'elle vise, le catalogue maigrit et la couverture reste à 100 % de moins en moins de choses. Les mutations ci-dessous cassent chacun des maillons de ce chemin.",
+ "_pourquoi": "LES SONDES DES ROUTES D'ÉVALUATION — chaque règle de tests/test_i18n_sentinel_outil.py doit tomber sur SON défaut. Ces sondes sont le seul chemin par lequel les phrases COMPOSÉES par les POST entrent au catalogue : si l'une d'elles cesse de QUALIFIER son module, la route répond toujours 200, mais elle ne sert plus que son refus — le catalogue maigrit, et la couverture reste à 100 % de moins en moins de choses. Les mutations cassent chacun des maillons de ce chemin, témoin compris.",
  "cibles": [
   "tests/test_i18n_sentinel_outil.py"
  ],
@@ -14,36 +14,50 @@
   {
    "nom": "une sonde cesse de dire ce qu'elle va chercher",
    "fichier": "outils/i18n_sentinel.py",
-   "avant": "     'pourquoi': u\"le Top 10 n'est pas un barème, et la liste le dit avant \"\n                 u\"d'afficher quoi que ce soit\"},",
+   "avant": "     'pourquoi': u\"le Top 10 n'est pas un bar\\u00e8me, et la liste le dit avant \"\n                 u\"d'afficher quoi que ce soit\"},",
    "apres": "     'pourquoi': u\"sonde\"},",
-   "regle": "test_chaque_sonde_PORTE_sa_raison_et_une_charge_qui_la_justifie"
+   "regle": "test_chaque_sonde_PORTE_son_temoin_et_la_raison_de_sa_charge"
   },
   {
-   "nom": "le releve cesse de verifier la TETE : une sonde qui vise a cote passe pour bonne",
+   "nom": "un temoin devient un fragment trop court pour prouver quoi que ce soit",
    "fichier": "outils/i18n_sentinel.py",
-   "avant": "        attendue = s.get('tete_attendue')\n        if attendue is not None:",
-   "apres": "        attendue = s.get('tete_attendue')\n        if False:",
-   "regle": "test_une_sonde_qui_n_ouvre_PAS_sa_tete_est_une_FAUTE_et_non_une_charge_vide"
+   "avant": "     'temoin': u\"Rien ne se certifie contre SP\",",
+   "apres": "     'temoin': u\"SP\",",
+   "regle": "test_chaque_sonde_PORTE_son_temoin_et_la_raison_de_sa_charge"
+  },
+  {
+   "nom": "le releve cesse de verifier le TEMOIN : une sonde dequalifiee passe pour bonne",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "        if not any(temoin in t for t in chaines_d_une_charge(j)):",
+   "apres": "        if False:",
+   "regle": "test_une_sonde_dont_le_TEMOIN_manque_est_une_FAUTE_et_non_une_charge_vide"
+  },
+  {
+   "nom": "une sonde sans temoin cesse d'etre une faute",
+   "fichier": "outils/i18n_sentinel.py",
+   "avant": "        if not temoin:\n            fautes.append((s['route'], u'aucun témoin déclaré'))\n            continue\n",
+   "apres": "        if not temoin:\n            charges.append(j)\n            continue\n",
+   "regle": "test_une_sonde_dont_le_TEMOIN_manque_est_une_FAUTE_et_non_une_charge_vide"
   },
   {
    "nom": "une route qui refuse la charge devient une charge vide au lieu d'une faute",
    "fichier": "outils/i18n_sentinel.py",
    "avant": "        rep = client.post(s['route'], json=s['charge'])\n        if rep.status_code != 200:\n            fautes.append((s['route'], u'HTTP %d' % rep.status_code))\n            continue\n",
    "apres": "        rep = client.post(s['route'], json=s['charge'])\n        if rep.status_code != 200:\n            continue\n",
-   "regle": "test_une_sonde_qui_n_ouvre_PAS_sa_tete_est_une_FAUTE_et_non_une_charge_vide"
+   "regle": "test_une_sonde_dont_le_TEMOIN_manque_est_une_FAUTE_et_non_une_charge_vide"
   },
   {
-   "nom": "la cle de reponse de la sonde DGA est renommee : le questionnaire reste vide",
+   "nom": "la sonde DORA revient a la cle `types`, qui ne qualifie rien",
    "fichier": "outils/i18n_sentinel.py",
-   "avant": "     'charge': {'qualites': ['intermediaire'], 'reponses': {'art12_a': 'tenu'}},",
-   "apres": "     'charge': {'qualites': ['intermediaire'], 'reponses': {'art12_z': 'tenu'}},",
+   "avant": "     'charge': {'entite': 'etablissement_credit', 'effectif': 400,\n                'ca_eur': 90000000},",
+   "apres": "     'charge': {'types': ['etablissement_credit'], 'effectif': 400,\n                'ca_eur': 90000000},",
    "regle": "test_les_sondes_du_depot_passent_TOUTES_et_apportent_du_francais"
   },
   {
-   "nom": "une sonde abandonne sa tete et la dette declaree grossit en silence",
+   "nom": "la sonde NIS 2 retombe sur un mot de taille au lieu de l'effectif",
    "fichier": "outils/i18n_sentinel.py",
-   "avant": "     'tete_attendue': 'echeance_passee',",
-   "apres": "     'tete_attendue': None,",
+   "avant": "     'charge': {'nom': 'Sonde', 'secteur': 'energie', 'effectif': 400,\n                'ca_eur': 90000000},",
+   "apres": "     'charge': {'nom': 'Sonde', 'secteur': 'energie', 'taille': 'grande'},",
    "regle": "test_les_sondes_du_depot_passent_TOUTES_et_apportent_du_francais"
   }
  ]

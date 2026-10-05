@@ -1,6 +1,6 @@
 {
  "_lot": "64-routes-1",
- "_mots": 2399,
+ "_mots": 2420,
  "_pages": [
   "_routes"
  ],
@@ -531,6 +531,10 @@
    "en": "Above a small enterprise and below the large-enterprise thresholds, within the meaning of article #.",
    "fr": "Au-delà de la petite entreprise et en deçà des seuils de la grande entreprise, au sens de l'article 3."
   },
+  "Au-delà des plafonds PME": {
+   "en": "Above the SME ceilings",
+   "fr": "Au-delà des plafonds PME"
+  },
   "Au-delà des seuils de la moyenne entreprise.": {
    "en": "Above the medium-enterprise thresholds.",
    "fr": "Au-delà des seuils de la moyenne entreprise."
@@ -594,6 +598,10 @@
   "Aucune de ces qualités": {
    "en": "None of these capacities",
    "fr": "Aucune de ces qualités"
+  },
+  "Aucune des cinq catégories de l'article #, paragraphe #, n'est déclarée : les articles # à # s'appliquent.": {
+   "en": "None of the five categories of Article #(#) is declared: Articles # to # apply.",
+   "fr": "Aucune des cinq catégories de l'article 16, paragraphe 1, n'est déclarée : les articles 5 à 15 s'appliquent."
   },
   "Aucune des cinq catégories de l'article #, paragraphe #, n'est déclarée.": {
    "en": "None of the five categories in article #(#) is declared.",

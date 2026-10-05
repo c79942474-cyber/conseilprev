@@ -1,6 +1,6 @@
 {
  "_lot": "70-routes-7",
- "_mots": 2386,
+ "_mots": 2422,
  "_pages": [
   "_routes"
  ],
@@ -78,6 +78,10 @@
   "La prévention est technique chez le fournisseur ; l'affectation est organisationnelle chez vous. Les deux sont nécessaires.": {
    "en": "The prevention is technical, at the provider's end; the assignment is organisational, at yours. Both are needed.",
    "fr": "La prévention est technique chez le fournisseur ; l'affectation est organisationnelle chez vous. Les deux sont nécessaires."
+  },
+  "La périodicité et les scénarios que le règlement impose, que la norme laisse à l'organisme.": {
+   "en": "The frequency and the scenarios that the regulation imposes, which the standard leaves to the organisation.",
+   "fr": "La périodicité et les scénarios que le règlement impose, que la norme laisse à l'organisme."
   },
   "La qualification est faite, rien n'est renseigné. Le module ne rend aucun chiffre par défaut : un questionnaire vide n'est pas une conformité à zéro, c'est une conformité qu'on n'a pas regardée.": {
    "en": "The qualification is done, nothing is filled in. The module returns no figure by default: an empty questionnaire is not compliance at zero, it is compliance nobody has looked at.",
@@ -386,6 +390,10 @@
   "Le coût n'est pas le sujet : une pratique interdite se retire, elle ne s'optimise pas. Le montant est affiché parce que le taire ferait disparaître la ligne du tableau.": {
    "en": "Cost is not the point: a prohibited practice is withdrawn, not optimised. The amount is shown because hiding it would make the row disappear from the table.",
    "fr": "Le coût n'est pas le sujet : une pratique interdite se retire, elle ne s'optimise pas. Le montant est affiché parce que le taire ferait disparaître la ligne du tableau."
+  },
+  "Le cycle de vie complet des clés — génération, renouvellement, archivage, révocation, destruction — que la norme traite en une seule mesure.": {
+   "en": "The full key lifecycle — generation, renewal, archiving, revocation, destruction — which the standard treats in a single control.",
+   "fr": "Le cycle de vie complet des clés — génération, renouvellement, archivage, révocation, destruction — que la norme traite en une seule mesure."
   },
   "Le degré de substituabilité du prestataire.": {
    "en": "How substitutable the provider is.",

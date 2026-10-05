@@ -1,12 +1,20 @@
 {
  "_lot": "77-routes-14",
- "_mots": 2389,
+ "_mots": 2406,
  "_pages": [
   "_routes"
  ],
  "_rubrique": "_routes",
  "bloc": {},
  "texte": {
+  "Une compensation financière pour le dommage économiquement appréciable — atteinte physique ou morale, perte de revenus.": {
+   "en": "Financial compensation for harm that can be economically assessed — physical or mental harm, lost earnings.",
+   "fr": "Une compensation financière pour le dommage économiquement appréciable — atteinte physique ou morale, perte de revenus."
+  },
+  "Une conformité. Ce cadre n'est pas certifiable : il n'existe aucun auditeur au bout, et personne ne peut délivrer d'attestation contre lui.": {
+   "en": "Compliance. This framework cannot be certified: there is no auditor at the end of it, and nobody can issue an attestation against it.",
+   "fr": "Une conformité. Ce cadre n'est pas certifiable : il n'existe aucun auditeur au bout, et personne ne peut délivrer d'attestation contre lui."
+  },
   "Une continuité raisonnable du service, des mécanismes d'accès, de transfert et d'extraction des données stockées, et l'exercice des droits des personnes concernées.": {
    "en": "Reasonable continuity of the service, mechanisms for accessing, transferring and retrieving the stored data, and the exercise of the data subjects' rights.",
    "fr": "Une continuité raisonnable du service, des mécanismes d'accès, de transfert et d'extraction des données stockées, et l'exercice des droits des personnes concernées."
@@ -454,34 +462,6 @@
   "art. # et #": {
    "en": "art. # and #",
    "fr": "art. 6.1.2 et 6.1.3"
-  },
-  "art. # §# et art. #": {
-   "en": "art. #(#) and art. #",
-   "fr": "art. 5 §14 et art. 31"
-  },
-  "art. # §# et §#": {
-   "en": "art. #(#) and (#)",
-   "fr": "art. 5 §3 et §4"
-  },
-  "art. # §# à §#": {
-   "en": "art. #(#) to (#)",
-   "fr": "art. 4 §6 à §8"
-  },
-  "art. # à #": {
-   "en": "art. # to #",
-   "fr": "art. 3 à 7"
-  },
-  "art. #, #, # et #": {
-   "en": "art. #, #, # and #",
-   "fr": "art. 18, 20, 21 et 22"
-  },
-  "art. #, alinéa #": {
-   "en": "art. #, subparagraph #",
-   "fr": "art. 15, alinéa 1"
-  },
-  "article # : ce qui décide si le reste est appliqué": {
-   "en": "article #: what decides whether the rest applies",
-   "fr": "article 39 : ce qui décide si le reste est appliqué"
   }
  }
 }

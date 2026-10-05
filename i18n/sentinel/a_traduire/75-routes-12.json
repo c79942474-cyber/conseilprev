@@ -1,12 +1,48 @@
 {
  "_lot": "75-routes-12",
- "_mots": 2365,
+ "_mots": 2411,
  "_pages": [
   "_routes"
  ],
  "_rubrique": "_routes",
  "bloc": {},
  "texte": {
+  "Rapport intermédiaire": {
+   "en": "Intermediate report",
+   "fr": "Rapport intermédiaire"
+  },
+  "Rapport sur le réexamen du cadre de gestion du risque lié aux TIC": {
+   "en": "Report on the review of the ICT risk management framework",
+   "fr": "Rapport sur le réexamen du cadre de gestion du risque lié aux TIC"
+  },
+  "Rapport sur le réexamen du cadre simplifié de gestion du risque lié aux TIC": {
+   "en": "Report on the review of the simplified ICT risk management framework",
+   "fr": "Rapport sur le réexamen du cadre simplifié de gestion du risque lié aux TIC"
+  },
+  "ReCyF en pratique — collection de fiches ANSSI, version #": {
+   "en": "ReCyF in practice — ANSSI factsheet collection, version #",
+   "fr": "ReCyF en pratique — collection de fiches ANSSI, version 1.0"
+  },
+  "ReCyF — Référentiel Cyber France, version #": {
+   "en": "ReCyF — the French Cyber Framework, version #",
+   "fr": "ReCyF — Référentiel Cyber France, version 2.5"
+  },
+  "Recensement des principales dépendances vis-à-vis des prestataires tiers de services TIC": {
+   "en": "Inventory of the main dependencies on ICT third-party service providers",
+   "fr": "Recensement des principales dépendances vis-à-vis des prestataires tiers de services TIC"
+  },
+  "Recensement des systèmes d'information": {
+   "en": "Inventory of information systems",
+   "fr": "Recensement des systèmes d'information"
+  },
+  "Redevable et transparent": {
+   "en": "Accountable and transparent",
+   "fr": "Redevable et transparent"
+  },
+  "Redevance annuelle = coûts annuels totaux estimés des superviseurs, multipliés par un coefficient de chiffre d'affaires : le chiffre d'affaires applicable du prestataire pour n−#, rapporté à celui de TOUS les prestataires critiques pour n−#.": {
+   "en": "Annual fee = the overseers' estimated total annual costs, multiplied by a turnover coefficient: the provider's applicable turnover for n−#, over that of ALL critical providers for n−#.",
+   "fr": "Redevance annuelle = coûts annuels totaux estimés des superviseurs, multipliés par un coefficient de chiffre d'affaires : le chiffre d'affaires applicable du prestataire pour n−2, rapporté à celui de TOUS les prestataires critiques pour n−2."
+  },
   "Regardée, et pas en place.": {
    "en": "Looked at, and not in place.",
    "fr": "Regardée, et pas en place."
@@ -519,6 +555,10 @@
    "en": "Filing yourself under “directly linked” and doing nothing. The document writes that direct linkage becomes a CONTRIBUTION if the enterprise carries on without acting.",
    "fr": "Se ranger en « lien direct » et ne rien faire. Le document écrit que le lien direct devient une CONTRIBUTION si l'entreprise continue sans agir."
   },
+  "Secteur de l'annexe I, au-delà des plafonds de la moyenne entreprise.": {
+   "en": "Annex I sector, above the medium-sized enterprise ceilings.",
+   "fr": "Secteur de l'annexe I, au-delà des plafonds de la moyenne entreprise."
+  },
   "Secteur et sous-secteur des annexes I ou II": {
    "en": "Sector and subsector of Annexes I or II",
    "fr": "Secteur et sous-secteur des annexes I ou II"
@@ -570,34 +610,6 @@
   "Société de gestion": {
    "en": "Management company",
    "fr": "Société de gestion"
-  },
-  "Son périmètre est-il déterminé ?": {
-   "en": "Is its scope determined?",
-   "fr": "Son périmètre est-il déterminé ?"
-  },
-  "Sont-ils surveillés et ré-évalués en cours de vie ?": {
-   "en": "Are they monitored and reassessed over their life?",
-   "fr": "Sont-ils surveillés et ré-évalués en cours de vie ?"
-  },
-  "Spécification commune": {
-   "en": "Common specification",
-   "fr": "Spécification commune"
-  },
-  "Spécifications relatives aux notifications mises en œuvre par le déployeur": {
-   "en": "Specifications for the notifications implemented by the deployer",
-   "fr": "Spécifications relatives aux notifications mises en œuvre par le déployeur"
-  },
-  "Statut juridique, forme, structure de propriété, filiales pertinentes et numéro d'enregistrement": {
-   "en": "Legal status, form, ownership structure, relevant subsidiaries and registration number",
-   "fr": "Statut juridique, forme, structure de propriété, filiales pertinentes et numéro d'enregistrement"
-  },
-  "Statut non renseigné": {
-   "en": "Status not filled in",
-   "fr": "Statut non renseigné"
-  },
-  "Stockage temporaire, organisation, conversion, anonymisation, pseudonymisation : seulement sur demande ou approbation expresse, et les outils de tiers ne servent à rien d'autre.": {
-   "en": "Temporary storage, curation, conversion, anonymisation, pseudonymisation: only upon express request or approval, and third-party tools serve nothing else.",
-   "fr": "Stockage temporaire, organisation, conversion, anonymisation, pseudonymisation : seulement sur demande ou approbation expresse, et les outils de tiers ne servent à rien d'autre."
   }
  }
 }

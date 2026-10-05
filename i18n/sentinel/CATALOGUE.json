@@ -13462,15 +13462,15 @@
   "entrees": {
    "attr": 0,
    "bloc": 0,
-   "texte": 2857
+   "texte": 2873
   },
   "mots": {
    "attr": 0,
    "bloc": 0,
-   "texte": 45199
+   "texte": 45518
   },
   "routes": 19,
-  "sondes": 18
+  "sondes": 20
  },
  "rubriques": {
   "adoption": "BUSINESS",
@@ -23735,6 +23735,13 @@
     "_routes"
    ]
   },
+  "Au-delà des plafonds PME": {
+   "fr": "Au-delà des plafonds PME",
+   "mots": 5,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Au-delà des seuils de la moyenne entreprise.": {
    "fr": "Au-delà des seuils de la moyenne entreprise.",
    "mots": 8,
@@ -24829,6 +24836,13 @@
    "mots": 4,
    "pages": [
     "rgpd-site"
+   ]
+  },
+  "Aucune des cinq catégories de l'article #, paragraphe #, n'est déclarée : les articles # à # s'appliquent.": {
+   "fr": "Aucune des cinq catégories de l'article 16, paragraphe 1, n'est déclarée : les articles 5 à 15 s'appliquent.",
+   "mots": 16,
+   "pages": [
+    "_routes"
    ]
   },
   "Aucune des cinq catégories de l'article #, paragraphe #, n'est déclarée.": {
@@ -29541,6 +29555,13 @@
    "mots": 29,
    "pages": [
     "_js"
+   ]
+  },
+  "Ce pourcentage mesure une REPRISE DE PREUVES, pas une conformité. Il dit quelle part des articles du règlement délégué trouve un répondant dans un système de management certifié — il ne dit pas que ces articles sont tenus, et encore moins que l'autorité compétente l'admettra.": {
+   "fr": "Ce pourcentage mesure une REPRISE DE PREUVES, pas une conformité. Il dit quelle part des articles du règlement délégué trouve un répondant dans un système de management certifié — il ne dit pas que ces articles sont tenus, et encore moins que l'autorité compétente l'admettra.",
+   "mots": 46,
+   "pages": [
+    "_routes"
    ]
   },
   "Ce profil déclenche": {
@@ -54957,6 +54978,13 @@
     "simulateur"
    ]
   },
+  "L'analyse d'incidences sur les activités de l'article #, paragraphe #, du règlement, et les objectifs de temps et de point de reprise qui en découlent.": {
+   "fr": "L'analyse d'incidences sur les activités de l'article 11, paragraphe 5, du règlement, et les objectifs de temps et de point de reprise qui en découlent.",
+   "mots": 26,
+   "pages": [
+    "_routes"
+   ]
+  },
   "L'analyse de risque elle-même : gouvernance sous le dirigeant exécutif, chaque système couvert, risques résiduels acceptés, plan d'action daté et attribué, réexamen triennal.": {
    "fr": "L'analyse de risque elle-même : gouvernance sous le dirigeant exécutif, chaque système couvert, risques résiduels acceptés, plan d'action daté et attribué, réexamen triennal.",
    "mots": 25,
@@ -55727,6 +55755,13 @@
     "dora-incident",
     "dora-iso",
     "dora-supervision"
+   ]
+  },
+  "L'identification comme entité essentielle ou importante, au titre des dispositions nationales transposant l'article # de la directive, n'est pas déclarée.": {
+   "fr": "L'identification comme entité essentielle ou importante, au titre des dispositions nationales transposant l'article 3 de la directive, n'est pas déclarée.",
+   "mots": 22,
+   "pages": [
+    "_routes"
    ]
   },
   "L'identification comme entité essentielle ou importante, et l'inscription sur la liste que l'État membre établit.": {
@@ -58190,6 +58225,13 @@
     "enveloppe"
    ]
   },
+  "La périodicité et les scénarios que le règlement impose, que la norme laisse à l'organisme.": {
+   "fr": "La périodicité et les scénarios que le règlement impose, que la norme laisse à l'organisme.",
+   "mots": 16,
+   "pages": [
+    "_routes"
+   ]
+  },
   "La qualification dépend du Registre": {
    "fr": "La qualification dépend du Registre",
    "mots": 5,
@@ -59980,6 +60022,13 @@
     "_js"
    ]
   },
+  "Le cycle de vie complet des clés — génération, renouvellement, archivage, révocation, destruction — que la norme traite en une seule mesure.": {
+   "fr": "Le cycle de vie complet des clés — génération, renouvellement, archivage, révocation, destruction — que la norme traite en une seule mesure.",
+   "mots": 20,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Le cycle de vie complet des systèmes cartographiés : l’électricité qu’ils consomment, le CO₂ que cette électricité représente dans leur pays, la fabrication des équipements amortie sur leur durée de vie, et l’eau de refroidissement. La même chaîne de calcul que la page": {
    "fr": "Le cycle de vie complet des systèmes cartographiés : l’électricité qu’ils consomment, le CO₂ que cette électricité représente dans leur pays, la fabrication des équipements amortie sur leur durée de vie, et l’eau de refroidissement. La même chaîne de calcul que la page",
    "mots": 45,
@@ -60740,6 +60789,13 @@
     "_js"
    ]
   },
+  "Le niveau de TOLÉRANCE au risque lié aux TIC approuvé au titre de l'article #, paragraphe #, point b), du règlement.": {
+   "fr": "Le niveau de TOLÉRANCE au risque lié aux TIC approuvé au titre de l'article 6, paragraphe 8, point b), du règlement.",
+   "mots": 20,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Le niveau de risque au sens du règlement (UE) #/#. Un euro dépensé sur un système haut risque ne se lit pas comme un euro dépensé sur un système à risque minimal : le premier porte des obligations qui ont, elles aussi, un coût.": {
    "fr": "Le niveau de risque au sens du règlement (UE) 2024/1689. Un euro dépensé sur un système haut risque ne se lit pas comme un euro dépensé sur un système à risque minimal : le premier porte des obligations qui ont, elles aussi, un coût.",
    "mots": 42,
@@ -61477,6 +61533,13 @@
     "_js"
    ]
   },
+  "Le rapport sur le réexamen du cadre, dans un format électronique interrogeable, destiné à l'autorité compétente. Aucune mesure de l'annexe A ne le produit.": {
+   "fr": "Le rapport sur le réexamen du cadre, dans un format électronique interrogeable, destiné à l'autorité compétente. Aucune mesure de l'annexe A ne le produit.",
+   "mots": 26,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Le rapprochement le plus utile n’est pas point à point : GOVERN recoupe les articles # et #, et rien dans le cadre n’impose de déclaration d’applicabilité.": {
    "fr": "Le rapprochement le plus utile n’est pas point à point : GOVERN recoupe les articles 5 et 6, et rien dans le cadre n’impose de déclaration d’applicabilité.",
    "mots": 27,
@@ -61496,6 +61559,27 @@
    "mots": 14,
    "pages": [
     "_js"
+   ]
+  },
+  "Le rattachement au cadre de gestion du risque lié aux TIC de l'article # du règlement et son approbation par l'organe de direction.": {
+   "fr": "Le rattachement au cadre de gestion du risque lié aux TIC de l'article 6 du règlement et son approbation par l'organe de direction.",
+   "mots": 24,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Le rattachement au processus de gestion des incidents de l'article # du règlement, et la classification de l'article # qui décide de la notification.": {
+   "fr": "Le rattachement au processus de gestion des incidents de l'article 17 du règlement, et la classification de l'article 18 qui décide de la notification.",
+   "mots": 24,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Le rattachement des projets de TIC à la stratégie de résilience opérationnelle numérique et le compte rendu à l'organe de direction.": {
+   "fr": "Le rattachement des projets de TIC à la stratégie de résilience opérationnelle numérique et le compte rendu à l'organe de direction.",
+   "mots": 22,
+   "pages": [
+    "_routes"
    ]
   },
   "Le recours à une prestation d'accompagnement et de conseil en sécurité (PACS) qualifiée par l'ANSSI, au titre de l'article # du décret n° #-# du # mars # modifié": {
@@ -63797,6 +63881,13 @@
     "_routes"
    ]
   },
+  "Les conditions d'activation et de désactivation des plans, et leur articulation avec la notification des incidents majeurs.": {
+   "fr": "Les conditions d'activation et de désactivation des plans, et leur articulation avec la notification des incidents majeurs.",
+   "mots": 18,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Les conditions de réutilisation sont non discriminatoires, proportionnées et objectivement justifiées": {
    "fr": "Les conditions de réutilisation sont non discriminatoires, proportionnées et objectivement justifiées",
    "mots": 11,
@@ -63887,6 +63978,13 @@
    "mots": 26,
    "pages": [
     "iso27001-risques",
+    "_routes"
+   ]
+  },
+  "Les critères de déclenchement de la détection, alignés sur les seuils du règlement délégué (UE) #/#.": {
+   "fr": "Les critères de déclenchement de la détection, alignés sur les seuils du règlement délégué (UE) 2024/1772.",
+   "mots": 15,
+   "pages": [
     "_routes"
    ]
   },
@@ -89365,6 +89463,13 @@
     "pricing"
    ]
   },
+  "Secteur de l'annexe I, au-delà des plafonds de la moyenne entreprise.": {
+   "fr": "Secteur de l'annexe I, au-delà des plafonds de la moyenne entreprise.",
+   "mots": 13,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Secteur d’activité": {
    "fr": "Secteur d’activité",
    "mots": 3,
@@ -106063,6 +106168,13 @@
   "l'attente la plus forte du cadre dès que l'entreprise cause ou contribue": {
    "fr": "l'attente la plus forte du cadre dès que l'entreprise cause ou contribue",
    "mots": 14,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "l'effectif atteint ou dépasse # personnes": {
+   "fr": "l'effectif atteint ou dépasse 250 personnes",
+   "mots": 6,
    "pages": [
     "_routes"
    ]

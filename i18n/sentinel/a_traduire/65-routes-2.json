@@ -1,6 +1,6 @@
 {
  "_lot": "65-routes-2",
- "_mots": 2401,
+ "_mots": 2412,
  "_pages": [
   "_routes"
  ],
@@ -315,6 +315,10 @@
    "en": "These are not exclusive classifications to which the whole system would be assigned: one and the same system carries different configurations depending on the scenario, and a scenario may combine several of them.",
    "fr": "Ce ne sont pas des classifications exclusives auxquelles le système entier serait affecté : un même système porte des configurations différentes selon le scénario, et un scénario peut en combiner plusieurs."
   },
+  "Ce pourcentage mesure une REPRISE DE PREUVES, pas une conformité. Il dit quelle part des articles du règlement délégué trouve un répondant dans un système de management certifié — il ne dit pas que ces articles sont tenus, et encore moins que l'autorité compétente l'admettra.": {
+   "en": "This percentage measures a RE-USE OF EVIDENCE, not compliance. It says what share of the delegated regulation's articles finds an answer in a certified management system — it does not say that those articles are met, still less that the competent authority will accept it.",
+   "fr": "Ce pourcentage mesure une REPRISE DE PREUVES, pas une conformité. Il dit quelle part des articles du règlement délégué trouve un répondant dans un système de management certifié — il ne dit pas que ces articles sont tenus, et encore moins que l'autorité compétente l'admettra."
+  },
   "Ce qu'il en coûte, dans cette maison, de dire non.": {
    "en": "What it costs, in this firm, to say no.",
    "fr": "Ce qu'il en coûte, dans cette maison, de dire non."
@@ -438,10 +442,6 @@
   "Ce qui sépare une conception d'une mesure qui fonctionne : critères d'acceptation, essais, résultats.": {
    "en": "What separates a design from a measure that works: acceptance criteria, tests, results.",
    "fr": "Ce qui sépare une conception d'une mesure qui fonctionne : critères d'acceptation, essais, résultats."
-  },
-  "Ce sont les éléments d'une liste imbriquée que le document numérote comme une liste de premier rang : chacun est un facteur à considérer, et la phrase qui les introduit est dans l'exemple précédent.": {
-   "en": "These are the items of a nested list that the document numbers as a top-level list: each one is a factor to consider, and the sentence that introduces them is in the previous example.",
-   "fr": "Ce sont les éléments d'une liste imbriquée que le document numérote comme une liste de premier rang : chacun est un facteur à considérer, et la phrase qui les introduit est dans l'exemple précédent."
   }
  }
 }

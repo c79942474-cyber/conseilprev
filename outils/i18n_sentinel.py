@@ -614,98 +614,123 @@ def entrees_des_charges(charges):
 SONDES_EVALUATION = (
     {'route': '/api/dga/evaluer',
      'charge': {'qualites': ['intermediaire'], 'reponses': {'art12_a': 'tenu'}},
-     'tete_attendue': 'mesure',
-     'pourquoi': u"un prestataire d'intermédiation qui tient un point sur "
-                 u"dix-neuf : la tête du taux, celle qui porte la phrase que "
-                 u"l'écran affiche à côté du chiffre"},
+     'temoin': u"des obligations attendues de vos qualit\u00e9s sont d\u00e9clar\u00e9es tenues",
+     'pourquoi': u"un prestataire d'interm\u00e9diation qui tient un point sur "
+                 u"dix-neuf : la phrase du taux, celle que l'\u00e9cran affiche \u00e0 "
+                 u"c\u00f4t\u00e9 du chiffre, et qui n'existe qu'un questionnaire rempli"},
     {'route': '/api/dga/evaluer',
      'charge': {'qualites': ['aucune']},
-     'tete_attendue': 'hors_champ',
-     'pourquoi': u"« aucune de ces qualités » est la réponse de la plupart "
+     'temoin': u"HORS CHAMP. Vous n'\u00eates ni un organisme du secteur public",
+     'pourquoi': u"\u00ab aucune de ces qualit\u00e9s \u00bb est la r\u00e9ponse de la plupart "
                  u"des clients, et son texte est le plus lu du module"},
     {'route': '/api/data-act/evaluer',
      'charge': {'qualites': ['fabricant'], 'chiffre_affaires': 8000000,
                 'reponses': {'fab_conception': 'tenu'}},
-     'tete_attendue': 'echeance_passee',
-     'pourquoi': u"une PME fabricant : l'échéance de l'article 3 §1 est "
-                 u"passée, et cette tête-là prime sur celle du taux"},
+     'temoin': u"Avant la vente, la location ou le cr\u00e9dit-bail",
+     'pourquoi': u"une PME fabricant : les obligations de l'article 3 ne sont "
+                 u"servies qu'une fois la qualit\u00e9 d\u00e9clar\u00e9e"},
     {'route': '/api/data-act/evaluer',
      'charge': {'qualites': ['cloud'], 'chiffre_affaires': 5000000},
-     'tete_attendue': None,
+     'temoin': u"Le contrat porte les clauses de changement de fournisseur",
      'pourquoi': u"un fournisseur de services de traitement : il n'ouvre que "
-                 u"des chapitres hors article 40 §4, et c'est la phrase du "
-                 u"régime national qu'on vient chercher"},
+                 u"des chapitres hors article 40 \u00a74, et c'est le chapitre VI "
+                 u"qu'on vient chercher"},
     {'route': '/api/en18286/evaluer',
      'charge': {'qualification': {'fournisseur': True, 'haut_risque': True},
                 'reponses': {'4.4.1': 'tenu'}},
-     'tete_attendue': 'strategie_incomplete',
-     'pourquoi': u"un fournisseur de système à haut risque dont la stratégie "
-                 u"du 4.4 n'est pas complète — l'état le plus fréquent"},
+     'temoin': u"La strat\u00e9gie de conformit\u00e9 r\u00e9glementaire du",
+     'pourquoi': u"un fournisseur de syst\u00e8me \u00e0 haut risque dont la strat\u00e9gie "
+                 u"du 4.4 n'est pas compl\u00e8te \u2014 l'\u00e9tat le plus fr\u00e9quent"},
     {'route': '/api/cra/evaluer',
-     'charge': {'nom': 'Sonde', 'marche_ue': True, 'classe': 'important_ii'},
-     'tete_attendue': None,
+     'charge': {'nom': 'Sonde', 'marche_ue': True, 'classe': 'important_ii',
+                'role': 'fabricant'},
+     'temoin': u"Gestion des vuln\u00e9rabilit\u00e9s (annexe I, partie II)",
      'pourquoi': u"la route exige un nom ; un produit de classe importante II "
-                 u"ouvre l'organisme notifié et ses réserves"},
+                 u"ouvre l'annexe I et ses deux parties"},
     {'route': '/api/cra/exposition',
      'charge': {'chiffre_affaires': 50000000},
-     'tete_attendue': None,
-     'pourquoi': u"l'exposition chiffrée de l'article 64, et la réserve qui "
+     'temoin': u"Ces montants sont des PLAFONDS, pas des pr\u00e9visions",
+     'pourquoi': u"l'exposition chiffr\u00e9e de l'article 64, et la r\u00e9serve qui "
                  u"dit que ces montants sont des plafonds"},
     {'route': '/api/nis2/evaluer',
-     'charge': {'nom': 'Sonde', 'secteur': 'energie', 'taille': 'grande'},
-     'tete_attendue': None,
-     'pourquoi': u"la route exige un nom ; une grande entité du secteur de "
-                 u"l'énergie est le cas d'école de l'entité essentielle"},
+     'charge': {'nom': 'Sonde', 'secteur': 'energie', 'effectif': 400,
+                'ca_eur': 90000000},
+     'temoin': u"Secteur de l'annexe I, au-del\u00e0 des plafonds de la moyenne "
+               u"entreprise",
+     'pourquoi': u"la taille se PRONONCE sur l'effectif et le chiffre "
+                 u"d'affaires, pas sur un mot : 400 personnes et 90 M\u20ac "
+                 u"qualifient une entit\u00e9 essentielle de l'annexe I, et c'est "
+                 u"cette qualification qui ouvre les mesures de l'article 21"},
     {'route': '/api/nis2/exposition',
      'charge': {'chiffre_affaires': 50000000, 'qualification': 'essentielle'},
-     'tete_attendue': None,
+     'temoin': u"Les deux paliers pivotent au m\u00eame chiffre d'affaires",
      'pourquoi': u"le plancher sur le plafond de l'article 34, qui ne se lit "
                  u"pas comme celui du RGPD"},
+    {'route': '/api/nis2/evaluer',
+     #  LE SECTEUR SANS LA TAILLE, et pas la charge nue : `{'nom': …}` seul
+     #  répond « Aucun secteur déclaré », un refus plus précoce. C'est le
+     #  refus SUR LA TAILLE qu'on vient relever, celui qu'un client atteint
+     #  après avoir choisi son secteur.
+     'charge': {'nom': 'Sonde', 'secteur': 'energie'},
+     'temoin': u"La taille n'est pas renseign\u00e9e",
+     'pourquoi': u"l'\u00e9tat de d\u00e9part : qualifier la sonde ci-dessus a fait "
+                 u"SORTIR ce refus de l'inventaire, alors que la production "
+                 u"le sert \u00e0 qui n'a pas encore rempli sa taille \u2014 les deux "
+                 u"\u00e9tats se rel\u00e8vent donc, pas l'un contre l'autre"},
     {'route': '/api/dora/evaluer',
-     'charge': {'types': ['etablissement_credit'], 'taille': 'grande'},
-     'tete_attendue': None,
-     'pourquoi': u"un établissement de crédit : le régime de l'article 16 "
-                 u"décide des articles opposables, et l'articulation avec "
-                 u"NIS 2 n'apparaît qu'une fois le type déclaré"},
+     'charge': {},
+     'temoin': u"Aucun type d'entit\u00e9 d\u00e9clar\u00e9",
+     'pourquoi': u"m\u00eame raison : le refus de qualification de l'article 2, "
+                 u"paragraphe 1, est le premier texte que lit un visiteur, et "
+                 u"la sonde qualifiante ne le sert plus"},
+    {'route': '/api/dora/evaluer',
+     'charge': {'entite': 'etablissement_credit', 'effectif': 400,
+                'ca_eur': 90000000},
+     'temoin': u"Ce pourcentage mesure une REPRISE DE PREUVES",
+     'pourquoi': u"la cl\u00e9 est `entite` au SINGULIER, et une valeur de "
+                 u"ENTITES_PAR_CLE : un \u00e9tablissement de cr\u00e9dit ouvre le "
+                 u"r\u00e9gime de l'article 16, les articles du r\u00e8glement d\u00e9l\u00e9gu\u00e9 "
+                 u"et l'articulation avec NIS 2 \u2014 mesur\u00e9 : 13 phrases de plus "
+                 u"au catalogue, l\u00e0 o\u00f9 la charge vide n'en apportait aucune"},
     {'route': '/api/iso42001/evaluer',
      'charge': {'nom': 'Sonde'},
-     'tete_attendue': None,
-     'pourquoi': u"la route exige un nom ; la déclaration d'applicabilité "
-                 u"irrecevable est l'état de départ de tout organisme"},
+     'temoin': u"La d\u00e9claration n'est PAS recevable pour un audit d'\u00e9tape",
+     'pourquoi': u"la route exige un nom ; la d\u00e9claration d'applicabilit\u00e9 "
+                 u"irrecevable est l'\u00e9tat de d\u00e9part de tout organisme"},
     {'route': '/api/iso27001/evaluer',
      'charge': {'nom': 'Sonde'},
-     'tete_attendue': None,
-     'pourquoi': u"la route exige un nom ; l'analyse de risque sans critères "
-                 u"est l'état de départ"},
+     'temoin': u"Le domaine d'application n'est pas \u00e9crit",
+     'pourquoi': u"la route exige un nom ; le domaine d'application non \u00e9crit "
+                 u"est la premi\u00e8re d\u00e9cision de la certification"},
     {'route': '/api/ocde/evaluer',
      'charge': {},
-     'tete_attendue': 'non_qualifie',
+     'temoin': u"Aucun groupe d'acteur n'est d\u00e9clar\u00e9",
      'pourquoi': u"le guide ne rend aucun chiffre sans groupe d'acteur "
-                 u"déclaré, et ce refus motivé est le premier texte lu"},
+                 u"d\u00e9clar\u00e9, et ce refus motiv\u00e9 est le premier texte lu"},
     {'route': '/api/nist-ai-rmf/evaluer',
      'charge': {},
-     'tete_attendue': 'vide',
-     'pourquoi': u"un profil vide n'est pas un profil à zéro, et la réserve "
-                 u"de non-certification est servie dès la première réponse"},
+     'temoin': u"Le cadre NIST AI RMF ne se certifie pas",
+     'pourquoi': u"un profil vide n'est pas un profil \u00e0 z\u00e9ro, et la r\u00e9serve "
+                 u"de non-certification est servie d\u00e8s la premi\u00e8re r\u00e9ponse"},
     {'route': '/api/nist-ai-rmf/profil/analyser',
      'charge': {'generatif': True},
-     'tete_attendue': None,
-     'pourquoi': u"le profil AI 600-1 et sa réserve : 211 actions "
-                 u"« suggérées », qui ne se certifient pas"},
+     'temoin': u"Le syst\u00e8me n'est pas d\u00e9clar\u00e9 g\u00e9n\u00e9ratif",
+     'pourquoi': u"le profil AI 600-1 et sa r\u00e9serve : 211 actions "
+                 u"\u00ab sugg\u00e9r\u00e9es \u00bb, qui ne se certifient pas"},
     {'route': '/api/nist-800-53/evaluer',
      'charge': {},
-     'tete_attendue': None,
-     'pourquoi': u"la maille par FAMILLE et la réserve de non-certification, "
-                 u"servies sans qu'aucun socle soit déclaré"},
+     'temoin': u"Le module travaille par FAMILLE, pas par mesure",
+     'pourquoi': u"la maille par FAMILLE et la r\u00e9serve de non-certification, "
+                 u"servies sans qu'aucun socle soit d\u00e9clar\u00e9"},
     {'route': '/api/nist-800-82/evaluer',
      'charge': {},
-     'tete_attendue': None,
+     'temoin': u"Rien ne se certifie contre SP",
      'pourquoi': u"le verrou qui dit qu'une surcharge industrielle sans "
                  u"socle 800-53 mesure une adaptation de rien"},
     {'route': '/api/owasp-llm/evaluer',
      'charge': {},
-     'tete_attendue': 'vide',
-     'pourquoi': u"le Top 10 n'est pas un barème, et la liste le dit avant "
+     'temoin': u"qu'aucune de ces dix d\u00e9faillances n'a \u00e9t\u00e9 oubli\u00e9e",
+     'pourquoi': u"le Top 10 n'est pas un bar\u00e8me, et la liste le dit avant "
                  u"d'afficher quoi que ce soit"},
 )
 
@@ -714,9 +739,27 @@ def charges_des_sondes(sondes):
     """Les charges que les routes d'ÉVALUATION rendent, et les fautes.
 
     MÊME EXIGENCE QUE POUR LES GET : une route qui ne répond pas 200 est une
-    faute nommée, pas une charge vide. Une sonde qui n'ouvre pas la tête
-    qu'elle déclare en est une autre — elle inventorierait autre chose que ce
-    pour quoi elle a été écrite, et personne ne le verrait."""
+    faute nommée, pas une charge vide.
+
+    ET UNE DE PLUS, QUI EST LA RAISON D'ÊTRE DE LA SONDE : la charge doit
+    porter le TÉMOIN déclaré. Une sonde existe pour faire entrer au catalogue
+    des phrases que le serveur COMPOSE, et qu'aucun fichier HTML ne contient.
+    Si sa déclaration cesse de qualifier le module — un vocabulaire qui
+    change, une clé de réponse renommée —, la route répond toujours 200, mais
+    elle ne sert plus que son refus : le catalogue maigrit, et la couverture
+    reste à 100 % de moins en moins de choses. Le témoin est une phrase que
+    SEULE l'évaluation sert ; son absence est une faute.
+
+    CE QUI A ÉTÉ MESURÉ, ET POURQUOI LE TÉMOIN A REMPLACÉ LA TÊTE. La version
+    précédente comparait une `tete_attendue` à la tête de la charge. C'était
+    un PROXY, et il ne couvrait pas les seize routes : six n'ont aucune tête
+    (ce sont des calculateurs), `cra` dit son périmètre par `perimetre.dans`
+    et laisse `motif` vide quand le règlement s'applique — à juste titre, un
+    motif est une raison d'exclusion —, `nis2` et `dora` répondent par une
+    PHRASE dans `qualification.motif`. Onze sondes se déclaraient donc
+    « sans tête », ce qui mêlait deux choses très différentes : celles qui
+    n'en ont pas, et celles dont on n'atteignait pas la tête. Le témoin dit
+    la même chose pour les dix-huit, sans tiers ni plafond à tenir."""
     import json as _json
     sys.path.insert(0, RACINE)
     import app as _app
@@ -732,14 +775,15 @@ def charges_des_sondes(sondes):
         except ValueError:
             fautes.append((s['route'], u'la réponse n\'est pas du JSON'))
             continue
-        attendue = s.get('tete_attendue')
-        if attendue is not None:
-            tete = j.get('tete') or (j.get('analyse') or {}).get('tete') \
-                or (j.get('applicable') or {}).get('motif')
-            if tete != attendue:
-                fautes.append((s['route'], u'tête « %s » au lieu de « %s »'
-                               % (tete, attendue)))
-                continue
+        temoin = s.get('temoin')
+        if not temoin:
+            fautes.append((s['route'], u'aucun témoin déclaré'))
+            continue
+        if not any(temoin in t for t in chaines_d_une_charge(j)):
+            fautes.append((s['route'],
+                           u'le témoin « %s… » est absent de la charge'
+                           % temoin[:48]))
+            continue
         charges.append(j)
     return charges, fautes
 

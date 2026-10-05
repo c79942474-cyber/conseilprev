@@ -1,12 +1,40 @@
 {
  "_lot": "76-routes-13",
- "_mots": 2394,
+ "_mots": 2420,
  "_pages": [
   "_routes"
  ],
  "_rubrique": "_routes",
  "bloc": {},
  "texte": {
+  "Son périmètre est-il déterminé ?": {
+   "en": "Is its scope determined?",
+   "fr": "Son périmètre est-il déterminé ?"
+  },
+  "Sont-ils surveillés et ré-évalués en cours de vie ?": {
+   "en": "Are they monitored and reassessed over their life?",
+   "fr": "Sont-ils surveillés et ré-évalués en cours de vie ?"
+  },
+  "Spécification commune": {
+   "en": "Common specification",
+   "fr": "Spécification commune"
+  },
+  "Spécifications relatives aux notifications mises en œuvre par le déployeur": {
+   "en": "Specifications for the notifications implemented by the deployer",
+   "fr": "Spécifications relatives aux notifications mises en œuvre par le déployeur"
+  },
+  "Statut juridique, forme, structure de propriété, filiales pertinentes et numéro d'enregistrement": {
+   "en": "Legal status, form, ownership structure, relevant subsidiaries and registration number",
+   "fr": "Statut juridique, forme, structure de propriété, filiales pertinentes et numéro d'enregistrement"
+  },
+  "Statut non renseigné": {
+   "en": "Status not filled in",
+   "fr": "Statut non renseigné"
+  },
+  "Stockage temporaire, organisation, conversion, anonymisation, pseudonymisation : seulement sur demande ou approbation expresse, et les outils de tiers ne servent à rien d'autre.": {
+   "en": "Temporary storage, curation, conversion, anonymisation, pseudonymisation: only upon express request or approval, and third-party tools serve nothing else.",
+   "fr": "Stockage temporaire, organisation, conversion, anonymisation, pseudonymisation : seulement sur demande ou approbation expresse, et les outils de tiers ne servent à rien d'autre."
+  },
   "Stratégie commerciale future — changements de groupe ou de gestion, nouveaux marchés, nouvelles activités": {
    "en": "Future business strategy — group or management changes, new markets, new activities",
    "fr": "Stratégie commerciale future — changements de groupe ou de gestion, nouveaux marchés, nouvelles activités"
@@ -610,14 +638,6 @@
   "Une commande d'arrêt trop facile à heurter crée un danger de plus ; une commande trop difficile à atteindre annule la mesure.": {
    "en": "A stop control too easy to knock creates one more hazard; a control too hard to reach cancels the measure.",
    "fr": "Une commande d'arrêt trop facile à heurter crée un danger de plus ; une commande trop difficile à atteindre annule la mesure."
-  },
-  "Une compensation financière pour le dommage économiquement appréciable — atteinte physique ou morale, perte de revenus.": {
-   "en": "Financial compensation for harm that can be economically assessed — physical or mental harm, lost earnings.",
-   "fr": "Une compensation financière pour le dommage économiquement appréciable — atteinte physique ou morale, perte de revenus."
-  },
-  "Une conformité. Ce cadre n'est pas certifiable : il n'existe aucun auditeur au bout, et personne ne peut délivrer d'attestation contre lui.": {
-   "en": "Compliance. This framework cannot be certified: there is no auditor at the end of it, and nobody can issue an attestation against it.",
-   "fr": "Une conformité. Ce cadre n'est pas certifiable : il n'existe aucun auditeur au bout, et personne ne peut délivrer d'attestation contre lui."
   }
  }
 }

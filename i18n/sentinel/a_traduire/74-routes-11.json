@@ -1,12 +1,36 @@
 {
  "_lot": "74-routes-11",
- "_mots": 2418,
+ "_mots": 2406,
  "_pages": [
   "_routes"
  ],
  "_rubrique": "_routes",
  "bloc": {},
  "texte": {
+  "Mise en œuvre d'un cadre de gouvernance de la sécurité numérique": {
+   "en": "Implementation of a digital security governance framework",
+   "fr": "Mise en œuvre d'un cadre de gouvernance de la sécurité numérique"
+  },
+  "Mise en œuvre d'une approche par les risques": {
+   "en": "Implementation of a risk-based approach",
+   "fr": "Mise en œuvre d'une approche par les risques"
+  },
+  "Mise en œuvre des conclusions des tests et de l'analyse post-incident, et programmes de sensibilisation et de formation": {
+   "en": "Implementation of the conclusions of testing and post-incident analysis, and awareness and training programmes",
+   "fr": "Mise en œuvre des conclusions des tests et de l'analyse post-incident, et programmes de sensibilisation et de formation"
+  },
+  "Mise en œuvre et test de plans d'urgence, et mesures, outils et politiques de sécurité des TIC de niveau approprié": {
+   "en": "Implementation and testing of contingency plans, and ICT security measures, tools and policies of an appropriate level",
+   "fr": "Mise en œuvre et test de plans d'urgence, et mesures, outils et politiques de sécurité des TIC de niveau approprié"
+  },
+  "Mise en œuvre par le déployeur des mesures spécifiées": {
+   "en": "Implementation by the deployer of the specified measures",
+   "fr": "Mise en œuvre par le déployeur des mesures spécifiées"
+  },
+  "Mise à disposition au profit d'organismes du secteur public en cas de besoin exceptionnel": {
+   "en": "Making data available to public sector bodies in the event of an exceptional need",
+   "fr": "Mise à disposition au profit d'organismes du secteur public en cas de besoin exceptionnel"
+  },
   "Mise à jour des informations documentées": {
    "en": "Updating of documented information",
    "fr": "Mise à jour des informations documentées"
@@ -642,42 +666,6 @@
   "RIEN DIRECTEMENT — le texte n'est pas disponible ici. Ce module vise ce catalogue et en porte le nom, mais n'en a lu aucune page : les familles viennent de SP #-# Rev. #. C'est la raison pour laquelle rien n'est mesuré à la maille de la mesure.": {
    "en": "NOTHING DIRECTLY — the text is not available here. This module targets that catalogue and bears its name, but has read none of its pages: the families come from SP #-# Rev. #. That is why nothing is measured at control level.",
    "fr": "RIEN DIRECTEMENT — le texte n'est pas disponible ici. Ce module vise ce catalogue et en porte le nom, mais n'en a lu aucune page : les familles viennent de SP 800-82 Rev. 2. C'est la raison pour laquelle rien n'est mesuré à la maille de la mesure."
-  },
-  "Rapport intermédiaire": {
-   "en": "Intermediate report",
-   "fr": "Rapport intermédiaire"
-  },
-  "Rapport sur le réexamen du cadre de gestion du risque lié aux TIC": {
-   "en": "Report on the review of the ICT risk management framework",
-   "fr": "Rapport sur le réexamen du cadre de gestion du risque lié aux TIC"
-  },
-  "Rapport sur le réexamen du cadre simplifié de gestion du risque lié aux TIC": {
-   "en": "Report on the review of the simplified ICT risk management framework",
-   "fr": "Rapport sur le réexamen du cadre simplifié de gestion du risque lié aux TIC"
-  },
-  "ReCyF en pratique — collection de fiches ANSSI, version #": {
-   "en": "ReCyF in practice — ANSSI factsheet collection, version #",
-   "fr": "ReCyF en pratique — collection de fiches ANSSI, version 1.0"
-  },
-  "ReCyF — Référentiel Cyber France, version #": {
-   "en": "ReCyF — the French Cyber Framework, version #",
-   "fr": "ReCyF — Référentiel Cyber France, version 2.5"
-  },
-  "Recensement des principales dépendances vis-à-vis des prestataires tiers de services TIC": {
-   "en": "Inventory of the main dependencies on ICT third-party service providers",
-   "fr": "Recensement des principales dépendances vis-à-vis des prestataires tiers de services TIC"
-  },
-  "Recensement des systèmes d'information": {
-   "en": "Inventory of information systems",
-   "fr": "Recensement des systèmes d'information"
-  },
-  "Redevable et transparent": {
-   "en": "Accountable and transparent",
-   "fr": "Redevable et transparent"
-  },
-  "Redevance annuelle = coûts annuels totaux estimés des superviseurs, multipliés par un coefficient de chiffre d'affaires : le chiffre d'affaires applicable du prestataire pour n−#, rapporté à celui de TOUS les prestataires critiques pour n−#.": {
-   "en": "Annual fee = the overseers' estimated total annual costs, multiplied by a turnover coefficient: the provider's applicable turnover for n−#, over that of ALL critical providers for n−#.",
-   "fr": "Redevance annuelle = coûts annuels totaux estimés des superviseurs, multipliés par un coefficient de chiffre d'affaires : le chiffre d'affaires applicable du prestataire pour n−2, rapporté à celui de TOUS les prestataires critiques pour n−2."
   }
  }
 }

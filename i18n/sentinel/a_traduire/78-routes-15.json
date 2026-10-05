@@ -1,12 +1,40 @@
 {
  "_lot": "78-routes-15",
- "_mots": 2383,
+ "_mots": 2411,
  "_pages": [
   "_routes"
  ],
  "_rubrique": "_routes",
  "bloc": {},
  "texte": {
+  "art. # §# et art. #": {
+   "en": "art. #(#) and art. #",
+   "fr": "art. 5 §14 et art. 31"
+  },
+  "art. # §# et §#": {
+   "en": "art. #(#) and (#)",
+   "fr": "art. 5 §3 et §4"
+  },
+  "art. # §# à §#": {
+   "en": "art. #(#) to (#)",
+   "fr": "art. 4 §6 à §8"
+  },
+  "art. # à #": {
+   "en": "art. # to #",
+   "fr": "art. 3 à 7"
+  },
+  "art. #, #, # et #": {
+   "en": "art. #, #, # and #",
+   "fr": "art. 18, 20, 21 et 22"
+  },
+  "art. #, alinéa #": {
+   "en": "art. #, subparagraph #",
+   "fr": "art. 15, alinéa 1"
+  },
+  "article # : ce qui décide si le reste est appliqué": {
+   "en": "article #: what decides whether the rest applies",
+   "fr": "article 39 : ce qui décide si le reste est appliqué"
+  },
   "article # : la pièce qu'une autorité demande en premier, et celle dont l'absence est constatable immédiatement": {
    "en": "article #: the document an authority asks for first, and the one whose absence is immediately observable",
    "fr": "article 30 : la pièce qu'une autorité demande en premier, et celle dont l'absence est constatable immédiatement"
@@ -170,6 +198,10 @@
   "l'attente la plus forte du cadre dès que l'entreprise cause ou contribue": {
    "en": "the strongest expectation in the framework as soon as the enterprise causes or contributes",
    "fr": "l'attente la plus forte du cadre dès que l'entreprise cause ou contribue"
+  },
+  "l'effectif atteint ou dépasse # personnes": {
+   "en": "headcount reaches or exceeds # persons",
+   "fr": "l'effectif atteint ou dépasse 250 personnes"
   },
   "l'entrée, la mobilité et le départ des personnes": {
    "en": "the arrival, movement and departure of people",
