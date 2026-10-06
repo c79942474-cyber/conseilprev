@@ -54,6 +54,8 @@ INDEX = io.open(os.path.join(_RACINE, "index.html"), encoding="utf-8").read()
 SENTINEL = io.open(os.path.join(_RACINE, "sentinel.html"), encoding="utf-8").read()
 APP = io.open(os.path.join(_RACINE, "app.py"), encoding="utf-8").read()
 LOGIN = io.open(os.path.join(_RACINE, "login.page.js"), encoding="utf-8").read()
+SENTINELJS = io.open(os.path.join(_RACINE, "sentinel.page.js"),
+                     encoding="utf-8").read()
 INDEXJS = io.open(os.path.join(_RACINE, "index.page.js"), encoding="utf-8").read()
 
 #: LES `onclick` DES ENTRÉES DE LA BARRE, lus comme `hubGo` les interroge.
@@ -449,6 +451,107 @@ def test_la_page_de_connexion_emploie_bien_la_destination_reportee():
     corps = LOGIN[d:LOGIN.index("\n}", d)]
     assert "__suiteSure()" in corps, (
         "la destination reportée n'est pas employée après connexion")
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  5 bis. L'OFFRE EST ANNONCÉE AVANT LE CLIC
+# ═══════════════════════════════════════════════════════════════════════════
+#
+#  CE QUI A ÉTÉ MESURÉ, DANS UN NAVIGATEUR, AVEC UN COMPTE RÉEL AU PLAN
+#  GRATUIT. Le clic sur une carte traversait toute la chaîne — la porte, le
+#  formulaire, `hubGo`, l'onglet — et l'écran demandé ne s'affichait pas : la
+#  porte des offres refusait le module, et affichait « Module verrouillé ».
+#  Mesuré : 106 onglets sur 111 verrouillés, écran peint `p-apercu`.
+#
+#  LE REFUS EST LÉGITIME — c'est le modèle commercial, et il est écrit dans
+#  `sentinel.page.js` : « Les offres Pro et Entreprise sont attribuées par
+#  l'administration CONSEILPREV APRÈS confirmation de paiement. » CE QUI NE
+#  L'ÉTAIT PAS, c'est qu'une page d'accueil PUBLIQUE annonce seize normes
+#  maîtrisées, pose seize liens, et ne dise nulle part lequel s'ouvrira. Un
+#  refus qu'on ne pouvait pas prévoir se lit comme un lien cassé — et c'est
+#  le même défaut que la page avait déjà payé pour la connexion, corrigé
+#  alors par la pastille « Connexion requise ».
+#
+#  L'OFFRE N'EST PAS ÉCRITE DEUX FOIS. Ce que la carte annonce est comparé à
+#  ce que la porte applique : `PLAN_GRATUIT_MODULES` et
+#  `PLAN_ENTREPRISE_ONLY`, lues dans le moteur. Changer la politique sans
+#  changer les cartes fait tomber la règle, et elle nomme la carte.
+
+
+def _politique_des_offres():
+    """LES DEUX LISTES QUI DÉCIDENT, LUES OÙ ELLES VIVENT."""
+    g = re.search(r"var PLAN_GRATUIT_MODULES = \[([^\]]*)\]", SENTINELJS)
+    e = re.search(r"var PLAN_ENTREPRISE_ONLY = \[([^\]]*)\]", SENTINELJS)
+    assert g and e, (
+        "les listes d'offres ne se lisent plus dans sentinel.page.js : la "
+        "règle comparerait les cartes à du vide")
+    lire = lambda m: {x.strip().strip("'\"") for x in m.group(1).split(",")
+                      if x.strip()}
+    return lire(g), lire(e)
+
+
+def _offre_exigee(panneau):
+    """L'OFFRE QU'IL FAUT POUR OUVRIR CET ÉCRAN, DÉRIVÉE DE LA PORTE.
+    `planIsAllowed` : Entreprise ouvre tout ; Pro ouvre tout sauf
+    `PLAN_ENTREPRISE_ONLY` ; Gratuit n'ouvre que `PLAN_GRATUIT_MODULES`."""
+    gratuit, entreprise = _politique_des_offres()
+    if panneau in gratuit:
+        return None                      # ouvert à tous : rien à annoncer
+    if panneau in entreprise:
+        return "entreprise"
+    return "pro"
+
+
+@pytest.mark.parametrize("nom,panneau", ATTENDUES, ids=IDS)
+def test_chaque_carte_ANNONCE_l_offre_que_la_porte_EXIGE(nom, panneau):
+    """LES DEUX SENS COMPTENT. Une carte qui n'annonce rien alors que l'écran
+    est verrouillé promet ce qu'elle ne peut pas tenir ; une carte qui annonce
+    une offre alors que l'écran est ouvert à tous décourage pour rien."""
+    carte = _carte(nom)
+    assert carte, "la carte « %s » a disparu de la grille" % nom
+    attendue = _offre_exigee(panneau)
+    m = re.search(r'<div class="nc-offre" data-offre="([^"]+)">', carte)
+    if attendue is None:
+        assert not m, (
+            "« %s » annonce l'offre %s alors que %s est ouvert à tous : la "
+            "carte décourage pour rien" % (nom, m.group(1), panneau))
+        return
+    assert m, (
+        "« %s » n'annonce aucune offre, alors que la porte exige %s pour "
+        "ouvrir %s : le visiteur cliquera et recevra « Module verrouillé » "
+        "sans que rien ne l'ait prévenu" % (nom, attendue, panneau))
+    assert m.group(1) == attendue, (
+        "« %s » annonce l'offre %s, la porte exige %s"
+        % (nom, m.group(1), attendue))
+    #  LA PASTILLE EST DANS LE LIEN, et pas à côté : hors du lien elle
+    #  découperait la surface cliquable que la règle du rembourrage garde.
+    d = carte.index('<a class="nc-go"')
+    f = carte.index("</a>", d)
+    assert d < carte.index('class="nc-offre"') < f, (
+        "la pastille d'offre de « %s » est hors du lien : elle troue la "
+        "surface cliquable de la carte" % nom)
+    #  ET ELLE SE TRADUIT : un libellé écrit en dur resterait français.
+    assert re.search(r'class="nc-offre"[^>]*>[^<]*<span data-i18n="([^"]+)"',
+                     carte), (
+        "le libellé d'offre de « %s » ne porte pas de clé de dictionnaire : "
+        "il resterait français dans les deux autres langues" % nom)
+
+
+def test_le_libelle_de_l_offre_existe_dans_LES_TROIS_dictionnaires():
+    """UNE CLÉ ABSENTE NE LAISSE PAS UN BLANC : `applyLang` ne remplace rien,
+    et la pastille reste en français au milieu d'une page anglaise ou
+    allemande. C'est pire qu'une faute visible, parce que la page a l'air
+    traduite."""
+    cles = set(re.findall(
+        r'class="nc-offre"[^>]*>[^<]*<span data-i18n="([^"]+)"', _bloc()))
+    assert cles, "aucune pastille d'offre ne porte de clé : rien n'est mesuré"
+    for cle in sorted(cles):
+        for langue in ("fr", "en", "de"):
+            d = INDEXJS.index("  %s:JSON.parse(`" % langue)
+            f = INDEXJS.index("`", d + 20)
+            assert ('"%s":"' % cle) in INDEXJS[d:f], (
+                "la clé %s manque au dictionnaire %s : la pastille restera "
+                "en français" % (cle, langue))
 
 
 # ═══════════════════════════════════════════════════════════════════════════

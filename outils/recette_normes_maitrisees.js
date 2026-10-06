@@ -272,6 +272,96 @@ function arreter(s, garder) {
         }),
       };
     });
+    /* ── §1 bis. L'OFFRE EST ANNONCÉE, ET ELLE EST VISIBLE ───────────────
+       UNE PASTILLE PRÉSENTE DANS LE HTML N'EST PAS UNE PASTILLE LUE. Celle-ci
+       vit dans le lien de la carte, sous la description, dans une grille qui
+       grossit au survol : une règle Python la trouve dans le fichier, elle ne
+       sait pas si elle a une hauteur. On la mesure donc peinte, puis dans les
+       deux autres langues — un libellé qui ne bouge pas à la bascule est un
+       libellé resté français. */
+    const politique = (() => {
+      const js = fs.readFileSync(path.join(RACINE, 'sentinel.page.js'), 'utf8');
+      const lire = (nom) => {
+        const m = new RegExp('var ' + nom + ' = \\[([^\\]]*)\\]').exec(js);
+        return m ? m[1].split(',').map((x) => x.trim().replace(/^'|'$/g, ''))
+                        .filter(Boolean) : null;
+      };
+      return { gratuit: lire('PLAN_GRATUIT_MODULES'),
+               entreprise: lire('PLAN_ENTREPRISE_ONLY') };
+    })();
+    if (!politique.gratuit || !politique.entreprise) {
+      fautes.push('la politique des offres ne se lit plus dans sentinel.page.js : '
+                  + '§1 bis ne mesure plus rien');
+    }
+    const pastilles = await pg.evaluate(() => [...document.querySelectorAll('.ng .nc')]
+      .map((c) => {
+        const a = c.querySelector('a.nc-go');
+        const p = c.querySelector('.nc-offre');
+        const n = c.querySelector('.nn');
+        return { nom: n ? n.textContent.trim() : null,
+                 id: a ? (a.getAttribute('href') || '').split('goto=')[1] : null,
+                 offre: p ? p.getAttribute('data-offre') : null,
+                 h: p ? Math.round(p.getBoundingClientRect().height) : 0,
+                 texte: p ? (p.innerText || '').replace(/\s+/g, ' ').trim() : null,
+                 dedans: !!(p && a && a.contains(p)) };
+      }));
+    let annoncees = 0;
+    pastilles.forEach((x) => {
+      const attendue = politique.gratuit && politique.gratuit.indexOf(x.id) >= 0
+        ? null
+        : (politique.entreprise && politique.entreprise.indexOf(x.id) >= 0
+           ? 'entreprise' : 'pro');
+      if (attendue === null) {
+        if (x.offre) fautes.push('« ' + x.nom + ' » annonce l\'offre ' + x.offre
+                                 + ' alors que ' + x.id + ' est ouvert à tous');
+        return;
+      }
+      if (!x.offre) {
+        fautes.push('« ' + x.nom + ' » n\'annonce aucune offre alors que la porte '
+                    + 'exige ' + attendue + ' : le clic finira sur « Module verrouillé »');
+        return;
+      }
+      if (x.offre !== attendue) {
+        fautes.push('« ' + x.nom + ' » annonce ' + x.offre + ', la porte exige ' + attendue);
+      }
+      if (x.h < 8) {
+        fautes.push('la pastille d\'offre de « ' + x.nom + ' » ne fait que ' + x.h
+                    + ' px de haut : elle est dans le HTML, pas sur l\'écran');
+      }
+      if (!x.dedans) {
+        fautes.push('la pastille d\'offre de « ' + x.nom + ' » est hors du lien');
+      }
+      if (!x.texte) {
+        fautes.push('la pastille d\'offre de « ' + x.nom + ' » ne dit rien');
+      }
+      annoncees++;
+    });
+    if (annoncees) {
+      dits.push(annoncees + ' carte(s) annoncent l\'offre exigée, visible et dans le lien — '
+                + 'la plus basse à ' + Math.min.apply(null, pastilles.filter((x) => x.h)
+                  .map((x) => x.h)) + ' px, « ' + (pastilles.find((x) => x.texte) || {}).texte + ' »');
+    }
+    /* LES DEUX AUTRES LANGUES : le libellé doit CHANGER. */
+    const fr0 = (pastilles.find((x) => x.texte) || {}).texte;
+    for (const lg of ['en', 'de']) {
+      const vu = await pg.evaluate((l) => {
+        if (typeof setLang !== 'function') return null;
+        setLang(l);
+        const p = document.querySelector('.ng .nc-offre');
+        return p ? (p.innerText || '').replace(/\s+/g, ' ').trim() : null;
+      }, lg);
+      if (vu === null) {
+        fautes.push('la bascule de langue de l\'accueil est introuvable : §1 bis '
+                    + 'ne peut pas mesurer la traduction de la pastille');
+      } else if (vu === fr0) {
+        fautes.push('en ' + lg + ', la pastille d\'offre dit encore « ' + vu
+                    + ' » : le libellé n\'est pas traduit');
+      } else {
+        dits.push('la pastille d\'offre en ' + lg + ' : « ' + vu + ' »');
+      }
+    }
+    await pg.evaluate(() => { if (typeof setLang === 'function') setLang('fr'); });
+
     const cibles = [];
     grille.cartes.forEach((c) => {
       const m = c.href && /^\/sentinel\?goto=(.+)$/.exec(c.href);

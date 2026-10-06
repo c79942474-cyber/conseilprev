@@ -52,6 +52,41 @@
       "avant": "\"nr.ttl\":\"16 normes",
       "apres": "\"nr.ttl\":\"15 normes",
       "regle": "test_le_titre_compte_EXACTEMENT_les_cartes_du_bloc"
+    },
+    {
+      "nom": "une carte cesse d'annoncer l'offre : le visiteur clique et reçoit « Module verrouillé » sans prévenir",
+      "fichier": "index.html",
+      "avant": "<div class=\"nn\">RGPD</div><div class=\"nd\" data-i18n=\"nr.rgpd\">Privacy by Design</div><div class=\"nc-offre\" data-offre=\"pro\">",
+      "apres": "<div class=\"nn\">RGPD</div><div class=\"nd\" data-i18n=\"nr.rgpd\">Privacy by Design</div><div class=\"nc-offre-retiree\" data-offre=\"pro\">",
+      "regle": "test_chaque_carte_ANNONCE_l_offre_que_la_porte_EXIGE[RGPD]"
+    },
+    {
+      "nom": "une carte annonce la mauvaise offre : Entreprise là où Pro suffit",
+      "fichier": "index.html",
+      "avant": "<a class=\"nc-go\" href=\"/sentinel?goto=nist-profil\"",
+      "apres": "<a data-offre=\"entreprise\" class=\"nc-go\" href=\"/sentinel?goto=nist-profil\"",
+      "regle": "test_chaque_carte_ANNONCE_l_offre_que_la_porte_EXIGE[NIST-AI-RMF]"
+    },
+    {
+      "nom": "la politique des offres s'ouvre sans que les cartes suivent : elles découragent pour rien",
+      "fichier": "sentinel.page.js",
+      "avant": "var PLAN_GRATUIT_MODULES = ['apercu', 'simulateur', 'regs', 'training', 'empreinte'];",
+      "apres": "var PLAN_GRATUIT_MODULES = ['apercu', 'simulateur', 'regs', 'training', 'empreinte', 'owasp-dix'];",
+      "regle": "test_chaque_carte_ANNONCE_l_offre_que_la_porte_EXIGE[OWASP-LLM]"
+    },
+    {
+      "nom": "le libellé de l'offre perd sa clé de dictionnaire : il reste français en anglais et en allemand",
+      "fichier": "index.html",
+      "avant": "<span data-i18n=\"nr.offre.pro\">Offre Pro requise</span></div></a><a class=\"nc-src\" href=\"https://eur-lex.europa.eu/eli/reg/2016/679/oj\"",
+      "apres": "<span>Offre Pro requise</span></div></a><a class=\"nc-src\" href=\"https://eur-lex.europa.eu/eli/reg/2016/679/oj\"",
+      "regle": "test_chaque_carte_ANNONCE_l_offre_que_la_porte_EXIGE[RGPD]"
+    },
+    {
+      "nom": "le libellé de l'offre sort du dictionnaire allemand",
+      "fichier": "index.page.js",
+      "avant": "\"nr.offre.pro\":\"Pro-Abo erforderlich\",",
+      "apres": "\"nr.offre.pro.de\":\"Pro-Abo erforderlich\",",
+      "regle": "test_le_libelle_de_l_offre_existe_dans_LES_TROIS_dictionnaires"
     }
   ]
 }
