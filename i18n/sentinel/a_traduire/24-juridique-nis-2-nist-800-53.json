@@ -1,0 +1,890 @@
+{
+ "_lot": "24-juridique-nis-2-nist-800-53",
+ "_mots": 2697,
+ "_pages": [
+  "juridique",
+  "nis2",
+  "nis2-chiffre",
+  "nis2-gouvernance",
+  "nis2-qualifier",
+  "nis2-signalement",
+  "nist53-socle"
+ ],
+ "_rubrique": "JURIDIQUE + NIS 2 + NIST 800-53",
+ "bloc": {
+  "Assiette — Chiffre d'affaires annuel mondial total de l'entreprise à laquelle l'entité appartient — pas celui de la seule entité concernée.": {
+   "en": "<b>Base — </b>The total worldwide annual turnover of the undertaking to which the entity belongs — not that of the entity concerned alone.",
+   "fr": "Assiette — Chiffre d'affaires annuel mondial total de l'entreprise à laquelle l'entité appartient — pas celui de la seule entité concernée.",
+   "html": "<b>Assiette — </b>Chiffre d'affaires annuel mondial total de l'entreprise à laquelle l'entité appartient — pas celui de la seule entité concernée."
+  },
+  "Base figée du dispositif : ces références ne sont jamais générées. Chaque entrée renvoie à sa source officielle — EUR-Lex pour les textes européens, Légifrance pour les textes français — parce qu'une analyse ne vaut que si l'on peut remonter au texte.": {
+   "en": "Frozen base of the framework: these references are never generated. Each entry links to its <strong>official source</strong> — EUR-Lex for European texts, Légifrance for French texts — because an analysis is only worth something if you can trace it back to the text.",
+   "fr": "Base figée du dispositif : ces références ne sont jamais générées. Chaque entrée renvoie à sa source officielle — EUR-Lex pour les textes européens, Légifrance pour les textes français — parce qu'une analyse ne vaut que si l'on peut remonter au texte.",
+   "html": "Base figée du dispositif : ces références ne sont jamais générées. Chaque entrée renvoie à sa <strong>source officielle</strong> — EUR-Lex pour les textes européens, Légifrance pour les textes français — parce qu'une analyse ne vaut que si l'on peut remonter au texte."
+  },
+  "Bloc # sur # · Gouvernance art. # — Verrouillé": {
+   "en": "<b>Block # of # · Governance, art. # — Locked</b>",
+   "fr": "Bloc 3 sur 7 · Gouvernance art. 20 — Verrouillé",
+   "html": "<b>Bloc 3 sur 7 · Gouvernance art. 20 — Verrouillé</b>"
+  },
+  "Bloc # sur # · Mesures art. # §# — Verrouillé": {
+   "en": "<b>Block # of # · Measures, art. #(#) — Locked</b>",
+   "fr": "Bloc 2 sur 7 · Mesures art. 21 §2 — Verrouillé",
+   "html": "<b>Bloc 2 sur 7 · Mesures art. 21 §2 — Verrouillé</b>"
+  },
+  "Bloc # sur # · Socle et dix-huit familles — À remplir maintenant": {
+   "en": "<b>Block # of # · Baseline and eighteen families — To fill in now</b>",
+   "fr": "Bloc 1 sur 1 · Socle et dix-huit familles — À remplir maintenant",
+   "html": "<b>Bloc 1 sur 1 · Socle et dix-huit familles — À remplir maintenant</b>"
+  },
+  "Bloc # sur # · Suis-je concerné ? — À remplir maintenant": {
+   "en": "<b>Block # of # · Am I in scope? — To fill in now</b>",
+   "fr": "Bloc 1 sur 7 · Suis-je concerné ? — À remplir maintenant",
+   "html": "<b>Bloc 1 sur 7 · Suis-je concerné ? — À remplir maintenant</b>"
+  },
+  "Ce qui fait basculer n'est pas votre niveau de sécurité. C'est le secteur (annexe I ou II) et la taille. Une entreprise de l'annexe I qui passe de # à # personnes devient essentielle sans avoir rien changé à son risque — et hérite des audits réguliers et d'un palier de sanction supérieur de # %.": {
+   "en": "<b>What tips you over is not your level of security.</b> It is the sector (Annex&nbsp;I or II) and size. A company in Annex&nbsp;I that grows from # to # people becomes an essential entity without having changed anything about its risk — and inherits regular audits and a penalty tier #&nbsp;% higher.",
+   "fr": "Ce qui fait basculer n'est pas votre niveau de sécurité. C'est le secteur (annexe I ou II) et la taille. Une entreprise de l'annexe I qui passe de 240 à 260 personnes devient essentielle sans avoir rien changé à son risque — et hérite des audits réguliers et d'un palier de sanction supérieur de 43 %.",
+   "html": "<b>Ce qui fait basculer n'est pas votre niveau de sécurité.</b> C'est le secteur (annexe&nbsp;I ou II) et la taille. Une entreprise de l'annexe&nbsp;I qui passe de 240 à 260 personnes devient essentielle sans avoir rien changé à son risque — et hérite des audits réguliers et d'un palier de sanction supérieur de 43&nbsp;%."
+  },
+  "Cette qualification suit ce que vous déclarez. Elle est prononcée en droit par l'autorité nationale compétente, sur l'entité réelle. Et elle ne se demande pas : l'État dresse la liste (art. #, §#) et l'entité s'y déclare elle-même (art. #, §#) — au plus tard le # avril #.": {
+   "en": "This qualification follows what you declare. It is determined in law by the competent national authority, on the actual entity. And it <b>is not something you apply for</b>: the State draws up the list (art.&nbsp;#(#)) and the entity registers itself on it (art.&nbsp;#(#)) — by #&nbsp;April&nbsp;# at the latest.",
+   "fr": "Cette qualification suit ce que vous déclarez. Elle est prononcée en droit par l'autorité nationale compétente, sur l'entité réelle. Et elle ne se demande pas : l'État dresse la liste (art. 3, §3) et l'entité s'y déclare elle-même (art. 3, §4) — au plus tard le 17 avril 2025.",
+   "html": "Cette qualification suit ce que vous déclarez. Elle est prononcée en droit par l'autorité nationale compétente, sur l'entité réelle. Et elle <b>ne se demande pas</b> : l'État dresse la liste (art.&nbsp;3,&nbsp;§3) et l'entité s'y déclare elle-même (art.&nbsp;3,&nbsp;§4) — au plus tard le 17&nbsp;avril&nbsp;2025."
+  },
+  "Chaque exigence porte son fondement : c'est ce qui permet de la défendre en négociation — et de l'abandonner en connaissance de cause quand elle n'en a pas. Les crochets marquent les valeurs à arbitrer.": {
+   "en": "Each requirement carries its <strong>basis</strong>: that is what lets you defend it in negotiation — and drop it knowingly when it has none. Square brackets mark the values still to be decided.",
+   "fr": "Chaque exigence porte son fondement : c'est ce qui permet de la défendre en négociation — et de l'abandonner en connaissance de cause quand elle n'en a pas. Les crochets marquent les valeurs à arbitrer.",
+   "html": "Chaque exigence porte son <strong>fondement</strong> : c'est ce qui permet de la défendre en négociation — et de l'abandonner en connaissance de cause quand elle n'en a pas. Les crochets marquent les valeurs à arbitrer."
+  },
+  "Conseil juridiqueassisté": {
+   "en": "<em>Assisted</em><br>legal advice",
+   "fr": "Conseil juridiqueassisté",
+   "html": "Conseil juridique<br><em>assisté</em>"
+  },
+  "Entités essentielles": {
+   "en": "<b>Essential entities</b>",
+   "fr": "Entités essentielles",
+   "html": "<b>Entités essentielles</b>"
+  },
+  "Entités importantes": {
+   "en": "<b>Important entities</b>",
+   "fr": "Entités importantes",
+   "html": "<b>Entités importantes</b>"
+  },
+  "Huit portes d’entrée ignorent totalement la taille, et deux d’entre elles mènent directement au statut d’entité essentielle. Un dirigeant de PME qui lit « moins de # salariés » et referme le dossier passe à côté de celles-là.": {
+   "en": "Eight entry doors ignore size altogether, and two of them lead straight to <b>essential</b> entity status. An SME director who reads « fewer than # employees » and closes the file misses those.",
+   "fr": "Huit portes d’entrée ignorent totalement la taille, et deux d’entre elles mènent directement au statut d’entité essentielle. Un dirigeant de PME qui lit « moins de 50 salariés » et referme le dossier passe à côté de celles-là.",
+   "html": "Huit portes d’entrée ignorent totalement la taille, et deux d’entre elles mènent directement au statut d’entité <b>essentielle</b>. Un dirigeant de PME qui lit « moins de 50 salariés » et referme le dossier passe à côté de celles-là."
+  },
+  "L'assiette est le chiffre d'affaires mondial total de l'entreprise à laquelle l'entité appartient — pas celui de la seule filiale concernée. Lire le chiffre de la filiale divise l'exposition par l'écart entre la filiale et le groupe : c'est le plus gros facteur d'erreur possible sur ce calcul.": {
+   "en": "The base is the <b>total worldwide turnover of the company to which the entity belongs</b> — not that of the subsidiary concerned alone. Reading the subsidiary’s figure divides the exposure by the gap between the subsidiary and the group: it is the largest possible source of error in this calculation.",
+   "fr": "L'assiette est le chiffre d'affaires mondial total de l'entreprise à laquelle l'entité appartient — pas celui de la seule filiale concernée. Lire le chiffre de la filiale divise l'exposition par l'écart entre la filiale et le groupe : c'est le plus gros facteur d'erreur possible sur ce calcul.",
+   "html": "L'assiette est le <b>chiffre d'affaires mondial total de l'entreprise à laquelle l'entité appartient</b> — pas celui de la seule filiale concernée. Lire le chiffre de la filiale divise l'exposition par l'écart entre la filiale et le groupe : c'est le plus gros facteur d'erreur possible sur ce calcul."
+  },
+  "La preuve attendue pour la formation des dirigeants est nominative et datée, et elle porte sur les membres de l'organe de direction eux-mêmes. Un plan de formation d'entreprise, si complet soit-il, ne l'établit pas.": {
+   "en": "The evidence expected for managers’ training is <b>named and dated</b>, and it concerns the members of the management body themselves. A company training plan, however complete, does not establish it.",
+   "fr": "La preuve attendue pour la formation des dirigeants est nominative et datée, et elle porte sur les membres de l'organe de direction eux-mêmes. Un plan de formation d'entreprise, si complet soit-il, ne l'établit pas.",
+   "html": "La preuve attendue pour la formation des dirigeants est <b>nominative et datée</b>, et elle porte sur les membres de l'organe de direction eux-mêmes. Un plan de formation d'entreprise, si complet soit-il, ne l'établit pas."
+  },
+  "La réponse suit une trame imposée : qualification, textes applicables, lectures possibles avec leurs conséquences, risque, recommandation assumée, actions, puis réserves. Le profil renseigné à l'étape # est repris et restreint le périmètre des textes.": {
+   "en": "The answer follows a set structure: qualification, applicable texts, <strong>possible readings</strong> with their consequences, risk, a recommendation that takes a position, actions, then reservations. The profile entered in step # is carried over and narrows the scope of the texts.",
+   "fr": "La réponse suit une trame imposée : qualification, textes applicables, lectures possibles avec leurs conséquences, risque, recommandation assumée, actions, puis réserves. Le profil renseigné à l'étape 1 est repris et restreint le périmètre des textes.",
+   "html": "La réponse suit une trame imposée : qualification, textes applicables, <strong>lectures possibles</strong> avec leurs conséquences, risque, recommandation assumée, actions, puis réserves. Le profil renseigné à l'étape 1 est repris et restreint le périmètre des textes."
+  },
+  "Le contrat est confronté à la grille fermée du clausier, point par point : présent, partiel ou absent, avec la citation exacte de la clause concernée. Le document est analysé en mémoire et n'est pas conservé — ni stocké, ni indexé.": {
+   "en": "The contract is checked against the <strong>closed grid</strong> of the clause library, point by point: present, partial or absent, with the exact quotation of the clause concerned. The document is analysed <strong>in memory and is not kept</strong> — neither stored nor indexed.",
+   "fr": "Le contrat est confronté à la grille fermée du clausier, point par point : présent, partiel ou absent, avec la citation exacte de la clause concernée. Le document est analysé en mémoire et n'est pas conservé — ni stocké, ni indexé.",
+   "html": "Le contrat est confronté à la <strong>grille fermée</strong> du clausier, point par point : présent, partiel ou absent, avec la citation exacte de la clause concernée. Le document est analysé <strong>en mémoire et n'est pas conservé</strong> — ni stocké, ni indexé."
+  },
+  "Le rattachement est calculé par des règles explicites, sans intelligence artificielle : deux exécutions sur le même profil donnent le même résultat, et chaque texte retenu affiche pourquoi il l'est. Ce que le questionnaire ne tranche pas seul est signalé « à confirmer » plutôt que deviné.": {
+   "en": "The link to each text is computed by <strong>explicit rules</strong>, without artificial intelligence: two runs on the same profile give the same result, and each text included shows <em>why</em> it is included. What the questionnaire cannot decide on its own is flagged “to be confirmed” rather than guessed.",
+   "fr": "Le rattachement est calculé par des règles explicites, sans intelligence artificielle : deux exécutions sur le même profil donnent le même résultat, et chaque texte retenu affiche pourquoi il l'est. Ce que le questionnaire ne tranche pas seul est signalé « à confirmer » plutôt que deviné.",
+   "html": "Le rattachement est calculé par des <strong>règles explicites</strong>, sans intelligence artificielle : deux exécutions sur le même profil donnent le même résultat, et chaque texte retenu affiche <em>pourquoi</em> il l'est. Ce que le questionnaire ne tranche pas seul est signalé « à confirmer » plutôt que deviné."
+  },
+  "Le taux ci-dessus ne compte que les # obligations. La formation du personnel, qui est un encouragement, est affichée mais n’entre pas au dénominateur : l’y mettre ferait gagner des points à qui a manqué la seule ligne obligatoire.": {
+   "en": "The rate above counts the <b># obligations</b> only. Staff training, which is an encouragement, is shown but does not enter the denominator: putting it there would earn points for someone who has missed the one mandatory line.",
+   "fr": "Le taux ci-dessus ne compte que les 4 obligations. La formation du personnel, qui est un encouragement, est affichée mais n’entre pas au dénominateur : l’y mettre ferait gagner des points à qui a manqué la seule ligne obligatoire.",
+   "html": "Le taux ci-dessus ne compte que les <b>4 obligations</b>. La formation du personnel, qui est un encouragement, est affichée mais n’entre pas au dénominateur : l’y mettre ferait gagner des points à qui a manqué la seule ligne obligatoire."
+  },
+  "Les cinq lignes ne pèsent pas pareil. Quatre sont des obligations ; la formation du personnel est un encouragement. Une entreprise qui forme toutes ses équipes sauf son conseil d'administration a manqué la seule des deux formations qui soit obligatoire — et c'est celle qui expose personnellement quelqu'un.": {
+   "en": "<b>The five lines do not weigh the same.</b> Four are obligations; staff training is an <b>encouragement</b>. A company that trains all its teams except its board has missed the only one of the two training requirements that is mandatory — and it is the one that exposes someone personally.",
+   "fr": "Les cinq lignes ne pèsent pas pareil. Quatre sont des obligations ; la formation du personnel est un encouragement. Une entreprise qui forme toutes ses équipes sauf son conseil d'administration a manqué la seule des deux formations qui soit obligatoire — et c'est celle qui expose personnellement quelqu'un.",
+   "html": "<b>Les cinq lignes ne pèsent pas pareil.</b> Quatre sont des obligations ; la formation du personnel est un <b>encouragement</b>. Une entreprise qui forme toutes ses équipes sauf son conseil d'administration a manqué la seule des deux formations qui soit obligatoire — et c'est celle qui expose personnellement quelqu'un."
+  },
+  "Les pièces désignées sont lues intégralement, pas recherchées par similarité — quand on soumet un contrat à un comité, on veut la pièce, pas les trois passages les plus ressemblants.": {
+   "en": "The designated documents are read <strong>in full</strong>, not searched by similarity — when you submit a contract to a committee, you want the document, not the three most similar passages.",
+   "fr": "Les pièces désignées sont lues intégralement, pas recherchées par similarité — quand on soumet un contrat à un comité, on veut la pièce, pas les trois passages les plus ressemblants.",
+   "html": "Les pièces désignées sont lues <strong>intégralement</strong>, pas recherchées par similarité — quand on soumet un contrat à un comité, on veut la pièce, pas les trois passages les plus ressemblants."
+  },
+  "Ne pas lire NIS # comme le CRA. Le règlement (UE) #/# est d'application directe : ses montants sont les montants. NIS # est une directive — traiter les deux de la même façon sous-estime l'exposition.": {
+   "en": "<b>Do not read NIS # like the CRA.</b> Regulation (EU) #/# is directly applicable: its amounts are the amounts. NIS # is a directive — treating the two the same way <b>underestimates</b> the exposure.",
+   "fr": "Ne pas lire NIS 2 comme le CRA. Le règlement (UE) 2024/2847 est d'application directe : ses montants sont les montants. NIS 2 est une directive — traiter les deux de la même façon sous-estime l'exposition.",
+   "html": "<b>Ne pas lire NIS&nbsp;2 comme le CRA.</b> Le règlement (UE) 2024/2847 est d'application directe : ses montants sont les montants. NIS&nbsp;2 est une directive — traiter les deux de la même façon <b>sous-estime</b> l'exposition."
+  },
+  "Pour une réunion de direction ou une négociation. Trois choses sont produites, et une seule vient du modèle : le routage — qui tranche, qui est consulté — est calculé par règles, parce que lorsqu'un texte réserve une décision à un organe, s'en écarter est un manquement et non un choix d'organisation ; les échéances réglementaires commandent le calendrier ; la synthèse, les options et la recommandation sont rédigées sur les seules pièces fournies.": {
+   "en": "For an executive meeting or a negotiation. Three things are produced, and <strong>only one comes from the model</strong>: the <strong>routing</strong> — who decides, who is consulted — is computed by rules, because when a text reserves a decision to a body, departing from it is a breach and not an organisational choice; the regulatory <strong>deadlines</strong> drive the timetable; the <em>summary, the options and the recommendation</em> are drafted solely from the documents provided.",
+   "fr": "Pour une réunion de direction ou une négociation. Trois choses sont produites, et une seule vient du modèle : le routage — qui tranche, qui est consulté — est calculé par règles, parce que lorsqu'un texte réserve une décision à un organe, s'en écarter est un manquement et non un choix d'organisation ; les échéances réglementaires commandent le calendrier ; la synthèse, les options et la recommandation sont rédigées sur les seules pièces fournies.",
+   "html": "Pour une réunion de direction ou une négociation. Trois choses sont produites, et <strong>une seule vient du modèle</strong> : le <strong>routage</strong> — qui tranche, qui est consulté — est calculé par règles, parce que lorsqu'un texte réserve une décision à un organe, s'en écarter est un manquement et non un choix d'organisation ; les <strong>échéances</strong> réglementaires commandent le calendrier ; la <em>synthèse, les options et la recommandation</em> sont rédigées sur les seules pièces fournies."
+  },
+  "Preuve attendue — La chaîne de délégation écrite, et ce qu'elle ne délègue pas.": {
+   "en": "<b>Evidence expected — </b>The written chain of delegation, and what it does not delegate.",
+   "fr": "Preuve attendue — La chaîne de délégation écrite, et ce qu'elle ne délègue pas.",
+   "html": "<b>Preuve attendue — </b>La chaîne de délégation écrite, et ce qu'elle ne délègue pas."
+  },
+  "Preuve attendue — Le plan de formation et son taux de réalisation.": {
+   "en": "<b>Evidence expected — </b>The training plan and its completion rate.",
+   "fr": "Preuve attendue — Le plan de formation et son taux de réalisation.",
+   "html": "<b>Preuve attendue — </b>Le plan de formation et son taux de réalisation."
+  },
+  "Preuve attendue — Les attestations nominatives et datées des dirigeants eux-mêmes — pas celles des équipes.": {
+   "en": "<b>Evidence expected — </b>Named and dated attestations from the senior managers themselves — not from the teams.",
+   "fr": "Preuve attendue — Les attestations nominatives et datées des dirigeants eux-mêmes — pas celles des équipes.",
+   "html": "<b>Preuve attendue — </b>Les attestations nominatives et datées des dirigeants eux-mêmes — pas celles des équipes."
+  },
+  "Preuve attendue — Un point récurrent à l'ordre du jour, avec des indicateurs et des décisions tracées.": {
+   "en": "<b>Evidence expected — </b>A standing item on the agenda, with indicators and decisions on the record.",
+   "fr": "Preuve attendue — Un point récurrent à l'ordre du jour, avec des indicateurs et des décisions tracées.",
+   "html": "<b>Preuve attendue — </b>Un point récurrent à l'ordre du jour, avec des indicateurs et des décisions tracées."
+  },
+  "Preuve attendue — Une délibération datée, nommant les mesures approuvées.": {
+   "en": "<b>Evidence expected — </b>A dated resolution, naming the measures approved.",
+   "fr": "Preuve attendue — Une délibération datée, nommant les mesures approuvées.",
+   "html": "<b>Preuve attendue — </b>Une délibération datée, nommant les mesures approuvées."
+  },
+  "Profil non renseigné. Le routage se déduit de votre secteur, de votre taille et de vos rôles : sans eux, le moteur ne peut pas savoir qu'une décision doit remonter à l'organe de direction plutôt qu'à la direction juridique. Renseignez l'onglet # · Qualification — la note reste produite, mais son routage sera générique.": {
+   "en": "<b>Profile not provided.</b> Routing is deduced from your sector, your size and your roles: without them, the engine cannot know that a decision must go up to the management body rather than to the legal department. Fill in tab <b># · Qualification</b> — the note is still produced, but its routing will be generic.",
+   "fr": "Profil non renseigné. Le routage se déduit de votre secteur, de votre taille et de vos rôles : sans eux, le moteur ne peut pas savoir qu'une décision doit remonter à l'organe de direction plutôt qu'à la direction juridique. Renseignez l'onglet 1 · Qualification — la note reste produite, mais son routage sera générique.",
+   "html": "<b>Profil non renseigné.</b> Le routage se déduit de votre secteur, de votre taille et de vos rôles : sans eux, le moteur ne peut pas savoir qu'une décision doit remonter à l'organe de direction plutôt qu'à la direction juridique. Renseignez l'onglet <b>1 · Qualification</b> — la note reste produite, mais son routage sera générique."
+  },
+  "Services numériques, cybersécurité IT / OT / ICS, intelligence artificielle et contrats fournisseurs. Une qualification réglementaire calculée par des règles explicites — sans IA, donc reproductible — puis une analyse qui expose les lectures possibles d'un texte plutôt qu'une réponse unique.": {
+   "en": "Digital services, IT&nbsp;/&nbsp;OT&nbsp;/&nbsp;ICS cybersecurity, artificial intelligence and supplier contracts. A regulatory qualification computed by explicit rules — without AI, and therefore reproducible — followed by an analysis that sets out the <em>possible readings</em> of a text rather than a single answer.",
+   "fr": "Services numériques, cybersécurité IT / OT / ICS, intelligence artificielle et contrats fournisseurs. Une qualification réglementaire calculée par des règles explicites — sans IA, donc reproductible — puis une analyse qui expose les lectures possibles d'un texte plutôt qu'une réponse unique.",
+   "html": "Services numériques, cybersécurité IT&nbsp;/&nbsp;OT&nbsp;/&nbsp;ICS, intelligence artificielle et contrats fournisseurs. Une qualification réglementaire calculée par des règles explicites — sans IA, donc reproductible — puis une analyse qui expose les <em>lectures possibles</em> d'un texte plutôt qu'une réponse unique."
+  },
+  "Un prestataire de services de confiance notifie les incidents affectant ses services de confiance dans les # heures, et non #. Et si l'incident est encore en cours au moment du rapport final, un rapport d'avancement le remplace, le rapport final venant un mois après le traitement de l'incident.": {
+   "en": "A <b>trust service provider</b> notifies incidents affecting its trust services within <b>#&nbsp;hours</b>, not #. And if the incident is still ongoing at the time of the final report, a progress report replaces it, with the final report following one month after the incident has been handled.",
+   "fr": "Un prestataire de services de confiance notifie les incidents affectant ses services de confiance dans les 24 heures, et non 72. Et si l'incident est encore en cours au moment du rapport final, un rapport d'avancement le remplace, le rapport final venant un mois après le traitement de l'incident.",
+   "html": "Un <b>prestataire de services de confiance</b> notifie les incidents affectant ses services de confiance dans les <b>24&nbsp;heures</b>, et non 72. Et si l'incident est encore en cours au moment du rapport final, un rapport d'avancement le remplace, le rapport final venant un mois après le traitement de l'incident."
+  },
+  "obligation : le texte dit « sont tenus de » · encouragement : le texte dit « encouragent ».": {
+   "en": "<b>obligation</b>: the text says « are required to » · <b>encouragement</b>: the text says « encourage ».",
+   "fr": "obligation : le texte dit « sont tenus de » · encouragement : le texte dit « encouragent ».",
+   "html": "<b>obligation</b> : le texte dit « sont tenus de » · <b>encouragement</b> : le texte dit « encouragent »."
+  }
+ },
+ "texte": {
+  "# heures": {
+   "en": "# hours",
+   "fr": "24 heures"
+  },
+  "# mois après la notification": {
+   "en": "# month after the notification",
+   "fr": "1 mois après la notification"
+  },
+  "# · Analyse d'une question": {
+   "en": "# · Question analysis",
+   "fr": "2 · Analyse d'une question"
+  },
+  "# · Clausier fournisseurs": {
+   "en": "# · Supplier clause library",
+   "fr": "3 · Clausier fournisseurs"
+  },
+  "# · Note d'arbitrage": {
+   "en": "# · Decision note",
+   "fr": "5 · Note d'arbitrage"
+  },
+  "# · Revue de contrat": {
+   "en": "# · Contract review",
+   "fr": "4 · Revue de contrat"
+  },
+  "#. Alerte précoce": {
+   "en": "#. Early warning",
+   "fr": "1. Alerte précoce"
+  },
+  "#. Notification d'incident": {
+   "en": "#. Incident notification",
+   "fr": "2. Notification d'incident"
+  },
+  "#. Rapport final": {
+   "en": "#. Final report",
+   "fr": "4. Rapport final"
+  },
+  "#. Rapport intermédiaire": {
+   "en": "#. Intermediate report",
+   "fr": "3. Rapport intermédiaire"
+  },
+  ". La formation du personnel, qui est un encouragement, est affichée mais n’entre pas au dénominateur : l’y mettre ferait gagner des points à qui a manqué la seule ligne obligatoire.": {
+   "en": ". Staff training, which is an encouragement, is displayed but does not enter the denominator: putting it there would give points to whoever missed the only mandatory line.",
+   "fr": ". La formation du personnel, qui est un encouragement, est affichée mais n’entre pas au dénominateur : l’y mettre ferait gagner des points à qui a manqué la seule ligne obligatoire."
+  },
+  ": le texte dit « encouragent ».": {
+   "en": ": the text says “encourage”.",
+   "fr": ": le texte dit « encouragent »."
+  },
+  ": le texte dit « sont tenus de » ·": {
+   "en": ": the text says “are required to” ·",
+   "fr": ": le texte dit « sont tenus de » ·"
+  },
+  "Analyse des risques et sécurité des systèmes d'information": {
+   "en": "Risk analysis and information system security",
+   "fr": "Analyse des risques et sécurité des systèmes d'information"
+  },
+  "Analyser": {
+   "en": "Analyse",
+   "fr": "Analyser"
+  },
+  "Analyser le contrat": {
+   "en": "Analyse the contract",
+   "fr": "Analyser le contrat"
+  },
+  "Approche « tous risques » — protéger les réseaux et les systèmes d'information ET leur environnement physique. La proportionnalité tient compte du degré d'exposition, de la taille de l'entité, et de la probabilité et de la gravité des incidents.": {
+   "en": "“All-hazards” approach — protect network and information systems AND their physical environment. Proportionality takes into account the degree of exposure, the size of the entity, and the likelihood and severity of incidents.",
+   "fr": "Approche « tous risques » — protéger les réseaux et les systèmes d'information ET leur environnement physique. La proportionnalité tient compte du degré d'exposition, de la taille de l'entité, et de la probabilité et de la gravité des incidents."
+  },
+  "Aucun secteur déclaré.": {
+   "en": "No sector declared.",
+   "fr": "Aucun secteur déclaré."
+  },
+  "Authentification à plusieurs facteurs ou continue, communications sécurisées": {
+   "en": "Multi-factor or continuous authentication, secured communications",
+   "fr": "Authentification à plusieurs facteurs ou continue, communications sécurisées"
+  },
+  "Bloc # sur # · Gouvernance art. # — Verrouillé": {
+   "en": "Block # of # · Governance, art. # — Locked",
+   "fr": "Bloc 3 sur 7 · Gouvernance art. 20 — Verrouillé"
+  },
+  "Bloc # sur # · Mesures art. # §# — Verrouillé": {
+   "en": "Block # of # · Measures, art. #(#) — Locked",
+   "fr": "Bloc 2 sur 7 · Mesures art. 21 §2 — Verrouillé"
+  },
+  "Bloc # sur # · Socle et dix-huit familles — À remplir maintenant": {
+   "en": "Block # of # · Baseline and eighteen families — To fill in now",
+   "fr": "Bloc 1 sur 1 · Socle et dix-huit familles — À remplir maintenant"
+  },
+  "Bloc # sur # · Suis-je concerné ? — À remplir maintenant": {
+   "en": "Block # of # · Am I in scope? — To fill in now",
+   "fr": "Bloc 1 sur 7 · Suis-je concerné ? — À remplir maintenant"
+  },
+  "CA annuel (M€)": {
+   "en": "Annual turnover (M€)",
+   "fr": "CA annuel (M€)"
+  },
+  "Catégorie de taille": {
+   "en": "Size category",
+   "fr": "Catégorie de taille"
+  },
+  "Ce bloc dépend de : Suis-je concerné ?. Complétez-le d'abord.": {
+   "en": "This block depends on: Am I in scope? Complete it first.",
+   "fr": "Ce bloc dépend de : Suis-je concerné ?. Complétez-le d'abord."
+  },
+  "Ce que vous savez et qui ne figure pas au dossier. Traité comme déclaré, non comme établi.": {
+   "en": "What you know that is not in the file. Treated as declared, not as established.",
+   "fr": "Ce que vous savez et qui ne figure pas au dossier. Traité comme déclaré, non comme établi."
+  },
+  "Ces deux communications sont DISTINCTES de la notification au CSIRT et ne s'y substituent pas. La liste des destinataires à prévenir ne se fabrique pas le jour de l'incident.": {
+   "en": "These two communications are SEPARATE from the notification to the CSIRT and do not replace it. The list of recipients to warn is not built on the day of the incident.",
+   "fr": "Ces deux communications sont DISTINCTES de la notification au CSIRT et ne s'y substituent pas. La liste des destinataires à prévenir ne se fabrique pas le jour de l'incident."
+  },
+  "Chargement…": {
+   "en": "Loading…",
+   "fr": "Chargement…"
+  },
+  "Chiffre d'affaires annuel mondial du groupe (M€)": {
+   "en": "Group annual worldwide turnover (€M)",
+   "fr": "Chiffre d'affaires annuel mondial du groupe (M€)"
+  },
+  "Chiffre d'affaires annuel mondial total de l'entreprise à laquelle l'entité appartient — pas celui de la seule entité concernée.": {
+   "en": "Total worldwide annual turnover of the undertaking to which the entity belongs — not that of the entity concerned alone.",
+   "fr": "Chiffre d'affaires annuel mondial total de l'entreprise à laquelle l'entité appartient — pas celui de la seule entité concernée."
+  },
+  "Clause, courrier, compte rendu…": {
+   "en": "Clause, letter, minutes…",
+   "fr": "Clause, courrier, compte rendu…"
+  },
+  "Clausier fournisseurs": {
+   "en": "Supplier clause library",
+   "fr": "Clausier fournisseurs"
+  },
+  "Coller une pièce": {
+   "en": "Paste a document",
+   "fr": "Coller une pièce"
+  },
+  "Collez les articles à examiner — ou chargez le fichier ci-dessous.": {
+   "en": "Paste the articles to review — or upload the file below.",
+   "fr": "Collez les articles à examiner — ou chargez le fichier ci-dessous."
+  },
+  "Communiquer aux destinataires potentiellement affectés par une cybermenace importante les mesures ou corrections qu'ils peuvent appliquer eux-mêmes.": {
+   "en": "Communicate to the recipients potentially affected by a significant cyber threat the measures or remedies they can take themselves.",
+   "fr": "Communiquer aux destinataires potentiellement affectés par une cybermenace importante les mesures ou corrections qu'ils peuvent appliquer eux-mêmes."
+  },
+  "Conformes — # / #": {
+   "en": "Compliant — # / #",
+   "fr": "Conformes — 0 / 10"
+  },
+  "Contexte (hors pièces)": {
+   "en": "Context (outside the documents)",
+   "fr": "Contexte (hors pièces)"
+  },
+  "Continuité des activités": {
+   "en": "Business continuity",
+   "fr": "Continuité des activités"
+  },
+  "Criticité": {
+   "en": "Criticality",
+   "fr": "Criticité"
+  },
+  "Cryptographie et, le cas échéant, chiffrement": {
+   "en": "Cryptography and, where appropriate, encryption",
+   "fr": "Cryptographie et, le cas échéant, chiffrement"
+  },
+  "Cyberhygiène de base et formation à la cybersécurité": {
+   "en": "Basic cyber hygiene practices and cybersecurity training",
+   "fr": "Cyberhygiène de base et formation à la cybersécurité"
+  },
+  "Cybermenace —": {
+   "en": "Cyber threat —",
+   "fr": "Cybermenace —"
+  },
+  "Description détaillée de l'incident, type de menace ou cause profonde, mesures d'atténuation appliquées et en cours, et impact transfrontière le cas échéant.": {
+   "en": "Detailed description of the incident, type of threat or root cause, mitigation measures applied and ongoing, and cross-border impact where applicable.",
+   "fr": "Description détaillée de l'incident, type de menace ou cause profonde, mesures d'atténuation appliquées et en cours, et impact transfrontière le cas échéant."
+  },
+  "Destinataire : Le CSIRT ou, selon le cas, l'autorité compétente": {
+   "en": "Recipient: The CSIRT or, where applicable, the competent authority",
+   "fr": "Destinataire : Le CSIRT ou, selon le cas, l'autorité compétente"
+  },
+  "Domaine": {
+   "en": "Domain",
+   "fr": "Domaine"
+  },
+  "Droit du numérique · cyber · IA": {
+   "en": "Digital law · cyber · AI",
+   "fr": "Droit du numérique · cyber · IA"
+  },
+  "Décision à préparer": {
+   "en": "Decision to prepare",
+   "fr": "Décision à préparer"
+  },
+  "Détecter, qualifier, traiter, clore — et savoir à quel moment l'horloge des # heures de l'article # démarre.": {
+   "en": "Detect, qualify, handle, close — and know at what moment the #-hour clock of Article # starts.",
+   "fr": "Détecter, qualifier, traiter, clore — et savoir à quel moment l'horloge des 24 heures de l'article 23 démarre."
+  },
+  "Détermine les échéances applicables et l'instance qui doit trancher.": {
+   "en": "Determines the applicable deadlines and the body that must decide.",
+   "fr": "Détermine les échéances applicables et l'instance qui doit trancher."
+  },
+  "Effacer les réponses NIS # et ReCyF": {
+   "en": "Clear the NIS # and ReCyF answers",
+   "fr": "Effacer les réponses NIS 2 et ReCyF"
+  },
+  "Effectif": {
+   "en": "Headcount",
+   "fr": "Effectif"
+  },
+  "Encouragement : « encouragent »": {
+   "en": "Encouragement: « encourage »",
+   "fr": "Encouragement : « encouragent »"
+  },
+  "Entité critique en raison de son importance spécifique au niveau…": {
+   "en": "An entity critical because of its specific importance at nationa…",
+   "fr": "Entité critique en raison de son importance spécifique au niveau…"
+  },
+  "Entité de l'administration publique au niveau régional dont la p…": {
+   "en": "A public administration entity at regional level whose disruptio…",
+   "fr": "Entité de l'administration publique au niveau régional dont la p…"
+  },
+  "Entité de l'administration publique des pouvoirs publics centrau…": {
+   "en": "A public administration entity of central government",
+   "fr": "Entité de l'administration publique des pouvoirs publics centrau…"
+  },
+  "Entité fournissant des services d'enregistrement de noms de doma…": {
+   "en": "An entity providing domain name registration services",
+   "fr": "Entité fournissant des services d'enregistrement de noms de doma…"
+  },
+  "Entité recensée comme entité critique au titre de la directive (…": {
+   "en": "An entity identified as a critical entity under Directive (EU)…",
+   "fr": "Entité recensée comme entité critique au titre de la directive (…"
+  },
+  "Entités essentielles": {
+   "en": "Essential entities",
+   "fr": "Entités essentielles"
+  },
+  "Entités importantes": {
+   "en": "Important entities",
+   "fr": "Entités importantes"
+  },
+  "Et une SECONDE notification, que tout le monde oublie.": {
+   "en": "And a SECOND notification, which everybody forgets.",
+   "fr": "Et une SECONDE notification, que tout le monde oublie."
+  },
+  "Exemple : accepter le report d'un an de la segmentation du réseau industriel ?": {
+   "en": "Example: accept a one-year postponement of the industrial network segmentation?",
+   "fr": "Exemple : accepter le report d'un an de la segmentation du réseau industriel ?"
+  },
+  "Exemple : notre prestataire refuse le droit d'audit sur place et propose son rapport de certification — est-ce suffisant ?": {
+   "en": "Example: our provider refuses the right to an on-site audit and offers its certification report instead — is that sufficient?",
+   "fr": "Exemple : notre prestataire refuse le droit d'audit sur place et propose son rapport de certification — est-ce suffisant ?"
+  },
+  "Fournisseur de réseaux de communications électroniques publics o…": {
+   "en": "A provider of public electronic communications networks or of pu…",
+   "fr": "Fournisseur de réseaux de communications électroniques publics o…"
+  },
+  "Gestion des incidents": {
+   "en": "Incident handling",
+   "fr": "Gestion des incidents"
+  },
+  "Gouvernance art. # →": {
+   "en": "Governance, art. # →",
+   "fr": "Gouvernance art. 20 →"
+  },
+  "Hors du champ de la directive": {
+   "en": "Outside the scope of the Directive",
+   "fr": "Hors du champ de la directive"
+  },
+  "Indique, le cas échéant, si l'incident est suspecté d'avoir été causé par des actes illicites ou malveillants, et s'il pourrait avoir un impact transfrontière.": {
+   "en": "Indicates, where applicable, whether the incident is suspected of being caused by unlawful or malicious acts, and whether it could have a cross-border impact.",
+   "fr": "Indique, le cas échéant, si l'incident est suspecté d'avoir été causé par des actes illicites ou malveillants, et s'il pourrait avoir un impact transfrontière."
+  },
+  "Indéterminée": {
+   "en": "Undetermined",
+   "fr": "Indéterminée"
+  },
+  "L'argument « ne notifions pas, ça nous incriminerait » est écarté par le texte lui-même.": {
+   "en": "The argument “let us not notify, it would incriminate us” is dismissed by the text itself.",
+   "fr": "L'argument « ne notifions pas, ça nous incriminerait » est écarté par le texte lui-même."
+  },
+  "L'article #, §#, de l'annexe à la recommandation #/#/CE — qui exclut du statut de PME une entreprise détenue à # % ou plus par un organisme public — ne s'applique pas aux fins de NIS #. Une entreprise publique ou à capitaux publics se mesure sur son effectif et ses comptes, comme les autres.": {
+   "en": "Article #(#) of the Annex to Recommendation #/#/EC — which excludes from SME status an enterprise # % or more of which is held by a public body — does not apply for the purposes of NIS #. A public enterprise or one with public capital is measured on its headcount and its accounts, like the others.",
+   "fr": "L'article 3, §4, de l'annexe à la recommandation 2003/361/CE — qui exclut du statut de PME une entreprise détenue à 25 % ou plus par un organisme public — ne s'applique pas aux fins de NIS 2. Une entreprise publique ou à capitaux publics se mesure sur son effectif et ses comptes, comme les autres."
+  },
+  "L'entité est encouragée à offrir régulièrement une formation similaire à son personnel": {
+   "en": "The entity is encouraged to offer similar training to its employees on a regular basis",
+   "fr": "L'entité est encouragée à offrir régulièrement une formation similaire à son personnel"
+  },
+  "L'exposition réelle se lit dans la loi de transposition de chaque État membre où l'entité fournit ses services. Le chiffre ci-dessous est un minimum européen.": {
+   "en": "The actual exposure is read in the transposition law of each Member State where the entity provides its services. The figure below is a European minimum.",
+   "fr": "L'exposition réelle se lit dans la loi de transposition de chaque État membre où l'entité fournit ses services. Le chiffre ci-dessous est un minimum européen."
+  },
+  "L'organe de direction approuve les mesures de gestion des risques en matière de cybersécurité": {
+   "en": "The management body approves the cybersecurity risk-management measures",
+   "fr": "L'organe de direction approuve les mesures de gestion des risques en matière de cybersécurité"
+  },
+  "L'organe de direction approuve les mesures de gestion des risques en matière de cybersécurité (art. #, §#)": {
+   "en": "The management body approves the cybersecurity risk-management measures (art. #(#))",
+   "fr": "L'organe de direction approuve les mesures de gestion des risques en matière de cybersécurité (art. 20, §1)"
+  },
+  "L'organe de direction supervise la mise en œuvre de ces mesures": {
+   "en": "The management body oversees the implementation of these measures",
+   "fr": "L'organe de direction supervise la mise en œuvre de ces mesures"
+  },
+  "L'organe de direction supervise la mise en œuvre de ces mesures (art. #, §#)": {
+   "en": "The management body oversees the implementation of these measures (art. #(#))",
+   "fr": "L'organe de direction supervise la mise en œuvre de ces mesures (art. 20, §1)"
+  },
+  "La CONNAISSANCE de l'incident important — pas sa survenance, pas sa détection technique.": {
+   "en": "AWARENESS of the significant incident — not its occurrence, not its technical detection.",
+   "fr": "La CONNAISSANCE de l'incident important — pas sa survenance, pas sa détection technique."
+  },
+  "La catégorie de taille ne se prononce pas sans effectif ni chiffre d'affaires ou total du bilan.": {
+   "en": "The size category cannot be determined without headcount and either turnover or balance sheet total.",
+   "fr": "La catégorie de taille ne se prononce pas sans effectif ni chiffre d'affaires ou total du bilan."
+  },
+  "La chaîne de délégation écrite, et ce qu'elle ne délègue pas.": {
+   "en": "The written chain of delegation, and what it does not delegate.",
+   "fr": "La chaîne de délégation écrite, et ce qu'elle ne délègue pas."
+  },
+  "Le plan de formation et son taux de réalisation.": {
+   "en": "The training plan and its completion rate.",
+   "fr": "Le plan de formation et son taux de réalisation."
+  },
+  "Le point de départ —": {
+   "en": "The starting point —",
+   "fr": "Le point de départ —"
+  },
+  "Le règlement (UE) #/# (CRA), lui, est d'application directe : ses montants sont les montants. Traiter NIS # comme le CRA sous-estime l'exposition.": {
+   "en": "Regulation (EU) #/# (CRA), for its part, is directly applicable: its amounts are the amounts. Treating NIS # like the CRA underestimates the exposure.",
+   "fr": "Le règlement (UE) 2024/2847 (CRA), lui, est d'application directe : ses montants sont les montants. Traiter NIS 2 comme le CRA sous-estime l'exposition."
+  },
+  "Le référentiel de la directive est momentanément indisponible. Rien n’est affiché plutôt qu’une liste partielle : sur un texte réglementaire, une liste tronquée qui ne dit pas qu’elle l’est vaut moins que pas de liste du tout.": {
+   "en": "The Directive’s framework is temporarily unavailable. Nothing is displayed rather than a partial list: for a regulatory text, a truncated list that does not say it is truncated is worth less than no list at all.",
+   "fr": "Le référentiel de la directive est momentanément indisponible. Rien n’est affiché plutôt qu’une liste partielle : sur un texte réglementaire, une liste tronquée qui ne dit pas qu’elle l’est vaut moins que pas de liste du tout."
+  },
+  "Le secteur d'activité — ou « aucune des deux annexes »": {
+   "en": "The sector — or “neither of the two Annexes”",
+   "fr": "Le secteur d'activité — ou « aucune des deux annexes »"
+  },
+  "Le simple fait de notifier un incident n'accroît pas la responsabilité de l'entité qui est à l'origine de la notification.": {
+   "en": "The mere act of notification does not subject the notifying entity to increased liability.",
+   "fr": "Le simple fait de notifier un incident n'accroît pas la responsabilité de l'entité qui est à l'origine de la notification."
+  },
+  "Le socle retenu : Low, Moderate ou High": {
+   "en": "The selected baseline: Low, Moderate or High",
+   "fr": "Le socle retenu : Low, Moderate ou High"
+  },
+  "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : ce catalogue ne se certifie pas hors du cadre fédéral américain : il n'y a pas de conformité à prononcer.": {
+   "en": "The green of this path says that what a block expects has been filled in. It does not say that you are compliant: this catalogue is not certified outside the US federal framework: there is no compliance to declare.",
+   "fr": "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : ce catalogue ne se certifie pas hors du cadre fédéral américain : il n'y a pas de conformité à prononcer."
+  },
+  "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : l'autorité nationale compétente l'apprécie — l'ANSSI selon le projet de loi de transposition —, sur pièces et par audit.": {
+   "en": "The green of this path says that what a block expects has been filled in. It does not say that you are compliant: the national competent authority assesses that — ANSSI under the transposition bill — on the documents and by audit.",
+   "fr": "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : l'autorité nationale compétente l'apprécie — l'ANSSI selon le projet de loi de transposition —, sur pièces et par audit."
+  },
+  "Les attestations nominatives et datées des dirigeants eux-mêmes — pas celles des équipes.": {
+   "en": "Named, dated attestations for the managers themselves — not those of the teams.",
+   "fr": "Les attestations nominatives et datées des dirigeants eux-mêmes — pas celles des équipes."
+  },
+  "Les cas où la taille ne compte pas": {
+   "en": "The cases where size does not matter",
+   "fr": "Les cas où la taille ne compte pas"
+  },
+  "Les deux paliers pivotent au même chiffre d'affaires — # M€ : en dessous, ce sont les planchers forfaitaires qui commandent ; au-dessus, les pourcentages. L'écart entre les deux qualifications reste de # % de part et d'autre.": {
+   "en": "The two tiers pivot at the same turnover — €# million: below it, the flat-rate floors govern; above it, the percentages. The gap between the two qualifications remains # % on either side.",
+   "fr": "Les deux paliers pivotent au même chiffre d'affaires — 500 M€ : en dessous, ce sont les planchers forfaitaires qui commandent ; au-dessus, les pourcentages. L'écart entre les deux qualifications reste de 43 % de part et d'autre."
+  },
+  "Les membres de l'organe de direction SONT TENUS de suivre une formation": {
+   "en": "Members of the management body ARE REQUIRED to follow training",
+   "fr": "Les membres de l'organe de direction SONT TENUS de suivre une formation"
+  },
+  "Les membres de l'organe de direction SONT TENUS de suivre une formation (art. #, §#)": {
+   "en": "Members of the management body ARE REQUIRED to follow training (art. #(#))",
+   "fr": "Les membres de l'organe de direction SONT TENUS de suivre une formation (art. 20, §2)"
+  },
+  "Les membres de l'organe de direction peuvent être tenus responsables de la violation de l'article # par l'entité": {
+   "en": "Members of the management body can be held liable for infringements of Article # by the entity",
+   "fr": "Les membres de l'organe de direction peuvent être tenus responsables de la violation de l'article 21 par l'entité"
+  },
+  "Les membres de l'organe de direction peuvent être tenus responsables de la violation de l'article # par l'entité (art. #, §#)": {
+   "en": "Members of the management body can be held liable for infringements of Article # by the entity (art. #(#))",
+   "fr": "Les membres de l'organe de direction peuvent être tenus responsables de la violation de l'article 21 par l'entité (art. 20, §1)"
+  },
+  "Les mesures « comprennent au moins » ces dix éléments : c'est un plancher, pas une liste à épuiser.": {
+   "en": "The measures “shall include at least” these ten elements: it is a floor, not a list to exhaust.",
+   "fr": "Les mesures « comprennent au moins » ces dix éléments : c'est un plancher, pas une liste à épuiser."
+  },
+  "Les mises à jour pertinentes de la situation.": {
+   "en": "Relevant status updates.",
+   "fr": "Les mises à jour pertinentes de la situation."
+  },
+  "Les montants de l'article # sont des PLANCHERS imposés aux États membres (« un maximum d'au moins »), pas des plafonds opposables à l'administration.": {
+   "en": "The amounts in Article # are FLOORS imposed on the Member States (“of a maximum of at least”), not ceilings enforceable against the administration.",
+   "fr": "Les montants de l'article 34 sont des PLANCHERS imposés aux États membres (« un maximum d'au moins »), pas des plafonds opposables à l'administration."
+  },
+  "Les politiques et procédures qui disent quoi chiffrer, avec quoi, et qui détient les clés.": {
+   "en": "The policies and procedures that say what to encrypt, with what, and who holds the keys.",
+   "fr": "Les politiques et procédures qui disent quoi chiffrer, avec quoi, et qui détient les clés."
+  },
+  "Les politiques qui disent comment le risque est apprécié, et comment la sécurité des systèmes en découle.": {
+   "en": "The policies that say how risk is assessed, and how the security of systems follows from it.",
+   "fr": "Les politiques qui disent comment le risque est apprécié, et comment la sécurité des systèmes en découle."
+  },
+  "Les pratiques élémentaires, et la formation — à distinguer de la formation des dirigeants, qui relève de l'article #, §#.": {
+   "en": "Basic practices, and training — to be distinguished from the training of managers, which falls under Article #(#).",
+   "fr": "Les pratiques élémentaires, et la formation — à distinguer de la formation des dirigeants, qui relève de l'article 20, §2."
+  },
+  "Les relations avec les fournisseurs et prestataires DIRECTS, en tenant compte des vulnérabilités propres à chacun et de la qualité de leurs pratiques (art. #, §#).": {
+   "en": "Relationships with DIRECT suppliers and service providers, taking into account the vulnerabilities specific to each and the quality of their practices (art. #(#)).",
+   "fr": "Les relations avec les fournisseurs et prestataires DIRECTS, en tenant compte des vulnérabilités propres à chacun et de la qualité de leurs pratiques (art. 21, §3)."
+  },
+  "Les trois se tiennent : un inventaire d'actifs sans gestion des arrivées et des départs ne protège rien.": {
+   "en": "The three hold together: an asset inventory without management of arrivals and departures protects nothing.",
+   "fr": "Les trois se tiennent : un inventaire d'actifs sans gestion des arrivées et des départs ne protège rien."
+  },
+  "Mesure a) — Analyse des risques et sécurité des systèmes d'information": {
+   "en": "Measure (a) — Risk analysis and information system security",
+   "fr": "Mesure a) — Analyse des risques et sécurité des systèmes d'information"
+  },
+  "Mesure b) — Gestion des incidents": {
+   "en": "Measure (b) — Incident handling",
+   "fr": "Mesure b) — Gestion des incidents"
+  },
+  "Mesure c) — Continuité des activités": {
+   "en": "Measure (c) — Business continuity",
+   "fr": "Mesure c) — Continuité des activités"
+  },
+  "Mesure d) — Sécurité de la chaîne d'approvisionnement": {
+   "en": "Measure (d) — Supply chain security",
+   "fr": "Mesure d) — Sécurité de la chaîne d'approvisionnement"
+  },
+  "Mesure e) — Sécurité de l'acquisition, du développement et de la maintenance": {
+   "en": "Measure (e) — Security in acquisition, development and maintenance",
+   "fr": "Mesure e) — Sécurité de l'acquisition, du développement et de la maintenance"
+  },
+  "Mesure f) — Politiques et procédures d'évaluation de l'efficacité des mesures": {
+   "en": "Measure (f) — Policies and procedures to assess the effectiveness of measures",
+   "fr": "Mesure f) — Politiques et procédures d'évaluation de l'efficacité des mesures"
+  },
+  "Mesurer ce que les mesures produisent, pas seulement qu'elles existent.": {
+   "en": "Measure what the measures produce, not merely that they exist.",
+   "fr": "Mesurer ce que les mesures produisent, pas seulement qu'elles existent."
+  },
+  "Met à jour l'alerte précoce, fournit une évaluation initiale — gravité, impact — et les indicateurs de compromission lorsqu'ils sont disponibles.": {
+   "en": "Updates the early warning, provides an initial assessment — severity, impact — and the indicators of compromise where available.",
+   "fr": "Met à jour l'alerte précoce, fournit une évaluation initiale — gravité, impact — et les indicateurs de compromission lorsqu'ils sont disponibles."
+  },
+  "Nature du dossier": {
+   "en": "Type of matter",
+   "fr": "Nature du dossier"
+  },
+  "Niveau d'enjeu": {
+   "en": "Level of stakes",
+   "fr": "Niveau d'enjeu"
+  },
+  "Non renseignées": {
+   "en": "Not provided",
+   "fr": "Non renseignées"
+  },
+  "Notifier aux destinataires des services les incidents importants susceptibles de nuire à la fourniture de ces services. Sans retard injustifié — aucun délai chiffré, ce qui n'en fait pas une obligation molle : « sans retard injustifié » se juge après coup, sur ce qu'on aurait pu faire.": {
+   "en": "Notify the recipients of the services of significant incidents that are likely to adversely affect the provision of those services. Without undue delay — no deadline in figures, which does not make it a soft obligation: “without undue delay” is judged after the fact, on what could have been done.",
+   "fr": "Notifier aux destinataires des services les incidents importants susceptibles de nuire à la fourniture de ces services. Sans retard injustifié — aucun délai chiffré, ce qui n'en fait pas une obligation molle : « sans retard injustifié » se juge après coup, sur ce qu'on aurait pu faire."
+  },
+  "Obligation : « sont tenus de »": {
+   "en": "Obligation: “are required to”",
+   "fr": "Obligation : « sont tenus de »"
+  },
+  "Obligations tenues — # / #": {
+   "en": "Obligations met — # / #",
+   "fr": "Obligations tenues — 0 / 4"
+  },
+  "Part du CA mondial": {
+   "en": "Share of worldwide turnover",
+   "fr": "Part du CA mondial"
+  },
+  "Pièces du dossier": {
+   "en": "Case documents",
+   "fr": "Pièces du dossier"
+  },
+  "Plancher forfaitaire": {
+   "en": "Flat-rate floor",
+   "fr": "Plancher forfaitaire"
+  },
+  "Plancher retenu": {
+   "en": "Floor applied",
+   "fr": "Plancher retenu"
+  },
+  "Politiques et procédures d'évaluation de l'efficacité des mesures": {
+   "en": "Policies and procedures to assess the effectiveness of measures",
+   "fr": "Politiques et procédures d'évaluation de l'efficacité des mesures"
+  },
+  "Poser une question juridique": {
+   "en": "Ask a legal question",
+   "fr": "Poser une question juridique"
+  },
+  "Prestataire de services de confiance": {
+   "en": "A trust service provider",
+   "fr": "Prestataire de services de confiance"
+  },
+  "Préparer la note": {
+   "en": "Prepare the note",
+   "fr": "Préparer la note"
+  },
+  "Préparer une décision": {
+   "en": "Prepare a decision",
+   "fr": "Préparer une décision"
+  },
+  "Qualifier": {
+   "en": "Qualify",
+   "fr": "Qualifier"
+  },
+  "Quels textes s'appliquent à vous ?": {
+   "en": "Which texts apply to you?",
+   "fr": "Quels textes s'appliquent à vous ?"
+  },
+  "Registre de noms de domaine de premier niveau ou fournisseur de …": {
+   "en": "A top-level domain name registry or DNS service provider",
+   "fr": "Registre de noms de domaine de premier niveau ou fournisseur de …"
+  },
+  "Restreindre à certains domaines (facultatif)": {
+   "en": "Restrict to certain areas (optional)",
+   "fr": "Restreindre à certains domaines (facultatif)"
+  },
+  "Revue d'un contrat de services fournisseur": {
+   "en": "Review of a supplier services contract",
+   "fr": "Revue d'un contrat de services fournisseur"
+  },
+  "Référentiel": {
+   "en": "Framework",
+   "fr": "Référentiel"
+  },
+  "Référentiel des textes": {
+   "en": "Legal texts reference",
+   "fr": "Référentiel des textes"
+  },
+  "Réinitialiser": {
+   "en": "Reset",
+   "fr": "Réinitialiser"
+  },
+  "Saisissez un chiffre d'affaires, ou calculez sans pour voir les montants planchers.": {
+   "en": "Enter a turnover figure, or calculate without one to see the floor amounts.",
+   "fr": "Saisissez un chiffre d'affaires, ou calculez sans pour voir les montants planchers."
+  },
+  "Sauvegardes, reprise d'activité et gestion de crise : ce qui permet de continuer à servir quand le système principal ne répond plus.": {
+   "en": "Backups, disaster recovery and crisis management: what lets you keep serving when the main system no longer responds.",
+   "fr": "Sauvegardes, reprise d'activité et gestion de crise : ce qui permet de continuer à servir quand le système principal ne répond plus."
+  },
+  "Secteur": {
+   "en": "Sector",
+   "fr": "Secteur"
+  },
+  "Seul prestataire, dans un État membre, d'un service essentiel au…": {
+   "en": "The sole provider in a Member State of a service essential for t…",
+   "fr": "Seul prestataire, dans un État membre, d'un service essentiel au…"
+  },
+  "Si l'incident est toujours en cours à la date du rapport final, l'entité fournit à cette date un RAPPORT D'AVANCEMENT, puis un rapport final dans un délai d'un mois à compter du traitement de l'incident.": {
+   "en": "If the incident is still ongoing at the time of the final report, the entity provides a PROGRESS REPORT at that time, then a final report within one month of its handling of the incident.",
+   "fr": "Si l'incident est toujours en cours à la date du rapport final, l'entité fournit à cette date un RAPPORT D'AVANCEMENT, puis un rapport final dans un délai d'un mois à compter du traitement de l'incident."
+  },
+  "Sécurité de l'acquisition, du développement et de la maintenance": {
+   "en": "Security in acquisition, development and maintenance",
+   "fr": "Sécurité de l'acquisition, du développement et de la maintenance"
+  },
+  "Sécurité de la chaîne d'approvisionnement": {
+   "en": "Supply chain security",
+   "fr": "Sécurité de la chaîne d'approvisionnement"
+  },
+  "Sécurité des ressources humaines, contrôle d'accès, gestion des actifs": {
+   "en": "Human resources security, access control, asset management",
+   "fr": "Sécurité des ressources humaines, contrôle d'accès, gestion des actifs"
+  },
+  "Texte du contrat": {
+   "en": "Contract text",
+   "fr": "Texte du contrat"
+  },
+  "Total du bilan (M€)": {
+   "en": "Balance sheet total (€M)",
+   "fr": "Total du bilan (M€)"
+  },
+  "Un enjeu élevé appelle systématiquement un conseil externe.": {
+   "en": "High stakes always call for external counsel.",
+   "fr": "Un enjeu élevé appelle systématiquement un conseil externe."
+  },
+  "Un point récurrent à l'ordre du jour, avec des indicateurs et des décisions tracées.": {
+   "en": "A recurring agenda item, with indicators and recorded decisions.",
+   "fr": "Un point récurrent à l'ordre du jour, avec des indicateurs et des décisions tracées."
+  },
+  "Un prestataire de services de confiance notifie les incidents importants affectant la fourniture de ses services de confiance dans les # heures — et non #.": {
+   "en": "A trust service provider notifies significant incidents affecting the provision of its trust services within # hours — not #.",
+   "fr": "Un prestataire de services de confiance notifie les incidents importants affectant la fourniture de ses services de confiance dans les 24 heures — et non 72."
+  },
+  "Une délibération datée, nommant les mesures approuvées.": {
+   "en": "A dated resolution, naming the measures approved.",
+   "fr": "Une délibération datée, nommant les mesures approuvées."
+  },
+  "Une entité qui constate qu'elle ne se conforme pas prend sans retard injustifié les mesures correctives nécessaires (art. #, §#).": {
+   "en": "An entity that finds it is not complying takes, without undue delay, all the necessary corrective measures (art. #(#)).",
+   "fr": "Une entité qui constate qu'elle ne se conforme pas prend sans retard injustifié les mesures correctives nécessaires (art. 21, §4)."
+  },
+  "Une mesure non renseignée n'est pas une mesure conforme. Le taux affiché est toujours accompagné du nombre de lignes non renseignées : un # % sur deux mesures ne dit rien des huit autres.": {
+   "en": "A measure that is not provided is not a compliant measure. The rate shown always comes with the number of rows not provided: # % on two measures says nothing about the other eight.",
+   "fr": "Une mesure non renseignée n'est pas une mesure conforme. Le taux affiché est toujours accompagné du nombre de lignes non renseignées : un 100 % sur deux mesures ne dit rien des huit autres."
+  },
+  "Une perturbation du service pourrait avoir un impact important s…": {
+   "en": "A disruption of the service could have a significant impact on p…",
+   "fr": "Une perturbation du service pourrait avoir un impact important s…"
+  },
+  "Une perturbation pourrait induire un risque systémique important…": {
+   "en": "A disruption could induce significant systemic risk, in particul…",
+   "fr": "Une perturbation pourrait induire un risque systémique important…"
+  },
+  "Voix, vidéo et texte sécurisés, et des systèmes sécurisés de communication d'urgence au sein de l'entité, selon les besoins.": {
+   "en": "Secured voice, video and text, and secured emergency communication systems within the entity, where appropriate.",
+   "fr": "Voix, vidéo et texte sécurisés, et des systèmes sécurisés de communication d'urgence au sein de l'entité, selon les besoins."
+  },
+  "Votre question": {
+   "en": "Your question",
+   "fr": "Votre question"
+  },
+  "Y compris le traitement et la divulgation des vulnérabilités — le point de couture avec le CRA, qui impose la même chose côté produit.": {
+   "en": "Including vulnerability handling and disclosure — the seam with the CRA, which imposes the same thing on the product side.",
+   "fr": "Y compris le traitement et la divulgation des vulnérabilités — le point de couture avec le CRA, qui impose la même chose côté produit."
+  },
+  "a)": {
+   "en": "a)",
+   "fr": "a)"
+  },
+  "art. #, §#, a) i)": {
+   "en": "art. #(#)(a)(i)",
+   "fr": "art. 2, §2, a) i)"
+  },
+  "art. #, §#, a) ii)": {
+   "en": "art. #(#)(a)(ii)",
+   "fr": "art. 2, §2, a) ii)"
+  },
+  "art. #, §#, a) iii)": {
+   "en": "art. #(#)(a)(iii)",
+   "fr": "art. 2, §2, a) iii)"
+  },
+  "art. #, §#, f) i)": {
+   "en": "art. #(#)(f)(i)",
+   "fr": "art. 2, §2, f) i)"
+  },
+  "art. #, §#, f) ii)": {
+   "en": "art. #(#)(f)(ii)",
+   "fr": "art. 2, §2, f) ii)"
+  },
+  "art. #, §#, second alinéa": {
+   "en": "art. #(#), second subparagraph",
+   "fr": "art. 2, §1, second alinéa"
+  },
+  "art. #, §§# et #": {
+   "en": "art. #(#) and (#)",
+   "fr": "art. 23, §§1 et 4"
+  },
+  "art. #, §§# à #": {
+   "en": "art. #(#) to (#)",
+   "fr": "art. 2, §§2 à 4"
+  },
+  "b)": {
+   "en": "b)",
+   "fr": "b)"
+  },
+  "c)": {
+   "en": "c)",
+   "fr": "c)"
+  },
+  "d)": {
+   "en": "d)",
+   "fr": "d)"
+  },
+  "e)": {
+   "en": "e)",
+   "fr": "e)"
+  },
+  "f)": {
+   "en": "f)",
+   "fr": "f)"
+  },
+  "g)": {
+   "en": "g)",
+   "fr": "g)"
+  },
+  "h)": {
+   "en": "h)",
+   "fr": "h)"
+  },
+  "i)": {
+   "en": "i)",
+   "fr": "i)"
+  },
+  "j)": {
+   "en": "j)",
+   "fr": "j)"
+  },
+  "à la demande du CSIRT": {
+   "en": "at the request of the CSIRT",
+   "fr": "à la demande du CSIRT"
+  },
+  "— choisir un secteur —": {
+   "en": "— choose a sector —",
+   "fr": "— choisir un secteur —"
+  },
+  "…ou charger un fichier (PDF, DOCX, TXT — # Mo max)": {
+   "en": "…or upload a file (PDF, DOCX, TXT — # MB max)",
+   "fr": "…ou charger un fichier (PDF, DOCX, TXT — 6 Mo max)"
+  },
+  "↓ Suis-je concerné ?": {
+   "en": "↓ Am I in scope?",
+   "fr": "↓ Suis-je concerné ?"
+  }
+ }
+}

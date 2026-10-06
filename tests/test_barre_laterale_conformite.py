@@ -59,7 +59,14 @@ NODE = shutil.which("node")
 # savoir lequel ouvrir, ce qui est exactement la question à laquelle il
 # répond.
 TIROIRS = ["taux-conformite",
-           "rgpd-et-privacy", "iso27001", "iso42001", "en18229", "en18286",
+           "rgpd-et-privacy",
+           #  LES DEUX RÈGLEMENTS DE LA DONNÉE SUIVENT CELUI DU RGPD, et pas
+           #  par commodité : le DGA (art. 1er §3) et le Data Act (art. 1er
+           #  §5) disent tous deux que le RGPD PRÉVAUT en cas de conflit et
+           #  qu'ils ne créent AUCUNE base juridique de traitement. C'est de
+           #  cette adjacence que la palette a été validée.
+           "donnees-et-partage",
+           "iso27001", "iso42001", "en18229", "en18286",
            "dora", "nis2", "cra", "nist-ai-rmf", "owasp-llm", "nist-ot",
            #  LA DILIGENCE OCDE FERME LA FAMILLE, et sa place est la seule
            #  qui tienne : c'est le seul référentiel de la barre qui ne

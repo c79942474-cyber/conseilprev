@@ -168,6 +168,13 @@ body{
 .sb-nav [data-grp="taux-conformite"]{--sb-ic:var(--muted)}
 .sb-nav [data-grp="nist-ot"]{--sb-ic:var(--muted)}
 .sb-nav [data-grp="rgpd-et-privacy"]{--sb-ic:#C50759}
+/* LE GROUPE DES DEUX RÈGLEMENTS DE LA DONNÉE, VOISIN DE CELUI DU RGPD, ET
+   NEUTRE COMME CELUI DES DEUX NIST. Il porte DEUX référentiels : donner au
+   titre la couleur de l'un rangerait l'autre sous une teinte qui n'est pas
+   la sienne. Chaque entrée garde donc la sienne, et le titre n'en prend
+   aucune — une teinte SANS CHROMA, pour qu'il ne retombe pas sur la terre
+   cuite du repli, qui dit « ici ». */
+.sb-nav [data-grp="donnees-et-partage"]{--sb-ic:var(--muted)}
 .sb-nav [data-grp="iso27001"]{--sb-ic:#355CD4}
 .sb-nav [data-grp="iso42001"]{--sb-ic:#0A8D83}
 .sb-nav [data-grp="dora"]{--sb-ic:#9650E8}
@@ -188,6 +195,12 @@ body{
    groupe, pour que le rail ne le fasse pas passer pour une norme. */
 .sb-nav .sb-item[data-norme="cartographier"]{--sb-ic:var(--blue)}
 .sb-nav .sb-item[data-norme="rgpd"]{--sb-ic:#C50759}
+/* LES DEUX NEUVES. Mesuré dans l'ordre réel de la barre — cramoisi,
+   outremer, mauve, puis le bleu d'ISO 27001 : ΔE 38,4 / 16,8 pour la
+   première adjacence, 31,0 / 21,9 pour la seconde, 18,9 / 16,1 pour la
+   troisième ; planchers 15 et 8. */
+.sb-nav .sb-item[data-norme="dga"]{--sb-ic:#1200A2}
+.sb-nav .sb-item[data-norme="data_act"]{--sb-ic:#8A667B}
 .sb-nav .sb-item[data-norme="iso27001"]{--sb-ic:#355CD4}
 .sb-nav .sb-item[data-norme="iso42001"]{--sb-ic:#0A8D83}
 .sb-nav .sb-item[data-norme="dora"]{--sb-ic:#9650E8}
@@ -211,7 +224,7 @@ body{
 .sb-item .sb-icon:empty::before{content:'';width:8px;height:8px;
   border-radius:50%;background:currentColor}
 
-/* ── LE TAUX DE CONFORMITÉ DES QUATORZE NORMES ──────────────────────────────
+/* ── LE TAUX DE CONFORMITÉ DE TOUS LES RÉFÉRENTIELS DU RAIL ──────────────────────────────
    DEUX COULEURS SEULEMENT PORTENT UN SENS ICI, et c'est délibéré : l'ambre
    marque un VERROU — un défaut qui arrête un tiers — et le gris barré marque
    l'ABSENCE DE MESURE. Un taux bas n'est pas coloré : colorer la faiblesse
@@ -3938,7 +3951,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
          frères d'une section jusqu'à la suivante, et une section de plus
          aurait coupé le groupe RGPD en deux. -->
     <div class="sb-famille" data-fam="conformite"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 2.5 20 6v6.2c0 4.9-3.3 8.6-8 9.8-4.7-1.2-8-4.9-8-9.8V6z"/><path d="M8.6 12.1 11 14.5l4.4-4.6"/></svg><span>Votre Mise en Conformité Réglementaire</span><span class="sb-famille-n" id="sb-fam-n" aria-hidden="true"></span></div>
-    <div class="sb-section sb-pliable" data-grp="taux-conformite" data-fam="conformite" role="button" tabindex="0" aria-expanded="false" onclick="sbReplier(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sbReplier(this)}" title="Le taux de chacune des quatorze normes, et le plan qui le fait monter"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg><span>Taux de conformité — les quatorze normes</span><svg class="sb-chev" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></div>
+    <div class="sb-section sb-pliable" data-grp="taux-conformite" data-fam="conformite" role="button" tabindex="0" aria-expanded="false" onclick="sbReplier(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sbReplier(this)}" title="Le taux de chacune des seize normes, et le plan qui le fait monter"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg><span>Taux de conformité — les seize normes</span><svg class="sb-chev" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></div>
     <div class="sb-item" data-grp="taux-conformite" role="button" tabindex="0" onclick="go('conf-taux',this,'TAUX DE CONFORMITÉ','Le taux par norme');confInit()" title="Un taux par norme, ce qu il mesure, et ce qui le plafonne"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 5 5 19"/><circle cx="7" cy="7" r="2.5"/><circle cx="17" cy="17" r="2.5"/></svg></span>Les onze taux</div>
     <div class="sb-item" data-grp="taux-conformite" role="button" tabindex="0" onclick="go('conf-plan',this,'TAUX DE CONFORMITÉ','Plan de mise en conformité');confInit()" title="Les actions, du verrou au detail — et ce que chacune rapporte reellement"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 6h10M10 12h10M10 18h10"/><path d="M3.5 6l1.5 1.5L7.5 5M3.5 12l1.5 1.5L7.5 11M3.5 18l1.5 1.5L7.5 17"/></svg></span>Plan de mise en conformité</div>
     <div class="sb-item" data-grp="taux-conformite" role="button" tabindex="0" onclick="go('conf-limites',this,'TAUX DE CONFORMITÉ','Ce que le plan ne peut pas faire');confInit()" title="DORA sans instrument, le NIST non certifiable, et les trois risques LLM hors annexe A"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg></span>Ce que le plan ne peut pas faire</div>
@@ -3952,6 +3965,37 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <div class="sb-item" data-norme="rgpd" data-grp="rgpd-et-privacy" role="button" tabindex="0" onclick="go('rgpd-sensibilisation',this,'RGPD &amp; PRIVACY','Sensibilisation');sensInit()" title="Plan de sensibilisation a la protection des donnees par public cible : periodicite, statut, suivi."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span data-i18n="nav.item.rgpd-sensibilisation">Sensibilisation</span></div>
     <div class="sb-item" data-norme="rgpd" data-grp="rgpd-et-privacy" role="button" tabindex="0" onclick="go('rgpd-conformite',this,'RGPD &amp; PRIVACY','Conformité RGPD');confLoadOnce()" title="Tableau de bord consolidant registre, AIPD, privacy by design, documentation et sensibilisation : indice global et points d attention."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg></span><span data-i18n="nav.item.rgpd-conformite">Conformité RGPD</span></div>
     <div class="sb-item" data-grp="rgpd-et-privacy" role="button" tabindex="0" onclick="go('empreinte',this,'EMPREINTE','Empreinte numerique')" title="Compteur temps reel de l'empreinte numerique : site, plateforme et modeles de langage ; trois methodes comparees."><span class="sb-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg></span><span data-i18n="nav.item.empreinte">Empreinte numérique</span></div>
+    <!-- ══ DONNÉES & PARTAGE — LE DGA ET LE DATA ACT ══════════════════════
+         POURQUOI UN GROUPE DE PREMIER NIVEAU, ET PAS DEUX ENTRÉES DE PLUS
+         SOUS « RGPD & Privacy ». Ce tiroir-là porte déjà neuf entrées, et le
+         commentaire qui l'ouvre explique qu'on n'a pas voulu le couper en
+         deux. Onze entrées le rendraient illisible pour un client qui n'a
+         que du RGPD à faire.
+
+         POURQUOI JUSTE APRÈS LUI, ALORS. Parce que le lien est TEXTUEL et
+         qu'il va dans les deux sens : le DGA (art. 1er §3) et le Data Act
+         (art. 1er §5) disent tous deux que le RGPD PRÉVAUT en cas de
+         conflit et qu'ils ne créent AUCUNE base juridique de traitement ;
+         le chapitre II du Data Act COMPLÈTE les articles 15 et 20 du RGPD
+         sans les remplacer (art. 1er §5) ; une demande d'accès par un
+         utilisateur qui n'est pas la personne concernée exige une base de
+         l'article 6 du RGPD (art. 4 §12) ; et c'est l'autorité RGPD — la
+         CNIL — qui sanctionne les chapitres II, III et V, au plafond de
+         l'article 83 §5 (art. 40 §4). Deux écrans de pont le montrent.
+
+         CE QUE CES DEUX MODULES MESURENT QUE LES QUATORZE AUTRES NE
+         MESURAIENT PAS : les données NON personnelles. Le reste de Sentinel
+         couvre l'IA, la cybersécurité, la résilience et les données
+         personnelles ; un produit connecté, un contrat de cloud et une
+         place de marché de données n'y entraient par aucune porte. -->
+    <div class="sb-section sb-pliable" data-grp="donnees-et-partage" data-fam="conformite" role="button" tabindex="0" aria-expanded="false" onclick="sbReplier(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sbReplier(this)}" title="Replier ou déplier Données &amp; Partage"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><ellipse cx="12" cy="5.5" rx="7.5" ry="3"/><path d="M4.5 5.5v6c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3v-6"/><path d="M4.5 11.5v6c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3v-6"/></svg><span>Données &amp; Partage</span></div>
+    <div class="sb-item" data-norme="dga" data-grp="donnees-et-partage" role="button" tabindex="0" onclick="go('dga-qualifier',this,'DONNÉES &amp; PARTAGE','DGA — qualification')" title="Le reglement (UE) 2022/868 vous saisit-il ? Quatre cadres seulement, et la plupart des entreprises ne relevent d aucun."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span><span data-i18n="nav.item.dga-qualifier">DGA — qualification</span></div>
+    <div class="sb-item" data-norme="dga" data-grp="donnees-et-partage" role="button" tabindex="0" onclick="go('dga-obligations',this,'DONNÉES &amp; PARTAGE','DGA — obligations')" title="Les quinze conditions de l article 12 pour un intermediaire de donnees, les articles 18, 20, 21 et 22 pour une organisation altruiste."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h6"/></svg></span><span data-i18n="nav.item.dga-obligations">DGA — obligations</span></div>
+    <div class="sb-item" data-norme="dga" data-grp="donnees-et-partage" role="button" tabindex="0" onclick="go('dga-pont-rgpd',this,'DONNÉES &amp; PARTAGE','DGA ↔ RGPD')" title="Ce que l article 1er §3 dit du RGPD : il prevaut en cas de conflit, et le DGA ne cree aucune base juridique de traitement."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg></span><span data-i18n="nav.item.dga-pont-rgpd">DGA ↔ RGPD</span></div>
+    <div class="sb-item" data-norme="data_act" data-grp="donnees-et-partage" role="button" tabindex="0" onclick="go('data-act-qualifier',this,'DONNÉES &amp; PARTAGE','Data Act — qualification')" title="Les sept qualites de l article 1er §3, extraterritoriales, et l exemption de l article 7 qui ne couvre que le chapitre II."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="7" width="12" height="10" rx="2"/><path d="M16 11h2.5a2.5 2.5 0 0 1 0 5H16"/><path d="M8 4v3M12 4v3"/></svg></span><span data-i18n="nav.item.data-act-qualifier">Data Act — qualification</span></div>
+    <div class="sb-item" data-norme="data_act" data-grp="donnees-et-partage" role="button" tabindex="0" onclick="go('data-act-obligations',this,'DONNÉES &amp; PARTAGE','Data Act — obligations')" title="Les obligations des chapitres que vos qualites ouvrent, et les echeances de l article 50 — dont une est deja passee."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5"/><path d="M9 14l2 2 4-4"/></svg></span><span data-i18n="nav.item.data-act-obligations">Data Act — obligations</span></div>
+    <div class="sb-item" data-norme="data_act" data-grp="donnees-et-partage" role="button" tabindex="0" onclick="go('data-act-cloud',this,'DONNÉES &amp; PARTAGE','Changement de fournisseur')" title="Les articles 23 a 31 : obstacles, clauses contractuelles, et la suppression des frais de changement au 12 janvier 2027."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 10h-1.3A5 5 0 1 0 7 11.5"/><path d="M13 16l-3 3 3 3"/><path d="M10 19h9a3 3 0 0 0 0-6h-1"/></svg></span><span data-i18n="nav.item.data-act-cloud">Changement de fournisseur</span></div>
+    <div class="sb-item" data-norme="data_act" data-grp="donnees-et-partage" role="button" tabindex="0" onclick="go('data-act-pont-rgpd',this,'DONNÉES &amp; PARTAGE','Data Act ↔ RGPD')" title="Le chapitre II COMPLETE les articles 15 et 20 du RGPD, et l article 40 §4 emprunte le plafond de son article 83 §5."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span><span data-i18n="nav.item.data-act-pont-rgpd">Data Act ↔ RGPD</span></div>
     <!-- ═══ ISO/IEC 27001 — LE SOCLE, ET IL VIENT EN PREMIER ═══
          POURQUOI AVANT 42001 ET NON APRÈS. Les deux normes partagent la
          structure harmonisée des articles 4 à 10 ; 42001 se GREFFE sur ce
@@ -6149,18 +6193,18 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 
 
 <!-- ═══════════════════════════════════════════════════════════════════
-     LE TAUX DE CONFORMITÉ DES QUATORZE NORMES
+     LE TAUX DE CONFORMITÉ DE TOUS LES RÉFÉRENTIELS DU RAIL
      Trois écrans, et le troisième compte autant que les deux premiers :
      les taux, le plan, et CE QUE LE PLAN NE PEUT PAS FAIRE. Un plan qui
      promettrait 100 % partout mentirait sur quatre points connus d'avance.
      ═══════════════════════════════════════════════════════════════════ -->
 <div class="page" id="p-conf-taux">
-  <span class="eyebrow" data-i18n="pg.conf-taux.eb">Taux de conformité · les quatorze normes</span>
-  <h1 class="page-h" data-i18n-bloc="pg.conf-taux.h1">Quatorze taux, et <em>ce qu'ils ne disent pas</em></h1>
+  <span class="eyebrow" data-i18n="pg.conf-taux.eb">Taux de conformité · les seize normes</span>
+  <h1 class="page-h" data-i18n-bloc="pg.conf-taux.h1">Seize taux, et <em>ce qu'ils ne disent pas</em></h1>
   <p class="page-p" data-i18n-bloc="pg.conf-taux.p">Chaque taux est composé des parts de sa norme, pondérées, puis
   <strong>plafonné par ses verrous</strong>&nbsp;: un défaut qui arrête un auditeur
-  n'efface pas le travail fait, il interdit de s'en prévaloir au-delà. Quatorze
-  pourcentages alignés se lisent comme quatorze fois la même chose&nbsp;; ils ne le sont
+  n'efface pas le travail fait, il interdit de s'en prévaloir au-delà. Seize
+  pourcentages alignés se lisent comme seize fois la même chose&nbsp;; ils ne le sont
   pas, et la <em>nature</em> de chaque norme dit ce que 100&nbsp;% veut dire —
   <strong>et ce qu'il ne veut pas dire</strong>.</p>
   <p class="page-p" data-i18n-bloc="pg.conf-taux.rail">Ces taux lisent <strong>les mêmes
@@ -6243,6 +6287,97 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     vide</strong> — le §4.4 et le chapitre 9, c'est-à-dire exactement ce que le règlement ajoute. Et prEN 18286 organise la façon de
     répondre aux exigences essentielles&nbsp;: ce sont les <b>autres</b> normes de la famille qui disent comment y répondre.</p>
   <div id="en18286-analyse-body" class="veille-loading">Chargement…</div>
+</div>
+
+<!-- ══ DONNÉES & PARTAGE — LES SEPT ÉCRANS ════════════════════════════════
+     CHAQUE ÉCRAN EST UNE COQUILLE, et son corps vient d'une ROUTE. C'est la
+     règle de la maison pour les modules de référentiel : le texte des
+     obligations vit dans le moteur, une seule fois, et l'écran ne le
+     recopie pas. Un libellé écrit ici se serait séparé du moteur au premier
+     article corrigé. -->
+<div class="page" id="p-dga-qualifier">
+  <span class="eyebrow" data-i18n="pg.dga-qualifier.eb">DGA · Qualification</span>
+  <h1 class="page-h" data-i18n-bloc="pg.dga-qualifier.h1">Le règlement vous saisit-il&nbsp;? <em>Pour la plupart, non</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.dga-qualifier.p">Le règlement (UE) 2022/868 n'établit que <b>quatre cadres</b> à son
+    article&nbsp;1er&nbsp;§1, et trois seulement créent des obligations&nbsp;: la réutilisation de certaines données protégées détenues
+    par un <b>organisme du secteur public</b>, les <b>services d'intermédiation de données</b>, et l'<b>altruisme en matière de
+    données</b>. Une entreprise qui n'est aucun de ceux-là n'a <strong>rien à faire</strong> au titre de ce texte, et le dire est le
+    premier service de cet écran&nbsp;: un outil qui lui inventerait un taux lui ferait acheter un chantier qui n'existe pas.</p>
+  <div id="dga-qualifier-body" class="veille-loading">Chargement…</div>
+</div>
+
+<div class="page" id="p-dga-obligations">
+  <span class="eyebrow" data-i18n="pg.dga-obligations.eb">DGA · Obligations</span>
+  <h1 class="page-h" data-i18n-bloc="pg.dga-obligations.h1">Quinze conditions, <em>et une échéance déjà passée</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.dga-obligations.p">Les obligations de <b>vos</b> qualités, et d'elles seules&nbsp;: les quinze
+    conditions de l'article&nbsp;12 et la notification de l'article&nbsp;11 pour un intermédiaire de données, les articles&nbsp;18,
+    20, 21 et 22 pour une organisation altruiste reconnue&nbsp;— ce sont exactement ceux que l'article&nbsp;34 rend sanctionnables.
+    <strong>L'article&nbsp;37 est échu</strong>&nbsp;: un prestataire qui fournissait déjà le service au 23&nbsp;juin&nbsp;2022 devait se
+    conformer au chapitre&nbsp;III au plus tard le 24&nbsp;septembre&nbsp;2025. Cette date est passée&nbsp;; un manquement n'est plus un
+    retard.</p>
+  <div id="dga-obligations-body" class="veille-loading">Chargement…</div>
+</div>
+
+<div class="page" id="p-dga-pont-rgpd">
+  <span class="eyebrow" data-i18n="pg.dga-pont-rgpd.eb">DGA · Pont RGPD</span>
+  <h1 class="page-h" data-i18n-bloc="pg.dga-pont-rgpd.h1">Le RGPD prévaut, <em>et le DGA ne crée aucune base légale</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.dga-pont-rgpd.p">Ce pont n'est pas une commodité de navigation&nbsp;: il est <b>écrit dans le
+    texte</b>, et chaque point ci-dessous porte l'article qui le dit. L'article&nbsp;1er&nbsp;§3 énonce que le droit de la protection
+    des données s'applique à <b>toutes</b> les données personnelles traitées en lien avec le règlement, qu'il <strong>prévaut en cas
+    de conflit</strong>, et que le DGA <strong>ne crée pas de base juridique</strong> ni ne modifie les droits du RGPD. Et
+    l'article&nbsp;10&nbsp;b) va plus loin&nbsp;: les services d'intermédiation au profit des personnes concernées existent
+    précisément pour leur permettre d'exercer leurs droits RGPD.</p>
+  <div id="dga-pont-body" class="veille-loading">Chargement…</div>
+</div>
+
+<div class="page" id="p-data-act-qualifier">
+  <span class="eyebrow" data-i18n="pg.data-act-qualifier.eb">Data Act · Qualification</span>
+  <h1 class="page-h" data-i18n-bloc="pg.data-act-qualifier.h1">Sept qualités, <em>et aucune ne dépend de votre siège</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.data-act-qualifier.p">L'article&nbsp;1er&nbsp;§3 énumère sept assujettis, et répète pour le
+    fabricant, le détenteur et le fournisseur de cloud&nbsp;: «&nbsp;<b>quel que soit le lieu d'établissement</b>&nbsp;». Une société
+    hors de l'Union qui met un produit connecté sur le marché de l'Union, ou qui sert des clients dans l'Union, est tenue&nbsp;— c'est
+    le contresens le plus fréquent. L'<b>exemption de l'article&nbsp;7</b> existe pour les micro et petites entreprises, mais elle ne
+    couvre que le <strong>chapitre&nbsp;II</strong>, et seulement sans entreprise liée plus grande et hors sous-traitance&nbsp;: les
+    clauses abusives, le changement de fournisseur et l'accès international ne la connaissent pas.</p>
+  <div id="data-act-qualifier-body" class="veille-loading">Chargement…</div>
+</div>
+
+<div class="page" id="p-data-act-obligations">
+  <span class="eyebrow" data-i18n="pg.data-act-obligations.eb">Data Act · Obligations</span>
+  <h1 class="page-h" data-i18n-bloc="pg.data-act-obligations.h1">Les chapitres que vos qualités ouvrent, <em>et le calendrier réel</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.data-act-obligations.p">Le règlement est applicable depuis le 12&nbsp;septembre&nbsp;2025, mais
+    l'article&nbsp;50 échelonne&nbsp;: l'accessibilité dès la conception de l'article&nbsp;3&nbsp;§1 vise les produits connectés et
+    services connexes mis sur le marché <strong>après le 12&nbsp;septembre&nbsp;2026</strong>&nbsp;— une date passée, donc un état
+    exigible et non un projet&nbsp;; le chapitre&nbsp;IV s'applique aux contrats conclus après le 12&nbsp;septembre&nbsp;2025, et au
+    12&nbsp;septembre&nbsp;2027 aux contrats antérieurs à durée indéterminée ou à échéance d'au moins dix ans. L'écran situe chaque
+    échéance par rapport à aujourd'hui.</p>
+  <div id="data-act-obligations-body" class="veille-loading">Chargement…</div>
+</div>
+
+<div class="page" id="p-data-act-cloud">
+  <span class="eyebrow" data-i18n="pg.data-act-cloud.eb">Data Act · Changement de fournisseur</span>
+  <h1 class="page-h" data-i18n-bloc="pg.data-act-cloud.h1">Quitter son fournisseur, <em>sans frais à partir du 12 janvier 2027</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.data-act-cloud.p">Les articles&nbsp;23 à 31 démontent les obstacles au changement de
+    fournisseur de services de traitement de données&nbsp;: obstacles précommerciaux, commerciaux, techniques, contractuels et
+    organisationnels (art.&nbsp;23), clauses contractuelles obligatoires (art.&nbsp;25), information du client (art.&nbsp;26),
+    coopération de bonne foi (art.&nbsp;27), transparence sur la juridiction d'hébergement (art.&nbsp;28). Et
+    l'article&nbsp;29&nbsp;§1 <strong>supprime tout frais de changement au 12&nbsp;janvier&nbsp;2027</strong>&nbsp;; d'ici là, des frais
+    réduits sont admis, plafonnés aux coûts directement liés.</p>
+  <div id="data-act-cloud-body" class="veille-loading">Chargement…</div>
+</div>
+
+<div class="page" id="p-data-act-pont-rgpd">
+  <span class="eyebrow" data-i18n="pg.data-act-pont-rgpd.eb">Data Act · Pont RGPD</span>
+  <h1 class="page-h" data-i18n-bloc="pg.data-act-pont-rgpd.h1">Il complète les articles 15 et 20, <em>et emprunte le plafond de l'article 83 §5</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.data-act-pont-rgpd.p">Quatre dispositions relient ce règlement au RGPD, et la dernière est la
+    plus lourde. L'article&nbsp;1er&nbsp;§5 dit que les droits du chapitre&nbsp;II <b>complètent</b> les articles&nbsp;15 et 20 du
+    RGPD&nbsp;— ils ne les remplacent pas&nbsp;—, et que le RGPD prévaut en cas de conflit. L'article&nbsp;4&nbsp;§12 exige une base de
+    l'article&nbsp;6 du RGPD quand l'utilisateur n'est pas la personne concernée. Et l'article&nbsp;40&nbsp;§4 donne compétence aux
+    autorités RGPD&nbsp;— la CNIL&nbsp;— pour les chapitres&nbsp;II, III et V, <strong>jusqu'au montant de l'article&nbsp;83&nbsp;§5 du
+    RGPD</strong>&nbsp;: 20&nbsp;000&nbsp;000&nbsp;EUR ou 4&nbsp;% du chiffre d'affaires mondial, le plus élevé. L'article&nbsp;83&nbsp;§5
+    ne prévoit <strong>aucune réduction pour les PME</strong>, là où l'article&nbsp;99&nbsp;§6 de l'IA Act retient pour elles le
+    plafond le plus bas.</p>
+  <div id="data-act-pont-body" class="veille-loading">Chargement…</div>
 </div>
 
 <div class="page" id="p-ocde-processus">

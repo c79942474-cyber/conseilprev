@@ -1,6 +1,6 @@
 {
  "_lot": "14-documenter-prouver",
- "_mots": 2470,
+ "_mots": 2469,
  "_pages": [
   "evals",
   "historique",
@@ -36,10 +36,6 @@
   }
  },
  "texte": {
-  "# documents": {
-   "en": "# documents",
-   "fr": "63 documents"
-  },
   "# éléments obligatoires du QMS, liens ISO #/ISO #, rôle du responsable désigné, fréquence des revues.": {
    "en": "# mandatory elements of the QMS, links to ISO #/ISO #, role of the designated owner, frequency of reviews.",
    "fr": "12 éléments obligatoires du QMS, liens ISO 42001/ISO 9001, rôle du responsable désigné, fréquence des revues."

@@ -1,6 +1,6 @@
 {
  "_lot": "01-administration-1",
- "_mots": 2018,
+ "_mots": 2035,
  "_pages": [
   "clients",
   "ia50"
@@ -244,7 +244,7 @@
   },
   "Créé le #/#/#": {
    "en": "Created on #/#/#",
-   "fr": "Créé le 29/09/2026"
+   "fr": "Créé le 21/09/2026"
   },
   "Cycle de facturation — prélèvements Stripe": {
    "en": "Billing cycle — Stripe direct debits",
@@ -252,7 +252,7 @@
   },
   "Dernier événement Stripe reçu : jamais · vérifié le #-#-#T#:#:#+#:#": {
    "en": "Last Stripe event received: never · checked on #-#-#T#:#:#+#:#",
-   "fr": "Dernier événement Stripe reçu : jamais · vérifié le 2026-09-25T08:00:50+00:00"
+   "fr": "Dernier événement Stripe reçu : jamais · vérifié le 2026-10-05T15:53:06+00:00"
   },
   "Dernier événement Stripe reçu : journal non lu · vérifié le #-#-#T#:#:#+#:#": {
    "en": "Last Stripe event received: log not read · checked on #-#-#T#:#:#+#:#",
@@ -374,17 +374,9 @@
    "en": "\\ud#d\\udcc# Portfolio view",
    "fr": "\\ud83d\\udcc8 Vue portefeuille"
   },
-  "brevo_non_configure": {
-   "en": "brevo_non_configure",
-   "fr": "brevo_non_configure"
-  },
   "contact@client.com": {
    "en": "contact@clientcompany.com",
    "fr": "contact@client.com"
-  },
-  "stripe_non_configure": {
-   "en": "stripe_non_configure",
-   "fr": "stripe_non_configure"
   },
   "Échecs (#h)": {
    "en": "Failures (#h)",
@@ -414,9 +406,9 @@
    "en": "⚙️ Technical status of the infrastructure",
    "fr": "⚙️ Statut technique de l'infrastructure"
   },
-  "✅ payeur@recette.test": {
-   "en": "✅ payeur@recette.test",
-   "fr": "✅ payeur@recette.test"
+  "⚠️ Taux d'échec élevé sur les dernières #h — vérifiez le blocage IP Brevo (Security → Authorized IPs → Désactiver) ou le quota d'envoi de votre compte Brevo.": {
+   "en": "⚠️ High failure rate over the last #h — check the Brevo IP blocking (Security → Authorized IPs → Deactivate) or the sending quota of your Brevo account.",
+   "fr": "⚠️ Taux d'échec élevé sur les dernières 24h — vérifiez le blocage IP Brevo (Security → Authorized IPs → Désactiver) ou le quota d'envoi de votre compte Brevo."
   },
   "📧 Santé des envois d'email": {
    "en": "📧 Email delivery health",

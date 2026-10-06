@@ -1,0 +1,411 @@
+{
+ "_lot": "49-js-19",
+ "_mots": 2426,
+ "_pages": [
+  "_js"
+ ],
+ "_rubrique": "_js",
+ "bloc": {},
+ "texte": {
+  "Lisez les quatre étapes AVANT d’en avoir besoin.": {
+   "en": "Read the four steps BEFORE you need them.",
+   "fr": "Lisez les quatre étapes AVANT d’en avoir besoin."
+  },
+  "Lisez les quatre-vingt-onze lignes de pont, étape par étape, et la colonne qui dit si Sentinel mesure le cadre d'en face.": {
+   "en": "Read the ninety-one bridging rows, step by step, and the column that says whether Sentinel measures the framework opposite.",
+   "fr": "Lisez les quatre-vingt-onze lignes de pont, étape par étape, et la colonne qui dit si Sentinel mesure le cadre d'en face."
+  },
+  "Lisez les quinze clauses du point de vue de celui à qui on va les demander.": {
+   "en": "Read the fifteen clauses from the point of view of the party who will be asked for them.",
+   "fr": "Lisez les quinze clauses du point de vue de celui à qui on va les demander."
+  },
+  "Lisez l’article # alinéa par alinéa, avec les paragraphes de la norme qui le visent et le taux que vos réponses y produisent.": {
+   "en": "Read article # subparagraph by subparagraph, with the paragraphs of the standard that address it and the rate your answers produce there.",
+   "fr": "Lisez l’article 17 alinéa par alinéa, avec les paragraphes de la norme qui le visent et le taux que vos réponses y produisent."
+  },
+  "Lisez l’empreinte du parc recensé dans son ensemble, puis descendez sur les sites qui s’écartent de la moyenne.": {
+   "en": "Read the footprint of the listed estate as a whole, then drill down to the sites that deviate from the average.",
+   "fr": "Lisez l’empreinte du parc recensé dans son ensemble, puis descendez sur les sites qui s’écartent de la moyenne."
+  },
+  "Lisez « pourquoi ça dure » avant la description de chaque risque, PUIS déclarez l'état de chacun — traité, partiel, non traité, sans objet. Le verdict arrive sous la liste.": {
+   "en": "Read “why it persists” before each risk’s description, THEN declare the status of each one — treated, partial, not treated, not applicable. The verdict appears below the list.",
+   "fr": "Lisez « pourquoi ça dure » avant la description de chaque risque, PUIS déclarez l'état de chacun — traité, partiel, non traité, sans objet. Le verdict arrive sous la liste."
+  },
+  "Lisez « pourquoi ça dure » avant la description. Plusieurs de ces risques tiennent à une propriété du procédé et non à un défaut d’implémentation : pour ceux-là, tout ce qui se construit est de l’atténuation, et promettre la disparition du risque est une faute.": {
+   "en": "Read “why it persists” before the description. Several of these risks stem from a property of the process and not from an implementation defect: for those, everything that is built is mitigation, and promising that the risk will disappear is a mistake.",
+   "fr": "Lisez « pourquoi ça dure » avant la description. Plusieurs de ces risques tiennent à une propriété du procédé et non à un défaut d’implémentation : pour ceux-là, tout ce qui se construit est de l’atténuation, et promettre la disparition du risque est une faute."
+  },
+  "Lisez-la AVANT le comité, pas après la question qui embarrasse.": {
+   "en": "Read it BEFORE the committee, not after the awkward question.",
+   "fr": "Lisez-la AVANT le comité, pas après la question qui embarrasse."
+  },
+  "Lisez-la AVANT les fiches : l’ordre inverse fait prendre une particularité nationale pour une tendance mondiale.": {
+   "en": "Read it BEFORE the profiles: the reverse order makes you mistake a national peculiarity for a global trend.",
+   "fr": "Lisez-la AVANT les fiches : l’ordre inverse fait prendre une particularité nationale pour une tendance mondiale."
+  },
+  "Lisez-la AVANT l’incident, pas pendant. Deux faits déclenchent la même mécanique — vulnérabilité activement exploitée, incident grave — avec les mêmes premiers délais, # h puis # h. Ce qui diffère est le rapport final : quatorze jours après la mise à disposition d’un correctif d’un côté, un mois après la notification de l’autre. Et la notification part simultanément au CSIRT coordinateur ET à l’ENISA, par la plateforme unique de l’article # : prévenir l’un puis l’autre n’est pas ce que le texte demande.": {
+   "en": "Read it BEFORE the incident, not during it. Two facts trigger the same mechanism — an actively exploited vulnerability, a severe incident — with the same first deadlines, # h then # h. What differs is the final report: fourteen days after a fix is made available on one side, one month after the notification on the other. And the notification goes simultaneously to the coordinating CSIRT AND to ENISA, through the single platform of Article #: alerting one and then the other is not what the text requires.",
+   "fr": "Lisez-la AVANT l’incident, pas pendant. Deux faits déclenchent la même mécanique — vulnérabilité activement exploitée, incident grave — avec les mêmes premiers délais, 24 h puis 72 h. Ce qui diffère est le rapport final : quatorze jours après la mise à disposition d’un correctif d’un côté, un mois après la notification de l’autre. Et la notification part simultanément au CSIRT coordinateur ET à l’ENISA, par la plateforme unique de l’article 16 : prévenir l’un puis l’autre n’est pas ce que le texte demande."
+  },
+  "Lisez-la de gauche à droite : ce qui est incomplet appelle une action, et chaque bloc renvoie au module qui la traite. Revenez-y après chaque session de travail pour vérifier que l’avancement a bougé.": {
+   "en": "Read it from left to right: what is incomplete calls for an action, and each block points to the module that handles it. Come back to it after each working session to check that progress has moved.",
+   "fr": "Lisez-la de gauche à droite : ce qui est incomplet appelle une action, et chaque bloc renvoie au module qui la traite. Revenez-y après chaque session de travail pour vérifier que l’avancement a bougé."
+  },
+  "Lissage sur la duree": {
+   "en": "Smoothing over the duration",
+   "fr": "Lissage sur la duree"
+  },
+  "Liste de questions de data room et revue de clauses, exportables en DOCX et PDF, marquage IA porté dans les métadonnées du fichier (art. # du règlement (UE) #/#), avec le nom exact du modèle employé.": {
+   "en": "List of data room questions and clause review, exportable as DOCX and PDF, with AI marking carried in the file metadata (Art. # of Regulation (EU) #/#), with the exact name of the model used.",
+   "fr": "Liste de questions de data room et revue de clauses, exportables en DOCX et PDF, marquage IA porté dans les métadonnées du fichier (art. 50 du règlement (UE) 2024/1689), avec le nom exact du modèle employé."
+  },
+  "Liste des # obligations (points a à l) des fournisseurs : conformité aux exigences de la section #, indication du nom et de l'adresse, système de gestion de la qualité, conservation de la documentation, conservation des journaux, évaluation de conformité avant mise sur le marché, déclaration UE de conformité, marquage CE, enregistrement dans la base de données EU, actions correctives et information, démonstration de la conformité sur demande motivée d'une autorité, exigences d'accessibilité.": {
+   "en": "List of the # obligations (points a to l) of providers: compliance with the requirements of Section #, indication of name and address, quality management system, documentation keeping, log keeping, conformity assessment before placing on the market, EU declaration of conformity, CE marking, registration in the EU database, corrective actions and information, demonstration of conformity upon a reasoned request from an authority, accessibility requirements.",
+   "fr": "Liste des 12 obligations (points a à l) des fournisseurs : conformité aux exigences de la section 2, indication du nom et de l'adresse, système de gestion de la qualité, conservation de la documentation, conservation des journaux, évaluation de conformité avant mise sur le marché, déclaration UE de conformité, marquage CE, enregistrement dans la base de données EU, actions correctives et information, démonstration de la conformité sur demande motivée d'une autorité, exigences d'accessibilité."
+  },
+  "Liste exhaustive classée par niveau de risque + fiches techniques (données, modèles, conformité).": {
+   "en": "Exhaustive list sorted by risk level + technical fact sheets (data, models, compliance).",
+   "fr": "Liste exhaustive classée par niveau de risque + fiches techniques (données, modèles, conformité)."
+  },
+  "Listez, avec l’assistance juridique, ce que le référentiel ne peut pas trancher : PUE mesuré sur douze mois, raccordement contractuel, baux, CAPEX engagé, structure de détention.": {
+   "en": "List, with legal assistance, what the framework cannot decide: PUE measured over twelve months, contractual connection, leases, committed CAPEX, ownership structure.",
+   "fr": "Listez, avec l’assistance juridique, ce que le référentiel ne peut pas trancher : PUE mesuré sur douze mois, raccordement contractuel, baux, CAPEX engagé, structure de détention."
+  },
+  "Littératie IA": {
+   "en": "AI literacy",
+   "fr": "Littératie IA"
+  },
+  "Livrable IA généré (Audit de maturité)": {
+   "en": "AI deliverable generated (AI maturity audit)",
+   "fr": "Livrable IA généré (Audit de maturité)"
+  },
+  "Livrables produits a l issue de cette phase. Duree :": {
+   "en": "Deliverables produced at the end of this phase. Duration:",
+   "fr": "Livrables produits a l issue de cette phase. Duree :"
+  },
+  "Livrer un système à un client fait de vous son fournisseur": {
+   "en": "Delivering a system to a client makes you its provider",
+   "fr": "Livrer un système à un client fait de vous son fournisseur"
+  },
+  "Llama, Mistral ou autre modèle déployé sur l'infrastructure de l'entreprise": {
+   "en": "Llama, Mistral or another model deployed on the company’s infrastructure",
+   "fr": "Llama, Mistral ou autre modèle déployé sur l'infrastructure de l'entreprise"
+  },
+  "Logiciel de registre IA (OneTrust)": {
+   "en": "AI register software (OneTrust)",
+   "fr": "Logiciel de registre IA (OneTrust)"
+  },
+  "Logique du score : peut-on l'expliquer en langage clair ?": {
+   "en": "Score logic: can it be explained in plain language?",
+   "fr": "Logique du score : peut-on l'expliquer en langage clair ?"
+  },
+  "Logs BOT_BLOCKED dans la console serveur (Render)": {
+   "en": "BOT_BLOCKED logs in the server console (Render)",
+   "fr": "Logs BOT_BLOCKED dans la console serveur (Render)"
+  },
+  "Loi du #er juillet #": {
+   "en": "Law of # July #",
+   "fr": "Loi du 1er juillet 1901"
+  },
+  "Loi en vigueur, loi votée non encore applicable, projet de loi, ou simple stratégie/lignes directrices non obligatoires ?": {
+   "en": "Law in force, law passed but not yet applicable, bill, or a mere non-binding strategy/guidelines?",
+   "fr": "Loi en vigueur, loi votée non encore applicable, projet de loi, ou simple stratégie/lignes directrices non obligatoires ?"
+  },
+  "Lutte anti-fraude et AML": {
+   "en": "Anti-fraud and AML",
+   "fr": "Lutte anti-fraude et AML"
+  },
+  "L’AIDF n’est pas due par tous les déployeurs. La faire sans y être tenu coûte ; ne pas la faire en y étant tenu s’expose.": {
+   "en": "The FRIA is not owed by every deployer. Doing it without being required to has a cost; not doing it when required exposes you.",
+   "fr": "L’AIDF n’est pas due par tous les déployeurs. La faire sans y être tenu coûte ; ne pas la faire en y étant tenu s’expose."
+  },
+  "L’AIPD (RGPD art. #) porte sur la protection des données ; la FRIA (AI Act art. #) porte sur les droits fondamentaux et incombe au déployeur d’un système à haut risque. Un même système peut exiger les deux — l’une ne dispense jamais de l’autre.": {
+   "en": "The DPIA (GDPR Art. #) concerns data protection; the FRIA (AI Act Art. #) concerns fundamental rights and falls to the deployer of a high-risk system. The same system may require both — one never exempts you from the other.",
+   "fr": "L’AIPD (RGPD art. 35) porte sur la protection des données ; la FRIA (AI Act art. 27) porte sur les droits fondamentaux et incombe au déployeur d’un système à haut risque. Un même système peut exiger les deux — l’une ne dispense jamais de l’autre."
+  },
+  "L’IA Act et le RGPD se chevauchent sans se confondre — ce parcours clarifie où s’arrête l’un et où commence l’autre.": {
+   "en": "The AI Act and the GDPR overlap without merging — this path clarifies where one stops and the other begins.",
+   "fr": "L’IA Act et le RGPD se chevauchent sans se confondre — ce parcours clarifie où s’arrête l’un et où commence l’autre."
+  },
+  "L’IA hébergée : du site au registre": {
+   "en": "Hosted AI: from the site to the register",
+   "fr": "L’IA hébergée : du site au registre"
+  },
+  "L’abandon à quatre-vingt-dix jours est relevé, avec sa méthode.": {
+   "en": "The ninety-day drop-out is recorded, with its method.",
+   "fr": "L’abandon à quatre-vingt-dix jours est relevé, avec sa méthode."
+  },
+  "L’acceptation d’une dépendance nouvelle": {
+   "en": "Accepting a new dependency",
+   "fr": "L’acceptation d’une dépendance nouvelle"
+  },
+  "L’accès à Sentinel a pris fin. Souscrivez une offre pour retrouver l’accès à la plateforme.": {
+   "en": "Access to Sentinel has ended. Subscribe to a plan to regain access to the platform.",
+   "fr": "L’accès à Sentinel a pris fin. Souscrivez une offre pour retrouver l’accès à la plateforme."
+  },
+  "L’ajustement fin demande cinq champs et ne s’estime pas : tant qu’il en manque un, la ligne reste incomplète et le dit, au lieu d’être comblée.": {
+   "en": "Fine-tuning requires five fields and cannot be estimated: as long as one is missing, the row stays incomplete and says so, instead of being filled in.",
+   "fr": "L’ajustement fin demande cinq champs et ne s’estime pas : tant qu’il en manque un, la ligne reste incomplète et le dit, au lieu d’être comblée."
+  },
+  "L’ajustement fin est à part, et c’est délibéré": {
+   "en": "Fine-tuning is separate, and deliberately so",
+   "fr": "L’ajustement fin est à part, et c’est délibéré"
+  },
+  "L’analyse s’effectue en mémoire : aucun contrat n’est conservé. Cet outil prépare une décision juridique, il ne la remplace pas — pour un engagement contractuel, faites valider par un conseil.": {
+   "en": "The analysis is carried out in memory: no contract is kept. This tool prepares a legal decision, it does not replace it — for a contractual commitment, have it validated by counsel.",
+   "fr": "L’analyse s’effectue en mémoire : aucun contrat n’est conservé. Cet outil prépare une décision juridique, il ne la remplace pas — pour un engagement contractuel, faites valider par un conseil."
+  },
+  "L’annexe A est passée de # mesures en # chapitres à # en # thèmes, dont ONZE entièrement nouvelles. Votre reste à faire n’est ni #, ni #, ni « tout » : ce sont ces onze-là, et la renumérotation de tout le reste.": {
+   "en": "Annex A has gone from # controls in # chapters to # in # themes, ELEVEN of them entirely new. What you have left to do is neither #, nor #, nor “everything”: it is those eleven, and the renumbering of all the rest.",
+   "fr": "L’annexe A est passée de 114 mesures en 14 chapitres à 93 en 4 thèmes, dont ONZE entièrement nouvelles. Votre reste à faire n’est ni 93, ni 114, ni « tout » : ce sont ces onze-là, et la renumérotation de tout le reste."
+  },
+  "L’annexe G de #-# est une surcharge, pas un second référentiel. Poser deux questionnaires indépendants aurait fait répondre deux fois aux mêmes questions, puis additionné les réponses en un taux flatteur. Cette page LIT la déclaration #-# et n’en redemande rien.": {
+   "en": "Appendix G of #-# is an overlay, not a second framework. Asking two independent questionnaires would have meant answering the same questions twice, then adding the answers up into a flattering rate. This page READS the #-# declaration and asks for nothing again.",
+   "fr": "L’annexe G de 800-82 est une surcharge, pas un second référentiel. Poser deux questionnaires indépendants aurait fait répondre deux fois aux mêmes questions, puis additionné les réponses en un taux flatteur. Cette page LIT la déclaration 800-53 et n’en redemande rien."
+  },
+  "L’annexe ZA déclare elle-même l’article #(#) — les fournisseurs soumis à la législation de l’Union sur les services financiers — NON COUVERT par aucun paragraphe. Un tableau qui masquerait cette ligne rendrait un cent pour cent mensonger. Si vous relevez des services financiers, l’écran du processus vous le dit autrement : vos obligations de gouvernance interne valent exécution de l’article #.": {
+   "en": "Annex ZA itself declares article #(#) — providers subject to Union financial services legislation — COVERED by no paragraph. A table that hid that row would return a lying hundred per cent. If you fall under financial services, the process screen tells you so differently: your internal governance obligations amount to performance of article #.",
+   "fr": "L’annexe ZA déclare elle-même l’article 17(2) — les fournisseurs soumis à la législation de l’Union sur les services financiers — NON COUVERT par aucun paragraphe. Un tableau qui masquerait cette ligne rendrait un cent pour cent mensonger. Si vous relevez des services financiers, l’écran du processus vous le dit autrement : vos obligations de gouvernance interne valent exécution de l’article 17."
+  },
+  "L’approche par les risques est placée sous la responsabilité du DIRIGEANT EXÉCUTIF, et elle exige que des moyens financiers, humains ou techniques soient alloués — un arbitrage qui ne se délègue pas.": {
+   "en": "The risk-based approach is placed under the responsibility of the CHIEF EXECUTIVE, and it requires financial, human or technical resources to be allocated — a decision that cannot be delegated.",
+   "fr": "L’approche par les risques est placée sous la responsabilité du DIRIGEANT EXÉCUTIF, et elle exige que des moyens financiers, humains ou techniques soient alloués — un arbitrage qui ne se délègue pas."
+  },
+  "L’approche retenue COMMANDE la charge de preuve": {
+   "en": "The approach chosen GOVERNS the burden of proof",
+   "fr": "L’approche retenue COMMANDE la charge de preuve"
+  },
+  "L’approche retenue COMMANDE la charge de preuve : une norme harmonisée ou une spécification commune ouvrent présomption et se documentent ; « autre norme » et « autre solution technique » réclament en plus ce qui n’est pas couvert, la justification et la preuve objective.": {
+   "en": "The approach chosen GOVERNS the burden of proof: a harmonised standard or a common specification open a presumption and are documented; « another standard » and « another technical solution » additionally call for what is not covered, the justification and the objective evidence.",
+   "fr": "L’approche retenue COMMANDE la charge de preuve : une norme harmonisée ou une spécification commune ouvrent présomption et se documentent ; « autre norme » et « autre solution technique » réclament en plus ce qui n’est pas couvert, la justification et la preuve objective."
+  },
+  "L’appréciation des risques de l’article # et l’évaluation d’impact de l’article # se font toutes deux sur cet inventaire.": {
+   "en": "The risk assessment of clause # and the impact assessment of clause # are both carried out on this inventory.",
+   "fr": "L’appréciation des risques de l’article 6.1.2 et l’évaluation d’impact de l’article 8.4 se font toutes deux sur cet inventaire."
+  },
+  "L’appréciation des risques de l’article # se fait sur cet inventaire, pas à côté.": {
+   "en": "The risk assessment of clause # is carried out on this inventory, not alongside it.",
+   "fr": "L’appréciation des risques de l’article 6.1.2 se fait sur cet inventaire, pas à côté."
+  },
+  "L’argument décisif pour prioriser un budget — un chiffre parle plus qu’un rapport de # pages.": {
+   "en": "The decisive argument for prioritising a budget — a figure speaks louder than a #-page report.",
+   "fr": "L’argument décisif pour prioriser un budget — un chiffre parle plus qu’un rapport de 40 pages."
+  },
+  "L’article # b) décrit des services d’intermédiation qui existent notamment pour permettre aux personnes concernées d’exercer les droits que le RGPD leur confère. Un intermédiaire de cette catégorie est un sujet du RGPD par construction, pas par accident.": {
+   "en": "Article #(b) describes intermediation services that exist in particular to let data subjects exercise the rights the GDPR confers on them. An intermediary of this category is a GDPR subject by construction, not by accident.",
+   "fr": "L’article 10 b) décrit des services d’intermédiation qui existent notamment pour permettre aux personnes concernées d’exercer les droits que le RGPD leur confère. Un intermédiaire de cette catégorie est un sujet du RGPD par construction, pas par accident."
+  },
+  "L’article # c) exige, pour CHAQUE risque, la propriété atteinte — confidentialité, intégrité, disponibilité — et un propriétaire désigné.": {
+   "en": "Clause # c) requires, for EACH risk, the property affected — confidentiality, integrity, availability — and a designated owner.",
+   "fr": "L’article 6.1.2 c) exige, pour CHAQUE risque, la propriété atteinte — confidentialité, intégrité, disponibilité — et un propriétaire désigné."
+  },
+  "L’article # du règlement (UE) #/# impose au fournisseur d’un système d’IA à haut risque un système de management de la qualité. prEN # dit comment le construire, et une seule de ses parties n’a d’équivalent ni dans ISO # ni dans ISO/IEC # : la stratégie de conformité réglementaire du §#. Ce parcours la pose d’abord, parce que c’est elle qui plafonne tout le reste.": {
+   "en": "Article # of Regulation (EU) #/# requires the provider of a high-risk AI system to have a quality management system. prEN # says how to build it, and only one of its parts has no counterpart in either ISO # or ISO/IEC #: the regulatory compliance strategy of §#. This path sets that out first, because it is what caps everything else.",
+   "fr": "L’article 17 du règlement (UE) 2024/1689 impose au fournisseur d’un système d’IA à haut risque un système de management de la qualité. prEN 18286 dit comment le construire, et une seule de ses parties n’a d’équivalent ni dans ISO 9001 ni dans ISO/IEC 42001 : la stratégie de conformité réglementaire du §4.4. Ce parcours la pose d’abord, parce que c’est elle qui plafonne tout le reste."
+  },
+  "L’article # exige de refaire l’appréciation à intervalles planifiés ET après tout changement notable.": {
+   "en": "Clause # requires the assessment to be redone at planned intervals AND after any significant change.",
+   "fr": "L’article 8.2 exige de refaire l’appréciation à intervalles planifiés ET après tout changement notable."
+  },
+  "L’article # exige que vous soyez EN MESURE DE FOURNIR les documents prouvant la conformité — pas seulement de les avoir vus.": {
+   "en": "Article # requires you to be ABLE TO PROVIDE the documents demonstrating conformity — not merely to have seen them.",
+   "fr": "L’article 19 exige que vous soyez EN MESURE DE FOURNIR les documents prouvant la conformité — pas seulement de les avoir vus."
+  },
+  "L’article # exige un processus ITÉRATIF et documenté sur tout le cycle de vie — pas une analyse faite une fois avant le lancement.": {
+   "en": "Article # requires an ITERATIVE and documented process across the whole life cycle — not an analysis done once before launch.",
+   "fr": "L’article 9 exige un processus ITÉRATIF et documenté sur tout le cycle de vie — pas une analyse faite une fois avant le lancement."
+  },
+  "L’article # relève du palier intermédiaire ; la requalification de l’article #, du palier lourd.": {
+   "en": "Article # falls under the intermediate tier; the reclassification under Article #, under the heavy tier.",
+   "fr": "L’article 20 relève du palier intermédiaire ; la requalification de l’article 21, du palier lourd."
+  },
+  "L’article # renvoie aux États membres le régime des sanctions, sans aucun plafond européen — contrairement au Data Act, qui emprunte celui de l’article # §# du RGPD. Ce module ne chiffre donc aucune amende, et il le dit plutôt que de se taire.": {
+   "en": "Article # refers the penalty regime to the Member States, with no European cap whatsoever — unlike the Data Act, which borrows the one in Article #(#) GDPR. This module therefore quantifies no fine, and says so rather than staying silent.",
+   "fr": "L’article 34 renvoie aux États membres le régime des sanctions, sans aucun plafond européen — contrairement au Data Act, qui emprunte celui de l’article 83 §5 du RGPD. Ce module ne chiffre donc aucune amende, et il le dit plutôt que de se taire."
+  },
+  "L’article # se lit par alinéa, sans pourcentage": {
+   "en": "Article # reads subparagraph by subparagraph, with no percentage",
+   "fr": "L’article 14 se lit par alinéa, sans pourcentage"
+  },
+  "L’article # vise « une personne autre que le fabricant, l’importateur ou le distributeur » qui apporte une modification substantielle et met le produit à disposition. C’est l’infogéreur, le maître d’œuvre, l’assembleur de solution — et c’est le rôle le plus souvent ignoré, parce que celui qui l’exerce ne se pense pas fabricant.": {
+   "en": "Article # targets “a person other than the manufacturer, the importer or the distributor” who carries out a substantial modification and makes the product available. That is the managed service provider, the prime contractor, the solution assembler — and it is the role most often ignored, because whoever exercises it does not think of themselves as a manufacturer.",
+   "fr": "L’article 22 vise « une personne autre que le fabricant, l’importateur ou le distributeur » qui apporte une modification substantielle et met le produit à disposition. C’est l’infogéreur, le maître d’œuvre, l’assembleur de solution — et c’est le rôle le plus souvent ignoré, parce que celui qui l’exerce ne se pense pas fabricant."
+  },
+  "L’article # vous demande la diligence requise : vérifier le marquage, vérifier que le fabricant ET l’importateur ont fait leur part, et surtout que les documents vous ont été COMMUNIQUÉS. Puis, si quelque chose cloche, faire prendre les mesures correctives — ou faire retirer.": {
+   "en": "Article # asks you for due diligence: check the marking, check that the manufacturer AND the importer have done their part, and above all that the documents have been PROVIDED to you. Then, if something is wrong, have the corrective measures taken — or have the product withdrawn.",
+   "fr": "L’article 20 vous demande la diligence requise : vérifier le marquage, vérifier que le fabricant ET l’importateur ont fait leur part, et surtout que les documents vous ont été COMMUNIQUÉS. Puis, si quelque chose cloche, faire prendre les mesures correctives — ou faire retirer."
+  },
+  "L’article # vous oblige à dire, sur demande, qui vous a fourni un produit et à qui vous l’avez fourni — ce qui suppose de l’avoir noté au moment de la transaction.": {
+   "en": "Article # obliges you to say, on request, who supplied you with a product and to whom you supplied it — which presupposes having noted it at the time of the transaction.",
+   "fr": "L’article 23 vous oblige à dire, sur demande, qui vous a fourni un produit et à qui vous l’avez fourni — ce qui suppose de l’avoir noté au moment de la transaction."
+  },
+  "L’article # vous place au palier lourd — celui des articles # et # : # M€ ou # %.": {
+   "en": "Article # places you in the heavy tier — that of Articles # and #: €# million or # %.",
+   "fr": "L’article 22 vous place au palier lourd — celui des articles 13 et 14 : 15 M€ ou 2,5 %."
+  },
+  "L’article # vous soumet aux articles # ET # : le compte à rebours de # h vous concerne depuis le # septembre #.": {
+   "en": "Article # subjects you to Articles # AND #: the #-hour countdown has applied to you since # September #.",
+   "fr": "L’article 22 vous soumet aux articles 13 ET 14 : le compte à rebours de 24 h vous concerne depuis le 11 septembre 2026."
+  },
+  "L’article # §# : quand l’utilisateur n’est pas la personne concernée, les données personnelles ne lui sont mises à disposition que s’il existe un fondement juridique valable au titre de l’article # du RGPD, et le cas échéant si les conditions de l’article # du RGPD et de l’article # §# de la directive #/#/CE sont remplies. Sans article #, la demande se refuse.": {
+   "en": "Article #(#): where the user is not the data subject, personal data is made available to them only where there is a valid legal basis under Article # GDPR and, where applicable, where the conditions of Article # GDPR and of Article #(#) of Directive #/#/EC are met. Without Article #, the request is refused.",
+   "fr": "L’article 4 §12 : quand l’utilisateur n’est pas la personne concernée, les données personnelles ne lui sont mises à disposition que s’il existe un fondement juridique valable au titre de l’article 6 du RGPD, et le cas échéant si les conditions de l’article 9 du RGPD et de l’article 5 §3 de la directive 2002/58/CE sont remplies. Sans article 6, la demande se refuse."
+  },
+  "L’article # §# donne compétence aux autorités de contrôle du RGPD — la CNIL — pour les manquements aux chapitres II, III et V, jusqu’au montant de l’article # §# : # # # EUR ou # % du chiffre d’affaires annuel mondial total, le plus élevé étant retenu. Et l’article # §# ne prévoit AUCUNE réduction pour les PME, là où l’article # §# de l’IA Act retient pour elles le plafond le plus bas : une PME est donc plus exposée ici que sous l’IA Act.": {
+   "en": "Article #(#) gives the GDPR supervisory authorities — the CNIL — competence over infringements of Chapters II, III and V, up to the amount in Article #(#): EUR # # # or # % of total worldwide annual turnover, whichever is higher. And Article #(#) provides for NO reduction for SMEs, whereas Article #(#) of the AI Act retains the lower cap for them: an SME is therefore more exposed here than under the AI Act.",
+   "fr": "L’article 40 §4 donne compétence aux autorités de contrôle du RGPD — la CNIL — pour les manquements aux chapitres II, III et V, jusqu’au montant de l’article 83 §5 : 20 000 000 EUR ou 4 % du chiffre d’affaires annuel mondial total, le plus élevé étant retenu. Et l’article 83 §5 ne prévoit AUCUNE réduction pour les PME, là où l’article 99 §6 de l’IA Act retient pour elles le plafond le plus bas : une PME est donc plus exposée ici que sous l’IA Act."
+  },
+  "L’article # §# ne désigne que les chapitres II, III et V. Pour le chapitre VI, le régime de sanction est celui que l’État membre détermine, et aucun plafond européen ne s’applique. La page le dit pour éviter l’inverse : croire l’exposition maximale là où elle est nationale.": {
+   "en": "Article #(#) designates only Chapters II, III and V. For Chapter VI, the penalty regime is the one the Member State lays down, and no European cap applies. The page says so to avoid the opposite error: believing exposure is at its maximum where it is in fact national.",
+   "fr": "L’article 40 §4 ne désigne que les chapitres II, III et V. Pour le chapitre VI, le régime de sanction est celui que l’État membre détermine, et aucun plafond européen ne s’applique. La page le dit pour éviter l’inverse : croire l’exposition maximale là où elle est nationale."
+  },
+  "L’article # §# supprime tout frais de changement de fournisseur au # janvier #. D’ici là, des frais réduits restent admis, plafonnés aux coûts directement liés au processus, et l’information précontractuelle du §# est due : frais de service standard, pénalités de résiliation anticipée, frais réduits applicables.": {
+   "en": "Article #(#) withdraws all switching charges on # January #. Until then, reduced charges remain allowed, capped at the costs directly related to the process, and the pre-contractual information of §# is due: standard service fees, early-termination penalties, applicable reduced charges.",
+   "fr": "L’article 29 §1 supprime tout frais de changement de fournisseur au 12 janvier 2027. D’ici là, des frais réduits restent admis, plafonnés aux coûts directement liés au processus, et l’information précontractuelle du §4 est due : frais de service standard, pénalités de résiliation anticipée, frais réduits applicables."
+  },
+  "L’article #(#) n’exige pas qu’un humain regarde : il exige qu’il puisse dire non. Une supervision sans autorité de contredire n’en est pas une.": {
+   "en": "Article #(#) does not require a human to look: it requires that they can say no. Oversight without the authority to contradict is not oversight.",
+   "fr": "L’article 26(2) n’exige pas qu’un humain regarde : il exige qu’il puisse dire non. Une supervision sans autorité de contredire n’en est pas une."
+  },
+  "L’article #, §# vous oblige à faire prendre les mesures correctives ou à faire retirer — ce qui suppose de savoir joindre le fabricant, et sous quel délai.": {
+   "en": "Article #(#) obliges you to have corrective measures taken or to have the product withdrawn — which presupposes knowing how to reach the manufacturer, and within what time.",
+   "fr": "L’article 20, §4 vous oblige à faire prendre les mesures correctives ou à faire retirer — ce qui suppose de savoir joindre le fabricant, et sous quel délai."
+  },
+  "L’article #, §#, b), exige des délais de préavis et des obligations de notification dans le contrat. C’est là que se négocie votre propre horloge.": {
+   "en": "Article #(#)(b) requires notice periods and notification obligations in the contract. That is where your own clock is negotiated.",
+   "fr": "L’article 30, §3, b), exige des délais de préavis et des obligations de notification dans le contrat. C’est là que se négocie votre propre horloge."
+  },
+  "L’article #, §#, exige de tenir compte des vulnérabilités PROPRES à chaque fournisseur direct, pas d’une politique fournisseurs générique.": {
+   "en": "Article #(#) requires taking into account the vulnerabilities SPECIFIC to each direct supplier, not a generic supplier policy.",
+   "fr": "L’article 21, §3, exige de tenir compte des vulnérabilités PROPRES à chaque fournisseur direct, pas d’une politique fournisseurs générique."
+  },
+  "L’article #, §#, impose une SECONDE notification, aux destinataires des services, distincte de celle au CSIRT. Et le §# impose de leur dire ce qu’ils peuvent appliquer eux-mêmes.": {
+   "en": "Article #(#) imposes a SECOND notification, to the recipients of the services, separate from the one to the CSIRT. And paragraph # requires you to tell them what they can apply themselves.",
+   "fr": "L’article 23, §1, impose une SECONDE notification, aux destinataires des services, distincte de celle au CSIRT. Et le §2 impose de leur dire ce qu’ils peuvent appliquer eux-mêmes."
+  },
+  "L’article #, §#, ne vise QUE les entités essentielles. L’article # n’a pas d’équivalent.": {
+   "en": "Article #(#) targets ONLY essential entities. Article # has no equivalent.",
+   "fr": "L’article 32, §5, ne vise QUE les entités essentielles. L’article 33 n’a pas d’équivalent."
+  },
+  "L’article #er §# le dit en propres termes : dans la mesure où les utilisateurs sont les personnes concernées, les droits du chapitre II complètent les droits d’accès et de portabilité des articles # et # du RGPD. Deux droits, deux régimes, deux délais — et répondre au titre de l’un ne purge pas une demande au titre de l’autre.": {
+   "en": "Article #(#) says it in so many words: in so far as the users are the data subjects, the Chapter II rights complement the rights of access and portability of Articles # and # GDPR. Two rights, two regimes, two deadlines — and answering under one does not discharge a request under the other.",
+   "fr": "L’article 1er §5 le dit en propres termes : dans la mesure où les utilisateurs sont les personnes concernées, les droits du chapitre II complètent les droits d’accès et de portabilité des articles 15 et 20 du RGPD. Deux droits, deux régimes, deux délais — et répondre au titre de l’un ne purge pas une demande au titre de l’autre."
+  },
+  "L’article #er §# énonce que le droit de la protection des données s’applique à TOUTES les données personnelles traitées en lien avec le règlement, qu’il prévaut en cas de conflit, et que le DGA ne crée pas de base juridique ni ne modifie les droits du RGPD. Relever du DGA ne dispense donc pas de l’article #.": {
+   "en": "Article #(#) states that data protection law applies to ALL personal data processed in connection with the Regulation, that it prevails in the event of a conflict, and that the DGA creates no legal basis and does not alter GDPR rights. Falling under the DGA therefore does not dispense with Article #.",
+   "fr": "L’article 1er §3 énonce que le droit de la protection des données s’applique à TOUTES les données personnelles traitées en lien avec le règlement, qu’il prévaut en cas de conflit, et que le DGA ne crée pas de base juridique ni ne modifie les droits du RGPD. Relever du DGA ne dispense donc pas de l’article 6."
+  },
+  "L’article #er, §#, ne vise que les entités FINANCIÈRES, que l’article #, §#, réserve aux points a) à t). Un hébergeur qui sert des banques reste pleinement sous NIS # : c’est l’erreur de lecture la plus coûteuse du marché.": {
+   "en": "Article #(#) targets only FINANCIAL entities, which Article #(#) limits to points (a) to (t). A hosting provider serving banks remains fully under NIS #: it is the costliest misreading on the market.",
+   "fr": "L’article 1er, §2, ne vise que les entités FINANCIÈRES, que l’article 2, §2, réserve aux points a) à t). Un hébergeur qui sert des banques reste pleinement sous NIS 2 : c’est l’erreur de lecture la plus coûteuse du marché."
+  },
+  "L’assiette est le chiffre d’affaires mondial du GROUPE, pas celui de la filiale concernée.": {
+   "en": "The base is the GROUP’s worldwide turnover, not that of the subsidiary concerned.",
+   "fr": "L’assiette est le chiffre d’affaires mondial du GROUPE, pas celui de la filiale concernée."
+  },
+  "L’assistance au développement, sous règle": {
+   "en": "Development assistance, under rules",
+   "fr": "L’assistance au développement, sous règle"
+  },
+  "L’audit décide du programme": {
+   "en": "The audit decides the programme",
+   "fr": "L’audit décide du programme"
+  },
+  "L’avancement est conservé dans ce navigateur et survit à un rechargement ; il ne quitte jamais votre poste.": {
+   "en": "Progress is kept in this browser and survives a reload; it never leaves your computer.",
+   "fr": "L’avancement est conservé dans ce navigateur et survit à un rechargement ; il ne quitte jamais votre poste."
+  },
+  "L’avancement n’est pas déclaratif": {
+   "en": "Progress is not self-declared",
+   "fr": "L’avancement n’est pas déclaratif"
+  },
+  "L’eau de refroidissement se juge au point exact du site et au mois le plus tendu, jamais sur une moyenne nationale annuelle.": {
+   "en": "Cooling water is judged at the exact point of the site and in the most stressed month, never on an annual national average.",
+   "fr": "L’eau de refroidissement se juge au point exact du site et au mois le plus tendu, jamais sur une moyenne nationale annuelle."
+  },
+  "L’empreinte croise trois postes jamais confondus : l’usage (électricité × intensité carbone du pays, millésime #, cycle de vie), la fabrication des équipements amortie sur leur durée de vie, et l’eau de refroidissement. Sur un réseau très décarboné, la fabrication pèse plus lourd que l’usage — une lecture qui n’afficherait que l’usage classerait la Suède à tort près de zéro.": {
+   "en": "The footprint cross-checks three items that are never confused: use (electricity × the country’s carbon intensity, # edition, life cycle), the manufacturing of equipment amortised over its lifetime, and cooling water. On a highly decarbonised grid, manufacturing weighs more than use — a reading that showed only use would wrongly rank Sweden close to zero.",
+   "fr": "L’empreinte croise trois postes jamais confondus : l’usage (électricité × intensité carbone du pays, millésime 2024, cycle de vie), la fabrication des équipements amortie sur leur durée de vie, et l’eau de refroidissement. Sur un réseau très décarboné, la fabrication pèse plus lourd que l’usage — une lecture qui n’afficherait que l’usage classerait la Suède à tort près de zéro."
+  },
+  "L’empreinte du parc d’IA, avec sa couverture": {
+   "en": "The footprint of the AI estate, with its coverage",
+   "fr": "L’empreinte du parc d’IA, avec sa couverture"
+  },
+  "L’empreinte du parc, en regard": {
+   "en": "The footprint of the estate, alongside",
+   "fr": "L’empreinte du parc, en regard"
+  },
+  "L’empreinte d’un modèle de langage n’est pas publiée par les fournisseurs : ces chiffres sont des estimations fondées sur des travaux publics, pas des relevés. Présentez-les comme tels.": {
+   "en": "The footprint of a language model is not published by providers: these figures are estimates based on public work, not readings. Present them as such.",
+   "fr": "L’empreinte d’un modèle de langage n’est pas publiée par les fournisseurs : ces chiffres sont des estimations fondées sur des travaux publics, pas des relevés. Présentez-les comme tels."
+  },
+  "L’empreinte environnementale du même parc se lit dans le parcours « RSE / reporting extra-financier », qui rend compte devant vous : elle n’est pas reprise ici pour ne pas dédoubler la même mesure.": {
+   "en": "The environmental footprint of the same estate is read in the “CSR / non-financial reporting” path, which reports to you: it is not repeated here so as not to duplicate the same measurement.",
+   "fr": "L’empreinte environnementale du même parc se lit dans le parcours « RSE / reporting extra-financier », qui rend compte devant vous : elle n’est pas reprise ici pour ne pas dédoubler la même mesure."
+  },
+  "L’enregistrer quand même comme un document": {
+   "en": "Save it as a document anyway",
+   "fr": "L’enregistrer quand même comme un document"
+  },
+  "L’enveloppe RaaS ci-dessous se dimensionne sur ce périmètre ; rapprochez-la du gain attendu pour calibrer les jalons.": {
+   "en": "The RaaS envelope below is sized on this scope; set it against the expected gain to calibrate the milestones.",
+   "fr": "L’enveloppe RaaS ci-dessous se dimensionne sur ce périmètre ; rapprochez-la du gain attendu pour calibrer les jalons."
+  },
+  "L’enveloppe d’investissement — décision GO / NO GO": {
+   "en": "Investment envelope — GO / NO-GO decision",
+   "fr": "L’enveloppe d’investissement — décision GO / NO GO"
+  },
+  "L’exemption de l’article #, et ses deux conditions": {
+   "en": "The Article # exemption, and its two conditions",
+   "fr": "L’exemption de l’article 7, et ses deux conditions"
+  },
+  "L’exposition n’est pas chiffrable ici": {
+   "en": "Exposure cannot be quantified here",
+   "fr": "L’exposition n’est pas chiffrable ici"
+  },
+  "L’exposition, empruntée à l’article # §#": {
+   "en": "Exposure, borrowed from Article #(#)",
+   "fr": "L’exposition, empruntée à l’article 83 §5"
+  },
+  "L’extension au reste du périmètre, un réseau d’ambassadeurs qui porte l’usage au quotidien, et une revue à quatre-vingt-dix jours inscrite au calendrier.": {
+   "en": "Extension to the rest of the scope, a network of ambassadors who carry day-to-day use, and a ninety-day review in the calendar.",
+   "fr": "L’extension au reste du périmètre, un réseau d’ambassadeurs qui porte l’usage au quotidien, et une revue à quatre-vingt-dix jours inscrite au calendrier."
+  },
+  "L’horloge démarre à la CONNAISSANCE de l’incident : elle a pu démarrer sans que vous le sachiez.": {
+   "en": "The clock starts at AWARENESS of the incident: it may have started without your knowing.",
+   "fr": "L’horloge démarre à la CONNAISSANCE de l’incident : elle a pu démarrer sans que vous le sachiez."
+  },
+  "L’horloge part de la CONNAISSANCE. La question n’est donc pas la détection : c’est la qualification.": {
+   "en": "The clock starts at AWARENESS. The question is therefore not detection: it is qualification.",
+   "fr": "L’horloge part de la CONNAISSANCE. La question n’est donc pas la détection : c’est la qualification."
+  },
+  "L’identification biométrique à distance change le questionnaire": {
+   "en": "Remote biometric identification changes the questionnaire",
+   "fr": "L’identification biométrique à distance change le questionnaire"
+  },
+  "L’implication COMMANDE le niveau attendu": {
+   "en": "Involvement COMMANDS the expected level",
+   "fr": "L’implication COMMANDE le niveau attendu"
+  },
+  "L’incident ne crée pas la compétence de l’autorité sur une entité essentielle : elle l’avait déjà.": {
+   "en": "The incident does not create the authority’s competence over an essential entity: it already had it.",
+   "fr": "L’incident ne crée pas la compétence de l’autorité sur une entité essentielle : elle l’avait déjà."
+  },
+  "L’indicateur « processus effectivement redessinés » est au complet, et chaque ligne nomme une suppression.": {
+   "en": "The “processes actually redesigned” indicator is complete, and each row names something removed.",
+   "fr": "L’indicateur « processus effectivement redessinés » est au complet, et chaque ligne nomme une suppression."
+  },
+  "L’indice de conformité dit si vous êtes en règle ; celui-ci dit si l’organisation s’en sert.": {
+   "en": "The compliance index says whether you are compliant; this one says whether the organisation uses it.",
+   "fr": "L’indice de conformité dit si vous êtes en règle ; celui-ci dit si l’organisation s’en sert."
+  },
+  "L’indice est une aide au pilotage, non une attestation juridique.": {
+   "en": "The index is a steering aid, not a legal attestation.",
+   "fr": "L’indice est une aide au pilotage, non une attestation juridique."
+  },
+  "L’indice mesure la COMPLÉTUDE de votre dispositif documentaire, pas la légalité de vos traitements. Un registre complet mais fondé sur des bases légales fragiles produira un bon indice et un mauvais contrôle.": {
+   "en": "The index measures the COMPLETENESS of your documentation framework, not the lawfulness of your processing. A complete register based on fragile legal bases will produce a good index and a bad inspection.",
+   "fr": "L’indice mesure la COMPLÉTUDE de votre dispositif documentaire, pas la légalité de vos traitements. Un registre complet mais fondé sur des bases légales fragiles produira un bon indice et un mauvais contrôle."
+  }
+ }
+}

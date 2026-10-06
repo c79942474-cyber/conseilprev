@@ -1,0 +1,451 @@
+{
+ "_lot": "71-routes-8",
+ "_mots": 2405,
+ "_pages": [
+  "_routes"
+ ],
+ "_rubrique": "_routes",
+ "bloc": {},
+ "texte": {
+  "Le déploiement est-il maîtrisé, et la version déployée liée à sa documentation ?": {
+   "en": "Is the deployment under control, and is the deployed version tied to its documentation?",
+   "fr": "Le déploiement est-il maîtrisé, et la version déployée liée à sa documentation ?"
+  },
+  "Le détenteur est informé sans retard de tout transfert, accès ou usage non autorisé portant sur les données non personnelles partagées.": {
+   "en": "The data holder is informed without delay of any unauthorised transfer of, access to or use of the non-personal data shared.",
+   "fr": "Le détenteur est informé sans retard de tout transfert, accès ou usage non autorisé portant sur les données non personnelles partagées."
+  },
+  "Le détenteur n'utilise les données non personnelles facilement accessibles que sur la base d'un contrat avec l'utilisateur, n'en tire pas d'informations sur sa position commerciale, et ne les transmet à aucun tiers hors exécution de ce contrat": {
+   "en": "The data holder uses readily available non-personal data only on the basis of a contract with the user, derives from it no insight into the user's economic position, and passes it to no third party outside the performance of that contract",
+   "fr": "Le détenteur n'utilise les données non personnelles facilement accessibles que sur la base d'un contrat avec l'utilisateur, n'en tire pas d'informations sur sa position commerciale, et ne les transmet à aucun tiers hors exécution de ce contrat"
+  },
+  "Le fabricant évalue, établit la documentation technique, signe la déclaration UE de conformité et appose le marquage CE. Aucun tiers n'intervient.": {
+   "en": "The manufacturer assesses, draws up the technical documentation, signs the EU declaration of conformity and affixes the CE marking. No third party is involved.",
+   "fr": "Le fabricant évalue, établit la documentation technique, signe la déclaration UE de conformité et appose le marquage CE. Aucun tiers n'intervient."
+  },
+  "Le fournisseur a démontré sa supervision pour un profil donné. Une personne moins qualifiée que ce profil invalide la démonstration.": {
+   "en": "The provider demonstrated its oversight for a given profile. A person less qualified than that profile invalidates the demonstration.",
+   "fr": "Le fournisseur a démontré sa supervision pour un profil donné. Une personne moins qualifiée que ce profil invalide la démonstration."
+  },
+  "Le fournisseur de modèle est un tiers comme un autre — sauf qu'il change de version sans préavis.": {
+   "en": "The model provider is a third party like any other — except that it changes version without notice.",
+   "fr": "Le fournisseur de modèle est un tiers comme un autre — sauf qu'il change de version sans préavis."
+  },
+  "Le jour où ça casse, qui fait quoi.": {
+   "en": "On the day it breaks, who does what.",
+   "fr": "Le jour où ça casse, qui fait quoi."
+  },
+  "Le label de l'article # §# s'obtient de l'autorité compétente sur confirmation, jamais d'un questionnaire. Ce module prépare le dossier ; il ne délivre pas le label.": {
+   "en": "The label of Article #(#) is obtained from the competent authority upon confirmation, never from a questionnaire. This module prepares the file; it does not issue the label.",
+   "fr": "Le label de l'article 11 §9 s'obtient de l'autorité compétente sur confirmation, jamais d'un questionnaire. Ce module prépare le dossier ; il ne délivre pas le label."
+  },
+  "Le logo, l'identité visuelle et l'image de couverture de l'OCDE ne peuvent pas être employés sans autorisation expresse.": {
+   "en": "The OECD's logo, visual identity and cover image cannot be used without express permission.",
+   "fr": "Le logo, l'identité visuelle et l'image de couverture de l'OCDE ne peuvent pas être employés sans autorisation expresse."
+  },
+  "Le masquage en revue séquentielle est le point le plus souvent absent : techniquement simple, il est presque toujours oublié.": {
+   "en": "Blinding in a sequential review is the point most often missing: technically simple, it is almost always forgotten.",
+   "fr": "Le masquage en revue séquentielle est le point le plus souvent absent : techniquement simple, il est presque toujours oublié."
+  },
+  "Le matériel d'entraînement couvre-t-il les limites et mises en garde, la façon dont la base de calcul des sorties peut produire des sorties exceptionnelles, et — pour un système qui continue d'apprendre — si les actions de supervision influencent ou non l'apprentissage ?": {
+   "en": "Does the training material cover the limits and warnings, the way the basis on which outputs are computed can produce exceptional outputs, and — for a system that keeps learning — whether the oversight actions influence the learning or not?",
+   "fr": "Le matériel d'entraînement couvre-t-il les limites et mises en garde, la façon dont la base de calcul des sorties peut produire des sorties exceptionnelles, et — pour un système qui continue d'apprendre — si les actions de supervision influencent ou non l'apprentissage ?"
+  },
+  "Le millésime # du Top # des applications à base de LLM, risque par risque.": {
+   "en": "The # edition of the Top # for LLM-based applications, risk by risk.",
+   "fr": "Le millésime 2025 du Top 10 des applications à base de LLM, risque par risque."
+  },
+  "Le module ne l'ajoute pas au tableau : il le signale comme une norme de la famille que ce site traite déjà, en disant que le rattachement vient du site et non de l'annexe B.": {
+   "en": "The module does not add it to the table: it flags it as a standard of the family this site already covers, saying that the link comes from the site and not from Annex B.",
+   "fr": "Le module ne l'ajoute pas au tableau : il le signale comme une norme de la famille que ce site traite déjà, en disant que le rattachement vient du site et non de l'annexe B."
+  },
+  "Le module travaille par FAMILLE, pas par mesure : la répartition des mesures par socle n'est pas reprise ici, et un ratio au dénominateur supposé vaudrait moins que son absence.": {
+   "en": "The module works by FAMILY, not by control: the distribution of controls per baseline is not reproduced here, and a ratio with an assumed denominator would be worth less than its absence.",
+   "fr": "Le module travaille par FAMILLE, pas par mesure : la répartition des mesures par socle n'est pas reprise ici, et un ratio au dénominateur supposé vaudrait moins que son absence."
+  },
+  "Le modèle est normatif : la chaîne de sous-traitance se déclare dans un format unique, comparable d'un prestataire à l'autre.": {
+   "en": "The template is normative: the subcontracting chain is declared in a single format, comparable from one provider to another.",
+   "fr": "Le modèle est normatif : la chaîne de sous-traitance se déclare dans un format unique, comparable d'un prestataire à l'autre."
+  },
+  "Le modèle produit un contenu faux, présenté avec assurance, que le système ou l'utilisateur reprend à son compte.": {
+   "en": "The model produces false content, delivered with confidence, which the system or the user adopts as its own.",
+   "fr": "Le modèle produit un contenu faux, présenté avec assurance, que le système ou l'utilisateur reprend à son compte."
+  },
+  "Le modèle rend des données qu'il n'aurait pas dû rendre : données personnelles, secrets, contenus d'un autre client.": {
+   "en": "The model returns data it should not have returned: personal data, secrets, another client's content.",
+   "fr": "Le modèle rend des données qu'il n'aurait pas dû rendre : données personnelles, secrets, contenus d'un autre client."
+  },
+  "Le modèle, un adaptateur, une bibliothèque ou un jeu de données arrive déjà compromis.": {
+   "en": "The model, an adapter, a library or a data set arrives already compromised.",
+   "fr": "Le modèle, un adaptateur, une bibliothèque ou un jeu de données arrive déjà compromis."
+  },
+  "Le montant des redevances de supervision, leur assiette, leur plancher et leur échéance de paiement.": {
+   "en": "The amount of the oversight fees, their basis, their floor and their payment deadline.",
+   "fr": "Le montant des redevances de supervision, leur assiette, leur plancher et leur échéance de paiement."
+  },
+  "Le moteur PROPOSE : rien n'est écrit au registre sans une décision et le nom de qui l'a prise.": {
+   "en": "The engine PROPOSES: nothing is written to the register without a decision and the name of whoever took it.",
+   "fr": "Le moteur PROPOSE : rien n'est écrit au registre sans une décision et le nom de qui l'a prise."
+  },
+  "Le moteur n'a rien renvoyé.": {
+   "en": "The engine returned nothing.",
+   "fr": "Le moteur n'a rien renvoyé."
+  },
+  "Le même volume déclaré donne le coût et l'empreinte : on ne tient pas deux inventaires.": {
+   "en": "The same declared volume gives both the cost and the footprint: there is no keeping two inventories.",
+   "fr": "Le même volume déclaré donne le coût et l'empreinte : on ne tient pas deux inventaires."
+  },
+  "Le niveau de TOLÉRANCE au risque lié aux TIC approuvé au titre de l'article #, paragraphe #, point b), du règlement.": {
+   "en": "The ICT risk TOLERANCE level approved under Article #(#)(b) of the regulation.",
+   "fr": "Le niveau de TOLÉRANCE au risque lié aux TIC approuvé au titre de l'article 6, paragraphe 8, point b), du règlement."
+  },
+  "Le niveau le plus exigeant du règlement, adossé à un schéma européen de certification de cybersécurité.": {
+   "en": "The most demanding level of the Regulation, backed by a European cybersecurity certification scheme.",
+   "fr": "Le niveau le plus exigeant du règlement, adossé à un schéma européen de certification de cybersécurité."
+  },
+  "Le nombre d'entités financières servies et la valeur totale de leurs actifs.": {
+   "en": "The number of financial entities served and the total value of their assets.",
+   "fr": "Le nombre d'entités financières servies et la valeur totale de leurs actifs."
+  },
+  "Le nombre d'établissements d'importance systémique mondiale ou autres qui en dépendent, et leur interdépendance avec d'autres entités financières.": {
+   "en": "The number of global or other systemically important institutions that depend on it, and their interdependence with other financial entities.",
+   "fr": "Le nombre d'établissements d'importance systémique mondiale ou autres qui en dépendent, et leur interdépendance avec d'autres entités financières."
+  },
+  "Le paragraphe ne s'applique pas — et il faut pouvoir dire pourquoi.": {
+   "en": "The clause does not apply — and you must be able to say why.",
+   "fr": "Le paragraphe ne s'applique pas — et il faut pouvoir dire pourquoi."
+  },
+  "Le pilier physique de l'approche tous risques : qui entre où, et ce qu'un accès aux locaux permet d'atteindre.": {
+   "en": "The physical pillar of the all-hazards approach: who gets in where, and what access to the premises reaches.",
+   "fr": "Le pilier physique de l'approche tous risques : qui entre où, et ce qu'un accès aux locaux permet d'atteindre."
+  },
+  "Le plafond retenu est le plus élevé des deux montants.": {
+   "en": "The ceiling applied is the higher of the two amounts.",
+   "fr": "Le plafond retenu est le plus élevé des deux montants."
+  },
+  "Le plan de sensibilisation, public par public : l'état de chaque action, choisi.": {
+   "en": "The awareness plan, audience by audience: the state of each action, chosen.",
+   "fr": "Le plan de sensibilisation, public par public : l'état de chaque action, choisi."
+  },
+  "Le plus tôt possible, et en tout état de cause dans les quatre heures suivant la classification comme majeur, sans dépasser vingt-quatre heures depuis la connaissance.": {
+   "en": "As early as possible, and in any event within four hours of the classification as major, and no more than twenty-four hours from becoming aware.",
+   "fr": "Le plus tôt possible, et en tout état de cause dans les quatre heures suivant la classification comme majeur, sans dépasser vingt-quatre heures depuis la connaissance."
+  },
+  "Le point d'entrée du dispositif IA Act : cartographier, classer, évaluer, documenter, prouver.": {
+   "en": "The entry point of the AI Act arrangement: map, classify, assess, document, prove.",
+   "fr": "Le point d'entrée du dispositif IA Act : cartographier, classer, évaluer, documenter, prouver."
+  },
+  "Le point d'entrée du dispositif RGPD, et ce que chaque écran couvre.": {
+   "en": "The entry point of the GDPR arrangement, and what each screen covers.",
+   "fr": "Le point d'entrée du dispositif RGPD, et ce que chaque écran couvre."
+  },
+  "Le pont dit où la norme s'arrête, pas qu'elle est insuffisante.": {
+   "en": "The bridge says where the standard stops, not that it is inadequate.",
+   "fr": "Le pont dit où la norme s'arrête, pas qu'elle est insuffisante."
+  },
+  "Le prestataire notifie sa désignation aux entités financières auxquelles il fournit des services.": {
+   "en": "The provider notifies its designation to the financial entities it supplies.",
+   "fr": "Le prestataire notifie sa désignation aux entités financières auxquelles il fournit des services."
+  },
+  "Le prestataire peut adresser une déclaration motivée contenant toute information pertinente pour l'évaluation.": {
+   "en": "The provider may submit a reasoned statement containing any information relevant to the assessment.",
+   "fr": "Le prestataire peut adresser une déclaration motivée contenant toute information pertinente pour l'évaluation."
+  },
+  "Le prestataire tient un journal de son activité d'intermédiation.": {
+   "en": "The provider keeps a log of its data intermediation activity.",
+   "fr": "Le prestataire tient un journal de son activité d'intermédiation."
+  },
+  "Le prestataire vous notifie sa désignation comme critique.": {
+   "en": "The provider notifies you of its designation as critical.",
+   "fr": "Le prestataire vous notifie sa désignation comme critique."
+  },
+  "Le produit est conçu et fabriqué, le service conçu et fourni, de sorte que les données et leurs métadonnées soient accessibles à l'utilisateur par défaut : aisément, en sécurité, SANS FRAIS, dans un format complet, structuré, couramment utilisé et lisible par machine": {
+   "en": "The product is designed and manufactured, and the service designed and provided, so that the data and its metadata are accessible to the user by default: easily, securely, FREE OF CHARGE, in a comprehensive, structured, commonly used and machine-readable format",
+   "fr": "Le produit est conçu et fabriqué, le service conçu et fourni, de sorte que les données et leurs métadonnées soient accessibles à l'utilisateur par défaut : aisément, en sécurité, SANS FRAIS, dans un format complet, structuré, couramment utilisé et lisible par machine"
+  },
+  "Le périmètre de certification est exactement ce qui plafonne le pont : c'est la première chose à mesurer, avant de compter sur lui.": {
+   "en": "The certification scope is exactly what caps the bridge: it is the first thing to measure, before relying on it.",
+   "fr": "Le périmètre de certification est exactement ce qui plafonne le pont : c'est la première chose à mesurer, avant de compter sur lui."
+  },
+  "Le périmètre du SMSI n'est pas écrit. Tout ce qui n'est pas exclu par écrit est audité — un périmètre flou est la première cause de dérive du coût d'audit.": {
+   "en": "The ISMS scope is not written down. Anything not excluded in writing is audited — a vague scope is the first cause of audit-cost drift.",
+   "fr": "Le périmètre du SMSI n'est pas écrit. Tout ce qui n'est pas exclu par écrit est audité — un périmètre flou est la première cause de dérive du coût d'audit."
+  },
+  "Le périmètre du système de management est choisi par l'organisme ; celui du règlement ne l'est pas. Reprendre le premier pour le second est l'erreur la plus courante.": {
+   "en": "The management system's scope is chosen by the organisation; the Regulation's is not. Carrying the first over as the second is the commonest mistake.",
+   "fr": "Le périmètre du système de management est choisi par l'organisme ; celui du règlement ne l'est pas. Reprendre le premier pour le second est l'erreur la plus courante."
+  },
+  "Le périmètre exact des « dispositions pertinentes » que l'article #, paragraphe #, de NIS # écarte n'est pas énuméré par le texte. Les lignes directrices de la Commission prévues au paragraphe # le précisent ; ce module distingue donc ce que le texte nomme de ce qui s'en déduit.": {
+   "en": "The exact scope of the « relevant provisions » that article #(#) of NIS # carves out is not listed by the text. The Commission guidelines provided for in paragraph # specify it; this module therefore tells what the text names from what is inferred.",
+   "fr": "Le périmètre exact des « dispositions pertinentes » que l'article 4, paragraphe 1, de NIS 2 écarte n'est pas énuméré par le texte. Les lignes directrices de la Commission prévues au paragraphe 3 le précisent ; ce module distingue donc ce que le texte nomme de ce qui s'en déduit."
+  },
+  "Le périmètre nomme-t-il les systèmes d'IA couverts — et dit-il ce qui en est exclu, et pourquoi ?": {
+   "en": "Does the scope name the AI systems covered — and does it say what is excluded from it, and why?",
+   "fr": "Le périmètre nomme-t-il les systèmes d'IA couverts — et dit-il ce qui en est exclu, et pourquoi ?"
+  },
+  "Le rapport sur le réexamen du cadre, dans un format électronique interrogeable, destiné à l'autorité compétente. Aucune mesure de l'annexe A ne le produit.": {
+   "en": "The report on the review of the framework, in a searchable electronic format, intended for the competent authority. No Annex A control produces it.",
+   "fr": "Le rapport sur le réexamen du cadre, dans un format électronique interrogeable, destiné à l'autorité compétente. Aucune mesure de l'annexe A ne le produit."
+  },
+  "Le rattachement au cadre de gestion du risque lié aux TIC de l'article # du règlement et son approbation par l'organe de direction.": {
+   "en": "The link to the ICT risk management framework of Article # of the regulation and its approval by the management body.",
+   "fr": "Le rattachement au cadre de gestion du risque lié aux TIC de l'article 6 du règlement et son approbation par l'organe de direction."
+  },
+  "Le rattachement au processus de gestion des incidents de l'article # du règlement, et la classification de l'article # qui décide de la notification.": {
+   "en": "The link to the incident management process of Article # of the regulation, and the Article # classification that decides on notification.",
+   "fr": "Le rattachement au processus de gestion des incidents de l'article 17 du règlement, et la classification de l'article 18 qui décide de la notification."
+  },
+  "Le rattachement des projets de TIC à la stratégie de résilience opérationnelle numérique et le compte rendu à l'organe de direction.": {
+   "en": "The link between ICT projects and the digital operational resilience strategy, and the report to the management body.",
+   "fr": "Le rattachement des projets de TIC à la stratégie de résilience opérationnelle numérique et le compte rendu à l'organe de direction."
+  },
+  "Le recours à une prestation d'accompagnement et de conseil en sécurité (PACS) qualifiée par l'ANSSI, au titre de l'article # du décret n° #-# du # mars # modifié": {
+   "en": "The use of a security support and advisory service (PACS) qualified by ANSSI, under article # of Decree No #-# of # March # as amended",
+   "fr": "Le recours à une prestation d'accompagnement et de conseil en sécurité (PACS) qualifiée par l'ANSSI, au titre de l'article 10 du décret n° 2015-350 du 27 mars 2015 modifié"
+  },
+  "Le recueil de règles de l'article # est un acte délégué de la Commission. Ce que l'article # e) rend exigible dépend de son entrée en vigueur, et le module ne la devine pas.": {
+   "en": "The rulebook of Article # is a Commission delegated act. What Article #(e) makes enforceable depends on its entry into force, and the module does not guess that date.",
+   "fr": "Le recueil de règles de l'article 22 est un acte délégué de la Commission. Ce que l'article 18 e) rend exigible dépend de son entrée en vigueur, et le module ne la devine pas."
+  },
+  "Le registre d'informations de tous les accords contractuels portant sur des services TIC, tenu aux niveaux individuel, sous-consolidé et consolidé.": {
+   "en": "The register of information on all contractual arrangements for ICT services, kept at individual, sub-consolidated and consolidated level.",
+   "fr": "Le registre d'informations de tous les accords contractuels portant sur des services TIC, tenu aux niveaux individuel, sous-consolidé et consolidé."
+  },
+  "Le registre d'informations n'est pas une formalité déclarative : c'est la matière première de la désignation. Un registre incomplet fausse l'appréciation portée sur vos fournisseurs.": {
+   "en": "The register of information is not a reporting formality: it is the raw material of the designation. An incomplete register distorts the assessment made of your suppliers.",
+   "fr": "Le registre d'informations n'est pas une formalité déclarative : c'est la matière première de la désignation. Un registre incomplet fausse l'appréciation portée sur vos fournisseurs."
+  },
+  "Le registre des produits comportant des éléments numériques, et la classe déclarée de chacun.": {
+   "en": "The register of products with digital elements, and the declared class of each.",
+   "fr": "Le registre des produits comportant des éléments numériques, et la classe déclarée de chacun."
+  },
+  "Le registre est la pièce que la CNIL demande en premier, et il alimente l'AIPD et la cartographie.": {
+   "en": "The register is the document the CNIL asks for first, and it feeds the DPIA and the map.",
+   "fr": "Le registre est la pièce que la CNIL demande en premier, et il alimente l'AIPD et la cartographie."
+  },
+  "Le registre vu d'ensemble : flux, catégories, destinataires.": {
+   "en": "The register seen as a whole: flows, categories, recipients.",
+   "fr": "Le registre vu d'ensemble : flux, catégories, destinataires."
+  },
+  "Le reste de l'audit — nécessaire, mais qui ne ferme pas l'accès au marché à lui seul.": {
+   "en": "The rest of the audit — necessary, but not enough on its own to close off market access.",
+   "fr": "Le reste de l'audit — nécessaire, mais qui ne ferme pas l'accès au marché à lui seul."
+  },
+  "Le risque le plus sous-estimé du lot : il couvre la confiance excessive, la confusion sur qui décide, et l'anthropomorphisme.": {
+   "en": "The most underestimated risk of the set: it covers over-reliance, confusion about who decides, and anthropomorphism.",
+   "fr": "Le risque le plus sous-estimé du lot : il couvre la confiance excessive, la confusion sur qui décide, et l'anthropomorphisme."
+  },
+  "Le règlement NE CRÉE PAS de base juridique pour le traitement de données à caractère personnel, et ne modifie pas les droits et obligations du RGPD.": {
+   "en": "The Regulation DOES NOT CREATE a legal basis for the processing of personal data, and does not alter the rights and obligations of the GDPR.",
+   "fr": "Le règlement NE CRÉE PAS de base juridique pour le traitement de données à caractère personnel, et ne modifie pas les droits et obligations du RGPD."
+  },
+  "Le règlement est applicable.": {
+   "en": "The Regulation applies.",
+   "fr": "Le règlement est applicable."
+  },
+  "Le règlement est sans préjudice des règlements (UE) #/# et (UE) #/# et des directives #/#/CE et (UE) #/#, y compris en ce qui concerne les pouvoirs et compétences des autorités de contrôle.": {
+   "en": "The Regulation is without prejudice to Regulations (EU) #/# and (EU) #/# and to Directives #/#/EC and (EU) #/#, including as regards the powers and competences of the supervisory authorities.",
+   "fr": "Le règlement est sans préjudice des règlements (UE) 2016/679 et (UE) 2018/1725 et des directives 2002/58/CE et (UE) 2016/680, y compris en ce qui concerne les pouvoirs et compétences des autorités de contrôle."
+  },
+  "Le règlement ne crée aucune base juridique de traitement. L'article # §# exige l'article # du RGPD, et ce module ne le remplace pas.": {
+   "en": "The Regulation creates no legal basis for processing. Article #(#) requires Article # GDPR, and this module does not replace it.",
+   "fr": "Le règlement ne crée aucune base juridique de traitement. L'article 4 §12 exige l'article 6 du RGPD, et ce module ne le remplace pas."
+  },
+  "Le règlement ne s'applique pas.": {
+   "en": "The Regulation does not apply.",
+   "fr": "Le règlement ne s'applique pas."
+  },
+  "Le règlement ne vous saisit alors pas. C'est rare : dès qu'une entreprise consomme du cloud, elle est cliente d'un fournisseur et bénéficie du chapitre VI — mais en bénéficier n'est pas y être assujetti.": {
+   "en": "The Regulation then does not catch you. That is rare: as soon as a company consumes cloud, it is the customer of a provider and benefits from Chapter VI — but benefiting from it is not being subject to it.",
+   "fr": "Le règlement ne vous saisit alors pas. C'est rare : dès qu'une entreprise consomme du cloud, elle est cliente d'un fournisseur et bénéficie du chapitre VI — mais en bénéficier n'est pas y être assujetti."
+  },
+  "Le règlement regarde vos GESTES, pas votre métier : le rôle commande les obligations.": {
+   "en": "The Regulation looks at what you DO, not at your trade: the role governs the obligations.",
+   "fr": "Le règlement regarde vos GESTES, pas votre métier : le rôle commande les obligations."
+  },
+  "Le règlement relève le niveau d'harmonisation et pose des exigences plus strictes que le droit de l'Union en vigueur sur les services financiers, y compris que celles de la directive (UE) #/#. Il constitue à son égard une lex specialis.": {
+   "en": "The Regulation raises the level of harmonisation and sets stricter requirements than the Union law in force on financial services, including those of Directive (EU) #/#. In relation to it, it is a lex specialis.",
+   "fr": "Le règlement relève le niveau d'harmonisation et pose des exigences plus strictes que le droit de l'Union en vigueur sur les services financiers, y compris que celles de la directive (UE) 2022/2555. Il constitue à son égard une lex specialis."
+  },
+  "Le référentiel fait office de preuve : c'est le chemin le moins coûteux en contrôle.": {
+   "en": "The framework serves as the evidence: it is the least costly path through an inspection.",
+   "fr": "Le référentiel fait office de preuve : c'est le chemin le moins coûteux en contrôle."
+  },
+  "Le référentiel ne l'attend pas de cette entité.": {
+   "en": "The framework does not expect it of this entity.",
+   "fr": "Le référentiel ne l'attend pas de cette entité."
+  },
+  "Le régime n'est pas déterminé : on ne sait pas si le cadre complet ou le cadre simplifié de l'article # s'applique.": {
+   "en": "The regime is not determined: it is not known whether the full framework or the simplified framework of article # applies.",
+   "fr": "Le régime n'est pas déterminé : on ne sait pas si le cadre complet ou le cadre simplifié de l'article 16 s'applique."
+  },
+  "Le rôle n'est pas qualifié ; le taux est calculé comme si vous étiez fabricant.": {
+   "en": "The role is not qualified; the rate is computed as though you were the manufacturer.",
+   "fr": "Le rôle n'est pas qualifié ; le taux est calculé comme si vous étiez fabricant."
+  },
+  "Le score, ses plafonds, la documentation exigée et la couverture de l'article # alinéa par alinéa.": {
+   "en": "The score, its caps, the documentation required and the coverage of article # subparagraph by subparagraph.",
+   "fr": "Le score, ses plafonds, la documentation exigée et la couverture de l'article 14 alinéa par alinéa."
+  },
+  "Le secteur oriente vers le bon point de l'annexe III sans jamais le décider à lui seul.": {
+   "en": "The sector points to the right item in Annex III without ever deciding it on its own.",
+   "fr": "Le secteur oriente vers le bon point de l'annexe III sans jamais le décider à lui seul."
+  },
+  "Le secteur, la taille, et les portes de l'article # qui ignorent la taille.": {
+   "en": "The sector, the size, and the doors in article # that ignore size.",
+   "fr": "Le secteur, la taille, et les portes de l'article 2 qui ignorent la taille."
+  },
+  "Le service TIC fourni en définitive à l'appui de fonctions critiques ou importantes est de nature critique pour les activités de ces entités.": {
+   "en": "The ICT service ultimately supplied in support of critical or important functions is of a critical nature for those entities' activities.",
+   "fr": "Le service TIC fourni en définitive à l'appui de fonctions critiques ou importantes est de nature critique pour les activités de ces entités."
+  },
+  "Le seul des douze que la cyber couvre de bout en bout — et celui dont on déduit à tort qu'elle couvre les onze autres.": {
+   "en": "The only one of the twelve that cybersecurity covers end to end — and the one from which it is wrongly inferred that it covers the other eleven.",
+   "fr": "Le seul des douze que la cyber couvre de bout en bout — et celui dont on déduit à tort qu'elle couvre les onze autres."
+  },
+  "Le seul endroit où quelque chose change pour les personnes. Tout le reste documente ; celle-ci agit.": {
+   "en": "The only place where something changes for people. Everything else documents; this one acts.",
+   "fr": "Le seul endroit où quelque chose change pour les personnes. Tout le reste documente ; celle-ci agit."
+  },
+  "Le socle : champ d'application, gestion du risque lié aux TIC, incidents, tests, prestataires tiers. # articles.": {
+   "en": "The baseline: scope, ICT risk management, incidents, testing, third-party providers. # articles.",
+   "fr": "Le socle : champ d'application, gestion du risque lié aux TIC, incidents, tests, prestataires tiers. 64 articles."
+  },
+  "Le socle décide de ce que chaque famille doit contenir.": {
+   "en": "The baseline decides what each family must contain.",
+   "fr": "Le socle décide de ce que chaque famille doit contenir."
+  },
+  "Le socle retenu — Low, Moderate ou High —, puis l'état de chacune des dix-huit familles de mesures.": {
+   "en": "The baseline chosen — Low, Moderate or High — then the state of each of the eighteen control families.",
+   "fr": "Le socle retenu — Low, Moderate ou High —, puis l'état de chacune des dix-huit familles de mesures."
+  },
+  "Le socle, et celui qu'un système de management déjà en place — ISO/IEC #, ISO #, un dispositif RSE — apporte le plus souvent tel quel.": {
+   "en": "The foundation, and the one that an existing management system — ISO/IEC #, ISO #, a CSR arrangement — most often supplies as it stands.",
+   "fr": "Le socle, et celui qu'un système de management déjà en place — ISO/IEC 42001, ISO 9001, un dispositif RSE — apporte le plus souvent tel quel."
+  },
+  "Le statut des fonctions d'intervention fait partie de l'information de supervision : savoir qu'on peut arrêter est une condition pour arrêter.": {
+   "en": "The status of the intervention functions is part of the oversight information: knowing that you can stop is a condition of stopping.",
+   "fr": "Le statut des fonctions d'intervention fait partie de l'information de supervision : savoir qu'on peut arrêter est une condition pour arrêter."
+  },
+  "Le superviseur principal applique ce sous-critère à compter de vingt-quatre mois après l'entrée en vigueur de DORA (article # de l'acte délégué).": {
+   "en": "The lead overseer applies this sub-criterion from twenty-four months after DORA's entry into force (article # of the delegated act).",
+   "fr": "Le superviseur principal applique ce sous-critère à compter de vingt-quatre mois après l'entrée en vigueur de DORA (article 7 de l'acte délégué)."
+  },
+  "Le superviseur principal détermine le nombre de membres et la composition, en accord avec le réseau de supervision commun et en concertation avec le forum de supervision de l'article #, paragraphe #.": {
+   "en": "The lead overseer determines the number of members and the composition, in agreement with the joint oversight network and in consultation with the Oversight Forum of article #(#).",
+   "fr": "Le superviseur principal détermine le nombre de membres et la composition, en accord avec le réseau de supervision commun et en concertation avec le forum de supervision de l'article 32, paragraphe 1."
+  },
+  "Le superviseur principal notifie au prestataire le résultat de l'évaluation menée en vue de la désignation.": {
+   "en": "The lead overseer notifies the provider of the outcome of the assessment carried out with a view to designation.",
+   "fr": "Le superviseur principal notifie au prestataire le résultat de l'évaluation menée en vue de la désignation."
+  },
+  "Le superviseur principal rend PUBLIC le cas où un prestataire ne répond pas, ou répond insuffisamment — en révélant son identité, le type et la nature du manquement.": {
+   "en": "The lead overseer makes PUBLIC any case where a provider does not reply, or replies insufficiently — disclosing its identity, and the type and nature of the failure.",
+   "fr": "Le superviseur principal rend PUBLIC le cas où un prestataire ne répond pas, ou répond insuffisamment — en révélant son identité, le type et la nature du manquement."
+  },
+  "Le superviseur principal tient compte de la déclaration et peut demander des informations complémentaires.": {
+   "en": "The lead overseer takes the statement into account and may ask for further information.",
+   "fr": "Le superviseur principal tient compte de la déclaration et peut demander des informations complémentaires."
+  },
+  "Le système authentifie-t-il chaque réviseur par des justificatifs individuels, empêche-t-il un même compte de réviser deux fois la même sortie, masque-t-il en revue séquentielle la décision du premier réviseur au second, et enregistre-t-il chaque action séparément ?": {
+   "en": "Does the system authenticate each reviewer with individual credentials, prevent one and the same account from reviewing the same output twice, blind the first reviewer's decision from the second in a sequential review, and record each action separately?",
+   "fr": "Le système authentifie-t-il chaque réviseur par des justificatifs individuels, empêche-t-il un même compte de réviser deux fois la même sortie, masque-t-il en revue séquentielle la décision du premier réviseur au second, et enregistre-t-il chaque action séparément ?"
+  },
+  "Le système bouge ; la mesure d'hier ne vaut plus.": {
+   "en": "The system moves; yesterday's measurement no longer holds.",
+   "fr": "Le système bouge ; la mesure d'hier ne vaut plus."
+  },
+  "Le système de gestion des risques de l'article # est-il en place, et ses actions reprises dans l'élaboration du produit ?": {
+   "en": "Is the risk management system of article # in place, and are its actions taken up in the product's development?",
+   "fr": "Le système de gestion des risques de l'article 9 est-il en place, et ses actions reprises dans l'élaboration du produit ?"
+  },
+  "Le système de management est-il amélioré sur la base de ce que la revue et la surveillance rendent ?": {
+   "en": "Is the management system improved on the basis of what the review and the monitoring return?",
+   "fr": "Le système de management est-il amélioré sur la base de ce que la revue et la surveillance rendent ?"
+  },
+  "Le système de management produit déjà l'artefact que l'article réclame. Il reste à en vérifier le périmètre.": {
+   "en": "The management system already produces the artefact the article calls for. What remains is to check its scope.",
+   "fr": "Le système de management produit déjà l'artefact que l'article réclame. Il reste à en vérifier le périmètre."
+  },
+  "Le système de surveillance après commercialisation.": {
+   "en": "The post-market monitoring system.",
+   "fr": "Le système de surveillance après commercialisation."
+  },
+  "Le système distingue-t-il au minimum les états « revue requise », « revue complétée » et « rejeté », et l'accès à l'interface de revue est-il limité à des comptes authentifiés ?": {
+   "en": "Does the system distinguish at least the states « review required », « review completed » and « rejected », and is access to the review interface limited to authenticated accounts?",
+   "fr": "Le système distingue-t-il au minimum les états « revue requise », « revue complétée » et « rejeté », et l'accès à l'interface de revue est-il limité à des comptes authentifiés ?"
+  },
+  "Le système déclaré est un composant de sécurité d'un produit couvert par la législation d'harmonisation de l'annexe I, ou est lui-même un tel produit.": {
+   "en": "The declared system is a safety component of a product covered by the harmonisation legislation in Annex I, or is itself such a product.",
+   "fr": "Le système déclaré est un composant de sécurité d'un produit couvert par la législation d'harmonisation de l'annexe I, ou est lui-même un tel produit."
+  },
+  "Le système empêche-t-il TECHNIQUEMENT une sortie d'identification de déclencher une action, une décision automatisée ou une transmission avant que les revues de deux personnes physiques distinctes soient enregistrées ?": {
+   "en": "Does the system TECHNICALLY prevent an identification output from triggering an action, an automated decision or a transmission before the reviews by two separate natural persons are recorded?",
+   "fr": "Le système empêche-t-il TECHNIQUEMENT une sortie d'identification de déclencher une action, une décision automatisée ou une transmission avant que les revues de deux personnes physiques distinctes soient enregistrées ?"
+  },
+  "Le système est déclaré génératif : le taux est celui du cadre PLAFONNÉ par le profil AI #-#.": {
+   "en": "The system is declared generative: the rate is the framework's, CAPPED by the AI #-# profile.",
+   "fr": "Le système est déclaré génératif : le taux est celui du cadre PLAFONNÉ par le profil AI 600-1."
+  },
+  "Le système est-il génératif, lesquels des douze risques s'appliquent, et lesquelles des # actions suggérées du §# sont tenues.": {
+   "en": "Whether the system is generative, which of the twelve risks apply, and which of the # suggested actions of §# are met.",
+   "fr": "Le système est-il génératif, lesquels des douze risques s'appliquent, et lesquelles des 211 actions suggérées du §3 sont tenues."
+  },
+  "Le système interagit directement avec des personnes, ou produit du contenu de synthèse, sans relever par ailleurs de l'annexe III ni de l'annexe I.": {
+   "en": "The system interacts directly with people, or produces synthetic content, without otherwise falling under Annex III or Annex I.",
+   "fr": "Le système interagit directement avec des personnes, ou produit du contenu de synthèse, sans relever par ailleurs de l'annexe III ni de l'annexe I."
+  },
+  "Le système met-il en œuvre au moins une fonction parmi négligence, écrasement et retour, PLUS de quoi couper le système ou le basculer en marche dégradée sûre — et la latence est-elle spécifiée, mesurée et vérifiée comme compatible avec le délai de réaction ?": {
+   "en": "Does the system implement at least one function among disregard, override and revert, PLUS the means to shut the system down or switch it to a safe degraded mode — and is the latency specified, measured and verified as compatible with the reaction time?",
+   "fr": "Le système met-il en œuvre au moins une fonction parmi négligence, écrasement et retour, PLUS de quoi couper le système ou le basculer en marche dégradée sûre — et la latence est-elle spécifiée, mesurée et vérifiée comme compatible avec le délai de réaction ?"
+  },
+  "Le système n'est pas déclaré génératif. Le profil AI #-# ne s'applique pas, et le taux du cadre reste celui du socle. Ce n'est pas une dispense : c'est une qualification, et elle se revoit le jour où un modèle de langage entre dans la chaîne.": {
+   "en": "The system is not declared generative. The AI #-# profile does not apply, and the framework's rate remains that of the core. This is not an exemption: it is a qualification, and it is revisited the day a language model enters the chain.",
+   "fr": "Le système n'est pas déclaré génératif. Le profil AI 600-1 ne s'applique pas, et le taux du cadre reste celui du socle. Ce n'est pas une dispense : c'est une qualification, et elle se revoit le jour où un modèle de langage entre dans la chaîne."
+  },
+  "Le système notifie la personne désignée lorsqu'il entre dans un état qui demande une attention ou une intervention humaine ; la personne perçoit, évalue, puis intervient.": {
+   "en": "The system alerts the designated person when it enters a state calling for human attention or intervention; the person perceives, assesses, then intervenes.",
+   "fr": "Le système notifie la personne désignée lorsqu'il entre dans un état qui demande une attention ou une intervention humaine ; la personne perçoit, évalue, puis intervient."
+  },
+  "Le système, sa documentation et le matériel d'entraînement obligatoire permettent-ils aux personnes désignées de comprendre le fonctionnement, les capacités et les limites du système, et les compétences que vous supposez sont-elles DÉCLARÉES dans la notice ?": {
+   "en": "Do the system, its documentation and the mandatory training material allow the designated persons to understand how the system works, what it can do and where its limits lie, and are the competences you assume DECLARED in the instructions?",
+   "fr": "Le système, sa documentation et le matériel d'entraînement obligatoire permettent-ils aux personnes désignées de comprendre le fonctionnement, les capacités et les limites du système, et les compétences que vous supposez sont-elles DÉCLARÉES dans la notice ?"
+  },
+  "Le tableau de bord qui consolide le registre, l'AIPD, la privacy by design, la documentation et la sensibilisation.": {
+   "en": "The dashboard that consolidates the register, the DPIA, privacy by design, the documentation and the awareness work.",
+   "fr": "Le tableau de bord qui consolide le registre, l'AIPD, la privacy by design, la documentation et la sensibilisation."
+  },
+  "Le tableau ne liste PAS prEN #-# (supervision humaine). Il range les articles # à # sous prEN #-#.": {
+   "en": "The table does NOT list prEN #-# (human oversight). It files articles # to # under prEN #-#.",
+   "fr": "Le tableau ne liste PAS prEN 18229-3 (supervision humaine). Il range les articles 12 à 14 sous prEN 18229-1."
+  },
+  "Le taux de fausses alertes et la latence de réponse sont les deux mesures qui décident si une alerte sert encore à quelque chose.": {
+   "en": "The false-alert rate and the response latency are the two measures that decide whether an alert still serves any purpose.",
+   "fr": "Le taux de fausses alertes et la latence de réponse sont les deux mesures qui décident si une alerte sert encore à quelque chose."
+  },
+  "Le taux dit ce que le système de management déclaré couvre du tableau ZA.#. Il ne dit ni qu'un organisme notifié l'a vu, ni que la norme est citée.": {
+   "en": "The rate states what the declared management system covers of table ZA.#. It states neither that a notified body has seen it, nor that the standard is cited.",
+   "fr": "Le taux dit ce que le système de management déclaré couvre du tableau ZA.1. Il ne dit ni qu'un organisme notifié l'a vu, ni que la norme est citée."
+  },
+  "Le taux dit ce que le système de management déclaré couvre du tableau ZA.#. Il ne dit pas qu'un organisme notifié l'a vu, ni que la norme est citée au JOUE.": {
+   "en": "The rate says what the declared management system covers of Table ZA.#. It does not say that a notified body has seen it, nor that the standard is cited in the OJEU.",
+   "fr": "Le taux dit ce que le système de management déclaré couvre du tableau ZA.1. Il ne dit pas qu'un organisme notifié l'a vu, ni que la norme est citée au JOUE."
+  },
+  "Le taux dit la diligence déclarée. Aucun organisme ne délivre d'attestation contre ce guide — à la différence de prEN #, qui vaudra présomption le jour de sa citation au Journal officiel.": {
+   "en": "The rate states the due diligence declared. No body issues an attestation against this guidance — unlike prEN #, which will carry presumption the day it is cited in the Official Journal.",
+   "fr": "Le taux dit la diligence déclarée. Aucun organisme ne délivre d'attestation contre ce guide — à la différence de prEN 18286, qui vaudra présomption le jour de sa citation au Journal officiel."
+  },
+  "Le taux dit la supervision humaine déclarée au regard d'un projet à l'Enquête CEN. Le jour où la référence sera citée, le même travail vaudra présomption — dans les limites du domaine d'application de la norme.": {
+   "en": "The rate states the human oversight declared against a draft at CEN Enquiry stage. The day the reference is cited, the same work will carry presumption — within the limits of the standard's scope.",
+   "fr": "Le taux dit la supervision humaine déclarée au regard d'un projet à l'Enquête CEN. Le jour où la référence sera citée, le même travail vaudra présomption — dans les limites du domaine d'application de la norme."
+  },
+  "Le taux dit une couverture déclarée, pas une conformité reconnue. « Conforme #-# » ne veut rien dire hors du périmètre fédéral américain.": {
+   "en": "The rate states a declared coverage, not a recognised compliance. “#-# compliant” means nothing outside the US federal perimeter.",
+   "fr": "Le taux dit une couverture déclarée, pas une conformité reconnue. « Conforme 800-53 » ne veut rien dire hors du périmètre fédéral américain."
+  },
+  "Le taux par part s'en déduit, et le poids suit la charge réglementaire : le chapitre # pèse trois fois le chapitre #.": {
+   "en": "The rate per share follows from it, and the weight follows the regulatory load: chapter # weighs three times chapter #.",
+   "fr": "Le taux par part s'en déduit, et le poids suit la charge réglementaire : le chapitre 4 pèse trois fois le chapitre 10."
+  }
+ }
+}

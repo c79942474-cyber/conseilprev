@@ -1,6 +1,6 @@
 {
  "_lot": "13-cra-produits",
- "_mots": 2392,
+ "_mots": 2380,
  "_pages": [
   "cra",
   "cra-chiffre",
@@ -443,10 +443,6 @@
    "en": "Hypervisors and container runtime systems",
    "fr": "Hyperviseurs et systèmes d'exécution de conteneurs"
   },
-  "Il manque # réponses :": {
-   "en": "Missing # answers:",
-   "fr": "Il manque 21 réponses :"
-  },
   "Incident grave ayant des répercussions sur la sécurité du produit": {
    "en": "Severe incident having an impact on the security of the product",
    "fr": "Incident grave ayant des répercussions sur la sécurité du produit"
@@ -711,10 +707,6 @@
    "en": "Protection of data at rest, in transit and in processing, through encryption or other appropriate means.",
    "fr": "Protection des données au repos, en transit et en traitement, par chiffrement ou autre moyen adapté."
   },
-  "Question": {
-   "en": "Question",
-   "fr": "Question"
-  },
   "Recensement et documentation des vulnérabilités et des composants, par une nomenclature lisible par machine couvrant au moins les dépendances de niveau supérieur.": {
    "en": "Identification and documentation of vulnerabilities and components, through a machine-readable bill of materials covering at least the top-level dependencies.",
    "fr": "Recensement et documentation des vulnérabilités et des composants, par une nomenclature lisible par machine couvrant au moins les dépendances de niveau supérieur."
@@ -865,11 +857,11 @@
   },
   "depuis le #-#-# (# j) — Article # — signalement des vulnérabilités activement exploitées et des incidents graves": {
    "en": "since #-#-# (# d) — Article # — reporting of actively exploited vulnerabilities and severe incidents",
-   "fr": "depuis le 2026-09-11 (20 j) — Article 14 — signalement des vulnérabilités activement exploitées et des incidents graves"
+   "fr": "depuis le 2026-09-11 (24 j) — Article 14 — signalement des vulnérabilités activement exploitées et des incidents graves"
   },
   "depuis le #-#-# (# j) — Chapitre IV (art. # à #) — notification des organismes d'évaluation de la conformité": {
    "en": "since #-#-# (# d) — Chapter IV (art. # to #) — notification of conformity assessment bodies",
-   "fr": "depuis le 2026-06-11 (112 j) — Chapitre IV (art. 35 à 51) — notification des organismes d'évaluation de la conformité"
+   "fr": "depuis le 2026-06-11 (116 j) — Chapitre IV (art. 35 à 51) — notification des organismes d'évaluation de la conformité"
   },
   "ei-# — Aucune vulnérabilité exploitable connue à la mise sur le marché": {
    "en": "ei-# — No known exploitable vulnerability when placed on the market",
@@ -925,7 +917,7 @@
   },
   "le #-#-# (dans # j) — Application générale du règlement": {
    "en": "on #-#-# (in # d) — General application of the Regulation",
-   "fr": "le 2027-12-11 (dans 436 j) — Application générale du règlement"
+   "fr": "le 2027-12-11 (dans 432 j) — Application générale du règlement"
   },
   "le montant fixe": {
    "en": "the fixed amount",
@@ -934,10 +926,6 @@
   "ne pas mettre à disposition tant qu'un produit qu'il croit non conforme n'a pas été mis en conformité": {
    "en": "not make available a product it believes non-compliant until it has been brought into compliance",
    "fr": "ne pas mettre à disposition tant qu'un produit qu'il croit non conforme n'a pas été mis en conformité"
-  },
-  "non": {
-   "en": "no",
-   "fr": "non"
   },
   "se vérifie sur l’organisation, et vaut pendant toute la période d’assistance": {
    "en": "is verified on the organisation, and holds for the whole support period",
@@ -971,10 +959,6 @@
    "en": "When an update is published: description, product identification, consequences, severity, and help with remediation.",
    "fr": "À la publication d'une mise à jour : description, identification du produit, conséquences, gravité, et aide à la remédiation."
   },
-  "Étape": {
-   "en": "Stage",
-   "fr": "Étape"
-  },
   "État sûr à la livraison, avec possibilité de réinitialisation à l'état d'origine ; dérogation possible pour un produit sur mesure.": {
    "en": "Secure state on delivery, with the option to reset to the original state; derogation possible for a tailor-made product.",
    "fr": "État sûr à la livraison, avec possibilité de réinitialisation à l'état d'origine ; dérogation possible pour un produit sur mesure."
@@ -994,10 +978,6 @@
   "— Vous mettez le produit à disposition sans le concevoir, l'importer, le marquer ni le modifier.": {
    "en": "— You make the product available without designing, importing, marking or modifying it.",
    "fr": "— Vous mettez le produit à disposition sans le concevoir, l'importer, le marquer ni le modifier."
-  },
-  "… et # autre(s), sur cet écran.": {
-   "en": "… and # other(s), on this screen.",
-   "fr": "… et 15 autre(s), sur cet écran."
   },
   "↓ Qualifier mon rôle": {
    "en": "↓ Qualify my role",

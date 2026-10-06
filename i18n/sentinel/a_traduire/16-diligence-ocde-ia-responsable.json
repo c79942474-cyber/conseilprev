@@ -1,0 +1,370 @@
+{
+ "_lot": "16-diligence-ocde-ia-responsable",
+ "_mots": 1789,
+ "_pages": [
+  "ocde-analyse",
+  "ocde-conformite",
+  "ocde-processus",
+  "ocde-questionnaire"
+ ],
+ "_rubrique": "Diligence OCDE — IA responsable",
+ "bloc": {
+  "ApprobationApprouvé et déclassifié le # janvier #": {
+   "en": "<b>Approval</b><i>Approved and declassified on # January #</i>",
+   "fr": "ApprobationApprouvé et déclassifié le 26 janvier 2026",
+   "html": "<b>Approbation</b><i>Approuvé et déclassifié le 26 janvier 2026</i>"
+  },
+  "Aucune présomption, à aucune dateCet instrument est VOLONTAIRE : c'est le guide de mise en œuvre de deux recommandations de l'OCDE, pas une norme harmonisée. Il n'ouvre aucune présomption de conformité, aucun organisme ne délivre d'attestation contre lui, et aucune date ne changera cela — à la différence de prEN #, qui vaudra présomption le jour de sa citation au Journal officiel. Le travail fait ici sert la diligence de l'entreprise et les cadres que les feuilles de route nomment ; il ne tient lieu d'aucun.": {
+   "en": "<b>No presumption, at any date</b><i>This instrument is VOLUNTARY: it is the implementation guidance for two OECD recommendations, not a harmonised standard. It opens no presumption of conformity, no body issues an attestation against it, and no date will change that — unlike prEN #, which will carry presumption the day it is cited in the Official Journal. The work done here serves the enterprise's due diligence and the frameworks the roadmaps name; it stands in for none of them.</i>",
+   "fr": "Aucune présomption, à aucune dateCet instrument est VOLONTAIRE : c'est le guide de mise en œuvre de deux recommandations de l'OCDE, pas une norme harmonisée. Il n'ouvre aucune présomption de conformité, aucun organisme ne délivre d'attestation contre lui, et aucune date ne changera cela — à la différence de prEN 18286, qui vaudra présomption le jour de sa citation au Journal officiel. Le travail fait ici sert la diligence de l'entreprise et les cadres que les feuilles de route nomment ; il ne tient lieu d'aucun.",
+   "html": "<b>Aucune présomption, à aucune date</b><i>Cet instrument est VOLONTAIRE : c'est le guide de mise en œuvre de deux recommandations de l'OCDE, pas une norme harmonisée. Il n'ouvre aucune présomption de conformité, aucun organisme ne délivre d'attestation contre lui, et aucune date ne changera cela — à la différence de prEN 18286, qui vaudra présomption le jour de sa citation au Journal officiel. Le travail fait ici sert la diligence de l'entreprise et les cadres que les feuilles de route nomment ; il ne tient lieu d'aucun.</i>"
+  },
+  "Bloc # sur # · Processus — groupes et implication — À remplir maintenant": {
+   "en": "<b>Block # of # · Process — groups and involvement — To fill in now</b>",
+   "fr": "Bloc 1 sur 4 · Processus — groupes et implication — À remplir maintenant",
+   "html": "<b>Bloc 1 sur 4 · Processus — groupes et implication — À remplir maintenant</b>"
+  },
+  "Bloc # sur # · Questionnaire — les six étapes — Verrouillé": {
+   "en": "<b>Block # of # · Questionnaire — the six steps — Locked</b>",
+   "fr": "Bloc 2 sur 4 · Questionnaire — les six étapes — Verrouillé",
+   "html": "<b>Bloc 2 sur 4 · Questionnaire — les six étapes — Verrouillé</b>"
+  },
+  "Ce qui est de l'OCDE, et ce qui est du cabinetLes intitulés et les # exemples pratiques viennent du document, sous licence CC BY #. Le découpage du questionnaire, les poids, les plafonds et tout le français autour sont du cabinet — les deux mentions que la licence impose sont portées à l'écran, mot pour mot.": {
+   "en": "<b>What comes from the OECD, and what comes from the firm</b><i>The titles and the # practical examples come from the document, under the CC BY # licence. The shape of the questionnaire, the weights, the caps and all the French around them are the firm's — both notices the licence imposes are carried on the screen, word for word.</i>",
+   "fr": "Ce qui est de l'OCDE, et ce qui est du cabinetLes intitulés et les 115 exemples pratiques viennent du document, sous licence CC BY 4.0. Le découpage du questionnaire, les poids, les plafonds et tout le français autour sont du cabinet — les deux mentions que la licence impose sont portées à l'écran, mot pour mot.",
+   "html": "<b>Ce qui est de l'OCDE, et ce qui est du cabinet</b><i>Les intitulés et les 115 exemples pratiques viennent du document, sous licence CC BY 4.0. Le découpage du questionnaire, les poids, les plafonds et tout le français autour sont du cabinet — les deux mentions que la licence impose sont portées à l'écran, mot pour mot.</i>"
+  },
+  "CompensationUne compensation financière pour le dommage économiquement appréciable — atteinte physique ou morale, perte de revenus.": {
+   "en": "<b>Compensation</b><i>Financial compensation for harm that can be economically assessed — physical or mental harm, lost earnings.</i>",
+   "fr": "CompensationUne compensation financière pour le dommage économiquement appréciable — atteinte physique ou morale, perte de revenus.",
+   "html": "<b>Compensation</b><i>Une compensation financière pour le dommage économiquement appréciable — atteinte physique ou morale, perte de revenus.</i>"
+  },
+  "Groupe # — Acteur du cycle de vie du systèmeVous êtes dans le cycle de vie du système : planification et conception, construction du modèle ou adaptation d'un modèle existant, test, évaluation, vérification et validation, déploiement quel qu'en soit le canal — y compris la distribution de logiciel ouvert —, exploitation pour des clients et surveillance. Un organisme qui modifie et redéploie un modèle existant pour son propre usage en fait partie.": {
+   "en": "<b>Group # — AI system lifecycle actor</b><i>You are in the system lifecycle: planning and design, building the model or adapting an existing model, testing, evaluating, verifying and validating, deploying through whatever channel — including the distribution of open-source software —, operating for customers and monitoring. An organisation that modifies and re-deploys an existing model for its own use is part of it.</i>",
+   "fr": "Groupe 2 — Acteur du cycle de vie du systèmeVous êtes dans le cycle de vie du système : planification et conception, construction du modèle ou adaptation d'un modèle existant, test, évaluation, vérification et validation, déploiement quel qu'en soit le canal — y compris la distribution de logiciel ouvert —, exploitation pour des clients et surveillance. Un organisme qui modifie et redéploie un modèle existant pour son propre usage en fait partie.",
+   "html": "<b>Groupe 2 — Acteur du cycle de vie du système</b><i>Vous êtes dans le cycle de vie du système : planification et conception, construction du modèle ou adaptation d'un modèle existant, test, évaluation, vérification et validation, déploiement quel qu'en soit le canal — y compris la distribution de logiciel ouvert —, exploitation pour des clients et surveillance. Un organisme qui modifie et redéploie un modèle existant pour son propre usage en fait partie.</i>"
+  },
+  "Groupe # — Fournisseur d'intrants d'IAVous fournissez ce avec quoi un système d'IA se construit : données, annotation, création et conservation de jeux de données, code mis à disposition de tiers — contributions à des bibliothèques ouvertes comprises —, métriques et mesures d'évaluation. Ou les intrants qui le portent : capital, infrastructure numérique et services administratifs (calcul, nuage, plateformes de paiement, plateformes de travail numériques, systèmes d'exploitation, magasins d'applications, éditeurs de sécurité et de logiciels d'entreprise), matériel (semi-conducteurs, équipements réseau).": {
+   "en": "<b>Group # — AI input provider</b><i>You supply what an AI system is built with: data, annotation, dataset creation and curation, code made available to third parties — contributions to open libraries included —, metrics and evaluation measures. Or the inputs that carry it: capital, digital infrastructure and administrative services (compute, cloud, payment platforms, digital labour platforms, operating systems, app stores, security and enterprise software providers), hardware (semiconductors, network equipment).</i>",
+   "fr": "Groupe 1 — Fournisseur d'intrants d'IAVous fournissez ce avec quoi un système d'IA se construit : données, annotation, création et conservation de jeux de données, code mis à disposition de tiers — contributions à des bibliothèques ouvertes comprises —, métriques et mesures d'évaluation. Ou les intrants qui le portent : capital, infrastructure numérique et services administratifs (calcul, nuage, plateformes de paiement, plateformes de travail numériques, systèmes d'exploitation, magasins d'applications, éditeurs de sécurité et de logiciels d'entreprise), matériel (semi-conducteurs, équipements réseau).",
+   "html": "<b>Groupe 1 — Fournisseur d'intrants d'IA</b><i>Vous fournissez ce avec quoi un système d'IA se construit : données, annotation, création et conservation de jeux de données, code mis à disposition de tiers — contributions à des bibliothèques ouvertes comprises —, métriques et mesures d'évaluation. Ou les intrants qui le portent : capital, infrastructure numérique et services administratifs (calcul, nuage, plateformes de paiement, plateformes de travail numériques, systèmes d'exploitation, magasins d'applications, éditeurs de sécurité et de logiciels d'entreprise), matériel (semi-conducteurs, équipements réseau).</i>"
+  },
+  "Groupe # — Utilisateur du système d'IAVous utilisez des systèmes d'IA dans vos opérations, vos produits ou vos services — établissements financiers et entreprises de l'économie réelle comprises, y compris celles dont le métier n'a rien à voir avec l'IA. Le document attend de vous que la diligence sur ces systèmes entre dans votre diligence d'ensemble : si le système ne porte pas de risque significatif, d'autres sujets passent devant.": {
+   "en": "<b>Group # — AI system user</b><i>You use AI systems in your operations, your products or your services — financial institutions and real-economy enterprises included, including those whose business has nothing to do with AI. The document expects due diligence on those systems to enter your overall due diligence: if the system carries no significant risk, other topics come first.</i>",
+   "fr": "Groupe 3 — Utilisateur du système d'IAVous utilisez des systèmes d'IA dans vos opérations, vos produits ou vos services — établissements financiers et entreprises de l'économie réelle comprises, y compris celles dont le métier n'a rien à voir avec l'IA. Le document attend de vous que la diligence sur ces systèmes entre dans votre diligence d'ensemble : si le système ne porte pas de risque significatif, d'autres sujets passent devant.",
+   "html": "<b>Groupe 3 — Utilisateur du système d'IA</b><i>Vous utilisez des systèmes d'IA dans vos opérations, vos produits ou vos services — établissements financiers et entreprises de l'économie réelle comprises, y compris celles dont le métier n'a rien à voir avec l'IA. Le document attend de vous que la diligence sur ces systèmes entre dans votre diligence d'ensemble : si le système ne porte pas de risque significatif, d'autres sujets passent devant.</i>"
+  },
+  "Il est interdit de suggérer que l'OCDE adosse cet usage de l'œuvre.Les deux mentions de licence voyagent avec le référentiel, et l'écran dit que les poids, les plafonds et le découpage du questionnaire sont du cabinet.": {
+   "en": "<b>It is forbidden to suggest that the OECD endorses this use of the work.</b><i>Both licence notices travel with the framework, and the screen says that the weights, the caps and the shape of the questionnaire are the firm's.</i>",
+   "fr": "Il est interdit de suggérer que l'OCDE adosse cet usage de l'œuvre.Les deux mentions de licence voyagent avec le référentiel, et l'écran dit que les poids, les plafonds et le découpage du questionnaire sont du cabinet.",
+   "html": "<b>Il est interdit de suggérer que l'OCDE adosse cet usage de l'œuvre.</b><i>Les deux mentions de licence voyagent avec le référentiel, et l'écran dit que les poids, les plafonds et le découpage du questionnaire sont du cabinet.</i>"
+  },
+  "La licence ne couvre pas le matériel de tiers présent dans l'œuvre.Les feuilles de route citent les clauses d'ISO, de l'IEEE et d'AI Verify par NUMÉRO ET INTITULÉ seulement, comme un index.": {
+   "en": "<b>The licence does not cover the third-party material present in the work.</b><i>The roadmaps cite the clauses of ISO, IEEE and AI Verify by NUMBER AND TITLE only, as an index does.</i>",
+   "fr": "La licence ne couvre pas le matériel de tiers présent dans l'œuvre.Les feuilles de route citent les clauses d'ISO, de l'IEEE et d'AI Verify par NUMÉRO ET INTITULÉ seulement, comme un index.",
+   "html": "<b>La licence ne couvre pas le matériel de tiers présent dans l'œuvre.</b><i>Les feuilles de route citent les clauses d'ISO, de l'IEEE et d'AI Verify par NUMÉRO ET INTITULÉ seulement, comme un index.</i>"
+  },
+  "Le logo, l'identité visuelle et l'image de couverture de l'OCDE ne peuvent pas être employés sans autorisation expresse.La couleur du tiroir de ce module dans la barre latérale n'est pas le bleu de l'OCDE, et aucune marque de l'OCDE n'est reproduite.": {
+   "en": "<b>The OECD's logo, visual identity and cover image cannot be used without express permission.</b><i>The colour of this module's drawer in the sidebar is not the OECD's blue, and no OECD mark is reproduced.</i>",
+   "fr": "Le logo, l'identité visuelle et l'image de couverture de l'OCDE ne peuvent pas être employés sans autorisation expresse.La couleur du tiroir de ce module dans la barre latérale n'est pas le bleu de l'OCDE, et aucune marque de l'OCDE n'est reproduite.",
+   "html": "<b>Le logo, l'identité visuelle et l'image de couverture de l'OCDE ne peuvent pas être employés sans autorisation expresse.</b><i>La couleur du tiroir de ce module dans la barre latérale n'est pas le bleu de l'OCDE, et aucune marque de l'OCDE n'est reproduite.</i>"
+  },
+  "Les autres formesLe document note que plusieurs options peuvent se combiner selon l'ampleur et le contexte du dommage, et que la réparation effective dépend du contexte.": {
+   "en": "<b>The other forms</b><i>The document notes that several options may be combined depending on the scale and context of the harm, and that effective remedy is context dependent.</i>",
+   "fr": "Les autres formesLe document note que plusieurs options peuvent se combiner selon l'ampleur et le contexte du dommage, et que la réparation effective dépend du contexte.",
+   "html": "<b>Les autres formes</b><i>Le document note que plusieurs options peuvent se combiner selon l'ampleur et le contexte du dommage, et que la réparation effective dépend du contexte.</i>"
+  },
+  "Les chaînes d'approvisionnement des intrants matériels — extraction des matières premières, fabrication des composants.Le document s'en exclut expressément et renvoie à un autre guide de diligence de l'OCDE.": {
+   "en": "<b>The supply chains of hardware inputs — mining of raw materials, manufacturing of components.</b><i>The document expressly excludes it and points to another OECD due diligence guidance.</i>",
+   "fr": "Les chaînes d'approvisionnement des intrants matériels — extraction des matières premières, fabrication des composants.Le document s'en exclut expressément et renvoie à un autre guide de diligence de l'OCDE.",
+   "html": "<b>Les chaînes d'approvisionnement des intrants matériels — extraction des matières premières, fabrication des composants.</b><i>Le document s'en exclut expressément et renvoie à un autre guide de diligence de l'OCDE.</i>"
+  },
+  "Les exemples ne sont pas exhaustifsCe taux dit la part des exemples pratiques retenus par vos groupes que vous déclarez tenus. Ce n'est PAS un taux de conformité : le document écrit lui-même que ses exemples ne constituent pas une liste de contrôle exhaustive, et aucun organisme ne délivre d'attestation contre ce guide. Un organisme peut avoir tenu les # exemples et rester en défaut de diligence sur un risque qu'aucun d'eux ne nomme.": {
+   "en": "<b>The examples are not exhaustive</b><i>This rate states the share of the practical examples retained by your groups that you declare held. It is NOT a compliance rate: the document itself writes that its examples do not constitute an exhaustive check list, and no body issues an attestation against this guidance. An organisation can have held all # examples and still fall short on due diligence for a risk none of them names.</i>",
+   "fr": "Les exemples ne sont pas exhaustifsCe taux dit la part des exemples pratiques retenus par vos groupes que vous déclarez tenus. Ce n'est PAS un taux de conformité : le document écrit lui-même que ses exemples ne constituent pas une liste de contrôle exhaustive, et aucun organisme ne délivre d'attestation contre ce guide. Un organisme peut avoir tenu les 115 exemples et rester en défaut de diligence sur un risque qu'aucun d'eux ne nomme.",
+   "html": "<b>Les exemples ne sont pas exhaustifs</b><i>Ce taux dit la part des exemples pratiques retenus par vos groupes que vous déclarez tenus. Ce n'est PAS un taux de conformité : le document écrit lui-même que ses exemples ne constituent pas une liste de contrôle exhaustive, et aucun organisme ne délivre d'attestation contre ce guide. Un organisme peut avoir tenu les 115 exemples et rester en défaut de diligence sur un risque qu'aucun d'eux ne nomme.</i>"
+  },
+  "Les intitulés des étapes et les # exemples pratiques viennent de ce document, sous licence CC BY #. Le découpage du questionnaire, les poids, les plafonds et tout le français autour sont du cabinet.": {
+   "en": "The step titles and the # practical examples come from that document, under a CC BY # licence. The breakdown of the questionnaire, the weights, the caps and all the French around them are the firm's.",
+   "fr": "Les intitulés des étapes et les 115 exemples pratiques viennent de ce document, sous licence CC BY 4.0. Le découpage du questionnaire, les poids, les plafonds et tout le français autour sont du cabinet.",
+   "html": "Les intitulés des étapes et les 115 exemples pratiques viennent de ce document, sous licence <b>CC BY 4.0</b>. Le découpage du questionnaire, les poids, les plafonds et tout le français autour sont du cabinet."
+  },
+  "Les ponts ne valent pas équivalenceLes six feuilles de route rapprochent les étapes de l'OCDE des dispositions d'autres cadres. Le document écrit que ce n'est pas un cadre d'équivalence : tenir ISO/IEC # ou le cadre du NIST ne vaut pas diligence OCDE, et l'inverse est vrai aussi.": {
+   "en": "<b>The bridges do not amount to equivalence</b><i>The six roadmaps bring the OECD steps alongside the provisions of other frameworks. The document writes that this is not an equivalency framework: holding ISO/IEC # or the NIST framework does not amount to OECD due diligence, and the reverse is true too.</i>",
+   "fr": "Les ponts ne valent pas équivalenceLes six feuilles de route rapprochent les étapes de l'OCDE des dispositions d'autres cadres. Le document écrit que ce n'est pas un cadre d'équivalence : tenir ISO/IEC 42001 ou le cadre du NIST ne vaut pas diligence OCDE, et l'inverse est vrai aussi.",
+   "html": "<b>Les ponts ne valent pas équivalence</b><i>Les six feuilles de route rapprochent les étapes de l'OCDE des dispositions d'autres cadres. Le document écrit que ce n'est pas un cadre d'équivalence : tenir ISO/IEC 42001 ou le cadre du NIST ne vaut pas diligence OCDE, et l'inverse est vrai aussi.</i>"
+  },
+  "LicenceCreative Commons Attribution # International (CC BY #) — © OCDE #. La reproduction, la traduction et l'adaptation sont permises, à charge de citer l'œuvre, d'identifier les modifications et de porter les mentions que la licence impose. Le matériel de tiers en est exclu.": {
+   "en": "<b>Licence</b><i>Creative Commons Attribution # International (CC BY #) — © OECD #. Reproduction, translation and adaptation are permitted, subject to citing the work, identifying changes and carrying the notices the licence imposes. Third-party material is excluded from it.</i>",
+   "fr": "LicenceCreative Commons Attribution 4.0 International (CC BY 4.0) — © OCDE 2026. La reproduction, la traduction et l'adaptation sont permises, à charge de citer l'œuvre, d'identifier les modifications et de porter les mentions que la licence impose. Le matériel de tiers en est exclu.",
+   "html": "<b>Licence</b><i>Creative Commons Attribution 4.0 International (CC BY 4.0) — © OCDE 2026. La reproduction, la traduction et l'adaptation sont permises, à charge de citer l'œuvre, d'identifier les modifications et de porter les mentions que la licence impose. Le matériel de tiers en est exclu.</i>"
+  },
+  "Met en œuvreLes Principes de l'OCDE sur l'IA (Recommandation du Conseil sur l'intelligence artificielle, révisée en mai #) et le Guide OCDE à l'intention des entreprises multinationales sur la conduite responsable des entreprises (#)": {
+   "en": "<b>Implements</b><i>The OECD AI Principles (Recommendation of the Council on Artificial Intelligence, revised in May #) and the OECD Guidelines for Multinational Enterprises on Responsible Business Conduct (#)</i>",
+   "fr": "Met en œuvreLes Principes de l'OCDE sur l'IA (Recommandation du Conseil sur l'intelligence artificielle, révisée en mai 2024) et le Guide OCDE à l'intention des entreprises multinationales sur la conduite responsable des entreprises (2023)",
+   "html": "<b>Met en œuvre</b><i>Les Principes de l'OCDE sur l'IA (Recommandation du Conseil sur l'intelligence artificielle, révisée en mai 2024) et le Guide OCDE à l'intention des entreprises multinationales sur la conduite responsable des entreprises (2023)</i>"
+  },
+  "Millésime#-# (version révisée)": {
+   "en": "<b>Vintage</b><i>#-# (revised version)</i>",
+   "fr": "Millésime2026-05 (version révisée)",
+   "html": "<b>Millésime</b><i>2026-05 (version révisée)</i>"
+  },
+  "RestitutionRétablir la personne ou le groupe dans la position qui serait la sienne si le dommage ne s'était pas produit.": {
+   "en": "<b>Results</b><i>Restoring the person or group to the position that would be theirs had the harm not occurred.</i>",
+   "fr": "RestitutionRétablir la personne ou le groupe dans la position qui serait la sienne si le dommage ne s'était pas produit.",
+   "html": "<b>Restitution</b><i>Rétablir la personne ou le groupe dans la position qui serait la sienne si le dommage ne s'était pas produit.</i>"
+  },
+  "SocleGuide OCDE sur le devoir de diligence pour une conduite responsable des entreprises (#)": {
+   "en": "<b>Baseline</b><i>OECD Due Diligence Guidance for Responsible Business Conduct (#)</i>",
+   "fr": "SocleGuide OCDE sur le devoir de diligence pour une conduite responsable des entreprises (2018)",
+   "html": "<b>Socle</b><i>Guide OCDE sur le devoir de diligence pour une conduite responsable des entreprises (2018)</i>"
+  },
+  "TitreOECD Due Diligence Guidance for Responsible AI": {
+   "en": "<b>Title</b><i>OECD Due Diligence Guidance for Responsible AI</i>",
+   "fr": "TitreOECD Due Diligence Guidance for Responsible AI",
+   "html": "<b>Titre</b><i>OECD Due Diligence Guidance for Responsible AI</i>"
+  },
+  "Une liste des risques propres à l'IA.Le document se déclare « risk-agnostic » pour rester valable dans le temps : il nomme des cadres qui listent des risques, il n'en dresse pas la liste. Ce module ne lui en prête pas une.": {
+   "en": "<b>A list of the risks specific to AI.</b><i>The document declares itself “risk-agnostic” in order to stay evergreen: it names frameworks that list risks, it does not draw up the list. This module does not lend it one.</i>",
+   "fr": "Une liste des risques propres à l'IA.Le document se déclare « risk-agnostic » pour rester valable dans le temps : il nomme des cadres qui listent des risques, il n'en dresse pas la liste. Ce module ne lui en prête pas une.",
+   "html": "<b>Une liste des risques propres à l'IA.</b><i>Le document se déclare « risk-agnostic » pour rester valable dans le temps : il nomme des cadres qui listent des risques, il n'en dresse pas la liste. Ce module ne lui en prête pas une.</i>"
+  },
+  "Une table d'équivalence entre les cadres.Les six feuilles de route montrent où les exigences se ressemblent. Le document écrit qu'elles ne constituent PAS un cadre d'équivalence, « as the scope and nature of the expectations in the other frameworks may vary ».": {
+   "en": "<b>An equivalence table between the frameworks.</b><i>The six roadmaps show where the requirements resemble one another. The document writes that they do NOT constitute an equivalency framework, “as the scope and nature of the expectations in the other frameworks may vary”.</i>",
+   "fr": "Une table d'équivalence entre les cadres.Les six feuilles de route montrent où les exigences se ressemblent. Le document écrit qu'elles ne constituent PAS un cadre d'équivalence, « as the scope and nature of the expectations in the other frameworks may vary ».",
+   "html": "<b>Une table d'équivalence entre les cadres.</b><i>Les six feuilles de route montrent où les exigences se ressemblent. Le document écrit qu'elles ne constituent PAS un cadre d'équivalence, « as the scope and nature of the expectations in the other frameworks may vary ».</i>"
+  },
+  "mesuré": {
+   "en": "<b>measured</b>",
+   "fr": "mesuré",
+   "html": "<b>mesuré</b>"
+  },
+  "ÉditeurOCDE — Comité de la politique de l'économie numérique (CPEN, par son Groupe de travail sur la gouvernance de l'IA) et Comité de l'investissement (par son Groupe de travail sur la conduite responsable des entreprises)": {
+   "en": "<b>Vendor</b><i>OECD — Digital Policy Committee (through its Working Party on AI Governance) and Investment Committee (through its Working Party on Responsible Business Conduct)</i>",
+   "fr": "ÉditeurOCDE — Comité de la politique de l'économie numérique (CPEN, par son Groupe de travail sur la gouvernance de l'IA) et Comité de l'investissement (par son Groupe de travail sur la conduite responsable des entreprises)",
+   "html": "<b>Éditeur</b><i>OCDE — Comité de la politique de l'économie numérique (CPEN, par son Groupe de travail sur la gouvernance de l'IA) et Comité de l'investissement (par son Groupe de travail sur la conduite responsable des entreprises)</i>"
+  }
+ },
+ "texte": {
+  "# cadres · # mesuré ici": {
+   "en": "# frameworks · # measured here",
+   "fr": "7 cadres · 0 mesuré ici"
+  },
+  "# cadres · # mesurés ici": {
+   "en": "# frameworks · # measured here",
+   "fr": "18 cadres · 3 mesurés ici"
+  },
+  "Australie — Guidance for AI Adoption (Implementation Practices)": {
+   "en": "Australia — Guidance for AI Adoption (Implementation Practices)",
+   "fr": "Australie — Guidance for AI Adoption (Implementation Practices)"
+  },
+  "Bloc # sur # · Analyse — licence et limites — Verrouillé": {
+   "en": "Block # of # · Analysis — licence and limits — Locked",
+   "fr": "Bloc 4 sur 4 · Analyse — licence et limites — Verrouillé"
+  },
+  "Bloc # sur # · Conformité — feuilles de route — Verrouillé": {
+   "en": "Block # of # · Compliance — roadmaps — Locked",
+   "fr": "Bloc 3 sur 4 · Conformité — feuilles de route — Verrouillé"
+  },
+  "Ce bloc dépend de : Conformité — feuilles de route. Complétez-le d'abord.": {
+   "en": "This block depends on: Compliance — roadmaps. Complete it first.",
+   "fr": "Ce bloc dépend de : Conformité — feuilles de route. Complétez-le d'abord."
+  },
+  "Ce bloc dépend de : Processus — groupes et implication. Complétez-le d'abord.": {
+   "en": "This block depends on: Process — groups and involvement. Complete it first.",
+   "fr": "Ce bloc dépend de : Processus — groupes et implication. Complétez-le d'abord."
+  },
+  "Ce bloc dépend de : Questionnaire — les six étapes. Complétez-le d'abord.": {
+   "en": "This block depends on: Questionnaire — the six steps. Complete it first.",
+   "fr": "Ce bloc dépend de : Questionnaire — les six étapes. Complétez-le d'abord."
+  },
+  "Ce que ce module refuse de dire": {
+   "en": "What this module refuses to say",
+   "fr": "Ce que ce module refuse de dire"
+  },
+  "Ce que la licence interdit": {
+   "en": "What the licence forbids",
+   "fr": "Ce que la licence interdit"
+  },
+  "Ce que le document s’exclut lui-même": {
+   "en": "What the document excludes itself",
+   "fr": "Ce que le document s’exclut lui-même"
+  },
+  "Ce qui est de l’OCDE, et ce qui est du cabinet": {
+   "en": "What is the OECD's, and what is the firm's",
+   "fr": "Ce qui est de l’OCDE, et ce qui est du cabinet"
+  },
+  "Ces lignes sont celles du document : c'est l'OCDE qui rapproche ses six étapes des dispositions de # autres cadres, en # lignes. Le document écrit que ce n'est PAS un cadre d'équivalence — la portée et la nature des attentes varient d'un cadre à l'autre. Et sur ces # cadres, Sentinel en mesure # : les # autres sont nommés ici et non tenus par le cabinet.": {
+   "en": "These rows are the document's own: it is the OECD that brings its six steps alongside the provisions of # other frameworks, in # rows. The document writes that this is NOT an equivalency framework — the scope and nature of the expectations vary from one framework to another. And of those # frameworks, Sentinel measures #: the other # are named here and not held by the firm.",
+   "fr": "Ces lignes sont celles du document : c'est l'OCDE qui rapproche ses six étapes des dispositions de 20 autres cadres, en 91 lignes. Le document écrit que ce n'est PAS un cadre d'équivalence — la portée et la nature des attentes varient d'un cadre à l'autre. Et sur ces 20 cadres, Sentinel en mesure 3 : les 17 autres sont nommés ici et non tenus par le cabinet."
+  },
+  "Cet instrument est VOLONTAIRE : c'est le guide de mise en œuvre de deux recommandations de l'OCDE, pas une norme harmonisée. Il n'ouvre aucune présomption de conformité, aucun organisme ne délivre d'attestation contre lui, et aucune date ne changera cela — à la différence de prEN #, qui vaudra présomption le jour de sa citation au Journal officiel. Le travail fait ici sert la diligence de l'entreprise et les cadres que les feuilles de route nomment ; il ne tient lieu d'aucun.": {
+   "en": "This instrument is VOLUNTARY: it is the implementation guidance for two OECD recommendations, not a harmonised standard. It opens no presumption of conformity, no body issues an attestation against it, and no date will change that — unlike prEN #, which will carry presumption the day it is cited in the Official Journal. The work done here serves the enterprise's due diligence and the frameworks the roadmaps name; it stands in for none of them.",
+   "fr": "Cet instrument est VOLONTAIRE : c'est le guide de mise en œuvre de deux recommandations de l'OCDE, pas une norme harmonisée. Il n'ouvre aucune présomption de conformité, aucun organisme ne délivre d'attestation contre lui, et aucune date ne changera cela — à la différence de prEN 18286, qui vaudra présomption le jour de sa citation au Journal officiel. Le travail fait ici sert la diligence de l'entreprise et les cadres que les feuilles de route nomment ; il ne tient lieu d'aucun."
+  },
+  "Conseil de l'Europe — Convention-cadre sur l'IA et méthodologie HUDERIA": {
+   "en": "Council of Europe — Framework Convention on AI and the HUDERIA methodology",
+   "fr": "Conseil de l'Europe — Convention-cadre sur l'IA et méthodologie HUDERIA"
+  },
+  "Corée — AI Basic Act": {
+   "en": "Korea — AI Basic Act",
+   "fr": "Corée — AI Basic Act"
+  },
+  "Directive (UE) #/# — devoir de vigilance des entreprises en matière de durabilité (CSDDD)": {
+   "en": "Directive (EU) #/# — corporate sustainability due diligence (CSDDD)",
+   "fr": "Directive (UE) 2024/1760 — devoir de vigilance des entreprises en matière de durabilité (CSDDD)"
+  },
+  "Dispositions voisines": {
+   "en": "Neighbouring provisions",
+   "fr": "Dispositions voisines"
+  },
+  "Déclarez d’abord un groupe. Tant qu’aucun ne l’est, le questionnaire ne sait pas lesquels des # exemples vous visent, et rien n’est calculé.": {
+   "en": "Declare a group first. As long as none is declared, the questionnaire does not know which of the # examples concern you, and nothing is calculated.",
+   "fr": "Déclarez d’abord un groupe. Tant qu’aucun ne l’est, le questionnaire ne sait pas lesquels des 115 exemples vous visent, et rien n’est calculé."
+  },
+  "Déclarez d’abord votre ou vos groupes sur l’écran « Processus ». Les # exemples du document ne s’adressent pas tous aux mêmes entreprises, et ceux qui ne vous visent pas ne doivent pas vous être comptés.": {
+   "en": "Declare your group or groups first, on the 'Process' screen. The # examples in the document are not all addressed to the same companies, and those that do not concern you must not be counted against you.",
+   "fr": "Déclarez d’abord votre ou vos groupes sur l’écran « Processus ». Les 115 exemples du document ne s’adressent pas tous aux mêmes entreprises, et ceux qui ne vous visent pas ne doivent pas vous être comptés."
+  },
+  "ISO # et ISO/IEC #": {
+   "en": "ISO # and ISO/IEC #",
+   "fr": "ISO 31000 et ISO/IEC 23894"
+  },
+  "ISO/IEC # — management du risque de l'IA": {
+   "en": "ISO/IEC # — guidance on AI risk management",
+   "fr": "ISO/IEC 23894 — management du risque de l'IA"
+  },
+  "ISO/IEC # — système de management de l'IA": {
+   "en": "ISO/IEC # — AI management system",
+   "fr": "ISO/IEC 42001 — système de management de l'IA"
+  },
+  "ISO/IEC # — évaluation d'impact d'un SIA": {
+   "en": "ISO/IEC # — AI system impact assessment",
+   "fr": "ISO/IEC 42005 — évaluation d'impact d'un SIA"
+  },
+  "ISO/IEC #:# — gouvernance de l'usage de l'IA": {
+   "en": "ISO/IEC #:# — governance implications of the use of AI",
+   "fr": "ISO/IEC 38507:2022 — gouvernance de l'usage de l'IA"
+  },
+  "Japon — AI Guidelines for Business v#": {
+   "en": "Japan — AI Guidelines for Business v#",
+   "fr": "Japon — AI Guidelines for Business v1.1"
+  },
+  "La PRIORISATION de l'étape # : coter les risques sur l'échelle, la portée, l'irrémédiabilité et la probabilité.": {
+   "en": "The PRIORITISATION of step #: rating risks on scale, scope, irremediability and likelihood.",
+   "fr": "La PRIORISATION de l'étape 2.4 : coter les risques sur l'échelle, la portée, l'irrémédiabilité et la probabilité."
+  },
+  "La source": {
+   "en": "The source",
+   "fr": "La source"
+  },
+  "Le site porte une page /dsa qui expose le règlement ; aucun module ne le mesure.": {
+   "en": "The site carries a /dsa page that sets out the regulation; no module measures it.",
+   "fr": "Le site porte une page /dsa qui expose le règlement ; aucun module ne le mesure."
+  },
+  "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : ce guide est volontaire : il met en œuvre deux recommandations de l'OCDE et n'ouvre aucune présomption de conformité, à aucune date. Aucun organisme ne délivre d'attestation contre lui.": {
+   "en": "Green on this itinerary says that what a block expects is filled in. It does not say you are compliant: this guidance is voluntary: it implements two OECD recommendations and opens no presumption of conformity, at any date. No body issues an attestation against it.",
+   "fr": "Le vert de ce parcours dit que ce qu'un bloc attend est renseigné. Il ne dit pas que vous êtes en conformité : ce guide est volontaire : il met en œuvre deux recommandations de l'OCDE et n'ouvre aucune présomption de conformité, à aucune date. Aucun organisme ne délivre d'attestation contre lui."
+  },
+  "Les PME sont tenues à la diligence comme les autres. Le document reconnaît qu'elles n'en ont pas la même capacité — moyens limités, levier plus faible sur les relations d'affaires, coût de la prévention — et que la mesure se proportionne à leur situation. Elle ne disparaît pas.": {
+   "en": "SMEs are held to due diligence like the others. The document recognises that they do not have the same capacity — limited means, weaker leverage over business relationships, the cost of prevention — and that the measure is proportionate to their situation. It does not disappear.",
+   "fr": "Les PME sont tenues à la diligence comme les autres. Le document reconnaît qu'elles n'en ont pas la même capacité — moyens limités, levier plus faible sur les relations d'affaires, coût de la prévention — et que la mesure se proportionne à leur situation. Elle ne disparaît pas."
+  },
+  "Les options de réparation que le document nomme": {
+   "en": "The remediation options the document names",
+   "fr": "Les options de réparation que le document nomme"
+  },
+  "Les ponts, donnés par le document lui-même": {
+   "en": "The bridges, given by the document itself",
+   "fr": "Les ponts, donnés par le document lui-même"
+  },
+  "Les trois groupes ne sont ni rigides ni exclusifs — le document le dit lui-même. Déclarez-en autant que votre organisme en occupe : le questionnaire montre alors les exemples de chacun, et ceux qu'aucun de vos groupes ne vise sortent du calcul au lieu de compter zéro.": {
+   "en": "The three groups are neither rigid nor exclusive — the document says so itself. Declare as many as your organisation occupies: the questionnaire then shows the examples of each, and those that none of your groups covers leave the calculation instead of counting zero.",
+   "fr": "Les trois groupes ne sont ni rigides ni exclusifs — le document le dit lui-même. Déclarez-en autant que votre organisme en occupe : le questionnaire montre alors les exemples de chacun, et ceux qu'aucun de vos groupes ne vise sortent du calcul au lieu de compter zéro."
+  },
+  "Matériel de tiers : la licence CC BY de l’OCDE ne le couvre pas. Numéro et intitulé seulement.": {
+   "en": "Third-party material: the OECD's CC BY licence does not cover it. Number and title only.",
+   "fr": "Matériel de tiers : la licence CC BY de l’OCDE ne le couvre pas. Numéro et intitulé seulement."
+  },
+  "ONU — Principes directeurs relatifs aux entreprises et aux droits de l'homme": {
+   "en": "UN — Guiding Principles on Business and Human Rights",
+   "fr": "ONU — Principes directeurs relatifs aux entreprises et aux droits de l'homme"
+  },
+  "Processus d'Hiroshima — Code de conduite international pour les systèmes d'IA avancés": {
+   "en": "Hiroshima Process — International Code of Conduct for Advanced AI Systems",
+   "fr": "Processus d'Hiroshima — Code de conduite international pour les systèmes d'IA avancés"
+  },
+  "Quel ou quels GROUPES d'acteur votre organisme occupe-t-il dans la chaîne de valeur de l'IA ? Ils ne sont ni rigides ni exclusifs : déclarez-en autant que nécessaire.": {
+   "en": "Which actor GROUP or GROUPS does your organisation occupy in the AI value chain? They are neither rigid nor exclusive: declare as many as necessary.",
+   "fr": "Quel ou quels GROUPES d'acteur votre organisme occupe-t-il dans la chaîne de valeur de l'IA ? Ils ne sont ni rigides ni exclusifs : déclarez-en autant que nécessaire."
+  },
+  "Royaume-Uni — DSIT, Introduction to AI Assurance": {
+   "en": "United Kingdom — DSIT, Introduction to AI Assurance",
+   "fr": "Royaume-Uni — DSIT, Introduction to AI Assurance"
+  },
+  "Règlement (UE) #/# — DSA": {
+   "en": "Regulation (EU) #/# — DSA",
+   "fr": "Règlement (UE) 2022/2065 — DSA"
+  },
+  "Règlement (UE) #/# — IA Act": {
+   "en": "Regulation (EU) #/# — AI Act",
+   "fr": "Règlement (UE) 2024/1689 — IA Act"
+  },
+  "Sentinel": {
+   "en": "Sentinel",
+   "fr": "Sentinel"
+  },
+  "Singapour — AI Verify Testing Framework": {
+   "en": "Singapore — AI Verify Testing Framework",
+   "fr": "Singapour — AI Verify Testing Framework"
+  },
+  "Votre IMPLICATION dans l'incidence : la causez-vous, y contribuez-vous, ou y êtes-vous lié par une relation d'affaires ? C'est elle qui fixe le niveau de diligence attendu.": {
+   "en": "Your INVOLVEMENT in the impact: do you cause it, contribute to it, or are you linked to it through a business relationship? That is what sets the level of due diligence expected.",
+   "fr": "Votre IMPLICATION dans l'incidence : la causez-vous, y contribuez-vous, ou y êtes-vous lié par une relation d'affaires ? C'est elle qui fixe le niveau de diligence attendu."
+  },
+  "Votre place dans la chaîne de valeur de l’IA": {
+   "en": "Your place in the AI value chain",
+   "fr": "Votre place dans la chaîne de valeur de l’IA"
+  },
+  "non tenu ici": {
+   "en": "not held here",
+   "fr": "non tenu ici"
+  },
+  "tiers": {
+   "en": "third parties",
+   "fr": "tiers"
+  },
+  "Étape # — Ancrer la conduite responsable dans les politiques et les systèmes de management": {
+   "en": "Step # — Embed responsible business conduct in policies and management systems",
+   "fr": "Étape 1 — Ancrer la conduite responsable dans les politiques et les systèmes de management"
+  },
+  "Étape # — Assurer la réparation ou y coopérer, lorsqu'il y a lieu": {
+   "en": "Step # — Provide for or cooperate in remediation, where appropriate",
+   "fr": "Étape 6 — Assurer la réparation ou y coopérer, lorsqu'il y a lieu"
+  },
+  "Étape # — Faire cesser, prévenir et atténuer les incidences négatives": {
+   "en": "Step # — Cease, prevent and mitigate adverse impacts",
+   "fr": "Étape 3 — Faire cesser, prévenir et atténuer les incidences négatives"
+  },
+  "Étape # — Identifier et évaluer les incidences négatives réelles et potentielles": {
+   "en": "Step # — Identify and assess actual and potential adverse impacts",
+   "fr": "Étape 2 — Identifier et évaluer les incidences négatives réelles et potentielles"
+  },
+  "Étape # — Rendre compte des actions menées": {
+   "en": "Step # — Communicate how impacts are addressed",
+   "fr": "Étape 5 — Rendre compte des actions menées"
+  },
+  "Étape # — Suivre la mise en œuvre et les résultats de la diligence": {
+   "en": "Step # — Track implementation and results of due diligence",
+   "fr": "Étape 4 — Suivre la mise en œuvre et les résultats de la diligence"
+  },
+  "États-Unis — NIST AI Risk Management Framework": {
+   "en": "United States — NIST AI Risk Management Framework",
+   "fr": "États-Unis — NIST AI Risk Management Framework"
+  },
+  "↓ Processus — groupes et implication": {
+   "en": "↓ Process — groups and involvement",
+   "fr": "↓ Processus — groupes et implication"
+  }
+ }
+}

@@ -462,12 +462,28 @@ def test_l_INDICE_rend_le_MEME_taux_que_le_moteur():
         assert o["taux"] == sc["taux"]
 
 
-def test_la_QUATORZIEME_norme_est_annoncee_et_atteignable():
-    assert conformite.NORMES_ANNONCEES == 14
-    assert len(conformite.NORMES) == 14
+def test_la_norme_OCDE_est_annoncee_et_atteignable():
+    """CETTE RÈGLE A ÉTÉ RÉÉCRITE QUAND LA QUINZIÈME NORME EST ARRIVÉE.
+
+    Elle figeait quatre choses qu'une norme de plus suffit à démentir : le
+    compte à 14, la longueur de la table, le libellé « 14 normes maîtrisées »
+    et le fait que l'OCDE FERME `ORDRE_BARRE`. Les trois premières étaient
+    une COPIE de ce que `conformite.NORMES_ANNONCEES` décide déjà, et la
+    quatrième n'a jamais rien dit de l'OCDE : elle disait seulement qu'aucune
+    norme n'avait été ajoutée depuis.
+
+    CE QU'ELLE GARDE, ET QUI PORTE SUR L'OCDE : sa nature de « cadre » — ce
+    guide ne se certifie pas et ne vaudra jamais présomption —, sa présence
+    dans l'ordre de la barre, et le fait que la carte de l'accueil mène à son
+    écran. Le COMPTE, lui, est gardé une seule fois, par
+    `test_conformite.py::test_les_normes_EVALUEES_sont_celles_QUE_LA_PAGE_MONTRE`,
+    qui le confronte au titre ET à la grille.
+    """
+    assert len(conformite.NORMES) == conformite.NORMES_ANNONCEES
     assert conformite.NORMES_PAR_CLE["ocde"]["nature"] == "cadre"
-    assert conformite.ORDRE_BARRE[-1] == "ocde"
-    assert "14 normes maîtrisées" in _lire("index.html")
+    assert "ocde" in conformite.ORDRE_BARRE
+    assert ("%d normes maîtrisées" % conformite.NORMES_ANNONCEES) \
+        in _lire("index.html")
     assert "goto=ocde-processus" in _lire("index.html")
 
 

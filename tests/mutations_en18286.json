@@ -1,232 +1,232 @@
 {
- "_pourquoi": "prEN 18286 : chaque règle de tests/test_en18286.py doit tomber sur SON défaut. Les mutations qui feraient LEVER le moteur à l'import ne sont pas ici — un refus d'import se lit en erreur de collecte, que le banc prendrait pour une survivante : elles sont dans tests/mutations_en18286_socle.json, portées sur les lignes de la garde elle-même. Ce qui est muté ici sont donc des comportements que la garde NE rejoue pas : la lecture par conformite, le rail, les routes, la feuille de style, la barre latérale, et les champs de prose que le droit d'auteur du CEN interdit de recopier.",
- "cibles": [
-  "tests/test_en18286.py"
- ],
- "mutations": [
-  {
-   "nom": "hors champ, le signal ne part plus et la carte affiche un zéro",
-   "fichier": "conformite.py",
-   "avant": "    champ = ev.get(\"applicable\") or {}\n    if champ.get(\"ok\") is False:\n        return None, [\"hors_champ\"]",
-   "apres": "    champ = ev.get(\"applicable\") or {}\n    if champ.get(\"ok\") is False:\n        return None, []",
-   "regle": "test_HORS_CHAMP_il_n_y_a_PAS_de_taux_et_le_rail_dit_SANS_OBJET"
-  },
-  {
-   "nom": "conformite recompose les parts BRUTES : deux vérités sur un nombre",
-   "fichier": "conformite.py",
-   "avant": "        signaux.append(\"charge_de_preuve\")\n    return dict(ev.get(\"parts\") or {}), signaux",
-   "apres": "        signaux.append(\"charge_de_preuve\")\n    return dict(ev.get(\"parts_brutes\") or {}), signaux",
-   "regle": "test_le_moteur_et_la_carte_du_taux_rendent_LE_MEME_nombre"
-  },
-  {
-   "nom": "le verrou de la charge de preuve ne remonte plus jusqu'à la carte",
-   "fichier": "conformite.py",
-   "avant": "    if (ev.get(\"score\") or {}).get(\"verrous\"):\n        signaux.append(\"charge_de_preuve\")",
-   "apres": "    if False:\n        signaux.append(\"charge_de_preuve\")",
-   "regle": "test_le_verrou_de_la_charge_de_preuve_REMONTE_jusqu_a_la_carte"
-  },
-  {
-   "nom": "le signal de charge de preuve part TOUJOURS, donc il ne signale rien",
-   "fichier": "conformite.py",
-   "avant": "    if (ev.get(\"score\") or {}).get(\"verrous\"):\n        signaux.append(\"charge_de_preuve\")",
-   "apres": "    if True:\n        signaux.append(\"charge_de_preuve\")",
-   "regle": "test_sans_verrou_le_signal_NE_PART_PAS"
-  },
-  {
-   "nom": "la qualification seule ne fait plus une déclaration : la carte dit « — »",
-   "fichier": "conformite.py",
-   "avant": "    if not (qual or reponses or strat or certifie):",
-   "apres": "    if not (reponses or strat or certifie):",
-   "regle": "test_la_qualification_SEULE_fait_deja_une_declaration"
-  },
-  {
-   "nom": "le « sans objet » du rail repart en troisième position, où rien ne le lit",
-   "fichier": "parcours_normes.py",
-   "avant": "        return {}, so, {}",
-   "apres": "        return {}, {}, so",
-   "regle": "test_HORS_CHAMP_il_n_y_a_PAS_de_taux_et_le_rail_dit_SANS_OBJET"
-  },
-  {
-   "nom": "tout devient sans objet, même dans le champ",
-   "fichier": "parcours_normes.py",
-   "avant": "    if champ.get(\"ok\") is False:",
-   "apres": "    if True:",
-   "regle": "test_DANS_le_champ_les_quatre_blocs_redeviennent_du_travail"
-  },
-  {
-   "nom": "une composante manquante ne retient plus le bloc processus",
-   "fichier": "parcours_normes.py",
-   "avant": "    attente = [_q(\"Stratégie de conformité : « %s »\" % c[\"nom\"])\n               for c in st[\"composantes\"] if not c[\"declaree\"]]",
-   "apres": "    attente = []",
-   "regle": "test_une_composante_MANQUANTE_retient_le_bloc_processus"
-  },
-  {
-   "nom": "une exigence sans approche se confond avec une exigence à prouver",
-   "fichier": "parcours_normes.py",
-   "avant": "            attente.append(_q(\"Exigence essentielle « %s » (%s) : aucune \"\n                              \"approche retenue\"",
-   "apres": "            attente.append(_q(\"Exigence essentielle « %s » (%s) : il reste \"\n                              \"des pièces\"",
-   "regle": "test_une_exigence_SANS_APPROCHE_n_est_pas_une_exigence_a_prouver"
-  },
-  {
-   "nom": "le bloc « conformité » devient un bloc de saisie",
-   "fichier": "parcours_normes.py",
-   "avant": "           \"Conformité — annexe ZA\", \"lecture\",",
-   "apres": "           \"Conformité — annexe ZA\", \"saisie\",",
-   "regle": "test_le_rail_du_referentiel_porte_les_QUATRE_blocs_dans_l_ordre"
-  },
-  {
-   "nom": "l'annexe ZA déclare TOUT couvert, article 17(2) compris",
-   "fichier": "en18286.py",
-   "avant": "\"couvert_par_la_norme\": z[\"couvert\"]",
-   "apres": "\"couvert_par_la_norme\": True",
-   "regle": "test_l_article_17_2_est_declare_NON_COUVERT_et_ne_rend_AUCUN_taux"
-  },
-  {
-   "nom": "« partiellement tenu » vaut autant que « tenu »",
-   "fichier": "en18286.py",
-   "avant": "    \"partiel\": {\"nom\": \"Partiellement tenu\", \"valeur\": 0.5,",
-   "apres": "    \"partiel\": {\"nom\": \"Partiellement tenu\", \"valeur\": 1.0,",
-   "regle": "test_les_quatre_etats_sont_les_quatre_etats_et_leurs_valeurs_sont_ordonnees"
-  },
-  {
-   "nom": "une contradiction du document perd ce qui en a été fait",
-   "fichier": "en18286.py",
-   "avant": "     \"fait\": \"Le module ne l'ajoute pas au tableau : il le signale comme \"\n             \"une norme de la famille que ce site traite déjà, en disant \"\n             \"que le rattachement vient du site et non de l'annexe B.\"},",
-   "apres": "     \"fait\": \"Signalée.\"},",
-   "regle": "test_les_TROIS_contradictions_du_document_sont_DITES_et_non_masquees"
-  },
-  {
-   "nom": "prEN 18229-3 n'est plus déclarée traitée par le site",
-   "fichier": "en18286.py",
-   "avant": "     \"articles\": \"Article 14\", \"dans_le_site\": True,",
-   "apres": "     \"articles\": \"Article 14\", \"dans_le_site\": False,",
-   "regle": "test_la_FAMILLE_dit_lesquelles_le_site_traite_DEJA"
-  },
-  {
-   "nom": "la réserve de l'article 17(2) part même sans services financiers",
-   "fichier": "en18286.py",
-   "avant": "    if q.get(\"services_financiers\"):",
-   "apres": "    if True:",
-   "regle": "test_les_services_financiers_LEVENT_la_reserve_de_l_article_17_2"
-  },
-  {
-   "nom": "le plan ne respecte plus la limite qu'on lui donne",
-   "fichier": "en18286.py",
-   "avant": "    return out[:limite] if limite else out",
-   "apres": "    return out",
-   "regle": "test_la_limite_du_plan_est_RESPECTEE"
-  },
-  {
-   "nom": "le compte des paragraphes renseignés devient le compte total",
-   "fichier": "en18286.py",
-   "avant": "    renseignes = len([k for k in rep if rep[k] in ETATS])",
-   "apres": "    renseignes = len(PARAGRAPHES)",
-   "regle": "test_un_paragraphe_SANS_REPONSE_compte_zero_et_le_dit"
-  },
-  {
-   "nom": "une phrase de la norme revient dans une question du module",
-   "fichier": "en18286.py",
-   "avant": "       \"Votre SMQ est-il établi par écrit, tenu à jour, et son efficacité \"\n       \"entretenue dans le temps ?\"),",
-   "apres": "       \"Le système de management de la qualité est-il établi, documenté et \"\n       \"tenu à jour, et son efficacité entretenue dans le temps ?\"),",
-   "regle": "test_AUCUNE_suite_de_huit_mots_du_module_n_est_dans_le_texte_de_la_norme"
-  },
-  {
-   "nom": "la réserve cesse de reprendre la formule légale du JOUE",
-   "fichier": "en18286.py",
-   "avant": "    \"Ce projet de norme n'est pas encore cité au Journal officiel de l'Union \"\n    \"européenne au titre du Règlement (UE) 2024/1689 : le tenir n'ouvre \"",
-   "apres": "    \"Ce projet de norme n'est pas encore cité au Journal officiel : le \"\n    \"Règlement (UE) 2024/1689 ne le vise pas encore, et le tenir n'ouvre \"",
-   "regle": "test_l_exemption_de_la_formule_legale_SERT_vraiment_et_ne_couvre_QU_ELLE"
-  },
-  {
-   "nom": "la route n'attache plus le plan à l'évaluation",
-   "fichier": "app.py",
-   "avant": "    r[\"plan\"] = en18286.plan(d, limite=limite)",
-   "apres": "    r[\"plan\"] = []",
-   "regle": "test_la_route_d_evaluation_rend_le_taux_ET_le_plan"
-  },
-  {
-   "nom": "la route du référentiel ne sert plus la table",
-   "fichier": "app.py",
-   "avant": "    return jsonify({\"ok\": True, \"referentiel\": en18286.referentiel()})",
-   "apres": "    return jsonify({\"ok\": True, \"referentiel\": {}})",
-   "regle": "test_la_route_du_referentiel_sert_les_SOIXANTE_CINQ_paragraphes"
-  },
-  {
-   "nom": "l'écran vierge devient une déclaration, et la carte affiche un taux",
-   "fichier": "conformite.py",
-   "avant": "    qual = _dict_de(v, \"qualification\")\n    reponses = _dict_de(v, \"reponses\")\n    strat = v.get(\"strategie\") if isinstance(v.get(\"strategie\"), dict) else {}",
-   "apres": "    qual = {\"fournisseur\": True, \"haut_risque\": True}\n    reponses = _dict_de(v, \"reponses\")\n    strat = v.get(\"strategie\") if isinstance(v.get(\"strategie\"), dict) else {}",
-   "regle": "test_la_qualification_SEULE_fait_deja_une_declaration"
-  },
-  {
-   "nom": "les quatre pages perdent la couleur du référentiel",
-   "fichier": "sentinel.html",
-   "avant": "#p-en18286-processus,#p-en18286-questionnaire,#p-en18286-conformite,#p-en18286-analyse{--ref:80 0 120}",
-   "apres": "#p-en18286-processus,#p-en18286-questionnaire,#p-en18286-conformite,#p-en18286-analyse{--ref:31 111 63}",
-   "regle": "test_les_quatre_panneaux_portent_la_couleur_du_referentiel"
-  },
-  {
-   "nom": "la puce des onglets perd la teinte du moteur",
-   "fichier": "sentinel.html",
-   "avant": ".sb-nav .sb-item[data-norme=\"en18286\"]{--sb-ic:#500078}",
-   "apres": ".sb-nav .sb-item[data-norme=\"en18286\"]{--sb-ic:#1F6F3F}",
-   "regle": "test_les_quatre_panneaux_portent_la_couleur_du_referentiel"
-  },
-  {
-   "nom": "un onglet de plus dans le tiroir de prEN 18286",
-   "fichier": "sentinel.html",
-   "avant": "<span data-i18n=\"nav.item.en18286-analyse\">Analyse — ponts et famille</span></div>",
-   "apres": "<span data-i18n=\"nav.item.en18286-analyse\">Analyse — ponts et famille</span></div>\n    <div class=\"sb-item\" data-norme=\"en18286\" data-grp=\"en18286\" role=\"button\" tabindex=\"0\" onclick=\"go('en18286-intrus',this,'X','Y')\"><span class=\"sb-icon\"></span><span>Intrus</span></div>",
-   "regle": "test_le_tiroir_porte_les_QUATRE_onglets_et_pas_un_de_plus"
-  },
-  {
-   "nom": "go() n'amorce plus le module : « Chargement… » sans fin",
-   "fichier": "sentinel.page.js",
-   "avant": "  if (id.indexOf('en18286') === 0 && typeof window.en18286Init === 'function') _apresPeinture(window.en18286Init);",
-   "apres": "  /* amorce retirée */",
-   "regle": "test_un_lien_PROFOND_amorce_le_module_au_lieu_de_laisser_Chargement[en18286-processus]"
-  },
-  {
-   "nom": "la déclaration de l'écran est ramassée deux fois",
-   "fichier": "sentinel.page.js",
-   "avant": "  en18286: function () { return EN18286_DECL; },",
-   "apres": "  en18286: function () { return EN18286_DECL; },\n  en18286: function () { return EN18286_DECL; },",
-   "regle": "test_la_declaration_de_l_ecran_est_RAMASSEE_une_seule_fois"
-  },
-  {
-   "nom": "la composition de la norme perd une part",
-   "fichier": "conformite.py",
-   "avant": "    \"en18286\": [\n        {\"cle\": \"strategie\",",
-   "apres": "    \"en18286\": [\n        {\"cle\": \"strategie_renommee\",",
-   "regle": "test_le_module_est_la_TREIZIEME_norme_du_taux_et_non_une_carte_de_plus"
-  },
-  {
-   "nom": "la route passe une déclaration qui n'est pas un dictionnaire au moteur",
-   "fichier": "app.py",
-   "avant": "    d = data.get(\"declaration\") if isinstance(data.get(\"declaration\"), dict) \\\n        else data\n    r = en18286.evaluer(d, aujourdhui=data.get(\"date\"))",
-   "apres": "    d = data.get(\"declaration\")\n    r = en18286.evaluer(dict(d), aujourdhui=data.get(\"date\"))",
-   "regle": "test_la_route_d_evaluation_REFUSE_une_declaration_qui_n_en_est_pas_une"
-  },
-  {
-   "nom": "go() n'amorce plus l'écran du taux : les parcours finissent sur une page vide",
-   "fichier": "sentinel.page.js",
-   "avant": "  if (id.indexOf('conf-') === 0 && typeof window.confInit === 'function') _apresPeinture(window.confInit);",
-   "apres": "  /* amorce du taux retirée */",
-   "regle": "test_la_DERNIERE_etape_du_parcours_s_amorce_aussi_par_go"
-  },
-  {
-   "nom": "le titre de l'écran du taux fige à nouveau onze normes",
-   "fichier": "sentinel.html",
-   "avant": "<h1 class=\"page-h\" data-i18n-bloc=\"pg.conf-taux.h1\">Quatorze taux, et <em>ce qu'ils ne disent pas</em></h1>",
-   "apres": "<h1 class=\"page-h\" data-i18n-bloc=\"pg.conf-taux.h1\">Onze taux, et <em>ce qu'ils ne disent pas</em></h1>",
-   "regle": "test_aucun_ECRAN_du_taux_ne_fige_un_COMPTE_de_normes_devenu_faux"
-  },
-  {
-   "nom": "le libellé de menu du taux fige à nouveau un compte",
-   "fichier": "sentinel.page.js",
-   "avant": "  'conf-taux': { section: 'Taux de conformité', label: 'Le taux par norme' },",
-   "apres": "  'conf-taux': { section: 'Taux de conformité', label: 'Les neuf taux' },",
-   "regle": "test_aucun_ECRAN_du_taux_ne_fige_un_COMPTE_de_normes_devenu_faux"
-  }
- ]
+  "_pourquoi": "prEN 18286 : chaque règle de tests/test_en18286.py doit tomber sur SON défaut. Les mutations qui feraient LEVER le moteur à l'import ne sont pas ici — un refus d'import se lit en erreur de collecte, que le banc prendrait pour une survivante : elles sont dans tests/mutations_en18286_socle.json, portées sur les lignes de la garde elle-même. Ce qui est muté ici sont donc des comportements que la garde NE rejoue pas : la lecture par conformite, le rail, les routes, la feuille de style, la barre latérale, et les champs de prose que le droit d'auteur du CEN interdit de recopier.",
+  "cibles": [
+    "tests/test_en18286.py"
+  ],
+  "mutations": [
+    {
+      "nom": "hors champ, le signal ne part plus et la carte affiche un zéro",
+      "fichier": "conformite.py",
+      "avant": "    champ = ev.get(\"applicable\") or {}\n    if champ.get(\"ok\") is False:\n        return None, [\"hors_champ\"]",
+      "apres": "    champ = ev.get(\"applicable\") or {}\n    if champ.get(\"ok\") is False:\n        return None, []",
+      "regle": "test_HORS_CHAMP_il_n_y_a_PAS_de_taux_et_le_rail_dit_SANS_OBJET"
+    },
+    {
+      "nom": "conformite recompose les parts BRUTES : deux vérités sur un nombre",
+      "fichier": "conformite.py",
+      "avant": "        signaux.append(\"charge_de_preuve\")\n    return dict(ev.get(\"parts\") or {}), signaux",
+      "apres": "        signaux.append(\"charge_de_preuve\")\n    return dict(ev.get(\"parts_brutes\") or {}), signaux",
+      "regle": "test_le_moteur_et_la_carte_du_taux_rendent_LE_MEME_nombre"
+    },
+    {
+      "nom": "le verrou de la charge de preuve ne remonte plus jusqu'à la carte",
+      "fichier": "conformite.py",
+      "avant": "    if (ev.get(\"score\") or {}).get(\"verrous\"):\n        signaux.append(\"charge_de_preuve\")",
+      "apres": "    if False:\n        signaux.append(\"charge_de_preuve\")",
+      "regle": "test_le_verrou_de_la_charge_de_preuve_REMONTE_jusqu_a_la_carte"
+    },
+    {
+      "nom": "le signal de charge de preuve part TOUJOURS, donc il ne signale rien",
+      "fichier": "conformite.py",
+      "avant": "    if (ev.get(\"score\") or {}).get(\"verrous\"):\n        signaux.append(\"charge_de_preuve\")",
+      "apres": "    if True:\n        signaux.append(\"charge_de_preuve\")",
+      "regle": "test_sans_verrou_le_signal_NE_PART_PAS"
+    },
+    {
+      "nom": "la qualification seule ne fait plus une déclaration : la carte dit « — »",
+      "fichier": "conformite.py",
+      "avant": "    if not (qual or reponses or strat or certifie):",
+      "apres": "    if not (reponses or strat or certifie):",
+      "regle": "test_la_qualification_SEULE_fait_deja_une_declaration"
+    },
+    {
+      "nom": "le « sans objet » du rail repart en troisième position, où rien ne le lit",
+      "fichier": "parcours_normes.py",
+      "avant": "        return {}, so, {}",
+      "apres": "        return {}, {}, so",
+      "regle": "test_HORS_CHAMP_il_n_y_a_PAS_de_taux_et_le_rail_dit_SANS_OBJET"
+    },
+    {
+      "nom": "tout devient sans objet, même dans le champ",
+      "fichier": "parcours_normes.py",
+      "avant": "    if champ.get(\"ok\") is False:",
+      "apres": "    if True:",
+      "regle": "test_DANS_le_champ_les_quatre_blocs_redeviennent_du_travail"
+    },
+    {
+      "nom": "une composante manquante ne retient plus le bloc processus",
+      "fichier": "parcours_normes.py",
+      "avant": "    attente = [_q(\"Stratégie de conformité : « %s »\" % c[\"nom\"])\n               for c in st[\"composantes\"] if not c[\"declaree\"]]",
+      "apres": "    attente = []",
+      "regle": "test_une_composante_MANQUANTE_retient_le_bloc_processus"
+    },
+    {
+      "nom": "une exigence sans approche se confond avec une exigence à prouver",
+      "fichier": "parcours_normes.py",
+      "avant": "            attente.append(_q(\"Exigence essentielle « %s » (%s) : aucune \"\n                              \"approche retenue\"",
+      "apres": "            attente.append(_q(\"Exigence essentielle « %s » (%s) : il reste \"\n                              \"des pièces\"",
+      "regle": "test_une_exigence_SANS_APPROCHE_n_est_pas_une_exigence_a_prouver"
+    },
+    {
+      "nom": "le bloc « conformité » devient un bloc de saisie",
+      "fichier": "parcours_normes.py",
+      "avant": "           \"Conformité — annexe ZA\", \"lecture\",",
+      "apres": "           \"Conformité — annexe ZA\", \"saisie\",",
+      "regle": "test_le_rail_du_referentiel_porte_les_QUATRE_blocs_dans_l_ordre"
+    },
+    {
+      "nom": "l'annexe ZA déclare TOUT couvert, article 17(2) compris",
+      "fichier": "en18286.py",
+      "avant": "\"couvert_par_la_norme\": z[\"couvert\"]",
+      "apres": "\"couvert_par_la_norme\": True",
+      "regle": "test_l_article_17_2_est_declare_NON_COUVERT_et_ne_rend_AUCUN_taux"
+    },
+    {
+      "nom": "« partiellement tenu » vaut autant que « tenu »",
+      "fichier": "en18286.py",
+      "avant": "    \"partiel\": {\"nom\": \"Partiellement tenu\", \"valeur\": 0.5,",
+      "apres": "    \"partiel\": {\"nom\": \"Partiellement tenu\", \"valeur\": 1.0,",
+      "regle": "test_les_quatre_etats_sont_les_quatre_etats_et_leurs_valeurs_sont_ordonnees"
+    },
+    {
+      "nom": "une contradiction du document perd ce qui en a été fait",
+      "fichier": "en18286.py",
+      "avant": "     \"fait\": \"Le module ne l'ajoute pas au tableau : il le signale comme \"\n             \"une norme de la famille que ce site traite déjà, en disant \"\n             \"que le rattachement vient du site et non de l'annexe B.\"},",
+      "apres": "     \"fait\": \"Signalée.\"},",
+      "regle": "test_les_TROIS_contradictions_du_document_sont_DITES_et_non_masquees"
+    },
+    {
+      "nom": "prEN 18229-3 n'est plus déclarée traitée par le site",
+      "fichier": "en18286.py",
+      "avant": "     \"articles\": \"Article 14\", \"dans_le_site\": True,",
+      "apres": "     \"articles\": \"Article 14\", \"dans_le_site\": False,",
+      "regle": "test_la_FAMILLE_dit_lesquelles_le_site_traite_DEJA"
+    },
+    {
+      "nom": "la réserve de l'article 17(2) part même sans services financiers",
+      "fichier": "en18286.py",
+      "avant": "    if q.get(\"services_financiers\"):",
+      "apres": "    if True:",
+      "regle": "test_les_services_financiers_LEVENT_la_reserve_de_l_article_17_2"
+    },
+    {
+      "nom": "le plan ne respecte plus la limite qu'on lui donne",
+      "fichier": "en18286.py",
+      "avant": "    return out[:limite] if limite else out",
+      "apres": "    return out",
+      "regle": "test_la_limite_du_plan_est_RESPECTEE"
+    },
+    {
+      "nom": "le compte des paragraphes renseignés devient le compte total",
+      "fichier": "en18286.py",
+      "avant": "    renseignes = len([k for k in rep if rep[k] in ETATS])",
+      "apres": "    renseignes = len(PARAGRAPHES)",
+      "regle": "test_un_paragraphe_SANS_REPONSE_compte_zero_et_le_dit"
+    },
+    {
+      "nom": "une phrase de la norme revient dans une question du module",
+      "fichier": "en18286.py",
+      "avant": "       \"Votre SMQ est-il établi par écrit, tenu à jour, et son efficacité \"\n       \"entretenue dans le temps ?\"),",
+      "apres": "       \"Le système de management de la qualité est-il établi, documenté et \"\n       \"tenu à jour, et son efficacité entretenue dans le temps ?\"),",
+      "regle": "test_AUCUNE_suite_de_huit_mots_du_module_n_est_dans_le_texte_de_la_norme"
+    },
+    {
+      "nom": "la réserve cesse de reprendre la formule légale du JOUE",
+      "fichier": "en18286.py",
+      "avant": "    \"Ce projet de norme n'est pas encore cité au Journal officiel de l'Union \"\n    \"européenne au titre du Règlement (UE) 2024/1689 : le tenir n'ouvre \"",
+      "apres": "    \"Ce projet de norme n'est pas encore cité au Journal officiel : le \"\n    \"Règlement (UE) 2024/1689 ne le vise pas encore, et le tenir n'ouvre \"",
+      "regle": "test_l_exemption_de_la_formule_legale_SERT_vraiment_et_ne_couvre_QU_ELLE"
+    },
+    {
+      "nom": "la route n'attache plus le plan à l'évaluation",
+      "fichier": "app.py",
+      "avant": "    r[\"plan\"] = en18286.plan(d, limite=limite)",
+      "apres": "    r[\"plan\"] = []",
+      "regle": "test_la_route_d_evaluation_rend_le_taux_ET_le_plan"
+    },
+    {
+      "nom": "la route du référentiel ne sert plus la table",
+      "fichier": "app.py",
+      "avant": "    return jsonify({\"ok\": True, \"referentiel\": en18286.referentiel()})",
+      "apres": "    return jsonify({\"ok\": True, \"referentiel\": {}})",
+      "regle": "test_la_route_du_referentiel_sert_les_SOIXANTE_CINQ_paragraphes"
+    },
+    {
+      "nom": "l'écran vierge devient une déclaration, et la carte affiche un taux",
+      "fichier": "conformite.py",
+      "avant": "    qual = _dict_de(v, \"qualification\")\n    reponses = _dict_de(v, \"reponses\")\n    strat = v.get(\"strategie\") if isinstance(v.get(\"strategie\"), dict) else {}",
+      "apres": "    qual = {\"fournisseur\": True, \"haut_risque\": True}\n    reponses = _dict_de(v, \"reponses\")\n    strat = v.get(\"strategie\") if isinstance(v.get(\"strategie\"), dict) else {}",
+      "regle": "test_la_qualification_SEULE_fait_deja_une_declaration"
+    },
+    {
+      "nom": "les quatre pages perdent la couleur du référentiel",
+      "fichier": "sentinel.html",
+      "avant": "#p-en18286-processus,#p-en18286-questionnaire,#p-en18286-conformite,#p-en18286-analyse{--ref:80 0 120}",
+      "apres": "#p-en18286-processus,#p-en18286-questionnaire,#p-en18286-conformite,#p-en18286-analyse{--ref:31 111 63}",
+      "regle": "test_les_quatre_panneaux_portent_la_couleur_du_referentiel"
+    },
+    {
+      "nom": "la puce des onglets perd la teinte du moteur",
+      "fichier": "sentinel.html",
+      "avant": ".sb-nav .sb-item[data-norme=\"en18286\"]{--sb-ic:#500078}",
+      "apres": ".sb-nav .sb-item[data-norme=\"en18286\"]{--sb-ic:#1F6F3F}",
+      "regle": "test_les_quatre_panneaux_portent_la_couleur_du_referentiel"
+    },
+    {
+      "nom": "un onglet de plus dans le tiroir de prEN 18286",
+      "fichier": "sentinel.html",
+      "avant": "<span data-i18n=\"nav.item.en18286-analyse\">Analyse — ponts et famille</span></div>",
+      "apres": "<span data-i18n=\"nav.item.en18286-analyse\">Analyse — ponts et famille</span></div>\n    <div class=\"sb-item\" data-norme=\"en18286\" data-grp=\"en18286\" role=\"button\" tabindex=\"0\" onclick=\"go('en18286-intrus',this,'X','Y')\"><span class=\"sb-icon\"></span><span>Intrus</span></div>",
+      "regle": "test_le_tiroir_porte_les_QUATRE_onglets_et_pas_un_de_plus"
+    },
+    {
+      "nom": "go() n'amorce plus le module : « Chargement… » sans fin",
+      "fichier": "sentinel.page.js",
+      "avant": "  if (id.indexOf('en18286') === 0 && typeof window.en18286Init === 'function') _apresPeinture(window.en18286Init);",
+      "apres": "  /* amorce retirée */",
+      "regle": "test_un_lien_PROFOND_amorce_le_module_au_lieu_de_laisser_Chargement[en18286-processus]"
+    },
+    {
+      "nom": "la déclaration de l'écran est ramassée deux fois",
+      "fichier": "sentinel.page.js",
+      "avant": "  en18286: function () { return EN18286_DECL; },",
+      "apres": "  en18286: function () { return EN18286_DECL; },\n  en18286: function () { return EN18286_DECL; },",
+      "regle": "test_la_declaration_de_l_ecran_est_RAMASSEE_une_seule_fois"
+    },
+    {
+      "nom": "la composition de la norme perd une part",
+      "fichier": "conformite.py",
+      "avant": "    \"en18286\": [\n        {\"cle\": \"strategie\",",
+      "apres": "    \"en18286\": [\n        {\"cle\": \"strategie_renommee\",",
+      "regle": "test_le_module_est_la_TREIZIEME_norme_du_taux_et_non_une_carte_de_plus"
+    },
+    {
+      "nom": "la route passe une déclaration qui n'est pas un dictionnaire au moteur",
+      "fichier": "app.py",
+      "avant": "    d = data.get(\"declaration\") if isinstance(data.get(\"declaration\"), dict) \\\n        else data\n    r = en18286.evaluer(d, aujourdhui=data.get(\"date\"))",
+      "apres": "    d = data.get(\"declaration\")\n    r = en18286.evaluer(dict(d), aujourdhui=data.get(\"date\"))",
+      "regle": "test_la_route_d_evaluation_REFUSE_une_declaration_qui_n_en_est_pas_une"
+    },
+    {
+      "nom": "go() n'amorce plus l'écran du taux : les parcours finissent sur une page vide",
+      "fichier": "sentinel.page.js",
+      "avant": "  if (id.indexOf('conf-') === 0 && typeof window.confInit === 'function') _apresPeinture(window.confInit);",
+      "apres": "  /* amorce du taux retirée */",
+      "regle": "test_la_DERNIERE_etape_du_parcours_s_amorce_aussi_par_go"
+    },
+    {
+      "nom": "le titre de l'écran du taux fige à nouveau onze normes",
+      "fichier": "sentinel.html",
+      "avant": "<h1 class=\"page-h\" data-i18n-bloc=\"pg.conf-taux.h1\">Seize taux, et <em>ce qu'ils ne disent pas</em></h1>",
+      "apres": "<h1 class=\"page-h\" data-i18n-bloc=\"pg.conf-taux.h1\">Onze taux, et <em>ce qu'ils ne disent pas</em></h1>",
+      "regle": "test_aucun_ECRAN_du_taux_ne_fige_un_COMPTE_de_normes_devenu_faux"
+    },
+    {
+      "nom": "le libellé de menu du taux fige à nouveau un compte",
+      "fichier": "sentinel.page.js",
+      "avant": "  'conf-taux': { section: 'Taux de conformité', label: 'Le taux par norme' },",
+      "apres": "  'conf-taux': { section: 'Taux de conformité', label: 'Les neuf taux' },",
+      "regle": "test_aucun_ECRAN_du_taux_ne_fige_un_COMPTE_de_normes_devenu_faux"
+    }
+  ]
 }

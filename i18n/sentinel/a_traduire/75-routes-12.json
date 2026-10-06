@@ -1,0 +1,615 @@
+{
+ "_lot": "75-routes-12",
+ "_mots": 2411,
+ "_pages": [
+  "_routes"
+ ],
+ "_rubrique": "_routes",
+ "bloc": {},
+ "texte": {
+  "Rapport intermédiaire": {
+   "en": "Intermediate report",
+   "fr": "Rapport intermédiaire"
+  },
+  "Rapport sur le réexamen du cadre de gestion du risque lié aux TIC": {
+   "en": "Report on the review of the ICT risk management framework",
+   "fr": "Rapport sur le réexamen du cadre de gestion du risque lié aux TIC"
+  },
+  "Rapport sur le réexamen du cadre simplifié de gestion du risque lié aux TIC": {
+   "en": "Report on the review of the simplified ICT risk management framework",
+   "fr": "Rapport sur le réexamen du cadre simplifié de gestion du risque lié aux TIC"
+  },
+  "ReCyF en pratique — collection de fiches ANSSI, version #": {
+   "en": "ReCyF in practice — ANSSI factsheet collection, version #",
+   "fr": "ReCyF en pratique — collection de fiches ANSSI, version 1.0"
+  },
+  "ReCyF — Référentiel Cyber France, version #": {
+   "en": "ReCyF — the French Cyber Framework, version #",
+   "fr": "ReCyF — Référentiel Cyber France, version 2.5"
+  },
+  "Recensement des principales dépendances vis-à-vis des prestataires tiers de services TIC": {
+   "en": "Inventory of the main dependencies on ICT third-party service providers",
+   "fr": "Recensement des principales dépendances vis-à-vis des prestataires tiers de services TIC"
+  },
+  "Recensement des systèmes d'information": {
+   "en": "Inventory of information systems",
+   "fr": "Recensement des systèmes d'information"
+  },
+  "Redevable et transparent": {
+   "en": "Accountable and transparent",
+   "fr": "Redevable et transparent"
+  },
+  "Redevance annuelle = coûts annuels totaux estimés des superviseurs, multipliés par un coefficient de chiffre d'affaires : le chiffre d'affaires applicable du prestataire pour n−#, rapporté à celui de TOUS les prestataires critiques pour n−#.": {
+   "en": "Annual fee = the overseers' estimated total annual costs, multiplied by a turnover coefficient: the provider's applicable turnover for n−#, over that of ALL critical providers for n−#.",
+   "fr": "Redevance annuelle = coûts annuels totaux estimés des superviseurs, multipliés par un coefficient de chiffre d'affaires : le chiffre d'affaires applicable du prestataire pour n−2, rapporté à celui de TOUS les prestataires critiques pour n−2."
+  },
+  "Regardée, et pas en place.": {
+   "en": "Looked at, and not in place.",
+   "fr": "Regardée, et pas en place."
+  },
+  "Registre de noms de domaine de premier niveau ou fournisseur de services DNS": {
+   "en": "A top-level domain name registry or DNS service provider",
+   "fr": "Registre de noms de domaine de premier niveau ou fournisseur de services DNS"
+  },
+  "Registres de noms de domaine de premier niveau": {
+   "en": "Top-level domain name registries",
+   "fr": "Registres de noms de domaine de premier niveau"
+  },
+  "Rejeter une sortie que le système rejoue une seconde plus tard n'est pas un rejet. La stabilité après rejet est la moitié de la fonction.": {
+   "en": "Rejecting an output that the system replays a second later is not a rejection. Stability after rejection is half the function.",
+   "fr": "Rejeter une sortie que le système rejoue une seconde plus tard n'est pas un rejet. La stabilité après rejet est la moitié de la fonction."
+  },
+  "Relations avec les tiers et avec les clients": {
+   "en": "Relations with third parties and with clients",
+   "fr": "Relations avec les tiers et avec les clients"
+  },
+  "Relever du DGA ne dispense pas de l'article # du RGPD. La base légale reste à trouver ailleurs.": {
+   "en": "Falling under the DGA does not dispense with Article # GDPR. The legal basis remains to be found elsewhere.",
+   "fr": "Relever du DGA ne dispense pas de l'article 6 du RGPD. La base légale reste à trouver ailleurs."
+  },
+  "Rendre compte des actions menées": {
+   "en": "Communicate the actions taken",
+   "fr": "Rendre compte des actions menées"
+  },
+  "Renoncer à l'activité qui l'engendre. C'est la seule option qui supprime réellement le risque, et la seule qui coûte une décision de métier.": {
+   "en": "Give up the activity that produces it. It is the only option that really removes the risk, and the only one that costs a business decision.",
+   "fr": "Renoncer à l'activité qui l'engendre. C'est la seule option qui supprime réellement le risque, et la seule qui coûte une décision de métier."
+  },
+  "Renseigner — art. # : Aucun obstacle précommercial, commercial, technique, contractuel ou organisationnel n'empêche le client de changer de fournisseur, d'atteindre l'équivalence fonctionnelle, ou de résilier": {
+   "en": "Fill in — art. #: No pre-commercial, commercial, technical, contractual or organisational obstacle prevents the customer from switching provider, reaching functional equivalence, or terminating",
+   "fr": "Renseigner — art. 23 : Aucun obstacle précommercial, commercial, technique, contractuel ou organisationnel n'empêche le client de changer de fournisseur, d'atteindre l'équivalence fonctionnelle, ou de résilier"
+  },
+  "Renseigner — art. # : Aucun transfert ni accès gouvernemental de pays tiers à des données non personnelles détenues dans l'Union n'est accordé hors des conditions de l'article # ; le client est informé": {
+   "en": "Fill in — art. #: No third-country governmental transfer of, or access to, non-personal data held in the Union is granted outside the conditions of Article #; the customer is informed",
+   "fr": "Renseigner — art. 32 : Aucun transfert ni accès gouvernemental de pays tiers à des données non personnelles détenues dans l'Union n'est accordé hors des conditions de l'article 32 ; le client est informé"
+  },
+  "Renseigner — art. # : Le client reçoit l'information sur les procédures de changement, les formats, les outils d'exportation et les restrictions connues": {
+   "en": "Fill in — art. #: The customer receives the information on switching procedures, formats, export tools and known restrictions",
+   "fr": "Renseigner — art. 26 : Le client reçoit l'information sur les procédures de changement, les formats, les outils d'exportation et les restrictions connues"
+  },
+  "Renseigner — art. # : Le contrat est transparent sur la juridiction où les données sont hébergées et sur les mesures techniques, organisationnelles et juridiques prises contre un accès international non conforme": {
+   "en": "Fill in — art. #: The contract is transparent about the jurisdiction where the data is hosted and about the technical, organisational and legal measures taken against non-compliant international access",
+   "fr": "Renseigner — art. 28 : Le contrat est transparent sur la juridiction où les données sont hébergées et sur les mesures techniques, organisationnelles et juridiques prises contre un accès international non conforme"
+  },
+  "Renseigner — art. # : Le contrat porte les clauses de changement de fournisseur : délai de transition maximal de trente jours, préavis de résiliation de deux mois au plus, assistance, et énumération des données et actifs numériques portables": {
+   "en": "Fill in — art. #: The contract carries the switching clauses: a maximum transition period of thirty days, a termination notice of no more than two months, assistance, and a list of the portable data and digital assets",
+   "fr": "Renseigner — art. 25 : Le contrat porte les clauses de changement de fournisseur : délai de transition maximal de trente jours, préavis de résiliation de deux mois au plus, assistance, et énumération des données et actifs numériques portables"
+  },
+  "Renseigner — art. # : Les frais de changement de fournisseur sont supprimés au # janvier # ; d'ici là ils sont réduits et plafonnés aux coûts directement liés, et l'information précontractuelle du §# est fournie": {
+   "en": "Fill in — art. #: Switching charges are withdrawn on # January #; until then they are reduced and capped at the costs directly linked, and the pre-contractual information of paragraph # is provided",
+   "fr": "Renseigner — art. 29 : Les frais de changement de fournisseur sont supprimés au 12 janvier 2027 ; d'ici là ils sont réduits et plafonnés aux coûts directement liés, et l'information précontractuelle du §4 est fournie"
+  },
+  "Renseigner — art. # : Les obligations techniques du changement sont tenues selon la catégorie de service, l'équivalence fonctionnelle comprise là où l'article l'exige": {
+   "en": "Fill in — art. #: The technical switching obligations are met according to the service category, functional equivalence included where the article requires it",
+   "fr": "Renseigner — art. 30 : Les obligations techniques du changement sont tenues selon la catégorie de service, l'équivalence fonctionnelle comprise là où l'article l'exige"
+  },
+  "Renseigner — art. # : Toutes les parties coopèrent de bonne foi pour rendre le changement effectif, dans les délais et en préservant la continuité": {
+   "en": "Fill in — art. #: All parties cooperate in good faith to make the switch effective, within the deadlines and preserving continuity",
+   "fr": "Renseigner — art. 27 : Toutes les parties coopèrent de bonne foi pour rendre le changement effectif, dans les délais et en préservant la continuité"
+  },
+  "Renseigner — art. # b) : Les modalités commerciales, tarification comprise, ne dépendent pas de l'usage d'autres services du même prestataire ou d'une entité liée.": {
+   "en": "Fill in — art. # (b): The commercial terms, pricing included, do not depend on the use of other services of the same provider or of a linked entity.",
+   "fr": "Renseigner — art. 12 b) : Les modalités commerciales, tarification comprise, ne dépendent pas de l'usage d'autres services du même prestataire ou d'une entité liée."
+  },
+  "Renseigner — art. # c) : Date, heure, géolocalisation, durée et connexions établies ne servent qu'au développement du service — fraude et cybersécurité comprises — et sont communiquées au détenteur sur demande.": {
+   "en": "Fill in — art. # (c): Date, time, geolocation, duration and connections established serve only the development of the service — fraud and cybersecurity included — and are communicated to the holder on request.",
+   "fr": "Renseigner — art. 12 c) : Date, heure, géolocalisation, durée et connexions établies ne servent qu'au développement du service — fraude et cybersécurité comprises — et sont communiquées au détenteur sur demande."
+  },
+  "Renseigner — art. # d) : L'échange se fait au format reçu ; toute conversion est justifiée et ouvre une possibilité de non-participation, sauf si le droit de l'Union l'exige.": {
+   "en": "Fill in — art. # (d): The exchange takes place in the format received; any conversion is justified and opens an opt-out, unless Union law requires it.",
+   "fr": "Renseigner — art. 12 d) : L'échange se fait au format reçu ; toute conversion est justifiée et ouvre une possibilité de non-participation, sauf si le droit de l'Union l'exige."
+  },
+  "Renseigner — art. # e) : Stockage temporaire, organisation, conversion, anonymisation, pseudonymisation : seulement sur demande ou approbation expresse, et les outils de tiers ne servent à rien d'autre.": {
+   "en": "Fill in — art. # (e): Temporary storage, organisation, conversion, anonymisation, pseudonymisation: only on request or express approval, and third-party tools serve nothing else.",
+   "fr": "Renseigner — art. 12 e) : Stockage temporaire, organisation, conversion, anonymisation, pseudonymisation : seulement sur demande ou approbation expresse, et les outils de tiers ne servent à rien d'autre."
+  },
+  "Renseigner — art. # f) : Y compris sur les prix et les conditions de service, à l'égard des personnes concernées, des détenteurs et des utilisateurs.": {
+   "en": "Fill in — art. # (f): Including on prices and service conditions, towards data subjects, holders and users.",
+   "fr": "Renseigner — art. 12 f) : Y compris sur les prix et les conditions de service, à l'égard des personnes concernées, des détenteurs et des utilisateurs."
+  },
+  "Renseigner — art. # g) : Des procédures pour prévenir les pratiques frauduleuses ou abusives de parties cherchant à obtenir un accès.": {
+   "en": "Fill in — art. # (g): Procedures to prevent fraudulent or abusive practices by parties seeking access.",
+   "fr": "Renseigner — art. 12 g) : Des procédures pour prévenir les pratiques frauduleuses ou abusives de parties cherchant à obtenir un accès."
+  },
+  "Renseigner — art. # h) : Une continuité raisonnable du service, des mécanismes d'accès, de transfert et d'extraction des données stockées, et l'exercice des droits des personnes concernées.": {
+   "en": "Fill in — art. # (h): Reasonable service continuity, mechanisms for access to, transfer of and retrieval of the stored data, and the exercise of data subjects' rights.",
+   "fr": "Renseigner — art. 12 h) : Une continuité raisonnable du service, des mécanismes d'accès, de transfert et d'extraction des données stockées, et l'exercice des droits des personnes concernées."
+  },
+  "Renseigner — art. # i) : Par des normes ouvertes communément utilisées dans le secteur.": {
+   "en": "Fill in — art. # (i): Through open standards commonly used in the sector.",
+   "fr": "Renseigner — art. 12 i) : Par des normes ouvertes communément utilisées dans le secteur."
+  },
+  "Renseigner — art. # j) : Des mesures techniques, juridiques et organisationnelles contre le transfert ou l'accès illicites aux données non personnelles.": {
+   "en": "Fill in — art. # (j): Technical, legal and organisational measures against unlawful transfer of, or access to, non-personal data.",
+   "fr": "Renseigner — art. 12 j) : Des mesures techniques, juridiques et organisationnelles contre le transfert ou l'accès illicites aux données non personnelles."
+  },
+  "Renseigner — art. # k) : Le détenteur est informé sans retard de tout transfert, accès ou usage non autorisé portant sur les données non personnelles partagées.": {
+   "en": "Fill in — art. # (k): The holder is informed without delay of any unauthorised transfer, access or use of the shared non-personal data.",
+   "fr": "Renseigner — art. 12 k) : Le détenteur est informé sans retard de tout transfert, accès ou usage non autorisé portant sur les données non personnelles partagées."
+  },
+  "Renseigner — art. # l) : Un niveau approprié pour les données non personnelles, et le niveau le PLUS ÉLEVÉ pour les informations sensibles sous l'angle de la concurrence.": {
+   "en": "Fill in — art. # (l): An appropriate level for non-personal data, and the HIGHEST level for information sensitive from a competition standpoint.",
+   "fr": "Renseigner — art. 12 l) : Un niveau approprié pour les données non personnelles, et le niveau le PLUS ÉLEVÉ pour les informations sensibles sous l'angle de la concurrence."
+  },
+  "Renseigner — art. # m) : Les informer et, le cas échéant, les conseiller de manière concise, transparente et accessible sur les utilisations prévues AVANT qu'elles ne consentent.": {
+   "en": "Fill in — art. # (m): Inform them and, where relevant, advise them concisely, transparently and accessibly about the intended uses BEFORE they consent.",
+   "fr": "Renseigner — art. 12 m) : Les informer et, le cas échéant, les conseiller de manière concise, transparente et accessible sur les utilisations prévues AVANT qu'elles ne consentent."
+  },
+  "Renseigner — art. # n) : Préciser la juridiction du pays tiers où l'usage est prévu, et fournir des outils pour donner ET retirer le consentement ou l'autorisation.": {
+   "en": "Fill in — art. # (n): State the third-country jurisdiction where the use is intended, and provide tools to give AND withdraw consent or permission.",
+   "fr": "Renseigner — art. 12 n) : Préciser la juridiction du pays tiers où l'usage est prévu, et fournir des outils pour donner ET retirer le consentement ou l'autorisation."
+  },
+  "Renseigner — art. # o) : Le prestataire tient un journal de son activité d'intermédiation.": {
+   "en": "Fill in — art. # (o): The provider keeps a log of its intermediation activity.",
+   "fr": "Renseigner — art. 12 o) : Le prestataire tient un journal de son activité d'intermédiation."
+  },
+  "Renseigner — art. # §# : Avant la fourniture d'un service connexe, l'utilisateur reçoit les neuf informations du §#, dont l'identité du détenteur de données, le droit de réclamation et l'existence de secrets d'affaires": {
+   "en": "Fill in — art. #(#): Before the supply of a related service, the user receives the nine items of information in paragraph #, including the data holder's identity, the right to complain and the existence of trade secrets",
+   "fr": "Renseigner — art. 3 §3 : Avant la fourniture d'un service connexe, l'utilisateur reçoit les neuf informations du §3, dont l'identité du détenteur de données, le droit de réclamation et l'existence de secrets d'affaires"
+  },
+  "Renseigner — art. # §# : Avant la vente, la location ou le crédit-bail, l'utilisateur reçoit les quatre informations du §# : type, format et volume estimé ; génération en continu et en temps réel ; stockage et durée ; moyens d'accès, d'extraction et d'effacement": {
+   "en": "Fill in — art. #(#): Before sale, rent or lease, the user receives the four items of information in paragraph #: type, format and estimated volume; continuous and real-time generation; storage and duration; means of access, retrieval and erasure",
+   "fr": "Renseigner — art. 3 §2 : Avant la vente, la location ou le crédit-bail, l'utilisateur reçoit les quatre informations du §2 : type, format et volume estimé ; génération en continu et en temps réel ; stockage et durée ; moyens d'accès, d'extraction et d'effacement"
+  },
+  "Renseigner — art. # §# : La notification a été soumise à l'autorité compétente avant la fourniture du service": {
+   "en": "Fill in — art. #(#): The notification was submitted to the competent authority before the service was provided",
+   "fr": "Renseigner — art. 11 §1 : La notification a été soumise à l'autorité compétente avant la fourniture du service"
+  },
+  "Renseigner — art. # §# : Les modifications des renseignements notifiés sont transmises dans les quatorze jours": {
+   "en": "Fill in — art. #(#): Changes to the notified particulars are transmitted within fourteen days",
+   "fr": "Renseigner — art. 11 §12 : Les modifications des renseignements notifiés sont transmises dans les quatorze jours"
+  },
+  "Renseigner — art. # §# : Une procédure existe pour notifier la cessation d'activité dans les quinze jours": {
+   "en": "Fill in — art. #(#): A procedure exists to notify the cessation of activity within fifteen days",
+   "fr": "Renseigner — art. 11 §13 : Une procédure existe pour notifier la cessation d'activité dans les quinze jours"
+  },
+  "Renseigner — art. # §# d) : Un site internet public porte des informations complètes et à jour sur le prestataire et son activité": {
+   "en": "Fill in — art. #(#) (d): A public website carries complete and up-to-date information about the provider and its activity",
+   "fr": "Renseigner — art. 11 §6 d) : Un site internet public porte des informations complètes et à jour sur le prestataire et son activité"
+  },
+  "Requalifié fabricant (art. #)": {
+   "en": "Reclassified as manufacturer (art. #)",
+   "fr": "Requalifié fabricant (art. 21)"
+  },
+  "Respect des conditions et du risque résiduel": {
+   "en": "Compliance with the conditions and the residual risk",
+   "fr": "Respect des conditions et du risque résiduel"
+  },
+  "Respectueux de la vie privée": {
+   "en": "Privacy-respecting",
+   "fr": "Respectueux de la vie privée"
+  },
+  "Responsabilité de la direction": {
+   "en": "Management responsibility",
+   "fr": "Responsabilité de la direction"
+  },
+  "Ressources contraintes et systèmes hérités": {
+   "en": "Constrained resources and legacy systems",
+   "fr": "Ressources contraintes et systèmes hérités"
+  },
+  "Ressources humaines, contrôle d'accès, gestion des actifs": {
+   "en": "Human resources, access control, asset management",
+   "fr": "Ressources humaines, contrôle d'accès, gestion des actifs"
+  },
+  "Ressources pour les systèmes d'IA": {
+   "en": "Resources for AI systems",
+   "fr": "Ressources pour les systèmes d'IA"
+  },
+  "Reste au registre et se revoit ; ne commande pas d'action immédiate.": {
+   "en": "Stays in the register and is reviewed; calls for no immediate action.",
+   "fr": "Reste au registre et se revoit ; ne commande pas d'action immédiate."
+  },
+  "Retenue par une personne et inscrite au registre": {
+   "en": "Adopted by a person and entered in the register",
+   "fr": "Retenue par une personne et inscrite au registre"
+  },
+  "Revoyez-vous les scénarios, les délais et les mesures lors de la surveillance après commercialisation et à chaque modification de conception, et mettez-vous à jour le dossier en conséquence ?": {
+   "en": "Do you review the scenarios, the deadlines and the measures during post-market monitoring and at every design change, and update the file accordingly?",
+   "fr": "Revoyez-vous les scénarios, les délais et les mesures lors de la surveillance après commercialisation et à chaque modification de conception, et mettez-vous à jour le dossier en conséquence ?"
+  },
+  "Revue des affectations de supervision": {
+   "en": "Review of oversight assignments",
+   "fr": "Revue des affectations de supervision"
+  },
+  "Revue — généralités": {
+   "en": "Review — general",
+   "fr": "Revue — généralités"
+  },
+  "Rien dans la norme n'y répond. L'exigence est à construire intégralement.": {
+   "en": "Nothing in the standard answers it. The requirement has to be built from scratch.",
+   "fr": "Rien dans la norme n'y répond. L'exigence est à construire intégralement."
+  },
+  "Rien en place, ou rien qu'on puisse montrer.": {
+   "en": "Nothing in place, or nothing that can be shown.",
+   "fr": "Rien en place, ou rien qu'on puisse montrer."
+  },
+  "Rien n'est en place pour cet objectif.": {
+   "en": "Nothing is in place for this objective.",
+   "fr": "Rien n'est en place pour cet objectif."
+  },
+  "Rien n'est renseigné. La liste ci-dessous n'est pas un barème : elle sert à vérifier qu'aucune de ces dix défaillances n'a été oubliée, pas à obtenir une note.": {
+   "en": "Nothing is filled in. The list below is not a scoring scale: it serves to check that none of these ten failures has been forgotten, not to obtain a mark.",
+   "fr": "Rien n'est renseigné. La liste ci-dessous n'est pas un barème : elle sert à vérifier qu'aucune de ces dix défaillances n'a été oubliée, pas à obtenir une note."
+  },
+  "Rien n'est renseigné. Le cadre ne rend aucun chiffre par défaut : un profil vide n'est pas un profil à zéro.": {
+   "en": "Nothing is filled in. The framework returns no figure by default: an empty profile is not a profile at zero.",
+   "fr": "Rien n'est renseigné. Le cadre ne rend aucun chiffre par défaut : un profil vide n'est pas un profil à zéro."
+  },
+  "Rien ne distingue, dans une invite, la consigne de la donnée. C'est une propriété du procédé : aucun correctif ne la fera disparaître, et tout ce qui se construit ici est de l'atténuation.": {
+   "en": "Nothing in a prompt tells the instruction apart from the data. It is a property of the method: no patch will make it go away, and everything built here is mitigation.",
+   "fr": "Rien ne distingue, dans une invite, la consigne de la donnée. C'est une propriété du procédé : aucun correctif ne la fera disparaître, et tout ce qui se construit ici est de l'atténuation."
+  },
+  "Rien ne s'y saisit : il se marque lu, et « lu » n'est pas vert.": {
+   "en": "Nothing is entered here: it gets marked read, and “read” is not green.",
+   "fr": "Rien ne s'y saisit : il se marque lu, et « lu » n'est pas vert."
+  },
+  "Rien ne se certifie contre SP #-# : ce taux dit l'adaptation industrielle déclarée d'un catalogue volontaire, pas une conformité reconnue.": {
+   "en": "Nothing is certifiable against SP #-#: this rate says the declared industrial adaptation of a voluntary catalogue, not a recognised compliance.",
+   "fr": "Rien ne se certifie contre SP 800-82 : ce taux dit l'adaptation industrielle déclarée d'un catalogue volontaire, pas une conformité reconnue."
+  },
+  "Rien ne se mesure avant : le questionnaire ne sait pas lesquels des # exemples vous visent.": {
+   "en": "Nothing can be measured before: the questionnaire does not know which of the # examples concern you.",
+   "fr": "Rien ne se mesure avant : le questionnaire ne sait pas lesquels des 115 exemples vous visent."
+  },
+  "Rien ne se saisit ici : les huit champs se remplissent sur la fiche du système, au Registre. Un système sans volume déclaré ne coûte pas zéro — personne n'a encore dit ce qu'il consomme.": {
+   "en": "Nothing is entered here: the eight fields are filled in on the system's record, in the Register. A system with no declared volume does not cost zero — nobody has yet said what it consumes.",
+   "fr": "Rien ne se saisit ici : les huit champs se remplissent sur la fiche du système, au Registre. Un système sans volume déclaré ne coûte pas zéro — personne n'a encore dit ce qu'il consomme."
+  },
+  "Rien ne se saisit ici non plus : le volume vient de la fiche du système, au Registre.": {
+   "en": "Nothing is entered here either: the volume comes from the system's record, in the Register.",
+   "fr": "Rien ne se saisit ici non plus : le volume vient de la fiche du système, au Registre."
+  },
+  "Rien à remplir sur cet écran : il explique. Il est marqué lu parce que vous l'avez déclaré — ce n'est pas un bloc validé.": {
+   "en": "Nothing to fill in on this screen: it explains. It is marked read because you said so — it is not a validated block.",
+   "fr": "Rien à remplir sur cet écran : il explique. Il est marqué lu parce que vous l'avez déclaré — ce n'est pas un bloc validé."
+  },
+  "Rien à écarter : NIS # ne vise pas cette entité": {
+   "en": "Nothing to set aside: NIS # does not cover this entity",
+   "fr": "Rien à écarter : NIS 2 ne vise pas cette entité"
+  },
+  "Risques nouveaux et émergents": {
+   "en": "New and emerging risks",
+   "fr": "Risques nouveaux et émergents"
+  },
+  "Rouvrir https://top#.owasp.org/#/ depuis un poste ordinaire et confirmer les dix intitulés avant de présenter cette vue à un client.": {
+   "en": "Reopen https://top#.owasp.org/#/ from an ordinary workstation and confirm the ten titles before showing this view to a client.",
+   "fr": "Rouvrir https://top10.owasp.org/2025/ depuis un poste ordinaire et confirmer les dix intitulés avant de présenter cette vue à un client."
+  },
+  "Règlement (UE) #/# (AI Act)": {
+   "en": "Regulation (EU) #/# (AI Act)",
+   "fr": "Règlement (UE) 2024/1689 (AI Act)"
+  },
+  "Règlement (UE) #/# (DORA)": {
+   "en": "Regulation (EU) #/# (DORA)",
+   "fr": "Règlement (UE) 2022/2554 (DORA)"
+  },
+  "Règlement (UE) #/# du Parlement européen et du Conseil du # décembre # concernant des règles harmonisées portant sur l'équité de l'accès aux données et de l'utilisation des données et modifiant le règlement (UE) #/# et la directive (UE) #/# (règlement sur les données)": {
+   "en": "Regulation (EU) #/# of the European Parliament and of the Council of # December # on harmonised rules on fair access to and use of data and amending Regulation (EU) #/# and Directive (EU) #/# (Data Act)",
+   "fr": "Règlement (UE) 2023/2854 du Parlement européen et du Conseil du 13 décembre 2023 concernant des règles harmonisées portant sur l'équité de l'accès aux données et de l'utilisation des données et modifiant le règlement (UE) 2017/2394 et la directive (UE) 2020/1828 (règlement sur les données)"
+  },
+  "Règlement (UE) #/# du Parlement européen et du Conseil du # décembre # sur la résilience opérationnelle numérique du secteur financier": {
+   "en": "Regulation (EU) #/# of the European Parliament and of the Council of # December # on digital operational resilience for the financial sector",
+   "fr": "Règlement (UE) 2022/2554 du Parlement européen et du Conseil du 14 décembre 2022 sur la résilience opérationnelle numérique du secteur financier"
+  },
+  "Règlement (UE) #/# du Parlement européen et du Conseil du # mai # portant sur la gouvernance européenne des données et modifiant le règlement (UE) #/# (règlement sur la gouvernance des données)": {
+   "en": "Regulation (EU) #/# of the European Parliament and of the Council of # May # on European data governance and amending Regulation (EU) #/# (Data Governance Act)",
+   "fr": "Règlement (UE) 2022/868 du Parlement européen et du Conseil du 30 mai 2022 portant sur la gouvernance européenne des données et modifiant le règlement (UE) 2018/1724 (règlement sur la gouvernance des données)"
+  },
+  "Règlement (UE) #/# du Parlement européen et du Conseil du # octobre # concernant des exigences de cybersécurité horizontales pour les produits comportant des éléments numériques (règlement sur la cyberrésilience)": {
+   "en": "Regulation (EU) #/# of the European Parliament and of the Council of # October # on horizontal cybersecurity requirements for products with digital elements (Cyber Resilience Act)",
+   "fr": "Règlement (UE) 2024/2847 du Parlement européen et du Conseil du 23 octobre 2024 concernant des exigences de cybersécurité horizontales pour les produits comportant des éléments numériques (règlement sur la cyberrésilience)"
+  },
+  "Règlement (UE) #/#, article # — système de management de la qualité du fournisseur de système d'IA à haut risque": {
+   "en": "Regulation (EU) #/#, article # — quality management system of the provider of a high-risk AI system",
+   "fr": "Règlement (UE) 2024/1689, article 17 — système de management de la qualité du fournisseur de système d'IA à haut risque"
+  },
+  "Règlement (UE) #/#, articles # à #": {
+   "en": "Regulation (EU) #/#, articles # to #",
+   "fr": "Règlement (UE) 2022/2554, articles 17 à 20"
+  },
+  "Règlement délégué (UE) #/#": {
+   "en": "Delegated Regulation (EU) #/#",
+   "fr": "Règlement délégué (UE) 2024/1774"
+  },
+  "Règlement délégué (UE) #/# de la Commission du # mars # complétant le règlement (UE) #/# par des normes techniques de réglementation précisant les outils, méthodes, processus et politiques de gestion du risque lié aux TIC et le cadre simplifié de gestion du risque lié aux TIC": {
+   "en": "Commission Delegated Regulation (EU) #/# of # March # supplementing Regulation (EU) #/# with regulatory technical standards specifying ICT risk management tools, methods, processes and policies and the simplified ICT risk management framework",
+   "fr": "Règlement délégué (UE) 2024/1774 de la Commission du 13 mars 2024 complétant le règlement (UE) 2022/2554 par des normes techniques de réglementation précisant les outils, méthodes, processus et politiques de gestion du risque lié aux TIC et le cadre simplifié de gestion du risque lié aux TIC"
+  },
+  "Règlement délégué (UE) #/# — contenu de la politique relative aux accords contractuels sur les services TIC soutenant des fonctions critiques ou importantes": {
+   "en": "Delegated Regulation (EU) #/# — content of the policy on contractual arrangements for ICT services supporting critical or important functions",
+   "fr": "Règlement délégué (UE) 2024/1773 — contenu de la politique relative aux accords contractuels sur les services TIC soutenant des fonctions critiques ou importantes"
+  },
+  "Règlement délégué (UE) #/# — contenu et délais de la notification initiale et des rapports intermédiaire et final": {
+   "en": "Delegated Regulation (EU) #/# — content and deadlines of the initial notification and of the intermediate and final reports",
+   "fr": "Règlement délégué (UE) 2025/301 — contenu et délais de la notification initiale et des rapports intermédiaire et final"
+  },
+  "Règlement délégué (UE) #/# — critères de classification et seuils d'importance significative": {
+   "en": "Delegated Regulation (EU) #/# — classification criteria and materiality thresholds",
+   "fr": "Règlement délégué (UE) 2024/1772 — critères de classification et seuils d'importance significative"
+  },
+  "Règlement délégué (UE) #/# — éléments à déterminer et évaluer en cas de sous-traitance de services TIC soutenant des fonctions critiques": {
+   "en": "Delegated Regulation (EU) #/# — elements to determine and assess where ICT services supporting critical functions are subcontracted",
+   "fr": "Règlement délégué (UE) 2025/532 — éléments à déterminer et évaluer en cas de sous-traitance de services TIC soutenant des fonctions critiques"
+  },
+  "Règlement délégué (UE) #/#, titre II": {
+   "en": "Delegated Regulation (EU) #/#, title II",
+   "fr": "Règlement délégué (UE) 2024/1774, titre II"
+  },
+  "Règlement délégué (UE) #/#, titre III": {
+   "en": "Delegated Regulation (EU) #/#, title III",
+   "fr": "Règlement délégué (UE) 2024/1774, titre III"
+  },
+  "Règlement sur la gouvernance des données": {
+   "en": "Data Governance Act",
+   "fr": "Règlement sur la gouvernance des données"
+  },
+  "Règlement sur les données": {
+   "en": "Data Act",
+   "fr": "Règlement sur les données"
+  },
+  "Réaction aux crises d'origine cyber": {
+   "en": "Response to cyber-originated crises",
+   "fr": "Réaction aux crises d'origine cyber"
+  },
+  "Réclamer par écrit sert deux fois : à obtenir l'information, et à montrer plus tard que vous l'avez demandée.": {
+   "en": "Asking in writing serves twice: to obtain the information, and to show later that you asked for it.",
+   "fr": "Réclamer par écrit sert deux fois : à obtenir l'information, et à montrer plus tard que vous l'avez demandée."
+  },
+  "Réduction au minimum de l'incidence du risque, par des systèmes, protocoles et outils solides, résilients et actualisés": {
+   "en": "Minimisation of the impact of risk, through sound, resilient and up-to-date systems, protocols and tools",
+   "fr": "Réduction au minimum de l'incidence du risque, par des systèmes, protocoles et outils solides, résilients et actualisés"
+  },
+  "Réexamen au moins tous les trois ans": {
+   "en": "Review at least every three years",
+   "fr": "Réexamen au moins tous les trois ans"
+  },
+  "Référentiel central": {
+   "en": "Central repository",
+   "fr": "Référentiel central"
+  },
+  "Référentiel des titrisations": {
+   "en": "Securitisation repository",
+   "fr": "Référentiel des titrisations"
+  },
+  "Réparer ou y coopérer": {
+   "en": "Remediate or co-operate in it",
+   "fr": "Réparer ou y coopérer"
+  },
+  "Réseaux de chaleur et de froid": {
+   "en": "District heating and cooling networks",
+   "fr": "Réseaux de chaleur et de froid"
+  },
+  "Réseaux de diffusion de contenu": {
+   "en": "Content delivery networks",
+   "fr": "Réseaux de diffusion de contenu"
+  },
+  "Réservé aux entités essentielles : pour une importante, le bloc est sans objet, pas à zéro.": {
+   "en": "Reserved for essential entities: for an important one, the block is not applicable, not at zero.",
+   "fr": "Réservé aux entités essentielles : pour une importante, le bloc est sans objet, pas à zéro."
+  },
+  "Résiliation du contrat entre l'entité financière et le prestataire tiers": {
+   "en": "Termination of the contract between the financial entity and the third-party provider",
+   "fr": "Résiliation du contrat entre l'entité financière et le prestataire tiers"
+  },
+  "Rétablir la personne ou le groupe dans la position qui serait la sienne si le dommage ne s'était pas produit.": {
+   "en": "Restoring the person or group to the position that would be theirs had the harm not occurred.",
+   "fr": "Rétablir la personne ou le groupe dans la position qui serait la sienne si le dommage ne s'était pas produit."
+  },
+  "Réutilisateur de données du secteur public": {
+   "en": "Re-user of public sector data",
+   "fr": "Réutilisateur de données du secteur public"
+  },
+  "Réutilisation autorisée — décision #/#/UE, avec attribution. Seul le texte publié au Journal officiel fait foi.": {
+   "en": "Reuse authorised — decision #/#/EU, with attribution. Only the text published in the Official Journal prevails.",
+   "fr": "Réutilisation autorisée — décision 2011/833/UE, avec attribution. Seul le texte publié au Journal officiel fait foi."
+  },
+  "Réutilisation de données protégées du secteur public": {
+   "en": "Re-use of protected public sector data",
+   "fr": "Réutilisation de données protégées du secteur public"
+  },
+  "Révision # : ce n'est plus le dernier millésime du catalogue.": {
+   "en": "Revision #: this is no longer the latest edition of the catalogue.",
+   "fr": "Révision 4 : ce n'est plus le dernier millésime du catalogue."
+  },
+  "Rôles, responsabilité et autorités": {
+   "en": "Roles, responsibility and authorities",
+   "fr": "Rôles, responsabilité et autorités"
+  },
+  "SP #-# Rev. # surcharge la révision # du catalogue #-#. Elle a été remplacée en # par la révision #, qui parle d'OT plutôt que d'ICS et se rattache à la révision #. Ce module mesure ce que la révision # demande, parce que c'est elle qui est ici : un lecteur qui travaille sur la révision # doit le savoir avant de lire ce taux.": {
+   "en": "SP #-# Rev. # overlays revision # of the #-# catalogue. It was superseded in # by revision #, which speaks of OT rather than ICS and attaches to revision #. This module measures what revision # requires, because that is the one present here: a reader working on revision # must know this before reading that rate.",
+   "fr": "SP 800-82 Rev. 2 surcharge la révision 4 du catalogue 800-53. Elle a été remplacée en 2023 par la révision 3, qui parle d'OT plutôt que d'ICS et se rattache à la révision 5. Ce module mesure ce que la révision 2 demande, parce que c'est elle qui est ici : un lecteur qui travaille sur la révision 3 doit le savoir avant de lire ce taux."
+  },
+  "SP #-# ne se certifie pas : aucun organisme ne délivre d'attestation contre ce catalogue.": {
+   "en": "SP #-# cannot be certified: no body issues an attestation against this catalogue.",
+   "fr": "SP 800-53 ne se certifie pas : aucun organisme ne délivre d'attestation contre ce catalogue."
+  },
+  "SP #-# ne se certifie pas. Aucun organisme ne délivre d'attestation contre ce catalogue : ce taux dit une couverture déclarée, pas une conformité reconnue.": {
+   "en": "SP #-# is not certifiable. No body issues an attestation against this catalogue: this rate says a declared coverage, not a recognised compliance.",
+   "fr": "SP 800-53 ne se certifie pas. Aucun organisme ne délivre d'attestation contre ce catalogue : ce taux dit une couverture déclarée, pas une conformité reconnue."
+  },
+  "Sait-on quels changements déclenchent une action réglementaire — nouvelle évaluation, nouvelle documentation, notification ?": {
+   "en": "Is it known which changes trigger a regulatory action — new assessment, new documentation, notification?",
+   "fr": "Sait-on quels changements déclenchent une action réglementaire — nouvelle évaluation, nouvelle documentation, notification ?"
+  },
+  "Sans approche": {
+   "en": "No approach",
+   "fr": "Sans approche"
+  },
+  "Sans deux réviseurs indépendants effectivement affectés, l'alinéa #(#) n'est pas tenu chez vous : le score ne peut pas dépasser # %.": {
+   "en": "Without two independent reviewers actually assigned, paragraph #(#) is not held in your organisation: the score cannot exceed # %.",
+   "fr": "Sans deux réviseurs indépendants effectivement affectés, l'alinéa 14(5) n'est pas tenu chez vous : le score ne peut pas dépasser 30 %."
+  },
+  "Sans délai de réaction, le choix des catégories de mesure n'est justifiable par rien : le score ne peut pas dépasser # %.": {
+   "en": "With no reaction time, the choice of measure categories is justifiable by nothing: the score cannot exceed # %.",
+   "fr": "Sans délai de réaction, le choix des catégories de mesure n'est justifiable par rien : le score ne peut pas dépasser 40 %."
+  },
+  "Sans filtrage par scénario, type de sortie et score de confiance, une revue rétrospective sur un gros volume devient une navigation au hasard.": {
+   "en": "Without filtering by scenario, output type and confidence score, a retrospective review over a large volume becomes random browsing.",
+   "fr": "Sans filtrage par scénario, type de sortie et score de confiance, une revue rétrospective sur un gros volume devient une navigation au hasard."
+  },
+  "Sans fonction d'intervention, la supervision humaine ne peut rien empêcher : le score ne peut pas dépasser # %.": {
+   "en": "With no intervention function, human oversight can prevent nothing: the score cannot exceed # %.",
+   "fr": "Sans fonction d'intervention, la supervision humaine ne peut rien empêcher : le score ne peut pas dépasser 35 %."
+  },
+  "Sans instrument de mesure ici": {
+   "en": "No measuring instrument here",
+   "fr": "Sans instrument de mesure ici"
+  },
+  "Sans le socle #-# renseigné, chaque axe est plafonné à zéro : remplissez d'abord l'écran du catalogue.": {
+   "en": "Without the #-# baseline filled in, every axis is capped at zero: fill in the catalogue screen first.",
+   "fr": "Sans le socle 800-53 renseigné, chaque axe est plafonné à zéro : remplissez d'abord l'écran du catalogue."
+  },
+  "Sans mise en œuvre des mesures que la notice vous attribue, la supervision humaine du système que vous exploitez n'existe pas : le score ne peut pas dépasser # %.": {
+   "en": "Without implementing the measures the instructions assign to you, human oversight of the system you operate does not exist: the score cannot exceed # %.",
+   "fr": "Sans mise en œuvre des mesures que la notice vous attribue, la supervision humaine du système que vous exploitez n'existe pas : le score ne peut pas dépasser 30 %."
+  },
+  "Sans objet pour vous": {
+   "en": "Not applicable to you",
+   "fr": "Sans objet pour vous"
+  },
+  "Sans prévention technique des sorties non revues, l'alinéa #(#) n'est pas tenu sur un système d'identification biométrique à distance : le score ne peut pas dépasser # %.": {
+   "en": "Without technical prevention of unreviewed outputs, paragraph #(#) is not held on a remote biometric identification system: the score cannot exceed # %.",
+   "fr": "Sans prévention technique des sorties non revues, l'alinéa 14(5) n'est pas tenu sur un système d'identification biométrique à distance : le score ne peut pas dépasser 30 %."
+  },
+  "Sans retard injustifié — aucun délai chiffré, ce qui n'en fait pas une obligation molle : « sans retard injustifié » se juge après coup, sur ce qu'on aurait pu faire.": {
+   "en": "Without undue delay — no figure given, which does not make it a soft obligation: “without undue delay” is judged after the fact, against what could have been done.",
+   "fr": "Sans retard injustifié — aucun délai chiffré, ce qui n'en fait pas une obligation molle : « sans retard injustifié » se juge après coup, sur ce qu'on aurait pu faire."
+  },
+  "Sans retard injustifié.": {
+   "en": "Without undue delay.",
+   "fr": "Sans retard injustifié."
+  },
+  "Sans scénario de risque identifié, aucune mesure de supervision n'est calibrée sur quoi que ce soit : le score ne peut pas dépasser # %.": {
+   "en": "With no identified risk scenario, no oversight measure is calibrated against anything: the score cannot exceed # %.",
+   "fr": "Sans scénario de risque identifié, aucune mesure de supervision n'est calibrée sur quoi que ce soit : le score ne peut pas dépasser 25 %."
+  },
+  "Sauvegardes éprouvées et reprise mesurée : ce qui permet de continuer à servir quand le système principal ne répond plus.": {
+   "en": "Tested backups and measured recovery: what makes it possible to keep serving when the main system stops responding.",
+   "fr": "Sauvegardes éprouvées et reprise mesurée : ce qui permet de continuer à servir quand le système principal ne répond plus."
+  },
+  "Savoir ce que l'auditeur ouvre en premier évite de préparer l'étape # avant l'étape #.": {
+   "en": "Knowing what the auditor opens first avoids preparing stage # before stage #.",
+   "fr": "Savoir ce que l'auditeur ouvre en premier évite de préparer l'étape 2 avant l'étape 1."
+  },
+  "Savoir de qui l'on dépend — fournisseurs, prestataires, filiales — et ce que chacun peut atteindre.": {
+   "en": "Knowing who you depend on — suppliers, providers, subsidiaries — and what each one can reach.",
+   "fr": "Savoir de qui l'on dépend — fournisseurs, prestataires, filiales — et ce que chacun peut atteindre."
+  },
+  "Savoir où l'on va avant de remplir le registre.": {
+   "en": "Knowing where you are going before filling in the register.",
+   "fr": "Savoir où l'on va avant de remplir le registre."
+  },
+  "Savoir quels systèmes sont concernés avant d'auditer.": {
+   "en": "Knowing which systems are concerned before auditing.",
+   "fr": "Savoir quels systèmes sont concernés avant d'auditer."
+  },
+  "Scans de sécurité fondés sur des critères d'évaluation des risques": {
+   "en": "Security scans based on risk assessment criteria",
+   "fr": "Scans de sécurité fondés sur des critères d'évaluation des risques"
+  },
+  "Schéma européen de certification de cybersécurité (niveau d'assurance au moins « substantiel »)": {
+   "en": "European cybersecurity certification scheme (assurance level at least “substantial”)",
+   "fr": "Schéma européen de certification de cybersécurité (niveau d'assurance au moins « substantiel »)"
+  },
+  "Scénarios, délais et sélection": {
+   "en": "Scenarios, deadlines and selection",
+   "fr": "Scénarios, délais et sélection"
+  },
+  "Se conformer au recueil de règles de l'article # §#, au plus tard dix-huit mois après l'entrée en vigueur des actes délégués": {
+   "en": "Complying with the rulebook of Article #(#), no later than eighteen months after the delegated acts enter into force",
+   "fr": "Se conformer au recueil de règles de l'article 22 §1, au plus tard dix-huit mois après l'entrée en vigueur des actes délégués"
+  },
+  "Se croire hors champ parce qu'on n'est pas établi dans l'Union. Le texte répète « quel que soit le lieu d'établissement » pour le fabricant, le détenteur et le fournisseur de cloud.": {
+   "en": "Believing yourself out of scope because you are not established in the Union. The text repeats 'whatever the place of establishment' for the manufacturer, the data holder and the cloud provider.",
+   "fr": "Se croire hors champ parce qu'on n'est pas établi dans l'Union. Le texte répète « quel que soit le lieu d'établissement » pour le fabricant, le détenteur et le fournisseur de cloud."
+  },
+  "Se déduit de la formule « dispositions pertinentes » de l'article #, paragraphe # ; les lignes directrices de la Commission en fixent le périmètre.": {
+   "en": "Follows from the words “relevant provisions” in article #, paragraph #; the Commission's guidelines set its scope.",
+   "fr": "Se déduit de la formule « dispositions pertinentes » de l'article 4, paragraphe 1 ; les lignes directrices de la Commission en fixent le périmètre."
+  },
+  "Se faire regarder par quelqu'un d'autre, à intervalle défini, et traiter ce qui en sort.": {
+   "en": "Being looked at by somebody else, at a defined interval, and handling what comes out of it.",
+   "fr": "Se faire regarder par quelqu'un d'autre, à intervalle défini, et traiter ce qui en sort."
+  },
+  "Se ranger en « lien direct » et ne rien faire. Le document écrit que le lien direct devient une CONTRIBUTION si l'entreprise continue sans agir.": {
+   "en": "Filing yourself under “directly linked” and doing nothing. The document writes that direct linkage becomes a CONTRIBUTION if the enterprise carries on without acting.",
+   "fr": "Se ranger en « lien direct » et ne rien faire. Le document écrit que le lien direct devient une CONTRIBUTION si l'entreprise continue sans agir."
+  },
+  "Secteur de l'annexe I, au-delà des plafonds de la moyenne entreprise.": {
+   "en": "Annex I sector, above the medium-sized enterprise ceilings.",
+   "fr": "Secteur de l'annexe I, au-delà des plafonds de la moyenne entreprise."
+  },
+  "Secteur et sous-secteur des annexes I ou II": {
+   "en": "Sector and subsector of Annexes I or II",
+   "fr": "Secteur et sous-secteur des annexes I ou II"
+  },
+  "Sensibilisation au biais d'automatisation": {
+   "en": "Automation bias awareness",
+   "fr": "Sensibilisation au biais d'automatisation"
+  },
+  "Sensibilisation des personnes désignées au biais d'automatisation": {
+   "en": "Automation bias awareness for the designated persons",
+   "fr": "Sensibilisation des personnes désignées au biais d'automatisation"
+  },
+  "Service essentiel interrompu, tiers affectés, obligation de notification possible.": {
+   "en": "Essential service interrupted, third parties affected, notification obligation possible.",
+   "fr": "Service essentiel interrompu, tiers affectés, obligation de notification possible."
+  },
+  "Services d'intermédiation de données": {
+   "en": "Data intermediation services",
+   "fr": "Services d'intermédiation de données"
+  },
+  "Services de coopératives de données": {
+   "en": "Data cooperative services",
+   "fr": "Services de coopératives de données"
+  },
+  "Services postaux et d'expédition": {
+   "en": "Postal and courier services",
+   "fr": "Services postaux et d'expédition"
+  },
+  "Seul prestataire, dans un État membre, d'un service essentiel au maintien d'activités sociétales ou économiques critiques": {
+   "en": "The sole provider in a Member State of a service essential for the maintenance of critical societal or economic activities",
+   "fr": "Seul prestataire, dans un État membre, d'un service essentiel au maintien d'activités sociétales ou économiques critiques"
+  },
+  "Seulement sur les systèmes d'information COUVERTS PAR LA CERTIFICATION. Un périmètre de certification restreint ne couvre qu'une partie de l'objectif — le reste reste à démontrer.": {
+   "en": "Only on the information systems COVERED BY THE CERTIFICATION. A narrow certification scope covers only part of the objective — the rest remains to be demonstrated.",
+   "fr": "Seulement sur les systèmes d'information COUVERTS PAR LA CERTIFICATION. Un périmètre de certification restreint ne couvre qu'une partie de l'objectif — le reste reste à démontrer."
+  },
+  "Si les mesures d'exécution restent inefficaces, l'autorité peut faire suspendre une certification ou une autorisation, et faire INTERDIRE TEMPORAIREMENT au directeur général ou au représentant légal d'exercer des responsabilités dirigeantes dans l'entité.": {
+   "en": "If the enforcement measures remain ineffective, the authority may have a certification or an authorisation suspended, and have the chief executive officer or legal representative TEMPORARILY BARRED from exercising managerial responsibilities in the entity.",
+   "fr": "Si les mesures d'exécution restent inefficaces, l'autorité peut faire suspendre une certification ou une autorisation, et faire INTERDIRE TEMPORAIREMENT au directeur général ou au représentant légal d'exercer des responsabilités dirigeantes dans l'entité."
+  },
+  "Signalement d'incidents graves — généralités": {
+   "en": "Serious incident reporting — general",
+   "fr": "Signalement d'incidents graves — généralités"
+  },
+  "Six semaines à compter de la notification": {
+   "en": "Six weeks from the notification",
+   "fr": "Six semaines à compter de la notification"
+  },
+  "Société de gestion": {
+   "en": "Management company",
+   "fr": "Société de gestion"
+  }
+ }
+}

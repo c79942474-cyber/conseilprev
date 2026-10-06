@@ -1,0 +1,1223 @@
+{
+ "_lot": "26-recyf-traiter-gouverner",
+ "_mots": 2376,
+ "_pages": [
+  "recyf-analyse",
+  "recyf-objectifs",
+  "gouvernance",
+  "parties",
+  "roadmap"
+ ],
+ "_rubrique": "ReCyF + TRAITER & GOUVERNER",
+ "bloc": {
+  "Bloc # sur # · ReCyF · # objectifs — Verrouillé": {
+   "en": "<b>Block # of # · ReCyF · # objectives — Locked</b>",
+   "fr": "Bloc 5 sur 7 · ReCyF · 20 objectifs — Verrouillé",
+   "html": "<b>Bloc 5 sur 7 · ReCyF · 20 objectifs — Verrouillé</b>"
+  },
+  "Bloc # sur # · ReCyF · Analyse de risque — Verrouillé": {
+   "en": "<b>Block # of # · ReCyF · Risk analysis — Locked</b>",
+   "fr": "Bloc 6 sur 7 · ReCyF · Analyse de risque — Verrouillé",
+   "html": "<b>Bloc 6 sur 7 · ReCyF · Analyse de risque — Verrouillé</b>"
+  },
+  "Cadence trimestrielle, avec séance extraordinaire sur demande motivée": {
+   "en": "<span><b>Cadence</b> quarterly, with an extraordinary sitting on a reasoned request</span>",
+   "fr": "Cadence trimestrielle, avec séance extraordinaire sur demande motivée",
+   "html": "<span><b>Cadence</b> trimestrielle, avec séance extraordinaire sur demande motivée</span>"
+  },
+  "Cartographie des parties prenantes": {
+   "en": "<em>Stakeholder</em> map",
+   "fr": "Cartographie des parties prenantes",
+   "html": "Cartographie des <em>parties prenantes</em>"
+  },
+  "Ce qui manque : le vote de la loi · le décret en Conseil d'État qui fixe les objectifs · la publication du référentiel dans sa version finale": {
+   "en": "<b>What is missing:</b> the passing of the act · the Conseil d'État decree that sets the objectives · the publication of the framework in its final version",
+   "fr": "Ce qui manque : le vote de la loi · le décret en Conseil d'État qui fixe les objectifs · la publication du référentiel dans sa version finale",
+   "html": "<b>Ce qui manque :</b> le vote de la loi · le décret en Conseil d'État qui fixe les objectifs · la publication du référentiel dans sa version finale"
+  },
+  "Ce qui vous oblige aujourd’hui : La directive (UE) #/#, telle que transposée — et à ce jour la France n'a pas achevé sa transposition.": {
+   "en": "<b>What binds you today:</b> Directive (EU) #/#, as transposed — and to date France has not completed its transposition.",
+   "fr": "Ce qui vous oblige aujourd’hui : La directive (UE) 2022/2555, telle que transposée — et à ce jour la France n'a pas achevé sa transposition.",
+   "html": "<b>Ce qui vous oblige aujourd’hui :</b> La directive (UE) 2022/2555, telle que transposée — et à ce jour la France n'a pas achevé sa transposition."
+  },
+  "Gouvernance opérationnelle de l’IA": {
+   "en": "<em>Operational</em> AI governance",
+   "fr": "Gouvernance opérationnelle de l’IA",
+   "html": "Gouvernance <em>opérationnelle</em> de l’IA"
+  },
+  "Le référentiel ouvre lui-même deux voies de preuve, et il les borne : un SMSI certifié ISO/CEI #:# vaut pour les objectifs # et #, mais seulement sur les systèmes couverts par la certification ; une PACS qualifiée par l'ANSSI vaut pour l'objectif #, à condition que le plan de traitement soit suivi par l'entité.": {
+   "en": "The framework itself opens <b>two routes of evidence</b>, and it sets limits on them: an ISMS certified to <b>ISO/IEC #:#</b> counts for objectives # and #, but <b>only for the systems covered by the certification</b>; a <b>PACS qualified by ANSSI</b> counts for objective #, provided the entity follows the treatment plan.",
+   "fr": "Le référentiel ouvre lui-même deux voies de preuve, et il les borne : un SMSI certifié ISO/CEI 27001:2022 vaut pour les objectifs 2 et 16, mais seulement sur les systèmes couverts par la certification ; une PACS qualifiée par l'ANSSI vaut pour l'objectif 16, à condition que le plan de traitement soit suivi par l'entité.",
+   "html": "Le référentiel ouvre lui-même <b>deux voies de preuve</b>, et il les borne : un SMSI certifié <b>ISO/CEI 27001:2022</b> vaut pour les objectifs 2 et 16, mais <b>seulement sur les systèmes couverts par la certification</b> ; une <b>PACS qualifiée par l'ANSSI</b> vaut pour l'objectif 16, à condition que le plan de traitement soit suivi par l'entité."
+  },
+  "Le taux affiché est un taux de préparation, jamais un taux de conformité, et il n'entre dans aucun indice consolidé. Le référentiel qu'il mesure est un document de travail attaché à un projet de loi non voté : noter une conformité contre un texte qui n'existe pas encore serait un chiffre qui a l'air de mesurer autre chose que ce qu'il mesure.": {
+   "en": "The rate shown is a <b>readiness</b> rate, never a compliance rate, and it enters no consolidated index. The framework it measures is a working document attached to a bill not yet passed: scoring compliance against a text that does not yet exist would produce a figure that appears to measure something other than what it measures.",
+   "fr": "Le taux affiché est un taux de préparation, jamais un taux de conformité, et il n'entre dans aucun indice consolidé. Le référentiel qu'il mesure est un document de travail attaché à un projet de loi non voté : noter une conformité contre un texte qui n'existe pas encore serait un chiffre qui a l'air de mesurer autre chose que ce qu'il mesure.",
+   "html": "Le taux affiché est un taux de <b>préparation</b>, jamais un taux de conformité, et il n'entre dans aucun indice consolidé. Le référentiel qu'il mesure est un document de travail attaché à un projet de loi non voté : noter une conformité contre un texte qui n'existe pas encore serait un chiffre qui a l'air de mesurer autre chose que ce qu'il mesure."
+  },
+  "Le verrou de périmètre, et il se contourne d'un mot. Les objectifs s'appliquent à tous les systèmes. Une exclusion n'est recevable que si une analyse de risques montre que le système n'est exposé à aucun des trois risques nommés — et le référentiel ajoute que la présence de mesures de sécurité ne vaut pas justification. « C'est cloisonné, donc c'est hors périmètre » est refusé en toutes lettres.": {
+   "en": "<b>The scope blocker, and one word gets round it.</b> The objectives apply to <b>all</b> systems. An exclusion is admissible only if a risk analysis shows that the system is exposed to <b>none</b> of the three named risks — and the framework adds that the presence of security measures <b>is not</b> a justification. “It is segregated, so it is out of scope” is refused in so many words.",
+   "fr": "Le verrou de périmètre, et il se contourne d'un mot. Les objectifs s'appliquent à tous les systèmes. Une exclusion n'est recevable que si une analyse de risques montre que le système n'est exposé à aucun des trois risques nommés — et le référentiel ajoute que la présence de mesures de sécurité ne vaut pas justification. « C'est cloisonné, donc c'est hors périmètre » est refusé en toutes lettres.",
+   "html": "<b>Le verrou de périmètre, et il se contourne d'un mot.</b> Les objectifs s'appliquent à <b>tous</b> les systèmes. Une exclusion n'est recevable que si une analyse de risques montre que le système n'est exposé à <b>aucun</b> des trois risques nommés — et le référentiel ajoute que la présence de mesures de sécurité <b>ne vaut pas</b> justification. « C'est cloisonné, donc c'est hors périmètre » est refusé en toutes lettres."
+  },
+  "Pourquoi s’y préparer quand même : Parce que c'est contre eux que le contrôle se fera. Une entité qui attend la publication du décret pour commencer découvrira alors qu'il lui manque vingt objectifs, pas dix mesures.": {
+   "en": "<b>Why prepare for it anyway:</b> Because it is against them that the inspection will be run. An entity that waits for the decree to be published before starting will discover then that it is twenty objectives short, not ten measures.",
+   "fr": "Pourquoi s’y préparer quand même : Parce que c'est contre eux que le contrôle se fera. Une entité qui attend la publication du décret pour commencer découvrira alors qu'il lui manque vingt objectifs, pas dix mesures.",
+   "html": "<b>Pourquoi s’y préparer quand même :</b> Parce que c'est contre eux que le contrôle se fera. Une entité qui attend la publication du décret pour commencer découvrira alors qu'il lui manque vingt objectifs, pas dix mesures."
+  },
+  "Quorum — Direction, Conformité/Risque et Métiers doivent être représentés. Sans l'un des trois, la séance informe mais ne décide pas.": {
+   "en": "<b>Quorum — </b>Executive, Compliance/Risk and the business lines must each be represented. Without one of the three, the sitting informs but does not decide.",
+   "fr": "Quorum — Direction, Conformité/Risque et Métiers doivent être représentés. Sans l'un des trois, la séance informe mais ne décide pas.",
+   "html": "<b>Quorum — </b>Direction, Conformité/Risque et Métiers doivent être représentés. Sans l'un des trois, la séance informe mais ne décide pas."
+  },
+  "Roadmap conformité": {
+   "en": "<em>Compliance</em> roadmap",
+   "fr": "Roadmap conformité",
+   "html": "Roadmap <em>conformité</em>"
+  },
+  "Sortie : avis technique motivé": {
+   "en": "Output: <b>a reasoned technical opinion</b>",
+   "fr": "Sortie : avis technique motivé",
+   "html": "Sortie : <b>avis technique motivé</b>"
+  },
+  "Sortie : classe présumée & obligations": {
+   "en": "Output: <b>presumed class &amp; obligations</b>",
+   "fr": "Sortie : classe présumée & obligations",
+   "html": "Sortie : <b>classe présumée &amp; obligations</b>"
+  },
+  "Sortie : décision tracée": {
+   "en": "Output: <b>a decision on the record</b>",
+   "fr": "Sortie : décision tracée",
+   "html": "Sortie : <b>décision tracée</b>"
+  },
+  "Sortie : fiche d'usage": {
+   "en": "Output: <b>a use-case record</b>",
+   "fr": "Sortie : fiche d'usage",
+   "html": "Sortie : <b>fiche d'usage</b>"
+  },
+  "Sortie : inscription au registre": {
+   "en": "Output: <b>entry in the register</b>",
+   "fr": "Sortie : inscription au registre",
+   "html": "Sortie : <b>inscription au registre</b>"
+  },
+  "Sortie : revue périodique": {
+   "en": "Output: <b>a periodic review</b>",
+   "fr": "Sortie : revue périodique",
+   "html": "Sortie : <b>revue périodique</b>"
+  }
+ },
+ "texte": {
+  "# % des usages connus": {
+   "en": "# % of known uses",
+   "fr": "100 % des usages connus"
+  },
+  "# AOÛT #": {
+   "en": "# AUGUST #",
+   "fr": "02 AOÛT 2026"
+  },
+  "# DÉCEMBRE #": {
+   "en": "# DECEMBER #",
+   "fr": "2 DÉCEMBRE 2026"
+  },
+  "# phases du programme CONSEILPREV (même méthodologie que l'Audit de maturité IA), avec progression calculée à partir de votre Registre IA et de l'Audit IA Act réels.": {
+   "en": "# phases of the CONSEILPREV programme (same methodology as the AI maturity audit), with progress computed from your actual AI register and AI Act audit.",
+   "fr": "4 phases du programme CONSEILPREV (même méthodologie que l'Audit de maturité IA), avec progression calculée à partir de votre Registre IA et de l'Audit IA Act réels."
+  },
+  "# questions · référentiel #-#-a": {
+   "en": "# questions · framework #-#-a",
+   "fr": "7 questions · référentiel 2026-07-a"
+  },
+  "# système(s) inventoriés": {
+   "en": "# system(s) inventoried",
+   "fr": "2189 système(s) inventoriés"
+  },
+  "# système(s) à haut risque identifiés": {
+   "en": "# high-risk system(s) identified",
+   "fr": "1277 système(s) à haut risque identifiés"
+  },
+  "#% — haut risque annexe III : échéance # décembre # (Art. #(c)(i) — règlement (UE) #/#)": {
+   "en": "#% — Annex III high risk: deadline # December # (Art. #(c)(i) — Regulation (EU) #/#)",
+   "fr": "0% — haut risque annexe III : échéance 2 décembre 2027 (Art. 113(c)(i) — règlement (UE) 2026/1744)"
+  },
+  "#% — échéance # décembre # (Digital Omnibus, haut risque annexe III)": {
+   "en": "#% — deadline # December # (Digital Omnibus, Annex III high risk)",
+   "fr": "0% — échéance 2 décembre 2027 (Digital Omnibus, haut risque annexe III)"
+  },
+  "#/# contrôles conformes": {
+   "en": "#/# compliant controls",
+   "fr": "0/34 contrôles conformes"
+  },
+  ": ce module ne la duplique pas, il l’applique.": {
+   "en": ": this module does not duplicate it, it applies it.",
+   "fr": ": ce module ne la duplique pas, il l’applique."
+  },
+  "< # jours": {
+   "en": "< # days",
+   "fr": "< 30 jours"
+  },
+  "> # % des populations exposées": {
+   "en": "> # % of the populations exposed",
+   "fr": "> 90 % des populations exposées"
+  },
+  "A": {
+   "en": "A",
+   "fr": "A"
+  },
+  "A — Approbateur (valide)": {
+   "en": "A — Accountable (approves)",
+   "fr": "A — Approbateur (valide)"
+  },
+  "AI Act — Systèmes haut risque (Art. #)": {
+   "en": "AI Act — High-risk systems (Art. #)",
+   "fr": "AI Act — Systèmes haut risque (Art. 113)"
+  },
+  "AI Business Partners": {
+   "en": "AI business partners",
+   "fr": "AI Business Partners"
+  },
+  "Accompagnement commercial": {
+   "en": "Sales support",
+   "fr": "Accompagnement commercial"
+  },
+  "Aide : Demandes en attente de décision": {
+   "en": "Help: Requests awaiting decision",
+   "fr": "Aide : Demandes en attente de décision"
+  },
+  "Aide : Demandes refusées ou ajournées": {
+   "en": "Help: Requests rejected or deferred",
+   "fr": "Aide : Demandes refusées ou ajournées"
+  },
+  "Aide : Délai moyen de décision (jours)": {
+   "en": "Help: Average decision time (days)",
+   "fr": "Aide : Délai moyen de décision (jours)"
+  },
+  "Aide : Part des usages qualifiés AI Act": {
+   "en": "Help: Share of uses qualified under the AI Act",
+   "fr": "Aide : Part des usages qualifiés AI Act"
+  },
+  "Aide : Systèmes à haut risque en exploitation": {
+   "en": "Help: High-risk systems in operation",
+   "fr": "Aide : Systèmes à haut risque en exploitation"
+  },
+  "Aide : Usages déclarés au registre": {
+   "en": "Help: Uses declared in the register",
+   "fr": "Aide : Usages déclarés au registre"
+  },
+  "Analyse de risque (obj. #) →": {
+   "en": "Risk analysis (obj. #) →",
+   "fr": "Analyse de risque (obj. 16) →"
+  },
+  "Approbateur (valide)": {
+   "en": "Accountable (approves)",
+   "fr": "Approbateur (valide)"
+  },
+  "Art. # EU AI Act": {
+   "en": "Art. # EU AI Act",
+   "fr": "Art. 14 EU AI Act"
+  },
+  "Art. # EU AI Act / Annexe III": {
+   "en": "Art. # EU AI Act / Annex III",
+   "fr": "Art. 6 EU AI Act / Annexe III"
+  },
+  "Art. # EU AI Act / ISO # A.#": {
+   "en": "Art. # EU AI Act / ISO # A.#",
+   "fr": "Art. 10 EU AI Act / ISO 42001 A.7"
+  },
+  "Art. # EU AI Act / ISO # cl. #": {
+   "en": "Art. # EU AI Act / ISO # cl. #",
+   "fr": "Art. 9 EU AI Act / ISO 42001 cl. 6.1"
+  },
+  "Art. # EU AI Act / ISO # cl. #-#": {
+   "en": "Art. # EU AI Act / ISO # cl. #-#",
+   "fr": "Art. 4 EU AI Act / ISO 42001 cl. 7.2-7.3"
+  },
+  "Art. # — Champ d'application (EUR-Lex)": {
+   "en": "Art. # — Scope (EUR-Lex)",
+   "fr": "Art. 2 — Champ d'application (EUR-Lex)"
+  },
+  "Art. #(#) + Annexe I (EUR-Lex)": {
+   "en": "Art. #(#) + Annex I (EUR-Lex)",
+   "fr": "Art. 6(1) + Annexe I (EUR-Lex)"
+  },
+  "Art. #(#) — Coopération du fournisseur initial (EUR-Lex)": {
+   "en": "Art. #(#) — Cooperation by the initial provider (EUR-Lex)",
+   "fr": "Art. 25(2) — Coopération du fournisseur initial (EUR-Lex)"
+  },
+  "Art. #(#) — Pratiques interdites (EUR-Lex)": {
+   "en": "Art. #(#) — Prohibited practices (EUR-Lex)",
+   "fr": "Art. 5(1) — Pratiques interdites (EUR-Lex)"
+  },
+  "Art. #, # EU AI Act": {
+   "en": "Art. #, # EU AI Act",
+   "fr": "Art. 49, 71 EU AI Act"
+  },
+  "Art. L#-#, L#-#, L#-# Code du travail": {
+   "en": "Art. L#-#, L#-#, L#-# French Labour Code",
+   "fr": "Art. L2312-8, L2312-37, L2312-38 Code du travail"
+  },
+  "Articles #, #, #, #, #, #, #, # obligatoires": {
+   "en": "Articles #, #, #, #, #, #, #, # mandatory",
+   "fr": "Articles 6, 9, 10, 11, 12, 13, 14, 15 obligatoires"
+  },
+  "Aucune demande enregistrée. Une file vide ne signifie pas qu’aucun usage n’existe : elle signifie qu’aucun n’est passé par le circuit.": {
+   "en": "No request recorded. An empty queue does not mean that no use exists: it means that none has gone through the workflow.",
+   "fr": "Aucune demande enregistrée. Une file vide ne signifie pas qu’aucun usage n’existe : elle signifie qu’aucun n’est passé par le circuit."
+  },
+  "Audit interne et revue de conformite": {
+   "en": "Internal audit and compliance review",
+   "fr": "Audit interne et revue de conformite"
+  },
+  "Autorisation, autorisation sous conditions, ajournement ou refus. Toute décision est motivée et tracée, y compris le refus.": {
+   "en": "Authorisation, conditional authorisation, deferral or rejection. Every decision is reasoned and traced, including a rejection.",
+   "fr": "Autorisation, autorisation sous conditions, ajournement ou refus. Toute décision est motivée et tracée, y compris le refus."
+  },
+  "Bloc # sur # · ReCyF · # objectifs — Verrouillé": {
+   "en": "Block # of # · ReCyF · # objectives — Locked",
+   "fr": "Bloc 5 sur 7 · ReCyF · 20 objectifs — Verrouillé"
+  },
+  "Bloc # sur # · ReCyF · Analyse de risque — Verrouillé": {
+   "en": "Block # of # · ReCyF · Risk analysis — Locked",
+   "fr": "Bloc 6 sur 7 · ReCyF · Analyse de risque — Verrouillé"
+  },
+  "C": {
+   "en": "C",
+   "fr": "C"
+  },
+  "C — Consulte (avis requis)": {
+   "en": "C — Consulted (opinion required)",
+   "fr": "C — Consulte (avis requis)"
+  },
+  "CSE (Comite Social et Economique)": {
+   "en": "CSE (French works council)",
+   "fr": "CSE (Comite Social et Economique)"
+  },
+  "CSRD / Bilan carbone IA": {
+   "en": "CSRD / AI carbon assessment",
+   "fr": "CSRD / Bilan carbone IA"
+  },
+  "CTO": {
+   "en": "CTO",
+   "fr": "CTO"
+  },
+  "Ce qu’elle apporte": {
+   "en": "What it brings",
+   "fr": "Ce qu’elle apporte"
+  },
+  "Ce texte n’est pas en vigueur.": {
+   "en": "This text is not in force.",
+   "fr": "Ce texte n’est pas en vigueur."
+  },
+  "Celle de CONSEILPREV": {
+   "en": "CONSEILPREV’s own",
+   "fr": "Celle de CONSEILPREV"
+  },
+  "Ces documents sont produits par calcul déterministe à partir d'un référentiel versionné : aucun modèle de langage n'intervient dans leur rédaction, et leurs propriétés de fichier le déclarent. Ils ne valent pas conseil juridique — la politique d'une organisation se lit au regard de ses contrats et du droit qui lui est applicable.": {
+   "en": "These documents are produced by deterministic calculation from a versioned framework: no language model takes part in drafting them, and their file properties say so. They do not constitute legal advice — an organisation’s policy is read in the light of its contracts and of the law applicable to it.",
+   "fr": "Ces documents sont produits par calcul déterministe à partir d'un référentiel versionné : aucun modèle de langage n'intervient dans leur rédaction, et leurs propriétés de fichier le déclarent. Ils ne valent pas conseil juridique — la politique d'une organisation se lit au regard de ses contrats et du droit qui lui est applicable."
+  },
+  "Chargement de l'objectif #…": {
+   "en": "Loading objective #…",
+   "fr": "Chargement de l'objectif 16…"
+  },
+  "Chargement du statut des textes…": {
+   "en": "Loading the status of the texts…",
+   "fr": "Chargement du statut des textes…"
+  },
+  "Chiffrement des metadonnees et donnees de communication": {
+   "en": "Encryption of metadata and communication data",
+   "fr": "Chiffrement des metadonnees et donnees de communication"
+  },
+  "Cible": {
+   "en": "Target",
+   "fr": "Cible"
+  },
+  "Cible : # % des usages connus": {
+   "en": "Target: # % of known uses",
+   "fr": "Cible : 100 % des usages connus"
+  },
+  "Cible : aucune au-delà d'un trimestre": {
+   "en": "Target: none older than a quarter",
+   "fr": "Cible : aucune au-delà d'un trimestre"
+  },
+  "Cible : connu et documenté": {
+   "en": "Target: known and documented",
+   "fr": "Cible : connu et documenté"
+  },
+  "Cible : non nul": {
+   "en": "Target: non-zero",
+   "fr": "Cible : non nul"
+  },
+  "Circuit complet": {
+   "en": "Full circuit",
+   "fr": "Circuit complet"
+  },
+  "Circuit de validation": {
+   "en": "Approval workflow",
+   "fr": "Circuit de validation"
+  },
+  "Classe AI Act présumée, nécessité d'une AIPD ou d'une FRIA, obligations de transparence (art. #). C'est ICI que se décide la lourdeur de tout le reste — jamais à la fin.": {
+   "en": "Presumed AI Act class, need for a DPIA or a FRIA, transparency obligations (art. #). It is HERE that the weight of everything else is decided — never at the end.",
+   "fr": "Classe AI Act présumée, nécessité d'une AIPD ou d'une FRIA, obligations de transparence (art. 50). C'est ICI que se décide la lourdeur de tout le reste — jamais à la fin."
+  },
+  "Cliquez sur une cellule pour faire defiler les assignations : vide → R → A → C → I → vide. Chaque processus ne devrait avoir qu un seul A (Approbateur) pour eviter les conflits de decision.": {
+   "en": "Click a cell to cycle through the assignments: empty → R → A → C → I → empty. Each process should have only one A (Accountable) to avoid decision conflicts.",
+   "fr": "Cliquez sur une cellule pour faire defiler les assignations : vide → R → A → C → I → vide. Chaque processus ne devrait avoir qu un seul A (Approbateur) pour eviter les conflits de decision."
+  },
+  "Collaborateurs sensibilisés": {
+   "en": "Staff made aware",
+   "fr": "Collaborateurs sensibilisés"
+  },
+  "Comite de Gouvernance IA": {
+   "en": "AI governance committee",
+   "fr": "Comite de Gouvernance IA"
+  },
+  "Comité de gouvernance IA": {
+   "en": "AI governance committee",
+   "fr": "Comité de gouvernance IA"
+  },
+  "Comité de gouvernance IA (ou délégation selon la classe)": {
+   "en": "AI governance committee (or delegation depending on the class)",
+   "fr": "Comité de gouvernance IA (ou délégation selon la classe)"
+  },
+  "Comité de gouvernance IA · # étape(s)": {
+   "en": "AI governance committee · # step(s)",
+   "fr": "Comité de gouvernance IA · 6 étape(s)"
+  },
+  "Commercial / Avant-vente": {
+   "en": "Sales / Pre-sales",
+   "fr": "Commercial / Avant-vente"
+  },
+  "Conditions de la décision mises en œuvre, inscription au registre des systèmes IA, information des utilisateurs.": {
+   "en": "Decision conditions implemented, recording in the AI systems register, information of users.",
+   "fr": "Conditions de la décision mises en œuvre, inscription au registre des systèmes IA, information des utilisateurs."
+  },
+  "Conditions réelles d'usage, contournements observés": {
+   "en": "Actual conditions of use, workarounds observed",
+   "fr": "Conditions réelles d'usage, contournements observés"
+  },
+  "Conformité + métier, comité informé · # étape(s)": {
+   "en": "Compliance + business, committee informed · # step(s)",
+   "fr": "Conformité + métier, comité informé · 5 étape(s)"
+  },
+  "Conformité / Juridique": {
+   "en": "Compliance / Legal",
+   "fr": "Conformité / Juridique"
+  },
+  "Conformité / Risque": {
+   "en": "Compliance / Risk",
+   "fr": "Conformité / Risque"
+  },
+  "Consulte (avis requis)": {
+   "en": "Consulted (opinion required)",
+   "fr": "Consulte (avis requis)"
+  },
+  "Continu": {
+   "en": "Continuous",
+   "fr": "Continu"
+  },
+  "Controle des reponses des chatbots (anti-desinformation, biais)": {
+   "en": "Checking chatbot answers (anti-disinformation, bias)",
+   "fr": "Controle des reponses des chatbots (anti-desinformation, biais)"
+  },
+  "Contrôle réglementaire et éthique, veto motivé": {
+   "en": "Regulatory and ethical review, reasoned veto",
+   "fr": "Contrôle réglementaire et éthique, veto motivé"
+  },
+  "Couverture": {
+   "en": "Coverage",
+   "fr": "Couverture"
+  },
+  "Cybersecurite": {
+   "en": "Cybersecurity",
+   "fr": "Cybersecurite"
+  },
+  "Cybersécurité": {
+   "en": "Cybersecurity",
+   "fr": "Cybersécurité"
+  },
+  "DPO": {
+   "en": "DPO",
+   "fr": "DPO"
+  },
+  "Data / Expert Gouvernance": {
+   "en": "Data / Governance expert",
+   "fr": "Data / Expert Gouvernance"
+  },
+  "Demande & description de l'usage": {
+   "en": "Request & description of the use",
+   "fr": "Demande & description de l'usage"
+  },
+  "Demandes en attente de décision": {
+   "en": "Requests awaiting decision",
+   "fr": "Demandes en attente de décision"
+  },
+  "Demandes refusées ou ajournées": {
+   "en": "Requests rejected or deferred",
+   "fr": "Demandes refusées ou ajournées"
+  },
+  "Direction Financiere": {
+   "en": "Finance department",
+   "fr": "Direction Financiere"
+  },
+  "Direction Generale / Comex": {
+   "en": "Executive management / Executive committee",
+   "fr": "Direction Generale / Comex"
+  },
+  "Direction générale": {
+   "en": "Executive management",
+   "fr": "Direction générale"
+  },
+  "Direction, Conformité/Risque et Métiers doivent être représentés. Sans l'un des trois, la séance informe mais ne décide pas.": {
+   "en": "Senior management, Compliance/Risk and the business lines must be represented. Without one of the three, the session informs but does not decide.",
+   "fr": "Direction, Conformité/Risque et Métiers doivent être représentés. Sans l'un des trois, la séance informe mais ne décide pas."
+  },
+  "Données de phases indisponibles.": {
+   "en": "Phase data unavailable.",
+   "fr": "Données de phases indisponibles."
+  },
+  "Données réellement nécessaires, hébergement, exposition, supervision humaine prévue, journalisation.": {
+   "en": "Data actually needed, hosting, exposure, planned human oversight, logging.",
+   "fr": "Données réellement nécessaires, hébergement, exposition, supervision humaine prévue, journalisation."
+  },
+  "Décision": {
+   "en": "Decision",
+   "fr": "Décision"
+  },
+  "Décisions qui lui sont réservées": {
+   "en": "Decisions reserved to it",
+   "fr": "Décisions qui lui sont réservées"
+  },
+  "Déclarer un nouvel usage & le qualifier": {
+   "en": "Declare a new use & qualify it",
+   "fr": "Déclarer un nouvel usage & le qualifier"
+  },
+  "Défiler vers la droite": {
+   "en": "Scroll right",
+   "fr": "Défiler vers la droite"
+  },
+  "Défiler vers la gauche": {
+   "en": "Scroll left",
+   "fr": "Défiler vers la gauche"
+  },
+  "Défiler vers le bas": {
+   "en": "Scroll down",
+   "fr": "Défiler vers le bas"
+  },
+  "Défiler vers le haut": {
+   "en": "Scroll up",
+   "fr": "Défiler vers le haut"
+  },
+  "Délai moyen de décision (jours)": {
+   "en": "Average decision time (days)",
+   "fr": "Délai moyen de décision (jours)"
+  },
+  "Enregistrer l etat actuel de la matrice RACI dans l historique persistant et tracable (RGPD).": {
+   "en": "Save the current state of the RACI matrix to the persistent, traceable history (GDPR).",
+   "fr": "Enregistrer l etat actuel de la matrice RACI dans l historique persistant et tracable (RGPD)."
+  },
+  "Enregistrer la demande dans la file": {
+   "en": "Save the request to the queue",
+   "fr": "Enregistrer la demande dans la file"
+  },
+  "Envoyer la matrice RACI par email a un collegue.": {
+   "en": "Send the RACI matrix to a colleague by email.",
+   "fr": "Envoyer la matrice RACI par email a un collegue."
+  },
+  "Equipes Metiers": {
+   "en": "Business teams",
+   "fr": "Equipes Metiers"
+  },
+  "Evaluation des impacts RSE et environnementaux des systemes IA": {
+   "en": "Assessment of the CSR and environmental impacts of AI systems",
+   "fr": "Evaluation des impacts RSE et environnementaux des systemes IA"
+  },
+  "Evaluation des risques et impacts (FRIA)": {
+   "en": "Risk and impact assessment (FRIA)",
+   "fr": "Evaluation des risques et impacts (FRIA)"
+  },
+  "Exploitation": {
+   "en": "Operation",
+   "fr": "Exploitation"
+  },
+  "Exposition": {
+   "en": "Exposure",
+   "fr": "Exposition"
+  },
+  "Exposition, sécurité des données et du modèle": {
+   "en": "Exposure, security of the data and of the model",
+   "fr": "Exposition, sécurité des données et du modèle"
+  },
+  "Faisabilité, architecture, sécurité technique": {
+   "en": "Feasibility, architecture, technical security",
+   "fr": "Faisabilité, architecture, sécurité technique"
+  },
+  "Famille": {
+   "en": "Family",
+   "fr": "Famille"
+  },
+  "File de validation": {
+   "en": "Approval queue",
+   "fr": "File de validation"
+  },
+  "Finalité — à quoi sert cet usage, pour qui, avec quel gain attendu": {
+   "en": "Purpose — what this use is for, for whom, with what expected gain",
+   "fr": "Finalité — à quoi sert cet usage, pour qui, avec quel gain attendu"
+  },
+  "Finalité, population concernée, données envisagées, gain attendu. Une demande sans finalité écrite n'est pas instruite.": {
+   "en": "Purpose, population concerned, data envisaged, expected gain. A request without a written purpose is not examined.",
+   "fr": "Finalité, population concernée, données envisagées, gain attendu. Une demande sans finalité écrite n'est pas instruite."
+  },
+  "Fluidité": {
+   "en": "Flow",
+   "fr": "Fluidité"
+  },
+  "Fonction": {
+   "en": "Function",
+   "fr": "Fonction"
+  },
+  "Formation": {
+   "en": "Training",
+   "fr": "Formation"
+  },
+  "Formation et sensibilisation des equipes": {
+   "en": "Team training and awareness",
+   "fr": "Formation et sensibilisation des equipes"
+  },
+  "Generer par IA le document complet de cartographie (analyse, recommandations, plan de communication).": {
+   "en": "Generate the complete mapping document with AI (analysis, recommendations, communication plan).",
+   "fr": "Generer par IA le document complet de cartographie (analyse, recommandations, plan de communication)."
+  },
+  "Gestion des donnees d entrainement et de leur qualite": {
+   "en": "Management of training data and its quality",
+   "fr": "Gestion des donnees d entrainement et de leur qualite"
+  },
+  "Gestion des incidents IA (biais, fuites, attaques)": {
+   "en": "AI incident management (bias, leaks, attacks)",
+   "fr": "Gestion des incidents IA (biais, fuites, attaques)"
+  },
+  "Gouvernance · Comité & circuit": {
+   "en": "Governance · Committee & workflow",
+   "fr": "Gouvernance · Comité & circuit"
+  },
+  "Gouvernance · Parties prenantes": {
+   "en": "Governance · Stakeholders",
+   "fr": "Gouvernance · Parties prenantes"
+  },
+  "Hors de son périmètre": {
+   "en": "Outside its scope",
+   "fr": "Hors de son périmètre"
+  },
+  "Humain": {
+   "en": "Human",
+   "fr": "Humain"
+  },
+  "I": {
+   "en": "I",
+   "fr": "I"
+  },
+  "I — Informe (tenu au courant)": {
+   "en": "I — Informed (kept up to date)",
+   "fr": "I — Informe (tenu au courant)"
+  },
+  "ISO # cl. #": {
+   "en": "ISO # cl. #",
+   "fr": "ISO 42001 cl. 9.2"
+  },
+  "IT & métier": {
+   "en": "IT & business",
+   "fr": "IT & métier"
+  },
+  "IT, Cybersécurité, DPO": {
+   "en": "IT, Cybersecurity, DPO",
+   "fr": "IT, Cybersécurité, DPO"
+  },
+  "Identification et classification des systemes IA": {
+   "en": "Identification and classification of AI systems",
+   "fr": "Identification et classification des systemes IA"
+  },
+  "Indicateur": {
+   "en": "Indicator",
+   "fr": "Indicateur"
+  },
+  "Indicateurs de gouvernance": {
+   "en": "Governance indicators",
+   "fr": "Indicateurs de gouvernance"
+  },
+  "Indicateurs de performance et de dérive, incidents, revue périodique dont la fréquence dépend de la classe.": {
+   "en": "Performance and drift indicators, incidents, periodic review whose frequency depends on the class.",
+   "fr": "Indicateurs de performance et de dérive, incidents, revue périodique dont la fréquence dépend de la classe."
+  },
+  "Information-consultation du CSE avant introduction d un systeme IA": {
+   "en": "Information and consultation of the CSE (works council) before introducing an AI system",
+   "fr": "Information-consultation du CSE avant introduction d un systeme IA"
+  },
+  "Instruction technique & sécurité": {
+   "en": "Technical & security review",
+   "fr": "Instruction technique & sécurité"
+  },
+  "Interagit-il directement avec des personnes, ou génère-t-il du contenu diffusé ?": {
+   "en": "Does it interact directly with people, or generate content that is disseminated?",
+   "fr": "Interagit-il directement avec des personnes, ou génère-t-il du contenu diffusé ?"
+  },
+  "Juridique": {
+   "en": "Legal",
+   "fr": "Juridique"
+  },
+  "Juridique / Conformite": {
+   "en": "Legal / Compliance",
+   "fr": "Juridique / Conformite"
+  },
+  "L'usage est-il opéré par un tiers, ou repose-t-il sur un modèle fourni par un tiers ?": {
+   "en": "Is the use operated by a third party, or does it rely on a model supplied by a third party?",
+   "fr": "L'usage est-il opéré par un tiers, ou repose-t-il sur un modèle fourni par un tiers ?"
+  },
+  "L'usage relève-t-il d'une pratique interdite (notation sociale, manipulation, reconnaissance des émotions au travail, police prédictive) ?": {
+   "en": "Does the use fall under a prohibited practice (social scoring, manipulation, emotion recognition in the workplace, predictive policing)?",
+   "fr": "L'usage relève-t-il d'une pratique interdite (notation sociale, manipulation, reconnaissance des émotions au travail, police prédictive) ?"
+  },
+  "L'usage touche-t-il un domaine de l'annexe III (emploi, éducation, crédit, services essentiels, migration, justice, biométrie, infrastructures critiques) ?": {
+   "en": "Does the use touch an Annex III area (employment, education, credit, essential services, migration, justice, biometrics, critical infrastructure)?",
+   "fr": "L'usage touche-t-il un domaine de l'annexe III (emploi, éducation, crédit, services essentiels, migration, justice, biométrie, infrastructures critiques) ?"
+  },
+  "La calculer →": {
+   "en": "Calculate it →",
+   "fr": "La calculer →"
+  },
+  "La directive (UE) #/#, telle que transposée — et à ce jour la France n'a pas achevé sa transposition.": {
+   "en": "Directive (EU) #/#, as transposed — and to date France has not completed its transposition.",
+   "fr": "La directive (UE) 2022/2555, telle que transposée — et à ce jour la France n'a pas achevé sa transposition."
+  },
+  "La matrice RACI détaillée — # rôles, # processus, variantes sectorielles — est portée par le module « Parties prenantes ». Ce module ne la duplique pas : il en applique les rôles au comité et au circuit.": {
+   "en": "The detailed RACI matrix — # roles, # processes, sector variants — is held by the “Stakeholders” module. This module does not duplicate it: it applies its roles to the committee and the workflow.",
+   "fr": "La matrice RACI détaillée — 18 rôles, 16 processus, variantes sectorielles — est portée par le module « Parties prenantes ». Ce module ne la duplique pas : il en applique les rôles au comité et au circuit."
+  },
+  "La politique d'usage ne produit d'effet que si elle est connue.": {
+   "en": "The use policy only has an effect if it is known.",
+   "fr": "La politique d'usage ne produit d'effet que si elle est connue."
+  },
+  "Le comité de gouvernance IA arbitre les usages de l'intelligence artificielle dans l'organisation : il autorise ou refuse un nouvel usage, tranche les arbitrages entre valeur métier et exposition, et suspend un système dont le suivi révèle une dérive.": {
+   "en": "The AI governance committee decides on the uses of artificial intelligence in the organisation: it authorises or refuses a new use, settles trade-offs between business value and exposure, and suspends a system whose monitoring reveals a drift.",
+   "fr": "Le comité de gouvernance IA arbitre les usages de l'intelligence artificielle dans l'organisation : il autorise ou refuse un nouvel usage, tranche les arbitrages entre valeur métier et exposition, et suspend un système dont le suivi révèle une dérive."
+  },
+  "Le module NIS # la calcule à partir du secteur et de la taille.": {
+   "en": "The NIS # module calculates it from the sector and size.",
+   "fr": "Le module NIS 2 la calcule à partir du secteur et de la taille."
+  },
+  "Le module refuse de chiffrer sans qualification, et ce refus est le premier service rendu.": {
+   "en": "The module refuses to cost without a qualification, and that refusal is the first service it renders.",
+   "fr": "Le module refuse de chiffrer sans qualification, et ce refus est le premier service rendu."
+  },
+  "Le modèle à compléter": {
+   "en": "The template to fill in",
+   "fr": "Le modèle à compléter"
+  },
+  "Le nombre importe moins que la certitude de les avoir tous identifiés.": {
+   "en": "The number matters less than the certainty of having identified them all.",
+   "fr": "Le nombre importe moins que la certitude de les avoir tous identifiés."
+  },
+  "Le référentiel gradue ses exigences : # objectifs sur # sont réservés aux entités essentielles, et le nombre de moyens attendus change pour les autres — # pour une entité essentielle, # pour une importante. Sans la qualification, tout chiffre serait une moyenne entre deux régimes qui ne se moyennent pas.": {
+   "en": "The reference framework grades its requirements: # of # objectives are reserved for essential entities, and the number of means of compliance expected changes for the others — # for an essential entity, # for an important entity. Without the qualification, any figure would be an average between two regimes that cannot be averaged.",
+   "fr": "Le référentiel gradue ses exigences : 5 objectifs sur 20 sont réservés aux entités essentielles, et le nombre de moyens attendus change pour les autres — 152 pour une entité essentielle, 76 pour une importante. Sans la qualification, tout chiffre serait une moyenne entre deux régimes qui ne se moyennent pas."
+  },
+  "Le système produit-il une décision ou une évaluation concernant une personne ?": {
+   "en": "Does the system produce a decision or an assessment concerning a person?",
+   "fr": "Le système produit-il une décision ou une évaluation concernant une personne ?"
+  },
+  "Les indicateurs sans valeur ne sont pas à zéro : ils ne sont pas encore mesurés. Les revues et la sensibilisation se renseignent hors de ce module.": {
+   "en": "Indicators without a value are not at zero: they are not yet measured. Reviews and awareness are entered outside this module.",
+   "fr": "Les indicateurs sans valeur ne sont pas à zéro : ils ne sont pas encore mesurés. Les revues et la sensibilisation se renseignent hors de ce module."
+  },
+  "Les roles metiers et processus de gouvernance ci-dessous sont contextualises selon le secteur selectionne (EU AI Act + ISO/IEC #:#).": {
+   "en": "The business roles and governance processes below are contextualised for the selected sector (EU AI Act + ISO/IEC #:#).",
+   "fr": "Les roles metiers et processus de gouvernance ci-dessous sont contextualises selon le secteur selectionne (EU AI Act + ISO/IEC 42001:2023)."
+  },
+  "Matrice RACI interactive (Responsable / Approbateur / Consulté / Informé) des processus de gouvernance IA. Cliquez sur une cellule pour assigner un rôle, puis générez le document complet par IA.": {
+   "en": "Interactive RACI matrix (Responsible / Accountable / Consulted / Informed) of the AI governance processes. Click a cell to assign a role, then generate the complete document with AI.",
+   "fr": "Matrice RACI interactive (Responsable / Approbateur / Consulté / Informé) des processus de gouvernance IA. Cliquez sur une cellule pour assigner un rôle, puis générez le document complet par IA."
+  },
+  "Mise en production encadrée": {
+   "en": "Controlled go-live",
+   "fr": "Mise en production encadrée"
+  },
+  "Métier demandeur": {
+   "en": "Requesting business line",
+   "fr": "Métier demandeur"
+  },
+  "Métiers": {
+   "en": "Business lines",
+   "fr": "Métiers"
+  },
+  "Ni le projet de loi ni le ReCyF ne sont en vigueur. Aucune entité ne peut être sanctionnée aujourd'hui sur le fondement de ces objectifs.": {
+   "en": "Neither the bill nor the ReCyF is in force. No entity can be penalised today on the basis of these objectives.",
+   "fr": "Ni le projet de loi ni le ReCyF ne sont en vigueur. Aucune entité ne peut être sanctionnée aujourd'hui sur le fondement de ces objectifs."
+  },
+  "Nom de l’usage envisagé": {
+   "en": "Name of the intended use",
+   "fr": "Nom de l’usage envisagé"
+  },
+  "Orientation stratégique IA, arbitrage final": {
+   "en": "Strategic AI direction, final decision",
+   "fr": "Orientation stratégique IA, arbitrage final"
+  },
+  "Ouvrir Parties prenantes →": {
+   "en": "Open Stakeholders →",
+   "fr": "Ouvrir Parties prenantes →"
+  },
+  "PDF": {
+   "en": "PDF",
+   "fr": "PDF"
+  },
+  "Parce que c'est contre eux que le contrôle se fera. Une entité qui attend la publication du décret pour commencer découvrira alors qu'il lui manque vingt objectifs, pas dix mesures.": {
+   "en": "Because it is against them that inspections will take place. An entity that waits for the decree to be published before starting will then find that it is missing twenty objectives, not ten measures.",
+   "fr": "Parce que c'est contre eux que le contrôle se fera. Une entité qui attend la publication du décret pour commencer découvrira alors qu'il lui manque vingt objectifs, pas dix mesures."
+  },
+  "Part des usages qualifiés AI Act": {
+   "en": "Share of uses qualified under the AI Act",
+   "fr": "Part des usages qualifiés AI Act"
+  },
+  "Politique de gouvernance de l'IA — à télécharger": {
+   "en": "AI governance policy — to download",
+   "fr": "Politique de gouvernance de l'IA — à télécharger"
+  },
+  "Pourquoi il compte": {
+   "en": "Why it matters",
+   "fr": "Pourquoi il compte"
+  },
+  "Processus de gouvernance IA": {
+   "en": "AI governance processes",
+   "fr": "Processus de gouvernance IA"
+  },
+  "Prochaine échéance critique": {
+   "en": "Next critical deadline",
+   "fr": "Prochaine échéance critique"
+  },
+  "Protection des données, nécessité d'une AIPD": {
+   "en": "Data protection, need for a DPIA",
+   "fr": "Protection des données, nécessité d'une AIPD"
+  },
+  "Périmètre ISO # →": {
+   "en": "ISO # scope →",
+   "fr": "Périmètre ISO 27001 →"
+  },
+  "Qualification réglementaire": {
+   "en": "Regulatory qualification",
+   "fr": "Qualification réglementaire"
+  },
+  "Qualification réglementaire, contrats, responsabilité": {
+   "en": "Regulatory qualification, contracts, liability",
+   "fr": "Qualification réglementaire, contrats, responsabilité"
+  },
+  "Qui décide, ce qu’il a le droit de trancher, et par quel chemin passe un nouvel usage": {
+   "en": "Who decides, what they are entitled to decide, and which route a new use takes",
+   "fr": "Qui décide, ce qu’il a le droit de trancher, et par quel chemin passe un nouvel usage"
+  },
+  "R": {
+   "en": "R",
+   "fr": "R"
+  },
+  "R — Responsable (execute)": {
+   "en": "R — Responsible (executes)",
+   "fr": "R — Responsable (execute)"
+  },
+  "RH / Direction des Ressources Humaines": {
+   "en": "HR / Human Resources department",
+   "fr": "RH / Direction des Ressources Humaines"
+  },
+  "Redaction et mise a jour des politiques IA": {
+   "en": "Drafting and updating AI policies",
+   "fr": "Redaction et mise a jour des politiques IA"
+  },
+  "Registre + qualification": {
+   "en": "Register + qualification",
+   "fr": "Registre + qualification"
+  },
+  "Reinitialiser la matrice RACI au profil de reference CONSEILPREV.": {
+   "en": "Reset the RACI matrix to the CONSEILPREV reference profile.",
+   "fr": "Reinitialiser la matrice RACI au profil de reference CONSEILPREV."
+  },
+  "Relation avec les fournisseurs et sous-traitants IA": {
+   "en": "Relationship with AI suppliers and processors",
+   "fr": "Relation avec les fournisseurs et sous-traitants IA"
+  },
+  "Remplie. Ce que le cabinet s'applique à lui-même : son inventaire réel, ses trois systèmes génératifs — et les trois moteurs déterministes qu'il refuse d'y ranger.": {
+   "en": "Filled in. What the firm applies to itself: its actual inventory, its three generative systems — and the three deterministic engines it refuses to file among them.",
+   "fr": "Remplie. Ce que le cabinet s'applique à lui-même : son inventaire réel, ses trois systèmes génératifs — et les trois moteurs déterministes qu'il refuse d'y ranger."
+  },
+  "Renseignez votre qualification sur le panneau des vingt objectifs : l’objectif # est réservé aux entités essentielles, et le dire suppose de savoir laquelle vous êtes.": {
+   "en": "Enter your qualification on the twenty objectives panel: objective # is reserved for essential entities, and saying so requires knowing which one you are.",
+   "fr": "Renseignez votre qualification sur le panneau des vingt objectifs : l’objectif 16 est réservé aux entités essentielles, et le dire suppose de savoir laquelle vous êtes."
+  },
+  "Reponses aux demandes clients sur la gouvernance IA": {
+   "en": "Answers to client requests about AI governance",
+   "fr": "Reponses aux demandes clients sur la gouvernance IA"
+  },
+  "Reporting executif et revue de direction": {
+   "en": "Executive reporting and management review",
+   "fr": "Reporting executif et revue de direction"
+  },
+  "Représentation des utilisateurs": {
+   "en": "User representation",
+   "fr": "Représentation des utilisateurs"
+  },
+  "Responsable (execute)": {
+   "en": "Responsible (executes)",
+   "fr": "Responsable (execute)"
+  },
+  "Responsable IA": {
+   "en": "AI lead",
+   "fr": "Responsable IA"
+  },
+  "Responsable IA, enregistrement au registre · # étape(s)": {
+   "en": "AI owner, recording in the register · # step(s)",
+   "fr": "Responsable IA, enregistrement au registre · 2 étape(s)"
+  },
+  "Responsable RSE / Environnement": {
+   "en": "CSR / Environment manager",
+   "fr": "Responsable RSE / Environnement"
+  },
+  "Responsable de l'usage": {
+   "en": "Owner of the use",
+   "fr": "Responsable de l'usage"
+  },
+  "Revues périodiques à jour": {
+   "en": "Periodic reviews up to date",
+   "fr": "Revues périodiques à jour"
+  },
+  "Référentiel indisponible.": {
+   "en": "Framework unavailable.",
+   "fr": "Référentiel indisponible."
+  },
+  "Répondez aux questions ci-dessus : la qualification présumée et la voie applicable s’affichent ici, avant tout enregistrement.": {
+   "en": "Answer the questions above: the presumed qualification and the applicable route are displayed here, before anything is saved.",
+   "fr": "Répondez aux questions ci-dessus : la qualification présumée et la voie applicable s’affichent ici, avant tout enregistrement."
+  },
+  "Réponse — Classification selon l'Annexe III (# domaines) et l'Annexe I": {
+   "en": "Answer — Classification under Annex III (# areas) and Annex I",
+   "fr": "Réponse — Classification selon l'Annexe III (8 domaines) et l'Annexe I"
+  },
+  "Réponse — Culture de l'IA des équipes (Art. #)": {
+   "en": "Answer — AI literacy of the teams (Art. #)",
+   "fr": "Réponse — Culture de l'IA des équipes (Art. 4)"
+  },
+  "Résumé avancement": {
+   "en": "Progress summary",
+   "fr": "Résumé avancement"
+  },
+  "Secteur d activite :": {
+   "en": "Sector:",
+   "fr": "Secteur d activite :"
+  },
+  "Sectoriel": {
+   "en": "Sectoral",
+   "fr": "Sectoriel"
+  },
+  "Seize sections : inventaire des systèmes, évaluation des risques, règles d'usage, vérification avant livrable, supervision humaine, agents, fournisseurs, transparence, incidents. Deux versions.": {
+   "en": "Sixteen sections: inventory of systems, risk assessment, rules of use, checks before a deliverable, human oversight, agents, suppliers, transparency, incidents. Two versions.",
+   "fr": "Seize sections : inventaire des systèmes, évaluation des risques, règles d'usage, vérification avant livrable, supervision humaine, agents, fournisseurs, transparence, incidents. Deux versions."
+  },
+  "Sens de lecture": {
+   "en": "Reading direction",
+   "fr": "Sens de lecture"
+  },
+  "Simple déclaration": {
+   "en": "Simple declaration",
+   "fr": "Simple déclaration"
+  },
+  "Suivi & revue": {
+   "en": "Monitoring & review",
+   "fr": "Suivi & revue"
+  },
+  "Suivi des systèmes": {
+   "en": "System monitoring",
+   "fr": "Suivi des systèmes"
+  },
+  "Supervision humaine des systemes en production": {
+   "en": "Human oversight of systems in production",
+   "fr": "Supervision humaine des systemes en production"
+  },
+  "Systèmes à haut risque en exploitation": {
+   "en": "High-risk systems in operation",
+   "fr": "Systèmes à haut risque en exploitation"
+  },
+  "Telecharger la charte du comite et le circuit au format Word.": {
+   "en": "Download the committee charter and the workflow in Word format.",
+   "fr": "Telecharger la charte du comite et le circuit au format Word."
+  },
+  "Telecharger la matrice RACI brute au format PDF (format paysage).": {
+   "en": "Download the raw RACI matrix as a PDF (landscape format).",
+   "fr": "Telecharger la matrice RACI brute au format PDF (format paysage)."
+  },
+  "Telecharger la matrice RACI brute au format Word.": {
+   "en": "Download the raw RACI matrix in Word format.",
+   "fr": "Telecharger la matrice RACI brute au format Word."
+  },
+  "Tenue du registre des systemes IA": {
+   "en": "Keeping the AI systems register",
+   "fr": "Tenue du registre des systemes IA"
+  },
+  "Tout ne mérite pas le circuit complet : prétendre le contraire fait naître le contournement, c’est-à-dire le shadow AI.": {
+   "en": "Not everything deserves the full workflow: claiming otherwise breeds workarounds, that is, shadow AI.",
+   "fr": "Tout ne mérite pas le circuit complet : prétendre le contraire fait naître le contournement, c’est-à-dire le shadow AI."
+  },
+  "Traite-t-il des données personnelles (même non sensibles) ?": {
+   "en": "Does it process personal data (even non-sensitive)?",
+   "fr": "Traite-t-il des données personnelles (même non sensibles) ?"
+  },
+  "Traite-t-il des données personnelles sensibles (santé, biométrie, opinions, appartenance syndicale) ?": {
+   "en": "Does it process sensitive personal data (health, biometrics, opinions, trade union membership)?",
+   "fr": "Traite-t-il des données personnelles sensibles (santé, biométrie, opinions, appartenance syndicale) ?"
+  },
+  "Trois voies, selon ce qui est en jeu": {
+   "en": "Three routes, depending on what is at stake",
+   "fr": "Trois voies, selon ce qui est en jeu"
+  },
+  "Un circuit lent se contourne. Ce chiffre mesure le risque de shadow AI autant que l'efficacité du comité.": {
+   "en": "A slow workflow gets bypassed. This figure measures the risk of shadow AI as much as the committee’s efficiency.",
+   "fr": "Un circuit lent se contourne. Ce chiffre mesure le risque de shadow AI autant que l'efficacité du comité."
+  },
+  "Un comité qui n'a jamais rien refusé ne décide pas : il enregistre.": {
+   "en": "A committee that has never refused anything does not decide: it records.",
+   "fr": "Un comité qui n'a jamais rien refusé ne décide pas : il enregistre."
+  },
+  "Un comité sans décisions réservées ne gouverne pas : il informe.": {
+   "en": "A committee without reserved decisions does not govern: it informs.",
+   "fr": "Un comité sans décisions réservées ne gouverne pas : il informe."
+  },
+  "Un registre incomplet rend toutes les autres mesures fausses.": {
+   "en": "An incomplete register makes every other measurement wrong.",
+   "fr": "Un registre incomplet rend toutes les autres mesures fausses."
+  },
+  "Un usage non qualifié est un usage dont on ignore les obligations.": {
+   "en": "An unqualified use is a use whose obligations are unknown.",
+   "fr": "Un usage non qualifié est un usage dont on ignore les obligations."
+  },
+  "Une demande sans finalité écrite n’est pas instruite.": {
+   "en": "A request without a written purpose is not examined.",
+   "fr": "Une demande sans finalité écrite n’est pas instruite."
+  },
+  "Une file qui s'allonge annonce des mises en production hors circuit.": {
+   "en": "A growing queue heralds go-lives outside the workflow.",
+   "fr": "Une file qui s'allonge annonce des mises en production hors circuit."
+  },
+  "Une revue en retard sur un système à haut risque est un écart de conformité.": {
+   "en": "An overdue review on a high-risk system is a compliance gap.",
+   "fr": "Une revue en retard sur un système à haut risque est un écart de conformité."
+  },
+  "Usages déclarés au registre": {
+   "en": "Uses declared in the register",
+   "fr": "Usages déclarés au registre"
+  },
+  "Valeur": {
+   "en": "Value",
+   "fr": "Valeur"
+  },
+  "Validation de la valeur d'usage et de l'appropriation": {
+   "en": "Validation of the use value and of adoption",
+   "fr": "Validation de la valeur d'usage et de l'appropriation"
+  },
+  "Validation des nouveaux projets IA avant deploiement": {
+   "en": "Validation of new AI projects before deployment",
+   "fr": "Validation des nouveaux projets IA avant deploiement"
+  },
+  "Veille reglementaire et diffusion aux parties prenantes": {
+   "en": "Regulatory watch and dissemination to stakeholders",
+   "fr": "Veille reglementaire et diffusion aux parties prenantes"
+  },
+  "Vierge. Les champs entre crochets sont à remplir. Une annexe donne la correspondance entre les références françaises et européennes et leurs équivalents québécois.": {
+   "en": "Blank. The fields in square brackets are to be filled in. An annex gives the correspondence between the French and European references and their Quebec equivalents.",
+   "fr": "Vierge. Les champs entre crochets sont à remplir. Une annexe donne la correspondance entre les références françaises et européennes et leurs équivalents québécois."
+  },
+  "Voie allégée": {
+   "en": "Fast track",
+   "fr": "Voie allégée"
+  },
+  "Voix": {
+   "en": "Voice",
+   "fr": "Voix"
+  },
+  "Votre qualification": {
+   "en": "Your qualification",
+   "fr": "Votre qualification"
+  },
+  "Votre statut au sens du référentiel : entité essentielle ou importante": {
+   "en": "Your status within the meaning of the reference framework: essential or important entity",
+   "fr": "Votre statut au sens du référentiel : entité essentielle ou importante"
+  },
+  "Votre statut, choisi sur l'écran des vingt objectifs": {
+   "en": "Your status, chosen on the twenty objectives screen",
+   "fr": "Votre statut, choisi sur l'écran des vingt objectifs"
+  },
+  "accepter formellement un risque résiduel, avec sa justification écrite": {
+   "en": "formally accept a residual risk, with its written justification",
+   "fr": "accepter formellement un risque résiduel, avec sa justification écrite"
+  },
+  "arbitrer un désaccord entre valeur métier et exposition réglementaire": {
+   "en": "settle a disagreement between business value and regulatory exposure",
+   "fr": "arbitrer un désaccord entre valeur métier et exposition réglementaire"
+  },
+  "aucune au-delà d'un trimestre": {
+   "en": "none older than a quarter",
+   "fr": "aucune au-delà d'un trimestre"
+  },
+  "aucune demande": {
+   "en": "no request",
+   "fr": "aucune demande"
+  },
+  "autoriser la mise en production d'un système d'IA à haut risque": {
+   "en": "authorise the go-live of a high-risk AI system",
+   "fr": "autoriser la mise en production d'un système d'IA à haut risque"
+  },
+  "autoriser un usage porté par un tiers sur les données de l'organisation": {
+   "en": "authorise a use run by a third party on the organisation’s data",
+   "fr": "autoriser un usage porté par un tiers sur les données de l'organisation"
+  },
+  "autoriser un usage traitant des données personnelles sensibles": {
+   "en": "authorise a use processing sensitive personal data",
+   "fr": "autoriser un usage traitant des données personnelles sensibles"
+  },
+  "avant": {
+   "en": "before",
+   "fr": "avant"
+  },
+  "avis technique motivé": {
+   "en": "reasoned technical opinion",
+   "fr": "avis technique motivé"
+  },
+  "ce que le comité regarde": {
+   "en": "what the committee looks at",
+   "fr": "ce que le comité regarde"
+  },
+  "classe présumée & obligations": {
+   "en": "presumed class & obligations",
+   "fr": "classe présumée & obligations"
+  },
+  "connu et documenté": {
+   "en": "known and documented",
+   "fr": "connu et documenté"
+  },
+  "décision tracée": {
+   "en": "traced decision",
+   "fr": "décision tracée"
+  },
+  "décisionnaire": {
+   "en": "decision-maker",
+   "fr": "décisionnaire"
+  },
+  "d’exister. La matrice RACI détaillée reste dans": {
+   "en": "it exists. The detailed RACI matrix stays in",
+   "fr": "d’exister. La matrice RACI détaillée reste dans"
+  },
+  "ex. Direction des ressources humaines": {
+   "en": "e.g. Human resources department",
+   "fr": "ex. Direction des ressources humaines"
+  },
+  "ex. Tri automatique des candidatures": {
+   "en": "e.g. Automatic screening of applications",
+   "fr": "ex. Tri automatique des candidatures"
+  },
+  "fiche d'usage": {
+   "en": "use record",
+   "fr": "fiche d'usage"
+  },
+  "haut risque présumé, données sensibles, ou usage porté par un tiers": {
+   "en": "presumed high-risk, sensitive data, or use run by a third party",
+   "fr": "haut risque présumé, données sensibles, ou usage porté par un tiers"
+  },
+  "inscription au registre": {
+   "en": "recording in the register",
+   "fr": "inscription au registre"
+  },
+  "l'opportunité métier d'un cas d'usage (métiers, avant saisine)": {
+   "en": "the business case for a use case (business lines, before referral)",
+   "fr": "l'opportunité métier d'un cas d'usage (métiers, avant saisine)"
+  },
+  "le choix technique d'un modèle ou d'un fournisseur (IT, sur cahier des charges)": {
+   "en": "the technical choice of a model or a provider (IT, against specifications)",
+   "fr": "le choix technique d'un modèle ou d'un fournisseur (IT, sur cahier des charges)"
+  },
+  "le vote de la loi · le décret en Conseil d'État qui fixe les objectifs · la publication du référentiel dans sa version finale": {
+   "en": "the vote on the law · the decree in the Conseil d'État setting the objectives · the publication of the reference framework in its final version",
+   "fr": "le vote de la loi · le décret en Conseil d'État qui fixe les objectifs · la publication du référentiel dans sa version finale"
+  },
+  "les décisions de sûreté ou de sécurité des personnes (instances dédiées)": {
+   "en": "decisions on the safety or security of people (dedicated bodies)",
+   "fr": "les décisions de sûreté ou de sécurité des personnes (instances dédiées)"
+  },
+  "non mesuré": {
+   "en": "not measured",
+   "fr": "non mesuré"
+  },
+  "non nul": {
+   "en": "non-zero",
+   "fr": "non nul"
+  },
+  "revue périodique": {
+   "en": "periodic review",
+   "fr": "revue périodique"
+  },
+  "risque limité, données non sensibles, périmètre restreint": {
+   "en": "limited risk, non-sensitive data, restricted scope",
+   "fr": "risque limité, données non sensibles, périmètre restreint"
+  },
+  "référentiel indisponible": {
+   "en": "framework unavailable",
+   "fr": "référentiel indisponible"
+  },
+  "suspendre ou retirer un système en exploitation": {
+   "en": "suspend or withdraw a system in operation",
+   "fr": "suspendre ou retirer un système en exploitation"
+  },
+  "trimestrielle, avec séance extraordinaire sur demande motivée": {
+   "en": "quarterly, with an extraordinary session on reasoned request",
+   "fr": "trimestrielle, avec séance extraordinaire sur demande motivée"
+  },
+  "usage bureautique d'un outil déjà autorisé, sans donnée sensible": {
+   "en": "office use of an already authorised tool, without sensitive data",
+   "fr": "usage bureautique d'un outil déjà autorisé, sans donnée sensible"
+  },
+  "valider la politique interne d'usage de l'IA et ses révisions": {
+   "en": "validate the internal AI use policy and its revisions",
+   "fr": "valider la politique interne d'usage de l'IA et ses révisions"
+  },
+  "— non renseignée": {
+   "en": "— not provided",
+   "fr": "— non renseignée"
+  },
+  "← Les vingt objectifs": {
+   "en": "← The twenty objectives",
+   "fr": "← Les vingt objectifs"
+  },
+  "↑ doit monter": {
+   "en": "↑ must rise",
+   "fr": "↑ doit monter"
+  },
+  "↓ PDF": {
+   "en": "↓ PDF",
+   "fr": "↓ PDF"
+  },
+  "↓ Word": {
+   "en": "↓ Word",
+   "fr": "↓ Word"
+  },
+  "↓ doit descendre": {
+   "en": "↓ must fall",
+   "fr": "↓ doit descendre"
+  },
+  "↻ Reinitialiser": {
+   "en": "↻ Reset",
+   "fr": "↻ Reinitialiser"
+  },
+  "◉ à surveiller": {
+   "en": "◉ to be monitored",
+   "fr": "◉ à surveiller"
+  },
+  "✉ Envoyer a un collegue": {
+   "en": "✉ Send to a colleague",
+   "fr": "✉ Envoyer a un collegue"
+  },
+  "🤖 Generer la cartographie complete par IA": {
+   "en": "🤖 Generate the complete mapping with AI",
+   "fr": "🤖 Generer la cartographie complete par IA"
+  }
+ }
+}

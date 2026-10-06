@@ -1,84 +1,84 @@
 {
- "cibles": [
-  "tests/test_en18229_socle.py"
- ],
- "mutations": [
-  {
-   "nom": "le témoin du socle : le module cesse de se charger sans défaut",
-   "fichier": "en18229_3.py",
-   "avant": "_FAUTES = _verifier()",
-   "apres": "_FAUTES = _verifier() or _tordu()",
-   "regle": "test_le_module_se_charge_SANS_defaut_injecte"
-  },
-  {
-   "nom": "la source annonce une présomption de conformité",
-   "fichier": "en18229_3.py",
-   "avant": "    \"presomption\": False,",
-   "apres": "    \"presomption\": True,",
-   "regle": "test_le_module_REFUSE_une_presomption_de_conformite_declaree"
-  },
-  {
-   "nom": "la licence cesse de nommer le droit d'auteur",
-   "fichier": "en18229_3.py",
-   "avant": "    \"licence\": \"PROTÉGÉE PAR LE DROIT D'AUTEUR",
-   "apres": "    \"licence\": \"Publiée par le CEN",
-   "regle": "test_le_module_REFUSE_une_licence_qui_ne_nomme_pas_le_droit_d_auteur"
-  },
-  {
-   "nom": "le plafond n'est plus lu dans le texte du verrou",
-   "fichier": "en18229_3.py",
-   "avant": "    return int(m.group(1)) if m else 100",
-   "apres": "    return 100",
-   "regle": "test_le_module_REFUSE_un_verrou_dont_le_plafond_ne_se_LIT_PAS"
-  },
-  {
-   "nom": "le plan range la calibration avant les verrous",
-   "fichier": "en18229_3.py",
-   "avant": "ETAPES_PLAN = (\n    (\"verrous\", \"Lever les verrous\",",
-   "apres": "ETAPES_PLAN = (\n    (\"zverrous\", \"Lever les verrous\",",
-   "regle": "test_le_module_REFUSE_un_plan_qui_ne_commence_PAS_par_les_verrous"
-  },
-  {
-   "nom": "une exigence perd son étape de plan déclarée",
-   "fichier": "en18229_3.py",
-   "avant": "    \"scenarios\": \"calibrer\",",
-   "apres": "    \"zscenarios\": \"calibrer\",",
-   "regle": "test_le_module_REFUSE_une_exigence_SANS_etape_de_plan"
-  },
-  {
-   "nom": "un alinéa de l'annexe ZA perd la question qui le mesure",
-   "fichier": "en18229_3.py",
-   "avant": "_e(\"etat_sur\", \"5.7.5\"",
-   "apres": "_e(\"etat_sur\", \"5.7.9\"",
-   "regle": "test_le_module_REFUSE_un_alinea_de_l_annexe_ZA_que_personne_ne_MESURE"
-  },
-  {
-   "nom": "la comparaison s'inverse : une mesure qui tient est déclarée en défaut",
-   "fichier": "en18229_3.py",
-   "avant": "    if latence <= delai:\n        r[\"etat\"] = \"tient\"",
-   "apres": "    if latence >= delai:\n        r[\"etat\"] = \"tient\"",
-   "regle": "test_le_module_REFUSE_une_ARITHMETIQUE_de_scenario_qui_ne_tient_plus"
-  },
-  {
-   "nom": "la consignation du 5.2.4 cesse d'être reconnue",
-   "fichier": "en18229_3.py",
-   "avant": "    if consignee:\n        r[\"etat\"] = \"impossible_consignee\"",
-   "apres": "    if not consignee:\n        r[\"etat\"] = \"impossible_consignee\"",
-   "regle": "test_le_module_REFUSE_de_ne_plus_reconnaitre_la_consignation_du_5_2_4"
-  },
-  {
-   "nom": "le taux cesse d'être plafonné : le brut passe tel quel",
-   "fichier": "en18229_3.py",
-   "avant": "    return {\"brut\": brut, \"taux\": min(brut, plafond), \"plafond\": plafond,",
-   "apres": "    return {\"brut\": brut, \"taux\": brut, \"plafond\": plafond,",
-   "regle": "test_le_module_REFUSE_un_verrou_que_le_score_DEPASSE"
-  },
-  {
-   "nom": "le taux annonce douze normes quand la table en porte treize",
-   "fichier": "conformite.py",
-   "avant": "NORMES_ANNONCEES = 14",
-   "apres": "NORMES_ANNONCEES = 13",
-   "regle": "test_conformite_REFUSE_un_compte_de_normes_qui_NE_SUIT_PAS_la_table"
-  }
- ]
+  "cibles": [
+    "tests/test_en18229_socle.py"
+  ],
+  "mutations": [
+    {
+      "nom": "le témoin du socle : le module cesse de se charger sans défaut",
+      "fichier": "en18229_3.py",
+      "avant": "_FAUTES = _verifier()",
+      "apres": "_FAUTES = _verifier() or _tordu()",
+      "regle": "test_le_module_se_charge_SANS_defaut_injecte"
+    },
+    {
+      "nom": "la source annonce une présomption de conformité",
+      "fichier": "en18229_3.py",
+      "avant": "    \"presomption\": False,",
+      "apres": "    \"presomption\": True,",
+      "regle": "test_le_module_REFUSE_une_presomption_de_conformite_declaree"
+    },
+    {
+      "nom": "la licence cesse de nommer le droit d'auteur",
+      "fichier": "en18229_3.py",
+      "avant": "    \"licence\": \"PROTÉGÉE PAR LE DROIT D'AUTEUR",
+      "apres": "    \"licence\": \"Publiée par le CEN",
+      "regle": "test_le_module_REFUSE_une_licence_qui_ne_nomme_pas_le_droit_d_auteur"
+    },
+    {
+      "nom": "le plafond n'est plus lu dans le texte du verrou",
+      "fichier": "en18229_3.py",
+      "avant": "    return int(m.group(1)) if m else 100",
+      "apres": "    return 100",
+      "regle": "test_le_module_REFUSE_un_verrou_dont_le_plafond_ne_se_LIT_PAS"
+    },
+    {
+      "nom": "le plan range la calibration avant les verrous",
+      "fichier": "en18229_3.py",
+      "avant": "ETAPES_PLAN = (\n    (\"verrous\", \"Lever les verrous\",",
+      "apres": "ETAPES_PLAN = (\n    (\"zverrous\", \"Lever les verrous\",",
+      "regle": "test_le_module_REFUSE_un_plan_qui_ne_commence_PAS_par_les_verrous"
+    },
+    {
+      "nom": "une exigence perd son étape de plan déclarée",
+      "fichier": "en18229_3.py",
+      "avant": "    \"scenarios\": \"calibrer\",",
+      "apres": "    \"zscenarios\": \"calibrer\",",
+      "regle": "test_le_module_REFUSE_une_exigence_SANS_etape_de_plan"
+    },
+    {
+      "nom": "un alinéa de l'annexe ZA perd la question qui le mesure",
+      "fichier": "en18229_3.py",
+      "avant": "_e(\"etat_sur\", \"5.7.5\"",
+      "apres": "_e(\"etat_sur\", \"5.7.9\"",
+      "regle": "test_le_module_REFUSE_un_alinea_de_l_annexe_ZA_que_personne_ne_MESURE"
+    },
+    {
+      "nom": "la comparaison s'inverse : une mesure qui tient est déclarée en défaut",
+      "fichier": "en18229_3.py",
+      "avant": "    if latence <= delai:\n        r[\"etat\"] = \"tient\"",
+      "apres": "    if latence >= delai:\n        r[\"etat\"] = \"tient\"",
+      "regle": "test_le_module_REFUSE_une_ARITHMETIQUE_de_scenario_qui_ne_tient_plus"
+    },
+    {
+      "nom": "la consignation du 5.2.4 cesse d'être reconnue",
+      "fichier": "en18229_3.py",
+      "avant": "    if consignee:\n        r[\"etat\"] = \"impossible_consignee\"",
+      "apres": "    if not consignee:\n        r[\"etat\"] = \"impossible_consignee\"",
+      "regle": "test_le_module_REFUSE_de_ne_plus_reconnaitre_la_consignation_du_5_2_4"
+    },
+    {
+      "nom": "le taux cesse d'être plafonné : le brut passe tel quel",
+      "fichier": "en18229_3.py",
+      "avant": "    return {\"brut\": brut, \"taux\": min(brut, plafond), \"plafond\": plafond,",
+      "apres": "    return {\"brut\": brut, \"taux\": brut, \"plafond\": plafond,",
+      "regle": "test_le_module_REFUSE_un_verrou_que_le_score_DEPASSE"
+    },
+    {
+      "nom": "le taux annonce quinze normes quand la table en porte seize",
+      "fichier": "conformite.py",
+      "avant": "NORMES_ANNONCEES = 16",
+      "apres": "NORMES_ANNONCEES = 15",
+      "regle": "test_conformite_REFUSE_un_compte_de_normes_qui_NE_SUIT_PAS_la_table"
+    }
+  ]
 }

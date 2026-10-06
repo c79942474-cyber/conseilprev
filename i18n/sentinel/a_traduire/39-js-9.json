@@ -1,0 +1,655 @@
+{
+ "_lot": "39-js-9",
+ "_mots": 2542,
+ "_pages": [
+  "_js"
+ ],
+ "_rubrique": "_js",
+ "bloc": {},
+ "texte": {
+  "Dossier documentaire — sources, millésimes, hypothèses, formules — exportable en DOCX et PDF, marquage IA porté dans les métadonnées du fichier (art. # du règlement (UE) #/#), avec le nom exact du modèle employé.": {
+   "en": "Documentation file — sources, editions, assumptions, formulas — exportable as DOCX and PDF, with AI marking carried in the file metadata (Art. # of Regulation (EU) #/#), including the exact name of the model used.",
+   "fr": "Dossier documentaire — sources, millésimes, hypothèses, formules — exportable en DOCX et PDF, marquage IA porté dans les métadonnées du fichier (art. 50 du règlement (UE) 2024/1689), avec le nom exact du modèle employé."
+  },
+  "Dossier technique complet avant mise sur le marché : architecture, données, performances, limitations, évaluation de conformité. PME, start-up et petites capitalisations intermédiaires : formulaire simplifié établi par la Commission (Art. #(#)).": {
+   "en": "Complete technical file before placing on the market: architecture, data, performance, limitations, conformity assessment. SMEs, start-ups and small mid-cap enterprises: simplified form established by the Commission (Art. #(#)).",
+   "fr": "Dossier technique complet avant mise sur le marché : architecture, données, performances, limitations, évaluation de conformité. PME, start-up et petites capitalisations intermédiaires : formulaire simplifié établi par la Commission (Art. 11(1))."
+  },
+  "Dossier technique complet établi avant mise sur le marché, conforme à l'Annexe IV. Contient : description générale, architecture, données utilisées, évaluation de conformité, performances et limites.": {
+   "en": "Complete technical file drawn up before placing on the market, in accordance with Annex IV. It contains: general description, architecture, data used, conformity assessment, performance and limitations.",
+   "fr": "Dossier technique complet établi avant mise sur le marché, conforme à l'Annexe IV. Contient : description générale, architecture, données utilisées, évaluation de conformité, performances et limites."
+  },
+  "Double evaluation de conformite (EU AI Act + MDR/IVDR)": {
+   "en": "Dual conformity assessment (EU AI Act + MDR/IVDR)",
+   "fr": "Double evaluation de conformite (EU AI Act + MDR/IVDR)"
+  },
+  "Double régime : EU AI Act + Règlement dispositifs médicaux (MDR/IVDR). Évaluation de conformité par organisme notifié obligatoire.": {
+   "en": "Dual regime: EU AI Act + Medical Devices Regulation (MDR/IVDR). Conformity assessment by a notified body mandatory.",
+   "fr": "Double régime : EU AI Act + Règlement dispositifs médicaux (MDR/IVDR). Évaluation de conformité par organisme notifié obligatoire."
+  },
+  "Droit d'accès": {
+   "en": "Right of access",
+   "fr": "Droit d'accès"
+  },
+  "Droit d'exprimer son point de vue": {
+   "en": "Right to express one’s point of view",
+   "fr": "Droit d'exprimer son point de vue"
+  },
+  "Droit d'obtenir une intervention humaine": {
+   "en": "Right to obtain human intervention",
+   "fr": "Droit d'obtenir une intervention humaine"
+  },
+  "Droit d'opposition aux décisions automatisées": {
+   "en": "Right to object to automated decisions",
+   "fr": "Droit d'opposition aux décisions automatisées"
+  },
+  "Droit de contestation : par quel canal, sous quel délai ?": {
+   "en": "Right to challenge: through which channel, within what time limit?",
+   "fr": "Droit de contestation : par quel canal, sous quel délai ?"
+  },
+  "Droit de contester la décision": {
+   "en": "Right to contest the decision",
+   "fr": "Droit de contester la décision"
+  },
+  "Droit de la non-discrimination": {
+   "en": "Non-discrimination law",
+   "fr": "Droit de la non-discrimination"
+  },
+  "Droit de ne pas faire l'objet d'une décision fondée exclusivement sur un traitement automatisé (y compris le profilage) produisant des effets juridiques ou affectant significativement la personne. # exceptions strictes : nécessité contractuelle, autorisation légale, consentement explicite.": {
+   "en": "Right not to be subject to a decision based solely on automated processing (including profiling) which produces legal effects or similarly significantly affects the person. # strict exceptions: contractual necessity, legal authorisation, explicit consent.",
+   "fr": "Droit de ne pas faire l'objet d'une décision fondée exclusivement sur un traitement automatisé (y compris le profilage) produisant des effets juridiques ou affectant significativement la personne. 3 exceptions strictes : nécessité contractuelle, autorisation légale, consentement explicite."
+  },
+  "Droit à l explication et droit de recours": {
+   "en": "Right to explanation and right of redress",
+   "fr": "Droit à l explication et droit de recours"
+  },
+  "Droit à un recours effectif": {
+   "en": "Right to an effective remedy",
+   "fr": "Droit à un recours effectif"
+  },
+  "Droit à une bonne administration": {
+   "en": "Right to good administration",
+   "fr": "Droit à une bonne administration"
+  },
+  "Droits de l'enfant": {
+   "en": "Rights of the child",
+   "fr": "Droits de l'enfant"
+  },
+  "Droits des personnes (art. # à #)": {
+   "en": "Data subject rights (Art. # to #)",
+   "fr": "Droits des personnes (art. 15 à 22)"
+  },
+  "Duplication manuelle des scores du tableau JURS de la page Apercu. Risque de desynchronisation si les scores source sont modifies sans repercuter ici.": {
+   "en": "Manual duplication of the scores from the JURS table on the Overview page. Risk of desynchronisation if the source scores are modified without being carried over here.",
+   "fr": "Duplication manuelle des scores du tableau JURS de la page Apercu. Risque de desynchronisation si les scores source sont modifies sans repercuter ici."
+  },
+  "Durée de clôture −# % ; erreurs de saisie −# %.": {
+   "en": "Closing time −# %; data-entry errors −# %.",
+   "fr": "Durée de clôture −30 % ; erreurs de saisie −50 %."
+  },
+  "Durée de conservation": {
+   "en": "Retention period",
+   "fr": "Durée de conservation"
+  },
+  "Dès qu'ils attribuent des missions sur le comportement ou les caractéristiques d'un intervenant, ou qu'ils suivent ses performances. Une tournée optimisée sur le seul temps de trajet n'y est pas ; une tournée optimisée sur une note de l'intervenant y est.": {
+   "en": "As soon as they assign jobs based on a worker’s behaviour or characteristics, or monitor their performance. A round optimised on travel time alone is not in scope; a round optimised on the worker’s rating is.",
+   "fr": "Dès qu'ils attribuent des missions sur le comportement ou les caractéristiques d'un intervenant, ou qu'ils suivent ses performances. Une tournée optimisée sur le seul temps de trajet n'y est pas ; une tournée optimisée sur une note de l'intervenant y est."
+  },
+  "Début réel du fichier": {
+   "en": "Actual start of the file",
+   "fr": "Début réel du fichier"
+  },
+  "Décision automatisée": {
+   "en": "Automated decision",
+   "fr": "Décision automatisée"
+  },
+  "Décision automatisée à effet juridique ou significatif": {
+   "en": "Automated decision with legal or similarly significant effect",
+   "fr": "Décision automatisée à effet juridique ou significatif"
+  },
+  "Décision fondée EXCLUSIVEMENT sur un traitement automatisé, profilage compris": {
+   "en": "Decision based SOLELY on automated processing, including profiling",
+   "fr": "Décision fondée EXCLUSIVEMENT sur un traitement automatisé, profilage compris"
+  },
+  "Décision individuelle automatisée": {
+   "en": "Automated individual decision",
+   "fr": "Décision individuelle automatisée"
+  },
+  "Décision légitime, à condition d’être appliquée. Interdire sans moyen de le constater produit l’usage clandestin : le code généré entre quand même, et sans aucune des vérifications du point #.": {
+   "en": "A legitimate decision, provided it is enforced. Prohibiting without a means of detecting it produces clandestine use: generated code gets in anyway, and without any of the checks in point #.",
+   "fr": "Décision légitime, à condition d’être appliquée. Interdire sans moyen de le constater produit l’usage clandestin : le code généré entre quand même, et sans aucune des vérifications du point 2."
+  },
+  "Décision refusée (HTTP": {
+   "en": "Decision refused (HTTP",
+   "fr": "Décision refusée (HTTP"
+  },
+  "Décisions automatisées, scoring et intervention humaine": {
+   "en": "Automated decisions, scoring and human intervention",
+   "fr": "Décisions automatisées, scoring et intervention humaine"
+  },
+  "Décisions de désactivation temporaire ou définitive de comptes chauffeurs": {
+   "en": "Decisions to temporarily or permanently deactivate driver accounts",
+   "fr": "Décisions de désactivation temporaire ou définitive de comptes chauffeurs"
+  },
+  "Décisions entièrement automatisées (Art. # RGPD)": {
+   "en": "Fully automated decisions (Art. # GDPR)",
+   "fr": "Décisions entièrement automatisées (Art. 22 RGPD)"
+  },
+  "Décisions individuelles (Annexe III)": {
+   "en": "Individual decisions (Annex III)",
+   "fr": "Décisions individuelles (Annexe III)"
+  },
+  "Déclaration UE de conformité et marquage CE": {
+   "en": "EU declaration of conformity and CE marking",
+   "fr": "Déclaration UE de conformité et marquage CE"
+  },
+  "Déclaration d’applicabilité — article # d)": {
+   "en": "Statement of Applicability — clause # d)",
+   "fr": "Déclaration d’applicabilité — article 6.1.3 d)"
+  },
+  "Déclaration d’applicabilité — article # f)": {
+   "en": "Statement of Applicability — clause # f)",
+   "fr": "Déclaration d’applicabilité — article 6.1.3 f)"
+  },
+  "Déclaration écrite tenue à disposition des autorités pendant dix ans, et apposition du marquage CE avant mise sur le marché.": {
+   "en": "Written declaration kept at the disposal of the authorities for ten years, and affixing of the CE marking before placing on the market.",
+   "fr": "Déclaration écrite tenue à disposition des autorités pendant dix ans, et apposition du marquage CE avant mise sur le marché."
+  },
+  "Déclarer le périmètre avant de le peser": {
+   "en": "Declare the scope before weighing it",
+   "fr": "Déclarer le périmètre avant de le peser"
+  },
+  "Déclarer, famille par famille, où en est la maîtrise du système — et annoncer le socle (Low, Moderate, High) contre lequel on se mesure. Le taux qui en sort alimente l’indice de conformité, au même titre que les dix autres normes.": {
+   "en": "Declare, family by family, how well the system is controlled — and state the baseline (Low, Moderate, High) you measure yourself against. The resulting rate feeds the compliance index, in the same way as the other ten standards.",
+   "fr": "Déclarer, famille par famille, où en est la maîtrise du système — et annoncer le socle (Low, Moderate, High) contre lequel on se mesure. Le taux qui en sort alimente l’indice de conformité, au même titre que les dix autres normes."
+  },
+  "Déclarez AUTANT DE GROUPES que nécessaire : le document écrit expressément qu’ils ne sont ni rigides ni exclusifs, et un éditeur qui entraîne sur ses propres données et exploite pour ses clients est dans deux. Choisissez ensuite votre implication — causer, contribuer, être lié — puis cotez vos risques sur les quatre facteurs, chacun avec sa justification écrite.": {
+   "en": "Declare AS MANY GROUPS as needed: the document expressly writes that they are neither rigid nor exclusive, and a publisher that trains on its own data and operates for its clients is in two. Then choose your involvement — cause, contribute, be linked — and rate your risks on the four factors, each with its written justification.",
+   "fr": "Déclarez AUTANT DE GROUPES que nécessaire : le document écrit expressément qu’ils ne sont ni rigides ni exclusifs, et un éditeur qui entraîne sur ses propres données et exploite pour ses clients est dans deux. Choisissez ensuite votre implication — causer, contribuer, être lié — puis cotez vos risques sur les quatre facteurs, chacun avec sa justification écrite."
+  },
+  "Déclarez d’abord la criticité de la fonction soutenue : tant qu’elle ne l’est pas, rien n’est compté, parce qu’un taux sur neuf clauses alors que quinze sont dues serait rassurant à tort. Regardez ensuite les deux que l’autorité ouvre en premier : le droit d’audit illimité (§#, e) et la stratégie de sortie (§#, f).": {
+   "en": "First declare the criticality of the function supported: as long as it is not declared, nothing is counted, because a rate on nine clauses when fifteen are due would be falsely reassuring. Then look at the two the authority opens first: the unrestricted right of audit (paragraph #, e) and the exit strategy (paragraph #, f).",
+   "fr": "Déclarez d’abord la criticité de la fonction soutenue : tant qu’elle ne l’est pas, rien n’est compté, parce qu’un taux sur neuf clauses alors que quinze sont dues serait rassurant à tort. Regardez ensuite les deux que l’autorité ouvre en premier : le droit d’audit illimité (§3, e) et la stratégie de sortie (§3, f)."
+  },
+  "Déclarez d’abord un groupe. Tant qu’aucun ne": {
+   "en": "Declare a group first. As long as none",
+   "fr": "Déclarez d’abord un groupe. Tant qu’aucun ne"
+  },
+  "Déclarez d’abord vos": {
+   "en": "First declare your",
+   "fr": "Déclarez d’abord vos"
+  },
+  "Déclarez d’abord votre": {
+   "en": "First declare your",
+   "fr": "Déclarez d’abord votre"
+  },
+  "Déclarez d’abord votre ou vos": {
+   "en": "First declare your",
+   "fr": "Déclarez d’abord votre ou vos"
+  },
+  "Déclarez la criticité, cochez les seuils atteints, puis horodatez la connaissance et la classification. L’horloge a deux bornes : quatre heures depuis la classification, vingt-quatre heures depuis la connaissance, la première échue commandant. Si la classification intervient après ces vingt-quatre heures, l’article #, §#, du règlement délégué (UE) #/# traite le cas à part.": {
+   "en": "Declare the criticality, tick the thresholds reached, then timestamp awareness and classification. The clock has two limits: four hours from classification, twenty-four hours from awareness, whichever expires first governing. If classification occurs after those twenty-four hours, Article #(#) of Delegated Regulation (EU) #/# deals with the case separately.",
+   "fr": "Déclarez la criticité, cochez les seuils atteints, puis horodatez la connaissance et la classification. L’horloge a deux bornes : quatre heures depuis la classification, vingt-quatre heures depuis la connaissance, la première échue commandant. Si la classification intervient après ces vingt-quatre heures, l’article 5, §2, du règlement délégué (UE) 2025/301 traite le cas à part."
+  },
+  "Déclarez laquelle ou lesquelles des sept qualités de l'article #er §# sont les vôtres, et répondez aux deux conditions de l'exemption de l'article # si vous êtes micro ou petite entreprise.": {
+   "en": "Declare which one or more of the seven capacities of Article #(#) are yours, and answer the two conditions of the Article # exemption if you are a micro or small enterprise.",
+   "fr": "Déclarez laquelle ou lesquelles des sept qualités de l'article 1er §3 sont les vôtres, et répondez aux deux conditions de l'exemption de l'article 7 si vous êtes micro ou petite entreprise."
+  },
+  "Déclarez l’unité de facturation « requêtes » là où c’est le cas : les systèmes facturés au jeton sortiront avec un hébergement non compté, et le reporting devra le dire.": {
+   "en": "Declare the billing unit “requests” where that is the case: systems billed per token will come out with hosting not counted, and the reporting will have to say so.",
+   "fr": "Déclarez l’unité de facturation « requêtes » là où c’est le cas : les systèmes facturés au jeton sortiront avec un hébergement non compté, et le reporting devra le dire."
+  },
+  "Déclarez si vous êtes fournisseur, déployeur ou les deux, et si le système identifie des personnes à distance par la biométrie.": {
+   "en": "Declare whether you are a provider, a deployer or both, and whether the system identifies persons remotely through biometrics.",
+   "fr": "Déclarez si vous êtes fournisseur, déployeur ou les deux, et si le système identifie des personnes à distance par la biométrie."
+  },
+  "Déclarez vos groupes — ils ne sont ni rigides ni exclusifs —, votre implication dans l'incidence, et cotez vos risques sur les quatre facteurs avec leur justification.": {
+   "en": "Declare your groups — they are neither rigid nor exclusive —, your involvement in the impact, and rate your risks on the four factors with their justification.",
+   "fr": "Déclarez vos groupes — ils ne sont ni rigides ni exclusifs —, votre implication dans l'incidence, et cotez vos risques sur les quatre facteurs avec leur justification."
+  },
+  "Déclarez vos produits et choisissez leur classe. Commencez par celui dont vous doutez, pas par le plus simple.": {
+   "en": "Declare your products and choose their class. Start with the one you are unsure about, not the simplest one.",
+   "fr": "Déclarez vos produits et choisissez leur classe. Commencez par celui dont vous doutez, pas par le plus simple."
+  },
+  "Déclarez votre qualité au titre du règlement (UE) #/#, ou cochez « aucune de ces qualités » — qui est une réponse complète et clôt ce parcours.": {
+   "en": "Declare your capacity under Regulation (EU) #/#, or tick 'none of these capacities' — which is a complete answer and closes this path.",
+   "fr": "Déclarez votre qualité au titre du règlement (UE) 2022/868, ou cochez « aucune de ces qualités » — qui est une réponse complète et clôt ce parcours."
+  },
+  "Déclarez votre qualité, ou cochez « aucune de ces qualités » — qui est une réponse complète et clôt le parcours. Si vous êtes prestataire de services d’intermédiation, dites aussi si vous fournissiez déjà ce service au # juin # : l’article # vous donnait jusqu’au # septembre # pour vous conformer au chapitre III, et cette date est passée.": {
+   "en": "Declare your capacity, or tick 'none of these capacities' — which is a complete answer and closes the path. If you are a data intermediation services provider, say also whether you were already providing that service on # June #: Article # gave you until # September # to comply with Chapter III, and that date has passed.",
+   "fr": "Déclarez votre qualité, ou cochez « aucune de ces qualités » — qui est une réponse complète et clôt le parcours. Si vous êtes prestataire de services d’intermédiation, dites aussi si vous fournissiez déjà ce service au 23 juin 2022 : l’article 37 vous donnait jusqu’au 24 septembre 2025 pour vous conformer au chapitre III, et cette date est passée."
+  },
+  "Déclencher les prélèvements Stripe pour toutes les échéances dues ? Cette action prélève réellement les clients.": {
+   "en": "Trigger the Stripe direct debits for all instalments due? This action really debits the clients.",
+   "fr": "Déclencher les prélèvements Stripe pour toutes les échéances dues ? Cette action prélève réellement les clients."
+  },
+  "Déclenchées sur suspicion de fraude et sur de faibles notes clients": {
+   "en": "Triggered on suspicion of fraud and on low customer ratings",
+   "fr": "Déclenchées sur suspicion de fraude et sur de faibles notes clients"
+  },
+  "Découpez en jalons trimestriels — un programme sans étapes intermédiaires perd en visibilité après #-# mois.": {
+   "en": "Break it down into quarterly milestones — a programme without intermediate stages loses visibility after #-# months.",
+   "fr": "Découpez en jalons trimestriels — un programme sans étapes intermédiaires perd en visibilité après 2-3 mois."
+  },
+  "Découverte Shadow AI": {
+   "en": "Shadow AI discovery",
+   "fr": "Découverte Shadow AI"
+  },
+  "Découvrez les briques du dispositif et l’indice global de conformité.": {
+   "en": "Discover the building blocks of the framework and the global compliance index.",
+   "fr": "Découvrez les briques du dispositif et l’indice global de conformité."
+  },
+  "Découvrir le coût": {
+   "en": "Discover the cost",
+   "fr": "Découvrir le coût"
+  },
+  "Décrivez le système (étape #), répondez aux questions de classification (étape #), indiquez vos pratiques actuelles (étape #), précisez les aspects GPAI/données si pertinent (étape #), puis consultez le résultat détaillé (étape #). Vous pourrez ensuite l ajouter directement au Registre IA, sauvegarder la simulation dans l historique, ou lancer l audit complet.": {
+   "en": "Describe the system (step #), answer the classification questions (step #), indicate your current practices (step #), specify the GPAI/data aspects if relevant (step #), then consult the detailed result (step #). You can then add it directly to the AI register, save the simulation to history, or run the full audit.",
+   "fr": "Décrivez le système (étape 1), répondez aux questions de classification (étape 2), indiquez vos pratiques actuelles (étape 3), précisez les aspects GPAI/données si pertinent (étape 4), puis consultez le résultat détaillé (étape 5). Vous pourrez ensuite l ajouter directement au Registre IA, sauvegarder la simulation dans l historique, ou lancer l audit complet."
+  },
+  "Décrivez qui qualifie un incident d’« important », et à quel moment.": {
+   "en": "Describe who qualifies an incident as “significant”, and at what point.",
+   "fr": "Décrivez qui qualifie un incident d’« important », et à quel moment."
+  },
+  "Définir clairement votre rôle (fournisseur, déployeur, ou les deux)": {
+   "en": "Clearly define your role (provider, deployer, or both)",
+   "fr": "Définir clairement votre rôle (fournisseur, déployeur, ou les deux)"
+  },
+  "Définir des indicateurs de performance du SMIA et les suivre régulièrement": {
+   "en": "Define AIMS performance indicators and monitor them regularly",
+   "fr": "Définir des indicateurs de performance du SMIA et les suivre régulièrement"
+  },
+  "Définir et mesurer les niveaux d'exactitude cibles": {
+   "en": "Define and measure target accuracy levels",
+   "fr": "Définir et mesurer les niveaux d'exactitude cibles"
+  },
+  "Définir la durée de conservation des journaux": {
+   "en": "Define the log retention period",
+   "fr": "Définir la durée de conservation des journaux"
+  },
+  "Définir le périmètre du mandat (vérification déclaration conformité, coopération autorités)": {
+   "en": "Define the scope of the mandate (verification of the declaration of conformity, cooperation with authorities)",
+   "fr": "Définir le périmètre du mandat (vérification déclaration conformité, coopération autorités)"
+  },
+  "Définir les critères déclenchant une intervention humaine": {
+   "en": "Define the criteria that trigger human intervention",
+   "fr": "Définir les critères déclenchant une intervention humaine"
+  },
+  "Définir les seuils déclenchant un signalement aux autorités": {
+   "en": "Define the thresholds that trigger reporting to the authorities",
+   "fr": "Définir les seuils déclenchant un signalement aux autorités"
+  },
+  "Définir un plan d'action correctif (mise en conformité, retrait, désactivation, rappel)": {
+   "en": "Define a corrective action plan (bringing into compliance, withdrawal, deactivation, recall)",
+   "fr": "Définir un plan d'action correctif (mise en conformité, retrait, désactivation, rappel)"
+  },
+  "Définir une période de support et la communiquer": {
+   "en": "Define a support period and communicate it",
+   "fr": "Définir une période de support et la communiquer"
+  },
+  "Définit les termes clés (# points, auxquels le règlement (UE) #/# ajoute les PME — #(#a) — et les petites capitalisations intermédiaires — #(#b)). Système d'IA : système basé sur une machine, conçu pour fonctionner à différents niveaux d'autonomie et pouvant faire preuve d'adaptabilité après son déploiement, qui, pour des objectifs explicites ou implicites, déduit à partir des entrées reçues comment générer des sorties — prédictions, contenus, recommandations ou décisions — pouvant influencer des environnements physiques ou virtuels (#(#)). Composant de sécurité (#(#)) : redéfini par le même règlement autour de la fonction de sécurité et de la santé ou de la sécurité des personnes et des biens.": {
+   "en": "Defines the key terms (# points, to which Regulation (EU) #/# adds SMEs — #(#a) — and small mid-cap enterprises — #(#b)). AI system: a machine-based system designed to operate with varying levels of autonomy and that may exhibit adaptiveness after deployment and that, for explicit or implicit objectives, infers, from the input it receives, how to generate outputs such as predictions, content, recommendations or decisions that can influence physical or virtual environments (#(#)). Safety component (#(#)): redefined by the same Regulation around the safety function and the health or safety of persons and property.",
+   "fr": "Définit les termes clés (68 points, auxquels le règlement (UE) 2026/1744 ajoute les PME — 3(14a) — et les petites capitalisations intermédiaires — 3(14b)). Système d'IA : système basé sur une machine, conçu pour fonctionner à différents niveaux d'autonomie et pouvant faire preuve d'adaptabilité après son déploiement, qui, pour des objectifs explicites ou implicites, déduit à partir des entrées reçues comment générer des sorties — prédictions, contenus, recommandations ou décisions — pouvant influencer des environnements physiques ou virtuels (3(1)). Composant de sécurité (3(14)) : redéfini par le même règlement autour de la fonction de sécurité et de la santé ou de la sécurité des personnes et des biens."
+  },
+  "Définitions clés : système IA, fournisseur, déployeur (Art. #)": {
+   "en": "Key definitions: AI system, provider, deployer (Art. #)",
+   "fr": "Définitions clés : système IA, fournisseur, déployeur (Art. 3)"
+  },
+  "Déjà certifié ISO # — qu’est-ce que # ajoute ?": {
+   "en": "Already ISO # certified — what does # add?",
+   "fr": "Déjà certifié ISO 27001 — qu’est-ce que 42001 ajoute ?"
+  },
+  "Déjà certifié ISO #:# — qu’est-ce qui a changé ?": {
+   "en": "Already ISO #:# certified — what has changed?",
+   "fr": "Déjà certifié ISO 27001:2013 — qu’est-ce qui a changé ?"
+  },
+  "Déjà conforme (mention affichée)": {
+   "en": "Already compliant (notice displayed)",
+   "fr": "Déjà conforme (mention affichée)"
+  },
+  "Délai de production −# % ; déclinaisons par canal ×#.": {
+   "en": "Production time −# %; variants per channel ×#.",
+   "fr": "Délai de production −50 % ; déclinaisons par canal ×3."
+  },
+  "Délai de présélection −# % ; volume traité sans renfort.": {
+   "en": "Pre-selection time −# %; volume handled without extra staff.",
+   "fr": "Délai de présélection −60 % ; volume traité sans renfort."
+  },
+  "Délai de publication −# % ; formulations homogènes.": {
+   "en": "Publication time −# %; consistent wording.",
+   "fr": "Délai de publication −40 % ; formulations homogènes."
+  },
+  "Délai de récupération : temps d’amortissement du coût projet.": {
+   "en": "Payback period: time to recover the project cost.",
+   "fr": "Délai de récupération : temps d’amortissement du coût projet."
+  },
+  "Délai de rédaction −# % ; complétude des critères +# %.": {
+   "en": "Drafting time −# %; completeness of criteria +# %.",
+   "fr": "Délai de rédaction −40 % ; complétude des critères +30 %."
+  },
+  "Démontre une trajectoire (amélioration ou dégradation) plutôt qu’une photo isolée — bien plus convaincant en comité.": {
+   "en": "Shows a trajectory (improvement or deterioration) rather than an isolated snapshot — far more convincing in a committee.",
+   "fr": "Démontre une trajectoire (amélioration ou dégradation) plutôt qu’une photo isolée — bien plus convaincant en comité."
+  },
+  "Déontologies ordinales": {
+   "en": "Professional codes of conduct",
+   "fr": "Déontologies ordinales"
+  },
+  "Département qui utilise le système (RH, IT, Marketing, Finance…).": {
+   "en": "Department that uses the system (HR, IT, Marketing, Finance…).",
+   "fr": "Département qui utilise le système (RH, IT, Marketing, Finance…)."
+  },
+  "Dépend du produit final. Vérifier si le produit tombe sous l'Annexe III.": {
+   "en": "Depends on the final product. Check whether the product falls under Annex III.",
+   "fr": "Dépend du produit final. Vérifier si le produit tombe sous l'Annexe III."
+  },
+  "Dépend — risque limité sauf si décisions sur des personnes (RH, crédit)": {
+   "en": "Depends — limited risk unless decisions are made about people (HR, credit)",
+   "fr": "Dépend — risque limité sauf si décisions sur des personnes (RH, crédit)"
+  },
+  "Dépenses média, conversions, modèle d’attribution.": {
+   "en": "Media spend, conversions, attribution model.",
+   "fr": "Dépenses média, conversions, modèle d’attribution."
+  },
+  "Déplace la charge sur la revue, qui devient le point de contrôle réel. À ne choisir que si les relecteurs ont le temps et le mandat de refuser.": {
+   "en": "Shifts the burden onto the review, which becomes the real checkpoint. Only choose it if the reviewers have the time and the mandate to refuse.",
+   "fr": "Déplace la charge sur la revue, qui devient le point de contrôle réel. À ne choisir que si les relecteurs ont le temps et le mandat de refuser."
+  },
+  "Déplace la conversation de « faut-il le faire » à « où en sont ceux qui l’ont fait » — et c’est la seule des deux qui se conclut.": {
+   "en": "Moves the conversation from “should we do it” to “where do those who did it stand” — and it is the only one of the two that reaches a conclusion.",
+   "fr": "Déplace la conversation de « faut-il le faire » à « où en sont ceux qui l’ont fait » — et c’est la seule des deux qui se conclut."
+  },
+  "Déplace la discussion de « est-ce faisable » à « où en sont ceux qui l’ont fait ».": {
+   "en": "Moves the discussion from “is it feasible” to “where do those who did it stand”.",
+   "fr": "Déplace la discussion de « est-ce faisable » à « où en sont ceux qui l’ont fait »."
+  },
+  "Déplacements, documentation": {
+   "en": "Travel, documentation",
+   "fr": "Déplacements, documentation"
+  },
+  "Dépliez la catégorie sur laquelle vous travaillez et servez-vous de ses points comme d’une liste de preuves à demander.": {
+   "en": "Expand the category you are working on and use its points as a list of evidence to request.",
+   "fr": "Dépliez la catégorie sur laquelle vous travaillez et servez-vous de ses points comme d’une liste de preuves à demander."
+  },
+  "Dépliez la catégorie sur laquelle vous travaillez et servez-vous des points comme d’une liste de preuves à demander. Les énoncés sont en anglais et verbatim, volontairement : une pièce traduite ne se retrouve plus dans le document le jour où l’auditeur demande où elle est écrite.": {
+   "en": "Expand the category you are working on and use the points as a list of evidence to request. The statements are in English and verbatim, deliberately: a translated document can no longer be found in the source the day the auditor asks where it is written.",
+   "fr": "Dépliez la catégorie sur laquelle vous travaillez et servez-vous des points comme d’une liste de preuves à demander. Les énoncés sont en anglais et verbatim, volontairement : une pièce traduite ne se retrouve plus dans le document le jour où l’auditeur demande où elle est écrite."
+  },
+  "Déploiement opérationnel": {
+   "en": "Operational deployment",
+   "fr": "Déploiement opérationnel"
+  },
+  "Déployeur (utilise sous sa propre autorité)": {
+   "en": "Deployer (uses under its own authority)",
+   "fr": "Déployeur (utilise sous sa propre autorité)"
+  },
+  "Déployeur : informer les personnes exposées à la reconnaissance des émotions ou à la catégorisation biométrique (Art. #(#))": {
+   "en": "Deployer: inform the persons exposed to emotion recognition or biometric categorisation (Art. #(#))",
+   "fr": "Déployeur : informer les personnes exposées à la reconnaissance des émotions ou à la catégorisation biométrique (Art. 50(3))"
+  },
+  "Déployeur : signaler les hypertrucages et les textes publiés d'intérêt public, sauf relecture humaine ou contrôle éditorial (Art. #(#))": {
+   "en": "Deployer: disclose deepfakes and published texts of public interest, unless there has been human review or editorial control (Art. #(#))",
+   "fr": "Déployeur : signaler les hypertrucages et les textes publiés d'intérêt public, sauf relecture humaine ou contrôle éditorial (Art. 50(4))"
+  },
+  "Déployeur — j’emploie un système acheté": {
+   "en": "Deployer — I use a system I bought",
+   "fr": "Déployeur — j’emploie un système acheté"
+  },
+  "Déployeurs : supervision, FRIA, surveillance (Art. #, #)": {
+   "en": "Deployers: oversight, FRIA, monitoring (Art. #, #)",
+   "fr": "Déployeurs : supervision, FRIA, surveillance (Art. 26, 27)"
+  },
+  "Déployeurs de systèmes à haut risque : prendre des mesures pour utiliser le système conformément à la notice (#(#)), confier la supervision humaine à des personnes compétentes, formées et habilitées (#(#)), veiller à la pertinence et à la représentativité des données d'entrée qu'ils maîtrisent (#(#)), surveiller le fonctionnement et informer le fournisseur (#(#)). En cas de risque : informer sans retard fournisseur ou distributeur et autorité de surveillance du marché, et suspendre l'usage ; en cas d'incident grave : informer immédiatement d'abord le fournisseur, puis l'importateur ou le distributeur et les autorités. Conserver les journaux au moins six mois (#(#)), informer les représentants des travailleurs et les travailleurs concernés avant tout usage au travail (#(#)), informer les personnes faisant l'objet d'une décision de l'annexe III (#(#)), coopérer avec les autorités (#(#)).": {
+   "en": "Deployers of high-risk systems: take measures to use the system in accordance with the instructions for use (#(#)), assign human oversight to persons who are competent, trained and authorised (#(#)), ensure the relevance and representativeness of the input data they control (#(#)), monitor the operation and inform the provider (#(#)). In case of risk: inform the provider or distributor and the market surveillance authority without undue delay, and suspend use; in case of a serious incident: first inform the provider immediately, then the importer or distributor and the authorities. Keep the logs for at least six months (#(#)), inform workers' representatives and the workers concerned before any use in the workplace (#(#)), inform the persons who are subject to an Annex III decision (#(#)), cooperate with the authorities (#(#)).",
+   "fr": "Déployeurs de systèmes à haut risque : prendre des mesures pour utiliser le système conformément à la notice (26(1)), confier la supervision humaine à des personnes compétentes, formées et habilitées (26(2)), veiller à la pertinence et à la représentativité des données d'entrée qu'ils maîtrisent (26(4)), surveiller le fonctionnement et informer le fournisseur (26(5)). En cas de risque : informer sans retard fournisseur ou distributeur et autorité de surveillance du marché, et suspendre l'usage ; en cas d'incident grave : informer immédiatement d'abord le fournisseur, puis l'importateur ou le distributeur et les autorités. Conserver les journaux au moins six mois (26(6)), informer les représentants des travailleurs et les travailleurs concernés avant tout usage au travail (26(7)), informer les personnes faisant l'objet d'une décision de l'annexe III (26(11)), coopérer avec les autorités (26(12))."
+  },
+  "Déployez des modules de formation ciblés selon le rôle (développeur, métier, dirigeant).": {
+   "en": "Roll out training modules targeted by role (developer, business, executive).",
+   "fr": "Déployez des modules de formation ciblés selon le rôle (développeur, métier, dirigeant)."
+  },
+  "Déposez la documentation technique, la déclaration UE de conformité et les instructions de l’annexe II reçues du fabricant.": {
+   "en": "Upload the technical documentation, the EU declaration of conformity and the Annex II instructions received from the manufacturer.",
+   "fr": "Déposez la documentation technique, la déclaration UE de conformité et les instructions de l’annexe II reçues du fabricant."
+  },
+  "Déposez les livrables de cadrage, les grilles d’arbitrage et les retours d’expérience.": {
+   "en": "Upload the scoping deliverables, the decision grids and the lessons learned.",
+   "fr": "Déposez les livrables de cadrage, les grilles d’arbitrage et les retours d’expérience."
+  },
+  "Déposez les supports, les procédures et les comptes rendus d’exercice dans la base de connaissance, rangés par compétence et non par session.": {
+   "en": "Upload the materials, procedures and exercise minutes to the knowledge base, organised by skill and not by session.",
+   "fr": "Déposez les supports, les procédures et les comptes rendus d’exercice dans la base de connaissance, rangés par compétence et non par session."
+  },
+  "Déposée le": {
+   "en": "Filed on",
+   "fr": "Déposée le"
+  },
+  "Déroulez les # étapes de classification pour un cas.": {
+   "en": "Go through the # classification steps for one case.",
+   "fr": "Déroulez les 5 étapes de classification pour un cas."
+  },
+  "Déroulez les cinq étapes de classification pour chaque système hébergé ou opéré.": {
+   "en": "Go through the five classification steps for each system hosted or operated.",
+   "fr": "Déroulez les cinq étapes de classification pour chaque système hébergé ou opéré."
+  },
+  "Désignation et lettre de mission du DPO": {
+   "en": "Designation and engagement letter of the DPO",
+   "fr": "Désignation et lettre de mission du DPO"
+  },
+  "Désigner et former des superviseurs humains compétents": {
+   "en": "Designate and train competent human overseers",
+   "fr": "Désigner et former des superviseurs humains compétents"
+  },
+  "Désigner un point de contact pour la notification aux autorités (ANSSI/CSIRT)": {
+   "en": "Designate a point of contact for notification to the authorities (ANSSI/CSIRT)",
+   "fr": "Désigner un point de contact pour la notification aux autorités (ANSSI/CSIRT)"
+  },
+  "Désigner un point de contact pour les autorités (CERT-FR en France)": {
+   "en": "Designate a point of contact for the authorities (CERT-FR in France)",
+   "fr": "Désigner un point de contact pour les autorités (CERT-FR en France)"
+  },
+  "Désigner un responsable conformité AI Act interne": {
+   "en": "Designate an internal AI Act compliance lead",
+   "fr": "Désigner un responsable conformité AI Act interne"
+  },
+  "Désigner un responsable de la gestion des risques TIC au niveau de la direction": {
+   "en": "Designate a person responsible for ICT risk management at senior management level",
+   "fr": "Désigner un responsable de la gestion des risques TIC au niveau de la direction"
+  },
+  "Désigner un responsable de la gouvernance IA avec autorité et ressources": {
+   "en": "Designate an AI governance lead with authority and resources",
+   "fr": "Désigner un responsable de la gouvernance IA avec autorité et ressources"
+  },
+  "Désignez nommément les personnes chargées de la supervision, et vérifiez qu’elles ont la compétence, le temps ET l’autorité d’écarter une sortie du système.": {
+   "en": "Name the people responsible for oversight, and check that they have the competence, the time AND the authority to override an output of the system.",
+   "fr": "Désignez nommément les personnes chargées de la supervision, et vérifiez qu’elles ont la compétence, le temps ET l’autorité d’écarter une sortie du système."
+  },
+  "Détail des # critères": {
+   "en": "Details of the # criteria",
+   "fr": "Détail des 12 critères"
+  },
+  "Détail du cadre applicable à une juridiction : textes en vigueur ou en projet, autorité compétente, niveau de sévérité, points de vigilance. Une fiche par pays, accessible depuis la carte mondiale ou le comparateur.": {
+   "en": "Details of the framework applicable in a jurisdiction: texts in force or in draft, competent authority, severity level, points to watch. One profile per country, accessible from the world map or the comparator.",
+   "fr": "Détail du cadre applicable à une juridiction : textes en vigueur ou en projet, autorité compétente, niveau de sévérité, points de vigilance. Une fiche par pays, accessible depuis la carte mondiale ou le comparateur."
+  },
+  "Détail par critère": {
+   "en": "Details by criterion",
+   "fr": "Détail par critère"
+  },
+  "Détails indisponibles (Stripe non configuré).": {
+   "en": "Details unavailable (Stripe not configured).",
+   "fr": "Détails indisponibles (Stripe non configuré)."
+  },
+  "Détection anomalies industrielles": {
+   "en": "Industrial anomaly detection",
+   "fr": "Détection anomalies industrielles"
+  },
+  "Détection anticipée des défaillances ; ruptures d’appro réduites.": {
+   "en": "Early detection of failures; fewer supply shortages.",
+   "fr": "Détection anticipée des défaillances ; ruptures d’appro réduites."
+  },
+  "Détection d'anomalies SCADA": {
+   "en": "SCADA anomaly detection",
+   "fr": "Détection d'anomalies SCADA"
+  },
+  "Détection d'intrusion par ML, réponse automatique aux incidents, analyse comportementale du réseau (UEBA)": {
+   "en": "ML-based intrusion detection, automated incident response, network behaviour analytics (UEBA)",
+   "fr": "Détection d'intrusion par ML, réponse automatique aux incidents, analyse comportementale du réseau (UEBA)"
+  },
+  "Détection de chute, capteurs de présence au domicile : article # du RGPD, et hébergement certifié dès que la donnée devient une donnée de santé.": {
+   "en": "Fall detection, presence sensors in the home: Article # of the GDPR, and certified hosting as soon as the data becomes health data.",
+   "fr": "Détection de chute, capteurs de présence au domicile : article 9 du RGPD, et hébergement certifié dès que la donnée devient une donnée de santé."
+  },
+  "Détection de fatigue conducteur": {
+   "en": "Driver fatigue detection",
+   "fr": "Détection de fatigue conducteur"
+  },
+  "Détection de fraude au paiement": {
+   "en": "Payment fraud detection",
+   "fr": "Détection de fraude au paiement"
+  },
+  "Détection de fraude fiscale": {
+   "en": "Tax fraud detection",
+   "fr": "Détection de fraude fiscale"
+  },
+  "Détection de maladies par imagerie": {
+   "en": "Disease detection by imaging",
+   "fr": "Détection de maladies par imagerie"
+  },
+  "Détection de présence et d'atmosphère : la défaillance se paie en vies. Contrôle humain effectif (art. #) et arrêt d'urgence indépendant du système.": {
+   "en": "Presence and atmosphere detection: failure is paid for in lives. Effective human oversight (art. #) and an emergency stop independent of the system.",
+   "fr": "Détection de présence et d'atmosphère : la défaillance se paie en vies. Contrôle humain effectif (art. 14) et arrêt d'urgence indépendant du système."
+  },
+  "Détection de risques sur chantier par vision": {
+   "en": "Vision-based risk detection on construction sites",
+   "fr": "Détection de risques sur chantier par vision"
+  },
+  "Détection d’anomalies": {
+   "en": "Anomaly detection",
+   "fr": "Détection d’anomalies"
+  },
+  "Détection et correction des biais": {
+   "en": "Bias detection and correction",
+   "fr": "Détection et correction des biais"
+  },
+  "Détermine en quelques minutes le niveau de risque et les obligations légales exactes — évite de découvrir une obligation critique trop tard dans le projet.": {
+   "en": "Determines in a few minutes the risk level and the exact legal obligations — avoids discovering a critical obligation too late in the project.",
+   "fr": "Détermine en quelques minutes le niveau de risque et les obligations légales exactes — évite de découvrir une obligation critique trop tard dans le projet."
+  },
+  "Détermine la classification d un système IA (interdit, haut risque, risque limité, minimal) et ses obligations associées, en répondant à # étapes guidées — avant même de l enregistrer au Registre.": {
+   "en": "Determines the classification of an AI system (prohibited, high-risk, limited risk, minimal) and its associated obligations, by answering # guided steps — before even recording it in the register.",
+   "fr": "Détermine la classification d un système IA (interdit, haut risque, risque limité, minimal) et ses obligations associées, en répondant à 5 étapes guidées — avant même de l enregistrer au Registre."
+  },
+  "Détermine si vous restez déployeur ou si vous êtes devenu FOURNISSEUR sans le savoir. C’est la bascule que les organisations découvrent le plus tard, généralement après avoir affiné un modèle acheté.": {
+   "en": "Determines whether you remain a deployer or have become a PROVIDER without knowing it. It is the switch organisations discover the latest, usually after fine-tuning a model they bought.",
+   "fr": "Détermine si vous restez déployeur ou si vous êtes devenu FOURNISSEUR sans le savoir. C’est la bascule que les organisations découvrent le plus tard, généralement après avoir affiné un modèle acheté."
+  },
+  "Détermine, pour chaque traitement du registre, si une analyse d’impact est requise, selon les neuf critères de la CNIL. Deux critères réunis rendent l’AIPD nécessaire.": {
+   "en": "Determines, for each processing activity in the records, whether an impact assessment is required, according to the CNIL’s nine criteria. Two criteria together make a DPIA necessary.",
+   "fr": "Détermine, pour chaque traitement du registre, si une analyse d’impact est requise, selon les neuf critères de la CNIL. Deux critères réunis rendent l’AIPD nécessaire."
+  },
+  "Déterminer l'accès, l'admission ou l'affectation ; évaluer les acquis d'apprentissage ; évaluer le niveau d'enseignement qu'une personne pourra atteindre ; surveiller et détecter des comportements interdits lors d'examens. Le point vise « tous les niveaux ». Un établissement qui fait l'un des quatre est déployeur d'un système à haut risque.": {
+   "en": "Determining access, admission or assignment; evaluating learning outcomes; assessing the appropriate level of education a person will be able to reach; monitoring and detecting prohibited behaviour during tests. The point covers “all levels”. An institution that does any one of the four is a deployer of a high-risk system.",
+   "fr": "Déterminer l'accès, l'admission ou l'affectation ; évaluer les acquis d'apprentissage ; évaluer le niveau d'enseignement qu'une personne pourra atteindre ; surveiller et détecter des comportements interdits lors d'examens. Le point vise « tous les niveaux ». Un établissement qui fait l'un des quatre est déployeur d'un système à haut risque."
+  },
+  "Déterminer le rôle": {
+   "en": "Determine the role",
+   "fr": "Déterminer le rôle"
+  },
+  "Déterminer votre rôle (fournisseur, déployeur, importateur, distributeur — Art. #(#) à #(#)) avant de lister les obligations": {
+   "en": "Determine your role (provider, deployer, importer, distributor — Art. #(#) to #(#)) before listing the obligations",
+   "fr": "Déterminer votre rôle (fournisseur, déployeur, importateur, distributeur — Art. 3(3) à 3(7)) avant de lister les obligations"
+  },
+  "Déterminez les traitements nécessitant une AIPD et appréciez leurs risques.": {
+   "en": "Identify the processing activities requiring a DPIA and assess their risks.",
+   "fr": "Déterminez les traitements nécessitant une AIPD et appréciez leurs risques."
+  },
+  "Déterminez tôt si un organisme notifié doit intervenir : son délai d’intervention commande tout votre calendrier.": {
+   "en": "Determine early whether a notified body must be involved: its lead time drives your whole timetable.",
+   "fr": "Déterminez tôt si un organisme notifié doit intervenir : son délai d’intervention commande tout votre calendrier."
+  },
+  "Développement assisté par IA": {
+   "en": "AI-assisted development",
+   "fr": "Développement assisté par IA"
+  },
+  "Dû (art. #)": {
+   "en": "Due (art. #)",
+   "fr": "Dû (art. 50)"
+  },
+  "EFFACEMENT RGPD — supprimer les données KYC, notes, relances et suivi, et anonymiser les coordonnées nominatives du compte de ce client ? Les factures et contrats sont conservés (liés par identifiant pseudonymisé) au titre de l’obligation comptable légale de # ans. Le compte sera désactivé. Cette action est irréversible.": {
+   "en": "GDPR ERASURE — delete the KYC data, notes, reminders and follow-up, and anonymise the personal contact details of this client’s account? Invoices and contracts are kept (linked by a pseudonymised identifier) under the #-year statutory accounting obligation. The account will be deactivated. This action is irreversible.",
+   "fr": "EFFACEMENT RGPD — supprimer les données KYC, notes, relances et suivi, et anonymiser les coordonnées nominatives du compte de ce client ? Les factures et contrats sont conservés (liés par identifiant pseudonymisé) au titre de l’obligation comptable légale de 10 ans. Le compte sera désactivé. Cette action est irréversible."
+  },
+  "EU AI Act — Entrée en vigueur obligations IA haut risque": {
+   "en": "EU AI Act — Entry into force of high-risk AI obligations",
+   "fr": "EU AI Act — Entrée en vigueur obligations IA haut risque"
+  },
+  "EU vs USA sur l'IA ?": {
+   "en": "EU vs USA on AI?",
+   "fr": "EU vs USA sur l'IA ?"
+  },
+  "Effacement effectué.": {
+   "en": "Erasure completed.",
+   "fr": "Effacement effectué."
+  },
+  "Effacer de ce navigateur les réponses": {
+   "en": "Clear from this browser the answers",
+   "fr": "Effacer de ce navigateur les réponses"
+  },
+  "Effacer les choix de politique enregistrés dans ce navigateur ?": {
+   "en": "Clear the policy choices saved in this browser?",
+   "fr": "Effacer les choix de politique enregistrés dans ce navigateur ?"
+  },
+  "Effacer les relevés d’adoption enregistrés dans ce navigateur ?": {
+   "en": "Clear the adoption readings saved in this browser?",
+   "fr": "Effacer les relevés d’adoption enregistrés dans ce navigateur ?"
+  },
+  "Effacer tout l historique des evaluations ?": {
+   "en": "Clear the entire assessment history?",
+   "fr": "Effacer tout l historique des evaluations ?"
+  },
+  "Effet juridique, ou effet significatif similaire, pour la personne": {
+   "en": "Legal effect, or similarly significant effect, on the person",
+   "fr": "Effet juridique, ou effet significatif similaire, pour la personne"
+  },
+  "Egalite de Traitement": {
+   "en": "Equal Treatment",
+   "fr": "Egalite de Traitement"
+  },
+  "Elle agrège ce qui a été saisi ailleurs et ne se remplit pas ici. Un Registre IA incomplet produit une vue direction rassurante et fausse : vérifiez le registre avant de présenter la synthèse.": {
+   "en": "It aggregates what was entered elsewhere and is not filled in here. An incomplete AI register produces a reassuring and false executive view: check the register before presenting the summary.",
+   "fr": "Elle agrège ce qui a été saisi ailleurs et ne se remplit pas ici. Un Registre IA incomplet produit une vue direction rassurante et fausse : vérifiez le registre avant de présenter la synthèse."
+  },
+  "Elle alimente les formations": {
+   "en": "It feeds the training",
+   "fr": "Elle alimente les formations"
+  },
+  "Elle dit qui est connecté, sous quelle offre, et donne les deux seuls chemins qui comptent : se déconnecter, ou se connecter. Sentinel comptait cinquante-deux onglets et pas un ne parlait du compte — la session n’existait que dans un bouton de la barre du haut, entre deux boutons de même apparence.": {
+   "en": "It says who is signed in, under which plan, and gives the only two routes that matter: sign out, or sign in. Sentinel had fifty-two tabs and not one spoke of the account — the session existed only in a button in the top bar, between two buttons that looked the same.",
+   "fr": "Elle dit qui est connecté, sous quelle offre, et donne les deux seuls chemins qui comptent : se déconnecter, ou se connecter. Sentinel comptait cinquante-deux onglets et pas un ne parlait du compte — la session n’existait que dans un bouton de la barre du haut, entre deux boutons de même apparence."
+  },
+  "Elle décrit un rapport de force, pas un droit": {
+   "en": "It describes a balance of power, not a right",
+   "fr": "Elle décrit un rapport de force, pas un droit"
+  },
+  "Elle dérive de Parties prenantes": {
+   "en": "It derives from Stakeholders",
+   "fr": "Elle dérive de Parties prenantes"
+  },
+  "Elle engage l’organisation sur des obligations dont le coût se compte en mois.": {
+   "en": "It commits the organisation to obligations whose cost is counted in months.",
+   "fr": "Elle engage l’organisation sur des obligations dont le coût se compte en mois."
+  },
+  "Elle est au stade de l’Enquête CEN : sa référence n’est PAS citée au Journal officiel de l’Union européenne. La tenir n’ouvre donc AUCUNE présomption de conformité à l’article #. Le jour où elle sera citée, le même travail vaudra présomption — dans les limites de son domaine d’application.": {
+   "en": "It is at the CEN Enquiry stage: its reference is NOT cited in the Official Journal of the European Union. Meeting it therefore opens NO presumption of conformity with article #. The day it is cited, the same work will carry a presumption — within the limits of its scope.",
+   "fr": "Elle est au stade de l’Enquête CEN : sa référence n’est PAS citée au Journal officiel de l’Union européenne. La tenir n’ouvre donc AUCUNE présomption de conformité à l’article 14. Le jour où elle sera citée, le même travail vaudra présomption — dans les limites de son domaine d’application."
+  },
+  "Elle est à notifier à l’autorité de surveillance — prévoyez le délai correspondant dans votre calendrier.": {
+   "en": "It must be notified to the market surveillance authority — allow for the corresponding lead time in your timetable.",
+   "fr": "Elle est à notifier à l’autorité de surveillance — prévoyez le délai correspondant dans votre calendrier."
+  },
+  "Elle ne chiffre PAS le coût de votre mise en conformité — ni jours-homme, ni honoraires d’organisme notifié. Ces chiffres ne sont ni dans le règlement ni publics de façon fiable, et les inventer produirait un document qui a l’air d’un devis sans en être un : il serait cité en comité. Et les montants affichés sont des PLAFONDS, jamais des prévisions : l’article #, §# impose de tenir compte de la nature, de la gravité et de la durée de l’infraction, des antécédents de l’opérateur et de sa taille. Le régime de sanctions lui-même est fixé par chaque État membre.": {
+   "en": "It does NOT cost your compliance effort — neither person-days nor notified body fees. These figures are neither in the Regulation nor reliably public, and inventing them would produce a document that looks like a quote without being one: it would be cited in committee. And the amounts displayed are CEILINGS, never forecasts: Article #(#) requires account to be taken of the nature, gravity and duration of the infringement, the operator’s history and its size. The penalty regime itself is set by each Member State.",
+   "fr": "Elle ne chiffre PAS le coût de votre mise en conformité — ni jours-homme, ni honoraires d’organisme notifié. Ces chiffres ne sont ni dans le règlement ni publics de façon fiable, et les inventer produirait un document qui a l’air d’un devis sans en être un : il serait cité en comité. Et les montants affichés sont des PLAFONDS, jamais des prévisions : l’article 64, §5 impose de tenir compte de la nature, de la gravité et de la durée de l’infraction, des antécédents de l’opérateur et de sa taille. Le régime de sanctions lui-même est fixé par chaque État membre."
+  }
+ }
+}

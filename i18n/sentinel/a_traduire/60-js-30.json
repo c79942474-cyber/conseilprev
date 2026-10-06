@@ -1,0 +1,975 @@
+{
+ "_lot": "60-js-30",
+ "_mots": 2468,
+ "_pages": [
+  "_js"
+ ],
+ "_rubrique": "_js",
+ "bloc": {},
+ "texte": {
+  "Vous en répondez aussi, sur votre périmètre.": {
+   "en": "You are also accountable for it, within your scope.",
+   "fr": "Vous en répondez aussi, sur votre périmètre."
+  },
+  "Vous lancez un nouveau traitement. Ce parcours applique la privacy by design dès la conception, puis l’AIPD et la documentation.": {
+   "en": "You are launching a new processing activity. This path applies privacy by design from the outset, then the DPIA and the documentation.",
+   "fr": "Vous lancez un nouveau traitement. Ce parcours applique la privacy by design dès la conception, puis l’AIPD et la documentation."
+  },
+  "Vous n avez pas le temps d entrer dans le détail opérationne": {
+   "en": "You do not have time to go into operational detai",
+   "fr": "Vous n avez pas le temps d entrer dans le détail opérationne"
+  },
+  "Vous ne conduisez pas un site, vous arbitrez entre plusieurs. Ce parcours enchaîne ce que le parc pèse, ce que la réglementation lui demandera, ce que la prochaine extension coûtera, et ce que vos équipes emploient réellement de ce qui a été déployé.": {
+   "en": "You do not run one site, you decide between several. This path links what the estate weighs, what regulation will require of it, what the next extension will cost, and what your teams actually use of what has been deployed.",
+   "fr": "Vous ne conduisez pas un site, vous arbitrez entre plusieurs. Ce parcours enchaîne ce que le parc pèse, ce que la réglementation lui demandera, ce que la prochaine extension coûtera, et ce que vos équipes emploient réellement de ce qui a été déployé."
+  },
+  "Vous ne pouvez pas dire ce que vous avez modifié si vous ne savez pas ce que vous aviez.": {
+   "en": "You cannot say what you have modified if you do not know what you had.",
+   "fr": "Vous ne pouvez pas dire ce que vous avez modifié si vous ne savez pas ce que vous aviez."
+  },
+  "Vous ne pouvez pas vérifier « la procédure appropriée » sans savoir laquelle était appropriée.": {
+   "en": "You cannot verify “the appropriate procedure” without knowing which one was appropriate.",
+   "fr": "Vous ne pouvez pas vérifier « la procédure appropriée » sans savoir laquelle était appropriée."
+  },
+  "Vous n’avez pas conçu ce système : vous l’employez sous votre autorité. Le règlement ne vous demande donc pas le dossier technique de l’annexe IV, mais l’article # — et personne ne vous le dira à votre place. Ce parcours suit vos obligations, pas celles de votre fournisseur.": {
+   "en": "You did not design this system: you use it under your authority. The Regulation therefore does not ask you for the Annex IV technical file, but for Article # — and nobody will tell you in your place. This path follows your obligations, not those of your provider.",
+   "fr": "Vous n’avez pas conçu ce système : vous l’employez sous votre autorité. Le règlement ne vous demande donc pas le dossier technique de l’annexe IV, mais l’article 26 — et personne ne vous le dira à votre place. Ce parcours suit vos obligations, pas celles de votre fournisseur."
+  },
+  "Vous n’avez pas le temps d’entrer dans le détail opérationnel — ce parcours va droit à l’essentiel décisionnel.": {
+   "en": "You do not have time to go into operational detail — this path goes straight to what matters for decisions.",
+   "fr": "Vous n’avez pas le temps d’entrer dans le détail opérationnel — ce parcours va droit à l’essentiel décisionnel."
+  },
+  "Vous n’avez pas à refaire l’évaluation ; vous avez à constater qu’elle a eu lieu.": {
+   "en": "You do not have to redo the assessment; you have to establish that it took place.",
+   "fr": "Vous n’avez pas à refaire l’évaluation ; vous avez à constater qu’elle a eu lieu."
+  },
+  "Vous n’êtes pas une entité financière, et cela change tout : les chapitres II à IV ne vous sont pas opposables, RIEN ne vous est écarté de NIS #, et le chapitre V vous atteint comme contrepartie de votre client.": {
+   "en": "You are not a financial entity, and that changes everything: Chapters II to IV cannot be enforced against you, NOTHING of NIS # is set aside for you, and Chapter V reaches you as your client’s counterparty.",
+   "fr": "Vous n’êtes pas une entité financière, et cela change tout : les chapitres II à IV ne vous sont pas opposables, RIEN ne vous est écarté de NIS 2, et le chapitre V vous atteint comme contrepartie de votre client."
+  },
+  "Vous pilotez la mise en conformité de bout en bout. Ce parcours enchaîne diagnostic, audit, priorisation et reporting — la colonne vertébrale d’un programme structuré.": {
+   "en": "You steer compliance from end to end. This path links diagnosis, audit, prioritisation and reporting — the backbone of a structured programme.",
+   "fr": "Vous pilotez la mise en conformité de bout en bout. Ce parcours enchaîne diagnostic, audit, priorisation et reporting — la colonne vertébrale d’un programme structuré."
+  },
+  "Vous portez le déploiement à l échelle — ce parcours structu": {
+   "en": "You carry deployment at scale — this path structu",
+   "fr": "Vous portez le déploiement à l échelle — ce parcours structu"
+  },
+  "Vous portez le déploiement à l’échelle — ce parcours structure la croissance du programme IA sans perdre le contrôle.": {
+   "en": "You carry deployment at scale — this path structures the growth of the AI programme without losing control.",
+   "fr": "Vous portez le déploiement à l’échelle — ce parcours structure la croissance du programme IA sans perdre le contrôle."
+  },
+  "Vous prenez la conformité RGPD à zéro. Ce parcours déroule le cycle complet, du registre jusqu’à l’indice de conformité.": {
+   "en": "You are starting GDPR compliance from zero. This path runs through the full cycle, from the records of processing to the compliance index.",
+   "fr": "Vous prenez la conformité RGPD à zéro. Ce parcours déroule le cycle complet, du registre jusqu’à l’indice de conformité."
+  },
+  "Vous préparez un contrôle. Ce parcours met l’accent sur la preuve : registre à jour, documentation opposable, AIPD et indice de conformité.": {
+   "en": "You are preparing for an inspection. This path focuses on evidence: up-to-date records, enforceable documentation, DPIA and compliance index.",
+   "fr": "Vous préparez un contrôle. Ce parcours met l’accent sur la preuve : registre à jour, documentation opposable, AIPD et indice de conformité."
+  },
+  "Vous quantifiez ce qui reste flou pour les autres — l exposi": {
+   "en": "You quantify what remains vague for others — the exposu",
+   "fr": "Vous quantifiez ce qui reste flou pour les autres — l exposi"
+  },
+  "Vous quantifiez ce qui reste flou pour les autres — l’exposition réelle, en risque et en euros.": {
+   "en": "You quantify what remains vague for others — the real exposure, in risk and in euros.",
+   "fr": "Vous quantifiez ce qui reste flou pour les autres — l’exposition réelle, en risque et en euros."
+  },
+  "Vous répondez aux deux questionnaires. Le score retenu": {
+   "en": "You answer both questionnaires. The score taken",
+   "fr": "Vous répondez aux deux questionnaires. Le score retenu"
+  },
+  "Vous répondez de l’article # et de l’article # : exigences essentielles, documentation technique, déclaration UE de conformité, marquage CE, et le signalement en vingt-quatre heures qui court DEPUIS LE # SEPTEMBRE #. Ce parcours part de ce qui est déjà exigible, puis remonte vers ce qui se prépare.": {
+   "en": "You are accountable for Article # and Article #: essential requirements, technical documentation, EU declaration of conformity, CE marking, and the twenty-four-hour reporting that has run SINCE # SEPTEMBER #. This path starts from what is already required, then works back to what is being prepared.",
+   "fr": "Vous répondez de l’article 13 et de l’article 14 : exigences essentielles, documentation technique, déclaration UE de conformité, marquage CE, et le signalement en vingt-quatre heures qui court DEPUIS LE 11 SEPTEMBRE 2026. Ce parcours part de ce qui est déjà exigible, puis remonte vers ce qui se prépare."
+  },
+  "Vous structurez le cadre de contrôle permanent — pas un audi": {
+   "en": "You structure the permanent control framework — not a one-off audi",
+   "fr": "Vous structurez le cadre de contrôle permanent — pas un audi"
+  },
+  "Vous structurez le cadre de contrôle permanent — pas un audit ponctuel, mais un dispositif qui tient dans le temps.": {
+   "en": "You structure the permanent control framework — not a one-off audit, but arrangements that hold over time.",
+   "fr": "Vous structurez le cadre de contrôle permanent — pas un audit ponctuel, mais un dispositif qui tient dans le temps."
+  },
+  "Vous tenez le registre au quotidien. Un parcours court pour recenser, visualiser et vérifier la conformité.": {
+   "en": "You keep the register day to day. A short path to list, visualise and check compliance.",
+   "fr": "Vous tenez le registre au quotidien. Un parcours court pour recenser, visualiser et vérifier la conformité."
+  },
+  "Vous transformez un goulot d’étranglement opérationnel en cas d’usage arbitré, puis en système qui tient en production. Ce parcours suit l’ordre du métier — idéation, cadrage, dossier d’arbitrage, industrialisation — et dit à chaque étape ce que Sentinel porte, et ce qu’il ne porte pas.": {
+   "en": "You turn an operational bottleneck into a decided use case, then into a system that holds up in production. This path follows the business order — ideation, scoping, decision file, industrialisation — and says at each step what Sentinel carries, and what it does not.",
+   "fr": "Vous transformez un goulot d’étranglement opérationnel en cas d’usage arbitré, puis en système qui tient en production. Ce parcours suit l’ordre du métier — idéation, cadrage, dossier d’arbitrage, industrialisation — et dit à chaque étape ce que Sentinel porte, et ce qu’il ne porte pas."
+  },
+  "Vous êtes donc le": {
+   "en": "You are therefore the",
+   "fr": "Vous êtes donc le"
+  },
+  "Vous êtes passé par cette page. Cela ne dit pas que le": {
+   "en": "You have been through this page. That does not say that the",
+   "fr": "Vous êtes passé par cette page. Cela ne dit pas que le"
+  },
+  "Vous êtes votre propre déployeur : ce que vous vous": {
+   "en": "You are your own deployer: what you",
+   "fr": "Vous êtes votre propre déployeur : ce que vous vous"
+  },
+  "Vue agrégée par service, base légale, données sensibles et transferts.": {
+   "en": "Aggregated view by department, legal basis, sensitive data and transfers.",
+   "fr": "Vue agrégée par service, base légale, données sensibles et transferts."
+  },
+  "Vue de direction imprimable, avec la version du référentiel et sa date.": {
+   "en": "Printable executive view, with the version of the reference framework and its date.",
+   "fr": "Vue de direction imprimable, avec la version du référentiel et sa date."
+  },
+  "Vue de direction imprimable, réserves incluses.": {
+   "en": "Printable executive view, reservations included.",
+   "fr": "Vue de direction imprimable, réserves incluses."
+  },
+  "Vue d’ensemble agrégée depuis le registre : répartition par service et par base légale, données sensibles, transferts hors Union européenne. Elle fait apparaître les concentrations de risque qu’une lecture ligne à ligne ne montre pas.": {
+   "en": "Overview aggregated from the records: breakdown by department and by legal basis, sensitive data, transfers outside the European Union. It reveals the concentrations of risk that a row-by-row reading does not show.",
+   "fr": "Vue d’ensemble agrégée depuis le registre : répartition par service et par base légale, données sensibles, transferts hors Union européenne. Elle fait apparaître les concentrations de risque qu’une lecture ligne à ligne ne montre pas."
+  },
+  "Vue d’ensemble du dispositif": {
+   "en": "Overview of the framework",
+   "fr": "Vue d’ensemble du dispositif"
+  },
+  "Vue d’exposition et fiches site, avec la nature de chaque valeur.": {
+   "en": "Exposure view and site records, with the nature of each value.",
+   "fr": "Vue d’exposition et fiches site, avec la nature de chaque valeur."
+  },
+  "Vue personnelle : votre activité récente et les actions à traiter en priorité (systèmes non conformes, points d audit à compléter, FRIA à vérifier).": {
+   "en": "Personal view: your recent activity and the actions to address first (non-compliant systems, audit points to complete, FRIAs to check).",
+   "fr": "Vue personnelle : votre activité récente et les actions à traiter en priorité (systèmes non conformes, points d audit à compléter, FRIA à vérifier)."
+  },
+  "Vue synthétique pour prioriser : tout ne peut pas être traité en même temps, la matrice tranche objectivement.": {
+   "en": "Summary view for prioritising: not everything can be treated at the same time, and the matrix decides objectively.",
+   "fr": "Vue synthétique pour prioriser : tout ne peut pas être traité en même temps, la matrice tranche objectivement."
+  },
+  "Vérification des comptes Stripe et Brevo…": {
+   "en": "Checking the Stripe and Brevo accounts…",
+   "fr": "Vérification des comptes Stripe et Brevo…"
+  },
+  "Vérification du paiement…": {
+   "en": "Checking the payment…",
+   "fr": "Vérification du paiement…"
+  },
+  "Vérification en cours…": {
+   "en": "Checking…",
+   "fr": "Vérification en cours…"
+  },
+  "Vérifier auprès de l'éditeur le niveau de risque. Si interaction avec des personnes : Art. #§# applicable au # août #.": {
+   "en": "Check the risk level with the vendor. If there is interaction with people: Art. #(#) applicable on # August #.",
+   "fr": "Vérifier auprès de l'éditeur le niveau de risque. Si interaction avec des personnes : Art. 50§1 applicable au 2 août 2026."
+  },
+  "Vérifier avant de citer": {
+   "en": "Check before citing",
+   "fr": "Vérifier avant de citer"
+  },
+  "Vérifier documentation du fournisseur (Art. # si GPAI). Si interaction avec des personnes : Art. # à votre charge.": {
+   "en": "Check the provider’s documentation (Art. # if GPAI). If there is interaction with people: Art. # is your responsibility.",
+   "fr": "Vérifier documentation du fournisseur (Art. 53 si GPAI). Si interaction avec des personnes : Art. 50 à votre charge."
+  },
+  "Vérifier en premier si l'usage envisagé tombe dans les pratiques interdites Art. # — avant même de parler de conformité haut risque.": {
+   "en": "Check first whether the intended use falls within the prohibited practices of Art. # — before even talking about high-risk compliance.",
+   "fr": "Vérifier en premier si l'usage envisagé tombe dans les pratiques interdites Art. 5 — avant même de parler de conformité haut risque."
+  },
+  "Vérifier l'Annexe III": {
+   "en": "Check Annex III",
+   "fr": "Vérifier l'Annexe III"
+  },
+  "Vérifier l'enregistrement du système dans la base de données de l'Union": {
+   "en": "Check the registration of the system in the Union database",
+   "fr": "Vérifier l'enregistrement du système dans la base de données de l'Union"
+  },
+  "Vérifier la compatibilité RGPD Art. # (droit de ne pas faire l'objet d'une décision uniquement automatisée) — ce cas cumule deux régimes réglementaires.": {
+   "en": "Check GDPR compatibility with Art. # (the right not to be subject to a decision based solely on automated processing) — this case combines two regulatory regimes.",
+   "fr": "Vérifier la compatibilité RGPD Art. 22 (droit de ne pas faire l'objet d'une décision uniquement automatisée) — ce cas cumule deux régimes réglementaires."
+  },
+  "Vérifier la complétude des obligations listées à l'Art. #": {
+   "en": "Check the completeness of the obligations listed in Art. #",
+   "fr": "Vérifier la complétude des obligations listées à l'Art. 16"
+  },
+  "Vérifier la conformité avant mise sur le marché": {
+   "en": "Check compliance before placing on the market",
+   "fr": "Vérifier la conformité avant mise sur le marché"
+  },
+  "Vérifier la présence des clauses contractuelles minimales DORA dans les contrats IA": {
+   "en": "Check that the minimum DORA contractual clauses are present in AI contracts",
+   "fr": "Vérifier la présence des clauses contractuelles minimales DORA dans les contrats IA"
+  },
+  "Vérifier les dérogations légales applicables pour l'identification biométrique (finalités répressives, autorisation préalable — Art. #(#) à #(#))": {
+   "en": "Check the legal exemptions applicable to biometric identification (law-enforcement purposes, prior authorisation — Art. #(#) to #(#))",
+   "fr": "Vérifier les dérogations légales applicables pour l'identification biométrique (finalités répressives, autorisation préalable — Art. 5(2) à 5(7))"
+  },
+  "Vérifier l’eau avant de s’engager": {
+   "en": "Check the water before committing",
+   "fr": "Vérifier l’eau avant de s’engager"
+  },
+  "Vérifier marquage, déclaration et notice": {
+   "en": "Check marking, declaration and instructions",
+   "fr": "Vérifier marquage, déclaration et notice"
+  },
+  "Vérifier que la mention apparaît dès le premier message, pas seulement dans les mentions légales.": {
+   "en": "Check that the notice appears from the first message, not only in the legal notice.",
+   "fr": "Vérifier que la mention apparaît dès le premier message, pas seulement dans les mentions légales."
+  },
+  "Vérifier si votre organisation est désignée contrôleur d'accès": {
+   "en": "Check whether your organisation is designated as a gatekeeper",
+   "fr": "Vérifier si votre organisation est désignée contrôleur d'accès"
+  },
+  "Vérifier si votre organisation est un opérateur d'importance essentielle (OIE) ou importante (OII) au sens NIS# — le double régime AI Act + NIS# est particulièrement exigeant.": {
+   "en": "Check whether your organisation is an operator of essential importance (OIE) or of importance (OII) within the meaning of NIS# — the dual AI Act + NIS# regime is particularly demanding.",
+   "fr": "Vérifier si votre organisation est un opérateur d'importance essentielle (OIE) ou importante (OII) au sens NIS2 — le double régime AI Act + NIS2 est particulièrement exigeant."
+  },
+  "Vérifier si votre système est dans le champ territorial de l'AI Act": {
+   "en": "Check whether your system falls within the territorial scope of the AI Act",
+   "fr": "Vérifier si votre système est dans le champ territorial de l'AI Act"
+  },
+  "Vérifier, et documenter, si une exclusion de l'Art. # s'applique (militaire, défense, sécurité nationale ; recherche ; usage personnel non professionnel)": {
+   "en": "Check, and document, whether an exclusion under Art. # applies (military, defence, national security; research; non-professional personal use)",
+   "fr": "Vérifier, et documenter, si une exclusion de l'Art. 2 s'applique (militaire, défense, sécurité nationale ; recherche ; usage personnel non professionnel)"
+  },
+  "Vérifiez d’abord si vous êtes essentielle ou importante. L’escalade sur votre personne n’existe que dans un cas.": {
+   "en": "First check whether you are an essential or an important entity. Escalation to you personally exists in only one case.",
+   "fr": "Vérifiez d’abord si vous êtes essentielle ou importante. L’escalade sur votre personne n’existe que dans un cas."
+  },
+  "Vérifiez la LANGUE : l’annexe II doit être compréhensible par les utilisateurs ET par les autorités de surveillance de l’État où vous mettez sur le marché. Un manuel en anglais seul ne suffit pas partout.": {
+   "en": "Check the LANGUAGE: Annex II must be understandable by users AND by the market surveillance authorities of the State where you place on the market. A manual in English alone is not enough everywhere.",
+   "fr": "Vérifiez la LANGUE : l’annexe II doit être compréhensible par les utilisateurs ET par les autorités de surveillance de l’État où vous mettez sur le marché. Un manuel en anglais seul ne suffit pas partout."
+  },
+  "Vérifiez la conservation et la traçabilité de vos évaluations passées.": {
+   "en": "Check the retention and traceability of your past assessments.",
+   "fr": "Vérifiez la conservation et la traçabilité de vos évaluations passées."
+  },
+  "Vérifiez la liste dans un instant : si le document y figure, l import a": {
+   "en": "Check the list in a moment: if the document appears in it, the import has",
+   "fr": "Vérifiez la liste dans un instant : si le document y figure, l import a"
+  },
+  "Vérifiez le marquage des contenus générés, l’information dès la première interaction, et l’information des personnes soumises à une décision au titre de l’article #(#).": {
+   "en": "Check the marking of generated content, the information from the first interaction, and the information of people subject to a decision under Article #(#).",
+   "fr": "Vérifiez le marquage des contenus générés, l’information dès la première interaction, et l’information des personnes soumises à une décision au titre de l’article 26(11)."
+  },
+  "Vérifiez les obligations selon les juridictions de déploiement.": {
+   "en": "Check the obligations according to the jurisdictions of deployment.",
+   "fr": "Vérifiez les obligations selon les juridictions de déploiement."
+  },
+  "Vérifiez les échéances clés et les jalons à venir.": {
+   "en": "Check the key deadlines and upcoming milestones.",
+   "fr": "Vérifiez les échéances clés et les jalons à venir."
+  },
+  "Vérifiez l’article #, ajouté par la version #.": {
+   "en": "Check Article #, added by version #.",
+   "fr": "Vérifiez l’article 6.3, ajouté par la version 2022."
+  },
+  "Vérifiez que votre fournisseur vous DONNE accès à ces journaux : beaucoup de contrats ne le prévoient pas.": {
+   "en": "Check that your provider GIVES you access to these logs: many contracts do not provide for it.",
+   "fr": "Vérifiez que votre fournisseur vous DONNE accès à ces journaux : beaucoup de contrats ne le prévoient pas."
+  },
+  "Vérifiez si l’article # vous vise : organisme public, organisme privé chargé d’un service public, ou système évaluant la solvabilité ou tarifant un risque en assurance vie ou santé.": {
+   "en": "Check whether Article # applies to you: public body, private body providing a public service, or system assessing creditworthiness or pricing a risk in life or health insurance.",
+   "fr": "Vérifiez si l’article 27 vous vise : organisme public, organisme privé chargé d’un service public, ou système évaluant la solvabilité ou tarifant un risque en assurance vie ou santé."
+  },
+  "Vérifiez votre statut : il décide de ce que l’autorité peut faire après l’incident.": {
+   "en": "Check your status: it decides what the authority can do after the incident.",
+   "fr": "Vérifiez votre statut : il décide de ce que l’autorité peut faire après l’incident."
+  },
+  "Vérifié/facturé :": {
+   "en": "Verified/invoiced:",
+   "fr": "Vérifié/facturé :"
+  },
+  "WUE_source = WUE_site + EWIF × PUE, par mode de refroidissement.": {
+   "en": "WUE_source = WUE_site + EWIF × PUE, by cooling mode.",
+   "fr": "WUE_source = WUE_site + EWIF × PUE, par mode de refroidissement."
+  },
+  "WUE_source = WUE_site + EWIF × PUE. L’eau du site et l’eau de la source sont tenues séparées : un aéroréfrigérant sec affiche zéro sur site et davantage à la source.": {
+   "en": "WUE_source = WUE_site + EWIF × PUE. On-site water and source water are kept separate: a dry cooler shows zero on site and more at the source.",
+   "fr": "WUE_source = WUE_site + EWIF × PUE. L’eau du site et l’eau de la source sont tenues séparées : un aéroréfrigérant sec affiche zéro sur site et davantage à la source."
+  },
+  "Watermarking technique des contenus synthetiques generes (Art. #(#))": {
+   "en": "Technical watermarking of generated synthetic content (Art. #(#))",
+   "fr": "Watermarking technique des contenus synthetiques generes (Art. 50(2))"
+  },
+  "Workflow de controle": {
+   "en": "Control workflow",
+   "fr": "Workflow de controle"
+  },
+  "Workflow de contrôle": {
+   "en": "Control workflow",
+   "fr": "Workflow de contrôle"
+  },
+  "[Sentinel AI] Demande de contact CONSEILPREV": {
+   "en": "[Sentinel AI] CONSEILPREV contact request",
+   "fr": "[Sentinel AI] Demande de contact CONSEILPREV"
+  },
+  "a analyser pour le moment.": {
+   "en": "to analyse for the moment.",
+   "fr": "a analyser pour le moment."
+  },
+  "a été fait. Sentinel ne peut pas mesurer le second.": {
+   "en": "has been done. Sentinel cannot measure the second.",
+   "fr": "a été fait. Sentinel ne peut pas mesurer le second."
+  },
+  "abouti. Rien n’est affiché plutôt qu’un résultat partiel.": {
+   "en": "completed. Nothing is displayed rather than a partial result.",
+   "fr": "abouti. Rien n’est affiché plutôt qu’un résultat partiel."
+  },
+  "abouti. Rien n’est affiché plutôt qu’une couverture": {
+   "en": "complete. Nothing is displayed rather than a partial",
+   "fr": "abouti. Rien n’est affiché plutôt qu’une couverture"
+  },
+  "acceptation du propriétaire": {
+   "en": "owner acceptance",
+   "fr": "acceptation du propriétaire"
+  },
+  "acceptation non requise à ce niveau": {
+   "en": "acceptance not required at this level",
+   "fr": "acceptation non requise à ce niveau"
+  },
+  "acceptée par la passerelle, qui ne consulte pas la limite du site.": {
+   "en": "accepted by the gateway, which does not check the site limit.",
+   "fr": "acceptée par la passerelle, qui ne consulte pas la limite du site."
+  },
+  "accompagnée d’un communiqué": {
+   "en": "accompanied by a press release",
+   "fr": "accompagnée d’un communiqué"
+  },
+  "action(s) affichée(s) sur": {
+   "en": "action(s) shown out of",
+   "fr": "action(s) affichée(s) sur"
+  },
+  "action(s) affichée(s).": {
+   "en": "action(s) shown.",
+   "fr": "action(s) affichée(s)."
+  },
+  "actions du profil ne sont pas tenues.": {
+   "en": "of the profile's actions are not met.",
+   "fr": "actions du profil ne sont pas tenues."
+  },
+  "actions suggérées": {
+   "en": "suggested actions",
+   "fr": "actions suggérées"
+  },
+  "affiché plutôt qu’une liste partielle : sur un texte": {
+   "en": "displayed rather than a partial list: on a text",
+   "fr": "affiché plutôt qu’une liste partielle : sur un texte"
+  },
+  "affichée(s)": {
+   "en": "displayed",
+   "fr": "affichée(s)"
+  },
+  "agit sur": {
+   "en": "acts on",
+   "fr": "agit sur"
+  },
+  "ajustement fin — à déclarer&nbsp;:": {
+   "en": "fine-tuning — to be declared:",
+   "fr": "ajustement fin — à déclarer&nbsp;:"
+  },
+  "alors que quinze sont dues serait rassurant à tort — et il ne": {
+   "en": "when fifteen are due would be wrongly reassuring — and it does not",
+   "fr": "alors que quinze sont dues serait rassurant à tort — et il ne"
+  },
+  "an, quel que soit son chiffre d’affaires": {
+   "en": "year, whatever its turnover",
+   "fr": "an, quel que soit son chiffre d’affaires"
+  },
+  "anglais : c’est le libellé qu’un auditeur cherchera.": {
+   "en": "English: it is the wording an auditor will look for.",
+   "fr": "anglais : c’est le libellé qu’un auditeur cherchera."
+  },
+  "annexe A tronquée coûte plus cher que l’attendre.": {
+   "en": "a truncated Annex A costs more than waiting for it.",
+   "fr": "annexe A tronquée coûte plus cher que l’attendre."
+  },
+  "approches se documentent. Les deux dernières se documentent, se": {
+   "en": "approaches are documented. The last two are documented, are",
+   "fr": "approches se documentent. Les deux dernières se documentent, se"
+  },
+  "après traitement": {
+   "en": "after treatment",
+   "fr": "après traitement"
+  },
+  "arrivée. Soit le réseau a coupé, soit le service s est arrêté en cours de": {
+   "en": "arrived. Either the network cut out, or the service stopped in the middle of",
+   "fr": "arrivée. Soit le réseau a coupé, soit le service s est arrêté en cours de"
+  },
+  "au déployeur par la notice d’utilisation.": {
+   "en": "to the deployer through the instructions for use.",
+   "fr": "au déployeur par la notice d’utilisation."
+  },
+  "au modèle. Ce contrôle vérifie qu'aucune décision n'a été ajoutée — il ne": {
+   "en": "to the model. This check verifies that no decision has been added — it does not",
+   "fr": "au modèle. Ce contrôle vérifie qu'aucune décision n'a été ajoutée — il ne"
+  },
+  "au registre": {
+   "en": "in the register",
+   "fr": "au registre"
+  },
+  "au total": {
+   "en": "in total",
+   "fr": "au total"
+  },
+  "au-dessus de son socle #-# : ramené à": {
+   "en": "above its baseline #-#: brought back to",
+   "fr": "au-dessus de son socle 800-53 : ramené à"
+  },
+  "au-dessus du seuil": {
+   "en": "above the threshold",
+   "fr": "au-dessus du seuil"
+  },
+  "aucun onglet ne correspond — menu complet affiché": {
+   "en": "no tab matches — full menu displayed",
+   "fr": "aucun onglet ne correspond — menu complet affiché"
+  },
+  "aucun point d'audit rattaché": {
+   "en": "no audit point attached",
+   "fr": "aucun point d'audit rattaché"
+  },
+  "aucune contrepartie déclarée.": {
+   "en": "no consideration declared.",
+   "fr": "aucune contrepartie déclarée."
+  },
+  "aucune mission n'a encore fourni de budget ni de durée. Les extrapoler": {
+   "en": "no engagement has yet provided a budget or a duration. Extrapolating them",
+   "fr": "aucune mission n'a encore fourni de budget ni de durée. Les extrapoler"
+  },
+  "aucune. Le niveau est le produit de la vraisemblance et de la": {
+   "en": "none. The level is the product of likelihood and",
+   "fr": "aucune. Le niveau est le produit de la vraisemblance et de la"
+  },
+  "autre(s) — tous dans le compte rendu copiable.": {
+   "en": "other(s) — all in the copyable summary.",
+   "fr": "autre(s) — tous dans le compte rendu copiable."
+  },
+  "autre(s), sur cet écran.": {
+   "en": "other(s), on this screen.",
+   "fr": "autre(s), sur cet écran."
+  },
+  "autre(s). Elles se remplissent sur cet écran.": {
+   "en": "other(s). They are filled in on this screen.",
+   "fr": "autre(s). Elles se remplissent sur cet écran."
+  },
+  "autres ligne(s) ne coûtent pas": {
+   "en": "other row(s) cost nothing",
+   "fr": "autres ligne(s) ne coûtent pas"
+  },
+  "b) commande l’horloge de l’article # ; d) est la mesure que l’article #, §#, détaille le plus.": {
+   "en": "(b) drives the clock of Article #; (d) is the measure that Article #(#) details most.",
+   "fr": "b) commande l’horloge de l’article 23 ; d) est la mesure que l’article 21, §3, détaille le plus."
+  },
+  "bascule à": {
+   "en": "switches to",
+   "fr": "bascule à"
+  },
+  "blocs faits sur": {
+   "en": "blocks done out of",
+   "fr": "blocs faits sur"
+  },
+  "cadre seront plafonnées.": {
+   "en": "framework will be capped.",
+   "fr": "cadre seront plafonnées."
+  },
+  "calculé&nbsp;: une action qui traite quatre des risques retenus": {
+   "en": "computed&nbsp;: an action that addresses four of the risks selected",
+   "fr": "calculé&nbsp;: une action qui traite quatre des risques retenus"
+  },
+  "caractères analysés": {
+   "en": "characters analysed",
+   "fr": "caractères analysés"
+  },
+  "cas chiffré(s)": {
+   "en": "costed case(s)",
+   "fr": "cas chiffré(s)"
+  },
+  "cas concerné(s).": {
+   "en": "case(s) concerned.",
+   "fr": "cas concerné(s)."
+  },
+  "cas exigent des données solides, or leur disponibilité ou qualité est faible (niveau": {
+   "en": "cases require solid data, yet its availability or quality is low (level",
+   "fr": "cas exigent des données solides, or leur disponibilité ou qualité est faible (niveau"
+  },
+  "cas redessiné": {
+   "en": "redesigned case",
+   "fr": "cas redessiné"
+  },
+  "cas redessiné(s) sur": {
+   "en": "case(s) redesigned out of",
+   "fr": "cas redessiné(s) sur"
+  },
+  "cas reposent sur": {
+   "en": "cases rely on",
+   "fr": "cas reposent sur"
+  },
+  "cas retenus sont redessinés.": {
+   "en": "shortlisted cases are redesigned.",
+   "fr": "cas retenus sont redessinés."
+  },
+  "catégorie(s) ne peuvent pas": {
+   "en": "category(ies) cannot",
+   "fr": "catégorie(s) ne peuvent pas"
+  },
+  "catégories renseignées": {
+   "en": "categories filled in",
+   "fr": "catégories renseignées"
+  },
+  "catégorisation biométrique déduisant des données sensibles": {
+   "en": "biometric categorisation inferring sensitive data",
+   "fr": "catégorisation biométrique déduisant des données sensibles"
+  },
+  "ce cabinet, et se discutent. Généré par Sentinel AI.": {
+   "en": "this firm, and are open to discussion. Generated by Sentinel AI.",
+   "fr": "ce cabinet, et se discutent. Généré par Sentinel AI."
+  },
+  "ce qui est dû, seulement ce qui est fait. À rééditer avant transmission.": {
+   "en": "what is due, only what is done. To be reissued before transmission.",
+   "fr": "ce qui est dû, seulement ce qui est fait. À rééditer avant transmission."
+  },
+  "ce qui se lirait comme un parc sobre.": {
+   "en": "which would read as a lean estate.",
+   "fr": "ce qui se lirait comme un parc sobre."
+  },
+  "ce référentiel a son propre": {
+   "en": "this framework has its own",
+   "fr": "ce référentiel a son propre"
+  },
+  "ces profils ont leur activité principale": {
+   "en": "these profiles have their main activity",
+   "fr": "ces profils ont leur activité principale"
+  },
+  "cet article ne se reprend pas d’un système de management existant ·": {
+   "en": "this article does not carry over from an existing management system ·",
+   "fr": "cet article ne se reprend pas d’un système de management existant ·"
+  },
+  "ceux marqués « propre à la sécurité » sont les": {
+   "en": "those marked “security-specific” are the",
+   "fr": "ceux marqués « propre à la sécurité » sont les"
+  },
+  "chacun décide pour lui-même et la politique ne dit rien de ce qui se fait.": {
+   "en": "everyone decides for themselves and the policy says nothing about what is done.",
+   "fr": "chacun décide pour lui-même et la politique ne dit rien de ce qui se fait."
+  },
+  "champ(s) repris de «": {
+   "en": "field(s) taken from “",
+   "fr": "champ(s) repris de «"
+  },
+  "cherchera. «&nbsp;Sans objet&nbsp;» sort l’action du calcul, et": {
+   "en": "will look. «&nbsp;Not applicable&nbsp;» takes the action out of the calculation, and",
+   "fr": "cherchera. «&nbsp;Sans objet&nbsp;» sort l’action du calcul, et"
+  },
+  "chiffre d’affaires, c’est le pourcentage qui commande.": {
+   "en": "turnover, it is the percentage that governs.",
+   "fr": "chiffre d’affaires, c’est le pourcentage qui commande."
+  },
+  "chip-o Déployeurs": {
+   "en": "chip-o Deployers",
+   "fr": "chip-o Déployeurs"
+  },
+  "choisissez ci-dessus si vous voulez qu’il le soit.": {
+   "en": "choose above if you want it to be.",
+   "fr": "choisissez ci-dessus si vous voulez qu’il le soit."
+  },
+  "cite aucune est une opinion, pas une analyse.": {
+   "en": "cites none is an opinion, not an analysis.",
+   "fr": "cite aucune est une opinion, pas une analyse."
+  },
+  "citées font partie de celles qui ont été rapportées du corpus et soumises": {
+   "en": "cited are among those retrieved from the corpus and submitted",
+   "fr": "citées font partie de celles qui ont été rapportées du corpus et soumises"
+  },
+  "commande — le reste en dépend.": {
+   "en": "governs — the rest depends on it.",
+   "fr": "commande — le reste en dépend."
+  },
+  "comme payée ?": {
+   "en": "as paid?",
+   "fr": "comme payée ?"
+  },
+  "comment y répondre : acheter « la norme du SMQ » et croire avoir": {
+   "en": "how to answer them: buying « the QMS standard » and believing you have",
+   "fr": "comment y répondre : acheter « la norme du SMQ » et croire avoir"
+  },
+  "composantes de la stratégie, puis les paragraphes — par poids": {
+   "en": "components of the strategy, then the paragraphs — by weight",
+   "fr": "composantes de la stratégie, puis les paragraphes — par poids"
+  },
+  "confisqué par le verrou": {
+   "en": "withheld by the blocker",
+   "fr": "confisqué par le verrou"
+  },
+  "conformité, et Sentinel ne peut pas mesurer le travail fait sur": {
+   "en": "compliance, and Sentinel cannot measure the work done on",
+   "fr": "conformité, et Sentinel ne peut pas mesurer le travail fait sur"
+  },
+  "connexion interrompue — relancez pour reprendre": {
+   "en": "connection interrupted — run again to resume",
+   "fr": "connexion interrompue — relancez pour reprendre"
+  },
+  "connexion interrompue, aucune réponse": {
+   "en": "connection interrupted, no response",
+   "fr": "connexion interrompue, aucune réponse"
+  },
+  "conseilprevcyber a répondu par une erreur, pas par une sauvegarde :": {
+   "en": "conseilprevcyber responded with an error, not a backup:",
+   "fr": "conseilprevcyber a répondu par une erreur, pas par une sauvegarde :"
+  },
+  "conseilprevcyber mais se termine au milieu : le téléchargement s’est": {
+   "en": "conseilprevcyber but ends in the middle: the download was",
+   "fr": "conseilprevcyber mais se termine au milieu : le téléchargement s’est"
+  },
+  "constitution de bases de reconnaissance faciale par moissonnage non ciblé": {
+   "en": "building of facial recognition databases through untargeted scraping",
+   "fr": "constitution de bases de reconnaissance faciale par moissonnage non ciblé"
+  },
+  "conséquence — il se refait de tête, et laisse la discussion là où": {
+   "en": "consequence — it is redone from memory, and leaves the discussion where",
+   "fr": "conséquence — il se refait de tête, et laisse la discussion là où"
+  },
+  "contrôles applicables (": {
+   "en": "applicable controls (",
+   "fr": "contrôles applicables ("
+  },
+  "contrôles conformes": {
+   "en": "compliant controls",
+   "fr": "contrôles conformes"
+  },
+  "corpus : traitez-les comme INEXISTANTES tant que vous ne les avez pas": {
+   "en": "corpus: treat them as NON-EXISTENT until you have",
+   "fr": "corpus : traitez-les comme INEXISTANTES tant que vous ne les avez pas"
+  },
+  "correspond à": {
+   "en": "corresponds to",
+   "fr": "correspond à"
+  },
+  "couvert par tous les paragraphes que l’annexe ZA lui associe, ou il": {
+   "en": "covered by all the paragraphs Annex ZA associates with it, or it",
+   "fr": "couvert par tous les paragraphes que l’annexe ZA lui associe, ou il"
+  },
+  "couvertes&nbsp;». Le NIST n’a rien de particulier à y ajouter pour": {
+   "en": "covered&nbsp;». NIST has nothing in particular to add there for",
+   "fr": "couvertes&nbsp;». Le NIST n’a rien de particulier à y ajouter pour"
+  },
+  "coûts cumulés": {
+   "en": "cumulative costs",
+   "fr": "coûts cumulés"
+  },
+  "coûts mensuels": {
+   "en": "monthly costs",
+   "fr": "coûts mensuels"
+  },
+  "d'observations et de missions réelles : ils ne sont pas établis pour ce": {
+   "en": "of observations and real engagements: they are not established for this",
+   "fr": "d'observations et de missions réelles : ils ne sont pas établis pour ce"
+  },
+  "dans ce fichier. Vous pouvez les transférer maintenant et refaire une": {
+   "en": "in this file. You can transfer them now and do another",
+   "fr": "dans ce fichier. Vous pouvez les transférer maintenant et refaire une"
+  },
+  "dans la langue selectionnee": {
+   "en": "in the selected language",
+   "fr": "dans la langue selectionnee"
+  },
+  "dans le Registre IA — les # points restent affichés sans filtrage de pertinence.": {
+   "en": "in the AI register — the # points remain displayed without relevance filtering.",
+   "fr": "dans le Registre IA — les 34 points restent affichés sans filtrage de pertinence."
+  },
+  "dans le Registre IA — scores basés sur le profil sectoriel de référence uniquement.": {
+   "en": "in the AI register — scores based on the reference sector profile only.",
+   "fr": "dans le Registre IA — scores basés sur le profil sectoriel de référence uniquement."
+  },
+  "dans le Registre IA. Ajoutez vos systèmes pour une évaluation FRIA réelle.": {
+   "en": "in the AI register. Add your systems for a real FRIA assessment.",
+   "fr": "dans le Registre IA. Ajoutez vos systèmes pour une évaluation FRIA réelle."
+  },
+  "dans le périmètre": {
+   "en": "in scope",
+   "fr": "dans le périmètre"
+  },
+  "dans l’autre.": {
+   "en": "in the other.",
+   "fr": "dans l’autre."
+  },
+  "de /admin/base-connaissance.": {
+   "en": "from /admin/base-connaissance.",
+   "fr": "de /admin/base-connaissance."
+  },
+  "de ce système au sens du règlement, et vous en portez toutes les obligations — celles listées ci-dessous.": {
+   "en": "of this system within the meaning of the Regulation, and you bear all its obligations — those listed below.",
+   "fr": "de ce système au sens du règlement, et vous en portez toutes les obligations — celles listées ci-dessous."
+  },
+  "de ces douze": {
+   "en": "of these twelve",
+   "fr": "de ces douze"
+  },
+  "de départ.": {
+   "en": "to start with.",
+   "fr": "de départ."
+  },
+  "de liste du tout.": {
+   "en": "no list at all.",
+   "fr": "de liste du tout."
+  },
+  "de l’IA": {
+   "en": "of AI",
+   "fr": "de l’IA"
+  },
+  "de l’annexe A réellement en place précisent la carte.": {
+   "en": "of Annex A actually in place refine the map.",
+   "fr": "de l’annexe A réellement en place précisent la carte."
+  },
+  "de l’exposition, pas son plafond — au-delà d’un certain": {
+   "en": "of the exposure, not its ceiling — beyond a certain",
+   "fr": "de l’exposition, pas son plafond — au-delà d’un certain"
+  },
+  "de l’hébergement, puis rechargez la page. Votre clé n’est pas en cause.": {
+   "en": "of the hosting, then reload the page. Your key is not the issue.",
+   "fr": "de l’hébergement, puis rechargez la page. Votre clé n’est pas en cause."
+  },
+  "de part.": {
+   "en": "of share.",
+   "fr": "de part."
+  },
+  "de votre registre, et un système que personne n’y a inscrit ne pèse rien ici — ce qui ne": {
+   "en": "of your register, and a system that nobody has recorded in it weighs nothing here — which does not",
+   "fr": "de votre registre, et un système que personne n’y a inscrit ne pèse rien ici — ce qui ne"
+  },
+  "demande un processus CRÉDIBLE dont la logique est rendue publique.": {
+   "en": "requires a CREDIBLE process whose reasoning is made public.",
+   "fr": "demande un processus CRÉDIBLE dont la logique est rendue publique."
+  },
+  "des # sous-catégories du cadre ne portent AUCUNE action du": {
+   "en": "of the framework's # sub-categories carry NO action from the",
+   "fr": "des 72 sous-catégories du cadre ne portent AUCUNE action du"
+  },
+  "des six éléments cumulatifs ne sont pas cochés. L'inférence l'est, donc la qualification reste probable, mais elle doit être établie et écrite avant de s'appuyer sur la suite.": {
+   "en": "of the six cumulative elements are not ticked. Inference is, so the qualification remains probable, but it must be established and written down before relying on what follows.",
+   "fr": "des six éléments cumulatifs ne sont pas cochés. L'inférence l'est, donc la qualification reste probable, mais elle doit être établie et écrite avant de s'appuyer sur la suite."
+  },
+  "diligence attendu — et c’est elle qui plafonne le taux.": {
+   "en": "due diligence expected — and it is involvement that caps the rate.",
+   "fr": "diligence attendu — et c’est elle qui plafonne le taux."
+  },
+  "dirigeant : l’article # n’en prévoit pas. C’est la différence la": {
+   "en": "manager: Article # does not provide for one. That is the difference",
+   "fr": "dirigeant : l’article 33 n’en prévoit pas. C’est la différence la"
+  },
+  "dit pas ce que chacune juge : lisez-la avant de vous en prévaloir.": {
+   "en": "does not say what each one assesses: read it before relying on it.",
+   "fr": "dit pas ce que chacune juge : lisez-la avant de vous en prévaloir."
+  },
+  "document lui-même": {
+   "en": "document itself",
+   "fr": "document lui-même"
+  },
+  "document(s) trouvé(s) ·": {
+   "en": "document(s) found ·",
+   "fr": "document(s) trouvé(s) ·"
+  },
+  "document(s) — laissez cet onglet": {
+   "en": "document(s) — leave this tab",
+   "fr": "document(s) — laissez cet onglet"
+  },
+  "documents récupérables :": {
+   "en": "recoverable documents:",
+   "fr": "documents récupérables :"
+  },
+  "documents récupérés": {
+   "en": "documents recovered",
+   "fr": "documents récupérés"
+  },
+  "donc rien — ce qui revient à dire que la génération": {
+   "en": "nothing then — which amounts to saying that generation",
+   "fr": "donc rien — ce qui revient à dire que la génération"
+  },
+  "du CA mondial": {
+   "en": "of worldwide turnover",
+   "fr": "du CA mondial"
+  },
+  "du RGPD": {
+   "en": "GDPR",
+   "fr": "du RGPD"
+  },
+  "du plus faible des deux.": {
+   "en": "of the weaker of the two.",
+   "fr": "du plus faible des deux."
+  },
+  "du risque": {
+   "en": "of the risk",
+   "fr": "du risque"
+  },
+  "du règlement (UE) #/#, annexes I et II de la directive (UE) #/#.": {
+   "en": "of Regulation (EU) #/#, Annexes I and II of Directive (EU) #/#.",
+   "fr": "du règlement (UE) 2024/1689, annexes I et II de la directive (UE) 2022/2555."
+  },
+  "du règlement est momentanément indisponible. Rien n’est": {
+   "en": "of the Regulation is temporarily unavailable. Nothing is",
+   "fr": "du règlement est momentanément indisponible. Rien n’est"
+  },
+  "du système de management déclaré": {
+   "en": "of the management system declared",
+   "fr": "du système de management déclaré"
+  },
+  "durée à confirmer": {
+   "en": "duration to be confirmed",
+   "fr": "durée à confirmer"
+  },
+  "début réel affiché ci-dessous, puis retéléchargez par le": {
+   "en": "actual beginning displayed below, then download again via the",
+   "fr": "début réel affiché ci-dessous, puis retéléchargez par le"
+  },
+  "décident lesquelles des # actions suggérées vous sont": {
+   "en": "decide which of the # suggested actions are",
+   "fr": "décident lesquelles des 211 actions suggérées vous sont"
+  },
+  "décision cassée ne dit plus rien.": {
+   "en": "a broken decision no longer says anything.",
+   "fr": "décision cassée ne dit plus rien."
+  },
+  "décision(s) sur": {
+   "en": "decision(s) out of",
+   "fr": "décision(s) sur"
+  },
+  "décisions portées, ce qu’il devra pouvoir démontrer — et vous confier à un cabinet spécialisé,": {
+   "en": "decisions carried, what it will have to be able to demonstrate — and entrust you to a specialist firm,",
+   "fr": "décisions portées, ce qu’il devra pouvoir démontrer — et vous confier à un cabinet spécialisé,"
+  },
+  "déclaratives. Elles orientent le circuit et ne valent pas analyse juridique : la classification définitive": {
+   "en": "declarative. They steer the approval workflow and do not amount to a legal analysis: the final classification",
+   "fr": "déclaratives. Elles orientent le circuit et ne valent pas analyse juridique : la classification définitive"
+  },
+  "déclaré est chiffrable.": {
+   "en": "declared can be costed.",
+   "fr": "déclaré est chiffrable."
+  },
+  "déclaré(s) sans objet": {
+   "en": "declared not applicable",
+   "fr": "déclaré(s) sans objet"
+  },
+  "déclaré(s) sur": {
+   "en": "declared out of",
+   "fr": "déclaré(s) sur"
+  },
+  "déclarées. Ce n’est pas un zéro : c’est un périmètre vide.": {
+   "en": "declared. This is not a zero: it is an empty perimeter.",
+   "fr": "déclarées. Ce n’est pas un zéro : c’est un périmètre vide."
+  },
+  "déduit — voir les lignes directrices": {
+   "en": "inferred — see the guidelines",
+   "fr": "déduit — voir les lignes directrices"
+  },
+  "déjà en place ; ceux marqués « propre à l’IA » sont ce que # ajoute,": {
+   "en": "already in place; those marked “AI-specific” are what # adds,",
+   "fr": "déjà en place ; ceux marqués « propre à l’IA » sont ce que 42001 ajoute,"
+  },
+  "déjà en place — ISO # partage exactement la même structure — et": {
+   "en": "already in place — ISO # shares exactly the same structure — and",
+   "fr": "déjà en place — ISO 42001 partage exactement la même structure — et"
+  },
+  "déjà présent(s)": {
+   "en": "already present",
+   "fr": "déjà présent(s)"
+  },
+  "déjà présent(s) ·": {
+   "en": "already present ·",
+   "fr": "déjà présent(s) ·"
+  },
+  "déjà servi : le parcours direction générale couvre l’arbitrage et la vue direction": {
+   "en": "already covered: the executive management path covers decision-making and the executive view",
+   "fr": "déjà servi : le parcours direction générale couvre l’arbitrage et la vue direction"
+  },
+  "déjà servi : le socle avant l’échelle part de la maturité, pas de l’inventaire": {
+   "en": "already covered: the foundation-before-scale path starts from maturity, not from the inventory",
+   "fr": "déjà servi : le socle avant l’échelle part de la maturité, pas de l’inventaire"
+  },
+  "déjà servi : l’implantation d’un centre de données EST le parcours de programme": {
+   "en": "already covered: siting a data centre IS the programme path",
+   "fr": "déjà servi : l’implantation d’un centre de données EST le parcours de programme"
+  },
+  "déjà servi : « Énergie, eau et climat du parc » situe le site, le pèse sur tout son cycle et sort les pièces — c’est le parcours de l’exploitant, sous un titre qui ne le disait pas": {
+   "en": "already covered: “Energy, water and climate of the estate” locates the site, weighs it over its whole life cycle and produces the documents — it is the operator’s path, under a title that did not say so",
+   "fr": "déjà servi : « Énergie, eau et climat du parc » situe le site, le pèse sur tout son cycle et sort les pièces — c’est le parcours de l’exploitant, sous un titre qui ne le disait pas"
+  },
+  "délai dépassé — fichier trop lourd ?": {
+   "en": "timed out — file too large?",
+   "fr": "délai dépassé — fichier trop lourd ?"
+  },
+  "dépassent ce qu’un navigateur tient en mémoire.": {
+   "en": "exceed what a browser can hold in memory.",
+   "fr": "dépassent ce qu’un navigateur tient en mémoire."
+  },
+  "dépasser l’état que la couverture d’AI #-# autorise.": {
+   "en": "go beyond the state that the AI #-# coverage allows.",
+   "fr": "dépasser l’état que la couverture d’AI 600-1 autorise."
+  },
+  "dépendent d'un élément que le questionnaire ne tranche pas seul (bilan comptable, exception": {
+   "en": "depend on an element that the questionnaire cannot decide alone (balance sheet, exception",
+   "fr": "dépendent d'un élément que le questionnaire ne tranche pas seul (bilan comptable, exception"
+  },
+  "déterminent les sections ci-dessous comme applicables ou non.": {
+   "en": "determine whether the sections below are applicable or not.",
+   "fr": "déterminent les sections ci-dessous comme applicables ou non."
+  },
+  "d’entité ci-dessus.": {
+   "en": "of entity above.",
+   "fr": "d’entité ci-dessus."
+  },
+  "d’erreur pendant un redémarrage de conseilprevcyber, ou écran de connexion": {
+   "en": "of an error during a restart of conseilprevcyber, or sign-in screen",
+   "fr": "d’erreur pendant un redémarrage de conseilprevcyber, ou écran de connexion"
+  },
+  "d’une IA digne de confiance": {
+   "en": "of trustworthy AI",
+   "fr": "d’une IA digne de confiance"
+  },
+  "d’une longueur de réponse moyenne ferait entrer un chiffre que personne n’a déclaré.": {
+   "en": "of an average response length would bring in a figure that nobody has declared.",
+   "fr": "d’une longueur de réponse moyenne ferait entrer un chiffre que personne n’a déclaré."
+  },
+  "d’évaluation, ni la responsabilité juridique correspondante. Ce que nous faisons à la place,": {
+   "en": "of assessment, nor the corresponding legal liability. What we do instead,",
+   "fr": "d’évaluation, ni la responsabilité juridique correspondante. Ce que nous faisons à la place,"
+  },
+  "elle est utile, sur les cotations elles-mêmes.": {
+   "en": "it is useful, on the ratings themselves.",
+   "fr": "elle est utile, sur les cotations elles-mêmes."
+  },
+  "elle suppose une mise à disposition à titre gratuit, et": {
+   "en": "it presupposes availability free of charge, and",
+   "fr": "elle suppose une mise à disposition à titre gratuit, et"
+  },
+  "en anglais et verbatim&nbsp;: œuvre du gouvernement des": {
+   "en": "in English and verbatim&nbsp;: a work of the government of the",
+   "fr": "en anglais et verbatim&nbsp;: œuvre du gouvernement des"
+  },
+  "en cours, sur": {
+   "en": "in progress, out of",
+   "fr": "en cours, sur"
+  },
+  "en extraire les documents un par un.": {
+   "en": "extract the documents from it one by one.",
+   "fr": "en extraire les documents un par un."
+  },
+  "en face du vide —": {
+   "en": "facing the emptiness —",
+   "fr": "en face du vide —"
+  },
+  "encore été évalué.": {
+   "en": "yet been assessed.",
+   "fr": "encore été évalué."
+  },
+  "entités essentielles, et le dire suppose de savoir laquelle vous": {
+   "en": "essential entities, and saying so requires knowing which one you",
+   "fr": "entités essentielles, et le dire suppose de savoir laquelle vous"
+  },
+  "entreprises, et ceux qui ne vous visent pas ne doivent pas vous": {
+   "en": "companies, and those that do not target you must not be",
+   "fr": "entreprises, et ceux qui ne vous visent pas ne doivent pas vous"
+  },
+  "essentielles. Ce sont les autres normes de la famille qui disent": {
+   "en": "requirements. It is the other standards of the family that say",
+   "fr": "essentielles. Ce sont les autres normes de la famille qui disent"
+  },
+  "est affichée mais n’entre pas au dénominateur : l’y mettre ferait": {
+   "en": "is displayed but does not enter the denominator: putting it there would",
+   "fr": "est affichée mais n’entre pas au dénominateur : l’y mettre ferait"
+  }
+ }
+}

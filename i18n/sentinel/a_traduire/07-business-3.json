@@ -1,6 +1,6 @@
 {
  "_lot": "07-business-3",
- "_mots": 2336,
+ "_mots": 2360,
  "_pages": [
   "pricing"
  ],
@@ -103,8 +103,13 @@
   },
   "Écart cumulé # moisSaaS : # # €Hybride : # # €SaaS moins coûteux de # € sur # mois. L’écart s’inverse généralement dès M#-M#.": {
    "en": "<strong>Cumulative gap, # months</strong><br>SaaS: <em>€# #</em><br>Hybrid: <em>€# #</em><br>SaaS cheaper by €# over #&nbsp;months. The gap usually reverses from M#-M#.",
-   "fr": "Écart cumulé 6 moisSaaS : 2 700 €Hybride : 3 044 €SaaS moins coûteux de 344 € sur 6 mois. L’écart s’inverse généralement dès M8-M10.",
-   "html": "<strong>Écart cumulé 6 mois</strong><br>SaaS&nbsp;: <em>2 700 €</em><br>Hybride&nbsp;: <em>3 044 €</em><br>SaaS moins coûteux de 344 € sur 6&nbsp;mois. L’écart s’inverse généralement dès M8-M10."
+   "fr": "Écart cumulé 6 moisSaaS : 2 700 €Hybride : 3 030 €SaaS moins coûteux de 330 € sur 6 mois. L’écart s’inverse généralement dès M8-M10.",
+   "html": "<strong>Écart cumulé 6 mois</strong><br>SaaS&nbsp;: <em>2 700 €</em><br>Hybride&nbsp;: <em>3 030 €</em><br>SaaS moins coûteux de 330 € sur 6&nbsp;mois. L’écart s’inverse généralement dès M8-M10."
+  },
+  "Écart cumulé # moisSaaS : # # €Hybride : # # €Économie de # # € pour le modèle hybride. Extrapolation # mois : économie estimée # # €.": {
+   "en": "<strong>Cumulative gap, # months</strong><br>SaaS&nbsp;: <em># # €</em><br>Hybrid&nbsp;: <em># # €</em><br><strong>Saving of # # €</strong> for the hybrid model. Extrapolated over #&nbsp;months&nbsp;: estimated saving <strong># # €</strong>.",
+   "fr": "Écart cumulé 6 moisSaaS : 295 020 €Hybride : 3 792 €Économie de 291 228 € pour le modèle hybride. Extrapolation 12 mois : économie estimée 582 456 €.",
+   "html": "<strong>Écart cumulé 6 mois</strong><br>SaaS&nbsp;: <em>295 020 €</em><br>Hybride&nbsp;: <em>3 792 €</em><br><strong>Économie de 291 228 €</strong> pour le modèle hybride. Extrapolation 12&nbsp;mois&nbsp;: économie estimée <strong>582 456 €</strong>."
   },
   "📊 Socle hybride : # €/mois (∵# % du SaaS PME — secteur Télécom). Part variable plafonnée à #× le socle. Systèmes pondérés par classification. Outil d’aide à la décision commerciale — pas un engagement contractuel.": {
    "en": "📊 Hybrid base: <strong>€#/month</strong> (∵#&nbsp;% of SME SaaS — <strong>Telecoms</strong> sector). Variable share capped at #× the base. Systems weighted by classification. <strong>A commercial decision-support tool — not a contractual commitment.</strong>",
@@ -113,18 +118,18 @@
   },
   "📋 # système(s) au Registre IA, mais aucun Audit IA Act réalisé — score de départ à estimer manuellement ci-dessous.": {
    "en": "📋 # system(s) in the AI Register, but no AI Act Audit carried out — the starting score must be estimated by hand below.",
-   "fr": "📋 1 système(s) au Registre IA, mais aucun Audit IA Act réalisé — score de départ à estimer manuellement ci-dessous.",
-   "html": "📋 <strong>1 système(s)</strong> au Registre IA, mais aucun Audit IA Act réalisé — score de départ à estimer manuellement ci-dessous."
+   "fr": "📋 2189 système(s) au Registre IA, mais aucun Audit IA Act réalisé — score de départ à estimer manuellement ci-dessous.",
+   "html": "📋 <strong>2189 système(s)</strong> au Registre IA, mais aucun Audit IA Act réalisé — score de départ à estimer manuellement ci-dessous."
   }
  },
  "texte": {
   "# % du SaaS": {
    "en": "# % of SaaS",
-   "fr": "86 % du SaaS"
+   "fr": "51 % du SaaS"
   },
   "# % du SaaS (# # €) — toujours inférieur": {
    "en": "# % of SaaS (€# #) — always lower",
-   "fr": "86 % du SaaS (5 400 €) — toujours inférieur"
+   "fr": "51 % du SaaS (590 040 €) — toujours inférieur"
   },
   "# modules : Registre IA, FRIA, Audit AI Act, Maturité, Veille qualifiée, Sanctions, Roadmap, RAG…": {
    "en": "# modules: AI register, FRIA, AI Act audit, Maturity, Qualified watch, Penalties, Roadmap, RAG…",
@@ -157,10 +162,6 @@
   "# · Initialiser l'échéancier d'un client": {
    "en": "# · Initialising a client’s payment schedule",
    "fr": "1 · Initialiser l'échéancier d'un client"
-  },
-  "# · Non-cumulation rule": {
-   "en": "# · Non-cumulation rule",
-   "fr": "5 · Non-cumulation rule"
   },
   "# · Règle d'exclusion du cumul": {
    "en": "# · Non-cumulation rule",
@@ -518,6 +519,10 @@
    "en": "M#",
    "fr": "M1"
   },
+  "M# — SaaS : # # € · RaaS Jalons : # € · Hybride continu : # €": {
+   "en": "M# — SaaS: # # € · RaaS milestones: # € · Continuous hybrid: # €",
+   "fr": "M6 — SaaS : 49 170 € · RaaS Jalons : 158 € · Hybride continu : 632 €"
+  },
   "M# — SaaS : # € · RaaS Jalons : # € · Hybride continu : # €": {
    "en": "M# — SaaS: €# · RaaS Milestones: €# · Continuous hybrid: €#",
    "fr": "M6 — SaaS : 450 € · RaaS Jalons : 158 € · Hybride continu : 632 €"
@@ -701,6 +706,10 @@
   "Remise annuelle :": {
    "en": "Annual discount:",
    "fr": "Remise annuelle :"
+  },
+  "Remise volume −#%": {
+   "en": "Volume discount −#%",
+   "fr": "Remise volume −20%"
   },
   "Renseignez vos paramètres et visualisez instantanément le coût comparé au SaaS classique.": {
    "en": "Enter your parameters and instantly see the cost compared with conventional SaaS.",
@@ -978,6 +987,10 @@
    "en": "Schedule recalculated from your simulator parameters (segment, sector, projected realistic trajectory). The milestones shown adapt to your organisation’s role within the meaning of the AI Act. The trigger months are forecasts; actual billing only occurs after verification.",
    "fr": "Échéancier recalculé depuis vos paramètres simulateur (segment, secteur, trajectoire réaliste projetée). Les jalons affichés s’adaptent au rôle de votre organisation au sens de l’AI Act. Les mois de déclenchement sont prévisionnels ; la facturation réelle n’intervient qu’après vérification."
   },
+  "Économie hybride vs SaaS": {
+   "en": "Hybrid vs SaaS saving",
+   "fr": "Économie hybride vs SaaS"
+  },
   "Équilibre": {
    "en": "Break-even",
    "fr": "Équilibre"
@@ -1041,6 +1054,10 @@
   "∵# % du SaaS — seul coût fixe": {
    "en": "∵# % of SaaS — the only fixed cost",
    "fr": "∵35 % du SaaS — seul coût fixe"
+  },
+  "≈ # # €/an": {
+   "en": "≈ # # €/yr",
+   "fr": "≈ 582 456 €/an"
   },
   "⊞ Données réelles": {
    "en": "⊞ Actual data",

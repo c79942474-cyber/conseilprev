@@ -1,0 +1,863 @@
+{
+ "_lot": "78-routes-15",
+ "_mots": 2411,
+ "_pages": [
+  "_routes"
+ ],
+ "_rubrique": "_routes",
+ "bloc": {},
+ "texte": {
+  "art. # §# et art. #": {
+   "en": "art. #(#) and art. #",
+   "fr": "art. 5 §14 et art. 31"
+  },
+  "art. # §# et §#": {
+   "en": "art. #(#) and (#)",
+   "fr": "art. 5 §3 et §4"
+  },
+  "art. # §# à §#": {
+   "en": "art. #(#) to (#)",
+   "fr": "art. 4 §6 à §8"
+  },
+  "art. # à #": {
+   "en": "art. # to #",
+   "fr": "art. 3 à 7"
+  },
+  "art. #, #, # et #": {
+   "en": "art. #, #, # and #",
+   "fr": "art. 18, 20, 21 et 22"
+  },
+  "art. #, alinéa #": {
+   "en": "art. #, subparagraph #",
+   "fr": "art. 15, alinéa 1"
+  },
+  "article # : ce qui décide si le reste est appliqué": {
+   "en": "article #: what decides whether the rest applies",
+   "fr": "article 39 : ce qui décide si le reste est appliqué"
+  },
+  "article # : la pièce qu'une autorité demande en premier, et celle dont l'absence est constatable immédiatement": {
+   "en": "article #: the document an authority asks for first, and the one whose absence is immediately observable",
+   "fr": "article 30 : la pièce qu'une autorité demande en premier, et celle dont l'absence est constatable immédiatement"
+  },
+  "authentification, surveillance, équipements hérités et les métiers qui tiennent le réseau": {
+   "en": "authentication, monitoring, legacy equipment and the trades that keep the network running",
+   "fr": "authentification, surveillance, équipements hérités et les métiers qui tiennent le réseau"
+  },
+  "automaticiens et informaticiens travaillent sur le même plan, et les habilitations suivent les deux métiers": {
+   "en": "control engineers and IT staff work on the same plant, and the authorisations follow both trades",
+   "fr": "automaticiens et informaticiens travaillent sur le même plan, et les habilitations suivent les deux métiers"
+  },
+  "calcul et nuage": {
+   "en": "compute and cloud",
+   "fr": "calcul et nuage"
+  },
+  "ce qu'on exige de ses fournisseurs avant de signer": {
+   "en": "what you require of your suppliers before signing",
+   "fr": "ce qu'on exige de ses fournisseurs avant de signer"
+  },
+  "ce que les gens savent faire, pas ce qu'ils ont signé": {
+   "en": "what people can actually do, not what they signed",
+   "fr": "ce que les gens savent faire, pas ce qu'ils ont signé"
+  },
+  "ce qui distingue cette norme d'un SMSI générique — c'est là que se joue l'étape #": {
+   "en": "what sets this standard apart from a generic ISMS — this is where stage # is decided",
+   "fr": "ce qui distingue cette norme d'un SMSI générique — c'est là que se joue l'étape 2"
+  },
+  "ce qui empêche la diligence d'être un exercice annuel": {
+   "en": "what stops due diligence being an annual exercise",
+   "fr": "ce qui empêche la diligence d'être un exercice annuel"
+  },
+  "ce qui se passe une fois en service, y compris le jour où le système tombe": {
+   "en": "what happens once in service, including the day the system goes down",
+   "fr": "ce qui se passe une fois en service, y compris le jour où le système tombe"
+  },
+  "ce qui se passe une fois le système en service, y compris le jour où il tombe": {
+   "en": "what happens once the system is in service, including the day it goes down",
+   "fr": "ce qui se passe une fois le système en service, y compris le jour où il tombe"
+  },
+  "ce qui sépare une conception d'une mesure qui fonctionne, et ce qui la rend démontrable": {
+   "en": "what separates a design from a measure that works, and what makes it demonstrable",
+   "fr": "ce qui sépare une conception d'une mesure qui fonctionne, et ce qui la rend démontrable"
+  },
+  "ce qui tourne, d'où cela vient, et qui y intervient": {
+   "en": "what is running, where it comes from, and who works on it",
+   "fr": "ce qui tourne, d'où cela vient, et qui y intervient"
+  },
+  "ces informations sont RÉDIGÉES DANS UNE LANGUE aisément compréhensible par les utilisateurs ET par les autorités de surveillance": {
+   "en": "this information is DRAFTED IN A LANGUAGE readily understandable by users AND by the market surveillance authorities",
+   "fr": "ces informations sont RÉDIGÉES DANS UNE LANGUE aisément compréhensible par les utilisateurs ET par les autorités de surveillance"
+  },
+  "ces quatre familles produisent le socle, le plan et l'autorisation : elles commandent le périmètre des quatorze autres": {
+   "en": "these four families produce the baseline, the plan and the authorisation: they govern the scope of the other fourteen",
+   "fr": "ces quatre familles produisent le socle, le plan et l'autorisation : elles commandent le périmètre des quatorze autres"
+  },
+  "chapitres A.# à A.#": {
+   "en": "clauses A.# to A.#",
+   "fr": "chapitres A.5 à A.18"
+  },
+  "chiffre d'affaires ou total du bilan": {
+   "en": "turnover or balance-sheet total",
+   "fr": "chiffre d'affaires ou total du bilan"
+  },
+  "claude-agent-sdk (Claude Code en sous-processus, sans aucun outil)": {
+   "en": "claude-agent-sdk (Claude Code as a subprocess, with no tools at all)",
+   "fr": "claude-agent-sdk (Claude Code en sous-processus, sans aucun outil)"
+  },
+  "code pour des tiers": {
+   "en": "code for third parties",
+   "fr": "code pour des tiers"
+  },
+  "collection en cours de publication": {
+   "en": "collection currently being published",
+   "fr": "collection en cours de publication"
+  },
+  "construction ou adaptation du modèle": {
+   "en": "building or adapting the model",
+   "fr": "construction ou adaptation du modèle"
+  },
+  "couverture du cadre": {
+   "en": "framework coverage",
+   "fr": "couverture du cadre"
+  },
+  "cra · rôle": {
+   "en": "cra · role",
+   "fr": "cra · rôle"
+  },
+  "de la destination à la documentation technique : ce que l'évaluation de conformité examine": {
+   "en": "from the intended purpose to the technical documentation: what the conformity assessment examines",
+   "fr": "de la destination à la documentation technique : ce que l'évaluation de conformité examine"
+  },
+  "données et annotation": {
+   "en": "data and annotation",
+   "fr": "données et annotation"
+  },
+  "dora · portée du taux": {
+   "en": "dora · scope of the rate",
+   "fr": "dora · portée du taux"
+  },
+  "déclaration UE de conformité (annexe V)": {
+   "en": "EU declaration of conformity (annex V)",
+   "fr": "déclaration UE de conformité (annexe V)"
+  },
+  "détecter, qualifier, contenir, et rendre compte dans les délais dus": {
+   "en": "detect, qualify, contain, and report within the deadlines due",
+   "fr": "détecter, qualifier, contenir, et rendre compte dans les délais dus"
+  },
+  "elle commande la déclaration d'applicabilité : sans elle, aucune exclusion ne se justifie": {
+   "en": "it governs the statement of applicability: without it, no exclusion can be justified",
+   "fr": "elle commande la déclaration d'applicabilité : sans elle, aucune exclusion ne se justifie"
+  },
+  "en# · conformité": {
+   "en": "en# · conformity",
+   "fr": "en18286 · conformité"
+  },
+  "en# · scénarios de risque": {
+   "en": "en# · risk scenarios",
+   "fr": "en18229 · scénarios de risque"
+  },
+  "exploitation et surveillance": {
+   "en": "operation and monitoring",
+   "fr": "exploitation et surveillance"
+  },
+  "informer le fabricant et les autorités d'un risque important, y compris tiré de facteurs NON TECHNIQUES": {
+   "en": "inform the manufacturer and the authorities of a significant risk, including one drawn from NON-TECHNICAL factors",
+   "fr": "informer le fabricant et les autorités d'un risque important, y compris tiré de facteurs NON TECHNIQUES"
+  },
+  "iso# · déclaration d'applicabilité": {
+   "en": "iso# · statement of applicability",
+   "fr": "iso27001 · déclaration d'applicabilité"
+  },
+  "iso# · périmètre": {
+   "en": "iso# · scope",
+   "fr": "iso27001 · périmètre"
+  },
+  "jeux de données": {
+   "en": "datasets",
+   "fr": "jeux de données"
+  },
+  "l'accountability de l'article # §#": {
+   "en": "the accountability of article # §#",
+   "fr": "l'accountability de l'article 5 §2"
+  },
+  "l'accès physique, l'énergie, le refroidissement, l'eau": {
+   "en": "physical access, power, cooling, water",
+   "fr": "l'accès physique, l'énergie, le refroidissement, l'eau"
+  },
+  "l'analyse de sûreté existe, et le programme de cybersécurité lui est subordonné — une mesure de sécurité qui peut déclencher un arrêt de procédé est un événement de sûreté avant d'être un incident informatique": {
+   "en": "the safety analysis exists, and the cybersecurity programme is subordinate to it — a security measure that can trigger a process shutdown is a safety event before it is an IT incident",
+   "fr": "l'analyse de sûreté existe, et le programme de cybersécurité lui est subordonné — une mesure de sécurité qui peut déclencher un arrêt de procédé est un événement de sûreté avant d'être un incident informatique"
+  },
+  "l'annexe A se choisit ; ce qui compte est que le choix soit appliqué, pas qu'il soit large": {
+   "en": "Annex A is a matter of choice; what counts is that the choice is applied, not that it is broad",
+   "fr": "l'annexe A se choisit ; ce qui compte est que le choix soit appliqué, pas qu'il soit large"
+  },
+  "l'appréciation du risque, les articles et la déclaration d'applicabilité": {
+   "en": "the risk assessment, the clauses and the statement of applicability",
+   "fr": "l'appréciation du risque, les articles et la déclaration d'applicabilité"
+  },
+  "l'attente la plus forte du cadre dès que l'entreprise cause ou contribue": {
+   "en": "the strongest expectation in the framework as soon as the enterprise causes or contributes",
+   "fr": "l'attente la plus forte du cadre dès que l'entreprise cause ou contribue"
+  },
+  "l'effectif atteint ou dépasse # personnes": {
+   "en": "headcount reaches or exceeds # persons",
+   "fr": "l'effectif atteint ou dépasse 250 personnes"
+  },
+  "l'entrée, la mobilité et le départ des personnes": {
+   "en": "the arrival, movement and departure of people",
+   "fr": "l'entrée, la mobilité et le départ des personnes"
+  },
+  "l'intervention, sur site et à distance, et qui la conduit": {
+   "en": "intervention, on site and remote, and who carries it out",
+   "fr": "l'intervention, sur site et à distance, et qui la conduit"
+  },
+  "l'objet même du règlement : les articles du règlement délégué (UE) #/# que votre régime rend opposables, et ce que l'autorité ouvre en premier": {
+   "en": "the very subject of the regulation: the articles of delegated regulation (EU) #/# that your regime makes enforceable, and what the authority opens first",
+   "fr": "l'objet même du règlement : les articles du règlement délégué (UE) 2024/1774 que votre régime rend opposables, et ce que l'autorité ouvre en premier"
+  },
+  "l'étape qui commande toutes les autres : sans incidences identifiées, qualifiées et priorisées, les étapes # à # n'ont pas d'objet": {
+   "en": "the step that governs all the others: with no impacts identified, qualified and prioritised, steps # to # have no object",
+   "fr": "l'étape qui commande toutes les autres : sans incidences identifiées, qualifiées et priorisées, les étapes 3 à 6 n'ont pas d'objet"
+  },
+  "l'état de référence, et ce qui se passe quand il dérive": {
+   "en": "the reference state, and what happens when it drifts",
+   "fr": "l'état de référence, et ce qui se passe quand il dérive"
+  },
+  "la catégorisation du système, et le socle qui en découle": {
+   "en": "the categorisation of the system, and the baseline that follows from it",
+   "fr": "la catégorisation du système, et le socle qui en découle"
+  },
+  "la complétude du dispositif documentaire": {
+   "en": "the completeness of the documentary set",
+   "fr": "la complétude du dispositif documentaire"
+  },
+  "la directive dit « comprennent au moins » : c'est un plancher, et un plancher se tient entièrement": {
+   "en": "the directive says “shall include at least”: that is a floor, and a floor is held in full",
+   "fr": "la directive dit « comprennent au moins » : c'est un plancher, et un plancher se tient entièrement"
+  },
+  "la donnée elle-même, en transit et sur support": {
+   "en": "the data itself, in transit and on media",
+   "fr": "la donnée elle-même, en transit et sur support"
+  },
+  "la latence d'intervention déclarée du scénario (#) comparée à son délai de réaction déterminé (#) — deux nombres que le client déclare, aucun seuil inventé ici": {
+   "en": "the scenario's declared intervention latency (#) compared with its determined reaction time (#) — two numbers the client declares, no threshold invented here",
+   "fr": "la latence d'intervention déclarée du scénario (5.7.1) comparée à son délai de réaction déterminé (5.2.2) — deux nombres que le client déclare, aucun seuil inventé ici"
+  },
+  "la liste n'est pas ordonnée par gravité : rien ne justifierait d'y pondérer un risque plus qu'un autre": {
+   "en": "the list is not ordered by severity: nothing would justify weighting one risk above another in it",
+   "fr": "la liste n'est pas ordonnée par gravité : rien ne justifierait d'y pondérer un risque plus qu'un autre"
+  },
+  "la mise à disposition d'une mesure de correction ou d'atténuation": {
+   "en": "the making available of a corrective or mitigating measure",
+   "fr": "la mise à disposition d'une mesure de correction ou d'atténuation"
+  },
+  "la notification d'incident": {
+   "en": "incident notification",
+   "fr": "la notification d'incident"
+  },
+  "la part que les parties prenantes peuvent vérifier": {
+   "en": "the share that stakeholders can verify",
+   "fr": "la part que les parties prenantes peuvent vérifier"
+  },
+  "la procédure d'évaluation de la conformité a bien été menée à bien par le fabricant (art. #)": {
+   "en": "the conformity assessment procedure has indeed been carried out by the manufacturer (art. #)",
+   "fr": "la procédure d'évaluation de la conformité a bien été menée à bien par le fabricant (art. 32)"
+  },
+  "la publication du référentiel dans sa version finale": {
+   "en": "the publication of the framework in its final version",
+   "fr": "la publication du référentiel dans sa version finale"
+  },
+  "la revue de direction ne produit rien par elle-même : elle décide de ce que le reste produit": {
+   "en": "the management review produces nothing by itself: it decides what the rest produces",
+   "fr": "la revue de direction ne produit rien par elle-même : elle décide de ce que le reste produit"
+  },
+  "la seule partie dont les dirigeants répondent personnellement": {
+   "en": "the only part the directors answer for personally",
+   "fr": "la seule partie dont les dirigeants répondent personnellement"
+  },
+  "la supervision humaine de l'article # : les scénarios de risque, leur délai de réaction, et les mesures qui doivent le tenir": {
+   "en": "the human oversight of article #: the risk scenarios, their reaction time, and the measures that have to hold it",
+   "fr": "la supervision humaine de l'article 14 : les scénarios de risque, leur délai de réaction, et les mesures qui doivent le tenir"
+  },
+  "la surveillance est passive sur les segments sensibles — un balayage actif renverse des équipements qui n'ont jamais été écrits pour y répondre": {
+   "en": "monitoring is passive on the sensitive segments — an active scan knocks over equipment that was never written to answer one",
+   "fr": "la surveillance est passive sur les segments sensibles — un balayage actif renverse des équipements qui n'ont jamais été écrits pour y répondre"
+  },
+  "le SMSI lui-même": {
+   "en": "the ISMS itself",
+   "fr": "le SMSI lui-même"
+  },
+  "le chemin le plus emprunté reste un accès légitime mal tenu": {
+   "en": "the most travelled path remains a legitimate access badly kept",
+   "fr": "le chemin le plus emprunté reste un accès légitime mal tenu"
+  },
+  "le chemin le plus emprunté vers un système reste un accès légitime mal tenu": {
+   "en": "the most travelled path into a system remains a legitimate access badly kept",
+   "fr": "le chemin le plus emprunté vers un système reste un accès légitime mal tenu"
+  },
+  "le cloisonnement, le chiffrement, les frontières": {
+   "en": "partitioning, encryption, boundaries",
+   "fr": "le cloisonnement, le chiffrement, les frontières"
+  },
+  "le décret en Conseil d'État qui fixe les objectifs": {
+   "en": "the decree in Conseil d'État setting the objectives",
+   "fr": "le décret en Conseil d'État qui fixe les objectifs"
+  },
+  "le délai de réaction décide quelle catégorie de mesure peut tenir un scénario ; tout le reste s'y réfère": {
+   "en": "the reaction time decides which measure category can hold a scenario; everything else refers back to it",
+   "fr": "le délai de réaction décide quelle catégorie de mesure peut tenir un scénario ; tout le reste s'y réfère"
+  },
+  "le fabricant a établi la documentation technique": {
+   "en": "the manufacturer has drawn up the technical documentation",
+   "fr": "le fabricant a établi la documentation technique"
+  },
+  "le marquage CE est apposé, la déclaration UE de conformité et les instructions de l'annexe II accompagnent le produit": {
+   "en": "the CE marking is affixed, and the EU declaration of conformity and the annex II instructions accompany the product",
+   "fr": "le marquage CE est apposé, la déclaration UE de conformité et les instructions de l'annexe II accompagnent le produit"
+  },
+  "le montant le plus élevé": {
+   "en": "whichever is higher",
+   "fr": "le montant le plus élevé"
+  },
+  "le plan de sécurité du système : ce qu'il est, ce qu'il protège": {
+   "en": "the system security plan: what it is, what it protects",
+   "fr": "le plan de sécurité du système : ce qu'il est, ce qu'il protège"
+  },
+  "le procédé sait tourner en mode dégradé ou manuel, et quelqu'un l'a déjà fait pour de bon": {
+   "en": "the process can run in degraded or manual mode, and somebody has already done it for real",
+   "fr": "le procédé sait tourner en mode dégradé ou manuel, et quelqu'un l'a déjà fait pour de bon"
+  },
+  "le programme à l'échelle de la maison, au-dessus de chaque système": {
+   "en": "the organisation-wide programme, above each individual system",
+   "fr": "le programme à l'échelle de la maison, au-dessus de chaque système"
+  },
+  "le reste de l'audit": {
+   "en": "the rest of the audit",
+   "fr": "le reste de l'audit"
+  },
+  "le retour en service, éprouvé — pas le plan qui le décrit": {
+   "en": "the return to service, tested — not the plan that describes it",
+   "fr": "le retour en service, éprouvé — pas le plan qui le décrit"
+  },
+  "le règlement n'établit que quatre cadres, et la qualification décide lesquels s'appliquent — pondérer entre eux supposerait qu'un client les cumule, ce qui est l'exception": {
+   "en": "the Regulation establishes only four frameworks, and the qualification decides which apply — weighting between them would assume a client accumulates them, which is the exception",
+   "fr": "le règlement n'établit que quatre cadres, et la qualification décide lesquels s'appliquent — pondérer entre eux supposerait qu'un client les cumule, ce qui est l'exception"
+  },
+  "le réseau de conduite est séparé du réseau de gestion, et la frontière est tenue par un dispositif qu'on sait configurer et relire": {
+   "en": "the control network is separated from the business network, and the boundary is held by a device that can be configured and reviewed",
+   "fr": "le réseau de conduite est séparé du réseau de gestion, et la frontière est tenue par un dispositif qu'on sait configurer et relire"
+  },
+  "le seul endroit où quelque chose change pour les personnes": {
+   "en": "the only place where something changes for people",
+   "fr": "le seul endroit où quelque chose change pour les personnes"
+  },
+  "le socle : le cadre lui-même place cette fonction au-dessus des trois autres": {
+   "en": "the foundation: the framework itself places this function above the other three",
+   "fr": "le socle : le cadre lui-même place cette fonction au-dessus des trois autres"
+  },
+  "le socle de management, celui qu'un SMQ déjà certifié apporte le plus souvent tel quel": {
+   "en": "the management foundation, the one an already-certified QMS most often supplies as it stands",
+   "fr": "le socle de management, celui qu'un SMQ déjà certifié apporte le plus souvent tel quel"
+  },
+  "le socle, et celui qu'un système de management déjà en place apporte le plus souvent tel quel": {
+   "en": "the foundation, and the one an existing management system most often supplies as it stands",
+   "fr": "le socle, et celui qu'un système de management déjà en place apporte le plus souvent tel quel"
+  },
+  "le socle, le plan et l'autorisation : sans eux, les autres familles s'appliquent sans mandat": {
+   "en": "the baseline, the plan and the authorisation: without them, the other families apply with no mandate",
+   "fr": "le socle, le plan et l'autorisation : sans eux, les autres familles s'appliquent sans mandat"
+  },
+  "le système de management de la qualité de l'article # : la stratégie de conformité réglementaire, et la charge de preuve que l'approche retenue ouvre": {
+   "en": "the quality management system of article #: the regulatory compliance strategy, and the burden of proof that the approach retained opens",
+   "fr": "le système de management de la qualité de l'article 17 : la stratégie de conformité réglementaire, et la charge de preuve que l'approche retenue ouvre"
+  },
+  "le système de management lui-même ; sans lui il n'y a rien à certifier": {
+   "en": "the management system itself; without it there is nothing to certify",
+   "fr": "le système de management lui-même ; sans lui il n'y a rien à certifier"
+  },
+  "le traitement des vulnérabilités court sur toute la durée de support, bien après la mise sur le marché": {
+   "en": "vulnerability handling runs for the whole support period, long after the placing on the market",
+   "fr": "le traitement des vulnérabilités court sur toute la durée de support, bien après la mise sur le marché"
+  },
+  "le vote de la loi": {
+   "en": "the vote on the law",
+   "fr": "le vote de la loi"
+  },
+  "le §# est la pièce propre au règlement, et celle que l'organisme notifié ouvre en premier": {
+   "en": "§# is the piece specific to the regulation, and the one the notified body opens first",
+   "fr": "le §4.4 est la pièce propre au règlement, et celle que l'organisme notifié ouvre en premier"
+  },
+  "les # mesures de l'annexe A se retiennent ou s'écartent ; seule la mise en œuvre du retenu compte": {
+   "en": "the # Annex A controls are retained or ruled out; only the implementation of what is retained counts",
+   "fr": "les 93 mesures de l'annexe A se retiennent ou s'écartent ; seule la mise en œuvre du retenu compte"
+  },
+  "les articles # à # et la déclaration d'applicabilité": {
+   "en": "clauses # to # and the statement of applicability",
+   "fr": "les articles 4 à 10 et la déclaration d'applicabilité"
+  },
+  "les articles du règlement délégué (UE) #/# du régime qui est le vôtre, et les quinze clauses de l'article #": {
+   "en": "the articles of delegated regulation (EU) #/# for the regime that is yours, and the fifteen clauses of article #",
+   "fr": "les articles du règlement délégué (UE) 2024/1774 du régime qui est le vôtre, et les quinze clauses de l'article 30"
+  },
+  "les comptes de conduite sont nominatifs là où c'est possible, et les comptes partagés qui subsistent sont recensés avec leur motif": {
+   "en": "the operating accounts are named where possible, and the shared accounts that remain are listed with their reason",
+   "fr": "les comptes de conduite sont nominatifs là où c'est possible, et les comptes partagés qui subsistent sont recensés avec leur motif"
+  },
+  "les correctifs, la détection, l'intégrité de ce qui tourne": {
+   "en": "patches, detection, the integrity of what is running",
+   "fr": "les correctifs, la détection, l'intégrité de ce qui tourne"
+  },
+  "les dix axes de la surcharge industrielle, plafonnés par le socle #-# qu'ils taillent": {
+   "en": "the ten axes of the industrial overlay, capped by the #-# baseline they tailor",
+   "fr": "les dix axes de la surcharge industrielle, plafonnés par le socle 800-53 qu'ils taillent"
+  },
+  "les dix mesures de l'article # §# et la gouvernance de l'article #": {
+   "en": "the ten measures of article # §# and the governance of article #",
+   "fr": "les dix mesures de l'article 21 §2 et la gouvernance de l'article 20"
+  },
+  "les dix risques de la liste": {
+   "en": "the ten risks on the list",
+   "fr": "les dix risques de la liste"
+  },
+  "les dix-huit familles de mesures, et le socle qu'elles supposent": {
+   "en": "the eighteen control families, and the baseline they presuppose",
+   "fr": "les dix-huit familles de mesures, et le socle qu'elles supposent"
+  },
+  "les exigences de l'annexe I, parties I et II": {
+   "en": "the requirements of annex I, parts I and II",
+   "fr": "les exigences de l'annexe I, parties I et II"
+  },
+  "les fenêtres d'intervention sont négociées et tenues, et les correctifs suivent la validation du constructeur — pas le calendrier de la DSI": {
+   "en": "the maintenance windows are negotiated and held, and the patches follow the vendor's validation — not the IT department's calendar",
+   "fr": "les fenêtres d'intervention sont négociées et tenues, et les correctifs suivent la validation du constructeur — pas le calendrier de la DSI"
+  },
+  "les interfaces, les notifications et les quatre fonctions — ce que la personne désignée voit et ce qu'elle peut faire": {
+   "en": "the interfaces, the notifications and the four functions — what the designated person sees and what they can do",
+   "fr": "les interfaces, les notifications et les quatre fonctions — ce que la personne désignée voit et ce qu'elle peut faire"
+  },
+  "les obligations de la qualité déclarée : les quinze conditions de l'article # pour un intermédiaire de données, les articles #, #, # et # pour une organisation altruiste": {
+   "en": "the obligations of the declared capacity: the fifteen conditions of Article # for a data intermediary, Articles #, #, # and # for a data altruism organisation",
+   "fr": "les obligations de la qualité déclarée : les quinze conditions de l'article 12 pour un intermédiaire de données, les articles 18, 20, 21 et 22 pour une organisation altruiste"
+  },
+  "les obligations des articles # et # SUR LA PARTIE modifiée": {
+   "en": "the obligations of articles # and # ON THE MODIFIED PART",
+   "fr": "les obligations des articles 13 et 14 SUR LA PARTIE modifiée"
+  },
+  "les obligations des chapitres que vos qualités ouvrent — produits connectés, partage légal, clauses abusives, besoin exceptionnel, changement de fournisseur": {
+   "en": "the obligations of the Chapters your capacities open — connected products, legal sharing, unfair terms, exceptional need, switching provider",
+   "fr": "les obligations des chapitres que vos qualités ouvrent — produits connectés, partage légal, clauses abusives, besoin exceptionnel, changement de fournisseur"
+  },
+  "les points uniques sont identifiés, et la redondance est éprouvée plutôt que déclarée": {
+   "en": "the single points are identified, and the redundancy is tested rather than declared",
+   "fr": "les points uniques sont identifiés, et la redondance est éprouvée plutôt que déclarée"
+  },
+  "les pratiques interdites et la classification : un écart s'y solde par un retrait, pas par une amende": {
+   "en": "prohibited practices and classification: a gap here ends in a withdrawal, not in a fine",
+   "fr": "les pratiques interdites et la classification : un écart s'y solde par un retrait, pas par une amende"
+  },
+  "les propriétés du produit — elles se vérifient sur une version livrable": {
+   "en": "the properties of the product — they are verified on a shippable version",
+   "fr": "les propriétés du produit — elles se vérifient sur une version livrable"
+  },
+  "les règles de filtrage sont écrites service par service, et les flux qui n'ont pas à remonter ne remontent pas": {
+   "en": "the filtering rules are written service by service, and the flows that have no business going up do not go up",
+   "fr": "les règles de filtrage sont écrites service par service, et les flux qui n'ont pas à remonter ne remontent pas"
+  },
+  "les sept qualités de l'article #er §# ouvrent des chapitres différents, et l'exemption de l'article # en retire un : le dénominateur est celui de VOTRE périmètre, pas celui du règlement entier": {
+   "en": "the seven capacities of Article #(#) open different Chapters, and the Article # exemption removes one: the denominator is that of YOUR perimeter, not that of the whole Regulation",
+   "fr": "les sept qualités de l'article 1er §3 ouvrent des chapitres différents, et l'exemption de l'article 7 en retire un : le dénominateur est celui de VOTRE périmètre, pas celui du règlement entier"
+  },
+  "les six étapes de la diligence, l'implication dans l'incidence — causer, contribuer, être lié — et les quatre facteurs de priorisation": {
+   "en": "the six steps of due diligence, involvement in the impact — causing, contributing, being linked — and the four prioritisation factors",
+   "fr": "les six étapes de la diligence, l'implication dans l'incidence — causer, contribuer, être lié — et les quatre facteurs de priorisation"
+  },
+  "les soixante-douze sous-catégories des quatre fonctions": {
+   "en": "the seventy-two subcategories of the four functions",
+   "fr": "les soixante-douze sous-catégories des quatre fonctions"
+  },
+  "les supports, jusqu'à leur effacement ou leur destruction": {
+   "en": "the media, through to their erasure or destruction",
+   "fr": "les supports, jusqu'à leur effacement ou leur destruction"
+  },
+  "les traces, leur intégrité, et quelqu'un qui les lit": {
+   "en": "the logs, their integrity, and somebody who reads them",
+   "fr": "les traces, leur intégrité, et quelqu'un qui les lit"
+  },
+  "les trente-quatre points de l'audit, article par article": {
+   "en": "the thirty-four audit checkpoints, article by article",
+   "fr": "les trente-quatre points de l'audit, article par article"
+  },
+  "les trois axes dont dépend la vie du procédé — et, dans cet ordre, des personnes": {
+   "en": "the three axes the life of the process depends on — and, in that order, of people",
+   "fr": "les trois axes dont dépend la vie du procédé — et, dans cet ordre, des personnes"
+  },
+  "les équipements qui ne supportent ni chiffrement ni journalisation sont inventoriés, et portent des mesures compensatoires écrites": {
+   "en": "the equipment that supports neither encryption nor logging is inventoried, and carries written compensating controls",
+   "fr": "les équipements qui ne supportent ni chiffrement ni journalisation sont inventoriés, et portent des mesures compensatoires écrites"
+  },
+  "marquage CE": {
+   "en": "CE marking",
+   "fr": "marquage CE"
+  },
+  "métriques d'évaluation": {
+   "en": "evaluation metrics",
+   "fr": "métriques d'évaluation"
+  },
+  "nist · profil IA générative": {
+   "en": "nist · generative AI profile",
+   "fr": "nist · profil IA générative"
+  },
+  "nist# · millésime": {
+   "en": "nist# · revision",
+   "fr": "nist53 · millésime"
+  },
+  "nist# · portée": {
+   "en": "nist# · scope",
+   "fr": "nist53 · portée"
+  },
+  "ocde · conformité": {
+   "en": "ocde · conformity",
+   "fr": "ocde · conformité"
+  },
+  "ou SUR LE PRODUIT ENTIER si la modification a des répercussions sur sa cybersécurité d'ensemble": {
+   "en": "or ON THE WHOLE PRODUCT if the modification has repercussions on its overall cybersecurity",
+   "fr": "ou SUR LE PRODUIT ENTIER si la modification a des répercussions sur sa cybersécurité d'ensemble"
+  },
+  "owasp.org, top#.owasp.org et genai.owasp.org sont refusés par le mandataire de sortie de l'environnement de construction : la liste n'a pas pu être recoupée avec la publication en ligne.": {
+   "en": "owasp.org, top#.owasp.org and genai.owasp.org are refused by the build environment's egress proxy: the list could not be cross-checked against the online publication.",
+   "fr": "owasp.org, top10.owasp.org et genai.owasp.org sont refusés par le mandataire de sortie de l'environnement de construction : la liste n'a pas pu être recoupée avec la publication en ligne."
+  },
+  "prEN # organise la façon de répondre aux exigences essentielles ; ce sont les AUTRES normes de la famille qui disent comment y répondre.": {
+   "en": "prEN # organises the way the essential requirements are answered; it is the OTHER standards in the family that say how to answer them.",
+   "fr": "prEN 18286 organise la façon de répondre aux exigences essentielles ; ce sont les AUTRES normes de la famille qui disent comment y répondre."
+  },
+  "prEN #-#:# — Cadre de fiabilité de l'IA — Partie # : Supervision humaine": {
+   "en": "prEN #-#:# — AI trustworthiness framework — Part #: Human oversight",
+   "fr": "prEN 18229-3:2026 — Cadre de fiabilité de l'IA — Partie 3 : Supervision humaine"
+  },
+  "prEN #:# — Intelligence artificielle — Système de management de la qualité pour le règlement européen sur l'IA": {
+   "en": "prEN #:# — Artificial intelligence — Quality management system for EU AI Act regulatory purposes",
+   "fr": "prEN 18286:2025 — Intelligence artificielle — Système de management de la qualité pour le règlement européen sur l'IA"
+  },
+  "projet de loi — non voté": {
+   "en": "bill — not voted",
+   "fr": "projet de loi — non voté"
+  },
+  "prouver qui l'on est, y compris pour les comptes de service": {
+   "en": "proving who you are, including for service accounts",
+   "fr": "prouver qui l'on est, y compris pour les comptes de service"
+  },
+  "préparation à l'audit de certification": {
+   "en": "preparation for the certification audit",
+   "fr": "préparation à l'audit de certification"
+  },
+  "période d'assistance et mises à jour de sécurité": {
+   "en": "support period and security updates",
+   "fr": "période d'assistance et mises à jour de sécurité"
+  },
+  "qui a autorisé la mise en service, sur quelles preuves, pour combien de temps": {
+   "en": "who authorised the go-live, on what evidence, for how long",
+   "fr": "qui a autorisé la mise en service, sur quelles preuves, pour combien de temps"
+  },
+  "qui peut faire quoi, et la révocation le jour où le rôle change": {
+   "en": "who can do what, and the revocation the day the role changes",
+   "fr": "qui peut faire quoi, et la révocation le jour où le rôle change"
+  },
+  "recommandation #/#/CE, annexe, art. #, §#": {
+   "en": "recommendation #/#/EC, annex, art. #, §#",
+   "fr": "recommandation 2003/361/CE, annexe, art. 2, §3"
+  },
+  "risques traités": {
+   "en": "risks addressed",
+   "fr": "risques traités"
+  },
+  "règlement (UE) #/#": {
+   "en": "regulation (EU) #/#",
+   "fr": "règlement (UE) 2018/1139"
+  },
+  "règlements (UE) #/# et #/#": {
+   "en": "regulations (EU) #/# and #/#",
+   "fr": "règlements (UE) 2017/745 et 2017/746"
+  },
+  "se vérifie sur l'organisation du fabricant, et vaut pendant toute la période d'assistance": {
+   "en": "is checked against the manufacturer's organisation, and holds throughout the support period",
+   "fr": "se vérifie sur l'organisation du fabricant, et vaut pendant toute la période d'assistance"
+  },
+  "segmentation, filtrage, redondance : ce qui décide jusqu'où une intrusion se propage": {
+   "en": "segmentation, filtering, redundancy: what decides how far an intrusion spreads",
+   "fr": "segmentation, filtrage, redondance : ce qui décide jusqu'où une intrusion se propage"
+  },
+  "source des dix-huit familles énumérées ici (§#) et de la surcharge industrielle": {
+   "en": "source of the eighteen families listed here (§#) and of the industrial overlay",
+   "fr": "source des dix-huit familles énumérées ici (§6.2) et de la surcharge industrielle"
+  },
+  "surveillance après commercialisation et incidents graves — les deux obligations dont une autorité se saisit sans attendre un audit": {
+   "en": "post-market monitoring and serious incidents — the two obligations an authority takes up without waiting for an audit",
+   "fr": "surveillance après commercialisation et incidents graves — les deux obligations dont une autorité se saisit sans attendre un audit"
+  },
+  "test et validation": {
+   "en": "testing and validation",
+   "fr": "test et validation"
+  },
+  "thèmes A.# à A.#": {
+   "en": "themes A.# to A.#",
+   "fr": "thèmes A.5 à A.8"
+  },
+  "toutes les obligations des articles # et #": {
+   "en": "all the obligations of articles # and #",
+   "fr": "toutes les obligations des articles 13 et 14"
+  },
+  "une clause absente ne se rattrape pas après la signature — il faut rouvrir le contrat, et le prestataire n'y a aucun intérêt": {
+   "en": "a missing clause cannot be caught up after signature — the contract has to be reopened, and the provider has no interest in that",
+   "fr": "une clause absente ne se rattrape pas après la signature — il faut rouvrir le contrat, et le prestataire n'y a aucun intérêt"
+  },
+  "une fonction": {
+   "en": "one function",
+   "fr": "une fonction"
+  },
+  "usage dans les opérations": {
+   "en": "use in operations",
+   "fr": "usage dans les opérations"
+  },
+  "usage dans les produits": {
+   "en": "use in products",
+   "fr": "usage dans les produits"
+  },
+  "usage dans les services": {
+   "en": "use in services",
+   "fr": "usage dans les services"
+  },
+  "y compris le signalement en # h, déjà applicable": {
+   "en": "including the # h report, already applicable",
+   "fr": "y compris le signalement en 24 h, déjà applicable"
+  },
+  "§# et §# — Preventing MITM, Authentication and Authorization": {
+   "en": "§# and §# — Preventing MITM, Authentication and Authorization",
+   "fr": "§5.14 et §5.15 — Preventing MITM, Authentication and Authorization"
+  },
+  "§# et §# — Single Points of Failure, Redundancy": {
+   "en": "§# and §# — Single Points of Failure, Redundancy",
+   "fr": "§5.12 et §5.13 — Single Points of Failure, Redundancy"
+  },
+  "§# à §# — Firewall policies, Unidirectional Gateways": {
+   "en": "§# to §# — Firewall policies, Unidirectional Gateways",
+   "fr": "§5.7 à §5.11 — Firewall policies, Unidirectional Gateways"
+  },
+  "§# à §# — Network Segmentation and Segregation": {
+   "en": "§# to §# — Network Segmentation and Segregation",
+   "fr": "§5.1 à §5.6 — Network Segmentation and Segregation"
+  },
+  "« Absent » est une réponse, et compte au dénominateur ; un document sans statut n'a pas encore été regardé.": {
+   "en": "“Absent” is an answer, and counts in the denominator; a document with no status has not been looked at yet.",
+   "fr": "« Absent » est une réponse, et compte au dénominateur ; un document sans statut n'a pas encore été regardé."
+  },
+  "« Aucun secteur choisi » n'est pas « aucune des deux annexes ». Le premier est une question sans réponse ; seul le second prononce un hors champ.": {
+   "en": "“No sector chosen” is not “neither annex”. The first is an unanswered question; only the second pronounces an out-of-scope.",
+   "fr": "« Aucun secteur choisi » n'est pas « aucune des deux annexes ». Le premier est une question sans réponse ; seul le second prononce un hors champ."
+  },
+  "« Le déployeur veillera à » n'est pas une spécification : sans critère de performance mesurable, la mesure n'est pas vérifiable chez le déployeur.": {
+   "en": "“The deployer shall ensure that” is not a specification: with no measurable performance criterion, the measure cannot be verified at the deployer's end.",
+   "fr": "« Le déployeur veillera à » n'est pas une spécification : sans critère de performance mesurable, la mesure n'est pas vérifiable chez le déployeur."
+  },
+  "« Nous avons une interface de revue » n'est pas une sélection : la sélection se justifie scénario par scénario, contre un délai.": {
+   "en": "“We have a review interface” is not a selection: the selection is justified scenario by scenario, against a deadline.",
+   "fr": "« Nous avons une interface de revue » n'est pas une sélection : la sélection se justifie scénario par scénario, contre un délai."
+  },
+  "« Partiel » n'est pas « conforme » : il compte pour une moitié.": {
+   "en": "“Partial” is not “compliant”: it counts as a half.",
+   "fr": "« Partiel » n'est pas « conforme » : il compte pour une moitié."
+  },
+  "« Pas encore répondu » n'est pas « Non » : le score porte sur les réponses reçues, et le compteur dit sur combien.": {
+   "en": "“Not answered yet” is not “No”: the score bears on the answers received, and the counter says out of how many.",
+   "fr": "« Pas encore répondu » n'est pas « Non » : le score porte sur les réponses reçues, et le compteur dit sur combien."
+  },
+  "« Prestataire de services d'intermédiation de données reconnu dans l'Union » — article # §#. Il s'obtient de l'autorité compétente, sur confirmation du respect des articles # et #, et s'accompagne d'un logo commun que la Commission conçoit.": {
+   "en": "'Data intermediation services provider recognised in the Union' — Article #(#). It is obtained from the competent authority, upon confirmation that Articles # and # are complied with, and comes with a common logo designed by the Commission.",
+   "fr": "« Prestataire de services d'intermédiation de données reconnu dans l'Union » — article 11 §9. Il s'obtient de l'autorité compétente, sur confirmation du respect des articles 11 et 12, et s'accompagne d'un logo commun que la Commission conçoit."
+  },
+  "« Sans objet » n'y est pas une réponse : il est refusé et le sous-article reste à renseigner.": {
+   "en": "“Not applicable” is not an answer here: it is refused and the sub-clause remains to be filled in.",
+   "fr": "« Sans objet » n'y est pas une réponse : il est refusé et le sous-article reste à renseigner."
+  },
+  "« Sans objet » sort le contrôle du calcul ; « non » l'y laisse, à zéro. Les confondre flatte le taux.": {
+   "en": "“Not applicable” takes the control out of the calculation; “no” leaves it in, at zero. Confusing the two flatters the rate.",
+   "fr": "« Sans objet » sort le contrôle du calcul ; « non » l'y laisse, à zéro. Les confondre flatte le taux."
+  },
+  "« À planifier » est une réponse ; une action sans état n'a pas encore été regardée.": {
+   "en": "“To be planned” is an answer; an action with no state has not been looked at yet.",
+   "fr": "« À planifier » est une réponse ; une action sans état n'a pas encore été regardée."
+  },
+  "« À réaliser » est une réponse, qui compte à zéro ; « sans objet » sort le point du calcul ; un point sans réponse n'a pas encore été regardé.": {
+   "en": "“To be done” is an answer, counting as zero; “not applicable” takes the point out of the calculation; a point with no answer has not been looked at yet.",
+   "fr": "« À réaliser » est une réponse, qui compte à zéro ; « sans objet » sort le point du calcul ; un point sans réponse n'a pas encore été regardé."
+  },
+  "« À évaluer » est l'état d'un système sans classification, pas une classification.": {
+   "en": "“To be assessed” is the state of a system with no classification, not a classification.",
+   "fr": "« À évaluer » est l'état d'un système sans classification, pas une classification."
+  },
+  "À défaut de chiffres audités correctement délimités, le superviseur principal retient le chiffre d'affaires généré dans l'Union.": {
+   "en": "Failing properly delimited audited figures, the lead overseer uses the turnover generated in the Union.",
+   "fr": "À défaut de chiffres audités correctement délimités, le superviseur principal retient le chiffre d'affaires généré dans l'Union."
+  },
+  "À lire": {
+   "en": "To read",
+   "fr": "À lire"
+  },
+  "À prouver": {
+   "en": "To be evidenced",
+   "fr": "À prouver"
+  },
+  "À quoi sert le système, et pour qui.": {
+   "en": "What the system is for, and for whom.",
+   "fr": "À quoi sert le système, et pour qui."
+  },
+  "À remplir": {
+   "en": "To fill in",
+   "fr": "À remplir"
+  },
+  "À remplir maintenant": {
+   "en": "To fill in now",
+   "fr": "À remplir maintenant"
+  },
+  "À suivre": {
+   "en": "To watch",
+   "fr": "À suivre"
+  },
+  "À traiter": {
+   "en": "To address",
+   "fr": "À traiter"
+  },
+  "Écarter la proposition": {
+   "en": "Set the proposal aside",
+   "fr": "Écarter la proposition"
+  },
+  "Écartée par une personne ; le registre n'a pas bougé": {
+   "en": "Set aside by a person; the register has not moved",
+   "fr": "Écartée par une personne ; le registre n'a pas bougé"
+  },
+  "Échanges bilatéraux ou multilatéraux, plateformes, bases de données partagées, infrastructure d'interconnexion.": {
+   "en": "Bilateral or multilateral exchanges, platforms, shared databases, interconnection infrastructure.",
+   "fr": "Échanges bilatéraux ou multilatéraux, plateformes, bases de données partagées, infrastructure d'interconnexion."
+  },
+  "Échéance passée le #-#-# (art. #, al. #) : L'obligation de l'article # §# — accessibilité des données dès la conception — s'applique aux produits connectés et aux services connexes mis sur le marché après cette date.": {
+   "en": "Deadline passed on #-#-# (art. #, subpara. #): The obligation in Article #(#) — access to data by design — applies to connected products and related services placed on the market after that date.",
+   "fr": "Échéance passée le 2026-09-12 (art. 50, al. 3) : L'obligation de l'article 3 §1 — accessibilité des données dès la conception — s'applique aux produits connectés et aux services connexes mis sur le marché après cette date."
+  },
+  "Élaboration du produit": {
+   "en": "Product development",
+   "fr": "Élaboration du produit"
+  },
+  "Éléments de sortie de la revue": {
+   "en": "Review outputs",
+   "fr": "Éléments de sortie de la revue"
+  },
+  "Éléments généraux des politiques, procédures, protocoles et outils de sécurité des TIC": {
+   "en": "General elements of ICT security policies, procedures, protocols and tools",
+   "fr": "Éléments généraux des politiques, procédures, protocoles et outils de sécurité des TIC"
+  },
+  "Éprouver ce qui est écrit. Un plan jamais joué n'est pas un plan.": {
+   "en": "Testing what is written down. A plan never run is not a plan.",
+   "fr": "Éprouver ce qui est écrit. Un plan jamais joué n'est pas un plan."
+  },
+  "Éprouver le système sur les caractéristiques de confiance, avec des méthodes et des métriques nommées, et suivre les risques dans le temps.": {
+   "en": "Testing the system against the trustworthiness characteristics, with named methods and metrics, and tracking the risks over time.",
+   "fr": "Éprouver le système sur les caractéristiques de confiance, avec des méthodes et des métriques nommées, et suivre les risques dans le temps."
+  },
+  "Équipement marin": {
+   "en": "Marine equipment",
+   "fr": "Équipement marin"
+  },
+  "Équipements électriques": {
+   "en": "Electrical equipment",
+   "fr": "Équipements électriques"
+  },
+  "Équitable, biais nuisibles maîtrisés": {
+   "en": "Fair, with harmful bias managed",
+   "fr": "Équitable, biais nuisibles maîtrisés"
+  },
+  "Établi dans l'Union, met sur le marché un produit d'un fabricant établi hors de l'Union.": {
+   "en": "Established in the Union, places on the market a product from a manufacturer established outside the Union.",
+   "fr": "Établi dans l'Union, met sur le marché un produit d'un fabricant établi hors de l'Union."
+  },
+  "Établir et transmettre un rapport annuel d'activité à l'autorité compétente, avec ses cinq éléments": {
+   "en": "Drawing up and sending an annual activity report to the competent authority, with its five elements",
+   "fr": "Établir et transmettre un rapport annuel d'activité à l'autorité compétente, avec ses cinq éléments"
+  },
+  "Établir le contexte : à quoi sert le système, sur quelles données, pour qui, avec quels tiers, et quels effets sur les personnes.": {
+   "en": "Establishing the context: what the system is for, on what data, for whom, with which third parties, and what effects on people.",
+   "fr": "Établir le contexte : à quoi sert le système, sur quelles données, pour qui, avec quels tiers, et quels effets sur les personnes."
+  },
+  "Établissement de crédit": {
+   "en": "Credit institution",
+   "fr": "Établissement de crédit"
+  },
+  "Établissement de la politique qualité": {
+   "en": "Establishment of the quality policy",
+   "fr": "Établissement de la politique qualité"
+  },
+  "Établissement de monnaie électronique, y compris exempté au titre de la directive #/#/CE": {
+   "en": "Electronic money institution, including one exempted under directive #/#/EC",
+   "fr": "Établissement de monnaie électronique, y compris exempté au titre de la directive 2009/110/CE"
+  },
+  "Établissement de paiement, y compris exempté au titre de la directive (UE) #/#": {
+   "en": "Payment institution, including one exempted under directive (EU) #/#",
+   "fr": "Établissement de paiement, y compris exempté au titre de la directive (UE) 2015/2366"
+  },
+  "Établissements de crédit au sens de l'article #, point #), du règlement (UE) n° #/#": {
+   "en": "Credit institutions within the meaning of article #, point #), of regulation (EU) No #/#",
+   "fr": "Établissements de crédit au sens de l'article 4, point 1), du règlement (UE) n° 575/2013"
+  },
+  "Étendue du contrôle": {
+   "en": "Extent of the inspection",
+   "fr": "Étendue du contrôle"
+  },
+  "Étiquette employée au §# d'AI #-# et absente des douze risques du §#. Affichée telle quelle, elle ne déclenche rien par elle-même.": {
+   "en": "A label used in §# of AI #-# and absent from the twelve risks of §#. Shown as it stands, it triggers nothing by itself.",
+   "fr": "Étiquette employée au §3 d'AI 600-1 et absente des douze risques du §2. Affichée telle quelle, elle ne déclenche rien par elle-même."
+  },
+  "Évaluation approfondie des risques les plus significatifs": {
+   "en": "In-depth assessment of the most significant risks",
+   "fr": "Évaluation approfondie des risques les plus significatifs"
+  },
+  "Évaluation de l'efficacité des mesures": {
+   "en": "Assessment of the effectiveness of the controls",
+   "fr": "Évaluation de l'efficacité des mesures"
+  },
+  "Évaluation des impacts des systèmes d'IA": {
+   "en": "AI system impact assessment",
+   "fr": "Évaluation des impacts des systèmes d'IA"
+  },
+  "Évaluation des performances": {
+   "en": "Performance evaluation",
+   "fr": "Évaluation des performances"
+  },
+  "Évaluation et sélection": {
+   "en": "Assessment and selection",
+   "fr": "Évaluation et sélection"
+  },
+  "Éviter le risque": {
+   "en": "Avoid the risk",
+   "fr": "Éviter le risque"
+  },
+  "Être une personne morale constituée pour poursuivre des objectifs d'intérêt général": {
+   "en": "Being a legal person constituted to pursue objectives of general interest",
+   "fr": "Être une personne morale constituée pour poursuivre des objectifs d'intérêt général"
+  },
+  "écarts mesurés refermés": {
+   "en": "measured gaps closed",
+   "fr": "écarts mesurés refermés"
+  },
+  "évaluation des risques de cybersécurité": {
+   "en": "cybersecurity risk assessment",
+   "fr": "évaluation des risques de cybersécurité"
+  },
+  "être EN MESURE DE FOURNIR les documents qui le prouvent": {
+   "en": "be ABLE TO PROVIDE the documents that prove it",
+   "fr": "être EN MESURE DE FOURNIR les documents qui le prouvent"
+  },
+  "Œuvre du gouvernement des États-Unis — libre de citation.": {
+   "en": "A work of the United States Government — free to quote.",
+   "fr": "Œuvre du gouvernement des États-Unis — libre de citation."
+  }
+ }
+}

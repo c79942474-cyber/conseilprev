@@ -174,8 +174,8 @@
   },
   "Intervalle de confiance mois #Pessimiste (# €) : progression # % plus lente.Optimiste (# €) : progression # % plus rapide (orgs. ISO #/#).L’écart reflète l’incertitude sur votre vitesse de mise en conformité.": {
    "en": "<strong>Confidence interval, month&nbsp;#</strong><br><em>Pessimistic (€#)</em>: progress #&nbsp;% slower.<br><em>Optimistic (€#)</em>: progress #&nbsp;% faster (ISO #/# orgs.).<br>The gap reflects the uncertainty about your speed of compliance.",
-   "fr": "Intervalle de confiance mois 6Pessimiste (439 €) : progression 45 % plus lente.Optimiste (632 €) : progression 50 % plus rapide (orgs. ISO 9001/27001).L’écart reflète l’incertitude sur votre vitesse de mise en conformité.",
-   "html": "<strong>Intervalle de confiance mois&nbsp;6</strong><br><em>Pessimiste (439 €)</em>&nbsp;: progression 45&nbsp;% plus lente.<br><em>Optimiste (632 €)</em>&nbsp;: progression 50&nbsp;% plus rapide (orgs. ISO&nbsp;9001/27001).<br>L’écart reflète l’incertitude sur votre vitesse de mise en conformité."
+   "fr": "Intervalle de confiance mois 6Pessimiste (632 €) : progression 45 % plus lente.Optimiste (632 €) : progression 50 % plus rapide (orgs. ISO 9001/27001).L’écart reflète l’incertitude sur votre vitesse de mise en conformité.",
+   "html": "<strong>Intervalle de confiance mois&nbsp;6</strong><br><em>Pessimiste (632 €)</em>&nbsp;: progression 45&nbsp;% plus lente.<br><em>Optimiste (632 €)</em>&nbsp;: progression 50&nbsp;% plus rapide (orgs. ISO&nbsp;9001/27001).<br>L’écart reflète l’incertitude sur votre vitesse de mise en conformité."
   },
   "La mise en productionUne personne nommée, qui accepte l’indisponibilité si elle survient.": {
    "en": "<strong>Release to production</strong><span>A named person, who accepts the downtime if it occurs.</span>",

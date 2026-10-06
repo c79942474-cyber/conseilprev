@@ -957,7 +957,7 @@ def test_aucun_ECRAN_du_taux_ne_fige_un_COMPTE_de_normes_devenu_faux():
     cherche les mots des comptes, pas des chiffres — c'est en lettres qu'ils
     s'écrivent ici."""
     mots = {9: "neuf", 10: "dix", 11: "onze", 12: "douze", 13: "treize",
-            14: "quatorze", 15: "quinze"}
+            14: "quatorze", 15: "quinze", 16: "seize"}
     juste = mots.get(c.NORMES_ANNONCEES)
     assert juste, ("%d normes annoncées : ajouter ce nombre à la table des "
                    "mots, puis réécrire l'écran du taux" % c.NORMES_ANNONCEES)

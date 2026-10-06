@@ -57,6 +57,12 @@ from sentinel_i18n import aplanir, normaliser  # noqa: E402
 
 DOSSIER = sentinel_i18n.DOSSIER
 CATALOGUE = os.path.join(DOSSIER, 'CATALOGUE.json')
+#: CE QUI N'A RIEN À TRADUIRE, DÉCLARÉ CLÉ PAR CLÉ AVEC SA RAISON. Le
+#: catalogue relève tout ce que l'écran montre ; une partie de ce qu'il montre
+#: est une citation d'un texte anglais, un nom propre, un identifiant ou une
+#: valeur. Compter ces clés comme du travail en attente rendait le plancher de
+#: SEUIL_COUVERTURE inatteignable — et un plancher inatteignable ne garde rien.
+SANS_TRADUCTION = os.path.join(DOSSIER, 'SANS_TRADUCTION.json')
 A_TRADUIRE = os.path.join(DOSSIER, 'a_traduire')
 PAGE_JS = os.path.join(RACINE, 'sentinel.page.js')
 
@@ -86,7 +92,16 @@ NOMS_PROPRES = ['EU AI Act', 'NIS 2', 'DORA', 'CRA', 'ReCyF', 'ISO 27001',
                 # La treizième norme, pour la même raison, et parce que
                 # l'assembleur refusait « prEN # » comme « identique au
                 # français » : ce n'est pas du français, c'est une cote.
-                'prEN 18286']
+                'prEN 18286',
+                # LES NOMS USUELS DES QUINZIÈME ET SEIZIÈME RÈGLEMENTS, et ils
+                # sont au même titre que « DORA » ou « Digital Omnibus » : le
+                # règlement (UE) 2022/868 s'appelle « DGA » et le règlement
+                # (UE) 2023/2854 « Data Act » dans les deux langues. La règle
+                # travaille donc dans les deux sens, et les deux comptent :
+                # une traduction qui PERDRAIT le nom est refusée, et « Data
+                # Act » seul — un titre d'onglet qui n'a rien à traduire —
+                # cesse d'être refusé comme « identique au français ».
+                'DGA', 'Data Act']
 
 #: CE QUI DIT QU'UNE CHAÎNE EST DU FRANÇAIS : un accent, ou un mot-outil que
 #: l'anglais n'emploie pas. « plus », « en », « on » sont exclus : ils sont
@@ -137,6 +152,18 @@ def ecrire_json(chemin, obj):
         os.makedirs(d)
     with io.open(chemin, 'w', encoding='utf-8') as f:
         f.write(texte)
+
+
+def lire_sans_traduction(chemin=None):
+    """{clé: raison} — vide si le fichier n'est pas là, ce qui rend la mesure
+    PLUS exigeante et jamais moins."""
+    chemin = SANS_TRADUCTION if chemin is None else chemin
+    try:
+        d = charger_json(chemin)
+    except (OSError, ValueError):
+        return {}
+    cles = d.get('cles') if isinstance(d, dict) else None
+    return cles if isinstance(cles, dict) else {}
 
 
 def charger_catalogue(chemin=None):
@@ -481,6 +508,8 @@ ROUTES_REFERENTIEL = (
     '/api/en18229/referentiel',
     '/api/en18286/referentiel',
     '/api/ocde/referentiel',
+    '/api/dga/referentiel',
+    '/api/data-act/referentiel',
     '/api/parcours/referentiel',
     '/api/nist-ai-rmf/referentiel',
     '/api/nist-ai-rmf/profil/referentiel',
@@ -552,6 +581,213 @@ def entrees_des_charges(charges):
     return out
 
 
+#: ══════════════════════════════════════════════════════════════════════════
+#:  LES SONDES — CE QUE LES ROUTES D'ÉVALUATION SERVENT
+#: ══════════════════════════════════════════════════════════════════════════
+#:
+#: POURQUOI ELLES EXISTENT, ET CE QUI A ÉTÉ MESURÉ. `ROUTES_REFERENTIEL`
+#: ci-dessus ne relève que des GET : le référentiel d'un module, c'est-à-dire
+#: ce qu'il saurait dire AVANT qu'on lui parle. Les seize routes
+#: d'ÉVALUATION sont des POST, et leurs phrases sont COMPOSÉES par le
+#: serveur au moment de répondre — elles n'existent dans aucun fichier HTML,
+#: donc ni la passe navigateur ni la passe de routes ne pouvait les voir.
+#: Mesuré avec une déclaration vide : 52 chaînes de français, 958 mots, que
+#: le catalogue ignorait et que le plancher de couverture comptait donc pour
+#: rien. Un lecteur anglophone qui remplit un questionnaire les lisait en
+#: français.
+#:
+#: CE QU'UNE SONDE DOIT ÊTRE. Une charge déclarée en clair, avec la raison de
+#: sa forme, et la TÊTE qu'elle doit ouvrir quand le module en rend une. La
+#: tête est ce qui rend la sonde vérifiable : une charge qui cesserait d'être
+#: acceptée, ou qui retomberait sur « rien de déclaré », n'inventorierait
+#: plus les phrases pour lesquelles elle a été écrite, et
+#: `tests/test_i18n_sentinel_outil.py` le refuse.
+#:
+#: CE QU'ELLES NE COUVRENT PAS ENCORE, ET JE LE DÉCLARE PLUTÔT QUE DE LE
+#: TAIRE : sept modules n'ouvrent ici que leur tête « rien de déclaré »,
+#: parce que leur vocabulaire de qualification et de réponses n'est pas celui
+#: qu'une sonde écrite à la main devine. Les phrases du taux de ces
+#: sept-là — « X % des … attendues sont déclarées tenues » et leurs
+#: voisines — restent hors inventaire. `tete_attendue` à `None` le dit
+#: route par route, et la règle compte combien il en reste : la dette est
+#: visible, bornée, et ne peut pas grossir en silence.
+SONDES_EVALUATION = (
+    {'route': '/api/dga/evaluer',
+     'charge': {'qualites': ['intermediaire'], 'reponses': {'art12_a': 'tenu'}},
+     'temoin': u"des obligations attendues de vos qualit\u00e9s sont d\u00e9clar\u00e9es tenues",
+     'pourquoi': u"un prestataire d'interm\u00e9diation qui tient un point sur "
+                 u"dix-neuf : la phrase du taux, celle que l'\u00e9cran affiche \u00e0 "
+                 u"c\u00f4t\u00e9 du chiffre, et qui n'existe qu'un questionnaire rempli"},
+    {'route': '/api/dga/evaluer',
+     'charge': {'qualites': ['aucune']},
+     'temoin': u"HORS CHAMP. Vous n'\u00eates ni un organisme du secteur public",
+     'pourquoi': u"\u00ab aucune de ces qualit\u00e9s \u00bb est la r\u00e9ponse de la plupart "
+                 u"des clients, et son texte est le plus lu du module"},
+    {'route': '/api/data-act/evaluer',
+     'charge': {'qualites': ['fabricant'], 'chiffre_affaires': 8000000,
+                'reponses': {'fab_conception': 'tenu'}},
+     'temoin': u"Avant la vente, la location ou le cr\u00e9dit-bail",
+     'pourquoi': u"une PME fabricant : les obligations de l'article 3 ne sont "
+                 u"servies qu'une fois la qualit\u00e9 d\u00e9clar\u00e9e"},
+    {'route': '/api/data-act/evaluer',
+     'charge': {'qualites': ['cloud'], 'chiffre_affaires': 5000000},
+     'temoin': u"Le contrat porte les clauses de changement de fournisseur",
+     'pourquoi': u"un fournisseur de services de traitement : il n'ouvre que "
+                 u"des chapitres hors article 40 \u00a74, et c'est le chapitre VI "
+                 u"qu'on vient chercher"},
+    {'route': '/api/en18286/evaluer',
+     'charge': {'qualification': {'fournisseur': True, 'haut_risque': True},
+                'reponses': {'4.4.1': 'tenu'}},
+     'temoin': u"La strat\u00e9gie de conformit\u00e9 r\u00e9glementaire du",
+     'pourquoi': u"un fournisseur de syst\u00e8me \u00e0 haut risque dont la strat\u00e9gie "
+                 u"du 4.4 n'est pas compl\u00e8te \u2014 l'\u00e9tat le plus fr\u00e9quent"},
+    {'route': '/api/cra/evaluer',
+     'charge': {'nom': 'Sonde', 'marche_ue': True, 'classe': 'important_ii',
+                'role': 'fabricant'},
+     'temoin': u"Gestion des vuln\u00e9rabilit\u00e9s (annexe I, partie II)",
+     'pourquoi': u"la route exige un nom ; un produit de classe importante II "
+                 u"ouvre l'annexe I et ses deux parties"},
+    {'route': '/api/cra/exposition',
+     'charge': {'chiffre_affaires': 50000000},
+     'temoin': u"Ces montants sont des PLAFONDS, pas des pr\u00e9visions",
+     'pourquoi': u"l'exposition chiffr\u00e9e de l'article 64, et la r\u00e9serve qui "
+                 u"dit que ces montants sont des plafonds"},
+    {'route': '/api/nis2/evaluer',
+     'charge': {'nom': 'Sonde', 'secteur': 'energie', 'effectif': 400,
+                'ca_eur': 90000000},
+     'temoin': u"Secteur de l'annexe I, au-del\u00e0 des plafonds de la moyenne "
+               u"entreprise",
+     'pourquoi': u"la taille se PRONONCE sur l'effectif et le chiffre "
+                 u"d'affaires, pas sur un mot : 400 personnes et 90 M\u20ac "
+                 u"qualifient une entit\u00e9 essentielle de l'annexe I, et c'est "
+                 u"cette qualification qui ouvre les mesures de l'article 21"},
+    {'route': '/api/nis2/exposition',
+     'charge': {'chiffre_affaires': 50000000, 'qualification': 'essentielle'},
+     'temoin': u"Les deux paliers pivotent au m\u00eame chiffre d'affaires",
+     'pourquoi': u"le plancher sur le plafond de l'article 34, qui ne se lit "
+                 u"pas comme celui du RGPD"},
+    {'route': '/api/nis2/evaluer',
+     #  LE SECTEUR SANS LA TAILLE, et pas la charge nue : `{'nom': …}` seul
+     #  répond « Aucun secteur déclaré », un refus plus précoce. C'est le
+     #  refus SUR LA TAILLE qu'on vient relever, celui qu'un client atteint
+     #  après avoir choisi son secteur.
+     'charge': {'nom': 'Sonde', 'secteur': 'energie'},
+     'temoin': u"La taille n'est pas renseign\u00e9e",
+     'pourquoi': u"l'\u00e9tat de d\u00e9part : qualifier la sonde ci-dessus a fait "
+                 u"SORTIR ce refus de l'inventaire, alors que la production "
+                 u"le sert \u00e0 qui n'a pas encore rempli sa taille \u2014 les deux "
+                 u"\u00e9tats se rel\u00e8vent donc, pas l'un contre l'autre"},
+    {'route': '/api/dora/evaluer',
+     'charge': {},
+     'temoin': u"Aucun type d'entit\u00e9 d\u00e9clar\u00e9",
+     'pourquoi': u"m\u00eame raison : le refus de qualification de l'article 2, "
+                 u"paragraphe 1, est le premier texte que lit un visiteur, et "
+                 u"la sonde qualifiante ne le sert plus"},
+    {'route': '/api/dora/evaluer',
+     'charge': {'entite': 'etablissement_credit', 'effectif': 400,
+                'ca_eur': 90000000},
+     'temoin': u"Ce pourcentage mesure une REPRISE DE PREUVES",
+     'pourquoi': u"la cl\u00e9 est `entite` au SINGULIER, et une valeur de "
+                 u"ENTITES_PAR_CLE : un \u00e9tablissement de cr\u00e9dit ouvre le "
+                 u"r\u00e9gime de l'article 16, les articles du r\u00e8glement d\u00e9l\u00e9gu\u00e9 "
+                 u"et l'articulation avec NIS 2 \u2014 mesur\u00e9 : 13 phrases de plus "
+                 u"au catalogue, l\u00e0 o\u00f9 la charge vide n'en apportait aucune"},
+    {'route': '/api/iso42001/evaluer',
+     'charge': {'nom': 'Sonde'},
+     'temoin': u"La d\u00e9claration n'est PAS recevable pour un audit d'\u00e9tape",
+     'pourquoi': u"la route exige un nom ; la d\u00e9claration d'applicabilit\u00e9 "
+                 u"irrecevable est l'\u00e9tat de d\u00e9part de tout organisme"},
+    {'route': '/api/iso27001/evaluer',
+     'charge': {'nom': 'Sonde'},
+     'temoin': u"Le domaine d'application n'est pas \u00e9crit",
+     'pourquoi': u"la route exige un nom ; le domaine d'application non \u00e9crit "
+                 u"est la premi\u00e8re d\u00e9cision de la certification"},
+    {'route': '/api/ocde/evaluer',
+     'charge': {},
+     'temoin': u"Aucun groupe d'acteur n'est d\u00e9clar\u00e9",
+     'pourquoi': u"le guide ne rend aucun chiffre sans groupe d'acteur "
+                 u"d\u00e9clar\u00e9, et ce refus motiv\u00e9 est le premier texte lu"},
+    {'route': '/api/nist-ai-rmf/evaluer',
+     'charge': {},
+     'temoin': u"Le cadre NIST AI RMF ne se certifie pas",
+     'pourquoi': u"un profil vide n'est pas un profil \u00e0 z\u00e9ro, et la r\u00e9serve "
+                 u"de non-certification est servie d\u00e8s la premi\u00e8re r\u00e9ponse"},
+    {'route': '/api/nist-ai-rmf/profil/analyser',
+     'charge': {'generatif': True},
+     'temoin': u"Le syst\u00e8me n'est pas d\u00e9clar\u00e9 g\u00e9n\u00e9ratif",
+     'pourquoi': u"le profil AI 600-1 et sa r\u00e9serve : 211 actions "
+                 u"\u00ab sugg\u00e9r\u00e9es \u00bb, qui ne se certifient pas"},
+    {'route': '/api/nist-800-53/evaluer',
+     'charge': {},
+     'temoin': u"Le module travaille par FAMILLE, pas par mesure",
+     'pourquoi': u"la maille par FAMILLE et la r\u00e9serve de non-certification, "
+                 u"servies sans qu'aucun socle soit d\u00e9clar\u00e9"},
+    {'route': '/api/nist-800-82/evaluer',
+     'charge': {},
+     'temoin': u"Rien ne se certifie contre SP",
+     'pourquoi': u"le verrou qui dit qu'une surcharge industrielle sans "
+                 u"socle 800-53 mesure une adaptation de rien"},
+    {'route': '/api/owasp-llm/evaluer',
+     'charge': {},
+     'temoin': u"qu'aucune de ces dix d\u00e9faillances n'a \u00e9t\u00e9 oubli\u00e9e",
+     'pourquoi': u"le Top 10 n'est pas un bar\u00e8me, et la liste le dit avant "
+                 u"d'afficher quoi que ce soit"},
+)
+
+
+def charges_des_sondes(sondes):
+    """Les charges que les routes d'ÉVALUATION rendent, et les fautes.
+
+    MÊME EXIGENCE QUE POUR LES GET : une route qui ne répond pas 200 est une
+    faute nommée, pas une charge vide.
+
+    ET UNE DE PLUS, QUI EST LA RAISON D'ÊTRE DE LA SONDE : la charge doit
+    porter le TÉMOIN déclaré. Une sonde existe pour faire entrer au catalogue
+    des phrases que le serveur COMPOSE, et qu'aucun fichier HTML ne contient.
+    Si sa déclaration cesse de qualifier le module — un vocabulaire qui
+    change, une clé de réponse renommée —, la route répond toujours 200, mais
+    elle ne sert plus que son refus : le catalogue maigrit, et la couverture
+    reste à 100 % de moins en moins de choses. Le témoin est une phrase que
+    SEULE l'évaluation sert ; son absence est une faute.
+
+    CE QUI A ÉTÉ MESURÉ, ET POURQUOI LE TÉMOIN A REMPLACÉ LA TÊTE. La version
+    précédente comparait une `tete_attendue` à la tête de la charge. C'était
+    un PROXY, et il ne couvrait pas les seize routes : six n'ont aucune tête
+    (ce sont des calculateurs), `cra` dit son périmètre par `perimetre.dans`
+    et laisse `motif` vide quand le règlement s'applique — à juste titre, un
+    motif est une raison d'exclusion —, `nis2` et `dora` répondent par une
+    PHRASE dans `qualification.motif`. Onze sondes se déclaraient donc
+    « sans tête », ce qui mêlait deux choses très différentes : celles qui
+    n'en ont pas, et celles dont on n'atteignait pas la tête. Le témoin dit
+    la même chose pour les dix-huit, sans tiers ni plafond à tenir."""
+    import json as _json
+    sys.path.insert(0, RACINE)
+    import app as _app
+    client = _app.app.test_client()
+    charges, fautes = [], []
+    for s in sondes:
+        rep = client.post(s['route'], json=s['charge'])
+        if rep.status_code != 200:
+            fautes.append((s['route'], u'HTTP %d' % rep.status_code))
+            continue
+        try:
+            j = _json.loads(rep.data.decode('utf-8'))
+        except ValueError:
+            fautes.append((s['route'], u'la réponse n\'est pas du JSON'))
+            continue
+        temoin = s.get('temoin')
+        if not temoin:
+            fautes.append((s['route'], u'aucun témoin déclaré'))
+            continue
+        if not any(temoin in t for t in chaines_d_une_charge(j)):
+            fautes.append((s['route'],
+                           u'le témoin « %s… » est absent de la charge'
+                           % temoin[:48]))
+            continue
+        charges.append(j)
+    return charges, fautes
+
+
 def charges_des_routes(routes):
     """Les charges JSON que ces routes rendent. Rend (charges, fautes) —
     une route qui ne répond pas 200, ou qui ne rend pas du JSON, est une
@@ -576,6 +812,23 @@ def charges_des_routes(routes):
 def cmd_routes(args):
     cat = charger_catalogue(args.catalogue)
     charges, fautes = charges_des_routes(args.route or list(ROUTES_REFERENTIEL))
+    #  LES SONDES PARTENT DANS LE MÊME PASSAGE, ET SOUS LA MÊME SOURCE.
+    #  Deux passages distincts laisseraient la source « _routes » du premier
+    #  être effacée par le second : le catalogue perdrait la moitié de ce
+    #  qu'il vient d'apprendre, et le plancher de couverture tomberait sans
+    #  qu'aucune phrase ait changé. `--route` cible les GET seuls, donc les
+    #  sondes ne partent que sur un passage complet.
+    sondes = [] if args.route else list(SONDES_EVALUATION)
+    #  LES DEUX COMPTES RESTENT DISTINCTS. `routes` dit combien de GET de
+    #  référentiel ont répondu, `sondes` combien de POST d'évaluation : les
+    #  additionner en un seul nombre ferait croire à dix-huit référentiels de
+    #  plus, et la règle qui confronte ce compte à ROUTES_REFERENTIEL ne
+    #  mesurerait plus rien.
+    n_get = len(charges)
+    if sondes:
+        ch_sondes, f_sondes = charges_des_sondes(sondes)
+        charges += ch_sondes
+        fautes += f_sondes
     for r, motif in fautes:
         print(u'  %-38s %s' % (r, motif))
     if fautes and not args.malgre_les_fautes:
@@ -589,13 +842,15 @@ def cmd_routes(args):
         print(u'  passage précédent effacé : %d entrée(s) « _routes »' % effacees)
     nouvelles, vues = ajouter_source(cat, entrees, '_routes')
     cat['routes'] = {
-        'routes': len(charges),
+        'routes': n_get,
+        'sondes': len(sondes),
         'entrees': {r: len(entrees[r]) for r in ('bloc', 'texte', 'attr')},
         'mots': {r: sum(e['mots'] for e in entrees[r].values()) for r in ('bloc', 'texte', 'attr')}}
     ecrire_json(args.catalogue, cat)
-    print(u'  %d route(s) : %d entrées françaises (bloc %d, texte %d, attr %d) '
-          u'— %d nouvelles au catalogue, %d déjà vues ailleurs'
-          % (len(charges), sum(len(entrees[r]) for r in entrees),
+    print(u'  %d charge(s), dont %d sonde(s) d\'évaluation : %d entrées '
+          u'françaises (bloc %d, texte %d, attr %d) — %d nouvelles au '
+          u'catalogue, %d déjà vues ailleurs'
+          % (len(charges), len(sondes), sum(len(entrees[r]) for r in entrees),
              len(entrees['bloc']), len(entrees['texte']), len(entrees['attr']),
              nouvelles, vues))
     for r in ('bloc', 'texte', 'attr'):
@@ -720,16 +975,39 @@ def cmd_verifier(args):
 #  COUVERTURE — ce qui est traduit, ce qui manque, page par page
 # ══════════════════════════════════════════════════════════════════════════
 
-def couverture(cat, dico):
+def couverture(cat, dico, sans_traduction=None):
     """{'pages': {page: {mots, couverts, entrees, traduites, manquantes}},
     'global': {...}}. Une entrée est couverte si sa clé est au dictionnaire
     servi (les attributs dans « texte ») avec une valeur non vide. Une entrée
     vue sur deux pages compte pour les deux ; le global la compte une fois."""
     pages, glob_ = {}, {'mots': 0, 'couverts': 0, 'entrees': 0, 'traduites': 0, 'manquantes': []}
+    #  LES MOTIFS COMPTENT, ET ILS NE COMPTAIENT PAS. Le navigateur traduit une
+    #  clé du régime texte en DEUX temps — l'entrée exacte, puis les motifs
+    #  (`sentChercherTexte`). Cette mesure ne regardait que la première, donc
+    #  elle déclarait « non traduit » un libellé composé que le lecteur voit
+    #  pourtant en anglais. MESURÉ : la passe navigateur réparée a relevé les
+    #  libellés du rail (« ↓ DGA — qualification », « Bloc # sur # · … —
+    #  Verrouillé ») ; aucun n'est une clé littérale, tous sont servis par un
+    #  motif. Un plancher de couverture tenu contre une mesure fausse n'est
+    #  pas un plancher — c'est un chiffre.
+    #  LE RÉGIME BLOC N'EN A PAS : `sentChercherBloc` ne consulte pas les
+    #  motifs, et la mesure ne doit donc pas le faire non plus.
+    _motifs = sentinel_i18n.motifs_compiles(dico.get('motif') or {})
+    _texte = dico.get('texte') or {}
+    #  ET CE QUI N'A RIEN À TRADUIRE, qui compte comme couvert : une citation
+    #  anglaise, un nom propre, un identifiant, une valeur. Chaque clé est
+    #  déclarée avec sa raison dans i18n/sentinel/SANS_TRADUCTION.json, et une
+    #  règle éprouve la table — on ne peut pas y garer du français.
+    _sans = sans_traduction if sans_traduction is not None else lire_sans_traduction()
     for regime in ('bloc', 'texte', 'attr'):
         d = dico.get(dico_de(regime)) or {}
         for cle, ent in cat[regime].items():
             ok = bool((d.get(cle) or '').strip()) if isinstance(d.get(cle), str) else False
+            if not ok and regime != 'bloc' and _motifs:
+                par_motif = sentinel_i18n.motif_traduire(cle, _motifs, _texte)
+                ok = bool(par_motif and par_motif.strip())
+            if not ok and cle in _sans:
+                ok = True
             m = ent.get('mots', compter_mots(ent['fr']))
             cibles = [glob_] + [pages.setdefault(p, {'mots': 0, 'couverts': 0, 'entrees': 0, 'traduites': 0, 'manquantes': []})
                                 for p in ent.get('pages') or ['_sans_page']]
@@ -781,7 +1059,7 @@ def _slug(s):
     return re.sub(r'-+', '-', re.sub(r'[^A-Za-z0-9]+', '-', s)).strip('-').lower() or 'autre'
 
 
-def decouper_lots(cat, taille=2500, rubriques=None, dico=None):
+def decouper_lots(cat, taille=2500, rubriques=None, dico=None, sans=None):
     """Les lots de travail : [{nom, rubrique, rubriques, pages, mots, texte,
     bloc}]. Chaque entrée va dans la rubrique de sa PREMIÈRE page.
       · UNE RUBRIQUE PLUS LOURDE QU'UN LOT est coupée en parts ÉGALES (et non
@@ -793,13 +1071,23 @@ def decouper_lots(cat, taille=2500, rubriques=None, dico=None):
         seule, et une rubrique n'est jamais coupée pour remplir un lot.
     Les pages hors menu (« _coquille », « _js », « _routes ») ne sont pas
     des rubriques : elles ne se regroupent avec rien. Avec `dico`, les entrées déjà traduites sont
-    laissées de côté."""
+    laissées de côté.
+
+    ET CE QUI N'A RIEN À TRADUIRE N'ENTRE PAS DANS L'INBOX. Les fichiers de
+    travail sont les ENTRÉES DES TRADUCTEURS : une citation d'un texte
+    anglais, un nom propre, un identifiant ou une valeur n'y a pas sa place,
+    et y laisser une case vide à côté ferait croire à du travail en attente.
+    Les clés déclarées dans i18n/sentinel/SANS_TRADUCTION.json sont donc
+    laissées de côté comme celles qui sont déjà traduites."""
     rubriques = cat.get('rubriques') or rubriques or {}
+    sans = lire_sans_traduction() if sans is None else sans
     par_rubrique = {}
     for regime in ('bloc', 'texte', 'attr'):
         d = (dico or {}).get(dico_de(regime)) or {}
         for cle, ent in cat[regime].items():
             if dico is not None and (d.get(cle) or '').strip():
+                continue
+            if cle in sans:
                 continue
             #  UN ATTRIBUT DONT LA CLÉ EST AUSSI UN TEXTE est la même entrée
             #  pour la route (les deux se cherchent dans « texte ») : une

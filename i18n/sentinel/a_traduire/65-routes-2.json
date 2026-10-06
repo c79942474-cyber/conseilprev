@@ -1,0 +1,447 @@
+{
+ "_lot": "65-routes-2",
+ "_mots": 2412,
+ "_pages": [
+  "_routes"
+ ],
+ "_rubrique": "_routes",
+ "bloc": {},
+ "texte": {
+  "Avez-vous vérifié que les personnes désignées accomplissent les tâches de supervision clés DANS le délai de réaction, avec des critères d'acceptation définis et des résultats consignés dans la documentation technique ?": {
+   "en": "Have you checked that the designated persons carry out the key oversight tasks WITHIN the reaction time, with defined acceptance criteria and results recorded in the technical documentation?",
+   "fr": "Avez-vous vérifié que les personnes désignées accomplissent les tâches de supervision clés DANS le délai de réaction, avec des critères d'acceptation définis et des résultats consignés dans la documentation technique ?"
+  },
+  "Avez-vous vérifié que les personnes désignées repèrent les sorties incorrectes ou dangereuses et agissent DANS le délai de réaction, défini des critères d'acceptation, traité les écarts avant la mise sur le marché, et prévu comment la revue se poursuit si l'interface principale ou la journalisation tombe ?": {
+   "en": "Have you checked that the designated persons spot incorrect or hazardous outputs and act WITHIN the reaction time, defined acceptance criteria, dealt with the gaps before placing on the market, and planned how the review carries on if the main interface or the logging fails?",
+   "fr": "Avez-vous vérifié que les personnes désignées repèrent les sorties incorrectes ou dangereuses et agissent DANS le délai de réaction, défini des critères d'acceptation, traité les écarts avant la mise sur le marché, et prévu comment la revue se poursuit si l'interface principale ou la journalisation tombe ?"
+  },
+  "Avez-vous vérifié, par les méthodes que la notice recommande, que chaque mesure tourne bien chez vous ET qu'elle produit l'effet attendu, au regard des critères de performance qu'elle donne ?": {
+   "en": "Have you checked, by the methods the instructions recommend, that each measure does run on your side AND that it produces the expected effect, against the performance criteria they give?",
+   "fr": "Avez-vous vérifié, par les méthodes que la notice recommande, que chaque mesure tourne bien chez vous ET qu'elle produit l'effet attendu, au regard des critères de performance qu'elle donne ?"
+  },
+  "Avez-vous établi, par écrit, quelles exigences réglementaires s'appliquent à chacun de vos systèmes d'IA ?": {
+   "en": "Have you established, in writing, which regulatory requirements apply to each of your AI systems?",
+   "fr": "Avez-vous établi, par écrit, quelles exigences réglementaires s'appliquent à chacun de vos systèmes d'IA ?"
+  },
+  "Biais nuisibles et homogénéisation": {
+   "en": "Harmful bias and homogenisation",
+   "fr": "Biais nuisibles et homogénéisation"
+  },
+  "C'EST LA SOURCE. La qualification assistée, le FinOps et l'Empreinte ne tiennent aucun inventaire à eux : ils lisent celui-ci.": {
+   "en": "THIS IS THE SOURCE. Assisted qualification, FinOps and the footprint keep no inventory of their own: they read this one.",
+   "fr": "C'EST LA SOURCE. La qualification assistée, le FinOps et l'Empreinte ne tiennent aucun inventaire à eux : ils lisent celui-ci."
+  },
+  "C'est ce que le score compte, et ce que le plan d'action reprend ligne par ligne.": {
+   "en": "This is what the score counts, and what the action plan takes up line by line.",
+   "fr": "C'est ce que le score compte, et ce que le plan d'action reprend ligne par ligne."
+  },
+  "C'est ce qui sépare une évolution prévue d'une modification substantielle qui rouvre l'évaluation de conformité.": {
+   "en": "This is what separates a planned change from a substantial modification that reopens the conformity assessment.",
+   "fr": "C'est ce qui sépare une évolution prévue d'une modification substantielle qui rouvre l'évaluation de conformité."
+  },
+  "C'est l'alinéa #(#) du règlement : la vérification séparée par au moins deux personnes. « Techniquement » veut dire que la procédure ne suffit pas.": {
+   "en": "This is subparagraph #(#) of the Regulation: separate verification by at least two persons. « Technically » means that a procedure is not enough.",
+   "fr": "C'est l'alinéa 14(5) du règlement : la vérification séparée par au moins deux personnes. « Techniquement » veut dire que la procédure ne suffit pas."
+  },
+  "C'est l'alinéa #(#)(b) du règlement. Une personne qui valide tout par habitude n'est pas une mesure de gestion des risques, même si elle clique.": {
+   "en": "This is subparagraph #(#)(b) of the Regulation. A person who approves everything out of habit is not a risk-management measure, even if they click.",
+   "fr": "C'est l'alinéa 14(4)(b) du règlement. Une personne qui valide tout par habitude n'est pas une mesure de gestion des risques, même si elle clique."
+  },
+  "C'est l'alinéa #(#)(c). Un score de confiance qu'on ne sait pas lire n'aide personne, et des compétences supposées mais non déclarées ne seront pas recrutées.": {
+   "en": "This is subparagraph #(#)(c). A confidence score nobody knows how to read helps no one, and competences that are assumed but not declared will not be hired.",
+   "fr": "C'est l'alinéa 14(4)(c). Un score de confiance qu'on ne sait pas lire n'aide personne, et des compétences supposées mais non déclarées ne seront pas recrutées."
+  },
+  "C'est l'alinéa #(#)(d) et (e). Sans fonction d'intervention, la supervision se réduit à regarder.": {
+   "en": "This is subparagraph #(#)(d) and (e). Without an intervention function, oversight comes down to watching.",
+   "fr": "C'est l'alinéa 14(4)(d) et (e). Sans fonction d'intervention, la supervision se réduit à regarder."
+  },
+  "C'est l'alinéa (f) de l'article #(#), et il renvoie à l'article # : l'ensemble de la gouvernance des jeux de données.": {
+   "en": "This is subparagraph (f) of article #(#), and it refers to article #: the whole governance of the data sets.",
+   "fr": "C'est l'alinéa (f) de l'article 17(1), et il renvoie à l'article 10 : l'ensemble de la gouvernance des jeux de données."
+  },
+  "C'est l'alinéa (j) de l'article #(#). Le jour d'un incident grave, c'est le seul chemin qui compte.": {
+   "en": "This is subparagraph (j) of article #(#). On the day of a serious incident, it is the only path that counts.",
+   "fr": "C'est l'alinéa (j) de l'article 17(1). Le jour d'un incident grave, c'est le seul chemin qui compte."
+  },
+  "C'est l'alinéa (l) de l'article #(#). Un modèle de fondation acheté sur étagère en fait partie.": {
+   "en": "This is subparagraph (l) of article #(#). A foundation model bought off the shelf is part of it.",
+   "fr": "C'est l'alinéa (l) de l'article 17(1). Un modèle de fondation acheté sur étagère en fait partie."
+  },
+  "C'est l'arithmétique du module : une approche « autre » sans justification ni preuve objective plafonne le score, parce que la norme elle-même l'exige au #.": {
+   "en": "This is the module's arithmetic: an « other » approach with no justification and no objective evidence caps the score, because the standard itself requires them at #.",
+   "fr": "C'est l'arithmétique du module : une approche « autre » sans justification ni preuve objective plafonne le score, parce que la norme elle-même l'exige au 4.4.3.2.2."
+  },
+  "C'est l'artefact que l'auditeur ouvre en premier.": {
+   "en": "This is the artefact the auditor opens first.",
+   "fr": "C'est l'artefact que l'auditeur ouvre en premier."
+  },
+  "C'est l'audit que le taux de conformité de l'IA Act lit.": {
+   "en": "This is the audit that the AI Act compliance rate reads.",
+   "fr": "C'est l'audit que le taux de conformité de l'IA Act lit."
+  },
+  "C'est l'aveu recevable. Confier une responsabilité de supervision à quelqu'un qui n'a pas matériellement le temps d'intervenir n'est pas une mesure de gestion des risques — et le prétendre expose.": {
+   "en": "This is the admissible admission. Giving an oversight responsibility to someone who physically has no time to intervene is not a risk-management measure — and claiming otherwise creates exposure.",
+   "fr": "C'est l'aveu recevable. Confier une responsabilité de supervision à quelqu'un qui n'a pas matériellement le temps d'intervenir n'est pas une mesure de gestion des risques — et le prétendre expose."
+  },
+  "C'est l'objet même du règlement, et ce que l'autorité ouvre en premier.": {
+   "en": "This is the very subject of the Regulation, and what the authority opens first.",
+   "fr": "C'est l'objet même du règlement, et ce que l'autorité ouvre en premier."
+  },
+  "C'est l'obligation du règlement qui s'applique la première.": {
+   "en": "This is the obligation of the Regulation that applies first.",
+   "fr": "C'est l'obligation du règlement qui s'applique la première."
+  },
+  "C'est la CNIL qui sanctionne, avec le plafond le plus élevé du RGPD — et l'article # §# ne prévoit AUCUNE réduction pour les PME.": {
+   "en": "It is the CNIL that imposes the fine, with the higher of the GDPR caps — and Article #(#) provides for NO reduction for SMEs.",
+   "fr": "C'est la CNIL qui sanctionne, avec le plafond le plus élevé du RGPD — et l'article 83 §5 ne prévoit AUCUNE réduction pour les PME."
+  },
+  "C'est la classification que le registre reprend, et que le FinOps range par niveau de risque.": {
+   "en": "This is the classification the register takes up, and that FinOps sorts by risk level.",
+   "fr": "C'est la classification que le registre reprend, et que le FinOps range par niveau de risque."
+  },
+  "C'est la fonction minimale : elle suppose que la sortie passe par une porte avant d'agir.": {
+   "en": "This is the minimum function: it assumes the output goes through a gate before it acts.",
+   "fr": "C'est la fonction minimale : elle suppose que la sortie passe par une porte avant d'agir."
+  },
+  "C'est la fonction que la norme rend OBLIGATOIRE en plus des autres. Un déclencheur qui dépend du système qu'il doit arrêter n'en est pas un.": {
+   "en": "This is the function the standard makes MANDATORY in addition to the others. A trigger that depends on the system it is meant to stop is not one.",
+   "fr": "C'est la fonction que la norme rend OBLIGATOIRE en plus des autres. Un déclencheur qui dépend du système qu'il doit arrêter n'en est pas un."
+  },
+  "C'est la forme que la transposition française prépare. Le taux qui en sort est un taux de PRÉPARATION, séparé de tout autre.": {
+   "en": "This is the shape the French transposition is preparing. The rate that comes out of it is a READINESS rate, kept apart from every other.",
+   "fr": "C'est la forme que la transposition française prépare. Le taux qui en sort est un taux de PRÉPARATION, séparé de tout autre."
+  },
+  "C'est la même logique que pour la revue rétrospective : une interface non vérifiée est une hypothèse sur le comportement humain.": {
+   "en": "This is the same logic as for the retrospective review: an unverified interface is an assumption about human behaviour.",
+   "fr": "C'est la même logique que pour la revue rétrospective : une interface non vérifiée est une hypothèse sur le comportement humain."
+  },
+  "C'est la pièce que ni ISO # ni ISO/IEC # ne donnent, et celle que l'organisme notifié ouvre en premier. L'approche retenue COMMANDE la charge de preuve : « autre norme » et « autre solution » réclament, en plus, ce qui n'est pas couvert, la justification et la preuve objective.": {
+   "en": "This is the document that neither ISO # nor ISO/IEC # gives, and the one the notified body opens first. The approach chosen GOVERNS the burden of proof: « another standard » and « another solution » additionally call for what is not covered, the justification and the objective evidence.",
+   "fr": "C'est la pièce que ni ISO 9001 ni ISO/IEC 42001 ne donnent, et celle que l'organisme notifié ouvre en premier. L'approche retenue COMMANDE la charge de preuve : « autre norme » et « autre solution » réclament, en plus, ce qui n'est pas couvert, la justification et la preuve objective."
+  },
+  "C'est la pièce qui n'a d'équivalent ni dans ISO # ni dans ISO/IEC # : un SMQ repris tel quel d'un certificat existant ne la porte pas.": {
+   "en": "This is the document that has no counterpart in either ISO # or ISO/IEC #: a QMS carried over as it stands from an existing certificate does not hold it.",
+   "fr": "C'est la pièce qui n'a d'équivalent ni dans ISO 9001 ni dans ISO/IEC 42001 : un SMQ repris tel quel d'un certificat existant ne la porte pas."
+  },
+  "C'est la racine de tout le reste : le délai de réaction, le choix des catégories de mesure et la vérification sont tous calibrés scénario par scénario.": {
+   "en": "This is the root of everything else: the reaction time, the choice of measure categories and the verification are all calibrated scenario by scenario.",
+   "fr": "C'est la racine de tout le reste : le délai de réaction, le choix des catégories de mesure et la vérification sont tous calibrés scénario par scénario."
+  },
+  "C'est la restitution : rien ne s'y saisit, tout y est dérivé de ce qui précède.": {
+   "en": "This is the read-out: nothing is entered here, everything is derived from what comes before.",
+   "fr": "C'est la restitution : rien ne s'y saisit, tout y est dérivé de ce qui précède."
+  },
+  "C'est la seule partie du cadre qui se CALCULE : la latence déclarée contre le délai déclaré.": {
+   "en": "This is the only part of the framework that is CALCULATED: the declared latency against the declared deadline.",
+   "fr": "C'est la seule partie du cadre qui se CALCULE : la latence déclarée contre le délai déclaré."
+  },
+  "C'est la seule vue qui dise ce que le travail fait COUVRE du règlement, et non ce qu'il couvre de la norme.": {
+   "en": "This is the only view that says what the work done COVERS of the Regulation, and not what it covers of the standard.",
+   "fr": "C'est la seule vue qui dise ce que le travail fait COUVRE du règlement, et non ce qu'il couvre de la norme."
+  },
+  "C'est le cas de la très grande majorité des entreprises. Le règlement ne vous impose alors rien, et le module s'arrête là plutôt que de vous proposer un chantier sans objet.": {
+   "en": "That is the case for the vast majority of companies. The Regulation then imposes nothing on you, and the module stops there rather than offering you a project with no purpose.",
+   "fr": "C'est le cas de la très grande majorité des entreprises. Le règlement ne vous impose alors rien, et le module s'arrête là plutôt que de vous proposer un chantier sans objet."
+  },
+  "C'est le chemin le plus court pour livrer, et le périmètre d'habilitation ne se resserre jamais après coup.": {
+   "en": "This is the shortest path to delivery, and an authorisation scope never narrows afterwards.",
+   "fr": "C'est le chemin le plus court pour livrer, et le périmètre d'habilitation ne se resserre jamais après coup."
+  },
+  "C'est le critère qui décide quelle catégorie de mesure peut tenir le scénario. Un délai en millisecondes et un délai en jours n'appellent pas la même supervision.": {
+   "en": "This is the criterion that decides which category of measure can hold the scenario. A deadline in milliseconds and a deadline in days do not call for the same oversight.",
+   "fr": "C'est le critère qui décide quelle catégorie de mesure peut tenir le scénario. Un délai en millisecondes et un délai en jours n'appellent pas la même supervision."
+  },
+  "C'est le cœur du règlement, et ce que la documentation technique devra démontrer.": {
+   "en": "This is the heart of the Regulation, and what the technical documentation will have to demonstrate.",
+   "fr": "C'est le cœur du règlement, et ce que la documentation technique devra démontrer."
+  },
+  "C'est le seul article qui expose personnellement les dirigeants.": {
+   "en": "This is the only article that exposes senior management personally.",
+   "fr": "C'est le seul article qui expose personnellement les dirigeants."
+  },
+  "C'est le seul chapitre dont une obligation n'est pas encore exigible : d'ici le # janvier #, des frais réduits restent admis, plafonnés aux coûts directement liés.": {
+   "en": "It is the only Chapter one of whose obligations is not yet enforceable: until # January #, reduced charges remain allowed, capped at the costs directly related.",
+   "fr": "C'est le seul chapitre dont une obligation n'est pas encore exigible : d'ici le 12 janvier 2027, des frais réduits restent admis, plafonnés aux coûts directement liés."
+  },
+  "C'est le seul moyen de savoir si la conception fonctionne : le biais d'automatisation ne se déclare pas, il se mesure.": {
+   "en": "It is the only way to know whether the design works: automation bias is not declared, it is measured.",
+   "fr": "C'est le seul moyen de savoir si la conception fonctionne : le biais d'automatisation ne se déclare pas, il se mesure."
+  },
+  "C'est le seul écran de cette section qui juge l'ORGANISATION et non les systèmes.": {
+   "en": "This is the only screen in this section that judges the ORGANISATION and not the systems.",
+   "fr": "C'est le seul écran de cette section qui juge l'ORGANISATION et non les systèmes."
+  },
+  "C'est le socle que l'autorité contrôle, quel que soit le statut.": {
+   "en": "This is the baseline the authority inspects, whatever the status.",
+   "fr": "C'est le socle que l'autorité contrôle, quel que soit le statut."
+  },
+  "C'est le véhicule de la responsabilité : ce que la notice ne dit pas, le déployeur ne le mettra pas en œuvre, et le risque restera sans porteur.": {
+   "en": "This is the vehicle of responsibility: what the instructions do not say, the deployer will not implement, and the risk will be left with nobody carrying it.",
+   "fr": "C'est le véhicule de la responsabilité : ce que la notice ne dit pas, le déployeur ne le mettra pas en œuvre, et le risque restera sans porteur."
+  },
+  "C'est là que vivent les preuves : critères d'acceptation, résultats de vérification, démonstration de non-surcharge, justifications.": {
+   "en": "This is where the evidence lives: acceptance criteria, verification results, the demonstration of non-overload, justifications.",
+   "fr": "C'est là que vivent les preuves : critères d'acceptation, résultats de vérification, démonstration de non-surcharge, justifications."
+  },
+  "C'est un PLANCHER du plafond que la loi nationale doit prévoir, pas un plafond européen.": {
+   "en": "This is a FLOOR on the ceiling that national law must provide for, not a European ceiling.",
+   "fr": "C'est un PLANCHER du plafond que la loi nationale doit prévoir, pas un plafond européen."
+  },
+  "C'est une CONDITION, pas un seuil. Sans elle, l'article #, paragraphe #, ne peut pas être rempli, quel que soit le nombre de seuils franchis par ailleurs.": {
+   "en": "This is a CONDITION, not a threshold. Without it, article #(#) cannot be satisfied, however many thresholds are crossed elsewhere.",
+   "fr": "C'est une CONDITION, pas un seuil. Sans elle, l'article 8, paragraphe 1, ne peut pas être rempli, quel que soit le nombre de seuils franchis par ailleurs."
+  },
+  "C'est une incitation, pas une obligation de résultat — le texte dit « envisagent ».": {
+   "en": "This is an encouragement, not an obligation of result — the text says « consider ».",
+   "fr": "C'est une incitation, pas une obligation de résultat — le texte dit « envisagent »."
+  },
+  "C'est une recommandation dans la norme, pas une exigence : elle pèse donc moins, mais son absence se voit en audit d'usage.": {
+   "en": "This is a recommendation in the standard, not a requirement: it therefore weighs less, but its absence shows in an audit of actual use.",
+   "fr": "C'est une recommandation dans la norme, pas une exigence : elle pèse donc moins, mais son absence se voit en audit d'usage."
+  },
+  "C'est une voie de preuve directe pour l'objectif # : la qualification de l'intervenant fait partie de la valeur rendue au client.": {
+   "en": "This is a direct line of evidence for objective #: the qualification of the person doing the work is part of the value delivered to the client.",
+   "fr": "C'est une voie de preuve directe pour l'objectif 16 : la qualification de l'intervenant fait partie de la valeur rendue au client."
+  },
+  "C'est votre levier. Une notice muette sur la supervision humaine est un écart du fournisseur à l'article #, et vous êtes la seule partie qui puisse le constater avant l'autorité.": {
+   "en": "This is your leverage. Instructions that are silent on human oversight are a provider's breach of article #, and you are the only party able to notice it before the authority does.",
+   "fr": "C'est votre levier. Une notice muette sur la supervision humaine est un écart du fournisseur à l'article 13, et vous êtes la seule partie qui puisse le constater avant l'autorité."
+  },
+  "C'est votre part du dispositif. La conception du fournisseur ne supervise rien tant que vous n'avez pas affecté quelqu'un et branché la mesure sur votre exploitation.": {
+   "en": "This is your share of the arrangement. The provider's design oversees nothing until you have assigned someone and wired the measure into your operations.",
+   "fr": "C'est votre part du dispositif. La conception du fournisseur ne supervise rien tant que vous n'avez pas affecté quelqu'un et branché la mesure sur votre exploitation."
+  },
+  "CEN/CENELEC JTC # « Intelligence artificielle » (secrétariat : DS)": {
+   "en": "CEN/CENELEC JTC # « Artificial Intelligence » (secretariat: DS)",
+   "fr": "CEN/CENELEC JTC 21 « Intelligence artificielle » (secrétariat : DS)"
+  },
+  "CEN/CLC JTC # « Intelligence artificielle » (secrétariat : DS)": {
+   "en": "CEN/CLC JTC # « Artificial Intelligence » (secretariat: DS)",
+   "fr": "CEN/CLC JTC 21 « Intelligence artificielle » (secrétariat : DS)"
+  },
+  "Cadrage initial des risques": {
+   "en": "Initial scoping of risks",
+   "fr": "Cadrage initial des risques"
+  },
+  "Cadre de gestion du risque lié aux TIC": {
+   "en": "ICT risk management framework",
+   "fr": "Cadre de gestion du risque lié aux TIC"
+  },
+  "Cadre de gestion du risque lié aux TIC solide et documenté, protection des composantes et infrastructures physiques comprise": {
+   "en": "A sound and documented ICT risk management framework, including the protection of physical components and infrastructure",
+   "fr": "Cadre de gestion du risque lié aux TIC solide et documenté, protection des composantes et infrastructures physiques comprise"
+  },
+  "Cadre simplifié": {
+   "en": "Simplified framework",
+   "fr": "Cadre simplifié"
+  },
+  "Cadre simplifié de gestion du risque lié aux TIC": {
+   "en": "Simplified ICT risk management framework",
+   "fr": "Cadre simplifié de gestion du risque lié aux TIC"
+  },
+  "Causer, contribuer, ou être lié : la question à trois réponses qui décide du niveau de diligence attendu. Elle se renseigne sur l'écran « processus », et c'est elle qui plafonne le taux.": {
+   "en": "Causing, contributing, or being linked: the three-answer question that decides the level of due diligence expected. It is filled in on the “process” screen, and it is what caps the rate.",
+   "fr": "Causer, contribuer, ou être lié : la question à trois réponses qui décide du niveau de diligence attendu. Elle se renseigne sur l'écran « processus », et c'est elle qui plafonne le taux."
+  },
+  "Ce bloc NE S'AJOUTE PAS au profil : il le PLAFONNE. Une catégorie « prouvée » sur le cadre ne l'est plus pour un système génératif si les actions du profil n'y sont pas tenues.": {
+   "en": "This block DOES NOT ADD to the profile: it CAPS it. A category « proven » on the framework is no longer proven for a generative system if the profile's actions are not met there.",
+   "fr": "Ce bloc NE S'AJOUTE PAS au profil : il le PLAFONNE. Une catégorie « prouvée » sur le cadre ne l'est plus pour un système génératif si les actions du profil n'y sont pas tenues."
+  },
+  "Ce bloc ne s'ouvre pas pour vous, et le motif est dit.": {
+   "en": "This block does not open for you, and the reason is stated.",
+   "fr": "Ce bloc ne s'ouvre pas pour vous, et le motif est dit."
+  },
+  "Ce bloc ne vous concerne pas, et il ne s'ouvrira jamais. Le motif est nommé : ce n'est pas un oubli.": {
+   "en": "This block does not concern you, and it will never open. The reason is named: this is not an oversight.",
+   "fr": "Ce bloc ne vous concerne pas, et il ne s'ouvrira jamais. Le motif est nommé : ce n'est pas un oubli."
+  },
+  "Ce calcul porte sur les seuls éléments déclarés. Il prépare une décision de déclaration ; il ne la remplace pas, et il ne vaut pas avis juridique. En cas de doute, la sur-déclaration se discute avec l'autorité compétente — l'absence de déclaration, beaucoup moins.": {
+   "en": "This calculation covers only the items declared. It prepares a reporting decision; it does not replace it, and it is not legal advice. In case of doubt, over-reporting can be discussed with the competent authority — a failure to report, far less so.",
+   "fr": "Ce calcul porte sur les seuls éléments déclarés. Il prépare une décision de déclaration ; il ne la remplace pas, et il ne vaut pas avis juridique. En cas de doute, la sur-déclaration se discute avec l'autorité compétente — l'absence de déclaration, beaucoup moins."
+  },
+  "Ce guide est VOLONTAIRE : c'est la mise en œuvre de deux recommandations de l'OCDE, pas une norme harmonisée. Il n'ouvre aucune présomption de conformité, et aucune date ne changera cela.": {
+   "en": "This guidance is VOLUNTARY: it implements two OECD recommendations, it is not a harmonised standard. It opens no presumption of conformity, and no date will change that.",
+   "fr": "Ce guide est VOLONTAIRE : c'est la mise en œuvre de deux recommandations de l'OCDE, pas une norme harmonisée. Il n'ouvre aucune présomption de conformité, et aucune date ne changera cela."
+  },
+  "Ce module décrit une procédure ; il ne prononce aucune désignation. Les autorités européennes de surveillance désignent, et elles seules. La liste des prestataires désignés est publiée et mise à jour chaque année par le comité mixte (article #, paragraphe #) ; elle n'est pas reproduite ici, parce qu'une liste recopiée vieillit sans prévenir.": {
+   "en": "This module describes a procedure; it pronounces no designation. The European Supervisory Authorities designate, and they alone. The list of designated providers is published and updated each year by the Joint Committee (article #(#)); it is not reproduced here, because a copied list ages without warning.",
+   "fr": "Ce module décrit une procédure ; il ne prononce aucune désignation. Les autorités européennes de surveillance désignent, et elles seules. La liste des prestataires désignés est publiée et mise à jour chaque année par le comité mixte (article 31, paragraphe 9) ; elle n'est pas reproduite ici, parce qu'une liste recopiée vieillit sans prévenir."
+  },
+  "Ce module mesure une déclaration, pas une conformité. Les intitulés d'articles sont ceux du texte publié au Journal officiel de l'Union ; ce que chacun exige est résumé par le cabinet et ne remplace pas la lecture de l'article. Aucune certification ne s'obtient contre ce texte : DORA est une obligation, pas un référentiel certifiable.": {
+   "en": "This module measures a declaration, not compliance. The article headings are those of the text published in the Official Journal of the Union; what each one requires is summarised by the firm and does not replace reading the article. No certification can be obtained against this text: DORA is an obligation, not a certifiable framework.",
+   "fr": "Ce module mesure une déclaration, pas une conformité. Les intitulés d'articles sont ceux du texte publié au Journal officiel de l'Union ; ce que chacun exige est résumé par le cabinet et ne remplace pas la lecture de l'article. Aucune certification ne s'obtient contre ce texte : DORA est une obligation, pas un référentiel certifiable."
+  },
+  "Ce module ne chiffre aucune amende, et un écran muet sur l'exposition laisserait croire qu'elle est nulle.": {
+   "en": "This module quantifies no fine, and a screen silent on exposure would suggest there is none.",
+   "fr": "Ce module ne chiffre aucune amende, et un écran muet sur l'exposition laisserait croire qu'elle est nulle."
+  },
+  "Ce module prépare une qualification ; il ne la prononce pas. La qualification réelle relève de l'autorité compétente — ACPR ou AMF en France, autorités européennes de surveillance au niveau de l'Union.": {
+   "en": "This module prepares a qualification; it does not pronounce it. The actual qualification is for the competent authority — the ACPR or the AMF in France, the European Supervisory Authorities at Union level.",
+   "fr": "Ce module prépare une qualification ; il ne la prononce pas. La qualification réelle relève de l'autorité compétente — ACPR ou AMF en France, autorités européennes de surveillance au niveau de l'Union."
+  },
+  "Ce module rapproche deux textes ; il ne prononce pas l'articulation. Le périmètre exact de la mise à l'écart est fixé par les dispositions nationales de transposition et par les lignes directrices que la Commission publie au titre de l'article #, paragraphe #, de la directive (UE) #/#. Seuls les textes publiés font foi.": {
+   "en": "This module brings two texts together; it does not pronounce how they interlock. The exact scope of the carve-out is set by the national transposing provisions and by the guidelines the Commission publishes under article #(#) of Directive (EU) #/#. Only the published texts are authoritative.",
+   "fr": "Ce module rapproche deux textes ; il ne prononce pas l'articulation. Le périmètre exact de la mise à l'écart est fixé par les dispositions nationales de transposition et par les lignes directrices que la Commission publie au titre de l'article 4, paragraphe 3, de la directive (UE) 2022/2555. Seuls les textes publiés font foi."
+  },
+  "Ce module vise la révision # du catalogue, parce que c'est celle que la surcharge industrielle SP #-# Rev. # adapte. La révision # est la version courante : elle ajoute les familles PT et SR, et renomme CA. Un système déjà aligné sur la révision # doit le savoir avant de lire ce taux.": {
+   "en": "This module targets revision # of the catalogue, because that is the one the industrial overlay SP #-# Rev. # adapts. Revision # is the current version: it adds the PT and SR families, and renames CA. A system already aligned on revision # needs to know this before reading this rate.",
+   "fr": "Ce module vise la révision 4 du catalogue, parce que c'est celle que la surcharge industrielle SP 800-82 Rev. 2 adapte. La révision 5 est la version courante : elle ajoute les familles PT et SR, et renomme CA. Un système déjà aligné sur la révision 5 doit le savoir avant de lire ce taux."
+  },
+  "Ce module vise la révision # du catalogue, parce que c'est celle que la surcharge industrielle SP #-# Rev. # adapte. La révision # est la version courante.": {
+   "en": "This module targets revision # of the catalogue, because that is the one the industrial overlay SP #-# Rev. # adapts. Revision # is the current version.",
+   "fr": "Ce module vise la révision 4 du catalogue, parce que c'est celle que la surcharge industrielle SP 800-82 Rev. 2 adapte. La révision 5 est la version courante."
+  },
+  "Ce n'est ni une mesure de gestion du risque ni une notification d'incident : l'article #, paragraphe #, ne l'atteint pas.": {
+   "en": "This is neither a risk-management measure nor an incident notification: article #(#) does not reach it.",
+   "fr": "Ce n'est ni une mesure de gestion du risque ni une notification d'incident : l'article 4, paragraphe 1, ne l'atteint pas."
+  },
+  "Ce n'est pas une dispense : le risque reste, et d'autres mesures doivent le porter. La consignation dit seulement que la supervision humaine ne le portera pas.": {
+   "en": "This is not an exemption: the risk remains, and other measures have to carry it. The record says only that human oversight will not.",
+   "fr": "Ce n'est pas une dispense : le risque reste, et d'autres mesures doivent le porter. La consignation dit seulement que la supervision humaine ne le portera pas."
+  },
+  "Ce n'est pas une note sur dix : c'est un profil et des angles morts.": {
+   "en": "This is not a mark out of ten: it is a profile and its blind spots.",
+   "fr": "Ce n'est pas une note sur dix : c'est un profil et des angles morts."
+  },
+  "Ce n'est pas vous qui désignez. Les autorités européennes de surveillance le font, et franchir l'étape # ne vaut pas désignation.": {
+   "en": "It is not you who designates. The European Supervisory Authorities do, and clearing step # does not amount to a designation.",
+   "fr": "Ce n'est pas vous qui désignez. Les autorités européennes de surveillance le font, et franchir l'étape 1 ne vaut pas désignation."
+  },
+  "Ce ne sont PAS les risques du système d'IA — ceux-là relèvent de l'article # et du §#.": {
+   "en": "These are NOT the risks of the AI system — those come under article # and §#.",
+   "fr": "Ce ne sont PAS les risques du système d'IA — ceux-là relèvent de l'article 9 et du §8.1."
+  },
+  "Ce ne sont pas des classifications exclusives auxquelles le système entier serait affecté : un même système porte des configurations différentes selon le scénario, et un scénario peut en combiner plusieurs.": {
+   "en": "These are not exclusive classifications to which the whole system would be assigned: one and the same system carries different configurations depending on the scenario, and a scenario may combine several of them.",
+   "fr": "Ce ne sont pas des classifications exclusives auxquelles le système entier serait affecté : un même système porte des configurations différentes selon le scénario, et un scénario peut en combiner plusieurs."
+  },
+  "Ce pourcentage mesure une REPRISE DE PREUVES, pas une conformité. Il dit quelle part des articles du règlement délégué trouve un répondant dans un système de management certifié — il ne dit pas que ces articles sont tenus, et encore moins que l'autorité compétente l'admettra.": {
+   "en": "This percentage measures a RE-USE OF EVIDENCE, not compliance. It says what share of the delegated regulation's articles finds an answer in a certified management system — it does not say that those articles are met, still less that the competent authority will accept it.",
+   "fr": "Ce pourcentage mesure une REPRISE DE PREUVES, pas une conformité. Il dit quelle part des articles du règlement délégué trouve un répondant dans un système de management certifié — il ne dit pas que ces articles sont tenus, et encore moins que l'autorité compétente l'admettra."
+  },
+  "Ce qu'il en coûte, dans cette maison, de dire non.": {
+   "en": "What it costs, in this firm, to say no.",
+   "fr": "Ce qu'il en coûte, dans cette maison, de dire non."
+  },
+  "Ce qu'il fait, et ce qu'il ne sait pas faire.": {
+   "en": "What it does, and what it cannot do.",
+   "fr": "Ce qu'il fait, et ce qu'il ne sait pas faire."
+  },
+  "Ce qu'il faut surveiller et mesurer est-il déterminé, et mesuré ?": {
+   "en": "Has what needs to be monitored and measured been determined, and is it measured?",
+   "fr": "Ce qu'il faut surveiller et mesurer est-il déterminé, et mesuré ?"
+  },
+  "Ce qu'on fait des jeux de données, de leur gouvernance à leur conservation.": {
+   "en": "What is done with the data sets, from their governance to their retention.",
+   "fr": "Ce qu'on fait des jeux de données, de leur gouvernance à leur conservation."
+  },
+  "Ce qu'on mesure, comment, et ce qu'on a renoncé à mesurer.": {
+   "en": "What is measured, how, and what has been given up on measuring.",
+   "fr": "Ce qu'on mesure, comment, et ce qu'on a renoncé à mesurer."
+  },
+  "Ce qu'on surveille une fois le système en service, et comment.": {
+   "en": "What is monitored once the system is in service, and how.",
+   "fr": "Ce qu'on surveille une fois le système en service, et comment."
+  },
+  "Ce qu'on traite, et ce qu'on accepte par écrit.": {
+   "en": "What is treated, and what is accepted in writing.",
+   "fr": "Ce qu'on traite, et ce qu'on accepte par écrit."
+  },
+  "Ce qu'un certificat ISO # ou ISO/IEC # apporte déjà, ce qu'il n'apporte PAS, et les autres normes harmonisées de la famille.": {
+   "en": "What an ISO # or ISO/IEC # certificate already brings, what it does NOT bring, and the other harmonised standards of the family.",
+   "fr": "Ce qu'un certificat ISO 9001 ou ISO/IEC 42001 apporte déjà, ce qu'il n'apporte PAS, et les autres normes harmonisées de la famille."
+  },
+  "Ce qu'une certification ISO/IEC # documente déjà parmi les articles du règlement délégué — et ce qu'elle ne documente pas.": {
+   "en": "What an ISO/IEC # certification already documents among the articles of the delegated regulation — and what it does not.",
+   "fr": "Ce qu'une certification ISO/IEC 27001 documente déjà parmi les articles du règlement délégué — et ce qu'elle ne documente pas."
+  },
+  "Ce qu'une entité doit déterminer et évaluer lorsqu'elle sous-traite des services TIC soutenant des fonctions critiques ou importantes.": {
+   "en": "What an entity must determine and assess when it subcontracts ICT services supporting critical or important functions.",
+   "fr": "Ce qu'une entité doit déterminer et évaluer lorsqu'elle sous-traite des services TIC soutenant des fonctions critiques ou importantes."
+  },
+  "Ce que ce bloc attend est renseigné. Cela ne vaut pas conformité.": {
+   "en": "What this block expects has been filled in. That does not amount to compliance.",
+   "fr": "Ce que ce bloc attend est renseigné. Cela ne vaut pas conformité."
+  },
+  "Ce que ce taux mesure s'appelle « couverture des exemples retenus », jamais conformité : un organisme peut les tenir tous et rester en défaut sur un risque qu'aucun d'eux ne nomme.": {
+   "en": "What this rate measures is called “coverage of the examples retained”, never compliance: an organisation can hold them all and still fall short on a risk none of them names.",
+   "fr": "Ce que ce taux mesure s'appelle « couverture des exemples retenus », jamais conformité : un organisme peut les tenir tous et rester en défaut sur un risque qu'aucun d'eux ne nomme."
+  },
+  "Ce que chaque catégorie demande, sous-catégorie par sous-catégorie.": {
+   "en": "What each category asks for, sub-category by sub-category.",
+   "fr": "Ce que chaque catégorie demande, sous-catégorie par sous-catégorie."
+  },
+  "Ce que coûte le parc déclaré : couverture du chiffrage, montants par niveau de risque, attribution, leviers.": {
+   "en": "What the declared estate costs: how much of it can be quantified, amounts by risk level, allocation, levers.",
+   "fr": "Ce que coûte le parc déclaré : couverture du chiffrage, montants par niveau de risque, attribution, leviers."
+  },
+  "Ce que le prestataire désigné doit fournir, sous quelle forme, et ce que l'autorité compétente apprécie ensuite chez l'entité financière cliente.": {
+   "en": "What the designated provider must supply, in what form, and what the competent authority then assesses at the client financial entity.",
+   "fr": "Ce que le prestataire désigné doit fournir, sous quelle forme, et ce que l'autorité compétente apprécie ensuite chez l'entité financière cliente."
+  },
+  "Ce que le système fait à ceux qui ne l'ont pas choisi.": {
+   "en": "What the system does to those who did not choose it.",
+   "fr": "Ce que le système fait à ceux qui ne l'ont pas choisi."
+  },
+  "Ce que pèse le parc déclaré : électricité, CO₂e, eau, et la trajectoire à l'horizon retenu.": {
+   "en": "What the declared estate weighs: electricity, CO₂e, water, and the trajectory to the horizon chosen.",
+   "fr": "Ce que pèse le parc déclaré : électricité, CO₂e, eau, et la trajectoire à l'horizon retenu."
+  },
+  "Ce que vous faites du produit : concevoir, importer, distribuer, le vendre sous votre marque, le modifier.": {
+   "en": "What you do with the product: design it, import it, distribute it, sell it under your own brand, modify it.",
+   "fr": "Ce que vous faites du produit : concevoir, importer, distribuer, le vendre sous votre marque, le modifier."
+  },
+  "Ce que vous mettez en œuvre reste sous votre responsabilité : affecter des personnes désignées compétentes, tenir les conditions d'utilisation, et vérifier que la mesure fonctionne chez vous.": {
+   "en": "What you implement stays your responsibility: assigning competent designated persons, meeting the conditions of use, and checking that the measure works on your side.",
+   "fr": "Ce que vous mettez en œuvre reste sous votre responsabilité : affecter des personnes désignées compétentes, tenir les conditions d'utilisation, et vérifier que la mesure fonctionne chez vous."
+  },
+  "Ce questionnaire porte sur ISO/IEC #:#, à laquelle ISO/IEC #:# a succédé. Le remplir aujourd'hui prépare contre une version retirée — et surtout contre une annexe A qui n'existe plus sous cette forme.": {
+   "en": "This questionnaire covers ISO/IEC #:#, which ISO/IEC #:# has superseded. Filling it in today prepares against a withdrawn version — and above all against an Annex A that no longer exists in that form.",
+   "fr": "Ce questionnaire porte sur ISO/IEC 27001:2013, à laquelle ISO/IEC 27001:2022 a succédé. Le remplir aujourd'hui prépare contre une version retirée — et surtout contre une annexe A qui n'existe plus sous cette forme."
+  },
+  "Ce qui a été introduit dans les données d'entraînement ou d'ajustement oriente le comportement du modèle.": {
+   "en": "What was put into the training or tuning data steers the model's behaviour.",
+   "fr": "Ce qui a été introduit dans les données d'entraînement ou d'ajustement oriente le comportement du modèle."
+  },
+  "Ce qui distingue la version # de la version # : # mesures en # thèmes au lieu de # en # chapitres.": {
+   "en": "What tells the # version from the # one: # controls in # themes instead of # in # chapters.",
+   "fr": "Ce qui distingue la version 2022 de la version 2013 : 93 mesures en 4 thèmes au lieu de 114 en 14 chapitres."
+  },
+  "Ce qui dépend du contexte de déploiement, vous ne pouvez pas le mettre en œuvre à la place du déployeur : vous le SPÉCIFIEZ dans la notice d'utilisation, avec ses critères de performance, les compétences requises et les méthodes de vérification.": {
+   "en": "What depends on the deployment context you cannot implement in the deployer's place: you SPECIFY it in the instructions for use, with its performance criteria, the competences required and the verification methods.",
+   "fr": "Ce qui dépend du contexte de déploiement, vous ne pouvez pas le mettre en œuvre à la place du déployeur : vous le SPÉCIFIEZ dans la notice d'utilisation, avec ses critères de performance, les compétences requises et les méthodes de vérification."
+  },
+  "Ce qui empêche la diligence d'être un exercice annuel : le document demande de chercher ce que les passes précédentes ont manqué.": {
+   "en": "What stops due diligence being an annual exercise: the document calls for looking for what earlier passes missed.",
+   "fr": "Ce qui empêche la diligence d'être un exercice annuel : le document demande de chercher ce que les passes précédentes ont manqué."
+  },
+  "Ce qui est de l'OCDE, et ce qui est du cabinet": {
+   "en": "What comes from the OECD, and what comes from the firm",
+   "fr": "Ce qui est de l'OCDE, et ce qui est du cabinet"
+  },
+  "Ce qui est écrit, et ce qui s'applique.": {
+   "en": "What is written, and what applies.",
+   "fr": "Ce qui est écrit, et ce qui s'applique."
+  },
+  "Ce qui n'est PAS entièrement couvert, écrit": {
+   "en": "What is NOT fully covered, in writing",
+   "fr": "Ce qui n'est PAS entièrement couvert, écrit"
+  },
+  "Ce qui ne se voit pas ligne à ligne se voit en carte.": {
+   "en": "What does not show line by line shows on a map.",
+   "fr": "Ce qui ne se voit pas ligne à ligne se voit en carte."
+  },
+  "Ce qui se réutilise d'un cadre à l'autre, et ce qui ne se réutilise pas.": {
+   "en": "What can be reused from one framework to another, and what cannot.",
+   "fr": "Ce qui se réutilise d'un cadre à l'autre, et ce qui ne se réutilise pas."
+  },
+  "Ce qui sépare les trois catégories, c'est QUAND l'humain entre en scène : après la sortie, appelé par une alerte, ou déjà présent. C'est ce « quand » qui décide si la mesure tient le délai.": {
+   "en": "What separates the three categories is WHEN the human comes in: after the output, called by an alert, or already present. It is that « when » which decides whether the measure holds the deadline.",
+   "fr": "Ce qui sépare les trois catégories, c'est QUAND l'humain entre en scène : après la sortie, appelé par une alerte, ou déjà présent. C'est ce « quand » qui décide si la mesure tient le délai."
+  },
+  "Ce qui sépare une conception d'une mesure qui fonctionne : critères d'acceptation, essais, résultats.": {
+   "en": "What separates a design from a measure that works: acceptance criteria, tests, results.",
+   "fr": "Ce qui sépare une conception d'une mesure qui fonctionne : critères d'acceptation, essais, résultats."
+  }
+ }
+}

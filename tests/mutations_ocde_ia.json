@@ -110,11 +110,11 @@
    "regle": "test_l_INDICE_rend_le_MEME_taux_que_le_moteur"
   },
   {
-   "nom": "la quatorzieme norme n'est plus la derniere de la barre",
+   "nom": "le guide de l'OCDE se declare CERTIFIABLE : 100 % se lirait comme une attestation",
    "fichier": "conformite.py",
-   "avant": "               \"nist_800_82\", \"ocde\")\n",
-   "apres": "               \"ocde\", \"nist_800_82\")\n",
-   "regle": "test_la_QUATORZIEME_norme_est_annoncee_et_atteignable"
+   "avant": "{\"cle\": \"ocde\", \"nom\": \"Diligence OCDE\", \"nature\": \"cadre\",",
+   "apres": "{\"cle\": \"ocde\", \"nom\": \"Diligence OCDE\", \"nature\": \"certifiable\",",
+   "regle": "test_la_norme_OCDE_est_annoncee_et_atteignable"
   },
   {
    "nom": "le rail dit « sans objet » la ou le guide n'ecarte personne",

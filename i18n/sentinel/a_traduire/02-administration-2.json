@@ -1,6 +1,6 @@
 {
  "_lot": "02-administration-2",
- "_mots": 2067,
+ "_mots": 2013,
  "_pages": [
   "ia50",
   "rgpd-site"
@@ -16,11 +16,6 @@
    "en": "<strong>Every week:</strong> check the index and deal with anomalies; handle the requests received.<br><strong>Every month:</strong> check the records of processing against changes to the site; check that the automatic purge is running properly.<br><strong>Every quarter:</strong> archive an audit report; export the consent records; review retention periods.<br><strong>Every year:</strong> review the impact assessments; review transfers and their safeguards; update the privacy policy and its version.",
    "fr": "Chaque semaine : consulter l'indice et traiter les anomalies ; traiter les demandes reçues.Chaque mois : vérifier le registre des traitements au regard des évolutions du site ; contrôler le bon déroulement de la purge automatique.Chaque trimestre : archiver un rapport d'audit ; exporter le registre des preuves ; revoir les durées de conservation.Chaque année : revoir les analyses d'impact ; revoir les transferts et leurs garanties ; mettre à jour la politique de confidentialité et sa version.",
    "html": "<strong>Chaque semaine :</strong> consulter l'indice et traiter les anomalies ; traiter les demandes reçues.<br><strong>Chaque mois :</strong> vérifier le registre des traitements au regard des évolutions du site ; contrôler le bon déroulement de la purge automatique.<br><strong>Chaque trimestre :</strong> archiver un rapport d'audit ; exporter le registre des preuves ; revoir les durées de conservation.<br><strong>Chaque année :</strong> revoir les analyses d'impact ; revoir les transferts et leurs garanties ; mettre à jour la politique de confidentialité et sa version."
-  },
-  "Deux ensembles coexistent. Les modules « Conformité RGPD » et « Registre des traitements » portent sur l'organisation du client. Les modules « RGPD — CONSEILPREV » et « Transparence IA Act » portent sur notre propre conformité : site public et plateforme Sentinel. Ils sont réservés à CONSEILPREV et masqués pour les clients. En cas de contrôle, seuls ces derniers constituent votre dossier.": {
-   "en": "Two sets coexist. The “GDPR compliance” and “Records of processing” modules concern the <strong>client’s</strong> organisation. The “GDPR — CONSEILPREV” and “AI Act transparency” modules concern <strong>our own compliance</strong>: public site and Sentinel platform. They are reserved for CONSEILPREV and hidden from clients. In the event of an inspection, only the latter make up your file.",
-   "fr": "Deux ensembles coexistent. Les modules « Conformité RGPD » et « Registre des traitements » portent sur l'organisation du client. Les modules « RGPD — CONSEILPREV » et « Transparence IA Act » portent sur notre propre conformité : site public et plateforme Sentinel. Ils sont réservés à CONSEILPREV et masqués pour les clients. En cas de contrôle, seuls ces derniers constituent votre dossier.",
-   "html": "Deux ensembles coexistent. Les modules « Conformité RGPD » et « Registre des traitements » portent sur l'organisation du <strong>client</strong>. Les modules « RGPD — CONSEILPREV » et « Transparence IA Act » portent sur <strong>notre propre conformité</strong> : site public et plateforme Sentinel. Ils sont réservés à CONSEILPREV et masqués pour les clients. En cas de contrôle, seuls ces derniers constituent votre dossier."
   }
  },
  "texte": {
@@ -30,7 +25,7 @@
   },
   "# jour(s)": {
    "en": "# day(s)",
-   "fr": "62 jour(s)"
+   "fr": "58 jour(s)"
   },
   "# · Distinguer fournisseur et déployeur": {
    "en": "# · Distinguishing provider and deployer",
@@ -144,6 +139,10 @@
    "en": "None.",
    "fr": "Aucune."
   },
+  "Avant la prochaine échéance légale": {
+   "en": "Before the next legal deadline",
+   "fr": "Avant la prochaine échéance légale"
+  },
   "Avant le # août #": {
    "en": "Before # August #",
    "fr": "Avant le 2 août 2026"
@@ -183,10 +182,6 @@
   "Chez nous": {
    "en": "At our firm",
    "fr": "Chez nous"
-  },
-  "Christophe CERF": {
-   "en": "Christophe CERF",
-   "fr": "Christophe CERF"
   },
   "Conforme": {
    "en": "Compliant",
@@ -231,10 +226,6 @@
   "En cas de decision automatisee ou de profilage, des exigences specifiques s'ajoutent.": {
    "en": "Where there is automated decision-making or profiling, specific requirements are added.",
    "fr": "En cas de decision automatisee ou de profilage, des exigences specifiques s'ajoutent."
-  },
-  "Exception": {
-   "en": "Exception",
-   "fr": "Exception"
   },
   "Exemple : faux avis, faux temoignage, personnage artificiel presente comme reel.": {
    "en": "For example: a fake review, a fake testimonial, an artificial character presented as real.",
@@ -394,7 +385,7 @@
   },
   "Mesuré le #-#-# #:#:# UTC — les fichiers servis sont relus à chaque mesure ; la case « Conforme » reste une attestation humaine.": {
    "en": "Measured on #-#-# #:#:# UTC — the files served are re-read at each measurement; the “Compliant” box remains a human attestation.",
-   "fr": "Mesuré le 2026-10-01 15:26:07 UTC — les fichiers servis sont relus à chaque mesure ; la case « Conforme » reste une attestation humaine."
+   "fr": "Mesuré le 2026-10-05 15:51:14 UTC — les fichiers servis sont relus à chaque mesure ; la case « Conforme » reste une attestation humaine."
   },
   "Metadonnees lisibles par machine (ai-generated, ai-disclosure) inserees dans le document — EN PLACE": {
    "en": "Machine-readable metadata (ai-generated, ai-disclosure) inserted in the document — IN PLACE",
@@ -403,10 +394,6 @@
   "Modalités": {
    "en": "Arrangements",
    "fr": "Modalités"
-  },
-  "Motif": {
-   "en": "Reason",
-   "fr": "Motif"
   },
   "Même si l'AI Act ne s'applique pas, d'autres obligations peuvent jouer": {
    "en": "Even if the AI Act does not apply, other obligations may come into play",

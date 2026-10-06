@@ -169,6 +169,58 @@ def motif_faute(cle, val):
     return None
 
 
+def motifs_compiles(motifs):
+    """Les motifs prêts à être essayés, du plus long au plus court — LE MÊME
+    ORDRE que `sentMotifsCompiler` de sentinel.i18n.js, parce que c'est le
+    plus précis qui doit gagner.
+
+    POURQUOI CETTE FONCTION EXISTE CÔTÉ PYTHON. Le navigateur traduit une clé
+    du régime texte en DEUX temps : l'entrée exacte, puis les motifs
+    (`sentChercherTexte`). `couverture`, elle, ne regardait que l'entrée
+    exacte — donc elle comptait comme NON TRADUIT tout libellé composé que le
+    lecteur voit pourtant en anglais. Deux règles pour une même question
+    donnaient deux réponses, et c'est la mesure qui avait tort.
+    MESURÉ : la passe navigateur réparée a relevé les libellés du rail
+    (« ↓ DGA — qualification », « Bloc # sur # · … — Verrouillé ») ; aucun
+    n'est une clé littérale, tous sont servis par un motif de
+    i18n/sentinel/motifs.json."""
+    liste = []
+    for cle in sorted((motifs or {}), key=lambda k: (-len(k), k)):
+        val = motifs[cle]
+        if not isinstance(val, str):
+            continue
+        morceaux = cle.split(TROU)
+        if not u''.join(morceaux).strip():
+            continue
+        if len(val.split(TROU)) != len(morceaux):
+            continue
+        indice = max(morceaux, key=len)
+        rx = re.compile(u'^' + u'(.+?)'.join(re.escape(m) for m in morceaux) + u'$')
+        liste.append((cle, val, indice, rx))
+    return liste
+
+
+def motif_traduire(cle, compiles, texte=None):
+    """La valeur anglaise d'une clé PAR LES MOTIFS, ou None — la
+    réimplémentation de `sentMotifTraduire`. Un morceau capturé est recopié
+    tel quel, sauf s'il est lui-même une clé exacte du régime texte."""
+    texte = texte or {}
+    for _cle, val, indice, rx in compiles:
+        if indice not in cle:
+            continue
+        m = rx.match(cle)
+        if not m:
+            continue
+        parts = val.split(TROU)
+        out = parts[0]
+        for i, suite in enumerate(parts[1:], start=1):
+            capte = m.group(i)
+            t = texte.get(capte)
+            out += (t if isinstance(t, str) else capte) + suite
+        return out
+    return None
+
+
 #: dossier → (signature, corps JSON, etag). Un seul dossier en pratique ; le
 #: dictionnaire fait ce que fera la table quand elle aura plusieurs entrées.
 _CACHE = {}

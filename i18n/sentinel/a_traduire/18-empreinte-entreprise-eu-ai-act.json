@@ -1,0 +1,694 @@
+{
+ "_lot": "18-empreinte-entreprise-eu-ai-act",
+ "_mots": 1588,
+ "_pages": [
+  "empreinte",
+  "entreprise",
+  "articles"
+ ],
+ "_rubrique": "EMPREINTE + ENTREPRISE + EU AI ACT",
+ "bloc": {
+  "# g": {
+   "en": "<strong># g</strong>",
+   "fr": "0 g",
+   "html": "<strong>0 g</strong>"
+  },
+  "A — Facteurs statiques. Énergie par millier de jetons, intensité fixe. Simple, mais sous-estime : ni rendement du centre de données, ni fabrication.B — Paramétrique. Inspirée d'EcoLogits, de Boavizta et de la Base Empreinte de l'ADEME : rendement du centre de données (PUE), intensité carbone temps réel (RTE éCO#mix), fourchette basse et haute.C — Cycle de vie étendu (retenue). B, augmentée des impacts incorporés (fabrication du matériel, amortie) et de l'hébergement de la requête. C'est la méthode affichée par défaut.": {
+   "en": "<strong>A — Static factors.</strong> Energy per thousand tokens, fixed intensity. Simple, but it underestimates: neither data centre efficiency nor manufacturing.<br><br><strong>B — Parametric.</strong> Inspired by EcoLogits, Boavizta and ADEME’s Base Empreinte: data centre efficiency (PUE), <strong>real-time</strong> carbon intensity (RTE éCO#mix), low and high range.<br><br><strong>C — Extended life cycle (used).</strong> B, plus the <strong>embodied impacts</strong> (hardware manufacturing, amortised) and the hosting of the request. This is the method shown by default.",
+   "fr": "A — Facteurs statiques. Énergie par millier de jetons, intensité fixe. Simple, mais sous-estime : ni rendement du centre de données, ni fabrication.B — Paramétrique. Inspirée d'EcoLogits, de Boavizta et de la Base Empreinte de l'ADEME : rendement du centre de données (PUE), intensité carbone temps réel (RTE éCO2mix), fourchette basse et haute.C — Cycle de vie étendu (retenue). B, augmentée des impacts incorporés (fabrication du matériel, amortie) et de l'hébergement de la requête. C'est la méthode affichée par défaut.",
+   "html": "<strong>A — Facteurs statiques.</strong> Énergie par millier de jetons, intensité fixe. Simple, mais sous-estime : ni rendement du centre de données, ni fabrication.<br><br><strong>B — Paramétrique.</strong> Inspirée d'EcoLogits, de Boavizta et de la Base Empreinte de l'ADEME : rendement du centre de données (PUE), intensité carbone <strong>temps réel</strong> (RTE éCO2mix), fourchette basse et haute.<br><br><strong>C — Cycle de vie étendu (retenue).</strong> B, augmentée des <strong>impacts incorporés</strong> (fabrication du matériel, amortie) et de l'hébergement de la requête. C'est la méthode affichée par défaut."
+  },
+  "Aucun appel de modèle aujourd’hui. Le compteur ne mesure que les appels de modèles (copilote, explorateur, analyses générées) : la simple navigation n’en déclenche aucun.": {
+   "en": "No model calls today. The counter only measures <strong>model calls</strong> (copilot, explorer, generated analyses): simple browsing does not trigger any.",
+   "fr": "Aucun appel de modèle aujourd’hui. Le compteur ne mesure que les appels de modèles (copilote, explorateur, analyses générées) : la simple navigation n’en déclenche aucun.",
+   "html": "Aucun appel de modèle aujourd’hui. Le compteur ne mesure que les <strong>appels de modèles</strong> (copilote, explorateur, analyses générées) : la simple navigation n’en déclenche aucun."
+  },
+  "Chaque appel de modèle est journalisé avec le décompte réel des jetons renvoyé par l'API, la latence, le client, le module et le fournisseur. Les pages servies sont agrégées par jour. Tous les appels passant par le serveur, le comptage est exhaustif.": {
+   "en": "Each model call is logged with the <strong>actual token count</strong> returned by the API, the latency, the client, the module and the provider. Pages served are aggregated by day. Since all calls go through the server, the count is <strong>exhaustive</strong>.",
+   "fr": "Chaque appel de modèle est journalisé avec le décompte réel des jetons renvoyé par l'API, la latence, le client, le module et le fournisseur. Les pages servies sont agrégées par jour. Tous les appels passant par le serveur, le comptage est exhaustif.",
+   "html": "Chaque appel de modèle est journalisé avec le <strong>décompte réel des jetons</strong> renvoyé par l'API, la latence, le client, le module et le fournisseur. Les pages servies sont agrégées par jour. Tous les appels passant par le serveur, le comptage est <strong>exhaustif</strong>."
+  },
+  "Deux sessions sur site, dans vos locaux, par an — incluses dans l'offre Entreprise. Les autres formations du catalogue se tiennent à distance ou en présentiel à Paris.": {
+   "en": "Two sessions <strong>on site, on your premises</strong>, a year — included in the Enterprise plan. The other courses in the catalogue are held remotely or in person in Paris.",
+   "fr": "Deux sessions sur site, dans vos locaux, par an — incluses dans l'offre Entreprise. Les autres formations du catalogue se tiennent à distance ou en présentiel à Paris.",
+   "html": "Deux sessions <strong>sur site, dans vos locaux</strong>, par an — incluses dans l'offre Entreprise. Les autres formations du catalogue se tiennent à distance ou en présentiel à Paris."
+  },
+  "EcoLogits (GenAI Impact) — méthodologie d'estimation des impacts des modèles via API, prenant en charge Anthropic et Mistral.Boavizta — données ouvertes sur les impacts incorporés du matériel.ADEME — Base Empreinte — facteurs d'émission des mix électriques.RTE — éCO#mix / ODRÉ — intensité carbone du réseau français au pas de quinze minutes, en données ouvertes.": {
+   "en": "<strong>EcoLogits</strong> (GenAI Impact) — methodology for estimating the impacts of models via API, supporting Anthropic and Mistral.<br><strong>Boavizta</strong> — open data on the embodied impacts of hardware.<br><strong>ADEME — Base Empreinte</strong> — emission factors of electricity mixes.<br><strong>RTE — éCO#mix / ODRÉ</strong> — carbon intensity of the French grid in fifteen-minute steps, as open data.",
+   "fr": "EcoLogits (GenAI Impact) — méthodologie d'estimation des impacts des modèles via API, prenant en charge Anthropic et Mistral.Boavizta — données ouvertes sur les impacts incorporés du matériel.ADEME — Base Empreinte — facteurs d'émission des mix électriques.RTE — éCO2mix / ODRÉ — intensité carbone du réseau français au pas de quinze minutes, en données ouvertes.",
+   "html": "<strong>EcoLogits</strong> (GenAI Impact) — méthodologie d'estimation des impacts des modèles via API, prenant en charge Anthropic et Mistral.<br><strong>Boavizta</strong> — données ouvertes sur les impacts incorporés du matériel.<br><strong>ADEME — Base Empreinte</strong> — facteurs d'émission des mix électriques.<br><strong>RTE — éCO2mix / ODRÉ</strong> — intensité carbone du réseau français au pas de quinze minutes, en données ouvertes."
+  },
+  "Incertitude de la méthode retenue : ± # % (amplitude de la fourchette rapportée à la valeur centrale) · Version de méthodologie : # · # requête(s) analysée(s).": {
+   "en": "<strong>Uncertainty of the method used:</strong> ± # % (the width of the range against the central value) · Methodology version: # · # request(s) analysed.",
+   "fr": "Incertitude de la méthode retenue : ± 0 % (amplitude de la fourchette rapportée à la valeur centrale) · Version de méthodologie : 1.0 · 0 requête(s) analysée(s).",
+   "html": "<strong>Incertitude de la méthode retenue :</strong> ± 0 % (amplitude de la fourchette rapportée à la valeur centrale) · Version de méthodologie : 1.0 · 0 requête(s) analysée(s)."
+  },
+  "Les trois méthodes sont appliquées aux mêmes données d'usage réelles. L'écart mesure la sensibilité du résultat au choix méthodologique — c'est l'information la plus utile d'un point de vue d'audit.": {
+   "en": "The three methods are applied to the <strong>same actual usage data</strong>. The gap measures how sensitive the result is to the methodological choice — this is the most useful information from an audit point of view.",
+   "fr": "Les trois méthodes sont appliquées aux mêmes données d'usage réelles. L'écart mesure la sensibilité du résultat au choix méthodologique — c'est l'information la plus utile d'un point de vue d'audit.",
+   "html": "Les trois méthodes sont appliquées aux <strong>mêmes données d'usage réelles</strong>. L'écart mesure la sensibilité du résultat au choix méthodologique — c'est l'information la plus utile d'un point de vue d'audit."
+  },
+  "Même énergie consommée, facteurs d'intensité différents. Point de vigilance : l'hébergement Render est situé à Francfort ; retenir le facteur français serait une erreur méthodologique.": {
+   "en": "Same energy consumed, different intensity factors. <strong>Point of vigilance:</strong> the Render hosting is located in Frankfurt; using the French factor would be a methodological error.",
+   "fr": "Même énergie consommée, facteurs d'intensité différents. Point de vigilance : l'hébergement Render est situé à Francfort ; retenir le facteur français serait une erreur méthodologique.",
+   "html": "Même énergie consommée, facteurs d'intensité différents. <strong>Point de vigilance :</strong> l'hébergement Render est situé à Francfort ; retenir le facteur français serait une erreur méthodologique."
+  },
+  "Obligations article par article": {
+   "en": "Obligations <em>article by article</em>",
+   "fr": "Obligations article par article",
+   "html": "Obligations <em>article par article</em>"
+  },
+  "Offre Entreprise": {
+   "en": "<em>Enterprise</em> plan",
+   "fr": "Offre Entreprise",
+   "html": "Offre <em>Entreprise</em>"
+  },
+  "Un écart important entre les méthodes ne signifie pas qu'une valeur est fausse : il signifie que le périmètre diffère. C'est précisément ce qu'un auditeur vérifie. Documentez la méthode retenue, sa version et sa date, et conservez l'export.": {
+   "en": "A significant gap between the methods does not mean that a value is wrong: it means that the <strong>scope</strong> differs. This is precisely what an auditor checks. Document the method used, its version and its date, and keep the export.",
+   "fr": "Un écart important entre les méthodes ne signifie pas qu'une valeur est fausse : il signifie que le périmètre diffère. C'est précisément ce qu'un auditeur vérifie. Documentez la méthode retenue, sa version et sa date, et conservez l'export.",
+   "html": "Un écart important entre les méthodes ne signifie pas qu'une valeur est fausse : il signifie que le <strong>périmètre</strong> diffère. C'est précisément ce qu'un auditeur vérifie. Documentez la méthode retenue, sa version et sa date, et conservez l'export."
+  }
+ },
+ "texte": {
+  "# Wh": {
+   "en": "# Wh",
+   "fr": "0 Wh"
+  },
+  "# g": {
+   "en": "<strong># g</strong>",
+   "fr": "0 g"
+  },
+  "# g CO#eq": {
+   "en": "# g CO#eq",
+   "fr": "0 g CO2eq"
+  },
+  "# gCO#eq/kWh": {
+   "en": "# gCO#eq/kWh",
+   "fr": "60 gCO2eq/kWh"
+  },
+  "# g–# g": {
+   "en": "# g–# g",
+   "fr": "0 g–0 g"
+  },
+  "# h ouvrées": {
+   "en": "# working hours",
+   "fr": "2 h ouvrées"
+  },
+  "# jour ouvré": {
+   "en": "# working day",
+   "fr": "1 jour ouvré"
+  },
+  "# jours ouvrés": {
+   "en": "# working days",
+   "fr": "3 jours ouvrés"
+  },
+  "# requête(s) journalisée(s) au total, dont # aujourd’hui · # page(s) comptabilisée(s) · clé Anthropic :": {
+   "en": "# request(s) logged in total, of which # today · # page(s) counted · Anthropic key:",
+   "fr": "0 requête(s) journalisée(s) au total, dont 0 aujourd’hui · 25263 page(s) comptabilisée(s) · clé Anthropic :"
+  },
+  "# requête(s) · # g/requête · # g/# jetons": {
+   "en": "# request(s) · # g/request · # g/# tokens",
+   "fr": "0 requête(s) · 0 g/requête · 0 g/1000 jetons"
+  },
+  "# · API d'intégration d'outils internes": {
+   "en": "# · Integration API for internal tools",
+   "fr": "2 · API d'intégration d'outils internes"
+  },
+  "# · Ce qui est compté": {
+   "en": "# · What is counted",
+   "fr": "1 · Ce qui est compté"
+  },
+  "# · Déploiement multi-entités et multi-périmètres": {
+   "en": "# · Multi-entity and multi-scope deployment",
+   "fr": "1 · Déploiement multi-entités et multi-périmètres"
+  },
+  "# · Formation sur site": {
+   "en": "# · On-site training",
+   "fr": "4 · Formation sur site"
+  },
+  "# · Jalons RaaS sur trois cadres": {
+   "en": "# · RaaS milestones across three frameworks",
+   "fr": "6 · Jalons RaaS sur trois cadres"
+  },
+  "# · Les trois méthodes": {
+   "en": "# · The three methods",
+   "fr": "2 · Les trois méthodes"
+  },
+  "# · Lire l'analyse d'écarts": {
+   "en": "# · Reading the gap analysis",
+   "fr": "4 · Lire l'analyse d'écarts"
+  },
+  "# · Précautions à respecter": {
+   "en": "# · Precautions to observe",
+   "fr": "5 · Précautions à respecter"
+  },
+  "# · Rapport IA Act annuel personnalisé": {
+   "en": "# · Personalised annual AI Act report",
+   "fr": "5 · Rapport IA Act annuel personnalisé"
+  },
+  "# · SLA contractuel dédié et interlocuteur CONSEILPREV": {
+   "en": "# · Dedicated contractual SLA and CONSEILPREV contact",
+   "fr": "3 · SLA contractuel dédié et interlocuteur CONSEILPREV"
+  },
+  "# · SLA contractuel et accompagnement": {
+   "en": "# · Contractual SLA and support",
+   "fr": "3 · SLA contractuel et accompagnement"
+  },
+  "# · Sources": {
+   "en": "# · Data sources",
+   "fr": "3 · Sources"
+  },
+  ", non des mesures. Aucun fournisseur ne publie la consommation réelle par requête. Les fourchettes d'incertitude sont affichées et la méthodologie est versionnée. Ne pas en tirer d'allégation de neutralité ni d'émissions évitées.": {
+   "en": ", not measurements. No provider publishes the actual consumption per request. Uncertainty ranges are shown and the methodology is versioned. Do not draw from them any neutrality claim or avoided emissions.",
+   "fr": ", non des mesures. Aucun fournisseur ne publie la consommation réelle par requête. Les fourchettes d'incertitude sont affichées et la méthodologie est versionnée. Ne pas en tirer d'allégation de neutralité ni d'émissions évitées."
+  },
+  "A — Facteurs statiques (socle)": {
+   "en": "A — Static factors (baseline)",
+   "fr": "A — Facteurs statiques (socle)"
+  },
+  "Allemagne — facteur moyen pays (repli)": {
+   "en": "Germany — national average factor (fallback)",
+   "fr": "Allemagne — facteur moyen pays (repli)"
+  },
+  "Allemagne — temps reel (Fraunhofer ISE, Energy-Charts)": {
+   "en": "Germany — real time (Fraunhofer ISE, Energy-Charts)",
+   "fr": "Allemagne — temps reel (Fraunhofer ISE, Energy-Charts)"
+  },
+  "Analyse d'écarts — comparaison des méthodes": {
+   "en": "Gap analysis — comparison of methods",
+   "fr": "Analyse d'écarts — comparaison des méthodes"
+  },
+  "Analyse d'écarts — scénarios d'intensité carbone": {
+   "en": "Gap analysis — carbon intensity scenarios",
+   "fr": "Analyse d'écarts — scénarios d'intensité carbone"
+  },
+  "Annexe III : # domaines. Annexe I : produits soumis à la législation d'harmonisation de l'UE.": {
+   "en": "Annex III: # areas. Annex I: products subject to EU harmonisation legislation.",
+   "fr": "Annexe III : 8 domaines. Annexe I : produits soumis à la législation d'harmonisation de l'UE."
+  },
+  "Annexe III : # domaines. Annexe II : produits soumis à législation harmonisée UE.": {
+   "en": "Annex III: # areas. Annex II: products covered by EU harmonised legislation.",
+   "fr": "Annexe III : 8 domaines. Annexe II : produits soumis à législation harmonisée UE."
+  },
+  "Applicable aux appels Anthropic": {
+   "en": "Applicable to Anthropic calls",
+   "fr": "Applicable aux appels Anthropic"
+  },
+  "Aucun connecteur configuré.": {
+   "en": "No connector configured.",
+   "fr": "Aucun connecteur configuré."
+  },
+  "Aucun usage client sur la période.": {
+   "en": "No client use over the period.",
+   "fr": "Aucun usage client sur la période."
+  },
+  "Aucun usage enregistré sur la période.": {
+   "en": "No use recorded over the period.",
+   "fr": "Aucun usage enregistré sur la période."
+  },
+  "Aucune entité enregistrée.": {
+   "en": "No entity recorded.",
+   "fr": "Aucune entité enregistrée."
+  },
+  "Aucune session planifiée.": {
+   "en": "No session scheduled.",
+   "fr": "Aucune session planifiée."
+  },
+  "Aujourd'hui": {
+   "en": "Today",
+   "fr": "Aujourd'hui"
+  },
+  "Avertissement méthodologique.": {
+   "en": "Methodological warning.",
+   "fr": "Avertissement méthodologique."
+  },
+  "B + Boavizta (fabrication) + hebergement Render (DE)": {
+   "en": "B + Boavizta (manufacturing) + Render hosting (DE)",
+   "fr": "B + Boavizta (fabrication) + hebergement Render (DE)"
+  },
+  "B + impacts incorpores (fabrication, +# %) + hebergement de la requete": {
+   "en": "B + embodied impacts (manufacturing, +# %) + hosting of the request",
+   "fr": "B + impacts incorpores (fabrication, +30 %) + hebergement de la requete"
+  },
+  "B — Parametrique (EcoLogits / Boavizta / ADEME)": {
+   "en": "B — Parametric (EcoLogits / Boavizta / ADEME)",
+   "fr": "B — Parametrique (EcoLogits / Boavizta / ADEME)"
+  },
+  "Bilan GES (GHG Protocol · ADEME)": {
+   "en": "GHG assessment (GHG Protocol · ADEME)",
+   "fr": "Bilan GES (GHG Protocol · ADEME)"
+  },
+  "C — Cycle de vie etendu (retenue)": {
+   "en": "C — Extended life cycle (selected)",
+   "fr": "C — Cycle de vie etendu (retenue)"
+  },
+  "CONSEILPREV (usage propre)": {
+   "en": "CONSEILPREV (own use)",
+   "fr": "CONSEILPREV (usage propre)"
+  },
+  "Capacité de journalisation automatique.": {
+   "en": "Automatic logging capability.",
+   "fr": "Capacité de journalisation automatique."
+  },
+  "Ces valeurs sont des": {
+   "en": "These values are",
+   "fr": "Ces valeurs sont des"
+  },
+  "Classification des systèmes IA à haut risque": {
+   "en": "Classification of high-risk AI systems",
+   "fr": "Classification des systèmes IA à haut risque"
+  },
+  "Cle ANTHROPIC_API_KEY absente : les appels a Claude echouent avant tout comptage.": {
+   "en": "ANTHROPIC_API_KEY missing: calls to Claude fail before any counting.",
+   "fr": "Cle ANTHROPIC_API_KEY absente : les appels a Claude echouent avant tout comptage."
+  },
+  "Cle MISTRAL_API_KEY absente : les appels a Mistral echouent avant tout comptage.": {
+   "en": "MISTRAL_API_KEY missing: calls to Mistral fail before any counting.",
+   "fr": "Cle MISTRAL_API_KEY absente : les appels a Mistral echouent avant tout comptage."
+  },
+  "Connexion de Sentinel à vos outils internes de gouvernance, gestion et exploitation.": {
+   "en": "Connection of Sentinel to your internal governance, management and operations tools.",
+   "fr": "Connexion de Sentinel à vos outils internes de gouvernance, gestion et exploitation."
+  },
+  "Critique": {
+   "en": "Critical",
+   "fr": "Critique"
+  },
+  "Date prévue de la session": {
+   "en": "Planned date of the session",
+   "fr": "Date prévue de la session"
+  },
+  "Deux sessions de formation par an, dispensées sur votre site.": {
+   "en": "Two training sessions a year, delivered on your premises.",
+   "fr": "Deux sessions de formation par an, dispensées sur votre site."
+  },
+  "Diagnostic du compteur.": {
+   "en": "Meter diagnostic.",
+   "fr": "Diagnostic du compteur."
+  },
+  "Documentation technique": {
+   "en": "Technical documentation",
+   "fr": "Documentation technique"
+  },
+  "Documentation, tests, évaluation continue — obligatoire pour les systèmes haut risque.": {
+   "en": "Documentation, testing, continuous evaluation — mandatory for high-risk systems.",
+   "fr": "Documentation, tests, évaluation continue — obligatoire pour les systèmes haut risque."
+  },
+  "Données et gouvernance": {
+   "en": "Data and data governance",
+   "fr": "Données et gouvernance"
+  },
+  "Dossier technique complet avant mise sur le marché.": {
+   "en": "Complete technical file before placing on the market.",
+   "fr": "Dossier technique complet avant mise sur le marché."
+  },
+  "Déclarer ce connecteur": {
+   "en": "Declare this connector",
+   "fr": "Déclarer ce connecteur"
+  },
+  "Déclarez un connecteur vers un outil interne en choisissant sa catégorie (GRC, ERP ou ITSM), en lui donnant un nom, et en indiquant l'URL HTTPS de son API et, si nécessaire, un jeton d'authentification. « Tester » vérifie l'accès réel à l'API. « Synchroniser » transmet à cette API un contenu adapté à la catégorie : un instantané de conformité pour un GRC, un ticket pour un ITSM, un contexte de gouvernance pour un ERP. Seules les URL HTTPS sont acceptées, et le jeton n'est jamais affiché après enregistrement.": {
+   "en": "Declare a connector to an internal tool by choosing its category (GRC, ERP or ITSM), giving it a name, and entering the HTTPS URL of its API and, if necessary, an authentication token. “Test” checks actual access to the API. “Synchronise” sends this API content suited to the category: a compliance snapshot for a GRC, a ticket for an ITSM, a governance context for an ERP. Only HTTPS URLs are accepted, and the token is never shown again after saving.",
+   "fr": "Déclarez un connecteur vers un outil interne en choisissant sa catégorie (GRC, ERP ou ITSM), en lui donnant un nom, et en indiquant l'URL HTTPS de son API et, si nécessaire, un jeton d'authentification. « Tester » vérifie l'accès réel à l'API. « Synchroniser » transmet à cette API un contenu adapté à la catégorie : un instantané de conformité pour un GRC, un ticket pour un ITSM, un contexte de gouvernance pour un ERP. Seules les URL HTTPS sont acceptées, et le jeton n'est jamais affiché après enregistrement."
+  },
+  "EU AI Act — Article par article": {
+   "en": "EU AI Act — Article by article",
+   "fr": "EU AI Act — Article par article"
+  },
+  "Enregistrement obligatoire avant déploiement pour les systèmes haut risque.": {
+   "en": "Registration mandatory before deployment for high-risk systems.",
+   "fr": "Enregistrement obligatoire avant déploiement pour les systèmes haut risque."
+  },
+  "Enregistrer cette entité (côté serveur)": {
+   "en": "Save this entity (server side)",
+   "fr": "Enregistrer cette entité (côté serveur)"
+  },
+  "Enregistrez chaque entité couverte par votre déploiement en précisant son type : filiale, groupe, périmètre ou site. Ces entités structurent le pilotage à l'échelle de votre organisation et sont conservées côté serveur, rattachées à votre compte. Saisissez un nom, choisissez le type, puis « Ajouter » ; « Retirer » supprime une entité.": {
+   "en": "Record each entity covered by your deployment, specifying its type: subsidiary, group, scope or site. These entities structure steering across your organisation and are kept server side, linked to your account. Enter a name, choose the type, then “Add”; “Remove” deletes an entity.",
+   "fr": "Enregistrez chaque entité couverte par votre déploiement en précisant son type : filiale, groupe, périmètre ou site. Ces entités structurent le pilotage à l'échelle de votre organisation et sont conservées côté serveur, rattachées à votre compte. Saisissez un nom, choisissez le type, puis « Ajouter » ; « Retirer » supprime une entité."
+  },
+  "Erreur frequente : ne correspond pas a votre hebergement": {
+   "en": "Common error: does not match your hosting",
+   "fr": "Erreur frequente : ne correspond pas a votre hebergement"
+  },
+  "Etats-Unis — centre de donnees du fournisseur": {
+   "en": "United States — provider’s data centre",
+   "fr": "Etats-Unis — centre de donnees du fournisseur"
+  },
+  "Exporter CSV": {
+   "en": "Export CSV",
+   "fr": "Exporter CSV"
+  },
+  "Facteur par defaut (ADEME, repli)": {
+   "en": "Default factor (ADEME, fallback)",
+   "fr": "Facteur par defaut (ADEME, repli)"
+  },
+  "Facteur retenu pour l hebergement (Render Francfort)": {
+   "en": "Factor used for hosting (Render Frankfurt)",
+   "fr": "Facteur retenu pour l hebergement (Render Francfort)"
+  },
+  "Facteurs internes documentes": {
+   "en": "Documented internal factors",
+   "fr": "Facteurs internes documentes"
+  },
+  "Facturation par résultats indexée sur l'atteinte de jalons vérifiés, sur trois référentiels : IA Act, RGPD et ISO/IEC #.": {
+   "en": "Outcome-based billing indexed on reaching verified milestones, across three frameworks: AI Act, GDPR and ISO/IEC #.",
+   "fr": "Facturation par résultats indexée sur l'atteinte de jalons vérifiés, sur trois référentiels : IA Act, RGPD et ISO/IEC 42001."
+  },
+  "Filiales, entités et périmètres d'un groupe, pilotés depuis un espace unique. Enregistrez ici les entités couvertes par votre déploiement.": {
+   "en": "Subsidiaries, entities and scopes of a group, steered from a single workspace. Record here the entities covered by your deployment.",
+   "fr": "Filiales, entités et périmètres d'un groupe, pilotés depuis un espace unique. Enregistrez ici les entités couvertes par votre déploiement."
+  },
+  "Fourchette": {
+   "en": "Range",
+   "fr": "Fourchette"
+  },
+  "Fournisseur / module": {
+   "en": "Provider / module",
+   "fr": "Fournisseur / module"
+  },
+  "France — facteur ADEME (ACV)": {
+   "en": "France — ADEME factor (LCA)",
+   "fr": "France — facteur ADEME (ACV)"
+  },
+  "France — temps reel RTE (majore ACV)": {
+   "en": "France — real time RTE (LCA uplift)",
+   "fr": "France — temps reel RTE (majore ACV)"
+  },
+  "Guide d'utilisation": {
+   "en": "User guide",
+   "fr": "Guide d'utilisation"
+  },
+  "Générer le rapport annuel": {
+   "en": "Generate the annual report",
+   "fr": "Générer le rapport annuel"
+  },
+  "Incertitude de la méthode retenue :": {
+   "en": "Uncertainty of the selected method:",
+   "fr": "Incertitude de la méthode retenue :"
+  },
+  "Intensité carbone — France (temps réel)": {
+   "en": "Carbon intensity — France (real time)",
+   "fr": "Intensité carbone — France (temps réel)"
+  },
+  "Interdit": {
+   "en": "Prohibited",
+   "fr": "Interdit"
+  },
+  "Interlocuteur CONSEILPREV dédié, référent de votre déploiement — contact : christophe.cerf@outlook.com.": {
+   "en": "Dedicated CONSEILPREV contact, the lead for your deployment — contact: christophe.cerf@outlook.com.",
+   "fr": "Interlocuteur CONSEILPREV dédié, référent de votre déploiement — contact : christophe.cerf@outlook.com."
+  },
+  "Jeton (optionnel)": {
+   "en": "Token (optional)",
+   "fr": "Jeton (optionnel)"
+  },
+  "Jeton Bearer (optionnel)": {
+   "en": "Bearer token (optional)",
+   "fr": "Jeton Bearer (optionnel)"
+  },
+  "Jeton Bearer, transmis mais jamais réaffiché.": {
+   "en": "Bearer token, sent but never shown again.",
+   "fr": "Jeton Bearer, transmis mais jamais réaffiché."
+  },
+  "Jetons": {
+   "en": "Tokens",
+   "fr": "Jetons"
+  },
+  "L'offre Entreprise inclut l'intégralité de l'offre Pro et y ajoute le déploiement à l'échelle d'un groupe, l'intégration à votre système d'information et un accompagnement contractuel dédié.": {
+   "en": "The Enterprise plan includes everything in the Pro plan and adds group-wide deployment, integration with your information system and dedicated contractual support.",
+   "fr": "L'offre Entreprise inclut l'intégralité de l'offre Pro et y ajoute le déploiement à l'échelle d'un groupe, l'intégration à votre système d'information et un accompagnement contractuel dédié."
+  },
+  "La facturation par résultats indexe une partie de votre engagement sur l'atteinte de jalons vérifiés, sur trois référentiels : IA Act, RGPD et ISO/IEC #. Le bouton ouvre l'indice de conformité consolidé des trois cadres, où ces jalons sont suivis, sans duplication avec le module existant.": {
+   "en": "Outcome-based billing indexes part of your commitment on reaching verified milestones, across three frameworks: AI Act, GDPR and ISO/IEC #. The button opens the consolidated compliance index of the three frameworks, where these milestones are tracked, without duplicating the existing module.",
+   "fr": "La facturation par résultats indexe une partie de votre engagement sur l'atteinte de jalons vérifiés, sur trois référentiels : IA Act, RGPD et ISO/IEC 42001. Le bouton ouvre l'indice de conformité consolidé des trois cadres, où ces jalons sont suivis, sans duplication avec le module existant."
+  },
+  "Le tableau présente les engagements de service par niveau de criticité : délai de prise en charge et délai de résolution visé. Ces valeurs sont indicatives et sont précisées dans votre contrat. Un interlocuteur CONSEILPREV dédié est votre référent tout au long du déploiement.": {
+   "en": "The table sets out the service commitments by criticality level: handling time and target resolution time. These values are indicative and are specified in your contract. A dedicated CONSEILPREV contact is your lead throughout the deployment.",
+   "fr": "Le tableau présente les engagements de service par niveau de criticité : délai de prise en charge et délai de résolution visé. Ces valeurs sont indicatives et sont précisées dans votre contrat. Un interlocuteur CONSEILPREV dédié est votre référent tout au long du déploiement."
+  },
+  "Le test de connexion vérifie l'accès réel à l'API configurée (HTTPS).": {
+   "en": "The connection test checks actual access to the configured API (HTTPS).",
+   "fr": "Le test de connexion vérifie l'accès réel à l'API configurée (HTTPS)."
+  },
+  "Majeur": {
+   "en": "Major",
+   "fr": "Majeur"
+  },
+  "Manipulation comportementale, systemes de notation sociale, identification biometrique en temps reel.": {
+   "en": "Behavioural manipulation, social scoring systems, real-time biometric identification.",
+   "fr": "Manipulation comportementale, systemes de notation sociale, identification biometrique en temps reel."
+  },
+  "Mesures permettant à une personne physique de surveiller et intervenir.": {
+   "en": "Measures enabling a natural person to oversee and intervene.",
+   "fr": "Mesures permettant à une personne physique de surveiller et intervenir."
+  },
+  "Mineur": {
+   "en": "Minor",
+   "fr": "Mineur"
+  },
+  "Méthode": {
+   "en": "Method",
+   "fr": "Méthode"
+  },
+  "Méthodologie et guide d'exploitation": {
+   "en": "Methodology and operating guide",
+   "fr": "Méthodologie et guide d'exploitation"
+  },
+  "N'affichez jamais d'« émissions évitées » ni de « neutralité » sans base solide : la réglementation européenne sur les allégations environnementales et le contrôle de la DGCCRF s'y intéressent. Distinguez toujours votre empreinte propre de celle imputable aux clients. Revoyez les paramètres au moins une fois par an.": {
+   "en": "Never display “avoided emissions” or “neutrality” without a solid basis: the European rules on environmental claims and the DGCCRF’s inspections take an interest in them. Always distinguish your own footprint from the one attributable to clients. Review the parameters at least once a year.",
+   "fr": "N'affichez jamais d'« émissions évitées » ni de « neutralité » sans base solide : la réglementation européenne sur les allégations environnementales et le contrôle de la DGCCRF s'y intéressent. Distinguez toujours votre empreinte propre de celle imputable aux clients. Revoyez les paramètres au moins une fois par an."
+  },
+  "Niveaux de service par criticité, engagés contractuellement (valeurs indicatives, précisées au contrat).": {
+   "en": "Service levels by criticality, contractually committed (indicative values, specified in the contract).",
+   "fr": "Niveaux de service par criticité, engagés contractuellement (valeurs indicatives, précisées au contrat)."
+  },
+  "Nom (ex. ServiceNow)": {
+   "en": "Name (e.g. ServiceNow)",
+   "fr": "Nom (ex. ServiceNow)"
+  },
+  "Nom de la filiale, du site ou du périmètre": {
+   "en": "Name of the subsidiary, site or scope",
+   "fr": "Nom de la filiale, du site ou du périmètre"
+  },
+  "Notice claire pour les deployeurs. Capacites, limites, conditions.": {
+   "en": "Clear instructions for deployers. Capabilities, limitations, conditions.",
+   "fr": "Notice claire pour les deployeurs. Capacites, limites, conditions."
+  },
+  "Obligatoire": {
+   "en": "Mandatory",
+   "fr": "Obligatoire"
+  },
+  "Observatoire, simulateur IA Act, registre, matrice de risques, audits, module RGPD, documentation, équipe et formation : toutes les capacités de l'offre Pro sont comprises, sans redondance. L'offre Entreprise les étend aux six dimensions ci-dessous.": {
+   "en": "Observatory, AI Act simulator, register, risk matrix, audits, GDPR module, documentation, team and training: all the capabilities of the Pro plan are included, without redundancy. The Enterprise plan extends them to the six dimensions below.",
+   "fr": "Observatoire, simulateur IA Act, registre, matrice de risques, audits, module RGPD, documentation, équipe et formation : toutes les capacités de l'offre Pro sont comprises, sans redondance. L'offre Entreprise les étend aux six dimensions ci-dessous."
+  },
+  "Offre · Entreprise": {
+   "en": "Plan · Enterprise",
+   "fr": "Offre · Entreprise"
+  },
+  "Ouvrir l'indice de conformité des trois cadres": {
+   "en": "Open the compliance index of the three frameworks",
+   "fr": "Ouvrir l'indice de conformité des trois cadres"
+  },
+  "Par client": {
+   "en": "By client",
+   "fr": "Par client"
+  },
+  "Par fournisseur et par module": {
+   "en": "By provider and by module",
+   "fr": "Par fournisseur et par module"
+  },
+  "Par requête": {
+   "en": "Per request",
+   "fr": "Par requête"
+  },
+  "Planifier": {
+   "en": "Schedule",
+   "fr": "Planifier"
+  },
+  "Planifier cette session (côté serveur)": {
+   "en": "Schedule this session (server side)",
+   "fr": "Planifier cette session (côté serveur)"
+  },
+  "Planifiez les sessions de formation sur site en indiquant une date et un thème, puis « Planifier ». Les sessions sont conservées côté serveur et peuvent être retirées. L'offre comprend deux sessions par an.": {
+   "en": "Schedule the on-site training sessions by entering a date and a topic, then “Schedule”. Sessions are kept server side and can be removed. The plan includes two sessions a year.",
+   "fr": "Planifiez les sessions de formation sur site en indiquant une date et un thème, puis « Planifier ». Les sessions sont conservées côté serveur et peuvent être retirées. L'offre comprend deux sessions par an."
+  },
+  "Pratiques IA interdites": {
+   "en": "Prohibited AI practices",
+   "fr": "Pratiques IA interdites"
+  },
+  "Prise en charge": {
+   "en": "Handling",
+   "fr": "Prise en charge"
+  },
+  "Produire un rapport imprimable / PDF": {
+   "en": "Produce a printable report / PDF",
+   "fr": "Produire un rapport imprimable / PDF"
+  },
+  "Périmètre": {
+   "en": "Scope",
+   "fr": "Périmètre"
+  },
+  "Qualite des donnees utilisees en entrainement, validation, test.": {
+   "en": "Quality of the data used in training, validation and testing.",
+   "fr": "Qualite des donnees utilisees en entrainement, validation, test."
+  },
+  "RTE éCO#mix": {
+   "en": "RTE éCO#mix",
+   "fr": "RTE éCO2mix"
+  },
+  "Rappel : la simple navigation ne declenche aucun appel de modele. Seuls le copilote, l explorateur de connaissance et les analyses generees par IA sont comptabilises.": {
+   "en": "Reminder: simply browsing triggers no model call. Only the copilot, the knowledge explorer and AI-generated analyses are counted.",
+   "fr": "Rappel : la simple navigation ne declenche aucun appel de modele. Seuls le copilote, l explorateur de connaissance et les analyses generees par IA sont comptabilises."
+  },
+  "Requêtes": {
+   "en": "Requests",
+   "fr": "Requêtes"
+  },
+  "Référence structurée des # articles de l'EU AI Act.": {
+   "en": "Structured reference of the # articles of the EU AI Act.",
+   "fr": "Référence structurée des 113 articles de l'EU AI Act."
+  },
+  "Répartition par module": {
+   "en": "Breakdown by module",
+   "fr": "Répartition par module"
+  },
+  "Résolution visée": {
+   "en": "Target resolution",
+   "fr": "Résolution visée"
+  },
+  "Scénario d'intensité": {
+   "en": "Intensity scenario",
+   "fr": "Scénario d'intensité"
+  },
+  "Site public (hébergement, réseau, terminal)": {
+   "en": "Public site (hosting, network, device)",
+   "fr": "Site public (hébergement, réseau, terminal)"
+  },
+  "Socle inclus : Sentinel Pro dans son intégralité": {
+   "en": "Baseline included: Sentinel Pro in its entirety",
+   "fr": "Socle inclus : Sentinel Pro dans son intégralité"
+  },
+  "Suivi consolidé IA Act, RGPD, ISO/IEC #": {
+   "en": "Consolidated tracking of the AI Act, GDPR, ISO/IEC #",
+   "fr": "Suivi consolidé IA Act, RGPD, ISO/IEC 42001"
+  },
+  "Supervision humaine": {
+   "en": "Human oversight",
+   "fr": "Supervision humaine"
+  },
+  "Sur # jours": {
+   "en": "Over # days",
+   "fr": "Sur 30 jours"
+  },
+  "Système de gestion des risques": {
+   "en": "Risk management system",
+   "fr": "Système de gestion des risques"
+  },
+  "Tenue de registres (journalisation)": {
+   "en": "Record-keeping (logging)",
+   "fr": "Tenue de registres (journalisation)"
+  },
+  "Thème de la session": {
+   "en": "Session topic",
+   "fr": "Thème de la session"
+  },
+  "Total plateforme": {
+   "en": "Platform total",
+   "fr": "Total plateforme"
+  },
+  "Transparence et information": {
+   "en": "Transparency and information",
+   "fr": "Transparence et information"
+  },
+  "URL HTTPS de l'API de l'outil à connecter": {
+   "en": "HTTPS URL of the API of the tool to connect",
+   "fr": "URL HTTPS de l'API de l'outil à connecter"
+  },
+  "URL de l'API (https://...)": {
+   "en": "API URL (https://...)",
+   "fr": "URL de l'API (https://...)"
+  },
+  "Une synthèse annuelle de votre conformité à l'IA Act, adaptée à votre organisation et à vos périmètres.": {
+   "en": "An annual summary of your AI Act compliance, adapted to your organisation and your scopes.",
+   "fr": "Une synthèse annuelle de votre conformité à l'IA Act, adaptée à votre organisation et à vos périmètres."
+  },
+  "Usage + rendement du centre de donnees (PUE) ; intensite temps reel ; fourchette": {
+   "en": "Use + data centre efficiency (PUE); real-time intensity; range",
+   "fr": "Usage + rendement du centre de donnees (PUE) ; intensite temps reel ; fourchette"
+  },
+  "Usage des modeles seulement ; intensite fixe ; sans PUE ni fabrication": {
+   "en": "Model use only; fixed intensity; no PUE or manufacturing",
+   "fr": "Usage des modeles seulement ; intensite fixe ; sans PUE ni fabrication"
+  },
+  "Utilise si le mix temps reel est indisponible": {
+   "en": "Used if the real-time mix is unavailable",
+   "fr": "Utilise si le mix temps reel est indisponible"
+  },
+  "Vue globale — CONSEILPREV": {
+   "en": "Global view — CONSEILPREV",
+   "fr": "Vue globale — CONSEILPREV"
+  },
+  "absente": {
+   "en": "missing",
+   "fr": "absente"
+  },
+  "estimations par modélisation": {
+   "en": "model-based estimates",
+   "fr": "estimations par modélisation"
+  },
+  "gCO#eq/kWh": {
+   "en": "gCO#eq/kWh",
+   "fr": "gCO2eq/kWh"
+  },
+  "i": {
+   "en": "i",
+   "fr": "i"
+  },
+  "« Générer le rapport annuel » produit un document imprimable, exportable en PDF, consolidant l'indice global de conformité et le détail des trois référentiels (IA Act, RGPD, ISO/IEC #). Les indices reflètent l'état de vos évaluations à la date d'édition.": {
+   "en": "“Generate the annual report” produces a printable document, exportable as PDF, consolidating the global compliance index and the detail of the three frameworks (AI Act, GDPR, ISO/IEC #). The indices reflect the state of your assessments on the date of issue.",
+   "fr": "« Générer le rapport annuel » produit un document imprimable, exportable en PDF, consolidant l'indice global de conformité et le détail des trois référentiels (IA Act, RGPD, ISO/IEC 42001). Les indices reflètent l'état de vos évaluations à la date d'édition."
+  },
+  "± # % (amplitude de la fourchette rapportée à la valeur centrale) · Version de méthodologie : # · # requête(s) analysée(s).": {
+   "en": "± # % (width of the range relative to the central value) · Methodology version: # · # request(s) analysed.",
+   "fr": "± 0 % (amplitude de la fourchette rapportée à la valeur centrale) · Version de méthodologie : 1.0 · 0 requête(s) analysée(s)."
+  },
+  "· clé Mistral :": {
+   "en": "· Mistral key:",
+   "fr": "· clé Mistral :"
+  },
+  "Écart / méthode C": {
+   "en": "Gap / method C",
+   "fr": "Écart / méthode C"
+  },
+  "Écart vs France": {
+   "en": "Gap vs France",
+   "fr": "Écart vs France"
+  },
+  "Émissions": {
+   "en": "Emissions",
+   "fr": "Émissions"
+  },
+  "Émissions (C)": {
+   "en": "Emissions (C)",
+   "fr": "Émissions (C)"
+  },
+  "Émissions (énergie méthode B)": {
+   "en": "Emissions (energy, method B)",
+   "fr": "Émissions (énergie méthode B)"
+  },
+  "Énergie": {
+   "en": "Energy",
+   "fr": "Énergie"
+  },
+  "État de conformité, écarts, plan d'action et recommandations, remis chaque année.": {
+   "en": "Compliance status, gaps, action plan and recommendations, delivered every year.",
+   "fr": "État de conformité, écarts, plan d'action et recommandations, remis chaque année."
+  },
+  "● ACTIF": {
+   "en": "● ACTIVE",
+   "fr": "● ACTIF"
+  }
+ }
+}

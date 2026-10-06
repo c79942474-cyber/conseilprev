@@ -1,0 +1,459 @@
+{
+ "_lot": "70-routes-7",
+ "_mots": 2422,
+ "_pages": [
+  "_routes"
+ ],
+ "_rubrique": "_routes",
+ "bloc": {},
+ "texte": {
+  "La personne désignée a un accès continu et en temps réel à l'état du système, à ses sorties, à ses alertes et à la disponibilité des fonctions d'intervention.": {
+   "en": "The designated person has continuous, real-time access to the state of the system, to its outputs, to its alerts and to the availability of the intervention functions.",
+   "fr": "La personne désignée a un accès continu et en temps réel à l'état du système, à ses sorties, à ses alertes et à la disponibilité des fonctions d'intervention."
+  },
+  "La personne désignée a-t-elle un accès continu et en temps réel au fonctionnement courant du système et à ses notifications — et sait-elle à tout instant si elle peut encore écraser une sortie, couper le système ou le remettre à zéro ?": {
+   "en": "Does the designated person have continuous, real-time access to the system's current operation and to its alerts — and do they know at any moment whether they can still override an output, shut the system down or reset it?",
+   "fr": "La personne désignée a-t-elle un accès continu et en temps réel au fonctionnement courant du système et à ses notifications — et sait-elle à tout instant si elle peut encore écraser une sortie, couper le système ou le remettre à zéro ?"
+  },
+  "La personne désignée annule une action DÉJÀ EXÉCUTÉE et ramène le processus à un état antérieur ou sécurisé.": {
+   "en": "The designated person undoes an action ALREADY EXECUTED and brings the process back to an earlier or safe state.",
+   "fr": "La personne désignée annule une action DÉJÀ EXÉCUTÉE et ramène le processus à un état antérieur ou sécurisé."
+  },
+  "La personne désignée bloque la sortie du système et lui substitue une alternative qu'elle fournit ; le chemin automatique est interrompu.": {
+   "en": "The designated person blocks the system's output and substitutes an alternative of their own; the automatic path is interrupted.",
+   "fr": "La personne désignée bloque la sortie du système et lui substitue une alternative qu'elle fournit ; le chemin automatique est interrompu."
+  },
+  "La personne désignée dispose-t-elle d'une commande de mise en sécurité — bouton matériel ou commande logicielle — atteignable INDÉPENDAMMENT du système, et la bascule est-elle validée sur le temps, la stabilité, la complétude de l'atténuation et la récupération ?": {
+   "en": "Does the designated person have a safe-state control — a hardware button or a software command — reachable INDEPENDENTLY of the system, and is the transition validated on time, stability, completeness of mitigation and recovery?",
+   "fr": "La personne désignée dispose-t-elle d'une commande de mise en sécurité — bouton matériel ou commande logicielle — atteignable INDÉPENDAMMENT du système, et la bascule est-elle validée sur le temps, la stabilité, la complétude de l'atténuation et la récupération ?"
+  },
+  "La personne désignée déclenche un état sécurisé prédéfini — ou un arrêt, lorsque l'arrêt est lui-même un état sécurisé — par un déclencheur accessible indépendamment de l'état du système.": {
+   "en": "The designated person triggers a predefined safe state — or a shutdown, where shutdown is itself a safe state — through a trigger reachable independently of the system's state.",
+   "fr": "La personne désignée déclenche un état sécurisé prédéfini — ou un arrêt, lorsque l'arrêt est lui-même un état sécurisé — par un déclencheur accessible indépendamment de l'état du système."
+  },
+  "La personne désignée peut-elle annuler une action DÉJÀ exécutée et ramener le processus à un état antérieur ou sécurisé, les processus dépendants reçoivent-ils l'ordre de revenir eux aussi, et la notice dit-elle ce qui est réversible et ce qui ne l'est pas ?": {
+   "en": "Can the designated person undo an action ALREADY executed and bring the process back to an earlier or safe state, do the dependent processes receive the order to revert as well, and do the instructions say what is reversible and what is not?",
+   "fr": "La personne désignée peut-elle annuler une action DÉJÀ exécutée et ramener le processus à un état antérieur ou sécurisé, les processus dépendants reçoivent-ils l'ordre de revenir eux aussi, et la notice dit-elle ce qui est réversible et ce qui ne l'est pas ?"
+  },
+  "La personne désignée rejette explicitement une sortie AVANT son exécution ; le système ne l'exécute pas et ne la rejoue pas.": {
+   "en": "The designated person explicitly rejects an output BEFORE it is executed; the system neither executes it nor replays it.",
+   "fr": "La personne désignée rejette explicitement une sortie AVANT son exécution ; le système ne l'exécute pas et ne la rejoue pas."
+  },
+  "La politique qualité, les rôles, et qui répond de quoi.": {
+   "en": "The quality policy, the roles, and who answers for what.",
+   "fr": "La politique qualité, les rôles, et qui répond de quoi."
+  },
+  "La politique qui tranche un désaccord entre réviseurs relève du propriétaire du système : elle doit être définie et documentée, pas improvisée.": {
+   "en": "The policy that settles a disagreement between reviewers belongs to the system owner: it must be defined and documented, not improvised.",
+   "fr": "La politique qui tranche un désaccord entre réviseurs relève du propriétaire du système : elle doit être définie et documentée, pas improvisée."
+  },
+  "La preuve objective que l'exigence est satisfaite": {
+   "en": "Objective evidence that the requirement is satisfied",
+   "fr": "La preuve objective que l'exigence est satisfaite"
+  },
+  "La priorisation sur la gravité et la probabilité, quand il n'est pas possible de tout traiter en même temps. Les quatre facteurs se cotent sur l'écran « processus », et chacun demande sa justification écrite.": {
+   "en": "Prioritisation on severity and likelihood, when it is not possible to address everything at once. The four factors are rated on the “process” screen, and each calls for its written justification.",
+   "fr": "La priorisation sur la gravité et la probabilité, quand il n'est pas possible de tout traiter en même temps. Les quatre facteurs se cotent sur l'écran « processus », et chacun demande sa justification écrite."
+  },
+  "La proportionnalité tient compte du degré d'exposition, de la taille de l'entité, et de la probabilité et de la gravité des incidents.": {
+   "en": "Proportionality takes account of the degree of exposure, the entity's size, and the likelihood and severity of incidents.",
+   "fr": "La proportionnalité tient compte du degré d'exposition, de la taille de l'entité, et de la probabilité et de la gravité des incidents."
+  },
+  "La proposition n'est pas motivée.": {
+   "en": "The proposal gives no reasons.",
+   "fr": "La proposition n'est pas motivée."
+  },
+  "La protection des données se conçoit avant la mise en production, pas après.": {
+   "en": "Data protection is designed before go-live, not after.",
+   "fr": "La protection des données se conçoit avant la mise en production, pas après."
+  },
+  "La présence de données biométriques ou sensibles déplace la qualification, et le RGPD s'y ajoute.": {
+   "en": "The presence of biometric or sensitive data shifts the qualification, and the GDPR is added on top.",
+   "fr": "La présence de données biométriques ou sensibles déplace la qualification, et le RGPD s'y ajoute."
+  },
+  "La présentation des sorties et des indicateurs de confiance relève de la prEN #-# : ce paragraphe ne traite que les fonctions de supervision.": {
+   "en": "Presenting the outputs and the confidence indicators comes under prEN #-#: this clause deals only with the oversight functions.",
+   "fr": "La présentation des sorties et des indicateurs de confiance relève de la prEN 18229-2 : ce paragraphe ne traite que les fonctions de supervision."
+  },
+  "La prévention est technique chez le fournisseur ; l'affectation est organisationnelle chez vous. Les deux sont nécessaires.": {
+   "en": "The prevention is technical, at the provider's end; the assignment is organisational, at yours. Both are needed.",
+   "fr": "La prévention est technique chez le fournisseur ; l'affectation est organisationnelle chez vous. Les deux sont nécessaires."
+  },
+  "La périodicité et les scénarios que le règlement impose, que la norme laisse à l'organisme.": {
+   "en": "The frequency and the scenarios that the regulation imposes, which the standard leaves to the organisation.",
+   "fr": "La périodicité et les scénarios que le règlement impose, que la norme laisse à l'organisme."
+  },
+  "La qualification est faite, rien n'est renseigné. Le module ne rend aucun chiffre par défaut : un questionnaire vide n'est pas une conformité à zéro, c'est une conformité qu'on n'a pas regardée.": {
+   "en": "The qualification is done, nothing is filled in. The module returns no figure by default: an empty questionnaire is not compliance at zero, it is compliance nobody has looked at.",
+   "fr": "La qualification est faite, rien n'est renseigné. Le module ne rend aucun chiffre par défaut : un questionnaire vide n'est pas une conformité à zéro, c'est une conformité qu'on n'a pas regardée."
+  },
+  "La qualification, les cinq composantes de la stratégie du §#, et l'approche retenue pour chacune des sept exigences essentielles.": {
+   "en": "The qualification, the five components of the §# strategy, and the approach chosen for each of the seven essential requirements.",
+   "fr": "La qualification, les cinq composantes de la stratégie du §4.4, et l'approche retenue pour chacune des sept exigences essentielles."
+  },
+  "La qualité rédactionnelle fait présumer la justesse : plus le texte est bien écrit, moins on le relit.": {
+   "en": "Good writing makes correctness presumed: the better the text reads, the less it gets re-read.",
+   "fr": "La qualité rédactionnelle fait présumer la justesse : plus le texte est bien écrit, moins on le relit."
+  },
+  "La relation d'un organisme à une incidence n'est pas statique. Elle change avec la situation, et avec ce que la diligence fait baisser. Le document le dit dans l'autre sens aussi : un organisme qui reste lié à une incidence et ne prend aucune mesure pour l'atténuer voit son lien direct devenir une CONTRIBUTION avec le temps.": {
+   "en": "An organisation's relationship to an impact is not static. It changes with the situation, and with what due diligence brings down. The document says it the other way round too: an organisation that stays linked to an impact and takes no measure to mitigate it sees its direct linkage become a CONTRIBUTION over time.",
+   "fr": "La relation d'un organisme à une incidence n'est pas statique. Elle change avec la situation, et avec ce que la diligence fait baisser. Le document le dit dans l'autre sens aussi : un organisme qui reste lié à une incidence et ne prend aucune mesure pour l'atténuer voit son lien direct devenir une CONTRIBUTION avec le temps."
+  },
+  "La responsabilité NOMMÉE et personnelle de l'organe de direction sur le cadre de gestion du risque lié aux TIC. La mesure A.# demande un engagement ; le règlement désigne un responsable.": {
+   "en": "The NAMED, personal responsibility of the management body for the ICT risk management framework. Control A.# asks for a commitment; the Regulation designates someone accountable.",
+   "fr": "La responsabilité NOMMÉE et personnelle de l'organe de direction sur le cadre de gestion du risque lié aux TIC. La mesure A.5.4 demande un engagement ; le règlement désigne un responsable."
+  },
+  "La revue de direction : elle ne produit rien par elle-même, elle décide de ce que le reste produit.": {
+   "en": "The management review: it produces nothing by itself, it decides on what the rest produces.",
+   "fr": "La revue de direction : elle ne produit rien par elle-même, elle décide de ce que le reste produit."
+  },
+  "La revue de direction, l'amélioration, et la planification des changements du système de management.": {
+   "en": "The management review, improvement, and the planning of changes to the management system.",
+   "fr": "La revue de direction, l'amélioration, et la planification des changements du système de management."
+  },
+  "La revue produit-elle des décisions tracées, et pas seulement un compte rendu ?": {
+   "en": "Does the review produce decisions on the record, and not just minutes?",
+   "fr": "La revue produit-elle des décisions tracées, et pas seulement un compte rendu ?"
+  },
+  "La revue reçoit-elle ce qu'il lui faut pour décider — surveillance, incidents, non-conformités, changements, retours des déployeurs ?": {
+   "en": "Does the review receive what it needs in order to decide — monitoring, incidents, nonconformities, changes, feedback from deployers?",
+   "fr": "La revue reçoit-elle ce qu'il lui faut pour décider — surveillance, incidents, non-conformités, changements, retours des déployeurs ?"
+  },
+  "La réponse du moteur n'est pas un objet JSON exploitable.": {
+   "en": "The engine's reply is not a usable JSON object.",
+   "fr": "La réponse du moteur n'est pas un objet JSON exploitable."
+  },
+  "La révision # (#) parle d'ICS et surcharge #-# Rev. #. La révision # (#) parle d'OT et vise la révision #.": {
+   "en": "Revision # (#) speaks of ICS and overlays #-# Rev. #. Revision # (#) speaks of OT and targets revision #.",
+   "fr": "La révision 2 (2015) parle d'ICS et surcharge 800-53 Rev. 4. La révision 3 (2023) parle d'OT et vise la révision 5."
+  },
+  "La révision # ajoute les familles PT et SR et renomme CA. Un système déjà aligné sur la révision # lit ce taux contre un millésime antérieur au sien.": {
+   "en": "Revision # adds the PT and SR families and renames CA. A system already aligned on revision # reads this rate against an edition older than its own.",
+   "fr": "La révision 5 ajoute les familles PT et SR et renomme CA. Un système déjà aligné sur la révision 5 lit ce taux contre un millésime antérieur au sien."
+  },
+  "La seconde moitié s'oublie : ce qui se passe si la mesure N'EST PAS mise en œuvre doit être écrit, sinon le système est utilisé hors de sa destination sans que personne le sache.": {
+   "en": "The second half gets forgotten: what happens if the measure is NOT implemented has to be written down, otherwise the system is used outside its intended purpose with nobody knowing.",
+   "fr": "La seconde moitié s'oublie : ce qui se passe si la mesure N'EST PAS mise en œuvre doit être écrit, sinon le système est utilisé hors de sa destination sans que personne le sache."
+  },
+  "La sensibilisation au biais d'automatisation est explicitement citée parmi les compétences : sur un flux de milliers d'identifications, c'est le risque premier.": {
+   "en": "Awareness of automation bias is expressly listed among the competences: on a flow of thousands of identifications, it is the first risk.",
+   "fr": "La sensibilisation au biais d'automatisation est explicitement citée parmi les compétences : sur un flux de milliers d'identifications, c'est le risque premier."
+  },
+  "La seule fiche disponible à ce jour — architectures sécurisées, objectifs # et # — et la confirmation que la collection n'est ni prescriptive ni exhaustive.": {
+   "en": "The only sheet available to date — secure architectures, objectives # and # — and the confirmation that the collection is neither prescriptive nor exhaustive.",
+   "fr": "La seule fiche disponible à ce jour — architectures sécurisées, objectifs 7 et 8 — et la confirmation que la collection n'est ni prescriptive ni exhaustive."
+  },
+  "La seule qui soit un préalable : un système qui ne marche pas n'a pas besoin d'être équitable.": {
+   "en": "The only one that is a precondition: a system that does not work has no need to be fair.",
+   "fr": "La seule qui soit un préalable : un système qui ne marche pas n'a pas besoin d'être équitable."
+  },
+  "La sortie doit rester isolée pendant la revue : si elle est consultable par les systèmes en aval « pour information », elle n'est pas isolée.": {
+   "en": "The output must stay isolated during the review: if downstream systems can read it « for information », it is not isolated.",
+   "fr": "La sortie doit rester isolée pendant la revue : si elle est consultable par les systèmes en aval « pour information », elle n'est pas isolée."
+  },
+  "La sortie du modèle est reprise telle quelle par le système d'aval — requête, commande, page rendue — sans être traitée comme une entrée non fiable.": {
+   "en": "The model's output is taken as it stands by the downstream system — a query, a command, a rendered page — without being treated as untrusted input.",
+   "fr": "La sortie du modèle est reprise telle quelle par le système d'aval — requête, commande, page rendue — sans être traitée comme une entrée non fiable."
+  },
+  "La source, sa licence CC BY # et les deux mentions qu'elle impose, ce que le document s'exclut lui-même, et ce que ce module refuse de dire.": {
+   "en": "The source, its CC BY # licence and the two notices it imposes, what the document excludes itself from, and what this module refuses to say.",
+   "fr": "La source, sa licence CC BY 4.0 et les deux mentions qu'elle impose, ce que le document s'exclut lui-même, et ce que ce module refuse de dire."
+  },
+  "La sous-traitance est dans l'obligation, pas à côté : un prestataire qui exploite le système ne déplace pas la responsabilité.": {
+   "en": "Subcontracting is inside the obligation, not beside it: a provider who operates the system does not move the responsibility.",
+   "fr": "La sous-traitance est dans l'obligation, pas à côté : un prestataire qui exploite le système ne déplace pas la responsabilité."
+  },
+  "La stratégie de conformité réglementaire du §# n'est pas complète. C'est la pièce que ni ISO # ni ISO/IEC # ne donnent, et celle que l'organisme notifié ouvre en premier.": {
+   "en": "The regulatory compliance strategy of paragraph # is not complete. It is the piece that neither ISO # nor ISO/IEC # provides, and the one a notified body opens first.",
+   "fr": "La stratégie de conformité réglementaire du §4.4 n'est pas complète. C'est la pièce que ni ISO 9001 ni ISO/IEC 42001 ne donnent, et celle que l'organisme notifié ouvre en premier."
+  },
+  "La stratégie de conformité réglementaire est-elle déterminée et documentée, avec ses cinq composantes ?": {
+   "en": "Is the regulatory compliance strategy determined and documented, with its five components?",
+   "fr": "La stratégie de conformité réglementaire est-elle déterminée et documentée, avec ses cinq composantes ?"
+  },
+  "La stratégie de gestion des données": {
+   "en": "The data management strategy",
+   "fr": "La stratégie de gestion des données"
+  },
+  "La stratégie de gestion des données est-elle établie et tenue ?": {
+   "en": "Is the data management strategy established and kept up?",
+   "fr": "La stratégie de gestion des données est-elle établie et tenue ?"
+  },
+  "La stratégie de respect de la réglementation, y compris pour les modifications.": {
+   "en": "The regulatory compliance strategy, including for modifications.",
+   "fr": "La stratégie de respect de la réglementation, y compris pour les modifications."
+  },
+  "La supervision se dégrade par la fatigue, la baisse de vigilance et le conflit d'attention bien avant de se dégrader par une faute de conception.": {
+   "en": "Oversight degrades through fatigue, falling vigilance and competing demands on attention long before it degrades through a design fault.",
+   "fr": "La supervision se dégrade par la fatigue, la baisse de vigilance et le conflit d'attention bien avant de se dégrader par une faute de conception."
+  },
+  "La surveillance après commercialisation": {
+   "en": "Post-market monitoring",
+   "fr": "La surveillance après commercialisation"
+  },
+  "La surveillance après commercialisation par les fournisseurs, et le plan qui l'accompagne.": {
+   "en": "Post-market monitoring by providers, and the plan that goes with it.",
+   "fr": "La surveillance après commercialisation par les fournisseurs, et le plan qui l'accompagne."
+  },
+  "La surveillance de l'autorité compétente — ACPR ou AMF en France. Un organisme accrédité certifie un système de management ; il ne délivre aucune conformité à un règlement.": {
+   "en": "Supervision by the competent authority — the ACPR or the AMF in France. An accredited body certifies a management system; it issues no compliance with a regulation.",
+   "fr": "La surveillance de l'autorité compétente — ACPR ou AMF en France. Un organisme accrédité certifie un système de management ; il ne délivre aucune conformité à un règlement."
+  },
+  "La taille n'est pas renseignée : la qualification ne peut pas être prononcée.": {
+   "en": "The size is not filled in: the qualification cannot be pronounced.",
+   "fr": "La taille n'est pas renseignée : la qualification ne peut pas être prononcée."
+  },
+  "La taille n'est pas renseignée.": {
+   "en": "The size is not filled in.",
+   "fr": "La taille n'est pas renseignée."
+  },
+  "La taille ne décide PAS du régime. Une microentreprise qui n'est dans aucune des cinq catégories de l'article #, paragraphe #, relève du cadre complet.": {
+   "en": "Size does NOT decide the regime. A microenterprise that is in none of the five categories of article #(#) falls under the full framework.",
+   "fr": "La taille ne décide PAS du régime. Une microentreprise qui n'est dans aucune des cinq catégories de l'article 16, paragraphe 1, relève du cadre complet."
+  },
+  "La transmission des notifications d'incident aux CSIRT ou aux autorités désignés au titre de NIS #, lorsque l'État membre en décide ainsi.": {
+   "en": "The forwarding of incident notifications to the CSIRTs or authorities designated under NIS #, where the Member State so decides.",
+   "fr": "La transmission des notifications d'incident aux CSIRT ou aux autorités désignés au titre de NIS 2, lorsque l'État membre en décide ainsi."
+  },
+  "La validation démontre-t-elle que le système tient sa destination dans les conditions réelles d'usage ?": {
+   "en": "Does the validation demonstrate that the system meets its intended purpose under real conditions of use?",
+   "fr": "La validation démontre-t-elle que le système tient sa destination dans les conditions réelles d'usage ?"
+  },
+  "La vue d'ensemble ne mesure rien : elle oriente.": {
+   "en": "The overview measures nothing: it orients.",
+   "fr": "La vue d'ensemble ne mesure rien : elle oriente."
+  },
+  "La vérification de la qualité d'utilisateur n'exige que les informations nécessaires, et aucune donnée de connexion n'est conservée au-delà du nécessaire": {
+   "en": "Verification that a person is a user requires only the necessary information, and no connection data is retained beyond what is necessary",
+   "fr": "La vérification de la qualité d'utilisateur n'exige que les informations nécessaires, et aucune donnée de connexion n'est conservée au-delà du nécessaire"
+  },
+  "La vérification démontre-t-elle que le système satisfait ses exigences ?": {
+   "en": "Does the verification demonstrate that the system satisfies its requirements?",
+   "fr": "La vérification démontre-t-elle que le système satisfait ses exigences ?"
+  },
+  "La vérification est ce qui sépare une interface conçue d'une interface qui fonctionne. Les critères d'acceptation et les résultats entrent dans la documentation technique.": {
+   "en": "Verification is what separates an interface that was designed from an interface that works. The acceptance criteria and the results go into the technical documentation.",
+   "fr": "La vérification est ce qui sépare une interface conçue d'une interface qui fonctionne. Les critères d'acceptation et les résultats entrent dans la documentation technique."
+  },
+  "Latence d'intervention non déclarée": {
+   "en": "Intervention latency not declared",
+   "fr": "Latence d'intervention non déclarée"
+  },
+  "Le # exige au moins une mesure par scénario. Un scénario sans mesure est un risque identifié que rien ne supervise.": {
+   "en": "# requires at least one measure per scenario. A scenario with no measure is an identified risk that nothing oversees.",
+   "fr": "Le 5.2.3 exige au moins une mesure par scénario. Un scénario sans mesure est un risque identifié que rien ne supervise."
+  },
+  "Le # exige que la latence d'intervention soit spécifiée, mesurée et vérifiée. Sans elle, rien ne dit que la mesure choisie tient le délai — le moteur ne suppose pas.": {
+   "en": "# requires the intervention latency to be specified, measured and verified. Without it, nothing says the measure chosen holds the deadline — the engine does not assume.",
+   "fr": "Le 5.7.1 exige que la latence d'intervention soit spécifiée, mesurée et vérifiée. Sans elle, rien ne dit que la mesure choisie tient le délai — le moteur ne suppose pas."
+  },
+  "Le # exige un délai de réaction PAR scénario. C'est lui qui commande le choix des catégories de mesure : sans lui, aucun choix n'est justifiable.": {
+   "en": "# requires a reaction time PER scenario. It is what governs the choice of measure categories: without it, no choice can be justified.",
+   "fr": "Le 5.2.2 exige un délai de réaction PAR scénario. C'est lui qui commande le choix des catégories de mesure : sans lui, aucun choix n'est justifiable."
+  },
+  "Le CSIRT désigné comme coordinateur ET l'ENISA, SIMULTANÉMENT, par la plateforme unique de signalement.": {
+   "en": "The CSIRT designated as coordinator AND ENISA, SIMULTANEOUSLY, through the single reporting platform.",
+   "fr": "Le CSIRT désigné comme coordinateur ET l'ENISA, SIMULTANÉMENT, par la plateforme unique de signalement."
+  },
+  "Le CSIRT ou, selon le cas, l'autorité compétente": {
+   "en": "The CSIRT or, as the case may be, the competent authority",
+   "fr": "Le CSIRT ou, selon le cas, l'autorité compétente"
+  },
+  "Le DGA ne prévoit ni certification ni marquage. Un taux élevé ici ne vaut aucune présomption de conformité.": {
+   "en": "The DGA provides for neither certification nor marking. A high rate here carries no presumption of conformity.",
+   "fr": "Le DGA ne prévoit ni certification ni marquage. Un taux élevé ici ne vaut aucune présomption de conformité."
+  },
+  "Le Data Act ne prévoit ni certification ni marquage. Un taux élevé ici ne vaut aucune présomption de conformité.": {
+   "en": "The Data Act provides for neither certification nor marking. A high rate here carries no presumption of conformity.",
+   "fr": "Le Data Act ne prévoit ni certification ni marquage. Un taux élevé ici ne vaut aucune présomption de conformité."
+  },
+  "Le SMQ est conforme aux exigences réglementaires, telles que ce document les décline.": {
+   "en": "The QMS complies with the regulatory requirements, as this document breaks them down.",
+   "fr": "Le SMQ est conforme aux exigences réglementaires, telles que ce document les décline."
+  },
+  "Le Top # OWASP n'est pas un référentiel de conformité : on ne s'y conforme pas, on s'en sert pour ne rien oublier d'évident. Il porte un millésime, et celui-ci est # — le précédent ignorait la fuite d'invite système, les bases vectorielles et la consommation non bornée.": {
+   "en": "The OWASP Top # is not a compliance framework: you do not conform to it, you use it so that nothing obvious is forgotten. It carries a year, and this one is # — the previous one ignored system prompt leakage, vector databases and unbounded consumption.",
+   "fr": "Le Top 10 OWASP n'est pas un référentiel de conformité : on ne s'y conforme pas, on s'en sert pour ne rien oublier d'évident. Il porte un millésime, et celui-ci est 2025 — le précédent ignorait la fuite d'invite système, les bases vectorielles et la consommation non bornée."
+  },
+  "Le besoin exceptionnel est caractérisé selon l'article #, et la demande n'est pas un substitut à une obligation de partage existante (art. #)": {
+   "en": "The exceptional need is established in accordance with Article #, and the request is not a substitute for an existing sharing obligation (art. #)",
+   "fr": "Le besoin exceptionnel est caractérisé selon l'article 15, et la demande n'est pas un substitut à une obligation de partage existante (art. 16)"
+  },
+  "Le bloc que le parcours attend. Il nomme, ci-dessous, exactement ce qui lui manque.": {
+   "en": "The block the path is waiting on. It names, below, exactly what it is missing.",
+   "fr": "Le bloc que le parcours attend. Il nomme, ci-dessous, exactement ce qui lui manque."
+  },
+  "Le bloc que le parcours attend. La flèche y mène, et le bandeau de l'écran nomme ce qui lui manque.": {
+   "en": "The block the path is waiting on. The arrow leads there, and the screen's banner names what it is missing.",
+   "fr": "Le bloc que le parcours attend. La flèche y mène, et le bandeau de l'écran nomme ce qui lui manque."
+  },
+  "Le cadre NIST AI RMF ne se certifie pas : aucun organisme n'accrédite, aucun auditeur n'habilite, aucun certificat n'existe. « Conforme NIST AI RMF » ne veut rien dire. Ce profil dit où vous en êtes de VOTRE usage du cadre, et rien d'autre.": {
+   "en": "The NIST AI RMF framework is not certifiable: no body accredits, no auditor is licensed, no certificate exists. “NIST AI RMF compliant” means nothing. This profile says where you stand in YOUR use of the framework, and nothing else.",
+   "fr": "Le cadre NIST AI RMF ne se certifie pas : aucun organisme n'accrédite, aucun auditeur n'habilite, aucun certificat n'existe. « Conforme NIST AI RMF » ne veut rien dire. Ce profil dit où vous en êtes de VOTRE usage du cadre, et rien d'autre."
+  },
+  "Le cadre de responsabilité de la direction et du personnel.": {
+   "en": "The accountability framework for management and staff.",
+   "fr": "Le cadre de responsabilité de la direction et du personnel."
+  },
+  "Le cadre est volontaire : il décrit des résultats, pas des contrôles imposés.": {
+   "en": "The framework is voluntary: it describes outcomes, not imposed controls.",
+   "fr": "Le cadre est volontaire : il décrit des résultats, pas des contrôles imposés."
+  },
+  "Le cadre place GOVERN au-dessus des trois autres. Le travail de MEASURE et de MANAGE est réel, mais personne ne le reprend : c'est une couverture sans gouvernance, pas une couverture moindre.": {
+   "en": "The framework places GOVERN above the other three. The work on MEASURE and MANAGE is real, but nobody takes it up: this is coverage without governance, not lesser coverage.",
+   "fr": "Le cadre place GOVERN au-dessus des trois autres. Le travail de MEASURE et de MANAGE est réel, mais personne ne le reprend : c'est une couverture sans gouvernance, pas une couverture moindre."
+  },
+  "Le cadre se lit en profil, jamais en note globale.": {
+   "en": "The framework is read as a profile, never as an overall mark.",
+   "fr": "Le cadre se lit en profil, jamais en note globale."
+  },
+  "Le calendrier n'est pas négocié : il est fixé recommandation par recommandation.": {
+   "en": "The timetable is not negotiated: it is set recommendation by recommendation.",
+   "fr": "Le calendrier n'est pas négocié : il est fixé recommandation par recommandation."
+  },
+  "Le caractère ou l'importance systémique des entités financières qui dépendent du prestataire.": {
+   "en": "The systemic character or importance of the financial entities that depend on the provider.",
+   "fr": "Le caractère ou l'importance systémique des entités financières qui dépendent du prestataire."
+  },
+  "Le certificat vit sur un cycle de trois ans, avec des audits périodiques.": {
+   "en": "The certificate runs on a three-year cycle, with periodic audits.",
+   "fr": "Le certificat vit sur un cycle de trois ans, avec des audits périodiques."
+  },
+  "Le chapitre IV s'applique aussi aux contrats conclus le # septembre # ou avant, s'ils sont à durée indéterminée ou viennent à échéance au moins dix ans à compter du # janvier #.": {
+   "en": "Chapter IV also applies to contracts concluded on or before # September #, where they are of indefinite duration or expire at least ten years from # January #.",
+   "fr": "Le chapitre IV s'applique aussi aux contrats conclus le 12 septembre 2025 ou avant, s'ils sont à durée indéterminée ou viennent à échéance au moins dix ans à compter du 11 janvier 2024."
+  },
+  "Le chapitre IV — clauses contractuelles abusives — s'applique aux contrats conclus après cette date.": {
+   "en": "Chapter IV — unfair contractual terms — applies to contracts concluded after that date.",
+   "fr": "Le chapitre IV — clauses contractuelles abusives — s'applique aux contrats conclus après cette date."
+  },
+  "Le chemin pour les atteindre est-il planifié — qui, quoi, quand, avec quelles ressources ?": {
+   "en": "Is the path to reaching them planned — who, what, when, with what resources?",
+   "fr": "Le chemin pour les atteindre est-il planifié — qui, quoi, quand, avec quelles ressources ?"
+  },
+  "Le chiffre d'affaires annuel mondial, et le plancher du plafond d'amende qu'il fixe.": {
+   "en": "The worldwide annual turnover, and the floor it sets on the fine ceiling.",
+   "fr": "Le chiffre d'affaires annuel mondial, et le plancher du plafond d'amende qu'il fixe."
+  },
+  "Le chiffre d'affaires annuel mondial, et les trois paliers d'amende de l'article #.": {
+   "en": "The worldwide annual turnover, and the three fine tiers of article #.",
+   "fr": "Le chiffre d'affaires annuel mondial, et les trois paliers d'amende de l'article 64."
+  },
+  "Le chiffre d'affaires annuel réalisé dans l'Union au cours de l'exercice précédent": {
+   "en": "The annual turnover generated in the Union during the preceding financial year",
+   "fr": "Le chiffre d'affaires annuel réalisé dans l'Union au cours de l'exercice précédent"
+  },
+  "Le chiffre d'affaires retenu est celui réalisé DANS L'UNION en fournissant aux entités financières de l'article #, paragraphe #, de DORA les services TIC énumérés par les normes techniques d'exécution de l'article #, paragraphe #.": {
+   "en": "The turnover taken is the one made IN THE UNION by supplying the financial entities of article #(#) of DORA with the ICT services listed by the implementing technical standards of article #(#).",
+   "fr": "Le chiffre d'affaires retenu est celui réalisé DANS L'UNION en fournissant aux entités financières de l'article 2, paragraphe 1, de DORA les services TIC énumérés par les normes techniques d'exécution de l'article 28, paragraphe 9."
+  },
+  "Le chiffre qui part en comité doit porter sa réserve dans le même bloc.": {
+   "en": "A figure that goes to a committee must carry its reservation in the same block.",
+   "fr": "Le chiffre qui part en comité doit porter sa réserve dans le même bloc."
+  },
+  "Le choix n'est pas neutre : les deux dernières approches ouvrent une charge de preuve que les deux premières n'ont pas.": {
+   "en": "The choice is not neutral: the last two approaches open a burden of proof the first two do not carry.",
+   "fr": "Le choix n'est pas neutre : les deux dernières approches ouvrent une charge de preuve que les deux premières n'ont pas."
+  },
+  "Le cinquième risque paraissait n'avoir aucune action, alors qu'il en a quatre. Un risque orphelin à l'écran se lit « rien à faire », ce qui est l'inverse.": {
+   "en": "The fifth risk looked as though it had no action, when in fact it has four. An orphan risk on screen reads as « nothing to do », which is the opposite.",
+   "fr": "Le cinquième risque paraissait n'avoir aucune action, alors qu'il en a quatre. Un risque orphelin à l'écran se lit « rien à faire », ce qui est l'inverse."
+  },
+  "Le client reçoit l'information sur les procédures de changement, les formats, les outils d'exportation et les restrictions connues": {
+   "en": "The customer receives the information on the switching procedures, the formats, the export tools and the known restrictions",
+   "fr": "Le client reçoit l'information sur les procédures de changement, les formats, les outils d'exportation et les restrictions connues"
+  },
+  "Le comportement du système après une intervention est-il prévisible, et les écarts constatés sont-ils documentés et analysés dans la documentation technique ?": {
+   "en": "Is the system's behaviour after an intervention predictable, and are the gaps found documented and analysed in the technical documentation?",
+   "fr": "Le comportement du système après une intervention est-il prévisible, et les écarts constatés sont-ils documentés et analysés dans la documentation technique ?"
+  },
+  "Le contenu lu par le modèle — document, page, ticket, description d'outil — porte des instructions qu'il exécute comme si elles venaient de l'utilisateur.": {
+   "en": "The content the model reads — a document, a page, a ticket, a tool description — carries instructions that it executes as though they came from the user.",
+   "fr": "Le contenu lu par le modèle — document, page, ticket, description d'outil — porte des instructions qu'il exécute comme si elles venaient de l'utilisateur."
+  },
+  "Le contrat est transparent sur la juridiction où les données sont hébergées et sur les mesures techniques, organisationnelles et juridiques prises contre un accès international non conforme": {
+   "en": "The contract is transparent about the jurisdiction where the data is hosted and about the technical, organisational and legal measures taken against non-compliant international access",
+   "fr": "Le contrat est transparent sur la juridiction où les données sont hébergées et sur les mesures techniques, organisationnelles et juridiques prises contre un accès international non conforme"
+  },
+  "Le contrat porte les clauses de changement de fournisseur : délai de transition maximal de trente jours, préavis de résiliation de deux mois au plus, assistance, et énumération des données et actifs numériques portables": {
+   "en": "The contract carries the switching terms: a maximum transitional period of thirty days, a notice period for termination of no more than two months, assistance, and a list of the portable data and digital assets",
+   "fr": "Le contrat porte les clauses de changement de fournisseur : délai de transition maximal de trente jours, préavis de résiliation de deux mois au plus, assistance, et énumération des données et actifs numériques portables"
+  },
+  "Le contrat, la sortie, et ce qu'on fait si le tiers s'arrête.": {
+   "en": "The contract, the exit, and what is done if the third party stops.",
+   "fr": "Le contrat, la sortie, et ce qu'on fait si le tiers s'arrête."
+  },
+  "Le coût est porté par l'exploitant et non par l'appelant : rien, dans l'usage normal, ne signale l'abus avant la facture.": {
+   "en": "The cost is borne by the operator and not by the caller: nothing in normal use flags the abuse before the invoice does.",
+   "fr": "Le coût est porté par l'exploitant et non par l'appelant : rien, dans l'usage normal, ne signale l'abus avant la facture."
+  },
+  "Le coût n'est pas le sujet : une pratique interdite se retire, elle ne s'optimise pas. Le montant est affiché parce que le taire ferait disparaître la ligne du tableau.": {
+   "en": "Cost is not the point: a prohibited practice is withdrawn, not optimised. The amount is shown because hiding it would make the row disappear from the table.",
+   "fr": "Le coût n'est pas le sujet : une pratique interdite se retire, elle ne s'optimise pas. Le montant est affiché parce que le taire ferait disparaître la ligne du tableau."
+  },
+  "Le cycle de vie complet des clés — génération, renouvellement, archivage, révocation, destruction — que la norme traite en une seule mesure.": {
+   "en": "The full key lifecycle — generation, renewal, archiving, revocation, destruction — which the standard treats in a single control.",
+   "fr": "Le cycle de vie complet des clés — génération, renouvellement, archivage, révocation, destruction — que la norme traite en une seule mesure."
+  },
+  "Le degré de substituabilité du prestataire.": {
+   "en": "How substitutable the provider is.",
+   "fr": "Le degré de substituabilité du prestataire."
+  },
+  "Le dispositif du fournisseur suppose une personne disponible. Une cadence qui ne laisse pas le temps d'examiner produit l'acceptation passive quelle que soit la conception.": {
+   "en": "The provider's arrangement assumes an available person. A pace that leaves no time to examine produces passive acceptance whatever the design.",
+   "fr": "Le dispositif du fournisseur suppose une personne disponible. Une cadence qui ne laisse pas le temps d'examiner produit l'acceptation passive quelle que soit la conception."
+  },
+  "Le document attend qu'il passe devant : c'est un des risques les plus significatifs, et l'étape # commence par lui.": {
+   "en": "The document expects it to come first: it is one of the most significant risks, and step # begins with it.",
+   "fr": "Le document attend qu'il passe devant : c'est un des risques les plus significatifs, et l'étape 3 commence par lui."
+  },
+  "Le document dit MAÎTRISÉS, pas absents : un biais nul n'existe pas, et promettre son absence est la faute la plus commune.": {
+   "en": "The document says CONTROLLED, not absent: zero bias does not exist, and promising its absence is the commonest mistake.",
+   "fr": "Le document dit MAÎTRISÉS, pas absents : un biais nul n'existe pas, et promettre son absence est la faute la plus commune."
+  },
+  "Le document déclare lui-même que ses exemples pratiques ne constituent pas une liste de contrôle exhaustive.": {
+   "en": "The document itself states that its practical examples do not constitute an exhaustive check list.",
+   "fr": "Le document déclare lui-même que ses exemples pratiques ne constituent pas une liste de contrôle exhaustive."
+  },
+  "Le document emploie « confabulation » plutôt qu'« hallucination » : le second terme prête au système une expérience qu'il n'a pas.": {
+   "en": "The document uses « confabulation » rather than « hallucination »: the second term credits the system with an experience it does not have.",
+   "fr": "Le document emploie « confabulation » plutôt qu'« hallucination » : le second terme prête au système une expérience qu'il n'a pas."
+  },
+  "Le document note que plusieurs options peuvent se combiner selon l'ampleur et le contexte du dommage, et que la réparation effective dépend du contexte.": {
+   "en": "The document notes that several options may be combined depending on the scale and context of the harm, and that effective remedy is context dependent.",
+   "fr": "Le document note que plusieurs options peuvent se combiner selon l'ampleur et le contexte du dommage, et que la réparation effective dépend du contexte."
+  },
+  "Le document porte deux paragraphes du même titre, # et # : les deux sont conservés, distingués par leur numéro.": {
+   "en": "The document carries two clauses with the same title, # and #: both are kept, told apart by their number.",
+   "fr": "Le document porte deux paragraphes du même titre, 8.3.2.1 et 8.3.2.3 : les deux sont conservés, distingués par leur numéro."
+  },
+  "Le document s'en exclut expressément et renvoie à un autre guide de diligence de l'OCDE.": {
+   "en": "The document expressly excludes it and points to another OECD due diligence guidance.",
+   "fr": "Le document s'en exclut expressément et renvoie à un autre guide de diligence de l'OCDE."
+  },
+  "Le document se déclare « risk-agnostic » pour rester valable dans le temps : il nomme des cadres qui listent des risques, il n'en dresse pas la liste. Ce module ne lui en prête pas une.": {
+   "en": "The document declares itself “risk-agnostic” in order to stay evergreen: it names frameworks that list risks, it does not draw up the list. This module does not lend it one.",
+   "fr": "Le document se déclare « risk-agnostic » pour rester valable dans le temps : il nomme des cadres qui listent des risques, il n'en dresse pas la liste. Ce module ne lui en prête pas une."
+  },
+  "Le domaine d'application du SMSI (art. #), les critères d'acceptation et leurs deux dates, puis chaque risque avec sa cotation, la propriété atteinte et son propriétaire.": {
+   "en": "The scope of the ISMS (clause #), the acceptance criteria and their two dates, then each risk with its rating, the property affected and its owner.",
+   "fr": "Le domaine d'application du SMSI (art. 4.3), les critères d'acceptation et leurs deux dates, puis chaque risque avec sa cotation, la propriété atteinte et son propriétaire."
+  },
+  "Le domaine d'application n'est pas écrit. C'est la première décision de la certification et la plus structurante : tout ce qui n'en est pas exclu par écrit sera audité.": {
+   "en": "The scope is not written. It is the first decision of certification and the most structuring: everything not excluded from it in writing will be audited.",
+   "fr": "Le domaine d'application n'est pas écrit. C'est la première décision de la certification et la plus structurante : tout ce qui n'en est pas exclu par écrit sera audité."
+  },
+  "Le domaine d'application. Celui du système de management est choisi par l'organisme ; celui du règlement ne l'est pas — il couvre tout ce qui soutient les fonctions critiques ou importantes. Reprendre le premier pour le second est l'erreur la plus courante de cette greffe.": {
+   "en": "The scope. The management system's is chosen by the organisation; the Regulation's is not — it covers everything that supports critical or important functions. Carrying the first over as the second is the commonest mistake of this graft.",
+   "fr": "Le domaine d'application. Celui du système de management est choisi par l'organisme ; celui du règlement ne l'est pas — il couvre tout ce qui soutient les fonctions critiques ou importantes. Reprendre le premier pour le second est l'erreur la plus courante de cette greffe."
+  },
+  "Le droit d'accès du Data Act NE FABRIQUE PAS de base légale. Sans article #, la demande se refuse.": {
+   "en": "The Data Act right of access DOES NOT MANUFACTURE a legal basis. Without Article #, the request is refused.",
+   "fr": "Le droit d'accès du Data Act NE FABRIQUE PAS de base légale. Sans article 6, la demande se refuse."
+  },
+  "Le droit de l'Union et le droit national en matière de protection des données à caractère personnel s'appliquent à TOUTES les données à caractère personnel traitées en lien avec le règlement.": {
+   "en": "Union and national personal data protection law applies to ALL personal data processed in connection with the Regulation.",
+   "fr": "Le droit de l'Union et le droit national en matière de protection des données à caractère personnel s'appliquent à TOUTES les données à caractère personnel traitées en lien avec le règlement."
+  }
+ }
+}

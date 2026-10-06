@@ -679,9 +679,19 @@ def test_sentinel_html_n_est_pas_marque_element_par_element():
     fois 4 surtitres + 5 entrées de barre (données data-i18n) et 4 titres
     + 4 chapôs (données data-i18n-bloc) — et de rien d'autre : la marge
     au-dessus du relevé reste celle que le lot de traduction avait laissée,
-    10 et 7. RELEVÉ APRÈS la diligence OCDE : 147 et 117."""
-    assert SENTINEL.count("data-i18n=") <= 157, SENTINEL.count("data-i18n=")
-    assert SENTINEL.count("data-i18n-bloc=") <= 124, \
+    10 et 7. RELEVÉ APRÈS la diligence OCDE : 147 et 117.
+
+    LA QUINZIÈME ET LA SEIZIÈME — DGA ET DATA ACT — ONT COÛTÉ SEPT ÉCRANS,
+    et le relevé le confirme à l'unité : 7 surtitres + 7 entrées de barre
+    (data-i18n), 7 titres + 7 chapôs (data-i18n-bloc). Rien d'autre n'est
+    marqué dans leurs sept panneaux : leur corps entier vient d'une route, et
+    le moteur par contenu le traduit sans une marque. Les plafonds passent
+    donc de 157 à 171 et de 124 à 138, et LA MARGE AU-DESSUS DU RELEVÉ RESTE
+    LA MÊME — 10 et 7 — ce qui est tout l'intérêt de la chiffrer : un
+    marquage au détail glissé dans un écran la mangerait, et la règle
+    tomberait."""
+    assert SENTINEL.count("data-i18n=") <= 171, SENTINEL.count("data-i18n=")
+    assert SENTINEL.count("data-i18n-bloc=") <= 138, \
         SENTINEL.count("data-i18n-bloc=")
 
 

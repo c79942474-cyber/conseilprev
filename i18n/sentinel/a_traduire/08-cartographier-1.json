@@ -1,12 +1,17 @@
 {
  "_lot": "08-cartographier-1",
- "_mots": 2336,
+ "_mots": 2376,
  "_pages": [
   "empreinte-ia",
   "finops"
  ],
  "_rubrique": "CARTOGRAPHIER",
  "bloc": {
+  "# % du parc déclaré est chiffrable. Les # autres ligne(s) ne coûtent pas zéro : personne n’a encore dit ce qu’elles consomment.": {
+   "en": "<b># %</b> of the declared estate can be quantified. The # other line(s) do not cost zero&nbsp;: nobody has yet said what they consume.",
+   "fr": "0 % du parc déclaré est chiffrable. Les 2189 autres ligne(s) ne coûtent pas zéro : personne n’a encore dit ce qu’elles consomment.",
+   "html": "<b>0 %</b> du parc déclaré est chiffrable. Les 2189 autres ligne(s) ne coûtent pas zéro&nbsp;: personne n’a encore dit ce qu’elles consomment."
+  },
   "# % du parc déclaré est chiffrable. Toutes les lignes portent un volume et sa source.": {
    "en": "<b># %</b> of the declared estate can be quantified. Every line carries a volume and its source.",
    "fr": "100 % du parc déclaré est chiffrable. Toutes les lignes portent un volume et sa source.",
@@ -127,25 +132,10 @@
    "fr": "analyse — Analyse sur documents longs",
    "html": "<code>analyse</code> — Analyse sur documents longs"
   },
-  "classification": {
-   "en": "classification",
-   "fr": "classification",
-   "html": "<code>classification</code>"
-  },
-  "claude-fable-# · claude-haiku-#-# · claude-opus-#-# · claude-opus-# · claude-sonnet-#-# · claude-sonnet-#": {
-   "en": "claude-fable-# · claude-haiku-#-# · claude-opus-#-# · claude-opus-# · claude-sonnet-#-# · claude-sonnet-#",
-   "fr": "claude-fable-5 · claude-haiku-4-5 · claude-opus-4-8 · claude-opus-5 · claude-sonnet-4-6 · claude-sonnet-5",
-   "html": "<code>claude-fable-5</code> · <code>claude-haiku-4-5</code> · <code>claude-opus-4-8</code> · <code>claude-opus-5</code> · <code>claude-sonnet-4-6</code> · <code>claude-sonnet-5</code>"
-  },
   "coûts hors modèle — Stockage vectoriel, orchestration, supervision, temps humain de relecture : ces postes sont réels et absents ici. Un coût de modèle n'est pas un coût de cas d'usage.": {
    "en": "<b>costs beyond the model</b> — Vector storage, orchestration, monitoring, human review time: these items are real and absent here. A model cost is not a use-case cost.",
    "fr": "coûts hors modèle — Stockage vectoriel, orchestration, supervision, temps humain de relecture : ces postes sont réels et absents ici. Un coût de modèle n'est pas un coût de cas d'usage.",
    "html": "<b>coûts hors modèle</b> — Stockage vectoriel, orchestration, supervision, temps humain de relecture : ces postes sont réels et absents ici. Un coût de modèle n'est pas un coût de cas d'usage."
-  },
-  "cycle_vie": {
-   "en": "cycle_vie",
-   "fr": "cycle_vie",
-   "html": "<code>cycle_vie</code>"
   },
   "extraction — Extraction ou classification sur texte court": {
    "en": "<code>extraction</code> — Extraction or classification on short text",
@@ -158,7 +148,7 @@
    "html": "<code>forfait</code> — montant fixe, indépendant de l'usage"
   },
   "fournisseur": {
-   "en": "fournisseur",
+   "en": "<code>provider</code>",
    "fr": "fournisseur",
    "html": "<code>fournisseur</code>"
   },
@@ -171,11 +161,6 @@
    "en": "<code>jetons</code> — billed per token consumed (input + output)",
    "fr": "jetons — facturé au jeton consommé (entrée + sortie)",
    "html": "<code>jetons</code> — facturé au jeton consommé (entrée + sortie)"
-  },
-  "product_owner": {
-   "en": "product_owner",
-   "fr": "product_owner",
-   "html": "<code>product_owner</code>"
   },
   "raisonnement — Raisonnement long ou agentique": {
    "en": "<code>raisonnement</code> — Long or agentic reasoning",
@@ -197,20 +182,10 @@
    "fr": "requetes — facturé à la requête, quel que soit sa taille",
    "html": "<code>requetes</code> — facturé à la requête, quel que soit sa taille"
   },
-  "service": {
-   "en": "service",
-   "fr": "service",
-   "html": "<code>service</code>"
-  },
   "sieges — facturé par utilisateur et par mois": {
    "en": "<code>sieges</code> — billed per user per month",
    "fr": "sieges — facturé par utilisateur et par mois",
    "html": "<code>sieges</code> — facturé par utilisateur et par mois"
-  },
-  "statut_conformite": {
-   "en": "statut_conformite",
-   "fr": "statut_conformite",
-   "html": "<code>statut_conformite</code>"
   },
   "tarifs autres editeurs — Les tarifs d'OpenAI, Google, Mistral, Meta et des hébergeurs de modèles ouverts ne figurent pas dans la table : ils ne sont pas relevés ici. Les ajouter demande de reporter le prix publié, sa devise, sa date de relevé et son adresse — pas de l'estimer.": {
    "en": "<b>other vendors' prices</b> — The prices of OpenAI, Google, Mistral, Meta and of open-model hosts are not in the table: they are not recorded here. Adding them means transcribing the published price, its currency, the date it was read and its address — not estimating it.",
@@ -336,6 +311,10 @@
    "en": "What tells an EXPECTED gap from a gap TO BE CLOSED. A system still in design has no volume because it consumes nothing; a system in production has none because nobody recorded it.",
    "fr": "Ce qui distingue une lacune ATTENDUE d'une lacune À COMBLER. Un système en conception n'a pas de volume parce qu'il ne consomme rien ; un système en production n'en a pas parce que personne ne l'a relevé."
   },
+  "Ce qui manque": {
+   "en": "What is missing",
+   "fr": "Ce qui manque"
+  },
   "Ce qui n’est pas chiffré, et pourquoi": {
    "en": "What is not costed, and why",
    "fr": "Ce qui n’est pas chiffré, et pourquoi"
@@ -438,11 +417,15 @@
   },
   "En kg CO₂ éq. par an. Base # kg — inférence ET ajustement fin annualisés, jamais l’inférence seule.": {
    "en": "In kg CO₂ eq. per year. Base # kg — inference AND fine-tuning annualised, never inference alone.",
-   "fr": "En kg CO₂ éq. par an. Base 2,2 kg — inférence ET ajustement fin annualisés, jamais l’inférence seule."
+   "fr": "En kg CO₂ éq. par an. Base 0,0 kg — inférence ET ajustement fin annualisés, jamais l’inférence seule."
   },
   "Expansion maîtrisée": {
    "en": "Controlled expansion",
    "fr": "Expansion maîtrisée"
+  },
+  "Fournisseur nommé, modèle non déclaré": {
+   "en": "Provider named, model not declared",
+   "fr": "Fournisseur nommé, modèle non déclaré"
   },
   "Génération d'accélérateurs, durée de vie, taux de charge.": {
    "en": "Accelerator generation, lifetime, load rate.",
@@ -460,9 +443,25 @@
    "en": "FIRM’S ASSUMPTION. Usual order of magnitude in the literature on the energy intensity of fixed networks, whose published values span more than one order of magnitude depending on the scope used (core only, or core + access + terminal). ·",
    "fr": "HYPOTHÈSE DU CABINET. Ordre de grandeur usuel de la littérature sur l'intensité énergétique des réseaux fixes, dont les valeurs publiées s'étalent sur plus d'un ordre de grandeur selon le périmètre retenu (cœur seul, ou cœur + accès + terminal). ·"
   },
+  "Haut risque": {
+   "en": "High risk",
+   "fr": "Haut risque"
+  },
+  "Haut risque, et coût inconnu": {
+   "en": "High risk, and unknown cost",
+   "fr": "Haut risque, et coût inconnu"
+  },
   "Horizon": {
    "en": "Time horizon",
    "fr": "Horizon"
+  },
+  "Il manque # réponses :": {
+   "en": "Missing # answers:",
+   "fr": "Il manque 12 réponses :"
+  },
+  "Ils consomment, et personne n’a encore dit combien. C’est le seul lot sur lequel il y a du travail.": {
+   "en": "They consume, and nobody has yet said how much. It is the only batch where there is work to do.",
+   "fr": "Ils consomment, et personne n’a encore dit combien. C’est le seul lot sur lequel il y a du travail."
   },
   "Inférence": {
    "en": "Inference",
@@ -488,6 +487,10 @@
    "en": "The classification has not been done. The amount can be read, the risk cannot — and it is the second that governs the first.",
    "fr": "La classification n'est pas faite. Le montant se lit, le risque non — et c'est le second qui commande le premier."
   },
+  "Le compte par motif, tous cycles de vie confondus": {
+   "en": "The count by reason, across all life cycles",
+   "fr": "Le compte par motif, tous cycles de vie confondus"
+  },
   "Le coût d'usage est ici l'essentiel du coût.": {
    "en": "Usage cost is the bulk of the cost here.",
    "fr": "Le coût d'usage est ici l'essentiel du coût."
@@ -507,14 +510,6 @@
   "Le détail, système par système": {
    "en": "The detail, system by system",
    "fr": "Le détail, système par système"
-  },
-  "Le fournisseur est déclaré, le modèle non : le tarif est relevable chez un éditeur nommé. C'est la lacune la moins coûteuse à combler du lot.": {
-   "en": "The provider is declared, the model is not: the price can be read from a named vendor. It is the cheapest gap to close in the batch.",
-   "fr": "Le fournisseur est déclaré, le modèle non : le tarif est relevable chez un éditeur nommé. C'est la lacune la moins coûteuse à combler du lot."
-  },
-  "Le niveau de risque au sens du règlement (UE) #/#. Un euro dépensé sur un système haut risque ne se lit pas comme un euro dépensé sur un système à risque minimal : le premier porte des obligations qui ont, elles aussi, un coût.": {
-   "en": "The risk level within the meaning of Regulation (EU) #/#. A euro spent on a high-risk system does not read like a euro spent on a minimal-risk system: the first carries obligations that have a cost of their own.",
-   "fr": "Le niveau de risque au sens du règlement (UE) 2024/1689. Un euro dépensé sur un système haut risque ne se lit pas comme un euro dépensé sur un système à risque minimal : le premier porte des obligations qui ont, elles aussi, un coût."
   },
   "Le seul levier que le client actionne seul, sans rien changer d'autre.": {
    "en": "The only lever the client pulls alone, without changing anything else.",
@@ -608,6 +603,10 @@
    "en": "Caveats: A percentage uplift distinguishes neither computing, nor storage, nor network: it gives an order of magnitude, not a life cycle.",
    "fr": "Réserves : Une majoration en pourcentage ne distingue ni le calcul, ni le stockage, ni le réseau : elle rend un ordre de grandeur, pas un cycle de vie."
   },
+  "Sans volume déclaré :": {
+   "en": "No declared volume:",
+   "fr": "Sans volume déclaré :"
+  },
   "Scénario": {
    "en": "Scenario",
    "fr": "Scénario"
@@ -660,10 +659,6 @@
    "en": "of the estate carries a declared volume. The totals below count ONLY these systems.",
    "fr": "du parc porte un volume déclaré. Les totaux ci-dessous ne comptent QUE ces systèmes."
   },
-  "heures_accelerateur": {
-   "en": "heures_accelerateur",
-   "fr": "heures_accelerateur"
-  },
   "kWh par mois": {
    "en": "kWh per month",
    "fr": "kWh par mois"
@@ -680,17 +675,25 @@
    "en": "m³ eq. per month",
    "fr": "m³ éq. par mois"
   },
-  "nombre_accelerateurs": {
-   "en": "nombre_accelerateurs",
-   "fr": "nombre_accelerateurs"
-  },
   "sans": {
    "en": "without",
    "fr": "sans"
   },
-  "texte_reglementaire": {
-   "en": "texte_reglementaire",
-   "fr": "texte_reglementaire"
+  "« Chatbot service client » : renseignez le volume de sortie du mois — Registre IA → fiche du système": {
+   "en": "'Customer service chatbot': fill in the month's output volume — AI register → system record",
+   "fr": "« Chatbot service client » : renseignez le volume de sortie du mois — Registre IA → fiche du système"
+  },
+  "« Detection de fraude transactionnelle » : renseignez le volume de sortie du mois — Registre IA → fiche du système": {
+   "en": "'Transactional fraud detection': fill in the month's output volume — AI register → system record",
+   "fr": "« Detection de fraude transactionnelle » : renseignez le volume de sortie du mois — Registre IA → fiche du système"
+  },
+  "« Maintenance predictive reseau » : renseignez le volume de sortie du mois — Registre IA → fiche du système": {
+   "en": "'Predictive network maintenance': fill in the month's output volume — AI register → system record",
+   "fr": "« Maintenance predictive reseau » : renseignez le volume de sortie du mois — Registre IA → fiche du système"
+  },
+  "« Recette — deux fois » : renseignez le volume de sortie du mois — Registre IA → fiche du système": {
+   "en": "'Recipe — twice': fill in the month's output volume — AI register → system record",
+   "fr": "« Recette — deux fois » : renseignez le volume de sortie du mois — Registre IA → fiche du système"
   },
   "Électricité": {
    "en": "Electricity",

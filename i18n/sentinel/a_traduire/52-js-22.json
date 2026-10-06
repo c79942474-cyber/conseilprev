@@ -1,0 +1,767 @@
+{
+ "_lot": "52-js-22",
+ "_mots": 2489,
+ "_pages": [
+  "_js"
+ ],
+ "_rubrique": "_js",
+ "bloc": {},
+ "texte": {
+  "Ouvrez la carte des quarante-six juridictions analysées sur douze critères, triées par sévérité.": {
+   "en": "Open the map of the forty-six jurisdictions analysed against twelve criteria, sorted by severity.",
+   "fr": "Ouvrez la carte des quarante-six juridictions analysées sur douze critères, triées par sévérité."
+  },
+  "Ouvrez la carte prEN # : elle porte maintenant vos cinq parts.": {
+   "en": "Open the prEN # card: it now carries your five parts.",
+   "fr": "Ouvrez la carte prEN 18286 : elle porte maintenant vos cinq parts."
+  },
+  "Ouvrez la carte prEN #-# : elle porte maintenant votre déclaration.": {
+   "en": "Open the prEN #-# card: it now carries your declaration.",
+   "fr": "Ouvrez la carte prEN 18229-3 : elle porte maintenant votre déclaration."
+  },
+  "Ouvrez la déclaration et traitez les mesures que le rang # du plan a nommées.": {
+   "en": "Open the statement and treat the controls named by rank # of the plan.",
+   "fr": "Ouvrez la déclaration et traitez les mesures que le rang 2 du plan a nommées."
+  },
+  "Ouvrez les cartes DGA et Data Act : elles portent le taux de vos qualités, les réserves, et le plan dérivé de ce qui manque.": {
+   "en": "Open the DGA and Data Act cards: they carry the rate of your capacities, the caveats, and the plan derived from what is missing.",
+   "fr": "Ouvrez les cartes DGA et Data Act : elles portent le taux de vos qualités, les réserves, et le plan dérivé de ce qui manque."
+  },
+  "Ouvrez les deux cartes NIST #-# et #-# : elles portent maintenant vos déclarations.": {
+   "en": "Open the two NIST #-# and #-# maps: they now carry your declarations.",
+   "fr": "Ouvrez les deux cartes NIST 800-53 et 800-82 : elles portent maintenant vos déclarations."
+  },
+  "Ouvrez les deux tables de correspondance, et regardez d’abord les lignes en face du vide.": {
+   "en": "Open the two correspondence tables, and look first at the rows that face emptiness.",
+   "fr": "Ouvrez les deux tables de correspondance, et regardez d’abord les lignes en face du vide."
+  },
+  "Ouvrez les formations : leur progression se calcule à partir de vos scores d’audit par pilier, et non d’un catalogue générique.": {
+   "en": "Open the training: its progress is calculated from your audit scores per pillar, not from a generic catalogue.",
+   "fr": "Ouvrez les formations : leur progression se calcule à partir de vos scores d’audit par pilier, et non d’un catalogue générique."
+  },
+  "Ouvrez l’audit structuré en cinq étapes et faites-le porter sur le périmètre que vous venez de classer.": {
+   "en": "Open the audit structured in five steps and apply it to the scope you have just classified.",
+   "fr": "Ouvrez l’audit structuré en cinq étapes et faites-le porter sur le périmètre que vous venez de classer."
+  },
+  "Ouvrez l’étape qui vous occupe et lisez la colonne de droite : elle dit si Sentinel mesure ce cadre-là. Sur les vingt, trois sont mesurés ici — l’IA Act, ISO/IEC # et le cadre du NIST. Les dix-sept autres sont nommés par l’OCDE et non tenus par le cabinet, et l’écran le dit plutôt que de les présenter comme couverts.": {
+   "en": "Open the step that concerns you and read the right-hand column: it says whether Sentinel measures that framework. Of the twenty, three are measured here — the AI Act, ISO/IEC # and the NIST framework. The other seventeen are named by the OECD and not held by the firm, and the screen says so rather than presenting them as covered.",
+   "fr": "Ouvrez l’étape qui vous occupe et lisez la colonne de droite : elle dit si Sentinel mesure ce cadre-là. Sur les vingt, trois sont mesurés ici — l’IA Act, ISO/IEC 42001 et le cadre du NIST. Les dix-sept autres sont nommés par l’OCDE et non tenus par le cabinet, et l’écran le dit plutôt que de les présenter comme couverts."
+  },
+  "Ouvrez-la en début de séance : « Actions prioritaires » dit ce qui attend une décision de votre part, « Activité récente » ce qui a bougé depuis votre dernier passage. Refermez-la quand la liste des actions est vide.": {
+   "en": "Open it at the start of a session: “Priority actions” says what is awaiting a decision from you, “Recent activity” what has moved since your last visit. Close it when the action list is empty.",
+   "fr": "Ouvrez-la en début de séance : « Actions prioritaires » dit ce qui attend une décision de votre part, « Activité récente » ce qui a bougé depuis votre dernier passage. Refermez-la quand la liste des actions est vide."
+  },
+  "Ouvrez-la quand un module se vide sans raison : Registre sans systèmes, audit sans points, analyses sans historique. Neuf fois sur dix la session a expiré, et cette page vous le dira au lieu de vous laisser conclure que vos données ont disparu.": {
+   "en": "Open it when a module empties for no reason: register without systems, audit without checkpoints, analyses without history. Nine times out of ten the session has expired, and this page will tell you so instead of letting you conclude that your data has disappeared.",
+   "fr": "Ouvrez-la quand un module se vide sans raison : Registre sans systèmes, audit sans points, analyses sans historique. Neuf fois sur dix la session a expiré, et cette page vous le dira au lieu de vous laisser conclure que vos données ont disparu."
+  },
+  "Ouvrir cette page et avancer le parcours d’une étape.": {
+   "en": "Open this page and move the path forward by one step.",
+   "fr": "Ouvrir cette page et avancer le parcours d’une étape."
+  },
+  "Ouvrir dans Sentinel": {
+   "en": "Open in Sentinel",
+   "fr": "Ouvrir dans Sentinel"
+  },
+  "Ouvrir la FRIA": {
+   "en": "Open the FRIA",
+   "fr": "Ouvrir la FRIA"
+  },
+  "Ouvrir la Roadmap complète →": {
+   "en": "Open the full roadmap →",
+   "fr": "Ouvrir la Roadmap complète →"
+  },
+  "Ouvrir la fiche d’un centre": {
+   "en": "Open a centre’s record",
+   "fr": "Ouvrir la fiche d’un centre"
+  },
+  "Ouvrir la page de connexion": {
+   "en": "Open the sign-in page",
+   "fr": "Ouvrir la page de connexion"
+  },
+  "Ouvrir la page de connexion pour entrer avec un autre compte": {
+   "en": "Open the sign-in page to sign in with another account",
+   "fr": "Ouvrir la page de connexion pour entrer avec un autre compte"
+  },
+  "Ouvrir la source": {
+   "en": "Open the source",
+   "fr": "Ouvrir la source"
+  },
+  "Ouvrir la source ↗": {
+   "en": "Open the source ↗",
+   "fr": "Ouvrir la source ↗"
+  },
+  "Ouvrir le Radar →": {
+   "en": "Open the radar →",
+   "fr": "Ouvrir le Radar →"
+  },
+  "Ouvrir le Simulateur": {
+   "en": "Open the simulator",
+   "fr": "Ouvrir le Simulateur"
+  },
+  "Ouvrir le comparatif": {
+   "en": "Open the comparison",
+   "fr": "Ouvrir le comparatif"
+  },
+  "Ouvrir le détail d’un pays": {
+   "en": "Open a country’s details",
+   "fr": "Ouvrir le détail d’un pays"
+  },
+  "Ouvrir le guide d’utilisation de cette page": {
+   "en": "Open the user guide for this page",
+   "fr": "Ouvrir le guide d’utilisation de cette page"
+  },
+  "Où en est réellement le socle": {
+   "en": "Where the baseline really stands",
+   "fr": "Où en est réellement le socle"
+  },
+  "Où en sont ceux à qui vous vendez": {
+   "en": "Where the people you sell to stand",
+   "fr": "Où en sont ceux à qui vous vendez"
+  },
+  "Où le matériel de formation se range": {
+   "en": "Where the training material is stored",
+   "fr": "Où le matériel de formation se range"
+  },
+  "Où vous en êtes sur chacune des seize, et lesquelles sont ARRÊTÉES par un verrou plutôt que simplement en retard.": {
+   "en": "Where you stand on each of the sixteen, and which ones are STOPPED by a blocker rather than simply behind.",
+   "fr": "Où vous en êtes sur chacune des seize, et lesquelles sont ARRÊTÉES par un verrou plutôt que simplement en retard."
+  },
+  "PDF officiel fourni par le client (EU_IA_ACT.pdf). Articles retranscrits et vulgarises par CONSEILPREV.": {
+   "en": "Official PDF provided by the client (EU_IA_ACT.pdf). Articles transcribed and explained in plain language by CONSEILPREV.",
+   "fr": "PDF officiel fourni par le client (EU_IA_ACT.pdf). Articles retranscrits et vulgarises par CONSEILPREV."
+  },
+  "PDF officiel fourni par le client, extrait via pdftotext. Articles couverts par le moteur : #, #, #, #, #, #, # a #, #, #, #, #, #, #.": {
+   "en": "Official PDF provided by the client, extracted via pdftotext. Articles covered by the engine: #, #, #, #, #, #, # to #, #, #, #, #, #, #.",
+   "fr": "PDF officiel fourni par le client, extrait via pdftotext. Articles couverts par le moteur : 1, 2, 3, 4, 5, 6, 9 a 17, 22, 50, 51, 53, 55, 99."
+  },
+  "PLAFONNE passe devant : tant que la charge de preuve n’est pas": {
+   "en": "CAPS comes first: for as long as the burden of proof is not",
+   "fr": "PLAFONNE passe devant : tant que la charge de preuve n’est pas"
+  },
+  "PME (< # salariés)": {
+   "en": "SME (< # employees)",
+   "fr": "PME (< 250 salariés)"
+  },
+  "PME et start-up : le plus bas des deux plafonds s'applique (Art. #(#)).": {
+   "en": "SMEs and start-ups: the lower of the two ceilings applies (Art. #(#)).",
+   "fr": "PME et start-up : le plus bas des deux plafonds s'applique (Art. 99(6))."
+  },
+  "Paiement en cours de confirmation…": {
+   "en": "Payment being confirmed…",
+   "fr": "Paiement en cours de confirmation…"
+  },
+  "Panel de # cas d’IA documentés, version #-#-b — communiqués d’entreprises, décisions d’autorités, presse spécialisée": {
+   "en": "Panel of # documented AI cases, version #-#-b — company announcements, authority decisions, specialist press",
+   "fr": "Panel de 72 cas d’IA documentés, version 2026-07-b — communiqués d’entreprises, décisions d’autorités, presse spécialisée"
+  },
+  "Panorama IA & centres de données — UE": {
+   "en": "AI & data centres overview — EU",
+   "fr": "Panorama IA & centres de données — UE"
+  },
+  "Panorama des systèmes déployés dans l’UE": {
+   "en": "Overview of the systems deployed in the EU",
+   "fr": "Panorama des systèmes déployés dans l’UE"
+  },
+  "Papier, verre & matériaux": {
+   "en": "Paper, glass & materials",
+   "fr": "Papier, verre & matériaux"
+  },
+  "Par le haut. L'ordre n'est pas un classement de difficulté, c'est celui dans lequel les actions se rendent payantes les unes les autres.": {
+   "en": "From the top. The order is not a ranking of difficulty, it is the order in which the actions make each other pay off.",
+   "fr": "Par le haut. L'ordre n'est pas un classement de difficulté, c'est celui dans lequel les actions se rendent payantes les unes les autres."
+  },
+  "Par où commencer": {
+   "en": "Where to start",
+   "fr": "Par où commencer"
+  },
+  "Par où commencer : la couverture": {
+   "en": "Where to start: coverage",
+   "fr": "Par où commencer : la couverture"
+  },
+  "Par où commencer : les angles morts": {
+   "en": "Where to start: the blind spots",
+   "fr": "Par où commencer : les angles morts"
+  },
+  "Par quoi commencer": {
+   "en": "Where to start",
+   "fr": "Par quoi commencer"
+  },
+  "Par rôle au sens du règlement": {
+   "en": "By role within the meaning of the Regulation",
+   "fr": "Par rôle au sens du règlement"
+  },
+  "Paramètres saisis": {
+   "en": "Parameters entered",
+   "fr": "Paramètres saisis"
+  },
+  "Parce que c’est celle que la surcharge industrielle SP #-# Rev. # adapte — son annexe G le dit. La révision # est la version courante : elle ajoute les familles PT et SR et renomme CA. Un système déjà aligné sur la révision # lit donc ce taux contre un millésime antérieur au sien, et l’écran le rappelle avant le premier chiffre.": {
+   "en": "Because it is the one that the SP #-# Rev. # industrial overlay tailors — its Appendix G says so. Revision # is the current version: it adds the PT and SR families and renames CA. A system already aligned with revision # therefore reads this rate against an edition older than its own, and the screen reminds you of this before the first figure.",
+   "fr": "Parce que c’est celle que la surcharge industrielle SP 800-82 Rev. 2 adapte — son annexe G le dit. La révision 5 est la version courante : elle ajoute les familles PT et SR et renomme CA. Un système déjà aligné sur la révision 5 lit donc ce taux contre un millésime antérieur au sien, et l’écran le rappelle avant le premier chiffre."
+  },
+  "Parcourez le fond de carte « intensité carbone du réseau » et le tableau d’empreinte par pays, poste par poste.": {
+   "en": "Browse the “grid carbon intensity” base map and the footprint table by country, item by item.",
+   "fr": "Parcourez le fond de carte « intensité carbone du réseau » et le tableau d’empreinte par pays, poste par poste."
+  },
+  "Parcourez le panel des cas documentés — POC, pilotes, production, abandons — et leurs classes de risque AI Act.": {
+   "en": "Browse the panel of documented cases — POCs, pilots, production, abandonments — and their AI Act risk classes.",
+   "fr": "Parcourez le panel des cas documentés — POC, pilotes, production, abandons — et leurs classes de risque AI Act."
+  },
+  "Parcourez le référentiel avec la question du reporting : quelle donnée est opposable, laquelle est un ordre de grandeur.": {
+   "en": "Browse the framework with the reporting question in mind: which data is defensible, which is an order of magnitude.",
+   "fr": "Parcourez le référentiel avec la question du reporting : quelle donnée est opposable, laquelle est un ordre de grandeur."
+  },
+  "Parcourez les # étapes : ciblez votre secteur et vos processus, sélectionnez les cas d’usage à potentiel, qualifiez-les, chiffrez le retour attendu et évaluez votre maturité.": {
+   "en": "Go through the # steps: target your sector and your processes, select the use cases with potential, qualify them, quantify the expected return and assess your maturity.",
+   "fr": "Parcourez les 5 étapes : ciblez votre secteur et vos processus, sélectionnez les cas d’usage à potentiel, qualifiez-les, chiffrez le retour attendu et évaluez votre maturité."
+  },
+  "Parcourez les # étapes : secteur et processus, cas d’usage à potentiel, qualification, retour attendu, maturité. Partez des goulots d’étranglement déclarés par le métier, pas des technologies disponibles.": {
+   "en": "Go through the # steps: sector and processes, use cases with potential, qualification, expected return, maturity. Start from the bottlenecks reported by the business, not from the technologies available.",
+   "fr": "Parcourez les 5 étapes : secteur et processus, cas d’usage à potentiel, qualification, retour attendu, maturité. Partez des goulots d’étranglement déclarés par le métier, pas des technologies disponibles."
+  },
+  "Parcourez les centres de données et les systèmes d’IA effectivement recensés : pays, gabarits, stades atteints.": {
+   "en": "Browse the data centres and the AI systems actually recorded: country, size, stages reached.",
+   "fr": "Parcourez les centres de données et les systèmes d’IA effectivement recensés : pays, gabarits, stades atteints."
+  },
+  "Parcourez les points de contrôle en marquant chacun conforme, en cours ou à traiter.": {
+   "en": "Go through the checkpoints, marking each one compliant, in progress or to be addressed.",
+   "fr": "Parcourez les points de contrôle en marquant chacun conforme, en cours ou à traiter."
+  },
+  "Parcours chiffré — ce que le règlement chiffre lui-même": {
+   "en": "Costed path — what the Regulation puts its own figures on",
+   "fr": "Parcours chiffré — ce que le règlement chiffre lui-même"
+  },
+  "Parcours composé sur mesure :": {
+   "en": "Custom-built path:",
+   "fr": "Parcours composé sur mesure :"
+  },
+  "Parcours guidé en six temps pour identifier, qualifier, prioriser puis redessiner les processus autour des cas d’usage IA à fort impact métier, orienté organisations industrielles. C’est l’étape amont : la valeur métier avant la conformité.": {
+   "en": "A guided path in six stages to identify, qualify, prioritise and then redesign processes around high-business-impact AI use cases, geared to industrial organisations. It is the upstream step: business value before compliance.",
+   "fr": "Parcours guidé en six temps pour identifier, qualifier, prioriser puis redessiner les processus autour des cas d’usage IA à fort impact métier, orienté organisations industrielles. C’est l’étape amont : la valeur métier avant la conformité."
+  },
+  "Parcours guidés par profil": {
+   "en": "Guided paths by profile",
+   "fr": "Parcours guidés par profil"
+  },
+  "Parcours personnalisé généré depuis": {
+   "en": "Personalised path generated from",
+   "fr": "Parcours personnalisé généré depuis"
+  },
+  "Parcours terminé": {
+   "en": "Path completed",
+   "fr": "Parcours terminé"
+  },
+  "Part du nombre d’entités servies, dans": {
+   "en": "Share of the number of entities served, in",
+   "fr": "Part du nombre d’entités servies, dans"
+  },
+  "Partez d’une exigence à justifier (un article, un chapitre de norme) et remontez au module qui produit la preuve. En sens inverse, partez d’un module pour savoir ce qu’il vous permet d’opposer.": {
+   "en": "Start from a requirement to be justified (an article, a chapter of a standard) and trace it back to the module that produces the evidence. Conversely, start from a module to find out what it allows you to put forward.",
+   "fr": "Partez d’une exigence à justifier (un article, un chapitre de norme) et remontez au module qui produit la preuve. En sens inverse, partez d’un module pour savoir ce qu’il vous permet d’opposer."
+  },
+  "Particulièrement critique si vous entraînez ou fine-tunez des modèles en interne.": {
+   "en": "Particularly critical if you train or fine-tune models in-house.",
+   "fr": "Particulièrement critique si vous entraînez ou fine-tunez des modèles en interne."
+  },
+  "Partiellement — obligation de transparence sur la personnalisation (Art. #§#). Pratiques de manipulation : interdites (Art. #§#(a-b)).": {
+   "en": "Partially — transparency obligation on personalisation (Art. #(#)). Manipulation practices: prohibited (Art. #(#)(a-b)).",
+   "fr": "Partiellement — obligation de transparence sur la personnalisation (Art. 50§2). Pratiques de manipulation : interdites (Art. 5§1(a-b))."
+  },
+  "Parties prenantes et information des travailleurs": {
+   "en": "Stakeholders and informing workers",
+   "fr": "Parties prenantes et information des travailleurs"
+  },
+  "Pas commencé": {
+   "en": "Not started",
+   "fr": "Pas commencé"
+  },
+  "Pas d'obligation directe AI Act, mais risque non-conformité par ricochet (contenu non marqué, biais non documenté).": {
+   "en": "No direct AI Act obligation, but a knock-on risk of non-compliance (unmarked content, undocumented bias).",
+   "fr": "Pas d'obligation directe AI Act, mais risque non-conformité par ricochet (contenu non marqué, biais non documenté)."
+  },
+  "Pas encore atteinte": {
+   "en": "Not yet reached",
+   "fr": "Pas encore atteinte"
+  },
+  "Pas un incident majeur": {
+   "en": "Not a major incident",
+   "fr": "Pas un incident majeur"
+  },
+  "Passer les points de contrôle": {
+   "en": "Skip the checkpoints",
+   "fr": "Passer les points de contrôle"
+  },
+  "Passer à": {
+   "en": "Move to",
+   "fr": "Passer à"
+  },
+  "Passer à Entreprise →": {
+   "en": "Move to Enterprise →",
+   "fr": "Passer à Entreprise →"
+  },
+  "Passez du référentiel à VOTRE périmètre : saisissez vos équipements et vos usages pour obtenir votre propre empreinte.": {
+   "en": "Move from the framework to YOUR scope: enter your equipment and your uses to obtain your own footprint.",
+   "fr": "Passez du référentiel à VOTRE périmètre : saisissez vos équipements et vos usages pour obtenir votre propre empreinte."
+  },
+  "Passez d’abord l’Audit IA Act en autonomie (# points) : il fait remonter vos écarts évidents. L’audit accompagné a d’autant plus de valeur qu’il part d’un constat déjà établi.": {
+   "en": "First take the AI Act audit on your own (# checkpoints): it brings your obvious gaps to the surface. The assisted audit is all the more valuable when it starts from a finding already established.",
+   "fr": "Passez d’abord l’Audit IA Act en autonomie (34 points) : il fait remonter vos écarts évidents. L’audit accompagné a d’autant plus de valeur qu’il part d’un constat déjà établi."
+  },
+  "Passez en revue les # points de contrôle, en marquant chacun conforme / en cours / à traiter.": {
+   "en": "Review the # checkpoints, marking each one compliant / in progress / to be addressed.",
+   "fr": "Passez en revue les 34 points de contrôle, en marquant chacun conforme / en cours / à traiter."
+  },
+  "Passez la check-list sur un projet en cours de conception, pas sur un système déjà livré. Exportez-la en PDF pour la joindre au dossier de projet : c’est une preuve d’accountability.": {
+   "en": "Run the checklist on a project still being designed, not on a system already delivered. Export it as a PDF to attach it to the project file: it is evidence of accountability.",
+   "fr": "Passez la check-list sur un projet en cours de conception, pas sur un système déjà livré. Exportez-la en PDF pour la joindre au dossier de projet : c’est une preuve d’accountability."
+  },
+  "Passez les # points de contrôle : gestion des risques, gouvernance des données, documentation technique, journalisation, transparence, supervision humaine, exactitude et robustesse, système de qualité.": {
+   "en": "Go through the # checkpoints: risk management, data governance, technical documentation, logging, transparency, human oversight, accuracy and robustness, quality management system.",
+   "fr": "Passez les 34 points de contrôle : gestion des risques, gouvernance des données, documentation technique, journalisation, transparence, supervision humaine, exactitude et robustesse, système de qualité."
+  },
+  "Passez l’audit de maturité et retenez les piliers les plus bas — données, sécurité, industrialisation.": {
+   "en": "Take the maturity audit and note the lowest pillars — data, security, industrialisation.",
+   "fr": "Passez l’audit de maturité et retenez les piliers les plus bas — données, sécurité, industrialisation."
+  },
+  "Passez l’audit de maturité sur les piliers compétences, gouvernance et organisation, pour le périmètre concerné et non pour l’entreprise entière.": {
+   "en": "Take the maturity audit on the skills, governance and organisation pillars, for the scope concerned and not for the whole company.",
+   "fr": "Passez l’audit de maturité sur les piliers compétences, gouvernance et organisation, pour le périmètre concerné et non pour l’entreprise entière."
+  },
+  "Passez l’audit sur les piliers données, compétences, infrastructure et organisation, en retenant votre section d’activité.": {
+   "en": "Take the audit on the data, skills, infrastructure and organisation pillars, selecting your section of activity.",
+   "fr": "Passez l’audit sur les piliers données, compétences, infrastructure et organisation, en retenant votre section d’activité."
+  },
+  "Pays et garanties, ou « Non »": {
+   "en": "Countries and safeguards, or “No”",
+   "fr": "Pays et garanties, ou « Non »"
+  },
+  "Pays le plus regulateur ?": {
+   "en": "Most regulating country?",
+   "fr": "Pays le plus regulateur ?"
+  },
+  "Personnalisation de contenu client": {
+   "en": "Customer content personalisation",
+   "fr": "Personnalisation de contenu client"
+  },
+  "Personnalisation de l interface utilisateur par IA": {
+   "en": "AI-driven user interface personalisation",
+   "fr": "Personnalisation de l interface utilisateur par IA"
+  },
+  "Personnalisation des parcours pedagogiques": {
+   "en": "Personalisation of learning paths",
+   "fr": "Personnalisation des parcours pedagogiques"
+  },
+  "Personnes concernées": {
+   "en": "Data subjects",
+   "fr": "Personnes concernées"
+  },
+  "Personnes formées, disposant du temps, de l'autorité et du soutien nécessaires pour interrompre ou écarter une sortie du système.": {
+   "en": "People who are trained and have the time, authority and support needed to interrupt or override an output of the system.",
+   "fr": "Personnes formées, disposant du temps, de l'autorité et du soutien nécessaires pour interrompre ou écarter une sortie du système."
+  },
+  "Personnes habilitées aux traitements": {
+   "en": "People authorised to access the processing",
+   "fr": "Personnes habilitées aux traitements"
+  },
+  "Personnes vulnérables (mineurs, patients, salariés…)": {
+   "en": "Vulnerable persons (minors, patients, employees…)",
+   "fr": "Personnes vulnérables (mineurs, patients, salariés…)"
+  },
+  "Pertinence et representativite verifiees des datasets (Art. #(#))": {
+   "en": "Relevance and representativeness of the datasets verified (Art. #(#))",
+   "fr": "Pertinence et representativite verifiees des datasets (Art. 10(3))"
+  },
+  "Pertinent surtout si votre entreprise opère ou projette de s’étendre hors UE.": {
+   "en": "Relevant mainly if your company operates or plans to expand outside the EU.",
+   "fr": "Pertinent surtout si votre entreprise opère ou projette de s’étendre hors UE."
+  },
+  "Peser le parc de systèmes d’IA que vous avez déjà déclaré au Registre : électricité, émissions, énergie primaire et eau, puis les trajectoires à l’horizon. Le même volume déclaré sert au FinOps et à l’empreinte — divisé par un tarif d’un côté, multiplié par des wattheures de l’autre. C’est pourquoi il n’y a qu’un inventaire.": {
+   "en": "Weigh the estate of AI systems you have already declared in the register: electricity, emissions, primary energy and water, then the trajectories to the horizon. The same declared volume serves FinOps and the footprint — divided by a rate on one side, multiplied by watt-hours on the other. That is why there is only one inventory.",
+   "fr": "Peser le parc de systèmes d’IA que vous avez déjà déclaré au Registre : électricité, émissions, énergie primaire et eau, puis les trajectoires à l’horizon. Le même volume déclaré sert au FinOps et à l’empreinte — divisé par un tarif d’un côté, multiplié par des wattheures de l’autre. C’est pourquoi il n’y a qu’un inventaire."
+  },
+  "Pharmaceutique & cosmétique": {
+   "en": "Pharmaceuticals & cosmetics",
+   "fr": "Pharmaceutique & cosmétique"
+  },
+  "Pilotage automatique de la production solaire/eolienne selon meteo et demande.": {
+   "en": "Automatic steering of solar/wind production according to weather and demand.",
+   "fr": "Pilotage automatique de la production solaire/eolienne selon meteo et demande."
+  },
+  "Pilotage d'irrigation et d'intrants": {
+   "en": "Irrigation and input management",
+   "fr": "Pilotage d'irrigation et d'intrants"
+  },
+  "Pilotage de robots collaboratifs (cobots)": {
+   "en": "Control of collaborative robots (cobots)",
+   "fr": "Pilotage de robots collaboratifs (cobots)"
+  },
+  "Pilote du SMIA — je monte le système de management de l’IA": {
+   "en": "AIMS lead — I set up the AI management system",
+   "fr": "Pilote du SMIA — je monte le système de management de l’IA"
+  },
+  "Piloter l’empreinte réelle d’un parc de centres de données : électricité, CO₂e, fabrication amortie et eau de refroidissement, sans confondre ce qui est publié et ce qui est calculé.": {
+   "en": "Steer the actual footprint of an estate of data centres: electricity, CO₂e, amortised manufacturing and cooling water, without confusing what is published with what is calculated.",
+   "fr": "Piloter l’empreinte réelle d’un parc de centres de données : électricité, CO₂e, fabrication amortie et eau de refroidissement, sans confondre ce qui est publié et ce qui est calculé."
+  },
+  "Pièces de conformité (art. #, #).": {
+   "en": "Compliance documents (art. #, #).",
+   "fr": "Pièces de conformité (art. 11, 18)."
+  },
+  "Pièces à communiquer, référentiel des données à masquer.": {
+   "en": "Documents to be disclosed, reference list of the data to be masked.",
+   "fr": "Pièces à communiquer, référentiel des données à masquer."
+  },
+  "Plan d action en # phases (même méthodologie que l Audit de maturité), avec progression calculée à partir de votre Registre IA et de l Audit IA Act réels — pas des chiffres figés.": {
+   "en": "Action plan in # phases (same methodology as the maturity audit), with progress calculated from your actual AI register and AI Act audit — not fixed figures.",
+   "fr": "Plan d action en 4 phases (même méthodologie que l Audit de maturité), avec progression calculée à partir de votre Registre IA et de l Audit IA Act réels — pas des chiffres figés."
+  },
+  "Plan de maintenance": {
+   "en": "Maintenance plan",
+   "fr": "Plan de maintenance"
+  },
+  "Plan de sensibilisation RGPD": {
+   "en": "GDPR awareness plan",
+   "fr": "Plan de sensibilisation RGPD"
+  },
+  "Plan de sensibilisation par public cible et périodicité.": {
+   "en": "Awareness plan by target audience and frequency.",
+   "fr": "Plan de sensibilisation par public cible et périodicité."
+  },
+  "Plan de sensibilisation à la protection des données": {
+   "en": "Data protection awareness plan",
+   "fr": "Plan de sensibilisation à la protection des données"
+  },
+  "Plan de sensibilisation à la protection des données : actions par public cible, périodicité, réalisation. La culture de conformité est ce qui empêche les incidents que la documentation ne peut que constater.": {
+   "en": "Data protection awareness plan: actions by target audience, frequency, completion. A compliance culture is what prevents the incidents that documentation can only record.",
+   "fr": "Plan de sensibilisation à la protection des données : actions par public cible, périodicité, réalisation. La culture de conformité est ce qui empêche les incidents que la documentation ne peut que constater."
+  },
+  "Plan de surveillance post-commercialisation documenté avant mise sur le marché. Collecte et analyse des données post-déploiement. Signalement des incidents graves aux autorités nationales.": {
+   "en": "Post-market monitoring plan documented before placing on the market. Collection and analysis of post-deployment data. Reporting of serious incidents to the national authorities.",
+   "fr": "Plan de surveillance post-commercialisation documenté avant mise sur le marché. Collecte et analyse des données post-déploiement. Signalement des incidents graves aux autorités nationales."
+  },
+  "Plan documenté de collecte et d'analyse des données d'usage sur toute la durée de vie du système.": {
+   "en": "Documented plan for collecting and analysing usage data throughout the lifetime of the system.",
+   "fr": "Plan documenté de collecte et d'analyse des données d'usage sur toute la durée de vie du système."
+  },
+  "Plan et supports de sensibilisation": {
+   "en": "Awareness plan and materials",
+   "fr": "Plan et supports de sensibilisation"
+  },
+  "Planification automatisee des deplacements de pieces et produits.": {
+   "en": "Automated planning of the movement of parts and products.",
+   "fr": "Planification automatisee des deplacements de pieces et produits."
+  },
+  "Planification automatisee des equipes de production": {
+   "en": "Automated scheduling of production teams",
+   "fr": "Planification automatisee des equipes de production"
+  },
+  "Planification de tournées": {
+   "en": "Round planning",
+   "fr": "Planification de tournées"
+  },
+  "Planification des investissements infrastructure": {
+   "en": "Infrastructure investment planning",
+   "fr": "Planification des investissements infrastructure"
+  },
+  "Planification des équipes": {
+   "en": "Team scheduling",
+   "fr": "Planification des équipes"
+  },
+  "Planification dynamique des trajets selon trafic et demande.": {
+   "en": "Dynamic route planning according to traffic and demand.",
+   "fr": "Planification dynamique des trajets selon trafic et demande."
+  },
+  "Planification et affectation": {
+   "en": "Planning and allocation",
+   "fr": "Planification et affectation"
+  },
+  "Planification et ordonnancement": {
+   "en": "Planning and scheduling",
+   "fr": "Planification et ordonnancement"
+  },
+  "Planification sous contrainte": {
+   "en": "Constraint-based planning",
+   "fr": "Planification sous contrainte"
+  },
+  "Planifier cette formation": {
+   "en": "Schedule this course",
+   "fr": "Planifier cette formation"
+  },
+  "Planifier des audits internes périodiques": {
+   "en": "Schedule periodic internal audits",
+   "fr": "Planifier des audits internes périodiques"
+  },
+  "Planifier les vagues de déploiement": {
+   "en": "Plan the deployment waves",
+   "fr": "Planifier les vagues de déploiement"
+  },
+  "Planifiez les actions de sensibilisation par public cible et périodicité.": {
+   "en": "Plan the awareness actions by target audience and frequency.",
+   "fr": "Planifiez les actions de sensibilisation par public cible et périodicité."
+  },
+  "Planifiez l’audit interne et la revue de direction AVANT de demander l’étape #.": {
+   "en": "Schedule the internal audit and the management review BEFORE requesting stage #.",
+   "fr": "Planifiez l’audit interne et la revue de direction AVANT de demander l’étape 2."
+  },
+  "Plateformes : articulation EU AI Act / Digital Services Act. Transparence des systèmes de recommandation et de modération.": {
+   "en": "Platforms: interplay between the EU AI Act and the Digital Services Act. Transparency of recommender and moderation systems.",
+   "fr": "Plateformes : articulation EU AI Act / Digital Services Act. Transparence des systèmes de recommandation et de modération."
+  },
+  "Plus strict encore, au prix d’un frottement réel sur les projets neufs. Cohérent avec une chaîne de construction reproductible.": {
+   "en": "Stricter still, at the cost of real friction on new projects. Consistent with a reproducible build chain.",
+   "fr": "Plus strict encore, au prix d’un frottement réel sur les projets neufs. Cohérent avec une chaîne de construction reproductible."
+  },
+  "Plusieurs tiennent à une propriété du procédé et non à un défaut d’implémentation : pour ceux-là, tout ce qui se construit est de l’atténuation.": {
+   "en": "Several stem from a property of the technique and not from an implementation defect: for those, everything that is built is mitigation.",
+   "fr": "Plusieurs tiennent à une propriété du procédé et non à un défaut d’implémentation : pour ceux-là, tout ce qui se construit est de l’atténuation."
+  },
+  "Point de conformité transmis depuis Sentinel.": {
+   "en": "Compliance item sent from Sentinel.",
+   "fr": "Point de conformité transmis depuis Sentinel."
+  },
+  "Point de vigilance": {
+   "en": "Point of attention",
+   "fr": "Point de vigilance"
+  },
+  "Point d’entrée du dispositif RGPD : cartographier les traitements, évaluer les risques, documenter, sensibiliser, piloter. Toutes les briques sont reliées — le registre alimente la cartographie, qui déclenche les AIPD.": {
+   "en": "Entry point to the GDPR compliance framework: map the processing, assess the risks, document, raise awareness, steer. All the building blocks are linked — the records of processing feed the map, which triggers the DPIAs.",
+   "fr": "Point d’entrée du dispositif RGPD : cartographier les traitements, évaluer les risques, documenter, sensibiliser, piloter. Toutes les briques sont reliées — le registre alimente la cartographie, qui déclenche les AIPD."
+  },
+  "Politique IA (clause #) et rôles (clause #, Annexe A.#)": {
+   "en": "AI policy (clause #) and roles (clause #, Annex A.#)",
+   "fr": "Politique IA (clause 5.2) et rôles (clause 5.3, Annexe A.3)"
+  },
+  "Politique de droit d’auteur respectee et documentee (Art. #(#)(c))": {
+   "en": "Copyright policy complied with and documented (Art. #(#)(c))",
+   "fr": "Politique de droit d’auteur respectee et documentee (Art. 53(1)(c))"
+  },
+  "Politique de développement assisté par IA": {
+   "en": "AI-assisted development policy",
+   "fr": "Politique de développement assisté par IA"
+  },
+  "Politique de sécurité des systèmes d'information": {
+   "en": "Information systems security policy",
+   "fr": "Politique de sécurité des systèmes d'information"
+  },
+  "Politiques et procédures : stratégie réglementaire, conception, tests, incidents, surveillance post-commercialisation. Mise en œuvre proportionnée à la taille du fournisseur, PME, start-up et petites capitalisations intermédiaires notamment, sans jamais rabattre le niveau de rigueur exigé (Art. #(#), Art. #).": {
+   "en": "Policies and procedures: regulatory strategy, design, testing, incidents, post-market monitoring. Implementation proportionate to the size of the provider, SMEs, start-ups and small mid-cap enterprises in particular, without ever lowering the level of rigour required (Art. #(#), Art. #).",
+   "fr": "Politiques et procédures : stratégie réglementaire, conception, tests, incidents, surveillance post-commercialisation. Mise en œuvre proportionnée à la taille du fournisseur, PME, start-up et petites capitalisations intermédiaires notamment, sans jamais rabattre le niveau de rigueur exigé (Art. 17(2), Art. 63)."
+  },
+  "Politiques et procédures conformes à l'EU AI Act + guides pratiques par équipe.": {
+   "en": "Policies and procedures compliant with the EU AI Act + practical guides per team.",
+   "fr": "Politiques et procédures conformes à l'EU AI Act + guides pratiques par équipe."
+  },
+  "Politiques, procedures et instructions ecrites documentees": {
+   "en": "Documented written policies, procedures and instructions",
+   "fr": "Politiques, procedures et instructions ecrites documentees"
+  },
+  "Ponts et millésime": {
+   "en": "Bridges and edition",
+   "fr": "Ponts et millésime"
+  },
+  "Portefeuille · Gain annuel cumulé :": {
+   "en": "Portfolio · Cumulative annual gain:",
+   "fr": "Portefeuille · Gain annuel cumulé :"
+  },
+  "Porter les risques du projet dans la matrice": {
+   "en": "Enter the project’s risks in the matrix",
+   "fr": "Porter les risques du projet dans la matrice"
+  },
+  "Portée d'application": {
+   "en": "Scope of application",
+   "fr": "Portée d'application"
+  },
+  "Portée extraterritoriale": {
+   "en": "Extraterritorial scope",
+   "fr": "Portée extraterritoriale"
+  },
+  "Portée extraterritoriale : qui est concerné en dehors de l UE": {
+   "en": "Extraterritorial scope: who is concerned outside the EU",
+   "fr": "Portée extraterritoriale : qui est concerné en dehors de l UE"
+  },
+  "Poser les mêmes questions aux deux rôles donnerait un chiffre faux dans les deux sens : accablant pour le déployeur, qu’on noterait sur une interface qu’il n’a pas conçue ; indulgent pour le fournisseur, qu’on laisserait cocher « sans objet » sur son obligation principale. Qui conçoit ET exploite répond aux deux : le score retenu est celui du plus faible.": {
+   "en": "Asking both roles the same questions would give a wrong figure in both directions: damning for the deployer, who would be marked on an interface they did not design; lenient for the provider, who would be allowed to tick « not applicable » on their main obligation. Whoever designs AND operates answers both: the score taken is that of the weaker one.",
+   "fr": "Poser les mêmes questions aux deux rôles donnerait un chiffre faux dans les deux sens : accablant pour le déployeur, qu’on noterait sur une interface qu’il n’a pas conçue ; indulgent pour le fournisseur, qu’on laisserait cocher « sans objet » sur son obligation principale. Qui conçoit ET exploite répond aux deux : le score retenu est celui du plus faible."
+  },
+  "Poser ses limites soi-même est ce qui rend le reste crédible : un plan qui promet # % partout se défait à la première question précise.": {
+   "en": "Setting your own limits is what makes the rest credible: a plan that promises # % everywhere unravels at the first precise question.",
+   "fr": "Poser ses limites soi-même est ce qui rend le reste crédible : un plan qui promet 100 % partout se défait à la première question précise."
+  },
+  "Posez le RACI des rôles liés à l’IA : qui décide, qui exécute, qui est consulté, qui est informé.": {
+   "en": "Set out the RACI for AI-related roles: who decides, who executes, who is consulted, who is informed.",
+   "fr": "Posez le RACI des rôles liés à l’IA : qui décide, qui exécute, qui est consulté, qui est informé."
+  },
+  "Posez une question.": {
+   "en": "Ask a question.",
+   "fr": "Posez une question."
+  },
+  "Positionne vos systèmes réels du Registre IA sur une grille Probabilité de non-conformité × Impact, pour repérer en un coup d œil les priorités.": {
+   "en": "Positions the actual systems in your AI register on a Likelihood of non-compliance × Impact grid, so you can spot the priorities at a glance.",
+   "fr": "Positionne vos systèmes réels du Registre IA sur une grille Probabilité de non-conformité × Impact, pour repérer en un coup d œil les priorités."
+  },
+  "Positionnement gravité × probabilité ; aucune pondération cachée.": {
+   "en": "Severity × likelihood positioning; no hidden weighting.",
+   "fr": "Positionnement gravité × probabilité ; aucune pondération cachée."
+  },
+  "Positionnement gravité × probabilité, sans pondération cachée. Aucune note globale ne vient masquer un écart isolé.": {
+   "en": "Severity × likelihood positioning, with no hidden weighting. No overall score masks an isolated gap.",
+   "fr": "Positionnement gravité × probabilité, sans pondération cachée. Aucune note globale ne vient masquer un écart isolé."
+  },
+  "Positionnement post-Brexit pro-innovation. AI Safety Institute surveille les modeles de fondation. Risque de divergence normative avec l'UE.": {
+   "en": "Pro-innovation post-Brexit positioning. The AI Safety Institute monitors foundation models. Risk of regulatory divergence from the EU.",
+   "fr": "Positionnement post-Brexit pro-innovation. AI Safety Institute surveille les modeles de fondation. Risque de divergence normative avec l'UE."
+  },
+  "Positionner les risques": {
+   "en": "Position the risks",
+   "fr": "Positionner les risques"
+  },
+  "Positionnez chaque système selon sa probabilité de défaillance et son impact potentiel.": {
+   "en": "Position each system according to its likelihood of failure and its potential impact.",
+   "fr": "Positionnez chaque système selon sa probabilité de défaillance et son impact potentiel."
+  },
+  "Positionnez chaque système sur les axes probabilité × impact.": {
+   "en": "Position each system on the likelihood × impact axes.",
+   "fr": "Positionnez chaque système sur les axes probabilité × impact."
+  },
+  "Positionnez les cas d’usage retenus en probabilité × impact.": {
+   "en": "Position the selected use cases by likelihood × impact.",
+   "fr": "Positionnez les cas d’usage retenus en probabilité × impact."
+  },
+  "Positionnez les risques identifiés sur les axes probabilité × impact et documentez les mesures d’atténuation retenues.": {
+   "en": "Position the identified risks on the likelihood × impact axes and document the mitigation measures adopted.",
+   "fr": "Positionnez les risques identifiés sur les axes probabilité × impact et documentez les mesures d’atténuation retenues."
+  },
+  "Positionnez les risques par gravité et probabilité.": {
+   "en": "Position the risks by severity and likelihood.",
+   "fr": "Positionnez les risques par gravité et probabilité."
+  },
+  "Positionnez les risques relevés aux deux étapes précédentes — raccordement, eau, permis, concurrence sur le réseau — par gravité et probabilité.": {
+   "en": "Position the risks identified in the two previous steps — grid connection, water, permits, competition on the grid — by severity and likelihood.",
+   "fr": "Positionnez les risques relevés aux deux étapes précédentes — raccordement, eau, permis, concurrence sur le réseau — par gravité et probabilité."
+  },
+  "Possibilite d’ignorer, corriger ou annuler les decisions IA (Art. #(#)(c))": {
+   "en": "Ability to disregard, override or reverse AI decisions (Art. #(#)(c))",
+   "fr": "Possibilite d’ignorer, corriger ou annuler les decisions IA (Art. 14(4)(c))"
+  },
+  "Possibilité de confirmer, modifier ou annuler": {
+   "en": "Ability to confirm, modify or cancel",
+   "fr": "Possibilité de confirmer, modifier ou annuler"
+  },
+  "Postes frequemment sous-estimes — a anticiper pour un budget realiste.": {
+   "en": "Items frequently underestimated — to anticipate for a realistic budget.",
+   "fr": "Postes frequemment sous-estimes — a anticiper pour un budget realiste."
+  },
+  "Potentiellement interdit (Art. #). Simuler en priorité — décision d'abandon possible avant tout investissement.": {
+   "en": "Potentially prohibited (Art. #). Simulate as a priority — a decision to abandon is possible before any investment.",
+   "fr": "Potentiellement interdit (Art. 5). Simuler en priorité — décision d'abandon possible avant tout investissement."
+  },
+  "Potentiellement — Annexe III point # si utilisée comme composante de sécurité d'une infrastructure critique": {
+   "en": "Potentially — Annex III, point # if used as a safety component of critical infrastructure",
+   "fr": "Potentiellement — Annexe III point 2 si utilisée comme composante de sécurité d'une infrastructure critique"
+  },
+  "Pour celui-ci, le régime réglementaire a été relevé dans les textes, mais": {
+   "en": "For this one, the regulatory regime has been identified in the texts, but",
+   "fr": "Pour celui-ci, le régime réglementaire a été relevé dans les textes, mais"
+  },
+  "Pour chaque cas prioritaire, l’artefact avant / après de l’étape # : ce que fait la machine, ce que garde l’humain, ce qui disparaît, qui arbitre.": {
+   "en": "For each priority case, the before / after artefact from step #: what the machine does, what the human keeps, what disappears, who arbitrates.",
+   "fr": "Pour chaque cas prioritaire, l’artefact avant / après de l’étape 6 : ce que fait la machine, ce que garde l’humain, ce qui disparaît, qui arbitre."
+  },
+  "Pour chaque point de contrôle, indiquez votre statut réel (conforme / en cours / à réaliser). Le score global se calcule automatiquement. Les # cartes Cartographier/Évaluer/Planifier en haut de page synthétisent votre situation et proposent des rapports téléchargeables.": {
+   "en": "For each checkpoint, state your actual status (compliant / in progress / to be done). The overall score is calculated automatically. The # Map/Assess/Plan cards at the top of the page summarise your situation and offer downloadable reports.",
+   "fr": "Pour chaque point de contrôle, indiquez votre statut réel (conforme / en cours / à réaliser). Le score global se calcule automatiquement. Les 3 cartes Cartographier/Évaluer/Planifier en haut de page synthétisent votre situation et proposent des rapports téléchargeables."
+  },
+  "Pour chaque scénario de risque, déclarez son délai de réaction, la catégorie de mesure retenue, et la latence d'intervention que vous avez MESURÉE.": {
+   "en": "For each risk scenario, declare its reaction time, the category of measure chosen, and the intervention latency you have MEASURED.",
+   "fr": "Pour chaque scénario de risque, déclarez son délai de réaction, la catégorie de mesure retenue, et la latence d'intervention que vous avez MESURÉE."
+  },
+  "Pour classifier un nouveau système IA, utilisez le Simulateur IA Act (section Cartographier). Pour auditer votre conformité en détail, utilisez l Audit IA Act (section Évaluer le risque).": {
+   "en": "To classify a new AI system, use the AI Act simulator (Map section). To audit your compliance in detail, use the AI Act audit (Assess risk section).",
+   "fr": "Pour classifier un nouveau système IA, utilisez le Simulateur IA Act (section Cartographier). Pour auditer votre conformité en détail, utilisez l Audit IA Act (section Évaluer le risque)."
+  },
+  "Pour les GPAI à risque systémique : évaluation du modèle (red-teaming), évaluation et atténuation des risques systémiques, signalement des incidents à la Commission, mesures de cybersécurité.": {
+   "en": "For GPAI with systemic risk: model evaluation (red-teaming), assessment and mitigation of systemic risks, reporting of incidents to the Commission, cybersecurity measures.",
+   "fr": "Pour les GPAI à risque systémique : évaluation du modèle (red-teaming), évaluation et atténuation des risques systémiques, signalement des incidents à la Commission, mesures de cybersécurité."
+  },
+  "Pour les cas restés incomplets ci-dessous, ce chiffre décrit un gain que rien n’ira chercher.": {
+   "en": "For the cases left incomplete below, this figure describes a gain that nothing will go and collect.",
+   "fr": "Pour les cas restés incomplets ci-dessous, ce chiffre décrit un gain que rien n’ira chercher."
+  },
+  "Pour les fournisseurs hors UE : désigner un mandataire UE par mandat écrit": {
+   "en": "For providers outside the EU: appoint an EU authorised representative by written mandate",
+   "fr": "Pour les fournisseurs hors UE : désigner un mandataire UE par mandat écrit"
+  },
+  "Pour les organisations hors UE : désigner un mandataire UE (Art. #) si le système est utilisé dans l'UE": {
+   "en": "For organisations outside the EU: appoint an EU authorised representative (Art. #) if the system is used in the EU",
+   "fr": "Pour les organisations hors UE : désigner un mandataire UE (Art. 22) si le système est utilisé dans l'UE"
+  },
+  "Pour les systèmes haut risque Annexe III : évaluation FRIA obligatoire avant déploiement (Art. #).": {
+   "en": "For Annex III high-risk systems: FRIA mandatory before deployment (Art. #).",
+   "fr": "Pour les systèmes haut risque Annexe III : évaluation FRIA obligatoire avant déploiement (Art. 27)."
+  },
+  "Pour modifier les rôles ou leur assignation, rendez-vous sur la page Parties prenantes — cette page en est le reflet en lecture.": {
+   "en": "To change the roles or their assignment, go to the Stakeholders page — this page is a read-only reflection of it.",
+   "fr": "Pour modifier les rôles ou leur assignation, rendez-vous sur la page Parties prenantes — cette page en est le reflet en lecture."
+  },
+  "Pour un produit de la section B de l'annexe I : n'appliquer que l'Art. #(#), l'Art. #a et les Art. # à #": {
+   "en": "For a product in Section B of Annex I: apply only Art. #(#), Art. #a and Arts. # to #",
+   "fr": "Pour un produit de la section B de l'annexe I : n'appliquer que l'Art. 6(1), l'Art. 60a et les Art. 102 à 112"
+  },
+  "Pour un système génératif : démontrer les garanties techniques qui empêchent la génération des contenus des points (ba) et (bb) (Art. #(#a))": {
+   "en": "For a generative system: demonstrate the technical safeguards that prevent the generation of the content in points (ba) and (bb) (Art. #(#a))",
+   "fr": "Pour un système génératif : démontrer les garanties techniques qui empêchent la génération des contenus des points (ba) et (bb) (Art. 5(1a))"
+  },
+  "Pour un texte exact, allez aux Réglementations, qui citent le Règlement article par article. Cette page en donne la lecture, pas la lettre.": {
+   "en": "For the exact text, go to Regulations, which quote the Regulation article by article. This page gives its reading, not its letter.",
+   "fr": "Pour un texte exact, allez aux Réglementations, qui citent le Règlement article par article. Cette page en donne la lecture, pas la lettre."
+  },
+  "Pour un établissement de crédit, le report au midi du jour ouvrable suivant NE s’applique pas à la notification initiale. L’horloge tourne le samedi.": {
+   "en": "For a credit institution, the postponement to midday on the following working day does NOT apply to the initial notification. The clock runs on Saturday.",
+   "fr": "Pour un établissement de crédit, le report au midi du jour ouvrable suivant NE s’applique pas à la notification initiale. L’horloge tourne le samedi."
+  },
+  "Pourquoi DORA n'a pas de taux": {
+   "en": "Why DORA has no rate",
+   "fr": "Pourquoi DORA n'a pas de taux"
+  },
+  "Pourquoi certains systèmes n’ont pas d’hébergement compté": {
+   "en": "Why some systems have no hosting counted",
+   "fr": "Pourquoi certains systèmes n’ont pas d’hébergement compté"
+  },
+  "Pourquoi ici :": {
+   "en": "Why here:",
+   "fr": "Pourquoi ici :"
+  },
+  "Pourquoi la révision # et non la #": {
+   "en": "Why revision # and not #",
+   "fr": "Pourquoi la révision 4 et non la 5"
+  },
+  "Pourquoi les énoncés restent en anglais": {
+   "en": "Why the statements stay in English",
+   "fr": "Pourquoi les énoncés restent en anglais"
+  },
+  "Pouvoir réel de réexamen": {
+   "en": "Real power of review",
+   "fr": "Pouvoir réel de réexamen"
+  },
+  "Pratiques interdites (Art. #) : # catégories": {
+   "en": "Prohibited practices (Art. #): # categories",
+   "fr": "Pratiques interdites (Art. 5) : 8 catégories"
+  },
+  "Pratiques interdites en matière d'IA": {
+   "en": "Prohibited AI practices",
+   "fr": "Pratiques interdites en matière d'IA"
+  },
+  "Pre-traitement et orientation des demandes citoyennes (aides, permis).": {
+   "en": "Pre-processing and routing of citizens’ requests (benefits, permits).",
+   "fr": "Pre-traitement et orientation des demandes citoyennes (aides, permis)."
+  },
+  "Premières mesures en place mais incomplètes et non systématiques.": {
+   "en": "First measures in place but incomplete and not systematic.",
+   "fr": "Premières mesures en place mais incomplètes et non systématiques."
+  },
+  "Prendre des mesures pour soutenir le développement de la culture de l'IA des personnes qui exploitent ou utilisent les systèmes pour votre compte, compte tenu de leurs connaissances, de leur formation, du contexte d'emploi et des personnes visées. L'obligation est de moyens : elle ne garantit pas un niveau précis à chaque personne (texte remplacé par le règlement (UE) #/#).": {
+   "en": "Take measures to support the development of AI literacy among the persons who operate or use the systems on your behalf, taking into account their knowledge, their training, the context of use and the persons concerned. This is an obligation of means: it does not guarantee a specific level for each person (text replaced by Regulation (EU) #/#).",
+   "fr": "Prendre des mesures pour soutenir le développement de la culture de l'IA des personnes qui exploitent ou utilisent les systèmes pour votre compte, compte tenu de leurs connaissances, de leur formation, du contexte d'emploi et des personnes visées. L'obligation est de moyens : elle ne garantit pas un niveau précis à chaque personne (texte remplacé par le règlement (UE) 2026/1744)."
+  }
+ }
+}

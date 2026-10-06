@@ -394,6 +394,15 @@ PAGES_APRES_LA_MESURE = frozenset({
     #  quatre pages sont à 100 %.
     "ocde-processus", "ocde-questionnaire",
     "ocde-conformite", "ocde-analyse",
+    #  DONNÉES & PARTAGE — LES SEPT ÉCRANS DES QUINZIÈME ET SEIZIÈME
+    #  RÉFÉRENTIELS (DGA, Data Act), nés bien après la photo. Ce qu'ils
+    #  doivent au lot de traduction ne passe donc PAS par elle, et ne s'en
+    #  trouve pas allégé : le catalogue les relève page par page, et la
+    #  couverture en mots les compte comme les cent trente autres. La photo,
+    #  elle, garde ses 118 pages : elle DATE, c'est ce qui en fait un avant.
+    "dga-qualifier", "dga-obligations", "dga-pont-rgpd",
+    "data-act-qualifier", "data-act-obligations",
+    "data-act-cloud", "data-act-pont-rgpd",
 })
 
 
