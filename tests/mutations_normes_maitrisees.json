@@ -1,0 +1,57 @@
+{
+  "_pourquoi": "Les seize cartes de « normes maîtrisées » et les quatre maillons entre le clic et l'écran. La table des destinations était écrite à la main et figeait SEPT normes : neuf étaient entrées dans le produit sans qu'aucune règle les garde. Elle est désormais dérivée de la grille ; ces mutations vérifient que la dérivation garde bien les neuf, et qu'une table dérivée vide ne passe pas en silence.",
+  "cibles": [
+    "tests/test_normes_maitrisees.py"
+  ],
+  "mutations": [
+    {
+      "nom": "une norme AJOUTÉE APRÈS la table écrite perd son panneau : la table dérivée la garde, l'ancienne ne l'aurait pas vue",
+      "fichier": "sentinel.html",
+      "avant": "id=\"p-owasp-dix\"",
+      "apres": "id=\"p-owasp-10\"",
+      "regle": "test_chaque_cible_existe_comme_panneau_ET_comme_onglet[OWASP-LLM]"
+    },
+    {
+      "nom": "la carte du Data Act mène à un panneau qui n'existe pas",
+      "fichier": "index.html",
+      "avant": "<a class=\"nc-go\" href=\"/sentinel?goto=data-act-qualifier\"",
+      "apres": "<a class=\"nc-go\" href=\"/sentinel?goto=data-act-qualification\"",
+      "regle": "test_chaque_cible_existe_comme_panneau_ET_comme_onglet[Data-Act]"
+    },
+    {
+      "nom": "un SECOND onglet mène au même écran : hubGo en prend un, et ce n'est pas forcément celui qui amorce",
+      "fichier": "sentinel.html",
+      "avant": "<span data-i18n=\"nav.item.ocde-processus\">Processus — groupes et implication</span></div>",
+      "apres": "<span data-i18n=\"nav.item.ocde-processus\">Processus — groupes et implication</span></div><div class=\"sb-item\" data-norme=\"ocde\" data-grp=\"ocde\" role=\"button\" tabindex=\"0\" onclick=\"go('ocde-processus',this,'DILIGENCE OCDE','Processus')\"><span>Processus (bis)</span></div>",
+      "regle": "test_chaque_cible_existe_comme_panneau_ET_comme_onglet[Diligence-OCDE]"
+    },
+    {
+      "nom": "la porte cesse de reporter la destination demandée : le clic se perd à la connexion",
+      "fichier": "app.py",
+      "avant": "def _suite_sure(",
+      "apres": "def _suite_sure_desactivee(",
+      "regle": "test_la_destination_reportee_ne_peut_etre_qu_un_chemin_interne"
+    },
+    {
+      "nom": "la table dérivée ne lit plus le lien des cartes : elle rend un tuple vide, et les règles paramétrées disparaissent sans bruit",
+      "fichier": "tests/test_normes_maitrisees.py",
+      "avant": "        lien = re.search(r'class=\"nc-go\" href=\"/sentinel\\?goto=([^\"&]+)\"', c)",
+      "apres": "        lien = re.search(r'class=\"nc-aller\" href=\"/sentinel\\?goto=([^\"&]+)\"', c)",
+      "regle": "test_la_table_DERIVEE_couvre_TOUTES_les_cartes_et_pas_quelques_unes"
+    },
+    {
+      "nom": "une carte perd son lien vers le module sans être déclarée sans module",
+      "fichier": "index.html",
+      "avant": "<a class=\"nc-go\" href=\"/sentinel?goto=nist53-socle\"",
+      "apres": "<a class=\"nc-go\" href=\"https://doi.org/10.6028/NIST.SP.800-53r4\"",
+      "regle": "test_AUCUNE_carte_ne_reste_sans_module"
+    },
+    {
+      "nom": "le titre annonce un nombre que la grille ne montre pas",
+      "fichier": "index.page.js",
+      "avant": "\"nr.ttl\":\"16 normes",
+      "apres": "\"nr.ttl\":\"15 normes",
+      "regle": "test_le_titre_compte_EXACTEMENT_les_cartes_du_bloc"
+    }
+  ]
+}

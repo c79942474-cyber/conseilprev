@@ -871,7 +871,7 @@ def test_un_lien_PROFOND_amorce_le_module_au_lieu_de_laisser_Chargement(panneau)
     assert "'%s'" % panneau in PAGEJS or '"%s"' % panneau in PAGEJS, panneau
     amorce = re.search(
         r"if \(id\.indexOf\('en18286'\) === 0 && typeof window\.en18286Init "
-        r"=== 'function'\) _apresPeinture\(window\.en18286Init\);", PAGEJS)
+        r"=== 'function'\) _amorcer\(window\.en18286Init\);", PAGEJS)
     assert amorce, (
         "go() n'amorce pas le module : un lien profond ou un parcours guidé "
         "ouvrira « Chargement… » sans fin")
@@ -932,7 +932,7 @@ def test_la_DERNIERE_etape_du_parcours_s_amorce_aussi_par_go():
     occurrence de « prEN 18286 » sur la page ; puis la carte, et son taux."""
     amorce = re.search(
         r"if \(id\.indexOf\('conf-'\) === 0 && typeof window\.confInit "
-        r"=== 'function'\) _apresPeinture\(window\.confInit\);", PAGEJS)
+        r"=== 'function'\) _amorcer\(window\.confInit\);", PAGEJS)
     assert amorce, (
         "go() n'amorce pas l'écran du taux : les cinq parcours qui s'y "
         "terminent y conduiront sur une page vide")

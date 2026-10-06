@@ -1759,35 +1759,47 @@ function sentFilAriane(id) {
 })();
 
 function go(id, el, sec, pg) {
+  /* UNE AMORCE N'EST JOUÉE QU'UNE FOIS PAR OUVERTURE. Les lignes explicites
+     ci-dessous visent des PRÉFIXES (`dora`, `iso42001`, `conf-`…) et couvrent
+     aussi des écrans sans onglet ; l'amorce générique, plus bas, rejoue ce
+     que l'onglet aurait fait. Les deux se recoupent pour les familles qui ont
+     les deux, et sans ce mémo le référentiel partait DEUX fois sur le réseau
+     — pour rien, et au risque du limiteur. */
+  var _amorcees = [];
+  function _amorcer(f) {
+    if (typeof f !== 'function' || _amorcees.indexOf(f) >= 0) return;
+    _amorcees.push(f);
+    _apresPeinture(f);
+  }
   if(window.navRefresh) setTimeout(window.navRefresh, 30);
   document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('on'); });
   document.querySelectorAll('.sb-item').forEach(function(i){
     i.classList.remove('on'); i.removeAttribute('aria-current'); });
   var p = document.getElementById('p-'+id);
   if (p) p.classList.add('on');
-  if (id === 'templates' && typeof window.templatesRenderPage === 'function') _apresPeinture(window.templatesRenderPage);
-  if (id === 'rgpd-site' && typeof window.rgpdInit === 'function') _apresPeinture(window.rgpdInit);
-  if (id === 'training' && typeof window.formCatRender === 'function') _apresPeinture(window.formCatRender);
-  if (id === 'finops' && typeof window.finopsLoad === 'function') _apresPeinture(window.finopsLoad);
-  if (id === 'empreinte-ia' && typeof window.empIaLoad === 'function') _apresPeinture(window.empIaLoad);
-  if (id === 'maturite' && typeof window.naceCharger === 'function') _apresPeinture(window.naceCharger);
-  if (id === 'ia50' && typeof window.ia50Load === 'function') _apresPeinture(window.ia50Load);
-  if (id === 'empreinte' && typeof window.empInit === 'function') _apresPeinture(window.empInit);
-  if (id === 'gouvernance' && typeof window.gouvInit === 'function') _apresPeinture(window.gouvInit);
-  if (id === 'adoption' && typeof window.adpInit === 'function') _apresPeinture(window.adpInit);
-  if (id === 'ingenierie' && typeof window.ingInit === 'function') _apresPeinture(window.ingInit);
-  if (id.indexOf('cra') === 0 && typeof window.craInit === 'function') _apresPeinture(window.craInit);
+  if (id === 'templates' && typeof window.templatesRenderPage === 'function') _amorcer(window.templatesRenderPage);
+  if (id === 'rgpd-site' && typeof window.rgpdInit === 'function') _amorcer(window.rgpdInit);
+  if (id === 'training' && typeof window.formCatRender === 'function') _amorcer(window.formCatRender);
+  if (id === 'finops' && typeof window.finopsLoad === 'function') _amorcer(window.finopsLoad);
+  if (id === 'empreinte-ia' && typeof window.empIaLoad === 'function') _amorcer(window.empIaLoad);
+  if (id === 'maturite' && typeof window.naceCharger === 'function') _amorcer(window.naceCharger);
+  if (id === 'ia50' && typeof window.ia50Load === 'function') _amorcer(window.ia50Load);
+  if (id === 'empreinte' && typeof window.empInit === 'function') _amorcer(window.empInit);
+  if (id === 'gouvernance' && typeof window.gouvInit === 'function') _amorcer(window.gouvInit);
+  if (id === 'adoption' && typeof window.adpInit === 'function') _amorcer(window.adpInit);
+  if (id === 'ingenierie' && typeof window.ingInit === 'function') _amorcer(window.ingInit);
+  if (id.indexOf('cra') === 0 && typeof window.craInit === 'function') _amorcer(window.craInit);
   /* LES DEUX MODULES DE CONFORMITÉ S'AMORCENT AUSSI PAR `go()`, et pas
      seulement par leur onglet. Un lien direct, un parcours guidé ou un
      bouton « → » d'un autre écran passent par ici : sans ces deux lignes,
      la page s'affichait vide avec « Chargement… » qui ne finissait jamais. */
-  if (id.indexOf('iso42001') === 0 && typeof window.isoInit === 'function') _apresPeinture(window.isoInit);
-  if (id.indexOf('iso27001') === 0 && typeof window.iso27Init === 'function') _apresPeinture(window.iso27Init);
-  if (id.indexOf('nis2') === 0 && typeof window.nis2Init === 'function') _apresPeinture(window.nis2Init);
+  if (id.indexOf('iso42001') === 0 && typeof window.isoInit === 'function') _amorcer(window.isoInit);
+  if (id.indexOf('iso27001') === 0 && typeof window.iso27Init === 'function') _amorcer(window.iso27Init);
+  if (id.indexOf('nis2') === 0 && typeof window.nis2Init === 'function') _amorcer(window.nis2Init);
   /* Le calque français a son propre chargement : son préfixe n'est pas
      « nis2 », et sans cette ligne les deux panneaux resteraient sur
      « Chargement… » pour qui y arrive par un lien direct. */
-  if (id.indexOf('recyf') === 0 && typeof window.recyfInit === 'function') _apresPeinture(window.recyfInit);
+  if (id.indexOf('recyf') === 0 && typeof window.recyfInit === 'function') _amorcer(window.recyfInit);
   /* MÊME RAISON QUE POUR LES TROIS AU-DESSUS, ET ELLE A DÉJÀ COÛTÉ UNE
      RECETTE : le `;doraInit()` écrit dans le `onclick` de la barre
      latérale ne s'exécute PAS quand on arrive par `?goto=`, par un
@@ -1795,7 +1807,7 @@ function go(id, el, sec, pg) {
      ligne, les six panneaux DORA s'ouvrent sur un « Chargement… » qui ne
      finit jamais — et la carte DORA de l'accueil mène précisément par
      `?goto=dora-qualifier`. */
-  if (id.indexOf('dora') === 0 && typeof window.doraInit === 'function') _apresPeinture(window.doraInit);
+  if (id.indexOf('dora') === 0 && typeof window.doraInit === 'function') _amorcer(window.doraInit);
   /* MESURÉ PAR LA RECETTE, PAS SUPPOSÉ. Le lien profond `?goto=` et les
      étapes d'un parcours guidé passent par `go()` sans jamais exécuter le
      `;qualifInit()` écrit dans le `onclick` de la barre latérale : la page
@@ -1816,13 +1828,13 @@ function go(id, el, sec, pg) {
      mène par `?goto=`. RELEVÉ DANS UN NAVIGATEUR : arrivé par `go()`, le
      panneau n'affichait que son chapô — aucune carte, aucun taux. Le
      lecteur qu'un parcours venait d'y conduire voyait une page vide. */
-  if (id.indexOf('conf-') === 0 && typeof window.confInit === 'function') _apresPeinture(window.confInit);
-  if (id.indexOf('en18286') === 0 && typeof window.en18286Init === 'function') _apresPeinture(window.en18286Init);
+  if (id.indexOf('conf-') === 0 && typeof window.confInit === 'function') _amorcer(window.confInit);
+  if (id.indexOf('en18286') === 0 && typeof window.en18286Init === 'function') _amorcer(window.en18286Init);
   /* MEME CROCHET POUR LES QUATRE ECRANS DE L'OCDE, et pour la
      meme raison : `;ocdeInit()` ne vit que dans le `onclick` de
      la barre, et un lien profond ou un parcours guide passe par
      `go()` sans l'executer. */
-  if (id.indexOf('ocde') === 0 && typeof window.ocdeInit === 'function') _apresPeinture(window.ocdeInit);
+  if (id.indexOf('ocde') === 0 && typeof window.ocdeInit === 'function') _amorcer(window.ocdeInit);
   /* LES SEPT ÉCRANS DE « DONNÉES & PARTAGE », ET LE DÉFAUT A ÉTÉ MESURÉ
      AVANT D'ÊTRE ÉCRIT — par la passe d'inventaire, qui est le seul outil
      du dépôt capable de dire ce qu'un panneau montre VRAIMENT. Elle a
@@ -1835,8 +1847,70 @@ function go(id, el, sec, pg) {
      DEUX PRÉFIXES, PARCE QUE LES CLÉS SONT DEUX : « dga » et « data-act ».
      Un seul crochet sur « d » attraperait « dora » et « documents ». */
   if ((id.indexOf('dga') === 0 || id.indexOf('data-act') === 0)
-      && typeof window.dpInit === 'function') _apresPeinture(window.dpInit);
-  if (id === 'qualif-assistee' && typeof window.qualifInit === 'function') _apresPeinture(window.qualifInit);
+      && typeof window.dpInit === 'function') _amorcer(window.dpInit);
+  if (id === 'qualif-assistee' && typeof window.qualifInit === 'function') _amorcer(window.qualifInit);
+  /* ═══════════════════════════════════════════════════════════════════════
+     L'ÉCRAN S'AMORCE PAR OÙ QU'ON Y ENTRE, ET PLUS SEULEMENT PAR SON ONGLET.
+
+     LES LIGNES AU-DESSUS SONT LA SIXIÈME RÉPARATION DU MÊME DÉFAUT. Chacune
+     a été ajoutée après coup, pour une famille d'écrans, parce qu'un lecteur
+     était tombé sur un « Chargement… » qui ne finissait jamais : DORA,
+     prEN 18286, les trois écrans du taux, l'OCDE, les sept de « Données &
+     Partage ». Le défaut ne vient pas de ces familles-là : il vient de ce que
+     l'amorce d'un écran était écrite DANS le `onclick` de son onglet. Qui
+     n'arrive pas par l'onglet n'amorce rien.
+
+     ET ILS SONT NOMBREUX À NE PAS PASSER PAR L'ONGLET : le rail de
+     validation, dont le bouton « ↓ » et le passage automatique appellent
+     `go()` directement ; les boutons « → » d'un écran vers un autre ; le
+     pont des deux règlements de données vers le RGPD ; le repli du lien
+     profond `?goto=`.
+
+     ═══ CE QUI A ÉTÉ MESURÉ, DANS UN NAVIGATEUR, AVANT D'ÉCRIRE CECI ═══════
+     Dix-huit entrées de la barre portaient une amorce que `go()` ne
+     connaissait pas. Appelées par `go(id)` seul, TREIZE restaient sur
+     « Chargement… » indéfiniment :
+
+         ia-act-hub · rgpd-hub · rgpd-traitements · rgpd-cartographie
+         rgpd-aipd · nist-profil · nist-cadre · nist-genai · owasp-dix
+         owasp-pont · nist53-socle · nist82-ot · juridique
+
+     Six d'entre eux sont des BLOCS DE PARCOURS, et quatre sont des blocs de
+     SAISIE : un questionnaire qui ne se peint pas ne peut pas être rempli,
+     donc le rail ne peut pas verdir, donc le taux de la norme ne peut pas
+     monter. Le défaut ne se voyait pas comme une panne : comme une attente.
+
+     ═══ POURQUOI `el` DÉCIDE, ET PAS UN DRAPEAU ═══════════════════════════
+     L'onglet appelle `go(id, this, …)` : il passe son propre élément, et il
+     exécute ensuite SA propre amorce. Tous les autres appelants passent
+     `null` ou rien. Lire `el` suffit donc à distinguer « on arrive par
+     l'onglet » de « on arrive autrement », sans rien ajouter ailleurs — et
+     l'amorce n'est jamais jouée deux fois.
+
+     ═══ CE QUE CECI N'EST PAS ═══════════════════════════════════════════════
+     Pas une évaluation de chaîne : on relève les appels SANS ARGUMENT écrits
+     dans l'attribut (`nistInit()`), et on cherche la fonction par son nom
+     dans `window`. Un appel avec arguments n'est pas repris — les lignes
+     explicites ci-dessus restent la place de ces cas, et des écrans qui
+     n'ont pas d'onglet du tout.
+     ═══════════════════════════════════════════════════════════════════════ */
+  if (!el) (function () {
+    /*  L'IDENTIFIANT ENTRE DANS UN SÉLECTEUR CSS, ET IL PEUT VENIR DE L'URL.
+        `?goto=` est recopié tel quel dans `go()` : un identifiant portant une
+        apostrophe ou un crochet rendrait le sélecteur invalide,
+        `querySelector` lèverait, et la navigation s'arrêterait là — sur une
+        page déjà repeinte, donc à moitié. On n'accepte donc que la forme
+        qu'ont réellement les identifiants de panneau. */
+    if (!/^[A-Za-z0-9_-]+$/.test(String(id))) return;
+    var sb = document.querySelector('.sb-item[onclick*="go(\'' + id + '\'"]');
+    if (!sb) return;
+    var oc = sb.getAttribute('onclick') || '';
+    (oc.match(/[A-Za-z_][A-Za-z0-9_]*(?=\s*\(\s*\))/g) || []).forEach(function (nom) {
+      if (nom === 'go') return;
+      var f = window[nom];
+      _amorcer(f);
+    });
+  })();
   /* LE RAIL DU RÉFÉRENTIEL SE REPEINT SUR L'ÉCRAN QU'ON OUVRE — quel que
      soit le chemin : onglet, lien profond, parcours guidé ou passage
      automatique. */
@@ -8421,7 +8495,7 @@ function regFetch(){
     .then(function(d){
       if(d._statut === 401 || d._statut === 403){
         var msg = d._statut === 401
-          ? '🔒 Session expirée — <a href="/login" style="color:var(--blue)">reconnectez-vous</a> pour accéder au Registre IA.'
+          ? '🔒 Session expirée — <a href="' + window.sentLienConnexion() + '" style="color:var(--blue)">reconnectez-vous</a> pour accéder au Registre IA.'
           : '🔒 '+(d.error || 'Accès réservé aux plans Pro/Entreprise.');
         if(body) body.innerHTML = '<div class="reg-loading" style="color:var(--accent)">'+msg+'</div>';
         return;
@@ -9994,7 +10068,7 @@ function friaFetch(){
     .then(function(d){
       if(d._statut === 401 || d._statut === 403){
         var msg = d._statut === 401
-          ? '🔒 Session expirée — <a href="/login" style="color:var(--blue)">reconnectez-vous</a> pour accéder à FRIA.'
+          ? '🔒 Session expirée — <a href="' + window.sentLienConnexion() + '" style="color:var(--blue)">reconnectez-vous</a> pour accéder à FRIA.'
           : '🔒 '+(d.error || 'Accès réservé aux plans Pro/Entreprise.');
         if(holder) holder.innerHTML = '<div class="reg-loading" style="color:var(--accent)">'+msg+'</div>';
         if(info){ info.innerHTML = msg; info.className = "radar-registre-info radar-registre-warn"; }
@@ -16751,7 +16825,13 @@ function sentinelPlanBanner(plan){
   if(window.__IS_CONSEILPREV || !plan || plan === 'entreprise') return;
   var msg = (plan === 'pro')
     ? '✨ <strong>Sentinel Pro</strong> — gouvernance IA Act &amp; RGPD complète. <a href="/tarifications" style="color:var(--accent)">Passer à Entreprise →</a>'
-    : '🔒 <strong>Plan Gratuit</strong> — Accès limité à 4 modules. <a href="/tarifications" style="color:var(--accent)">Comparer les formules →</a>';
+    /* LE NOMBRE EST COMPTÉ, PLUS ÉCRIT. Le bandeau annonçait « 4 modules »
+       au-dessus d'une liste qui n'en contient pas quatre : un chiffre écrit à
+       la main, démenti par la ligne qui le détermine, et que personne ne
+       recompte. C'est le même défaut que le titre « N normes maîtrisées » de
+       l'accueil, déjà payé une fois. */
+    : '🔒 <strong>Plan Gratuit</strong> — Accès limité à ' + PLAN_GRATUIT_MODULES.length
+      + ' modules. <a href="/tarifications" style="color:var(--accent)">Comparer les formules →</a>';
   var banner = document.createElement('div');
   banner.id = 'sentinel-plan-banner';
   banner.style.cssText = 'margin:12px 16px;padding:10px 12px;background:rgba(184,50,34,.06);border:1px solid rgba(184,50,34,.2);border-radius:7px;font-size:11px;color:var(--ink2);line-height:1.5';
@@ -16760,14 +16840,25 @@ function sentinelPlanBanner(plan){
   if(nav && nav.parentNode) nav.parentNode.insertBefore(banner, nav.nextSibling);
 }
 
+/* `__SENTINEL_PLAN_CONNU` DIT « LA RÉPONSE EST ARRIVÉE », et il ne dit que
+   cela — pas quel plan. C'est la différence entre « plan inconnu » et « aucun
+   plan », que `__SENTINEL_PLAN = null` confondait : la porte des offres
+   AUTORISE quand le plan vaut `null` (`if(!p) return true`), si bien qu'avant
+   la réponse tout était ouvert. Le lien profond, lui, part à 350 ms et la
+   réponse arrive quand elle arrive : le même clic sur la même norme ouvrait
+   le module ou affichait « Module verrouillé » selon lequel des deux gagnait
+   la course. Mesuré avec un compte Gratuit : la norme demandée n'était pas
+   affichée, et l'écran restait sur l'Observatoire. */
 function sentinelFetchPlan(){
   if(window.__SENTINEL_PLAN === undefined) window.__SENTINEL_PLAN = null;
+  if(window.__SENTINEL_PLAN_CONNU === undefined) window.__SENTINEL_PLAN_CONNU = false;
   sentAuthMoi().then(function(d){
-    if(!d || !d.authenticated){ window.__SENTINEL_PLAN = null; sentinelApplyGating(); return; }
-    if(d.is_conseilprev || d.nom_entreprise === 'CONSEILPREV'){ window.__SENTINEL_PLAN = 'entreprise'; window.__IS_CONSEILPREV = true;
+    if(!d || !d.authenticated){ window.__SENTINEL_PLAN = null; window.__SENTINEL_PLAN_CONNU = true; sentinelApplyGating(); return; }
+    if(d.is_conseilprev || d.nom_entreprise === 'CONSEILPREV'){ window.__SENTINEL_PLAN = 'entreprise'; window.__IS_CONSEILPREV = true; window.__SENTINEL_PLAN_CONNU = true;
       var _rg = document.getElementById('raas-guide-admin'); if(_rg) _rg.style.display = 'block';
       sentinelApplyGating(); return; }
     window.__SENTINEL_PLAN = d.plan || 'gratuit';
+    window.__SENTINEL_PLAN_CONNU = true;
     window.__SENTINEL_ESSAI = !!d.essai_actif;
     window.__SENTINEL_ESSAI_JOURS = d.essai_jours || 0;
     window.__SENTINEL_ESSAI_EXPIRE = !!d.essai_expire;
@@ -16775,7 +16866,7 @@ function sentinelFetchPlan(){
     var _sbi = document.getElementById('sb-ia50'); if(_sbi) _sbi.style.display = 'none';
     sentinelApplyGating();
     if(window.sentinelEssaiBanner) sentinelEssaiBanner();
-  }).catch(function(){ window.__SENTINEL_PLAN = null; sentinelApplyGating(); });
+  }).catch(function(){ window.__SENTINEL_PLAN = null; window.__SENTINEL_PLAN_CONNU = true; sentinelApplyGating(); });
 }
 _auDomPret(sentinelFetchPlan, 300);
 
@@ -16803,7 +16894,12 @@ window.sentinelEssaiBanner = function(){
 };
 
 
-function sentinelLockPrompt(){
+/* LA MODALE NOMME CE QU'ON VIENT DE DEMANDER. Elle disait « Ce module »
+   — et le lecteur venait de cliquer sur une carte nommée « RGPD », depuis une
+   page d'accueil qui annonce seize normes maîtrisées. Refuser sans nommer
+   laisse croire que c'est le lien qui est cassé. Le nom vient de PAGE_META,
+   la table qui porte déjà le libellé des pages, et qui se traduit. */
+function sentinelLockPrompt(id){
   var old = document.getElementById('sentinel-lock-modal');
   if(old && old.parentNode) old.parentNode.removeChild(old);
   var plan = window.__SENTINEL_PLAN;
@@ -16812,12 +16908,17 @@ function sentinelLockPrompt(){
     : 'Ce module n’est pas inclus dans votre plan Gratuit. L’accès complet est ouvert après souscription et confirmation de paiement.';
   var nextPlan = (plan === 'pro') ? 'entreprise' : 'pro';
   var nextLabel = (nextPlan === 'entreprise') ? 'Entreprise' : 'Pro';
+  var meta = (typeof PAGE_META === 'object' && id) ? PAGE_META[id] : null;
+  var quoi = meta ? ((meta.section ? meta.section + ' · ' : '') + (meta.label || '')) : '';
   var m = document.createElement('div');
   m.id = 'sentinel-lock-modal';
   m.style.cssText = 'position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5)';
   m.innerHTML = '<div style="background:var(--white,#fff);max-width:390px;padding:28px;border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,.3);text-align:center">'
     + '<div style="font-size:30px;margin-bottom:10px">🔒</div>'
     + '<div style="font-size:15px;font-weight:700;color:var(--ink,#111);margin-bottom:8px">Module verrouillé</div>'
+    + (quoi ? '<div style="font-size:12.5px;color:var(--ink2,#333);margin-bottom:10px">Vous avez demandé : <strong>'
+       + quoi.replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; })
+       + '</strong></div>' : '')
     + '<div style="font-size:13px;color:var(--muted,#666);line-height:1.55;margin-bottom:18px">' + txt + '</div>'
     + '<button onclick="sentinelCheckout(\''+nextPlan+'\')" style="display:inline-block;background:var(--accent);color:#fff;padding:10px 18px;border-radius:9px;font-size:13px;font-weight:700;border:none;cursor:pointer">Souscrire l\u2019offre '+nextLabel+'</button>'
     + '<div style="margin-top:10px"><a href="/tarifications" style="font-size:12px;color:var(--accent);text-decoration:none">Comparer les formules</a></div>'
@@ -16898,7 +16999,7 @@ window.go = function(id){
   if(window.__IS_CONSEILPREV) return _planOrigGo ? _planOrigGo.apply(this, arguments) : undefined;
   var plan = window.__SENTINEL_PLAN;
   if((plan === 'gratuit' || plan === 'pro') && !planIsAllowed(id)){
-    sentinelLockPrompt();
+    sentinelLockPrompt(id);
     return;
   }
   return _planOrigGo ? _planOrigGo.apply(this, arguments) : undefined;
@@ -19149,6 +19250,33 @@ window.HUB_BRICKS = [
   ]]
 ];
 window.__hubLoaded = false;
+/* ═══════════════════════════════════════════════════════════════════════════
+   « RECONNECTEZ-VOUS » RAMÈNE SUR L'ÉCRAN QU'ON LISAIT, ET PAS À L'ACCUEIL.
+
+   LE DÉFAUT EST LE JUMEAU CÔTÉ PAGE D'UN DÉFAUT DÉJÀ CORRIGÉ CÔTÉ SERVEUR.
+   La porte de Sentinel reporte la destination demandée dans `?suite=` depuis
+   qu'on a mesuré que `/sentinel?goto=iso27001-risques` renvoyait vers
+   `/login` tout court. Mais trois liens de la page, eux, pointaient encore
+   vers `/login` NU : les deux bandeaux « Session expirée » du Registre IA et
+   de FRIA, et le bouton « Se connecter » de la page Mon compte. Un lecteur
+   dont la session expire sous les yeux cliquait, se reconnectait, et
+   retombait sur l'accueil de Sentinel — à quatre-vingt-dix onglets de ce
+   qu'il lisait.
+
+   CE QU'ON REPORTE, ET POURQUOI PAS `location`. La navigation de Sentinel est
+   interne : ouvrir un écran ne change pas l'URL. `location.search` dirait
+   donc l'écran d'ARRIVÉE, pas celui qu'on lit. C'est `navCurrentId()` qui le
+   sait — il lit le panneau réellement affiché.
+
+   LA DESTINATION EST ENCODÉE, et `__suiteSure()` de la page de connexion
+   n'accepte de toute façon qu'un chemin interne : ce lien ne peut pas devenir
+   un tremplin vers l'extérieur.
+   ═══════════════════════════════════════════════════════════════════════════ */
+window.sentLienConnexion = function(){
+  var id = (typeof window.navCurrentId === 'function') ? window.navCurrentId() : null;
+  var ou = id ? ('/sentinel?goto=' + id) : '/sentinel';
+  return '/login?suite=' + encodeURIComponent(ou);
+};
 window.hubGo = function(id){ var el=document.querySelector(".sb-item[onclick*=\"go('"+id+"'\"]"); if(el){ el.click(); } };
 window.hubLoadOnce = function(){ if(window.__hubLoaded) return; hubLoad(); };
 window.hubLoad = function(){
@@ -19519,7 +19647,34 @@ window.sentinelPointer = function(id){
     return true;
   }catch(e){ return false; }
 };
-window.sentinelGotoDeepLink = function(){ try{ var q=new URLSearchParams(location.search); var g=q.get('goto'); var pt=q.get('point'); if(g){ setTimeout(function(){ if(typeof hubGo==='function') hubGo(g); else if(typeof go==='function') go(g); if(pt){ /* LA PEINTURE DE LA PAGE EST ASYNCHRONE (elle attend son référentiel) : on retente le pointage le temps qu'elle arrive, au lieu de le tenter une fois dans le vide. */ var n=0; var t=setInterval(function(){ if(window.sentinelPointer(pt) || ++n>40) clearInterval(t); }, 150); } }, 350); } }catch(e){} };
+/* ═══════════════════════════════════════════════════════════════════════════
+   LE LIEN PROFOND N'OUVRE L'ÉCRAN QU'APRÈS AVOIR APPRIS L'OFFRE DU COMPTE.
+
+   CE QUI A ÉTÉ MESURÉ, avec un compte réel au plan Gratuit, après une
+   connexion par le formulaire, sur `/sentinel?goto=rgpd-hub` :
+
+       écran peint        p-apercu  (l'Observatoire)
+       titre              « Observatoire IA — Sentinel »
+       onglets verrouillés 106 sur 111
+       modale             « Module verrouillé »
+
+   La chaîne tenait de bout en bout — la carte, la porte, `?suite=`, le
+   formulaire, `hubGo`, l'onglet, `go()` — et l'écran demandé ne s'affichait
+   pas : la porte des offres refusait le module, sans que la demande en garde
+   la moindre trace.
+
+   ET CE REFUS N'ÉTAIT PAS STABLE. `planIsAllowed` autorise quand le plan vaut
+   `null`, c'est-à-dire tant que `/api/sentinel-auth/me` n'a pas répondu. Le
+   plan est demandé à 300 ms, le lien profond partait à 350 ms : le même clic,
+   sur la même norme, par le même compte, ouvrait le module ou affichait la
+   modale selon lequel des deux arrivait d'abord. Une porte qui s'ouvre sur un
+   délai réseau n'est pas une porte.
+
+   ON ATTEND DONC LA RÉPONSE, et on borne l'attente : six secondes, puis on
+   part quand même. Un lien profond qui n'aboutirait jamais parce qu'une route
+   est tombée serait pire que le défaut qu'on corrige.
+   ═══════════════════════════════════════════════════════════════════════════ */
+window.sentinelGotoDeepLink = function(){ try{ var q=new URLSearchParams(location.search); var g=q.get('goto'); var pt=q.get('point'); if(g){ setTimeout(function(){ var n=0; var attente=setInterval(function(){ if(window.__SENTINEL_PLAN_CONNU !== true && ++n <= 40) return; clearInterval(attente); if(typeof hubGo==='function') hubGo(g); else if(typeof go==='function') go(g); if(pt){ /* LA PEINTURE DE LA PAGE EST ASYNCHRONE (elle attend son référentiel) : on retente le pointage le temps qu'elle arrive, au lieu de le tenter une fois dans le vide. */ var m=0; var t=setInterval(function(){ if(window.sentinelPointer(pt) || ++m>40) clearInterval(t); }, 150); } }, 150); }, 350); } }catch(e){} };
 if(document.readyState==='complete') window.sentinelGotoDeepLink(); else window.addEventListener('load', window.sentinelGotoDeepLink);
 /* ══ Cycle de facturation échelonnée — prélèvements Stripe (Gestion des clients) ══ */
 window.billingRenderList = function(out, list){
@@ -25212,7 +25367,7 @@ document.addEventListener('keydown', function(e){
           + '<p style="font-size:12px;color:var(--muted);margin:14px 0 0;line-height:1.6">'
           + 'Le Registre, l’audit, les analyses et les documents sont rattachés à un compte. '
           + 'Sans session, Sentinel affiche ses référentiels publics mais rien de ce qui vous appartient.</p>';
-        if(act) act.innerHTML = bouton('Se connecter', "window.location.href='/login'", true,
+        if(act) act.innerHTML = bouton('Se connecter', "window.location.href=window.sentLienConnexion()", true,
                                        'Ouvrir la page de connexion');
       }
     };

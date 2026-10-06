@@ -675,10 +675,15 @@ def test_go_amorce_les_panneaux_DORA_sans_passer_par_le_menu():
     par un bouton d'un autre écran. Sans la ligne de dispatch, les six
     panneaux s'ouvrent sur un « Chargement… » qui ne finit jamais — et la
     carte DORA de l'accueil mène précisément par `?goto=dora-qualifier`.
+    `_amorcer` ET PLUS `_apresPeinture` : `go()` tient désormais un mémo des
+    amorces déjà programmées pour l'écran qu'il ouvre. La raison est
+    mesurée ailleurs (tests/test_amorce_des_ecrans.py) : une amorce générique
+    rejoue ce que l'onglet aurait fait, elle recoupe les lignes de préfixe
+    comme celle-ci, et sans mémo le référentiel partait deux fois.
     """
     assert re.search(
         r"if \(id\.indexOf\('dora'\) === 0 && typeof window\.doraInit"
-        r" === 'function'\) _apresPeinture\(window\.doraInit\);", PAGEJS), (
+        r" === 'function'\) _amorcer\(window\.doraInit\);", PAGEJS), (
         "aucun aiguillage `go()` n'amorce les panneaux DORA")
     assert 'href="/sentinel?goto=dora-qualifier"' in _lire("index.html"), (
         "la carte DORA de l'accueil ne mène plus au panneau")
