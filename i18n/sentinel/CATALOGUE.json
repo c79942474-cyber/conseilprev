@@ -7590,6 +7590,14 @@
     "_js"
    ]
   },
+  "Départ déclaré ·": {
+   "fr": "Départ déclaré ·",
+   "html": "<span>Départ déclaré ·",
+   "mots": 2,
+   "pages": [
+    "_js"
+   ]
+  },
   "Détail par critère non encore disponible pour cette juridiction. Score global basé sur une évaluation synthétique. Utilisez le bouton \"Actualiser via IA\" pour générer une analyse détaillée.": {
    "fr": "Détail par critère non encore disponible pour cette juridiction. Score global basé sur une évaluation synthétique. Utilisez le bouton \"Actualiser via IA\" pour générer une analyse détaillée.",
    "html": "Détail par critère non encore disponible pour cette juridiction. Score global basé sur une évaluation synthétique. <br><br>Utilisez le bouton \"Actualiser via IA\" pour générer une analyse détaillée.",
@@ -9485,6 +9493,14 @@
    "mots": 6,
    "pages": [
     "cra-ecarts"
+   ]
+  },
+  "Niveau visé ·": {
+   "fr": "Niveau visé ·",
+   "html": "<span>Niveau visé ·",
+   "mots": 2,
+   "pages": [
+    "_js"
    ]
   },
   "Nomenclature des logiciels (SBOM)": {
@@ -11565,6 +11581,14 @@
     "_js"
    ]
   },
+  "Vous avez demandé :": {
+   "fr": "Vous avez demandé :",
+   "html": "Vous avez demandé : <strong>",
+   "mots": 3,
+   "pages": [
+    "_js"
+   ]
+  },
   "Vous avez un investissement et un coût d’exploitation. Le bloc suivant les confronte au capital employé : un projet peut être le moins cher et rester destructeur de valeur, et c’est là que cela se voit.": {
    "fr": "Vous avez un investissement et un coût d’exploitation. Le bloc suivant les confronte au capital employé : un projet peut être le moins cher et rester destructeur de valeur, et c’est là que cela se voit.",
    "html": "<b>Vous avez un investissement et un coût d’exploitation.</b> Le bloc suivant les confronte au <b>capital employé</b> : un projet peut être le moins cher et rester destructeur de valeur, et c’est là que cela se voit.",
@@ -13409,6 +13433,14 @@
     "pricing"
    ]
   },
+  "🔒 Plan Gratuit — Accès limité à": {
+   "fr": "🔒 Plan Gratuit — Accès limité à",
+   "html": "🔒 <strong>Plan Gratuit</strong> — Accès limité à",
+   "mots": 5,
+   "pages": [
+    "_js"
+   ]
+  },
   "🔒 Traçabilité RGPD —": {
    "fr": "🔒 Traçabilité RGPD —",
    "html": "🔒 <strong>Traçabilité RGPD</strong> —",
@@ -13448,14 +13480,14 @@
  "js": {
   "entrees": {
    "attr": 72,
-   "bloc": 346,
-   "texte": 6543
+   "bloc": 350,
+   "texte": 6590
   },
   "fichier": "sentinel.page.js",
   "mots": {
    "attr": 619,
-   "bloc": 3344,
-   "texte": 88753
+   "bloc": 3356,
+   "texte": 89526
   }
  },
  "pages": 138,
@@ -13463,12 +13495,12 @@
   "entrees": {
    "attr": 0,
    "bloc": 0,
-   "texte": 2971
+   "texte": 2973
   },
   "mots": {
    "attr": 0,
    "bloc": 0,
-   "texte": 46599
+   "texte": 46614
   },
   "routes": 20,
   "sondes": 21
@@ -19461,6 +19493,13 @@
     "_js"
    ]
   },
+  "Agents autonomes : périmètre d'action, secrets, journalisation, point d'arrêt humain": {
+   "fr": "Agents autonomes : périmètre d'action, secrets, journalisation, point d'arrêt humain",
+   "mots": 11,
+   "pages": [
+    "_js"
+   ]
+  },
   "Agents connectés aux données de l'entreprise": {
    "fr": "Agents connectés aux données de l'entreprise",
    "mots": 7,
@@ -22758,6 +22797,13 @@
     "_routes"
    ]
   },
+  "Article # du règlement (UE) #/# : exactitude, robustesse, cybersécurité — ce qu'il exige et ce qu'il laisse ouvert": {
+   "fr": "Article 15 du règlement (UE) 2024/1689 : exactitude, robustesse, cybersécurité — ce qu'il exige et ce qu'il laisse ouvert",
+   "mots": 17,
+   "pages": [
+    "_js"
+   ]
+  },
   "Article # hors cybersécurité.": {
    "fr": "Article 15 hors cybersécurité.",
    "mots": 3,
@@ -23561,6 +23607,13 @@
     "_js"
    ]
   },
+  "Atelier : la revue de sécurité d'un système réel du participant, et les contrôles qui en sortent": {
+   "fr": "Atelier : la revue de sécurité d'un système réel du participant, et les contrôles qui en sortent",
+   "mots": 17,
+   "pages": [
+    "_js"
+   ]
+  },
   "Atelier : produire l'artefact avant / après d'un processus du service, et désigner qui l'arbitre": {
    "fr": "Atelier : produire l'artefact avant / après d'un processus du service, et désigner qui l'arbitre",
    "mots": 16,
@@ -23589,6 +23642,13 @@
    "mots": 4,
    "pages": [
     "training"
+   ]
+  },
+  "Atelier : sur ses propres dossiers, trois demandes refaites et trois productions auditées": {
+   "fr": "Atelier : sur ses propres dossiers, trois demandes refaites et trois productions auditées",
+   "mots": 12,
+   "pages": [
+    "_js"
    ]
   },
   "Atelier : sur trois productions réelles du service, dire ce qu'on garde, ce qu'on corrige, ce qu'on jette": {
@@ -24744,6 +24804,13 @@
   "Aucune action applicable": {
    "fr": "Aucune action applicable",
    "mots": 3,
+   "pages": [
+    "_js"
+   ]
+  },
+  "Aucune action de formation": {
+   "fr": "Aucune action de formation",
+   "mots": 4,
    "pages": [
     "_js"
    ]
@@ -29837,6 +29904,13 @@
     "_routes"
    ]
   },
+  "Ce qu'un système expose : l'invite, le contexte, les données d'entraînement, les poids, les sorties": {
+   "fr": "Ce qu'un système expose : l'invite, le contexte, les données d'entraînement, les poids, les sorties",
+   "mots": 17,
+   "pages": [
+    "_js"
+   ]
+  },
   "Ce qu'une certification ISO/IEC # documente déjà parmi les articles du règlement délégué — et ce qu'elle ne documente pas.": {
    "fr": "Ce qu'une certification ISO/IEC 27001 documente déjà parmi les articles du règlement délégué — et ce qu'elle ne documente pas.",
    "mots": 21,
@@ -29945,6 +30019,13 @@
    "pages": [
     "finops",
     "empreinte-ia"
+   ]
+  },
+  "Ce que cette sortie ne garantit pas": {
+   "fr": "Ce que cette sortie ne garantit pas",
+   "mots": 7,
+   "pages": [
+    "_js"
    ]
   },
   "Ce que chaque catégorie demande, sous-catégorie par sous-catégorie.": {
@@ -30084,6 +30165,13 @@
    "mots": 12,
    "pages": [
     "empreinte-parc"
+   ]
+  },
+  "Ce que le catalogue ne couvre pas": {
+   "fr": "Ce que le catalogue ne couvre pas",
+   "mots": 7,
+   "pages": [
+    "_js"
    ]
   },
   "Ce que le chiffre d’appui mesure, et ce qu’il ne mesure pas": {
@@ -30386,6 +30474,13 @@
     "_js"
    ]
   },
+  "Ce qui comble l’écart —": {
+   "fr": "Ce qui comble l’écart —",
+   "mots": 5,
+   "pages": [
+    "_js"
+   ]
+  },
   "Ce qui commande": {
    "fr": "Ce qui commande",
    "mots": 3,
@@ -30406,6 +30501,13 @@
    "mots": 16,
    "pages": [
     "_routes"
+   ]
+  },
+  "Ce qui distingue une demande qui aboutit d'une demande qui tourne : objectif, contexte, contraintes, format attendu": {
+   "fr": "Ce qui distingue une demande qui aboutit d'une demande qui tourne : objectif, contexte, contraintes, format attendu",
+   "mots": 17,
+   "pages": [
+    "_js"
    ]
   },
   "Ce qui distingue une lacune ATTENDUE d'une lacune À COMBLER. Un système en conception n'a pas de volume parce qu'il ne consomme rien ; un système en production n'en a pas parce que personne ne l'a relevé.": {
@@ -30576,6 +30678,13 @@
     "_js"
    ]
   },
+  "Ce qui ne se délègue pas, et comment le dire à son équipe": {
+   "fr": "Ce qui ne se délègue pas, et comment le dire à son équipe",
+   "mots": 13,
+   "pages": [
+    "_js"
+   ]
+  },
   "Ce qui ne se voit pas ligne à ligne se voit en carte.": {
    "fr": "Ce qui ne se voit pas ligne à ligne se voit en carte.",
    "mots": 13,
@@ -30595,6 +30704,13 @@
    "mots": 8,
    "pages": [
     "finops"
+   ]
+  },
+  "Ce qui n’est pas proposé, et pourquoi": {
+   "fr": "Ce qui n’est pas proposé, et pourquoi",
+   "mots": 8,
+   "pages": [
+    "_js"
    ]
   },
   "Ce qui peut être annulé après exécution, et ce qui ne peut pas l'être": {
@@ -32673,6 +32789,13 @@
    "mots": 5,
    "pages": [
     "pricing"
+   ]
+  },
+  "Choisissez dans les quatre listes : la sortie se recalcule à chaque changement. Elle donne le niveau de départ, le niveau visé, la cible des six familles de compétence, et ce qui commande chaque cible — le rôle, la fonction, le secteur ou l’article # du règlement européen.": {
+   "fr": "Choisissez dans les quatre listes : la sortie se recalcule à chaque changement. Elle donne le niveau de départ, le niveau visé, la cible des six familles de compétence, et ce qui commande chaque cible — le rôle, la fonction, le secteur ou l’article 4 du règlement européen.",
+   "mots": 46,
+   "pages": [
+    "_js"
    ]
   },
   "Choisissez d’abord votre": {
@@ -38036,6 +38159,13 @@
     "_js"
    ]
   },
+  "DSI, RSSI, architectes, développeurs, équipes MLOps": {
+   "fr": "DSI, RSSI, architectes, développeurs, équipes MLOps",
+   "mots": 6,
+   "pages": [
+    "_js"
+   ]
+  },
   "DSI, données, sécurité, développement": {
    "fr": "DSI, données, sécurité, développement",
    "mots": 4,
@@ -42160,6 +42290,13 @@
     "_routes"
    ]
   },
+  "Découper une tâche que le modèle échoue à traiter d'un bloc": {
+   "fr": "Découper une tâche que le modèle échoue à traiter d'un bloc",
+   "mots": 12,
+   "pages": [
+    "_js"
+   ]
+  },
   "Découpez en jalons trimestriels — un programme sans étapes intermédiaires perd en visibilité après #-# mois.": {
    "fr": "Découpez en jalons trimestriels — un programme sans étapes intermédiaires perd en visibilité après 2-3 mois.",
    "mots": 14,
@@ -44327,6 +44464,13 @@
   "Elle rend un taux pour chacune des seize normes, calculé à partir de ce que vous avez déjà renseigné dans les modules — rien n'est réévalué ici, tout est composé.": {
    "fr": "Elle rend un taux pour chacune des seize normes, calculé à partir de ce que vous avez déjà renseigné dans les modules — rien n'est réévalué ici, tout est composé.",
    "mots": 30,
+   "pages": [
+    "_js"
+   ]
+  },
+  "Elle répond à la question que le catalogue ne pose pas : pour CETTE personne, quelle formation ou quelle sensibilisation, et jusqu’où. Quatre réponses — rôle dans l’entreprise, secteur de l’entreprise, fonction métier, niveau de connaissance IA déclaré — et la trajectoire s’en déduit, famille par famille.": {
+   "fr": "Elle répond à la question que le catalogue ne pose pas : pour CETTE personne, quelle formation ou quelle sensibilisation, et jusqu’où. Quatre réponses — rôle dans l’entreprise, secteur de l’entreprise, fonction métier, niveau de connaissance IA déclaré — et la trajectoire s’en déduit, famille par famille.",
+   "mots": 48,
    "pages": [
     "_js"
    ]
@@ -53286,6 +53430,13 @@
     "fiche-mx"
    ]
   },
+  "Injection d'invite directe et indirecte, et pourquoi le filtrage seul ne la ferme pas": {
+   "fr": "Injection d'invite directe et indirecte, et pourquoi le filtrage seul ne la ferme pas",
+   "mots": 15,
+   "pages": [
+    "_js"
+   ]
+  },
   "Injection de prompt directe et indirecte": {
    "fr": "Injection de prompt directe et indirecte",
    "mots": 6,
@@ -56544,6 +56695,13 @@
     "empreinte-parc"
    ]
   },
+  "LE NIVEAU DE DÉPART EST DÉCLARÉ, PAS MESURÉ. Le module calcule un écart ; il ne constate aucune compétence. Faites confirmer par une mise en situation avant d’en faire un attendu RH, et faites valider les cibles par les métiers — l’article # du règlement européen impose des mesures, il n’écrit aucune échelle.": {
+   "fr": "LE NIVEAU DE DÉPART EST DÉCLARÉ, PAS MESURÉ. Le module calcule un écart ; il ne constate aucune compétence. Faites confirmer par une mise en situation avant d’en faire un attendu RH, et faites valider les cibles par les métiers — l’article 4 du règlement européen impose des mesures, il n’écrit aucune échelle.",
+   "mots": 53,
+   "pages": [
+    "_js"
+   ]
+  },
   "LE bureau d'études d'un centre de données. Son taux est QUADRUPLE sur le lot technique : c'est là que se décident le PUE, le mode de refroidissement et la consommation d'eau.": {
    "fr": "LE bureau d'études d'un centre de données. Son taux est QUADRUPLE sur le lot technique : c'est là que se décident le PUE, le mode de refroidissement et la consommation d'eau.",
    "mots": 34,
@@ -56911,6 +57069,13 @@
     "_routes"
    ]
   },
+  "La chaîne d'approvisionnement : modèles tiers, jeux de données, extensions, serveurs MCP": {
+   "fr": "La chaîne d'approvisionnement : modèles tiers, jeux de données, extensions, serveurs MCP",
+   "mots": 12,
+   "pages": [
+    "_js"
+   ]
+  },
   "La chaîne d'approvisionnement du modèle.": {
    "fr": "La chaîne d'approvisionnement du modèle.",
    "mots": 6,
@@ -56959,6 +57124,13 @@
    "mots": 21,
    "pages": [
     "_routes"
+   ]
+  },
+  "La cible, famille par famille": {
+   "fr": "La cible, famille par famille",
+   "mots": 5,
+   "pages": [
+    "_js"
    ]
   },
   "La classe commande la procédure d'évaluation, donc le budget.": {
@@ -58498,6 +58670,13 @@
     "_routes"
    ]
   },
+  "La proposition n’a pas pu être calculée.": {
+   "fr": "La proposition n’a pas pu être calculée.",
+   "mots": 8,
+   "pages": [
+    "_js"
+   ]
+  },
   "La protection des données est réexaminée à chaque évolution": {
    "fr": "La protection des données est réexaminée à chaque évolution",
    "mots": 9,
@@ -59585,6 +59764,13 @@
    "mots": 13,
    "pages": [
     "_routes"
+   ]
+  },
+  "Le Top # OWASP des applications à grand modèle de langage, risque par risque": {
+   "fr": "Le Top 10 OWASP des applications à grand modèle de langage, risque par risque",
+   "mots": 13,
+   "pages": [
+    "_js"
    ]
   },
   "Le Top # OWASP n'est pas un référentiel de conformité : on ne s'y conforme pas, on s'en sert pour ne rien oublier d'évident. Il porte un millésime, et celui-ci est # — le précédent ignorait la fuite d'invite système, les bases vectorielles et la consommation non bornée.": {
@@ -60932,6 +61118,13 @@
     "_js"
    ]
   },
+  "Le module calcule un écart entre une cible et une déclaration ; il ne constate aucune compétence. Confirmez par une mise en situation, un exercice pratique ou un entretien avec le manager avant d’en faire un attendu RH.": {
+   "fr": "Le module calcule un écart entre une cible et une déclaration ; il ne constate aucune compétence. Confirmez par une mise en situation, un exercice pratique ou un entretien avec le manager avant d’en faire un attendu RH.",
+   "mots": 38,
+   "pages": [
+    "_js"
+   ]
+  },
   "Le module calcule un écart entre une cible et une déclaration. Il ne constate aucune compétence.": {
    "fr": "Le module calcule un écart entre une cible et une déclaration. Il ne constate aucune compétence.",
    "mots": 16,
@@ -61155,6 +61348,13 @@
    "mots": 20,
    "pages": [
     "_routes"
+   ]
+  },
+  "Le niveau de départ est DÉCLARÉ, pas mesuré": {
+   "fr": "Le niveau de départ est DÉCLARÉ, pas mesuré",
+   "mots": 8,
+   "pages": [
+    "_js"
    ]
   },
   "Le niveau de départ est déclaré, pas mesuré": {
@@ -65567,6 +65767,13 @@
     "_routes"
    ]
   },
+  "Les niveaux # et # décrivent un rôle — transmettre, concevoir. Un secteur sensible et une direction technique élèvent l’exigence portée sur une personne ; ils ne lui donnent pas ce rôle. L’écran dit, famille par famille, ce qu’il a rabattu pour cette raison.": {
+   "fr": "Les niveaux 4 et 5 décrivent un rôle — transmettre, concevoir. Un secteur sensible et une direction technique élèvent l’exigence portée sur une personne ; ils ne lui donnent pas ce rôle. L’écran dit, famille par famille, ce qu’il a rabattu pour cette raison.",
+   "mots": 43,
+   "pages": [
+    "_js"
+   ]
+  },
   "Les non-conformités sont-elles traitées, et les actions correctives suivies jusqu'à leur efficacité ?": {
    "fr": "Les non-conformités sont-elles traitées, et les actions correctives suivies jusqu'à leur efficacité ?",
    "mots": 15,
@@ -68238,6 +68445,13 @@
     "_js"
    ]
   },
+  "L’article # du règlement (UE) #/# impose de prendre des mesures pour un niveau suffisant de maîtrise de l’IA ; il n’écrit aucune échelle. Les six niveaux et les cibles par rôle sont une lecture, à faire valider par les métiers, les managers et la DSI.": {
+   "fr": "L’article 4 du règlement (UE) 2024/1689 impose de prendre des mesures pour un niveau suffisant de maîtrise de l’IA ; il n’écrit aucune échelle. Les six niveaux et les cibles par rôle sont une lecture, à faire valider par les métiers, les managers et la DSI.",
+   "mots": 46,
+   "pages": [
+    "_js"
+   ]
+  },
   "L’article # exige de refaire l’appréciation à intervalles planifiés ET après tout changement notable.": {
    "fr": "L’article 8.2 exige de refaire l’appréciation à intervalles planifiés ET après tout changement notable.",
    "mots": 15,
@@ -68811,6 +69025,13 @@
   "L’écart reflète l’incertitude sur votre vitesse de mise en conformité.": {
    "fr": "L’écart reflète l’incertitude sur votre vitesse de mise en conformité.",
    "mots": 12,
+   "pages": [
+    "_js"
+   ]
+  },
+  "L’échelle et les cibles sont la position du cabinet": {
+   "fr": "L’échelle et les cibles sont la position du cabinet",
+   "mots": 10,
    "pages": [
     "_js"
    ]
@@ -77043,6 +77264,13 @@
     "_routes"
    ]
   },
+  "Passer de l'usage accompagné à l'autonomie : formuler, faire évoluer, et vérifier sans référent derrière.": {
+   "fr": "Passer de l'usage accompagné à l'autonomie : formuler, faire évoluer, et vérifier sans référent derrière.",
+   "mots": 16,
+   "pages": [
+    "_js"
+   ]
+  },
   "Passer de l’énergie informatique à l’énergie totale du site.": {
    "fr": "Passer de l’énergie informatique à l’énergie totale du site.",
    "mots": 11,
@@ -79009,6 +79237,13 @@
     "_routes"
    ]
   },
+  "Pour chaque personne du périmètre, choisissez son rôle, le secteur de l’entreprise, sa fonction métier et le niveau d’IA qu’elle déclare : la sortie donne le niveau de départ, le niveau visé par famille de compétence, et la formation ou la sensibilisation qui comble l’écart.": {
+   "fr": "Pour chaque personne du périmètre, choisissez son rôle, le secteur de l’entreprise, sa fonction métier et le niveau d’IA qu’elle déclare : la sortie donne le niveau de départ, le niveau visé par famille de compétence, et la formation ou la sensibilisation qui comble l’écart.",
+   "mots": 48,
+   "pages": [
+    "_js"
+   ]
+  },
   "Pour chaque point de contrôle, indiquez votre statut réel (conforme / en cours / à réaliser). Le score global se calcule automatiquement. Les # cartes Cartographier/Évaluer/Planifier en haut de page synthétisent votre situation et proposent des rapports téléchargeables.": {
    "fr": "Pour chaque point de contrôle, indiquez votre statut réel (conforme / en cours / à réaliser). Le score global se calcule automatiquement. Les 3 cartes Cartographier/Évaluer/Planifier en haut de page synthétisent votre situation et proposent des rapports téléchargeables.",
    "mots": 37,
@@ -79332,6 +79567,14 @@
    "mots": 4,
    "pages": [
     "_js"
+   ]
+  },
+  "Pratique avancée des systèmes génératifs : obtenir, itérer, vérifier": {
+   "fr": "Pratique avancée des systèmes génératifs : obtenir, itérer, vérifier",
+   "mots": 8,
+   "pages": [
+    "_js",
+    "_routes"
    ]
   },
   "Pratique interdite": {
@@ -82628,6 +82871,13 @@
     "simulateur"
    ]
   },
+  "Qui a besoin de quoi, et jusqu’où": {
+   "fr": "Qui a besoin de quoi, et jusqu’où",
+   "mots": 8,
+   "pages": [
+    "_js"
+   ]
+  },
   "Qui a le droit de faire quoi, depuis quand, et jusqu'à quand — c'est l'objectif le plus lourd du référentiel.": {
    "fr": "Qui a le droit de faire quoi, depuis quand, et jusqu'à quand — c'est l'objectif le plus lourd du référentiel.",
    "mots": 22,
@@ -84009,6 +84259,13 @@
   "Reconnaissance faciale à l'accès : annexe III, point #, et l'article # en interdit plusieurs formes. L'expérimentation ne vaut pas autorisation.": {
    "fr": "Reconnaissance faciale à l'accès : annexe III, point 1, et l'article 5 en interdit plusieurs formes. L'expérimentation ne vaut pas autorisation.",
    "mots": 21,
+   "pages": [
+    "_js"
+   ]
+  },
+  "Reconnaître l'invention confiante, et les formes qu'elle prend selon le type de demande": {
+   "fr": "Reconnaître l'invention confiante, et les formes qu'elle prend selon le type de demande",
+   "mots": 15,
    "pages": [
     "_js"
    ]
@@ -85624,6 +85881,13 @@
     "_js"
    ]
   },
+  "Reprendre une production insuffisante au lieu de la jeter : l'itération dirigée": {
+   "fr": "Reprendre une production insuffisante au lieu de la jeter : l'itération dirigée",
+   "mots": 12,
+   "pages": [
+    "_js"
+   ]
+  },
   "Reprenez le même module par le chemin « Eau & biodiversité » : indice WEI+ de l’Agence européenne, part de l’irrigation agricole, mode de refroidissement retenu.": {
    "fr": "Reprenez le même module par le chemin « Eau & biodiversité » : indice WEI+ de l’Agence européenne, part de l’irrigation agricole, mode de refroidissement retenu.",
    "mots": 24,
@@ -86557,6 +86821,13 @@
   "Rien n’est mesuré : Sentinel ne tourne pas dans vos applications. L’indicateur « ressources » (épuisement abiotique) n’est pas servi, et la page le déclare avec ce qu’il faudrait pour l’établir. L’eau est un ordre de grandeur à ±# %. Le coefficient d’énergie primaire porte trois réserves, lisibles au bloc des facteurs.": {
    "fr": "Rien n’est mesuré : Sentinel ne tourne pas dans vos applications. L’indicateur « ressources » (épuisement abiotique) n’est pas servi, et la page le déclare avec ce qu’il faudrait pour l’établir. L’eau est un ordre de grandeur à ±40 %. Le coefficient d’énergie primaire porte trois réserves, lisibles au bloc des facteurs.",
    "mots": 54,
+   "pages": [
+    "_js"
+   ]
+  },
+  "Rien n’est proposé au-delà de la cible": {
+   "fr": "Rien n’est proposé au-delà de la cible",
+   "mots": 9,
    "pages": [
     "_js"
    ]
@@ -87781,6 +88052,13 @@
    "mots": 5,
    "pages": [
     "enveloppe"
+   ]
+  },
+  "Référentiel de compétences IA": {
+   "fr": "Référentiel de compétences IA",
+   "mots": 4,
+   "pages": [
+    "_js"
    ]
   },
   "Référentiel de gouvernance CONSEILPREV, version #-#-a — RACI, décisions réservées, circuit de validation": {
@@ -89464,6 +89742,13 @@
    "mots": 10,
    "pages": [
     "_routes"
+   ]
+  },
+  "Savoir où un système d'IA s'attaque, et concevoir les contrôles AVANT la mise en production — pas après l'incident.": {
+   "fr": "Savoir où un système d'IA s'attaque, et concevoir les contrôles AVANT la mise en production — pas après l'incident.",
+   "mots": 21,
+   "pages": [
+    "_js"
    ]
   },
   "Savoir quelles compétences le système exige, vérifier qu'on les a, et combler l'écart.": {
@@ -93719,6 +94004,14 @@
     "_js"
    ]
   },
+  "Sécuriser un système d'IA par conception": {
+   "fr": "Sécuriser un système d'IA par conception",
+   "mots": 7,
+   "pages": [
+    "_js",
+    "_routes"
+   ]
+  },
   "Sécurisé et résilient": {
    "fr": "Sécurisé et résilient",
    "mots": 3,
@@ -93735,6 +94028,13 @@
   },
   "Sécurité (art. #)": {
    "fr": "Sécurité (art. 32)",
+   "mots": 2,
+   "pages": [
+    "_js"
+   ]
+  },
+  "Sécurité IA": {
+   "fr": "Sécurité IA",
    "mots": 2,
    "pages": [
     "_js"
@@ -97910,6 +98210,13 @@
     "_js"
    ]
   },
+  "Un plan nominatif au lieu d’un catalogue pour tous — et la raison écrite de chaque cible, à opposer en comité à qui la trouve trop haute ou trop basse.": {
+   "fr": "Un plan nominatif au lieu d’un catalogue pour tous — et la raison écrite de chaque cible, à opposer en comité à qui la trouve trop haute ou trop basse.",
+   "mots": 30,
+   "pages": [
+    "_js"
+   ]
+  },
   "Un plan qui promet # % partout se défait à la première question précise. Poser ses limites soi-même est ce qui rend le reste crédible.": {
    "fr": "Un plan qui promet 100 % partout se défait à la première question précise. Poser ses limites soi-même est ce qui rend le reste crédible.",
    "mots": 24,
@@ -98204,6 +98511,13 @@
   "Un secteur en retard ne justifie pas de l’être ; un secteur en avance ne justifie pas d’investir sans cas d’usage. Le benchmark situe, il ne décide pas.": {
    "fr": "Un secteur en retard ne justifie pas de l’être ; un secteur en avance ne justifie pas d’investir sans cas d’usage. Le benchmark situe, il ne décide pas.",
    "mots": 30,
+   "pages": [
+    "_js"
+   ]
+  },
+  "Un secteur n’accorde pas un rôle": {
+   "fr": "Un secteur n’accorde pas un rôle",
+   "mots": 7,
    "pages": [
     "_js"
    ]
@@ -99315,6 +99629,13 @@
     "_js"
    ]
   },
+  "Une personne dont la cible est # n’a pas besoin du niveau #. Les formations écartées pour ce motif sont rendues, repliées, avec la raison de leur écart — et là où le catalogue n’atteint pas la cible, le besoin est déclaré NON COUVERT au lieu de disparaître.": {
+   "fr": "Une personne dont la cible est 3 n’a pas besoin du niveau 5. Les formations écartées pour ce motif sont rendues, repliées, avec la raison de leur écart — et là où le catalogue n’atteint pas la cible, le besoin est déclaré NON COUVERT au lieu de disparaître.",
+   "mots": 47,
+   "pages": [
+    "_js"
+   ]
+  },
   "Une personne désignée qui ignore que son écrasement nourrit le modèle ne peut pas mesurer la portée de son geste.": {
    "fr": "Une personne désignée qui ignore que son écrasement nourrit le modèle ne peut pas mesurer la portée de son geste.",
    "mots": 20,
@@ -99952,6 +100273,13 @@
    "mots": 1,
    "pages": [
     "geo"
+   ]
+  },
+  "Utilisateurs quotidiens, référents IA, équipes métier déjà sensibilisées": {
+   "fr": "Utilisateurs quotidiens, référents IA, équipes métier déjà sensibilisées",
+   "mots": 8,
+   "pages": [
+    "_js"
    ]
   },
   "Utilisation correcte des informations et autres actifs associés": {
@@ -101924,6 +102252,13 @@
     "en18229-score"
    ]
   },
+  "Vérifier : les faits, la cohérence interne, ce qui exige une source, et ce qu'on ne peut pas vérifier": {
+   "fr": "Vérifier : les faits, la cohérence interne, ce qui exige une source, et ce qu'on ne peut pas vérifier",
+   "mots": 19,
+   "pages": [
+    "_js"
+   ]
+  },
   "Vérifier FRIA →": {
    "fr": "Vérifier FRIA →",
    "mots": 2,
@@ -103240,6 +103575,13 @@
     "_js"
    ]
   },
+  "au niveau": {
+   "fr": "au niveau",
+   "mots": 2,
+   "pages": [
+    "_js"
+   ]
+  },
   "au point": {
    "fr": "au point",
    "mots": 2,
@@ -103352,6 +103694,13 @@
    "mots": 2,
    "pages": [
     "gouvernance",
+    "_js"
+   ]
+  },
+  "aucune exigence": {
+   "fr": "aucune exigence",
+   "mots": 2,
+   "pages": [
     "_js"
    ]
   },
@@ -104201,6 +104550,13 @@
     "_js"
    ]
   },
+  "commandée par": {
+   "fr": "commandée par",
+   "mots": 2,
+   "pages": [
+    "_js"
+   ]
+  },
   "comme payée ?": {
    "fr": "comme payée ?",
    "mots": 2,
@@ -105042,6 +105398,13 @@
   },
   "du RGPD": {
    "fr": "du RGPD",
+   "mots": 2,
+   "pages": [
+    "_js"
+   ]
+  },
+  "du catalogue": {
+   "fr": "du catalogue",
    "mots": 2,
    "pages": [
     "_js"
@@ -106092,6 +106455,13 @@
    "mots": 1,
    "pages": [
     "finops"
+   ]
+  },
+  "formation(s) du catalogue écartée(s)": {
+   "fr": "formation(s) du catalogue écartée(s)",
+   "mots": 6,
+   "pages": [
+    "_js"
    ]
   },
   "formés dans le pays": {
@@ -109402,6 +109772,13 @@
    "mots": 5,
    "pages": [
     "_routes"
+   ]
+  },
+  "proposition calculée sur des listes incomplètes.": {
+   "fr": "proposition calculée sur des listes incomplètes.",
+   "mots": 6,
+   "pages": [
+    "_js"
    ]
   },
   "proposition(s) préparée(s).": {
@@ -115257,13 +115634,6 @@
     "conf-taux"
    ]
   },
-  "— Accès limité à # modules.": {
-   "fr": "— Accès limité à 4 modules.",
-   "mots": 4,
-   "pages": [
-    "_js"
-   ]
-  },
   "— Analyse sur documents longs": {
    "fr": "— Analyse sur documents longs",
    "mots": 4,
@@ -118231,13 +118601,6 @@
    "mots": 24,
    "pages": [
     "clients"
-   ]
-  },
-  "🔒 Session expirée —": {
-   "fr": "🔒 Session expirée —",
-   "mots": 2,
-   "pages": [
-    "_js"
    ]
   },
   "🔗 Agents connectés aux données de l'entreprise": {

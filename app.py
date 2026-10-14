@@ -18899,6 +18899,22 @@ FORM_CATALOGUE = [
     {'id': 13, 'ref': 'Adoption',   'titre': "Repenser mon processus en IA-first", 'jours': 1},
     {'id': 14, 'ref': 'Adoption',   'titre': "Animer un atelier d'adoption — former les formateurs", 'jours': 2},
     {'id': 15, 'ref': 'Adoption',   'titre': "Constituer un reseau d'ambassadeurs", 'jours': 1},
+    # ── LES DEUX LIGNES QUE LE REFERENTIEL DE COMPETENCES A FAIT ECRIRE ──────
+    # Le module `competences_ia` derive, pour chaque famille, la cible la plus
+    # haute que ses tables exigent, et la compare au plafond du catalogue. Il
+    # manquait « proteger » au niveau 5 (un ingenieur des systemes
+    # d'information), « comprendre » au niveau 4 et « interagir » au niveau 3 :
+    # trois besoins exiges, aucune ligne pour les porter.
+    #
+    # NI L'UNE NI L'AUTRE NE PORTE DE `prix_cents` : une et deux journees sont
+    # au bareme (950 et 1 750 EUR HT), donc le tarif se lit la ou tous les
+    # autres se lisent. Un prix ecrit ici serait un prix de plus a tenir.
+    # LA FAMILLE PORTE SES ACCENTS, ET C'EST UNE CONTRAINTE MESUREE : la
+    # recette compare les familles d'une copie a l'autre, A L'IDENTIQUE. Le
+    # titre, lui, reste sans accent comme ses quinze voisins — il n'est
+    # compare nulle part, et c'est le Hub qui l'affiche.
+    {'id': 16, 'ref': 'Sécurité IA', 'titre': "Securiser un systeme d'IA par conception", 'jours': 2},
+    {'id': 17, 'ref': 'Adoption',   'titre': "Pratique avancee des systemes generatifs : obtenir, iterer, verifier", 'jours': 1},
 ]
 
 # Tarifs indicatifs HT par participant (en centimes) : 1 jour = 950 EUR, 2 jours = 1750 EUR.
@@ -19030,6 +19046,18 @@ FORM_SESSIONS_DEFAUT = [
     (15, '2027-02-25', '2027-02-25', 'A distance (visioconference)'),
     (15, '2027-05-06', '2027-05-06', 'Presentiel — Paris'),
     (15, '2027-09-30', '2027-09-30', 'A distance (visioconference)'),
+    # LES DEUX FORMATIONS NEUVES ONT LEURS TROIS SESSIONS, comme les quinze
+    # autres : une formation sans session est au catalogue et ne se reserve
+    # pas — la recette le refuse, et elle a raison. La cadence suit celle de
+    # ses voisines : trois dates etalees sur l'annee, alternant presentiel et
+    # visioconference, et la session du n°16 tient sur deux jours consecutifs
+    # parce que la formation en dure deux.
+    (16, '2027-03-15', '2027-03-16', 'Presentiel — Paris'),
+    (16, '2027-06-07', '2027-06-08', 'A distance (visioconference)'),
+    (16, '2027-09-20', '2027-09-21', 'Presentiel — Paris'),
+    (17, '2027-03-04', '2027-03-04', 'A distance (visioconference)'),
+    (17, '2027-05-27', '2027-05-27', 'Presentiel — Paris'),
+    (17, '2027-10-07', '2027-10-07', 'A distance (visioconference)'),
 ]
 
 

@@ -534,6 +534,65 @@ def test_chaque_formation_CITEE_existe_au_catalogue_avec_le_titre_ATTENDU():
     assert "FORMATIONS_CAT" in M.CATALOGUE_SOURCE
 
 
+def test_AUCUNE_famille_n_a_de_trou_entre_la_cible_la_plus_haute_et_le_catalogue():
+    """LA RÈGLE QUI MANQUAIT, ET C'EST UN UTILISATEUR QUI L'A TROUVÉE.
+
+    L'écran rendait : « Le catalogue porte "Protéger" au niveau 4 au mieux ;
+    la cible est 5. Aucune formation existante ne comble cet écart. » La
+    sortie était honnête — elle déclarait le trou au lieu de le cacher — mais
+    rien ne l'empêchait d'exister. Trois familles étaient dans ce cas :
+    « protéger » au niveau 5 (un ingénieur des systèmes d'information),
+    « comprendre » au niveau 4 et « interagir » au niveau 3.
+
+    CE QUE LA RÈGLE COMPARE : pour chaque famille, la cible la plus haute que
+    les tables exigent SUR LES 1 320 TRIPLETS, et le plafond du catalogue.
+    Monter une cible sans écrire la formation qui la porte la fait tomber, et
+    retirer une formation qui portait un plafond aussi. Le trou ne peut plus
+    s'installer en silence."""
+    plafond, besoin = {}, {}
+    for a in M.APPORTS:
+        for fam, niv in a["porte"].items():
+            plafond[fam] = max(plafond.get(fam, 0), niv)
+    for pop, fon, sec in TRIPLETS:
+        for f in M.cible(pop, fon, sec)["familles"]:
+            besoin[f["famille"]] = max(besoin.get(f["famille"], 0), f["cible"])
+    trous = {fam: (besoin[fam], plafond.get(fam, 0))
+             for fam in besoin if plafond.get(fam, 0) < besoin[fam]}
+    assert not trous, (
+        "des familles sont exigées plus haut que le catalogue ne va "
+        "(cible la plus haute, plafond du catalogue) : %s — il manque la "
+        "formation qui les porte, et l'écran rendra « aucune formation "
+        "existante ne comble cet écart »" % trous)
+
+
+def test_la_declaration_du_NON_COUVERT_marche_encore_quand_un_trou_existe():
+    """LE MÉCANISME NE DOIT PAS MOURIR D'ÊTRE DEVENU INUTILE. Les trous
+    comblés, `non_couvert` ne se déclenche sur AUCUNE des 7 920 combinaisons :
+    c'est un filet, pas une fonctionnalité morte, et un filet qu'on ne tend
+    jamais ne se sait pas troué. La règle retire donc du catalogue la
+    formation qui porte « protéger » au niveau 5, et vérifie que le besoin
+    revient déclaré, chiffré et expliqué — puis remet le catalogue."""
+    porteuse = [a for a in M.APPORTS if a["porte"].get("proteger") == 5]
+    assert len(porteuse) == 1, (
+        "la règle vise la formation qui porte « protéger » au niveau 5 ; il "
+        "en existe %d" % len(porteuse))
+    entier = M.APPORTS
+    M.APPORTS = tuple(a for a in entier if a is not porteuse[0])
+    try:
+        r = M.proposer("expert_technique", "si_data", "K", 3)
+        trous = {x["famille"]: x for x in r["non_couvert"]}
+        assert "proteger" in trous, (
+            "la formation qui portait « protéger » au niveau 5 est retirée et "
+            "le besoin ne se déclare pas : l'écart disparaîtrait en silence")
+        x = trous["proteger"]
+        assert x["cible"] == 5 and x["plafond_catalogue"] == 4
+        assert "au mieux" in x["dit"] and "ne comble cet écart" in x["dit"]
+    finally:
+        M.APPORTS = entier
+    #  LE TÉMOIN : catalogue entier, plus aucun trou sur cette personne.
+    assert M.proposer("expert_technique", "si_data", "K", 3)["non_couvert"] == []
+
+
 def test_une_SEULE_formation_est_la_porte_d_entree_de_qui_part_de_zero():
     """DEUX SENSIBILISATIONS LAISSERAIENT CHOISIR, et le module n'a aucun
     élément pour trancher ; zéro laisserait sans porte celui qui part de rien."""

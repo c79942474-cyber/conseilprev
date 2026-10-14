@@ -219,7 +219,21 @@ ok("…et un bouton de filtre pour chacune", _pubbtn == _pubrefs, _pubbtn ^ _pub
 # ce qu'on déploie. Si ses quatre lignes se mettaient à parler d'articles et
 # d'annexes, elle aurait rejoint les cinq autres sans que rien ne le signale.
 _adop = [c for c in hub if c["ref"] == "Adoption"]
-ok("la famille Adoption compte quatre formations", len(_adop) == 4, len(_adop))
+# LE COMPTE SE DÉRIVE, IL NE S'ÉCRIT PLUS. La ligne disait « quatre » ; une
+# cinquième formation d'adoption l'a fait tomber alors que rien n'était cassé —
+# exactement le défaut que le §3 de cette recette dénonce chez les autres. Ce
+# qui compte n'est pas le nombre : c'est que les trois copies s'accordent sur
+# la composition de la famille, et qu'elle ne soit pas vide.
+#  `_adop` vient DÉJÀ du Hub (ligne ci-dessus) : la comparaison se fait donc
+#  avec le module tarifaire d'app.py, qui est l'autre copie.
+_adop_app = [c for c in CAT if c["ref"] == "Adoption"]
+ok("la famille Adoption n'est pas vide", len(_adop) >= 1, len(_adop))
+ok("…et le module tarifaire en porte autant que le Hub",
+   len(_adop_app) == len(_adop),
+   "%d au module, %d au Hub" % (len(_adop_app), len(_adop)))
+ok("…avec les mêmes numéros",
+   sorted(c["id"] for c in _adop_app) == sorted(x["n"] for x in _adop),
+   (sorted(c["id"] for c in _adop_app), sorted(x["n"] for x in _adop)))
 ok("…dont une demi-journée", any("½" in c["d"] for c in _adop),
    [c["d"] for c in _adop])
 # La comparaison ignore la casse : « CE QUI DISPARAÎT » est une emphase
@@ -355,32 +369,64 @@ ok("un second appel n'ajoute aucun doublon",
 print("\n══ 8. Discrimination : rien de tout cela n'existait avant ══\n")
 
 
+#: CE QUE §8 EXIGE, ET QU'UN CLONE TRONQUÉ N'A PAS. La discrimination remonte
+#: au commit qui a INTRODUIT un marqueur, puis lit son PARENT. Dans un clone
+#: peu profond (`clone_depth`, les sessions distantes), le plus ancien commit
+#: trouvé est la frontière de la greffe : il n'a pas de parent, `git show
+#: <sha>^:fichier` rend 128, et la recette MOURAIT là — en traînant les sept
+#: sections vertes qui précèdent dans un plantage.
+#: ELLE LE DIT DÉSORMAIS AU LIEU DE TOMBER : §8 s'annonce hors de portée, et
+#: le reste de la recette garde sa valeur. Sur un clone complet, il mesure
+#: comme avant.
+_HISTOIRE_TRONQUEE = []
+
+
 def _avant(marqueur, fichier):
     hs = subprocess.check_output(
         ["git", "-C", DEPOT, "log", "-S", marqueur, "--format=%H", "--", fichier],
         text=True).split()
     ref = ("%s^" % hs[-1]) if hs else "HEAD"
-    return subprocess.check_output(
-        ["git", "-C", DEPOT, "show", "%s:%s" % (ref, fichier)], text=True)
+    try:
+        return subprocess.check_output(
+            ["git", "-C", DEPOT, "show", "%s:%s" % (ref, fichier)], text=True,
+            stderr=subprocess.DEVNULL)
+    except subprocess.CalledProcessError:
+        _HISTOIRE_TRONQUEE.append((marqueur, fichier, ref))
+        return None
+
+
+def _ok_avant(titre, av, condition):
+    """Un contrôle de §8 : sauté, NOMMÉ, quand l'histoire manque."""
+    if av is None:
+        print("  SAUTÉ %s — l'histoire ne remonte pas jusque-là "
+              "(clone tronqué)" % titre)
+        return
+    ok(titre, condition(av))
 
 
 av = _avant("form_prix_cents", "app.py")
-ok("avant, le tarif se déduisait des jours, sans recours",
-   "FORM_PRIX.get(cat['jours'] if cat else 1, 95000)" in av)
-ok("…et aucune fonction ne le résolvait", "def form_prix_cents" not in av)
-ok("…ni ne journalisait un tarif manquant", "FORM_PRIX_MANQUANT" not in av)
-ok("avant, le catalogue s'arrêtait à dix", av.count("{'id': 1") >= 1
-   and "'id': 11" not in av)
+_ok_avant("avant, le tarif se déduisait des jours, sans recours", av,
+          lambda a: "FORM_PRIX.get(cat['jours'] if cat else 1, 95000)" in a)
+_ok_avant("…et aucune fonction ne le résolvait", av,
+          lambda a: "def form_prix_cents" not in a)
+_ok_avant("…ni ne journalisait un tarif manquant", av,
+          lambda a: "FORM_PRIX_MANQUANT" not in a)
+_ok_avant("avant, le catalogue s'arrêtait à dix", av,
+          lambda a: a.count("{'id': 1") >= 1 and "'id': 11" not in a)
 avs = _avant("'Programme':'#B03A2E'", "sentinel.html")
-ok("avant, le Hub n'avait pas de famille « Programme »",
-   "'Programme':'#B03A2E'" not in avs)
+_ok_avant("avant, le Hub n'avait pas de famille « Programme »", avs,
+          lambda a: "'Programme':'#B03A2E'" not in a)
 ava = _avant("FORM_SESSIONS_AMORCAGE", "app.py")
-ok("avant, l'amorçage renonçait dès qu'une ligne existait",
-   "if int(dict(cur.fetchone()).get('n', 0)) > 0:" in ava)
+_ok_avant("avant, l'amorçage renonçait dès qu'une ligne existait", ava,
+          lambda a: "if int(dict(cur.fetchone()).get('n', 0)) > 0:" in a)
 avp = _avant("window.foCompter", "formations.html")
-ok("avant, la page publique écrivait ses compteurs en dur",
-   "Toutes les formations (10)" in avp)
-ok("…et ne savait pas les calculer", "foCompter" not in avp)
+_ok_avant("avant, la page publique écrivait ses compteurs en dur", avp,
+          lambda a: "Toutes les formations (10)" in a)
+_ok_avant("…et ne savait pas les calculer", avp,
+          lambda a: "foCompter" not in a)
+if _HISTOIRE_TRONQUEE:
+    print("\n  §8 n'a pas pu mesurer : le clone ne remonte pas avant %s. "
+          "Sur un clone complet, ces contrôles tournent." % _HISTOIRE_TRONQUEE[0][2])
 
 print("")
 print("%d contrôle(s) en échec\n" % ko if ko else "tout est vert\n")

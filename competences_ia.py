@@ -374,6 +374,26 @@ APPORTS = (
      "porte": {"appliquer": 4, "encadrer": 4}},
     {"n": 15, "titre_attendu": "Constituer un réseau d'ambassadeurs",
      "porte": {"encadrer": 4}},
+    # ── LES DEUX FORMATIONS QUI COMBLENT LES TROUS QUE CE MODULE A RÉVÉLÉS ──
+    #
+    # CE QUI LES A FAIT ÉCRIRE, ET C'EST UNE SORTIE DU MODULE. Pour un
+    # ingénieur des systèmes d'information, la cible de « protéger » est 5 et
+    # le catalogue s'arrêtait à 4 : l'écran rendait « Aucune formation
+    # existante ne comble cet écart ». Même chose sur « comprendre » au niveau
+    # 4 et sur « interagir » au niveau 3. Trois besoins que les tables
+    # exigeaient et qu'aucune ligne du catalogue n'atteignait.
+    #
+    # LA RÈGLE QUI LES GARDE DÉSORMAIS :
+    # test_AUCUNE_famille_n_a_de_trou_entre_la_cible_la_plus_haute_et_le_catalogue.
+    # Elle compare, famille par famille, la cible la plus haute des 1 320
+    # triplets au plafond du catalogue. Monter une cible sans la formation qui
+    # la porte la fait tomber — le trou ne peut plus s'installer en silence.
+    {"n": 16, "titre_attendu": "Sécuriser un système d'IA par conception",
+     "porte": {"comprendre": 4, "proteger": 5}},
+    {"n": 17,
+     "titre_attendu": "Pratique avancée des systèmes génératifs : obtenir, "
+                      "itérer, vérifier",
+     "porte": {"interagir": 3, "evaluer": 3}},
 )
 _NUMEROS_APPORTS = tuple(a["n"] for a in APPORTS)
 CATALOGUE_SOURCE = ("Catalogue « Formations conformité IA » du Hub Training "
