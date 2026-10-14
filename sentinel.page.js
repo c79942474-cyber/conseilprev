@@ -1099,6 +1099,7 @@ var PAGE_META = {
   audit:    {section:'AUDIT',           label:'Audit de conformité'},
   equipe:   {section:'ÉQUIPE & FORMATION',          label:'Équipe'},
   training: {section:'ÉQUIPE & FORMATION',       label:'Hub Training'},
+  competences: {section:'ÉQUIPE & FORMATION',    label:'Référentiel de compétences IA'},
   espace: {section:'PILOTAGE', label:'Mes actions du jour'},
   report: {section:'PILOTAGE', label:'Vue direction'},
   maturite: {section:'CARTOGRAPHIER', label:'Audit de maturité IA'},
@@ -1295,6 +1296,16 @@ var SENT_T = {
     'pg.data-act-pont-rgpd.eb': 'Data Act · GDPR bridge',
     'pg.data-act-pont-rgpd.h1': 'It complements Articles 15 and 20, <em>and borrows the Article 83(5) cap</em>',
     'pg.data-act-pont-rgpd.p': 'Four provisions link this Regulation to the GDPR, and the last is the heaviest. Article 1(5) says the Chapter II rights <b>complement</b> GDPR Articles 15 and 20 — they do not replace them — and that the GDPR prevails in the event of conflict. Article 4(12) requires a GDPR Article 6 basis where the user is not the data subject. And Article 40(4) gives the GDPR supervisory authorities — the CNIL — competence for Chapters II, III and V, <strong>up to the amount of GDPR Article 83(5)</strong>: EUR 20 000 000 or 4 % of total worldwide annual turnover, whichever is higher. Article 83(5) provides <strong>no reduction for SMEs</strong>, where Article 99(6) of the AI Act keeps the lower cap for them.',
+
+    'nav.item.competences': 'Competency framework',
+    'pg.competences.eb': 'Training hub \u00b7 Competency framework',
+    'pg.competences.h1': 'Which training, <em>for which person, and how far</em>',
+    'pg.competences.p': 'Four answers, and one person\u2019s trajectory follows from them: their <b>role</b> in the company, the company\u2019s <b>sector</b>, their <b>business function</b>, and the level of AI knowledge they <b>declare</b>. The output gives, family by family, the starting level and the target level \u2014 and what commands each target, the role, the function, the sector or Article\u00a04. The starting level is <strong>declared, not measured</strong>: the answer says so itself, and no training is proposed beyond the target.',
+    'pg.competences.lbl.population': 'Type of person in the company',
+    'pg.competences.lbl.fonction': 'Business function',
+    'pg.competences.lbl.secteur': 'Company sector of activity',
+    'pg.competences.lbl.niveau': 'Declared level of AI knowledge',
+    'pg.competences.attente': 'Loading the framework\u2026',
 
     'nav.sec.ocde': 'OECD due diligence \u2014 responsible AI',
     'nav.item.ocde-processus': 'Process \u2014 groups and involvement',
@@ -12885,6 +12896,17 @@ var PAGE_GUIDES = {
       {h:"Ce que la réservation ne vérifie pas", t:"Elle ne contrôle pas que l’adresse saisie est bien en Île-de-France : hors de cette zone, écrivez avant de réserver. Elle ne retient qu’UNE séance par créneau, et un même sujet une seule fois par entreprise — le SIRET, et non le courriel, décompte la séance offerte."}
     ]
   },
+  competences: {
+    title: "Référentiel de compétences IA",
+    sections: [
+      {h:"À quoi sert cette page", t:"Elle répond à la question que le catalogue ne pose pas : pour CETTE personne, quelle formation ou quelle sensibilisation, et jusqu’où. Quatre réponses — rôle dans l’entreprise, secteur de l’entreprise, fonction métier, niveau de connaissance IA déclaré — et la trajectoire s’en déduit, famille par famille."},
+      {h:"Comment l’utiliser", t:"Choisissez dans les quatre listes : la sortie se recalcule à chaque changement. Elle donne le niveau de départ, le niveau visé, la cible des six familles de compétence, et ce qui commande chaque cible — le rôle, la fonction, le secteur ou l’article 4 du règlement européen."},
+      {h:"Le niveau de départ est DÉCLARÉ, pas mesuré", t:"Le module calcule un écart entre une cible et une déclaration ; il ne constate aucune compétence. Confirmez par une mise en situation, un exercice pratique ou un entretien avec le manager avant d’en faire un attendu RH."},
+      {h:"Un secteur n’accorde pas un rôle", t:"Les niveaux 4 et 5 décrivent un rôle — transmettre, concevoir. Un secteur sensible et une direction technique élèvent l’exigence portée sur une personne ; ils ne lui donnent pas ce rôle. L’écran dit, famille par famille, ce qu’il a rabattu pour cette raison."},
+      {h:"Rien n’est proposé au-delà de la cible", t:"Une personne dont la cible est 3 n’a pas besoin du niveau 5. Les formations écartées pour ce motif sont rendues, repliées, avec la raison de leur écart — et là où le catalogue n’atteint pas la cible, le besoin est déclaré NON COUVERT au lieu de disparaître."},
+      {h:"L’échelle et les cibles sont la position du cabinet", t:"L’article 4 du règlement (UE) 2024/1689 impose de prendre des mesures pour un niveau suffisant de maîtrise de l’IA ; il n’écrit aucune échelle. Les six niveaux et les cibles par rôle sont une lecture, à faire valider par les métiers, les managers et la DSI."}
+    ]
+  },
   espace: {
     title: "Mes actions du jour",
     sections: [
@@ -23304,6 +23326,10 @@ var GUIDED_PATHS = [
        action:'Passez l’audit de maturité sur les piliers compétences, gouvernance et organisation, pour le périmètre concerné et non pour l’entreprise entière.',
        gain:'Une base de départ chiffrée, à reprendre dans six mois — c’est l’écart entre deux mesures qui prouve qu’un plan de formation a servi.',
        tip:'Faites coter par ceux qui exploitent, pas par ceux qui pilotent. Un score obtenu en atelier de direction mesure l’optimisme de la direction.'},
+      {id:'competences', label:'Qui a besoin de quoi, et jusqu’où',
+       action:'Pour chaque personne du périmètre, choisissez son rôle, le secteur de l’entreprise, sa fonction métier et le niveau d’IA qu’elle déclare : la sortie donne le niveau de départ, le niveau visé par famille de compétence, et la formation ou la sensibilisation qui comble l’écart.',
+       gain:'Un plan nominatif au lieu d’un catalogue pour tous — et la raison écrite de chaque cible, à opposer en comité à qui la trouve trop haute ou trop basse.',
+       tip:'LE NIVEAU DE DÉPART EST DÉCLARÉ, PAS MESURÉ. Le module calcule un écart ; il ne constate aucune compétence. Faites confirmer par une mise en situation avant d’en faire un attendu RH, et faites valider les cibles par les métiers — l’article 4 du règlement européen impose des mesures, il n’écrit aucune échelle.'},
       {id:'training', label:'Les modules, accrochés aux scores réels',
        action:'Ouvrez les formations : leur progression se calcule à partir de vos scores d’audit par pilier, et non d’un catalogue générique.',
        gain:'Un plan de montée en compétence qui part des manques constatés, au lieu du catalogue que tout le monde suit dans le même ordre.',
@@ -31147,6 +31173,224 @@ function ocdeInit() {
     });
 }
 window.ocdeInit = ocdeInit;
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+   RÉFÉRENTIEL DE COMPÉTENCES IA — QUATRE LISTES, UNE TRAJECTOIRE
+   ═══════════════════════════════════════════════════════════════════════
+
+   CE QUE CET ÉCRAN NE CALCULE PAS. Ni la cible, ni l'écart, ni le choix des
+   formations : tout vient de `/api/competences-ia/proposer`. L'écran ne fait
+   que peindre. Recalculer ici le maximum des trois exigences aurait créé une
+   seconde arithmétique de la cible, et deux arithmétiques divergent au
+   premier changement de table.
+
+   LES QUATRE CHOIX SURVIVENT À LA FERMETURE DE L'ONGLET, comme les réponses
+   des questionnaires de normes : revenir sur l'écran et retrouver quatre
+   listes vides obligerait à redire ce qu'on vient de dire. */
+
+var COMP_REF = null;
+var COMP_CLE_STOCK = 'sentinel_competences_v1';
+
+function _compEsc(s) { return nistEsc(s); }
+
+function _compRemplir(id, items, valeur, cleVal, cleNom) {
+  var sel = document.getElementById(id);
+  if (!sel) return;
+  sel.innerHTML = items.map(function (o) {
+    return '<option value="' + _compEsc(String(o[cleVal])) + '">'
+      + _compEsc(String(o[cleNom])) + '</option>';
+  }).join('');
+  /* UNE VALEUR MÉMORISÉE QUI N'EXISTE PLUS EST IGNORÉE, pas imposée : une
+     table peut perdre une entrée entre deux visites, et forcer `value` sur
+     une option absente laisse le <select> sur la première en silence —
+     l'écran afficherait alors une proposition qui ne répond pas au choix
+     affiché. */
+  var connue = items.some(function (o) { return String(o[cleVal]) === String(valeur); });
+  if (connue) sel.value = String(valeur);
+}
+
+function compInit() {
+  if (COMP_REF) { compProposer(); return; }
+  fetch('/api/competences-ia/referentiel')
+    .then(function (r) { return r.json(); })
+    .then(function (j) {
+      if (!j || !j.ok) throw new Error('referentiel');
+      COMP_REF = j.referentiel;
+      var m = _declLire(COMP_CLE_STOCK);
+      _compRemplir('comp-population', COMP_REF.populations, m.population, 'cle', 'nom');
+      _compRemplir('comp-fonction', COMP_REF.fonctions, m.fonction, 'cle', 'nom');
+      _compRemplir('comp-secteur', COMP_REF.secteurs,
+                   m.secteur, 'code', 'nom');
+      /* L'ÉTIQUETTE DU NIVEAU SE COMPOSE ICI, du numéro et du nom déjà
+         servis : la faire servir par la route aurait ajouté au catalogue de
+         traduction une chaîne qui n'est que « 0 — » devant un nom déjà
+         traduit. */
+      _compRemplir('comp-niveau', COMP_REF.niveaux.map(function (o) {
+        return { n: o.n, etiquette: o.n + ' — ' + o.nom };
+      }), (m.niveau === undefined ? 0 : m.niveau), 'n', 'etiquette');
+      compProposer();
+    })
+    .catch(function () {
+      /* RIEN PLUTÔT QU'UN RÉFÉRENTIEL PARTIEL : quatre listes dont une est
+         vide donnent une proposition qui a l'air complète et ne l'est pas. */
+      var e = document.getElementById('comp-sortie');
+      if (e) e.innerHTML = '<div class="veille-loading">Le référentiel est '
+        + 'momentanément indisponible. Rien n’est affiché plutôt qu’une '
+        + 'proposition calculée sur des listes incomplètes.</div>';
+    });
+}
+window.compInit = compInit;
+
+function _compVal(id) {
+  var e = document.getElementById(id);
+  return e ? e.value : '';
+}
+
+function compProposer() {
+  if (!COMP_REF) return;
+  var corps = {
+    population: _compVal('comp-population'),
+    fonction: _compVal('comp-fonction'),
+    secteur: _compVal('comp-secteur'),
+    niveau: _compVal('comp-niveau'),
+  };
+  if (!corps.population || !corps.fonction || !corps.secteur) return;
+  _declEcrire(COMP_CLE_STOCK, {
+    population: corps.population, fonction: corps.fonction,
+    secteur: corps.secteur, niveau: parseInt(corps.niveau, 10),
+  });
+  _compAides(corps);
+  fetch('/api/competences-ia/proposer', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ personne: corps })
+  }).then(function (r) { return r.json(); })
+    .then(function (j) {
+      var e = document.getElementById('comp-sortie');
+      if (!e) return;
+      if (!j || !j.ok) {
+        e.className = '';
+        e.innerHTML = '<div class="comp-trou">' + _compEsc(j && j.dit
+          ? j.dit : 'La proposition n’a pas pu être calculée.') + '</div>';
+        return;
+      }
+      e.className = '';
+      e.innerHTML = _compPeindre(j);
+    }).catch(function () {});
+}
+window.compProposer = compProposer;
+
+/* CE QUE DIT CHAQUE CHOIX, SOUS LE CHOIX. Les six populations et les six
+   niveaux portent une phrase qui les distingue — « sans encadrement »,
+   « aucun repère ». La cacher derrière un `title` l'aurait réservée à la
+   souris posée ; elle décide pourtant du niveau qu'on déclare. */
+function _compAides(corps) {
+  var p = (COMP_REF.populations || []).filter(function (o) {
+    return o.cle === corps.population; })[0];
+  var n = (COMP_REF.niveaux || []).filter(function (o) {
+    return String(o.n) === String(corps.niveau); })[0];
+  var a = document.getElementById('comp-population-dit');
+  if (a) a.textContent = p ? p.dit : '';
+  var b = document.getElementById('comp-niveau-dit');
+  if (b) b.textContent = n ? n.dit : '';
+}
+
+/* L'ÉCHELLE D'UNE FAMILLE : le niveau déclaré plein, la cible cerclée, et
+   les crans entre les deux marqués comme écart. Le cran porte son numéro —
+   une pastille sans chiffre obligerait à compter les pastilles. */
+function _compEchelle(f) {
+  var out = [];
+  for (var i = 0; i <= 5; i++) {
+    var cl = 'comp-cran';
+    if (i <= f.actuel) cl += ' comp-acquis';
+    else if (i <= f.cible) cl += ' comp-ecart';
+    if (i === f.cible && f.cible > 0) cl += ' comp-vise';
+    out.push('<span class="' + cl + '" title="Niveau ' + i + '">' + i + '</span>');
+  }
+  return '<div class="comp-echelle">' + out.join('') + '</div>';
+}
+
+function _compPeindre(j) {
+  var h = '';
+  h += '<div class="q-verdict">';
+  h += '<div class="comp-trajet">'
+    + '<div class="comp-niv">' + j.depart.niveau
+    + '<span>Départ déclaré · ' + _compEsc(j.depart.nom) + '</span></div>'
+    + '<div class="comp-fleche">→</div>'
+    + '<div class="comp-niv">' + j.arrivee.niveau
+    + '<span>Niveau visé · ' + _compEsc(j.arrivee.nom) + '</span></div>'
+    + '</div>';
+  h += '<p>' + _compEsc(j.arrivee.dit) + '</p>';
+  h += '<p><b>' + _compEsc(j.nature_dit) + '</b></p>';
+  h += '<p class="q-trois">' + _compEsc(j.raison_secteur) + '</p>';
+  if (j.plafond_mord) h += '<p class="q-trois">' + _compEsc(j.plafond_role_dit) + '</p>';
+
+  h += '<div class="comp-sec">La cible, famille par famille</div>';
+  h += j.familles.map(function (f) {
+    var cmd = (f.cible === 0)
+      ? 'aucune exigence'
+      : 'commandée par ' + f.commande.join(', ');
+    var rab = (f.parts || []).filter(function (q) { return q.plafonne; });
+    if (rab.length) cmd += ' · rabattu : ' + rab.map(function (q) {
+      return q.entree + ' ' + q.exige + '→' + q.retenu; }).join(', ');
+    return '<div class="comp-fam">'
+      + '<div><div class="comp-fam-nom">' + _compEsc(f.nom) + '</div>'
+      + '<div class="comp-fam-dit">' + _compEsc(f.observable) + '</div></div>'
+      + _compEchelle(f)
+      + '<div class="comp-cmd">' + _compEsc(cmd)
+      + (f.ecart > 0 ? ' · écart ' + f.ecart : ' · atteint') + '</div>'
+      + '</div>';
+  }).join('');
+
+  if (j.formations.length) {
+    h += '<div class="comp-sec">Ce qui comble l’écart — '
+      + j.formations.length + ' du catalogue</div><ul class="comp-list">'
+      + j.formations.map(function (f) {
+          return '<li><b>n°' + f.n + ' — ' + _compEsc(f.titre_attendu) + '</b>'
+            + (f.sensibilisation ? ' <code>sensibilisation</code>' : '')
+            + '<br>porte ' + f.ajoute.map(function (a) {
+                return _compEsc(a.famille) + ' au niveau ' + a.porte_a;
+              }).join(', ') + '</li>';
+        }).join('') + '</ul>';
+  } else {
+    h += '<div class="comp-sec">Aucune action de formation</div>'
+      + '<p class="comp-res">' + _compEsc(j.nature_dit) + '</p>';
+  }
+
+  if (j.non_couvert.length) {
+    h += '<div class="comp-sec">Ce que le catalogue ne couvre pas</div>'
+      + j.non_couvert.map(function (x) {
+          return '<div class="comp-trou">' + _compEsc(x.dit) + '</div>';
+        }).join('');
+  }
+
+  /* LES ÉCARTÉES ET LES REDONDANTES SONT RENDUES, REPLIÉES. Une absence
+     silencieuse se lit comme un oubli du catalogue ; les déplier d'office
+     aurait noyé les trois ou quatre formations qui comptent. */
+  if (j.ecartees.length || j.redondantes.length) {
+    h += '<div class="comp-sec">Ce qui n’est pas proposé, et pourquoi</div>'
+      + '<details><summary style="cursor:pointer;font-size:12px;color:var(--muted)">'
+      + (j.ecartees.length + j.redondantes.length)
+      + ' formation(s) du catalogue écartée(s)</summary><ul class="comp-list">'
+      + j.ecartees.concat(j.redondantes).map(function (x) {
+          return '<li><b>n°' + x.n + '</b> ' + _compEsc(x.titre_attendu)
+            + ' — ' + _compEsc(x.motif) + '</li>';
+        }).join('') + '</ul></details>';
+  }
+
+  /* UNE RÉSERVE PORTE TROIS CHOSES, ET LES TROIS SE LISENT : ce qui n'est
+     pas garanti, pourquoi, et quoi faire pour le lever. N'en peindre qu'une
+     laisserait une mise en garde sans issue. */
+  h += '<div class="comp-sec">Ce que cette sortie ne garantit pas</div>'
+    + j.reserves.map(function (r) {
+        return '<div class="comp-res"><b>' + _compEsc(r.quoi) + '</b> — '
+          + _compEsc(r.pourquoi) + ' <i>' + _compEsc(r.quoi_faire) + '</i></div>';
+      }).join('');
+  h += '<p class="q-trois">' + _compEsc(j.catalogue_source) + '</p>';
+  h += '<p class="q-trois">' + _compEsc(j.plancher_source) + '</p>';
+  h += '</div>';
+  return h;
+}
 
 
 function nistInit() {

@@ -1322,19 +1322,33 @@ def test_les_routes_d_EVALUATION_sont_toutes_SONDEES_ou_ecartees_avec_leur_raiso
     Cette règle refuse que le trou se rouvre : une dix-septième route
     d'évaluation sans sonde, et elle tombe."""
     src = io.open(os.path.join(_RACINE, "app.py"), encoding="utf-8").read()
+    #  « PROPOSER » EST LE QUATRIÈME VERBE, et il a été ajouté quand une
+    #  route l'a porté : le référentiel de compétences ne note rien et
+    #  n'expose rien, il PROPOSE — et ses phrases sont composées à la réponse
+    #  exactement comme celles d'une évaluation. Laisser le verbe hors de la
+    #  liste aurait mis la route hors de cette règle sans que rien ne le
+    #  dise, c'est-à-dire aurait rouvert le trou qu'elle ferme.
     servies = set(re.findall(
-        r"@app\.route\('(/api/[^']*(?:evaluer|exposition|analyser)[^']*)'", src))
+        r"@app\.route\('(/api/[^']*(?:evaluer|exposition|analyser|proposer)"
+        r"[^']*)'", src))
     assert len(servies) >= 16, (
         "%d routes d'évaluation relevées dans app.py" % len(servies))
     sondees = {s['route'] for s in outil.SONDES_EVALUATION}
-    oubliees = sorted(servies - sondees)
+    ecartees = set(outil.SONDES_HORS_INVENTAIRE)
+    oubliees = sorted(servies - sondees - ecartees)
     assert not oubliees, (
         "routes d'évaluation sans sonde : %s — leurs phrases composées "
         "n'entreraient dans aucun lot" % oubliees)
-    fantomes = sorted(sondees - servies)
+    fantomes = sorted((sondees | ecartees) - servies)
     assert not fantomes, (
-        "sondées mais absentes d'app.py : %s — la sonde ne protège plus "
-        "rien" % fantomes)
+        "sondées ou écartées mais absentes d'app.py : %s — la déclaration ne "
+        "protège plus rien" % fantomes)
+    assert not (sondees & ecartees), sorted(sondees & ecartees)
+    #  UNE EXCLUSION SANS RAISON LISIBLE N'EST PAS UNE EXCLUSION : c'est la
+    #  même exigence que pour les GET de `ROUTES_HORS_INVENTAIRE`.
+    for r, raison in outil.SONDES_HORS_INVENTAIRE.items():
+        assert len(raison.split()) >= 5, (
+            "« %s » est écartée sans raison lisible : %r" % (r, raison))
 
 
 def test_chaque_sonde_PORTE_son_temoin_et_la_raison_de_sa_charge():

@@ -2591,6 +2591,12 @@ import ocde_ia     # noqa: E402  — le guide OCDE sur le devoir de
 import conformite
 import dga
 import data_act
+import competences_ia  # noqa: E402  — le référentiel de compétences IA :
+                   # six familles, une échelle de six niveaux, et la cible
+                   # DÉRIVÉE de la population, de la fonction et du secteur.
+                   # Le module ne décerne aucun niveau : il situe un écart
+                   # entre un niveau DÉCLARÉ et une cible, et rend ce qui le
+                   # comble dans le catalogue du cabinet
 import qualification_assistee  # noqa: E402  — la proposition, jamais la
                     # décision : ce module ne connaît ni clé ni réseau
 import qualification_moteur    # noqa: E402  — et le seul endroit qui dit
@@ -2746,6 +2752,49 @@ def api_data_act_evaluer():
     limite = data.get("limite")
     limite = limite if isinstance(limite, int) and 0 < limite <= 200 else None
     r["plan"] = data_act.plan(d, limite=(limite or 24))
+    return jsonify(r), 200
+
+
+# ══════════════════════════════════════════════════════════════════════════
+#  LE RÉFÉRENTIEL DE COMPÉTENCES IA — DEUX ROUTES, LE MÊME PARTAGE
+# ══════════════════════════════════════════════════════════════════════════
+
+@app.route('/api/competences-ia/referentiel', methods=['GET'])
+@rate_limit(limit=120, window=60)
+def api_competences_ia_referentiel():
+    """Les quatre listes déroulantes, les six familles et l'échelle.
+
+    UN SEUL APPEL SERT LES QUATRE LISTES, et c'est voulu : les vingt-deux
+    secteurs viennent de la nomenclature, les six populations et les dix
+    fonctions des tables du module. Les servir sur quatre routes aurait
+    permis à un écran de s'ouvrir avec trois listes remplies et une vide,
+    sans que rien ne le dise.
+
+    LE PLANCHER DE L'ARTICLE 4 PART AVEC LA TABLE, avec la mention qu'il est
+    la lecture du cabinet : le texte impose de prendre des mesures, il
+    n'écrit aucun niveau. Laisser l'écran l'affirmer aurait fait passer une
+    position pour une obligation."""
+    return jsonify({"ok": True, "referentiel": competences_ia.referentiel()})
+
+
+@app.route('/api/competences-ia/proposer', methods=['POST'])
+@rate_limit(limit=120, window=60)
+def api_competences_ia_proposer():
+    """Pour UNE personne : le niveau de départ, la cible par famille, les
+    écarts, et la formation ou la sensibilisation qui les comble.
+
+    LE NIVEAU DE DÉPART EST DÉCLARÉ, PAS MESURÉ, et la réponse le dit
+    elle-même dans ses réserves. Un module qui rendrait « niveau 2 » sans
+    cette réserve laisserait croire à une évaluation qui n'a pas eu lieu."""
+    data = request.get_json(silent=True) or {}
+    d = data.get("personne") if isinstance(data.get("personne"), dict) else data
+    niveau = d.get("niveau")
+    if isinstance(niveau, str) and niveau.strip().lstrip("-").isdigit():
+        niveau = int(niveau.strip())
+    r = competences_ia.proposer(d.get("population"), d.get("fonction"),
+                                d.get("secteur"), niveau)
+    if not r.get("ok"):
+        return jsonify(r), 400
     return jsonify(r), 200
 
 

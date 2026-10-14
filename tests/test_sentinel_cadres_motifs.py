@@ -319,8 +319,15 @@ def _sources():
     #  composé par la route du registre IA 50 (app.py), pas par le script de
     #  la page : la règle le déclarait « construit nulle part » alors qu'il
     #  s'affiche. Un motif qui vise le serveur doit pouvoir le prouver.
+    #  ET `competences_ia.py` : le motif « porte … au-delà de la cible de
+    #  cette personne » est composé par le moteur du référentiel de
+    #  compétences, pas par le script de la page. La liste des familles
+    #  écartées a autant de formes qu'il y a de parties de six familles : une
+    #  clé littérale par forme aurait traduit ce qu'une sonde a vu et laissé
+    #  en français ce qu'une autre personne déclenche — d'où le motif.
     src = [PAGE_JS, SENTINEL]
-    for nom in ("parcours_normes.py", "dora_parcours.py", "app.py"):
+    for nom in ("parcours_normes.py", "dora_parcours.py", "app.py",
+                "competences_ia.py"):
         src.append(_lire(nom))
     #  APLANIES AUSSI : le code écrit « réponse(s)&nbsp;: » avec une
     #  insécable, la clé porte l'espace que le navigateur calcule.
