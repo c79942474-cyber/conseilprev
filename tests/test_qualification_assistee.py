@@ -842,7 +842,7 @@ def test_une_ETAPE_DE_PARCOURS_ouvre_la_page_PEINTE_et_non_vide():
     """
     assert re.search(
         r"if \(id === 'qualif-assistee' && typeof window\.qualifInit === "
-        r"'function'\) _apresPeinture\(window\.qualifInit\);", SENTINEL_JS), (
+        r"'function'\) _amorcer\(window\.qualifInit\);", SENTINEL_JS), (
         "go() n'aiguille pas vers qualifInit : une étape de parcours ouvrira "
         "un panneau vide")
     # La fonction doit être trouvable là où l'aiguillage la cherche.

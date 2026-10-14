@@ -265,7 +265,7 @@
   {
    "nom": "l'étape de parcours rouvre un panneau vide",
    "fichier": "sentinel.page.js",
-   "avant": "  if (id === 'qualif-assistee' && typeof window.qualifInit === 'function') _apresPeinture(window.qualifInit);\n",
+   "avant": "  if (id === 'qualif-assistee' && typeof window.qualifInit === 'function') _amorcer(window.qualifInit);\n",
    "apres": "",
    "regle": "test_une_ETAPE_DE_PARCOURS_ouvre_la_page_PEINTE_et_non_vide"
   },

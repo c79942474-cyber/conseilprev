@@ -1,0 +1,92 @@
+{
+  "_pourquoi": "L'amorce d'un écran de Sentinel : treize écrans sur dix-huit restaient sur « Chargement… » dès qu'on y entrait autrement que par leur onglet. Les règles gardent le mécanisme qui rend la liste des dix-huit inutile ; ces mutations vérifient qu'elles tombent sur le défaut qu'elles nomment, et pas pour une autre raison.",
+  "cibles": [
+    "tests/test_amorce_des_ecrans.py"
+  ],
+  "mutations": [
+    {
+      "nom": "l'amorce générique disparaît : treize écrans redeviennent muets par tout chemin autre que l'onglet",
+      "fichier": "sentinel.page.js",
+      "avant": "  if (!el) (function () {",
+      "apres": "  if (false) (function () {",
+      "regle": "test_go_rejoue_l_amorce_ECRITE_DANS_L_ONGLET_de_l_ecran_qu_il_ouvre"
+    },
+    {
+      "nom": "l'amorce générique joue AUSSI quand on arrive par l'onglet : chaque référentiel part deux fois",
+      "fichier": "sentinel.page.js",
+      "avant": "  if (!el) (function () {",
+      "apres": "  if (el || !el) (function () {",
+      "regle": "test_l_amorce_generique_NE_JOUE_PAS_quand_on_arrive_par_l_onglet"
+    },
+    {
+      "nom": "l'amorce générique ne cherche plus l'onglet de l'écran ouvert mais un onglet fixe",
+      "fichier": "sentinel.page.js",
+      "avant": "    var sb = document.querySelector('.sb-item[onclick*=\"go(\\'' + id + '\\'\"]');\n    if (!sb) return;",
+      "apres": "    var sb = document.querySelector('.sb-item');\n    if (!sb) return;",
+      "regle": "test_go_rejoue_l_amorce_ECRITE_DANS_L_ONGLET_de_l_ecran_qu_il_ouvre"
+    },
+    {
+      "nom": "l'amorce générique reprend aussi les appels AVEC arguments, qu'elle ne sait pas rejouer",
+      "fichier": "sentinel.page.js",
+      "avant": "    (oc.match(/[A-Za-z_][A-Za-z0-9_]*(?=\\s*\\(\\s*\\))/g) || []).forEach(function (nom) {",
+      "apres": "    (oc.match(/[A-Za-z_][A-Za-z0-9_]*(?=\\s*\\()/g) || []).forEach(function (nom) {",
+      "regle": "test_go_rejoue_l_amorce_ECRITE_DANS_L_ONGLET_de_l_ecran_qu_il_ouvre"
+    },
+    {
+      "nom": "le mémo laisse passer une amorce déjà programmée : elle part deux fois",
+      "fichier": "sentinel.page.js",
+      "avant": "    if (typeof f !== 'function' || _amorcees.indexOf(f) >= 0) return;",
+      "apres": "    if (typeof f !== 'function') return;",
+      "regle": "test_le_memo_interdit_la_DOUBLE_amorce_et_TOUTES_y_passent"
+    },
+    {
+      "nom": "une amorce explicite contourne le mémo et repart par _apresPeinture",
+      "fichier": "sentinel.page.js",
+      "avant": "  if (id.indexOf('nis2') === 0 && typeof window.nis2Init === 'function') _amorcer(window.nis2Init);",
+      "apres": "  if (id.indexOf('nis2') === 0 && typeof window.nis2Init === 'function') _apresPeinture(window.nis2Init);",
+      "regle": "test_le_memo_interdit_la_DOUBLE_amorce_et_TOUTES_y_passent"
+    },
+    {
+      "nom": "un onglet appelle une amorce qui n'existe pas : l'écran s'ouvre vide, en silence",
+      "fichier": "sentinel.html",
+      "avant": "go('nist-profil',this,'NIST AI RMF','Profil par fonction');nistInit()",
+      "apres": "go('nist-profil',this,'NIST AI RMF','Profil par fonction');nistInitialiser()",
+      "regle": "test_l_amorce_d_un_onglet_nomme_une_fonction_QUI_EXISTE[nist-profil]"
+    },
+    {
+      "nom": "un onglet cesse de passer `this` : l'amorce générique s'ajouterait à la sienne",
+      "fichier": "sentinel.html",
+      "avant": "go('owasp-dix',this,'OWASP LLM','Les dix risques');owaspInit()",
+      "apres": "go('owasp-dix',null,'OWASP LLM','Les dix risques');owaspInit()",
+      "regle": "test_l_amorce_generique_NE_JOUE_PAS_quand_on_arrive_par_l_onglet"
+    },
+    {
+      "nom": "un bloc de parcours vise un écran qui n'a ni onglet ni ligne explicite",
+      "fichier": "parcours_normes.py",
+      "avant": "        _b(\"profil\", \"nist-profil\", \"Profil par fonction\", \"saisie\",",
+      "apres": "        _b(\"profil\", \"nist-profil-ecran\", \"Profil par fonction\", \"saisie\",",
+      "regle": "test_chaque_bloc_de_parcours_est_AMORCABLE_par_go"
+    },
+    {
+      "nom": "la lecture de la barre latérale rend zéro entrée : toutes les boucles deviennent vides",
+      "fichier": "tests/test_amorce_des_ecrans.py",
+      "avant": "    for oc in re.findall(r'class=\"sb-item[^\"]*\"[^>]*onclick=\"([^\"]+)\"', SENTINEL):",
+      "apres": "    for oc in re.findall(r'class=\"sb-entry[^\"]*\"[^>]*onclick=\"([^\"]+)\"', SENTINEL):",
+      "regle": "test_la_lecture_de_la_barre_n_est_pas_vide"
+    },
+    {
+      "nom": "l'amorce générique accepte un identifiant quelconque : un ?goto= fabriqué casse la navigation",
+      "fichier": "sentinel.page.js",
+      "avant": "    if (!/^[A-Za-z0-9_-]+$/.test(String(id))) return;",
+      "apres": "    if (false) return;",
+      "regle": "test_l_amorce_generique_REFUSE_un_identifiant_qui_n_est_pas_un_panneau"
+    },
+    {
+      "nom": "la vérification de l'identifiant passe APRÈS le sélecteur : elle n'empêche rien",
+      "fichier": "sentinel.page.js",
+      "avant": "    if (!/^[A-Za-z0-9_-]+$/.test(String(id))) return;\n    var sb = document.querySelector('.sb-item[onclick*=\"go(\\'' + id + '\\'\"]');\n",
+      "apres": "    var sb = document.querySelector('.sb-item[onclick*=\"go(\\'' + id + '\\'\"]');\n    if (!/^[A-Za-z0-9_-]+$/.test(String(id))) return;\n",
+      "regle": "test_l_amorce_generique_REFUSE_un_identifiant_qui_n_est_pas_un_panneau"
+    }
+  ]
+}

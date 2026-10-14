@@ -520,6 +520,7 @@ ROUTES_REFERENTIEL = (
     '/api/iso42001/referentiel',
     '/api/iso27001/referentiel',
     '/api/qualification/referentiel',
+    '/api/competences-ia/referentiel',
 )
 
 #: ET CELLES QU'ON NE RELÈVE PAS, avec la raison — une route écartée en
@@ -611,7 +612,27 @@ def entrees_des_charges(charges):
 #: voisines — restent hors inventaire. `tete_attendue` à `None` le dit
 #: route par route, et la règle compte combien il en reste : la dette est
 #: visible, bornée, et ne peut pas grossir en silence.
+#: ET LES POST QU'ON NE SONDE PAS, avec la raison — le pendant de
+#: `ROUTES_HORS_INVENTAIRE` pour les GET. Une route écartée en silence serait
+#: un trou de plus, et la règle exige que chaque exclusion soit nommée ici.
+SONDES_HORS_INVENTAIRE = {
+    '/api/qualification/proposer':
+        u"derrière la porte d'un compte payant, et sa réponse décrit LES "
+        u"SYSTÈMES DU CLIENT, pas du texte de produit ; une sonde y "
+        u"déclencherait de surcroît un appel au modèle",
+}
+
 SONDES_EVALUATION = (
+    {'route': '/api/competences-ia/proposer',
+     'charge': {'population': 'collaborateur', 'fonction': 'marketing',
+                'secteur': 'Q', 'niveau': 0},
+     'temoin': u"Les familles dont la cible est plus basse",
+     'pourquoi': u"la trajectoire d'une personne, ses écarts, la nature de "
+                 u"l'action et les réserves sont COMPOSÉS à la réponse : le "
+                 u"GET ne sert que les quatre listes et l'échelle. Un "
+                 u"collaborateur du marketing dans la santé, parti de zéro, "
+                 u"ouvre les trois sacs — retenues, écartées, redondantes — "
+                 u"et le rabattement du plafond de rôle"},
     {'route': '/api/dga/evaluer',
      'charge': {'qualites': ['intermediaire'], 'reponses': {'art12_a': 'tenu'}},
      'temoin': u"des obligations attendues de vos qualit\u00e9s sont d\u00e9clar\u00e9es tenues",

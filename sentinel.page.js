@@ -1099,6 +1099,7 @@ var PAGE_META = {
   audit:    {section:'AUDIT',           label:'Audit de conformité'},
   equipe:   {section:'ÉQUIPE & FORMATION',          label:'Équipe'},
   training: {section:'ÉQUIPE & FORMATION',       label:'Hub Training'},
+  competences: {section:'ÉQUIPE & FORMATION',    label:'Référentiel de compétences IA'},
   espace: {section:'PILOTAGE', label:'Mes actions du jour'},
   report: {section:'PILOTAGE', label:'Vue direction'},
   maturite: {section:'CARTOGRAPHIER', label:'Audit de maturité IA'},
@@ -1295,6 +1296,16 @@ var SENT_T = {
     'pg.data-act-pont-rgpd.eb': 'Data Act · GDPR bridge',
     'pg.data-act-pont-rgpd.h1': 'It complements Articles 15 and 20, <em>and borrows the Article 83(5) cap</em>',
     'pg.data-act-pont-rgpd.p': 'Four provisions link this Regulation to the GDPR, and the last is the heaviest. Article 1(5) says the Chapter II rights <b>complement</b> GDPR Articles 15 and 20 — they do not replace them — and that the GDPR prevails in the event of conflict. Article 4(12) requires a GDPR Article 6 basis where the user is not the data subject. And Article 40(4) gives the GDPR supervisory authorities — the CNIL — competence for Chapters II, III and V, <strong>up to the amount of GDPR Article 83(5)</strong>: EUR 20 000 000 or 4 % of total worldwide annual turnover, whichever is higher. Article 83(5) provides <strong>no reduction for SMEs</strong>, where Article 99(6) of the AI Act keeps the lower cap for them.',
+
+    'nav.item.competences': 'Competency framework',
+    'pg.competences.eb': 'Training hub \u00b7 Competency framework',
+    'pg.competences.h1': 'Which training, <em>for which person, and how far</em>',
+    'pg.competences.p': 'Four answers, and one person\u2019s trajectory follows from them: their <b>role</b> in the company, the company\u2019s <b>sector</b>, their <b>business function</b>, and the level of AI knowledge they <b>declare</b>. The output gives, family by family, the starting level and the target level \u2014 and what commands each target, the role, the function, the sector or Article\u00a04. The starting level is <strong>declared, not measured</strong>: the answer says so itself, and no training is proposed beyond the target.',
+    'pg.competences.lbl.population': 'Type of person in the company',
+    'pg.competences.lbl.fonction': 'Business function',
+    'pg.competences.lbl.secteur': 'Company sector of activity',
+    'pg.competences.lbl.niveau': 'Declared level of AI knowledge',
+    'pg.competences.attente': 'Loading the framework\u2026',
 
     'nav.sec.ocde': 'OECD due diligence \u2014 responsible AI',
     'nav.item.ocde-processus': 'Process \u2014 groups and involvement',
@@ -1759,35 +1770,47 @@ function sentFilAriane(id) {
 })();
 
 function go(id, el, sec, pg) {
+  /* UNE AMORCE N'EST JOUÉE QU'UNE FOIS PAR OUVERTURE. Les lignes explicites
+     ci-dessous visent des PRÉFIXES (`dora`, `iso42001`, `conf-`…) et couvrent
+     aussi des écrans sans onglet ; l'amorce générique, plus bas, rejoue ce
+     que l'onglet aurait fait. Les deux se recoupent pour les familles qui ont
+     les deux, et sans ce mémo le référentiel partait DEUX fois sur le réseau
+     — pour rien, et au risque du limiteur. */
+  var _amorcees = [];
+  function _amorcer(f) {
+    if (typeof f !== 'function' || _amorcees.indexOf(f) >= 0) return;
+    _amorcees.push(f);
+    _apresPeinture(f);
+  }
   if(window.navRefresh) setTimeout(window.navRefresh, 30);
   document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('on'); });
   document.querySelectorAll('.sb-item').forEach(function(i){
     i.classList.remove('on'); i.removeAttribute('aria-current'); });
   var p = document.getElementById('p-'+id);
   if (p) p.classList.add('on');
-  if (id === 'templates' && typeof window.templatesRenderPage === 'function') _apresPeinture(window.templatesRenderPage);
-  if (id === 'rgpd-site' && typeof window.rgpdInit === 'function') _apresPeinture(window.rgpdInit);
-  if (id === 'training' && typeof window.formCatRender === 'function') _apresPeinture(window.formCatRender);
-  if (id === 'finops' && typeof window.finopsLoad === 'function') _apresPeinture(window.finopsLoad);
-  if (id === 'empreinte-ia' && typeof window.empIaLoad === 'function') _apresPeinture(window.empIaLoad);
-  if (id === 'maturite' && typeof window.naceCharger === 'function') _apresPeinture(window.naceCharger);
-  if (id === 'ia50' && typeof window.ia50Load === 'function') _apresPeinture(window.ia50Load);
-  if (id === 'empreinte' && typeof window.empInit === 'function') _apresPeinture(window.empInit);
-  if (id === 'gouvernance' && typeof window.gouvInit === 'function') _apresPeinture(window.gouvInit);
-  if (id === 'adoption' && typeof window.adpInit === 'function') _apresPeinture(window.adpInit);
-  if (id === 'ingenierie' && typeof window.ingInit === 'function') _apresPeinture(window.ingInit);
-  if (id.indexOf('cra') === 0 && typeof window.craInit === 'function') _apresPeinture(window.craInit);
+  if (id === 'templates' && typeof window.templatesRenderPage === 'function') _amorcer(window.templatesRenderPage);
+  if (id === 'rgpd-site' && typeof window.rgpdInit === 'function') _amorcer(window.rgpdInit);
+  if (id === 'training' && typeof window.formCatRender === 'function') _amorcer(window.formCatRender);
+  if (id === 'finops' && typeof window.finopsLoad === 'function') _amorcer(window.finopsLoad);
+  if (id === 'empreinte-ia' && typeof window.empIaLoad === 'function') _amorcer(window.empIaLoad);
+  if (id === 'maturite' && typeof window.naceCharger === 'function') _amorcer(window.naceCharger);
+  if (id === 'ia50' && typeof window.ia50Load === 'function') _amorcer(window.ia50Load);
+  if (id === 'empreinte' && typeof window.empInit === 'function') _amorcer(window.empInit);
+  if (id === 'gouvernance' && typeof window.gouvInit === 'function') _amorcer(window.gouvInit);
+  if (id === 'adoption' && typeof window.adpInit === 'function') _amorcer(window.adpInit);
+  if (id === 'ingenierie' && typeof window.ingInit === 'function') _amorcer(window.ingInit);
+  if (id.indexOf('cra') === 0 && typeof window.craInit === 'function') _amorcer(window.craInit);
   /* LES DEUX MODULES DE CONFORMITÉ S'AMORCENT AUSSI PAR `go()`, et pas
      seulement par leur onglet. Un lien direct, un parcours guidé ou un
      bouton « → » d'un autre écran passent par ici : sans ces deux lignes,
      la page s'affichait vide avec « Chargement… » qui ne finissait jamais. */
-  if (id.indexOf('iso42001') === 0 && typeof window.isoInit === 'function') _apresPeinture(window.isoInit);
-  if (id.indexOf('iso27001') === 0 && typeof window.iso27Init === 'function') _apresPeinture(window.iso27Init);
-  if (id.indexOf('nis2') === 0 && typeof window.nis2Init === 'function') _apresPeinture(window.nis2Init);
+  if (id.indexOf('iso42001') === 0 && typeof window.isoInit === 'function') _amorcer(window.isoInit);
+  if (id.indexOf('iso27001') === 0 && typeof window.iso27Init === 'function') _amorcer(window.iso27Init);
+  if (id.indexOf('nis2') === 0 && typeof window.nis2Init === 'function') _amorcer(window.nis2Init);
   /* Le calque français a son propre chargement : son préfixe n'est pas
      « nis2 », et sans cette ligne les deux panneaux resteraient sur
      « Chargement… » pour qui y arrive par un lien direct. */
-  if (id.indexOf('recyf') === 0 && typeof window.recyfInit === 'function') _apresPeinture(window.recyfInit);
+  if (id.indexOf('recyf') === 0 && typeof window.recyfInit === 'function') _amorcer(window.recyfInit);
   /* MÊME RAISON QUE POUR LES TROIS AU-DESSUS, ET ELLE A DÉJÀ COÛTÉ UNE
      RECETTE : le `;doraInit()` écrit dans le `onclick` de la barre
      latérale ne s'exécute PAS quand on arrive par `?goto=`, par un
@@ -1795,7 +1818,7 @@ function go(id, el, sec, pg) {
      ligne, les six panneaux DORA s'ouvrent sur un « Chargement… » qui ne
      finit jamais — et la carte DORA de l'accueil mène précisément par
      `?goto=dora-qualifier`. */
-  if (id.indexOf('dora') === 0 && typeof window.doraInit === 'function') _apresPeinture(window.doraInit);
+  if (id.indexOf('dora') === 0 && typeof window.doraInit === 'function') _amorcer(window.doraInit);
   /* MESURÉ PAR LA RECETTE, PAS SUPPOSÉ. Le lien profond `?goto=` et les
      étapes d'un parcours guidé passent par `go()` sans jamais exécuter le
      `;qualifInit()` écrit dans le `onclick` de la barre latérale : la page
@@ -1816,13 +1839,13 @@ function go(id, el, sec, pg) {
      mène par `?goto=`. RELEVÉ DANS UN NAVIGATEUR : arrivé par `go()`, le
      panneau n'affichait que son chapô — aucune carte, aucun taux. Le
      lecteur qu'un parcours venait d'y conduire voyait une page vide. */
-  if (id.indexOf('conf-') === 0 && typeof window.confInit === 'function') _apresPeinture(window.confInit);
-  if (id.indexOf('en18286') === 0 && typeof window.en18286Init === 'function') _apresPeinture(window.en18286Init);
+  if (id.indexOf('conf-') === 0 && typeof window.confInit === 'function') _amorcer(window.confInit);
+  if (id.indexOf('en18286') === 0 && typeof window.en18286Init === 'function') _amorcer(window.en18286Init);
   /* MEME CROCHET POUR LES QUATRE ECRANS DE L'OCDE, et pour la
      meme raison : `;ocdeInit()` ne vit que dans le `onclick` de
      la barre, et un lien profond ou un parcours guide passe par
      `go()` sans l'executer. */
-  if (id.indexOf('ocde') === 0 && typeof window.ocdeInit === 'function') _apresPeinture(window.ocdeInit);
+  if (id.indexOf('ocde') === 0 && typeof window.ocdeInit === 'function') _amorcer(window.ocdeInit);
   /* LES SEPT ÉCRANS DE « DONNÉES & PARTAGE », ET LE DÉFAUT A ÉTÉ MESURÉ
      AVANT D'ÊTRE ÉCRIT — par la passe d'inventaire, qui est le seul outil
      du dépôt capable de dire ce qu'un panneau montre VRAIMENT. Elle a
@@ -1835,8 +1858,70 @@ function go(id, el, sec, pg) {
      DEUX PRÉFIXES, PARCE QUE LES CLÉS SONT DEUX : « dga » et « data-act ».
      Un seul crochet sur « d » attraperait « dora » et « documents ». */
   if ((id.indexOf('dga') === 0 || id.indexOf('data-act') === 0)
-      && typeof window.dpInit === 'function') _apresPeinture(window.dpInit);
-  if (id === 'qualif-assistee' && typeof window.qualifInit === 'function') _apresPeinture(window.qualifInit);
+      && typeof window.dpInit === 'function') _amorcer(window.dpInit);
+  if (id === 'qualif-assistee' && typeof window.qualifInit === 'function') _amorcer(window.qualifInit);
+  /* ═══════════════════════════════════════════════════════════════════════
+     L'ÉCRAN S'AMORCE PAR OÙ QU'ON Y ENTRE, ET PLUS SEULEMENT PAR SON ONGLET.
+
+     LES LIGNES AU-DESSUS SONT LA SIXIÈME RÉPARATION DU MÊME DÉFAUT. Chacune
+     a été ajoutée après coup, pour une famille d'écrans, parce qu'un lecteur
+     était tombé sur un « Chargement… » qui ne finissait jamais : DORA,
+     prEN 18286, les trois écrans du taux, l'OCDE, les sept de « Données &
+     Partage ». Le défaut ne vient pas de ces familles-là : il vient de ce que
+     l'amorce d'un écran était écrite DANS le `onclick` de son onglet. Qui
+     n'arrive pas par l'onglet n'amorce rien.
+
+     ET ILS SONT NOMBREUX À NE PAS PASSER PAR L'ONGLET : le rail de
+     validation, dont le bouton « ↓ » et le passage automatique appellent
+     `go()` directement ; les boutons « → » d'un écran vers un autre ; le
+     pont des deux règlements de données vers le RGPD ; le repli du lien
+     profond `?goto=`.
+
+     ═══ CE QUI A ÉTÉ MESURÉ, DANS UN NAVIGATEUR, AVANT D'ÉCRIRE CECI ═══════
+     Dix-huit entrées de la barre portaient une amorce que `go()` ne
+     connaissait pas. Appelées par `go(id)` seul, TREIZE restaient sur
+     « Chargement… » indéfiniment :
+
+         ia-act-hub · rgpd-hub · rgpd-traitements · rgpd-cartographie
+         rgpd-aipd · nist-profil · nist-cadre · nist-genai · owasp-dix
+         owasp-pont · nist53-socle · nist82-ot · juridique
+
+     Six d'entre eux sont des BLOCS DE PARCOURS, et quatre sont des blocs de
+     SAISIE : un questionnaire qui ne se peint pas ne peut pas être rempli,
+     donc le rail ne peut pas verdir, donc le taux de la norme ne peut pas
+     monter. Le défaut ne se voyait pas comme une panne : comme une attente.
+
+     ═══ POURQUOI `el` DÉCIDE, ET PAS UN DRAPEAU ═══════════════════════════
+     L'onglet appelle `go(id, this, …)` : il passe son propre élément, et il
+     exécute ensuite SA propre amorce. Tous les autres appelants passent
+     `null` ou rien. Lire `el` suffit donc à distinguer « on arrive par
+     l'onglet » de « on arrive autrement », sans rien ajouter ailleurs — et
+     l'amorce n'est jamais jouée deux fois.
+
+     ═══ CE QUE CECI N'EST PAS ═══════════════════════════════════════════════
+     Pas une évaluation de chaîne : on relève les appels SANS ARGUMENT écrits
+     dans l'attribut (`nistInit()`), et on cherche la fonction par son nom
+     dans `window`. Un appel avec arguments n'est pas repris — les lignes
+     explicites ci-dessus restent la place de ces cas, et des écrans qui
+     n'ont pas d'onglet du tout.
+     ═══════════════════════════════════════════════════════════════════════ */
+  if (!el) (function () {
+    /*  L'IDENTIFIANT ENTRE DANS UN SÉLECTEUR CSS, ET IL PEUT VENIR DE L'URL.
+        `?goto=` est recopié tel quel dans `go()` : un identifiant portant une
+        apostrophe ou un crochet rendrait le sélecteur invalide,
+        `querySelector` lèverait, et la navigation s'arrêterait là — sur une
+        page déjà repeinte, donc à moitié. On n'accepte donc que la forme
+        qu'ont réellement les identifiants de panneau. */
+    if (!/^[A-Za-z0-9_-]+$/.test(String(id))) return;
+    var sb = document.querySelector('.sb-item[onclick*="go(\'' + id + '\'"]');
+    if (!sb) return;
+    var oc = sb.getAttribute('onclick') || '';
+    (oc.match(/[A-Za-z_][A-Za-z0-9_]*(?=\s*\(\s*\))/g) || []).forEach(function (nom) {
+      if (nom === 'go') return;
+      var f = window[nom];
+      _amorcer(f);
+    });
+  })();
   /* LE RAIL DU RÉFÉRENTIEL SE REPEINT SUR L'ÉCRAN QU'ON OUVRE — quel que
      soit le chemin : onglet, lien profond, parcours guidé ou passage
      automatique. */
@@ -8421,7 +8506,7 @@ function regFetch(){
     .then(function(d){
       if(d._statut === 401 || d._statut === 403){
         var msg = d._statut === 401
-          ? '🔒 Session expirée — <a href="/login" style="color:var(--blue)">reconnectez-vous</a> pour accéder au Registre IA.'
+          ? '🔒 Session expirée — <a href="' + window.sentLienConnexion() + '" style="color:var(--blue)">reconnectez-vous</a> pour accéder au Registre IA.'
           : '🔒 '+(d.error || 'Accès réservé aux plans Pro/Entreprise.');
         if(body) body.innerHTML = '<div class="reg-loading" style="color:var(--accent)">'+msg+'</div>';
         return;
@@ -9994,7 +10079,7 @@ function friaFetch(){
     .then(function(d){
       if(d._statut === 401 || d._statut === 403){
         var msg = d._statut === 401
-          ? '🔒 Session expirée — <a href="/login" style="color:var(--blue)">reconnectez-vous</a> pour accéder à FRIA.'
+          ? '🔒 Session expirée — <a href="' + window.sentLienConnexion() + '" style="color:var(--blue)">reconnectez-vous</a> pour accéder à FRIA.'
           : '🔒 '+(d.error || 'Accès réservé aux plans Pro/Entreprise.');
         if(holder) holder.innerHTML = '<div class="reg-loading" style="color:var(--accent)">'+msg+'</div>';
         if(info){ info.innerHTML = msg; info.className = "radar-registre-info radar-registre-warn"; }
@@ -12809,6 +12894,17 @@ var PAGE_GUIDES = {
       {h:"L’audit décide du programme", t:"Un audit bâclé désigne les mauvaises formations. Si l’ordre proposé vous surprend, c’est l’audit qu’il faut reprendre, pas la liste."},
       {h:"« Angles morts de la conformité IA » — réservable en ligne", t:"Le cadre qui pulse en tête de page ouvre une offre DISTINCTE du catalogue : quatre sujets (gouvernance IA, gouvernance agentique, sécurité de l’IA, ingénierie de projet), une séance de 4 h par semaine jusqu’en mars 2027, SUR VOTRE SITE et en Île-de-France. La première séance est offerte, les trois suivantes sont à 800 € HT. Sujet et date se choisissent en ligne sur /formation."},
       {h:"Ce que la réservation ne vérifie pas", t:"Elle ne contrôle pas que l’adresse saisie est bien en Île-de-France : hors de cette zone, écrivez avant de réserver. Elle ne retient qu’UNE séance par créneau, et un même sujet une seule fois par entreprise — le SIRET, et non le courriel, décompte la séance offerte."}
+    ]
+  },
+  competences: {
+    title: "Référentiel de compétences IA",
+    sections: [
+      {h:"À quoi sert cette page", t:"Elle répond à la question que le catalogue ne pose pas : pour CETTE personne, quelle formation ou quelle sensibilisation, et jusqu’où. Quatre réponses — rôle dans l’entreprise, secteur de l’entreprise, fonction métier, niveau de connaissance IA déclaré — et la trajectoire s’en déduit, famille par famille."},
+      {h:"Comment l’utiliser", t:"Choisissez dans les quatre listes : la sortie se recalcule à chaque changement. Elle donne le niveau de départ, le niveau visé, la cible des six familles de compétence, et ce qui commande chaque cible — le rôle, la fonction, le secteur ou l’article 4 du règlement européen."},
+      {h:"Le niveau de départ est DÉCLARÉ, pas mesuré", t:"Le module calcule un écart entre une cible et une déclaration ; il ne constate aucune compétence. Confirmez par une mise en situation, un exercice pratique ou un entretien avec le manager avant d’en faire un attendu RH."},
+      {h:"Un secteur n’accorde pas un rôle", t:"Les niveaux 4 et 5 décrivent un rôle — transmettre, concevoir. Un secteur sensible et une direction technique élèvent l’exigence portée sur une personne ; ils ne lui donnent pas ce rôle. L’écran dit, famille par famille, ce qu’il a rabattu pour cette raison."},
+      {h:"Rien n’est proposé au-delà de la cible", t:"Une personne dont la cible est 3 n’a pas besoin du niveau 5. Les formations écartées pour ce motif sont rendues, repliées, avec la raison de leur écart — et là où le catalogue n’atteint pas la cible, le besoin est déclaré NON COUVERT au lieu de disparaître."},
+      {h:"L’échelle et les cibles sont la position du cabinet", t:"L’article 4 du règlement (UE) 2024/1689 impose de prendre des mesures pour un niveau suffisant de maîtrise de l’IA ; il n’écrit aucune échelle. Les six niveaux et les cibles par rôle sont une lecture, à faire valider par les métiers, les managers et la DSI."}
     ]
   },
   espace: {
@@ -16751,7 +16847,13 @@ function sentinelPlanBanner(plan){
   if(window.__IS_CONSEILPREV || !plan || plan === 'entreprise') return;
   var msg = (plan === 'pro')
     ? '✨ <strong>Sentinel Pro</strong> — gouvernance IA Act &amp; RGPD complète. <a href="/tarifications" style="color:var(--accent)">Passer à Entreprise →</a>'
-    : '🔒 <strong>Plan Gratuit</strong> — Accès limité à 4 modules. <a href="/tarifications" style="color:var(--accent)">Comparer les formules →</a>';
+    /* LE NOMBRE EST COMPTÉ, PLUS ÉCRIT. Le bandeau annonçait « 4 modules »
+       au-dessus d'une liste qui n'en contient pas quatre : un chiffre écrit à
+       la main, démenti par la ligne qui le détermine, et que personne ne
+       recompte. C'est le même défaut que le titre « N normes maîtrisées » de
+       l'accueil, déjà payé une fois. */
+    : '🔒 <strong>Plan Gratuit</strong> — Accès limité à ' + PLAN_GRATUIT_MODULES.length
+      + ' modules. <a href="/tarifications" style="color:var(--accent)">Comparer les formules →</a>';
   var banner = document.createElement('div');
   banner.id = 'sentinel-plan-banner';
   banner.style.cssText = 'margin:12px 16px;padding:10px 12px;background:rgba(184,50,34,.06);border:1px solid rgba(184,50,34,.2);border-radius:7px;font-size:11px;color:var(--ink2);line-height:1.5';
@@ -16760,14 +16862,25 @@ function sentinelPlanBanner(plan){
   if(nav && nav.parentNode) nav.parentNode.insertBefore(banner, nav.nextSibling);
 }
 
+/* `__SENTINEL_PLAN_CONNU` DIT « LA RÉPONSE EST ARRIVÉE », et il ne dit que
+   cela — pas quel plan. C'est la différence entre « plan inconnu » et « aucun
+   plan », que `__SENTINEL_PLAN = null` confondait : la porte des offres
+   AUTORISE quand le plan vaut `null` (`if(!p) return true`), si bien qu'avant
+   la réponse tout était ouvert. Le lien profond, lui, part à 350 ms et la
+   réponse arrive quand elle arrive : le même clic sur la même norme ouvrait
+   le module ou affichait « Module verrouillé » selon lequel des deux gagnait
+   la course. Mesuré avec un compte Gratuit : la norme demandée n'était pas
+   affichée, et l'écran restait sur l'Observatoire. */
 function sentinelFetchPlan(){
   if(window.__SENTINEL_PLAN === undefined) window.__SENTINEL_PLAN = null;
+  if(window.__SENTINEL_PLAN_CONNU === undefined) window.__SENTINEL_PLAN_CONNU = false;
   sentAuthMoi().then(function(d){
-    if(!d || !d.authenticated){ window.__SENTINEL_PLAN = null; sentinelApplyGating(); return; }
-    if(d.is_conseilprev || d.nom_entreprise === 'CONSEILPREV'){ window.__SENTINEL_PLAN = 'entreprise'; window.__IS_CONSEILPREV = true;
+    if(!d || !d.authenticated){ window.__SENTINEL_PLAN = null; window.__SENTINEL_PLAN_CONNU = true; sentinelApplyGating(); return; }
+    if(d.is_conseilprev || d.nom_entreprise === 'CONSEILPREV'){ window.__SENTINEL_PLAN = 'entreprise'; window.__IS_CONSEILPREV = true; window.__SENTINEL_PLAN_CONNU = true;
       var _rg = document.getElementById('raas-guide-admin'); if(_rg) _rg.style.display = 'block';
       sentinelApplyGating(); return; }
     window.__SENTINEL_PLAN = d.plan || 'gratuit';
+    window.__SENTINEL_PLAN_CONNU = true;
     window.__SENTINEL_ESSAI = !!d.essai_actif;
     window.__SENTINEL_ESSAI_JOURS = d.essai_jours || 0;
     window.__SENTINEL_ESSAI_EXPIRE = !!d.essai_expire;
@@ -16775,7 +16888,7 @@ function sentinelFetchPlan(){
     var _sbi = document.getElementById('sb-ia50'); if(_sbi) _sbi.style.display = 'none';
     sentinelApplyGating();
     if(window.sentinelEssaiBanner) sentinelEssaiBanner();
-  }).catch(function(){ window.__SENTINEL_PLAN = null; sentinelApplyGating(); });
+  }).catch(function(){ window.__SENTINEL_PLAN = null; window.__SENTINEL_PLAN_CONNU = true; sentinelApplyGating(); });
 }
 _auDomPret(sentinelFetchPlan, 300);
 
@@ -16803,7 +16916,12 @@ window.sentinelEssaiBanner = function(){
 };
 
 
-function sentinelLockPrompt(){
+/* LA MODALE NOMME CE QU'ON VIENT DE DEMANDER. Elle disait « Ce module »
+   — et le lecteur venait de cliquer sur une carte nommée « RGPD », depuis une
+   page d'accueil qui annonce seize normes maîtrisées. Refuser sans nommer
+   laisse croire que c'est le lien qui est cassé. Le nom vient de PAGE_META,
+   la table qui porte déjà le libellé des pages, et qui se traduit. */
+function sentinelLockPrompt(id){
   var old = document.getElementById('sentinel-lock-modal');
   if(old && old.parentNode) old.parentNode.removeChild(old);
   var plan = window.__SENTINEL_PLAN;
@@ -16812,12 +16930,17 @@ function sentinelLockPrompt(){
     : 'Ce module n’est pas inclus dans votre plan Gratuit. L’accès complet est ouvert après souscription et confirmation de paiement.';
   var nextPlan = (plan === 'pro') ? 'entreprise' : 'pro';
   var nextLabel = (nextPlan === 'entreprise') ? 'Entreprise' : 'Pro';
+  var meta = (typeof PAGE_META === 'object' && id) ? PAGE_META[id] : null;
+  var quoi = meta ? ((meta.section ? meta.section + ' · ' : '') + (meta.label || '')) : '';
   var m = document.createElement('div');
   m.id = 'sentinel-lock-modal';
   m.style.cssText = 'position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5)';
   m.innerHTML = '<div style="background:var(--white,#fff);max-width:390px;padding:28px;border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,.3);text-align:center">'
     + '<div style="font-size:30px;margin-bottom:10px">🔒</div>'
     + '<div style="font-size:15px;font-weight:700;color:var(--ink,#111);margin-bottom:8px">Module verrouillé</div>'
+    + (quoi ? '<div style="font-size:12.5px;color:var(--ink2,#333);margin-bottom:10px">Vous avez demandé : <strong>'
+       + quoi.replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; })
+       + '</strong></div>' : '')
     + '<div style="font-size:13px;color:var(--muted,#666);line-height:1.55;margin-bottom:18px">' + txt + '</div>'
     + '<button onclick="sentinelCheckout(\''+nextPlan+'\')" style="display:inline-block;background:var(--accent);color:#fff;padding:10px 18px;border-radius:9px;font-size:13px;font-weight:700;border:none;cursor:pointer">Souscrire l\u2019offre '+nextLabel+'</button>'
     + '<div style="margin-top:10px"><a href="/tarifications" style="font-size:12px;color:var(--accent);text-decoration:none">Comparer les formules</a></div>'
@@ -16898,7 +17021,7 @@ window.go = function(id){
   if(window.__IS_CONSEILPREV) return _planOrigGo ? _planOrigGo.apply(this, arguments) : undefined;
   var plan = window.__SENTINEL_PLAN;
   if((plan === 'gratuit' || plan === 'pro') && !planIsAllowed(id)){
-    sentinelLockPrompt();
+    sentinelLockPrompt(id);
     return;
   }
   return _planOrigGo ? _planOrigGo.apply(this, arguments) : undefined;
@@ -19149,6 +19272,33 @@ window.HUB_BRICKS = [
   ]]
 ];
 window.__hubLoaded = false;
+/* ═══════════════════════════════════════════════════════════════════════════
+   « RECONNECTEZ-VOUS » RAMÈNE SUR L'ÉCRAN QU'ON LISAIT, ET PAS À L'ACCUEIL.
+
+   LE DÉFAUT EST LE JUMEAU CÔTÉ PAGE D'UN DÉFAUT DÉJÀ CORRIGÉ CÔTÉ SERVEUR.
+   La porte de Sentinel reporte la destination demandée dans `?suite=` depuis
+   qu'on a mesuré que `/sentinel?goto=iso27001-risques` renvoyait vers
+   `/login` tout court. Mais trois liens de la page, eux, pointaient encore
+   vers `/login` NU : les deux bandeaux « Session expirée » du Registre IA et
+   de FRIA, et le bouton « Se connecter » de la page Mon compte. Un lecteur
+   dont la session expire sous les yeux cliquait, se reconnectait, et
+   retombait sur l'accueil de Sentinel — à quatre-vingt-dix onglets de ce
+   qu'il lisait.
+
+   CE QU'ON REPORTE, ET POURQUOI PAS `location`. La navigation de Sentinel est
+   interne : ouvrir un écran ne change pas l'URL. `location.search` dirait
+   donc l'écran d'ARRIVÉE, pas celui qu'on lit. C'est `navCurrentId()` qui le
+   sait — il lit le panneau réellement affiché.
+
+   LA DESTINATION EST ENCODÉE, et `__suiteSure()` de la page de connexion
+   n'accepte de toute façon qu'un chemin interne : ce lien ne peut pas devenir
+   un tremplin vers l'extérieur.
+   ═══════════════════════════════════════════════════════════════════════════ */
+window.sentLienConnexion = function(){
+  var id = (typeof window.navCurrentId === 'function') ? window.navCurrentId() : null;
+  var ou = id ? ('/sentinel?goto=' + id) : '/sentinel';
+  return '/login?suite=' + encodeURIComponent(ou);
+};
 window.hubGo = function(id){ var el=document.querySelector(".sb-item[onclick*=\"go('"+id+"'\"]"); if(el){ el.click(); } };
 window.hubLoadOnce = function(){ if(window.__hubLoaded) return; hubLoad(); };
 window.hubLoad = function(){
@@ -19519,7 +19669,34 @@ window.sentinelPointer = function(id){
     return true;
   }catch(e){ return false; }
 };
-window.sentinelGotoDeepLink = function(){ try{ var q=new URLSearchParams(location.search); var g=q.get('goto'); var pt=q.get('point'); if(g){ setTimeout(function(){ if(typeof hubGo==='function') hubGo(g); else if(typeof go==='function') go(g); if(pt){ /* LA PEINTURE DE LA PAGE EST ASYNCHRONE (elle attend son référentiel) : on retente le pointage le temps qu'elle arrive, au lieu de le tenter une fois dans le vide. */ var n=0; var t=setInterval(function(){ if(window.sentinelPointer(pt) || ++n>40) clearInterval(t); }, 150); } }, 350); } }catch(e){} };
+/* ═══════════════════════════════════════════════════════════════════════════
+   LE LIEN PROFOND N'OUVRE L'ÉCRAN QU'APRÈS AVOIR APPRIS L'OFFRE DU COMPTE.
+
+   CE QUI A ÉTÉ MESURÉ, avec un compte réel au plan Gratuit, après une
+   connexion par le formulaire, sur `/sentinel?goto=rgpd-hub` :
+
+       écran peint        p-apercu  (l'Observatoire)
+       titre              « Observatoire IA — Sentinel »
+       onglets verrouillés 106 sur 111
+       modale             « Module verrouillé »
+
+   La chaîne tenait de bout en bout — la carte, la porte, `?suite=`, le
+   formulaire, `hubGo`, l'onglet, `go()` — et l'écran demandé ne s'affichait
+   pas : la porte des offres refusait le module, sans que la demande en garde
+   la moindre trace.
+
+   ET CE REFUS N'ÉTAIT PAS STABLE. `planIsAllowed` autorise quand le plan vaut
+   `null`, c'est-à-dire tant que `/api/sentinel-auth/me` n'a pas répondu. Le
+   plan est demandé à 300 ms, le lien profond partait à 350 ms : le même clic,
+   sur la même norme, par le même compte, ouvrait le module ou affichait la
+   modale selon lequel des deux arrivait d'abord. Une porte qui s'ouvre sur un
+   délai réseau n'est pas une porte.
+
+   ON ATTEND DONC LA RÉPONSE, et on borne l'attente : six secondes, puis on
+   part quand même. Un lien profond qui n'aboutirait jamais parce qu'une route
+   est tombée serait pire que le défaut qu'on corrige.
+   ═══════════════════════════════════════════════════════════════════════════ */
+window.sentinelGotoDeepLink = function(){ try{ var q=new URLSearchParams(location.search); var g=q.get('goto'); var pt=q.get('point'); if(g){ setTimeout(function(){ var n=0; var attente=setInterval(function(){ if(window.__SENTINEL_PLAN_CONNU !== true && ++n <= 40) return; clearInterval(attente); if(typeof hubGo==='function') hubGo(g); else if(typeof go==='function') go(g); if(pt){ /* LA PEINTURE DE LA PAGE EST ASYNCHRONE (elle attend son référentiel) : on retente le pointage le temps qu'elle arrive, au lieu de le tenter une fois dans le vide. */ var m=0; var t=setInterval(function(){ if(window.sentinelPointer(pt) || ++m>40) clearInterval(t); }, 150); } }, 150); }, 350); } }catch(e){} };
 if(document.readyState==='complete') window.sentinelGotoDeepLink(); else window.addEventListener('load', window.sentinelGotoDeepLink);
 /* ══ Cycle de facturation échelonnée — prélèvements Stripe (Gestion des clients) ══ */
 window.billingRenderList = function(out, list){
@@ -23149,6 +23326,10 @@ var GUIDED_PATHS = [
        action:'Passez l’audit de maturité sur les piliers compétences, gouvernance et organisation, pour le périmètre concerné et non pour l’entreprise entière.',
        gain:'Une base de départ chiffrée, à reprendre dans six mois — c’est l’écart entre deux mesures qui prouve qu’un plan de formation a servi.',
        tip:'Faites coter par ceux qui exploitent, pas par ceux qui pilotent. Un score obtenu en atelier de direction mesure l’optimisme de la direction.'},
+      {id:'competences', label:'Qui a besoin de quoi, et jusqu’où',
+       action:'Pour chaque personne du périmètre, choisissez son rôle, le secteur de l’entreprise, sa fonction métier et le niveau d’IA qu’elle déclare : la sortie donne le niveau de départ, le niveau visé par famille de compétence, et la formation ou la sensibilisation qui comble l’écart.',
+       gain:'Un plan nominatif au lieu d’un catalogue pour tous — et la raison écrite de chaque cible, à opposer en comité à qui la trouve trop haute ou trop basse.',
+       tip:'LE NIVEAU DE DÉPART EST DÉCLARÉ, PAS MESURÉ. Le module calcule un écart ; il ne constate aucune compétence. Faites confirmer par une mise en situation avant d’en faire un attendu RH, et faites valider les cibles par les métiers — l’article 4 du règlement européen impose des mesures, il n’écrit aucune échelle.'},
       {id:'training', label:'Les modules, accrochés aux scores réels',
        action:'Ouvrez les formations : leur progression se calcule à partir de vos scores d’audit par pilier, et non d’un catalogue générique.',
        gain:'Un plan de montée en compétence qui part des manques constatés, au lieu du catalogue que tout le monde suit dans le même ordre.',
@@ -25212,7 +25393,7 @@ document.addEventListener('keydown', function(e){
           + '<p style="font-size:12px;color:var(--muted);margin:14px 0 0;line-height:1.6">'
           + 'Le Registre, l’audit, les analyses et les documents sont rattachés à un compte. '
           + 'Sans session, Sentinel affiche ses référentiels publics mais rien de ce qui vous appartient.</p>';
-        if(act) act.innerHTML = bouton('Se connecter', "window.location.href='/login'", true,
+        if(act) act.innerHTML = bouton('Se connecter', "window.location.href=window.sentLienConnexion()", true,
                                        'Ouvrir la page de connexion');
       }
     };
@@ -30992,6 +31173,224 @@ function ocdeInit() {
     });
 }
 window.ocdeInit = ocdeInit;
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+   RÉFÉRENTIEL DE COMPÉTENCES IA — QUATRE LISTES, UNE TRAJECTOIRE
+   ═══════════════════════════════════════════════════════════════════════
+
+   CE QUE CET ÉCRAN NE CALCULE PAS. Ni la cible, ni l'écart, ni le choix des
+   formations : tout vient de `/api/competences-ia/proposer`. L'écran ne fait
+   que peindre. Recalculer ici le maximum des trois exigences aurait créé une
+   seconde arithmétique de la cible, et deux arithmétiques divergent au
+   premier changement de table.
+
+   LES QUATRE CHOIX SURVIVENT À LA FERMETURE DE L'ONGLET, comme les réponses
+   des questionnaires de normes : revenir sur l'écran et retrouver quatre
+   listes vides obligerait à redire ce qu'on vient de dire. */
+
+var COMP_REF = null;
+var COMP_CLE_STOCK = 'sentinel_competences_v1';
+
+function _compEsc(s) { return nistEsc(s); }
+
+function _compRemplir(id, items, valeur, cleVal, cleNom) {
+  var sel = document.getElementById(id);
+  if (!sel) return;
+  sel.innerHTML = items.map(function (o) {
+    return '<option value="' + _compEsc(String(o[cleVal])) + '">'
+      + _compEsc(String(o[cleNom])) + '</option>';
+  }).join('');
+  /* UNE VALEUR MÉMORISÉE QUI N'EXISTE PLUS EST IGNORÉE, pas imposée : une
+     table peut perdre une entrée entre deux visites, et forcer `value` sur
+     une option absente laisse le <select> sur la première en silence —
+     l'écran afficherait alors une proposition qui ne répond pas au choix
+     affiché. */
+  var connue = items.some(function (o) { return String(o[cleVal]) === String(valeur); });
+  if (connue) sel.value = String(valeur);
+}
+
+function compInit() {
+  if (COMP_REF) { compProposer(); return; }
+  fetch('/api/competences-ia/referentiel')
+    .then(function (r) { return r.json(); })
+    .then(function (j) {
+      if (!j || !j.ok) throw new Error('referentiel');
+      COMP_REF = j.referentiel;
+      var m = _declLire(COMP_CLE_STOCK);
+      _compRemplir('comp-population', COMP_REF.populations, m.population, 'cle', 'nom');
+      _compRemplir('comp-fonction', COMP_REF.fonctions, m.fonction, 'cle', 'nom');
+      _compRemplir('comp-secteur', COMP_REF.secteurs,
+                   m.secteur, 'code', 'nom');
+      /* L'ÉTIQUETTE DU NIVEAU SE COMPOSE ICI, du numéro et du nom déjà
+         servis : la faire servir par la route aurait ajouté au catalogue de
+         traduction une chaîne qui n'est que « 0 — » devant un nom déjà
+         traduit. */
+      _compRemplir('comp-niveau', COMP_REF.niveaux.map(function (o) {
+        return { n: o.n, etiquette: o.n + ' — ' + o.nom };
+      }), (m.niveau === undefined ? 0 : m.niveau), 'n', 'etiquette');
+      compProposer();
+    })
+    .catch(function () {
+      /* RIEN PLUTÔT QU'UN RÉFÉRENTIEL PARTIEL : quatre listes dont une est
+         vide donnent une proposition qui a l'air complète et ne l'est pas. */
+      var e = document.getElementById('comp-sortie');
+      if (e) e.innerHTML = '<div class="veille-loading">Le référentiel est '
+        + 'momentanément indisponible. Rien n’est affiché plutôt qu’une '
+        + 'proposition calculée sur des listes incomplètes.</div>';
+    });
+}
+window.compInit = compInit;
+
+function _compVal(id) {
+  var e = document.getElementById(id);
+  return e ? e.value : '';
+}
+
+function compProposer() {
+  if (!COMP_REF) return;
+  var corps = {
+    population: _compVal('comp-population'),
+    fonction: _compVal('comp-fonction'),
+    secteur: _compVal('comp-secteur'),
+    niveau: _compVal('comp-niveau'),
+  };
+  if (!corps.population || !corps.fonction || !corps.secteur) return;
+  _declEcrire(COMP_CLE_STOCK, {
+    population: corps.population, fonction: corps.fonction,
+    secteur: corps.secteur, niveau: parseInt(corps.niveau, 10),
+  });
+  _compAides(corps);
+  fetch('/api/competences-ia/proposer', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ personne: corps })
+  }).then(function (r) { return r.json(); })
+    .then(function (j) {
+      var e = document.getElementById('comp-sortie');
+      if (!e) return;
+      if (!j || !j.ok) {
+        e.className = '';
+        e.innerHTML = '<div class="comp-trou">' + _compEsc(j && j.dit
+          ? j.dit : 'La proposition n’a pas pu être calculée.') + '</div>';
+        return;
+      }
+      e.className = '';
+      e.innerHTML = _compPeindre(j);
+    }).catch(function () {});
+}
+window.compProposer = compProposer;
+
+/* CE QUE DIT CHAQUE CHOIX, SOUS LE CHOIX. Les six populations et les six
+   niveaux portent une phrase qui les distingue — « sans encadrement »,
+   « aucun repère ». La cacher derrière un `title` l'aurait réservée à la
+   souris posée ; elle décide pourtant du niveau qu'on déclare. */
+function _compAides(corps) {
+  var p = (COMP_REF.populations || []).filter(function (o) {
+    return o.cle === corps.population; })[0];
+  var n = (COMP_REF.niveaux || []).filter(function (o) {
+    return String(o.n) === String(corps.niveau); })[0];
+  var a = document.getElementById('comp-population-dit');
+  if (a) a.textContent = p ? p.dit : '';
+  var b = document.getElementById('comp-niveau-dit');
+  if (b) b.textContent = n ? n.dit : '';
+}
+
+/* L'ÉCHELLE D'UNE FAMILLE : le niveau déclaré plein, la cible cerclée, et
+   les crans entre les deux marqués comme écart. Le cran porte son numéro —
+   une pastille sans chiffre obligerait à compter les pastilles. */
+function _compEchelle(f) {
+  var out = [];
+  for (var i = 0; i <= 5; i++) {
+    var cl = 'comp-cran';
+    if (i <= f.actuel) cl += ' comp-acquis';
+    else if (i <= f.cible) cl += ' comp-ecart';
+    if (i === f.cible && f.cible > 0) cl += ' comp-vise';
+    out.push('<span class="' + cl + '" title="Niveau ' + i + '">' + i + '</span>');
+  }
+  return '<div class="comp-echelle">' + out.join('') + '</div>';
+}
+
+function _compPeindre(j) {
+  var h = '';
+  h += '<div class="q-verdict">';
+  h += '<div class="comp-trajet">'
+    + '<div class="comp-niv">' + j.depart.niveau
+    + '<span>Départ déclaré · ' + _compEsc(j.depart.nom) + '</span></div>'
+    + '<div class="comp-fleche">→</div>'
+    + '<div class="comp-niv">' + j.arrivee.niveau
+    + '<span>Niveau visé · ' + _compEsc(j.arrivee.nom) + '</span></div>'
+    + '</div>';
+  h += '<p>' + _compEsc(j.arrivee.dit) + '</p>';
+  h += '<p><b>' + _compEsc(j.nature_dit) + '</b></p>';
+  h += '<p class="q-trois">' + _compEsc(j.raison_secteur) + '</p>';
+  if (j.plafond_mord) h += '<p class="q-trois">' + _compEsc(j.plafond_role_dit) + '</p>';
+
+  h += '<div class="comp-sec">La cible, famille par famille</div>';
+  h += j.familles.map(function (f) {
+    var cmd = (f.cible === 0)
+      ? 'aucune exigence'
+      : 'commandée par ' + f.commande.join(', ');
+    var rab = (f.parts || []).filter(function (q) { return q.plafonne; });
+    if (rab.length) cmd += ' · rabattu : ' + rab.map(function (q) {
+      return q.entree + ' ' + q.exige + '→' + q.retenu; }).join(', ');
+    return '<div class="comp-fam">'
+      + '<div><div class="comp-fam-nom">' + _compEsc(f.nom) + '</div>'
+      + '<div class="comp-fam-dit">' + _compEsc(f.observable) + '</div></div>'
+      + _compEchelle(f)
+      + '<div class="comp-cmd">' + _compEsc(cmd)
+      + (f.ecart > 0 ? ' · écart ' + f.ecart : ' · atteint') + '</div>'
+      + '</div>';
+  }).join('');
+
+  if (j.formations.length) {
+    h += '<div class="comp-sec">Ce qui comble l’écart — '
+      + j.formations.length + ' du catalogue</div><ul class="comp-list">'
+      + j.formations.map(function (f) {
+          return '<li><b>n°' + f.n + ' — ' + _compEsc(f.titre_attendu) + '</b>'
+            + (f.sensibilisation ? ' <code>sensibilisation</code>' : '')
+            + '<br>porte ' + f.ajoute.map(function (a) {
+                return _compEsc(a.famille) + ' au niveau ' + a.porte_a;
+              }).join(', ') + '</li>';
+        }).join('') + '</ul>';
+  } else {
+    h += '<div class="comp-sec">Aucune action de formation</div>'
+      + '<p class="comp-res">' + _compEsc(j.nature_dit) + '</p>';
+  }
+
+  if (j.non_couvert.length) {
+    h += '<div class="comp-sec">Ce que le catalogue ne couvre pas</div>'
+      + j.non_couvert.map(function (x) {
+          return '<div class="comp-trou">' + _compEsc(x.dit) + '</div>';
+        }).join('');
+  }
+
+  /* LES ÉCARTÉES ET LES REDONDANTES SONT RENDUES, REPLIÉES. Une absence
+     silencieuse se lit comme un oubli du catalogue ; les déplier d'office
+     aurait noyé les trois ou quatre formations qui comptent. */
+  if (j.ecartees.length || j.redondantes.length) {
+    h += '<div class="comp-sec">Ce qui n’est pas proposé, et pourquoi</div>'
+      + '<details><summary style="cursor:pointer;font-size:12px;color:var(--muted)">'
+      + (j.ecartees.length + j.redondantes.length)
+      + ' formation(s) du catalogue écartée(s)</summary><ul class="comp-list">'
+      + j.ecartees.concat(j.redondantes).map(function (x) {
+          return '<li><b>n°' + x.n + '</b> ' + _compEsc(x.titre_attendu)
+            + ' — ' + _compEsc(x.motif) + '</li>';
+        }).join('') + '</ul></details>';
+  }
+
+  /* UNE RÉSERVE PORTE TROIS CHOSES, ET LES TROIS SE LISENT : ce qui n'est
+     pas garanti, pourquoi, et quoi faire pour le lever. N'en peindre qu'une
+     laisserait une mise en garde sans issue. */
+  h += '<div class="comp-sec">Ce que cette sortie ne garantit pas</div>'
+    + j.reserves.map(function (r) {
+        return '<div class="comp-res"><b>' + _compEsc(r.quoi) + '</b> — '
+          + _compEsc(r.pourquoi) + ' <i>' + _compEsc(r.quoi_faire) + '</i></div>';
+      }).join('');
+  h += '<p class="q-trois">' + _compEsc(j.catalogue_source) + '</p>';
+  h += '<p class="q-trois">' + _compEsc(j.plancher_source) + '</p>';
+  h += '</div>';
+  return h;
+}
 
 
 function nistInit() {

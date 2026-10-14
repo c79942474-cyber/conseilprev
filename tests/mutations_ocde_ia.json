@@ -161,8 +161,8 @@
   {
    "nom": "go() n'amorce plus le module : « Chargement… » sans fin",
    "fichier": "sentinel.page.js",
-   "avant": "  if (id.indexOf('ocde') === 0 && typeof window.ocdeInit === 'function') _apresPeinture(window.ocdeInit);",
-   "apres": "  if (id.indexOf('ocde@') === 0 && typeof window.ocdeInit === 'function') _apresPeinture(window.ocdeInit);",
+   "avant": "  if (id.indexOf('ocde') === 0 && typeof window.ocdeInit === 'function') _amorcer(window.ocdeInit);",
+   "apres": "  if (id.indexOf('ocde@') === 0 && typeof window.ocdeInit === 'function') _amorcer(window.ocdeInit);",
    "regle": "test_les_quatre_ecrans_s_ouvrent_aussi_par_un_LIEN_PROFOND"
   },
   {

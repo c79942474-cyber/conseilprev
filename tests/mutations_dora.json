@@ -172,7 +172,7 @@
     {
       "nom": "go() cesse d'amorcer les panneaux DORA",
       "fichier": "sentinel.page.js",
-      "avant": "  if (id.indexOf('dora') === 0 && typeof window.doraInit === 'function') _apresPeinture(window.doraInit);",
+      "avant": "  if (id.indexOf('dora') === 0 && typeof window.doraInit === 'function') _amorcer(window.doraInit);",
       "apres": "  /* retiré */",
       "regle": "test_go_amorce_les_panneaux_DORA_sans_passer_par_le_menu"
     },

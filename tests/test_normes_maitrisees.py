@@ -54,32 +54,43 @@ INDEX = io.open(os.path.join(_RACINE, "index.html"), encoding="utf-8").read()
 SENTINEL = io.open(os.path.join(_RACINE, "sentinel.html"), encoding="utf-8").read()
 APP = io.open(os.path.join(_RACINE, "app.py"), encoding="utf-8").read()
 LOGIN = io.open(os.path.join(_RACINE, "login.page.js"), encoding="utf-8").read()
+SENTINELJS = io.open(os.path.join(_RACINE, "sentinel.page.js"),
+                     encoding="utf-8").read()
 INDEXJS = io.open(os.path.join(_RACINE, "index.page.js"), encoding="utf-8").read()
 
-#: LA TABLE DE CE QUE LA DEMANDE A DEMANDÉ. Elle est écrite ici une seule
-#: fois ; plusieurs règles la parcourent, et la tenir à deux endroits aurait
-#: garanti qu'une norme neuve soit contrôlée par l'une et ignorée par l'autre.
-ATTENDUES = (
-    ("IA Act", "ia-act-hub"),
-    ("CRA", "cra-role"),
-    ("ISO 42001", "iso42001"),
-    ("ISO 27001", "iso27001-risques"),
-    ("DORA", "dora-qualifier"),
-    ("NIS2", "nis2-qualifier"),
-    ("RGPD", "rgpd-hub"),
-)
+#: LES `onclick` DES ENTRÉES DE LA BARRE, lus comme `hubGo` les interroge.
+_ONCLICKS_DE_BARRE = re.findall(
+    r'class="sb-item[^"]*"[^>]*onclick="([^"]+)"', SENTINEL)
 
-#: LES IDENTIFIANTS DE PARAMÈTRE NE PORTENT PAS D'ESPACE, et ce n'est pas
-#: cosmétique : « ISO 27001 » rend un nom de règle qui se coupe en deux dès
-#: qu'on lit une ligne `FAILED` mot à mot — un banc de mutations, un filtre
-#: `-k`, un rapport. Le nom devient introuvable, et la règle passe pour
-#: absente alors qu'elle a bien levé.
-IDS = [n.replace(" ", "-") for n, _p in ATTENDUES]
+#: CE QUE LES RÈGLES PARCOURENT, ET IL N'EST PLUS ÉCRIT À LA MAIN.
+#:
+#: LA TABLE ÉCRITE FIGEAIT SEPT NORMES, et elle les a figées longtemps après
+#: que la grille en ait porté seize. Mesuré : les quatre maillons de la chaîne
+#: — la carte, la porte, la page de connexion, l'onglet — n'étaient gardés que
+#: pour SEPT destinations sur seize. Les neuf autres (NIST AI RMF, OWASP LLM,
+#: NIST 800-53, NIST 800-82, prEN 18229-3, prEN 18286, diligence OCDE, DGA,
+#: Data Act) étaient entrées dans le produit sans qu'aucune règle vérifie que
+#: leur panneau existe, que leur onglet existe une fois et une seule, ni que
+#: la porte reporte leur destination. Une table écrite à la main ne proteste
+#: pas quand on ajoute à côté d'elle : elle se tait, et la recette reste
+#: verte.
+#:
+#: ELLE EST DONC DÉRIVÉE DE LA GRILLE, exactement comme le titre l'est déjà
+#: (voir la règle du compte, plus bas) : le nom lu sur la carte, et la
+#: destination écrite dans son lien. Une dix-septième norme est gardée le jour
+#: où elle est ajoutée, sans que personne ait à y penser. Et une carte sans
+#: lien ne disparaît pas de la mesure pour autant — `SANS_MODULE`, plus bas,
+#: oblige à la déclarer.
+def _attendues():
+    out = []
+    for c in _cartes():
+        nom = re.search(r'<div class="nn">([^<]+)</div>', c)
+        lien = re.search(r'class="nc-go" href="/sentinel\?goto=([^"&]+)"', c)
+        if nom and lien:
+            out.append((nom.group(1).strip().rstrip(" \u2197"), lien.group(1)))
+    return tuple(out)
 
-#: PLUS AUCUNE EXCLUE. La table est vide, et elle reste écrite : une norme
-#: qu'on ajouterait sans écran devrait y figurer explicitement, ce qui oblige
-#: à le décider au lieu de le subir.
-SANS_MODULE = ()
+
 
 
 def _bloc():
@@ -101,6 +112,21 @@ def _carte(nom):
         if m and m.group(1).strip().rstrip(" ↗") == nom:
             return c
     return None
+
+
+ATTENDUES = _attendues()
+
+#: LES IDENTIFIANTS DE PARAMÈTRE NE PORTENT PAS D'ESPACE, et ce n'est pas
+#: cosmétique : « ISO 27001 » rend un nom de règle qui se coupe en deux dès
+#: qu'on lit une ligne `FAILED` mot à mot — un banc de mutations, un filtre
+#: `-k`, un rapport. Le nom devient introuvable, et la règle passe pour
+#: absente alors qu'elle a bien levé.
+IDS = [n.replace(" ", "-") for n, _p in ATTENDUES]
+
+#: PLUS AUCUNE EXCLUE. La table est vide, et elle reste écrite : une norme
+#: qu'on ajouterait sans écran devrait y figurer explicitement, ce qui oblige
+#: à le décider au lieu de le subir.
+SANS_MODULE = ()
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -143,6 +169,32 @@ def test_le_titre_compte_EXACTEMENT_les_cartes_du_bloc():
     assert len(noms) == n, "%d noms pour %d cartes : %s" % (len(noms), n, noms)
     # LE GARDE-FOU : un bloc vide ferait passer 0 == 0.
     assert n >= 5, "le bloc n'annonce plus que %d normes" % n
+
+
+def test_la_table_DERIVEE_couvre_TOUTES_les_cartes_et_pas_quelques_unes():
+    """LE RISQUE PROPRE À UNE TABLE DÉRIVÉE, ET IL EST SILENCIEUX. Une table
+    écrite à la main se voit ; une table dérivée d'une lecture qui ne trouve
+    plus rien rend un tuple VIDE — et `parametrize` sur un tuple vide ne lève
+    pas : il ne crée simplement aucune règle. Les quatorze règles
+    paramétrées de ce fichier disparaîtraient, la recette resterait verte, et
+    la ligne finale annoncerait moins de tests sans que personne la compare à
+    celle de la veille.
+
+    LA RÈGLE COMPARE DONC LA TABLE À LA GRILLE : chaque carte est soit
+    attendue avec sa destination, soit déclarée sans module. Aucune ne peut
+    sortir des deux."""
+    cartes = _cartes()
+    assert len(ATTENDUES) >= 5, (
+        "la table dérivée ne porte que %d entrée(s) : la lecture des cartes "
+        "ou de leur lien ne marche plus, et les règles paramétrées de ce "
+        "fichier ne mesurent plus rien" % len(ATTENDUES))
+    assert len(ATTENDUES) + len(SANS_MODULE) == len(cartes), (
+        "%d carte(s) dans la grille, %d attendue(s) + %d sans module : des "
+        "cartes échappent à la mesure" % (len(cartes), len(ATTENDUES),
+                                          len(SANS_MODULE)))
+    assert len(set(p for _n, p in ATTENDUES)) == len(ATTENDUES), (
+        "deux cartes mènent au même panneau : %s"
+        % [p for _n, p in ATTENDUES])
 
 
 def test_la_lecture_du_bloc_n_est_pas_vide():
@@ -244,10 +296,18 @@ def test_chaque_cible_existe_comme_panneau_ET_comme_onglet(nom, panneau):
     assert 'id="p-%s"' % panneau in SENTINEL, (
         "le panneau p-%s n'existe pas : le lien de la carte « %s » mène "
         "nulle part" % (panneau, nom))
-    onglets = SENTINEL.count("go('%s'," % panneau)
-    assert onglets == 1, (
+    #  LE COMPTE SE FAIT COMME `hubGo` CHERCHE, et plus autrement. La règle
+    #  comptait les occurrences de la chaîne « go('<id>', » — avec sa virgule
+    #  — dans tout le fichier. Or `hubGo` interroge
+    #  `.sb-item[onclick*="go('<id>'"]` : SANS virgule, et seulement parmi les
+    #  entrées de la barre. Mesuré par une mutation : un second onglet portant
+    #  `go('ocde-processus')` sans arguments devenait un candidat de plus pour
+    #  `hubGo` et la règle ne voyait rien. Elle lit désormais exactement ce
+    #  que le moteur lit.
+    onglets = [oc for oc in _ONCLICKS_DE_BARRE if ("go('%s'" % panneau) in oc]
+    assert len(onglets) == 1, (
         "%d onglet(s) portent go('%s') : hubGo en prend UN, et s'il y en a "
-        "zéro il ne se passe rien" % (onglets, panneau))
+        "zéro il ne se passe rien" % (len(onglets), panneau))
 
 
 def test_hubGo_cherche_bien_l_onglet_par_son_onclick():
@@ -391,6 +451,107 @@ def test_la_page_de_connexion_emploie_bien_la_destination_reportee():
     corps = LOGIN[d:LOGIN.index("\n}", d)]
     assert "__suiteSure()" in corps, (
         "la destination reportée n'est pas employée après connexion")
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  5 bis. L'OFFRE EST ANNONCÉE AVANT LE CLIC
+# ═══════════════════════════════════════════════════════════════════════════
+#
+#  CE QUI A ÉTÉ MESURÉ, DANS UN NAVIGATEUR, AVEC UN COMPTE RÉEL AU PLAN
+#  GRATUIT. Le clic sur une carte traversait toute la chaîne — la porte, le
+#  formulaire, `hubGo`, l'onglet — et l'écran demandé ne s'affichait pas : la
+#  porte des offres refusait le module, et affichait « Module verrouillé ».
+#  Mesuré : 106 onglets sur 111 verrouillés, écran peint `p-apercu`.
+#
+#  LE REFUS EST LÉGITIME — c'est le modèle commercial, et il est écrit dans
+#  `sentinel.page.js` : « Les offres Pro et Entreprise sont attribuées par
+#  l'administration CONSEILPREV APRÈS confirmation de paiement. » CE QUI NE
+#  L'ÉTAIT PAS, c'est qu'une page d'accueil PUBLIQUE annonce seize normes
+#  maîtrisées, pose seize liens, et ne dise nulle part lequel s'ouvrira. Un
+#  refus qu'on ne pouvait pas prévoir se lit comme un lien cassé — et c'est
+#  le même défaut que la page avait déjà payé pour la connexion, corrigé
+#  alors par la pastille « Connexion requise ».
+#
+#  L'OFFRE N'EST PAS ÉCRITE DEUX FOIS. Ce que la carte annonce est comparé à
+#  ce que la porte applique : `PLAN_GRATUIT_MODULES` et
+#  `PLAN_ENTREPRISE_ONLY`, lues dans le moteur. Changer la politique sans
+#  changer les cartes fait tomber la règle, et elle nomme la carte.
+
+
+def _politique_des_offres():
+    """LES DEUX LISTES QUI DÉCIDENT, LUES OÙ ELLES VIVENT."""
+    g = re.search(r"var PLAN_GRATUIT_MODULES = \[([^\]]*)\]", SENTINELJS)
+    e = re.search(r"var PLAN_ENTREPRISE_ONLY = \[([^\]]*)\]", SENTINELJS)
+    assert g and e, (
+        "les listes d'offres ne se lisent plus dans sentinel.page.js : la "
+        "règle comparerait les cartes à du vide")
+    lire = lambda m: {x.strip().strip("'\"") for x in m.group(1).split(",")
+                      if x.strip()}
+    return lire(g), lire(e)
+
+
+def _offre_exigee(panneau):
+    """L'OFFRE QU'IL FAUT POUR OUVRIR CET ÉCRAN, DÉRIVÉE DE LA PORTE.
+    `planIsAllowed` : Entreprise ouvre tout ; Pro ouvre tout sauf
+    `PLAN_ENTREPRISE_ONLY` ; Gratuit n'ouvre que `PLAN_GRATUIT_MODULES`."""
+    gratuit, entreprise = _politique_des_offres()
+    if panneau in gratuit:
+        return None                      # ouvert à tous : rien à annoncer
+    if panneau in entreprise:
+        return "entreprise"
+    return "pro"
+
+
+@pytest.mark.parametrize("nom,panneau", ATTENDUES, ids=IDS)
+def test_chaque_carte_ANNONCE_l_offre_que_la_porte_EXIGE(nom, panneau):
+    """LES DEUX SENS COMPTENT. Une carte qui n'annonce rien alors que l'écran
+    est verrouillé promet ce qu'elle ne peut pas tenir ; une carte qui annonce
+    une offre alors que l'écran est ouvert à tous décourage pour rien."""
+    carte = _carte(nom)
+    assert carte, "la carte « %s » a disparu de la grille" % nom
+    attendue = _offre_exigee(panneau)
+    m = re.search(r'<div class="nc-offre" data-offre="([^"]+)">', carte)
+    if attendue is None:
+        assert not m, (
+            "« %s » annonce l'offre %s alors que %s est ouvert à tous : la "
+            "carte décourage pour rien" % (nom, m.group(1), panneau))
+        return
+    assert m, (
+        "« %s » n'annonce aucune offre, alors que la porte exige %s pour "
+        "ouvrir %s : le visiteur cliquera et recevra « Module verrouillé » "
+        "sans que rien ne l'ait prévenu" % (nom, attendue, panneau))
+    assert m.group(1) == attendue, (
+        "« %s » annonce l'offre %s, la porte exige %s"
+        % (nom, m.group(1), attendue))
+    #  LA PASTILLE EST DANS LE LIEN, et pas à côté : hors du lien elle
+    #  découperait la surface cliquable que la règle du rembourrage garde.
+    d = carte.index('<a class="nc-go"')
+    f = carte.index("</a>", d)
+    assert d < carte.index('class="nc-offre"') < f, (
+        "la pastille d'offre de « %s » est hors du lien : elle troue la "
+        "surface cliquable de la carte" % nom)
+    #  ET ELLE SE TRADUIT : un libellé écrit en dur resterait français.
+    assert re.search(r'class="nc-offre"[^>]*>[^<]*<span data-i18n="([^"]+)"',
+                     carte), (
+        "le libellé d'offre de « %s » ne porte pas de clé de dictionnaire : "
+        "il resterait français dans les deux autres langues" % nom)
+
+
+def test_le_libelle_de_l_offre_existe_dans_LES_TROIS_dictionnaires():
+    """UNE CLÉ ABSENTE NE LAISSE PAS UN BLANC : `applyLang` ne remplace rien,
+    et la pastille reste en français au milieu d'une page anglaise ou
+    allemande. C'est pire qu'une faute visible, parce que la page a l'air
+    traduite."""
+    cles = set(re.findall(
+        r'class="nc-offre"[^>]*>[^<]*<span data-i18n="([^"]+)"', _bloc()))
+    assert cles, "aucune pastille d'offre ne porte de clé : rien n'est mesuré"
+    for cle in sorted(cles):
+        for langue in ("fr", "en", "de"):
+            d = INDEXJS.index("  %s:JSON.parse(`" % langue)
+            f = INDEXJS.index("`", d + 20)
+            assert ('"%s":"' % cle) in INDEXJS[d:f], (
+                "la clé %s manque au dictionnaire %s : la pastille restera "
+                "en français" % (cle, langue))
 
 
 # ═══════════════════════════════════════════════════════════════════════════

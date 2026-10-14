@@ -1,0 +1,76 @@
+{
+  "_pourquoi": "La porte des offres : avec un compte au plan Gratuit, les seize normes sont verrouillées et l'écran demandé ne s'affiche pas. Le refus est légitime (modèle commercial), mais il ne nommait pas ce qu'il refusait et il n'était pas stable — le lien profond partait avant que l'offre soit connue, et la porte autorise tant qu'elle ne la connaît pas. Ces mutations vérifient que les règles tombent sur ces défauts-là.",
+  "cibles": ["tests/test_porte_des_offres.py"],
+  "mutations": [
+    {
+      "nom": "le lien profond cesse d'attendre l'offre : le même clic ouvre ou refuse selon le réseau",
+      "fichier": "sentinel.page.js",
+      "avant": "if(window.__SENTINEL_PLAN_CONNU !== true && ++n <= 40) return;",
+      "apres": "if(false) return;",
+      "regle": "test_le_lien_profond_ATTEND_que_l_offre_du_compte_soit_connue"
+    },
+    {
+      "nom": "l'attente du lien profond n'est plus bornée : une route tombée bloque le lien pour toujours",
+      "fichier": "sentinel.page.js",
+      "avant": "if(window.__SENTINEL_PLAN_CONNU !== true && ++n <= 40) return;",
+      "apres": "if(window.__SENTINEL_PLAN_CONNU !== true) return;",
+      "regle": "test_le_lien_profond_ATTEND_que_l_offre_du_compte_soit_connue"
+    },
+    {
+      "nom": "la sortie « échec de la route » ne déclare plus l'offre connue",
+      "fichier": "sentinel.page.js",
+      "avant": "  }).catch(function(){ window.__SENTINEL_PLAN = null; window.__SENTINEL_PLAN_CONNU = true; sentinelApplyGating(); });",
+      "apres": "  }).catch(function(){ window.__SENTINEL_PLAN = null; sentinelApplyGating(); });",
+      "regle": "test_l_offre_est_declaree_CONNUE_sur_CHAQUE_sortie_de_sa_lecture"
+    },
+    {
+      "nom": "la sortie « compte client » ne déclare plus l'offre connue",
+      "fichier": "sentinel.page.js",
+      "avant": "    window.__SENTINEL_PLAN = d.plan || 'gratuit';\n    window.__SENTINEL_PLAN_CONNU = true;",
+      "apres": "    window.__SENTINEL_PLAN = d.plan || 'gratuit';",
+      "regle": "test_l_offre_est_declaree_CONNUE_sur_CHAQUE_sortie_de_sa_lecture"
+    },
+    {
+      "nom": "l'offre n'est plus déclarée inconnue au départ : le drapeau vaut undefined",
+      "fichier": "sentinel.page.js",
+      "avant": "  if(window.__SENTINEL_PLAN_CONNU === undefined) window.__SENTINEL_PLAN_CONNU = false;",
+      "apres": "  /* retiré */",
+      "regle": "test_l_offre_est_declaree_CONNUE_sur_CHAQUE_sortie_de_sa_lecture"
+    },
+    {
+      "nom": "la porte refuse sans dire quel écran : la modale retombe sur « ce module »",
+      "fichier": "sentinel.page.js",
+      "avant": "    sentinelLockPrompt(id);",
+      "apres": "    sentinelLockPrompt();",
+      "regle": "test_la_porte_passe_a_la_modale_L_ECRAN_qu_elle_refuse"
+    },
+    {
+      "nom": "la modale cesse de prendre le nom de l'écran dans PAGE_META",
+      "fichier": "sentinel.page.js",
+      "avant": "  var meta = (typeof PAGE_META === 'object' && id) ? PAGE_META[id] : null;",
+      "apres": "  var meta = null;",
+      "regle": "test_la_modale_NOMME_l_ecran_refuse_en_le_prenant_a_PAGE_META"
+    },
+    {
+      "nom": "le nom de l'écran entre dans la modale sans être échappé",
+      "fichier": "sentinel.page.js",
+      "avant": "       + quoi.replace(/[&<>\"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]; })",
+      "apres": "       + quoi",
+      "regle": "test_la_modale_NOMME_l_ecran_refuse_en_le_prenant_a_PAGE_META"
+    },
+    {
+      "nom": "le bandeau du plan Gratuit réécrit un nombre à la main",
+      "fichier": "sentinel.page.js",
+      "avant": "    : '🔒 <strong>Plan Gratuit</strong> — Accès limité à ' + PLAN_GRATUIT_MODULES.length",
+      "apres": "    : '🔒 <strong>Plan Gratuit</strong> — Accès limité à 4 modules.' + ('' ",
+      "regle": "test_le_bandeau_du_plan_gratuit_COMPTE_ses_modules"
+    },
+    {
+      "nom": "l'Observatoire sort du plan Gratuit : un compte Gratuit n'a plus aucun écran ouvert",
+      "fichier": "sentinel.page.js",
+      "avant": "var PLAN_GRATUIT_MODULES = ['apercu', 'simulateur', 'regs', 'training', 'empreinte'];",
+      "apres": "var PLAN_GRATUIT_MODULES = ['simulateur', 'regs', 'training', 'empreinte'];",
+      "regle": "test_la_liste_des_modules_du_plan_gratuit_est_LISIBLE_et_non_vide"
+    }
+  ]
+}

@@ -403,6 +403,11 @@ PAGES_APRES_LA_MESURE = frozenset({
     "dga-qualifier", "dga-obligations", "dga-pont-rgpd",
     "data-act-qualifier", "data-act-obligations",
     "data-act-cloud", "data-act-pont-rgpd",
+    #  RÉFÉRENTIEL DE COMPÉTENCES IA — l'écran du Hub Training né après la
+    #  photo lui aussi. Même régime que les quinze ci-dessus : la photo garde
+    #  ses 118 pages, et le catalogue, lui, le relève — ses clés d'écran comme
+    #  les 85 chaînes que ses deux routes servent y sont, traduites.
+    "competences",
 })
 
 

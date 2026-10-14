@@ -1219,6 +1219,36 @@ textarea.form-el{min-height:86px;resize:vertical}
 .res-actions{display:flex;gap:10px;margin-top:18px}
 
 .training-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:28px}
+
+/* ── RÉFÉRENTIEL DE COMPÉTENCES ──
+   L'ÉCHELLE SE LIT COMME UNE ÉCHELLE, pas comme un pourcentage : six crans,
+   le cran atteint plein, le cran visé cerclé, et les crans intermédiaires
+   vides. Une barre de progression aurait donné un « 60 % » qui ne veut rien
+   dire — on ne maîtrise pas 60 % d'une famille de compétences. */
+.comp-aide{font-size:11px;color:var(--muted);line-height:1.6;margin-top:6px}
+.comp-fam{display:grid;grid-template-columns:150px 1fr auto;gap:14px;align-items:center;padding:11px 0;border-bottom:1px solid var(--rule)}
+.comp-fam:last-child{border-bottom:none}
+.comp-fam-nom{font-family:var(--serif);font-size:14px;color:var(--ink);letter-spacing:-.01em}
+.comp-fam-dit{font-size:11px;color:var(--muted);line-height:1.55;margin-top:3px}
+.comp-echelle{display:flex;gap:5px;align-items:center}
+.comp-cran{width:15px;height:15px;border-radius:50%;border:1.5px solid var(--rule2);background:var(--bg);font-size:8px;font-family:var(--mono);display:flex;align-items:center;justify-content:center;color:var(--muted2)}
+.comp-cran.comp-acquis{background:var(--muted2);border-color:var(--muted2);color:#fff}
+.comp-cran.comp-vise{border-color:var(--accent);border-width:2px;color:var(--accent);font-weight:700}
+.comp-cran.comp-ecart{background:rgba(184,50,34,.12);border-color:rgba(184,50,34,.45);color:var(--accent)}
+.comp-cmd{font-size:9px;font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted2);white-space:nowrap}
+.comp-trajet{display:flex;gap:26px;align-items:flex-end;flex-wrap:wrap;margin-bottom:6px}
+.comp-niv{font-family:var(--serif);font-size:42px;line-height:1;color:var(--accent);letter-spacing:-.03em}
+.comp-niv span{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:7px}
+.comp-fleche{font-size:22px;color:var(--muted2);padding-bottom:12px}
+.comp-sec{font-size:9px;font-family:var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:22px 0 10px}
+.comp-list{list-style:none;padding:0;margin:0}
+.comp-list li{padding:10px 0;border-bottom:1px solid var(--rule);font-size:12px;color:var(--ink2);line-height:1.6}
+.comp-list li:last-child{border-bottom:none}
+.comp-list b{color:var(--ink)}
+.comp-list code{font-family:var(--mono);font-size:10px;color:var(--muted)}
+.comp-trou{border-left:3px solid var(--accent);background:rgba(184,50,34,.05);padding:11px 14px;margin-bottom:8px;font-size:12px;color:var(--ink2);line-height:1.6}
+.comp-res{font-size:11px;color:var(--muted);line-height:1.65;padding:8px 0 8px 14px;border-left:2px solid var(--rule2);margin-bottom:7px}
+@media(max-width:760px){.comp-fam{grid-template-columns:1fr;gap:7px}}
 .t-card{background:var(--white);border:1px solid var(--rule);border-radius:4px;padding:20px;cursor:pointer;transition:border-color .15s,box-shadow .15s}
 .t-card:hover{border-color:var(--rule2);box-shadow:0 2px 10px rgba(0,0,0,.06)}
 .t-badge{display:inline-block;font-size:8px;font-family:var(--mono);padding:2px 7px;border-radius:2px;letter-spacing:.07em;margin-bottom:12px}
@@ -3932,6 +3962,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <div class="sb-section" data-grp="equipe-et-formation"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 4 2.5 8.5 12 13l9.5-4.5z"/><path d="M6.5 10.8V16c0 1.6 2.5 3 5.5 3s5.5-1.4 5.5-3v-5.2"/></svg><span data-i18n="nav.sec.equipe-et-formation">Équipe & formation</span></div>
     <div class="sb-item" data-grp="equipe-et-formation" role="button" tabindex="0" onclick="go('equipe',this,'ÉQUIPE & FORMATION','Équipe')" title="Espace de collaboration pour l equipe en charge du programme de conformite IA."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 7a4 4 0 100 8 4 4 0 000-8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></span><span data-i18n="nav.item.equipe">Espace équipe</span></div>
     <div class="sb-item" data-grp="equipe-et-formation" role="button" tabindex="0" onclick="go('training',this,'ÉQUIPE & FORMATION','Hub Training')" title="Modules de formation sur l EU AI Act, les 8 piliers et la gouvernance IA."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polygon points="5 3 19 12 5 21 5 3"/></svg></span><span data-i18n="nav.item.training">Hub Training</span></div>
+    <div class="sb-item" data-grp="equipe-et-formation" role="button" tabindex="0" onclick="go('competences',this,'ÉQUIPE &amp; FORMATION','Référentiel de compétences IA');compInit()" title="Quelle formation ou sensibilisation pour quelle personne : role, secteur, fonction, niveau declare, et le niveau vise par famille de competence."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 20V8"/><path d="M10 20V5"/><path d="M16 20v-9"/><path d="M3 20h18"/><path d="m14 7 3-3 3 3"/></svg></span><span data-i18n="nav.item.competences">Référentiel de compétences</span></div>
     <div class="sb-section" data-grp="business"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="2.5" y="7" width="19" height="13" rx="2"/><path d="M8.5 7V5.2A1.7 1.7 0 0 1 10.2 3.5h3.6A1.7 1.7 0 0 1 15.5 5.2V7"/><path d="M2.5 12.5h19"/></svg><span data-i18n="nav.sec.business">Business</span></div>
     <div class="sb-item" data-grp="business" role="button" tabindex="0" onclick="go('carto-uc',this,'BUSINESS','Cartographie des cas d\u2019usage IA')" title="Identifier, qualifier et prioriser les cas d usage IA a fort impact metier (achats, finance, supply chain, operations, relation client)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span><span data-i18n="nav.item.carto-uc">Cartographie des cas d’usage</span></div>
     <div class="sb-item" data-grp="business" role="button" tabindex="0" onclick="go('adoption',this,'BUSINESS','Tableau de bord d\u2019adoption')" title="Si l organisation se sert de ce qui est deploye : usage hebdomadaire, processus redessines, temps rendu, abandon a 90 jours — avec la nature de chaque source."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 20h18"/><path d="M6 20V11"/><path d="M11 20V5"/><path d="M16 20v-6"/><path d="M21 20V8"/></svg></span><span data-i18n="nav.item.adoption">Adoption</span></div>
@@ -4852,6 +4883,47 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <div id="form-cat-filters" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px"></div>
     <div class="training-grid" id="form-cat-grid"></div>
   </div>
+</div>
+
+<!-- ═══ RÉFÉRENTIEL DE COMPÉTENCES IA ═══
+     POURQUOI UN ÉCRAN SÉPARÉ DU HUB TRAINING, ET NON UN BLOC DE PLUS DEDANS.
+     Le Hub montre le CATALOGUE : quinze formations, les mêmes pour tout le
+     monde. Cet écran répond à l'autre question, celle que le catalogue ne
+     pose jamais : « pour CETTE personne, quoi, et jusqu'où ». Les deux
+     restent voisins dans la barre parce qu'ils se lisent l'un après l'autre,
+     mais un bloc de plus dans le Hub aurait fait lire le référentiel comme
+     une seizième formation. -->
+<div class="page" id="p-competences">
+  <span class="eyebrow" data-i18n="pg.competences.eb">Hub Training · Référentiel de compétences</span>
+  <h1 class="page-h" data-i18n-bloc="pg.competences.h1">Quelle formation, <em>pour quelle personne, et jusqu’où</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.competences.p">Quatre réponses, et la trajectoire d’une personne s’en déduit&nbsp;: son
+    <b>rôle</b> dans l’entreprise, le <b>secteur</b> de l’entreprise, sa <b>fonction métier</b>, et le niveau de connaissance IA
+    qu’elle <b>déclare</b>. La sortie donne, famille par famille, le niveau de départ et le niveau visé&nbsp;— et ce qui commande
+    chaque cible, du rôle, de la fonction, du secteur ou de l’article&nbsp;4. Le niveau de départ est <strong>déclaré, pas
+    mesuré</strong>&nbsp;: la réponse le dit elle-même, et aucune formation n’est proposée au-delà de la cible.</p>
+  <div class="form-block" id="comp-form">
+    <div class="form-grid2">
+      <div class="form-row">
+        <label class="form-lbl" for="comp-population" data-i18n="pg.competences.lbl.population">Type de personne dans l’entreprise</label>
+        <select class="form-el" id="comp-population" onchange="compProposer()"></select>
+        <div class="comp-aide" id="comp-population-dit"></div>
+      </div>
+      <div class="form-row">
+        <label class="form-lbl" for="comp-fonction" data-i18n="pg.competences.lbl.fonction">Fonction métier</label>
+        <select class="form-el" id="comp-fonction" onchange="compProposer()"></select>
+      </div>
+      <div class="form-row">
+        <label class="form-lbl" for="comp-secteur" data-i18n="pg.competences.lbl.secteur">Secteur d’activité de l’entreprise</label>
+        <select class="form-el" id="comp-secteur" onchange="compProposer()"></select>
+      </div>
+      <div class="form-row">
+        <label class="form-lbl" for="comp-niveau" data-i18n="pg.competences.lbl.niveau">Niveau de connaissances IA déclaré</label>
+        <select class="form-el" id="comp-niveau" onchange="compProposer()"></select>
+        <div class="comp-aide" id="comp-niveau-dit"></div>
+      </div>
+    </div>
+  </div>
+  <div id="comp-sortie" class="veille-loading" data-i18n="pg.competences.attente">Chargement du référentiel…</div>
 </div>
 
 <!-- MON ESPACE -->

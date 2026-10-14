@@ -182,7 +182,7 @@
     {
       "nom": "go() n'amorce plus le module : « Chargement… » sans fin",
       "fichier": "sentinel.page.js",
-      "avant": "  if (id.indexOf('en18286') === 0 && typeof window.en18286Init === 'function') _apresPeinture(window.en18286Init);",
+      "avant": "  if (id.indexOf('en18286') === 0 && typeof window.en18286Init === 'function') _amorcer(window.en18286Init);",
       "apres": "  /* amorce retirée */",
       "regle": "test_un_lien_PROFOND_amorce_le_module_au_lieu_de_laisser_Chargement[en18286-processus]"
     },
@@ -210,7 +210,7 @@
     {
       "nom": "go() n'amorce plus l'écran du taux : les parcours finissent sur une page vide",
       "fichier": "sentinel.page.js",
-      "avant": "  if (id.indexOf('conf-') === 0 && typeof window.confInit === 'function') _apresPeinture(window.confInit);",
+      "avant": "  if (id.indexOf('conf-') === 0 && typeof window.confInit === 'function') _amorcer(window.confInit);",
       "apres": "  /* amorce du taux retirée */",
       "regle": "test_la_DERNIERE_etape_du_parcours_s_amorce_aussi_par_go"
     },

@@ -1,0 +1,162 @@
+{
+ "_pourquoi": "Referentiel de competences IA : chaque regle de tests/test_competences_ia.py doit tomber sur SON defaut. Le moteur porte une garde qui relit ses tables a l'import : les mutations qui la feraient lever sortiraient en erreur de COLLECTE, que le banc prendrait pour une survivante — ces portes-la sont dans tests/test_competences_ia_socle.py, qui injecte le defaut dans une copie jetable. Celles d'ici portent donc sur ce que la garde ne couvre pas : l'arithmetique de la cible, le plafond de role dans les deux sens, le refus de proposer au-dela, la couverture declaree incomplete, la reduction sur la couverture, la trajectoire, les reserves, les deux routes, les quatre listes de l'ecran, l'amorce de l'onglet et la traduction.",
+ "cibles": [
+  "tests/test_competences_ia.py"
+ ],
+ "mutations": [
+  {
+   "nom": "la cible devient une SOMME au lieu d'un maximum",
+   "fichier": "competences_ia.py",
+   "avant": "    niv = max([r[1] for r in retenus] + [plancher])\n",
+   "apres": "    niv = min(NIVEAU_MAX, sum(r[1] for r in retenus) + plancher)\n",
+   "regle": "test_la_cible_est_le_MAXIMUM_des_trois_entrees_et_jamais_leur_somme"
+  },
+  {
+   "nom": "le plafond de role cesse de rabattre la fonction et le secteur",
+   "fichier": "competences_ia.py",
+   "avant": "    retenus = [(nom, min(v, plafond) if rab else v, v)\n               for nom, v, rab in parts]\n",
+   "apres": "    retenus = [(nom, v, v)\n               for nom, v, rab in parts]\n",
+   "regle": "test_un_COLLABORATEUR_n_est_jamais_envoye_a_un_niveau_de_ROLE"
+  },
+  {
+   "nom": "le plafond de role s'applique AUSSI a la population",
+   "fichier": "competences_ia.py",
+   "avant": "    parts = [(\"population\", exig_pop, False),",
+   "apres": "    parts = [(\"population\", exig_pop, True),",
+   "regle": "test_le_plafond_de_role_ne_rabat_JAMAIS_la_population"
+  },
+  {
+   "nom": "le plancher de l'article 4 disparait",
+   "fichier": "competences_ia.py",
+   "avant": "    plancher = PLANCHER_ART4_NIVEAU if famille in PLANCHER_ART4 else 0\n",
+   "apres": "    plancher = 0\n",
+   "regle": "test_le_PLANCHER_de_l_article_4_mord_quand_AUCUNE_entree_n_exige_rien"
+  },
+  {
+   "nom": "ce qui commande est lu sur l'exigence BRUTE, pas sur la retenue",
+   "fichier": "competences_ia.py",
+   "avant": "    commande = [r[0] for r in retenus if r[1] == niv and niv > 0]\n",
+   "apres": "    commande = [r[0] for r in retenus if r[2] == niv and niv > 0]\n",
+   "regle": "test_CE_QUI_COMMANDE_est_une_entree_qui_atteint_vraiment_la_cible"
+  },
+  {
+   "nom": "une formation est retenue meme quand elle DEPASSE la cible",
+   "fichier": "competences_ia.py",
+   "avant": "            if porte > cibles[fam]:\n",
+   "apres": "            if False:\n",
+   "regle": "test_aucune_formation_RETENUE_ne_l_est_pour_depasser_la_cible[collaborateur-marketing-Q-0]"
+  },
+  {
+   "nom": "le besoin non couvert cesse d'etre declare",
+   "fichier": "competences_ia.py",
+   "avant": "        if couvert[fam] >= e[\"cible\"]:\n",
+   "apres": "        if True:\n",
+   "regle": "test_chaque_famille_en_ECART_est_couverte_OU_declaree_NON_COUVERTE[expert_technique-si_data-K-0]"
+  },
+  {
+   "nom": "la reduction sur la couverture disparait : le catalogue entier est rendu",
+   "fichier": "competences_ia.py",
+   "avant": "        if not gagne:\n",
+   "apres": "        if False:\n",
+   "regle": "test_le_nombre_de_formations_retenues_reste_une_PROPOSITION[collaborateur-marketing-Q-0]"
+  },
+  {
+   "nom": "l'arrivee peut redescendre sous le depart",
+   "fichier": "competences_ia.py",
+   "avant": "    vise = max(haute, niveau_actuel)\n",
+   "apres": "    vise = haute\n",
+   "regle": "test_l_arrivee_ne_descend_JAMAIS_sous_le_depart[collaborateur-marketing-Q-4]"
+  },
+  {
+   "nom": "le cursus ne se declenche qu'a quatre paliers",
+   "fichier": "competences_ia.py",
+   "avant": "    if pire >= 3:\n",
+   "apres": "    if pire >= 4:\n",
+   "regle": "test_la_NATURE_suit_le_PIRE_ecart_et_rien_d_autre[collaborateur-marketing-Q-0]"
+  },
+  {
+   "nom": "la liste des secteurs est tronquee a douze sections",
+   "fichier": "competences_ia.py",
+   "avant": "            for s in secteurs_nace.SECTIONS]\n",
+   "apres": "            for s in secteurs_nace.SECTIONS[:12]]\n",
+   "regle": "test_les_secteurs_sont_LUS_dans_secteurs_nace_et_jamais_recopies"
+  },
+  {
+   "nom": "le titre attendu d'une formation DERIVE du catalogue",
+   "fichier": "competences_ia.py",
+   "avant": "    {\"n\": 12, \"titre_attendu\": \"Littératie IA pour les métiers\",\n",
+   "apres": "    {\"n\": 12, \"titre_attendu\": \"Littératie IA pour tous\",\n",
+   "regle": "test_chaque_formation_CITEE_existe_au_catalogue_avec_le_titre_ATTENDU"
+  },
+  {
+   "nom": "le rabattement devient muet",
+   "fichier": "competences_ia.py",
+   "avant": "            \"plafond_mord\": any(q[\"plafonne\"] for f in out\n                                for q in f[\"parts\"])}",
+   "apres": "            \"plafond_mord\": False}",
+   "regle": "test_le_rabattement_est_DIT_la_ou_il_mord_et_PAS_la_ou_il_ne_mord_pas"
+  },
+  {
+   "nom": "un booleen repasse pour le niveau 1",
+   "fichier": "competences_ia.py",
+   "avant": "    if isinstance(niveau_actuel, bool) \\\n",
+   "apres": "    if not isinstance(niveau_actuel, int) \\\n",
+   "regle": "test_un_niveau_HORS_ECHELLE_est_refuse[True]"
+  },
+  {
+   "nom": "la quatrieme reserve du niveau eleve disparait",
+   "fichier": "competences_ia.py",
+   "avant": "    if niveau_actuel >= 3:\n",
+   "apres": "    if False:\n",
+   "regle": "test_la_reserve_du_niveau_DECLARE_part_avec_CHAQUE_reponse[3]"
+  },
+  {
+   "nom": "le motif de la redondance cesse de dire ce qu'il mesure",
+   "fichier": "competences_ia.py",
+   "avant": "                \"motif\": \"n'ajoute aucun palier que les formations retenues \"\n                         \"n'atteignent déjà\",\n",
+   "apres": "                \"motif\": \"pas retenue\",\n",
+   "regle": "test_une_formation_ECARTEE_pour_REDONDANCE_l_est_vraiment[collaborateur-marketing-Q-0]"
+  },
+  {
+   "nom": "une exigence sectorielle cesse d'elever quoi que ce soit",
+   "fichier": "competences_ia.py",
+   "avant": "    \"P\": ({\"evaluer\": 3, \"proteger\": 3},\n",
+   "apres": "    \"P\": ({\"evaluer\": 1, \"proteger\": 1},\n",
+   "regle": "test_le_secteur_choisi_CHANGE_vraiment_la_cible_pour_les_cinq_sections"
+  },
+  {
+   "nom": "la route du referentiel perd sa cadence",
+   "fichier": "app.py",
+   "avant": "@app.route('/api/competences-ia/referentiel', methods=['GET'])\n@rate_limit(limit=120, window=60)\n",
+   "apres": "@app.route('/api/competences-ia/referentiel', methods=['GET'])\n",
+   "regle": "test_les_DEUX_routes_existent_et_portent_la_CADENCE_des_autres"
+  },
+  {
+   "nom": "la route de proposition accepte tout sans refuser",
+   "fichier": "app.py",
+   "avant": "    if isinstance(niveau, str) and niveau.strip().lstrip(\"-\").isdigit():\n        niveau = int(niveau.strip())\n",
+   "apres": "    niveau = d.get(\"niveau\")\n",
+   "regle": "test_la_route_de_PROPOSITION_accepte_un_niveau_ECRIT_par_une_liste"
+  },
+  {
+   "nom": "une liste deroulante cesse de rappeler la proposition",
+   "fichier": "sentinel.html",
+   "avant": "<select class=\"form-el\" id=\"comp-secteur\" onchange=\"compProposer()\">",
+   "apres": "<select class=\"form-el\" id=\"comp-secteur\">",
+   "regle": "test_l_ecran_porte_les_QUATRE_listes_que_la_demande_nomme"
+  },
+  {
+   "nom": "l'onglet de la barre perd son amorce",
+   "fichier": "sentinel.html",
+   "avant": "go('competences',this,'ÉQUIPE &amp; FORMATION','Référentiel de compétences IA');compInit()",
+   "apres": "go('competences',this,'ÉQUIPE &amp; FORMATION','Référentiel de compétences IA')",
+   "regle": "test_la_barre_mene_a_l_ecran_et_l_AMORCE_est_dans_son_appel"
+  },
+  {
+   "nom": "une etiquette de l'ecran n'est plus traduite",
+   "fichier": "sentinel.page.js",
+   "avant": "    'pg.competences.lbl.secteur': 'Company sector of activity',\n",
+   "apres": "",
+   "regle": "test_tout_le_FRANCAIS_neuf_de_l_ecran_est_TRADUIT"
+  }
+ ]
+}

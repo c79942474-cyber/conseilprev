@@ -2662,143 +2662,144 @@
    "fr": "Ouvrir le guide d’utilisation de cette page",
    "mots": 8,
    "pages": [
-    "pan-sia",
-    "enveloppe",
-    "empreinte-parc",
-    "obs-rd",
-    "juridique",
-    "empreinte",
-    "finops",
-    "empreinte-ia",
-    "ia50",
-    "rgpd-site",
-    "entreprise",
-    "ia-act-hub",
-    "conformite-globale",
     "adoption",
-    "ingenierie",
+    "apercu",
+    "articles",
+    "audit",
+    "audit-ia-act",
+    "benchmark",
     "cadre-normatif",
-    "shadow-ai",
+    "carto",
+    "carto-uc",
+    "clients",
+    "comp",
+    "competences",
     "compte",
+    "conf-limites",
+    "conf-plan",
+    "conf-taux",
+    "conformite-globale",
     "cra",
+    "cra-chiffre",
     "cra-ecarts",
     "cra-role",
-    "cra-chiffre",
     "cra-signalement",
-    "iso27001-risques",
-    "iso27001-soa",
-    "iso27001",
-    "iso27001-millesime",
-    "iso42001",
-    "iso42001-soa",
-    "conf-taux",
-    "conf-plan",
-    "conf-limites",
-    "en18286-processus",
-    "en18286-questionnaire",
-    "en18286-conformite",
-    "en18286-analyse",
-    "dga-qualifier",
+    "data-act-cloud",
+    "data-act-obligations",
+    "data-act-pont-rgpd",
+    "data-act-qualifier",
     "dga-obligations",
     "dga-pont-rgpd",
-    "data-act-qualifier",
-    "data-act-obligations",
-    "data-act-cloud",
-    "data-act-pont-rgpd",
-    "ocde-processus",
-    "ocde-questionnaire",
-    "ocde-conformite",
-    "ocde-analyse",
-    "nist-profil",
-    "nist-cadre",
-    "nist-genai",
-    "owasp-dix",
-    "nist53-socle",
-    "nist82-ot",
-    "en18229-role",
-    "en18229-scenarios",
-    "en18229-cadre",
-    "en18229-score",
-    "owasp-pont",
-    "iso42001-certif",
-    "iso42001-ponts",
-    "dora-qualifier",
-    "dora-risque",
-    "dora-tiers",
+    "dga-qualifier",
     "dora-incident",
     "dora-iso",
+    "dora-qualifier",
+    "dora-risque",
     "dora-supervision",
-    "nis2-qualifier",
-    "nis2",
-    "nis2-gouvernance",
-    "nis2-signalement",
-    "nis2-chiffre",
-    "recyf-objectifs",
-    "recyf-analyse",
-    "rgpd-hub",
-    "rgpd-conformite",
-    "rgpd-sensibilisation",
-    "rgpd-doc",
-    "rgpd-pbd",
-    "rgpd-aipd",
-    "rgpd-cartographie",
-    "rgpd-traitements",
-    "apercu",
-    "carto",
-    "comp",
-    "geo",
-    "regs",
-    "veille",
-    "evals",
-    "historique",
-    "audit",
+    "dora-tiers",
+    "empreinte",
+    "empreinte-ia",
+    "empreinte-parc",
+    "en18229-cadre",
+    "en18229-role",
+    "en18229-scenarios",
+    "en18229-score",
+    "en18286-analyse",
+    "en18286-conformite",
+    "en18286-processus",
+    "en18286-questionnaire",
+    "entreprise",
+    "enveloppe",
     "equipe",
-    "training",
     "espace",
-    "report",
-    "maturite",
-    "gouvernance",
-    "parties",
-    "registre",
-    "qualif-assistee",
-    "simulateur",
-    "audit-ia-act",
-    "matrice",
-    "radar",
-    "articles",
-    "fria",
-    "roadmap",
-    "sanctions",
-    "benchmark",
-    "pricing",
-    "templates",
-    "rag",
-    "clients",
-    "carto-uc",
-    "fiche-eu",
-    "fiche-de",
-    "fiche-fr",
-    "fiche-cn",
-    "fiche-ru",
-    "fiche-kr",
+    "evals",
+    "fiche-ae",
+    "fiche-ar",
+    "fiche-au",
+    "fiche-br",
     "fiche-ca",
     "fiche-ch",
-    "fiche-br",
-    "fiche-gb",
-    "fiche-tr",
-    "fiche-au",
     "fiche-cl",
+    "fiche-cn",
+    "fiche-de",
+    "fiche-eu",
+    "fiche-fr",
+    "fiche-gb",
     "fiche-il",
-    "fiche-sg",
     "fiche-in",
-    "fiche-my",
-    "fiche-us",
-    "fiche-ae",
     "fiche-jp",
-    "fiche-ar",
+    "fiche-kr",
     "fiche-mx",
+    "fiche-my",
+    "fiche-ng",
+    "fiche-ru",
+    "fiche-sg",
+    "fiche-tr",
+    "fiche-us",
     "fiche-za",
-    "fiche-ng"
+    "finops",
+    "fria",
+    "geo",
+    "gouvernance",
+    "historique",
+    "ia-act-hub",
+    "ia50",
+    "ingenierie",
+    "iso27001",
+    "iso27001-millesime",
+    "iso27001-risques",
+    "iso27001-soa",
+    "iso42001",
+    "iso42001-certif",
+    "iso42001-ponts",
+    "iso42001-soa",
+    "juridique",
+    "matrice",
+    "maturite",
+    "nis2",
+    "nis2-chiffre",
+    "nis2-gouvernance",
+    "nis2-qualifier",
+    "nis2-signalement",
+    "nist-cadre",
+    "nist-genai",
+    "nist-profil",
+    "nist53-socle",
+    "nist82-ot",
+    "obs-rd",
+    "ocde-analyse",
+    "ocde-conformite",
+    "ocde-processus",
+    "ocde-questionnaire",
+    "owasp-dix",
+    "owasp-pont",
+    "pan-sia",
+    "parties",
+    "pricing",
+    "qualif-assistee",
+    "radar",
+    "rag",
+    "recyf-analyse",
+    "recyf-objectifs",
+    "registre",
+    "regs",
+    "report",
+    "rgpd-aipd",
+    "rgpd-cartographie",
+    "rgpd-conformite",
+    "rgpd-doc",
+    "rgpd-hub",
+    "rgpd-pbd",
+    "rgpd-sensibilisation",
+    "rgpd-site",
+    "rgpd-traitements",
+    "roadmap",
+    "sanctions",
+    "shadow-ai",
+    "simulateur",
+    "templates",
+    "training",
+    "veille"
    ]
   },
   "Panorama des systèmes d'IA en entreprise et des centres de données dans l'UE": {
@@ -13457,20 +13458,20 @@
    "texte": 88753
   }
  },
- "pages": 137,
+ "pages": 138,
  "routes": {
   "entrees": {
    "attr": 0,
    "bloc": 0,
-   "texte": 2873
+   "texte": 2971
   },
   "mots": {
    "attr": 0,
    "bloc": 0,
-   "texte": 45518
+   "texte": 46599
   },
-  "routes": 19,
-  "sondes": 20
+  "routes": 20,
+  "sondes": 21
  },
  "rubriques": {
   "adoption": "BUSINESS",
@@ -13484,6 +13485,7 @@
   "carto-uc": "BUSINESS",
   "clients": "ADMINISTRATION",
   "comp": "SE TENIR INFORMÉ",
+  "competences": "ÉQUIPE & FORMATION",
   "compte": "COMPTE",
   "conf-limites": "Taux de conformité",
   "conf-plan": "Taux de conformité",
@@ -19013,11 +19015,53 @@
     "espace"
    ]
   },
+  "Activités de services administratifs et de soutien": {
+   "fr": "Activités de services administratifs et de soutien",
+   "mots": 7,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Activités de surveillance": {
    "fr": "Activités de surveillance",
    "mots": 3,
    "pages": [
     "iso27001-soa",
+    "_routes"
+   ]
+  },
+  "Activités des ménages en tant qu'employeurs ; activités indifférenciées des ménages pour usage propre": {
+   "fr": "Activités des ménages en tant qu'employeurs ; activités indifférenciées des ménages pour usage propre",
+   "mots": 14,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Activités des organisations et organismes extraterritoriaux": {
+   "fr": "Activités des organisations et organismes extraterritoriaux",
+   "mots": 6,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Activités financières et d'assurance": {
+   "fr": "Activités financières et d'assurance",
+   "mots": 5,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Activités immobilières": {
+   "fr": "Activités immobilières",
+   "mots": 2,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Activités spécialisées, scientifiques et techniques": {
+   "fr": "Activités spécialisées, scientifiques et techniques",
+   "mots": 5,
+   "pages": [
     "_routes"
    ]
   },
@@ -19122,6 +19166,13 @@
   "Administration des systèmes d'information depuis des ressources dédiées": {
    "fr": "Administration des systèmes d'information depuis des ressources dédiées",
    "mots": 9,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Administration publique et défense ; sécurité sociale obligatoire": {
+   "fr": "Administration publique et défense ; sécurité sociale obligatoire",
+   "mots": 7,
    "pages": [
     "_routes"
    ]
@@ -19489,6 +19540,13 @@
    "pages": [
     "maturite",
     "_js"
+   ]
+  },
+  "Agriculture, sylviculture et pêche": {
+   "fr": "Agriculture, sylviculture et pêche",
+   "mots": 4,
+   "pages": [
+    "_routes"
    ]
   },
   "Aide : Demandes en attente de décision": {
@@ -20264,7 +20322,8 @@
    "pages": [
     "rgpd-site",
     "training",
-    "_js"
+    "_js",
+    "_routes"
    ]
   },
   "Analyse d'impact sur les droits fondamentaux (AIDF)": {
@@ -20279,7 +20338,8 @@
    "mots": 8,
    "pages": [
     "training",
-    "_js"
+    "_js",
+    "_routes"
    ]
   },
   "Analyse d'écart CRA": {
@@ -20633,7 +20693,8 @@
    "mots": 8,
    "pages": [
     "training",
-    "_js"
+    "_js",
+    "_routes"
    ]
   },
   "Annexe A (# catégories)": {
@@ -21467,6 +21528,14 @@
    "mots": 2,
    "pages": [
     "carto"
+   ]
+  },
+  "Arbitre les usages, engage l'organisation, répond du dispositif.": {
+   "fr": "Arbitre les usages, engage l'organisation, répond du dispositif.",
+   "mots": 9,
+   "pages": [
+    "competences",
+    "_routes"
    ]
   },
   "Arbre de décision déterministe en cinq étapes. Le même profil donne toujours le même résultat, avec la règle qui l’a produit.": {
@@ -23041,6 +23110,13 @@
     "_js"
    ]
   },
+  "Arts, sports et loisirs": {
+   "fr": "Arts, sports et loisirs",
+   "mots": 4,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Arts. # and #": {
    "fr": "Arts. 32 and 34",
    "mots": 2,
@@ -24334,6 +24410,13 @@
     "_routes"
    ]
   },
+  "Aucun repère": {
+   "fr": "Aucun repère",
+   "mots": 2,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Aucun risque déclaré. Ajoutez-en un :": {
    "fr": "Aucun risque déclaré. Ajoutez-en un :",
    "mots": 6,
@@ -24663,6 +24746,13 @@
    "mots": 3,
    "pages": [
     "_js"
+   ]
+  },
+  "Aucune action de formation : la cible est atteinte au niveau déclaré, sur les six familles.": {
+   "fr": "Aucune action de formation : la cible est atteinte au niveau déclaré, sur les six familles.",
+   "mots": 15,
+   "pages": [
+    "_routes"
    ]
   },
   "Aucune action du §# ne traite les risques retenus.": {
@@ -25529,7 +25619,8 @@
    "mots": 8,
    "pages": [
     "training",
-    "_js"
+    "_js",
+    "_routes"
    ]
   },
   "Auditeurs internes, conformité, qualité": {
@@ -25822,6 +25913,13 @@
    "mots": 3,
    "pages": [
     "dora-supervision"
+   ]
+  },
+  "Autres activités de services": {
+   "fr": "Autres activités de services",
+   "mots": 4,
+   "pages": [
+    "_routes"
    ]
   },
   "Autres entités financières identifiées comme systémiques par les autorités compétentes. Rempli si au moins une entité des points g), h), i) ou j) de l'article #, paragraphe #, OU au moins trois autres entités systémiques.": {
@@ -28996,6 +29094,13 @@
    "mots": 4,
    "pages": [
     "training"
+   ]
+  },
+  "Catalogue « Formations conformité IA » du Hub Training (FORMATIONS_CAT). Les titres, durées et publics viennent de là ; ce module n'ajoute que la correspondance entre une formation et les familles qu'elle porte.": {
+   "fr": "Catalogue « Formations conformité IA » du Hub Training (FORMATIONS_CAT). Les titres, durées et publics viennent de là ; ce module n'ajoute que la correspondance entre une formation et les familles qu'elle porte.",
+   "mots": 33,
+   "pages": [
+    "_routes"
    ]
   },
   "Categorisation et priorisation automatique des demandes de support.": {
@@ -33616,6 +33721,13 @@
     "empreinte-ia"
    ]
   },
+  "Collaborateur sans encadrement": {
+   "fr": "Collaborateur sans encadrement",
+   "mots": 3,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Collaborateurs sensibilisés": {
    "fr": "Collaborateurs sensibilisés",
    "mots": 2,
@@ -33942,7 +34054,8 @@
    "mots": 6,
    "pages": [
     "maturite",
-    "_js"
+    "_js",
+    "_routes"
    ]
   },
   "Commercial / Avant-vente": {
@@ -34707,6 +34820,13 @@
     "_routes"
    ]
   },
+  "Concevoir ou expertiser": {
+   "fr": "Concevoir ou expertiser",
+   "mots": 3,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Concevoir, documenter & prouver": {
    "fr": "Concevoir, documenter & prouver",
    "mots": 3,
@@ -34908,6 +35028,13 @@
    "mots": 7,
    "pages": [
     "_js"
+   ]
+  },
+  "Confirmer par une mise en situation, un exercice pratique ou un entretien avec le manager.": {
+   "fr": "Confirmer par une mise en situation, un exercice pratique ou un entretien avec le manager.",
+   "mots": 15,
+   "pages": [
+    "_routes"
    ]
   },
   "Confirmez-vous définitivement cet effacement ?": {
@@ -35160,6 +35287,13 @@
     "_js"
    ]
   },
+  "Conformité, juridique, DPO, qualité, audit": {
+   "fr": "Conformité, juridique, DPO, qualité, audit",
+   "mots": 5,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Conformité, juristes, métiers": {
    "fr": "Conformité, juristes, métiers",
    "mots": 3,
@@ -35189,6 +35323,13 @@
    "pages": [
     "dora-incident",
     "_js"
+   ]
+  },
+  "Connaître ce qu'une IA peut produire et les limites auxquelles elle reste confrontée : un résultat vraisemblable n'est pas un résultat exact.": {
+   "fr": "Connaître ce qu'une IA peut produire et les limites auxquelles elle reste confrontée : un résultat vraisemblable n'est pas un résultat exact.",
+   "mots": 23,
+   "pages": [
+    "_routes"
    ]
   },
   "Connaître le calendrier d application et les échéances clés jusqu en #": {
@@ -36298,6 +36439,13 @@
    "mots": 2,
    "pages": [
     "enveloppe"
+   ]
+  },
+  "Contrôler la qualité d'une production avant de s'en servir : exactitude, complétude, respect des contraintes posées.": {
+   "fr": "Contrôler la qualité d'une production avant de s'en servir : exactitude, complétude, respect des contraintes posées.",
+   "mots": 17,
+   "pages": [
+    "_routes"
    ]
   },
   "Contrôles PAC par surveillance : séries Sentinel-# et Sentinel-# classées automatiquement pour vérifier les cultures déclarées sur chaque parcelle": {
@@ -37888,6 +38036,13 @@
     "_js"
    ]
   },
+  "DSI, données, sécurité, développement": {
+   "fr": "DSI, données, sécurité, développement",
+   "mots": 4,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Danemark · Logistique maritime · Production": {
    "fr": "Danemark · Logistique maritime · Production",
    "mots": 4,
@@ -39411,6 +39566,13 @@
     "_routes"
    ]
   },
+  "Deux personnes au même niveau déclaré peuvent être fortes en « interagir » et faibles en « évaluer » : l'une obtient vite un résultat et ne le vérifie pas, l'autre se méfie et n'en tire rien. Le module ne corrige pas cet écart en silence.": {
+   "fr": "Deux personnes au même niveau déclaré peuvent être fortes en « interagir » et faibles en « évaluer » : l'une obtient vite un résultat et ne le vérifie pas, l'autre se méfie et n'en tire rien. Le module ne corrige pas cet écart en silence.",
+   "mots": 44,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Deux revues du même compte ou une seconde revue qui voit la première ne font pas deux vérifications indépendantes : elles en font une, et l'alinéa #(#) n'est pas tenu.": {
    "fr": "Deux revues du même compte ou une seconde revue qui voit la première ne font pas deux vérifications indépendantes : elles en font une, et l'alinéa 14(5) n'est pas tenu.",
    "mots": 30,
@@ -39830,6 +39992,13 @@
     "_js"
    ]
   },
+  "Direction générale, stratégie": {
+   "fr": "Direction générale, stratégie",
+   "mots": 3,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Direction immobilière et RSE": {
    "fr": "Direction immobilière et RSE",
    "mots": 4,
@@ -39943,6 +40112,13 @@
    "mots": 8,
    "pages": [
     "_js"
+   ]
+  },
+  "Dirigeant, membre du comité de direction": {
+   "fr": "Dirigeant, membre du comité de direction",
+   "mots": 6,
+   "pages": [
+    "_routes"
    ]
   },
   "Dirigeants, chefs de projet, juristes, DSI": {
@@ -41743,6 +41919,13 @@
     "_routes"
    ]
   },
+  "Déclarer un niveau PAR FAMILLE, ou observer les productions réelles de la personne.": {
+   "fr": "Déclarer un niveau PAR FAMILLE, ou observer les productions réelles de la personne.",
+   "mots": 13,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Déclarer un nouvel usage & le qualifier": {
    "fr": "Déclarer un nouvel usage & le qualifier",
    "mots": 6,
@@ -43061,6 +43244,13 @@
     "_js"
    ]
   },
+  "Déterminer quand l'IA apporte réellement de la valeur dans l'activité, et quelle place garder à l'expertise humaine.": {
+   "fr": "Déterminer quand l'IA apporte réellement de la valeur dans l'activité, et quelle place garder à l'expertise humaine.",
+   "mots": 20,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Déterminer votre rôle (fournisseur, déployeur, importateur, distributeur — Art. #(#) à #(#)) avant de lister les obligations": {
    "fr": "Déterminer votre rôle (fournisseur, déployeur, importateur, distributeur — Art. 3(3) à 3(7)) avant de lister les obligations",
    "mots": 14,
@@ -43635,6 +43825,13 @@
     "_js"
    ]
   },
+  "Elle accompagne d'autres utilisateurs, définit des pratiques, challenge les usages et participe aux règles communes.": {
+   "fr": "Elle accompagne d'autres utilisateurs, définit des pratiques, challenge les usages et participe aux règles communes.",
+   "mots": 16,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Elle agrège ce qui a été saisi ailleurs et ne se remplit pas ici. Un Registre IA incomplet produit une vue direction rassurante et fausse : vérifiez le registre avant de présenter la synthèse.": {
    "fr": "Elle agrège ce qui a été saisi ailleurs et ne se remplit pas ici. Un Registre IA incomplet produit une vue direction rassurante et fausse : vérifiez le registre avant de présenter la synthèse.",
    "mots": 33,
@@ -43649,11 +43846,25 @@
     "_js"
    ]
   },
+  "Elle choisit une approche pertinente, contextualise, évalue les réponses et gère les risques courants sans accompagnement systématique.": {
+   "fr": "Elle choisit une approche pertinente, contextualise, évalue les réponses et gère les risques courants sans accompagnement systématique.",
+   "mots": 17,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Elle complète, sans la remplacer, l’évaluation de gouvernance de l’Audit de maturité IA (# piliers).": {
    "fr": "Elle complète, sans la remplacer, l’évaluation de gouvernance de l’Audit de maturité IA (8 piliers).",
    "mots": 16,
    "pages": [
     "carto-uc"
+   ]
+  },
+  "Elle connaît les principes essentiels, les possibilités, les limites et les règles applicables, et sait quand demander de l'aide.": {
+   "fr": "Elle connaît les principes essentiels, les possibilités, les limites et les règles applicables, et sait quand demander de l'aide.",
+   "mots": 20,
+   "pages": [
+    "_routes"
    ]
   },
   "Elle dit qui est connecté, sous quelle offre, et donne les deux seuls chemins qui comptent : se déconnecter, ou se connecter. Sentinel comptait cinquante-deux onglets et pas un ne parlait du compte — la session n’existait que dans un bouton de la barre du haut, entre deux boutons de même apparence.": {
@@ -43711,6 +43922,20 @@
    "mots": 16,
    "pages": [
     "_js"
+   ]
+  },
+  "Elle intervient sur des situations complexes : conception, architecture, intégration, sécurisation, gouvernance avancée.": {
+   "fr": "Elle intervient sur des situations complexes : conception, architecture, intégration, sécurisation, gouvernance avancée.",
+   "mots": 12,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Elle met en œuvre les bonnes pratiques dans des situations simples ou encadrées, avec un référent ou une procédure.": {
+   "fr": "Elle met en œuvre les bonnes pratiques dans des situations simples ou encadrées, avec un référent ou une procédure.",
+   "mots": 19,
+   "pages": [
+    "_routes"
    ]
   },
   "Elle n'occupe personne à plein temps, mais elle ajoute à la latence le temps de percevoir l'alerte et de reprendre le contexte.": {
@@ -44268,6 +44493,13 @@
    "mots": 10,
    "pages": [
     "_js"
+   ]
+  },
+  "Emploie l'IA dans son activité, sans responsabilité d'arbitrage.": {
+   "fr": "Emploie l'IA dans son activité, sans responsabilité d'arbitrage.",
+   "mots": 10,
+   "pages": [
+    "_routes"
    ]
   },
   "Employer le système conformément à sa notice": {
@@ -47370,6 +47602,13 @@
     "_routes"
    ]
   },
+  "Faire valider les cibles par les métiers, les managers et la DSI avant d'en faire un attendu RH.": {
+   "fr": "Faire valider les cibles par les métiers, les managers et la DSI avant d'en faire un attendu RH.",
+   "mots": 19,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Faisabilité": {
    "fr": "Faisabilité",
    "mots": 1,
@@ -47931,6 +48170,13 @@
     "_js"
    ]
   },
+  "Finance, gestion, contrôle": {
+   "fr": "Finance, gestion, contrôle",
+   "mots": 3,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Financer ou assurer un centre de données": {
    "fr": "Financer ou assurer un centre de données",
    "mots": 7,
@@ -48072,7 +48318,8 @@
    "mots": 7,
    "pages": [
     "training",
-    "_js"
+    "_js",
+    "_routes"
    ]
   },
   "Fondée sur le consentement explicite de la personne": {
@@ -48260,6 +48507,13 @@
    "mots": 2,
    "pages": [
     "pricing"
+   ]
+  },
+  "Formuler une demande qui obtient une production exploitable, et la faire évoluer : objectif, contexte, contraintes, format.": {
+   "fr": "Formuler une demande qui obtient une production exploitable, et la faire évoluer : objectif, contexte, contraintes, format.",
+   "mots": 16,
+   "pages": [
+    "_routes"
    ]
   },
   "Formé n’est pas adopté": {
@@ -49598,7 +49852,8 @@
    "mots": 13,
    "pages": [
     "training",
-    "_js"
+    "_js",
+    "_routes"
    ]
   },
   "Gouvernance de l'article #": {
@@ -50758,6 +51013,13 @@
    "mots": 7,
    "pages": [
     "cra",
+    "_routes"
+   ]
+  },
+  "Hébergement et restauration": {
+   "fr": "Hébergement et restauration",
+   "mots": 3,
+   "pages": [
     "_routes"
    ]
   },
@@ -52591,6 +52853,13 @@
     "maturite"
    ]
   },
+  "Industrie manufacturière": {
+   "fr": "Industrie manufacturière",
+   "mots": 2,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Industrie manufacturière, automobile, aéronautique, chimie et biens d'équipement.": {
    "fr": "Industrie manufacturière, automobile, aéronautique, chimie et biens d'équipement.",
    "mots": 9,
@@ -53774,6 +54043,13 @@
     "_js"
    ]
   },
+  "Intègre, sécurise et exploite les solutions.": {
+   "fr": "Intègre, sécurise et exploite les solutions.",
+   "mots": 6,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Intégrateur — je modifie substantiellement un produit déjà sur le marché": {
    "fr": "Intégrateur — je modifie substantiellement un produit déjà sur le marché",
    "mots": 10,
@@ -54520,6 +54796,13 @@
     "_js"
    ]
   },
+  "Juridique, conformité, protection des données": {
+   "fr": "Juridique, conformité, protection des données",
+   "mots": 5,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Jurisprudence rapportée du": {
    "fr": "Jurisprudence rapportée du",
    "mots": 3,
@@ -55260,6 +55543,13 @@
    "mots": 31,
    "pages": [
     "_js"
+   ]
+  },
+  "L'article # du règlement (UE) #/# impose de prendre des mesures pour un niveau suffisant de maîtrise de l'IA, en tenant compte des connaissances et du contexte. Il n'écrit aucune échelle.": {
+   "fr": "L'article 4 du règlement (UE) 2024/1689 impose de prendre des mesures pour un niveau suffisant de maîtrise de l'IA, en tenant compte des connaissances et du contexte. Il n'écrit aucune échelle.",
+   "mots": 32,
+   "pages": [
+    "_routes"
    ]
   },
   "L'article # du règlement demande des mesures techniques et organisationnelles appropriées : l'annexe A en fournit l'inventaire, et A.# vise explicitement la protection des données à caractère personnel.": {
@@ -56107,6 +56397,13 @@
   "L'échange se fait au format reçu ; toute conversion est justifiée et ouvre une possibilité de non-participation, sauf si le droit de l'Union l'exige.": {
    "fr": "L'échange se fait au format reçu ; toute conversion est justifiée et ouvre une possibilité de non-participation, sauf si le droit de l'Union l'exige.",
    "mots": 27,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "L'échelle et les cibles sont la position du cabinet": {
+   "fr": "L'échelle et les cibles sont la position du cabinet",
+   "mots": 10,
    "pages": [
     "_routes"
    ]
@@ -58025,11 +58322,61 @@
     "_routes"
    ]
   },
+  "La personne formalise les usages autorisés, les contrôles et les responsabilités.": {
+   "fr": "La personne formalise les usages autorisés, les contrôles et les responsabilités.",
+   "mots": 11,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "La personne identifie une situation sensible et sait quelle règle appliquer ou qui solliciter.": {
+   "fr": "La personne identifie une situation sensible et sait quelle règle appliquer ou qui solliciter.",
+   "mots": 14,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "La personne n'a pas de repère sur ce qu'un système génératif produit, ni sur les règles qui s'appliquent.": {
+   "fr": "La personne n'a pas de repère sur ce qu'un système génératif produit, ni sur les règles qui s'appliquent.",
+   "mots": 21,
+   "pages": [
+    "competences",
+    "_routes"
+   ]
+  },
   "La personne peut-elle contester et obtenir un réexamen ?": {
    "fr": "La personne peut-elle contester et obtenir un réexamen ?",
    "mots": 9,
    "pages": [
     "_js"
+   ]
+  },
+  "La personne précise l'objectif, le contexte, les contraintes et le résultat attendu.": {
+   "fr": "La personne précise l'objectif, le contexte, les contraintes et le résultat attendu.",
+   "mots": 13,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "La personne sait dire la valeur apportée, et garde le contrôle du résultat.": {
+   "fr": "La personne sait dire la valeur apportée, et garde le contrôle du résultat.",
+   "mots": 13,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "La personne sait expliquer pourquoi une réponse générée demande une vérification.": {
+   "fr": "La personne sait expliquer pourquoi une réponse générée demande une vérification.",
+   "mots": 11,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "La personne vérifie les faits, la cohérence, et ce qui exige une source.": {
+   "fr": "La personne vérifie les faits, la cohérence, et ce qui exige une source.",
+   "mots": 13,
+   "pages": [
+    "_routes"
    ]
   },
   "La planification automatisée des équipes": {
@@ -60585,6 +60932,13 @@
     "_js"
    ]
   },
+  "Le module calcule un écart entre une cible et une déclaration. Il ne constate aucune compétence.": {
+   "fr": "Le module calcule un écart entre une cible et une déclaration. Il ne constate aucune compétence.",
+   "mots": 16,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Le module mesure par FAMILLE, pas par mesure : la répartition exacte des mesures par socle n’est pas reprise ici. Un ratio dont le dénominateur serait supposé vaudrait moins que son absence. Et ce catalogue ne se certifie pas : aucun organisme ne délivre d’attestation contre lui.": {
    "fr": "Le module mesure par FAMILLE, pas par mesure : la répartition exacte des mesures par socle n’est pas reprise ici. Un ratio dont le dénominateur serait supposé vaudrait moins que son absence. Et ce catalogue ne se certifie pas : aucun organisme ne délivre d’attestation contre lui.",
    "mots": 47,
@@ -60789,9 +61143,23 @@
     "_js"
    ]
   },
+  "Le niveau # est le plus haut niveau d'USAGE de l'échelle ; les niveaux # et # décrivent un rôle — transmettre, concevoir. La fonction et le secteur sont rabattus à ce plafond : ils élèvent l'exigence, ils ne confèrent pas le rôle. L'exigence de la population, elle, passe entière, puisque c'est elle qui porte le rôle.": {
+   "fr": "Le niveau 3 est le plus haut niveau d'USAGE de l'échelle ; les niveaux 4 et 5 décrivent un rôle — transmettre, concevoir. La fonction et le secteur sont rabattus à ce plafond : ils élèvent l'exigence, ils ne confèrent pas le rôle. L'exigence de la population, elle, passe entière, puisque c'est elle qui porte le rôle.",
+   "mots": 56,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Le niveau de TOLÉRANCE au risque lié aux TIC approuvé au titre de l'article #, paragraphe #, point b), du règlement.": {
    "fr": "Le niveau de TOLÉRANCE au risque lié aux TIC approuvé au titre de l'article 6, paragraphe 8, point b), du règlement.",
    "mots": 20,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Le niveau de départ est déclaré, pas mesuré": {
+   "fr": "Le niveau de départ est déclaré, pas mesuré",
+   "mots": 8,
    "pages": [
     "_routes"
    ]
@@ -67288,7 +67656,8 @@
    "mots": 5,
    "pages": [
     "training",
-    "_js"
+    "_js",
+    "_routes"
    ]
   },
   "Littérature d’exploitation (LBNL, Uptime Institute)": {
@@ -68854,6 +69223,13 @@
     "_js"
    ]
   },
+  "Manager, encadrant d'équipe": {
+   "fr": "Manager, encadrant d'équipe",
+   "mots": 4,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Mandataire UE obligatoire": {
    "fr": "Mandataire UE obligatoire",
    "mots": 3,
@@ -68938,6 +69314,13 @@
    "mots": 1,
    "pages": [
     "carto-uc"
+   ]
+  },
+  "Marketing, communication, création": {
+   "fr": "Marketing, communication, création",
+   "mots": 3,
+   "pages": [
+    "_routes"
    ]
   },
   "Marketing, communication, éditeurs, DPO": {
@@ -72469,6 +72852,13 @@
     "_js"
    ]
   },
+  "Niveau visé : le plus haut des six cibles. Les familles dont la cible est plus basse n'ont pas à l'atteindre.": {
+   "fr": "Niveau visé : le plus haut des six cibles. Les familles dont la cible est plus basse n'ont pas à l'atteindre.",
+   "mots": 22,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Niveaux d'exactitude déclarés, résilience aux erreurs et aux incohérences, résistance aux tentatives d'altération du système ou de ses données.": {
    "fr": "Niveaux d'exactitude déclarés, résilience aux erreurs et aux incohérences, résistance aux tentatives d'altération du système ou de ses données.",
    "mots": 21,
@@ -74125,6 +74515,13 @@
    "mots": 36,
    "pages": [
     "entreprise"
+   ]
+  },
+  "Observe les pratiques réelles, autorise ou refuse un usage dans son périmètre.": {
+   "fr": "Observe les pratiques réelles, autorise ou refuse un usage dans son périmètre.",
+   "mots": 12,
+   "pages": [
+    "_routes"
    ]
   },
   "Obstacle à un droit, à un service ou à un contrat": {
@@ -77210,6 +77607,20 @@
     "_js"
    ]
   },
+  "Piloter et transmettre": {
+   "fr": "Piloter et transmettre",
+   "mots": 3,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Piloter les usages et les responsabilités : règles, niveaux de contrôle, arbitrages, accompagnement des utilisateurs.": {
+   "fr": "Piloter les usages et les responsabilités : règles, niveaux de contrôle, arbitrages, accompagnement des utilisateurs.",
+   "mots": 14,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Piloter l’empreinte réelle d’un parc de centres de données : électricité, CO₂e, fabrication amortie et eau de refroidissement, sans confondre ce qui est publié et ce qui est calculé.": {
    "fr": "Piloter l’empreinte réelle d’un parc de centres de données : électricité, CO₂e, fabrication amortie et eau de refroidissement, sans confondre ce qui est publié et ce qui est calculé.",
    "mots": 31,
@@ -79374,7 +79785,8 @@
    "mots": 8,
    "pages": [
     "training",
-    "_js"
+    "_js",
+    "_routes"
    ]
   },
   "Preuve du traitement de la demande (art. #).": {
@@ -80167,6 +80579,20 @@
    "mots": 15,
    "pages": [
     "_js"
+   ]
+  },
+  "Production et distribution d'eau ; assainissement, gestion des déchets et dépollution": {
+   "fr": "Production et distribution d'eau ; assainissement, gestion des déchets et dépollution",
+   "mots": 11,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Production et distribution d'électricité, de gaz, de vapeur et d'air conditionné": {
+   "fr": "Production et distribution d'électricité, de gaz, de vapeur et d'air conditionné",
+   "mots": 13,
+   "pages": [
+    "_routes"
    ]
   },
   "Production et déclinaison de contenus": {
@@ -81785,6 +82211,13 @@
     "_routes"
    ]
   },
+  "Qualité, HSE, risques": {
+   "fr": "Qualité, HSE, risques",
+   "mots": 3,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Qualité, conformité, RSSI, direction": {
    "fr": "Qualité, conformité, RSSI, direction",
    "mots": 4,
@@ -82507,7 +82940,8 @@
    "mots": 7,
    "pages": [
     "training",
-    "_js"
+    "_js",
+    "_routes"
    ]
   },
   "RGPD — Articles pertinents pour l'IA": {
@@ -83348,6 +83782,13 @@
    "mots": 4,
    "pages": [
     "_js"
+   ]
+  },
+  "Recherche, développement, ingénierie": {
+   "fr": "Recherche, développement, ingénierie",
+   "mots": 3,
+   "pages": [
+    "_routes"
    ]
   },
   "Recherche, essai ou développement avant toute mise sur le marché ou en service": {
@@ -84440,6 +84881,13 @@
     "_routes"
    ]
   },
+  "Relais désigné auprès des utilisateurs, entre deux formations.": {
+   "fr": "Relais désigné auprès des utilisateurs, entre deux formations.",
+   "mots": 8,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Relation Client / Service Client": {
    "fr": "Relation Client / Service Client",
    "mots": 4,
@@ -84633,7 +85081,8 @@
    "mots": 7,
    "pages": [
     "training",
-    "_js"
+    "_js",
+    "_routes"
    ]
   },
   "Rendre l’usage possible": {
@@ -86839,6 +87288,13 @@
     "_js"
    ]
   },
+  "Règlement (UE) #/#, article # — maîtrise de l'IA. L'obligation est de prendre des mesures ; le niveau # est la lecture du cabinet, pas une exigence du texte.": {
+   "fr": "Règlement (UE) 2024/1689, article 4 — maîtrise de l'IA. L'obligation est de prendre des mesures ; le niveau 1 est la lecture du cabinet, pas une exigence du texte.",
+   "mots": 26,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Règlement (UE) #/#, article # — système de management de la qualité du fournisseur de système d'IA à haut risque": {
    "fr": "Règlement (UE) 2024/1689, article 17 — système de management de la qualité du fournisseur de système d'IA à haut risque",
    "mots": 18,
@@ -87290,6 +87746,13 @@
    "mots": 3,
    "pages": [
     "_js"
+   ]
+  },
+  "Référent ou ambassadeur IA": {
+   "fr": "Référent ou ambassadeur IA",
+   "mots": 4,
+   "pages": [
+    "_routes"
    ]
   },
   "Référentiel": {
@@ -88895,6 +89358,20 @@
     "_js"
    ]
   },
+  "Santé et action sociale : données de santé, et une production générée qui touche une personne se vérifie avant d'être employée.": {
+   "fr": "Santé et action sociale : données de santé, et une production générée qui touche une personne se vérifie avant d'être employée.",
+   "mots": 21,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Santé humaine et action sociale": {
+   "fr": "Santé humaine et action sociale",
+   "mots": 5,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Santé relation": {
    "fr": "Santé relation",
    "mots": 2,
@@ -88995,6 +89472,13 @@
    "pages": [
     "iso27001",
     "iso42001",
+    "_routes"
+   ]
+  },
+  "Savoir quelles informations peuvent être communiquées à l'outil, et lesquelles ne peuvent pas l'être.": {
+   "fr": "Savoir quelles informations peuvent être communiquées à l'outil, et lesquelles ne peuvent pas l'être.",
+   "mots": 16,
+   "pages": [
     "_routes"
    ]
   },
@@ -93044,6 +93528,13 @@
     "_routes"
    ]
   },
+  "Systèmes d'information, données, sécurité": {
+   "fr": "Systèmes d'information, données, sécurité",
+   "mots": 5,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Systèmes de gestion de la qualité": {
    "fr": "Systèmes de gestion de la qualité",
    "mots": 6,
@@ -93138,7 +93629,8 @@
    "mots": 9,
    "pages": [
     "training",
-    "_js"
+    "_js",
+    "_routes"
    ]
   },
   "Systèmes à haut risque Annexe III (biométrie, emploi, crédit, justice, migration…)": {
@@ -95751,7 +96243,8 @@
    "mots": 6,
    "pages": [
     "training",
-    "_js"
+    "_js",
+    "_routes"
    ]
   },
   "Transparence des systèmes de recommandation pour les plateformes ; l'articulation avec l'IA Act se joue sur la même interface.": {
@@ -95954,6 +96447,13 @@
   "Transports aériens": {
    "fr": "Transports aériens",
    "mots": 2,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "Transports et entreposage": {
+   "fr": "Transports et entreposage",
+   "mots": 3,
    "pages": [
     "_routes"
    ]
@@ -96483,6 +96983,13 @@
    "mots": 1,
    "pages": [
     "maturite"
+   ]
+  },
+  "Télécommunications, programmation informatique, conseil, infrastructures de calcul et autres services d'information": {
+   "fr": "Télécommunications, programmation informatique, conseil, infrastructures de calcul et autres services d'information",
+   "mots": 12,
+   "pages": [
+    "_routes"
    ]
   },
   "Télécoms": {
@@ -97249,6 +97756,13 @@
     "pan-sia"
    ]
   },
+  "Un niveau GLOBAL masque l'asymétrie qui compte": {
+   "fr": "Un niveau GLOBAL masque l'asymétrie qui compte",
+   "mots": 8,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Un niveau approprié pour les données non personnelles, et le niveau le PLUS ÉLEVÉ pour les informations sensibles sous l'angle de la concurrence.": {
    "fr": "Un niveau approprié pour les données non personnelles, et le niveau le PLUS ÉLEVÉ pour les informations sensibles sous l'angle de la concurrence.",
    "mots": 24,
@@ -97324,6 +97838,13 @@
    "mots": 22,
    "pages": [
     "_js"
+   ]
+  },
+  "Un parcours : l'écart dépasse deux paliers sur au moins une famille, et aucune séance isolée ne le comble.": {
+   "fr": "Un parcours : l'écart dépasse deux paliers sur au moins une famille, et aucune séance isolée ne le comble.",
+   "mots": 19,
+   "pages": [
+    "_routes"
    ]
   },
   "Un parcours pour la direction financière et le comité de risques. Il ne prétend PAS estimer un coût de mise en conformité — ni jours-homme ni honoraires : ces chiffres ne sont ni dans le texte ni publics de façon fiable. Il chiffre ce que le règlement chiffre : trois paliers d’amende, et le seuil de chiffre d’affaires où le pourcentage prend le relais du montant fixe.": {
@@ -98759,6 +99280,13 @@
     "_js"
    ]
   },
+  "Une ou deux formations ciblées sur les familles en écart.": {
+   "fr": "Une ou deux formations ciblées sur les familles en écart.",
+   "mots": 10,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Une ou plusieurs exigences essentielles sont traitées par « autre norme » ou « autre solution technique » sans la justification et la preuve objective que le §# réclame.": {
    "fr": "Une ou plusieurs exigences essentielles sont traitées par « autre norme » ou « autre solution technique » sans la justification et la preuve objective que le §4.4.3.2.2 réclame.",
    "mots": 24,
@@ -99054,6 +99582,13 @@
    "mots": 25,
    "pages": [
     "_js"
+   ]
+  },
+  "Une sensibilisation suffit : les écarts sont d'un palier, au premier niveau.": {
+   "fr": "Une sensibilisation suffit : les écarts sont d'un palier, au premier niveau.",
+   "mots": 12,
+   "pages": [
+    "_routes"
    ]
   },
   "Une seule mesure non décidée renvoie l'organisme à l'étape documentaire.": {
@@ -99463,6 +99998,13 @@
    "mots": 8,
    "pages": [
     "empreinte"
+   ]
+  },
+  "Utiliser avec accompagnement": {
+   "fr": "Utiliser avec accompagnement",
+   "mots": 3,
+   "pages": [
+    "_routes"
    ]
   },
   "Utiliser le système hors des conditions de sa destination vous fait sortir du cadre où le fournisseur a démontré quoi que ce soit.": {
@@ -107592,6 +108134,13 @@
     "_routes"
    ]
   },
+  "n'ajoute aucun palier que les formations retenues n'atteignent déjà": {
+   "fr": "n'ajoute aucun palier que les formations retenues n'atteignent déjà",
+   "mots": 11,
+   "pages": [
+    "_routes"
+   ]
+  },
   "ne l’est pas.": {
    "fr": "ne l’est pas.",
    "mots": 4,
@@ -108481,11 +109030,60 @@
     "pricing"
    ]
   },
+  "porte appliquer au-delà de la cible de cette personne": {
+   "fr": "porte appliquer au-delà de la cible de cette personne",
+   "mots": 10,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "porte appliquer, proteger au-delà de la cible de cette personne": {
+   "fr": "porte appliquer, proteger au-delà de la cible de cette personne",
+   "mots": 11,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "porte comprendre au-delà de la cible de cette personne": {
+   "fr": "porte comprendre au-delà de la cible de cette personne",
+   "mots": 10,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "porte comprendre, proteger au-delà de la cible de cette personne": {
+   "fr": "porte comprendre, proteger au-delà de la cible de cette personne",
+   "mots": 11,
+   "pages": [
+    "_routes"
+   ]
+  },
   "porte de même son niveau de preuve. Ouvrez une fiche : la provenance y est plus précise que tout ce qu’un tableau agrégé pourrait rendre.": {
    "fr": "porte de même son niveau de preuve. Ouvrez une fiche : la provenance y est plus précise que tout ce qu’un tableau agrégé pourrait rendre.",
    "mots": 25,
    "pages": [
     "pan-sia"
+   ]
+  },
+  "porte evaluer au-delà de la cible de cette personne": {
+   "fr": "porte evaluer au-delà de la cible de cette personne",
+   "mots": 10,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "porte evaluer, proteger au-delà de la cible de cette personne": {
+   "fr": "porte evaluer, proteger au-delà de la cible de cette personne",
+   "mots": 11,
+   "pages": [
+    "_routes"
+   ]
+  },
+  "porte proteger au-delà de la cible de cette personne": {
+   "fr": "porte proteger au-delà de la cible de cette personne",
+   "mots": 10,
+   "pages": [
+    "_routes"
    ]
   },
   "porte(s) déclarée(s) qui ignorent la taille": {
@@ -112663,6 +113261,13 @@
     "_js"
    ]
   },
+  "Écrit les règles, instruit les analyses d'impact, contrôle.": {
+   "fr": "Écrit les règles, instruit les analyses d'impact, contrôle.",
+   "mots": 9,
+   "pages": [
+    "_routes"
+   ]
+  },
   "Écritures comptables, relevés, référentiels.": {
    "fr": "Écritures comptables, relevés, référentiels.",
    "mots": 4,
@@ -112746,6 +113351,13 @@
    "mots": 3,
    "pages": [
     "apercu"
+   ]
+  },
+  "Édition, audiovisuel, production et distribution de contenus": {
+   "fr": "Édition, audiovisuel, production et distribution de contenus",
+   "mots": 7,
+   "pages": [
+    "_routes"
    ]
   },
   "Édité le": {
@@ -116822,143 +117434,144 @@
    "fr": "❔ Guide d'utilisation",
    "mots": 3,
    "pages": [
-    "pan-sia",
-    "enveloppe",
-    "empreinte-parc",
-    "obs-rd",
-    "juridique",
-    "empreinte",
-    "finops",
-    "empreinte-ia",
-    "ia50",
-    "rgpd-site",
-    "entreprise",
-    "ia-act-hub",
-    "conformite-globale",
     "adoption",
-    "ingenierie",
+    "apercu",
+    "articles",
+    "audit",
+    "audit-ia-act",
+    "benchmark",
     "cadre-normatif",
-    "shadow-ai",
+    "carto",
+    "carto-uc",
+    "clients",
+    "comp",
+    "competences",
     "compte",
+    "conf-limites",
+    "conf-plan",
+    "conf-taux",
+    "conformite-globale",
     "cra",
+    "cra-chiffre",
     "cra-ecarts",
     "cra-role",
-    "cra-chiffre",
     "cra-signalement",
-    "iso27001-risques",
-    "iso27001-soa",
-    "iso27001",
-    "iso27001-millesime",
-    "iso42001",
-    "iso42001-soa",
-    "conf-taux",
-    "conf-plan",
-    "conf-limites",
-    "en18286-processus",
-    "en18286-questionnaire",
-    "en18286-conformite",
-    "en18286-analyse",
-    "dga-qualifier",
+    "data-act-cloud",
+    "data-act-obligations",
+    "data-act-pont-rgpd",
+    "data-act-qualifier",
     "dga-obligations",
     "dga-pont-rgpd",
-    "data-act-qualifier",
-    "data-act-obligations",
-    "data-act-cloud",
-    "data-act-pont-rgpd",
-    "ocde-processus",
-    "ocde-questionnaire",
-    "ocde-conformite",
-    "ocde-analyse",
-    "nist-profil",
-    "nist-cadre",
-    "nist-genai",
-    "owasp-dix",
-    "nist53-socle",
-    "nist82-ot",
-    "en18229-role",
-    "en18229-scenarios",
-    "en18229-cadre",
-    "en18229-score",
-    "owasp-pont",
-    "iso42001-certif",
-    "iso42001-ponts",
-    "dora-qualifier",
-    "dora-risque",
-    "dora-tiers",
+    "dga-qualifier",
     "dora-incident",
     "dora-iso",
+    "dora-qualifier",
+    "dora-risque",
     "dora-supervision",
-    "nis2-qualifier",
-    "nis2",
-    "nis2-gouvernance",
-    "nis2-signalement",
-    "nis2-chiffre",
-    "recyf-objectifs",
-    "recyf-analyse",
-    "rgpd-hub",
-    "rgpd-conformite",
-    "rgpd-sensibilisation",
-    "rgpd-doc",
-    "rgpd-pbd",
-    "rgpd-aipd",
-    "rgpd-cartographie",
-    "rgpd-traitements",
-    "apercu",
-    "carto",
-    "comp",
-    "geo",
-    "regs",
-    "veille",
-    "evals",
-    "historique",
-    "audit",
+    "dora-tiers",
+    "empreinte",
+    "empreinte-ia",
+    "empreinte-parc",
+    "en18229-cadre",
+    "en18229-role",
+    "en18229-scenarios",
+    "en18229-score",
+    "en18286-analyse",
+    "en18286-conformite",
+    "en18286-processus",
+    "en18286-questionnaire",
+    "entreprise",
+    "enveloppe",
     "equipe",
-    "training",
     "espace",
-    "report",
-    "maturite",
-    "gouvernance",
-    "parties",
-    "registre",
-    "qualif-assistee",
-    "simulateur",
-    "audit-ia-act",
-    "matrice",
-    "radar",
-    "articles",
-    "fria",
-    "roadmap",
-    "sanctions",
-    "benchmark",
-    "pricing",
-    "templates",
-    "rag",
-    "clients",
-    "carto-uc",
-    "fiche-eu",
-    "fiche-de",
-    "fiche-fr",
-    "fiche-cn",
-    "fiche-ru",
-    "fiche-kr",
+    "evals",
+    "fiche-ae",
+    "fiche-ar",
+    "fiche-au",
+    "fiche-br",
     "fiche-ca",
     "fiche-ch",
-    "fiche-br",
-    "fiche-gb",
-    "fiche-tr",
-    "fiche-au",
     "fiche-cl",
+    "fiche-cn",
+    "fiche-de",
+    "fiche-eu",
+    "fiche-fr",
+    "fiche-gb",
     "fiche-il",
-    "fiche-sg",
     "fiche-in",
-    "fiche-my",
-    "fiche-us",
-    "fiche-ae",
     "fiche-jp",
-    "fiche-ar",
+    "fiche-kr",
     "fiche-mx",
+    "fiche-my",
+    "fiche-ng",
+    "fiche-ru",
+    "fiche-sg",
+    "fiche-tr",
+    "fiche-us",
     "fiche-za",
-    "fiche-ng"
+    "finops",
+    "fria",
+    "geo",
+    "gouvernance",
+    "historique",
+    "ia-act-hub",
+    "ia50",
+    "ingenierie",
+    "iso27001",
+    "iso27001-millesime",
+    "iso27001-risques",
+    "iso27001-soa",
+    "iso42001",
+    "iso42001-certif",
+    "iso42001-ponts",
+    "iso42001-soa",
+    "juridique",
+    "matrice",
+    "maturite",
+    "nis2",
+    "nis2-chiffre",
+    "nis2-gouvernance",
+    "nis2-qualifier",
+    "nis2-signalement",
+    "nist-cadre",
+    "nist-genai",
+    "nist-profil",
+    "nist53-socle",
+    "nist82-ot",
+    "obs-rd",
+    "ocde-analyse",
+    "ocde-conformite",
+    "ocde-processus",
+    "ocde-questionnaire",
+    "owasp-dix",
+    "owasp-pont",
+    "pan-sia",
+    "parties",
+    "pricing",
+    "qualif-assistee",
+    "radar",
+    "rag",
+    "recyf-analyse",
+    "recyf-objectifs",
+    "registre",
+    "regs",
+    "report",
+    "rgpd-aipd",
+    "rgpd-cartographie",
+    "rgpd-conformite",
+    "rgpd-doc",
+    "rgpd-hub",
+    "rgpd-pbd",
+    "rgpd-sensibilisation",
+    "rgpd-site",
+    "rgpd-traitements",
+    "roadmap",
+    "sanctions",
+    "shadow-ai",
+    "simulateur",
+    "templates",
+    "training",
+    "veille"
    ]
   },
   "⤵ Poser le revenu d’ÉQUILIBRE (EVA nulle) — pour voir le cas limite": {

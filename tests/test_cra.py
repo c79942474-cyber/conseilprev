@@ -436,8 +436,15 @@ def test_le_CRA_est_la_DEUXIEME_norme_de_l_accueil_derriere_l_IA_Act():
     """Le poser après ISO 27001 l'aurait rangé parmi les normes volontaires,
     alors qu'il est d'application directe."""
     h = _fichier("index.html")
-    i = h.index('id="normes"')
-    bloc = h[i:i + 4000]
+    #  LA GRILLE SE LIT JUSQU'À SA FERMETURE, PLUS SUR UNE LONGUEUR ÉCRITE.
+    #  La règle prenait « les 4 000 caractères qui suivent » : une fenêtre qui
+    #  tenait les sept normes du jour où elle a été écrite. Mesuré : l'ajout
+    #  d'une pastille d'offre sur chaque carte a repoussé les dernières normes
+    #  hors de la fenêtre, et la règle a annoncé que le bloc avait PERDU des
+    #  normes — alors qu'il en comptait seize. Une longueur en octets n'est pas
+    #  une borne : la balise fermante en est une.
+    i = h.index('<div class="ng">')
+    bloc = h[i:h.index("</div>\n  </div>", i)]
     noms = [re.sub(r"\s*↗$", "", x).strip()
             for x in re.findall(r'class="nn">([^<]*)<', bloc)]
     assert noms[0] == "IA Act"
