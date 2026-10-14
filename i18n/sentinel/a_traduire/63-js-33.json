@@ -563,10 +563,6 @@
    "en": "be read.",
    "fr": "être lu."
   },
-  "— Accès limité à # modules.": {
-   "en": "— Access limited to # modules.",
-   "fr": "— Accès limité à 4 modules."
-  },
   "— CONSEILPREV (SARL) · SIREN # # # · # rue Auguste Chabrières, # Paris · Responsable : Christophe CERF": {
    "en": "— CONSEILPREV (SARL) · SIREN # # # · # rue Auguste Chabrières, # Paris · Owner: Christophe CERF",
    "fr": "— CONSEILPREV (SARL) · SIREN 494 530 157 · 19 rue Auguste Chabrières, 75015 Paris · Responsable : Christophe CERF"
@@ -882,10 +878,6 @@
   "🔍 Tous les niveaux de risque (": {
    "en": "🔍 All risk levels (",
    "fr": "🔍 Tous les niveaux de risque ("
-  },
-  "🔒 Session expirée —": {
-   "en": "🔒 Session expired —",
-   "fr": "🔒 Session expirée —"
   },
   "🟡 SQLite local (non persistant)": {
    "en": "🟡 Local SQLite (not persistent)",

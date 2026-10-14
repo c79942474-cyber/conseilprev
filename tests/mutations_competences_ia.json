@@ -47,11 +47,11 @@
    "regle": "test_aucune_formation_RETENUE_ne_l_est_pour_depasser_la_cible[collaborateur-marketing-Q-0]"
   },
   {
-   "nom": "le besoin non couvert cesse d'etre declare",
+   "nom": "le besoin non couvert cesse d'etre declare (plus aucune famille en trou : seule la regle de vivacite le voit)",
    "fichier": "competences_ia.py",
    "avant": "        if couvert[fam] >= e[\"cible\"]:\n",
    "apres": "        if True:\n",
-   "regle": "test_chaque_famille_en_ECART_est_couverte_OU_declaree_NON_COUVERTE[expert_technique-si_data-K-0]"
+   "regle": "test_la_declaration_du_NON_COUVERT_marche_encore_quand_un_trou_existe"
   },
   {
    "nom": "la reduction sur la couverture disparait : le catalogue entier est rendu",
@@ -157,6 +157,20 @@
    "avant": "    'pg.competences.lbl.secteur': 'Company sector of activity',\n",
    "apres": "",
    "regle": "test_tout_le_FRANCAIS_neuf_de_l_ecran_est_TRADUIT"
+  },
+  {
+   "nom": "la formation qui porte « proteger » au niveau 5 disparait du catalogue",
+   "fichier": "competences_ia.py",
+   "avant": "    {\"n\": 16, \"titre_attendu\": \"Sécuriser un système d'IA par conception\",\n     \"porte\": {\"comprendre\": 4, \"proteger\": 5}},\n",
+   "apres": "",
+   "regle": "test_AUCUNE_famille_n_a_de_trou_entre_la_cible_la_plus_haute_et_le_catalogue"
+  },
+  {
+   "nom": "la phrase du trou cesse de dire le plafond du catalogue",
+   "fichier": "competences_ia.py",
+   "avant": "                    \"cible est %d. Aucune formation existante ne comble cet \"\n                    \"écart.\" % (e[\"nom\"], plafond, e[\"cible\"]))\n",
+   "apres": "                    \"cible est %d.\" % (e[\"nom\"], plafond, e[\"cible\"]))\n",
+   "regle": "test_la_declaration_du_NON_COUVERT_marche_encore_quand_un_trou_existe"
   }
  ]
 }

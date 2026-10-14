@@ -1,0 +1,172 @@
+{
+ "_lot": "97-formations-securite-et-pratique-avancee",
+ "_mots": 728,
+ "_pages": [
+  "_js",
+  "_routes"
+ ],
+ "_rubrique": "_js",
+ "bloc": {
+  "Départ déclaré ·": {
+   "en": "Declared start ·"
+  },
+  "Niveau visé ·": {
+   "en": "Target level ·"
+  },
+  "Vous avez demandé :": {
+   "en": "You requested:"
+  },
+  "🔒 Plan Gratuit — Accès limité à": {
+   "en": "🔒 Free plan — Access limited to"
+  }
+ },
+ "texte": {
+  "Agents autonomes : périmètre d'action, secrets, journalisation, point d'arrêt humain": {
+   "en": "Autonomous agents: scope of action, secrets, logging, human stopping point"
+  },
+  "Article # du règlement (UE) #/# : exactitude, robustesse, cybersécurité — ce qu'il exige et ce qu'il laisse ouvert": {
+   "en": "Article # of Regulation (EU) #/#: accuracy, robustness, cybersecurity — what it requires and what it leaves open"
+  },
+  "Atelier : la revue de sécurité d'un système réel du participant, et les contrôles qui en sortent": {
+   "en": "Workshop: the security review of a participant’s real system, and the controls that come out of it"
+  },
+  "Atelier : sur ses propres dossiers, trois demandes refaites et trois productions auditées": {
+   "en": "Workshop: on your own files, three requests redone and three outputs audited"
+  },
+  "Aucune action de formation": {
+   "en": "No training action"
+  },
+  "Ce qu'un système expose : l'invite, le contexte, les données d'entraînement, les poids, les sorties": {
+   "en": "What a system exposes: the prompt, the context, the training data, the weights, the outputs"
+  },
+  "Ce que cette sortie ne garantit pas": {
+   "en": "What this output does not guarantee"
+  },
+  "Ce que le catalogue ne couvre pas": {
+   "en": "What the catalogue does not cover"
+  },
+  "Ce qui comble l’écart —": {
+   "en": "What closes the gap —"
+  },
+  "Ce qui distingue une demande qui aboutit d'une demande qui tourne : objectif, contexte, contraintes, format attendu": {
+   "en": "What separates a request that lands from one that goes in circles: objective, context, constraints, expected format"
+  },
+  "Ce qui ne se délègue pas, et comment le dire à son équipe": {
+   "en": "What is never delegated, and how to say it to your team"
+  },
+  "Ce qui n’est pas proposé, et pourquoi": {
+   "en": "What is not proposed, and why"
+  },
+  "Choisissez dans les quatre listes : la sortie se recalcule à chaque changement. Elle donne le niveau de départ, le niveau visé, la cible des six familles de compétence, et ce qui commande chaque cible — le rôle, la fonction, le secteur ou l’article # du règlement européen.": {
+   "en": "Choose from the four lists: the output is recomputed on every change. It gives the starting level, the target level, the target for the six competency families, and what sets each target — the role, the function, the sector or Article # of the European Regulation."
+  },
+  "DSI, RSSI, architectes, développeurs, équipes MLOps": {
+   "en": "IT and security leads, architects, developers, MLOps teams"
+  },
+  "Découper une tâche que le modèle échoue à traiter d'un bloc": {
+   "en": "Breaking up a task the model fails to handle in one go"
+  },
+  "Elle répond à la question que le catalogue ne pose pas : pour CETTE personne, quelle formation ou quelle sensibilisation, et jusqu’où. Quatre réponses — rôle dans l’entreprise, secteur de l’entreprise, fonction métier, niveau de connaissance IA déclaré — et la trajectoire s’en déduit, famille par famille.": {
+   "en": "It answers the question the catalogue never asks: for THIS person, which course or awareness session, and how far. Four answers — role in the company, company sector, business function, declared level of AI knowledge — and the trajectory follows, family by family."
+  },
+  "Injection d'invite directe et indirecte, et pourquoi le filtrage seul ne la ferme pas": {
+   "en": "Direct and indirect prompt injection, and why filtering alone does not close it"
+  },
+  "LE NIVEAU DE DÉPART EST DÉCLARÉ, PAS MESURÉ. Le module calcule un écart ; il ne constate aucune compétence. Faites confirmer par une mise en situation avant d’en faire un attendu RH, et faites valider les cibles par les métiers — l’article # du règlement européen impose des mesures, il n’écrit aucune échelle.": {
+   "en": "THE STARTING LEVEL IS DECLARED, NOT MEASURED. The module computes a gap; it establishes no competency. Have it confirmed through a role-play before turning it into an HR expectation, and have the targets endorsed by the business lines — Article # of the European Regulation requires measures, it writes no scale."
+  },
+  "La chaîne d'approvisionnement : modèles tiers, jeux de données, extensions, serveurs MCP": {
+   "en": "The supply chain: third-party models, datasets, extensions, MCP servers"
+  },
+  "La cible, famille par famille": {
+   "en": "The target, family by family"
+  },
+  "La proposition n’a pas pu être calculée.": {
+   "en": "The proposal could not be computed."
+  },
+  "Le Top # OWASP des applications à grand modèle de langage, risque par risque": {
+   "en": "The OWASP Top # for large language model applications, risk by risk"
+  },
+  "Le module calcule un écart entre une cible et une déclaration ; il ne constate aucune compétence. Confirmez par une mise en situation, un exercice pratique ou un entretien avec le manager avant d’en faire un attendu RH.": {
+   "en": "The module computes a gap between a target and a declaration; it establishes no competency. Confirm through a role-play, a practical exercise or a conversation with the manager before turning it into an HR expectation."
+  },
+  "Le niveau de départ est DÉCLARÉ, pas mesuré": {
+   "en": "The starting level is DECLARED, not measured"
+  },
+  "Les niveaux # et # décrivent un rôle — transmettre, concevoir. Un secteur sensible et une direction technique élèvent l’exigence portée sur une personne ; ils ne lui donnent pas ce rôle. L’écran dit, famille par famille, ce qu’il a rabattu pour cette raison.": {
+   "en": "Levels # and # describe a role — passing on, designing. A sensitive sector and a technical department raise the requirement placed on a person; they do not give them that role. The screen says, family by family, what it capped for that reason."
+  },
+  "L’article # du règlement (UE) #/# impose de prendre des mesures pour un niveau suffisant de maîtrise de l’IA ; il n’écrit aucune échelle. Les six niveaux et les cibles par rôle sont une lecture, à faire valider par les métiers, les managers et la DSI.": {
+   "en": "Article # of Regulation (EU) #/# requires measures to be taken to ensure a sufficient level of AI literacy; it writes no scale. The six levels and the per-role targets are a reading, to be endorsed by the business lines, the managers and IT."
+  },
+  "L’échelle et les cibles sont la position du cabinet": {
+   "en": "The scale and the targets are the firm’s position"
+  },
+  "Passer de l'usage accompagné à l'autonomie : formuler, faire évoluer, et vérifier sans référent derrière.": {
+   "en": "Moving from supported use to autonomy: framing, refining, and checking with no referent behind you."
+  },
+  "Pour chaque personne du périmètre, choisissez son rôle, le secteur de l’entreprise, sa fonction métier et le niveau d’IA qu’elle déclare : la sortie donne le niveau de départ, le niveau visé par famille de compétence, et la formation ou la sensibilisation qui comble l’écart.": {
+   "en": "For each person in scope, choose their role, the company sector, their business function and the AI level they declare: the output gives the starting level, the target level per competency family, and the course or awareness session that closes the gap."
+  },
+  "Pratique avancée des systèmes génératifs : obtenir, itérer, vérifier": {
+   "en": "Advanced practice with generative systems: obtain, iterate, verify"
+  },
+  "Qui a besoin de quoi, et jusqu’où": {
+   "en": "Who needs what, and how far"
+  },
+  "Reconnaître l'invention confiante, et les formes qu'elle prend selon le type de demande": {
+   "en": "Recognising confident invention, and the forms it takes depending on the kind of request"
+  },
+  "Reprendre une production insuffisante au lieu de la jeter : l'itération dirigée": {
+   "en": "Reworking an inadequate output instead of discarding it: directed iteration"
+  },
+  "Rien n’est proposé au-delà de la cible": {
+   "en": "Nothing is proposed beyond the target"
+  },
+  "Référentiel de compétences IA": {
+   "en": "AI competency framework"
+  },
+  "Savoir où un système d'IA s'attaque, et concevoir les contrôles AVANT la mise en production — pas après l'incident.": {
+   "en": "Knowing where an AI system is attacked, and designing the controls BEFORE go-live — not after the incident."
+  },
+  "Sécuriser un système d'IA par conception": {
+   "en": "Securing an AI system by design"
+  },
+  "Sécurité IA": {
+   "en": "AI security"
+  },
+  "Un plan nominatif au lieu d’un catalogue pour tous — et la raison écrite de chaque cible, à opposer en comité à qui la trouve trop haute ou trop basse.": {
+   "en": "A plan by name instead of one catalogue for everyone — and the written reason for each target, to put to anyone in committee who finds it too high or too low."
+  },
+  "Un secteur n’accorde pas un rôle": {
+   "en": "A sector does not grant a role"
+  },
+  "Une personne dont la cible est # n’a pas besoin du niveau #. Les formations écartées pour ce motif sont rendues, repliées, avec la raison de leur écart — et là où le catalogue n’atteint pas la cible, le besoin est déclaré NON COUVERT au lieu de disparaître.": {
+   "en": "Someone whose target is # does not need level #. Courses set aside for that reason are shown, collapsed, with the reason they were set aside — and where the catalogue does not reach the target, the need is declared NOT COVERED instead of vanishing."
+  },
+  "Utilisateurs quotidiens, référents IA, équipes métier déjà sensibilisées": {
+   "en": "Daily users, AI referents, business teams already briefed"
+  },
+  "Vérifier : les faits, la cohérence interne, ce qui exige une source, et ce qu'on ne peut pas vérifier": {
+   "en": "Checking: the facts, internal consistency, what requires a source, and what cannot be checked"
+  },
+  "au niveau": {
+   "en": "at level"
+  },
+  "aucune exigence": {
+   "en": "no requirement"
+  },
+  "commandée par": {
+   "en": "set by"
+  },
+  "du catalogue": {
+   "en": "from the catalogue"
+  },
+  "formation(s) du catalogue écartée(s)": {
+   "en": "catalogue course(s) set aside"
+  },
+  "proposition calculée sur des listes incomplètes.": {
+   "en": "proposal computed from incomplete lists."
+  }
+ }
+}
