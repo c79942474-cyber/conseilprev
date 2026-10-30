@@ -1235,7 +1235,7 @@ textarea.form-el{min-height:86px;resize:vertical}
 .comp-cran.comp-acquis{background:var(--muted2);border-color:var(--muted2);color:#fff}
 .comp-cran.comp-vise{border-color:var(--accent);border-width:2px;color:var(--accent);font-weight:700}
 .comp-cran.comp-ecart{background:rgba(184,50,34,.12);border-color:rgba(184,50,34,.45);color:var(--accent)}
-.comp-cmd{font-size:9px;font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted2);white-space:nowrap}
+.comp-cmd{font-size:9px;font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted2);line-height:1.6}
 .comp-trajet{display:flex;gap:26px;align-items:flex-end;flex-wrap:wrap;margin-bottom:6px}
 .comp-niv{font-family:var(--serif);font-size:42px;line-height:1;color:var(--accent);letter-spacing:-.03em}
 .comp-niv span{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:7px}
@@ -1246,9 +1246,172 @@ textarea.form-el{min-height:86px;resize:vertical}
 .comp-list li:last-child{border-bottom:none}
 .comp-list b{color:var(--ink)}
 .comp-list code{font-family:var(--mono);font-size:10px;color:var(--muted)}
+.comp-niv span span{display:inline;margin:0}
+.comp-k-n{color:var(--ink2)}
+.comp-porte{font-size:11px;color:var(--muted);margin-top:3px}
+.comp-porte .comp-k+.comp-k{margin-left:4px}
+.comp-b{font-weight:700}
+.comp-res-i{font-style:italic}
 .comp-trou{border-left:3px solid var(--accent);background:rgba(184,50,34,.05);padding:11px 14px;margin-bottom:8px;font-size:12px;color:var(--ink2);line-height:1.6}
 .comp-res{font-size:11px;color:var(--muted);line-height:1.65;padding:8px 0 8px 14px;border-left:2px solid var(--rule2);margin-bottom:7px}
 @media(max-width:760px){.comp-fam{grid-template-columns:1fr;gap:7px}}
+
+/* ══ QCM SÉCURITÉ DE L'IA ═════════════════════════════════════════════
+   LES COULEURS NE SONT PAS DÉCORATIVES, ELLES PORTENT L'INFORMATION : un
+   niveau garde sa teinte de la carte d'entrée jusqu'au bilan, une médaille
+   garde la sienne partout où elle apparaît. Changer la teinte d'un niveau
+   entre deux écrans obligerait à relire la légende à chaque fois.
+
+   CE QUI BOUGE, ET CE QUI S'ARRÊTE QUAND ON LE DEMANDE : la barre de
+   progression, la révélation de la médaille et l'apparition d'une carte.
+   Sous `prefers-reduced-motion`, tout cela se pose d'un coup — l'écran
+   reste COMPLET, aucun contenu n'attend une animation pour exister. */
+.qcm-tete{position:relative;overflow:hidden;border-radius:16px;padding:24px 26px;margin-bottom:22px;background:var(--grad-royal);color:#fff}
+.qcm-tete::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 88% 12%,rgba(255,255,255,.22),transparent 58%);pointer-events:none}
+.qcm-tete-h{position:relative;display:flex;align-items:center;justify-content:space-between;gap:22px;flex-wrap:wrap}
+.qcm-tete-eb{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;opacity:.82;margin-bottom:7px}
+.qcm-tete-t{font-family:var(--serif);font-size:25px;line-height:1.15;letter-spacing:-.015em}
+.qcm-tete-p{font-size:12px;line-height:1.65;opacity:.9;max-width:470px;margin-top:8px}
+.qcm-anneau{flex:0 0 auto;display:flex;align-items:center;gap:16px}
+.qcm-anneau svg{display:block;transform:rotate(-90deg)}
+.qcm-anneau-c{position:relative;width:96px;height:96px}
+.qcm-anneau-n{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--mono);font-size:21px;font-weight:700;line-height:1}
+.qcm-anneau-u{font-family:var(--sans);font-size:8px;letter-spacing:.11em;text-transform:uppercase;opacity:.8;margin-top:4px}
+.qcm-rang{font-size:11px;line-height:1.6;max-width:190px;opacity:.95}
+.qcm-rang b{display:block;font-family:var(--serif);font-size:17px;margin-bottom:3px;opacity:1}
+.qcm-tete .qcm-med{background:rgba(255,255,255,.94)}
+
+/* LES QUATRE NIVEAUX — UNE CARTE PAR NIVEAU, SA TEINTE POUR TOUJOURS. */
+.qcm-nivs{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:26px}
+.qcm-niv{position:relative;overflow:hidden;background:var(--white);border:1px solid var(--rule);border-left:4px solid var(--n,var(--acc));border-radius:10px;padding:18px 20px;cursor:pointer;transition:border-color .15s,box-shadow .15s,transform .15s}
+.qcm-niv:hover{box-shadow:0 6px 22px rgba(0,0,0,.09);transform:translateY(-2px)}
+.qcm-niv:focus-visible{outline:2px solid var(--n,var(--acc));outline-offset:2px}
+.qcm-niv-h{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:9px}
+.qcm-niv-t{font-family:var(--serif);font-size:18px;color:var(--ink);line-height:1.2;letter-spacing:-.01em}
+.qcm-niv-n{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--n,var(--acc));font-weight:700;margin-bottom:5px}
+.qcm-niv-m{font-size:12px;color:var(--ink2);line-height:1.55;margin-bottom:7px}
+.qcm-niv-p{font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:13px}
+.qcm-niv-f{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:12px;border-top:1px solid var(--rule)}
+.qcm-niv-q{font-family:var(--mono);font-size:10px;color:var(--muted)}
+.qcm-niv-b{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--n,var(--acc));background:none;border:none;padding:0;cursor:pointer;white-space:nowrap}
+.qcm-jauge{height:5px;border-radius:3px;background:var(--bg2);overflow:hidden;margin-bottom:12px}
+.qcm-jauge i{display:block;height:100%;border-radius:3px;background:var(--n,var(--acc));width:0;transition:width .9s cubic-bezier(.2,.9,.25,1)}
+
+/* LES MÉDAILLES — QUATRE PALIERS, QUATRE MÉTAUX. */
+.qcm-med{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:9px;letter-spacing:.09em;text-transform:uppercase;font-weight:700;padding:4px 9px;border-radius:20px;white-space:nowrap}
+.qcm-med-pastille{width:9px;height:9px;border-radius:50%;box-shadow:inset 0 -1px 2px rgba(0,0,0,.25)}
+.qcm-med.platine{background:rgba(28,90,138,.11);color:#1C5A8A}.qcm-med.platine .qcm-med-pastille{background:linear-gradient(135deg,#E8EEF5,#9FB6C9)}
+.qcm-med.or{background:rgba(196,124,26,.14);color:#9A5E0E}.qcm-med.or .qcm-med-pastille{background:linear-gradient(135deg,#F3D27A,#C48A14)}
+.qcm-med.argent{background:var(--bg2);color:var(--muted)}.qcm-med.argent .qcm-med-pastille{background:linear-gradient(135deg,#E6E6EC,#A8A8B4)}
+.qcm-med.bronze{background:rgba(184,50,34,.09);color:#8E4326}.qcm-med.bronze .qcm-med-pastille{background:linear-gradient(135deg,#D9A27A,#9A5A32)}
+.qcm-med.aucune{background:var(--bg2);color:var(--muted2)}.qcm-med.aucune .qcm-med-pastille{background:var(--rule2);box-shadow:none}
+.qcm-med-g{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.qcm-med-xl{font-size:11px;padding:7px 14px;letter-spacing:.11em}
+.qcm-med-xl .qcm-med-pastille{width:14px;height:14px}
+@keyframes qcm-pop{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.12)}100%{transform:scale(1);opacity:1}}
+.qcm-med-reveal{animation:qcm-pop .5s cubic-bezier(.2,.9,.25,1) both}
+
+/* LE PROFIL PAR DOMAINE — SIX BARRES, ET LA RAISON ÉCRITE À CÔTÉ. */
+.qcm-bloc{background:var(--white);border:1px solid var(--rule);border-radius:12px;padding:20px 22px;margin-bottom:22px}
+.qcm-bloc-t{font-family:var(--serif);font-size:16px;color:var(--ink);margin-bottom:4px;letter-spacing:-.01em}
+.qcm-bloc-p{font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:16px}
+.qcm-dom{display:grid;grid-template-columns:200px 1fr 54px;gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid var(--rule)}
+.qcm-dom:last-child{border-bottom:none}
+.qcm-dom-n{font-size:12px;color:var(--ink2);line-height:1.4}
+.qcm-dom-b{height:7px;border-radius:4px;background:var(--bg2);overflow:hidden}
+.qcm-dom-b i{display:block;height:100%;border-radius:4px;background:var(--grad-cool);width:0;transition:width .9s cubic-bezier(.2,.9,.25,1)}
+.qcm-dom-v{font-family:var(--mono);font-size:11px;color:var(--ink);text-align:right;font-variant-numeric:tabular-nums}
+.qcm-dom-0 .qcm-dom-n,.qcm-dom-0 .qcm-dom-v{color:var(--muted2)}
+
+/* LA PISTE — UN SEGMENT PAR QUESTION DU NIVEAU EN COURS. */
+.qcm-piste{display:flex;gap:4px;margin-bottom:18px}
+.qcm-seg{flex:1;height:5px;border-radius:3px;background:var(--rule);transition:background .25s}
+.qcm-seg.ok{background:var(--green)}.qcm-seg.ko{background:var(--accent)}
+.qcm-seg.now{background:var(--acc);box-shadow:0 0 0 3px rgba(28,90,138,.16)}
+
+/* LA CARTE DE QUESTION. */
+.qcm-barre{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.qcm-barre-g{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.qcm-quit{font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);background:none;border:1px solid var(--rule);border-radius:16px;padding:5px 12px;cursor:pointer}
+.qcm-quit:hover{border-color:var(--rule2);color:var(--ink)}
+.qcm-compte{font-family:var(--mono);font-size:10px;color:var(--muted);font-variant-numeric:tabular-nums}
+.qcm-carte{background:var(--white);border:1px solid var(--rule);border-radius:14px;padding:24px 26px;animation:qcm-entre .35s ease both}
+@keyframes qcm-entre{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.qcm-dom-tag{display:inline-block;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:3px;background:var(--t-violet);color:var(--violet);margin-bottom:12px}
+.qcm-q{font-family:var(--serif);font-size:19px;line-height:1.42;color:var(--ink);letter-spacing:-.012em;margin-bottom:18px}
+.qcm-opts{display:flex;flex-direction:column;gap:9px}
+.qcm-opt{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;background:var(--white);border:1px solid var(--rule);border-radius:9px;padding:13px 15px;cursor:pointer;font:inherit;font-size:13px;line-height:1.5;color:var(--ink2);transition:border-color .14s,background .14s,transform .14s}
+.qcm-opt:hover:not(:disabled){border-color:var(--acc);transform:translateX(2px)}
+.qcm-opt:disabled{cursor:default}
+.qcm-opt-k{flex:0 0 22px;height:22px;border-radius:5px;background:var(--bg2);color:var(--muted);font-family:var(--mono);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.qcm-opt.bonne{border-color:var(--green);background:rgba(45,122,71,.07)}
+.qcm-opt.bonne .qcm-opt-k{background:var(--green);color:#fff}
+.qcm-opt.mauvaise{border-color:var(--accent);background:rgba(184,50,34,.06)}
+.qcm-opt.mauvaise .qcm-opt-k{background:var(--accent);color:#fff}
+.qcm-opt.pale{opacity:.5}
+.qcm-indice-b{margin-top:14px;font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--acc);background:none;border:none;padding:0;cursor:pointer}
+.qcm-indice{margin-top:12px;font-size:12px;line-height:1.6;color:var(--ink2);padding:11px 14px;border-left:3px solid var(--acc);background:var(--t-blue);border-radius:0 7px 7px 0}
+
+/* LA CORRECTION. */
+.qcm-fb{margin-top:20px;padding-top:18px;border-top:1px solid var(--rule);animation:qcm-entre .3s ease both}
+.qcm-verdict{font-family:var(--mono);font-size:10px;letter-spacing:.11em;text-transform:uppercase;font-weight:700;margin-bottom:10px}
+.qcm-verdict.ok{color:var(--green)}.qcm-verdict.ko{color:var(--accent)}
+.qcm-explique{font-size:13px;line-height:1.68;color:var(--ink2);margin-bottom:12px}
+.qcm-ref{font-family:var(--mono);font-size:10px;color:var(--muted);padding:7px 11px;background:var(--bg2);border-radius:5px;display:inline-block;margin-bottom:16px}
+.qcm-sous{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:9px}
+.qcm-prat{background:var(--t-emerald);border-radius:9px;padding:15px 17px;margin-bottom:16px}
+.qcm-prat ul{margin:0;padding-left:17px}
+.qcm-prat li{font-size:12px;line-height:1.6;color:var(--ink2);margin-bottom:6px}
+.qcm-prat li:last-child{margin-bottom:0}
+.qcm-autres{margin-bottom:16px}
+.qcm-autre{padding:10px 0 10px 14px;border-left:2px solid var(--rule2);margin-bottom:9px}
+.qcm-autre-t{font-size:12px;color:var(--ink);line-height:1.45;margin-bottom:4px}
+.qcm-autre-p{font-size:11px;color:var(--muted);line-height:1.6}
+details.qcm-owasp{border:1px solid var(--rule);border-radius:9px;padding:0;margin-bottom:16px;background:var(--bg)}
+details.qcm-owasp>summary{cursor:pointer;padding:11px 15px;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2)}
+details.qcm-owasp>div{padding:0 15px 14px}
+.qcm-ow-t{font-family:var(--mono);font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);margin:10px 0 7px}
+.qcm-ow{display:grid;grid-template-columns:62px 1fr;gap:9px;padding:6px 0;border-top:1px solid var(--rule);font-size:11px;line-height:1.55;color:var(--muted)}
+.qcm-ow code{font-family:var(--mono);font-size:10px;color:var(--muted2)}
+.qcm-ow.hit{color:var(--ink2)}
+.qcm-ow.hit code{color:var(--accent);font-weight:700}
+.qcm-ow-b{font-family:var(--mono);font-size:8px;letter-spacing:.1em;padding:2px 6px;border-radius:2px;background:rgba(184,50,34,.1);color:var(--accent);margin-left:6px;white-space:nowrap}
+.qcm-ow-ex{font-size:11px;line-height:1.55;color:var(--muted);margin-top:4px;padding-left:11px;border-left:2px solid var(--rule2)}
+.qcm-suite{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;font-weight:700;color:#fff;background:var(--acc);border:none;border-radius:22px;padding:11px 20px;cursor:pointer}
+.qcm-suite:hover{background:var(--ink)}
+
+/* LE BILAN. */
+.qcm-score{display:flex;align-items:center;gap:22px;flex-wrap:wrap;margin-bottom:6px}
+.qcm-score-n{font-family:var(--mono);font-size:44px;font-weight:700;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums}
+.qcm-score-u{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.qcm-revue{margin-top:8px}
+.qcm-rev{padding:13px 0;border-top:1px solid var(--rule)}
+.qcm-rev-h{display:flex;gap:10px;align-items:flex-start}
+.qcm-rev-p{flex:0 0 20px;height:20px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;font-weight:700;color:#fff}
+.qcm-rev-p.ok{background:var(--green)}.qcm-rev-p.ko{background:var(--accent)}
+.qcm-rev-q{font-size:12px;line-height:1.5;color:var(--ink2)}
+.qcm-rev-a{font-size:11px;color:var(--muted);line-height:1.55;margin-top:4px;padding-left:30px}
+.qcm-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.qcm-res{font-size:11px;color:var(--muted);line-height:1.65;padding:8px 0 8px 14px;border-left:2px solid var(--rule2);margin-bottom:8px}
+.qcm-res b{color:var(--ink2);font-weight:600}
+.qcm-res-q{display:block}
+.qcm-b{font-weight:inherit}b.qcm-b{font-weight:700}
+.qcm-rang-t{display:block}
+.qcm-autre-c{font-family:var(--mono);font-size:8px;letter-spacing:.1em;padding:2px 6px;border-radius:2px;background:rgba(184,50,34,.1);color:var(--accent);margin-left:7px;vertical-align:1px}
+@media(max-width:760px){
+  .qcm-nivs{grid-template-columns:1fr}
+  .qcm-dom{grid-template-columns:1fr;gap:5px}
+  .qcm-dom-v{text-align:left}
+  .qcm-tete-h{flex-direction:column;align-items:flex-start}
+  .qcm-q{font-size:17px}
+  .qcm-carte{padding:19px 17px}
+}
+@media(prefers-reduced-motion:reduce){
+  .qcm-jauge i,.qcm-dom-b i{transition:none}
+  .qcm-carte,.qcm-fb,.qcm-med-reveal{animation:none}
+  .qcm-niv:hover{transform:none}
+  .qcm-opt:hover:not(:disabled){transform:none}
+}
 .t-card{background:var(--white);border:1px solid var(--rule);border-radius:4px;padding:20px;cursor:pointer;transition:border-color .15s,box-shadow .15s}
 .t-card:hover{border-color:var(--rule2);box-shadow:0 2px 10px rgba(0,0,0,.06)}
 .t-badge{display:inline-block;font-size:8px;font-family:var(--mono);padding:2px 7px;border-radius:2px;letter-spacing:.07em;margin-bottom:12px}
@@ -3963,6 +4126,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <div class="sb-item" data-grp="equipe-et-formation" role="button" tabindex="0" onclick="go('equipe',this,'ÉQUIPE & FORMATION','Équipe')" title="Espace de collaboration pour l equipe en charge du programme de conformite IA."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 7a4 4 0 100 8 4 4 0 000-8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></span><span data-i18n="nav.item.equipe">Espace équipe</span></div>
     <div class="sb-item" data-grp="equipe-et-formation" role="button" tabindex="0" onclick="go('training',this,'ÉQUIPE & FORMATION','Hub Training')" title="Modules de formation sur l EU AI Act, les 8 piliers et la gouvernance IA."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polygon points="5 3 19 12 5 21 5 3"/></svg></span><span data-i18n="nav.item.training">Hub Training</span></div>
     <div class="sb-item" data-grp="equipe-et-formation" role="button" tabindex="0" onclick="go('competences',this,'ÉQUIPE &amp; FORMATION','Référentiel de compétences IA');compInit()" title="Quelle formation ou sensibilisation pour quelle personne : role, secteur, fonction, niveau declare, et le niveau vise par famille de competence."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 20V8"/><path d="M10 20V5"/><path d="M16 20v-9"/><path d="M3 20h18"/><path d="m14 7 3-3 3 3"/></svg></span><span data-i18n="nav.item.competences">Référentiel de compétences</span></div>
+    <div class="sb-item" data-grp="equipe-et-formation" role="button" tabindex="0" onclick="go('qcm-ia',this,'ÉQUIPE &amp; FORMATION','QCM Sécurité de l’IA');qcmInit()" title="Un QCM de sécurité de l’IA pris dans la banque, la finance et l’assurance : quatre niveaux, des médailles, un profil par domaine, et chaque réponse expliquée."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3 4 7v5c0 4.5 3.3 8.3 8 9 4.7-.7 8-4.5 8-9V7Z"/><path d="M9.2 10.2a2.8 2.8 0 1 1 3.6 3.1"/><path d="M12 16.2h.01"/></svg></span><span data-i18n="nav.item.qcm-ia">QCM Sécurité de l’IA</span></div>
     <div class="sb-section" data-grp="business"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="2.5" y="7" width="19" height="13" rx="2"/><path d="M8.5 7V5.2A1.7 1.7 0 0 1 10.2 3.5h3.6A1.7 1.7 0 0 1 15.5 5.2V7"/><path d="M2.5 12.5h19"/></svg><span data-i18n="nav.sec.business">Business</span></div>
     <div class="sb-item" data-grp="business" role="button" tabindex="0" onclick="go('carto-uc',this,'BUSINESS','Cartographie des cas d\u2019usage IA')" title="Identifier, qualifier et prioriser les cas d usage IA a fort impact metier (achats, finance, supply chain, operations, relation client)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span><span data-i18n="nav.item.carto-uc">Cartographie des cas d’usage</span></div>
     <div class="sb-item" data-grp="business" role="button" tabindex="0" onclick="go('adoption',this,'BUSINESS','Tableau de bord d\u2019adoption')" title="Si l organisation se sert de ce qui est deploye : usage hebdomadaire, processus redessines, temps rendu, abandon a 90 jours — avec la nature de chaque source."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 20h18"/><path d="M6 20V11"/><path d="M11 20V5"/><path d="M16 20v-6"/><path d="M21 20V8"/></svg></span><span data-i18n="nav.item.adoption">Adoption</span></div>
@@ -4923,7 +5087,42 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
       </div>
     </div>
   </div>
-  <div id="comp-sortie" class="veille-loading" data-i18n="pg.competences.attente">Chargement du référentiel…</div>
+  <!-- LE MESSAGE D'ATTENTE EST UN ENFANT, PAS LE CONTENEUR. Un élément qui porte
+       `data-i18n` est EXCLU de la traduction par contenu, lui et tout ce qu'il
+       contient, et la bascule de langue réécrit son `textContent` : la
+       proposition peinte ici restait en français à l'écran anglais, puis était
+       remplacée par « Loading the framework… » au premier clic sur EN. -->
+  <div id="comp-sortie"><div class="veille-loading" data-i18n="pg.competences.attente">Chargement du référentiel…</div></div>
+</div>
+
+<!-- ═══ QCM SÉCURITÉ DE L'IA — BANQUE, FINANCE, ASSURANCE ═══
+     POURQUOI UN TROISIÈME ÉCRAN DANS LE HUB, ET NON UN ONGLET DE PLUS.
+     Le Hub montre le CATALOGUE : ce que le cabinet anime. Le référentiel de
+     compétences répond à « pour cette personne, quoi et jusqu'où ». Celui-ci
+     répond à la seule question que les deux autres ne posent jamais :
+     « qu'est-ce que je reconnais, là, maintenant ». Les trois se lisent à la
+     suite, et c'est pourquoi ils sont voisins dans la barre.
+
+     CE QUI EST PEINT PAR LE JAVASCRIPT, ET POURQUOI. Les niveaux, les
+     médailles, le profil et les questions viennent tous de
+     `/api/qcm-securite-ia/referentiel`. Les écrire ici en dur ferait DEUX
+     vérités de la même banque, et c'est toujours la copie HTML qui se périme.
+     Le HTML ne porte donc que la coquille et les trois scènes. -->
+<div class="page" id="p-qcm-ia">
+  <span class="eyebrow" data-i18n="pg.qcm-ia.eb">Hub Training · QCM Sécurité de l’IA</span>
+  <h1 class="page-h" data-i18n-bloc="pg.qcm-ia.h1">Sécurité de l’IA&nbsp;: <em>ce que vous reconnaissez</em></h1>
+  <p class="page-lead" data-i18n-bloc="pg.qcm-ia.p">Des scènes prises dans la banque, la finance et l’assurance&nbsp;: un assistant
+    branché sur les courriels clients, un agent qui passe des écritures, une voix clonée sur un ordre de virement, un modèle de
+    fraude qu’on apprend à contourner. Quatre niveaux, du <b>débutant</b> à l’<b>expert</b>, des <b>médailles</b> qui se gagnent sur un
+    seuil et une <b>progression</b> gardée par votre navigateur. Chaque réponse s’explique&nbsp;— pourquoi la bonne l’est, pourquoi les
+    autres ne le sont pas, et ce qu’on met en place lundi matin. <strong>Un score n’est pas une preuve de conformité</strong>&nbsp;: la
+    littératie de l’article&nbsp;4 se démontre par un dispositif de formation tracé.</p>
+
+  <!-- MÊME RAISON QUE POUR LE RÉFÉRENTIEL DE COMPÉTENCES : le message d'attente
+       est un enfant, que la première peinture remplace. -->
+  <div id="qcm-hub"><div class="veille-loading" data-i18n="pg.qcm-ia.attente">Chargement de la banque de questions…</div></div>
+  <div id="qcm-jeu" hidden></div>
+  <div id="qcm-bilan" hidden></div>
 </div>
 
 <!-- MON ESPACE -->

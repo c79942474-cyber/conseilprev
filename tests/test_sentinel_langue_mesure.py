@@ -408,6 +408,11 @@ PAGES_APRES_LA_MESURE = frozenset({
     #  ses 118 pages, et le catalogue, lui, le relève — ses clés d'écran comme
     #  les 85 chaînes que ses deux routes servent y sont, traduites.
     "competences",
+    #  QCM SÉCURITÉ DE L'IA — le troisième écran du Hub Training, né après la
+    #  photo lui aussi. Il n'y échappe pas davantage : la banque de questions
+    #  est servie par une route du référentiel, relevée par la passe des
+    #  routes, et ce que l'écran compose est relevé par celle des littéraux.
+    "qcm-ia",
 })
 
 

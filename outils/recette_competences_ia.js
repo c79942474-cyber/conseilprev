@@ -339,13 +339,44 @@ function arreter(s, garder) {
       fautes.push('un collaborateur est envoyé à un niveau de RÔLE : « ' +
                   (s3.t.match(/Niveau visé · [^0-9]{3,40}/) || [''])[0] + ' »');
     }
-    if (!/rabattu/.test(s3.t)) {
+    if (!/rabattu/i.test(s3.t)) {
       fautes.push('la sortie ne dit pas qu\'elle a rabattu l\'exigence de la '
                   + 'fonction : le rabattement est muet');
     } else {
       dits.push('collaborateur/si_data/K : visé ' + s3.niveaux[1]
                 + ', et le rabattement est écrit');
     }
+
+    /* ── §5 bis. L'ÉCRAN ANGLAIS : LA PROPOSITION SURVIT, ET SE TRADUIT ──
+       LE DÉFAUT QUE CE PARAGRAPHE FERME A ÉTÉ LIVRÉ, PUIS TROUVÉ. La sortie
+       était peinte DANS l'élément qui portait `data-i18n` : exclue de la
+       traduction par contenu, elle restait en français à l'écran anglais —
+       et le clic sur EN réécrivait le `textContent` de cet élément, donc
+       REMPLAÇAIT la proposition entière par « Loading the framework… ».
+       Aucune des mesures ci-dessus ne pouvait le voir : elles lisent toutes
+       l'écran français. On bascule donc, et on mesure les deux effets. */
+    await pg.evaluate(() => sentSetLang('en'));
+    await pg.waitForFunction(() => {
+      const e = document.getElementById('comp-sortie');
+      return e && /Declared start/i.test(e.innerText || '');
+    }, null, { timeout: 15000 }).catch(() => {});
+    const en = await pg.evaluate(() => {
+      const e = document.getElementById('comp-sortie');
+      const t = e ? (e.innerText || '').replace(/\s+/g, ' ') : '';
+      return { familles: e ? e.querySelectorAll('.comp-fam').length : 0, t };
+    });
+    if (en.familles !== 6) {
+      fautes.push('§5 bis : à l\'écran anglais, la proposition a disparu ('
+                  + en.familles + ' famille(s)) — « ' + en.t.slice(0, 80) + ' »');
+    } else if (!/Declared start/i.test(en.t) || !/Target level/i.test(en.t)
+               || /D[ÉE]PART D[ÉE]CLAR[ÉE]/i.test(en.t)) {
+      fautes.push('§5 bis : la proposition reste en français à l\'écran anglais — « '
+                  + en.t.slice(0, 120) + ' »');
+    } else {
+      dits.push('§5 bis — écran anglais : la proposition survit à la bascule ('
+                + en.familles + ' familles) et se lit en anglais');
+    }
+    await pg.evaluate(() => sentSetLang('fr'));
 
     /* ── §6. L'OFFRE QUI REFUSE, ET CE QU'ELLE DOIT DIRE ─────────────────
        Le module n'est pas dans PLAN_GRATUIT_MODULES. Un compte Gratuit doit
