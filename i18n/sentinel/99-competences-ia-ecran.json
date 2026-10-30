@@ -1,0 +1,32 @@
+{
+ "_lot": "99-competences-ia-ecran",
+ "_quoi": "L'ÉCRAN DU RÉFÉRENTIEL DE COMPÉTENCES, RENDU TRADUISIBLE. Sa sortie était peinte dans un élément portant data-i18n, donc EXCLUE de la traduction par contenu, et ses lignes recollaient un numéro, un titre et un motif dans un même nœud : l'écran anglais montrait toute la proposition en français, et le premier clic sur EN la remplaçait par « Loading the framework… ». Le peintre ne pose plus qu'une chaîne par nœud ; voici les fragments qui en résultent, et la phrase des secteurs sans régime propre, qu'aucune sonde ne servait.",
+ "bloc": {},
+ "texte": {
+  "Appliquer": "Apply",
+  "Aucune exigence sectorielle n'est posée : ce secteur ne porte pas, en lui-même, de régime qui déplace la cible. La population et la fonction la commandent entièrement.": "No sectoral requirement applies: this sector does not, in itself, carry a regime that moves the target. The population and the function set it entirely.",
+  "Aucune exigence sur cette famille": "No requirement on this family",
+  "Ce qui comble l’écart, dans le catalogue": "What closes the gap, in the catalogue",
+  "Ce qu’elle porte :": "What it brings:",
+  "Cible atteinte": "Target reached",
+  "Commandée par": "Set by",
+  "Comprendre": "Understand",
+  "Départ déclaré": "Declared start",
+  "Encadrer": "Govern",
+  "Formations du catalogue écartées pour cette personne": "Catalogue trainings set aside for this person",
+  "Interagir": "Interact",
+  "Niveau #": "Level #",
+  "Niveau visé": "Target level",
+  "Protéger": "Protect",
+  "Rabattu par le plafond de rôle": "Capped by the role ceiling",
+  "jusqu’au niveau": "up to level",
+  "la fonction métier": "the business function",
+  "le secteur de l’entreprise": "the company’s sector",
+  "le type de personne": "the type of person",
+  "l’article # du règlement": "Article # of the Regulation",
+  "porte au-delà de la cible de cette personne": "goes beyond this person’s target",
+  "sur les familles :": "on the families:",
+  "Écart à combler": "Gap to close",
+  "Évaluer": "Evaluate"
+ }
+}

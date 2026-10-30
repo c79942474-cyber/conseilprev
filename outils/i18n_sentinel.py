@@ -521,6 +521,7 @@ ROUTES_REFERENTIEL = (
     '/api/iso27001/referentiel',
     '/api/qualification/referentiel',
     '/api/competences-ia/referentiel',
+    '/api/qcm-securite-ia/referentiel',
 )
 
 #: ET CELLES QU'ON NE RELÈVE PAS, avec la raison — une route écartée en
@@ -633,6 +634,16 @@ SONDES_EVALUATION = (
                  u"collaborateur du marketing dans la santé, parti de zéro, "
                  u"ouvre les trois sacs — retenues, écartées, redondantes — "
                  u"et le rabattement du plafond de rôle"},
+    {'route': '/api/competences-ia/proposer',
+     'charge': {'population': 'collaborateur', 'fonction': 'marketing',
+                'secteur': 'C', 'niveau': 0},
+     'temoin': u"Aucune exigence sectorielle n'est posée",
+     'pourquoi': u"la phrase que servent TOUS les secteurs sans régime propre "
+                 u"— la majorité des vingt-deux. La seule sonde précédente "
+                 u"prenait la santé, qui en a un : la phrase la plus lue de la "
+                 u"sortie n'entrait dans aucun lot, et l'écran anglais la "
+                 u"montrait en français. Relevé par la passe navigateur, sur la "
+                 u"sélection par défaut de l'écran"},
     {'route': '/api/dga/evaluer',
      'charge': {'qualites': ['intermediaire'], 'reponses': {'art12_a': 'tenu'}},
      'temoin': u"des obligations attendues de vos qualit\u00e9s sont d\u00e9clar\u00e9es tenues",

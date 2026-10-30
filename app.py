@@ -2597,6 +2597,13 @@ import competences_ia  # noqa: E402  — le référentiel de compétences IA :
                    # Le module ne décerne aucun niveau : il situe un écart
                    # entre un niveau DÉCLARÉ et une cible, et rend ce qui le
                    # comble dans le catalogue du cabinet
+import qcm_securite_ia  # noqa: E402  — la banque de questions du QCM de
+                   # sécurité de l'IA, écrite pour la banque, la finance et
+                   # l'assurance. Le module SERT les questions et ne garde
+                   # RIEN : ni réponse, ni score, ni nom — la correction a
+                   # lieu dans le navigateur, et un relevé nominatif de ce
+                   # que chacun ignore en sécurité serait le premier
+                   # problème de sécurité du dispositif
 import qualification_assistee  # noqa: E402  — la proposition, jamais la
                     # décision : ce module ne connaît ni clé ni réseau
 import qualification_moteur    # noqa: E402  — et le seul endroit qui dit
@@ -2796,6 +2803,34 @@ def api_competences_ia_proposer():
     if not r.get("ok"):
         return jsonify(r), 400
     return jsonify(r), 200
+
+
+# ═════════════════════════════════════════════════════════════════════════
+#  LE QCM DE SÉCURITÉ DE L'IA — UNE SEULE ROUTE, ET AUCUNE REMONTÉE
+# ═════════════════════════════════════════════════════════════════════════
+
+@app.route('/api/qcm-securite-ia/referentiel', methods=['GET'])
+@rate_limit(limit=120, window=60)
+def api_qcm_securite_ia_referentiel():
+    """La banque de questions, les quatre niveaux, les médailles et les trois
+    référentiels OWASP cités — en un appel.
+
+    POURQUOI UNE SEULE ROUTE, ET AUCUNE ROUTE DE CORRECTION. Il n'y a pas de
+    `…/evaluer` ici, et c'est un choix écrit : corriger au serveur
+    supposerait de lui envoyer chaque choix de chaque personne, donc de
+    constituer le relevé nominatif de ce que chaque collaborateur ignore en
+    sécurité. Ce fichier serait, à lui seul, le premier problème de sécurité
+    du dispositif — et il n'apporterait rien : la preuve de littératie
+    attendue à l'article 4 du règlement sur l'IA se fait par un dispositif
+    de formation tracé, pas par un score de questionnaire.
+
+    LES BONNES RÉPONSES PARTENT DONC AVEC LA BANQUE. C'est la conséquence
+    assumée du point ci-dessus, et la réserve le dit à l'écran : le QCM est
+    un outil d'apprentissage, jamais un examen surveillé.
+
+    AUCUN COMPTE N'EST ÉCRIT dans la réponse : les totaux par niveau et par
+    domaine sont dérivés de la banque elle-même."""
+    return jsonify({"ok": True, "referentiel": qcm_securite_ia.referentiel()})
 
 
 @app.route('/api/nist-ai-rmf/referentiel', methods=['GET'])

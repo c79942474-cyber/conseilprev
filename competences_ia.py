@@ -103,6 +103,9 @@ FAMILLES = (
                    "et les responsabilités."},
 )
 _CLES_FAMILLES = tuple(f["cle"] for f in FAMILLES)
+#: LE NOM D'UNE FAMILLE, tel que l'écran l'affiche. Une clé (« proteger »)
+#: ne doit jamais arriver dans une phrase lue : elle n'a pas d'accent.
+_NOM_FAMILLE = dict((f["cle"], f["nom"]) for f in FAMILLES)
 _RANG_FAMILLE = {f["cle"]: i for i, f in enumerate(FAMILLES)}
 
 
@@ -688,10 +691,18 @@ def proposer(population, fonction, secteur, niveau_actuel):
                 "_tri": (-sum(u["gagne"] for u in utiles), amont, a["n"]),
             })
         elif au_dela:
+            #  LE MOTIF EST UNE PHRASE FIXE, ET LES FAMILLES PARTENT À CÔTÉ,
+            #  PAR LEUR NOM. La version précédente recollait les CLÉS dans la
+            #  phrase (« porte evaluer, proteger au-delà… ») : des mots sans
+            #  accent à l'écran français, et une phrase différente par
+            #  combinaison de familles, qu'aucun dictionnaire ne pouvait
+            #  traduire — l'écran anglais la montrait en français.
             ecartees.append({
                 "n": a["n"], "titre_attendu": a["titre_attendu"],
-                "motif": "porte %s au-delà de la cible de cette personne"
-                         % ", ".join(sorted(au_dela)),
+                "motif": "porte au-delà de la cible de cette personne",
+                "au_dela": [{"famille": f, "nom": _NOM_FAMILLE[f]}
+                            for f in sorted(au_dela,
+                                            key=lambda c: _RANG_FAMILLE[c])],
             })
     retenues.sort(key=lambda r: r.pop("_tri"))
 
@@ -717,7 +728,8 @@ def proposer(population, fonction, secteur, niveau_actuel):
             continue
         for u in gagne:
             couvert[u["famille"]] = u["porte_a"]
-        r["ajoute"] = [{"famille": u["famille"], "porte_a": u["porte_a"]}
+        r["ajoute"] = [{"famille": u["famille"], "nom": _NOM_FAMILLE[u["famille"]],
+                        "porte_a": u["porte_a"]}
                        for u in gagne]
         gardees.append(r)
     retenues = gardees

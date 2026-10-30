@@ -1100,6 +1100,7 @@ var PAGE_META = {
   equipe:   {section:'ÉQUIPE & FORMATION',          label:'Équipe'},
   training: {section:'ÉQUIPE & FORMATION',       label:'Hub Training'},
   competences: {section:'ÉQUIPE & FORMATION',    label:'Référentiel de compétences IA'},
+  'qcm-ia':    {section:'ÉQUIPE & FORMATION',    label:'QCM Sécurité de l’IA'},
   espace: {section:'PILOTAGE', label:'Mes actions du jour'},
   report: {section:'PILOTAGE', label:'Vue direction'},
   maturite: {section:'CARTOGRAPHIER', label:'Audit de maturité IA'},
@@ -1306,6 +1307,11 @@ var SENT_T = {
     'pg.competences.lbl.secteur': 'Company sector of activity',
     'pg.competences.lbl.niveau': 'Declared level of AI knowledge',
     'pg.competences.attente': 'Loading the framework\u2026',
+    'nav.item.qcm-ia': 'AI security quiz',
+    'pg.qcm-ia.eb': 'Training hub \u00b7 AI security quiz',
+    'pg.qcm-ia.h1': 'AI security: <em>what you recognise</em>',
+    'pg.qcm-ia.p': 'Scenes taken from banking, finance and insurance: an assistant wired to customer e-mail, an agent posting journal entries, a cloned voice on a payment order, a fraud model someone is learning to evade. Four levels, from <b>beginner</b> to <b>expert</b>, <b>medals</b> earned on a threshold and <b>progress</b> kept by your browser. Every answer is explained \u2014 why the right one is right, why the others are not, and what you put in place on Monday morning. <strong>A score is not proof of compliance</strong>: the AI literacy required by Article\u00a04 is demonstrated through a documented training programme.',
+    'pg.qcm-ia.attente': 'Loading the question bank\u2026',
 
     'nav.sec.ocde': 'OECD due diligence \u2014 responsible AI',
     'nav.item.ocde-processus': 'Process \u2014 groups and involvement',
@@ -12911,6 +12917,17 @@ var PAGE_GUIDES = {
       {h:"L’échelle et les cibles sont la position du cabinet", t:"L’article 4 du règlement (UE) 2024/1689 impose de prendre des mesures pour un niveau suffisant de maîtrise de l’IA ; il n’écrit aucune échelle. Les six niveaux et les cibles par rôle sont une lecture, à faire valider par les métiers, les managers et la DSI."}
     ]
   },
+  'qcm-ia': {
+    title: "QCM Sécurité de l’IA",
+    sections: [
+      {h:"À quoi sert cette page", t:"À mesurer ce que vous RECONNAISSEZ, sur des scènes prises dans la banque, la finance et l’assurance : injection par un courriel client, agent qui passe une écriture, voix clonée sur un ordre de virement, modèle de fraude contourné, pièce de sinistre fabriquée. Chaque réponse s’explique, et se termine par ce qu’on met en place lundi matin."},
+      {h:"Comment l’utiliser", t:"Choisissez un niveau — débutant, intermédiaire, expérimenté, expert. Répondez au clavier (A, B, C, D) ou à la souris. La correction s’ouvre immédiatement : pourquoi la bonne réponse l’est, pourquoi chacune des autres ne l’est pas, les référentiels cités, et les gestes à mettre en place. Un indice est disponible avant de répondre."},
+      {h:"Les quatre niveaux ne mesurent pas la même chose", t:"Débutant demande de reconnaître la menace ; intermédiaire, de savoir quel contrôle s’applique et où ; expérimenté, d’arbitrer sous contrainte réglementaire ; expert, de savoir ce qui casse quand deux contrôles se contredisent. Échouer à l’expert quand on emploie un assistant au quotidien n’est pas un échec : ce niveau n’est pas écrit pour ce rôle."},
+      {h:"Les médailles sont des seuils, pas des récompenses", t:"Une médaille se gagne sur un taux de bonnes réponses dans un niveau. Le palier le plus bas demande déjà la majorité des réponses, et le plus haut demande le sans-faute — en sécurité, la question manquée est précisément celle qui ouvre l’incident. Le rang d’ensemble se lit sur la médaille la plus BASSE des quatre niveaux, jamais sur leur moyenne."},
+      {h:"Rien ne quitte votre navigateur", t:"Aucune réponse, aucun score et aucun nom ne remontent au serveur : la correction a lieu chez vous, et la progression est gardée par votre seul navigateur. Un relevé nominatif de ce que chaque collaborateur ignore en sécurité serait, à lui seul, le premier problème de sécurité du dispositif. Le revers est assumé : effacer les données du site efface la progression."},
+      {h:"Un score n’est pas une preuve de conformité", t:"L’obligation de littératie en IA de l’article 4 du règlement (UE) 2024/1689 se démontre par un dispositif de formation tracé et adapté aux rôles. Ce QCM en est une pièce utile, jamais la pièce. Pour le niveau attendu d’une personne et la formation qui l’atteint, passez par le référentiel de compétences."}
+    ]
+  },
   espace: {
     title: "Mes actions du jour",
     sections: [
@@ -23334,6 +23351,10 @@ var GUIDED_PATHS = [
        action:'Pour chaque personne du périmètre, choisissez son rôle, le secteur de l’entreprise, sa fonction métier et le niveau d’IA qu’elle déclare : la sortie donne le niveau de départ, le niveau visé par famille de compétence, et la formation ou la sensibilisation qui comble l’écart.',
        gain:'Un plan nominatif au lieu d’un catalogue pour tous — et la raison écrite de chaque cible, à opposer en comité à qui la trouve trop haute ou trop basse.',
        tip:'LE NIVEAU DE DÉPART EST DÉCLARÉ, PAS MESURÉ. Le module calcule un écart ; il ne constate aucune compétence. Faites confirmer par une mise en situation avant d’en faire un attendu RH, et faites valider les cibles par les métiers — l’article 4 du règlement européen impose des mesures, il n’écrit aucune échelle.'},
+      {id:'qcm-ia', label:'Ce que les équipes reconnaissent déjà',
+       action:'Faites passer le QCM de sécurité de l’IA au niveau qui correspond au rôle de chacun, et regardez le profil par domaine plutôt que le score : menaces des modèles, agents et outils, données et secret, réglementation, gouvernance, fraude.',
+       gain:'Le domaine le plus faible désigne la formation à prendre en premier — et il la désigne sur une réponse observée, non sur une déclaration.',
+       tip:'RIEN NE REMONTE : les réponses restent dans le navigateur de chacun, et c’est voulu. Pour suivre une équipe, passez par le dispositif de formation et son émargement. Et n’employez pas un score comme preuve de littératie : l’article 4 attend un dispositif tracé, pas un résultat de questionnaire.'},
       {id:'training', label:'Les modules, accrochés aux scores réels',
        action:'Ouvrez les formations : leur progression se calcule à partir de vos scores d’audit par pilier, et non d’un catalogue générique.',
        gain:'Un plan de montée en compétence qui part des manques constatés, au lieu du catalogue que tout le monde suit dans le même ordre.',
@@ -31246,6 +31267,428 @@ function compInit() {
 }
 window.compInit = compInit;
 
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+   QCM SÉCURITÉ DE L'IA — BANQUE, FINANCE, ASSURANCE
+   ═══════════════════════════════════════════════════════════════════════
+
+   CE QUE CET ÉCRAN NE PORTE PAS. Aucune question, aucun seuil de médaille,
+   aucun compte : tout vient de `/api/qcm-securite-ia/referentiel`. Écrire
+   ici le nombre de questions d'un niveau ou le seuil d'une médaille ferait
+   deux vérités de la même banque, et c'est toujours la copie de l'écran qui
+   se périme.
+
+   CE QUI RESTE DANS LE NAVIGATEUR, ET RIEN D'AUTRE. La progression — le
+   meilleur taux et la médaille de chaque niveau, le dernier résultat de
+   chaque question — est gardée sous QCM_CLE_STOCK. Rien n'est envoyé : la
+   route n'a pas de pendant `…/evaluer`, et c'est écrit dans `app.py`.
+
+   LE RANG SE LIT SUR LA MÉDAILLE LA PLUS BASSE. La règle est celle du
+   module (`qcm_securite_ia.rang`) ; l'écran la reproduit parce qu'il ne
+   parle pas au serveur, et une règle Python mesure que les deux lisent le
+   même ordre de médailles.
+
+   UN NŒUD DE TEXTE, UNE CHAÎNE. La traduction par contenu cherche chaque
+   nœud de texte tel quel dans le dictionnaire, et le dictionnaire ne porte
+   que ce que l'inventaire a relevé : les littéraux de ce fichier, un par un,
+   et les chaînes servies par la route. Un nœud qui recollerait un littéral,
+   un nombre et une chaîne servie ne se retrouverait jamais. Les nombres
+   passent donc par `sentDonnee` (translate="no"), et chaque chaîne servie
+   occupe son propre élément. */
+
+var QCM_REF = null;
+var QCM_CLE_STOCK = 'sentinel_qcm_ia_v1';
+var QCM_TOUCHES = ['A', 'B', 'C', 'D'];
+var QCM_TEINTES = { debutant: '#2D7A47', medium: '#1C5A8A',
+                    experimente: '#6A4BA8', expert: '#B83222' };
+var QCM_JEU = null;   /* { niveau, questions, i, ordres, choix, indices } */
+
+function _qcmEsc(s) { return nistEsc(s); }
+
+function _qcmLire() {
+  var m = _declLire(QCM_CLE_STOCK);
+  if (!m.niveaux || typeof m.niveaux !== 'object') m.niveaux = {};
+  if (!m.questions || typeof m.questions !== 'object') m.questions = {};
+  return m;
+}
+
+function _qcmMedaille(taux) {
+  var ms = QCM_REF.medailles;
+  for (var i = 0; i < ms.length; i++) {
+    if (taux >= ms[i].seuil) return ms[i];
+  }
+  return null;
+}
+
+function _qcmPastille(med, xl, revele) {
+  var cle = med ? med.cle : 'aucune';
+  var dit = med ? med.dit : QCM_REF.sans_medaille;
+  return '<span class="qcm-med ' + cle + (xl ? ' qcm-med-xl' : '')
+    + (revele ? ' qcm-med-reveal' : '') + '"><span class="qcm-med-pastille"></span>'
+    + _qcmEsc(dit) + '</span>';
+}
+
+function _qcmRang(m) {
+  var ordre = QCM_REF.medailles.map(function (x) { return x.cle; });
+  var plusBasse = -1, restants = 0;
+  QCM_REF.niveaux.forEach(function (n) {
+    var e = m.niveaux[n.cle];
+    var k = e ? ordre.indexOf(e.medaille) : -1;
+    if (k < 0) { restants++; return; }
+    if (k > plusBasse) plusBasse = k;
+  });
+  if (restants) return { ouvert: false, restants: restants };
+  var cle = ordre[plusBasse];
+  var r = QCM_REF.rangs.filter(function (x) { return x.cle === cle; })[0];
+  return { ouvert: true, medaille: QCM_REF.medailles[plusBasse], dit: r ? r.dit : '' };
+}
+
+function qcmInit() {
+  if (QCM_REF) { qcmHub(); return; }
+  fetch('/api/qcm-securite-ia/referentiel')
+    .then(function (r) { return r.json(); })
+    .then(function (j) {
+      if (!j || !j.ok) throw new Error('referentiel');
+      QCM_REF = j.referentiel;
+      qcmHub();
+    })
+    .catch(function () {
+      var h = document.getElementById('qcm-hub');
+      if (h) h.innerHTML = '<div class="veille-loading">La banque de questions n’a pas pu être chargée. Rechargez la page ; si le problème persiste, le service est indisponible.</div>';
+    });
+}
+
+function _qcmScene(nom) {
+  ['hub', 'jeu', 'bilan'].forEach(function (k) {
+    var el = document.getElementById('qcm-' + k);
+    if (el) el.hidden = (k !== nom);
+  });
+  /* LES TOUCHES A–D NE VALENT QUE PENDANT UNE QUESTION : ailleurs, elles
+     détourneraient la frappe d'un champ de recherche de la barre. */
+  if (nom === 'jeu') document.addEventListener('keydown', _qcmClavier);
+  else document.removeEventListener('keydown', _qcmClavier);
+}
+
+function _qcmAnimerJauges(racine) {
+  /* LA LARGEUR CIBLE EST POSÉE APRÈS LE PREMIER RENDU, pour que la barre
+     parte de zéro. Sous `prefers-reduced-motion`, la transition est nulle :
+     la barre se pose d'un coup, à la bonne valeur. */
+  requestAnimationFrame(function () {
+    racine.querySelectorAll('[data-qcm-l]').forEach(function (el) {
+      el.style.width = el.getAttribute('data-qcm-l');
+    });
+  });
+}
+
+function qcmHub() {
+  var h = document.getElementById('qcm-hub');
+  if (!h || !QCM_REF) return;
+  _qcmScene('hub');
+  var m = _qcmLire();
+  var total = QCM_REF.questions.length;
+  var reussies = QCM_REF.questions.filter(function (q) {
+    return m.questions[q.n] === true;
+  }).length;
+  var pct = total ? Math.round(100 * reussies / total) : 0;
+  var rang = _qcmRang(m);
+  var R = 40, C = 2 * Math.PI * R;
+
+  var tete = '<div class="qcm-tete"><div class="qcm-tete-h"><div>'
+    + '<div class="qcm-tete-eb">Banque, finance et assurance</div>'
+    + '<div class="qcm-tete-t">' + sentDonnee(total) + ' questions, quatre niveaux, une médaille par niveau</div>'
+    + '<div class="qcm-tete-p">' + (rang.ouvert
+        ? 'Les quatre niveaux sont terminés. Votre rang se lit sur la médaille la plus basse obtenue, jamais sur la moyenne : c’est le socle qui protège l’établissement au quotidien.'
+        : 'Le rang d’ensemble s’ouvre quand les quatre niveaux ont chacun une médaille. Niveaux encore sans médaille : ' + sentDonnee(rang.restants))
+    + '</div>'
+    + '</div><div class="qcm-anneau"><div class="qcm-anneau-c">'
+    + '<svg width="96" height="96" viewBox="0 0 96 96" aria-hidden="true" focusable="false">'
+    + '<circle cx="48" cy="48" r="' + R + '" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="8"/>'
+    + '<circle cx="48" cy="48" r="' + R + '" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" '
+    + 'stroke-dasharray="' + C.toFixed(1) + '" stroke-dashoffset="' + (C * (1 - pct / 100)).toFixed(1) + '"/></svg>'
+    + '<div class="qcm-anneau-n">' + sentDonnee(pct + '%') + '<span class="qcm-anneau-u">de la banque</span></div></div>'
+    + '<div class="qcm-rang">' + (rang.ouvert
+        ? '<b class="qcm-rang-t">' + _qcmEsc(rang.dit) + '</b>' + _qcmPastille(rang.medaille)
+        : '<b class="qcm-rang-t">Rang à ouvrir</b>Questions réussies à leur dernier passage : ' + sentDonnee(reussies + ' / ' + total))
+    + '</div></div></div></div>';
+
+  var nivs = '<div class="qcm-nivs">' + QCM_REF.niveaux.map(function (n) {
+    var e = m.niveaux[n.cle];
+    var nb = QCM_REF.par_niveau[n.cle] || 0;
+    var med = e ? QCM_REF.medailles.filter(function (x) { return x.cle === e.medaille; })[0] : null;
+    var meilleur = e ? Math.round(100 * e.meilleur) : 0;
+    return '<div class="qcm-niv" role="button" tabindex="0" style="--n:' + QCM_TEINTES[n.cle] + '"'
+      + ' data-qcm-niveau="' + _qcmEsc(n.cle) + '" onclick="qcmJouer(this.getAttribute(\'data-qcm-niveau\'))"'
+      + ' onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();qcmJouer(this.getAttribute(\'data-qcm-niveau\'))}">'
+      + '<div class="qcm-niv-h"><div><div class="qcm-niv-n">' + _qcmEsc(n.dit) + '</div>'
+      + '<div class="qcm-niv-t">' + _qcmEsc(n.mesure) + '</div></div>'
+      + (e ? _qcmPastille(med) : '') + '</div>'
+      + '<div class="qcm-niv-p">' + _qcmEsc(n.pour) + '</div>'
+      + '<div class="qcm-jauge"><i data-qcm-l="' + meilleur + '%" style="background:' + QCM_TEINTES[n.cle] + '"></i></div>'
+      + '<div class="qcm-niv-f"><span class="qcm-niv-q">' + sentDonnee(nb)
+      + (e ? ' questions · votre meilleur passage :' + sentDonnee(' ' + meilleur + ' %')
+             + ' · nombre de passages :' + sentDonnee(' ' + e.essais)
+           : ' questions dans ce niveau') + '</span>'
+      + '<span class="qcm-niv-b">' + (e ? 'Recommencer le niveau →' : 'Commencer le niveau →') + '</span></div></div>';
+  }).join('') + '</div>';
+
+  var doms = '<div class="qcm-bloc"><div class="qcm-bloc-t">Votre profil par domaine</div>'
+    + '<div class="qcm-bloc-p">La part des questions réussies à leur dernier passage, domaine par domaine, tous niveaux confondus. Le domaine le plus bas désigne la formation à prendre en premier — c’est le référentiel de compétences qui en donne le niveau attendu.</div>'
+    + QCM_REF.domaines.map(function (d) {
+        var qs = QCM_REF.questions.filter(function (q) { return q.domaine === d.cle; });
+        var vues = qs.filter(function (q) { return q.n in m.questions; });
+        var ok = vues.filter(function (q) { return m.questions[q.n] === true; }).length;
+        var l = qs.length ? Math.round(100 * ok / qs.length) : 0;
+        return '<div class="qcm-dom' + (vues.length ? '' : ' qcm-dom-0') + '" title="' + _qcmEsc(d.quoi) + '">'
+          + '<div class="qcm-dom-n">' + _qcmEsc(d.dit) + '</div>'
+          + '<div class="qcm-dom-b"><i data-qcm-l="' + l + '%"></i></div>'
+          + '<div class="qcm-dom-v">' + ok + '/' + qs.length + '</div></div>';
+      }).join('') + '</div>';
+
+  var paliers = '<div class="qcm-bloc"><div class="qcm-bloc-t">Les médailles</div>'
+    + '<div class="qcm-bloc-p">Une médaille se gagne sur le taux de bonnes réponses d’un niveau, en un passage. En dessous du premier palier, le niveau est à reprendre.</div>'
+    + '<div class="qcm-med-g">' + QCM_REF.medailles.map(function (x) {
+        return _qcmPastille(x) + '<span class="qcm-niv-q" style="align-self:center">'
+          + _qcmEsc(x.quoi) + sentDonnee(' · ≥ ' + Math.round(100 * x.seuil) + ' %') + '</span>';
+      }).join('') + '</div></div>';
+
+  var reserves = '<div class="qcm-bloc"><div class="qcm-bloc-t">Ce que ce QCM est, et ce qu’il n’est pas</div>'
+    + QCM_REF.reserves.map(function (r) {
+        return '<div class="qcm-res"><b class="qcm-res-q">' + _qcmEsc(r.quoi) + '</b>'
+          + '<span class="qcm-res-p">' + _qcmEsc(r.pourquoi) + '</span>'
+          + '<span class="qcm-sep"> </span><span class="qcm-res-p">' + _qcmEsc(r.quoi_faire) + '</span></div>';
+      }).join('') + '</div>';
+
+  h.innerHTML = tete + nivs + doms + paliers + reserves;
+  _qcmAnimerJauges(h);
+}
+
+function _qcmMelanger(n) {
+  var t = [];
+  for (var i = 0; i < n; i++) t.push(i);
+  for (var j = n - 1; j > 0; j--) {
+    var k = Math.floor(Math.random() * (j + 1));
+    var x = t[j]; t[j] = t[k]; t[k] = x;
+  }
+  return t;
+}
+
+function qcmJouer(niveau) {
+  if (!QCM_REF) return;
+  var qs = QCM_REF.questions.filter(function (q) { return q.niveau === niveau; });
+  if (!qs.length) return;
+  QCM_JEU = { niveau: niveau, questions: qs, i: 0, choix: [], indices: [],
+              ordres: qs.map(function (q) { return _qcmMelanger(q.o.length); }) };
+  _qcmScene('jeu');
+  _qcmCarte();
+  window.scrollTo({ top: 0 });
+}
+
+function _qcmDomaine(cle) {
+  var d = QCM_REF.domaines.filter(function (x) { return x.cle === cle; })[0];
+  return d ? d.dit : cle;
+}
+
+function _qcmPiste() {
+  return '<div class="qcm-piste">' + QCM_JEU.questions.map(function (q, k) {
+    var c = '';
+    if (k < QCM_JEU.choix.length) c = QCM_JEU.choix[k] === q.a ? ' ok' : ' ko';
+    else if (k === QCM_JEU.i) c = ' now';
+    return '<span class="qcm-seg' + c + '"></span>';
+  }).join('') + '</div>';
+}
+
+function _qcmCarte() {
+  var el = document.getElementById('qcm-jeu');
+  var J = QCM_JEU, q = J.questions[J.i], ordre = J.ordres[J.i];
+  var niv = QCM_REF.niveaux.filter(function (n) { return n.cle === J.niveau; })[0];
+  var repondu = J.i < J.choix.length;
+  el.innerHTML = '<div class="qcm-barre"><div class="qcm-barre-g">'
+    + '<button type="button" class="qcm-quit" onclick="qcmHub()">← Hub du QCM</button>'
+    + '<span class="qcm-niv-n" style="color:' + QCM_TEINTES[J.niveau] + ';margin:0">' + _qcmEsc(niv.dit) + '</span></div>'
+    + '<span class="qcm-compte">Question ' + sentDonnee((J.i + 1) + ' / ' + J.questions.length) + '</span></div>'
+    + _qcmPiste()
+    + '<div class="qcm-carte" style="border-top:3px solid ' + QCM_TEINTES[J.niveau] + '">'
+    + '<span class="qcm-dom-tag">' + _qcmEsc(_qcmDomaine(q.domaine)) + '</span>'
+    + '<div class="qcm-q">' + _qcmEsc(q.q) + '</div>'
+    + '<div class="qcm-opts" role="group">' + ordre.map(function (k, pos) {
+        return '<button type="button" class="qcm-opt" id="qcm-opt-' + pos + '" data-qcm-o="' + k + '"'
+          + ' onclick="qcmChoisir(' + k + ')"><span class="qcm-opt-k">' + QCM_TOUCHES[pos] + '</span>'
+          + '<span class="qcm-opt-t">' + _qcmEsc(q.o[k]) + '</span></button>';
+      }).join('') + '</div>'
+    + '<div id="qcm-indice-zone">' + (J.indices[J.i]
+        ? '<div class="qcm-indice">' + _qcmEsc(q.indice) + '</div>'
+        : '<button type="button" class="qcm-indice-b" onclick="qcmIndice()">Voir un indice</button>') + '</div>'
+    + '<div id="qcm-fb"></div></div>';
+  if (repondu) _qcmCorriger();
+}
+
+function qcmIndice() {
+  if (!QCM_JEU) return;
+  QCM_JEU.indices[QCM_JEU.i] = true;
+  var z = document.getElementById('qcm-indice-zone');
+  var q = QCM_JEU.questions[QCM_JEU.i];
+  if (z) z.innerHTML = '<div class="qcm-indice">' + _qcmEsc(q.indice) + '</div>';
+}
+
+function _qcmClavier(ev) {
+  if (!QCM_JEU || ev.ctrlKey || ev.metaKey || ev.altKey) return;
+  var t = ev.target && ev.target.tagName;
+  if (t === 'INPUT' || t === 'TEXTAREA' || t === 'SELECT') return;
+  var p = document.getElementById('p-qcm-ia');
+  if (!p || !p.classList.contains('on')) return;
+  var pos = QCM_TOUCHES.indexOf(String(ev.key || '').toUpperCase());
+  if (pos >= 0 && QCM_JEU.i >= QCM_JEU.choix.length) {
+    ev.preventDefault();
+    qcmChoisir(QCM_JEU.ordres[QCM_JEU.i][pos]);
+  } else if (ev.key === 'Enter' && QCM_JEU.i < QCM_JEU.choix.length) {
+    ev.preventDefault();
+    qcmSuite();
+  }
+}
+
+function qcmChoisir(k) {
+  var J = QCM_JEU;
+  if (!J || J.i < J.choix.length) return;   /* une seule réponse par question */
+  J.choix.push(k);
+  _qcmCorriger();
+}
+
+function _qcmOwasp(q) {
+  var codes = q.codes;
+  return '<details class="qcm-owasp"><summary>Les trois référentiels OWASP — où se situe cette question</summary><div>'
+    + QCM_REF.referentiels.map(function (r) {
+        return '<div class="qcm-ow-t">' + _qcmEsc(r.dit) + '</div>' + r.entrees.map(function (e) {
+          var hit = codes.indexOf(e.code) >= 0;
+          return '<div class="qcm-ow' + (hit ? ' hit' : '') + '"><code>' + _qcmEsc(e.code) + '</code><div>'
+            + '<b class="qcm-b">' + _qcmEsc(e.nom) + '</b>' + (hit ? '<span class="qcm-ow-b">CETTE QUESTION</span>' : '')
+            + '<span class="qcm-sep"> — </span><span class="qcm-ow-q">' + _qcmEsc(e.quoi) + '</span>'
+            + (hit && e.exemple ? '<div class="qcm-ow-ex">' + _qcmEsc(e.exemple) + '</div>'
+                                + '<div class="qcm-ow-ex">' + _qcmEsc(e.controles) + '</div>' : '')
+            + '</div></div>';
+        }).join('');
+      }).join('') + '</div></details>';
+}
+
+function _qcmCorriger() {
+  var J = QCM_JEU, q = J.questions[J.i], choix = J.choix[J.i], ok = choix === q.a;
+  document.querySelectorAll('#qcm-jeu .qcm-opt').forEach(function (b) {
+    var k = +b.getAttribute('data-qcm-o');
+    b.disabled = true;
+    if (k === q.a) b.classList.add('bonne');
+    else if (k === choix) b.classList.add('mauvaise');
+    else b.classList.add('pale');
+  });
+  var autres = [];
+  var j = 0;
+  q.o.forEach(function (txt, k) {
+    if (k === q.a) return;
+    autres.push({ k: k, txt: txt, pourquoi: q.faux[j++] });
+  });
+  var dernier = J.i === J.questions.length - 1;
+  var fb = document.getElementById('qcm-fb');
+  fb.innerHTML = '<div class="qcm-fb">'
+    + '<div class="qcm-verdict ' + (ok ? 'ok' : 'ko') + '">' + (ok ? '✓ Bonne réponse' : '✕ Réponse incorrecte') + '</div>'
+    + (ok ? '' : '<div class="qcm-autre-t" style="margin-bottom:8px">La bonne réponse : <b class="qcm-b">' + _qcmEsc(q.o[q.a]) + '</b></div>')
+    + '<div class="qcm-explique">' + _qcmEsc(q.e) + '</div>'
+    + '<div class="qcm-ref">' + _qcmEsc(q.ref) + '</div>'
+    + '<div class="qcm-prat"><div class="qcm-sous">En pratique : ce qu’on met en place</div><ul>'
+    + q.pratique.map(function (x) { return '<li>' + _qcmEsc(x) + '</li>'; }).join('') + '</ul></div>'
+    + '<div class="qcm-autres"><div class="qcm-sous">Pourquoi les autres réponses sont fausses</div>'
+    + autres.map(function (a) {
+        return '<div class="qcm-autre"><div class="qcm-autre-t"><span class="qcm-autre-o">' + _qcmEsc(a.txt) + '</span>'
+          + (a.k === choix ? '<span class="qcm-autre-c">VOTRE CHOIX</span>' : '') + '</div>'
+          + '<div class="qcm-autre-p">' + _qcmEsc(a.pourquoi) + '</div></div>';
+      }).join('') + '</div>'
+    + _qcmOwasp(q)
+    + '<button type="button" class="qcm-suite" id="qcm-suite" onclick="qcmSuite()">'
+    + (dernier ? 'Voir le bilan →' : 'Passer à la question suivante →') + '</button></div>';
+  var piste = document.querySelector('#qcm-jeu .qcm-piste');
+  if (piste) piste.outerHTML = _qcmPiste();
+  var b = document.getElementById('qcm-suite');
+  if (b) b.focus({ preventScroll: true });
+}
+
+function qcmSuite() {
+  var J = QCM_JEU;
+  if (!J || J.i >= J.choix.length) return;
+  if (J.i < J.questions.length - 1) {
+    J.i++;
+    _qcmCarte();
+    var p = document.getElementById('qcm-jeu');
+    if (p) p.scrollIntoView({ block: 'start' });
+    return;
+  }
+  _qcmBilan();
+}
+
+function _qcmBilan() {
+  var J = QCM_JEU;
+  var bons = J.questions.filter(function (q, k) { return J.choix[k] === q.a; }).length;
+  var n = J.questions.length, taux = n ? bons / n : 0;
+  var med = _qcmMedaille(taux);
+  var m = _qcmLire();
+  var avant = m.niveaux[J.niveau];
+  /* LA MÉDAILLE GARDÉE EST CELLE DU MEILLEUR PASSAGE. Un passage moins bon
+     ne retire rien : on mesure ce qu'une personne a su reconnaître au moins
+     une fois. Le profil par domaine, lui, suit le DERNIER passage de chaque
+     question — c'est lui qui dit ce qui est su maintenant. */
+  var meilleur = Math.max(taux, avant ? avant.meilleur : 0);
+  var medGardee = _qcmMedaille(meilleur);
+  m.niveaux[J.niveau] = { meilleur: meilleur, dernier: taux,
+                          medaille: medGardee ? medGardee.cle : null,
+                          essais: (avant ? avant.essais : 0) + 1 };
+  J.questions.forEach(function (q, k) { m.questions[q.n] = (J.choix[k] === q.a); });
+  _declEcrire(QCM_CLE_STOCK, m);
+  var nouvelle = med && (!avant || !avant.medaille || meilleur > avant.meilleur);
+  var niv = QCM_REF.niveaux.filter(function (x) { return x.cle === J.niveau; })[0];
+
+  var doms = QCM_REF.domaines.map(function (d) {
+    var qs = J.questions.filter(function (q) { return q.domaine === d.cle; });
+    if (!qs.length) return '';
+    var ok = qs.filter(function (q) { return J.choix[J.questions.indexOf(q)] === q.a; }).length;
+    return '<div class="qcm-dom"><div class="qcm-dom-n">' + _qcmEsc(d.dit) + '</div>'
+      + '<div class="qcm-dom-b"><i data-qcm-l="' + Math.round(100 * ok / qs.length) + '%"></i></div>'
+      + '<div class="qcm-dom-v">' + ok + '/' + qs.length + '</div></div>';
+  }).join('');
+
+  var el = document.getElementById('qcm-bilan');
+  el.innerHTML = '<div class="qcm-bloc" style="border-top:3px solid ' + QCM_TEINTES[J.niveau] + '">'
+    + '<div class="qcm-niv-n" style="color:' + QCM_TEINTES[J.niveau] + '"><span class="qcm-b">' + _qcmEsc(niv.dit) + '</span>'
+    + '<span class="qcm-b"> · Bilan du passage</span></div>'
+    + '<div class="qcm-score"><div><span class="qcm-score-n">' + bons + '</span><span class="qcm-score-u"> / ' + n
+    + ' · ' + Math.round(100 * taux) + ' %</span></div>' + _qcmPastille(med, true, true) + '</div>'
+    + '<div class="qcm-bloc-p" style="margin-top:10px">' + (med
+        ? '<span class="qcm-b">' + (nouvelle ? 'Médaille gagnée sur ce passage :' : 'Médaille de ce passage :') + '</span> '
+          + '<b class="qcm-b">' + _qcmEsc(med.quoi) + '</b>'
+        : 'Aucune médaille sur ce passage : le premier palier demande' + sentDonnee(' ' + Math.round(100 * QCM_REF.medailles[QCM_REF.medailles.length - 1].seuil) + ' ') + '% de bonnes réponses.')
+    + (avant && avant.medaille && meilleur > taux ? ' <span class="qcm-b">Votre meilleur passage reste gardé.</span>' : '') + '</div>'
+    + '<div class="qcm-sous" style="margin-top:16px">Par domaine, sur ce passage</div>' + doms
+    + '<div class="qcm-actions">'
+    + '<button type="button" class="qcm-suite" data-qcm-niveau="' + _qcmEsc(J.niveau) + '" onclick="qcmJouer(this.getAttribute(\'data-qcm-niveau\'))">Recommencer ce niveau</button>'
+    + '<button type="button" class="qcm-quit" onclick="qcmHub()">← Hub du QCM</button>'
+    + '<button type="button" class="qcm-quit" onclick="go(\'competences\',null,\'ÉQUIPE & FORMATION\',\'Référentiel de compétences IA\');compInit()">Référentiel de compétences →</button>'
+    + '</div></div>'
+    + '<div class="qcm-bloc"><div class="qcm-bloc-t">Revue complète</div><div class="qcm-revue">'
+    + J.questions.map(function (q, k) {
+        var ok = J.choix[k] === q.a;
+        return '<div class="qcm-rev"><div class="qcm-rev-h"><span class="qcm-rev-p ' + (ok ? 'ok' : 'ko') + '">'
+          + (ok ? '✓' : '✕') + '</span><div class="qcm-rev-q">' + _qcmEsc(q.q) + '</div></div>'
+          + '<div class="qcm-rev-a"><b class="qcm-b">' + _qcmEsc(q.o[q.a]) + '</b>'
+          + '<span class="qcm-sep"> — </span><span class="qcm-rev-e">' + _qcmEsc(q.e) + '</span></div></div>';
+      }).join('') + '</div></div>';
+  _qcmScene('bilan');
+  _qcmAnimerJauges(el);
+  window.scrollTo({ top: 0 });
+}
+
+window.qcmInit = qcmInit;
+window.qcmHub = qcmHub;
+window.qcmJouer = qcmJouer;
+window.qcmChoisir = qcmChoisir;
+window.qcmIndice = qcmIndice;
+window.qcmSuite = qcmSuite;
+
 function _compVal(id) {
   var e = document.getElementById(id);
   return e ? e.value : '';
@@ -31314,47 +31757,76 @@ function _compEchelle(f) {
   return '<div class="comp-echelle">' + out.join('') + '</div>';
 }
 
+/* CE QUI COMMANDE UNE CIBLE, DIT EN FRANÇAIS. La route sert des CLÉS
+   (« population », « article 4 ») : les afficher telles quelles mettait
+   un mot technique au milieu d'une phrase, et un mot seul que la traduction
+   par contenu ne relevait pas. */
+var COMP_ENTREE_DIT = {
+  population: 'le type de personne', fonction: 'la fonction métier',
+  secteur: 'le secteur de l’entreprise', 'article 4': 'l’article 4 du règlement'
+};
+
+/* UN NŒUD DE TEXTE, UNE CHAÎNE — la même règle que l'écran du QCM, et pour la
+   même raison : la traduction par contenu cherche chaque nœud tel quel. La
+   version précédente recollait dans un même <b> un numéro, un titre servi et
+   un motif ; chaque combinaison faisait une clé, aucune n'était traduite, et
+   l'écran anglais montrait toute la proposition en français. Les nombres
+   passent donc par `sentDonnee`, et chaque chaîne a son élément. */
+function _compK(s, cl) {
+  return '<span class="' + (cl || 'comp-k') + '">' + _compEsc(s) + '</span>';
+}
+
 function _compPeindre(j) {
   var h = '';
   h += '<div class="q-verdict">';
   h += '<div class="comp-trajet">'
-    + '<div class="comp-niv">' + j.depart.niveau
-    + '<span>Départ déclaré · ' + _compEsc(j.depart.nom) + '</span></div>'
+    + '<div class="comp-niv">' + sentDonnee(j.depart.niveau)
+    + '<span>' + _compK('Départ déclaré') + '<span class="comp-sep"> · </span>' + _compK(j.depart.nom, 'comp-k comp-k-n') + '</span></div>'
     + '<div class="comp-fleche">→</div>'
-    + '<div class="comp-niv">' + j.arrivee.niveau
-    + '<span>Niveau visé · ' + _compEsc(j.arrivee.nom) + '</span></div>'
+    + '<div class="comp-niv">' + sentDonnee(j.arrivee.niveau)
+    + '<span>' + _compK('Niveau visé') + '<span class="comp-sep"> · </span>' + _compK(j.arrivee.nom, 'comp-k comp-k-n') + '</span></div>'
     + '</div>';
   h += '<p>' + _compEsc(j.arrivee.dit) + '</p>';
-  h += '<p><b>' + _compEsc(j.nature_dit) + '</b></p>';
+  h += '<p><b class="comp-b">' + _compEsc(j.nature_dit) + '</b></p>';
   h += '<p class="q-trois">' + _compEsc(j.raison_secteur) + '</p>';
   if (j.plafond_mord) h += '<p class="q-trois">' + _compEsc(j.plafond_role_dit) + '</p>';
 
   h += '<div class="comp-sec">La cible, famille par famille</div>';
   h += j.familles.map(function (f) {
-    var cmd = (f.cible === 0)
-      ? 'aucune exigence'
-      : 'commandée par ' + f.commande.join(', ');
+    var cmd;
+    if (f.cible === 0) {
+      cmd = _compK('Aucune exigence sur cette famille');
+    } else {
+      cmd = _compK('Commandée par') + f.commande.map(function (c) {
+        return _compK(COMP_ENTREE_DIT[c] || c, 'comp-k comp-k-n');
+      }).join('<span class="comp-sep">, </span>');
+    }
     var rab = (f.parts || []).filter(function (q) { return q.plafonne; });
-    if (rab.length) cmd += ' · rabattu : ' + rab.map(function (q) {
-      return q.entree + ' ' + q.exige + '→' + q.retenu; }).join(', ');
+    if (rab.length) cmd += '<span class="comp-sep"> · </span>' + _compK('Rabattu par le plafond de rôle') + rab.map(function (q) {
+      return _compK(COMP_ENTREE_DIT[q.entree] || q.entree, 'comp-k comp-k-n')
+        + sentDonnee(' ' + q.exige + '→' + q.retenu);
+    }).join('<span class="comp-sep">, </span>');
+    cmd += f.ecart > 0
+      ? '<span class="comp-sep"> · </span>' + _compK('Écart à combler') + sentDonnee(' ' + f.ecart)
+      : '<span class="comp-sep"> · </span>' + _compK('Cible atteinte');
     return '<div class="comp-fam">'
       + '<div><div class="comp-fam-nom">' + _compEsc(f.nom) + '</div>'
       + '<div class="comp-fam-dit">' + _compEsc(f.observable) + '</div></div>'
       + _compEchelle(f)
-      + '<div class="comp-cmd">' + _compEsc(cmd)
-      + (f.ecart > 0 ? ' · écart ' + f.ecart : ' · atteint') + '</div>'
+      + '<div class="comp-cmd">' + cmd + '</div>'
       + '</div>';
   }).join('');
 
   if (j.formations.length) {
-    h += '<div class="comp-sec">Ce qui comble l’écart — '
-      + j.formations.length + ' du catalogue</div><ul class="comp-list">'
+    h += '<div class="comp-sec">' + _compK('Ce qui comble l’écart, dans le catalogue')
+      + sentDonnee(' · ' + j.formations.length) + '</div><ul class="comp-list">'
       + j.formations.map(function (f) {
-          return '<li><b>n°' + f.n + ' — ' + _compEsc(f.titre_attendu) + '</b>'
-            + (f.sensibilisation ? ' <code>sensibilisation</code>' : '')
-            + '<br>porte ' + f.ajoute.map(function (a) {
-                return _compEsc(a.famille) + ' au niveau ' + a.porte_a;
-              }).join(', ') + '</li>';
+          return '<li>' + sentDonnee('n°' + f.n) + ' <b class="comp-b">' + _compEsc(f.titre_attendu) + '</b>'
+            + (f.sensibilisation ? ' <code class="comp-code">sensibilisation</code>' : '')
+            + '<div class="comp-porte">' + _compK('Ce qu’elle porte :') + f.ajoute.map(function (a) {
+                return _compK(a.nom || a.famille, 'comp-k comp-k-n') + _compK('jusqu’au niveau')
+                  + sentDonnee(' ' + a.porte_a);
+              }).join('<span class="comp-sep"> · </span>') + '</div></li>';
         }).join('') + '</ul>';
   } else {
     h += '<div class="comp-sec">Aucune action de formation</div>'
@@ -31374,11 +31846,16 @@ function _compPeindre(j) {
   if (j.ecartees.length || j.redondantes.length) {
     h += '<div class="comp-sec">Ce qui n’est pas proposé, et pourquoi</div>'
       + '<details><summary style="cursor:pointer;font-size:12px;color:var(--muted)">'
-      + (j.ecartees.length + j.redondantes.length)
-      + ' formation(s) du catalogue écartée(s)</summary><ul class="comp-list">'
+      + _compK('Formations du catalogue écartées pour cette personne')
+      + sentDonnee(' · ' + (j.ecartees.length + j.redondantes.length))
+      + '</summary><ul class="comp-list">'
       + j.ecartees.concat(j.redondantes).map(function (x) {
-          return '<li><b>n°' + x.n + '</b> ' + _compEsc(x.titre_attendu)
-            + ' — ' + _compEsc(x.motif) + '</li>';
+          return '<li>' + sentDonnee('n°' + x.n) + ' <b class="comp-b">' + _compEsc(x.titre_attendu) + '</b>'
+            + '<div class="comp-porte">' + _compK(x.motif)
+            + (x.au_dela && x.au_dela.length ? '<span class="comp-sep"> </span>' + _compK('sur les familles :') + x.au_dela.map(function (a) {
+                return _compK(a.nom, 'comp-k comp-k-n');
+              }).join('<span class="comp-sep">, </span>') : '')
+            + '</div></li>';
         }).join('') + '</ul></details>';
   }
 
@@ -31387,15 +31864,15 @@ function _compPeindre(j) {
      laisserait une mise en garde sans issue. */
   h += '<div class="comp-sec">Ce que cette sortie ne garantit pas</div>'
     + j.reserves.map(function (r) {
-        return '<div class="comp-res"><b>' + _compEsc(r.quoi) + '</b> — '
-          + _compEsc(r.pourquoi) + ' <i>' + _compEsc(r.quoi_faire) + '</i></div>';
+        return '<div class="comp-res"><b class="comp-b comp-res-q">' + _compEsc(r.quoi) + '</b>'
+          + '<span class="comp-sep"> — </span><span class="comp-res-p">' + _compEsc(r.pourquoi) + '</span>'
+          + '<span class="comp-sep"> </span><i class="comp-res-i">' + _compEsc(r.quoi_faire) + '</i></div>';
       }).join('');
   h += '<p class="q-trois">' + _compEsc(j.catalogue_source) + '</p>';
   h += '<p class="q-trois">' + _compEsc(j.plancher_source) + '</p>';
   h += '</div>';
   return h;
 }
-
 
 function nistInit() {
   /* LES RÉPONSES SURVIVENT À LA FERMETURE DE L'ONGLET, et repartent vers le

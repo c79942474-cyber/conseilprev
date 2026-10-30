@@ -1,0 +1,169 @@
+{
+ "_pourquoi": "QCM securite de l'IA : chaque regle de tests/test_qcm_securite_ia.py doit tomber sur SON defaut. La banque porte une garde qui la relit a l'import : les mutations qui la feraient lever sortiraient en erreur de COLLECTE, que le banc prendrait pour une survivante — ces portes-la sont dans tests/test_qcm_securite_ia_socle.py, sur une copie jetable. DEUX REGLES N'ONT PAS DE MUTATION ICI, et c'est dit : les deux bornes de la longueur de la bonne reponse (francais, anglais). Aucune retouche d'UNE option ne franchit une borne fixee sur cinquante questions ; elles ont ete eprouvees sur la banque reelle, ou elles sont tombees trois fois (49/50 la plus longue, puis 39/50 la plus courte, puis 22/50 la plus longue en anglais) avant la reecriture des options.",
+ "cibles": [
+  "tests/test_qcm_securite_ia.py"
+ ],
+ "mutations": [
+  {
+   "nom": "le rang se lit sur la médaille la plus HAUTE",
+   "fichier": "qcm_securite_ia.py",
+   "avant": "    plus_basse = max(obtenues.values(), key=lambda c: ordre.index(c))\n",
+   "apres": "    plus_basse = min(obtenues.values(), key=lambda c: ordre.index(c))\n",
+   "regle": "test_le_rang_se_lit_sur_la_medaille_la_plus_BASSE_jamais_sur_la_moyenne"
+  },
+  {
+   "nom": "l'écran lit le rang sur la médaille la plus haute",
+   "fichier": "sentinel.page.js",
+   "avant": "    if (k > plusBasse) plusBasse = k;\n",
+   "apres": "    if (plusBasse < 0 || k < plusBasse) plusBasse = k;\n",
+   "regle": "test_l_ECRAN_calcule_le_meme_rang_que_le_module_sur_les_625_cas"
+  },
+  {
+   "nom": "l'écran exige de dépasser le seuil au lieu de l'atteindre",
+   "fichier": "sentinel.page.js",
+   "avant": "    if (taux >= ms[i].seuil) return ms[i];\n",
+   "apres": "    if (taux > ms[i].seuil) return ms[i];\n",
+   "regle": "test_l_ECRAN_attribue_la_meme_medaille_que_le_module_a_chaque_score"
+  },
+  {
+   "nom": "le module exige de dépasser le seuil : le sans-faute ne donne plus le platine",
+   "fichier": "qcm_securite_ia.py",
+   "avant": "        if taux >= seuil:\n",
+   "apres": "        if taux > seuil:\n",
+   "regle": "test_le_SANS_FAUTE_et_lui_seul_donne_la_medaille_la_plus_haute"
+  },
+  {
+   "nom": "le bronze se gagne à la moitié des réponses",
+   "fichier": "qcm_securite_ia.py",
+   "avant": "(\"bronze\", \"Médaille de bronze\", \"Les bases sont en place\", 0.55),",
+   "apres": "(\"bronze\", \"Médaille de bronze\", \"Les bases sont en place\", 0.50),",
+   "regle": "test_le_palier_le_plus_bas_demande_DEJA_la_majorite"
+  },
+  {
+   "nom": "l'écran envoie quelque chose au serveur",
+   "fichier": "sentinel.page.js",
+   "avant": "  fetch('/api/qcm-securite-ia/referentiel')\n",
+   "apres": "  fetch('/api/qcm-securite-ia/referentiel', { method: 'POST', body: JSON.stringify(_qcmLire()) })\n",
+   "regle": "test_l_ecran_n_envoie_RIEN_au_serveur"
+  },
+  {
+   "nom": "la route du QCM perd sa cadence",
+   "fichier": "app.py",
+   "avant": "@rate_limit(limit=120, window=60)\ndef api_qcm_securite_ia_referentiel():",
+   "apres": "def api_qcm_securite_ia_referentiel():",
+   "regle": "test_l_ecran_n_envoie_RIEN_au_serveur"
+  },
+  {
+   "nom": "une question surligne un code que la table ne relie pas à son ASI",
+   "fichier": "qcm_securite_ia.py",
+   "avant": "{\"n\": 48, \"domaine\": \"gouv\", \"niveau\": \"expert\",\n     \"codes\": (\"ASI01\", \"LLM01\", \"T6\"),",
+   "apres": "{\"n\": 48, \"domaine\": \"gouv\", \"niveau\": \"expert\",\n     \"codes\": (\"ASI01\", \"LLM01\", \"T8\"),",
+   "regle": "test_les_codes_d_une_question_suivent_la_TABLE_DE_CORRESPONDANCE"
+  },
+  {
+   "nom": "la citation affichée suit le DERNIER code au lieu du premier",
+   "fichier": "qcm_securite_ia.py",
+   "avant": "            \"ref\": q.get(\"ref\") or citation(q[\"codes\"][0]),\n",
+   "apres": "            \"ref\": q.get(\"ref\") or citation(q[\"codes\"][-1]),\n",
+   "regle": "test_la_citation_affichee_est_DERIVEE_et_nomme_son_code"
+  },
+  {
+   "nom": "le total par niveau est écrit au lieu d'être compté",
+   "fichier": "qcm_securite_ia.py",
+   "avant": "        par_niveau[cle] = sum(1 for q in QUESTIONS if q[\"niveau\"] == cle)\n",
+   "apres": "        par_niveau[cle] = 13\n",
+   "regle": "test_la_banque_SERVIE_est_la_banque_ENTIERE_et_ses_totaux_sont_DERIVES"
+  },
+  {
+   "nom": "un niveau ne pose plus un des six domaines",
+   "fichier": "qcm_securite_ia.py",
+   "avant": "{\"n\": 8, \"domaine\": \"reg\", \"niveau\": \"debutant\",",
+   "apres": "{\"n\": 8, \"domaine\": \"gouv\", \"niveau\": \"debutant\",",
+   "regle": "test_chaque_niveau_porte_les_SIX_domaines"
+  },
+  {
+   "nom": "le guide écrit le compte de la banque en lettres",
+   "fichier": "sentinel.page.js",
+   "avant": "{h:\"À quoi sert cette page\", t:\"À mesurer ce que vous RECONNAISSEZ,",
+   "apres": "{h:\"À quoi sert cette page\", t:\"À mesurer, en cinquante questions, ce que vous RECONNAISSEZ,",
+   "regle": "test_aucun_COMPTE_de_questions_n_est_ECRIT_dans_les_textes"
+  },
+  {
+   "nom": "le clavier perd une touche",
+   "fichier": "sentinel.page.js",
+   "avant": "var QCM_TOUCHES = ['A', 'B', 'C', 'D'];",
+   "apres": "var QCM_TOUCHES = ['A', 'B', 'C'];",
+   "regle": "test_les_touches_du_clavier_suivent_le_nombre_d_OPTIONS"
+  },
+  {
+   "nom": "un niveau perd sa teinte",
+   "fichier": "sentinel.page.js",
+   "avant": "experimente: '#6A4BA8'",
+   "apres": "experimente2: '#6A4BA8'",
+   "regle": "test_QUATRE_niveaux_parce_que_les_textes_disent_quatre"
+  },
+  {
+   "nom": "la médaille d'or redevient « Or », que l'inventaire ne relève pas",
+   "fichier": "qcm_securite_ia.py",
+   "avant": "(\"or\", \"Médaille d’or\", \"Maîtrise du niveau\", 0.85),",
+   "apres": "(\"or\", \"Or\", \"Maîtrise du niveau\", 0.85),",
+   "regle": "test_chaque_LIBELLE_de_niveau_de_medaille_de_rang_et_de_domaine_est_RELEVE"
+  },
+  {
+   "nom": "une phrase servie change sans que sa traduction suive",
+   "fichier": "qcm_securite_ia.py",
+   "avant": "SANS_MEDAILLE = \"Niveau à reprendre\"",
+   "apres": "SANS_MEDAILLE = \"Niveau à refaire entièrement\"",
+   "regle": "test_tout_le_FRANCAIS_que_la_route_sert_est_TRADUIT"
+  },
+  {
+   "nom": "un libellé de l'écran change sans que sa traduction suive",
+   "fichier": "sentinel.page.js",
+   "avant": "onclick=\"qcmIndice()\">Voir un indice</button>",
+   "apres": "onclick=\"qcmIndice()\">Afficher un indice pour cette question</button>",
+   "regle": "test_tout_le_FRANCAIS_que_l_ecran_compose_est_TRADUIT"
+  },
+  {
+   "nom": "le hub du QCM est de nouveau peint DANS l'élément data-i18n",
+   "fichier": "sentinel.html",
+   "avant": "<div id=\"qcm-hub\"><div class=\"veille-loading\" data-i18n=\"pg.qcm-ia.attente\">Chargement de la banque de questions…</div></div>",
+   "apres": "<div id=\"qcm-hub\" class=\"veille-loading\" data-i18n=\"pg.qcm-ia.attente\">Chargement de la banque de questions…</div>",
+   "regle": "test_un_element_qui_porte_data_i18n_n_est_JAMAIS_repeint"
+  },
+  {
+   "nom": "la proposition des compétences est de nouveau peinte DANS l'élément data-i18n",
+   "fichier": "sentinel.html",
+   "avant": "<div id=\"comp-sortie\"><div class=\"veille-loading\" data-i18n=\"pg.competences.attente\">Chargement du référentiel…</div></div>",
+   "apres": "<div id=\"comp-sortie\" class=\"veille-loading\" data-i18n=\"pg.competences.attente\">Chargement du référentiel…</div>",
+   "regle": "test_un_element_qui_porte_data_i18n_n_est_JAMAIS_repeint"
+  },
+  {
+   "nom": "l'onglet n'amorce plus l'écran",
+   "fichier": "sentinel.html",
+   "avant": "'QCM Sécurité de l’IA');qcmInit()\"",
+   "apres": "'QCM Sécurité de l’IA')\"",
+   "regle": "test_la_barre_mene_a_l_ecran_et_l_AMORCE_est_dans_son_appel"
+  },
+  {
+   "nom": "l'écran perd son guide",
+   "fichier": "sentinel.page.js",
+   "avant": "  'qcm-ia': {\n    title: \"QCM",
+   "apres": "  'qcm-ia-x': {\n    title: \"QCM",
+   "regle": "test_l_ecran_a_sa_fiche_son_guide_et_une_etape_de_parcours"
+  },
+  {
+   "nom": "la scène du jeu s'affiche dès l'ouverture",
+   "fichier": "sentinel.html",
+   "avant": "<div id=\"qcm-jeu\" hidden></div>",
+   "apres": "<div id=\"qcm-jeu\"></div>",
+   "regle": "test_les_trois_scenes_existent_et_le_hub_s_ouvre_sur_ses_quatre_niveaux"
+  },
+  {
+   "nom": "la correction donne aussi un motif à la bonne réponse",
+   "fichier": "sentinel.page.js",
+   "avant": "    if (k === q.a) return;\n",
+   "apres": "",
+   "regle": "test_la_correction_dit_POURQUOI_chaque_option_fausse_l_est"
+  }
+ ]
+}

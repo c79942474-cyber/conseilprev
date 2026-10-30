@@ -2,8 +2,6 @@
  "_lot": "96-formations-securite-et-pratique-avancee",
  "_quoi": "LES DEUX FORMATIONS QUI COMBLENT LES TROUS DU RÉFÉRENTIEL DE COMPÉTENCES — « Sécuriser un système d'IA par conception » (famille neuve « Sécurité IA ») et « Pratique avancée des systèmes génératifs » —, leurs programmes, et la dette que la passe `litteraux` a RÉVÉLÉE au même moment : les libellés que l'écran du référentiel COMPOSE en JavaScript. Le lot précédent n'avait rejoué que les passes « routes » et navigateur ; la page « _js » du catalogue portait donc encore les littéraux d'avant, et ces libellés n'avaient jamais pu entrer dans un lot de traduction. La couverture annonçait 100 % sur un inventaire qui ne les voyait pas.",
  "bloc": {
-  "Départ déclaré ·": "Declared start ·",
-  "Niveau visé ·": "Target level ·",
   "Vous avez demandé :": "You requested:",
   "🔒 Plan Gratuit — Accès limité à": "🔒 Free plan — Access limited to"
  },
@@ -16,7 +14,6 @@
   "Ce qu'un système expose : l'invite, le contexte, les données d'entraînement, les poids, les sorties": "What a system exposes: the prompt, the context, the training data, the weights, the outputs",
   "Ce que cette sortie ne garantit pas": "What this output does not guarantee",
   "Ce que le catalogue ne couvre pas": "What the catalogue does not cover",
-  "Ce qui comble l’écart —": "What closes the gap —",
   "Ce qui distingue une demande qui aboutit d'une demande qui tourne : objectif, contexte, contraintes, format attendu": "What separates a request that lands from one that goes in circles: objective, context, constraints, expected format",
   "Ce qui ne se délègue pas, et comment le dire à son équipe": "What is never delegated, and how to say it to your team",
   "Ce qui n’est pas proposé, et pourquoi": "What is not proposed, and why",
@@ -51,11 +48,6 @@
   "Une personne dont la cible est # n’a pas besoin du niveau #. Les formations écartées pour ce motif sont rendues, repliées, avec la raison de leur écart — et là où le catalogue n’atteint pas la cible, le besoin est déclaré NON COUVERT au lieu de disparaître.": "Someone whose target is # does not need level #. Courses set aside for that reason are shown, collapsed, with the reason they were set aside — and where the catalogue does not reach the target, the need is declared NOT COVERED instead of vanishing.",
   "Utilisateurs quotidiens, référents IA, équipes métier déjà sensibilisées": "Daily users, AI referents, business teams already briefed",
   "Vérifier : les faits, la cohérence interne, ce qui exige une source, et ce qu'on ne peut pas vérifier": "Checking: the facts, internal consistency, what requires a source, and what cannot be checked",
-  "au niveau": "at level",
-  "aucune exigence": "no requirement",
-  "commandée par": "set by",
-  "du catalogue": "from the catalogue",
-  "formation(s) du catalogue écartée(s)": "catalogue course(s) set aside",
   "proposition calculée sur des listes incomplètes.": "proposal computed from incomplete lists."
  }
 }

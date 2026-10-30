@@ -1,18 +1,12 @@
 {
  "_lot": "97-formations-securite-et-pratique-avancee",
- "_mots": 728,
+ "_mots": 768,
  "_pages": [
   "_js",
   "_routes"
  ],
  "_rubrique": "_js",
  "bloc": {
-  "Départ déclaré ·": {
-   "en": "Declared start ·"
-  },
-  "Niveau visé ·": {
-   "en": "Target level ·"
-  },
   "Vous avez demandé :": {
    "en": "You requested:"
   },
@@ -44,9 +38,6 @@
   },
   "Ce que le catalogue ne couvre pas": {
    "en": "What the catalogue does not cover"
-  },
-  "Ce qui comble l’écart —": {
-   "en": "What closes the gap —"
   },
   "Ce qui distingue une demande qui aboutit d'une demande qui tourne : objectif, contexte, contraintes, format attendu": {
    "en": "What separates a request that lands from one that goes in circles: objective, context, constraints, expected format"
@@ -149,21 +140,6 @@
   },
   "Vérifier : les faits, la cohérence interne, ce qui exige une source, et ce qu'on ne peut pas vérifier": {
    "en": "Checking: the facts, internal consistency, what requires a source, and what cannot be checked"
-  },
-  "au niveau": {
-   "en": "at level"
-  },
-  "aucune exigence": {
-   "en": "no requirement"
-  },
-  "commandée par": {
-   "en": "set by"
-  },
-  "du catalogue": {
-   "en": "from the catalogue"
-  },
-  "formation(s) du catalogue écartée(s)": {
-   "en": "catalogue course(s) set aside"
   },
   "proposition calculée sur des listes incomplètes.": {
    "en": "proposal computed from incomplete lists."

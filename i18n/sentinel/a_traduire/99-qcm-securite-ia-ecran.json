@@ -1,0 +1,174 @@
+{
+ "_lot": "99-qcm-securite-ia-ecran",
+ "_mots": 773,
+ "_pages": [
+  "_js",
+  "qcm-ia"
+ ],
+ "_rubrique": "_js",
+ "bloc": {},
+ "texte": {
+  "% de bonnes réponses.": {
+   "en": "% correct answers."
+  },
+  "Aucune médaille sur ce passage : le premier palier demande": {
+   "en": "No medal on this attempt: the first tier requires"
+  },
+  "Aucune réponse, aucun score et aucun nom ne remontent au serveur : la correction a lieu chez vous, et la progression est gardée par votre seul navigateur. Un relevé nominatif de ce que chaque collaborateur ignore en sécurité serait, à lui seul, le premier problème de sécurité du dispositif. Le revers est assumé : effacer les données du site efface la progression.": {
+   "en": "No answer, no score and no name is sent to the server: grading happens on your side, and progress is kept by your browser alone. A named record of what each employee does not know about security would, on its own, be the set-up’s first security problem. The downside is accepted: clearing the site’s data clears your progress."
+  },
+  "Banque, finance et assurance": {
+   "en": "Banking, finance and insurance"
+  },
+  "CETTE QUESTION": {
+   "en": "THIS QUESTION"
+  },
+  "Ce que ce QCM est, et ce qu’il n’est pas": {
+   "en": "What this quiz is, and what it is not"
+  },
+  "Ce que les équipes reconnaissent déjà": {
+   "en": "What the teams already recognise"
+  },
+  "Choisissez un niveau — débutant, intermédiaire, expérimenté, expert. Répondez au clavier (A, B, C, D) ou à la souris. La correction s’ouvre immédiatement : pourquoi la bonne réponse l’est, pourquoi chacune des autres ne l’est pas, les référentiels cités, et les gestes à mettre en place. Un indice est disponible avant de répondre.": {
+   "en": "Choose a level — beginner, intermediate, experienced, expert. Answer with the keyboard (A, B, C, D) or the mouse. The correction opens immediately: why the right answer is right, why each of the others is not, the frameworks cited, and the measures to put in place. A hint is available before you answer."
+  },
+  "Commencer le niveau →": {
+   "en": "Start the level →"
+  },
+  "Débutant demande de reconnaître la menace ; intermédiaire, de savoir quel contrôle s’applique et où ; expérimenté, d’arbitrer sous contrainte réglementaire ; expert, de savoir ce qui casse quand deux contrôles se contredisent. Échouer à l’expert quand on emploie un assistant au quotidien n’est pas un échec : ce niveau n’est pas écrit pour ce rôle.": {
+   "en": "Beginner asks you to recognise the threat; intermediate, to know which control applies and where; experienced, to make the call under regulatory pressure; expert, to know what breaks when two controls contradict each other. Failing the expert level when you use an assistant day to day is not a failure: that level is not written for that role."
+  },
+  "En pratique : ce qu’on met en place": {
+   "en": "In practice: what you put in place"
+  },
+  "Faites passer le QCM de sécurité de l’IA au niveau qui correspond au rôle de chacun, et regardez le profil par domaine plutôt que le score : menaces des modèles, agents et outils, données et secret, réglementation, gouvernance, fraude.": {
+   "en": "Have each person take the AI security quiz at the level matching their role, and look at the profile by domain rather than the score: model threats, agents and tools, data and secrecy, regulation, governance, fraud."
+  },
+  "La banque de questions n’a pas pu être chargée. Rechargez la page ; si le problème persiste, le service est indisponible.": {
+   "en": "The question bank could not be loaded. Reload the page; if the problem persists, the service is unavailable."
+  },
+  "La bonne réponse :": {
+   "en": "The right answer:"
+  },
+  "La part des questions réussies à leur dernier passage, domaine par domaine, tous niveaux confondus. Le domaine le plus bas désigne la formation à prendre en premier — c’est le référentiel de compétences qui en donne le niveau attendu.": {
+   "en": "The share of questions answered correctly on their last attempt, domain by domain, all levels combined. The lowest domain points to the training to take first — the competency framework gives the level expected."
+  },
+  "Le domaine le plus faible désigne la formation à prendre en premier — et il la désigne sur une réponse observée, non sur une déclaration.": {
+   "en": "The weakest domain points to the training to take first — and it does so on an observed answer, not on a declaration."
+  },
+  "Le rang d’ensemble s’ouvre quand les quatre niveaux ont chacun une médaille. Niveaux encore sans médaille :": {
+   "en": "The overall rank unlocks when each of the four levels has a medal. Levels still without a medal:"
+  },
+  "Les médailles": {
+   "en": "The medals"
+  },
+  "Les médailles sont des seuils, pas des récompenses": {
+   "en": "Medals are thresholds, not rewards"
+  },
+  "Les quatre niveaux ne mesurent pas la même chose": {
+   "en": "The four levels do not measure the same thing"
+  },
+  "Les quatre niveaux sont terminés. Votre rang se lit sur la médaille la plus basse obtenue, jamais sur la moyenne : c’est le socle qui protège l’établissement au quotidien.": {
+   "en": "All four levels are done. Your rank is read from the lowest medal obtained, never from the average: it is the foundation that protects the institution day to day."
+  },
+  "Les trois référentiels OWASP — où se situe cette question": {
+   "en": "The three OWASP frameworks — where this question sits"
+  },
+  "L’obligation de littératie en IA de l’article # du règlement (UE) #/# se démontre par un dispositif de formation tracé et adapté aux rôles. Ce QCM en est une pièce utile, jamais la pièce. Pour le niveau attendu d’une personne et la formation qui l’atteint, passez par le référentiel de compétences.": {
+   "en": "The AI literacy obligation in Article # of Regulation (EU) #/# is demonstrated through a documented training programme suited to each role. This quiz is a useful exhibit of it, never the exhibit. For the level expected of a person and the training that reaches it, use the competency framework."
+  },
+  "Médaille de ce passage :": {
+   "en": "Medal for this attempt:"
+  },
+  "Médaille gagnée sur ce passage :": {
+   "en": "Medal earned on this attempt:"
+  },
+  "Par domaine, sur ce passage": {
+   "en": "By domain, on this attempt"
+  },
+  "Passer à la question suivante →": {
+   "en": "Go to the next question →"
+  },
+  "Pourquoi les autres réponses sont fausses": {
+   "en": "Why the other answers are wrong"
+  },
+  "QCM Sécurité de l’IA": {
+   "en": "AI security quiz"
+  },
+  "Questions réussies à leur dernier passage :": {
+   "en": "Questions answered correctly on their last attempt:"
+  },
+  "RIEN NE REMONTE : les réponses restent dans le navigateur de chacun, et c’est voulu. Pour suivre une équipe, passez par le dispositif de formation et son émargement. Et n’employez pas un score comme preuve de littératie : l’article # attend un dispositif tracé, pas un résultat de questionnaire.": {
+   "en": "NOTHING IS SENT BACK: answers stay in each person’s browser, by design. To track a team, go through the training programme and its attendance records. And do not use a score as proof of literacy: Article # expects a documented programme, not a questionnaire result."
+  },
+  "Rang à ouvrir": {
+   "en": "Rank still to unlock"
+  },
+  "Recommencer ce niveau": {
+   "en": "Retake this level"
+  },
+  "Recommencer le niveau →": {
+   "en": "Retake the level →"
+  },
+  "Revue complète": {
+   "en": "Full review"
+  },
+  "Rien ne quitte votre navigateur": {
+   "en": "Nothing leaves your browser"
+  },
+  "Référentiel de compétences →": {
+   "en": "Competency framework →"
+  },
+  "Une médaille se gagne sur le taux de bonnes réponses d’un niveau, en un passage. En dessous du premier palier, le niveau est à reprendre.": {
+   "en": "A medal is earned on a level’s rate of correct answers, in a single attempt. Below the first tier, the level is to be retaken."
+  },
+  "Une médaille se gagne sur un taux de bonnes réponses dans un niveau. Le palier le plus bas demande déjà la majorité des réponses, et le plus haut demande le sans-faute — en sécurité, la question manquée est précisément celle qui ouvre l’incident. Le rang d’ensemble se lit sur la médaille la plus BASSE des quatre niveaux, jamais sur leur moyenne.": {
+   "en": "A medal is earned on a rate of correct answers within a level. The lowest tier already requires most of the answers, and the highest requires a flawless run — in security, the question you miss is precisely the one that opens the incident. The overall rank is read from the LOWEST medal across the four levels, never from their average."
+  },
+  "VOTRE CHOIX": {
+   "en": "YOUR CHOICE"
+  },
+  "Voir le bilan →": {
+   "en": "See the results →"
+  },
+  "Voir un indice": {
+   "en": "Show a hint"
+  },
+  "Votre meilleur passage reste gardé.": {
+   "en": "Your best attempt is kept."
+  },
+  "Votre profil par domaine": {
+   "en": "Your profile by domain"
+  },
+  "de la banque": {
+   "en": "of the bank"
+  },
+  "questions dans ce niveau": {
+   "en": "questions in this level"
+  },
+  "questions · votre meilleur passage :": {
+   "en": "questions · your best attempt:"
+  },
+  "questions, quatre niveaux, une médaille par niveau": {
+   "en": "questions, four levels, one medal per level"
+  },
+  "· Bilan du passage": {
+   "en": "· Attempt results"
+  },
+  "· nombre de passages :": {
+   "en": "· number of attempts:"
+  },
+  "À mesurer ce que vous RECONNAISSEZ, sur des scènes prises dans la banque, la finance et l’assurance : injection par un courriel client, agent qui passe une écriture, voix clonée sur un ordre de virement, modèle de fraude contourné, pièce de sinistre fabriquée. Chaque réponse s’explique, et se termine par ce qu’on met en place lundi matin.": {
+   "en": "To measure what you RECOGNISE, on scenes taken from banking, finance and insurance: injection through a customer e-mail, an agent posting an entry, a cloned voice on a payment order, an evaded fraud model, a fabricated claims document. Every answer is explained, and ends with what you put in place on Monday morning."
+  },
+  "← Hub du QCM": {
+   "en": "← Quiz hub"
+  },
+  "✓ Bonne réponse": {
+   "en": "✓ Correct answer"
+  },
+  "✕ Réponse incorrecte": {
+   "en": "✕ Wrong answer"
+  }
+ }
+}
