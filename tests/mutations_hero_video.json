@@ -1,0 +1,64 @@
+{
+ "_pourquoi": "Animation du heros de l'accueil : chaque regle textuelle de tests/test_hero_video.py doit tomber sur SON defaut. LES REGLES QUI DECODENT LA VIDEO N'ONT PAS DE MUTATION ICI, et c'est dit : une mutation de texte ne peut pas reintroduire des images. La regle de la scene a ete eprouvee sur l'original, ou elle reconnait 66 images de la carte bancaire (415 a 480), contre 0 dans la video publiee.",
+ "cibles": [
+  "tests/test_hero_video.py"
+ ],
+ "mutations": [
+  {
+   "nom": "la vidéo perd « muted » : elle ne démarrerait nulle part",
+   "fichier": "index.html",
+   "avant": "             autoplay muted loop playsinline preload=\"metadata\"",
+   "apres": "             autoplay loop playsinline preload=\"metadata\"",
+   "regle": "test_la_video_est_muette_en_boucle_inline_et_cite_des_fichiers_qui_existent"
+  },
+  {
+   "nom": "la hauteur n'est plus réservée",
+   "fichier": "index.html",
+   "avant": "<video class=\"hero-video-v\" id=\"hero-video-lecteur\" width=\"720\" height=\"900\"",
+   "apres": "<video class=\"hero-video-v\" id=\"hero-video-lecteur\"",
+   "regle": "test_la_video_est_muette_en_boucle_inline_et_cite_des_fichiers_qui_existent"
+  },
+  {
+   "nom": "un titre passe au-dessus de l'animation",
+   "fichier": "index.html",
+   "avant": "    <!-- L'ANIMATION « SECURITY ADVISOR — BANQUE ».",
+   "apres": "    <h1 class=\"hero-main-title\">Titre</h1>\n    <!-- L'ANIMATION « SECURITY ADVISOR — BANQUE ».",
+   "regle": "test_l_animation_tient_la_place_du_bandeau_en_tete_du_heros"
+  },
+  {
+   "nom": "le mouvement réduit n'est plus respecté",
+   "fichier": "index.page.js",
+   "avant": "  if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches){",
+   "apres": "  if(false){",
+   "regle": "test_elle_se_met_en_PAUSE_et_respecte_le_mouvement_reduit"
+  },
+  {
+   "nom": "le retour à l'écran relance une animation qu'on a arrêtée",
+   "fichier": "index.page.js",
+   "avant": "        if(!voulue) return;\n",
+   "apres": "",
+   "regle": "test_elle_se_met_en_PAUSE_et_respecte_le_mouvement_reduit"
+  },
+  {
+   "nom": "la vidéo est servie par une route bridée",
+   "fichier": "app.py",
+   "avant": "@app.route('/demo.mp4')",
+   "apres": "@app.route('/hero-security-advisor.mp4')\n@rate_limit(limit=5, window=60)\ndef hero_video():\n    return send_from_directory('.', 'hero-security-advisor.mp4', mimetype='video/mp4')\n\n@app.route('/demo.mp4')",
+   "regle": "test_la_video_est_servie_comme_un_FICHIER_et_non_par_une_route_bridee"
+  },
+  {
+   "nom": "le texte de remplacement redit le montant coupé",
+   "fichier": "index.page.js",
+   "avant": "\"hero.video.desc\":\"Animation « Security Advisor — Banque » : votre banque déploie l’IA, qui la sécurise ?",
+   "apres": "\"hero.video.desc\":\"Animation « Security Advisor — Banque » : une référence bancaire de 600 k€, votre banque déploie l’IA, qui la sécurise ?",
+   "regle": "test_ce_que_montre_l_animation_est_ECRIT_dans_les_trois_langues[fr]"
+  },
+  {
+   "nom": "la description n'est plus reliée à la vidéo",
+   "fichier": "index.html",
+   "avant": "poster=\"/hero-security-advisor.jpg\" aria-describedby=\"hero-video-desc\">",
+   "apres": "poster=\"/hero-security-advisor.jpg\">",
+   "regle": "test_ce_que_montre_l_animation_est_ECRIT_dans_les_trois_langues[fr]"
+  }
+ ]
+}
