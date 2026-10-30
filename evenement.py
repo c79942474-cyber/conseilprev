@@ -1,12 +1,17 @@
 # -*- coding: utf-8 -*-
 """LES FAITS DE L'ÉVÉNEMENT, ÉCRITS UNE FOIS.
 
-POURQUOI CE MODULE EXISTE. L'invitation à la formation du 9 novembre 2026 est
-servie à DEUX endroits : le bandeau en tête de l'accueil (`index.html`) et la
-page d'invitation (`formation-ia.html`), celle qu'on partage par courriel ou
-sur LinkedIn. Deux copies d'un même programme divergent — ce dépôt a déjà payé
-ce défaut-là, et son commentaire sur `/enveloppe` le dit en toutes lettres :
+POURQUOI CE MODULE EXISTE. L'invitation à la formation du 9 novembre 2026 a
+été servie à DEUX endroits : un bandeau en tête de l'accueil et la page
+d'invitation (`formation-ia.html`), celle qu'on partage par courriel ou sur
+LinkedIn. Deux copies d'un même programme divergent — ce dépôt a déjà payé ce
+défaut-là, et son commentaire sur `/enveloppe` le dit en toutes lettres :
 « c'est toujours l'exemplaire qu'on oublie de corriger qui reste en ligne ».
+
+LE BANDEAU DE L'ACCUEIL A ÉTÉ RETIRÉ, remplacé par l'animation « Security
+Advisor — Banque ». Il reste deux exemplaires des faits : la page, écrite à la
+main, et `evenement.js`, que `outils/engendrer_invitation.py` produit d'ici
+pour le fichier d'agenda de la page. Les règles gardent leur accord.
 
 CE QUE CE MODULE N'EST PAS. Il ne peint aucun écran. Les deux copies sont du
 HTML écrit à la main, et c'est voulu : une page d'invitation partagée doit

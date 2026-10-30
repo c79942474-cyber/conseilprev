@@ -5,27 +5,6 @@
  ],
  "mutations": [
   {
-   "nom": "M1 — une étape du programme change dans le bandeau seul",
-   "fichier": "index.html",
-   "avant": "<time datetime=\"2026-11-09T15:45+01:00\">15:45</time>",
-   "apres": "<time datetime=\"2026-11-09T15:40+01:00\">15:40</time>",
-   "regle": "test_les_deux_copies_portent_la_meme_etape[15:45]"
-  },
-  {
-   "nom": "M2 — le bandeau perd la condition de l'autre Novotel",
-   "fichier": "index.html",
-   "avant": "<li data-i18n=\"inv.cond2\">Si besoin, l'événement pourra se dérouler dans un autre Novotel à Paris, à une autre date à définir.</li>",
-   "apres": "<li data-i18n=\"inv.cond2\">Le lieu est définitif.</li>",
-   "regle": "test_le_bandeau_de_l_accueil_porte_le_fait[condition-autre-novotel]"
-  },
-  {
-   "nom": "M3 — le titre du bandeau cesse d'être un lien",
-   "fichier": "index.html",
-   "avant": "<h2 class=\"inv-titre\" id=\"inv-titre\"><a class=\"inv-titre-lien\" href=\"/formation-ia\">",
-   "apres": "<h2 class=\"inv-titre\" id=\"inv-titre\"><a class=\"inv-titre-lien\" href=\"/formations\">",
-   "regle": "test_le_titre_du_bandeau_est_le_lien_vers_la_page"
-  },
-  {
    "nom": "M4 — la borne de fin du .ics part d'une heure",
    "fichier": "evenement.js",
    "avant": "    fin: Date.UTC(2026, 10, 9, 17, 0, 0),",
@@ -38,20 +17,6 @@
    "avant": "    '/formation-ia':      'formation-ia.html',",
    "apres": "",
    "regle": "test_la_page_est_publiee_par_le_serveur"
-  },
-  {
-   "nom": "M6 — index.html cesse de charger le script partagé",
-   "fichier": "index.html",
-   "avant": "<script src=\"/evenement.js\" defer></script>\n<script src=\"/index.page.js\" defer></script>",
-   "apres": "<script src=\"/index.page.js\" defer></script>",
-   "regle": "test_les_deux_pages_chargent_le_script_partage[index.html]"
-  },
-  {
-   "nom": "M7 — un lien d'inscription du bandeau change d'objet",
-   "fichier": "index.html",
-   "avant": "<a class=\"inv-pdf\" href=\"/formation-ia\"><span data-i18n=\"inv.page\">",
-   "apres": "<a class=\"inv-pdf\" href=\"mailto:christophe.cerf@outlook.com?subject=Autre\"><span data-i18n=\"inv.page\">",
-   "regle": "test_le_bandeau_offre_aussi_le_lien_en_toutes_lettres"
   },
   {
    "nom": "M8 — la page engendrée est modifiée à la main (couleur du titre)",
@@ -73,6 +38,13 @@
    "avant": "  GUIDES[\"/formation-ia\"] = {",
    "apres": "  GUIDES[\"/formation-ia-autre\"] = {",
    "regle": "test_la_page_a_son_guide"
+  },
+  {
+   "nom": "l'accueil recharge le script de l'invitation, reste du bandeau retiré",
+   "fichier": "index.html",
+   "avant": "<script src=\"/index.page.js",
+   "apres": "<script src=\"/evenement.js\" defer></script>\n<script src=\"/index.page.js",
+   "regle": "test_l_accueil_ne_garde_AUCUN_reste_du_bandeau"
   }
  ]
 }

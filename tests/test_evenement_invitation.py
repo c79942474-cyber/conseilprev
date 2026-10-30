@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
-"""L'INVITATION EXISTE À DEUX ENDROITS, ET ILS NE DOIVENT PAS DIVERGER.
+"""L'INVITATION ET SA SOURCE NE DOIVENT PAS DIVERGER.
 
 CE QUE CES RÈGLES GARDENT. L'après-midi de formation du 9 novembre 2026 est
-servie par le bandeau en tête de l'accueil ET par la page `/formation-ia`,
-celle qu'on partage. Un horaire corrigé d'un côté et pas de l'autre ne se
-signalerait par rien — personne ne relit deux pages pour comparer une heure.
-`evenement.py` est donc la source, et ces règles refusent qu'une des deux
-copies s'en écarte.
+servie par la page `/formation-ia`, celle qu'on partage, et `evenement.py` en
+est la source. Un horaire corrigé d'un côté et pas de l'autre ne se
+signalerait par rien : ces règles refusent que la page s'en écarte — la date,
+les bornes horaires, le lieu, les neuf étapes, les conditions, l'adresse
+d'inscription, le lien du PDF.
 
-CE QU'ELLES NE GARDENT PAS, ET POURQUOI. Elles ne comparent pas la MISE EN
-PAGE : le bandeau est un billet compact, la page est une invitation complète
-avec son pitch. Ce sont deux présentations d'un même fait, et c'est voulu.
-Ce qui est mesuré, ce sont les FAITS : la date, les bornes horaires, le lieu,
-les neuf étapes, les conditions, l'adresse d'inscription, le lien du PDF.
+LE BANDEAU DE L'ACCUEIL, SECONDE COPIE, A ÉTÉ RETIRÉ — remplacé par
+l'animation « Security Advisor — Banque » (tests/test_hero_video.py). Les
+règles qui le comparaient à la page sont parties avec lui ; une seule reste,
+et elle refuse qu'un bandeau à moitié retiré survive en tête de l'accueil.
 """
 import html as _html
 import io
@@ -54,13 +53,6 @@ def _texte(src):
 
 TEXTE_PAGE = _texte(PAGE)
 
-#: LE BANDEAU SEUL, source comprise. L'accueil entier porte d'autres liens
-#: vers la même adresse — « Demande offre PDF », le contact du pied — qui ne
-#: sont pas des inscriptions : une règle qui lirait toute la page les
-#: compterait comme des liens d'inscription abîmés.
-_D = ACCUEIL.index('<section class="inv"')
-BANDEAU = ACCUEIL[_D:ACCUEIL.index('</section>', _D)]
-TEXTE_BANDEAU = _texte(BANDEAU)
 
 
 # ══════════════════════════════════════════════════════════════════════════
@@ -117,79 +109,46 @@ def test_la_page_porte_le_fait(fait):
         % v[:70])
 
 
-@pytest.mark.parametrize('fait', FAITS)
-def test_le_bandeau_de_l_accueil_porte_le_fait(fait):
-    v = fait()
-    assert v in TEXTE_BANDEAU, (
-        "le bandeau de l'accueil ne dit pas « %s » : il a dérivé de "
-        "evenement.py, que la page d'invitation suit" % v[:70])
-
-
 #  L'IDENTIFIANT DE CHAQUE CAS EST L'HEURE, et rien d'autre : pytest
 #  fabriquerait sinon un nom à partir des quatre champs, intitulé et
 #  détail compris — illisible dans un rapport, et instable dès qu'on
 #  corrige une virgule.
 @pytest.mark.parametrize('heure,titre,detail,module', ev.PROGRAMME,
                          ids=[h for h, _, _, _ in ev.PROGRAMME])
-def test_les_deux_copies_portent_la_meme_etape(heure, titre, detail, module):
+def test_la_page_porte_chaque_etape(heure, titre, detail, module):
     """LES NEUF ÉTAPES, HEURE PAR HEURE. C'est le contenu le plus long, donc
     celui qu'on corrige d'un seul côté."""
-    for nom, txt in (('/formation-ia', TEXTE_PAGE),
-                     ("le bandeau de l'accueil", TEXTE_BANDEAU)):
-        assert heure in txt, '%s : %s absent' % (nom, heure)
-        assert titre in txt, '%s : « %s » absent' % (nom, titre)
-        if detail:
-            assert detail in txt, '%s : le détail de %s est absent' % (nom, heure)
+    assert heure in TEXTE_PAGE, '/formation-ia : %s absent' % heure
+    assert titre in TEXTE_PAGE, '/formation-ia : « %s » absent' % titre
+    if detail:
+        assert detail in TEXTE_PAGE, '/formation-ia : le détail de %s est absent' % heure
 
 
-def test_aucune_des_deux_copies_n_ajoute_une_etape():
-    """Une étape de plus d'un côté est une divergence autant qu'une de moins,
-    et elle ne se verrait pas en cherchant ce que le module déclare."""
+def test_la_page_n_ajoute_aucune_etape():
+    """Une étape de plus est une divergence autant qu'une de moins, et elle ne
+    se verrait pas en cherchant ce que le module déclare."""
     attendues = len(ev.PROGRAMME)
     assert PAGE.count('<li class="iv-mod">') + PAGE.count('<li class="iv-pause">') \
         + PAGE.count('<li><time') == attendues, \
         '/formation-ia ne porte pas %d étapes' % attendues
-    assert len(re.findall(r'<li[^>]*><time datetime="2026-11-09', ACCUEIL)) == attendues, \
-        "le bandeau de l'accueil ne porte pas %d étapes" % attendues
+
+
+def test_l_accueil_ne_garde_AUCUN_reste_du_bandeau():
+    """UN BANDEAU À MOITIÉ RETIRÉ EST PIRE QU'UN BANDEAU. Le retrait touchait
+    le HTML, sa feuille de style, son script, ses cinquante-six clés de
+    traduction et le chargement de /evenement.js : un morceau oublié laisse
+    une invitation fantôme — un bouton d'agenda sans bandeau, un libellé
+    traduit que plus rien n'affiche, un script chargé pour rien."""
+    for reste in ('id="inv-bandeau"', 'class="inv-billet"', '.inv-billet{',
+                  '/evenement.js', 'datetime="2026-11-09'):
+        assert reste not in ACCUEIL, "l'accueil garde « %s » du bandeau" % reste
+    for reste in ("getElementById('inv-bandeau')", '"inv.titre"', 'CPEvenement'):
+        assert reste not in ACCUEIL_JS, "index.page.js garde « %s » du bandeau" % reste
 
 
 # ══════════════════════════════════════════════════════════════════════════
-#  3. LE LIEN : LE BANDEAU MÈNE À LA PAGE, ET LA PAGE EST SERVIE
+#  3. LA PAGE EST SERVIE
 # ══════════════════════════════════════════════════════════════════════════
-
-def test_le_titre_du_bandeau_est_le_lien_vers_la_page():
-    """UN BANDEAU NE SE PARTAGE PAS : il ne vit qu'en tête de l'accueil, et il
-    disparaît le soir de la formation. Sans ce lien, l'adresse qu'on colle
-    dans un courriel n'existe pour personne."""
-    m = re.search(r'<h2 class="inv-titre" id="inv-titre">\s*<a[^>]*href="([^"]+)"',
-                  ACCUEIL)
-    assert m, "le titre du bandeau n'est plus un lien"
-    assert m.group(1) == ev.PAGE, m.group(1)
-
-
-def test_le_bandeau_offre_aussi_le_lien_en_toutes_lettres():
-    """Le titre-lien ne se devine pas au survol sur un téléphone : un second
-    lien, nommé, vit au pied du programme déplié."""
-    liens = re.findall(r'href="%s"' % re.escape(ev.PAGE), ACCUEIL)
-    assert len(liens) >= 2, (
-        "l'accueil ne mène à %s qu'une fois (%d) : le lien nommé a disparu"
-        % (ev.PAGE, len(liens)))
-    assert 'data-i18n="inv.page"' in ACCUEIL, \
-        "le lien nommé n'a plus de libellé traduisible"
-
-
-@pytest.mark.parametrize('langue', ['fr', 'en', 'de'])
-def test_le_libelle_du_lien_existe_dans_les_trois_langues(langue):
-    def gabarit(t):
-        return re.sub(r'\\(?:u([0-9a-fA-F]{4})|(.))',
-                      lambda m: (chr(int(m.group(1), 16)) if m.group(1)
-                                 else {'n': '\n', 't': '\t', 'r': '\r'}
-                                 .get(m.group(2), m.group(2))), t)
-    m = re.search(r'\n  %s:JSON\.parse\(`(.*?)`\)' % langue, ACCUEIL_JS, re.S)
-    assert m, langue
-    d = json.loads(gabarit(m.group(1)))
-    assert d.get('inv.page'), "%s : pas de libellé pour inv.page" % langue
-
 
 def test_la_page_est_publiee_par_le_serveur():
     """Un lien vers une adresse que le serveur ne publie pas rend 404, et le
@@ -230,7 +189,7 @@ def test_l_inscription_mene_au_lien_du_pdf_des_deux_cotes():
     #  TOUS LES LIENS, PAS « AU MOINS UN ». Mesuré par la mutation M7 : la
     #  page porte trois fois l'adresse d'inscription, et n'en changer qu'une
     #  laissait passer une règle qui se contentait d'une occurrence.
-    for nom, src in (('/formation-ia', PAGE), ("le bandeau de l'accueil", BANDEAU)):
+    for nom, src in (('/formation-ia', PAGE),):
         liens = re.findall(r'href="(mailto:[^"]*%s[^"]*)"'
                            % re.escape(ev.INSCRIPTION), src)
         assert liens, "%s n'offre plus aucun lien d'inscription" % nom
@@ -244,7 +203,7 @@ def test_le_pdf_de_l_invitation_est_sur_le_disque_et_lie():
     chemin = os.path.join(ICI, ev.PDF.lstrip('/'))
     assert os.path.exists(chemin), "le PDF de l'invitation a disparu : %s" % ev.PDF
     assert io.open(chemin, 'rb').read(5) == b'%PDF-', "ce n'est pas un PDF"
-    assert ev.PDF in PAGE and ev.PDF in ACCUEIL
+    assert ev.PDF in PAGE
 
 
 def test_les_donnees_structurees_disent_les_memes_bornes():
@@ -265,34 +224,23 @@ def test_les_donnees_structurees_disent_les_memes_bornes():
 #  5. UN SEUL FABRICANT DE FICHIER D'AGENDA
 # ══════════════════════════════════════════════════════════════════════════
 
-def test_le_bandeau_ne_fabrique_plus_son_propre_ics():
-    """LE DÉFAUT QUE CETTE RÈGLE EMPÊCHE DE REVENIR. Le bandeau fabriquait son
-    .ics lui-même ; la page d'invitation en aurait fait un second. Deux
-    fabricants finissent par poser deux séances différentes — un horaire
-    corrigé d'un côté, pas de l'autre, et rien pour s'en apercevoir avant que
-    la salle soit à moitié vide."""
+def test_l_accueil_ne_fabrique_aucun_ics():
+    """LE DÉFAUT QUE CETTE RÈGLE EMPÊCHE DE REVENIR. Le bandeau de l'accueil
+    fabriquait son .ics lui-même, à côté de celui de la page : deux fabricants
+    finissent par poser deux séances différentes. Le bandeau est parti ; la
+    règle reste, parce qu'un retour de l'invitation sur l'accueil se ferait
+    d'abord en recopiant un fabricant."""
     for marqueur in ('BEGIN:VCALENDAR', 'function plier', 'DTSTART:'):
         assert marqueur not in ACCUEIL_JS, (
             "index.page.js refabrique un .ics (« %s ») : il doit passer par "
             "/evenement.js" % marqueur)
-    assert 'CPEvenement' in ACCUEIL_JS, \
-        "le bandeau n'utilise pas le fabricant partagé"
 
 
-@pytest.mark.parametrize('page', ['index.html', 'formation-ia.html'])
-def test_les_deux_pages_chargent_le_script_partage(page):
-    """Un écran qui s'en sert sans le charger masque son bouton d'agenda : le
-    repli existe, mais il ne doit jamais servir.
-
-    LE PARAMÈTRE EST LE NOM DU FICHIER, PAS SON CONTENU : passer le HTML
-    donnait un identifiant de test de trois cent mille caractères, que ni un
-    rapport ni un banc de mutations ne savent nommer."""
-    fichier = {'index.html': ACCUEIL, 'formation-ia.html': PAGE}[page]
-    assert '<script src="/evenement.js" defer></script>' in fichier, \
-        "%s ne charge pas /evenement.js" % page
-    if page == 'index.html':
-        assert fichier.index('/evenement.js') < fichier.index('/index.page.js'), \
-            "index.html charge /evenement.js APRÈS index.page.js"
+def test_la_page_charge_le_script_partage():
+    """La page s'en sert pour son bouton d'agenda : sans lui, le repli
+    existe, mais il ne doit jamais servir."""
+    assert '<script src="/evenement.js" defer></script>' in PAGE, \
+        "formation-ia.html ne charge pas /evenement.js"
 
 
 def test_le_script_partage_porte_les_bornes_du_module():
