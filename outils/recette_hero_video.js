@@ -1,4 +1,4 @@
-/* RECETTE NAVIGATEUR — L'ANIMATION « SECURITY ADVISOR — BANQUE » DE L'ACCUEIL.
+/* RECETTE NAVIGATEUR — LE BANDEAU « SECURITY ADVISOR — BANQUE » DE L'ACCUEIL.
  *
  * CE QU'ELLE MESURE, ET QU'AUCUNE RÈGLE PYTHON NE PEUT MESURER : que la vidéo
  * JOUE. Les règles de `tests/test_hero_video.py` lisent le HTML, le script,
@@ -11,7 +11,9 @@
  *   §3  le bouton l'arrête, la relance, et son libellé dit ce qu'il fera ;
  *   §4  le libellé suit la langue : en anglais, il est anglais ;
  *   §5  sous `prefers-reduced-motion`, elle ne démarre pas d'elle-même ;
- *   §6  le bandeau du 9 novembre n'est plus là.
+ *   §6  le bandeau du 9 novembre n'est plus là ;
+ *   §7  un clic sur le bandeau ouvre le profil LinkedIn dans un NOUVEL onglet,
+ *       et un clic sur la pause n'ouvre RIEN (le bouton vit hors du lien).
  *
  *   node outils/recette_hero_video.js
  */
@@ -113,12 +115,18 @@ function arreter(s, garder) {
         Object.defineProperty(navigator, 'languages', { get: () => ['fr-FR', 'fr'] });
         Object.defineProperty(navigator, 'plugins', { get: () => ({ length: 3, 0: {}, 1: {}, 2: {} }) });
       });
+      /* LINKEDIN N'EST PAS JOIGNABLE D'ICI, ET CE N'EST PAS LA MESURE : on
+         répond à sa place, et on compte les onglets qui s'ouvrent. */
+      await ctx.route('**://*.linkedin.com/**', (r) => r.fulfill({ status: 200, body: 'profil' }));
+      const onglets = [];
+      ctx.on('page', (p) => onglets.push(p));
       const pg = await ctx.newPage();
+      onglets.length = 0;
       const erreurs = [];
       pg.on('pageerror', (e) => erreurs.push(String(e).slice(0, 200)));
       await pg.goto(serveur.base + '/', { waitUntil: 'load' });
       await pg.waitForTimeout(2500);
-      return { ctx, pg, erreurs };
+      return { ctx, pg, erreurs, onglets };
     };
     const etat = (pg) => pg.evaluate(() => {
       const v = document.getElementById('hero-video-lecteur');
@@ -172,6 +180,29 @@ function arreter(s, garder) {
     }
     if (a.erreurs.length) fautes.push('erreurs JavaScript : ' + a.erreurs.join(' | '));
 
+    /* ── §7. LE CLIC MÈNE À LINKEDIN, LA PAUSE NON ───────────────────── */
+    const avantPause = a.onglets.length;
+    await a.pg.click('#hero-video-btn');
+    await a.pg.waitForTimeout(500);
+    const parPause = a.onglets.length - avantPause;
+    const box = await a.pg.locator('#hero-video-lien').boundingBox();
+    const [onglet] = await Promise.all([
+      a.ctx.waitForEvent('page', { timeout: 8000 }).catch(() => null),
+      a.pg.mouse.click(box.x + box.width * 0.5, box.y + box.height * 0.5),
+    ]);
+    if (onglet) await onglet.waitForLoadState('domcontentloaded').catch(() => {});
+    const ou = onglet ? onglet.url() : null;
+    const ici = a.pg.url();
+    if (parPause !== 0) {
+      fautes.push('§7 : le bouton de pause ouvre un onglet (' + parPause + ')');
+    } else if (ou !== 'https://www.linkedin.com/in/cerfchristophe' || /linkedin/.test(ici)) {
+      fautes.push('§7 : le clic sur le bandeau ne mène pas au profil dans un nouvel onglet — onglet '
+                  + ou + ', page ' + ici);
+    } else {
+      dits.push('§7 — un clic au centre du bandeau ouvre ' + ou + ' dans un nouvel onglet ; '
+                + 'la pause n\'en ouvre aucun');
+    }
+
     /* ── §6. LE BANDEAU N'EST PLUS LÀ ────────────────────────────────── */
     const reste = await a.pg.evaluate(() => ({
       bandeau: !!document.getElementById('inv-bandeau'),
@@ -208,5 +239,5 @@ function arreter(s, garder) {
     fautes.forEach((f) => console.log('  ✗ ' + f));
     process.exit(1);
   }
-  console.log('\n✓ Animation de l\'accueil : tout ce qui est mesuré tient.');
+  console.log('\n✓ Bandeau de l\'accueil : tout ce qui est mesuré tient.');
 })();

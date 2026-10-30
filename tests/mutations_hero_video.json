@@ -1,5 +1,5 @@
 {
- "_pourquoi": "Animation du heros de l'accueil : chaque regle textuelle de tests/test_hero_video.py doit tomber sur SON defaut. LES REGLES QUI DECODENT LA VIDEO N'ONT PAS DE MUTATION ICI, et c'est dit : une mutation de texte ne peut pas reintroduire des images. La regle de la scene a ete eprouvee sur l'original, ou elle reconnait 66 images de la carte bancaire (415 a 480), contre 0 dans la video publiee.",
+ "_pourquoi": "Bandeau du heros de l'accueil : chaque regle de tests/test_hero_video.py doit tomber sur SON defaut. Les deux regles qui lisent le FORMAT du fichier (dimensions, codec, faststart) n'ont pas de mutation ici : une mutation de texte ne change pas un fichier video. Celle qui lie la video a sa source tombe, elle, des que la chronologie de la source change sans que la video soit refaite (derniere mutation).",
  "cibles": [
   "tests/test_hero_video.py"
  ],
@@ -7,37 +7,58 @@
   {
    "nom": "la vidéo perd « muted » : elle ne démarrerait nulle part",
    "fichier": "index.html",
-   "avant": "             autoplay muted loop playsinline preload=\"metadata\"",
-   "apres": "             autoplay loop playsinline preload=\"metadata\"",
-   "regle": "test_la_video_est_muette_en_boucle_inline_et_cite_des_fichiers_qui_existent"
+   "avant": "               autoplay muted loop playsinline preload=\"metadata\"",
+   "apres": "               autoplay loop playsinline preload=\"metadata\"",
+   "regle": "test_la_video_est_muette_en_boucle_inline_et_reserve_sa_hauteur"
   },
   {
    "nom": "la hauteur n'est plus réservée",
    "fichier": "index.html",
-   "avant": "<video class=\"hero-video-v\" id=\"hero-video-lecteur\" width=\"720\" height=\"900\"",
-   "apres": "<video class=\"hero-video-v\" id=\"hero-video-lecteur\"",
-   "regle": "test_la_video_est_muette_en_boucle_inline_et_cite_des_fichiers_qui_existent"
+   "avant": "id=\"hero-video-lecteur\" width=\"1584\" height=\"396\"",
+   "apres": "id=\"hero-video-lecteur\"",
+   "regle": "test_la_video_est_muette_en_boucle_inline_et_reserve_sa_hauteur"
   },
   {
-   "nom": "un titre passe au-dessus de l'animation",
+   "nom": "la boîte garde le format portrait",
    "fichier": "index.html",
-   "avant": "    <!-- L'ANIMATION « SECURITY ADVISOR — BANQUE ».",
-   "apres": "    <h1 class=\"hero-main-title\">Titre</h1>\n    <!-- L'ANIMATION « SECURITY ADVISOR — BANQUE ».",
-   "regle": "test_l_animation_tient_la_place_du_bandeau_en_tete_du_heros"
+   "avant": ".hero-video-v{display:block;width:100%;height:auto;aspect-ratio:4/1;",
+   "apres": ".hero-video-v{display:block;width:100%;height:auto;aspect-ratio:4/5;",
+   "regle": "test_la_video_est_muette_en_boucle_inline_et_reserve_sa_hauteur"
+  },
+  {
+   "nom": "un titre passe au-dessus du bandeau",
+   "fichier": "index.html",
+   "avant": "    <!-- LE BANDEAU « SECURITY ADVISOR — BANQUE », AU FORMAT LINKEDIN.",
+   "apres": "    <h1 class=\"hero-main-title\">Titre</h1>\n    <!-- LE BANDEAU « SECURITY ADVISOR — BANQUE », AU FORMAT LINKEDIN.",
+   "regle": "test_le_bandeau_tient_la_place_de_l_invitation_en_tete_du_heros"
+  },
+  {
+   "nom": "le bandeau mène à la page entreprise au lieu du profil",
+   "fichier": "index.html",
+   "avant": "id=\"hero-video-lien\" href=\"https://www.linkedin.com/in/cerfchristophe\"",
+   "apres": "id=\"hero-video-lien\" href=\"https://www.linkedin.com/company/conseilprev\"",
+   "regle": "test_le_bandeau_ENTIER_mene_au_profil_LinkedIn_dans_un_nouvel_onglet"
+  },
+  {
+   "nom": "le nouvel onglet garde la main sur la page d'origine",
+   "fichier": "index.html",
+   "avant": "href=\"https://www.linkedin.com/in/cerfchristophe\" target=\"_blank\" rel=\"noopener\">",
+   "apres": "href=\"https://www.linkedin.com/in/cerfchristophe\" target=\"_blank\">",
+   "regle": "test_le_bandeau_ENTIER_mene_au_profil_LinkedIn_dans_un_nouvel_onglet"
   },
   {
    "nom": "le mouvement réduit n'est plus respecté",
    "fichier": "index.page.js",
    "avant": "  if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches){",
    "apres": "  if(false){",
-   "regle": "test_elle_se_met_en_PAUSE_et_respecte_le_mouvement_reduit"
+   "regle": "test_il_se_met_en_PAUSE_et_respecte_le_mouvement_reduit"
   },
   {
-   "nom": "le retour à l'écran relance une animation qu'on a arrêtée",
+   "nom": "le retour à l'écran relance un bandeau qu'on a arrêté",
    "fichier": "index.page.js",
    "avant": "        if(!voulue) return;\n",
    "apres": "",
-   "regle": "test_elle_se_met_en_PAUSE_et_respecte_le_mouvement_reduit"
+   "regle": "test_il_se_met_en_PAUSE_et_respecte_le_mouvement_reduit"
   },
   {
    "nom": "la vidéo est servie par une route bridée",
@@ -51,14 +72,28 @@
    "fichier": "index.page.js",
    "avant": "\"hero.video.desc\":\"Animation « Security Advisor — Banque » : votre banque déploie l’IA, qui la sécurise ?",
    "apres": "\"hero.video.desc\":\"Animation « Security Advisor — Banque » : une référence bancaire de 600 k€, votre banque déploie l’IA, qui la sécurise ?",
-   "regle": "test_ce_que_montre_l_animation_est_ECRIT_dans_les_trois_langues[fr]"
+   "regle": "test_ce_que_montre_le_bandeau_est_ECRIT_dans_les_trois_langues[fr]"
   },
   {
    "nom": "la description n'est plus reliée à la vidéo",
    "fichier": "index.html",
    "avant": "poster=\"/hero-security-advisor.jpg\" aria-describedby=\"hero-video-desc\">",
    "apres": "poster=\"/hero-security-advisor.jpg\">",
-   "regle": "test_ce_que_montre_l_animation_est_ECRIT_dans_les_trois_langues[fr]"
+   "regle": "test_ce_que_montre_le_bandeau_est_ECRIT_dans_les_trois_langues[fr]"
+  },
+  {
+   "nom": "la carte de la référence bancaire revient dans la source",
+   "fichier": "outils/bandeau_security_advisor/bandeau.html",
+   "avant": "<!-- 3. 15 MENACES AGENTIQUES -->",
+   "apres": "<section class=\"scene\" data-scene=\"9\"><div class=\"titre v\">600 k€</div></section>\n<!-- 3. 15 MENACES AGENTIQUES -->",
+   "regle": "test_la_source_ne_porte_AUCUNE_trace_de_la_reference_bancaire"
+  },
+  {
+   "nom": "la chronologie de la source change sans que la vidéo soit refaite",
+   "fichier": "outils/bandeau_security_advisor/bandeau.html",
+   "avant": "var DUREES = [3.8, 4.6, 4.0, 5.0, 4.2, 4.6];",
+   "apres": "var DUREES = [3.8, 4.6, 4.0, 5.0, 4.2, 5.6];",
+   "regle": "test_la_video_publiee_est_CELLE_de_la_source"
   }
  ]
 }
