@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Bandeau Security Advisor — source de la vidéo</title>
+<!--
+  LA SOURCE DU BANDEAU DE L'ACCUEIL (hero-security-advisor.mp4).
+
+  CE QUE C'EST. L'animation « Security Advisor — Banque » recomposée au format
+  d'un bandeau LinkedIn (1584 × 396, 4:1). L'original était en portrait (4:5),
+  titres et cartes empilés : un recadrage horizontal aurait coupé les textes.
+  Les scènes, leurs textes et leurs couleurs sont ceux de l'original, disposés
+  en largeur — SAUF la scène « référence bancaire » (montant d'un appel
+  d'offres remporté), qui n'existe pas ici et ne doit pas y revenir :
+  tests/test_hero_video.py relit ce fichier pour s'en assurer.
+
+  COMMENT LA VIDÉO EN SORT. Aucune animation CSS : `poser(t)` calcule l'état
+  de chaque élément à l'instant t, de façon déterministe. outils/
+  bandeau_security_advisor/engendrer.js appelle `poser` pour chaque image
+  (30 par seconde), en prend une capture, et ffmpeg assemble le MP4. Une
+  animation CSS, elle, avancerait au rythme de l'horloge, pas des captures :
+  les images sortiraient saccadées ou dédoublées.
+-->
+<style>
+@font-face{font-family:"Inter D";src:local("Inter Display ExtraBold"),local("InterDisplay-ExtraBold");font-weight:800}
+@font-face{font-family:"Inter D";src:local("Inter Display Black"),local("InterDisplay-Black");font-weight:900}
+:root{
+  --encre:#16112E; --violet:#6D3BEF; --violet2:#8B5CF6; --violet-p:#5B21D6;
+  --lav:#F3EEFD; --lav2:#E6DCFA; --carte:rgba(255,255,255,.86); --trait:rgba(109,59,239,.18);
+  --grad:linear-gradient(100deg,#5B2BE0 0%,#7C4DF2 55%,#9B74F7 100%);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1584px;height:396px;overflow:hidden}
+body{font-family:"Inter",sans-serif;color:var(--encre);background:var(--lav);position:relative;-webkit-font-smoothing:antialiased}
+.fond{position:absolute;inset:0;background:
+  radial-gradient(520px 300px at 92% 8%,rgba(167,139,250,.30),transparent 70%),
+  radial-gradient(480px 260px at 4% 110%,rgba(196,170,250,.42),transparent 70%),
+  radial-gradient(600px 300px at 60% 120%,rgba(221,206,251,.55),transparent 70%),
+  linear-gradient(180deg,#F7F3FE 0%,#EDE5FB 100%)}
+.points{position:absolute;right:40px;top:40px;width:420px;height:230px;
+  background-image:radial-gradient(rgba(124,77,242,.28) 1.4px,transparent 1.6px);background-size:14px 14px;
+  -webkit-mask:radial-gradient(closest-side,#000 30%,transparent 100%);mask:radial-gradient(closest-side,#000 30%,transparent 100%)}
+.vague{position:absolute;left:-40px;right:-40px;bottom:-30px;height:90px;border-top:2px solid rgba(255,255,255,.75);border-radius:50% 50% 0 0/100% 100% 0 0;transform:rotate(-1.2deg)}
+.vague.v2{bottom:-44px;border-top-color:rgba(255,255,255,.45);transform:rotate(.8deg)}
+/* EN-TÊTE */
+.piste{position:absolute;left:56px;right:56px;top:18px;display:flex;gap:8px}
+.piste i{flex:1;height:4px;border-radius:3px;background:rgba(109,59,239,.16);overflow:hidden;position:relative}
+.piste i b{position:absolute;inset:0;width:0;background:var(--grad)}
+.logo{position:absolute;left:56px;top:38px;display:flex;align-items:center;gap:12px;font:800 20px/1 "Inter";letter-spacing:.32em}
+.logo span{width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#C4B5FD,#7C3AED 70%);box-shadow:0 4px 10px rgba(124,58,237,.35)}
+.pastille{position:absolute;right:56px;top:34px;padding:7px 16px;border:1.5px solid rgba(109,59,239,.35);border-radius:99px;font:800 12.5px/1 "Inter";letter-spacing:.16em;color:var(--violet);background:rgba(255,255,255,.55)}
+.devise{position:absolute;left:0;right:0;bottom:12px;text-align:center;font:italic 400 15px/1 "Inter";letter-spacing:.16em;color:#3B3360}
+/* SCÈNES */
+.scene{position:absolute;left:56px;right:56px;top:76px;bottom:40px;display:flex;align-items:center;gap:48px}
+.el{opacity:0}
+.lab{display:flex;align-items:center;gap:14px;font:400 17px/1 "Inter";letter-spacing:.32em;color:#3B3360;margin-bottom:12px}
+.lab::after{content:"";width:90px;height:1px;background:rgba(59,51,96,.35)}
+.titre{font:900 66px/0.98 "Inter D","Inter";letter-spacing:-.02em;text-transform:uppercase}
+.titre.m{font-size:50px}
+.v{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.col-g{flex:0 0 auto}
+.col-d{flex:1 1 auto;display:flex;flex-direction:column;gap:12px;min-width:0}
+.rang{display:flex;gap:12px}
+.carte{background:var(--carte);border-radius:18px;box-shadow:0 10px 30px rgba(91,33,214,.10),0 0 0 1px rgba(255,255,255,.7) inset;padding:16px 18px}
+.stat{flex:1;text-align:center;padding:14px 12px}
+.stat .n{font:900 46px/1 "Inter D","Inter";letter-spacing:-.02em}
+.stat .t{margin-top:6px;font:600 15px/1.25 "Inter";color:#2A2350}
+.note{display:flex;gap:12px;align-items:center;font:400 16px/1.35 "Inter";color:#2A2350;padding:12px 18px}
+.note b{font-weight:800}
+.bouclier{flex:0 0 auto;width:22px;height:22px;border-radius:50%;background:rgba(109,59,239,.14);display:flex;align-items:center;justify-content:center}
+.source{font:400 13px/1 "Inter";color:#6B6290;text-align:center}
+/* 15 menaces */
+.quinze{font:900 210px/.8 "Inter D","Inter";letter-spacing:-.06em}
+.mena .titre{font-size:58px}
+.mena .s{margin-top:8px;font:700 22px/1 "Inter";color:var(--violet)}
+.puce{display:flex;gap:14px;align-items:center;padding:16px 20px}
+.puce .ic{flex:0 0 auto;width:48px;height:48px;border-radius:50%;background:radial-gradient(circle,#fff,#EDE5FD);box-shadow:0 6px 14px rgba(91,33,214,.15);display:flex;align-items:center;justify-content:center}
+.puce .t1{font:800 22px/1.1 "Inter"}
+.puce .t2{font:400 15px/1.2 "Inter";color:#4A4270;margin-top:3px}
+/* normes */
+.norme{flex:1;padding:14px 16px;position:relative}
+.tag{display:inline-block;padding:4px 10px;border-radius:7px;background:var(--grad);color:#fff;font:800 11.5px/1 "Inter";letter-spacing:.16em}
+.norme .c{margin-top:8px;font:900 27px/1 "Inter D","Inter";letter-spacing:-.01em}
+.norme .s{margin-top:5px;font:800 17px/1.1 "Inter";color:var(--violet)}
+.norme .d{margin-top:7px;padding-top:7px;border-top:1px solid rgba(42,35,80,.12);font:400 13px/1.25 "Inter";color:#4A4270}
+.plus{font:800 18px/1 "Inter";margin-top:14px;color:#2A2350}
+/* mission */
+.puces{display:flex;flex-wrap:wrap;gap:12px 12px}
+.chip{display:flex;align-items:center;gap:10px;padding:12px 20px;border-radius:99px;background:var(--carte);box-shadow:0 8px 22px rgba(91,33,214,.10);font:800 22px/1 "Inter"}
+.chip::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--violet2);box-shadow:0 0 0 3px rgba(139,92,246,.18)}
+/* fin */
+.fin .titre{font-size:62px}
+.cerf{display:flex;align-items:center;gap:18px;padding:14px 22px}
+.cerf .n{font:900 54px/1 "Inter D","Inter";letter-spacing:-.03em}
+.cerf .p{font:800 26px/1.05 "Inter"}
+.cerf .q{font:700 15px/1.2 "Inter";color:var(--violet);margin-top:4px}
+.cta{align-self:flex-start;display:flex;align-items:center;gap:12px;padding:15px 30px;border-radius:99px;background:var(--grad);color:#fff;font:800 25px/1 "Inter";box-shadow:0 12px 26px rgba(91,43,224,.35)}
+.coord{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap}
+.coord .m{font:700 17px/1 "Inter"}
+.coord .d{font:900 38px/1 "Inter D","Inter";letter-spacing:-.01em}
+</style>
+</head>
+<body>
+<div class="fond"></div><div class="points"></div><div class="vague"></div><div class="vague v2"></div>
+<div class="piste" id="piste"></div>
+<div class="logo"><span></span>CONSEILPREV</div>
+<div class="pastille">SECURITY ADVISOR · BANQUE</div>
+<div class="devise">AI Security is evolving fast.</div>
+
+<!-- 1. VOTRE BANQUE DÉPLOIE L'IA — QUI LA SÉCURISE ? -->
+<section class="scene" data-scene="0" style="justify-content:center;gap:70px">
+  <div class="col-g">
+    <div class="lab el" data-in="0.05">banque · finance · ia</div>
+    <div class="titre el" data-in="0.25">Votre banque<br>déploie l'IA.</div>
+  </div>
+  <div class="titre v el" data-in="1.5" style="font-size:78px">Qui la<br>sécurise ?</div>
+</section>
+
+<!-- 2. DES MILLIONS D'EUROS D'ÉCONOMIES ATTENDUES -->
+<section class="scene" data-scene="1">
+  <div class="col-g">
+    <div class="lab el" data-in="0.05">l'enjeu pour la banque</div>
+    <div class="titre m el" data-in="0.2">Des <span class="v">millions d'euros</span><br>d'économies<br>attendues</div>
+  </div>
+  <div class="col-d">
+    <div class="rang">
+      <div class="carte stat el" data-in="0.6"><div class="n v" data-compte="-30" data-suffixe=" %">−30 %</div><div class="t">de coûts de développement informatique</div></div>
+      <div class="carte stat el" data-in="0.8"><div class="n v" data-compte="40" data-suffixe=" %">40 %</div><div class="t">des appels clients automatisés</div></div>
+      <div class="carte stat el" data-in="1.0"><div class="n"><svg width="54" height="44" viewBox="0 0 54 44" aria-hidden="true"><rect x="4" y="24" width="9" height="18" rx="2" fill="#B9A3F7"/><rect x="18" y="16" width="9" height="26" rx="2" fill="#8B5CF6"/><rect x="32" y="8" width="9" height="34" rx="2" fill="#6D3BEF"/><path d="M4 18 L20 9 L32 13 L50 2" stroke="#16112E" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M42 2 L50 2 L50 10" stroke="#16112E" stroke-width="3" fill="none" stroke-linecap="round"/></svg></div><div class="t">rapports et indicateurs clés automatisés</div></div>
+    </div>
+    <div class="carte note el" data-in="1.4"><span class="bouclier"><svg width="12" height="13" viewBox="0 0 24 26"><path d="M12 1 2 5v7c0 6 4.3 11.3 10 13 5.7-1.7 10-7 10-13V5z" fill="#6D3BEF"/></svg></span><span>À court terme, <b>le poids des régulateurs</b> limitera l'effet de l'IA : la conformité devient la condition du gain.</span></div>
+    <div class="source el" data-in="1.6">Objectifs annoncés par de grandes banques européennes dans leur plan de développement IA</div>
+  </div>
+</section>
+
+<!-- 3. 15 MENACES AGENTIQUES -->
+<section class="scene mena" data-scene="2" style="justify-content:center;gap:90px">
+  <div class="col-g" style="display:flex;align-items:center;gap:28px">
+    <div class="quinze v el" data-in="0.1" data-compte="15">15</div>
+    <div>
+      <div class="lab el" data-in="0.05">owasp · ia agentique</div>
+      <div class="titre el" data-in="0.35">Menaces<br>agentiques</div>
+      <div class="s el" data-in="0.6">sous contrôle, de T1 à T15</div>
+    </div>
+  </div>
+  <div class="col-d" style="flex:0 0 480px">
+    <div class="carte puce el" data-in="0.9"><span class="ic"><svg width="22" height="24" viewBox="0 0 24 26"><path d="M12 1 2 5v7c0 6 4.3 11.3 10 13 5.7-1.7 10-7 10-13V5z" fill="#7C4DF2"/><path d="m7.5 13 3 3 6-6" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg></span><div><div class="t1">OWASP LLM Top 10</div><div class="t2">risques des modèles de langage</div></div></div>
+    <div class="carte puce el" data-in="1.2"><span class="ic"><svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" stroke="#7C4DF2" stroke-width="2" fill="none"/><circle cx="12" cy="12" r="3" fill="#7C4DF2"/><path d="M12 1v5M12 18v5M1 12h5M18 12h5" stroke="#7C4DF2" stroke-width="2"/></svg></span><div><div class="t1">MITRE ATLAS</div><div class="t2">techniques d'attaque sur l'IA</div></div></div>
+  </div>
+</section>
+
+<!-- 4. 3 NOUVELLES NORMES IA -->
+<section class="scene" data-scene="3" style="gap:40px">
+  <div class="col-g">
+    <div class="titre el" data-in="0.1" style="font-size:56px"><span class="v">3 nouvelles</span><br>normes IA</div>
+    <div class="lab el" data-in="0.35" style="margin-top:14px;margin-bottom:0">le cadre du régulateur</div>
+    <div class="plus el" data-in="2.0">+ ISO/IEC 27001 · ISO/IEC 42001</div>
+  </div>
+  <div class="col-d"><div class="rang">
+    <div class="carte norme el" data-in="0.6"><span class="tag">ISO / IEC</span><div class="c">ISO/IEC 27090:2026</div><div class="s">AI Security</div><div class="d">Publiée le 14 oct. 2026</div></div>
+    <div class="carte norme el" data-in="0.95"><span class="tag">CEN · CENELEC</span><div class="c">EN 18286:2026</div><div class="s">Regulatory Quality Management</div><div class="d">Citée au Journal officiel de l'UE le 14 oct. 2026</div></div>
+    <div class="carte norme el" data-in="1.3"><span class="tag">IEEE</span><div class="c">IEEE 2863-2026</div><div class="s">Organizational Governance</div><div class="d">Gouvernance organisationnelle de l'IA</div></div>
+  </div></div>
+</section>
+
+<!-- 5. LA MISSION SECURITY ADVISOR -->
+<section class="scene" data-scene="4" style="gap:64px">
+  <div class="col-g">
+    <div class="lab el" data-in="0.05">la mission</div>
+    <div class="titre el" data-in="0.2" style="font-size:72px">Security<br><span class="v">Advisor</span></div>
+  </div>
+  <div class="col-d"><div class="puces">
+    <div class="chip el" data-in="0.55">Threat modeling</div>
+    <div class="chip el" data-in="0.75">Revues d'architecture</div>
+    <div class="chip el" data-in="0.95">AI Security GRC</div>
+    <div class="chip el" data-in="1.15">Charte IA</div>
+    <div class="chip el" data-in="1.35">AI Act Program</div>
+    <div class="chip el" data-in="1.55">Copilot &amp; ML</div>
+    <div class="chip el" data-in="1.75">Security Blueprints</div>
+  </div></div>
+</section>
+
+<!-- 6. IA · BANQUE · FINANCE — LE CONTACT -->
+<section class="scene fin" data-scene="5" style="gap:52px">
+  <div class="col-g">
+    <div class="lab el" data-in="0.05">security advisor</div>
+    <div class="titre el" data-in="0.2">IA · Banque<br><span class="v">· Finance ·</span></div>
+  </div>
+  <div class="col-d">
+    <div class="rang" style="align-items:center;gap:30px">
+      <div class="carte cerf el" data-in="0.6"><div class="n v" data-compte="33" data-suffixe="+">33+</div><div><div class="p">Christophe CERF</div><div class="q">CEO CONSEILPREV · Expert Cyber GRC, AI Security</div></div></div>
+      <div class="coord el" data-in="1.5"><span class="d v">i-aes.eu · i-aes.com</span></div>
+    </div>
+    <div class="rang" style="align-items:center;gap:22px">
+      <div class="cta el" data-in="1.0">Diagnostic AI Security offert <span>→</span></div>
+      <div class="coord el" data-in="1.3"><span class="m">christophe.cerf@i-aes.com · +33 6 60 69 21 45</span></div>
+    </div>
+  </div>
+</section>
+
+<script>
+/* LA CHRONOLOGIE. Six scènes ; la durée totale reprend celle de la vidéo
+   précédente (26,2 s), pour que la boucle garde son rythme. */
+var DUREES = [3.8, 4.6, 4.0, 5.0, 4.2, 4.6];
+var TOTAL = DUREES.reduce(function (a, b) { return a + b; }, 0);
+var ENTREE = 0.45, SORTIE = 0.35;
+var scenes = [].slice.call(document.querySelectorAll('.scene'));
+var piste = document.getElementById('piste');
+DUREES.forEach(function () { var i = document.createElement('i'); i.appendChild(document.createElement('b')); piste.appendChild(i); });
+var barres = [].slice.call(piste.querySelectorAll('b'));
+var debuts = []; DUREES.reduce(function (a, d) { debuts.push(a); return a + d; }, 0);
+function lisse(x) { x = Math.max(0, Math.min(1, x)); return x * x * (3 - 2 * x); }
+function poser(t) {
+  t = ((t % TOTAL) + TOTAL) % TOTAL;
+  scenes.forEach(function (s, k) {
+    var r = t - debuts[k], d = DUREES[k];
+    var dedans = r >= 0 && r < d;
+    s.style.visibility = dedans ? 'visible' : 'hidden';
+    var sortie = dedans ? lisse((d - r) / SORTIE) : 0;
+    s.querySelectorAll('.el').forEach(function (e) {
+      var a = lisse((r - parseFloat(e.dataset.in)) / ENTREE);
+      e.style.opacity = String(Math.min(a, sortie));
+      e.style.transform = 'translateY(' + ((1 - a) * 16 - (1 - sortie) * 8).toFixed(2) + 'px)';
+    });
+    /* LES COMPTEURS montent depuis l'apparition de l'élément qui les porte —
+       eux-mêmes ou leur carte. */
+    s.querySelectorAll('[data-compte]').forEach(function (e) {
+      var porteur = e.classList.contains('el') ? e : e.closest('.el');
+      var fin = parseFloat(e.dataset.compte), p = lisse((r - parseFloat(porteur.dataset.in)) / 1.1);
+      var v = Math.round(fin * p);
+      e.textContent = (v < 0 ? '−' + Math.abs(v) : String(v)) + (e.dataset.suffixe || '');
+    });
+  });
+  barres.forEach(function (b, k) {
+    var r = (t - debuts[k]) / DUREES[k];
+    b.style.width = (Math.max(0, Math.min(1, r)) * 100).toFixed(2) + '%';
+  });
+}
+window.poser = poser; window.TOTAL = TOTAL;
+poser(2.6);
+</script>
+</body>
+</html>
