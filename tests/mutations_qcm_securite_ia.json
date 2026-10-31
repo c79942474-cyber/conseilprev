@@ -164,6 +164,48 @@
    "avant": "    if (k === q.a) return;\n",
    "apres": "",
    "regle": "test_la_correction_dit_POURQUOI_chaque_option_fausse_l_est"
+  },
+  {
+   "nom": "le hub ne peint plus les correspondances",
+   "fichier": "sentinel.page.js",
+   "avant": "  h.innerHTML = tete + nivs + doms + _qcmCorrBloc() + paliers + reserves;",
+   "apres": "  h.innerHTML = tete + nivs + doms + paliers + reserves;",
+   "regle": "test_le_HUB_peint_la_correspondance_que_la_route_sert"
+  },
+  {
+   "nom": "l'écran oublie les liens indirects",
+   "fichier": "sentinel.page.js",
+   "avant": "      C[a][autre].forEach(function (x) { if (indirect.indexOf(x) < 0) indirect.push(x); });",
+   "apres": "      C[a][autre].forEach(function (x) { });",
+   "regle": "test_l_ECRAN_relie_chaque_code_comme_la_TABLE_du_module"
+  },
+  {
+   "nom": "une menace est cherchée dans la colonne LLM",
+   "fichier": "sentinel.page.js",
+   "avant": "  return Object.keys(C).filter(function (a) { return C[a][it.fw].indexOf(code) >= 0; })",
+   "apres": "  return Object.keys(C).filter(function (a) { return C[a].llm.indexOf(code) >= 0; })",
+   "regle": "test_l_ECRAN_relie_chaque_code_comme_la_TABLE_du_module"
+  },
+  {
+   "nom": "un risque agentique perd ses menaces",
+   "fichier": "sentinel.page.js",
+   "avant": "    if (C[code]) direct = C[code].llm.concat(C[code].t);",
+   "apres": "    if (C[code]) direct = C[code].llm.slice();",
+   "regle": "test_l_ECRAN_relie_chaque_code_comme_la_TABLE_du_module"
+  },
+  {
+   "nom": "la fiche liste toutes les questions du niveau, pas celles du code",
+   "fichier": "sentinel.page.js",
+   "avant": "  var qs = QCM_REF.questions.filter(function (q) { return q.codes.indexOf(code) >= 0; });",
+   "apres": "  var qs = QCM_REF.questions.filter(function (q) { return q.codes.length > 0; });",
+   "regle": "test_les_questions_d_un_code_sont_DERIVEES_de_la_banque"
+  },
+  {
+   "nom": "la correction ne marque plus les codes liés",
+   "fichier": "sentinel.page.js",
+   "avant": "    var r = _qcmCorrRelations(c);",
+   "apres": "    var r = { direct: [], indirect: [] };",
+   "regle": "test_la_correction_marque_les_codes_LIES_par_la_table"
   }
  ]
 }
