@@ -1,6 +1,6 @@
 {
  "_lot": "99-qcm-securite-ia-ecran",
- "_mots": 773,
+ "_mots": 947,
  "_pages": [
   "_js",
   "qcm-ia"
@@ -169,6 +169,66 @@
   },
   "✕ Réponse incorrecte": {
    "en": "✕ Wrong answer"
+  },
+  "Les correspondances OWASP": {
+   "en": "The OWASP correspondences"
+  },
+  "Les risques des applications LLM, les risques des applications agentiques et les menaces agentiques, reliés par la table de correspondance du cabinet. Choisissez un code : sa définition, ses liens, les contrôles clés et les questions de la banque qui le citent.": {
+   "en": "LLM application risks, agentic application risks and agentic threats, linked by the firm’s correspondence table. Pick a code: its definition, its links, the key controls and the questions in the bank that cite it."
+  },
+  "Effacer la sélection": {
+   "en": "Clear the selection"
+  },
+  "Une table de lecture, pas une équivalence : l’OWASP ne publie pas de table officielle complète reliant ces trois listes. Un lien direct passe toujours par un risque agentique ; un lien indirect, en pointillé, relie un risque LLM à une menace agentique par son intermédiaire.": {
+   "en": "A reading aid, not an equivalence: OWASP publishes no complete official table linking these three lists. A direct link always goes through an agentic risk; an indirect link, dotted, connects an LLM risk to an agentic threat by way of one."
+  },
+  "Choisissez un code": {
+   "en": "Pick a code"
+  },
+  "dans l’une des trois colonnes, ou une case de la matrice.": {
+   "en": "in one of the three columns, or a cell of the matrix."
+  },
+  "Aucun lien dans la table.": {
+   "en": "No link in the table."
+  },
+  "Contrôles clés": {
+   "en": "Key controls"
+  },
+  "Risques agentiques liés (direct)": {
+   "en": "Linked agentic risks (direct)"
+  },
+  "Menaces agentiques liées (indirect, via un risque agentique)": {
+   "en": "Linked agentic threats (indirect, via an agentic risk)"
+  },
+  "Risques LLM liés (indirect, via un risque agentique)": {
+   "en": "Linked LLM risks (indirect, via an agentic risk)"
+  },
+  "Contrôles clés associés": {
+   "en": "Associated key controls"
+  },
+  "Questions de la banque qui citent ce code": {
+   "en": "Questions in the bank that cite this code"
+  },
+  "Aucune question de la banque ne cite ce code.": {
+   "en": "No question in the bank cites this code."
+  },
+  "LIÉ PAR LA CORRESPONDANCE": {
+   "en": "LINKED BY THE CORRESPONDENCE"
+  },
+  "Vue en réseau": {
+   "en": "Network view"
+  },
+  "Tableau croisé": {
+   "en": "Cross table"
+  },
+  "Un exemple bancaire": {
+   "en": "A banking example"
+  },
+  "Les risques LLM correspondants": {
+   "en": "The corresponding LLM risks"
+  },
+  "Les menaces agentiques correspondantes": {
+   "en": "The corresponding agentic threats"
   }
  }
 }

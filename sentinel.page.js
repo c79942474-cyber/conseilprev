@@ -31381,6 +31381,257 @@ function _qcmAnimerJauges(racine) {
   });
 }
 
+/* LES CORRESPONDANCES OWASP — LA TABLE DU MODULE, ENFIN À L'ÉCRAN.
+   ─────────────────────────────────────────────────────────────────────
+   LE DÉFAUT : la route servait `correspondance` (qcm_securite_ia.OWASP_MAP)
+   et l'écran ne la lisait nulle part. Après chaque réponse, la fiche des
+   trois référentiels surlignait les codes de la question, sans jamais dire
+   ce qui les relie : la correspondance, remise au client dans la note du
+   cabinet, restait invisible dans le QCM.
+
+   CE QUI EST PEINT. Les trois référentiels en colonnes, reliés par la
+   table ; le risque agentique au centre, parce que c'est le pivot de la
+   table (un lien direct passe toujours par lui). La même table en matrice.
+   Une fiche par code : sa définition, ses liens directs et indirects, les
+   contrôles, et LES QUESTIONS DE LA BANQUE QUI LE CITENT — dérivées des
+   codes des questions, jamais d'une liste écrite à part.
+
+   RIEN N'EST RECOPIÉ ICI : codes, noms, définitions, liens et questions
+   viennent de /api/qcm-securite-ia/referentiel. */
+var QCM_CORR = { sel: null, vue: 'reseau', idx: null, ordre: null, ro: null };
+var QCM_CORR_FW = { llm: 'llm', asi: 'asi', agent: 't' };
+
+function _qcmCorrIndex() {
+  if (QCM_CORR.idx) return QCM_CORR.idx;
+  var idx = {}, ordre = {}, k = 0;
+  QCM_REF.referentiels.forEach(function (r) {
+    r.entrees.forEach(function (e) {
+      idx[e.code] = { e: e, fw: QCM_CORR_FW[r.cle], ref: r.dit };
+      ordre[e.code] = k++;
+    });
+  });
+  QCM_CORR.idx = idx;
+  QCM_CORR.ordre = ordre;
+  return idx;
+}
+
+/* Les risques agentiques par lesquels passe un code : lui-même s'il en est
+   un, sinon ceux que la table lui relie. */
+function _qcmCorrAsi(code) {
+  var it = _qcmCorrIndex()[code], C = QCM_REF.correspondance;
+  if (!it) return [];
+  if (it.fw === 'asi') return C[code] ? [code] : [];
+  return Object.keys(C).filter(function (a) { return C[a][it.fw].indexOf(code) >= 0; })
+    .sort(function (a, b) { return QCM_CORR.ordre[a] - QCM_CORR.ordre[b]; });
+}
+
+function _qcmCorrRelations(code) {
+  var it = _qcmCorrIndex()[code], C = QCM_REF.correspondance;
+  var direct = [], indirect = [];
+  if (!it) return { direct: direct, indirect: indirect };
+  if (it.fw === 'asi') {
+    if (C[code]) direct = C[code].llm.concat(C[code].t);
+  } else {
+    var autre = it.fw === 'llm' ? 't' : 'llm';
+    direct = _qcmCorrAsi(code);
+    direct.forEach(function (a) {
+      C[a][autre].forEach(function (x) { if (indirect.indexOf(x) < 0) indirect.push(x); });
+    });
+  }
+  var parOrdre = function (a, b) { return QCM_CORR.ordre[a] - QCM_CORR.ordre[b]; };
+  return { direct: direct.sort(parOrdre), indirect: indirect.sort(parOrdre) };
+}
+
+function _qcmCorrPuce(code, indirect) {
+  var it = _qcmCorrIndex()[code];
+  if (!it) return '';
+  return '<button type="button" class="qcm-corr-chip qcm-corr-' + it.fw + (indirect ? ' ind' : '')
+    + '" data-qcm-code="' + _qcmEsc(code) + '" title="' + _qcmEsc(it.e.nom) + '">' + _qcmEsc(code) + '</button>';
+}
+
+function _qcmCorrBloc() {
+  _qcmCorrIndex();
+  var C = QCM_REF.correspondance;
+  if (!QCM_CORR.sel) {
+    var asi = QCM_REF.referentiels.filter(function (r) { return r.cle === 'asi'; })[0];
+    QCM_CORR.sel = asi && asi.entrees.length ? asi.entrees[0].code : null;
+  }
+  var cols = QCM_REF.referentiels.map(function (r) {
+    var fw = QCM_CORR_FW[r.cle];
+    return '<div class="qcm-corr-col qcm-corr-' + fw + '"><div class="qcm-corr-col-t">' + _qcmEsc(r.dit) + '</div>'
+      + r.entrees.map(function (e) {
+          return '<button type="button" class="qcm-corr-i" data-qcm-code="' + _qcmEsc(e.code) + '" aria-pressed="false">'
+            + '<code>' + _qcmEsc(e.code) + '</code><span>' + _qcmEsc(e.nom) + '</span></button>';
+        }).join('') + '</div>';
+  }).join('');
+  var traits = '';
+  Object.keys(C).forEach(function (a) {
+    C[a].llm.forEach(function (l) { traits += '<path class="qcm-corr-trait" data-o="' + _qcmEsc(l) + '" data-d="' + _qcmEsc(a) + '"></path>'; });
+    C[a].t.forEach(function (t) { traits += '<path class="qcm-corr-trait" data-o="' + _qcmEsc(a) + '" data-d="' + _qcmEsc(t) + '"></path>'; });
+  });
+  var llm = QCM_REF.referentiels.filter(function (r) { return r.cle === 'llm'; })[0].entrees;
+  var men = QCM_REF.referentiels.filter(function (r) { return r.cle === 'agent'; })[0].entrees;
+  var asis = QCM_REF.referentiels.filter(function (r) { return r.cle === 'asi'; })[0].entrees;
+  var tete = '<tr><th class="qcm-corr-mx-h"></th>' + llm.concat(men).map(function (e, i) {
+      var fw = i < llm.length ? 'llm' : 't';
+      return '<th class="qcm-corr-' + fw + (i === 0 || i === llm.length ? ' sep' : '') + '" data-qcm-col="' + _qcmEsc(e.code) + '">'
+        + '<button type="button" data-qcm-code="' + _qcmEsc(e.code) + '" title="' + _qcmEsc(e.nom) + '">' + _qcmEsc(e.code) + '</button></th>';
+    }).join('') + '</tr>';
+  var corps = asis.map(function (a) {
+    var m = C[a.code] || { llm: [], t: [] };
+    return '<tr data-qcm-ligne="' + _qcmEsc(a.code) + '"><th class="qcm-corr-mx-h"><button type="button" data-qcm-code="' + _qcmEsc(a.code) + '">'
+      + '<code>' + _qcmEsc(a.code) + '</code> ' + _qcmEsc(a.nom) + '</button></th>'
+      + llm.concat(men).map(function (e, i) {
+          var fw = i < llm.length ? 'llm' : 't';
+          var lie = m[fw].indexOf(e.code) >= 0;
+          return '<td class="' + (i === 0 || i === llm.length ? 'sep' : '') + '" data-qcm-col="' + _qcmEsc(e.code) + '">'
+            + (lie ? '<button type="button" data-qcm-code="' + _qcmEsc(a.code) + '" aria-label="' + _qcmEsc(a.code + ' — ' + e.code)
+                     + '" title="' + _qcmEsc(a.code + ' ↔ ' + e.code) + '"><i class="qcm-corr-pt qcm-corr-' + fw + '"></i></button>' : '')
+            + '</td>';
+        }).join('') + '</tr>';
+  }).join('');
+  return '<div class="qcm-bloc qcm-corr" id="qcm-corr">'
+    + '<div class="qcm-bloc-t">Les correspondances OWASP</div>'
+    + '<div class="qcm-bloc-p">Les risques des applications LLM, les risques des applications agentiques et les menaces agentiques, reliés par la table de correspondance du cabinet. Choisissez un code : sa définition, ses liens, les contrôles clés et les questions de la banque qui le citent.</div>'
+    + '<div class="qcm-corr-barre"><div class="qcm-corr-onglets" role="group">'
+    + '<button type="button" class="qcm-corr-onglet" data-qcm-vue="reseau" aria-pressed="' + (QCM_CORR.vue === 'reseau') + '">Vue en réseau</button>'
+    + '<button type="button" class="qcm-corr-onglet" data-qcm-vue="matrice" aria-pressed="' + (QCM_CORR.vue === 'matrice') + '">Tableau croisé</button></div>'
+    + '<button type="button" class="qcm-corr-eff" data-qcm-eff="1">Effacer la sélection</button></div>'
+    + '<div class="qcm-corr-corps"><div class="qcm-corr-vue">'
+    + '<div class="qcm-corr-reseau"' + (QCM_CORR.vue === 'reseau' ? '' : ' hidden') + '><svg class="qcm-corr-traits" aria-hidden="true">' + traits + '</svg>' + cols + '</div>'
+    + '<div class="qcm-corr-mx-cadre"' + (QCM_CORR.vue === 'matrice' ? '' : ' hidden') + '><table class="qcm-corr-mx"><thead>' + tete + '</thead><tbody>' + corps + '</tbody></table></div>'
+    + '</div><div class="qcm-corr-fiche" aria-live="polite"></div></div>'
+    + '<div class="qcm-corr-note">Une table de lecture, pas une équivalence : l’OWASP ne publie pas de table officielle complète reliant ces trois listes. Un lien direct passe toujours par un risque agentique ; un lien indirect, en pointillé, relie un risque LLM à une menace agentique par son intermédiaire.</div>'
+    + '</div>';
+}
+
+function _qcmCorrFiche(racine) {
+  var f = racine.querySelector('.qcm-corr-fiche');
+  var code = QCM_CORR.sel, it = code ? _qcmCorrIndex()[code] : null;
+  if (!it) {
+    f.innerHTML = '<div class="qcm-corr-vide"><b class="qcm-b">Choisissez un code</b> dans l’une des trois colonnes, ou une case de la matrice.</div>';
+    return;
+  }
+  var C = QCM_REF.correspondance, rel = _qcmCorrRelations(code);
+  var sec = function (titre, corps) { return '<div class="qcm-corr-sec"><div class="qcm-sous">' + titre + '</div>' + corps + '</div>'; };
+  var puces = function (codes, ind) {
+    return codes.length ? '<div class="qcm-corr-puces">' + codes.map(function (c) { return _qcmCorrPuce(c, ind); }).join('') + '</div>'
+                        : '<div class="qcm-corr-rien">Aucun lien dans la table.</div>';
+  };
+  var h = '<div class="qcm-corr-ref">' + _qcmEsc(it.ref) + '</div>'
+    + '<div class="qcm-corr-nom"><code class="qcm-corr-' + it.fw + '">' + _qcmEsc(code) + '</code>' + _qcmEsc(it.e.nom) + '</div>'
+    + '<div class="qcm-corr-quoi">' + _qcmEsc(it.e.quoi) + '</div>';
+  if (it.fw === 'asi') {
+    h += sec('Les risques LLM correspondants', puces(C[code] ? C[code].llm : []))
+      + sec('Les menaces agentiques correspondantes', puces(C[code] ? C[code].t : []));
+    if (it.e.exemple) h += sec('Un exemple bancaire', '<div class="qcm-corr-txt">' + _qcmEsc(it.e.exemple) + '</div>');
+    if (it.e.controles) h += sec('Contrôles clés', '<div class="qcm-corr-txt">' + _qcmEsc(it.e.controles) + '</div>');
+  } else {
+    h += sec('Risques agentiques liés (direct)', puces(rel.direct))
+      + sec(it.fw === 'llm' ? 'Menaces agentiques liées (indirect, via un risque agentique)'
+                            : 'Risques LLM liés (indirect, via un risque agentique)', puces(rel.indirect, true));
+    if (rel.direct.length) {
+      h += sec('Contrôles clés associés', '<ul class="qcm-corr-liste">' + rel.direct.map(function (a) {
+        var x = _qcmCorrIndex()[a];
+        return '<li><b class="qcm-b">' + _qcmEsc(a) + '</b><span class="qcm-sep"> — </span>' + _qcmEsc(x.e.controles || '') + '</li>';
+      }).join('') + '</ul>');
+    }
+  }
+  var niv = {};
+  QCM_REF.niveaux.forEach(function (n) { niv[n.cle] = n.dit; });
+  var qs = QCM_REF.questions.filter(function (q) { return q.codes.indexOf(code) >= 0; });
+  h += sec('Questions de la banque qui citent ce code', qs.length
+    ? '<ul class="qcm-corr-liste">' + qs.map(function (q) {
+        return '<li><span class="qcm-corr-qn">' + sentDonnee('n° ' + q.n) + '<span class="qcm-sep"> · </span><span>' + _qcmEsc(niv[q.niveau] || q.niveau) + '</span></span>'
+          + '<span class="qcm-sep"> — </span><span class="qcm-corr-qs">' + _qcmEsc(q.q) + '</span></li>';
+      }).join('') + '</ul>'
+    : '<div class="qcm-corr-rien">Aucune question de la banque ne cite ce code.</div>');
+  f.innerHTML = h;
+}
+
+function _qcmCorrTracer(racine) {
+  var res = racine.querySelector('.qcm-corr-reseau'), svg = racine.querySelector('.qcm-corr-traits');
+  if (!res || res.hidden || !svg || getComputedStyle(svg).display === 'none') return;
+  var box = res.getBoundingClientRect();
+  if (!box.width) return;
+  svg.setAttribute('viewBox', '0 0 ' + box.width + ' ' + box.height);
+  svg.querySelectorAll('path').forEach(function (p) {
+    var a = res.querySelector('.qcm-corr-i[data-qcm-code="' + p.getAttribute('data-o') + '"]');
+    var b = res.querySelector('.qcm-corr-i[data-qcm-code="' + p.getAttribute('data-d') + '"]');
+    if (!a || !b) return;
+    var ra = a.getBoundingClientRect(), rb = b.getBoundingClientRect();
+    var x1 = ra.right - box.left, y1 = ra.top + ra.height / 2 - box.top;
+    var x2 = rb.left - box.left, y2 = rb.top + rb.height / 2 - box.top, dx = (x2 - x1) / 2;
+    p.setAttribute('d', 'M' + x1 + ',' + y1 + ' C' + (x1 + dx) + ',' + y1 + ' ' + (x2 - dx) + ',' + y2 + ' ' + x2 + ',' + y2);
+  });
+}
+
+function _qcmCorrPeindre(racine) {
+  var code = QCM_CORR.sel, it = code ? _qcmCorrIndex()[code] : null;
+  var rel = it ? _qcmCorrRelations(code) : { direct: [], indirect: [] };
+  var asis = it && it.fw !== 'asi' ? _qcmCorrAsi(code) : [];
+  racine.querySelector('.qcm-corr-reseau').classList.toggle('sel', !!it);
+  racine.querySelectorAll('.qcm-corr-i').forEach(function (b) {
+    var c = b.getAttribute('data-qcm-code');
+    b.classList.toggle('on', c === code);
+    b.classList.toggle('lk', rel.direct.indexOf(c) >= 0);
+    b.classList.toggle('lk2', rel.indirect.indexOf(c) >= 0);
+    b.setAttribute('aria-pressed', c === code ? 'true' : 'false');
+  });
+  racine.querySelectorAll('.qcm-corr-trait').forEach(function (p) {
+    var de = p.getAttribute('data-o'), a = p.getAttribute('data-d'), cls = 'qcm-corr-trait';
+    if (it && (de === code || a === code)) cls += ' act';
+    else if (it && it.fw === 'llm' && asis.indexOf(de) >= 0) cls += ' act2';
+    else if (it && it.fw === 't' && asis.indexOf(a) >= 0) cls += ' act2';
+    p.setAttribute('class', cls);
+  });
+  racine.querySelectorAll('.qcm-corr-mx .hl').forEach(function (n) { n.classList.remove('hl'); });
+  if (it && it.fw === 'asi') {
+    racine.querySelectorAll('.qcm-corr-mx tr[data-qcm-ligne="' + code + '"] > *').forEach(function (n) { n.classList.add('hl'); });
+  } else if (it) {
+    racine.querySelectorAll('.qcm-corr-mx [data-qcm-col="' + code + '"]').forEach(function (n) { n.classList.add('hl'); });
+    asis.forEach(function (a) {
+      var th = racine.querySelector('.qcm-corr-mx tr[data-qcm-ligne="' + a + '"] > th');
+      if (th) th.classList.add('hl');
+    });
+  }
+  racine.querySelectorAll('.qcm-corr-onglet').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.getAttribute('data-qcm-vue') === QCM_CORR.vue ? 'true' : 'false');
+  });
+  _qcmCorrFiche(racine);
+}
+
+function _qcmCorrBrancher(h) {
+  var racine = h.querySelector('#qcm-corr');
+  if (!racine) return;
+  racine.addEventListener('click', function (ev) {
+    var b = ev.target.closest('button');
+    if (!b || !racine.contains(b)) return;
+    if (b.hasAttribute('data-qcm-vue')) {
+      QCM_CORR.vue = b.getAttribute('data-qcm-vue');
+      racine.querySelector('.qcm-corr-reseau').hidden = QCM_CORR.vue !== 'reseau';
+      racine.querySelector('.qcm-corr-mx-cadre').hidden = QCM_CORR.vue !== 'matrice';
+      _qcmCorrPeindre(racine);
+      _qcmCorrTracer(racine);
+      return;
+    }
+    if (b.hasAttribute('data-qcm-eff')) { QCM_CORR.sel = null; _qcmCorrPeindre(racine); return; }
+    var c = b.getAttribute('data-qcm-code');
+    if (!c) return;
+    /* Un clic dans une colonne sur le code déjà choisi le désélectionne ;
+       une puce de la fiche, elle, choisit toujours. */
+    QCM_CORR.sel = (b.classList.contains('qcm-corr-i') && QCM_CORR.sel === c) ? null : c;
+    _qcmCorrPeindre(racine);
+  });
+  _qcmCorrPeindre(racine);
+  if (QCM_CORR.ro) QCM_CORR.ro.disconnect();
+  if (window.ResizeObserver) {
+    QCM_CORR.ro = new ResizeObserver(function () { _qcmCorrTracer(racine); });
+    QCM_CORR.ro.observe(racine.querySelector('.qcm-corr-reseau'));
+  }
+  requestAnimationFrame(function () { _qcmCorrTracer(racine); });
+}
+
 function qcmHub() {
   var h = document.getElementById('qcm-hub');
   if (!h || !QCM_REF) return;
@@ -31459,8 +31710,9 @@ function qcmHub() {
           + '<span class="qcm-sep"> </span><span class="qcm-res-p">' + _qcmEsc(r.quoi_faire) + '</span></div>';
       }).join('') + '</div>';
 
-  h.innerHTML = tete + nivs + doms + paliers + reserves;
+  h.innerHTML = tete + nivs + doms + _qcmCorrBloc() + paliers + reserves;
   _qcmAnimerJauges(h);
+  _qcmCorrBrancher(h);
 }
 
 function _qcmMelanger(n) {
@@ -31556,12 +31808,22 @@ function qcmChoisir(k) {
 
 function _qcmOwasp(q) {
   var codes = q.codes;
+  /* CE QUE LA TABLE RELIE AUX CODES DE LA QUESTION : les risques agentiques
+     par lesquels ils passent, et ce que ceux-ci relient à leur tour. */
+  var lies = [];
+  codes.forEach(function (c) {
+    var r = _qcmCorrRelations(c);
+    r.direct.concat(r.indirect).forEach(function (x) {
+      if (codes.indexOf(x) < 0 && lies.indexOf(x) < 0) lies.push(x);
+    });
+  });
   return '<details class="qcm-owasp"><summary>Les trois référentiels OWASP — où se situe cette question</summary><div>'
     + QCM_REF.referentiels.map(function (r) {
         return '<div class="qcm-ow-t">' + _qcmEsc(r.dit) + '</div>' + r.entrees.map(function (e) {
-          var hit = codes.indexOf(e.code) >= 0;
-          return '<div class="qcm-ow' + (hit ? ' hit' : '') + '"><code>' + _qcmEsc(e.code) + '</code><div>'
+          var hit = codes.indexOf(e.code) >= 0, lie = lies.indexOf(e.code) >= 0;
+          return '<div class="qcm-ow' + (hit ? ' hit' : '') + (lie ? ' lie' : '') + '"><code>' + _qcmEsc(e.code) + '</code><div>'
             + '<b class="qcm-b">' + _qcmEsc(e.nom) + '</b>' + (hit ? '<span class="qcm-ow-b">CETTE QUESTION</span>' : '')
+            + (lie ? '<span class="qcm-ow-b qcm-ow-lie">LIÉ PAR LA CORRESPONDANCE</span>' : '')
             + '<span class="qcm-sep"> — </span><span class="qcm-ow-q">' + _qcmEsc(e.quoi) + '</span>'
             + (hit && e.exemple ? '<div class="qcm-ow-ex">' + _qcmEsc(e.exemple) + '</div>'
                                 + '<div class="qcm-ow-ex">' + _qcmEsc(e.controles) + '</div>' : '')

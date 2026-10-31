@@ -477,3 +477,79 @@ def test_la_correction_dit_POURQUOI_chaque_option_fausse_l_est():
     for q in M.QUESTIONS:
         fausses = [o for k, o in enumerate(q["o"]) if k != q["a"]]
         assert len(fausses) == len(q["faux"]), q["n"]
+
+
+# ══════════════════════════════════════════════════════════════════════════
+#  LES CORRESPONDANCES OWASP, À L'ÉCRAN
+# ══════════════════════════════════════════════════════════════════════════
+#
+#  LE DÉFAUT CONSTATÉ : la route servait `correspondance` et l'écran ne la
+#  lisait nulle part — la table de la note du cabinet restait invisible dans
+#  le QCM. Ces règles tiennent la vue du hub à la table du module.
+
+def _relations_ecran():
+    """Les relations que l'ÉCRAN calcule, pour chaque code, à partir de la
+    banque servie — exécutées dans node, pas relues. Seules les deux clés
+    que ces fonctions lisent sont passées : la banque entière dépasserait
+    la longueur d'argument que Linux accepte."""
+    src = "\n".join(_fonction_js(n) for n in
+                    ("_qcmCorrIndex", "_qcmCorrAsi", "_qcmCorrRelations"))
+    script = ("var QCM_REF = %s;\nvar QCM_CORR = {idx: null, ordre: null};\n"
+              "var QCM_CORR_FW = {llm: 'llm', asi: 'asi', agent: 't'};\n%s\n"
+              "var o = {}; Object.keys(_qcmCorrIndex()).forEach(function (c) {"
+              " o[c] = _qcmCorrRelations(c); });\n"
+              "process.stdout.write(JSON.stringify(o));"
+              % (json.dumps({"referentiels": REF["referentiels"],
+                             "correspondance": REF["correspondance"]}), src))
+    return _node(script)
+
+
+def _attendu(code):
+    m = M.OWASP_MAP
+    if code in m:
+        return sorted(m[code]["llm"] + m[code]["t"]), []
+    cle = "llm" if code in _CODES_LLM else "t"
+    autre = "t" if cle == "llm" else "llm"
+    asis = sorted(a for a in m if code in m[a][cle])
+    ind = set()
+    for a in asis:
+        ind |= set(m[a][autre])
+    return asis, sorted(ind)
+
+
+def test_le_HUB_peint_la_correspondance_que_la_route_sert():
+    hub = _fonction_js("qcmHub")
+    assert "_qcmCorrBloc()" in hub and "_qcmCorrBrancher(h)" in hub, (
+        "la vue des correspondances n'est plus dans le hub")
+    bloc = _fonction_js("_qcmCorrBloc")
+    assert "QCM_REF.correspondance" in bloc and "QCM_REF.referentiels" in bloc
+    assert "correspondance" in REF and set(REF["correspondance"]) == set(M.OWASP_MAP)
+
+
+def test_l_ECRAN_relie_chaque_code_comme_la_TABLE_du_module():
+    """Pour CHACUN des codes : liens directs et indirects calculés par
+    l'écran = ceux que la table OWASP_MAP implique. Un risque agentique
+    relie ses risques LLM et ses menaces ; un risque LLM ou une menace
+    passe par les risques agentiques qui le citent."""
+    rel = _relations_ecran()
+    assert set(rel) == _CODES_LLM | _CODES_ASI | _CODES_T
+    faux = []
+    for code, r in sorted(rel.items()):
+        d, i = _attendu(code)
+        if sorted(r["direct"]) != d or sorted(r["indirect"]) != i:
+            faux.append((code, r, d, i))
+    assert not faux, "l'écran ne suit pas la table : %s" % faux[:2]
+
+
+def test_les_questions_d_un_code_sont_DERIVEES_de_la_banque():
+    """La fiche liste les questions qui citent le code, filtrées sur leurs
+    codes — jamais une liste écrite à part, qui mentirait à la première
+    question ajoutée."""
+    fiche = _fonction_js("_qcmCorrFiche")
+    assert ("QCM_REF.questions.filter(function (q) { return q.codes.indexOf(code) >= 0; })"
+            in fiche)
+
+
+def test_la_correction_marque_les_codes_LIES_par_la_table():
+    ow = _fonction_js("_qcmOwasp")
+    assert "_qcmCorrRelations(c)" in ow and "LIÉ PAR LA CORRESPONDANCE" in ow

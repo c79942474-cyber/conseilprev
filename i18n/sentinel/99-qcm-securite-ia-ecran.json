@@ -55,6 +55,26 @@
   "À mesurer ce que vous RECONNAISSEZ, sur des scènes prises dans la banque, la finance et l’assurance : injection par un courriel client, agent qui passe une écriture, voix clonée sur un ordre de virement, modèle de fraude contourné, pièce de sinistre fabriquée. Chaque réponse s’explique, et se termine par ce qu’on met en place lundi matin.": "To measure what you RECOGNISE, on scenes taken from banking, finance and insurance: injection through a customer e-mail, an agent posting an entry, a cloned voice on a payment order, an evaded fraud model, a fabricated claims document. Every answer is explained, and ends with what you put in place on Monday morning.",
   "← Hub du QCM": "← Quiz hub",
   "✓ Bonne réponse": "✓ Correct answer",
-  "✕ Réponse incorrecte": "✕ Wrong answer"
+  "✕ Réponse incorrecte": "✕ Wrong answer",
+  "Les correspondances OWASP": "The OWASP correspondences",
+  "Les risques des applications LLM, les risques des applications agentiques et les menaces agentiques, reliés par la table de correspondance du cabinet. Choisissez un code : sa définition, ses liens, les contrôles clés et les questions de la banque qui le citent.": "LLM application risks, agentic application risks and agentic threats, linked by the firm’s correspondence table. Pick a code: its definition, its links, the key controls and the questions in the bank that cite it.",
+  "Effacer la sélection": "Clear the selection",
+  "Une table de lecture, pas une équivalence : l’OWASP ne publie pas de table officielle complète reliant ces trois listes. Un lien direct passe toujours par un risque agentique ; un lien indirect, en pointillé, relie un risque LLM à une menace agentique par son intermédiaire.": "A reading aid, not an equivalence: OWASP publishes no complete official table linking these three lists. A direct link always goes through an agentic risk; an indirect link, dotted, connects an LLM risk to an agentic threat by way of one.",
+  "Choisissez un code": "Pick a code",
+  "dans l’une des trois colonnes, ou une case de la matrice.": "in one of the three columns, or a cell of the matrix.",
+  "Aucun lien dans la table.": "No link in the table.",
+  "Contrôles clés": "Key controls",
+  "Risques agentiques liés (direct)": "Linked agentic risks (direct)",
+  "Menaces agentiques liées (indirect, via un risque agentique)": "Linked agentic threats (indirect, via an agentic risk)",
+  "Risques LLM liés (indirect, via un risque agentique)": "Linked LLM risks (indirect, via an agentic risk)",
+  "Contrôles clés associés": "Associated key controls",
+  "Questions de la banque qui citent ce code": "Questions in the bank that cite this code",
+  "Aucune question de la banque ne cite ce code.": "No question in the bank cites this code.",
+  "LIÉ PAR LA CORRESPONDANCE": "LINKED BY THE CORRESPONDENCE",
+  "Vue en réseau": "Network view",
+  "Tableau croisé": "Cross table",
+  "Un exemple bancaire": "A banking example",
+  "Les risques LLM correspondants": "The corresponding LLM risks",
+  "Les menaces agentiques correspondantes": "The corresponding agentic threats"
  }
 }

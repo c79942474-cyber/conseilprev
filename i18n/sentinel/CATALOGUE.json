@@ -13515,13 +13515,13 @@
   "entrees": {
    "attr": 72,
    "bloc": 348,
-   "texte": 6654
+   "texte": 6674
   },
   "fichier": "sentinel.page.js",
   "mots": {
    "attr": 619,
    "bloc": 3352,
-   "texte": 90350
+   "texte": 90524
   }
  },
  "pages": 139,
@@ -24484,6 +24484,13 @@
     "_js"
    ]
   },
+  "Aucun lien dans la table.": {
+   "fr": "Aucun lien dans la table.",
+   "mots": 5,
+   "pages": [
+    "_js"
+   ]
+  },
   "Aucun module de ce site ne l'évalue. Le taux est ABSENT, ce qui n'est pas la même chose que nul : zéro voudrait dire « rien de fait », l'absence dit « nous ne le mesurons pas ».": {
    "fr": "Aucun module de ce site ne l'évalue. Le taux est ABSENT, ce qui n'est pas la même chose que nul : zéro voudrait dire « rien de fait », l'absence dit « nous ne le mesurons pas ».",
    "mots": 36,
@@ -25600,6 +25607,13 @@
    "mots": 6,
    "pages": [
     "rgpd-site",
+    "_js"
+   ]
+  },
+  "Aucune question de la banque ne cite ce code.": {
+   "fr": "Aucune question de la banque ne cite ce code.",
+   "mots": 9,
+   "pages": [
     "_js"
    ]
   },
@@ -33404,6 +33418,13 @@
     "enveloppe"
    ]
   },
+  "Choisissez un code": {
+   "fr": "Choisissez un code",
+   "mots": 3,
+   "pages": [
+    "_js"
+   ]
+  },
   "Choisissez un niveau — débutant, intermédiaire, expérimenté, expert. Répondez au clavier (A, B, C, D) ou à la souris. La correction s’ouvre immédiatement : pourquoi la bonne réponse l’est, pourquoi chacune des autres ne l’est pas, les référentiels cités, et les gestes à mettre en place. Un indice est disponible avant de répondre.": {
    "fr": "Choisissez un niveau — débutant, intermédiaire, expérimenté, expert. Répondez au clavier (A, B, C, D) ou à la souris. La correction s’ouvre immédiatement : pourquoi la bonne réponse l’est, pourquoi chacune des autres ne l’est pas, les référentiels cités, et les gestes à mettre en place. Un indice est disponible avant de répondre.",
    "mots": 54,
@@ -37305,6 +37326,20 @@
    "mots": 8,
    "pages": [
     "rgpd-site"
+   ]
+  },
+  "Contrôles clés": {
+   "fr": "Contrôles clés",
+   "mots": 2,
+   "pages": [
+    "_js"
+   ]
+  },
+  "Contrôles clés associés": {
+   "fr": "Contrôles clés associés",
+   "mots": 3,
+   "pages": [
+    "_js"
    ]
   },
   "Contrôles d'accès physique": {
@@ -44943,6 +44978,13 @@
    "mots": 3,
    "pages": [
     "evals"
+   ]
+  },
+  "Effacer la sélection": {
+   "fr": "Effacer la sélection",
+   "mots": 3,
+   "pages": [
+    "_js"
    ]
   },
   "Effacer le filtre": {
@@ -58753,6 +58795,13 @@
     "fiche-br"
    ]
   },
+  "LIÉ PAR LA CORRESPONDANCE": {
+   "fr": "LIÉ PAR LA CORRESPONDANCE",
+   "mots": 4,
+   "pages": [
+    "_js"
+   ]
+  },
   "LK": {
    "fr": "LK",
    "mots": 1,
@@ -67605,6 +67654,13 @@
     "_routes"
    ]
   },
+  "Les correspondances OWASP": {
+   "fr": "Les correspondances OWASP",
+   "mots": 3,
+   "pages": [
+    "_js"
+   ]
+  },
   "Les couleurs dépendent des poids que vous venez de régler": {
    "fr": "Les couleurs dépendent des poids que vous venez de régler",
    "mots": 10,
@@ -68674,6 +68730,13 @@
     "_routes"
    ]
   },
+  "Les menaces agentiques correspondantes": {
+   "fr": "Les menaces agentiques correspondantes",
+   "mots": 4,
+   "pages": [
+    "_js"
+   ]
+  },
   "Les mentions d'IA, le bandeau « AI GENERATED » et le marquage des documents sont mesurés sur les fichiers servis et sur un document généré à l'instant — jamais déclarés. Ce qui n'est pas mesurable par une machine (l'examen humain de l'art. #) est rendu comme attestation, pas converti en vert.": {
    "fr": "Les mentions d'IA, le bandeau « AI GENERATED » et le marquage des documents sont mesurés sur les fichiers servis et sur un document généré à l'instant — jamais déclarés. Ce qui n'est pas mesurable par une machine (l'examen humain de l'art. 50.4) est rendu comme attestation, pas converti en vert.",
    "mots": 52,
@@ -69647,6 +69710,20 @@
    "mots": 16,
    "pages": [
     "_routes"
+   ]
+  },
+  "Les risques LLM correspondants": {
+   "fr": "Les risques LLM correspondants",
+   "mots": 4,
+   "pages": [
+    "_js"
+   ]
+  },
+  "Les risques des applications LLM, les risques des applications agentiques et les menaces agentiques, reliés par la table de correspondance du cabinet. Choisissez un code : sa définition, ses liens, les contrôles clés et les questions de la banque qui le citent.": {
+   "fr": "Les risques des applications LLM, les risques des applications agentiques et les menaces agentiques, reliés par la table de correspondance du cabinet. Choisissez un code : sa définition, ses liens, les contrôles clés et les questions de la banque qui le citent.",
+   "mots": 41,
+   "pages": [
+    "_js"
    ]
   },
   "Les risques nouveaux ou émergents détectés en service sont-ils traités et renvoyés au système de gestion des risques ?": {
@@ -73725,6 +73802,13 @@
   "Memes modalites techniques que les flux FR.": {
    "fr": "Memes modalites techniques que les flux FR.",
    "mots": 7,
+   "pages": [
+    "_js"
+   ]
+  },
+  "Menaces agentiques liées (indirect, via un risque agentique)": {
+   "fr": "Menaces agentiques liées (indirect, via un risque agentique)",
+   "mots": 8,
    "pages": [
     "_js"
    ]
@@ -87320,6 +87404,13 @@
     "_js"
    ]
   },
+  "Questions de la banque qui citent ce code": {
+   "fr": "Questions de la banque qui citent ce code",
+   "mots": 8,
+   "pages": [
+    "_js"
+   ]
+  },
   "Questions réussies à leur dernier passage :": {
    "fr": "Questions réussies à leur dernier passage :",
    "mots": 6,
@@ -91790,6 +91881,20 @@
   "Risque élevé": {
    "fr": "Risque élevé",
    "mots": 2,
+   "pages": [
+    "_js"
+   ]
+  },
+  "Risques LLM liés (indirect, via un risque agentique)": {
+   "fr": "Risques LLM liés (indirect, via un risque agentique)",
+   "mots": 8,
+   "pages": [
+    "_js"
+   ]
+  },
+  "Risques agentiques liés (direct)": {
+   "fr": "Risques agentiques liés (direct)",
+   "mots": 4,
    "pages": [
     "_js"
    ]
@@ -99623,6 +99728,13 @@
     "templates"
    ]
   },
+  "Tableau croisé": {
+   "fr": "Tableau croisé",
+   "mots": 2,
+   "pages": [
+    "_js"
+   ]
+  },
   "Tableau croisé probabilité x impact — # niveaux de criticité, mesures correctives, responsable désigné.": {
    "fr": "Tableau croisé probabilité x impact — 5 niveaux de criticité, mesures correctives, responsable désigné.",
    "mots": 12,
@@ -103143,6 +103255,13 @@
     "_routes"
    ]
   },
+  "Un exemple bancaire": {
+   "fr": "Un exemple bancaire",
+   "mots": 3,
+   "pages": [
+    "_js"
+   ]
+  },
   "Un exercice de cadrage qui dit OÙ les risques peuvent se trouver et où ils peuvent être les plus significatifs — avant toute évaluation approfondie.": {
    "fr": "Un exercice de cadrage qui dit OÙ les risques peuvent se trouver et où ils peuvent être les plus significatifs — avant toute évaluation approfondie.",
    "mots": 24,
@@ -105859,6 +105978,13 @@
     "_routes"
    ]
   },
+  "Une table de lecture, pas une équivalence : l’OWASP ne publie pas de table officielle complète reliant ces trois listes. Un lien direct passe toujours par un risque agentique ; un lien indirect, en pointillé, relie un risque LLM à une menace agentique par son intermédiaire.": {
+   "fr": "Une table de lecture, pas une équivalence : l’OWASP ne publie pas de table officielle complète reliant ces trois listes. Un lien direct passe toujours par un risque agentique ; un lien indirect, en pointillé, relie un risque LLM à une menace agentique par son intermédiaire.",
+   "mots": 45,
+   "pages": [
+    "_js"
+   ]
+  },
   "Une trace datée écrite pendant la crise vaut mieux qu’une reconstitution écrite après. Elle se fait en deux minutes, au moment où personne n’en a.": {
    "fr": "Une trace datée écrite pendant la crise vaut mieux qu’une reconstitution écrite après. Elle se fait en deux minutes, au moment où personne n’en a.",
    "mots": 27,
@@ -108082,6 +108208,13 @@
   "Vue d’exposition et fiches site, avec la nature de chaque valeur.": {
    "fr": "Vue d’exposition et fiches site, avec la nature de chaque valeur.",
    "mots": 12,
+   "pages": [
+    "_js"
+   ]
+  },
+  "Vue en réseau": {
+   "fr": "Vue en réseau",
+   "mots": 3,
    "pages": [
     "_js"
    ]
@@ -111012,6 +111145,13 @@
   "dans l’autre.": {
    "fr": "dans l’autre.",
    "mots": 3,
+   "pages": [
+    "_js"
+   ]
+  },
+  "dans l’une des trois colonnes, ou une case de la matrice.": {
+   "fr": "dans l’une des trois colonnes, ou une case de la matrice.",
+   "mots": 12,
    "pages": [
     "_js"
    ]

@@ -21,7 +21,10 @@
  *   §6  pendant tout cela, AUCUNE requête n'est partie vers le serveur en
  *       dehors de la lecture de la banque — c'est la promesse de l'écran ;
  *   §7  l'écran anglais : le hub survit à la bascule et se lit en anglais ;
- *   §8  un compte Gratuit est refusé explicitement.
+ *   §8  un compte Gratuit est refusé explicitement ;
+ *   §9  les correspondances OWASP du hub : tous les codes, un trait par lien
+ *       de la table, la sélection qui suit la table, la fiche qui liste les
+ *       questions citant le code, et le tableau croisé.
  *
  * DEUX COMPTES RÉELS, rendus à la fin quoi qu'il arrive. La progression est
  * celle du navigateur de la recette, jeté avec lui.
@@ -235,6 +238,64 @@ function arreter(s, garder) {
                 + h0.domaines + ' domaines, anneau « ' + h0.anneau.replace(/\s+/g, ' ') + ' »');
     }
 
+    /* ── §9. LES CORRESPONDANCES OWASP DU HUB ────────────────────────────
+       Mesurée ici, sur le hub frais : tout vient de la route (REF), rien
+       n'est recopié dans la recette. */
+    {
+      const C = REF.correspondance;
+      const nbCodes = REF.referentiels.reduce((a, r) => a + r.entrees.length, 0);
+      const nbLiens = Object.keys(C).reduce((a, k) => a + C[k].llm.length + C[k].t.length, 0);
+      const asiDe = (code) => Object.keys(C).filter((a) => C[a].llm.indexOf(code) >= 0).sort();
+      const citant = (code) => REF.questions.filter((q) => q.codes.indexOf(code) >= 0).length;
+      await pg.waitForFunction(() => document.querySelector('#qcm-corr .qcm-corr-trait[d]'), null, { timeout: 10000 }).catch(() => {});
+      const r0 = await pg.evaluate(() => {
+        const c = document.getElementById('qcm-corr');
+        if (!c) return null;
+        return {
+          codes: c.querySelectorAll('.qcm-corr-i').length,
+          traits: c.querySelectorAll('.qcm-corr-trait').length,
+          traces: [...c.querySelectorAll('.qcm-corr-trait')].filter((p) => (p.getAttribute('d') || '').length > 10).length,
+          choisi: (c.querySelector('.qcm-corr-i.on') || {}).getAttribute ? c.querySelector('.qcm-corr-i.on').getAttribute('data-qcm-code') : null,
+        };
+      });
+      await pg.click('#qcm-corr .qcm-corr-i[data-qcm-code="LLM01"]');
+      const r1 = await pg.evaluate(() => {
+        const c = document.getElementById('qcm-corr');
+        const sec = [...c.querySelectorAll('.qcm-corr-sec')].filter((s) => /Questions de la banque/.test(s.textContent))[0];
+        return {
+          lies: [...c.querySelectorAll('.qcm-corr-i.lk')].map((b) => b.getAttribute('data-qcm-code')).filter((x) => /^ASI/.test(x)).sort(),
+          actifs: c.querySelectorAll('.qcm-corr-trait.act').length,
+          questions: sec ? sec.querySelectorAll('li').length : -1,
+        };
+      });
+      if (process.env.RECETTE_CAPTURE) {
+        await pg.locator('#qcm-corr').screenshot({ path: process.env.RECETTE_CAPTURE });
+      }
+      await pg.click('#qcm-corr [data-qcm-vue="matrice"]');
+      const r2 = await pg.evaluate(() => {
+        const c = document.getElementById('qcm-corr');
+        const cadre = c.querySelector('.qcm-corr-mx-cadre');
+        return { visible: !cadre.hidden && cadre.offsetHeight > 0, points: c.querySelectorAll('.qcm-corr-mx td button').length };
+      });
+      await pg.click('#qcm-corr .qcm-corr-mx td button');
+      const r3 = await pg.evaluate(() => (document.querySelector('#qcm-corr .qcm-corr-nom code') || {}).textContent || '');
+      await pg.click('#qcm-corr [data-qcm-vue="reseau"]');
+      const premierAsi = REF.referentiels.filter((r) => r.cle === 'asi')[0].entrees[0].code;
+      const attendus = asiDe('LLM01');
+      if (!r0 || r0.codes !== nbCodes || r0.traits !== nbLiens || r0.traces !== nbLiens || r0.choisi !== premierAsi) {
+        fautes.push('§9 : réseau incomplet — ' + JSON.stringify(r0) + ' pour ' + nbCodes + ' codes et ' + nbLiens + ' liens');
+      } else if (r1.lies.join() !== attendus.join() || r1.actifs !== attendus.length || r1.questions !== citant('LLM01')) {
+        fautes.push('§9 : la sélection de LLM01 ne suit pas la table — ' + JSON.stringify(r1)
+                    + ', attendu ' + attendus.join() + ' et ' + citant('LLM01') + ' question(s)');
+      } else if (!r2.visible || r2.points !== nbLiens || !/^ASI/.test(r3)) {
+        fautes.push('§9 : tableau croisé — ' + JSON.stringify(r2) + ', choix « ' + r3 + ' »');
+      } else {
+        dits.push('§9 — correspondances : ' + nbCodes + ' codes, ' + nbLiens + ' traits tracés ; LLM01 → '
+                  + r1.lies.join(', ') + ', ' + r1.questions + ' question(s) citante(s) ; tableau croisé : '
+                  + r2.points + ' points');
+      }
+    }
+
     /* ── §3 et §4. JOUER UN NIVEAU, AU CLAVIER ───────────────────────── */
     enJeu = true;
     const jouer = async (niveau, juste) => {
@@ -336,6 +397,7 @@ function arreter(s, garder) {
     await pg.waitForFunction(() => /Beginner level/i.test(document.getElementById('qcm-hub').innerText || ''),
                              null, { timeout: 15000 }).catch(() => {});
     const en = await hub();
+    if (process.env.RECETTE_DEBUG) console.log('EN: ' + en.t);
     if (en.niveaux !== 4) {
       fautes.push('§7 : à l\'écran anglais, le hub a disparu — « ' + en.t.slice(0, 80) + ' »');
     } else if (!/Beginner level/i.test(en.t) || !/Retake the level/i.test(en.t) || /NIVEAU D[ÉE]BUTANT/i.test(en.t)) {
