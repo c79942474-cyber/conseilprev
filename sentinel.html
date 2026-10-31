@@ -1394,6 +1394,11 @@ details.qcm-owasp>div{padding:0 15px 14px}
 .qcm-corr-corps{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px;align-items:start}
 .qcm-corr-vue{min-width:0}
 .qcm-corr-reseau{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:40px}
+/* UNE VUE CACHÉE DOIT L'ÊTRE : `display:grid` ci-dessus l'emporte sur la
+   règle du navigateur pour `[hidden]`. Sans cette ligne, le réseau restait
+   affiché en mode « Tableau croisé », la matrice se peignait en dessous,
+   hors de vue, et les deux onglets semblaient identiques. */
+.qcm-corr-reseau[hidden],.qcm-corr-mx-cadre[hidden]{display:none}
 .qcm-corr-traits{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
 .qcm-corr-trait{fill:none;stroke:var(--rule2);stroke-width:1.1}
 .qcm-corr-reseau.sel .qcm-corr-trait{opacity:.18}

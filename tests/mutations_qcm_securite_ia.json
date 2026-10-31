@@ -206,6 +206,20 @@
    "avant": "    var r = _qcmCorrRelations(c);",
    "apres": "    var r = { direct: [], indirect: [] };",
    "regle": "test_la_correction_marque_les_codes_LIES_par_la_table"
+  },
+  {
+   "nom": "le réseau caché reste affiché sous le tableau croisé",
+   "fichier": "sentinel.html",
+   "avant": ".qcm-corr-reseau[hidden],.qcm-corr-mx-cadre[hidden]{display:none}\n",
+   "apres": ".qcm-corr-mx-cadre[hidden]{display:none}\n",
+   "regle": "test_les_deux_VUES_s_excluent_meme_quand_le_style_fixe_display"
+  },
+  {
+   "nom": "l'onglet ne cache plus le réseau",
+   "fichier": "sentinel.page.js",
+   "avant": "      racine.querySelector('.qcm-corr-reseau').hidden = QCM_CORR.vue !== 'reseau';\n",
+   "apres": "",
+   "regle": "test_les_deux_VUES_s_excluent_meme_quand_le_style_fixe_display"
   }
  ]
 }

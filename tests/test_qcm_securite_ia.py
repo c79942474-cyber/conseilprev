@@ -553,3 +553,20 @@ def test_les_questions_d_un_code_sont_DERIVEES_de_la_banque():
 def test_la_correction_marque_les_codes_LIES_par_la_table():
     ow = _fonction_js("_qcmOwasp")
     assert "_qcmCorrRelations(c)" in ow and "LIÉ PAR LA CORRESPONDANCE" in ow
+
+
+def test_les_deux_VUES_s_excluent_meme_quand_le_style_fixe_display():
+    """LE DÉFAUT CONSTATÉ EN LIGNE : `.qcm-corr-reseau{display:grid}`
+    l'emportait sur `[hidden]` — en « Tableau croisé », le réseau restait
+    affiché et masquait la matrice. Toute vue qui fixe `display` doit
+    redire `[hidden]{display:none}`."""
+    for cls in ("qcm-corr-reseau", "qcm-corr-mx-cadre"):
+        fixe = re.search(r"\.%s\{[^}]*display:(?!none)" % cls, HTML)
+        if fixe:
+            assert re.search(r"\.%s\[hidden\][^{]*\{display:none\}" % cls, HTML) or \
+                re.search(r"\.%s\[hidden\]\s*,[^{]*\{display:none\}" % cls, HTML) or \
+                re.search(r",\s*\.%s\[hidden\]\{display:none\}" % cls, HTML), (
+                    "%s fixe display sans redire [hidden] : la vue cachée resterait affichée" % cls)
+    bascule = _fonction_js("_qcmCorrBrancher")
+    assert ".qcm-corr-reseau').hidden = QCM_CORR.vue !== 'reseau'" in bascule
+    assert ".qcm-corr-mx-cadre').hidden = QCM_CORR.vue !== 'matrice'" in bascule
