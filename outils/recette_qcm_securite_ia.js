@@ -275,11 +275,22 @@ function arreter(s, garder) {
       const r2 = await pg.evaluate(() => {
         const c = document.getElementById('qcm-corr');
         const cadre = c.querySelector('.qcm-corr-mx-cadre');
-        return { visible: !cadre.hidden && cadre.offsetHeight > 0, points: c.querySelectorAll('.qcm-corr-mx td button').length };
+        /* LES DEUX VUES S'EXCLUENT, MESURÉ À L'ÉCRAN : une première version
+           ne vérifiait que l'apparition de la matrice — le réseau, resté
+           affiché au-dessus, la cachait, et les deux onglets semblaient
+           identiques. */
+        return { visible: !cadre.hidden && cadre.offsetHeight > 0,
+                 reseauCache: c.querySelector('.qcm-corr-reseau').offsetHeight === 0,
+                 points: c.querySelectorAll('.qcm-corr-mx td button').length };
       });
       await pg.click('#qcm-corr .qcm-corr-mx td button');
       const r3 = await pg.evaluate(() => (document.querySelector('#qcm-corr .qcm-corr-nom code') || {}).textContent || '');
       await pg.click('#qcm-corr [data-qcm-vue="reseau"]');
+      const r4 = await pg.evaluate(() => {
+        const c = document.getElementById('qcm-corr');
+        return c.querySelector('.qcm-corr-reseau').offsetHeight > 0 && c.querySelector('.qcm-corr-mx-cadre').offsetHeight === 0;
+      });
+      if (!r4) fautes.push('§9 : revenu en vue réseau, le réseau et le tableau croisé ne s’excluent pas');
       const premierAsi = REF.referentiels.filter((r) => r.cle === 'asi')[0].entrees[0].code;
       const attendus = asiDe('LLM01');
       if (!r0 || r0.codes !== nbCodes || r0.traits !== nbLiens || r0.traces !== nbLiens || r0.choisi !== premierAsi) {
@@ -287,7 +298,7 @@ function arreter(s, garder) {
       } else if (r1.lies.join() !== attendus.join() || r1.actifs !== attendus.length || r1.questions !== citant('LLM01')) {
         fautes.push('§9 : la sélection de LLM01 ne suit pas la table — ' + JSON.stringify(r1)
                     + ', attendu ' + attendus.join() + ' et ' + citant('LLM01') + ' question(s)');
-      } else if (!r2.visible || r2.points !== nbLiens || !/^ASI/.test(r3)) {
+      } else if (!r2.visible || !r2.reseauCache || r2.points !== nbLiens || !/^ASI/.test(r3)) {
         fautes.push('§9 : tableau croisé — ' + JSON.stringify(r2) + ', choix « ' + r3 + ' »');
       } else {
         dits.push('§9 — correspondances : ' + nbCodes + ' codes, ' + nbLiens + ' traits tracés ; LLM01 → '
